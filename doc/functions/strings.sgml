@@ -34,6 +34,25 @@
    </refsect1>
   </refentry>
 
+  <refentry id="function.bin2hex">
+   <refnamediv>
+    <refname>bin2hex</refname>
+    <refpurpose>convert binary data into hexadecimal representation</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>string <function>bin2hex</function></funcdef>
+     <paramdef>string <parameter>str</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+     Returns an ASCII string containing the hexadecimal representation of
+     <parameter>str</parameter>. The conversion is done byte-wise with
+     the high-nibble first.
+
+   </refsect1>
+  </refentry>
+
   <refentry id="function.chop">
    <refnamediv>
     <refname>Chop</refname>
@@ -181,7 +200,7 @@ $new_string = chunk_split(base64_encode($data));
      crypt function for more information.  
 	<simpara>
 	 If the salt argument is not provided, it will be randomly generated
-	 by PHP.
+	 by PHP.  
 	<simpara>
 	 Some operating systems support more than one type of encryption.  
 	 In fact, sometimes the standard DES encryption is replaced by an
@@ -191,10 +210,23 @@ $new_string = chunk_split(base64_encode($data));
 	 types.  If no salt is provided, PHP will auto-generate a standard
 	 2-character DES salt by default unless the default encryption type
 	 on the system is MD5 in which case a random MD5-compatible salt
-	 is generated.
+	 is generated.  PHP sets a constant named CRYPT_SALT_LENGTH which 
+	 tells you whether a regular 2-character salt applies to your system
+	 or the longer 12-char MD5 salt is applicable.
 	<simpara>
 	 The standard DES encryption <function>crypt</function> contains
 	 the salt as the first two characters of the output.
+	<simpara>
+	 On systems where the crypt() function supports multiple encryption
+	 types, the following constants are set to 0 or 1 depending on whether
+	 the given type is available:
+	<itemizedlist>
+	<listitem><simpara>CRYPT_STD_DES - Standard DES encryption with a 2-char SALT</simpara></listitem>
+	<listitem><simpara>CRYPT_EXT_DES - Extended DES encryption with a 9-char SALT</simpara></listitem>
+	<listitem><simpara>CRYPT_MD5 - MD5 encryption with a 12-char SALT starting with $1$</simpara></listitem>
+	<listitem><simpara>CRYPT_BLOWFISH - Extended DES encryption with a 16-char SALT starting with $2$</simpara></listitem>
+	</itemizedlist>
+	
     <simpara>
      There is no decrypt function, since <function>crypt</function>
      uses a one-way algorithm.
@@ -1073,6 +1105,25 @@ $formatted = sprintf ("%01.2f", $money);
    </refsect1>
   </refentry>
 
+  <refentry id="function.strip-tags">
+   <refnamediv>
+    <refname>strip_tags</refname>
+    <refpurpose>Strip HTML and PHP tags from a string</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>string <function>strip_tags</function></funcdef>
+     <paramdef>string <parameter>str</parameter></paramdef>
+    </funcsynopsis>
+    <simpara>
+     This function tries to strip all HTML and PHP tags from the given
+     string.  It errors on the side of caution in case of incomplete
+     or bogus tags.  It uses the same tag stripping state machine as
+     the <function>fgetss</function> function.
+   </refsect1>
+  </refentry>
+
   <refentry id="function.stripslashes">
    <refnamediv>
     <refname>StripSlashes</refname>
@@ -1541,7 +1592,7 @@ $rest = substr("abcdef", -3, 1); // returns "d"
      will contain the single character at <parameter>start</parameter>.
      Examples:
      <informalexample><programlisting role=php>
-$rest = substr("abcdef", -1, -1); // returns "bcde"
+$rest = substr("abcdef", 1, -1); // returns "bcde"
 </programlisting>
      </informalexample>
 

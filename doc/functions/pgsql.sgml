@@ -13,9 +13,9 @@
     extensibility.  PostgreSQL is a public-domain, open source
     descendant of this original Berkeley code.
    <para>
-    PostgreSQL is available without cost. The current version 6.3.2 is
+    PostgreSQL is available without cost. The current version is
     available at <ulink
-    url="http://www.postgresql.org/">www.postgreSQL.org</ulink>.
+    url="http://www.postgresql.org/">www.PostgreSQL.org</ulink>.
    <para>
     Since version 6.3 (03/02/1998) PostgreSQL use unix domain sockets,
     a table is given to this new possibilities. This socket will be

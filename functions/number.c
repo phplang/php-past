@@ -27,7 +27,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: number.c,v 1.17 1999/01/01 17:59:14 zeev Exp $
+/* $Id: number.c,v 1.18 1999/05/23 09:54:56 sas Exp $
    Implements arbitrary precision numbers. */
 
 /*  This file is part of GNU bc.
@@ -62,7 +62,7 @@
 #if 0
 #include "bcdefs.h"
 #include "proto.h"
-#include "global.h"
+#include "php3_global.h"
 #endif
 
 #include "number.h"

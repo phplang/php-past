@@ -27,7 +27,7 @@
    +----------------------------------------------------------------------+
  */
  
-/* $Id: sysvsem.c,v 1.5 1999/01/01 17:59:19 zeev Exp $ */
+/* $Id: sysvsem.c,v 1.6 1999/05/19 12:55:45 sas Exp $ */
 
 /* This has been built and tested on Solaris 2.6 and Linux 2.1.122.
  * It may not compile or execute correctly on other systems.
@@ -51,6 +51,19 @@
 #include "php3_list.h"
 #include "php3_sysvsem.h"
 
+#if !HAVE_SEMUN && defined(__GNU_LIBRARY__) && __GNU_LIBRARY__ == 6
+
+union semun {
+	int val;                    /* value for SETVAL */
+	struct semid_ds *buf;       /* buffer for IPC_STAT, IPC_SET */
+	unsigned short int *array;  /* array for GETALL, SETALL */
+	struct seminfo *__buf;      /* buffer for IPC_INFO */
+};
+
+#undef HAVE_SEMUN
+#define HAVE_SEMUN 1
+
+#endif
 
 function_entry sysvsem_functions[] = {
 	{"sem_get",				php3_sysvsem_get,			NULL},

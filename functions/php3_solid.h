@@ -24,11 +24,11 @@
    | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
    | Authors: Jeroen van der Most <jvdmost@digiface.nl>                   |
-   |          Stig Sæther Bakken <ssb@guardian.no>                        |
+   |          Stig Sæther Bakken <ssb@fast.no>                            |
    +----------------------------------------------------------------------+
  */
 
-/* $Id: php3_solid.h,v 1.12 1999/01/01 17:59:16 zeev Exp $ */
+/* $Id: php3_solid.h,v 1.13 1999/04/22 13:19:50 ssb Exp $ */
 
 #ifndef _PHP3_SOLID_H
 #define _PHP3_SOLID_H

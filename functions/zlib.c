@@ -22,7 +22,7 @@
    |          Stefan Röhrich <sr@linux.de>                                |
    +----------------------------------------------------------------------+
  */
-/* $Id: zlib.c,v 1.14 1999/02/27 15:52:14 sas Exp $ */
+/* $Id: zlib.c,v 1.15 1999/05/16 15:44:57 ssb Exp $ */
 #if !PHP_31 && defined(THREAD_SAFE)
 #undef THREAD_SAFE
 #endif
@@ -159,6 +159,10 @@ php3_module_entry php3_zlib_module_entry = {
 DLEXPORT php3_module_entry *get_module(void) { return &php3_zlib_module_entry; }
 #endif
 
+static void php3i_destructor_gzclose(gzFile *zp) {
+	(void)gzclose(zp);
+}
+
 int php3_minit_zlib(INIT_FUNC_ARGS)
 {
 #ifdef THREAD_SAFE
@@ -185,7 +189,7 @@ int php3_minit_zlib(INIT_FUNC_ARGS)
 	cfg_get_string("doc_root",&ZLIB_INI(doc_root));
 	cfg_get_string("include_path",&ZLIB_INI(include_path));
 
-	ZLIB_GLOBAL(le_zp) = register_list_destructors(gzclose,NULL);
+	ZLIB_GLOBAL(le_zp) = register_list_destructors(php3i_destructor_gzclose,NULL);
 	return SUCCESS;
 }
 

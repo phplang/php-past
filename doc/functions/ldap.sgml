@@ -254,6 +254,74 @@ if ($ds) {
    </refsect1>
   </refentry>
 
+  <refentry id="function.ldap-mod-add">
+   <refnamediv>
+    <refname>ldap_mod_add</refname>
+    <refpurpose>Add attribute values to current attributes</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>ldap_mod_add</function></funcdef>
+     <paramdef>int <parameter>link_identifier</parameter></paramdef>
+     <paramdef>string <parameter>dn</parameter></paramdef>
+     <paramdef>array <parameter>entry</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+     returns true on success and false on error.  
+	<para>
+	 This function adds attribute(s) to the specified dn.  It
+	 performs the modification at the attribute level as opposed to the 
+	 object level.  Object-level additions are done by the 
+	<function>ldap_add</function> function.
+   </refsect1>
+  </refentry>
+
+  <refentry id="function.ldap-mod-del">
+   <refnamediv>
+    <refname>ldap_mod_del</refname>
+    <refpurpose>Delete attribute values from current attributes</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>ldap_mod_del</function></funcdef>
+     <paramdef>int <parameter>link_identifier</parameter></paramdef>
+     <paramdef>string <parameter>dn</parameter></paramdef>
+     <paramdef>array <parameter>entry</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+     returns true on success and false on error.  
+	<para>
+	 This function removes attribute(s) from the specified dn.  It
+	 performs the modification at the attribute level as opposed to the 
+	 object level.  Object-level deletions are done by the 
+	<function>ldap_del</function> function.
+   </refsect1>
+  </refentry>
+
+  <refentry id="function.ldap-mod-replace">
+   <refnamediv>
+    <refname>ldap_mod_replace</refname>
+    <refpurpose>Replace attribute values with new ones</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>ldap_mod_replace</function></funcdef>
+     <paramdef>int <parameter>link_identifier</parameter></paramdef>
+     <paramdef>string <parameter>dn</parameter></paramdef>
+     <paramdef>array <parameter>entry</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+     returns true on success and false on error.  
+	<para>
+	 This function replaces attribute(s) from the specified dn.  It
+	 performs the modification at the attribute level as opposed to the 
+	 object level.  Object-level modifications are done by the 
+	<function>ldap_modify</function> function.
+   </refsect1>
+  </refentry>
 
   <refentry id="function.ldap-bind">
    <refnamediv>
@@ -415,8 +483,8 @@ if ($ds) {
      <parameter>with_attrib</parameter> is used to request if the RDNs
      are returned with only values or their attributes as well.  To
      get RDNs with the attributes (i.e. in attribute=value format) set
-     <parameter>with_attrib</parameter> to 1 and to get only values
-     set it to 0.
+     <parameter>with_attrib</parameter> to 0 and to get only values
+     set it to 1.
    </refsect1>
   </refentry>
 
@@ -963,30 +1031,6 @@ $info = ldap_get_entries($ds, $sr);
 print $info["count"]." entries returned&lt;p>";
 </programlisting>
       </example>
-
-     <para>
-
-      When you perform a search, and too much data comes back (alot of
-      entries) you will get a warning, and
-      <function>ldap_get_entries</function> will fail. The trick here
-      is to turn off the warnings, then check the return value.
-     
-     <informalexample>
-      <literallayout>
-$normerr = error_reporting ();
-error_reporting (0);  // turn off warnings!
-$sr = ldap_search ($ds, $dn, $searchfor);
-$normerr = error_reporting ($normerr);
-if (!$sr) {
-    print "too many entries!";
-} else .....
-      </literallayout>
-     </informalexample>
-
-     <para>
-      You could try narrowing the scope, by adding an extra filter
-      eg. (cn=a*), but It would be nicer to be able to grab the
-      results in bits (eg. 1-100, 101-200...).
 
    </refsect1>
   </refentry>

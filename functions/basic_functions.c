@@ -28,7 +28,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: basic_functions.c,v 1.258 1999/02/11 06:23:40 andrey Exp $ */
+/* $Id: basic_functions.c,v 1.264 1999/06/02 23:53:16 cmv Exp $ */
 #ifdef THREAD_SAFE
 #include "tls.h"
 #endif
@@ -117,10 +117,13 @@ function_entry basic_functions[] = {
 	{"usort",		php3_user_sort,				first_arg_force_ref},
 	{"uasort",		php3_auser_sort,			first_arg_force_ref},
 	{"uksort",		php3_user_key_sort,			first_arg_force_ref},
+	{"shuffle",		php3_shuffle,				first_arg_force_ref},
 	{"array_walk",  php3_array_walk,			first_arg_force_ref},
 	{"sizeof",		php3_count,					first_arg_allow_ref},
 	{"count",		php3_count,					first_arg_allow_ref},
 	{"time",		php3_time,					NULL},
+	{"easter_date",		php3_easter_date,			NULL},
+	{"easter_days",		php3_easter_days,			NULL},
 	{"mktime",		php3_mktime,				NULL},
 	{"gmmktime",	php3_gmmktime,				NULL},
 #if HAVE_STRFTIME
@@ -140,6 +143,7 @@ function_entry basic_functions[] = {
 	{"current",		array_current,				first_arg_force_ref},
 	{"key",			array_current_key,			first_arg_force_ref},
 	{"each",		array_each,					first_arg_force_ref},
+	{"range",		php3_range,					NULL},
 	{"gettype",		php3_gettype,				NULL},
 	{"settype",		php3_settype,				first_arg_force_ref},
 	{"min",			php3_min,					NULL},
@@ -149,6 +153,7 @@ function_entry basic_functions[] = {
 	{"chop",		php3_chop,					NULL},
 	{"str_replace",	php3_str_replace,			NULL},
 	{"chunk_split",	php3_chunk_split,			NULL},
+	{"strip_tags",	php3_strip_tags,			NULL},
 	{"trim",		php3_trim,					NULL},
 	{"ltrim",		php3_ltrim,					NULL},
 	{"rtrim",		php3_chop,					NULL},
@@ -265,6 +270,7 @@ function_entry basic_functions[] = {
 	{"decbin",		php3_decbin,				NULL},
 	{"decoct",		php3_decoct,				NULL},
 	{"dechex",		php3_dechex,				NULL},
+	PHP_FE(bin2hex, NULL)
 	{"base_convert",php3_base_convert,			NULL},
 	{"number_format",	php3_number_format,		NULL},
 
@@ -732,6 +738,47 @@ void php3_key_sort(INTERNAL_FUNCTION_PARAMETERS)
 	RETURN_TRUE;
 }
 /* }}} */
+
+static int array_data_shuffle(const void *a, const void*b) {
+	return (
+	/* This is just a little messy. */
+#ifdef HAVE_LRAND48
+        lrand48()
+#else
+#ifdef HAVE_RANDOM
+        random()
+#else
+        rand()
+#endif
+#endif
+	% 2) ? 1 : -1;
+}
+
+/* {{{ proto int shuffle(array array_arg)
+   Randomly shuffle the contents of an array */
+PHP_FUNCTION(shuffle)
+{
+	pval *array;
+	TLS_VARS;
+
+	if (ARG_COUNT(ht) != 1 || getParameters(ht, 1, &array) == FAILURE) {
+		WRONG_PARAM_COUNT;
+	}
+	if (!(array->type & IS_HASH)) {
+		php3_error(E_WARNING, "Wrong datatype in shuffle() call");
+		return;
+	}
+	if (!ParameterPassedByReference(ht,1)) {
+		php3_error(E_WARNING, "Array not passed by reference in call to shuffle()");
+		return;
+	}
+	if (_php3_hash_sort(array->value.ht, array_data_shuffle,1) == FAILURE) {
+		return;
+	}
+	RETURN_TRUE;
+}
+/* }}} */
+
 
 /* the current implementation of count() is a definite example of what
  * user functions should NOT look like.  It's a hack, until we get
@@ -1296,6 +1343,31 @@ void array_current_key(INTERNAL_FUNCTION_PARAMETERS)
 			break;
 		case HASH_KEY_NON_EXISTANT:
 			return;
+	}
+}
+/* }}} */
+
+/* {{{ proto array range(int low, int high)
+   Create an array containing the range of integers from low to high (inclusive) */
+PHP_FUNCTION(range)
+{
+	pval *plow, *phigh;
+	int low, high;
+	if (ARG_COUNT(ht) != 2 || getParameters(ht,2,&plow,&phigh) == FAILURE) {
+		WRONG_PARAM_COUNT;
+	}
+	convert_to_long(plow);
+	convert_to_long(phigh);
+	low = plow->value.lval;
+	high = phigh->value.lval;
+
+        /* allocate an array for return */
+        if (array_init(return_value) == FAILURE) {
+                RETURN_FALSE;
+        }
+
+	for (; low <= high; low++) {
+		add_next_index_long(return_value, low);
 	}
 }
 /* }}} */
@@ -1976,15 +2048,20 @@ PHP_FUNCTION(function_exists)
 {
 	pval *fname;
 	pval *tmp;
+	char *lcname;
 	
 	if (ARG_COUNT(ht)!=1 || getParameters(ht, 1, &fname)==FAILURE) {
 		WRONG_PARAM_COUNT;
 	}
 	
-	if (_php3_hash_find(&GLOBAL(function_table), fname->value.str.val,
+	lcname = estrdup(fname->value.str.val);
+	php3_str_tolower(lcname, fname->value.str.len);
+	if (_php3_hash_find(&GLOBAL(function_table), lcname,
 						fname->value.str.len+1, (void**)&tmp) == FAILURE) {
+		efree(lcname);
 		RETURN_FALSE;
 	} else {
+		efree(lcname);
 		RETURN_TRUE;
 	}
 }
@@ -2026,15 +2103,23 @@ PHP_FUNCTION(extract)
 	pval data;
 	char *varname, *finalname;
 	ulong lkey;
-	int res;
+	int res, extype;
 	
 	switch(ARG_COUNT(ht)) {
+		case 1:
+			if (getParameters(ht, 1, &var_array) == FAILURE) {
+				WRONG_PARAM_COUNT;
+			}
+			extype = EXTR_OVERWRITE;
+			break;
+
 		case 2:
 			if (getParameters(ht, 2, &var_array, &etype) == FAILURE) {
 				WRONG_PARAM_COUNT;
 			}
 			convert_to_long(etype);
-			if (etype->value.lval > EXTR_SKIP && etype->value.lval <= EXTR_PREFIX_ALL) {
+			extype = etype->value.lval;
+			if (extype > EXTR_SKIP && extype <= EXTR_PREFIX_ALL) {
 				WRONG_PARAM_COUNT;
 			}
 			break;
@@ -2043,6 +2128,7 @@ PHP_FUNCTION(extract)
 			if (getParameters(ht, 3, &var_array, &etype, &prefix) == FAILURE) {
 				WRONG_PARAM_COUNT;
 			}
+			extype = etype->value.lval;
 			break;
 
 		default:
@@ -2050,7 +2136,7 @@ PHP_FUNCTION(extract)
 			break;
 	}
 	
-	if (etype->value.lval < EXTR_OVERWRITE || etype->value.lval > EXTR_PREFIX_ALL) {
+	if (extype < EXTR_OVERWRITE || extype > EXTR_PREFIX_ALL) {
 		php3_error(E_WARNING, "Wrong argument in call to extract()");
 		return;
 	}
@@ -2076,7 +2162,7 @@ PHP_FUNCTION(extract)
 					
 					res = _php3_hash_find(GLOBAL(active_symbol_table),
 										  varname, strlen(varname)+1, (void**)&exist);
-					switch (etype->value.lval) {
+					switch (extype) {
 						case EXTR_OVERWRITE:
 							finalname = estrdup(varname);
 							break;

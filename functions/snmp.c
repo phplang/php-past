@@ -24,9 +24,10 @@
    | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
    | Authors: Rasmus Lerdorf <rasmus@lerdorf.on.ca>                       |
+   |          Mike Jackson <mhjack@tscnet.com>                            |
    +----------------------------------------------------------------------+
  */
-/* $Id: snmp.c,v 1.9 1999/01/05 16:12:28 martin Exp $ */
+/* $Id: snmp.c,v 1.14 1999/05/22 14:38:40 rasmus Exp $ */
 
 #include "php.h"
 #include "internal_functions.h"
@@ -88,8 +89,12 @@ static oid objid_mib[] = {1, 3, 6, 1, 2, 1};
 void sprint_variable(char *, oid *, int, struct variable_list *);
 
 function_entry snmp_functions[] = {
-    {"snmpget", php3_snmpget, NULL},
-    {"snmpwalk", php3_snmpwalk, NULL},
+	PHP_FE(snmpget, NULL)
+	PHP_FE(snmpwalk, NULL)
+	PHP_FE(snmprealwalk, NULL)
+	PHP_FE(snmpwalkoid, NULL)
+	PHP_FE(snmp_get_quick_print, NULL)
+	PHP_FE(snmp_set_quick_print, NULL)
     {NULL,NULL,NULL}
 };
 
@@ -116,8 +121,16 @@ void php3_info_snmp(void) {
 /*
  * Generic SNMP object fetcher
  *
- * st=1 GET
- * st=2 WALK
+ * st=1   snmpget() - query an agent and return a single value.
+ * st=2   snmpwalk() - walk the mib and return a single dimensional array 
+ *          containing the values.
+ * st=3,4 snmprealwalk() and snmpwalkoid() - walk the mib and return an 
+ *          array of oid,value pairs.
+ * st=5-8 ** Reserved **
+ * st=9   snmp_get_quick_print() - Return the current value for quickprint 
+ *        (default setting is 0 (false)).
+ * st=10  snmp_set_quick_print() - Set the current value for quickprint
+ *
  */
 void _php3_snmp(INTERNAL_FUNCTION_PARAMETERS, int st) {
 	pval *a1, *a2, *a3, *a4, *a5;
@@ -130,11 +143,25 @@ void _php3_snmp(INTERNAL_FUNCTION_PARAMETERS, int st) {
     int status, count,rootlen=0,gotroot=0;
 	oid root[MAX_NAME_LEN];
 	char buf[2048];
+	char buf2[2048];
 	int keepwalking=1;
 	long timeout=SNMP_DEFAULT_TIMEOUT;
 	long retries=SNMP_DEFAULT_RETRIES;
 	int myargc = ARG_COUNT(ht);
-	
+       
+	switch(st) {
+		case 4:
+			st = 3; /* This is temporary until snmprealwalk() is removed */
+			break;
+		case 9:
+			RETURN_LONG(snmp_get_quick_print()?1:0);
+		case 10:
+      	if(myargc != 1 || getParameters(ht, myargc, &a1)) return(WRONG_PARAM_COUNT);
+      	convert_to_long(a1);
+		snmp_set_quick_print((int) a1->value.lval);
+		RETURN_TRUE;
+   }
+                                                                                                                             	
 	if (myargc<3 || myargc>5 || getParameters(ht, myargc, &a1, &a2, &a3, &a4, &a5) == FAILURE) {
 		WRONG_PARAM_COUNT;
 	}
@@ -151,7 +178,7 @@ void _php3_snmp(INTERNAL_FUNCTION_PARAMETERS, int st) {
 	}
 	objid=a3->value.str.val;
 	
-	if (st==2) { /* walk */
+	if (st>=2) { /* walk */
 		rootlen = MAX_NAME_LEN;
 		if (strlen(objid)) { /* on a walk, an empty string means top of tree - no error */
 			if (read_objid(objid, root, &rootlen)) {
@@ -171,7 +198,13 @@ void _php3_snmp(INTERNAL_FUNCTION_PARAMETERS, int st) {
 	session.peername = a1->value.str.val;
 
 	session.version = SNMP_VERSION_1;
-	session.community = (u_char *)a2->value.str.val;
+	/*
+	 * FIXME: potential memory leak
+	 * This is a workaround for an "artifact" (Mike Slifcak)
+	 * in (at least) ucd-snmp 3.6.1 which frees
+	 * memory it did not allocate
+	 */
+	session.community = (u_char *) strdup(a2->value.str.val);
 	session.community_len = a2->value.str.len;
 	session.retries = retries;
 	session.timeout = timeout;
@@ -183,7 +216,7 @@ void _php3_snmp(INTERNAL_FUNCTION_PARAMETERS, int st) {
 		php3_error(E_WARNING,"Couldn't open snmp\n");
 		RETURN_FALSE;
 	}
-	if (st==2) {
+	if (st>=2) {
 		memmove((char *)name, (char *)root, rootlen * sizeof(oid));
 		name_length = rootlen;
 		/* prepare result array */
@@ -193,7 +226,7 @@ void _php3_snmp(INTERNAL_FUNCTION_PARAMETERS, int st) {
 	while(keepwalking) {
 		keepwalking=0;
 		if (st==1) pdu = snmp_pdu_create(SNMP_MSG_GET);
-		else if (st==2) pdu = snmp_pdu_create(SNMP_MSG_GETNEXT);
+		else if (st>=2) pdu = snmp_pdu_create(SNMP_MSG_GETNEXT);
 
 		if (st==1) {
 			name_length = MAX_NAME_LEN;
@@ -209,7 +242,7 @@ retry:
 		if (status == STAT_SUCCESS) {
 			if (response->errstat == SNMP_ERR_NOERROR) {
 				for(vars = response->variables; vars; vars = vars->next_variable) {
-					if (st==2 && (vars->name_length < rootlen || memcmp(root, vars->name, rootlen * sizeof(oid))))
+					if (st>=2 && (vars->name_length < rootlen || memcmp(root, vars->name, rootlen * sizeof(oid))))
 						continue;       /* not part of this subtree */
 
 					sprint_value(buf,vars->name, vars->name_length, vars);
@@ -221,6 +254,11 @@ retry:
 					} else if (st==2) {
 						/* Add to returned array */
 						add_next_index_string(return_value,buf,1);
+					} else if (st==3) {
+						sprint_objid(buf2, vars->name, vars->name_length);
+						add_assoc_string(return_value,buf2,buf,1);
+					}
+					if (st>=2) {
 						if (vars->type != SNMP_ENDOFMIBVIEW && vars->type != SNMP_NOSUCHOBJECT && vars->type != SNMP_NOSUCHINSTANCE) {
 							memmove((char *)name, (char *)vars->name,vars->name_length * sizeof(oid));
 							name_length = vars->name_length;
@@ -239,7 +277,7 @@ retry:
 					}
 					if (st==1) {
 						if ((pdu = snmp_fix_pdu(response, SNMP_MSG_GET)) != NULL) goto retry;
-					} else if (st==2) {
+					} else if (st>=2) {
 						if ((pdu = snmp_fix_pdu(response, SNMP_MSG_GETNEXT)) != NULL) goto retry;
 					}
 					RETURN_FALSE;
@@ -271,7 +309,40 @@ void php3_snmpwalk(INTERNAL_FUNCTION_PARAMETERS) {
 }
 /* }}} */
 
+/* {{{ proto string snmprealwalk(string host, string community, string object_id [, int timeout [, int retries]])
+   Return all objects including their respective object id withing the specified one */
+PHP_FUNCTION(snmprealwalk)
+{
+	return _php3_snmp(INTERNAL_FUNCTION_PARAM_PASSTHRU,3);
+}
+/* }}} */
+
+/* {{{ proto string snmprealoid(string host, string community, string object_id [, int timeout [, int retries]])
+   Return all objects including their respective object id withing the specified one */
+PHP_FUNCTION(snmpwalkoid)
+{
+	return _php3_snmp(INTERNAL_FUNCTION_PARAM_PASSTHRU,4);
+}
+/* }}} */
+
+/* {{{ proto int snmp_get_quick_print(void)
+	Return the current status of quick_print */
+PHP_FUNCTION(snmp_get_quick_print)
+{
+	return _php3_snmp(INTERNAL_FUNCTION_PARAM_PASSTHRU,9);
+}
+/* }}} */
+           
+/* {{{ proto void snmp_set_quick_print(int quick_print)
+	Return all objects including their respective object id withing the specified one */
+PHP_FUNCTION(snmp_set_quick_print)
+{
+	return _php3_snmp(INTERNAL_FUNCTION_PARAM_PASSTHRU,10);
+}
+/* }}} */
+         
 #endif
+                      
 
 /*
  * Local variables:

@@ -1,0 +1,18 @@
+I am currently working to make the C code a part of the standard php 
+distribution; however, at this time it takes some manual configuration.
+
+Also, the following steps only really aply to unix versions of php,
+it should be possible to compile on NT, but this install sequence does
+not cover that instance.
+
+I apologize for the lack of automated configuration.  This will updated
+shortly.  This has only been tested with php-3.0.4 and php-3.0.6
+on a linux-glibc 2.0.36 system with MCK-3.2.0.3.
+
+There is no longer any need to modify your php as of php-cvs 01/26/99,
+simply ./configure --with-mck=/your/mck/dir
+
+To use the scripts:
+A test.php3 is included with this distribution, it is fairly self explanatory to the php user.
+
+Timothy <timothy@ametro.net>

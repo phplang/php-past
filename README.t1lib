@@ -1,0 +1,31 @@
+You MUST have T1lib version 0.8 or newer. Older versions do
+not provide all the functionality required by PHP3's functions
+and will never be supported, besides they are already outdated.
+If you have version 0.9, you must apply the following patch
+to T1libs sources or you will get massive memory leaks.
+
+--- T1-0.9.old/lib/t1lib/t1set.c	Fri Apr 23 17:27:04 1999
++++ T1-0.9/lib/t1lib/t1set.c	Tue Jun  1 03:41:23 1999
+@@ -1771,6 +1771,7 @@
+ {
+   struct region *area=NULL;
+   struct region *Interior(struct segment *path, int fillrule);
++  struct edgelist *current, *next;
+ 
+   static GLYPH glyph={NULL,{0,0,0,0,0,0},NULL,1};
+   volatile int memsize=0;
+@@ -1868,6 +1869,14 @@
+     (void) memset(glyph.bits, 0, memsize);
+     fill(glyph.bits, h, paddedW, area, T1_byte, T1_bit, T1_wordsize );
+   }
++
++  for (current = area->anchor; current; current = next) {
++    next = current->link;
++    if (current->ymin == current->ymax) next == NULL;
++    free(current);
++  }
++  if (area->thresholded) free(area->thresholded);
++  free(area);
+ 
+   /* Check for writing direction and re-compute dimensions appropriately: */
+   if (modflag & T1_RIGHT_TO_LEFT){

@@ -25,12 +25,13 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: modules.h,v 1.29 1999/01/01 17:58:51 zeev Exp $ */
+/* $Id: modules.h,v 1.30 1999/04/24 13:16:08 sas Exp $ */
 
 #ifndef _MODULES_H
 #define _MODULES_H
 
 #define INIT_FUNC_ARGS int type, int module_number
+#define SHUTDOWN_FUNC_ARGS void
 #define STANDARD_MODULE_PROPERTIES 0, 0, 0, NULL, 0
 
 #define MODULE_PERSISTENT 1

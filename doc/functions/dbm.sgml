@@ -36,13 +36,15 @@ dbmclose($dbm);
     <funcsynopsis>
      <funcdef>int <function>dbmopen</function></funcdef>
      <paramdef>string <parameter>filename</parameter></paramdef>
-     <paramdef>int <parameter>flags</parameter></paramdef>
+     <paramdef>string <parameter>flags</parameter></paramdef>
     </funcsynopsis>
     <para>
      The first argument is the full-path filename of the dbm file to be opened
-     and the second is the file open mode which is one of "r", "n" or "w" for
-     read-only, new (implies read-write, and may truncate an already-existing
-	 database of the same name) and read-write respectively.
+     and the second is the file open mode which is one of "r", "n", "c" or "w"
+     for read-only, new (implies read-write, and most likely will truncate an
+     already-existing database of the same name), create (implies read-write,
+     and will not truncate an already-existing database of the same name)
+     and read-write respectively.
     <para>
      Returns an identifer to be passed to the other dbm functions on success,
      or false on failure.

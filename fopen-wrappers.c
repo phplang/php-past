@@ -27,7 +27,7 @@
    |          Jim Winstead <jimw@php.net>                                 |
    +----------------------------------------------------------------------+
  */
-/* $Id: fopen-wrappers.c,v 1.57 1999/02/15 17:25:44 steffann Exp $ */
+/* $Id: fopen-wrappers.c,v 1.60 1999/05/25 17:52:14 danny Exp $ */
 
 #ifdef THREAD_SAFE
 #include "tls.h"
@@ -131,7 +131,9 @@ PHPAPI int _php3_check_specific_open_basedir(char *basedir, char *path)
 		) {
 			local_open_basedir[local_open_basedir_pos--] = 0;
 		}
-			
+/* stripping unnecessary slashes is left 
+   as an exercise to the underlying OS */
+#if 0	
 		/* Strip double (back)slashes */
 		if (local_open_basedir_pos > 0) {
 			while ((
@@ -145,7 +147,7 @@ PHPAPI int _php3_check_specific_open_basedir(char *basedir, char *path)
 				local_open_basedir[local_open_basedir_pos--] = 0;
 			}
 		}
-			
+#endif		
 	} else {
 		/* Else use the unmodified path */
 		strcpy(local_open_basedir, basedir);
@@ -478,7 +480,6 @@ static FILE *php3_fopen_url_wrapper(char *path, char *mode, int options, int *is
 	FILE *fp = NULL;
 	struct sockaddr_in server;
 	unsigned short portno;
-	char winfeof;
 
 	if (!strncasecmp(path, "http://", 7)) {
 		resource = url_parse(path);
@@ -588,8 +589,8 @@ static FILE *php3_fopen_url_wrapper(char *path, char *mode, int options, int *is
 		/* Read past http header */
 		body = 0;
 		location[0] = '\0';
-		while (!body && recv(*socketd, (char *) &winfeof, 1, MSG_PEEK)) {
-			if (SOCK_FGETC(buf, *socketd) == SOCK_RECV_ERR) {
+		while (!body && !SOCK_FEOF(*socketd)) {
+			if ((buf[0] = SOCK_FGETC(*socketd)) == SOCK_RECV_ERR) {
 				SOCK_FCLOSE(*socketd);
 				*socketd = 0;
 				free_url(resource);

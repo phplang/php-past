@@ -225,6 +225,9 @@ bcmath.scale	=	0	; number of decimal digits for all bcmath functions
 [browscap]
 ;browscap	=	extra/browscap.ini
 
+[image]
+;ps.default_encoding	=	"/etc/t1lib/enc/IsoLatin1.enc"	; default character encoding vector for PostScript Type1 fonts
+
 [Informix]
 ifx.default_host		=		; default host for ifx_connect() (doesn't apply in safe mode)
 ifx.default_user		=		; default user for ifx_connect() (doesn't apply in safe mode)

@@ -23,11 +23,11 @@
    | If you did not, or have any questions about PHP licensing, please    |
    | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
-   | Authors: Stig Sæther Bakken <ssb@guardian.no>                        |
+   | Authors: Stig Sæther Bakken <ssb@fast.no>                            |
    +----------------------------------------------------------------------+
  */
 
-/* $Id: snprintf.h,v 1.9 1999/01/01 17:58:52 zeev Exp $ */
+/* $Id: snprintf.h,v 1.10 1999/04/22 13:19:48 ssb Exp $ */
 
 #ifndef _PHP3_SNPRINTF_H
 #define _PHP3_SNPRINTF_H

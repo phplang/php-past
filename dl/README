@@ -1,7 +1,7 @@
 PHP3 Dynamically Loadable Libraries
 
 The build procedure for dynamic modules is not very clean yet.
-It will be improved in PHP-3.1.
+It will be improved in PHP4.
 
 Try:
 

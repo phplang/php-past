@@ -29,7 +29,7 @@
 
 
 /* !!!! experimental, use at your own risk! !!!! 
-   $Id: COM.c,v 1.7 1999/01/04 14:25:18 jah Exp $ */
+   $Id: COM.c,v 1.8 1999/05/19 02:06:06 rasmus Exp $ */
 
 #if WIN32|WINNT
 
@@ -166,7 +166,7 @@ void php3_COM_load(INTERNAL_FUNCTION_PARAMETERS)
 	hr=CLSIDFromProgID(ProgID, &clsid);
 	efree(ProgID);
 
-	// obtain CLSID
+	/* obtain CLSID */
 	if (FAILED(hr)) {
 		error_message = _php3_COM_error_message(hr);
 		php3_error(E_WARNING,"Invalid ProgID:  %s\n", error_message);
@@ -174,7 +174,7 @@ void php3_COM_load(INTERNAL_FUNCTION_PARAMETERS)
 		RETURN_FALSE;
 	}
 
-	// obtain IUnknown
+	/* obtain IUnknown */
 	if (FAILED(hr=CoCreateInstance(&clsid, NULL, CLSCTX_ALL, &IID_IUnknown, (void FAR* FAR*) &i_unknown))) {
 		error_message = _php3_COM_error_message(hr);
 		clsid_str = _php3_string_from_clsid(&clsid);
@@ -184,7 +184,7 @@ void php3_COM_load(INTERNAL_FUNCTION_PARAMETERS)
 		RETURN_FALSE;
 	}
 
-	// obtain IDispatch
+	/* obtain IDispatch */
 	if (FAILED(hr=i_unknown->lpVtbl->QueryInterface(i_unknown, &IID_IDispatch, (void FAR* FAR*) &i_dispatch))) {
 		error_message = _php3_COM_error_message(hr);
 		clsid_str = _php3_string_from_clsid(&clsid);
@@ -257,11 +257,11 @@ static void _php3_pval_to_variant(pval *pval_arg, VARIANTARG *var_arg)
 		var_arg->vt = VT_EMPTY;
 		break;
 	case IS_LONG:
-		var_arg->vt = VT_I4;  // assuming 32-bit platform
+		var_arg->vt = VT_I4;  /* assuming 32-bit platform */
 		var_arg->lVal = pval_arg->value.lval;
 		break;
 	case IS_DOUBLE:
-		var_arg->vt = VT_R8;  // assuming 64-bit double precision
+		var_arg->vt = VT_R8;  /* assuming 64-bit double precision */
 		var_arg->dblVal = pval_arg->value.dval;
 		break;
 	case IS_STRING:

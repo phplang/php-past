@@ -27,7 +27,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: pdf.c,v 1.25 1999/02/28 23:03:51 steffann Exp $ */
+/* $Id: pdf.c,v 1.29 1999/05/27 18:11:06 steinm Exp $ */
 
 /* pdflib 0.6 is subject to the ALADDIN FREE PUBLIC LICENSE.
    Copyright (C) 1997 Thomas Merz. */
@@ -192,11 +192,19 @@ int php3_mend_pdf(void){
 /* {{{ proto int pdf_get_info(void)
    Returns a default info structure for a pdf document */
 void php3_pdf_get_info(INTERNAL_FUNCTION_PARAMETERS) {
-	PDF_info *pdf_info;
+	PDF_info *pdf_info=NULL;
 	int id;
 	PDF_TLS_VARS;
 
 	pdf_info = PDF_get_info();
+
+	/* PDF_get_info() will never fail and return NULL thought
+	   it does a malloc. Anyway, once proper error checking is
+	   introduced in PDF_get_info() this will be needed.
+	   The author of pdflib is informed.
+	*/
+	if(pdf_info == NULL)
+		RETURN_FALSE;
 
 	if(!pdf_info) {
 		php3_error(E_WARNING, "Could not get PDF info");
@@ -539,7 +547,7 @@ void php3_pdf_show_xy(INTERNAL_FUNCTION_PARAMETERS) {
 /* }}} */
 
 /* {{{ proto void pdf_set_font(int pdfdoc, string font, double size, int encoding)
-   Select the current font face and size */
+   Select the current font face, size and encoding */
 void php3_pdf_set_font(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *arg1, *arg2, *arg3, *arg4;
 	int id, type;
@@ -561,6 +569,10 @@ void php3_pdf_set_font(INTERNAL_FUNCTION_PARAMETERS) {
 		RETURN_FALSE;
 	}
 	
+	if(arg4->value.lval > 6) {
+		php3_error(E_WARNING,"Font encoding set to 5");
+		arg4->value.lval = 5;
+	}
 	PDF_set_font(pdf, arg2->value.str.val, (float) arg3->value.dval, arg4->value.lval);
 
 	RETURN_TRUE;
@@ -712,8 +724,10 @@ void php3_pdf_set_text_matrix(INTERNAL_FUNCTION_PARAMETERS) {
 		switch(data->type) {
 			case IS_DOUBLE:
 				*pdfmatrixptr++ = (float) data->value.dval;
+				break;
 			default:
 				*pdfmatrixptr++ = 0.0;
+				break;
 		}
 		_php3_hash_move_forward(matrix);
 	}

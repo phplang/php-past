@@ -23,11 +23,11 @@
    | If you did not, or have any questions about PHP licensing, please    |
    | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
-   | Authors: Stig Sæther Bakken <ssb@guardian.no>                        |
+   | Authors: Stig Sæther Bakken <ssb@fast.no>                            |
    +----------------------------------------------------------------------+
  */
 
-/* $Id: debugger.c,v 1.68 1999/01/29 21:42:13 shane Exp $ */
+/* $Id: debugger.c,v 1.69 1999/04/22 13:19:48 ssb Exp $ */
 #if THREAD_SAFE
 #include "tls.h"
 #endif

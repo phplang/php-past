@@ -12,10 +12,10 @@
      the name <acronym>Hyper-G</acronym> and changed to Hyperwave when
      it was commercialised (If I remember properly it was in 1996).
     <para>
-     Hyperwave is not free software. The current version, 4.0, is
+     Hyperwave is not free software. The current version, 4.1, is
      available at <ulink
      url="http://www.hyperwave.com/">www.hyperwave.com</ulink>.  A
-     time limited version can be downloaded for free (30 days).
+     time limited version can be ordered for free (30 days).
     <para>
      Hyperwave is an information system similar to a database
      (<acronym>HIS</acronym>, Hyperwave Information Server). Its focus
@@ -25,7 +25,28 @@
      contains meta data for the document. The meta data is a list of
      attributes which can be extended by the user. Certain attributes
      are always set by the Hyperwave server, other may be modified by
-     the user.
+     the user. An attribute is a name/value pair of the form name=value.
+     The complete object record contains as many of those pairs as the
+     user likes. The name of an attribute does not have to be unique,
+     e.g. a title may appear several times within an object record.
+     This makes sense if you want to specify a title in several languages.
+     In such a case there is a convention, that each title value is
+     preceded by the two letter language abbreviation followed by a colon,
+     e.g. 'en:Title in English' or 'ge:Titel in deutsch'. Other attributes
+     like a description or keywords are potential candidates. You may
+     also replace the language abbreviation by any other string as long
+     as it separated by colon from the rest of the attribute value.
+    <para>
+     Each object record has native a string representation with each
+     name/value
+     pair separated by a newline. The PHP3 Hyperwave module also knows
+     a second representation which is an associated array with the
+     attribute name being the key. Multilingual attribute values itself
+     form another associated array with the key being the language
+     abbreviation. Actually any multiple attribute forms an associated
+     array with the string left to the colon in the attribute value
+     being the key. (This is not fully implemented. Only the attributes
+     Title, Description and Keyword are treated properly yet.)
     <para>
      Besides the documents, all hyper links contained in a document
      are stored as object records as well. Hyper links which
@@ -47,29 +68,29 @@
      Saying that <function>hw_pipedocument</function> and
      <function>hw_gettext</function> do the link insertion automatically
      is not as simple as it sounds. Inserting links implies a certain
-     hierachy of the documents. On a web server this is given by the
-     file system, but Hyperwave has its own hierachy and names do not
-     reflect the position of an object in that hierachy. Therefore
+     hierarchy of the documents. On a web server this is given by the
+     file system, but Hyperwave has its own hierarchy and names do not
+     reflect the position of an object in that hierarchy. Therefore
      creation of links first of all requires a mapping from the Hyperwave
-     hierachy and namespace into a web hierachy respective web namespace.
+     hierarchy and namespace into a web hierarchy respective web namespace.
      The fundamental difference between Hyperwave and the web is the clear
-     distingtion between names and hierachy in Hyperwave. The name does
-     not contain any information about the objects position in the hierachy.
+     distinction between names and hierarchy in Hyperwave. The name does
+     not contain any information about the objects position in the hierarchy.
      In the web the
      name also contains the information on where the object is located
-     in the hierachy. This leads to two possibles ways of mapping. Either
-     the Hyperwave hierachy and name of the Hyperwave object is reflected
+     in the hierarchy. This leads to two possibles ways of mapping. Either
+     the Hyperwave hierarchy and name of the Hyperwave object is reflected
      in the URL or the name only.
      To make things simple the second approach is used.
      Hyperwave object with name 'my_object' is mapped to
-     'http://host/my_object' diregarding where it resides in the
-     Hyperwave hierachy.
+     'http://host/my_object' disregarding where it resides in the
+     Hyperwave hierarchy.
      An object with name 'parent/my_object' could be the child of
-     'my_object' in the Hyperwave hierachy, though in a web namespace it
+     'my_object' in the Hyperwave hierarchy, though in a web namespace it
      appears to be just the opposite and the user might get confused. 
-     This can only be prevented by selecting reasonable obect names.
+     This can only be prevented by selecting reasonable object names.
     <para>
-     Having made this decission a second problem arises. How do you
+     Having made this decision a second problem arises. How do you
      involve php3? The URL http://host/my_object will not call any
      php3 script unless you tell your web server to rewrite it to
      e.g. 'http://host/php3_script/my_object' and the script 'php3_script'
@@ -87,9 +108,9 @@
      It gets more complicated if php3 is not run as a module/CGI script
      but as a standalone application e.g. to dump the content of the
      Hyperwave server on a CD-ROM. In such a case it makes sense to
-     retain the Hyperwave hierachy and map in onto the filesystem. This
-     conflicts with the object names if they reflect its own hierachy
-     (e.g. by chosing names including '/'). Therefore '/' has to be
+     retain the Hyperwave hierarchy and map in onto the file system. This
+     conflicts with the object names if they reflect its own hierarchy
+     (e.g. by choosing names including '/'). Therefore '/' has to be
      replaced by another character, e.g. '_'. to be continued.
     <para>
      The network protocol to communicate with the Hyperwave server is
@@ -99,7 +120,7 @@
      initiate certain actions, e.g. get object record.  In early
      versions of the Hyperwave Server two native clients (Harmony,
      Amadeus) were provided for communication with the server. Those
-     two disappeared when Hyperwave was commercialized.  As a
+     two disappeared when Hyperwave was commercialised.  As a
      replacement a so called wavemaster was provided. The wavemaster
      is like a protocol converter from <abbrev>HTTP</abbrev> to
      <abbrev>HG-CSP</abbrev>.  The idea is to do all the
@@ -294,39 +315,120 @@ RewriteEngine on
    </sect1>
   </partintro>
 
-  <refentry id="function.hw-changeobject">
+  <refentry id="function.hw-modifyobject">
    <refnamediv>
-    <refname>hw_Changeobject</refname>
-    <refpurpose>changes object</refpurpose>
+    <refname>hw_Modifyobject</refname>
+    <refpurpose>modifies object record</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
     <funcsynopsis>
-     <funcdef>int <function>hw_changeobject</function></funcdef>
+     <funcdef>int <function>hw_modifyobject</function></funcdef>
      <paramdef>int <parameter>connection</parameter></paramdef>
      <paramdef>int <parameter>object_to_change</parameter></paramdef>
-     <paramdef>string <parameter>commands</parameter></paramdef>
+     <paramdef>array <parameter>remove</parameter></paramdef>
+     <paramdef>array <parameter>add</parameter></paramdef>
+
     </funcsynopsis>
     <para>
      This command allows to remove, add, or modify individual attributes
      of an object record.  The object is specified by the Object ID
-     <parameter>object_to_change</parameter>; commands
-     adhere to the following syntax:
-     <literallayout>
-&lt;command> ::= &lt;remcmd&gt; |
-              &lt;addcmd&gt; |
-              &lt;remcmd&gt; "\" &lt;addcmd&gt;
+     <parameter>object_to_change</parameter>. The first array
+     <parameter>remove</parameter> is a list of attributes to remove.
+     The second array <parameter>add</parameter> is a list of attributes
+     to add. In order to modify an attribute one will have to remove
+     the old one and add a new one. <function>hw_modifyobject</function>
+     will always remove the attributes before it adds attributes unless
+     the value of the attribute to remove is not a string or array.
 
-&lt;remcmd&gt;  ::= "rem " &lt;attribute&gt; "=" &lt;value&gt;
+    <para>
+     The keys of both arrays are the attributes name. The value of each
+     array element can either be an array, a string or anything else.
+     If it is an array
+     each attribute value is constructed by the key of each element plus
+     a colon and the value of each element. If it is a string it is taken
+     as the attribute value. An empty string will result in a complete
+     removal of that attribute. If the value is neither a string nor an
+     array but something else, e.g. an integer, no operation at all will
+     be performed on the attribute. This is neccessary if you want to
+     to add a completely new attribute not just a new value for an existing
+     attribute. If the remove array contained
+     an empty string for that attribute, the attribute would be tried to
+     removed which would fail since it doesn't exist. The following addition of
+     a new value for that attribute would also fail. Setting the value
+     for that attribute to e.g. 0 would not even try to remove it since
+     the addition will work.
 
-&lt;addcmd&gt;  ::= "add " &lt;attribute&gt; "=" &lt;value&gt;                
-</literallayout>
-
-     Note that in order to delete or remove an attribute its old value
-     has to be supplied (some attributes are allowed more than
-     once). A command like <command>rem attr=value\add
-     attr=value</command> allows to modify attributes in one
-     operation.
+    <para>
+     If you would like to change the attribute 'Name' with the current
+     value 'books' into 'articles' you will have to create two arrays
+     and call <function>hw_modifyobject</function>.
+     <example>
+      <title>modifying an attribute</title>
+      <programlisting role="php">
+       // $connect is an existing connection to the Hyperwave server
+       // $objid is the ID of the object to modify
+       $remarr = array("Name" => "books");
+       $addarr = array("Name" => "articles");
+       $hw_modifyobject($connect, $objid, $remarr, $addarr);
+      </programlisting>
+     </example>
+     In order to delete/add a name=value pair from/to the object record just
+     pass the remove/add array and set the last/third parameter to an empty
+     array. If the attribute is the first one with that name to add, set
+     attribute value in the remove array to an integer.
+     <example>
+      <title>adding a completly new attribute</title>
+      <programlisting role="php">
+       // $connect is an existing connection to the Hyperwave server
+       // $objid is the ID of the object to modify
+       $remarr = array("Name" => 0);
+       $addarr = array("Name" => "articles");
+       $hw_modifyobject($connect, $objid, $remarr, $addarr);
+      </programlisting>
+     </example>
+    <para>
+     Note: Multilingual attributes, e.g. 'Title', can be modified in two
+     ways. Either by providing the attributes value in its  native form
+     'language':'title' or by providing an array with elements for each
+     language as described above. The above example would than be:
+     <example>
+      <title>modifying Title attribute</title>
+      <programlisting role="php">
+       $remarr = array("Title" => "en:Books");
+       $addarr = array("Title" => "en:Articles");
+       $hw_modifyobject($connect, $objid, $remarr, $addarr);
+      </programlisting>
+     </example>
+     or
+     <example>
+      <title>modifying Title attribute</title>
+      <programlisting role="php">
+       $remarr = array("Title" => array("en" => "Books"));
+       $addarr = array("Title" => array("en" => "Articles", "ge"=>"Artikel"));
+       $hw_modifyobject($connect, $objid, $remarr, $addarr);
+      </programlisting>
+     </example>
+     This removes the english title 'Books' and adds the english title
+     'Articles' and the german title 'Artikel'.
+     <example>
+      <title>removing attribute</title>
+      <programlisting role="php">
+       $remarr = array("Title" => "");
+       $addarr = array("Title" => "en:Articles");
+       $hw_modifyobject($connect, $objid, $remarr, $addarr);
+      </programlisting>
+     </example>
+     This will remove all attributes with the name 'Title' and adds a
+     new 'Title' attribute. This comes in handy if you want to remove
+     attributes recursively.
+    <para>
+     If you need to delete all attributes with a certain name you will have
+     to pass an empty string as the attribute value.
+    <para>
+     Note: Only the attributes 'Title', 'Description' and 'Keyword' will
+     properly handle the language prefix. If those attributes don't carry
+     a language prefix, the prefix 'xx' will be assigned.
     <para>
      Returns TRUE if no error occurs otherwise FALSE.
    </refsect1>
@@ -458,7 +560,7 @@ RewriteEngine on
      <paramdef>int <parameter>object_to_delete</parameter></paramdef>
     </funcsynopsis>
     <para>
-     Deletes the the object with the given object id in the second
+     Deletes the object with the given object id in the second
      parameter. It will delete all instances of the object.
     <para>
      Returns TRUE if no error occurs otherwise FALSE.
@@ -539,6 +641,55 @@ RewriteEngine on
     <para>
      See also <function>hw_DocumentAttributes</function>,
               <function>hw_DocumentSize</function>.
+   </refsect1>
+  </refentry>
+
+  <refentry id="function.hw-documentcontent">
+   <refnamediv>
+    <refname>hw_DocumentContent</refname>
+    <refpurpose>returns content of hw_document</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>string <function>hw_documentcontent</function></funcdef>
+     <paramdef>int <parameter>hw_document</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+     Returns the content of the document. If the document is an HTML
+     document the content is everything after the BODY tag. Information
+     from the HEAD and BODY tag is in the stored in the object record.
+    <para>
+     See also <function>hw_DocumentAttributes</function>,
+              <function>hw_DocumentSize</function>,
+              <function>hw_DocumentSetContent</function>.
+   </refsect1>
+  </refentry>
+
+  <refentry id="function.hw-documentsetcontent">
+   <refnamediv>
+    <refname>hw_DocumentSetContent</refname>
+    <refpurpose>sets/replaces content of hw_document</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>string <function>hw_documentsetcontent</function></funcdef>
+     <paramdef>int <parameter>hw_document</parameter></paramdef>
+     <paramdef>string <parameter>content</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+     Sets or replaces the content of the document. If the document is an HTML
+     document the content is everything after the BODY tag. Information
+     from the HEAD and BODY tag is in the stored in the object record.
+     If you provide this information in the content of the document too,
+     the Hyperwave server will change the object record accordingly when
+     the document is inserted. Probably not a very good idea.
+     If this functions fails the document will retain its old content.
+    <para>
+     See also <function>hw_DocumentAttributes</function>,
+              <function>hw_DocumentSize</function>,
+              <function>hw_DocumentContent</function>.
    </refsect1>
   </refentry>
 
@@ -722,6 +873,74 @@ RewriteEngine on
     <para>
      See also <function>hw_ChildrenObj</function>,
               <function>hw_GetChildDocCollObj</function>.
+   </refsect1>
+  </refentry>
+
+  <refentry id="function.hw-getremote">
+   <refnamediv>
+    <refname>hw_GetRemote</refname>
+    <refpurpose>Gets a remote document</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>hw_getremote</function></funcdef>
+     <paramdef>int <parameter>connection</parameter></paramdef>
+     <paramdef>int <parameter>objectID</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+     Returns a remote document. Remote documents in Hyperwave notation
+     are documents retrieved from an external source. Common remote
+     documents are for example external web pages or queries in a database.
+     In order to be able to access external sources throught remote documents
+     Hyperwave introduces the HGI (Hyperwave Gateway Interface) which
+     is similar to the CGI. Currently, only ftp, http-servers and some
+     databases can be accessed by the HGI.
+     Calling <function>hw_GetRemote</function> returns the document from
+     the external source.
+     If you want to use this function you should be very familiar with HGIs.
+     You should also consider to use php3 instead of Hyperwave to access
+     external
+     sources. Adding database support by a Hyperwave gateway should be more
+     difficult than doing it in php3. 
+    <para>
+     See also <function>hw_GetRemoteChildren</function>.
+   </refsect1>
+  </refentry>
+
+  <refentry id="function.hw-getremotechildren">
+   <refnamediv>
+    <refname>hw_GetRemoteChildren</refname>
+    <refpurpose>Gets children of remote document</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>hw_getremotechildren</function></funcdef>
+     <paramdef>int <parameter>connection</parameter></paramdef>
+     <paramdef>string <parameter>object record</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+     Returns the children of a remote document. Children of a remote
+     document are remote documents itself.
+     This makes sense
+     if a database query has to be narrowed and is explained in
+     Hyperwave Programmers' Guide. If the number of children is 1 the
+     function will return the document itself formated by the Hyperwave
+     Gateway Interface (HGI). If the number of children
+     is greater than 1 it will return an array of object record with
+     each maybe the input value for another call to
+     <function>hw_GetRemoteChildren</function>. Those object records are
+     virtual and do not exist in the Hyperwave server, therefore they
+     do not have a valid object ID. How exactely such an object record
+     looks like is up to the HGI.
+     If you want to use this function you should be very familiar with HGIs.
+     You should also consider to use php3 instead of Hyperwave to access
+     external
+     sources. Adding database support by a Hyperwave gateway should be more
+     difficult than doing it in php3. 
+    <para>
+     See also <function>hw_GetRemote</function>.
    </refsect1>
   </refentry>
 
@@ -1034,9 +1253,10 @@ RewriteEngine on
      Moves the objects with object ids as specified in the second
      parameter from the collection with id <parameter>source id</parameter>
      to the collection with the id <parameter>destination id</parameter>.
-     If the source id is 0 the objects will
+     If the destination id is 0 the objects will
      be unlinked from the source collection. If this is the last instance
-     of that object it will be deleted.
+     of that object it will be deleted. If you want to delete all instances
+     at once, use <function>hw_deleteobject</function>.
     <para>
      The value return is the number of moved objects.
     <para>
@@ -1232,8 +1452,8 @@ RewriteEngine on
     <title>Description</title>
     <funcsynopsis>
      <funcdef>int <function>hw_new_document</function></funcdef>
-     <paramdef>string <parameter>document_data</parameter></paramdef>
      <paramdef>string <parameter>object_record</parameter></paramdef>
+     <paramdef>string <parameter>document_data</parameter></paramdef>
      <paramdef>int <parameter>document_size</parameter></paramdef>
     </funcsynopsis>
     <para>
@@ -1265,6 +1485,11 @@ RewriteEngine on
     </funcsynopsis>
     <para>
      Converts an <parameter>object_record</parameter> into an object array.
+     The keys of the resulting array are the attributes names.
+     Multiple attributes like 'Title' in different languages form its own
+     array. The keys of this array are the left part to the colon of the
+     attribute value. Currently only the attributes 'Title', 'Description'
+     and 'Keyword' are treated properly.
    </refsect1>
   </refentry>
 

@@ -1,48 +1,77 @@
  <chapter id="introduction">
-  <title>An introduction to PHP3</title>
+  <title>Introduction</title>
   <simpara></simpara>
 
   <sect1 id="intro-whatis">
-   <title>What is PHP3?</title>
+   <title>What is PHP?</title>
    <simpara>
-    PHP Version 3.0 is a server-side HTML-embedded scripting language.
+    PHP is a server-side HTML-embedded scripting language.
+
+   <para>
+    Simple answer, but what does that mean? An example:
+   <example>
+    <title>An introductory example</title>
+    <programlisting>
+&lt;html>&lt;head>&lt;title>Example&lt;/title>
+&lt;body>
+&lt;?php echo "Hi, I'm a PHP script!"; ?>
+&lt;/body>&lt;/html>
+    </programlisting>
+   </example>
+
+   <para>
+    Notice how this is different from a CGI script written in other
+    languages like Perl or C -- instead of writing a program with lots
+    of commands to output HTML, you write an HTML script with a some
+    embedded code to do something (in this case, output some text). The
+    PHP code is enclosed in special start and end tags that allow you
+    to jump into and out of "PHP mode".
+
+   <para>
+    What distinguishes PHP from something like client-side Javascript
+    is that the code is executed on the server. If you were to have a
+    script similar to the above on your server, the client would receive
+    the results of running that script, with no way of determining what
+    the underlying code may be. You can even configure your web server
+    to process all your HTML files with PHP, and then there's really no
+    way that users can tell what you have up your sleeve.
 
   <sect1 id="intro-whatcando">
-   <title>What can PHP3 do?</title>
+   <title>What can PHP do?</title>
+
    <para>
-    Perhaps the strongest and most significant feature in PHP3 is its
-    database integration layer.  Writing a database-enabled web page
-    is incredibly simple.  The following databases are currently
+    At the most basic level, PHP can do anything any other CGI
+    program can do, such as collect form data, generate dynamic
+    page content, or send and receive cookies.
+
+   <para>
+    Perhaps the strongest and most significant feature in PHP is its
+    support for a wide range of databases. Writing a database-enabled
+    web page is incredibly simple.  The following databases are currently
     supported:
     <blockquote>
-     <simplelist columns=2>
-      <member>Oracle</member>
-      <member>Sybase</member>
+     <simplelist columns=3>
+      <member>Adabas D</member>
+      <member>dBase</member>
+      <member>Empress</member>
+      <member>FilePro</member>
+      <member>Informix</member>
+      <member>InterBase</member>
       <member>mSQL</member>
       <member>MySQL</member>
-      <member>Solid</member>
-      <member>ODBC</member>
+      <member>Oracle</member>
       <member>PostgreSQL</member>
-      <member>Adabas D</member>
-      <member>FilePro</member>
+      <member>Solid</member>
+      <member>Sybase</member>
       <member>Velocis</member>
-      <member>Informix</member>
-      <member>dBase</member>
       <member>Unix dbm</member>
      </simplelist>
     </blockquote>
 
-<!--
-  <sect1 id="intro-concepts">
-   <title>PHP3 Concepts</title>
-   <simpara></simpara>
--->
-
-<!--
-  <sect1 id="intro-examples">
-   <title>Some examples</title>
-   <simpara></simpara>
--->
+   <para>
+    PHP also has support for talking to other services using protocols
+    such as IMAP, SNMP, NNTP, POP3, or even HTTP. You can even open raw
+    network sockets and interact using other protocols.
 
   <sect1 id="intro-history">
    <title>A Brief History of PHP</title>
@@ -60,7 +89,7 @@
     the Personal Home Page tools scripts with the Form Interpreter and
     added mSQL support and PHP/FI was born.  PHP/FI grew at an amazing
     pace and people started contributing code to it.
-   </simpara>
+
    <simpara>
     It is hard to give any hard statistics, but it is estimated that
     by late 1996 PHP/FI was in use on at least 15,000 web sites around
@@ -72,15 +101,21 @@
     and this new parser formed the basis for PHP Version 3.  A lot of
     the utility code from PHP/FI was ported over to PHP3 and a lot of
     it was completely rewritten.
-   </simpara>
+
    <simpara>
-    Today (mid-1998) either PHP/FI or PHP3 ships with a number of
+    Today (mid-1999) either PHP/FI or PHP3 ships with a number of
     commercial products such as C2's StrongHold web server and RedHat
     Linux and a conservative estimate based on an extrapolation from
-    numbers provided by NetCraft would be that PHP is in use on 150,000
-    sites around the world.  To put that in perspective, that is more
-    sites than run Netscape's flagship Enterprise server on the Internet.
-   </simpara>
+    numbers provided by NetCraft would be that PHP is in use on over
+    150,000 sites around the world.  To put that in perspective, that
+    is more sites than run Netscape's flagship Enterprise server on
+    the Internet.
+
+   <simpara>
+    Also as of this writing, work is underway on the next generation of
+    PHP that will utilize the powerful Zend scripting engine to deliver
+    higher performance, and will also support running under webservers
+    other than Apache as a native server module.
 
  </chapter>
 

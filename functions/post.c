@@ -33,6 +33,7 @@
 #include <stdio.h>
 #include "php.h"
 #include "internal_functions.h"
+#include "php3_list.h"
 #include "functions/mime.h"
 #include "functions/type.h"
 #include "functions/php3_string.h"
@@ -41,7 +42,87 @@
 
 #ifndef THREAD_SAFE
 int php3_track_vars;
+extern int le_uploads;
+extern HashTable list;
 #endif
+
+/*
+ * php3_getput()
+ *
+ * This copies the uploaded file to a temporary file.
+ */
+static void php3_getput(void) {
+#if MODULE_MAGIC_NUMBER > 19961007
+	char upload_buffer[BUFSIZ];
+#endif
+	size_t bytes=0;
+	char *fn;
+	FILE *fp;
+	int length, cnt;
+
+	length = GLOBAL(request_info).content_length;
+	if (length > php3_ini.upload_max_filesize) {
+		php3_error(E_WARNING, "Max file size of %ld bytes exceeded - temporary file not saved", php3_ini.upload_max_filesize);
+		SET_VAR_STRING("PHP_PUT_FILENAME", estrdup("none"));
+		return;
+	}
+	fn = tempnam(php3_ini.upload_tmp_dir, "php");
+	fp = fopen(fn, "w");
+	if (!fp) {
+		php3_error(E_WARNING, "File Upload Error - Unable to open temporary file [%s]", fn);
+		return;
+	}
+	cnt = length;
+#if FHTTPD
+	bytes = fwrite(req->databuffer, 1, length, fp);
+#else
+#if MODULE_MAGIC_NUMBER > 19961007
+	if (should_client_block(GLOBAL(php3_rqst))) {
+		void (*handler) (int);
+		int dbsize, len_read, dbpos = 0;
+
+		hard_timeout("copy script args", GLOBAL(php3_rqst));    /* start timeout timer */
+		handler = signal(SIGPIPE, SIG_IGN);             /* Ignore sigpipes for now */
+		while ((len_read = get_client_block(GLOBAL(php3_rqst), upload_buffer, BUFSIZ)) > 0) {
+			if ((dbpos + len_read) > length) dbsize = length - dbpos;
+			else dbsize = len_read;
+			reset_timeout(GLOBAL(php3_rqst));       /* Make sure we don't timeout */
+			if((bytes=fwrite(upload_buffer, 1, dbsize, fp))<dbsize) {
+				bytes+=dbpos;
+				break;
+			}
+			dbpos += dbsize;
+			bytes=dbpos;
+		}
+		signal(SIGPIPE, handler);       /* restore normal sigpipe handling */
+		kill_timeout(GLOBAL(php3_rqst));        /* stop timeout timer */
+	}
+#else
+	cnt = 0;
+	do {
+		char upload_buffer[BUFSIZ];
+
+#if APACHE
+		bytes = read_client_block(php3_rqst, upload_buffer + cnt, min(length - cnt,BUFSIZ));
+#endif
+#if CGI_BINARY
+		bytes = fread(upload_buffer + cnt, 1, ((length-cnt)<BUFSIZ)?length-cnt:BUFSIZ, stdin);
+#endif
+#if USE_SAPI
+		bytes = GLOBAL(sapi_rqst)->readclient(GLOBAL(sapi_rqst)->scid,upload_buffer + cnt, 1, min(length - cnt,BUFSIZ));
+#endif
+		cnt += bytes;
+	} while (bytes && cnt < length);
+#endif
+#endif
+	fclose(fp);
+	if (bytes < (size_t)length) {
+		php3_error(E_WARNING, "Only %d bytes were written, expected to write %ld", bytes, length);
+	}
+	SET_VAR_STRING("PHP_PUT_FILENAME", estrdup(fn));
+	php3_list_do_insert(&GLOBAL(list),fn,GLOBAL(le_uploads));  /* Tell PHP about the file so the destructor can unlink it later */
+}
+
 
 /*
  * php3_getpost()
@@ -340,6 +421,9 @@ void php3_treat_data(int arg, char *str)
 		}
 	} else if (arg == PARSE_STRING) {		/* String data */
 		res = str;
+      } else if (arg == PARSE_PUT) {          /* Put data */
+              php3_getput();
+              return;
 	}
 	if (!res) {
 		return;

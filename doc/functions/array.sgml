@@ -331,6 +331,11 @@ while ( list( $key, $val ) = each( $HTTP_POST_VARS ) ) {
       </programlisting>
      </example>
 
+	<para>
+	 After <function>each</function> has executed, the array cursor
+	 will be left on the next element of the array, or on the last
+	 element if it hits the end of the array.
+
     <para>
      See also <function>key</function>, <function>list</function>,
 	 <function>current</function>, <function>reset</function>,
@@ -553,6 +558,27 @@ while (list($id, $name, $salary) = mysql_fetch_row($result)) {
    </refsect1>
   </refentry>
 
+  <refentry id="function.range">
+   <refnamediv>
+    <refname>range</refname>
+    <refpurpose>Create an array containing a range of integers</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>array <function>range</function></funcdef>
+     <paramdef>int <parameter>low</parameter></paramdef>
+     <paramdef>int <parameter>high</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+     <function>range</function> returns an array of integers from
+     <parameter>low</parameter> to <parameter>high</parameter>,
+     inclusive.
+    <para>
+     See <function>shuffle</function> for an example of its use.
+   </refsect1>
+  </refentry>
+
   <refentry id="function.reset">
    <refnamediv>
     <refname>reset</refname>
@@ -610,6 +636,37 @@ while (list($id, $name, $salary) = mysql_fetch_row($result)) {
     <para>
      See also <function>arsort</function>, <function>asort</function>,
      <function>ksort</function>, <function>sort</function> and <function>usort</function>.
+   </refsect1>
+  </refentry>
+
+  <refentry id="function.shuffle">
+   <refnamediv>
+    <refname>shuffle</refname>
+    <refpurpose>Shuffle an array</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>void <function>shuffle</function></funcdef>
+     <paramdef>array <parameter>array</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+     This function shuffles (randomizes the order of the elements in) 
+     an array.
+     <example>
+      <title><function>shuffle</function> example</title>
+	<programlisting>
+$numbers = range(1,20);
+srand(time());
+shuffle($numbers);
+while (list(,$number) = each($numbers)) {
+  echo "$number ";
+}
+</programlisting></example>
+    <para>
+     See also <function>arsort</function>, <function>asort</function>,
+     <function>ksort</function>, <function>rsort</function>,
+     <function>sort</function> and <function>usort</function>.
    </refsect1>
   </refentry>
 
@@ -749,6 +806,11 @@ while(list($key, $value) = each($a)) {
      user-supplied comparison function.  If the array you wish to sort
      needs to be sorted by some non-trivial criteria, you should use
      this function.
+    <para>
+     The comparison function must return an integer less than, equal to, or 
+     greater than zero if the first argument is considered to be respectively 
+     less than, equal to, or greater than the second. If two members compare 
+     as equal, their order in the sorted array is undefined.
      <example>
       <title><function>usort</function> example</title>
 	<programlisting>

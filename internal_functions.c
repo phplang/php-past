@@ -29,7 +29,7 @@
  */
 
 
-/* $Id: internal_functions.c,v 1.346 1999/02/25 12:17:01 thies Exp $ */
+/* $Id: internal_functions.c,v 1.351 1999/05/27 15:42:50 andrey Exp $ */
 
 #ifdef THREAD_SAFE
 #include "tls.h"
@@ -94,6 +94,7 @@
 #include "functions/php3_interbase.h"
 #include "functions/php3_xml.h"
 #include "functions/php3_pdf.h"
+#include "functions/php3_cpdf.h"
 #include "functions/php3_fdf.h"
 #include "functions/php3_sysvsem.h"
 #include "functions/php3_sysvshm.h"
@@ -102,6 +103,10 @@
 #include "functions/php3_wddx.h"
 #include "functions/php3_wddx_a.h"
 #include "functions/php3_yp.h"
+#include "functions/php3_dba.h"
+#include "functions/php_mcrypt.h"
+#include "functions/php_mhash.h"
+#include "functions/php3_pcre.h"
 
 #ifndef WIN32
 #include <netinet/in.h>
@@ -136,12 +141,15 @@ php3_builtin_module php3_builtin_modules[] =
 	{"Debugger",					debugger_module_ptr},
 	{"Syslog",						syslog_module_ptr},
 	{"MySQL",						mysql_module_ptr},
+	{"mcrypt",						mcrypt_module_ptr},
+	{"mhash",						mhash_module_ptr},
 	{"mSQL",						msql_module_ptr},
 	{"PostgresSQL",					pgsql_module_ptr},
 	{"Informix",					ifx_module_ptr},
 	{"LDAP",						ldap_module_ptr},
 	{"Velocis",						velocis_module_ptr},
 	{"FilePro",						filepro_module_ptr},
+	{"DBA",							dba_module_ptr},
 	{"Sybase SQL",					sybase_module_ptr},
 	{"Sybase SQL - CT",				sybct_module_ptr},
 	{"Unified ODBC",				uodbc_module_ptr},
@@ -170,6 +178,7 @@ php3_builtin_module php3_builtin_modules[] =
 	{"InterBase",					php3_ibase_module_ptr},
 	{"XML",							xml_module_ptr},
 	{"PDF",							pdf_module_ptr},
+	{"CPDF",							cpdf_module_ptr},
 	{"FDF",							fdf_module_ptr},
 	{"System V semaphores",			sysvsem_module_ptr},
 	{"System V shared memory",		sysvshm_module_ptr},
@@ -177,6 +186,7 @@ php3_builtin_module php3_builtin_modules[] =
 	{"MCK Crypt",					mckcrypt_module_ptr},
     {"YP",                          yp_module_ptr},
 	{"ImageMagick",					magick_module_ptr},
+	{"PCRE",					pcre_module_ptr},
 	{NULL,							NULL}
 };
 

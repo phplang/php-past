@@ -27,7 +27,7 @@ INTRODUCTION
         http://www.ora.com/homepages/dtdparse/docbook/3.0/
 
     RPMs with the necessary software can be found at
-    ftp://ftp.cygnus.com/pub/home/rosalia/docware/
+    ftp://sourceware.cygnus.com/pub/docbook-tools/
 
 CONVENTIONS
 
@@ -150,9 +150,8 @@ function some_code($foo)
      a "See also" list like this:
 
     <simpara>
-     See also:
-     <link linkend="function.stripslashes">stripslashes</link>
-     <link linkend="function.quotemeta">quotemeta</link>
+     See also <function>stripslashes</function> and
+     <function>quotemeta</function>.
 
    </refsect1>
   </refentry>

@@ -7,13 +7,13 @@
    <para>
     The Informix driver for Online (ODS) 7.x, SE 7.x and Universal
     Server (IUS) 9.x is implemented in "functions/ifx.ec" and
-    "functions/php3_ifx.h".  At the moment of writing ODS 7.2 support
-    is fairly complete, with full BLOB support. IUS 9.1 support is
-    partly finished: the new data types are there, but SLOBS support
+    "functions/php3_ifx.h".  ODS 7.x support is fairly complete, 
+    with full support for BYTE and TEXT columns. IUS 9.x support is
+    partly finished: the new data types are there, but SLOB and CLOB support
     is still under construction.
    </para>
    <note>
-    <title>Configuration notes</title>
+   <title>Configuration notes</title>
    <para></para><para>
     Before you run the "configure" script, make sure that the
     "INFORMIXDIR" variable has been set.
@@ -28,82 +28,94 @@
    </para>
    </note>
    <note>
-    <title>Some notes on the use of BLOBs</title>
+  <title>Some notes on the use of BLOBs (TEXT and BYTE columns)</title>
    <para></para><para>
-   The current version (September 18, 1998) has complete select/insert/update
-   support for BLOB columns.
+    BLOBs are normally addressed by integer BLOB identifiers.
+    Select queries return a "blob id" for every BYTE and TEXT column.
+    You can get at the contents with "string_var = ifx_get_blob($blob_id);" if
+    you choose to get the BLOBs in memory (with : "ifx_blobinfile(0);"). 
+    If you prefer to receive the content of BLOB columns in a file, use
+    "ifx_blobinfile(1);", and "ifx_get_blob($blob_id);" will get 
+    you the filename.  Use normal file I/O to get at the blob contents.
   </para><para>
-   BLOBs are normally addressed by integer BLOB identifiers.
-   Select queries return a "blob id" for every BYTE and TEXT column.
-   You can get at the contents with "string_var = ifx_get_blob($blob_id);" if
-   you choose to get the BLOBs in memory (with : "ifx_blobinfile(0);"). 
-   If you prefer to receive the content of BLOB columns in a file, use
-   "ifx_blobinfile(1);", and "ifx_get_blob($blob_id);" will get 
-   you the filename.  Use normal file I/O to get at the blob contents.
+    For insert/update queries you must create these "blob id's" yourself
+    with "ifx_create_blob(..);". You then plug the blob id's into an array,
+    and replace the blob columns with a question mark (?) in the query string.
+    For updates/inserts, you are responsible for setting the blob contents with
+    ifx_update_blob(...).
   </para><para>
-   For insert/update queries you must create these "blob id's" yourself
-   with "ifx_create_blob(..);". You then plug the blob id's into an array,
-   and replace the blob columns with a question mark (?) in the query string.
-   For updates/inserts, you are responsible for setting the blob contents with
-   ifx_update_blob(...).
-  </para><para>
-   The behaviour of BLOB columns can be altered by configuration variables that
-   also can be set at runtime :
+    The behaviour of BLOB columns can be altered by configuration variables
+    that also can be set at runtime :
   </para><para>
   </para><para>
-   configuration variable : ifx.textasvarchar
+       configuration variable : ifx.textasvarchar
   </para><para>
-   configuration variable : ifx.byteasvarchar
-  </para><para>
-  </para><para>
-   runtime functions :
-  </para><para>
-   ifx_textasvarchar(0) : use blob id's for select queries with TEXT columns
-  </para><para>
-   ifx_byteasvarchar(0) : use blob id's for select queries with BYTE columns
-  </para><para>
-   ifx_textasvarchar(1) : return TEXT columns as if they were VARCHAR columns,
-                          without the use of blob id's for select queries.
-  </para><para>
-   ifx_byteasvarchar(1) : return BYTE columns as if they were VARCHAR columns,
-                          without the use of blob id's for select queries.
+       configuration variable : ifx.byteasvarchar
   </para><para>
   </para><para>
-   configuration variable : ifx.blobinfile
+    runtime functions :
   </para><para>
-   runtime function :
+      ifx_textasvarchar(0) : use blob id's for select queries with TEXT columns
   </para><para>
-   ifx_blobinfile_mode(0) : return BYTE columns in memory, the blob id lets you
-                            get at the contents.
+      ifx_byteasvarchar(0) : use blob id's for select queries with BYTE columns
   </para><para>
-   ifx_blobinfile_mode(1) : return BYTE columns in a file, the blob id lets you
-                            get at the file name.
+      ifx_textasvarchar(1) : return TEXT columns as if they were 
+                             VARCHAR columns, without the use of blob id's
+                             for select queries.
   </para><para>
-   If you set ifx_text/byteasvarchar to 1, you can use TEXT and BYTE columns
-   in select queries just like normal (but rather long) VARCHAR fields.
-   Since all strings are "counted" in PHP3, this remains "binary safe".
-   It is up to you to handle this correctly. The returned data can contain
-   anything, you are responsible for the contents.
+      ifx_byteasvarchar(1) : return BYTE columns as if they were VARCHAR 
+                             columns, without the use of blob id's for 
+                             select queries.
   </para><para>
-   If you set ifx_blobinfile to 1, use the file name returned by 
-   ifx_get_blob(..) to get at the blob contents. 
-   Note that in this case YOU ARE RESPONSIBLE FOR DELETING THE TEMPORARY 
-   FILES CREATED BY INFORMIX when fetching the row.
-   Every new row fetched will create new temporary files for every BYTE column.
   </para><para>
-   The location of the temporary files can be influenced by the environment
-   variable "blobdir", default is "." (the current directory).
-   Something like : putenv(blobdir=tmpblob"); will ease the cleaning up of temp 
-   files accidentally left behind (their names all start with "blb").
+    configuration variable : ifx.blobinfile
+  </para><para>
+    runtime function :
+  </para><para>
+     ifx_blobinfile_mode(0) : return BYTE columns in memory, the blob id 
+                              lets you get at the contents.
+  </para><para>
+     ifx_blobinfile_mode(1) : return BYTE columns in a file, the blob id
+                              lets you get at the file name.
+  </para><para>
+    If you set ifx_text/byteasvarchar to 1, you can use TEXT and BYTE columns
+    in select queries just like normal (but rather long) VARCHAR fields.
+    Since all strings are "counted" in PHP3, this remains "binary safe".
+    It is up to you to handle this correctly. The returned data can contain
+    anything, you are responsible for the contents.
+  </para><para>
+    If you set ifx_blobinfile to 1, use the file name returned by 
+    ifx_get_blob(..) to get at the blob contents. 
+    Note that in this case YOU ARE RESPONSIBLE FOR DELETING THE TEMPORARY 
+    FILES CREATED BY INFORMIX when fetching the row.
+    Every new row fetched will create new temporary files for every 
+    BYTE column.
+  </para><para>
+    The location of the temporary files can be influenced by the environment
+    variable "blobdir", default is "." (the current directory).
+    Something like : putenv(blobdir=tmpblob"); will ease the cleaning up of
+    temp files accidentally left behind (their names all start with "blb").
    </para>
+  </note>
+  <note>
+   <title>Automatically trimming "char" (SQLCHAR and SQLNCHAR) data</title>
+    <para></para><para>
+    This can be set with the configuration variable
+    </para><para>
+    ifx.charasvarchar : if set to 1 trailing spaces will be automatically
+    trimmed.
+    </para>
    </note>
+    <para></para>
    <note>
-    <title>Automatically trimming "char" (SQLCHAR and SQLNCHAR) data</title>
-   <para></para><para>
-   This can be set with a configuration variable :
-   </para><para>
-   ifx.charasvarchar : if set to 1 trailing spaces will be automatically trimmed
-   </para>
+   <title>NULL values</title>
+    <para></para><para>
+     The configuration variable ifx.nullformat (and the runtime function
+     <function>ifx_nullformat</function>) when set to true will return NULL
+     columns as the string "NULL", when set to false they return the empty
+     string. This allows you to discriminate between NULL columns and 
+     empty columns. 
+    </para>
    </note>
   </partintro>
 
@@ -302,12 +314,11 @@ ifx_close($conn_id);
 ifx_textasvarchar(1);      // use "text mode" for blobs
 $res_id = ifx_query("select * from orders", $conn_id);
 if (! $res_id) {
-    printf("Can't select orders : %s\n&lt;br>%s&lt;br>\n",
-        ifx_error();
-        ifx_errormsg();
-  die;
+    printf("Can't select orders : %s\n&lt;br>%s&lt;br>\n", ifx_error());
+    ifx_errormsg();
+    die;
 }
-ifx_htmltbl_result($res_id, "border=\"1\");
+ifx_htmltbl_result($res_id, "border=\"1\"");
 ifx_free_result($res_id);
       </programlisting>
      </example>
@@ -521,6 +532,49 @@ if ($rowcount > 1000) {
     printf ("Too many rows in result set (%d)\n&lt;br>", $rowcount);
     die ("Please restrict your query&lt;br>\n");
 }
+      </programlisting>
+     </example>
+   </refsect1>
+  </refentry>
+
+  <refentry id="function.ifx-getsqlca">
+   <refnamediv>
+    <refname>ifx_getsqlca</refname>
+    <refpurpose>Get the contents of sqlca.sqlerrd[0..5] after a query</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>array <function>ifx_getsqlca</function></funcdef>
+     <paramdef>int <parameter>result_id</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+     <parameter>result_id</parameter> is a valid result id returned by
+     <function>ifx_query</function> or
+     <function>ifx_prepare</function>. 
+    </para><para> 
+     Returns a pseudo-row (assiociative arry) with sqlca.sqlerrd[0] to sqlca.sqlerrd[5] 
+     after the query associated with <parameter>result_id</parameter>.  
+    </para><para> 
+     For inserts, updates and deletes the values returned are those as set by the server
+     after executing the query. This gives access to the number of affected
+     rows and the serial insert value. For selects the values are those saved after
+     the prepare statement. This gives access to the estimated number of
+     affected rows. The use of this function saves the overhead of executing
+     a "select dbinfo('sqlca.sqlerrdx')" query, as it retrieves the values
+     that were saved by the ifx driver at the appropriate moment.  
+    </para>
+     <example>
+      <title>Retrieve Informix sqlca.sqlerrd[x] values</title>
+      <programlisting role="php3">
+/* assume the first column of 'sometable' is a serial */
+$qid = ifx_query("insert into sometable values(0, '2nd column', 'another column' ", $connid);
+if (! $qid) {
+    ... error ...
+}
+$sqlca = ifx_getsqlca ($qid);
+$serial_value = $sqlca["sqlerrd1"];
+echo "The serial value of the inserted row is : " . $serial_value&lt;br>\n"; 
       </programlisting>
      </example>
    </refsect1>

@@ -8,7 +8,7 @@
    | it under the terms of one of the following licenses:                 |
    |                                                                      |
    |  A) the GNU General Public License as published by the Free Software |
-   |     Foundation; either version 2 of the License, or (at your option) |
+   |     Foundatbion; either version 2 of the License, or (at your option) |
    |     any later version.                                               |
    |                                                                      |
    |  B) the PHP License as published by the PHP Development Team and     |
@@ -23,7 +23,8 @@
    | If you did not, or have any questions about PHP licensing, please    |
    | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
-   | Authors: Stig Sæther Bakken <ssb@guardian.no>                        |
+   | Authors: Stig Sæther Bakken <ssb@fast.no>                            |
+   |          Thies C. Arntzen <thies@digicol.de>                         |
    |                                                                      |
    | Initial work sponsored by Thies Arntzen <thies@digicol.de> of        |
    | Digital Collections, http://www.digicol.de/                          |
@@ -49,24 +50,34 @@
 #  endif
 # endif /* osf alpha */
 
-# include <oci.h>
+#include <oci.h>
 
-# if 0
 typedef struct {
-    OCIEnv *pEnv;
-} oci8_request;
-# endif
+	int num;
+	int persistent;
+	int open;
+	char *dbname;
+    OCIServer *pServer;
+	OCIFocbkStruct failover;
+} oci8_server;
+
+typedef struct {
+	int num;
+	int persistent;
+	int open;
+	oci8_server *server;
+	OCISession *pSession;
+} oci8_session;
 
 typedef struct {
 	int id;
-    OCIEnv *pEnv;
-    OCIServer *pServer;
+	int open;
+	oci8_session *session;
     OCISvcCtx *pServiceContext;
+	sword error;
     OCIError *pError;
-	OCISession *pSession;
 	HashTable *descriptors;
 	int descriptors_count;
-    int open;
 } oci8_connection;
 
 typedef struct {
@@ -79,16 +90,15 @@ typedef struct {
     text *name;
     ub4 name_len;
 	ub4 type;
-	char *data;			/* for pval cache */
 } oci8_define;
-
 
 typedef struct {
 	int id;
 	oci8_connection *conn;
+	sword error;
     OCIError *pError;
     OCIStmt *pStmt;
-	text *last_query;
+	char *last_query;
 	HashTable *columns;
 	int ncolumns;
 	HashTable *binds;
@@ -100,6 +110,7 @@ typedef struct {
 	OCIBind *pBind;
 	pval *value;
 	dvoid *descr;		/* used for binding of LOBS etc */
+    OCIStmt *pStmt;     /* used for binding REFCURSORs */
 	ub4 maxsize;
 	sb2 indicator;
 	ub2 retcode;
@@ -108,7 +119,7 @@ typedef struct {
 typedef struct {
 	oci8_statement *statement;
 	OCIDefine *pDefine;
-    text *name;
+    char *name;
     ub4 name_len;
     ub2 type;
     ub4 size4;
@@ -118,36 +129,58 @@ typedef struct {
 	ub2 retcode;
 	ub4 rlen;
 	ub2 is_descr;
+	ub2 is_cursor;
     int descr;
     oci8_descriptor *pdescr;
+    oci8_statement *pstmt;
+	int stmtid;
 	void *data;
 	oci8_define *define;
+
+	/* for piecewise read */
+	int piecewise;
+	int cursize;
+	int curoffs;
+    ub4 piecesize;
 } oci8_out_column;
 
 typedef struct {
+	sword error;
+    OCIError *pError;
     char *default_username;
     char *default_password;
     char *default_dbname;
+
     long debug_mode;
+
+	/* XXX NYI
     long allow_persistent;
     long max_persistent;
     long max_links;
     long num_persistent;
     long num_links;
-    int le_conn;
-    int le_stmt; 
+	*/
+
+    int le_conn; /* active connections */
+    int le_stmt; /* active statements */
+    int le_trans; /* active transactions */
+
+	int server_num;
+    HashTable *server;
+	int user_num;
+	HashTable *user;
+
+    OCIEnv *pEnv;
 } oci8_module;
 
 extern php3_module_entry oci8_module_entry;
-# define oci8_module_ptr &oci8_module_entry
+#define oci8_module_ptr &oci8_module_entry
 
-# define OCI8_MAX_NAME_LEN 64
-# define OCI8_MAX_DATA_SIZE 2097152 /* two megs */
-
-/* this one has to be changed to include persistent connections as well */
+#define OCI8_MAX_NAME_LEN 64
+#define OCI8_MAX_DATA_SIZE INT_MAX
+#define OCI8_PIECE_SIZE (64*1024)-1
 # define OCI8_CONN_TYPE(x) ((x)==OCI8_GLOBAL(php3_oci8_module).le_conn)
 # define OCI8_STMT_TYPE(x) ((x)==OCI8_GLOBAL(php3_oci8_module).le_stmt)
-# define OCI8_DESCR_TYPE(x) ((x)==OCI8_GLOBAL(php3_oci8_module).le_descr)
 
 # define RETURN_OUT_OF_MEMORY \
 	php3_error(E_WARNING, "Out of memory");\
@@ -155,10 +188,6 @@ extern php3_module_entry oci8_module_entry;
 # define OCI8_FAIL(c,f,r) \
 	php3i_oci8_error((c)->pError,(f),(r));\
 	RETURN_FALSE
-
-void php3_oci_logon(INTERNAL_FUNCTION_PARAMETERS);
-void php3_oci_plogon(INTERNAL_FUNCTION_PARAMETERS);
-void php3_oci_do_logon(INTERNAL_FUNCTION_PARAMETERS, int persistent);
 
 #else /* !HAVE_OCI8 */
 

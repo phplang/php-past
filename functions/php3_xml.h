@@ -23,7 +23,7 @@
    | If you did not, or have any questions about PHP licensing, please    |
    | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
-   | Authors: Stig Sæther Bakken <ssb@guardian.no>                        |
+   | Authors: Stig Sæther Bakken <ssb@fast.no>                            |
    +----------------------------------------------------------------------+
  */
 
@@ -60,6 +60,17 @@ typedef struct {
 	char *notationDeclHandler;
 	char *externalEntityRefHandler;
 	char *unknownEncodingHandler;
+
+	pval *data;
+	pval *info;
+	int level;
+	int toffset;
+	int curtag;
+	pval *ctag;
+	char **ltags;
+	int lastwasopen;
+	int skipwhite;
+	
 	XML_Char *baseURI;
 } xml_parser;
 
@@ -76,12 +87,18 @@ extern php3_module_entry xml_module_entry;
 
 enum php3_xml_option {
     PHP3_XML_OPTION_CASE_FOLDING = 1,
-    PHP3_XML_OPTION_TARGET_ENCODING
+    PHP3_XML_OPTION_TARGET_ENCODING,
+    PHP3_XML_OPTION_SKIP_TAGSTART,
+    PHP3_XML_OPTION_SKIP_WHITE
 };
 
 # define RETURN_OUT_OF_MEMORY \
 	php3_error(E_WARNING, "Out of memory");\
 	RETURN_FALSE
+
+/* for xml_parse_into_struct */
+
+#define XML_MAXLEVEL 255 /* XXX this shoud be dynamic */
 
 PHP_FUNCTION(xml_parser_create);
 PHP_FUNCTION(xml_set_element_handler);
@@ -92,6 +109,7 @@ PHP_FUNCTION(xml_set_unparsed_entity_decl_handler);
 PHP_FUNCTION(xml_set_notation_decl_handler);
 PHP_FUNCTION(xml_set_external_entity_ref_handler);
 PHP_FUNCTION(xml_parse);
+PHP_FUNCTION(xml_parse_into_struct);
 PHP_FUNCTION(xml_get_error_code);
 PHP_FUNCTION(xml_error_string);
 PHP_FUNCTION(xml_get_current_line_number);

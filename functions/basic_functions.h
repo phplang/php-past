@@ -29,7 +29,7 @@
  */
 
 
-/* $Id: basic_functions.h,v 1.41 1999/02/11 06:23:40 andrey Exp $ */
+/* $Id: basic_functions.h,v 1.42 1999/05/16 18:55:08 jim Exp $ */
 
 #ifndef _BASIC_FUNCTIONS_H
 #define _BASIC_FUNCTIONS_H
@@ -54,6 +54,7 @@ extern void php3_rsort(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_user_sort(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_auser_sort(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_user_key_sort(INTERNAL_FUNCTION_PARAMETERS);
+extern void php3_shuffle(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_array_walk(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_count(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_flush(INTERNAL_FUNCTION_PARAMETERS);
@@ -64,6 +65,7 @@ extern void array_each(INTERNAL_FUNCTION_PARAMETERS);
 extern void array_reset(INTERNAL_FUNCTION_PARAMETERS);
 extern void array_current(INTERNAL_FUNCTION_PARAMETERS);
 extern void array_current_key(INTERNAL_FUNCTION_PARAMETERS);
+extern void php3_range(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_gettype(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_settype(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_min(INTERNAL_FUNCTION_PARAMETERS);

@@ -27,7 +27,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: fdf.c,v 1.2 1999/01/01 17:59:09 zeev Exp $ */
+/* $Id: fdf.c,v 1.4 1999/05/16 15:38:01 rasmus Exp $ */
 
 /* FdfTk lib 2.0 is a Complete C/C++ FDF Toolkit available from
    http://beta1.adobe.com/ada/acrosdk/forms.html. */
@@ -101,14 +101,18 @@ php3_module_entry fdf_module_entry = {
 DLEXPORT php3_module_entry *get_module(void) { return &fdf_module_entry; }
 #endif
 
+static void php3i_FDFClose(FDFDoc fdf) {
+	(void)FDFClose(fdf);
+}
+
 int php3_minit_fdf(INIT_FUNC_ARGS)
 {
 	FDFErc err;
-	FDF_GLOBAL(le_fdf) = register_list_destructors(FDFClose, NULL);
+	FDF_GLOBAL(le_fdf) = register_list_destructors(php3i_FDFClose, NULL);
 	err = FDFInitialize();
 	if(err == FDFErcOK)
-		printf("FDFINitital executed\n");
-	return SUCCESS;
+		return SUCCESS;
+	return(FAILURE);
 }
 
 void php3_info_fdf(void) {
@@ -120,8 +124,8 @@ int php3_mend_fdf(void){
 	FDFErc err;
 	err = FDFFinalize();
 	if(err == FDFErcOK)
-		printf("FDFFinalize executed\n");
-	return SUCCESS;
+		return SUCCESS;
+	return(FAILURE);
 }
 
 /* {{{ proto int fdf_open(string filename)
@@ -170,7 +174,7 @@ void php3_fdf_close(INTERNAL_FUNCTION_PARAMETERS) {
 		RETURN_FALSE;
 	}
 
-//	FDFClose(fdf);
+/*	FDFClose(fdf); */
 	php3_list_delete(id);
 
 	RETURN_TRUE;
@@ -220,6 +224,7 @@ void php3_fdf_get_value(INTERNAL_FUNCTION_PARAMETERS) {
 	}
 
 	err = FDFGetValue(fdf, arg2->value.str.val, NULL, 0, &nr);
+	nr++;
 	if(err != FDFErcOK)
 		printf("Aiii, error\n");
 	buffer = emalloc(nr);
@@ -297,6 +302,7 @@ void php3_fdf_next_field_name(INTERNAL_FUNCTION_PARAMETERS) {
 	}
 
 	err = FDFNextFieldName(fdf, fieldname, NULL, 0, &nr);
+	nr++;
 	if(err != FDFErcOK)
 		printf("Aiii, error\n");
 	if(nr == 0)
@@ -364,7 +370,6 @@ void php3_fdf_set_ap(INTERNAL_FUNCTION_PARAMETERS) {
 void php3_fdf_set_status(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *arg1, *arg2;
 	int id, type;
-	ASInt32 nr;
 	FDFDoc fdf;
 	FDFErc err;
 	FDF_TLS_VARS;
@@ -414,12 +419,14 @@ void php3_fdf_get_status(INTERNAL_FUNCTION_PARAMETERS) {
 	}
 
 	err = FDFGetStatus(fdf, NULL, 0,  &nr);
+	nr++;
 	if(err != FDFErcOK)
 		printf("Aiii, error\n");
 	if(nr == 0)
 		RETURN_STRING(empty_string, 1);
 	buf = emalloc(nr);
 	err = FDFGetStatus(fdf, buf, nr,  &nr);
+fprintf(stderr, "status = %s (%d)\n", buf, nr);
 	if(err != FDFErcOK)
 		printf("Aiii, error\n");
 
@@ -481,12 +488,14 @@ void php3_fdf_get_file(INTERNAL_FUNCTION_PARAMETERS) {
 	}
 
 	err = FDFGetFile(fdf, NULL, 0,  &nr);
+	nr++;
 	if(err != FDFErcOK)
 		printf("Aiii, error\n");
 	if(nr == 0)
 		RETURN_STRING(empty_string, 1);
 	buf = emalloc(nr);
 	err = FDFGetFile(fdf, buf, nr,  &nr);
+fprintf(stderr, "file = %s (%d)\n", buf, nr);
 	if(err != FDFErcOK)
 		printf("Aiii, error\n");
 

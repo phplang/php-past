@@ -1,11 +1,11 @@
 <!DOCTYPE style-sheet PUBLIC "-//James Clark//DTD DSSSL Style Sheet//EN" [
-<!ENTITY docbook.dsl SYSTEM "/usr/lib/sgml/docbook/html/docbook.dsl" CDATA DSSSL>
+<!ENTITY docbook.dsl SYSTEM "@DOCBOOK_PRINT@" CDATA DSSSL>
 <!ENTITY common.dsl SYSTEM "common.dsl">
 ]>
 
 <!--
 
-  $Id: print.dsl,v 1.3 1998/03/11 03:13:57 ssb Exp $
+  $Id: print.dsl.in,v 1.2 1999/05/17 03:13:39 ssb Exp $
 
   This file contains printout-specific stylesheet customization.
 

@@ -96,7 +96,7 @@ PHPAPI void *_emalloc(size_t size)
 
 #if DEBUG
 	if (!(initialized & INIT_MEMORY_MANAGER)) {
-		fprintf(stderr,"WARNING:  Call to emalloc() before memory manager is started from %s:%u (%ul bytes)\n",filename,lineno, size);
+		fprintf(stderr,"WARNING:  Call to emalloc() before memory manager is started from %s:%u (%lu bytes)\n",filename,lineno,(unsigned long) size);
 	}
 #endif
 
@@ -116,7 +116,7 @@ PHPAPI void *_emalloc(size_t size)
 	}
 
 	if (!p) {
-		fprintf(stderr,"FATAL:  emalloc():  Unable to allocate %ul bytes\n", size);
+		fprintf(stderr,"FATAL:  emalloc():  Unable to allocate %lu bytes\n", (unsigned long) size);
 		exit(1);
 		UNBLOCK_INTERRUPTIONS;
 		return (void *)p;
@@ -222,7 +222,7 @@ PHPAPI void *_erealloc(void *ptr, size_t size)
 	REMOVE_POINTER_FROM_LIST(p);
 	p = (mem_header *) realloc(p,sizeof(mem_header)+size+PLATFORM_PADDING+END_ALIGNMENT(size)+END_MAGIC_SIZE);
 	if (!p) {
-		fprintf(stderr,"FATAL:  erealloc():  Unable to allocate %ul bytes\n", size);
+		fprintf(stderr,"FATAL:  erealloc():  Unable to allocate %lu bytes\n", (unsigned long) size);
 		exit(1);
 		orig->pNext = GLOBAL(head);
 		if (GLOBAL(head)) {

@@ -27,16 +27,16 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: wddx_a.c,v 1.3 1999/02/07 16:37:42 rasmus Exp $ */
+/* $Id: wddx_a.c,v 1.7 1999/06/03 10:48:17 sas Exp $ */
 
 #include "php.h"
 #include "internal_functions.h"
 #include "php3_string.h"
 #include "php3_list.h"
 #include "php3_wddx_a.h"
-#include "DList.h"
 
 #if HAVE_LIBEXPAT
+#include "DList.h"
 
 #define WDDX_PACKET_S			"<wddxPacket version='0.9'>"
 #define WDDX_PACKET_E			"</wddxPacket>"
@@ -234,7 +234,7 @@ static void _php3_wddx_add_chunk(wddx_packet *packet, char *str)
 	
 	chunk_ptr = (char**)dlst_newnode(sizeof(char *));
 	(*chunk_ptr) = estrdup(str);
-	dlst_insertafter(packet->packet_head, chunk_ptr, DLST_TAIL(packet->packet_head));
+	dlst_insertafter(packet->packet_head, chunk_ptr, PHP_DLST_TAIL(packet->packet_head));
 	packet->packet_length += strlen(str);
 }
 /* }}} */
@@ -247,6 +247,7 @@ static char* _php3_wddx_gather(wddx_packet *packet)
 	char *buf;
 	
 	buf = (char *)emalloc(packet->packet_length+1);	
+	buf[0] = '\0';
 	for(chunk=dlst_first(packet->packet_head);
 		chunk!=NULL;
 		chunk = dlst_next(chunk)) {
@@ -644,23 +645,8 @@ PHP_FUNCTION(wddx_serialize_value)
 	char *buf;
 	
 	argc = ARG_COUNT(ht);
-	switch (argc)
-	{
-		case 1:
-			if (getParameters(ht, 1, &var) == FAILURE) {
-				RETURN_FALSE;
-			}			
-			break;
-			
-		case 2:
-			if (getParameters(ht, 1, &var, &comment) == FAILURE) {
-				RETURN_FALSE;
-			}
-			break;
-			
-		default:
-			WRONG_PARAM_COUNT;
-			break;
+	if(argc < 1 || argc > 2 || getParameters(ht, argc, &var, &comment) == FAILURE) {
+		WRONG_PARAM_COUNT;
 	}
 	
 	packet = emalloc(sizeof(wddx_packet));

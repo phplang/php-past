@@ -23,13 +23,13 @@
    | If you did not, or have any questions about PHP licensing, please    |
    | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
-   | Authors: Stig Sæther Bakken <ssb@guardian.no>                        |
+   | Authors: Stig Sæther Bakken <ssb@fast.no>                            |
    |          Andreas Karajannis <Andreas.Karajannis@gmd.de>              |
    |          Frank M. Kromann <fmk@businessnet.dk> Support for DB/2 CLI  |
    +----------------------------------------------------------------------+
  */
 
-/* $Id: unified_odbc.c,v 1.103 1999/02/18 17:48:53 shane Exp $ */
+/* $Id: unified_odbc.c,v 1.106 1999/05/10 15:37:18 kara Exp $ */
 
 /* This file is based on the Adabas D extension.
  * Adabas D will no longer be supported as separate module.
@@ -711,6 +711,23 @@ UODBC_FUNCTION(prepare)
 		RETURN_FALSE;
 	}
 
+#if HAVE_SQL_EXTENDED_FETCH
+	/* Solid doesn't have ExtendedFetch, if DriverManager is used, get Info,
+	   whether Driver supports ExtendedFetch */
+	if (curr_conn->fetch_abs){
+		/* Try to set CURSOR_TYPE to dynamic. Driver will replace this with other
+		   type if not possible.
+		 */
+		if (SQLSetStmtOption(result->stmt, SQL_CURSOR_TYPE, SQL_CURSOR_DYNAMIC)
+			== SQL_ERROR){
+			UODBC_SQL_ERROR(curr_conn->hdbc, result->stmt, " SQLSetStmtOption");
+			SQLFreeStmt(result->stmt, SQL_DROP);
+			efree(result);
+			RETURN_FALSE;
+		}
+	}
+#endif
+
 	if ((rc = SQLPrepare(result->stmt, query, SQL_NTS)) != SQL_SUCCESS){
 		UODBC_SQL_ERROR(curr_conn->hdbc, result->stmt, "SQLPrepare");
 		SQLFreeStmt(result->stmt, SQL_DROP);
@@ -982,9 +999,6 @@ UODBC_FUNCTION(exec)
 	UODBC_RESULT   *result=NULL;
 	UODBC_CONNECTION *curr_conn=NULL;
 	RETCODE     rc;
-#if HAVE_SQL_EXTENDED_FETCH
-	UDWORD      scrollopts;
-#endif
 
 	if (getParameters(ht, 2, &arg1, &arg2) == FAILURE){
 		WRONG_PARAM_COUNT;
@@ -1024,22 +1038,17 @@ UODBC_FUNCTION(exec)
 #if HAVE_SQL_EXTENDED_FETCH
 	/* Solid doesn't have ExtendedFetch, if DriverManager is used, get Info,
 	   whether Driver supports ExtendedFetch */
-	rc = SQLGetInfo(curr_conn->hdbc, SQL_FETCH_DIRECTION, (void *) &scrollopts, sizeof(scrollopts), NULL);
-	if (rc == SQL_SUCCESS){
-		if ((result->fetch_abs = (scrollopts & SQL_FD_FETCH_ABSOLUTE))){
-			/* Try to set CURSOR_TYPE to dynamic. Driver will replace this with other
-			   type if not possible.
-			 */
-			if (SQLSetStmtOption(result->stmt, SQL_CURSOR_TYPE, SQL_CURSOR_DYNAMIC)
-				== SQL_ERROR){
-				UODBC_SQL_ERROR(curr_conn->hdbc, result->stmt, " SQLSetStmtOption");
-				SQLFreeStmt(result->stmt, SQL_DROP);
-				efree(result);
-				RETURN_FALSE;
-			}
+	if (curr_conn->fetch_abs){
+		/* Try to set CURSOR_TYPE to dynamic. Driver will replace this with other
+		   type if not possible.
+		 */
+		if (SQLSetStmtOption(result->stmt, SQL_CURSOR_TYPE, SQL_CURSOR_DYNAMIC)
+			== SQL_ERROR){
+			UODBC_SQL_ERROR(curr_conn->hdbc, result->stmt, " SQLSetStmtOption");
+			SQLFreeStmt(result->stmt, SQL_DROP);
+			efree(result);
+			RETURN_FALSE;
 		}
-	} else {
-		result->fetch_abs = 0;
 	}
 #endif
 
@@ -1143,7 +1152,7 @@ UODBC_FUNCTION(fetch_into)
 	}
 
 #if HAVE_SQL_EXTENDED_FETCH
-	if (result->fetch_abs){
+	if (result->conn_ptr->fetch_abs){
 		if (rownum > 0)
 			rc = SQLExtendedFetch(result->stmt,SQL_FETCH_ABSOLUTE,rownum,&crow,RowStatus);
 		else
@@ -1157,7 +1166,7 @@ UODBC_FUNCTION(fetch_into)
 		RETURN_FALSE;
 
 #if HAVE_SQL_EXTENDED_FETCH
-	if (rownum > 0 && result->fetch_abs)
+	if (rownum > 0 && result->conn_ptr->fetch_abs)
 		result->fetched = rownum;
 	else
 #endif
@@ -1297,7 +1306,7 @@ UODBC_FUNCTION(fetch_row)
 	}
 
 #if HAVE_SQL_EXTENDED_FETCH
-    if (result->fetch_abs){
+    if (result->conn_ptr->fetch_abs){
 		if (numArgs > 1)
 			rc = SQLExtendedFetch(result->stmt,SQL_FETCH_ABSOLUTE,rownum,&crow,RowStatus);
 		else
@@ -1392,7 +1401,7 @@ UODBC_FUNCTION(result)
 	if (result->fetched == 0){
 		/* User forgot to call odbc_fetchrow(), let's do it here */
 #if HAVE_SQL_EXTENDED_FETCH
-		if (result->fetch_abs)
+		if (result->conn_ptr->fetch_abs)
 			rc = SQLExtendedFetch(result->stmt, SQL_FETCH_NEXT, 1, &crow,RowStatus);
 		else
 #endif
@@ -1547,7 +1556,7 @@ UODBC_FUNCTION(result_all)
 		RETURN_FALSE;
 	}
 #if HAVE_SQL_EXTENDED_FETCH
-	if (result->fetch_abs)
+	if (result->conn_ptr->fetch_abs)
 		rc = SQLExtendedFetch(result->stmt,SQL_FETCH_NEXT,1,&crow,RowStatus);
 	else
 #endif	
@@ -1630,7 +1639,7 @@ UODBC_FUNCTION(result_all)
    		php3_printf("</tr>\n");
 
 #if HAVE_SQL_EXTENDED_FETCH
-		if (result->fetch_abs)
+		if (result->conn_ptr->fetch_abs)
 			rc = SQLExtendedFetch(result->stmt,SQL_FETCH_NEXT,1,&crow,RowStatus);
 		else
 #endif
@@ -1698,6 +1707,10 @@ void PHP3_UODBC_DO_CONNECT(INTERNAL_FUNCTION_PARAMETERS, int persistent)
 	char *hashed_details;
 	int hashed_len, len, id, cur_opt;
 	int type;
+#if HAVE_SQL_EXTENDED_FETCH
+	UDWORD      scrollopts;
+#endif
+
 	UODBC_TLS_VARS;
 
 	UODBC_GLOBAL(PHP3_UODBC_MODULE).resource_list = list;
@@ -1879,6 +1892,18 @@ void PHP3_UODBC_DO_CONNECT(INTERNAL_FUNCTION_PARAMETERS, int persistent)
 			RETURN_FALSE;
 		}
 		db_conn->open = 1;
+		
+#if HAVE_SQL_EXTENDED_FETCH
+		/* Solid doesn't have ExtendedFetch, if DriverManager is used, get Info,
+	 	   whether Driver supports ExtendedFetch */
+		rc = SQLGetInfo(db_conn->hdbc, SQL_FETCH_DIRECTION, (void *) &scrollopts, sizeof(scrollopts), NULL);
+		if (rc == SQL_SUCCESS){
+			db_conn->fetch_abs = (scrollopts & SQL_FD_FETCH_ABSOLUTE);
+		} else {
+			db_conn->fetch_abs = 0;
+		}
+#endif
+
 		if (persistent){
 			new_le.type = UODBC_GLOBAL(PHP3_UODBC_MODULE).le_pconn;
 			new_le.ptr = db_conn;
@@ -2275,7 +2300,7 @@ UODBC_FUNCTION(setoption)
 	RETCODE rc;
 	pval *arg1, *arg2, *arg3, *arg4;
 
- 	if ( getParameters(ht, 3, &arg1, &arg2, &arg3, &arg4) == FAILURE) {
+ 	if ( getParameters(ht, 4, &arg1, &arg2, &arg3, &arg4) == FAILURE) {
 		WRONG_PARAM_COUNT;
 	}                            
  

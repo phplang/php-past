@@ -1,6 +1,39 @@
+/* Define if you want dmalloc checking */
+#define HAVE_DMALLOC 0
+
+/* Define if you want to have PCRE support */
+#define HAVE_PCRE 0
+
+/* Define if you have the libmhash library */
+#undef HAVE_LIBMHASH
+
+/* Define if you have the libmcrypt library */
+#undef HAVE_LIBMCRYPT
+
 /* This is the default configuration file to read */
 #define CONFIGURATION_FILE_PATH "php3.ini"
 #define USE_CONFIG_FILE 1
+
+#undef HAVE_CPDFLIB
+#undef ptrdiff_t
+
+/* define if you have the specific db library */
+
+#define NDBM_DB1_NDBM_H 0
+#define NDBM_NDBM_H 0
+#define DB2_DB2_DB_H 0
+#define DB2_DB_DB2_H 0
+#define DB2_DB_H 0
+#define DB2_DB2_H 0
+#define HAVE_DBA 0
+#define DBA_GDBM 0
+#define DBA_NDBM 0
+#define DBA_DBOPEN 0
+#define DBA_DB2 0
+#define DBA_DBM 0
+#define DBA_CDB 0
+
+#define HAVE_GDBM_H 0
 
 /* Some global constants defined by conigure */
 #undef PHP_BUILD_DATE
@@ -34,6 +67,9 @@
 /* Define if you have dirent.h but opendir() resides in libc rather than in libdir */
 /* This will cause HAVE_DIRENT_H defined twice sometimes, but it should be problem */
 #define HAVE_DIRENT_H 0
+
+/* Define if your struct tm has tm_gmtoff.  */
+#undef HAVE_TM_GMTOFF
 
 /* Define if you have struct flock */
 #define HAVE_STRUCT_FLOCK 0
@@ -89,6 +125,10 @@
 
 /* Define if you have the gdbm library (-lgdbm).  */
 #define GDBM 0
+
+/* Define if you want the Perl-regex library */
+#define HAVE_BUNDLED_PCRE 0
+#define HAVE_PCRE 0
 
 /* Define both of these if you want the bundled REGEX library */
 #define REGEX 0
@@ -293,3 +333,6 @@
 
 /* Define to enable yp/nis support */
 #define HAVE_YP 0
+
+/* Define if you have the t1 library (-lt1).  */
+#undef HAVE_LIBT1_OUTLINE

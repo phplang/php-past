@@ -23,10 +23,10 @@
    | If you did not, or have any questions about PHP licensing, please    |
    | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
-   | Author: Bjørn Borud - Guardian Networks AS <borud@guardian.no>    |
+   | Author: Bjørn Borud <borud@fast.no>                                  |
    +----------------------------------------------------------------------+
  */
-/* $Id: soundex.c,v 1.30 1999/01/01 17:59:18 zeev Exp $ */
+/* $Id: soundex.c,v 1.31 1999/04/22 13:19:50 ssb Exp $ */
 
 #include "php.h"
 #include "internal_functions.h"

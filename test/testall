@@ -3,7 +3,7 @@
 count=0
 fail=0
 
-for i in `find . -name "*.php3t" -print`; do
+for i in `find . -name "*.php3t" -print | sort`; do
   ./testphp $i
   if [ $? -gt 0 ]; then
     echo $i >> test.log

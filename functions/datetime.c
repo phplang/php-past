@@ -30,7 +30,7 @@
  */
 
 
-/* $Id: datetime.c,v 1.48 1999/01/18 12:53:57 rasmus Exp $ */
+/* $Id: datetime.c,v 1.53 1999/06/02 23:53:17 cmv Exp $ */
 
 
 #ifdef THREAD_SAFE
@@ -76,6 +76,8 @@ static int phpday_tab[2][12] =
 	{31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31}
 };
 
+#define isleap(year) (((year%4) == 0 && (year%100)!=0) || (year%400)==0)
+
 /* {{{ proto int time(void)
    Return current UNIX timestamp */
 void php3_time(INTERNAL_FUNCTION_PARAMETERS)
@@ -105,7 +107,7 @@ void _php3_mktime(INTERNAL_FUNCTION_PARAMETERS, int gm)
 #endif
 	tn = localtime(&t);
 	if (gm) {
-#if HAVE_TM_ZONE
+#if HAVE_TM_GMTOFF
 		gmadjust=(tn->tm_gmtoff)/3600;
 #else
 		gmadjust=timezone/3600;
@@ -154,6 +156,118 @@ void php3_gmmktime(INTERNAL_FUNCTION_PARAMETERS)
 	_php3_mktime(INTERNAL_FUNCTION_PARAM_PASSTHRU, 1);
 }
 /* }}} */
+
+
+void _php3_easter(INTERNAL_FUNCTION_PARAMETERS, int gm)
+{
+
+	/* based on code by Simon Kershaw, <webmaster@ely.anglican.org> */
+
+	pval *year_arg;
+	struct tm *ta, te;
+	time_t the_time;
+	int year, golden, solar, lunar, pfm, dom, tmp, easter;
+
+	switch(ARG_COUNT(ht)) {
+	case 0:
+		the_time = time(NULL);
+		ta = localtime(&the_time);
+		year = ta->tm_year + 1900;
+		break;
+	case 1:
+		if (getParameters(ht, 1, &year_arg) == FAILURE) {
+			WRONG_PARAM_COUNT;
+		}
+		convert_to_long(year_arg);
+		year = year_arg->value.lval;
+		break;
+	default:
+		WRONG_PARAM_COUNT;
+	}
+
+	if (gm && (year<1970 || year>2037)) {				/* out of range for timestamps */
+		php3_error(E_WARNING, "easter_date() is only valid for years between 1970 and 2037 inclusive");
+		RETURN_FALSE;
+	}
+
+	golden = (year % 19) + 1;					/* the Golden number */
+
+	if ( year <= 1752 ) {						/* JULIAN CALENDAR */
+		dom = (year + (year/4) + 5) % 7;			/* the "Dominical number" - finding a Sunday */
+		if (dom < 0) {
+			dom += 7;
+		}
+
+		pfm = (3 - (11*golden) - 7) % 30;			/* uncorrected date of the Paschal full moon */
+		if (pfm < 0) {
+			pfm += 30;
+		}
+	} else {							/* GREGORIAN CALENDAR */
+		dom = (year + (year/4) - (year/100) + (year/400)) % 7;	/* the "Domincal number" */
+		if (dom < 0) {
+			dom += 7;
+		}
+
+		solar = (year-1600)/100 - (year-1600)/400;		/* the solar and lunar corrections */
+		lunar = (((year-1400) / 100) * 8) / 25;
+
+		pfm = (3 - (11*golden) + solar - lunar) % 30;		/* uncorrected date of the Paschal full moon */
+		if (pfm < 0) {
+			pfm += 30;
+		}
+	}
+
+	if ((pfm == 29) || (pfm == 28 && golden > 11)) {		/* corrected date of the Paschal full moon */
+		pfm--;							/* - days after 21st March                 */
+	}
+
+	tmp = (4-pfm-dom) % 7;
+	if (tmp < 0) {
+		tmp += 7;
+	}
+
+	easter = pfm + tmp + 1;	    					/* Easter as the number of days after 21st March */
+
+	if (gm) {							/* return a timestamp */
+		te.tm_isdst = -1;
+		te.tm_year = year-1900;
+		te.tm_sec = 0;
+		te.tm_min = 0;
+		te.tm_hour = 0;
+
+		if (easter < 11) {
+			te.tm_mon = 2;			/* March */
+			te.tm_mday = easter+21;
+		} else {
+			te.tm_mon = 3;			/* April */
+			te.tm_mday = easter-10;
+		}
+
+	        return_value->value.lval = mktime(&te);
+	} else {							/* return the days after March 21 */	
+	        return_value->value.lval = easter;
+	}
+
+        return_value->type = IS_LONG;
+
+}
+
+/* {{{ proto int easter_date([int year])
+   Return the timestamp of midnight on Easter of a given year (defaults to current year) */
+void php3_easter_date(INTERNAL_FUNCTION_PARAMETERS)
+{
+	_php3_easter(INTERNAL_FUNCTION_PARAM_PASSTHRU, 1);
+}
+/* }}} */
+
+/* {{{ proto int easter_days([int year])
+   Return the number of days after March 21 that Easter falls on for a given year (defaults to current year) */
+void php3_easter_days(INTERNAL_FUNCTION_PARAMETERS)
+{
+	_php3_easter(INTERNAL_FUNCTION_PARAM_PASSTHRU, 0);
+}
+/* }}} */
+
 
 static void
 _php3_date(INTERNAL_FUNCTION_PARAMETERS, int gm)
@@ -213,6 +327,7 @@ _php3_date(INTERNAL_FUNCTION_PARAMETERS, int gm)
 				break;
 			case 'y':		/* year, numeric, 2 digits */
 			case 'm':		/* month, numeric */
+			case 'n':		/* month, numeric, no leading zeros */
 			case 'd':		/* day of the month, numeric */
 			case 'j':		/* day of the month, numeric, no leading zeros */
 			case 'H':		/* hour, numeric, 24 hour format */
@@ -222,6 +337,7 @@ _php3_date(INTERNAL_FUNCTION_PARAMETERS, int gm)
 			case 'A':		/* AM/PM */
 			case 'a':		/* am/pm */
 			case 'S':		/* standard english suffix for the day of the month (e.g. 3rd, 2nd, etc) */
+			case 't':		/* days in current month */
 				size += 2;
 				break;
 			case '\\':
@@ -281,11 +397,15 @@ _php3_date(INTERNAL_FUNCTION_PARAMETERS, int gm)
 				sprintf(tmp_buff, "%02d", ta->tm_mon + 1);  /* SAFE */
 				strcat(return_value->value.str.val, tmp_buff);
 				break;
+			case 'n':		/* month, numeric, no leading zeros */
+				sprintf(tmp_buff, "%d", ta->tm_mon + 1);  /* SAFE */
+				strcat(return_value->value.str.val, tmp_buff);
+				break;
 			case 'd':		/* day of the month, numeric */
 				sprintf(tmp_buff, "%02d", ta->tm_mday);  /* SAFE */
 				strcat(return_value->value.str.val, tmp_buff);
 				break;
-			case 'j':
+			case 'j':		/* day of the month, numeric, no leading zeros */
 				sprintf(tmp_buff, "%d", ta->tm_mday); /* SAFE */
 				strcat(return_value->value.str.val, tmp_buff);
 				break;
@@ -296,6 +416,15 @@ _php3_date(INTERNAL_FUNCTION_PARAMETERS, int gm)
 			case 'h':		/* hour, numeric, 12 hour format */
 				h = ta->tm_hour % 12; if (h==0) h = 12;
 				sprintf(tmp_buff, "%02d", h);  /* SAFE */
+				strcat(return_value->value.str.val, tmp_buff);
+				break;
+			case 'G':		/* hour, numeric, 24 hour format, no leading zeros */
+				sprintf(tmp_buff, "%d", ta->tm_hour);  /* SAFE */
+				strcat(return_value->value.str.val, tmp_buff);
+				break;
+			case 'g':		/* hour, numeric, 12 hour format, no leading zeros */
+				h = ta->tm_hour % 12; if (h==0) h = 12;
+				sprintf(tmp_buff, "%d", h);  /* SAFE */
 				strcat(return_value->value.str.val, tmp_buff);
 				break;
 			case 'i':		/* minutes, numeric */
@@ -334,6 +463,10 @@ _php3_date(INTERNAL_FUNCTION_PARAMETERS, int gm)
 				break;
 			case 'w':		/* day of the week, numeric EXTENSION */
 				sprintf(tmp_buff, "%01d", ta->tm_wday);  /* SAFE */
+				strcat(return_value->value.str.val, tmp_buff);
+				break;
+			case 't':		/* days in current month */
+				sprintf(tmp_buff, "%2d", phpday_tab[isleap(ta->tm_year)][ta->tm_mon] );
 				strcat(return_value->value.str.val, tmp_buff);
 				break;
 			default:
@@ -438,7 +571,6 @@ char *php3_std_date(time_t t)
  */
 /* {{{ proto bool checkdate(int month, int day, int year)
    Validate a date/time */
-#define isleap(year) (((year%4) == 0 && (year%100)!=0) || (year%400)==0)
 void php3_checkdate(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *month, *day, *year;
@@ -485,6 +617,7 @@ void php3_strftime(INTERNAL_FUNCTION_PARAMETERS)
 	char *format,*buf;
 	time_t timestamp;
 	struct tm *ta;
+	int max_reallocs = 5;
 	size_t buf_len=64, real_len;
 
 	switch (ARG_COUNT(ht)) {
@@ -517,11 +650,15 @@ void php3_strftime(INTERNAL_FUNCTION_PARAMETERS)
 	while ((real_len=strftime(buf,buf_len,format,ta))==buf_len || real_len==0) {
 		buf_len *= 2;
 		buf = (char *) erealloc(buf, buf_len);
+		if(!--max_reallocs) break;
 	}
 	
-	return_value->value.str.val = (char *) erealloc(buf,real_len+1);
-	return_value->value.str.len = real_len;
-	return_value->type = IS_STRING;
+	if(real_len && real_len != buf_len) {
+		buf = (char *) erealloc(buf,real_len+1);
+		RETURN_STRINGL(buf, real_len, 0);
+	}
+	efree(buf);
+	RETURN_FALSE;
 }
 /* }}} */
 #endif

@@ -23,11 +23,11 @@
    | If you did not, or have any questions about PHP licensing, please    |
    | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
-   | Authors: Stig Sæther Bakken <ssb@guardian.no>                        |
+   | Authors: Stig Sæther Bakken <ssb@fast.no>                            |
    +----------------------------------------------------------------------+
  */
 
-/* $Id: syslog.c,v 1.43 1999/01/01 17:59:19 zeev Exp $ */
+/* $Id: syslog.c,v 1.44 1999/04/22 13:19:51 ssb Exp $ */
 #ifdef THREAD_SAFE
 #include "tls.h"
 #endif

@@ -29,7 +29,7 @@
  */
 
 
-/* $Id: php3_ldap.h,v 1.24 1999/01/01 17:59:15 zeev Exp $ */
+/* $Id: php3_ldap.h,v 1.25 1999/03/08 16:56:48 rasmus Exp $ */
 
 #ifndef _PHP3_LDAP_H
 #define _PHP3_LDAP_H
@@ -84,6 +84,9 @@ extern void php3_ldap_dn2ufn(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_ldap_add(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_ldap_delete(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_ldap_modify(INTERNAL_FUNCTION_PARAMETERS);
+extern void php3_ldap_mod_add(INTERNAL_FUNCTION_PARAMETERS);
+extern void php3_ldap_mod_del(INTERNAL_FUNCTION_PARAMETERS);
+extern void php3_ldap_mod_replace(INTERNAL_FUNCTION_PARAMETERS);
 
 typedef struct {
 	long default_link;

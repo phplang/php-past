@@ -1,4 +1,4 @@
-/*
+				     /*
    +----------------------------------------------------------------------+
    | PHP HTML Embedded Scripting Language Version 3.0                     |
    +----------------------------------------------------------------------+
@@ -25,12 +25,12 @@
    +----------------------------------------------------------------------+
    | Authors: Danny Heijl  <Danny.Heijl@cevi.be> : initial cut (ODS 7.2x) |
    |          Christian Cartus <chc@idgruppe.de> : blobs, and IUS 9       |
-   |          Jouni Ahto <jah@guru.cultnet.fi>   : configuration stuff    |
+   |          Jouni Ahto <jah@mork.net>   : configuration stuff           |
    | Based on the MySQL code by:  Zeev Suraski <bourbon@netvision.net.il> |
    +----------------------------------------------------------------------+
  */
 
-/* $Id: ifx.ec,v 1.38 1999/01/04 07:38:14 jah Exp $ */
+/* $Id: ifx.ec,v 1.43 1999/05/08 21:46:52 jah Exp $ */
 
 /* -------------------------------------------------------------------
  * if you want a function reference : "grep '^\*\*' ifx.ec" will give
@@ -55,7 +55,7 @@
  *
  * ? cursory stored procedures
  * Jouni Ahto promised help and already did the configuration stuff
- * (Jouni Ahto <jah@guru.cultnet.fi>).
+ * (Jouni Ahto <jah@mork.net>).
  *
  */
 
@@ -82,8 +82,10 @@ Changes: 11.9.1998 (chc@idgruppe.de)
   (ifx_query, ifx_prepare, ifx_do, ifx_htmltbl_result, ifx_fetch_row)
 - minor bug-fixes
 - Test-Page (informix_blob.php3) updated
-- begin with coding of slob-support(still deactivated, not yet complete: #undef HAVE_IFX_IUS in php3_ifx.h)
-- ifx_fetch_row returns always a blob-id (contains "NULL"-flag or content from db)(except ifx_textasvarchar, ifx_byteasvarchar set to 1)
+- begin with coding of slob-support
+  (still deactivated, not yet complete:  #undef HAVE_IFX_IUS in php3_ifx.h)
+- ifx_fetch_row returns always a blob-id (contains "NULL"-flag or content from db)
+  (except ifx_textasvarchar, ifx_byteasvarchar set to 1)
 
 Changes 14.9.1998 (chc@idgruppe.de)
 - supports now IUS- serial8,int8,boolean, nchar, nvchar, lvarchar
@@ -93,11 +95,32 @@ Changes 25.9.1998 (danny.heijl@cevi.be)
 - cursory and non-cursory stored procedures
 
 Changes 24.10.1998 (chc@idgruppe.de)
-- changes the internal structure of IFX_BLOB and IFX_SLOB into one structure. it is now prepared for general-id-usage
+- changes the internal structure of IFX_BLOB and IFX_SLOB into one structure. 
+  it is now prepared for general-id-usage.
 - fixed a lvarchar-bug (i hate esql/c)
 
 Changes 12.11.1998 (danny.heijl@cevi.be)
 - added proto comments
+
+Changes 04/03/1999 (danny.heijl@cevi.be) 
+- added "SET CONNECTION" statement to ifx_fetch_row() so that you can now
+  fetch rows from different databases simultaneously
+  (ifx_query() & ifx_prepare() were already OK).
+
+Changes 05/03/1999 (danny.heijl@cevi.be)
+- made all sqlerrd[] fields of sqlca structure available 
+  with ifx_getsqlca($query_id) in a pseudo-row after a 
+  prepare (select statements) or insert/update (non-select statements).
+  gives access to affected rows and serial insert values
+- made all internal functions static
+ 
+
+Changes 09/03/1999 (danny.heijl@cevi.be)
+- suppressed ESQL/C BLOB memory leak fix for ESQL/C 7.24 and higher
+  this is the same fix as in Perl DBD::Informix
+- really free an Ifx_Result now, do not wait for script termination
+- code cleanup
+
 */
 
 
@@ -127,10 +150,37 @@ void *ifx_mutex;
 #include "php.h"
 #include "internal_functions.h"
 #include "php3_string.h"
-#include "build-defs.h"
+#if !(WIN32|WINNT)
+# include "build-defs.h"
+#endif
 #include "php3_ifx.h"
 
+
 #if HAVE_IFX
+
+                            /* local function prototypes */
+static long php3_intifx_getType(long id, HashTable *list);
+static long php3_intifx_create_blob(long type, long mode, char* param, long len, HashTable *list);
+static long php3_intifx_free_blob(long id, HashTable *list);
+static long php3_intifx2_free_blob(long id, HashTable *list);
+static long php3_intifx_get_blob(long bid, HashTable *list, char** content);
+static long php3_intifx_update_blob(long bid, char* param, long len, HashTable *list);
+static loc_t *php3_intifx_get_blobloc(long bid, HashTable *list);
+static char* php3_intifx_create_tmpfile(long bid);
+static long php3_intifx_copy_blob(long bid, HashTable *list);
+static char* php3_intifx_null();
+static long php3_intifx_create_char(char* param, long len, HashTable *list);
+static long php3_intifx_free_char(long id, HashTable *list);
+static long php3_intifx_update_char(long bid, char* param, long len, HashTable *list);
+static long php3_intifx_get_char(long bid, HashTable *list, char** content);
+#if HAVE_IFX_IUS
+static long php3_intifxus_create_slob(long create_mode, HashTable *list);
+static long php3_intifxus_free_slob(long bid, HashTable *list);
+static long php3_intifxus_close_slob(long bid, HashTable *list);
+static long php3_intifxus_open_slob(long bid, long create_mode, HashTable *list);
+static long php3_intifxus_new_slob(HashTable *list);
+static ifx_lo_t *php3_intifxus_get_slobloc(long bid, HashTable *list);
+#endif
 
 #ifndef CLIENT_SQLI_VER					/* 7.10 on (at least) AIX is missing this */
 #define CLIENT_SQLI_VER IFX_VERSION
@@ -178,6 +228,7 @@ function_entry ifx_functions[] = {
     {"ifx_htmltbl_result", php3_ifx_htmltbl_result,     NULL},
     {"ifx_fieldtypes",     php3_ifx_fieldtypes,         NULL},
     {"ifx_fieldproperties",php3_ifx_fieldproperties,    NULL},
+    {"ifx_getsqlca",       php3_ifx_getsqlca,           NULL},
 
     {"ifx_create_blob",    php3_ifx_create_blob,        NULL},
     {"ifx_free_blob",      php3_ifx_free_blob,          NULL},
@@ -415,6 +466,11 @@ int php3_minit_ifx(INIT_FUNC_ARGS)
                       &Informix_GLOBAL(php3_ifx_module).nullformat)==FAILURE) {
         Informix_GLOBAL(php3_ifx_module).nullformat=0;
     }
+    
+    Informix_GLOBAL(php3_ifx_module).nullvalue = malloc(1);
+    Informix_GLOBAL(php3_ifx_module).nullvalue[0] = 0;
+    Informix_GLOBAL(php3_ifx_module).nullstring = malloc(5);
+    strcpy(Informix_GLOBAL(php3_ifx_module).nullstring, "NULL");
 
     if (cfg_get_long("ifx.allow_persistent",
                       &Informix_GLOBAL(php3_ifx_module).allow_persistent)==FAILURE) {
@@ -564,7 +620,6 @@ static void php3_ifx_do_connect(INTERNAL_FUNCTION_PARAMETERS,int persistent)
       char *ifx;
     EXEC SQL END DECLARE SECTION;    
 
-    char *tmp;
     char *hashed_details;
     int hashed_details_length;
     Informix_TLS_VARS;
@@ -955,6 +1010,8 @@ EXEC SQL END DECLARE SECTION;
     int  locind;
     int  ctype;
     int  affected_rows;
+    long sqlerrd[6];
+    int  e;
     int  query_type;
     int  cursoryproc;
         
@@ -1008,7 +1065,10 @@ EXEC SQL END DECLARE SECTION;
                               ifx_error(ifx));
         RETURN_FALSE;
     }
+
     affected_rows = sqlca.sqlerrd[0];    /* save estimated affected rows */
+    for (e = 0; e < 6; e++) sqlerrd[e] = sqlca.sqlerrd[e];
+   
     EXEC SQL ALLOCATE DESCRIPTOR :descrpid WITH MAX 256;
     if (ifx_check() < 0) {
         Informix_GLOBAL(php3_ifx_module).sv_sqlcode = SQLCODE;
@@ -1145,6 +1205,7 @@ EXEC SQL END DECLARE SECTION;
         RETURN_FALSE;
        }
        Ifx_Result->affected_rows = sqlca.sqlerrd[2]; /* really affected */
+       for (e = 0; e < 6; e++) Ifx_Result->sqlerrd[e] = sqlca.sqlerrd[e];
     } else {
       /* ##
          ** SELECT-STATEMENT 
@@ -1173,7 +1234,9 @@ EXEC SQL END DECLARE SECTION;
             
 
 
-        Ifx_Result->affected_rows = affected_rows;   /* saved estimated */
+        Ifx_Result->affected_rows = affected_rows;   /* saved estimated from prepare */
+        for (e = 0; e < 6; e++) Ifx_Result->sqlerrd[e] = sqlerrd[e];
+       
         EXEC SQL GET DESCRIPTOR :descrpid :fieldcount = COUNT;
         if (ifx_check() < 0) {
             Informix_GLOBAL(php3_ifx_module).sv_sqlcode = SQLCODE;
@@ -1314,13 +1377,14 @@ EXEC SQL BEGIN DECLARE SECTION;
     char *statement;          /* query text        */
     int  fieldcount;          /* field count       */
     int  i;                   /* field index       */
-    short fieldtype;
     loc_t *locator;
     int loc_t_type=CLOCATORTYPE; /* WORKAROUND: TYPE=CLOCATORTYPE doesn't work, */
     int sqlchar_type=SQLCHAR;     /* don't ask me, why. */
     char *char_tmp;
     long len;
     int indicator;    
+    long sqlerrd[6];
+    int e;
 
 $ifdef HAVE_IFX_IUS;
     fixed binary 'blob' ifx_lo_t *slocator;
@@ -1328,8 +1392,6 @@ $endif;
 
 EXEC SQL END DECLARE SECTION;
 
-    char *blobfilename;
-    int  locind;
     int  ctype;
     int  affected_rows;
     int  query_type;
@@ -1387,6 +1449,7 @@ EXEC SQL END DECLARE SECTION;
         RETURN_FALSE;
     }
     affected_rows = sqlca.sqlerrd[0];    /* save estimated affected rows */
+    for (e = 0; e < 6; e++) sqlerrd[e] = sqlca.sqlerrd[e];
     EXEC SQL ALLOCATE DESCRIPTOR :descrpid WITH MAX 256;
     if (ifx_check() < 0) {
         Informix_GLOBAL(php3_ifx_module).sv_sqlcode = SQLCODE;
@@ -1508,7 +1571,8 @@ EXEC SQL END DECLARE SECTION;
               _php3_hash_move_forward(pblobidarr->value.ht);
             } /* while */
       } /* if paramquery */
-      Ifx_Result->affected_rows = affected_rows;   /* saved estimated */
+      Ifx_Result->affected_rows = affected_rows;   /* saved estimated from prepare */
+      for (e = 0; e < 6; e++) Ifx_Result->sqlerrd[e] = sqlerrd[e];
      } else {
       /* ##
          ** SELECT-STATEMENT 
@@ -1537,7 +1601,8 @@ EXEC SQL END DECLARE SECTION;
         strcpy(Ifx_Result->cursorid, cursorid);
 
         Ifx_Result->iscursory = 1;
-        Ifx_Result->affected_rows = affected_rows;   /* saved estimated */
+        Ifx_Result->affected_rows = affected_rows;   /* saved estimated from prepare */
+        for (e = 0; e < 6; e++) Ifx_Result->sqlerrd[e] = sqlerrd[e];
         EXEC SQL GET DESCRIPTOR :descrpid :fieldcount = COUNT;
         if (ifx_check() < 0) {
             Informix_GLOBAL(php3_ifx_module).sv_sqlcode = SQLCODE;
@@ -1593,6 +1658,8 @@ EXEC SQL BEGIN DECLARE SECTION;
     int  i;                   /* field index       */
     short fieldtype;
     loc_t *locator;
+    
+    int e;
 
 $ifdef HAVE_IFX_IUS;
     fixed binary 'blob' ifx_lo_t *slocator;
@@ -1602,7 +1669,6 @@ EXEC SQL END DECLARE SECTION;
 
     int  locind;
     char *blobfilename;
-    char *blobdir;
     
     Informix_TLS_VARS;
 
@@ -1636,6 +1702,14 @@ EXEC SQL END DECLARE SECTION;
     descrpid   = Ifx_Result->descrpid;
     fieldcount = Ifx_Result->numcols;
 
+    EXEC SQL set connection :ifx;
+    if (ifx_check() < 0) {
+        Informix_GLOBAL(php3_ifx_module).sv_sqlcode = SQLCODE;
+        php3_error(E_WARNING,"Set connection %s fails (%s)",
+                              ifx,
+                              ifx_error(ifx));
+        RETURN_FALSE;
+    }
     
     if (Ifx_Result->iscursory < 0) {
         php3_error(E_WARNING, "Resultindex %d is not a prepared query",
@@ -1655,6 +1729,7 @@ EXEC SQL END DECLARE SECTION;
             RETURN_FALSE;
         }
         Ifx_Result->affected_rows = sqlca.sqlerrd[2]; /* really affected */
+        for (e = 0; e < 6; e++) Ifx_Result->sqlerrd[e] = sqlca.sqlerrd[e];
     } else {                                /* open cursor */
         if (Ifx_Result->isscroll) 
             if (Ifx_Result->ishold) 
@@ -1748,8 +1823,7 @@ $endif;
 void php3_ifx_error(INTERNAL_FUNCTION_PARAMETERS)
 {
     pval *ifx_link;
-    int id,type;
-    IFX *ifx;
+    int id;
     Informix_TLS_VARS;
 
     
@@ -1769,16 +1843,6 @@ void php3_ifx_error(INTERNAL_FUNCTION_PARAMETERS)
             break;
     }
     
-/*  connection id is no longer checked 
-*    ifx = (IFX *) php3_list_find(id,&type);
-*    if (type!=Informix_GLOBAL(php3_ifx_module).le_link 
-*                        && type!=Informix_GLOBAL(php3_ifx_module).le_plink) {
-*        php3_error(E_WARNING,
-*                   "ifx_error : %d (type %d) is not an Informix link index",
-*                   id,
-*                   type);
-*     }
-*/  
     RETURN_STRING(ifx_error(0),0); /* ifx_error returns emalloced string */
 }
 /* }}} */
@@ -1922,15 +1986,11 @@ EXEC SQL BEGIN DECLARE SECTION;
     char *cursorid;           /* query cursor id  */
     char *statemid;           /* statement id     */
     char *descrpid;           /* descriptor id    */
-    char *statement;          /* query text       */
     int  fieldcount;          /* field count      */
     int   i;                  /* an index         */ 
     char  fieldname[64];      /* fieldname        */
-    char  ifx_bug;            /* pad for ifx bug  */
     short fieldtype;          /* field type       */
     int   fieldleng;          /* field length     */
-    int   field_ind;          /* the field index  */
-    char  *field;             /* the field data   */
 
 $ifdef HAVE_IFX_IUS;
     ifx_int8_t  int8_var;
@@ -1945,7 +2005,7 @@ $endif;
     datetime   dt_data = {0};
     decimal    dec_data = {0};
     short      short_data;
-    loc_t      *locator, *locator_b;
+    loc_t      *locator_b;
 
 $ifdef HAVE_IFX_IUS;
     fixed binary 'blob' ifx_lo_t *slocator;
@@ -1963,7 +2023,6 @@ EXEC SQL END DECLARE SECTION;
     char string_data[256];
     long long_data;
     char *p;
-    FILE *fp;
     char *blobfilename;            
 
     char *fetch_pos;
@@ -2023,6 +2082,16 @@ EXEC SQL END DECLARE SECTION;
     statemid   = Ifx_Result->statemid;
     descrpid   = Ifx_Result->descrpid;
     fieldcount = Ifx_Result->numcols;
+
+    EXEC SQL set connection :ifx;
+    if (ifx_check() < 0) {
+        Informix_GLOBAL(php3_ifx_module).sv_sqlcode = SQLCODE;
+        php3_error(E_WARNING,"Set connection %s fails (%s)",
+                              ifx,
+                              ifx_error(ifx));
+        RETURN_FALSE;
+    }
+
 
     if (! Ifx_Result->isscroll) {    
         EXEC SQL FETCH :cursorid USING SQL DESCRIPTOR :descrpid;
@@ -2282,7 +2351,6 @@ $endif;
         continue;
     }    
     
-   efree(nullstr);
 }
 /* }}} */
 
@@ -2310,14 +2378,11 @@ EXEC SQL BEGIN DECLARE SECTION;
     char  *cursorid;            /* query cursor id  */
     char  *statemid;            /* statement id     */
     char  *descrpid;            /* descriptor id    */
-    char  *statement;           /* query text       */
     int   fieldcount;           /* field count      */
     int   i;                    /* an index         */ 
     char  fieldname[64];        /* fieldname        */
     short fieldtype;            /* field type       */
-    int   field_ind;            /* the field index  */
     int   fieldleng;            /* field length     */
-    char  *field;               /* the field        */
 
 $ifdef HAVE_IFX_IUS;
     ifx_int8_t  int8_var;
@@ -2351,13 +2416,9 @@ EXEC SQL END DECLARE SECTION;
     long long_data;
     char *p;
     int  locind,bid_b;
-    FILE *fp;
-    char *blobfilename;            
-    char *blobdir;
     char *table_options;
     int  moredata;
-    int bid;
-            
+
     Informix_TLS_VARS;
 
     switch (ARG_COUNT(ht)) {
@@ -2399,6 +2460,16 @@ EXEC SQL END DECLARE SECTION;
     statemid   = Ifx_Result->statemid;
     descrpid   = Ifx_Result->descrpid;
     fieldcount = Ifx_Result->numcols;
+
+    EXEC SQL set connection :ifx;
+    if (ifx_check() < 0) {
+        Informix_GLOBAL(php3_ifx_module).sv_sqlcode = SQLCODE;
+        php3_error(E_WARNING,"Set connection %s fails (%s)",
+                              ifx,
+                              ifx_error(ifx));
+        RETURN_FALSE;
+    }
+
 
     /* try to fetch the first row */            
     EXEC SQL FETCH :cursorid USING SQL DESCRIPTOR :descrpid;
@@ -2639,7 +2710,6 @@ $endif;
           
     } /* endwhile (moredata); */    
     php3_printf("</table>\n");
-    efree(nullstr);
     RETURN_LONG(Ifx_Result->rowid);
 
 }
@@ -2668,40 +2738,20 @@ EXEC SQL BEGIN DECLARE SECTION;
     char  *cursorid;            /* query cursor id  */
     char  *statemid;            /* statement id     */
     char  *descrpid;            /* descriptor id    */
-    char  *statement;           /* query text       */
     int   fieldcount;           /* field count      */
     int   i;                    /* an index         */ 
     char  fieldname[64];        /* fieldname        */
     short fieldtype;            /* field type       */
-    int   field_ind;            /* the field index  */
-    int   fieldleng;            /* field length     */
-    char  *field;               /* the field        */
 
-    short     indicator;
-    int       int_data;
     char      *char_data = NULL;
-    long      date_data;
-    interval  intvl_data = {0};
-    datetime  dt_data = {0};
-    decimal   dec_data = {0};
-    short     short_data;
-    float     float_data;
-    double    double_data;
-    loc_t     *locator;
+
 EXEC SQL END DECLARE SECTION;
 
     int type;
     int num_fields;
     
-    char string_data[256];
-    long long_data;
     char *p;
-    int  locind;
-    FILE *fp;
-    char *blobfilename;            
-    char *blobdir;
     char *table_options;
-    int  moredata;
             
     Informix_TLS_VARS;
 
@@ -2744,6 +2794,15 @@ EXEC SQL END DECLARE SECTION;
     statemid   = Ifx_Result->statemid;
     descrpid   = Ifx_Result->descrpid;
     fieldcount = Ifx_Result->numcols;
+
+    EXEC SQL set connection :ifx;
+    if (ifx_check() < 0) {
+        Informix_GLOBAL(php3_ifx_module).sv_sqlcode = SQLCODE;
+        php3_error(E_WARNING,"Set connection %s fails (%s)",
+                              ifx,
+                              ifx_error(ifx));
+        RETURN_FALSE;
+    }
 
     if (array_init(return_value)==FAILURE) {
         RETURN_FALSE;
@@ -2871,26 +2930,11 @@ EXEC SQL BEGIN DECLARE SECTION;
     char  *cursorid;            /* query cursor id  */
     char  *statemid;            /* statement id     */
     char  *descrpid;            /* descriptor id    */
-    char  *statement;           /* query text       */
     int   fieldcount;           /* field count      */
     int   i;                    /* an index         */ 
     char  fieldname[64];        /* fieldname        */
     short fieldtype;            /* field type       */
-    int   field_ind;            /* the field index  */
-    int   fieldleng;            /* field length     */
-    char  *field;               /* the field        */
-
-    short     indicator;
-    int       int_data;
     char      *char_data = NULL;
-    long      date_data;
-    interval  intvl_data = {0};
-    datetime  dt_data = {0};
-    decimal   dec_data = {0};
-    short     short_data;
-    float     float_data;
-    double    double_data;
-    loc_t     *locator;
     int       size;
     int       precision;
     int       scale;
@@ -2901,14 +2945,8 @@ EXEC SQL END DECLARE SECTION;
     int num_fields;
     
     char string_data[256];
-    long long_data;
     char *p;
-    int  locind;
-    FILE *fp;
-    char *blobfilename;            
-    char *blobdir;
     char *table_options;
-    int  moredata;
             
     Informix_TLS_VARS;
 
@@ -2952,6 +2990,16 @@ EXEC SQL END DECLARE SECTION;
     descrpid   = Ifx_Result->descrpid;
     fieldcount = Ifx_Result->numcols;
 
+    EXEC SQL set connection :ifx;
+    if (ifx_check() < 0) {
+        Informix_GLOBAL(php3_ifx_module).sv_sqlcode = SQLCODE;
+        php3_error(E_WARNING,"Set connection %s fails (%s)",
+                              ifx,
+                              ifx_error(ifx));
+        RETURN_FALSE;
+    }
+
+   
     if (array_init(return_value)==FAILURE) {
         RETURN_FALSE;
     }
@@ -3100,6 +3148,60 @@ void php3_ifx_num_rows(INTERNAL_FUNCTION_PARAMETERS)
 }
 /* }}} */
 
+
+/* --------------------------------------------------------------
+** int ifx_getsqlca(int $resultid)
+**
+** returns the sqlerrd[] fields of the sqlca struct for query $resultid
+** following the prepare (select) or execute immediate (insert/update/execute procedure)
+**
+** ---------------------------------------------------------------
+*/
+
+/* {{{ proto int ifx_getsqlca(int $resultid)
+   returns the sqlerrd[] fields of the sqlca struct for query $resultid */
+void php3_ifx_getsqlca(INTERNAL_FUNCTION_PARAMETERS)
+{
+    pval *result;
+    IFX_RES *Ifx_Result;
+
+    int type;
+    char fieldname[16];
+    int e;
+   
+    Informix_TLS_VARS;
+
+    if (ARG_COUNT(ht)!=1 || getParameters(ht, 1, &result)==FAILURE) {
+        WRONG_PARAM_COUNT;
+    }
+    
+    Informix_GLOBAL(php3_ifx_module).sv_sqlcode = 0;
+    
+    convert_to_long(result);
+    Ifx_Result = (IFX_RES *) php3_list_find(result->value.lval,&type);
+    
+    if (type!=Informix_GLOBAL(php3_ifx_module).le_result) {
+        php3_error(E_WARNING,"%d is not a Informix result index",
+                   result->value.lval);
+        RETURN_FALSE;
+    }
+    
+    /* create pseudo-row array to return */
+    if (array_init(return_value)==FAILURE) {
+        RETURN_FALSE;
+    }
+    /* fill array with 6 fields sqlerrd0 .. sqlerrd5 */
+    /* each ESQLC call saves these sqlca values      */
+    for (e = 0; e < 6; e++) {
+       sprintf(fieldname,"sqlerrd%d", e);
+       add_assoc_long(return_value, fieldname, Ifx_Result->sqlerrd[e]);
+    }
+
+}
+/* }}} */
+
+
+
 /* ----------------------------------------------------------------------
 ** int ifx_num_fields(int $resultid)
 **
@@ -3197,10 +3299,21 @@ EXEC SQL END DECLARE SECTION;
         }
     }
 
+    ifx        = Ifx_Result->connecid;
     cursorid   = Ifx_Result->cursorid;
     statemid   = Ifx_Result->statemid;
     descrpid   = Ifx_Result->descrpid;
     
+    EXEC SQL set connection :ifx;
+    if (ifx_check() < 0) {
+        Informix_GLOBAL(php3_ifx_module).sv_sqlcode = SQLCODE;
+        php3_error(E_WARNING,"Set connection %s fails (%s)",
+                              ifx,
+                              ifx_error(ifx));
+        RETURN_FALSE;
+    }
+
+   
     EXEC SQL free :statemid;
     if (strlen(cursorid) != 0) {
         EXEC SQL CLOSE :cursorid;
@@ -3210,6 +3323,8 @@ EXEC SQL END DECLARE SECTION;
         
     EXEC SQL DEALLOCATE DESCRIPTOR :descrpid;
         
+    efree(Ifx_Result);             /* this can be safely done now */
+  
     php3_list_delete(result->value.lval);
     RETURN_TRUE;
 }
@@ -3230,7 +3345,7 @@ EXEC SQL END DECLARE SECTION;
  * return -1 on error otherwise the type: TYPE_BLTEXT, TYPE_BLBYTE, TYPE_SLOB
  * ----------------------------------------------------------------------
 */
-long php3_intifx_getType(long id, HashTable *list) {
+static long php3_intifx_getType(long id, HashTable *list) {
  IFX_IDRES *Ifx_res;
  int type;
 
@@ -3301,7 +3416,7 @@ void php3_ifx_create_blob(INTERNAL_FUNCTION_PARAMETERS) {
  * return -1 on error otherwise the new Blob-Object-id
  * ----------------------------------------------------------------------
 */
-long php3_intifx_create_blob(long type, long mode, char* param, long len, HashTable *list) {
+static long php3_intifx_create_blob(long type, long mode, char* param, long len, HashTable *list) {
  IFX_IDRES *Ifx_blob;
 
 
@@ -3404,7 +3519,7 @@ void php3_ifx_copy_blob(INTERNAL_FUNCTION_PARAMETERS) {
  * return -1 on error otherwise the new Blob-Object-id
  * ----------------------------------------------------------------------
 */
-long php3_intifx_copy_blob(long bid, HashTable *list) {
+static long php3_intifx_copy_blob(long bid, HashTable *list) {
  IFX_IDRES *Ifx_blob, *Ifx_blob_orig;
  loc_t *locator, *locator_orig;
  int type;
@@ -3507,7 +3622,7 @@ void php3_ifx_free_blob(INTERNAL_FUNCTION_PARAMETERS) {
  * FREES BYTE-MEMORY WITH EFREE()
  * ----------------------------------------------------------------------
 */
-long php3_intifx_free_blob(long bid, HashTable *list) {
+static long php3_intifx_free_blob(long bid, HashTable *list) {
  IFX_IDRES *Ifx_blob;
  int type;
  
@@ -3549,7 +3664,7 @@ long php3_intifx_free_blob(long bid, HashTable *list) {
  * use this for freeing blob-source after select (in ifx_free_result)
  * ----------------------------------------------------------------------
 */
-long php3_intifx2_free_blob(long bid, HashTable *list) {
+static long php3_intifx2_free_blob(long bid, HashTable *list) {
  IFX_IDRES *Ifx_blob;
  int type;
  
@@ -3559,6 +3674,10 @@ long php3_intifx2_free_blob(long bid, HashTable *list) {
             bid);
   return -1;
  }
+#if IFX_VERSION < 724                                       /* this Informix  memory leak is fixed from 7.24 on     */
+                                                            /* according to the current PERL DBD::Informix          */
+                                                            /* and otherwise I get segmenation violations with 7.30 */
+
  if(Ifx_blob->BLOB.mode==BLMODE_INMEM) {
     if(Ifx_blob->BLOB.blob_data.loc_buffer==NULL ||
        Ifx_blob->BLOB.blob_data.loc_size<=0) {;} else {
@@ -3569,7 +3688,9 @@ long php3_intifx2_free_blob(long bid, HashTable *list) {
        efree(Ifx_blob->BLOB.blob_data.loc_fname); 
     }
  }
- 
+
+#endif
+  
  php3_list_delete(bid);
  efree(Ifx_blob); 
  return 0;
@@ -3618,7 +3739,7 @@ void php3_ifx_get_blob(INTERNAL_FUNCTION_PARAMETERS) {
  * returns the pointer to the content in char** content and the amount of content in bytes
  * ----------------------------------------------------------------------
 */
-long php3_intifx_get_blob(long bid, HashTable *list, char** content) {
+static long php3_intifx_get_blob(long bid, HashTable *list, char** content) {
  IFX_IDRES *Ifx_blob;
  int type;
  
@@ -3648,7 +3769,7 @@ long php3_intifx_get_blob(long bid, HashTable *list, char** content) {
  * return NULL on error or the pointer to the locator-structur
  * ----------------------------------------------------------------------
 */
-loc_t *php3_intifx_get_blobloc(long bid, HashTable *list) {
+static loc_t *php3_intifx_get_blobloc(long bid, HashTable *list) {
  IFX_IDRES *Ifx_blob;
  int type;
  
@@ -3711,7 +3832,7 @@ void php3_ifx_update_blob(INTERNAL_FUNCTION_PARAMETERS) {
  * return nothing
  * ----------------------------------------------------------------------
 */
-long php3_intifx_update_blob(long bid, char* param, long len, HashTable *list) {
+static long php3_intifx_update_blob(long bid, char* param, long len, HashTable *list) {
  IFX_IDRES *Ifx_blob;
  int type;
  
@@ -3771,7 +3892,7 @@ long php3_intifx_update_blob(long bid, char* param, long len, HashTable *list) {
 */
 
 
-char* php3_intifx_create_tmpfile(long bid) {
+static char* php3_intifx_create_tmpfile(long bid) {
  char filename[10];
  char *blobdir;
  char *blobfile;
@@ -3910,15 +4031,13 @@ void php3_ifx_nullformat(INTERNAL_FUNCTION_PARAMETERS) {
  * return "" or "NULL"
  * ----------------------------------------------------------------------
 */
-char* php3_intifx_null() {
+static char* php3_intifx_null() {
   char* tmp;
 
   if(Informix_GLOBAL(php3_ifx_module).nullformat==0) {
-   tmp=emalloc(1);
-   tmp[0]=0;
+   tmp=Informix_GLOBAL(php3_ifx_module).nullvalue;
   } else {
-   tmp=emalloc(5);
-   strcpy(tmp,"NULL");
+   tmp=Informix_GLOBAL(php3_ifx_module).nullstring;
   }
   return tmp;
 }
@@ -3975,7 +4094,7 @@ void php3_ifx_create_char(INTERNAL_FUNCTION_PARAMETERS) {
  * return -1 on error otherwise the new char-Object-id
  * ----------------------------------------------------------------------
 */
-long php3_intifx_create_char(char* param, long len, HashTable *list) {
+static long php3_intifx_create_char(char* param, long len, HashTable *list) {
  IFX_IDRES *Ifx_char;
 
 
@@ -4047,7 +4166,7 @@ void php3_ifx_get_char(INTERNAL_FUNCTION_PARAMETERS) {
  * returns the pointer to the content in char** content and the amount of content in bytes
  * ----------------------------------------------------------------------
 */
-long php3_intifx_get_char(long bid, HashTable *list, char** content) {
+static long php3_intifx_get_char(long bid, HashTable *list, char** content) {
  IFX_IDRES *Ifx_char;
  int type;
  
@@ -4101,7 +4220,7 @@ void php3_ifx_free_char(INTERNAL_FUNCTION_PARAMETERS) {
  * return -1 on error otherwise 0
  * ----------------------------------------------------------------------
 */
-long php3_intifx_free_char(long bid, HashTable *list) {
+static long php3_intifx_free_char(long bid, HashTable *list) {
  IFX_IDRES *Ifx_char;
  int type;
  
@@ -4168,7 +4287,7 @@ void php3_ifx_update_char(INTERNAL_FUNCTION_PARAMETERS) {
  * return nothing
  * ----------------------------------------------------------------------
 */
-long php3_intifx_update_char(long bid, char* param, long len, HashTable *list) {
+static long php3_intifx_update_char(long bid, char* param, long len, HashTable *list) {
  IFX_IDRES *Ifx_char;
  int type;
  
@@ -4294,7 +4413,7 @@ void php3_ifxus_create_slob(INTERNAL_FUNCTION_PARAMETERS) {
  * return -1 on error otherwise the new Blob-Object-id
  * ----------------------------------------------------------------------
 */
-long php3_intifxus_create_slob(long create_mode, HashTable *list) {
+static long php3_intifxus_create_slob(long create_mode, HashTable *list) {
  IFX_IDRES *Ifx_slob;
  int errcode;
  
@@ -4362,7 +4481,7 @@ void php3_ifxus_free_slob(INTERNAL_FUNCTION_PARAMETERS) {
  * return -1 on error otherwise 0
  * ----------------------------------------------------------------------
 */
-long php3_intifxus_free_slob(long bid, HashTable *list) {
+static long php3_intifxus_free_slob(long bid, HashTable *list) {
  IFX_IDRES *Ifx_slob;
  int type;
  
@@ -4428,7 +4547,7 @@ void php3_ifxus_close_slob(INTERNAL_FUNCTION_PARAMETERS) {
  * return -1 on error otherwise 0
  * ----------------------------------------------------------------------
 */
-long php3_intifxus_close_slob(long bid, HashTable *list) {
+static long php3_intifxus_close_slob(long bid, HashTable *list) {
  IFX_IDRES *Ifx_slob;
  int type;
  
@@ -4511,7 +4630,7 @@ void php3_ifxus_open_slob(INTERNAL_FUNCTION_PARAMETERS) {
  * return -1 on error otherwise the new Blob-Object-id
  * ----------------------------------------------------------------------
 */
-long php3_intifxus_open_slob(long bid, long create_mode, HashTable *list) {
+static long php3_intifxus_open_slob(long bid, long create_mode, HashTable *list) {
  IFX_IDRES *Ifx_slob;
  int errcode;
  int type;
@@ -4553,7 +4672,7 @@ long php3_intifxus_open_slob(long bid, long create_mode, HashTable *list) {
  * return -1 on error otherwise the new slob-Object-id
  * ----------------------------------------------------------------------
 */
-long php3_intifxus_new_slob(HashTable *list) {
+static long php3_intifxus_new_slob(HashTable *list) {
  IFX_IDRES *Ifx_slob;
  int errcode;
  
@@ -4581,7 +4700,7 @@ long php3_intifxus_new_slob(HashTable *list) {
  * return -1 on error otherwise the new Blob-Object-id
  * ----------------------------------------------------------------------
 */
-ifx_lo_t *php3_intifxus_get_slobloc(long bid, HashTable *list) {
+static ifx_lo_t *php3_intifxus_get_slobloc(long bid, HashTable *list) {
  IFX_IDRES *Ifx_slob;
  int errcode, type;
  

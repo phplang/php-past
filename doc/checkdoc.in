@@ -3,9 +3,9 @@
 #
 # Script that checks which functions are documented in the manual.
 #
-# $Id: checkdoc.in,v 1.7 1998/07/16 15:55:21 ssb Exp $
+# $Id: checkdoc.in,v 1.8 1999/04/22 13:19:49 ssb Exp $
 #
-# Author: Stig Bakken <ssb@guardian.no>
+# Author: Stig Bakken <ssb@fast.no>
 #
 
 $dir = "functions";

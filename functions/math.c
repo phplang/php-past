@@ -24,11 +24,11 @@
    | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
    | Authors: Jim Winstead (jimw@php.net)                                 |
-   |          Stig Sæther Bakken <ssb@guardian.no>                        |
+   |          Stig Sæther Bakken <ssb@fast.no>                            |
    +----------------------------------------------------------------------+
  */
 
-/* $Id: math.c,v 1.45 1999/01/01 17:59:12 zeev Exp $ */
+/* $Id: math.c,v 1.46 1999/04/22 13:19:50 ssb Exp $ */
 
 #ifdef THREAD_SAFE
 #include "tls.h"

@@ -1,4 +1,4 @@
-	#ifndef COMPAT_H
+#ifndef COMPAT_H
 #define COMPAT_H
 
 #include "php.h"
@@ -11,6 +11,10 @@
 #include "netdb.h"
 #include "arpa/nameser.h"
 #include "resolv.h"
+#endif
+
+#if HAVE_NETINET_IN_H
+#include <netinet/in.h>
 #endif
 
 #if !HAVE_FLOCK

@@ -56,7 +56,7 @@
 
   You can edit /usr/local/lib/php3.ini file to set PHP options.  If
   you prefer this file in another location, use
-  --with-config-file=/path in step 8.
+  --with-config-file-path=/path in step 8.
 
 17. Edit your httpd.conf or srm.conf file and add: 
       
@@ -418,6 +418,19 @@
    <sect2>
     <title>Other configure options</title>
 
+    <sect3 id="with-mcrypt">
+     <title>--with-mcrypt<replaceable>=DIR</replaceable></title>
+     <synopsis>
+      <option>--with-mcrypt</option>
+     </synopsis>
+     <simpara>
+      Include support for the mcrypt library. See the <link
+      linkend="ref.mcrypt">mcrypt documentation</link> for more information. If
+      you use the optional <replaceable>DIR</replaceable> argument, PHP will
+      look for mcrypt.h in <replaceable>DIR</replaceable>/include.  
+     </simpara>
+    </sect3>
+     
     <sect3 id="enable-sysvsem">
      <title>--enable-sysvsem</title>
      <synopsis>
@@ -1067,7 +1080,7 @@
       <listitem>
        <simpara>
 	<literal>ScriptAlias /php3/
-	 "c:/path-to-php-dir/php.exe"</literal> 
+	 "c:/path-to-php-dir/"</literal>
        </simpara>
       </listitem>
       <listitem>
@@ -1082,7 +1095,7 @@
       </listitem>
       <listitem>
        <simpara>
-	<literal>Action application/x-httpd-php3 "php3/php.exe"</literal>
+	<literal>Action application/x-httpd-php3 "/php3/php.exe"</literal>
        </simpara>
       </listitem>
      </itemizedlist>

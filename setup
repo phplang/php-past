@@ -24,12 +24,12 @@
 # | If you did not, or have any questions about PHP licensing, please    |
 # | contact core@php.net.                                                |
 # +----------------------------------------------------------------------+
-# | Authors: Stig Sæther Bakken <ssb@guardian.no>                        |
+# | Authors: Stig Sæther Bakken <ssb@fast.no>                            |
 # | Updated By: Jim Winstead <jimw@php.net>                              |
 # |             Ariel Shkedi <ars@ziplink.net> or <as@altavista.net>     |
 # +----------------------------------------------------------------------+
 # 
-# $Id: setup,v 1.53 1999/01/05 15:23:19 martin Exp $
+# $Id: setup,v 1.54 1999/04/22 13:19:48 ssb Exp $
 
 if [ "$1" = "-q" ]; then
     quiet_mode=on

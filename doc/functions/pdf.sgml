@@ -16,7 +16,7 @@
     http://www.ifconnection.de/~tm/software/pdflib/PDFlib-0.6.pdf</ulink>.
     As long as this documentation is not complete the pdflib
     documentation should be your first choice. The functions in pdflib
-    and the php3 module have the same name. The parameteres are also
+    and the php3 module have the same name. The parameters are also
     identical.  You should also understand some of the concepts of pdf
     to efficiently use this module.
 
@@ -33,8 +33,50 @@
     the afm file for each font. By default these afm files are searched
     for in a directory named 'fonts' relative to the directory where the
     php3 script is located. 
-  </partintro>
 
+   <simpara>
+    Most of the functions are fairly easy to use. The most difficult part
+    is probably to create a very simple pdf document at all. The following
+    example should help to get started. It creates the file test.pdf
+    with one page. The page contains the text "Times-Roman" in an
+    outlined 30pt font. The text is underlined.
+     <example>
+      <title>PDF_get_info</title>
+      <programlisting>
+&lt;?php
+$fp = fopen("test.pdf", "w");
+$info = PDF_get_info();
+pdf_set_info_author($info, "Uwe Steinmann");
+PDF_set_info_title($info, "Test for PHP3 wrapper of PDFlib 0.6");
+PDF_set_info_author($info, "Name of Author");
+pdf_set_info_creator($info, "See Author");
+pdf_set_info_subject($info, "Testing");
+$pdf = PDF_open($fp, $info);
+PDF_begin_page($pdf, 595, 842);
+PDF_add_outline($pdf, "Page 1");
+pdf_set_font($pdf, "Times-Roman", 30, 4);
+pdf_set_text_rendering($pdf, 1);
+PDF_show_xy($pdf, "Times Roman outlined", 50, 750);
+pdf_moveto($pdf, 50, 740);
+pdf_lineto($pdf, 330, 740);
+pdf_stroke($pdf);
+PDF_end_page($pdf);
+PDF_close($pdf);
+echo "&lt;A HREF=gettest.php3>finished&lt;/A>";
+?>
+    </programlisting>
+    <para>
+     The php3 file gettext.php3 just outputs the pdf document.
+    <programlisting>
+&lt;?php
+  $fp = fopen("test.pdf", "r");
+  header("Content-type: application/pdf");
+  fpassthru($fp);
+  fclose($fp);
+?>
+</programlisting>
+  </example>
+  </partintro>
 
   <refentry id="function.pdf-get-info">
    <refnamediv>
@@ -52,17 +94,9 @@
      default info structure for the pdf document. It can be filled
      with appropriate information like the author, subject etc.
 
-     <example>
-      <title>PDF_get_info</title>
-      <programlisting>
-&lt;?php $info = PDF_get_info();
-PDF_set_info_creator($info, "Name of Author") ?>
-</programlisting></example>
-
     <para>
      See also <function>PDF_set_info_creator</function>,
               <function>PDF_set_info_subject</function>.
-
    </refsect1>
   </refentry>
 
@@ -225,11 +259,11 @@ PDF_set_info_creator($info, "Name of Author") ?>
     <title>Description</title>
     <funcsynopsis>
      <funcdef>int <function>pdf_open</function></funcdef>
-     <paramdef>int descripter<parameter>file</parameter></paramdef>
+     <paramdef>int <parameter>file</parameter></paramdef>
      <paramdef>int <parameter>info</parameter></paramdef>
     </funcsynopsis>
     <para>
-     The <function>PDF_set_info_author</function> function opens
+     The <function>PDF_open</function> function opens
      a new pdf document. The corresponding file has to be opened
      with <function>fopen</function> and the file descriptor passed
      as argument <parameter>file</parameter>. <parameter>info</parameter>
@@ -391,8 +425,10 @@ PDF_set_info_creator($info, "Name of Author") ?>
      provide the Adobe Font Metrics (afm-files) for the font in the
      font path (default is ./fonts). The last parameter
      <parameter>encoding</parameter> can take the following values:
-     0 = builtin, 1 = pdfdoc, 2 = macroman, 3 = macexpert, 4 = winansi,
-     5 = encoding_count.
+     0 = builtin, 1 = pdfdoc, 2 = macroman, 3 = macexpert, 4 = winansi.
+     You should not pass a value greater than 5,
+     because pdflib 0.6 does a poor error checking and dies for greater
+     values.
 
     <para>
      See also <function>PDF_info</function>.
@@ -1452,12 +1488,12 @@ PDF_restore($pdf) ?>
      <paramdef>int <parameter>image</parameter></paramdef>
      <paramdef>double <parameter>x-koor</parameter></paramdef>
      <paramdef>double <parameter>y-koor</parameter></paramdef>
-     <paramdef>double <parameter>skale</parameter></paramdef>
+     <paramdef>double <parameter>scale</parameter></paramdef>
     </funcsynopsis>
     <para>
      The <function>PDF_place_image</function> function places an image
      on the page at postion (<parameter>x-koor</parameter>,
-     <parameter>x-koor</parameter>). The image can be skaled at the same
+     <parameter>x-koor</parameter>). The image can be scaled at the same
      time.
    </refsect1>
   </refentry>

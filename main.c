@@ -29,7 +29,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: main.c,v 1.495 1999/01/30 00:52:20 shane Exp $ */
+/* $Id: main.c,v 1.498 1999/05/21 19:32:06 sas Exp $ */
 
 /* #define CRASH_DETECTION */
 
@@ -105,6 +105,7 @@ int error_reporting, tmp_error_reporting;
 int initialized;				/* keep track of which resources were successfully initialized */
 static int module_initialized = 0;
 char *php3_ini_path = NULL;
+int wanted_exit_status = 0;
 int shutdown_requested;
 unsigned char header_is_being_sent;
 unsigned int max_execution_time = 0;
@@ -1314,8 +1315,14 @@ int _php3_hash_environment(void)
 		switch(*p++) {
 			case 'p':
 			case 'P':
-				if (!_gpc_flags[0] && php3_headers_unsent() && GLOBAL(request_info).request_method && !strcasecmp(GLOBAL(request_info).request_method, "post")) {
-					php3_treat_data(PARSE_POST, NULL);	/* POST Data */
+                              if (!_gpc_flags[0] && php3_headers_unsent() && GLOBAL(request_info).request_method) {
+                                      if(!strcasecmp(GLOBAL(request_info).request_method, "post")) {
+                                              php3_treat_data(PARSE_POST, NULL);      /* POST Data */
+                                      } else {
+                                              if(!strcasecmp(GLOBAL(request_info).request_method, "put")) {
+                                                      php3_treat_data(PARSE_PUT, NULL);       /* PUT Data */
+                                              }
+                                      }
 					_gpc_flags[0]=1;
 				}
 				break;
@@ -1645,6 +1652,7 @@ int main(int argc, char *argv[])
 	setmode(_fileno(stderr), O_BINARY);		/* make the stdio mode be binary */
 #endif
 
+	signal(SIGFPE, SIG_IGN);
 	/* Make sure we detect we are a cgi - a bit redundancy here,
 	   but the default case is that we have to check only the first one. */
 	if (getenv("SERVER_SOFTWARE")
@@ -1863,7 +1871,7 @@ any .htaccess restrictions anywhere on your site you can leave doc_root undefine
 		tls_shutdown();
 		tls_destroy();
 #endif
-		return SUCCESS;
+		exit(wanted_exit_status);
 	} else {
 		return FAILURE;
 	}
@@ -2009,6 +2017,7 @@ int main(int argc, char **argv)
 		return FAILURE;
 	}
 	signal(SIGPIPE, SIG_IGN);
+	signal(SIGFPE, SIG_IGN);
 	umask(077);
 
 	while ((c = getopt(argc, argv, "spdu:t:c:PESvh")) != -1) {

@@ -27,7 +27,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: dir.c,v 1.57 1999/01/01 17:59:08 zeev Exp $ */
+/* $Id: dir.c,v 1.58 1999/05/16 15:45:57 ssb Exp $ */
 
 #ifdef THREAD_SAFE
 #include "tls.h"
@@ -76,11 +76,15 @@ php3_module_entry php3_dir_module_entry = {
 };
 
 
+static void php3i_destructor_closedir(DIR *dir) {
+	(void)closedir(dir);
+}
+
 int php3_minit_dir(INIT_FUNC_ARGS)
 {
 	TLS_VARS;
 	
-	GLOBAL(le_dirp) = register_list_destructors(closedir,NULL);
+	GLOBAL(le_dirp) = register_list_destructors(php3i_destructor_closedir,NULL);
 	return SUCCESS;
 }
 

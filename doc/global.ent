@@ -1,11 +1,22 @@
 <!-- -*- SGML -*-
 
- $Id: global.ent,v 1.18 1999/02/02 05:44:10 andrey Exp $
+ $Id: global.ent,v 1.23 1999/05/26 20:02:16 sas Exp $
 
  Contains global "macros" for all the SGML documents.
 
  -->
 
+<!ENTITY url.filepro "http://www.fileproplus.com/">
+<!ENTITY url.mhash "http://sasweb.de/mhash/">
+<!ENTITY url.iptc "http://www.xe.net/iptc/">
+<!ENTITY url.freetype "http://www.freetype.org/">
+<!ENTITY url.gd "http://www.boutell.com/gd/">
+<!ENTITY url.vmailmgr "http://www.qcc.sk.ca/~bguenter/distrib/vmailmgr/">
+<!ENTITY url.qmail "http://www.qmail.org/">
+<!ENTITY url.gdbm "ftp://ftp.gnu.org/pub/gnu/gdbm/">
+<!ENTITY url.cdb "http://pobox.com/~djb/cdb.html">
+<!ENTITY url.sleepycat "http://www.sleepycat.com/">
+<!ENTITY url.mcrypt "ftp://argeas.cs-net.gr/pub/unix/mcrypt/">
 <!ENTITY url.docbook "http://www.ora.com/davenport/">
 <!ENTITY url.docbook-ref "http://www.ora.com/davenport/">
 <!ENTITY url.docbook-dtdref "http://www.ora.com/homepages/dtdparse/docbook/3.0/">
@@ -34,6 +45,8 @@
 <!ENTITY url.win32install "http://www.umesd.k12.or.us/php/win32install.html">
 <!ENTITY url.browscap "http://www.netvision.net.il/browser-id.php3">
 <!ENTITY url.wddx "http://www.wddx.org">
+
+<!ENTITY book.applied.cryptography 'Applied Cryptography by Schneier (ISBN 0-471-11709-9)'>
 
 <!ENTITY php.homepage '<systemitem class=resource><ulink url="&url.php;">&url.php;</ulink></systemitem>'>
 

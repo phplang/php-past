@@ -29,7 +29,7 @@
  */
 
 
-/* $Id: control_structures_inline.h,v 1.194 1999/01/01 17:58:48 zeev Exp $ */
+/* $Id: control_structures_inline.h,v 1.198 1999/05/19 19:10:58 zeev Exp $ */
 
 #ifdef THREAD_SAFE
 #include "tls.h"
@@ -111,7 +111,7 @@ inline int cs_global_variable(pval *varname INLINE_TLS)
 
 	if (GLOBAL(Execute)) {
 		if (!GLOBAL(function_state).function_name) {
-			php3_error(E_WARNING, "GLOBAL variable decleration meaningless in main() scope");
+			php3_error(E_WARNING, "GLOBAL variable declaration meaningless in main() scope");
 			return FAILURE;
 		}
 		if ((varname->type != IS_STRING)) {
@@ -153,7 +153,7 @@ inline int cs_static_variable(pval *varname, pval *value INLINE_TLS)
 		pval *func_ent, *variable_entry, tmp;
 
 		if (!GLOBAL(function_state).function_name) {
-			php3_error(E_WARNING, "STATIC variable decleration meaningless in main() scope");
+			php3_error(E_WARNING, "STATIC variable declaration meaningless in main() scope");
 			STR_FREE(varname->value.str.val);
 			if (value) {
 				pval_destructor(value _INLINE_TLS);
@@ -524,9 +524,13 @@ inline void end_function_decleration(pval *function_token, pval *function_name I
 		function_token->type = IS_USER_FUNCTION;
 		function_token->value.func.addr.statics = NULL;
 		function_token->value.func.arg_types = GLOBAL(function_state).func_arg_types;
-		GLOBAL(function_state).func_arg_types = NULL;
 		_php3_hash_update(target_symbol_table, function_name->value.str.val, function_name->value.str.len+1, function_token, sizeof(pval), NULL);
+	} else {
+		if (GLOBAL(function_state).func_arg_types) {
+			efree(GLOBAL(function_state).func_arg_types);
+		}
 	}
+	GLOBAL(function_state).func_arg_types = NULL;
 }
 
 
@@ -1202,7 +1206,9 @@ inline void fetch_array_index(pval *result, pval *expr, pval *dimension INLINE_T
 			} else if (arr_ptr->type!=IS_ARRAY) {
 				php3_error(E_WARNING,"Index referencing a non-array");
 				result->value.varptr.pvalue=NULL;
-				pval_destructor(expr _INLINE_TLS);
+				if (expr) { 
+					pval_destructor(expr _INLINE_TLS);
+				}
 				return;
 			}
 			if (expr) {

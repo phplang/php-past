@@ -24,13 +24,13 @@
    | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
    | Authors: Rasmus Lerdorf <rasmus@lerdorf.on.ca>                       |
-   |          Stig Sæther Bakken <ssb@guardian.no>                        |
+   |          Stig Sæther Bakken <ssb@fast.no>                            |
    |          Zeev Suraski <bourbon@nevision.net.il>                      |
    +----------------------------------------------------------------------+
  */
 
 
-/* $Id: string.c,v 1.178 1999/02/12 15:41:17 fmk Exp $ */
+/* $Id: string.c,v 1.192 1999/05/22 22:34:56 sas Exp $ */
 #ifdef THREAD_SAFE
 #include "tls.h"
 #endif
@@ -43,6 +43,52 @@
 #if HAVE_SETLOCALE
 #include <locale.h>
 #endif
+
+static char hexconvtab[] = "0123456789abcdef";
+
+static char *php_bin2hex(const unsigned char *old, const size_t oldlen, size_t *newlen)
+{
+	unsigned char *new = NULL;
+	int i, j;
+
+	new = (char *) emalloc(oldlen * 2 * sizeof(char));
+	if(!new) {
+		return new;
+	}
+	
+	for(i = j = 0; i < oldlen; i++) {
+		new[j++] = hexconvtab[old[i] >> 4];
+		new[j++] = hexconvtab[old[i] & 15];
+	}
+
+	if(newlen) *newlen = oldlen * 2 * sizeof(char);
+
+	return new;
+}
+
+/* proto bin2hex(string data)
+   converts the binary representation of data to hex */
+PHP_FUNCTION(bin2hex)
+{
+	pval *data;
+	char *new;
+	size_t newlen;
+
+	if(ARG_COUNT(ht) != 1 || getParameters(ht, 1, &data) == FAILURE) {
+		WRONG_PARAM_COUNT;
+	}
+
+	convert_to_string(data);
+
+	new = php_bin2hex(data->value.str.val, data->value.str.len, &newlen);
+	
+	if(!new) {
+		RETURN_FALSE;
+	}
+
+	RETURN_STRINGL(new, newlen, 0);
+}
+
 
 /* {{{ proto int strlen(string str)
    Get string length */
@@ -154,6 +200,34 @@ void php3_chop(INTERNAL_FUNCTION_PARAMETERS)
 }
 /* }}} */
 
+PHPAPI void _php3_trim(pval *str, pval * return_value)
+{
+	register int i;
+
+	int len = str->value.str.len;
+	int trimmed = 0;
+	char *c = str->value.str.val;
+	for (i = 0; i < len; i++) {
+		if (c[i] == ' ' || c[i] == '\n' || c[i] == '\r' ||
+			c[i] == '\t' || c[i] == '\v') {
+			trimmed++;
+		} else {
+			break;
+		}
+	}
+	len-=trimmed;
+	c+=trimmed;
+	for (i = len - 1; i >= 0; i--) {
+		if (c[i] == ' ' || c[i] == '\n' || c[i] == '\r' ||
+			c[i] == '\t' || c[i] == '\v') {
+			len--;
+		} else {
+			break;
+		}
+	}
+	RETVAL_STRINGL(c, len, 1);
+}
+
 /* {{{ proto string trim(string str)
    Strip whitespace from the beginning and end of a string */
 void php3_trim(INTERNAL_FUNCTION_PARAMETERS)
@@ -201,27 +275,14 @@ void php3_trim(INTERNAL_FUNCTION_PARAMETERS)
 void php3_ltrim(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *str;
-	register int i;
 	TLS_VARS;
 	
 	if (ARG_COUNT(ht) != 1 || getParameters(ht, 1, &str) == FAILURE) {
 		WRONG_PARAM_COUNT;
 	}
 	convert_to_string(str);
-
 	if (str->type == IS_STRING) {
-		int len = str->value.str.len;
-		int trimmed = 0;
-		char *c = str->value.str.val;
-		for (i = 0; i < len; i++) {
-			if (c[i] == ' ' || c[i] == '\n' || c[i] == '\r' ||
-				c[i] == '\t' || c[i] == '\v') {
-				trimmed++;
-			} else {
-				break;
-			}
-		}
-		RETVAL_STRINGL(c+trimmed, len-trimmed, 1);
+		_php3_trim(str, return_value);
 		return;
 	}
 	RETURN_FALSE;
@@ -302,7 +363,7 @@ void _php3_implode(pval *delim, pval *arr, pval *return_value)
 	return_value->value.str.val[len] = '\0';
 	_php3_hash_internal_pointer_reset(arr->value.ht);
 	while (_php3_hash_get_current_data(arr->value.ht, (void **) &tmp) == SUCCESS) {
-		if (tmp->type == IS_STRING) {
+		if (tmp->type == IS_STRING && tmp->value.str.val != undefined_variable_string) {
 			count--;
 			strcat(return_value->value.str.val, tmp->value.str.val);
 			if (count > 0) {
@@ -870,10 +931,11 @@ void php3_substr(INTERNAL_FUNCTION_PARAMETERS)
 		RETURN_FALSE;
 	}
 
-	if ((f + l) < (int)string->value.str.len) {
-		string->value.str.val[f + l] = '\0';
+	/* Adjust l to match the actual string segment to be returned */
+	if((f+l) > (int)string->value.str.len) {
+		l = (int)string->value.str.len - f;
 	}
-	RETVAL_STRING(string->value.str.val + f,1);
+	RETVAL_STRINGL(string->value.str.val + f,l,1);
 }
 /* }}} */
 
@@ -997,31 +1059,27 @@ void php3_ucwords(INTERNAL_FUNCTION_PARAMETERS)
 		if(*(r+1)){
 			r++;
 			*r=toupper((unsigned char)*r);
-		}
+		} else break;
 	}
 	RETVAL_STRING(arg->value.str.val,1);
 }
 /* }}} */
 
-PHPAPI char *_php3_strtr(char *string, char *str_from, char *str_to)
+PHPAPI char *_php3_strtr(char *string, int len, char *str_from, char *str_to, int trlen)
 {
-	int i, len1, len2;
+	int i;
 	unsigned char xlat[256];
 
-	len1 = strlen(str_from);
-	len2 = strlen(str_to);
+	if ((trlen < 1) || (len < 1))
+		return string;
 
-	if (len1 > len2) {
-		str_from[len2] = '\0';
-		len1 = len2;
-	}
 	for (i = 0; i < 256; xlat[i] = i, i++);
 
-	for (i = 0; i < len1; i++) {
+	for (i = 0; i < trlen; i++) {
 		xlat[(unsigned char) str_from[i]] = str_to[i];
 	}
 
-	for (i = 0; i < (int)strlen(string); i++) {
+	for (i = 0; i < len; i++) {
 		string[i] = xlat[(unsigned char) string[i]];
 	}
 
@@ -1043,7 +1101,12 @@ void php3_strtr(INTERNAL_FUNCTION_PARAMETERS)
 	convert_to_string(from);
 	convert_to_string(to);
 
-	RETVAL_STRING(_php3_strtr(str->value.str.val, from->value.str.val, to->value.str.val),1);
+	RETVAL_STRING(_php3_strtr(str->value.str.val,
+							  str->value.str.len,
+							  from->value.str.val,
+							  to->value.str.val,
+							  MIN(from->value.str.len,to->value.str.len)),
+				  1);
 }
 /* }}} */
 
@@ -1129,12 +1192,20 @@ void php3_similar_text(INTERNAL_FUNCTION_PARAMETERS)
 	
 	convert_to_string(t1);
 	convert_to_string(t2);
-
+	if(ac > 2) {
+		convert_to_double(percent);
+	}
+	
+	if((t1->value.str.len + t2->value.str.len) == 0) {
+		if(ac > 2) 
+			percent->value.dval = 0;
+		RETURN_LONG(0);
+	}
+	
 	sim = _php3_similar_char(t1->value.str.val, t1->value.str.len, 
 			t2->value.str.val, t2->value.str.len);
 	
 	if (ac > 2) {
-		convert_to_double(percent);
 		percent->value.dval = sim * 200.0 / (t1->value.str.len + t2->value.str.len);
 	}
 	
@@ -1324,6 +1395,7 @@ PHPAPI void _php3_char_to_str(char *str,uint len,char from,char *to,int to_len,p
 	*target = 0;
 }
 
+#if 1
 /*
  * this is a binary safe equivalent to strnstr
  * note that we don't check for the end in str_to_str but here
@@ -1335,8 +1407,8 @@ _php3_memnstr(char *haystack, char *needle, int needle_len, char *end)
 	char *p = haystack;
 	char *s = NULL;
 
-	for(; p < end - needle_len && 
-			(s = memchr(p, *needle, end - p - needle_len)); p = s + 1) {
+	for(; p <= end - needle_len && 
+			(s = memchr(p, *needle, end - p - needle_len + 1)); p = s + 1) {
 		if(memcmp(s, needle, needle_len) == 0)
 			return s;
 	}
@@ -1358,12 +1430,12 @@ static char *_php3_str_to_str(char *haystack, int length,
 	char *new;
 	char *off;
 	
-	new = malloc(length);
+	new = emalloc(length);
 	/* we jump through haystack searching for the needle. hurray! */
 	for(p = haystack, q = new;
 			(r = _php3_memnstr(p, needle, needle_len, end));) {
 	/* this ain't optimal. you could call it `efficient memory usage' */
-		off = realloc(new, (q - new) + (r - p) + (str_len) + 1);
+		off = erealloc(new, (q - new) + (r - p) + (str_len) + 1);
 		if(off != new) {
 			if(!off) {
 				goto finish;
@@ -1381,7 +1453,7 @@ static char *_php3_str_to_str(char *haystack, int length,
 	/* if there is a rest, copy it */
 	if((end - p) > 0) {
 		s = (q) + (end - p);
-		off = realloc(new, s - new + 1);
+		off = erealloc(new, s - new + 1);
 		if(off != new) {
 			if(!off) {
 				goto finish;
@@ -1399,12 +1471,63 @@ finish:
 	return new;
 }
 
+#else
+
+static char *_php3_memstr(char *s, char *c, size_t n, size_t m)
+{
+    char *p;
+
+    for(p = s; (p - s) < n; p++)
+        if(memcmp(p, c, m) == 0)
+            return p;
+    return NULL;
+}
+
+#define ATTCHSTR(st, sz) \
+    nl += sz; \
+    n = erealloc(n, nl + 1); \
+    memcpy(n + no, st, sz); \
+    no += sz
+
+
+static char *_php3_str_to_str(char *a, int al, char *b, int bl, char *c, int cl,
+        int *newlen)
+{
+    char *n = NULL, *p, *q;
+    int nl = 0;
+    int no = 0;
+
+	/* run through all occurences of b in a */
+	for(p = q = a; (p = _php3_memstr(p, b, al - (p - a), bl)); q = p) {
+		/* attach everything between the previous occ. and this one */
+		ATTCHSTR(q, p - q);
+		/* attach the replacement string c */
+		ATTCHSTR(c, cl);
+		/* jump over string b in a */
+		p += bl;
+	}
+	
+	/* anything left over ? */
+	if((al - (q - a)) > 0) {
+		ATTCHSTR(q, al - (q - a));
+	}
+
+	if(newlen) *newlen = nl;
+	n[nl] = '\0';
+
+	return n;
+}
+
+#undef ATTCHSTR
+#endif
+
 /* {{{ proto string str_replace(string needle, string str, string haystack)
    Replace all occurrences of needle in haystack with str */
 void php3_str_replace(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *haystack, *needle, *str;
 	char *new;
+	int len = 0;
 
 	if(ARG_COUNT(ht) != 3 || 
 			getParameters(ht, 3, &needle, &str, &haystack) == FAILURE) {
@@ -1415,19 +1538,25 @@ void php3_str_replace(INTERNAL_FUNCTION_PARAMETERS)
 	convert_to_string(needle);
 	convert_to_string(str);
 
+	if(haystack->value.str.len == 0) {
+		RETURN_STRING(empty_string,1);
+	}
+
 	if(needle->value.str.len == 1) {
 		_php3_char_to_str(haystack->value.str.val,haystack->value.str.len,needle->value.str.val[0],str->value.str.val, str->value.str.len ,return_value);
 		return;
 	}
 
+	if(needle->value.str.len == 0) {
+		php3_error(E_WARNING, "The length of the needle must not be 0");
+		RETURN_FALSE;
+	}
+
 	new = _php3_str_to_str(haystack->value.str.val, haystack->value.str.len, 
 				needle->value.str.val, needle->value.str.len, 
 				str->value.str.val, str->value.str.len,
-				&return_value->value.str.len);
-	return_value->value.str.val = emalloc(return_value->value.str.len + 1);
-	memcpy(return_value->value.str.val, new, return_value->value.str.len + 1);
-	free(new);
-	return_value->type = IS_STRING;
+				&len);
+	RETURN_STRINGL(new, len, 0);
 }
 /* }}} */
 
@@ -1630,6 +1759,24 @@ void php3_newline_to_br(INTERNAL_FUNCTION_PARAMETERS)
 }
 /* }}} */
 
+/* {{{ proto string strip_tags(string str)
+   Strips HTML and PHP tags from a string */
+void php3_strip_tags(INTERNAL_FUNCTION_PARAMETERS)
+{
+	char *buf;
+	pval *str;
+	
+	if (ARG_COUNT(ht)!=1 || getParameters(ht, 1, &str)==FAILURE) {
+		WRONG_PARAM_COUNT;
+	}
+	convert_to_string(str);
+	buf=estrdup(str->value.str.val);
+	_php3_strip_tags(buf,0);
+	RETURN_STRING(buf,0);
+}
+/* }}} */
+
+
 /* {{{ proto string setlocale(string category, string locale)
    Set locale information */
 void php3_setlocale(INTERNAL_FUNCTION_PARAMETERS)
@@ -1672,6 +1819,102 @@ void php3_setlocale(INTERNAL_FUNCTION_PARAMETERS)
 	RETURN_FALSE;
 }
 /* }}} */
+
+/* A simple little state-machine to strip out html and php tags 
+	
+	State 0 is the output state, State 1 means we are inside a
+	normal html tag and state 2 means we are inside a php tag.
+
+	The state variable is passed in to allow a function like fgetss
+	to maintain state across calls to the function.
+
+	lc holds the last significant character read and br is a bracket
+	counter.
+*/
+void _php3_strip_tags(char *rbuf, int state) {
+	char *buf, *p, *rp, c, lc;
+	int br;
+
+	buf = estrdup(rbuf);
+	c = *buf;
+	lc = '\0';
+	p = buf;
+	rp = rbuf;
+	br = 0;
+
+	while (c) { /* This is not binary-safe.  Don't see why it should be */
+		switch (c) {
+			case '<':
+				if (state == 0) {
+					lc = '<';
+					state = 1;
+				}
+				break;
+
+			case '(':
+				if (state == 2) {
+					if (lc != '\"') {
+						lc = '(';
+						br++;
+					}
+				} else if (state == 0) {
+					*(rp++) = c;
+				}
+				break;	
+
+			case ')':
+				if (state == 2) {
+					if (lc != '\"') {
+						lc = ')';
+						br--;
+					}
+				} else if (state == 0) {
+					*(rp++) = c;
+				}
+				break;	
+
+			case '>':
+				if (state == 1) {
+					lc = '>';
+					state = 0;
+				} else if (state == 2) {
+					if (!br && lc != '\"' && *(p-1)=='?') {
+						state = 0;
+					}
+				}
+				break;
+
+			case '\"':
+				if (state == 2) {
+					if (lc == '\"') {
+						lc = '\0';
+					} else if (lc != '\\') {
+						lc = '\"';
+					}
+				} else if (state == 0) {
+					*(rp++) = c;
+				}
+				break;
+
+			case '?':
+				if (state==1 && *(p-1)=='<') {
+					br=0;
+					state=2;
+					break;
+				}
+				/* fall-through */
+
+			default:
+				if (state == 0) {
+					*(rp++) = c;
+				}	
+				break;
+		}
+		c = *(++p);
+	}	
+	*rp = '\0';
+	efree(buf);
+}
 
 /*
  * Local variables:

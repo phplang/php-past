@@ -24,12 +24,12 @@
    | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
    | Authors: Jim Winstead (jimw@php.net)                                 |
-   |          Stig Sæther Bakken <ssb@guardian.no>                        |
+   |          Stig Sæther Bakken <ssb@fast.no>                            |
    +----------------------------------------------------------------------+
  */
 
 
-/* $Id: phpmath.h,v 1.16 1999/01/01 17:59:17 zeev Exp $ */
+/* $Id: phpmath.h,v 1.17 1999/04/22 13:19:50 ssb Exp $ */
 
 #ifndef _PHPMATH_H
 #define _PHPMATH_H

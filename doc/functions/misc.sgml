@@ -129,8 +129,8 @@ This is a cup with my coffee in it.
     <funcsynopsis>
      <funcdef>void <function>extract</function></funcdef>
 	 <paramdef>array <parameter>var_array</parameter></paramdef>
-	 <paramdef>int <parameter>extract_type</parameter></paramdef>
-	 <paramdef>string <parameter><optional>var_array</optional></parameter></paramdef>
+	 <paramdef>int <parameter><optional>extract_type</optional></parameter></paramdef>
+	 <paramdef>string <parameter><optional>prefix</optional></parameter></paramdef>
     </funcsynopsis>
     <para>
      This function is used to import variables from an array into the
@@ -173,6 +173,9 @@ This is a cup with my coffee in it.
 	   </listitem>
 	  </varlistentry>
 	 </variablelist>
+	<para>
+     If <parameter>extract_type</parameter> is not specified,
+     it is assumed to be EXTR_OVERWRITE.
 	<para>
      Note that <parameter>prefix</parameter> is only required if
      <parameter>extract_type</parameter> is EXTR_PREFIX_SAME or
@@ -442,6 +445,11 @@ $binarydata = pack("nvc*", 0x1234, 0x5678, 65, 66);
    <simpara>
      Registers the function named by <parameter>func</parameter> to be
      executed when script processing is complete.
+   <para>
+     Common Pitfalls:
+   <simpara>
+     Since no output is allowed to the browser in this function, you will be 
+     unable to debug it using statements such as print or echo. 
   </refsect1>
  </refentry>
 
@@ -627,7 +635,7 @@ if (!odbc_execute($stmt, &$sqldata) || !odbc_fetch_into($stmt, &$tmp)) {
      it is recommended that you use something along the lines of
      <informalexample><programlisting>
 $token = md5(uniqid("")); // no random portion
-$better_token = md5(uniqid(random())); // better, difficult to guess
+$better_token = md5(uniqid(rand())); // better, difficult to guess
 </programlisting></informalexample>
     <simpara>
      This will create a 32 character identifier (a 128 bit hex number)

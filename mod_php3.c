@@ -27,7 +27,7 @@
    | (with helpful hints from Dean Gaudet <dgaudet@arctic.org>            |
    +----------------------------------------------------------------------+
  */
-/* $Id: mod_php3.c,v 1.90 1999/02/15 17:25:44 steffann Exp $ */
+/* $Id: mod_php3.c,v 1.92 1999/05/22 15:27:46 sas Exp $ */
 
 #ifdef THREAD_SAFE
 #include "tls.h"
@@ -98,7 +98,7 @@ int saved_umask;
 extern php3_ini_structure php3_ini;  /* active config */
 extern php3_ini_structure php3_ini_master;  /* master copy of config */
 
-extern int apache_php3_module_main(request_rec *, int, int, int, FILE *);
+extern int apache_php3_module_main(request_rec *, int, int, int);
 extern int php3_module_startup();
 extern void php3_module_shutdown();
 extern void php3_module_shutdown_for_exec();
@@ -242,7 +242,7 @@ int send_php3(request_rec *r, int display_source_mode, int preprocessed, char *f
 	chdir_file(filename);
 	add_common_vars(r);
 	add_cgi_vars(r);
-	apache_php3_module_main(r, fd, display_source_mode, preprocessed, NULL);
+	apache_php3_module_main(r, fd, display_source_mode, preprocessed);
 
 	/* Done, restore umask, turn off timeout, close file and return */
 	php3_restore_umask();
@@ -362,7 +362,7 @@ const char *php3flaghandler(cmd_parms * cmd, php3_ini_structure * conf, int val)
 char *php3flaghandler(cmd_parms * cmd, php3_ini_structure * conf, int val)
 {
 #endif
-	int c = (int) cmd->info;
+	long c = (long) cmd->info;
 
 	switch (c) {
 		case 0:
@@ -424,7 +424,7 @@ const char *php3take1handler(cmd_parms * cmd, php3_ini_structure * conf, char *a
 char *php3take1handler(cmd_parms * cmd, php3_ini_structure * conf, char *arg)
 {
 #endif
-	int c = (int) cmd->info;
+	long c = (long) cmd->info;
 
 	switch (c) {
 		case 0:

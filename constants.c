@@ -27,7 +27,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: constants.c,v 1.24 1999/01/04 14:25:10 jah Exp $ */
+/* $Id: constants.c,v 1.25 1999/05/19 02:06:06 rasmus Exp $ */
 #ifdef THREAD_SAFE
 #include "tls.h"
 #endif
@@ -90,7 +90,7 @@ int php3_startup_constants(void)
 	TLS_VARS;
 
 #if WIN32|WINNT
-	// Get build numbers for Windows NT or Win95
+	/* Get build numbers for Windows NT or Win95 */
 	if (dwVersion < 0x80000000){
 		php3_os="WINNT";
 	} else {

@@ -28,10 +28,12 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: php.h,v 1.49 1999/02/28 23:00:41 zeev Exp $ */
+/* $Id: php.h,v 1.52 1999/06/03 12:03:05 sas Exp $ */
 
 #ifndef _PHP_H
 #define _PHP_H
+
+#define PHP_API_VERSION 19980604
 
 #define YYDEBUG 0
 
@@ -145,8 +147,10 @@
 # endif 
 #endif 
 
-//#include "compat.h"
-
+#if 0
+#include "compat.h"
+#endif
+	
 #include "php3_hash.h"
 #include "alloc.h"
 
@@ -592,6 +596,10 @@ extern PHPAPI php3_ini_structure php3_ini;
 extern int yylineno;
 #endif
 extern void phprestart(FILE *input_file);
+
+#if HAVE_DMALLOC
+#include <dmalloc.h>
+#endif
 
 #endif
 

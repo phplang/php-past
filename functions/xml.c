@@ -23,11 +23,11 @@
    | If you did not, or have any questions about PHP licensing, please    |
    | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
-   | Authors: Stig Sæther Bakken <ssb@guardian.no>                        |
+   | Authors: Stig Sæther Bakken <ssb@fast.no>                            |
    +----------------------------------------------------------------------+
  */
 
-/* $Id: xml.c,v 1.22 1999/02/08 15:53:01 rasmus Exp $ */
+/* $Id: xml.c,v 1.26 1999/05/16 18:23:52 ssb Exp $ */
 #define IS_EXT_MODULE
 #if COMPILE_DL
 # if PHP_31
@@ -118,6 +118,8 @@ static char *xml_utf8_decode(const XML_Char *, int, int *, const XML_Char *);
 static pval *xml_call_handler(xml_parser *, char *, int, pval **);
 static pval *php3i_xmlcharpval(const XML_Char *, int, const XML_Char *);
 static int php3i_xmlcharlen(const XML_Char *);
+static void php3i_add_to_info(xml_parser *parser,char *name);
+
 
 void php3i_xml_startElementHandler(void *, const char *, const char **);
 void php3i_xml_endElementHandler(void *, const char *);
@@ -141,6 +143,7 @@ function_entry xml_functions[] = {
 	PHP_FE(xml_set_notation_decl_handler, NULL)
 	PHP_FE(xml_set_external_entity_ref_handler, NULL)
     PHP_FE(xml_parse, NULL)
+    PHP_FE(xml_parse_into_struct, NULL)
     PHP_FE(xml_get_error_code, NULL)
     PHP_FE(xml_error_string, NULL)
     PHP_FE(xml_get_current_line_number, NULL)
@@ -231,6 +234,9 @@ int php3_minit_xml(INIT_FUNC_ARGS)
 
 	REGISTER_LONG_CONSTANT("XML_OPTION_CASE_FOLDING", PHP3_XML_OPTION_CASE_FOLDING, CONST_CS|CONST_PERSISTENT);
 	REGISTER_LONG_CONSTANT("XML_OPTION_TARGET_ENCODING", PHP3_XML_OPTION_TARGET_ENCODING, CONST_CS|CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("XML_OPTION_SKIP_TAGSTART", PHP3_XML_OPTION_SKIP_TAGSTART, CONST_CS|CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("XML_OPTION_SKIP_WHITE", PHP3_XML_OPTION_SKIP_WHITE, CONST_CS|CONST_PERSISTENT);
+	
 
 	return SUCCESS;
 }
@@ -312,6 +318,9 @@ xml_destroy_parser(xml_parser *parser)
   
 	if (parser->parser) {
 		XML_ParserFree(parser->parser);
+	}
+	if (parser->ltags) {
+		efree(parser->ltags);
 	}
 	if (parser->startElementHandler) {
 		efree(parser->startElementHandler);
@@ -512,7 +521,7 @@ static char *
 xml_utf8_decode(const XML_Char *s, int len, int *newlen, const XML_Char *encoding)
 {
 	int pos = len;
-	char *newbuf = emalloc(len);
+	char *newbuf = emalloc(len + 1);
 	unsigned short c;
 	char (*decoder)(unsigned short) = NULL;
 	xml_encoding *enc = xml_get_encoding(encoding);
@@ -527,6 +536,7 @@ xml_utf8_decode(const XML_Char *s, int len, int *newlen, const XML_Char *encodin
 		 */
 		memcpy(newbuf, s, len);
 		*newlen = len;
+		newbuf[*newlen] = '\0';
 		return newbuf;
 	}
 	while (pos > 0) {
@@ -551,8 +561,9 @@ xml_utf8_decode(const XML_Char *s, int len, int *newlen, const XML_Char *encodin
 		++*newlen;
     }
 	if (*newlen < len) {
-		newbuf = erealloc(newbuf, *newlen);
+		newbuf = erealloc(newbuf, *newlen + 1);
 	}
+	newbuf[*newlen] = '\0';
 	return newbuf;
 }
 /* }}} */
@@ -589,45 +600,125 @@ static int php3i_xmlcharlen(const XML_Char *s)
 }
 
 /* }}} */
-    /* {{{ php3i_xml_startElementHandler() */
+/* {{{ php3i_add_to_info */
+static void php3i_add_to_info(xml_parser *parser,char *name)
+{
+	pval *element, values;
+
+	if (! parser->info) {
+		return;
+	}
+
+	if (_php3_hash_find(parser->info->value.ht,name,strlen(name) + 1,(void **) &element) == FAILURE) {
+		if (array_init(&values) == FAILURE) {
+			php3_error(E_ERROR, "Unable to initialize array");
+			return;
+		}
+		
+		_php3_hash_update(parser->info->value.ht, name, strlen(name)+1, (void *) &values, sizeof(pval), (void **) &element);
+	} 
+			
+	add_next_index_long(element,parser->curtag);
+
+	
+	parser->curtag++;
+}
+
+/* }}} */
+/* {{{ php3i_xml_startElementHandler() */
 
 void php3i_xml_startElementHandler(void *userData, const char *name,
 								   const char **attributes)
 {
 	xml_parser *parser = (xml_parser *)userData;
+	const char **attrs = attributes;
 	XML_TLS_VARS;
 
-	if (parser && parser->startElementHandler) {
+	if (parser) {
 		pval *retval, *args[3];
+
+		parser->level++;
 
 		if (parser->case_folding) {
 			name = _php3_strtoupper(estrdup(name));
 		}
-		args[0] = php3i_long_pval(parser->index);
-		args[1] = php3i_string_pval(name);
-		args[2] = emalloc(sizeof(pval));
-		array_init(args[2]);
-		while (attributes && *attributes) {
-			char *key = (char *)attributes[0];
-			char *value = (char *)attributes[1];
-			char *decoded_value;
-			int decoded_len;
-			if (parser->case_folding) {
-				key = _php3_strtoupper(estrdup(key));
+
+		if (parser->startElementHandler) {
+			args[0] = php3i_long_pval(parser->index);
+			args[1] = php3i_string_pval(name);
+			args[2] = emalloc(sizeof(pval));
+			array_init(args[2]);
+			while (attributes && *attributes) {
+				char *key = (char *)attributes[0];
+				char *value = (char *)attributes[1];
+				char *decoded_value;
+				int decoded_len;
+				if (parser->case_folding) {
+					key = _php3_strtoupper(estrdup(key));
+				}
+				decoded_value = xml_utf8_decode(value, strlen(value),
+												&decoded_len,
+												parser->target_encoding);
+				
+				add_assoc_string(args[2], key, decoded_value, 0);
+				if (parser->case_folding) {
+					efree(key);
+				}
+				attributes += 2;
 			}
-			decoded_value = xml_utf8_decode(value, strlen(value),
-											&decoded_len,
-											parser->target_encoding);
-			add_assoc_string(args[2], key, decoded_value, 0);
-			if (parser->case_folding) {
-				efree(key);
+			
+			if ((retval = xml_call_handler(parser, parser->startElementHandler, 3, args))) {
+				php3tls_pval_destructor(retval);
+				efree(retval);
 			}
-			attributes += 2;
+		} 
+
+		if (parser->data) {
+			pval tag, atr;
+			int atcnt = 0;
+
+			array_init(&tag);
+			array_init(&atr);
+
+			php3i_add_to_info(parser,((char *) name) + parser->toffset);
+
+			add_assoc_string(&tag,"tag",((char *) name) + parser->toffset,1); /* cast to avoid gcc-warning */
+			add_assoc_string(&tag,"type","open",1);
+			add_assoc_long(&tag,"level",parser->level);
+
+			parser->ltags[parser->level-1] = estrdup(name);
+			parser->lastwasopen = 1;
+
+			attributes = attrs;
+			while (attributes && *attributes) {
+				char *key = (char *)attributes[0];
+				char *value = (char *)attributes[1];
+				char *decoded_value;
+				int decoded_len;
+				if (parser->case_folding) {
+					key = _php3_strtoupper(estrdup(key));
+				}
+				decoded_value = xml_utf8_decode(value, strlen(value),
+												&decoded_len,
+												parser->target_encoding);
+				
+				add_assoc_stringl(&atr,key,decoded_value,decoded_len,0);
+				atcnt++;
+				if (parser->case_folding) {
+					efree(key);
+				}
+				attributes += 2;
+			}
+
+			if (atcnt) {
+				_php3_hash_add(tag.value.ht,"attributes",sizeof("attributes"),&atr,sizeof(pval),NULL);
+			} else {
+				php3tls_pval_destructor(&atr);
+			}
+
+			_php3_hash_next_index_insert(parser->data->value.ht,&tag,sizeof(pval),(void *) &parser->ctag);
 		}
-		if ((retval = xml_call_handler(parser, parser->startElementHandler, 3, args))) {
-			php3tls_pval_destructor(retval);
-			efree(retval);
-		}
+
 		if (parser->case_folding) {
 			efree((char *)name);
 		}
@@ -642,21 +733,50 @@ void php3i_xml_endElementHandler(void *userData, const char *name)
 	xml_parser *parser = (xml_parser *)userData;
 	XML_TLS_VARS;
 
-	if (parser && parser->endElementHandler) {
+	if (parser) {
 		pval *retval, *args[2];
 
 		if (parser->case_folding) {
 			name = _php3_strtoupper(estrdup(name));
 		}
-		args[0] = php3i_long_pval(parser->index);
-		args[1] = php3i_string_pval(name);
-		if ((retval = xml_call_handler(parser, parser->endElementHandler, 2, args))) {
-			php3tls_pval_destructor(retval);
-			efree(retval);
+
+		if (parser->endElementHandler) {
+			args[0] = php3i_long_pval(parser->index);
+			args[1] = php3i_string_pval(name);
+
+			if ((retval = xml_call_handler(parser, parser->endElementHandler, 2, args))) {
+				php3tls_pval_destructor(retval);
+				efree(retval);
+			}
+		} 
+
+		if (parser->data) {
+			pval tag;
+
+			if (parser->lastwasopen) {
+				add_assoc_string(parser->ctag,"type","complete",1);
+			} else {
+				array_init(&tag);
+				  
+				php3i_add_to_info(parser,((char *) name) + parser->toffset);
+
+				add_assoc_string(&tag,"tag",((char *) name) + parser->toffset,1); /* cast to avoid gcc-warning */
+				add_assoc_string(&tag,"type","close",1);
+				add_assoc_long(&tag,"level",parser->level);
+				  
+				_php3_hash_next_index_insert(parser->data->value.ht,&tag,sizeof(pval),NULL);
+			}
+
+			parser->lastwasopen = 0;
 		}
+
 		if (parser->case_folding) {
 			efree((char *)name);
 		}
+		if (parser->ltags) {
+			efree(parser->ltags[parser->level-1]);
+		}
+		parser->level--;
 	}
 }
 
@@ -668,14 +788,60 @@ void php3i_xml_characterDataHandler(void *userData, const XML_Char *s, int len)
 	xml_parser *parser = (xml_parser *)userData;
 	XML_TLS_VARS;
 
-	if (parser && parser->characterDataHandler) {
+	if (parser) {
 		pval *retval, *args[2];
 
-		args[0] = php3i_long_pval(parser->index);
-		args[1] = php3i_xmlcharpval(s, len, parser->target_encoding);
-		if ((retval = xml_call_handler(parser, parser->characterDataHandler, 2, args))) {
-			php3tls_pval_destructor(retval);
-			efree(retval);
+		if (parser->characterDataHandler) {
+			args[0] = php3i_long_pval(parser->index);
+			args[1] = php3i_xmlcharpval(s, len, parser->target_encoding);
+			if ((retval = xml_call_handler(parser, parser->characterDataHandler, 2, args))) {
+				php3tls_pval_destructor(retval);
+				efree(retval);
+			}
+		} 
+
+		if (parser->data) {
+			int i;
+			int doprint = 0;
+
+			char *decoded_value;
+			int decoded_len;
+			
+			decoded_value = xml_utf8_decode(s,len,&decoded_len,parser->target_encoding);
+			for (i = 0; i < decoded_len; i++) {
+				switch (decoded_value[i]) {
+				case ' ':
+				case '\t':
+				case '\n':
+					continue;
+				default:
+					doprint = 1;
+					break;
+				}
+				if (doprint) {
+					break;
+				}
+			}
+			if (doprint || (! parser->skipwhite)) {
+				if (parser->lastwasopen) {
+					add_assoc_string(parser->ctag,"value",decoded_value,0);
+				} else {
+					pval tag;
+					
+					array_init(&tag);
+					
+					php3i_add_to_info(parser,parser->ltags[parser->level-1] + parser->toffset);
+
+					add_assoc_string(&tag,"tag",parser->ltags[parser->level-1] + parser->toffset,1);
+					add_assoc_string(&tag,"value",decoded_value,0);
+					add_assoc_string(&tag,"type","cdata",1);
+					add_assoc_long(&tag,"level",parser->level);
+					
+					_php3_hash_next_index_insert(parser->data->value.ht,&tag,sizeof(pval),NULL);
+				}
+			} else {
+				efree(decoded_value);
+			}
 		}
 	}
 }
@@ -1061,8 +1227,58 @@ PHP_FUNCTION(xml_parse)
 	if (parser == NULL) {
 		RETURN_FALSE;
 	}
-	fflush(stdout);
+	/* fflush(stdout); uups, that can't be serious?!?!?*/
 	ret = XML_Parse(parser->parser, data->value.str.val, data->value.str.len, isFinal);
+	RETVAL_LONG(ret);
+}
+
+/* }}} */
+/* {{{ proto int xml_parse_into_struct(int pind, string data,array &struct,array &index) 
+   Parsing a XML document */
+
+PHP_FUNCTION(xml_parse_into_struct)
+{
+	xml_parser *parser;
+	pval *pind, *data, *xdata,*info = 0;
+	int argc, ret;
+	XML_TLS_VARS;
+
+	argc = ARG_COUNT(ht);
+	if (getParameters(ht, 4, &pind, &data, &xdata,&info) == SUCCESS) {
+		if (!ParameterPassedByReference(ht, 4)) {
+			php3_error(E_WARNING, "Array to be filled with values must be passed by reference.");
+            RETURN_FALSE;
+		}
+		array_init(info);
+	} else if (getParameters(ht, 3, &pind, &data, &xdata) == FAILURE) {
+		WRONG_PARAM_COUNT;
+	}
+
+	if (!ParameterPassedByReference(ht, 3)) {
+		php3_error(E_WARNING, "Array to be filled with values must be passed by reference.");
+		RETURN_FALSE;
+	}
+
+	convert_to_long(pind);
+	convert_to_string(data);
+	array_init(xdata);
+
+	parser = xml_get_parser(pind->value.lval, "XML_Parse_Into_Struct", list);
+	if (parser == NULL) {
+		RETURN_FALSE;
+	}
+
+	parser->data = xdata;
+	parser->info = info;
+	parser->level = 0;
+	parser->ltags = emalloc(XML_MAXLEVEL * sizeof(char *));
+
+	XML_SetDefaultHandler(parser->parser, php3i_xml_defaultHandler);
+	XML_SetElementHandler(parser->parser, php3i_xml_startElementHandler, php3i_xml_endElementHandler);
+	XML_SetCharacterDataHandler(parser->parser, php3i_xml_characterDataHandler);
+
+	ret = XML_Parse(parser->parser, data->value.str.val, data->value.str.len, 1);
+
 	RETVAL_LONG(ret);
 }
 /* }}} */
@@ -1207,6 +1423,14 @@ PHP_FUNCTION(xml_parser_set_option)
 		case PHP3_XML_OPTION_CASE_FOLDING:
 			convert_to_long(val);
 			parser->case_folding = val->value.lval;
+			break;
+		case PHP3_XML_OPTION_SKIP_TAGSTART:
+			convert_to_long(val);
+			parser->toffset = val->value.lval;
+			break;
+		case PHP3_XML_OPTION_SKIP_WHITE:
+			convert_to_long(val);
+			parser->skipwhite = val->value.lval;
 			break;
 		case PHP3_XML_OPTION_TARGET_ENCODING: {
 			xml_encoding *enc = xml_get_encoding(val->value.str.val);

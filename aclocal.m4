@@ -1,6 +1,16 @@
-dnl $Id: aclocal.m4,v 1.31 1999/02/06 19:33:17 sas Exp $
+dnl $Id: aclocal.m4,v 1.37 1999/05/12 17:54:23 sas Exp $
 dnl
 dnl This file contains local autoconf functions.
+
+dnl dummy function for PHP4 compatibility
+AC_DEFUN(PHP_EXTENSION,[])
+
+AC_DEFUN(AC_TEMP_LDFLAGS,[
+  old_LDFLAGS="$LDFLAGS"
+  LDFLAGS="$1 $LDFLAGS"
+  $2
+  LDFLAGS="$old_LDFLAGS"
+])
 
 AC_DEFUN(AC_ORACLE_VERSION,[
   AC_MSG_CHECKING([Oracle version])
@@ -9,7 +19,12 @@ AC_DEFUN(AC_ORACLE_VERSION,[
 	ORACLE_VERSION=`grep '"ocommon"' $ORACLEINST_TOP/orainst/unix.rgs | sed 's/[ ][ ]*/:/g' | cut -d: -f 6 | cut -c 2-4`
     test -z "$ORACLE_VERSION" && ORACLE_VERSION=7.3
   else
-    ORACLE_VERSION=8.0
+    if test -f "$ORACLEINST_TOP/lib/libclntsh.so.8.0"
+    then
+        ORACLE_VERSION=8.1
+    else
+        ORACLE_VERSION=8.0
+    fi
   fi
   AC_MSG_RESULT($ORACLE_VERSION)
 ])
@@ -112,6 +127,86 @@ AC_DEFUN(AC_PREFERRED_DB_LIB,[
   fi
   AC_SUBST(DBM_LIB)
   AC_SUBST(DBM_TYPE)
+])
+
+dnl Assign INCLUDE/LFLAGS from PREFIX
+AC_DEFUN(AC_DBA_STD_ASSIGN,[
+  if test "$THIS_PREFIX" != "" -a "$THIS_PREFIX" != "/usr"; then
+    THIS_INCLUDE="-I$THIS_PREFIX/include"
+    THIS_LFLAGS="-L$THIS_PREFIX/lib"
+  fi
+])
+
+dnl Standard check
+AC_DEFUN(AC_DBA_STD_CHECK,[
+  THIS_RESULT="yes"
+  if test "$THIS_PREFIX" != "/usr"; then
+  if test "$THIS_INCLUDE" = "" ; then
+    AC_MSG_ERROR(cannot find necessary header file(s))
+  elif test "$THIS_LIBS" = "" ; then
+    AC_MSG_ERROR(cannot find necessary library)
+  fi
+  fi
+])
+
+dnl Attach THIS_x to DBA_x
+AC_DEFUN(AC_DBA_STD_ATTACH,[
+  DBA_INCLUDE="$DBA_INCLUDE $THIS_INCLUDE"
+  DBA_LIBS="$DBA_LIBS $THIS_LIBS"
+  DBA_LFLAGS="$DBA_LFLAGS $THIS_LFLAGS"
+
+  THIS_INCLUDE=""
+  THIS_LIBS=""
+  THIS_LFLAGS=""
+  THIS_PREFIX=""
+])
+
+dnl Print the result message
+AC_DEFUN(AC_DBA_STD_RESULT,[
+  if test "$THIS_RESULT" = "yes"; then
+    HAVE_DBA=1
+    AC_MSG_RESULT(yes)
+  else
+    AC_MSG_RESULT(no)
+  fi
+  THIS_RESULT=""
+])
+
+
+dnl
+dnl Check for concurrent available database libraries
+dnl
+AC_DEFUN(AC_AVAILABLE_DB_LIBS,[
+dnl NDBM in -lc or -ldbm or -lndbm or -ldb1 or -lgdbm
+  AC_CHECK_LIB(c, dbm_open, [AC_DEFINE(DBA_NDBM, 1)],
+    [AC_CHECK_LIB(dbm, dbm_open, [AC_DEFINE(DBA_NDBM, 1) DBA_LIBS=-ldbm],
+    [AC_CHECK_LIB(ndbm, dbm_open, [AC_DEFINE(DBA_NDBM, 1) DBA_LIBS=-lndbm],
+    [AC_CHECK_LIB(db1, dbm_open, [AC_DEFINE(DBA_NDBM, 1) DBA_LIBS=-ldb1],
+    [AC_CHECK_LIB(gdbm, dbm_open, [AC_DEFINE(DBA_NDBM, 1) DBA_LIBS=-lgdbm])])])])])
+dnl DBM in -lc or -ldbm or -ldb1 or -lgdbm
+  AC_CHECK_LIB(c, dbminit, [AC_DEFINE(DBA_DBM, 1)],
+    [AC_CHECK_LIB(dbm, dbminit, 
+        [AC_DEFINE(DBA_DBM, 1) DBA_LIBS="$DBA_LIBS -ldbm"],
+    [AC_CHECK_LIB(db1, dbminit, 
+        [AC_DEFINE(DBA_DBM, 1) DBA_LIBS="$DBA_LIBS -ldb1"],
+	[AC_CHECK_LIB(db, __db_dbm_init,
+		[AC_DEFINE(DBA_DBM, 1) DBA_LIBS="$DBA_LIBS -ldb"],
+	[AC_CHECK_LIB(gdbm, dbminit,
+		[AC_DEFINE(DBA_DBM, 1) DBA_LIBS="$DBA_LIBS -lgdbm"])])])])])
+dnl GDBM in -lgdbm
+  AC_CHECK_LIB(gdbm, gdbm_open, 
+      [AC_DEFINE(DBA_GDBM, 1) DBA_LIBS="$DBA_LIBS -lgdbm"])
+dnl Sleepycat DB2 in -ldb or -ldb2
+  AC_CHECK_LIB(db, db_open,[AC_DEFINE(DBA_DB2, 1) DBA_LIBS="$DBA_LIBS -ldb"],
+    [AC_CHECK_LIB(db2,db_open,[AC_DEFINE(DBA_DB2,1) DBA_LIBS="$DBA_LIBS -ldb2"])
+  ])
+dnl dbopen(3) interface 
+  AC_CHECK_LIB(c, dbopen, [AC_DEFINE(DBA_DBOPEN, 1)],
+    [AC_CHECK_LIB(db1, dbopen, 
+        [AC_DEFINE(DBA_DBOPEN, 1) DBA_LIBS="$DBA_LIBS -ldb1"])])
+dnl DJB's cdb
+  AC_CHECK_LIB(cdb, cdb_bread, 
+    [AC_DEFINE(DBA_CDB, 1) DBA_LIBS="$DBA_LIBS -lcdb"])
 ])
 
 dnl

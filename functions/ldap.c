@@ -26,11 +26,11 @@
    | Authors: Amitay Isaacs  <amitay@w-o-i.com>                           |
    |          Eric Warnke    <ericw@albany.edu>                           |
    |          Rasmus Lerdorf <rasmus@lerdorf.on.ca>                       |
+   |          Gerrit Thomson <334647@swin.edu.au>                         |
    +----------------------------------------------------------------------+
  */
- 
 
-/* $Id: ldap.c,v 1.66 1999/02/01 02:31:10 sas Exp $ */
+/* $Id: ldap.c,v 1.67 1999/03/08 16:56:47 rasmus Exp $ */
 #define IS_EXT_MODULE
 #if !PHP_31 && defined(THREAD_SAFE)
 #undef THREAD_SAFE
@@ -123,6 +123,11 @@ function_entry ldap_functions[] = {
 	{"ldap_add", 					php3_ldap_add,					NULL},
 	{"ldap_delete",					php3_ldap_delete,				NULL},
 	{"ldap_modify",					php3_ldap_modify,				NULL},
+/* additional functions for attribute based modifications, Gerrit Thomson */
+	{"ldap_mod_add",				php3_ldap_mod_add,				NULL},
+	{"ldap_mod_replace",			php3_ldap_mod_replace,			NULL},
+	{"ldap_mod_del",				php3_ldap_mod_del,				NULL},
+/* end gjt mod */
 	{NULL, NULL, NULL}
 };
 
@@ -305,7 +310,7 @@ void php3_info_ldap(void)
 
 	php3_printf("<table>"
 				"<tr><td>Total links:</td><td>%d/%s</td></tr>\n"
-		        "<tr><td>RCS Version:</td><td>$Id: ldap.c,v 1.66 1999/02/01 02:31:10 sas Exp $</td></tr>\n"
+		        "<tr><td>RCS Version:</td><td>$Id: ldap.c,v 1.67 1999/03/08 16:56:47 rasmus Exp $</td></tr>\n"
 #if HAVE_NSLDAP
 				"<tr><td>SDK Version:</td><td>%f</td></tr>"
 				"<tr><td>Highest LDAP Protocol Supported:</td><td>%f</td></tr>"
@@ -1140,7 +1145,10 @@ void php3_ldap_dn2ufn(INTERNAL_FUNCTION_PARAMETERS)
 	}
 }
 /* }}} */
-	
+
+/* added to fix use of ldap_modify_add for doing an ldap_add, gerrit thomson.   */
+#define PHP_LD_FULL_ADD 0xff
+ 	
 
 static void php3_ldap_do_modify(INTERNAL_FUNCTION_PARAMETERS, int oper)
 {
@@ -1151,7 +1159,8 @@ LDAPMod **ldap_mods;
 int i, j, num_attribs, num_values;
 char *attribute;
 ulong index;
-
+int is_full_add=0; /* flag for full add operation so ldap_mod_add can be put back into oper, gerrit THomson */
+ 
 	if (ARG_COUNT(ht) != 3 || getParameters(ht, 3, &link, &dn, &entry) == FAILURE) {
 		WRONG_PARAM_COUNT;
 	}	
@@ -1172,6 +1181,13 @@ ulong index;
 	ldap_mods = emalloc((num_attribs+1) * sizeof(LDAPMod *));
 
 	_php3_hash_internal_pointer_reset(entry->value.ht);
+        /* added by gerrit thomson to fix ldap_add using ldap_mod_add */
+        if ( oper == PHP_LD_FULL_ADD )
+        {
+                oper = LDAP_MOD_ADD;
+                is_full_add = 1;
+        }
+	/* end additional , gerrit thomson */
 
 	for(i=0; i<num_attribs; i++) {
 		ldap_mods[i] = emalloc(sizeof(LDAPMod));
@@ -1194,8 +1210,10 @@ ulong index;
 		}
 
 		ldap_mods[i]->mod_values = emalloc((num_values+1) * sizeof(char *));
-		
-		if (num_values == 1) {
+
+/* allow for arrays with one element, no allowance for arrays with none but probably not required, gerrit thomson. */
+/*              if (num_values == 1) {*/
+                if ((num_values == 1) && (value->type != IS_ARRAY)) {
 			convert_to_string(value);
 			ldap_mods[i]->mod_values[0] = value->value.str.val;
 		} else {	
@@ -1211,7 +1229,9 @@ ulong index;
 	}
 	ldap_mods[num_attribs] = NULL;
 
-	if (oper == LDAP_MOD_ADD) {
+/* check flag to see if do_mod was called to perform full add , gerrit thomson */
+/* 	if (oper == LDAP_MOD_ADD) { */
+        if (is_full_add == 1) {
 		if (ldap_add_s(ldap, ldap_dn, ldap_mods) != LDAP_SUCCESS) {
 			ldap_perror(ldap, "LDAP");
 			php3_error(E_WARNING, "LDAP: add operation could not be completed.");
@@ -1238,7 +1258,9 @@ ulong index;
    Add entries to LDAP directory */
 void php3_ldap_add(INTERNAL_FUNCTION_PARAMETERS)
 {
-	php3_ldap_do_modify(INTERNAL_FUNCTION_PARAM_PASSTHRU, LDAP_MOD_ADD);
+	/* use a newly define parameter into the do_modify so ldap_mod_add can be used the way it is supposed to be used , Gerrit THomson */
+	/* php3_ldap_do_modify(INTERNAL_FUNCTION_PARAM_PASSTHRU, LDAP_MOD_ADD);*/
+	php3_ldap_do_modify(INTERNAL_FUNCTION_PARAM_PASSTHRU, PHP_LD_FULL_ADD);
 }
 /* }}} */
 
@@ -1250,6 +1272,36 @@ void php3_ldap_modify(INTERNAL_FUNCTION_PARAMETERS)
 	php3_ldap_do_modify(INTERNAL_FUNCTION_PARAM_PASSTHRU, LDAP_MOD_REPLACE); 
 }
 /* }}} */
+
+
+/* three functions for attribute base modifications, gerrit Thomson */
+
+
+
+/* {{{ proto int ldap_mod_replace(int link, string dn, array entry)
+   Replace attribute values with new ones */
+void php3_ldap_mod_replace(INTERNAL_FUNCTION_PARAMETERS)
+{
+        php3_ldap_do_modify(INTERNAL_FUNCTION_PARAM_PASSTHRU, LDAP_MOD_REPLACE);}
+/* }}} */
+
+/* {{{ proto int ldap_mod_add(int link, string dn, array entry)
+        Add attribute values to current */
+void php3_ldap_mod_add(INTERNAL_FUNCTION_PARAMETERS)
+{
+        php3_ldap_do_modify(INTERNAL_FUNCTION_PARAM_PASSTHRU, LDAP_MOD_ADD);
+}
+/* }}} */
+
+/* {{{ proto int ldap_mod_del(int link, string dn, array entry)
+   Delete attribute values */
+void php3_ldap_mod_del(INTERNAL_FUNCTION_PARAMETERS)
+{
+        php3_ldap_do_modify(INTERNAL_FUNCTION_PARAM_PASSTHRU, LDAP_MOD_DELETE);
+}
+
+/* end of attribute based functions , gerrit thomson */
+
 
 /* {{{ proto int ldap_delete(int link, string dn)
    Delete an entry from a directory */

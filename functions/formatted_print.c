@@ -23,11 +23,11 @@
    | If you did not, or have any questions about PHP licensing, please    |
    | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
-   | Authors: Stig Sæther Bakken <ssb@guardian.no>                        |
+   | Authors: Stig Sæther Bakken <ssb@fast.no>                            |
    +----------------------------------------------------------------------+
  */
 
-/* $Id: formatted_print.c,v 1.46 1999/01/04 18:13:29 rasmus Exp $ */
+/* $Id: formatted_print.c,v 1.47 1999/04/22 13:19:49 ssb Exp $ */
 
 #include <math.h>				/* modf() */
 #ifdef THREAD_SAFE

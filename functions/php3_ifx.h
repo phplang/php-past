@@ -25,12 +25,12 @@
    +----------------------------------------------------------------------+
    | Authors: Danny Heijl <Danny.Heijl@cevi.be>, initial cut (ODS 7)      |
    |          Christian Cartus <chc@idgruppe.de>, blobs, and IUS 9        |
-   |          Jouni Ahto <jah@guru.cultnet.fi>   : configuration stuff    |
+   |          Jouni Ahto <jah@mork.net>   : configuration stuff           |
    | based on mysql code by: Zeev Suraski <bourbon@netvision.net.il>      |
    +----------------------------------------------------------------------+
  */
 
-/* $Id: php3_ifx.h,v 1.17 1999/01/01 17:59:15 zeev Exp $ */
+/* $Id: php3_ifx.h,v 1.20 1999/05/08 21:46:52 jah Exp $ */
 
 #ifndef _PHP3_IFX_H
 #define _PHP3_IFX_H
@@ -73,48 +73,29 @@ extern void php3_ifx_free_result(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_ifx_htmltbl_result(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_ifx_fieldtypes(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_ifx_fieldproperties(INTERNAL_FUNCTION_PARAMETERS);
+extern void php3_ifx_getsqlca(INTERNAL_FUNCTION_PARAMETERS);
 
-long php3_intifx_getType(long id, HashTable *list);
 extern void php3_ifx_create_blob(INTERNAL_FUNCTION_PARAMETERS);
-long php3_intifx_create_blob(long type, long mode, char* param, long len, HashTable *list);
 extern void php3_ifx_free_blob(INTERNAL_FUNCTION_PARAMETERS) ;
-long php3_intifx_free_blob(long id, HashTable *list);
-long php3_intifx2_free_blob(long id, HashTable *list);
 extern void php3_ifx_get_blob(INTERNAL_FUNCTION_PARAMETERS);
-long php3_intifx_get_blob(long bid, HashTable *list, char** content);
 extern void php3_ifx_update_blob(INTERNAL_FUNCTION_PARAMETERS);
-long php3_intifx_update_blob(long bid, char* param, long len, HashTable *list);
-loc_t *php3_intifx_get_blobloc(long bid, HashTable *list);
-char* php3_intifx_create_tmpfile(long bid);
 extern void php3_ifx_blobinfile_mode(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_ifx_copy_blob(INTERNAL_FUNCTION_PARAMETERS);
-long php3_intifx_copy_blob(long bid, HashTable *list);
 extern void php3_ifx_textasvarchar(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_ifx_byteasvarchar(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_ifx_nullformat(INTERNAL_FUNCTION_PARAMETERS);
-char* php3_intifx_null();
 
 extern void php3_ifx_create_char(INTERNAL_FUNCTION_PARAMETERS);
-long php3_intifx_create_char(char* param, long len, HashTable *list);
 extern void php3_ifx_free_char(INTERNAL_FUNCTION_PARAMETERS) ;
-long php3_intifx_free_char(long id, HashTable *list);
 extern void php3_ifx_update_char(INTERNAL_FUNCTION_PARAMETERS);
-long php3_intifx_update_char(long bid, char* param, long len, HashTable *list);
 extern void php3_ifx_get_char(INTERNAL_FUNCTION_PARAMETERS);
-long php3_intifx_get_char(long bid, HashTable *list, char** content);
 
 
 #if HAVE_IFX_IUS
 extern void php3_ifxus_create_slob(INTERNAL_FUNCTION_PARAMETERS);
-long php3_intifxus_create_slob(long create_mode, HashTable *list);
 extern void php3_ifxus_free_slob(INTERNAL_FUNCTION_PARAMETERS) ;
-long php3_intifxus_free_slob(long bid, HashTable *list);
 extern void php3_ifxus_close_slob(INTERNAL_FUNCTION_PARAMETERS) ;
-long php3_intifxus_close_slob(long bid, HashTable *list);
 extern void php3_ifxus_open_slob(INTERNAL_FUNCTION_PARAMETERS) ;
-long php3_intifxus_open_slob(long bid, long create_mode, HashTable *list);
-long php3_intifxus_new_slob(HashTable *list);
-ifx_lo_t *php3_intifxus_get_slobloc(long bid, HashTable *list);
 extern void php3_ifxus_read_slob(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_ifxus_write_slob(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_ifxus_seek_slob(INTERNAL_FUNCTION_PARAMETERS);
@@ -136,6 +117,8 @@ typedef struct {
         long byteasvarchar;  /* 0=as id, 1=as varchar */
         long charasvarchar;  /* 0=don't strip trailing blanks, 1=strip */
         long nullformat;     /* 0=NULL as "", 1= NULL as "NULL" */
+        char *nullvalue;     /* "" */
+        char *nullstring;    /* "NULL" */
 } ifx_module;
 
 #define MAX_RESID          64
@@ -153,6 +136,7 @@ typedef struct ifx_res {
 	int  numcols;
 	int  rowid;
         int  affected_rows;
+        long sqlerrd[6];
         int res_id[MAX_RESID];
 } IFX_RES;
 

@@ -4,19 +4,25 @@
 *							All rights reserved.
 *
 * Filename:		$RCSfile: DList.h,v $
-* Version:		$Revision: 1.2 $
+* Version:		$Revision: 1.4 $
 *
 * Language:		ANSI C
 * Environment:	any
 *
 * Description:	Header file for doubly linked list routines.
 *
-* $Id: DList.h,v 1.2 1998/08/14 15:51:12 shane Exp $
+* $Id: DList.h,v 1.4 1999/05/28 12:14:26 sas Exp $
 *
 * Revision History:
 * -----------------
 *
 * $Log: DList.h,v $
+* Revision 1.4  1999/05/28 12:14:26  sas
+* as reported in #1353
+*
+* Revision 1.3  1999/03/09 17:49:55  rasmus
+* Eliminate symbol conflicts here
+*
 * Revision 1.2  1998/08/14 15:51:12  shane
 * Some work on getting hyperwave to work on windows.  hg_comm needs a lot of work.
 *
@@ -37,7 +43,7 @@
 * Took out extern references
 * 
 * Revision 1.2  91/09/01  19:37:20  ROOT_DOS
-* Changed DLST_TAIL macro so that it returns a pointer to the REAL last
+* Changed PHP_DLST_TAIL macro so that it returns a pointer to the REAL last
 * node of the list, not the dummy last node (l->z).
 * 
 * Revision 1.1  91/09/01  18:38:23  ROOT_DOS
@@ -54,45 +60,51 @@
 
 /*---------------------- Macros and type definitions ----------------------*/
 
-typedef struct DLST_BUCKET {
-	struct DLST_BUCKET	*next;
-	struct DLST_BUCKET	*prev;
-	} DLST_BUCKET;
+typedef struct PHP_DLST_BUCKET {
+	struct PHP_DLST_BUCKET	*next;
+	struct PHP_DLST_BUCKET	*prev;
+	} PHP_DLST_BUCKET;
+
+/* necessary for AIX 4.2.x */
+
+#ifdef hz
+#undef hz
+#endif
 
 typedef struct {
 	int			count;			/* Number of elements currently in list	*/
-	DLST_BUCKET	*head;			/* Pointer to head element of list		*/
-	DLST_BUCKET	*z;				/* Pointer to last node of list			*/
-	DLST_BUCKET	hz[2];			/* Space for head and z nodes			*/
+	PHP_DLST_BUCKET	*head;			/* Pointer to head element of list		*/
+	PHP_DLST_BUCKET	*z;				/* Pointer to last node of list			*/
+	PHP_DLST_BUCKET	hz[2];			/* Space for head and z nodes			*/
 	} DLIST;
 
 /* Return a pointer to the user space given the address of the header of
  * a node.
  */
 
-#define	DLST_USERSPACE(h)	((void*)((DLST_BUCKET*)(h) + 1))
+#define	PHP_DLST_USERSPACE(h)	((void*)((PHP_DLST_BUCKET*)(h) + 1))
 
 /* Return a pointer to the header of a node, given the address of the
  * user space.
  */
 
-#define	DLST_HEADER(n)		((DLST_BUCKET*)(n) - 1)
+#define	PHP_DLST_HEADER(n)		((PHP_DLST_BUCKET*)(n) - 1)
 
 /* Return a pointer to the user space of the list's head node. This user
  * space does not actually exist, but it is useful to be able to address
  * it to enable insertion at the start of the list.
  */
 
-#define	DLST_HEAD(l)		DLST_USERSPACE((l)->head)
+#define	PHP_DLST_HEAD(l)		PHP_DLST_USERSPACE((l)->head)
 
 /* Return a pointer to the user space of the last node in list.	*/
 
-#define	DLST_TAIL(l)		DLST_USERSPACE((l)->z->prev)
+#define	PHP_DLST_TAIL(l)		PHP_DLST_USERSPACE((l)->z->prev)
 
 /* Determine if a list is empty
  */
 
-#define	DLST_EMPTY(l)		((l)->count == 0)
+#define	PHP_DLST_EMPTY(l)		((l)->count == 0)
 
 /*-------------------------- Function Prototypes --------------------------*/
 

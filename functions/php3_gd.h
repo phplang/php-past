@@ -24,12 +24,12 @@
    | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
    | Authors: Rasmus Lerdorf <rasmus@lerdorf.on.ca>                       |
-   |          Stig Bakken <ssb@guardian.no>                               |
+   |          Stig Bakken <ssb@fast.no>                                   |
    +----------------------------------------------------------------------+
  */
 
 
-/* $Id: php3_gd.h,v 1.25 1998/10/12 22:40:35 zeev Exp $ */
+/* $Id: php3_gd.h,v 1.33 1999/06/01 22:04:25 jah Exp $ */
 
 #ifndef _PHP3_GD_H
 #define _PHP3_GD_H
@@ -42,6 +42,10 @@
 #if HAVE_LIBGD
 
 #include <gd.h>
+
+#if HAVE_LIBT1
+#include <t1lib.h>
+#endif
 
 extern php3_module_entry gd_module_entry;
 #define gd_module_ptr &gd_module_entry
@@ -92,6 +96,32 @@ extern void php3_imagedashedline(INTERNAL_FUNCTION_PARAMETERS);
 #ifdef HAVE_LIBTTF
 extern void php3_imagettfbbox(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_imagettftext(INTERNAL_FUNCTION_PARAMETERS);
+#endif
+#if HAVE_LIBT1
+extern void php3_imagepsloadfont(INTERNAL_FUNCTION_PARAMETERS);
+extern void php3_imagepsfreefont(INTERNAL_FUNCTION_PARAMETERS);
+/* The function in t1lib which this function uses seem to be buggy...
+extern void php3_imagepscopyfont(INTERNAL_FUNCTION_PARAMETERS);
+*/
+extern void php3_imagepsencodefont(INTERNAL_FUNCTION_PARAMETERS);
+extern void php3_imagepsextendfont(INTERNAL_FUNCTION_PARAMETERS);
+extern void php3_imagepsslantfont(INTERNAL_FUNCTION_PARAMETERS);
+extern void php3_imagepsbbox(INTERNAL_FUNCTION_PARAMETERS);
+extern void php3_imagepstext(INTERNAL_FUNCTION_PARAMETERS);
+
+typedef struct {
+  char *default_encoding;
+} gd_module;
+
+typedef struct {
+  int font_id;
+  float extend;
+} gd_ps_font;
+
+extern void _php3_free_ps_font(gd_ps_font *);
+extern void _php3_free_ps_enc(char **);
+extern gd_module php3_gd_module;
+
 #endif
 #else
 

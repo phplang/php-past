@@ -15,7 +15,7 @@ brian
 lr            Lachlan Roche   lr@www.wwi.com.au          MD5
 damian
 ian
-jah           Jouni Ahto      jah@cultnet.fi             Postgres, Informix
+jah           Jouni Ahto      jah@mork.net               Postgres, Informix
 adam
 amitay        Amitay Isaacs   amitay@w-o-i.com           LDAP
 dizzy
@@ -48,7 +48,7 @@ steinm        Uwe Steinmann   Uwe.Steinmann@fernuni-hagen.de  Hyperwave Module
 danny         Danny Heijl     Danny.Heijl@cevi.be        Informix
 kara          Andreas Karajannis Andreas.Karajannis@gmd.de ODBC, Oracle
 nyenyon       Christian Cartus chc@idgruppe.de           Informix
-kk            Kristian Köhntopp kk@shonline.de        Documentation
+kk            Kristian Köhntopp kk@shonline.de           Documentation
 ted           Ted Rolle       ted.rolle@usa.net          Documentation
 holger        Holger Zimmermann  zimpel@t-online.de      Pi3Web support
 sgk           Shigeru Kanemoto  sgk@happysize.co.jp      Japanese language support
@@ -66,3 +66,8 @@ alex          Alex Plotnick   shrike@netaxs.com          gettext module
 affinity      Donald C. Sumbry][ sumbry@affinity.net     Documentation
 timothy       Timothy Whitfield timothy@ametro.net       Cybercash module
 iometrics     Mike McWilliams mmcwilliams@hotmail.com    ODBC, graphic functions
+atrak         Stephanie Wehner _@r4k.net                 Maintain the yp functions
+slawrance     Steven Lawrance slawrance@technologist.com PHP RPC server
+paul          Paul Andersen   paul@egate.net             Documentation
+skaag         Aric Fedida     countz@escape.com          Documentation
+mhjack        Mike Jackson    mhjack@tscnet.com          SNMP

@@ -28,7 +28,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: db.c,v 1.87 1999/02/28 23:32:32 rasmus Exp $ */
+/* $Id: db.c,v 1.90 1999/03/21 18:13:19 jimjag Exp $ */
 #define IS_EXT_MODULE
 #if COMPILE_DL
 #ifdef PHP_31
@@ -86,17 +86,18 @@
 #endif
 
 #if NDBM && !GDBM
-#if BSD2
+
+#if HAVE_NDBM_H
+#include <ndbm.h>
+#elif HAVE_DB_H
 #define DB_DBM_HSEARCH 1
 #include <db.h>
-#else
-#include <ndbm.h>
 #endif
 
 #define DBM_TYPE DBM *
 #define DBM_MODE_TYPE int
 #define DBM_WRITE_MODE O_RDWR
-#define DBM_CREATE_MODE O_RDWR | O_APPEND | O_CREAT
+#define DBM_CREATE_MODE O_RDWR | O_CREAT
 #define DBM_NEW_MODE O_RDWR | O_CREAT | O_TRUNC
 #define DBM_DEFAULT_MODE O_RDONLY
 #define DBM_OPEN(filename, mode) dbm_open(filename, mode, 0666)

@@ -28,7 +28,7 @@
    |          Jaakko Hyvätti <jaakko@hyvatti.iki.fi>                      | 
    +----------------------------------------------------------------------+
  */
-/* $Id: reg.c,v 1.98 1999/02/28 17:25:57 rasmus Exp $ */
+/* $Id: reg.c,v 1.101 1999/06/05 14:17:31 andrey Exp $ */
 #ifdef THREAD_SAFE
 #include "tls.h"
 #endif
@@ -543,7 +543,7 @@ void php3_split(INTERNAL_FUNCTION_PARAMETERS)
 	}
 
 	/* churn through str, generating array entries as we go */
-	while ((count == -1 || count > 1) && !(err = regexec(&re, strp, 1, subs, 0))) {
+	while ((count == -1 || count > 0) && !(err = regexec(&re, strp, 1, subs, 0))) {
 		if (subs[0].rm_so == 0 && subs[0].rm_eo) {
 			/* match is at start of string, return empty string */
 			add_next_index_stringl(return_value, empty_string, 0, 1);
@@ -584,9 +584,10 @@ void php3_split(INTERNAL_FUNCTION_PARAMETERS)
 	}
 
 	/* otherwise we just have one last element to add to the array */
-	size = endp - strp;
-	
-	add_next_index_stringl(return_value, strp, size, 1);
+	if (count != 0) {
+		size = endp - strp;
+		add_next_index_stringl(return_value, strp, size, 1);
+	}
 
 	_php3_regfree(&re);
 
@@ -600,7 +601,8 @@ PHPAPI void php3_sql_regcase(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *string;
 	char *tmp;
-	register int i;
+	unsigned char c;
+	register int i, j;
 	
 	if (ARG_COUNT(ht)!=1 || getParameters(ht, 1, &string)==FAILURE) {
 		WRONG_PARAM_COUNT;
@@ -610,17 +612,22 @@ PHPAPI void php3_sql_regcase(INTERNAL_FUNCTION_PARAMETERS)
 	
 	tmp = (char *) emalloc(string->value.str.len*4+1);
 	
-	for (i=0; i<string->value.str.len; i++) {
-		tmp[i*4] = '[';
-		tmp[i*4+1]=toupper((unsigned char)string->value.str.val[i]);
-		tmp[i*4+2]=tolower((unsigned char)string->value.str.val[i]);
-		tmp[i*4+3]=']';
+	for (i=j=0; i<string->value.str.len; i++) {
+		c = (unsigned char) string->value.str.val[i];
+		if(isalpha(c)) {
+			tmp[j++] = '[';
+			tmp[j++] = toupper(c);
+			tmp[j++] = tolower(c);
+			tmp[j++] = ']';
+		} else {
+			tmp[j++] = c;
+		}
 	}
-	tmp[string->value.str.len*4]=0;
+	tmp[j]=0;
 	
-	return_value->value.str.val = tmp;
-	return_value->value.str.len = string->value.str.len*4;
-	return_value->type = IS_STRING;
+	tmp = erealloc(tmp, j + 1);
+	
+	RETVAL_STRINGL(tmp, j, 0);
 }
 /* }}} */
 

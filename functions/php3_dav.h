@@ -23,7 +23,7 @@
    | If you did not, or have any questions about PHP licensing, please    |
    | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
-   | Authors: Stig Sæther Bakken <ssb@guardian.no>                        |
+   | Authors: Stig Sæther Bakken <ssb@fast.no>                            |
    +----------------------------------------------------------------------+
  */
 
@@ -43,7 +43,7 @@ typedef struct {
 extern php3_module_entry phpdav_module_entry;
 #  define phpdav_module_ptr &phpdav_module_entry
 
-int phpdav_mkcol_test_handler(request_rec *);
+int phpdav_mkcol_test_handler(request_rec *r);
 
 PHP_FUNCTION(dav_set_mkcol_handlers);
 

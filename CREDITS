@@ -29,7 +29,7 @@ Andi Gutmans (andi@php.net) and Zeev Suraski (zeev@php.net)
 * Win32 COM support
 
 
-Stig Bakken (ssb@guardian.no)
+Stig Bakken (ssb@fast.no)
 
 * Oracle support
 * configure/install script work
@@ -60,13 +60,13 @@ Jim Winstead (jimw@php.net)
 Major Contributors
 ==================
 
-* Jouni Ahto (jah@cultnet.fi)
+* Jouni Ahto (jah@mork.net)
   Postgres, Informix
 
 * Alex Belits (abelits@phobos.illtel.denver.co.us)
   fhttpd support
 
-* Bjørn Borud (borud@guardian.no) 
+* Bjørn Borud (borud@fast.no) 
   soundex code and lots of enthusiasm
 
 * Christian Cartus (chc@idgruppe.de)
@@ -151,6 +151,27 @@ Major Contributors
 * Thies C. Arntzen (thies@digicol.de)
   IPTC-Support, Oracle-OCI8
 
+* Andrey Zmievski <andrey@ispi.net>
+  WDDX
+  Perl Compatible Regular Expressions
+  Miscellaneous functions
+
+* Stephanie Wehner <_@r4k.net>
+  YP (NIS)
+
+* Alex Plotnick <shrike@netaxs.com>
+  Gettext support
+
+* Timothy Whitfield <timothy@ametro.net>
+  Cybercash
+
+* Sascha Schumann <sascha@schumann.2ns.de>
+  Regex cache, speedups & bug fixes, mSQL improvement
+  various string and time functions
+  DBA module
+  mcrypt module
+  mhash module
+  
 ------------------------------------------------------------------------------
 
 Beta Testers
@@ -168,7 +189,7 @@ Beta Testers
 * Jim Jagielski (jim@jagunet.com)
   A/UX, FreeBSD/x86
 
-* Jouni Ahto (jah@cultnet.fi)
+* Jouni Ahto (jah@mork.net)
   Debian Linux 2.0
 
 

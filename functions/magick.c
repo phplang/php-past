@@ -28,7 +28,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: magick.c,v 1.7 1999/02/28 17:25:57 rasmus Exp $ */
+/* $Id: magick.c,v 1.8 1999/03/30 11:17:42 thies Exp $ */
 
 /* TODO list:
  *
@@ -282,7 +282,7 @@ void php3_info_magick()
 	PUTS(MagickVersion);
 	PUTS("<BR>\n");
 	PUTS(MagickCopyright);
-	PUTS("<br>RCS Version: $Id: magick.c,v 1.7 1999/02/28 17:25:57 rasmus Exp $<br>\n");
+	PUTS("<br>RCS Version: $Id: magick.c,v 1.8 1999/03/30 11:17:42 thies Exp $<br>\n");
 	php3_printf("<b>Compile Options</b><br><tt>IMAGICK_INCLUDE=%s<br>\n"
 	"IMAGICK_LFLAGS=%s<br>\n"
 	"IMAGICK_LIBS=%s<br></tt>\n",
@@ -323,6 +323,10 @@ magick_free_imageinfo(magick_imageinfo *imageinfo)
 
 	magick_debug(D_IMAGEINFO,"Free ImageInfo %d -> %x",imageinfo->id,imageinfo);
 
+	if (imageinfo->ImageInfo.size) {
+		efree(imageinfo->ImageInfo.size);
+	}
+		
 	efree(imageinfo);
 }
 
@@ -398,14 +402,19 @@ magick_warninghandler(const unsigned int error,const char *message,const char *q
 
 void php3_ReadMagick(INTERNAL_FUNCTION_PARAMETERS)
 { 
-	pval *filename;
+	pval *filename, *size;
 	magick_imageinfo *imageinfo;
 	magick_image *image;
+	char *sizestr;
 	MAGICK_TLS_VARS;
 	
-	if (getParameters(ht, 1, &filename) == FAILURE) {
-		WRONG_PARAM_COUNT;
-	}
+	if (getParameters(ht, 2, &filename, &size) == SUCCESS) {
+		convert_to_string(size);
+		sizestr = estrdup(size->value.str.val);
+	} else if (getParameters(ht, 1, &filename) == FAILURE) {
+		sizestr = 0;
+	} 
+		
 	convert_to_string(filename);
 
     if (_php3_check_open_basedir(filename->value.str.val)) {
@@ -425,6 +434,8 @@ void php3_ReadMagick(INTERNAL_FUNCTION_PARAMETERS)
 	magick_debug(D_IMAGEINFO,"New ImageInfo %d -> %x",imageinfo->id,imageinfo);
 
 	strcpy(imageinfo->ImageInfo.filename,filename->value.str.val);
+
+	imageinfo->ImageInfo.size = sizestr;
 
 	image = emalloc(sizeof(magick_image));
 

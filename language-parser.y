@@ -31,7 +31,7 @@
 */
 
 
-/* $Id: language-parser.y,v 1.178 1999/01/01 17:58:50 zeev Exp $ */
+/* $Id: language-parser.y,v 1.180 1999/05/14 10:00:24 sas Exp $ */
 
 
 /* 
@@ -51,6 +51,7 @@
 #else
 extern char *phptext;
 extern int phpleng;
+extern int wanted_exit_status;
 #define YY_TLS_VARS
 #endif
 #include "php.h"
@@ -549,7 +550,7 @@ expr_without_variable:
 	|	OBJECT_CAST expr { if (GLOBAL(Execute)) { convert_to_object(&$2); $$ = $2; } }
 	|	EXIT { if (GLOBAL(Execute)) { php3_header(); GLOBAL(shutdown_requested)=ABNORMAL_SHUTDOWN; $$.type=IS_LONG; $$.value.lval=1; } }
 	|	EXIT '(' ')'  { if (GLOBAL(Execute)) { php3_header(); GLOBAL(shutdown_requested)=ABNORMAL_SHUTDOWN; $$.type=IS_LONG; $$.value.lval=1; } }
-	|	EXIT '(' expr ')'  { if (GLOBAL(Execute)) { if (php3_header()) { convert_to_string(&$3);  PUTS($3.value.str.val);  pval_destructor(&$3 _INLINE_TLS); } GLOBAL(shutdown_requested)=ABNORMAL_SHUTDOWN; $$.type=IS_LONG; $$.value.lval=1; } }
+	|	EXIT '(' expr ')'  { if (GLOBAL(Execute)) { if (php3_header()) { convert_to_string(&$3);  PUTS($3.value.str.val); convert_to_long(&$3); wanted_exit_status = $3.value.lval;  pval_destructor(&$3 _INLINE_TLS); } GLOBAL(shutdown_requested)=ABNORMAL_SHUTDOWN; $$.type=IS_LONG; $$.value.lval=1; } }
 	|	'@' { $1.cs_data.error_reporting=GLOBAL(error_reporting); GLOBAL(error_reporting)=0; } expr { GLOBAL(error_reporting)=$1.cs_data.error_reporting; $$ = $3; }
 	|	'@' error { php3_error(E_ERROR,"@ operator may only be used on expressions"); }
 	|   scalar { if (GLOBAL(Execute)) $$ = $1; }

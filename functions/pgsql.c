@@ -24,11 +24,11 @@
    | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
    | Authors: Zeev Suraski <bourbon@netvision.net.il>                     |
-   |          Jouni Ahto <jah@cultnet.fi> (large object interface)        |
+   |          Jouni Ahto <jah@mork.net> (large object interface)          |
    +----------------------------------------------------------------------+
  */
  
-/* $Id: pgsql.c,v 1.81 1999/01/04 07:38:15 jah Exp $ */
+/* $Id: pgsql.c,v 1.84 1999/05/27 15:00:50 steinm Exp $ */
 
 #include <stdlib.h>
 
@@ -39,6 +39,10 @@
 #include "internal_functions.h"
 #include "php3_pgsql.h"
 #include "php3_string.h"
+
+#if !(WIN32|WINNT)
+#include "build-defs.h"
+#endif
 
 #if HAVE_PGSQL
 
@@ -82,7 +86,7 @@ function_entry pgsql_functions[] = {
 };
 
 php3_module_entry pgsql_module_entry = {
-	"PostgreSQL", pgsql_functions, php3_minit_pgsql, NULL, php3_rinit_pgsql, NULL, NULL, STANDARD_MODULE_PROPERTIES
+	"PostgreSQL", pgsql_functions, php3_minit_pgsql, NULL, php3_rinit_pgsql, NULL, php3_info_pgsql, STANDARD_MODULE_PROPERTIES
 };
 
 #if COMPILE_DL
@@ -376,7 +380,7 @@ void php3_pgsql_connect(INTERNAL_FUNCTION_PARAMETERS)
 }
 /* }}} */
 
-/* {{{ proto int pg_pconnect([string connection_string] | [string host, string port, [string options, [string tty,]] string database)
+/* {{{ proto int pg_pconnect([string connection_string] | [string host, string port, [string options, [string tty,]] string database])
    Open a persistent PostgreSQL connection */
 void php3_pgsql_pconnect(INTERNAL_FUNCTION_PARAMETERS)
 {
@@ -1484,7 +1488,48 @@ void php3_pgsql_lo_readall(INTERNAL_FUNCTION_PARAMETERS)
 	}
 }
 /* }}} */
-	
+
+
+/* {{{ proto void php3_info_pgsql(void)
+   Show info about the pgsql module */
+void php3_info_pgsql(void)
+{
+	char maxp[16],maxl[16];
+
+	if (php3_pgsql_module.max_persistent==-1) {
+		strcpy(maxp,"Unlimited");
+	} else {
+		snprintf(maxp,15,"%ld",php3_pgsql_module.max_persistent);
+		maxp[15]=0;
+	}
+	if (php3_pgsql_module.max_links==-1) {
+		strcpy(maxl,"Unlimited");
+	} else {
+		snprintf(maxl,15,"%ld",php3_pgsql_module.max_links);
+		maxl[15]=0;
+	}
+	php3_printf("<table cellpadding=5>"
+				"<tr><td>Allow persistent links:</td><td>%s</td></tr>\n"
+				"<tr><td>Persistent links:</td><td>%d/%s</td></tr>\n"
+				"<tr><td>Total links:</td><td>%d/%s</td></tr>\n"
+#if !(WIN32|WINNT)
+				"<tr><td valign=\"top\">Compilation definitions:</td><td>"
+				"<tt>PGSQL_INCLUDE=%s<br>\n"
+		        "PGSQL_LFLAGS=%s<br>\n"
+		        "PGSQL_LIBS=%s<br></tt></td></tr>"
+#endif
+				"</table>\n",
+				(php3_pgsql_module.allow_persistent?"Yes":"No"),
+				php3_pgsql_module.num_persistent,maxp,
+				php3_pgsql_module.num_links,maxl
+#if !(WIN32|WINNT)
+				,PHP_PGSQL_INCLUDE,PHP_PGSQL_LFLAGS,PHP_PGSQL_LIBS
+#endif
+				);
+}
+/* }}} */
+
+
 #endif
 
 /*

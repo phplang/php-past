@@ -29,7 +29,7 @@
  */
 
 
-/* $Id: operators.c,v 1.101 1999/02/25 14:57:54 rasmus Exp $ */
+/* $Id: operators.c,v 1.102 1999/03/15 16:27:13 andi Exp $ */
 
 #ifdef THREAD_SAFE
 #include "tls.h"
@@ -1045,6 +1045,7 @@ int decrement_function(pval *op1)
 				op1->type = IS_LONG;
 				break;
 			} else if (is_numeric_string(op1->value.str.val, op1->value.str.len, &lval, NULL)==IS_LONG) { /* long */
+				STR_FREE(op1->value.str.val);
 				op1->value.lval = lval-1;
 				op1->type = IS_LONG;
 				break;

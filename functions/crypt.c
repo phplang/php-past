@@ -28,7 +28,7 @@
    |          Rasmus Lerdorf <rasmus@lerdorf.on.ca>                       |
    +----------------------------------------------------------------------+
  */
-/* $Id: crypt.c,v 1.41 1999/01/03 22:46:42 rasmus Exp $ */
+/* $Id: crypt.c,v 1.44 1999/03/31 04:18:51 rasmus Exp $ */
 #include <stdlib.h>
 
 #include "php.h"
@@ -66,7 +66,7 @@ function_entry crypt_functions[] = {
 };
 
 php3_module_entry crypt_module_entry = {
-	"Crypt", crypt_functions, NULL, NULL, NULL, NULL, NULL, STANDARD_MODULE_PROPERTIES
+	"Crypt", crypt_functions, php3_minit_crypt, NULL, NULL, NULL, NULL, STANDARD_MODULE_PROPERTIES
 };
 
 
@@ -101,6 +101,21 @@ php3_module_entry crypt_module_entry = {
 #define PHP3_CRYPT_RAND rand()
 #endif
 #endif
+
+int php3_minit_crypt(INIT_FUNC_ARGS) {
+#ifdef PHP3_STD_DES_CRYPT
+	REGISTER_LONG_CONSTANT("CRYPT_SALT_LENGTH", 2, CONST_CS | CONST_PERSISTENT);
+#else
+#if PHP3_MD5_CRYPT
+	REGISTER_LONG_CONSTANT("CRYPT_SALT_LENGTH", 12, CONST_CS | CONST_PERSISTENT);
+#endif
+#endif
+	REGISTER_LONG_CONSTANT("CRYPT_STD_DES", PHP3_STD_DES_CRYPT, CONST_CS | CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("CRYPT_EXT_DES", PHP3_EXT_DES_CRYPT, CONST_CS | CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("CRYPT_MD5", PHP3_MD5_CRYPT, CONST_CS | CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("CRYPT_BLOWFISH", PHP3_BLOWFISH_CRYPT, CONST_CS | CONST_PERSISTENT);
+	return SUCCESS;
+}
 
 static unsigned char itoa64[] = "./0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 
@@ -169,10 +184,9 @@ void php3_crypt(INTERNAL_FUNCTION_PARAMETERS)
 	return_value->type = IS_STRING;
 	pval_copy_constructor(return_value);
 }
-
-#endif
 /* }}} */
 
+#endif
 
 /*
  * Local variables:

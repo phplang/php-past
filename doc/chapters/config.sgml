@@ -971,6 +971,170 @@ include_path=".;c:\www\phplib"
     </variablelist>
    </sect2>
 
+   <sect2 id="ini.sect.informix">
+    <title>Informix Configuration Directives</title>
+    <variablelist>
+     
+     <varlistentry id="ini.ifx.allow-persistent">
+      <term>
+       <parameter>ifx.allow_persistent</parameter>
+       <type>boolean</type>
+      </term>
+      <listitem>
+       <para>
+        Whether to allow persistent Informix connections.
+       </para>
+      </listitem>
+     </varlistentry>
+     
+     <varlistentry id="ini.ifx.max-persistent">
+      <term>
+       <parameter>ifx.max_persistent</parameter>
+       <type>integer</type>
+      </term>
+      <listitem>
+       <para>
+        The maximum number of persistent Informix connections per
+        process.
+       </para>
+      </listitem>
+     </varlistentry>
+     
+     <varlistentry id="ini.ifx.max-links">
+      <term>
+       <parameter>ifx.max_links</parameter>
+       <type>integer</type>
+      </term>
+      <listitem>
+       <para>
+        The maximum number of Informix connections per process, including
+        persistent connections.
+       </para>
+      </listitem>
+     </varlistentry>
+
+     <varlistentry id="ini.ifx.default-host">
+      <term>
+       <parameter>ifx.default_host</parameter>
+       <type>string</type>
+      </term>
+      <listitem>
+       <para>
+        The default host to connect to when no host is specified
+        in <function>ifx_connect</function> or 
+        <function>ifx_pconnect</function>.
+       </para>
+      </listitem>
+     </varlistentry>
+
+     <varlistentry id="ini.ifx.default-user">
+      <term>
+       <parameter>ifx.default_user</parameter>
+       <type>string</type>
+      </term>
+      <listitem>
+       <para>
+        The default user id to use when none is specified 
+        in <function>ifx_connect</function> or 
+        <function>ifx_pconnect</function>.
+       </para>
+      </listitem>
+     </varlistentry>
+
+     <varlistentry id="ini.ifx.default-password">
+      <term>
+       <parameter>ifx.default_password</parameter>
+       <type>string</type>
+      </term>
+      <listitem>
+       <para>
+        The default password to use when none is specified 
+        in <function>ifx_connect</function> or 
+        <function>ifx_pconnect</function>.
+       </para>
+      </listitem>
+     </varlistentry>
+
+     <varlistentry id="ini.ifx.blobinfile">
+      <term>
+       <parameter>ifx.blobinfile</parameter>
+       <type>boolean</type>
+      </term>
+      <listitem>
+       <para>
+        Set to true if you want to return blob columns
+        in a file, false if you want them in memory. You can
+        override the setting at runtime 
+        with <function>ifx_blobinfile_mode</function>.
+       </para>
+      </listitem>
+     </varlistentry>
+
+     <varlistentry id="ini.ifx.textasvarchar">
+      <term>
+       <parameter>ifx.textasvarchar</parameter>
+       <type>boolean</type>
+      </term>
+      <listitem>
+       <para>
+        Set to true if you want to return TEXT columns
+        as normal strings in select statements,
+        false if you want to use blob id parameters. You can
+        override the setting at runtime with 
+       <function>ifx_textasvarchar</function>.
+       </para>
+      </listitem>
+     </varlistentry>
+
+     <varlistentry id="ini.ifx.byteasvarchar">
+      <term>
+       <parameter>ifx.byteasvarchar</parameter>
+       <type>boolean</type>
+      </term>
+      <listitem>
+       <para>
+        Set to true if you want to return BYTE columns
+        as normal strings in select queries, 
+        false if you want to use blob id parameters. You can
+        override the setting at runtime with 
+        <function>ifx_textasvarchar</function>.
+       </para>
+      </listitem>
+     </varlistentry>
+
+     <varlistentry id="ini.ifx.charasvarchar">
+      <term>
+       <parameter>ifx.charasvarchar</parameter>
+       <type>boolean</type>
+      </term>
+      <listitem>
+       <para>
+        Set to true if you want to trim trailing spaces
+        from CHAR columns when fetching them.
+       </para>
+      </listitem>
+     </varlistentry>
+
+     <varlistentry id="ini.ifx.nullformat">
+      <term>
+       <parameter>ifx.nullformat</parameter>
+       <type>boolean</type>
+      </term>
+      <listitem>
+       <para>
+        Set to true if you want to return NULL columns
+        as the literal string "NULL", false if you want
+        them returned as the empty string "". You can
+        override this setting at runtime with 
+        <function>ifx_nullformat</function>.
+       </para>
+      </listitem>
+     </varlistentry>
+
+
+    </variablelist>
+   </sect2>
+
    <sect2 id="ini.sect.bcmath">
     <title>BC Math Configuration Directives</title>
     <variablelist>

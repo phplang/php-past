@@ -11,6 +11,9 @@
 
 #define HAVE_INET_ATON HAVE_BINDLIB
 
+#define SIZEOF_INT 4
+#define SIZEOF_LONG 4
+
 /* set to enable bcmath */
 #define WITH_BCMATH 1
 /* should be added to runtime config*/

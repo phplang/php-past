@@ -207,6 +207,27 @@ if (!copy($file, $file.'.bak')) {
    </refsect1>
   </refentry>
 
+  <refentry id="function.delete">
+   <refnamediv>
+    <refname>delete</refname>
+    <refpurpose>a dummy manual entry</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>void <function>delete</function></funcdef>
+     <paramdef>string <parameter>file</parameter></paramdef>
+    </funcsynopsis>
+     <para>
+      This is a dummy manual entry to satisfy those people who are
+      looking for <function>unlink</function> or
+      <function>unset</function> in the wrong place.
+     <para>
+      See also:
+      <function>unlink</function> to delete files, <function>unset</function>
+     to delete variables.
+   </refsect1>
+  </refentry>
 
   <refentry id="function.dirname">
    <refnamediv>
@@ -343,6 +364,50 @@ $df = diskfreespace("/"); // $df contains the number of bytes available on "/"
    </refsect1>
   </refentry>
 
+  <refentry id="function.fgetcsv">
+   <refnamediv>
+    <refname>fgetcsv</refname>
+    <refpurpose>get line from file pointer and parse for CSV fields</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>array <function>fgetcsv</function></funcdef>
+     <paramdef>int <parameter>fp</parameter></paramdef>
+     <paramdef>int <parameter>length</parameter></paramdef>
+    </funcsynopsis>
+    <simpara>
+	 Similar to fgets() except that fgetcsv() parses the line it reads for
+	 fields in CSV format and returns an array containing the fields read.
+    <simpara>
+	 fp must be a valid file pointer to a file successfully opened by
+	 <function>fopen</function>, <function>popen</function>, or <function>fsockopen</function>
+	<simpara>
+	 length must be greater than the longest line to be found in the CSV
+	 file (allowing for trailing line-end characters).
+	<simpara>
+	 fgetcsv() returns false on error, including end of file.
+	<simpara>
+	 NB A blank line in a CSV file will be returned as an array comprising
+	 just one single null field, and will not be treated as an error.
+
+	<example>
+      <title>fgetcsv() example - Read and print entire contents of a CSV file</title>
+      <programlisting>
+$row=1;
+$fp = fopen("test.csv","r");
+while ($data = fgetcsv($fp,1000)) {
+	$num = count($data);
+	print "&lt;p> $num fields in line $row: &lt;br>";
+	$row++;
+	for ( $c=0; $c<$num; $c++ ) print $data[$c] . "&lt;br>";
+}
+fclose($fp);
+      </programlisting></example>
+
+   </refsect1>
+  </refentry>
+
 
   <refentry id="function.fgets">
    <refnamediv>
@@ -365,12 +430,28 @@ $df = diskfreespace("/"); // $df contains the number of bytes available on "/"
 
     <para>
 	 If an error occurs, returns false.
-
     <para>
+    Common Pitfalls:
+    <simpara>
+         People used to the 'C' semantics of fgets should note the difference
+         in how EOF is returned.
+    <simpara>
 	 The file pointer must be valid, and must point to a file
      successfully opened by <function>fopen</function>,
      <function>popen</function>, or <function>fsockopen</function>.
 
+    <para>
+    A simple example follows:
+    <example> 
+      <title>Reading a file line by line</title>
+      <programlisting role=php>
+$fd = fopen("/tmp/inputfile.txt", "r");
+while ($buffer = fgets($fd, 4096)) {
+  echo $buffer;
+}
+fclose($fd);
+</programlisting></example>
+    
     <para> See also <function>fread</function>,
      <function>fopen</function>, <function>popen</function>, 
      <function>fgetc</function>, and <function>fsockopen</function>.
@@ -398,7 +479,8 @@ $df = diskfreespace("/"); // $df contains the number of bytes available on "/"
 
     <para>
      See also <function>fgets</function>, <function>fopen</function>,
-     <function>fsockopen</function>, and <function>popen</function>.
+     <function>fsockopen</function>, <function>popen</function>,
+	 and <function>strip_tags</function>.
 
    </refsect1>
   </refentry>
@@ -445,8 +527,9 @@ $df = diskfreespace("/"); // $df contains the number of bytes available on "/"
      Returns true if the file specified by
      <parameter>filename</parameter> exists; false otherwise.
 
-    <simpara>
-     See also <function>clearstatcache</function>.
+    <para>
+     The results of this function are cached. See
+     <function>clearstatecache</function> for more details.
 
    </refsect1>
   </refentry>
@@ -465,7 +548,9 @@ $df = diskfreespace("/"); // $df contains the number of bytes available on "/"
     </funcsynopsis>
     <para> Returns the time the file was last accessed, or false in case
     of an error.
-
+    <para>
+     The results of this function are cached. See
+     <function>clearstatecache</function> for more details.
    </refsect1>
   </refentry>
 
@@ -473,7 +558,7 @@ $df = diskfreespace("/"); // $df contains the number of bytes available on "/"
   <refentry id="function.filectime">
    <refnamediv>
     <refname>filectime</refname>
-    <refpurpose>get inode modification time of file</refpurpose>
+    <refpurpose>get inode change time of file</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
@@ -481,9 +566,12 @@ $df = diskfreespace("/"); // $df contains the number of bytes available on "/"
      <funcdef>int <function>filectime</function></funcdef>
      <paramdef>string <parameter>filename</parameter></paramdef>
     </funcsynopsis>
-	<para>
-	 Returns the time the file was last changed, or false in case of an
-     error.
+    <para>
+     Returns the time the file was last changed, or false in case of
+     an error.
+    <para>
+     The results of this function are cached. See
+     <function>clearstatecache</function> for more details.
 
    </refsect1>
   </refentry>
@@ -502,6 +590,9 @@ $df = diskfreespace("/"); // $df contains the number of bytes available on "/"
     </funcsynopsis>
 <para>    Returns the group ID of the owner of the file, or false in case of an
     error.
+    <para>
+     The results of this function are cached. See
+     <function>clearstatecache</function> for more details.
 
    </refsect1>
   </refentry>
@@ -519,6 +610,9 @@ $df = diskfreespace("/"); // $df contains the number of bytes available on "/"
      <paramdef>string <parameter>filename</parameter></paramdef>
     </funcsynopsis>
 <para>    Returns the inode number of the file, or false in case of an error.
+    <para>
+     The results of this function are cached. See
+     <function>clearstatecache</function> for more details.
 
    </refsect1>
   </refentry>
@@ -537,6 +631,9 @@ $df = diskfreespace("/"); // $df contains the number of bytes available on "/"
     </funcsynopsis>
 	<simpara>
 	 Returns the time the file was last modified, or false in case of an
+    <para>
+     The results of this function are cached. See
+     <function>clearstatecache</function> for more details.
      error.
 
    </refsect1>
@@ -555,6 +652,9 @@ $df = diskfreespace("/"); // $df contains the number of bytes available on "/"
      <paramdef>string <parameter>filename</parameter></paramdef>
     </funcsynopsis>
 <para>    Returns the user ID of the owner of the file, or false in case of an
+    <para>
+     The results of this function are cached. See
+     <function>clearstatecache</function> for more details.
     error.
 
    </refsect1>
@@ -573,6 +673,9 @@ $df = diskfreespace("/"); // $df contains the number of bytes available on "/"
      <paramdef>string <parameter>filename</parameter></paramdef>
     </funcsynopsis>
 <para>    Returns the permissions on the file, or false in case of an error.
+    <para>
+     The results of this function are cached. See
+     <function>clearstatecache</function> for more details.
 
    </refsect1>
   </refentry>
@@ -590,6 +693,9 @@ $df = diskfreespace("/"); // $df contains the number of bytes available on "/"
      <paramdef>string <parameter>filename</parameter></paramdef>
     </funcsynopsis>
 <para>    Returns the size of the file, or false in case of an error.
+    <para>
+     The results of this function are cached. See
+     <function>clearstatecache</function> for more details.
 
    </refsect1>
   </refentry>
@@ -611,6 +717,9 @@ $df = diskfreespace("/"); // $df contains the number of bytes available on "/"
     block, link, file, and
     unknown.
   <para>    Returns false if an error occurs.
+    <para>
+     The results of this function are cached. See
+     <function>clearstatecache</function> for more details.
 
    </refsect1>
   </refentry>
@@ -618,7 +727,7 @@ $df = diskfreespace("/"); // $df contains the number of bytes available on "/"
   <refentry id="function.flock">
    <refnamediv>
     <refname>flock</refname>
-    <refpurpose>portable file locking</refpurpose>
+    <refpurpose>portable advisory file locking</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
@@ -628,24 +737,44 @@ $df = diskfreespace("/"); // $df contains the number of bytes available on "/"
      <paramdef>int <parameter>operation</parameter></paramdef>
     </funcsynopsis>
     <simpara>
-     PHP supports a portable way of locking whole files in an
-     advisory way (which means all accessing programs have to
-     use the same way of locking or it will not work).
+     PHP supports a portable way of locking complete files in an advisory way
+     (which means all accessing programs have to use the same way of locking
+     or it will not work).
 
     <simpara>
-     To lock a file, you have to open it first and pass the
-     resulting file pointer to flock. The operations you can
-     use are 1 for locking the file as a reader (shared lock),
-     2 for locking the file as a writer (exclusive lock) and
-     3 for releasing a lock. This enables a simple reader/writer
-     model which can be used on almost every platform (including
-     most Unixes and even Windows).
+     <function>flock</function> operates on <parameter>fp</parameter> which
+     must be an open file pointer. <parameter>operation</parameter> is one of
+     the following values:
+
+    <para>
+     <itemizedlist>
+      <listitem><simpara>
+       To acquire a shared lock (reader), set <parameter>operation</parameter>
+       to 1.
+
+      <listitem><simpara>
+       To acquire an exclusive lock (writer), set
+       <parameter>operation</parameter> to 2.
+
+      <listitem><simpara>
+       To release a lock (shared or exclusive), set
+       <parameter>operation</parameter> to 3.
+
+      <listitem><simpara>
+       If you don't want <function>flock</function> to block while locking,
+       add 4 to <parameter>operation</parameter>.
+
+     </itemizedlist>
+    </para>
+
+    <simpara>
+     <function>flock</function> allows you to perform a simple reader/writer
+     model which can be used on virtually every platform (including most
+     Unices and even Windows).
     
     <simpara>
-     If you add 4 to the operation parameter, locking will be tried
-     in a non-blocking way. It returns false, if the lock cannot
-     be acquired non-blocking. Otherwise, flock will always
-     return true.
+     <function>flock</function> returns true on success and false on error
+     (e.g. when a lock could not be acquired).
 
    </refsect1>
   </refentry>
@@ -945,6 +1074,37 @@ fclose( $fd );
    </refsect1>
   </refentry>
 
+  <refentry id="function.set-file-buffer">
+   <refnamediv>
+    <refname>set_file_buffer</refname>
+    <refpurpose>Sets file buffering on the given file pointer</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>fwrite</function></funcdef>
+     <paramdef>int <parameter>fp</parameter></paramdef>
+     <paramdef>int <parameter>buffer</parameter></paramdef>
+    </funcsynopsis>
+    <simpara>
+     <function>set_file_buffer</function> sets the buffering for write
+     operations on the given filepointer <parameter>fp</parameter> to
+     <parameter>buffer</parameter> bytes.  If <parameter>buffer</parameter>
+     is 0 then write operations are unbuffered.
+
+     <simpara>
+     The function returns 0 on success, or EOF if the request cannot
+     be honored.
+     
+     <simpara>
+     Note that the default for any fopen with calling set_file_buffer
+     is 8K.
+
+    <simpara>
+     See also <function>fopen</function>.
+   </refsect1>
+  </refentry>
+
   <refentry id="function.is-dir">
    <refnamediv>
     <refname>is_dir</refname>
@@ -958,6 +1118,9 @@ fclose( $fd );
     </funcsynopsis>
     <para>
      Returns true if the filename exists and is a directory.
+    <para>
+     The results of this function are cached. See
+     <function>clearstatecache</function> for more details.
     <para>
      See also <function>is_file</function> and <function>is_link</function>.
    </refsect1>
@@ -977,6 +1140,9 @@ fclose( $fd );
     <para>
      Returns true if the filename exists and is executable.
     <para>
+     The results of this function are cached. See
+     <function>clearstatecache</function> for more details.
+    <para>
      See also <function>is_file</function> and <function>is_link</function>.
    </refsect1>
   </refentry>
@@ -995,6 +1161,9 @@ fclose( $fd );
     <para>
      Returns true if the filename exists and is a regular file.
     <para>
+     The results of this function are cached. See
+     <function>clearstatecache</function> for more details.
+    <para>
      See also <function>is_dir</function> and <function>is_link</function>.
    </refsect1>
   </refentry>
@@ -1012,6 +1181,9 @@ fclose( $fd );
     </funcsynopsis>
     <para>
      Returns true if the filename exists and is a symbolic link.
+    <para>
+     The results of this function are cached. See
+     <function>clearstatecache</function> for more details.
     <para>
      See also <function>is_dir</function> and <function>is_file</function>.
    </refsect1>
@@ -1035,6 +1207,9 @@ fclose( $fd );
      id that the web server runs as (often 'nobody'). Safe mode
      limitations are not taken into account.
     <para>
+     The results of this function are cached. See
+     <function>clearstatecache</function> for more details.
+    <para>
      See also <function>is_writeable</function>.
    </refsect1>
   </refentry>
@@ -1047,15 +1222,20 @@ fclose( $fd );
    <refsect1>
     <title>Description</title>
     <funcsynopsis>
-     <funcdef>bool <function>is_readable</function></funcdef>
+     <funcdef>bool <function>is_writeable</function></funcdef>
      <paramdef>string <parameter>filename</parameter></paramdef>
     </funcsynopsis>
     <para>
-     Returns true if the filename exists and is writeable.
+     Returns true if the filename exists and is writeable.  The filename
+	 argument may be a directory name allowing you to check if a 
+	 directory is writeable.
     <para>
      Keep in mind that PHP may be accessing the file as the user
      id that the web server runs as (often 'nobody'). Safe mode
      limitations are not taken into account.
+    <para>
+     The results of this function are cached. See
+     <function>clearstatecache</function> for more details.
     <para>
      See also <function>is_readable</function>.
    </refsect1>
@@ -1342,6 +1522,7 @@ mkdir("/path/to/my/dir", 0700);
      <orderedlist>
       <listitem><simpara>device</simpara></listitem>
       <listitem><simpara>inode</simpara></listitem>
+      <listitem><simpara>inode protection mode</simpara></listitem>
       <listitem><simpara>number of links</simpara></listitem>
       <listitem><simpara>user id of owner</simpara></listitem>
       <listitem><simpara>group id owner</simpara></listitem>
@@ -1355,6 +1536,9 @@ mkdir("/path/to/my/dir", 0700);
      </orderedlist>
      * - only valid on systems supporting the st_blksize type--other
      systems (i.e. Windows) return -1
+    <para>
+     The results of this function are cached. See
+     <function>clearstatecache</function> for more details.
 
    </refsect1>
   </refentry>
@@ -1396,6 +1580,9 @@ mkdir("/path/to/my/dir", 0700);
      </orderedlist>
      * - only valid on systems supporting the st_blksize type--other
      systems (i.e. Windows) return -1
+    <para>
+     The results of this function are cached. See
+     <function>clearstatecache</function> for more details.
 
    </refsect1>
   </refentry>

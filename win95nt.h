@@ -1,4 +1,4 @@
-/* $Id: win95nt.h,v 1.21 1998/12/28 09:43:53 sas Exp $ */
+/* $Id: win95nt.h,v 1.22 1999/06/01 12:39:41 fmk Exp $ */
 
 /* Defines and types for Windows 95/NT */
 #define WIN32_LEAN_AND_MEAN
@@ -24,7 +24,7 @@ typedef char * caddr_t;
 #define popen		_popen
 #define chdir(path) SetCurrentDirectory(path)
 #define mkdir(a,b)	_mkdir(a)
-#define rmdir		_rmdir
+#define rmdir(a)	_rmdir(a)
 #define getpid		_getpid
 #if !(APACHE)
 #define sleep(t)	Sleep(t*1000)

@@ -31,7 +31,7 @@
    |          Rasmus Lerdorf      <rasmus@lerdorf.on.ca>                  |
    +----------------------------------------------------------------------+
  */
-/* $Id: imap.c,v 1.55 1999/01/20 16:10:56 musone Exp $ */
+/* $Id: imap.c,v 1.56 1999/03/30 11:25:04 rasmus Exp $ */
 
 #define IMAP41
 
@@ -1814,7 +1814,7 @@ void php3_imap_qprint(INTERNAL_FUNCTION_PARAMETERS)
 	}
 
 	convert_to_string( text );
-	object_init(return_value);
+/*	object_init(return_value);               Why is this here?  -RL */
 
 	decode = (char *) rfc822_qprint((unsigned char *) text->value.str.val, text->value.str.len,&newlength);
 	RETVAL_STRINGL(decode,newlength,1);

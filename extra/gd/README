@@ -1,11 +1,11 @@
 #
-# $Date: 1998/07/11 10:09:12 $
+# $Date: 1999/04/22 13:19:49 $
 # README for bdf2gdfont
 # Tin Le <tin@netimages.com>
 
 This perl script is for converting X11 bdf font files into GD font format
 file for PHP3.  The original script was written by Stig S. Bakken
-<ssb@guardian.no>.  I have fixed a minor bug in it and added more options,
+<ssb@fast.no>.  I have fixed a minor bug in it and added more options,
 plus this README file.
 
 Note that since PHP now has support for TTF fonts through the FreeType

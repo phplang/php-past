@@ -23,7 +23,7 @@
  */
 
 
-/* $Id: hg_comm.h,v 1.4 1999/01/14 17:47:50 steinm Exp $ */
+/* $Id: hg_comm.h,v 1.7 1999/06/02 10:06:42 steinm Exp $ */
 
 #ifndef _HG_COMM_H
 #define _HG_COMM_H
@@ -88,6 +88,16 @@
 #define DOCUMENT                      0
 #define COLLECTION                    1
 
+#if WIN32|WINNT
+# define SOCK_ERR INVALID_SOCKET
+# define SOCK_CONN_ERR SOCKET_ERROR
+# define SOCK_FCLOSE(s) closesocket(s)
+#else
+# define SOCK_ERR -1
+# define SOCK_CONN_ERR -1
+# define SOCK_FCLOSE(s) close(s)
+#endif
+
 /* Low error messages */
 #define LE_MALLOC                    -1
 
@@ -150,8 +160,10 @@ extern int getrellink(int sockfd, int rootID, int thisID, int destID, char **rel
 
 extern int send_deleteobject(int sockfd, hw_objectID objectID);
 extern int send_changeobject(int sockfd, hw_objectID objectID, char *mod);
+extern int send_groupchangeobject(int sockfd, hw_objectID objectID, char *mod);
 extern int send_getobject(int sockfd, hw_objectID objectID, char **attributes);
 extern int send_getandlock(int sockfd, hw_objectID objectID, char **attributes);
+extern int send_lock(int sockfd, hw_objectID objectID);
 extern int send_unlock(int sockfd, hw_objectID objectID);
 extern int send_gettext(int sockfd, hw_objectID objectID, int mode, int rootid, char **objattr, char **bodytag, char **text, int *count);
 extern int send_edittext(int sockfd, char *objattr, char *text);

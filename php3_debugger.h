@@ -23,11 +23,11 @@
    | If you did not, or have any questions about PHP licensing, please    |
    | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
-   | Authors: Stig Sæther Bakken <ssb@guardian.no>                        |
+   | Authors: Stig Sæther Bakken <ssb@fast.no>                            |
    +----------------------------------------------------------------------+
  */
 
-/* $Id: php3_debugger.h,v 1.11 1999/01/01 17:58:51 zeev Exp $ */
+/* $Id: php3_debugger.h,v 1.12 1999/04/22 13:19:48 ssb Exp $ */
 
 #ifndef _PHP3_DEBUGGER_H
 #define _PHP3_DEBUGGER_H

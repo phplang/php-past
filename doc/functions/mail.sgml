@@ -19,7 +19,7 @@
      <paramdef>string <parameter>to</parameter></paramdef>
      <paramdef>string <parameter>subject</parameter></paramdef>
      <paramdef>string <parameter>message</parameter></paramdef>
-     <paramdef>string <parameter>additional_headers</parameter></paramdef>
+     <paramdef>string <parameter><optional>additional_headers</optional></parameter></paramdef>
     </funcsynopsis>
     <simpara>
       <function>Mail</function> automatically mails the message specified
@@ -41,7 +41,7 @@ mail("rasmus@lerdorf.on.ca", "My Subject", "Line 1\nLine 2\nLine 3");
      <example>
       <title>Sending mail with extra headers.</title>
       <programlisting>
-mail("ssb@guardian.no", "the subject", $message,
+mail("nobody@aol.com", "the subject", $message,
      "From: webmaster@$SERVER_NAME\nReply-To: webmaster@$SERVER_NAME\nX-Mailer: PHP/" . phpversion());
       </programlisting>
      </example>

@@ -26,7 +26,7 @@
    | Authors: Rasmus Lerdorf <rasmus@lerdorf.on.ca>                       |
    +----------------------------------------------------------------------+
  */
-/* $Id: head.c,v 1.112 1999/01/04 14:25:20 jah Exp $ */
+/* $Id: head.c,v 1.119 1999/06/01 19:57:04 jim Exp $ */
 #ifdef THREAD_SAFE
 #include "tls.h"
 #endif
@@ -75,6 +75,16 @@ int php3_init_head(INIT_FUNC_ARGS)
 	return SUCCESS;
 }
 
+/* {{{ proto int headers_sent(void)
+   Return true if headers have already been sent, false otherwise */
+void php3_Headers_Sent(INTERNAL_FUNCTION_PARAMETERS) {
+	if (GLOBAL(php3_HeaderPrinted)) {
+		RETURN_TRUE;
+	}
+	RETURN_FALSE;
+}	
+/* }}} */
+
 void php3_noheader(void)
 {
 	TLS_VARS;
@@ -105,11 +115,9 @@ TLS_VARS;
 	}
 	convert_to_string(arg1);
 	if (GLOBAL(php3_HeaderPrinted) == 1) {
-#if DEBUG
 		php3_error(E_WARNING, "Cannot add more header information - the header was already sent "
 							  "(header information may be added only before any output is generated from the script - "
 							  "check for text or whitespace outside PHP tags, or calls to functions that output text)");
-#endif
 		return;					/* too late, already sent */
 	}
 #if APACHE
@@ -255,8 +263,13 @@ TLS_VARS;
 		return 1;
 	}
 	if ((GLOBAL(php3_PrintHeader) && !GLOBAL(php3_HeaderPrinted)) || (GLOBAL(php3_PrintHeader) && GLOBAL(php3_HeaderPrinted) == 2)) {
-		if (!(GLOBAL(initialized) & INIT_ENVIRONMENT) && GLOBAL(request_info).request_method && !strcasecmp(GLOBAL(request_info).request_method, "post")) {
-			php3_treat_data(PARSE_POST, NULL);	/* POST Data */
+              if (!(GLOBAL(initialized) & INIT_ENVIRONMENT) && GLOBAL(request_info).request_method) {
+                      if(!strcasecmp(GLOBAL(request_info).request_method, "post"))
+                              php3_treat_data(PARSE_POST, NULL);      /* POST Data */
+                      else {
+                              if(!strcasecmp(GLOBAL(request_info).request_method, "put"))
+                                      php3_treat_data(PARSE_PUT, NULL);       /* PUT Data */
+                      }
 		}
 		cookie = php3_PopCookieList();
 		while (cookie) {
@@ -335,8 +348,13 @@ TLS_VARS;
 	}
 #else
 	if (GLOBAL(php3_PrintHeader) && !GLOBAL(php3_HeaderPrinted)) {
-		if (!(GLOBAL(initialized) & INIT_ENVIRONMENT) && GLOBAL(request_info).request_method && !strcasecmp(GLOBAL(request_info).request_method, "post")) {
-			php3_treat_data(PARSE_POST, NULL);	/* POST Data */
+              if (!(GLOBAL(initialized) & INIT_ENVIRONMENT) && GLOBAL(request_info).request_method) {
+                      if(!strcasecmp(GLOBAL(request_info).request_method, "post"))
+                              php3_treat_data(PARSE_POST, NULL);      /* POST Data */
+                      else {
+                              if(!strcasecmp(GLOBAL(request_info).request_method, "put"))
+                                      php3_treat_data(PARSE_PUT, NULL);       /* PUT Data */
+                      }
 		}
 		if (!GLOBAL(cont_type)) {
 #if USE_SAPI
@@ -422,10 +440,7 @@ CookieList *php3_PopCookieList(void)
 	return (ret);
 }
 
-/* php3_SetCookie(name,value,expires,path,domain,secure) */
-/* {{{ proto void setcookie(string name[, string value[, int expires[, string path[, string domain[, string secure]]]]])
-   Send a cookie */
-void php3_SetCookie(INTERNAL_FUNCTION_PARAMETERS)
+void _php3_SetCookie(char * name, char * value, time_t expires, char * path, char * domain, int secure)
 {
 #if !APACHE
 	char *tempstr;
@@ -436,42 +451,11 @@ void php3_SetCookie(INTERNAL_FUNCTION_PARAMETERS)
 	time_t t;
 	char *r, *dt;
 #endif
-	char *name = NULL, *value = NULL, *path = NULL, *domain = NULL;
-	time_t expires = 0;
-	int secure = 0;
-	pval *arg[6];
-	int arg_count;
-	TLS_VARS;
-
-	arg_count = ARG_COUNT(ht);
-	if (arg_count < 1 || arg_count > 6 || getParametersArray(ht, arg_count, arg) == FAILURE) {
-		WRONG_PARAM_COUNT;
-	}
-	if (GLOBAL(php3_HeaderPrinted) == 1) {
-		php3_error(E_WARNING, "Oops, php3_SetCookie called after header has been sent\n");
-		return;
-	}
-	switch (arg_count) {
-		case 6:
-			convert_to_boolean_long(arg[5]);
-			secure = arg[5]->value.lval;
-		case 5:
-			convert_to_string(arg[4]);
-			domain = estrndup(arg[4]->value.str.val,arg[4]->value.str.len);
-		case 4:
-			convert_to_string(arg[3]);
-			path = estrndup(arg[3]->value.str.val,arg[3]->value.str.len);
-		case 3:
-			convert_to_long(arg[2]);
-			expires = arg[2]->value.lval;
-		case 2:
-			convert_to_string(arg[1]);
-			value = estrndup(arg[1]->value.str.val,arg[1]->value.str.len);
-		case 1:
-			convert_to_string(arg[0]);
-			name = estrndup(arg[0]->value.str.val,arg[0]->value.str.len);
-	}
 #if APACHE
+	if (name) name = estrdup(name);
+	if (value) value = estrdup(value);
+	if (path) path = estrdup(path);
+	if (domain) domain = estrdup(domain);
 	php3_PushCookieList(name, value, expires, path, domain, secure);
 #else
 	if (name) len += strlen(name);
@@ -496,10 +480,6 @@ void php3_SetCookie(INTERNAL_FUNCTION_PARAMETERS)
 		r = _php3_urlencode(value, strlen (value));
 		sprintf(tempstr, "%s=%s", name, value ? r : "");
 		if (r) efree(r);
-		if (value) efree(value);
-		value=NULL;
-		if (name) efree(name);
-		name=NULL;
 		if (expires > 0) {
 			strcat(tempstr, "; expires=");
 			dt = php3_std_date(expires);
@@ -510,14 +490,10 @@ void php3_SetCookie(INTERNAL_FUNCTION_PARAMETERS)
 	if (path && strlen(path)) {
 		strcat(tempstr, "; path=");
 		strcat(tempstr, path);
-		efree(path);
-		path=NULL;
 	}
 	if (domain && strlen(domain)) {
 		strcat(tempstr, "; domain=");
 		strcat(tempstr, domain);
-		efree(domain);
-		domain=NULL;
 	}
 	if (secure) {
 		strcat(tempstr, "; secure");
@@ -546,12 +522,51 @@ void php3_SetCookie(INTERNAL_FUNCTION_PARAMETERS)
 	PUTS("\015\012");
 #endif
 #endif /* endif SAPI */
-	if (domain) efree(domain);
-	if (path) efree(path);
-	if (name) efree(name);
-	if (value) efree(value);
 	efree(tempstr);
 #endif
+}
+
+/* php3_SetCookie(name,value,expires,path,domain,secure) */
+/* {{{ proto void setcookie(string name[, string value[, int expires[, string path[, string domain[, string secure]]]]])
+   Send a cookie */
+void php3_SetCookie(INTERNAL_FUNCTION_PARAMETERS)
+{
+	char *name = NULL, *value = NULL, *path = NULL, *domain = NULL;
+	time_t expires = 0;
+	int secure = 0;
+	pval *arg[6];
+	int arg_count;
+	TLS_VARS;
+
+	arg_count = ARG_COUNT(ht);
+	if (arg_count < 1 || arg_count > 6 || getParametersArray(ht, arg_count, arg) == FAILURE) {
+		WRONG_PARAM_COUNT;
+	}
+	if (GLOBAL(php3_HeaderPrinted) == 1) {
+		php3_error(E_WARNING, "Oops, php3_SetCookie called after header has been sent\n");
+		return;
+	}
+	switch (arg_count) {
+		case 6:
+			convert_to_boolean_long(arg[5]);
+			secure = arg[5]->value.lval;
+		case 5:
+			convert_to_string(arg[4]);
+			domain = arg[4]->value.str.val;
+		case 4:
+			convert_to_string(arg[3]);
+			path = arg[3]->value.str.val;
+		case 3:
+			convert_to_long(arg[2]);
+			expires = arg[2]->value.lval;
+		case 2:
+			convert_to_string(arg[1]);
+			value = arg[1]->value.str.val;
+		case 1:
+			convert_to_string(arg[0]);
+			name = arg[0]->value.str.val;
+	}
+	_php3_SetCookie(name, value, expires, path, domain, secure);
 }
 /* }}} */
 
@@ -570,6 +585,7 @@ int php3_headers_unsent(void)
 function_entry php3_header_functions[] = {
 	{"setcookie",		php3_SetCookie,		NULL},
 	{"header",			php3_Header,		NULL},
+	{"headers_sent",		php3_Headers_Sent,	NULL},
 	{NULL, NULL, NULL}
 };
 

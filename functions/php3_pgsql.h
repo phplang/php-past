@@ -27,7 +27,7 @@
    +----------------------------------------------------------------------+
  */
  
-/* $Id: php3_pgsql.h,v 1.19 1999/01/01 17:59:16 zeev Exp $ */
+/* $Id: php3_pgsql.h,v 1.20 1999/04/25 01:29:22 steffann Exp $ */
 
 #ifndef _PHP3_PGSQL_H
 #define _PHP3_PGSQL_H
@@ -48,6 +48,7 @@ extern php3_module_entry pgsql_module_entry;
 
 extern int php3_minit_pgsql(INIT_FUNC_ARGS);
 extern int php3_rinit_pgsql(INIT_FUNC_ARGS);
+extern void php3_info_pgsql(void);
 extern void php3_pgsql_connect(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_pgsql_pconnect(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_pgsql_close(INTERNAL_FUNCTION_PARAMETERS);

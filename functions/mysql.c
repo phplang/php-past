@@ -27,7 +27,7 @@
    +----------------------------------------------------------------------+
  */
  
-/* $Id: mysql.c,v 1.180 1999/02/27 19:10:38 eschmid Exp $ */
+/* $Id: mysql.c,v 1.181 1999/04/13 20:30:07 cslawi Exp $ */
 
 
 /* TODO:
@@ -1495,12 +1495,12 @@ static void php3_mysql_fetch_hash(INTERNAL_FUNCTION_PARAMETERS, int result_type)
 				data_len = mysql_row_lengths[i];
 				should_copy=1;
 			}
+			if (result_type & MYSQL_NUM) {
+				add_index_stringl(return_value, i, data, data_len, should_copy);
+			}
 			if (result_type & MYSQL_ASSOC) {
 				add_assoc_stringl(return_value, mysql_field->name, data, data_len, should_copy);
 				should_copy=1;
-			}
-			if (result_type & MYSQL_NUM) {
-				add_index_stringl(return_value, i, data, data_len, should_copy);
 			}
 		} else {
 			/* NULL field, don't set it */

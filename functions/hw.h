@@ -23,7 +23,7 @@
  */
 
 
-/* $Id: hw.h,v 1.5 1999/01/12 17:36:18 steinm Exp $ */
+/* $Id: hw.h,v 1.7 1999/04/30 10:29:18 steinm Exp $ */
 
 #ifndef _HW_H
 #define _HW_H
@@ -65,6 +65,7 @@ extern void php3_hw_mv(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_hw_cp(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_hw_deleteobject(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_hw_changeobject(INTERNAL_FUNCTION_PARAMETERS);
+extern void php3_hw_groupchangeobject(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_hw_modifyobject(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_hw_getparents(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_hw_getparentsobj(INTERNAL_FUNCTION_PARAMETERS);
@@ -107,6 +108,7 @@ extern void php3_hw_document_size(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_hw_document_attributes(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_hw_document_bodytag(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_hw_document_content(INTERNAL_FUNCTION_PARAMETERS);
+extern void php3_hw_document_setcontent(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_hw_objrec2array(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_hw_array2objrec(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_hw_connection_info(INTERNAL_FUNCTION_PARAMETERS);

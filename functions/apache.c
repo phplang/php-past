@@ -24,12 +24,12 @@
    | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
    | Authors: Rasmus Lerdorf <rasmus@lerdorf.on.ca>                       |
-   |          Stig Sæther Bakken <ssb@guardian.no>                        |
+   |          Stig Sæther Bakken <ssb@fast.no>                            |
    |          David Sklar <sklar@student.net>                             |
    +----------------------------------------------------------------------+
  */
 
-/* $Id: apache.c,v 1.45 1999/01/01 17:59:07 zeev Exp $ */
+/* $Id: apache.c,v 1.47 1999/05/11 12:11:40 rasmus Exp $ */
 #ifdef THREAD_SAFE
 #include "tls.h"
 #endif
@@ -252,10 +252,10 @@ void php3_apache_lookup_uri(INTERNAL_FUNCTION_PARAMETERS)
 		add_property_string(return_value,"the_request",rr->the_request,1);
 	}
 	if (rr->status_line) {
-		add_property_string(return_value,"status_line",rr->status_line,1);		
+		add_property_string(return_value,"status_line",(char *)rr->status_line,1);		
 	}
 	if (rr->method) {
-		add_property_string(return_value,"method",rr->method,1);		
+		add_property_string(return_value,"method",(char *)rr->method,1);		
 	}
 	if (rr->content_type) {
 		add_property_string(return_value,"content_type",(char *)rr->content_type,1);

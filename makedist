@@ -22,9 +22,9 @@
 #
 # Usage: makedist <package> <version>
 #
-# Written by Stig Bakken <ssb@guardian.no> 1997-05-28.
+# Written by Stig Bakken <ssb@fast.no>     1997-05-28.
 #
-# $Id: makedist,v 1.22 1998/08/15 14:29:14 rasmus Exp $
+# $Id: makedist,v 1.24 1999/04/22 13:19:48 ssb Exp $
 #
 
 CVSROOT=:pserver:cvsread@cvs.php.net:/repository
@@ -49,17 +49,21 @@ VER=$1 ; shift
 
 OLDPWD=`pwd`
 
+if [ "$VER" = "snapshot" ]; then
+    VER=`date -u '+%Y%m%d%k%M'`
+    CVSTAG="-D today"
+else
+    # version part of the CVS release tag
+    CVSVER=`echo $VER | sed -e 's/\./_/g'`
+    # CVS release tag
+    CVSTAG="-r ${PKG}_$CVSVER"
+fi
+
 # the destination .tar.gz file
 ARCHIVE=$OLDPWD/$PKG-$VER.tar.gz
 
 # temporary directory used to check out files from CVS
 TMPDIR=$OLDPWD/cvstmp-$PKG-$VER
-
-# version part of the CVS release tag
-CVSVER=`echo $VER | sed -e 's/\./_/g'`
-
-# CVS release tag
-CVSTAG=${PKG}_$CVSVER
 
 # should become "php3"
 CVSMOD=`cat CVS/Repository | sed -e 's!^/[^/]*/!!'`
@@ -70,8 +74,8 @@ fi
 
 cd $TMPDIR || exit 3
 
-$ECHO_N "makedist: exporting tag '$CVSTAG' from '$CVSMOD'...$ECHO_C"
-cvs -Q export -r $CVSTAG $CVSMOD || exit 4
+$ECHO_N "makedist: exporting '$CVSTAG' from '$CVSMOD'...$ECHO_C"
+cvs -Q export $CVSTAG $CVSMOD || exit 4
 echo ""
 
 cd $CVSMOD || exit 5

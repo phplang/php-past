@@ -28,7 +28,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: info.c,v 1.73 1999/02/12 16:03:43 steffann Exp $ */
+/* $Id: info.c,v 1.75 1999/05/19 02:06:06 rasmus Exp $ */
 
 #ifdef THREAD_SAFE
 #include "tls.h"
@@ -96,7 +96,7 @@ void _php3_info(void)
 	TLS_VARS;
 	
 #if WIN32|WINNT
-	// Get build numbers for Windows NT or Win95
+	/* Get build numbers for Windows NT or Win95 */
 	if (dwVersion < 0x80000000){
 		dwBuild = (DWORD)(HIWORD(dwVersion));
 		snprintf(php3_windows_uname,255,"%s %d.%d build %d","Windows NT",dwWindowsMajorVersion,dwWindowsMinorVersion,dwBuild);
@@ -116,7 +116,7 @@ void _php3_info(void)
 	PUTS("by <a href=\"mailto:rasmus@lerdorf.on.ca\">Rasmus Lerdorf</a>,\n");
 	PUTS("<a href=\"mailto:andi@php.net\">Andi Gutmans</a>,\n");
 	PUTS("<a href=\"mailto:bourbon@netvision.net.il\">Zeev Suraski</a>,\n");
-	PUTS("<a href=\"mailto:ssb@guardian.no\">Stig Bakken</a>,\n");
+	PUTS("<a href=\"mailto:ssb@fast.no\">Stig Bakken</a>,\n");
 	PUTS("<a href=\"mailto:shane@caraveo.com\">Shane Caraveo</a>,\n");
 	PUTS("<a href=\"mailto:jimw@php.net\">Jim Winstead</a>, and countless others.<P>\n");
 

@@ -32,7 +32,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: mssql.c,v 1.14 1999/02/15 19:57:23 fmk Exp $ */
+/* $Id: mssql.c,v 1.15 1999/03/15 21:43:14 fmk Exp $ */
 #define IS_EXT_MODULE
 #ifdef THREAD_SAFE
 # ifndef PHP_31
@@ -804,7 +804,7 @@ static void php3_mssql_get_column_content_without_type(mssql_link *mssql_ptr,int
 		unsigned char *res_buf;
 		int res_length = dbdatlen(mssql_ptr->link,offset);
 		
-		res_buf = (unsigned char *) emalloc(res_length+1 + 10);
+		res_buf = (unsigned char *) emalloc(res_length+1 + 19);
 		memset(res_buf, 0, res_length+1 + 10);
 		dbconvert(NULL,coltype(offset),dbdata(mssql_ptr->link,offset), res_length, SQLCHAR,res_buf,-1);
 		

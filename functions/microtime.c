@@ -27,7 +27,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: microtime.c,v 1.29 1999/02/12 09:13:07 fmk Exp $ */
+/* $Id: microtime.c,v 1.30 1999/05/18 12:56:39 sas Exp $ */
 
 #include "php.h"
 #include <stdlib.h>
@@ -98,7 +98,9 @@ void _php3_gettimeofday(pval *return_value) {
 #if HAVE_GETTIMEOFDAY
 	struct timeval tp;
 	struct timezone tz;
-
+	
+	memset(&tp, 0, sizeof(tp));
+	memset(&tz, 0, sizeof(tz));
 	if(gettimeofday(&tp, &tz) == 0) {
 		array_init(return_value);
 		add_assoc_long(return_value, "sec", tp.tv_sec);
@@ -129,6 +131,7 @@ void php3_getrusage(INTERNAL_FUNCTION_PARAMETERS)
 			who = RUSAGE_CHILDREN;
 	}
 
+	memset(&usg, 0, sizeof(usg));
 	if(getrusage(who, &usg) == -1) {
 		RETURN_FALSE;
 	}

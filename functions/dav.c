@@ -23,11 +23,11 @@
    | If you did not, or have any questions about PHP licensing, please    |
    | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
-   | Authors: Stig Sæther Bakken <ssb@guardian.no>                        |
+   | Authors: Stig Sæther Bakken <ssb@fast.no>                            |
    +----------------------------------------------------------------------+
  */
 
-/* $Id: dav.c,v 1.5 1999/02/14 20:51:42 rasmus Exp $ */
+/* $Id: dav.c,v 1.7 1999/05/21 04:15:24 steinm Exp $ */
 
 #define IS_EXT_MODULE
 #if COMPILE_DL
@@ -47,7 +47,7 @@
 
 #if HAVE_MOD_DAV
 
-# include "mod_dav.h"
+# include "php3_dav.h"
 # include "variables.h"
 
 /* {{{ thread safety stuff */

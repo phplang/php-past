@@ -23,13 +23,13 @@
    | If you did not, or have any questions about PHP licensing, please    |
    | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
-   | Authors: Stig Sæther Bakken <ssb@guardian.no>                        |
+   | Authors: Stig Sæther Bakken <ssb@fast.no>                            |
    |          Andreas Karajannis <Andreas.Karajannis@gmd.de>              |
    |          Frank M. Kromann <fmk@businessnet.dk> Support for DB/2 CLI  |
    +----------------------------------------------------------------------+
  */
 
-/* $Id: php3_unified_odbc.h,v 1.47 1999/02/02 14:50:29 kara Exp $ */
+/* $Id: php3_unified_odbc.h,v 1.51 1999/05/28 12:36:52 kara Exp $ */
 
 #ifndef _UNIFIED_ODBC_H
 #define _UNIFIED_ODBC_H
@@ -155,7 +155,7 @@ extern void php3_solid_fetch_prev(INTERNAL_FUNCTION_PARAMETERS);
 #  include <isql.h>
 #  include <isqlext.h>
 #  include <udbcext.h>
-#  define HAVE_SQL_EXTENDED_FETCH 1
+#  define HAVE_SQL_EXTENDED_FETCH 0 
 #  if defined(UODBC_UNIQUE_NAMES)
 #   define UODBC_TYPE opnlnk
 #   define UODBC_NAME "opnlnk"
@@ -234,6 +234,25 @@ extern void php3_solid_fetch_prev(INTERNAL_FUNCTION_PARAMETERS);
 #   define PHP3_UODBC_VAR(a) UODBC_VAR_NAME(php3_db2_##a)
 #   define UODBC_MODULE_ENTRY UODBC_VAR(module_entry)
 #   define db2_module_ptr &UODBC_MODULE_ENTRY
+#  endif
+
+#elif HAVE_INFORMIX
+#  define HAVE_SQL_EXTENDED_FETCH 1
+#  include <infxcli.h>
+#  if defined(UODBC_UNIQUE_NAMES)
+#   define UODBC_TYPE informix
+#   define UODBC_NAME "informix"
+#   define UODBC_FE(name, arg_types) UODBC_NAMED_FE(informix_##name, php3_informix_##name, arg_types)
+#   define UODBC_FE_ALIAS(php_name, name, arg_types) UODBC_NAMED_FE(informix_##php_name, php3_informix_##name, arg_types)
+#   define UODBC_FUNCTION(name) UODBC_NAMED_FUNCTION(php3_informix_##name)
+#   define UODBC_FNAME(name) php3i_informix_##name
+#   define ODBC_INI_VAR_NAME(name) #name
+#   define ODBC_INI_VAR(a) ODBC_INI_VAR_NAME(informix.##a)
+#   define UODBC_VAR_NAME(name) name
+#   define UODBC_VAR(a) UODBC_VAR_NAME(informix_##a)
+#   define PHP3_UODBC_VAR(a) UODBC_VAR_NAME(php3_informix_##a)
+#   define UODBC_MODULE_ENTRY UODBC_VAR(module_entry)
+#   define informix_module_ptr &UODBC_MODULE_ENTRY
 #  endif
 
 # else /* MS ODBC */
@@ -366,6 +385,9 @@ typedef struct UODBC_CONNECTION {
 	HDBC hdbc;
 #endif
 	int open;
+# if HAVE_SQL_EXTENDED_FETCH
+	int fetch_abs;
+# endif
 } UODBC_CONNECTION;
 
 typedef struct UODBC_RESULT_VALUE {
@@ -384,9 +406,6 @@ typedef struct UODBC_RESULT {
 	UODBC_RESULT_VALUE *values;
 	SWORD numcols;
 	SWORD numparams;
-# if HAVE_SQL_EXTENDED_FETCH
-	int fetch_abs;
-# endif
     long longreadlen;
     int binmode;
 	int fetched;

@@ -23,11 +23,11 @@
    | If you did not, or have any questions about PHP licensing, please    |
    | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
-   | Author: Stig Sæther Bakken <ssb@guardian.no>                        |
+   | Author: Stig Sæther Bakken <ssb@fast.no>                             |
    +----------------------------------------------------------------------+
  */
 
-/* $Id: uniqid.h,v 1.6 1999/01/01 17:59:19 zeev Exp $ */
+/* $Id: uniqid.h,v 1.7 1999/04/22 13:19:51 ssb Exp $ */
 
 #ifndef _UNIQID_H
 #define _UNIQID_H

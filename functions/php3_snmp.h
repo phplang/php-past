@@ -24,9 +24,10 @@
    | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
    | Authors: Rasmus Lerdorf <rasmus@lerdorf.on.ca>                       |
+   |          Mike Jackson <mhjack@tscnet.com>                            |
    +----------------------------------------------------------------------+
  */
-/* $Id: php3_snmp.h,v 1.3 1999/01/01 17:59:16 zeev Exp $ */
+/* $Id: php3_snmp.h,v 1.5 1999/05/22 07:04:13 mhjack Exp $ */
 #ifndef _PHP3_SNMP_H
 #define _PHP3_SNMP_H
 
@@ -43,8 +44,12 @@ extern php3_module_entry snmp_module_entry;
 #define snmp_module_ptr &snmp_module_entry
 
 extern int php3i_snmp_init(INIT_FUNC_ARGS);
-extern void php3_snmpget(INTERNAL_FUNCTION_PARAMETERS);
-extern void php3_snmpwalk(INTERNAL_FUNCTION_PARAMETERS);
+extern PHP_FUNCTION(snmpget);
+extern PHP_FUNCTION(snmpwalk);
+extern PHP_FUNCTION(snmprealwalk);
+extern PHP_FUNCTION(snmpwalkoid);
+extern PHP_FUNCTION(snmp_get_quick_print);
+extern PHP_FUNCTION(snmp_set_quick_print);
 extern void php3_info_snmp(void);
 #else
 

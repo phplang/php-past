@@ -15,35 +15,47 @@
      <paramdef>int <parameter>port</parameter></paramdef>
      <paramdef>int <parameter><optional>errno</optional></parameter></paramdef>
      <paramdef>string <parameter><optional>errstr</optional></parameter></paramdef>
+     <paramdef>int
+     <parameter><optional>timeout</optional></parameter></paramdef>
     </funcsynopsis>
 
     <para>
-     Opens an Internet domain socket connection to
-     <parameter>hostname</parameter> on port
-     <parameter>port</parameter> and returns a file pointer, which may
-     be used by <function>fgets</function>,
-     <function>fgetss</function>, <function>fputs</function>, and
-     <function>fclose</function>.  If the call fails, it will return FALSE
-	 and if the optional <parameter>errno</parameter> and <parameter>errstr</parameter>
-	 arguments are present they will be set to indicate the actual system level
-	 error that ocurred on the system-level connect() call.  If the returned
-	 errno is 0, but the function returned FALSE, it is an indication that the
-	 error occurred before the connect() call.  This is most likely due to a problem
-	 initializing the socket.  Note that the errno and errstr arguments should be
-	 passed by reference.
+     Initiates a stream connection in the Internet (AF_INET) or Unix (AF_UNIX)
+     domain. For the Internet domain, it will open a TCP socket connection to
+     <parameter>hostname</parameter> on port <parameter>port</parameter>. For
+     the Unix domain, <parameter>hostname</parameter> will be used as the path
+     to the socket, <parameter>port</parameter> must be set to 0 in this case.
+     The optional <parameter>timeout</parameter> can be used to set a timeout
+     in seconds for the connect system call.
 
     <para>
-     If <parameter>port</parameter> is 0 and the operating system
-     supports Unix domain sockets, <parameter>hostname</parameter>
-     will be used as the filename of a Unix domain socket to connect
-     to.
-	 <para>
-	 The socket will by default be opened in blocking mode.  You can
-	 switch it to non-blocking mode by using the <function>set_socket_blocking</function>.
+     <function>fsockopen</function> returns a file pointer which may be used
+     together with the other file functions (such as
+     <function>fgets</function>, <function>fgetss</function>,
+     <function>fputs</function>, <function>fclose</function>,
+     <function>feof</function>).  
+     
+    <para>
+     If the call fails, it will return false and if the optional
+     <parameter>errno</parameter> and <parameter>errstr</parameter> arguments
+     are present they will be set to indicate the actual system level error
+     that occurred on the system-level connect() call. If the returned errno is
+     0 and the function returned false, it is an indication that the error
+     occurred before the connect() call. This is most likely due to a problem
+     initializing the socket. Note that the errno and errstr arguments must be
+     passed by reference.
+
+    <para>
+     Depending on the environment, the Unix domain or the optional connect
+     timeout may not be available. 
+     
+	<para>
+     The socket will by default be opened in blocking mode.  You can switch it
+     to non-blocking mode by using <function>set_socket_blocking</function>.
 	 <example>
 	  <title>fsockopen example</title>
 	  <programlisting>
-$fp = fsockopen("www.php.net", 80, &$errno, &$errstr);
+$fp = fsockopen("www.php.net", 80, &$errno, &$errstr, 30);
 if(!$fp) {
 	echo "$errstr ($errno)&lt;br&gt;\n";
 } else {
@@ -55,6 +67,9 @@ if(!$fp) {
 }
 	  </programlisting>
 	 </example>
+
+     See also: <function>pfsockopen</function>
+     
    </refsect1>
   </refentry>
 
@@ -71,13 +86,14 @@ if(!$fp) {
      <paramdef>int <parameter>port</parameter></paramdef>
      <paramdef>int <parameter><optional>errno</optional></parameter></paramdef>
      <paramdef>string <parameter><optional>errstr</optional></parameter></paramdef>
+     <paramdef>int
+     <parameter><optional>timeout</optional></parameter></paramdef>
     </funcsynopsis>
 
     <para>
-     This function behaves exactly as <function>fsockopen</function>
-     with the difference that the connection is not closed after
-     the request is finished. It is the persistent version of 
-     fsockopen. 
+     This function behaves exactly as <function>fsockopen</function> with the
+     difference that the connection is not closed after the script finishes.
+     It is the persistent version of <function>fsockopen</function>. 
    </refsect1>
   </refentry>
 

@@ -5,9 +5,8 @@
 
   <partintro>
    <simpara>
-    These functions require QMAIL (www.qmail.org) and the vmailmgr
-    package by Bruce Guenter
-    http://www.qcc.sk.ca/~bguenter/distrib/vmailmgr/
+    These functions require <ulink url="&url.qmail;">qmail</ulink> and the
+    <ulink url="&url.vmailmgr;">vmailmgr package</ulink> by Bruce Guenter.
    <simpara>
     For all functions, the following two variables are defined as:
     string vdomain the domain name of your virtual domain

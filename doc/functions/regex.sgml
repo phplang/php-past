@@ -84,7 +84,14 @@ if ( ereg( "([0-9]{4})-([0-9]{1,2})-([0-9]{1,2})", $date, $regs ) ) {
      substring; <literal>\\0</literal> will produce the entire
      contents of string.  Up to nine substrings may be used.
      Parentheses may be nested, in which case they are counted by the
-     opening parenthesis.  For example, the following code snippet
+     opening parenthesis.  
+
+	<para>
+	 If no matches are found in <parameter>string</parameter>, then
+	 <parameter>string</parameter> will be returned unchanged.
+
+	<para>
+	 For example, the following code snippet
      prints "This was a test" three times:
      <example>
       <title>ereg_replace() example</title>

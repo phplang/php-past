@@ -26,7 +26,7 @@
    | Authors: Jim Winstead <jimw@php.net>                                 |
    +----------------------------------------------------------------------+
  */
-/* $Id: fopen-wrappers.h,v 1.23 1999/02/25 14:57:54 rasmus Exp $ */
+/* $Id: fopen-wrappers.h,v 1.24 1999/05/20 16:34:32 sas Exp $ */
 
 #ifndef _FOPEN_WRAPPERS_H
 #define _FOPEN_WRAPPERS_H
@@ -55,8 +55,10 @@
 #endif
 #define SOCK_WRITE(d,s) send(s,d,strlen(d),0)
 #define SOCK_WRITEL(d,l,s) send(s,d,l,0)
-#define SOCK_FGETC(c,s) recv(s,c,1,0)
+#define SOCK_FGETC(s) _php3_sock_fgetc((s))
 #define SOCK_FGETS(b,l,s) _php3_sock_fgets((b),(l),(s))
+#define SOCK_FEOF(sock) _php3_sock_feof((sock))
+#define SOCK_FREAD(ptr,size,sock) _php3_sock_fread((ptr),(size),(sock))
 
 /* values for issock */
 #define IS_NOT_SOCKET	0

@@ -118,6 +118,7 @@ echo '&lt;A HREF="mycgi?foo=', urlencode ($userinput), '">';
     <para>
      See also:
      <function>base64_decode</function>,
+     <function>chunk_split</function>,
      RFC-2045 section 6.8.
 
    </refsect1>

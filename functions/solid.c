@@ -24,11 +24,11 @@
    | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
    | Authors: Jeroen van der Most <jvdmost@digiface.nl>                   |
-   |          Stig Sæther Bakken <ssb@guardian.no>                        |
+   |          Stig Sæther Bakken <ssb@fast.no>                            |
    +----------------------------------------------------------------------+
  */
 
-/* $Id: solid.c,v 1.38 1999/01/01 17:59:18 zeev Exp $ */
+/* $Id: solid.c,v 1.39 1999/04/22 13:19:50 ssb Exp $ */
 
 #include <stdlib.h>
 #include <ctype.h>

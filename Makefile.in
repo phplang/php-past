@@ -24,7 +24,7 @@
 # +----------------------------------------------------------------------+
 
 #
-# $Id: Makefile.in,v 1.297 1999/02/28 23:30:00 rasmus Exp $
+# $Id: Makefile.in,v 1.319 1999/06/03 14:05:10 sas Exp $
 #
 
 prefix = @prefix@
@@ -37,7 +37,7 @@ CC = @CC@
 AR = ar rc
 BINNAME = @BINNAME@
 INSTALL_IT = @INSTALL_IT@
-INCLUDE = -I$(srcdir) -I. @GDBM_INCLUDE@ @ORACLE_INCLUDE@ @APACHE_INCLUDE@ @FHTTPD_INCLUDE@ @ADA_INCLUDE@ @IODBC_INCLUDE@ @SYBASE_INCLUDE@ @SYBASE_CT_INCLUDE@ @MYSQL_INCLUDE@ @MSQL_INCLUDE@ @SOLID_INCLUDE@ @EMPRESS_INCLUDE@ @OPENLINK_INCLUDE@ @PGSQL_INCLUDE@ @LDAP_INCLUDE@ @MCK_INCLUDE@ @VELOCIS_INCLUDE@ @CODBC_INCLUDE@ @GD_INCLUDE@ @IMAP_INCLUDE@ @ASPELL_INCLUDE@ @ZLIB_INCLUDE@ @PDFLIB_INCLUDE@ @FDFLIB_INCLUDE@ @IFX_INCLUDE@ @SNMP_INCLUDE@ @IBASE_INCLUDE@ @GETTEXT_INCLUDE@ @IMAGICK_INCLUDE@
+INCLUDE = -I$(srcdir) -I. @DBA_INCLUDE@ @GDBM_INCLUDE@ @ORACLE_INCLUDE@ @APACHE_INCLUDE@ @FHTTPD_INCLUDE@ @ADA_INCLUDE@ @IODBC_INCLUDE@ @SYBASE_INCLUDE@ @SYBASE_CT_INCLUDE@ @MYSQL_INCLUDE@ @MSQL_INCLUDE@ @SOLID_INCLUDE@ @EMPRESS_INCLUDE@ @OPENLINK_INCLUDE@ @PGSQL_INCLUDE@ @LDAP_INCLUDE@ @MCK_INCLUDE@ @VELOCIS_INCLUDE@ @CODBC_INCLUDE@ @GD_INCLUDE@ @IMAP_INCLUDE@ @ASPELL_INCLUDE@ @ZLIB_INCLUDE@ @PDFLIB_INCLUDE@ @CPDFLIB_INCLUDE@ @FDFLIB_INCLUDE@ @IFX_INCLUDE@ @SNMP_INCLUDE@ @IBASE_INCLUDE@ @GETTEXT_INCLUDE@ @IMAGICK_INCLUDE@ @INCLUDES@
 PROF_CFLAGS =
 CFLAGS_SHLIB = @CFLAGS_SHLIB@
 LDFLAGS_SHLIB = @LDFLAGS_SHLIB@
@@ -88,40 +88,45 @@ FUNCTIONS_SOURCE = functions/adabasd.c functions/aspell.c functions/apache.c fun
        functions/unified_odbc.c functions/ldap.c functions/browscap.c \
        functions/velocis.c functions/gdttf.c functions/gdcache.c \
        functions/zlib.c functions/COM.c functions/ifx.c \
-       functions/pdf.c functions/hw.c functions/hg_comm.c functions/dlist.c \
-       functions/fdf.c functions/wddx.c functions/wddx_a.c \
+       functions/pdf.c functions/cpdf.c functions/hw.c functions/hg_comm.c \
+       functions/dlist.c functions/fdf.c functions/wddx.c functions/wddx_a.c \
        functions/snmp.c functions/var.c functions/interbase.c \
        functions/quot_print.c functions/cyr_convert.c \
        functions/sysvsem.c functions/dav.c functions/sysvshm.c \
        functions/gettext.c functions/php3_mckcrypt.c \
-       functions/yp.c
+       functions/yp.c functions/dba.c functions/dba_gdbm.c \
+	   functions/dba_dbm.c functions/dba_ndbm.c functions/dba_cdb.c \
+	   functions/mcrypt.c functions/dba_db2.c functions/mhash.c \
+       functions/pcre.c
 
 FUNCTIONS = $(FUNCTIONS_SOURCE:.c=.o)
 
-LIBS = @SYBASE_CT_LFLAGS@ @SYBASE_CT_LIBS@ @FHTTPD_LIB@ @DBASE_LIB@ @REGEX_LIB@ @DBM_LIB@ @ORACLE_LFLAGS@ @ORACLE_LIBS@ @IODBC_LFLAGS@ @IODBC_LIBS@ @SYBASE_LFLAGS@ @SYBASE_LIBS@ @SYBASE_CT_LFLAGS@ @SYBASE_CT_LIBS@ @MYSQL_LFLAGS@ @MYSQL_LIBS@ @MSQL_LFLAGS@ @MSQL_LIBS@ @ADA_LFLAGS@ @ADA_LIBS@ @SOLID_LIBS@ @EMPRESS_LIBS@ @OPENLINK_LFLAGS@ @OPENLINK_LIBS@ @PGSQL_LFLAGS@ @PGSQL_LIBS@ @LDAP_LFLAGS@ @LDAP_LIBS@ @MCK_LFLAGS@ @MCK_LIBS@ @VELOCIS_LIBS@ @CODBC_LFLAGS@ @CODBC_LIBS@ @IMAP_LIBS@ @ASPELL_LIBS@ @GD_LIBS@ @ZLIB_LIBS@ @PDFLIB_LIBS@ @FDFLIB_LIBS@ @IFX_LFLAGS@ @IFX_LIBS@ @SNMP_LFLAGS@ @SNMP_LIBS@ @IBASE_LFLAGS@ @IBASE_LIBS@ @XML_LIBS@ @GETTEXT_LIBS@ @IMAGICK_LFLAGS@ @IMAGICK_LIBS@ @LIBS@
-
+LIBS = @SYBASE_CT_LFLAGS@ @SYBASE_CT_LIBS@ @FHTTPD_LIB@ @DBASE_LIB@ @PCRE_LIB@ @REGEX_LIB@ @DBM_LIB@ @ORACLE_LFLAGS@ @ORACLE_LIBS@ @IODBC_LFLAGS@ @IODBC_LIBS@ @SYBASE_LFLAGS@ @SYBASE_LIBS@ @SYBASE_CT_LFLAGS@ @SYBASE_CT_LIBS@ @MYSQL_LFLAGS@ @MYSQL_LIBS@ @MSQL_LFLAGS@ @MSQL_LIBS@ @ADA_LFLAGS@ @ADA_LIBS@ @SOLID_LIBS@ @EMPRESS_LIBS@ @OPENLINK_LFLAGS@ @OPENLINK_LIBS@ @PGSQL_LFLAGS@ @PGSQL_LIBS@ @LDAP_LFLAGS@ @LDAP_LIBS@ @MCK_LFLAGS@ @MCK_LIBS@ @VELOCIS_LIBS@ @CODBC_LFLAGS@ @CODBC_LIBS@ @IMAP_LIBS@ @ASPELL_LIBS@ @GD_LIBS@ @ZLIB_LIBS@ @PDFLIB_LIBS@ @CPDFLIB_LIBS@ @FDFLIB_LIBS@ @IFX_LFLAGS@ @IFX_LIBS@ @SNMP_LFLAGS@ @SNMP_LIBS@ @IBASE_LFLAGS@ @IBASE_LIBS@ @XML_LIBS@ @GETTEXT_LFLAGS@ @GETTEXT_LIBS@ @IMAGICK_LFLAGS@ @IMAGICK_LIBS@ @DBA_LFLAGS@ @DBA_LIBS@ @EXTRA_LIBS@ @LIBS@ 
 all: $(BINNAME)
 
-php: $(OBJS) $(FUNCTIONS) @REGEX_LIB@ @FHTTPD_LIB@ @DBASE_LIB@
+php: $(OBJS) $(FUNCTIONS) @PCRE_LIB@ @REGEX_LIB@ @FHTTPD_LIB@ @DBASE_LIB@
 	$(CC) $(CFLAGS) -o $(BINNAME) $(LDFLAGS) $(OBJS) $(FUNCTIONS) $(LIBS)
 
-libphp3.a: $(OBJS) $(FUNCTIONS) @DBASE_OBJS@
+libphp3.a: $(OBJS) $(FUNCTIONS) @PCRE_LIB@ @DBASE_OBJS@
 	$(AR) $(BINNAME) $(OBJS) $(FUNCTIONS) @DBASE_OBJS@
 	$(RANLIB) $(BINNAME)
 
-libmodphp3.a: $(OBJS) $(FUNCTIONS) @DBASE_OBJS@
+libmodphp3.a: $(OBJS) $(FUNCTIONS) @PCRE_LIB@ @DBASE_OBJS@
 	$(AR) $(BINNAME) $(OBJS) $(FUNCTIONS) @DBASE_OBJS@
 	$(RANLIB) $(BINNAME)
 
-libmodphp3-so.a: $(OBJS) $(FUNCTIONS) @DBASE_OBJS@
+libmodphp3-so.a: $(OBJS) $(FUNCTIONS) @PCRE_LIB@ @DBASE_OBJS@
 	$(AR) libmodphp3-so.a $(OBJS) $(FUNCTIONS) @DBASE_OBJS@
 	$(RANLIB) libmodphp3-so.a
 
-libphp3.so: mod_php3.c libmodphp3-so.a @DBASE_LIB@
-	$(APXS) -c -o libphp3.so $(APXS_LDFLAGS) mod_php3.c libmodphp3-so.a 
+libphp3.so: mod_php3.c libmodphp3-so.a @DBASE_LIB@ @PCRE_LIB@
+	$(APXS) -c -o libphp3.so $(APXS_LDFLAGS) mod_php3.c libmodphp3-so.a @PCRE_LIBS@
 
 docs:
 	cd doc; $(MAKE)
+
+pcrelib/libpcre.a:
+	(cd pcrelib; $(MAKE))
 
 regex/libregex.a:
 	(cd regex; $(MAKE) lib)
@@ -130,7 +135,7 @@ dbase/libdbf.a:
 	(cd dbase; $(MAKE))
 
 functions/ifx.c: functions/ifx.ec
-	(if test @INFORMIXDIR@; then esql -e @IFX_ESQL_FLAGS@ functions/ifx.ec; mv ifx.c functions; else touch functions/ifx.c; fi)
+	@IFX_C_MAKE@
 
 language-parser.tab.h language-parser.tab.c: $(srcdir)/language-parser.y
 	bison -p php -v -d $(srcdir)/language-parser.y -o language-parser.tab.c
@@ -151,22 +156,27 @@ configuration-scanner.c:	$(srcdir)/configuration-scanner.lex
 	flex -Pcfg -oconfiguration-scanner.c -i $(srcdir)/configuration-scanner.lex
 
 clean:  
-	-rm -f libphp3.a libmodphp3.a php *.o
+	-rm -f libphp3.a libmodphp3.a libphp3.so libmodphp3-so.a php *.o
 	-rm -f $(FUNCTIONS) functions/ifx.c
+#-rm -f language-parser.tab.h language-parser.tab.c language-scanner.c language-parser.output
+#-rm -f configuration-parser.tab.h configuration-parser.tab.c configuration-scanner.c configuration-parser.output
 	-rm -f test/php.desc test/php.in test/php.out test/php.test
 	-rm -f test/a.tmp test/b.tmp test/test.dbm*
 	(cd dbase; $(MAKE) clean)
+	(cd pcrelib; $(MAKE) clean)
+	(cd regex; $(MAKE) clean)
 
 distclean: clean
 	-rm -f *.tab.? *-scanner.c *.output
 	-rm -f config.status config.cache config.log
 	-rm -f Makefile Makefile.depend config.h build-defs.h
-	-rm -f libphp3.module stamp-h
+	-rm -f libphp3.module libmodphp3-so.a stamp-h
+	-rm -f pcrelib/*.o pcrelib/*.a
 	-rm -f regex/*.o regex/*.a regex/*.ih
 	-rm -f dbase/*.o dbase/*.a
 	-rm -f doc/checkdoc doc/funcparse doc/version.ent
 	-rm -f do-conf test/test.log extra/gd/bdf2gdfont
-	-rm -f doc/Makefile regex/Makefile dbase/Makefile
+	-rm -f doc/Makefile regex/Makefile dbase/Makefile pcrelib/Makefile
 
 bench: $(BINNAME)
 	./$(BINNAME) -c. tests/bench.phtml
@@ -209,6 +219,7 @@ indent:	clean
 	rm -f *~ functions/*~
 
 .c.o:
+	@rm -f $@
 	$(CC) $(CFLAGS) -c $< -o $@
 	@bn=`echo $@ | sed -e 's#functions/##'`; test -f $@ || \
 	  (test "$@" != "$$bn" && test -f "$$bn" && mv $$bn $@)
@@ -274,7 +285,7 @@ internal_functions.o: internal_functions.c php.h php_version.h \
  functions/dns.h functions/php3_pgsql.h functions/php3_velocis.h \
  functions/php3_sybase.h functions/php3_sybase-ct.h functions/reg.h \
  functions/php3_mail.h functions/imap.h functions/php3_aspell.h \
- functions/md5.h functions/global.h functions/php3_gd.h \
+ functions/md5.h functions/php3_global.h functions/php3_gd.h \
  functions/html.h functions/dl.h functions/head.h functions/post.h \
  functions/exec.h functions/php3_solid.h functions/adabasd.h \
  functions/file.h functions/dbase.h functions/hw.h functions/filepro.h \
@@ -286,7 +297,7 @@ internal_functions.o: internal_functions.c php.h php_version.h \
  functions/php3_sysvsem.h functions/php3_sysvshm.h \
  functions/php3_dav.h functions/php3_gettext.h functions/php3_wddx.h \
  functions/php3_wddx_a.h functions/php3_yp.h functions/fsock.h \
- functions/php3_mckcrypt.h
+ functions/php3_mckcrypt.h functions/php3_pcre.h
 snprintf.o: snprintf.c config.h
 php3_sprintf.o: php3_sprintf.c config.h
 alloc.o: alloc.c alloc.h php.h php_version.h config.h request_info.h \
@@ -365,7 +376,7 @@ functions/basic_functions.o: functions/basic_functions.c php.h php_version.h \
  variables.h constants.h modules.h internal_functions.h \
  internal_functions_registry.h php3_list.h functions/basic_functions.h \
  functions/phpmath.h functions/php3_string.h functions/dns.h \
- functions/md5.h functions/global.h functions/html.h functions/post.h \
+ functions/md5.h functions/php3_global.h functions/html.h functions/post.h \
  functions/exec.h functions/info.h functions/url.h \
  functions/datetime.h functions/fsock.h functions/image.h \
  functions/php3_link.h functions/php3_filestat.h functions/microtime.h \
@@ -478,7 +489,7 @@ functions/iptc.o: functions/iptc.c php.h php_version.h config.h request_info.h \
 functions/md5.o: functions/md5.c php.h php_version.h config.h request_info.h \
  php3_hash.h alloc.h  safe_mode.h fopen-wrappers.h \
  mod_php3.h stack.h operators.h token_cache.h variables.h constants.h \
- internal_functions.h modules.h functions/md5.h functions/global.h
+ internal_functions.h modules.h functions/md5.h functions/php3_global.h
 functions/microtime.o: functions/microtime.c php.h php_version.h config.h \
  request_info.h php3_hash.h alloc.h  safe_mode.h \
  fopen-wrappers.h mod_php3.h stack.h operators.h token_cache.h \
@@ -705,6 +716,10 @@ functions/yp.o: functions/yp.c php.h php_version.h config.h request_info.h \
  php3_hash.h alloc.h  safe_mode.h fopen-wrappers.h \
  mod_php3.h stack.h operators.h token_cache.h variables.h constants.h \
  internal_functions.h modules.h functions/php3_yp.h
+functions/pcre.o: functions/pcre.c php.h php_version.h config.h request_info.h \
+ php3_hash.h alloc.h  safe_mode.h fopen-wrappers.h \
+ mod_php3.h stack.h operators.h token_cache.h variables.h constants.h \
+ internal_functions.h modules.h functions/php3_pcre.h
 
 # Local Variables:
 # tab-width: 4

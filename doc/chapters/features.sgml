@@ -1,5 +1,5 @@
  <chapter id="features">
-  <title>PHP3 features</title>
+  <title>Features</title>
   <simpara></simpara>
 
   <sect1 id="feature-httpauth">
@@ -7,15 +7,17 @@
 
    <simpara>
     The HTTP Authentication hooks in PHP are only available when it is
-    running as an Apache module.  In an Apache module PHP script, it
-    is possible to use the <function>Header</function> function to
-    send an "Authentication Required" message to the client browser
-    causing it to pop up a Username/Password input window.  Once the
-    user has filled in a username and a password, the URL containing
-    the PHP script will be called again with the variables,
+    running as an Apache module and is hence not available in the CGI version.
+    In an Apache module PHP script, it is possible to use the 
+    <function>Header</function> function to send an "Authentication Required" 
+    message to the client browser causing it to pop up a Username/Password 
+    input window.  Once the user has filled in a username and a password, 
+    the URL containing the PHP script will be called again with the variables,
     $PHP_AUTH_USER, $PHP_AUTH_PW and $PHP_AUTH_TYPE set to the user
     name, password and authentication type respectively.  Only "Basic"
-    authentication is supported at this point.
+    authentication is supported at this point. See the <function>Header</function>
+    function for more information.
+   
    <para>
     An example script fragment which would force client authentication
     on a page would be the following:
@@ -65,6 +67,34 @@
     server response of 401. This can effectively "log out" a user,
     forcing them to re-enter their username and password. Some people
     use this to "time out" logins, or provide a "log-out" button.
+   <simpara>
+    <example>
+      <title>HTTP Authentication example forcing a new name/password</title>
+      <programlisting role=php>
+&lt;?php
+  function  authenticate()  {
+    Header( &quot;WWW-authenticate:  basic  realm='Test  Authentication  System'&quot;);
+    Header( &quot;HTTP/1.0  401  Unauthorized&quot;);
+    echo  &quot;You  must  enter  a  valid  login  ID  and  password  to  access  this  resource\n&quot;;
+    exit;
+  }
+
+  if(!isset($PHP_AUTH_USER)  ||  ($SeenBefore ==  1  &&  !strcmp($OldAuth,  $PHP_AUTH_USER))  )  {
+    authenticate();
+  }  
+  else  {
+    echo  &quot;Welcome:  $PHP_AUTH_USER&lt;BR&gt;&quot;;
+    echo  &quot;Old:  $OldAuth&quot;;
+    echo  &quot;&lt;FORM  ACTION=\&quot;$PHP_SELF\&quot;  METHOD=POST&gt;\n&quot;;
+    echo  &quot;&lt;INPUT  TYPE=HIDDEN  NAME=\&quot;SeenBefore\&quot;  VALUE=\&quot;1\&quot;&gt;\n&quot;;
+    echo  &quot;&lt;INPUT  TYPE=HIDDEN  NAME=\&quot;OldAuth\&quot;  VALUE=\&quot;$PHP_AUTH_USER\&quot;&gt;\n&quot;;
+    echo  &quot;&lt;INPUT  TYPE=Submit  VALUE=\&quot;Re  Authenticate\&quot;&gt;\n&quot;;
+    echo  &quot;&lt;/FORM&gt;\n&quot;;
+
+}
+?>
+    </programlisting>
+   </example>
    <simpara>
     This behavior is not required by the HTTP Basic authentication
     standard, so you should never depend on this. Testing with Lynx
@@ -127,6 +157,13 @@
     what is to be done with the file once it has been uploaded.
    </simpara>
    <para>
+	Note that PHP also supports PUT-method file uploads as used by 
+	Netscape Composer and W3C's Amaya clients.  See the
+	<link linkend="feature-putsupport">PUT Method Support</link> for more 
+	details.
+   </para>
+
+   <para>
     A file upload screen can be built by creating a special form which
     looks something like this:
 
@@ -178,7 +215,7 @@ Send this file: &lt;INPUT NAME=&quot;userfile&quot; TYPE=&quot;file&quot;&gt;
     whatever the name of the INPUT field of TYPE=file is in the upload
     form.  In the above upload form example, we chose to call it
     &quot;userfile&quot;.
-
+  
    <simpara>
     Files will by default be stored in the server's default temporary
     directory.  This can be changed by setting the environment
@@ -197,12 +234,74 @@ Send this file: &lt;INPUT NAME=&quot;userfile&quot; TYPE=&quot;file&quot;&gt;
    <simpara>
     The file will be deleted from the temporary directory at the end
     of the request if it has not been moved away or renamed.
+   <para>
+   Common Pitfalls:
+   <simpara>
+    The MAX_FILE_SIZE item cannot specify a file size greater than the file 
+    size that has been set in the upload_max_filesize in the PHP3.ini file
+    or the corresponding php3_upload_max_filesize Apache .conf directive. 
+    The default is 2 Megabytes.
    <simpara>
     Please note that the CERN httpd seems to strip off everything
     starting at the first whitespace in the content-type mime header
     it gets from the client.  As long as this is the case, CERN httpd
     will not support the file upload feature.
+  </sect1>
 
+  <sect1 id="feature-putsupport">
+   <title>PUT Method Support</title>
+   <simpara>
+    PHP provides support for the HTTP PUT method used by clients such
+    as Netscape Composer and W3C Amaya.  PUT requests are much simpler
+    than a file upload and they look something like this:
+   </simpara>
+   <simpara>
+    <emphasis>PUT /path/filename.html HTTP/1.1</emphasis>
+   </simpara>
+   <simpara>
+    This would normally mean that the remote client would like to save
+    the content that follows as: /path/filename.html in your web tree.
+    It is obviously not a good idea for Apache or PHP to automatically
+    let everybody overwrite any files in your web tree.  So, to handle
+    such a request you have to first tell your web server that you
+    want a certain PHP script to handle the request.  In Apache you do
+    this with the <emphasis>Script</emphasis> directive.  It can be
+    placed almost anywhere in your Apache configuration file.  A
+    common place is inside a &lt;Directory&gt; block or perhaps inside
+    a &lt;Virtualhost&gt; block.  A line like this would do the trick:
+   </simpara>
+   <simpara>
+    <emphasis>Script PUT /put.php3</emphasis>
+   </simpara>
+   <simpara>
+    This tells Apache to send all PUT requests for URIs that match the
+    context in which you put this line to the put.php3 script.  This
+    assumes, of course, that you have PHP enabled for the .php3
+    extension and PHP is active.
+   </simpara>
+   <simpara>
+    Inside your put.php3 file you would then do something like this:
+   </simpara>
+   <simpara>
+    &lt;? copy($PHP_UPLOADED_FILE_NAME,$DOCUMENT_ROOT.$REQUEST_URI); ?&gt;
+   </simpara>
+   <simpara>
+    This would copy the file to the location requested by the remote
+    client.  You would probably want to perform some checks and/or
+    authenticate the user before performing this file copy.  The only
+    trick here is that when PHP sees a PUT-method request it stores
+    the uploaded file in a temporary file just like the <link
+    linkend="feature-fileupload">File Upload</link> feature.  When the
+    request ends, this temporary file is deleted.  So, your PUT
+    handling PHP script has to copy that file somewhere.  The filename
+    of this temporary file is in the $PHP_PUT_FILENAME variable, and
+    you can see the suggested destination filename in the $REQUEST_URI
+    (may vary on non-Apache web servers).  This destination filename
+    is the one that the remote client specified.  You do not have to
+    listen to this client.  You could, for example, copy all uploaded
+    files to a special uploads directory.
+   </simpara>
+  </sect1>
 
   <sect1 id="feature-cookies">
    <title>HTTP cookie support</title>
@@ -222,31 +321,6 @@ Send this file: &lt;INPUT NAME=&quot;userfile&quot; TYPE=&quot;file&quot;&gt;
     <emphasis>[]</emphasis> to the cookie name.  For more details see
     the <function>setcookie</function> function.
   </sect1>
-
-
-  <sect1 id="feature-databases">
-   <title>Database support</title>
-
-   <para>
-    PHP supports a number of different databases in both native mode
-    and through ODBC, including:
-
-     <simplelist columns=2>
-      <member>Adabas D</member>
-      <member>dBase</member>
-      <member>Empress</member>
-      <member>FilePro</member>
-      <member>Informix</member>
-      <member>InterBase</member>
-      <member>mSQL</member>
-      <member>MySQL</member>
-      <member>Oracle</member>
-      <member>PostgreSQL</member>
-      <member>Solid</member>
-      <member>Sybase</member>
-      <member>Velocis</member>
-      <member>Unix dbm</member>
-     </simplelist>
 
 
   <sect1 id="feature-regexps">
@@ -343,7 +417,7 @@ ereg_replace("\n","",$string);
     the <function>error_reporting</function> function.
 	
    <simpara>	
-    All <link linkend="lang-expr">PHP expressions</link> can also be called
+    All <link linkend="expressions">PHP expressions</link> can also be called
     with the "@" prefix, which turns off error reporting for that particular
     expression.  If an error occurred during such an expression and the
     <link linkend="ini.track-errors">track_errors</link> feature
@@ -408,10 +482,6 @@ ereg_replace("\n","",$string);
 	returns a bitfield of the active states.  So, if both states are active it would return 3, for example.
 	</simpara>
   </sect1>
-
-  <sect1 id="feature-source-viewer">
-   <title>PHP source viewer</title>
-   <simpara></simpara>
 
  </chapter>
 

@@ -1,7 +1,7 @@
 <!DOCTYPE BOOK PUBLIC "-//Davenport//DTD DocBook V3.0//EN" [
+<!ENTITY % build.version    SYSTEM "version.ent">
 <!ENTITY % global.entities  SYSTEM "global.ent">
 <!ENTITY % global.chapters  SYSTEM "chapters.ent">
-<!ENTITY % build.version    SYSTEM "version.ent">
 %global.entities;
 %global.chapters;
 %build.version;
@@ -13,11 +13,10 @@
  &bookinfo;
 
  <dedication>
-    <para>
-     Date: &php.build-date;
-    </para><para>
-     Release: &php.version;
-    </para>
+  <para>
+   Date: &php.build-date;
+  </para><para>
+   Release: &php.version;
  </dedication>
 
  &preface;
@@ -25,12 +24,10 @@
  <part id="langref">
   <title>Language Reference</title>
   &chapter.introduction;
-  &chapter.features;
   &chapter.install;
   &chapter.config;
+  &chapter.features;
   &chapter.syntax;
-  &chapter.language-constructs;
-  &chapter.expressions;
  </part>
 
  <part id="funcref">
@@ -42,11 +39,13 @@
   &reference.bc;
   &reference.calendar;
   &reference.datetime;
+  &reference.dba;
   &reference.dbase;
   &reference.dbm;
   &reference.dir;
   &reference.dl;
   &reference.exec;
+  &reference.fdf;
   &reference.filepro;
   &reference.filesystem;
   &reference.http;
@@ -59,6 +58,8 @@
   &reference.ldap;
   &reference.mail;
   &reference.math;
+  &reference.mcrypt;
+  &reference.mhash;
   &reference.misc;
   &reference.msql;
   &reference.mssql;
@@ -68,6 +69,7 @@
   &reference.uodbc;
   &reference.oci8;
   &reference.oracle;
+  &reference.pcre;
   &reference.pdf;
   &reference.pgsql;
   &reference.regex;

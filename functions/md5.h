@@ -27,7 +27,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: md5.h,v 1.14 1999/02/01 07:44:10 fmk Exp $ */
+/* $Id: md5.h,v 1.15 1999/05/23 09:54:56 sas Exp $ */
 
 #ifndef _md5_h
 #define _md5_h
@@ -56,7 +56,7 @@
    documentation and/or software.
  */
 
-#include "global.h"
+#include "php3_global.h"
 
 /* MD5 context. */
 typedef struct {

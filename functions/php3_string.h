@@ -24,12 +24,12 @@
    | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
    | Authors: Rasmus Lerdorf <rasmus@lerdorf.on.ca>                       |
-   |          Stig Sæther Bakken <ssb@guardian.no>                        |
+   |          Stig Sæther Bakken <ssb@fast.no>                            |
    +----------------------------------------------------------------------+
  */
 
 
-/* $Id: php3_string.h,v 1.35 1999/02/12 15:41:17 fmk Exp $ */
+/* $Id: php3_string.h,v 1.43 1999/05/22 22:34:56 sas Exp $ */
 
 #ifndef _PHPSTRING_H
 #define _PHPSTRING_H
@@ -38,6 +38,7 @@
 extern char *strtok_string;
 #endif
 
+PHP_FUNCTION(bin2hex);
 extern void php3_strlen(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_strcmp(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_strspn(INTERNAL_FUNCTION_PARAMETERS);
@@ -79,23 +80,29 @@ extern void php3_newline_to_br(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_setlocale(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_stristr(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_chunk_split(INTERNAL_FUNCTION_PARAMETERS);
+extern void php3_strip_tags(INTERNAL_FUNCTION_PARAMETERS);
 
 #if HAVE_CRYPT
 extern php3_module_entry crypt_module_entry;
 #define crypt_module_ptr &crypt_module_entry
 extern void php3_crypt(INTERNAL_FUNCTION_PARAMETERS);
+extern int php3_minit_crypt(INIT_FUNC_ARGS);
 #else
 #define crypt_module_ptr NULL
 #endif
 
 extern PHPAPI char *_php3_strtoupper(char *s);
 extern PHPAPI char *_php3_strtolower(char *s);
-//extern PHPAPI char *_StrTr(char *string, char *str_from, char *str_to);
-extern PHPAPI char *_php3_strtr(char *string, char *str_from, char *str_to);
+#if 0
+extern PHPAPI char *_StrTr(char *string, char *str_from, char *str_to);
+#endif
+extern PHPAPI char *_php3_strtr(char *string, int len, char *str_from, char *str_to, int trlen);
 extern PHPAPI char *_php3_addslashes(char *string, int length, int *new_length, int freeit);
 extern PHPAPI void _php3_stripslashes(char *string, int *len);
 extern PHPAPI void _php3_dirname(char *str, int len);
 extern PHPAPI char *php3i_stristr(unsigned char *s, unsigned char *t);
+extern PHPAPI void _php3_trim(pval *str, pval * return_value);
+extern PHPAPI void _php3_strip_tags(char *rbuf, int state);
 
 #if 0
 extern PHPAPI char *_php3_str_to_str(char *haystack, int length, 

@@ -277,7 +277,7 @@ OCILogoff($conn);
    <refsect1>
     <title>Description</title>
     <funcsynopsis>
-     <funcdef>int <function>OCIRoolback</function></funcdef>
+     <funcdef>int <function>OCIRollback</function></funcdef>
      <paramdef>int <parameter>connection</parameter></paramdef>
     </funcsynopsis>
     <para>
