@@ -1,0 +1,69 @@
+PHP Tools - Personal Home Page Tools
+====================================
+ Copyright (C) 1995 Rasmus Lerdorf
+====================================
+
+This software is distributed under the GPL (GNU Public License).  Please
+see the accompanying "License" file for a complete description of the
+terms of this license if you are not familiar with them.
+
+====================================
+
+INSTALLATION:
+
+Step 1: Edit config.h and modify for your system.  Defaults should be
+        fine for most systems.  Then edit the Makefile and set the OPTIONS
+        variable to match your system configuration.
+
+Step 2: Type: make
+
+Step 3: Copy the cgi binaries to you cgi directory.  For most sites
+        running NCSA HTTPD you can just name them filename.cgi and
+        place them in your ~/public_html directory.  Or you may need to
+        put them in ~/public_html/cgi-bin.  Ask your system administrator
+        how to run your own cgi programs on your system.
+
+        ie.    cp *.cgi ~/public_html
+
+Step 4: I'd recommend you run these scripts under your own user id as
+        opposed to under the httpd user id.  To do this you must set 
+        the setuid bit.  type:
+
+               chmod u+s ~/public_html/php*.cgi
+
+        It is possible to run without setuid, and on some systems
+        paranoid admins have user directories on non setuid filesystems.
+        The only thing to be aware of if you don't run setuid is that
+        access restrictions will not be completely secure, and you will
+        have a bit of a hassle editing the various log files this
+        package generates.
+
+Step 5: Check http://www.io.org/~rasmus for complete installation and
+        configuration instructions.  (Yes, I am lazy.  I don't feel like
+        typing everything out twice.)
+        
+        Even if you don't think you need help, you might want to check this
+        URL anyway to check whether or not you have the latest version.
+        The easiest way to check the current version is to enter this
+        url into your browser:
+
+        http://www.io.org/~rasmus/phpl.cgi?version
+
+        You can of course do that to your own version of the phpl.cgi 
+        binary to verify whether you have that version yet or not.
+
+Step 6: This step is very optional.  But if you wish, subscribe to the
+        PHP Mailing list by sending an e-mail message to:
+
+        majordomo@kajen.malmo.se
+
+        with the line:
+
+        subscribe php-list your_email_address
+
+        in the body of the message.  The subject line is ignored.
+        This list will put you in touch with other people using the PHP
+        Tools and it will be a good source of information once you get
+        going.  
+
+                                          Rasmus Lerdorf <rasmus@io.org>
