@@ -4,7 +4,7 @@
 >explode</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="echo"
 HREF="function.echo.html"><LINK
 REL="NEXT"
 TITLE="flush"
-HREF="function.flush.html"></HEAD
+HREF="function.flush.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,42 +68,77 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.EXPLODE"
+NAME="function.explode"
 >explode</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN25006"
+NAME="AEN33328"
 ></A
->explode -- Split a string by string</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>explode&nbsp;--&nbsp;Split a string by string</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN25009"
+NAME="AEN33331"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->array explode</CODE
->(string separator, string string);<P
+>array <B
+CLASS="function"
+>explode</B
+></CODE
+> (string separator, string string [, int    
+       limit])</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->&#13;     Returns an array of strings containing the elements separated by
+>&#13;     Returns an array of strings, each of which is a substring of
      <TT
-CLASS="REPLACEABLE"
+CLASS="parameter"
 ><I
->separator</I
+>string</I
+></TT
+> formed by splitting it on boundaries formed 
+     by the string <TT
+CLASS="parameter"
+><I
+>delim</I
+></TT
+>. 
+     If <TT
+CLASS="parameter"
+><I
+>limit</I
+></TT
+> is set, the returned array will contaion 
+     a maximum of <TT
+CLASS="parameter"
+><I
+>limit</I
+></TT
+> elements with the last element
+     containing the whole rest of <TT
+CLASS="parameter"
+><I
+>string</I
 ></TT
 >.
-
-     <TABLE
+    </P
+><P
+>&#13;     <TABLE
 WIDTH="100%"
 BORDER="0"
 CELLPADDING="0"
@@ -109,38 +147,50 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
 >Example 1. <B
-CLASS="FUNCTION"
->explode()</B
+CLASS="function"
+>Explode()</B
 > example</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->$pizza = "piece1 piece2 piece3 piece4 piece5 piece6";
-$pieces = explode(" ", $pizza);</PRE
+CLASS="programlisting"
+>&#13;$pizza = "piece1 piece2 piece3 piece4 piece5 piece6";
+$pieces = explode (" ", $pizza);
+      </PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR
 ></TABLE
-></P
+>
+    </P
 ><P
->     See also <A
+>&#13;     See also <A
 HREF="function.split.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >split()</B
 ></A
 > and
      <A
 HREF="function.implode.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >implode()</B
 ></A
->.</P
+>.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

@@ -4,7 +4,7 @@
 >OCIDefineByName</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="Oracle 8 functions"
 HREF="ref.oci8.html"><LINK
 REL="NEXT"
 TITLE="OCIBindByName"
-HREF="function.ocibindbyname.html"></HEAD
+HREF="function.ocibindbyname.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,54 +68,56 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.OCIDEFINEBYNAME"
+NAME="function.ocidefinebyname"
 >OCIDefineByName</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN19985"
+NAME="AEN25632"
 ></A
->OCIDefineByName -- Use a PHP variable for the define-step during a SELECT</DIV
+><P
+>    (PHP3 &#62;= 3.0.7, PHP4 )</P
+>OCIDefineByName&nbsp;--&nbsp;
+     Use a PHP variable for the define-step during a SELECT
+    </DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN19988"
+NAME="AEN25635"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int OCIDefineByName</CODE
->(int stmt, string Column-Name, mixed &#38;variable, int [<SPAN
-CLASS="OPTIONAL"
->type</SPAN
->]);<P
+>int <B
+CLASS="function"
+>OCIDefineByName</B
+></CODE
+> (int stmt, string Column-Name, mixed &#38;variable [, int type])</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     <A
-HREF="function.ocidefinebyname.html"
-><B
-CLASS="FUNCTION"
+>&#13;     <B
+CLASS="function"
 >OCIDefineByName()</B
-></A
 > uses fetches SQL-Columns
      into user-defined PHP-Variables. Be careful that Oracle user
      ALL-UPPERCASE column-names, whereby in your select you can also
-     write lower-case. <A
-HREF="function.ocidefinebyname.html"
-><B
-CLASS="FUNCTION"
+     write lower-case. <B
+CLASS="function"
 >OCIDefineByName()</B
-></A
 > expects
      the <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >Column-Name</I
 ></TT
@@ -121,21 +126,15 @@ CLASS="PARAMETER"
      error will be given!
     </P
 ><P
->     If you need to define an abstract Datatype (LOB/ROWID/BFILE) you
+>&#13;     If you need to define an abstract Datatype (LOB/ROWID/BFILE) you
      need to allocate it first using
-     <A
-HREF="function.ocinewdescriptor.html"
-><B
-CLASS="FUNCTION"
+     <B
+CLASS="function"
 >OCINewDescriptor()</B
-></A
 > function. See also the
-     <A
-HREF="function.ocibindbyname.html"
-><B
-CLASS="FUNCTION"
+     <B
+CLASS="function"
 >OCIBindByName()</B
-></A
 > function.
     </P
 ><TABLE
@@ -147,14 +146,20 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
 >Example 1. OCIDefineByName</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->&lt;?php
+CLASS="programlisting"
+>&#13;&#60;?php
 /* OCIDefineByPos example thies@digicol.de (980219) */
 
 $conn = OCILogon("scott","tiger");
@@ -175,7 +180,11 @@ while (OCIFetch($stmt)) {
 
 OCIFreeStatement($stmt);
 OCILogoff($conn);
-?&#62;</PRE
+?&#62;
+     </PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR

@@ -4,7 +4,7 @@
 >ifx_fetch_row</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="ifx_getsqlca"
 HREF="function.ifx-getsqlca.html"><LINK
 REL="NEXT"
 TITLE="ifx_htmltbl_result"
-HREF="function.ifx-htmltbl-result.html"></HEAD
+HREF="function.ifx-htmltbl-result.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,34 +68,40 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.IFX-FETCH-ROW"
+NAME="function.ifx-fetch-row"
 >ifx_fetch_row</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN13793"
+NAME="AEN16616"
 ></A
->ifx_fetch_row -- Get row as enumerated array</DIV
+><P
+>    (PHP3 &#62;= 3.0.3, PHP4 )</P
+>ifx_fetch_row&nbsp;--&nbsp;Get row as enumerated array</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN13796"
+NAME="AEN16619"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->array ifx_fetch_row</CODE
->(int result_id, mixed [<SPAN
-CLASS="OPTIONAL"
->position</SPAN
->]
-                      );<P
+>array <B
+CLASS="function"
+>ifx_fetch_row</B
+></CODE
+> (int result_id [, mixed 
+       position])</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
@@ -101,11 +110,11 @@ CLASS="OPTIONAL"
      or false if there are no more rows.
     </P
 ><P
->     Blob columns are returned as integer blob id values for use in
+>&#13;     Blob columns are returned as integer blob id values for use in
      <A
 HREF="function.ifx-get-blob.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >ifx_get_blob()</B
 ></A
 > unless you have used
@@ -113,8 +122,8 @@ CLASS="FUNCTION"
      are returned as string values.  Returns FALSE on error
     </P
 ><P
->     <TT
-CLASS="PARAMETER"
+>&#13;     <TT
+CLASS="parameter"
 ><I
 >result_id</I
 ></TT
@@ -122,45 +131,42 @@ CLASS="PARAMETER"
      <A
 HREF="function.ifx-query.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >ifx_query()</B
 ></A
 > or
      <A
 HREF="function.ifx-prepare.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >ifx_prepare()</B
 ></A
 > (select type queries only!).
     </P
 ><P
->     <TT
-CLASS="PARAMETER"
+>&#13;     <TT
+CLASS="parameter"
 ><I
->[<SPAN
-CLASS="OPTIONAL"
->position</SPAN
->]</I
+>position</I
 ></TT
 > is an
      optional parameter for a "fetch" operation on "scroll" cursors:
      "NEXT", "PREVIOUS", "CURRENT", "FIRST", "LAST" or a number.  If
      you specify a number, an "absolute" row fetch is executed.  This
-     parameter is optional, and only valid for scrollcursors.
+     parameter is optional, and only valid for SCROLL cursors.
     </P
 ><P
->     <B
-CLASS="FUNCTION"
+>&#13;     <B
+CLASS="function"
 >ifx_fetch_row()</B
 > fetches one row of data from
      the result associated with the specified result identifier.  The
      row is returned as an array.  Each result column is stored in an
-     array offset, starting at offset 0.
+     array offset, starting at offset 0, with the column name as key.
     </P
 ><P
->     Subsequent call to <B
-CLASS="FUNCTION"
+>&#13;     Subsequent calls to <B
+CLASS="function"
 >ifx_fetch_row()</B
 > would
      return the next row in the result set, or false if there are no
@@ -175,22 +181,28 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
 >Example 1. Informix fetch rows</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->$rid = ifx_prepare ("select * from emp where name like " . $name,
+CLASS="programlisting"
+>&#13;$rid = ifx_prepare ("select * from emp where name like " . $name,
                      $connid, IFX_SCROLL);
 if (! $rid) {
     ... error ...
 }
 $rowcount = ifx_affected_rows($rid);
 if ($rowcount &#62; 1000) {
-    printf ("Too many rows in result set (%d)\n&lt;br&#62;", $rowcount);
-    die ("Please restrict your query&lt;br&#62;\n");
+    printf ("Too many rows in result set (%d)\n&#60;br&#62;", $rowcount);
+    die ("Please restrict your query&#60;br&#62;\n");
 }
 if (! ifx_do ($rid)) {
    ... error ...
@@ -201,11 +213,14 @@ while (is_array($row)) {
         $fieldvalue = $row[$fieldname];
         printf ("%s = %s,", $fieldname, $fieldvalue);
     }
-    printf("\n&lt;br&#62;");
+    printf("\n&#60;br&#62;");
     $row = ifx_fetch_row ($rid, "NEXT");
 }
 ifx_free_result ($rid);
      </PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR

@@ -4,7 +4,7 @@
 >msql_fetch_row</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="msql_fetch_object"
 HREF="function.msql-fetch-object.html"><LINK
 REL="NEXT"
 TITLE="msql_fieldname"
-HREF="function.msql-fieldname.html"></HEAD
+HREF="function.msql-fieldname.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,74 +68,94 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.MSQL-FETCH-ROW"
+NAME="function.msql-fetch-row"
 >msql_fetch_row</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN17417"
+NAME="AEN22235"
 ></A
->msql_fetch_row -- get row as enumerated array</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>msql_fetch_row&nbsp;--&nbsp;Get row as enumerated array</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN17420"
+NAME="AEN22238"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->array msql_fetch_row</CODE
->(int query_identifier);<P
+>array <B
+CLASS="function"
+>msql_fetch_row</B
+></CODE
+> (int query_identifier)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Returns an array that corresponds to the fetched row, or false if
-     there are no more rows.</P
+>&#13;     Returns an array that corresponds to the fetched row, or false if
+     there are no more rows.
+    </P
 ><P
->     msql_fetch_row() fetches one row of data from the result
-     associated with the specified query identifier.  The row is
-     returned as an array.  Each result column is stored in an array
-     offset, starting at offset 0.</P
+>&#13;     <B
+CLASS="function"
+>Msql_fetch_row()</B
+> fetches one row of data from
+     the result associated with the specified query identifier.  The
+     row is returned as an array.  Each result column is stored in an
+     array offset, starting at offset 0.
+    </P
 ><P
 > 
-     Subsequent call to msql_fetch_row() would return the next row in
-     the result set, or false if there are no more rows.</P
+     Subsequent call to <B
+CLASS="function"
+>msql_fetch_row()</B
+> would
+     return the next row in the result set, or false if there are no
+     more rows.
+    </P
 ><P
-> See also:
-     <A
+> 
+     See also: <A
 HREF="function.msql-fetch-array.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >msql_fetch_array()</B
 ></A
 >,
      <A
 HREF="function.msql-fetch-object.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >msql_fetch_object()</B
 ></A
 >,
      <A
 HREF="function.msql-data-seek.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >msql_data_seek()</B
 ></A
 >, and
      <A
 HREF="function.msql-result.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >msql_result()</B
 ></A
->.</P
+>.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

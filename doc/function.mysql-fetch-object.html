@@ -4,7 +4,7 @@
 >mysql_fetch_object</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="mysql_fetch_lengths"
 HREF="function.mysql-fetch-lengths.html"><LINK
 REL="NEXT"
 TITLE="mysql_fetch_row"
-HREF="function.mysql-fetch-row.html"></HEAD
+HREF="function.mysql-fetch-row.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,82 +68,92 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.MYSQL-FETCH-OBJECT"
+NAME="function.mysql-fetch-object"
 >mysql_fetch_object</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN18114"
+NAME="AEN23017"
 ></A
->mysql_fetch_object -- Fetch a result row as an object</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>mysql_fetch_object&nbsp;--&nbsp;Fetch a result row as an object</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN18117"
+NAME="AEN23020"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->object mysql_fetch_object</CODE
->(int result, int [<SPAN
-CLASS="OPTIONAL"
->result_typ</SPAN
->]);<P
+>object <B
+CLASS="function"
+>mysql_fetch_object</B
+></CODE
+> (int result [, int
+       result_typ])</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
 > 
      Returns an object with properties that correspond to the fetched
-     row, or false if there are no more rows.</P
+     row, or false if there are no more rows.
+    </P
 ><P
 > 
      <B
-CLASS="FUNCTION"
+CLASS="function"
 >mysql_fetch_object()</B
 > is similar to
      <A
 HREF="function.mysql-fetch-array.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >mysql_fetch_array()</B
 ></A
 >, with one difference - an
      object is returned, instead of an array.  Indirectly, that means
      that you can only access the data by the field names, and not by
-     their offsets (numbers are illegal property names).</P
+     their offsets (numbers are illegal property names).
+    </P
 ><P
->     The optional argument <TT
-CLASS="PARAMETER"
+>&#13;     The optional argument <TT
+CLASS="parameter"
 ><I
 >result_typ</I
 ></TT
 > is a
      constant and can take the following values: MYSQL_ASSOC,
-     MYSQL_NUM, and MYSQL_BOTH.</P
+     MYSQL_NUM, and MYSQL_BOTH.
+    </P
 ><P
->     Speed-wise, the function is identical to
+>&#13;     Speed-wise, the function is identical to
      <A
 HREF="function.mysql-fetch-array.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >mysql_fetch_array()</B
 ></A
 >, and almost as quick as
      <A
 HREF="function.mysql-fetch-row.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >mysql_fetch_row()</B
 ></A
 > (the difference is
      insignificant).
-    <TABLE
+     <TABLE
 WIDTH="100%"
 BORDER="0"
 CELLPADDING="0"
@@ -149,42 +162,55 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
 >Example 1. mysql fetch object</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->&lt;?php 
-mysql_connect($host,$user,$password);
-$result = mysql_db_query("database","select * from table");
-while($row = mysql_fetch_object($result)) {
+CLASS="programlisting"
+>&#13;&#60;?php 
+mysql_connect ($host, $user, $password);
+$result = mysql_db_query ("database", "select * from table");
+while ($row = mysql_fetch_object ($result)) {
     echo $row-&#62;user_id;
     echo $row-&#62;fullname;
 }
-mysql_free_result($result);
-?&#62;</PRE
+mysql_free_result ($result);
+?&#62;
+      </PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR
 ></TABLE
-></P
+>
+    </P
 ><P
-> See also: <A
+> 
+     See also: <A
 HREF="function.mysql-fetch-array.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >mysql_fetch_array()</B
 ></A
 > and
-                     <A
+     <A
 HREF="function.mysql-fetch-row.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >mysql_fetch_row()</B
 ></A
->.</P
+>.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

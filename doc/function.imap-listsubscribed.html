@@ -4,20 +4,23 @@
 >imap_listsubscribed</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
-TITLE="IMAP functions"
+TITLE="IMAP, POP3 and NNTP functions"
 HREF="ref.imap.html"><LINK
 REL="PREVIOUS"
 TITLE="imap_getmailboxes"
 HREF="function.imap-getmailboxes.html"><LINK
 REL="NEXT"
 TITLE="imap_getsubscribed"
-HREF="function.imap-getsubscribed.html"></HEAD
+HREF="function.imap-getsubscribed.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,48 +68,53 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.IMAP-LISTSUBSCRIBED"
+NAME="function.imap-listsubscribed"
 >imap_listsubscribed</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN12870"
+NAME="AEN15373"
 ></A
->imap_listsubscribed -- List all the subscribed mailboxes</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>imap_listsubscribed&nbsp;--&nbsp;List all the subscribed mailboxes</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN12873"
+NAME="AEN15376"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->array imap_listsubscribed</CODE
->(int imap_stream, string ref, string pattern);<P
+>array <B
+CLASS="function"
+>imap_listsubscribed</B
+></CODE
+> (int imap_stream, string ref, string pattern)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Returns an array of all the mailboxes that you have
-     subscribed. The <TT
-CLASS="PARAMETER"
-><I
->ref</I
-></TT
-> and
-     <TT
-CLASS="PARAMETER"
-><I
->pattern</I
-></TT
-> arguments specify the base
-     location to search from and the pattern the mailbox name must
-     match.</P
+>&#13;     Returns an array of all the mailboxes that you have
+     subscribed. This is almost identical to 
+     <A
+HREF="function.imap-listmailbox.html"
+><B
+CLASS="function"
+>imap_listmailbox()</B
+></A
+>, but will only return
+     mailboxes the user you logged in as has subscribed.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

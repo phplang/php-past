@@ -4,7 +4,7 @@
 >unlink</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="umask"
 HREF="function.umask.html"><LINK
 REL="NEXT"
 TITLE="Forms Data Format functions"
-HREF="ref.fdf.html"></HEAD
+HREF="ref.fdf.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,49 +68,74 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.UNLINK"
+NAME="function.unlink"
 >unlink</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN9494"
+NAME="AEN10930"
 ></A
->unlink -- Delete a file</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>unlink&nbsp;--&nbsp;Deletes a file</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN9497"
+NAME="AEN10933"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int unlink</CODE
->(string filename);<P
+>int <B
+CLASS="function"
+>unlink</B
+></CODE
+> (string filename)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->    Deletes <TT
-CLASS="PARAMETER"
+>&#13;     Deletes <TT
+CLASS="parameter"
 ><I
 >filename</I
 ></TT
->.  Similar to the Unix C unlink() function.</P
+>.  Similar to the Unix C
+     unlink() function.
+    </P
 ><P
->    Returns 0 or FALSE on an error.</P
+>&#13;     Returns 0 or FALSE on an error.
+    </P
 ><P
->    See also <A
+>&#13;     See also <A
 HREF="function.rmdir.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >rmdir()</B
 ></A
-> for removing directories.</P
+> for removing directories.
+    </P
+><DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
+><P
+><B
+>Note: </B
+>
+      This function may not work on Windows systems.
+     </P
+></BLOCKQUOTE
+></DIV
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

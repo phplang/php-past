@@ -4,7 +4,7 @@
 >cpdf_set_page_animation</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="cpdf_add_outline"
 HREF="function.cpdf-add-outline.html"><LINK
 REL="NEXT"
 TITLE="cpdf_import_jpeg"
-HREF="function.cpdf-import-jpeg.html"></HEAD
+HREF="function.cpdf-import-jpeg.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,41 +68,50 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.CPDF-SET-PAGE-ANIMATION"
+NAME="function.cpdf-set-page-animation"
 >cpdf_set_page_animation</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN6160"
+NAME="AEN7375"
 ></A
->cpdf_set_page_animation -- Sets duration between pages</DIV
+><P
+>    (PHP3 &#62;= 3.0.9, PHP4 &#62;= 4.0b4)</P
+>cpdf_set_page_animation&nbsp;--&nbsp;Sets duration between pages</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN6163"
+NAME="AEN7378"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->void cpdf_set_page_animation</CODE
->(int pdf document, int transition, double duration);<P
+>void <B
+CLASS="function"
+>cpdf_set_page_animation</B
+></CODE
+> (int pdf document, int transition, double duration)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     The <B
-CLASS="FUNCTION"
+>&#13;     The <B
+CLASS="function"
 >cpdf_set_page_animation()</B
 > function set the
      transition between following pages.</P
 ><P
->     The value of <TT
-CLASS="PARAMETER"
+>&#13;     The value of <TT
+CLASS="parameter"
 ><I
 >transition</I
 ></TT
@@ -109,53 +121,55 @@ CLASS="PARAMETER"
 ></P
 ><TABLE
 BORDER="0"
+><TBODY
 ><TR
 ><TD
->       0 for none,
+>&#13;       0 for none,
       </TD
 ></TR
 ><TR
 ><TD
->       1 for two lines sweeping across the screen reveal the page,
+>&#13;       1 for two lines sweeping across the screen reveal the page,
       </TD
 ></TR
 ><TR
 ><TD
->       2 for multiple lines sweeping across the screen reveal the page,
+>&#13;       2 for multiple lines sweeping across the screen reveal the page,
       </TD
 ></TR
 ><TR
 ><TD
->       3 for a box reveals the page,
+>&#13;       3 for a box reveals the page,
       </TD
 ></TR
 ><TR
 ><TD
->       4 for a single line sweeping across the screen reveals the page,
+>&#13;       4 for a single line sweeping across the screen reveals the page,
       </TD
 ></TR
 ><TR
 ><TD
->       5 for the old page dissolves to reveal the page,
+>&#13;       5 for the old page dissolves to reveal the page,
       </TD
 ></TR
 ><TR
 ><TD
->       6 for the dissolve effect moves from one screen edge to another,
+>&#13;       6 for the dissolve effect moves from one screen edge to another,
       </TD
 ></TR
 ><TR
 ><TD
->       7 for the old page is simply replaced by the new page (default)
+>&#13;       7 for the old page is simply replaced by the new page (default)
       </TD
 ></TR
+></TBODY
 ></TABLE
 ><P
 ></P
 ></P
 ><P
->     The value of <TT
-CLASS="PARAMETER"
+>&#13;     The value of <TT
+CLASS="parameter"
 ><I
 >duration</I
 ></TT

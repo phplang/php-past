@@ -4,20 +4,23 @@
 >sql_regcase</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
-TITLE="Regular expression functions"
+TITLE="Regular Expression Functions (POSIX Extended)"
 HREF="ref.regex.html"><LINK
 REL="PREVIOUS"
-TITLE="split"
-HREF="function.split.html"><LINK
+TITLE="spliti"
+HREF="function.spliti.html"><LINK
 REL="NEXT"
-TITLE="Semaphore and shared memory functions"
-HREF="ref.sem.html"></HEAD
+TITLE="Semaphore and Shared Memory Functions"
+HREF="ref.sem.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -42,7 +45,7 @@ WIDTH="10%"
 ALIGN="left"
 VALIGN="bottom"
 ><A
-HREF="function.split.html"
+HREF="function.spliti.html"
 >Prev</A
 ></TD
 ><TD
@@ -65,49 +68,60 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.SQL-REGCASE"
+NAME="function.sql-regcase"
 >sql_regcase</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN24020"
+NAME="AEN30947"
 ></A
->sql_regcase -- make regular expression for case insensitive match</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>sql_regcase&nbsp;--&nbsp;
+     Make regular expression for case insensitive match
+    </DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN24023"
+NAME="AEN30950"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->string sql_regcase</CODE
->(string string);<P
+>string <B
+CLASS="function"
+>sql_regcase</B
+></CODE
+> (string string)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Returns a valid regular expression which will match <TT
-CLASS="PARAMETER"
+>&#13;     Returns a valid regular expression which will match
+     <TT
+CLASS="parameter"
 ><I
 >string</I
 ></TT
->,
-     ignoring case. This expression is <TT
-CLASS="PARAMETER"
+>, ignoring case. This expression is
+     <TT
+CLASS="parameter"
 ><I
 >string</I
 ></TT
-> with each character
-     converted to a bracket expression; this bracket expression
-     contains that character's uppercase and lowercase form if
-     applicable, otherwise it contains the original character
-     twice.
+> with each character converted to a
+     bracket expression; this bracket expression contains that
+     character's uppercase and lowercase form if applicable, otherwise
+     it contains the original character twice.
      <TABLE
 WIDTH="100%"
 BORDER="0"
@@ -117,27 +131,50 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
->Example 1. sql_regcase() example</B
+>Example 1. <B
+CLASS="function"
+>Sql_regcase()</B
+> Example</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->echo sql_regcase( "Foo bar" );</PRE
+CLASS="programlisting"
+>&#13;echo sql_regcase ("Foo bar");
+      </PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR
 ></TABLE
 >
-
-     prints <PRE
-CLASS="SCREEN"
+     prints <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="screen"
 >[Ff][Oo][Oo][  ][Bb][Aa][Rr]</PRE
->.</P
+></TD
+></TR
+></TABLE
+>.
+    </P
 ><P
->     This can be used to achieve case insensitive pattern matching in
-     products which support only case sensitive regular expressions.</P
+>&#13;     This can be used to achieve case insensitive pattern matching in
+     products which support only case sensitive regular expressions.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -154,7 +191,7 @@ WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
 ><A
-HREF="function.split.html"
+HREF="function.spliti.html"
 >Prev</A
 ></TD
 ><TD
@@ -179,7 +216,7 @@ HREF="ref.sem.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->split</TD
+>spliti</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"
@@ -192,7 +229,7 @@ HREF="ref.regex.html"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->Semaphore and shared memory functions</TD
+>Semaphore and Shared Memory Functions</TD
 ></TR
 ></TABLE
 ></DIV

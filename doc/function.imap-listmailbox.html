@@ -4,20 +4,23 @@
 >imap_listmailbox</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
-TITLE="IMAP functions"
+TITLE="IMAP, POP3 and NNTP functions"
 HREF="ref.imap.html"><LINK
 REL="PREVIOUS"
 TITLE="imap_headers"
 HREF="function.imap-headers.html"><LINK
 REL="NEXT"
 TITLE="imap_getmailboxes"
-HREF="function.imap-getmailboxes.html"></HEAD
+HREF="function.imap-getmailboxes.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,34 +68,113 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.IMAP-LISTMAILBOX"
+NAME="function.imap-listmailbox"
 >imap_listmailbox</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN12817"
+NAME="AEN15302"
 ></A
->imap_listmailbox -- Read the list of mailboxes</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>imap_listmailbox&nbsp;--&nbsp;Read the list of mailboxes</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN12820"
+NAME="AEN15305"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->array imap_listmailbox</CODE
->(int imap_stream, string ref, string pat);<P
+>array <B
+CLASS="function"
+>imap_listmailbox</B
+></CODE
+> (int imap_stream, string ref, string pattern)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Returns an array containing the names of the mailboxes.</P
+>&#13;     Returns an array containing the names of the mailboxes.
+     See <A
+HREF="function.imap-getmailboxes.html"
+><B
+CLASS="function"
+>imap_getmailboxes()</B
+></A
+> for a description
+     of <TT
+CLASS="parameter"
+><I
+>ref</I
+></TT
+> and <TT
+CLASS="parameter"
+><I
+>pattern</I
+></TT
+>.
+    </P
+><P
+>&#13;     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><P
+><B
+>Example 1. <A
+HREF="function.imap-getmailboxes.html"
+><B
+CLASS="function"
+>imap_getmailboxes()</B
+></A
+> example</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;$mbox = imap_open("{your.imap.host}","username","password",OP_HALFOPEN)
+      || die("can't connect: ".imap_last_error());
+ 
+$list = imap_listmailbox($mbox,"{your.imap.host}","*");
+if(is_array($list)) {
+  reset($list);
+  while (list($key, $val) = each($list))
+    print imap_utf7_decode($val)."&#60;br&#62;\n";
+} else
+  print "imap_listmailbox failed: ".imap_last_error()."\n";
+ 
+imap_close($mbox);                                                                
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

@@ -4,20 +4,23 @@
 >imap_delete</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
-TITLE="IMAP functions"
+TITLE="IMAP, POP3 and NNTP functions"
 HREF="ref.imap.html"><LINK
 REL="PREVIOUS"
 TITLE="imap_createmailbox"
 HREF="function.imap-createmailbox.html"><LINK
 REL="NEXT"
 TITLE="imap_deletemailbox"
-HREF="function.imap-deletemailbox.html"></HEAD
+HREF="function.imap-deletemailbox.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,54 +68,149 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.IMAP-DELETE"
+NAME="function.imap-delete"
 >imap_delete</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN12615"
+NAME="AEN14998"
 ></A
->imap_delete -- Mark a messge for deletion from current mailbox</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>imap_delete&nbsp;--&nbsp;
+     Mark a messge for deletion from current mailbox
+    </DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN12618"
+NAME="AEN15001"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int imap_delete</CODE
->(int imap_stream, int msg_number);<P
+>int <B
+CLASS="function"
+>imap_delete</B
+></CODE
+> (int imap_stream, int msg_number [, int 
+       flags])</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Returns true.</P
+>&#13;     Returns true.
+    </P
 ><P
->  
+> 
      <B
-CLASS="FUNCTION"
+CLASS="function"
 >imap_delete()</B
 > function marks message pointed
      by <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >msg_number</I
 ></TT
-> for deletion. Actual
-     deletion of the messages is done by
+> for deletion.  The optional
+     <TT
+CLASS="parameter"
+><I
+>flags</I
+></TT
+> parameter only has a single option,
+     <TT
+CLASS="parameter"
+><I
+>FT_UID</I
+></TT
+>, which tells the function to treat
+     the <TT
+CLASS="parameter"
+><I
+>msg_number</I
+></TT
+> argument as a
+     <TT
+CLASS="parameter"
+><I
+>UID</I
+></TT
+>.  Messages marked for deletion will
+     stay in the mailbox until either
      <A
 HREF="function.imap-expunge.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >imap_expunge()</B
 ></A
->.</P
+> is called or
+     <A
+HREF="function.imap-close.html"
+><B
+CLASS="function"
+>imap_close()</B
+></A
+> is called with the optional
+     parameter CL_EXPUNGE.
+    </P
+><P
+>     
+     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><P
+><B
+>Example 1. <B
+CLASS="function"
+>Imap_delete()</B
+> Beispiel</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;$mbox = imap_open ("{your.imap.host}INBOX", "username", "password")
+    || die ("can't connect: " . imap_last_error());
+
+$check = imap_mailboxmsginfo ($mbox);
+print "Messages before delete: " . $check-&#62;Nmsgs . "&#60;br&#62;\n" ;
+imap_delete ($mbox, 1);
+$check = imap_mailboxmsginfo ($mbox);
+print "Messages after  delete: " . $check-&#62;Nmsgs . "&#60;br&#62;\n" ;
+imap_expunge ($mbox);
+$check = imap_mailboxmsginfo ($mbox);
+print "Messages after expunge: " . $check-&#62;Nmsgs . "&#60;br&#62;\n" ;
+imap_close ($mbox);
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

@@ -4,20 +4,23 @@
 >doubleval</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
-TITLE="Variable functions"
+TITLE="Variable Functions"
 HREF="ref.var.html"><LINK
 REL="PREVIOUS"
-TITLE="Variable functions"
-HREF="ref.var.html"><LINK
+TITLE="call_user_func"
+HREF="function.call-user-func.html"><LINK
 REL="NEXT"
 TITLE="empty"
-HREF="function.empty.html"></HEAD
+HREF="function.empty.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -42,7 +45,7 @@ WIDTH="10%"
 ALIGN="left"
 VALIGN="bottom"
 ><A
-HREF="ref.var.html"
+HREF="function.call-user-func.html"
 >Prev</A
 ></TD
 ><TD
@@ -65,75 +68,112 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.DOUBLEVAL"
+NAME="function.doubleval"
 >doubleval</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN26580"
+NAME="AEN35502"
 ></A
->doubleval -- Get double value of a variable.</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>doubleval&nbsp;--&nbsp;Get double value of a variable</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN26583"
+NAME="AEN35505"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->double doubleval</CODE
->(mixed var);<P
+>double <B
+CLASS="function"
+>doubleval</B
+></CODE
+> (mixed var)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Returns the double (floating point) value of <TT
-CLASS="PARAMETER"
+>&#13;     Returns the double (floating point) value of
+     <TT
+CLASS="parameter"
 ><I
 >var</I
 ></TT
->.</P
+>.
+    </P
 ><P
->     <TT
-CLASS="PARAMETER"
+>&#13;     <TT
+CLASS="parameter"
 ><I
->var</I
+>Var</I
 ></TT
 > may be any scalar type. You cannot use
      <B
-CLASS="FUNCTION"
+CLASS="function"
 >doubleval()</B
-> on arrays or objects.</P
+> on arrays or objects.
+    <DIV
+CLASS="informalexample"
 ><P
->     See also <A
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;$var = '122.34343The';
+$double_value_of_var = doubleval ($var);
+print $double_value_of_var; // prints 122.34343
+      </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+>
+    </P
+><P
+>&#13;     See also <A
 HREF="function.intval.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >intval()</B
 ></A
 >,
      <A
 HREF="function.strval.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >strval()</B
 ></A
->,
-     <A
+>, <A
 HREF="function.settype.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >settype()</B
 ></A
-> and <A
+> and
+     <A
 HREF="language.types.type-juggling.html"
->Type juggling</A
->.</P
+>Type
+     juggling</A
+>.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -150,7 +190,7 @@ WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
 ><A
-HREF="ref.var.html"
+HREF="function.call-user-func.html"
 >Prev</A
 ></TD
 ><TD
@@ -175,7 +215,7 @@ HREF="function.empty.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->Variable functions</TD
+>call_user_func</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"

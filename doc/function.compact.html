@@ -4,20 +4,23 @@
 >compact</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
-TITLE="Array functions"
+TITLE="Array Functions"
 HREF="ref.array.html"><LINK
 REL="PREVIOUS"
 TITLE="asort"
 HREF="function.asort.html"><LINK
 REL="NEXT"
 TITLE="count"
-HREF="function.count.html"></HEAD
+HREF="function.count.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,52 +68,60 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.COMPACT"
+NAME="function.compact"
 >compact</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN4004"
+NAME="AEN4332"
 ></A
->compact --      Create array containing variables and their values
+><P
+>    (PHP4 )</P
+>compact&nbsp;--&nbsp;
+     Create array containing variables and their values
     </DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN4007"
+NAME="AEN4335"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->array compact</CODE
->(string varname | array
-     varnames, [<SPAN
-CLASS="OPTIONAL"
->...</SPAN
->]);<P
+>array <B
+CLASS="function"
+>compact</B
+></CODE
+> (mixed varname [, mixed
+       ...])</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     <B
-CLASS="FUNCTION"
->compact()</B
+>&#13;     <B
+CLASS="function"
+>Compact()</B
 > takes a variable number of
      parameters. Each parameter can be either a string containing the
      name of the variable, or an array of variable names.  The array
      can contain other arrays of variable names inside it;
      <B
-CLASS="FUNCTION"
+CLASS="function"
 >compact()</B
-> handles it recursively.</P
+> handles it recursively.
+    </P
 ><P
->     For each of these, <B
-CLASS="FUNCTION"
+>&#13;     For each of these, <B
+CLASS="function"
 >compact()</B
 > looks for a
      variable with that name in the current symbol table and adds it
@@ -119,13 +130,14 @@ CLASS="FUNCTION"
      In short, it does the opposite of <A
 HREF="function.extract.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >extract()</B
 ></A
 >.
-     It returns the output array with all the variables added to it.</P
+     It returns the output array with all the variables added to it.
+    </P
 ><P
->     <TABLE
+>&#13;     <TABLE
 WIDTH="100%"
 BORDER="0"
 CELLPADDING="0"
@@ -134,52 +146,58 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
 >Example 1. <B
-CLASS="FUNCTION"
->compact()</B
+CLASS="function"
+>Compact()</B
 > example</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->$city = "San Francisco";
+CLASS="programlisting"
+>&#13;$city = "San Francisco";
 $state = "CA";
 $event = "SIGGRAPH";
 
-$location_vars = array("city", "state");
+$location_vars = array ("city", "state");
 
-$result = compact("event", $location_vars);
+$result = compact ("event", $location_vars);
       </PRE
+></TD
+></TR
+></TABLE
 ><P
->       After this, $result will be array("event" =&#62; "SIGGRAPH", "city"
-       =&#62; "San Francisco", "state" =&#62; "CA").</P
+>&#13;       After this, <TT
+CLASS="varname"
+>$result</TT
+> will be <TT
+CLASS="literal"
+>array ("event"
+       =&#62; "SIGGRAPH", "city" =&#62; "San Francisco", "state" =&#62; "CA")</TT
+>.
+      </P
 ></DIV
 ></TD
 ></TR
 ></TABLE
-></P
+>
+    </P
 ><P
->     See also <A
+>&#13;     See also <A
 HREF="function.extract.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >extract()</B
 ></A
 >.
-
-    <DIV
-CLASS="NOTE"
-><BLOCKQUOTE
-CLASS="NOTE"
-><P
-><B
->Note: </B
->      This function was added in PHP 4.0.</P
-></BLOCKQUOTE
-></DIV
-></P
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

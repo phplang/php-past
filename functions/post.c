@@ -136,27 +136,28 @@ static char *php3_getpost(pval *http_post_vars)
 #endif
 	int length, cnt;
 	int file_upload = 0;
-	int unknown_content_type = 0;
+	int unknown_content_type = 1;
 	char *mb;
 	char boundary[100];
 	TLS_VARS;
 	
 	ctype = GLOBAL(request_info).content_type;
 	if (!ctype) {
-		php3_error(E_WARNING, "POST Error: content-type missing");
-		return NULL;
+		php3_error(E_NOTICE, "POST Error: content-type missing");
 	}
-	if (strncasecmp(ctype, "application/x-www-form-urlencoded", 33) && strncasecmp(ctype, "multipart/form-data", 19)
+	else if (strncasecmp(ctype, "application/x-www-form-urlencoded", 33) && strncasecmp(ctype, "multipart/form-data", 19)
 #if HAVE_FDFLIB
  && strncasecmp(ctype, "application/vnd.fdf", 19)
 #endif
       ) {
 		php3_error(E_NOTICE, "Unknown POST content-type: %s", ctype);
-		unknown_content_type = 1;
+	}
+	else {
+		unknown_content_type = 0;
 	}
 
 	/* if this is a POST file upload, figure out the boundary */
-	if (!strncasecmp(ctype, "multipart/form-data", 19)) {
+	if (ctype && !strncasecmp(ctype, "multipart/form-data", 19)) {
 		file_upload = 1;
 		mb = strchr(ctype, '=');
 		if (mb) {
@@ -226,7 +227,7 @@ static char *php3_getpost(pval *http_post_vars)
 	buf[cnt] = '\0';
 
 #if HAVE_FDFLIB
-	if (!strncasecmp(ctype, "application/vnd.fdf", 19)) {
+	if (ctype && !strncasecmp(ctype, "application/vnd.fdf", 19)) {
 		pval postdata, *postdata_ptr;
 		postdata_ptr = &postdata;
 		postdata_ptr->type = IS_STRING;

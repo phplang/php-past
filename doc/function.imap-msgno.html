@@ -4,20 +4,23 @@
 >imap_msgno</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
-TITLE="IMAP functions"
+TITLE="IMAP, POP3 and NNTP functions"
 HREF="ref.imap.html"><LINK
 REL="PREVIOUS"
 TITLE="imap_uid"
 HREF="function.imap-uid.html"><LINK
 REL="NEXT"
 TITLE="imap_search"
-HREF="function.imap-search.html"></HEAD
+HREF="function.imap-search.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,41 +68,54 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.IMAP-MSGNO"
+NAME="function.imap-msgno"
 >imap_msgno</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN13320"
+NAME="AEN15947"
 ></A
->imap_msgno -- This function returns the message sequence number for the given UID.</DIV
+><P
+>    (PHP3 &#62;= 3.0.3, PHP4 )</P
+>imap_msgno&nbsp;--&nbsp;
+     This function returns the message sequence number for the given
+     UID
+    </DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN13323"
+NAME="AEN15950"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int imap_msgno</CODE
->(int imap_stream, int uid);<P
+>int <B
+CLASS="function"
+>imap_msgno</B
+></CODE
+> (int imap_stream, int uid)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     This function returns the message sequence number for the given
+>&#13;     This function returns the message sequence number for the given
      UID. It is the inverse of <A
 HREF="function.imap-uid.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >imap_uid()</B
 ></A
->.</P
+>.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

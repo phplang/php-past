@@ -1,4 +1,4 @@
-/* $Id: imap.h,v 1.16 2000/01/17 19:19:03 askalski Exp $ */
+/* $Id: imap.h,v 1.17 2000/04/19 20:01:14 askalski Exp $ */
 
 #ifndef _INCLUDED_IMAP_H
 #define _INCLUDED_IMAP_H
@@ -78,6 +78,7 @@ void php3_imap_search(INTERNAL_FUNCTION_PARAMETERS);
 void php3_imap_utf8(INTERNAL_FUNCTION_PARAMETERS);
 void php3_imap_utf7_decode(INTERNAL_FUNCTION_PARAMETERS);
 void php3_imap_utf7_encode(INTERNAL_FUNCTION_PARAMETERS);
+void php3_imap_mime_header_decode(INTERNAL_FUNCTION_PARAMETERS);
 #else
 #define php3_imap_module_ptr NULL
 #endif /* HAVE_IMAP */

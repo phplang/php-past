@@ -4,20 +4,23 @@
 >imap_binary</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
-TITLE="IMAP functions"
+TITLE="IMAP, POP3 and NNTP functions"
 HREF="ref.imap.html"><LINK
 REL="PREVIOUS"
 TITLE="imap_8bit"
 HREF="function.imap-8bit.html"><LINK
 REL="NEXT"
 TITLE="imap_scanmailbox"
-HREF="function.imap-scanmailbox.html"></HEAD
+HREF="function.imap-scanmailbox.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,37 +68,63 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.IMAP-BINARY"
+NAME="function.imap-binary"
 >imap_binary</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN13141"
+NAME="AEN15694"
 ></A
->imap_binary -- Convert an 8bit string to a base64 string.</DIV
+><P
+>    (PHP3 &#62;= 3.0.2, PHP4 )</P
+>imap_binary&nbsp;--&nbsp;
+     Convert an 8bit string to a base64 string
+    </DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN13144"
+NAME="AEN15697"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->string imap_binary</CODE
->(string string);<P
+>string <B
+CLASS="function"
+>imap_binary</B
+></CODE
+> (string string)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
 >  
-     Convert an 8bit string to a base64 string.</P
+     Convert an 8bit string to a base64 string (according to <A
+HREF="http://www.faqs.org/rfcs/rfc2045.html"
+TARGET="_top"
+>RFC2045</A
+>, Section 6.8).
+    </P
 ><P
->    Returns a base64 string</P
+>&#13;     Returns a base64 string.
+    </P
+><P
+>&#13;     See also <A
+HREF="function.imap-base64.html"
+><B
+CLASS="function"
+>imap_base64()</B
+></A
+>.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

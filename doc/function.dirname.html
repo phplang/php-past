@@ -4,7 +4,7 @@
 >dirname</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="delete"
 HREF="function.delete.html"><LINK
 REL="NEXT"
 TITLE="diskfreespace"
-HREF="function.diskfreespace.html"></HEAD
+HREF="function.diskfreespace.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,51 +68,60 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.DIRNAME"
+NAME="function.dirname"
 >dirname</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN8421"
+NAME="AEN9605"
 ></A
->dirname -- return directory name component of path</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>dirname&nbsp;--&nbsp;Returns directory name component of path</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN8424"
+NAME="AEN9608"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->string dirname</CODE
->(string path);<P
+>string <B
+CLASS="function"
+>dirname</B
+></CODE
+> (string path)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Given a string containing a path to a file, this function will
+>&#13;     Given a string containing a path to a file, this function will
      return the name of the directory.</P
 ><P
->     On Windows, both slash (<TT
-CLASS="LITERAL"
+>&#13;     On Windows, both slash (<TT
+CLASS="literal"
 >/</TT
 >) and backslash
      (<TT
-CLASS="LITERAL"
+CLASS="literal"
 >\</TT
 >) are used as path separator character.  In
      other environments, it is the forward slash
      (<TT
-CLASS="LITERAL"
+CLASS="literal"
 >/</TT
 >).</P
 ><P
->     <TABLE
+>&#13;     <TABLE
 WIDTH="100%"
 BORDER="0"
 CELLPADDING="0"
@@ -118,32 +130,43 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
 >Example 1. <B
-CLASS="FUNCTION"
->dirname()</B
+CLASS="function"
+>Dirname()</B
 > example</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->$path = "/etc/passwd";
-$file = dirname($path); // $file is set to "/etc"</PRE
+CLASS="programlisting"
+>&#13;$path = "/etc/passwd";
+$file = dirname ($path); // $file is set to "/etc"
+      </PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR
 ></TABLE
-></P
+>
+    </P
 ><P
->     See also:
-     <A
+>&#13;     See also: <A
 HREF="function.basename.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >basename()</B
 ></A
-></P
+>
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

@@ -4,7 +4,7 @@
 >ldap_first_attribute</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="ldap_explode_dn"
 HREF="function.ldap-explode-dn.html"><LINK
 REL="NEXT"
 TITLE="ldap_first_entry"
-HREF="function.ldap-first-entry.html"></HEAD
+HREF="function.ldap-first-entry.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,41 +68,51 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.LDAP-FIRST-ATTRIBUTE"
+NAME="function.ldap-first-attribute"
 >ldap_first_attribute</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN14593"
+NAME="AEN17648"
 ></A
->ldap_first_attribute -- Return first attribute</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>ldap_first_attribute&nbsp;--&nbsp;Return first attribute</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN14596"
+NAME="AEN17651"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->string ldap_first_attribute</CODE
->(int link_identifier, int result_entry_identifier, int ber_identifier);<P
+>string <B
+CLASS="function"
+>ldap_first_attribute</B
+></CODE
+> (int link_identifier, int result_entry_identifier, int ber_identifier)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Returns the first attribute in the entry on success and false on
-     error.</P
+>&#13;     Returns the first attribute in the entry on success and false on
+     error.
+    </P
 ><P
->  
+> 
      Similar to reading entries, attributes are also read one by one
      from a particular entry.
      <B
-CLASS="FUNCTION"
+CLASS="function"
 >ldap_first_attribute()</B
 > returns the first
      attribute in the entry pointed by the entry identifier.
@@ -107,29 +120,37 @@ CLASS="FUNCTION"
      <A
 HREF="function.ldap-next-attribute.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >ldap_next_attribute()</B
 ></A
 > successively.
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >ber_identifier</I
 ></TT
 > is the identifier to
      internal memory location pointer. It is passed by reference. The
      same <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >ber_identifier</I
 ></TT
 > is passed to the
-     ldap_next_attribute() function, which modifies that pointer.</P
+     <A
+HREF="function.ldap-next-attribute.html"
+><B
+CLASS="function"
+>ldap_next_attribute()</B
+></A
+> function, which modifies
+     that pointer.
+    </P
 ><P
->     see also <A
+>&#13;     see also <A
 HREF="function.ldap-get-attributes.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >ldap_get_attributes()</B
 ></A
 ></P

@@ -4,7 +4,7 @@
 >chgrp</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="basename"
 HREF="function.basename.html"><LINK
 REL="NEXT"
 TITLE="chmod"
-HREF="function.chmod.html"></HEAD
+HREF="function.chmod.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,55 +68,89 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.CHGRP"
+NAME="function.chgrp"
 >chgrp</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN8287"
+NAME="AEN9460"
 ></A
->chgrp -- change file group</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>chgrp&nbsp;--&nbsp;Changes file group</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN8290"
+NAME="AEN9463"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int chgrp</CODE
->(string filename, mixed group);<P
+>int <B
+CLASS="function"
+>chgrp</B
+></CODE
+> (string filename, mixed group)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Attempts to change the group of the file filename to group. Only
-     the superuser may change the group of a file arbitrarily; other
-     users may change the group of a file to any group of which that
-     user is a member.</P
+>&#13;     Attempts to change the group of the file
+     <TT
+CLASS="parameter"
+><I
+>filename</I
+></TT
+> to
+     <TT
+CLASS="parameter"
+><I
+>group</I
+></TT
+>. Only the superuser may change the
+     group of a file arbitrarily; other users may change the group of
+     a file to any group of which that user is a member.
+    </P
 ><P
->     Returns true on success; otherwise returns false.</P
+>&#13;     Returns true on success; otherwise returns false.
+    </P
 ><P
->     On Windows, does nothing and returns true.</P
-><P
->     See also <A
+>&#13;     See also <A
 HREF="function.chown.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >chown()</B
 ></A
-> and <A
+> and
+     <A
 HREF="function.chmod.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >chmod()</B
 ></A
->.</P
+>.
+    </P
+><DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
+><P
+><B
+>Note: </B
+>
+      This function does not work on Windows systems
+     </P
+></BLOCKQUOTE
+></DIV
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

@@ -4,7 +4,7 @@
 >chown</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="chmod"
 HREF="function.chmod.html"><LINK
 REL="NEXT"
 TITLE="clearstatcache"
-HREF="function.clearstatcache.html"></HEAD
+HREF="function.clearstatcache.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,60 +68,73 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.CHOWN"
+NAME="function.chown"
 >chown</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN8331"
+NAME="AEN9511"
 ></A
->chown -- change file owner</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>chown&nbsp;--&nbsp;Changes file owner</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN8334"
+NAME="AEN9514"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int chown</CODE
->(string filename, mixed user);<P
+>int <B
+CLASS="function"
+>chown</B
+></CODE
+> (string filename, mixed user)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Attempts to change the owner of the file filename to user
-     user. Only the superuser may change the owner of a file.</P
+>&#13;     Attempts to change the owner of the file filename to user
+     user. Only the superuser may change the owner of a file.
+    </P
 ><P
->     Returns true on success; otherwise returns false.
-
-     <DIV
-CLASS="NOTE"
+>&#13;     Returns true on success; otherwise returns false.
+    </P
+><P
+>&#13;     See also <B
+CLASS="function"
+>chown()</B
+> and
+     <A
+HREF="function.chmod.html"
+><B
+CLASS="function"
+>chmod()</B
+></A
+>.
+    </P
+><DIV
+CLASS="note"
 ><BLOCKQUOTE
-CLASS="NOTE"
+CLASS="note"
 ><P
 ><B
 >Note: </B
->On Windows, does nothing and returns true.</P
+>
+     This function does not work on Windows systems
+     </P
 ></BLOCKQUOTE
 ></DIV
-></P
-><P
->     See also <B
-CLASS="FUNCTION"
->chown()</B
-> and <A
-HREF="function.chmod.html"
-><B
-CLASS="FUNCTION"
->chmod()</B
-></A
->.</P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

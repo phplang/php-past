@@ -4,7 +4,7 @@
 >WDDX functions</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="vm_deluser"
 HREF="function.vm-deluser.html"><LINK
 REL="NEXT"
 TITLE="wddx_serialize_value"
-HREF="function.wddx-serialize-value.html"></HEAD
+HREF="function.wddx-serialize-value.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="reference"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -64,28 +67,28 @@ HREF="function.wddx-serialize-value.html"
 ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><DIV
-CLASS="REFERENCE"
+CLASS="reference"
 ><A
-NAME="REF.WDDX"
+NAME="ref.wddx"
 ></A
 ><DIV
 CLASS="TITLEPAGE"
 ><H1
-CLASS="TITLE"
->LVII. WDDX functions</H1
+CLASS="title"
+>LXV. WDDX functions</H1
 ><DIV
 CLASS="PARTINTRO"
 ><A
-NAME="AEN27078"
+NAME="AEN36148"
 ></A
 ><P
->    These functions are intended for work with <A
-HREF="http://www.wddx.org"
+>&#13;    These functions are intended for work with <A
+HREF="http://www.wddx.org/"
 TARGET="_top"
 >WDDX</A
 >.</P
 ><P
->    Note that all the functions that serialize variables use the first
+>&#13;    Note that all the functions that serialize variables use the first
     element of an array to determine whether the array is to be
     serialized into an array or structure.  If the first element has
     string key, then it is serialized into a structure, otherwise,
@@ -100,33 +103,51 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
 >Example 1. Serializing a single value</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->&lt;?php
+CLASS="programlisting"
+>&#13;&#60;?php
 print wddx_serialize_value("PHP to WDDX packet example", "PHP packet");
-?&gt;
+?&#62;
      </PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR
 ></TABLE
 ></P
 ><P
->    This example will produce:
+>&#13;    This example will produce:
     <DIV
-CLASS="INFORMALEXAMPLE"
+CLASS="informalexample"
 ><P
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->&lt;wddxPacket version='0.9'&gt;&lt;header comment='PHP packet'/&gt;&lt;data&gt;
-&lt;string&gt;PHP to WDDX packet example&lt;/string&gt;&lt;/data&gt;&lt;/wddxPacket&gt;
+CLASS="programlisting"
+>&#13;&#60;wddxPacket version='1.0'&#62;&#60;header comment='PHP packet'/&#62;&#60;data&#62;
+&#60;string&#62;PHP to WDDX packet example&#60;/string&#62;&#60;/data&#62;&#60;/wddxPacket&#62;
      </PRE
+></TD
+></TR
+></TABLE
 ><P
 ></P
 ></DIV
@@ -141,14 +162,20 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
 >Example 2. Using incremental packets</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->&lt;?php
+CLASS="programlisting"
+>&#13;&#60;?php
 $pi = 3.1415926;
 $packet_id = wddx_packet_start("PHP");
 wddx_add_vars($packet_id, "pi");
@@ -159,27 +186,39 @@ wddx_add_vars($packet_id, "cities");
 
 $packet = wddx_packet_end($packet_id);
 print $packet;
-?&gt;
+?&#62;
      </PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR
 ></TABLE
 ></P
 ><P
->    This example will produce:
+>&#13;    This example will produce:
 
     <DIV
-CLASS="INFORMALEXAMPLE"
+CLASS="informalexample"
 ><P
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->&lt;wddxPacket version='0.9'&gt;&lt;header comment='PHP'/&gt;&lt;data&gt;&lt;struct&gt;
-&lt;var name='pi'&gt;&lt;number&gt;3.1415926&lt;/number&gt;&lt;/var&gt;&lt;var name='cities'&gt;
-&lt;array length='3'&gt;&lt;string&gt;Austin&lt;/string&gt;&lt;string&gt;Novato&lt;/string&gt;
-&lt;string&gt;Seattle&lt;/string&gt;&lt;/array&gt;&lt;/var&gt;&lt;/struct&gt;&lt;/data&gt;&lt;/wddxPacket&gt;
+CLASS="programlisting"
+>&#13;&#60;wddxPacket version='1.0'&#62;&#60;header comment='PHP'/&#62;&#60;data&#62;&#60;struct&#62;
+&#60;var name='pi'&#62;&#60;number&#62;3.1415926&#60;/number&#62;&#60;/var&#62;&#60;var name='cities'&#62;
+&#60;array length='3'&#62;&#60;string&#62;Austin&#60;/string&#62;&#60;string&#62;Novato&#60;/string&#62;
+&#60;string&#62;Seattle&#60;/string&#62;&#60;/array&#62;&#60;/var&#62;&#60;/struct&#62;&#60;/data&#62;&#60;/wddxPacket&#62;
      </PRE
+></TD
+></TR
+></TABLE
 ><P
 ></P
 ></DIV

@@ -4,7 +4,7 @@
 >pg_tty</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -12,12 +12,15 @@ REL="UP"
 TITLE="PostgreSQL functions"
 HREF="ref.pgsql.html"><LINK
 REL="PREVIOUS"
-TITLE="pg_Result"
-HREF="function.pg-result.html"><LINK
+TITLE="pg_trace"
+HREF="function.pg-trace.html"><LINK
 REL="NEXT"
-TITLE="Program Execution functions"
-HREF="ref.exec.html"></HEAD
+TITLE="pg_untrace"
+HREF="function.pg-untrace.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -42,7 +45,7 @@ WIDTH="10%"
 ALIGN="left"
 VALIGN="bottom"
 ><A
-HREF="function.pg-result.html"
+HREF="function.pg-trace.html"
 >Prev</A
 ></TD
 ><TD
@@ -55,7 +58,7 @@ WIDTH="10%"
 ALIGN="right"
 VALIGN="bottom"
 ><A
-HREF="ref.exec.html"
+HREF="function.pg-untrace.html"
 >Next</A
 ></TD
 ></TR
@@ -65,35 +68,51 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.PG-TTY"
+NAME="function.pg-tty"
 >pg_tty</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN23665"
+NAME="AEN29892"
 ></A
->pg_tty -- Returns the tty name</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>pg_tty&nbsp;--&nbsp;
+     Return the tty name associated with the connection
+    </DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN23668"
+NAME="AEN29895"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->string pg_tty</CODE
->(int connection_id);<P
+>string <B
+CLASS="function"
+>pg_tty</B
+></CODE
+> (int connection_id)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     pg_tty() will return the tty name that server side debugging
-     output is sent to on the given PostgreSQL connection identifier.</P
+>&#13;     <B
+CLASS="function"
+>Pg_tty()</B
+> will return the tty name that server
+     side debugging output is sent to on the given PostgreSQL
+     connection identifier.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -110,7 +129,7 @@ WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
 ><A
-HREF="function.pg-result.html"
+HREF="function.pg-trace.html"
 >Prev</A
 ></TD
 ><TD
@@ -126,7 +145,7 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><A
-HREF="ref.exec.html"
+HREF="function.pg-untrace.html"
 >Next</A
 ></TD
 ></TR
@@ -135,7 +154,7 @@ HREF="ref.exec.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->pg_Result</TD
+>pg_trace</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"
@@ -148,7 +167,7 @@ HREF="ref.pgsql.html"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->Program Execution functions</TD
+>pg_untrace</TD
 ></TR
 ></TABLE
 ></DIV

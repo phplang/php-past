@@ -4,20 +4,23 @@
 >odbc_connect</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
-TITLE="ODBC functions"
+TITLE="Unified ODBC functions"
 HREF="ref.odbc.html"><LINK
 REL="PREVIOUS"
 TITLE="odbc_commit"
 HREF="function.odbc-commit.html"><LINK
 REL="NEXT"
 TITLE="odbc_cursor"
-HREF="function.odbc-cursor.html"></HEAD
+HREF="function.odbc-cursor.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,48 +68,57 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.ODBC-CONNECT"
+NAME="function.odbc-connect"
 >odbc_connect</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN19251"
+NAME="AEN24102"
 ></A
->odbc_connect -- Connect to a datasource</DIV
+><P
+>    (PHP3 &#62;= 3.0.6, PHP4 )</P
+>odbc_connect&nbsp;--&nbsp;Connect to a datasource</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN19254"
+NAME="AEN24105"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int odbc_connect</CODE
->(string dsn, string user, string password, int [<SPAN
-CLASS="OPTIONAL"
->cursor_type</SPAN
->]);<P
+>int <B
+CLASS="function"
+>odbc_connect</B
+></CODE
+> (string dsn, string user, string password [, int cursor_type])</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Returns an ODBC connection id or 0 (<TT
-CLASS="LITERAL"
+>&#13;     Returns an ODBC connection id or 0 (<TT
+CLASS="literal"
 >false</TT
->) on error.</P
+>) on
+     error.
+    </P
 ><P
->     The connection id returned by this functions is needed by other
+>&#13;     The connection id returned by this functions is needed by other
      ODBC functions. You can have multiple connections open at once.
      The optional fourth parameter sets the type of cursor to be used
      for this connection. This parameter is not normally needed, but
-     can be useful for working around problems with some ODBC drivers.</P
+     can be useful for working around problems with some ODBC drivers.
+    </P
 ><P
->     With some ODBC drivers, executing a complex stored procedure may
+>&#13;     With some ODBC drivers, executing a complex stored procedure may
      fail with an error similar to: "Cannot open a cursor on a stored
      procedure that has anything other than a single select statement
      in it".  Using SQL_CUR_USE_ODBC may avoid that error. Also, some
@@ -114,47 +126,52 @@ CLASS="LITERAL"
      <A
 HREF="function.odbc-fetch-row.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >odbc_fetch_row()</B
 ></A
 >. SQL_CUR_USE_ODBC might help
-     in that case, too.</P
+     in that case, too.
+    </P
 ><P
->     The following constants are defined for cursortype:</P
+>&#13;     The following constants are defined for cursortype:
+    </P
 ><P
->     <P
+>&#13;     <P
 ></P
 ><UL
 ><LI
 ><P
->      SQL_CUR_USE_IF_NEEDED
-      </P
+>&#13;	SQL_CUR_USE_IF_NEEDED
+       </P
 ></LI
 ><LI
 ><P
->      SQL_CUR_USE_ODBC
-      </P
+>&#13;	SQL_CUR_USE_ODBC
+       </P
 ></LI
 ><LI
 ><P
->      SQL_CUR_USE_DRIVER
-      </P
+>&#13;	SQL_CUR_USE_DRIVER
+       </P
 ></LI
 ><LI
 ><P
->      SQL_CUR_DEFAULT
-      </P
+>&#13;	SQL_CUR_DEFAULT
+       </P
 ></LI
 ></UL
-></P
+>
+    </P
 ><P
->     For persistent connections see <A
+>&#13;     For persistent connections see
+     <A
 HREF="function.odbc-pconnect.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >odbc_pconnect()</B
 ></A
->.</P
+>.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

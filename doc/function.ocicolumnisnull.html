@@ -4,7 +4,7 @@
 >OCIColumnIsNULL</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="OCIFetchStatement"
 HREF="function.ocifetchstatement.html"><LINK
 REL="NEXT"
 TITLE="OCIColumnSize"
-HREF="function.ocicolumnsize.html"></HEAD
+HREF="function.ocicolumnsize.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,54 +68,60 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.OCICOLUMNISNULL"
+NAME="function.ocicolumnisnull"
 >OCIColumnIsNULL</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN20323"
+NAME="AEN25986"
 ></A
->OCIColumnIsNULL -- test whether a result column is NULL</DIV
+><P
+>    (PHP3 &#62;= 3.0.4, PHP4 )</P
+>OCIColumnIsNULL&nbsp;--&nbsp;test whether a result column is NULL</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN20326"
+NAME="AEN25989"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int OCIColumnIsNULL</CODE
->(int stmt, mixed column);<P
+>int <B
+CLASS="function"
+>OCIColumnIsNULL</B
+></CODE
+> (int stmt, mixed column)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     <A
-HREF="function.ocicolumnisnull.html"
-><B
-CLASS="FUNCTION"
+>&#13;     <B
+CLASS="function"
 >OCIColumnIsNULL()</B
-></A
 > returns true if the returned
      column <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
->col</I
+>column</I
 ></TT
 > in the result from the
      statement <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >stmt</I
 ></TT
 > is NULL. You can either use
 	 the column-number (1-Based) or the column-name for the <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >col</I
 ></TT

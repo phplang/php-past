@@ -4,20 +4,23 @@
 >gzfile</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
-TITLE="Compression functions"
+TITLE="Zlib Compression Functions"
 HREF="ref.zlib.html"><LINK
 REL="PREVIOUS"
 TITLE="gzeof"
 HREF="function.gzeof.html"><LINK
 REL="NEXT"
 TITLE="gzgetc"
-HREF="function.gzgetc.html"></HEAD
+HREF="function.gzgetc.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,66 +68,80 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.GZFILE"
+NAME="function.gzfile"
 >gzfile</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN6335"
+NAME="AEN37729"
 ></A
->gzfile -- read entire gz-file into an
-    array</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>gzfile&nbsp;--&nbsp;Read entire gz-file into an array</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN6338"
+NAME="AEN37732"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->array gzfile</CODE
->(string filename, int [<SPAN
-CLASS="OPTIONAL"
->use_include_path</SPAN
->]);<P
+>array <B
+CLASS="function"
+>gzfile</B
+></CODE
+> (string filename [, int 
+       use_include_path])</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
-> Identical to <A
+> 
+     Identical to <A
 HREF="function.readgzfile.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >readgzfile()</B
 ></A
->, except that gzfile()
-     returns the file in an array.</P
+>, except that
+     <B
+CLASS="function"
+>gzfile()</B
+> returns the file in an array.
+    </P
 ><P
->     You can use the optional second parameter and set it to "1", if
+>&#13;     You can use the optional second parameter and set it to "1", if
      you want to search for the file in the <A
-HREF="configuration.html#INI.INCLUDE-PATH"
+HREF="configuration.html#ini.include-path"
 >include_path</A
->, too.</P
+>, too.
+    </P
 ><P
-> See also <A
+> 
+     See also <A
 HREF="function.readgzfile.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >readgzfile()</B
 ></A
 >, and
      <A
 HREF="function.gzopen.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >gzopen()</B
 ></A
->.</P
+>.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

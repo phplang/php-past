@@ -28,7 +28,7 @@
  */
 
 
-/* $Id: php3_mssql.h,v 1.5 2000/02/07 23:54:50 zeev Exp $ */
+/* $Id: php3_mssql.h,v 1.7 2000/08/14 19:59:42 fmk Exp $ */
 
 #ifndef _PHP3_MSSQL_H
 #define _PHP3_MSSQL_H
@@ -43,6 +43,35 @@
 #if HAVE_MSSQL
 #ifndef DLEXPORT
 #define DLEXPORT
+#endif
+
+#if HAVE_FREETDS
+#define dbfreelogin(a) dbloginfree(a)
+#define FREETDS_OPTION , -1
+#define SQLINT1 SYBINT1
+#define SQLINT2 SYBINT2
+#define SQLINT4 SYBINT4
+#define SQLINTN SYBINTN
+#define SQLCHAR SYBCHAR
+#define SQLVARCHAR SYBVARCHAR
+#define SQLTEXT SYBTEXT
+#define SQLFLT SYBFLT
+#define SQLFLT8 SYBFLT8
+#define SQLFLTN SYBFLTN
+#define SQLNUMERIC SYBNUMERIC
+#define SQLDECIMAL SYBDECIMAL
+#define SQLMONEY SYBMONEY
+#define SQLMONEY4 SYBMONEY4
+#define SQLMONEYN SYBMONEYN
+#define SQLBINARY SYBBINARY
+#define SQLVARBINARY SYBVARBINARY
+#define SQLDATETIME SYBDATETIME
+#define SQLDATETIM4 SYBDATETIME4
+#define SQLDATETIMN SYBDATETIMN
+#define SQLBIT SYBBIT
+#define SQLIMAGE SYBIMAGE
+#else
+#define FREETDS_OPTION
 #endif
 
 extern php3_module_entry mssql_module_entry;
@@ -112,7 +141,7 @@ typedef struct {
 	char *appname;
 	char *server_message;
 	int le_link,le_plink,le_result;
-	int magic_quotes_runtime;
+	long magic_quotes_runtime;
 	long min_error_severity,min_message_severity;
 	long cfg_min_error_severity,cfg_min_message_severity;
 	void (*get_column_content)(mssql_link *mssql_ptr,int offset,pval *result,int column_type);

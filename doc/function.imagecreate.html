@@ -4,7 +4,7 @@
 >ImageCreate</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -15,9 +15,12 @@ REL="PREVIOUS"
 TITLE="ImageCopyResized"
 HREF="function.imagecopyresized.html"><LINK
 REL="NEXT"
-TITLE="ImageCreateFromGif"
-HREF="function.imagecreatefromgif.html"></HEAD
+TITLE="ImageCreateFromGIF"
+HREF="function.imagecreatefromgif.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,36 +68,102 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.IMAGECREATE"
+NAME="function.imagecreate"
 >ImageCreate</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN11759"
+NAME="AEN13797"
 ></A
->ImageCreate -- create a new image</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>ImageCreate&nbsp;--&nbsp;Create a new image</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN11762"
+NAME="AEN13800"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int imagecreate</CODE
->(int x_size, int y_size);<P
+>int <B
+CLASS="function"
+>imagecreate</B
+></CODE
+> (int x_size, int y_size)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->    
-     ImageCreate returns an image identifier representing a blank
-     image of size x_size by y_size.</P
+> 
+     <B
+CLASS="function"
+>ImageCreate()</B
+> returns an image identifier
+     representing a blank image of size <TT
+CLASS="parameter"
+><I
+>x_size</I
+></TT
+>
+     by <TT
+CLASS="parameter"
+><I
+>y_size</I
+></TT
+>.
+     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><P
+><B
+>Example 1. 
+       Creating a new GD image stream and outputting an image.
+      </B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;&#60;?php
+header ("Content-type: image/png");
+$im = @ImageCreate (50, 100)
+    or die ("Cannot Initialize new GD image stream");
+$background_color = ImageColorAllocate ($im, 255, 255, 255);
+$text_color = ImageColorAllocate ($im, 233, 14, 91);
+ImageString ($im, 1, 5, 5,  "A Simple Text String", $text_color);
+ImagePng ($im);
+?&#62;
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -149,7 +218,7 @@ HREF="ref.image.html"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->ImageCreateFromGif</TD
+>ImageCreateFromGIF</TD
 ></TR
 ></TABLE
 ></DIV

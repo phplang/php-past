@@ -4,7 +4,7 @@
 >hw_InsDoc</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="hw_InsColl"
 HREF="function.hw-inscoll.html"><LINK
 REL="NEXT"
 TITLE="hw_InsertDocument"
-HREF="function.hw-insertdocument.html"></HEAD
+HREF="function.hw-insertdocument.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,54 +68,63 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.HW-INSDOC"
+NAME="function.hw-insdoc"
 >hw_InsDoc</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN11135"
+NAME="AEN12782"
 ></A
->hw_InsDoc -- insert document</DIV
+><P
+>    (PHP3 &#62;= 3.0.3, PHP4 )</P
+>hw_InsDoc&nbsp;--&nbsp;insert document</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN11138"
+NAME="AEN12785"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int hw_insdoc</CODE
->(int connection, int parentID, string object_record, string text);<P
+>int <B
+CLASS="function"
+>hw_insdoc</B
+></CODE
+> (int connection, int parentID, string object_record, string text)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Inserts a new document with attributes as in
+>&#13;     Inserts a new document with attributes as in
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >object_record</I
 ></TT
 > into collection with object ID
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >parentID</I
 ></TT
 >. This function inserts either 
      an object record only or an object record and a pure ascii text in
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >text</I
 ></TT
 > if <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >text</I
 ></TT
@@ -121,24 +133,18 @@ CLASS="PARAMETER"
      <A
 HREF="function.hw-insertdocument.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >hw_insertdocument()</B
 ></A
 > instead.</P
 ><P
->     See also <A
-HREF="function.hw-insertdocument.html"
-><B
-CLASS="FUNCTION"
+>&#13;     See also <B
+CLASS="function"
 >hw_InsertDocument()</B
-></A
 >,
-              <A
-HREF="function.hw-inscoll.html"
-><B
-CLASS="FUNCTION"
+              <B
+CLASS="function"
 >hw_InsColl()</B
-></A
 >.</P
 ></DIV
 ><DIV

@@ -280,6 +280,10 @@ SOURCE=..\functions\lcg.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\functions\levenshtein.c
+# End Source File
+# Begin Source File
+
 SOURCE=..\functions\link.c
 # End Source File
 # Begin Source File

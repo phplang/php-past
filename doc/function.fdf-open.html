@@ -4,7 +4,7 @@
 >fdf_open</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="Forms Data Format functions"
 HREF="ref.fdf.html"><LINK
 REL="NEXT"
 TITLE="fdf_close"
-HREF="function.fdf-close.html"></HEAD
+HREF="function.fdf-close.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,35 +68,44 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.FDF-OPEN"
+NAME="function.fdf-open"
 >fdf_open</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN9529"
+NAME="AEN10978"
 ></A
->fdf_open -- Open a FDF document</DIV
+><P
+>    (PHP3 &#62;= 3.0.6, PHP4 )</P
+>fdf_open&nbsp;--&nbsp;Open a FDF document</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN9532"
+NAME="AEN10981"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int fdf_open</CODE
->(string filename);<P
+>int <B
+CLASS="function"
+>fdf_open</B
+></CODE
+> (string filename)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     The <B
-CLASS="FUNCTION"
+>&#13;     The <B
+CLASS="function"
 >fdf_open()</B
 > function opens
      a file with form data. This file must contain the data as returned
@@ -101,21 +113,21 @@ CLASS="FUNCTION"
      by using <A
 HREF="function.fopen.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >fopen()</B
 ></A
 > and writing the content
      of HTTP_FDF_DATA with <A
 HREF="function.fwrite.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >fwrite()</B
 ></A
 > into it.
      A mechanism like for HTML form data where for each input
      field a variable is created does not exist.</P
 ><P
->    <TABLE
+>&#13;    <TABLE
 WIDTH="100%"
 BORDER="0"
 CELLPADDING="0"
@@ -124,14 +136,20 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
 >Example 1. Accessing the form data</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->&lt;?php
+CLASS="programlisting"
+>&#13;&#60;?php
 // Save the FDF data into a temp file
 $fdffp = fopen("test.fdf", "w");
 fwrite($fdffp, $HTTP_FDF_DATA, strlen($HTTP_FDF_DATA));
@@ -143,16 +161,19 @@ $fdf = fdf_open("test.fdf");
 fdf_close($fdf);
 ?&#62;
      </PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR
 ></TABLE
 ></P
 ><P
->     See also <A
+>&#13;     See also <A
 HREF="function.fdf-close.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >fdf_close()</B
 ></A
 >.</P

@@ -4,7 +4,7 @@
 >gmmktime</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="gmdate"
 HREF="function.gmdate.html"><LINK
 REL="NEXT"
 TITLE="gmstrftime"
-HREF="function.gmstrftime.html"></HEAD
+HREF="function.gmstrftime.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,44 +68,51 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.GMMKTIME"
+NAME="function.gmmktime"
 >gmmktime</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN7193"
+NAME="AEN8407"
 ></A
->gmmktime -- get UNIX timestamp for a GMT date</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>gmmktime&nbsp;--&nbsp;Get UNIX timestamp for a GMT date</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN7196"
+NAME="AEN8410"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int gmmktime</CODE
->(int hour, int minute, int second, int month, int day, int year, int [<SPAN
-CLASS="OPTIONAL"
->is_dst</SPAN
->]);<P
+>int <B
+CLASS="function"
+>gmmktime</B
+></CODE
+> (int hour, int minute, int second, int month, int day, int year [, int 
+       is_dst])</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Identical to <A
+>&#13;     Identical to <A
 HREF="function.mktime.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >mktime()</B
 ></A
-> except the passed parameters
-	 represents a GMT date.
+> except the passed
+     parameters represents a GMT date.
     </P
 ></DIV
 ><DIV

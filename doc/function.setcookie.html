@@ -4,7 +4,7 @@
 >setcookie</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -12,12 +12,15 @@ REL="UP"
 TITLE="HTTP functions"
 HREF="ref.http.html"><LINK
 REL="PREVIOUS"
-TITLE="header"
-HREF="function.header.html"><LINK
+TITLE="header_sent"
+HREF="function.headers-sent.html"><LINK
 REL="NEXT"
 TITLE="Hyperwave functions"
-HREF="ref.hyperwave.html"></HEAD
+HREF="ref.hyperwave.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -42,7 +45,7 @@ WIDTH="10%"
 ALIGN="left"
 VALIGN="bottom"
 ><A
-HREF="function.header.html"
+HREF="function.headers-sent.html"
 >Prev</A
 ></TD
 ><TD
@@ -65,123 +68,159 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.SETCOOKIE"
+NAME="function.setcookie"
 >setcookie</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN10243"
+NAME="AEN11833"
 ></A
->setcookie -- Send a cookie</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>setcookie&nbsp;--&nbsp;Send a cookie</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN10246"
+NAME="AEN11836"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int setcookie</CODE
->(string name, string value, int expire, string path, string domain, int secure);<P
+>int <B
+CLASS="function"
+>setcookie</B
+></CODE
+> (string name [, string 
+       value [, int 
+       expire [, string 
+       path [, string 
+       domain [, int 
+       secure]]]]])</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     <B
-CLASS="FUNCTION"
->setcookie()</B
+>&#13;     <B
+CLASS="function"
+>Setcookie()</B
 > defines a cookie to be sent along
      with the rest of the header information.  Cookies must be sent
      <I
-CLASS="EMPHASIS"
+CLASS="emphasis"
 >before</I
 > any other headers are sent (this is a
      restriction of cookies, not PHP). This requires you to place
      calls to this function before any <TT
-CLASS="LITERAL"
->&lt;html&#62;</TT
+CLASS="literal"
+>&#60;html&#62;</TT
 > or
      <TT
-CLASS="LITERAL"
->&lt;head&#62;</TT
-> tags.</P
+CLASS="literal"
+>&#60;head&#62;</TT
+> tags.
+    </P
 ><P
->     All the arguments except the <TT
-CLASS="PARAMETER"
+>&#13;     All the arguments except the <TT
+CLASS="parameter"
 ><I
 >name</I
 ></TT
-> argument are
-     optional.  If only the name argument is present, the cookie by that
-     name will be deleted from the remote client.  You may also replace
-     any argument with an empty string (<I
-CLASS="EMPHASIS"
->&quot;&quot;</I
->)
-     in order to skip that argument.  The <TT
-CLASS="PARAMETER"
+> argument
+     are optional.  If only the name argument is present, the cookie
+     by that name will be deleted from the remote client.  You may
+     also replace any argument with an empty string
+     (<I
+CLASS="emphasis"
+>""</I
+>) in order to skip that
+     argument.  The <TT
+CLASS="parameter"
 ><I
 >expire</I
 ></TT
->
-     and <TT
-CLASS="PARAMETER"
+> and
+     <TT
+CLASS="parameter"
 ><I
 >secure</I
 ></TT
-> arguments are integers
-     and cannot be skipped with an empty string.  Use a zero
+> arguments are integers and cannot
+     be skipped with an empty string.  Use a zero
      (<I
-CLASS="EMPHASIS"
+CLASS="emphasis"
 >0</I
->) instead.  The <TT
-CLASS="PARAMETER"
+>) instead.  The
+     <TT
+CLASS="parameter"
 ><I
 >expire</I
 ></TT
->
-     argument is a regular Unix time integer as returned by the
-     <A
+> argument is a regular Unix time
+     integer as returned by the <A
 HREF="function.time.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >time()</B
 ></A
-> or <A
+> or
+     <A
 HREF="function.mktime.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >mktime()</B
 ></A
-> functions.
-     The <TT
-CLASS="PARAMETER"
+> functions.  The
+     <TT
+CLASS="parameter"
 ><I
 >secure</I
 ></TT
 > indicates that the cookie should
-     only be transmitted over a secure HTTPS connection.</P
+     only be transmitted over a secure HTTPS connection.
+    </P
 ><P
->  
-     Common Pitfalls:</P
+>&#13;     Common Pitfalls:
+     <P
+></P
+><UL
+><LI
 ><P
->     Cookies will not become visible until the next loading of a page that 
-     the cookie should be visible for.</P
+>&#13;        Cookies will not become visible until the next loading of a page that 
+        the cookie should be visible for.
+       </P
+></LI
+><LI
 ><P
->     Multiple calls to <B
-CLASS="FUNCTION"
+>&#13;        Cookies must be deleted with the same parameters as they were set with.
+       </P
+></LI
+></UL
+>
+    </P
+><P
+>&#13;     In PHP3, multiple calls to <B
+CLASS="function"
 >setcookie()</B
 > in the same
      script will be performed in reverse order. If you are trying to
      delete one cookie before inserting another you should put the
-     insert before the delete.</P
+     insert before the delete. In PHP4, multiple calls to
+     <B
+CLASS="function"
+>setcookie()</B
+> are performed in the order called.
+    </P
 ><P
->     Some examples follow:
+>&#13;     Some examples follow how to send cookies:
      <TABLE
 WIDTH="100%"
 BORDER="0"
@@ -191,85 +230,157 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
 >Example 1. <B
-CLASS="FUNCTION"
->setcookie()</B
-> examples</B
+CLASS="function"
+>Setcookie()</B
+> send examples</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->setcookie("TestCookie","Test Value");
-setcookie("TestCookie",$value,time()+3600);  /* expire in 1 hour */
-setcookie("TestCookie",$value,time()+3600,"/~rasmus/",".utoronto.ca",1);</PRE
+CLASS="programlisting"
+>&#13;setcookie ("TestCookie", "Test Value");
+setcookie ("TestCookie", $value,time()+3600);  /* expire in 1 hour */
+setcookie ("TestCookie", $value,time()+3600, "/~rasmus/", ".utoronto.ca", 1);
+      </PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR
 ></TABLE
-></P
+>
+    </P
 ><P
->     Note that the value portion of the cookie will automatically be
+>&#13;     Examples follow how to delete cookies send in previous example:
+     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><P
+><B
+>Example 2. <B
+CLASS="function"
+>setcookie()</B
+> delete examples</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;setcookie ("TestCookie");
+setcookie ("TestCookie", "", time());
+setcookie ("TestCookie", "", time(), "/~rasmus/", ".utoronto.ca", 1);
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+    </P
+><P
+>&#13;     Note that the value portion of the cookie will automatically be
      urlencoded when you send the cookie, and when it is received, it
      is automatically decoded and assigned to a variable by the same
      name as the cookie name.  To see the contents of our test
      cookie in a script, simply use one of the following examples:
-
-<DIV
-CLASS="INFORMALEXAMPLE"
+     <DIV
+CLASS="informalexample"
 ><P
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->echo $TestCookie;
-echo $HTTP_COOKIE_VARS["TestCookie"];</PRE
-><P
-></P
-></DIV
-></P
-><P
->	 You may also set array cookies by using array notation in the
-	 cookie name. This has the effect of setting as many cookies as
-	 you have array elements, but when the cookie is received by your
-	 script, the values are all placed in an array with the cookie's
-	 name:
-	 <DIV
-CLASS="INFORMALEXAMPLE"
-><P
-></P
-><PRE
-CLASS="PROGRAMLISTING"
->setcookie( "cookie[three]", "cookiethree" );
-setcookie( "cookie[two]", "cookietwo" );
-setcookie( "cookie[one]", "cookieone" );
-if ( isset( $cookie ) ) {
-   while( list( $name, $value ) = each( $cookie ) ) {
-	  echo "$name == $value&lt;br&gt;\n";
-   }
-}
-	  </PRE
+CLASS="programlisting"
+>&#13;echo $TestCookie;
+echo $HTTP_COOKIE_VARS["TestCookie"];
+      </PRE
+></TD
+></TR
+></TABLE
 ><P
 ></P
 ></DIV
 >
-
-	</P
+    </P
 ><P
->     For more information on cookies, see Netscape's cookie
+>&#13;     You may also set array cookies by using array notation in the
+     cookie name. This has the effect of setting as many cookies as
+     you have array elements, but when the cookie is received by your
+     script, the values are all placed in an array with the cookie's
+     name:
+     <DIV
+CLASS="informalexample"
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;setcookie ("cookie[three]", "cookiethree");
+setcookie ("cookie[two]", "cookietwo");
+setcookie ("cookie[one]", "cookieone");
+if (isset ($cookie)) {
+    while (list ($name, $value) = each ($cookie)) {
+        echo "$name == $value&#60;br&#62;\n";
+    }
+}
+      </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+>
+    </P
+><P
+>&#13;     For more information on cookies, see Netscape's cookie
      specification at <A
 HREF="http://www.netscape.com/newsref/std/cookie_spec.html"
 TARGET="_top"
 >http://www.netscape.com/newsref/std/cookie_spec.html</A
->.</P
+>.
+    </P
 ><P
->     Microsoft Internet Explorer 4 with Service Pack 1 applied does
+>&#13;     Microsoft Internet Explorer 4 with Service Pack 1 applied does
      not correctly deal with cookies that have their path parameter
-     set.</P
+     set.
+    </P
 ><P
->     Netscape Communicator 4.05 and Microsoft Internet Explorer 3.x
+>&#13;     Netscape Communicator 4.05 and Microsoft Internet Explorer 3.x
      appear to handle cookies incorrectly when the path and time
-     are not set.</P
+     are not set.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -286,7 +397,7 @@ WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
 ><A
-HREF="function.header.html"
+HREF="function.headers-sent.html"
 >Prev</A
 ></TD
 ><TD
@@ -311,7 +422,7 @@ HREF="ref.hyperwave.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->header</TD
+>header_sent</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"

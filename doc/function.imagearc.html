@@ -4,7 +4,7 @@
 >ImageArc</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="GetImageSize"
 HREF="function.getimagesize.html"><LINK
 REL="NEXT"
 TITLE="ImageChar"
-HREF="function.imagechar.html"></HEAD
+HREF="function.imagechar.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,38 +68,83 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.IMAGEARC"
+NAME="function.imagearc"
 >ImageArc</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN11472"
+NAME="AEN13395"
 ></A
->ImageArc -- draw a partial ellipse</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>ImageArc&nbsp;--&nbsp;Draw a partial ellipse</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN11475"
+NAME="AEN13398"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int imagearc</CODE
->(int im, int cx, int cy, int w, int h, int s, int e, int col);<P
+>int <B
+CLASS="function"
+>imagearc</B
+></CODE
+> (int im, int cx, int cy, int w, int h, int s, int e, int col)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     ImageArc draws a partial ellipse centered at cx, cy (top left is
-     0,0) in the image represented by im.  w and h specifies the
-     ellipse's width and height respectively while the start and end
-     points are specified in degrees indicated by the s and e
-     arguments.</P
+>&#13;     <B
+CLASS="function"
+>ImageArc()</B
+> draws a partial ellipse centered at
+     <TT
+CLASS="parameter"
+><I
+>cx</I
+></TT
+>, <TT
+CLASS="parameter"
+><I
+>cy</I
+></TT
+> (top left is
+     0, 0) in the image represented by im.  <TT
+CLASS="parameter"
+><I
+>W</I
+></TT
+>
+     and <TT
+CLASS="parameter"
+><I
+>h</I
+></TT
+> specifies the ellipse's width and
+     height respectively while the start and end points are specified
+     in degrees indicated by the <TT
+CLASS="parameter"
+><I
+>s</I
+></TT
+> and
+     <TT
+CLASS="parameter"
+><I
+>e</I
+></TT
+>.  arguments.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

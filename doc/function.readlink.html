@@ -4,7 +4,7 @@
 >readlink</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="readfile"
 HREF="function.readfile.html"><LINK
 REL="NEXT"
 TITLE="rename"
-HREF="function.rename.html"></HEAD
+HREF="function.rename.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,59 +68,81 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.READLINK"
+NAME="function.readlink"
 >readlink</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN9268"
+NAME="AEN10643"
 ></A
->readlink -- Return the target of a symbolic link</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>readlink&nbsp;--&nbsp;Returns the target of a symbolic link</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN9271"
+NAME="AEN10646"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->string readlink</CODE
->(string path);<P
+>string <B
+CLASS="function"
+>readlink</B
+></CODE
+> (string path)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->    <A
-HREF="function.readlink.html"
-><B
-CLASS="FUNCTION"
+>&#13;    <B
+CLASS="function"
 >Readlink()</B
-></A
-> does the same as the readlink C function
-    and returns the contents of the symbolic link path or 0 in case of error.</P
+> does the same as the readlink C
+    function and returns the contents of the symbolic link path or 0
+    in case of error.
+    </P
 ><P
->    See also <A
+>&#13;     See also <A
 HREF="function.symlink.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >symlink()</B
 ></A
 >,
-    <B
-CLASS="FUNCTION"
+     <B
+CLASS="function"
 >readlink()</B
-> and <A
+> and
+     <A
 HREF="function.linkinfo.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >linkinfo()</B
 ></A
->.</P
+>.
+    </P
+><DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
+><P
+><B
+>Note: </B
+>
+     This function does not work on Windows systems
+     </P
+></BLOCKQUOTE
+></DIV
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

@@ -4,7 +4,7 @@
 >chunk_split</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="Chr"
 HREF="function.chr.html"><LINK
 REL="NEXT"
 TITLE="convert_cyr_string"
-HREF="function.convert-cyr-string.html"></HEAD
+HREF="function.convert-cyr-string.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,55 +68,58 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.CHUNK-SPLIT"
+NAME="function.chunk-split"
 >chunk_split</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN24888"
+NAME="AEN33154"
 ></A
->chunk_split -- Split a string into smaller chunks</DIV
+><P
+>    (PHP3 &#62;= 3.0.6, PHP4 )</P
+>chunk_split&nbsp;--&nbsp;Split a string into smaller chunks</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN24891"
+NAME="AEN33157"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->string chunk_split</CODE
->(string string, int [<SPAN
-CLASS="OPTIONAL"
->chunklen</SPAN
->]
-      , string [<SPAN
-CLASS="OPTIONAL"
->end</SPAN
->]
-      );<P
+>string <B
+CLASS="function"
+>chunk_split</B
+></CODE
+> (string string [, int 
+       chunklen [, string 
+       end]])</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Can be used to split a string into smaller chunks which is useful
+>&#13;     Can be used to split a string into smaller chunks which is useful
      for e.g. converting <A
 HREF="function.base64-encode.html"
 >base64_encode</A
 > output to
      match RFC 2045 semantics. It inserts every
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >chunklen</I
 ></TT
 > (defaults to 76) chars the string
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >end</I
 ></TT
@@ -128,45 +134,56 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
 >Example 1. <B
-CLASS="FUNCTION"
->chunk_split()</B
+CLASS="function"
+>Chunk_split()</B
 > example</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
-># format $data using RFC 2045 semantics
+CLASS="programlisting"
+>&#13;# format $data using RFC 2045 semantics
 
-$new_string = chunk_split(base64_encode($data));&#13;</PRE
+$new_string = chunk_split (base64_encode($data));
+      </PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR
 ></TABLE
 >
-     
      This function is significantly faster than
      <A
 HREF="function.ereg-replace.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >ereg_replace()</B
 ></A
 >.
-
-    <DIV
-CLASS="NOTE"
+     <DIV
+CLASS="note"
 ><BLOCKQUOTE
-CLASS="NOTE"
+CLASS="note"
 ><P
 ><B
 >Note: </B
->      This function was added in 3.0.6.</P
+>
+       This function was added in 3.0.6.
+      </P
 ></BLOCKQUOTE
 ></DIV
-></P
+>
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

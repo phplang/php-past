@@ -4,7 +4,7 @@
 >Ora_Error</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -12,12 +12,15 @@ REL="UP"
 TITLE="Oracle functions"
 HREF="ref.oracle.html"><LINK
 REL="PREVIOUS"
-TITLE="Ora_CommitOn"
-HREF="function.ora-commiton.html"><LINK
+TITLE="Ora_Do"
+HREF="function.ora-do.html"><LINK
 REL="NEXT"
 TITLE="Ora_ErrorCode"
-HREF="function.ora-errorcode.html"></HEAD
+HREF="function.ora-errorcode.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -42,7 +45,7 @@ WIDTH="10%"
 ALIGN="left"
 VALIGN="bottom"
 ><A
-HREF="function.ora-commiton.html"
+HREF="function.ora-do.html"
 >Prev</A
 ></TD
 ><TD
@@ -65,81 +68,91 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.ORA-ERROR"
+NAME="function.ora-error"
 >Ora_Error</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN19810"
+NAME="AEN25357"
 ></A
->Ora_Error -- get Oracle error message</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>Ora_Error&nbsp;--&nbsp;get Oracle error message</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN19813"
+NAME="AEN25360"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->string Ora_Error</CODE
->(int cursor_or_connection);<P
+>string <B
+CLASS="function"
+>Ora_Error</B
+></CODE
+> (int cursor_or_connection)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Returns an error message of the form
+>&#13;     Returns an error message of the form
      <TT
-CLASS="REPLACEABLE"
+CLASS="replaceable"
 ><I
 >XXX</I
 ></TT
 >-<TT
-CLASS="REPLACEABLE"
+CLASS="replaceable"
 ><I
 >NNNNN</I
 ></TT
 >
      where <TT
-CLASS="REPLACEABLE"
+CLASS="replaceable"
 ><I
 >XXX</I
 ></TT
 > is where the error comes
      from and <TT
-CLASS="REPLACEABLE"
+CLASS="replaceable"
 ><I
 >NNNNN</I
 ></TT
 > identifies the error
      message.
-    <DIV
-CLASS="NOTE"
+     <DIV
+CLASS="note"
 ><BLOCKQUOTE
-CLASS="NOTE"
+CLASS="note"
 ><P
 ><B
 >Note: </B
 >Support for connection ids was added in 3.0.4.</P
 ></BLOCKQUOTE
 ></DIV
-></P
+>
+    </P
 ><P
->     On UNIX versions of Oracle, you can find details about an error
+>&#13;     On UNIX versions of Oracle, you can find details about an error
      message like this: <TT
-CLASS="COMPUTEROUTPUT"
-><TT
-CLASS="PROMPT"
+CLASS="computeroutput"
+>&#13;<TT
+CLASS="prompt"
 >$</TT
 > <TT
-CLASS="USERINPUT"
+CLASS="userinput"
 ><B
 >oerr ora <TT
-CLASS="REPLACEABLE"
+CLASS="replaceable"
 ><I
 >00001</I
 ></TT
@@ -151,7 +164,8 @@ statement attempted to insert a duplicate key //         For Trusted
 ORACLE configured in DBMS MAC mode, you may see //         this message
 if a duplicate entry exists at a different level.  // *Action: Either
 remove the unique restriction or do not insert the key </TT
-></P
+>
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -168,7 +182,7 @@ WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
 ><A
-HREF="function.ora-commiton.html"
+HREF="function.ora-do.html"
 >Prev</A
 ></TD
 ><TD
@@ -193,7 +207,7 @@ HREF="function.ora-errorcode.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->Ora_CommitOn</TD
+>Ora_Do</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"

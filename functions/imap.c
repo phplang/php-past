@@ -33,7 +33,7 @@
    |          Andrew Skalski      <askalski@chek.com>                  |
    +----------------------------------------------------------------------+
  */
-/* $Id: imap.c,v 1.87 2000/03/26 04:29:35 chagenbu Exp $ */
+/* $Id: imap.c,v 1.89 2000/04/19 20:01:14 askalski Exp $ */
 
 #define IMAP41
 
@@ -61,6 +61,7 @@
 #include "imap.h"
 #include "mail.h"
 #include "rfc822.h"
+#include "utf8.h"
 #include "modules.h"
 #if (WIN32|WINNT)
 #include "winsock.h"
@@ -201,6 +202,7 @@ function_entry imap_functions[] = {
 	{"imap_utf8", php3_imap_utf8, NULL},
 	{"imap_utf7_decode", php3_imap_utf7_decode, NULL},
 	{"imap_utf7_encode", php3_imap_utf7_encode, NULL},
+	{"imap_mime_header_decode", php3_imap_mime_header_decode, NULL},
 	{NULL, NULL, NULL}
 };
 
@@ -2823,6 +2825,115 @@ void php3_imap_utf7_encode(INTERNAL_FUNCTION_PARAMETERS)
 #undef B64
 #undef UNB64
 
+/* {{{ proto object imap_mime_header_decode(string str)
+   Decode mime header element in accordance with RFC 2047 and return array of objects containing 'charset' encoding and decoded 'text' */
+void php3_imap_mime_header_decode(INTERNAL_FUNCTION_PARAMETERS)
+{
+	/* string, string-endp, charset, charset-endp,
+	 * encoding, encoding-endp, text, text-endp,
+	 * language separator, marked start of unencoded text */
+	unsigned char	*s, *se, *cs, *ce, *e, *ee, *t, *te, *ls, *mark;
+	/* decoded text */
+	SIZEDTEXT	decoded;
+	int		argc;
+	pval		*arg, obj;
+
+	/* collect arguments */
+	argc = ARG_COUNT(ht);
+	if (argc != 1 || getParameters(ht, argc, &arg) == FAILURE) {
+		WRONG_PARAM_COUNT;
+	}
+	convert_to_string(arg);
+	s = arg->value.str.val;
+	se = s + arg->value.str.len;
+
+	/* init return value */
+	if (array_init(return_value) == FAILURE) {
+		RETURN_FALSE;
+	}
+
+	/* conversion routine derived from Mark Crispin's c-client library
+	 * function utf_mime2text()
+	 */
+#define MINENCWORD 9
+	for (mark = s; s < se; s++) {
+		/* try to tokenize as a mime2 encoded word */
+		if ((se - s) > MINENCWORD && *s == '=' && s[1] == '?' &&
+			(cs = mime2_token(s + 2, se, &ce)) &&
+			(e = mime2_token(ce + 1, se, &ee)) &&
+			(t = mime2_text(e + 2, se, &te)))
+		{
+			/* try to decode the text */
+			if (!mime2_decode(e, t, te, &decoded)) {
+				/* skip over the block */
+				s = te + 1;
+				continue;
+			}
+
+			/* first, flush out any non-encoded text */
+			if (mark < s) {
+				object_init(&obj);
+				add_property_string(&obj,
+					"charset", "default", 1);
+				add_property_stringl(&obj,
+					"text", mark, s - mark, 1);
+				add_next_index_object(return_value, obj);
+			}
+
+			/* advance the string pointer and the mark */
+			s = te + 1;
+			mark = s + 1;
+
+			/* tie off charset and remove language specifier */
+			*ce = '\0';
+			if (ls = strchr(cs, '*')) *ls = '\0';
+			/* flush decoded text */
+			object_init(&obj);
+			add_property_string(&obj, "charset", cs, 1);
+			add_property_stringl(&obj, "text",
+				decoded.data, decoded.size, 1);
+			add_next_index_object(return_value, obj);
+			/* restore charset and free decoded data */
+			if (ls) *ls = '*';
+			*ce = '?';
+			fs_give((void**) &decoded.data);
+
+			/* skip trailing whitespace; handle continuations */
+			for (t = s + 1; t < se && (*t == ' ' || *t == '\t');
+				t++);
+			if (t < se - MINENCWORD) switch (*t) {
+			case '=':	/* encoded block? */
+				if (t[1] == '?') s = t - 1;
+				break;
+			case '\r':	/* CR */
+				if (t[1] == '\n') t++;
+			case '\n':	/* LF */
+				if (t[1] == ' ' || t[1] == '\t') {
+					/* eat up leading spaces/tabs */
+					do t++;
+					while (t < se - MINENCWORD &&
+						(t[1] == ' ' || t[1] == '\t'));
+					/* found something interesting */
+					if (t < se - MINENCWORD &&
+						t[1] == '=' && t[2] == '?')
+					{
+						s = t;
+					}
+				}
+			}
+		}
+	}
+#undef MINENCWORD
+	/* flush out remaining non-encoded text */
+	if (mark < se) {
+		object_init(&obj);
+		add_property_string(&obj, "charset", "default", 1);
+		add_property_stringl(&obj, "text", mark, se - mark, 1);
+		add_next_index_object(return_value, obj);
+	}
+}
+/* }}} */
+
 /* {{{ proto int imap_setflag_full(int stream_id, string sequence, string flag [, int options])
    Sets flags on messages */
 void php3_imap_setflag_full(INTERNAL_FUNCTION_PARAMETERS)
@@ -2937,32 +3048,39 @@ void php3_imap_sort(INTERNAL_FUNCTION_PARAMETERS)
    Get the full unfiltered header for a message */
 void php3_imap_fetchheader(INTERNAL_FUNCTION_PARAMETERS)
 {
-	pval *streamind, * msgno, * flags;
-	int ind, ind_type;
+	pval *streamind, *msgno, *flags;
+	int ind, ind_type, msgindex;
 	pils *imap_le_struct;
 	int myargc = ARG_COUNT(ht);
 	if (myargc < 2 || myargc > 3 || getParameters(ht,myargc,&streamind,&msgno,&flags) == FAILURE) {
 		WRONG_PARAM_COUNT;
 	}
-
+	
 	convert_to_long(streamind);
 	convert_to_long(msgno);
-	if(myargc == 3) convert_to_long(flags);
+	if (myargc == 3) convert_to_long(flags);
 	ind = streamind->value.lval;
-
+	
 	imap_le_struct = (pils *)php3_list_find(ind, &ind_type);
 	if (!imap_le_struct || !IS_STREAM(ind_type)) {
 		php3_error(E_WARNING, "Unable to find stream pointer");
 		RETURN_FALSE;
 	}
 	
-	if ((msgno->value.lval < 1) || (msgno->value.lval > imap_le_struct->imap_stream->nmsgs)) {
+	if ((myargc == 3) && (flags->value.lval & FT_UID)) {
+		/* This should be cached; if it causes an extra RTT to the
+           IMAP server, then that's the price we pay for making sure
+           we don't crash. */
+		msgindex = mail_msgno(imap_le_struct->imap_stream, msgno->value.lval);
+	} else {
+		msgindex = msgno->value.lval;
+	}
+	if ((msgindex < 1) || ((unsigned) msgindex > imap_le_struct->imap_stream->nmsgs)) {
 		php3_error(E_WARNING, "Bad message number");
 		RETURN_FALSE;
 	}
 	
 	RETVAL_STRING(mail_fetchheader_full (imap_le_struct->imap_stream,msgno->value.lval,NIL,NIL,myargc == 3 ? flags->value.lval : NIL),1);
-
 }
 /* }}} */
 

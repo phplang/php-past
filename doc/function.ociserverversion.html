@@ -4,7 +4,7 @@
 >OCIServerVersion</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="OCIColumnSize"
 HREF="function.ocicolumnsize.html"><LINK
 REL="NEXT"
 TITLE="OCIStatementType"
-HREF="function.ocistatementtype.html"></HEAD
+HREF="function.ocistatementtype.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,34 +68,43 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.OCISERVERVERSION"
+NAME="function.ociserverversion"
 >OCIServerVersion</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN20365"
+NAME="AEN26030"
 ></A
->OCIServerVersion -- Return a string containing server version information.</DIV
+><P
+>    (PHP3 &#62;= 3.0.4, PHP4 )</P
+>OCIServerVersion&nbsp;--&nbsp;Return a string containing server version information.</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN20368"
+NAME="AEN26033"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->string OCIServerVersion</CODE
->(int conn);<P
+>string <B
+CLASS="function"
+>OCIServerVersion</B
+></CODE
+> (int conn)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     <TABLE
+>&#13;     <TABLE
 WIDTH="100%"
 BORDER="0"
 CELLPADDING="0"
@@ -101,18 +113,27 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
 >Example 1. OCIServerVersion</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->&lt;?php
+CLASS="programlisting"
+>&#13;&#60;?php
    $conn = OCILogon("scott","tiger");
    print "Server Version: " . OCIServerVersion($conn);
    OCILogOff($conn);
 ?&#62;</PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR

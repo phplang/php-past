@@ -4,7 +4,7 @@
 >posix_kill</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="POSIX functions"
 HREF="ref.posix.html"><LINK
 REL="NEXT"
 TITLE="posix_getpid"
-HREF="function.posix-getpid.html"></HEAD
+HREF="function.posix-getpid.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,48 +68,57 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.POSIX-KILL"
+NAME="function.posix-kill"
 >posix_kill</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN22694"
+NAME="AEN28710"
 ></A
->posix_kill -- Send a signal to a process</DIV
+><P
+>    (PHP3 &#62;= 3.0.13, PHP4 &#62;= 4.0b4)</P
+>posix_kill&nbsp;--&nbsp;Send a signal to a process</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN22697"
+NAME="AEN28713"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->bool posix_kill</CODE
->(int pid, int sig);<P
+>bool <B
+CLASS="function"
+>posix_kill</B
+></CODE
+> (int pid, int sig)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Send the signal <TT
-CLASS="PARAMETER"
+>&#13;     Send the signal <TT
+CLASS="parameter"
 ><I
 >sig</I
 ></TT
 > to the process
      with the process identifier <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >pid</I
 ></TT
 >.
      Returns FALSE, if unable to send the signal, TRUE otherwise.</P
 ><P
->     See also the kill(2) manual page of your POSIX system, which
+>&#13;     See also the kill(2) manual page of your POSIX system, which
      contains additional information about negative process
      identifiers, the special pid 0, the special pid -1, and the
      signal number 0.</P

@@ -28,7 +28,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: interbase.c,v 1.29 2000/03/13 18:50:55 jah Exp $ */
+/* $Id: interbase.c,v 1.32 2000/06/11 16:21:43 eschmid Exp $ */
 
 /* TODO: Arrays, roles?
 A lot... */
@@ -531,7 +531,7 @@ void php3_info_ibase(void)
 
     php3_printf(
                 "<table>"
-                "<tr><td>Revision:</td><td>$Revision: 1.29 $</td></tr>\n"
+                "<tr><td>Revision:</td><td>$Revision: 1.32 $</td></tr>\n"
 #ifdef COMPILE_DL
                 "<tr><td>Dynamic module:</td><td>Yes</td></tr>\n"
 #endif
@@ -679,8 +679,24 @@ static void _php3_ibase_connect(INTERNAL_FUNCTION_PARAMETERS, int persistent)
 
 	if (persistent) {
 		list_entry *le;
+		int open_new_connection = 1;
 		
-		if (_php3_hash_find(plist, hashed_details, hashed_details_length+1, (void **) &le)==FAILURE) {
+		if (_php3_hash_find(plist, hashed_details, hashed_details_length+1, (void **) &le)!=FAILURE) {
+			char tmp_1[] = {isc_info_base_level, isc_info_end};
+			char tmp_2[8]; /* Enough? Hope so... */ 
+
+			if (le->type != IBASE_GLOBAL(php3_ibase_module).le_plink) {
+				RETURN_FALSE;
+			}
+			/* Check if connection has timed out */
+			ib_link = (ibase_db_link *) le->ptr;
+			if (!isc_database_info(IB_STATUS, &ib_link->link, sizeof(tmp_1), tmp_1, sizeof(tmp_2), tmp_2)) {
+				open_new_connection = 0;
+			}
+		}
+
+		/* There was no previous connection to use or it has timed out */
+		if (open_new_connection) {
 			list_entry new_le;
 			
 			if (IBASE_GLOBAL(php3_ibase_module).max_links!=-1 && IBASE_GLOBAL(php3_ibase_module).num_links>=IBASE_GLOBAL(php3_ibase_module).max_links) {
@@ -716,12 +732,6 @@ static void _php3_ibase_connect(INTERNAL_FUNCTION_PARAMETERS, int persistent)
 			}
 			IBASE_GLOBAL(php3_ibase_module).num_links++;
 			IBASE_GLOBAL(php3_ibase_module).num_persistent++;
-		} else {
-			if (le->type != IBASE_GLOBAL(php3_ibase_module).le_plink) {
-				RETURN_FALSE;
-			}
-			/* TODO: ensure that the ib_link did not die */
-			ib_link = (ibase_db_link *) le->ptr;
 		}
 		return_value->value.lval = IBASE_TRANS_ON_LINK *
 			php3_list_insert(ib_link, IBASE_GLOBAL(php3_ibase_module).le_plink);
@@ -1572,6 +1582,11 @@ static int _php3_ibase_var_pval(pval *val, void *data, int type, int len, int sc
 			long timestamp = -1;
 					 
 			isc_decode_date((ISC_QUAD *) data, &t);
+			/*
+			  XXX - Might have to remove this later - seems that isc_decode_date()
+			   always sets tm_isdst to 0, sometimes incorrectly (InterBase 6 bug?)
+			*/
+			t.tm_isdst = -1;
 			timestamp = mktime(&t);
 #if HAVE_TM_ZONE
 			t.tm_zone = tzname[0];
@@ -2548,7 +2563,7 @@ PHP_FUNCTION(ibase_blob_echo)
 extern int le_fp,le_pp;
 extern int wsa_fp; /*to handle reading and writing to windows sockets*/
 
-/* {{{ proto string ibase_blob_import([link_identifier,] file_id)
+/* {{{ proto string ibase_blob_import([link_identifier,] int file_id)
    Create blob, copy file in it, and close it */
 
 

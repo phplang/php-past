@@ -4,7 +4,7 @@
 >OCIParse</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="OCIColumnType"
 HREF="function.ocicolumntype.html"><LINK
 REL="NEXT"
 TITLE="OCIError"
-HREF="function.ocierror.html"></HEAD
+HREF="function.ocierror.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,58 +68,65 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.OCIPARSE"
+NAME="function.ociparse"
 >OCIParse</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN20511"
+NAME="AEN26183"
 ></A
->OCIParse -- Parse a query and return a statement</DIV
+><P
+>    (PHP3 &#62;= 3.0.4, PHP4 )</P
+>OCIParse&nbsp;--&nbsp;Parse a query and return a statement</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN20514"
+NAME="AEN26186"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int OCIParse</CODE
->(int conn, strint query);<P
+>int <B
+CLASS="function"
+>OCIParse</B
+></CODE
+> (int conn, strint query)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     <A
-HREF="function.ociparse.html"
-><B
-CLASS="FUNCTION"
+>&#13;     <B
+CLASS="function"
 >OCIParse()</B
-></A
 > parses the <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >query</I
 ></TT
 > 
      using  <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >conn</I
 ></TT
->.  It returns true if the query is 
-     valid, false if not. The <TT
-CLASS="PARAMETER"
+>.  It returns the statement
+     identity if the query is valid, false if not. The
+     <TT
+CLASS="parameter"
 ><I
 >query</I
 ></TT
-> can be any valid 
-     SQL statement.</P
+> can be any valid SQL statement.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

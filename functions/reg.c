@@ -28,7 +28,7 @@
    |          Jaakko Hyvätti <jaakko@hyvatti.iki.fi>                      | 
    +----------------------------------------------------------------------+
  */
-/* $Id: reg.c,v 1.106 2000/01/01 04:31:16 sas Exp $ */
+/* $Id: reg.c,v 1.108 2000/08/04 12:01:39 eschmid Exp $ */
 #include <stdio.h>
 #include "php.h"
 #include "internal_functions.h"
@@ -467,7 +467,7 @@ static void _php3_eregreplace(INTERNAL_FUNCTION_PARAMETERS, int icase)
 	STR_FREE(pattern);
 }
 
-/* {{{ proto string ereg_replace(string pattern, string string [, array registers])
+/* {{{ proto string ereg_replace(string pattern, string replacement, string string)
    Replace regular expression */
 void php3_eregreplace(INTERNAL_FUNCTION_PARAMETERS)
 {
@@ -475,7 +475,7 @@ void php3_eregreplace(INTERNAL_FUNCTION_PARAMETERS)
 }
 /* }}} */
 
-/* {{{ proto string eregi_replace(string pattern, string string [, array registers])
+/* {{{ proto string eregi_replace(string pattern, string replacement, string string)
    Case insensitive replace regular expression */
 void php3_eregireplace(INTERNAL_FUNCTION_PARAMETERS)
 {

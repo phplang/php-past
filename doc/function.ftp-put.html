@@ -4,7 +4,7 @@
 >ftp_put</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="ftp_fget"
 HREF="function.ftp-fget.html"><LINK
 REL="NEXT"
 TITLE="ftp_fput"
-HREF="function.ftp-fput.html"></HEAD
+HREF="function.ftp-fput.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,52 +68,61 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.FTP-PUT"
+NAME="function.ftp-put"
 >ftp_put</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN9971"
+NAME="AEN11541"
 ></A
->ftp_put -- Uploads a file to the FTP server.</DIV
+><P
+>    (PHP3 &#62;= 3.0.13, PHP4 &#62;= 4.0b4)</P
+>ftp_put&nbsp;--&nbsp;Uploads a file to the FTP server.</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN9974"
+NAME="AEN11544"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int ftp_put</CODE
->(int ftp_stream, string remote_file, string local_file, int mode);<P
+>int <B
+CLASS="function"
+>ftp_put</B
+></CODE
+> (int ftp_stream, string remote_file, string local_file, int mode)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Returns true on success, false on error.</P
+>&#13;     Returns true on success, false on error.</P
 ><P
->     <B
-CLASS="FUNCTION"
+>&#13;     <B
+CLASS="function"
 >ftp_put()</B
 > stores <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >local_file</I
 ></TT
 >
      on the FTP server, as <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >remote_file</I
 ></TT
 >.  The transfer
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >mode</I
 ></TT

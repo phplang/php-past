@@ -23,7 +23,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: hw.c,v 1.55 2000/02/23 15:05:08 steinm Exp $ */
+/* $Id: hw.c,v 1.56 2000/06/12 13:15:41 eschmid Exp $ */
 
 #if COMPILE_DL
 #include "dl/phpdl.h"
@@ -744,7 +744,7 @@ static void php3_hw_do_connect(INTERNAL_FUNCTION_PARAMETERS, int persistent)
 
 /* Start of user level functions */
 /* ***************************** */
-/* {{{ proto int hw_connect(string host, int port [string username [, string password]])
+/* {{{ proto int hw_connect(string host, int port [, string username [, string password]])
    Connect to the Hyperwave server */
 PHP_FUNCTION(hw_connect)
 {
@@ -3276,7 +3276,7 @@ PHP_FUNCTION(hw_identify) {
 /* }}} */
 
 /* {{{ proto array hw_objrec2array(string objrec)
-   Returns object array of object record*/
+   Returns object array of object record */
 PHP_FUNCTION(hw_objrec2array) {
 	pval *arg1;
 	HW_TLS_VARS;
@@ -3455,7 +3455,7 @@ PHP_FUNCTION(hw_insdoc) {
 /* }}} */
 
 /* {{{ proto int hw_getsrcbydestobj(int link, int destid)
-   Returns a object id of source docment by destination anchor */
+   Returns a object id of source document by destination anchor */
 PHP_FUNCTION(hw_getsrcbydestobj) {
 	pval *arg1, *arg2;
 	int link, type, id;
@@ -3522,7 +3522,7 @@ PHP_FUNCTION(hw_mapid) {
 /* }}} */
 
 /* {{{ proto string hw_getrellink(int link, int rootid, int sourceid, int destid)
-   Get a link form a source to destination relative to rootid */
+   Get a link from a source to destination relative to rootid */
 PHP_FUNCTION(hw_getrellink) {
 	pval *arg1, *arg2, *arg3, *arg4;
 	int link, type;

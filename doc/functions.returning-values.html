@@ -4,7 +4,7 @@
 >Returning values</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="Function arguments"
 HREF="functions.arguments.html"><LINK
 REL="NEXT"
 TITLE="old_function"
-HREF="functions.old-syntax.html"></HEAD
+HREF="functions.old-syntax.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="sect1"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -64,51 +67,101 @@ HREF="functions.old-syntax.html"
 ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><DIV
-CLASS="SECT1"
+CLASS="sect1"
 ><H1
-CLASS="SECT1"
+CLASS="sect1"
 ><A
-NAME="FUNCTIONS.RETURNING-VALUES"
+NAME="functions.returning-values"
 >Returning values</A
 ></H1
 ><P
->     Values are returned by using the optional return statement. Any
-     type may be returned, including lists and objects.
+>&#13;    Values are returned by using the optional return statement. Any
+    type may be returned, including lists and objects.
  
-     <DIV
-CLASS="INFORMALEXAMPLE"
+    <DIV
+CLASS="informalexample"
 ><P
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->function square ($num) {
+CLASS="programlisting"
+>&#13;function square ($num) {
     return $num * $num;
 }
 echo square (4);   // outputs '16'.
-      </PRE
+     </PRE
+></TD
+></TR
+></TABLE
 ><P
 ></P
 ></DIV
-></P
+>
+   </P
 ><P
->     You can't return multiple values from a function, but similar
-     results can be obtained by returning a list.
+>&#13;    You can't return multiple values from a function, but similar
+    results can be obtained by returning a list.
  
-     <DIV
-CLASS="INFORMALEXAMPLE"
+    <DIV
+CLASS="informalexample"
 ><P
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->function small_numbers() {
-   return array (0, 1, 2);
+CLASS="programlisting"
+>&#13;function small_numbers() {
+    return array (0, 1, 2);
 }
 list ($zero, $one, $two) = small_numbers();
-      </PRE
+     </PRE
+></TD
+></TR
+></TABLE
 ><P
 ></P
 ></DIV
+>
+   </P
+><P
+>&#13;    To return a reference from a function, you have to use
+    the reference operator &#38; in both the function declaration and
+    when assigning the return value to a variable:
+    <DIV
+CLASS="informalexample"
+><P
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;function &#38;returns_reference() {
+    return &#38;$someref;
+}
+
+$newref = &#38;returns_reference();
+     </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+>
+   </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -164,7 +217,7 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><TT
-CLASS="LITERAL"
+CLASS="literal"
 >old_function</TT
 ></TD
 ></TR

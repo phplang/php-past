@@ -610,7 +610,7 @@ void php3_mcal_create_calendar(INTERNAL_FUNCTION_PARAMETERS)
 }
 /* }}} */
 
-/* {{{ proto string mcal_rename(int stream_id, string src_calendar, string dest_calendar)
+/* {{{ proto string mcal_rename_calendar(int stream_id, string src_calendar, string dest_calendar)
    Rename a calendar */
 void php3_mcal_rename_calendar(INTERNAL_FUNCTION_PARAMETERS)
 {

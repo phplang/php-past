@@ -4,7 +4,7 @@
 >hw_Connect</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="hw_Close"
 HREF="function.hw-close.html"><LINK
 REL="NEXT"
 TITLE="hw_Cp"
-HREF="function.hw-cp.html"></HEAD
+HREF="function.hw-cp.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,44 +68,53 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.HW-CONNECT"
+NAME="function.hw-connect"
 >hw_Connect</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN10463"
+NAME="AEN12073"
 ></A
->hw_Connect -- opens a connection</DIV
+><P
+>    (PHP3 &#62;= 3.0.3, PHP4 )</P
+>hw_Connect&nbsp;--&nbsp;opens a connection</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN10466"
+NAME="AEN12076"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int hw_connect</CODE
->(string host, int port, string username, string password);<P
+>int <B
+CLASS="function"
+>hw_connect</B
+></CODE
+> (string host, int port, string username, string password)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Opens a connection to a Hyperwave server and returns a connection
+>&#13;     Opens a connection to a Hyperwave server and returns a connection
      index on success, or false if the connection
      could not be made. Each of the arguments should be a quoted string,
      except for the port number. The <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >username</I
 ></TT
 > and
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >password</I
 ></TT
@@ -114,12 +126,9 @@ CLASS="PARAMETER"
      multiple connections open at once. Keep in mind, that the password
      is not encrypted.</P
 ><P
->     See also <A
-HREF="function.hw-pconnect.html"
-><B
-CLASS="FUNCTION"
+>&#13;     See also <B
+CLASS="function"
 >hw_pConnect()</B
-></A
 >.</P
 ></DIV
 ><DIV

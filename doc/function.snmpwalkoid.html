@@ -4,7 +4,7 @@
 >snmpwalkoid</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="snmpwalk"
 HREF="function.snmpwalk.html"><LINK
 REL="NEXT"
 TITLE="snmp_get_quick_print"
-HREF="function.snmp-get-quick-print.html"></HEAD
+HREF="function.snmp-get-quick-print.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,125 +68,144 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.SNMPWALKOID"
+NAME="function.snmpwalkoid"
 >snmpwalkoid</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN24621"
+NAME="AEN32959"
 ></A
->snmpwalkoid -- Query for a tree of information about a network entity
+><P
+>    (PHP3 &#62;= 3.0.8, PHP4 &#62;= 4.0b2)</P
+>snmpwalkoid&nbsp;--&nbsp;Query for a tree of information about a network entity
     </DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN24624"
+NAME="AEN32962"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->array snmpwalkoid</CODE
->(string hostname, string community, string object_id, int [<SPAN
-CLASS="OPTIONAL"
->timeout</SPAN
->]
-     , int [<SPAN
-CLASS="OPTIONAL"
->retries</SPAN
->]
-     );<P
+>array <B
+CLASS="function"
+>snmpwalkoid</B
+></CODE
+> (string hostname, string community, string object_id [, int timeout [, int retries]])</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Returns an associative array with object ids and their respective
+>&#13;     Returns an associative array with object ids and their respective
      object value starting from the <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >object_id</I
 ></TT
 >
      as root and false on error.</P
 ><P
->     <B
-CLASS="FUNCTION"
+>&#13;     <B
+CLASS="function"
 >snmpwalkoid()</B
 > function is used to read all
      object ids and their respective values from an SNMP agent
      specified by the hostname. Community specifies the read
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >community</I
 ></TT
 > for that agent. A null
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >object_id</I
 ></TT
 > is taken as the root of the SNMP
      objects tree and all objects under that tree are returned as an
      array. If <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >object_id</I
 ></TT
 > is specified, all the
      SNMP objects below that <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >object_id</I
 ></TT
 > are
      returned.</P
 ><P
->     The existence of <B
-CLASS="FUNCTION"
+>&#13;     The existence of <B
+CLASS="function"
 >snmpwalkoid()</B
 > and
      <A
 HREF="function.snmpwalk.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >snmpwalk()</B
 ></A
 > has historical reasons.  Both
      functions are provided for backward compatibility.
 
      <DIV
-CLASS="INFORMALEXAMPLE"
+CLASS="informalexample"
 ><P
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
+CLASS="programlisting"
 > 
 $a = snmpwalkoid("127.0.0.1", "public", ""); 
       </PRE
+></TD
+></TR
+></TABLE
 ><P
 ></P
 ></DIV
 ></P
 ><P
->     Above function call would return all the SNMP objects from the
+>&#13;     Above function call would return all the SNMP objects from the
      SNMP agent running on localhost. One can step through the values
      with a loop
 
      <DIV
-CLASS="INFORMALEXAMPLE"
+CLASS="informalexample"
 ><P
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->for (reset($a); $i = key($a); next($a)) {
-    echo "$i: $a[$i]&lt;br&#62;\n";
+CLASS="programlisting"
+>&#13;for (reset($a); $i = key($a); next($a)) {
+    echo "$i: $a[$i]&#60;br&#62;\n";
 }
       </PRE
+></TD
+></TR
+></TABLE
 ><P
 ></P
 ></DIV

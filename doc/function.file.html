@@ -4,7 +4,7 @@
 >file</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="fgetss"
 HREF="function.fgetss.html"><LINK
 REL="NEXT"
 TITLE="file_exists"
-HREF="function.file-exists.html"></HEAD
+HREF="function.file-exists.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,33 +68,40 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.FILE"
+NAME="function.file"
 >file</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN8602"
+NAME="AEN9800"
 ></A
->file -- read entire file into an array</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>file&nbsp;--&nbsp;Reads entire file into an array</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN8605"
+NAME="AEN9803"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->array file</CODE
->(string filename, int [<SPAN
-CLASS="OPTIONAL"
->use_include_path</SPAN
->]);<P
+>array <B
+CLASS="function"
+>file</B
+></CODE
+> (string filename [, int 
+       use_include_path])</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
@@ -99,43 +109,86 @@ CLASS="OPTIONAL"
      Identical to <A
 HREF="function.readfile.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >readfile()</B
 ></A
->, except that <B
-CLASS="FUNCTION"
+>, except that
+     <B
+CLASS="function"
 >file()</B
->
-     returns the file in an array. Each element of the array corresponds
-	 to a line in the file, with the newline still attached.</P
+> returns the file in an array. Each
+     element of the array corresponds to a line in the file, with the
+     newline still attached.
+    </P
 ><P
->     You can use the optional second parameter and set it to "1", if
+>&#13;     You can use the optional second parameter and set it to "1", if
      you want to search for the file in the <A
-HREF="configuration.html#INI.INCLUDE-PATH"
+HREF="configuration.html#ini.include-path"
 >include_path</A
->, too.</P
+>, too.
+    </P
+><P
+>&#13;     <DIV
+CLASS="informalexample"
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;&#60;?php
+// get a web page into an array and print it out
+$fcontents = file ('http://www.php.net');
+while (list ($line_num, $line) = each ($fcontents)) {
+    echo "&#60;b&#62;Line $line_num:&#60;/b&#62; " . htmlspecialchars ($line) . "&#60;br&#62;\n";
+}
+
+// get a web page into a string
+$fcontents = join ('', file ('http://www.php.net'));
+?&#62;
+      </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+>
+    </P
 ><P
 > 
      See also <A
 HREF="function.readfile.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >readfile()</B
 ></A
 >,
      <A
 HREF="function.fopen.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >fopen()</B
 ></A
->, and <A
+>, <A
+HREF="function.fsockopen.html"
+><B
+CLASS="function"
+>fsockopen()</B
+></A
+>, and
+     <A
 HREF="function.popen.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >popen()</B
 ></A
->.</P
+>.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

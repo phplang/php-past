@@ -4,20 +4,23 @@
 >next</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
-TITLE="Array functions"
+TITLE="Array Functions"
 HREF="ref.array.html"><LINK
 REL="PREVIOUS"
-TITLE="list"
-HREF="function.list.html"><LINK
+TITLE="natcasesort"
+HREF="function.natcasesort.html"><LINK
 REL="NEXT"
 TITLE="pos"
-HREF="function.pos.html"></HEAD
+HREF="function.pos.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -42,7 +45,7 @@ WIDTH="10%"
 ALIGN="left"
 VALIGN="bottom"
 ><A
-HREF="function.list.html"
+HREF="function.natcasesort.html"
 >Prev</A
 ></TD
 ><TD
@@ -65,45 +68,56 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.NEXT"
+NAME="function.next"
 >next</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN4330"
+NAME="AEN4748"
 ></A
->next --      Advance the internal array pointer of an array
+><P
+>    (PHP3 , PHP4 )</P
+>next&nbsp;--&nbsp;
+     Advance the internal array pointer of an array
     </DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN4333"
+NAME="AEN4751"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->mixed next</CODE
->(array array);<P
+>mixed <B
+CLASS="function"
+>next</B
+></CODE
+> (array array)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Returns the array element in the next place that's pointed by the
-     internal array pointer, or false if there are no more elements.</P
+>&#13;     Returns the array element in the next place that's pointed by the
+     internal array pointer, or false if there are no more elements.
+    </P
 ><P
->     <B
-CLASS="FUNCTION"
->next()</B
+>&#13;     <B
+CLASS="function"
+>Next()</B
 > behaves like
      <A
 HREF="function.current.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >current()</B
 ></A
 >, with one difference.  It advances
@@ -112,15 +126,15 @@ CLASS="FUNCTION"
      advances the internal array pointer by one.  If advancing the
      internal array pointer results in going beyond the end of the
      element list, <B
-CLASS="FUNCTION"
+CLASS="function"
 >next()</B
 > returns false.
      <DIV
-CLASS="WARNING"
+CLASS="warning"
 ><P
 ></P
 ><TABLE
-CLASS="WARNING"
+CLASS="warning"
 BORDER="1"
 WIDTH="100%"
 ><TR
@@ -134,13 +148,14 @@ ALIGN="CENTER"
 ><TD
 ALIGN="LEFT"
 ><P
->       If the array contains empty elements then this function will
-       return false for these elements as well.  To properly traverse
-       an array which may contain empty elements see the
+>&#13;       If the array contains empty elements, or elements that have a key
+       value of 0 then this function will return false for these elements 
+       as well.  To properly traverse an array which may contain empty 
+       elements or elements with key values of 0 see the
        <A
 HREF="function.each.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >each()</B
 ></A
 > function.
@@ -149,35 +164,37 @@ CLASS="FUNCTION"
 ></TR
 ></TABLE
 ></DIV
-></P
+>
+    </P
 ><P
->     See also:
+>&#13;     See also:
      <A
 HREF="function.current.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >current()</B
 ></A
 >, <A
 HREF="function.end.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >end()</B
 ></A
->
+>,
      <A
 HREF="function.prev.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >prev()</B
 ></A
-> and <A
+>, and <A
 HREF="function.reset.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >reset()</B
 ></A
-></P
+>.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -194,7 +211,7 @@ WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
 ><A
-HREF="function.list.html"
+HREF="function.natcasesort.html"
 >Prev</A
 ></TD
 ><TD
@@ -219,7 +236,7 @@ HREF="function.pos.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->list</TD
+>natcasesort</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"

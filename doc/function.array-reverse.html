@@ -4,20 +4,23 @@
 >array_reverse</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
-TITLE="Array functions"
+TITLE="Array Functions"
 HREF="ref.array.html"><LINK
 REL="PREVIOUS"
-TITLE="array_push"
-HREF="function.array-push.html"><LINK
+TITLE="array_rand"
+HREF="function.array-rand.html"><LINK
 REL="NEXT"
 TITLE="array_shift"
-HREF="function.array-shift.html"></HEAD
+HREF="function.array-shift.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -42,7 +45,7 @@ WIDTH="10%"
 ALIGN="left"
 VALIGN="bottom"
 ><A
-HREF="function.array-push.html"
+HREF="function.array-rand.html"
 >Prev</A
 ></TD
 ><TD
@@ -65,44 +68,58 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.ARRAY-REVERSE"
+NAME="function.array-reverse"
 >array_reverse</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN3720"
+NAME="AEN3997"
 ></A
->array_reverse -- Return an array with elements in reverse order</DIV
+><P
+>    (PHP4 &#62;= 4.0b4)</P
+>array_reverse&nbsp;--&nbsp;
+     Return an array with elements in reverse order
+    </DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN3723"
+NAME="AEN4000"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->array array_reverse</CODE
->(array array);<P
+>array <B
+CLASS="function"
+>array_reverse</B
+></CODE
+> (array array)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     <B
-CLASS="FUNCTION"
->array_reverse()</B
-> takes input <TT
-CLASS="PARAMETER"
+>&#13;     <B
+CLASS="function"
+>Array_reverse()</B
+> takes input
+     <TT
+CLASS="parameter"
 ><I
 >array</I
 ></TT
-> and returns a new array with the order of the elements reversed.</P
+> and returns a new array with the
+     order of the elements reversed.
+    </P
 ><P
->     <TABLE
+>&#13;     <TABLE
 WIDTH="100%"
 BORDER="0"
 CELLPADDING="0"
@@ -111,37 +128,44 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
 >Example 1. <B
-CLASS="FUNCTION"
->array_reverse()</B
+CLASS="function"
+>Array_reverse()</B
 > example</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->$input = array("php", 4.0, array("green", "red"));
-$result = array_reverse($input);
+CLASS="programlisting"
+>&#13;$input = array ("php", 4.0, array ("green", "red"));
+$result = array_reverse ($input);
       </PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR
 ></TABLE
 >
-     This makes $result have array(array("green", "red"), 4.0, "php").
-
-     <DIV
-CLASS="NOTE"
-><BLOCKQUOTE
-CLASS="NOTE"
+    </P
 ><P
-><B
->Note: </B
->       This function was added in PHP 4.0 Beta 3.</P
-></BLOCKQUOTE
-></DIV
-></P
+>&#13;     This makes <TT
+CLASS="varname"
+>$result</TT
+> have <TT
+CLASS="literal"
+>array
+     (array ("green", "red"), 4.0, "php")</TT
+>.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -158,7 +182,7 @@ WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
 ><A
-HREF="function.array-push.html"
+HREF="function.array-rand.html"
 >Prev</A
 ></TD
 ><TD
@@ -183,7 +207,7 @@ HREF="function.array-shift.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->array_push</TD
+>array_rand</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"

@@ -4,7 +4,7 @@
 >Start/end tags</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="Migrating from PHP/FI 2.0 to PHP 3.0"
 HREF="migration.html"><LINK
 REL="NEXT"
 TITLE="if..endif syntax"
-HREF="migration-if-endif.html"></HEAD
+HREF="migration-if-endif.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="sect1"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -64,18 +67,18 @@ HREF="migration-if-endif.html"
 ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><DIV
-CLASS="SECT1"
+CLASS="sect1"
 ><H1
-CLASS="SECT1"
+CLASS="sect1"
 ><A
-NAME="MIGRATION-STARTENDTAGS"
+NAME="migration-startendtags"
 >Start/end tags</A
 ></H1
 ><P
->   The first thing you probably will notice is that PHP's start and end
+>&#13;   The first thing you probably will notice is that PHP's start and end
    tags have changed.  The old <TT
-CLASS="LITERAL"
->&lt;? &gt;</TT
+CLASS="literal"
+>&#60;? &#62;</TT
 > form has been
    replaced by three new possible forms:
    <TABLE
@@ -87,14 +90,24 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
 >Example A-1. Migration: old start/end tags</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->&lt;? echo "This is PHP/FI 2.0 code.\n"; &gt;</PRE
+CLASS="programlisting"
+>&#13;&#60;? echo "This is PHP/FI 2.0 code.\n"; &#62;
+</PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR
@@ -112,14 +125,24 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
 >Example A-2. Migration: first new start/end tags</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->&lt;? echo "This is PHP 3.0 code!\n"; ?&gt;</PRE
+CLASS="programlisting"
+>&#13;&#60;? echo "This is PHP 3.0 code!\n"; ?&#62;
+</PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR
@@ -142,14 +165,24 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
 >Example A-3. Migration: second new start/end tags</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->&lt;?php echo "This is PHP 3.0 code!\n"; ?&gt;</PRE
+CLASS="programlisting"
+>&#13;&#60;?php echo "This is PHP 3.0 code!\n"; ?&#62;
+</PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR
@@ -170,18 +203,28 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
 >Example A-4. Migration: third new start/end tags</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->&lt;script language="php"&gt;
+CLASS="programlisting"
+>&#13;&#60;script language="php"&#62;
 
   echo "This is PHP 3.0 code!\n";
 
-&lt;/script&gt;</PRE
+&#60;/script&#62;
+</PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR

@@ -4,7 +4,7 @@
 >mssql_fetch_array</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="mssql_data_seek"
 HREF="function.mssql-data-seek.html"><LINK
 REL="NEXT"
 TITLE="mssql_fetch_field"
-HREF="function.mssql-fetch-field.html"></HEAD
+HREF="function.mssql-fetch-field.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,42 +68,55 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.MSSQL-FETCH-ARRAY"
+NAME="function.mssql-fetch-array"
 >mssql_fetch_array</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN16382"
+NAME="AEN20815"
 ></A
->mssql_fetch_array -- fetch row as array</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>mssql_fetch_array&nbsp;--&nbsp;Fetch row as array</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN16385"
+NAME="AEN20818"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int mssql_fetch_array</CODE
->(int result);<P
+>int <B
+CLASS="function"
+>mssql_fetch_array</B
+></CODE
+> (int result)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
-> Returns: An array that corresponds to the fetched row, or
-    false if there are no more rows.
+> 
+     Returns: An array that corresponds to the fetched row, or false
+     if there are no more rows.
     </P
 ><P
->     mssql_fetch_array() is an extended version of
+>&#13;     <B
+CLASS="function"
+>Mssql_fetch_array()</B
+> is an extended version of
      <A
 HREF="function.mssql-fetch-row.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >mssql_fetch_row()</B
 ></A
 >.  In addition to storing the
@@ -108,18 +124,29 @@ CLASS="FUNCTION"
      the data in associative indices, using the field names as keys.
     </P
 ><P
->     An important thing to note is that using mssql_fetch_array() is
-     NOT significantly slower than using mssql_fetch_row(), while it
-     provides a significant added value.</P
+>&#13;     An important thing to note is that using
+     <B
+CLASS="function"
+>mssql_fetch_array()</B
+> is NOT significantly
+     slower than using <A
+HREF="function.mssql-fetch-row.html"
+><B
+CLASS="function"
+>mssql_fetch_row()</B
+></A
+>, while it
+     provides a significant added value.
+    </P
 ><P
->     For further details, also see
+>&#13;     For further details, also see
      <A
 HREF="function.mssql-fetch-row.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >mssql_fetch_row()</B
 ></A
->
+>.
     </P
 ></DIV
 ><DIV

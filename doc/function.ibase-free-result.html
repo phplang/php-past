@@ -4,7 +4,7 @@
 >ibase_free_result</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -12,12 +12,15 @@ REL="UP"
 TITLE="InterBase functions"
 HREF="ref.ibase.html"><LINK
 REL="PREVIOUS"
-TITLE="ibase_fetch_row"
-HREF="function.ibase-fetch-row.html"><LINK
+TITLE="ibase_fetch_object"
+HREF="function.ibase-fetch-object.html"><LINK
 REL="NEXT"
 TITLE="ibase_prepare"
-HREF="function.ibase-prepare.html"></HEAD
+HREF="function.ibase-prepare.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -42,7 +45,7 @@ WIDTH="10%"
 ALIGN="left"
 VALIGN="bottom"
 ><A
-HREF="function.ibase-fetch-row.html"
+HREF="function.ibase-fetch-object.html"
 >Prev</A
 ></TD
 ><TD
@@ -65,32 +68,52 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.IBASE-FREE-RESULT"
+NAME="function.ibase-free-result"
 >ibase_free_result</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN14274"
+NAME="AEN17235"
 ></A
->ibase_free_result -- </DIV
+><P
+>    (PHP3 &#62;= 3.0.6, PHP4 )</P
+>ibase_free_result&nbsp;--&nbsp;Free a result set</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN14277"
+NAME="AEN17238"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
-> ibase_free_result</CODE
->( );<P
+>int <B
+CLASS="function"
+>ibase_free_result</B
+></CODE
+> (int
+       result_identifier)</CODE
+></P
+><P
 ></P
 ></DIV
+><P
+>&#13;     Free's a result set the has been created by
+     <A
+HREF="function.ibase-query.html"
+><B
+CLASS="function"
+>ibase_query()</B
+></A
+>.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -107,7 +130,7 @@ WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
 ><A
-HREF="function.ibase-fetch-row.html"
+HREF="function.ibase-fetch-object.html"
 >Prev</A
 ></TD
 ><TD
@@ -132,7 +155,7 @@ HREF="function.ibase-prepare.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->ibase_fetch_row</TD
+>ibase_fetch_object</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"

@@ -4,7 +4,7 @@
 >pg_loread</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="pg_loopen"
 HREF="function.pg-loopen.html"><LINK
 REL="NEXT"
 TITLE="pg_loreadall"
-HREF="function.pg-loreadall.html"></HEAD
+HREF="function.pg-loreadall.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,57 +68,67 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.PG-LOREAD"
+NAME="function.pg-loread"
 >pg_loread</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN23498"
+NAME="AEN29680"
 ></A
->pg_loread -- read a large object</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>pg_loread&nbsp;--&nbsp;Read a large object</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN23501"
+NAME="AEN29683"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->string pg_loread</CODE
->(int fd, int len);<P
+>string <B
+CLASS="function"
+>pg_loread</B
+></CODE
+> (int fd, int len)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     <B
-CLASS="FUNCTION"
+>&#13;     <B
+CLASS="function"
 >pg_loread()</B
 > reads at most
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >len</I
 ></TT
 > bytes from a large object and
      returns it as a string.
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >fd</I
 ></TT
 > specifies a valid large object file
      descriptor and<TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >len</I
 ></TT
 > specifies the maximum
-     allowable size of the large object segment.</P
+     allowable size of the large object segment.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

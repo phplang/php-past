@@ -4,7 +4,7 @@
 >recode_file</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -12,12 +12,15 @@ REL="UP"
 TITLE="GNU Recode functions"
 HREF="ref.recode.html"><LINK
 REL="PREVIOUS"
-TITLE="recode_string"
-HREF="function.recode-string.html"><LINK
+TITLE="recode"
+HREF="function.recode.html"><LINK
 REL="NEXT"
-TITLE="Regular expression functions"
-HREF="ref.regex.html"></HEAD
+TITLE="Regular Expression Functions (Perl-Compatible)"
+HREF="ref.pcre.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -42,7 +45,7 @@ WIDTH="10%"
 ALIGN="left"
 VALIGN="bottom"
 ><A
-HREF="function.recode-string.html"
+HREF="function.recode.html"
 >Prev</A
 ></TD
 ><TD
@@ -55,7 +58,7 @@ WIDTH="10%"
 ALIGN="right"
 VALIGN="bottom"
 ><A
-HREF="ref.regex.html"
+HREF="ref.pcre.html"
 >Next</A
 ></TD
 ></TR
@@ -65,54 +68,62 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.RECODE-FILE"
+NAME="function.recode-file"
 >recode_file</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN23822"
+NAME="AEN30319"
 ></A
->recode_file -- Recode from file to file according to recode request.</DIV
+><P
+>    (PHP3 &#62;= 3.0.13, PHP4 &#62;= 4.0RC1)</P
+>recode_file&nbsp;--&nbsp;
+     Recode from file to file according to recode request
+    </DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN23825"
+NAME="AEN30322"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->bool recode_file</CODE
->(int input, int output);<P
+>bool <B
+CLASS="function"
+>recode_file</B
+></CODE
+> (int input, int output)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Recode the file referenced by file handle <TT
-CLASS="PARAMETER"
+>&#13;     Recode the file referenced by file handle
+     <TT
+CLASS="parameter"
 ><I
 >input</I
 ></TT
-> 
-     into the file referenced by file handle <TT
-CLASS="PARAMETER"
+> into the file referenced by file
+     handle <TT
+CLASS="parameter"
 ><I
 >output</I
 ></TT
->
-     according to the recode request <TT
-CLASS="PARAMETER"
-><I
->request</I
-></TT
->. 
-     Returns FALSE, if unable to comply, TRUE otherwise.</P
+> according to the recode
+     request.  Returns FALSE, if unable to comply, TRUE
+     otherwise.
+    </P
 ><P
->     This function does not currently process filehandles referencing
+>&#13;     This function does not currently process filehandles referencing
      remote files (URLs). Both filehandles must refer to local files.
     </P
 ></DIV
@@ -131,7 +142,7 @@ WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
 ><A
-HREF="function.recode-string.html"
+HREF="function.recode.html"
 >Prev</A
 ></TD
 ><TD
@@ -147,7 +158,7 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><A
-HREF="ref.regex.html"
+HREF="ref.pcre.html"
 >Next</A
 ></TD
 ></TR
@@ -156,7 +167,7 @@ HREF="ref.regex.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->recode_string</TD
+>recode</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"
@@ -169,7 +180,7 @@ HREF="ref.recode.html"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->Regular expression functions</TD
+>Regular Expression Functions (Perl-Compatible)</TD
 ></TR
 ></TABLE
 ></DIV

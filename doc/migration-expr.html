@@ -4,7 +4,7 @@
 >Expression types</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="while syntax"
 HREF="migration-while.html"><LINK
 REL="NEXT"
 TITLE="Error messages have changed"
-HREF="migration-errors.html"></HEAD
+HREF="migration-errors.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="sect1"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -64,36 +67,46 @@ HREF="migration-errors.html"
 ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><DIV
-CLASS="SECT1"
+CLASS="sect1"
 ><H1
-CLASS="SECT1"
+CLASS="sect1"
 ><A
-NAME="MIGRATION-EXPR"
+NAME="migration-expr"
 >Expression types</A
 ></H1
 ><P
->   PHP/FI 2.0 used the left side of expressions to determine what type
+>&#13;   PHP/FI 2.0 used the left side of expressions to determine what type
    the result should be.  PHP 3.0 takes both sides into account when
    determining result types, and this may cause 2.0 scripts to behave
    unexpectedly in 3.0.</P
 ><P
 ></P
 ><P
->   Consider this example:
+>&#13;   Consider this example:
    <DIV
-CLASS="INFORMALEXAMPLE"
+CLASS="informalexample"
 ><P
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->$a[0]=5;
+CLASS="programlisting"
+>&#13;$a[0]=5;
 $a[1]=7;
 
 $key = key($a);
 while ("" != $key) {
     echo "$keyn";
     next($a);
-}</PRE
+}
+</PRE
+></TD
+></TR
+></TABLE
 ><P
 ></P
 ></DIV
@@ -103,45 +116,55 @@ while ("" != $key) {
    3.0, it wouldn't display anything.  The reason is that in PHP 2.0,
    because the left argument's type was string, a string comparison
    was made, and indeed <TT
-CLASS="LITERAL"
+CLASS="literal"
 >""</TT
 > does not equal
    <TT
-CLASS="LITERAL"
+CLASS="literal"
 >"0"</TT
 >, and the loop went through.  In PHP 3.0,
    when a string is compared with an integer, an integer comparison is
    made (the string is converted to an integer).  This results in
    comparing <TT
-CLASS="LITERAL"
+CLASS="literal"
 >atoi("")</TT
 > which is
    <TT
-CLASS="LITERAL"
+CLASS="literal"
 >0</TT
 >, and <TT
-CLASS="LITERAL"
+CLASS="literal"
 >variablelist</TT
 > which is
    also <TT
-CLASS="LITERAL"
+CLASS="literal"
 >0</TT
 >, and since <TT
-CLASS="LITERAL"
+CLASS="literal"
 >0==0</TT
 >, the
    loop doesn't go through even once.
 
   </P
 ><P
->   The fix for this is simple.  Replace the while statement with:
+>&#13;   The fix for this is simple.  Replace the while statement with:
    <DIV
-CLASS="INFORMALEXAMPLE"
+CLASS="informalexample"
 ><P
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->while ((string)$key != "") {</PRE
+CLASS="programlisting"
+>&#13;while ((string)$key != "") {
+</PRE
+></TD
+></TR
+></TABLE
 ><P
 ></P
 ></DIV

@@ -12,7 +12,7 @@ function test_mcrypt($func, $cipher, $needsiv = true) {
 		$iv = mcrypt_create_iv($size, MCRYPT_DEV_URANDOM);
 		$ivmd5 = md5($iv);
 		if($lastivmd5 == $ivmd5) {
-			echo "VERY UNSECURE initial vector!\n";
+			echo "VERY INSECURE initial vector!\n";
 		}
 		$lastivmd5 = $ivmd5;
 		$res = $func($cipher, $key, $data, MCRYPT_ENCRYPT, $iv);

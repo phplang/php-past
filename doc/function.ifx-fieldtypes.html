@@ -4,7 +4,7 @@
 >ifx_fieldtypes</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="ifx_htmltbl_result"
 HREF="function.ifx-htmltbl-result.html"><LINK
 REL="NEXT"
 TITLE="ifx_fieldproperties"
-HREF="function.ifx-fieldproperties.html"></HEAD
+HREF="function.ifx-fieldproperties.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,37 +68,46 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.IFX-FIELDTYPES"
+NAME="function.ifx-fieldtypes"
 >ifx_fieldtypes</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN13844"
+NAME="AEN16669"
 ></A
->ifx_fieldtypes -- List of Informix SQL fields</DIV
+><P
+>    (PHP3 &#62;= 3.0.3, PHP4 )</P
+>ifx_fieldtypes&nbsp;--&nbsp;List of Informix SQL fields</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN13847"
+NAME="AEN16672"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->array ifx_fieldtypes</CODE
->(int result_id);<P
+>array <B
+CLASS="function"
+>ifx_fieldtypes</B
+></CODE
+> (int result_id)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Returns an associative array with fieldnames as key and the SQL
+>&#13;     Returns an associative array with fieldnames as key and the SQL
      fieldtypes as data for query with
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >result_id</I
 ></TT
@@ -110,14 +122,20 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
 >Example 1. Fielnames and SQL fieldtypes</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->$types = ifx_fieldtypes ($resultid);
+CLASS="programlisting"
+>&#13;$types = ifx_fieldtypes ($resultid);
 if (! isset ($types)) {
   ... error ...
 }
@@ -127,6 +145,9 @@ for ($i = 0; $i &#60; count($types); $i++) {
     next($types);
 }
      </PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR

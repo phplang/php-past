@@ -1,10 +1,10 @@
 <HTML
 ><HEAD
 ><TITLE
->pg_Fetch_Row</TITLE
+>pg_fetch_row</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -12,12 +12,15 @@ REL="UP"
 TITLE="PostgreSQL functions"
 HREF="ref.pgsql.html"><LINK
 REL="PREVIOUS"
-TITLE="pg_Fetch_Object"
+TITLE="pg_fetch_object"
 HREF="function.pg-fetch-object.html"><LINK
 REL="NEXT"
-TITLE="pg_FieldIsNull"
-HREF="function.pg-fieldisnull.html"></HEAD
+TITLE="pg_fieldisnull"
+HREF="function.pg-fieldisnull.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,75 +68,78 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.PG-FETCH-ROW"
->pg_Fetch_Row</A
+NAME="function.pg-fetch-row"
+>pg_fetch_row</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN23295"
+NAME="AEN29421"
 ></A
->pg_Fetch_Row -- get row as enumerated array</DIV
+><P
+>    (PHP3 &#62;= 3.0.1, PHP4 )</P
+>pg_fetch_row&nbsp;--&nbsp;Get a row as an enumerated array</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN23298"
+NAME="AEN29424"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->array pg_fetch_row</CODE
->(int result, int row);<P
+>array <B
+CLASS="function"
+>pg_fetch_row</B
+></CODE
+> (int result, int row)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
 > 
      Returns: An array that corresponds to the fetched row, or false
-     if there are no more rows.</P
+     if there are no more rows.
+    </P
 ><P
->     <B
-CLASS="FUNCTION"
->pg_fetch_row()</B
+>&#13;     <B
+CLASS="function"
+>Pg_fetch_row()</B
 > fetches one row of data from
      the result associated with the specified result identifier.  The
      row is returned as an array.  Each result column is stored in an
-     array offset, starting at offset 0.</P
+     array offset, starting at offset 0.
+    </P
 ><P
->     Subsequent call to <B
-CLASS="FUNCTION"
->pg_fetch_row()</B
-> would
-     return the next row in the result set, or false if there are no
-     more rows.</P
-><P
->     See also: <A
+>&#13;     See also: <A
 HREF="function.pg-fetch-array.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >pg_fetch_array()</B
 ></A
 >,
-               <A
+     <A
 HREF="function.pg-fetch-object.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >pg_fetch_object()</B
 ></A
 >,
-               <A
+     <A
 HREF="function.pg-result.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >pg_result()</B
 ></A
 >.
-
-    <TABLE
+     <TABLE
 WIDTH="100%"
 BORDER="0"
 CELLPADDING="0"
@@ -142,15 +148,21 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
 >Example 1. Postgres fetch row</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->&lt;?php 
-$conn = pg_pconnect("","","","","publisher");
+CLASS="programlisting"
+>&#13;&#60;?php 
+$conn = pg_pconnect ("", "", "", "", "publisher");
 if (!$conn) {
     echo "An error occured.\n";
     exit;
@@ -162,20 +174,30 @@ if (!$result) {
     exit;
 }
 
-$row = pg_fetch_row ($result, 0);
-echo $row[0] . " &#60;- row\n";
+$num = pg_numrows($result); 
 
-$row = pg_fetch_row ($result, 1);
-echo $row[0] . " &#60;- row\n";
+for ($i=0; $i&#60;$num; $i++) {
+  $r = pg_fetch_row($result, $i);
 
-$row = pg_fetch_row ($result, 2);
-echo $row[1] . " &#60;- row\n";
-?&#62;</PRE
+  for ($j=0; $j&#60;count($r); $j++) {
+    echo "$r[$j]&#38;nbsp;";
+  }
+
+  echo "&#60;BR&#62;";
+
+}
+ 
+?&#62;
+      </PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR
 ></TABLE
-></P
+>
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -217,7 +239,7 @@ HREF="function.pg-fieldisnull.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->pg_Fetch_Object</TD
+>pg_fetch_object</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"
@@ -230,7 +252,7 @@ HREF="ref.pgsql.html"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->pg_FieldIsNull</TD
+>pg_fieldisnull</TD
 ></TR
 ></TABLE
 ></DIV

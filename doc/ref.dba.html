@@ -4,7 +4,7 @@
 >Database (dbm-style) abstraction layer functions</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -12,12 +12,15 @@ REL="UP"
 TITLE="Function Reference"
 HREF="funcref.html"><LINK
 REL="PREVIOUS"
-TITLE="microtime"
-HREF="function.microtime.html"><LINK
+TITLE="cybercash_base64_decode"
+HREF="function.cybercash-base64-decode.html"><LINK
 REL="NEXT"
 TITLE="dba_close"
-HREF="function.dba-close.html"></HEAD
+HREF="function.dba-close.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="reference"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -42,7 +45,7 @@ WIDTH="10%"
 ALIGN="left"
 VALIGN="bottom"
 ><A
-HREF="function.microtime.html"
+HREF="function.cybercash-base64-decode.html"
 >Prev</A
 ></TD
 ><TD
@@ -64,27 +67,26 @@ HREF="function.dba-close.html"
 ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><DIV
-CLASS="REFERENCE"
+CLASS="reference"
 ><A
-NAME="REF.DBA"
+NAME="ref.dba"
 ></A
 ><DIV
 CLASS="TITLEPAGE"
 ><H1
-CLASS="TITLE"
->IX. Database (dbm-style) abstraction layer functions</H1
+CLASS="title"
+>XII. Database (dbm-style) abstraction layer functions</H1
 ><DIV
 CLASS="PARTINTRO"
 ><A
-NAME="AEN6106"
+NAME="AEN7815"
 ></A
 ><P
->    These functions build the foundation for accessing Berkeley DB style
-    databases.
-
+>&#13;    These functions build the foundation for accessing Berkeley DB
+    style databases.
    </P
 ><P
->    This is a general abstraction layer for several file-based databases. As
+>&#13;    This is a general abstraction layer for several file-based databases. As
     such, functionality is limited to a subset of features modern databases
     such as <A
 HREF="http://www.sleepycat.com/"
@@ -96,91 +98,96 @@ TARGET="_top"
 HREF="ref.odbc.html"
 >ODBC functions</A
 >.)
-
    </P
 ><P
->    The behaviour of various aspects depend on the implementation of the
+>&#13;    The behaviour of various aspects depend on the implementation of the
     underlying database. Functions such as <A
 HREF="function.dba-optimize.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >dba_optimize()</B
 ></A
 >
     and <A
 HREF="function.dba-sync.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >dba_sync()</B
 ></A
 > will do what they promise for one
     database and will do nothing for others.
-
    </P
 ><P
->    The following handlers are supported:
-
+>&#13;	To add support for any of the following handlers, add the specified --with
+    configure switch to your PHP configure line:
     <P
 ></P
 ><UL
 ><LI
 ><P
->      dbm is the oldest (original) type of Berkeley DB style databases. You
-      should avoid it, if possible. We do not support the compatibility
-      functions built into DB2 and gdbm, because they are only compatible on
-      the source code level, but cannot handle the original dbm format.
-
-     </P
+>&#13;       Dbm is the oldest (original) type of Berkeley DB style
+       databases. You should avoid it, if possible. We do not support
+       the compatibility functions built into DB2 and gdbm, because
+       they are only compatible on the source code level, but cannot
+       handle the original dbm format.  (--with-dbm)
+      </P
 ></LI
 ><LI
 ><P
->      ndbm is a newer type and more flexible than dbm. It still has most of the
-      arbitrary limits of dbm (therefore it is deprecated).
-
-     </P
+>&#13;       Ndbm is a newer type and more flexible than dbm. It still has
+       most of the arbitrary limits of dbm (therefore it is
+       deprecated).  (--with-ndbm)
+      </P
 ></LI
 ><LI
 ><P
->      gdbm is the <A
+>&#13;       Gdbm is the <A
 HREF="ftp://ftp.gnu.org/pub/gnu/gdbm/"
 TARGET="_top"
->GNU database manager</A
->.
-
-     </P
+>GNU database
+       manager</A
+>.  (--with-gdbm)
+      </P
 ></LI
 ><LI
 ><P
->      db2 is <A
+>&#13;       DB2 is <A
 HREF="http://www.sleepycat.com/"
 TARGET="_top"
->Sleepycat Software's DB2</A
->. It
-      is described as "a programmatic toolkit that provides high-performance
-      built-in database support for both standalone and client/server
-      applications."
-     
-     </P
+>Sleepycat Software's
+       DB2</A
+>. It is described as "a programmatic toolkit that
+       provides high-performance built-in database support for both
+       standalone and client/server applications."  (--with-db2)
+      </P
 ></LI
 ><LI
 ><P
->      cdb is "a fast, reliable, lightweight package for creating and reading
-      constant databases." It is from the author of qmail and can be found
-      <A
+>&#13;       DB3 is <A
+HREF="http://www.sleepycat.com/"
+TARGET="_top"
+>Sleepycat Software's
+       DB3</A
+>.  (--with-db3)
+      </P
+></LI
+><LI
+><P
+>&#13;       Cdb is "a fast, reliable, lightweight package for creating and
+       reading constant databases." It is from the author of qmail and
+       can be found <A
 HREF="http://pobox.com/~djb/cdb.html"
 TARGET="_top"
 >here</A
->. Since it is constant, we support
-      only reading operations.
-
-    </P
+>. Since it is
+       constant, we support only reading operations.  (--with-cdb)
+      </P
 ></LI
 ></UL
 >
-
    </P
 ><P
->    <TABLE
+>&#13;    <TABLE
 WIDTH="100%"
 BORDER="0"
 CELLPADDING="0"
@@ -189,82 +196,88 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
 >Example 1. DBA example</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->&lt;?php
+CLASS="programlisting"
+>&#13;&#60;?php
 
-$id = dba_open("/tmp/test.db", "n", "db2");
+$id = dba_open ("/tmp/test.db", "n", "db2");
 
-if(!$id) {
+if (!$id) {
     echo "dba_open failed\n";
     exit;
 }
 
-dba_replace("key", "This is an example!", $id);
+dba_replace ("key", "This is an example!", $id);
 
-if(dba_exists("key", $id)) {
-    echo dba_fetch("key", $id);
-    dba_delete("key", $id);
+if (dba_exists ("key", $id)) {
+    echo dba_fetch ("key", $id);
+    dba_delete ("key", $id);
 }
 
-dba_close($id);
-?&gt;</PRE
+dba_close ($id);
+?&#62;
+     </PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR
 ></TABLE
 >
-
    </P
 ><P
->    DBA is binary safe and does not have any arbitrary limits. It inherits all
+>&#13;    DBA is binary safe and does not have any arbitrary limits. It inherits all
     limits set by the underlying database implementation.
-
    </P
 ><P
->    All file-based databases must provide a way of setting the file mode of a
-    new created database, if that is possible at all. The file mode is commonly
-    passed as the fourth argument to <A
+>&#13;    All file-based databases must provide a way of setting the file
+    mode of a new created database, if that is possible at all. The
+    file mode is commonly passed as the fourth argument to
+    <A
 HREF="function.dba-open.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >dba_open()</B
 ></A
-> or
-    <A
+> or <A
 HREF="function.dba-popen.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >dba_popen()</B
 ></A
 >.
-
    </P
 ><P
->    You can access all entries of a database in a linear way by using the
+>&#13;    You can access all entries of a database in a linear way by using the
     <A
 HREF="function.dba-firstkey.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >dba_firstkey()</B
 ></A
 > and <A
 HREF="function.dba-nextkey.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >dba_nextkey()</B
 ></A
 >
-    functions. You may not change the database while traversing it. 
-    
+    functions. You may not change the database while traversing it.
    </P
 ><P
->    <TABLE
+>&#13;    <TABLE
 WIDTH="100%"
 BORDER="0"
 CELLPADDING="0"
@@ -273,37 +286,46 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
 >Example 2. Traversing a database</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->&lt;?php
+CLASS="programlisting"
+>&#13;&#60;?php
 
 # ...open database...
 
-$key = dba_firstkey($id);
+$key = dba_firstkey ($id);
 
-while($key != false) {
-    if(...) { # remember the key to perform some action later
+while ($key != false) {
+    if (...) { # remember the key to perform some action later
         $handle_later[] = $key;
     }
-    $key = dba_nextkey($id);
+    $key = dba_nextkey ($id);
 }
 
-for($i = 0; $i &lt; count($handle_later); $i++)
-    dba_delete($handle_later[$i], $id);
+for ($i = 0; $i &#60; count($handle_later); $i++)
+    dba_delete ($handle_later[$i], $id);
 
-?&gt;</PRE
+?&#62;
+     </PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR
 ></TABLE
 >
-
-  </P
+   </P
 ></DIV
 ><DIV
 CLASS="TOC"
@@ -391,7 +413,7 @@ WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
 ><A
-HREF="function.microtime.html"
+HREF="function.cybercash-base64-decode.html"
 >Prev</A
 ></TD
 ><TD
@@ -416,7 +438,7 @@ HREF="function.dba-close.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->microtime</TD
+>cybercash_base64_decode</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"

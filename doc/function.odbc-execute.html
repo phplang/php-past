@@ -4,20 +4,23 @@
 >odbc_execute</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
-TITLE="ODBC functions"
+TITLE="Unified ODBC functions"
 HREF="ref.odbc.html"><LINK
 REL="PREVIOUS"
 TITLE="odbc_exec"
 HREF="function.odbc-exec.html"><LINK
 REL="NEXT"
 TITLE="odbc_fetch_into"
-HREF="function.odbc-fetch-into.html"></HEAD
+HREF="function.odbc-fetch-into.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,60 +68,67 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.ODBC-EXECUTE"
+NAME="function.odbc-execute"
 >odbc_execute</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN19337"
+NAME="AEN24193"
 ></A
->odbc_execute -- execute a prepared statement</DIV
+><P
+>    (PHP3 &#62;= 3.0.6, PHP4 )</P
+>odbc_execute&nbsp;--&nbsp;Execute a prepared statement</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN19340"
+NAME="AEN24196"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int odbc_execute</CODE
->(int result_id, array
-      [<SPAN
-CLASS="OPTIONAL"
->parameters_array</SPAN
->]);<P
+>int <B
+CLASS="function"
+>odbc_execute</B
+></CODE
+> (int result_id [, array
+       parameters_array])</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Executes a statement prepared with
+>&#13;     Executes a statement prepared with
      <A
 HREF="function.odbc-prepare.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >odbc_prepare()</B
 ></A
 >.  Returns
      <TT
-CLASS="LITERAL"
+CLASS="literal"
 >true</TT
 > on successful execution,
      <TT
-CLASS="LITERAL"
+CLASS="literal"
 >false</TT
 > otherwise. The array 
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >arameters_array</I
 ></TT
 > only needs to
-     be given if you really have parameters in your statement.</P
+     be given if you really have parameters in your statement.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

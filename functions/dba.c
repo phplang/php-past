@@ -23,11 +23,11 @@
    | If you did not, or have any questions about PHP licensing, please    |
    | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
-   | Authors: Sascha Schumann <sas@schell.de>                             |
+   | Authors: Sascha Schumann <sascha@schumann.cx>                        |
    +----------------------------------------------------------------------+
  */
 
-/* $Id: dba.c,v 1.22 2000/01/01 04:31:14 sas Exp $ */
+/* $Id: dba.c,v 1.23 2000/07/10 10:15:36 sas Exp $ */
 
 #include "php.h"
 
@@ -201,7 +201,7 @@ static void php3_info_dba(void)
 {
 	dba_handler *hptr;
 	
-	PUTS("V1 ($Id: dba.c,v 1.22 2000/01/01 04:31:14 sas Exp $)");
+	PUTS("V1 ($Id: dba.c,v 1.23 2000/07/10 10:15:36 sas Exp $)");
 	for(hptr = handler; hptr->name; hptr++) {
 		PUTS(" ");
 		PUTS(hptr->name);

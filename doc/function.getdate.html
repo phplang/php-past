@@ -4,7 +4,7 @@
 >getdate</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="date"
 HREF="function.date.html"><LINK
 REL="NEXT"
 TITLE="gettimeofday"
-HREF="function.gettimeofday.html"></HEAD
+HREF="function.gettimeofday.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,78 +68,102 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.GETDATE"
+NAME="function.getdate"
 >getdate</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN7117"
+NAME="AEN8327"
 ></A
->getdate -- get date/time information</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>getdate&nbsp;--&nbsp;Get date/time information</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN7120"
+NAME="AEN8330"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->array getdate</CODE
->(int timestamp);<P
+>array <B
+CLASS="function"
+>getdate</B
+></CODE
+> (int timestamp)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Returns an associative array containing the date information of the
-     timestamp as the following array elements:
+>&#13;     Returns an associative array containing the date information of
+     the <TT
+CLASS="parameter"
+><I
+>timestamp</I
+></TT
+> as the following array
+     elements:
      <P
 ></P
 ><UL
 ><LI
 ><P
->"seconds" - seconds</P
+>&#13;	"seconds" - seconds
+       </P
 ></LI
 ><LI
 ><P
->"minutes" - minutes</P
+>&#13;	"minutes" - minutes
+       </P
 ></LI
 ><LI
 ><P
->"hours" - hours</P
+>&#13;	"hours" - hours
+       </P
 ></LI
 ><LI
 ><P
->"mday" - day of the month</P
+>&#13;	"mday" - day of the month
+       </P
 ></LI
 ><LI
 ><P
->"wday" - day of the week, numeric</P
+>&#13;	"wday" - day of the week, numeric
+       </P
 ></LI
 ><LI
 ><P
->"mon" - month, numeric</P
+>&#13;	"mon" - month, numeric
+       </P
 ></LI
 ><LI
 ><P
->"year" - year, numeric</P
+>&#13;	"year" - year, numeric
+       </P
 ></LI
 ><LI
 ><P
->"yday" - day of the year, numeric; i.e. "299"</P
+>&#13;	"yday" - day of the year, numeric; i.e. "299"
+       </P
 ></LI
 ><LI
 ><P
->"weekday" - day of the week, textual, full; i.e.
-       "Friday"</P
+>&#13;	"weekday" - day of the week, textual, full; i.e. "Friday"
+       </P
 ></LI
 ><LI
 ><P
->"month" - month, textual, full; i.e. "January"</P
+>&#13;	"month" - month, textual, full; i.e. "January"
+       </P
 ></LI
 ></UL
 >

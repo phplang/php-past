@@ -4,7 +4,7 @@
 >ImageString</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="ImageSetPixel"
 HREF="function.imagesetpixel.html"><LINK
 REL="NEXT"
 TITLE="ImageStringUp"
-HREF="function.imagestringup.html"></HEAD
+HREF="function.imagestringup.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,46 +68,85 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.IMAGESTRING"
+NAME="function.imagestring"
 >ImageString</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN12290"
+NAME="AEN14538"
 ></A
->ImageString -- draw a string horizontally</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>ImageString&nbsp;--&nbsp;Draw a string horizontally</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN12293"
+NAME="AEN14541"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int imagestring</CODE
->(int im, int font, int x, int y, string s, int col);<P
+>int <B
+CLASS="function"
+>imagestring</B
+></CODE
+> (int im, int font, int x, int y, string s, int col)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
 >    
-     ImageString draws the string s in the image identified by im at
-     coordinates x,y (top left is 0,0) in color col.  If font is 1, 2,
-     3, 4 or 5, a built-in font is used.</P
+     <B
+CLASS="function"
+>ImageString()</B
+> draws the string
+     <TT
+CLASS="parameter"
+><I
+>s</I
+></TT
+> in the image identified by
+     <TT
+CLASS="parameter"
+><I
+>im</I
+></TT
+> at coordinates
+     <TT
+CLASS="parameter"
+><I
+>x</I
+></TT
+>, <TT
+CLASS="parameter"
+><I
+>y</I
+></TT
+> (top left is
+     0, 0) in color <TT
+CLASS="parameter"
+><I
+>col</I
+></TT
+>.  If font is 1, 2, 3, 4
+     or 5, a built-in font is used.  
+    </P
 ><P
-> See also
-     <A
-HREF="function.imageloadfont.html"
-><B
-CLASS="FUNCTION"
->imageloadfont()</B
-></A
->.</P
+> 
+     See also <B
+CLASS="function"
+>ImageLoadFont()</B
+>.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

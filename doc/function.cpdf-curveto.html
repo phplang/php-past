@@ -4,7 +4,7 @@
 >cpdf_curveto</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="cpdf_rmoveto"
 HREF="function.cpdf-rmoveto.html"><LINK
 REL="NEXT"
 TITLE="cpdf_lineto"
-HREF="function.cpdf-lineto.html"></HEAD
+HREF="function.cpdf-lineto.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,102 +68,111 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.CPDF-CURVETO"
+NAME="function.cpdf-curveto"
 >cpdf_curveto</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN5721"
+NAME="AEN6916"
 ></A
->cpdf_curveto -- Draws a curve</DIV
+><P
+>    (PHP3 &#62;= 3.0.8, PHP4 &#62;= 4.0b4)</P
+>cpdf_curveto&nbsp;--&nbsp;Draws a curve</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN5724"
+NAME="AEN6919"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->void cpdf_curveto</CODE
->(int pdf document, double x1, double y1, double x2, double y2, double x3, double y3, int mode);<P
+>void <B
+CLASS="function"
+>cpdf_curveto</B
+></CODE
+> (int pdf document, double x1, double y1, double x2, double y2, double x3, double y3, int mode)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     The <B
-CLASS="FUNCTION"
+>&#13;     The <B
+CLASS="function"
 >cpdf_curveto()</B
 > function draws a Bezier curve
      from the current point to the point
      (<TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >x3</I
 ></TT
 >, <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >y3</I
 ></TT
 >) using
      (<TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >x1</I
 ></TT
 >, <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >y1</I
 ></TT
 >) and
      (<TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >x2</I
 ></TT
 >, <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >y2</I
 ></TT
 >) as control
      points.</P
 ><P
->     The last optional parameter determines the unit length. If is 0 or omitted
+>&#13;     The last optional parameter determines the unit length. If is 0 or omitted
      the default unit as specified for the page is used. Otherwise the koodinates
      are measured in postscript points disregarding the current unit.</P
 ><P
->     See also <A
+>&#13;     See also <A
 HREF="function.cpdf-moveto.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >cpdf_moveto()</B
 ></A
 >,
               <A
 HREF="function.cpdf-rmoveto.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >cpdf_rmoveto()</B
 ></A
 >,
               <A
 HREF="function.cpdf-rlineto.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >cpdf_rlineto()</B
 ></A
 >,
               <A
 HREF="function.cpdf-lineto.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >cpdf_lineto()</B
 ></A
 >.</P

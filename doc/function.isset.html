@@ -4,20 +4,23 @@
 >isset</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
-TITLE="Variable functions"
+TITLE="Variable Functions"
 HREF="ref.var.html"><LINK
 REL="PREVIOUS"
 TITLE="is_string"
 HREF="function.is-string.html"><LINK
 REL="NEXT"
-TITLE="settype"
-HREF="function.settype.html"></HEAD
+TITLE="print_r"
+HREF="function.print-r.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -55,7 +58,7 @@ WIDTH="10%"
 ALIGN="right"
 VALIGN="bottom"
 ><A
-HREF="function.settype.html"
+HREF="function.print-r.html"
 >Next</A
 ></TD
 ></TR
@@ -65,80 +68,103 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.ISSET"
+NAME="function.isset"
 >isset</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN26868"
+NAME="AEN35887"
 ></A
->isset -- determine whether a variable is set</DIV
+><P
+>    (unknown)</P
+>isset&nbsp;--&nbsp;Determine whether a variable is set</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN26871"
+NAME="AEN35890"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int isset</CODE
->(mixed var);<P
+>int <B
+CLASS="function"
+>isset</B
+></CODE
+> (mixed var)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Returns true if <TT
-CLASS="PARAMETER"
+>&#13;     Returns true if <TT
+CLASS="parameter"
 ><I
 >var</I
 ></TT
 > exists;
-     false otherwise.</P
+     false otherwise.
+    </P
 ><P
->     If a variable has been unset with <A
+>&#13;     If a variable has been unset with <A
 HREF="function.unset.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >unset()</B
 ></A
 >,
      it will no longer be <B
-CLASS="FUNCTION"
+CLASS="function"
 >isset()</B
 >.
-    <DIV
-CLASS="INFORMALEXAMPLE"
+     <DIV
+CLASS="informalexample"
 ><P
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->$a = "test";
-echo isset($a); // true
-unset($a);
-echo isset($a); // false</PRE
+CLASS="programlisting"
+>&#13;$a = "test";
+echo isset ($a); // true
+unset ($a);
+echo isset ($a); // false
+      </PRE
+></TD
+></TR
+></TABLE
 ><P
 ></P
 ></DIV
-></P
+>
+    </P
 ><P
->     See also <A
+>&#13;     See also <A
 HREF="function.empty.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >empty()</B
 ></A
-> and <A
+> and
+     <A
 HREF="function.unset.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >unset()</B
 ></A
->.</P
+>.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -171,7 +197,7 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><A
-HREF="function.settype.html"
+HREF="function.print-r.html"
 >Next</A
 ></TD
 ></TR
@@ -193,7 +219,7 @@ HREF="ref.var.html"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->settype</TD
+>print_r</TD
 ></TR
 ></TABLE
 ></DIV

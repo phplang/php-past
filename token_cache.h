@@ -23,13 +23,13 @@
    | If you did not, or have any questions about PHP licensing, please    |
    | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
-   | Authors: Andi Gutmans <andi@php.net>                                 |
+   | Authors: Andi Gutmans <andi@zend.com>                                |
    |          Zeev Suraski <zeev@zend.com>                                |
    +----------------------------------------------------------------------+
  */
 
 
-/* $Id: token_cache.h,v 1.37 2000/02/07 23:54:50 zeev Exp $ */
+/* $Id: token_cache.h,v 1.38 2000/04/10 19:29:36 andi Exp $ */
 
 
 #ifndef _TOKEN_CACHE

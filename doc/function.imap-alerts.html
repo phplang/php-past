@@ -4,20 +4,23 @@
 >imap_alerts</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
-TITLE="IMAP functions"
+TITLE="IMAP, POP3 and NNTP functions"
 HREF="ref.imap.html"><LINK
 REL="PREVIOUS"
 TITLE="imap_errors"
 HREF="function.imap-errors.html"><LINK
 REL="NEXT"
 TITLE="imap_status"
-HREF="function.imap-status.html"></HEAD
+HREF="function.imap-status.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,45 +68,59 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.IMAP-ALERTS"
+NAME="function.imap-alerts"
 >imap_alerts</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN13428"
+NAME="AEN16059"
 ></A
->imap_alerts -- This function returns all IMAP alert messages (if any) that have occurred during this page request or since the alert stack was reset.</DIV
+><P
+>    (PHP3 &#62;= 3.0.12, PHP4 &#62;= 4.0b4)</P
+>imap_alerts&nbsp;--&nbsp;
+     This function returns all IMAP alert messages (if any) that have
+     occurred during this page request or since the alert stack was
+     reset
+    </DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN13431"
+NAME="AEN16062"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->array imap_alerts</CODE
->(void );<P
+>array <B
+CLASS="function"
+>imap_alerts</B
+></CODE
+> (void)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     This function returns an array of all of the IMAP alert messages
+>&#13;     This function returns an array of all of the IMAP alert messages
      generated since the last <B
-CLASS="FUNCTION"
+CLASS="function"
 >imap_alerts()</B
 > call,
      or the beginning of the page. When
      <B
-CLASS="FUNCTION"
+CLASS="function"
 >imap_alerts()</B
 > is called, the alert stack is
      subsequently cleared. The IMAP specification requires that these
-     messages be passed to the user.</P
+     messages be passed to the user.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

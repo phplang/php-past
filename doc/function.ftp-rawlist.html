@@ -4,7 +4,7 @@
 >ftp_rawlist</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="ftp_nlist"
 HREF="function.ftp-nlist.html"><LINK
 REL="NEXT"
 TITLE="ftp_systype"
-HREF="function.ftp-systype.html"></HEAD
+HREF="function.ftp-systype.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,36 +68,46 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.FTP-RAWLIST"
+NAME="function.ftp-rawlist"
 >ftp_rawlist</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN9879"
+NAME="AEN11444"
 ></A
->ftp_rawlist --      Returns a detailed list of files in the given directory.
+><P
+>    (PHP3 &#62;= 3.0.13, PHP4 &#62;= 4.0b4)</P
+>ftp_rawlist&nbsp;--&nbsp;
+     Returns a detailed list of files in the given directory.
     </DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN9882"
+NAME="AEN11447"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int ftp_rawlist</CODE
->(int ftp_stream, string directory);<P
+>int <B
+CLASS="function"
+>ftp_rawlist</B
+></CODE
+> (int ftp_stream, string directory)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     <B
-CLASS="FUNCTION"
+>&#13;     <B
+CLASS="function"
 >ftp_rawlist()</B
 > executes the FTP LIST command,
      and returns the result as an array.  Each array element corresponds
@@ -102,7 +115,7 @@ CLASS="FUNCTION"
      system type identifier returned by <A
 HREF="function.ftp-systype.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >ftp_systype()</B
 ></A
 >

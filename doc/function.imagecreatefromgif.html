@@ -1,10 +1,10 @@
 <HTML
 ><HEAD
 ><TITLE
->ImageCreateFromGif</TITLE
+>ImageCreateFromGIF</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -15,9 +15,12 @@ REL="PREVIOUS"
 TITLE="ImageCreate"
 HREF="function.imagecreate.html"><LINK
 REL="NEXT"
-TITLE="ImageDashedLine"
-HREF="function.imagedashedline.html"></HEAD
+TITLE="ImageCreateFromJPEG"
+HREF="function.imagecreatefromjpeg.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -55,7 +58,7 @@ WIDTH="10%"
 ALIGN="right"
 VALIGN="bottom"
 ><A
-HREF="function.imagedashedline.html"
+HREF="function.imagecreatefromjpeg.html"
 >Next</A
 ></TD
 ></TR
@@ -65,43 +68,53 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.IMAGECREATEFROMGIF"
->ImageCreateFromGif</A
+NAME="function.imagecreatefromgif"
+>ImageCreateFromGIF</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN11773"
+NAME="AEN13818"
 ></A
->ImageCreateFromGif -- create a new image from file or URL</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>ImageCreateFromGIF&nbsp;--&nbsp;Create a new image from file or URL</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN11776"
+NAME="AEN13821"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int imagecreatefromgif</CODE
->(string filename);<P
+>int <B
+CLASS="function"
+>imagecreatefromgif</B
+></CODE
+> (string filename)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     <B
-CLASS="FUNCTION"
->imagecreatefromgif()</B
+>&#13;     <B
+CLASS="function"
+>ImageCreateFromGif()</B
 > returns an image identifier
-     representing the image obtained from the given filename.</P
+     representing the image obtained from the given filename.
+    </P
 ><P
 > 
      <B
-CLASS="FUNCTION"
->imagecreatefromgif()</B
+CLASS="function"
+>ImageCreateFromGif()</B
 > returns an empty string
      on failure. It also outputs an error message, which unfortunately
      displays as a broken link in a browser.  To ease debugging the
@@ -115,43 +128,59 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
->Example 1. Example to handle an error during creation (courtesy vic@zymsys.com )</B
+>Example 1. 
+      Example to handle an error during creation (courtesy
+      vic@zymsys.com)
+     </B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->function LoadGif($imgname)
-{
-  $im = @imagecreatefromgif($imgname); /* Attempt to open */
-  if ($im == "") { /* See if it failed */
-    $im = ImageCreate(150,30); /* Create a blank image */
-    $bgc = ImageColorAllocate($im,255,255,255);
-    $tc  = ImageColorAllocate($im,0,0,0);
-    ImageFilledRectangle($im,0,0,150,30,$bgc);
-    ImageString($im,1,5,5,"Error loading $imgname",$tc); /* Output an errmsg */
-  }
-  return $im;
-}</PRE
+CLASS="programlisting"
+>&#13;function LoadGif ($imgname) {
+    $im = @ImageCreateFromGIF ($imgname); /* Attempt to open */
+    if (!$im) { /* See if it failed */
+        $im = ImageCreate (150, 30); /* Create a blank image */
+        $bgc = ImageColorAllocate ($im, 255, 255, 255);
+        $tc  = ImageColorAllocate ($im, 0, 0, 0);
+        ImageFilledRectangle ($im, 0, 0, 150, 30, $bgc); 
+        /* Output an errmsg */
+        ImageString($im, 1, 5, 5, "Error loading $imgname", $tc); 
+    }
+    return $im;
+}
+      </PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR
 ></TABLE
 >
-    <DIV
-CLASS="NOTE"
+     <DIV
+CLASS="note"
 ><BLOCKQUOTE
-CLASS="NOTE"
+CLASS="note"
 ><P
 ><B
 >Note: </B
->      Since all GIF support was removed from the GD library in version 1.6,
-      this function is not available if you are using that version of the
-      GD library.</P
+>
+       Since all GIF support was removed from the GD library in
+       version 1.6, this function is not available if you are using
+       that version of the GD library.
+      </P
 ></BLOCKQUOTE
 ></DIV
-></P
+>
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -184,7 +213,7 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><A
-HREF="function.imagedashedline.html"
+HREF="function.imagecreatefromjpeg.html"
 >Next</A
 ></TD
 ></TR
@@ -206,7 +235,7 @@ HREF="ref.image.html"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->ImageDashedLine</TD
+>ImageCreateFromJPEG</TD
 ></TR
 ></TABLE
 ></DIV

@@ -4,7 +4,7 @@
 >dba_firstkey</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="dba_fetch"
 HREF="function.dba-fetch.html"><LINK
 REL="NEXT"
 TITLE="dba_insert"
-HREF="function.dba-insert.html"></HEAD
+HREF="function.dba-insert.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,81 +68,84 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.DBA-FIRSTKEY"
+NAME="function.dba-firstkey"
 >dba_firstkey</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN6254"
+NAME="AEN7970"
 ></A
->dba_firstkey -- Fetch first key</DIV
+><P
+>    (PHP3 &#62;= 3.0.8, PHP4 &#62;= 4.0b2)</P
+>dba_firstkey&nbsp;--&nbsp;Fetch first key</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN6257"
+NAME="AEN7973"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->string dba_firstkey</CODE
->(int handle);<P
+>string <B
+CLASS="function"
+>dba_firstkey</B
+></CODE
+> (int handle)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     <B
-CLASS="FUNCTION"
->dba_firstkey()</B
-> returns the first key of the database
-     specified by <TT
-CLASS="PARAMETER"
+>&#13;     <B
+CLASS="function"
+>Dba_firstkey()</B
+> returns the first key of the
+     database specified by <TT
+CLASS="parameter"
 ><I
 >handle</I
 ></TT
-> and resets the internal key
-     pointer. This permits a linear search through the whole database.
-
+> and resets
+     the internal key pointer. This permits a linear search through
+     the whole database.
     </P
 ><P
->     <TT
-CLASS="PARAMETER"
+>&#13;     <TT
+CLASS="parameter"
 ><I
->handle</I
+>Handle</I
 ></TT
 > is a database handle returned by
      <A
 HREF="function.dba-open.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >dba_open()</B
 ></A
 >.
-
     </P
 ><P
->     <B
-CLASS="FUNCTION"
->dba_firstkey()</B
-> returns the key or false depending on
-     whether it succeeds or fails, respectively.
-
+>&#13;     <B
+CLASS="function"
+>Dba_firstkey()</B
+> returns the key or false
+     depending on whether it succeeds or fails, respectively.
     </P
 ><P
->     See also:
-     <A
-HREF="function.dba-nextkey.html"
-><B
-CLASS="FUNCTION"
->dba_nextkey()</B
-></A
+>&#13;     See also:
+     <B
+CLASS="function"
+>Dba_nextkey()</B
 >
-     
-   </P
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

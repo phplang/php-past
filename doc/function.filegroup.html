@@ -4,7 +4,7 @@
 >filegroup</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="filectime"
 HREF="function.filectime.html"><LINK
 REL="NEXT"
 TITLE="fileinode"
-HREF="function.fileinode.html"></HEAD
+HREF="function.fileinode.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,44 +68,75 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.FILEGROUP"
+NAME="function.filegroup"
 >filegroup</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN8668"
+NAME="AEN9881"
 ></A
->filegroup -- get file group</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>filegroup&nbsp;--&nbsp;Gets file group</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN8671"
+NAME="AEN9884"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int filegroup</CODE
->(string filename);<P
+>int <B
+CLASS="function"
+>filegroup</B
+></CODE
+> (string filename)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->    Returns the group ID of the owner of the file, or false in case of an
-    error.</P
+>    
+     Returns the group ID of the owner of the file, or false in case
+     of an error. The group ID is returned in numerical format, use
+     <A
+HREF="function.posix-getgrgid.html"
+><B
+CLASS="function"
+>posix_getgrgid()</B
+></A
+> to resolve it to a group name.
+    </P
 ><P
->     The results of this function are cached. See
+>&#13;     The results of this function are cached. See
      <A
 HREF="function.clearstatcache.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >clearstatcache()</B
 ></A
-> for more details.</P
+> for more details.
+    </P
+><DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
+><P
+><B
+>Note: </B
+>
+     This function does not work on Windows systems
+     </P
+></BLOCKQUOTE
+></DIV
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

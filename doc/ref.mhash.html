@@ -1,10 +1,10 @@
 <HTML
 ><HEAD
 ><TITLE
->Hash functions</TITLE
+>Mhash Functions</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -12,12 +12,15 @@ REL="UP"
 TITLE="Function Reference"
 HREF="funcref.html"><LINK
 REL="PREVIOUS"
-TITLE="ftp_quit"
-HREF="function.ftp-quit.html"><LINK
+TITLE="mcrypt_module_get_algo_supported_key_sizes"
+HREF="function.mcrypt-module-get-algo-supported-key-sizes.html"><LINK
 REL="NEXT"
 TITLE="mhash_get_hash_name"
-HREF="function.mhash-get-hash-name.html"></HEAD
+HREF="function.mhash-get-hash-name.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="reference"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -42,7 +45,7 @@ WIDTH="10%"
 ALIGN="left"
 VALIGN="bottom"
 ><A
-HREF="function.ftp-quit.html"
+HREF="function.mcrypt-module-get-algo-supported-key-sizes.html"
 >Prev</A
 ></TD
 ><TD
@@ -64,44 +67,50 @@ HREF="function.mhash-get-hash-name.html"
 ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><DIV
-CLASS="REFERENCE"
+CLASS="reference"
 ><A
-NAME="REF.MHASH"
+NAME="ref.mhash"
 ></A
 ><DIV
 CLASS="TITLEPAGE"
 ><H1
-CLASS="TITLE"
->XX. Hash functions</H1
+CLASS="title"
+>XXXVI. Mhash Functions</H1
 ><DIV
 CLASS="PARTINTRO"
 ><A
-NAME="AEN10102"
+NAME="AEN20628"
 ></A
 ><P
->    These functions are intended to work with <A
-HREF="http://sasweb.de/mhash/"
+>&#13;    These functions are intended to work with <A
+HREF="http://mhash.sourceforge.net/"
 TARGET="_top"
 >mhash</A
 >.</P
 ><P
->    This is an interface to the mhash library. mhash supports a wide variety of
-    hash algorithms such as MD5, SHA1, GOST, and many others.</P
+>&#13;    This is an interface to the mhash library. mhash supports a wide
+    variety of hash algorithms such as MD5, SHA1, GOST, and many
+    others.
+   </P
 ><P
->    To use it, download the mhash distribution from <A
-HREF="http://sasweb.de/mhash/"
+>&#13;    To use it, download the mhash distribution from <A
+HREF="http://mhash.sourceforge.net/"
 TARGET="_top"
 >its web site</A
 > and follow the included
-    installation instructions. You need to compile PHP with the <TT
-CLASS="OPTION"
+    installation instructions. You need to compile PHP with the
+    <TT
+CLASS="option"
 >--with-mhash</TT
-> parameter to enable this
-    extension.</P
+> parameter to enable
+    this extension.
+   </P
 ><P
->    mhash can be used to create checksums, message digests, and more.</P
+>&#13;    Mhash can be used to create checksums, message digests, and
+    more.
+   </P
 ><P
->    <TABLE
+>&#13;    <TABLE
 WIDTH="100%"
 BORDER="0"
 CELLPADDING="0"
@@ -110,89 +119,114 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
 >Example 1. Compute the SHA1 key and print it out as hex</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->&lt;?php
+CLASS="programlisting"
+>&#13;&#60;?php
 $input = "Let us meet at 9 o' clock at the secret place.";
-$hash = mhash(MHASH_SHA1, $input);
+$hash = mhash (MHASH_SHA1, $input);
 
-print "The hash is ".bin2hex($hash)."\n";
-
-?&gt;
+print "The hash is ".bin2hex ($hash)."\n";
+?&#62;
      </PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR
 ></TABLE
 >
-
     This will produce:
-
-    <PRE
-CLASS="PROGRAMLISTING"
->The hash is d3b85d710d8f6e4e5efd4d5e67d041f9cecedafe
+    <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;The hash is d3b85d710d8f6e4e5efd4d5e67d041f9cecedafe
     </PRE
+></TD
+></TR
+></TABLE
 >
-	  
-    For a complete list of supported hashes, refer to the documentation of
-    mhash. The general rule is that you can access the hash algorithm from PHP
-    with MHASH_HASHNAME. For example, to access HAVAL you use the PHP constant
-    MHASH_HAVAL.</P
+    For a complete list of supported hashes, refer to the
+    documentation of mhash. The general rule is that you can access
+    the hash algorithm from PHP with MHASH_HASHNAME. For example, to
+    access HAVAL you use the PHP constant MHASH_HAVAL.
+   </P
 ><P
->    Here is a list of hashes which are currently supported by mhash. If a
+>&#13;    Here is a list of hashes which are currently supported by mhash. If a
     hash is not listed here, but is listed by mhash as supported, you can
     safely assume that this documentation is outdated.
-
     <P
 ></P
 ><UL
 ><LI
 ><P
->      MHASH_MD5</P
+>&#13;       MHASH_MD5
+      </P
 ></LI
 ><LI
 ><P
->      MHASH_SHA1</P
+>&#13;       MHASH_SHA1
+      </P
 ></LI
 ><LI
 ><P
->      MHASH_HAVAL</P
+>&#13;       MHASH_HAVAL
+      </P
 ></LI
 ><LI
 ><P
->      MHASH_RIPEMD160</P
+>&#13;       MHASH_RIPEMD160
+      </P
 ></LI
 ><LI
 ><P
->      MHASH_RIPEMD128</P
+>&#13;       MHASH_RIPEMD128
+      </P
 ></LI
 ><LI
 ><P
->      MHASH_SNEFRU</P
+>&#13;       MHASH_SNEFRU
+      </P
 ></LI
 ><LI
 ><P
->      MHASH_TIGER</P
+>&#13;       MHASH_TIGER
+      </P
 ></LI
 ><LI
 ><P
->      MHASH_GOST</P
+>&#13;       MHASH_GOST
+      </P
 ></LI
 ><LI
 ><P
->      MHASH_CRC32</P
+>&#13;       MHASH_CRC32
+      </P
 ></LI
 ><LI
 ><P
->      MHASH_CRC32B</P
+>&#13;       MHASH_CRC32B
+      </P
 ></LI
 ></UL
-></P
+>
+   </P
 ></DIV
 ><DIV
 CLASS="TOC"
@@ -240,7 +274,7 @@ WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
 ><A
-HREF="function.ftp-quit.html"
+HREF="function.mcrypt-module-get-algo-supported-key-sizes.html"
 >Prev</A
 ></TD
 ><TD
@@ -265,7 +299,7 @@ HREF="function.mhash-get-hash-name.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->ftp_quit</TD
+>mcrypt_module_get_algo_supported_key_sizes</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"

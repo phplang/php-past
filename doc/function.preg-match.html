@@ -4,20 +4,23 @@
 >preg_match</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
-TITLE="Perl-compatible Regular Expression functions"
+TITLE="Regular Expression Functions (Perl-Compatible)"
 HREF="ref.pcre.html"><LINK
 REL="PREVIOUS"
-TITLE="Perl-compatible Regular Expression functions"
+TITLE="Regular Expression Functions (Perl-Compatible)"
 HREF="ref.pcre.html"><LINK
 REL="NEXT"
 TITLE="preg_match_all"
-HREF="function.preg-match-all.html"></HEAD
+HREF="function.preg-match-all.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,61 +68,70 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.PREG-MATCH"
+NAME="function.preg-match"
 >preg_match</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN22006"
+NAME="AEN30366"
 ></A
->preg_match -- Perform a regular expression match</DIV
+><P
+>    (PHP3 &#62;= 3.0.9, PHP4 )</P
+>preg_match&nbsp;--&nbsp;Perform a regular expression match</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN22009"
+NAME="AEN30369"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int preg_match</CODE
->(string pattern, string subject, array [<SPAN
-CLASS="OPTIONAL"
->matches</SPAN
->]);<P
+>int <B
+CLASS="function"
+>preg_match</B
+></CODE
+> (string pattern, string subject [, array 
+       matches])</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Searches <TT
-CLASS="PARAMETER"
+>&#13;     Searches <TT
+CLASS="parameter"
 ><I
 >subject</I
 ></TT
 > for a match to the regular
      expression given in <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >pattern</I
 ></TT
->.</P
+>.
+    </P
 ><P
->     If <TT
-CLASS="PARAMETER"
+>&#13;     If <TT
+CLASS="parameter"
 ><I
 >matches</I
 ></TT
 > is provided, then it is filled
      with the results of search.  $matches[0] will contain the text that
      match the full pattern, $matches[1] will have the text that matched
-     the first captured parenthesized subpattern, and so on.</P
+     the first captured parenthesized subpattern, and so on.
+    </P
 ><P
->     Returns true if a match for <TT
-CLASS="PARAMETER"
+>&#13;     Returns true if a match for <TT
+CLASS="parameter"
 ><I
 >pattern</I
 ></TT
@@ -127,7 +139,7 @@ CLASS="PARAMETER"
      found in the subject string, or false if not match was found
      or an error occurred.</P
 ><P
->     <TABLE
+>&#13;     <TABLE
 WIDTH="100%"
 BORDER="0"
 CELLPADDING="0"
@@ -136,45 +148,149 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
->Example 1. Getting the page number out of a string</B
+>Example 1. find the string of text "php"</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->if (preg_match("/page\s+#(\d+)/i", "Go to page #9.", $parts))
-    print "Next page is $parts[1]";
-else
-    print "Page not found.";
+CLASS="programlisting"
+>&#13;// the "i" after the pattern delimiter indicates a case-insensitive search
+if (preg_match ("/php/i", "PHP is the web scripting language of choice.")) {
+    print "A match was found.";
+} else {
+    print "A match was not found.";
+}
       </PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR
 ></TABLE
 >
-
+     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><P
+><B
+>Example 2. find the word "web"</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;// the \b in the pattern indicates a word boundary, so only the distinct
+// word "web" is matched, and not a word partial like "webbing" or "cobweb"
+if (preg_match ("/\bweb\b/i", "PHP is the web scripting language of choice.")) {
+    print "A match was found.";
+} else {
+    print "A match was not found.";
+}
+if (preg_match ("/\bweb\b/i", "PHP is the website scripting language of choice.")) {
+    print "A match was found.";
+} else {
+    print "A match was not found.";
+}
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><P
+><B
+>Example 3. Getting the domain name out of a URL</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;preg_match("/^(.*)([^\.]+\.[^\.]+)(\/.*)?/U",
+           "http://www.php.net/index.html", $matches);
+// show the second parenthesized subpattern
+echo "domain name is: ".$matches[2]."\n"; 
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+     This example will produce:
+     <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;domain name is: php.net
+     </PRE
+></TD
+></TR
+></TABLE
+>
      See also <A
 HREF="function.preg-match-all.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >preg_match_all()</B
 ></A
 >, 
      <A
 HREF="function.preg-replace.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >preg_replace()</B
 ></A
 >, and
      <A
 HREF="function.preg-split.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >preg_split()</B
 ></A
->.</P
+>.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -216,7 +332,7 @@ HREF="function.preg-match-all.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->Perl-compatible Regular Expression functions</TD
+>Regular Expression Functions (Perl-Compatible)</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"

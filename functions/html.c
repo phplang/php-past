@@ -28,7 +28,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: html.c,v 1.35 2000/02/01 00:18:44 martin Exp $ */
+/* $Id: html.c,v 1.36 2000/07/25 10:18:27 hholzgra Exp $ */
 
 #include "php.h"
 #include "internal_functions.h"
@@ -88,6 +88,10 @@ PHPAPI char * _php3_htmlentities(char *s, int i, int all)
 		} else if ('"' == *old) {
 			memcpy (new + len, "&quot;", 6);
 			len += 6;
+		} else if (39 == *old) {
+			/* single quote (') */
+			memcpy (new + len, "&#039;",6);
+			len += 6;		
 		} else if ('<' == *old) {
 			memcpy (new + len, "&lt;", 4);
 			len += 4;

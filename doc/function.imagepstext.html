@@ -4,7 +4,7 @@
 >ImagePSText</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -12,12 +12,15 @@ REL="UP"
 TITLE="Image functions"
 HREF="ref.image.html"><LINK
 REL="PREVIOUS"
-TITLE="ImagePSLoadFont"
-HREF="function.imagepsloadfont.html"><LINK
+TITLE="ImagePsSlantFont"
+HREF="function.imagepsslantfont.html"><LINK
 REL="NEXT"
 TITLE="ImageRectangle"
-HREF="function.imagerectangle.html"></HEAD
+HREF="function.imagerectangle.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -42,7 +45,7 @@ WIDTH="10%"
 ALIGN="left"
 VALIGN="bottom"
 ><A
-HREF="function.imagepsloadfont.html"
+HREF="function.imagepsslantfont.html"
 >Prev</A
 ></TD
 ><TD
@@ -65,234 +68,257 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.IMAGEPSTEXT"
+NAME="function.imagepstext"
 >ImagePSText</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN12166"
+NAME="AEN14403"
 ></A
->ImagePSText -- to draw a text string over an image using PostScript Type1 fonts</DIV
+><P
+>    (PHP3 &#62;= 3.0.9, PHP4 &#62;= 4.0RC1)</P
+>ImagePSText&nbsp;--&nbsp;
+     To draw a text string over an image using PostScript Type1 fonts
+    </DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN12169"
+NAME="AEN14406"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->array imagepstext</CODE
->(int image, string text, int font, int size, int foreground, int background, int x, int y, int        [<SPAN
-CLASS="OPTIONAL"
->space</SPAN
->], int        [<SPAN
-CLASS="OPTIONAL"
->tightness</SPAN
->], float        [<SPAN
-CLASS="OPTIONAL"
->angle</SPAN
->], int        [<SPAN
-CLASS="OPTIONAL"
->antialias_steps</SPAN
->]);<P
+>array <B
+CLASS="function"
+>imagepstext</B
+></CODE
+> (int image, string text, int font, int size, int foreground, int background, int x, int y [, int 
+       space [, int 
+       tightness [, float 
+       angle [, int 
+       antialias_steps]]]])</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     <TT
-CLASS="PARAMETER"
+>&#13;     <TT
+CLASS="parameter"
 ><I
->size</I
+>Size</I
 ></TT
-> is expressed in pixels.</P
+> is expressed in pixels.
+    </P
 ><P
->     <TT
-CLASS="PARAMETER"
+>&#13;     <TT
+CLASS="parameter"
 ><I
->foreground</I
+>Foreground</I
 ></TT
 > is the color in which the text
      will be painted.  <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
->background</I
+>Background</I
 ></TT
 > is the color
      to which the text will try to fade in with antialiasing. No
      pixels with the color <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >background</I
 ></TT
 > are
      actually painted, so the background image does not need to be of
-     solid color.</P
+     solid color.
+    </P
 ><P
->     The coordinates given by <TT
-CLASS="PARAMETER"
+>&#13;     The coordinates given by <TT
+CLASS="parameter"
 ><I
 >x</I
 ></TT
 >,
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >y</I
 ></TT
 > will define the origin (or reference
      point) of the first character (roughly the lower-left corner of
      the character).  This is different from the
-     <A
-HREF="function.imagestring.html"
-><B
-CLASS="FUNCTION"
+     <B
+CLASS="function"
 >ImageString()</B
-></A
->, where x, y define the
-     upper-right corner of the first character. Refer to PostScipt
-     documentation about fonts and their measuring system if you have
-     trouble understanding how this works.</P
-><P
->     <TT
-CLASS="PARAMETER"
+>, where <TT
+CLASS="parameter"
 ><I
->space</I
+>x</I
+></TT
+>,
+     <TT
+CLASS="parameter"
+><I
+>y</I
+></TT
+> define the upper-right corner of the
+     first character. Refer to PostScipt documentation about fonts and
+     their measuring system if you have trouble understanding how this
+     works.
+    </P
+><P
+>&#13;     <TT
+CLASS="parameter"
+><I
+>Space</I
 ></TT
 > allows you to change the default
      value of a space in a font.  This amount is added to the normal
-     value and can also be negative.</P
+     value and can also be negative.
+    </P
 ><P
->     <TT
-CLASS="PARAMETER"
+>&#13;     <TT
+CLASS="parameter"
 ><I
->tightness</I
+>Tightness</I
 ></TT
 > allows you to control the amount
      of white space between characters. This amount is added to the
-     normal character width and can also be negative.</P
+     normal character width and can also be negative.
+    </P
 ><P
->     <TT
-CLASS="PARAMETER"
+>&#13;     <TT
+CLASS="parameter"
 ><I
->angle</I
+>Angle</I
 ></TT
-> is in degrees.</P
+> is in degrees.
+    </P
 ><P
->     <TT
-CLASS="PARAMETER"
+>&#13;     <TT
+CLASS="parameter"
 ><I
->antialias_steps</I
+>Antialias_steps</I
 ></TT
 > allows you to control the
      number of colours used for antialiasing text. Allowed values are
      4 and 16. The higher value is recommended for text sizes lower
      than 20, where the effect in text quality is quite visible.  With
-     bigger sizes, use 4. It's less computationally intensive.</P
+     bigger sizes, use 4. It's less computationally intensive.
+    </P
 ><P
->     Parameters <TT
-CLASS="PARAMETER"
+>&#13;     Parameters <TT
+CLASS="parameter"
 ><I
 >space</I
 ></TT
 > and
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >tightness</I
 ></TT
 > are expressed in character space
-     units, where 1 unit is 1/1000th of an em-square.</P
+     units, where 1 unit is 1/1000th of an em-square.
+    </P
 ><P
->     Parameters <TT
-CLASS="PARAMETER"
+>&#13;     Parameters <TT
+CLASS="parameter"
 ><I
 >space</I
 ></TT
 >,
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >tightness</I
 ></TT
 >, <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >angle</I
 ></TT
 >
      and <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >antialias</I
 ></TT
-> are optional.</P
+> are optional.
+    </P
 ><P
->     This function returns an array containing the following elements:
+>&#13;     This function returns an array containing the following elements:
      <DIV
-CLASS="INFORMALTABLE"
+CLASS="informaltable"
 ><P
 ></P
 ><TABLE
 BORDER="1"
 CLASS="CALSTABLE"
+><TBODY
 ><TR
 ><TD
 ALIGN="LEFT"
-VALIGN="TOP"
+VALIGN="MIDDLE"
 >0</TD
 ><TD
 ALIGN="LEFT"
-VALIGN="TOP"
+VALIGN="MIDDLE"
 >lower left x-coordinate</TD
 ></TR
 ><TR
 ><TD
 ALIGN="LEFT"
-VALIGN="TOP"
+VALIGN="MIDDLE"
 >1</TD
 ><TD
 ALIGN="LEFT"
-VALIGN="TOP"
+VALIGN="MIDDLE"
 >lower left y-coordinate</TD
 ></TR
 ><TR
 ><TD
 ALIGN="LEFT"
-VALIGN="TOP"
+VALIGN="MIDDLE"
 >2</TD
 ><TD
 ALIGN="LEFT"
-VALIGN="TOP"
+VALIGN="MIDDLE"
 >upper right x-coordinate</TD
 ></TR
 ><TR
 ><TD
 ALIGN="LEFT"
-VALIGN="TOP"
+VALIGN="MIDDLE"
 >3</TD
 ><TD
 ALIGN="LEFT"
-VALIGN="TOP"
+VALIGN="MIDDLE"
 >upper right y-coordinate</TD
 ></TR
+></TBODY
 ></TABLE
 ><P
 ></P
 ></DIV
 ></P
 ><P
->     See also <A
+>&#13;     See also <A
 HREF="function.imagepsbbox.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >imagepsbbox()</B
 ></A
->.</P
+>.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -309,7 +335,7 @@ WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
 ><A
-HREF="function.imagepsloadfont.html"
+HREF="function.imagepsslantfont.html"
 >Prev</A
 ></TD
 ><TD
@@ -334,7 +360,7 @@ HREF="function.imagerectangle.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->ImagePSLoadFont</TD
+>ImagePsSlantFont</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"

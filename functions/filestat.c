@@ -27,7 +27,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: filestat.c,v 1.94 2000/01/01 04:31:15 sas Exp $ */
+/* $Id: filestat.c,v 1.95 2000/06/12 14:39:44 eschmid Exp $ */
 #include "php.h"
 #include "internal_functions.h"
 #include "safe_mode.h"
@@ -122,7 +122,7 @@ int php3_shutdown_filestat(void)
 }
 
 /* {{{ proto bool diskfree(string path)
-   return number of kilobytes free in path */
+   Return number of kilobytes free in path */
 void php3_diskfreespace(INTERNAL_FUNCTION_PARAMETERS)
 {
 #ifdef WINDOWS
@@ -349,7 +349,7 @@ void php3_chmod(INTERNAL_FUNCTION_PARAMETERS) {
 }
 /* }}} */
 
-/* {{{ proto bool touch(string filename[, int time])
+/* {{{ proto bool touch(string filename [, int time])
    Set modification time of file */
 void php3_touch(INTERNAL_FUNCTION_PARAMETERS) {
 #if HAVE_UTIME

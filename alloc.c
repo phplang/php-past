@@ -362,7 +362,7 @@ void shutdown_memory_manager(void)
 			log_error(memory_leak_buf,GLOBAL(php3_rqst)->server);
 #endif
 # else
-			php3_printf("Freeing 0x%0.8X (%d bytes), allocated in %s on line %d<br>\n",(void *)((char *)t+sizeof(mem_header)+PLATFORM_PADDING),t->size,t->filename,t->lineno);
+			php3_printf("Freeing 0x%.8X (%d bytes), allocated in %s on line %d<br>\n",(void *)((char *)t+sizeof(mem_header)+PLATFORM_PADDING),t->size,t->filename,t->lineno);
 # endif			
 		}
 #endif
@@ -392,7 +392,7 @@ int _mem_block_check(void *ptr, int silent, char *filename, int lineno)
 	}
 	if (!silent) {
 		fprintf(stderr,"---------------------------------------\n");
-		fprintf(stderr,"Block 0x%0.8lX status at %s:%d:\n", (long) p, filename, lineno);
+		fprintf(stderr,"Block 0x%.8lX status at %s:%d:\n", (long) p, filename, lineno);
 		fprintf(stderr,"%10s\t","Beginning:  ");
 	}
 
@@ -424,7 +424,7 @@ int _mem_block_check(void *ptr, int silent, char *filename, int lineno)
 			break;
 		default:
 			if (!silent) {
-				fprintf(stderr,"Overrun (magic=0x%0.8lX, expected=0x%0.8lX)\n", p->magic, MEM_BLOCK_START_MAGIC);
+				fprintf(stderr,"Overrun (magic=0x%.8lX, expected=0x%.8lX)\n", p->magic, MEM_BLOCK_START_MAGIC);
 			} else {
 				return _mem_block_check(ptr, 0, filename, lineno);
 			}
@@ -454,7 +454,7 @@ int _mem_block_check(void *ptr, int silent, char *filename, int lineno)
 		}
 
 		fprintf(stderr,"%10s\t", "End:");
-		fprintf(stderr,"Overflown (magic=0x%0.8lX instead of 0x%0.8lX)\n", 
+		fprintf(stderr,"Overflown (magic=0x%.8lX instead of 0x%.8lX)\n", 
 				*((long *)(((char *) p) + sizeof(mem_header)+p->size+PLATFORM_PADDING+END_ALIGNMENT(p->size))), MEM_BLOCK_END_MAGIC);
 		fprintf(stderr,"%10s\t","");
 		if (overflows>=sizeof(long)) {

@@ -4,20 +4,23 @@
 >gzpassthru</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
-TITLE="Compression functions"
+TITLE="Zlib Compression Functions"
 HREF="ref.zlib.html"><LINK
 REL="PREVIOUS"
 TITLE="gzopen"
 HREF="function.gzopen.html"><LINK
 REL="NEXT"
 TITLE="gzputs"
-HREF="function.gzputs.html"></HEAD
+HREF="function.gzputs.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,57 +68,72 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.GZPASSTHRU"
+NAME="function.gzpassthru"
 >gzpassthru</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN6451"
+NAME="AEN37855"
 ></A
->gzpassthru -- output all remaining data on a gz-file pointer</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>gzpassthru&nbsp;--&nbsp;
+     Output all remaining data on a gz-file pointer
+    </DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN6454"
+NAME="AEN37858"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int gzpassthru</CODE
->(int zp);<P
+>int <B
+CLASS="function"
+>gzpassthru</B
+></CODE
+> (int zp)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Reads to EOF on the given gz-file pointer and writes the
-     (uncompressed) results to standard output.</P
+>&#13;     Reads to EOF on the given gz-file pointer and writes the
+     (uncompressed) results to standard output.
+    </P
 ><P
->     If an error occurs, returns false.</P
+>&#13;     If an error occurs, returns false.
+    </P
 ><P
->     The file pointer must be valid, and must point to a file
+>&#13;     The file pointer must be valid, and must point to a file
      successfully opened by <A
 HREF="function.gzopen.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >gzopen()</B
 ></A
->.</P
+>.
+    </P
 ><P
->     The gz-file is closed when <B
-CLASS="FUNCTION"
+>&#13;     The gz-file is closed when <B
+CLASS="function"
 >gzpassthru()</B
 > is
      done reading it (leaving <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >zp</I
 ></TT
-> useless).</P
+> useless).
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

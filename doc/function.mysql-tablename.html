@@ -4,7 +4,7 @@
 >mysql_tablename</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -15,9 +15,12 @@ REL="PREVIOUS"
 TITLE="mysql_select_db"
 HREF="function.mysql-select-db.html"><LINK
 REL="NEXT"
-TITLE="Network functions"
-HREF="ref.network.html"></HEAD
+TITLE="Network Functions"
+HREF="ref.network.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,42 +68,51 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.MYSQL-TABLENAME"
+NAME="function.mysql-tablename"
 >mysql_tablename</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN18542"
+NAME="AEN23465"
 ></A
->mysql_tablename -- Get table name of field</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>mysql_tablename&nbsp;--&nbsp;Get table name of field</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN18545"
+NAME="AEN23468"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->string mysql_tablename</CODE
->(int result, int i);<P
+>string <B
+CLASS="function"
+>mysql_tablename</B
+></CODE
+> (int result, int i)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
 > 
      <B
-CLASS="FUNCTION"
+CLASS="function"
 >mysql_tablename()</B
 > takes a result pointer
      returned by the <A
 HREF="function.mysql-list-tables.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >mysql_list_tables()</B
 ></A
 > function
@@ -108,13 +120,12 @@ CLASS="FUNCTION"
      <A
 HREF="function.mysql-num-rows.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >mysql_num_rows()</B
 ></A
 > function may be used to
      determine the number of tables in the result pointer.
-
-    <TABLE
+     <TABLE
 WIDTH="100%"
 BORDER="0"
 CELLPADDING="0"
@@ -123,31 +134,42 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
 >Example 1. <B
-CLASS="FUNCTION"
->mysql_tablename()</B
-> example</B
+CLASS="function"
+>Mysql_tablename()</B
+> Example</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->&lt;?php 
+CLASS="programlisting"
+>&#13;&#60;?php 
 mysql_connect ("localhost:3306");
 $result = mysql_list_tables ("wisconsin");
 $i = 0;
-while ($i &lt; mysql_num_rows ($result)) {
+while ($i &#60; mysql_num_rows ($result)) {
     $tb_names[$i] = mysql_tablename ($result, $i);
-    echo $tb_names[$i] . "&lt;BR&#62;";
+    echo $tb_names[$i] . "&#60;BR&#62;";
     $i++;
 }
-?&#62;</PRE
+?&#62;
+      </PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR
 ></TABLE
-></P
+>
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -202,7 +224,7 @@ HREF="ref.mysql.html"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->Network functions</TD
+>Network Functions</TD
 ></TR
 ></TABLE
 ></DIV

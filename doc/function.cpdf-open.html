@@ -4,7 +4,7 @@
 >cpdf_open</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="cpdf_set_keywords"
 HREF="function.cpdf-set-keywords.html"><LINK
 REL="NEXT"
 TITLE="cpdf_close"
-HREF="function.cpdf-close.html"></HEAD
+HREF="function.cpdf-close.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,35 +68,44 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.CPDF-OPEN"
+NAME="function.cpdf-open"
 >cpdf_open</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN5010"
+NAME="AEN6153"
 ></A
->cpdf_open -- Opens a new pdf document</DIV
+><P
+>    (PHP3 &#62;= 3.0.8, PHP4 &#62;= 4.0b4)</P
+>cpdf_open&nbsp;--&nbsp;Opens a new pdf document</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN5013"
+NAME="AEN6156"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int cpdf_open</CODE
->(int compression, string filename);<P
+>int <B
+CLASS="function"
+>cpdf_open</B
+></CODE
+> (int compression, string filename)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     The <B
-CLASS="FUNCTION"
+>&#13;     The <B
+CLASS="function"
 >cpdf_open()</B
 > function opens
      a new pdf document. The first parameter turns document compression
@@ -103,38 +115,39 @@ CLASS="FUNCTION"
      the <A
 HREF="function.cpdf-save-to-file.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >cpdf_save_to_file()</B
 ></A
 > or written to standard
      output with <A
 HREF="function.cpdf-output-buffer.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >cpdf_output_buffer()</B
 ></A
 >.
 
      <DIV
-CLASS="NOTE"
+CLASS="note"
 ><BLOCKQUOTE
-CLASS="NOTE"
+CLASS="note"
 ><P
 ><B
 >Note: </B
->       The return value will be needed in futher versions of ClibPDF as the 
+>
+       The return value will be needed in futher versions of ClibPDF as the 
        first parameter in all other functions which are writing to the pdf
        document.
       </P
 ><P
->       The ClibPDF library takes the filename "-" as a synonym for stdout.
+>&#13;       The ClibPDF library takes the filename "-" as a synonym for stdout.
        If PHP is compiled as an apache module this will not work because the
        way ClibPDF outputs to stdout does not work with apache. You can solve
        this problem by skipping the filename and using
        <A
 HREF="function.cpdf-output-buffer.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >cpdf_output_buffer()</B
 ></A
 > to output the pdf document.
@@ -143,17 +156,17 @@ CLASS="FUNCTION"
 ></DIV
 ></P
 ><P
->     See also <A
+>&#13;     See also <A
 HREF="function.cpdf-close.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >cpdf_close()</B
 ></A
 >,
               <A
 HREF="function.cpdf-output-buffer.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >cpdf_output_buffer()</B
 ></A
 >.</P

@@ -4,20 +4,23 @@
 >getallheaders</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
-TITLE="Apache-specific functions"
+TITLE="Apache-specific Functions"
 HREF="ref.apache.html"><LINK
 REL="PREVIOUS"
 TITLE="apache_note"
 HREF="function.apache-note.html"><LINK
 REL="NEXT"
 TITLE="virtual"
-HREF="function.virtual.html"></HEAD
+HREF="function.virtual.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,57 +68,72 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.GETALLHEADERS"
+NAME="function.getallheaders"
 >getallheaders</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN3282"
+NAME="AEN3563"
 ></A
->getallheaders -- Fetch all HTTP request headers</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>getallheaders&nbsp;--&nbsp;Fetch all HTTP request headers</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN3285"
+NAME="AEN3566"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->array getallheaders</CODE
->(void);<P
+>array <B
+CLASS="function"
+>getallheaders</B
+></CODE
+> (void)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     This function returns an associative array of all the HTTP headers in the 
-     current request.
-    <DIV
-CLASS="NOTE"
+>&#13;     This function returns an associative array of all the HTTP
+     headers in the current request.
+    </P
+><P
+>&#13;     <DIV
+CLASS="note"
 ><BLOCKQUOTE
-CLASS="NOTE"
+CLASS="note"
 ><P
 ><B
 >Note: </B
->      You can also get at the value of the common CGI variables by reading
-      them from the environment, which works whether or not you are using
-      PHP as an Apache module. Use <A
+>
+       You can also get at the value of the common CGI variables by
+       reading them from the environment, which works whether or not
+       you are using PHP as an Apache module. Use
+       <A
 HREF="function.phpinfo.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >phpinfo()</B
 ></A
-> to see a
-      list of all of the environment variables defined this way.
-     </P
+> to see a list of all of the
+       environment variables defined this way.
+      </P
 ></BLOCKQUOTE
 ></DIV
 >
-     <TABLE
+    </P
+><P
+>&#13;     <TABLE
 WIDTH="100%"
 BORDER="0"
 CELLPADDING="0"
@@ -124,43 +142,60 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
->Example 1. getallheaders() Example</B
+>Example 1. <B
+CLASS="function"
+>getallheaders()</B
+> Example</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->$headers = getallheaders();
-while (list($header, $value) = each($headers)) {
-    echo "$header: $value&lt;br&gt;\n";
-}</PRE
+CLASS="programlisting"
+>&#13;$headers = getallheaders();
+while (list ($header, $value) = each ($headers)) {
+    echo "$header: $value&#60;br&#62;\n";
+}
+      </PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR
 ></TABLE
 >
-     This example will display all the request headers for the
-     current request.
+    </P
+><P
+>&#13;     This example will display all the request headers for the current
+     request.
      <DIV
-CLASS="NOTE"
+CLASS="note"
 ><BLOCKQUOTE
-CLASS="NOTE"
+CLASS="note"
 ><P
 ><B
 >Note: </B
->       <B
-CLASS="FUNCTION"
->getallheaders()</B
+>
+       <B
+CLASS="function"
+>Getallheaders()</B
 > is currently only supported
        when PHP runs as an <SPAN
-CLASS="PRODUCTNAME"
+CLASS="productname"
 >Apache</SPAN
 > module.
       </P
 ></BLOCKQUOTE
 ></DIV
-></P
+>
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

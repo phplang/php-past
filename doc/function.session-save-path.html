@@ -4,7 +4,7 @@
 >session_save_path</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="session_module_name"
 HREF="function.session-module-name.html"><LINK
 REL="NEXT"
 TITLE="session_id"
-HREF="function.session-id.html"></HEAD
+HREF="function.session-id.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,72 +68,84 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.SESSION-SAVE-PATH"
+NAME="function.session-save-path"
 >session_save_path</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN24392"
+NAME="AEN31357"
 ></A
->session_save_path -- Get and/or set the current session save path</DIV
+><P
+>    (PHP4 )</P
+>session_save_path&nbsp;--&nbsp;Get and/or set the current session save path</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN24395"
+NAME="AEN31360"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->string session_save_path</CODE
->(string [<SPAN
-CLASS="OPTIONAL"
->path</SPAN
->]);<P
+>string <B
+CLASS="function"
+>session_save_path</B
+></CODE
+> ([string 
+       path])</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     <B
-CLASS="FUNCTION"
+>&#13;     <B
+CLASS="function"
 >session_save_path()</B
 > returns the path of the current
      directory used to save session data. If <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >path</I
 ></TT
 >
      is specified, the path to which data is saved will be changed.
-    <DIV
-CLASS="NOTE"
+     <DIV
+CLASS="note"
 ><BLOCKQUOTE
-CLASS="NOTE"
+CLASS="note"
 ><P
 ><B
 >Note: </B
->      On some operating systems, you may want to specify a path on
-      a filesystem that handles lots of small files efficiently. For
-      example, on Linux, reiserfs may provide better performance than
-      ext2fs.</P
+>
+       On some operating systems, you may want to specify a path on a
+       filesystem that handles lots of small files efficiently. For
+       example, on Linux, reiserfs may provide better performance than
+       ext2fs.
+      </P
 ></BLOCKQUOTE
 ></DIV
 >
-    <DIV
-CLASS="NOTE"
+     <DIV
+CLASS="note"
 ><BLOCKQUOTE
-CLASS="NOTE"
+CLASS="note"
 ><P
 ><B
 >Note: </B
->      This function was added in PHP 4.0.</P
+>
+       This function was added in PHP 4.0.
+      </P
 ></BLOCKQUOTE
 ></DIV
-></P
+>
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

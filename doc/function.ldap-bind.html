@@ -4,7 +4,7 @@
 >ldap_bind</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -12,12 +12,15 @@ REL="UP"
 TITLE="LDAP functions"
 HREF="ref.ldap.html"><LINK
 REL="PREVIOUS"
-TITLE="ldap_mod_replace"
-HREF="function.ldap-mod-replace.html"><LINK
+TITLE="ldap_add"
+HREF="function.ldap-add.html"><LINK
 REL="NEXT"
 TITLE="ldap_close"
-HREF="function.ldap-close.html"></HEAD
+HREF="function.ldap-close.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -42,7 +45,7 @@ WIDTH="10%"
 ALIGN="left"
 VALIGN="bottom"
 ><A
-HREF="function.ldap-mod-replace.html"
+HREF="function.ldap-add.html"
 >Prev</A
 ></TD
 ><TD
@@ -65,45 +68,48 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.LDAP-BIND"
+NAME="function.ldap-bind"
 >ldap_bind</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN14468"
+NAME="AEN17420"
 ></A
->ldap_bind -- Bind to LDAP directory</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>ldap_bind&nbsp;--&nbsp;Bind to LDAP directory</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN14471"
+NAME="AEN17423"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int ldap_bind</CODE
->(int link_identifier, string [<SPAN
-CLASS="OPTIONAL"
->bind_rdn</SPAN
->], string [<SPAN
-CLASS="OPTIONAL"
->bind_password</SPAN
->]);<P
+>int <B
+CLASS="function"
+>ldap_bind</B
+></CODE
+> (int link_identifier [, string bind_rdn [, string bind_password]])</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Binds to the LDAP directory with specified RDN and
+>&#13;     Binds to the LDAP directory with specified RDN and
      password. Returns true on success and false on error.</P
 ><P
 >  
      <B
-CLASS="FUNCTION"
+CLASS="function"
 >ldap_bind()</B
 > does a bind operation on the
      directory. bind_rdn and bind_password are optional. If not
@@ -124,7 +130,7 @@ WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
 ><A
-HREF="function.ldap-mod-replace.html"
+HREF="function.ldap-add.html"
 >Prev</A
 ></TD
 ><TD
@@ -149,7 +155,7 @@ HREF="function.ldap-close.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->ldap_mod_replace</TD
+>ldap_add</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"

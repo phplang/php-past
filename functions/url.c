@@ -26,7 +26,7 @@
    | Author: Jim Winstead (jimw@php.net)                                  |
    +----------------------------------------------------------------------+
  */
-/* $Id: url.c,v 1.45 2000/01/01 04:31:17 sas Exp $ */
+/* $Id: url.c,v 1.46 2000/08/04 12:28:41 martin Exp $ */
 
 #include <stdlib.h>
 #include <string.h>
@@ -254,7 +254,8 @@ char *_php3_urlencode(char *s, int len)
 			str[y] = hexchars[(unsigned char) s[x] & 15];
 		}
 #else /*CHARSET_EBCDIC*/
-		} else if (!isalnum(str[y]) && strchr("_-.", str[y]) != NULL) {
+		} else if (!isalnum(str[y]) && strchr("_-.", str[y]) == NULL) {
+			/* Allow only alphanumeric chars and '_', '-', '.'; escape the rest */
 			str[y++] = '%';
 			str[y++] = hexchars[os_toascii[(unsigned char) s[x]] >> 4];
 			str[y] = hexchars[os_toascii[(unsigned char) s[x]] & 0x0F];

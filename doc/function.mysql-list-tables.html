@@ -4,7 +4,7 @@
 >mysql_list_tables</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -12,12 +12,15 @@ REL="UP"
 TITLE="MySQL functions"
 HREF="ref.mysql.html"><LINK
 REL="PREVIOUS"
-TITLE="mysql_list_dbs"
-HREF="function.mysql-list-dbs.html"><LINK
+TITLE="mysql_list_fields"
+HREF="function.mysql-list-fields.html"><LINK
 REL="NEXT"
 TITLE="mysql_num_fields"
-HREF="function.mysql-num-fields.html"></HEAD
+HREF="function.mysql-num-fields.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -42,7 +45,7 @@ WIDTH="10%"
 ALIGN="left"
 VALIGN="bottom"
 ><A
-HREF="function.mysql-list-dbs.html"
+HREF="function.mysql-list-fields.html"
 >Prev</A
 ></TD
 ><TD
@@ -65,66 +68,72 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.MYSQL-LIST-TABLES"
+NAME="function.mysql-list-tables"
 >mysql_list_tables</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN18347"
+NAME="AEN23262"
 ></A
->mysql_list_tables -- List tables in a MySQL database</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>mysql_list_tables&nbsp;--&nbsp;List tables in a MySQL database</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN18350"
+NAME="AEN23265"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int mysql_list_tables</CODE
->(string database, int 
-      [<SPAN
-CLASS="OPTIONAL"
->link_identifier</SPAN
->]
-      
-     );<P
+>int <B
+CLASS="function"
+>mysql_list_tables</B
+></CODE
+> (string database [, int 
+       link_identifier])</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
 > 
      <B
-CLASS="FUNCTION"
+CLASS="function"
 >mysql_list_tables()</B
 > takes a database name and
      returns a result pointer much like the
      <A
 HREF="function.mysql-db-query.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >mysql_db_query()</B
 ></A
 > function.  The
      <A
 HREF="function.mysql-tablename.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >mysql_tablename()</B
 ></A
 > function should be used to
-     extract the actual table names from the result pointer.</P
+     extract the actual table names from the result pointer.
+    </P
 ><P
->     For downward compatibility <B
-CLASS="FUNCTION"
+>&#13;     For downward compatibility <B
+CLASS="function"
 >mysql_listtables()</B
 >
-     can also be used.</P
+     can also be used.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -141,7 +150,7 @@ WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
 ><A
-HREF="function.mysql-list-dbs.html"
+HREF="function.mysql-list-fields.html"
 >Prev</A
 ></TD
 ><TD
@@ -166,7 +175,7 @@ HREF="function.mysql-num-fields.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->mysql_list_dbs</TD
+>mysql_list_fields</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"

@@ -4,20 +4,23 @@
 >getservbyname</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
-TITLE="Network functions"
+TITLE="Network Functions"
 HREF="ref.network.html"><LINK
 REL="PREVIOUS"
 TITLE="getprotobynumber"
 HREF="function.getprotobynumber.html"><LINK
 REL="NEXT"
 TITLE="getservbyport"
-HREF="function.getservbyport.html"></HEAD
+HREF="function.getservbyport.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,70 +68,87 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.GETSERVBYNAME"
+NAME="function.getservbyname"
 >getservbyname</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN18779"
+NAME="AEN23736"
 ></A
->getservbyname -- get port number associated with an Internet service and protocol</DIV
+><P
+>    (PHP4 &#62;= 4.0b4)</P
+>getservbyname&nbsp;--&nbsp;
+     Get port number associated with an Internet service and protocol
+    </DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN18782"
+NAME="AEN23739"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int getservbyname</CODE
->(string service, string protocol);<P
+>int <B
+CLASS="function"
+>getservbyname</B
+></CODE
+> (string service, string protocol)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->    <B
-CLASS="FUNCTION"
->getservbyname()</B
-> returns the Internet port which
-    corresponds to <TT
-CLASS="PARAMETER"
+>&#13;     <B
+CLASS="function"
+>Getservbyname()</B
+> returns the Internet port
+     which corresponds to <TT
+CLASS="parameter"
 ><I
 >service</I
 ></TT
-> for the specified
-    <TT
-CLASS="PARAMETER"
+> for the
+     specified <TT
+CLASS="parameter"
 ><I
 >protocol</I
 ></TT
-> as per /etc/services.
-    <TT
-CLASS="PARAMETER"
+> as per
+     <TT
+CLASS="filename"
+>/etc/services</TT
+>.
+     <TT
+CLASS="parameter"
 ><I
 >protocol</I
 ></TT
 > is either <TT
-CLASS="LITERAL"
->tcp</TT
-> or 
-    <TT
-CLASS="LITERAL"
->udp</TT
+CLASS="literal"
+>TCP</TT
+>
+     or <TT
+CLASS="literal"
+>UDP</TT
 >.
-  
-    See also <A
+    </P
+><P
+>&#13;     See also: <A
 HREF="function.getservbyport.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >getservbyport()</B
 ></A
->.</P
+>.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

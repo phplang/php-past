@@ -4,20 +4,23 @@
 >rsort</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
-TITLE="Array functions"
+TITLE="Array Functions"
 HREF="ref.array.html"><LINK
 REL="PREVIOUS"
 TITLE="reset"
 HREF="function.reset.html"><LINK
 REL="NEXT"
 TITLE="shuffle"
-HREF="function.shuffle.html"></HEAD
+HREF="function.shuffle.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,34 +68,44 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.RSORT"
+NAME="function.rsort"
 >rsort</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN4436"
+NAME="AEN4858"
 ></A
->rsort -- Sort an array in reverse order</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>rsort&nbsp;--&nbsp;Sort an array in reverse order</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN4439"
+NAME="AEN4861"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->void rsort</CODE
->(array array);<P
+>void <B
+CLASS="function"
+>rsort</B
+></CODE
+> (array array [, int 
+       sort_flags])</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     This function sorts an array in reverse order (highest to lowest).
+>&#13;     This function sorts an array in reverse order (highest to lowest).
      <TABLE
 WIDTH="100%"
 BORDER="0"
@@ -102,77 +115,121 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
 >Example 1. <B
-CLASS="FUNCTION"
->rsort()</B
+CLASS="function"
+>Rsort()</B
 > example</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->$fruits = array("lemon","orange","banana","apple");
-rsort($fruits);
-for (reset($fruits); list($key,$value) = each($fruits); ) {
-    echo "fruits[$key] = ", $value, "\n";
+CLASS="programlisting"
+>&#13;$fruits = array ("lemon", "orange", "banana", "apple");
+rsort ($fruits);
+reset ($fruits);
+while (list ($key, $val) = each ($fruits)) {
+    echo "$key -&#62; $val\n";
 }
       </PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR
 ></TABLE
 >
-
-     This example would display:
-
-     <TT
-CLASS="COMPUTEROUTPUT"
->fruits[0] = orange
+    </P
+><P
+>&#13;     This example would display:
+    </P
+><P
+>&#13;     <DIV
+CLASS="informalexample"
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;fruits[0] = orange
 fruits[1] = lemon
 fruits[2] = banana
 fruits[3] = apple
-     </TT
->
-
-     The fruits have been sorted in reverse alphabetical order.</P
+      </PRE
+></TD
+></TR
+></TABLE
 ><P
->     See also:
-     <A
+></P
+></DIV
+>
+    </P
+><P
+>&#13;     The fruits have been sorted in reverse alphabetical order.
+    </P
+><P
+>&#13;     You may modify the behavior of the sort using the optional
+     parameter <TT
+CLASS="parameter"
+><I
+>sort_flags</I
+></TT
+>, for details 
+     see <A
+HREF="function.sort.html"
+><B
+CLASS="function"
+>sort()</B
+></A
+>.
+    </P
+><P
+>&#13;     See also: <A
 HREF="function.arsort.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >arsort()</B
-></A
->, 
-     <A
-HREF="function.asort.html"
-><B
-CLASS="FUNCTION"
->asort()</B
 ></A
 >,
      <A
+HREF="function.asort.html"
+><B
+CLASS="function"
+>asort()</B
+></A
+>, <A
 HREF="function.ksort.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >ksort()</B
 ></A
->, 
+>,
      <A
 HREF="function.sort.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >sort()</B
 ></A
->, and
-     <A
+>, and <A
 HREF="function.usort.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >usort()</B
 ></A
->.</P
+>.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

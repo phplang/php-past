@@ -4,20 +4,23 @@
 >imap_body</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
-TITLE="IMAP functions"
+TITLE="IMAP, POP3 and NNTP functions"
 HREF="ref.imap.html"><LINK
 REL="PREVIOUS"
 TITLE="imap_base64"
 HREF="function.imap-base64.html"><LINK
 REL="NEXT"
 TITLE="imap_check"
-HREF="function.imap-check.html"></HEAD
+HREF="function.imap-check.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,45 +68,54 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.IMAP-BODY"
+NAME="function.imap-body"
 >imap_body</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN12540"
+NAME="AEN14896"
 ></A
->imap_body -- Read the message body</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>imap_body&nbsp;--&nbsp;Read the message body</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN12543"
+NAME="AEN14899"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->string imap_body</CODE
->(int imap_stream, int msg_number, int flags);<P
+>string <B
+CLASS="function"
+>imap_body</B
+></CODE
+> (int imap_stream, int msg_number [, int flags])</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     <B
-CLASS="FUNCTION"
+>&#13;     <B
+CLASS="function"
 >imap_body()</B
 > returns the body of the message,
      numbered <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 > msg_number</I
 ></TT
 > in the current
      mailbox. The optional <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >flags</I
 ></TT
@@ -114,19 +126,28 @@ CLASS="PARAMETER"
 ><UL
 ><LI
 ><P
->	FT_UID - The msgno is a UID</P
+>&#13;	FT_UID - The <TT
+CLASS="parameter"
+><I
+>msgno</I
+></TT
+> is a UID
+       </P
 ></LI
 ><LI
 ><P
->	FT_PEEK - Do not set the \Seen flag if not already set</P
+>&#13;	FT_PEEK - Do not set the \Seen flag if not already set
+       </P
 ></LI
 ><LI
 ><P
->	FT_INTERNAL - The return string is in internal format, will
-	not canonicalize to CRLF.</P
+>&#13;	FT_INTERNAL - The return string is in internal format, will
+	not canonicalize to CRLF.
+       </P
 ></LI
 ></UL
-></P
+>
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

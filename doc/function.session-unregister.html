@@ -4,7 +4,7 @@
 >session_unregister</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -15,9 +15,12 @@ REL="PREVIOUS"
 TITLE="session_register"
 HREF="function.session-register.html"><LINK
 REL="NEXT"
-TITLE="session_is_registered"
-HREF="function.session-is-registered.html"></HEAD
+TITLE="session_unset"
+HREF="function.session-unset.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -55,7 +58,7 @@ WIDTH="10%"
 ALIGN="right"
 VALIGN="bottom"
 ><A
-HREF="function.session-is-registered.html"
+HREF="function.session-unset.html"
 >Next</A
 ></TD
 ></TR
@@ -65,58 +68,73 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.SESSION-UNREGISTER"
+NAME="function.session-unregister"
 >session_unregister</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN24452"
+NAME="AEN31416"
 ></A
->session_unregister -- Unregister a variable from the current session</DIV
+><P
+>    (PHP4 )</P
+>session_unregister&nbsp;--&nbsp;
+     Unregister a variable from the current session
+    </DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN24455"
+NAME="AEN31419"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->bool session_unregister</CODE
->(string name);<P
+>bool <B
+CLASS="function"
+>session_unregister</B
+></CODE
+> (string name)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     <B
-CLASS="FUNCTION"
+>&#13;     <B
+CLASS="function"
 >session_unregister()</B
 > unregisters (forgets)
      the global variable named <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >name</I
 ></TT
 > from the
-     current session.</P
+     current session.
+    </P
 ><P
->     This function returns true when the variable is successfully
+>&#13;     This function returns true when the variable is successfully
      unregistered from the session.
-    <DIV
-CLASS="NOTE"
+     <DIV
+CLASS="note"
 ><BLOCKQUOTE
-CLASS="NOTE"
+CLASS="note"
 ><P
 ><B
 >Note: </B
->      This function was added in PHP 4.0.</P
+>
+       This function was added in PHP 4.0.
+      </P
 ></BLOCKQUOTE
 ></DIV
-></P
+>
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -149,7 +167,7 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><A
-HREF="function.session-is-registered.html"
+HREF="function.session-unset.html"
 >Next</A
 ></TD
 ></TR
@@ -171,7 +189,7 @@ HREF="ref.session.html"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->session_is_registered</TD
+>session_unset</TD
 ></TR
 ></TABLE
 ></DIV

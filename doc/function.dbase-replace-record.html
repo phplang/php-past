@@ -4,7 +4,7 @@
 >dbase_replace_record</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="dbase_add_record"
 HREF="function.dbase-add-record.html"><LINK
 REL="NEXT"
 TITLE="dbase_delete_record"
-HREF="function.dbase-delete-record.html"></HEAD
+HREF="function.dbase-delete-record.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,63 +68,75 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.DBASE-REPLACE-RECORD"
+NAME="function.dbase-replace-record"
 >dbase_replace_record</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN7483"
+NAME="AEN8800"
 ></A
->dbase_replace_record -- replace a record in a dBase database</DIV
+><P
+>    (PHP3 &#62;= 3.0.11, PHP4 )</P
+>dbase_replace_record&nbsp;--&nbsp;Replace a record in a dBase database</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN7486"
+NAME="AEN8803"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->bool dbase_replace_record</CODE
->(int dbase_identifier, array record, int dbase_record_number);<P
+>bool <B
+CLASS="function"
+>dbase_replace_record</B
+></CODE
+> (int dbase_identifier, array record, int dbase_record_number)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Replaces the data associated with the record
+>&#13;     Replaces the data associated with the record
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >record_number</I
 ></TT
 > with the data in the
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >record</I
 ></TT
-> in the database. If the number of items in
-     the supplied record is not equal to the number of fields in the database,
-     the operation will fail and false will be returned.</P
+> in the database. If the number of
+     items in the supplied record is not equal to the number of fields
+     in the database, the operation will fail and false will be
+     returned.
+    </P
 ><P
->     <TT
-CLASS="PARAMETER"
+>&#13;     <TT
+CLASS="parameter"
 ><I
 >dbase_record_number</I
 ></TT
-> is an integer which spans from
-     1 to the number of records in the database (as returned by
-     <A
+> is an integer which
+     spans from 1 to the number of records in the database (as
+     returned by <A
 HREF="function.dbase-numrecords.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >dbase_numrecords()</B
 ></A
->).</P
+>).
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

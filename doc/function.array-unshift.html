@@ -4,20 +4,23 @@
 >array_unshift</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
-TITLE="Array functions"
+TITLE="Array Functions"
 HREF="ref.array.html"><LINK
 REL="PREVIOUS"
-TITLE="array_splice"
-HREF="function.array-splice.html"><LINK
+TITLE="array_unique"
+HREF="function.array-unique.html"><LINK
 REL="NEXT"
 TITLE="array_values"
-HREF="function.array-values.html"></HEAD
+HREF="function.array-values.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -42,7 +45,7 @@ WIDTH="10%"
 ALIGN="left"
 VALIGN="bottom"
 ><A
-HREF="function.array-splice.html"
+HREF="function.array-unique.html"
 >Prev</A
 ></TD
 ><TD
@@ -65,63 +68,69 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.ARRAY-UNSHIFT"
+NAME="function.array-unshift"
 >array_unshift</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN3865"
+NAME="AEN4167"
 ></A
->array_unshift -- Push one or more elements
-     onto the beginning of array</DIV
+><P
+>    (PHP4 )</P
+>array_unshift&nbsp;--&nbsp;
+     Push one or more elements onto the beginning of array
+    </DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN3868"
+NAME="AEN4170"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
 ><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->int array_unshift</CODE
->(array array, mixed var, [<SPAN
-CLASS="OPTIONAL"
->...</SPAN
->]);</CODE
+>int <B
+CLASS="function"
+>array_unshift</B
+></CODE
+> (array array, mixed var [, mixed
+       ...])</CODE
 ></P
 ><P
 ></P
 ></DIV
 ><P
->     <B
-CLASS="FUNCTION"
->array_unshift()</B
+>&#13;     <B
+CLASS="function"
+>Array_unshift()</B
 > prepends passed elements to
      the front of the <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >array</I
 ></TT
 >. Note that the list
      of elements is prepended as a whole, so that the prepended
-     elements stay in the same order.</P
+     elements stay in the same order.
+    </P
 ><P
->     Returns the new number of elements in the
+>&#13;     Returns the new number of elements in the
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >array</I
 ></TT
->.</P
+>.
+    </P
 ><P
->     <TABLE
+>&#13;     <TABLE
 WIDTH="100%"
 BORDER="0"
 CELLPADDING="0"
@@ -130,60 +139,64 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
 >Example 1. <B
-CLASS="FUNCTION"
->array_unshift()</B
+CLASS="function"
+>Array_unshift()</B
 > example</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->$queue = array("p1", "p3");
-array_unshift($queue, "p4", "p5", "p6");
+CLASS="programlisting"
+>&#13;$queue = array ("p1", "p3");
+array_unshift ($queue, "p4", "p5", "p6");
       </PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR
 ></TABLE
 >
-     This would result in $queue having 5 elements: "p4", "p5", "p6",
-     "p1", and "p3".</P
+    </P
 ><P
->     See also <A
+>&#13;     This would result in <TT
+CLASS="varname"
+>$queue</TT
+> having 5
+     elements: "p4", "p5", "p6", "p1", and "p3".
+    </P
+><P
+>&#13;     See also <A
 HREF="function.array-shift.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >array_shift()</B
 ></A
 >,
      <A
 HREF="function.array-push.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >array_push()</B
 ></A
 >, and
      <A
 HREF="function.array-pop.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >array_pop()</B
 ></A
 >.
-
-    <DIV
-CLASS="NOTE"
-><BLOCKQUOTE
-CLASS="NOTE"
-><P
-><B
->Note: </B
->      This function was added in PHP 4.0.</P
-></BLOCKQUOTE
-></DIV
-></P
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -200,7 +213,7 @@ WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
 ><A
-HREF="function.array-splice.html"
+HREF="function.array-unique.html"
 >Prev</A
 ></TD
 ><TD
@@ -225,7 +238,7 @@ HREF="function.array-values.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->array_splice</TD
+>array_unique</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"

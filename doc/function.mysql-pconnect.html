@@ -4,7 +4,7 @@
 >mysql_pconnect</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="mysql_num_rows"
 HREF="function.mysql-num-rows.html"><LINK
 REL="NEXT"
 TITLE="mysql_query"
-HREF="function.mysql-query.html"></HEAD
+HREF="function.mysql-query.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,106 +68,104 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.MYSQL-PCONNECT"
+NAME="function.mysql-pconnect"
 >mysql_pconnect</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN18406"
+NAME="AEN23325"
 ></A
->mysql_pconnect --      Open a persistent connection to a MySQL Server
+><P
+>    (PHP3 , PHP4 )</P
+>mysql_pconnect&nbsp;--&nbsp;
+     Open a persistent connection to a MySQL Server
     </DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN18409"
+NAME="AEN23328"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int mysql_pconnect</CODE
->(string 
-             [<SPAN
-CLASS="OPTIONAL"
->hostname
-	[<SPAN
-CLASS="OPTIONAL"
->:port</SPAN
->]  
-	[<SPAN
-CLASS="OPTIONAL"
->:/path/to/socket</SPAN
->]
-       </SPAN
->]
-      
-     , string 
-      [<SPAN
-CLASS="OPTIONAL"
->username</SPAN
->]
-     , string 
-      [<SPAN
-CLASS="OPTIONAL"
->password</SPAN
->]
-     );<P
+>int <B
+CLASS="function"
+>mysql_pconnect</B
+></CODE
+> ([string 
+       hostname
+ 	[:port]  
+ 	[:/path/to/socket] [, string 
+       username [, string 
+       password]]])</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
 > 
      Returns: A positive MySQL persistent link identifier on success,
-     or false on error</P
+     or false on error.
+    </P
 ><P
->     <B
-CLASS="FUNCTION"
+>&#13;     <B
+CLASS="function"
 >mysql_pconnect()</B
 > establishes a connection to a
      MySQL server.  All of the arguments are optional, and if they're
      missing, defaults are assumed ('localhost', user name of the user
-     that owns the server process, empty password).</P
+     that owns the server process, empty password).
+    </P
 ><P
->     The hostname string can also include a port
-     number. eg. &quot;hostname:port&quot; or a path to a socket
-     eg. &quot;:/path/to/socket&quot; for the localhost.
+>&#13;     The hostname string can also include a port
+     number. eg. "hostname:port" or a path to a socket
+     eg. ":/path/to/socket" for the localhost.
      <DIV
-CLASS="NOTE"
+CLASS="note"
 ><BLOCKQUOTE
-CLASS="NOTE"
+CLASS="note"
 ><P
 ><B
 >Note: </B
->       Support for &quot;:port&quot; wass added in 3.0B4.</P
+>
+       Support for ":port" wass added in 3.0B4.
+      </P
 ><P
->       Support for the &quot;:/path/to/socket&quot; was added in
-       3.0.10.</P
+>&#13;       Support for the ":/path/to/socket" was added in
+       3.0.10.
+      </P
 ></BLOCKQUOTE
 ></DIV
-></P
+>
+    </P
 ><P
->     <B
-CLASS="FUNCTION"
+>&#13;     <B
+CLASS="function"
 >mysql_pconnect()</B
 > acts very much like
      <A
 HREF="function.mysql-connect.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >mysql_connect()</B
 ></A
-> with two major differences.</P
+> with two major differences.
+    </P
 ><P
 > 
      First, when connecting, the function would first try to find a
      (persistent) link that's already open with the same host,
      username and password.  If one is found, an identifier for it
-     will be returned instead of opening a new connection.</P
+     will be returned instead of opening a new connection.
+    </P
 ><P
 > 
      Second, the connection to the SQL server will not be closed when
@@ -172,17 +173,19 @@ CLASS="FUNCTION"
      open for future use (<A
 HREF="function.mysql-close.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >mysql_close()</B
 ></A
 > will not
      close links established by <B
-CLASS="FUNCTION"
+CLASS="function"
 >mysql_pconnect()</B
->).</P
+>).
+    </P
 ><P
 > 
-     This type of links is therefore called 'persistent'.</P
+     This type of links is therefore called 'persistent'.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

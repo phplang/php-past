@@ -4,7 +4,7 @@
 >ifx_error</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="ifx_do"
 HREF="function.ifx-do.html"><LINK
 REL="NEXT"
 TITLE="ifx_errormsg"
-HREF="function.ifx-errormsg.html"></HEAD
+HREF="function.ifx-errormsg.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,91 +68,104 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.IFX-ERROR"
+NAME="function.ifx-error"
 >ifx_error</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN13702"
+NAME="AEN16521"
 ></A
->ifx_error -- Returns error code of last Informix call</DIV
+><P
+>    (PHP3 &#62;= 3.0.3, PHP4 )</P
+>ifx_error&nbsp;--&nbsp;Returns error code of last Informix call</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN13705"
+NAME="AEN16524"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->string ifx_error</CODE
->(void);<P
+>string <B
+CLASS="function"
+>ifx_error</B
+></CODE
+>(void);</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     The Informix error codes (SQLSTATE &#38; SQLCODE) formatted as
+>&#13;     The Informix error codes (SQLSTATE &#38; SQLCODE) formatted as
      follows :
     </P
 ><P
->     x [SQLSTATE = aa bbb SQLCODE=cccc]
+>&#13;     x [SQLSTATE = aa bbb SQLCODE=cccc]
     </P
 ><P
->     where x = space : no error
+>&#13;     where x = space : no error
     </P
 ><P
->        E     : error
+> 
+     E : error
     </P
 ><P
->        N     : no more data
+> 
+     N : no more data
     </P
 ><P
->        W     : warning
+>        
+     W : warning
     </P
 ><P
->        ?     : undefined
+>        
+     ? : undefined
     </P
 ><P
->     If the "x" character is anything other than space, SQLSTATE and
+>&#13;     If the "x" character is anything other than space, SQLSTATE and
      SQLCODE describe the error in more detail.
     </P
 ><P
->     See the Informix manual for the description of SQLSTATE and
+>&#13;     See the Informix manual for the description of SQLSTATE and
      SQLCODE
     </P
 ><P
->     Returns in a string one character describing the general results
+>&#13;     Returns in a string one character describing the general results
      of a statement and both SQLSTATE and SQLCODE associated with the
      most recent SQL statement executed. The format of the string is
      "(char) [SQLSTATE=(two digits) (three digits) SQLCODE=(one
      digit)]". The first character can be '<TT
-CLASS="LITERAL"
+CLASS="literal"
 > </TT
 >'
      (space) (success), '<TT
-CLASS="LITERAL"
+CLASS="literal"
 >W</TT
 >' (the statement caused
      some warning), '<TT
-CLASS="LITERAL"
+CLASS="literal"
 >E</TT
 >' (an error happened when
      executing the statement) or '<TT
-CLASS="LITERAL"
+CLASS="literal"
 >N</TT
 >' (the statement
      didn't return any data).  
     </P
 ><P
-> See also:
-     <A
+> 
+     See also: <A
 HREF="function.ifx-errormsg.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >ifx_errormsg()</B
 ></A
 >

@@ -4,7 +4,7 @@
 >Expressions</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="Constants"
 HREF="language.constants.html"><LINK
 REL="NEXT"
 TITLE="Operators"
-HREF="language.operators.html"></HEAD
+HREF="language.operators.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="chapter"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -64,62 +67,71 @@ HREF="language.operators.html"
 ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><DIV
-CLASS="CHAPTER"
+CLASS="chapter"
 ><H1
 ><A
-NAME="LANGUAGE.EXPRESSIONS"
+NAME="language.expressions"
 >Chapter 9. Expressions</A
 ></H1
 ><P
->    Expressions are the most important building stones of PHP.  In PHP,
+>&#13;    Expressions are the most important building stones of PHP.  In PHP,
     almost anything you write is an expression.  The simplest yet
     most accurate way to define an expression is "anything that has a
     value".</P
 ><P
->    The most basic forms of expressions are constants and variables.
+>&#13;    The most basic forms of expressions are constants and variables.
     When you type "$a = 5", you're assigning '5' into $a.  '5', obviously,
     has the value 5, or in other words '5' is an expression with the
     value of 5 (in this case, '5' is an integer constant).</P
 ><P
->    After this assignment, you'd expect $a's value to be 5 as
+>&#13;    After this assignment, you'd expect $a's value to be 5 as
     well, so if you wrote $b = $a, you'd expect it to behave just as
     if you wrote $b = 5.  In other words, $a is an expression with the
     value of 5 as well.  If everything works right, this is exactly
     what will happen.</P
 ><P
->    Slightly more complex examples for expressions are functions.  For
+>&#13;    Slightly more complex examples for expressions are functions.  For
     instance, consider the following function:
 
     <DIV
-CLASS="INFORMALEXAMPLE"
+CLASS="informalexample"
 ><P
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->function foo () {
+CLASS="programlisting"
+>&#13;function foo () {
     return 5;
 }
      </PRE
+></TD
+></TR
+></TABLE
 ><P
 ></P
 ></DIV
 ></P
 ><P
->    Assuming you're familiar with the concept of functions (if you're
+>&#13;    Assuming you're familiar with the concept of functions (if you're
     not, take a look at the chapter about functions), you'd assume
     that typing <TT
-CLASS="LITERAL"
+CLASS="literal"
 >$c = foo()</TT
 > is essentially just like
     writing <TT
-CLASS="LITERAL"
+CLASS="literal"
 >$c = 5</TT
 >, and you're right.  Functions
     are expressions with the value of their return value.  Since foo()
     returns 5, the value of the expression 'foo()' is 5.  Usually
     functions don't just return a static value but compute something.</P
 ><P
->    Of course, values in PHP don't have to be integers, and very often
+>&#13;    Of course, values in PHP don't have to be integers, and very often
     they aren't.  PHP supports three scalar value types: integer values,
     floating point values and string values (scalar values are values that
     you can't 'break' into smaller pieces, unlike arrays, for instance).
@@ -127,7 +139,7 @@ CLASS="LITERAL"
     objects.  Each of these value types can be assigned into variables or
     returned from functions.</P
 ><P
->    So far, users of PHP/FI 2 shouldn't feel any change.  However, PHP
+>&#13;    So far, users of PHP/FI 2 shouldn't feel any change.  However, PHP
     takes expressions much further, in the same way many other
     languages do.  PHP is an expression-oriented language, in the
     sense that almost everything is an expression.  Consider the
@@ -143,7 +155,7 @@ CLASS="LITERAL"
     marks the end of a statement).  Since assignments are parsed in a
     right to left order, you can also write '$b = $a = 5'.</P
 ><P
->    Another good example of expression orientation is pre- and
+>&#13;    Another good example of expression orientation is pre- and
     post-increment and decrement.  Users of PHP/FI 2 and many other
     languages may be familiar with the notation of variable++ and
     variable--.  These are increment and decrement operators.  In
@@ -162,18 +174,18 @@ CLASS="LITERAL"
     $variable, before it was incremented (PHP increments the variable
     after reading its value, thus the name 'post-increment').</P
 ><P
->    A very common type of expressions are comparison expressions.
+>&#13;    A very common type of expressions are comparison expressions.
     These expressions evaluate to either 0 or 1, meaning FALSE or TRUE
     (respectively).  PHP supports &#62; (bigger than), &#62;= (bigger than
     or equal to), == (equal), != (not equal), &#60; (smaller than) and &#60;=
     (smaller than or equal to).  These expressions are most commonly used
     inside conditional execution, such as <TT
-CLASS="LITERAL"
+CLASS="literal"
 >if</TT
 >
     statements.</P
 ><P
->    The last example of expressions we'll deal with here is combined
+>&#13;    The last example of expressions we'll deal with here is combined
     operator-assignment expressions.  You already know that if you
     want to increment $a by 1, you can simply write '$a++' or '++$a'.
     But what if you want to add more than one to it, for instance 3?
@@ -194,16 +206,26 @@ CLASS="LITERAL"
     operator-assignment mode, for example '$a -= 5' (subtract 5 from
     the value of $a), '$b *= 7' (multiply the value of $b by 7), etc.</P
 ><P
->    There is one more expression that may seem odd if you haven't seen
+>&#13;    There is one more expression that may seem odd if you haven't seen
     it in other languages, the ternary conditional operator:
 
     <DIV
-CLASS="INFORMALEXAMPLE"
+CLASS="informalexample"
 ><P
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->$first ? $second : $third</PRE
+CLASS="programlisting"
+>&#13;$first ? $second : $third
+</PRE
+></TD
+></TR
+></TABLE
 ><P
 ></P
 ></DIV
@@ -214,16 +236,22 @@ CLASS="PROGRAMLISTING"
     of the conditional expression. Otherwise, the third subexpression
     is evaluated, and that is the value.</P
 ><P
->    The following example should help you understand pre- and
+>&#13;    The following example should help you understand pre- and
     post-increment and expressions in general a bit better:
 
     <DIV
-CLASS="INFORMALEXAMPLE"
+CLASS="informalexample"
 ><P
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->function double($i) {
+CLASS="programlisting"
+>&#13;function double($i) {
     return $i*2;
 }
 $b = $a = 5;        /* assign the value five into the variable $a and $b */
@@ -235,25 +263,29 @@ $e = $d = ++$b;     /* pre-increment, assign the incremented value of
 /* at this point, both $d and $e are equal to 6 */
 
 $f = double($d++);  /* assign twice the value of $d <I
-CLASS="EMPHASIS"
+CLASS="emphasis"
 >before</I
 > 
                        the increment, 2*6 = 12 to $f */
 $g = double(++$e);  /* assign twice the value of $e <I
-CLASS="EMPHASIS"
+CLASS="emphasis"
 >after</I
 >
                        the increment, 2*7 = 14 to $g */
 $h = $g += 10;      /* first, $g is incremented by 10 and ends with the 
                        value of 24. the value of the assignment (24) is 
                        then assigned into $h, and $h ends with the value 
-                       of 24 as well. */</PRE
+                       of 24 as well. */
+</PRE
+></TD
+></TR
+></TABLE
 ><P
 ></P
 ></DIV
 ></P
 ><P
->    In the beginning of the chapter we said that we'll be describing
+>&#13;    In the beginning of the chapter we said that we'll be describing
     the various statement types, and as promised, expressions can be
     statements.  However, not every expression is a statement.  In
     this case, a statement has the form of 'expr' ';' that is, an
@@ -261,7 +293,7 @@ $h = $g += 10;      /* first, $g is incremented by 10 and ends with the
     valid expression, but it's not a statement by itself.  '$b=$a=5;'
     however is a valid statement.</P
 ><P
->    One last thing worth mentioning is the truth value of expressions.
+>&#13;    One last thing worth mentioning is the truth value of expressions.
     In many events, mainly in conditional execution and loops, you're
     not interested in the specific value of the expression, but only
     care about whether it means TRUE or FALSE (PHP doesn't have a
@@ -274,12 +306,12 @@ $h = $g += 10;      /* first, $g is incremented by 10 and ends with the
     contains no elements it's considered FALSE, otherwise it's
     considered TRUE.</P
 ><P
->    PHP provides a full and powerful implementation of expressions, and
+>&#13;    PHP provides a full and powerful implementation of expressions, and
     documenting it entirely goes beyond the scope of this manual. The
     above examples should give you a good idea about what expressions
     are and how you can construct useful expressions. Throughout the
     rest of this manual we'll write <TT
-CLASS="REPLACEABLE"
+CLASS="replaceable"
 ><I
 >expr</I
 ></TT

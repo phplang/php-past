@@ -4,7 +4,7 @@
 >ignore_user_abort</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -12,12 +12,15 @@ REL="UP"
 TITLE="Miscellaneous functions"
 HREF="ref.misc.html"><LINK
 REL="PREVIOUS"
-TITLE="get_browser"
-HREF="function.get-browser.html"><LINK
+TITLE="highlight_string"
+HREF="function.highlight-string.html"><LINK
 REL="NEXT"
 TITLE="iptcparse"
-HREF="function.iptcparse.html"></HEAD
+HREF="function.iptcparse.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -42,7 +45,7 @@ WIDTH="10%"
 ALIGN="left"
 VALIGN="bottom"
 ><A
-HREF="function.get-browser.html"
+HREF="function.highlight-string.html"
 >Prev</A
 ></TD
 ><TD
@@ -65,42 +68,57 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.IGNORE-USER-ABORT"
+NAME="function.ignore-user-abort"
 >ignore_user_abort</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN16893"
+NAME="AEN21547"
 ></A
->ignore_user_abort -- Set whether a client disconnect should abort script execution</DIV
+><P
+>    (PHP3 &#62;= 3.0.7, PHP4 &#62;= 4.0b4)</P
+>ignore_user_abort&nbsp;--&nbsp;
+     Set whether a client disconnect should abort script execution
+    </DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN16896"
+NAME="AEN21550"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int ignore_user_abort</CODE
->(int [<SPAN
-CLASS="OPTIONAL"
->setting</SPAN
->]);<P
+>int <B
+CLASS="function"
+>ignore_user_abort</B
+></CODE
+> ([int 
+       setting])</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     This function sets whether a client disconnect should cause a
-     script to be aborted.  It will return the previous setting and
+>&#13;     This function sets whether a client disconnect should cause a
+     script to be aborted.    It will return the previous setting and
      can be called without an argument to not change the current
-     setting and only return the current setting.  See the Connection
-     Handling section in the Features chapter for a complete
-     description of connection handling in PHP.
+     setting and only return the current setting.  See the <A
+HREF="features.connection-handling.html"
+>Connection Handling</A
+>
+     section in the <A
+HREF="features.html"
+>Features</A
+> chapter
+     for a complete description of connection handling in PHP.
     </P
 ></DIV
 ><DIV
@@ -118,7 +136,7 @@ WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
 ><A
-HREF="function.get-browser.html"
+HREF="function.highlight-string.html"
 >Prev</A
 ></TD
 ><TD
@@ -143,7 +161,7 @@ HREF="function.iptcparse.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->get_browser</TD
+>highlight_string</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"

@@ -4,7 +4,7 @@
 >mcal_next_recurrence</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -15,9 +15,12 @@ REL="PREVIOUS"
 TITLE="mcal_date_compare"
 HREF="function.mcal-date-compare.html"><LINK
 REL="NEXT"
-TITLE="mcal_event_set_recur_daily"
-HREF="function.mcal-event-set-recur-daily.html"></HEAD
+TITLE="mcal_event_set_recur_none"
+HREF="function.mcal-event-set-recur-none.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -55,7 +58,7 @@ WIDTH="10%"
 ALIGN="right"
 VALIGN="bottom"
 ><A
-HREF="function.mcal-event-set-recur-daily.html"
+HREF="function.mcal-event-set-recur-none.html"
 >Next</A
 ></TD
 ></TR
@@ -65,44 +68,51 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.MCAL-NEXT-RECURRENCE"
+NAME="function.mcal-next-recurrence"
 >mcal_next_recurrence</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN16112"
+NAME="AEN19473"
 ></A
->mcal_next_recurrence -- Returns the next recurrence of the event</DIV
+><P
+>    (PHP3 &#62;= 3.0.13, PHP4 &#62;= 4.0b4)</P
+>mcal_next_recurrence&nbsp;--&nbsp;Returns the next recurrence of the event</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN16115"
+NAME="AEN19476"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int mcal_next_recurrence</CODE
->(int stream, int weekstart, array next);<P
+>int <B
+CLASS="function"
+>mcal_next_recurrence</B
+></CODE
+> (int stream, int weekstart, array next)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
 >  
      <B
-CLASS="FUNCTION"
+CLASS="function"
 >mcal_next_recurrence()</B
 > returns an object
      filled with the next date the event occurs, on or after the
      supplied date.  Returns empty date field if event does not occur
      or something is invalid. Uses weekstart to determine what day is
      considered the beginning of the week.</P
-><P
->     Returns true.</P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -135,7 +145,7 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><A
-HREF="function.mcal-event-set-recur-daily.html"
+HREF="function.mcal-event-set-recur-none.html"
 >Next</A
 ></TD
 ></TR
@@ -157,7 +167,7 @@ HREF="ref.mcal.html"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->mcal_event_set_recur_daily</TD
+>mcal_event_set_recur_none</TD
 ></TR
 ></TABLE
 ></DIV

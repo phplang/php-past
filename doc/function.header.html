@@ -4,7 +4,7 @@
 >header</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -15,9 +15,12 @@ REL="PREVIOUS"
 TITLE="HTTP functions"
 HREF="ref.http.html"><LINK
 REL="NEXT"
-TITLE="setcookie"
-HREF="function.setcookie.html"></HEAD
+TITLE="header_sent"
+HREF="function.headers-sent.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -55,7 +58,7 @@ WIDTH="10%"
 ALIGN="right"
 VALIGN="bottom"
 ><A
-HREF="function.setcookie.html"
+HREF="function.headers-sent.html"
 >Next</A
 ></TD
 ></TR
@@ -65,133 +68,183 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.HEADER"
+NAME="function.header"
 >header</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN10214"
+NAME="AEN11786"
 ></A
->header -- Send a raw HTTP header</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>header&nbsp;--&nbsp;Send a raw HTTP header</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN10217"
+NAME="AEN11789"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int header</CODE
->(string string);<P
+>int <B
+CLASS="function"
+>header</B
+></CODE
+> (string string)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     The <A
-HREF="function.header.html"
-><B
-CLASS="FUNCTION"
+>&#13;     The <B
+CLASS="function"
 >Header()</B
-></A
 > function is used at the top of an
      <SPAN
-CLASS="ACRONYM"
+CLASS="acronym"
 >HTML</SPAN
 > file to send raw <SPAN
-CLASS="ACRONYM"
+CLASS="acronym"
 >HTTP</SPAN
 >
      header strings.  See the <A
-HREF="http://www.w3.org/Protocols/rfc2068/rfc2068"
+HREF="http://www.w3.org/Protocols/rfc2616/rfc2616"
 TARGET="_top"
 >HTTP 1.1
      Specification</A
 > for more information on raw http headers.
      <I
-CLASS="EMPHASIS"
+CLASS="emphasis"
 >Note:</I
 > Remember that the
-     <A
-HREF="function.header.html"
-><B
-CLASS="FUNCTION"
+     <B
+CLASS="function"
 >Header()</B
-></A
-> function must be called before any actual
-     output is sent either by normal HTML tags or from PHP. It is a very
-     common error to read code with <A
+> function must be called before any
+     actual output is sent either by normal HTML tags or from PHP. It
+     is a very common error to read code with
+     <A
 HREF="function.include.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >include()</B
 ></A
-> or with 
-     auto_prepend and have spaces or empty lines in this code that force
-     output before <B
-CLASS="FUNCTION"
+> or with auto_prepend and have spaces
+     or empty lines in this code that force output before
+     <B
+CLASS="function"
 >header()</B
-> is called.</P
+> is called.
+    </P
 ><P
->	 There are two special-case header calls.  The first is the &quot;Location&quot;
-	 header.  Not only does it send this header back to the browser, it also returns
-	 a REDIRECT status code to Apache.  From a script writer's point of view this
-	 should not be important, but for people who understand Apache internals it is
-	 important to understand.
+>&#13;     There are two special-case header calls.  The first is the
+     "Location" header.  Not only does it send this header
+     back to the browser, it also returns a REDIRECT status code to
+     Apache.  From a script writer's point of view this should not be
+     important, but for people who understand Apache internals it is
+     important to understand.
      <DIV
-CLASS="INFORMALEXAMPLE"
+CLASS="informalexample"
 ><P
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->header("Location: http://www.php.net");  /* Redirect browser to PHP web site */
-exit;  /* Make sure that code below does not get executed when we redirect. */</PRE
-><P
-></P
-></DIV
-></P
-><P
->	 The second special-case is any header that starts with the string, &quot;HTTP/&quot;
-	 (case is not significant).  For example, if you have your ErrorDocument 404 Apache
-	 directive pointed to a PHP script, it would be a good idea to make sure that your
-	 PHP script is actually generating a 404.  The first thing you do in your script should
-	 then be:
-     <DIV
-CLASS="INFORMALEXAMPLE"
-><P
-></P
-><PRE
-CLASS="PROGRAMLISTING"
->header("http/1.0 404 Not Found");
-	 </PRE
+CLASS="programlisting"
+>&#13;header ("Location: http://www.php.net"); /* Redirect browser 
+                                            to PHP web site */
+exit;                 /* Make sure that code below does 
+                         not get executed when we redirect. */
+      </PRE
+></TD
+></TR
+></TABLE
 ><P
 ></P
 ></DIV
 >
-	</P
+    </P
 ><P
->     PHP scripts often generate dynamic HTML that must not be cached
+>&#13;     The second special-case is any header that starts with the
+     string, "HTTP/" (case is not significant).  For
+     example, if you have your ErrorDocument 404 Apache directive
+     pointed to a PHP script, it would be a good idea to make sure
+     that your PHP script is actually generating a 404.  The first
+     thing you do in your script should then be:
+     <DIV
+CLASS="informalexample"
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;header ("HTTP/1.0 404 Not Found");
+      </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+>
+    </P
+><P
+>&#13;     PHP scripts often generate dynamic HTML that must not be cached
      by the client browser or any proxy caches between the server and the
      client browser. Many proxies and clients can be forced to disable
      caching with
      <DIV
-CLASS="INFORMALEXAMPLE"
+CLASS="informalexample"
 ><P
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->  header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");             // Date in the past
-  header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT"); // always modified
-  header("Cache-Control: no-cache, must-revalidate");           // HTTP/1.1
-  header("Pragma: no-cache");                                   // HTTP/1.0</PRE
+CLASS="programlisting"
+>&#13;header ("Expires: Mon, 26 Jul 1997 05:00:00 GMT");    // Date in the past
+header ("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT"); 
+                                                      // always modified
+header ("Cache-Control: no-cache, must-revalidate");  // HTTP/1.1
+header ("Pragma: no-cache");                          // HTTP/1.0
+      </PRE
+></TD
+></TR
+></TABLE
 ><P
 ></P
 ></DIV
-></P
+>
+    </P
+><P
+>&#13;     See also <A
+HREF="function.headers-sent.html"
+><B
+CLASS="function"
+>headers_sent()</B
+></A
+>
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -224,7 +277,7 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><A
-HREF="function.setcookie.html"
+HREF="function.headers-sent.html"
 >Next</A
 ></TD
 ></TR
@@ -246,7 +299,7 @@ HREF="ref.http.html"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->setcookie</TD
+>header_sent</TD
 ></TR
 ></TABLE
 ></DIV

@@ -4,7 +4,7 @@
 >cpdf_place_inline_image</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="cpdf_import_jpeg"
 HREF="function.cpdf-import-jpeg.html"><LINK
 REL="NEXT"
 TITLE="cpdf_add_annotation"
-HREF="function.cpdf-add-annotation.html"></HEAD
+HREF="function.cpdf-add-annotation.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,60 +68,69 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.CPDF-PLACE-INLINE-IMAGE"
+NAME="function.cpdf-place-inline-image"
 >cpdf_place_inline_image</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN6228"
+NAME="AEN7445"
 ></A
->cpdf_place_inline_image -- Places an image on the page</DIV
+><P
+>    (PHP3 &#62;= 3.0.9, PHP4 &#62;= 4.0b4)</P
+>cpdf_place_inline_image&nbsp;--&nbsp;Places an image on the page</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN6231"
+NAME="AEN7448"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->void cpdf_place_inline_image</CODE
->(int pdf document, int image, double x-koor, double y-koor, double angle, double width, double height, int mode);<P
+>void <B
+CLASS="function"
+>cpdf_place_inline_image</B
+></CODE
+> (int pdf document, int image, double x-koor, double y-koor, double angle, double width, double height, int mode)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     The <B
-CLASS="FUNCTION"
+>&#13;     The <B
+CLASS="function"
 >cpdf_place_inline_image()</B
 > function places an image
      created with the php image functions on the page at postion
      (<TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >x-koor</I
 ></TT
 >,
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >y-koor</I
 ></TT
 >). The image can be scaled at the same
      time.</P
 ><P
->     The last optional parameter determines the unit length. If is 0 or omitted
+>&#13;     The last optional parameter determines the unit length. If is 0 or omitted
      the default unit as specified for the page is used. Otherwise the koodinates
      are measured in postscript points disregarding the current unit.</P
 ><P
->     See also <A
+>&#13;     See also <A
 HREF="function.cpdf-import-jpeg.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >cpdf_import_jpeg()</B
 ></A
 >,</P

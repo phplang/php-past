@@ -4,7 +4,7 @@
 >strtolower</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="strtok"
 HREF="function.strtok.html"><LINK
 REL="NEXT"
 TITLE="strtoupper"
-HREF="function.strtoupper.html"></HEAD
+HREF="function.strtoupper.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,59 +68,107 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.STRTOLOWER"
+NAME="function.strtolower"
 >strtolower</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN25922"
+NAME="AEN34660"
 ></A
->strtolower -- Make a string lowercase</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>strtolower&nbsp;--&nbsp;Make a string lowercase</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN25925"
+NAME="AEN34663"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->string strtolower</CODE
->(string str);<P
+>string <B
+CLASS="function"
+>strtolower</B
+></CODE
+> (string str)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Returns <TT
-CLASS="PARAMETER"
+>&#13;     Returns <TT
+CLASS="parameter"
 ><I
 >string</I
 ></TT
 > with all alphabetic
-     characters converted to lowercase.</P
+     characters converted to lowercase.
+    </P
 ><P
->     Note that 'alphabetic' is determined by the current locale. This
+>&#13;     Note that 'alphabetic' is determined by the current locale. This
      means that in i.e. the default "C" locale, characters such as
-     umlaut-A (Ä) will not be converted.</P
+     umlaut-A (Ä) will not be converted.
+    </P
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
 ><P
->     See also <A
+><B
+>Example 1. <B
+CLASS="function"
+>Strtolower()</B
+> example</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;$str = "Mary Had A Little Lamb and She LOVED It So";
+$str = strtolower($str);	
+print $str; # Prints mary had a little lamb and she loved it so
+     </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+><P
+>&#13;     See also <A
 HREF="function.strtoupper.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >strtoupper()</B
 ></A
 >
      and <A
 HREF="function.ucfirst.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >ucfirst()</B
 ></A
->.</P
+>.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

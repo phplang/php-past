@@ -4,7 +4,7 @@
 >ifx_fieldproperties</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="ifx_fieldtypes"
 HREF="function.ifx-fieldtypes.html"><LINK
 REL="NEXT"
 TITLE="ifx_num_fields"
-HREF="function.ifx-num-fields.html"></HEAD
+HREF="function.ifx-num-fields.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,44 +68,53 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.IFX-FIELDPROPERTIES"
+NAME="function.ifx-fieldproperties"
 >ifx_fieldproperties</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN13860"
+NAME="AEN16686"
 ></A
->ifx_fieldproperties -- List of SQL fieldproperties</DIV
+><P
+>    (PHP3 &#62;= 3.0.3, PHP4 )</P
+>ifx_fieldproperties&nbsp;--&nbsp;List of SQL fieldproperties</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN13863"
+NAME="AEN16689"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->array ifx_fieldproperties</CODE
->(int result_id);<P
+>array <B
+CLASS="function"
+>ifx_fieldproperties</B
+></CODE
+> (int result_id)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Returns an associative array with fieldnames as key and the SQL
+>&#13;     Returns an associative array with fieldnames as key and the SQL
      fieldproperties as data for a query with
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >result_id</I
 ></TT
 >.  Returns FALSE on error.
     </P
 ><P
->     Returns the Informix SQL fieldproperies of every field in the
+>&#13;     Returns the Informix SQL fieldproperies of every field in the
      query as an associative array.  Properties are encoded as:
      "SQLTYPE;length;precision;scale;ISNULLABLE" where SQLTYPE = the
      Informix type like "SQLVCHAR" etc. and ISNULLABLE = "Y" or "N".
@@ -116,14 +128,20 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
 >Example 1. Informix SQL fieldproperties</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->$properties = ifx_fieldtypes ($resultid);
+CLASS="programlisting"
+>&#13;$properties = ifx_fieldtypes ($resultid);
 if (! isset($properties)) {
   ... error ...
 }
@@ -133,6 +151,9 @@ for ($i = 0; $i &#60; count($properties); $i++) {
     next ($properties);
 }
      </PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR

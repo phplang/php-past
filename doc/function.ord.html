@@ -4,7 +4,7 @@
 >Ord</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -12,12 +12,15 @@ REL="UP"
 TITLE="String functions"
 HREF="ref.strings.html"><LINK
 REL="PREVIOUS"
-TITLE="nl2br"
-HREF="function.nl2br.html"><LINK
+TITLE="ob_implicit_flush"
+HREF="function.ob-implicit-flush.html"><LINK
 REL="NEXT"
 TITLE="parse_str"
-HREF="function.parse-str.html"></HEAD
+HREF="function.parse-str.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -42,7 +45,7 @@ WIDTH="10%"
 ALIGN="left"
 VALIGN="bottom"
 ><A
-HREF="function.nl2br.html"
+HREF="function.ob-implicit-flush.html"
 >Prev</A
 ></TD
 ><TD
@@ -65,36 +68,45 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.ORD"
+NAME="function.ord"
 >Ord</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN25251"
+NAME="AEN33777"
 ></A
->Ord -- Return ASCII value of character</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>Ord&nbsp;--&nbsp;Return ASCII value of character</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN25254"
+NAME="AEN33780"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int ord</CODE
->(string string);<P
+>int <B
+CLASS="function"
+>ord</B
+></CODE
+> (string string)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Returns the ASCII value of the first character of
+>&#13;     Returns the ASCII value of the first character of
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >string</I
 ></TT
@@ -102,7 +114,7 @@ CLASS="PARAMETER"
      <A
 HREF="function.chr.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >chr()</B
 ></A
 >.
@@ -115,32 +127,44 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
 >Example 1. <B
-CLASS="FUNCTION"
->ord()</B
+CLASS="function"
+>Ord()</B
 > example</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->if (ord($str) == 10) {
+CLASS="programlisting"
+>&#13;if (ord ($str) == 10) {
     echo "The first character of \$str is a line feed.\n";
-}</PRE
+}
+      </PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR
 ></TABLE
-></P
+>
+    </P
 ><P
->     See also <A
+>&#13;     See also <A
 HREF="function.chr.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >chr()</B
 ></A
->.</P
+>.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -157,7 +181,7 @@ WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
 ><A
-HREF="function.nl2br.html"
+HREF="function.ob-implicit-flush.html"
 >Prev</A
 ></TD
 ><TD
@@ -182,7 +206,7 @@ HREF="function.parse-str.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->nl2br</TD
+>ob_implicit_flush</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"

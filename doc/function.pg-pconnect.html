@@ -1,10 +1,10 @@
 <HTML
 ><HEAD
 ><TITLE
->pg_pConnect</TITLE
+>pg_pconnect</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -12,12 +12,15 @@ REL="UP"
 TITLE="PostgreSQL functions"
 HREF="ref.pgsql.html"><LINK
 REL="PREVIOUS"
-TITLE="pg_Options"
+TITLE="pg_options"
 HREF="function.pg-options.html"><LINK
 REL="NEXT"
-TITLE="pg_Port"
-HREF="function.pg-port.html"></HEAD
+TITLE="pg_port"
+HREF="function.pg-port.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,34 +68,45 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.PG-PCONNECT"
->pg_pConnect</A
+NAME="function.pg-pconnect"
+>pg_pconnect</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN23602"
+NAME="AEN29793"
 ></A
->pg_pConnect -- make a persistent database connection</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>pg_pconnect&nbsp;--&nbsp;
+     Open a persistent PostgreSQL connection
+    </DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN23605"
+NAME="AEN29796"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int pg_pconnect</CODE
->(string host, string port, string options, string tty, string dbname);<P
+>int <B
+CLASS="function"
+>pg_pconnect</B
+></CODE
+> (string host, string port, string options, string tty, string dbname)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Returns a connection index on success, or false if the connection
+>&#13;     Returns a connection index on success, or false if the connection
      could not be made.  Opens a persistent connection to a PostgreSQL
      database. Each of the arguments should be a quoted string,
      including the port number. The options and tty arguments are
@@ -102,55 +116,57 @@ CLASS="FUNCDEF"
      <A
 HREF="function.pg-connect.html"
 ><B
-CLASS="FUNCTION"
->pg_Connect()</B
+CLASS="function"
+>pg_connect()</B
 ></A
->.</P
+>.
+    </P
 ><P
->     A connection can also established with the following command:
+>&#13;     A connection can also established with the following command:
      <B
-CLASS="COMMAND"
+CLASS="command"
 >$conn = pg_pconnect("dbname=marliese port=5432");</B
 >
      Other parameters besides <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >dbname</I
 ></TT
 > and
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >port</I
 ></TT
 > are <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >host</I
 ></TT
 >, 
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >tty</I
 ></TT
 >, <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >options</I
 ></TT
 >,
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >user</I
 ></TT
 > and <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >password</I
 ></TT
->.</P
+>.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -192,7 +208,7 @@ HREF="function.pg-port.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->pg_Options</TD
+>pg_options</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"
@@ -205,7 +221,7 @@ HREF="ref.pgsql.html"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->pg_Port</TD
+>pg_port</TD
 ></TR
 ></TABLE
 ></DIV

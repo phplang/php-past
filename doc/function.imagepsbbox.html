@@ -4,7 +4,7 @@
 >ImagePSBBox</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="ImagePolygon"
 HREF="function.imagepolygon.html"><LINK
 REL="NEXT"
 TITLE="ImagePSEncodeFont"
-HREF="function.imagepsencodefont.html"></HEAD
+HREF="function.imagepsencodefont.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,165 +68,188 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.IMAGEPSBBOX"
+NAME="function.imagepsbbox"
 >ImagePSBBox</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN12070"
+NAME="AEN14266"
 ></A
->ImagePSBBox -- give the bounding box of a text rectangle using PostScript Type1 fonts</DIV
+><P
+>    (PHP3 &#62;= 3.0.9, PHP4 &#62;= 4.0RC1)</P
+>ImagePSBBox&nbsp;--&nbsp;
+     Give the bounding box of a text rectangle using PostScript Type1
+     fonts
+    </DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN12073"
+NAME="AEN14269"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->array imagepsbbox</CODE
->(string text, int font, int size, int space, int width, float angle);<P
+>array <B
+CLASS="function"
+>imagepsbbox</B
+></CODE
+> (string text, int font, int size [, int space [, int tightness [, float angle]]])</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     <TT
-CLASS="PARAMETER"
+>&#13;     <TT
+CLASS="parameter"
 ><I
->size</I
+>Size</I
 ></TT
-> is expressed in pixels.</P
+> is expressed in pixels.
+    </P
 ><P
->     <TT
-CLASS="PARAMETER"
+>&#13;     <TT
+CLASS="parameter"
 ><I
->space</I
+>Space</I
 ></TT
 > allows you to change the default
      value of a space in a font.  This amount is added to the normal
-     value and can also be negative.</P
+     value and can also be negative.
+    </P
 ><P
->     <TT
-CLASS="PARAMETER"
+>&#13;     <TT
+CLASS="parameter"
 ><I
->tightness</I
+>Tightness</I
 ></TT
 > allows you to control the amount
      of white space between characters. This amount is added to the
-     normal character width and can also be negative.</P
+     normal character width and can also be negative.
+    </P
 ><P
->     <TT
-CLASS="PARAMETER"
+>&#13;     <TT
+CLASS="parameter"
 ><I
->angle</I
+>Angle</I
 ></TT
-> is in degrees.</P
+> is in degrees.
+    </P
 ><P
->     Parameters <TT
-CLASS="PARAMETER"
+>&#13;     Parameters <TT
+CLASS="parameter"
 ><I
 >space</I
 ></TT
 > and
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >tightness</I
 ></TT
 > are expressed in character space
-     units, where 1 unit is 1/1000th of an em-square.</P
+     units, where 1 unit is 1/1000th of an em-square.
+    </P
 ><P
->     Parameters <TT
-CLASS="PARAMETER"
+>&#13;     Parameters <TT
+CLASS="parameter"
 ><I
 >space</I
 ></TT
 >,
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >tightness</I
 ></TT
-> and <TT
-CLASS="PARAMETER"
+>, and <TT
+CLASS="parameter"
 ><I
 >angle</I
 ></TT
 >
-     are optional.</P
+     are optional.
+    </P
 ><P
->     The bounding box is calculated using information available from
+>&#13;     The bounding box is calculated using information available from
      character metrics, and unfortunately tends to differ slightly
      from the results achieved by actually rasterizing the text. If
      the angle is 0 degrees, you can expect the text to need 1 pixel
-     more to every direction.</P
+     more to every direction.
+    </P
 ><P
->     This function returns an array containing the following elements:
+>&#13;     This function returns an array containing the following elements:
      <DIV
-CLASS="INFORMALTABLE"
+CLASS="informaltable"
 ><P
 ></P
 ><TABLE
 BORDER="1"
 CLASS="CALSTABLE"
+><TBODY
 ><TR
 ><TD
 ALIGN="LEFT"
-VALIGN="TOP"
+VALIGN="MIDDLE"
 >0</TD
 ><TD
 ALIGN="LEFT"
-VALIGN="TOP"
+VALIGN="MIDDLE"
 >lower left x-coordinate</TD
 ></TR
 ><TR
 ><TD
 ALIGN="LEFT"
-VALIGN="TOP"
+VALIGN="MIDDLE"
 >1</TD
 ><TD
 ALIGN="LEFT"
-VALIGN="TOP"
+VALIGN="MIDDLE"
 >lower left y-coordinate</TD
 ></TR
 ><TR
 ><TD
 ALIGN="LEFT"
-VALIGN="TOP"
+VALIGN="MIDDLE"
 >2</TD
 ><TD
 ALIGN="LEFT"
-VALIGN="TOP"
+VALIGN="MIDDLE"
 >upper right x-coordinate</TD
 ></TR
 ><TR
 ><TD
 ALIGN="LEFT"
-VALIGN="TOP"
+VALIGN="MIDDLE"
 >3</TD
 ><TD
 ALIGN="LEFT"
-VALIGN="TOP"
+VALIGN="MIDDLE"
 >upper right y-coordinate</TD
 ></TR
+></TBODY
 ></TABLE
 ><P
 ></P
 ></DIV
-></P
+>
+    </P
 ><P
->     See also <A
+>&#13;     See also <A
 HREF="function.imagepstext.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >imagepstext()</B
 ></A
->.</P
+>.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

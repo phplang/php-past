@@ -4,7 +4,7 @@
 >fgetss</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="fgets"
 HREF="function.fgets.html"><LINK
 REL="NEXT"
 TITLE="file"
-HREF="function.file.html"></HEAD
+HREF="function.file.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,99 +68,113 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.FGETSS"
+NAME="function.fgetss"
 >fgetss</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN8574"
+NAME="AEN9771"
 ></A
->fgetss -- get line from file pointer and strip HTML tags</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>fgetss&nbsp;--&nbsp;
+     Gets line from file pointer and strip HTML tags
+    </DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN8577"
+NAME="AEN9774"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->string fgetss</CODE
->(int fp, int length, string [<SPAN
-CLASS="OPTIONAL"
->allowable_tags</SPAN
->]);<P
+>string <B
+CLASS="function"
+>fgetss</B
+></CODE
+> (int fp, int length [, string 
+       allowable_tags])</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Identical to <A
+>&#13;     Identical to <A
 HREF="function.fgets.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >fgets()</B
 ></A
->,
-     except that fgetss attempts to strip any HTML and PHP tags from
-     the text it reads.</P
+>, except that fgetss
+     attempts to strip any HTML and PHP tags from the text it
+     reads.
+    </P
 ><P
->     You can use the optional third parameter to specify tags which
+>&#13;     You can use the optional third parameter to specify tags which
      should not be stripped.
-
-    <DIV
-CLASS="NOTE"
+     <DIV
+CLASS="note"
 ><BLOCKQUOTE
-CLASS="NOTE"
+CLASS="note"
 ><P
 ><B
 >Note: </B
->      <TT
-CLASS="PARAMETER"
+>
+       <TT
+CLASS="parameter"
 ><I
 >allowable_tags</I
 ></TT
-> was added in PHP 3.0.13, PHP4B3.</P
+> was added in PHP 3.0.13,
+       PHP4B3.
+      </P
 ></BLOCKQUOTE
 ></DIV
-></P
+>
+    </P
 ><P
->     See also <A
+>&#13;     See also <A
 HREF="function.fgets.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >fgets()</B
 ></A
 >, <A
 HREF="function.fopen.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >fopen()</B
 ></A
 >,
      <A
 HREF="function.fsockopen.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >fsockopen()</B
 ></A
 >, <A
 HREF="function.popen.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >popen()</B
 ></A
->,
-	 and <A
+>, and
+     <A
 HREF="function.strip-tags.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >strip_tags()</B
 ></A
->.</P
+>.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

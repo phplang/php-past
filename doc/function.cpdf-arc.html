@@ -4,7 +4,7 @@
 >cpdf_arc</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="cpdf_circle"
 HREF="function.cpdf-circle.html"><LINK
 REL="NEXT"
 TITLE="cpdf_rect"
-HREF="function.cpdf-rect.html"></HEAD
+HREF="function.cpdf-rect.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,76 +68,85 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.CPDF-ARC"
+NAME="function.cpdf-arc"
 >cpdf_arc</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN5839"
+NAME="AEN7038"
 ></A
->cpdf_arc -- Draws an arc</DIV
+><P
+>    (PHP3 &#62;= 3.0.8, PHP4 &#62;= 4.0b4)</P
+>cpdf_arc&nbsp;--&nbsp;Draws an arc</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN5842"
+NAME="AEN7041"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->void cpdf_arc</CODE
->(int pdf document, double x-koor, double y-koor, double radius, double start, double end, int mode);<P
+>void <B
+CLASS="function"
+>cpdf_arc</B
+></CODE
+> (int pdf document, double x-koor, double y-koor, double radius, double start, double end, int mode)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     The <B
-CLASS="FUNCTION"
+>&#13;     The <B
+CLASS="function"
 >cpdf_arc()</B
 > function draws an arc with
      center at point 
      (<TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >x-koor</I
 ></TT
 >, <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >y-koor</I
 ></TT
 >)
      and radius <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >radius</I
 ></TT
 >, starting at angle
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >start</I
 ></TT
 > and ending at angle
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >end</I
 ></TT
 >.</P
 ><P
->     The last optional parameter determines the unit length. If is 0 or omitted
+>&#13;     The last optional parameter determines the unit length. If is 0 or omitted
      the default unit as specified for the page is used. Otherwise the koodinates
      are measured in postscript points disregarding the current unit.</P
 ><P
->     See also <A
+>&#13;     See also <A
 HREF="function.cpdf-circle.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >cpdf_circle()</B
 ></A
 >.</P

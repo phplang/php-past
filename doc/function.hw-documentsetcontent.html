@@ -4,7 +4,7 @@
 >hw_DocumentSetContent</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="hw_DocumentContent"
 HREF="function.hw-documentcontent.html"><LINK
 REL="NEXT"
 TITLE="hw_DocumentSize"
-HREF="function.hw-documentsize.html"></HEAD
+HREF="function.hw-documentsize.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,34 +68,43 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.HW-DOCUMENTSETCONTENT"
+NAME="function.hw-documentsetcontent"
 >hw_DocumentSetContent</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN10598"
+NAME="AEN12216"
 ></A
->hw_DocumentSetContent -- sets/replaces content of hw_document</DIV
+><P
+>    (PHP3 &#62;= 3.0.8)</P
+>hw_DocumentSetContent&nbsp;--&nbsp;sets/replaces content of hw_document</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN10601"
+NAME="AEN12219"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->string hw_documentsetcontent</CODE
->(int hw_document, string content);<P
+>string <B
+CLASS="function"
+>hw_documentsetcontent</B
+></CODE
+> (int hw_document, string content)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Sets or replaces the content of the document. If the document is an HTML
+>&#13;     Sets or replaces the content of the document. If the document is an HTML
      document the content is everything after the BODY tag. Information
      from the HEAD and BODY tag is in the stored in the object record.
      If you provide this information in the content of the document too,
@@ -100,26 +112,17 @@ CLASS="FUNCDEF"
      the document is inserted. Probably not a very good idea.
      If this functions fails the document will retain its old content.</P
 ><P
->     See also <A
-HREF="function.hw-documentattributes.html"
-><B
-CLASS="FUNCTION"
+>&#13;     See also <B
+CLASS="function"
 >hw_DocumentAttributes()</B
-></A
 >,
-              <A
-HREF="function.hw-documentsize.html"
-><B
-CLASS="FUNCTION"
+              <B
+CLASS="function"
 >hw_DocumentSize()</B
-></A
 >,
-              <A
-HREF="function.hw-documentcontent.html"
-><B
-CLASS="FUNCTION"
+              <B
+CLASS="function"
 >hw_DocumentContent()</B
-></A
 >.</P
 ></DIV
 ><DIV

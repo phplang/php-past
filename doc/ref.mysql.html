@@ -4,7 +4,7 @@
 >MySQL functions</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="msql_tablename"
 HREF="function.msql-tablename.html"><LINK
 REL="NEXT"
 TITLE="mysql_affected_rows"
-HREF="function.mysql-affected-rows.html"></HEAD
+HREF="function.mysql-affected-rows.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="reference"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -64,28 +67,47 @@ HREF="function.mysql-affected-rows.html"
 ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><DIV
-CLASS="REFERENCE"
+CLASS="reference"
 ><A
-NAME="REF.MYSQL"
+NAME="ref.mysql"
 ></A
 ><DIV
 CLASS="TITLEPAGE"
 ><H1
-CLASS="TITLE"
->XXXIV. MySQL functions</H1
+CLASS="title"
+>XL. MySQL functions</H1
 ><DIV
 CLASS="PARTINTRO"
 ><A
-NAME="AEN17801"
+NAME="AEN22657"
 ></A
 ><P
->    These functions allow you to access MySQL database servers.</P
+>&#13;    These functions allow you to access MySQL database servers. In
+    order to have these functions available, you must compile php
+    with mysql support by using the
+    <TT
+CLASS="option"
+>--with-mysql</TT
+> option. If you
+    use this option without specifying the path to mysql, php will
+    use the built-in mysql client libraries. Users who run other
+    applications that use mysql (for example, running php3 and php4
+    as concurrent apache modules, or auth-mysql) should always
+    specify the path to mysql:
+    <TT
+CLASS="option"
+>--with-mysql=/path/to/mysql</TT
+>.
+    This will force php to use the client libraries installed by
+    mysql, avoiding any conflicts.
+   </P
 ><P
->    More information about MySQL can be found at <A
+>&#13;    More information about MySQL can be found at <A
 HREF="http://www.mysql.com/"
 TARGET="_top"
 >http://www.mysql.com/</A
->.</P
+>.
+   </P
 ></DIV
 ><DIV
 CLASS="TOC"
@@ -104,12 +126,14 @@ HREF="function.mysql-affected-rows.html"
 ><A
 HREF="function.mysql-change-user.html"
 >mysql_change_user</A
-> &#8212; Change logged in user on active connection</DT
+> &#8212; 
+     Change logged in user of the active connection
+    </DT
 ><DT
 ><A
 HREF="function.mysql-close.html"
 >mysql_close</A
-> &#8212; close MySQL connection</DT
+> &#8212; Close MySQL connection</DT
 ><DT
 ><A
 HREF="function.mysql-connect.html"
@@ -129,7 +153,7 @@ HREF="function.mysql-data-seek.html"
 ><A
 HREF="function.mysql-db-query.html"
 >mysql_db_query</A
-> &#8212; Send an MySQL query to MySQL</DT
+> &#8212; Send a MySQL query</DT
 ><DT
 ><A
 HREF="function.mysql-drop-db.html"
@@ -139,7 +163,7 @@ HREF="function.mysql-drop-db.html"
 ><A
 HREF="function.mysql-errno.html"
 >mysql_errno</A
-> &#8212; Returns the number of the error message from previous
+> &#8212; Returns the numerical value of the error message from previous
      MySQL operation</DT
 ><DT
 ><A
@@ -151,18 +175,23 @@ HREF="function.mysql-error.html"
 ><A
 HREF="function.mysql-fetch-array.html"
 >mysql_fetch_array</A
-> &#8212; Fetch a result row as an associative array</DT
+> &#8212; 
+     Fetch a result row as an associative array
+    </DT
 ><DT
 ><A
 HREF="function.mysql-fetch-field.html"
 >mysql_fetch_field</A
-> &#8212; Get column information from a result and return as an
-     object</DT
+> &#8212; 
+     Get column information from a result and return as an object
+    </DT
 ><DT
 ><A
 HREF="function.mysql-fetch-lengths.html"
 >mysql_fetch_lengths</A
-> &#8212; Get the length of each output in a result</DT
+> &#8212; 
+     Get the length of each output in a result
+    </DT
 ><DT
 ><A
 HREF="function.mysql-fetch-object.html"
@@ -175,38 +204,46 @@ HREF="function.mysql-fetch-row.html"
 > &#8212; Get a result row as an enumerated array</DT
 ><DT
 ><A
-HREF="function.mysql-field-name.html"
->mysql_field_name</A
-> &#8212; Get the name of the specified field in a
-     result</DT
-><DT
-><A
-HREF="function.mysql-field-seek.html"
->mysql_field_seek</A
-> &#8212; Set result pointer to a specified field offset</DT
-><DT
-><A
-HREF="function.mysql-field-table.html"
->mysql_field_table</A
-> &#8212; Get name of the table the specified field is
-     in</DT
-><DT
-><A
-HREF="function.mysql-field-type.html"
->mysql_field_type</A
-> &#8212; Get the type of the specified field in a
-     result</DT
-><DT
-><A
 HREF="function.mysql-field-flags.html"
 >mysql_field_flags</A
-> &#8212; Get the flags associated with the specified field in a
-     result</DT
+> &#8212; 
+     Get the flags associated with the specified field in a result
+    </DT
+><DT
+><A
+HREF="function.mysql-field-name.html"
+>mysql_field_name</A
+> &#8212; 
+     Get the name of the specified field in a result
+    </DT
 ><DT
 ><A
 HREF="function.mysql-field-len.html"
 >mysql_field_len</A
-> &#8212; Returns the length of the specified field</DT
+> &#8212; 
+     Returns the length of the specified field
+    </DT
+><DT
+><A
+HREF="function.mysql-field-seek.html"
+>mysql_field_seek</A
+> &#8212; 
+     Set result pointer to a specified field offset
+    </DT
+><DT
+><A
+HREF="function.mysql-field-table.html"
+>mysql_field_table</A
+> &#8212; 
+     Get name of the table the specified field is in
+    </DT
+><DT
+><A
+HREF="function.mysql-field-type.html"
+>mysql_field_type</A
+> &#8212; 
+     Get the type of the specified field in a result
+    </DT
 ><DT
 ><A
 HREF="function.mysql-free-result.html"
@@ -216,18 +253,21 @@ HREF="function.mysql-free-result.html"
 ><A
 HREF="function.mysql-insert-id.html"
 >mysql_insert_id</A
-> &#8212; Get the id generated from the previous INSERT
-     operation</DT
+> &#8212; 
+     Get the id generated from the previous INSERT operation
+    </DT
+><DT
+><A
+HREF="function.mysql-list-dbs.html"
+>mysql_list_dbs</A
+> &#8212; 
+     List databases available on a MySQL server
+    </DT
 ><DT
 ><A
 HREF="function.mysql-list-fields.html"
 >mysql_list_fields</A
 > &#8212; List MySQL result fields</DT
-><DT
-><A
-HREF="function.mysql-list-dbs.html"
->mysql_list_dbs</A
-> &#8212; List databases available on on MySQL server</DT
 ><DT
 ><A
 HREF="function.mysql-list-tables.html"
@@ -247,13 +287,14 @@ HREF="function.mysql-num-rows.html"
 ><A
 HREF="function.mysql-pconnect.html"
 >mysql_pconnect</A
-> &#8212;      Open a persistent connection to a MySQL Server
+> &#8212; 
+     Open a persistent connection to a MySQL Server
     </DT
 ><DT
 ><A
 HREF="function.mysql-query.html"
 >mysql_query</A
-> &#8212; Send an SQL query to MySQL</DT
+> &#8212; Send a MySQL query</DT
 ><DT
 ><A
 HREF="function.mysql-result.html"

@@ -23,13 +23,13 @@
    | If you did not, or have any questions about PHP licensing, please    |
    | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
-   | Authors: Andi Gutmans <andi@php.net>                                 |
+   | Authors: Andi Gutmans <andi@zend.com>                                |
    |          Zeev Suraski <bourbon@netvision.net.il>                     |
    |          Rasmus Lerdorf <rasmus@lerdorf.on.ca>                       |
    +----------------------------------------------------------------------+
  */
 
-/* $Id: main.c,v 1.512 2000/01/29 19:33:04 rasmus Exp $ */
+/* $Id: main.c,v 1.514 2000/05/31 14:24:48 thies Exp $ */
 
 /* #define CRASH_DETECTION */
 
@@ -79,6 +79,11 @@
 #include "win32/syslog.h"
 #elif HAVE_SYSLOG_H
 #include <syslog.h>
+#endif
+
+#if PHP_SIGCHILD
+#include <sys/types.h>
+#include <sys/wait.h>
 #endif
 
 #if USE_SAPI
@@ -591,6 +596,17 @@ void php3_set_time_limit(INTERNAL_FUNCTION_PARAMETERS)
 /* }}} */
 
 
+#if PHP_SIGCHILD
+static void sigchld_handler(int apar)
+{
+    while (waitpid(-1, NULL, WNOHANG) > 0)
+		;
+	signal(SIGCHLD,sigchld_handler);
+}
+#endif
+
+
+
 int php3_request_startup(INLINE_TLS_VOID)
 {
 #if APACHE && defined(CRASH_DETECTION)
@@ -601,6 +617,11 @@ int php3_request_startup(INLINE_TLS_VOID)
 		log_error(log_message, php3_rqst->server);
 	}
 #endif
+
+#if PHP_SIGCHILD
+	signal(SIGCHLD,sigchld_handler);
+#endif
+
 
 	GLOBAL(max_execution_time) = php3_ini.max_execution_time;
 	php3_set_timeout(GLOBAL(max_execution_time) _INLINE_TLS);

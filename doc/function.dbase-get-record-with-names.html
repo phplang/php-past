@@ -4,7 +4,7 @@
 >dbase_get_record_with_names</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="dbase_get_record"
 HREF="function.dbase-get-record.html"><LINK
 REL="NEXT"
 TITLE="dbase_numfields"
-HREF="function.dbase-numfields.html"></HEAD
+HREF="function.dbase-numfields.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,51 +68,66 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.DBASE-GET-RECORD-WITH-NAMES"
+NAME="function.dbase-get-record-with-names"
 >dbase_get_record_with_names</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN7537"
+NAME="AEN8857"
 ></A
->dbase_get_record_with_names -- gets a record from a dBase database as an associative array</DIV
+><P
+>    (PHP3 &#62;= 3.0.4, PHP4 )</P
+>dbase_get_record_with_names&nbsp;--&nbsp;
+     Gets a record from a dBase database as an associative array
+    </DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN7540"
+NAME="AEN8860"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->array dbase_get_record_with_names</CODE
->(int dbase_identifier, int record);<P
+>array 
+       <B
+CLASS="function"
+>dbase_get_record_with_names</B
+>
+      </CODE
+> (int dbase_identifier, int record)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->	Returns the data from <TT
-CLASS="PARAMETER"
+>&#13;     Returns the data from <TT
+CLASS="parameter"
 ><I
 >record</I
 ></TT
 > in an
-	associative array.  The array also includes an associative member
-	named 'deleted' which is set to 1 if the record has been marked
-	for deletion (see <A
+     associative array.  The array also includes an associative member
+     named 'deleted' which is set to 1 if the record has been marked
+     for deletion (see <A
 HREF="function.dbase-delete-record.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >dbase_delete_record()</B
 ></A
->.</P
+>.
+    </P
 ><P
->        Each field is converted to the appropriate PHP type. (Dates
-        are left as strings.)</P
+>&#13;     Each field is converted to the appropriate PHP type. (Dates are
+     left as strings.)
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

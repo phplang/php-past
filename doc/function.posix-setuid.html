@@ -4,7 +4,7 @@
 >posix_setuid</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="posix_getegid"
 HREF="function.posix-getegid.html"><LINK
 REL="NEXT"
 TITLE="posix_setgid"
-HREF="function.posix-setgid.html"></HEAD
+HREF="function.posix-setgid.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,43 +68,53 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.POSIX-SETUID"
+NAME="function.posix-setuid"
 >posix_setuid</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN22787"
+NAME="AEN28810"
 ></A
->posix_setuid --      Set the effective UID of the current process
+><P
+>    (PHP3 &#62;= 3.0.13, PHP4 &#62;= 4.0b4)</P
+>posix_setuid&nbsp;--&nbsp;
+     Set the effective UID of the current process
     </DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN22790"
+NAME="AEN28813"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->bool posix_setuid</CODE
->(int uid);<P
+>bool <B
+CLASS="function"
+>posix_setuid</B
+></CODE
+> (int uid)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Set the real user ID of the current process. This is a privileged
+>&#13;     Set the real user ID of the current process. This is a privileged
      function and you need appropriate privileges (usually root) on
      your system to be able to perform this function.</P
 ><P
->     Returns TRUE on success, FALSE otherwise. See also
+>&#13;     Returns TRUE on success, FALSE otherwise. See also
      <A
 HREF="function.posix-setgid.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >posix_setgid()</B
 ></A
 >.</P

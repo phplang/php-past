@@ -1,4 +1,4 @@
-/* $Id: sendmail.c,v 1.28 1999/12/26 18:44:50 rasmus Exp $ */
+/* $Id: sendmail.c,v 1.30 2000/08/11 15:08:49 fmk Exp $ */
 
 /* 
  *    PHP Sendmail for Windows.
@@ -250,7 +250,7 @@ int SendText(char *RPath, char *Subject, char *mailTo, char *data, char *headers
 
 	// Send mail to all Cc rcpt's
 	efree(tempMailTo);
-	if (pos1 = strstr(headers, "Cc:")) {
+	if (headers && (pos1 = strstr(headers, "Cc:"))) {
 		pos2 = strstr(pos1, "\r\n");
 		tempMailTo = estrndup(pos1, pos2-pos1);
 

@@ -4,7 +4,7 @@
 >msql_fieldname</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="msql_fetch_row"
 HREF="function.msql-fetch-row.html"><LINK
 REL="NEXT"
 TITLE="msql_field_seek"
-HREF="function.msql-field-seek.html"></HEAD
+HREF="function.msql-field-seek.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,52 +68,65 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.MSQL-FIELDNAME"
+NAME="function.msql-fieldname"
 >msql_fieldname</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN17436"
+NAME="AEN22257"
 ></A
->msql_fieldname -- get field name</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>msql_fieldname&nbsp;--&nbsp;Get field name</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN17439"
+NAME="AEN22260"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->string msql_fieldname</CODE
->(int query_identifier, int field);<P
+>string <B
+CLASS="function"
+>msql_fieldname</B
+></CODE
+> (int query_identifier, int field)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     msql_fieldname() returns the name of the specified field.
-     <TT
-CLASS="PARAMETER"
+>&#13;     <B
+CLASS="function"
+>Msql_fieldname()</B
+> returns the name of the
+     specified field.  <TT
+CLASS="parameter"
 ><I
 >query_identifier</I
 ></TT
-> is the query identifier, and
-     <TT
-CLASS="PARAMETER"
+> is the
+     query identifier, and <TT
+CLASS="parameter"
 ><I
 >field</I
 ></TT
-> is the field index.
-     <TT
-CLASS="LITERAL"
+> is the field
+     index.  <TT
+CLASS="literal"
 >msql_fieldname($result, 2);</TT
-> will return the
-     name of the second field in the result associated with the result
-     identifier.</P
+> will
+     return the name of the second field in the result associated with
+     the result identifier.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

@@ -26,11 +26,11 @@
    | Authors: Danny Heijl  <Danny.Heijl@cevi.be> : initial cut (ODS 7.2x) |
    |          Christian Cartus <chc@idgruppe.de> : blobs, and IUS 9       |
    |          Jouni Ahto <jah@mork.net>   : configuration stuff           |
-   | Based on the MySQL code by:  Zeev Suraski <bourbon@netvision.net.il> |
+   | Based on the MySQL code by:  Zeev Suraski <zeev@zend.com> |
    +----------------------------------------------------------------------+
  */
 
-/* $Id: ifx.ec,v 1.48 2000/02/21 07:57:00 eschmid Exp $ */
+/* $Id: ifx.ec,v 1.51 2000/08/05 13:29:40 danny Exp $ */
 
 /* -------------------------------------------------------------------
  * if you want a function reference : "grep '^\*\*' ifx.ec" will give
@@ -1772,7 +1772,7 @@ $endif;
 ** ----------------------------------------------------------------------
 */
 
-/* {{{ proto string ifx_error(void);
+/* {{{ proto string ifx_error([int connection_id]);
    Returns the Informix error codes (SQLSTATE & SQLCODE) */
 void php3_ifx_error(INTERNAL_FUNCTION_PARAMETERS)
 {
@@ -1915,7 +1915,7 @@ void php3_ifx_affected_rows(INTERNAL_FUNCTION_PARAMETERS)
 /* }}} */
 
 /* ----------------------------------------------------------------------
-** array ifx_fetch_row(int $resultid, [mixed $position])
+** array ifx_fetch_row(int $resultid [, mixed $position])
 **
 ** fetches the next row, or if using a scroll cursor, and $position
 ** is present, the row as given in $position, into an associative
@@ -2200,14 +2200,21 @@ $ifdef HAVE_IFX_IUS;
             case SQLSERIAL8   :
             case SQLINT8   :
                 EXEC SQL GET DESCRIPTOR :descrpid VALUE :i :int8_var = DATA;
+	        memset(string_data, ' ', sizeof(string_data));
                 ifx_int8toasc(&int8_var,string_data,200);
+                p = string_data;         /* rtrim string_data */
+                while ((*p != ' ') && (p < &string_data[sizeof(string_data) - 1])) ++p;
+                *p = 0;		
                 add_assoc_string(return_value, fieldname, string_data, DUP);
                 break;
             case SQLLVARCHAR:
             	ifx_var_flag(&lvar_tmp,1);
                 EXEC SQL GET DESCRIPTOR :descrpid VALUE :i :lvar_tmp = DATA;
 
-		fieldleng=ifx_var_getlen(&lvar_tmp);
+		        fieldleng=ifx_var_getlen(&lvar_tmp);
+ 
+                if (fieldleng > 2) fieldleng -= 2; /* fix by Alan Sheperd */
+
                 if ((char_data = (char *)emalloc(fieldleng + 1)) == NULL) {
                     php3_error(E_WARNING, "Out of memory");
                     RETURN_FALSE;
@@ -2311,7 +2318,7 @@ $endif;
 
 
 /* ----------------------------------------------------------------------
-** int ifx_htmltbl_result(int $resultid, [string $htmltableoptions])
+** int ifx_htmltbl_result(int $resultid [, string $htmltableoptions])
 **
 ** formats all rows of the $resultid query into a html table
 ** the optional second argument is a string of <table> tag options
@@ -2555,14 +2562,21 @@ $ifdef HAVE_IFX_IUS;
                 case SQLSERIAL8:
                 case SQLINT8   :
                     EXEC SQL GET DESCRIPTOR :descrpid VALUE :i :int8_var = DATA;
+                    memset(string_data, ' ', sizeof(string_data));
                     ifx_int8toasc(&int8_var,string_data,200);
+                    p = string_data;         /* rtrim string_data */
+                    while ((*p != ' ') && (p < &string_data[sizeof(string_data) - 1])) ++p;
+                    *p = 0;		
                     php3_printf("<td>%s</td>", string_data);
                     break;
                 case SQLLVARCHAR:
 	            	ifx_var_flag(&lvar_tmp,1);
         	        EXEC SQL GET DESCRIPTOR :descrpid VALUE :i :lvar_tmp = DATA;
 
-			fieldleng=ifx_var_getlen(&lvar_tmp);
+			        fieldleng=ifx_var_getlen(&lvar_tmp);
+ 
+                    if (fieldleng > 2) fieldleng -= 2; /* fix by Alan Sheperd */
+
         	        if ((char_data = (char *)emalloc(fieldleng + 1)) == NULL) {
                 	    php3_error(E_WARNING, "Out of memory");
             	        RETURN_FALSE;
@@ -3113,7 +3127,7 @@ void php3_ifx_num_rows(INTERNAL_FUNCTION_PARAMETERS)
 */
 
 /* {{{ proto int ifx_getsqlca(int resultid)
-   Returns the sqlerrd[} fields of the sqlca struct for query a given resultid */
+   Returns the sqlerrd[] fields of the sqlca struct for query a given resultid */
 void php3_ifx_getsqlca(INTERNAL_FUNCTION_PARAMETERS)
 {
     pval *result;

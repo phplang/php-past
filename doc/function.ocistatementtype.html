@@ -4,7 +4,7 @@
 >OCIStatementType</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="OCIServerVersion"
 HREF="function.ociserverversion.html"><LINK
 REL="NEXT"
 TITLE="OCINewCursor"
-HREF="function.ocinewcursor.html"></HEAD
+HREF="function.ocinewcursor.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,39 +68,45 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.OCISTATEMENTTYPE"
+NAME="function.ocistatementtype"
 >OCIStatementType</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN20380"
+NAME="AEN26046"
 ></A
->OCIStatementType -- Return the type of an OCI statement.</DIV
+><P
+>    (PHP3 &#62;= 3.0.5, PHP4 )</P
+>OCIStatementType&nbsp;--&nbsp;Return the type of an OCI statement.</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN20383"
+NAME="AEN26049"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->string OCIStatementType</CODE
->(int stmt);<P
+>string <B
+CLASS="function"
+>OCIStatementType</B
+></CODE
+> (int stmt)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     <A
-HREF="function.ocistatementtype.html"
-><B
-CLASS="FUNCTION"
+>&#13;     <B
+CLASS="function"
 >OCIStatementType()</B
-></A
 > returns on of the following values:
      <P
 ></P
@@ -146,7 +155,7 @@ TYPE="1"
 ></OL
 ></P
 ><P
->     <TABLE
+>&#13;     <TABLE
 WIDTH="100%"
 BORDER="0"
 CELLPADDING="0"
@@ -155,26 +164,36 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
 >Example 1. Code examples</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->&lt;?php
-    print "&lt;HTML&#62;&lt;PRE&#62;";
+CLASS="programlisting"
+>&#13;&#60;?php
+    print "&#60;HTML&#62;&#60;PRE&#62;";
     $conn = OCILogon("scott","tiger");
     $sql  = "delete from emp where deptno = 10";
    
     $stmt = OCIParse($conn,$sql);
     if ( OCIStatementType($stmt) == "DELETE" ) {
-        die "You are not allowed to delete from this table&lt;BR&#62;";
+        die "You are not allowed to delete from this table&#60;BR&#62;";
     }
    
     OCILogoff($conn);
-    print "&lt;/PRE&#62;&lt;/HTML&#62;";
-?&#62;</PRE
+    print "&#60;/PRE&#62;&#60;/HTML&#62;";
+?&#62;
+</PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR

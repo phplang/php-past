@@ -4,7 +4,7 @@
 >ibase_fetch_row</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -15,9 +15,12 @@ REL="PREVIOUS"
 TITLE="ibase_query"
 HREF="function.ibase-query.html"><LINK
 REL="NEXT"
-TITLE="ibase_free_result"
-HREF="function.ibase-free-result.html"></HEAD
+TITLE="ibase_fetch_object"
+HREF="function.ibase-fetch-object.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -55,7 +58,7 @@ WIDTH="10%"
 ALIGN="right"
 VALIGN="bottom"
 ><A
-HREF="function.ibase-free-result.html"
+HREF="function.ibase-fetch-object.html"
 >Next</A
 ></TD
 ></TR
@@ -65,32 +68,52 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.IBASE-FETCH-ROW"
+NAME="function.ibase-fetch-row"
 >ibase_fetch_row</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN14263"
+NAME="AEN17201"
 ></A
->ibase_fetch_row -- </DIV
+><P
+>    (PHP3 &#62;= 3.0.6, PHP4 )</P
+>ibase_fetch_row&nbsp;--&nbsp;Fetch a row from an InterBase database</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN14266"
+NAME="AEN17204"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
-> ibase_fetch_row</CODE
->( );<P
+>array <B
+CLASS="function"
+>ibase_fetch_row</B
+></CODE
+> (int
+       result_identifier)</CODE
+></P
+><P
 ></P
 ></DIV
+><P
+>&#13;     Returns the next row specified by the result identifier obtained
+     using the <A
+HREF="function.ibase-query.html"
+><B
+CLASS="function"
+>ibase_query()</B
+></A
+>.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -123,7 +146,7 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><A
-HREF="function.ibase-free-result.html"
+HREF="function.ibase-fetch-object.html"
 >Next</A
 ></TD
 ></TR
@@ -145,7 +168,7 @@ HREF="ref.ibase.html"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->ibase_free_result</TD
+>ibase_fetch_object</TD
 ></TR
 ></TABLE
 ></DIV

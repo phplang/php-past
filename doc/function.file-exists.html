@@ -4,7 +4,7 @@
 >file_exists</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="file"
 HREF="function.file.html"><LINK
 REL="NEXT"
 TITLE="fileatime"
-HREF="function.fileatime.html"></HEAD
+HREF="function.fileatime.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,49 +68,68 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.FILE-EXISTS"
+NAME="function.file-exists"
 >file_exists</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN8625"
+NAME="AEN9828"
 ></A
->file_exists -- Check whether a file exists.</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>file_exists&nbsp;--&nbsp;Checks whether a file exists</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN8628"
+NAME="AEN9831"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int file_exists</CODE
->(string filename);<P
+>bool <B
+CLASS="function"
+>file_exists</B
+></CODE
+> (string filename)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Returns true if the file specified by
+>&#13;     Returns true if the file specified by
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >filename</I
 ></TT
-> exists; false otherwise.</P
+> exists; false otherwise.
+    </P
 ><P
->     The results of this function are cached. See
+>&#13;     <B
+CLASS="function"
+>file_exists()</B
+> will not work on remote files;
+     the file to be examined must be accessible via the server's
+     filesystem.
+    </P
+><P
+>&#13;     The results of this function are cached. See
      <A
 HREF="function.clearstatcache.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >clearstatcache()</B
 ></A
-> for more details.</P
+> for more details.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

@@ -4,7 +4,7 @@
 >Vmailmgr functions</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -12,12 +12,15 @@ REL="UP"
 TITLE="Function Reference"
 HREF="funcref.html"><LINK
 REL="PREVIOUS"
-TITLE="unset"
-HREF="function.unset.html"><LINK
+TITLE="var_dump"
+HREF="function.var-dump.html"><LINK
 REL="NEXT"
 TITLE="vm_adduser"
-HREF="function.vm-adduser.html"></HEAD
+HREF="function.vm-adduser.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="reference"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -42,7 +45,7 @@ WIDTH="10%"
 ALIGN="left"
 VALIGN="bottom"
 ><A
-HREF="function.unset.html"
+HREF="function.var-dump.html"
 >Prev</A
 ></TD
 ><TD
@@ -64,22 +67,22 @@ HREF="function.vm-adduser.html"
 ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><DIV
-CLASS="REFERENCE"
+CLASS="reference"
 ><A
-NAME="REF.VMAILMGR"
+NAME="ref.vmailmgr"
 ></A
 ><DIV
 CLASS="TITLEPAGE"
 ><H1
-CLASS="TITLE"
->LVI. Vmailmgr functions</H1
+CLASS="title"
+>LXIV. Vmailmgr functions</H1
 ><DIV
 CLASS="PARTINTRO"
 ><A
-NAME="AEN26965"
+NAME="AEN36030"
 ></A
 ><P
->    These functions require <A
+>&#13;    These functions require <A
 HREF="http://www.qmail.org/"
 TARGET="_top"
 >qmail</A
@@ -90,20 +93,22 @@ TARGET="_top"
 >vmailmgr package</A
 > by Bruce Guenter.</P
 ><P
->    For all functions, the following two variables are defined as:
+>&#13;    For all functions, the following two variables are defined as:
     string vdomain the domain name of your virtual domain
     (vdomain.com) string basepwd the password of the 'real' user that
     holds the virtual users</P
 ><P
->    Only up to 8 characters are recognized in passwords for virtual
+>&#13;    Only up to 8 characters are recognized in passwords for virtual
     users</P
 ><P
->    Return status for all functions matches response in response.h</P
+>&#13;    Return status for all functions matches response in response.h</P
 ><P
->&#13;    <P
+>&#13;
+    <P
 ></P
 ><TABLE
 BORDER="0"
+><TBODY
 ><TR
 ><TD
 >O ok</TD
@@ -120,39 +125,49 @@ BORDER="0"
 ><TD
 >3 error connecting</TD
 ></TR
+></TBODY
 ></TABLE
 ><P
 ></P
 ></P
 ><P
->    Known problems: <A
+>&#13;    Known problems: <A
 HREF="function.vm-deluser.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >vm_deluser()</B
 ></A
 > does not delete
     the user directory as it should.  <A
 HREF="function.vm-addalias.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >vm_addalias()</B
 ></A
 >
     currently does not work correctly.</P
 ><P
->    <DIV
-CLASS="INFORMALEXAMPLE"
+>&#13;    <DIV
+CLASS="informalexample"
 ><P
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->&lt;?php
+CLASS="programlisting"
+>&#13;&#60;?php
 dl("php3_vmailmgr.so"); //load the shared library
 $vdomain="vdomain.com";
 $basepwd="password";
 ?&#62;
       </PRE
+></TD
+></TR
+></TABLE
 ><P
 ></P
 ></DIV
@@ -209,7 +224,7 @@ WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
 ><A
-HREF="function.unset.html"
+HREF="function.var-dump.html"
 >Prev</A
 ></TD
 ><TD
@@ -234,7 +249,7 @@ HREF="function.vm-adduser.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->unset</TD
+>var_dump</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"

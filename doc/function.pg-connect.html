@@ -1,10 +1,10 @@
 <HTML
 ><HEAD
 ><TITLE
->pg_Connect</TITLE
+>pg_connect</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -12,12 +12,15 @@ REL="UP"
 TITLE="PostgreSQL functions"
 HREF="ref.pgsql.html"><LINK
 REL="PREVIOUS"
-TITLE="pg_cmdTuples"
+TITLE="pg_cmdtuples"
 HREF="function.pg-cmdtuples.html"><LINK
 REL="NEXT"
-TITLE="pg_DBname"
-HREF="function.pg-dbname.html"></HEAD
+TITLE="pg_dbname"
+HREF="function.pg-dbname.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,93 +68,105 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.PG-CONNECT"
->pg_Connect</A
+NAME="function.pg-connect"
+>pg_connect</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN23153"
+NAME="AEN29272"
 ></A
->pg_Connect -- opens a connection</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>pg_connect&nbsp;--&nbsp;Open a PostgreSQL connection</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN23156"
+NAME="AEN29275"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int pg_connect</CODE
->(string host, string port, string options, string tty, string dbname);<P
+>int <B
+CLASS="function"
+>pg_connect</B
+></CODE
+> (string host, string port, string options, string tty, string dbname)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Returns a connection index on success, or false if the connection
+>&#13;     Returns a connection index on success, or false if the connection
      could not be made.  Opens a connection to a PostgreSQL
      database. Each of the arguments should be a quoted string,
      including the port number. The options and tty arguments are
      optional and can be left out. This function returns a connection
      index that is needed by other PostgreSQL functions. You can have
-     multiple connections open at once.</P
+     multiple connections open at once.
+    </P
 ><P
->     A connection can also established with the following command:
+>&#13;     A connection can also established with the following command:
      <B
-CLASS="COMMAND"
+CLASS="command"
 >$conn = pg_connect("dbname=marliese port=5432");</B
 >
      Other parameters besides <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >dbname</I
 ></TT
 > and
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >port</I
 ></TT
 > are <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >host</I
 ></TT
 >, 
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >tty</I
 ></TT
 >, <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >options</I
 ></TT
 >,
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >user</I
 ></TT
-> and <TT
-CLASS="PARAMETER"
+>, and <TT
+CLASS="parameter"
 ><I
 >password</I
 ></TT
->.</P
+>.
+    </P
 ><P
->     See also <A
+>&#13;     See also <A
 HREF="function.pg-pconnect.html"
 ><B
-CLASS="FUNCTION"
->pg_pConnect()</B
+CLASS="function"
+>pg_pconnect()</B
 ></A
->.</P
+>.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -193,7 +208,7 @@ HREF="function.pg-dbname.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->pg_cmdTuples</TD
+>pg_cmdtuples</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"
@@ -206,7 +221,7 @@ HREF="ref.pgsql.html"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->pg_DBname</TD
+>pg_dbname</TD
 ></TR
 ></TABLE
 ></DIV

@@ -31,7 +31,7 @@
    +----------------------------------------------------------------------+
  */
  
-/* $Id: sybase.c,v 1.113 2000/02/07 23:54:51 zeev Exp $ */
+/* $Id: sybase.c,v 1.114 2000/08/07 00:09:54 rasmus Exp $ */
 
 
 #ifndef MSVC5
@@ -260,7 +260,7 @@ int php3_rshutdown_sybase(void)
 
 static void php3_sybase_do_connect(INTERNAL_FUNCTION_PARAMETERS,int persistent)
 {
-	char *user,*passwd,*host;
+	char *user,*passwd,*host,*charset;
 	char *hashed_details;
 	int hashed_details_length;
 	sybase_link sybase,*sybase_ptr;
@@ -322,6 +322,25 @@ static void php3_sybase_do_connect(INTERNAL_FUNCTION_PARAMETERS,int persistent)
 				sprintf(hashed_details,"sybase_%s_%s_%s",yyhost->value.str.val,yyuser->value.str.val,yypasswd->value.str.val); /* SAFE */
 			}
 			break;
+		case 4: {
+				pval *yyhost,*yyuser,*yypasswd,*yycharset;
+				if (getParameters(ht, 4, &yyhost, &yyuser, &yypasswd, &yycharset) == FAILURE) {
+					RETURN_FALSE;
+				}
+				convert_to_string(yyhost);
+				convert_to_string(yyuser);
+				convert_to_string(yypasswd);
+				convert_to_string(yycharset);
+				host = yyhost->value.str.val;
+				user = yyuser->value.str.val;
+				passwd = yypasswd->value.str.val;
+				charset = yycharset->value.str.val;
+				hashed_details_length = yyhost->value.str.len+yyuser->value.str.len+yypasswd->value.str.len+yycharset->value.str.len+6+3;
+				hashed_details = (char *) emalloc(hashed_details_length+1);
+				sprintf(hashed_details,"sybase_%s_%s_%s_%s",yyhost->value.str.val,yyuser->value.str.val,yypasswd->value.str.val,yycharset->value.str.val); /* SAFE */
+			}
+			break;
+
 		default:
 			WRONG_PARAM_COUNT;
 			break;
@@ -339,6 +358,9 @@ static void php3_sybase_do_connect(INTERNAL_FUNCTION_PARAMETERS,int persistent)
 	}
 	if (passwd) {
 		DBSETLPWD(sybase.login,passwd);
+	}
+	if (charset) {
+		DBSETLCHARSET(sybase.login,charset);
 	}
 	DBSETLAPP(sybase.login,php3_sybase_module.appname);
 	sybase.valid = 1;
@@ -510,7 +532,7 @@ static int php3_sybase_get_default_link(INTERNAL_FUNCTION_PARAMETERS)
 }
 
 
-/* {{{ proto int sybase_connect([string host [, string user [, string password]]])
+/* {{{ proto int sybase_connect([string host [, string user [, string password [, string charset]]]])
    Open Sybase server connection */
 void php3_sybase_connect(INTERNAL_FUNCTION_PARAMETERS)
 {
@@ -518,7 +540,7 @@ void php3_sybase_connect(INTERNAL_FUNCTION_PARAMETERS)
 }
 /* }}} */
 
-/* {{{ proto int sybase_pconnect([string host [, string user [, string password]]])
+/* {{{ proto int sybase_pconnect([string host [, string user [, string password [, string charset]]]])
    Open persistent Sybase connection */
 void php3_sybase_pconnect(INTERNAL_FUNCTION_PARAMETERS)
 {

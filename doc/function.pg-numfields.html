@@ -1,10 +1,10 @@
 <HTML
 ><HEAD
 ><TITLE
->pg_NumFields</TITLE
+>pg_numfields</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -15,9 +15,12 @@ REL="PREVIOUS"
 TITLE="pg_lowrite"
 HREF="function.pg-lowrite.html"><LINK
 REL="NEXT"
-TITLE="pg_NumRows"
-HREF="function.pg-numrows.html"></HEAD
+TITLE="pg_numrows"
+HREF="function.pg-numrows.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,43 +68,56 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.PG-NUMFIELDS"
->pg_NumFields</A
+NAME="function.pg-numfields"
+>pg_numfields</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN23563"
+NAME="AEN29749"
 ></A
->pg_NumFields -- Returns the number of fields</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>pg_numfields&nbsp;--&nbsp;Returns the number of fields</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN23566"
+NAME="AEN29752"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int pg_numfields</CODE
->(int result_id);<P
+>int <B
+CLASS="function"
+>pg_numfields</B
+></CODE
+> (int result_id)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     pg_NumFields() will return the number of fields (columns) in a
-     PostgreSQL result.  The argument is a valid result identifier
-     returned by <A
+>&#13;     <B
+CLASS="function"
+>Pg_numfields()</B
+> will return the number of
+     fields (columns) in a PostgreSQL result.  The argument is a valid
+     result identifier returned by <A
 HREF="function.pg-exec.html"
 ><B
-CLASS="FUNCTION"
->pg_Exec()</B
+CLASS="function"
+>pg_exec()</B
 ></A
->. This function will
-     return -1 on error.</P
+>. This
+     function will return -1 on error.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -156,7 +172,7 @@ HREF="ref.pgsql.html"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->pg_NumRows</TD
+>pg_numrows</TD
 ></TR
 ></TABLE
 ></DIV

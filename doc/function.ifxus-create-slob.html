@@ -4,7 +4,7 @@
 >ifxus_create_slob</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="ifx_nullformat"
 HREF="function.ifx-nullformat.html"><LINK
 REL="NEXT"
 TITLE="ifx_free_slob"
-HREF="function.ifxus-free-slob.html"></HEAD
+HREF="function.ifxus-free-slob.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,34 +68,43 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.IFXUS-CREATE-SLOB"
+NAME="function.ifxus-create-slob"
 >ifxus_create_slob</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN14098"
+NAME="AEN16941"
 ></A
->ifxus_create_slob -- Creates an slob object and opens it</DIV
+><P
+>    (PHP3 &#62;= 3.0.4, PHP4 )</P
+>ifxus_create_slob&nbsp;--&nbsp;Creates an slob object and opens it</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN14101"
+NAME="AEN16944"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int ifxus_create_slob</CODE
->(int mode);<P
+>int <B
+CLASS="function"
+>ifxus_create_slob</B
+></CODE
+> (int mode)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Creates an slob object and opens it.  Modes: 1 = LO_RDONLY, 2 =
+>&#13;     Creates an slob object and opens it.  Modes: 1 = LO_RDONLY, 2 =
      LO_WRONLY, 4 = LO_APPEND, 8 = LO_RDWR, 16 = LO_BUFFER, 32 =
      LO_NOBUFFER -&#62; or-mask. You can also use constants named
      IFX_LO_RDONLY, IFX_LO_WRONLY etc.  Return FALSE on error otherwise

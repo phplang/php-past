@@ -4,7 +4,7 @@
 >PDF_stringwidth</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="PDF_continue_text"
 HREF="function.pdf-continue-text.html"><LINK
 REL="NEXT"
 TITLE="PDF_save"
-HREF="function.pdf-save.html"></HEAD
+HREF="function.pdf-save.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,54 +68,61 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.PDF-STRINGWIDTH"
+NAME="function.pdf-stringwidth"
 >PDF_stringwidth</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN21098"
+NAME="AEN26836"
 ></A
->PDF_stringwidth -- Returns width of text using current font</DIV
+><P
+>    (PHP3 &#62;= 3.0.6, PHP4 )</P
+>PDF_stringwidth&nbsp;--&nbsp;Returns width of text using current font</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN21101"
+NAME="AEN26839"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->double pdf_stringwidth</CODE
->(int pdf document, string text);<P
+>double <B
+CLASS="function"
+>pdf_stringwidth</B
+></CODE
+> (int pdf document, string text)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     The <A
-HREF="function.pdf-stringwidth.html"
-><B
-CLASS="FUNCTION"
+>&#13;     The <B
+CLASS="function"
 >PDF_stringwidth()</B
-></A
 > function returns the
      width of the string in <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >text</I
 ></TT
->. It requires
-     a font to be set before.</P
-><P
->     See also <A
-HREF="function.pdf-set-font.html"
-><B
-CLASS="FUNCTION"
+> by using the
+     current font. It requires a font to be set before with
+     <B
+CLASS="function"
 >PDF_set_font()</B
-></A
+>.</P
+><P
+>&#13;     See also <B
+CLASS="function"
+>PDF_set_font()</B
 >.</P
 ></DIV
 ><DIV

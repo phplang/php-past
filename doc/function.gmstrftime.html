@@ -4,7 +4,7 @@
 >gmstrftime</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -15,9 +15,12 @@ REL="PREVIOUS"
 TITLE="gmmktime"
 HREF="function.gmmktime.html"><LINK
 REL="NEXT"
-TITLE="microtime"
-HREF="function.microtime.html"></HEAD
+TITLE="localtime"
+HREF="function.localtime.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -55,7 +58,7 @@ WIDTH="10%"
 ALIGN="right"
 VALIGN="bottom"
 ><A
-HREF="function.microtime.html"
+HREF="function.localtime.html"
 >Next</A
 ></TD
 ></TR
@@ -65,43 +68,55 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.GMSTRFTIME"
+NAME="function.gmstrftime"
 >gmstrftime</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN7219"
+NAME="AEN8434"
 ></A
->gmstrftime -- format a GMT/CUT time/date according to locale settings</DIV
+><P
+>    (PHP3 &#62;= 3.0.12, PHP4 &#62;= 4.0RC2)</P
+>gmstrftime&nbsp;--&nbsp;
+     Format a GMT/CUT time/date according to locale settings
+    </DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN7222"
+NAME="AEN8437"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->string gmstrftime</CODE
->(string format, int timestamp);<P
+>string <B
+CLASS="function"
+>gmstrftime</B
+></CODE
+> (string format, int timestamp)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Behaves the same as <A
+>&#13;     Behaves the same as <A
 HREF="function.strftime.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >strftime()</B
 ></A
 > except that the
      time returned is Greenwich Mean Time (GMT). For example, when run
      in Eastern Standard Time (GMT -0500), the first line below prints
-     "Dec 31 1998 20:00:00", while the second prints "Jan 01 1999 01:00:00".
+     "Dec 31 1998 20:00:00", while the second prints "Jan 01 1999
+     01:00:00".
      <TABLE
 WIDTH="100%"
 BORDER="0"
@@ -111,20 +126,29 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
 >Example 1. <B
-CLASS="FUNCTION"
->gmstrftime()</B
+CLASS="function"
+>Gmstrftime()</B
 > example</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->setlocale ('LC_TIME','en_US');
-echo strftime ("%b %d %Y %H:%M:%S",mktime(20,0,0,12,31,98))."\n";
-echo gmstrftime ("%b %d %Y %H:%M:%S",mktime(20,0,0,12,31,98))."\n";
+CLASS="programlisting"
+>&#13;setlocale ('LC_TIME', 'en_US');
+echo strftime ("%b %d %Y %H:%M:%S", mktime (20,0,0,12,31,98))."\n";
+echo gmstrftime ("%b %d %Y %H:%M:%S", mktime (20,0,0,12,31,98))."\n";
       </PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR
@@ -132,10 +156,10 @@ echo gmstrftime ("%b %d %Y %H:%M:%S",mktime(20,0,0,12,31,98))."\n";
 >
     </P
 ><P
->     See also <A
+>&#13;     See also <A
 HREF="function.strftime.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >strftime()</B
 ></A
 >.
@@ -172,7 +196,7 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><A
-HREF="function.microtime.html"
+HREF="function.localtime.html"
 >Next</A
 ></TD
 ></TR
@@ -194,7 +218,7 @@ HREF="ref.datetime.html"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->microtime</TD
+>localtime</TD
 ></TR
 ></TABLE
 ></DIV

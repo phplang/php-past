@@ -4,7 +4,7 @@
 >clearstatcache</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="chown"
 HREF="function.chown.html"><LINK
 REL="NEXT"
 TITLE="copy"
-HREF="function.copy.html"></HEAD
+HREF="function.copy.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,176 +68,188 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.CLEARSTATCACHE"
+NAME="function.clearstatcache"
 >clearstatcache</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN8351"
+NAME="AEN9532"
 ></A
->clearstatcache -- clear file stat cache</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>clearstatcache&nbsp;--&nbsp;Clears file stat cache</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN8354"
+NAME="AEN9535"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->void clearstatcache</CODE
->(void);<P
+>void <B
+CLASS="function"
+>clearstatcache</B
+></CODE
+>(void);</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Invoking the <SPAN
-CLASS="SYSTEMITEM"
+>&#13;     Invoking the <SPAN
+CLASS="systemitem"
 >stat</SPAN
 > or
      <SPAN
-CLASS="SYSTEMITEM"
+CLASS="systemitem"
 >lstat</SPAN
-> system call on most systems is quite
-     expensive. Therefore, the result of the last call to any of the
-     status functions (listed below) is stored for use on the next
+> system call on most systems is
+     quite expensive. Therefore, the result of the last call to any of
+     the status functions (listed below) is stored for use on the next
      such call using the same filename. If you wish to force a new
      status check, for instance if the file is being checked many
      times and may change or disappear, use this function to clear the
-     results of the last call from memory.</P
+     results of the last call from memory.
+    </P
 ><P
->	 This value is only cached for the lifetime of a single request.</P
+>&#13;     This value is only cached for the lifetime of a single request.
+    </P
 ><P
->     Affected functions include <A
+>&#13;     Affected functions include <A
 HREF="function.stat.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >stat()</B
 ></A
 >,
      <A
 HREF="function.lstat.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >lstat()</B
 ></A
 >,
      <A
 HREF="function.file-exists.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >file_exists()</B
 ></A
 >,
      <A
 HREF="function.is-writeable.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >is_writeable()</B
 ></A
 >,
      <A
 HREF="function.is-readable.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >is_readable()</B
 ></A
 >,
      <A
 HREF="function.is-executable.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >is_executable()</B
 ></A
 >,
      <A
 HREF="function.is-file.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >is_file()</B
 ></A
 >,
      <A
 HREF="function.is-dir.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >is_dir()</B
 ></A
 >,
      <A
 HREF="function.is-link.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >is_link()</B
 ></A
 >,
      <A
 HREF="function.filectime.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >filectime()</B
 ></A
 >,
      <A
 HREF="function.fileatime.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >fileatime()</B
 ></A
 >,
      <A
 HREF="function.filemtime.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >filemtime()</B
 ></A
 >,
      <A
 HREF="function.fileinode.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >fileinode()</B
 ></A
 >,
      <A
 HREF="function.filegroup.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >filegroup()</B
 ></A
 >,
      <A
 HREF="function.fileowner.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >fileowner()</B
 ></A
 >,
      <A
 HREF="function.filesize.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >filesize()</B
 ></A
 >,
      <A
 HREF="function.filetype.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >filetype()</B
 ></A
 >, and
      <A
 HREF="function.fileperms.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >fileperms()</B
 ></A
->.</P
+>.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

@@ -23,13 +23,13 @@
    | If you did not, or have any questions about PHP licensing, please    |
    | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
-   | Authors: Andi Gutmans <andi@php.net>                                 |
+   | Authors: Andi Gutmans <andi@zend.com>                                |
    |          Zeev Suraski <zeev@zend.com>                                |
    +----------------------------------------------------------------------+
  */
 
 
-/* $Id: operators.c,v 1.106 2000/03/20 16:38:06 askalski Exp $ */
+/* $Id: operators.c,v 1.107 2000/04/10 19:29:36 andi Exp $ */
 
 #include "php.h"
 #include "functions/number.h"

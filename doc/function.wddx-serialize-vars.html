@@ -4,7 +4,7 @@
 >wddx_serialize_vars</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="wddx_serialize_value"
 HREF="function.wddx-serialize-value.html"><LINK
 REL="NEXT"
 TITLE="wddx_packet_start"
-HREF="function.wddx-packet-start.html"></HEAD
+HREF="function.wddx-packet-start.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,54 +68,59 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.WDDX-SERIALIZE-VARS"
+NAME="function.wddx-serialize-vars"
 >wddx_serialize_vars</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN27113"
+NAME="AEN36184"
 ></A
->wddx_serialize_vars -- Serialize variables into a WDDX packet</DIV
+><P
+>    (PHP3 &#62;= 3.0.7, PHP4 &#62;= 4.0b2)</P
+>wddx_serialize_vars&nbsp;--&nbsp;Serialize variables into a WDDX packet</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN27116"
+NAME="AEN36187"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->string wddx_serialize_vars</CODE
->(mixed var_name, mixed 
-      [<SPAN
-CLASS="OPTIONAL"
->...</SPAN
->]
-     );<P
+>string <B
+CLASS="function"
+>wddx_serialize_vars</B
+></CODE
+> (mixed var_name [, mixed 
+       ...])</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     <B
-CLASS="FUNCTION"
+>&#13;     <B
+CLASS="function"
 >wddx_serialize_vars()</B
 > is used to create a WDDX
      packet with a structure that contains the serialized
      representation of the passed variables.</P
 ><P
->     <B
-CLASS="FUNCTION"
+>&#13;     <B
+CLASS="function"
 >wddx_serialize_vars()</B
 > takes a variable number
      of arguments, each of which can be either a string naming a
      variable or an array containing strings naming the variables or
      another array, etc.</P
 ><P
->     <TABLE
+>&#13;     <TABLE
 WIDTH="100%"
 BORDER="0"
 CELLPADDING="0"
@@ -121,14 +129,20 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
 >Example 1. wddx_serialize_vars example</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->&lt;?php
+CLASS="programlisting"
+>&#13;&#60;?php
 $a = 1;
 $b = 5.5;
 $c = array("blue", "orange", "violet");
@@ -136,22 +150,34 @@ $d = "colors";
 
 $clvars = array("c", "d");
 print wddx_serialize_vars("a", "b", $clvars);
-?&gt;
+?&#62;
       </PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR
 ></TABLE
 ></P
 ><P
->     The above example will produce:
-     <PRE
-CLASS="PROGRAMLISTING"
->&lt;wddxPacket version='0.9'&gt;&lt;header/&gt;&lt;data&gt;&lt;struct&gt;&lt;var name='a'&gt;&lt;number&gt;1&lt;/number&gt;&lt;/var&gt;
-&lt;var name='b'&gt;&lt;number&gt;5.5&lt;/number&gt;&lt;/var&gt;&lt;var name='c'&gt;&lt;array length='3'&gt;
-&lt;string&gt;blue&lt;/string&gt;&lt;string&gt;orange&lt;/string&gt;&lt;string&gt;violet&lt;/string&gt;&lt;/array&gt;&lt;/var&gt;
-&lt;var name='d'&gt;&lt;string&gt;colors&lt;/string&gt;&lt;/var&gt;&lt;/struct&gt;&lt;/data&gt;&lt;/wddxPacket&gt;
+>&#13;     The above example will produce:
+     <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;&#60;wddxPacket version='1.0'&#62;&#60;header/&#62;&#60;data&#62;&#60;struct&#62;&#60;var name='a'&#62;&#60;number&#62;1&#60;/number&#62;&#60;/var&#62;
+&#60;var name='b'&#62;&#60;number&#62;5.5&#60;/number&#62;&#60;/var&#62;&#60;var name='c'&#62;&#60;array length='3'&#62;
+&#60;string&#62;blue&#60;/string&#62;&#60;string&#62;orange&#60;/string&#62;&#60;string&#62;violet&#60;/string&#62;&#60;/array&#62;&#60;/var&#62;
+&#60;var name='d'&#62;&#60;string&#62;colors&#60;/string&#62;&#60;/var&#62;&#60;/struct&#62;&#60;/data&#62;&#60;/wddxPacket&#62;
      </PRE
+></TD
+></TR
+></TABLE
 ></P
 ></DIV
 ><DIV

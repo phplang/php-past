@@ -4,7 +4,7 @@
 >mssql_free_result</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -12,12 +12,15 @@ REL="UP"
 TITLE="Microsoft SQL Server functions"
 HREF="ref.mssql.html"><LINK
 REL="PREVIOUS"
-TITLE="mssql_field_seek"
-HREF="function.mssql-field-seek.html"><LINK
+TITLE="mssql_field_type"
+HREF="function.mssql-field-type.html"><LINK
 REL="NEXT"
-TITLE="mssql_num_fields"
-HREF="function.mssql-num-fields.html"></HEAD
+TITLE="mssql_get_last_message"
+HREF="function.mssql-get-last-message.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -42,7 +45,7 @@ WIDTH="10%"
 ALIGN="left"
 VALIGN="bottom"
 ><A
-HREF="function.mssql-field-seek.html"
+HREF="function.mssql-field-type.html"
 >Prev</A
 ></TD
 ><TD
@@ -55,7 +58,7 @@ WIDTH="10%"
 ALIGN="right"
 VALIGN="bottom"
 ><A
-HREF="function.mssql-num-fields.html"
+HREF="function.mssql-get-last-message.html"
 >Next</A
 ></TD
 ></TR
@@ -65,41 +68,50 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.MSSQL-FREE-RESULT"
+NAME="function.mssql-free-result"
 >mssql_free_result</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN16484"
+NAME="AEN20976"
 ></A
->mssql_free_result -- free result memory</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>mssql_free_result&nbsp;--&nbsp;Free result memory</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN16487"
+NAME="AEN20979"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int mssql_free_result</CODE
->(int result);<P
+>int <B
+CLASS="function"
+>mssql_free_result</B
+></CODE
+> (int result)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     <B
-CLASS="FUNCTION"
+>&#13;     <B
+CLASS="function"
 >mssql_free_result()</B
 > only needs to be called
      if you are worried about using too much memory while your script
      is running. All result memory will automatically be freed when
-     the script, you may call <B
-CLASS="FUNCTION"
+     the script ends. You may call <B
+CLASS="function"
 >mssql_free_result()</B
 >
      with the result identifier as an argument and the associated
@@ -121,7 +133,7 @@ WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
 ><A
-HREF="function.mssql-field-seek.html"
+HREF="function.mssql-field-type.html"
 >Prev</A
 ></TD
 ><TD
@@ -137,7 +149,7 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><A
-HREF="function.mssql-num-fields.html"
+HREF="function.mssql-get-last-message.html"
 >Next</A
 ></TD
 ></TR
@@ -146,7 +158,7 @@ HREF="function.mssql-num-fields.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->mssql_field_seek</TD
+>mssql_field_type</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"
@@ -159,7 +171,7 @@ HREF="ref.mssql.html"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->mssql_num_fields</TD
+>mssql_get_last_message</TD
 ></TR
 ></TABLE
 ></DIV

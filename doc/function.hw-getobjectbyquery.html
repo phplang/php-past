@@ -4,7 +4,7 @@
 >hw_GetObjectByQuery</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="hw_GetText"
 HREF="function.hw-gettext.html"><LINK
 REL="NEXT"
 TITLE="hw_GetObjectByQueryObj"
-HREF="function.hw-getobjectbyqueryobj.html"></HEAD
+HREF="function.hw-getobjectbyqueryobj.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,56 +68,62 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.HW-GETOBJECTBYQUERY"
+NAME="function.hw-getobjectbyquery"
 >hw_GetObjectByQuery</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN10886"
+NAME="AEN12520"
 ></A
->hw_GetObjectByQuery -- search object</DIV
+><P
+>    (PHP3 &#62;= 3.0.3, PHP4 )</P
+>hw_GetObjectByQuery&nbsp;--&nbsp;search object</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN10889"
+NAME="AEN12523"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->array hw_getobjectbyquery</CODE
->(int connection, string query, int max_hits);<P
+>array <B
+CLASS="function"
+>hw_getobjectbyquery</B
+></CODE
+> (int connection, string query, int max_hits)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Searches for objects on the whole server and returns an array of
+>&#13;     Searches for objects on the whole server and returns an array of
      object ids. The maximum number of matches is limited to 
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >max_hits</I
 ></TT
 >. If <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >max_hits</I
 ></TT
 >
      is set to -1 the maximum number of matches is unlimited.</P
 ><P
->     The query will only work with indexed attributes.</P
+>&#13;     The query will only work with indexed attributes.</P
 ><P
->     See also <A
-HREF="function.hw-getobjectbyqueryobj.html"
-><B
-CLASS="FUNCTION"
+>&#13;     See also <B
+CLASS="function"
 >hw_GetObjectByQueryObj()</B
-></A
 >.</P
 ></DIV
 ><DIV

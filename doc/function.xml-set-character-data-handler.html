@@ -4,7 +4,7 @@
 >xml_set_character_data_handler</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="xml_set_element_handler"
 HREF="function.xml-set-element-handler.html"><LINK
 REL="NEXT"
 TITLE="xml_set_processing_instruction_handler"
-HREF="function.xml-set-processing-instruction-handler.html"></HEAD
+HREF="function.xml-set-processing-instruction-handler.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,43 +68,52 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.XML-SET-CHARACTER-DATA-HANDLER"
+NAME="function.xml-set-character-data-handler"
 >xml_set_character_data_handler</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN27503"
+NAME="AEN36581"
 ></A
->xml_set_character_data_handler -- set up character data handler</DIV
+><P
+>    (PHP3 &#62;= 3.0.6, PHP4 )</P
+>xml_set_character_data_handler&nbsp;--&nbsp;set up character data handler</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN27506"
+NAME="AEN36584"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
 >int 
-      xml_set_character_data_handler
-     </CODE
->(int parser, string handler);<P
+       <B
+CLASS="function"
+>xml_set_character_data_handler</B
+>
+      </CODE
+> (int parser, string handler)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Sets the character data handler function for the XML parser
+>&#13;     Sets the character data handler function for the XML parser
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >parser</I
 ></TT
 >.  <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >handler</I
 ></TT
@@ -110,54 +122,60 @@ CLASS="PARAMETER"
      <A
 HREF="function.xml-parse.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >xml_parse()</B
 ></A
 > is called for
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >parser</I
 ></TT
 >.</P
 ><P
->     The function named by <TT
-CLASS="PARAMETER"
+>&#13;     The function named by <TT
+CLASS="parameter"
 ><I
 >handler</I
 ></TT
 > must accept
      two parameters:
      <DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
 ><TT
-CLASS="REPLACEABLE"
+CLASS="replaceable"
 ><I
 >handler</I
 ></TT
 ></CODE
->(int parser, string data);<P
+> (int parser, string data)</CODE
+></P
+><P
 ></P
 ></DIV
 >
      <P
 ></P
+><DIV
+CLASS="variablelist"
 ><DL
 ><DT
 ><TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >parser</I
 ></TT
 ></DT
 ><DD
 ><P
->	 The first parameter, <TT
-CLASS="REPLACEABLE"
+>&#13;	 The first parameter, <TT
+CLASS="replaceable"
 ><I
 >parser</I
 ></TT
@@ -167,15 +185,15 @@ CLASS="REPLACEABLE"
 ></DD
 ><DT
 ><TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >data</I
 ></TT
 ></DT
 ><DD
 ><P
->	 The second parameter, <TT
-CLASS="PARAMETER"
+>&#13;	 The second parameter, <TT
+CLASS="parameter"
 ><I
 >data</I
 ></TT
@@ -184,26 +202,35 @@ CLASS="PARAMETER"
 	</P
 ></DD
 ></DL
+></DIV
 ></P
 ><P
->     If a handler function is set to an empty string, or
+>&#13;     If a handler function is set to an empty string, or
      <TT
-CLASS="LITERAL"
+CLASS="literal"
 >false</TT
 >, the handler in question is
      disabled.
     </P
 ><P
->     True is returned if the handler is set up, false if
+>&#13;     True is returned if the handler is set up, false if
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >parser</I
 ></TT
 > is not a parser.
     </P
 ><P
->     There is currently no support for object/method handlers.
+>&#13;     There is currently no support for object/method handlers.  See
+     <A
+HREF="function.xml-set-object.html"
+><B
+CLASS="function"
+>xml_set_object()</B
+></A
+> for using the XML parser
+     within an object.
     </P
 ></DIV
 ><DIV

@@ -4,7 +4,7 @@
 >is_writeable</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="is_readable"
 HREF="function.is-readable.html"><LINK
 REL="NEXT"
 TITLE="link"
-HREF="function.link.html"></HEAD
+HREF="function.link.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,57 +68,70 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.IS-WRITEABLE"
+NAME="function.is-writeable"
 >is_writeable</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN9118"
+NAME="AEN10482"
 ></A
->is_writeable -- tells whether the filename is writeable</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>is_writeable&nbsp;--&nbsp;Tells whether the filename is writeable</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN9121"
+NAME="AEN10485"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->bool is_writeable</CODE
->(string filename);<P
+>bool <B
+CLASS="function"
+>is_writeable</B
+></CODE
+> (string filename)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Returns true if the filename exists and is writeable.  The filename
-	 argument may be a directory name allowing you to check if a 
-	 directory is writeable.</P
+>&#13;     Returns true if the filename exists and is writeable.  The
+     filename argument may be a directory name allowing you to check
+     if a directory is writeable.
+    </P
 ><P
->     Keep in mind that PHP may be accessing the file as the user
-     id that the web server runs as (often 'nobody'). Safe mode
-     limitations are not taken into account.</P
+>&#13;     Keep in mind that PHP may be accessing the file as the user id
+     that the web server runs as (often 'nobody'). Safe mode
+     limitations are not taken into account.
+    </P
 ><P
->     The results of this function are cached. See
+>&#13;     The results of this function are cached. See
      <A
 HREF="function.clearstatcache.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >clearstatcache()</B
 ></A
-> for more details.</P
+> for more details.
+    </P
 ><P
->     See also <A
+>&#13;     See also <A
 HREF="function.is-readable.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >is_readable()</B
 ></A
->.</P
+>.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

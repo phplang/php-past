@@ -174,6 +174,11 @@ static const text *ora_func_tab[] =
 /* 61, 62 */ (text *) "unused", (text *) "OBNDRA"
 };
 
+/* This variable is to store error information in the case 
+ * when there was connection error */
+
+static oraConnection db_err_conn;
+
 #if COMPILE_DL
 DLEXPORT php3_module_entry *get_module() { return &oracle_module_entry; };
 #endif
@@ -456,7 +461,12 @@ void php3_Ora_Do_Logon(INTERNAL_FUNCTION_PARAMETERS, int persistent)
 #endif
 			php3_error(E_WARNING, "Unable to connect to ORACLE (%s)",
 					   ora_error(&db_conn->lda));
-			if (persistent)
+            
+            /* The next line is to provide error information
+             * for OraError && OraErrorCode calls */
+            db_err_conn = *db_conn;
+            
+            if (persistent)
 				free(db_conn);
 			else
 				efree(db_conn);
@@ -510,7 +520,12 @@ void php3_Ora_Do_Logon(INTERNAL_FUNCTION_PARAMETERS, int persistent)
 				if(orlon(&db_conn->lda, db_conn->hda, user,
 						 strlen(user), pwd, strlen(pwd), 0)) {
 #endif
-					php3_error(E_WARNING, "Unable to reconnect to ORACLE (%s)",
+				
+                    /* The next line is to provide error information
+                     * for OraError && OraErrorCode calls */
+                    db_err_conn = *db_conn;
+                            
+                    php3_error(E_WARNING, "Unable to reconnect to ORACLE (%s)",
 							   ora_error(&db_conn->lda));
 					/* Delete list entry for this connection */
 					php3_plist_delete(id);
@@ -1543,21 +1558,28 @@ void php3_Ora_Error(INTERNAL_FUNCTION_PARAMETERS)
 	pval *arg;
 	oraCursor *cursor;
 	oraConnection *conn;
+	int argc = ARG_COUNT(ht);
 
-	if (ARG_COUNT(ht) != 1 || getParametersArray(ht, 1, &arg) == FAILURE) {
+	if (argc < 0 || argc > 1 || getParametersArray(ht, argc, &arg) == FAILURE) {
 		WRONG_PARAM_COUNT;
 	}
-
-	convert_to_long(arg);
-	if ((cursor = ora_get_cursor(list, arg->value.lval)) != NULL) {
-		return_value->type = IS_STRING;
-		return_value->value.str.val = estrdup(ora_error(&cursor->cda));
-		return_value->value.str.len = strlen(return_value->value.str.val);
-	} else if ((conn = ora_get_conn(list,plist, arg->value.lval)) != NULL) {
-		return_value->type = IS_STRING;
-		return_value->value.str.val = estrdup(ora_error(&conn->lda));
-		return_value->value.str.len = strlen(return_value->value.str.val);
-	}
+	
+	if (argc == 1) {
+		convert_to_long(arg);
+		if ((cursor = ora_get_cursor(list, arg->value.lval)) != NULL) {
+			return_value->type = IS_STRING;
+			return_value->value.str.val = estrdup(ora_error(&cursor->cda));
+			return_value->value.str.len = strlen(return_value->value.str.val);
+		} else if ((conn = ora_get_conn(list,plist, arg->value.lval)) != NULL) {
+			return_value->type = IS_STRING;
+			return_value->value.str.val = estrdup(ora_error(&conn->lda));
+			return_value->value.str.len = strlen(return_value->value.str.val);
+		}
+	} else {
+        return_value->type = IS_STRING;
+        return_value->value.str.val = estrdup(ora_error(&db_err_conn.lda));
+        return_value->value.str.len = strlen(return_value->value.str.val);
+    }
 }
 /* }}} */
 
@@ -1568,17 +1590,23 @@ void php3_Ora_ErrorCode(INTERNAL_FUNCTION_PARAMETERS)
 	pval *arg;
 	oraCursor *cursor;
 	oraConnection *conn;
+	int argc = ARG_COUNT(ht);
 
-	if (ARG_COUNT(ht) != 1 || getParametersArray(ht, 1, &arg) == FAILURE) {
+	if (argc < 0 || argc > 1 || getParametersArray(ht, argc, &arg) == FAILURE) {
 		WRONG_PARAM_COUNT;
 	}
+	
+	if (argc == 1) {
+		convert_to_long(arg);
+		if ((cursor = ora_get_cursor(list, arg->value.lval)) != NULL) {
+			RETURN_LONG(cursor->cda.rc);
+		} else if ((conn = ora_get_conn(list,plist, arg->value.lval)) != NULL) {
+			RETURN_LONG(conn->lda.rc);
+		} 
+	} else {
+        RETURN_LONG(db_err_conn.lda.rc);
+    }
 
-	convert_to_long(arg);
-	if ((cursor = ora_get_cursor(list, arg->value.lval)) != NULL) {
-		RETURN_LONG(cursor->cda.rc);
-	} else if ((conn = ora_get_conn(list,plist, arg->value.lval)) != NULL) {
-		RETURN_LONG(conn->lda.rc);
-	}
 }
 /* }}} */
 

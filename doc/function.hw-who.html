@@ -4,7 +4,7 @@
 >hw_Who</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="hw_Unlock"
 HREF="function.hw-unlock.html"><LINK
 REL="NEXT"
 TITLE="hw_Username"
-HREF="function.hw-getusername.html"></HEAD
+HREF="function.hw-getusername.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,34 +68,43 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.HW-WHO"
+NAME="function.hw-who"
 >hw_Who</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN11407"
+NAME="AEN13066"
 ></A
->hw_Who -- List of currently logged in users</DIV
+><P
+>    (PHP3 &#62;= 3.0.3, PHP4 )</P
+>hw_Who&nbsp;--&nbsp;List of currently logged in users</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN11410"
+NAME="AEN13069"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int hw_who</CODE
->(int connection);<P
+>int <B
+CLASS="function"
+>hw_who</B
+></CODE
+> (int connection)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Returns an array of users currently logged into the Hyperwave server.
+>&#13;     Returns an array of users currently logged into the Hyperwave server.
      Each entry in this array is an array itself containing the elements id,
      name, system, onSinceDate, onSinceTime, TotalTime and self. 'self'
      is 1 if this entry belongs to the user who initianted the request.</P

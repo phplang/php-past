@@ -4,7 +4,7 @@
 >mssql_fetch_field</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="mssql_fetch_array"
 HREF="function.mssql-fetch-array.html"><LINK
 REL="NEXT"
 TITLE="mssql_fetch_object"
-HREF="function.mssql-fetch-object.html"></HEAD
+HREF="function.mssql-fetch-object.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,77 +68,94 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.MSSQL-FETCH-FIELD"
+NAME="function.mssql-fetch-field"
 >mssql_fetch_field</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN16399"
+NAME="AEN20836"
 ></A
->mssql_fetch_field -- get field information</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>mssql_fetch_field&nbsp;--&nbsp;Get field information</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN16402"
+NAME="AEN20839"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->object mssql_fetch_field</CODE
->(int result, int field_offset);<P
+>object <B
+CLASS="function"
+>mssql_fetch_field</B
+></CODE
+> (int result [, int 
+       field_offset])</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Returns an object containing field information.  
+>&#13;     Returns an object containing field information.  
     </P
 ><P
->     mssql_fetch_field() can be used in order to obtain information about
-     fields in a certain query result.  If the field offset isn't
-     specified, the next field that wasn't yet retreived by
-     mssql_fetch_field() is retreived.
+>&#13;     <B
+CLASS="function"
+>Mssql_fetch_field()</B
+> can be used in order to
+     obtain information about fields in a certain query result. If
+     the field offset isn't specified, the next field that wasn't yet
+     retrieved by <B
+CLASS="function"
+>mssql_fetch_field()</B
+> is retrieved.
     </P
 ><P
->     The properties of the object are:
+>&#13;     The properties of the object are:
     </P
 ><P
 ></P
 ><UL
 ><LI
 ><P
->	name - column name.  if the column is a result of a function, this property is set to computed#N,
-	where #N is a serial number.
-       </P
+>&#13;       name - column name.  if the column is a result of a function,
+       this property is set to computed#N, where #N is a serial
+       number.
+      </P
 ></LI
 ><LI
 ><P
->	column_source - the table from which the column was taken
-       </P
+>&#13;       column_source - the table from which the column was taken
+      </P
 ></LI
 ><LI
 ><P
->	max_length - maximum length of the column
-       </P
+>&#13;       max_length - maximum length of the column
+      </P
 ></LI
 ><LI
 ><P
->	numeric - 1 if the column is numeric
-       </P
+>&#13;       numeric - 1 if the column is numeric
+      </P
 ></LI
 ></UL
 ><P
->     See also <A
+>&#13;     See also <A
 HREF="function.mssql-field-seek.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >mssql_field_seek()</B
 ></A
->
+>.
     </P
 ></DIV
 ><DIV

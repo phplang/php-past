@@ -4,7 +4,7 @@
 >mysql_affected_rows</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="MySQL functions"
 HREF="ref.mysql.html"><LINK
 REL="NEXT"
 TITLE="mysql_change_user"
-HREF="function.mysql-change-user.html"></HEAD
+HREF="function.mysql-change-user.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,60 +68,69 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.MYSQL-AFFECTED-ROWS"
+NAME="function.mysql-affected-rows"
 >mysql_affected_rows</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN17806"
+NAME="AEN22664"
 ></A
->mysql_affected_rows -- Get number of affected rows in previous MySQL
+><P
+>    (PHP3 , PHP4 )</P
+>mysql_affected_rows&nbsp;--&nbsp;Get number of affected rows in previous MySQL
      operation</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN17809"
+NAME="AEN22667"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int mysql_affected_rows</CODE
->(int [<SPAN
-CLASS="OPTIONAL"
->link_identifier</SPAN
->]
-                   );<P
+>int <B
+CLASS="function"
+>mysql_affected_rows</B
+></CODE
+> ([int 
+       link_identifier])</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
 > 
      <B
-CLASS="FUNCTION"
+CLASS="function"
 >mysql_affected_rows()</B
 > returns the number of
      rows affected by the last INSERT, UPDATE or DELETE query on the
      server associated with the specified link identifier.  If the
-     link identifier isn't specified, the last opened link is assumed.</P
+     link identifier isn't specified, the last opened link is assumed.
+    </P
 ><P
->     If the last query was a DELETE query with no WHERE clause, all
+>&#13;     If the last query was a DELETE query with no WHERE clause, all
      of the records will have been deleted from the table but this
-     function will return zero.</P
+     function will return zero.
+    </P
 ><P
->     This command is not effective for SELECT statements, only on
+>&#13;     This command is not effective for SELECT statements, only on
      statements which modify records. To retrieve the number of rows
      returned from a SELECT, use <A
 HREF="function.mysql-num-rows.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >mysql_num_rows()</B
 ></A
->.</P
+>.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

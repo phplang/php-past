@@ -4,7 +4,7 @@
 >ldap_get_values_len</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="ldap_get_values"
 HREF="function.ldap-get-values.html"><LINK
 REL="NEXT"
 TITLE="ldap_list"
-HREF="function.ldap-list.html"></HEAD
+HREF="function.ldap-list.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,45 +68,54 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.LDAP-GET-VALUES-LEN"
+NAME="function.ldap-get-values-len"
 >ldap_get_values_len</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN14747"
+NAME="AEN17810"
 ></A
->ldap_get_values_len -- Get all binary values from a result entry</DIV
+><P
+>    (PHP3 &#62;= 3.0.13, PHP4 &#62;= 4.0RC2)</P
+>ldap_get_values_len&nbsp;--&nbsp;Get all binary values from a result entry</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN14750"
+NAME="AEN17813"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->array ldap_get_values_len</CODE
->(int link_identifier, int result_entry_identifier, string attribute);<P
+>array <B
+CLASS="function"
+>ldap_get_values_len</B
+></CODE
+> (int link_identifier, int result_entry_identifier, string attribute)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Returns an array of values for the attribute on success and false
+>&#13;     Returns an array of values for the attribute on success and false
      on error.</P
 ><P
 >  
      <B
-CLASS="FUNCTION"
+CLASS="function"
 >ldap_get_values_len()</B
 > function is used to read all
      the values of the attribute in the entry in the result. entry is
      specified by the
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >result_entry_identifier</I
 ></TT
@@ -112,15 +124,27 @@ CLASS="PARAMETER"
      array. Individual values are accessed by integer index in the
      array.  The first index is 0.</P
 ><P
->     This function is used exactly like
+>&#13;     This function is used exactly like
      <A
 HREF="function.ldap-get-values.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >ldap_get_values()</B
 ></A
 > except that it handles
      binary data and not string data.</P
+><DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
+><P
+><B
+>Note: </B
+>
+      This function was added in 4.0.
+     </P
+></BLOCKQUOTE
+></DIV
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

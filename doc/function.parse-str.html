@@ -4,7 +4,7 @@
 >parse_str</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="Ord"
 HREF="function.ord.html"><LINK
 REL="NEXT"
 TITLE="print"
-HREF="function.print.html"></HEAD
+HREF="function.print.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,42 +68,52 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.PARSE-STR"
+NAME="function.parse-str"
 >parse_str</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN25271"
+NAME="AEN33798"
 ></A
->parse_str -- Parses the string into variables</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>parse_str&nbsp;--&nbsp;Parses the string into variables</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN25274"
+NAME="AEN33801"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->void parse_str</CODE
->(string str);<P
+>void <B
+CLASS="function"
+>parse_str</B
+></CODE
+> (string str)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Parses <TT
-CLASS="PARAMETER"
+>&#13;     Parses <TT
+CLASS="parameter"
 ><I
 >str</I
 ></TT
 > as if it were the query string
-     passed via an URL and sets variables in the current scope.</P
+     passed via an URL and sets variables in the current scope.
+    </P
 ><P
->     <TABLE
+>&#13;     <TABLE
 WIDTH="100%"
 BORDER="0"
 CELLPADDING="0"
@@ -109,27 +122,59 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
 >Example 1. Using <B
-CLASS="FUNCTION"
+CLASS="function"
 >parse_str()</B
 ></B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->$str = "first=value&amp;second[]=this+works&amp;second[]=another";
+CLASS="programlisting"
+>&#13;$str = "first=value&#38;second[]=this+works&#38;second[]=another";
 parse_str($str);
-echo $first; /* prints "value" */
+echo $first;     /* prints "value" */
 echo $second[0]; /* prints "this works" */
 echo $second[1]; /* prints "another" */
       </PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR
 ></TABLE
-></P
+>
+    </P
+><DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
+><P
+><B
+>Note: </B
+>
+       This currently requires 
+       <A
+HREF="configuration.html#ini.register-globals"
+>register_globals</A
+>=on 
+       to be set in <TT
+CLASS="filename"
+>php.ini</TT
+>, this behaviour may 
+       change in the future (After 4.0.2) and this function might well 
+       also return an array of values.
+      </P
+></BLOCKQUOTE
+></DIV
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

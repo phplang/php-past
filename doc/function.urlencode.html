@@ -4,20 +4,23 @@
 >urlencode</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
-TITLE="URL functions"
+TITLE="URL Functions"
 HREF="ref.url.html"><LINK
 REL="PREVIOUS"
 TITLE="urldecode"
 HREF="function.urldecode.html"><LINK
 REL="NEXT"
-TITLE="Variable functions"
-HREF="ref.var.html"></HEAD
+TITLE="Variable Functions"
+HREF="ref.var.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,64 +68,72 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.URLENCODE"
+NAME="function.urlencode"
 >urlencode</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN26555"
+NAME="AEN35451"
 ></A
->urlencode -- URL-encodes string</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>urlencode&nbsp;--&nbsp;URL-encodes string</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN26558"
+NAME="AEN35454"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->string urlencode</CODE
->(string str);<P
+>string <B
+CLASS="function"
+>urlencode</B
+></CODE
+> (string str)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Returns a string in which all non-alphanumeric characters except
+>&#13;     Returns a string in which all non-alphanumeric characters except
      <TT
-CLASS="LITERAL"
+CLASS="literal"
 >-_.</TT
 > have been replaced with a percent
      (<TT
-CLASS="LITERAL"
+CLASS="literal"
 >%</TT
 >) sign followed by two hex digits and spaces
      encoded as plus (<TT
-CLASS="LITERAL"
+CLASS="literal"
 >+</TT
 >) signs.  It is encoded the
      same way that the posted data from a WWW form is encoded, that is
      the same way as in
      <TT
-CLASS="LITERAL"
+CLASS="literal"
 >application/x-www-form-urlencoded</TT
 > media type.
-     This differs from the RFC1738 encoding (see <A
+     This differs from the RFC1738 encoding (see
+     <A
 HREF="function.rawurlencode.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >rawurlencode()</B
 ></A
-> ) in that
-     for historical reasons, spaces are encoded as plus (+ ) signs.
-     This function is convenient when encoding a string to be used in
-     a query part of an URL, as a convenient way to pass variables to
-     the next page:
-
+>) in that for historical
+     reasons, spaces are encoded as plus (+) signs.  This function is
+     convenient when encoding a string to be used in a query part of
+     an URL, as a convenient way to pass variables to the next page:
      <TABLE
 WIDTH="100%"
 BORDER="0"
@@ -132,27 +143,56 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
->Example 1. urlencode() example</B
+>Example 1. <B
+CLASS="function"
+>Urlencode()</B
+> example</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->echo '&lt;A HREF="mycgi?foo=', urlencode ($userinput), '"&#62;';</PRE
+CLASS="programlisting"
+>&#13;echo '&#60;A HREF="mycgi?foo=', urlencode ($userinput), '"&#62;';
+      </PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR
 ></TABLE
-></P
+>
+    </P
 ><P
->     See also <A
+>&#13;     See also <A
 HREF="function.urldecode.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >urldecode()</B
 ></A
-></P
+>,
+		          <A
+HREF="function.rawurldecode.html"
+><B
+CLASS="function"
+>rawurldecode()</B
+></A
+>,
+							<A
+HREF="function.rawurlencode.html"
+><B
+CLASS="function"
+>rawurlencode()</B
+></A
+>.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -207,7 +247,7 @@ HREF="ref.url.html"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->Variable functions</TD
+>Variable Functions</TD
 ></TR
 ></TABLE
 ></DIV

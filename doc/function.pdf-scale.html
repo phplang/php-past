@@ -4,7 +4,7 @@
 >PDF_scale</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="PDF_translate"
 HREF="function.pdf-translate.html"><LINK
 REL="NEXT"
 TITLE="PDF_rotate"
-HREF="function.pdf-rotate.html"></HEAD
+HREF="function.pdf-rotate.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,40 +68,46 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.PDF-SCALE"
+NAME="function.pdf-scale"
 >PDF_scale</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN21175"
+NAME="AEN26919"
 ></A
->PDF_scale -- Sets scaling</DIV
+><P
+>    (PHP3 &#62;= 3.0.6, PHP4 )</P
+>PDF_scale&nbsp;--&nbsp;Sets scaling</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN21178"
+NAME="AEN26922"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->void pdf_scale</CODE
->(int pdf document, double x-scale, double y-scale);<P
+>void <B
+CLASS="function"
+>pdf_scale</B
+></CODE
+> (int pdf document, double x-scale, double y-scale)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     The <A
-HREF="function.pdf-scale.html"
-><B
-CLASS="FUNCTION"
+>&#13;     The <B
+CLASS="function"
 >PDF_scale()</B
-></A
-> function set the scaling factor
+> function sets the scaling factor
      in both directions. The following example scales x and y direction
      by 72. The following line will therefore be drawn one inch in both
      directions.
@@ -112,17 +121,27 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
 >Example 1. Scaling</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->&lt;?php PDF_scale($pdf, 72.0, 72.0);
+CLASS="programlisting"
+>&#13;&#60;?php PDF_scale($pdf, 72.0, 72.0);
 PDF_lineto($pdf, 1, 1);
 PDF_stroke($pdf);
-?&#62;</PRE
+?&#62;
+</PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR

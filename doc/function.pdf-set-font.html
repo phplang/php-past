@@ -4,7 +4,7 @@
 >PDF_set_font</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="PDF_show_xy"
 HREF="function.pdf-show-xy.html"><LINK
 REL="NEXT"
 TITLE="PDF_set_leading"
-HREF="function.pdf-set-leading.html"></HEAD
+HREF="function.pdf-set-leading.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,88 +68,105 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.PDF-SET-FONT"
+NAME="function.pdf-set-font"
 >PDF_set_font</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN20912"
+NAME="AEN26526"
 ></A
->PDF_set_font -- Selects a font face and size</DIV
+><P
+>    (PHP3 &#62;= 3.0.6, PHP4 )</P
+>PDF_set_font&nbsp;--&nbsp;Selects a font face and size</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN20915"
+NAME="AEN26529"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->void pdf_set_font</CODE
->(int pdf document, string font name, double size, int encoding, int embed);<P
+>void <B
+CLASS="function"
+>pdf_set_font</B
+></CODE
+> (int pdf document, string font name, double size, string encoding [, int embed])</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     The <A
-HREF="function.pdf-set-font.html"
-><B
-CLASS="FUNCTION"
+>&#13;     The <B
+CLASS="function"
 >PDF_set_font()</B
-></A
 > function sets the
-     current font face, font size and encoding. You will need to
+     current font face, font size and encoding. If you use pdflib 0.6
+     you will need to
      provide the Adobe Font Metrics (afm-files) for the font in the
-     font path (default is ./fonts). The last parameter
+     font path (default is ./fonts). If you use php3 or a version of
+     pdflib older than 2.20 the fourth parameter
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >encoding</I
 ></TT
 > can take the following values:
      0 = builtin, 1 = pdfdoc, 2 = macroman, 3 = macexpert, 4 = winansi.
      An encoding greater than 4 and less than 0 will default to winansi.
-     winansi is often a good choice. If the last parameter is set to
+     winansi is often a good choice.
+     If you use php4 and a version of pdflib &#62;= 2.20 the encoding parameter
+     has changed to a string. Use 'winansi', 'builtin', 'host', 'macroman' etc. instead.
+     If the last parameter is set to
      1 the font is embedded into the pdf document otherwise it is not.
-
-    <DIV
-CLASS="NOTE"
+     To embed a font is usually a good idea if the font is not widely spread
+     and you cannot ensure that the person watching your document has
+     access on fonts in the document.
+     I font is only embedded once even if you call 
+     <B
+CLASS="function"
+>PDF_set_font()</B
+> several times.
+    </P
+><DIV
+CLASS="note"
 ><BLOCKQUOTE
-CLASS="NOTE"
+CLASS="note"
 ><P
 ><B
 >Note: </B
->     This function has to be called after
-     <A
-HREF="function.pdf-begin-page.html"
-><B
-CLASS="FUNCTION"
->PDF_begin_page()</B
-></A
-> in order to create a
-     valid pdf document.
-    </P
-></BLOCKQUOTE
-></DIV
 >
-
-    <DIV
-CLASS="NOTE"
+      This function has to be called after
+      <B
+CLASS="function"
+>PDF_begin_page()</B
+> in order to create a valid
+      pdf document.
+     </P
+></BLOCKQUOTE
+></DIV
+><DIV
+CLASS="note"
 ><BLOCKQUOTE
-CLASS="NOTE"
+CLASS="note"
 ><P
 ><B
 >Note: </B
->     This function does not need the afm files for winansi encoding if 
-     pdflib 2.0 support is activated.
-    </P
+>
+      If you reference a font in a .upr file make sure the name
+      in the afm file and the font name are the same. Otherwise,
+      the font will be embedded several times (Thanks to Paul Haddon
+      for finding this.)
+     </P
 ></BLOCKQUOTE
 ></DIV
-></P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

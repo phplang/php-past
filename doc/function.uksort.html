@@ -4,20 +4,23 @@
 >uksort</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
-TITLE="Array functions"
+TITLE="Array Functions"
 HREF="ref.array.html"><LINK
 REL="PREVIOUS"
 TITLE="uasort"
 HREF="function.uasort.html"><LINK
 REL="NEXT"
 TITLE="usort"
-HREF="function.usort.html"></HEAD
+HREF="function.usort.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,40 +68,51 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.UKSORT"
+NAME="function.uksort"
 >uksort</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN4533"
+NAME="AEN5000"
 ></A
->uksort --      Sort an array by keys using a user-defined comparison function
+><P
+>    (PHP3 &#62;= 3.0.4, PHP4 )</P
+>uksort&nbsp;--&nbsp;
+     Sort an array by keys using a user-defined comparison function
     </DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN4536"
+NAME="AEN5003"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->void uksort</CODE
->(array array, function cmp_function);<P
+>void <B
+CLASS="function"
+>uksort</B
+></CODE
+> (array array, function cmp_function)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     This function will sort the keys of an array using a
+>&#13;     This function will sort the keys of an array using a
      user-supplied comparison function.  If the array you wish to sort
      needs to be sorted by some non-trivial criteria, you should use
      this function.
-
-     <TABLE
+    </P
+><P
+>&#13;     <TABLE
 WIDTH="100%"
 BORDER="0"
 CELLPADDING="0"
@@ -107,85 +121,127 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
 >Example 1. <B
-CLASS="FUNCTION"
->uksort()</B
+CLASS="function"
+>Uksort()</B
 > example</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->function mycompare($a, $b) {   
+CLASS="programlisting"
+>&#13;function cmp ($a, $b) {   
     if ($a == $b) return 0;
     return ($a &#62; $b) ? -1 : 1;
 }
-$a = array(4 =&#62; "four", 3 =&#62; "three", 20 =&#62; "twenty", 10 =&#62; "ten");
-uksort($a, mycompare);
-while(list($key, $value) = each($a)) {
+
+$a = array (4 =&#62; "four", 3 =&#62; "three", 20 =&#62; "twenty", 10 =&#62; "ten");
+
+uksort ($a, "cmp");
+
+while (list ($key, $value) = each ($a)) {
     echo "$key: $value\n";
-}</PRE
+}
+      </PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR
 ></TABLE
 >
-
-     This example would display:
-
-     <TT
-CLASS="COMPUTEROUTPUT"
->20: twenty
+    </P
+><P
+>&#13;     This example would display:
+    </P
+><P
+>&#13;     <DIV
+CLASS="informalexample"
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;20: twenty
 10: ten
 4: four
 3: three
-     </TT
-></P
+      </PRE
+></TD
+></TR
+></TABLE
 ><P
->     See also: 
-     <A
-HREF="function.arsort.html"
+></P
+></DIV
+>
+    </P
+><P
+>&#13;     See also: <A
+HREF="function.usort.html"
 ><B
-CLASS="FUNCTION"
->arsort()</B
+CLASS="function"
+>usort()</B
 ></A
->, 
-     <A
-HREF="function.asort.html"
-><B
-CLASS="FUNCTION"
->asort()</B
-></A
->,
-     <A
+>, <A
 HREF="function.uasort.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >uasort()</B
 ></A
 >, 
      <A
+HREF="function.sort.html"
+><B
+CLASS="function"
+>sort()</B
+></A
+>, <A
+HREF="function.asort.html"
+><B
+CLASS="function"
+>asort()</B
+></A
+>, 
+     <A
+HREF="function.arsort.html"
+><B
+CLASS="function"
+>arsort()</B
+></A
+>, <A
 HREF="function.ksort.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >ksort()</B
 ></A
 >,
      <A
+HREF="function.natsort.html"
+><B
+CLASS="function"
+>natsort()</B
+></A
+> and <A
 HREF="function.rsort.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >rsort()</B
 ></A
->, and 
-     <A
-HREF="function.sort.html"
-><B
-CLASS="FUNCTION"
->sort()</B
-></A
->.</P
+>.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

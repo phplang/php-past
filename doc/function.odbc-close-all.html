@@ -4,20 +4,23 @@
 >odbc_close_all</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
-TITLE="ODBC functions"
+TITLE="Unified ODBC functions"
 HREF="ref.odbc.html"><LINK
 REL="PREVIOUS"
 TITLE="odbc_close"
 HREF="function.odbc-close.html"><LINK
 REL="NEXT"
 TITLE="odbc_commit"
-HREF="function.odbc-commit.html"></HEAD
+HREF="function.odbc-commit.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,53 +68,62 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.ODBC-CLOSE-ALL"
+NAME="function.odbc-close-all"
 >odbc_close_all</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN19222"
+NAME="AEN24071"
 ></A
->odbc_close_all -- Close all ODBC connections</DIV
+><P
+>    (PHP3 &#62;= 3.0.6, PHP4 )</P
+>odbc_close_all&nbsp;--&nbsp;Close all ODBC connections</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN19225"
+NAME="AEN24074"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->void odbc_close_all</CODE
->(void);<P
+>void <B
+CLASS="function"
+>odbc_close_all</B
+></CODE
+>(void);</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     <B
-CLASS="FUNCTION"
+>&#13;     <B
+CLASS="function"
 >odbc_close_all()</B
 > will close down all
      connections to database server(s).
-
      <DIV
-CLASS="NOTE"
+CLASS="note"
 ><BLOCKQUOTE
-CLASS="NOTE"
+CLASS="note"
 ><P
 ><B
 >Note: </B
->       This function will fail if there are open
-       transactions on a connection. This connection will remain open
-       in this case.
+>
+       This function will fail if there are open transactions on a
+       connection. This connection will remain open in this case.
       </P
 ></BLOCKQUOTE
 ></DIV
-></P
+>
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

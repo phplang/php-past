@@ -4,7 +4,7 @@
 >msql_result</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="msql_regcase"
 HREF="function.msql-regcase.html"><LINK
 REL="NEXT"
 TITLE="msql_select_db"
-HREF="function.msql-select-db.html"></HEAD
+HREF="function.msql-select-db.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,76 +68,95 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.MSQL-RESULT"
+NAME="function.msql-result"
 >msql_result</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN17729"
+NAME="AEN22576"
 ></A
->msql_result -- get result data</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>msql_result&nbsp;--&nbsp;Get result data</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN17732"
+NAME="AEN22579"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int msql_result</CODE
->(int query_identifier, int i, mixed field);<P
+>int <B
+CLASS="function"
+>msql_result</B
+></CODE
+> (int query_identifier, int i, mixed field)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Returns the contents of the cell at the row and offset in the
-     specified mSQL result set.</P
+>&#13;     Returns the contents of the cell at the row and offset in the
+     specified mSQL result set.
+    </P
 ><P
 > 
-     msql_result() returns the contents of one cell from a mSQL
-     result set.  The field argument can be the field's offset, or the
-     field's name, or the field's table dot field's name
-     (fieldname.tablename).  If the column name has been aliased
-     ('select foo as bar from...'), use the alias instead of the column
-     name.</P
+     <B
+CLASS="function"
+>Msql_result()</B
+> returns the contents of one cell
+     from a mSQL result set.  The field argument can be the field's
+     offset, or the field's name, or the field's table dot field's
+     name (fieldname.tablename).  If the column name has been aliased
+     ('select foo as bar from ...'), use the alias instead of the
+     column name.
+    </P
 ><P
 > 
-     When working on large result sets, you should consider
-     using one of the functions that fetch an entire row (specified
-     below).  As these functions return the contents of multiple cells
-     in one function call, they're MUCH quicker than msql_result().
-     Also, note that specifying a numeric offset for the field argument
-     is much quicker than specifying a fieldname or tablename.fieldname
-     argument.</P
+     When working on large result sets, you should consider using one
+     of the functions that fetch an entire row (specified below).  As
+     these functions return the contents of multiple cells in one
+     function call, they're MUCH quicker than
+     <B
+CLASS="function"
+>msql_result()</B
+>.  Also, note that specifying a
+     numeric offset for the field argument is much quicker than
+     specifying a fieldname or tablename.fieldname argument.
+    </P
 ><P
 > 
      Recommended high-performance alternatives:
      <A
 HREF="function.msql-fetch-row.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >msql_fetch_row()</B
 ></A
 >,
      <A
 HREF="function.msql-fetch-array.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >msql_fetch_array()</B
 ></A
 >, and
      <A
 HREF="function.msql-fetch-object.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >msql_fetch_object()</B
 ></A
->.</P
+>.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

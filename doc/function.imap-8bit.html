@@ -4,20 +4,23 @@
 >imap_8bit</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
-TITLE="IMAP functions"
+TITLE="IMAP, POP3 and NNTP functions"
 HREF="ref.imap.html"><LINK
 REL="PREVIOUS"
 TITLE="imap_qprint"
 HREF="function.imap-qprint.html"><LINK
 REL="NEXT"
 TITLE="imap_binary"
-HREF="function.imap-binary.html"></HEAD
+HREF="function.imap-binary.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,37 +68,65 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.IMAP-8BIT"
+NAME="function.imap-8bit"
 >imap_8bit</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN13128"
+NAME="AEN15677"
 ></A
->imap_8bit -- Convert an 8bit string to a quoted-printable string.</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>imap_8bit&nbsp;--&nbsp;
+     Convert an 8bit string to a quoted-printable string
+    </DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN13131"
+NAME="AEN15680"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->string imap_8bit</CODE
->(string string);<P
+>string <B
+CLASS="function"
+>imap_8bit</B
+></CODE
+> (string string)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
 >  
-     Convert an 8bit string to a quoted-printable string.</P
+     Convert an 8bit string to a quoted-printable string (according to
+     <A
+HREF="http://www.faqs.org/rfcs/rfc2045.html"
+TARGET="_top"
+>RFC2045</A
+>, section
+     6.7).
+    </P
 ><P
->     Returns a quoted-printable string</P
+>&#13;     Returns a quoted-printable string.
+    </P
+><P
+>&#13;     See also <A
+HREF="function.imap-qprint.html"
+><B
+CLASS="function"
+>imap_qprint()</B
+></A
+>.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

@@ -4,7 +4,7 @@
 >hw_InsertDocument</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="hw_InsDoc"
 HREF="function.hw-insdoc.html"><LINK
 REL="NEXT"
 TITLE="hw_InsertObject"
-HREF="function.hw-insertobject.html"></HEAD
+HREF="function.hw-insertobject.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,43 +68,52 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.HW-INSERTDOCUMENT"
+NAME="function.hw-insertdocument"
 >hw_InsertDocument</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN11161"
+NAME="AEN12809"
 ></A
->hw_InsertDocument -- upload any document</DIV
+><P
+>    (PHP3 &#62;= 3.0.3, PHP4 )</P
+>hw_InsertDocument&nbsp;--&nbsp;upload any document</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN11164"
+NAME="AEN12812"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int hw_insertdocument</CODE
->(int connection, int parent_id, int hw_document);<P
+>int <B
+CLASS="function"
+>hw_insertdocument</B
+></CODE
+> (int connection, int parent_id, int hw_document)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->      Uploads a document into the collection with
+>&#13;      Uploads a document into the collection with
       <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >parent_id</I
 ></TT
 >.
       The document has to be created before with
       <B
-CLASS="FUNCTION"
+CLASS="function"
 >hw_NewDocument()</B
 >. Make sure that
       the object record of the new document contains at least
@@ -109,12 +121,9 @@ CLASS="FUNCTION"
       you also want to set the MimeType. The functions returns the
       object id of the new document or false.</P
 ><P
->     See also <A
-HREF="function.hw-pipedocument.html"
-><B
-CLASS="FUNCTION"
+>&#13;     See also <B
+CLASS="function"
 >hw_PipeDocument()</B
-></A
 >.</P
 ></DIV
 ><DIV

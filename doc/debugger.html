@@ -4,7 +4,7 @@
 >The PHP Debugger</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="Reporting Errors"
 HREF="phpdevel-errors.html"><LINK
 REL="NEXT"
 TITLE="Debugger Protocol"
-HREF="debugger-protocol.html"></HEAD
+HREF="debugger-protocol.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="appendix"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -64,10 +67,10 @@ HREF="debugger-protocol.html"
 ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><DIV
-CLASS="APPENDIX"
+CLASS="appendix"
 ><H1
 ><A
-NAME="DEBUGGER"
+NAME="debugger"
 >Appendix C. The PHP Debugger</A
 ></H1
 ><DIV
@@ -79,7 +82,7 @@ CLASS="TOC"
 ></DT
 ><DT
 ><A
-HREF="debugger.html#DEBUGGER-USING"
+HREF="debugger.html#debugger-using"
 >Using the Debugger</A
 ></DT
 ><DT
@@ -90,89 +93,96 @@ HREF="debugger-protocol.html"
 ></DL
 ></DIV
 ><DIV
-CLASS="SECT1"
+CLASS="sect1"
 ><H1
-CLASS="SECT1"
+CLASS="sect1"
 ><A
-NAME="DEBUGGER-USING"
+NAME="debugger-using"
 >Using the Debugger</A
 ></H1
 ><P
->   PHP's internal debugger is useful for tracking down evasive bugs.
-   The debugger works by connecting to a <SPAN
-CLASS="ACRONYM"
+>&#13;    PHP's internal debugger is useful for tracking down evasive bugs.
+    The debugger works by connecting to a <SPAN
+CLASS="acronym"
 >TCP</SPAN
 > port
-   for every time PHP starts up.  All error messages from that request
-   will be sent to this TCP connection.  This information is intended
-   for "debugging server" that can run inside an
-   <SPAN
-CLASS="ACRONYM"
+    for every time PHP starts up.  All error messages from that
+    request will be sent to this TCP connection.  This information is
+    intended for "debugging server" that can run inside an
+    <SPAN
+CLASS="acronym"
 >IDE</SPAN
-> or programmable editor (such as Emacs).</P
+> or programmable editor (such as Emacs).
+   </P
 ><P
->   How to set up the debugger:
-   <P
+>&#13;    How to set up the debugger:
+    <P
 ></P
 ><OL
 TYPE="1"
 ><LI
 ><P
-> Set up a TCP port for the debugger in the <A
-HREF="configuration.html#CONFIGURATION.FILE"
+> 
+       Set up a TCP port for the debugger in the <A
+HREF="configuration.html#configuration.file"
 >configuration file</A
 > (<A
-HREF="configuration.html#INI.DEBUGGER.PORT"
+HREF="configuration.html#ini.debugger.port"
 >debugger.port</A
 >) and enable it
-      (<A
-HREF="configuration.html#INI.DEBUGGER.ENABLED"
+       (<A
+HREF="configuration.html#ini.debugger.enabled"
 >debugger.enabled</A
->).</P
+>).
+      </P
 ></LI
 ><LI
 ><P
-> Set up a TCP listener on that port somewhere
-      (for example <B
-CLASS="COMMAND"
+> 
+       Set up a TCP listener on that port somewhere (for example
+       <B
+CLASS="command"
 >socket -l -s 1400</B
-> on UNIX).</P
+> on UNIX).
+      </P
 ></LI
 ><LI
 ><P
-> In your code, run
-      "debugger_on(<TT
-CLASS="REPLACEABLE"
+> 
+       In your code, run
+       "debugger_on(<TT
+CLASS="replaceable"
 ><I
 >host</I
 ></TT
 >)", where
-      <TT
-CLASS="REPLACEABLE"
+       <TT
+CLASS="replaceable"
 ><I
 >host</I
 ></TT
 > is the IP number or name of the
-      host running the <SPAN
-CLASS="ACRONYM"
+       host running the <SPAN
+CLASS="acronym"
 >TCP</SPAN
-> listener.</P
+> listener.
+      </P
 ></LI
 ></OL
 >
-
-   Now, all warnings, notices etc. will show up on that listener
-   socket, <I
-CLASS="EMPHASIS"
+    Now, all warnings, notices etc. will show up on that listener
+    socket, <I
+CLASS="emphasis"
 >even if you them turned off with
     <A
 HREF="function.error-reporting.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >error_reporting()</B
 ></A
 ></I
->.</P
+>.  
+   </P
 ></DIV
 ></DIV
 ><DIV

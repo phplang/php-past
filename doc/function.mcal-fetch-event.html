@@ -4,7 +4,7 @@
 >mcal_fetch_event</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="mcal_close"
 HREF="function.mcal-close.html"><LINK
 REL="NEXT"
 TITLE="mcal_list_events"
-HREF="function.mcal-list-events.html"></HEAD
+HREF="function.mcal-list-events.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,99 +68,109 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.MCAL-FETCH-EVENT"
+NAME="function.mcal-fetch-event"
 >mcal_fetch_event</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN15671"
+NAME="AEN18993"
 ></A
->mcal_fetch_event --      Fetches an event from the calendar stream
+><P
+>    (PHP3 &#62;= 3.0.13, PHP4 &#62;= 4.0b4)</P
+>mcal_fetch_event&nbsp;--&nbsp;
+     Fetches an event from the calendar stream
     </DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN15674"
+NAME="AEN18996"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->object mcal_fetch_event</CODE
->(int mcal_stream, int event_id, int options);<P
+>object <B
+CLASS="function"
+>mcal_fetch_event</B
+></CODE
+> (int mcal_stream, int event_id [, int options])</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
 >  
      <B
-CLASS="FUNCTION"
+CLASS="function"
 >mcal_fetch_event()</B
 > fetches an event from the 
      calendar stream specified by <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >id</I
 ></TT
 >.</P
 ><P
->     Returns an event object consisting of:
+>&#13;     Returns an event object consisting of:
      <P
 ></P
 ><UL
 ><LI
 ><P
->	int id - ID of that event.</P
+>&#13;	int id - ID of that event.</P
 ></LI
 ><LI
 ><P
->	int public - TRUE if the event if public, FALSE if it is
+>&#13;	int public - TRUE if the event if public, FALSE if it is
 	private.</P
 ></LI
 ><LI
 ><P
->	string category - Category string of the event.</P
+>&#13;	string category - Category string of the event.</P
 ></LI
 ><LI
 ><P
->	string title - Title string of the event.</P
+>&#13;	string title - Title string of the event.</P
 ></LI
 ><LI
 ><P
->	string description - Description string of the event.</P
+>&#13;	string description - Description string of the event.</P
 ></LI
 ><LI
 ><P
->	int alarm - number of minutes before the event to send an
+>&#13;	int alarm - number of minutes before the event to send an
 	alarm/reminder.</P
 ></LI
 ><LI
 ><P
->	object start - Object containing a datetime entry.</P
+>&#13;	object start - Object containing a datetime entry.</P
 ></LI
 ><LI
 ><P
->	object end - Object containing a datetime entry.</P
+>&#13;	object end - Object containing a datetime entry.</P
 ></LI
 ><LI
 ><P
->	int recur_type   - recurrence type</P
+>&#13;	int recur_type   - recurrence type</P
 ></LI
 ><LI
 ><P
->	int recur_interval   - recurrence interval</P
+>&#13;	int recur_interval   - recurrence interval</P
 ></LI
 ><LI
 ><P
->	datetime recur_endate   - recurrence end date</P
+>&#13;	datetime recur_enddate   - recurrence end date</P
 ></LI
 ><LI
 ><P
->	int recur_data   - recurrence data</P
+>&#13;	int recur_data   - recurrence data</P
 ></LI
 ></UL
 >
@@ -169,31 +182,31 @@ CLASS="PARAMETER"
 ><UL
 ><LI
 ><P
->	int year - year</P
+>&#13;	int year - year</P
 ></LI
 ><LI
 ><P
->	int month - month</P
+>&#13;	int month - month</P
 ></LI
 ><LI
 ><P
->	int mday  - day of month</P
+>&#13;	int mday  - day of month</P
 ></LI
 ><LI
 ><P
->	int hour  - hour</P
+>&#13;	int hour  - hour</P
 ></LI
 ><LI
 ><P
->	int min   - minutes</P
+>&#13;	int min   - minutes</P
 ></LI
 ><LI
 ><P
->	int sec   - seconds</P
+>&#13;	int sec   - seconds</P
 ></LI
 ><LI
 ><P
->	int alarm   - minutes before event to send an alarm</P
+>&#13;	int alarm   - minutes before event to send an alarm</P
 ></LI
 ></UL
 ></P

@@ -32,7 +32,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: mssql.c,v 1.18 2000/02/20 18:40:33 eschmid Exp $ */
+/* $Id: mssql.c,v 1.19 2000/05/23 18:13:28 fmk Exp $ */
 #define IS_EXT_MODULE
 
 #if !(WIN32|WINNT)
@@ -201,8 +201,10 @@ int php3_minit_mssql(INIT_FUNC_ARGS)
 	if (dbinit()==FAIL) {
 		return FAILURE;
 	}
+#if WINNT|WIN32
 	dberrhandle((DBERRHANDLE_PROC) php3_mssql_error_handler);
 	dbmsghandle((DBMSGHANDLE_PROC) php3_mssql_message_handler);
+#endif
 	
 	//if (cfg_get_string("mssql.interface_file",&interface_file)==SUCCESS) {
 		//dbsetifile(interface_file);
@@ -364,7 +366,9 @@ static void php3_mssql_do_connect(INTERNAL_FUNCTION_PARAMETERS,int persistent)
 	DBSETLAPP(mssql.login,msSQL_GLOBAL(appname));
 	mssql.valid = 1;
 
+#if WINNT|WIN32
 	DBSETLVERSION(mssql.login, DBVER60);
+#endif
 //	DBSETLTIME(mssql.login, TIMEOUT_INFINITE);
 
 	if (!msSQL_GLOBAL(allow_persistent)) {
@@ -397,8 +401,7 @@ static void php3_mssql_do_connect(INTERNAL_FUNCTION_PARAMETERS,int persistent)
 				RETURN_FALSE;
 			}
 
-//			if (dbsetopt(mssql.link,DBBUFFER,"2",-1)==FAIL) {
-			if (dbsetopt(mssql.link,DBBUFFER,"2")==FAIL) {
+			if (dbsetopt(mssql.link,DBBUFFER,"2" FREETDS_OPTION)==FAIL) {
 				efree(hashed_details);
 				dbfreelogin(mssql.login);
 				dbclose(mssql.link);
@@ -407,7 +410,7 @@ static void php3_mssql_do_connect(INTERNAL_FUNCTION_PARAMETERS,int persistent)
 
 			if (msSQL_GLOBAL(textsize) != -1) {
 				sprintf(buffer, "%li", msSQL_GLOBAL(textsize));
-				if (dbsetopt(mssql.link, DBTEXTSIZE, buffer)==FAIL) {
+				if (dbsetopt(mssql.link, DBTEXTSIZE, buffer FREETDS_OPTION)==FAIL) {
 					efree(hashed_details);
 					dbfreelogin(mssql.login);
 					RETURN_FALSE;
@@ -415,7 +418,7 @@ static void php3_mssql_do_connect(INTERNAL_FUNCTION_PARAMETERS,int persistent)
 			}
 			if (msSQL_GLOBAL(textlimit) != -1) {
 				sprintf(buffer, "%li", msSQL_GLOBAL(textlimit));
-				if (dbsetopt(mssql.link, DBTEXTLIMIT, buffer)==FAIL) {
+				if (dbsetopt(mssql.link, DBTEXTLIMIT, buffer FREETDS_OPTION)==FAIL) {
 					efree(hashed_details);
 					dbfreelogin(mssql.login);
 					RETURN_FALSE;
@@ -462,8 +465,7 @@ static void php3_mssql_do_connect(INTERNAL_FUNCTION_PARAMETERS,int persistent)
 #if BROKEN_MSSQL_PCONNECTS
 				log_error("PHP/MS SQL:  Reconnect successful!",php3_rqst->server);
 #endif
-//				if (dbsetopt(mssql_ptr->link,DBBUFFER,"2",-1)==FAIL) {
-				if (dbsetopt(mssql_ptr->link,DBBUFFER,"2")==FAIL) {
+				if (dbsetopt(mssql_ptr->link,DBBUFFER,"2" FREETDS_OPTION)==FAIL) {
 #if BROKEN_MSSQL_PCONNECTS
 					log_error("PHP/MS SQL:  Unable to set required options",php3_rqst->server);
 #endif
@@ -512,8 +514,7 @@ static void php3_mssql_do_connect(INTERNAL_FUNCTION_PARAMETERS,int persistent)
 			RETURN_FALSE;
 		}
 
-//		if (dbsetopt(mssql.link,DBBUFFER,"2",-1)==FAIL) {
-		if (dbsetopt(mssql.link,DBBUFFER,"2")==FAIL) {
+		if (dbsetopt(mssql.link,DBBUFFER,"2" FREETDS_OPTION)==FAIL) {
 			efree(hashed_details);
 			dbfreelogin(mssql.login);
 			dbclose(mssql.link);
@@ -522,7 +523,7 @@ static void php3_mssql_do_connect(INTERNAL_FUNCTION_PARAMETERS,int persistent)
 
 		if (msSQL_GLOBAL(textlimit) != -1) {
 			sprintf(buffer, "%li", msSQL_GLOBAL(textlimit));
-			if (dbsetopt(mssql.link, DBTEXTLIMIT, buffer)==FAIL) {
+			if (dbsetopt(mssql.link, DBTEXTLIMIT, buffer FREETDS_OPTION)==FAIL) {
 				efree(hashed_details);
 				dbfreelogin(mssql.login);
 				RETURN_FALSE;

@@ -4,20 +4,23 @@
 >openlog</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
-TITLE="Network functions"
+TITLE="Network Functions"
 HREF="ref.network.html"><LINK
 REL="PREVIOUS"
 TITLE="getservbyport"
 HREF="function.getservbyport.html"><LINK
 REL="NEXT"
 TITLE="pfsockopen"
-HREF="function.pfsockopen.html"></HEAD
+HREF="function.pfsockopen.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,82 +68,99 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.OPENLOG"
+NAME="function.openlog"
 >openlog</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN18821"
+NAME="AEN23783"
 ></A
->openlog -- open connection to system logger</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>openlog&nbsp;--&nbsp;Open connection to system logger</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN18824"
+NAME="AEN23786"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int openlog</CODE
->(string ident, int option, int facility);<P
+>int <B
+CLASS="function"
+>openlog</B
+></CODE
+> (string ident, int option, int facility)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     <B
-CLASS="FUNCTION"
->openlog()</B
+>&#13;     <B
+CLASS="function"
+>Openlog()</B
 > opens a connection to the system
      logger for a program.  The string <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >ident</I
 ></TT
 > is
      added to each message.  Values for <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >option</I
 ></TT
 >
      and <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >facility</I
 ></TT
 > are given in the next
-     section.  The use of openlog() is optional; It will automatically
-     be called by <A
+     section.  The use of <B
+CLASS="function"
+>openlog()</B
+> is optional; It
+     will automatically be called by <A
 HREF="function.syslog.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >syslog()</B
 ></A
-> if necessary, in which
-     case ident will default to <TT
-CLASS="LITERAL"
->false</TT
->.
-
-     See also <A
+> if
+     necessary, in which case <TT
+CLASS="parameter"
+><I
+>ident</I
+></TT
+> will default
+     to false.
+    </P
+><P
+>&#13;     See also <A
 HREF="function.syslog.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >syslog()</B
 ></A
 > and
      <A
 HREF="function.closelog.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >closelog()</B
 ></A
->.</P
+>.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

@@ -4,7 +4,7 @@
 >sybase_fetch_row</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="sybase_fetch_object"
 HREF="function.sybase-fetch-object.html"><LINK
 REL="NEXT"
 TITLE="sybase_field_seek"
-HREF="function.sybase-field-seek.html"></HEAD
+HREF="function.sybase-field-seek.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,30 +68,39 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.SYBASE-FETCH-ROW"
+NAME="function.sybase-fetch-row"
 >sybase_fetch_row</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN26315"
+NAME="AEN35148"
 ></A
->sybase_fetch_row -- get row as enumerated array</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>sybase_fetch_row&nbsp;--&nbsp;get row as enumerated array</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN26318"
+NAME="AEN35151"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->array sybase_fetch_row</CODE
->(int result);<P
+>array <B
+CLASS="function"
+>sybase_fetch_row</B
+></CODE
+> (int result)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
@@ -96,45 +108,45 @@ CLASS="FUNCDEF"
     false if there are no more rows.
     </P
 ><P
->     sybase_fetch_row() fetches one row of data from the result
+>&#13;     sybase_fetch_row() fetches one row of data from the result
      associated with the specified result identifier.  The row is
      returned as an array.  Each result column is stored in an array
      offset, starting at offset 0.
     </P
 ><P
->     Subsequent call to sybase_fetch_rows() would return the next row
+>&#13;     Subsequent call to sybase_fetch_rows() would return the next row
      in the result set, or false if there are no more rows.
     </P
 ><P
->     See also: <A
+>&#13;     See also: <A
 HREF="function.sybase-fetch-array.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >sybase_fetch_array()</B
 ></A
 >,
                <A
 HREF="function.sybase-fetch-object.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >sybase_fetch_object()</B
 ></A
 >,
                <A
 HREF="function.sybase-data-seek.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >sybase_data_seek()</B
 ></A
 >,
                <B
-CLASS="FUNCTION"
+CLASS="function"
 >sybase_fetch_lengths()</B
 >, and
                <A
 HREF="function.sybase-result.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >sybase_result()</B
 ></A
 >.

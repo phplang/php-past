@@ -4,7 +4,7 @@
 >ldap_get_attributes</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="ldap_free_result"
 HREF="function.ldap-free-result.html"><LINK
 REL="NEXT"
 TITLE="ldap_get_dn"
-HREF="function.ldap-get-dn.html"></HEAD
+HREF="function.ldap-get-dn.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,46 +68,55 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.LDAP-GET-ATTRIBUTES"
+NAME="function.ldap-get-attributes"
 >ldap_get_attributes</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN14654"
+NAME="AEN17713"
 ></A
->ldap_get_attributes -- Get attributes from a search result entry</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>ldap_get_attributes&nbsp;--&nbsp;Get attributes from a search result entry</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN14657"
+NAME="AEN17716"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->array ldap_get_attributes</CODE
->(int link_identifier, int
-     result_entry_identifier);<P
+>array <B
+CLASS="function"
+>ldap_get_attributes</B
+></CODE
+> (int link_identifier, int
+      result_entry_identifier)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Returns a complete entry information in a multi-dimensional array
+>&#13;     Returns a complete entry information in a multi-dimensional array
      on success and false on error.</P
 ><P
->     <B
-CLASS="FUNCTION"
+>&#13;     <B
+CLASS="function"
 >ldap_get_attributes()</B
 > function is used to
      simplify reading the attributes and values from an entry in the
      search result. The return value is a multi-dimensional array of
      attributes and values.</P
 ><P
->     Having located a specific entry in the directory, you can find
+>&#13;     Having located a specific entry in the directory, you can find
      out what information is held for that entry by using this
      call. You would use this call for an application which "browses"
      directory entries and/or where you do not know the structure of
@@ -112,19 +124,21 @@ CLASS="FUNCTION"
      for a specific attribute such as an email address or a surname,
      and won't care what other data is held.</P
 ><P
->     <DIV
-CLASS="INFORMALEXAMPLE"
+>&#13;     <DIV
+CLASS="informalexample"
 ><P
 ></P
 ><P
-CLASS="LITERALLAYOUT"
->return_value["count"]&nbsp;=&nbsp;number&nbsp;of&nbsp;attributes&nbsp;in&nbsp;the&nbsp;entry<br>
+CLASS="literallayout"
+><br>
+return_value["count"]&nbsp;=&nbsp;number&nbsp;of&nbsp;attributes&nbsp;in&nbsp;the&nbsp;entry<br>
 return_value[0]&nbsp;=&nbsp;first&nbsp;attribute<br>
 return_value[n]&nbsp;=&nbsp;nth&nbsp;attribute<br>
 <br>
 return_value["attribute"]["count"]&nbsp;=&nbsp;number&nbsp;of&nbsp;values&nbsp;for&nbsp;attribute<br>
 return_value["attribute"][0]&nbsp;=&nbsp;first&nbsp;value&nbsp;of&nbsp;the&nbsp;attribute<br>
-return_value["attribute"][i]&nbsp;=&nbsp;ith&nbsp;value&nbsp;of&nbsp;the&nbsp;attribute</P
+return_value["attribute"][i]&nbsp;=&nbsp;ith&nbsp;value&nbsp;of&nbsp;the&nbsp;attribute<br>
+</P
 ><P
 ></P
 ></DIV
@@ -139,15 +153,21 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
 >Example 1. Show the list of attributes held for a particular directory
      entry </B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->// $ds is the link identifier for the directory
+CLASS="programlisting"
+>&#13;// $ds is the link identifier for the directory
 
 // $sr is a valid search result from a prior call to
 // one of the ldap directory search calls
@@ -156,27 +176,31 @@ $entry = ldap_first_entry($ds, $sr);
 
 $attrs = ldap_get_attributes($ds, $entry);
 
-echo $attrs["count"]." attributes held for this entry:&lt;p&#62;";
+echo $attrs["count"]." attributes held for this entry:&#60;p&#62;";
 
 for ($i=0; $i&#60;$attrs["count"]; $i++)
-    echo $attrs[$i]."&lt;br&#62;";</PRE
+    echo $attrs[$i]."&#60;br&#62;";
+</PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR
 ></TABLE
 ></P
 ><P
->      see also <A
+>&#13;      see also <A
 HREF="function.ldap-first-attribute.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >ldap_first_attribute()</B
 ></A
 > and
       <A
 HREF="function.ldap-next-attribute.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >ldap_next_attribute()</B
 ></A
 ></P

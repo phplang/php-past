@@ -4,7 +4,7 @@
 >PDF_open_memory_image</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -12,12 +12,15 @@ REL="UP"
 TITLE="PDF functions"
 HREF="ref.pdf.html"><LINK
 REL="PREVIOUS"
-TITLE="PDF_open_gif"
-HREF="function.pdf-open-gif.html"><LINK
+TITLE="PDF_open_png"
+HREF="function.pdf-open-png.html"><LINK
 REL="NEXT"
 TITLE="PDF_open_jpeg"
-HREF="function.pdf-open-jpeg.html"></HEAD
+HREF="function.pdf-open-jpeg.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -42,7 +45,7 @@ WIDTH="10%"
 ALIGN="left"
 VALIGN="bottom"
 ><A
-HREF="function.pdf-open-gif.html"
+HREF="function.pdf-open-png.html"
 >Prev</A
 ></TD
 ><TD
@@ -65,39 +68,45 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.PDF-OPEN-MEMORY-IMAGE"
+NAME="function.pdf-open-memory-image"
 >PDF_open_memory_image</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN21809"
+NAME="AEN27621"
 ></A
->PDF_open_memory_image -- Opens an image created with PHP's image functions</DIV
+><P
+>    (PHP3 &#62;= 3.0.10, PHP4 &#62;= 4.0b2)</P
+>PDF_open_memory_image&nbsp;--&nbsp;Opens an image created with PHP's image functions</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN21812"
+NAME="AEN27624"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int pdf_open_memory_image</CODE
->(int pdf document, string int image);<P
+>int <B
+CLASS="function"
+>pdf_open_memory_image</B
+></CODE
+> (int pdf document, int image)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     The <A
-HREF="function.pdf-open-memory-image.html"
-><B
-CLASS="FUNCTION"
+>&#13;     The <B
+CLASS="function"
 >PDF_open_memory_image()</B
-></A
 > function takes
      an image created with the PHP's image functions and makes it available
      for the pdf document. The function returns a pdf
@@ -112,14 +121,20 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
 >Example 1. Including a memory image</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->&lt;?php
+CLASS="programlisting"
+>&#13;&#60;?php
 $im = ImageCreate(100, 100);
 $col = ImageColorAllocate($im, 80, 45, 190);
 ImageFill($im, 10, 10, $col);
@@ -129,53 +144,42 @@ pdf_place_image($pdf, $pim, 100, 100, 1);
 pdf_close_image($pdf, $pim);
 ?&#62;
      </PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR
 ></TABLE
 ></P
 ><P
->     See also <A
-HREF="function.pdf-close-image.html"
-><B
-CLASS="FUNCTION"
+>&#13;     See also <B
+CLASS="function"
 >PDF_close_image()</B
-></A
 >,
-              <A
-HREF="function.pdf-open-jpeg.html"
-><B
-CLASS="FUNCTION"
+              <B
+CLASS="function"
 >PDF_open_jpeg()</B
-></A
 >,
-              <A
-HREF="function.pdf-open-gif.html"
-><B
-CLASS="FUNCTION"
+              <B
+CLASS="function"
 >PDF_open_gif()</B
-></A
 >,
-              <A
-HREF="function.pdf-execute-image.html"
-><B
-CLASS="FUNCTION"
+              <B
+CLASS="function"
+>PDF_open_png()</B
+>
+              <B
+CLASS="function"
 >PDF_execute_image()</B
-></A
 >,
-              <A
-HREF="function.pdf-place-image.html"
-><B
-CLASS="FUNCTION"
+              <B
+CLASS="function"
 >PDF_place_image()</B
-></A
 >,
-              <A
-HREF="function.pdf-put-image.html"
-><B
-CLASS="FUNCTION"
+              <B
+CLASS="function"
 >PDF_put_image()</B
-></A
 >.</P
 ></DIV
 ><DIV
@@ -193,7 +197,7 @@ WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
 ><A
-HREF="function.pdf-open-gif.html"
+HREF="function.pdf-open-png.html"
 >Prev</A
 ></TD
 ><TD
@@ -218,7 +222,7 @@ HREF="function.pdf-open-jpeg.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->PDF_open_gif</TD
+>PDF_open_png</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"

@@ -29,7 +29,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: gd.c,v 1.148 2000/03/13 20:10:40 eschmid Exp $ */
+/* $Id: gd.c,v 1.154 2000/07/04 16:52:19 rasmus Exp $ */
 
 /* gd 1.2 is copyright 1994, 1995, Quest Protein Database Center, 
    Cold Spring Harbor Labs. */
@@ -97,18 +97,12 @@ function_entry gd_functions[] = {
 	{"imagecopy",			php3_imagecopy,			NULL},
 	{"imagecopyresized",		php3_imagecopyresized,		NULL},
 	{"imagecreate",				php3_imagecreate,			NULL},
-#if HAVE_GD_GIF
 	{"imagecreatefromgif",		php3_imagecreatefromgif,	NULL},
 	{"imagegif",				php3_imagegif,				NULL},
-#endif
-#if HAVE_GD_PNG
-      {"imagecreatefrompng",          php3_imagecreatefrompng,        NULL},
-      {"imagepng",                            php3_imagepng,                          NULL},
-#endif
-#if HAVE_GD_JPG
-      {"imagecreatefromjpeg",          php3_imagecreatefromjpeg,        NULL},
-      {"imagejpeg",                            php3_imagejpeg,                          NULL},
-#endif
+    {"imagecreatefrompng",          php3_imagecreatefrompng,        NULL},
+    {"imagepng",                            php3_imagepng,                          NULL},
+    {"imagecreatefromjpeg",          php3_imagecreatefromjpeg,        NULL},
+    {"imagejpeg",                            php3_imagejpeg,                          NULL},
 	{"imagewbmp",				php3_imagewbmp,				NULL},
 	{"imagedestroy",			php3_imagedestroy,			NULL},
 	{"imagefill",				php3_imagefill,				NULL},
@@ -129,11 +123,8 @@ function_entry gd_functions[] = {
 	{"imagesy",					php3_imagesyfn,				NULL},
 	{"imagedashedline",			php3_imagedashedline,  		NULL},
 	{"imagegammacorrect",		php3_imagegammacorrect,		NULL},
-#if HAVE_LIBTTF|HAVE_LIBFREETYPE
 	{"imagettfbbox",			php3_imagettfbbox,			NULL},
 	{"imagettftext",			php3_imagettftext,			NULL},
-#endif
-#if HAVE_LIBT1
 	{"imagepsloadfont",			php3_imagepsloadfont,		NULL},
 	{"imagepsfreefont",			php3_imagepsfreefont,		NULL},
 	/* The function in t1lib which this function uses seem to be buggy...
@@ -144,7 +135,6 @@ function_entry gd_functions[] = {
 	{"imagepsslantfont",		php3_imagepsslantfont,		NULL},
 	{"imagepsbbox",				php3_imagepsbbox,			NULL},
 	{"imagepstext",				php3_imagepstext,			NULL},
-#endif
 	{NULL, NULL, NULL}
 };
 
@@ -157,8 +147,6 @@ php3_module_entry gd_module_entry = {
 DLEXPORT php3_module_entry *get_module(void) { return &gd_module_entry; }
 #endif
 
-
-#define PolyMaxPoints 256
 
 static void php3i_destructor_gdImageDestroy(gdImagePtr img) {
 	(void)gdImageDestroy(img);
@@ -380,10 +368,10 @@ void php3_imagecreate(INTERNAL_FUNCTION_PARAMETERS) {
 }
 /* }}} */
 
-#if HAVE_GD_GIF
 /* {{{ proto int imagecreatefromgif(string filename)
    Create a new image from GIF file or URL */
 void php3_imagecreatefromgif (INTERNAL_FUNCTION_PARAMETERS) {
+#if HAVE_GD_GIF
 	pval *file;
 	int ind;
 	gdImagePtr im;
@@ -417,17 +405,25 @@ void php3_imagecreatefromgif (INTERNAL_FUNCTION_PARAMETERS) {
 	fflush(fp);
 	fclose(fp);
 
+	if (!im) {
+		php3_error(E_WARNING,"ImageCreateFromGif: %s is not a valid GIF file", fn);
+		RETURN_FALSE;
+	}
 	ind = php3_list_insert(im, GD_GLOBAL(le_gd));
 
 	RETURN_LONG(ind);
+#else /* HAVE_GD_GIF */
+	php3_error(E_WARNING, "ImageCreateFromGif: No GIF support in this PHP build");
+	RETURN_FALSE;
+#endif /* HAVE_GD_GIF */
 }
 /* }}} */
-#endif /* HAVE_GD_GIF */
 
-#if HAVE_GD_PNG
+
 /* {{{ proto int imagecreatefrompng(string filename)
    Create a new image from PNG file or URL */
 void php3_imagecreatefrompng (INTERNAL_FUNCTION_PARAMETERS) {
+#if HAVE_GD_PNG
       pval *file;
       int ind;
       gdImagePtr im;
@@ -460,18 +456,24 @@ void php3_imagecreatefrompng (INTERNAL_FUNCTION_PARAMETERS) {
 
       fflush(fp);
       fclose(fp);
-
+      if (!im) {
+             php3_error(E_WARNING,"ImageCreateFromPng: %s is not a valid PNG file", fn);
+             RETURN_FALSE;
+      }
       ind = php3_list_insert(im, GD_GLOBAL(le_gd));
 
       RETURN_LONG(ind);
+#else /* HAVE_GD_PNG */
+	php3_error(E_WARNING, "ImageCreateFromPng: No PNG support in this PHP build");
+	RETURN_FALSE;
+#endif /* HAVE_GD_PNG */
 }
 /* }}} */
-#endif /* HAVE_GD_PNG */
 
-#if HAVE_GD_JPG
 /* {{{ proto int imagecreatefromjpeg(string filename)
    Create a new image from JPEG file or URL */
 void php3_imagecreatefromjpeg (INTERNAL_FUNCTION_PARAMETERS) {
+#if HAVE_GD_JPG
 	pval *file;
 	int ind;
 	gdImagePtr im;
@@ -505,12 +507,20 @@ void php3_imagecreatefromjpeg (INTERNAL_FUNCTION_PARAMETERS) {
 	fflush(fp);
 	fclose(fp);
 
+	if (!im) {
+		php3_error(E_WARNING,"ImageCreateFromJPEG: %s is not a valid JPEG file", fn);
+		RETURN_FALSE;
+	}
+
 	ind = php3_list_insert(im, GD_GLOBAL(le_gd));
 
 	RETURN_LONG(ind);
+#else /* HAVE_GD_JPG */
+	php3_error(E_WARNING, "ImageCreateFromJpeg: No JPG support in this PHP build");
+	RETURN_FALSE;
+#endif /* HAVE_GD_JPG */
 }
 /* }}} */
-#endif /* HAVE_GD_JPG */
 
 /* {{{ proto int imagedestroy(int im)
    Destroy an image */
@@ -820,10 +830,10 @@ void php3_imagecolorsforindex(INTERNAL_FUNCTION_PARAMETERS) {
 }
 /* }}} */
 
-#if HAVE_GD_GIF
 /* {{{ proto int imagegif(int im [, string filename])
    Output GIF image to browser or file */
 void php3_imagegif (INTERNAL_FUNCTION_PARAMETERS) {
+#if HAVE_GD_GIF
 	pval *imgind, *file;
 	gdImagePtr im;
 	char *fn=NULL;
@@ -903,14 +913,17 @@ void php3_imagegif (INTERNAL_FUNCTION_PARAMETERS) {
       }
 
       RETURN_TRUE;
+#else /* HAVE_GD_GIF */
+	php3_error(E_WARNING, "ImageGif: No GIF support in this PHP build");
+	RETURN_FALSE;
+#endif /* HAVE_GD_GIF */
 }
 /* }}} */
-#endif /* HAVE_GD_GIF */
 
-#if HAVE_GD_PNG
 /* {{{ proto int imagepng(int im [, string filename])
    Output PNG image to browser or file */
 void php3_imagepng (INTERNAL_FUNCTION_PARAMETERS) {
+#if HAVE_GD_PNG
       pval *imgind, *file;
       gdImagePtr im;
       char *fn=NULL;
@@ -982,14 +995,17 @@ void php3_imagepng (INTERNAL_FUNCTION_PARAMETERS) {
 	}
 
 	RETURN_TRUE;
+#else /* HAVE_GD_PNG */
+	php3_error(E_WARNING, "ImagePng: No PNG support in this PHP build");
+	RETURN_FALSE;
+#endif /* HAVE_GD_PNG */
 }
 /* }}} */
-#endif /* HAVE_GD_PNG */
 
-#if HAVE_GD_JPG
 /* {{{ proto int imagejpeg(int im [, string filename [, int quality]])
    Output JPEG image to browser or file */
 void php3_imagejpeg (INTERNAL_FUNCTION_PARAMETERS) {
+#if HAVE_GD_JPG
       pval *imgind, *file, *qual;
       gdImagePtr im;
       char *fn=NULL;
@@ -1066,9 +1082,12 @@ void php3_imagejpeg (INTERNAL_FUNCTION_PARAMETERS) {
 	}
 
 	RETURN_TRUE;
+#else /* HAVE_GD_JPG */
+	php3_error(E_WARNING, "ImageJpg: No JPG support in this PHP build");
+	RETURN_FALSE;
+#endif /* HAVE_GD_JPG */
 }
 /* }}} */
-#endif
 
 /* {{{ proto int imagewbmp(int im [, string filename])
    Output WBMP image to browser or file */
@@ -1120,11 +1139,11 @@ void php3_imagewbmp (INTERNAL_FUNCTION_PARAMETERS) {
               /* Width and height of image */
               c = 1; width = im->sx;
               while(width & 0x7f << 7*c) c++;
-              while(c > 1) fputc(0x80 | (width >> 7*--c) & 0xff, fp);
+              while(c > 1) fputc(0x80 | ((width >> 7*--c) & 0xff), fp);
               fputc(width & 0x7f,fp);
               c = 1; height = im->sy;
               while(height & 0x7f << 7*c) c++;
-              while(c > 1) fputc(0x80 | (height >> 7*--c) & 0xff, fp);
+              while(c > 1) fputc(0x80 | ((height >> 7*--c) & 0xff), fp);
               fputc(height & 0x7f,fp);
                       
               /* Actual image data */
@@ -1161,12 +1180,12 @@ void php3_imagewbmp (INTERNAL_FUNCTION_PARAMETERS) {
                       /* Width and height of image */
                       c = 1; width = im->sx;
                       while(width & 0x7f << 7*c) c++;
-                      while(c > 1) php3_putc(0x80 | (width >> 7*--c) & 0xff);
+                      while(c > 1) php3_putc(0x80 | ((width >> 7*--c) & 0xff));
                       php3_putc(width & 0x7f);
                       
                       c = 1; height = im->sy;
                       while(height & 0x7f << 7*c) c++;
-                      while(c > 1) php3_putc(0x80 | (height >> 7*--c) & 0xff);
+                      while(c > 1) php3_putc(0x80 | ((height >> 7*--c) & 0xff));
                       php3_putc(height & 0x7f);
                       
                       /* Actual image data */
@@ -1660,7 +1679,7 @@ void php3_imageinterlace(INTERNAL_FUNCTION_PARAMETERS) {
 static void _php3_imagepolygon(INTERNAL_FUNCTION_PARAMETERS, int filled) {
 	pval *IM, *POINTS, *NPOINTS, *COL, *var;
 	gdImagePtr im;
-	gdPoint points[PolyMaxPoints];	
+	gdPointPtr points;
 	int npoints, col, nelem, i;
 	int ind_type;
 	GD_TLS_VARS;
@@ -1712,10 +1731,7 @@ static void _php3_imagepolygon(INTERNAL_FUNCTION_PARAMETERS, int filled) {
 		RETURN_FALSE;
 	}
 
-	if (npoints > PolyMaxPoints) {
-		php3_error(E_WARNING, "maximum %d points", PolyMaxPoints);
-		RETURN_FALSE;
-	}
+	points = (gdPointPtr) emalloc(npoints * sizeof(gdPoint));
 
 	for (i = 0; i < npoints; i++) {
 		if (_php3_hash_index_find(POINTS->value.ht, (i * 2), (void **)&var) == SUCCESS) {
@@ -1734,6 +1750,8 @@ static void _php3_imagepolygon(INTERNAL_FUNCTION_PARAMETERS, int filled) {
 	else {
 		gdImagePolygon(im, points, npoints, col);
 	}
+
+	efree(points);
 
 	RETURN_TRUE;
 }
@@ -2111,15 +2129,20 @@ void php3_imagesyfn(INTERNAL_FUNCTION_PARAMETERS)
 /* }}} */
 
 #if HAVE_LIBTTF|HAVE_LIBFREETYPE
-
 #define TTFTEXT_DRAW 0
 #define TTFTEXT_BBOX 1
+#endif
 
 /* {{{ proto array imagettfbbox(int size, int angle, string font_file, string text)
    Give the bounding box of a text using TrueType fonts */
 void php3_imagettfbbox(INTERNAL_FUNCTION_PARAMETERS)
 {
+#if HAVE_LIBTTF|HAVE_LIBFREETYPE
 	php3_imagettftext_common(INTERNAL_FUNCTION_PARAM_PASSTHRU, TTFTEXT_BBOX);
+#else 
+	php3_error(E_WARNING, "ImageTtfBBox: No TTF support in this PHP build");
+	RETURN_FALSE;
+#endif 
 }
 /* }}} */
 
@@ -2127,9 +2150,16 @@ void php3_imagettfbbox(INTERNAL_FUNCTION_PARAMETERS)
    Write text to the image using a TrueType font */
 void php3_imagettftext(INTERNAL_FUNCTION_PARAMETERS)
 {
+#if HAVE_LIBTTF|HAVE_LIBFREETYPE
 	php3_imagettftext_common(INTERNAL_FUNCTION_PARAM_PASSTHRU, TTFTEXT_DRAW);
+#else 
+	php3_error(E_WARNING, "ImageTtfBBox: No TTF support in this PHP build");
+	RETURN_FALSE;
+#endif 
 }
 /* }}} */
+
+#if HAVE_LIBTTF|HAVE_LIBFREETYPE
 
 static
 void php3_imagettftext_common(INTERNAL_FUNCTION_PARAMETERS, int mode)
@@ -2216,9 +2246,12 @@ void _php3_free_ps_enc(char **enc)
 	T1_DeleteEncoding(enc);
 }
 
+#endif
+
 /* {{{ proto int imagepsloadfont(string pathname)
    Load a new font from specified file */
 void php3_imagepsloadfont(INTERNAL_FUNCTION_PARAMETERS) {
+#if HAVE_LIBT1
 	pval *file;
 	int l_ind;
 	gd_ps_font *f_ind;
@@ -2256,6 +2289,10 @@ void php3_imagepsloadfont(INTERNAL_FUNCTION_PARAMETERS) {
 	f_ind->extend = 1;
 	l_ind = php3_list_insert(f_ind, GD_GLOBAL(le_ps_font));
 	RETURN_LONG(l_ind);
+#else /* HAVE_LIBT1 */
+	php3_error(E_WARNING, "ImagePsLoadFont: No T1lib support in this PHP build");
+	RETURN_FALSE;
+#endif /* HAVE_LIBT1 */
 }
 /* }}} */
 
@@ -2264,6 +2301,7 @@ proto int imagepscopyfont(int font_index)
    Make a copy of a font for purposes like extending or reenconding */
 /*
 void php3_imagepscopyfont(INTERNAL_FUNCTION_PARAMETERS) {
+#if HAVE_LIBT1
 	pval *fnt;
 	int l_ind, type;
 	gd_ps_font *nf_ind, *of_ind;
@@ -2310,6 +2348,10 @@ void php3_imagepscopyfont(INTERNAL_FUNCTION_PARAMETERS) {
 	nf_ind->extend = 1;
 	l_ind = php3_list_insert(nf_ind, GD_GLOBAL(le_ps_font));
 	RETURN_LONG(l_ind);
+#else 
+    php3_error(E_WARNING, "ImagePsCopyFont: No T1lib support in this PHP build");
+    RETURN_FALSE;
+#endif
 }
 */
 /* }}} */
@@ -2317,6 +2359,7 @@ void php3_imagepscopyfont(INTERNAL_FUNCTION_PARAMETERS) {
 /* {{{ proto bool imagepsfreefont(int font_index)
    Free memory used by a font */
 void php3_imagepsfreefont(INTERNAL_FUNCTION_PARAMETERS) {
+#if HAVE_LIBT1
 	pval *fnt;
 	int type;
 
@@ -2335,12 +2378,17 @@ void php3_imagepsfreefont(INTERNAL_FUNCTION_PARAMETERS) {
 
 	php3_list_delete(fnt->value.lval);
 	RETURN_TRUE;
+#else 
+    php3_error(E_WARNING, "ImagePsFreeFont: No T1lib support in this PHP build");
+    RETURN_FALSE;
+#endif
 }
 /* }}} */
 
 /* {{{ proto bool imagepsencodefont(int font_index, string filename)
    To change a fonts character encoding vector */
 void php3_imagepsencodefont(INTERNAL_FUNCTION_PARAMETERS) {
+#if HAVE_LIBT1
 	pval *fnt, *enc;
 	char **enc_vector;
 	int type;
@@ -2373,12 +2421,17 @@ void php3_imagepsencodefont(INTERNAL_FUNCTION_PARAMETERS) {
 	}
 	php3_list_insert(enc_vector, GD_GLOBAL(le_ps_enc));
 	RETURN_TRUE;
+#else 
+    php3_error(E_WARNING, "ImagePsEncodeFont: No T1lib support in this PHP build");
+    RETURN_FALSE;
+#endif
 }
 /* }}} */
 
 /* {{{ proto bool imagepsextendfont(int font_index, double extend)
    Extend or or condense (if extend < 1) a font */
 void php3_imagepsextendfont(INTERNAL_FUNCTION_PARAMETERS) {
+#if HAVE_LIBT1
 	pval *fnt, *ext;
 	int type;
 	gd_ps_font *f_ind;
@@ -2400,12 +2453,17 @@ void php3_imagepsextendfont(INTERNAL_FUNCTION_PARAMETERS) {
 	if (T1_ExtendFont(f_ind->font_id, ext->value.dval) != 0) RETURN_FALSE;
 	f_ind->extend = ext->value.dval;
 	RETURN_TRUE;
+#else 
+    php3_error(E_WARNING, "ImagePsExtendFont: No T1lib support in this PHP build");
+    RETURN_FALSE;
+#endif
 }
 /* }}} */
 
 /* {{{ proto bool imagepsslantfont(int font_index, double slant)
    Slant a font */
 void php3_imagepsslantfont(INTERNAL_FUNCTION_PARAMETERS) {
+#if HAVE_LIBT1
 	pval *fnt, *slt;
 	int type;
 	gd_ps_font*f_ind;
@@ -2426,12 +2484,17 @@ void php3_imagepsslantfont(INTERNAL_FUNCTION_PARAMETERS) {
 
 	if (T1_SlantFont(f_ind->font_id, slt->value.dval) != 0) RETURN_FALSE;
 	RETURN_TRUE;
+#else 
+    php3_error(E_WARNING, "ImagePsSlantFont: No T1lib support in this PHP build");
+    RETURN_FALSE;
+#endif
 }
 /* }}} */
 
 /* {{{ proto array imagepstext(int image, string text, int font, int size, int xcoord, int ycoord [, int space, int tightness, double angle, int antialias])
    Rasterize a string over an image */
 void php3_imagepstext(INTERNAL_FUNCTION_PARAMETERS) {
+#if HAVE_LIBT1
 	pval *img, *str, *fnt, *sz, *fg, *bg, *sp, *px, *py, *aas, *wd, *ang;
 	int i, j, x, y;
 	int space, type;
@@ -2594,12 +2657,17 @@ void php3_imagepstext(INTERNAL_FUNCTION_PARAMETERS) {
 	add_next_index_long(return_value, str_img->metrics.rightSideBearing);
 	add_next_index_long(return_value, str_img->metrics.ascent);
 
+#else 
+    php3_error(E_WARNING, "ImagePsText: No T1lib support in this PHP build");
+    RETURN_FALSE;
+#endif
 }
 /* }}} */
 
 /* {{{ proto array imagepsbbox(string text, int font, int size [, int space, int tightness, int angle])
    Return the bounding box needed by a string if rasterized */
 void php3_imagepsbbox(INTERNAL_FUNCTION_PARAMETERS) {
+#if HAVE_LIBT1
 	pval *str, *fnt, *sz, *sp, *wd, *ang;
 	int i, space, add_width, char_width, amount_kern, type;
 	int cur_x, cur_y, dx, dy;
@@ -2707,10 +2775,13 @@ void php3_imagepsbbox(INTERNAL_FUNCTION_PARAMETERS) {
 	add_next_index_long(return_value, (int) ceil(((double) str_bbox.lly)*sz->value.lval/1000));
 	add_next_index_long(return_value, (int) ceil(((double) str_bbox.urx)*sz->value.lval/1000));
 	add_next_index_long(return_value, (int) ceil(((double) str_bbox.ury)*sz->value.lval/1000));
+#else 
+    php3_error(E_WARNING, "ImagePsBBox: No T1lib support in this PHP build");
+    RETURN_FALSE;
+#endif
 }
 /* }}} */
 
-#endif /* HAVE_LIBT1 */
 
 #endif
 

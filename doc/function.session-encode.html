@@ -4,7 +4,7 @@
 >session_encode</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -15,9 +15,12 @@ REL="PREVIOUS"
 TITLE="session_decode"
 HREF="function.session-decode.html"><LINK
 REL="NEXT"
-TITLE="SNMP functions"
-HREF="ref.snmp.html"></HEAD
+TITLE="session_set_save_handler"
+HREF="function.session-set-save-handler.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -55,7 +58,7 @@ WIDTH="10%"
 ALIGN="right"
 VALIGN="bottom"
 ><A
-HREF="ref.snmp.html"
+HREF="function.session-set-save-handler.html"
 >Next</A
 ></TD
 ></TR
@@ -65,49 +68,63 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.SESSION-ENCODE"
+NAME="function.session-encode"
 >session_encode</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN24501"
+NAME="AEN31520"
 ></A
->session_encode -- Encodes the current session data as a string</DIV
+><P
+>    (PHP4 )</P
+>session_encode&nbsp;--&nbsp;
+     Encodes the current session data as a string
+    </DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN24504"
+NAME="AEN31523"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->bool session_encode</CODE
->(void);<P
+>string <B
+CLASS="function"
+>session_encode</B
+></CODE
+>(void);</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     <B
-CLASS="FUNCTION"
+>&#13;     <B
+CLASS="function"
 >session_encode()</B
 > returns a string with the
      contents of the current session encoded within.
-    <DIV
-CLASS="NOTE"
+     <DIV
+CLASS="note"
 ><BLOCKQUOTE
-CLASS="NOTE"
+CLASS="note"
 ><P
 ><B
 >Note: </B
->      This function was added in PHP 4.0.</P
+>
+       This function was added in PHP 4.0.
+      </P
 ></BLOCKQUOTE
 ></DIV
-></P
+>
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -140,7 +157,7 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><A
-HREF="ref.snmp.html"
+HREF="function.session-set-save-handler.html"
 >Next</A
 ></TD
 ></TR
@@ -162,7 +179,7 @@ HREF="ref.session.html"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->SNMP functions</TD
+>session_set_save_handler</TD
 ></TR
 ></TABLE
 ></DIV

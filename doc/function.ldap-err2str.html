@@ -4,7 +4,7 @@
 >ldap_err2str</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -12,12 +12,15 @@ REL="UP"
 TITLE="LDAP functions"
 HREF="ref.ldap.html"><LINK
 REL="PREVIOUS"
-TITLE="ldap_unbind"
-HREF="function.ldap-unbind.html"><LINK
+TITLE="ldap_dn2ufn"
+HREF="function.ldap-dn2ufn.html"><LINK
 REL="NEXT"
 TITLE="ldap_errno"
-HREF="function.ldap-errno.html"></HEAD
+HREF="function.ldap-errno.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -42,7 +45,7 @@ WIDTH="10%"
 ALIGN="left"
 VALIGN="bottom"
 ><A
-HREF="function.ldap-unbind.html"
+HREF="function.ldap-dn2ufn.html"
 >Prev</A
 ></TD
 ><TD
@@ -65,53 +68,63 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.LDAP-ERR2STR"
+NAME="function.ldap-err2str"
 >ldap_err2str</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN14930"
+NAME="AEN17566"
 ></A
->ldap_err2str --      Convert LDAP error number into string error message
+><P
+>    (PHP3 &#62;= 3.0.13, PHP4 &#62;= 4.0RC2)</P
+>ldap_err2str&nbsp;--&nbsp;
+     Convert LDAP error number into string error message
     </DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN14933"
+NAME="AEN17569"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->string ldap_err2str</CODE
->(int errno);<P
+>string <B
+CLASS="function"
+>ldap_err2str</B
+></CODE
+> (int errno)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     returns string error message.</P
+>&#13;     returns string error message.</P
 ><P
->     This function returns the string error message explaining the
+>&#13;     This function returns the string error message explaining the
      error number errno. While LDAP errno numbers are standardized,
      different libraries return different or even localized textual
      error messages. Never check for a specific error message text,
      but always use an error number to check.</P
 ><P
->     see also <A
+>&#13;     See also <A
 HREF="function.ldap-errno.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >ldap_errno()</B
 ></A
 > and
      <A
 HREF="function.ldap-error.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >ldap_error()</B
 ></A
 >.
@@ -125,18 +138,28 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
 >Example 1. Enumerating all LDAP error messages</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->&lt;?php
+CLASS="programlisting"
+>&#13;&#60;?php
   for($i=0; $i&#60;100; $i++) {
-    printf("Error $i: %s&lt;br&#62;\n", ldap_str2err($i));
+    printf("Error $i: %s&#60;br&#62;\n", ldap_str2err($i));
   }
-?&#62;</PRE
+?&#62;
+</PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR
@@ -158,7 +181,7 @@ WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
 ><A
-HREF="function.ldap-unbind.html"
+HREF="function.ldap-dn2ufn.html"
 >Prev</A
 ></TD
 ><TD
@@ -183,7 +206,7 @@ HREF="function.ldap-errno.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->ldap_unbind</TD
+>ldap_dn2ufn</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"

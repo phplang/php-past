@@ -4,7 +4,7 @@
 >ImageDashedLine</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -12,12 +12,15 @@ REL="UP"
 TITLE="Image functions"
 HREF="ref.image.html"><LINK
 REL="PREVIOUS"
-TITLE="ImageCreateFromGif"
-HREF="function.imagecreatefromgif.html"><LINK
+TITLE="ImageCreateFromPNG"
+HREF="function.imagecreatefrompng.html"><LINK
 REL="NEXT"
 TITLE="ImageDestroy"
-HREF="function.imagedestroy.html"></HEAD
+HREF="function.imagedestroy.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -42,7 +45,7 @@ WIDTH="10%"
 ALIGN="left"
 VALIGN="bottom"
 ><A
-HREF="function.imagecreatefromgif.html"
+HREF="function.imagecreatefrompng.html"
 >Prev</A
 ></TD
 ><TD
@@ -65,45 +68,89 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.IMAGEDASHEDLINE"
+NAME="function.imagedashedline"
 >ImageDashedLine</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN11793"
+NAME="AEN13879"
 ></A
->ImageDashedLine -- draw a dashed line</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>ImageDashedLine&nbsp;--&nbsp;Draw a dashed line</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN11796"
+NAME="AEN13882"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int imagedashedline</CODE
->(int im, int x1, int y1, int x2, int y2, int col);<P
+>int <B
+CLASS="function"
+>imagedashedline</B
+></CODE
+> (int im, int x1, int y1, int x2, int y2, int col)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
 >    
-     ImageLine draws a dashed line from x1,y1 to x2,y2 (top left is
-     0,0) in image im of color col.</P
+     <B
+CLASS="function"
+>ImageDashedLine()</B
+> draws a dashed line from
+     <TT
+CLASS="parameter"
+><I
+>x1</I
+></TT
+>, <TT
+CLASS="parameter"
+><I
+>y1</I
+></TT
+> to
+     <TT
+CLASS="parameter"
+><I
+>x2</I
+></TT
+>, <TT
+CLASS="parameter"
+><I
+>y2</I
+></TT
+> (top left is
+     0, 0) in image <TT
+CLASS="parameter"
+><I
+>im</I
+></TT
+> of color
+     <TT
+CLASS="parameter"
+><I
+>col</I
+></TT
+>.
+    </P
 ><P
 >    
-     See also <A
-HREF="function.imageline.html"
-><B
-CLASS="FUNCTION"
->imageline()</B
-></A
->.</P
+     See also <B
+CLASS="function"
+>ImageLine()</B
+>.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -120,7 +167,7 @@ WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
 ><A
-HREF="function.imagecreatefromgif.html"
+HREF="function.imagecreatefrompng.html"
 >Prev</A
 ></TD
 ><TD
@@ -145,7 +192,7 @@ HREF="function.imagedestroy.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->ImageCreateFromGif</TD
+>ImageCreateFromPNG</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"

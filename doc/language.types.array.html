@@ -4,7 +4,7 @@
 >Arrays</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="Strings"
 HREF="language.types.string.html"><LINK
 REL="NEXT"
 TITLE="Objects"
-HREF="language.types.object.html"></HEAD
+HREF="language.types.object.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="sect1"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -64,184 +67,209 @@ HREF="language.types.object.html"
 ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><DIV
-CLASS="SECT1"
+CLASS="sect1"
 ><H1
-CLASS="SECT1"
+CLASS="sect1"
 ><A
-NAME="LANGUAGE.TYPES.ARRAY"
+NAME="language.types.array"
 >Arrays</A
 ></H1
 ><P
->    Arrays actually act like both hash tables (associative arrays) and
-    indexed arrays (vectors).</P
+>&#13;    Arrays actually act like both hash tables (associative arrays) and
+    indexed arrays (vectors).
+   </P
 ><DIV
-CLASS="SECT2"
+CLASS="sect2"
 ><H2
-CLASS="SECT2"
+CLASS="sect2"
 ><A
-NAME="LANGUAGE.TYPES.ARRAY.SINGLE-DIM"
+NAME="language.types.array.single-dim"
 >Single Dimension Arrays</A
 ></H2
 ><P
->     PHP supports both scalar and associative arrays. In fact, there
+>&#13;     PHP supports both scalar and associative arrays. In fact, there
      is no difference between the two.  You can create an array using
      the <A
 HREF="function.list.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >list()</B
 ></A
 > or <A
 HREF="function.array.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >array()</B
 ></A
 >
      functions, or you can explicitly set each array element value.
-
      <DIV
-CLASS="INFORMALEXAMPLE"
+CLASS="informalexample"
 ><P
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
+CLASS="programlisting"
 > 
 $a[0] = "abc"; 
 $a[1] = "def"; 
 $b["foo"] = 13;
       </PRE
+></TD
+></TR
+></TABLE
 ><P
 ></P
 ></DIV
 >
     </P
 ><P
->     You can also create an array by simply adding values to the
+>&#13;     You can also create an array by simply adding values to the
      array. When you assign a value to an array variable using empty
      brackets, the value will be added onto the end of the array.
-
      <DIV
-CLASS="INFORMALEXAMPLE"
+CLASS="informalexample"
 ><P
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
+CLASS="programlisting"
 > 
 $a[] = "hello"; // $a[2] == "hello"
 $a[] = "world"; // $a[3] == "world" 
       </PRE
+></TD
+></TR
+></TABLE
 ><P
 ></P
 ></DIV
-></P
+>
+    </P
 ><P
->     Arrays may be sorted using the <A
+>&#13;     Arrays may be sorted using the <A
 HREF="function.asort.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >asort()</B
 ></A
 >,
      <A
 HREF="function.arsort.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >arsort()</B
 ></A
 >, <A
 HREF="function.ksort.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >ksort()</B
 ></A
 >,
      <A
 HREF="function.rsort.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >rsort()</B
 ></A
 >, <A
 HREF="function.sort.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >sort()</B
 ></A
 >,
      <A
 HREF="function.uasort.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >uasort()</B
 ></A
 >, <A
 HREF="function.usort.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >usort()</B
 ></A
 >, and
      <A
 HREF="function.uksort.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >uksort()</B
 ></A
 > functions depending on the type of
-     sort you want.</P
+     sort you want.
+    </P
 ><P
->     You can count the number of items in an array using the
+>&#13;     You can count the number of items in an array using the
      <A
 HREF="function.count.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >count()</B
 ></A
-> function.</P
+> function.
+    </P
 ><P
->      You can traverse an array using <A
+>&#13;     You can traverse an array using <A
 HREF="function.next.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >next()</B
 ></A
 > and
-      <A
+     <A
 HREF="function.prev.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >prev()</B
 ></A
 > functions.  Another common way to
-      traverse an array is to use the <A
+     traverse an array is to use the <A
 HREF="function.each.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >each()</B
 ></A
 >
-      function.
+     function.
     </P
 ></DIV
 ><DIV
-CLASS="SECT2"
+CLASS="sect2"
 ><H2
-CLASS="SECT2"
+CLASS="sect2"
 ><A
-NAME="LANGUAGE.TYPES.ARRAY.MULTI-DIM"
+NAME="language.types.array.multi-dim"
 >Multi-Dimensional Arrays</A
 ></H2
 ><P
->     Multi-dimensional arrays are actually pretty simple.  For each
+>&#13;     Multi-dimensional arrays are actually pretty simple.  For each
      dimension of the array, you add another [key] value to the end:
-
      <DIV
-CLASS="INFORMALEXAMPLE"
+CLASS="informalexample"
 ><P
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
+CLASS="programlisting"
 > 
 $a[1]      = $f;               # one dimensional examples
 $a["foo"]  = $f;   
@@ -252,89 +280,121 @@ $a[3]["bar"] = $f;             # (you can mix numeric and associative indices)
 
 $a["foo"][4]["bar"][0] = $f;   # four dimensional!
       </PRE
+></TD
+></TR
+></TABLE
 ><P
 ></P
 ></DIV
-></P
+>
+    </P
 ><P
->     In PHP3 it is not possible to reference multidimensional arrays
+>&#13;     In PHP3 it is not possible to reference multidimensional arrays
      directly within strings. For instance, the following will not
      have the desired result:
      <DIV
-CLASS="INFORMALEXAMPLE"
+CLASS="informalexample"
 ><P
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
+CLASS="programlisting"
 > 
 $a[3]['bar'] = 'Bob';
 echo "This won't work: $a[3][bar]";
       </PRE
+></TD
+></TR
+></TABLE
 ><P
 ></P
 ></DIV
 >
-
      In PHP3, the above will output <TT
-CLASS="COMPUTEROUTPUT"
+CLASS="computeroutput"
 >This won't work:
      Array[bar]</TT
 >. The string concatenation operator,
      however, can be used to overcome this:
-	 
      <DIV
-CLASS="INFORMALEXAMPLE"
+CLASS="informalexample"
 ><P
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->$a[3]['bar'] = 'Bob';
+CLASS="programlisting"
+>&#13;$a[3]['bar'] = 'Bob';
 echo "This will work: " . $a[3][bar];
       </PRE
+></TD
+></TR
+></TABLE
 ><P
 ></P
 ></DIV
 >
-	  
     </P
 ><P
->     In PHP4, however, the whole problem may be circumvented by
+>&#13;     In PHP4, however, the whole problem may be circumvented by
      enclosing the array reference (inside the string) in curly
      braces:
-
      <DIV
-CLASS="INFORMALEXAMPLE"
+CLASS="informalexample"
 ><P
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->$a[3]['bar'] = 'Bob';
+CLASS="programlisting"
+>&#13;$a[3]['bar'] = 'Bob';
 echo "This will work: {$a[3][bar]}";
       </PRE
+></TD
+></TR
+></TABLE
 ><P
 ></P
 ></DIV
 >
     </P
 ><P
->     You can "fill up" multi-dimensional arrays in many ways, but the
+>&#13;     You can "fill up" multi-dimensional arrays in many ways, but the
      trickiest one to understand is how to use the
      <A
 HREF="function.array.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >array()</B
 ></A
 > command for associative arrays.  These
      two snippets of code fill up the one-dimensional array in the
      same way:
-
      <DIV
-CLASS="INFORMALEXAMPLE"
+CLASS="informalexample"
 ><P
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
+CLASS="programlisting"
 > 
 # Example 1:
 
@@ -353,28 +413,37 @@ $a = array(
      3       =&#62; 4
 );
       </PRE
+></TD
+></TR
+></TABLE
 ><P
 ></P
 ></DIV
-></P
+>
+    </P
 ><P
->     The <A
+>&#13;     The <A
 HREF="function.array.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >array()</B
 ></A
 > function can be nested for
      multi-dimensional arrays:
-
      <DIV
-CLASS="INFORMALEXAMPLE"
+CLASS="informalexample"
 ><P
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
+CLASS="programlisting"
 > 
-&lt;?
+&#60;?
 $a = array(
      "apple"  =&#62; array(
           "color"  =&#62; "red",
@@ -396,10 +465,14 @@ $a = array(
 echo $a["apple"]["taste"];    # will output "sweet"
 ?&#62;
       </PRE
+></TD
+></TR
+></TABLE
 ><P
 ></P
 ></DIV
-></P
+>
+    </P
 ></DIV
 ></DIV
 ><DIV

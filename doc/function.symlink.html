@@ -4,7 +4,7 @@
 >symlink</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -12,12 +12,15 @@ REL="UP"
 TITLE="Filesystem functions"
 HREF="ref.filesystem.html"><LINK
 REL="PREVIOUS"
-TITLE="lstat"
-HREF="function.lstat.html"><LINK
+TITLE="realpath"
+HREF="function.realpath.html"><LINK
 REL="NEXT"
 TITLE="tempnam"
-HREF="function.tempnam.html"></HEAD
+HREF="function.tempnam.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -42,7 +45,7 @@ WIDTH="10%"
 ALIGN="left"
 VALIGN="bottom"
 ><A
-HREF="function.lstat.html"
+HREF="function.realpath.html"
 >Prev</A
 ></TD
 ><TD
@@ -65,71 +68,94 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.SYMLINK"
+NAME="function.symlink"
 >symlink</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN9419"
+NAME="AEN10822"
 ></A
->symlink -- Create a symbolic link</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>symlink&nbsp;--&nbsp;Creates a symbolic link</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN9422"
+NAME="AEN10825"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int symlink</CODE
->(string target, string link);<P
+>int <B
+CLASS="function"
+>symlink</B
+></CODE
+> (string target, string link)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     <B
-CLASS="FUNCTION"
+>&#13;     <B
+CLASS="function"
 >symlink()</B
 > creates a symbolic link
      from the existing <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >target</I
 ></TT
 > with
      the specified name <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >link</I
 ></TT
->.</P
+>.
+    </P
 ><P
->     See also <A
+>&#13;     See also <A
 HREF="function.link.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >link()</B
 ></A
 > to create hard links,
      and <A
 HREF="function.readlink.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >readlink()</B
 ></A
 > along with
      <A
 HREF="function.linkinfo.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >linkinfo()</B
 ></A
->.</P
+>.
+    </P
+><DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
+><P
+><B
+>Note: </B
+>
+      This function does not work on Windows systems.
+     </P
+></BLOCKQUOTE
+></DIV
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -146,7 +172,7 @@ WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
 ><A
-HREF="function.lstat.html"
+HREF="function.realpath.html"
 >Prev</A
 ></TD
 ><TD
@@ -171,7 +197,7 @@ HREF="function.tempnam.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->lstat</TD
+>realpath</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"

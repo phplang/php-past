@@ -4,7 +4,7 @@
 >Variable functions</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="old_function"
 HREF="functions.old-syntax.html"><LINK
 REL="NEXT"
 TITLE="Classes and Objects"
-HREF="oop.html"></HEAD
+HREF="language.oop.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="sect1"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -55,7 +58,7 @@ WIDTH="10%"
 ALIGN="right"
 VALIGN="bottom"
 ><A
-HREF="oop.html"
+HREF="language.oop.html"
 >Next</A
 ></TD
 ></TR
@@ -64,22 +67,22 @@ HREF="oop.html"
 ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><DIV
-CLASS="SECT1"
+CLASS="sect1"
 ><H1
-CLASS="SECT1"
+CLASS="sect1"
 ><A
-NAME="FUNCTIONS.VARIABLE-FUNCTIONS"
+NAME="functions.variable-functions"
 >Variable functions</A
 ></H1
 ><P
->	PHP supports the concept of variable functions. This means that if 
-	a variable name has parentheses appended to it, PHP will look for
-	a function with the same name as whatever the variable evaluates
-	to, and will attempt to execute it. Among other things, this can
-	be used to implement callbacks, function tables, and so forth.
+>&#13;    PHP supports the concept of variable functions. This means that if
+    a variable name has parentheses appended to it, PHP will look for
+    a function with the same name as whatever the variable evaluates
+    to, and will attempt to execute it. Among other things, this can
+    be used to implement callbacks, function tables, and so forth.
    </P
 ><P
->	<TABLE
+>&#13;    <TABLE
 WIDTH="100%"
 BORDER="0"
 CELLPADDING="0"
@@ -88,28 +91,37 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
 >Example 12-1. Variable function example</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->&lt;?php
+CLASS="programlisting"
+>&#13;&#60;?php
 function foo() {
-   echo "In foo()&lt;br&gt;\n";
+    echo "In foo()&#60;br&#62;\n";
 }
 
 function bar( $arg = '' ) {
-   echo "In bar(); argument was '$arg'.&lt;br&gt;\n";
+    echo "In bar(); argument was '$arg'.&#60;br&#62;\n";
 }
 
 $func = 'foo';
 $func();
 $func = 'bar';
 $func( 'test' );
-?&gt;
-	 </PRE
+?&#62;
+     </PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR
@@ -148,7 +160,7 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><A
-HREF="oop.html"
+HREF="language.oop.html"
 >Next</A
 ></TD
 ></TR
@@ -158,7 +170,7 @@ WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
 ><TT
-CLASS="LITERAL"
+CLASS="literal"
 >old_function</TT
 ></TD
 ><TD

@@ -4,20 +4,23 @@
 >urldecode</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
-TITLE="URL functions"
+TITLE="URL Functions"
 HREF="ref.url.html"><LINK
 REL="PREVIOUS"
-TITLE="parse_url"
-HREF="function.parse-url.html"><LINK
+TITLE="rawurlencode"
+HREF="function.rawurlencode.html"><LINK
 REL="NEXT"
 TITLE="urlencode"
-HREF="function.urlencode.html"></HEAD
+HREF="function.urlencode.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -42,7 +45,7 @@ WIDTH="10%"
 ALIGN="left"
 VALIGN="bottom"
 ><A
-HREF="function.parse-url.html"
+HREF="function.rawurlencode.html"
 >Prev</A
 ></TD
 ><TD
@@ -65,37 +68,46 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.URLDECODE"
+NAME="function.urldecode"
 >urldecode</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN26536"
+NAME="AEN35428"
 ></A
->urldecode -- decodes URL-encoded string</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>urldecode&nbsp;--&nbsp;Decodes URL-encoded string</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN26539"
+NAME="AEN35431"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->string urldecode</CODE
->(string str);<P
+>string <B
+CLASS="function"
+>urldecode</B
+></CODE
+> (string str)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Decodes any <TT
-CLASS="LITERAL"
+>&#13;     Decodes any <TT
+CLASS="literal"
 >%<TT
-CLASS="REPLACEABLE"
+CLASS="replaceable"
 ><I
 >##</I
 ></TT
@@ -111,34 +123,63 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
->Example 1. urldecode() example</B
+>Example 1. <B
+CLASS="function"
+>Urldecode()</B
+> example</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->$a = split ('&#38;', $querystring);
+CLASS="programlisting"
+>&#13;$a = split ('&#38;', $querystring);
 $i = 0;
-while ($i &lt; count ($a)) {
-  $b = split ('=', $a [$i]);
-  echo 'Value for parameter ', htmlspecialchars (urldecode ($b [0])),
-       ' is ', htmlspecialchars (urldecode ($b [1])), "&lt;BR&#62;";
-  $i++;
-}</PRE
+while ($i &#60; count ($a)) {
+    $b = split ('=', $a [$i]);
+    echo 'Value for parameter ', htmlspecialchars (urldecode ($b [0])),
+         ' is ', htmlspecialchars (urldecode ($b [1])), "&#60;BR&#62;";
+    $i++;
+}
+      </PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR
 ></TABLE
-></P
+>
+    </P
 ><P
->     See also <A
+>&#13;     See also <A
 HREF="function.urlencode.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >urlencode()</B
 ></A
-></P
+>,
+		          <A
+HREF="function.rawurlencode.html"
+><B
+CLASS="function"
+>rawurlencode()</B
+></A
+>,
+							<A
+HREF="function.rawurldecode.html"
+><B
+CLASS="function"
+>rawurldecode()</B
+></A
+>.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -155,7 +196,7 @@ WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
 ><A
-HREF="function.parse-url.html"
+HREF="function.rawurlencode.html"
 >Prev</A
 ></TD
 ><TD
@@ -180,7 +221,7 @@ HREF="function.urlencode.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->parse_url</TD
+>rawurlencode</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"

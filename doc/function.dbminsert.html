@@ -4,20 +4,23 @@
 >dbminsert</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
-TITLE="dbm functions"
+TITLE="DBM Functions"
 HREF="ref.dbm.html"><LINK
 REL="PREVIOUS"
 TITLE="dbmfetch"
 HREF="function.dbmfetch.html"><LINK
 REL="NEXT"
 TITLE="dbmreplace"
-HREF="function.dbmreplace.html"></HEAD
+HREF="function.dbmreplace.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,44 +68,57 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.DBMINSERT"
+NAME="function.dbminsert"
 >dbminsert</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN7650"
+NAME="AEN8979"
 ></A
->dbminsert -- inserts a value for a key in a dbm database</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>dbminsert&nbsp;--&nbsp;
+     Inserts a value for a key in a DBM database
+    </DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN7653"
+NAME="AEN8982"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int dbminsert</CODE
->(int dbm_identifier, string key, string value);<P
+>int <B
+CLASS="function"
+>dbminsert</B
+></CODE
+> (int dbm_identifier, string key, string value)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Adds the value to the database with the specified key.</P
+>&#13;     Adds the value to the database with the specified key.
+    </P
 ><P
->     Returns -1 if the database was opened read-only, 0 if the insert
-     was successful, and 1 if the specified key already exists. (To replace
-     the value, use <A
+>&#13;     Returns -1 if the database was opened read-only, 0 if the insert
+     was successful, and 1 if the specified key already exists. (To
+     replace the value, use <A
 HREF="function.dbmreplace.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >dbmreplace()</B
 ></A
->.)</P
+>.)
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

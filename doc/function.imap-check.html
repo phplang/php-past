@@ -4,20 +4,23 @@
 >imap_check</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
-TITLE="IMAP functions"
+TITLE="IMAP, POP3 and NNTP functions"
 HREF="ref.imap.html"><LINK
 REL="PREVIOUS"
 TITLE="imap_body"
 HREF="function.imap-body.html"><LINK
 REL="NEXT"
 TITLE="imap_close"
-HREF="function.imap-close.html"></HEAD
+HREF="function.imap-close.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,60 +68,86 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.IMAP-CHECK"
+NAME="function.imap-check"
 >imap_check</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN12566"
+NAME="AEN14925"
 ></A
->imap_check -- Check current mailbox</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>imap_check&nbsp;--&nbsp;Check current mailbox</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN12569"
+NAME="AEN14928"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->array imap_check</CODE
->(int imap_stream);<P
+>object <B
+CLASS="function"
+>imap_check</B
+></CODE
+> (int imap_stream)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Returns information about the current mailbox. Returns FALSE on
-     failure.</P
+>&#13;     Returns information about the current mailbox. Returns FALSE on
+     failure.
+    </P
 ><P
 > 
      The <B
-CLASS="FUNCTION"
+CLASS="function"
 >imap_check()</B
 > function checks the current
      mailbox status on the server and returns the information in an
-     object with following properties.</P
+     object with following properties:
+    </P
 ><P
->     <DIV
-CLASS="INFORMALEXAMPLE"
-><P
+>&#13;     <P
 ></P
+><UL
+><LI
 ><P
-CLASS="LITERALLAYOUT"
->&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Date&nbsp;:&nbsp;date&nbsp;of&nbsp;the&nbsp;message<br>
-	Driver&nbsp;:&nbsp;driver<br>
-	Mailbox&nbsp;:&nbsp;name&nbsp;of&nbsp;the&nbsp;mailbox	<br>
-	Nmsgs&nbsp;:&nbsp;number&nbsp;of&nbsp;messages	<br>
-	Recent&nbsp;:&nbsp;number&nbsp;of&nbsp;recent&nbsp;messages<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</P
+>&#13;        Date - last change of mailbox contents
+       </P
+></LI
+><LI
 ><P
-></P
-></DIV
-></P
+>&#13;	Driver - protocol used to access this mailbox: POP3, IMAP, NNTP
+       </P
+></LI
+><LI
+><P
+>&#13;	Mailbox - the mailbox name
+       </P
+></LI
+><LI
+><P
+>&#13;	Nmsgs - number of messages in the mailbox
+       </P
+></LI
+><LI
+><P
+>&#13;	Recent - number of recent messages in the mailbox
+       </P
+></LI
+></UL
+>
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

@@ -4,7 +4,7 @@
 >mysql_fetch_row</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -15,9 +15,12 @@ REL="PREVIOUS"
 TITLE="mysql_fetch_object"
 HREF="function.mysql-fetch-object.html"><LINK
 REL="NEXT"
-TITLE="mysql_field_name"
-HREF="function.mysql-field-name.html"></HEAD
+TITLE="mysql_field_flags"
+HREF="function.mysql-field-flags.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -55,7 +58,7 @@ WIDTH="10%"
 ALIGN="right"
 VALIGN="bottom"
 ><A
-HREF="function.mysql-field-name.html"
+HREF="function.mysql-field-flags.html"
 >Next</A
 ></TD
 ></TR
@@ -65,87 +68,100 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.MYSQL-FETCH-ROW"
+NAME="function.mysql-fetch-row"
 >mysql_fetch_row</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN18143"
+NAME="AEN23047"
 ></A
->mysql_fetch_row -- Get a result row as an enumerated array</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>mysql_fetch_row&nbsp;--&nbsp;Get a result row as an enumerated array</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN18146"
+NAME="AEN23050"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->array mysql_fetch_row</CODE
->(int result);<P
+>array <B
+CLASS="function"
+>mysql_fetch_row</B
+></CODE
+> (int result)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
 > 
      Returns: An array that corresponds to the fetched row, or false
-     if there are no more rows.</P
+     if there are no more rows.
+    </P
 ><P
->     <B
-CLASS="FUNCTION"
+>&#13;     <B
+CLASS="function"
 >mysql_fetch_row()</B
 > fetches one row of data from
      the result associated with the specified result identifier.  The
      row is returned as an array.  Each result column is stored in an
-     array offset, starting at offset 0.</P
+     array offset, starting at offset 0.
+    </P
 ><P
->     Subsequent call to <B
-CLASS="FUNCTION"
+>&#13;     Subsequent call to <B
+CLASS="function"
 >mysql_fetch_row()</B
 > would
      return the next row in the result set, or false if there are no
-     more rows.</P
+     more rows.
+    </P
 ><P
->     See also: <A
+>&#13;     See also: <A
 HREF="function.mysql-fetch-array.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >mysql_fetch_array()</B
 ></A
 >,
-               <A
+     <A
 HREF="function.mysql-fetch-object.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >mysql_fetch_object()</B
 ></A
 >,
-               <A
+     <A
 HREF="function.mysql-data-seek.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >mysql_data_seek()</B
 ></A
 >,
-               <A
+     <A
 HREF="function.mysql-fetch-lengths.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >mysql_fetch_lengths()</B
 ></A
 >, and
-               <A
+     <A
 HREF="function.mysql-result.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >mysql_result()</B
 ></A
->.</P
+>.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -178,7 +194,7 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><A
-HREF="function.mysql-field-name.html"
+HREF="function.mysql-field-flags.html"
 >Next</A
 ></TD
 ></TR
@@ -200,7 +216,7 @@ HREF="ref.mysql.html"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->mysql_field_name</TD
+>mysql_field_flags</TD
 ></TR
 ></TABLE
 ></DIV

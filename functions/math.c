@@ -28,7 +28,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: math.c,v 1.51 2000/03/01 19:36:15 hholzgra Exp $ */
+/* $Id: math.c,v 1.54 2000/08/01 15:09:48 hholzgra Exp $ */
 #include "php.h"
 #include "internal_functions.h"
 #include "phpmath.h"
@@ -67,7 +67,7 @@ void php3_abs(INTERNAL_FUNCTION_PARAMETERS) {
 }
 /* }}} */
 
-/* {{{ proto int ceil(double number)
+/* {{{ proto double ceil(double number)
    Returns the next highest integer value of the number */
 void php3_ceil(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *value;
@@ -82,7 +82,7 @@ void php3_ceil(INTERNAL_FUNCTION_PARAMETERS) {
 	}
 
 	if (value->type == IS_DOUBLE) {
-		RETURN_LONG((long)ceil(value->value.dval));
+		RETURN_DOUBLE(ceil(value->value.dval));
 	}
 	else if (value->type == IS_LONG) {
 		RETURN_LONG(value->value.lval);
@@ -92,7 +92,7 @@ void php3_ceil(INTERNAL_FUNCTION_PARAMETERS) {
 }
 /* }}} */
 
-/* {{{ proto int floor(double number)
+/* {{{ proto double floor(double number)
    Returns the next lowest integer value from the number */
 void php3_floor(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *value;
@@ -107,7 +107,7 @@ void php3_floor(INTERNAL_FUNCTION_PARAMETERS) {
 	}
 
 	if (value->type == IS_DOUBLE) {
-		RETURN_LONG((long)floor(value->value.dval));
+		RETURN_DOUBLE(floor(value->value.dval));
 	}
 	else if (value->type == IS_LONG) {
 		RETURN_LONG(value->value.lval);
@@ -470,7 +470,7 @@ void php3_bindec(INTERNAL_FUNCTION_PARAMETERS)
 }
 /* }}} */
 
-/* {{{ proto int hexdec(string hexadimal_number)
+/* {{{ proto int hexdec(string hexadecimal_number)
    Returns the decimal equivalent of the hexadecimal number */
 void php3_hexdec(INTERNAL_FUNCTION_PARAMETERS)
 {
@@ -661,7 +661,7 @@ char *_php3_number_format(double d,int dec,char dec_point,char thousand_sep)
 	return resbuf;
 }
 
-/* {{{ proto string number_format(double number [,int num_decimal_places [, string  dec_separator, string thousands_separator)]])
+/* {{{ proto string number_format(double number [, int num_decimal_places [, string dec_separator, string thousands_separator]])
    Formats a number with grouped thousands */
 void php3_number_format(INTERNAL_FUNCTION_PARAMETERS)
 {

@@ -4,7 +4,7 @@
 >ucwords</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -15,9 +15,12 @@ REL="PREVIOUS"
 TITLE="ucfirst"
 HREF="function.ucfirst.html"><LINK
 REL="NEXT"
-TITLE="Sybase functions"
-HREF="ref.sybase.html"></HEAD
+TITLE="wordwrap"
+HREF="function.wordwrap.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -55,7 +58,7 @@ WIDTH="10%"
 ALIGN="right"
 VALIGN="bottom"
 ><A
-HREF="ref.sybase.html"
+HREF="function.wordwrap.html"
 >Next</A
 ></TD
 ></TR
@@ -65,62 +68,111 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.UCWORDS"
+NAME="function.ucwords"
 >ucwords</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN26153"
+NAME="AEN34937"
 ></A
->ucwords --      Uppercase the first character of each word in a string
+><P
+>    (PHP3 &#62;= 3.0.3, PHP4 )</P
+>ucwords&nbsp;--&nbsp;
+     Uppercase the first character of each word in a string
     </DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN26156"
+NAME="AEN34940"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->string ucwords</CODE
->(string str);<P
+>string <B
+CLASS="function"
+>ucwords</B
+></CODE
+> (string str)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Capitalizes the first character of each word in
+>&#13;     Capitalizes the first character of each word in
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >str</I
 ></TT
-> if that character is alphabetic.</P
+> if that character is alphabetic.
+     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
 ><P
->     See also <A
+><B
+>Example 1. <B
+CLASS="function"
+>ucwords()</B
+> example</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;$text = "mary had a little lamb and she loved it so.";
+$text = ucwords($text); // $text is now: Mary Had A Little 
+                        // Lamb And She Loved It So.
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+    </P
+><P
+>&#13;     See also <A
 HREF="function.strtoupper.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >strtoupper()</B
 ></A
 >,
      <A
 HREF="function.strtolower.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >strtolower()</B
 ></A
 > and <A
 HREF="function.ucfirst.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >ucfirst()</B
 ></A
->.</P
+>.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -153,7 +205,7 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><A
-HREF="ref.sybase.html"
+HREF="function.wordwrap.html"
 >Next</A
 ></TD
 ></TR
@@ -175,7 +227,7 @@ HREF="ref.strings.html"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->Sybase functions</TD
+>wordwrap</TD
 ></TR
 ></TABLE
 ></DIV

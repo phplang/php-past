@@ -4,7 +4,7 @@
 >ibase_prepare</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -15,9 +15,12 @@ REL="PREVIOUS"
 TITLE="ibase_free_result"
 HREF="function.ibase-free-result.html"><LINK
 REL="NEXT"
-TITLE="ibase_bind"
-HREF="function.ibase-bind.html"></HEAD
+TITLE="ibase_execute"
+HREF="function.ibase-execute.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -55,7 +58,7 @@ WIDTH="10%"
 ALIGN="right"
 VALIGN="bottom"
 ><A
-HREF="function.ibase-bind.html"
+HREF="function.ibase-execute.html"
 >Next</A
 ></TD
 ></TR
@@ -65,32 +68,55 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.IBASE-PREPARE"
+NAME="function.ibase-prepare"
 >ibase_prepare</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN14285"
+NAME="AEN17249"
 ></A
->ibase_prepare -- </DIV
+><P
+>    (PHP3 &#62;= 3.0.6, PHP4 )</P
+>ibase_prepare&nbsp;--&nbsp;
+     Prepare a query for later binding of parameter placeholders and
+     execution
+    </DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN14288"
+NAME="AEN17252"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
-> ibase_prepare</CODE
->( );<P
+>int <B
+CLASS="function"
+>ibase_prepare</B
+></CODE
+> ([int 
+       link_identifier, string query])</CODE
+></P
+><P
 ></P
 ></DIV
+><P
+>&#13;     Prepare a query for later binding of parameter placeholders and
+     execution (via <A
+HREF="function.ibase-execute.html"
+><B
+CLASS="function"
+>ibase_execute()</B
+></A
+>).
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -123,7 +149,7 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><A
-HREF="function.ibase-bind.html"
+HREF="function.ibase-execute.html"
 >Next</A
 ></TD
 ></TR
@@ -145,7 +171,7 @@ HREF="ref.ibase.html"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->ibase_bind</TD
+>ibase_execute</TD
 ></TR
 ></TABLE
 ></DIV

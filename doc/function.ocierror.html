@@ -4,7 +4,7 @@
 >OCIError</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="OCIParse"
 HREF="function.ociparse.html"><LINK
 REL="NEXT"
 TITLE="OCIInternalDebug"
-HREF="function.ociinternaldebug.html"></HEAD
+HREF="function.ociinternaldebug.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,58 +68,78 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.OCIERROR"
+NAME="function.ocierror"
 >OCIError</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN20529"
+NAME="AEN26202"
 ></A
->OCIError -- Return the last error of stmt|conn|global. 
+><P
+>    (PHP3 &#62;= 3.0.7, PHP4 )</P
+>OCIError&nbsp;--&nbsp;Return the last error of stmt|conn|global. 
      If no error happened returns false.
     </DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN20532"
+NAME="AEN26205"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int OCIError</CODE
->(int [<SPAN
-CLASS="OPTIONAL"
->stmt|conn</SPAN
->]);<P
+>array <B
+CLASS="function"
+>OCIError</B
+></CODE
+> ([int 
+       stmt|conn|global])</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     <A
-HREF="function.ocierror.html"
-><B
-CLASS="FUNCTION"
+>&#13;     <B
+CLASS="function"
 >OCIError()</B
-></A
-> returns the last error found.  If the optional
-      <TT
-CLASS="PARAMETER"
+> returns the last error found.  If
+     the optional <TT
+CLASS="parameter"
 ><I
->stmt|conn</I
+>stmt|conn|global</I
 ></TT
-> is not provided, the last error encountered
-      is returned.  If no error is found, <A
-HREF="function.ocierror.html"
-><B
-CLASS="FUNCTION"
+> is not
+     provided, the last error encountered is returned.  If no error is
+     found, <B
+CLASS="function"
 >OCIError()</B
-></A
-> returns false.</P
+> returns
+     false. <B
+CLASS="function"
+>OCIError()</B
+> returns the error as an
+     associative array. In this array, <TT
+CLASS="parameter"
+><I
+>code</I
+></TT
+>
+     consists the oracle error code and <TT
+CLASS="parameter"
+><I
+>message</I
+></TT
+>
+     the oracle errorstring.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

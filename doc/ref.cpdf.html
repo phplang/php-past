@@ -4,7 +4,7 @@
 >ClibPDF functions</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -12,12 +12,15 @@ REL="UP"
 TITLE="Function Reference"
 HREF="funcref.html"><LINK
 REL="PREVIOUS"
-TITLE="easter_days"
-HREF="function.easter-days.html"><LINK
+TITLE="call_user_method"
+HREF="function.call-user-method.html"><LINK
 REL="NEXT"
-TITLE="cpdf_set_creator"
-HREF="function.cpdf-set-creator.html"></HEAD
+TITLE="cpdf_global_set_document_limits"
+HREF="function.cpdf-global-set-document-limits.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="reference"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -42,7 +45,7 @@ WIDTH="10%"
 ALIGN="left"
 VALIGN="bottom"
 ><A
-HREF="function.easter-days.html"
+HREF="function.call-user-method.html"
 >Prev</A
 ></TD
 ><TD
@@ -55,7 +58,7 @@ WIDTH="10%"
 ALIGN="right"
 VALIGN="bottom"
 ><A
-HREF="function.cpdf-set-creator.html"
+HREF="function.cpdf-global-set-document-limits.html"
 >Next</A
 ></TD
 ></TR
@@ -64,24 +67,24 @@ HREF="function.cpdf-set-creator.html"
 ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><DIV
-CLASS="REFERENCE"
+CLASS="reference"
 ><A
-NAME="REF.CPDF"
+NAME="ref.cpdf"
 ></A
 ><DIV
 CLASS="TITLEPAGE"
 ><H1
-CLASS="TITLE"
->VII. ClibPDF functions</H1
+CLASS="title"
+>IX. ClibPDF functions</H1
 ><DIV
 CLASS="PARTINTRO"
 ><A
-NAME="AEN4922"
+NAME="AEN6036"
 ></A
 ><P
->    ClibPDF lets you create PDF documents with PHP. It is available at
+>&#13;    ClibPDF lets you create PDF documents with PHP. It is available at
     <A
-HREF="http://www.fastio.com"
+HREF="http://www.fastio.com/"
 TARGET="_top"
 >FastIO</A
 > but it isn't free
@@ -96,16 +99,16 @@ TARGET="_top"
     is also similar if compression is turned off.  So, try them both
     and see which one does the job for you.</P
 ><P
->    This documentation should be read alongside the ClibPDF manual since it
+>&#13;    This documentation should be read alongside the ClibPDF manual since it
     explains the library in much greater detail. 
     </P
 ><P
->    Many functions in the native ClibPDF and the PHP module, as
+>&#13;    Many functions in the native ClibPDF and the PHP module, as
     well as in pdflib, have the same name.  All functions except for
     <A
 HREF="function.cpdf-open.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >cpdf_open()</B
 ></A
 > take the handle for the document as
@@ -118,16 +121,17 @@ CLASS="FUNCTION"
     the next releases (current version when this was written is 1.10).
     If you need this functionality use the pdflib module.</P
 ><DIV
-CLASS="NOTE"
+CLASS="note"
 ><BLOCKQUOTE
-CLASS="NOTE"
+CLASS="note"
 ><P
 ><B
 >Note: </B
->    The function <A
+>
+    The function <A
 HREF="function.cpdf-set-font.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >cpdf_set_font()</B
 ></A
 > has changed since PHP3
@@ -136,19 +140,19 @@ CLASS="FUNCTION"
 ></BLOCKQUOTE
 ></DIV
 ><P
->    One big advantage of ClibPDF over pdflib is the possibility to create
+>&#13;    One big advantage of ClibPDF over pdflib is the possibility to create
     the pdf document completely in memory without using temporary files.
     It also provides the ability to pass coordinates in a predefined
     unit length. This is a handy feature but can be simulated with
     <A
 HREF="function.pdf-translate.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >pdf_translate()</B
 ></A
 >.</P
 ><P
->    Most of the functions are fairly easy to use. The most difficult part
+>&#13;    Most of the functions are fairly easy to use. The most difficult part
     is probably creating a very simple PDF document at all. The following
     example should help you get started. It creates a document
     with one page. The page contains the text "Times-Roman" in an
@@ -162,20 +166,28 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
 >Example 1. Simple ClibPDF Example</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->&lt;?php
+CLASS="programlisting"
+>&#13;&#60;?php
 $cpdf = cpdf_open(0);
 cpdf_page_init($cpdf, 1, 0, 595, 842);
 cpdf_add_outline($cpdf, 0, 0, 0, 1, "Page 1");
+cpdf_begin_text($pdf);
 cpdf_set_font($cpdf, "Times-Roman", 30, "WinAnsiEncoding");
 cpdf_set_text_rendering($cpdf, 1);
 cpdf_text($cpdf, "Times Roman outlined", 50, 750);
+cpdf_end_text($pdf);	
 cpdf_moveto($cpdf, 50, 740);
 cpdf_lineto($cpdf, 330, 740);
 cpdf_stroke($cpdf);
@@ -185,12 +197,15 @@ cpdf_output_buffer($cpdf);
 cpdf_close($cpdf);
 ?&#62;
     </PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR
 ></TABLE
 ><P
->  The pdflib distribution contains a more complex example which creates a
+>&#13;  The pdflib distribution contains a more complex example which creates a
   series of pages with an analog clock. Here is that example converted
   into PHP using the ClibPDF extension:</P
 ><TABLE
@@ -202,14 +217,20 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
 >Example 2. pdfclock example from pdflib 2.0 distribution</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->&lt;?php
+CLASS="programlisting"
+>&#13;&#60;?php
 $radius = 200;
 $margin = 20;
 $pagecount = 40;
@@ -297,6 +318,9 @@ cpdf_output_buffer($pdf);
 cpdf_close($pdf);
 ?&#62;
     </PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR
@@ -309,6 +333,11 @@ CLASS="TOC"
 ><B
 >Table of Contents</B
 ></DT
+><DT
+><A
+HREF="function.cpdf-global-set-document-limits.html"
+>cpdf_global_set_document_limits</A
+> &#8212; Sets document limits for any pdf document</DT
 ><DT
 ><A
 HREF="function.cpdf-set-creator.html"
@@ -378,7 +407,7 @@ HREF="function.cpdf-begin-text.html"
 ><A
 HREF="function.cpdf-end-text.html"
 >cpdf_end_text</A
-> &#8212; Starts text section</DT
+> &#8212; Ends text section</DT
 ><DT
 ><A
 HREF="function.cpdf-show.html"
@@ -504,6 +533,13 @@ HREF="function.cpdf-setlinewidth.html"
 HREF="function.cpdf-setdash.html"
 >cpdf_setdash</A
 > &#8212; Sets dash pattern</DT
+><DT
+><A
+HREF="function.cpdf-newpath.html"
+>cpdf_newpath</A
+> &#8212; 
+        Starts a new path
+      </DT
 ><DT
 ><A
 HREF="function.cpdf-moveto.html"
@@ -653,7 +689,7 @@ WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
 ><A
-HREF="function.easter-days.html"
+HREF="function.call-user-method.html"
 >Prev</A
 ></TD
 ><TD
@@ -669,7 +705,7 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><A
-HREF="function.cpdf-set-creator.html"
+HREF="function.cpdf-global-set-document-limits.html"
 >Next</A
 ></TD
 ></TR
@@ -678,7 +714,7 @@ HREF="function.cpdf-set-creator.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->easter_days</TD
+>call_user_method</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"
@@ -691,7 +727,7 @@ HREF="funcref.html"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->cpdf_set_creator</TD
+>cpdf_global_set_document_limits</TD
 ></TR
 ></TABLE
 ></DIV

@@ -4,7 +4,7 @@
 >ImageColorResolve</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -15,9 +15,12 @@ REL="PREVIOUS"
 TITLE="ImageColorExact"
 HREF="function.imagecolorexact.html"><LINK
 REL="NEXT"
-TITLE="ImageColorSet"
-HREF="function.imagecolorset.html"></HEAD
+TITLE="ImageGammaCorrect"
+HREF="function.imagegammacorrect.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -55,7 +58,7 @@ WIDTH="10%"
 ALIGN="right"
 VALIGN="bottom"
 ><A
-HREF="function.imagecolorset.html"
+HREF="function.imagegammacorrect.html"
 >Next</A
 ></TD
 ></TR
@@ -65,44 +68,58 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.IMAGECOLORRESOLVE"
+NAME="function.imagecolorresolve"
 >ImageColorResolve</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN11633"
+NAME="AEN13603"
 ></A
->ImageColorResolve -- get the index of the specified color or its closest possible alternative</DIV
+><P
+>    (PHP3 &#62;= 3.0.2, PHP4 )</P
+>ImageColorResolve&nbsp;--&nbsp;
+     Get the index of the specified color or its closest possible
+     alternative
+    </DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN11636"
+NAME="AEN13606"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int imagecolorresolve</CODE
->(int im, int red, int green, int blue);<P
+>int <B
+CLASS="function"
+>imagecolorresolve</B
+></CODE
+> (int im, int red, int green, int blue)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     This function is guaranteed to return a color index for a
+>&#13;     This function is guaranteed to return a color index for a
      requested color, either the exact color or the closest possible
-     alternative.</P
+     alternative.
+    </P
 ><P
->     See also <A
+>&#13;     See also <A
 HREF="function.imagecolorclosest.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >imagecolorclosest()</B
 ></A
->.</P
+>.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -135,7 +152,7 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><A
-HREF="function.imagecolorset.html"
+HREF="function.imagegammacorrect.html"
 >Next</A
 ></TD
 ></TR
@@ -157,7 +174,7 @@ HREF="ref.image.html"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->ImageColorSet</TD
+>ImageGammaCorrect</TD
 ></TR
 ></TABLE
 ></DIV

@@ -4,7 +4,7 @@
 >mysql_list_dbs</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -12,12 +12,15 @@ REL="UP"
 TITLE="MySQL functions"
 HREF="ref.mysql.html"><LINK
 REL="PREVIOUS"
-TITLE="mysql_list_fields"
-HREF="function.mysql-list-fields.html"><LINK
+TITLE="mysql_insert_id"
+HREF="function.mysql-insert-id.html"><LINK
 REL="NEXT"
-TITLE="mysql_list_tables"
-HREF="function.mysql-list-tables.html"></HEAD
+TITLE="mysql_list_fields"
+HREF="function.mysql-list-fields.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -42,7 +45,7 @@ WIDTH="10%"
 ALIGN="left"
 VALIGN="bottom"
 ><A
-HREF="function.mysql-list-fields.html"
+HREF="function.mysql-insert-id.html"
 >Prev</A
 ></TD
 ><TD
@@ -55,7 +58,7 @@ WIDTH="10%"
 ALIGN="right"
 VALIGN="bottom"
 ><A
-HREF="function.mysql-list-tables.html"
+HREF="function.mysql-list-fields.html"
 >Next</A
 ></TD
 ></TR
@@ -65,56 +68,66 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.MYSQL-LIST-DBS"
+NAME="function.mysql-list-dbs"
 >mysql_list_dbs</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN18330"
+NAME="AEN23216"
 ></A
->mysql_list_dbs -- List databases available on on MySQL server</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>mysql_list_dbs&nbsp;--&nbsp;
+     List databases available on a MySQL server
+    </DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN18333"
+NAME="AEN23219"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int mysql_list_dbs</CODE
->(int [<SPAN
-CLASS="OPTIONAL"
->link_identifier</SPAN
->]
-                   );<P
+>int <B
+CLASS="function"
+>mysql_list_dbs</B
+></CODE
+> ([int 
+       link_identifier])</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     <B
-CLASS="FUNCTION"
+>&#13;     <B
+CLASS="function"
 >mysql_list_dbs()</B
 > will return a result pointer
      containing the databases available from the current mysql
      daemon. Use the <A
 HREF="function.mysql-tablename.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >mysql_tablename()</B
 ></A
 > function to
-     traverse this result pointer.</P
+     traverse this result pointer.
+    </P
 ><P
->     For downward compatibility <B
-CLASS="FUNCTION"
+>&#13;     For downward compatibility <B
+CLASS="function"
 >mysql_listdbs()</B
 > can
-     also be used.</P
+     also be used.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -131,7 +144,7 @@ WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
 ><A
-HREF="function.mysql-list-fields.html"
+HREF="function.mysql-insert-id.html"
 >Prev</A
 ></TD
 ><TD
@@ -147,7 +160,7 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><A
-HREF="function.mysql-list-tables.html"
+HREF="function.mysql-list-fields.html"
 >Next</A
 ></TD
 ></TR
@@ -156,7 +169,7 @@ HREF="function.mysql-list-tables.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->mysql_list_fields</TD
+>mysql_insert_id</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"
@@ -169,7 +182,7 @@ HREF="ref.mysql.html"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->mysql_list_tables</TD
+>mysql_list_fields</TD
 ></TR
 ></TABLE
 ></DIV

@@ -4,20 +4,23 @@
 >Pattern Syntax</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
-TITLE="Perl-compatible Regular Expression functions"
+TITLE="Regular Expression Functions (Perl-Compatible)"
 HREF="ref.pcre.html"><LINK
 REL="PREVIOUS"
 TITLE="Pattern Modifiers"
 HREF="pcre.pattern.modifiers.html"><LINK
 REL="NEXT"
-TITLE="PHP options & information"
-HREF="ref.info.html"></HEAD
+TITLE="Regular Expression Functions (POSIX Extended)"
+HREF="ref.regex.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -55,7 +58,7 @@ WIDTH="10%"
 ALIGN="right"
 VALIGN="bottom"
 ><A
-HREF="ref.info.html"
+HREF="ref.regex.html"
 >Next</A
 ></TD
 ></TR
@@ -65,40 +68,44 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="PCRE.PATTERN.SYNTAX"
+NAME="pcre.pattern.syntax"
 >Pattern Syntax</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN22300"
+NAME="AEN30694"
 ></A
->Pattern Syntax -- describes PCRE regex syntax</DIV
+><P
+>    (unknown)</P
+>Pattern Syntax&nbsp;--&nbsp;Describes PCRE regex syntax</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN22303"
+NAME="AEN30697"
 ></A
 ><H2
 >Description</H2
 ><P
-CLASS="LITERALLAYOUT"
->&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;PCRE&nbsp;library&nbsp;is&nbsp;a&nbsp;set&nbsp;of&nbsp;functions&nbsp;that&nbsp;implement&nbsp;regular<br>
+CLASS="literallayout"
+><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;PCRE&nbsp;library&nbsp;is&nbsp;a&nbsp;set&nbsp;of&nbsp;functions&nbsp;that&nbsp;implement&nbsp;regular<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;expression&nbsp;pattern&nbsp;matching&nbsp;using&nbsp;the&nbsp;same&nbsp;syntax&nbsp;and&nbsp;semantics<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;as&nbsp;Perl&nbsp;5,&nbsp;with&nbsp;just&nbsp;a&nbsp;few&nbsp;differences&nbsp;(see&nbsp;below).&nbsp;&nbsp;The&nbsp;current<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;implementation&nbsp;corresponds&nbsp;to&nbsp;Perl&nbsp;5.005.<br>
-&nbsp;&nbsp;&nbsp;</P
+&nbsp;&nbsp;&nbsp;&nbsp;</P
 ></DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN22306"
+NAME="AEN30700"
 ></A
 ><H2
 >Differences From Perl</H2
 ><P
-CLASS="LITERALLAYOUT"
->&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;differences&nbsp;described&nbsp;here&nbsp;&nbsp;are&nbsp;&nbsp;with&nbsp;&nbsp;respect&nbsp;&nbsp;to&nbsp;&nbsp;Perl<br>
+CLASS="literallayout"
+><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;differences&nbsp;described&nbsp;here&nbsp;&nbsp;are&nbsp;&nbsp;with&nbsp;&nbsp;respect&nbsp;&nbsp;to&nbsp;&nbsp;Perl<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5.005.<br>
 <br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1.&nbsp;By&nbsp;default,&nbsp;a&nbsp;whitespace&nbsp;character&nbsp;is&nbsp;any&nbsp;character&nbsp;&nbsp;that<br>
@@ -181,15 +188,16 @@ CLASS="LITERALLAYOUT"
 &nbsp;&nbsp;&nbsp;&nbsp;</P
 ></DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN22309"
+NAME="AEN30703"
 ></A
 ><H2
 >Regular Expression Details</H2
 ><P
-CLASS="LITERALLAYOUT"
->&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;syntax&nbsp;and&nbsp;semantics&nbsp;of&nbsp;&nbsp;the&nbsp;&nbsp;regular&nbsp;&nbsp;expressions&nbsp;&nbsp;sup-<br>
+CLASS="literallayout"
+><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;syntax&nbsp;and&nbsp;semantics&nbsp;of&nbsp;&nbsp;the&nbsp;&nbsp;regular&nbsp;&nbsp;expressions&nbsp;&nbsp;sup-<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ported&nbsp;&nbsp;by&nbsp;PCRE&nbsp;are&nbsp;described&nbsp;below.&nbsp;Regular&nbsp;expressions&nbsp;are<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;also&nbsp;described&nbsp;in&nbsp;the&nbsp;Perl&nbsp;documentation&nbsp;and&nbsp;in&nbsp;a&nbsp;number&nbsp;&nbsp;of<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;other&nbsp;&nbsp;books,&nbsp;&nbsp;some&nbsp;&nbsp;of&nbsp;which&nbsp;have&nbsp;copious&nbsp;examples.&nbsp;Jeffrey<br>
@@ -208,11 +216,11 @@ CLASS="LITERALLAYOUT"
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;itself.&nbsp;&nbsp;The&nbsp;&nbsp;power&nbsp;&nbsp;of&nbsp;&nbsp;regular&nbsp;&nbsp;expressions&nbsp;comes&nbsp;from&nbsp;the<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ability&nbsp;to&nbsp;include&nbsp;alternatives&nbsp;and&nbsp;repetitions&nbsp;in&nbsp;the&nbsp;&nbsp;pat-<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tern.&nbsp;&nbsp;These&nbsp;&nbsp;are&nbsp;encoded&nbsp;in&nbsp;the&nbsp;pattern&nbsp;by&nbsp;the&nbsp;use&nbsp;of&nbsp;<I
-CLASS="EMPHASIS"
+CLASS="emphasis"
 >meta</I
 >-<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<I
-CLASS="EMPHASIS"
+CLASS="emphasis"
 >characters</I
 >,&nbsp;which&nbsp;do&nbsp;not&nbsp;stand&nbsp;for&nbsp;&nbsp;themselves&nbsp;&nbsp;but&nbsp;&nbsp;instead<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;are&nbsp;interpreted&nbsp;in&nbsp;some&nbsp;special&nbsp;way.<br>
@@ -310,10 +318,10 @@ BACKSLASH<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is&nbsp;&nbsp;less&nbsp;&nbsp;than&nbsp;&nbsp;10,&nbsp;or&nbsp;if&nbsp;there&nbsp;have&nbsp;been&nbsp;at&nbsp;least&nbsp;that&nbsp;many<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;previous&nbsp;capturing&nbsp;left&nbsp;parentheses&nbsp;in&nbsp;the&nbsp;&nbsp;expression,&nbsp;&nbsp;the<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;entire&nbsp;&nbsp;sequence&nbsp;is&nbsp;taken&nbsp;as&nbsp;a&nbsp;<I
-CLASS="EMPHASIS"
+CLASS="emphasis"
 >back</I
 >&nbsp;<I
-CLASS="EMPHASIS"
+CLASS="emphasis"
 >reference</I
 >.&nbsp;A&nbsp;description<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;of&nbsp;how&nbsp;this&nbsp;works&nbsp;is&nbsp;given&nbsp;later,&nbsp;following&nbsp;&nbsp;the&nbsp;&nbsp;discussion<br>
@@ -654,11 +662,11 @@ SUBPATTERNS<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;defined&nbsp;&nbsp;above).&nbsp;&nbsp;&nbsp;When&nbsp;the&nbsp;whole&nbsp;pattern&nbsp;matches,&nbsp;that&nbsp;por-<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tion&nbsp;of&nbsp;the&nbsp;subject&nbsp;string&nbsp;that&nbsp;matched&nbsp;&nbsp;the&nbsp;&nbsp;subpattern&nbsp;&nbsp;is<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;passed&nbsp;&nbsp;back&nbsp;&nbsp;to&nbsp;&nbsp;the&nbsp;&nbsp;caller&nbsp;&nbsp;via&nbsp;&nbsp;the&nbsp;&nbsp;<I
-CLASS="EMPHASIS"
+CLASS="emphasis"
 >ovector</I
 >&nbsp;argument&nbsp;of<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<B
-CLASS="FUNCTION"
+CLASS="function"
 >pcre_exec()</B
 >.&nbsp;Opening&nbsp;parentheses&nbsp;are&nbsp;counted&nbsp;&nbsp;from&nbsp;&nbsp;left&nbsp;&nbsp;to<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;right&nbsp;(starting&nbsp;from&nbsp;1)&nbsp;to&nbsp;obtain&nbsp;the&nbsp;numbers&nbsp;of&nbsp;the&nbsp;captur-<br>
@@ -939,10 +947,10 @@ ASSERTIONS<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;whatsoever,&nbsp;because&nbsp;the&nbsp;assertion&nbsp;&nbsp;(?!foo)&nbsp;&nbsp;is&nbsp;&nbsp;always&nbsp;&nbsp;true<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;when&nbsp;&nbsp;the&nbsp;&nbsp;next&nbsp;&nbsp;three&nbsp;&nbsp;characters&nbsp;&nbsp;are&nbsp;&nbsp;"bar".&nbsp;A&nbsp;lookbehind<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;assertion&nbsp;is&nbsp;needed&nbsp;to&nbsp;achieve&nbsp;this&nbsp;effect.<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Lookbehind&nbsp;assertions&nbsp;start&nbsp;with&nbsp;(?&lt;=&nbsp;&nbsp;for&nbsp;&nbsp;positive&nbsp;&nbsp;asser-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tions&nbsp;and&nbsp;(?&lt;!&nbsp;for&nbsp;negative&nbsp;assertions.&nbsp;For&nbsp;example,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Lookbehind&nbsp;assertions&nbsp;start&nbsp;with&nbsp;(?&#60;=&nbsp;&nbsp;for&nbsp;&nbsp;positive&nbsp;&nbsp;asser-<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tions&nbsp;and&nbsp;(?&#60;!&nbsp;for&nbsp;negative&nbsp;assertions.&nbsp;For&nbsp;example,<br>
 <br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(?&lt;!foo)bar<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(?&#60;!foo)bar<br>
 <br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;does&nbsp;find&nbsp;an&nbsp;occurrence&nbsp;of&nbsp;"bar"&nbsp;that&nbsp;&nbsp;is&nbsp;&nbsp;not&nbsp;&nbsp;preceded&nbsp;&nbsp;by<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"foo".&nbsp;The&nbsp;contents&nbsp;of&nbsp;a&nbsp;lookbehind&nbsp;assertion&nbsp;are&nbsp;restricted<br>
@@ -950,11 +958,11 @@ ASSERTIONS<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;length.&nbsp;&nbsp;However,&nbsp;if&nbsp;there&nbsp;are&nbsp;several&nbsp;alternatives,&nbsp;they&nbsp;do<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;not&nbsp;all&nbsp;have&nbsp;to&nbsp;have&nbsp;the&nbsp;same&nbsp;fixed&nbsp;length.&nbsp;Thus<br>
 <br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(?&lt;=bullock|donkey)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(?&#60;=bullock|donkey)<br>
 <br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is&nbsp;permitted,&nbsp;but<br>
 <br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(?&lt;!dogs?|cats?)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(?&#60;!dogs?|cats?)<br>
 <br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;causes&nbsp;an&nbsp;error&nbsp;at&nbsp;compile&nbsp;time.&nbsp;Branches&nbsp;&nbsp;that&nbsp;&nbsp;match&nbsp;&nbsp;dif-<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ferent&nbsp;length&nbsp;strings&nbsp;are&nbsp;permitted&nbsp;only&nbsp;at&nbsp;the&nbsp;top&nbsp;level&nbsp;of<br>
@@ -962,13 +970,13 @@ ASSERTIONS<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Perl&nbsp;&nbsp;5.005,&nbsp;&nbsp;which&nbsp;&nbsp;requires&nbsp;all&nbsp;branches&nbsp;to&nbsp;match&nbsp;the&nbsp;same<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;length&nbsp;of&nbsp;string.&nbsp;An&nbsp;assertion&nbsp;such&nbsp;as<br>
 <br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(?&lt;=ab(c|de))<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(?&#60;=ab(c|de))<br>
 <br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is&nbsp;not&nbsp;permitted,&nbsp;because&nbsp;its&nbsp;single&nbsp;&nbsp;top-level&nbsp;&nbsp;branch&nbsp;&nbsp;can<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;match&nbsp;two&nbsp;different&nbsp;lengths,&nbsp;but&nbsp;it&nbsp;is&nbsp;acceptable&nbsp;if&nbsp;rewrit-<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ten&nbsp;to&nbsp;use&nbsp;two&nbsp;top-level&nbsp;branches:<br>
 <br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(?&lt;=abc|abde)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(?&#60;=abc|abde)<br>
 <br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;implementation&nbsp;of&nbsp;lookbehind&nbsp;&nbsp;assertions&nbsp;&nbsp;is,&nbsp;&nbsp;for&nbsp;&nbsp;each<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;alternative,&nbsp;&nbsp;to&nbsp;&nbsp;temporarily&nbsp;move&nbsp;the&nbsp;current&nbsp;position&nbsp;back<br>
@@ -982,13 +990,13 @@ ASSERTIONS<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Several&nbsp;assertions&nbsp;(of&nbsp;any&nbsp;sort)&nbsp;may&nbsp;&nbsp;occur&nbsp;&nbsp;in&nbsp;&nbsp;succession.<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;For&nbsp;example,<br>
 <br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(?&lt;=\d{3})(?&lt;!999)foo<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(?&#60;=\d{3})(?&#60;!999)foo<br>
 <br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;matches&nbsp;"foo"&nbsp;preceded&nbsp;by&nbsp;three&nbsp;digits&nbsp;that&nbsp;are&nbsp;&nbsp;not&nbsp;&nbsp;"999".<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Furthermore,&nbsp;&nbsp;assertions&nbsp;&nbsp;can&nbsp;&nbsp;be&nbsp;nested&nbsp;in&nbsp;any&nbsp;combination.<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;For&nbsp;example,<br>
 <br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(?&lt;=(?&lt;!foo)bar)baz<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(?&#60;=(?&#60;!foo)bar)baz<br>
 <br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;matches&nbsp;an&nbsp;occurrence&nbsp;of&nbsp;"baz"&nbsp;that&nbsp;&nbsp;is&nbsp;&nbsp;preceded&nbsp;&nbsp;by&nbsp;&nbsp;"bar"<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;which&nbsp;in&nbsp;turn&nbsp;is&nbsp;not&nbsp;preceded&nbsp;by&nbsp;"foo".<br>
@@ -1030,9 +1038,9 @@ ONCE-ONLY&nbsp;SUBPATTERNS<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;matched,&nbsp;&nbsp;it&nbsp;&nbsp;is&nbsp;&nbsp;not&nbsp;to&nbsp;be&nbsp;re-evaluated&nbsp;in&nbsp;this&nbsp;way,&nbsp;so&nbsp;the<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;matcher&nbsp;would&nbsp;give&nbsp;up&nbsp;immediately&nbsp;on&nbsp;failing&nbsp;to&nbsp;match&nbsp;&nbsp;"foo"<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the&nbsp;&nbsp;first&nbsp;&nbsp;time.&nbsp;&nbsp;The&nbsp;&nbsp;notation&nbsp;&nbsp;is&nbsp;another&nbsp;kind&nbsp;of&nbsp;special<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;parenthesis,&nbsp;starting&nbsp;with&nbsp;(?&gt;&nbsp;as&nbsp;in&nbsp;this&nbsp;example:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;parenthesis,&nbsp;starting&nbsp;with&nbsp;(?&#62;&nbsp;as&nbsp;in&nbsp;this&nbsp;example:<br>
 <br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(?&gt;\d+)bar<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(?&#62;\d+)bar<br>
 <br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This&nbsp;kind&nbsp;of&nbsp;parenthesis&nbsp;"locks&nbsp;up"&nbsp;the&nbsp;&nbsp;part&nbsp;of&nbsp;the&nbsp;pattern<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it&nbsp;&nbsp;contains&nbsp;once&nbsp;it&nbsp;has&nbsp;matched,&nbsp;and&nbsp;a&nbsp;failure&nbsp;further&nbsp;into<br>
@@ -1050,7 +1058,7 @@ ONCE-ONLY&nbsp;SUBPATTERNS<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;imizing&nbsp;repeat&nbsp;that&nbsp;must&nbsp;&nbsp;swallow&nbsp;&nbsp;everything&nbsp;&nbsp;it&nbsp;&nbsp;can.&nbsp;&nbsp;So,<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;while&nbsp;both&nbsp;\d+&nbsp;and&nbsp;\d+?&nbsp;are&nbsp;prepared&nbsp;to&nbsp;adjust&nbsp;the&nbsp;number&nbsp;of<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;digits&nbsp;they&nbsp;match&nbsp;in&nbsp;order&nbsp;to&nbsp;make&nbsp;the&nbsp;rest&nbsp;of&nbsp;&nbsp;the&nbsp;&nbsp;pattern<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;match,&nbsp;(?&gt;\d+)&nbsp;can&nbsp;only&nbsp;match&nbsp;an&nbsp;entire&nbsp;sequence&nbsp;of&nbsp;digits.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;match,&nbsp;(?&#62;\d+)&nbsp;can&nbsp;only&nbsp;match&nbsp;an&nbsp;entire&nbsp;sequence&nbsp;of&nbsp;digits.<br>
 <br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This&nbsp;construction&nbsp;can&nbsp;of&nbsp;course&nbsp;contain&nbsp;arbitrarily&nbsp;&nbsp;compli-<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cated&nbsp;subpatterns,&nbsp;and&nbsp;it&nbsp;can&nbsp;be&nbsp;nested.<br>
@@ -1076,7 +1084,7 @@ ONCE-ONLY&nbsp;SUBPATTERNS<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;right&nbsp;to&nbsp;left,&nbsp;so&nbsp;we&nbsp;are&nbsp;no&nbsp;better&nbsp;off.&nbsp;However,&nbsp;if&nbsp;the&nbsp;pat-<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tern&nbsp;is&nbsp;written&nbsp;as<br>
 <br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^(?&gt;.*)(?&lt;=abcd)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^(?&#62;.*)(?&#60;=abcd)<br>
 <br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;then&nbsp;there&nbsp;can&nbsp;be&nbsp;no&nbsp;backtracking&nbsp;for&nbsp;the&nbsp;.*&nbsp;&nbsp;item;&nbsp;&nbsp;it&nbsp;&nbsp;can<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;match&nbsp;&nbsp;only&nbsp;&nbsp;the&nbsp;&nbsp;entire&nbsp;&nbsp;string.&nbsp;&nbsp;The&nbsp;subsequent&nbsp;lookbehind<br>
@@ -1220,7 +1228,7 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><A
-HREF="ref.info.html"
+HREF="ref.regex.html"
 >Next</A
 ></TD
 ></TR
@@ -1242,7 +1250,7 @@ HREF="ref.pcre.html"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->PHP options &#38; information</TD
+>Regular Expression Functions (POSIX Extended)</TD
 ></TR
 ></TABLE
 ></DIV

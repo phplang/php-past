@@ -4,20 +4,23 @@
 >array_slice</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
-TITLE="Array functions"
+TITLE="Array Functions"
 HREF="ref.array.html"><LINK
 REL="PREVIOUS"
 TITLE="array_shift"
 HREF="function.array-shift.html"><LINK
 REL="NEXT"
 TITLE="array_splice"
-HREF="function.array-splice.html"></HEAD
+HREF="function.array-splice.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,96 +68,102 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.ARRAY-SLICE"
+NAME="function.array-slice"
 >array_slice</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN3767"
+NAME="AEN4048"
 ></A
->array_slice -- Extract a slice of the array</DIV
+><P
+>    (PHP4 )</P
+>array_slice&nbsp;--&nbsp;Extract a slice of the array</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN3770"
+NAME="AEN4051"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->array array_slice</CODE
->(array array, int offset, int
-             [<SPAN
-CLASS="OPTIONAL"
->length</SPAN
->]
-      
-     );<P
+>array <B
+CLASS="function"
+>array_slice</B
+></CODE
+> (array array, int offset [, int
+       length])</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     <B
-CLASS="FUNCTION"
->array_slice()</B
+>&#13;     <B
+CLASS="function"
+>Array_slice()</B
 > returns a sequence of elements
      from the <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >array</I
 ></TT
 > specified by the
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >offset</I
 ></TT
 > and <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >length</I
 ></TT
 >
-     parameters.</P
+     parameters.
+    </P
 ><P
->     If <TT
-CLASS="PARAMETER"
+>&#13;     If <TT
+CLASS="parameter"
 ><I
 >offset</I
 ></TT
 > is positive, the sequence will
      start at that offset in the <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >array</I
 ></TT
 >.  If
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >offset</I
 ></TT
 > is negative, the sequence will
      start that far from the end of the <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >array</I
 ></TT
->.</P
+>.
+    </P
 ><P
->     If <TT
-CLASS="PARAMETER"
+>&#13;     If <TT
+CLASS="parameter"
 ><I
 >length</I
 ></TT
 > is given and is positive, then
      the sequence will have that many elements in it. If
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >length</I
 ></TT
@@ -162,19 +171,20 @@ CLASS="PARAMETER"
      sequence will stop that many elements from the end of the
      array. If it is omitted, then the sequence will have everything
      from <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >offset</I
 ></TT
 > up until the end of the
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >array</I
 ></TT
->.</P
+>.
+    </P
 ><P
->     <TABLE
+>&#13;     <TABLE
 WIDTH="100%"
 BORDER="0"
 CELLPADDING="0"
@@ -183,48 +193,47 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
 >Example 1. <B
-CLASS="FUNCTION"
->array_slice()</B
+CLASS="function"
+>Array_slice()</B
 > examples</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->$input = array("a", "b", "c", "d", "e");
+CLASS="programlisting"
+>&#13;$input = array ("a", "b", "c", "d", "e");
 
-$output = array_slice($input, 2);      // returns "c", "d", and "e"
-$output = array_slice($input, 2, -1);  // returns "c", "d"
-$output = array_slice($input, -2, 1);  // returns "d"
-$output = array_slice($input, 0, 3);   // returns "a", "b", and "c"
+$output = array_slice ($input, 2);      // returns "c", "d", and "e"
+$output = array_slice ($input, 2, -1);  // returns "c", "d"
+$output = array_slice ($input, -2, 1);  // returns "d"
+$output = array_slice ($input, 0, 3);   // returns "a", "b", and "c"
       </PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR
 ></TABLE
-></P
+>
+    </P
 ><P
->     See also <A
+>&#13;     See also <A
 HREF="function.array-splice.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >array_splice()</B
 ></A
 >.
-
-    <DIV
-CLASS="NOTE"
-><BLOCKQUOTE
-CLASS="NOTE"
-><P
-><B
->Note: </B
->      This function was added in PHP 4.0.</P
-></BLOCKQUOTE
-></DIV
-></P
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

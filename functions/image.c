@@ -26,7 +26,7 @@
    | Authors: Rasmus Lerdorf                                              |
    +----------------------------------------------------------------------+
  */
-/* $Id: image.c,v 1.50 2000/01/01 04:31:15 sas Exp $ */
+/* $Id: image.c,v 1.51 2000/05/17 20:01:50 eschmid Exp $ */
 /* 
  * Based on Daniel Schmitt's imageinfo.c which carried the following
  * Copyright notice.
@@ -306,7 +306,7 @@ static struct gfxinfo *php3_handle_jpeg(FILE *fp,pval *info)
 }
 
 /* main function */
-/* {{{ proto array getimagesize(string imagefile[, array info])
+/* {{{ proto array getimagesize(string imagefile [, array info])
    Get the size of an image as 4-element array */
 void php3_getimagesize(INTERNAL_FUNCTION_PARAMETERS)
 {

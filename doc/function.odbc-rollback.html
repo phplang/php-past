@@ -4,20 +4,23 @@
 >odbc_rollback</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
-TITLE="ODBC functions"
+TITLE="Unified ODBC functions"
 HREF="ref.odbc.html"><LINK
 REL="PREVIOUS"
 TITLE="odbc_result_all"
 HREF="function.odbc-result-all.html"><LINK
 REL="NEXT"
 TITLE="odbc_setoption"
-HREF="function.odbc-setoption.html"></HEAD
+HREF="function.odbc-setoption.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,48 +68,58 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.ODBC-ROLLBACK"
+NAME="function.odbc-rollback"
 >odbc_rollback</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN19618"
+NAME="AEN24542"
 ></A
->odbc_rollback -- Rollback a transaction</DIV
+><P
+>    (PHP3 &#62;= 3.0.6, PHP4 )</P
+>odbc_rollback&nbsp;--&nbsp;Rollback a transaction</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN19621"
+NAME="AEN24545"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int odbc_rollback</CODE
->(int connection_id);<P
+>int <B
+CLASS="function"
+>odbc_rollback</B
+></CODE
+> (int connection_id)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Rolls back all pending statements on
+>&#13;     Rolls back all pending statements on
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >connection_id</I
 ></TT
 >.  Returns
      <TT
-CLASS="LITERAL"
+CLASS="literal"
 >true</TT
 > on success, <TT
-CLASS="LITERAL"
+CLASS="literal"
 >false</TT
 > on
-     failure.</P
+     failure.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

@@ -4,7 +4,7 @@
 >msql_free_result</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="msql_fieldlen"
 HREF="function.msql-fieldlen.html"><LINK
 REL="NEXT"
 TITLE="msql_freeresult"
-HREF="function.msql-freeresult.html"></HEAD
+HREF="function.msql-freeresult.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,46 +68,56 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.MSQL-FREE-RESULT"
+NAME="function.msql-free-result"
 >msql_free_result</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN17528"
+NAME="AEN22359"
 ></A
->msql_free_result -- free result memory</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>msql_free_result&nbsp;--&nbsp;Free result memory</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN17531"
+NAME="AEN22362"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int msql_free_result</CODE
->(int query_identifier);<P
+>int <B
+CLASS="function"
+>msql_free_result</B
+></CODE
+> (int query_identifier)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     <B
-CLASS="FUNCTION"
->msql_free_result()</B
+>&#13;     <B
+CLASS="function"
+>Msql_free_result()</B
 > frees the memory associated
      with <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >query_identifier</I
 ></TT
 >.  When PHP completes a
      request, this memory is freed automatically, so you only need to
      call this function when you want to make sure you don't use too
-     much memory while the script is running.</P
+     much memory while the script is running.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

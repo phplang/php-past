@@ -4,7 +4,7 @@
 >Variable variables</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="Variable scope"
 HREF="language.variables.scope.html"><LINK
 REL="NEXT"
 TITLE="Variables from outside PHP"
-HREF="language.variables.external.html"></HEAD
+HREF="language.variables.external.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="sect1"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -64,87 +67,123 @@ HREF="language.variables.external.html"
 ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><DIV
-CLASS="SECT1"
+CLASS="sect1"
 ><H1
-CLASS="SECT1"
+CLASS="sect1"
 ><A
-NAME="LANGUAGE.VARIABLES.VARIABLE"
+NAME="language.variables.variable"
 >Variable variables</A
 ></H1
 ><P
->    Sometimes it is convenient to be able to have variable variable
+>&#13;    Sometimes it is convenient to be able to have variable variable
     names.  That is, a variable name which can be set and used
     dynamically.  A normal variable is set with a statement such as:
    </P
 ><DIV
-CLASS="INFORMALEXAMPLE"
+CLASS="informalexample"
 ><P
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->$a = "hello";
+CLASS="programlisting"
+>&#13;$a = "hello";
     </PRE
+></TD
+></TR
+></TABLE
 ><P
 ></P
 ></DIV
 ><P
->    A variable variable takes the value of a variable and treats that
+>&#13;    A variable variable takes the value of a variable and treats that
     as the name of a variable.  In the above example,
     <I
-CLASS="EMPHASIS"
+CLASS="emphasis"
 >hello</I
 >, can be used as the name of a variable
     by using two dollar signs. i.e.
    </P
 ><DIV
-CLASS="INFORMALEXAMPLE"
+CLASS="informalexample"
 ><P
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->$$a = "world";
+CLASS="programlisting"
+>&#13;$$a = "world";
     </PRE
+></TD
+></TR
+></TABLE
 ><P
 ></P
 ></DIV
 ><P
->    At this point two variables have been defined and stored in the
+>&#13;    At this point two variables have been defined and stored in the
     PHP symbol tree: $a with contents "hello" and $hello with contents
     "world".  Therefore, this statement:
    </P
 ><DIV
-CLASS="INFORMALEXAMPLE"
+CLASS="informalexample"
 ><P
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->echo "$a ${$a}";
+CLASS="programlisting"
+>&#13;echo "$a ${$a}";
     </PRE
+></TD
+></TR
+></TABLE
 ><P
 ></P
 ></DIV
 ><P
->    produces the exact same output as:
+>&#13;    produces the exact same output as:
    </P
 ><DIV
-CLASS="INFORMALEXAMPLE"
+CLASS="informalexample"
 ><P
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->echo "$a $hello";
+CLASS="programlisting"
+>&#13;echo "$a $hello";
     </PRE
+></TD
+></TR
+></TABLE
 ><P
 ></P
 ></DIV
 ><P
->     i.e. they both produce: <I
-CLASS="EMPHASIS"
+>&#13;     i.e. they both produce: <I
+CLASS="emphasis"
 >hello world</I
 >.
    </P
 ><P
->    In order to use variable variables with arrays, you have to
+>&#13;    In order to use variable variables with arrays, you have to
     resolve an ambiguity problem.  That is, if you write $$a[1] then
     the parser needs to know if you meant to use $a[1] as a variable,
     or if you wanted $$a as the variable and then the [1] index from

@@ -27,7 +27,7 @@
    +----------------------------------------------------------------------+
  */
  
-/* $Id: posix.c,v 1.18 2000/01/01 04:31:16 sas Exp $ */
+/* $Id: posix.c,v 1.19 2000/05/31 00:21:02 sas Exp $ */
 
 
 #include "php.h"
@@ -144,7 +144,7 @@ int php3_mshutdown_posix(void){
 
 void php3_info_posix(void)
 {
-    php3_printf("$Revision: 1.18 $\n");
+    php3_printf("$Revision: 1.19 $\n");
 }
 
 /* {{{ proto int posix_kill(int pid, int sig)
@@ -717,10 +717,7 @@ void php3_posix_getgrgid(INTERNAL_FUNCTION_PARAMETERS)
 void php3_posix_getpwnam(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval          *name;
-	char           buffer[10];
 	struct passwd *pw;
-	char         **p;
-	int            count;
 	
     if (ARG_COUNT(ht) != 1 || getParameters(ht, 1, &name)==FAILURE) {
 		WRONG_PARAM_COUNT;
@@ -752,10 +749,7 @@ void php3_posix_getpwnam(INTERNAL_FUNCTION_PARAMETERS)
 void php3_posix_getpwuid(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval          *uid;
-	char           buffer[10];
 	struct passwd *pw;
-	char         **p;
-	int            count;
 	
     if (ARG_COUNT(ht) != 1 || getParameters(ht, 1, &uid)==FAILURE) {
 		WRONG_PARAM_COUNT;

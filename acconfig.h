@@ -110,6 +110,12 @@
 /* Define if you want POST/GET/Cookie track variables by default */
 #define PHP_TRACK_VARS 0
 
+/* Define if PHP to setup it's own SIGCHLD handler */
+#define PHP_SIGCHILD 0
+
+/* Define if you want POST/GET/Cookie track variables by default */
+#define PHP_TRACK_VARS 0
+
 /* Undefine if you want stricter XML/SGML compliance by default */
 /* (this disables "<?expression?>" by default) */
 #define DEFAULT_SHORT_OPEN_TAG 1

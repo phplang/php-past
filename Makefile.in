@@ -24,7 +24,7 @@
 # +----------------------------------------------------------------------+
 
 #
-# $Id: Makefile.in,v 1.360 2000/03/30 04:14:21 sas Exp $
+# $Id: Makefile.in,v 1.361 2000/05/23 19:34:47 hholzgra Exp $
 #
 
 prefix = @prefix@
@@ -99,7 +99,7 @@ FUNCTIONS_SOURCE = functions/adabasd.c functions/aspell.c functions/apache.c fun
 	   functions/dba_dbm.c functions/dba_ndbm.c functions/dba_cdb.c \
 	   functions/mcrypt.c functions/dba_db2.c functions/mhash.c \
        functions/pcre.c functions/posix.c functions/parsedate.c \
-	   functions/lcg.c functions/recode.c
+	   functions/lcg.c functions/recode.c functions/levenshtein.c
 
 FUNCTIONS = $(FUNCTIONS_SOURCE:.c=.o)
 

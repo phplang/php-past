@@ -4,7 +4,7 @@
 >hw_GetObject</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="hw_GetSrcByDestObj"
 HREF="function.hw-getsrcbydestobj.html"><LINK
 REL="NEXT"
 TITLE="hw_GetAndLock"
-HREF="function.hw-getandlock.html"></HEAD
+HREF="function.hw-getandlock.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,36 +68,45 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.HW-GETOBJECT"
+NAME="function.hw-getobject"
 >hw_GetObject</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN10805"
+NAME="AEN12436"
 ></A
->hw_GetObject -- object record</DIV
+><P
+>    (PHP3 &#62;= 3.0.3, PHP4 )</P
+>hw_GetObject&nbsp;--&nbsp;object record</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN10808"
+NAME="AEN12439"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->array hw_getobject</CODE
->(int connection, [int|array] objectID, string query);<P
+>array <B
+CLASS="function"
+>hw_getobject</B
+></CODE
+> (int connection, [int|array] objectID, string query)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Returns the object record for the object with ID
+>&#13;     Returns the object record for the object with ID
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >objectID</I
 ></TT
@@ -103,49 +115,45 @@ CLASS="PARAMETER"
      return an array of object records. In such a case the last
      parameter is also evaluated which is a query string.</P
 ><P
->     The query string has the following syntax:</P
+>&#13;     The query string has the following syntax:</P
 ><P
->     &lt;expr&#62; ::= "(" &lt;expr&#62; ")" |</P
+>&#13;     &#60;expr&#62; ::= "(" &#60;expr&#62; ")" |</P
 ><P
->             "!" &lt;expr&#62; |          /* NOT */</P
+>&#13;             "!" &#60;expr&#62; |          /* NOT */</P
 ><P
->             &lt;expr&#62; "||" &lt;expr&#62; |  /* OR */</P
+>&#13;             &#60;expr&#62; "||" &#60;expr&#62; |  /* OR */</P
 ><P
->             &lt;expr&#62; "&amp;&amp;" &lt;expr&#62; |  /* AND */</P
+>&#13;             &#60;expr&#62; "&#38;&#38;" &#60;expr&#62; |  /* AND */</P
 ><P
->             &lt;attribute&#62; &lt;operator&#62; &lt;value&#62;</P
+>&#13;             &#60;attribute&#62; &#60;operator&#62; &#60;value&#62;</P
 ><P
->&#13;  &lt;attribute&#62; ::= /* any attribute name (Title, Author, DocumentType ...) */</P
+>&#13;
+  &#60;attribute&#62; ::= /* any attribute name (Title, Author, DocumentType ...) */</P
 ><P
->&#13;  &lt;operator&#62; ::= "=" |    /* equal */</P
+>&#13;
+  &#60;operator&#62; ::= "=" |    /* equal */</P
 ><P
->                 "&lt;" |    /* less than (string compare) */</P
+>&#13;                 "&#60;" |    /* less than (string compare) */</P
 ><P
->                 "&#62;" |    /* greater than (string compare) */</P
+>&#13;                 "&#62;" |    /* greater than (string compare) */</P
 ><P
->                 "~"      /* regular expression matching */</P
+>&#13;                 "~"      /* regular expression matching */</P
 ><P
 ></P
 ><P
->     The query allows to further select certain objects from the list
+>&#13;     The query allows to further select certain objects from the list
      of given objects. Unlike the other
      query functions, this query may use not indexed attributes. How many
      object records are returned depends on the query and if access to
      the object is allowed.</P
 ><P
->     See also <A
-HREF="function.hw-getandlock.html"
-><B
-CLASS="FUNCTION"
+>&#13;     See also <B
+CLASS="function"
 >hw_GetAndLock()</B
-></A
 >,
-              <A
-HREF="function.hw-getobjectbyquery.html"
-><B
-CLASS="FUNCTION"
+              <B
+CLASS="function"
 >hw_GetObjectByQuery()</B
-></A
 >.</P
 ></DIV
 ><DIV

@@ -4,7 +4,7 @@
 >mcal_list_alarms</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="mcal_snooze"
 HREF="function.mcal-snooze.html"><LINK
 REL="NEXT"
 TITLE="mcal_event_init"
-HREF="function.mcal-event-init.html"></HEAD
+HREF="function.mcal-event-init.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,66 +68,52 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.MCAL-LIST-ALARMS"
+NAME="function.mcal-list-alarms"
 >mcal_list_alarms</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN15805"
+NAME="AEN19152"
 ></A
->mcal_list_alarms --      Return a list of events that has an alarm triggered at the given
+><P
+>    (PHP3 &#62;= 3.0.13, PHP4 &#62;= 4.0b4)</P
+>mcal_list_alarms&nbsp;--&nbsp;
+     Return a list of events that has an alarm triggered at the given
      datetime
     </DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN15808"
+NAME="AEN19155"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->array mcal_list_events</CODE
->(int mcal_stream, int 
-      [<SPAN
-CLASS="OPTIONAL"
->begin_year</SPAN
->]
-     , int 
-      [<SPAN
-CLASS="OPTIONAL"
->begin_month</SPAN
->]
-     , int 
-      [<SPAN
-CLASS="OPTIONAL"
->begin_day</SPAN
->]
-     , int 
-      [<SPAN
-CLASS="OPTIONAL"
->end_year</SPAN
->]
-     , int 
-      [<SPAN
-CLASS="OPTIONAL"
->end_month</SPAN
->]
-     , int 
-      [<SPAN
-CLASS="OPTIONAL"
->end_day</SPAN
->]
-     );<P
+>array <B
+CLASS="function"
+>mcal_list_events</B
+></CODE
+> (int mcal_stream [, int 
+       begin_year [, int 
+       begin_month [, int 
+       begin_day [, int 
+       end_year [, int 
+       end_month [, int 
+       end_day]]]]]])</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Returns an array of event ID's that has an alarm going off
+>&#13;     Returns an array of event ID's that has an alarm going off
      between the start and end dates, or if just a stream is given,
      uses the start and end dates in the global event structure.</P
 ><P
@@ -132,7 +121,7 @@ CLASS="OPTIONAL"
      <A
 HREF="function.mcal-list-events.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >mcal_list_events()</B
 ></A
 > function takes in an

@@ -4,7 +4,7 @@
 >Operators</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="Expressions"
 HREF="language.expressions.html"><LINK
 REL="NEXT"
 TITLE="Assignment Operators"
-HREF="language.operators.assignment.html"></HEAD
+HREF="language.operators.assignment.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="chapter"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -64,10 +67,10 @@ HREF="language.operators.assignment.html"
 ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><DIV
-CLASS="CHAPTER"
+CLASS="chapter"
 ><H1
 ><A
-NAME="LANGUAGE.OPERATORS"
+NAME="language.operators"
 >Chapter 10. Operators</A
 ></H1
 ><DIV
@@ -79,7 +82,7 @@ CLASS="TOC"
 ></DT
 ><DT
 ><A
-HREF="language.operators.html#LANGUAGE.OPERATORS.ARITHMETIC"
+HREF="language.operators.html#language.operators.arithmetic"
 >Arithmetic Operators</A
 ></DT
 ><DT
@@ -96,6 +99,11 @@ HREF="language.operators.bitwise.html"
 ><A
 HREF="language.operators.comparison.html"
 >Comparison Operators</A
+></DT
+><DT
+><A
+HREF="language.operators.errorcontrol.html"
+>Error Control Operators</A
 ></DT
 ><DT
 ><A
@@ -125,21 +133,21 @@ HREF="language.operators.string.html"
 ></DL
 ></DIV
 ><P
->   </P
+>&#13;  </P
 ><DIV
-CLASS="SECT1"
+CLASS="sect1"
 ><H1
-CLASS="SECT1"
+CLASS="sect1"
 ><A
-NAME="LANGUAGE.OPERATORS.ARITHMETIC"
+NAME="language.operators.arithmetic"
 >Arithmetic Operators</A
 ></H1
 ><P
->     Remember basic arithmetic from school? These work just
-     like those.
-    </P
+>&#13;    Remember basic arithmetic from school? These work just
+    like those.
+   </P
 ><DIV
-CLASS="TABLE"
+CLASS="table"
 ><P
 ><B
 >Table 10-1. Arithmetic Operators</B
@@ -147,92 +155,102 @@ CLASS="TABLE"
 ><TABLE
 BORDER="1"
 CLASS="CALSTABLE"
+><THEAD
 ><TR
 ><TH
 ALIGN="LEFT"
-VALIGN="TOP"
->example</TH
+VALIGN="MIDDLE"
+>Example</TH
 ><TH
 ALIGN="LEFT"
-VALIGN="TOP"
->name</TH
+VALIGN="MIDDLE"
+>Name</TH
 ><TH
 ALIGN="LEFT"
-VALIGN="TOP"
->result</TH
+VALIGN="MIDDLE"
+>Result</TH
 ></TR
+></THEAD
+><TBODY
 ><TR
 ><TD
 ALIGN="LEFT"
-VALIGN="TOP"
+VALIGN="MIDDLE"
 >$a + $b</TD
 ><TD
 ALIGN="LEFT"
-VALIGN="TOP"
+VALIGN="MIDDLE"
 >Addition</TD
 ><TD
 ALIGN="LEFT"
-VALIGN="TOP"
+VALIGN="MIDDLE"
 >Sum of $a and $b.</TD
 ></TR
 ><TR
 ><TD
 ALIGN="LEFT"
-VALIGN="TOP"
+VALIGN="MIDDLE"
 >$a - $b</TD
 ><TD
 ALIGN="LEFT"
-VALIGN="TOP"
+VALIGN="MIDDLE"
 >Subtraction</TD
 ><TD
 ALIGN="LEFT"
-VALIGN="TOP"
+VALIGN="MIDDLE"
 >Difference of $a and $b.</TD
 ></TR
 ><TR
 ><TD
 ALIGN="LEFT"
-VALIGN="TOP"
+VALIGN="MIDDLE"
 >$a * $b</TD
 ><TD
 ALIGN="LEFT"
-VALIGN="TOP"
+VALIGN="MIDDLE"
 >Multiplication</TD
 ><TD
 ALIGN="LEFT"
-VALIGN="TOP"
+VALIGN="MIDDLE"
 >Product of $a and $b.</TD
 ></TR
 ><TR
 ><TD
 ALIGN="LEFT"
-VALIGN="TOP"
+VALIGN="MIDDLE"
 >$a / $b</TD
 ><TD
 ALIGN="LEFT"
-VALIGN="TOP"
+VALIGN="MIDDLE"
 >Division</TD
 ><TD
 ALIGN="LEFT"
-VALIGN="TOP"
+VALIGN="MIDDLE"
 >Quotient of $a and $b.</TD
 ></TR
 ><TR
 ><TD
 ALIGN="LEFT"
-VALIGN="TOP"
+VALIGN="MIDDLE"
 >$a % $b</TD
 ><TD
 ALIGN="LEFT"
-VALIGN="TOP"
+VALIGN="MIDDLE"
 >Modulus</TD
 ><TD
 ALIGN="LEFT"
-VALIGN="TOP"
+VALIGN="MIDDLE"
 >Remainder of $a divided by $b.</TD
 ></TR
+></TBODY
 ></TABLE
 ></DIV
+><P
+>&#13;    The division operator ("/") returns an integer value (the result
+    of an integer division) if the two operands are integers (or
+    strings that get converted to integers). If either operand is a
+    floating-point value, floating-point division is performed.
+   </P
 ></DIV
 ></DIV
 ><DIV

@@ -4,7 +4,7 @@
 >OCIFetchStatement</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="OCIFetchInto"
 HREF="function.ocifetchinto.html"><LINK
 REL="NEXT"
 TITLE="OCIColumnIsNULL"
-HREF="function.ocicolumnisnull.html"></HEAD
+HREF="function.ocicolumnisnull.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,46 +68,49 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.OCIFETCHSTATEMENT"
+NAME="function.ocifetchstatement"
 >OCIFetchStatement</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN20304"
+NAME="AEN25966"
 ></A
->OCIFetchStatement -- Fetch all rows of result data into an array.</DIV
+><P
+>    (PHP3 &#62;= 3.0.8, PHP4 )</P
+>OCIFetchStatement&nbsp;--&nbsp;Fetch all rows of result data into an array.</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN20307"
+NAME="AEN25969"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int OCIFetchStatement</CODE
->(int stmt, array &#38;variable);<P
+>int <B
+CLASS="function"
+>OCIFetchStatement</B
+></CODE
+> (int stmt, array &#38;variable)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     <A
-HREF="function.ocifetchstatement.html"
-><B
-CLASS="FUNCTION"
+>&#13;     <B
+CLASS="function"
 >OCIFetchStatement()</B
-></A
 > fetches all the rows from a 
-     result into a user-defined array. <A
-HREF="function.ocifetchstatement.html"
-><B
-CLASS="FUNCTION"
+     result into a user-defined array. <B
+CLASS="function"
 >OCIFetchStatement()</B
-></A
 > 
      returns the number of rows fetched. 
     </P
@@ -117,14 +123,20 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
 >Example 1. OCIFetchStatement</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->&lt;?php
+CLASS="programlisting"
+>&#13;&#60;?php
 /* OCIFetchStatement example mbritton@verinet.com (990624) */
 
 $conn = OCILogon("scott","tiger");
@@ -135,32 +147,35 @@ OCIExecute($stmt);
 
 $nrows = OCIFetchStatement($stmt,$results);
 if ( $nrows &#62; 0 ) {
-   print "&lt;TABLE BORDER=\"1\"&#62;\n";
-   print "&lt;TR&#62;\n";
+   print "&#60;TABLE BORDER=\"1\"&#62;\n";
+   print "&#60;TR&#62;\n";
    while ( list( $key, $val ) = each( $results ) ) {
-      print "&lt;TH&#62;$key&lt;/TH&#62;\n";
+      print "&#60;TH&#62;$key&#60;/TH&#62;\n";
    }
-   print "&lt;/TR&#62;\n";
+   print "&#60;/TR&#62;\n";
    
-   for ( $i = 0; $i &lt; $nrows; $i++ ) {
+   for ( $i = 0; $i &#60; $nrows; $i++ ) {
       reset($results);
-      print "&lt;TR&#62;\n";
+      print "&#60;TR&#62;\n";
       while ( $column = each($results) ) {   
          $data = $column['value'];
-         print "&lt;TD&#62;$data[$i]&lt;/TD&#62;\n";
+         print "&#60;TD&#62;$data[$i]&#60;/TD&#62;\n";
       }
-      print "&lt;/TR&#62;\n";
+      print "&#60;/TR&#62;\n";
    }
-   print "&lt;/TABLE&#62;\n";
+   print "&#60;/TABLE&#62;\n";
 } else {
-   echo "No data found&lt;BR&#62;\n";
+   echo "No data found&#60;BR&#62;\n";
 }      
-print "$nrows Records Selected&lt;BR&#62;\n";
+print "$nrows Records Selected&#60;BR&#62;\n";
  
 OCIFreeStatement($stmt);
 OCILogoff($conn);
 
 ?&#62;</PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR

@@ -4,7 +4,7 @@
 >do..while</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="while"
 HREF="control-structures.while.html"><LINK
 REL="NEXT"
 TITLE="for"
-HREF="control-structures.for.html"></HEAD
+HREF="control-structures.for.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="sect1"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -64,121 +67,145 @@ HREF="control-structures.for.html"
 ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><DIV
-CLASS="SECT1"
+CLASS="sect1"
 ><H1
-CLASS="SECT1"
+CLASS="sect1"
 ><A
-NAME="CONTROL-STRUCTURES.DO.WHILE"
+NAME="control-structures.do.while"
 ><TT
-CLASS="LITERAL"
+CLASS="literal"
 >do..while</TT
 ></A
 ></H1
 ><P
->     <TT
-CLASS="LITERAL"
+>&#13;    <TT
+CLASS="literal"
 >do..while</TT
 > loops are very similar to
-     <TT
-CLASS="LITERAL"
+    <TT
+CLASS="literal"
 >while</TT
 > loops, except the truth expression is
-     checked at the end of each iteration instead of in the beginning.
-     The main difference from regular <TT
-CLASS="LITERAL"
+    checked at the end of each iteration instead of in the beginning.
+    The main difference from regular <TT
+CLASS="literal"
 >while</TT
-> loops
-     is that the first iteration of a <TT
-CLASS="LITERAL"
+> loops is
+    that the first iteration of a <TT
+CLASS="literal"
 >do..while</TT
->
-     loop is guarenteed to run (the truth expression is only checked
-     at the end of the iteration), whereas it's may not necessarily run
-     with a regular <TT
-CLASS="LITERAL"
+> loop is
+    guarenteed to run (the truth expression is only checked at the end
+    of the iteration), whereas it's may not necessarily run with a
+    regular <TT
+CLASS="literal"
 >while</TT
-> loop (the truth expression
-     is checked at the beginning of each iteration, if it evaluates
-     to <TT
-CLASS="LITERAL"
+> loop (the truth expression is
+    checked at the beginning of each iteration, if it evaluates to
+    <TT
+CLASS="literal"
 >FALSE</TT
 > right from the beginning, the loop
-     execution would end immediately).</P
+    execution would end immediately).
+   </P
 ><P
->     There is just one syntax for <TT
-CLASS="LITERAL"
+>&#13;    There is just one syntax for <TT
+CLASS="literal"
 >do..while</TT
 > loops:
  
-     <DIV
-CLASS="INFORMALEXAMPLE"
+    <DIV
+CLASS="informalexample"
 ><P
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
-> $i = 0;
- do {
-     print $i;
- } while ($i&#62;0);
-      </PRE
+CLASS="programlisting"
+>&#13;$i = 0;
+do {
+   print $i;
+} while ($i&#62;0);
+     </PRE
+></TD
+></TR
+></TABLE
 ><P
 ></P
 ></DIV
-></P
+>
+   </P
 ><P
->     The above loop would run one time exactly, since after the first
+>&#13;     The above loop would run one time exactly, since after the first
      iteration, when truth expression is checked, it evaluates to
      <TT
-CLASS="LITERAL"
+CLASS="literal"
 >FALSE</TT
 > ($i is not bigger than 0) and the loop
-     execution ends.</P
+     execution ends.
+   </P
 ><P
->     Advanced C users may be familiar with a different usage of
-     the <TT
-CLASS="LITERAL"
+>&#13;    Advanced C users may be familiar with a different usage of the
+    <TT
+CLASS="literal"
 >do..while</TT
-> loop, to allow stopping
-     execution in the middle of code blocks, by encapsulating
-     them with <TT
-CLASS="LITERAL"
+> loop, to allow stopping execution in
+    the middle of code blocks, by encapsulating them with
+    <TT
+CLASS="literal"
 >do..while</TT
 >(0), and using the <A
 HREF="control-structures.break.html"
 ><TT
-CLASS="LITERAL"
+CLASS="literal"
 >break</TT
 ></A
-> statement.
-     The following code fragment demonstrates this:
- 
-     <DIV
-CLASS="INFORMALEXAMPLE"
+>
+    statement.  The following code fragment demonstrates this:
+    <DIV
+CLASS="informalexample"
 ><P
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
-> do {
-     if ($i &#60; 5) {
-         print "i is not big enough";
-         break;
-     }
-     $i *= $factor;
-     if ($i &#60; $minimum_limit) {
-         break;
-     }
-     print "i is ok";
+CLASS="programlisting"
+>&#13;do {
+    if ($i &#60; 5) {
+        print "i is not big enough";
+        break;
+    }
+    $i *= $factor;
+    if ($i &#60; $minimum_limit) {
+        break;
+    }
+    print "i is ok";
+
      ...process i...
- } while(0);
-      </PRE
+
+} while(0);
+     </PRE
+></TD
+></TR
+></TABLE
 ><P
 ></P
 ></DIV
-></P
+>
+   </P
 ><P
->     Don't worry if you don't understand this right away or at all.
-     You can code scripts and even powerful scripts without using this
-     `feature'.</P
+>&#13;    Don't worry if you don't understand this right away or at all.
+    You can code scripts and even powerful scripts without using this
+    `feature'.
+   </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -221,7 +248,7 @@ WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
 ><TT
-CLASS="LITERAL"
+CLASS="literal"
 >while</TT
 ></TD
 ><TD
@@ -237,7 +264,7 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><TT
-CLASS="LITERAL"
+CLASS="literal"
 >for</TT
 ></TD
 ></TR

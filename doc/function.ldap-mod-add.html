@@ -4,7 +4,7 @@
 >ldap_mod_add</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -12,12 +12,15 @@ REL="UP"
 TITLE="LDAP functions"
 HREF="ref.ldap.html"><LINK
 REL="PREVIOUS"
-TITLE="ldap_add"
-HREF="function.ldap-add.html"><LINK
+TITLE="ldap_modify"
+HREF="function.ldap-modify.html"><LINK
 REL="NEXT"
 TITLE="ldap_mod_del"
-HREF="function.ldap-mod-del.html"></HEAD
+HREF="function.ldap-mod-del.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -42,7 +45,7 @@ WIDTH="10%"
 ALIGN="left"
 VALIGN="bottom"
 ><A
-HREF="function.ldap-add.html"
+HREF="function.ldap-modify.html"
 >Prev</A
 ></TD
 ><TD
@@ -65,42 +68,51 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.LDAP-MOD-ADD"
+NAME="function.ldap-mod-add"
 >ldap_mod_add</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN14414"
+NAME="AEN17900"
 ></A
->ldap_mod_add -- Add attribute values to current attributes</DIV
+><P
+>    (PHP3 &#62;= 3.0.8, PHP4 )</P
+>ldap_mod_add&nbsp;--&nbsp;Add attribute values to current attributes</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN14417"
+NAME="AEN17903"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int ldap_mod_add</CODE
->(int link_identifier, string dn, array entry);<P
+>int <B
+CLASS="function"
+>ldap_mod_add</B
+></CODE
+> (int link_identifier, string dn, array entry)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     returns true on success and false on error.</P
+>&#13;     returns true on success and false on error.</P
 ><P
->	 This function adds attribute(s) to the specified dn.  It
+>&#13;	 This function adds attribute(s) to the specified dn.  It
 	 performs the modification at the attribute level as opposed to the 
 	 object level.  Object-level additions are done by the 
 	<A
 HREF="function.ldap-add.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >ldap_add()</B
 ></A
 > function.</P
@@ -120,7 +132,7 @@ WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
 ><A
-HREF="function.ldap-add.html"
+HREF="function.ldap-modify.html"
 >Prev</A
 ></TD
 ><TD
@@ -145,7 +157,7 @@ HREF="function.ldap-mod-del.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->ldap_add</TD
+>ldap_modify</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"

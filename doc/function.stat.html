@@ -4,7 +4,7 @@
 >stat</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="rmdir"
 HREF="function.rmdir.html"><LINK
 REL="NEXT"
 TITLE="lstat"
-HREF="function.lstat.html"></HEAD
+HREF="function.lstat.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,36 +68,45 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.STAT"
+NAME="function.stat"
 >stat</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN9335"
+NAME="AEN10716"
 ></A
->stat -- give information about a file</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>stat&nbsp;--&nbsp;Gives information about a file</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN9338"
+NAME="AEN10719"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->array stat</CODE
->(string filename);<P
+>array <B
+CLASS="function"
+>stat</B
+></CODE
+> (string filename)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Gathers the statistics of the file named by filename.</P
+>&#13;     Gathers the statistics of the file named by filename.</P
 ><P
->     Returns an array with the statistics of the file with the
+>&#13;     Returns an array with the statistics of the file with the
      following elements:
      <P
 ></P
@@ -157,14 +169,15 @@ TYPE="1"
      * - only valid on systems supporting the st_blksize type--other
      systems (i.e. Windows) return -1</P
 ><P
->     The results of this function are cached. See
+>&#13;     The results of this function are cached. See
      <A
 HREF="function.clearstatcache.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >clearstatcache()</B
 ></A
-> for more details.</P
+> for more details.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

@@ -4,20 +4,23 @@
 >fsockopen</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
-TITLE="Network functions"
+TITLE="Network Functions"
 HREF="ref.network.html"><LINK
 REL="PREVIOUS"
 TITLE="debugger_on"
 HREF="function.debugger-on.html"><LINK
 REL="NEXT"
 TITLE="gethostbyaddr"
-HREF="function.gethostbyaddr.html"></HEAD
+HREF="function.gethostbyaddr.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,145 +68,231 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.FSOCKOPEN"
+NAME="function.fsockopen"
 >fsockopen</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN18629"
+NAME="AEN23557"
 ></A
->fsockopen -- Open Internet or Unix domain socket connection.</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>fsockopen&nbsp;--&nbsp;
+     Open Internet or Unix domain socket connection
+    </DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN18632"
+NAME="AEN23560"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int fsockopen</CODE
->(string hostname, int port, int [<SPAN
-CLASS="OPTIONAL"
->errno</SPAN
->], string [<SPAN
-CLASS="OPTIONAL"
->errstr</SPAN
->], double
-     [<SPAN
-CLASS="OPTIONAL"
->timeout</SPAN
->]);<P
+>int <B
+CLASS="function"
+>fsockopen</B
+></CODE
+> (string [udp://]hostname, int port [, int 
+       errno [, string 
+       errstr [, double
+       timeout]]])</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Initiates a stream connection in the Internet (AF_INET) or Unix (AF_UNIX)
-     domain. For the Internet domain, it will open a TCP socket connection to
-     <TT
-CLASS="PARAMETER"
+>&#13;	 Initiates a stream connection in the Internet (AF_INET, using TCP
+	 or UDP) or Unix (AF_UNIX) domain. For the Internet domain, it
+	 will open a TCP socket connection to
+	 <TT
+CLASS="parameter"
 ><I
 >hostname</I
 ></TT
-> on port <TT
-CLASS="PARAMETER"
+> on port
+	 <TT
+CLASS="parameter"
 ><I
 >port</I
 ></TT
->. For
-     the Unix domain, <TT
-CLASS="PARAMETER"
+>.  <TT
+CLASS="parameter"
 ><I
 >hostname</I
 ></TT
-> will be used as the path
-     to the socket, <TT
-CLASS="PARAMETER"
+> may
+	 in this case be either a fully qualified domain name or an IP
+	 address. For UDP connections, you need to explicitely specify the
+	 the protocol: <TT
+CLASS="parameter"
+><I
+>udp://hostname</I
+></TT
+>.  For the
+	 Unix domain, <TT
+CLASS="parameter"
+><I
+>hostname</I
+></TT
+> will be used as the
+	 path to the socket, <TT
+CLASS="parameter"
 ><I
 >port</I
 ></TT
-> must be set to 0 in this case.
-     The optional <TT
-CLASS="PARAMETER"
+> must be set to 0
+	 in this case.  The optional <TT
+CLASS="parameter"
 ><I
 >timeout</I
 ></TT
-> can be used to set a timeout
-     in seconds for the connect system call.</P
+> can be
+	 used to set a timeout in seconds for the connect system call.
+    </P
 ><P
->     <B
-CLASS="FUNCTION"
->fsockopen()</B
-> returns a file pointer which may be used
-     together with the other file functions (such as
+>&#13;     <B
+CLASS="function"
+>Fsockopen()</B
+> returns a file pointer which may
+     be used together with the other file functions (such as
      <A
 HREF="function.fgets.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >fgets()</B
 ></A
 >, <A
 HREF="function.fgetss.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >fgetss()</B
 ></A
 >,
      <A
 HREF="function.fputs.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >fputs()</B
 ></A
 >, <A
 HREF="function.fclose.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >fclose()</B
 ></A
->,
+>, and
      <A
 HREF="function.feof.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >feof()</B
 ></A
->).</P
+>).
+    </P
 ><P
->     If the call fails, it will return false and if the optional
+>&#13;     If the call fails, it will return false and if the optional
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >errno</I
 ></TT
 > and <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >errstr</I
 ></TT
-> arguments
-     are present they will be set to indicate the actual system level error
-     that occurred on the system-level connect() call. If the returned errno is
-     0 and the function returned false, it is an indication that the error
-     occurred before the connect() call. This is most likely due to a problem
-     initializing the socket. Note that the errno and errstr arguments must be
-     passed by reference.</P
+>
+     arguments are present they will be set to indicate the actual
+     system level error that occurred on the system-level
+     <TT
+CLASS="literal"
+>connect()</TT
+> call. If the returned errno is 0 and
+     the function returned false, it is an indication that the error
+     occurred before the <TT
+CLASS="literal"
+>connect()</TT
+> call. This is
+     most likely due to a problem initializing the socket. Note that
+     the <TT
+CLASS="parameter"
+><I
+>errno</I
+></TT
+> and
+     <TT
+CLASS="parameter"
+><I
+>errstr</I
+></TT
+> arguments must be passed by
+     reference.
+    </P
 ><P
->     Depending on the environment, the Unix domain or the optional connect
-     timeout may not be available.</P
+>&#13;     Depending on the environment, the Unix domain or the optional
+     connect timeout may not be available.
+    </P
 ><P
->     The socket will by default be opened in blocking mode.  You can switch it
-     to non-blocking mode by using <A
-HREF="function.set-socket-blocking.html"
-><B
-CLASS="FUNCTION"
->set_socket_blocking()</B
-></A
+>&#13;     The socket will by default be opened in blocking mode.  You can
+     switch it to non-blocking mode by using
+     <B
+CLASS="function"
+>socket_set_blocking()</B
 >.
+     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><P
+><B
+>Example 1. <B
+CLASS="function"
+>Fsockopen()</B
+> Example</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;$fp = fsockopen ("www.php.net", 80, &#38;$errno, &#38;$errstr, 30);
+if (!$fp) {
+    echo "$errstr ($errno)&#60;br&#62;\n";
+} else {
+    fputs ($fp, "GET / HTTP/1.0\r\n\r\n");
+    while (!feof($fp)) {
+        echo fgets ($fp,128);
+    }
+    fclose ($fp);
+}
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+	 The example below shows how to retrieve the day and time
+	 from the UDP service "daytime" (port 13) in your own machine.
 	 <TABLE
 WIDTH="100%"
 BORDER="0"
@@ -213,37 +302,89 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
->Example 1. fsockopen example</B
+>Example 2. Using UDP connection</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->$fp = fsockopen("www.php.net", 80, &#38;$errno, &#38;$errstr, 30);
-if(!$fp) {
-	echo "$errstr ($errno)&lt;br&gt;\n";
+CLASS="programlisting"
+>&#13;&#60;?php
+$fp = fsockopen("udp://127.0.0.1", 13, &#38;$errno, &#38;$errstr);
+if (!$fp) {
+    echo "ERROR: $errno - $errstr&#60;br&#62;\n";
 } else {
-	fputs($fp,"GET / HTTP/1.0\n\n");
-	while(!feof($fp)) {
-		echo fgets($fp,128);
-	}
-	fclose($fp);
+    fwrite($fp,"\n");
+    echo fread($fp, 26);
+    fclose($fp);
 }
-	  </PRE
+?&#62;
+	 </PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR
 ></TABLE
 >
-
      See also: <A
 HREF="function.pfsockopen.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >pfsockopen()</B
 ></A
-></P
+>, 
+     <B
+CLASS="function"
+>socket_set_blocking()</B
+>,
+     <A
+HREF="function.socket-set-timeout.html"
+><B
+CLASS="function"
+>socket_set_timeout()</B
+></A
+>, <A
+HREF="function.fgets.html"
+><B
+CLASS="function"
+>fgets()</B
+></A
+>,
+     <A
+HREF="function.fgetss.html"
+><B
+CLASS="function"
+>fgetss()</B
+></A
+>, <A
+HREF="function.fputs.html"
+><B
+CLASS="function"
+>fputs()</B
+></A
+>,
+     <A
+HREF="function.fclose.html"
+><B
+CLASS="function"
+>fclose()</B
+></A
+>, and <A
+HREF="function.feof.html"
+><B
+CLASS="function"
+>feof()</B
+></A
+>).
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

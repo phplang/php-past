@@ -4,20 +4,23 @@
 >imap_rfc822_write_address</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
-TITLE="IMAP functions"
+TITLE="IMAP, POP3 and NNTP functions"
 HREF="ref.imap.html"><LINK
 REL="PREVIOUS"
 TITLE="imap_mailboxmsginfo"
 HREF="function.imap-mailboxmsginfo.html"><LINK
 REL="NEXT"
 TITLE="imap_rfc822_parse_adrlist"
-HREF="function.imap-rfc822-parse-adrlist.html"></HEAD
+HREF="function.imap-rfc822-parse-adrlist.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,36 +68,92 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.IMAP-RFC822-WRITE-ADDRESS"
+NAME="function.imap-rfc822-write-address"
 >imap_rfc822_write_address</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN13186"
+NAME="AEN15779"
 ></A
->imap_rfc822_write_address -- Returns a properly formatted email address given the
-    mailbox, host, and personal info.</DIV
+><P
+>    (PHP3 &#62;= 3.0.2, PHP4 )</P
+>imap_rfc822_write_address&nbsp;--&nbsp;
+     Returns a properly formatted email address given the mailbox,
+     host, and personal info.
+    </DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN13189"
+NAME="AEN15782"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->string imap_rfc822_write_address</CODE
->(string mailbox, string host, string personal);<P
+>string 
+       <B
+CLASS="function"
+>imap_rfc822_write_address</B
+>
+      </CODE
+> (string mailbox, string host, string personal)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Returns a properly formatted email address given the mailbox,
-     host, and personal info.</P
+>&#13;     Returns a properly formatted email address as defined in 
+     <A
+HREF="http://www.faqs.org/rfcs/rfc822.html"
+TARGET="_top"
+>RFC822</A
+>
+     given the mailbox, host, and personal info.
+    </P
+><P
+>&#13;     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><P
+><B
+>Example 1. <B
+CLASS="function"
+>imap_rfc822_write_address()</B
+> example</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;print imap_rfc822_write_address("hartmut","cvs.php.net","Hartmut Holzgraefe")."\n";      
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

@@ -4,7 +4,7 @@
 >filectime</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="fileatime"
 HREF="function.fileatime.html"><LINK
 REL="NEXT"
 TITLE="filegroup"
-HREF="function.filegroup.html"></HEAD
+HREF="function.filegroup.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,44 +68,82 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.FILECTIME"
+NAME="function.filectime"
 >filectime</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN8654"
+NAME="AEN9862"
 ></A
->filectime -- get inode change time of file</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>filectime&nbsp;--&nbsp;Gets inode change time of file</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN8657"
+NAME="AEN9865"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int filectime</CODE
->(string filename);<P
+>int <B
+CLASS="function"
+>filectime</B
+></CODE
+> (string filename)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Returns the time the file was last changed, or false in case of
-     an error.</P
+>&#13;     Returns the time the file was last changed, or false in case of
+     an error. The time is returned as a Unix timestamp.
+    </P
 ><P
->     The results of this function are cached. See
+>&#13;     The results of this function are cached. See
      <A
 HREF="function.clearstatcache.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >clearstatcache()</B
 ></A
-> for more details.</P
+> for more details.
+    </P
+><P
+>Note: In most Unix filesystem, a file is considered
+     changed, when it's Inode data is changed, that is, when
+     the permissions, the owner, the group or other metadata
+     from the Inode is written to. See also 
+     <A
+HREF="function.filemtime.html"
+><B
+CLASS="function"
+>filemtime()</B
+></A
+> (this is what you want to use
+     when you want to create "Last Modified" footers on web pages) and 
+     <A
+HREF="function.fileatime.html"
+><B
+CLASS="function"
+>fileatime()</B
+></A
+>.
+    </P
+><P
+>Note: In some Unix texts the ctime of a file is being
+     referred to as the creation time of the file. This is wrong.
+     There is no creation time for Unix files in most Unix 
+     filesystems.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

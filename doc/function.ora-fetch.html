@@ -4,7 +4,7 @@
 >Ora_Fetch</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -15,9 +15,12 @@ REL="PREVIOUS"
 TITLE="Ora_Exec"
 HREF="function.ora-exec.html"><LINK
 REL="NEXT"
-TITLE="Ora_GetColumn"
-HREF="function.ora-getcolumn.html"></HEAD
+TITLE="Ora_Fetch_Into"
+HREF="function.ora-fetch-into.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -55,7 +58,7 @@ WIDTH="10%"
 ALIGN="right"
 VALIGN="bottom"
 ><A
-HREF="function.ora-getcolumn.html"
+HREF="function.ora-fetch-into.html"
 >Next</A
 ></TD
 ></TR
@@ -65,57 +68,89 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.ORA-FETCH"
+NAME="function.ora-fetch"
 >Ora_Fetch</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN19862"
+NAME="AEN25416"
 ></A
->Ora_Fetch -- fetch a row of data from a cursor</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>Ora_Fetch&nbsp;--&nbsp;fetch a row of data from a cursor</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN19865"
+NAME="AEN25419"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int ora_fetch</CODE
->(int cursor);<P
+>int <B
+CLASS="function"
+>ora_fetch</B
+></CODE
+> (int cursor)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Returns true (a row was fetched) or false (no more rows, or an
-     error occured).  If an error occured, details can be retrieved
+>&#13;     Returns true (a row was fetched) or false (no more rows, or an
+     error occured). If an error occured, details can be retrieved
      using the <A
 HREF="function.ora-error.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >ora_error()</B
 ></A
 > and
      <A
 HREF="function.ora-errorcode.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >ora_errorcode()</B
 ></A
-> functions.  If there was no
+> functions. If there was no
      error, <A
 HREF="function.ora-errorcode.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >ora_errorcode()</B
 ></A
 > will return 0.
-     Retrieves a row of data from the specified cursor.</P
+     Retrieves a row of data from the specified cursor.
+    </P
+><P
+>&#13;     See also <A
+HREF="function.ora-parse.html"
+><B
+CLASS="function"
+>ora_parse()</B
+></A
+>,<A
+HREF="function.ora-exec.html"
+><B
+CLASS="function"
+>ora_exec()</B
+></A
+>,
+     and <A
+HREF="function.ora-do.html"
+><B
+CLASS="function"
+>ora_do()</B
+></A
+>.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -148,7 +183,7 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><A
-HREF="function.ora-getcolumn.html"
+HREF="function.ora-fetch-into.html"
 >Next</A
 ></TD
 ></TR
@@ -170,7 +205,7 @@ HREF="ref.oracle.html"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->Ora_GetColumn</TD
+>Ora_Fetch_Into</TD
 ></TR
 ></TABLE
 ></DIV

@@ -4,7 +4,7 @@
 >Ora_Commit</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="Ora_ColumnType"
 HREF="function.ora-columntype.html"><LINK
 REL="NEXT"
 TITLE="Ora_CommitOff"
-HREF="function.ora-commitoff.html"></HEAD
+HREF="function.ora-commitoff.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,51 +68,61 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.ORA-COMMIT"
+NAME="function.ora-commit"
 >Ora_Commit</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN19764"
+NAME="AEN25284"
 ></A
->Ora_Commit -- commit an Oracle transaction</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>Ora_Commit&nbsp;--&nbsp;commit an Oracle transaction</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN19767"
+NAME="AEN25287"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int ora_commit</CODE
->(int conn);<P
+>int <B
+CLASS="function"
+>ora_commit</B
+></CODE
+> (int conn)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->Returns true on success, false on error.  Details about the
-    error can be retrieved using the <A
+>Returns true on success, false on error. Details about the
+     error can be retrieved using the <A
 HREF="function.ora-error.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >ora_error()</B
 ></A
 >
-    and <A
+     and <A
 HREF="function.ora-errorcode.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >ora_errorcode()</B
 ></A
-> functions.  This function
-    commits an Oracle transaction.  A transaction is defined as all
-    the changes on a given connection since the last commit/rollback,
-    autocommit was turned off or when the connection was established.</P
+> functions. This function
+     commits an Oracle transaction. A transaction is defined as all
+     the changes on a given connection since the last commit/rollback,
+     autocommit was turned off or when the connection was established.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

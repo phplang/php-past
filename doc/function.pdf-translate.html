@@ -4,7 +4,7 @@
 >PDF_translate</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="PDF_restore"
 HREF="function.pdf-restore.html"><LINK
 REL="NEXT"
 TITLE="PDF_scale"
-HREF="function.pdf-scale.html"></HEAD
+HREF="function.pdf-scale.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,60 +68,64 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.PDF-TRANSLATE"
+NAME="function.pdf-translate"
 >PDF_translate</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN21152"
+NAME="AEN26895"
 ></A
->PDF_translate -- Sets origin of coordinate system</DIV
+><P
+>    (PHP3 &#62;= 3.0.6, PHP4 )</P
+>PDF_translate&nbsp;--&nbsp;Sets origin of coordinate system</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN21155"
+NAME="AEN26898"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->void pdf_translate</CODE
->(int pdf document, double x-koor, double y-koor);<P
+>void <B
+CLASS="function"
+>pdf_translate</B
+></CODE
+> (int pdf document, double x-coor, double y-coor)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     The <A
-HREF="function.pdf-translate.html"
-><B
-CLASS="FUNCTION"
+>&#13;     The <B
+CLASS="function"
 >PDF_translate()</B
-></A
-> function set the origin of
+> function sets the origin of
      coordinate system to the point (<TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
->x-koor</I
+>x-coor</I
 ></TT
 >,
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
->y-koor</I
+>y-coor</I
 ></TT
->). The following example draws
+>) relativ the current origin.
+     The following example draws
      a line from (0, 0) to (200, 200) relative to the initial coordinate
      system. You have to set the current point after
-     <A
-HREF="function.pdf-translate.html"
-><B
-CLASS="FUNCTION"
+     <B
+CLASS="function"
 >PDF_translate()</B
-></A
 > and before you start drawing
      more objects.
 
@@ -131,21 +138,31 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
 >Example 1. Translation</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->&lt;?php PDF_moveto($pdf, 0, 0);
+CLASS="programlisting"
+>&#13;&#60;?php PDF_moveto($pdf, 0, 0);
 PDF_lineto($pdf, 100, 100);
 PDF_stroke($pdf);
 PDF_translate($pdf, 100, 100);
 PDF_moveto($pdf, 0, 0);
 PDF_lineto($pdf, 100, 100);
 PDF_stroke($pdf);
-?&#62;</PRE
+?&#62;
+</PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR

@@ -4,20 +4,23 @@
 >array_shift</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
-TITLE="Array functions"
+TITLE="Array Functions"
 HREF="ref.array.html"><LINK
 REL="PREVIOUS"
 TITLE="array_reverse"
 HREF="function.array-reverse.html"><LINK
 REL="NEXT"
 TITLE="array_slice"
-HREF="function.array-slice.html"></HEAD
+HREF="function.array-slice.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,52 +68,64 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.ARRAY-SHIFT"
+NAME="function.array-shift"
 >array_shift</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN3741"
+NAME="AEN4020"
 ></A
->array_shift -- Pop an element off the beginning of array</DIV
+><P
+>    (PHP4 )</P
+>array_shift&nbsp;--&nbsp;
+     Pop an element off the beginning of array
+    </DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN3744"
+NAME="AEN4023"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->mixed array_shift</CODE
->(array array);<P
+>mixed <B
+CLASS="function"
+>array_shift</B
+></CODE
+> (array array)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     <B
-CLASS="FUNCTION"
->array_shift()</B
+>&#13;     <B
+CLASS="function"
+>Array_shift()</B
 > shifts the first value of the
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >array</I
 ></TT
 > off and returns it, shortening the
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >array</I
 ></TT
 > by one element and moving everything
-     down.</P
+     down.
+    </P
 ><P
->     <TABLE
+>&#13;     <TABLE
 WIDTH="100%"
 BORDER="0"
 CELLPADDING="0"
@@ -119,60 +134,67 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
 >Example 1. <B
-CLASS="FUNCTION"
->array_shift()</B
+CLASS="function"
+>Array_shift()</B
 > example</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->$args = array("-v", "-f");
-$opt = array_shift($args);
+CLASS="programlisting"
+>&#13;$args = array ("-v", "-f");
+$opt = array_shift ($args);
       </PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR
 ></TABLE
 >
-     This would result in $args having one element "-f" left, and $opt
-     being "-v".</P
+    </P
 ><P
->     See also <A
+>&#13;     This would result in <TT
+CLASS="varname"
+>$args</TT
+> having one element
+     "-f" left, and <TT
+CLASS="varname"
+>$opt</TT
+> being "-v".
+    </P
+><P
+>&#13;     See also <A
 HREF="function.array-unshift.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >array_unshift()</B
 ></A
 >,
      <A
 HREF="function.array-push.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >array_push()</B
 ></A
 >, and
      <A
 HREF="function.array-pop.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >array_pop()</B
 ></A
 >.
-
-    <DIV
-CLASS="NOTE"
-><BLOCKQUOTE
-CLASS="NOTE"
-><P
-><B
->Note: </B
->      This function was added in PHP 4.0.</P
-></BLOCKQUOTE
-></DIV
-></P
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

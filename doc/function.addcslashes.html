@@ -4,7 +4,7 @@
 >AddCSlashes</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="String functions"
 HREF="ref.strings.html"><LINK
 REL="NEXT"
 TITLE="AddSlashes"
-HREF="function.addslashes.html"></HEAD
+HREF="function.addslashes.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,52 +68,61 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.ADDCSLASHES"
+NAME="function.addcslashes"
 >AddCSlashes</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN24790"
+NAME="AEN33045"
 ></A
->AddCSlashes -- Quote string with slashes in a C style</DIV
+><P
+>    (PHP4 &#62;= 4.0b4)</P
+>AddCSlashes&nbsp;--&nbsp;Quote string with slashes in a C style</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN24793"
+NAME="AEN33048"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->string addcslashes</CODE
->(string str, string charlist);<P
+>string <B
+CLASS="function"
+>addcslashes</B
+></CODE
+> (string str, string charlist)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Returns a string with backslashes before characters that are
+>&#13;     Returns a string with backslashes before characters that are
      listed in <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >charlist</I
 ></TT
 > parameter. It escapes
      <TT
-CLASS="LITERAL"
+CLASS="literal"
 >\n</TT
 >, <TT
-CLASS="LITERAL"
+CLASS="literal"
 >\r</TT
 > etc. in C-like
      style, characters with ASCII code lower than 32 and higher than
      126 are converted to octal representation. Be carefull when
      escaping alphanumeric characters. You can specify a range in
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >charlist</I
 ></TT
@@ -125,67 +137,82 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
->Example 1. addcslashes() example</B
+>Example 1. <B
+CLASS="function"
+>Addcslashes()</B
+> example</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->$escaped = addcslashes($not_escaped, "\0..\37!@\177..\377");</PRE
+CLASS="programlisting"
+>&#13;$escaped = addcslashes ($not_escaped, "\0..\37!@\177..\377");
+      </PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR
 ></TABLE
 >
-
      <DIV
-CLASS="NOTE"
+CLASS="note"
 ><BLOCKQUOTE
-CLASS="NOTE"
+CLASS="note"
 ><P
 ><B
 >Note: </B
->       Added in PHP4b3-dev.</P
+>
+       Added in PHP4b3-dev.</P
 ></BLOCKQUOTE
 ></DIV
-></P
+>
+    </P
 ><P
->     See also <A
+>&#13;     See also <A
 HREF="function.stripcslashes.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >stripcslashes()</B
 ></A
 >, 
      <A
 HREF="function.stripslashes.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >stripslashes()</B
 ></A
 >, 
      <A
 HREF="function.htmlspecialchars.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >htmlspecialchars()</B
 ></A
 >,
      <A
 HREF="function.htmlspecialchars.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >htmlspecialchars()</B
 ></A
 >, and 
      <A
 HREF="function.quotemeta.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >quotemeta()</B
 ></A
->.</P
+>.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

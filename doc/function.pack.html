@@ -4,7 +4,7 @@
 >pack</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="leak"
 HREF="function.leak.html"><LINK
 REL="NEXT"
 TITLE="register_shutdown_function"
-HREF="function.register-shutdown-function.html"></HEAD
+HREF="function.register-shutdown-function.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,150 +68,174 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.PACK"
+NAME="function.pack"
 >pack</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN16934"
+NAME="AEN21593"
 ></A
->pack -- pack data into binary string</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>pack&nbsp;--&nbsp;Pack data into binary string.</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN16937"
+NAME="AEN21596"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->string pack</CODE
->(string format, mixed [<SPAN
-CLASS="OPTIONAL"
->args</SPAN
->]...);<P
+>string <B
+CLASS="function"
+>pack</B
+></CODE
+> (string format [, mixed 
+       args ...])</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Pack given arguments into binary string according to
+>&#13;     Pack given arguments into binary string according to
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >format</I
 ></TT
->. Returns binary string containing data.</P
+>. Returns binary string containing
+     data.
+    </P
 ><P
->     The idea to this function was taken from Perl and all formatting
-     codes work the same as there. The format string consists of
-     format codes followed by an optional repeater argument. The
-     repeater argument can be either an integer value or * for
-     repeating to the end of the input data. For a, A, h, H the repeat
-     count specifies how many characters of one data argument are
-     taken, for @ it is the absolute position where to put the next
-     data, for everything else the repeat count specifies how many
-     data arguments are consumed and packed into the resulting binary
-     string. Currently implemented are
+>&#13;     The idea to this function was taken from Perl and all formatting
+     codes work the same as there, however, there are some formatting
+     codes that are missing such as Perl's "u" format code. The format
+     string consists of format codes followed by an optional repeater
+     argument. The repeater argument can be either an integer value or
+     * for repeating to the end of the input data. For a, A, h, H the
+     repeat count specifies how many characters of one data argument
+     are taken, for @ it is the absolute position where to put the
+     next data, for everything else the repeat count specifies how
+     many data arguments are consumed and packed into the resulting
+     binary string. Currently implemented are
      <P
 ></P
 ><UL
 ><LI
 ><P
->a NUL-padded string</P
+>&#13;    a NUL-padded string
+       </P
 ></LI
 ><LI
 ><P
->A SPACE-padded string</P
+>&#13;    A SPACE-padded string
+       </P
 ></LI
 ><LI
 ><P
->h Hex string, low nibble first</P
+>&#13;    h Hex string, low nibble first
+       </P
 ></LI
 ><LI
 ><P
->H Hex string, high nibble first</P
+>&#13;    H Hex string, high nibble first
+       </P
 ></LI
 ><LI
 ><P
->c signed char</P
+>&#13;    c signed char
+       </P
 ></LI
 ><LI
 ><P
->C unsigned char</P
+>&#13;    C unsigned char
+       </P
 ></LI
 ><LI
 ><P
->s signed short (always 16 bit, machine byte order)</P
+>&#13;    s signed short (always 16 bit, machine byte order)
+       </P
 ></LI
 ><LI
 ><P
->S unsigned short (always 16 bit, machine byte order)</P
+>&#13;    S unsigned short (always 16 bit, machine byte order)
+       </P
 ></LI
 ><LI
 ><P
->n unsigned short (always 16 bit, big endian
-	byte order)</P
+>&#13;    n unsigned short (always 16 bit, big endian byte order)
+       </P
 ></LI
 ><LI
 ><P
->v unsigned short (always 16 bit, little
-	endian byte order)</P
+>&#13;    v unsigned short (always 16 bit, little endian byte order)
+       </P
 ></LI
 ><LI
 ><P
->i signed integer (machine dependant size and
-	byte order)</P
+>&#13;    i signed integer (machine dependent size and byte order)
+       </P
 ></LI
 ><LI
 ><P
->I unsigned integer (machine dependant size
-	and byte order)</P
+>&#13;    I unsigned integer (machine dependent size and byte order)
+       </P
 ></LI
 ><LI
 ><P
->l signed long (always 32 bit, machine byte order)</P
+>&#13;    l signed long (always 32 bit, machine byte order)
+       </P
 ></LI
 ><LI
 ><P
->L unsigned long (always 32 bit, machine byte order)</P
+>&#13;    L unsigned long (always 32 bit, machine byte order)
+       </P
 ></LI
 ><LI
 ><P
->N unsigned long (always 32 bit, big endian
-	byte order)</P
+>&#13;    N unsigned long (always 32 bit, big endian byte order)
+       </P
 ></LI
 ><LI
 ><P
->V unsigned long (always 32 bit, little endian
-	byte order)</P
+>&#13;    V unsigned long (always 32 bit, little endian byte order)
+       </P
 ></LI
 ><LI
 ><P
->f float (machine dependent size and representation)</P
+>&#13;    f float (machine dependent size and representation)
+       </P
 ></LI
 ><LI
 ><P
->d double (machine dependent size and representation)</P
+>&#13;    d double (machine dependent size and representation)
+       </P
 ></LI
 ><LI
 ><P
->x NUL byte</P
+>&#13;    x NUL byte
+       </P
 ></LI
 ><LI
 ><P
->X Back up one byte</P
+>&#13;    X Back up one byte
+       </P
 ></LI
 ><LI
 ><P
->@ NUL-fill to absolute position</P
+>&#13;    @ NUL-fill to absolute position
+       </P
 ></LI
 ></UL
 >
-
      <TABLE
 WIDTH="100%"
 BORDER="0"
@@ -218,41 +245,58 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
->Example 1. pack format string</B
+>Example 1. <B
+CLASS="function"
+>Pack()</B
+> format string</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->$binarydata = pack("nvc*", 0x1234, 0x5678, 65, 66);</PRE
+CLASS="programlisting"
+>&#13;$binarydata = pack ("nvc*", 0x1234, 0x5678, 65, 66);
+      </PRE
+></TD
+></TR
+></TABLE
 ><P
->       The resulting binary string will be 6 bytes long and contain
-       the byte sequence 0x12, 0x34, 0x78, 0x56, 0x41, 0x42.</P
+>&#13;       The resulting binary string will be 6 bytes long and contain
+       the byte sequence 0x12, 0x34, 0x78, 0x56, 0x41, 0x42.
+      </P
 ></DIV
 ></TD
 ></TR
 ></TABLE
-></P
+>
+    </P
 ><P
->     Note that the distinction between signed and unsigned values only 
+>&#13;     Note that the distinction between signed and unsigned values only 
      affects the function <A
 HREF="function.unpack.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >unpack()</B
 ></A
 >, where as
      function <B
-CLASS="FUNCTION"
+CLASS="function"
 >pack()</B
 > gives the same result for
-     signed and unsigned format codes.</P
+     signed and unsigned format codes.
+    </P
 ><P
->     Also note that PHP internally stores integral values as signed
-     values of a machine dependant size. If you give it an unsigned
-     integral value too large to be stored that way it is converted to 
-     a double which often yields an undesired result.</P
+>&#13;     Also note that PHP internally stores integral values as signed
+     values of a machine dependent size. If you give it an unsigned
+     integral value too large to be stored that way it is converted to
+     a double which often yields an undesired result.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

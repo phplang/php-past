@@ -4,7 +4,7 @@
 >Introduction</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="Getting Started"
 HREF="getting-started.html"><LINK
 REL="NEXT"
 TITLE="What can PHP do?"
-HREF="intro-whatcando.html"></HEAD
+HREF="intro-whatcando.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="chapter"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -64,10 +67,10 @@ HREF="intro-whatcando.html"
 ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><DIV
-CLASS="CHAPTER"
+CLASS="chapter"
 ><H1
 ><A
-NAME="INTRODUCTION"
+NAME="introduction"
 >Chapter 1. Introduction</A
 ></H1
 ><DIV
@@ -79,7 +82,7 @@ CLASS="TOC"
 ></DT
 ><DT
 ><A
-HREF="introduction.html#INTRO-WHATIS"
+HREF="introduction.html#intro-whatis"
 >What is PHP?</A
 ></DT
 ><DT
@@ -94,23 +97,23 @@ HREF="intro-history.html"
 ></DT
 ></DL
 ></DIV
-><P
-></P
 ><DIV
-CLASS="SECT1"
+CLASS="sect1"
 ><H1
-CLASS="SECT1"
+CLASS="sect1"
 ><A
-NAME="INTRO-WHATIS"
+NAME="intro-whatis"
 >What is PHP?</A
 ></H1
 ><P
->    PHP (officially "PHP: Hypertext Preprocessor") is a server-side
-    HTML-embedded scripting language.</P
+>&#13;    PHP (officially "PHP: Hypertext Preprocessor") is a server-side
+    HTML-embedded scripting language.
+   </P
 ><P
->    Simple answer, but what does that mean? An example:</P
+>&#13;    Simple answer, but what does that mean? An example:
+   </P
 ><P
->    <TABLE
+>&#13;    <TABLE
 WIDTH="100%"
 BORDER="0"
 CELLPADDING="0"
@@ -119,45 +122,57 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
 >Example 1-1. An introductory example</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->&lt;html&#62;
-    &lt;head&#62;
-        &lt;title&#62;Example&lt;/title&#62;
-    &lt;/head&#62;
-    &lt;body&#62;
-        &lt;?php echo "Hi, I'm a PHP script!"; ?&#62;
-    &lt;/body&#62;
-&lt;/html&#62;
+CLASS="programlisting"
+>&#13;&#60;html&#62;
+    &#60;head&#62;
+        &#60;title&#62;Example&#60;/title&#62;
+    &#60;/head&#62;
+    &#60;body&#62;
+        &#60;?php echo "Hi, I'm a PHP script!"; ?&#62;
+    &#60;/body&#62;
+&#60;/html&#62;
      </PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR
 ></TABLE
-></P
+>
+   </P
 ><P
->    Notice how this is different from a CGI script written in other
+>&#13;    Notice how this is different from a CGI script written in other
     languages like Perl or C -- instead of writing a program with lots
     of commands to output HTML, you write an HTML script with a some
     embedded code to do something (in this case, output some
     text). The PHP code is enclosed in special <A
-HREF="language.basic-syntax.html#LANGUAGE.BASIC-SYNTAX.PHPMODE"
+HREF="language.basic-syntax.html#language.basic-syntax.phpmode"
 >start and end tags</A
 >
-    that allow you to jump into and out of PHP mode.</P
+    that allow you to jump into and out of PHP mode.
+   </P
 ><P
->    What distinguishes PHP from something like client-side Javascript
+>&#13;    What distinguishes PHP from something like client-side Javascript
     is that the code is executed on the server. If you were to have a
     script similar to the above on your server, the client would receive
     the results of running that script, with no way of determining what
     the underlying code may be. You can even configure your web server
     to process all your HTML files with PHP, and then there's really no
-    way that users can tell what you have up your sleeve.</P
+    way that users can tell what you have up your sleeve.
+   </P
 ></DIV
 ></DIV
 ><DIV

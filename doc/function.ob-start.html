@@ -1,0 +1,226 @@
+<HTML
+><HEAD
+><TITLE
+>ob_start</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="String functions"
+HREF="ref.strings.html"><LINK
+REL="PREVIOUS"
+TITLE="nl2br"
+HREF="function.nl2br.html"><LINK
+REL="NEXT"
+TITLE="ob_get_contents"
+HREF="function.ob-get-contents.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.nl2br.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.ob-get-contents.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.ob-start"
+>ob_start</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN33664"
+></A
+><P
+>    (PHP4 )</P
+>ob_start&nbsp;--&nbsp;Turn on output buffering</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN33667"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>void <B
+CLASS="function"
+>ob_start</B
+></CODE
+>(void);</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     This function will turn output buffering. While output buffering
+     is active there will be no rel output from the script, the output
+     is appended to an internal buffer instead.
+    </P
+><P
+>&#13;     The contents of this internal buffer may be copied into a string
+     variable using <A
+HREF="function.ob-get-contents.html"
+><B
+CLASS="function"
+>ob_get_contents()</B
+></A
+>.  Real output
+     happens when <A
+HREF="function.ob-end-flush.html"
+><B
+CLASS="function"
+>ob_end_flush()</B
+></A
+> is called and
+     <A
+HREF="function.ob-end-clean.html"
+><B
+CLASS="function"
+>ob_end_clean()</B
+></A
+> will just silently discard the
+     buffer contents.
+    </P
+><P
+>&#13;     See also <A
+HREF="function.ob-get-contents.html"
+><B
+CLASS="function"
+>ob_get_contents()</B
+></A
+>,
+     <A
+HREF="function.ob-end-flush.html"
+><B
+CLASS="function"
+>ob_end_flush()</B
+></A
+>,
+     <A
+HREF="function.ob-end-clean.html"
+><B
+CLASS="function"
+>ob_end_clean()</B
+></A
+> and
+     <A
+HREF="function.ob-implicit-flush.html"
+><B
+CLASS="function"
+>ob_implicit_flush()</B
+></A
+>
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.nl2br.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.ob-get-contents.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>nl2br</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.strings.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>ob_get_contents</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

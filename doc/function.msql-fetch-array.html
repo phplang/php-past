@@ -4,7 +4,7 @@
 >msql_fetch_array</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="msql_error"
 HREF="function.msql-error.html"><LINK
 REL="NEXT"
 TITLE="msql_fetch_field"
-HREF="function.msql-fetch-field.html"></HEAD
+HREF="function.msql-fetch-field.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,94 +68,105 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.MSQL-FETCH-ARRAY"
+NAME="function.msql-fetch-array"
 >msql_fetch_array</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN17332"
+NAME="AEN22145"
 ></A
->msql_fetch_array -- fetch row as array</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>msql_fetch_array&nbsp;--&nbsp;Fetch row as array</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN17335"
+NAME="AEN22148"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int msql_fetch_array</CODE
->(int query_identifier, int 
-      [<SPAN
-CLASS="OPTIONAL"
->result_type</SPAN
->]
-     );<P
+>int <B
+CLASS="function"
+>msql_fetch_array</B
+></CODE
+> (int query_identifier [, int 
+       result_type])</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Returns an array that corresponds to the fetched row, or false if
-     there are no more rows.</P
+>&#13;     Returns an array that corresponds to the fetched row, or false if
+     there are no more rows.
+    </P
 ><P
->     <B
-CLASS="FUNCTION"
+>&#13;     <B
+CLASS="function"
 >msql_fetch_array()</B
 > is an extended version of
      <A
 HREF="function.msql-fetch-row.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >msql_fetch_row()</B
 ></A
 >.  In addition to storing the
      data in the numeric indices of the result array, it also stores
-     the data in associative indices, using the field names as keys.</P
+     the data in associative indices, using the field names as keys.
+    </P
 ><P
->     The second optional argument <TT
-CLASS="PARAMETER"
+>&#13;     The second optional argument <TT
+CLASS="parameter"
 ><I
 >result_type</I
 ></TT
 >
      in <B
-CLASS="FUNCTION"
+CLASS="function"
 >msql_fetch_array()</B
 > is a constant and can
-     take the following values: MSQL_ASSOC, MSQL_NUM, and MYSQL_BOTH.</P
+     take the following values: MSQL_ASSOC, MSQL_NUM, and MYSQL_BOTH.
+    </P
 ><P
->     Be careful if you are retrieving results from a query that may
+>&#13;     Be careful if you are retrieving results from a query that may
      return a record that contains only one field that has a value of
-     0 (or an empty string, or NULL).</P
+     0 (or an empty string, or NULL).
+    </P
 ><P
 > 
      An important thing to note is that using
      <B
-CLASS="FUNCTION"
+CLASS="function"
 >msql_fetch_array()</B
 > is NOT significantly slower
      than using <A
 HREF="function.msql-fetch-row.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >msql_fetch_row()</B
 ></A
 >, while it provides
-     a significant added value.</P
+     a significant added value.
+    </P
 ><P
-> 
-     For further details, also see <A
+>&#13;     For further details, also see
+     <A
 HREF="function.msql-fetch-row.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >msql_fetch_row()</B
 ></A
-></P
+>.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

@@ -4,20 +4,23 @@
 >yp_match</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
-TITLE="NIS functions"
+TITLE="YP/NIS Functions"
 HREF="ref.nis.html"><LINK
 REL="PREVIOUS"
 TITLE="yp_master"
 HREF="function.yp-master.html"><LINK
 REL="NEXT"
 TITLE="yp_first"
-HREF="function.yp-first.html"></HEAD
+HREF="function.yp-first.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,41 +68,50 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.YP-MATCH"
+NAME="function.yp-match"
 >yp_match</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN18982"
+NAME="AEN37613"
 ></A
->yp_match -- Returns the matched line.</DIV
+><P
+>    (PHP3 &#62;= 3.0.7, PHP4 )</P
+>yp_match&nbsp;--&nbsp;Returns the matched line</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN18985"
+NAME="AEN37616"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->string yp_match</CODE
->(string domain, string map, string key);<P
+>string <B
+CLASS="function"
+>yp_match</B
+></CODE
+> (string domain, string map, string key)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     <B
-CLASS="FUNCTION"
->yp_match()</B
+>&#13;     <B
+CLASS="function"
+>Yp_match()</B
 > returns the value associated with
      the passed key out of the specified map or FALSE. This key must
      be exact.</P
 ><P
->     <TABLE
+>&#13;     <TABLE
 WIDTH="100%"
 BORDER="0"
 CELLPADDING="0"
@@ -108,42 +120,47 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
 >Example 1. Example for NIS match</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->&lt;?php
-    $entry = yp_match($domain, "passwd.byname", "joe");
-
-    if(!$entry) {
-        echo yp_errno() . ": " . yp_err_string();
-    }
-
-    echo "Matched entry is: " . $entry;
+CLASS="programlisting"
+>&#13;&#60;?php
+$entry = yp_match ($domain, "passwd.byname", "joe");
+echo "Matched entry is: " . $entry;
 ?&#62;
       </PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR
 ></TABLE
-></P
+>
+    </P
 ><P
->     In this case this could be: joe:##joe:11111:100:Joe
-     User:/home/j/joe:/usr/local/bin/bash</P
+>&#13;     In this case this could be: joe:##joe:11111:100:Joe
+     User:/home/j/joe:/usr/local/bin/bash
+    </P
 ><P
->     See also: <A
+>&#13;     See also <A
 HREF="function.yp-get-default-domain.html"
->     yp_get_default_domain</A
-> <A
-HREF="function.yp-errno.html"
->yp_errno</A
-> and <A
-HREF="function.yp-err-string.html"
->yp_err_string</A
-></P
+><B
+CLASS="function"
+>yp-get-default-domain()</B
+></A
+>
+
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

@@ -4,7 +4,7 @@
 >ldap_read</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="ldap_next_entry"
 HREF="function.ldap-next-entry.html"><LINK
 REL="NEXT"
 TITLE="ldap_search"
-HREF="function.ldap-search.html"></HEAD
+HREF="function.ldap-search.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,63 +68,109 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.LDAP-READ"
+NAME="function.ldap-read"
 >ldap_read</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN14861"
+NAME="AEN18006"
 ></A
->ldap_read -- Read an entry</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>ldap_read&nbsp;--&nbsp;Read an entry</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN14864"
+NAME="AEN18009"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int ldap_read</CODE
->(int link_identifier, string base_dn, string filter, array 
-      [<SPAN
-CLASS="OPTIONAL"
->attributes</SPAN
->]);<P
+>int <B
+CLASS="function"
+>ldap_read</B
+></CODE
+> (int link_identifier, string base_dn, string filter [, array 
+       attributes [, int 
+       attrsonly [, int 
+       sizelimit [, int 
+       timelimit [, int 
+       deref]]]]])</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Returns a search result identifier or false on error.</P
+>&#13;     Returns a search result identifier or false on error.</P
 ><P
 >  
      <B
-CLASS="FUNCTION"
+CLASS="function"
 >ldap_read()</B
 > performs the search for a
      specified filter on the directory with the scope
      LDAP_SCOPE_BASE. So it is equivalent to reading an entry from the
      directory.</P
 ><P
->     An empty filter is not allowed. If you want to retrieve
+>&#13;     An empty filter is not allowed. If you want to retrieve
      absolutely all information for this entry, use a filter of
      "objectClass=*". If you know which entry types are used on the
      directory server, you might use an appropriate filter such as
      "objectClass=inetOrgPerson".</P
 ><P
->     This call takes an optional fourth parameter which is an array of
-     the attributes required. See <A
+>&#13;     This call takes 5 optional parameters. See <A
 HREF="function.ldap-search.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >ldap_search()</B
 ></A
 >
-     notes.</P
+     notes.
+    </P
+><DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
+><P
+><B
+>Note: </B
+>
+	  These optional parameters were added in 4.0.2:
+      <TT
+CLASS="parameter"
+><I
+>attrsonly</I
+></TT
+>,
+      <TT
+CLASS="parameter"
+><I
+>sizelimit</I
+></TT
+>,
+      <TT
+CLASS="parameter"
+><I
+>timelimit</I
+></TT
+>,
+      <TT
+CLASS="parameter"
+><I
+>deref</I
+></TT
+>.
+     </P
+></BLOCKQUOTE
+></DIV
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

@@ -4,7 +4,7 @@
 >mssql_fetch_row</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -15,9 +15,12 @@ REL="PREVIOUS"
 TITLE="mssql_fetch_object"
 HREF="function.mssql-fetch-object.html"><LINK
 REL="NEXT"
-TITLE="mssql_field_seek"
-HREF="function.mssql-field-seek.html"></HEAD
+TITLE="mssql_field_length"
+HREF="function.mssql-field-length.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -55,7 +58,7 @@ WIDTH="10%"
 ALIGN="right"
 VALIGN="bottom"
 ><A
-HREF="function.mssql-field-seek.html"
+HREF="function.mssql-field-length.html"
 >Next</A
 ></TD
 ></TR
@@ -65,76 +68,93 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.MSSQL-FETCH-ROW"
+NAME="function.mssql-fetch-row"
 >mssql_fetch_row</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN16446"
+NAME="AEN20889"
 ></A
->mssql_fetch_row -- get row as enumerated array</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>mssql_fetch_row&nbsp;--&nbsp;Get row as enumerated array</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN16449"
+NAME="AEN20892"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->array mssql_fetch_row</CODE
->(int result);<P
+>array <B
+CLASS="function"
+>mssql_fetch_row</B
+></CODE
+> (int result)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
-> Returns: An array that corresponds to the fetched row, or
-    false if there are no more rows.
+> 
+     Returns: An array that corresponds to the fetched row, or false
+     if there are no more rows.
     </P
 ><P
->     mssql_fetch_row() fetches one row of data from the result
-     associated with the specified result identifier.  The row is
-     returned as an array.  Each result column is stored in an array
-     offset, starting at offset 0.
+>&#13;     <B
+CLASS="function"
+>Mssql_fetch_row()</B
+> fetches one row of data from
+     the result associated with the specified result identifier.  The
+     row is returned as an array.  Each result column is stored in an
+     array offset, starting at offset 0.
     </P
 ><P
->     Subsequent call to mssql_fetch_rows() would return the next row
-     in the result set, or false if there are no more rows.
+>&#13;     Subsequent call to <B
+CLASS="function"
+>mssql_fetch_rows()</B
+> would
+     return the next row in the result set, or false if there are no
+     more rows.
     </P
 ><P
->     See also: <A
+>&#13;     See also: <A
 HREF="function.mssql-fetch-array.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >mssql_fetch_array()</B
 ></A
 >,
-               <A
+     <A
 HREF="function.mssql-fetch-object.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >mssql_fetch_object()</B
 ></A
 >,
-               <A
+     <A
 HREF="function.mssql-data-seek.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >mssql_data_seek()</B
 ></A
 >,
-               <B
-CLASS="FUNCTION"
+     <B
+CLASS="function"
 >mssql_fetch_lengths()</B
 >, and
-               <A
+     <A
 HREF="function.mssql-result.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >mssql_result()</B
 ></A
 >.
@@ -171,7 +191,7 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><A
-HREF="function.mssql-field-seek.html"
+HREF="function.mssql-field-length.html"
 >Next</A
 ></TD
 ></TR
@@ -193,7 +213,7 @@ HREF="ref.mssql.html"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->mssql_field_seek</TD
+>mssql_field_length</TD
 ></TR
 ></TABLE
 ></DIV

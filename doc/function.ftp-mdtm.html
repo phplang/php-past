@@ -4,7 +4,7 @@
 >ftp_mdtm</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="ftp_size"
 HREF="function.ftp-size.html"><LINK
 REL="NEXT"
 TITLE="ftp_rename"
-HREF="function.ftp-rename.html"></HEAD
+HREF="function.ftp-rename.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,37 +68,46 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.FTP-MDTM"
+NAME="function.ftp-mdtm"
 >ftp_mdtm</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN10033"
+NAME="AEN11606"
 ></A
->ftp_mdtm -- Returns the last modified time of the given file.</DIV
+><P
+>    (PHP3 &#62;= 3.0.13, PHP4 &#62;= 4.0b4)</P
+>ftp_mdtm&nbsp;--&nbsp;Returns the last modified time of the given file.</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN10036"
+NAME="AEN11609"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int ftp_mdtm</CODE
->(int ftp_stream, string remote_file);<P
+>int <B
+CLASS="function"
+>ftp_mdtm</B
+></CODE
+> (int ftp_stream, string remote_file)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Returns a UNIX timestamp on success, or -1 on error.</P
+>&#13;     Returns a UNIX timestamp on success, or -1 on error.</P
 ><P
->     <B
-CLASS="FUNCTION"
+>&#13;     <B
+CLASS="function"
 >ftp_mdtm()</B
 > checks the last-modified time for a
      file, and returns it as a UNIX timestamp.  If an error occurs, or

@@ -4,7 +4,7 @@
 >passthru</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="exec"
 HREF="function.exec.html"><LINK
 REL="NEXT"
 TITLE="system"
-HREF="function.system.html"></HEAD
+HREF="function.system.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,115 +68,120 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.PASSTHRU"
+NAME="function.passthru"
 >passthru</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN23741"
+NAME="AEN29992"
 ></A
->passthru -- Execute an external program and display raw output</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>passthru&nbsp;--&nbsp;
+     Execute an external program and display raw output
+    </DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN23744"
+NAME="AEN29995"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->string passthru</CODE
->(string command, int [<SPAN
-CLASS="OPTIONAL"
->return_var</SPAN
->]);<P
+>void <B
+CLASS="function"
+>passthru</B
+></CODE
+> (string command [, int 
+       return_var])</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     The <B
-CLASS="FUNCTION"
+>&#13;     The <B
+CLASS="function"
 >passthru()</B
 > function is similar to the
-     <A
-HREF="function.exec.html"
-><B
-CLASS="FUNCTION"
+     <B
+CLASS="function"
 >Exec()</B
-></A
 > function in that it executes a
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >command</I
 ></TT
 >.  If the
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >return_var</I
 ></TT
 > argument is present, the return
      status of the Unix command will be placed here.  This function
-     should be used in place of <A
-HREF="function.exec.html"
-><B
-CLASS="FUNCTION"
+     should be used in place of <B
+CLASS="function"
 >Exec()</B
-></A
 > or
-     <A
-HREF="function.system.html"
-><B
-CLASS="FUNCTION"
+     <B
+CLASS="function"
 >System()</B
-></A
 > when the output from the Unix command
      is binary data which needs to be passed directly back to the
      browser.  A common use for this is to execute something like the
      pbmplus utilities that can output an image stream directly.  By
      setting the content-type to <I
-CLASS="EMPHASIS"
+CLASS="emphasis"
 >image/gif</I
 > and
      then calling a pbmplus program to output a gif, you can create
      PHP scripts that output images directly.</P
 ><P
->	 See also <A
+>&#13;     Note that if you start a program using this function and want to
+     leave it running in the background, you have to make sure that the
+     output of that program is redirected to a file or some other
+     output stream or else PHP will hang until the execution of the
+     program ends.
+    </P
+><P
+>&#13;     See also <A
 HREF="function.exec.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >exec()</B
 ></A
->,
-	 <A
+>, <A
 HREF="function.system.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >system()</B
 ></A
->, <A
+>,
+     <A
 HREF="function.popen.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >popen()</B
 ></A
->,
-	 <A
-HREF="function.escapeshellcmd.html"
-><B
-CLASS="FUNCTION"
+>, <B
+CLASS="function"
 >EscapeShellCmd()</B
-></A
->, and the <A
+>,
+     and the <A
 HREF="language.operators.execution.html"
->backtick operator</A
+>backtick
+     operator</A
 >.
-	</P
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

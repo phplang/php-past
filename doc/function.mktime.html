@@ -4,7 +4,7 @@
 >mktime</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="microtime"
 HREF="function.microtime.html"><LINK
 REL="NEXT"
 TITLE="strftime"
-HREF="function.strftime.html"></HEAD
+HREF="function.strftime.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,90 +68,99 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.MKTIME"
+NAME="function.mktime"
 >mktime</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN7253"
+NAME="AEN8511"
 ></A
->mktime -- get UNIX timestamp for a date</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>mktime&nbsp;--&nbsp;Get UNIX timestamp for a date</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN7256"
+NAME="AEN8514"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int mktime</CODE
->(int hour, int minute, int second, int month, int day, int year, int [<SPAN
-CLASS="OPTIONAL"
->is_dst</SPAN
->]);<P
+>int <B
+CLASS="function"
+>mktime</B
+></CODE
+> (int hour, int minute, int second, int month, int day, int year [, int 
+       is_dst])</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     <I
-CLASS="EMPHASIS"
+>&#13;     <I
+CLASS="emphasis"
 >Warning:</I
 > Note the strange order of
-     arguments, which differs from the order of arguments in
-     a regular UNIX mktime() call and which does not lend
-     itself well to leaving out parameters from right to left
-     (see below). It is a common error to mix these values up
-     in a script.</P
+     arguments, which differs from the order of arguments in a regular
+     UNIX mktime() call and which does not lend itself well to leaving
+     out parameters from right to left (see below). It is a common
+     error to mix these values up in a script.
+    </P
 ><P
->     Returns the Unix timestamp corresponding to the arguments
+>&#13;     Returns the Unix timestamp corresponding to the arguments
      given. This timestamp is a long integer containing the number of
      seconds between the Unix Epoch (January 1 1970) and the time
      specified.
     </P
 ><P
->     Arguments may be left out in order from right to left; any
+>&#13;     Arguments may be left out in order from right to left; any
      arguments thus omitted will be set to the current value according
      to the local date and time.
     </P
 ><P
->     <TT
-CLASS="PARAMETER"
+>&#13;     <TT
+CLASS="parameter"
 ><I
->is_dst</I
+>Is_dst</I
 ></TT
-> can be set to 1 if the time
-     is during daylight savings time, 0 if it is not, or -1 (the
-     default) if it is unknown whether the time is within daylight
-     savings time or not.
+> can be set to 1 if the time is
+     during daylight savings time, 0 if it is not, or -1 (the default)
+     if it is unknown whether the time is within daylight savings time
+     or not.
     </P
 ><DIV
-CLASS="NOTE"
+CLASS="note"
 ><BLOCKQUOTE
-CLASS="NOTE"
+CLASS="note"
 ><P
 ><B
 >Note: </B
-><TT
-CLASS="PARAMETER"
+>
+      <TT
+CLASS="parameter"
 ><I
->is_dst</I
+>Is_dst</I
 ></TT
-> was added in 3.0.10.</P
+> was added in 3.0.10.
+     </P
 ></BLOCKQUOTE
 ></DIV
 ><P
->     <B
-CLASS="FUNCTION"
->mktime()</B
-> is useful for doing date arithmetic and
-     validation, as it will automatically calculate the correct value
-     for out-of-range input. For example, each of the following lines
-     produces the string "Jan-01-1998".
+>&#13;     <B
+CLASS="function"
+>Mktime()</B
+> is useful for doing date arithmetic
+     and validation, as it will automatically calculate the correct
+     value for out-of-range input. For example, each of the following
+     lines produces the string "Jan-01-1998".
      <TABLE
 WIDTH="100%"
 BORDER="0"
@@ -158,20 +170,86 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
 >Example 1. <B
-CLASS="FUNCTION"
->mktime()</B
+CLASS="function"
+>Mktime()</B
 > example</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->echo date( "M-d-Y", mktime(0,0,0,12,32,1997) );
-echo date( "M-d-Y", mktime(0,0,0,13,1,1997) );
-echo date( "M-d-Y", mktime(0,0,0,1,1,1998) );
+CLASS="programlisting"
+>&#13;echo date ("M-d-Y", mktime (0,0,0,12,32,1997));
+echo date ("M-d-Y", mktime (0,0,0,13,1,1997));
+echo date ("M-d-Y", mktime (0,0,0,1,1,1998));
+echo date ("M-d-Y", mktime (0,0,0,1,1,98));
       </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+     <TT
+CLASS="parameter"
+><I
+>Year</I
+></TT
+> may be a two or four digit value,
+     with values between 0-69 mapping to 2000-2069 and 70-99 to
+     1970-1999 (on systems where time_t is a 32bit signed integer, as
+     most common today, the valid range for
+     <TT
+CLASS="parameter"
+><I
+>year</I
+></TT
+> is somewhere between 1902 and 2037).
+    </P
+><P
+>&#13;     The last day of any given month can be expressed as the "0" day
+     of the next month, not the -1 day. Both of the following examples
+     will produce the string "The last day in Feb 2000 is: 29".
+     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><P
+><B
+>Example 2. Last day of next month</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;$lastday = mktime (0,0,0,3,0,2000);
+echo strftime ("Last day in Feb 2000 is: %d", $lastday);
+     
+$lastday = mktime (0,0,0,4,-31,2000);
+echo strftime ("Last day in Feb 2000 is: %d", $lastday);
+      </PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR
@@ -179,16 +257,16 @@ echo date( "M-d-Y", mktime(0,0,0,1,1,1998) );
 >
     </P
 ><P
->     See also <A
+>&#13;     See also <A
 HREF="function.date.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >date()</B
 ></A
 > and <A
 HREF="function.time.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >time()</B
 ></A
 >.

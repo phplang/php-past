@@ -4,7 +4,7 @@
 >leak</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="iptcparse"
 HREF="function.iptcparse.html"><LINK
 REL="NEXT"
 TITLE="pack"
-HREF="function.pack.html"></HEAD
+HREF="function.pack.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,43 +68,52 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.LEAK"
+NAME="function.leak"
 >leak</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN16920"
+NAME="AEN21578"
 ></A
->leak -- Leak memory</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>leak&nbsp;--&nbsp;Leak memory</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN16923"
+NAME="AEN21581"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->void leak</CODE
->(int bytes);<P
+>void <B
+CLASS="function"
+>leak</B
+></CODE
+> (int bytes)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     <A
-HREF="function.leak.html"
-><B
-CLASS="FUNCTION"
+>&#13;     <B
+CLASS="function"
 >Leak()</B
-></A
-> leaks the specified amount of memory.</P
+> leaks the specified amount of memory.
+    </P
 ><P
->     This is useful when debugging the memory manager, which automatically
-     cleans up "leaked" memory when each request is completed.</P
+>&#13;     This is useful when debugging the memory manager, which
+     automatically cleans up "leaked" memory when each request is
+     completed.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

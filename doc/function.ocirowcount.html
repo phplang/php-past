@@ -4,7 +4,7 @@
 >OCIRowCount</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="OCINewDescriptor"
 HREF="function.ocinewdescriptor.html"><LINK
 REL="NEXT"
 TITLE="OCINumCols"
-HREF="function.ocinumcols.html"></HEAD
+HREF="function.ocinumcols.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,41 +68,50 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.OCIROWCOUNT"
+NAME="function.ocirowcount"
 >OCIRowCount</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN20206"
+NAME="AEN25863"
 ></A
->OCIRowCount -- Gets the number of affected rows</DIV
+><P
+>    (PHP3 &#62;= 3.0.7, PHP4 )</P
+>OCIRowCount&nbsp;--&nbsp;Gets the number of affected rows</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN20209"
+NAME="AEN25866"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int OCIRowCount</CODE
->(int statement);<P
+>int <B
+CLASS="function"
+>OCIRowCount</B
+></CODE
+> (int statement)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     <B
-CLASS="FUNCTION"
->OCIRowCounts()</B
+>&#13;     <B
+CLASS="function"
+>OCIRowCount()</B
 > returns the number of rows affected
 	 for eg update-statements. This funtions will not tell you the number
 	 of rows that a select will return!</P
 ><P
->     <TABLE
+>&#13;     <TABLE
 WIDTH="100%"
 BORDER="0"
 CELLPADDING="0"
@@ -108,31 +120,40 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
 >Example 1. OCIRowCount</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->&lt;?php
-    print "&lt;HTML&#62;&lt;PRE&#62;";
+CLASS="programlisting"
+>&#13;&#60;?php
+    print "&#60;HTML&#62;&#60;PRE&#62;";
     $conn = OCILogon("scott","tiger");
     $stmt = OCIParse($conn,"create table emp2 as select * from emp");
     OCIExecute($stmt);
-    print OCIRowCount($stmt) . " rows inserted.&lt;BR&#62;";
+    print OCIRowCount($stmt) . " rows inserted.&#60;BR&#62;";
     OCIFreeStatement($stmt);
     $stmt = OCIParse($conn,"delete from emp2");
     OCIExecute($stmt);
-    print OCIRowCount($stmt) . " rows deleted.&lt;BR&#62;";
+    print OCIRowCount($stmt) . " rows deleted.&#60;BR&#62;";
     OCICommit($conn);
     OCIFreeStatement($stmt);
     $stmt = OCIParse($conn,"drop table emp2");
     OCIExecute($stmt);
     OCIFreeStatement($stmt);
     OCILogOff($conn);
-    print "&lt;/PRE&#62;&lt;/HTML&#62;";
+    print "&#60;/PRE&#62;&#60;/HTML&#62;";
 ?&#62; </PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR

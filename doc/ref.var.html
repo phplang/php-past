@@ -1,10 +1,10 @@
 <HTML
 ><HEAD
 ><TITLE
->Variable functions</TITLE
+>Variable Functions</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -15,9 +15,12 @@ REL="PREVIOUS"
 TITLE="urlencode"
 HREF="function.urlencode.html"><LINK
 REL="NEXT"
-TITLE="doubleval"
-HREF="function.doubleval.html"></HEAD
+TITLE="call_user_func"
+HREF="function.call-user-func.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="reference"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -55,7 +58,7 @@ WIDTH="10%"
 ALIGN="right"
 VALIGN="bottom"
 ><A
-HREF="function.doubleval.html"
+HREF="function.call-user-func.html"
 >Next</A
 ></TD
 ></TR
@@ -64,15 +67,15 @@ HREF="function.doubleval.html"
 ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><DIV
-CLASS="REFERENCE"
+CLASS="reference"
 ><A
-NAME="REF.VAR"
+NAME="ref.var"
 ></A
 ><DIV
 CLASS="TITLEPAGE"
 ><H1
-CLASS="TITLE"
->LV. Variable functions</H1
+CLASS="title"
+>LXIII. Variable Functions</H1
 ><DIV
 CLASS="TOC"
 ><DL
@@ -82,89 +85,129 @@ CLASS="TOC"
 ></DT
 ><DT
 ><A
+HREF="function.call-user-func.html"
+>call_user_func</A
+> &#8212; 
+     Call a user function given by the first parameter
+    </DT
+><DT
+><A
 HREF="function.doubleval.html"
 >doubleval</A
-> &#8212; Get double value of a variable.</DT
+> &#8212; Get double value of a variable</DT
 ><DT
 ><A
 HREF="function.empty.html"
 >empty</A
-> &#8212; determine whether a variable is set</DT
+> &#8212; Determine whether a variable is set</DT
 ><DT
 ><A
 HREF="function.gettype.html"
 >gettype</A
-> &#8212; Get the type of a variable.</DT
+> &#8212; Get the type of a variable</DT
 ><DT
 ><A
 HREF="function.intval.html"
 >intval</A
-> &#8212; Get integer value of a variable.</DT
+> &#8212; Get integer value of a variable</DT
 ><DT
 ><A
 HREF="function.is-array.html"
 >is_array</A
-> &#8212; Finds whether a variable is an array.</DT
+> &#8212; Finds whether a variable is an array</DT
+><DT
+><A
+HREF="function.is-bool.html"
+>is_bool</A
+> &#8212; 
+      Finds out whether a variable is a boolean
+     </DT
 ><DT
 ><A
 HREF="function.is-double.html"
 >is_double</A
-> &#8212; Finds whether a variable is a double.</DT
+> &#8212; Finds whether a variable is a double</DT
 ><DT
 ><A
 HREF="function.is-float.html"
 >is_float</A
-> &#8212; Finds whether a variable is a float.</DT
+> &#8212; Finds whether a variable is a float</DT
 ><DT
 ><A
 HREF="function.is-int.html"
 >is_int</A
-> &#8212; Find whether a variable is an integer.</DT
+> &#8212; Find whether a variable is an integer</DT
 ><DT
 ><A
 HREF="function.is-integer.html"
 >is_integer</A
-> &#8212; Find whether a variable is an integer.</DT
+> &#8212; Find whether a variable is an integer</DT
 ><DT
 ><A
 HREF="function.is-long.html"
 >is_long</A
-> &#8212; Finds whether a variable is an integer.</DT
+> &#8212; Finds whether a variable is an integer</DT
+><DT
+><A
+HREF="function.is-numeric.html"
+>is_numeric</A
+> &#8212; 
+     Finds whether a variable is a number or a numeric string
+    </DT
 ><DT
 ><A
 HREF="function.is-object.html"
 >is_object</A
-> &#8212; Finds whether a variable is an object.</DT
+> &#8212; Finds whether a variable is an object</DT
 ><DT
 ><A
 HREF="function.is-real.html"
 >is_real</A
-> &#8212; Finds whether a variable is a real.</DT
+> &#8212; Finds whether a variable is a real</DT
+><DT
+><A
+HREF="function.is-resource.html"
+>is_resource</A
+> &#8212; 
+     Finds whether a variable is a resource
+    </DT
 ><DT
 ><A
 HREF="function.is-string.html"
 >is_string</A
-> &#8212; Finds whether a variable is a string.</DT
+> &#8212; Finds whether a variable is a string</DT
 ><DT
 ><A
 HREF="function.isset.html"
 >isset</A
-> &#8212; determine whether a variable is set</DT
+> &#8212; Determine whether a variable is set</DT
+><DT
+><A
+HREF="function.print-r.html"
+>print_r</A
+> &#8212; 
+     Prints human-readable information about a variable
+    </DT
 ><DT
 ><A
 HREF="function.settype.html"
 >settype</A
-> &#8212; Set the type of a variable.</DT
+> &#8212; Set the type of a variable</DT
 ><DT
 ><A
 HREF="function.strval.html"
 >strval</A
-> &#8212; Get string value of a variable.</DT
+> &#8212; Get string value of a variable</DT
 ><DT
 ><A
 HREF="function.unset.html"
 >unset</A
 > &#8212; Unset a given variable</DT
+><DT
+><A
+HREF="function.var-dump.html"
+>var_dump</A
+> &#8212; Dumps information about a variable</DT
 ></DL
 ></DIV
 ></DIV
@@ -200,7 +243,7 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><A
-HREF="function.doubleval.html"
+HREF="function.call-user-func.html"
 >Next</A
 ></TD
 ></TR
@@ -222,7 +265,7 @@ HREF="funcref.html"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->doubleval</TD
+>call_user_func</TD
 ></TR
 ></TABLE
 ></DIV

@@ -4,7 +4,7 @@
 >ldap_close</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -15,9 +15,12 @@ REL="PREVIOUS"
 TITLE="ldap_bind"
 HREF="function.ldap-bind.html"><LINK
 REL="NEXT"
-TITLE="ldap_connect"
-HREF="function.ldap-connect.html"></HEAD
+TITLE="ldap_compare"
+HREF="function.ldap-compare.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -55,7 +58,7 @@ WIDTH="10%"
 ALIGN="right"
 VALIGN="bottom"
 ><A
-HREF="function.ldap-connect.html"
+HREF="function.ldap-compare.html"
 >Next</A
 ></TD
 ></TR
@@ -65,64 +68,73 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.LDAP-CLOSE"
+NAME="function.ldap-close"
 >ldap_close</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN14488"
+NAME="AEN17441"
 ></A
->ldap_close -- Close link to LDAP server</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>ldap_close&nbsp;--&nbsp;Close link to LDAP server</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN14491"
+NAME="AEN17444"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int ldap_close</CODE
->(int link_identifier);<P
+>int <B
+CLASS="function"
+>ldap_close</B
+></CODE
+> (int link_identifier)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Returns true on success, false on error.</P
+>&#13;     Returns true on success, false on error.</P
 ><P
->     <B
-CLASS="FUNCTION"
+>&#13;     <B
+CLASS="function"
 >ldap_close()</B
 > closes the link to the LDAP
      server that's associated with the specified
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >link_identifier</I
 ></TT
 >.</P
 ><P
->     This call is internally identical to
+>&#13;     This call is internally identical to
      <A
 HREF="function.ldap-unbind.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >ldap_unbind()</B
 ></A
 >. The LDAP API uses the call
      <A
 HREF="function.ldap-unbind.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >ldap_unbind()</B
 ></A
 >, so perhaps you should use this
      in preference to <B
-CLASS="FUNCTION"
+CLASS="function"
 >ldap_close()</B
 >.</P
 ></DIV
@@ -157,7 +169,7 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><A
-HREF="function.ldap-connect.html"
+HREF="function.ldap-compare.html"
 >Next</A
 ></TD
 ></TR
@@ -179,7 +191,7 @@ HREF="ref.ldap.html"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->ldap_connect</TD
+>ldap_compare</TD
 ></TR
 ></TABLE
 ></DIV

@@ -4,7 +4,7 @@
 >msql_data_seek</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="msql_createdb"
 HREF="function.msql-createdb.html"><LINK
 REL="NEXT"
 TITLE="msql_dbname"
-HREF="function.msql-dbname.html"></HEAD
+HREF="function.msql-dbname.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,55 +68,70 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.MSQL-DATA-SEEK"
+NAME="function.msql-data-seek"
 >msql_data_seek</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN17259"
+NAME="AEN22066"
 ></A
->msql_data_seek -- move internal row pointer</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>msql_data_seek&nbsp;--&nbsp;Move internal row pointer</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN17262"
+NAME="AEN22069"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int msql_data_seek</CODE
->(int query_identifier, int row_number);<P
+>int <B
+CLASS="function"
+>msql_data_seek</B
+></CODE
+> (int query_identifier, int row_number)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Returns true on success, false on failure.</P
+>&#13;     Returns true on success, false on failure.
+    </P
 ><P
->     msql_data_seek() moves the internal row pointer of the mSQL
-     result associated with the specified query identifier to pointer
-     to the specifyed row number.  The next call to
-     <A
+>&#13;     <B
+CLASS="function"
+>Msql_data_seek()</B
+> moves the internal row
+     pointer of the mSQL result associated with the specified query
+     identifier to pointer to the specifyed row number.  The next call
+     to <A
 HREF="function.msql-fetch-row.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >msql_fetch_row()</B
 ></A
-> would return that row.</P
+> would return that
+     row.
+    </P
 ><P
 > 
-     See also:
-     <A
+     See also: <A
 HREF="function.msql-fetch-row.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >msql_fetch_row()</B
 ></A
->.</P
+>.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

@@ -4,7 +4,7 @@
 >if..endif syntax</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="Start/end tags"
 HREF="migration-startendtags.html"><LINK
 REL="NEXT"
 TITLE="while syntax"
-HREF="migration-while.html"></HEAD
+HREF="migration-while.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="sect1"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -64,15 +67,15 @@ HREF="migration-while.html"
 ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><DIV
-CLASS="SECT1"
+CLASS="sect1"
 ><H1
-CLASS="SECT1"
+CLASS="sect1"
 ><A
-NAME="MIGRATION-IF-ENDIF"
+NAME="migration-if-endif"
 >if..endif syntax</A
 ></H1
 ><P
->   The `alternative' way to write if/elseif/else statements, using if();
+>&#13;   The `alternative' way to write if/elseif/else statements, using if();
    elseif(); else; endif; cannot be efficiently implemented without
    adding a large amount of complexity to the 3.0 parser.  Because of
    this, the syntax has been changed:
@@ -85,20 +88,30 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
 >Example A-5. Migration: old if..endif syntax</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->if ($foo);
+CLASS="programlisting"
+>&#13;if ($foo);
     echo "yep\n";
 elseif ($bar);
     echo "almost\n";
 else;
     echo "nope\n";
-endif;</PRE
+endif;
+</PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR
@@ -113,20 +126,30 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
 >Example A-6. Migration: new if..endif syntax</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->if ($foo):
+CLASS="programlisting"
+>&#13;if ($foo):
     echo "yep\n";
 elseif ($bar):
     echo "almost\n";
 else:
     echo "nope\n";
-endif;</PRE
+endif;
+</PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR

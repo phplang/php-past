@@ -21,11 +21,13 @@
    allocating any.  It is a good idea to use alloca(0) in
    your main control loop, etc. to force garbage collection.  */
 
-/* $Id: alloca.c,v 1.4 1999/09/26 15:33:01 sas Exp $ */
+/* $Id: alloca.c,v 1.5 2000/04/17 18:17:59 sas Exp $ */
 
-#include <config.h>
+#include "config.h"
 
 #if !HAVE_ALLOCA
+
+#include <stdio.h>
 
 #ifdef HAVE_STRING_H
 #include <string.h>

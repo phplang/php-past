@@ -4,7 +4,7 @@
 >msql_list_fields</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="msql_freeresult"
 HREF="function.msql-freeresult.html"><LINK
 REL="NEXT"
 TITLE="msql_listfields"
-HREF="function.msql-listfields.html"></HEAD
+HREF="function.msql-listfields.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,86 +68,100 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.MSQL-LIST-FIELDS"
+NAME="function.msql-list-fields"
 >msql_list_fields</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN17550"
+NAME="AEN22382"
 ></A
->msql_list_fields -- list result fields</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>msql_list_fields&nbsp;--&nbsp;List result fields</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN17553"
+NAME="AEN22385"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int msql_list_fields</CODE
->(string database, string tablename);<P
+>int <B
+CLASS="function"
+>msql_list_fields</B
+></CODE
+> (string database, string tablename)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     msql_list_fields() retrieves information about
+>&#13;     <B
+CLASS="function"
+>Msql_list_fields()</B
+> retrieves information about
      the given tablename. Arguments are the database name and the
      table name. A result pointer is returned which can be used with
      <A
 HREF="function.msql-fieldflags.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >msql_fieldflags()</B
 ></A
 >,
      <A
 HREF="function.msql-fieldlen.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >msql_fieldlen()</B
 ></A
 >,
      <A
 HREF="function.msql-fieldname.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >msql_fieldname()</B
 ></A
 >, and
      <A
 HREF="function.msql-fieldtype.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >msql_fieldtype()</B
 ></A
->.  
-     A query identifier is a positive integer. The function returns
-     <TT
-CLASS="LITERAL"
+>.  A query identifier is a
+     positive integer. The function returns <TT
+CLASS="literal"
 >-1</TT
-> if a error occurs. A string describing the
-     error will be placed in <TT
-CLASS="LITERAL"
+> if a
+     error occurs. A string describing the error will be placed in
+     <TT
+CLASS="literal"
 >$phperrmsg</TT
->, and unless
-     the function was called as <TT
-CLASS="LITERAL"
+>, and unless the function was called
+     as <TT
+CLASS="literal"
 >@msql_list_fields()</TT
->
-     then this error string will also be printed out.</P
+> then this error string
+     will also be printed out.
+    </P
 ><P
->     See also <A
+>&#13;     See also <A
 HREF="function.msql-error.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >msql_error()</B
 ></A
->.</P
+>.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

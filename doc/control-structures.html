@@ -4,7 +4,7 @@
 >Control Structures</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="String Operators"
 HREF="language.operators.string.html"><LINK
 REL="NEXT"
 TITLE="else"
-HREF="control-structures.else.html"></HEAD
+HREF="control-structures.else.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="chapter"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -64,10 +67,10 @@ HREF="control-structures.else.html"
 ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><DIV
-CLASS="CHAPTER"
+CLASS="chapter"
 ><H1
 ><A
-NAME="CONTROL-STRUCTURES"
+NAME="control-structures"
 >Chapter 11. Control Structures</A
 ></H1
 ><DIV
@@ -79,9 +82,9 @@ CLASS="TOC"
 ></DT
 ><DT
 ><A
-HREF="control-structures.html#CONTROL-STRUCTURES.IF"
+HREF="control-structures.html#control-structures.if"
 ><TT
-CLASS="LITERAL"
+CLASS="literal"
 >if</TT
 ></A
 ></DT
@@ -89,7 +92,7 @@ CLASS="LITERAL"
 ><A
 HREF="control-structures.else.html"
 ><TT
-CLASS="LITERAL"
+CLASS="literal"
 >else</TT
 ></A
 ></DT
@@ -97,7 +100,7 @@ CLASS="LITERAL"
 ><A
 HREF="control-structures.elseif.html"
 ><TT
-CLASS="LITERAL"
+CLASS="literal"
 >elseif</TT
 ></A
 ></DT
@@ -110,7 +113,7 @@ HREF="control-structures.alternative-syntax.html"
 ><A
 HREF="control-structures.while.html"
 ><TT
-CLASS="LITERAL"
+CLASS="literal"
 >while</TT
 ></A
 ></DT
@@ -118,7 +121,7 @@ CLASS="LITERAL"
 ><A
 HREF="control-structures.do.while.html"
 ><TT
-CLASS="LITERAL"
+CLASS="literal"
 >do..while</TT
 ></A
 ></DT
@@ -126,15 +129,23 @@ CLASS="LITERAL"
 ><A
 HREF="control-structures.for.html"
 ><TT
-CLASS="LITERAL"
+CLASS="literal"
 >for</TT
+></A
+></DT
+><DT
+><A
+HREF="control-structures.foreach.html"
+><TT
+CLASS="literal"
+>foreach</TT
 ></A
 ></DT
 ><DT
 ><A
 HREF="control-structures.break.html"
 ><TT
-CLASS="LITERAL"
+CLASS="literal"
 >break</TT
 ></A
 ></DT
@@ -142,7 +153,7 @@ CLASS="LITERAL"
 ><A
 HREF="control-structures.continue.html"
 ><TT
-CLASS="LITERAL"
+CLASS="literal"
 >continue</TT
 ></A
 ></DT
@@ -150,7 +161,7 @@ CLASS="LITERAL"
 ><A
 HREF="control-structures.switch.html"
 ><TT
-CLASS="LITERAL"
+CLASS="literal"
 >switch</TT
 ></A
 ></DT
@@ -160,7 +171,7 @@ HREF="function.require.html"
 ><A
 HREF="function.require.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >require()</B
 ></A
 ></A
@@ -171,163 +182,216 @@ HREF="function.include.html"
 ><A
 HREF="function.include.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >include()</B
+></A
+></A
+></DT
+><DT
+><A
+HREF="function.require-once.html"
+><A
+HREF="function.require-once.html"
+><B
+CLASS="function"
+>require_once()</B
+></A
+></A
+></DT
+><DT
+><A
+HREF="function.include-once.html"
+><A
+HREF="function.include-once.html"
+><B
+CLASS="function"
+>include_once()</B
 ></A
 ></A
 ></DT
 ></DL
 ></DIV
 ><P
->    Any PHP script is built out of a series of statements. A statement can
-    be an assignment, a function call, a loop, a conditional statement of
-    even a statement that does nothing (an empty statement). Statements
-    usually end with a semicolon. In addition, statements can be grouped
-    into a statement-group by encapsulating a group of statements with
-    curly braces. A statement-group is a statement by itself as well. The
-    various statement types are described in this chapter.</P
+>&#13;   Any PHP script is built out of a series of statements. A statement
+   can be an assignment, a function call, a loop, a conditional
+   statement of even a statement that does nothing (an empty
+   statement). Statements usually end with a semicolon. In addition,
+   statements can be grouped into a statement-group by encapsulating a
+   group of statements with curly braces. A statement-group is a
+   statement by itself as well. The various statement types are
+   described in this chapter.
+  </P
 ><DIV
-CLASS="SECT1"
+CLASS="sect1"
 ><H1
-CLASS="SECT1"
+CLASS="sect1"
 ><A
-NAME="CONTROL-STRUCTURES.IF"
+NAME="control-structures.if"
 ><TT
-CLASS="LITERAL"
+CLASS="literal"
 >if</TT
 ></A
 ></H1
 ><P
->     The <TT
-CLASS="LITERAL"
+>&#13;    The <TT
+CLASS="literal"
 >if</TT
 > construct is one of the most important
-     features of many languages, PHP included.  It allows for conditional
-     execution of code fragments.  PHP features an <TT
-CLASS="LITERAL"
+    features of many languages, PHP included.  It allows for
+    conditional execution of code fragments.  PHP features an
+    <TT
+CLASS="literal"
 >if</TT
->
-     structure that is similar to that of C:
-
-     <DIV
-CLASS="INFORMALEXAMPLE"
+> structure that is similar to that of C:
+    <DIV
+CLASS="informalexample"
 ><P
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
-> if (expr)
-     statement
- </PRE
+CLASS="programlisting"
+>&#13;if (expr)
+    statement
+     </PRE
+></TD
+></TR
+></TABLE
 ><P
 ></P
 ></DIV
-></P
+>
+   </P
 ><P
->     As described in the section about expressions, expr is evaluated
-     to its truth value.  If <TT
-CLASS="REPLACEABLE"
+>&#13;    As described in the section about expressions, expr is evaluated
+    to its truth value.  If <TT
+CLASS="replaceable"
 ><I
 >expr</I
 ></TT
 > evaluates
-     to <TT
-CLASS="LITERAL"
+    to <TT
+CLASS="literal"
 >TRUE</TT
 >, PHP will execute statement, and if it
-     evaluates to <TT
-CLASS="LITERAL"
+    evaluates to <TT
+CLASS="literal"
 >FALSE</TT
-> - it'll ignore it.</P
+> - it'll ignore it.
+   </P
 ><P
->     The following example would display <TT
-CLASS="COMPUTEROUTPUT"
+>&#13;    The following example would display <TT
+CLASS="computeroutput"
 >a is bigger
-     than b</TT
+    than b</TT
 > if <TT
-CLASS="REPLACEABLE"
+CLASS="replaceable"
 ><I
 >$a</I
 ></TT
 > is bigger
-     than <TT
-CLASS="REPLACEABLE"
+    than <TT
+CLASS="replaceable"
 ><I
 >$b</I
 ></TT
 >:
- 
-     <DIV
-CLASS="INFORMALEXAMPLE"
+    <DIV
+CLASS="informalexample"
 ><P
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
-> if ($a &#62; $b)
-     print "a is bigger than b";
- </PRE
+CLASS="programlisting"
+>&#13;if ($a &#62; $b)
+    print "a is bigger than b";
+     </PRE
+></TD
+></TR
+></TABLE
 ><P
 ></P
 ></DIV
-></P
+>
+   </P
 ><P
->     Often you'd want to have more than one statement to be executed
-     conditionally.  Of course, there's no need to wrap each statement
-     with an <TT
-CLASS="LITERAL"
+>&#13;    Often you'd want to have more than one statement to be executed
+    conditionally.  Of course, there's no need to wrap each statement
+    with an <TT
+CLASS="literal"
 >if</TT
 > clause.  Instead, you can group
-     several statements into a statement group.
-     For example, this code would display <TT
-CLASS="COMPUTEROUTPUT"
->a is bigger than
-     b</TT
-> if <TT
-CLASS="REPLACEABLE"
+    several statements into a statement group.  For example, this code
+    would display <TT
+CLASS="computeroutput"
+>a is bigger than b</TT
+>
+    if <TT
+CLASS="replaceable"
 ><I
 >$a</I
 ></TT
 > is bigger than
-     <TT
-CLASS="REPLACEABLE"
+    <TT
+CLASS="replaceable"
 ><I
 >$b</I
 ></TT
 >, and would then assign the value of
-     <TT
-CLASS="REPLACEABLE"
+    <TT
+CLASS="replaceable"
 ><I
 >$a</I
 ></TT
 > into <TT
-CLASS="REPLACEABLE"
+CLASS="replaceable"
 ><I
 >$b</I
 ></TT
 >:
- 
-     <DIV
-CLASS="INFORMALEXAMPLE"
+    <DIV
+CLASS="informalexample"
 ><P
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
-> if ($a &#62; $b) {
-     print "a is bigger than b";
-     $b = $a;
- }
- </PRE
+CLASS="programlisting"
+>&#13;if ($a &#62; $b) {
+    print "a is bigger than b";
+    $b = $a;
+}
+     </PRE
+></TD
+></TR
+></TABLE
 ><P
 ></P
 ></DIV
-></P
+>
+   </P
 ><P
->     If statements can be nested indefinitely within other
-     <TT
-CLASS="LITERAL"
+>&#13;    If statements can be nested indefinitely within other
+    <TT
+CLASS="literal"
 >if</TT
 > statements, which provides you with complete
-     flexibility for conditional execution of the various parts of
-     your program.</P
+    flexibility for conditional execution of the various parts of your
+    program.
+   </P
 ></DIV
 ></DIV
 ><DIV
@@ -384,7 +448,7 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><TT
-CLASS="LITERAL"
+CLASS="literal"
 >else</TT
 ></TD
 ></TR

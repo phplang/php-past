@@ -4,7 +4,7 @@
 >OCIBindByName</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="OCIDefineByName"
 HREF="function.ocidefinebyname.html"><LINK
 REL="NEXT"
 TITLE="OCILogon"
-HREF="function.ocilogon.html"></HEAD
+HREF="function.ocilogon.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,51 +68,54 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.OCIBINDBYNAME"
+NAME="function.ocibindbyname"
 >OCIBindByName</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN20013"
+NAME="AEN25661"
 ></A
->OCIBindByName -- Bind a PHP variable to an Oracle Placeholder</DIV
+><P
+>    (PHP3 &#62;= 3.0.4, PHP4 )</P
+>OCIBindByName&nbsp;--&nbsp;Bind a PHP variable to an Oracle Placeholder</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN20016"
+NAME="AEN25664"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int OCIBindByName</CODE
->(int stmt, string ph_name, mixed &#38;variable, intlength, int [<SPAN
-CLASS="OPTIONAL"
->type</SPAN
->]);<P
+>int <B
+CLASS="function"
+>OCIBindByName</B
+></CODE
+> (int stmt, string ph_name, mixed &#38;variable, intlength [, int type])</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     <A
-HREF="function.ocibindbyname.html"
-><B
-CLASS="FUNCTION"
+>&#13;     <B
+CLASS="function"
 >OCIBindByName()</B
-></A
 > binds the PHP variable
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >variable</I
 ></TT
 > to the Oracle placeholder
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >ph_name</I
 ></TT
@@ -117,49 +123,43 @@ CLASS="PARAMETER"
      input or output will be determined run-time, and the necessary
      storage space will be allocated. The
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >length</I
 ></TT
 > paramter sets the maximum length
      for the bind. If you set <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >length</I
 ></TT
 > to -1
-     <A
-HREF="function.ocibindbyname.html"
-><B
-CLASS="FUNCTION"
+     <B
+CLASS="function"
 >OCIBindByName()</B
-></A
 > will use the current length of
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >variable</I
 ></TT
 > to set the maximum length.
     </P
 ><P
->     If you need to bind an abstract Datatype (LOB/ROWID/BFILE) you
+>&#13;     If you need to bind an abstract Datatype (LOB/ROWID/BFILE) you
      need to allocate it first using
-     <A
-HREF="function.ocinewdescriptor.html"
-><B
-CLASS="FUNCTION"
+     <B
+CLASS="function"
 >OCINewDescriptor()</B
-></A
 > function. The
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >length</I
 ></TT
 > is not used for abstract Datatypes
      and should be set to -1. The <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >type</I
 ></TT
@@ -178,14 +178,20 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
 >Example 1. OCIDefineByName</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->&lt;?php
+CLASS="programlisting"
+>&#13;&#60;?php
 /* OCIBindByPos example thies@digicol.de (980221)
 
   inserts 3 resords into emp, and uses the ROWID for updating the 
@@ -235,7 +241,11 @@ OCIExecute($stmt);
 OCIFreeStatement($stmt);
 
 OCILogoff($conn);
-?&#62;</PRE
+?&#62;
+     </PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR

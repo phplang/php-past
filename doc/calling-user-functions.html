@@ -4,7 +4,7 @@
 >Calling User Functions</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="PHP development"
 HREF="phpdevel.html"><LINK
 REL="NEXT"
 TITLE="Reporting Errors"
-HREF="phpdevel-errors.html"></HEAD
+HREF="phpdevel-errors.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="sect1"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -64,23 +67,23 @@ HREF="phpdevel-errors.html"
 ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><DIV
-CLASS="SECT1"
+CLASS="sect1"
 ><H1
-CLASS="SECT1"
+CLASS="sect1"
 ><A
-NAME="CALLING-USER-FUNCTIONS"
+NAME="calling-user-functions"
 >Calling User Functions</A
 ></H1
 ><P
->   To call user functions from an internal function, you should use
+>&#13;   To call user functions from an internal function, you should use
    the <B
-CLASS="FUNCTION"
+CLASS="function"
 >call_user_function()</B
 > function.
   </P
 ><P
->   <B
-CLASS="FUNCTION"
+>&#13;   <B
+CLASS="function"
 >call_user_function()</B
 > returns SUCCESS on success,
    and FAILURE in case the function cannot be found.  You should check
@@ -90,41 +93,41 @@ CLASS="FUNCTION"
    undefined, and you mustn't touch it.
   </P
 ><P
->   All internal functions that call user functions
+>&#13;   All internal functions that call user functions
    <I
-CLASS="EMPHASIS"
+CLASS="emphasis"
 >must</I
 > be reentrant.  Among other things, this
    means they must not use globals or static variables.
   </P
 ><P
->   <B
-CLASS="FUNCTION"
+>&#13;   <B
+CLASS="function"
 >call_user_function()</B
 > takes six arguments:
   </P
 ><DIV
-CLASS="SECT2"
+CLASS="sect2"
 ><H2
-CLASS="SECT2"
+CLASS="sect2"
 ><A
-NAME="CALLING-USER-FUNCTIONS.FUNCTION-TABLE"
+NAME="calling-user-functions.function-table"
 >HashTable *function_table</A
 ></H2
 ><P
->    This is the hash table in which the function is to be looked up.
+>&#13;    This is the hash table in which the function is to be looked up.
    </P
 ></DIV
 ><DIV
-CLASS="SECT2"
+CLASS="sect2"
 ><H2
-CLASS="SECT2"
+CLASS="sect2"
 ><A
-NAME="CALLING-USER-FUNCTIONS.OBJECT"
+NAME="calling-user-functions.object"
 >pval *object</A
 ></H2
 ><P
->    This is a pointer to an object on which the function is invoked.
+>&#13;    This is a pointer to an object on which the function is invoked.
     This should be NULL if a global function is called.  If it's not
     NULL (i.e.  it points to an object), the function_table argument is
     ignored, and instead taken from the object's hash.  The object *may*
@@ -134,15 +137,15 @@ NAME="CALLING-USER-FUNCTIONS.OBJECT"
    </P
 ></DIV
 ><DIV
-CLASS="SECT2"
+CLASS="sect2"
 ><H2
-CLASS="SECT2"
+CLASS="sect2"
 ><A
-NAME="CALLING-USER-FUNCTIONS.FUNCTION-NAME"
+NAME="calling-user-functions.function-name"
 >pval *function_name</A
 ></H2
 ><P
->    The name of the function to call.  Must be a pval of type
+>&#13;    The name of the function to call.  Must be a pval of type
     IS_STRING with function_name.str.val and function_name.str.len
     set to the appropriate values.  The function_name is modified by
     call_user_function() - it's converted to lowercase.  If you need to
@@ -150,45 +153,45 @@ NAME="CALLING-USER-FUNCTIONS.FUNCTION-NAME"
    </P
 ></DIV
 ><DIV
-CLASS="SECT2"
+CLASS="sect2"
 ><H2
-CLASS="SECT2"
+CLASS="sect2"
 ><A
-NAME="CALLING-USER-FUNCTIONS.RETVAL"
+NAME="calling-user-functions.retval"
 >pval *retval</A
 ></H2
 ><P
->    A pointer to a pval structure, into which the return value of
+>&#13;    A pointer to a pval structure, into which the return value of
     the invoked function is saved.  The structure must be previously
     allocated - <B
-CLASS="FUNCTION"
+CLASS="function"
 >call_user_function()</B
 > does NOT allocate
     it by itself.
    </P
 ></DIV
 ><DIV
-CLASS="SECT2"
+CLASS="sect2"
 ><H2
-CLASS="SECT2"
+CLASS="sect2"
 ><A
-NAME="CALLING-USER-FUNCTIONS.PARAM-COUNT"
+NAME="calling-user-functions.param-count"
 >int param_count</A
 ></H2
 ><P
->    The number of parameters being passed to the function.
+>&#13;    The number of parameters being passed to the function.
    </P
 ></DIV
 ><DIV
-CLASS="SECT2"
+CLASS="sect2"
 ><H2
-CLASS="SECT2"
+CLASS="sect2"
 ><A
-NAME="CALLING-USER-FUNCTIONS.PARAMS"
+NAME="calling-user-functions.params"
 >pval *params[]</A
 ></H2
 ><P
->    An array of pointers to values that will be passed as arguments to the
+>&#13;    An array of pointers to values that will be passed as arguments to the
     function, the first argument being in offset 0, the second in offset
     1, etc.  The array is an array of pointers to pval's;  The pointers
     are sent as-is to the function, which means if the function modifies

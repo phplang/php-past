@@ -27,7 +27,7 @@
    +----------------------------------------------------------------------+
  */
  
-/* $Id: sysvsem.c,v 1.9 2000/04/03 18:23:19 sas Exp $ */
+/* $Id: sysvsem.c,v 1.10 2000/04/14 13:12:56 rasmus Exp $ */
 
 /* This has been built and tested on Solaris 2.6 and Linux 2.1.122.
  * It may not compile or execute correctly on other systems.
@@ -51,7 +51,7 @@
 #include "php3_list.h"
 #include "php3_sysvsem.h"
 
-#if !HAVE_SEMUN && defined(__GNU_LIBRARY__) && __GNU_LIBRARY__ == 6
+#if !HAVE_SEMUN
 
 union semun {
 	int val;                    /* value for SETVAL */

@@ -4,20 +4,23 @@
 >in_array</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
-TITLE="Array functions"
+TITLE="Array Functions"
 HREF="ref.array.html"><LINK
 REL="PREVIOUS"
 TITLE="extract"
 HREF="function.extract.html"><LINK
 REL="NEXT"
 TITLE="key"
-HREF="function.key.html"></HEAD
+HREF="function.key.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,48 +68,55 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.IN-ARRAY"
+NAME="function.in-array"
 >in_array</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN4227"
+NAME="AEN4570"
 ></A
->in_array -- Return true if a value exists in an array</DIV
+><P
+>    (PHP4 )</P
+>in_array&nbsp;--&nbsp;Return true if a value exists in an array</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN4230"
+NAME="AEN4573"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
 >bool in_array</CODE
->(mixed needle, array haystack);<P
+> (mixed needle, array haystack)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Searches <TT
-CLASS="PARAMETER"
+>&#13;     Searches <TT
+CLASS="parameter"
 ><I
 >haystack</I
 ></TT
 > for
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >needle</I
 ></TT
 > and returns true if it is found in
-     the array, false otherwise.</P
+     the array, false otherwise.
+    </P
 ><P
->     <TABLE
+>&#13;     <TABLE
 WIDTH="100%"
 BORDER="0"
 CELLPADDING="0"
@@ -115,37 +125,35 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
 >Example 1. <B
-CLASS="FUNCTION"
->in_array()</B
+CLASS="function"
+>In_array()</B
 > example</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->$os = array("Mac", "NT", "Irix", "Linux");
-if (in_array("Irix", $os))
-       print "Got Irix";
+CLASS="programlisting"
+>&#13;$os = array ("Mac", "NT", "Irix", "Linux");
+if (in_array ("Irix", $os))
+    print "Got Irix";
       </PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR
 ></TABLE
 >
-
-    <DIV
-CLASS="NOTE"
-><BLOCKQUOTE
-CLASS="NOTE"
-><P
-><B
->Note: </B
->      This function was added in PHP 4.0.</P
-></BLOCKQUOTE
-></DIV
-></P
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

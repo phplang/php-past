@@ -4,20 +4,23 @@
 >extract</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
-TITLE="Array functions"
+TITLE="Array Functions"
 HREF="ref.array.html"><LINK
 REL="PREVIOUS"
 TITLE="end"
 HREF="function.end.html"><LINK
 REL="NEXT"
 TITLE="in_array"
-HREF="function.in-array.html"></HEAD
+HREF="function.in-array.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,48 +68,50 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.EXTRACT"
+NAME="function.extract"
 >extract</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN4168"
+NAME="AEN4503"
 ></A
->extract --      Import variables into the symbol table from an array
+><P
+>    (PHP3 &#62;= 3.0.7, PHP4 )</P
+>extract&nbsp;--&nbsp;
+     Import variables into the symbol table from an array
     </DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN4171"
+NAME="AEN4506"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->void extract</CODE
->(array var_array, int 
-      [<SPAN
-CLASS="OPTIONAL"
->extract_type</SPAN
->]
-     , string 
-      [<SPAN
-CLASS="OPTIONAL"
->prefix</SPAN
->]
-     );<P
+>void <B
+CLASS="function"
+>extract</B
+></CODE
+> (array var_array [, int 
+       extract_type [, string 
+       prefix]])</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     This function is used to import variables from an array into the
+>&#13;     This function is used to import variables from an array into the
      current symbol table.  It takes associative array
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >var_array</I
 ></TT
@@ -114,25 +119,26 @@ CLASS="PARAMETER"
      names and values as variable values.  For each key/value pair it
      will create a variable in the current symbol table, subject to
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >extract_type</I
 ></TT
 > and
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >prefix</I
 ></TT
-> parameters.</P
+> parameters.
+    </P
 ><P
->     <B
-CLASS="FUNCTION"
->extract()</B
+>&#13;     <B
+CLASS="function"
+>Extract()</B
 > checks for colissions with existing
      variables.  The way collisions are treated is determined by
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >extract_type</I
 ></TT
@@ -140,19 +146,22 @@ CLASS="PARAMETER"
      following values:
      <P
 ></P
+><DIV
+CLASS="variablelist"
 ><DL
 ><DT
 >EXTR_OVERWRITE</DT
 ><DD
 ><P
->	 If there is a collision, overwrite the existing variable.
+>&#13;	 If there is a collision, overwrite the existing variable.
 	</P
 ></DD
 ><DT
 >EXTR_SKIP</DT
 ><DD
 ><P
->	 If there is a collision, don't overwrite the existing variable.
+>&#13;	 If there is a collision, don't overwrite the existing
+	 variable.
 	</P
 ></DD
 ><DT
@@ -160,8 +169,8 @@ CLASS="PARAMETER"
 ><DD
 ><P
 >If there is a collision, prefix the new variable with
-	 <TT
-CLASS="PARAMETER"
+	<TT
+CLASS="parameter"
 ><I
 >prefix</I
 ></TT
@@ -172,8 +181,8 @@ CLASS="PARAMETER"
 >EXTR_PREFIX_ALL</DT
 ><DD
 ><P
->	 Prefix all variables with <TT
-CLASS="PARAMETER"
+>&#13;	 Prefix all variables with <TT
+CLASS="parameter"
 ><I
 >prefix</I
 ></TT
@@ -181,48 +190,54 @@ CLASS="PARAMETER"
 	</P
 ></DD
 ></DL
-></P
+></DIV
+>
+    </P
 ><P
->     If <TT
-CLASS="PARAMETER"
+>&#13;     If <TT
+CLASS="parameter"
 ><I
 >extract_type</I
 ></TT
 > is not specified, it is
-     assumed to be EXTR_OVERWRITE.</P
+     assumed to be EXTR_OVERWRITE.
+    </P
 ><P
->     Note that <TT
-CLASS="PARAMETER"
+>&#13;     Note that <TT
+CLASS="parameter"
 ><I
 >prefix</I
 ></TT
 > is only required if
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >extract_type</I
 ></TT
 > is EXTR_PREFIX_SAME or
-     EXTR_PREFIX_ALL.</P
+     EXTR_PREFIX_ALL.
+    </P
 ><P
->     <B
-CLASS="FUNCTION"
->extract()</B
+>&#13;     <B
+CLASS="function"
+>Extract()</B
 > checks each key to see if it
      constitues a valid variable name, and if it does only then does
-     it proceed to import it.</P
+     it proceed to import it.
+    </P
 ><P
->     A possible use for extract is to import into symbol table
+>&#13;     A possible use for extract is to import into symbol table
      variables contained in an associative array returned by
      <A
 HREF="function.wddx-deserialize.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >wddx_deserialize()</B
 ></A
->.</P
+>.
+    </P
 ><P
->     <TABLE
+>&#13;     <TABLE
 WIDTH="100%"
 BORDER="0"
 CELLPADDING="0"
@@ -231,46 +246,92 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
->Example 1. extract example</B
+>Example 1. <B
+CLASS="function"
+>Extract()</B
+> example</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->&lt;?
+CLASS="programlisting"
+>&#13;&#60;php?
 
 /* Suppose that $var_array is an array returned from
    wddx_deserialize */
+
 $size = "large";
-$var_array = array("color" =&#62; "blue",
-                   "size"  =&#62; "medium",
-                   "shape" =&#62; "sphere");
-extract($var_array, EXTR_PREFIX_SAME, "wddx");
+$var_array = array ("color" =&#62; "blue",
+                    "size"  =&#62; "medium",
+                    "shape" =&#62; "sphere");
+extract ($var_array, EXTR_PREFIX_SAME, "wddx");
 
 print "$color, $size, $shape, $wddx_size\n";
 
 ?&#62;
       </PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR
 ></TABLE
-></P
+>
+    </P
 ><P
->	 The above example will produce:
-	 <PRE
-CLASS="PROGRAMLISTING"
->blue, large, sphere, medium
-	 </PRE
-></P
+>&#13;     The above example will produce:
+     <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;blue, large, sphere, medium
+     </PRE
+></TD
+></TR
+></TABLE
+>
+    </P
 ><P
->     The $size wasn't overwritten, becaus we specified
-     EXTR_PREFIX_SAME, which resulted in $wddx_size being created. 
-     If EXTR_SKIP was specified, then $wddx_size wouldn't even have
-     been created.  EXTR_OVERWRITE would have cause $size to have
-     value "medium", and EXTR_PREFIX_ALL would result in new
-     variables being named $wddx_color, $wddx_size, and $wddx_shape.</P
+>&#13;     The <TT
+CLASS="varname"
+>$size</TT
+> wasn't overwritten, becaus we
+     specified EXTR_PREFIX_SAME, which resulted in
+     <TT
+CLASS="varname"
+>$wddx_size</TT
+> being created.  If EXTR_SKIP was
+     specified, then $wddx_size wouldn't even have been created.
+     EXTR_OVERWRITE would have cause <TT
+CLASS="varname"
+>$size</TT
+> to have
+     value "medium", and EXTR_PREFIX_ALL would result in new variables
+     being named <TT
+CLASS="varname"
+>$wddx_color</TT
+>,
+     <TT
+CLASS="varname"
+>$wddx_size</TT
+>, and
+     <TT
+CLASS="varname"
+>$wddx_shape</TT
+>.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

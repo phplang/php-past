@@ -4,7 +4,7 @@
 >session_is_registered</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -12,12 +12,15 @@ REL="UP"
 TITLE="Session handling functions"
 HREF="ref.session.html"><LINK
 REL="PREVIOUS"
-TITLE="session_unregister"
-HREF="function.session-unregister.html"><LINK
+TITLE="session_unset"
+HREF="function.session-unset.html"><LINK
 REL="NEXT"
-TITLE="session_decode"
-HREF="function.session-decode.html"></HEAD
+TITLE="session_get_cookie_params"
+HREF="function.session-get-cookie-params.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -42,7 +45,7 @@ WIDTH="10%"
 ALIGN="left"
 VALIGN="bottom"
 ><A
-HREF="function.session-unregister.html"
+HREF="function.session-unset.html"
 >Prev</A
 ></TD
 ><TD
@@ -55,7 +58,7 @@ WIDTH="10%"
 ALIGN="right"
 VALIGN="bottom"
 ><A
-HREF="function.session-decode.html"
+HREF="function.session-get-cookie-params.html"
 >Next</A
 ></TD
 ></TR
@@ -65,55 +68,69 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.SESSION-IS-REGISTERED"
+NAME="function.session-is-registered"
 >session_is_registered</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN24469"
+NAME="AEN31447"
 ></A
->session_is_registered -- Find out if a variable is registered in a session</DIV
+><P
+>    (PHP4 )</P
+>session_is_registered&nbsp;--&nbsp;
+     Find out if a variable is registered in a session
+    </DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN24472"
+NAME="AEN31450"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->bool session_is_registered</CODE
->(string name);<P
+>bool <B
+CLASS="function"
+>session_is_registered</B
+></CODE
+> (string name)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     <B
-CLASS="FUNCTION"
+>&#13;     <B
+CLASS="function"
 >session_is_registered()</B
 > returns true if there
      is a variable with the name <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >name</I
 ></TT
-> registered
-     in the current session.
-    <DIV
-CLASS="NOTE"
+>
+     registered in the current session.
+     <DIV
+CLASS="note"
 ><BLOCKQUOTE
-CLASS="NOTE"
+CLASS="note"
 ><P
 ><B
 >Note: </B
->      This function was added in PHP 4.0.</P
+>
+       This function was added in PHP 4.0.
+      </P
 ></BLOCKQUOTE
 ></DIV
-></P
+>
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -130,7 +147,7 @@ WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
 ><A
-HREF="function.session-unregister.html"
+HREF="function.session-unset.html"
 >Prev</A
 ></TD
 ><TD
@@ -146,7 +163,7 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><A
-HREF="function.session-decode.html"
+HREF="function.session-get-cookie-params.html"
 >Next</A
 ></TD
 ></TR
@@ -155,7 +172,7 @@ HREF="function.session-decode.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->session_unregister</TD
+>session_unset</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"
@@ -168,7 +185,7 @@ HREF="ref.session.html"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->session_decode</TD
+>session_get_cookie_params</TD
 ></TR
 ></TABLE
 ></DIV

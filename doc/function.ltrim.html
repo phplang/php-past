@@ -4,7 +4,7 @@
 >ltrim</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -12,12 +12,15 @@ REL="UP"
 TITLE="String functions"
 HREF="ref.strings.html"><LINK
 REL="PREVIOUS"
-TITLE="join"
-HREF="function.join.html"><LINK
+TITLE="levenshtein"
+HREF="function.levenshtein.html"><LINK
 REL="NEXT"
 TITLE="md5"
-HREF="function.md5.html"></HEAD
+HREF="function.md5.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -42,7 +45,7 @@ WIDTH="10%"
 ALIGN="left"
 VALIGN="bottom"
 ><A
-HREF="function.join.html"
+HREF="function.levenshtein.html"
 >Prev</A
 ></TD
 ><TD
@@ -65,50 +68,64 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.LTRIM"
+NAME="function.ltrim"
 >ltrim</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN25187"
+NAME="AEN33593"
 ></A
->ltrim --      Strip whitespace from the beginning of a string
+><P
+>    (PHP3 , PHP4 )</P
+>ltrim&nbsp;--&nbsp;
+     Strip whitespace from the beginning of a string
     </DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN25190"
+NAME="AEN33596"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->string ltrim</CODE
->(string str);<P
+>string <B
+CLASS="function"
+>ltrim</B
+></CODE
+> (string str)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     This function strips whitespace from the start of a string and
-     returns the stripped string.</P
+>&#13;     This function strips whitespace from the start of a string and
+     returns the stripped string.  The whitespace
+     characters it currently strips are: "\n", "\r", "\t", "\v", "\0",
+     and a plain space.
+    </P
 ><P
->     See also <A
+>&#13;     See also <A
 HREF="function.chop.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >chop()</B
 ></A
 > and <A
 HREF="function.trim.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >trim()</B
 ></A
->.</P
+>.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -125,7 +142,7 @@ WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
 ><A
-HREF="function.join.html"
+HREF="function.levenshtein.html"
 >Prev</A
 ></TD
 ><TD
@@ -150,7 +167,7 @@ HREF="function.md5.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->join</TD
+>levenshtein</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"

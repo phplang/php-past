@@ -4,7 +4,7 @@
 >setlocale</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -12,12 +12,15 @@ REL="UP"
 TITLE="String functions"
 HREF="ref.strings.html"><LINK
 REL="PREVIOUS"
-TITLE="rawurlencode"
-HREF="function.rawurlencode.html"><LINK
+TITLE="sscanf"
+HREF="function.sscanf.html"><LINK
 REL="NEXT"
 TITLE="similar_text"
-HREF="function.similar-text.html"></HEAD
+HREF="function.similar-text.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -42,7 +45,7 @@ WIDTH="10%"
 ALIGN="left"
 VALIGN="bottom"
 ><A
-HREF="function.rawurlencode.html"
+HREF="function.sscanf.html"
 >Prev</A
 ></TD
 ><TD
@@ -65,37 +68,46 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.SETLOCALE"
+NAME="function.setlocale"
 >setlocale</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN25401"
+NAME="AEN33953"
 ></A
->setlocale -- Set locale information</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>setlocale&nbsp;--&nbsp;Set locale information</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN25404"
+NAME="AEN33956"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->string setlocale</CODE
->(string category, string locale);<P
+>string <B
+CLASS="function"
+>setlocale</B
+></CODE
+> (string category, string locale)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     <TT
-CLASS="PARAMETER"
+>&#13;     <TT
+CLASS="parameter"
 ><I
->category</I
+>Category</I
 ></TT
 > is a string specifying the
      category of the functions affected by the locale setting:
@@ -104,21 +116,21 @@ CLASS="PARAMETER"
 ><UL
 ><LI
 ><P
->	LC_ALL for all of the below
+>&#13;	LC_ALL for all of the below
        </P
 ></LI
 ><LI
 ><P
->	LC_COLLATE for string comparison - not currently implemented in PHP
+>&#13;	LC_COLLATE for string comparison - not currently implemented in PHP
        </P
 ></LI
 ><LI
 ><P
->	LC_CTYPE for character classification and conversion, for
+>&#13;	LC_CTYPE for character classification and conversion, for
 	example <A
 HREF="function.strtoupper.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >strtoupper()</B
 ></A
 >
@@ -126,7 +138,7 @@ CLASS="FUNCTION"
 ></LI
 ><LI
 ><P
->	LC_MONETARY for localeconv() - not currently implemented in
+>&#13;	LC_MONETARY for localeconv() - not currently implemented in
 	PHP
        </P
 ></LI
@@ -138,42 +150,46 @@ CLASS="FUNCTION"
 ></LI
 ><LI
 ><P
->	LC_TIME for date and time formatting with
+>&#13;	LC_TIME for date and time formatting with
 	<A
 HREF="function.strftime.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >strftime()</B
 ></A
 >
        </P
 ></LI
 ></UL
-></P
+>
+    </P
 ><P
->     If <TT
-CLASS="PARAMETER"
+>&#13;     If <TT
+CLASS="parameter"
 ><I
 >locale</I
 ></TT
 > is the empty string
      <TT
-CLASS="LITERAL"
+CLASS="literal"
 >""</TT
 >, the locale names will be set from the
      values of environment variables with the same names as the above
-     categories, or from "LANG".</P
+     categories, or from "LANG".
+    </P
 ><P
->     If locale is zero or <TT
-CLASS="LITERAL"
+>&#13;     If locale is zero or <TT
+CLASS="literal"
 >"0"</TT
 >, the locale setting
-     is not affected, only the current setting is returned.</P
+     is not affected, only the current setting is returned.
+    </P
 ><P
->     Setlocale returns the new current locale, or false if the locale
+>&#13;     Setlocale returns the new current locale, or false if the locale
      functionality is not implemented in the plattform, the specified
      locale does not exist or the category name is invalid.
-     An invalid category name also causes a warning message.</P
+     An invalid category name also causes a warning message.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -190,7 +206,7 @@ WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
 ><A
-HREF="function.rawurlencode.html"
+HREF="function.sscanf.html"
 >Prev</A
 ></TD
 ><TD
@@ -215,7 +231,7 @@ HREF="function.similar-text.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->rawurlencode</TD
+>sscanf</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"

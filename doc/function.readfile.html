@@ -4,7 +4,7 @@
 >readfile</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="popen"
 HREF="function.popen.html"><LINK
 REL="NEXT"
 TITLE="readlink"
-HREF="function.readlink.html"></HEAD
+HREF="function.readlink.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,119 +68,135 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.READFILE"
+NAME="function.readfile"
 >readfile</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN9236"
+NAME="AEN10610"
 ></A
->readfile -- output a file</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>readfile&nbsp;--&nbsp;Outputs a file</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN9239"
+NAME="AEN10613"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int readfile</CODE
->(string filename, int [<SPAN
-CLASS="OPTIONAL"
->use_include_path</SPAN
->]);<P
+>int <B
+CLASS="function"
+>readfile</B
+></CODE
+> (string filename [, int 
+       use_include_path])</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Reads a file and writes it to standard output.</P
+>&#13;     Reads a file and writes it to standard output.
+    </P
 ><P
->     Returns the number of bytes read from the file. If an error
+>&#13;     Returns the number of bytes read from the file. If an error
      occurs, false is returned and unless the function was called as
-     @readfile, an error message is printed.</P
+     @readfile, an error message is printed.
+    </P
 ><P
->     If <TT
-CLASS="PARAMETER"
+>&#13;     If <TT
+CLASS="parameter"
 ><I
 >filename</I
 ></TT
 > begins with "http://"
      (not case sensitive), an HTTP 1.0 connection is opened to the
      specified server and the text of the response is written to
-     standard output.</P
+     standard output.
+    </P
 ><P
->     Does not handle HTTP redirects, so you must include trailing
-     slashes on directories.</P
+>&#13;     Does not handle HTTP redirects, so you must include trailing
+     slashes on directories.
+    </P
 ><P
->     If <TT
-CLASS="PARAMETER"
+>&#13;     If <TT
+CLASS="parameter"
 ><I
 >filename</I
 ></TT
 > begins with "ftp://"
      (not case sensitive), an ftp connection to the specified server is
      opened and the requested file is written to standard output. If the server
-     does not support passive mode ftp, this will fail.</P
+     does not support passive mode ftp, this will fail.
+    </P
 ><P
->     If <TT
-CLASS="PARAMETER"
+>&#13;     If <TT
+CLASS="parameter"
 ><I
 >filename</I
 ></TT
 > begins with neither
      of these strings, the file will be opened from the filesystem and
-     its contents written to standard output.</P
+     its contents written to standard output.
+    </P
 ><P
->     You can use the optional second parameter and set it to "1", if
+>&#13;     You can use the optional second parameter and set it to "1", if
      you want to search for the file in the <A
-HREF="configuration.html#INI.INCLUDE-PATH"
+HREF="configuration.html#ini.include-path"
 >include_path</A
->, too.</P
+>, too.
+    </P
 ><P
->     See also <A
+>&#13;     See also <A
 HREF="function.fpassthru.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >fpassthru()</B
 ></A
->, <A
+>,
+     <A
 HREF="function.file.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >file()</B
 ></A
->,
-     <A
+>, <A
 HREF="function.fopen.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >fopen()</B
-></A
->, <A
-HREF="function.include.html"
-><B
-CLASS="FUNCTION"
->include()</B
 ></A
 >,
      <A
+HREF="function.include.html"
+><B
+CLASS="function"
+>include()</B
+></A
+>, <A
 HREF="function.require.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >require()</B
 ></A
->, and <A
+>, and
+     <A
 HREF="function.virtual.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >virtual()</B
 ></A
->.</P
+>.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

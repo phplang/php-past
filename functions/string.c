@@ -26,10 +26,11 @@
    | Authors: Rasmus Lerdorf <rasmus@lerdorf.on.ca>                       |
    |          Stig Sæther Bakken <ssb@fast.no>                            |
    |          Zeev Suraski <bourbon@nevision.net.il>                      |
+   |          Sascha Schumann <sascha@schumann.cx>                        |
    +----------------------------------------------------------------------+
  */
 
-/* $Id: string.c,v 1.209 2000/02/14 10:07:24 thies Exp $ */
+/* $Id: string.c,v 1.214 2000/07/30 05:09:46 rasmus Exp $ */
 #include <stdio.h>
 #include "php.h"
 #include "internal_functions.h"
@@ -301,7 +302,7 @@ void _php3_explode(pval *delim, pval *str, pval *return_value)
 		do {
 			add_index_stringl(return_value, i++, p1, p2-p1, 1);
 			p1 = p2 + delim->value.str.len;
-		} while (p2 = _php3_memnstr(p1, delim->value.str.val, delim->value.str.len, endp));
+		} while ((p2 = _php3_memnstr(p1, delim->value.str.val, delim->value.str.len, endp)));
 
 		if (p1 <= endp) {
 			add_index_stringl(return_value, i++, p1, endp-p1, 1);
@@ -580,6 +581,8 @@ PHPAPI void _php3_dirname(char *str, int len) {
 #endif
 		)
 		*c='\0';
+	else
+		*str='\0';
 }
 
 /* {{{ proto string dirname(string path)
@@ -596,7 +599,11 @@ void php3_dirname(INTERNAL_FUNCTION_PARAMETERS)
 	convert_to_string(str);
 	ret = estrdup(str->value.str.val);
 	_php3_dirname(ret,str->value.str.len);
-	RETVAL_STRING(ret,1);
+	if(*ret) {
+		RETVAL_STRING(ret,1);
+	} else { 
+		RETVAL_FALSE;
+	}
 	efree(ret);
 }
 /* }}} */
@@ -1428,7 +1435,7 @@ _php3_memnstr(char *haystack, char *needle, int needle_len, char *end)
 /*
  * because of efficiency we use malloc/realloc/free here
  * erealloc _will_ move your data around - it took me some time
- * to find out ... Sascha Schumann <sas@schell.de> 981220
+ * to find out ... Sascha Schumann <sascha@schumann.cx> 981220
  */
 
 static char *_php3_str_to_str(char *haystack, int length, 
@@ -1931,7 +1938,10 @@ void _php3_strip_tags(char *rbuf, int len, int state, char *allow) {
 		_php3_strtolower(allow);
 		tbuf = emalloc(PHP_TAG_BUF_SIZE+1);
 		tp = tbuf;
-	} else tp=NULL;
+	} else {
+		tp=NULL;
+		tbuf=NULL;
+	}
 
 	while(i<len) { 
 		switch (c) {
@@ -1983,6 +1993,7 @@ void _php3_strip_tags(char *rbuf, int len, int state, char *allow) {
 				} else if (state == 2) {
 					if (!br && lc != '\"' && *(p-1)=='?') {
 						state = 0;
+						tp = tbuf;
 					}
 				}
 				break;

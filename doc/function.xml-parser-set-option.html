@@ -4,7 +4,7 @@
 >xml_parser_set_option</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="xml_parser_free"
 HREF="function.xml-parser-free.html"><LINK
 REL="NEXT"
 TITLE="xml_parser_get_option"
-HREF="function.xml-parser-get-option.html"></HEAD
+HREF="function.xml-parser-get-option.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,78 +68,90 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.XML-PARSER-SET-OPTION"
+NAME="function.xml-parser-set-option"
 >xml_parser_set_option</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN28045"
+NAME="AEN37188"
 ></A
->xml_parser_set_option -- set options in an XML parser</DIV
+><P
+>    (PHP3 &#62;= 3.0.6, PHP4 )</P
+>xml_parser_set_option&nbsp;--&nbsp;set options in an XML parser</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN28048"
+NAME="AEN37191"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int xml_parser_set_option</CODE
->(int parser, int option, mixed value);<P
+>int <B
+CLASS="function"
+>xml_parser_set_option</B
+></CODE
+> (int parser, int option, mixed value)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     <P
+>&#13;     <P
 ></P
+><DIV
+CLASS="variablelist"
 ><DL
 ><DT
 ><TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >parser</I
 ></TT
 ></DT
 ><DD
 ><P
->	 A reference to the XML parser to set an option in.
+>&#13;	 A reference to the XML parser to set an option in.
 	</P
 ></DD
 ><DT
 ><TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >option</I
 ></TT
 ></DT
 ><DD
 ><P
->	 Which option to set.  See below.
+>&#13;	 Which option to set.  See below.
 	</P
 ></DD
 ><DT
 ><TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >value</I
 ></TT
 ></DT
 ><DD
 ><P
->	 The option's new value.
+>&#13;	 The option's new value.
 	</P
 ></DD
 ></DL
+></DIV
 >
     </P
 ><P
->     This function returns false if <TT
-CLASS="PARAMETER"
+>&#13;     This function returns false if <TT
+CLASS="parameter"
 ><I
 >parser</I
 ></TT
@@ -145,9 +160,9 @@ CLASS="PARAMETER"
      Else the option is set and true is returned.
     </P
 ><P
->     The following options are available:
+>&#13;     The following options are available:
      <DIV
-CLASS="TABLE"
+CLASS="table"
 ><P
 ><B
 >Table 1. XML parser options</B
@@ -155,34 +170,37 @@ CLASS="TABLE"
 ><TABLE
 BORDER="1"
 CLASS="CALSTABLE"
+><THEAD
 ><TR
 ><TH
 ALIGN="LEFT"
-VALIGN="TOP"
+VALIGN="MIDDLE"
 >Option constant</TH
 ><TH
 ALIGN="LEFT"
-VALIGN="TOP"
+VALIGN="MIDDLE"
 >Data type</TH
 ><TH
 ALIGN="LEFT"
-VALIGN="TOP"
+VALIGN="MIDDLE"
 >Description</TH
 ></TR
+></THEAD
+><TBODY
 ><TR
 ><TD
 ALIGN="LEFT"
-VALIGN="TOP"
+VALIGN="MIDDLE"
 >XML_OPTION_CASE_FOLDING</TD
 ><TD
 ALIGN="LEFT"
-VALIGN="TOP"
+VALIGN="MIDDLE"
 >integer</TD
 ><TD
 ALIGN="LEFT"
-VALIGN="TOP"
->	  Controls whether <A
-HREF="ref.xml.html#XML.CASE-FOLDING"
+VALIGN="MIDDLE"
+>&#13;	  Controls whether <A
+HREF="ref.xml.html#xml.case-folding"
 >case-folding</A
 > is enabled
 	  for this XML parser.  Enabled by default.
@@ -191,17 +209,17 @@ HREF="ref.xml.html#XML.CASE-FOLDING"
 ><TR
 ><TD
 ALIGN="LEFT"
-VALIGN="TOP"
+VALIGN="MIDDLE"
 >XML_OPTION_TARGET_ENCODING</TD
 ><TD
 ALIGN="LEFT"
-VALIGN="TOP"
+VALIGN="MIDDLE"
 >string</TD
 ><TD
 ALIGN="LEFT"
-VALIGN="TOP"
->	  Sets which <A
-HREF="ref.xml.html#XML.ENCODING"
+VALIGN="MIDDLE"
+>&#13;	  Sets which <A
+HREF="ref.xml.html#xml.encoding"
 >target
 	  encoding</A
 > to use in this XML parser.  By default, it
@@ -209,23 +227,24 @@ HREF="ref.xml.html#XML.ENCODING"
 	  <A
 HREF="function.xml-parser-create.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >xml_parser_create()</B
 ></A
 >.  Supported target
 	  encodings are <TT
-CLASS="LITERAL"
+CLASS="literal"
 >ISO-8859-1</TT
 >,
 	  <TT
-CLASS="LITERAL"
+CLASS="literal"
 >US-ASCII</TT
 > and <TT
-CLASS="LITERAL"
+CLASS="literal"
 >UTF-8</TT
 >.
 	 </TD
 ></TR
+></TBODY
 ></TABLE
 ></DIV
 >

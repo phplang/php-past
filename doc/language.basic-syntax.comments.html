@@ -4,7 +4,7 @@
 >Comments</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="Instruction separation"
 HREF="language.basic-syntax.instruction-separation.html"><LINK
 REL="NEXT"
 TITLE="Types"
-HREF="language.types.html"></HEAD
+HREF="language.types.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="sect1"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -64,23 +67,29 @@ HREF="language.types.html"
 ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><DIV
-CLASS="SECT1"
+CLASS="sect1"
 ><H1
-CLASS="SECT1"
+CLASS="sect1"
 ><A
-NAME="LANGUAGE.BASIC-SYNTAX.COMMENTS"
+NAME="language.basic-syntax.comments"
 >Comments</A
 ></H1
 ><P
->     PHP supports 'C', 'C++' and Unix shell-style comments. For example:
+>&#13;     PHP supports 'C', 'C++' and Unix shell-style comments. For example:
 
     <DIV
-CLASS="INFORMALEXAMPLE"
+CLASS="informalexample"
 ><P
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->&lt;?php
+CLASS="programlisting"
+>&#13;&#60;?php
     echo "This is a test"; // This is a one-line c++ style comment
     /* This is a multi line comment
        yet another line of comment */
@@ -88,40 +97,62 @@ CLASS="PROGRAMLISTING"
     echo "One Final Test"; # This is shell-style style comment
 ?&#62;
      </PRE
+></TD
+></TR
+></TABLE
 ><P
 ></P
 ></DIV
 ></P
 ><P
->     The "one-line" comment styles actually only comment to the
+>&#13;     The "one-line" comment styles actually only comment to the
      end of the line or the current block of PHP code, whichever
      comes first.</P
 ><DIV
-CLASS="INFORMALEXAMPLE"
+CLASS="informalexample"
 ><P
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->&lt;h1&#62;This is an &lt;?# echo "simple";?&#62; example.&lt;/h1&#62;
-&lt;p&#62;The header above will say 'This is an example'.</PRE
+CLASS="programlisting"
+>&#13;&#60;h1&#62;This is an &#60;?# echo "simple";?&#62; example.&#60;/h1&#62;
+&#60;p&#62;The header above will say 'This is an example'.
+</PRE
+></TD
+></TR
+></TABLE
 ><P
 ></P
 ></DIV
 ><P
->     You should be careful not to nest 'C' style comments, which can
+>&#13;     You should be careful not to nest 'C' style comments, which can
      happen when commenting out large blocks.</P
 ><DIV
-CLASS="INFORMALEXAMPLE"
+CLASS="informalexample"
 ><P
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->&lt;?php
+CLASS="programlisting"
+>&#13;&#60;?php
  /* 
     echo "This is a test"; /* This comment will cause a problem */
  */
 ?&#62;
     </PRE
+></TD
+></TR
+></TABLE
 ><P
 ></P
 ></DIV

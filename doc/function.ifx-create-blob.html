@@ -4,7 +4,7 @@
 >ifx_create_blob</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="ifx_get_char"
 HREF="function.ifx-get-char.html"><LINK
 REL="NEXT"
 TITLE="ifx_copy_blob"
-HREF="function.ifx-copy-blob.html"></HEAD
+HREF="function.ifx-copy-blob.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,48 +68,57 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.IFX-CREATE-BLOB"
+NAME="function.ifx-create-blob"
 >ifx_create_blob</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN13974"
+NAME="AEN16808"
 ></A
->ifx_create_blob -- Creates an blob object</DIV
+><P
+>    (PHP3 &#62;= 3.0.4, PHP4 )</P
+>ifx_create_blob&nbsp;--&nbsp;Creates an blob object</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN13977"
+NAME="AEN16811"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int ifx_create_blob</CODE
->(int type, int mode, string param);<P
+>int <B
+CLASS="function"
+>ifx_create_blob</B
+></CODE
+> (int type, int mode, string param)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Creates an blob object.
+>&#13;     Creates an blob object.
     </P
 ><P
->     type: 1 = TEXT, 0 = BYTE
+>&#13;     type: 1 = TEXT, 0 = BYTE
     </P
 ><P
->     mode: 0 = blob-object holds the content in memory, 
+>&#13;     mode: 0 = blob-object holds the content in memory, 
            1 = blob-object holds the content in file.
     </P
 ><P
->     param: if mode = 0: pointer to the content,
+>&#13;     param: if mode = 0: pointer to the content,
             if mode = 1: pointer to the filestring.
     </P
 ><P
->     Return FALSE on error, otherwise the new blob object-id.
+>&#13;     Return FALSE on error, otherwise the new blob object-id.
     </P
 ></DIV
 ><DIV

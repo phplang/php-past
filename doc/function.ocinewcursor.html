@@ -4,7 +4,7 @@
 >OCINewCursor</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="OCIStatementType"
 HREF="function.ocistatementtype.html"><LINK
 REL="NEXT"
 TITLE="OCIFreeStatement"
-HREF="function.ocifreestatement.html"></HEAD
+HREF="function.ocifreestatement.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,44 +68,50 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.OCINEWCURSOR"
+NAME="function.ocinewcursor"
 >OCINewCursor</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN20418"
+NAME="AEN26085"
 ></A
->OCINewCursor -- return a new cursor (Statement-Handle) - use this to bind ref-cursors!</DIV
+><P
+>    (PHP3 &#62;= 3.0.8, PHP4 )</P
+>OCINewCursor&nbsp;--&nbsp;return a new cursor (Statement-Handle) - use this to bind ref-cursors!</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN20421"
+NAME="AEN26088"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int OCINewCursor</CODE
->(int conn);<P
+>int <B
+CLASS="function"
+>OCINewCursor</B
+></CODE
+> (int conn)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     <A
-HREF="function.ocinewcursor.html"
-><B
-CLASS="FUNCTION"
+>&#13;     <B
+CLASS="function"
 >OCINewCursor()</B
-></A
 > allocates a new statement handle on the specified
      connection.
     </P
 ><P
->     <TABLE
+>&#13;     <TABLE
 WIDTH="100%"
 BORDER="0"
 CELLPADDING="0"
@@ -111,14 +120,20 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
 >Example 1. Using a REF CURSOR from a stored procedure</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->&lt;?php   
+CLASS="programlisting"
+>&#13;&#60;?php   
 // suppose your stored procedure info.output returns a ref cursor in :data
 
 $conn = OCILogon("scott","tiger");
@@ -136,14 +151,19 @@ while (OCIFetchInto($curs,&#38;$data)) {
 OCIFreeCursor($stmt);
 OCIFreeStatement($curs);
 OCILogoff($conn);
-?&#62;</PRE
+?&#62;
+      </PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR
 ></TABLE
-></P
+>
+    </P
 ><P
->     <TABLE
+>&#13;     <TABLE
 WIDTH="100%"
 BORDER="0"
 CELLPADDING="0"
@@ -152,51 +172,62 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
 >Example 2. Using a REF CURSOR in a select statement</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->&lt;?php   
-print "&lt;HTML&#62;&lt;BODY&#62;";
+CLASS="programlisting"
+>&#13;&#60;?php   
+print "&#60;HTML&#62;&#60;BODY&#62;";
 $conn = OCILogon("scott","tiger");
 $count_cursor = "CURSOR(select count(empno) num_emps from emp " .
                 "where emp.deptno = dept.deptno) as EMPCNT from dept";
 $stmt = OCIParse($conn,"select deptno,dname,$count_cursor");
 
 ociexecute($stmt);
-print "&lt;TABLE BORDER=\"1\"&#62;";
-print "&lt;TR&#62;";
-print "&lt;TH&#62;DEPT NAME&lt;/TH&#62;";
-print "&lt;TH&#62;DEPT #&lt;/TH&#62;";
-print "&lt;TH&#62;# EMPLOYEES&lt;/TH&#62;";
-print "&lt;/TR&#62;";
+print "&#60;TABLE BORDER=\"1\"&#62;";
+print "&#60;TR&#62;";
+print "&#60;TH&#62;DEPT NAME&#60;/TH&#62;";
+print "&#60;TH&#62;DEPT #&#60;/TH&#62;";
+print "&#60;TH&#62;# EMPLOYEES&#60;/TH&#62;";
+print "&#60;/TR&#62;";
 
 while (OCIFetchInto($stmt,&#38;$data,OCI_ASSOC)) {
-    print "&lt;TR&#62;";
+    print "&#60;TR&#62;";
     $dname  = $data["DNAME"];
     $deptno = $data["DEPTNO"];
-    print "&lt;TD&#62;$dname&lt;/TD&#62;";
-    print "&lt;TD&#62;$deptno&lt;/TD&#62;";
+    print "&#60;TD&#62;$dname&#60;/TD&#62;";
+    print "&#60;TD&#62;$deptno&#60;/TD&#62;";
     ociexecute($data[ "EMPCNT" ]);
     while (OCIFetchInto($data[ "EMPCNT" ],&#38;$subdata,OCI_ASSOC)) {
         $num_emps = $subdata["NUM_EMPS"];
-        print  "&lt;TD&#62;$num_emps&lt;/TD&#62;";
+        print  "&#60;TD&#62;$num_emps&#60;/TD&#62;";
     }
-    print "&lt;/TR&#62;";
+    print "&#60;/TR&#62;";
 }
-print "&lt;/TABLE&#62;";
-print "&lt;/BODY&#62;&lt;/HTML&#62;";
+print "&#60;/TABLE&#62;";
+print "&#60;/BODY&#62;&#60;/HTML&#62;";
 OCIFreeStatement($stmt);
 OCILogoff($conn);
-?&#62;</PRE
+?&#62;
+      </PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR
 ></TABLE
-></P
+>
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

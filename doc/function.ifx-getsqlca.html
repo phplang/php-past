@@ -4,7 +4,7 @@
 >ifx_getsqlca</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="ifx_affected_rows"
 HREF="function.ifx-affected-rows.html"><LINK
 REL="NEXT"
 TITLE="ifx_fetch_row"
-HREF="function.ifx-fetch-row.html"></HEAD
+HREF="function.ifx-fetch-row.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,35 +68,46 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.IFX-GETSQLCA"
+NAME="function.ifx-getsqlca"
 >ifx_getsqlca</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN13772"
+NAME="AEN16594"
 ></A
->ifx_getsqlca -- Get the contents of sqlca.sqlerrd[0..5] after a query</DIV
+><P
+>    (PHP3 &#62;= 3.0.8, PHP4 )</P
+>ifx_getsqlca&nbsp;--&nbsp;
+     Get the contents of sqlca.sqlerrd[0..5] after a query
+    </DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN13775"
+NAME="AEN16597"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->array ifx_getsqlca</CODE
->(int result_id);<P
+>array <B
+CLASS="function"
+>ifx_getsqlca</B
+></CODE
+> (int result_id)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     <TT
-CLASS="PARAMETER"
+>&#13;     <TT
+CLASS="parameter"
 ><I
 >result_id</I
 ></TT
@@ -101,37 +115,40 @@ CLASS="PARAMETER"
      <A
 HREF="function.ifx-query.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >ifx_query()</B
 ></A
 > or
      <A
 HREF="function.ifx-prepare.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >ifx_prepare()</B
 ></A
 >. 
     </P
 ><P
 > 
-     Returns a pseudo-row (assiociative arry) with sqlca.sqlerrd[0] to sqlca.sqlerrd[5] 
-     after the query associated with <TT
-CLASS="PARAMETER"
+     Returns a pseudo-row (assiociative array) with sqlca.sqlerrd[0]
+     ... sqlca.sqlerrd[5] after the query associated with
+     <TT
+CLASS="parameter"
 ><I
 >result_id</I
 ></TT
->.  
+>.
     </P
 ><P
 > 
-     For inserts, updates and deletes the values returned are those as set by the server
-     after executing the query. This gives access to the number of affected
-     rows and the serial insert value. For selects the values are those saved after
-     the prepare statement. This gives access to the estimated number of
-     affected rows. The use of this function saves the overhead of executing
-     a "select dbinfo('sqlca.sqlerrdx')" query, as it retrieves the values
-     that were saved by the ifx driver at the appropriate moment.  
+     For inserts, updates and deletes the values returned are those as
+     set by the server after executing the query. This gives access to
+     the number of affected rows and the serial insert value. For
+     SELECTs the values are those saved after the PREPARE
+     statement. This gives access to the *estimated* number of
+     affected rows. The use of this function saves the overhead of
+     executing a "select dbinfo('sqlca.sqlerrdx')" query, as it
+     retrieves the values that were saved by the ifx driver at the
+     appropriate moment.
     </P
 ><TABLE
 WIDTH="100%"
@@ -142,22 +159,32 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
 >Example 1. Retrieve Informix sqlca.sqlerrd[x] values</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->/* assume the first column of 'sometable' is a serial */
-$qid = ifx_query("insert into sometable values(0, '2nd column', 'another column' ", $connid);
+CLASS="programlisting"
+>&#13;/* assume the first column of 'sometable' is a serial */
+$qid = ifx_query("insert into sometable 
+                  values (0, '2nd column', 'another column' ", $connid));
 if (! $qid) {
     ... error ...
 }
 $sqlca = ifx_getsqlca ($qid);
 $serial_value = $sqlca["sqlerrd1"];
-echo "The serial value of the inserted row is : " . $serial_value&lt;br&#62;\n"; 
-      </PRE
+echo "The serial value of the inserted row is : " . $serial_value&#60;br&#62;\n"; 
+     </PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR

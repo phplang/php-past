@@ -4,7 +4,7 @@
 >str_repeat</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="strrchr"
 HREF="function.strrchr.html"><LINK
 REL="NEXT"
 TITLE="strrev"
-HREF="function.strrev.html"></HEAD
+HREF="function.strrev.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,47 +68,56 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.STR-REPEAT"
+NAME="function.str-repeat"
 >str_repeat</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN25792"
+NAME="AEN34511"
 ></A
->str_repeat -- Repeat a string</DIV
+><P
+>    (PHP4 &#62;= 4.0b4)</P
+>str_repeat&nbsp;--&nbsp;Repeat a string</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN25795"
+NAME="AEN34514"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->string str_repeat</CODE
->(string input, int multiplier);<P
+>string <B
+CLASS="function"
+>str_repeat</B
+></CODE
+> (string input, int multiplier)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Returns <TT
-CLASS="PARAMETER"
+>&#13;     Returns <TT
+CLASS="parameter"
 ><I
 >input_str</I
 ></TT
 > repeated
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >multiplier</I
 ></TT
 > times.
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >multiplier</I
 ></TT
@@ -120,33 +132,44 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
 >Example 1. <B
-CLASS="FUNCTION"
->str_repeat()</B
+CLASS="function"
+>Str_repeat()</B
 > example</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->echo str_repeat("-=", 10);
+CLASS="programlisting"
+>&#13;echo str_repeat ("-=", 10);
      </PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR
 ></TABLE
 ><P
->     This will output "-=-=-=-=-=-=-=-=-=-=".
+>&#13;     This will output "-=-=-=-=-=-=-=-=-=-=".
     </P
 ><DIV
-CLASS="NOTE"
+CLASS="note"
 ><BLOCKQUOTE
-CLASS="NOTE"
+CLASS="note"
 ><P
 ><B
 >Note: </B
->      This function was added in PHP 4.0.</P
+>
+      This function was added in PHP 4.0.
+     </P
 ></BLOCKQUOTE
 ></DIV
 ></DIV

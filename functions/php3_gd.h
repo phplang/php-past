@@ -29,7 +29,7 @@
  */
 
 
-/* $Id: php3_gd.h,v 1.43 2000/03/13 03:30:55 rasmus Exp $ */
+/* $Id: php3_gd.h,v 1.44 2000/05/02 20:27:19 hholzgra Exp $ */
 
 #ifndef _PHP3_GD_H
 #define _PHP3_GD_H
@@ -73,18 +73,12 @@ extern void php3_imagecolorsforindex(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_imagecopy(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_imagecopyresized(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_imagecreate(INTERNAL_FUNCTION_PARAMETERS);
-#if HAVE_GD_GIF
 extern void php3_imagecreatefromgif (INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_imagegif(INTERNAL_FUNCTION_PARAMETERS);
-#endif
-#if HAVE_GD_PNG
 extern void php3_imagecreatefrompng (INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_imagepng(INTERNAL_FUNCTION_PARAMETERS);
-#endif
-#if HAVE_GD_JPG
 extern void php3_imagecreatefromjpeg (INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_imagejpeg(INTERNAL_FUNCTION_PARAMETERS);
-#endif
 extern void php3_imagewbmp(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_imagedestroy(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_imagefill(INTERNAL_FUNCTION_PARAMETERS);
@@ -107,11 +101,8 @@ extern void php3_imagedashedline(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_imagegammacorrect(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_free_gd_font(gdFontPtr);
 extern void _php3_gdimagecharup(gdImagePtr, gdFontPtr, int, int, int, int);
-#if HAVE_LIBTTF|HAVE_LIBFREETYPE
 extern void php3_imagettfbbox(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_imagettftext(INTERNAL_FUNCTION_PARAMETERS);
-#endif
-#if HAVE_LIBT1
 extern void php3_imagepsloadfont(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_imagepsfreefont(INTERNAL_FUNCTION_PARAMETERS);
 /* The function in t1lib which this function uses seem to be buggy...
@@ -123,6 +114,7 @@ extern void php3_imagepsslantfont(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_imagepsbbox(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_imagepstext(INTERNAL_FUNCTION_PARAMETERS);
 
+#if HAVE_LIBT1
 typedef struct {
   char *default_encoding;
 } gd_module;

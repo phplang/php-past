@@ -4,7 +4,7 @@
 >msql_tablename</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="msql_selectdb"
 HREF="function.msql-selectdb.html"><LINK
 REL="NEXT"
 TITLE="MySQL functions"
-HREF="ref.mysql.html"></HEAD
+HREF="ref.mysql.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,55 +68,64 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.MSQL-TABLENAME"
+NAME="function.msql-tablename"
 >msql_tablename</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN17780"
+NAME="AEN22633"
 ></A
->msql_tablename -- get table name of field</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>msql_tablename&nbsp;--&nbsp;Get table name of field</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN17783"
+NAME="AEN22636"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->string msql_tablename</CODE
->(int query_identifier, int field);<P
+>string <B
+CLASS="function"
+>msql_tablename</B
+></CODE
+> (int query_identifier, int field)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
 >    
-     msql_tablename() takes a result pointer returned by the 
-     <A
+     <B
+CLASS="function"
+>Msql_tablename()</B
+> takes a result pointer
+     returned by the <A
 HREF="function.msql-list-tables.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >msql_list_tables()</B
 ></A
->
-     function as well as an integer index and returns the name of a
-     table. The
+> function as
+     well as an integer index and returns the name of a table. The
      <A
 HREF="function.msql-numrows.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >msql_numrows()</B
 ></A
-> function
-     may be used to determine the number of tables in the result
-     pointer.
-
-    <TABLE
+> function may be used to
+     determine the number of tables in the result pointer.
+     <TABLE
 WIDTH="100%"
 BORDER="0"
 CELLPADDING="0"
@@ -122,28 +134,42 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
->Example 1. msql_tablename() example</B
+>Example 1. <B
+CLASS="function"
+>Msql_tablename()</B
+> example</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->&lt;?php 
+CLASS="programlisting"
+>&#13;&#60;?php 
 msql_connect ("localhost");
-$result = msql_list_tables("wisconsin");
+$result = msql_list_tables ("wisconsin");
 $i = 0;
-while ($i &lt; msql_numrows($result)) {
-    $tb_names[$i] = msql_tablename($result, $i);
-    echo $tb_names[$i] . "&lt;BR&#62;";
+while ($i &#60; msql_numrows ($result)) {
+    $tb_names[$i] = msql_tablename ($result, $i);
+    echo $tb_names[$i] . "&#60;BR&#62;";
     $i++; 
 }
-?&#62;</PRE
+?&#62;
+      </PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR
 ></TABLE
-></P
+>
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

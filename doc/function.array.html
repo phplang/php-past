@@ -4,20 +4,23 @@
 >array</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
-TITLE="Array functions"
+TITLE="Array Functions"
 HREF="ref.array.html"><LINK
 REL="PREVIOUS"
-TITLE="Array functions"
+TITLE="Array Functions"
 HREF="ref.array.html"><LINK
 REL="NEXT"
 TITLE="array_count_values"
-HREF="function.array-count-values.html"></HEAD
+HREF="function.array-count-values.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,62 +68,75 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.ARRAY"
+NAME="function.array"
 >array</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN3510"
+NAME="AEN3613"
 ></A
->array --      Create an array
+><P
+>    (unknown)</P
+>array&nbsp;--&nbsp;
+     Create an array
     </DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN3513"
+NAME="AEN3616"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->array array</CODE
->(...);<P
+>array <B
+CLASS="function"
+>array</B
+></CODE
+> ([mixed 
+       ...])</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Returns an array of the parameters.  The parameters can be given
+>&#13;     Returns an array of the parameters.  The parameters can be given
      an index with the <TT
-CLASS="LITERAL"
->=&gt;</TT
+CLASS="literal"
+>=&#62;</TT
 > operator.
-
-    <DIV
-CLASS="NOTE"
+    </P
+><P
+>&#13;     <DIV
+CLASS="note"
 ><BLOCKQUOTE
-CLASS="NOTE"
+CLASS="note"
 ><P
 ><B
 >Note: </B
->      <B
-CLASS="FUNCTION"
->array()</B
+>
+       <B
+CLASS="function"
+>Array()</B
 > is a language construct used to
-      represent literal arrays, and not a regular function.
-     </P
+       represent literal arrays, and not a regular function.
+      </P
 ></BLOCKQUOTE
 ></DIV
-></P
+>
+    </P
 ><P
->     The following example demonstrates how to create a
+>&#13;     The following example demonstrates how to create a
      two-dimensional array, how to specify keys for associative
      arrays, and how to skip-and-continue numeric indices in normal
      arrays.
-
      <TABLE
 WIDTH="100%"
 BORDER="0"
@@ -130,35 +146,46 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
 >Example 1. <B
-CLASS="FUNCTION"
->array()</B
+CLASS="function"
+>Array()</B
 > example</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->$fruits = array(
-    "fruits"  =&#62; array("a"=&#62;"orange","b"=&#62;"banana","c"=&#62;"apple"),
-    "numbers" =&#62; array(1, 2, 3, 4, 5, 6),
-    "holes"   =&#62; array("first", 5 =&#62; "second", "third")
-);</PRE
+CLASS="programlisting"
+>&#13;$fruits = array (
+    "fruits"  =&#62; array ("a"=&#62;"orange", "b"=&#62;"banana", "c"=&#62;"apple"),
+    "numbers" =&#62; array (1, 2, 3, 4, 5, 6),
+    "holes"   =&#62; array ("first", 5 =&#62; "second", "third")
+);
+      </PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR
 ></TABLE
-></P
+>
+    </P
 ><P
->     See also:
-     <A
+>&#13;     See also: <A
 HREF="function.list.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >list()</B
 ></A
->.</P
+>.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -200,7 +227,7 @@ HREF="function.array-count-values.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->Array functions</TD
+>Array Functions</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"

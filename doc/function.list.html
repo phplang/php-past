@@ -4,20 +4,23 @@
 >list</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
-TITLE="Array functions"
+TITLE="Array Functions"
 HREF="ref.array.html"><LINK
 REL="PREVIOUS"
 TITLE="ksort"
 HREF="function.ksort.html"><LINK
 REL="NEXT"
-TITLE="next"
-HREF="function.next.html"></HEAD
+TITLE="natsort"
+HREF="function.natsort.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -55,7 +58,7 @@ WIDTH="10%"
 ALIGN="right"
 VALIGN="bottom"
 ><A
-HREF="function.next.html"
+HREF="function.natsort.html"
 >Next</A
 ></TD
 ></TR
@@ -65,47 +68,56 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.LIST"
+NAME="function.list"
 >list</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN4310"
+NAME="AEN4675"
 ></A
->list --      Assign variables as if they were an array
+><P
+>    (unknown)</P
+>list&nbsp;--&nbsp;
+     Assign variables as if they were an array
     </DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN4313"
+NAME="AEN4678"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->void list</CODE
->(...);<P
+>void <B
+CLASS="function"
+>list</B
+></CODE
+>(...);</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Like <A
+>&#13;     Like <A
 HREF="function.array.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >array()</B
 ></A
 >, this is not really a function,
      but a language construct.  <B
-CLASS="FUNCTION"
+CLASS="function"
 >list()</B
 > is used to
      assign a list of variables in one operation.
-
      <TABLE
 WIDTH="100%"
 BORDER="0"
@@ -115,51 +127,66 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
 >Example 1. <B
-CLASS="FUNCTION"
->list()</B
+CLASS="function"
+>List()</B
 > example</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->&lt;table&#62;
- &lt;tr&#62;
-  &lt;th&#62;Employee name&lt;/th&#62;
-  &lt;th&#62;Salary&lt;/th&#62;
- &lt;/tr&#62;
-&lt;?php
+CLASS="programlisting"
+>&#13;&#60;table&#62;
+ &#60;tr&#62;
+  &#60;th&#62;Employee name&#60;/th&#62;
+  &#60;th&#62;Salary&#60;/th&#62;
+ &#60;/tr&#62;
 
-$result = mysql($conn, "SELECT id, name, salary FROM employees");
-while (list($id, $name, $salary) = mysql_fetch_row($result)) {
-    print(" &lt;tr&#62;\n".
-          "  &lt;td&#62;&lt;a href=\"info.php3?id=$id\"&#62;$name&lt;/a&#62;&lt;/td&#62;\n".
-          "  &lt;td&#62;$salary&lt;/td&#62;\n".
-          " &lt;/tr&#62;\n");
+&#60;?php
+
+$result = mysql ($conn, "SELECT id, name, salary FROM employees");
+while (list ($id, $name, $salary) = mysql_fetch_row ($result)) {
+    print (" &#60;tr&#62;\n".
+           "  &#60;td&#62;&#60;a href=\"info.php3?id=$id\"&#62;$name&#60;/a&#62;&#60;/td&#62;\n".
+           "  &#60;td&#62;$salary&#60;/td&#62;\n".
+           " &#60;/tr&#62;\n");
 }
 
-?&#62;&lt;/table&#62;</PRE
+?&#62;
+
+&#60;/table&#62;
+      </PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR
 ></TABLE
-></P
+>
+    </P
 ><P
->     See also: <A
+>&#13;     See also <A
 HREF="function.each.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >each()</B
 ></A
->, <A
+> and <A
 HREF="function.array.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >array()</B
 ></A
->.</P
+>.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -192,7 +219,7 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><A
-HREF="function.next.html"
+HREF="function.natsort.html"
 >Next</A
 ></TD
 ></TR
@@ -214,7 +241,7 @@ HREF="ref.array.html"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->next</TD
+>natsort</TD
 ></TR
 ></TABLE
 ></DIV

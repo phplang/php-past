@@ -4,7 +4,7 @@
 >die</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="defined"
 HREF="function.defined.html"><LINK
 REL="NEXT"
 TITLE="eval"
-HREF="function.eval.html"></HEAD
+HREF="function.eval.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,37 +68,49 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.DIE"
+NAME="function.die"
 >die</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN16722"
+NAME="AEN21307"
 ></A
->die -- Output a message and terminate the current script</DIV
+><P
+>    (unknown)</P
+>die&nbsp;--&nbsp;
+     Output a message and terminate the current script
+    </DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN16725"
+NAME="AEN21310"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->void die</CODE
->(string message);<P
+>void <B
+CLASS="function"
+>die</B
+></CODE
+> (string message)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     This language construct outputs a message and terminates parsing
-     of the script.  It does not return.</P
+>&#13;     This language construct outputs a message and terminates parsing
+     of the script.  It does not return anything.
+    </P
 ><P
->     <TABLE
+>&#13;     <TABLE
 WIDTH="100%"
 BORDER="0"
 CELLPADDING="0"
@@ -104,24 +119,43 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
 >Example 1. die example</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->&lt;?php
+CLASS="programlisting"
+>&#13;&#60;?php
 $filename = '/path/to/data-file';
-$file = fopen($filename, 'r')
-  or die "unable to open file ($filename)";
-?&gt;
+$file = fopen ($filename, 'r')
+    or die("unable to open file ($filename)");
+?&#62;
       </PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR
 ></TABLE
-></P
+>
+    </P
+><P
+>&#13;     See also <A
+HREF="function.exit.html"
+><B
+CLASS="function"
+>exit()</B
+></A
+>.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

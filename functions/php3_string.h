@@ -29,7 +29,7 @@
  */
 
 
-/* $Id: php3_string.h,v 1.47 2000/01/01 04:44:09 sas Exp $ */
+/* $Id: php3_string.h,v 1.48 2000/05/23 19:34:47 hholzgra Exp $ */
 
 #ifndef _PHPSTRING_H
 #define _PHPSTRING_H
@@ -49,6 +49,7 @@ extern void php3_trim(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_ltrim(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_similar_text(INTERNAL_FUNCTION_PARAMETERS);
 extern void soundex(INTERNAL_FUNCTION_PARAMETERS);
+extern void php3_levenshtein(INTERNAL_FUNCTION_PARAMETERS);
 
 extern void php3_explode(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_implode(INTERNAL_FUNCTION_PARAMETERS);

@@ -4,7 +4,7 @@
 >mysql_field_flags</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -12,12 +12,15 @@ REL="UP"
 TITLE="MySQL functions"
 HREF="ref.mysql.html"><LINK
 REL="PREVIOUS"
-TITLE="mysql_field_type"
-HREF="function.mysql-field-type.html"><LINK
+TITLE="mysql_fetch_row"
+HREF="function.mysql-fetch-row.html"><LINK
 REL="NEXT"
-TITLE="mysql_field_len"
-HREF="function.mysql-field-len.html"></HEAD
+TITLE="mysql_field_name"
+HREF="function.mysql-field-name.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -42,7 +45,7 @@ WIDTH="10%"
 ALIGN="left"
 VALIGN="bottom"
 ><A
-HREF="function.mysql-field-type.html"
+HREF="function.mysql-fetch-row.html"
 >Prev</A
 ></TD
 ><TD
@@ -55,7 +58,7 @@ WIDTH="10%"
 ALIGN="right"
 VALIGN="bottom"
 ><A
-HREF="function.mysql-field-len.html"
+HREF="function.mysql-field-name.html"
 >Next</A
 ></TD
 ></TR
@@ -65,37 +68,47 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.MYSQL-FIELD-FLAGS"
+NAME="function.mysql-field-flags"
 >mysql_field_flags</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN18237"
+NAME="AEN23070"
 ></A
->mysql_field_flags -- Get the flags associated with the specified field in a
-     result</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>mysql_field_flags&nbsp;--&nbsp;
+     Get the flags associated with the specified field in a result
+    </DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN18240"
+NAME="AEN23073"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->string mysql_field_flags</CODE
->(int result, int field_offset);<P
+>string <B
+CLASS="function"
+>mysql_field_flags</B
+></CODE
+> (int result, int field_offset)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
 > 
      <B
-CLASS="FUNCTION"
+CLASS="function"
 >mysql_field_flags()</B
 > returns the field flags of
      the specified field. The flags are reported as a single word
@@ -103,22 +116,25 @@ CLASS="FUNCTION"
      returned value using <A
 HREF="function.explode.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >explode()</B
 ></A
->.</P
+>.
+    </P
 ><P
 >The following flags are reported, if your version of MySQL
      is current enough to support them: "not_null", "primary_key",
      "unique_key", "multiple_key", "blob", "unsigned", "zerofill",
-     "binary", "enum", "auto_increment", "timestamp".</P
+     "binary", "enum", "auto_increment", "timestamp".
+    </P
 ><P
 > 
      For downward compatibility <B
-CLASS="FUNCTION"
+CLASS="function"
 >mysql_fieldflags()</B
 >
-     can also be used.</P
+     can also be used.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -135,7 +151,7 @@ WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
 ><A
-HREF="function.mysql-field-type.html"
+HREF="function.mysql-fetch-row.html"
 >Prev</A
 ></TD
 ><TD
@@ -151,7 +167,7 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><A
-HREF="function.mysql-field-len.html"
+HREF="function.mysql-field-name.html"
 >Next</A
 ></TD
 ></TR
@@ -160,7 +176,7 @@ HREF="function.mysql-field-len.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->mysql_field_type</TD
+>mysql_fetch_row</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"
@@ -173,7 +189,7 @@ HREF="ref.mysql.html"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->mysql_field_len</TD
+>mysql_field_name</TD
 ></TR
 ></TABLE
 ></DIV

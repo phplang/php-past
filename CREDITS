@@ -15,7 +15,7 @@ Rasmus Lerdorf (rasmus@lerdorf.on.ca)
 * Oracle module work
 
 
-Andi Gutmans (andi@php.net) and Zeev Suraski (zeev@php.net)
+Andi Gutmans (andi@zend.com) and Zeev Suraski (zeev@zend.com)
 
 * New language definition and implementation
 * Internal functions API design
@@ -168,7 +168,7 @@ Major Contributors
 * Timothy Whitfield <timothy@ametro.net>
   Cybercash
 
-* Sascha Schumann <sascha@schumann.2ns.de>
+* Sascha Schumann <sascha@schumann.cx>
   Regex cache, speedups & bug fixes, mSQL improvement
   various string and time functions
   DBA module
@@ -186,7 +186,7 @@ Beta Testers
 * Chuck Hagenbuch <chuck@osmos.ml.org>
   Linux/x86 glibc2, MySQL, mod_ssl
 
-* Sascha Schumann (sas@schell.de)
+* Sascha Schumann (sascha@schumann.cx)
   FreeBSD/x86, PostgreSQL, IMAP, gdttf
 
 * Jim Jagielski (jim@jagunet.com)

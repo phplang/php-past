@@ -4,7 +4,7 @@
 >usleep</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -12,12 +12,15 @@ REL="UP"
 TITLE="Miscellaneous functions"
 HREF="ref.misc.html"><LINK
 REL="PREVIOUS"
-TITLE="unserialize"
-HREF="function.unserialize.html"><LINK
+TITLE="user_error"
+HREF="function.user-error.html"><LINK
 REL="NEXT"
 TITLE="mSQL functions"
-HREF="ref.msql.html"></HEAD
+HREF="ref.msql.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -42,7 +45,7 @@ WIDTH="10%"
 ALIGN="left"
 VALIGN="bottom"
 ><A
-HREF="function.unserialize.html"
+HREF="function.user-error.html"
 >Prev</A
 ></TD
 ><TD
@@ -65,48 +68,77 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.USLEEP"
+NAME="function.usleep"
 >usleep</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN17136"
+NAME="AEN21924"
 ></A
->usleep -- Delay execution in microseconds</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>usleep&nbsp;--&nbsp;Delay execution in microseconds</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN17139"
+NAME="AEN21927"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->void usleep</CODE
->(int micro_seconds);<P
+>void <B
+CLASS="function"
+>usleep</B
+></CODE
+> (int micro_seconds)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     The sleep function delays program execution for the given number
-     of <TT
-CLASS="PARAMETER"
+>&#13;     The <A
+HREF="function.sleep.html"
+><B
+CLASS="function"
+>sleep()</B
+></A
+> function delays program execution
+     for the given number of <TT
+CLASS="parameter"
 ><I
 >micro_seconds</I
 ></TT
->.</P
+>.
+    </P
 ><P
->     See also <A
+>&#13;     See also <A
 HREF="function.sleep.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >sleep()</B
 ></A
->.</P
+>.
+    </P
+><DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
+><P
+><B
+>Note: </B
+>
+      This function does not work on Windows systems.
+     </P
+></BLOCKQUOTE
+></DIV
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -123,7 +155,7 @@ WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
 ><A
-HREF="function.unserialize.html"
+HREF="function.user-error.html"
 >Prev</A
 ></TD
 ><TD
@@ -148,7 +180,7 @@ HREF="ref.msql.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->unserialize</TD
+>user_error</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"

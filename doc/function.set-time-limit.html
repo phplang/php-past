@@ -4,7 +4,7 @@
 >set_time_limit</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -15,9 +15,12 @@ REL="PREVIOUS"
 TITLE="set_magic_quotes_runtime"
 HREF="function.set-magic-quotes-runtime.html"><LINK
 REL="NEXT"
-TITLE="POSIX functions"
-HREF="ref.posix.html"></HEAD
+TITLE="zend_logo_guid"
+HREF="function.zend-logo-guid.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -55,7 +58,7 @@ WIDTH="10%"
 ALIGN="right"
 VALIGN="bottom"
 ><A
-HREF="ref.posix.html"
+HREF="function.zend-logo-guid.html"
 >Next</A
 ></TD
 ></TR
@@ -65,63 +68,73 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.SET-TIME-LIMIT"
+NAME="function.set-time-limit"
 >set_time_limit</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN22671"
+NAME="AEN28582"
 ></A
->set_time_limit -- limit the maximum execution time</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>set_time_limit&nbsp;--&nbsp;limit the maximum execution time</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN22674"
+NAME="AEN28585"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->void set_time_limit</CODE
->(int seconds);<P
+>void <B
+CLASS="function"
+>set_time_limit</B
+></CODE
+> (int seconds)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Set the number of seconds a script is allowed to run.  If this is
-     reached, the script returns a fatal error.  The default limit is 30
-     seconds or, if it exists, the max_execution_time value defined in
-     the <A
-HREF="configuration.html#CONFIGURATION.FILE"
->configuration file</A
->.
-     If seconds is set to zero, no time limit is imposed.</P
+>&#13;     Set the number of seconds a script is allowed to run.  If this is
+     reached, the script returns a fatal error.  The default limit is
+     30 seconds or, if it exists, the max_execution_time value defined
+     in the <A
+HREF="configuration.html#configuration.file"
+>configuration
+     file</A
+>.  If seconds is set to zero, no time limit is
+     imposed.
+    </P
 ><P
->     When called, <B
-CLASS="FUNCTION"
+>&#13;     When called, <B
+CLASS="function"
 >set_time_limit()</B
-> restarts the timeout
-     counter from zero. In other words, if the timeout is the default 30
-     seconds, and 25 seconds into script execution a call such as
-     set_time_limit(20) is made, the script will run for a total of
-     45 seconds before timing out.
-	</P
+> restarts the
+     timeout counter from zero. In other words, if the timeout is the
+     default 30 seconds, and 25 seconds into script execution a call
+     such as set_time_limit(20) is made, the script will run for a
+     total of 45 seconds before timing out.
+    </P
 ><P
->	 Note that <B
-CLASS="FUNCTION"
+>&#13;     Note that <B
+CLASS="function"
 >set_time_limit()</B
 > has no effect when
-	 PHP is running in safe mode. There is no workaround other than
-	 turning off safe mode or changing the time limit in the
-	 <A
-HREF="configuration.html#CONFIGURATION.FILE"
+     PHP is running in safe mode. There is no workaround other than
+     turning off safe mode or changing the time limit in the <A
+HREF="configuration.html#configuration.file"
 >configuration file</A
 >.
-	</P
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -154,7 +167,7 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><A
-HREF="ref.posix.html"
+HREF="function.zend-logo-guid.html"
 >Next</A
 ></TD
 ></TR
@@ -176,7 +189,7 @@ HREF="ref.info.html"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->POSIX functions</TD
+>zend_logo_guid</TD
 ></TR
 ></TABLE
 ></DIV

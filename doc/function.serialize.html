@@ -4,7 +4,7 @@
 >serialize</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -12,12 +12,15 @@ REL="UP"
 TITLE="Miscellaneous functions"
 HREF="ref.misc.html"><LINK
 REL="PREVIOUS"
-TITLE="register_shutdown_function"
-HREF="function.register-shutdown-function.html"><LINK
+TITLE="restore_error_handler"
+HREF="function.restore-error-handler.html"><LINK
 REL="NEXT"
-TITLE="sleep"
-HREF="function.sleep.html"></HEAD
+TITLE="set_error_handlers"
+HREF="function.set-error-handler.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -42,7 +45,7 @@ WIDTH="10%"
 ALIGN="left"
 VALIGN="bottom"
 ><A
-HREF="function.register-shutdown-function.html"
+HREF="function.restore-error-handler.html"
 >Prev</A
 ></TD
 ><TD
@@ -55,7 +58,7 @@ WIDTH="10%"
 ALIGN="right"
 VALIGN="bottom"
 ><A
-HREF="function.sleep.html"
+HREF="function.set-error-handler.html"
 >Next</A
 ></TD
 ></TR
@@ -65,80 +68,94 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.SERIALIZE"
+NAME="function.serialize"
 >serialize</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN17017"
+NAME="AEN21697"
 ></A
->serialize -- generates a storable representation of a value</DIV
+><P
+>    (PHP3 &#62;= 3.0.5, PHP4 )</P
+>serialize&nbsp;--&nbsp;
+     Generates a storable representation of a value
+    </DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN17020"
+NAME="AEN21700"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->string serialize</CODE
->(mixed value);<P
+>string <B
+CLASS="function"
+>serialize</B
+></CODE
+> (mixed value)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     <B
-CLASS="FUNCTION"
->serialize()</B
+>&#13;     <B
+CLASS="function"
+>Serialize()</B
 > returns a string containing a
      byte-stream representation of <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >value</I
 ></TT
 > that
-     can be stored anywhere.</P
+     can be stored anywhere.
+    </P
 ><P
->     This is useful for storing or passing PHP values around without
-     losing their type and structure.</P
+>&#13;     This is useful for storing or passing PHP values around without
+     losing their type and structure.
+    </P
 ><P
->     To make the serialized string into a PHP value again, use
+>&#13;     To make the serialized string into a PHP value again, use
      <A
 HREF="function.unserialize.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >unserialize()</B
 ></A
->.  <B
-CLASS="FUNCTION"
->serialize()</B
+>.	  <B
+CLASS="function"
+>Serialize()</B
 >
      handles the types <SPAN
-CLASS="TYPE"
+CLASS="type"
 >integer</SPAN
 >, <SPAN
-CLASS="TYPE"
+CLASS="type"
 >double</SPAN
 >,
      <SPAN
-CLASS="TYPE"
+CLASS="type"
 >string</SPAN
 >, <SPAN
-CLASS="TYPE"
+CLASS="type"
 >array</SPAN
 > (multidimensional) and
      <SPAN
-CLASS="TYPE"
+CLASS="type"
 >object</SPAN
 > (object properties will be serialized, but
-     methods are lost).</P
+     methods are lost).
+    </P
 ><P
->     <TABLE
+>&#13;     <TABLE
 WIDTH="100%"
 BORDER="0"
 CELLPADDING="0"
@@ -147,33 +164,47 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
->Example 1. serialize example</B
+>Example 1. <B
+CLASS="function"
+>Serialize()</B
+> example</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->// $session_data contains a multi-dimensional array with session
+CLASS="programlisting"
+>&#13;// $session_data contains a multi-dimensional array with session
 // information for the current user.  We use serialize() to store
 // it in a database at the end of the request.
 
-$conn = odbc_connect("webdb", "php", "chicken");
-$stmt = odbc_prepare($conn,
-                     "UPDATE sessions SET data = ? WHERE id = ?");
-$sqldata = array(serialize($session_data), $PHP_AUTH_USER);
-if (!odbc_execute($stmt, &#38;$sqldata)) {
+$conn = odbc_connect ("webdb", "php", "chicken");
+$stmt = odbc_prepare ($conn,
+	      "UPDATE sessions SET data = ? WHERE id = ?");
+$sqldata = array (serialize($session_data), $PHP_AUTH_USER);
+if (!odbc_execute ($stmt, &#38;$sqldata)) {
     $stmt = odbc_prepare($conn,
-                         "INSERT INTO sessions (id, data) VALUES(?, ?)");
+	     "INSERT INTO sessions (id, data) VALUES(?, ?)");
     if (!odbc_execute($stmt, &#38;$sqldata)) {
-        /* Something went wrong.  Bitch, whine and moan. */
+    /* Something went wrong.  Bitch, whine and moan. */
     }
-}</PRE
+}
+      </PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR
 ></TABLE
-></P
+>
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -190,7 +221,7 @@ WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
 ><A
-HREF="function.register-shutdown-function.html"
+HREF="function.restore-error-handler.html"
 >Prev</A
 ></TD
 ><TD
@@ -206,7 +237,7 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><A
-HREF="function.sleep.html"
+HREF="function.set-error-handler.html"
 >Next</A
 ></TD
 ></TR
@@ -215,7 +246,7 @@ HREF="function.sleep.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->register_shutdown_function</TD
+>restore_error_handler</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"
@@ -228,7 +259,7 @@ HREF="ref.misc.html"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->sleep</TD
+>set_error_handlers</TD
 ></TR
 ></TABLE
 ></DIV

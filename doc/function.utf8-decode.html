@@ -4,7 +4,7 @@
 >utf8_decode</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="xml_parser_get_option"
 HREF="function.xml-parser-get-option.html"><LINK
 REL="NEXT"
 TITLE="utf8_encode"
-HREF="function.utf8-encode.html"></HEAD
+HREF="function.utf8-encode.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,53 +68,64 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.UTF8-DECODE"
+NAME="function.utf8-decode"
 >utf8_decode</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN28133"
+NAME="AEN37278"
 ></A
->utf8_decode --      Converts a UTF-8 encoded string to ISO-8859-1
+><P
+>    (PHP3 &#62;= 3.0.6, PHP4 )</P
+>utf8_decode&nbsp;--&nbsp;
+     Converts a string with ISO-8859-1 characters encoded with UTF-8
+     to single-byte ISO-8859-1.
     </DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN28136"
+NAME="AEN37281"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->string utf8_decode</CODE
->(string data);<P
+>string <B
+CLASS="function"
+>utf8_decode</B
+></CODE
+> (string data)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     This function decodes <TT
-CLASS="PARAMETER"
+>&#13;     This function decodes <TT
+CLASS="parameter"
 ><I
 >data</I
 ></TT
 >, assumed to be
      <TT
-CLASS="LITERAL"
+CLASS="literal"
 >UTF-8</TT
 > encoded, to <TT
-CLASS="LITERAL"
+CLASS="literal"
 >ISO-8859-1</TT
 >.
     </P
 ><P
->     See <A
+>&#13;     See <A
 HREF="function.utf8-encode.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >utf8_encode()</B
 ></A
 > for an explaination of UTF-8

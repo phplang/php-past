@@ -4,7 +4,7 @@
 >Basic syntax</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="Language Reference"
 HREF="langref.html"><LINK
 REL="NEXT"
 TITLE="Instruction separation"
-HREF="language.basic-syntax.instruction-separation.html"></HEAD
+HREF="language.basic-syntax.instruction-separation.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="chapter"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -64,10 +67,10 @@ HREF="language.basic-syntax.instruction-separation.html"
 ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><DIV
-CLASS="CHAPTER"
+CLASS="chapter"
 ><H1
 ><A
-NAME="LANGUAGE.BASIC-SYNTAX"
+NAME="language.basic-syntax"
 >Chapter 5. Basic syntax</A
 ></H1
 ><DIV
@@ -79,7 +82,7 @@ CLASS="TOC"
 ></DT
 ><DT
 ><A
-HREF="language.basic-syntax.html#LANGUAGE.BASIC-SYNTAX.PHPMODE"
+HREF="language.basic-syntax.html#language.basic-syntax.phpmode"
 >Escaping from HTML</A
 ></DT
 ><DT
@@ -95,18 +98,18 @@ HREF="language.basic-syntax.comments.html"
 ></DL
 ></DIV
 ><DIV
-CLASS="SECT1"
+CLASS="sect1"
 ><H1
-CLASS="SECT1"
+CLASS="sect1"
 ><A
-NAME="LANGUAGE.BASIC-SYNTAX.PHPMODE"
+NAME="language.basic-syntax.phpmode"
 >Escaping from HTML</A
 ></H1
 ><P
->     There are four ways of escaping from HTML and entering "PHP code
+>&#13;     There are four ways of escaping from HTML and entering "PHP code
      mode":</P
 ><P
->     <TABLE
+>&#13;     <TABLE
 WIDTH="100%"
 BORDER="0"
 CELLPADDING="0"
@@ -115,57 +118,66 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
 >Example 5-1. Ways of escaping from HTML</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->1.  &lt;? echo ("this is the simplest, an SGML processing instruction\n"); ?&#62;
+CLASS="programlisting"
+>&#13;1.  &#60;? echo ("this is the simplest, an SGML processing instruction\n"); ?&#62;
  
-2.  &lt;?php echo("if you want to serve XML documents, do like this\n"); ?&#62;
+2.  &#60;?php echo("if you want to serve XML documents, do like this\n"); ?&#62;
 
-3.  &lt;script language="php"&#62; 
+3.  &#60;script language="php"&#62; 
         echo ("some editors (like FrontPage) don't
               like processing instructions");
-    &lt;/script&#62;
+    &#60;/script&#62;
 
-4.  &lt;% echo ("You may optionally use ASP-style tags"); %&#62;
-    &lt;%= $variable; # This is a shortcut for "&lt;%echo .." %&#62;
+4.  &#60;% echo ("You may optionally use ASP-style tags"); %&#62;
+    &#60;%= $variable; # This is a shortcut for "&#60;%echo .." %&#62;
       </PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR
 ></TABLE
 ></P
 ><P
->     The first way is only available if short tags have been
+>&#13;     The first way is only available if short tags have been
      enabled. This can be done via the <B
-CLASS="FUNCTION"
+CLASS="function"
 >short_tags()</B
 >
      function, by enabling the <A
-HREF="configuration.html#INI.SHORT-OPEN-TAG"
+HREF="configuration.html#ini.short-open-tag"
 >short_open_tag</A
 > configuration
      setting in the PHP config file, or by compiling PHP with the
      --enable-short-tags option to <B
-CLASS="COMMAND"
+CLASS="command"
 >configure</B
 >.</P
 ><P
->     The fourth way is only available if ASP-style tags have been
+>&#13;     The fourth way is only available if ASP-style tags have been
      enabled using the <A
-HREF="configuration.html#INI.ASP-TAGS"
+HREF="configuration.html#ini.asp-tags"
 >asp_tags</A
 >
      configuration setting.
 
     <DIV
-CLASS="NOTE"
+CLASS="note"
 ><BLOCKQUOTE
-CLASS="NOTE"
+CLASS="note"
 ><P
 ><B
 >Note: </B
@@ -174,7 +186,7 @@ CLASS="NOTE"
 ></DIV
 ></P
 ><P
->     The closing tag for the block will include the immediately
+>&#13;     The closing tag for the block will include the immediately
      trailing newline if one is present.</P
 ></DIV
 ></DIV

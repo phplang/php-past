@@ -4,7 +4,7 @@
 >posix_getpgid</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -15,9 +15,12 @@ REL="PREVIOUS"
 TITLE="posix_setpgid"
 HREF="function.posix-setpgid.html"><LINK
 REL="NEXT"
-TITLE="posix_setsid"
-HREF="function.posix-getsid.html"></HEAD
+TITLE="posix_getsid"
+HREF="function.posix-getsid.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,42 +68,51 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.POSIX-GETPGID"
+NAME="function.posix-getpgid"
 >posix_getpgid</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN22882"
+NAME="AEN28912"
 ></A
->posix_getpgid -- Get process group id for job control</DIV
+><P
+>    (PHP3 &#62;= 3.0.10, PHP4 &#62;= 4.0b4)</P
+>posix_getpgid&nbsp;--&nbsp;Get process group id for job control</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN22885"
+NAME="AEN28915"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int posix_getpgid</CODE
->(int pid);<P
+>int <B
+CLASS="function"
+>posix_getpgid</B
+></CODE
+> (int pid)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Returns the process group identifier of the process
+>&#13;     Returns the process group identifier of the process
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >pid</I
 ></TT
 >.</P
 ><P
->     This is not a POSIX function, but is common on BSD and System V
+>&#13;     This is not a POSIX function, but is common on BSD and System V
      systems. If your system does not support this function at system
      level, this PHP function will always return FALSE.</P
 ></DIV
@@ -157,7 +169,7 @@ HREF="ref.posix.html"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->posix_setsid</TD
+>posix_getsid</TD
 ></TR
 ></TABLE
 ></DIV

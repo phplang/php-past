@@ -4,7 +4,7 @@
 >ImageFillToBorder</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="ImageFilledRectangle"
 HREF="function.imagefilledrectangle.html"><LINK
 REL="NEXT"
 TITLE="ImageFontHeight"
-HREF="function.imagefontheight.html"></HEAD
+HREF="function.imagefontheight.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,37 +68,72 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.IMAGEFILLTOBORDER"
+NAME="function.imagefilltoborder"
 >ImageFillToBorder</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN11888"
+NAME="AEN14005"
 ></A
->ImageFillToBorder -- flood fill to specific color</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>ImageFillToBorder&nbsp;--&nbsp;Flood fill to specific color</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN11891"
+NAME="AEN14008"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int imagefilltoborder</CODE
->(int im, int x, int y, int border, int col);<P
+>int <B
+CLASS="function"
+>imagefilltoborder</B
+></CODE
+> (int im, int x, int y, int border, int col)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
 >    
-     ImageFillToBorder performs a flood fill whose border color is
-     defined by border.  The starting point for the fill is x,y (top
-     left is 0,0) and the region is filled with color col.</P
+     <B
+CLASS="function"
+>ImageFillToBorder()</B
+> performs a flood fill
+     whose border color is defined by <TT
+CLASS="parameter"
+><I
+>border</I
+></TT
+>.
+     The starting point for the fill is <TT
+CLASS="parameter"
+><I
+>x</I
+></TT
+>,
+     <TT
+CLASS="parameter"
+><I
+>y</I
+></TT
+> (top left is 0, 0) and the region is
+     filled with color <TT
+CLASS="parameter"
+><I
+>col</I
+></TT
+>.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

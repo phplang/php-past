@@ -4,7 +4,7 @@
 >msql</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="mSQL functions"
 HREF="ref.msql.html"><LINK
 REL="NEXT"
 TITLE="msql_affected_rows"
-HREF="function.msql-affected-rows.html"></HEAD
+HREF="function.msql-affected-rows.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,39 +68,49 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.MSQL"
+NAME="function.msql"
 >msql</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN17154"
+NAME="AEN21951"
 ></A
->msql -- send mSQL query</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>msql&nbsp;--&nbsp;Send mSQL query</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN17157"
+NAME="AEN21954"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int msql</CODE
->(string database, string query, int link_identifier);<P
+>int <B
+CLASS="function"
+>msql</B
+></CODE
+> (string database, string query, int link_identifier)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
 > 
      Returns a positive mSQL query identifier to the query result, or
-     false on error.</P
+     false on error.
+    </P
 ><P
->     <B
-CLASS="FUNCTION"
+>&#13;     <B
+CLASS="function"
 >msql()</B
 > selects a database and executes a query
      on it.  If the optional link identifier isn't specified, the
@@ -106,17 +119,18 @@ CLASS="FUNCTION"
      <A
 HREF="function.msql-connect.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >msql_connect()</B
 ></A
 > was called with no arguments
      (see <A
 HREF="function.msql-connect.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >msql_connect()</B
 ></A
->).</P
+>).
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

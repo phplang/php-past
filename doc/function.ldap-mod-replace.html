@@ -4,7 +4,7 @@
 >ldap_mod_replace</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -15,9 +15,12 @@ REL="PREVIOUS"
 TITLE="ldap_mod_del"
 HREF="function.ldap-mod-del.html"><LINK
 REL="NEXT"
-TITLE="ldap_bind"
-HREF="function.ldap-bind.html"></HEAD
+TITLE="ldap_next_attribute"
+HREF="function.ldap-next-attribute.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -55,7 +58,7 @@ WIDTH="10%"
 ALIGN="right"
 VALIGN="bottom"
 ><A
-HREF="function.ldap-bind.html"
+HREF="function.ldap-next-attribute.html"
 >Next</A
 ></TD
 ></TR
@@ -65,42 +68,51 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.LDAP-MOD-REPLACE"
+NAME="function.ldap-mod-replace"
 >ldap_mod_replace</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN14450"
+NAME="AEN17938"
 ></A
->ldap_mod_replace -- Replace attribute values with new ones</DIV
+><P
+>    (PHP3 &#62;= 3.0.8, PHP4 )</P
+>ldap_mod_replace&nbsp;--&nbsp;Replace attribute values with new ones</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN14453"
+NAME="AEN17941"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int ldap_mod_replace</CODE
->(int link_identifier, string dn, array entry);<P
+>int <B
+CLASS="function"
+>ldap_mod_replace</B
+></CODE
+> (int link_identifier, string dn, array entry)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     returns true on success and false on error.</P
+>&#13;     returns true on success and false on error.</P
 ><P
->	 This function replaces attribute(s) from the specified dn.  It
+>&#13;	 This function replaces attribute(s) from the specified dn.  It
 	 performs the modification at the attribute level as opposed to the 
 	 object level.  Object-level modifications are done by the 
 	<A
 HREF="function.ldap-modify.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >ldap_modify()</B
 ></A
 > function.</P
@@ -136,7 +148,7 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><A
-HREF="function.ldap-bind.html"
+HREF="function.ldap-next-attribute.html"
 >Next</A
 ></TD
 ></TR
@@ -158,7 +170,7 @@ HREF="ref.ldap.html"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->ldap_bind</TD
+>ldap_next_attribute</TD
 ></TR
 ></TABLE
 ></DIV

@@ -23,12 +23,12 @@
    | If you did not, or have any questions about PHP licensing, please    |
    | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
-   | Authors: Andi Gutmans <andi@php.net>                                 |
+   | Authors: Andi Gutmans <andi@zend.com>                                |
    |          Zeev Suraski <zeev@zend.com>                                |
    +----------------------------------------------------------------------+
  */
 
-/* $Id: basic_functions.c,v 1.286 2000/02/25 20:00:51 sas Exp $ */
+/* $Id: basic_functions.c,v 1.290 2000/09/09 21:05:45 zeev Exp $ */
 #include "php.h"
 #include "modules.h"
 #include "internal_functions.h"
@@ -226,6 +226,7 @@ function_entry basic_functions[] = {
 	{"passthru",		php3_passthru,			second_arg_force_ref},
 
 	{"soundex",		soundex,					NULL},
+	{"levenshtein", php3_levenshtein,           NULL},
 
 	{"rand",		php3_rand,					NULL},
 	{"srand",		php3_srand,					NULL},
@@ -340,6 +341,7 @@ function_entry basic_functions[] = {
 	PHP_FE(connection_status,	NULL)
 	PHP_FE(ignore_user_abort,	NULL)
 
+	PHP_FE(is_uploaded_file,	NULL)
 	PHP_FE(extract, NULL)
 	
 	PHP_FE(function_exists,		NULL)
@@ -2055,8 +2057,8 @@ PHPAPI int _php3_error_log(int opt_err,char *message,char *opt,char *headers){
 	return SUCCESS;
 }
 
-/* {{{ proto mixed call_user_func(???)
-   ??? */
+/* {{{ proto mixed call_user_func(string function_name [, mixed parameter] [, mixed ...])
+   Call a user function which is the first parameter */
 void php3_call_user_func(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval **params;
@@ -2082,8 +2084,8 @@ void php3_call_user_func(INTERNAL_FUNCTION_PARAMETERS)
 }
 /* }}} */
 
-/* {{{ proto mixed call_user_method(???)
-   ??? */
+/* {{{ proto mixed call_user_method(string method_name, object object [, mixed parameter] [, mixed ...])
+   Call a user method, on a specific object where the first argument is the method name, the second argument is the object and the subsequent arguments are the parameters */
 void php3_call_user_method(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval **params;
@@ -2319,6 +2321,24 @@ PHP_FUNCTION(extract)
 	}
 }
 /* }}} */
+
+
+
+PHP_FUNCTION(is_uploaded_file)
+{
+	pval *path;
+
+	if (ARG_COUNT(ht)!=1 || getParameters(ht, 1, &path)!=SUCCESS) {
+		WRONG_PARAM_COUNT;
+	}
+	convert_to_string(path);
+
+	if (_php3_hash_exists(&GLOBAL(request_info).rfc1867_uploaded_files, path->value.str.val, path->value.str.len+1)) {
+		RETURN_TRUE;
+	} else {
+		RETURN_FALSE;
+	}
+}
 
 /*
  * Local variables:

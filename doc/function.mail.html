@@ -4,7 +4,7 @@
 >mail</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -15,9 +15,12 @@ REL="PREVIOUS"
 TITLE="Mail functions"
 HREF="ref.mail.html"><LINK
 REL="NEXT"
-TITLE="Mathematical functions"
-HREF="ref.math.html"></HEAD
+TITLE="ezmlm_hash"
+HREF="function.ezmlm-hash.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -55,7 +58,7 @@ WIDTH="10%"
 ALIGN="right"
 VALIGN="bottom"
 ><A
-HREF="ref.math.html"
+HREF="function.ezmlm-hash.html"
 >Next</A
 ></TD
 ></TR
@@ -65,63 +68,66 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.MAIL"
+NAME="function.mail"
 >mail</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN14995"
+NAME="AEN18137"
 ></A
->mail -- send mail</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>mail&nbsp;--&nbsp;send mail</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN14998"
+NAME="AEN18140"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->bool mail</CODE
->(string to, string subject, string message, string [<SPAN
-CLASS="OPTIONAL"
->additional_headers</SPAN
->]);<P
+>bool <B
+CLASS="function"
+>mail</B
+></CODE
+> (string to, string subject, string message [, string additional_headers])</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->      <A
-HREF="function.mail.html"
-><B
-CLASS="FUNCTION"
+>&#13;      <B
+CLASS="function"
 >Mail()</B
-></A
 > automatically mails the message specified
       in <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >message</I
 ></TT
 > to the receiver specified in
       <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >to</I
 ></TT
 >. Multiple recipients can be specified by
       putting a comma between each address in <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >to</I
 ></TT
 >.</P
 ><P
->     <TABLE
+>&#13;     <TABLE
 WIDTH="100%"
 BORDER="0"
 CELLPADDING="0"
@@ -130,26 +136,35 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
 >Example 1. Sending mail.</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->mail("rasmus@lerdorf.on.ca", "My Subject", "Line 1\nLine 2\nLine 3");
+CLASS="programlisting"
+>&#13;mail("rasmus@lerdorf.on.ca", "My Subject", "Line 1\nLine 2\nLine 3");
       </PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR
 ></TABLE
 ></P
 ><P
->     If a fourth string argument is passed, this string is inserted at
+>&#13;     If a fourth string argument is passed, this string is inserted at
      the end of the header.  This is typically used to add extra
      headers.  Multiple extra headers are separated with a newline.</P
 ><P
->     <TABLE
+>&#13;     <TABLE
 WIDTH="100%"
 BORDER="0"
 CELLPADDING="0"
@@ -158,16 +173,25 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
 >Example 2. Sending mail with extra headers.</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->mail("nobody@aol.com", "the subject", $message,
+CLASS="programlisting"
+>&#13;mail("nobody@aol.com", "the subject", $message,
      "From: webmaster@$SERVER_NAME\nReply-To: webmaster@$SERVER_NAME\nX-Mailer: PHP/" . phpversion());
       </PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR
@@ -205,7 +229,7 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><A
-HREF="ref.math.html"
+HREF="function.ezmlm-hash.html"
 >Next</A
 ></TD
 ></TR
@@ -227,7 +251,7 @@ HREF="ref.mail.html"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->Mathematical functions</TD
+>ezmlm_hash</TD
 ></TR
 ></TABLE
 ></DIV

@@ -4,7 +4,7 @@
 >mysql_change_user</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="mysql_affected_rows"
 HREF="function.mysql-affected-rows.html"><LINK
 REL="NEXT"
 TITLE="mysql_close"
-HREF="function.mysql-close.html"></HEAD
+HREF="function.mysql-close.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,53 +68,68 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.MYSQL-CHANGE-USER"
+NAME="function.mysql-change-user"
 >mysql_change_user</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN17823"
+NAME="AEN22682"
 ></A
->mysql_change_user -- Change logged in user on active connection</DIV
+><P
+>    (PHP3 &#62;= 3.0.13)</P
+>mysql_change_user&nbsp;--&nbsp;
+     Change logged in user of the active connection
+    </DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN17826"
+NAME="AEN22685"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int mysql_change_user</CODE
->(string user, string password, string [<SPAN
-CLASS="OPTIONAL"
->database</SPAN
->]
-		, int [<SPAN
-CLASS="OPTIONAL"
->link_identifier</SPAN
->]
-		);<P
+>int <B
+CLASS="function"
+>mysql_change_user</B
+></CODE
+> (string user, string password [, string 
+       database [, int 
+       link_identifier]])</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
 > 
-	<B
-CLASS="FUNCTION"
+     <B
+CLASS="function"
 >mysql_change_user()</B
-> changes the logged in user on the current
-	active connection, or, if specified on the connection given by the link identifier.
-	If a database is specified, this will default or current database after the
-	user has been changed.  If the new user/password combination fails to be authorized
-	the current connected user stays active.</P
+> changes the logged in user
+     of the current active connection, or the connection given by the 
+     optional parameter link_identifier.  If a database is
+     specified, this will default or current database after the user
+     has been changed.  If the new user and password authorization fails, 
+     the current connected user stays active.</P
+><DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
 ><P
->Note that this function was introduced in PHP 3.0.13 and requires MySQL
-	3.23.3 or higher.</P
+><B
+>Note: </B
+>This function was introduced in PHP 3.0.13 and
+     requires MySQL 3.23.3 or higher.
+    </P
+></BLOCKQUOTE
+></DIV
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

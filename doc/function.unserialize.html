@@ -4,7 +4,7 @@
 >unserialize</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -15,9 +15,12 @@ REL="PREVIOUS"
 TITLE="unpack"
 HREF="function.unpack.html"><LINK
 REL="NEXT"
-TITLE="usleep"
-HREF="function.usleep.html"></HEAD
+TITLE="user_error"
+HREF="function.user-error.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -55,7 +58,7 @@ WIDTH="10%"
 ALIGN="right"
 VALIGN="bottom"
 ><A
-HREF="function.usleep.html"
+HREF="function.user-error.html"
 >Next</A
 ></TD
 ></TR
@@ -65,66 +68,78 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.UNSERIALIZE"
+NAME="function.unserialize"
 >unserialize</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN17112"
+NAME="AEN21876"
 ></A
->unserialize -- creates a PHP value from a stored representation</DIV
+><P
+>    (PHP3 &#62;= 3.0.5, PHP4 )</P
+>unserialize&nbsp;--&nbsp;
+     Creates a PHP value from a stored representation
+    </DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN17115"
+NAME="AEN21879"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->mixed unserialize</CODE
->(string str);<P
+>mixed <B
+CLASS="function"
+>unserialize</B
+></CODE
+> (string str)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     <B
-CLASS="FUNCTION"
+>&#13;     <B
+CLASS="function"
 >unserialize()</B
 > takes a single serialized
      variable (see <A
 HREF="function.serialize.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >serialize()</B
 ></A
 >) and converts it
      back into a PHP value.  The converted value is returned, and can
      be an <SPAN
-CLASS="TYPE"
+CLASS="type"
 >integer</SPAN
 >, <SPAN
-CLASS="TYPE"
+CLASS="type"
 >double</SPAN
 >,
      <SPAN
-CLASS="TYPE"
+CLASS="type"
 >string</SPAN
 >, <SPAN
-CLASS="TYPE"
+CLASS="type"
 >array</SPAN
 > or <SPAN
-CLASS="TYPE"
+CLASS="type"
 >object</SPAN
 >.
      If an object was serialized, its methods are not preserved in the
-     returned value.</P
+     returned value.
+    </P
 ><P
->     <TABLE
+>&#13;     <TABLE
 WIDTH="100%"
 BORDER="0"
 CELLPADDING="0"
@@ -133,42 +148,56 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
->Example 1. unserialize example</B
+>Example 1. <B
+CLASS="function"
+>Unserialize()</B
+> example</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->// Here, we use unserialize() to load session data from a database
-// into $session_data.  This example complements the one described
+CLASS="programlisting"
+>&#13;// Here, we use unserialize() to load session data from a database
+// into $session_data.	  This example complements the one described
 // with <A
 HREF="function.serialize.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >serialize()</B
 ></A
 >.
 
-$conn = odbc_connect("webdb", "php", "chicken");
-$stmt = odbc_prepare($conn, "SELECT data FROM sessions WHERE id = ?");
-$sqldata = array($PHP_AUTH_USER);
-if (!odbc_execute($stmt, &#38;$sqldata) || !odbc_fetch_into($stmt, &#38;$tmp)) {
+$conn = odbc_connect ("webdb", "php", "chicken");
+$stmt = odbc_prepare ($conn, "SELECT data FROM sessions WHERE id = ?");
+$sqldata = array ($PHP_AUTH_USER);
+if (!odbc_execute ($stmt, &#38;$sqldata) || !odbc_fetch_into ($stmt, &#38;$tmp)) {
     // if the execute or fetch fails, initialize to empty array
     $session_data = array();
 } else {
     // we should now have the serialized data in $tmp[0].
-    $session_data = unserialize($tmp[0]);
-    if (!is_array($session_data)) {
-        // something went wrong, initialize to empty array
-        $session_data = array();
+    $session_data = unserialize ($tmp[0]);
+    if (!is_array ($session_data)) {
+    // something went wrong, initialize to empty array
+    $session_data = array();
     }
-}</PRE
+}
+      </PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR
 ></TABLE
-></P
+>
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -201,7 +230,7 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><A
-HREF="function.usleep.html"
+HREF="function.user-error.html"
 >Next</A
 ></TD
 ></TR
@@ -223,7 +252,7 @@ HREF="ref.misc.html"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->usleep</TD
+>user_error</TD
 ></TR
 ></TABLE
 ></DIV

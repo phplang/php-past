@@ -4,7 +4,7 @@
 >cpdf_translate</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="cpdf_restore"
 HREF="function.cpdf-restore.html"><LINK
 REL="NEXT"
 TITLE="cpdf_scale"
-HREF="function.cpdf-scale.html"></HEAD
+HREF="function.cpdf-scale.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,51 +68,60 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.CPDF-TRANSLATE"
+NAME="function.cpdf-translate"
 >cpdf_translate</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN5525"
+NAME="AEN6694"
 ></A
->cpdf_translate -- Sets origin of coordinate system</DIV
+><P
+>    (PHP3 &#62;= 3.0.8, PHP4 &#62;= 4.0b4)</P
+>cpdf_translate&nbsp;--&nbsp;Sets origin of coordinate system</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN5528"
+NAME="AEN6697"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->void cpdf_translate</CODE
->(int pdf document, double x-koor, double y-koor, int mode);<P
+>void <B
+CLASS="function"
+>cpdf_translate</B
+></CODE
+> (int pdf document, double x-koor, double y-koor, int mode)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     The <B
-CLASS="FUNCTION"
+>&#13;     The <B
+CLASS="function"
 >cpdf_translate()</B
 > function set the origin of
      coordinate system to the point (<TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >x-koor</I
 ></TT
 >,
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >y-koor</I
 ></TT
 >).</P
 ><P
->     The last optional parameter determines the unit length. If is 0 or omitted
+>&#13;     The last optional parameter determines the unit length. If is 0 or omitted
      the default unit as specified for the page is used. Otherwise the koodinates
      are measured in postscript points disregarding the current unit.</P
 ></DIV

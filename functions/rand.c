@@ -30,7 +30,7 @@
    | Based on code from: Shawn Cokus <Cokus@math.washington.edu>          |
    +----------------------------------------------------------------------+
  */
-/* $Id: rand.c,v 1.37 2000/03/02 16:00:32 bjh Exp $ */
+/* $Id: rand.c,v 1.39 2000/05/22 17:31:41 hholzgra Exp $ */
 
 #include <stdlib.h>
 
@@ -106,6 +106,8 @@ typedef unsigned int uint32;
 #define loBit(u)      ((u) & 0x00000001U)  /* mask all but lowest    bit of u */
 #define loBits(u)     ((u) & 0x7FFFFFFFU)  /* mask     the highest   bit of u */
 #define mixBits(u, v) (hiBit(u)|loBits(v)) /* move hi bit of u to hi bit of v */
+
+#define MT_RAND_MAX 2147483647
 
 static uint32   state[N+1];  /* state vector + 1 extra to not violate ANSI C */
 static uint32   *next;       /* next random value is computed from here */
@@ -265,6 +267,8 @@ void php3_rand(INTERNAL_FUNCTION_PARAMETERS)
 			convert_to_long(p_max);
 			if (p_max->value.lval-p_min->value.lval <= 0) {
 				php3_error(E_WARNING,"rand():  Invalid range:  %ld..%ld", p_min->value.lval, p_max->value.lval);
+			} else if (p_max->value.lval-p_min->value.lval > RAND_MAX){
+				php3_error(E_WARNING,"rand():  Invalid range:  %ld..%ld", p_min->value.lval, p_max->value.lval);
 			}
 			break;
 		default:
@@ -309,7 +313,7 @@ void php3_rand(INTERNAL_FUNCTION_PARAMETERS)
 	 */
 	if (p_min && p_max) { /* implement range */
 		return_value->value.lval = p_min->value.lval +
-			(int)((double)(p_max->value.lval - p_min->value.lval + 1) * return_value->value.lval/(PHP_RAND_MAX+1.0));
+			(int)((double)(p_max->value.lval - p_min->value.lval + 1.0) * return_value->value.lval/(PHP_RAND_MAX+1.0));
 	}
 }
 /* }}} */
@@ -329,8 +333,10 @@ void php3_mt_rand(INTERNAL_FUNCTION_PARAMETERS)
 			}
 			convert_to_long(p_min);
 			convert_to_long(p_max);
-			if (p_max->value.lval-p_min->value.lval <= 0) {
-				php3_error(E_WARNING,"mtrand():  Invalid range:  %ld..%ld", p_min->value.lval, p_max->value.lval);
+			if (p_max->value.lval-p_min->value.lval <=0)  {
+				php3_error(E_WARNING,"mt_rand():  Invalid range:  %ld..%ld", p_min->value.lval, p_max->value.lval);
+			}else if (p_max->value.lval-p_min->value.lval > MT_RAND_MAX){
+				php3_error(E_WARNING,"mt_rand():  Invalid range:  %ld..%ld", p_min->value.lval, p_max->value.lval);
 			}
 			break;
 		default:
@@ -352,7 +358,7 @@ void php3_mt_rand(INTERNAL_FUNCTION_PARAMETERS)
 	/* see the comment in the php3_rand() function about this ugly algorithm */
 	if (p_min && p_max) { /* implement range */
 		return_value->value.lval = p_min->value.lval +
-			(int)((double)(p_max->value.lval - p_min->value.lval + 1) * return_value->value.lval/(PHP_RAND_MAX+1.0));
+			(int)((double)(p_max->value.lval - p_min->value.lval + 1.0) * return_value->value.lval/(MT_RAND_MAX+1.0));
 	}
 }
 /* }}} */
@@ -375,7 +381,7 @@ void php3_mt_getrandmax(INTERNAL_FUNCTION_PARAMETERS)
 	 * Melo: it could be 2^^32 but we only use 2^^31 to maintain
 	 * compatibility with the previous php3_rand
 	 */
-  	return_value->value.lval = 2147483647;	/* 2^^31 */
+  	return_value->value.lval = MT_RAND_MAX;	/* 2^^31 */
 }
 /* }}} */
 

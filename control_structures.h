@@ -23,13 +23,13 @@
    | If you did not, or have any questions about PHP licensing, please    |
    | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
-   | Authors: Andi Gutmans <andi@php.net>                                 |
+   | Authors: Andi Gutmans <andi@zend.com>                                |
    |          Zeev Suraski <zeev@zend.com>                                |
    +----------------------------------------------------------------------+
  */
 
 
-/* $Id: control_structures.h,v 1.45 2000/02/07 23:54:49 zeev Exp $ */
+/* $Id: control_structures.h,v 1.46 2000/04/10 19:29:36 andi Exp $ */
 
 
 #ifndef _CONTROL_STRUCTURES_H

@@ -4,20 +4,23 @@
 >imap_last_error</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
-TITLE="IMAP functions"
+TITLE="IMAP, POP3 and NNTP functions"
 HREF="ref.imap.html"><LINK
 REL="PREVIOUS"
 TITLE="imap_search"
 HREF="function.imap-search.html"><LINK
 REL="NEXT"
 TITLE="imap_errors"
-HREF="function.imap-errors.html"></HEAD
+HREF="function.imap-errors.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,41 +68,54 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.IMAP-LAST-ERROR"
+NAME="function.imap-last-error"
 >imap_last_error</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN13403"
+NAME="AEN16032"
 ></A
->imap_last_error -- This function returns the last IMAP error (if any) that occurred during this page request.</DIV
+><P
+>    (PHP3 &#62;= 3.0.12, PHP4 &#62;= 4.0b4)</P
+>imap_last_error&nbsp;--&nbsp;
+     This function returns the last IMAP error (if any) that occurred
+     during this page request
+    </DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN13406"
+NAME="AEN16035"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->string imap_last_error</CODE
->(void );<P
+>string <B
+CLASS="function"
+>imap_last_error</B
+></CODE
+> (void)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     This function returns the full text of the last IMAP error
+>&#13;     This function returns the full text of the last IMAP error
      message that occurred on the current page. The error stack is
      untouched; calling <B
-CLASS="FUNCTION"
+CLASS="function"
 >imap_last_error()</B
 >
      subsequently, with no intervening errors, will return the same
-     error.</P
+     error.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

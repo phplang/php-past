@@ -1,10 +1,10 @@
 <HTML
 ><HEAD
 ><TITLE
->pg_cmdTuples</TITLE
+>pg_cmdtuples</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -12,12 +12,15 @@ REL="UP"
 TITLE="PostgreSQL functions"
 HREF="ref.pgsql.html"><LINK
 REL="PREVIOUS"
-TITLE="pg_Close"
+TITLE="pg_close"
 HREF="function.pg-close.html"><LINK
 REL="NEXT"
-TITLE="pg_Connect"
-HREF="function.pg-connect.html"></HEAD
+TITLE="pg_connect"
+HREF="function.pg-connect.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,38 +68,49 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.PG-CMDTUPLES"
->pg_cmdTuples</A
+NAME="function.pg-cmdtuples"
+>pg_cmdtuples</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN23138"
+NAME="AEN29254"
 ></A
->pg_cmdTuples -- returns number of affected tuples</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>pg_cmdtuples&nbsp;--&nbsp;Returns number of affected tuples</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN23141"
+NAME="AEN29257"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int pg_cmdtuples</CODE
->(int result_id);<P
+>int <B
+CLASS="function"
+>pg_cmdtuples</B
+></CODE
+> (int result_id)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     pg_cmdTuples() returns the number of tuples (instances) affected
-     by INSERT, UPDATE, and DELETE queries. If no tuple is affected the
-     function will return 0.
-
-    <TABLE
+>&#13;     <B
+CLASS="function"
+>Pg_cmdtuples()</B
+> returns the number of tuples
+     (instances) affected by INSERT, UPDATE, and DELETE queries. If no
+     tuple is affected the function will return 0.
+     <TABLE
 WIDTH="100%"
 BORDER="0"
 CELLPADDING="0"
@@ -105,23 +119,37 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
->Example 1. pg_cmdtuples</B
+>Example 1. <B
+CLASS="function"
+>Pg_cmdtuples()</B
+></B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->&lt;?php
-$result = pg_exec($conn, "INSERT INTO verlag VALUES ('Autor')");
-$cmdtuples = pg_cmdtuples($result);
+CLASS="programlisting"
+>&#13;&#60;?php
+$result = pg_exec ($conn, "INSERT INTO publisher VALUES ('Author')");
+$cmdtuples = pg_cmdtuples ($result);
 echo $cmdtuples . " &#60;- cmdtuples affected.";
-?&#62;</PRE
+?&#62;
+      </PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR
 ></TABLE
-></P
+>
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -163,7 +191,7 @@ HREF="function.pg-connect.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->pg_Close</TD
+>pg_close</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"
@@ -176,7 +204,7 @@ HREF="ref.pgsql.html"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->pg_Connect</TD
+>pg_connect</TD
 ></TR
 ></TABLE
 ></DIV

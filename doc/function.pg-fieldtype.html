@@ -1,10 +1,10 @@
 <HTML
 ><HEAD
 ><TITLE
->pg_FieldType</TITLE
+>pg_fieldtype</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -12,12 +12,15 @@ REL="UP"
 TITLE="PostgreSQL functions"
 HREF="ref.pgsql.html"><LINK
 REL="PREVIOUS"
-TITLE="pg_FieldSize"
+TITLE="pg_fieldsize"
 HREF="function.pg-fieldsize.html"><LINK
 REL="NEXT"
-TITLE="pg_FreeResult"
-HREF="function.pg-freeresult.html"></HEAD
+TITLE="pg_freeresult"
+HREF="function.pg-freeresult.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,37 +68,51 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.PG-FIELDTYPE"
->pg_FieldType</A
+NAME="function.pg-fieldtype"
+>pg_fieldtype</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN23395"
+NAME="AEN29528"
 ></A
->pg_FieldType -- Returns the type name for the corresponding field number
+><P
+>    (PHP3 , PHP4 )</P
+>pg_fieldtype&nbsp;--&nbsp;
+     Returns the type name for the corresponding field number
     </DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN23398"
+NAME="AEN29531"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int pg_fieldtype</CODE
->(int result_id, int field_number);<P
+>string <B
+CLASS="function"
+>pg_fieldtype</B
+></CODE
+> (int result_id, int field_number)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     pg_FieldType() will return a string containing the type name of
-     the given field in the given PostgreSQL result identifier.  Field
-     numbering starts at 0.</P
+>&#13;     <B
+CLASS="function"
+>Pg_fieldtype()</B
+> will return a string containing
+     the type name of the given field in the given PostgreSQL result
+     identifier.  Field numbering starts at 0.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -137,7 +154,7 @@ HREF="function.pg-freeresult.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->pg_FieldSize</TD
+>pg_fieldsize</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"
@@ -150,7 +167,7 @@ HREF="ref.pgsql.html"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->pg_FreeResult</TD
+>pg_freeresult</TD
 ></TR
 ></TABLE
 ></DIV

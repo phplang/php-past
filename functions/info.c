@@ -28,7 +28,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: info.c,v 1.84 2000/02/07 23:54:51 zeev Exp $ */
+/* $Id: info.c,v 1.85 2000/04/10 19:29:37 andi Exp $ */
 #include "php.h"
 #include "internal_functions.h"
 #include "head.h"
@@ -111,7 +111,7 @@ void _php3_info(void)
 	}
 	php3_printf("<center><h1>PHP Version %s</h1></center>\n", PHP_VERSION);
 	PUTS("by <a href=\"mailto:rasmus@lerdorf.on.ca\">Rasmus Lerdorf</a>,\n");
-	PUTS("<a href=\"mailto:andi@php.net\">Andi Gutmans</a>,\n");
+	PUTS("<a href=\"mailto:andi@zend.com\">Andi Gutmans</a>,\n");
 	PUTS("<a href=\"mailto:bourbon@netvision.net.il\">Zeev Suraski</a>,\n");
 	PUTS("<a href=\"mailto:ssb@fast.no\">Stig Bakken</a>,\n");
 	PUTS("<a href=\"mailto:shane@caraveo.com\">Shane Caraveo</a>,\n");

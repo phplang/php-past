@@ -4,20 +4,23 @@
 >array_splice</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
-TITLE="Array functions"
+TITLE="Array Functions"
 HREF="ref.array.html"><LINK
 REL="PREVIOUS"
 TITLE="array_slice"
 HREF="function.array-slice.html"><LINK
 REL="NEXT"
-TITLE="array_unshift"
-HREF="function.array-unshift.html"></HEAD
+TITLE="array_unique"
+HREF="function.array-unique.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -55,7 +58,7 @@ WIDTH="10%"
 ALIGN="right"
 VALIGN="bottom"
 ><A
-HREF="function.array-unshift.html"
+HREF="function.array-unique.html"
 >Next</A
 ></TD
 ></TR
@@ -65,121 +68,126 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.ARRAY-SPLICE"
+NAME="function.array-splice"
 >array_splice</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN3807"
+NAME="AEN4087"
 ></A
->array_splice --      Remove a portion of the array and replace it with something
+><P
+>    (PHP4 )</P
+>array_splice&nbsp;--&nbsp;
+     Remove a portion of the array and replace it with something
      else
     </DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN3810"
+NAME="AEN4090"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->array array_splice</CODE
->(array input, int offset, int
-      [<SPAN
-CLASS="OPTIONAL"
->length</SPAN
->]
-     , array
-     [<SPAN
-CLASS="OPTIONAL"
->replacement</SPAN
->]);<P
+>array <B
+CLASS="function"
+>array_splice</B
+></CODE
+> (array input, int offset [, int
+       length [, array
+       replacement]])</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     <B
-CLASS="FUNCTION"
->array_splice()</B
-> removed the elements designated
+>&#13;     <B
+CLASS="function"
+>Array_splice()</B
+> removes the elements designated
      by <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >offset</I
 ></TT
 > and
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >length</I
 ></TT
 > from the
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >input</I
 ></TT
 > array, and replaces them with the
      elements of the <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >replacement</I
 ></TT
 > array, if
-     supplied.</P
+     supplied.
+    </P
 ><P
->     If <TT
-CLASS="PARAMETER"
+>&#13;     If <TT
+CLASS="parameter"
 ><I
 >offset</I
 ></TT
 > is positive then the start of
      removed portion is at that offset from the beginning of the
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >input</I
 ></TT
 > array.  If
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >offset</I
 ></TT
 > is negative then it starts that far
      from the end of the <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >input</I
 ></TT
-> array.</P
+> array.
+    </P
 ><P
->     If <TT
-CLASS="PARAMETER"
+>&#13;     If <TT
+CLASS="parameter"
 ><I
 >length</I
 ></TT
 > is omitted, removes everything
      from <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >offset</I
 ></TT
 > to the end of the array.  If
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >length</I
 ></TT
 > is specified and is positive, then
      that many elements will be removed. If
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >length</I
 ></TT
@@ -187,80 +195,94 @@ CLASS="PARAMETER"
      the end of the removed portion will be that many elements from
      the end of the array.  Tip: to remove everything from
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >offset</I
 ></TT
 > to the end of the array when
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >replacement</I
 ></TT
 > is also specified, use
      <TT
-CLASS="LITERAL"
+CLASS="literal"
 >count($input)</TT
 > for
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >length</I
 ></TT
->.</P
+>.
+    </P
 ><P
->     If <TT
-CLASS="PARAMETER"
+>&#13;     If <TT
+CLASS="parameter"
 ><I
 >replacement</I
 ></TT
 > array is specified, then
      the removed elements are replaced with elements from this array.
      If <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >offset</I
 ></TT
 > and
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >length</I
 ></TT
 > are such that nothing is removed,
      then the elements from the <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >replacement</I
 ></TT
 >
      array are inserted in the place specified by the
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >offset</I
 ></TT
 >. Tip: if the replacement is just
      one element it is not necessary to put <TT
-CLASS="LITERAL"
+CLASS="literal"
 >array()</TT
 >
-     around it, unless the element is an array itself.</P
+     around it, unless the element is an array itself.
+    </P
 ><P
->     The following equivalences hold:
-     <PRE
-CLASS="PROGRAMLISTING"
->array_push($input, $x, $y)     array_splice($input, count($input), 0, array($x, $y))
-array_pop($input)              array_splice($input, -1)
-array_shift($input)            array_splice($input, 0, 1)
-array_unshift($input, $x, $y)  array_splice($input, 0, 0, array($x, $y))
-$a[$x] = $y                    array_splice($input, $x, 1, $y)
+>&#13;     The following equivalences hold:
+     <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;array_push ($input, $x, $y)     array_splice ($input, count ($input), 0, 
+                                             array ($x, $y))
+array_pop ($input)              array_splice ($input, -1)
+array_shift ($input)            array_splice ($input, 0, 1)
+array_unshift ($input, $x, $y)  array_splice ($input, 0, 0, array ($x, $y))
+$a[$x] = $y                     array_splice ($input, $x, 1, $y)
      </PRE
-></P
+></TD
+></TR
+></TABLE
+>
+    </P
 ><P
->     Returns the array consisting of removed elements.</P
+>&#13;     Returns the array consisting of removed elements.
+    </P
 ><P
->     <TABLE
+>&#13;     <TABLE
 WIDTH="100%"
 BORDER="0"
 CELLPADDING="0"
@@ -269,51 +291,50 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
 >Example 1. <B
-CLASS="FUNCTION"
->array_splice()</B
+CLASS="function"
+>Array_splice()</B
 > examples</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->$input = array("red", "green", "blue", "yellow");
+CLASS="programlisting"
+>&#13;$input = array ("red", "green", "blue", "yellow");
 
-array_splice($input, 2);      // $input is now array("red", "green")
-array_splice($input, 1, -1);  // $input is now array("red", "yellow")
-array_splice($input, 1, count($input), "orange");  
-                              // $input is now array("red", "orange")
-array_splice($input, -1, 1, array("black", "maroon")); 
-                              // $input is now array("red", "green", 
-                              //          "blue", "black", "maroon")
+array_splice ($input, 2);      // $input is now array ("red", "green")
+array_splice ($input, 1, -1);  // $input is now array ("red", "yellow")
+array_splice ($input, 1, count($input), "orange");  
+                               // $input is now array ("red", "orange")
+array_splice ($input, -1, 1, array("black", "maroon")); 
+                               // $input is now array ("red", "green", 
+                               //          "blue", "black", "maroon")
       </PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR
 ></TABLE
-></P
+>
+    </P
 ><P
->     See also <A
+>&#13;     See also <A
 HREF="function.array-slice.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >array_slice()</B
 ></A
 >.
-
-    <DIV
-CLASS="NOTE"
-><BLOCKQUOTE
-CLASS="NOTE"
-><P
-><B
->Note: </B
->      This function was added in PHP 4.0.</P
-></BLOCKQUOTE
-></DIV
-></P
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -346,7 +367,7 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><A
-HREF="function.array-unshift.html"
+HREF="function.array-unique.html"
 >Next</A
 ></TD
 ></TR
@@ -368,7 +389,7 @@ HREF="ref.array.html"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->array_unshift</TD
+>array_unique</TD
 ></TR
 ></TABLE
 ></DIV

@@ -4,7 +4,7 @@
 >fopen</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="flock"
 HREF="function.flock.html"><LINK
 REL="NEXT"
 TITLE="fpassthru"
-HREF="function.fpassthru.html"></HEAD
+HREF="function.fpassthru.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,72 +68,99 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.FOPEN"
+NAME="function.fopen"
 >fopen</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN8804"
+NAME="AEN10038"
 ></A
->fopen -- open file or URL</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>fopen&nbsp;--&nbsp;Opens file or URL</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN8807"
+NAME="AEN10041"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int fopen</CODE
->(string filename, string mode, int [<SPAN
-CLASS="OPTIONAL"
->use_include_path</SPAN
->]);<P
+>int <B
+CLASS="function"
+>fopen</B
+></CODE
+> (string filename, string mode [, int 
+       use_include_path])</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     If <TT
-CLASS="PARAMETER"
+>&#13;     If <TT
+CLASS="parameter"
 ><I
 >filename</I
 ></TT
-> begins with "http://" (not case sensitive), an HTTP
-     1.0 connection is opened to the specified server and a file
-     pointer is returned to the beginning of the text of the response.</P
+> begins with "http://" (not
+     case sensitive), an HTTP 1.0 connection is opened to the
+     specified server and a file pointer is returned to the beginning
+     of the text of the response. A 'Host:' header is sent with the
+     request in order to handle name-based virtual hosts.
+    </P
 ><P
->     Does not handle HTTP redirects, so you must include trailing
-     slashes on directories.</P
+>&#13;     Does not handle HTTP redirects, so you must include trailing
+     slashes on directories.
+    </P
 ><P
->     If <TT
-CLASS="PARAMETER"
+>&#13;     If <TT
+CLASS="parameter"
 ><I
 >filename</I
 ></TT
-> begins with "ftp://" (not case sensitive), an ftp
-     connection to the specified server is opened and a pointer to the
-     requested file is returned. If the server does not support
-     passive mode ftp, this will fail. You can open files for either
-	 reading and writing via ftp (but not both simultaneously).</P
+> begins with "ftp://" (not case
+     sensitive), an ftp connection to the specified server is opened
+     and a pointer to the requested file is returned. If the server
+     does not support passive mode ftp, this will fail. You can open
+     files for either reading and writing via ftp (but not both
+     simultaneously).
+    </P
 ><P
->     If <TT
-CLASS="PARAMETER"
+>&#13;     If <TT
+CLASS="parameter"
+><I
+>filename</I
+></TT
+> is one of "php://stdin",
+     "php://stdout", or "php://stderr", the corresponding stdio
+     stream will be opened.  (This was introduced in PHP 3.0.13;
+     in earlier versions, a filename such as "/dev/stdin" or
+     "/dev/fd/0" must be used to access the stdio streams.)
+    </P
+><P
+>&#13;     If <TT
+CLASS="parameter"
 ><I
 >filename</I
 ></TT
 > begins with anything else, the
      file will be opened from the filesystem, and a file pointer to
-     the file opened is returned.</P
+     the file opened is returned.
+    </P
 ><P
->     If the open fails, the function returns false.</P
+>&#13;     If the open fails, the function returns false.
+    </P
 ><P
->     <TT
-CLASS="PARAMETER"
+>&#13;     <TT
+CLASS="parameter"
 ><I
 >mode</I
 ></TT
@@ -140,57 +170,65 @@ CLASS="PARAMETER"
 ><UL
 ><LI
 ><P
->'r' - Open for reading only; place the file
-      pointer at the beginning of the file.</P
+>&#13;	'r' - Open for reading only; place the file pointer at the
+	beginning of the file.
+       </P
 ></LI
 ><LI
 ><P
->       'r+' - Open for reading and writing; place the file pointer at
-       the beginning of the file.</P
+>&#13;	'r+' - Open for reading and writing; place the file pointer at
+	the beginning of the file.
+       </P
 ></LI
 ><LI
 ><P
->       'w' - Open for writing only; place the file pointer at the
-       beginning of the file and truncate the file to zero length.
-       If the file does not exist, attempt to create it.</P
+>&#13;	'w' - Open for writing only; place the file pointer at the
+	beginning of the file and truncate the file to zero length.
+	If the file does not exist, attempt to create it.
+       </P
 ></LI
 ><LI
 ><P
->       'w+' - Open for reading and writing; place the file pointer at
-       the beginning of the file and truncate the file to zero length.
-       If the file does not exist, attempt to create it.</P
+>&#13;	'w+' - Open for reading and writing; place the file pointer at
+	the beginning of the file and truncate the file to zero
+	length.  If the file does not exist, attempt to create it.
+       </P
 ></LI
 ><LI
 ><P
->       'a' - Open for writing only; place the file pointer at the end
-       of the file. If the file does not exist, attempt to create it.</P
+>&#13;	'a' - Open for writing only; place the file pointer at the end
+	of the file. If the file does not exist, attempt to create
+	it.
+       </P
 ></LI
 ><LI
 ><P
->       'a+' - Open for reading and writing; place the file pointer at
-       the end of the file. If the file does not exist, attempt to
-       create it.</P
+>&#13;	'a+' - Open for reading and writing; place the file pointer at
+	the end of the file. If the file does not exist, attempt to
+	create it.
+       </P
 ></LI
 ></UL
 >
-
-     As well, <TT
-CLASS="PARAMETER"
+     The <TT
+CLASS="parameter"
 ><I
 >mode</I
 ></TT
 > may contain the letter
      'b'. This is useful only on systems which differentiate between
      binary and text files (i.e., it's useless on Unix). If not
-     needed, this will be ignored.</P
+     needed, this will be ignored.
+    </P
 ><P
->     You can use the optional third parameter and set it to "1", if
+>&#13;     You can use the optional third parameter and set it to "1", if
      you want to search for the file in the <A
-HREF="configuration.html#INI.INCLUDE-PATH"
+HREF="configuration.html#ini.include-path"
 >include_path</A
->, too.</P
+>, too.
+    </P
 ><P
->     <TABLE
+>&#13;     <TABLE
 WIDTH="100%"
 BORDER="0"
 CELLPADDING="0"
@@ -199,61 +237,98 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
->Example 1. fopen() example</B
+>Example 1. <B
+CLASS="function"
+>Fopen()</B
+> example</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->$fp = fopen("/home/rasmus/file.txt", "r");
-$fp = fopen("http://www.php.net/", "r");
-$fp = fopen("ftp://user:password@example.com/", "w");</PRE
+CLASS="programlisting"
+>&#13;$fp = fopen ("/home/rasmus/file.txt", "r");
+$fp = fopen ("/home/rasmus/file.gif", "wb");
+$fp = fopen ("http://www.php.net/", "r");
+$fp = fopen ("ftp://user:password@example.com/", "w");
+      </PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR
 ></TABLE
-></P
+>
+    </P
 ><P
->     If you are experiencing problems with reading and writing to
-     files and you're using the server module version of PHP, remember 
+>&#13;     If you are experiencing problems with reading and writing to
+     files and you're using the server module version of PHP, remember
      to make sure that the files and directories you're using are
-     accessible to the server process.</P
+     accessible to the server process.
+    </P
 ><P
->	 On the Windows platform, be careful to escape any backslashes
-	 used in the path to the file, or use forward slashes.
+>&#13;     On the Windows platform, be careful to escape any backslashes
+     used in the path to the file, or use forward slashes.
      <DIV
-CLASS="INFORMALEXAMPLE"
+CLASS="informalexample"
 ><P
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->$fp = fopen("c:\\data\\info.txt", "r");</PRE
+CLASS="programlisting"
+> 
+$fp = fopen ("c:\\data\\info.txt", "r");
+      </PRE
+></TD
+></TR
+></TABLE
 ><P
 ></P
 ></DIV
-></P
+>
+    </P
 ><P
->     See also <A
+>&#13;     See also <A
 HREF="function.fclose.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >fclose()</B
 ></A
 >,
      <A
 HREF="function.fsockopen.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >fsockopen()</B
 ></A
->, and <A
+>,
+     <A
+HREF="function.socket-set-timeout.html"
+><B
+CLASS="function"
+>socket_set_timeout()</B
+></A
+>, and
+     <A
 HREF="function.popen.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >popen()</B
 ></A
->.</P
+>.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

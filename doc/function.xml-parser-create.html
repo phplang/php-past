@@ -4,7 +4,7 @@
 >xml_parser_create</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="XML parser functions"
 HREF="ref.xml.html"><LINK
 REL="NEXT"
 TITLE="xml_set_object"
-HREF="function.xml-set-object.html"></HEAD
+HREF="function.xml-set-object.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,87 +68,98 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.XML-PARSER-CREATE"
+NAME="function.xml-parser-create"
 >xml_parser_create</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN27368"
+NAME="AEN36444"
 ></A
->xml_parser_create -- create an XML parser</DIV
+><P
+>    (PHP3 &#62;= 3.0.6, PHP4 )</P
+>xml_parser_create&nbsp;--&nbsp;create an XML parser</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN27371"
+NAME="AEN36447"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int xml_parser_create</CODE
->(string 
-      [<SPAN
-CLASS="OPTIONAL"
->encoding</SPAN
->]
-     );<P
+>int <B
+CLASS="function"
+>xml_parser_create</B
+></CODE
+> ([string 
+       encoding])</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     <P
+>&#13;     <P
 ></P
+><DIV
+CLASS="variablelist"
 ><DL
 ><DT
 ><TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >encoding</I
 ></TT
 > (optional)</DT
 ><DD
 ><P
->	 Which character encoding the parser should use.  The
+>&#13;	 Which character encoding the parser should use.  The
 	 following character encodings are supported:
 	 <P
 ></P
 ><TABLE
 BORDER="0"
+><TBODY
 ><TR
 ><TD
 ><TT
-CLASS="LITERAL"
+CLASS="literal"
 >ISO-8859-1</TT
 > (default)</TD
 ></TR
 ><TR
 ><TD
 ><TT
-CLASS="LITERAL"
+CLASS="literal"
 >US-ASCII</TT
 ></TD
 ></TR
 ><TR
 ><TD
 ><TT
-CLASS="LITERAL"
+CLASS="literal"
 >UTF-8</TT
 ></TD
 ></TR
+></TBODY
 ></TABLE
 ><P
 ></P
-></P
+>
+	</P
 ></DD
 ></DL
+></DIV
 >
      This function creates an XML parser and returns a handle for use
      by other XML functions.  Returns <TT
-CLASS="LITERAL"
+CLASS="literal"
 >false</TT
 > on
      failure.

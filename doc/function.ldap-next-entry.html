@@ -4,7 +4,7 @@
 >ldap_next_entry</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="ldap_next_attribute"
 HREF="function.ldap-next-attribute.html"><LINK
 REL="NEXT"
 TITLE="ldap_read"
-HREF="function.ldap-read.html"></HEAD
+HREF="function.ldap-read.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,39 +68,48 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.LDAP-NEXT-ENTRY"
+NAME="function.ldap-next-entry"
 >ldap_next_entry</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN14838"
+NAME="AEN17982"
 ></A
->ldap_next_entry -- Get next result entry</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>ldap_next_entry&nbsp;--&nbsp;Get next result entry</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN14841"
+NAME="AEN17985"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int ldap_next_entry</CODE
->(int link_identifier, int result_entry_identifier);<P
+>int <B
+CLASS="function"
+>ldap_next_entry</B
+></CODE
+> (int link_identifier, int result_entry_identifier)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Returns entry identifier for the next entry in the result whose
+>&#13;     Returns entry identifier for the next entry in the result whose
      entries are being read starting with
      <A
 HREF="function.ldap-first-entry.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >ldap_first_entry()</B
 ></A
 >. If there are no more
@@ -105,38 +117,38 @@ CLASS="FUNCTION"
 ><P
 >  
      <B
-CLASS="FUNCTION"
+CLASS="function"
 >ldap_next_entry()</B
 > function is used to retrieve
      the entries stored in the result. Successive calls to the
      <B
-CLASS="FUNCTION"
+CLASS="function"
 >ldap_next_entry()</B
 > return entries one by one
      till there are no more entries. The first call to
      <B
-CLASS="FUNCTION"
+CLASS="function"
 >ldap_next_entry()</B
 > is made after the call to
      <A
 HREF="function.ldap-first-entry.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >ldap_first_entry()</B
 ></A
 > with the result_identifier
      as returned from the <A
 HREF="function.ldap-first-entry.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >ldap_first_entry()</B
 ></A
 >.</P
 ><P
->     see also <A
+>&#13;     see also <A
 HREF="function.ldap-get-entries.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >ldap_get_entries()</B
 ></A
 ></P

@@ -4,20 +4,23 @@
 >odbc_field_len</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
-TITLE="ODBC functions"
+TITLE="Unified ODBC functions"
 HREF="ref.odbc.html"><LINK
 REL="PREVIOUS"
 TITLE="odbc_field_type"
 HREF="function.odbc-field-type.html"><LINK
 REL="NEXT"
-TITLE="odbc_free_result"
-HREF="function.odbc-free-result.html"></HEAD
+TITLE="odbc_field_precision"
+HREF="function.odbc-field-precision.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -55,7 +58,7 @@ WIDTH="10%"
 ALIGN="right"
 VALIGN="bottom"
 ><A
-HREF="function.odbc-free-result.html"
+HREF="function.odbc-field-precision.html"
 >Next</A
 ></TD
 ></TR
@@ -65,39 +68,59 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.ODBC-FIELD-LEN"
+NAME="function.odbc-field-len"
 >odbc_field_len</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN19441"
+NAME="AEN24319"
 ></A
->odbc_field_len -- get the Length of a field</DIV
+><P
+>    (PHP3 &#62;= 3.0.6, PHP4 )</P
+>odbc_field_len&nbsp;--&nbsp;Get the length (precision) of a field</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN19444"
+NAME="AEN24322"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int odbc_field_len</CODE
->(int result_id, int field_number);<P
+>int <B
+CLASS="function"
+>odbc_field_len</B
+></CODE
+> (int result_id, int field_number)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     <B
-CLASS="FUNCTION"
+>&#13;     <B
+CLASS="function"
 >odbc_field_len()</B
 > will return the length of
      the field referecend by number in the given ODBC result
-     identifier.  Field numbering starts at 1.</P
+     identifier.  Field numbering starts at 1.
+    </P
+><P
+>&#13;     See also: <A
+HREF="function.odbc-field-scale.html"
+><B
+CLASS="function"
+>odbc_field_scale()</B
+></A
+> to get the scale of a
+     floating point number.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -130,7 +153,7 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><A
-HREF="function.odbc-free-result.html"
+HREF="function.odbc-field-precision.html"
 >Next</A
 ></TD
 ></TR
@@ -152,7 +175,7 @@ HREF="ref.odbc.html"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->odbc_free_result</TD
+>odbc_field_precision</TD
 ></TR
 ></TABLE
 ></DIV

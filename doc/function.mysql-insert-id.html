@@ -4,7 +4,7 @@
 >mysql_insert_id</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -15,9 +15,12 @@ REL="PREVIOUS"
 TITLE="mysql_free_result"
 HREF="function.mysql-free-result.html"><LINK
 REL="NEXT"
-TITLE="mysql_list_fields"
-HREF="function.mysql-list-fields.html"></HEAD
+TITLE="mysql_list_dbs"
+HREF="function.mysql-list-dbs.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -55,7 +58,7 @@ WIDTH="10%"
 ALIGN="right"
 VALIGN="bottom"
 ><A
-HREF="function.mysql-list-fields.html"
+HREF="function.mysql-list-dbs.html"
 >Next</A
 ></TD
 ></TR
@@ -65,58 +68,66 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.MYSQL-INSERT-ID"
+NAME="function.mysql-insert-id"
 >mysql_insert_id</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN18287"
+NAME="AEN23199"
 ></A
->mysql_insert_id -- Get the id generated from the previous INSERT
-     operation</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>mysql_insert_id&nbsp;--&nbsp;
+     Get the id generated from the previous INSERT operation
+    </DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN18290"
+NAME="AEN23202"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int mysql_insert_id</CODE
->(int [<SPAN
-CLASS="OPTIONAL"
->link_identifier</SPAN
->]
-                   );<P
+>int <B
+CLASS="function"
+>mysql_insert_id</B
+></CODE
+> ([int 
+       link_identifier])</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
 > 
      <B
-CLASS="FUNCTION"
+CLASS="function"
 >mysql_insert_id()</B
 > returns the ID generated for
      an AUTO_INCREMENTED field.  It will return the auto-generated ID
-     returned by the last INSERT query performed using the given 
+     returned by the last INSERT query performed using the given
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >link_identifier</I
 ></TT
 >.  If
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >link_identifier</I
 ></TT
-> isn't specified, the last 
-     opened link is assumed.</P
+> isn't specified, the last
+     opened link is assumed.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -149,7 +160,7 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><A
-HREF="function.mysql-list-fields.html"
+HREF="function.mysql-list-dbs.html"
 >Next</A
 ></TD
 ></TR
@@ -171,7 +182,7 @@ HREF="ref.mysql.html"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->mysql_list_fields</TD
+>mysql_list_dbs</TD
 ></TR
 ></TABLE
 ></DIV

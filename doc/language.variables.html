@@ -4,7 +4,7 @@
 >Variables</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -12,12 +12,15 @@ REL="UP"
 TITLE="Language Reference"
 HREF="langref.html"><LINK
 REL="PREVIOUS"
-TITLE="Type juggling"
+TITLE="Type Juggling"
 HREF="language.types.type-juggling.html"><LINK
 REL="NEXT"
 TITLE="Predefined variables"
-HREF="language.variables.predefined.html"></HEAD
+HREF="language.variables.predefined.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="chapter"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -64,10 +67,10 @@ HREF="language.variables.predefined.html"
 ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><DIV
-CLASS="CHAPTER"
+CLASS="chapter"
 ><H1
 ><A
-NAME="LANGUAGE.VARIABLES"
+NAME="language.variables"
 >Chapter 7. Variables</A
 ></H1
 ><DIV
@@ -79,7 +82,7 @@ CLASS="TOC"
 ></DT
 ><DT
 ><A
-HREF="language.variables.html#LANGUAGE.VARIABLES.BASICS"
+HREF="language.variables.html#language.variables.basics"
 >Basics</A
 ></DT
 ><DT
@@ -105,34 +108,69 @@ HREF="language.variables.external.html"
 ></DL
 ></DIV
 ><DIV
-CLASS="SECT1"
+CLASS="sect1"
 ><H1
-CLASS="SECT1"
+CLASS="sect1"
 ><A
-NAME="LANGUAGE.VARIABLES.BASICS"
+NAME="language.variables.basics"
 >Basics</A
 ></H1
 ><P
->    Variables in PHP are represented by a dollar sign followed by the
+>&#13;    Variables in PHP are represented by a dollar sign followed by the
     name of the variable. The variable name is case-sensitive.
-    <DIV
-CLASS="INFORMALEXAMPLE"
+   </P
+><P
+>&#13;    Variable names follow the same rules as other labels in PHP. A
+    valid variable name starts with a letter or underscore, followed
+    by any number of letters, numbers, or underscores. As a regular
+    expression, it would be expressed thus:
+    '[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*'
+   </P
+><DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
+><P
+><B
+>Note: </B
+>
+     For our purposes here, a letter is a-z, A-Z, and the ASCII
+     characters from 127 through 255 (0x7f-0xff).
+    </P
+></BLOCKQUOTE
+></DIV
+><P
+>&#13;    <DIV
+CLASS="informalexample"
 ><P
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
+CLASS="programlisting"
 > 
 $var = "Bob";
 $Var = "Joe";
-echo "$var, $Var"; // outputs "Bob, Joe"
+echo "$var, $Var";      // outputs "Bob, Joe"
+
+$4site = 'not yet';     // invalid; starts with a number
+$_4site = 'not yet';    // valid; starts with an underscore
+$täyte = 'mansikka';    // valid; 'ä' is ASCII 228.
      </PRE
+></TD
+></TR
+></TABLE
 ><P
 ></P
 ></DIV
 >
    </P
 ><P
->    In PHP3, variables are always assigned by value. That is to say,
+>&#13;    In PHP3, variables are always assigned by value. That is to say,
     when you assign an expression to a variable, the entire value of
     the original expression is copied into the destination
     variable. This means, for instance, that after assigning one
@@ -144,9 +182,9 @@ HREF="language.expressions.html"
 >.
    </P
 ><P
->    PHP4 offers another way to assign values to variables:
+>&#13;    PHP4 offers another way to assign values to variables:
     <I
-CLASS="EMPHASIS"
+CLASS="emphasis"
 >assign by reference</I
 >. This means that the new
     variable simply references (in other words, "becomes an alias for"
@@ -157,51 +195,69 @@ CLASS="EMPHASIS"
     loops or when assigning large arrays or objects.
    </P
 ><P
->    To assign by reference, simply prepend an ampersand (&amp;) to the
+>&#13;    To assign by reference, simply prepend an ampersand (&#38;) to the
     beginning of the variable which is being assigned (the source
     variable). For instance, the following code snippet outputs 'My
     name is Bob' twice:
 
     <DIV
-CLASS="INFORMALEXAMPLE"
+CLASS="informalexample"
 ><P
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->&lt;?php
+CLASS="programlisting"
+>&#13;&#60;?php
 $foo = 'Bob';              // Assign the value 'Bob' to $foo
-$bar = &amp;$foo;              // Reference $foo via $bar.
+$bar = &#38;$foo;              // Reference $foo via $bar.
 $bar = "My name is $bar";  // Alter $bar...
 echo $foo;                 // $foo is altered too.
 echo $bar;
-?&gt;
+?&#62;
      </PRE
+></TD
+></TR
+></TABLE
 ><P
 ></P
 ></DIV
 >
    </P
 ><P
->    One important thing to note is that only named variables may be
+>&#13;    One important thing to note is that only named variables may be
     assigned by reference.
     <DIV
-CLASS="INFORMALEXAMPLE"
+CLASS="informalexample"
 ><P
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->&lt;?php
+CLASS="programlisting"
+>&#13;&#60;?php
 $foo = 25;
-$bar = &amp;$foo;      // This is a valid assignment.
-$bar = &amp;(24 * 7);  // Invalid; references an unnamed expression.
+$bar = &#38;$foo;      // This is a valid assignment.
+$bar = &#38;(24 * 7);  // Invalid; references an unnamed expression.
 
 function test() {
    return 25;
 }
 
-$bar = &amp;test();    // Invalid.
-?&gt;
+$bar = &#38;test();    // Invalid.
+?&#62;
      </PRE
+></TD
+></TR
+></TABLE
 ><P
 ></P
 ></DIV
@@ -249,7 +305,7 @@ HREF="language.variables.predefined.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->Type juggling</TD
+>Type Juggling</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"

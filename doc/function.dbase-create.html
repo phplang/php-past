@@ -4,7 +4,7 @@
 >dbase_create</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="dBase functions"
 HREF="ref.dbase.html"><LINK
 REL="NEXT"
 TITLE="dbase_open"
-HREF="function.dbase-open.html"></HEAD
+HREF="function.dbase-open.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,86 +68,104 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.DBASE-CREATE"
+NAME="function.dbase-create"
 >dbase_create</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN7386"
+NAME="AEN8698"
 ></A
->dbase_create -- creates a dBase database</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>dbase_create&nbsp;--&nbsp;Creates a dBase database</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN7389"
+NAME="AEN8701"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int dbase_create</CODE
->(string filename, array fields);<P
+>int <B
+CLASS="function"
+>dbase_create</B
+></CODE
+> (string filename, array fields)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->	The <TT
-CLASS="PARAMETER"
+>&#13;     The <TT
+CLASS="parameter"
 ><I
 >fields</I
 ></TT
 > parameter is an array of
-	arrays, each array describing the format of one field in the
-	database. Each field consists of a name, a character
-	indicating the field type, a length, and a precision.</P
+     arrays, each array describing the format of one field in the
+     database. Each field consists of a name, a character indicating
+     the field type, a length, and a precision.
+    </P
 ><P
->	The types of fields available are:
-	<P
+>&#13;     The types of fields available are:
+     <P
 ></P
+><DIV
+CLASS="variablelist"
 ><DL
 ><DT
 >L</DT
 ><DD
 ><P
->	   Boolean. These do not have a length or precision.</P
+>&#13;	 Boolean. These do not have a length or precision.
+	</P
 ></DD
 ><DT
 >M</DT
 ><DD
 ><P
->	   Memo. (Note that these aren't supported by PHP.)
-	   These do not have a length or precision.</P
+>&#13;	 Memo. (Note that these aren't supported by PHP.)  These do
+	 not have a length or precision.
+	</P
 ></DD
 ><DT
 >D</DT
 ><DD
 ><P
->	   Date (stored as YYYYMMDD).  These do not have a length
-	   or precision.</P
+>&#13;	 Date (stored as YYYYMMDD).  These do not have a length or
+	 precision.
+	</P
 ></DD
 ><DT
 >N</DT
 ><DD
 ><P
->	   Number. These have both a length and a precision (the
-	   number of digits after the decimal point).</P
+>&#13;	 Number. These have both a length and a precision (the number
+	 of digits after the decimal point).
+	</P
 ></DD
 ><DT
 >C</DT
 ><DD
 ><P
->	   String.</P
+>&#13;	 String.
+	</P
 ></DD
 ></DL
-></P
+></DIV
+>
+    </P
 ><P
->	If the database is successfully created, a dbase_identifier
-	is returned, otherwise false is returned.
-
+>&#13;     If the database is successfully created, a dbase_identifier is
+     returned, otherwise false is returned.
      <TABLE
 WIDTH="100%"
 BORDER="0"
@@ -154,14 +175,20 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
 >Example 1. Creating a dBase database file</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->// "database" name
+CLASS="programlisting"
+>&#13;// "database" name
 $dbname = "/tmp/test.dbf";
 
 // database "definition"
@@ -176,12 +203,17 @@ $def =
 
 // creation
 if (!dbase_create($dbname, $def))
-    print "&lt;strong&#62;Error!&lt;/strong&#62;";&#13;</PRE
+    print "&#60;strong&#62;Error!&#60;/strong&#62;";
+      </PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR
 ></TABLE
-></P
+>
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

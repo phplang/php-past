@@ -4,7 +4,7 @@
 >Functions</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -12,12 +12,15 @@ REL="UP"
 TITLE="Language Reference"
 HREF="langref.html"><LINK
 REL="PREVIOUS"
-TITLE="include"
-HREF="function.include.html"><LINK
+TITLE="include_once"
+HREF="function.include-once.html"><LINK
 REL="NEXT"
 TITLE="Function arguments"
-HREF="functions.arguments.html"></HEAD
+HREF="functions.arguments.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="chapter"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -42,7 +45,7 @@ WIDTH="10%"
 ALIGN="left"
 VALIGN="bottom"
 ><A
-HREF="function.include.html"
+HREF="function.include-once.html"
 >Prev</A
 ></TD
 ><TD
@@ -64,10 +67,10 @@ HREF="functions.arguments.html"
 ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><DIV
-CLASS="CHAPTER"
+CLASS="chapter"
 ><H1
 ><A
-NAME="FUNCTIONS"
+NAME="functions"
 >Chapter 12. Functions</A
 ></H1
 ><DIV
@@ -79,7 +82,7 @@ CLASS="TOC"
 ></DT
 ><DT
 ><A
-HREF="functions.html#FUNCTIONS.USER-DEFINED"
+HREF="functions.html#functions.user-defined"
 >User-defined functions</A
 ></DT
 ><DT
@@ -96,7 +99,7 @@ HREF="functions.returning-values.html"
 ><A
 HREF="functions.old-syntax.html"
 ><TT
-CLASS="LITERAL"
+CLASS="literal"
 >old_function</TT
 ></A
 ></DT
@@ -108,75 +111,86 @@ HREF="functions.variable-functions.html"
 ></DL
 ></DIV
 ><DIV
-CLASS="SECT1"
+CLASS="sect1"
 ><H1
-CLASS="SECT1"
+CLASS="sect1"
 ><A
-NAME="FUNCTIONS.USER-DEFINED"
+NAME="functions.user-defined"
 >User-defined functions</A
 ></H1
 ><P
->     A function may be defined using syntax such as the following:
+>&#13;    A function may be defined using syntax such as the following:
  
-     <DIV
-CLASS="INFORMALEXAMPLE"
+    <DIV
+CLASS="informalexample"
 ><P
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->function foo ($arg_1, $arg_2, ..., $arg_n) {
+CLASS="programlisting"
+>&#13;function foo ($arg_1, $arg_2, ..., $arg_n) {
     echo "Example function.\n";
     return $retval;
 }
-      </PRE
+     </PRE
+></TD
+></TR
+></TABLE
 ><P
 ></P
 ></DIV
-></P
+>
+   </P
 ><P
->     Any valid PHP code may appear inside a function, even other
-     functions and <A
-HREF="oop.html#KEYWORD.CLASS"
+>&#13;    Any valid PHP code may appear inside a function, even other
+    functions and <A
+HREF="language.oop.html#keyword.class"
 >class</A
 >
-     definitions.</P
-><P
->	In PHP3, functions must be defined before they are referenced. No
-	such requirement exists in PHP4.
+    definitions.
    </P
 ><P
->	PHP does not support function overloading, nor is it possible to
-	undefine or redefine previously-declared functions.
+>&#13;    In PHP3, functions must be defined before they are referenced. No
+    such requirement exists in PHP4.
    </P
 ><P
->	PHP3 does not support variable numbers of arguments to functions,
-	although default arguments are supported (see <A
-HREF="functions.arguments.html#FUNCTIONS.ARGUMENTS.DEFAULT"
+>&#13;    PHP does not support function overloading, nor is it possible to
+    undefine or redefine previously-declared functions.
+   </P
+><P
+>&#13;    PHP3 does not support variable numbers of arguments to functions,
+    although default arguments are supported (see <A
+HREF="functions.arguments.html#functions.arguments.default"
 >Default argument
-	values</A
+    values</A
 > for more information). PHP4 supports both: see <A
-HREF="functions.arguments.html#FUNCTIONS.VARIABLE-ARG-LIST"
+HREF="functions.arguments.html#functions.variable-arg-list"
 >Variable-length argument
-	lists</A
+    lists</A
 > and the function references for
-	<A
+    <A
 HREF="function.func-num-args.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >func_num_args()</B
 ></A
 >,
-	<A
+    <A
 HREF="function.func-get-arg.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >func_get_arg()</B
 ></A
 >, and
-	<A
+    <A
 HREF="function.func-get-args.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >func_get_args()</B
 ></A
 > for more information.
@@ -198,7 +212,7 @@ WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
 ><A
-HREF="function.include.html"
+HREF="function.include-once.html"
 >Prev</A
 ></TD
 ><TD
@@ -224,10 +238,10 @@ WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
 ><A
-HREF="function.include.html"
+HREF="function.include-once.html"
 ><B
-CLASS="FUNCTION"
->include()</B
+CLASS="function"
+>include_once()</B
 ></A
 ></TD
 ><TD

@@ -4,7 +4,7 @@
 >hw_pConnect</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="hw_OutputDocument"
 HREF="function.hw-outputdocument.html"><LINK
 REL="NEXT"
 TITLE="hw_PipeDocument"
-HREF="function.hw-pipedocument.html"></HEAD
+HREF="function.hw-pipedocument.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,44 +68,53 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.HW-PCONNECT"
+NAME="function.hw-pconnect"
 >hw_pConnect</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN11336"
+NAME="AEN12991"
 ></A
->hw_pConnect -- make a persistent database connection</DIV
+><P
+>    (PHP3 &#62;= 3.0.3, PHP4 )</P
+>hw_pConnect&nbsp;--&nbsp;make a persistent database connection</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN11339"
+NAME="AEN12994"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int hw_pconnect</CODE
->(string host, int port, string username, string password);<P
+>int <B
+CLASS="function"
+>hw_pconnect</B
+></CODE
+> (string host, int port, string username, string password)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Returns a connection index on success, or false if the connection
+>&#13;     Returns a connection index on success, or false if the connection
      could not be made.  Opens a persistent connection to a Hyperwave
      server. Each of the arguments should be a quoted string,
      except for the port number. The <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >username</I
 ></TT
 >
      and <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >password</I
 ></TT
@@ -113,12 +125,9 @@ CLASS="PARAMETER"
      index that is needed by other Hyperwave functions. You can have
      multiple persistent connections open at once.</P
 ><P
->     See also <A
-HREF="function.hw-connect.html"
-><B
-CLASS="FUNCTION"
+>&#13;     See also <B
+CLASS="function"
 >hw_Connect()</B
-></A
 >.</P
 ></DIV
 ><DIV

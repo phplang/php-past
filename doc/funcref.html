@@ -4,17 +4,20 @@
 >Function Reference</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="PREVIOUS"
-TITLE="Persistent database connections"
+TITLE="Persistent Database Connections"
 HREF="features.persistent-connections.html"><LINK
 REL="NEXT"
-TITLE="Adabas D functions"
-HREF="ref.adabas.html"></HEAD
+TITLE="Apache-specific Functions"
+HREF="ref.apache.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="part"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -52,7 +55,7 @@ WIDTH="10%"
 ALIGN="right"
 VALIGN="bottom"
 ><A
-HREF="ref.adabas.html"
+HREF="ref.apache.html"
 >Next</A
 ></TD
 ></TR
@@ -63,12 +66,12 @@ WIDTH="100%"></DIV
 ><DIV
 CLASS="PART"
 ><A
-NAME="FUNCREF"
+NAME="funcref"
 ></A
 ><DIV
 CLASS="TITLEPAGE"
 ><H1
-CLASS="TITLE"
+CLASS="title"
 >IV. Function Reference</H1
 ><DIV
 CLASS="TOC"
@@ -79,293 +82,348 @@ CLASS="TOC"
 ></DT
 ><DT
 >I. <A
-HREF="ref.adabas.html"
->Adabas D functions</A
+HREF="ref.apache.html"
+>Apache-specific Functions</A
 ></DT
 ><DT
 >II. <A
-HREF="ref.apache.html"
->Apache-specific functions</A
+HREF="ref.array.html"
+>Array Functions</A
 ></DT
 ><DT
 >III. <A
-HREF="ref.bc.html"
->Arbitrary precision mathematics functions</A
-></DT
-><DT
->IV. <A
-HREF="ref.array.html"
->Array functions</A
-></DT
-><DT
->V. <A
 HREF="ref.aspell.html"
 >Aspell functions</A
 ></DT
 ><DT
->VI. <A
+>IV. <A
+HREF="ref.bc.html"
+>BCMath Arbitrary Precision Mathematics Functions</A
+></DT
+><DT
+>V. <A
 HREF="ref.calendar.html"
 >Calendar functions</A
 ></DT
 ><DT
+>VI. <A
+HREF="ref.ccvs.html"
+>CCVS API Functions</A
+></DT
+><DT
 >VII. <A
+HREF="ref.com.html"
+>COM support functions for Windows</A
+></DT
+><DT
+>VIII. <A
+HREF="ref.classobj.html"
+>Class/Object Functions</A
+></DT
+><DT
+>IX. <A
 HREF="ref.cpdf.html"
 >ClibPDF functions</A
 ></DT
 ><DT
->VIII. <A
-HREF="ref.zlib.html"
->Compression functions</A
+>X. <A
+HREF="ref.curl.html"
+>CURL, Client URL Library Functions</A
 ></DT
 ><DT
->IX. <A
-HREF="r6628.html"
+>XI. <A
+HREF="ref.cybercash.html"
+>Cybercash payment functions</A
+></DT
+><DT
+>XII. <A
+HREF="ref.dba.html"
 >Database (dbm-style) abstraction layer functions</A
 ></DT
 ><DT
->X. <A
+>XIII. <A
 HREF="ref.datetime.html"
 >Date and Time functions</A
 ></DT
 ><DT
->XI. <A
+>XIV. <A
 HREF="ref.dbase.html"
 >dBase functions</A
 ></DT
 ><DT
->XII. <A
+>XV. <A
 HREF="ref.dbm.html"
->dbm functions</A
+>DBM Functions</A
 ></DT
 ><DT
->XIII. <A
+>XVI. <A
 HREF="ref.dir.html"
 >Directory functions</A
 ></DT
 ><DT
->XIV. <A
+>XVII. <A
 HREF="ref.dl.html"
 >Dynamic Loading functions</A
 ></DT
 ><DT
->XV. <A
-HREF="ref.mcrypt.html"
->Encryption functions</A
+>XVIII. <A
+HREF="ref.domxml.html"
+>DOM XML functions</A
 ></DT
 ><DT
->XVI. <A
+>XIX. <A
 HREF="ref.filepro.html"
 >filePro functions</A
 ></DT
 ><DT
->XVII. <A
+>XX. <A
 HREF="ref.filesystem.html"
 >Filesystem functions</A
 ></DT
 ><DT
->XVIII. <A
+>XXI. <A
 HREF="ref.fdf.html"
 >Forms Data Format functions</A
 ></DT
 ><DT
->XIX. <A
+>XXII. <A
 HREF="ref.ftp.html"
 >FTP functions</A
 ></DT
 ><DT
->XX. <A
-HREF="ref.mhash.html"
->Hash functions</A
+>XXIII. <A
+HREF="ref.gettext.html"
+>GNU Gettext</A
 ></DT
 ><DT
->XXI. <A
+>XXIV. <A
 HREF="ref.http.html"
 >HTTP functions</A
 ></DT
 ><DT
->XXII. <A
+>XXV. <A
 HREF="ref.hyperwave.html"
 >Hyperwave functions</A
 ></DT
 ><DT
->XXIII. <A
+>XXVI. <A
+HREF="ref.icap.html"
+>ICAP Functions</A
+></DT
+><DT
+>XXVII. <A
 HREF="ref.image.html"
 >Image functions</A
 ></DT
 ><DT
->XXIV. <A
+>XXVIII. <A
 HREF="ref.imap.html"
->IMAP functions</A
+>IMAP, POP3 and NNTP functions</A
 ></DT
 ><DT
->XXV. <A
+>XXIX. <A
 HREF="ref.ifx.html"
 >Informix functions</A
 ></DT
 ><DT
->XXVI. <A
+>XXX. <A
 HREF="ref.ibase.html"
 >InterBase functions</A
 ></DT
 ><DT
->XXVII. <A
+>XXXI. <A
 HREF="ref.ldap.html"
 >LDAP functions</A
 ></DT
 ><DT
->XXVIII. <A
+>XXXII. <A
 HREF="ref.mail.html"
 >Mail functions</A
 ></DT
 ><DT
->XXIX. <A
+>XXXIII. <A
 HREF="ref.math.html"
->Mathematical functions</A
+>Mathematical Functions</A
 ></DT
 ><DT
->XXX. <A
+>XXXIV. <A
 HREF="ref.mcal.html"
 >MCAL functions</A
 ></DT
 ><DT
->XXXI. <A
+>XXXV. <A
+HREF="ref.mcrypt.html"
+>Mcrypt Encryption Functions</A
+></DT
+><DT
+>XXXVI. <A
+HREF="ref.mhash.html"
+>Mhash Functions</A
+></DT
+><DT
+>XXXVII. <A
 HREF="ref.mssql.html"
 >Microsoft SQL Server functions</A
 ></DT
 ><DT
->XXXII. <A
+>XXXVIII. <A
 HREF="ref.misc.html"
 >Miscellaneous functions</A
 ></DT
 ><DT
->XXXIII. <A
+>XXXIX. <A
 HREF="ref.msql.html"
 >mSQL functions</A
 ></DT
 ><DT
->XXXIV. <A
+>XL. <A
 HREF="ref.mysql.html"
 >MySQL functions</A
 ></DT
 ><DT
->XXXV. <A
+>XLI. <A
 HREF="ref.network.html"
->Network functions</A
+>Network Functions</A
 ></DT
 ><DT
->XXXVI. <A
-HREF="ref.nis.html"
->NIS functions</A
-></DT
-><DT
->XXXVII. <A
+>XLII. <A
 HREF="ref.odbc.html"
->ODBC functions</A
+>Unified ODBC functions</A
 ></DT
 ><DT
->XXXVIII. <A
+>XLIII. <A
 HREF="ref.oracle.html"
 >Oracle functions</A
 ></DT
 ><DT
->XXXIX. <A
+>XLIV. <A
 HREF="ref.oci8.html"
 >Oracle 8 functions</A
 ></DT
 ><DT
->XL. <A
+>XLV. <A
 HREF="ref.pdf.html"
 >PDF functions</A
 ></DT
 ><DT
->XLI. <A
-HREF="ref.pcre.html"
->Perl-compatible Regular Expression functions</A
+>XLVI. <A
+HREF="ref.pfpro.html"
+>Verisign Payflow Pro functions</A
 ></DT
 ><DT
->XLII. <A
+>XLVII. <A
 HREF="ref.info.html"
 >PHP options &#38; information</A
 ></DT
 ><DT
->XLIII. <A
+>XLVIII. <A
 HREF="ref.posix.html"
 >POSIX functions</A
 ></DT
 ><DT
->XLIV. <A
+>XLIX. <A
 HREF="ref.pgsql.html"
 >PostgreSQL functions</A
 ></DT
 ><DT
->XLV. <A
+>L. <A
 HREF="ref.exec.html"
 >Program Execution functions</A
 ></DT
 ><DT
->XLVI. <A
+>LI. <A
+HREF="ref.pspell.html"
+>Pspell Functions</A
+></DT
+><DT
+>LII. <A
+HREF="ref.readline.html"
+>GNU Readline</A
+></DT
+><DT
+>LIII. <A
 HREF="ref.recode.html"
 >GNU Recode functions</A
 ></DT
 ><DT
->XLVII. <A
+>LIV. <A
+HREF="ref.pcre.html"
+>Regular Expression Functions (Perl-Compatible)</A
+></DT
+><DT
+>LV. <A
 HREF="ref.regex.html"
->Regular expression functions</A
+>Regular Expression Functions (POSIX Extended)</A
 ></DT
 ><DT
->XLVIII. <A
+>LVI. <A
 HREF="ref.sem.html"
->Semaphore and shared memory functions</A
+>Semaphore and Shared Memory Functions</A
 ></DT
 ><DT
->XLIX. <A
+>LVII. <A
 HREF="ref.session.html"
 >Session handling functions</A
 ></DT
 ><DT
->L. <A
+>LVIII. <A
+HREF="ref.swf.html"
+>Shockwave Flash functions</A
+></DT
+><DT
+>LIX. <A
 HREF="ref.snmp.html"
 >SNMP functions</A
 ></DT
 ><DT
->LI. <A
-HREF="ref.solid.html"
->Solid functions</A
-></DT
-><DT
->LII. <A
+>LX. <A
 HREF="ref.strings.html"
 >String functions</A
 ></DT
 ><DT
->LIII. <A
+>LXI. <A
 HREF="ref.sybase.html"
 >Sybase functions</A
 ></DT
 ><DT
->LIV. <A
+>LXII. <A
 HREF="ref.url.html"
->URL functions</A
+>URL Functions</A
 ></DT
 ><DT
->LV. <A
+>LXIII. <A
 HREF="ref.var.html"
->Variable functions</A
+>Variable Functions</A
 ></DT
 ><DT
->LVI. <A
+>LXIV. <A
 HREF="ref.vmailmgr.html"
 >Vmailmgr functions</A
 ></DT
 ><DT
->LVII. <A
+>LXV. <A
 HREF="ref.wddx.html"
 >WDDX functions</A
 ></DT
 ><DT
->LVIII. <A
+>LXVI. <A
 HREF="ref.xml.html"
 >XML parser functions</A
+></DT
+><DT
+>LXVII. <A
+HREF="ref.yaz.html"
+>YAZ</A
+></DT
+><DT
+>LXVIII. <A
+HREF="ref.nis.html"
+>YP/NIS Functions</A
+></DT
+><DT
+>LXIX. <A
+HREF="ref.zlib.html"
+>Zlib Compression Functions</A
 ></DT
 ></DL
 ></DIV
@@ -402,7 +460,7 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><A
-HREF="ref.adabas.html"
+HREF="ref.apache.html"
 >Next</A
 ></TD
 ></TR
@@ -411,7 +469,7 @@ HREF="ref.adabas.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->Persistent database connections</TD
+>Persistent Database Connections</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"
@@ -421,7 +479,7 @@ VALIGN="top"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->Adabas D functions</TD
+>Apache-specific Functions</TD
 ></TR
 ></TABLE
 ></DIV

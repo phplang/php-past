@@ -125,13 +125,13 @@
    | If you did not, or have any questions about PHP licensing, please    |
    | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
-   | Authors: Andi Gutmans <andi@php.net>                                 |
+   | Authors: Andi Gutmans <andi@zend.com>                                |
    |          Zeev Suraski <zeev@zend.com>                                |
    +----------------------------------------------------------------------+
 */
 
 
-/* $Id: language-parser.y,v 1.184 2000/02/07 23:54:50 zeev Exp $ */
+/* $Id: language-parser.y,v 1.186 2000/08/11 22:24:55 martin Exp $ */
 
 
 /* 
@@ -548,7 +548,7 @@ static const char * const yytname[] = {   "$","error","$undefined.","','","LOGIC
 "@37","@38","@39","@40","@41","parameter_list","@42","non_empty_parameter_list",
 "function_call_parameter_list","non_empty_function_call_parameter_list","global_var_list",
 "static_var_list","unambiguous_static_assignment","class_statement_list","class_statement",
-"@43","@44","class_variable_decleration","echo_expr_list","for_expr","expr_without_variable",
+"@43","@44","class_variable_declaration","echo_expr_list","for_expr","expr_without_variable",
 "@45","@46","@47","@48","@49","@50","@51","@52","@53","@54","@55","@56","@57",
 "@58","scalar","signed_scalar","varname_scalar","expr","unambiguous_variable_name",
 "unambiguous_array_name","unambiguous_class_name","assignment_list","assignment_variable_pointer",
@@ -1511,7 +1511,7 @@ static const short yycheck[] = {     2,
 #define YYPURE 1
 
 /* -*-C-*-  Note some compilers choke on comments on `#line' lines.  */
-#line 3 "/usr/local/share/bison.simple"
+#line 3 "/usr/lib/bison.simple"
 /* This file comes from bison-1.28.  */
 
 /* Skeleton output parser for bison,
@@ -1725,7 +1725,7 @@ __yy_memcpy (char *to, char *from, unsigned int count)
 #endif
 #endif
 
-#line 217 "/usr/local/share/bison.simple"
+#line 217 "/usr/lib/bison.simple"
 
 /* The user can define YYPARSE_PARAM as the name of an argument to be passed
    into yyparse.  The argument should have type void *.
@@ -3097,7 +3097,7 @@ case 295:
     break;}
 }
    /* the action file gets copied in in place of this dollarsign */
-#line 543 "/usr/local/share/bison.simple"
+#line 543 "/usr/lib/bison.simple"
 
   yyvsp -= yylen;
   yyssp -= yylen;

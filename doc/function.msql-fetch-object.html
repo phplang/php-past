@@ -4,7 +4,7 @@
 >msql_fetch_object</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="msql_fetch_field"
 HREF="function.msql-fetch-field.html"><LINK
 REL="NEXT"
 TITLE="msql_fetch_row"
-HREF="function.msql-fetch-row.html"></HEAD
+HREF="function.msql-fetch-row.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,58 +68,65 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.MSQL-FETCH-OBJECT"
+NAME="function.msql-fetch-object"
 >msql_fetch_object</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN17390"
+NAME="AEN22207"
 ></A
->msql_fetch_object -- fetch row as object</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>msql_fetch_object&nbsp;--&nbsp;Fetch row as object</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN17393"
+NAME="AEN22210"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int msql_fetch_object</CODE
->(int query_identifier, int
-      [<SPAN
-CLASS="OPTIONAL"
->result_type</SPAN
->]
-     );<P
+>int <B
+CLASS="function"
+>msql_fetch_object</B
+></CODE
+> (int query_identifier [, int
+       result_type])</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Returns an object with properties that correspond to the fetched
-     row, or false if there are no more rows.</P
+>&#13;     Returns an object with properties that correspond to the fetched
+     row, or false if there are no more rows.
+    </P
 ><P
->     <B
-CLASS="FUNCTION"
+>&#13;     <B
+CLASS="function"
 >msql_fetch_object()</B
 > is similar to
      <A
 HREF="function.msql-fetch-array.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >msql_fetch_array()</B
 ></A
 >, with one difference - an
      object is returned, instead of an array.  Indirectly, that means
      that you can only access the data by the field names, and not by
-     their offsets (numbers are illegal property names).</P
+     their offsets (numbers are illegal property names).
+    </P
 ><P
->     The optional second argument <TT
-CLASS="PARAMETER"
+>&#13;     The optional second argument <TT
+CLASS="parameter"
 ><I
 >result_type</I
 ></TT
@@ -124,44 +134,47 @@ CLASS="PARAMETER"
      in <A
 HREF="function.msql-fetch-array.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >msql_fetch_array()</B
 ></A
 > is a constant and can
-     take the following values: MSQL_ASSOC, MSQL_NUM, and MSQL_BOTH.</P
+     take the following values: MSQL_ASSOC, MSQL_NUM, and MSQL_BOTH.
+    </P
 ><P
->     Speed-wise, the function is identical to
+>&#13;     Speed-wise, the function is identical to
      <A
 HREF="function.msql-fetch-array.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >msql_fetch_array()</B
 ></A
 >, and almost as quick as
      <A
 HREF="function.msql-fetch-row.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >msql_fetch_row()</B
 ></A
 > (the difference is
-     insignificant).</P
+     insignificant).
+    </P
 ><P
 > See also:
      <A
 HREF="function.msql-fetch-array.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >msql_fetch_array()</B
 ></A
 > and
      <A
 HREF="function.msql-fetch-row.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >msql_fetch_row()</B
 ></A
->.</P
+>.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

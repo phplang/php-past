@@ -4,20 +4,23 @@
 >imap_search</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
-TITLE="IMAP functions"
+TITLE="IMAP, POP3 and NNTP functions"
 HREF="ref.imap.html"><LINK
 REL="PREVIOUS"
 TITLE="imap_msgno"
 HREF="function.imap-msgno.html"><LINK
 REL="NEXT"
 TITLE="imap_last_error"
-HREF="function.imap-last-error.html"></HEAD
+HREF="function.imap-last-error.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,153 +68,194 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.IMAP-SEARCH"
+NAME="function.imap-search"
 >imap_search</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN13335"
+NAME="AEN15963"
 ></A
->imap_search -- This function returns an array of messages matching the given search criteria.</DIV
+><P
+>    (PHP3 &#62;= 3.0.12, PHP4 &#62;= 4.0b4)</P
+>imap_search&nbsp;--&nbsp;
+     This function returns an array of messages matching the given
+     search criteria
+    </DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN13338"
+NAME="AEN15966"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->array imap_search</CODE
->(int imap_stream, string criteria, int flags);<P
+>array <B
+CLASS="function"
+>imap_search</B
+></CODE
+> (int imap_stream, string criteria, int flags)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     This function performs a search on the mailbox currently opened
+>&#13;     This function performs a search on the mailbox currently opened
      in the given imap stream. <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >criteria</I
 ></TT
 > is a
      string, delimited by spaces, in which the following keywords are
-     allowed. Any multi-word arguments (eg FROM "joe smith") must be
+     allowed. Any multi-word arguments (eg. FROM "joey smith") must be
      quoted.
-    <P
+     <P
 ></P
 ><UL
 ><LI
 ><P
->      ALL - return all messages matching the rest of the criteria</P
+>&#13;	ALL - return all messages matching the rest of the criteria
+       </P
 ></LI
 ><LI
 ><P
->      ANSWERED - match messages with the \\ANSWERED flag set</P
+>&#13;	ANSWERED - match messages with the \\ANSWERED flag set
+       </P
 ></LI
 ><LI
 ><P
->      BCC "string" - match messages with "string" in the Bcc: field</P
+>&#13;	BCC "string" - match messages with "string" in the Bcc: field
+       </P
 ></LI
 ><LI
 ><P
->      BEFORE "date" - match messages with Date: before "date"</P
+>&#13;	BEFORE "date" - match messages with Date: before "date"
+       </P
 ></LI
 ><LI
 ><P
->      BODY "string" - match messages with "string" in the body of the message</P
+>&#13;	BODY "string" - match messages with "string" in the body of the message
+       </P
 ></LI
 ><LI
 ><P
->      CC "string" - match messages with "string" in the Cc: field</P
+>&#13;	CC "string" - match messages with "string" in the Cc: field
+       </P
 ></LI
 ><LI
 ><P
->      DELETED - match deleted messages</P
+>&#13;	DELETED - match deleted messages
+       </P
 ></LI
 ><LI
 ><P
->      FLAGGED - match messages with the \\FLAGGED (sometimes referred to as Important or Urgent) flag set</P
+>&#13;	FLAGGED - match messages with the \\FLAGGED (sometimes
+	referred to as Important or Urgent) flag set
+       </P
 ></LI
 ><LI
 ><P
->      FROM "string" - match messages with "string" in the From: field</P
+>&#13;	FROM "string" - match messages with "string" in the From: field
+       </P
 ></LI
 ><LI
 ><P
->      KEYWORD "string" - match messages with "string" as a keyword</P
+>&#13;	KEYWORD "string" - match messages with "string" as a keyword
+       </P
 ></LI
 ><LI
 ><P
->      NEW - match new messages</P
+>&#13;	NEW - match new messages
+       </P
 ></LI
 ><LI
 ><P
->      OLD - match old messages</P
+>&#13;	OLD - match old messages
+       </P
 ></LI
 ><LI
 ><P
->      ON "date" - match messages with Date: matching "date"</P
+>&#13;	ON "date" - match messages with Date: matching "date"
+       </P
 ></LI
 ><LI
 ><P
->      RECENT - match messages with the \\RECENT flag set</P
+>&#13;	RECENT - match messages with the \\RECENT flag set
+       </P
 ></LI
 ><LI
 ><P
->      SEEN - match messages that have been read (the \\SEEN flag is set)</P
+>&#13;	SEEN - match messages that have been read (the \\SEEN flag is set)
+       </P
 ></LI
 ><LI
 ><P
->      SINCE "date" - match messages with Date: after "date"</P
+>&#13;	SINCE "date" - match messages with Date: after "date"
+       </P
 ></LI
 ><LI
 ><P
->      SUBJECT "string" - match messages with "string" in the Subject:</P
+>&#13;	SUBJECT "string" - match messages with "string" in the Subject:
+       </P
 ></LI
 ><LI
 ><P
->      TEXT "string" - match messages with text "string"</P
+>&#13;	TEXT "string" - match messages with text "string"
+       </P
 ></LI
 ><LI
 ><P
->      TO "string" - match messages with "string" in the To:</P
+>&#13;	TO "string" - match messages with "string" in the To:
+       </P
 ></LI
 ><LI
 ><P
->      UNANSWERED - match messages that have not been answered</P
+>&#13;	UNANSWERED - match messages that have not been answered
+       </P
 ></LI
 ><LI
 ><P
->      UNDELETED - match messages that are not deleted</P
+>&#13;	UNDELETED - match messages that are not deleted
+       </P
 ></LI
 ><LI
 ><P
->      UNFLAGGED - match messages that are not flagged</P
+>&#13;	UNFLAGGED - match messages that are not flagged
+       </P
 ></LI
 ><LI
 ><P
->      UNKEYWORD "string" - match messages that do not have the keyword "string"</P
+>&#13;	UNKEYWORD "string" - match messages that do not have the
+	keyword "string"
+       </P
 ></LI
 ><LI
 ><P
->      UNSEEN - match messages which have not been read yet</P
+>&#13;	UNSEEN - match messages which have not been read yet
+       </P
 ></LI
 ></UL
-></P
+>
+    </P
 ><P
->     For example, to match all unanswered messages sent by Mom, you'd
+>&#13;     For example, to match all unanswered messages sent by Mom, you'd
      use: "UNANSWERED FROM mom". Searches appear to be case
      insensitive. This list of criteria is from a reading of the UW
      c-client source code and may be uncomplete or
-     inaccurate. Searcher beware.</P
+     inaccurate (see also RFC2060, section 6.4.4).
+    </P
 ><P
->     Valid values for flags are SE_UID, which causes the returned
-     array to contain UIDs instead of messages sequence numbers.</P
+>&#13;     Valid values for flags are SE_UID, which causes the returned
+     array to contain UIDs instead of messages sequence numbers.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

@@ -4,7 +4,7 @@
 >mcal_store_event</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -12,12 +12,15 @@ REL="UP"
 TITLE="MCAL functions"
 HREF="ref.mcal.html"><LINK
 REL="PREVIOUS"
-TITLE="mcal_list_events"
-HREF="function.mcal-list-events.html"><LINK
+TITLE="mcal_append_event"
+HREF="function.mcal-append-event.html"><LINK
 REL="NEXT"
 TITLE="mcal_delete_event"
-HREF="function.mcal-delete-event.html"></HEAD
+HREF="function.mcal-delete-event.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -42,7 +45,7 @@ WIDTH="10%"
 ALIGN="left"
 VALIGN="bottom"
 ><A
-HREF="function.mcal-list-events.html"
+HREF="function.mcal-append-event.html"
 >Prev</A
 ></TD
 ><TD
@@ -65,41 +68,50 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.MCAL-STORE-EVENT"
+NAME="function.mcal-store-event"
 >mcal_store_event</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN15762"
+NAME="AEN19103"
 ></A
->mcal_store_event -- Store an event into an MCAL calendar</DIV
+><P
+>    (PHP3 &#62;= 3.0.13, PHP4 &#62;= 4.0b4)</P
+>mcal_store_event&nbsp;--&nbsp;Modify an existing event in an MCAL calendar</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN15765"
+NAME="AEN19106"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int mcal_store_event</CODE
->(int mcal_stream);<P
+>int <B
+CLASS="function"
+>mcal_store_event</B
+></CODE
+> (int mcal_stream)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
 > 
      <B
-CLASS="FUNCTION"
+CLASS="function"
 >mcal_store_event()</B
-> Stores the global event
-     into an MCAL calendar for the given stream.</P
+> Stores the modifications
+     to the current global event for the given stream.</P
 ><P
->     Returns true on success and false on error.</P
+>&#13;     Returns true on success and false on error.</P
 ><P
 ></P
 ></DIV
@@ -118,7 +130,7 @@ WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
 ><A
-HREF="function.mcal-list-events.html"
+HREF="function.mcal-append-event.html"
 >Prev</A
 ></TD
 ><TD
@@ -143,7 +155,7 @@ HREF="function.mcal-delete-event.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->mcal_list_events</TD
+>mcal_append_event</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"

@@ -4,7 +4,7 @@
 >trim</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="substr_replace"
 HREF="function.substr-replace.html"><LINK
 REL="NEXT"
 TITLE="ucfirst"
-HREF="function.ucfirst.html"></HEAD
+HREF="function.ucfirst.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,51 +68,65 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.TRIM"
+NAME="function.trim"
 >trim</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN26121"
+NAME="AEN34899"
 ></A
->trim --      Strip whitespace from the beginning and end of a string
+><P
+>    (PHP3 , PHP4 )</P
+>trim&nbsp;--&nbsp;
+     Strip whitespace from the beginning and end of a string
     </DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN26124"
+NAME="AEN34902"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->string trim</CODE
->(string str);<P
+>string <B
+CLASS="function"
+>trim</B
+></CODE
+> (string str)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     This function strips whitespace from the start and the end of a
-     string and returns the stripped string.</P
+>&#13;     This function strips whitespace from the start and the end of a
+     string and returns the stripped string.  The whitespace
+     characters it currently strips are: "\n", "\r", "\t", "\v", "\0",
+     and a plain space.
+    </P
 ><P
->     See also <A
+>&#13;     See also <A
 HREF="function.chop.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >chop()</B
 ></A
 > and
      <A
 HREF="function.ltrim.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >ltrim()</B
 ></A
->.</P
+>.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

@@ -4,20 +4,23 @@
 >current</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
-TITLE="Array functions"
+TITLE="Array Functions"
 HREF="ref.array.html"><LINK
 REL="PREVIOUS"
 TITLE="count"
 HREF="function.count.html"><LINK
 REL="NEXT"
 TITLE="each"
-HREF="function.each.html"></HEAD
+HREF="function.each.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,55 +68,64 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.CURRENT"
+NAME="function.current"
 >current</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN4057"
+NAME="AEN4387"
 ></A
->current -- Return the current element in an array</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>current&nbsp;--&nbsp;Return the current element in an array</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN4060"
+NAME="AEN4390"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->mixed current</CODE
->(array array);<P
+>mixed <B
+CLASS="function"
+>current</B
+></CODE
+> (array array)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Every array has an internal pointer to its "current" element,
+>&#13;     Every array has an internal pointer to its "current" element,
      which is initialized to the first element inserted into the
-     array.</P
+     array.
+    </P
 ><P
->     The <B
-CLASS="FUNCTION"
+>&#13;     The <B
+CLASS="function"
 >current()</B
 > function simply returns the
      array element that's currently being pointed by the internal
      pointer.  It does not move the pointer in any way.  If the
      internal pointer points beyond the end of the elements list,
      <B
-CLASS="FUNCTION"
+CLASS="function"
 >current()</B
 > returns false.
-
-    <DIV
-CLASS="WARNING"
+     <DIV
+CLASS="warning"
 ><P
 ></P
 ><TABLE
-CLASS="WARNING"
+CLASS="warning"
 BORDER="1"
 WIDTH="100%"
 ><TR
@@ -127,55 +139,58 @@ ALIGN="CENTER"
 ><TD
 ALIGN="LEFT"
 ><P
-> If the array contains empty elements (0 or "", the empty
-     string) then this function will return false for these elements
-     as well.  This makes it impossible to determine if you are really
-     at the end of the list in such an array using
-     <B
-CLASS="FUNCTION"
+> 
+       If the array contains empty elements (0 or "", the empty
+       string) then this function will return false for these elements
+       as well.  This makes it impossible to determine if you are
+       really at the end of the list in such an array using
+       <B
+CLASS="function"
 >current()</B
->.  To properly traverse an array that
-     may contain empty elements, use the <A
+>.  To properly traverse an array
+       that may contain empty elements, use the
+       <A
 HREF="function.each.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >each()</B
 ></A
->
-     function.</P
+> function.  
+      </P
 ></TD
 ></TR
 ></TABLE
 ></DIV
-></P
+>
+    </P
 ><P
->     See also:
-     <A
+>&#13;     See also: <A
 HREF="function.end.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >end()</B
 ></A
 >, <A
 HREF="function.next.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >next()</B
 ></A
 >,
      <A
 HREF="function.prev.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >prev()</B
 ></A
-> and <A
+>, and <A
 HREF="function.reset.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >reset()</B
 ></A
->.</P
+>.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

@@ -4,20 +4,23 @@
 >array_walk</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
-TITLE="Array functions"
+TITLE="Array Functions"
 HREF="ref.array.html"><LINK
 REL="PREVIOUS"
 TITLE="array_values"
 HREF="function.array-values.html"><LINK
 REL="NEXT"
 TITLE="arsort"
-HREF="function.arsort.html"></HEAD
+HREF="function.arsort.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,112 +68,124 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.ARRAY-WALK"
+NAME="function.array-walk"
 >array_walk</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN3919"
+NAME="AEN4220"
 ></A
->array_walk --      Apply a user function to every member of an array.
+><P
+>    (PHP3 &#62;= 3.0.3, PHP4 )</P
+>array_walk&nbsp;--&nbsp;
+     Apply a user function to every member of an array
     </DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN3922"
+NAME="AEN4223"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int array_walk</CODE
->(array arr, string func, mixed userdata);<P
+>int <B
+CLASS="function"
+>array_walk</B
+></CODE
+> (array arr, string func, mixed userdata)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Applies the function named by <TT
-CLASS="PARAMETER"
+>&#13;     Applies the function named by <TT
+CLASS="parameter"
 ><I
 >func</I
 ></TT
 > to each
-     element of
-     <TT
-CLASS="PARAMETER"
+     element of <TT
+CLASS="parameter"
 ><I
 >arr</I
 ></TT
->. <TT
-CLASS="PARAMETER"
+>.
+     <TT
+CLASS="parameter"
 ><I
 >func</I
 ></TT
-> will be
-     passed array value as the first parameter and array key as the
-     second parameter.  If <TT
-CLASS="PARAMETER"
+> will be passed array value as the
+     first parameter and array key as the second parameter.  If
+     <TT
+CLASS="parameter"
 ><I
 >userdata</I
 ></TT
-> is
-     supplied, it will be passed as the third parameter to the user
-     function.
-
-     If <TT
-CLASS="PARAMETER"
+> is supplied, it will be passed as
+     the third parameter to the user function.
+    </P
+><P
+>&#13;     If <TT
+CLASS="parameter"
 ><I
 >func</I
 ></TT
 > requires more than two or three
      arguments, depending on <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >userdata</I
 ></TT
 >, a
      warning will be generated each time
      <B
-CLASS="FUNCTION"
+CLASS="function"
 >array_walk()</B
 > calls
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >func</I
 ></TT
 >. These warnings may be suppressed by
      prepending the '@' sign to the <B
-CLASS="FUNCTION"
+CLASS="function"
 >array_walk()</B
 >
      call, or by using <A
 HREF="function.error-reporting.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >error_reporting()</B
 ></A
->.</P
+>.
+    </P
 ><DIV
-CLASS="NOTE"
+CLASS="note"
 ><BLOCKQUOTE
-CLASS="NOTE"
+CLASS="note"
 ><P
 ><B
 >Note: </B
->      If <TT
-CLASS="PARAMETER"
+>
+      If <TT
+CLASS="parameter"
 ><I
 >func</I
 ></TT
 > needs to be working with the
       actual values of the array, specify that the first parameter of
       <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >func</I
 ></TT
@@ -181,22 +196,39 @@ CLASS="PARAMETER"
 ></BLOCKQUOTE
 ></DIV
 ><DIV
-CLASS="NOTE"
+CLASS="note"
 ><BLOCKQUOTE
-CLASS="NOTE"
+CLASS="note"
 ><P
 ><B
 >Note: </B
->      Passing the key and userdata to <TT
-CLASS="PARAMETER"
+>
+      Passing the key and userdata to <TT
+CLASS="parameter"
 ><I
 >func</I
 ></TT
-> was added in 4.0.</P
+> was
+      added in 4.0.
+     </P
+><P
+>&#13;      In PHP 4 <A
+HREF="function.reset.html"
+><B
+CLASS="function"
+>reset()</B
+></A
+> needs to be called as
+      necessary since <B
+CLASS="function"
+>array_walk()</B
+> does not reset
+      the array by default.
+     </P
 ></BLOCKQUOTE
 ></DIV
 ><P
->     <TABLE
+>&#13;     <TABLE
 WIDTH="100%"
 BORDER="0"
 CELLPADDING="0"
@@ -205,49 +237,62 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
 >Example 1. <B
-CLASS="FUNCTION"
->array_walk()</B
+CLASS="function"
+>Array_walk()</B
 > example</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->$fruits = array("d"=&#62;"lemon","a"=&#62;"orange","b"=&#62;"banana","c"=&#62;"apple");
+CLASS="programlisting"
+>&#13;$fruits = array ("d"=&#62;"lemon", "a"=&#62;"orange", "b"=&#62;"banana", "c"=&#62;"apple");
 
-function test_alter( &#38;$item1, $key, $prefix ) {
+function test_alter (&#38;$item1, $key, $prefix) {
    $item1 = "$prefix: $item1";
 }
 
-function test_print( $item2, $key ) {
-   echo "$key. $item2&lt;br&gt;\n";
+function test_print ($item2, $key) {
+   echo "$key. $item2&#60;br&#62;\n";
 }
 
-array_walk( $fruits, 'test_print' );
-array_walk( $fruits, 'test_alter', 'fruit' );
-array_walk( $fruits, 'test_print' );
+array_walk ($fruits, 'test_print');
+reset ($fruits);
+array_walk ($fruits, 'test_alter', 'fruit');
+reset ($fruits);
+array_walk ($fruits, 'test_print');
       </PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR
 ></TABLE
-></P
+>
+    </P
 ><P
->     See also <A
+>&#13;     See also <A
 HREF="function.each.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >each()</B
 ></A
 > and <A
 HREF="function.list.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >list()</B
 ></A
->.</P
+>.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

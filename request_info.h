@@ -27,10 +27,12 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: request_info.h,v 1.19 2000/01/01 04:44:07 sas Exp $ */
+/* $Id: request_info.h,v 1.20 2000/09/09 21:05:45 zeev Exp $ */
 
 #ifndef _REQUEST_INFO_H_
 #define _REQUEST_INFO_H_
+
+#include "php3_hash.h"
 
 typedef struct {
 	char *filename;
@@ -46,6 +48,7 @@ typedef struct {
 	const char *cookies;
 	const char *script_filename;
 	char *php_argv0;
+	HashTable rfc1867_uploaded_files;
 } php3_request_info;
 
 extern php3_request_info request_info;

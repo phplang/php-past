@@ -1,10 +1,10 @@
 <HTML
 ><HEAD
 ><TITLE
->Creating GIF images</TITLE
+>Creating and manipulating images</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -12,12 +12,15 @@ REL="UP"
 TITLE="Features"
 HREF="features.html"><LINK
 REL="PREVIOUS"
-TITLE="Error handling"
+TITLE="Error Handling"
 HREF="features.error-handling.html"><LINK
 REL="NEXT"
 TITLE="HTTP authentication with PHP"
-HREF="features.http-auth.html"></HEAD
+HREF="features.http-auth.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="chapter"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -64,20 +67,23 @@ HREF="features.http-auth.html"
 ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><DIV
-CLASS="CHAPTER"
+CLASS="chapter"
 ><H1
 ><A
-NAME="FEATURES.IMAGES"
->Chapter 15. Creating GIF images</A
+NAME="features.images"
+>Chapter 16. Creating and manipulating images</A
 ></H1
 ><P
->   PHP is not limited to creating just HTML output.  It can also be
-   used to create GIF image files, or even more convenient GIF image
-   streams.  You will need to compile PHP with the GD library of
-   image functions for this to work.
+>&#13;   PHP is not limited to creating just HTML output.  It can also be
+   used to create and manipulate image files in a variety of different
+   image formats, including gif, png, jpg, wbmp, and xpm. Even more
+   convenient, php can output image streams directly to a browser. You
+   will need to compile PHP with the GD library of image functions for
+   this to work. GD and PHP may also require other libraries, depending
+   on which image formats you want to work with.
   </P
 ><P
->   <TABLE
+>&#13;   <TABLE
 WIDTH="100%"
 BORDER="0"
 CELLPADDING="0"
@@ -86,14 +92,20 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
->Example 15-1. GIF creation with PHP</B
+>Example 16-1. GIF creation with PHP</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->&lt;?php
+CLASS="programlisting"
+>&#13;&#60;?php
     Header("Content-type: image/gif");
     $string=implode($argv," ");
     $im = imagecreatefromgif("images/button1.gif");
@@ -104,16 +116,19 @@ CLASS="PROGRAMLISTING"
     ImageDestroy($im);
 ?&#62;
     </PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR
 ></TABLE
 >
 
-   This example would be called from a page with a tag like: &lt;img
-   src=&quot;button.php3?text&quot;&gt; The above button.php3 script
-   then takes this &quot;text&quot; string an overlays it on top of a
-   base image which in this case is &quot;images/button1.gif&quot;
+   This example would be called from a page with a tag like: &#60;img
+   src="button.php?text"&#62; The above button.php script
+   then takes this "text" string an overlays it on top of a
+   base image which in this case is "images/button1.gif"
    and outputs the resulting image.  This is a very convenient way to
    avoid having to draw new button images every time you want to
    change the text of a button.  With this method they are
@@ -160,7 +175,7 @@ HREF="features.http-auth.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->Error handling</TD
+>Error Handling</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"

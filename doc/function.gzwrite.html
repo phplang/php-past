@@ -4,20 +4,23 @@
 >gzwrite</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
-TITLE="Compression functions"
+TITLE="Zlib Compression Functions"
 HREF="ref.zlib.html"><LINK
 REL="PREVIOUS"
 TITLE="gztell"
 HREF="function.gztell.html"><LINK
 REL="NEXT"
 TITLE="readgzfile"
-HREF="function.readgzfile.html"></HEAD
+HREF="function.readgzfile.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,110 +68,120 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.GZWRITE"
+NAME="function.gzwrite"
 >gzwrite</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN6573"
+NAME="AEN37984"
 ></A
->gzwrite -- Binary-safe gz-file write</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>gzwrite&nbsp;--&nbsp;Binary-safe gz-file write</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN6576"
+NAME="AEN37987"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int gzwrite</CODE
->(int zp, string string, int [<SPAN
-CLASS="OPTIONAL"
->length</SPAN
->]);<P
+>int <B
+CLASS="function"
+>gzwrite</B
+></CODE
+> (int zp, string string [, int 
+       length])</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     <B
-CLASS="FUNCTION"
->gzwrite()</B
+>&#13;     <B
+CLASS="function"
+>Gzwrite()</B
 > writes the contents of
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >string</I
 ></TT
 > to the gz-file stream pointed to by
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >zp</I
 ></TT
 >. If the <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >length</I
 ></TT
 >
      argument is given, writing will stop after
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >length</I
 ></TT
 > (uncompressed) bytes have been
      written or the end of <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >string</I
 ></TT
 > is reached,
-     whichever comes first.</P
+     whichever comes first.
+    </P
 ><P
->     Note that if the <TT
-CLASS="PARAMETER"
+>&#13;     Note that if the <TT
+CLASS="parameter"
 ><I
 >length</I
 ></TT
 > argument is given,
      then the <A
-HREF="configuration.html#INI.MAGIC-QUOTES-RUNTIME"
+HREF="configuration.html#ini.magic-quotes-runtime"
 >magic_quotes_runtime</A
 >
      configuration option will be ignored and no slashes will be
      stripped from <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >string</I
 ></TT
->.</P
+>.
+    </P
 ><P
->     See also <A
+>&#13;     See also <A
 HREF="function.gzread.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >gzread()</B
 ></A
 >, <A
 HREF="function.gzopen.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >gzopen()</B
 ></A
 >,
      and <A
 HREF="function.gzputs.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >gzputs()</B
 ></A
->.</P
+>.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

@@ -23,10 +23,10 @@
    | If you did not, or have any questions about PHP licensing, please    |
    | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
-   | Authors: Sascha Schumann <sas@schell.de>                             |
+   | Authors: Sascha Schumann <sascha@schumann.cx>                        |
    +----------------------------------------------------------------------+
 
-   $Id: php_compat.c,v 1.3 2000/01/01 04:31:13 sas Exp $
+   $Id: php_compat.c,v 1.4 2000/07/10 10:15:35 sas Exp $
  */
 
 

@@ -1,10 +1,10 @@
 <HTML
 ><HEAD
 ><TITLE
->Error handling</TITLE
+>Error Handling</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -15,9 +15,12 @@ REL="PREVIOUS"
 TITLE="Features"
 HREF="features.html"><LINK
 REL="NEXT"
-TITLE="Creating GIF images"
-HREF="features.images.html"></HEAD
+TITLE="Creating and manipulating images"
+HREF="features.images.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="chapter"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -64,65 +67,457 @@ HREF="features.images.html"
 ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><DIV
-CLASS="CHAPTER"
+CLASS="chapter"
 ><H1
 ><A
-NAME="FEATURES.ERROR-HANDLING"
->Chapter 14. Error handling</A
+NAME="features.error-handling"
+>Chapter 15. Error Handling</A
 ></H1
 ><P
->   There are 4 types of errors and warnings in PHP.  They are:
+>&#13;   There are several types of errors and warnings in PHP.  They are:
 
-   <P
+   <DIV
+CLASS="table"
+><P
+><B
+>Table 15-1. PHP error types</B
 ></P
-><UL
-><LI
+><TABLE
+BORDER="1"
+CLASS="CALSTABLE"
+><THEAD
+><TR
+><TH
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Value</TH
+><TH
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Constant</TH
+><TH
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Description</TH
+><TH
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Note</TH
+></TR
+></THEAD
+><TBODY
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>1</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>E_ERROR</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>fatal run-time errors</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&nbsp;</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>2</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>E_WARNING</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>run-time warnings (non fatal errors)</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&nbsp;</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>4</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>E_PARSE</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>compile-time parse errors</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&nbsp;</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>8</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>E_NOTICE	</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;        run-time notices (less serious than warnings)
+       </TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&nbsp;</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>16</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>E_CORE_ERROR</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>fatal errors that occur during PHP's initial startup</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>PHP 4 only</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>32</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>E_CORE_WARNING</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;	warnings (non fatal errors) that occur during PHP's initial
+	startup
+       </TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>PHP 4 only</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>64</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>E_COMPILE_ERROR</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>fatal compile-time errors</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>PHP 4 only</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>128</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>E_COMPILE_WARNING</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>compile-time warnings (non fatal errors)</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>PHP 4 only</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>256</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>E_USER_ERROR</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>user-generated error message</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>PHP 4 only</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>512</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>E_USER_WARNING</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>user-generated warning message</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>PHP 4 only</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>1024</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>E_USER_NOTICE	</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>user-generated notice message</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>PHP 4 only</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&nbsp;</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>E_ALL</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>all of the above, as supported</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&nbsp;</TD
+></TR
+></TBODY
+></TABLE
+></DIV
+>
+  </P
 ><P
->1 - Normal Function Errors</P
-></LI
-><LI
+>&#13;   The above values (either numerical or symbolic) are used to build
+   up a bitmask that specifies which errors to report. You can use the
+   <A
+HREF="language.operators.bitwise.html"
+>bitwise operators</A
+>
+   to combine these values or mask out certain types of errors. Note
+   that only '|', '~', '!', and '&#38;' will be understood within
+   <TT
+CLASS="filename"
+>php.ini</TT
+>, however, and that no bitwise
+   operators will be understood within <TT
+CLASS="filename"
+>php3.ini</TT
+>.
+  </P
 ><P
->2 - Normal Warnings</P
-></LI
-><LI
+>&#13;   In PHP 4, the default <A
+HREF="configuration.html#ini.error-reporting"
+>error_reporting</A
+> setting is
+   <TT
+CLASS="literal"
+>E_ALL &#38; ~E_NOTICE</TT
+>, meaning to display all errors
+   and warnings which are not E_NOTICE-level. In PHP 3, the default
+   setting is <TT
+CLASS="literal"
+>(E_ERROR | E_WARNING | E_PARSE)</TT
+>,
+   meaning the same thing. Note, however, that since constants are not
+   supported in PHP 3's <TT
+CLASS="filename"
+>php3.ini</TT
+>, the <A
+HREF="configuration.html#ini.error-reporting"
+>error_reporting</A
+> setting there
+   must be numeric; hence, it is <TT
+CLASS="literal"
+>7</TT
+>.
+  </P
 ><P
->4 - Parser Errors</P
-></LI
-><LI
-><P
->8 - Notices (warnings you can ignore but which
-     may imply a bug in your code)</P
-></LI
-></UL
-></P
-><P
->   The above 4 numbers are added up to define an error reporting
-   level.  The default error reporting level is 7 which is 1 + 2 + 4,
-   or everything except notices.  This level can be changed in the
-   php3.ini file with the error_reporting directive.  It can also be
-   set in your Apache httpd.conf file with the php3_error_reporting
-   directive or lastly it may be set at runtime within a script using
-   the <A
+>&#13;   The initial setting can be changed in the ini file with the <A
+HREF="configuration.html#ini.error-reporting"
+>error_reporting</A
+> directive, in
+   your Apache <TT
+CLASS="filename"
+>httpd.conf</TT
+> file with the
+   php_error_reporting (php3_error_reporting for PHP 3) directive, and
+   lastly it may be set at runtime within a script by using the
+   <A
 HREF="function.error-reporting.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >error_reporting()</B
 ></A
-> function.</P
+> function.
+  </P
+><DIV
+CLASS="warning"
 ><P
->	
-   All <A
+></P
+><TABLE
+CLASS="warning"
+BORDER="1"
+WIDTH="100%"
+><TR
+><TD
+ALIGN="CENTER"
+><B
+>Warning</B
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+><P
+>&#13;    When upgrading code or servers from PHP 3 to PHP 4 you should
+    check these settings and calls to
+    <A
+HREF="function.error-reporting.html"
+><B
+CLASS="function"
+>error_reporting()</B
+></A
+> or you might disable
+    reporting the new error types, especially E_COMPILE_ERROR.  This
+    may lead to empty documents without any feedback of what happened
+    or where to look for the problem.
+   </P
+></TD
+></TR
+></TABLE
+></DIV
+><P
+>&#13;   All <A
 HREF="language.expressions.html"
 >PHP expressions</A
-> can also be called
-   with the "@" prefix, which turns off error reporting for that particular
-   expression.  If an error occurred during such an expression and the
-   <A
-HREF="configuration.html#INI.TRACK-ERRORS"
+> can
+   also be called with the "@" prefix, which turns off error reporting
+   for that particular expression.  If an error occurred during such
+   an expression and the <A
+HREF="configuration.html#ini.track-errors"
 >track_errors</A
-> feature
-   is enabled, you can find the error message in the global variable
-   $php_errormsg.</P
+> feature is enabled,
+   you can find the error message in the global variable
+   $php_errormsg.
+  </P
+><DIV
+CLASS="warning"
+><P
+></P
+><TABLE
+CLASS="warning"
+BORDER="1"
+WIDTH="100%"
+><TR
+><TD
+ALIGN="CENTER"
+><B
+>Warning</B
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+><P
+>&#13;    Currently the <A
+HREF="language.operators.errorcontrol.html"
+>@
+    error-control operator</A
+> prefix will even disable error
+    reporting for critical errors that will terminate script
+    execution. Among other things, this means that if you use <A
+HREF="language.operators.errorcontrol.html"
+>@</A
+> to suppress
+    errors from a certain function and either it isn't available or
+    has been mistyped, the script will die right there with no
+    indication as to why.
+   </P
+></TD
+></TR
+></TABLE
+></DIV
+><P
+>&#13;   See also <A
+HREF="function.error-reporting.html"
+><B
+CLASS="function"
+>error_reporting()</B
+></A
+>,
+   <A
+HREF="function.set-error-handler.html"
+><B
+CLASS="function"
+>set_error_handler()</B
+></A
+>,
+   <A
+HREF="function.restore-error-handler.html"
+><B
+CLASS="function"
+>restore_error_handler()</B
+></A
+>, 
+   <A
+HREF="function.trigger-error.html"
+><B
+CLASS="function"
+>trigger_error()</B
+></A
+>,
+   <A
+HREF="function.user-error.html"
+><B
+CLASS="function"
+>user_error()</B
+></A
+>
+  </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -177,7 +572,7 @@ HREF="features.html"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->Creating GIF images</TD
+>Creating and manipulating images</TD
 ></TR
 ></TABLE
 ></DIV

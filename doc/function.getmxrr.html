@@ -4,20 +4,23 @@
 >getmxrr</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
-TITLE="Network functions"
+TITLE="Network Functions"
 HREF="ref.network.html"><LINK
 REL="PREVIOUS"
 TITLE="gethostbynamel"
 HREF="function.gethostbynamel.html"><LINK
 REL="NEXT"
 TITLE="getprotobyname"
-HREF="function.getprotobyname.html"></HEAD
+HREF="function.getprotobyname.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,91 +68,105 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.GETMXRR"
+NAME="function.getmxrr"
 >getmxrr</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN18723"
+NAME="AEN23674"
 ></A
->getmxrr -- Get MX records corresponding to a given
-    Internet host name.</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>getmxrr&nbsp;--&nbsp;
+     Get MX records corresponding to a given Internet host name
+    </DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN18726"
+NAME="AEN23677"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int getmxrr</CODE
->(string hostname, array mxhosts, array [<SPAN
-CLASS="OPTIONAL"
->weight</SPAN
->]);<P
+>int <B
+CLASS="function"
+>getmxrr</B
+></CODE
+> (string hostname, array mxhosts [, array 
+       weight])</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Searches DNS for MX records corresponding to
+>&#13;     Searches DNS for MX records corresponding to
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >hostname</I
 ></TT
 >. Returns true if any records are
-     found; returns false if no records were found or if an error occurred.</P
+     found; returns false if no records were found or if an error
+     occurred.
+    </P
 ><P
->     A list of the MX records found is placed into the array
+>&#13;     A list of the MX records found is placed into the array
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >mxhosts</I
 ></TT
 >. If the
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >weight</I
 ></TT
 > array is given, it will be filled
-     with the weight information gathered.</P
+     with the weight information gathered.
+    </P
 ><P
->     See also
-     <A
+>&#13;     See also <A
 HREF="function.checkdnsrr.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >checkdnsrr()</B
 ></A
 >,
      <A
 HREF="function.gethostbyname.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >gethostbyname()</B
 ></A
 >,
      <A
 HREF="function.gethostbynamel.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >gethostbynamel()</B
 ></A
 >,
      <A
 HREF="function.gethostbyaddr.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >gethostbyaddr()</B
 ></A
->, and
-     the named(8) manual page.</P
+>, and the
+     <TT
+CLASS="literal"
+>named(8)</TT
+> manual page.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

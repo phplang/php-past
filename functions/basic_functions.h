@@ -23,13 +23,13 @@
    | If you did not, or have any questions about PHP licensing, please    |
    | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
-   | Authors: Andi Gutmans <andi@php.net>                                 |
+   | Authors: Andi Gutmans <andi@zend.com>                                |
    |          Zeev Suraski <zeev@zend.com>                                |
    +----------------------------------------------------------------------+
  */
 
 
-/* $Id: basic_functions.h,v 1.47 2000/02/23 22:57:21 zeev Exp $ */
+/* $Id: basic_functions.h,v 1.49 2000/09/09 21:05:45 zeev Exp $ */
 
 #ifndef _BASIC_FUNCTIONS_H
 #define _BASIC_FUNCTIONS_H
@@ -106,6 +106,8 @@ extern void php3_ignore_user_abort(INTERNAL_FUNCTION_PARAMETERS);
 
 extern PHP_FUNCTION(function_exists);
 extern PHP_FUNCTION(extract);
+
+PHP_FUNCTION(is_uploaded_file);
 
 PHP_FUNCTION(register_shutdown_function);
 PHP_FUNCTION(alarm);

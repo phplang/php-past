@@ -4,20 +4,23 @@
 >imap_status</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
-TITLE="IMAP functions"
+TITLE="IMAP, POP3 and NNTP functions"
 HREF="ref.imap.html"><LINK
 REL="PREVIOUS"
 TITLE="imap_alerts"
 HREF="function.imap-alerts.html"><LINK
 REL="NEXT"
-TITLE="Informix functions"
-HREF="ref.ifx.html"></HEAD
+TITLE="imap_utf7_decode"
+HREF="function.imap-utf7-decode.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -55,7 +58,7 @@ WIDTH="10%"
 ALIGN="right"
 VALIGN="bottom"
 ><A
-HREF="ref.ifx.html"
+HREF="function.imap-utf7-decode.html"
 >Next</A
 ></TD
 ></TR
@@ -65,66 +68,142 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.IMAP-STATUS"
+NAME="function.imap-status"
 >imap_status</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN13441"
+NAME="AEN16073"
 ></A
->imap_status -- This function returns status information on a mailbox other than the current one.</DIV
+><P
+>    (PHP3 &#62;= 3.0.4, PHP4 )</P
+>imap_status&nbsp;--&nbsp;
+     This function returns status information on a mailbox other than
+     the current one
+    </DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN13444"
+NAME="AEN16076"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->object imap_status</CODE
->(int imap_stream, string mailbox, int options);<P
+>object <B
+CLASS="function"
+>imap_status</B
+></CODE
+> (int imap_stream, string mailbox, int options)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     This function returns an object containing status information. Valid flags are:
-    <P
+>&#13;     This function returns an object containing status
+     information. Valid flags are:
+     <P
 ></P
 ><UL
 ><LI
 ><P
->      SA_MESSAGES - set status-&#62;messages to the number of messages in the mailbox</P
+>&#13;	SA_MESSAGES - set status-&#62;messages to the number of messages
+	in the mailbox
+       </P
 ></LI
 ><LI
 ><P
->      SA_RECENT - set status-&#62;recent to the number of recent messages in the mailbox</P
+>&#13;	SA_RECENT - set status-&#62;recent to the number of recent
+	messages in the mailbox
+       </P
 ></LI
 ><LI
 ><P
->      SA_UNSEEN - set status-&#62;unseen to the number of unseen (new) messages in the mailbox</P
+>&#13;	SA_UNSEEN - set status-&#62;unseen to the number of unseen (new)
+	messages in the mailbox
+       </P
 ></LI
 ><LI
 ><P
->      SA_UIDNEXT - set status-&#62;uidnext to the next uid to be used in the mailbox</P
+>&#13;	SA_UIDNEXT - set status-&#62;uidnext to the next uid to be used in
+	the mailbox
+       </P
 ></LI
 ><LI
 ><P
->      SA_UIDVALIDITY - set status-&#62;uidvalidity to a constant that changes when uids for the mailbox may no longer be valid</P
+>&#13;	SA_UIDVALIDITY - set status-&#62;uidvalidity to a constant that
+	changes when uids for the mailbox may no longer be valid
+       </P
 ></LI
 ><LI
 ><P
->      SA_ALL - set all of the above</P
+>&#13;	SA_ALL - set all of the above
+       </P
 ></LI
 ></UL
-></P
+>
+    </P
 ><P
->     status-&#62;flags is also set, which contains a bitmask which can be
-     checked against any of the above constants.</P
+>&#13;     status-&#62;flags is also set, which contains a bitmask which can be
+     checked against any of the above constants.
+    </P
+><P
+>&#13;     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><P
+><B
+>Example 1. <B
+CLASS="function"
+>imap_status()</B
+> example</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;$mbox = imap_open("{your.imap.host}","username","password",OP_HALFOPEN)
+      || die("can't connect: ".imap_last_error());
+ 
+$status = imap_status($mbox,"{your.imap.host}INBOX",SA_ALL);
+if($status) {
+  print("Messages:   ". $status-&#62;messages   )."&#60;br&#62;\n";
+  print("Recent:     ". $status-&#62;recent     )."&#60;br&#62;\n";
+  print("Unseen:     ". $status-&#62;unseen     )."&#60;br&#62;\n";
+  print("UIDnext:    ". $status-&#62;uidnext    )."&#60;br&#62;\n";
+  print("UIDvalidity:". $status-&#62;uidvalidity)."&#60;br&#62;\n"; 
+} else
+  print "imap_status failed: ".imap_lasterror()."\n";
+ 
+imap_close($mbox);
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -157,7 +236,7 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><A
-HREF="ref.ifx.html"
+HREF="function.imap-utf7-decode.html"
 >Next</A
 ></TD
 ></TR
@@ -179,7 +258,7 @@ HREF="ref.imap.html"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->Informix functions</TD
+>imap_utf7_decode</TD
 ></TR
 ></TABLE
 ></DIV

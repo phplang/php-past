@@ -4,20 +4,23 @@
 >each</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
-TITLE="Array functions"
+TITLE="Array Functions"
 HREF="ref.array.html"><LINK
 REL="PREVIOUS"
 TITLE="current"
 HREF="function.current.html"><LINK
 REL="NEXT"
 TITLE="end"
-HREF="function.end.html"></HEAD
+HREF="function.end.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,80 +68,92 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.EACH"
+NAME="function.each"
 >each</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN4081"
+NAME="AEN4412"
 ></A
->each --      Return the next key and value pair from an array
+><P
+>    (PHP3 , PHP4 )</P
+>each&nbsp;--&nbsp;
+     Return the next key and value pair from an array
     </DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN4084"
+NAME="AEN4415"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->array each</CODE
->(array array);<P
+>array <B
+CLASS="function"
+>each</B
+></CODE
+> (array array)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Returns the current key and value pair from the array
+>&#13;     Returns the current key and value pair from the array
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >array</I
 ></TT
 > and advances the array cursor. This
      pair is returned in a four-element array, with the keys
      <I
-CLASS="EMPHASIS"
+CLASS="emphasis"
 >0</I
 >, <I
-CLASS="EMPHASIS"
+CLASS="emphasis"
 >1</I
 >,
      <I
-CLASS="EMPHASIS"
+CLASS="emphasis"
 >key</I
 >, and
      <I
-CLASS="EMPHASIS"
+CLASS="emphasis"
 >value</I
 >. Elements <I
-CLASS="EMPHASIS"
+CLASS="emphasis"
 >0</I
 > and
      <I
-CLASS="EMPHASIS"
+CLASS="emphasis"
 >key</I
 > contain the key name of the array
      element, and <I
-CLASS="EMPHASIS"
+CLASS="emphasis"
 >1</I
 > and
      <I
-CLASS="EMPHASIS"
+CLASS="emphasis"
 >value</I
-> contain the data.</P
+> contain the data.
+    </P
 ><P
->     If the internal pointer for the array points past the end of the
+>&#13;     If the internal pointer for the array points past the end of the
      array contents, <B
-CLASS="FUNCTION"
+CLASS="function"
 >each()</B
-> returns false.</P
+> returns false.
+    </P
 ><P
->     <TABLE
+>&#13;     <TABLE
 WIDTH="100%"
 BORDER="0"
 CELLPADDING="0"
@@ -147,26 +162,34 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
 >Example 1. <B
-CLASS="FUNCTION"
->each()</B
+CLASS="function"
+>Each()</B
 > examples</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->$foo = array ("bob", "fred", "jussi", "jouni", "egon", "marliese");
-$bar = each( $foo );
+CLASS="programlisting"
+>&#13;$foo = array ("bob", "fred", "jussi", "jouni", "egon", "marliese");
+$bar = each ($foo);
       </PRE
+></TD
+></TR
+></TABLE
 ><P
->       <TT
-CLASS="LITERAL"
+>&#13;       <TT
+CLASS="varname"
 >$bar</TT
 > now contains the following key/value
        pairs:
-       
        <P
 ></P
 ><UL
@@ -189,20 +212,28 @@ COMPACT="COMPACT"
 ></LI
 ></UL
 >
-
-       <PRE
-CLASS="PROGRAMLISTING"
->$foo = array( "Robert" =&#62; "Bob", "Seppo" =&#62; "Sepi" );
-$bar = each( $foo );
+       <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;$foo = array ("Robert" =&#62; "Bob", "Seppo" =&#62; "Sepi");
+$bar = each ($foo);
        </PRE
-></P
+></TD
+></TR
+></TABLE
+>
+      </P
 ><P
->       <TT
-CLASS="LITERAL"
+>&#13;       <TT
+CLASS="varname"
 >$bar</TT
 > now contains the following key/value
        pairs:
-
        <P
 ></P
 ><UL
@@ -224,26 +255,30 @@ COMPACT="COMPACT"
 >value =&#62; 'Bob'</SPAN
 ></LI
 ></UL
-></P
+>
+      </P
 ></DIV
 ></TD
 ></TR
 ></TABLE
-></P
+>
+    </P
 ><P
->     <B
-CLASS="FUNCTION"
->each()</B
+>&#13;     <B
+CLASS="function"
+>Each()</B
 > is typically used in conjunction with
      <A
 HREF="function.list.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >list()</B
 ></A
 > to traverse an array; for instance,
-     $HTTP_POST_VARS: 
-
+     <TT
+CLASS="varname"
+>$HTTP_POST_VARS</TT
+>: 
      <TABLE
 WIDTH="100%"
 BORDER="0"
@@ -253,75 +288,92 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
->Example 2.        Traversing $HTTP_POST_VARS with <B
-CLASS="FUNCTION"
+>Example 2. 
+       Traversing <TT
+CLASS="varname"
+>$HTTP_POST_VARS</TT
+> with
+       <B
+CLASS="function"
 >each()</B
 >
       </B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->echo "Values submitted via POST method:&lt;br&gt;";
-reset($HTTP_POST_VARS);
-while (list($key, $val) = each($HTTP_POST_VARS)) {
-   echo "$key =&#62; $val&lt;br&gt;";
+CLASS="programlisting"
+>&#13;echo "Values submitted via POST method:&#60;br&#62;";
+reset ($HTTP_POST_VARS);
+while (list ($key, $val) = each ($HTTP_POST_VARS)) {
+    echo "$key =&#62; $val&#60;br&#62;";
 }
       </PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR
 ></TABLE
-></P
+>
+    </P
 ><P
->      After <B
-CLASS="FUNCTION"
+>&#13;     After <B
+CLASS="function"
 >each()</B
 > has executed, the array cursor
-      will be left on the next element of the array, or on the last
-      element if it hits the end of the array.</P
+     will be left on the next element of the array, or on the last
+     element if it hits the end of the array.
+    </P
 ><P
->     See also <A
+>&#13;     See also <A
 HREF="function.key.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >key()</B
 ></A
 >, <A
 HREF="function.list.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >list()</B
 ></A
 >,
-	 <A
+     <A
 HREF="function.current.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >current()</B
 ></A
 >, <A
 HREF="function.reset.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >reset()</B
 ></A
 >,
-	 <A
+     <A
 HREF="function.next.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >next()</B
 ></A
 >, and <A
 HREF="function.prev.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >prev()</B
 ></A
->.</P
+>.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

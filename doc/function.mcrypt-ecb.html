@@ -4,20 +4,23 @@
 >mcrypt_ecb</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
-TITLE="Encryption functions"
+TITLE="Mcrypt Encryption Functions"
 HREF="ref.mcrypt.html"><LINK
 REL="PREVIOUS"
 TITLE="mcrypt_cfb"
 HREF="function.mcrypt-cfb.html"><LINK
 REL="NEXT"
 TITLE="mcrypt_ofb"
-HREF="function.mcrypt-ofb.html"></HEAD
+HREF="function.mcrypt-ofb.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,113 +68,150 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.MCRYPT-ECB"
+NAME="function.mcrypt-ecb"
 >mcrypt_ecb</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN8089"
+NAME="AEN20024"
 ></A
->mcrypt_ecb -- Encrypt/decrypt data in ECB mode</DIV
+><P
+>    (PHP3 &#62;= 3.0.8, PHP4 )</P
+>mcrypt_ecb&nbsp;--&nbsp;Encrypt/decrypt data in ECB mode</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN8092"
+NAME="AEN20027"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int mcrypt_ecb</CODE
->(int cipher, string key, string data, int mode);<P
+>string <B
+CLASS="function"
+>mcrypt_ecb</B
+></CODE
+> (int cipher, string key, string data, int mode)</CODE
+></P
+><P
+></P
+></DIV
+><DIV
+CLASS="funcsynopsis"
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>string <B
+CLASS="function"
+>mcrypt_ecb</B
+></CODE
+> (string cipher, string key, string data, int mode [, string 
+       iv])</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     <B
-CLASS="FUNCTION"
->mcrypt_ecb()</B
-> encrypts or decrypts (depending on
-     <TT
-CLASS="PARAMETER"
+>&#13;     The first prototype is when linked against libmcrypt 2.2.x, the
+     second when linked against libmcrypt 2.4.x.
+    </P
+><P
+>&#13;     <B
+CLASS="function"
+>Mcrypt_ecb()</B
+> encrypts or decrypts (depending
+     on <TT
+CLASS="parameter"
 ><I
 >mode</I
 ></TT
 >) the <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >data</I
 ></TT
-> with
-     <TT
-CLASS="PARAMETER"
+>
+     with <TT
+CLASS="parameter"
 ><I
 >cipher</I
 ></TT
 > and <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >key</I
 ></TT
-> in ECB cipher
-     mode and returns the resulting string.</P
+>
+     in ECB cipher mode and returns the resulting string.
+    </P
 ><P
->     <TT
-CLASS="PARAMETER"
+>&#13;     <TT
+CLASS="parameter"
 ><I
->cipher</I
+>Cipher</I
 ></TT
-> is one of the MCRYPT_ciphername constants.</P
+> is one of the MCRYPT_ciphername
+     constants.
+    </P
 ><P
->     <TT
-CLASS="PARAMETER"
+>&#13;     <TT
+CLASS="parameter"
 ><I
->key</I
+>Key</I
 ></TT
-> is the key supplied to the algorithm. It must
-     be kept secret.</P
+> is the key supplied to the
+     algorithm. It must be kept secret.
+    </P
 ><P
->     <TT
-CLASS="PARAMETER"
+>&#13;     <TT
+CLASS="parameter"
 ><I
->data</I
+>Data</I
 ></TT
 > is the data which shall be
-     encrypted/decrypted.</P
+     encrypted/decrypted.
+    </P
 ><P
->     <TT
-CLASS="PARAMETER"
+>&#13;     <TT
+CLASS="parameter"
 ><I
->mode</I
+>Mode</I
 ></TT
-> is MCRYPT_ENCRYPT or MCRYPT_DECRYPT.</P
+> is MCRYPT_ENCRYPT or MCRYPT_DECRYPT.
+    </P
 ><P
->     See also:
-     <A
+>&#13;     See also: <A
 HREF="function.mcrypt-cbc.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >mcrypt_cbc()</B
 ></A
 >,
      <A
 HREF="function.mcrypt-cfb.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >mcrypt_cfb()</B
 ></A
->,
+>, and
      <A
 HREF="function.mcrypt-ofb.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >mcrypt_ofb()</B
 ></A
-></P
+>.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

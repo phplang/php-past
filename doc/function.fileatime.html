@@ -4,7 +4,7 @@
 >fileatime</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="file_exists"
 HREF="function.file-exists.html"><LINK
 REL="NEXT"
 TITLE="filectime"
-HREF="function.filectime.html"></HEAD
+HREF="function.filectime.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,44 +68,66 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.FILEATIME"
+NAME="function.fileatime"
 >fileatime</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN8640"
+NAME="AEN9846"
 ></A
->fileatime -- get last access time of file</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>fileatime&nbsp;--&nbsp;Gets last access time of file</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN8643"
+NAME="AEN9849"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int fileatime</CODE
->(string filename);<P
+>int <B
+CLASS="function"
+>fileatime</B
+></CODE
+> (string filename)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
-> Returns the time the file was last accessed, or false in case
-    of an error.</P
+> 
+     Returns the time the file was last accessed, or false in case of
+     an error. The time is returned as a Unix timestamp.
+    </P
 ><P
->     The results of this function are cached. See
+>&#13;     The results of this function are cached. See
      <A
 HREF="function.clearstatcache.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >clearstatcache()</B
 ></A
-> for more details.</P
+> for more details.
+    </P
+><P
+>&#13;     Note: The atime of a file is supposed to change whenever
+     the data blocks of a file are being read. This can be
+     costly performancewise when an appliation regularly
+     accesses a very large number of files or directories. Some
+     Unix filesystems can be mounted with atime updates disabled
+     to increase the performance of such applications; USENET
+     news spools are a common example. On such filesystems
+     this function will be useless.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

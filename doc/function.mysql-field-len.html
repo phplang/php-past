@@ -4,7 +4,7 @@
 >mysql_field_len</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -12,12 +12,15 @@ REL="UP"
 TITLE="MySQL functions"
 HREF="ref.mysql.html"><LINK
 REL="PREVIOUS"
-TITLE="mysql_field_flags"
-HREF="function.mysql-field-flags.html"><LINK
+TITLE="mysql_field_name"
+HREF="function.mysql-field-name.html"><LINK
 REL="NEXT"
-TITLE="mysql_free_result"
-HREF="function.mysql-free-result.html"></HEAD
+TITLE="mysql_field_seek"
+HREF="function.mysql-field-seek.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -42,7 +45,7 @@ WIDTH="10%"
 ALIGN="left"
 VALIGN="bottom"
 ><A
-HREF="function.mysql-field-flags.html"
+HREF="function.mysql-field-name.html"
 >Prev</A
 ></TD
 ><TD
@@ -55,7 +58,7 @@ WIDTH="10%"
 ALIGN="right"
 VALIGN="bottom"
 ><A
-HREF="function.mysql-free-result.html"
+HREF="function.mysql-field-seek.html"
 >Next</A
 ></TD
 ></TR
@@ -65,40 +68,51 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.MYSQL-FIELD-LEN"
+NAME="function.mysql-field-len"
 >mysql_field_len</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN18256"
+NAME="AEN23110"
 ></A
->mysql_field_len -- Returns the length of the specified field</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>mysql_field_len&nbsp;--&nbsp;
+     Returns the length of the specified field
+    </DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN18259"
+NAME="AEN23113"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int mysql_field_len</CODE
->(int result, int field_offset);<P
+>int <B
+CLASS="function"
+>mysql_field_len</B
+></CODE
+> (int result, int field_offset)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     <B
-CLASS="FUNCTION"
+>&#13;     <B
+CLASS="function"
 >mysql_field_len()</B
 > returns the length of the
      specified field.  For downward compatibility
      <B
-CLASS="FUNCTION"
+CLASS="function"
 >mysql_fieldlen()</B
 > can also be used.
     </P
@@ -118,7 +132,7 @@ WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
 ><A
-HREF="function.mysql-field-flags.html"
+HREF="function.mysql-field-name.html"
 >Prev</A
 ></TD
 ><TD
@@ -134,7 +148,7 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><A
-HREF="function.mysql-free-result.html"
+HREF="function.mysql-field-seek.html"
 >Next</A
 ></TD
 ></TR
@@ -143,7 +157,7 @@ HREF="function.mysql-free-result.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->mysql_field_flags</TD
+>mysql_field_name</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"
@@ -156,7 +170,7 @@ HREF="ref.mysql.html"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->mysql_free_result</TD
+>mysql_field_seek</TD
 ></TR
 ></TABLE
 ></DIV

@@ -4,20 +4,23 @@
 >odbc_close</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
-TITLE="ODBC functions"
+TITLE="Unified ODBC functions"
 HREF="ref.odbc.html"><LINK
 REL="PREVIOUS"
 TITLE="odbc_binmode"
 HREF="function.odbc-binmode.html"><LINK
 REL="NEXT"
 TITLE="odbc_close_all"
-HREF="function.odbc-close-all.html"></HEAD
+HREF="function.odbc-close-all.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,54 +68,63 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.ODBC-CLOSE"
+NAME="function.odbc-close"
 >odbc_close</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN19207"
+NAME="AEN24055"
 ></A
->odbc_close -- Close an ODBC connection</DIV
+><P
+>    (PHP3 &#62;= 3.0.6, PHP4 )</P
+>odbc_close&nbsp;--&nbsp;Close an ODBC connection</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN19210"
+NAME="AEN24058"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->void odbc_close</CODE
->(int connection_id);<P
+>void <B
+CLASS="function"
+>odbc_close</B
+></CODE
+> (int connection_id)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     <B
-CLASS="FUNCTION"
+>&#13;     <B
+CLASS="function"
 >odbc_close()</B
 > will close down the connection to
      the database server associated with the given connection
      identifier.
-
      <DIV
-CLASS="NOTE"
+CLASS="note"
 ><BLOCKQUOTE
-CLASS="NOTE"
+CLASS="note"
 ><P
 ><B
 >Note: </B
->       This function will fail if there are open
-       transactions on this connection.  The connection will remain open
-       in this case.
+>
+       This function will fail if there are open transactions on this
+       connection.  The connection will remain open in this case.
       </P
 ></BLOCKQUOTE
 ></DIV
-></P
+>
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

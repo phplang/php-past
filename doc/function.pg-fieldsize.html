@@ -1,10 +1,10 @@
 <HTML
 ><HEAD
 ><TITLE
->pg_FieldSize</TITLE
+>pg_fieldsize</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -12,12 +12,15 @@ REL="UP"
 TITLE="PostgreSQL functions"
 HREF="ref.pgsql.html"><LINK
 REL="PREVIOUS"
-TITLE="pg_FieldPrtLen"
+TITLE="pg_fieldprtlen"
 HREF="function.pg-fieldprtlen.html"><LINK
 REL="NEXT"
-TITLE="pg_FieldType"
-HREF="function.pg-fieldtype.html"></HEAD
+TITLE="pg_fieldtype"
+HREF="function.pg-fieldtype.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,45 +68,53 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.PG-FIELDSIZE"
->pg_FieldSize</A
+NAME="function.pg-fieldsize"
+>pg_fieldsize</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN23380"
+NAME="AEN29512"
 ></A
->pg_FieldSize -- Returns the internal
-    storage size of the named field</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>pg_fieldsize&nbsp;--&nbsp;
+     Returns the internal storage size of the named field
+    </DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN23383"
+NAME="AEN29515"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int pg_fieldsize</CODE
->(int result_id, int field_number);<P
+>int <B
+CLASS="function"
+>pg_fieldsize</B
+></CODE
+> (int result_id, int field_number)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     <A
-HREF="function.pg-fieldsize.html"
-><B
-CLASS="FUNCTION"
->pg_FieldSize()</B
-></A
+>&#13;     <B
+CLASS="function"
+>Pg_fieldsize()</B
 > will return the internal
      storage size (in bytes) of the field number in the given
      PostgreSQL result. Field numbering starts at 0. A field size of
      -1 indicates a variable length field. This function will return
-     false on error.</P
+     false on error.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -145,7 +156,7 @@ HREF="function.pg-fieldtype.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->pg_FieldPrtLen</TD
+>pg_fieldprtlen</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"
@@ -158,7 +169,7 @@ HREF="ref.pgsql.html"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->pg_FieldType</TD
+>pg_fieldtype</TD
 ></TR
 ></TABLE
 ></DIV

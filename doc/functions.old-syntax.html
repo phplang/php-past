@@ -4,7 +4,7 @@
 >old_function</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="Returning values"
 HREF="functions.returning-values.html"><LINK
 REL="NEXT"
 TITLE="Variable functions"
-HREF="functions.variable-functions.html"></HEAD
+HREF="functions.variable-functions.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="sect1"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -64,32 +67,34 @@ HREF="functions.variable-functions.html"
 ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><DIV
-CLASS="SECT1"
+CLASS="sect1"
 ><H1
-CLASS="SECT1"
+CLASS="sect1"
 ><A
-NAME="FUNCTIONS.OLD-SYNTAX"
+NAME="functions.old-syntax"
 ><TT
-CLASS="LITERAL"
+CLASS="literal"
 >old_function</TT
 ></A
 ></H1
 ><P
->     The <TT
-CLASS="LITERAL"
+>&#13;    The <TT
+CLASS="literal"
 >old_function</TT
-> statement allows you to declare
-     a function using a syntax identical to PHP/FI2 (except you must
-     replace 'function' with 'old_function'.</P
+> statement allows you to
+    declare a function using a syntax identical to PHP/FI2 (except you
+    must replace 'function' with 'old_function'.
+   </P
 ><P
->     This is a deprecated feature, and should only be used by the
-     PHP/FI2-&#62;PHP3 convertor.</P
+>&#13;    This is a deprecated feature, and should only be used by the
+    PHP/FI2-&#62;PHP3 convertor.
+   </P
 ><DIV
-CLASS="WARNING"
+CLASS="warning"
 ><P
 ></P
 ><TABLE
-CLASS="WARNING"
+CLASS="warning"
 BORDER="1"
 WIDTH="100%"
 ><TR
@@ -103,38 +108,38 @@ ALIGN="CENTER"
 ><TD
 ALIGN="LEFT"
 ><P
->      Functions declared as <TT
-CLASS="LITERAL"
+>&#13;     Functions declared as <TT
+CLASS="literal"
 >old_function</TT
->
-      cannot be called from PHP's internal code. Among other
-      things, this means you can't use them in functions such as
-      <A
+> cannot be
+     called from PHP's internal code. Among other things, this means
+     you can't use them in functions such as
+     <A
 HREF="function.usort.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >usort()</B
 ></A
 >, <A
 HREF="function.array-walk.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >array_walk()</B
 ></A
 >, and
-      <A
+     <A
 HREF="function.register-shutdown-function.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >register_shutdown_function()</B
 ></A
->. You can get around
-      this limitation by writing a wrapper function (in normal PHP3 form)
-      to call the <TT
-CLASS="LITERAL"
+>. You can get
+     around this limitation by writing a wrapper function (in normal
+     PHP3 form) to call the <TT
+CLASS="literal"
 >old_function</TT
 >.
-     </P
+    </P
 ></TD
 ></TR
 ></TABLE

@@ -4,7 +4,7 @@
 >strip_tags</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -15,9 +15,12 @@ REL="PREVIOUS"
 TITLE="strcspn"
 HREF="function.strcspn.html"><LINK
 REL="NEXT"
-TITLE="StripCSlashes"
-HREF="function.stripcslashes.html"></HEAD
+TITLE="stripcslashes"
+HREF="function.stripcslashes.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,66 +68,77 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.STRIP-TAGS"
+NAME="function.strip-tags"
 >strip_tags</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN25631"
+NAME="AEN34200"
 ></A
->strip_tags -- Strip HTML and PHP tags from a string</DIV
+><P
+>    (PHP3 &#62;= 3.0.8, PHP4 &#62;= 4.0b2)</P
+>strip_tags&nbsp;--&nbsp;Strip HTML and PHP tags from a string</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN25634"
+NAME="AEN34203"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->string strip_tags</CODE
->(string str, string [<SPAN
-CLASS="OPTIONAL"
->allowable_tags</SPAN
->]);<P
+>string <B
+CLASS="function"
+>strip_tags</B
+></CODE
+> (string str [, string 
+       allowable_tags])</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     This function tries to strip all HTML and PHP tags from the given
+>&#13;     This function tries to strip all HTML and PHP tags from the given
      string.  It errors on the side of caution in case of incomplete
      or bogus tags.  It uses the same tag stripping state machine as
      the <A
 HREF="function.fgetss.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >fgetss()</B
 ></A
-> function.</P
+> function.
+    </P
 ><P
->     You can use the optional second parameter to specify tags which
+>&#13;     You can use the optional second parameter to specify tags which
      should not be stripped.
-
-    <DIV
-CLASS="NOTE"
+     <DIV
+CLASS="note"
 ><BLOCKQUOTE
-CLASS="NOTE"
+CLASS="note"
 ><P
 ><B
 >Note: </B
->      <TT
-CLASS="PARAMETER"
+>
+       <TT
+CLASS="parameter"
 ><I
->allowable_tags</I
+>Allowable_tags</I
 ></TT
-> was added in PHP 3.0.13, PHP4B3.</P
+> was added in PHP 3.0.13,
+       PHP4B3.
+      </P
 ></BLOCKQUOTE
 ></DIV
-></P
+>
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -179,7 +193,7 @@ HREF="ref.strings.html"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->StripCSlashes</TD
+>stripcslashes</TD
 ></TR
 ></TABLE
 ></DIV

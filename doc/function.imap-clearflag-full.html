@@ -4,20 +4,23 @@
 >imap_clearflag_full</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
-TITLE="IMAP functions"
+TITLE="IMAP, POP3 and NNTP functions"
 HREF="ref.imap.html"><LINK
 REL="PREVIOUS"
 TITLE="imap_setflag_full"
 HREF="function.imap-setflag-full.html"><LINK
 REL="NEXT"
 TITLE="imap_sort"
-HREF="function.imap-sort.html"></HEAD
+HREF="function.imap-sort.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,50 +68,67 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.IMAP-CLEARFLAG-FULL"
+NAME="function.imap-clearflag-full"
 >imap_clearflag_full</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN13240"
+NAME="AEN15861"
 ></A
->imap_clearflag_full -- Clears flags on messages</DIV
+><P
+>    (PHP3 &#62;= 3.0.3, PHP4 )</P
+>imap_clearflag_full&nbsp;--&nbsp;Clears flags on messages</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN13243"
+NAME="AEN15864"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->string imap_clearflag_full</CODE
->(int stream, string sequence, string flag, string options);<P
+>string 
+       <B
+CLASS="function"
+>imap_clearflag_full</B
+>
+      </CODE
+> (int stream, string sequence, string flag, string options)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     This function causes a store to delete the specified flag to the
-     flags set for the messages in the specified sequence.</P
+>&#13;     This function causes a store to delete the specified flag to the
+     flags set for the messages in the specified sequence.
+     The flags which you can unset are "\\Seen", "\\Answered",
+     "\\Flagged", "\\Deleted", "\\Draft", and "\\Recent" (as defined
+     by RFC2060).
+    </P
 ><P
->     The options are a bit mask with one or more of the following:
+>&#13;     The options are a bit mask with one or more of the following:
      <DIV
-CLASS="INFORMALEXAMPLE"
+CLASS="informalexample"
 ><P
 ></P
 ><P
-CLASS="LITERALLAYOUT"
->&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ST_UID&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;sequence&nbsp;argument&nbsp;contains&nbsp;UIDs&nbsp;instead&nbsp;of<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sequence&nbsp;numbers<br>
+CLASS="literallayout"
+><br>
+ST_UID&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;sequence&nbsp;argument&nbsp;contains&nbsp;UIDs&nbsp;instead&nbsp;of<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sequence&nbsp;numbers<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</P
 ><P
 ></P
 ></DIV
-></P
+>
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

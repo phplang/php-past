@@ -4,7 +4,7 @@
 >dbase_numfields</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="dbase_get_record_with_names"
 HREF="function.dbase-get-record-with-names.html"><LINK
 REL="NEXT"
 TITLE="dbase_numrecords"
-HREF="function.dbase-numrecords.html"></HEAD
+HREF="function.dbase-numrecords.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,37 +68,48 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.DBASE-NUMFIELDS"
+NAME="function.dbase-numfields"
 >dbase_numfields</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN7554"
+NAME="AEN8875"
 ></A
->dbase_numfields -- find out how many fields are in a dBase database</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>dbase_numfields&nbsp;--&nbsp;
+     Find out how many fields are in a dBase database
+    </DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN7557"
+NAME="AEN8878"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int dbase_numfields</CODE
->(int dbase_identifier);<P
+>int <B
+CLASS="function"
+>dbase_numfields</B
+></CODE
+> (int dbase_identifier)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->	Returns the number of fields (columns) in the specified
-	database. Field numbers are between 0 and dbase_numfields($db)-1,
-        while record numbers are between 1 and dbase_numrecords($db).
-    <TABLE
+>&#13;     Returns the number of fields (columns) in the specified
+     database. Field numbers are between 0 and dbase_numfields($db)-1,
+     while record numbers are between 1 and dbase_numrecords($db).
+     <TABLE
 WIDTH="100%"
 BORDER="0"
 CELLPADDING="0"
@@ -104,26 +118,37 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
 >Example 1. Using <B
-CLASS="FUNCTION"
+CLASS="function"
 >dbase_numfields()</B
 ></B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->$rec = dbase_get_record($db, $recno);
+CLASS="programlisting"
+>&#13;$rec = dbase_get_record($db, $recno);
 $nf  = dbase_numfields($db);
-for ($i=0; $i &lt; $nf; $i++) {
-    print $rec[$i]."&lt;br&#62;\n";
-}</PRE
+for ($i=0; $i &#60; $nf; $i++) {
+    print $rec[$i]."&#60;br&#62;\n";
+}
+      </PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR
 ></TABLE
-></P
+>
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

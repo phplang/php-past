@@ -4,7 +4,7 @@
 >Other incompatibilities</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="Function true/false return values"
 HREF="migration-truefalse.html"><LINK
 REL="NEXT"
 TITLE="PHP development"
-HREF="phpdevel.html"></HEAD
+HREF="phpdevel.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="sect1"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -64,11 +67,11 @@ HREF="phpdevel.html"
 ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><DIV
-CLASS="SECT1"
+CLASS="sect1"
 ><H1
-CLASS="SECT1"
+CLASS="sect1"
 ><A
-NAME="MIGRATION-OTHER"
+NAME="migration-other"
 >Other incompatibilities</A
 ></H1
 ><P
@@ -76,7 +79,7 @@ NAME="MIGRATION-OTHER"
 ><UL
 ><LI
 ><P
->      The PHP 3.0 Apache module no longer supports Apache versions
+>&#13;      The PHP 3.0 Apache module no longer supports Apache versions
       prior to 1.2.  Apache 1.2 or later is required.</P
 ></LI
 ><LI
@@ -84,7 +87,7 @@ NAME="MIGRATION-OTHER"
 > <A
 HREF="function.echo.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >echo()</B
 ></A
 > no longer
@@ -92,68 +95,68 @@ CLASS="FUNCTION"
     <A
 HREF="function.printf.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >printf()</B
 ></A
 > function instead.</P
 ></LI
 ><LI
 ><P
->      In PHP/FI 2.0, an implementation side-effect caused
+>&#13;      In PHP/FI 2.0, an implementation side-effect caused
       <TT
-CLASS="LITERAL"
+CLASS="literal"
 >$foo[0]</TT
 > to have the same effect as
       <TT
-CLASS="LITERAL"
+CLASS="literal"
 >$foo</TT
 >.  This is not true for PHP 3.0.</P
 ></LI
 ><LI
 ><P
->      Reading arrays with <TT
-CLASS="LITERAL"
+>&#13;      Reading arrays with <TT
+CLASS="literal"
 >$array[]</TT
 > is no longer
       supported</P
 ><P
->      That is, you cannot traverse an array by having a loop that does
+>&#13;      That is, you cannot traverse an array by having a loop that does
       <TT
-CLASS="LITERAL"
+CLASS="literal"
 >$data = $array[]</TT
 >.  Use
       <A
 HREF="function.current.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >current()</B
 ></A
 > and <A
 HREF="function.next.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >next()</B
 ></A
 >
       instead.</P
 ><P
->      Also, <TT
-CLASS="LITERAL"
+>&#13;      Also, <TT
+CLASS="literal"
 >$array1[] = $array2</TT
 > does not append the
       values of <TT
-CLASS="LITERAL"
+CLASS="literal"
 >$array2</TT
 > to <TT
-CLASS="LITERAL"
+CLASS="literal"
 >$array1</TT
 >,
       but appends <TT
-CLASS="LITERAL"
+CLASS="literal"
 >$array2</TT
 > as the last entry of
       <TT
-CLASS="LITERAL"
+CLASS="literal"
 >$array1</TT
 >.  See also multidimensional array
       support.</P
@@ -161,13 +164,13 @@ CLASS="LITERAL"
 ><LI
 ><P
 > <TT
-CLASS="LITERAL"
+CLASS="literal"
 >"+"</TT
 > is no longer overloaded as a
      concatenation operator for strings, instead it converts it's
      arguments to numbers and performs numeric addition. Use
      <TT
-CLASS="LITERAL"
+CLASS="literal"
 >"."</TT
 > instead.</P
 ></LI
@@ -181,39 +184,79 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
 >Example A-11. Migration from 2.0: concatenation for strings</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->echo "1" + "1";</PRE
+CLASS="programlisting"
+>&#13;echo "1" + "1";
+</PRE
+></TD
+></TR
+></TABLE
 ><P
 > 
           In PHP 2.0 this would echo 11, in PHP 3.0 it would echo 2. Instead
           use:
 
-          <PRE
-CLASS="PROGRAMLISTING"
->echo "1"."1";</PRE
+          <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;echo "1"."1";
+</PRE
+></TD
+></TR
+></TABLE
 >
 
-          <PRE
-CLASS="PROGRAMLISTING"
->$a = 1;
+          <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;$a = 1;
 $b = 1;
-echo $a + $b;</PRE
+echo $a + $b;
+</PRE
+></TD
+></TR
+></TABLE
 ></P
 ><P
 >  
           This would echo 2 in both PHP 2.0 and 3.0.
 
-          <PRE
-CLASS="PROGRAMLISTING"
->$a = 1;
+          <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;$a = 1;
 $b = 1;
-echo $a.$b;</PRE
+echo $a.$b;
+</PRE
+></TD
+></TR
+></TABLE
 >
           This will echo 11 in PHP 3.0.</P
 ></DIV

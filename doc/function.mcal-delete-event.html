@@ -4,7 +4,7 @@
 >mcal_delete_event</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="mcal_store_event"
 HREF="function.mcal-store-event.html"><LINK
 REL="NEXT"
 TITLE="mcal_snooze"
-HREF="function.mcal-snooze.html"></HEAD
+HREF="function.mcal-snooze.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,41 +68,50 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.MCAL-DELETE-EVENT"
+NAME="function.mcal-delete-event"
 >mcal_delete_event</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN15777"
+NAME="AEN19119"
 ></A
->mcal_delete_event -- Delete an event from an MCAL calendar</DIV
+><P
+>    (PHP3 &#62;= 3.0.13, PHP4 &#62;= 4.0b4)</P
+>mcal_delete_event&nbsp;--&nbsp;Delete an event from an MCAL calendar</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN15780"
+NAME="AEN19122"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int mcal_delete_event</CODE
->(int uid);<P
+>int <B
+CLASS="function"
+>mcal_delete_event</B
+></CODE
+> (int mcal_stream [, int event_id])</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
 >  
      <B
-CLASS="FUNCTION"
+CLASS="function"
 >mcal_delete_event()</B
 > deletes the calendar event
-     specified by the uid.</P
+     specified by the event_id.</P
 ><P
->     Returns true.</P
+>&#13;     Returns true.</P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

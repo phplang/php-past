@@ -4,7 +4,7 @@
 >ldap_delete</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="ldap_count_entries"
 HREF="function.ldap-count-entries.html"><LINK
 REL="NEXT"
 TITLE="ldap_dn2ufn"
-HREF="function.ldap-dn2ufn.html"></HEAD
+HREF="function.ldap-dn2ufn.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,37 +68,46 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.LDAP-DELETE"
+NAME="function.ldap-delete"
 >ldap_delete</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN14545"
+NAME="AEN17535"
 ></A
->ldap_delete -- Delete an entry from a directory</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>ldap_delete&nbsp;--&nbsp;Delete an entry from a directory</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN14548"
+NAME="AEN17538"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int ldap_delete</CODE
->(int link_identifier, string dn);<P
+>int <B
+CLASS="function"
+>ldap_delete</B
+></CODE
+> (int link_identifier, string dn)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Returns true on success and false on error.</P
+>&#13;     Returns true on success and false on error.</P
 ><P
->     <B
-CLASS="FUNCTION"
+>&#13;     <B
+CLASS="function"
 >ldap_delete()</B
 > function delete a particular
      entry in LDAP directory specified by dn.</P

@@ -4,20 +4,23 @@
 >odbc_field_name</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
-TITLE="ODBC functions"
+TITLE="Unified ODBC functions"
 HREF="ref.odbc.html"><LINK
 REL="PREVIOUS"
 TITLE="odbc_fetch_row"
 HREF="function.odbc-fetch-row.html"><LINK
 REL="NEXT"
-TITLE="odbc_field_type"
-HREF="function.odbc-field-type.html"></HEAD
+TITLE="odbc_field_num"
+HREF="function.odbc-field-num.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -55,7 +58,7 @@ WIDTH="10%"
 ALIGN="right"
 VALIGN="bottom"
 ><A
-HREF="function.odbc-field-type.html"
+HREF="function.odbc-field-num.html"
 >Next</A
 ></TD
 ></TR
@@ -65,43 +68,53 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.ODBC-FIELD-NAME"
+NAME="function.odbc-field-name"
 >odbc_field_name</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN19410"
+NAME="AEN24269"
 ></A
->odbc_field_name -- Get the columnname</DIV
+><P
+>    (PHP3 &#62;= 3.0.6, PHP4 )</P
+>odbc_field_name&nbsp;--&nbsp;Get the columnname</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN19413"
+NAME="AEN24272"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->string odbc_fieldname</CODE
->(int result_id, int field_number);<P
+>string <B
+CLASS="function"
+>odbc_field_name</B
+></CODE
+> (int result_id, int field_number)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     <B
-CLASS="FUNCTION"
+>&#13;     <B
+CLASS="function"
 >odbc_field_name()</B
 > will return the name of the
      field occupying the given column number in the given ODBC result
      identifier.  Field numbering starts at 1.
      <TT
-CLASS="LITERAL"
+CLASS="literal"
 >false</TT
-> is returned on error.</P
+> is returned on error.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -134,7 +147,7 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><A
-HREF="function.odbc-field-type.html"
+HREF="function.odbc-field-num.html"
 >Next</A
 ></TD
 ></TR
@@ -156,7 +169,7 @@ HREF="ref.odbc.html"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->odbc_field_type</TD
+>odbc_field_num</TD
 ></TR
 ></TABLE
 ></DIV

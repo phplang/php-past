@@ -1,10 +1,10 @@
 <HTML
 ><HEAD
 ><TITLE
->Perl-compatible Regular Expression functions</TITLE
+>Regular Expression Functions (Perl-Compatible)</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -12,12 +12,15 @@ REL="UP"
 TITLE="Function Reference"
 HREF="funcref.html"><LINK
 REL="PREVIOUS"
-TITLE="pdf_add_annotation"
-HREF="function.pdf-add-annotation.html"><LINK
+TITLE="recode_file"
+HREF="function.recode-file.html"><LINK
 REL="NEXT"
 TITLE="preg_match"
-HREF="function.preg-match.html"></HEAD
+HREF="function.preg-match.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="reference"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -42,7 +45,7 @@ WIDTH="10%"
 ALIGN="left"
 VALIGN="bottom"
 ><A
-HREF="function.pdf-add-annotation.html"
+HREF="function.recode-file.html"
 >Prev</A
 ></TD
 ><TD
@@ -64,36 +67,38 @@ HREF="function.preg-match.html"
 ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><DIV
-CLASS="REFERENCE"
+CLASS="reference"
 ><A
-NAME="REF.PCRE"
+NAME="ref.pcre"
 ></A
 ><DIV
 CLASS="TITLEPAGE"
 ><H1
-CLASS="TITLE"
->XLI. Perl-compatible Regular Expression functions</H1
+CLASS="title"
+>LIV. Regular Expression Functions (Perl-Compatible)</H1
 ><DIV
 CLASS="PARTINTRO"
 ><A
-NAME="AEN21981"
+NAME="AEN30339"
 ></A
 ><P
->    The syntax for patterns used in these functions closely resembles
+>&#13;    The syntax for patterns used in these functions closely resembles
     Perl. The expression should be enclosed in the delimiters, a
     forward slash (/),  for example.  Any character can be used for
     delimiter as long as it's not alphanumeric or backslash (\). If
     the delimiter character has to be used in the expression itself,
-    it needs to be escaped by backslash.</P
+    it needs to be escaped by backslash.
+   </P
 ><P
->    The ending delimiter may be followed by various modifiers that
+>&#13;    The ending delimiter may be followed by various modifiers that
     affect the matching. 
     See <A
 HREF="pcre.pattern.modifiers.html"
 >Pattern Modifiers</A
->.</P
+>.
+   </P
 ><P
->    <TABLE
+>&#13;    <TABLE
 WIDTH="100%"
 BORDER="0"
 CELLPADDING="0"
@@ -102,7 +107,7 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
 >Example 1. Examples of valid patterns</B
@@ -127,9 +132,10 @@ CLASS="EXAMPLE"
 ></TD
 ></TR
 ></TABLE
-></P
+>
+   </P
 ><P
->    <TABLE
+>&#13;    <TABLE
 WIDTH="100%"
 BORDER="0"
 CELLPADDING="0"
@@ -138,7 +144,7 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
 >Example 2. Examples of invalid patterns</B
@@ -148,22 +154,39 @@ CLASS="EXAMPLE"
 ><UL
 ><LI
 ><P
->/href='(.*)' - missing ending delimiter</P
+>&#13;	/href='(.*)' - missing ending delimiter
+       </P
 ></LI
 ><LI
 ><P
->/\w+\s*\w+/J - unknown modifier 'J'</P
+>&#13;	/\w+\s*\w+/J - unknown modifier 'J'
+       </P
 ></LI
 ><LI
 ><P
->1-\d3-\d3-\d4| - missing starting delimiter</P
+>&#13;	1-\d3-\d3-\d4| - missing starting delimiter
+       </P
 ></LI
 ></UL
 ></DIV
 ></TD
 ></TR
 ></TABLE
-></P
+>
+   </P
+><DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
+><P
+><B
+>Note: </B
+>
+     The Perl-compatible regular expression functions are available in
+     PHP 4 and in PHP 3.0.9 and up.
+    </P
+></BLOCKQUOTE
+></DIV
 ></DIV
 ><DIV
 CLASS="TOC"
@@ -201,18 +224,20 @@ HREF="function.preg-quote.html"
 ><A
 HREF="function.preg-grep.html"
 >preg_grep</A
-> &#8212; Return array entries that match the pattern</DT
+> &#8212; 
+     Return array entries that match the pattern
+    </DT
 ><DT
 ><A
 HREF="pcre.pattern.modifiers.html"
 >Pattern Modifiers</A
-> &#8212; describes possible modifiers in regex
+> &#8212; Describes possible modifiers in regex
      patterns</DT
 ><DT
 ><A
 HREF="pcre.pattern.syntax.html"
 >Pattern Syntax</A
-> &#8212; describes PCRE regex syntax</DT
+> &#8212; Describes PCRE regex syntax</DT
 ></DL
 ></DIV
 ></DIV
@@ -232,7 +257,7 @@ WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
 ><A
-HREF="function.pdf-add-annotation.html"
+HREF="function.recode-file.html"
 >Prev</A
 ></TD
 ><TD
@@ -257,7 +282,7 @@ HREF="function.preg-match.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->pdf_add_annotation</TD
+>recode_file</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"

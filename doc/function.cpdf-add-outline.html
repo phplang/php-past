@@ -4,7 +4,7 @@
 >cpdf_add_outline</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="cpdf_setrgbcolor"
 HREF="function.cpdf-setrgbcolor.html"><LINK
 REL="NEXT"
 TITLE="cpdf_set_page_animation"
-HREF="function.cpdf-set-page-animation.html"></HEAD
+HREF="function.cpdf-set-page-animation.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,39 +68,48 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.CPDF-ADD-OUTLINE"
+NAME="function.cpdf-add-outline"
 >cpdf_add_outline</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN6140"
+NAME="AEN7354"
 ></A
->cpdf_add_outline -- Adds bookmark for current page</DIV
+><P
+>    (PHP3 &#62;= 3.0.9, PHP4 &#62;= 4.0b4)</P
+>cpdf_add_outline&nbsp;--&nbsp;Adds bookmark for current page</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN6143"
+NAME="AEN7357"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->void cpdf_add_outline</CODE
->(int pdf document, string text);<P
+>void <B
+CLASS="function"
+>cpdf_add_outline</B
+></CODE
+> (int pdf document, string text)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     The <B
-CLASS="FUNCTION"
+>&#13;     The <B
+CLASS="function"
 >cpdf_add_outline()</B
 > function adds a bookmark
      with text <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >text</I
 ></TT
@@ -112,14 +124,20 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
 >Example 1. Adding a page outline</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->&lt;?php
+CLASS="programlisting"
+>&#13;&#60;?php
 $cpdf = cpdf_open(0);
 cpdf_page_init($cpdf, 1, 0, 595, 842);
 cpdf_add_outline($cpdf, 0, 0, 0, 1, "Page 1");
@@ -132,6 +150,9 @@ cpdf_output_buffer($cpdf);
 cpdf_close($cpdf);
 ?&#62;
     </PRE
+></TD
+></TR
+></TABLE
 ><P
 ></P
 ></DIV

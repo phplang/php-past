@@ -4,7 +4,7 @@
 >cpdf_text</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="cpdf_show_xy"
 HREF="function.cpdf-show-xy.html"><LINK
 REL="NEXT"
 TITLE="cpdf_set_font"
-HREF="function.cpdf-set-font.html"></HEAD
+HREF="function.cpdf-set-font.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,50 +68,59 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.CPDF-TEXT"
+NAME="function.cpdf-text"
 >cpdf_text</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN5258"
+NAME="AEN6413"
 ></A
->cpdf_text -- Output text with parameters</DIV
+><P
+>    (PHP3 &#62;= 3.0.8, PHP4 &#62;= 4.0b4)</P
+>cpdf_text&nbsp;--&nbsp;Output text with parameters</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN5261"
+NAME="AEN6416"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->void cpdf_text</CODE
->(int pdf document, string text, double x-koor, double y-koor, int mode, double orientation, int alignmode);<P
+>void <B
+CLASS="function"
+>cpdf_text</B
+></CODE
+> (int pdf document, string text, double x-koor, double y-koor, int mode, double orientation, int alignmode)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     The <B
-CLASS="FUNCTION"
+>&#13;     The <B
+CLASS="function"
 >cpdf_text()</B
 > function outputs the
      string <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >text</I
 ></TT
 > at position with
      coordinates (<TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >x-koor</I
 ></TT
 >, <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >y-koor</I
 ></TT
@@ -118,24 +130,24 @@ CLASS="PARAMETER"
      Otherwise the koodinates
      are measured in postscript points disregarding the current unit.
      The optional parameter <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >orientation</I
 ></TT
 > is the rotation
      of the text in degree. The optional parameter
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >alignmode</I
 ></TT
 > determines how the text is align.
      See the ClibPDF documentation for possible values.</P
 ><P
->     See also <A
+>&#13;     See also <A
 HREF="function.cpdf-show-xy.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >cpdf_show_xy()</B
 ></A
 >.</P

@@ -4,20 +4,23 @@
 >imap_setflag_full</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
-TITLE="IMAP functions"
+TITLE="IMAP, POP3 and NNTP functions"
 HREF="ref.imap.html"><LINK
 REL="PREVIOUS"
 TITLE="imap_rfc822_parse_adrlist"
 HREF="function.imap-rfc822-parse-adrlist.html"><LINK
 REL="NEXT"
 TITLE="imap_clearflag_full"
-HREF="function.imap-clearflag-full.html"></HEAD
+HREF="function.imap-clearflag-full.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,50 +68,112 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.IMAP-SETFLAG-FULL"
+NAME="function.imap-setflag-full"
 >imap_setflag_full</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN13219"
+NAME="AEN15833"
 ></A
->imap_setflag_full -- Sets flags on messages</DIV
+><P
+>    (PHP3 &#62;= 3.0.3, PHP4 )</P
+>imap_setflag_full&nbsp;--&nbsp;Sets flags on messages</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN13222"
+NAME="AEN15836"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->string imap_setflag_full</CODE
->(int stream, string sequence, string flag, string options);<P
+>string <B
+CLASS="function"
+>imap_setflag_full</B
+></CODE
+> (int stream, string sequence, string flag, string options)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     This function causes a store to add the specified flag to the
-     flags set for the messages in the specified sequence.</P
+>&#13;     This function causes a store to add the specified flag to the
+     flags set for the messages in the specified sequence.
+    </P
 ><P
->     The options are a bit mask with one or more of the following:
+>&#13;     The flags which you can set are "\\Seen", "\\Answered",
+     "\\Flagged", "\\Deleted", "\\Draft", and "\\Recent" (as defined
+     by RFC2060).
+    </P
+><P
+>&#13;     The options are a bit mask with one or more of the following:
      <DIV
-CLASS="INFORMALEXAMPLE"
+CLASS="informalexample"
 ><P
 ></P
 ><P
-CLASS="LITERALLAYOUT"
->&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ST_UID&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;sequence&nbsp;argument&nbsp;contains&nbsp;UIDs&nbsp;instead&nbsp;of<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sequence&nbsp;numbers<br>
+CLASS="literallayout"
+><br>
+ST_UID&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;sequence&nbsp;argument&nbsp;contains&nbsp;UIDs&nbsp;instead&nbsp;of<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sequence&nbsp;numbers<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</P
 ><P
 ></P
 ></DIV
+>
+    </P
+><P
+>&#13;     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><P
+><B
+>Example 1. <B
+CLASS="function"
+>imap_setflag_full()</B
+> example</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;$mbox = imap_open("{your.imap.host:143}","username","password")
+     || die("can't connect: ".imap_last_error());
+ 
+$status = imap_setflag_full($mbox,"2,5","\\Seen \\Flagged");
+ 
+print gettype($status)."\n";
+print $status."\n";
+ 
+imap_close($mbox);
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

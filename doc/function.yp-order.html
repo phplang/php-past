@@ -4,20 +4,23 @@
 >yp_order</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
-TITLE="NIS functions"
+TITLE="YP/NIS Functions"
 HREF="ref.nis.html"><LINK
 REL="PREVIOUS"
 TITLE="yp_get_default_domain"
 HREF="function.yp-get-default-domain.html"><LINK
 REL="NEXT"
 TITLE="yp_master"
-HREF="function.yp-master.html"></HEAD
+HREF="function.yp-master.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,40 +68,50 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.YP-ORDER"
+NAME="function.yp-order"
 >yp_order</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN18936"
+NAME="AEN37569"
 ></A
->yp_order -- Returns the order number for a map.</DIV
+><P
+>    (PHP3 &#62;= 3.0.7, PHP4 )</P
+>yp_order&nbsp;--&nbsp;Returns the order number for a map</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN18939"
+NAME="AEN37572"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int yp_order</CODE
->(string domain, string map);<P
+>int <B
+CLASS="function"
+>yp_order</B
+></CODE
+> (string domain, string map)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     <B
-CLASS="FUNCTION"
->yp_order()</B
+>&#13;     <B
+CLASS="function"
+>Yp_order()</B
 > returns the order number for a map
-     or FALSE.</P
+     or FALSE.
+    </P
 ><P
->     <TABLE
+>&#13;     <TABLE
 WIDTH="100%"
 BORDER="0"
 CELLPADDING="0"
@@ -107,39 +120,43 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
 >Example 1. Example for the NIS order</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->&lt;?php
+CLASS="programlisting"
+>&#13;&#60;?php
     $number = yp_order($domain,$mapname);
-
-    if(!$number) {
-        echo yp_errno() . ": " . yp_err_string();
-    }
-
     echo "Order number for this map is: " . $order;
 ?&#62;
       </PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR
 ></TABLE
-></P
+>
+    </P
 ><P
->     See also: <A
+>&#13;     See also <A
 HREF="function.yp-get-default-domain.html"
->     yp_get_default_domain</A
-> <A
-HREF="function.yp-errno.html"
->yp_errno</A
-> and <A
-HREF="function.yp-err-string.html"
->yp_err_string</A
-></P
+><B
+CLASS="function"
+>yp-get-default-domain()</B
+></A
+>.
+
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

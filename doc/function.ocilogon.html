@@ -4,7 +4,7 @@
 >OCILogon</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="OCIBindByName"
 HREF="function.ocibindbyname.html"><LINK
 REL="NEXT"
 TITLE="OCIPLogon"
-HREF="function.ociplogon.html"></HEAD
+HREF="function.ociplogon.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,42 +68,45 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.OCILOGON"
+NAME="function.ocilogon"
 >OCILogon</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN20048"
+NAME="AEN25697"
 ></A
->OCILogon -- Establishes a connection to Oracle</DIV
+><P
+>    (PHP3 &#62;= 3.0.4, PHP4 )</P
+>OCILogon&nbsp;--&nbsp;Establishes a connection to Oracle</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN20051"
+NAME="AEN25700"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int OCILogon</CODE
->(string username, string password, string [<SPAN
-CLASS="OPTIONAL"
->db</SPAN
->]);<P
+>int <B
+CLASS="function"
+>OCILogon</B
+></CODE
+> (string username, string password [, string db])</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     <A
-HREF="function.ocilogon.html"
-><B
-CLASS="FUNCTION"
+>&#13;     <B
+CLASS="function"
 >OCILogon()</B
-></A
 > returns an connection identifier
      needed for most other OCI calls.  The optional third parameter
      can either contain the name of the local Oracle instance or the
@@ -111,18 +117,15 @@ CLASS="FUNCTION"
     </P
 ><P
 >Connections are shared at the page level when using
-     <A
-HREF="function.ocilogon.html"
-><B
-CLASS="FUNCTION"
+     <B
+CLASS="function"
 >OCILogon()</B
-></A
 >.  This means that commits and
      rollbacks apply to all open transactions in the page, even if you
      have created multiple connections.
     </P
 ><P
->     This example demonstrates how the connections are shared.
+>&#13;     This example demonstrates how the connections are shared.
      <TABLE
 WIDTH="100%"
 BORDER="0"
@@ -132,23 +135,28 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
 >Example 1. OCILogon</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->&lt;?php
-print "&lt;HTML&#62;&lt;PRE&#62;";
+CLASS="programlisting"
+>&#13;&#60;?php
+print "&#60;HTML&#62;&#60;PRE&#62;";
 $db = "";
 
 $c1 = ocilogon("scott","tiger",$db);
 $c2 = ocilogon("scott","tiger",$db);
 
 function create_table($conn)
-{ $stmt = ociparse($conn,"create table scott.hallo (test
-varchar2(64))");
+{ $stmt = ociparse($conn,"create table scott.hallo (test varchar2(64))");
   ociexecute($stmt);
   echo $conn." created table\n\n";
 }
@@ -160,7 +168,8 @@ function drop_table($conn)
 }
 
 function insert_data($conn)
-{ $stmt = ociparse($conn,"insert into scott.hallo values('$conn' || ' ' || to_char(sysdate,'DD-MON-YY HH24:MI:SS'))");
+{ $stmt = ociparse($conn,"insert into scott.hallo 
+            values('$conn' || ' ' || to_char(sysdate,'DD-MON-YY HH24:MI:SS'))");
   ociexecute($stmt,OCI_DEFAULT);
   echo $conn." inserted hallo\n\n";
 }
@@ -186,7 +195,7 @@ function select_data($conn)
   ociexecute($stmt,OCI_DEFAULT);
   echo $conn."----selecting\n\n";
   while (ocifetch($stmt))
-    echo $conn." &lt;".ociresult($stmt,"TEST")."&#62;\n\n";
+    echo $conn." &#60;".ociresult($stmt,"TEST")."&#62;\n\n";
   echo $conn."----done\n\n";
 }
 
@@ -217,27 +226,24 @@ select_data($c2);   // no rows returned
 
 
 drop_table($c1);
-print "&lt;/PRE&#62;&lt;/HTML&#62;";
+print "&#60;/PRE&#62;&#60;/HTML&#62;";
 ?&#62;</PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR
 ></TABLE
 ></P
 ><P
->     See also <A
-HREF="function.ociplogon.html"
-><B
-CLASS="FUNCTION"
+>&#13;     See also <B
+CLASS="function"
 >OCIPLogon()</B
-></A
 > and
-     <A
-HREF="function.ocinlogon.html"
-><B
-CLASS="FUNCTION"
+     <B
+CLASS="function"
 >OCINLogon()</B
-></A
 >.</P
 ></DIV
 ><DIV

@@ -4,7 +4,7 @@
 >Common Pitfalls</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="Handling file uploads"
 HREF="features.file-upload.html"><LINK
 REL="NEXT"
 TITLE="Uploading multiple files"
-HREF="feature-fileupload.multiple.html"></HEAD
+HREF="feature-fileupload.multiple.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="sect1"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -49,7 +52,7 @@ HREF="features.file-upload.html"
 WIDTH="80%"
 ALIGN="center"
 VALIGN="bottom"
->Chapter 18. Handling file uploads</TD
+>Chapter 19. Handling file uploads</TD
 ><TD
 WIDTH="10%"
 ALIGN="right"
@@ -64,23 +67,25 @@ HREF="feature-fileupload.multiple.html"
 ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><DIV
-CLASS="SECT1"
+CLASS="sect1"
 ><H1
-CLASS="SECT1"
+CLASS="sect1"
 ><A
-NAME="FEATURES.FILE-UPLOAD.COMMON-PITFALLS"
+NAME="features.file-upload.common-pitfalls"
 >Common Pitfalls</A
 ></H1
 ><P
->    The MAX_FILE_SIZE item cannot specify a file size greater than the file 
+>&#13;    The MAX_FILE_SIZE item cannot specify a file size greater than the file 
     size that has been set in the upload_max_filesize in the PHP3.ini file
     or the corresponding php3_upload_max_filesize Apache .conf directive. 
-    The default is 2 Megabytes.</P
+    The default is 2 Megabytes.
+   </P
 ><P
->    Please note that the CERN httpd seems to strip off everything
+>&#13;    Please note that the CERN httpd seems to strip off everything
     starting at the first whitespace in the content-type mime header
     it gets from the client.  As long as this is the case, CERN httpd
-    will not support the file upload feature.</P
+    will not support the file upload feature.
+   </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

@@ -4,7 +4,7 @@
 >OCINumCols</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="OCIRowCount"
 HREF="function.ocirowcount.html"><LINK
 REL="NEXT"
 TITLE="OCIResult"
-HREF="function.ociresult.html"></HEAD
+HREF="function.ociresult.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,40 +68,48 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.OCINUMCOLS"
+NAME="function.ocinumcols"
 >OCINumCols</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN20223"
+NAME="AEN25881"
 ></A
->OCINumCols -- Return the number of result columns in a statement</DIV
+><P
+>    (PHP3 &#62;= 3.0.4, PHP4 )</P
+>OCINumCols&nbsp;--&nbsp;Return the number of result columns in a statement</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN20226"
+NAME="AEN25884"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int OCINumCols</CODE
->(int stmt);<P
+>int <B
+CLASS="function"
+>OCINumCols</B
+></CODE
+> (int stmt)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     <A
-HREF="function.ocinumcols.html"
-><B
-CLASS="FUNCTION"
+>&#13;     <B
+CLASS="function"
 >OCINumCols()</B
-></A
-> returns the number of columns in a statement</P
+> returns the number of columns in a 
+     statement
+    </P
 ><TABLE
 WIDTH="100%"
 BORDER="0"
@@ -108,15 +119,21 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
 >Example 1. OCINumCols</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->&lt;?php   
-    print "&lt;HTML&#62;&lt;PRE&#62;\n";   
+CLASS="programlisting"
+>&#13;&#60;?php   
+    print "&#60;HTML&#62;&#60;PRE&#62;\n";   
     $conn = OCILogon("scott", "tiger");
     $stmt = OCIParse($conn,"select * from emp");
     OCIExecute($stmt);
@@ -132,9 +149,13 @@ CLASS="PROGRAMLISTING"
     }
     OCIFreeStatement($stmt);  
     OCILogoff($conn);   
-    print "&lt;/PRE&#62;";
-    print "&lt;/HTML&#62;\n"; 
-?&#62;   </PRE
+    print "&#60;/PRE&#62;";
+    print "&#60;/HTML&#62;\n"; 
+?&#62;   
+     </PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR

@@ -4,7 +4,7 @@
 >else</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="Control Structures"
 HREF="control-structures.html"><LINK
 REL="NEXT"
 TITLE="elseif"
-HREF="control-structures.elseif.html"></HEAD
+HREF="control-structures.elseif.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="sect1"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -64,95 +67,109 @@ HREF="control-structures.elseif.html"
 ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><DIV
-CLASS="SECT1"
+CLASS="sect1"
 ><H1
-CLASS="SECT1"
+CLASS="sect1"
 ><A
-NAME="CONTROL-STRUCTURES.ELSE"
+NAME="control-structures.else"
 ><TT
-CLASS="LITERAL"
+CLASS="literal"
 >else</TT
 ></A
 ></H1
 ><P
->     Often you'd want to execute a statement if a certain condition
-     is met, and a different statement if the condition is not met.
-     This is what <TT
-CLASS="LITERAL"
+>&#13;    Often you'd want to execute a statement if a certain condition is
+    met, and a different statement if the condition is not met.  This
+    is what <TT
+CLASS="literal"
 >else</TT
 > is for.  <TT
-CLASS="LITERAL"
+CLASS="literal"
 >else</TT
 >
-     extends an <TT
-CLASS="LITERAL"
+    extends an <TT
+CLASS="literal"
 >if</TT
 > statement to execute a statement
-     in case the expression in the <TT
-CLASS="LITERAL"
+    in case the expression in the <TT
+CLASS="literal"
 >if</TT
 > statement
-     evaluates to <TT
-CLASS="LITERAL"
+    evaluates to <TT
+CLASS="literal"
 >FALSE</TT
 >.  For example, the following
-     code would display <TT
-CLASS="COMPUTEROUTPUT"
->a is bigger than b</TT
->
-     if <TT
-CLASS="REPLACEABLE"
+    code would display <TT
+CLASS="computeroutput"
+>a is bigger than
+    b</TT
+> if <TT
+CLASS="replaceable"
 ><I
 >$a</I
 ></TT
-> is bigger than <TT
-CLASS="REPLACEABLE"
+> is bigger than
+    <TT
+CLASS="replaceable"
 ><I
 >$b</I
 ></TT
->,
-     and <TT
-CLASS="COMPUTEROUTPUT"
->a is NOT bigger than b</TT
+>, and <TT
+CLASS="computeroutput"
+>a is NOT bigger
+    than b</TT
 > otherwise:
-
-     <DIV
-CLASS="INFORMALEXAMPLE"
+    <DIV
+CLASS="informalexample"
 ><P
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
-> if ($a &#62; $b) {
-     print "a is bigger than b";
- } else {
-     print "a is NOT bigger than b";
- }
-      </PRE
+CLASS="programlisting"
+>&#13;if ($a &#62; $b) {
+    print "a is bigger than b";
+} else {
+    print "a is NOT bigger than b";
+}
+     </PRE
+></TD
+></TR
+></TABLE
 ><P
 ></P
 ></DIV
 >
- 
-     The <TT
-CLASS="LITERAL"
+
+    The <TT
+CLASS="literal"
 >else</TT
-> statement is only executed
-     if the <TT
-CLASS="LITERAL"
+> statement is only executed if the
+    <TT
+CLASS="literal"
 >if</TT
 > expression evaluated to
-     <TT
-CLASS="LITERAL"
+    <TT
+CLASS="literal"
 >FALSE</TT
->, and if there were any <TT
-CLASS="LITERAL"
+>, and if there were any
+    <TT
+CLASS="literal"
 >elseif</TT
->
-     expressions - only if they evaluated to <TT
-CLASS="LITERAL"
+> expressions - only if they evaluated to
+    <TT
+CLASS="literal"
 >FALSE</TT
->
-     as well (see below).</P
+> as well (see <A
+HREF="control-structures.elseif.html"
+>elseif</A
+>).
+
+   </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -208,7 +225,7 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><TT
-CLASS="LITERAL"
+CLASS="literal"
 >elseif</TT
 ></TD
 ></TR

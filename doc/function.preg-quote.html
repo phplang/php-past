@@ -4,20 +4,23 @@
 >preg_quote</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
-TITLE="Perl-compatible Regular Expression functions"
+TITLE="Regular Expression Functions (Perl-Compatible)"
 HREF="ref.pcre.html"><LINK
 REL="PREVIOUS"
 TITLE="preg_split"
 HREF="function.preg-split.html"><LINK
 REL="NEXT"
 TITLE="preg_grep"
-HREF="function.preg-grep.html"></HEAD
+HREF="function.preg-grep.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,38 +68,48 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.PREG-QUOTE"
+NAME="function.preg-quote"
 >preg_quote</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN22190"
+NAME="AEN30576"
 ></A
->preg_quote -- Quote regular expression characters</DIV
+><P
+>    (PHP3 &#62;= 3.0.9, PHP4 )</P
+>preg_quote&nbsp;--&nbsp;Quote regular expression characters</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN22193"
+NAME="AEN30579"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->string preg_quote</CODE
->(string str);<P
+>string <B
+CLASS="function"
+>preg_quote</B
+></CODE
+> (string str [, string 
+       delimiter])</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     <B
-CLASS="FUNCTION"
+>&#13;     <B
+CLASS="function"
 >preg_quote()</B
 > takes <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >str</I
 ></TT
@@ -104,25 +117,111 @@ CLASS="PARAMETER"
      and puts a backslash in front of every character that is part of
      the regular expression syntax.  This is useful if you have a
      run-time string that you need to match in some text and the
-     string may contain special regex characters.</P
+     string may contain special regex characters.
+    </P
 ><P
->     The special regular expression characters are:
-     <PRE
-CLASS="SCREEN"
+>&#13;     If the optional <TT
+CLASS="parameter"
+><I
+>delimiter</I
+></TT
+> is specified, it
+     will also be escaped.  This is useful for escaping the delimeter
+     that is required by the PCRE functions. The / is the most commonly
+     used delimiter.</P
+><P
+>&#13;     The special regular expression characters are:
+     <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="screen"
 >. \\ + * ? [ ^ ] $ ( ) { } = ! &#60; &#62; | :</PRE
+></TD
+></TR
+></TABLE
 >
-
-    <DIV
-CLASS="NOTE"
-><BLOCKQUOTE
-CLASS="NOTE"
+    </P
+><P
+>&#13;     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
 ><P
 ><B
->Note: </B
->      This function was added in PHP 3.0.9.</P
-></BLOCKQUOTE
-></DIV
+>Example 1. </B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;$keywords = "$40 for a g3/400";
+$keywords = preg_quote ($keywords, "/");
+echo $keywords; // returns \$40 for a g3\/400
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><P
+><B
+>Example 2. Italicizing a word within some text</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;
+// In this example, preg_quote($word) is used to keep the
+// asterisks from having special meaning to the regular
+// expression.
+
+$textbody = "This book is *very* difficult to find.";
+$word = "*very*";
+$textbody = preg_replace ("/".preg_quote($word)."/",
+                          "&#60;i&#62;".$word."&#60;/i&#62;",
+                          $textbody);
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

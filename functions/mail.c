@@ -28,7 +28,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: mail.c,v 1.61 2000/01/01 04:31:16 sas Exp $ */
+/* $Id: mail.c,v 1.62 2000/06/29 12:07:47 kk Exp $ */
 
 #include <stdlib.h>
 #include <ctype.h>
@@ -53,6 +53,7 @@
 
 function_entry mail_functions[] = {
 	{"mail",		php3_mail,		NULL},
+	{"ezmlm_hash",		php3_ezmlm_hash,	NULL},
 	{NULL, NULL, NULL}
 };
 
@@ -159,6 +160,37 @@ int _php3_mail(char *to, char *subject, char *message, char *headers)
 	}
 #endif
 	return 1;
+}
+
+/* {{{ proto int ezmlm_hash(string hash)
+   Calculate EZMLM list hash value */
+void php3_ezmlm_hash(INTERNAL_FUNCTION_PARAMETERS)
+{
+	pval *pstr;
+	char *str=NULL;
+	unsigned long h = 5381L;
+	int j, l;
+	TLS_VARS;
+	
+	if (ARG_COUNT(ht) != 1 || getParameters(ht, 1, &pstr) == FAILURE) {
+		WRONG_PARAM_COUNT;
+	}
+
+	convert_to_string(pstr);
+	if (pstr->value.str.val) {
+		str = pstr->value.str.val;
+	} else {
+		php3_error(E_WARNING, "Must give string parameter to ezmlm_hash()");
+		RETURN_FALSE;
+	}
+	l = strlen(str);
+	
+	for (j=0; j<l; ++j) {
+	  h = (h + (h<<5)) ^ (unsigned long) (unsigned char) tolower(str[j]);
+	}
+	h = (h%53);
+
+	RETURN_LONG(h);
 }
 
 void php3_info_mail(void)

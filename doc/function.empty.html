@@ -4,20 +4,23 @@
 >empty</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
-TITLE="Variable functions"
+TITLE="Variable Functions"
 HREF="ref.var.html"><LINK
 REL="PREVIOUS"
 TITLE="doubleval"
 HREF="function.doubleval.html"><LINK
 REL="NEXT"
 TITLE="gettype"
-HREF="function.gettype.html"></HEAD
+HREF="function.gettype.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,54 +68,102 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.EMPTY"
+NAME="function.empty"
 >empty</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN26601"
+NAME="AEN35526"
 ></A
->empty -- determine whether a variable is set</DIV
+><P
+>    (unknown)</P
+>empty&nbsp;--&nbsp;Determine whether a variable is set</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN26604"
+NAME="AEN35529"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int empty</CODE
->(mixed var);<P
+>int <B
+CLASS="function"
+>empty</B
+></CODE
+> (mixed var)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Returns false if <TT
-CLASS="PARAMETER"
+>&#13;     Returns false if <TT
+CLASS="parameter"
 ><I
 >var</I
 ></TT
 > is set and has a
-     non-empty or non-zero value; true otherwise.</P
+     non-empty or non-zero value; true otherwise.
+     <DIV
+CLASS="informalexample"
 ><P
->     See also <A
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;$var = 0;
+if (empty($var)) { #evaluates true 
+    print '$var is either 0 or not at all set';
+}
+if (!isset($var)) { // evaluates false
+    print 'The $var is not set at all';
+}
+      </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+>
+    </P
+><P
+>&#13;     Note that this is meaningless when used on anything which isn't a
+     variable; i.e. <B
+CLASS="command"
+>empty (addslashes ($name))</B
+> has
+     no meaning since it would be checking whether something which
+     isn't a variable is a variable with a false value.
+    </P
+><P
+>&#13;     See also <A
 HREF="function.isset.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >isset()</B
 ></A
-> and <A
+> and
+     <A
 HREF="function.unset.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >unset()</B
 ></A
->.</P
+>.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

@@ -26,7 +26,7 @@
    | Authors: Chris Schneider <cschneid@relog.ch>                         |
    +----------------------------------------------------------------------+
  */
-/* $Id: pack.c,v 1.25 2000/01/01 04:31:16 sas Exp $ */
+/* $Id: pack.c,v 1.26 2000/07/09 14:26:48 eschmid Exp $ */
 #include "php.h"
 
 #include <stdio.h>
@@ -109,8 +109,8 @@ static void _php3_pack(pval *val, int size, int *map, char *output)
 /* pack() idea stolen from Perl (implemented formats behave the same as there)
  * Implemented formats are A,a,h,H,c,C,s,S,i,I,l,L,n,N,f,d,x,X,@.
  */
-/* {{{ proto string pack(string format, mixed arg1, mixed arg2, ...)
-   Takes 1 or more arguments and packs them into a binary string according to the format argument */
+/* {{{ proto string pack(string format, mixed arg1 [, mixed arg2 [, mixed ...]])
+   Takes one or more arguments and packs them into a binary string according to the format argument */
 PHP_FUNCTION(pack)
 {
 	pval **argv;

@@ -4,20 +4,23 @@
 >odbc_fetch_row</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
-TITLE="ODBC functions"
+TITLE="Unified ODBC functions"
 HREF="ref.odbc.html"><LINK
 REL="PREVIOUS"
 TITLE="odbc_fetch_into"
 HREF="function.odbc-fetch-into.html"><LINK
 REL="NEXT"
 TITLE="odbc_field_name"
-HREF="function.odbc-field-name.html"></HEAD
+HREF="function.odbc-field-name.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,129 +68,139 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.ODBC-FETCH-ROW"
+NAME="function.odbc-fetch-row"
 >odbc_fetch_row</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN19375"
+NAME="AEN24233"
 ></A
->odbc_fetch_row -- Fetch a row</DIV
+><P
+>    (PHP3 &#62;= 3.0.6, PHP4 )</P
+>odbc_fetch_row&nbsp;--&nbsp;Fetch a row</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN19378"
+NAME="AEN24236"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int odbc_fetch_row</CODE
->(int result_id, int [<SPAN
-CLASS="OPTIONAL"
->row_number</SPAN
->]);<P
+>int <B
+CLASS="function"
+>odbc_fetch_row</B
+></CODE
+> (int result_id [, int row_number])</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     If <B
-CLASS="FUNCTION"
+>&#13;     If <B
+CLASS="function"
 >odbc_fetch_row()</B
 > was succesful (there was a
      row), <TT
-CLASS="LITERAL"
+CLASS="literal"
 >true</TT
 > is returned.  If there are no more
      rows, <TT
-CLASS="LITERAL"
+CLASS="literal"
 >false</TT
-> is returned.</P
+> is returned.
+    </P
 ><P
->     <B
-CLASS="FUNCTION"
+>&#13;     <B
+CLASS="function"
 >odbc_fetch_row()</B
 > fetches a row of the data
      that was returned by <A
 HREF="function.odbc-do.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >odbc_do()</B
 ></A
 > /
      <A
 HREF="function.odbc-exec.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >odbc_exec()</B
 ></A
 >.  After
      <B
-CLASS="FUNCTION"
+CLASS="function"
 >odbc_fetch_row()</B
 > is called, the fields of that
      row can be accessed with <A
 HREF="function.odbc-result.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >odbc_result()</B
 ></A
->.</P
+>.
+    </P
 ><P
->     If <TT
-CLASS="PARAMETER"
+>&#13;     If <TT
+CLASS="parameter"
 ><I
 >row_number</I
 ></TT
 > is not specified,
      <B
-CLASS="FUNCTION"
+CLASS="function"
 >odbc_fetch_row()</B
 > will try to fetch the next
      row in the result set. Calls to
      <B
-CLASS="FUNCTION"
+CLASS="function"
 >odbc_fetch_row()</B
 > with and without
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >row_number</I
 ></TT
-> can be mixed.</P
+> can be mixed.
+    </P
 ><P
->     To step through the result more than once, you can call
+>&#13;     To step through the result more than once, you can call
      <B
-CLASS="FUNCTION"
+CLASS="function"
 >odbc_fetch_row()</B
 > with
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >row_number</I
 ></TT
 > 1, and then continue doing
      <B
-CLASS="FUNCTION"
+CLASS="function"
 >odbc_fetch_row()</B
 > without
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >row_number</I
 ></TT
 > to review the result.  If a
      driver doesn't support fetching rows by number, the
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >row_number</I
 ></TT
-> parameter is ignored.</P
+> parameter is ignored.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

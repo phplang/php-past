@@ -4,7 +4,7 @@
 >mysql_query</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="mysql_pconnect"
 HREF="function.mysql-pconnect.html"><LINK
 REL="NEXT"
 TITLE="mysql_result"
-HREF="function.mysql-result.html"></HEAD
+HREF="function.mysql-result.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,47 +68,52 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.MYSQL-QUERY"
+NAME="function.mysql-query"
 >mysql_query</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN18441"
+NAME="AEN23361"
 ></A
->mysql_query -- Send an SQL query to MySQL</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>mysql_query&nbsp;--&nbsp;Send a MySQL query</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN18444"
+NAME="AEN23364"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int mysql_query</CODE
->(string query, int 
-      [<SPAN
-CLASS="OPTIONAL"
->link_identifier</SPAN
->]
-     );<P
+>int <B
+CLASS="function"
+>mysql_query</B
+></CODE
+> (string query [, int 
+       link_identifier])</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
 > 
      <B
-CLASS="FUNCTION"
+CLASS="function"
 >mysql_query()</B
 > sends a query to the currently
      active database on the server that's associated with the
      specified link identifier.  If
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >link_identifier</I
 ></TT
@@ -114,30 +122,32 @@ CLASS="PARAMETER"
      to establish a link as if <A
 HREF="function.mysql-connect.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >mysql_connect()</B
 ></A
 > was
-     called with no arguments, and use it.</P
+     called with no arguments, and use it.
+    </P
 ><P
->     The query string should not end with a semicolon.</P
+>&#13;     The query string should not end with a semicolon.
+    </P
 ><P
->     <B
-CLASS="FUNCTION"
+>&#13;     <B
+CLASS="function"
 >mysql_query()</B
 > returns TRUE (non-zero) or FALSE
      to indicate whether or not the query succeeded.  A return value
      of TRUE means that the query was legal and could be executed by
      the server.  It does not indicate anything about the number of
      rows affected or returned. It is perfectly possible for a query
-     to succeed but affect no rows or return no rows.</P
+     to succeed but affect no rows or return no rows.
+    </P
 ><P
->     The following query is syntactically invalid, so
+>&#13;     The following query is syntactically invalid, so
      <B
-CLASS="FUNCTION"
+CLASS="function"
 >mysql_query()</B
 > fails and returns FALSE:
-
      <TABLE
 WIDTH="100%"
 BORDER="0"
@@ -147,41 +157,50 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
 >Example 1. <B
-CLASS="FUNCTION"
+CLASS="function"
 >mysql_query()</B
 ></B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->&lt;?php
+CLASS="programlisting"
+>&#13;&#60;?php
 $result = mysql_query ("SELECT * WHERE 1=1")
     or die ("Invalid query");
 ?&#62;
       </PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR
 ></TABLE
-></P
+>
+    </P
 ><P
->     The following query is semantically invalid if
+>&#13;     The following query is semantically invalid if
      <TT
-CLASS="LITERAL"
+CLASS="literal"
 >my_col</TT
 > is not a column in the table
      <TT
-CLASS="LITERAL"
+CLASS="literal"
 >my_tbl</TT
 >, so <B
-CLASS="FUNCTION"
+CLASS="function"
 >mysql_query()</B
 >
      fails and returns FALSE:
-  
      <TABLE
 WIDTH="100%"
 BORDER="0"
@@ -191,52 +210,63 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
 >Example 2. <B
-CLASS="FUNCTION"
+CLASS="function"
 >mysql_query()</B
 ></B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->&lt;?php
+CLASS="programlisting"
+>&#13;&#60;?php
 $result = mysql_query ("SELECT my_col FROM my_tbl")
     or die ("Invalid query");
 ?&#62;
       </PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR
 ></TABLE
-></P
+>
+    </P
 ><P
->     <B
-CLASS="FUNCTION"
+>&#13;     <B
+CLASS="function"
 >mysql_query()</B
 > will also fail and return FALSE
      if you don't have permission to access the table(s) referenced by
-     the query.</P
+     the query.
+    </P
 ><P
->     Assuming the query succeeds, you can call
+>&#13;     Assuming the query succeeds, you can call
      <A
 HREF="function.mysql-affected-rows.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >mysql_affected_rows()</B
 ></A
 > to find out how many
      rows were affected (for DELETE, INSERT, REPLACE, or UPDATE
      statements).  For SELECT statements,
      <B
-CLASS="FUNCTION"
+CLASS="function"
 >mysql_query()</B
 > returns a new result identifier
      that you can pass to <A
 HREF="function.mysql-result.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >mysql_result()</B
 ></A
 >.  When you
@@ -245,53 +275,55 @@ CLASS="FUNCTION"
      <A
 HREF="function.mysql-free-result.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >mysql_free_result()</B
 ></A
->.</P
+>.
+    </P
 ><P
->     See also: <A
+>&#13;     See also: <A
 HREF="function.mysql-affected-rows.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >mysql_affected_rows()</B
 ></A
 >,
      <A
 HREF="function.mysql-db-query.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >mysql_db_query()</B
 ></A
 >,
      <A
 HREF="function.mysql-free-result.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >mysql_free_result()</B
 ></A
 >,
      <A
 HREF="function.mysql-result.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >mysql_result()</B
 ></A
 >,
      <A
 HREF="function.mysql-select-db.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >mysql_select_db()</B
 ></A
 >, and
      <A
 HREF="function.mysql-connect.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >mysql_connect()</B
 ></A
->.</P
+>.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

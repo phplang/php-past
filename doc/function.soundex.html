@@ -4,7 +4,7 @@
 >soundex</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="similar_text"
 HREF="function.similar-text.html"><LINK
 REL="NEXT"
 TITLE="sprintf"
-HREF="function.sprintf.html"></HEAD
+HREF="function.sprintf.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,51 +68,63 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.SOUNDEX"
+NAME="function.soundex"
 >soundex</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN25456"
+NAME="AEN34010"
 ></A
->soundex -- Calculate the soundex key of a string</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>soundex&nbsp;--&nbsp;Calculate the soundex key of a string</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN25459"
+NAME="AEN34013"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->string soundex</CODE
->(string str);<P
+>string <B
+CLASS="function"
+>soundex</B
+></CODE
+> (string str)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Calculates the soundex key of <TT
-CLASS="PARAMETER"
+>&#13;     Calculates the soundex key of <TT
+CLASS="parameter"
 ><I
 >str</I
 ></TT
->.</P
+>.
+    </P
 ><P
->     Soundex keys have the property that words pronounced similarly
+>&#13;     Soundex keys have the property that words pronounced similarly
      produce the same soundex key, and can thus be used to simplify
      searches in databases where you know the pronunciation but not
      the spelling. This soundex function returns a string 4 characters
-     long, starting with a letter.</P
+     long, starting with a letter.
+    </P
 ><P
->     This particular soundex function is one described by Donald Knuth
+>&#13;     This particular soundex function is one described by Donald Knuth
      in "The Art Of Computer Programming, vol. 3: Sorting And
-     Searching", Addison-Wesley (1973), pp. 391-392.</P
+     Searching", Addison-Wesley (1973), pp. 391-392.
+    </P
 ><P
->     <TABLE
+>&#13;     <TABLE
 WIDTH="100%"
 BORDER="0"
 CELLPADDING="0"
@@ -118,24 +133,34 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
 >Example 1. Soundex Examples</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->soundex("Euler") == soundex("Ellery") == 'E460';
-soundex("Gauss") == soundex("Ghosh") == 'G200';
-soundex("Knuth") == soundex("Kant") == 'H416';
-soundex("Lloyd") == soundex("Ladd") == 'L300';
-soundex("Lukasiewicz") == soundex("Lissajous") == 'L222';
+CLASS="programlisting"
+>&#13;soundex ("Euler") == soundex ("Ellery") == 'E460';
+soundex ("Gauss") == soundex ("Ghosh") == 'G200';
+soundex ("Knuth") == soundex ("Kant") == 'H416';
+soundex ("Lloyd") == soundex ("Ladd") == 'L300';
+soundex ("Lukasiewicz") == soundex ("Lissajous") == 'L222';
       </PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR
 ></TABLE
-></P
+>
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

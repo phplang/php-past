@@ -4,7 +4,7 @@
 >posix_times</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="posix_uname"
 HREF="function.posix-uname.html"><LINK
 REL="NEXT"
 TITLE="posix_ctermid"
-HREF="function.posix-ctermid.html"></HEAD
+HREF="function.posix-ctermid.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,62 +68,71 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.POSIX-TIMES"
+NAME="function.posix-times"
 >posix_times</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN22935"
+NAME="AEN28968"
 ></A
->posix_times -- Get process times</DIV
+><P
+>    (PHP3 &#62;= 3.0.13, PHP4 &#62;= 4.0b4)</P
+>posix_times&nbsp;--&nbsp;Get process times</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN22938"
+NAME="AEN28971"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->array posix_times</CODE
->(void );<P
+>array <B
+CLASS="function"
+>posix_times</B
+></CODE
+> (void )</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Returns a hash of strings with information about the
+>&#13;     Returns a hash of strings with information about the
      current process CPU usage. The indices of the hash are
      <P
 ></P
 ><UL
 ><LI
 ><P
->        ticks - the number of clock ticks that have elapsed since
+>&#13;        ticks - the number of clock ticks that have elapsed since
         reboot.
        </P
 ></LI
 ><LI
 ><P
->        utime - user time used by the current process.
+>&#13;        utime - user time used by the current process.
        </P
 ></LI
 ><LI
 ><P
->        stime - system time used by the current process.
+>&#13;        stime - system time used by the current process.
        </P
 ></LI
 ><LI
 ><P
->        cutime - user time used by current process and children.
+>&#13;        cutime - user time used by current process and children.
        </P
 ></LI
 ><LI
 ><P
->        cstime - system time used by current process and children.
+>&#13;        cstime - system time used by current process and children.
        </P
 ></LI
 ></UL

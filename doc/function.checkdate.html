@@ -4,7 +4,7 @@
 >checkdate</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="Date and Time functions"
 HREF="ref.datetime.html"><LINK
 REL="NEXT"
 TITLE="date"
-HREF="function.date.html"></HEAD
+HREF="function.date.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,53 +68,78 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.CHECKDATE"
+NAME="function.checkdate"
 >checkdate</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN7007"
+NAME="AEN8206"
 ></A
->checkdate -- validate a date/time</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>checkdate&nbsp;--&nbsp;Validate a date/time</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN7010"
+NAME="AEN8209"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int checkdate</CODE
->(int month, int day, int year);<P
+>int <B
+CLASS="function"
+>checkdate</B
+></CODE
+> (int month, int day, int year)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Returns true if the date given is valid; otherwise returns false.
-     Checks the validity of the date formed by the arguments. A date is
-     considered valid if:
+>&#13;     Returns true if the date given is valid; otherwise returns false.
+     Checks the validity of the date formed by the arguments. A date
+     is considered valid if:
      <P
 ></P
 ><UL
 ><LI
 ><P
->        year is between 0 and 32767 inclusive
+>&#13;        year is between 0 and 32767 inclusive
        </P
 ></LI
 ><LI
 ><P
->        month is between 1 and 12 inclusive
+>&#13;        month is between 1 and 12 inclusive
        </P
 ></LI
 ><LI
 ><P
->        day is within the allowed number of days for the given month.
-        Leap years are taken into consideration.
+>&#13;        <TT
+CLASS="parameter"
+><I
+>Day</I
+></TT
+> is within the allowed number of
+        days for the given <TT
+CLASS="parameter"
+><I
+>month</I
+></TT
+>.  Leap
+        <TT
+CLASS="parameter"
+><I
+>year</I
+></TT
+>s are taken into consideration.
        </P
 ></LI
 ></UL

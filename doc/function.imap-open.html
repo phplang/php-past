@@ -4,20 +4,23 @@
 >imap_open</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
-TITLE="IMAP functions"
+TITLE="IMAP, POP3 and NNTP functions"
 HREF="ref.imap.html"><LINK
 REL="PREVIOUS"
 TITLE="imap_num_recent"
 HREF="function.imap-num-recent.html"><LINK
 REL="NEXT"
 TITLE="imap_ping"
-HREF="function.imap-ping.html"></HEAD
+HREF="function.imap-ping.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,107 +68,231 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.IMAP-OPEN"
+NAME="function.imap-open"
 >imap_open</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN12976"
+NAME="AEN15493"
 ></A
->imap_open -- Open an IMAP stream to a mailbox</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>imap_open&nbsp;--&nbsp;Open an IMAP stream to a mailbox</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN12979"
+NAME="AEN15496"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int imap_open</CODE
->(string mailbox, string username, string password, int flags);<P
+>int <B
+CLASS="function"
+>imap_open</B
+></CODE
+> (string mailbox, string username, string password [, int 
+       flags])</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Returns an IMAP stream on success and false on error.  This
+>&#13;     Returns an IMAP stream on success and false on error.  This
      function can also be used to open streams to POP3 and NNTP
-     servers.  To connect to an IMAP server running on port 143 on the
-     local machine, do the following: 
-     <DIV
-CLASS="INFORMALEXAMPLE"
+     servers, but some functions and features are not available
+     on IMAP servers.  
+    </P
 ><P
-></P
-><PRE
-CLASS="PROGRAMLISTING"
-> 
-$mbox = imap_open("{localhost:143}INBOX","user_id","password");
-      </PRE
+>&#13;     A mailbox name consists of a server part and a mailbox path on
+     this server. The special name INBOX stands for the current users
+     personal mailbox. The server part, which is enclosed in '{' and
+     '}', consists of the servers name or ip address, a protocol
+     secification (beginning with '/') and an optional port specifier
+     beginnung with ':'. The server part is mandatory in all mailbox
+     parameters. Mailbos names that contain international characters
+     besides those in the printable ASCII space have to be encoded 
+     with <A
+HREF="function.imap-utf7-encode.html"
+><B
+CLASS="function"
+>imap_utf7_encode()</B
+></A
+>.
+    </P
 ><P
-></P
-></DIV
->
-
-     To connect to a POP3 server on port 110 on the local server, use:
-
-     <DIV
-CLASS="INFORMALEXAMPLE"
-><P
-></P
-><PRE
-CLASS="PROGRAMLISTING"
->$mbox = imap_open("{localhost/pop3:110}INBOX","user_id","password");
-      </PRE
-><P
-></P
-></DIV
->
-
-     To connect to an NNTP server on port 119 on the local server, use:
-     
-     <DIV
-CLASS="INFORMALEXAMPLE"
-><P
-></P
-><PRE
-CLASS="PROGRAMLISTING"
->$nntp = imap_open("{localhost/nntp:119}comp.test","","");
-      </PRE
-><P
-></P
-></DIV
->
-
-     To connect to a remote server replace "localhost" with the name
-     or the IP address of the server you want to connect to.</P
-><P
->     The options are a bit mask with one or more of the following:
+>&#13;     The options are a bit mask with one or more of the following:
      <P
 ></P
 ><UL
 ><LI
 ><P
->	OP_READONLY - Open mailbox read-only</P
+>&#13;	OP_READONLY - Open mailbox read-only
+       </P
 ></LI
 ><LI
 ><P
->	OP_ANONYMOUS - Dont use or update a .newsrc for news</P
+>&#13;	OP_ANONYMOUS - Dont use or update a
+	<TT
+CLASS="filename"
+>.newsrc</TT
+> for news (NNTP only)
+       </P
 ></LI
 ><LI
 ><P
->	OP_HALFOPEN - For IMAP and NNTP names, open a connection but
-	dont open a mailbox</P
+>&#13;	OP_HALFOPEN - For IMAP and NNTP names, open a connection but
+	dont open a mailbox
+       </P
 ></LI
 ><LI
 ><P
->	CL_EXPUNGE - Expunge mailbox automatically upon mailbox close</P
+>&#13;	CL_EXPUNGE - Expunge mailbox automatically upon mailbox close
+       </P
 ></LI
 ></UL
+>
+    </P
+><P
+>&#13;     To connect to an IMAP server running on port 143 on the
+     local machine, do the following:
+     <DIV
+CLASS="informalexample"
+><P
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+> 
+$mbox = imap_open ("{localhost:143}INBOX", "user_id", "password");
+      </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+>
+     To connect to a POP3 server on port 110 on the local server, use:
+     <DIV
+CLASS="informalexample"
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;$mbox = imap_open ("{localhost/pop3:110}INBOX", "user_id", "password");
+      </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+>
+     To connect to an NNTP server on port 119 on the local server, use:
+     <DIV
+CLASS="informalexample"
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;$nntp = imap_open ("{localhost/nntp:119}comp.test", "", "");
+      </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+>
+     To connect to a remote server replace "localhost" with the name
+     or the IP address of the server you want to connect to.
+    </P
+><P
+>&#13;     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><P
+><B
+>Example 1. <B
+CLASS="function"
+>imap_open()</B
+> example</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;$mbox = imap_open ("{your.imap.host:143}", "username", "password");
+
+echo "&#60;p&#62;&#60;h1&#62;Mailboxes&#60;/h1&#62;\n";
+$folders = imap_listmailbox ($mbox, "{your.imap.host:143}", "*");
+
+if ($folders == false) {
+    echo "Call failed&#60;br&#62;\n";
+} else {
+    while (list ($key, $val) = each ($folders)) {
+        echo $val."&#60;br&#62;\n";
+    }
+}
+
+echo "&#60;p&#62;&#60;h1&#62;Headers in INBOX&#60;/h1&#62;\n";
+$headers = imap_headers ($mbox);
+
+if ($headers == false) {
+    echo "Call failed&#60;br&#62;\n";
+} else {
+    while (list ($key,$val) = each ($headers)) {
+        echo $val."&#60;br&#62;\n";
+    }
+}
+
+imap_close($mbox);
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

@@ -4,7 +4,7 @@
 >ImageColorSet</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -12,12 +12,15 @@ REL="UP"
 TITLE="Image functions"
 HREF="ref.image.html"><LINK
 REL="PREVIOUS"
-TITLE="ImageColorResolve"
-HREF="function.imagecolorresolve.html"><LINK
+TITLE="ImageGammaCorrect"
+HREF="function.imagegammacorrect.html"><LINK
 REL="NEXT"
 TITLE="ImageColorsForIndex"
-HREF="function.imagecolorsforindex.html"></HEAD
+HREF="function.imagecolorsforindex.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -42,7 +45,7 @@ WIDTH="10%"
 ALIGN="left"
 VALIGN="bottom"
 ><A
-HREF="function.imagecolorresolve.html"
+HREF="function.imagegammacorrect.html"
 >Prev</A
 ></TD
 ><TD
@@ -65,45 +68,58 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.IMAGECOLORSET"
+NAME="function.imagecolorset"
 >ImageColorSet</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN11653"
+NAME="AEN13645"
 ></A
->ImageColorSet -- set the color for the specified palette index</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>ImageColorSet&nbsp;--&nbsp;
+     Set the color for the specified palette index
+    </DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN11656"
+NAME="AEN13648"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->bool imagecolorset</CODE
->(int im, int index, int red, int green, int blue);<P
+>bool <B
+CLASS="function"
+>imagecolorset</B
+></CODE
+> (int im, int index, int red, int green, int blue)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     This sets the specified index in the palette to the specified
+>&#13;     This sets the specified index in the palette to the specified
      color. This is useful for creating flood-fill-like effects in
      paletted images without the overhead of performing the actual
-     flood-fill.</P
+     flood-fill.
+    </P
 ><P
->     See also <A
+>&#13;     See also <A
 HREF="function.imagecolorat.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >imagecolorat()</B
 ></A
->.</P
+>.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -120,7 +136,7 @@ WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
 ><A
-HREF="function.imagecolorresolve.html"
+HREF="function.imagegammacorrect.html"
 >Prev</A
 ></TD
 ><TD
@@ -145,7 +161,7 @@ HREF="function.imagecolorsforindex.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->ImageColorResolve</TD
+>ImageGammaCorrect</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"

@@ -4,7 +4,7 @@
 >OCIPLogon</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="OCILogon"
 HREF="function.ocilogon.html"><LINK
 REL="NEXT"
 TITLE="OCINLogon"
-HREF="function.ocinlogon.html"></HEAD
+HREF="function.ocinlogon.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,43 +68,46 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.OCIPLOGON"
+NAME="function.ociplogon"
 >OCIPLogon</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN20075"
+NAME="AEN25725"
 ></A
->OCIPLogon -- Connect to an Oracle database and log on using a persistant connection. 
+><P
+>    (PHP3 &#62;= 3.0.8, PHP4 )</P
+>OCIPLogon&nbsp;--&nbsp;Connect to an Oracle database and log on using a persistant connection. 
     Returns a new session.</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN20078"
+NAME="AEN25728"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int OCIPLogon</CODE
->(string username, string password, string [<SPAN
-CLASS="OPTIONAL"
->db</SPAN
->]);<P
+>int <B
+CLASS="function"
+>OCIPLogon</B
+></CODE
+> (string username, string password [, string db])</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     <A
-HREF="function.ociplogon.html"
-><B
-CLASS="FUNCTION"
+>&#13;     <B
+CLASS="function"
 >OCIPLogon()</B
-></A
 > creates a persistent connection to
      an Oracle 8 database and logs on.  The optional third parameter
      can either contain the name of the local Oracle instance or the
@@ -111,19 +117,13 @@ CLASS="FUNCTION"
      (tnsnames.ora) to determine which database to connect to.
     </P
 ><P
->     See also <A
-HREF="function.ocilogon.html"
-><B
-CLASS="FUNCTION"
+>&#13;     See also <B
+CLASS="function"
 >OCILogon()</B
-></A
 > and
-     <A
-HREF="function.ocinlogon.html"
-><B
-CLASS="FUNCTION"
+     <B
+CLASS="function"
 >OCINLogon()</B
-></A
 >.</P
 ></DIV
 ><DIV

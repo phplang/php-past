@@ -4,20 +4,23 @@
 >imap_headers</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
-TITLE="IMAP functions"
+TITLE="IMAP, POP3 and NNTP functions"
 HREF="ref.imap.html"><LINK
 REL="PREVIOUS"
-TITLE="imap_header"
-HREF="function.imap-header.html"><LINK
+TITLE="imap_rfc822_parse_headers"
+HREF="function.imap-rfc822-parse-headers.html"><LINK
 REL="NEXT"
 TITLE="imap_listmailbox"
-HREF="function.imap-listmailbox.html"></HEAD
+HREF="function.imap-listmailbox.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -42,7 +45,7 @@ WIDTH="10%"
 ALIGN="left"
 VALIGN="bottom"
 ><A
-HREF="function.imap-header.html"
+HREF="function.imap-rfc822-parse-headers.html"
 >Prev</A
 ></TD
 ><TD
@@ -65,35 +68,47 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.IMAP-HEADERS"
+NAME="function.imap-headers"
 >imap_headers</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN12805"
+NAME="AEN15289"
 ></A
->imap_headers -- Returns headers for all messages in a mailbox</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>imap_headers&nbsp;--&nbsp;
+     Returns headers for all messages in a mailbox
+    </DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN12808"
+NAME="AEN15292"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->array imap_headers</CODE
->(int imap_stream);<P
+>array <B
+CLASS="function"
+>imap_headers</B
+></CODE
+> (int imap_stream)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Returns an array of string formatted with header info. One
-     element per mail message.</P
+>&#13;     Returns an array of string formatted with header info. One
+     element per mail message.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -110,7 +125,7 @@ WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
 ><A
-HREF="function.imap-header.html"
+HREF="function.imap-rfc822-parse-headers.html"
 >Prev</A
 ></TD
 ><TD
@@ -135,7 +150,7 @@ HREF="function.imap-listmailbox.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->imap_header</TD
+>imap_rfc822_parse_headers</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"

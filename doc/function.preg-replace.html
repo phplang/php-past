@@ -4,20 +4,23 @@
 >preg_replace</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
-TITLE="Perl-compatible Regular Expression functions"
+TITLE="Regular Expression Functions (Perl-Compatible)"
 HREF="ref.pcre.html"><LINK
 REL="PREVIOUS"
 TITLE="preg_match_all"
 HREF="function.preg-match-all.html"><LINK
 REL="NEXT"
 TITLE="preg_split"
-HREF="function.preg-split.html"></HEAD
+HREF="function.preg-split.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,206 +68,237 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.PREG-REPLACE"
+NAME="function.preg-replace"
 >preg_replace</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN22090"
+NAME="AEN30464"
 ></A
->preg_replace -- Perform a regular expression search and replace</DIV
+><P
+>    (PHP3 &#62;= 3.0.9, PHP4 )</P
+>preg_replace&nbsp;--&nbsp;Perform a regular expression search and replace</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN22093"
+NAME="AEN30467"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->mixed preg_replace</CODE
->(mixed pattern, mixed replacement, mixed subject);<P
+>mixed <B
+CLASS="function"
+>preg_replace</B
+></CODE
+> (mixed pattern, mixed replacement, mixed subject [, int 
+       limit])</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Searches <TT
-CLASS="PARAMETER"
+>&#13;     Searches <TT
+CLASS="parameter"
 ><I
 >subject</I
 ></TT
-> for matches to <TT
-CLASS="PARAMETER"
-><I
->     pattern</I
-></TT
-> and replaces them with <TT
-CLASS="PARAMETER"
-><I
->replacement
-     </I
-></TT
->.</P
-><P
->     <TT
-CLASS="PARAMETER"
-><I
->replacement</I
-></TT
-> may contain references of the form
+> for matches to
      <TT
-CLASS="LITERAL"
+CLASS="parameter"
+><I
+> pattern</I
+></TT
+> and replaces them with
+     <TT
+CLASS="parameter"
+><I
+>replacement </I
+></TT
+>. If
+     <TT
+CLASS="parameter"
+><I
+>limit</I
+></TT
+> is specified, then only
+     <TT
+CLASS="parameter"
+><I
+>limit</I
+></TT
+> matches will be replaced; if
+     <TT
+CLASS="parameter"
+><I
+>limit</I
+></TT
+> is omitted or is -1, then all
+     matches are replaced.
+    </P
+><P
+>&#13;     <TT
+CLASS="parameter"
+><I
+>Replacement</I
+></TT
+> may contain references of the
+     form <TT
+CLASS="literal"
 >\\<TT
-CLASS="REPLACEABLE"
+CLASS="replaceable"
 ><I
 >n</I
 ></TT
 ></TT
->.  Every such
-     reference will be replaced by the text captured by the
+>.  Every
+     such reference will be replaced by the text captured by the
      <TT
-CLASS="REPLACEABLE"
+CLASS="replaceable"
 ><I
 >n</I
 ></TT
->'th parenthesized pattern.  <TT
-CLASS="REPLACEABLE"
+>'th parenthesized pattern.
+     <TT
+CLASS="replaceable"
 ><I
->n
-     </I
+>n </I
 ></TT
->can be from 0 to 99, and <TT
-CLASS="LITERAL"
+>can be from 0 to 99, and
+     <TT
+CLASS="literal"
 >\\0</TT
-> refers to
-     the text matched by the whole pattern. Opening parentheses are
-     counted from left to right (starting from 1) to obtain the number
-     of the capturing subpattern.</P
+> refers to the text matched by the whole
+     pattern. Opening parentheses are counted from left to right
+     (starting from 1) to obtain the number of the capturing
+     subpattern.
+    </P
 ><P
->     If no matches are found in <TT
-CLASS="PARAMETER"
+>&#13;     If no matches are found in <TT
+CLASS="parameter"
 ><I
 >subject</I
 ></TT
 >, then
-     it will be returned unchanged.</P
+     it will be returned unchanged.
+    </P
 ><P
->     Every parameter to <B
-CLASS="FUNCTION"
+>&#13;     Every parameter to <B
+CLASS="function"
 >preg_replace()</B
-> can be an array.</P
+> can be an
+     array.
+    </P
 ><P
->     If <TT
-CLASS="PARAMETER"
+>&#13;     If <TT
+CLASS="parameter"
 ><I
 >subject</I
 ></TT
-> is an array, then the search and
-     replace is performed on every entry of <TT
-CLASS="PARAMETER"
+> is an array, then the search
+     and replace is performed on every entry of
+     <TT
+CLASS="parameter"
 ><I
 >subject</I
 ></TT
->,
-     and the return value is an array as well.</P
+>, and the return value is an array
+     as well.
+    </P
 ><P
->     If <TT
-CLASS="PARAMETER"
+>&#13;     If <TT
+CLASS="parameter"
 ><I
 >pattern</I
 ></TT
-> and <TT
-CLASS="PARAMETER"
+> and
+     <TT
+CLASS="parameter"
 ><I
 >replacement</I
+></TT
+> are arrays, then
+     <B
+CLASS="function"
+>preg_replace()</B
+> takes a value from each array
+     and uses them to do search and replace on
+     <TT
+CLASS="parameter"
+><I
+>subject</I
+></TT
+>.  If
+     <TT
+CLASS="parameter"
+><I
+>replacement</I
+></TT
+> has fewer values than
+     <TT
+CLASS="parameter"
+><I
+>pattern</I
+></TT
+>, then empty string is used for the
+     rest of replacement values.  If <TT
+CLASS="parameter"
+><I
+>pattern </I
 ></TT
 >
-     are arrays, then <B
-CLASS="FUNCTION"
->preg_replace()</B
-> takes a value from
-     each array and uses them to do search and replace on
-     <TT
-CLASS="PARAMETER"
-><I
->subject</I
-></TT
->.  If <TT
-CLASS="PARAMETER"
+     is an array and <TT
+CLASS="parameter"
 ><I
 >replacement</I
 ></TT
->
-     has fewer values than <TT
-CLASS="PARAMETER"
-><I
->pattern</I
-></TT
->, then empty string
-     is used for the rest of replacement values.  If <TT
-CLASS="PARAMETER"
-><I
->pattern
-     </I
-></TT
-> is an array and <TT
-CLASS="PARAMETER"
-><I
->replacement</I
-></TT
-> is a
-     string; then this replacement string is used for every value of
+> is a string;
+     then this replacement string is used for every value of
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >pattern</I
 ></TT
->.  The converse would not make sense,
-     though.</P
+>.  The converse would not make
+     sense, though.
+    </P
 ><P
->     <TT
-CLASS="LITERAL"
+>&#13;     <TT
+CLASS="literal"
 >/e</TT
 > modifier makes
      <B
-CLASS="FUNCTION"
+CLASS="function"
 >preg_replace()</B
 > treat the
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >replacement</I
 ></TT
 > parameter as PHP code after
      the appropriate references substitution is done. Tip: make sure
      that <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >replacement</I
 ></TT
 > constitutes a valid PHP
      code string, otherwise PHP will complain about a parse error at
      the line containing <B
-CLASS="FUNCTION"
+CLASS="function"
 >preg_replace()</B
 >.
-     <DIV
-CLASS="NOTE"
-><BLOCKQUOTE
-CLASS="NOTE"
+    </P
 ><P
-><B
->Note: </B
->       This modifier was added in PHP 4.0.</P
-></BLOCKQUOTE
-></DIV
-></P
-><P
->     <TABLE
+>&#13;     <TABLE
 WIDTH="100%"
 BORDER="0"
 CELLPADDING="0"
@@ -273,31 +307,47 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
 >Example 1. Replacing several values</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->$patterns = array("/(19|20\d{2})-(\d{1,2})-(\d{1,2})/", "/^\s*{(\w+)}\s*=/");
-$replace = array("\\3/\\4/\\1", "$\\1 =");
-print preg_replace($patterns, $replace, "{startDate} = 1999-5-27");
+CLASS="programlisting"
+>&#13;$patterns = array ("/(19|20\d{2})-(\d{1,2})-(\d{1,2})/", 
+                   "/^\s*{(\w+)}\s*=/");
+$replace = array ("\\3/\\4/\\1", "$\\1 =");
+print preg_replace ($patterns, $replace, "{startDate} = 1999-5-27");
       </PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR
 ></TABLE
 >
-
      This example will produce:
-
-     <PRE
-CLASS="PROGRAMLISTING"
->      $startDate = 5/27/1999
+     <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;$startDate = 5/27/1999
      </PRE
+></TD
+></TR
+></TABLE
 >
-
      <TABLE
 WIDTH="100%"
 BORDER="0"
@@ -307,44 +357,140 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
 >Example 2. Using /e modifier</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->preg_replace("/(&#60;\/?)(\w+)([^&#62;]*&#62;)/e", "'\\1'.strtoupper('\\2').'\\3'", $html_body);
+CLASS="programlisting"
+>&#13;preg_replace ("/(&#60;\/?)(\w+)([^&#62;]*&#62;)/e", 
+              "'\\1'.strtoupper('\\2').'\\3'", 
+              $html_body);
       </PRE
+></TD
+></TR
+></TABLE
 ><P
->       This would capitalize all HTML tags in the input text.</P
+>&#13;This would capitalize all HTML tags in the input text.
+      </P
 ></DIV
 ></TD
 ></TR
 ></TABLE
-></P
+>
+     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
 ><P
->     See also <A
+><B
+>Example 3. Convert HTML to text</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;// $document should contain an HTML document.
+// This will remove HTML tags, javascript sections
+// and white space. It will also convert some
+// common HTML entities to their text equivalent.
+
+$search = array ("'&#60;script[^&#62;]*?&#62;.*?&#60;/script&#62;'si",  // Strip out javascript
+                 "'&#60;[\/\!]*?[^&#60;&#62;]*?&#62;'si",  // Strip out html tags
+                 "'([\r\n])[\s]+'",  // Strip out white space
+                 "'&#38;(quote|#34);'i",  // Replace html entities
+                 "'&#38;(amp|#38);'i",
+                 "'&#38;(lt|#60);'i",
+                 "'&#38;(gt|#62);'i",
+                 "'&#38;(nbsp|#160);'i",
+                 "'&#38;(iexcl|#161);'i",
+                 "'&#38;(cent|#162);'i",
+                 "'&#38;(pound|#163);'i",
+                 "'&#38;(copy|#169);'i",
+                 "'&#38;#(\d+);'e");  // evaluate as php
+
+$replace = array ("",
+                  "",
+                  "\\1",
+                  "\"",
+                  "&#38;",
+                  "&#60;",
+                  "&#62;",
+                  " ",
+                  chr(161),
+                  chr(162),
+                  chr(163),
+                  chr(169),
+                  "chr(\\1)");
+
+$text = preg_replace ($search, $replace, $document);
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+    </P
+><DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
+><P
+><B
+>Note: </B
+>
+      Parameter <TT
+CLASS="parameter"
+><I
+>limit</I
+></TT
+> was added after PHP 4.0.1pl2.
+     </P
+></BLOCKQUOTE
+></DIV
+><P
+>&#13;     See also <A
 HREF="function.preg-match.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >preg_match()</B
 ></A
 >,
      <A
 HREF="function.preg-match-all.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >preg_match_all()</B
 ></A
 >, and
      <A
 HREF="function.preg-split.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >preg_split()</B
 ></A
->.</P
+>.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

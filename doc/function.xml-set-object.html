@@ -4,7 +4,7 @@
 >xml_set_object</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="xml_parser_create"
 HREF="function.xml-parser-create.html"><LINK
 REL="NEXT"
 TITLE="xml_set_element_handler"
-HREF="function.xml-set-element-handler.html"></HEAD
+HREF="function.xml-set-element-handler.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,62 +68,77 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.XML-SET-OBJECT"
+NAME="function.xml-set-object"
 >xml_set_object</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN27395"
+NAME="AEN36472"
 ></A
->xml_set_object -- Use XML Parser withing an object</DIV
+><P
+>    (PHP4 &#62;= 4.0b4)</P
+>xml_set_object&nbsp;--&nbsp;Use XML Parser within an object</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN27398"
+NAME="AEN36475"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->void xml_set_object</CODE
->(int parser, object &amp;object);<P
+>void <B
+CLASS="function"
+>xml_set_object</B
+></CODE
+> (int parser, object &#38;object)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     This function makes <TT
-CLASS="PARAMETER"
+>&#13;     This function allows to use <TT
+CLASS="parameter"
 ><I
 >parser</I
 ></TT
-> useable from
-     within <TT
-CLASS="PARAMETER"
+> inside
+     <TT
+CLASS="parameter"
 ><I
 >object</I
 ></TT
->. All callback functions
-     settet via <A
+>. All callback functions could be
+     set with <A
 HREF="function.xml-set-element-handler.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >xml_set_element_handler()</B
 ></A
-> etc are
+> etc and
      assumed to be methods of <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >object</I
 ></TT
 >.
     </P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->&lt;?php
+CLASS="programlisting"
+>&#13;&#60;?php
 class xml  {
 var $parser;
 
@@ -150,27 +168,12 @@ function tag_close($parser,$tag) {
 } // end of class xml
 
 $xml_parser = new xml();
-$xml_parser-&#62;parse("&lt;A ID=\"hallo\"&#62;PHP&lt;/A&#62;");
+$xml_parser-&#62;parse("&#60;A ID=\"hallo\"&#62;PHP&#60;/A&#62;");
 ?&#62;
-   </PRE
-><P
->     <DIV
-CLASS="NOTE"
-><BLOCKQUOTE
-CLASS="NOTE"
-><P
-><B
->Note: </B
->       <B
-CLASS="FUNCTION"
->xml_set_object()</B
-> handling was added in PHP
-       4.0.
-      </P
-></BLOCKQUOTE
-></DIV
->
-    </P
+    </PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

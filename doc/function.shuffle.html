@@ -4,20 +4,23 @@
 >shuffle</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
-TITLE="Array functions"
+TITLE="Array Functions"
 HREF="ref.array.html"><LINK
 REL="PREVIOUS"
 TITLE="rsort"
 HREF="function.rsort.html"><LINK
 REL="NEXT"
 TITLE="sizeof"
-HREF="function.sizeof.html"></HEAD
+HREF="function.sizeof.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,34 +68,43 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.SHUFFLE"
+NAME="function.shuffle"
 >shuffle</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN4459"
+NAME="AEN4892"
 ></A
->shuffle -- Shuffle an array</DIV
+><P
+>    (PHP3 &#62;= 3.0.8, PHP4 &#62;= 4.0b4)</P
+>shuffle&nbsp;--&nbsp;Shuffle an array</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN4462"
+NAME="AEN4895"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->void shuffle</CODE
->(array array);<P
+>void <B
+CLASS="function"
+>shuffle</B
+></CODE
+> (array array)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     This function shuffles (randomizes the order of the elements in)
+>&#13;     This function shuffles (randomizes the order of the elements in)
      an array.
      <TABLE
 WIDTH="100%"
@@ -103,67 +115,79 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
 >Example 1. <B
-CLASS="FUNCTION"
->shuffle()</B
+CLASS="function"
+>Shuffle()</B
 > example</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->$numbers = range(1,20);
-srand(time());
-shuffle($numbers);
-while (list(,$number) = each($numbers)) {
+CLASS="programlisting"
+>&#13;$numbers = range (1,20);
+srand (time());
+shuffle ($numbers);
+while (list (, $number) = each ($numbers)) {
     echo "$number ";
-}</PRE
+}
+      </PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR
 ></TABLE
-></P
+>
+    </P
 ><P
->     See also <A
+>&#13;     See also <A
 HREF="function.arsort.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >arsort()</B
 ></A
 >, <A
 HREF="function.asort.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >asort()</B
 ></A
 >,
      <A
 HREF="function.ksort.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >ksort()</B
 ></A
 >, <A
 HREF="function.rsort.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >rsort()</B
 ></A
 >,
      <A
 HREF="function.sort.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >sort()</B
 ></A
 > and <A
 HREF="function.usort.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >usort()</B
 ></A
->.</P
+>.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

@@ -4,7 +4,7 @@
 >Ora_Exec</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="Ora_ErrorCode"
 HREF="function.ora-errorcode.html"><LINK
 REL="NEXT"
 TITLE="Ora_Fetch"
-HREF="function.ora-fetch.html"></HEAD
+HREF="function.ora-fetch.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,48 +68,80 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.ORA-EXEC"
+NAME="function.ora-exec"
 >Ora_Exec</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN19848"
+NAME="AEN25397"
 ></A
->Ora_Exec -- execute parsed statement on an Oracle cursor</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>Ora_Exec&nbsp;--&nbsp;execute parsed statement on an Oracle cursor</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN19851"
+NAME="AEN25400"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int ora_exec</CODE
->(int cursor);<P
+>int <B
+CLASS="function"
+>ora_exec</B
+></CODE
+> (int cursor)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Returns true on success, false on error.  Details about the error
+>&#13;     Returns true on success, false on error. Details about the error
      can be retrieved using the <A
 HREF="function.ora-error.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >ora_error()</B
 ></A
 > and
      <A
 HREF="function.ora-errorcode.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >ora_errorcode()</B
 ></A
-> functions.</P
+> functions.
+    </P
+><P
+>&#13;     See also <A
+HREF="function.ora-parse.html"
+><B
+CLASS="function"
+>ora_parse()</B
+></A
+>,
+     <A
+HREF="function.ora-fetch.html"
+><B
+CLASS="function"
+>ora_fetch()</B
+></A
+>, and <A
+HREF="function.ora-do.html"
+><B
+CLASS="function"
+>ora_do()</B
+></A
+>.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

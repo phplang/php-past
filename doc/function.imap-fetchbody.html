@@ -4,20 +4,23 @@
 >imap_fetchbody</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
-TITLE="IMAP functions"
+TITLE="IMAP, POP3 and NNTP functions"
 HREF="ref.imap.html"><LINK
 REL="PREVIOUS"
 TITLE="imap_expunge"
 HREF="function.imap-expunge.html"><LINK
 REL="NEXT"
 TITLE="imap_fetchstructure"
-HREF="function.imap-fetchstructure.html"></HEAD
+HREF="function.imap-fetchstructure.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,63 +68,84 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.IMAP-FETCHBODY"
+NAME="function.imap-fetchbody"
 >imap_fetchbody</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN12664"
+NAME="AEN15072"
 ></A
->imap_fetchbody -- Fetch a particular section of the body of the
-    message</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>imap_fetchbody&nbsp;--&nbsp;
+     Fetch a particular section of the body of the message
+    </DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN12667"
+NAME="AEN15075"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->string imap_fetchbody</CODE
->(int imap_stream, int msg_number, string part_number, flags flags);<P
+>string <B
+CLASS="function"
+>imap_fetchbody</B
+></CODE
+> (int imap_stream, int msg_number, string part_number [, flags 
+       flags])</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     This function causes a fetch of a particular section of the body
+>&#13;     This function causes a fetch of a particular section of the body
      of the specified messages as a text string and returns that text
      string. The section specification is a string of integers
      delimited by period which index into a body part list as per the
-     IMAP4 specification. Body parts are not decoded by this function.</P
+     IMAP4 specification. Body parts are not decoded by this function.
+    </P
 ><P
->     The options for <B
-CLASS="FUNCTION"
->imap_fetchbody ()</B
->e a bitmask
-     with one or more of the following
+>&#13;     The options for <B
+CLASS="function"
+>imap_fetchbody()</B
+> is a bitmask
+     with one or more of the following:
      <P
 ></P
 ><UL
 ><LI
 ><P
->	FT_UID - The msgono is a UID</P
+>&#13;	FT_UID - The <TT
+CLASS="parameter"
+><I
+>msg_number</I
+></TT
+> is a UID
+       </P
 ></LI
 ><LI
 ><P
->	FT_PEEK - Do not set the \Seen flag if not already set</P
+>&#13;	FT_PEEK - Do not set the \Seen flag if not already set
+       </P
 ></LI
 ><LI
 ><P
->	FT_UID - The return string is in "internal" format, without
-	any attempt to canonicalize CRLF</P
+>&#13;	FT_INTERNAL - The return string is in "internal" format,
+	without any attempt to canonicalize CRLF.
+       </P
 ></LI
 ></UL
-></P
+>
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

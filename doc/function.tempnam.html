@@ -4,7 +4,7 @@
 >tempnam</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -15,9 +15,12 @@ REL="PREVIOUS"
 TITLE="symlink"
 HREF="function.symlink.html"><LINK
 REL="NEXT"
-TITLE="touch"
-HREF="function.touch.html"></HEAD
+TITLE="tmpfile"
+HREF="function.tmpfile.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -55,7 +58,7 @@ WIDTH="10%"
 ALIGN="right"
 VALIGN="bottom"
 ><A
-HREF="function.touch.html"
+HREF="function.tmpfile.html"
 >Next</A
 ></TD
 ></TR
@@ -65,64 +68,74 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.TEMPNAM"
+NAME="function.tempnam"
 >tempnam</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN9440"
+NAME="AEN10846"
 ></A
->tempnam -- create unique file name</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>tempnam&nbsp;--&nbsp;Creates unique file name</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN9443"
+NAME="AEN10849"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->string tempnam</CODE
->(string dir, string prefix);<P
+>string <B
+CLASS="function"
+>tempnam</B
+></CODE
+> (string dir, string prefix)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Creates a unique temporary filename in the specified directory.
+>&#13;     Creates a unique temporary filename in the specified directory.
      If the directory does not exist, <B
-CLASS="FUNCTION"
+CLASS="function"
 >tempnam()</B
->
-     may generate a filename in the system's temporary directory.</P
+> may
+     generate a filename in the system's temporary directory.
+    </P
 ><P
->     The behaviour of the <B
-CLASS="FUNCTION"
+>&#13;     The behaviour of the <B
+CLASS="function"
 >tempnam()</B
 > function is
      system dependent. On Windows the TMP environment variable will
      override the <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >dir</I
 ></TT
 > parameter, on Linux the
      TMPDIR environment variable has precedence, while SVR4 will always
      use your <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >dir</I
 ></TT
 > parameter if the directory it
      points to exists. Consult your system documentation on the 
-     tempnam(3) function if in doubt.</P
+     tempnam(3) function if in doubt.
+    </P
 ><P
->     Returns the new temporary filename, or the null string on
+>&#13;     Returns the new temporary filename, or the null string on
      failure.
-
      <TABLE
 WIDTH="100%"
 BORDER="0"
@@ -132,19 +145,42 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
->Example 1. tempnam() example</B
+>Example 1. <B
+CLASS="function"
+>Tempnam()</B
+> example</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->$tmpfname = tempnam( "/tmp", "FOO" );</PRE
+CLASS="programlisting"
+>&#13;$tmpfname = tempnam ("/tmp", "FOO");
+      </PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR
 ></TABLE
-></P
+>
+    </P
+><P
+>&#13;	 See also <A
+HREF="function.tmpfile.html"
+><B
+CLASS="function"
+>tmpfile()</B
+></A
+>.
+	</P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -177,7 +213,7 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><A
-HREF="function.touch.html"
+HREF="function.tmpfile.html"
 >Next</A
 ></TD
 ></TR
@@ -199,7 +235,7 @@ HREF="ref.filesystem.html"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->touch</TD
+>tmpfile</TD
 ></TR
 ></TABLE
 ></DIV

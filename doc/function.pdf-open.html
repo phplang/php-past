@@ -4,7 +4,7 @@
 >PDF_open</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -12,12 +12,15 @@ REL="UP"
 TITLE="PDF functions"
 HREF="ref.pdf.html"><LINK
 REL="PREVIOUS"
-TITLE="PDF_set_info_author"
-HREF="function.pdf-set-info-author.html"><LINK
+TITLE="PDF_set_info"
+HREF="function.pdf-set-info.html"><LINK
 REL="NEXT"
 TITLE="PDF_close"
-HREF="function.pdf-close.html"></HEAD
+HREF="function.pdf-close.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -42,7 +45,7 @@ WIDTH="10%"
 ALIGN="left"
 VALIGN="bottom"
 ><A
-HREF="function.pdf-set-info-author.html"
+HREF="function.pdf-set-info.html"
 >Prev</A
 ></TD
 ><TD
@@ -65,55 +68,61 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.PDF-OPEN"
+NAME="function.pdf-open"
 >PDF_open</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN20783"
+NAME="AEN26350"
 ></A
->PDF_open -- Opens a new pdf document</DIV
+><P
+>    (PHP3 &#62;= 3.0.6, PHP4 )</P
+>PDF_open&nbsp;--&nbsp;Opens a new pdf document</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN20786"
+NAME="AEN26353"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int pdf_open</CODE
->(int file, int info);<P
+>int <B
+CLASS="function"
+>pdf_open</B
+></CODE
+> (int file, int info)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     The <A
-HREF="function.pdf-open.html"
-><B
-CLASS="FUNCTION"
+>&#13;     The <B
+CLASS="function"
 >PDF_open()</B
-></A
 > function opens
      a new pdf document. The corresponding file has to be opened
      with <A
 HREF="function.fopen.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >fopen()</B
 ></A
 > and the file descriptor passed
      as argument <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >file</I
 ></TT
 >. <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >info</I
 ></TT
@@ -122,20 +131,21 @@ CLASS="PARAMETER"
      <A
 HREF="function.pdf-get-info.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >pdf_get_info()</B
 ></A
 >. The info structure will be deleted
      within this function.
 
     <DIV
-CLASS="NOTE"
+CLASS="note"
 ><BLOCKQUOTE
-CLASS="NOTE"
+CLASS="note"
 ><P
 ><B
 >Note: </B
->     The return value is needed as the first parameter in all other
+>
+     The return value is needed as the first parameter in all other
      functions writing to the pdf document.
     </P
 ></BLOCKQUOTE
@@ -143,39 +153,34 @@ CLASS="NOTE"
 >
 
     <DIV
-CLASS="NOTE"
+CLASS="note"
 ><BLOCKQUOTE
-CLASS="NOTE"
+CLASS="note"
 ><P
 ><B
 >Note: </B
->     This function does not allow the second parameter if pdflib 2.0 support
+>
+     This function does not allow the second parameter if pdflib 2.0 support
      is activated.
     </P
 ></BLOCKQUOTE
 ></DIV
 ></P
 ><P
->     See also <A
+>&#13;     See also <A
 HREF="function.fopen.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >fopen()</B
 ></A
 >,
-              <A
-HREF="function.pdf-get-info.html"
-><B
-CLASS="FUNCTION"
+              <B
+CLASS="function"
 >PDF_get_info()</B
-></A
 >,
-              <A
-HREF="function.pdf-close.html"
-><B
-CLASS="FUNCTION"
+              <B
+CLASS="function"
 >PDF_close()</B
-></A
 >.</P
 ></DIV
 ><DIV
@@ -193,7 +198,7 @@ WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
 ><A
-HREF="function.pdf-set-info-author.html"
+HREF="function.pdf-set-info.html"
 >Prev</A
 ></TD
 ><TD
@@ -218,7 +223,7 @@ HREF="function.pdf-close.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->PDF_set_info_author</TD
+>PDF_set_info</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"

@@ -4,7 +4,7 @@
 >ifx_connect</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="Informix functions"
 HREF="ref.ifx.html"><LINK
 REL="NEXT"
 TITLE="ifx_pconnect"
-HREF="function.ifx-pconnect.html"></HEAD
+HREF="function.ifx-pconnect.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,72 +68,70 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.IFX-CONNECT"
+NAME="function.ifx-connect"
 >ifx_connect</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN13515"
+NAME="AEN16328"
 ></A
->ifx_connect -- Open Informix server connection</DIV
+><P
+>    (PHP3 &#62;= 3.0.3, PHP4 )</P
+>ifx_connect&nbsp;--&nbsp;Open Informix server connection</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN13518"
+NAME="AEN16331"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int ifx_connect</CODE
->(string [<SPAN
-CLASS="OPTIONAL"
->database</SPAN
->]
-                      , string [<SPAN
-CLASS="OPTIONAL"
->userid</SPAN
->]
-                      , string [<SPAN
-CLASS="OPTIONAL"
->password</SPAN
->]
-                      );<P
+>int <B
+CLASS="function"
+>ifx_connect</B
+></CODE
+> ([string database [, string userid [, string password]]])</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
 > 
-     Returns an connection identifier on success, or FALSE on
+     Returns a connection identifier on success, or FALSE on
      error.
     </P
 ><P
 > 
      <B
-CLASS="FUNCTION"
+CLASS="function"
 >ifx_connect()</B
 > establishes a connection to an
-     Informix server.  All of the arguments are optional, and if they're
-     missing, defaults are taken from values supplied in <A
-HREF="configuration.html#CONFIGURATION.FILE"
+     Informix server.  All of the arguments are optional, and if
+     they're missing, defaults are taken from values supplied in <A
+HREF="configuration.html#configuration.file"
 >configuration file</A
 >
      (ifx.default_host for the host (Informix libraries will use
      <TT
-CLASS="ENVAR"
+CLASS="envar"
 >INFORMIXSERVER</TT
-> environment value if not defined), ifx.default_user
-     for user, ifx.default_password for the password (none if not defined).
+> environment value if not defined),
+     ifx.default_user for user, ifx.default_password for the password
+     (none if not defined).
     </P
 ><P
 > 
      In case a second call is made to
      <B
-CLASS="FUNCTION"
+CLASS="function"
 >ifx_connect()</B
 > with the same arguments, no
      new link will be established, but instead, the link identifier of
@@ -143,7 +144,7 @@ CLASS="FUNCTION"
      <A
 HREF="function.ifx-close.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >ifx_close()</B
 ></A
 >.
@@ -153,14 +154,14 @@ CLASS="FUNCTION"
      See also <A
 HREF="function.ifx-pconnect.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >ifx_pconnect()</B
 ></A
->, and 
-              <A
+>, and
+     <A
 HREF="function.ifx-close.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >ifx_close()</B
 ></A
 >.
@@ -173,20 +174,30 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
 >Example 1. Connect to a Informix database</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->$conn_id = ifx_pconnect (mydb@ol_srv1, "imyself", "mypassword");
+CLASS="programlisting"
+>&#13;$conn_id = ifx_connect ("mydb@ol_srv1", "imyself", "mypassword");
       </PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR
 ></TABLE
-></P
+>
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

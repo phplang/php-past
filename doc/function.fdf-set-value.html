@@ -4,7 +4,7 @@
 >fdf_set_value</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="fdf_get_value"
 HREF="function.fdf-get-value.html"><LINK
 REL="NEXT"
 TITLE="fdf_next_field_name"
-HREF="function.fdf-next-field-name.html"></HEAD
+HREF="function.fdf-next-field-name.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,55 +68,64 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.FDF-SET-VALUE"
+NAME="function.fdf-set-value"
 >fdf_set_value</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN9621"
+NAME="AEN11075"
 ></A
->fdf_set_value -- Set the value of a field</DIV
+><P
+>    (PHP3 &#62;= 3.0.6, PHP4 )</P
+>fdf_set_value&nbsp;--&nbsp;Set the value of a field</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN9624"
+NAME="AEN11078"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->void fdf_set_value</CODE
->(int fdf_document, string fieldname, string value, int isName);<P
+>void <B
+CLASS="function"
+>fdf_set_value</B
+></CODE
+> (int fdf_document, string fieldname, string value, int isName)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     The <B
-CLASS="FUNCTION"
+>&#13;     The <B
+CLASS="function"
 >fdf_set_value()</B
 > function sets the
      value of a field. The last parameter determines if the field value
      is to be converted to a PDF Name (<TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >isName</I
 ></TT
 > = 1)
      or set to a PDF String (<TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >isName</I
 ></TT
 > = 0).</P
 ><P
->     See also <A
+>&#13;     See also <A
 HREF="function.fdf-get-value.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >fdf_get_value()</B
 ></A
 >.</P

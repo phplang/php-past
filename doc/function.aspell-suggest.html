@@ -4,7 +4,7 @@
 >aspell_suggest</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -15,9 +15,12 @@ REL="PREVIOUS"
 TITLE="aspell_check-raw"
 HREF="function.aspell-check-raw.html"><LINK
 REL="NEXT"
-TITLE="Calendar functions"
-HREF="ref.calendar.html"></HEAD
+TITLE="BCMath Arbitrary Precision Mathematics Functions"
+HREF="ref.bc.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -55,7 +58,7 @@ WIDTH="10%"
 ALIGN="right"
 VALIGN="bottom"
 ><A
-HREF="ref.calendar.html"
+HREF="ref.bc.html"
 >Next</A
 ></TD
 ></TR
@@ -65,40 +68,50 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.ASPELL-SUGGEST"
+NAME="function.aspell-suggest"
 >aspell_suggest</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN4655"
+NAME="AEN5157"
 ></A
->aspell_suggest -- suggest spellings of a word</DIV
+><P
+>    (PHP3 &#62;= 3.0.7, PHP4 )</P
+>aspell_suggest&nbsp;--&nbsp;Suggest spellings of a word</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN4658"
+NAME="AEN5160"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->array aspell_suggest</CODE
->(int dictionary_link, string word);<P
+>array <B
+CLASS="function"
+>aspell_suggest</B
+></CODE
+> (int dictionary_link, string word)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     <B
-CLASS="FUNCTION"
->aspell_suggest()</B
+>&#13;     <B
+CLASS="function"
+>Aspell_suggest()</B
 > returns an array of possible
-     spellings for the given word.</P
+     spellings for the given word.
+    </P
 ><P
->     <TABLE
+>&#13;     <TABLE
 WIDTH="100%"
 BORDER="0"
 CELLPADDING="0"
@@ -107,28 +120,41 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
->Example 1. aspell_suggest</B
+>Example 1. <B
+CLASS="function"
+>Aspell_suggest()</B
+></B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->$aspell_link=aspell_new("english");
+CLASS="programlisting"
+>&#13;$aspell_link=aspell_new ("english");
 
-if (!aspell_check($aspell_link,"testt")) {
-    $suggestions=aspell_suggest($aspell_link,"testt");
+if (!aspell_check ($aspell_link, "test")) {
+    $suggestions=aspell_suggest ($aspell_link, "test");
 
-    for($i=0; $i &lt; count($suggestions); $i++) {
-       echo "Possible spelling: " . $suggestions[$i] . "&lt;br&#62;"; 
+    for ($i=0; $i &#60; count ($suggestions); $i++) {
+        echo "Possible spelling: " . $suggestions[$i] . "&#60;br&#62;"; 
     }
 }
       </PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR
 ></TABLE
-></P
+>
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -161,7 +187,7 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><A
-HREF="ref.calendar.html"
+HREF="ref.bc.html"
 >Next</A
 ></TD
 ></TR
@@ -183,7 +209,7 @@ HREF="ref.aspell.html"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->Calendar functions</TD
+>BCMath Arbitrary Precision Mathematics Functions</TD
 ></TR
 ></TABLE
 ></DIV

@@ -4,20 +4,23 @@
 >rawurlencode</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
-TITLE="String functions"
-HREF="ref.strings.html"><LINK
+TITLE="URL Functions"
+HREF="ref.url.html"><LINK
 REL="PREVIOUS"
 TITLE="rawurldecode"
 HREF="function.rawurldecode.html"><LINK
 REL="NEXT"
-TITLE="setlocale"
-HREF="function.setlocale.html"></HEAD
+TITLE="urldecode"
+HREF="function.urldecode.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -55,7 +58,7 @@ WIDTH="10%"
 ALIGN="right"
 VALIGN="bottom"
 ><A
-HREF="function.setlocale.html"
+HREF="function.urldecode.html"
 >Next</A
 ></TD
 ></TR
@@ -65,40 +68,58 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.RAWURLENCODE"
+NAME="function.rawurlencode"
 >rawurlencode</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN25377"
+NAME="AEN35401"
 ></A
->rawurlencode -- URL-encode according to RFC1738</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>rawurlencode&nbsp;--&nbsp;URL-encode according to RFC1738</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN25380"
+NAME="AEN35404"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->string rawurlencode</CODE
->(string str);<P
+>string <B
+CLASS="function"
+>rawurlencode</B
+></CODE
+> (string str)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Returns a string in which all non-alphanumeric characters except
-     <PRE
-CLASS="SCREEN"
+>&#13;     Returns a string in which all non-alphanumeric characters except
+     <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="screen"
 >-_.</PRE
+></TD
+></TR
+></TABLE
 > have been replaced with a percent
      (<TT
-CLASS="LITERAL"
+CLASS="literal"
 >%</TT
 >) sign followed by two hex digits.  This is
      the encoding described in RFC1738 for protecting literal
@@ -115,26 +136,34 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
 >Example 1. <B
-CLASS="FUNCTION"
->rawurlencode()</B
+CLASS="function"
+>Rawurlencode()</B
 > example 1</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->echo '&lt;A HREF="ftp://user:', rawurlencode ('foo @+%/'),
-     '@ftp.my.com/x.txt"&#62;';</PRE
+CLASS="programlisting"
+>&#13;echo '&#60;A HREF="ftp://user:', rawurlencode ('foo @+%/'),
+     '@ftp.my.com/x.txt"&#62;';
+      </PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR
 ></TABLE
 >
-
      Or, if you pass information in a path info component of the url:
-
      <TABLE
 WIDTH="100%"
 BORDER="0"
@@ -144,31 +173,57 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
 >Example 2. <B
-CLASS="FUNCTION"
->rawurlencode()</B
+CLASS="function"
+>Rawurlencode()</B
 > example 2</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->echo '&lt;A HREF="http://x.com/department_list_script/',
-     rawurlencode ('sales and marketing/Miami'), '"&#62;';</PRE
+CLASS="programlisting"
+>&#13;echo '&#60;A HREF="http://x.com/department_list_script/',
+    rawurlencode ('sales and marketing/Miami'), '"&#62;';
+      </PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR
 ></TABLE
-></P
+>
+    </P
 ><P
->     See also <A
+>&#13;     See also <A
 HREF="function.rawurldecode.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >rawurldecode()</B
 ></A
->.</P
+>,
+		          <A
+HREF="function.urldecode.html"
+><B
+CLASS="function"
+>urldecode()</B
+></A
+>,
+							<A
+HREF="function.urlencode.html"
+><B
+CLASS="function"
+>urlencode()</B
+></A
+>.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -201,7 +256,7 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><A
-HREF="function.setlocale.html"
+HREF="function.urldecode.html"
 >Next</A
 ></TD
 ></TR
@@ -216,14 +271,14 @@ WIDTH="34%"
 ALIGN="center"
 VALIGN="top"
 ><A
-HREF="ref.strings.html"
+HREF="ref.url.html"
 >Up</A
 ></TD
 ><TD
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->setlocale</TD
+>urldecode</TD
 ></TR
 ></TABLE
 ></DIV

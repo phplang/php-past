@@ -4,7 +4,7 @@
 >PDF_add_outline</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="PDF_setrgbcolor"
 HREF="function.pdf-setrgbcolor.html"><LINK
 REL="NEXT"
 TITLE="PDF_set_transition"
-HREF="function.pdf-set-transition.html"></HEAD
+HREF="function.pdf-set-transition.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,48 +68,70 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.PDF-ADD-OUTLINE"
+NAME="function.pdf-add-outline"
 >PDF_add_outline</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN21722"
+NAME="AEN27494"
 ></A
->PDF_add_outline -- Adds bookmark for current page</DIV
+><P
+>    (PHP3 &#62;= 3.0.6, PHP4 )</P
+>PDF_add_outline&nbsp;--&nbsp;Adds bookmark for current page</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN21725"
+NAME="AEN27497"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->void pdf_add_outline</CODE
->(int pdf document, string text);<P
+>int <B
+CLASS="function"
+>pdf_add_outline</B
+></CODE
+> (int pdf document, string text [, int parent [, int open]])</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     The <A
-HREF="function.pdf-add-outline.html"
-><B
-CLASS="FUNCTION"
+>&#13;     The <B
+CLASS="function"
 >PDF_add_outline()</B
-></A
 > function adds a bookmark
      with text <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >text</I
 ></TT
-> that points to the current page.</P
+> that points to the current page.
+     The bookmark is inserted as a child of <TT
+CLASS="parameter"
+><I
+>parent</I
+></TT
+> and
+     is by default open if <TT
+CLASS="parameter"
+><I
+>open</I
+></TT
+> is not 0. The
+     return value is an identifier for the bookmark which can be used
+     as a parent for other bookmarks. Therefore you can build up hierarchies
+     of bookmarks.
+    </P
 ><P
->     Unfortunately pdflib does not make a copy of the string, which forces
+>&#13;     Unfortunately pdflib does not make a copy of the string, which forces
      PHP to allocate the memory. Currently this piece of memory is not
      been freed by any PDF function but it will be taken care of by the
      PHP memory manager.</P

@@ -4,7 +4,7 @@
 >mssql_query</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="mssql_pconnect"
 HREF="function.mssql-pconnect.html"><LINK
 REL="NEXT"
 TITLE="mssql_result"
-HREF="function.mssql-result.html"></HEAD
+HREF="function.mssql-result.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,67 +68,81 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.MSSQL-QUERY"
+NAME="function.mssql-query"
 >mssql_query</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN16554"
+NAME="AEN21092"
 ></A
->mssql_query -- send MS SQL query</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>mssql_query&nbsp;--&nbsp;Send MS SQL query</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN16557"
+NAME="AEN21095"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int mssql_query</CODE
->(string query, int link_identifier);<P
+>int <B
+CLASS="function"
+>mssql_query</B
+></CODE
+> (string query [, int 
+       link_identifier])</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
-> Returns: A positive MS SQL result identifier on success, or
-    false on error.
+> 
+     Returns: A positive MS SQL result identifier on success, or false
+     on error.
     </P
 ><P
-> mssql_query() sends a query to the currently active
-    database on the server that's associated with the specified link
-    identifier.  If the link identifier isn't specified, the last
-    opened link is assumed.  If no link is open, the function tries to
-    establish a link as if <A
+> 
+     <B
+CLASS="function"
+>Mssql_query()</B
+> sends a query to the currently
+     active database on the server that's associated with the
+     specified link identifier.  If the link identifier isn't
+     specified, the last opened link is assumed.  If no link is open,
+     the function tries to establish a link as if
+     <A
 HREF="function.mssql-connect.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >mssql_connect()</B
 ></A
-> was
-    called, and use it.
+> was called, and use it.
     </P
 ><P
->     See also:  
-     <B
-CLASS="FUNCTION"
+>&#13;     See also: <B
+CLASS="function"
 >mssql_db_query()</B
->, 
+>,
      <A
 HREF="function.mssql-select-db.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >mssql_select_db()</B
 ></A
->, and 
+>, and
      <A
 HREF="function.mssql-connect.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >mssql_connect()</B
 ></A
 >.

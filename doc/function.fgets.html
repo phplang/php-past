@@ -4,7 +4,7 @@
 >fgets</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="fgetcsv"
 HREF="function.fgetcsv.html"><LINK
 REL="NEXT"
 TITLE="fgetss"
-HREF="function.fgetss.html"></HEAD
+HREF="function.fgetss.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,69 +68,84 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.FGETS"
+NAME="function.fgets"
 >fgets</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN8543"
+NAME="AEN9738"
 ></A
->fgets -- get line from file pointer</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>fgets&nbsp;--&nbsp;Gets line from file pointer</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN8546"
+NAME="AEN9741"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->string fgets</CODE
->(int fp, int length);<P
+>string <B
+CLASS="function"
+>fgets</B
+></CODE
+> (int fp, int length)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Returns a string of up to length - 1 bytes read from the file
+>&#13;     Returns a string of up to length - 1 bytes read from the file
      pointed to by fp. Reading ends when length - 1 bytes have been
-     read, on a newline (which is included in the return value), or
-	 on EOF (whichever comes first).</P
+     read, on a newline (which is included in the return value), or on
+     EOF (whichever comes first).
+    </P
 ><P
->	 If an error occurs, returns false.</P
+>&#13;     If an error occurs, returns false.
+    </P
 ><P
->    Common Pitfalls:</P
+>&#13;     Common Pitfalls:
+    </P
 ><P
->         People used to the 'C' semantics of fgets should note the difference
-         in how EOF is returned.</P
+>&#13;     People used to the 'C' semantics of fgets should note the
+     difference in how EOF is returned.
+    </P
 ><P
->	 The file pointer must be valid, and must point to a file
+>&#13;     The file pointer must be valid, and must point to a file
      successfully opened by <A
 HREF="function.fopen.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >fopen()</B
 ></A
 >,
      <A
 HREF="function.popen.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >popen()</B
 ></A
->, or <A
+>, or
+     <A
 HREF="function.fsockopen.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >fsockopen()</B
 ></A
->.</P
+>.
+    </P
 ><P
->    A simple example follows:
-    <TABLE
+>&#13;     A simple example follows:
+     <TABLE
 WIDTH="100%"
 BORDER="0"
 CELLPADDING="0"
@@ -136,58 +154,78 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
 >Example 1. Reading a file line by line</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->$fd = fopen("/tmp/inputfile.txt", "r");
-while (!feof($fd)) {
-  $buffer = fgets($fd, 4096);
-  echo $buffer;
+CLASS="programlisting"
+>&#13;$fd = fopen ("/tmp/inputfile.txt", "r");
+while (!feof ($fd)) {
+    $buffer = fgets($fd, 4096);
+    echo $buffer;
 }
-fclose($fd);</PRE
+fclose ($fd);
+      </PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR
 ></TABLE
-></P
+>
+    </P
 ><P
-> See also <A
+> 
+     See also <A
 HREF="function.fread.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >fread()</B
+></A
+>, <A
+HREF="function.fopen.html"
+><B
+CLASS="function"
+>fopen()</B
 ></A
 >,
      <A
-HREF="function.fopen.html"
-><B
-CLASS="FUNCTION"
->fopen()</B
-></A
->, <A
 HREF="function.popen.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >popen()</B
 ></A
->, 
-     <A
+>, <A
 HREF="function.fgetc.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >fgetc()</B
 ></A
->, and <A
+>,
+     <A
 HREF="function.fsockopen.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >fsockopen()</B
 ></A
->.</P
+>, and
+     <A
+HREF="function.socket-set-timeout.html"
+><B
+CLASS="function"
+>socket_set_timeout()</B
+></A
+>.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

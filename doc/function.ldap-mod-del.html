@@ -4,7 +4,7 @@
 >ldap_mod_del</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="ldap_mod_add"
 HREF="function.ldap-mod-add.html"><LINK
 REL="NEXT"
 TITLE="ldap_mod_replace"
-HREF="function.ldap-mod-replace.html"></HEAD
+HREF="function.ldap-mod-replace.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,40 +68,49 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.LDAP-MOD-DEL"
+NAME="function.ldap-mod-del"
 >ldap_mod_del</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN14432"
+NAME="AEN17919"
 ></A
->ldap_mod_del -- Delete attribute values from current attributes</DIV
+><P
+>    (PHP3 &#62;= 3.0.8, PHP4 )</P
+>ldap_mod_del&nbsp;--&nbsp;Delete attribute values from current attributes</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN14435"
+NAME="AEN17922"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int ldap_mod_del</CODE
->(int link_identifier, string dn, array entry);<P
+>int <B
+CLASS="function"
+>ldap_mod_del</B
+></CODE
+> (int link_identifier, string dn, array entry)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     returns true on success and false on error.</P
+>&#13;     returns true on success and false on error.</P
 ><P
->	 This function removes attribute(s) from the specified dn.  It
+>&#13;	 This function removes attribute(s) from the specified dn.  It
 	 performs the modification at the attribute level as opposed to the 
 	 object level.  Object-level deletions are done by the 
 	<B
-CLASS="FUNCTION"
+CLASS="function"
 >ldap_del()</B
 > function.</P
 ></DIV

@@ -4,7 +4,7 @@
 >ImageTTFBBox</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="ImageSY"
 HREF="function.imagesy.html"><LINK
 REL="NEXT"
 TITLE="ImageTTFText"
-HREF="function.imagettftext.html"></HEAD
+HREF="function.imagettftext.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,41 +68,54 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.IMAGETTFBBOX"
+NAME="function.imagettfbbox"
 >ImageTTFBBox</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN12368"
+NAME="AEN14636"
 ></A
->ImageTTFBBox -- give the bounding box of a text using TypeType fonts</DIV
+><P
+>    (PHP3 &#62;= 3.0.1, PHP4 )</P
+>ImageTTFBBox&nbsp;--&nbsp;
+     Give the bounding box of a text using TypeType fonts
+    </DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN12371"
+NAME="AEN14639"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->array ImageTTFBBox</CODE
->(int size, int angle, string fontfile, string text);<P
+>array <B
+CLASS="function"
+>imagettfbbox</B
+></CODE
+> (int size, int angle, string fontfile, string text)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     This function calculates and returns the bounding box in pixels
-     a TrueType text.
+>&#13;     This function calculates and returns the bounding box in pixels
+     for a TrueType text.
      <P
 ></P
+><DIV
+CLASS="variablelist"
 ><DL
 ><DT
 ><TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >text</I
 ></TT
@@ -110,7 +126,7 @@ CLASS="PARAMETER"
 ></DD
 ><DT
 ><TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >size</I
 ></TT
@@ -121,155 +137,154 @@ CLASS="PARAMETER"
 ></DD
 ><DT
 ><TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >fontfile</I
 ></TT
 ></DT
 ><DD
 ><P
->The name of the TrueType font file.  (Can
-	 also be an URL.)</P
+>&#13;	 The name of the TrueType font file.  (Can also be an URL.)
+	</P
 ></DD
 ><DT
 ><TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >angle</I
 ></TT
 ></DT
 ><DD
 ><P
->Angle in degrees in which
-	 <TT
-CLASS="PARAMETER"
+>&#13;	 Angle in degrees in which <TT
+CLASS="parameter"
 ><I
 >text</I
 ></TT
-> will be measured.</P
+> will be
+	 measured.
+	</P
 ></DD
 ></DL
+></DIV
 >
-
-     <A
-HREF="function.imagettfbbox.html"
-><B
-CLASS="FUNCTION"
+     <B
+CLASS="function"
 >ImageTTFBBox()</B
-></A
 > returns an array with 8
      elements representing four points making the bounding box of the
      text:
-
      <DIV
-CLASS="INFORMALTABLE"
+CLASS="informaltable"
 ><P
 ></P
 ><TABLE
 BORDER="1"
 CLASS="CALSTABLE"
+><TBODY
 ><TR
 ><TD
 ALIGN="LEFT"
-VALIGN="TOP"
+VALIGN="MIDDLE"
 >0</TD
 ><TD
 ALIGN="LEFT"
-VALIGN="TOP"
+VALIGN="MIDDLE"
 >lower left corner, X position</TD
 ></TR
 ><TR
 ><TD
 ALIGN="LEFT"
-VALIGN="TOP"
+VALIGN="MIDDLE"
 >1</TD
 ><TD
 ALIGN="LEFT"
-VALIGN="TOP"
+VALIGN="MIDDLE"
 >lower left corner, Y position</TD
 ></TR
 ><TR
 ><TD
 ALIGN="LEFT"
-VALIGN="TOP"
+VALIGN="MIDDLE"
 >2</TD
 ><TD
 ALIGN="LEFT"
-VALIGN="TOP"
+VALIGN="MIDDLE"
 >lower right corner, X position</TD
 ></TR
 ><TR
 ><TD
 ALIGN="LEFT"
-VALIGN="TOP"
+VALIGN="MIDDLE"
 >3</TD
 ><TD
 ALIGN="LEFT"
-VALIGN="TOP"
+VALIGN="MIDDLE"
 >lower right corner, Y position</TD
 ></TR
 ><TR
 ><TD
 ALIGN="LEFT"
-VALIGN="TOP"
+VALIGN="MIDDLE"
 >4</TD
 ><TD
 ALIGN="LEFT"
-VALIGN="TOP"
+VALIGN="MIDDLE"
 >upper right corner, X position</TD
 ></TR
 ><TR
 ><TD
 ALIGN="LEFT"
-VALIGN="TOP"
+VALIGN="MIDDLE"
 >5</TD
 ><TD
 ALIGN="LEFT"
-VALIGN="TOP"
+VALIGN="MIDDLE"
 >upper right corner, Y position</TD
 ></TR
 ><TR
 ><TD
 ALIGN="LEFT"
-VALIGN="TOP"
+VALIGN="MIDDLE"
 >6</TD
 ><TD
 ALIGN="LEFT"
-VALIGN="TOP"
+VALIGN="MIDDLE"
 >upper left corner, X position</TD
 ></TR
 ><TR
 ><TD
 ALIGN="LEFT"
-VALIGN="TOP"
+VALIGN="MIDDLE"
 >7</TD
 ><TD
 ALIGN="LEFT"
-VALIGN="TOP"
+VALIGN="MIDDLE"
 >upper left corner, Y position</TD
 ></TR
+></TBODY
 ></TABLE
 ><P
 ></P
 ></DIV
 >
      The points are relative to the <I
-CLASS="EMPHASIS"
+CLASS="emphasis"
 >text</I
 >
      regardless of the angle, so "upper left" means in the top
-     left-hand corner seeing the text horizontallty.</P
+     left-hand corner seeing the text horizontallty.
+    </P
 ><P
->     This function requires both the GD library and the Freetype
-     library.</P
+>&#13;     This function requires both the GD library and the FreeType
+     library.
+    </P
 ><P
->     See also <A
-HREF="function.imagettftext.html"
-><B
-CLASS="FUNCTION"
+>&#13;     See also <B
+CLASS="function"
 >ImageTTFText()</B
-></A
->.</P
+>.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

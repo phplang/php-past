@@ -4,7 +4,7 @@
 >strspn</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="strrpos"
 HREF="function.strrpos.html"><LINK
 REL="NEXT"
 TITLE="strstr"
-HREF="function.strstr.html"></HEAD
+HREF="function.strstr.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,55 +68,94 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.STRSPN"
+NAME="function.strspn"
 >strspn</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN25855"
+NAME="AEN34577"
 ></A
->strspn --      Find length of initial segment matching mask
+><P
+>    (PHP3 &#62;= 3.0.3, PHP4 )</P
+>strspn&nbsp;--&nbsp;
+     Find length of initial segment matching mask
     </DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN25858"
+NAME="AEN34580"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int strspn</CODE
->(string str1, string str2);<P
+>int <B
+CLASS="function"
+>strspn</B
+></CODE
+> (string str1, string str2)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Returns the length of the initial segment of
+>&#13;     Returns the length of the initial segment of
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >str1</I
 ></TT
 > which consists entirely of characters
      in <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >str2</I
 ></TT
->.</P
+>.
+    </P
 ><P
->     See also <A
+>         
+     <DIV
+CLASS="informalexample"
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;strspn ("42 is the answer, what is the question ...", "1234567890");
+      </PRE
+></TD
+></TR
+></TABLE
+><P
+>&#13;       will return 2 as result. 
+      </P
+><P
+></P
+></DIV
+>
+    </P
+><P
+>&#13;     See also <A
 HREF="function.strcspn.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >strcspn()</B
 ></A
->.</P
+>.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

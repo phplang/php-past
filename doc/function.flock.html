@@ -4,7 +4,7 @@
 >flock</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="filetype"
 HREF="function.filetype.html"><LINK
 REL="NEXT"
 TITLE="fopen"
-HREF="function.fopen.html"></HEAD
+HREF="function.fopen.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,116 +68,141 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.FLOCK"
+NAME="function.flock"
 >flock</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN8767"
+NAME="AEN9997"
 ></A
->flock -- portable advisory file locking</DIV
+><P
+>    (PHP3 &#62;= 3.0.7, PHP4 )</P
+>flock&nbsp;--&nbsp;Portable advisory file locking</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN8770"
+NAME="AEN10000"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->bool flock</CODE
->(int fp, int operation);<P
+>bool <B
+CLASS="function"
+>flock</B
+></CODE
+> (int fp, int operation [, int 
+       wouldblock])</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     PHP supports a portable way of locking complete files in an advisory way
-     (which means all accessing programs have to use the same way of locking
-     or it will not work).</P
+>&#13;     PHP supports a portable way of locking complete files in an
+     advisory way (which means all accessing programs have to use the
+     same way of locking or it will not work).
+    </P
 ><P
->     <B
-CLASS="FUNCTION"
+>&#13;     <B
+CLASS="function"
 >flock()</B
 > operates on <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >fp</I
 ></TT
-> which
-     must be an open file pointer. <TT
-CLASS="PARAMETER"
+>
+     which must be an open file
+     pointer. <TT
+CLASS="parameter"
 ><I
 >operation</I
 ></TT
-> is one of
-     the following values:</P
+> is one of the following
+     values:
+    </P
 ><P
->     <P
+>&#13;     <P
 ></P
 ><UL
 ><LI
 ><P
->       To acquire a shared lock (reader), set <TT
-CLASS="PARAMETER"
+>&#13;	To acquire a shared lock (reader), set
+	<TT
+CLASS="parameter"
 ><I
 >operation</I
 ></TT
->
-       to 1.</P
+> to LOCK_SH (set to 1 prior to
+	PHP 4.0.1).
+       </P
 ></LI
 ><LI
 ><P
->       To acquire an exclusive lock (writer), set
-       <TT
-CLASS="PARAMETER"
+>&#13;	To acquire an exclusive lock (writer), set
+	<TT
+CLASS="parameter"
 ><I
 >operation</I
 ></TT
-> to 2.</P
+> to LOCK_EX (set to 2 prior to
+	PHP 4.0.1).
+       </P
 ></LI
 ><LI
 ><P
->       To release a lock (shared or exclusive), set
-       <TT
-CLASS="PARAMETER"
+>&#13;	To release a lock (shared or exclusive), set
+	<TT
+CLASS="parameter"
 ><I
 >operation</I
 ></TT
-> to 3.</P
+> to LOCK_UN (set to 3 prior to
+	PHP 4.0.1).
+       </P
 ></LI
 ><LI
 ><P
->       If you don't want <B
-CLASS="FUNCTION"
+>&#13;	If you don't want <B
+CLASS="function"
 >flock()</B
-> to block while locking,
-       add 4 to <TT
-CLASS="PARAMETER"
+> to block while
+	locking, add LOCK_NB (4 prior to PHP 4.0.1) to
+	<TT
+CLASS="parameter"
 ><I
 >operation</I
 ></TT
->.</P
+>.
+       </P
 ></LI
 ></UL
 >
     </P
 ><P
->     <B
-CLASS="FUNCTION"
->flock()</B
-> allows you to perform a simple reader/writer
-     model which can be used on virtually every platform (including most
-     Unices and even Windows).</P
+>&#13;     <B
+CLASS="function"
+>Flock()</B
+> allows you to perform a simple
+     reader/writer model which can be used on virtually every platform
+     (including most Unices and even Windows).  The optional 3rd
+     argument is set to true if the lock would block (EWOULDBLOCK
+     errno condition)
+    </P
 ><P
->     <B
-CLASS="FUNCTION"
->flock()</B
-> returns true on success and false on error
-     (e.g. when a lock could not be acquired).</P
+>&#13;     <B
+CLASS="function"
+>Flock()</B
+> returns true on success and false on
+     error (e.g. when a lock could not be acquired).
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

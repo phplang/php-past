@@ -4,7 +4,7 @@
 >recode_string</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -15,9 +15,12 @@ REL="PREVIOUS"
 TITLE="GNU Recode functions"
 HREF="ref.recode.html"><LINK
 REL="NEXT"
-TITLE="recode_file"
-HREF="function.recode-file.html"></HEAD
+TITLE="recode"
+HREF="function.recode.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -55,7 +58,7 @@ WIDTH="10%"
 ALIGN="right"
 VALIGN="bottom"
 ><A
-HREF="function.recode-file.html"
+HREF="function.recode.html"
 >Next</A
 ></TD
 ></TR
@@ -65,48 +68,58 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.RECODE-STRING"
+NAME="function.recode-string"
 >recode_string</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN23805"
+NAME="AEN30284"
 ></A
->recode_string -- Recode a string according to a recode request.</DIV
+><P
+>    (PHP3 &#62;= 3.0.13, PHP4 &#62;= 4.0RC1)</P
+>recode_string&nbsp;--&nbsp;Recode a string according to a recode request</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN23808"
+NAME="AEN30287"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->string recode_string</CODE
->(string request, string string);<P
+>string <B
+CLASS="function"
+>recode_string</B
+></CODE
+> (string request, string string)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Recode the string <TT
-CLASS="PARAMETER"
+>&#13;     Recode the string <TT
+CLASS="parameter"
 ><I
 >string</I
 ></TT
 > according to
      the recode request <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >request</I
 ></TT
 >. Returns
-     FALSE, if unable to comply, TRUE otherwise.</P
+     FALSE, if unable to comply, TRUE otherwise.
+    </P
 ><P
->     A simple recode request may be &quot;lat1..iso646-de&quot;.
+>&#13;     A simple recode request may be "lat1..iso646-de".
      See also the GNU Recode documentation of your installation
      for detailed instructions about recode requests.
     </P
@@ -142,7 +155,7 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><A
-HREF="function.recode-file.html"
+HREF="function.recode.html"
 >Next</A
 ></TD
 ></TR
@@ -164,7 +177,7 @@ HREF="ref.recode.html"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->recode_file</TD
+>recode</TD
 ></TR
 ></TABLE
 ></DIV

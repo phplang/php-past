@@ -4,20 +4,23 @@
 >sem_release</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
-TITLE="Semaphore and shared memory functions"
+TITLE="Semaphore and Shared Memory Functions"
 HREF="ref.sem.html"><LINK
 REL="PREVIOUS"
 TITLE="sem_acquire"
 HREF="function.sem-acquire.html"><LINK
 REL="NEXT"
 TITLE="shm_attach"
-HREF="function.shm-attach.html"></HEAD
+HREF="function.shm-attach.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,66 +68,79 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.SEM-RELEASE"
+NAME="function.sem-release"
 >sem_release</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN24104"
+NAME="AEN31035"
 ></A
->sem_release -- release a semaphore</DIV
+><P
+>    (PHP3 &#62;= 3.0.6, PHP4 )</P
+>sem_release&nbsp;--&nbsp;Release a semaphore</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN24107"
+NAME="AEN31038"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int sem_release</CODE
->(int sem_identifier);<P
+>int <B
+CLASS="function"
+>sem_release</B
+></CODE
+> (int sem_identifier)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Returns: true on success, false on error</P
+>&#13;     Returns: true on success, false on error.
+    </P
 ><P
->     <B
-CLASS="FUNCTION"
->sem_release()</B
+>&#13;     <B
+CLASS="function"
+>Sem_release()</B
 > releases the semaphore if it
      is currently acquired by the calling process, otherwise
-     a warning is generated.</P
+     a warning is generated.
+    </P
 ><P
->      After releasing the semaphore, <A
+>&#13;      After releasing the semaphore, <A
 HREF="function.sem-acquire.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >sem_acquire()</B
 ></A
 >
-      may be called to re-acquire it.</P
+      may be called to re-acquire it.
+    </P
 ><P
 > 
      See also: <A
 HREF="function.sem-get.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >sem_get()</B
 ></A
 > and
-               <A
+     <A
 HREF="function.sem-acquire.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >sem_acquire()</B
 ></A
->.</P
+>.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

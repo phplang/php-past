@@ -4,20 +4,23 @@
 >odbc_fetch_into</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
-TITLE="ODBC functions"
+TITLE="Unified ODBC functions"
 HREF="ref.odbc.html"><LINK
 REL="PREVIOUS"
 TITLE="odbc_execute"
 HREF="function.odbc-execute.html"><LINK
 REL="NEXT"
 TITLE="odbc_fetch_row"
-HREF="function.odbc-fetch-row.html"></HEAD
+HREF="function.odbc-fetch-row.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,50 +68,57 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.ODBC-FETCH-INTO"
+NAME="function.odbc-fetch-into"
 >odbc_fetch_into</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN19356"
+NAME="AEN24213"
 ></A
->odbc_fetch_into -- Fetch one result row into array</DIV
+><P
+>    (PHP3 &#62;= 3.0.6, PHP4 )</P
+>odbc_fetch_into&nbsp;--&nbsp;Fetch one result row into array</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN19359"
+NAME="AEN24216"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int odbc_fetch_into</CODE
->(int result_id, int [<SPAN
-CLASS="OPTIONAL"
->rownumber</SPAN
->], array result_array);<P
+>int <B
+CLASS="function"
+>odbc_fetch_into</B
+></CODE
+> (int result_id [, int rownumber, array result_array])</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Returns the number of columns in the result;
+>&#13;     Returns the number of columns in the result;
      <TT
-CLASS="LITERAL"
+CLASS="literal"
 >false</TT
 > on error.
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >result_array</I
 ></TT
 > must be passed by reference,
      but it can be of any type since it will be converted to type
      array. The array will contain the column values starting at array
-     index 0.</P
+     index 0.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

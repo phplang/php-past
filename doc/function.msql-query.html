@@ -4,7 +4,7 @@
 >msql_query</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="msql_pconnect"
 HREF="function.msql-pconnect.html"><LINK
 REL="NEXT"
 TITLE="msql_regcase"
-HREF="function.msql-regcase.html"></HEAD
+HREF="function.msql-regcase.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,34 +68,46 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.MSQL-QUERY"
+NAME="function.msql-query"
 >msql_query</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN17701"
+NAME="AEN22546"
 ></A
->msql_query -- send mSQL query</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>msql_query&nbsp;--&nbsp;Send mSQL query</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN17704"
+NAME="AEN22549"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int msql_query</CODE
->(string query, int link_identifier);<P
+>int <B
+CLASS="function"
+>msql_query</B
+></CODE
+> (string query, int link_identifier)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     msql_query() sends a query to the currently
+>&#13;     <B
+CLASS="function"
+>Msql_query()</B
+> sends a query to the currently
      active database on the server that's associated with the
      specified link identifier.  If the link identifier isn't
      specified, the last opened link is assumed.  If no link is open,
@@ -100,35 +115,38 @@ CLASS="FUNCDEF"
      <A
 HREF="function.msql-connect.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >msql_connect()</B
 ></A
-> was called, and use it.</P
+> was called, and use it.
+    </P
 ><P
->     Returns a positive mSQL query identifier on success, or false on error.</P
+>&#13;     Returns a positive mSQL query identifier on success, or false on
+     error.
+    </P
 ><P
->     See also:  
-     <A
+>&#13;     See also: <A
 HREF="function.msql.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >msql()</B
 ></A
->, 
+>,
      <A
 HREF="function.msql-select-db.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >msql_select_db()</B
 ></A
 >, and
      <A
 HREF="function.msql-connect.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >msql_connect()</B
 ></A
->.</P
+>.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

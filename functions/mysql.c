@@ -27,7 +27,7 @@
    +----------------------------------------------------------------------+
  */
  
-/* $Id: mysql.c,v 1.196 2000/03/20 07:34:57 rasmus Exp $ */
+/* $Id: mysql.c,v 1.197 2000/07/04 16:52:19 rasmus Exp $ */
 
 
 /* TODO:
@@ -437,7 +437,7 @@ static void php3_mysql_do_connect(INTERNAL_FUNCTION_PARAMETERS,int persistent)
 		tmp++;
 		if (tmp[0] != '/') {
 			port = atoi(tmp);
-			if(tmp=strchr(tmp,':')) {
+			if((tmp=strchr(tmp,':'))) {
 				*tmp=0;
 				tmp++;
 				socket=tmp;
@@ -724,7 +724,7 @@ void php3_mysql_select_db(INTERNAL_FUNCTION_PARAMETERS)
 void php3_mysql_change_user(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *user=NULL,*passwd=NULL,*db=NULL,*mysql_link=NULL;
-	int id,type;
+	int id=0,type;
 	MYSQL *mysql;
 	MySQL_TLS_VARS;
 
@@ -736,6 +736,7 @@ void php3_mysql_change_user(INTERNAL_FUNCTION_PARAMETERS)
 			}
 			convert_to_string(user);
 			convert_to_string(passwd);
+			id = php3_mysql_get_default_link(INTERNAL_FUNCTION_PARAM_PASSTHRU);
 			break;
 		case 3:
 			if (getParameters(ht, 3, &user, &passwd, &db)==FAILURE) {
@@ -744,6 +745,7 @@ void php3_mysql_change_user(INTERNAL_FUNCTION_PARAMETERS)
 			convert_to_string(user);
 			convert_to_string(passwd);
 			convert_to_string(db);
+			id = php3_mysql_get_default_link(INTERNAL_FUNCTION_PARAM_PASSTHRU);
 			break;
 		case 4:
 			if (getParameters(ht, 4, &user, &passwd, &db, &mysql_link)==FAILURE) {

@@ -4,20 +4,23 @@
 >array_merge</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
-TITLE="Array functions"
+TITLE="Array Functions"
 HREF="ref.array.html"><LINK
 REL="PREVIOUS"
 TITLE="array_keys"
 HREF="function.array-keys.html"><LINK
 REL="NEXT"
-TITLE="array_pad"
-HREF="function.array-pad.html"></HEAD
+TITLE="array_merge_recursive"
+HREF="function.array-merge-recursive.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -55,7 +58,7 @@ WIDTH="10%"
 ALIGN="right"
 VALIGN="bottom"
 ><A
-HREF="function.array-pad.html"
+HREF="function.array-merge-recursive.html"
 >Next</A
 ></TD
 ></TR
@@ -65,50 +68,58 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.ARRAY-MERGE"
+NAME="function.array-merge"
 >array_merge</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN3603"
+NAME="AEN3767"
 ></A
->array_merge -- Merge two or more arrays</DIV
+><P
+>    (PHP4 )</P
+>array_merge&nbsp;--&nbsp;Merge two or more arrays</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN3606"
+NAME="AEN3770"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->array array_merge</CODE
->(array array1, array array2,       [<SPAN
-CLASS="OPTIONAL"
-> ...</SPAN
->]
-     );<P
+>array <B
+CLASS="function"
+>array_merge</B
+></CODE
+> (array array1, array array2 [, array
+       ...])</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     <B
-CLASS="FUNCTION"
->array_merge()</B
+>&#13;     <B
+CLASS="function"
+>Array_merge()</B
 > merges the elements of two or
      more arrays together so that the values of one are appended to
-     the end of the previous one.  It returns the resulting array.</P
+     the end of the previous one.  It returns the resulting array.
+    </P
 ><P
->     If the input arrays had the same string keys, then the later
-     value for that key will overwrite previous one.  If, however, the
-     arrays have the same numeric key, this does not happen since the
-     values are appended.</P
+>&#13;     If the input arrays have the same string keys, then the later
+     value for that key will overwrite the previous one.  If, however, 
+     the arrays have the same numeric key, the later value will not 
+     overwrite the original value, but will be appended.
+    </P
 ><P
->     <TABLE
+>&#13;     <TABLE
 WIDTH="100%"
 BORDER="0"
 CELLPADDING="0"
@@ -117,40 +128,51 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
 >Example 1. <B
-CLASS="FUNCTION"
+CLASS="function"
 >array_merge()</B
 > example</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->$array1 = array("color" =&#62; "red", 2, 4);
-$array2 = array("a", "b", "color" =&#62; "green", "shape" =&#62; "trapezoid");
-array_merge($array1, $array2);
+CLASS="programlisting"
+>&#13;$array1 = array ("color" =&#62; "red", 2, 4);
+$array2 = array ("a", "b", "color" =&#62; "green", "shape" =&#62; "trapezoid", 4);
+array_merge ($array1, $array2);
       </PRE
-><P
->       Resulting array will be array("color" =&#62; "green", 2, 4, "a",
-       "b", "shape" =&#62; "trapezoid").</P
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR
 ></TABLE
 >
-
-    <DIV
-CLASS="NOTE"
-><BLOCKQUOTE
-CLASS="NOTE"
+    </P
 ><P
+>&#13;     Resulting array will be <TT
+CLASS="literal"
+>array("color" =&#62; "green", 2, 4,
+     "a", "b", "shape" =&#62; "trapezoid", 4)</TT
+>.
+    </P
+><P
+>&#13;     See also <A
+HREF="function.array-merge-recursive.html"
 ><B
->Note: </B
->      This function was added in PHP 4.0.</P
-></BLOCKQUOTE
-></DIV
-></P
+CLASS="function"
+>array_merge_recursive()</B
+></A
+>.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -183,7 +205,7 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><A
-HREF="function.array-pad.html"
+HREF="function.array-merge-recursive.html"
 >Next</A
 ></TD
 ></TR
@@ -205,7 +227,7 @@ HREF="ref.array.html"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->array_pad</TD
+>array_merge_recursive</TD
 ></TR
 ></TABLE
 ></DIV

@@ -4,7 +4,7 @@
 >linkinfo</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="link"
 HREF="function.link.html"><LINK
 REL="NEXT"
 TITLE="mkdir"
-HREF="function.mkdir.html"></HEAD
+HREF="function.mkdir.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,70 +68,91 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.LINKINFO"
+NAME="function.linkinfo"
 >linkinfo</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN9154"
+NAME="AEN10522"
 ></A
->linkinfo -- Get information about a link</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>linkinfo&nbsp;--&nbsp;Gets information about a link</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN9157"
+NAME="AEN10525"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int linkinfo</CODE
->(string path);<P
+>int <B
+CLASS="function"
+>linkinfo</B
+></CODE
+> (string path)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->    <A
-HREF="function.linkinfo.html"
-><B
-CLASS="FUNCTION"
+>&#13;     <B
+CLASS="function"
 >Linkinfo()</B
-></A
-> returns the st_dev field of the UNIX C
-    stat structure returned by the lstat system call.  This
-    function is used to verify if a link (pointed to by <TT
-CLASS="PARAMETER"
+> returns the st_dev field of the
+     UNIX C stat structure returned by the lstat system call.  This
+     function is used to verify if a link (pointed to by
+     <TT
+CLASS="parameter"
 ><I
 >path</I
 ></TT
->)
-    really exists (using the same method as the S_ISLNK macro defined in stat.h).
-    Returns 0 or FALSE in case of error.</P
+>) really exists (using the same method
+     as the S_ISLNK macro defined in stat.h).  Returns 0 or FALSE in
+     case of error.
+    </P
 ><P
->    See also <A
+>&#13;     See also <A
 HREF="function.symlink.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >symlink()</B
 ></A
 >, <A
 HREF="function.link.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >link()</B
 ></A
 >,
-    and <A
+     and <A
 HREF="function.readlink.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >readlink()</B
 ></A
->.</P
+>.
+    </P
+><DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
+><P
+><B
+>Note: </B
+>
+     This function does not work on Windows systems
+     </P
+></BLOCKQUOTE
+></DIV
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

@@ -1,10 +1,10 @@
 <HTML
 ><HEAD
 ><TITLE
->pg_Exec</TITLE
+>pg_exec</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -12,12 +12,15 @@ REL="UP"
 TITLE="PostgreSQL functions"
 HREF="ref.pgsql.html"><LINK
 REL="PREVIOUS"
-TITLE="pg_ErrorMessage"
+TITLE="pg_errormessage"
 HREF="function.pg-errormessage.html"><LINK
 REL="NEXT"
-TITLE="pg_Fetch_Array"
-HREF="function.pg-fetch-array.html"></HEAD
+TITLE="pg_fetch_array"
+HREF="function.pg-fetch-array.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,69 +68,74 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.PG-EXEC"
->pg_Exec</A
+NAME="function.pg-exec"
+>pg_exec</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN23208"
+NAME="AEN29331"
 ></A
->pg_Exec -- execute a query</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>pg_exec&nbsp;--&nbsp;Execute a query</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN23211"
+NAME="AEN29334"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int pg_exec</CODE
->(int connection, string query);<P
+>int <B
+CLASS="function"
+>pg_exec</B
+></CODE
+> (int connection, string query)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Returns a result index if query could be executed, false on
+>&#13;     Returns a result index if query could be executed, false on
      failure or if connection is not a valid connection index. Details
      about the error can be retrieved using the
-     <A
-HREF="function.pg-errormessage.html"
-><B
-CLASS="FUNCTION"
+     <B
+CLASS="function"
 >pg_ErrorMessage()</B
-></A
 > function if connection is
      valid.  Sends an SQL statement to the PostgreSQL database
      specified by the connection index. The connection must be a valid
-     index that was returned by <A
-HREF="function.pg-connect.html"
-><B
-CLASS="FUNCTION"
+     index that was returned by <B
+CLASS="function"
 >pg_Connect()</B
-></A
 >.  The
      return value of this function is an index to be used to access
      the results from other PostgreSQL functions.  
-    <DIV
-CLASS="NOTE"
+     <DIV
+CLASS="note"
 ><BLOCKQUOTE
-CLASS="NOTE"
+CLASS="note"
 ><P
 ><B
 >Note: </B
->     PHP/FI returned 1 if the query was not expected to return data
-     (inserts or updates, for example) and greater than 1 even on
-     selects that did not return anything. No such assumption can be
-     made in PHP.  
-    </P
+>
+       PHP/FI returned 1 if the query was not expected to return data
+       (inserts or updates, for example) and greater than 1 even on
+       selects that did not return anything. No such assumption can be
+       made in PHP.  
+      </P
 ></BLOCKQUOTE
 ></DIV
-></P
+>
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -169,7 +177,7 @@ HREF="function.pg-fetch-array.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->pg_ErrorMessage</TD
+>pg_errormessage</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"
@@ -182,7 +190,7 @@ HREF="ref.pgsql.html"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->pg_Fetch_Array</TD
+>pg_fetch_array</TD
 ></TR
 ></TABLE
 ></DIV

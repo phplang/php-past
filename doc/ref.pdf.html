@@ -4,7 +4,7 @@
 >PDF functions</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="OCIInternalDebug"
 HREF="function.ociinternaldebug.html"><LINK
 REL="NEXT"
 TITLE="PDF_get_info"
-HREF="function.pdf-get-info.html"></HEAD
+HREF="function.pdf-get-info.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="reference"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -64,22 +67,22 @@ HREF="function.pdf-get-info.html"
 ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><DIV
-CLASS="REFERENCE"
+CLASS="reference"
 ><A
-NAME="REF.PDF"
+NAME="ref.pdf"
 ></A
 ><DIV
 CLASS="TITLEPAGE"
 ><H1
-CLASS="TITLE"
->XL. PDF functions</H1
+CLASS="title"
+>XLV. PDF functions</H1
 ><DIV
 CLASS="PARTINTRO"
 ><A
-NAME="AEN20561"
+NAME="AEN26239"
 ></A
 ><P
->    You can use the PDF functions in PHP to create PDF files if you
+>&#13;    You can use the PDF functions in PHP to create PDF files if you
     have the PDF library by Thomas Merz  (available at 
     <A
 HREF="http://www.pdflib.com/pdflib/index.html"
@@ -103,7 +106,48 @@ TARGET="_top"
     a lib with the name libpdf2.01.so which cannot be found when linking
     the test programm in configure. You will have to create a symbolic
     link from libpdf.so to libpdf2.01.so.).
-    Please consult the excellent documentation for
+   </P
+><P
+>&#13;    Version 2.20 of pdflib has introduced more changes to its API and
+    support for chinese and japanese fonts. This unfortunately causes
+    some changes of the pdf module of php4 (not php3). If you use pdflib 2.20
+    handle the in memory generation of PDF documents with care. Until
+    pdflib 3.0 is released it might be unstable. The encoding parameter
+    of <A
+HREF="function.pdf-set-font.html"
+><B
+CLASS="function"
+>pdf_set_font()</B
+></A
+> has changed to a string. This
+    means that instead of e.g. 4 you have to use 'winansi'.
+   </P
+><P
+>&#13;    If you use pdflib 2.30 the <A
+HREF="function.pdf-set-text-matrix.html"
+><B
+CLASS="function"
+>pdf_set_text_matrix()</B
+></A
+>
+    will have gone. It is not supported any more. In general it is a good
+    advise to consult the release notes of the used version of pdflib
+    for possible changes.
+   </P
+><P
+>&#13;    Since version 3.0 of pdflib you should configure pdflib with the option
+    <TT
+CLASS="literal"
+>--enable-shared-pdflib</TT
+>.
+   </P
+><P
+>&#13;     Any version of PHP4 after March, 9th 2000 do not support versions
+     of pdflib older than 3.0. PHP3 on the other hand should not be used
+     with version newer than 2.01.
+   </P
+><P
+>&#13;    Please consult the excellent documentation for
     pdflib shipped with the source distribution of pdflib.
     It provides a very good overview of what pdflib capable of doing.
     Most of the functions in pdflib
@@ -112,11 +156,12 @@ TARGET="_top"
     or Postscript to efficiently use this module.
     All lengths and coordinates are measured in Postscript points.
     There are generally 72 PostScript points to an inch, but this
-    depends on the output resolution.</P
+    depends on the output resolution.
+   </P
 ><P
->    There is another PHP module for pdf document creation based on
+>&#13;    There is another PHP module for pdf document creation based on
     <A
-HREF="http://www.fastio.com"
+HREF="http://www.fastio.com/"
 TARGET="_top"
 >FastIO's</A
 >.
@@ -125,66 +170,60 @@ TARGET="_top"
 HREF="ref.cpdf.html"
 >ClibPDF functions</A
 > section for
-    details.</P
+    details.
+   </P
 ><P
->    Currently all versions of pdflib are supported. It
+>&#13;    Currently all versions of pdflib are supported. It
     is recommended that you use the newest version since it has more
     features and fixes some problems which required a patch for the old
     version. Unfortunately, the changes of the pdflib API in 2.x
     compared to 0.6 have
     been so severe that even some PHP functions had to be altered. Here
-    is a list of changes:</P
+    is a list of changes:
+   </P
 ><P
 ></P
 ><UL
 ><LI
 ><P
->      The Info structure does not exist anymore. Therefore the function
+>&#13;      The Info structure does not exist anymore. Therefore the function
       <A
 HREF="function.pdf-get-info.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >pdf_get_info()</B
 ></A
 > is obsolete and the functions
-      <A
-HREF="function.pdf-set-info-creator.html"
-><B
-CLASS="FUNCTION"
+      <B
+CLASS="function"
 >pdf_set_info_creator()</B
-></A
 >,
-      <A
-HREF="function.pdf-set-info-title.html"
-><B
-CLASS="FUNCTION"
+      <B
+CLASS="function"
 >pdf_set_info_title()</B
-></A
 >,
-      <A
-HREF="function.pdf-set-info-author.html"
-><B
-CLASS="FUNCTION"
+      <B
+CLASS="function"
 >pdf_set_info_author()</B
-></A
 >,
-      <A
-HREF="function.pdf-set-info-subject.html"
-><B
-CLASS="FUNCTION"
+      <B
+CLASS="function"
 >pdf_set_info_subject()</B
-></A
 > and
-      <A
-HREF="function.pdf-set-info-keywords.html"
-><B
-CLASS="FUNCTION"
+      <B
+CLASS="function"
 >pdf_set_info_keywords()</B
-></A
 > do not take the
       info structure as the first parameter but the pdf document. This
       also means that the pdf document must be opened before these functions
-      can be called.
+      can be called. The above functions can and should also be replaced by
+      <A
+HREF="function.pdf-set-info.html"
+><B
+CLASS="function"
+>pdf_set_info()</B
+></A
+>
      </P
 ></LI
 ><LI
@@ -194,14 +233,14 @@ CLASS="FUNCTION"
       <A
 HREF="function.pdf-open.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >pdf_open()</B
 ></A
 > takes only one parameter which is
       the file handle of a file opened with <A
 HREF="function.fopen.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >fopen()</B
 ></A
 >.
@@ -209,12 +248,12 @@ CLASS="FUNCTION"
 ></LI
 ></UL
 ><P
->    There were some more changes with the release 2.01 of pdflib which
+>&#13;    There were some more changes with the release 2.01 of pdflib which
     should be covered by PHP. Some functions are not required anymore
     (e.g. <A
 HREF="function.pdf-put-image.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >pdf_put_image()</B
 ></A
 >). You will get a warning so
@@ -224,31 +263,31 @@ CLASS="FUNCTION"
     The pdf module introduces two new types of variables (if pdflib 2.x
     is used it is only one new type). They are called
     <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >pdfdoc</I
 ></TT
 > and <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >pdfinfo</I
 ></TT
 >
     (<TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >pdfinfo</I
 ></TT
 > is not existent if pdflib 2.x is used. 
     <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >pdfdoc</I
 ></TT
 > is a pointer to a pdf document and
     almost all functions need it as its first parameter.
     <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >pdfinfo</I
 ></TT
@@ -256,15 +295,15 @@ CLASS="PARAMETER"
     document. It has to be set before <A
 HREF="function.pdf-open.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >pdf_open()</B
 ></A
 > is
     called.</P
 ><DIV
-CLASS="NOTE"
+CLASS="note"
 ><BLOCKQUOTE
-CLASS="NOTE"
+CLASS="note"
 ><P
 ><B
 >Note: </B
@@ -273,14 +312,14 @@ CLASS="NOTE"
 ></BLOCKQUOTE
 ></DIV
 ><P
->    In order to output text into a PDF document you will need to provide
+>&#13;    In order to output text into a PDF document you will need to provide
     the afm file for each font. Afm files contain font metrics for a
     Postscript font. By default these afm files are searched
     for in a directory named 'fonts' relative to the directory where the
     PHP script is located. (Again, this was true for pdflib 0.6, newer
     versions do not not neccessarily need the afm files.)</P
 ><P
->    Most of the functions are fairly easy to use. The most difficult part
+>&#13;    Most of the functions are fairly easy to use. The most difficult part
     is probably to create a very simple pdf document at all. The following
     example should help to get started. It uses the PHP functions for
     pdflib 0.6. It creates the file test.pdf
@@ -295,14 +334,20 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
 >Example 1. Creating a PDF document with pdflib 0.6</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->&lt;?php
+CLASS="programlisting"
+>&#13;&#60;?php
 $fp = fopen("test.pdf", "w");
 $info = PDF_get_info();
 pdf_set_info_author($info, "Uwe Steinmann");
@@ -322,29 +367,42 @@ pdf_stroke($pdf);
 PDF_end_page($pdf);
 PDF_close($pdf);
 fclose($fp);
-echo "&lt;A HREF=getpdf.php3&#62;finished&lt;/A&#62;";
+echo "&#60;A HREF=getpdf.php3&#62;finished&#60;/A&#62;";
 ?&#62;
     </PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR
 ></TABLE
 ><P
->&#13;    The PHP script getpdf.php3 just outputs the pdf document.
+>&#13;
+    The PHP script getpdf.php3 just outputs the pdf document.
 
     <DIV
-CLASS="INFORMALEXAMPLE"
+CLASS="informalexample"
 ><P
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->&lt;?php
+CLASS="programlisting"
+>&#13;&#60;?php
 $fp = fopen("test.pdf", "r");
 header("Content-type: application/pdf");
 fpassthru($fp);
 fclose($fp);
 ?&#62;
      </PRE
+></TD
+></TR
+></TABLE
 ><P
 ></P
 ></DIV
@@ -361,14 +419,20 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
->Example 2. Creating a PDF document with pdflib 2.0</B
+>Example 2. Creating a PDF document with pdflib 2.x</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->&lt;?php
+CLASS="programlisting"
+>&#13;&#60;?php
 $fp = fopen("test.pdf", "w");
 $pdf = PDF_open($fp);
 pdf_set_info_author($pdf, "Uwe Steinmann");
@@ -387,11 +451,14 @@ pdf_stroke($pdf);
 PDF_end_page($pdf);
 PDF_close($pdf);
 fclose($fp);
-echo "&lt;A HREF=getpdf.php3&#62;finished&lt;/A&#62;";
+echo "&#60;A HREF=getpdf.php3&#62;finished&#60;/A&#62;";
 ?&#62;
      </PRE
+></TD
+></TR
+></TABLE
 ><P
->      The PHP script getpdf.php3 is the same as above.</P
+>&#13;      The PHP script getpdf.php3 is the same as above.</P
 ></DIV
 ></TD
 ></TR
@@ -400,7 +467,7 @@ echo "&lt;A HREF=getpdf.php3&#62;finished&lt;/A&#62;";
 
   The pdflib distribution contains a more complex example which
   creates a serious of pages with an analog clock. This example
-  converted into PHP using pdflib 2.0 looks as the following (you
+  converted into PHP using pdflib 2.x looks as the following (you
   can see the same example in the documentation for the
   <A
 HREF="ref.cpdf.html"
@@ -416,14 +483,20 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
->Example 3. pdfclock example from pdflib 2.0 distribution</B
+>Example 3. pdfclock example from pdflib 2.x distribution</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->&lt;?php
+CLASS="programlisting"
+>&#13;&#60;?php
 $pdffilename = "clock.pdf";
 $radius = 200;
 $margin = 20;
@@ -509,20 +582,32 @@ while($pagecount-- &#62; 0) {
 
 $pdf = pdf_close($pdf);
 fclose($fp);
-echo "&lt;A HREF=getpdf.php3?filename=".$pdffilename."&#62;finished&lt;/A&#62;";
+echo "&#60;A HREF=getpdf.php3?filename=".$pdffilename."&#62;finished&#60;/A&#62;";
 ?&#62;
      </PRE
+></TD
+></TR
+></TABLE
 ><P
->      The PHP script getpdf.php3 just outputs the pdf document.
-      <PRE
-CLASS="PROGRAMLISTING"
->&lt;?php
+>&#13;      The PHP script getpdf.php3 just outputs the pdf document.
+      <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;&#60;?php
 $fp = fopen($filename, "r");
 header("Content-type: application/pdf");
 fpassthru($fp);
 fclose($fp);
 ?&#62;
       </PRE
+></TD
+></TR
+></TABLE
 ></P
 ></DIV
 ></TD
@@ -541,32 +626,12 @@ CLASS="TOC"
 ><A
 HREF="function.pdf-get-info.html"
 >PDF_get_info</A
-> &#8212; Returns a default info structure for a pdf document</DT
+> &#8212; Returns an empty info structure for a pdf document</DT
 ><DT
 ><A
-HREF="function.pdf-set-info-creator.html"
->PDF_set_info_creator</A
-> &#8212; Fills the creator field of the info structure</DT
-><DT
-><A
-HREF="function.pdf-set-info-title.html"
->PDF_set_info_title</A
-> &#8212; Fills the title field of the info structure</DT
-><DT
-><A
-HREF="function.pdf-set-info-subject.html"
->PDF_set_info_subject</A
-> &#8212; Fills the subject field of the info structure</DT
-><DT
-><A
-HREF="function.pdf-set-info-keywords.html"
->PDF_set_info_keywords</A
-> &#8212; Fills the keywords field of the info structure</DT
-><DT
-><A
-HREF="function.pdf-set-info-author.html"
->PDF_set_info_author</A
-> &#8212; Fills the author field of the info structure</DT
+HREF="function.pdf-set-info.html"
+>PDF_set_info</A
+> &#8212; Fills a field of the document information</DT
 ><DT
 ><A
 HREF="function.pdf-open.html"
@@ -594,6 +659,11 @@ HREF="function.pdf-show.html"
 > &#8212; Output text at current position</DT
 ><DT
 ><A
+HREF="function.pdf-show-boxed.html"
+>PDF_show_boxed</A
+> &#8212; Output text in a box</DT
+><DT
+><A
 HREF="function.pdf-show-xy.html"
 >PDF_show_xy</A
 > &#8212; Output text at given position</DT
@@ -607,6 +677,26 @@ HREF="function.pdf-set-font.html"
 HREF="function.pdf-set-leading.html"
 >PDF_set_leading</A
 > &#8212; Sets distance between text lines</DT
+><DT
+><A
+HREF="function.pdf-set-parameter.html"
+>PDF_set_parameter</A
+> &#8212; Sets certain parameters</DT
+><DT
+><A
+HREF="function.pdf-get-parameter.html"
+>PDF_get_parameter</A
+> &#8212; Gets certain parameters</DT
+><DT
+><A
+HREF="function.pdf-set-value.html"
+>PDF_set_value</A
+> &#8212; Sets certain numerical value</DT
+><DT
+><A
+HREF="function.pdf-get-value.html"
+>PDF_get_value</A
+> &#8212; Gets certain numerical value</DT
 ><DT
 ><A
 HREF="function.pdf-set-text-rendering.html"
@@ -642,6 +732,11 @@ HREF="function.pdf-set-char-spacing.html"
 HREF="function.pdf-set-word-spacing.html"
 >PDF_set_word_spacing</A
 > &#8212; Sets spacing between words</DT
+><DT
+><A
+HREF="function.pdf-skew.html"
+>PDF_skew</A
+> &#8212; Skews the coordinate system</DT
 ><DT
 ><A
 HREF="function.pdf-continue-text.html"
@@ -829,6 +924,13 @@ HREF="function.pdf-open-gif.html"
 > &#8212; Opens a GIF image</DT
 ><DT
 ><A
+HREF="function.pdf-open-png.html"
+>PDF_open_png</A
+> &#8212; 
+        Opens a PNG image
+      </DT
+><DT
+><A
 HREF="function.pdf-open-memory-image.html"
 >PDF_open_memory_image</A
 > &#8212; Opens an image created with PHP's image functions</DT
@@ -862,6 +964,21 @@ HREF="function.pdf-execute-image.html"
 HREF="function.pdf-add-annotation.html"
 >pdf_add_annotation</A
 > &#8212; Adds annotation</DT
+><DT
+><A
+HREF="function.pdf-set-border-style.html"
+>PDF_set_border_style</A
+> &#8212; Sets style of border around links and annotations</DT
+><DT
+><A
+HREF="function.pdf-set-border-color.html"
+>PDF_set_border_color</A
+> &#8212; Sets color of border around links and annotations</DT
+><DT
+><A
+HREF="function.pdf-set-border-dash.html"
+>PDF_set_border_dash</A
+> &#8212; Sets dash style of border around links and annotations</DT
 ></DL
 ></DIV
 ></DIV

@@ -4,7 +4,7 @@
 >session_destroy</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="session_start"
 HREF="function.session-start.html"><LINK
 REL="NEXT"
 TITLE="session_name"
-HREF="function.session-name.html"></HEAD
+HREF="function.session-name.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,50 +68,52 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.SESSION-DESTROY"
+NAME="function.session-destroy"
 >session_destroy</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN24334"
+NAME="AEN31298"
 ></A
->session_destroy -- Destroys all data registered to a session</DIV
+><P
+>    (PHP4 )</P
+>session_destroy&nbsp;--&nbsp;Destroys all data registered to a session</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN24337"
+NAME="AEN31301"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->bool session_destroy</CODE
->(void);<P
+>bool <B
+CLASS="function"
+>session_destroy</B
+></CODE
+>(void);</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     <B
-CLASS="FUNCTION"
+>&#13;     <B
+CLASS="function"
 >session_destroy()</B
 > destroys all of the data
-     associated with the current session.</P
+     associated with the current session.
+    </P
 ><P
->     This function always returns true.</P
-><DIV
-CLASS="NOTE"
-><BLOCKQUOTE
-CLASS="NOTE"
-><P
-><B
->Note: </B
->      This function was added in PHP 4.0.</P
-></BLOCKQUOTE
-></DIV
+>&#13;     This function returns true on success and false on failure to destroy
+     the session data.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

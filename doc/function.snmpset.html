@@ -4,7 +4,7 @@
 >snmpset</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="snmpget"
 HREF="function.snmpget.html"><LINK
 REL="NEXT"
 TITLE="snmpwalk"
-HREF="function.snmpwalk.html"></HEAD
+HREF="function.snmpwalk.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,61 +68,64 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.SNMPSET"
+NAME="function.snmpset"
 >snmpset</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN24555"
+NAME="AEN32891"
 ></A
->snmpset -- Set an SNMP object</DIV
+><P
+>    (PHP3 &#62;= 3.0.12, PHP4 &#62;= 4.0b2)</P
+>snmpset&nbsp;--&nbsp;Set an SNMP object</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN24558"
+NAME="AEN32894"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->string snmpget</CODE
->(string hostname, string community, string object_id, string type, mixed value, int [<SPAN
-CLASS="OPTIONAL"
->timeout</SPAN
->], int [<SPAN
-CLASS="OPTIONAL"
->retries</SPAN
->]);<P
+>bool <B
+CLASS="function"
+>snmpset</B
+></CODE
+> (string hostname, string community, string object_id, string type, mixed value [, int timeout [, int retries]])</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Sets the specified SNMP object value, returning true on success
+>&#13;     Sets the specified SNMP object value, returning true on success
      and false on error.</P
 ><P
->     The <B
-CLASS="FUNCTION"
+>&#13;     The <B
+CLASS="function"
 >snmpset()</B
 > function is used
      to set the value of an SNMP object specified by the
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >object_id</I
 ></TT
 >. SNMP agent is specified by the
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >hostname</I
 ></TT
 > and the read community is specified
      by the <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >community</I
 ></TT

@@ -23,13 +23,13 @@
    | If you did not, or have any questions about PHP licensing, please    |
    | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
-   | Authors: Andi Gutmans <andi@php.net>                                 |
+   | Authors: Andi Gutmans <andi@zend.com>                                |
    |          Zeev Suraski <zeev@zend.com>                                |
    +----------------------------------------------------------------------+
  */
 
 
-/* $Id: datetime.h,v 1.18 2000/02/07 23:54:51 zeev Exp $ */
+/* $Id: datetime.h,v 1.19 2000/04/10 19:29:37 andi Exp $ */
 
 #ifndef _DATETIME_H
 #define _DATETIME_H

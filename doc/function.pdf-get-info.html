@@ -4,7 +4,7 @@
 >PDF_get_info</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -15,9 +15,12 @@ REL="PREVIOUS"
 TITLE="PDF functions"
 HREF="ref.pdf.html"><LINK
 REL="NEXT"
-TITLE="PDF_set_info_creator"
-HREF="function.pdf-set-info-creator.html"></HEAD
+TITLE="PDF_set_info"
+HREF="function.pdf-set-info.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -55,7 +58,7 @@ WIDTH="10%"
 ALIGN="right"
 VALIGN="bottom"
 ><A
-HREF="function.pdf-set-info-creator.html"
+HREF="function.pdf-set-info.html"
 >Next</A
 ></TD
 ></TR
@@ -65,91 +68,83 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.PDF-GET-INFO"
+NAME="function.pdf-get-info"
 >PDF_get_info</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN20613"
+NAME="AEN26300"
 ></A
->PDF_get_info -- Returns a default info structure for a pdf document</DIV
+><P
+>    (PHP3 &#62;= 3.0.6, PHP4 &#60;= 4.0b1)</P
+>PDF_get_info&nbsp;--&nbsp;Returns an empty info structure for a pdf document</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN20616"
+NAME="AEN26303"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->info pdf_get_info</CODE
->(string filename);<P
+>info <B
+CLASS="function"
+>pdf_get_info</B
+></CODE
+> (string filename)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     The <A
-HREF="function.pdf-get-info.html"
-><B
-CLASS="FUNCTION"
+>&#13;     The <B
+CLASS="function"
 >PDF_get_info()</B
-></A
-> function returns a
-     default info structure for the pdf document. It should be filled
+> function returns an
+     empty info structure for the pdf document. It should be filled
      with appropriate information like the author, subject etc. of
      the document.
 
     <DIV
-CLASS="NOTE"
+CLASS="note"
 ><BLOCKQUOTE
-CLASS="NOTE"
+CLASS="note"
 ><P
 ><B
 >Note: </B
->     This functions is not available if pdflib 2.0 support is activated.
+>
+     This functions is not available if pdflib 2.x support is activated.
     </P
 ></BLOCKQUOTE
 ></DIV
 ></P
 ><P
->     See also <A
-HREF="function.pdf-set-info-creator.html"
-><B
-CLASS="FUNCTION"
+>&#13;     See also <B
+CLASS="function"
 >PDF_set_info_creator()</B
-></A
 >,
-              <A
-HREF="function.pdf-set-info-author.html"
-><B
-CLASS="FUNCTION"
+              <B
+CLASS="function"
 >PDF_set_info_author()</B
-></A
 >,
-              <A
-HREF="function.pdf-set-info-keywords.html"
-><B
-CLASS="FUNCTION"
+              <B
+CLASS="function"
 >PDF_set_info_keywords()</B
-></A
 >,
-              <A
-HREF="function.pdf-set-info-title.html"
-><B
-CLASS="FUNCTION"
+              <B
+CLASS="function"
 >PDF_set_info_title()</B
-></A
 >,
-              <A
-HREF="function.pdf-set-info-subject.html"
-><B
-CLASS="FUNCTION"
+              <B
+CLASS="function"
 >PDF_set_info_subject()</B
-></A
 >.</P
 ></DIV
 ><DIV
@@ -183,7 +178,7 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><A
-HREF="function.pdf-set-info-creator.html"
+HREF="function.pdf-set-info.html"
 >Next</A
 ></TD
 ></TR
@@ -205,7 +200,7 @@ HREF="ref.pdf.html"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->PDF_set_info_creator</TD
+>PDF_set_info</TD
 ></TR
 ></TABLE
 ></DIV

@@ -4,20 +4,23 @@
 >bcmul</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
-TITLE="Arbitrary precision mathematics functions"
+TITLE="BCMath Arbitrary Precision Mathematics Functions"
 HREF="ref.bc.html"><LINK
 REL="PREVIOUS"
 TITLE="bcmod"
 HREF="function.bcmod.html"><LINK
 REL="NEXT"
 TITLE="bcpow"
-HREF="function.bcpow.html"></HEAD
+HREF="function.bcpow.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,63 +68,72 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.BCMUL"
+NAME="function.bcmul"
 >bcmul</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN3411"
+NAME="AEN5274"
 ></A
->bcmul -- Multiply two arbitrary precision number.</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>bcmul&nbsp;--&nbsp;Multiply two arbitrary precision number</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN3414"
+NAME="AEN5277"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->string bcmul</CODE
->(string left operand, string right operand, int [<SPAN
-CLASS="OPTIONAL"
->scale</SPAN
->]);<P
+>string <B
+CLASS="function"
+>bcmul</B
+></CODE
+> (string left operand, string right operand [, int 
+       scale])</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->    Multiply the <TT
-CLASS="PARAMETER"
+>&#13;     Multiply the <TT
+CLASS="parameter"
 ><I
 >left operand</I
 ></TT
 > by the
-    <TT
-CLASS="PARAMETER"
+     <TT
+CLASS="parameter"
 ><I
 >right operand</I
 ></TT
-> and returns the result.  The optional
-    <TT
-CLASS="PARAMETER"
+> and returns the result.  The
+     optional <TT
+CLASS="parameter"
 ><I
 >scale</I
 ></TT
-> sets the number of digits after the decimal
-    place in the result.</P
+> sets the number of digits
+     after the decimal place in the result.
+    </P
 ><P
->    See also <A
+>&#13;     See also <A
 HREF="function.bcdiv.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >bcdiv()</B
 ></A
->.</P
+>.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

@@ -4,7 +4,7 @@
 >ifxus_seek_slob</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="ifxus_tell_slob"
 HREF="function.ifxus-tell-slob.html"><LINK
 REL="NEXT"
 TITLE="ifxus_read_slob"
-HREF="function.ifxus-read-slob.html"></HEAD
+HREF="function.ifxus-read-slob.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,43 +68,52 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.IFXUS-SEEK-SLOB"
+NAME="function.ifxus-seek-slob"
 >ifxus_seek_slob</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN14164"
+NAME="AEN17012"
 ></A
->ifxus_seek_slob -- Sets the current file or seek position</DIV
+><P
+>    (PHP3 &#62;= 3.0.4, PHP4 )</P
+>ifxus_seek_slob&nbsp;--&nbsp;Sets the current file or seek position</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN14167"
+NAME="AEN17015"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int ifxus_seek_blob</CODE
->(long bid, int mode, long offset);<P
+>int <B
+CLASS="function"
+>ifxus_seek_blob</B
+></CODE
+> (long bid, int mode, long offset)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Sets the current file or seek position of an open slob object.
+>&#13;     Sets the current file or seek position of an open slob object.
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >bid</I
 ></TT
 > should be an existing slob id.  Modes:
      0 = LO_SEEK_SET, 1 = LO_SEEK_CUR, 2 = LO_SEEK_END and
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >offset</I
 ></TT

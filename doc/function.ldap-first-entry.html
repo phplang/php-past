@@ -4,7 +4,7 @@
 >ldap_first_entry</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="ldap_first_attribute"
 HREF="function.ldap-first-attribute.html"><LINK
 REL="NEXT"
 TITLE="ldap_free_result"
-HREF="function.ldap-free-result.html"></HEAD
+HREF="function.ldap-free-result.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,65 +68,74 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.LDAP-FIRST-ENTRY"
+NAME="function.ldap-first-entry"
 >ldap_first_entry</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN14616"
+NAME="AEN17673"
 ></A
->ldap_first_entry -- Return first result id</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>ldap_first_entry&nbsp;--&nbsp;Return first result id</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN14619"
+NAME="AEN17676"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int ldap_first_entry</CODE
->(int link_identifier, int result_identifier);<P
+>int <B
+CLASS="function"
+>ldap_first_entry</B
+></CODE
+> (int link_identifier, int result_identifier)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Returns the result entry identifier for the first entry on
+>&#13;     Returns the result entry identifier for the first entry on
      success and false on error.</P
 ><P
 >  
      Entries in the LDAP result are read sequentially using the
      <B
-CLASS="FUNCTION"
+CLASS="function"
 >ldap_first_entry()</B
 > and
      <A
 HREF="function.ldap-next-entry.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >ldap_next_entry()</B
 ></A
 >
      functions. <B
-CLASS="FUNCTION"
+CLASS="function"
 >ldap_first_entry()</B
 > returns the
      entry identifier for first entry in the result. This entry
      identifier is then supplied to
      <B
-CLASS="FUNCTION"
+CLASS="function"
 >lap_next_entry()</B
 > routine to get successive
      entries from the result.</P
 ><P
->     see also <A
+>&#13;     see also <A
 HREF="function.ldap-get-entries.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >ldap_get_entries()</B
 ></A
 >.</P

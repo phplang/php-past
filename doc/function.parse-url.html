@@ -4,20 +4,23 @@
 >parse_url</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
-TITLE="URL functions"
+TITLE="URL Functions"
 HREF="ref.url.html"><LINK
 REL="PREVIOUS"
 TITLE="base64_encode"
 HREF="function.base64-encode.html"><LINK
 REL="NEXT"
-TITLE="urldecode"
-HREF="function.urldecode.html"></HEAD
+TITLE="rawurldecode"
+HREF="function.rawurldecode.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -55,7 +58,7 @@ WIDTH="10%"
 ALIGN="right"
 VALIGN="bottom"
 ><A
-HREF="function.urldecode.html"
+HREF="function.rawurldecode.html"
 >Next</A
 ></TD
 ></TR
@@ -65,37 +68,47 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.PARSE-URL"
+NAME="function.parse-url"
 >parse_url</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN26524"
+NAME="AEN35368"
 ></A
->parse_url -- parse a URL and return its components</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>parse_url&nbsp;--&nbsp;Parse a URL and return its components</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN26527"
+NAME="AEN35371"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->array parse_url</CODE
->(string url);<P
+>array <B
+CLASS="function"
+>parse_url</B
+></CODE
+> (string url)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     This function returns an associative array returning any of the
+>&#13;     This function returns an associative array returning any of the
      various components of the URL that are present. This includes the
      "scheme", "host", "port", "user", "pass", "path", "query", and
-     "fragment".</P
+     "fragment".
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -128,7 +141,7 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><A
-HREF="function.urldecode.html"
+HREF="function.rawurldecode.html"
 >Next</A
 ></TD
 ></TR
@@ -150,7 +163,7 @@ HREF="ref.url.html"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->urldecode</TD
+>rawurldecode</TD
 ></TR
 ></TABLE
 ></DIV

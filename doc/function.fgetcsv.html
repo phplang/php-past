@@ -4,7 +4,7 @@
 >fgetcsv</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="fgetc"
 HREF="function.fgetc.html"><LINK
 REL="NEXT"
 TITLE="fgets"
-HREF="function.fgets.html"></HEAD
+HREF="function.fgets.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,69 +68,107 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.FGETCSV"
+NAME="function.fgetcsv"
 >fgetcsv</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN8516"
+NAME="AEN9704"
 ></A
->fgetcsv -- get line from file pointer and parse for CSV fields</DIV
+><P
+>    (PHP3 &#62;= 3.0.8, PHP4 )</P
+>fgetcsv&nbsp;--&nbsp;
+     Gets line from file pointer and parse for CSV fields
+    </DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN8519"
+NAME="AEN9707"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->array fgetcsv</CODE
->(int fp, int length, string [<SPAN
-CLASS="OPTIONAL"
->delimiter</SPAN
->]);<P
+>array <B
+CLASS="function"
+>fgetcsv</B
+></CODE
+> (int fp, int length [, string 
+       delimiter])</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->	 Similar to fgets() except that fgetcsv() parses the line it reads for
-	 fields in CSV format and returns an array containing the fields read.
-         The field delimiter is a comma, unless you specifiy another
-         delimiter with the optional third parameter.</P
+>&#13;     Similar to <A
+HREF="function.fgets.html"
+><B
+CLASS="function"
+>fgets()</B
+></A
+> except that
+     <B
+CLASS="function"
+>fgetcsv()</B
+> parses the line it reads for fields
+     in <SPAN
+CLASS="acronym"
+>CSV</SPAN
+> format and returns an array containing
+     the fields read.  The field delimiter is a comma, unless you
+     specifiy another delimiter with the optional third parameter.
+    </P
 ><P
->	 fp must be a valid file pointer to a file successfully opened by
-	 <A
+>&#13;     <TT
+CLASS="parameter"
+><I
+>Fp</I
+></TT
+> must be a valid file pointer to a file
+     successfully opened by <A
 HREF="function.fopen.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >fopen()</B
 ></A
->, <A
+>,
+     <A
 HREF="function.popen.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >popen()</B
 ></A
 >, or <A
 HREF="function.fsockopen.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >fsockopen()</B
 ></A
-></P
+>
+    </P
 ><P
->	 length must be greater than the longest line to be found in the CSV
-	 file (allowing for trailing line-end characters).</P
+>&#13;     Length must be greater than the longest line to be found in the
+     CSV file (allowing for trailing line-end characters).
+    </P
 ><P
->	 fgetcsv() returns false on error, including end of file.</P
+>&#13;     <B
+CLASS="function"
+>Fgetcsv()</B
+> returns false on error, including
+     end of file.
+    </P
 ><P
->	 NB A blank line in a CSV file will be returned as an array comprising
-	 just one single null field, and will not be treated as an error.</P
+>&#13;     NB A blank line in a CSV file will be returned as an array
+     comprising just one single null field, and will not be treated as
+     an error.
+    </P
 ><TABLE
 WIDTH="100%"
 BORDER="0"
@@ -137,23 +178,40 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
->Example 1. fgetcsv() example - Read and print entire contents of a CSV file</B
+>Example 1. 
+      <B
+CLASS="function"
+>Fgetcsv()</B
+> example - Read and print entire
+      contents of a CSV file
+     </B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->$row=1;
-$fp = fopen("test.csv","r");
-while ($data = fgetcsv($fp,1000, ",")) {
-	$num = count($data);
-	print "&lt;p&#62; $num fields in line $row: &lt;br&#62;";
-	$row++;
-	for ( $c=0; $c&#60;$num; $c++ ) print $data[$c] . "&lt;br&#62;";
+CLASS="programlisting"
+>&#13;$row = 1;
+$fp = fopen ("test.csv","r");
+while ($data = fgetcsv ($fp, 1000, ",")) {
+    $num = count ($data);
+    print "&#60;p&#62; $num fields in line $row: &#60;br&#62;";
+    $row++;
+    for ($c=0; $c&#60;$num; $c++) {
+        print $data[$c] . "&#60;br&#62;";
+    }
 }
-fclose($fp);
-      </PRE
+fclose ($fp);
+     </PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR

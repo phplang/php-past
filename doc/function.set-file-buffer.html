@@ -4,7 +4,7 @@
 >set_file_buffer</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="fwrite"
 HREF="function.fwrite.html"><LINK
 REL="NEXT"
 TITLE="is_dir"
-HREF="function.is-dir.html"></HEAD
+HREF="function.is-dir.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,69 +68,85 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.SET-FILE-BUFFER"
+NAME="function.set-file-buffer"
 >set_file_buffer</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN9011"
+NAME="AEN10367"
 ></A
->set_file_buffer -- Sets file buffering on the given file pointer</DIV
+><P
+>    (PHP3 &#62;= 3.0.8, PHP4 &#62;= 4.0.1)</P
+>set_file_buffer&nbsp;--&nbsp;
+     Sets file buffering on the given file pointer
+    </DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN9014"
+NAME="AEN10370"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int fwrite</CODE
->(int fp, int buffer);<P
+>int <B
+CLASS="function"
+>set_file_buffer</B
+></CODE
+> (int fp, int buffer)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     <B
-CLASS="FUNCTION"
+>&#13;     <B
+CLASS="function"
 >set_file_buffer()</B
 > sets the buffering for write
      operations on the given filepointer <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >fp</I
 ></TT
 > to
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >buffer</I
 ></TT
-> bytes.  If <TT
-CLASS="PARAMETER"
+> bytes.  If
+     <TT
+CLASS="parameter"
 ><I
 >buffer</I
 ></TT
->
-     is 0 then write operations are unbuffered.</P
+> is 0 then write operations are
+     unbuffered.
+    </P
 ><P
->     The function returns 0 on success, or EOF if the request cannot
-     be honored.</P
+>&#13;     The function returns 0 on success, or EOF if the request cannot
+     be honored.
+    </P
 ><P
->     Note that the default for any fopen with calling set_file_buffer
-     is 8K.</P
+>&#13;     Note that the default for any fopen with calling set_file_buffer
+     is 8K.
+    </P
 ><P
->     See also <A
+>&#13;     See also <A
 HREF="function.fopen.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >fopen()</B
 ></A
->.</P
+>.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

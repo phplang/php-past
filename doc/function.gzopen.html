@@ -4,20 +4,23 @@
 >gzopen</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
-TITLE="Compression functions"
+TITLE="Zlib Compression Functions"
 HREF="ref.zlib.html"><LINK
 REL="PREVIOUS"
 TITLE="gzgetss"
 HREF="function.gzgetss.html"><LINK
 REL="NEXT"
 TITLE="gzpassthru"
-HREF="function.gzpassthru.html"></HEAD
+HREF="function.gzpassthru.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,72 +68,91 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.GZOPEN"
+NAME="function.gzopen"
 >gzopen</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN6421"
+NAME="AEN37821"
 ></A
->gzopen -- open gz-file</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>gzopen&nbsp;--&nbsp;Open gz-file</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN6424"
+NAME="AEN37824"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int gzopen</CODE
->(string filename, string mode, int [<SPAN
-CLASS="OPTIONAL"
->use_include_path</SPAN
->]);<P
+>int <B
+CLASS="function"
+>gzopen</B
+></CODE
+> (string filename, string mode [, int 
+       use_include_path])</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Opens a gzip (.gz) file for reading or writing. The mode
+>&#13;     Opens a gzip (.gz) file for reading or writing. The mode
      parameter is as in <A
 HREF="function.fopen.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >fopen()</B
 ></A
 > ("rb" or "wb") but
      can also include a compression level ("wb9") or a strategy: 'f'
      for filtered data as in "wb6f", 'h' for Huffman only compression
      as in "wb1h". (See the description of deflateInit2 in zlib.h for
-     more information about the strategy parameter.)</P
+     more information about the strategy parameter.)
+    </P
 ><P
->     Gzopen can be used to read a file which is not in gzip format; in
-     this case <A
+>&#13;     <B
+CLASS="function"
+>Gzopen()</B
+> can be used to read a file which is
+     not in gzip format; in this case <A
 HREF="function.gzread.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >gzread()</B
 ></A
-> will directly read from the
-     file without decompression.</P
+> will
+     directly read from the file without decompression.
+    </P
 ><P
->     Gzopen returns a file pointer to the file opened, after that,
-     everything you read from this file descriptor will be
-     transparently decompressed and what you write gets compressed.</P
+>&#13;     <B
+CLASS="function"
+>Gzopen()</B
+> returns a file pointer to the file
+     opened, after that, everything you read from this file descriptor
+     will be transparently decompressed and what you write gets
+     compressed.
+    </P
 ><P
->     If the open fails, the function returns false.</P
+>&#13;     If the open fails, the function returns false.
+    </P
 ><P
->     You can use the optional third parameter and set it to "1", if
+>&#13;     You can use the optional third parameter and set it to "1", if
      you want to search for the file in the <A
-HREF="configuration.html#INI.INCLUDE-PATH"
+HREF="configuration.html#ini.include-path"
 >include_path</A
->, too.</P
+>, too.
+    </P
 ><P
-><TABLE
+>&#13;     <TABLE
 WIDTH="100%"
 BORDER="0"
 CELLPADDING="0"
@@ -139,27 +161,42 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
->Example 1. gzopen() example</B
+>Example 1. <B
+CLASS="function"
+>Gzopen()</B
+> Example</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->$fp = gzopen("/tmp/file.gz", "r");</PRE
+CLASS="programlisting"
+>&#13;$fp = gzopen ("/tmp/file.gz", "r");
+      </PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR
 ></TABLE
-></P
+>
+    </P
 ><P
->     See also <A
+>&#13;     See also <A
 HREF="function.gzclose.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >gzclose()</B
 ></A
->.</P
+>.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

@@ -4,7 +4,7 @@
 >ImageColorTransparent</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -15,9 +15,12 @@ REL="PREVIOUS"
 TITLE="ImageColorsTotal"
 HREF="function.imagecolorstotal.html"><LINK
 REL="NEXT"
-TITLE="ImageCopyResized"
-HREF="function.imagecopyresized.html"></HEAD
+TITLE="ImageCopy"
+HREF="function.imagecopy.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -55,7 +58,7 @@ WIDTH="10%"
 ALIGN="right"
 VALIGN="bottom"
 ><A
-HREF="function.imagecopyresized.html"
+HREF="function.imagecopy.html"
 >Next</A
 ></TD
 ></TR
@@ -65,55 +68,83 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.IMAGECOLORTRANSPARENT"
+NAME="function.imagecolortransparent"
 >ImageColorTransparent</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN11707"
+NAME="AEN13702"
 ></A
->ImageColorTransparent -- define a color as transparent</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>ImageColorTransparent&nbsp;--&nbsp;Define a color as transparent</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN11710"
+NAME="AEN13705"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int imagecolortransparent</CODE
->(int im, int [<SPAN
-CLASS="OPTIONAL"
->col</SPAN
->]);<P
+>int <B
+CLASS="function"
+>imagecolortransparent</B
+></CODE
+> (int im [, int 
+       col])</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     ImageColorTransparent sets the transparent color in the im image
-     to col.  im is the image identifier returned by
-     <A
-HREF="function.imagecreate.html"
-><B
-CLASS="FUNCTION"
->imagecreate()</B
-></A
-> and col is a color identifier
-     returned by <A
-HREF="function.imagecolorallocate.html"
-><B
-CLASS="FUNCTION"
->imagecolorallocate()</B
-></A
->.</P
+>&#13;     <B
+CLASS="function"
+>ImageColorTransparent()</B
+> sets the transparent
+     color in the <TT
+CLASS="parameter"
+><I
+>im</I
+></TT
+> image to
+     <TT
+CLASS="parameter"
+><I
+>col</I
+></TT
+>.  <TT
+CLASS="parameter"
+><I
+>Im</I
+></TT
+> is the
+     image identifier returned by <B
+CLASS="function"
+>ImageCreate()</B
+> and
+     <TT
+CLASS="parameter"
+><I
+>col</I
+></TT
+> is a color identifier returned by
+     <B
+CLASS="function"
+>ImageColorAllocate()</B
+>.
+    </P
 ><P
->     The identifier of the new (or current, if none is specified)
-     transparent color is returned.</P
+>&#13;     The identifier of the new (or current, if none is specified)
+     transparent color is returned.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -146,7 +177,7 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><A
-HREF="function.imagecopyresized.html"
+HREF="function.imagecopy.html"
 >Next</A
 ></TD
 ></TR
@@ -168,7 +199,7 @@ HREF="ref.image.html"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->ImageCopyResized</TD
+>ImageCopy</TD
 ></TR
 ></TABLE
 ></DIV

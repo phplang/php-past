@@ -4,7 +4,7 @@
 >getrusage</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -15,9 +15,12 @@ REL="PREVIOUS"
 TITLE="getmyuid"
 HREF="function.getmyuid.html"><LINK
 REL="NEXT"
-TITLE="phpinfo"
-HREF="function.phpinfo.html"></HEAD
+TITLE="phpcredits"
+HREF="function.phpcredits.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -55,7 +58,7 @@ WIDTH="10%"
 ALIGN="right"
 VALIGN="bottom"
 ><A
-HREF="function.phpinfo.html"
+HREF="function.phpcredits.html"
 >Next</A
 ></TD
 ></TR
@@ -65,42 +68,49 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.GETRUSAGE"
+NAME="function.getrusage"
 >getrusage</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN22593"
+NAME="AEN28403"
 ></A
->getrusage -- Get the current resource usages.</DIV
+><P
+>    (PHP3 &#62;= 3.0.7, PHP4 &#62;= 4.0b2)</P
+>getrusage&nbsp;--&nbsp;Get the current resource usages.</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN22596"
+NAME="AEN28406"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->array getrusage</CODE
->(int [<SPAN
-CLASS="OPTIONAL"
->who</SPAN
->]);<P
+>array <B
+CLASS="function"
+>getrusage</B
+></CODE
+> ([int 
+       who])</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     This is an interface to getrusage(2). It returns an associative array
-     containing the data returned from the system call. If who is 1, getrusage
-     will be called with RUSAGE_CHILDREN.
-     
-     All entries are accessible by using their documented field names.
-
+>&#13;     This is an interface to getrusage(2). It returns an associative
+     array containing the data returned from the system call. If who
+     is 1, getrusage will be called with RUSAGE_CHILDREN.
+    </P
+><P
+>&#13;     All entries are accessible by using their documented field names.
      <TABLE
 WIDTH="100%"
 BORDER="0"
@@ -110,24 +120,33 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
 >Example 1. Getrusage Example</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->$dat = getrusage();
+CLASS="programlisting"
+>&#13;$dat = getrusage();
 echo $dat["ru_nswap"];         # number of swaps
 echo $dat["ru_majflt"];        # number of page faults
 echo $dat["ru_utime.tv_sec"];  # user time used (seconds)
-echo $dat["ru_utime.tv_usec"]; # user time used (microseconds)</PRE
+echo $dat["ru_utime.tv_usec"]; # user time used (microseconds)
+      </PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR
 ></TABLE
 >
-
      See your system's man page for more details. 
     </P
 ></DIV
@@ -162,7 +181,7 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><A
-HREF="function.phpinfo.html"
+HREF="function.phpcredits.html"
 >Next</A
 ></TD
 ></TR
@@ -184,7 +203,7 @@ HREF="ref.info.html"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->phpinfo</TD
+>phpcredits</TD
 ></TR
 ></TABLE
 ></DIV

@@ -4,7 +4,7 @@
 >Function true/false return values</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="Short-circuited boolean evaluation"
 HREF="migration-booleval.html"><LINK
 REL="NEXT"
 TITLE="Other incompatibilities"
-HREF="migration-other.html"></HEAD
+HREF="migration-other.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="sect1"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -64,19 +67,19 @@ HREF="migration-other.html"
 ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><DIV
-CLASS="SECT1"
+CLASS="sect1"
 ><H1
-CLASS="SECT1"
+CLASS="sect1"
 ><A
-NAME="MIGRATION-TRUEFALSE"
+NAME="migration-truefalse"
 >Function true/false return values</A
 ></H1
 ><P
->   Most internal functions have been rewritten so they return TRUE
+>&#13;   Most internal functions have been rewritten so they return TRUE
    when successful and FALSE when failing, as opposed to 0 and -1 in
    PHP/FI 2.0, respectively.  The new behaviour allows for more
    logical code, like <TT
-CLASS="LITERAL"
+CLASS="literal"
 >$fp = fopen("/your/file") or
     fail("darn!");</TT
 >.  Because PHP/FI 2.0 had no clear rules
@@ -84,7 +87,7 @@ CLASS="LITERAL"
    scripts will probably have to be checked manually after using the
    2.0 to 3.0 convertor.</P
 ><P
->   <TABLE
+>&#13;   <TABLE
 WIDTH="100%"
 BORDER="0"
 CELLPADDING="0"
@@ -93,17 +96,27 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
 >Example A-9. Migration from 2.0: return values, old code</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->$fp = fopen($file, "r");
+CLASS="programlisting"
+>&#13;$fp = fopen($file, "r");
 if ($fp == -1);
-    echo("Could not open $file for reading&lt;br&gt;\n");
-endif;</PRE
+    echo("Could not open $file for reading&#60;br&#62;\n");
+endif;
+</PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR
@@ -118,14 +131,24 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
 >Example A-10. Migration from 2.0: return values, new code</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->$fp = @fopen($file, "r") or print("Could not open $file for reading&lt;br&gt;\n");</PRE
+CLASS="programlisting"
+>&#13;$fp = @fopen($file, "r") or print("Could not open $file for reading&#60;br&#62;\n");
+</PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR

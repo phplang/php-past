@@ -4,20 +4,23 @@
 >syslog</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
-TITLE="Network functions"
+TITLE="Network Functions"
 HREF="ref.network.html"><LINK
 REL="PREVIOUS"
-TITLE="set_socket_blocking"
-HREF="function.set-socket-blocking.html"><LINK
+TITLE="socket_set_timeout"
+HREF="function.socket-set-timeout.html"><LINK
 REL="NEXT"
-TITLE="NIS functions"
-HREF="ref.nis.html"></HEAD
+TITLE="ip2long"
+HREF="function.ip2long.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -42,7 +45,7 @@ WIDTH="10%"
 ALIGN="left"
 VALIGN="bottom"
 ><A
-HREF="function.set-socket-blocking.html"
+HREF="function.socket-set-timeout.html"
 >Prev</A
 ></TD
 ><TD
@@ -55,7 +58,7 @@ WIDTH="10%"
 ALIGN="right"
 VALIGN="bottom"
 ><A
-HREF="ref.nis.html"
+HREF="function.ip2long.html"
 >Next</A
 ></TD
 ></TR
@@ -65,40 +68,49 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.SYSLOG"
+NAME="function.syslog"
 >syslog</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN18886"
+NAME="AEN23885"
 ></A
->syslog -- generate a system log message</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>syslog&nbsp;--&nbsp;Generate a system log message</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN18889"
+NAME="AEN23888"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int syslog</CODE
->(int priority, string message);<P
+>int <B
+CLASS="function"
+>syslog</B
+></CODE
+> (int priority, string message)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     <B
-CLASS="FUNCTION"
->syslog()</B
+>&#13;     <B
+CLASS="function"
+>Syslog()</B
 > generates a log message that will be
      distributed by the system logger.
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >priority</I
 ></TT
@@ -106,20 +118,23 @@ CLASS="PARAMETER"
      and the level, values for which are given in the next section.
      The remaining argument is the message to send, except that the
      two characters <TT
-CLASS="LITERAL"
+CLASS="literal"
 >%m</TT
 > will be replaced by the
      error message string (strerror) corresponding to the present
      value of <SPAN
-CLASS="ERRORTYPE"
+CLASS="errortype"
 >errno</SPAN
->.</P
+>.
+    </P
 ><P
->     More information on the syslog facilities can be found in
-     the man pages for syslog on Unix machines.</P
+>&#13;     More information on the syslog facilities can be found in the man
+     pages for syslog on Unix machines.
+    </P
 ><P
->     On Windows NT, the syslog service is emulated using the
-     Event Log.</P
+>&#13;     On Windows NT, the syslog service is emulated using the Event
+     Log.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -136,7 +151,7 @@ WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
 ><A
-HREF="function.set-socket-blocking.html"
+HREF="function.socket-set-timeout.html"
 >Prev</A
 ></TD
 ><TD
@@ -152,7 +167,7 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><A
-HREF="ref.nis.html"
+HREF="function.ip2long.html"
 >Next</A
 ></TD
 ></TR
@@ -161,7 +176,7 @@ HREF="ref.nis.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->set_socket_blocking</TD
+>socket_set_timeout</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"
@@ -174,7 +189,7 @@ HREF="ref.network.html"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->NIS functions</TD
+>ip2long</TD
 ></TR
 ></TABLE
 ></DIV

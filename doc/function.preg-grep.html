@@ -4,20 +4,23 @@
 >preg_grep</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
-TITLE="Perl-compatible Regular Expression functions"
+TITLE="Regular Expression Functions (Perl-Compatible)"
 HREF="ref.pcre.html"><LINK
 REL="PREVIOUS"
 TITLE="preg_quote"
 HREF="function.preg-quote.html"><LINK
 REL="NEXT"
 TITLE="Pattern Modifiers"
-HREF="pcre.pattern.modifiers.html"></HEAD
+HREF="pcre.pattern.modifiers.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,51 +68,62 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.PREG-GREP"
+NAME="function.preg-grep"
 >preg_grep</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN22208"
+NAME="AEN30605"
 ></A
->preg_grep -- Return array entries that match the pattern</DIV
+><P
+>    (PHP4 )</P
+>preg_grep&nbsp;--&nbsp;
+     Return array entries that match the pattern
+    </DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN22211"
+NAME="AEN30608"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->array preg_grep</CODE
->(string pattern, array input);<P
+>array <B
+CLASS="function"
+>preg_grep</B
+></CODE
+> (string pattern, array input)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     <B
-CLASS="FUNCTION"
+>&#13;     <B
+CLASS="function"
 >preg_grep()</B
 > returns the array consisting of
      the elements of the <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >input</I
 ></TT
 > array that match
      the given <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >pattern</I
 ></TT
 >.</P
 ><P
->     <TABLE
+>&#13;     <TABLE
 WIDTH="100%"
 BORDER="0"
 CELLPADDING="0"
@@ -118,35 +132,35 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
 >Example 1. <B
-CLASS="FUNCTION"
+CLASS="function"
 >preg_grep()</B
 > example</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->preg_grep("/^(\d+)?\.\d+$/", $array); // find all floating point numbers in the array
+CLASS="programlisting"
+>&#13;// return all array elements
+// containing floating point numbers
+$fl_array = preg_grep ("/^(\d+)?\.\d+$/", $array);
       </PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR
 ></TABLE
 >
-
-    <DIV
-CLASS="NOTE"
-><BLOCKQUOTE
-CLASS="NOTE"
-><P
-><B
->Note: </B
->      This function was added in PHP 4.0.</P
-></BLOCKQUOTE
-></DIV
-></P
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

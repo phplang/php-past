@@ -1,10 +1,10 @@
 <HTML
 ><HEAD
 ><TITLE
->pg_FieldPrtLen</TITLE
+>pg_fieldprtlen</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -12,12 +12,15 @@ REL="UP"
 TITLE="PostgreSQL functions"
 HREF="ref.pgsql.html"><LINK
 REL="PREVIOUS"
-TITLE="pg_FieldNum"
+TITLE="pg_fieldnum"
 HREF="function.pg-fieldnum.html"><LINK
 REL="NEXT"
-TITLE="pg_FieldSize"
-HREF="function.pg-fieldsize.html"></HEAD
+TITLE="pg_fieldsize"
+HREF="function.pg-fieldsize.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,36 +68,50 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.PG-FIELDPRTLEN"
->pg_FieldPrtLen</A
+NAME="function.pg-fieldprtlen"
+>pg_fieldprtlen</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN23364"
+NAME="AEN29494"
 ></A
->pg_FieldPrtLen -- Returns the printed length</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>pg_fieldprtlen&nbsp;--&nbsp;Returns the printed length</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN23367"
+NAME="AEN29497"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int pg_fieldprtlen</CODE
->(int result_id, int row_number, string field_name);<P
+>int <B
+CLASS="function"
+>pg_fieldprtlen</B
+></CODE
+> (int result_id, int row_number, string field_name)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     pg_FieldPrtLen() will return the actual printed length (number of
-     characters) of a specific value in a PostgreSQL result.  Row
-     numbering starts at 0.  This function will return -1 on an error.</P
+>&#13;     <B
+CLASS="function"
+>Pg_fieldprtlen()</B
+> will return the actual
+     printed length (number of characters) of a specific value in a
+     PostgreSQL result.  Row numbering starts at 0.  This function
+     will return -1 on an error.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -136,7 +153,7 @@ HREF="function.pg-fieldsize.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->pg_FieldNum</TD
+>pg_fieldnum</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"
@@ -149,7 +166,7 @@ HREF="ref.pgsql.html"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->pg_FieldSize</TD
+>pg_fieldsize</TD
 ></TR
 ></TABLE
 ></DIV

@@ -27,7 +27,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: wddx_a.c,v 1.13 2000/01/01 04:31:17 sas Exp $ */
+/* $Id: wddx_a.c,v 1.14 2000/05/25 12:20:29 andrei Exp $ */
 
 #include "php.h"
 #include "internal_functions.h"
@@ -297,7 +297,7 @@ static void _php3_wddx_serialize_string(wddx_packet *packet, pval *var)
 	_php3_wddx_add_chunk(packet, WDDX_STRING_S);
 
 	i = 0;
-	buf = (char *)emalloc(var->value.str.len);
+	buf = (char *)emalloc(var->value.str.len + 1);
 	for(c=var->value.str.val; *c!='\0'; c++)
 	{
 		if (iscntrl((int)*c))

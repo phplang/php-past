@@ -4,20 +4,23 @@
 >odbc_field_type</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
-TITLE="ODBC functions"
+TITLE="Unified ODBC functions"
 HREF="ref.odbc.html"><LINK
 REL="PREVIOUS"
-TITLE="odbc_field_name"
-HREF="function.odbc-field-name.html"><LINK
+TITLE="odbc_field_num"
+HREF="function.odbc-field-num.html"><LINK
 REL="NEXT"
 TITLE="odbc_field_len"
-HREF="function.odbc-field-len.html"></HEAD
+HREF="function.odbc-field-len.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -42,7 +45,7 @@ WIDTH="10%"
 ALIGN="left"
 VALIGN="bottom"
 ><A
-HREF="function.odbc-field-name.html"
+HREF="function.odbc-field-num.html"
 >Prev</A
 ></TD
 ><TD
@@ -65,39 +68,49 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.ODBC-FIELD-TYPE"
+NAME="function.odbc-field-type"
 >odbc_field_type</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN19426"
+NAME="AEN24303"
 ></A
->odbc_field_type -- datatype of a field</DIV
+><P
+>    (PHP3 &#62;= 3.0.6, PHP4 )</P
+>odbc_field_type&nbsp;--&nbsp;Datatype of a field</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN19429"
+NAME="AEN24306"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->string odbc_field_type</CODE
->(int result_id, int field_number);<P
+>string <B
+CLASS="function"
+>odbc_field_type</B
+></CODE
+> (int result_id, int field_number)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     <B
-CLASS="FUNCTION"
+>&#13;     <B
+CLASS="function"
 >odbc_field_type()</B
 > will return the SQL type of
      the field referecend by number in the given ODBC result
-     identifier.  Field numbering starts at 1.</P
+     identifier.  Field numbering starts at 1.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -114,7 +127,7 @@ WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
 ><A
-HREF="function.odbc-field-name.html"
+HREF="function.odbc-field-num.html"
 >Prev</A
 ></TD
 ><TD
@@ -139,7 +152,7 @@ HREF="function.odbc-field-len.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->odbc_field_name</TD
+>odbc_field_num</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"

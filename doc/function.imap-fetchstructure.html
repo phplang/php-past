@@ -4,20 +4,23 @@
 >imap_fetchstructure</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
-TITLE="IMAP functions"
+TITLE="IMAP, POP3 and NNTP functions"
 HREF="ref.imap.html"><LINK
 REL="PREVIOUS"
 TITLE="imap_fetchbody"
 HREF="function.imap-fetchbody.html"><LINK
 REL="NEXT"
 TITLE="imap_header"
-HREF="function.imap-header.html"></HEAD
+HREF="function.imap-header.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,59 +68,68 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.IMAP-FETCHSTRUCTURE"
+NAME="function.imap-fetchstructure"
 >imap_fetchstructure</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN12691"
+NAME="AEN15102"
 ></A
->imap_fetchstructure -- Read the structure of a particular message</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>imap_fetchstructure&nbsp;--&nbsp;
+     Read the structure of a particular message
+    </DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN12694"
+NAME="AEN15105"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->object imap_fetchstructure</CODE
->(int imap_stream, int msg_number, int 
-      [<SPAN
-CLASS="OPTIONAL"
->flags</SPAN
->]
-     );<P
+>object
+       <B
+CLASS="function"
+>imap_fetchstructure</B
+>
+      </CODE
+> (int imap_stream, int msg_number [, int 
+       flags])</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     This function fetches all the structured information for a given
+>&#13;     This function fetches all the structured information for a given
      message. The optional <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >flags</I
 ></TT
 > parameter only
      has a single option, <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >FT_UID</I
 ></TT
 >, which tells
      the function to treat the <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >msg_number</I
 ></TT
 >
      argument as a <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >UID</I
 ></TT
@@ -127,12 +139,13 @@ CLASS="PARAMETER"
      attachement. The structure of the returned objects is as follows:
     </P
 ><P
->     <DIV
-CLASS="TABLE"
+>&#13;     <DIV
+CLASS="table"
 ><P
 ><B
->Table 1.        Returned Objects for <B
-CLASS="FUNCTION"
+>Table 1. 
+       Returned Objects for <B
+CLASS="function"
 >imap_fetchstructure()</B
 >
       </B
@@ -140,221 +153,386 @@ CLASS="FUNCTION"
 ><TABLE
 BORDER="1"
 CLASS="CALSTABLE"
+><TBODY
 ><TR
 ><TD
 ALIGN="LEFT"
-VALIGN="TOP"
+VALIGN="MIDDLE"
 >type</TD
 ><TD
 ALIGN="LEFT"
-VALIGN="TOP"
+VALIGN="MIDDLE"
 >Primary body type</TD
 ></TR
 ><TR
 ><TD
 ALIGN="LEFT"
-VALIGN="TOP"
+VALIGN="MIDDLE"
 >encoding</TD
 ><TD
 ALIGN="LEFT"
-VALIGN="TOP"
+VALIGN="MIDDLE"
 >Body transfer encoding</TD
 ></TR
 ><TR
 ><TD
 ALIGN="LEFT"
-VALIGN="TOP"
+VALIGN="MIDDLE"
 >ifsubtype</TD
 ><TD
 ALIGN="LEFT"
-VALIGN="TOP"
+VALIGN="MIDDLE"
 >True if there is a subtype string</TD
 ></TR
 ><TR
 ><TD
 ALIGN="LEFT"
-VALIGN="TOP"
+VALIGN="MIDDLE"
 >subtype</TD
 ><TD
 ALIGN="LEFT"
-VALIGN="TOP"
+VALIGN="MIDDLE"
 ><SPAN
-CLASS="ACRONYM"
+CLASS="acronym"
 >MIME</SPAN
 > subtype</TD
 ></TR
 ><TR
 ><TD
 ALIGN="LEFT"
-VALIGN="TOP"
+VALIGN="MIDDLE"
 >ifdescription</TD
 ><TD
 ALIGN="LEFT"
-VALIGN="TOP"
+VALIGN="MIDDLE"
 >True if there is a description string</TD
 ></TR
 ><TR
 ><TD
 ALIGN="LEFT"
-VALIGN="TOP"
+VALIGN="MIDDLE"
 >description</TD
 ><TD
 ALIGN="LEFT"
-VALIGN="TOP"
+VALIGN="MIDDLE"
 >Content description string</TD
 ></TR
 ><TR
 ><TD
 ALIGN="LEFT"
-VALIGN="TOP"
+VALIGN="MIDDLE"
 >ifid</TD
 ><TD
 ALIGN="LEFT"
-VALIGN="TOP"
+VALIGN="MIDDLE"
 >True if there is an identification string</TD
 ></TR
 ><TR
 ><TD
 ALIGN="LEFT"
-VALIGN="TOP"
+VALIGN="MIDDLE"
 >id</TD
 ><TD
 ALIGN="LEFT"
-VALIGN="TOP"
+VALIGN="MIDDLE"
 >Identification string</TD
 ></TR
 ><TR
 ><TD
 ALIGN="LEFT"
-VALIGN="TOP"
+VALIGN="MIDDLE"
 >lines</TD
 ><TD
 ALIGN="LEFT"
-VALIGN="TOP"
+VALIGN="MIDDLE"
 >Number of lines</TD
 ></TR
 ><TR
 ><TD
 ALIGN="LEFT"
-VALIGN="TOP"
+VALIGN="MIDDLE"
 >bytes</TD
 ><TD
 ALIGN="LEFT"
-VALIGN="TOP"
+VALIGN="MIDDLE"
 >Number of bytes</TD
 ></TR
 ><TR
 ><TD
 ALIGN="LEFT"
-VALIGN="TOP"
+VALIGN="MIDDLE"
 >ifdisposition</TD
 ><TD
 ALIGN="LEFT"
-VALIGN="TOP"
+VALIGN="MIDDLE"
 >True if there is a disposition string</TD
 ></TR
 ><TR
 ><TD
 ALIGN="LEFT"
-VALIGN="TOP"
+VALIGN="MIDDLE"
 >disposition</TD
 ><TD
 ALIGN="LEFT"
-VALIGN="TOP"
+VALIGN="MIDDLE"
 >Disposition string</TD
 ></TR
 ><TR
 ><TD
 ALIGN="LEFT"
-VALIGN="TOP"
+VALIGN="MIDDLE"
 >ifdparameters</TD
 ><TD
 ALIGN="LEFT"
-VALIGN="TOP"
+VALIGN="MIDDLE"
 >True if the dparameters array exists</TD
 ></TR
 ><TR
 ><TD
 ALIGN="LEFT"
-VALIGN="TOP"
->dparameters
-	  <A
-NAME="AEN12759"
-HREF="#FTN.AEN12759"
->[a]</A
->
-	 </TD
+VALIGN="MIDDLE"
+>dparameters</TD
 ><TD
 ALIGN="LEFT"
-VALIGN="TOP"
+VALIGN="MIDDLE"
 >Disposition parameter array</TD
 ></TR
 ><TR
 ><TD
 ALIGN="LEFT"
-VALIGN="TOP"
+VALIGN="MIDDLE"
 >ifparameters</TD
 ><TD
 ALIGN="LEFT"
-VALIGN="TOP"
+VALIGN="MIDDLE"
 >True if the parameters array exists</TD
 ></TR
 ><TR
 ><TD
 ALIGN="LEFT"
-VALIGN="TOP"
->parameters
-	  <A
-NAME="AEN12767"
-HREF="#FTN.AEN12767"
->[b]</A
->
-	 </TD
+VALIGN="MIDDLE"
+>parameters</TD
 ><TD
 ALIGN="LEFT"
-VALIGN="TOP"
+VALIGN="MIDDLE"
 ><SPAN
-CLASS="ACRONYM"
+CLASS="acronym"
 >MIME</SPAN
 > parameters array</TD
 ></TR
 ><TR
 ><TD
 ALIGN="LEFT"
-VALIGN="TOP"
->parts
-	  <A
-NAME="AEN12773"
-HREF="#FTN.AEN12773"
->[c]</A
->
-	 </TD
+VALIGN="MIDDLE"
+>parts</TD
 ><TD
 ALIGN="LEFT"
-VALIGN="TOP"
+VALIGN="MIDDLE"
 >Array of objects describing each message part</TD
+></TR
+></TBODY
+></TABLE
+></DIV
+>
+    </P
+><DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
+><P
+></P
+><OL
+TYPE="1"
+><LI
+><P
+>&#13;	dparameters is an array of objects where each object has an
+	"attribute" and a "value" property.
+       </P
+></LI
+><LI
+><P
+>&#13;	Parameter is an array of objects where each object has an
+	"attributte" and a "value" property.
+       </P
+></LI
+><LI
+><P
+>&#13;	Parts is an array of objects identical in structure to the
+	top-level object, with the limitation that it cannot contain
+	further 'parts' objects.
+       </P
+></LI
+></OL
+></BLOCKQUOTE
+></DIV
+><P
+>&#13;     <DIV
+CLASS="table"
+><P
+><B
+>Table 2. Primary body type</B
+></P
+><TABLE
+BORDER="1"
+CLASS="CALSTABLE"
+><TBODY
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>0</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>text</TD
 ></TR
 ><TR
 ><TD
-COLSPAN="2"
->Notes:<BR><A
-NAME="FTN.AEN12759"
->a. </A
->	    dparameters is an array of objects where each object has
-	    an "attribute" and a "value" property.
-	   <BR><A
-NAME="FTN.AEN12767"
->b. </A
->	    parameter is an array of objects where each object has an
-	    "attributte" and a "value" property.
-	   <BR><A
-NAME="FTN.AEN12773"
->c. </A
->	    parts is an array of objects identical in structure to the
-	    top-level object, with the limitation that it cannot
-	    contain further 'parts' objects.
-	   <BR></TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>1</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>multipart</TD
 ></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>2</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>message</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>3</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>application</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>4</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>audio</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>5</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>image</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>6</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>video</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>7</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>other</TD
+></TR
+></TBODY
+></TABLE
+></DIV
+>
+    </P
+><P
+>&#13;     <DIV
+CLASS="table"
+><P
+><B
+>Table 3. Transfer encodings</B
+></P
+><TABLE
+BORDER="1"
+CLASS="CALSTABLE"
+><TBODY
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>0</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>7BIT</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>1</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>8BIT</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>2</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>BINARY</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>3</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>BASE64</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>4</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>QUOTED-PRINTABLE</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>5</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>OTHER</TD
+></TR
+></TBODY
 ></TABLE
 ></DIV
 >

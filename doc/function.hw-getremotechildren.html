@@ -4,7 +4,7 @@
 >hw_GetRemoteChildren</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="hw_GetRemote"
 HREF="function.hw-getremote.html"><LINK
 REL="NEXT"
 TITLE="hw_GetSrcByDestObj"
-HREF="function.hw-getsrcbydestobj.html"></HEAD
+HREF="function.hw-getsrcbydestobj.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,34 +68,43 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.HW-GETREMOTECHILDREN"
+NAME="function.hw-getremotechildren"
 >hw_GetRemoteChildren</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN10771"
+NAME="AEN12400"
 ></A
->hw_GetRemoteChildren -- Gets children of remote document</DIV
+><P
+>    (PHP3 &#62;= 3.0.3, PHP4 )</P
+>hw_GetRemoteChildren&nbsp;--&nbsp;Gets children of remote document</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN10774"
+NAME="AEN12403"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int hw_getremotechildren</CODE
->(int connection, string object record);<P
+>int <B
+CLASS="function"
+>hw_getremotechildren</B
+></CODE
+> (int connection, string object record)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Returns the children of a remote document. Children of a remote
+>&#13;     Returns the children of a remote document. Children of a remote
      document are remote documents itself.
      This makes sense
      if a database query has to be narrowed and is explained in
@@ -101,12 +113,9 @@ CLASS="FUNCDEF"
      Gateway Interface (HGI). If the number of children
      is greater than 1 it will return an array of object record with
      each maybe the input value for another call to
-     <A
-HREF="function.hw-getremotechildren.html"
-><B
-CLASS="FUNCTION"
+     <B
+CLASS="function"
 >hw_GetRemoteChildren()</B
-></A
 >. Those object records are
      virtual and do not exist in the Hyperwave server, therefore they
      do not have a valid object ID. How exactely such an object record
@@ -117,12 +126,9 @@ CLASS="FUNCTION"
      sources. Adding database support by a Hyperwave gateway should be more
      difficult than doing it in PHP.</P
 ><P
->     See also <A
-HREF="function.hw-getremote.html"
-><B
-CLASS="FUNCTION"
+>&#13;     See also <B
+CLASS="function"
 >hw_GetRemote()</B
-></A
 >.</P
 ></DIV
 ><DIV

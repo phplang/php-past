@@ -4,20 +4,23 @@
 >imap_uid</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
-TITLE="IMAP functions"
+TITLE="IMAP, POP3 and NNTP functions"
 HREF="ref.imap.html"><LINK
 REL="PREVIOUS"
 TITLE="imap_fetchheader"
 HREF="function.imap-fetchheader.html"><LINK
 REL="NEXT"
 TITLE="imap_msgno"
-HREF="function.imap-msgno.html"></HEAD
+HREF="function.imap-msgno.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,42 +68,57 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.IMAP-UID"
+NAME="function.imap-uid"
 >imap_uid</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN13305"
+NAME="AEN15931"
 ></A
->imap_uid -- This function returns the UID for the given message
-    sequence number.</DIV
+><P
+>    (PHP3 &#62;= 3.0.3, PHP4 )</P
+>imap_uid&nbsp;--&nbsp;
+     This function returns the UID for the given message sequence
+     number
+    </DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN13308"
+NAME="AEN15934"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int imap_uid</CODE
->(int imap_stream, int msgno);<P
+>int <B
+CLASS="function"
+>imap_uid</B
+></CODE
+> (int imap_stream, int msgno)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     This function returns the UID for the given message sequence
-     number. It is the inverse of <A
+>&#13;     This function returns the UID for the given message sequence
+     number. An UID is an unique identifier that will not change over
+     time while a message sequence number may change whenever the
+     content of the mailbox changes.  This function is the inverse of
+     <A
 HREF="function.imap-msgno.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >imap_msgno()</B
 ></A
->.</P
+>.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

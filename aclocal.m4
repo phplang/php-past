@@ -1,4 +1,4 @@
-dnl $Id: aclocal.m4,v 1.51 2000/03/29 17:45:33 sas Exp $
+dnl $Id: aclocal.m4,v 1.52 2000/07/19 15:39:18 rasmus Exp $
 dnl
 dnl This file contains local autoconf functions.
 
@@ -332,6 +332,10 @@ AC_DEFUN(AC_CRYPT_CAP,[
 
   AC_MSG_CHECKING([for standard DES crypt])
   AC_TRY_RUN([
+#if HAVE_CRYPT_H
+#include <crypt.h>
+#endif
+
 main() {
 #if HAVE_CRYPT
     exit (strcmp((char *)crypt("rasmuslerdorf","rl"),"rl.3StKT.4T8M"));
@@ -351,6 +355,10 @@ main() {
 
   AC_MSG_CHECKING([for extended DES crypt])
   AC_TRY_RUN([
+#if HAVE_CRYPT_H
+#include <crypt.h>
+#endif
+
 main() {
 #if HAVE_CRYPT
     exit (strcmp((char *)crypt("rasmuslerdorf","_J9..rasm"),"_J9..rasmBYk8r9AiWNc"));
@@ -370,6 +378,10 @@ main() {
 
   AC_MSG_CHECKING([for MD5 crypt])
   AC_TRY_RUN([
+#if HAVE_CRYPT_H
+#include <crypt.h>
+#endif
+
 main() {
 #if HAVE_CRYPT
     char salt[15], answer[40];
@@ -398,6 +410,10 @@ main() {
 
   AC_MSG_CHECKING([for Blowfish crypt])
   AC_TRY_RUN([
+#if HAVE_CRYPT_H
+#include <crypt.h>
+#endif
+
 main() {
 #if HAVE_CRYPT
     char salt[25], answer[70];

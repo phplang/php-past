@@ -4,7 +4,7 @@
 >sybase_free_result</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="sybase_field_seek"
 HREF="function.sybase-field-seek.html"><LINK
 REL="NEXT"
 TITLE="sybase_num_fields"
-HREF="function.sybase-num-fields.html"></HEAD
+HREF="function.sybase-num-fields.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,41 +68,50 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.SYBASE-FREE-RESULT"
+NAME="function.sybase-free-result"
 >sybase_free_result</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN26353"
+NAME="AEN35188"
 ></A
->sybase_free_result -- free result memory</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>sybase_free_result&nbsp;--&nbsp;free result memory</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN26356"
+NAME="AEN35191"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int sybase_free_result</CODE
->(int result);<P
+>int <B
+CLASS="function"
+>sybase_free_result</B
+></CODE
+> (int result)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     <B
-CLASS="FUNCTION"
+>&#13;     <B
+CLASS="function"
 >sybase_free_result()</B
 > only needs to be called
      if you are worried about using too much memory while your script
      is running. All result memory will automatically be freed when
-     the script, you may call <B
-CLASS="FUNCTION"
+     the script ends. You may call <B
+CLASS="function"
 >sybase_free_result()</B
 >
      with the result identifier as an argument and the associated

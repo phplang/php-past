@@ -25,12 +25,12 @@
    | If you did not, or have any questions about PHP licensing, please    |
    | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
-   | Authors: Andi Gutmans <andi@php.net>                                 |
+   | Authors: Andi Gutmans <andi@zend.com>                                |
    |          Zeev Suraski <bourbon@netvision.net.il>                     |
    +----------------------------------------------------------------------+
 */
 
-/* $id$ */
+/* $Id: language-scanner.lex,v 1.187 2000/08/11 22:17:34 martin Exp $ */
 
 %}
 
@@ -462,9 +462,9 @@ HNUM	"0x"[0-9a-fA-F]+
 LABEL	[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*
 WHITESPACE [ \n\r\t]+
 TABS_AND_SPACES [ \t]*
-TOKENS [;:,.\[\]()|^&+-/*=%!~$<>{}?@]
+TOKENS [-;:,.\[\]()|^&+/*=%!~$<>{}?@]
 ENCAPSED_TOKENS [\[\]{}$]
-ESCAPED_AND_WHITESPACE [\n\t\r #'.:;,()|^&+-/*=%!~<>?@]+
+ESCAPED_AND_WHITESPACE [-\n\t\r #'.:;,()|^&+/*=%!~<>?@]+
 
 %option noyylineno
 %option noyywrap

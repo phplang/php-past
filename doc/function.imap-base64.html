@@ -4,20 +4,23 @@
 >imap_base64</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
-TITLE="IMAP functions"
+TITLE="IMAP, POP3 and NNTP functions"
 HREF="ref.imap.html"><LINK
 REL="PREVIOUS"
 TITLE="imap_append"
 HREF="function.imap-append.html"><LINK
 REL="NEXT"
 TITLE="imap_body"
-HREF="function.imap-body.html"></HEAD
+HREF="function.imap-body.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,38 +68,62 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.IMAP-BASE64"
+NAME="function.imap-base64"
 >imap_base64</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN12527"
+NAME="AEN14879"
 ></A
->imap_base64 -- Decode BASE64 encoded text</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>imap_base64&nbsp;--&nbsp;Decode BASE64 encoded text</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN12530"
+NAME="AEN14882"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->string imap_base64</CODE
->(string text);<P
+>string <B
+CLASS="function"
+>imap_base64</B
+></CODE
+> (string text)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     <B
-CLASS="FUNCTION"
+>&#13;     <B
+CLASS="function"
 >imap_base64()</B
 > function decodes BASE-64 encoded
-     text. The decoded message is returned as a string.</P
+     text (see <A
+HREF="http://www.faqs.org/rfcs/rfc2045.html"
+TARGET="_top"
+>RFC2045</A
+>, 
+     Section 6.8). The decoded message is returned as a string.
+    </P
+><P
+>&#13;     See also <A
+HREF="function.imap-binary.html"
+><B
+CLASS="function"
+>imap_binary()</B
+></A
+>.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

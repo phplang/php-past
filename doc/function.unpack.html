@@ -4,7 +4,7 @@
 >unpack</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="uniqid"
 HREF="function.uniqid.html"><LINK
 REL="NEXT"
 TITLE="unserialize"
-HREF="function.unserialize.html"></HEAD
+HREF="function.unserialize.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,46 +68,62 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.UNPACK"
+NAME="function.unpack"
 >unpack</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN17089"
+NAME="AEN21849"
 ></A
->unpack -- unpack data from binary string</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>unpack&nbsp;--&nbsp;Unpack data from binary string</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN17092"
+NAME="AEN21852"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->array unpack</CODE
->(string format, string data);<P
+>array <B
+CLASS="function"
+>unpack</B
+></CODE
+> (string format, string data)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Unpack from binary string into array according to
-     <TT
-CLASS="PARAMETER"
+>&#13;     <B
+CLASS="function"
+>Unpack()</B
+> from binary string into array
+     according to <TT
+CLASS="parameter"
 ><I
 >format</I
 ></TT
->. Returns array containing unpacked
-     elements of binary string.</P
+>. Returns array
+     containing unpacked elements of binary string.
+    </P
 ><P
->     Unpack works slightly different from Perl as the unpacked data is 
-     stored in an associative array. To accomplish this you have to
-     name the different format codes and separate them by a slash /.
-
+>&#13;     <B
+CLASS="function"
+>Unpack()</B
+> works slightly different from Perl as
+     the unpacked data is stored in an associative array. To
+     accomplish this you have to name the different format codes and
+     separate them by a slash /.
      <TABLE
 WIDTH="100%"
 BORDER="0"
@@ -114,36 +133,53 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
->Example 1. unpack format string</B
+>Example 1. <B
+CLASS="function"
+>Unpack()</B
+> format string</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->$array = unpack("c2chars/nint", $binarydata);</PRE
+CLASS="programlisting"
+>&#13;$array = unpack ("c2chars/nint", $binarydata);
+      </PRE
+></TD
+></TR
+></TABLE
 ><P
->       The resulting array will contain the entries "chars1",
-       "chars2" and "int".</P
+>&#13;       The resulting array will contain the entries "chars1",
+       "chars2" and "int".
+      </P
 ></DIV
 ></TD
 ></TR
 ></TABLE
-></P
+>
+    </P
 ><P
->     For an explanation of the format codes see also:
+>&#13;     For an explanation of the format codes see also:
      <A
 HREF="function.pack.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >pack()</B
 ></A
-></P
+>
+    </P
 ><P
->     Note that PHP internally stores integral values as signed. If you
+>&#13;     Note that PHP internally stores integral values as signed. If you
      unpack a large unsigned long and it is of the same size as PHP
      internally stored values the result will be a negative number
-     even though unsigned unpacking was specified.</P
+     even though unsigned unpacking was specified.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

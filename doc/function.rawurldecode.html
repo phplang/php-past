@@ -4,20 +4,23 @@
 >rawurldecode</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
-TITLE="String functions"
-HREF="ref.strings.html"><LINK
+TITLE="URL Functions"
+HREF="ref.url.html"><LINK
 REL="PREVIOUS"
-TITLE="QuoteMeta"
-HREF="function.quotemeta.html"><LINK
+TITLE="parse_url"
+HREF="function.parse-url.html"><LINK
 REL="NEXT"
 TITLE="rawurlencode"
-HREF="function.rawurlencode.html"></HEAD
+HREF="function.rawurlencode.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -42,7 +45,7 @@ WIDTH="10%"
 ALIGN="left"
 VALIGN="bottom"
 ><A
-HREF="function.quotemeta.html"
+HREF="function.parse-url.html"
 >Prev</A
 ></TD
 ><TD
@@ -65,55 +68,98 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.RAWURLDECODE"
+NAME="function.rawurldecode"
 >rawurldecode</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN25360"
+NAME="AEN35381"
 ></A
->rawurldecode -- Decode URL-encoded strings</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>rawurldecode&nbsp;--&nbsp;Decode URL-encoded strings</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN25363"
+NAME="AEN35384"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->string rawurldecode</CODE
->(string str);<P
+>string <B
+CLASS="function"
+>rawurldecode</B
+></CODE
+> (string str)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Returns a string in which the sequences with percent
+>&#13;     Returns a string in which the sequences with percent
      (<TT
-CLASS="LITERAL"
+CLASS="literal"
 >%</TT
 >) signs followed by two hex digits have been
      replaced with literal characters.  For example, the string
-     <PRE
-CLASS="SCREEN"
+     <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="screen"
 >foo%20bar%40baz</PRE
-> decodes into <PRE
-CLASS="SCREEN"
+></TD
+></TR
+></TABLE
+> decodes into <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="screen"
 >foo
      bar@baz</PRE
-></P
+></TD
+></TR
+></TABLE
+>.
+    </P
 ><P
->     See also <A
+>&#13;     See also <A
 HREF="function.rawurlencode.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >rawurlencode()</B
 ></A
->.</P
+>,
+		          <A
+HREF="function.urldecode.html"
+><B
+CLASS="function"
+>urldecode()</B
+></A
+>,
+							<A
+HREF="function.urlencode.html"
+><B
+CLASS="function"
+>urlencode()</B
+></A
+>.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -130,7 +176,7 @@ WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
 ><A
-HREF="function.quotemeta.html"
+HREF="function.parse-url.html"
 >Prev</A
 ></TD
 ><TD
@@ -155,13 +201,13 @@ HREF="function.rawurlencode.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->QuoteMeta</TD
+>parse_url</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"
 VALIGN="top"
 ><A
-HREF="ref.strings.html"
+HREF="ref.url.html"
 >Up</A
 ></TD
 ><TD

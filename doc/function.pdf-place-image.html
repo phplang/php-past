@@ -4,7 +4,7 @@
 >PDF_place_image</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="PDF_close_image"
 HREF="function.pdf-close-image.html"><LINK
 REL="NEXT"
 TITLE="PDF_put_image"
-HREF="function.pdf-put-image.html"></HEAD
+HREF="function.pdf-put-image.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,61 +68,66 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.PDF-PLACE-IMAGE"
+NAME="function.pdf-place-image"
 >PDF_place_image</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN21875"
+NAME="AEN27692"
 ></A
->PDF_place_image -- Places an image on the page</DIV
+><P
+>    (PHP3 &#62;= 3.0.7, PHP4 &#62;= 4.0b2)</P
+>PDF_place_image&nbsp;--&nbsp;Places an image on the page</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN21878"
+NAME="AEN27695"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->void pdf_place_image</CODE
->(int pdf document, int image, double x-koor, double y-koor, double scale);<P
+>void <B
+CLASS="function"
+>pdf_place_image</B
+></CODE
+> (int pdf document, int image, double x-coor, double y-coor, double scale)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     The <A
-HREF="function.pdf-place-image.html"
-><B
-CLASS="FUNCTION"
+>&#13;     The <B
+CLASS="function"
 >PDF_place_image()</B
-></A
 > function places an image
      on the page at postion (<TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
->x-koor</I
+>x-coor</I
 ></TT
 >,
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
->x-koor</I
+>x-coor</I
 ></TT
 >). The image can be scaled at the same
-     time.</P
+     time.
+    </P
 ><P
->     See also <A
-HREF="function.pdf-put-image.html"
-><B
-CLASS="FUNCTION"
+>&#13;     See also <B
+CLASS="function"
 >PDF_put_image()</B
-></A
->.</P
+>.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

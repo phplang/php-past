@@ -4,7 +4,7 @@
 >mysql_fetch_field</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="mysql_fetch_array"
 HREF="function.mysql-fetch-array.html"><LINK
 REL="NEXT"
 TITLE="mysql_fetch_lengths"
-HREF="function.mysql-fetch-lengths.html"></HEAD
+HREF="function.mysql-fetch-lengths.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,126 +68,200 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.MYSQL-FETCH-FIELD"
+NAME="function.mysql-fetch-field"
 >mysql_fetch_field</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN18048"
+NAME="AEN22945"
 ></A
->mysql_fetch_field -- Get column information from a result and return as an
-     object</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>mysql_fetch_field&nbsp;--&nbsp;
+     Get column information from a result and return as an object
+    </DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN18051"
+NAME="AEN22948"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->object mysql_fetch_field</CODE
->(int result, int [<SPAN
-CLASS="OPTIONAL"
->field_offset</SPAN
->]
-                   );<P
+>object <B
+CLASS="function"
+>mysql_fetch_field</B
+></CODE
+> (int result [, int 
+       field_offset])</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Returns an object containing field information.</P
+>&#13;     Returns an object containing field information.
+    </P
 ><P
->     <B
-CLASS="FUNCTION"
+>&#13;     <B
+CLASS="function"
 >mysql_fetch_field()</B
 > can be used in order to
      obtain information about fields in a certain query result.  If
      the field offset isn't specified, the next field that wasn't yet
      retrieved by <B
-CLASS="FUNCTION"
+CLASS="function"
 >mysql_fetch_field()</B
-> is retrieved.</P
+> is retrieved.
+    </P
 ><P
->     The properties of the object are:
-
+>&#13;     The properties of the object are:
      <P
 ></P
 ><UL
 ><LI
 ><P
->	name - column name
+>&#13;	name - column name
        </P
 ></LI
 ><LI
 ><P
->	table - name of the table the column belongs to
+>&#13;	table - name of the table the column belongs to
        </P
 ></LI
 ><LI
 ><P
->	max_length - maximum length of the column
+>&#13;	max_length - maximum length of the column
        </P
 ></LI
 ><LI
 ><P
->	not_null - 1 if the column cannot be null
+>&#13;	not_null - 1 if the column cannot be null
        </P
 ></LI
 ><LI
 ><P
->	primary_key - 1 if the column is a primary key
+>&#13;	primary_key - 1 if the column is a primary key
        </P
 ></LI
 ><LI
 ><P
->	unique_key - 1 if the column is a unique key
+>&#13;	unique_key - 1 if the column is a unique key
        </P
 ></LI
 ><LI
 ><P
->	multiple_key - 1 if the column is a non-unique key
+>&#13;	multiple_key - 1 if the column is a non-unique key
        </P
 ></LI
 ><LI
 ><P
->	numeric - 1 if the column is numeric
+>&#13;	numeric - 1 if the column is numeric
        </P
 ></LI
 ><LI
 ><P
->	blob - 1 if the column is a BLOB
+>&#13;	blob - 1 if the column is a BLOB
        </P
 ></LI
 ><LI
 ><P
->	type - the type of the column
+>&#13;	type - the type of the column
        </P
 ></LI
 ><LI
 ><P
->	unsigned - 1 if the column is unsigned
+>&#13;	unsigned - 1 if the column is unsigned
        </P
 ></LI
 ><LI
 ><P
->	zerofill - 1 if the column is zero-filled
+>&#13;	zerofill - 1 if the column is zero-filled
        </P
 ></LI
 ></UL
-></P
+>
+    </P
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
 ><P
->     See also <A
+><B
+>Example 1. <B
+CLASS="function"
+>Mysql_fetch_field()</B
+></B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;&#60;?php 
+mysql_connect ($host, $user, $password)
+    or die ("Could not connect");
+$result = mysql_db_query ("database", "select * from table")
+    or die ("Query failed");
+# get column metadata
+$i = 0;
+while ($i &#60; mysql_num_fields ($result)) {
+    echo "Information for column $i:&#60;BR&#62;\n";
+    $meta = mysql_fetch_field ($result);
+    if (!$meta) {
+        echo "No information available&#60;BR&#62;\n";
+    }
+    echo "&#60;PRE&#62;
+blob:         $meta-&#62;blob
+max_length:   $meta-&#62;max_length
+multiple_key: $meta-&#62;multiple_key
+name:         $meta-&#62;name
+not_null:     $meta-&#62;not_null
+numeric:      $meta-&#62;numeric
+primary_key:  $meta-&#62;primary_key
+table:        $meta-&#62;table
+type:         $meta-&#62;type
+unique_key:   $meta-&#62;unique_key
+unsigned:     $meta-&#62;unsigned
+zerofill:     $meta-&#62;zerofill
+&#60;/PRE&#62;";
+    $i++;
+}
+mysql_free_result ($result);
+?&#62;
+     </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+><P
+>&#13;     See also <A
 HREF="function.mysql-field-seek.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >mysql_field_seek()</B
 ></A
-></P
+>.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

@@ -4,7 +4,7 @@
 >session_id</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="session_save_path"
 HREF="function.session-save-path.html"><LINK
 REL="NEXT"
 TITLE="session_register"
-HREF="function.session-register.html"></HEAD
+HREF="function.session-register.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,73 +68,62 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.SESSION-ID"
+NAME="function.session-id"
 >session_id</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN24411"
+NAME="AEN31377"
 ></A
->session_id -- Get and/or set the current session id</DIV
+><P
+>    (PHP4 )</P
+>session_id&nbsp;--&nbsp;Get and/or set the current session id</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN24414"
+NAME="AEN31380"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->string session_id</CODE
->(string [<SPAN
-CLASS="OPTIONAL"
->id</SPAN
->]);<P
+>string <B
+CLASS="function"
+>session_id</B
+></CODE
+> ([string id])</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     <B
-CLASS="FUNCTION"
+>&#13;     <B
+CLASS="function"
 >session_id()</B
-> returns the session id for the current
-     session. If <TT
-CLASS="PARAMETER"
+> returns the session id for the
+     current session. If <TT
+CLASS="parameter"
 ><I
 >id</I
 ></TT
-> is specified, it will replace
-     the current session id.</P
+> is specified, it
+     will replace the current session id.
+    </P
 ><P
->     directory used to save session data. If <TT
-CLASS="PARAMETER"
-><I
->path</I
-></TT
->
-     is specified, the path to which data is saved will be changed.</P
-><P
->     The constant <SPAN
-CLASS="SYSTEMITEM"
+>&#13;     The constant <SPAN
+CLASS="systemitem"
 >SID</SPAN
-> can also be used to retrieve
-     the current name and session id as a string suitable for adding to
-     URLs.
-    <DIV
-CLASS="NOTE"
-><BLOCKQUOTE
-CLASS="NOTE"
-><P
-><B
->Note: </B
->      This function was added in PHP 4.0.</P
-></BLOCKQUOTE
-></DIV
-></P
+> can also be used to
+     retrieve the current name and session id as a string suitable for
+     adding to URLs.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

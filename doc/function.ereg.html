@@ -4,20 +4,23 @@
 >ereg</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
-TITLE="Regular expression functions"
+TITLE="Regular Expression Functions (POSIX Extended)"
 HREF="ref.regex.html"><LINK
 REL="PREVIOUS"
-TITLE="Regular expression functions"
+TITLE="Regular Expression Functions (POSIX Extended)"
 HREF="ref.regex.html"><LINK
 REL="NEXT"
 TITLE="ereg_replace"
-HREF="function.ereg-replace.html"></HEAD
+HREF="function.ereg-replace.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,85 +68,124 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.EREG"
+NAME="function.ereg"
 >ereg</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN23866"
+NAME="AEN30742"
 ></A
->ereg -- regular expression match</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>ereg&nbsp;--&nbsp;Regular expression match</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN23869"
+NAME="AEN30745"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int ereg</CODE
->(string pattern, string string, array [<SPAN
-CLASS="OPTIONAL"
->regs</SPAN
->]);<P
+>int <B
+CLASS="function"
+>ereg</B
+></CODE
+> (string pattern, string string [, array 
+       regs])</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Searchs <TT
-CLASS="PARAMETER"
+>&#13;     Searches a <TT
+CLASS="parameter"
 ><I
 >string</I
 ></TT
-> for matches to the regular expression
-     given in <TT
-CLASS="PARAMETER"
+> for matches to the regular
+     expression given in <TT
+CLASS="parameter"
 ><I
 >pattern</I
 ></TT
->.</P
+>.
+    </P
 ><P
->     If matches are found for parenthesized substrings of
+>&#13;     If matches are found for parenthesized substrings of
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >pattern</I
 ></TT
 > and the function is called with
      the third argument <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >regs</I
 ></TT
 >, the matches will
-     be stored in the elements of
+     be stored in the elements of the array
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >regs</I
 ></TT
 >. $regs[1] will contain the substring
-     which starts at the first left parenthesis; $regs[2] will contain the
-     substring starting at the second, and so on. $regs[0] will
+     which starts at the first left parenthesis; $regs[2] will contain
+     the substring starting at the second, and so on. $regs[0] will
      contain a copy of <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >string</I
 ></TT
->.</P
+>.
+    </P
 ><P
->     Searching is case sensitive.</P
+>&#13;     If <B
+CLASS="function"
+>ereg()</B
+> finds any matches at all, $regs will
+     be filled with exactly ten elements, even though more or fewer
+     than ten parenthesized substrings may actually have matched.
+     This has no effect on <B
+CLASS="function"
+>ereg()</B
+>'s ability to
+     match more substrings. If no matches are found, $regs will not be
+     altered by <B
+CLASS="function"
+>ereg()</B
+>.
+    </P
 ><P
->     Returns true if a match for pattern was found in string, or false
-     if no matches were found or an error occurred.</P
+>&#13;     Searching is case sensitive.
+    </P
 ><P
->     The following code snippet takes a date in ISO format (YYYY-MM-DD)
-     and prints it in DD.MM.YYYY format:
+>&#13;     Returns true if a match for <TT
+CLASS="parameter"
+><I
+>pattern</I
+></TT
+> was
+     found in <TT
+CLASS="parameter"
+><I
+>string</I
+></TT
+>, or false if no matches
+     were found or an error occurred.
+    </P
+><P
+>&#13;     The following code snippet takes a date in ISO format
+     (YYYY-MM-DD) and prints it in DD.MM.YYYY format:
      <TABLE
 WIDTH="100%"
 BORDER="0"
@@ -153,43 +195,60 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
->Example 1. ereg() example</B
+>Example 1. <B
+CLASS="function"
+>Ereg()</B
+> Example</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->if ( ereg( "([0-9]{4})-([0-9]{1,2})-([0-9]{1,2})", $date, $regs ) ) {
+CLASS="programlisting"
+>&#13;if (ereg ("([0-9]{4})-([0-9]{1,2})-([0-9]{1,2})", $date, $regs)) {
     echo "$regs[3].$regs[2].$regs[1]";
 } else {
     echo "Invalid date format: $date";
-}</PRE
+}
+      </PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR
 ></TABLE
-></P
+>
+    </P
 ><P
->     See also <A
+>&#13;     See also <A
 HREF="function.eregi.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >eregi()</B
 ></A
->, <A
+>,
+     <A
 HREF="function.ereg-replace.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >ereg_replace()</B
 ></A
->, and <A
+>, and
+     <A
 HREF="function.eregi-replace.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >eregi_replace()</B
 ></A
->.</P
+>.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -231,7 +290,7 @@ HREF="function.ereg-replace.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->Regular expression functions</TD
+>Regular Expression Functions (POSIX Extended)</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"

@@ -1,10 +1,10 @@
 <HTML
 ><HEAD
 ><TITLE
->posix_setsid</TITLE
+>posix_getsid</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="posix_getpgid"
 HREF="function.posix-getpgid.html"><LINK
 REL="NEXT"
 TITLE="posix_uname"
-HREF="function.posix-uname.html"></HEAD
+HREF="function.posix-uname.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,48 +68,57 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.POSIX-GETSID"
->posix_setsid</A
+NAME="function.posix-getsid"
+>posix_getsid</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN22896"
+NAME="AEN28927"
 ></A
->posix_setsid -- Get the current sid of the process</DIV
+><P
+>    (PHP3 &#62;= 3.0.10, PHP4 &#62;= 4.0b4)</P
+>posix_getsid&nbsp;--&nbsp;Get the current sid of the process</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN22899"
+NAME="AEN28930"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int posix_getsid</CODE
->(int pid);<P
+>int <B
+CLASS="function"
+>posix_getsid</B
+></CODE
+> (int pid)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Return the sid of the process <TT
-CLASS="PARAMETER"
+>&#13;     Return the sid of the process <TT
+CLASS="parameter"
 ><I
 >pid</I
 ></TT
 >.
      If <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >pid</I
 ></TT
 > is 0, the sid of the
      current process is returned.</P
 ><P
->     This is not a POSIX function, but is common on System V
+>&#13;     This is not a POSIX function, but is common on System V
      systems. If your system does not support this function at system
      level, this PHP function will always return FALSE.</P
 ></DIV

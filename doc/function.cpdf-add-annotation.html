@@ -4,7 +4,7 @@
 >cpdf_add_annotation</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -15,9 +15,12 @@ REL="PREVIOUS"
 TITLE="cpdf_place_inline_image"
 HREF="function.cpdf-place-inline-image.html"><LINK
 REL="NEXT"
-TITLE="Compression functions"
-HREF="ref.zlib.html"></HEAD
+TITLE="CURL, Client URL Library Functions"
+HREF="ref.curl.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -55,7 +58,7 @@ WIDTH="10%"
 ALIGN="right"
 VALIGN="bottom"
 ><A
-HREF="ref.zlib.html"
+HREF="ref.curl.html"
 >Next</A
 ></TD
 ></TR
@@ -65,62 +68,71 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.CPDF-ADD-ANNOTATION"
+NAME="function.cpdf-add-annotation"
 >cpdf_add_annotation</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN6260"
+NAME="AEN7478"
 ></A
->cpdf_add_annotation -- Adds annotation</DIV
+><P
+>    (PHP3 &#62;= 3.0.12, PHP4 &#62;= 4.0b4)</P
+>cpdf_add_annotation&nbsp;--&nbsp;Adds annotation</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN6263"
+NAME="AEN7481"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->void cpdf_add_annotation</CODE
->(int pdf document, double llx, double lly, double urx, double ury, string title, string content, int mode);<P
+>void <B
+CLASS="function"
+>cpdf_add_annotation</B
+></CODE
+> (int pdf document, double llx, double lly, double urx, double ury, string title, string content, int mode)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     The <B
-CLASS="FUNCTION"
+>&#13;     The <B
+CLASS="function"
 >cpdf_add_annotation()</B
 > adds a note with
      the lower left corner at (<TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >llx</I
 ></TT
 >,
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >lly</I
 ></TT
 >) and the upper right corner at
      (<TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >urx</I
 ></TT
 >, <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >ury</I
 ></TT
 >).</P
 ><P
->     The last optional parameter determines the unit length. If is 0 or omitted
+>&#13;     The last optional parameter determines the unit length. If is 0 or omitted
      the default unit as specified for the page is used. Otherwise the koodinates
      are measured in postscript points disregarding the current unit.</P
 ></DIV
@@ -155,7 +167,7 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><A
-HREF="ref.zlib.html"
+HREF="ref.curl.html"
 >Next</A
 ></TD
 ></TR
@@ -177,7 +189,7 @@ HREF="ref.cpdf.html"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->Compression functions</TD
+>CURL, Client URL Library Functions</TD
 ></TR
 ></TABLE
 ></DIV

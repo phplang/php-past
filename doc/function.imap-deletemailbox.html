@@ -4,20 +4,23 @@
 >imap_deletemailbox</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
-TITLE="IMAP functions"
+TITLE="IMAP, POP3 and NNTP functions"
 HREF="ref.imap.html"><LINK
 REL="PREVIOUS"
 TITLE="imap_delete"
 HREF="function.imap-delete.html"><LINK
 REL="NEXT"
 TITLE="imap_expunge"
-HREF="function.imap-expunge.html"></HEAD
+HREF="function.imap-expunge.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,41 +68,93 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.IMAP-DELETEMAILBOX"
+NAME="function.imap-deletemailbox"
 >imap_deletemailbox</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN12633"
+NAME="AEN15030"
 ></A
->imap_deletemailbox -- Delete a mailbox</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>imap_deletemailbox&nbsp;--&nbsp;Delete a mailbox</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN12636"
+NAME="AEN15033"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int imap_deletemailbox</CODE
->(int imap_stream, string mbox);<P
+>int <B
+CLASS="function"
+>imap_deletemailbox</B
+></CODE
+> (int imap_stream, string mbox)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
 > 
      <B
-CLASS="FUNCTION"
+CLASS="function"
 >imap_deletemailbox()</B
 > deletes the specified
-     mailbox.</P
+     mailbox (see <A
+HREF="function.imap-open.html"
+><B
+CLASS="function"
+>imap_open()</B
+></A
+> for the format 
+     of <TT
+CLASS="parameter"
+><I
+>mbox</I
+></TT
+> names).
+    </P
 ><P
->     Returns true on success and false on error.</P
+>&#13;     Returns true on success and false on error.
+    </P
+><P
+>&#13;     See also <A
+HREF="function.imap-createmailbox.html"
+><B
+CLASS="function"
+>imap_createmailbox()</B
+></A
+>, 
+     <A
+HREF="function.imap-renamemailbox.html"
+><B
+CLASS="function"
+>imap_renamemailbox()</B
+></A
+>, and 
+     <A
+HREF="function.imap-open.html"
+><B
+CLASS="function"
+>imap_open()</B
+></A
+> for the format of
+     <TT
+CLASS="parameter"
+><I
+>mbox</I
+></TT
+>.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

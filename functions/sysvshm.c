@@ -27,7 +27,7 @@
    +----------------------------------------------------------------------+
  */
  
-/* $Id: sysvshm.c,v 1.11 2000/01/12 18:20:00 sas Exp $ */
+/* $Id: sysvshm.c,v 1.12 2000/07/27 23:44:32 hholzgra Exp $ */
 
 /* This has been built and tested on Solaris 2.6.
  * It may not compile or execute correctly on other systems.
@@ -216,6 +216,8 @@ void php3_sysvshm_detach(INTERNAL_FUNCTION_PARAMETERS)
 		php3_error(E_WARNING, "shm_detach() failed for id 0x%x: %s", id, strerror(errno));
 		RETURN_FALSE;
 	}
+
+	RETURN_TRUE;
 }
 /* }}} */
 

@@ -4,20 +4,23 @@
 >odbc_num_rows</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
-TITLE="ODBC functions"
+TITLE="Unified ODBC functions"
 HREF="ref.odbc.html"><LINK
 REL="PREVIOUS"
 TITLE="odbc_prepare"
 HREF="function.odbc-prepare.html"><LINK
 REL="NEXT"
 TITLE="odbc_result"
-HREF="function.odbc-result.html"></HEAD
+HREF="function.odbc-result.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,55 +68,66 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.ODBC-NUM-ROWS"
+NAME="function.odbc-num-rows"
 >odbc_num_rows</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN19557"
+NAME="AEN24478"
 ></A
->odbc_num_rows -- Number of rows in a result</DIV
+><P
+>    (PHP3 &#62;= 3.0.6, PHP4 )</P
+>odbc_num_rows&nbsp;--&nbsp;Number of rows in a result</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN19560"
+NAME="AEN24481"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int odbc_num_rows</CODE
->(int result_id);<P
+>int <B
+CLASS="function"
+>odbc_num_rows</B
+></CODE
+> (int result_id)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     <B
-CLASS="FUNCTION"
+>&#13;     <B
+CLASS="function"
 >odbc_num_rows()</B
 > will return the number of rows
      in an ODBC result.  This function will return -1 on error.  For
      INSERT, UPDATE and DELETE statements
      <B
-CLASS="FUNCTION"
+CLASS="function"
 >odbc_num_rows()</B
 > returns the number of rows
      affected.  For a SELECT clause this <TT
-CLASS="LITERAL"
+CLASS="literal"
 >can</TT
 > be 
-     the number of rows available.</P
+     the number of rows available.
+    </P
 ><P
->     Note: Using <B
-CLASS="FUNCTION"
+>&#13;     Note: Using <B
+CLASS="function"
 >odbc_num_rows()</B
 > to determine the
      number of rows available after a SELECT will return -1 with many
-     drivers.</P
+     drivers.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

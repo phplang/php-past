@@ -4,7 +4,7 @@
 >GregorianToJD</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="JDToGregorian"
 HREF="function.jdtogregorian.html"><LINK
 REL="NEXT"
 TITLE="JDToJulian"
-HREF="function.jdtojulian.html"></HEAD
+HREF="function.jdtojulian.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,46 +68,54 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.GREGORIANTOJD"
+NAME="function.gregoriantojd"
 >GregorianToJD</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN4693"
+NAME="AEN5395"
 ></A
->GregorianToJD -- Converts a Gregorian date to Julian Day
-         Count</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>GregorianToJD&nbsp;--&nbsp;
+     Converts a Gregorian date to Julian Day Count
+    </DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN4696"
+NAME="AEN5398"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int gregoriantojd</CODE
->(int month, int day, int year);<P
+>int <B
+CLASS="function"
+>gregoriantojd</B
+></CODE
+> (int month, int day, int year)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->         Valid Range for Gregorian Calendar 4714 B.C. to 9999 A.D.</P
+>&#13;     Valid Range for Gregorian Calendar 4714 B.C. to 9999 A.D.</P
 ><P
->         Although this software can handle dates all the way back to
-         4714 B.C., such use may not be meaningful. The Gregorian
-         calendar was not instituted until October 15, 1582 (or
-         October 5, 1582 in the Julian calendar). Some countries did
-         not accept it until much later. For example, Britain
-         converted in 1752, The USSR in 1918 and Greece in 1923. Most
-         European countries used the Julian calendar prior to the
-         Gregorian.
-
-<TABLE
+>&#13;     Although this software can handle dates all the way back to 4714
+     B.C., such use may not be meaningful. The Gregorian calendar was
+     not instituted until October 15, 1582 (or October 5, 1582 in the
+     Julian calendar). Some countries did not accept it until much
+     later. For example, Britain converted in 1752, The USSR in 1918
+     and Greece in 1923. Most European countries used the Julian
+     calendar prior to the Gregorian.
+     <TABLE
 WIDTH="100%"
 BORDER="0"
 CELLPADDING="0"
@@ -113,24 +124,35 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
 >Example 1. Calendar functions</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->&lt;?php
-$jd = GregorianToJD(10,11,1970);
-echo("$jd\n");
-$gregorian = JDToGregorian($jd);
-echo("$gregorian\n");
-?&#62;</PRE
+CLASS="programlisting"
+>&#13;&#60;?php
+$jd = GregorianToJD (10,11,1970);
+echo "$jd\n";
+$gregorian = JDToGregorian ($jd);
+echo "$gregorian\n";
+?&#62;
+      </PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR
 ></TABLE
-></P
+>
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

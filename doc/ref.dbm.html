@@ -1,10 +1,10 @@
 <HTML
 ><HEAD
 ><TITLE
->dbm functions</TITLE
+>DBM Functions</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="dbase_numrecords"
 HREF="function.dbase-numrecords.html"><LINK
 REL="NEXT"
 TITLE="dbmopen"
-HREF="function.dbmopen.html"></HEAD
+HREF="function.dbmopen.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="reference"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -64,28 +67,29 @@ HREF="function.dbmopen.html"
 ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><DIV
-CLASS="REFERENCE"
+CLASS="reference"
 ><A
-NAME="REF.DBM"
+NAME="ref.dbm"
 ></A
 ><DIV
 CLASS="TITLEPAGE"
 ><H1
-CLASS="TITLE"
->XII. dbm functions</H1
+CLASS="title"
+>XV. DBM Functions</H1
 ><DIV
 CLASS="PARTINTRO"
 ><A
-NAME="AEN7584"
+NAME="AEN8907"
 ></A
 ><P
->   These functions allow you to store records stored in a dbm-style
-   database. This type of database (supported by the Berkeley db,
-   gdbm, and some system libraries, as well as a built-in flatfile
-   library) stores key/value pairs (as opposed to the full-blown
-   records supported by relational databases).</P
+>&#13;    These functions allow you to store records stored in a dbm-style
+    database. This type of database (supported by the Berkeley DB,
+    GDBM, and some system libraries, as well as a built-in flatfile
+    library) stores key/value pairs (as opposed to the full-blown
+    records supported by relational databases).
+   </P
 ><P
->   <TABLE
+>&#13;    <TABLE
 WIDTH="100%"
 BORDER="0"
 CELLPADDING="0"
@@ -94,28 +98,38 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
->Example 1. dbm example</B
+>Example 1. DBM example</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->$dbm = dbmopen("lastseen", "w");
-if (dbmexists($dbm, $userid)) {
-  $last_seen = dbmfetch($dbm, $userid);
+CLASS="programlisting"
+>&#13;$dbm = dbmopen ("lastseen", "w");
+if (dbmexists ($dbm, $userid)) {
+    $last_seen = dbmfetch ($dbm, $userid);
 } else {
-  dbminsert($dbm, $userid, time());
+    dbminsert ($dbm, $userid, time());
 }
 do_stuff();
-dbmreplace($dbm, $userid, time());
-dbmclose($dbm);</PRE
+dbmreplace ($dbm, $userid, time());
+dbmclose ($dbm);
+     </PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR
 ></TABLE
 >
-  </P
+   </P
 ></DIV
 ><DIV
 CLASS="TOC"
@@ -128,52 +142,67 @@ CLASS="TOC"
 ><A
 HREF="function.dbmopen.html"
 >dbmopen</A
-> &#8212; opens a dbm database</DT
+> &#8212; Opens a DBM database</DT
 ><DT
 ><A
 HREF="function.dbmclose.html"
 >dbmclose</A
-> &#8212; closes a dbm database</DT
+> &#8212; Closes a dbm database</DT
 ><DT
 ><A
 HREF="function.dbmexists.html"
 >dbmexists</A
-> &#8212; tells if a value exists for a key in a dbm database</DT
+> &#8212; 
+     Tells if a value exists for a key in a DBM database
+    </DT
 ><DT
 ><A
 HREF="function.dbmfetch.html"
 >dbmfetch</A
-> &#8212; fetches a value for a key from a dbm database</DT
+> &#8212; 
+     Fetches a value for a key from a DBM database
+    </DT
 ><DT
 ><A
 HREF="function.dbminsert.html"
 >dbminsert</A
-> &#8212; inserts a value for a key in a dbm database</DT
+> &#8212; 
+     Inserts a value for a key in a DBM database
+    </DT
 ><DT
 ><A
 HREF="function.dbmreplace.html"
 >dbmreplace</A
-> &#8212; replaces the value for a key in a dbm database</DT
+> &#8212; 
+     Replaces the value for a key in a DBM database
+    </DT
 ><DT
 ><A
 HREF="function.dbmdelete.html"
 >dbmdelete</A
-> &#8212; deletes the value for a key from a dbm database</DT
+> &#8212; 
+     Deletes the value for a key from a DBM database
+    </DT
 ><DT
 ><A
 HREF="function.dbmfirstkey.html"
 >dbmfirstkey</A
-> &#8212; retrieves the first key from a dbm database</DT
+> &#8212; 
+     Retrieves the first key from a DBM database
+    </DT
 ><DT
 ><A
 HREF="function.dbmnextkey.html"
 >dbmnextkey</A
-> &#8212; retrieves the next key from a dbm database</DT
+> &#8212; 
+     Retrieves the next key from a DBM database</DT
 ><DT
 ><A
 HREF="function.dblist.html"
 >dblist</A
-> &#8212; describes the dbm-compatible library being used</DT
+> &#8212; 
+     Describes the DBM-compatible library being used
+    </DT
 ></DL
 ></DIV
 ></DIV

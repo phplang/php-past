@@ -4,7 +4,7 @@
 >readdir</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="opendir"
 HREF="function.opendir.html"><LINK
 REL="NEXT"
 TITLE="rewinddir"
-HREF="function.rewinddir.html"></HEAD
+HREF="function.rewinddir.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,34 +68,43 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.READDIR"
+NAME="function.readdir"
 >readdir</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN7808"
+NAME="AEN9159"
 ></A
->readdir -- read entry from directory handle</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>readdir&nbsp;--&nbsp;read entry from directory handle</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN7811"
+NAME="AEN9162"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->string readdir</CODE
->(int dir_handle);<P
+>string <B
+CLASS="function"
+>readdir</B
+></CODE
+> (int dir_handle)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Returns the filename of the next file from the directory. The
+>&#13;     Returns the filename of the next file from the directory. The
      filenames are not returned in any particular order.
      <TABLE
 WIDTH="100%"
@@ -103,23 +115,32 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
 >Example 1. List all files in the current directory</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->&lt;?php
+CLASS="programlisting"
+>&#13;&#60;?php
 $handle=opendir('.');
 echo "Directory handle: $handle\n";
 echo "Files:\n";
-while ($file = readdir($handle)) {
+while (($file = readdir($handle))!==false) {
     echo "$file\n";
 }
 closedir($handle); 
-?&gt;
+?&#62;
       </PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR
@@ -127,8 +148,8 @@ closedir($handle);
 >
     </P
 ><P
->     Note that <B
-CLASS="FUNCTION"
+>&#13;     Note that <B
+CLASS="function"
 >readdir()</B
 > will return the . and
      .. entries.  If you don't want these, simply strip them out:
@@ -141,25 +162,35 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
->Example 2.        List all files in the current directory and strip out . and
+>Example 2. 
+       List all files in the current directory and strip out . and
        ..
       </B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->&lt;?php 
+CLASS="programlisting"
+>&#13;&#60;?php 
 $handle=opendir('.'); 
-while ($file = readdir($handle)) { 
+while (false!==($file = readdir($handle))) { 
     if ($file != "." &#38;&#38; $file != "..") { 
         echo "$file\n"; 
     } 
 }
 closedir($handle); 
-?&gt;
+?&#62;
       </PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR

@@ -4,7 +4,7 @@
 >getenv</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="extension_loaded"
 HREF="function.extension-loaded.html"><LINK
 REL="NEXT"
 TITLE="get_cfg_var"
-HREF="function.get-cfg-var.html"></HEAD
+HREF="function.get-cfg-var.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,64 +68,82 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.GETENV"
+NAME="function.getenv"
 >getenv</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN22442"
+NAME="AEN28241"
 ></A
->getenv -- Get the value of an environment variable</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>getenv&nbsp;--&nbsp;Get the value of an environment variable</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN22445"
+NAME="AEN28244"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->string getenv</CODE
->(string varname);<P
+>string <B
+CLASS="function"
+>getenv</B
+></CODE
+> (string varname)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Returns the value of the environment variable
+>&#13;     Returns the value of the environment variable
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >varname</I
 ></TT
 >, or false on an error.
 
      <DIV
-CLASS="INFORMALEXAMPLE"
+CLASS="informalexample"
 ><P
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->$ip = getenv("REMOTE_ADDR"); // get the ip number of the user 
-     </PRE
+CLASS="programlisting"
+>&#13;$ip = getenv ("REMOTE_ADDR"); // get the ip number of the user 
+      </PRE
+></TD
+></TR
+></TABLE
 ><P
 ></P
 ></DIV
-></P
+>
+    </P
 ><P
->     You can see a list of all the environmental variables
-     by using <A
+>&#13;     You can see a list of all the environmental variables by using
+     <A
 HREF="function.phpinfo.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >phpinfo()</B
 ></A
->. You can find
-     out what many of them mean by taking a look at the
-     <A
+>. You can find out what many of them
+     mean by taking a look at the <A
 HREF="http://hoohoo.ncsa.uiuc.edu/cgi/"
 TARGET="_top"
 >CGI
@@ -130,9 +151,10 @@ TARGET="_top"
 >, specifically the <A
 HREF="http://hoohoo.ncsa.uiuc.edu/cgi/env.html"
 TARGET="_top"
->page on environmental
-     variables</A
->.</P
+>page on
+     environmental variables</A
+>.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

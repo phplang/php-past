@@ -4,20 +4,23 @@
 >rand</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
-TITLE="Mathematical functions"
+TITLE="Mathematical Functions"
 HREF="ref.math.html"><LINK
 REL="PREVIOUS"
-TITLE="pow"
-HREF="function.pow.html"><LINK
+TITLE="rad2deg"
+HREF="function.rad2deg.html"><LINK
 REL="NEXT"
 TITLE="round"
-HREF="function.round.html"></HEAD
+HREF="function.round.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -42,7 +45,7 @@ WIDTH="10%"
 ALIGN="left"
 VALIGN="bottom"
 ><A
-HREF="function.pow.html"
+HREF="function.rad2deg.html"
 >Prev</A
 ></TD
 ><TD
@@ -65,87 +68,143 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.RAND"
+NAME="function.rand"
 >rand</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN15515"
+NAME="AEN18815"
 ></A
->rand -- generate a random value</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>rand&nbsp;--&nbsp;Generate a random value</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN15518"
+NAME="AEN18818"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int rand</CODE
->([<SPAN
-CLASS="OPTIONAL"
->int min</SPAN
->], [<SPAN
-CLASS="OPTIONAL"
->int max</SPAN
->]);<P
+>int <B
+CLASS="function"
+>rand</B
+></CODE
+> ([int min [, int max]])</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     If called without the optional min,max arguments rand() returns a
-     pseudo-random value between 0 and RAND_MAX.  If you want a random
-     number between 5 and 15 (inclusive), for example, use rand(5,15).</P
+>&#13;     If called without the optional <TT
+CLASS="parameter"
+><I
+>min</I
+></TT
+>,
+     <TT
+CLASS="parameter"
+><I
+>max</I
+></TT
+> arguments <B
+CLASS="function"
+>rand()</B
+>
+     returns a pseudo-random value between 0 and
+     <TT
+CLASS="constant"
+>RAND_MAX</TT
+>.  If you want a random number
+     between 5 and 15 (inclusive), for example, use <TT
+CLASS="literal"
+>rand (5,
+     15)</TT
+>. 
+    </P
 ><P
->     Remember to seed the random number generator before use with
+>&#13;     Remember to seed the random number generator before use with
      <A
 HREF="function.srand.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >srand()</B
 ></A
->.</P
+>.
+    </P
+><DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
 ><P
->     See also <A
+><B
+>Note: </B
+>
+      In versions before 3.0.7 the meaning of
+      <TT
+CLASS="parameter"
+><I
+>max</I
+></TT
+> was <TT
+CLASS="parameter"
+><I
+>range</I
+></TT
+>. To
+      get the same results in these versions the short example should
+      be <TT
+CLASS="literal"
+>rand (5, 11)</TT
+> to get a random number
+      between 5 and 15.
+     </P
+></BLOCKQUOTE
+></DIV
+><P
+>&#13;     See also <A
 HREF="function.srand.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >srand()</B
 ></A
 >,
      <A
 HREF="function.getrandmax.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >getrandmax()</B
 ></A
->,
-     <A
+>, <A
 HREF="function.mt-rand.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >mt_rand()</B
 ></A
 >,
      <A
 HREF="function.mt-srand.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >mt_srand()</B
 ></A
-> and
+>, and
      <A
 HREF="function.mt-getrandmax.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >mt_getrandmax()</B
 ></A
->.</P
+>.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -162,7 +221,7 @@ WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
 ><A
-HREF="function.pow.html"
+HREF="function.rad2deg.html"
 >Prev</A
 ></TD
 ><TD
@@ -187,7 +246,7 @@ HREF="function.round.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->pow</TD
+>rad2deg</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"

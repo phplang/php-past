@@ -4,20 +4,23 @@
 >imap_fetchheader</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
-TITLE="IMAP functions"
+TITLE="IMAP, POP3 and NNTP functions"
 HREF="ref.imap.html"><LINK
 REL="PREVIOUS"
 TITLE="imap_sort"
 HREF="function.imap-sort.html"><LINK
 REL="NEXT"
 TITLE="imap_uid"
-HREF="function.imap-uid.html"></HEAD
+HREF="function.imap-uid.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,58 +68,75 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.IMAP-FETCHHEADER"
+NAME="function.imap-fetchheader"
 >imap_fetchheader</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN13286"
+NAME="AEN15910"
 ></A
->imap_fetchheader -- Returns header for a message</DIV
+><P
+>    (PHP3 &#62;= 3.0.3, PHP4 )</P
+>imap_fetchheader&nbsp;--&nbsp;Returns header for a message</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN13289"
+NAME="AEN15913"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->stringimap_fetchheader</CODE
->(int imap_stream, int msgno, int flags);<P
+>string <B
+CLASS="function"
+>imap_fetchheader</B
+></CODE
+> (int imap_stream, int msgno, int flags)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     This function causes a fetch of the complete, unfiltered RFC 822
+>&#13;     This function causes a fetch of the complete, unfiltered 
+     <A
+HREF="http://www.faqs.org/rfcs/rfc822.html"
+TARGET="_top"
+>RFC822</A
+>
      format header of the specified message as a text string and
-     returns that text string.</P
+     returns that text string.
+    </P
 ><P
->     The options are:
+>&#13;     The options are:
      <DIV
-CLASS="INFORMALEXAMPLE"
+CLASS="informalexample"
 ><P
 ></P
 ><P
-CLASS="LITERALLAYOUT"
->&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FT_UID&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;msgno&nbsp;argument&nbsp;is&nbsp;a&nbsp;UID&nbsp;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FT_INTERNAL&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;return&nbsp;string&nbsp;is&nbsp;in&nbsp;"internal"&nbsp;format,<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;without&nbsp;any&nbsp;attempt&nbsp;to&nbsp;canonicalize&nbsp;to&nbsp;CRLF<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;newlines<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FT_PREFETCHTEXT&nbsp;The&nbsp;RFC822.TEXT&nbsp;should&nbsp;be&nbsp;pre-fetched&nbsp;at&nbsp;the<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;same&nbsp;time.&nbsp;&nbsp;This&nbsp;avoids&nbsp;an&nbsp;extra&nbsp;RTT&nbsp;on&nbsp;an<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IMAP&nbsp;connection&nbsp;if&nbsp;a&nbsp;full&nbsp;message&nbsp;text&nbsp;is<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;desired&nbsp;(e.g.&nbsp;in&nbsp;a&nbsp;"save&nbsp;to&nbsp;local&nbsp;file"<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;operation)<br>
+CLASS="literallayout"
+><br>
+FT_UID&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;msgno&nbsp;argument&nbsp;is&nbsp;a&nbsp;UID&nbsp;<br>
+FT_INTERNAL&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;return&nbsp;string&nbsp;is&nbsp;in&nbsp;"internal"&nbsp;format,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;without&nbsp;any&nbsp;attempt&nbsp;to&nbsp;canonicalize&nbsp;to&nbsp;CRLF<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;newlines<br>
+FT_PREFETCHTEXT&nbsp;The&nbsp;RFC822.TEXT&nbsp;should&nbsp;be&nbsp;pre-fetched&nbsp;at&nbsp;the<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;same&nbsp;time.&nbsp;&nbsp;This&nbsp;avoids&nbsp;an&nbsp;extra&nbsp;RTT&nbsp;on&nbsp;an<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IMAP&nbsp;connection&nbsp;if&nbsp;a&nbsp;full&nbsp;message&nbsp;text&nbsp;is<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;desired&nbsp;(e.g.&nbsp;in&nbsp;a&nbsp;"save&nbsp;to&nbsp;local&nbsp;file"<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;operation)<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</P
 ><P
 ></P
 ></DIV
-></P
+>
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

@@ -4,7 +4,7 @@
 >session_name</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="session_destroy"
 HREF="function.session-destroy.html"><LINK
 REL="NEXT"
 TITLE="session_module_name"
-HREF="function.session-module-name.html"></HEAD
+HREF="function.session-module-name.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,74 +68,83 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.SESSION-NAME"
+NAME="function.session-name"
 >session_name</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN24349"
+NAME="AEN31312"
 ></A
->session_name -- Get and/or set the current session name</DIV
+><P
+>    (PHP4 )</P
+>session_name&nbsp;--&nbsp;Get and/or set the current session name</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN24352"
+NAME="AEN31315"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->string session_name</CODE
->(string [<SPAN
-CLASS="OPTIONAL"
->name</SPAN
->]);<P
+>string <B
+CLASS="function"
+>session_name</B
+></CODE
+> ([string 
+       name])</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     <B
-CLASS="FUNCTION"
+>&#13;     <B
+CLASS="function"
 >session_name()</B
 > returns the name of the current
      session. If <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >name</I
 ></TT
 > is specified, the name of
-     the current session is changed to its value.</P
+     the current session is changed to its value.
+    </P
 ><P
->     The session name references the session id in cookies and URLs. It should
-     contain only alphanumeric characters; it should be short and descriptive
-     (i.e. for users with enabled cookie warnings). The session name is
-     resetted to the default value stored in <TT
-CLASS="LITERAL"
+>&#13;     The session name references the session id in cookies and
+     URLs. It should contain only alphanumeric characters; it should
+     be short and descriptive (i.e. for users with enabled cookie
+     warnings). The session name is resetted to the default value
+     stored in <TT
+CLASS="literal"
 >session.name</TT
->
-     at request startup time. Thus, you need to call
-     <B
-CLASS="FUNCTION"
+> at request startup
+     time. Thus, you need to call <B
+CLASS="function"
 >session_name()</B
-> for every request (and before
-     <A
+>
+     for every request (and before <A
 HREF="function.session-start.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >session_start()</B
 ></A
-> or
-     <A
+>
+     or <A
 HREF="function.session-register.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >session_register()</B
 ></A
-> are called).</P
+> are called).
+    </P
 ><TABLE
 WIDTH="100%"
 BORDER="0"
@@ -142,36 +154,48 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
 >Example 1. <B
-CLASS="FUNCTION"
+CLASS="function"
 >session_name()</B
 > examples</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->&lt;?php
+CLASS="programlisting"
+>&#13;&#60;?php
 
 # set the session name to WebsiteID
 
-$previous_name = session_name("WebsiteID");
+$previous_name = session_name ("WebsiteID");
 
-echo "The previous session name was $previous_name&lt;p&gt;";
+echo "The previous session name was $previous_name&#60;p&#62;";
+?&#62;
      </PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR
 ></TABLE
 ><DIV
-CLASS="NOTE"
+CLASS="note"
 ><BLOCKQUOTE
-CLASS="NOTE"
+CLASS="note"
 ><P
 ><B
 >Note: </B
->      This function was added in PHP 4.0.</P
+>
+      This function was added in PHP 4.0.
+     </P
 ></BLOCKQUOTE
 ></DIV
 ></DIV

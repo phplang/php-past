@@ -4,20 +4,23 @@
 >shm_attach</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
-TITLE="Semaphore and shared memory functions"
+TITLE="Semaphore and Shared Memory Functions"
 HREF="ref.sem.html"><LINK
 REL="PREVIOUS"
 TITLE="sem_release"
 HREF="function.sem-release.html"><LINK
 REL="NEXT"
 TITLE="shm_detach"
-HREF="function.shm-detach.html"></HEAD
+HREF="function.shm-detach.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,76 +68,81 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.SHM-ATTACH"
+NAME="function.shm-attach"
 >shm_attach</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN24123"
+NAME="AEN31055"
 ></A
->shm_attach -- Creates or open a shared memory segment</DIV
+><P
+>    (PHP3 &#62;= 3.0.6, PHP4 )</P
+>shm_attach&nbsp;--&nbsp;Creates or open a shared memory segment</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN24126"
+NAME="AEN31058"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int shm_attach</CODE
->(int key, int
-     [<SPAN
-CLASS="OPTIONAL"
->memsize</SPAN
->], int
-     [<SPAN
-CLASS="OPTIONAL"
->perm</SPAN
->]);<P
+>int <B
+CLASS="function"
+>shm_attach</B
+></CODE
+> (int key [, int
+       memsize [, int
+       perm]])</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     <B
-CLASS="FUNCTION"
->shm_attach()</B
-> returns an id that that
-     can be used to access the System V shared memory with
-     the given key, the first call creates the shared memory
-     segment with mem_size (default: sysvshm.init_mem in the <A
-HREF="configuration.html#CONFIGURATION.FILE"
+>&#13;     <B
+CLASS="function"
+>Shm_attach()</B
+> returns an id that that can be
+     used to access the System V shared memory with the given key, the
+     first call creates the shared memory segment with mem_size
+     (default: sysvshm.init_mem in the <A
+HREF="configuration.html#configuration.file"
 >configuration file</A
 >, otherwise
-     10000 bytes) and the optional perm-bits (default: 0666).</P
+     10000 bytes) and the optional perm-bits (default: 0666).
+    </P
 ><P
->     A second call to <B
-CLASS="FUNCTION"
+>&#13;     A second call to <B
+CLASS="function"
 >shm_attach()</B
 > for the same
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >key</I
 ></TT
 > will return a different shared memory
      identifier, but both identifiers access the same underlying
      shared memory. <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
->memsize</I
+>Memsize</I
 ></TT
 > and
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >perm</I
 ></TT
-> will be ignored.</P
+> will be ignored.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

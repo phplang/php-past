@@ -23,11 +23,11 @@
    | If you did not, or have any questions about PHP licensing, please    |
    | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
-   | Modified for PHP by Andi Gutmans <andi@php.net>                      |
+   | Modified for PHP by Andi Gutmans <andi@zend.com>                     |
    +----------------------------------------------------------------------+
  */
 
-/* $Id: number.c,v 1.23 2000/01/01 04:31:16 sas Exp $
+/* $Id: number.c,v 1.24 2000/04/10 19:29:37 andi Exp $
    Implements arbitrary precision numbers. */
 
 /*  This file is part of GNU bc.

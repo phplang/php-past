@@ -23,13 +23,13 @@
    | If you did not, or have any questions about PHP licensing, please    |
    | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
-   | Authors: Andi Gutmans <andi@php.net>                                 |
+   | Authors: Andi Gutmans <andi@zend.com>                                |
    |          Zeev Suraski <zeev@zend.com>                                |
    +----------------------------------------------------------------------+
  */
 
 
-/* $Id: variables.c,v 1.164 2000/02/07 23:54:50 zeev Exp $ */
+/* $Id: variables.c,v 1.165 2000/04/10 19:29:36 andi Exp $ */
 #include "php.h"
 #if HAVE_STRING_H
 #include <string.h>

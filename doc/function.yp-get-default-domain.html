@@ -4,20 +4,23 @@
 >yp_get_default_domain</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
-TITLE="NIS functions"
+TITLE="YP/NIS Functions"
 HREF="ref.nis.html"><LINK
 REL="PREVIOUS"
-TITLE="NIS functions"
+TITLE="YP/NIS Functions"
 HREF="ref.nis.html"><LINK
 REL="NEXT"
 TITLE="yp_order"
-HREF="function.yp-order.html"></HEAD
+HREF="function.yp-order.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,47 +68,58 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.YP-GET-DEFAULT-DOMAIN"
+NAME="function.yp-get-default-domain"
 >yp_get_default_domain</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN18915"
+NAME="AEN37550"
 ></A
->yp_get_default_domain -- Fetches the machine's default NIS domain.</DIV
+><P
+>    (PHP3 &#62;= 3.0.7, PHP4 )</P
+>yp_get_default_domain&nbsp;--&nbsp;Fetches the machine's default NIS domain</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN18918"
+NAME="AEN37553"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int yp_get_default_domain</CODE
->(void );<P
+>int <B
+CLASS="function"
+>yp_get_default_domain</B
+></CODE
+> (void )</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     <B
-CLASS="FUNCTION"
->yp_get_default_domain()</B
+>&#13;     <B
+CLASS="function"
+>Yp_get_default_domain()</B
 > returns the default
      domain of the node or FALSE. Can be used as the domain parameter
-     for successive NIS calls.</P
+     for successive NIS calls.
+    </P
 ><P
 > 
      A NIS domain can be described a group of NIS maps.  Every host
      that needs to look up information binds itself to a certain
      domain. Refer to the documents mentioned at the beginning for
-     more detailed information.</P
+     more detailed information.
+    </P
 ><P
->     <TABLE
+>&#13;     <TABLE
 WIDTH="100%"
 BORDER="0"
 CELLPADDING="0"
@@ -114,37 +128,33 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
 >Example 1. Example for the default domain</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->&lt;?php
-    $domain = yp_get_default_domain();
-
-    if(!$domain) {
-        echo yp_errno() . ": " . yp_err_string();
-    }
-
-    echo "Default NIS domain is: " . $domain;
+CLASS="programlisting"
+>&#13;&#60;?php
+$domain = yp_get_default_domain();
+echo "Default NIS domain is: " . $domain;
 ?&#62;
       </PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR
 ></TABLE
-></P
-><P
->     See also: <A
-HREF="function.yp-errno.html"
->yp_errno</A
-> and
-     <A
-HREF="function.yp-err-string.html"
->yp_err_string</A
-></P
+>
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -186,7 +196,7 @@ HREF="function.yp-order.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->NIS functions</TD
+>YP/NIS Functions</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"

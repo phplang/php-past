@@ -4,7 +4,7 @@
 >fpassthru</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="fopen"
 HREF="function.fopen.html"><LINK
 REL="NEXT"
 TITLE="fputs"
-HREF="function.fputs.html"></HEAD
+HREF="function.fputs.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,115 +68,133 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.FPASSTHRU"
+NAME="function.fpassthru"
 >fpassthru</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN8858"
+NAME="AEN10097"
 ></A
->fpassthru -- output all remaining data on a file pointer</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>fpassthru&nbsp;--&nbsp;
+     Output all remaining data on a file pointer
+    </DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN8861"
+NAME="AEN10100"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int fpassthru</CODE
->(int fp);<P
+>int <B
+CLASS="function"
+>fpassthru</B
+></CODE
+> (int fp)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Reads to EOF on the given file pointer and writes the results to
-     standard output.</P
+>&#13;     Reads to EOF on the given file pointer and writes the results to
+     standard output.
+    </P
 ><P
->     If an error occurs, <B
-CLASS="FUNCTION"
+>&#13;     If an error occurs, <B
+CLASS="function"
 >fpassthru()</B
-> returns false.</P
+> returns
+     false.
+    </P
 ><P
->     The file pointer must be valid, and must point to a file successfully
-     opened by <A
+>&#13;     The file pointer must be valid, and must point to a file
+     successfully opened by <A
 HREF="function.fopen.html"
 ><B
-CLASS="FUNCTION"
->fopen()</B
-></A
->, <A
-HREF="function.popen.html"
-><B
-CLASS="FUNCTION"
->popen()</B
-></A
->, or
-     <A
-HREF="function.fsockopen.html"
-><B
-CLASS="FUNCTION"
->fsockopen()</B
-></A
->.  The file is closed when
-     <B
-CLASS="FUNCTION"
->fpassthru()</B
-> is done reading it (leaving
-     <TT
-CLASS="PARAMETER"
-><I
->fp</I
-></TT
-> useless).</P
-><P
->     If you just want to dump the contents of a file to stdout
-     you may want to use the <A
-HREF="function.readfile.html"
-><B
-CLASS="FUNCTION"
->readfile()</B
-></A
->, which
-     saves you the <A
-HREF="function.fopen.html"
-><B
-CLASS="FUNCTION"
->fopen()</B
-></A
-> call.</P
-><P
->     See also <A
-HREF="function.readfile.html"
-><B
-CLASS="FUNCTION"
->readfile()</B
-></A
->, <A
-HREF="function.fopen.html"
-><B
-CLASS="FUNCTION"
+CLASS="function"
 >fopen()</B
 ></A
 >,
      <A
 HREF="function.popen.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >popen()</B
 ></A
->, and <A
+>, or <A
 HREF="function.fsockopen.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >fsockopen()</B
 ></A
-></P
+>.
+     The file is closed when <B
+CLASS="function"
+>fpassthru()</B
+> is done
+     reading it (leaving <TT
+CLASS="parameter"
+><I
+>fp</I
+></TT
+> useless).
+    </P
+><P
+>&#13;     If you just want to dump the contents of a file to stdout you may
+     want to use the <A
+HREF="function.readfile.html"
+><B
+CLASS="function"
+>readfile()</B
+></A
+>, which saves you
+     the <A
+HREF="function.fopen.html"
+><B
+CLASS="function"
+>fopen()</B
+></A
+> call.
+    </P
+><P
+>&#13;     See also <A
+HREF="function.readfile.html"
+><B
+CLASS="function"
+>readfile()</B
+></A
+>,
+     <A
+HREF="function.fopen.html"
+><B
+CLASS="function"
+>fopen()</B
+></A
+>, <A
+HREF="function.popen.html"
+><B
+CLASS="function"
+>popen()</B
+></A
+>, and
+     <A
+HREF="function.fsockopen.html"
+><B
+CLASS="function"
+>fsockopen()</B
+></A
+>
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

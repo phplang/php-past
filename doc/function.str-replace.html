@@ -4,7 +4,7 @@
 >str_replace</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="strtoupper"
 HREF="function.strtoupper.html"><LINK
 REL="NEXT"
 TITLE="strtr"
-HREF="function.strtr.html"></HEAD
+HREF="function.strtr.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,48 +68,58 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.STR-REPLACE"
+NAME="function.str-replace"
 >str_replace</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN25956"
+NAME="AEN34704"
 ></A
->str_replace --      Replace all occurrences of needle in haystack with str
+><P
+>    (PHP3 &#62;= 3.0.6, PHP4 )</P
+>str_replace&nbsp;--&nbsp;
+     Replace all occurrences of needle in haystack with str
     </DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN25959"
+NAME="AEN34707"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->string str_replace</CODE
->(string needle, string str, string haystack);<P
+>string <B
+CLASS="function"
+>str_replace</B
+></CODE
+> (string needle, string str, string haystack)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     This function replaces all occurences of
+>&#13;     This function replaces all occurences of
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >needle</I
 ></TT
 > in <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >haystack</I
 ></TT
 >
      with the given <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >str</I
 ></TT
@@ -115,12 +128,12 @@ CLASS="PARAMETER"
      instead of <A
 HREF="function.ereg-replace.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >ereg_replace()</B
 ></A
 >.</P
 ><P
->     <TABLE
+>&#13;     <TABLE
 WIDTH="100%"
 BORDER="0"
 CELLPADDING="0"
@@ -129,46 +142,68 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
->Example 1. str_replace() example</B
+>Example 1. <B
+CLASS="function"
+>Str_replace()</B
+> example</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->$bodytag = str_replace("%body%", "black", "&lt;body text=%body%&#62;");
+CLASS="programlisting"
+>&#13;$bodytag = str_replace ("%body%", "black", "&#60;body text=%body%&#62;");
       </PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR
 ></TABLE
-></P
+>
+    </P
 ><P
->     This function is binary safe.
-	</P
+>&#13;     This function is binary safe.
+    </P
+><DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
 ><P
->	 <B
-CLASS="FUNCTION"
->str_replace()</B
+><B
+>Note: </B
+>
+      <B
+CLASS="function"
+>Str_replace()</B
 > was added in PHP 3.0.6, but was
-	 buggy up until PHP 3.0.8.
-	</P
+      buggy up until PHP 3.0.8.
+     </P
+></BLOCKQUOTE
+></DIV
 ><P
->     See also <A
+>&#13;     See also <A
 HREF="function.ereg-replace.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >ereg_replace()</B
 ></A
 > and
      <A
 HREF="function.strtr.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >strtr()</B
 ></A
 >.
-	</P
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

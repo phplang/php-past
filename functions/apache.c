@@ -29,7 +29,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: apache.c,v 1.52 2000/01/01 04:31:14 sas Exp $ */
+/* $Id: apache.c,v 1.53 2000/08/20 16:22:45 martin Exp $ */
 #include "php.h"
 #include "internal_functions.h"
 #include "functions/head.h"
@@ -54,12 +54,20 @@ void php3_apachelog(INTERNAL_FUNCTION_PARAMETERS);
 void php3_info_apache(void);
 void php3_apache_note(INTERNAL_FUNCTION_PARAMETERS);
 void php3_apache_lookup_uri(INTERNAL_FUNCTION_PARAMETERS);
+#ifdef CHARSET_EBCDIC
+static void php3_ebcdic2ascii(INTERNAL_FUNCTION_PARAMETERS);
+static void php3_ascii2ebcdic(INTERNAL_FUNCTION_PARAMETERS);
+#endif /*CHARSET_EBCDIC*/
 
 function_entry apache_functions[] = {
 	{"virtual",			php3_virtual,		NULL},
 	{"getallheaders",		php3_getallheaders,	NULL},
 	{"apache_note", php3_apache_note,NULL},
 	{"apache_lookup_uri", php3_apache_lookup_uri,NULL},
+#ifdef CHARSET_EBCDIC
+	PHP_FE(ebcdic2ascii, NULL)
+	PHP_FE(ascii2ebcdic, NULL)
+#endif /*CHARSET_EBCDIC*/
 	{NULL, NULL, NULL}
 };
 
@@ -321,7 +329,59 @@ void php3_apache_exec_uri(INTERNAL_FUNCTION_PARAMETERS) {
 }
 #endif
 
-#endif
+#ifdef CHARSET_EBCDIC
+/* {{{ proto string ebcdic2ascii (string mem)
+   Binary-safe ebcdic2ascii conversion */
+static void php3_ebcdic2ascii(INTERNAL_FUNCTION_PARAMETERS)
+{
+	pval *arg1;
+	int len;
+	TLS_VARS;
+	
+	if (ARG_COUNT(ht) != 1 || getParameters(ht, 1, &arg1) == FAILURE) {
+		WRONG_PARAM_COUNT;
+	}
+	convert_to_string(arg1);
+	len = arg1->value.str.len;
+
+	return_value->value.str.val = emalloc(sizeof(char) * (len + 1));
+	/* needed because ebcdic2ascii doesnt put a null at the end*/
+	
+	return_value->value.str.len = len;
+	ebcdic2ascii(return_value->value.str.val, arg1->value.str.val, len);
+	return_value->value.str.val[return_value->value.str.len] = '\0';
+
+	return_value->type = IS_STRING;
+}
+/* }}} ebcdic2ascii */
+
+
+/* {{{ proto string ascii2ebcdic (string mem)
+   Binary-safe ascii2ebcdic conversion */
+static void php3_ascii2ebcdic(INTERNAL_FUNCTION_PARAMETERS)
+{
+	pval *arg1;
+	int len;
+	TLS_VARS;
+	
+	if (ARG_COUNT(ht) != 1 || getParameters(ht, 1, &arg1) == FAILURE) {
+		WRONG_PARAM_COUNT;
+	}
+	convert_to_string(arg1);
+	len = arg1->value.str.len;
+
+	return_value->value.str.val = emalloc(sizeof(char) * (len + 1));
+	/* needed because ascii2ebcdic doesnt put a null at the end*/
+	
+	return_value->value.str.len = len;
+	ascii2ebcdic(return_value->value.str.val, arg1->value.str.val, len);
+	return_value->value.str.val[return_value->value.str.len] = '\0';
+
+	return_value->type = IS_STRING;
+}
+/* }}} ascii2ebcdic */
+#endif /*CHARSET_EBCDIC*/
+#endif /*APACHE*/
 
 /*
  * Local variables:

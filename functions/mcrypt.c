@@ -23,7 +23,7 @@
    | If you did not, or have any questions about PHP licensing, please    |
    | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
-   | Authors: Sascha Schumann <sascha@schumann.2ns.de>                    |
+   | Authors: Sascha Schumann <sascha@schumann.cx>                        |
    +----------------------------------------------------------------------+
  */
 
@@ -341,16 +341,19 @@ PHP_FUNCTION(mcrypt_cbc)
 	}
 	MCRYPT_CONVERT;
 	MCRYPT_SIZE;
-	if(ac > 4) {
+	
+	if (ac > 4) {
 		MCRYPT_CHECK_IV;
+		td = init_mcrypt_cbc_iv(
+			cipher->value.lval, key->value.str.val,
+			key->value.str.len, iv->value.str.val);
 	}
-	
-	td = init_mcrypt_cbc(cipher->value.lval, key->value.str.val, key->value.str.len);
+	else {
+		td = init_mcrypt_cbc(
+			cipher->value.lval, key->value.str.val,
+			key->value.str.len);
+	}
 	MCRYPT_CHECK_TD_CPY;
-	
-	if(ac > 4) {
-		mcrypt(td, iv->value.str.val);
-	}
 	
 	MCRYPT_ACTION(cbc);
 

@@ -4,7 +4,7 @@
 >xml_set_element_handler</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="xml_set_object"
 HREF="function.xml-set-object.html"><LINK
 REL="NEXT"
 TITLE="xml_set_character_data_handler"
-HREF="function.xml-set-character-data-handler.html"></HEAD
+HREF="function.xml-set-character-data-handler.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,54 +68,61 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.XML-SET-ELEMENT-HANDLER"
+NAME="function.xml-set-element-handler"
 >xml_set_element_handler</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN27418"
+NAME="AEN36492"
 ></A
->xml_set_element_handler -- set up start and end element handlers</DIV
+><P
+>    (PHP3 &#62;= 3.0.6, PHP4 )</P
+>xml_set_element_handler&nbsp;--&nbsp;set up start and end element handlers</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN27421"
+NAME="AEN36495"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
 >int 
-      xml_set_element_handler
-     </CODE
->(int parser, string 
-      startElementHandler
-     , string 
-      endElementHandler
-     );<P
+       <B
+CLASS="function"
+>xml_set_element_handler</B
+>
+      </CODE
+> (int parser, string 
+       startElementHandler, string 
+       endElementHandler)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Sets the element handler functions for the XML parser
+>&#13;     Sets the element handler functions for the XML parser
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >parser</I
 ></TT
 >.
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >startElementHandler</I
 ></TT
 > and
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >endElementHandler</I
 ></TT
@@ -121,171 +131,61 @@ CLASS="PARAMETER"
      <A
 HREF="function.xml-parse.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >xml_parse()</B
 ></A
 > is called for
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >parser</I
 ></TT
->.</P
+>.
+    </P
 ><P
->     The function named by <TT
-CLASS="PARAMETER"
+>&#13;     The function named by <TT
+CLASS="parameter"
 ><I
 >startElementHandler</I
 ></TT
 >
      must accept three parameters:
      <DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
 ><TT
-CLASS="REPLACEABLE"
+CLASS="replaceable"
 ><I
 >startElementHandler</I
 ></TT
 ></CODE
->(int parser, string name, string attribs);<P
+> (int parser, string name, array attribs)</CODE
+></P
+><P
 ></P
 ></DIV
 >
      <P
 ></P
+><DIV
+CLASS="variablelist"
 ><DL
 ><DT
 ><TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >parser</I
 ></TT
 ></DT
 ><DD
 ><P
->       The first parameter, <TT
-CLASS="REPLACEABLE"
-><I
->parser</I
-></TT
->, is a
-       reference to the XML parser calling the
-       handler.</P
-></DD
-><DT
-><TT
-CLASS="PARAMETER"
-><I
->name</I
-></TT
-></DT
-><DD
-><P
->	 The second parameter, <TT
-CLASS="PARAMETER"
-><I
->name</I
-></TT
->, contains
-	 the name of the element for which this handler is called.  If
-	 <A
-HREF="ref.xml.html#XML.CASE-FOLDING"
->case-folding</A
-> is in
-	 effect for this parser, the element name will be in uppercase
-	 letters.
-	</P
-></DD
-><DT
-><TT
-CLASS="PARAMETER"
-><I
->attribs</I
-></TT
-></DT
-><DD
-><P
->	 The third parameter, <TT
-CLASS="PARAMETER"
-><I
->attribs</I
-></TT
->, contains
-	 an associative array with the element's attributes (if any).
-	 The keys of this array are the attribute names, the values
-	 are the attribute values.  Attribute names are <A
-HREF="ref.xml.html#XML.CASE-FOLDING"
->case-folded</A
-> on the same
-	 criteria as element names.  Attribute values are
-	 <I
-CLASS="EMPHASIS"
->not</I
-> case-folded.
-	</P
-><P
->	 The original order of the attributes can be retrieved by
-	 walking through <TT
-CLASS="PARAMETER"
-><I
->attribs</I
-></TT
-> the normal
-	 way, using <A
-HREF="function.each.html"
-><B
-CLASS="FUNCTION"
->each()</B
-></A
->.  The first key in the
-	 array was the first attribute, and so on.
-	</P
-></DD
-></DL
->
-    </P
-><P
->     The function named by <TT
-CLASS="PARAMETER"
-><I
->endElementHandler</I
-></TT
->
-     must accept two parameters:
-     <DIV
-CLASS="FUNCSYNOPSIS"
-><P
-></P
-><CODE
-CLASS="FUNCDEF"
-><TT
-CLASS="REPLACEABLE"
-><I
->endElementHandler</I
-></TT
-></CODE
->(int parser, string name);<P
-></P
-></DIV
->
-     <P
-></P
-><DL
-><DT
-><TT
-CLASS="PARAMETER"
-><I
->parser</I
-></TT
-></DT
-><DD
-><P
->	 The first parameter, <TT
-CLASS="REPLACEABLE"
+>&#13;	 The first parameter, <TT
+CLASS="replaceable"
 ><I
 >parser</I
 ></TT
@@ -296,22 +196,147 @@ CLASS="REPLACEABLE"
 ></DD
 ><DT
 ><TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >name</I
 ></TT
 ></DT
 ><DD
 ><P
->	 The second parameter, <TT
-CLASS="PARAMETER"
+>&#13;	 The second parameter, <TT
+CLASS="parameter"
 ><I
 >name</I
 ></TT
 >, contains
 	 the name of the element for which this handler is called.  If
 	 <A
-HREF="ref.xml.html#XML.CASE-FOLDING"
+HREF="ref.xml.html#xml.case-folding"
+>case-folding</A
+> is in
+	 effect for this parser, the element name will be in uppercase
+	 letters.
+	</P
+></DD
+><DT
+><TT
+CLASS="parameter"
+><I
+>attribs</I
+></TT
+></DT
+><DD
+><P
+>&#13;	 The third parameter, <TT
+CLASS="parameter"
+><I
+>attribs</I
+></TT
+>, contains
+	 an associative array with the element's attributes (if any).
+	 The keys of this array are the attribute names, the values
+	 are the attribute values.  Attribute names are <A
+HREF="ref.xml.html#xml.case-folding"
+>case-folded</A
+> on the same
+	 criteria as element names.  Attribute values are
+	 <I
+CLASS="emphasis"
+>not</I
+> case-folded.
+	</P
+><P
+>&#13;	 The original order of the attributes can be retrieved by
+	 walking through <TT
+CLASS="parameter"
+><I
+>attribs</I
+></TT
+> the normal
+	 way, using <A
+HREF="function.each.html"
+><B
+CLASS="function"
+>each()</B
+></A
+>.  The first key in the
+	 array was the first attribute, and so on.
+	</P
+></DD
+></DL
+></DIV
+>
+    </P
+><P
+>&#13;     The function named by <TT
+CLASS="parameter"
+><I
+>endElementHandler</I
+></TT
+>
+     must accept two parameters:
+     <DIV
+CLASS="funcsynopsis"
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+><TT
+CLASS="replaceable"
+><I
+>endElementHandler</I
+></TT
+></CODE
+> (int parser, string name)</CODE
+></P
+><P
+></P
+></DIV
+>
+     <P
+></P
+><DIV
+CLASS="variablelist"
+><DL
+><DT
+><TT
+CLASS="parameter"
+><I
+>parser</I
+></TT
+></DT
+><DD
+><P
+>&#13;	 The first parameter, <TT
+CLASS="replaceable"
+><I
+>parser</I
+></TT
+>, is a
+	 reference to the XML parser calling the
+	 handler.
+	</P
+></DD
+><DT
+><TT
+CLASS="parameter"
+><I
+>name</I
+></TT
+></DT
+><DD
+><P
+>&#13;	 The second parameter, <TT
+CLASS="parameter"
+><I
+>name</I
+></TT
+>, contains
+	 the name of the element for which this handler is called.  If
+	 <A
+HREF="ref.xml.html#xml.case-folding"
 >case-folding</A
 > is in
 	 effect for this parser, the element name will be in uppercase
@@ -319,26 +344,35 @@ HREF="ref.xml.html#XML.CASE-FOLDING"
 	</P
 ></DD
 ></DL
+></DIV
 >
     </P
 ><P
->     If a handler function is set to an empty string, or
+>&#13;     If a handler function is set to an empty string, or
      <TT
-CLASS="LITERAL"
+CLASS="literal"
 >false</TT
 >, the handler in question is disabled.
     </P
 ><P
->     True is returned if the handlers are set up, false if
+>&#13;     True is returned if the handlers are set up, false if
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >parser</I
 ></TT
 > is not a parser.
     </P
 ><P
->     There is currently no support for object/method handlers.
+>&#13;     There is currently no support for object/method handlers.  See
+     <A
+HREF="function.xml-set-object.html"
+><B
+CLASS="function"
+>xml_set_object()</B
+></A
+> for using the XML parser
+     within an object.
     </P
 ></DIV
 ><DIV

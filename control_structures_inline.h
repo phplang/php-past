@@ -23,13 +23,13 @@
    | If you did not, or have any questions about PHP licensing, please    |
    | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
-   | Authors: Andi Gutmans <andi@php.net>                                 |
+   | Authors: Andi Gutmans <andi@zend.com>                                |
    |          Zeev Suraski <zeev@zend.com>                                |
    +----------------------------------------------------------------------+
  */
 
 
-/* $Id: control_structures_inline.h,v 1.204 2000/02/07 23:54:49 zeev Exp $ */
+/* $Id: control_structures_inline.h,v 1.206 2000/07/04 16:36:07 rasmus Exp $ */
 
 #include "php.h"
 #include "internal_functions.h"
@@ -493,6 +493,7 @@ inline void start_function_decleration(INLINE_TLS_VOID)
 	php3i_stack_push(&GLOBAL(css), &GLOBAL(ExecuteFlag), sizeof(int));
 	GLOBAL(ExecuteFlag) = DONT_EXECUTE;
 	GLOBAL(Execute) = SHOULD_EXECUTE;
+	GLOBAL(function_state).func_arg_types = NULL;
 }
 
 

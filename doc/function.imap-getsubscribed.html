@@ -4,20 +4,23 @@
 >imap_getsubscribed</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
-TITLE="IMAP functions"
+TITLE="IMAP, POP3 and NNTP functions"
 HREF="ref.imap.html"><LINK
 REL="PREVIOUS"
 TITLE="imap_listsubscribed"
 HREF="function.imap-listsubscribed.html"><LINK
 REL="NEXT"
 TITLE="imap_mail_copy"
-HREF="function.imap-mail-copy.html"></HEAD
+HREF="function.imap-mail-copy.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,42 +68,52 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.IMAP-GETSUBSCRIBED"
+NAME="function.imap-getsubscribed"
 >imap_getsubscribed</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN12888"
+NAME="AEN15391"
 ></A
->imap_getsubscribed -- List all the subscribed mailboxes</DIV
+><P
+>    (PHP3 &#62;= 3.0.12, PHP4 &#62;= 4.0b4)</P
+>imap_getsubscribed&nbsp;--&nbsp;List all the subscribed mailboxes</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN12891"
+NAME="AEN15394"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->array imap_getsubscribed</CODE
->(int imap_stream, string ref, string pattern);<P
+>array <B
+CLASS="function"
+>imap_getsubscribed</B
+></CODE
+> (int imap_stream, string ref, string pattern)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     This function is identical to
+>&#13;     This function is identical to
      <A
 HREF="function.imap-getmailboxes.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >imap_getmailboxes()</B
 ></A
 >, except that it only
-     returns mailboxes that the user is subscribed to.</P
+     returns mailboxes that the user is subscribed to.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

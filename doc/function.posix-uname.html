@@ -4,7 +4,7 @@
 >posix_uname</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -12,12 +12,15 @@ REL="UP"
 TITLE="POSIX functions"
 HREF="ref.posix.html"><LINK
 REL="PREVIOUS"
-TITLE="posix_setsid"
+TITLE="posix_getsid"
 HREF="function.posix-getsid.html"><LINK
 REL="NEXT"
 TITLE="posix_times"
-HREF="function.posix-times.html"></HEAD
+HREF="function.posix-times.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,68 +68,77 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.POSIX-UNAME"
+NAME="function.posix-uname"
 >posix_uname</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN22911"
+NAME="AEN28943"
 ></A
->posix_uname -- Get system name</DIV
+><P
+>    (PHP3 &#62;= 3.0.10, PHP4 &#62;= 4.0b4)</P
+>posix_uname&nbsp;--&nbsp;Get system name</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN22914"
+NAME="AEN28946"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->array posix_uname</CODE
->(void );<P
+>array <B
+CLASS="function"
+>posix_uname</B
+></CODE
+> (void )</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Returns a hash of strings with information about the
+>&#13;     Returns a hash of strings with information about the
      system. The indices of the hash are
      <P
 ></P
 ><UL
 ><LI
 ><P
->        sysname - operating system name (e.g. Linux)
+>&#13;        sysname - operating system name (e.g. Linux)
        </P
 ></LI
 ><LI
 ><P
->        nodename - system name (e.g. valiant)
+>&#13;        nodename - system name (e.g. valiant)
        </P
 ></LI
 ><LI
 ><P
->        release - operating system release (e.g. 2.2.10)
+>&#13;        release - operating system release (e.g. 2.2.10)
        </P
 ></LI
 ><LI
 ><P
->        version - operating system version (e.g. #4 Tue Jul 20
+>&#13;        version - operating system version (e.g. #4 Tue Jul 20
         17:01:36 MEST 1999)
        </P
 ></LI
 ><LI
 ><P
->        machine - system architecture (e.g. i586)
+>&#13;        machine - system architecture (e.g. i586)
        </P
 ></LI
 ></UL
 ></P
 ><P
->     Posix requires that you must not make any assumptions about the
+>&#13;     Posix requires that you must not make any assumptions about the
      format of the values, e.g. you cannot rely on three digit version
      numbers or anything else returned by this function.</P
 ></DIV
@@ -170,7 +182,7 @@ HREF="function.posix-times.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->posix_setsid</TD
+>posix_getsid</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"

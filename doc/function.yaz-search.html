@@ -1,0 +1,190 @@
+<HTML
+><HEAD
+><TITLE
+>yaz_search</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="YAZ"
+HREF="ref.yaz.html"><LINK
+REL="PREVIOUS"
+TITLE="yaz_record"
+HREF="function.yaz-record.html"><LINK
+REL="NEXT"
+TITLE="yaz_syntax"
+HREF="function.yaz-syntax.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.yaz-record.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.yaz-syntax.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.yaz-search"
+>yaz_search</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN37487"
+></A
+><P
+>    (PHP4 &#62;= 4.0.1)</P
+>yaz_search&nbsp;--&nbsp;Prepares for a search</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN37490"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int <B
+CLASS="function"
+>yaz_search</B
+></CODE
+> (int id, string type, string query)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     <B
+CLASS="function"
+>Yaz_search()</B
+> prepares for a search on the
+     target with given id. The type represents the query type - only
+     "rpn" is supported now in which case the third argument is a
+     prefix notation query as used by YAZ. Like
+     <A
+HREF="function.yaz-connect.html"
+><B
+CLASS="function"
+>yaz_connect()</B
+></A
+> this function is non-blocking
+     and only prepares for a search to be executed later when
+     <A
+HREF="function.yaz-wait.html"
+><B
+CLASS="function"
+>yaz_wait()</B
+></A
+> is called.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.yaz-record.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.yaz-syntax.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>yaz_record</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.yaz.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>yaz_syntax</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -23,12 +23,12 @@
    | If you did not, or have any questions about PHP licensing, please    |
    | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
-   | Authors: Andi Gutmans <andi@php.net>                                 |
+   | Authors: Andi Gutmans <andi@zend.com>                                |
    +----------------------------------------------------------------------+
  */
 
 
-/* $Id: php3_bcmath.h,v 1.20 2000/01/01 04:44:09 sas Exp $ */
+/* $Id: php3_bcmath.h,v 1.21 2000/04/10 19:29:37 andi Exp $ */
 
 #ifndef _PHP3_BCMATH_H
 #define _PHP3_BCMATH_H

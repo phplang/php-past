@@ -4,20 +4,23 @@
 >array_count_values</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
-TITLE="Array functions"
+TITLE="Array Functions"
 HREF="ref.array.html"><LINK
 REL="PREVIOUS"
 TITLE="array"
 HREF="function.array.html"><LINK
 REL="NEXT"
-TITLE="array_flip"
-HREF="function.array-flip.html"></HEAD
+TITLE="array_diff"
+HREF="function.array-diff.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -55,7 +58,7 @@ WIDTH="10%"
 ALIGN="right"
 VALIGN="bottom"
 ><A
-HREF="function.array-flip.html"
+HREF="function.array-diff.html"
 >Next</A
 ></TD
 ></TR
@@ -65,51 +68,61 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.ARRAY-COUNT-VALUES"
+NAME="function.array-count-values"
 >array_count_values</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN3532"
+NAME="AEN3639"
 ></A
->array_count_values -- Counts all the values of an array</DIV
+><P
+>    (PHP4 &#62;= 4.0b4)</P
+>array_count_values&nbsp;--&nbsp;Counts all the values of an array</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN3535"
+NAME="AEN3642"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->array array_count_values</CODE
->(array input);<P
+>array <B
+CLASS="function"
+>array_count_values</B
+></CODE
+> (array input)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     <B
-CLASS="FUNCTION"
->array_count_values()</B
-> returns an array using the values 
-	 of the <TT
-CLASS="PARAMETER"
+>&#13;     <B
+CLASS="function"
+>Array_count_values()</B
+> returns an array using
+     the values of the <TT
+CLASS="parameter"
 ><I
 >input</I
 ></TT
-> array as keys and their frequency in 
-	 <TT
-CLASS="PARAMETER"
+> array as keys and
+     their frequency in <TT
+CLASS="parameter"
 ><I
 >input</I
 ></TT
-> as values.</P
+> as values.
+    </P
 ><P
->     <TABLE
+>&#13;     <TABLE
 WIDTH="100%"
 BORDER="0"
 CELLPADDING="0"
@@ -118,36 +131,34 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
 >Example 1. <B
-CLASS="FUNCTION"
->array_count_values()</B
+CLASS="function"
+>Array_count_values()</B
 > example</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->$array = array(1,"hello",1,"world","hello");
-array_count_values($array);       // returns array(1=&#62;2, "hello"=&#62;2, "world"=&#62;1)
+CLASS="programlisting"
+>&#13;$array = array (1, "hello", 1, "world", "hello");
+array_count_values ($array); // returns array (1=&#62;2, "hello"=&#62;2, "world"=&#62;1)
       </PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR
 ></TABLE
->
-
-    <DIV
-CLASS="NOTE"
-><BLOCKQUOTE
-CLASS="NOTE"
-><P
-><B
->Note: </B
->      This function was added in PHP 4.0.</P
-></BLOCKQUOTE
-></DIV
-></P
+>     
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -180,7 +191,7 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><A
-HREF="function.array-flip.html"
+HREF="function.array-diff.html"
 >Next</A
 ></TD
 ></TR
@@ -202,7 +213,7 @@ HREF="ref.array.html"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->array_flip</TD
+>array_diff</TD
 ></TR
 ></TABLE
 ></DIV

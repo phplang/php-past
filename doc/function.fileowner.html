@@ -4,7 +4,7 @@
 >fileowner</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="filemtime"
 HREF="function.filemtime.html"><LINK
 REL="NEXT"
 TITLE="fileperms"
-HREF="function.fileperms.html"></HEAD
+HREF="function.fileperms.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,44 +68,75 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.FILEOWNER"
+NAME="function.fileowner"
 >fileowner</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN8710"
+NAME="AEN9933"
 ></A
->fileowner -- get file owner</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>fileowner&nbsp;--&nbsp;Gets file owner</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN8713"
+NAME="AEN9936"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int fileowner</CODE
->(string filename);<P
+>int <B
+CLASS="function"
+>fileowner</B
+></CODE
+> (string filename)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->    Returns the user ID of the owner of the file, or false in case of an</P
+>    
+     Returns the user ID of the owner of the file, or false in case of
+     an error. The user ID is returned in numerical format, use
+     <A
+HREF="function.posix-getpwuid.html"
+><B
+CLASS="function"
+>posix_getpwuid()</B
+></A
+> to resolve it to a username.
+    </P
 ><P
->     The results of this function are cached. See
+>&#13;     The results of this function are cached. See
      <A
 HREF="function.clearstatcache.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >clearstatcache()</B
 ></A
 > for more details.
-    error.</P
+    </P
+><DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
+><P
+><B
+>Note: </B
+>
+     This function does not work on Windows systems
+     </P
+></BLOCKQUOTE
+></DIV
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

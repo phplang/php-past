@@ -27,7 +27,7 @@
    |          Jim Winstead <jimw@php.net>                                 |
    +----------------------------------------------------------------------+
  */
-/* $Id: fopen-wrappers.c,v 1.77 2000/01/01 04:31:12 sas Exp $ */
+/* $Id: fopen-wrappers.c,v 1.78 2000/06/05 00:28:18 jimw Exp $ */
 
 #include "php.h"
 #include "modules.h"
@@ -449,7 +449,7 @@ PHPAPI FILE *php3_fopen_with_path(char *filename, char *mode, char *path, char *
  * If the specified path starts with "ftp://" (insensitive to case),
  * a pair of sockets are used to request the specified file and a file
  * pointer to the requested file is returned. Passive mode ftp is used,
- * so if the server doesn't suppor this, it will fail!
+ * so if the server doesn't support this, it will fail!
  *
  * Otherwise, fopen is called as usual and the file pointer is returned.
  */

@@ -4,7 +4,7 @@
 >xml_parse</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="xml_set_external_entity_ref_handler"
 HREF="function.xml-set-external-entity-ref-handler.html"><LINK
 REL="NEXT"
 TITLE="xml_get_error_code"
-HREF="function.xml-get-error-code.html"></HEAD
+HREF="function.xml-get-error-code.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,68 +68,76 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.XML-PARSE"
+NAME="function.xml-parse"
 >xml_parse</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN27878"
+NAME="AEN36974"
 ></A
->xml_parse -- start parsing an XML document</DIV
+><P
+>    (PHP3 &#62;= 3.0.6, PHP4 )</P
+>xml_parse&nbsp;--&nbsp;start parsing an XML document</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN27881"
+NAME="AEN36977"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int xml_parse</CODE
->(int parser, string data, int 
-      [<SPAN
-CLASS="OPTIONAL"
->isFinal</SPAN
->]
-     );<P
+>int <B
+CLASS="function"
+>xml_parse</B
+></CODE
+> (int parser, string data [, int 
+       isFinal])</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     <P
+>&#13;     <P
 ></P
+><DIV
+CLASS="variablelist"
 ><DL
 ><DT
 ><TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >parser</I
 ></TT
 ></DT
 ><DD
 ><P
->	 A reference to the XML parser to use.</P
+>&#13;	 A reference to the XML parser to use.
+	</P
 ></DD
 ><DT
 ><TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >data</I
 ></TT
 ></DT
 ><DD
 ><P
->	 Chunk of data to parse.  A document may be parsed piece-wise
+>&#13;	 Chunk of data to parse.  A document may be parsed piece-wise
 	 by calling <B
-CLASS="FUNCTION"
+CLASS="function"
 >xml_parse()</B
 > several times with
 	 new data, as long as the <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >isFinal</I
 ></TT
@@ -136,15 +147,15 @@ CLASS="PARAMETER"
 ></DD
 ><DT
 ><TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >isFinal</I
 ></TT
 > (optional)</DT
 ><DD
 ><P
->	 If set and true, <TT
-CLASS="PARAMETER"
+>&#13;	 If set and true, <TT
+CLASS="parameter"
 ><I
 >data</I
 ></TT
@@ -153,16 +164,18 @@ CLASS="PARAMETER"
 	</P
 ></DD
 ></DL
+></DIV
 >
     </P
 ><P
->     When the XML document is parsed, the handlers for the configured
+>&#13;     When the XML document is parsed, the handlers for the configured
      events are called as many times as necessary, after which this
-     function returns true or false.</P
+     function returns true or false.
+    </P
 ><P
->     True is returned if the parse was successful, false if it was not
+>&#13;     True is returned if the parse was successful, false if it was not
      successful, or if <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >parser</I
 ></TT
@@ -171,35 +184,35 @@ CLASS="PARAMETER"
      be retrieved with <A
 HREF="function.xml-get-error-code.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >xml_get_error_code()</B
 ></A
 >,
      <A
 HREF="function.xml-error-string.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >xml_error_string()</B
 ></A
 >,
      <A
 HREF="function.xml-get-current-line-number.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >xml_get_current_line_number()</B
 ></A
 >,
      <A
 HREF="function.xml-get-current-column-number.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >xml_get_current_column_number()</B
 ></A
 > and
      <A
 HREF="function.xml-get-current-byte-index.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >xml_get_current_byte_index()</B
 ></A
 >.

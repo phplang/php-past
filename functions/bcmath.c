@@ -23,11 +23,11 @@
    | If you did not, or have any questions about PHP licensing, please    |
    | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
-   | Authors: Andi Gutmans <andi@php.net>                                 |
+   | Authors: Andi Gutmans <andi@zend.com>                                |
    +----------------------------------------------------------------------+
  */
 
-/* $Id: bcmath.c,v 1.32 2000/02/22 15:13:57 eschmid Exp $ */
+/* $Id: bcmath.c,v 1.33 2000/04/10 19:29:37 andi Exp $ */
 #ifndef MSVC5
 #include "config.h"
 #include "build-defs.h"

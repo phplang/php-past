@@ -4,20 +4,23 @@
 >array_flip</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
-TITLE="Array functions"
+TITLE="Array Functions"
 HREF="ref.array.html"><LINK
 REL="PREVIOUS"
-TITLE="array_count_values"
-HREF="function.array-count-values.html"><LINK
+TITLE="array_diff"
+HREF="function.array-diff.html"><LINK
 REL="NEXT"
-TITLE="array_keys"
-HREF="function.array-keys.html"></HEAD
+TITLE="array_intersect"
+HREF="function.array-intersect.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -42,7 +45,7 @@ WIDTH="10%"
 ALIGN="left"
 VALIGN="bottom"
 ><A
-HREF="function.array-count-values.html"
+HREF="function.array-diff.html"
 >Prev</A
 ></TD
 ><TD
@@ -55,7 +58,7 @@ WIDTH="10%"
 ALIGN="right"
 VALIGN="bottom"
 ><A
-HREF="function.array-keys.html"
+HREF="function.array-intersect.html"
 >Next</A
 ></TD
 ></TR
@@ -65,40 +68,49 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.ARRAY-FLIP"
+NAME="function.array-flip"
 >array_flip</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN3554"
+NAME="AEN3690"
 ></A
->array_flip -- Flip all the values of an array</DIV
+><P
+>    (PHP4 &#62;= 4.0b4)</P
+>array_flip&nbsp;--&nbsp;Flip all the values of an array</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN3557"
+NAME="AEN3693"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->array array_flip</CODE
->(array trans);<P
+>array <B
+CLASS="function"
+>array_flip</B
+></CODE
+> (array trans)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     <B
-CLASS="FUNCTION"
->array_flip()</B
+>&#13;     <B
+CLASS="function"
+>Array_flip()</B
 > returns an array in flip order.
     </P
 ><P
->     <TABLE
+>&#13;     <TABLE
 WIDTH="100%"
 BORDER="0"
 CELLPADDING="0"
@@ -107,37 +119,34 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
 >Example 1. <B
-CLASS="FUNCTION"
->array_flip()</B
+CLASS="function"
+>Array_flip()</B
 > example</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->$trans = array_flip ($trans);
+CLASS="programlisting"
+>&#13;$trans = array_flip ($trans);
 $original = strtr ($str, $trans);
       </PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR
 ></TABLE
 >
-
-     <DIV
-CLASS="NOTE"
-><BLOCKQUOTE
-CLASS="NOTE"
-><P
-><B
->Note: </B
->       This function was added in PHP 4.0.
-      </P
-></BLOCKQUOTE
-></DIV
-></P
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -154,7 +163,7 @@ WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
 ><A
-HREF="function.array-count-values.html"
+HREF="function.array-diff.html"
 >Prev</A
 ></TD
 ><TD
@@ -170,7 +179,7 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><A
-HREF="function.array-keys.html"
+HREF="function.array-intersect.html"
 >Next</A
 ></TD
 ></TR
@@ -179,7 +188,7 @@ HREF="function.array-keys.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->array_count_values</TD
+>array_diff</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"
@@ -192,7 +201,7 @@ HREF="ref.array.html"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->array_keys</TD
+>array_intersect</TD
 ></TR
 ></TABLE
 ></DIV

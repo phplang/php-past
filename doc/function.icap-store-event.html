@@ -4,20 +4,23 @@
 >icap_store_event</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
-TITLE="ICAP functions"
+TITLE="ICAP Functions"
 HREF="ref.icap.html"><LINK
 REL="PREVIOUS"
 TITLE="icap_list_events"
 HREF="function.icap-list-events.html"><LINK
 REL="NEXT"
 TITLE="icap_delete_event"
-HREF="function.icap-delete-event.html"></HEAD
+HREF="function.icap-delete-event.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,128 +68,130 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.ICAP-STORE-EVENT"
+NAME="function.icap-store-event"
 >icap_store_event</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN9928"
+NAME="AEN13224"
 ></A
->icap_store_event -- Store an event into an ICAP calendar</DIV
+><P
+>    (PHP4 &#62;= 4.0b4)</P
+>icap_store_event&nbsp;--&nbsp;Store an event into an ICAP calendar</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN9931"
+NAME="AEN13227"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int icap_store_event</CODE
->(int icap_stream, object event);<P
+>string <B
+CLASS="function"
+>icap_store_event</B
+></CODE
+> (int stream_id, object event)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
 > 
      <B
-CLASS="FUNCTION"
->icap_store_event()</B
+CLASS="function"
+>Icap_store_event()</B
 > Stores an event into
-     an ICAP calendar.
-     an event object consists of:
-
+     an ICAP calendar.  An event object consists of:
      <P
 ></P
 ><UL
 ><LI
 ><P
->	int public - 1 if public, 0 if private;
-      </P
+>&#13;	int public - 1 if public, 0 if private;
+       </P
 ></LI
 ><LI
 ><P
->	string caegory - Category string of the event.
-      </P
+>&#13;	string caegory - Category string of the event.
+       </P
 ></LI
 ><LI
 ><P
->	string title - Title string of the event.
-      </P
+>&#13;	string title - Title string of the event.
+       </P
 ></LI
 ><LI
 ><P
->	string description - Description string of the event.
-      </P
+>&#13;	string description - Description string of the event.
+       </P
 ></LI
 ><LI
 ><P
->	int alarm - Number of minutes before the event to sned out an alarm.
-      </P
+>&#13;	int alarm - Number of minutes before the event to sned out an alarm.
+       </P
 ></LI
 ><LI
 ><P
->	datetime start - datetime object of the start of the event.
-      </P
+>&#13;	datetime start - datetime object of the start of the event.
+       </P
 ></LI
 ><LI
 ><P
->	datetime end - datetime object of the end of the event.
-     </P
+>&#13;	datetime end - datetime object of the end of the event.
+       </P
 ></LI
 ></UL
 >
-
     </P
 ><P
->     All datetime entries consist of an object that contains:
-
+>&#13;     All datetime entries consist of an object that contains:
      <P
 ></P
 ><UL
 ><LI
 ><P
->	int year - year
-      </P
+>&#13;	int year - year
+       </P
 ></LI
 ><LI
 ><P
->	int month - month
-      </P
+>&#13;	int month - month
+       </P
 ></LI
 ><LI
 ><P
->	int mday  - day of month
-      </P
+>&#13;	int mday  - day of month
+       </P
 ></LI
 ><LI
 ><P
->	int hour  - hour
-     </P
+>&#13;	int hour  - hour
+       </P
 ></LI
 ><LI
 ><P
->	int min   - minutes
-     </P
+>&#13;	int min   - minutes
+       </P
 ></LI
 ><LI
 ><P
->	int sec   - seconds
-     </P
+>&#13;	int sec   - seconds
+       </P
 ></LI
 ></UL
 >
-
     </P
 ><P
->     Returns true on success and false on error.
-     </P
-><P
->   </P
+>&#13;     Returns true on success and false on error.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

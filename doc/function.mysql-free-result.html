@@ -4,7 +4,7 @@
 >mysql_free_result</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -12,12 +12,15 @@ REL="UP"
 TITLE="MySQL functions"
 HREF="ref.mysql.html"><LINK
 REL="PREVIOUS"
-TITLE="mysql_field_len"
-HREF="function.mysql-field-len.html"><LINK
+TITLE="mysql_field_type"
+HREF="function.mysql-field-type.html"><LINK
 REL="NEXT"
 TITLE="mysql_insert_id"
-HREF="function.mysql-insert-id.html"></HEAD
+HREF="function.mysql-insert-id.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -42,7 +45,7 @@ WIDTH="10%"
 ALIGN="left"
 VALIGN="bottom"
 ><A
-HREF="function.mysql-field-len.html"
+HREF="function.mysql-field-type.html"
 >Prev</A
 ></TD
 ><TD
@@ -65,46 +68,57 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.MYSQL-FREE-RESULT"
+NAME="function.mysql-free-result"
 >mysql_free_result</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN18272"
+NAME="AEN23183"
 ></A
->mysql_free_result -- Free result memory</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>mysql_free_result&nbsp;--&nbsp;Free result memory</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN18275"
+NAME="AEN23186"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int mysql_free_result</CODE
->(int result);<P
+>int <B
+CLASS="function"
+>mysql_free_result</B
+></CODE
+> (int result)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     <B
-CLASS="FUNCTION"
+>&#13;     <B
+CLASS="function"
 >mysql_free_result()</B
 > only needs to be called if
      you are worried about using too much memory while your script is
      running. All associated result memory for the specified result
-     identifier will automatically be freed.</P
+     identifier will automatically be freed.
+    </P
 ><P
->     For downward compatibility <B
-CLASS="FUNCTION"
+>&#13;     For downward compatibility <B
+CLASS="function"
 >mysql_freeresult()</B
 >
-     can also be used.</P
+     can also be used.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -121,7 +135,7 @@ WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
 ><A
-HREF="function.mysql-field-len.html"
+HREF="function.mysql-field-type.html"
 >Prev</A
 ></TD
 ><TD
@@ -146,7 +160,7 @@ HREF="function.mysql-insert-id.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->mysql_field_len</TD
+>mysql_field_type</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"

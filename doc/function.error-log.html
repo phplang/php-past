@@ -4,7 +4,7 @@
 >error_log</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -12,12 +12,15 @@ REL="UP"
 TITLE="PHP options & information"
 HREF="ref.info.html"><LINK
 REL="PREVIOUS"
-TITLE="PHP options & information"
-HREF="ref.info.html"><LINK
+TITLE="assert-options"
+HREF="function.assert_options.html"><LINK
 REL="NEXT"
 TITLE="error_reporting"
-HREF="function.error-reporting.html"></HEAD
+HREF="function.error-reporting.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -42,7 +45,7 @@ WIDTH="10%"
 ALIGN="left"
 VALIGN="bottom"
 ><A
-HREF="ref.info.html"
+HREF="function.assert_options.html"
 >Prev</A
 ></TD
 ><TD
@@ -65,87 +68,93 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.ERROR-LOG"
+NAME="function.error-log"
 >error_log</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN22322"
+NAME="AEN28113"
 ></A
->error_log -- send an error message somewhere</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>error_log&nbsp;--&nbsp;send an error message somewhere</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN22325"
+NAME="AEN28116"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int error_log</CODE
->(string message, int message_type, string [<SPAN
-CLASS="OPTIONAL"
->destination</SPAN
->], string [<SPAN
-CLASS="OPTIONAL"
->extra_headers</SPAN
->]);<P
+>int <B
+CLASS="function"
+>error_log</B
+></CODE
+> (string message, int message_type [, string 
+       destination [, string 
+       extra_headers]])</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Sends an error message to the web server's error log, a
+>&#13;     Sends an error message to the web server's error log, a
      <SPAN
-CLASS="ACRONYM"
+CLASS="acronym"
 >TCP</SPAN
 > port or to a file.  The first parameter,
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >message</I
 ></TT
 >, is the error message that should
      be logged.  The second parameter,
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >message_type</I
 ></TT
 > says where the message should
      go:
      <DIV
-CLASS="TABLE"
+CLASS="table"
 ><P
 ><B
 >Table 1. <B
-CLASS="FUNCTION"
+CLASS="function"
 >error_log()</B
 > log types</B
 ></P
 ><TABLE
 BORDER="1"
 CLASS="CALSTABLE"
+><TBODY
 ><TR
 ><TD
 ALIGN="LEFT"
-VALIGN="TOP"
+VALIGN="MIDDLE"
 >0</TD
 ><TD
 ALIGN="LEFT"
-VALIGN="TOP"
->	  <TT
-CLASS="PARAMETER"
+VALIGN="MIDDLE"
+>&#13;	  <TT
+CLASS="parameter"
 ><I
 >message</I
 ></TT
 > is sent to PHP's system
 	  logger, using the Operating System's system logging
 	  mechanism or a file, depending on what the <A
-HREF="configuration.html#INI.ERROR-LOG"
+HREF="configuration.html#ini.error-log"
 >error_log</A
 > configuration
 	  directive is set to.
@@ -154,62 +163,59 @@ HREF="configuration.html#INI.ERROR-LOG"
 ><TR
 ><TD
 ALIGN="LEFT"
-VALIGN="TOP"
+VALIGN="MIDDLE"
 >1</TD
 ><TD
 ALIGN="LEFT"
-VALIGN="TOP"
->	  <TT
-CLASS="PARAMETER"
+VALIGN="MIDDLE"
+>&#13;	  <TT
+CLASS="parameter"
 ><I
 >message</I
 ></TT
 > is sent by email to the
 	  address in the <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >destination</I
 ></TT
 > parameter.
 	  This is the only message type where the fourth parameter,
 	  <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >extra_headers</I
 ></TT
 > is used.  This message
 	  type uses the same internal function as
-	  <A
-HREF="function.mail.html"
-><B
-CLASS="FUNCTION"
+	  <B
+CLASS="function"
 >Mail()</B
-></A
 > does.
 	 </TD
 ></TR
 ><TR
 ><TD
 ALIGN="LEFT"
-VALIGN="TOP"
+VALIGN="MIDDLE"
 >2</TD
 ><TD
 ALIGN="LEFT"
-VALIGN="TOP"
->	  <TT
-CLASS="PARAMETER"
+VALIGN="MIDDLE"
+>&#13;	  <TT
+CLASS="parameter"
 ><I
 >message</I
 ></TT
 > is sent through the PHP
 	  debugging connection.  This option is only available if
 	  <A
-HREF="install-unix.html#ENABLE-DEBUGGER"
+HREF="install-unix.html#enable-debugger"
 >remote debugging has been
 	  enabled</A
 >.  In this case, the
 	  <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >destination</I
 ></TT
@@ -221,30 +227,32 @@ CLASS="PARAMETER"
 ><TR
 ><TD
 ALIGN="LEFT"
-VALIGN="TOP"
+VALIGN="MIDDLE"
 >3</TD
 ><TD
 ALIGN="LEFT"
-VALIGN="TOP"
->	  <TT
-CLASS="PARAMETER"
+VALIGN="MIDDLE"
+>&#13;	  <TT
+CLASS="parameter"
 ><I
 >message</I
 ></TT
 > is appended to the file
 	  <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >destination</I
 ></TT
 >.
 	 </TD
 ></TR
+></TBODY
 ></TABLE
 ></DIV
-></P
+>
+    </P
 ><P
->     <TABLE
+>&#13;     <TABLE
 WIDTH="100%"
 BORDER="0"
 CELLPADDING="0"
@@ -253,17 +261,23 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
 >Example 1. <B
-CLASS="FUNCTION"
+CLASS="function"
 >error_log()</B
 > examples</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->// Send notification through the server log if we can not
+CLASS="programlisting"
+>&#13;// Send notification through the server log if we can not
 // connect to the database.
 if (!Ora_Logon($username, $password)) {
     error_log("Oracle database not available!", 0);
@@ -271,19 +285,24 @@ if (!Ora_Logon($username, $password)) {
 
 // Notify administrator by email if we run out of FOO
 if (!($foo = allocate_new_foo()) {
-    error_log("Big trouble, we're all out of FOOs!", 1,
-              "operator@mydomain.com");
+    error_log ("Big trouble, we're all out of FOOs!", 1,
+               "operator@mydomain.com");
 }
 
 // other ways of calling error_log():
-error_log("You messed up!", 2, "127.0.0.1:7000");
-error_log("You messed up!", 2, "loghost");
-error_log("You messed up!", 3, "/var/tmp/my-errors.log");</PRE
+error_log ("You messed up!", 2, "127.0.0.1:7000");
+error_log ("You messed up!", 2, "loghost");
+error_log ("You messed up!", 3, "/var/tmp/my-errors.log");
+      </PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR
 ></TABLE
-></P
+>
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -300,7 +319,7 @@ WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
 ><A
-HREF="ref.info.html"
+HREF="function.assert_options.html"
 >Prev</A
 ></TD
 ><TD
@@ -325,7 +344,7 @@ HREF="function.error-reporting.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->PHP options &#38; information</TD
+>assert-options</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"

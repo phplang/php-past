@@ -4,7 +4,7 @@
 >cpdf_import_jpeg</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="cpdf_set_page_animation"
 HREF="function.cpdf-set-page-animation.html"><LINK
 REL="NEXT"
 TITLE="cpdf_place_inline_image"
-HREF="function.cpdf-place-inline-image.html"></HEAD
+HREF="function.cpdf-place-inline-image.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,70 +68,79 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.CPDF-IMPORT-JPEG"
+NAME="function.cpdf-import-jpeg"
 >cpdf_import_jpeg</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN6190"
+NAME="AEN7406"
 ></A
->cpdf_import_jpeg -- Opens a JPEG image</DIV
+><P
+>    (PHP3 &#62;= 3.0.9, PHP4 &#62;= 4.0b4)</P
+>cpdf_import_jpeg&nbsp;--&nbsp;Opens a JPEG image</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN6193"
+NAME="AEN7409"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int cpdf_open_jpeg</CODE
->(int pdf document, string file name, double x-koor, double y-koor, double angle, double width, double height, double x-scale, double y-scale, int mode);<P
+>int <B
+CLASS="function"
+>cpdf_open_jpeg</B
+></CODE
+> (int pdf document, string file name, double x-koor, double y-koor, double angle, double width, double height, double x-scale, double y-scale, int mode)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     The <B
-CLASS="FUNCTION"
+>&#13;     The <B
+CLASS="function"
 >cpdf_import_jpeg()</B
 > function opens an image stored
      in the file with the name <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >file name</I
 ></TT
 >.
      The format of the image has to be jpeg. The image is placed on the current
      page at position (<TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >x-koor</I
 ></TT
 >, <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >y-koor</I
 ></TT
 >).
      The image is rotated by <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >angle</I
 ></TT
 > degres.</P
 ><P
->     The last optional parameter determines the unit length. If is 0 or omitted
+>&#13;     The last optional parameter determines the unit length. If is 0 or omitted
      the default unit as specified for the page is used. Otherwise the koodinates
      are measured in postscript points disregarding the current unit.</P
 ><P
->     See also <A
+>&#13;     See also <A
 HREF="function.cpdf-place-inline-image.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >cpdf_place_inline_image()</B
 ></A
 >,</P

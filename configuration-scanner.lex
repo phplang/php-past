@@ -24,7 +24,7 @@
    +----------------------------------------------------------------------+
 */
 
-/* $id$ */
+/* $Id: configuration-scanner.lex,v 1.37 2000/08/11 22:17:34 martin Exp $ */
 
 #include "php.h"
 #include "configuration-parser.tab.h"

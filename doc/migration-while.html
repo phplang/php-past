@@ -4,7 +4,7 @@
 >while syntax</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="if..endif syntax"
 HREF="migration-if-endif.html"><LINK
 REL="NEXT"
 TITLE="Expression types"
-HREF="migration-expr.html"></HEAD
+HREF="migration-expr.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="sect1"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -64,15 +67,15 @@ HREF="migration-expr.html"
 ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><DIV
-CLASS="SECT1"
+CLASS="sect1"
 ><H1
-CLASS="SECT1"
+CLASS="sect1"
 ><A
-NAME="MIGRATION-WHILE"
+NAME="migration-while"
 >while syntax</A
 ></H1
 ><P
->   Just like with if..endif, the syntax of while..endwhile has changed
+>&#13;   Just like with if..endif, the syntax of while..endwhile has changed
    as well:
    <TABLE
 WIDTH="100%"
@@ -83,16 +86,26 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
 >Example A-7. Migration: old while..endwhile syntax</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->while ($more_to_come);
+CLASS="programlisting"
+>&#13;while ($more_to_come);
     ...
-endwhile;</PRE
+endwhile;
+</PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR
@@ -107,16 +120,26 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
 >Example A-8. Migration: new while..endwhile syntax</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->while ($more_to_come):
+CLASS="programlisting"
+>&#13;while ($more_to_come):
     ...
-endwhile;</PRE
+endwhile;
+</PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR
@@ -124,11 +147,11 @@ endwhile;</PRE
 >
   </P
 ><DIV
-CLASS="WARNING"
+CLASS="warning"
 ><P
 ></P
 ><TABLE
-CLASS="WARNING"
+CLASS="warning"
 BORDER="1"
 WIDTH="100%"
 ><TR
@@ -142,7 +165,7 @@ ALIGN="CENTER"
 ><TD
 ALIGN="LEFT"
 ><P
->    If you use the old while..endwhile syntax in PHP 3.0, you will get
+>&#13;    If you use the old while..endwhile syntax in PHP 3.0, you will get
     a never-ending loop.
    </P
 ></TD

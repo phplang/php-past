@@ -4,20 +4,23 @@
 >odbc_result_all</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
-TITLE="ODBC functions"
+TITLE="Unified ODBC functions"
 HREF="ref.odbc.html"><LINK
 REL="PREVIOUS"
 TITLE="odbc_result"
 HREF="function.odbc-result.html"><LINK
 REL="NEXT"
 TITLE="odbc_rollback"
-HREF="function.odbc-rollback.html"></HEAD
+HREF="function.odbc-rollback.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,60 +68,69 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.ODBC-RESULT-ALL"
+NAME="function.odbc-result-all"
 >odbc_result_all</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN19598"
+NAME="AEN24521"
 ></A
->odbc_result_all -- Print result as HTML table</DIV
+><P
+>    (PHP3 &#62;= 3.0.6, PHP4 )</P
+>odbc_result_all&nbsp;--&nbsp;Print result as HTML table</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN19601"
+NAME="AEN24524"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int odbc_result_all</CODE
->(int result_id, string [<SPAN
-CLASS="OPTIONAL"
->format</SPAN
->]);<P
+>int <B
+CLASS="function"
+>odbc_result_all</B
+></CODE
+> (int result_id [, string format])</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Returns the number of rows in the result or <TT
-CLASS="LITERAL"
+>&#13;     Returns the number of rows in the result or
+     <TT
+CLASS="literal"
 >false</TT
-> on error.</P
+> on error.
+    </P
 ><P
->     <B
-CLASS="FUNCTION"
->odbc_result_all()</B
+>&#13;     <B
+CLASS="function"
+>Odbc_result_all()</B
 > will print all rows from a
      result identifier produced by <A
 HREF="function.odbc-exec.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >odbc_exec()</B
 ></A
 >. The
      result is printed in HTML table format.  With the optional string
      argument <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >format</I
 ></TT
 >, additional overall table
-     formatting can be done.</P
+     formatting can be done.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

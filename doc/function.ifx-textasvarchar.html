@@ -4,7 +4,7 @@
 >ifx_textasvarchar</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="ifx_blobinfile_mode"
 HREF="function.ifx-blobinfile-mode.html"><LINK
 REL="NEXT"
 TITLE="ifx_byteasvarchar"
-HREF="function.ifx-byteasvarchar.html"></HEAD
+HREF="function.ifx-byteasvarchar.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,34 +68,43 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.IFX-TEXTASVARCHAR"
+NAME="function.ifx-textasvarchar"
 >ifx_textasvarchar</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN14062"
+NAME="AEN16902"
 ></A
->ifx_textasvarchar -- Set the default text mode</DIV
+><P
+>    (PHP3 &#62;= 3.0.4, PHP4 )</P
+>ifx_textasvarchar&nbsp;--&nbsp;Set the default text mode</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN14065"
+NAME="AEN16905"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->void ifx_textasvarchar</CODE
->(int mode);<P
+>void <B
+CLASS="function"
+>ifx_textasvarchar</B
+></CODE
+> (int mode)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Sets the default text mode for all select-queries.  Mode "0" will
+>&#13;     Sets the default text mode for all select-queries.  Mode "0" will
      return a blob id, and mode "1" will return a varchar with text
      content.
     </P

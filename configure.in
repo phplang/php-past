@@ -1,4 +1,4 @@
-dnl $Id: configure.in,v 1.501 2000/04/03 18:24:29 sas Exp $
+dnl $Id: configure.in,v 1.506 2000/06/14 11:58:08 eschmid Exp $
 dnl Process this file with autoconf to produce a configure script.
 
 AC_INIT(main.c)
@@ -196,7 +196,7 @@ else
 fi
 AC_MISSING_FCLOSE_DECL
 dnl QNX requires unix.h to allow functions in libunix to work properly
-AC_CHECK_HEADERS(fcntl.h unistd.h crypt.h sys/file.h memory.h pwd.h grp.h sys/socket.h sys/wait.h syslog.h string.h sys/varargs.h stdarg.h sys/resource.h sys/time.h signal.h netinet/in.h dlfcn.h limits.h sys/types.h sys/statvfs.h sys/statfs.h unix.h db.h dbm.h ndbm.h db1/ndbm.h locale.h features.h)
+AC_CHECK_HEADERS(fcntl.h stdlib.h unistd.h crypt.h sys/file.h memory.h pwd.h grp.h sys/socket.h sys/wait.h syslog.h string.h sys/varargs.h stdarg.h sys/resource.h sys/time.h signal.h netinet/in.h dlfcn.h limits.h sys/types.h sys/statvfs.h sys/statfs.h unix.h db.h dbm.h ndbm.h db1/ndbm.h locale.h features.h)
 
 dnl Checks for typedefs, structures, and compiler characteristics.
 AC_STRUCT_TM
@@ -1150,25 +1150,19 @@ AC_ARG_WITH(oracle,
 
     # Oracle include files
 
-    if test -f "$ORACLEINST_TOP/rdbms/public/ocidfn.h"
-    then
-      # V8.0.5
+    if test -d "$ORACLEINST_TOP/rdbms/public"; then
       ORACLE_INCLUDE="$ORACLE_INCLUDE -I$ORACLEINST_TOP/rdbms/public"
-	elif test -f "$ORACLEINST_TOP/rdbms/demo/ocidfn.h"
-    then
-      # V7.[0123]
-      ORACLE_INCLUDE=-I$ORACLEINST_TOP/rdbms/demo
+	fi
+
+	if test -d "$ORACLEINST_TOP/rdbms/demo/";then
+      ORACLE_INCLUDE="$ORACLE_INCLUDE -I$ORACLEINST_TOP/rdbms/demo"
     fi
 
-    if test -d "$ORACLEINST_TOP/network/public"
-    then
-      # V8
+    if test -d "$ORACLEINST_TOP/network/public"; then
       ORACLE_INCLUDE="$ORACLE_INCLUDE -I$ORACLEINST_TOP/network/public"
     fi
 
-    if test -d "$ORACLEINST_TOP/plsql/public"
-    then
-      # V8
+    if test -d "$ORACLEINST_TOP/plsql/public"; then
       ORACLE_INCLUDE="$ORACLE_INCLUDE -I$ORACLEINST_TOP/plsql/public"
     fi
 
@@ -1270,6 +1264,13 @@ AC_ARG_WITH(oracle,
     ORACLE_LIBS=$ORACLE_SHLIBS
 
     AC_DEFINE(HAVE_ORACLE)
+
+	  echo "+--------------------------------------------------------------------+"
+	  echo "| Notice:                                                            |"
+	  echo "| If you encounter <defunc> processes when using a local Oracle-DB   |"
+	  echo "| please recompile PHP and specify --enable-sigchild when configuring|"
+	  echo "| (This problem has been reported un Linux using Oracle >= 8.1.5)    |"
+	  echo "+--------------------------------------------------------------------+"
 
   fi
 
@@ -2472,6 +2473,22 @@ AC_ARG_WITH(exec-dir,
 ])
 
 
+AC_MSG_CHECKING(whether to enable PHP's own SIGCHLD handler)
+AC_ARG_ENABLE(sigchild,
+[  --enable-sigchild       Enable PHP's own SIGCHLD handler.],
+[
+  if test "$enableval" = "yes"; then
+    AC_DEFINE(PHP_SIGCHILD, 1)
+    AC_MSG_RESULT(yes)
+  else
+    AC_DEFINE(PHP_SIGCHILD, 0)
+    AC_MSG_RESULT(no)
+  fi
+],[
+    AC_DEFINE(PHP_SIGCHILD, 0)
+    AC_MSG_RESULT(no)
+]) 
+
 AC_MSG_CHECKING(whether to enable track_vars variables by default)
 AC_ARG_ENABLE(track-vars,
 [  --enable-track-vars     Enable GET/POST/Cookie track variables by default.],
@@ -3075,7 +3092,7 @@ if test -n "$PHP_APXS_BROKEN" ; then
 	echo "=================================================================="
 	echo "WARNING: Your $APXS script is most likely broken."
 	echo ""
-	echo "Please go read http://www.php.net/FAQ.php3#4.11 and make the"
+	echo "Please go read http://www.php.net/FAQ.php3#6.11 and make the"
 	echo "changes described there and try again."
 	echo "=================================================================="
 fi
@@ -3100,7 +3117,7 @@ if test "$BINNAME" = "php"; then
 		echo "         redirection checking.  By putting this cgi binary somewhere"
 		echo "         in your web space, users may be able to circumvent existing .htaccess"
 		echo "         security by loading files directly through the parser.  See"
-		echo "         http://www.php.net/manual/config-security.php3 for more details."
+		echo "         http://www.php.net/manual/security.php for more details."
 		fi
 	fi
 fi

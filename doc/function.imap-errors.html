@@ -4,20 +4,23 @@
 >imap_errors</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
-TITLE="IMAP functions"
+TITLE="IMAP, POP3 and NNTP functions"
 HREF="ref.imap.html"><LINK
 REL="PREVIOUS"
 TITLE="imap_last_error"
 HREF="function.imap-last-error.html"><LINK
 REL="NEXT"
 TITLE="imap_alerts"
-HREF="function.imap-alerts.html"></HEAD
+HREF="function.imap-alerts.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,44 +68,58 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.IMAP-ERRORS"
+NAME="function.imap-errors"
 >imap_errors</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN13415"
+NAME="AEN16045"
 ></A
->imap_errors -- This function returns all of the IMAP errors (if any) that have occurred during this page request or since the error stack was reset.</DIV
+><P
+>    (PHP3 &#62;= 3.0.12, PHP4 &#62;= 4.0b4)</P
+>imap_errors&nbsp;--&nbsp;
+     This function returns all of the IMAP errors (if any) that have
+     occurred during this page request or since the error stack was
+     reset.
+    </DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN13418"
+NAME="AEN16048"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->array imap_errors</CODE
->(void );<P
+>array <B
+CLASS="function"
+>imap_errors</B
+></CODE
+> (void)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     This function returns an array of all of the IMAP error messages
+>&#13;     This function returns an array of all of the IMAP error messages
      generated since the last <B
-CLASS="FUNCTION"
+CLASS="function"
 >imap_errors()</B
 > call,
      or the beginning of the page. When
      <B
-CLASS="FUNCTION"
+CLASS="function"
 >imap_errors()</B
 > is called, the error stack is
-     subsequently cleared.</P
+     subsequently cleared.  
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

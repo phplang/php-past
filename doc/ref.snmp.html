@@ -4,7 +4,7 @@
 >SNMP functions</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -12,12 +12,15 @@ REL="UP"
 TITLE="Function Reference"
 HREF="funcref.html"><LINK
 REL="PREVIOUS"
-TITLE="session_encode"
-HREF="function.session-encode.html"><LINK
+TITLE="swf_posround"
+HREF="function.swf-posround.html"><LINK
 REL="NEXT"
 TITLE="snmpget"
-HREF="function.snmpget.html"></HEAD
+HREF="function.snmpget.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="reference"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -42,7 +45,7 @@ WIDTH="10%"
 ALIGN="left"
 VALIGN="bottom"
 ><A
-HREF="function.session-encode.html"
+HREF="function.swf-posround.html"
 >Prev</A
 ></TD
 ><TD
@@ -64,41 +67,50 @@ HREF="function.snmpget.html"
 ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><DIV
-CLASS="REFERENCE"
+CLASS="reference"
 ><A
-NAME="REF.SNMP"
+NAME="ref.snmp"
 ></A
 ><DIV
 CLASS="TITLEPAGE"
 ><H1
-CLASS="TITLE"
->L. SNMP functions</H1
+CLASS="title"
+>LIX. SNMP functions</H1
 ><DIV
 CLASS="PARTINTRO"
 ><A
-NAME="AEN24517"
+NAME="AEN32852"
 ></A
 ><P
->    In order to use the SNMP functions on Unix you need to install the <A
+>&#13;    In order to use the SNMP functions on Unix you need to install the <A
 HREF="http://ucd-snmp.ucdavis.edu/"
 TARGET="_top"
 >UCD SNMP</A
 > package. On Windows these functions
     are only available on NT and not on Win95/98.</P
 ><P
->    Important: In order to use the UCD SNMP package, you need to define
+>&#13;    Important: In order to use the UCD SNMP package, you need to define
     NO_ZEROLENGTH_COMMUNITY to 1 before compiling it. After configuring UCD
     SNMP, edit config.h and search for NO_ZEROLENGTH_COMMUNITY. Uncomment the
     #define line. It should look like this afterwards:</P
 ><P
->    <PRE
-CLASS="PROGRAMLISTING"
->#define NO_ZEROLENGTH_COMMUNITY 1
+>&#13;    <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;#define NO_ZEROLENGTH_COMMUNITY 1
     </PRE
+></TD
+></TR
+></TABLE
 >
    </P
 ><P
->    If you see strange segmentation faults in combination with SNMP commands,
+>&#13;    If you see strange segmentation faults in combination with SNMP commands,
     you did not follow the above instructions. If you do not want to recompile
     UCD SNMP, you can compile PHP with the --enable-ucd-snmp-hack switch which
     will work around the misfeature.</P
@@ -162,7 +174,7 @@ WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
 ><A
-HREF="function.session-encode.html"
+HREF="function.swf-posround.html"
 >Prev</A
 ></TD
 ><TD
@@ -187,7 +199,7 @@ HREF="function.snmpget.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->session_encode</TD
+>swf_posround</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"

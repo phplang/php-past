@@ -4,7 +4,7 @@
 >continue</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="break"
 HREF="control-structures.break.html"><LINK
 REL="NEXT"
 TITLE="switch"
-HREF="control-structures.switch.html"></HEAD
+HREF="control-structures.switch.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="sect1"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -64,41 +67,74 @@ HREF="control-structures.switch.html"
 ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><DIV
-CLASS="SECT1"
+CLASS="sect1"
 ><H1
-CLASS="SECT1"
+CLASS="sect1"
 ><A
-NAME="CONTROL-STRUCTURES.CONTINUE"
+NAME="control-structures.continue"
 ><TT
-CLASS="LITERAL"
+CLASS="literal"
 >continue</TT
 ></A
 ></H1
 ><P
->     <TT
-CLASS="LITERAL"
+>&#13;    <TT
+CLASS="literal"
 >continue</TT
 > is used within looping structures to
-     skip the rest of the current loop iteration and continue
-     execution at the beginning of the next iteration.
- 
-     <DIV
-CLASS="INFORMALEXAMPLE"
+    skip the rest of the current loop iteration and continue execution
+    at the beginning of the next iteration.
+   </P
+><P
+>&#13;    <TT
+CLASS="literal"
+>continue</TT
+> accepts an optional numeric argument
+    which tells it how many levels of enclosing loops it should skip
+    to the end of.
+   </P
+><P
+>&#13;    <DIV
+CLASS="informalexample"
 ><P
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
-> while (list($key,$value) = each($arr)) {
-     if ($key % 2) { // skip even members
-         continue;
-     }
-     do_something_odd ($value);
- }
-      </PRE
+CLASS="programlisting"
+>&#13;while (list ($key, $value) = each ($arr)) {
+    if (!($key % 2)) { // skip odd members
+        continue;
+    }
+    do_something_odd ($value);
+}
+
+$i = 0;
+while ($i++ &#60; 5) {
+    echo "Outer&#60;br&#62;\n";
+    while (1) {
+        echo "  Middle&#60;br&#62;\n";
+        while (1) {
+            echo "  Inner&#60;br&#62;\n";
+            continue 3;
+        }
+        echo "This never gets output.&#60;br&#62;\n";
+    }
+    echo "Neither does this.&#60;br&#62;\n";
+}
+     </PRE
+></TD
+></TR
+></TABLE
 ><P
 ></P
 ></DIV
-></P
+>
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -141,7 +177,7 @@ WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
 ><TT
-CLASS="LITERAL"
+CLASS="literal"
 >break</TT
 ></TD
 ><TD
@@ -157,7 +193,7 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><TT
-CLASS="LITERAL"
+CLASS="literal"
 >switch</TT
 ></TD
 ></TR

@@ -4,7 +4,7 @@
 >ldap_add</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -15,9 +15,12 @@ REL="PREVIOUS"
 TITLE="LDAP functions"
 HREF="ref.ldap.html"><LINK
 REL="NEXT"
-TITLE="ldap_mod_add"
-HREF="function.ldap-mod-add.html"></HEAD
+TITLE="ldap_bind"
+HREF="function.ldap-bind.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -55,7 +58,7 @@ WIDTH="10%"
 ALIGN="right"
 VALIGN="bottom"
 ><A
-HREF="function.ldap-mod-add.html"
+HREF="function.ldap-bind.html"
 >Next</A
 ></TD
 ></TR
@@ -65,39 +68,48 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.LDAP-ADD"
+NAME="function.ldap-add"
 >ldap_add</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN14391"
+NAME="AEN17396"
 ></A
->ldap_add -- Add entries to LDAP directory</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>ldap_add&nbsp;--&nbsp;Add entries to LDAP directory</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN14394"
+NAME="AEN17399"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int ldap_add</CODE
->(int link_identifier, string dn, array entry);<P
+>int <B
+CLASS="function"
+>ldap_add</B
+></CODE
+> (int link_identifier, string dn, array entry)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     returns true on success and false on error.  
+>&#13;     returns true on success and false on error.  
     </P
 ><P
 > 
      The <B
-CLASS="FUNCTION"
+CLASS="function"
 >ldap_add()</B
 > function is used to add entries
      in the LDAP directory. The DN of the entry to be added is
@@ -107,14 +119,16 @@ CLASS="FUNCTION"
      indexed using integers starting with 0.
     </P
 ><DIV
-CLASS="INFORMALEXAMPLE"
+CLASS="informalexample"
 ><P
 ></P
 ><P
-CLASS="LITERALLAYOUT"
->&nbsp;&nbsp;&nbsp;&nbsp;entry["attribute1"]&nbsp;=&nbsp;value<br>
+CLASS="literallayout"
+><br>
+&nbsp;&nbsp;&nbsp;&nbsp;entry["attribute1"]&nbsp;=&nbsp;value<br>
 &nbsp;&nbsp;&nbsp;&nbsp;entry["attribute2"][0]&nbsp;=&nbsp;value1<br>
-&nbsp;&nbsp;&nbsp;&nbsp;entry["attribute2"][1]&nbsp;=&nbsp;value2</P
+&nbsp;&nbsp;&nbsp;&nbsp;entry["attribute2"][1]&nbsp;=&nbsp;value2<br>
+</P
 ><P
 ></P
 ></DIV
@@ -127,14 +141,20 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
 >Example 1. Complete example with authenticated bind</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->&lt;?php
+CLASS="programlisting"
+>&#13;&#60;?php
 $ds=ldap_connect("localhost");  // assuming the LDAP server is on this host
 
 if ($ds) {
@@ -154,7 +174,11 @@ if ($ds) {
 } else {
     echo "Unable to connect to LDAP server"; 
 }
-?&#62;</PRE
+?&#62;
+</PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR
@@ -191,7 +215,7 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><A
-HREF="function.ldap-mod-add.html"
+HREF="function.ldap-bind.html"
 >Next</A
 ></TD
 ></TR
@@ -213,7 +237,7 @@ HREF="ref.ldap.html"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->ldap_mod_add</TD
+>ldap_bind</TD
 ></TR
 ></TABLE
 ></DIV

@@ -1,10 +1,10 @@
 <HTML
 ><HEAD
 ><TITLE
->pg_Fetch_Array</TITLE
+>pg_fetch_array</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -12,12 +12,15 @@ REL="UP"
 TITLE="PostgreSQL functions"
 HREF="ref.pgsql.html"><LINK
 REL="PREVIOUS"
-TITLE="pg_Exec"
+TITLE="pg_exec"
 HREF="function.pg-exec.html"><LINK
 REL="NEXT"
-TITLE="pg_Fetch_Object"
-HREF="function.pg-fetch-object.html"></HEAD
+TITLE="pg_fetch_object"
+HREF="function.pg-fetch-object.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,103 +68,114 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.PG-FETCH-ARRAY"
->pg_Fetch_Array</A
+NAME="function.pg-fetch-array"
+>pg_fetch_array</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN23226"
+NAME="AEN29350"
 ></A
->pg_Fetch_Array -- fetch row as array</DIV
+><P
+>    (PHP3 &#62;= 3.0.1, PHP4 )</P
+>pg_fetch_array&nbsp;--&nbsp;Fetch a row as an array</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN23229"
+NAME="AEN29353"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->array pg_fetch_array</CODE
->(int result, int row, int 
-      [<SPAN
-CLASS="OPTIONAL"
->result_type</SPAN
->]
-     );<P
+>array <B
+CLASS="function"
+>pg_fetch_array</B
+></CODE
+> (int result, int row [, int 
+       result_type])</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
 > 
      Returns: An array that corresponds to the fetched row, or false
-     if there are no more rows.</P
+     if there are no more rows.
+    </P
 ><P
->     <B
-CLASS="FUNCTION"
->pg_fetch_array()</B
+>&#13;     <B
+CLASS="function"
+>Pg_fetch_array()</B
 > is an extended version of
      <A
 HREF="function.pg-fetch-row.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >pg_fetch_row()</B
 ></A
 >.  In addition to storing the
      data in the numeric indices of the result array, it also stores
-     the data in associative indices, using the field names as keys.</P
+     the data in associative indices, using the field names as keys.
+    </P
 ><P
->     The third optional argument <TT
-CLASS="PARAMETER"
+>&#13;     The third optional argument <TT
+CLASS="parameter"
 ><I
 >result_type</I
 ></TT
 > in
      <B
-CLASS="FUNCTION"
+CLASS="function"
 >pg_fetch_array()</B
 > is a constant and can take the
      following values: PGSQL_ASSOC, PGSQL_NUM, and PGSQL_BOTH.
      <DIV
-CLASS="NOTE"
+CLASS="note"
 ><BLOCKQUOTE
-CLASS="NOTE"
+CLASS="note"
 ><P
 ><B
 >Note: </B
->       <TT
-CLASS="PARAMETER"
+>
+       <TT
+CLASS="parameter"
 ><I
 >Result_type</I
 ></TT
-> was added in PHP 4.0.</P
+> was added in PHP 4.0.
+      </P
 ></BLOCKQUOTE
 ></DIV
-></P
+>
+    </P
 ><P
->     An important thing to note is that using
+>&#13;     An important thing to note is that using
      <B
-CLASS="FUNCTION"
+CLASS="function"
 >pg_fetch_array()</B
 > is NOT significantly
      slower than using <A
 HREF="function.pg-fetch-row.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >pg_fetch_row()</B
 ></A
 >, while it
-     provides a significant added value.</P
+     provides a significant added value.
+    </P
 ><P
->     For further details, also see
+>&#13;     For further details, see also
      <A
 HREF="function.pg-fetch-row.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >pg_fetch_row()</B
 ></A
 >
@@ -175,15 +189,21 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
 >Example 1. PostgreSQL fetch array</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->&lt;?php 
-$conn = pg_pconnect("","","","","publisher");
+CLASS="programlisting"
+>&#13;&#60;?php 
+$conn = pg_pconnect ("", "", "", "", "publisher");
 if (!$conn) {
     echo "An error occured.\n";
     exit;
@@ -200,7 +220,11 @@ echo $arr[0] . " &#60;- array\n";
 
 $arr = pg_fetch_array ($result, 1);
 echo $arr["author"] . " &#60;- array\n";
-?&#62;</PRE
+?&#62;
+     </PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR
@@ -246,7 +270,7 @@ HREF="function.pg-fetch-object.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->pg_Exec</TD
+>pg_exec</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"
@@ -259,7 +283,7 @@ HREF="ref.pgsql.html"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->pg_Fetch_Object</TD
+>pg_fetch_object</TD
 ></TR
 ></TABLE
 ></DIV

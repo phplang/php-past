@@ -4,20 +4,23 @@
 >split</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
-TITLE="Regular expression functions"
+TITLE="Regular Expression Functions (POSIX Extended)"
 HREF="ref.regex.html"><LINK
 REL="PREVIOUS"
 TITLE="eregi_replace"
 HREF="function.eregi-replace.html"><LINK
 REL="NEXT"
-TITLE="sql_regcase"
-HREF="function.sql-regcase.html"></HEAD
+TITLE="spliti"
+HREF="function.spliti.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -55,7 +58,7 @@ WIDTH="10%"
 ALIGN="right"
 VALIGN="bottom"
 ><A
-HREF="function.sql-regcase.html"
+HREF="function.spliti.html"
 >Next</A
 ></TD
 ></TR
@@ -65,53 +68,87 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.SPLIT"
+NAME="function.split"
 >split</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN23980"
+NAME="AEN30875"
 ></A
->split -- split string into array by regular expression</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>split&nbsp;--&nbsp;split string into array by regular expression</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN23983"
+NAME="AEN30878"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->array split</CODE
->(string pattern, string string, int [<SPAN
-CLASS="OPTIONAL"
->limit</SPAN
->]);<P
+>array <B
+CLASS="function"
+>split</B
+></CODE
+> (string pattern, string string [, int 
+       limit])</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Returns an array of strings, each of which is a substring of
-     string formed by splitting it on boundaries formed by the regular
-     expression <TT
-CLASS="PARAMETER"
+>&#13;     Returns an array of strings, each of which is a substring of
+     <TT
+CLASS="parameter"
+><I
+>string</I
+></TT
+> formed by splitting it on
+     boundaries formed by the regular expression
+     <TT
+CLASS="parameter"
 ><I
 >pattern</I
 ></TT
->. If an error occurs,
-     returns false.
-	</P
-><P
->     To get the first five fields from a line from
+>.  If <TT
+CLASS="parameter"
+><I
+>limit</I
+></TT
+>
+     is set, the returned array will contain a maximum of
      <TT
-CLASS="FILENAME"
+CLASS="parameter"
+><I
+>limit</I
+></TT
+> elements with the last element
+     containing the whole rest of <TT
+CLASS="parameter"
+><I
+>string</I
+></TT
+>.  If
+     an error occurs, <B
+CLASS="function"
+>split()</B
+> returns false.
+    </P
+><P
+>&#13;     To get the first five fields from a line from
+     <TT
+CLASS="filename"
 >/etc/passwd</TT
 >:
-	 <TABLE
+     <TABLE
 WIDTH="100%"
 BORDER="0"
 CELLPADDING="0"
@@ -120,25 +157,37 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
->Example 1. split() example</B
+>Example 1. <B
+CLASS="function"
+>Split()</B
+> Example</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->$passwd_list = split( ":", $passwd_line, 5 );
-	  </PRE
+CLASS="programlisting"
+>&#13;$passwd_list = split (":", $passwd_line, 5);
+      </PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR
 ></TABLE
 >
-	</P
+    </P
 ><P
->	 To parse a date which may be delimited with slashes, dots, or
-	 hyphens:
-	 <TABLE
+>&#13;     To parse a date which may be delimited with slashes, dots, or
+     hyphens:
+     <TABLE
 WIDTH="100%"
 BORDER="0"
 CELLPADDING="0"
@@ -147,86 +196,105 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
->Example 2. split() example</B
+>Example 2. <B
+CLASS="function"
+>Split()</B
+> Example</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->$date = "04/30/1973";  // Delimiters may be slash, dot, or hyphen
-list( $month, $day, $year ) = split( '[/.-]', $date );
-echo "Month: $month; Day: $day; Year: $year&lt;br&gt;\n";
-	  </PRE
+CLASS="programlisting"
+>&#13;$date = "04/30/1973";  // Delimiters may be slash, dot, or hyphen
+list ($month, $day, $year) = split ('[/.-]', $date);
+echo "Month: $month; Day: $day; Year: $year&#60;br&#62;\n";
+      </PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR
 ></TABLE
 >
-	</P
+    </P
 ><P
->     Note that <TT
-CLASS="PARAMETER"
+>&#13;     Note that <TT
+CLASS="parameter"
 ><I
 >pattern</I
 ></TT
 > is case-sensitive.
-	</P
+    </P
 ><P
->	 Note that if you don't require the power of regular expressions,
-	 it is faster to use <A
+>&#13;     Note that if you don't require the power of regular expressions,
+     it is faster to use <A
 HREF="function.explode.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >explode()</B
 ></A
 >, which doesn't
-	 incur the overhead of the regular expression engine.
-	</P
+     incur the overhead of the regular expression engine.
+    </P
 ><P
->	 Please note that <TT
-CLASS="PARAMETER"
+>&#13;     Please note that <TT
+CLASS="parameter"
 ><I
 >pattern</I
 ></TT
 > is a regular
-	 expression.  If you want to split on any of the characters which
-	 are considered special by regular expressions, you'll need to
-	 escape them first. If you think <B
-CLASS="FUNCTION"
+     expression.  If you want to split on any of the characters which
+     are considered special by regular expressions, you'll need to
+     escape them first. If you think <B
+CLASS="function"
 >split()</B
 > (or
-	 any other regex function, for that matter) is doing something
-	 weird, please read the file <TT
-CLASS="FILENAME"
+     any other regex function, for that matter) is doing something
+     weird, please read the file <TT
+CLASS="filename"
 >regex.7</TT
 >,
-	 included in the <TT
-CLASS="FILENAME"
+     included in the <TT
+CLASS="filename"
 >regex/</TT
 > subdirectory of the
-	 PHP distribution. It's in manpage format, so you'll want to do
-	 something along the lines of <B
-CLASS="COMMAND"
+     PHP distribution. It's in manpage format, so you'll want to do
+     something along the lines of <B
+CLASS="command"
 >man
-	 /usr/local/src/regex/regex.7</B
+     /usr/local/src/regex/regex.7</B
 > in order to read it.
-	</P
+    </P
 ><P
->     See also: <A
+>&#13;     See also: <A
+HREF="function.spliti.html"
+><B
+CLASS="function"
+>spliti()</B
+></A
+>,
+     <A
 HREF="function.explode.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >explode()</B
 ></A
-> and <A
+>, and <A
 HREF="function.implode.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >implode()</B
 ></A
 >.
-	</P
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -259,7 +327,7 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><A
-HREF="function.sql-regcase.html"
+HREF="function.spliti.html"
 >Next</A
 ></TD
 ></TR
@@ -281,7 +349,7 @@ HREF="ref.regex.html"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->sql_regcase</TD
+>spliti</TD
 ></TR
 ></TABLE
 ></DIV

@@ -4,7 +4,7 @@
 >fdf_create</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="fdf_close"
 HREF="function.fdf-close.html"><LINK
 REL="NEXT"
 TITLE="fdf_save"
-HREF="function.fdf-save.html"></HEAD
+HREF="function.fdf-save.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,41 +68,50 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.FDF-CREATE"
+NAME="function.fdf-create"
 >fdf_create</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN9565"
+NAME="AEN11016"
 ></A
->fdf_create -- Create a new FDF document</DIV
+><P
+>    (PHP3 &#62;= 3.0.6, PHP4 )</P
+>fdf_create&nbsp;--&nbsp;Create a new FDF document</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN9568"
+NAME="AEN11019"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int fdf_create</CODE
->(void );<P
+>int <B
+CLASS="function"
+>fdf_create</B
+></CODE
+> (void )</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     The <B
-CLASS="FUNCTION"
+>&#13;     The <B
+CLASS="function"
 >fdf_create()</B
 > creates a new
      FDF document. This function is needed if one would like to
      populate input fields in a PDF document with data.</P
 ><P
->    <TABLE
+>&#13;    <TABLE
 WIDTH="100%"
 BORDER="0"
 CELLPADDING="0"
@@ -108,14 +120,20 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
 >Example 1. Populating a PDF document</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->&lt;?php
+CLASS="programlisting"
+>&#13;&#60;?php
 $outfdf = fdf_create();
 fdf_set_value($outfdf, "volume", $volume, 0);
 
@@ -128,30 +146,33 @@ fpassthru($fp);
 unlink("outtest.fdf");
 ?&#62;
      </PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR
 ></TABLE
 ></P
 ><P
->     See also <A
+>&#13;     See also <A
 HREF="function.fdf-close.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >fdf_close()</B
 ></A
 >,
               <A
 HREF="function.fdf-save.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >fdf_save()</B
 ></A
 >,
               <A
 HREF="function.fdf-open.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >fdf_open()</B
 ></A
 >.</P

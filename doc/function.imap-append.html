@@ -4,20 +4,23 @@
 >imap_append</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
-TITLE="IMAP functions"
+TITLE="IMAP, POP3 and NNTP functions"
 HREF="ref.imap.html"><LINK
 REL="PREVIOUS"
-TITLE="IMAP functions"
+TITLE="IMAP, POP3 and NNTP functions"
 HREF="ref.imap.html"><LINK
 REL="NEXT"
 TITLE="imap_base64"
-HREF="function.imap-base64.html"></HEAD
+HREF="function.imap-base64.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,61 +68,130 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.IMAP-APPEND"
+NAME="function.imap-append"
 >imap_append</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN12503"
+NAME="AEN14848"
 ></A
->imap_append -- Append a string message to a specified mailbox</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>imap_append&nbsp;--&nbsp;
+     Append a string message to a specified mailbox
+    </DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN12506"
+NAME="AEN14851"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int imap_append</CODE
->(int imap_stream, string mbox, string message, stringflags);<P
+>int <B
+CLASS="function"
+>imap_append</B
+></CODE
+> (int imap_stream, string mbox, string message [, string 
+       flags])</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Returns true on sucess, false on error.</P
+>&#13;     Returns true on sucess, false on error.
+    </P
 ><P
->     <B
-CLASS="FUNCTION"
+>&#13;     <B
+CLASS="function"
 >imap_append()</B
 > appends a string message to the
      specified mailbox <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >mbox</I
 ></TT
 >. If the optional
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >flags</I
 ></TT
 > is specified, writes the
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >flags</I
 ></TT
-> to that mailbox also.</P
+> to that mailbox also.
+    </P
 ><P
->     When talking to the Cyrus IMAP server, you must use "\r\n" as
+>&#13;     When talking to the Cyrus IMAP server, you must use "\r\n" as
      your end-of-line terminator instead of "\n" or the operation will
-     fail.</P
+     fail.
+    </P
+><P
+>     
+     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><P
+><B
+>Example 1. <B
+CLASS="function"
+>imap_append()</B
+> example</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;$stream = imap_open("{your.imap.host}INBOX.Drafts","username", "password");
+
+$check = imap_check($stream);
+print "Msg Count before append: ". $check-&#62;Nmsgs."\n";
+
+imap_append($stream,"{your.imap.host}INBOX.Drafts"
+                   ,"From: me@my.host\r\n"
+                   ."To: you@your.host\r\n"
+                   ."Subject: test\r\n"
+                   ."\r\n"
+                   ."this is a test message, please ignore\r\n"
+                   );
+
+$check = imap_check($stream);
+print "Msg Count after append : ". $check-&#62;Nmsgs."\n";
+
+imap_close($stream);
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -161,7 +233,7 @@ HREF="function.imap-base64.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->IMAP functions</TD
+>IMAP, POP3 and NNTP functions</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"

@@ -4,7 +4,7 @@
 >Alternative syntax for control structures</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="elseif"
 HREF="control-structures.elseif.html"><LINK
 REL="NEXT"
 TITLE="while"
-HREF="control-structures.while.html"></HEAD
+HREF="control-structures.while.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="sect1"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -64,121 +67,138 @@ HREF="control-structures.while.html"
 ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><DIV
-CLASS="SECT1"
+CLASS="sect1"
 ><H1
-CLASS="SECT1"
+CLASS="sect1"
 ><A
-NAME="CONTROL-STRUCTURES.ALTERNATIVE-SYNTAX"
+NAME="control-structures.alternative-syntax"
 >Alternative syntax for control structures</A
 ></H1
 ><P
->	PHP offers an alternative syntax for some of its control
-	structures; namely, <TT
-CLASS="LITERAL"
+>&#13;    PHP offers an alternative syntax for some of its control
+    structures; namely, <TT
+CLASS="literal"
 >if</TT
 >,
-	<TT
-CLASS="LITERAL"
+    <TT
+CLASS="literal"
 >while</TT
 >, <TT
-CLASS="LITERAL"
+CLASS="literal"
 >for</TT
 >, and
-	<TT
-CLASS="LITERAL"
+    <TT
+CLASS="literal"
 >switch</TT
 >.  In each case, the basic form of the
-	alternate syntax is to change the opening brace to a colon (:) and
-	the closing brace to <TT
-CLASS="LITERAL"
+    alternate syntax is to change the opening brace to a colon (:) and
+    the closing brace to <TT
+CLASS="literal"
 >endif;</TT
 >,
-	<TT
-CLASS="LITERAL"
+    <TT
+CLASS="literal"
 >endwhile;</TT
 >, <TT
-CLASS="LITERAL"
+CLASS="literal"
 >endfor;</TT
 >, or
-	<TT
-CLASS="LITERAL"
+    <TT
+CLASS="literal"
 >endswitch;</TT
 >, respectively.
-    
-      <DIV
-CLASS="INFORMALEXAMPLE"
+    <DIV
+CLASS="informalexample"
 ><P
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
-> &lt;?php if ($a==5): ?&gt;
+CLASS="programlisting"
+>&#13; &#60;?php if ($a == 5): ?&#62;
  A is equal to 5
- &lt;?php endif; ?&gt;
-       </PRE
-><P
-></P
-></DIV
->
-     </P
-><P
->      In the above example, the HTML block "A = 5" is nested within an
-      <TT
-CLASS="LITERAL"
->if</TT
-> statement written in the alternative syntax.
-      The HTML block would be displayed only if $a is equal to 5.</P
-><P
->      The alternative syntax applies to <TT
-CLASS="LITERAL"
->else</TT
->
-      and <TT
-CLASS="LITERAL"
->elseif</TT
-> as well.  The following is an
-      <TT
-CLASS="LITERAL"
->if</TT
-> structure with <TT
-CLASS="LITERAL"
->elseif</TT
->
-      and <TT
-CLASS="LITERAL"
->else</TT
-> in the alternative format:
-      
-      <DIV
-CLASS="INFORMALEXAMPLE"
-><P
-></P
-><PRE
-CLASS="PROGRAMLISTING"
-> if ($a == 5):
-     print "a equals 5";
-     print "...";
- elseif ($a == 6):
-     print "a equals 6";
-     print "!!!";
- else:
-     print "a is neither 5 nor 6";
- endif;
-       </PRE
+ &#60;?php endif; ?&#62;
+     </PRE
+></TD
+></TR
+></TABLE
 ><P
 ></P
 ></DIV
 >
    </P
 ><P
->	See also <A
+>&#13;    In the above example, the HTML block "A = 5" is nested within an
+    <TT
+CLASS="literal"
+>if</TT
+> statement written in the alternative syntax.
+    The HTML block would be displayed only if $a is equal to 5.
+   </P
+><P
+>&#13;    The alternative syntax applies to <TT
+CLASS="literal"
+>else</TT
+> and
+    <TT
+CLASS="literal"
+>elseif</TT
+> as well.  The following is an
+    <TT
+CLASS="literal"
+>if</TT
+> structure with <TT
+CLASS="literal"
+>elseif</TT
+> and
+    <TT
+CLASS="literal"
+>else</TT
+> in the alternative format:
+    <DIV
+CLASS="informalexample"
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;if ($a == 5):
+    print "a equals 5";
+    print "...";
+elseif ($a == 6):
+    print "a equals 6";
+    print "!!!";
+else:
+    print "a is neither 5 nor 6";
+endif;
+     </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+>
+   </P
+><P
+>&#13;    See also <A
 HREF="control-structures.while.html"
 >while</A
 >,
-	<A
+    <A
 HREF="control-structures.for.html"
 >for</A
 >, and <A
-HREF="control-structures.html#CONTROL-STRUCTURES.IF"
+HREF="control-structures.html#control-structures.if"
 >if</A
 > for further examples.
    </P
@@ -224,7 +244,7 @@ WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
 ><TT
-CLASS="LITERAL"
+CLASS="literal"
 >elseif</TT
 ></TD
 ><TD
@@ -240,7 +260,7 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><TT
-CLASS="LITERAL"
+CLASS="literal"
 >while</TT
 ></TD
 ></TR

@@ -4,7 +4,7 @@
 >cpdf_rmoveto</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="cpdf_moveto"
 HREF="function.cpdf-moveto.html"><LINK
 REL="NEXT"
 TITLE="cpdf_curveto"
-HREF="function.cpdf-curveto.html"></HEAD
+HREF="function.cpdf-curveto.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,58 +68,67 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.CPDF-RMOVETO"
+NAME="function.cpdf-rmoveto"
 >cpdf_rmoveto</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN5697"
+NAME="AEN6891"
 ></A
->cpdf_rmoveto -- Sets current point</DIV
+><P
+>    (PHP3 &#62;= 3.0.9, PHP4 &#62;= 4.0b4)</P
+>cpdf_rmoveto&nbsp;--&nbsp;Sets current point</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN5700"
+NAME="AEN6894"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->void cpdf_rmoveto</CODE
->(int pdf document, double x-koor, double y-koor, int mode);<P
+>void <B
+CLASS="function"
+>cpdf_rmoveto</B
+></CODE
+> (int pdf document, double x-koor, double y-koor, int mode)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     The <B
-CLASS="FUNCTION"
+>&#13;     The <B
+CLASS="function"
 >cpdf_rmoveto()</B
 > function set the current point
      relative to the coordinates <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >x-koor</I
 ></TT
 > and
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >y-koor</I
 ></TT
 >.</P
 ><P
->     The last optional parameter determines the unit length. If is 0 or omitted
+>&#13;     The last optional parameter determines the unit length. If is 0 or omitted
      the default unit as specified for the page is used. Otherwise the koodinates
      are measured in postscript points disregarding the current unit.</P
 ><P
->     See also <A
+>&#13;     See also <A
 HREF="function.cpdf-moveto.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >cpdf_moveto()</B
 ></A
 >.</P

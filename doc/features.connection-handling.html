@@ -4,7 +4,7 @@
 >Connection handling</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -15,9 +15,12 @@ REL="PREVIOUS"
 TITLE="Using remote files"
 HREF="features.remote-files.html"><LINK
 REL="NEXT"
-TITLE="Persistent database connections"
-HREF="features.persistent-connections.html"></HEAD
+TITLE="Persistent Database Connections"
+HREF="features.persistent-connections.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="chapter"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -64,16 +67,16 @@ HREF="features.persistent-connections.html"
 ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><DIV
-CLASS="CHAPTER"
+CLASS="chapter"
 ><H1
 ><A
-NAME="FEATURES.CONNECTION-HANDLING"
->Chapter 20. Connection handling</A
+NAME="features.connection-handling"
+>Chapter 21. Connection handling</A
 ></H1
 ><DIV
-CLASS="NOTE"
+CLASS="note"
 ><BLOCKQUOTE
-CLASS="NOTE"
+CLASS="note"
 ><P
 ><B
 >Note: </B
@@ -81,7 +84,7 @@ CLASS="NOTE"
 ></BLOCKQUOTE
 ></DIV
 ><P
->   Internally in PHP a connection status is maintained.  There are 3
+>&#13;   Internally in PHP a connection status is maintained.  There are 3
    possible states:
    <P
 ></P
@@ -102,20 +105,20 @@ CLASS="NOTE"
 >
   </P
 ><P
->   When a PHP script is running normally the NORMAL state, is active.
+>&#13;   When a PHP script is running normally the NORMAL state, is active.
    If the remote client disconnects the ABORTED state flag is
    turned on.  A remote client disconnect is usually caused by the
    user hitting his STOP button.  If the PHP-imposed time limit (see
    <A
 HREF="function.set-time-limit.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >set_time_limit()</B
 ></A
 >) is hit, the TIMEOUT state flag
    is turned on.</P
 ><P
->   You can decide whether or not you want a client disconnect to cause
+>&#13;   You can decide whether or not you want a client disconnect to cause
    your script to be aborted.  Sometimes it is handy to always have your
    scripts run to completion even if there is no remote browser receiving
    the output.  The default behaviour is however for your script to be
@@ -125,7 +128,7 @@ CLASS="FUNCTION"
    with the <A
 HREF="function.ignore-user-abort.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >ignore_user_abort()</B
 ></A
 > function.  If you do
@@ -134,7 +137,7 @@ CLASS="FUNCTION"
    function using <A
 HREF="function.register-shutdown-function.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >register_shutdown_function()</B
 ></A
 >.  With a
@@ -146,21 +149,21 @@ CLASS="FUNCTION"
    diconnect you can use the <A
 HREF="function.connection-aborted.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >connection_aborted()</B
 ></A
 >
    function.  This function will return true if the connection was
    aborted.</P
 ><P
->   Your script can also be terminated by the built-in script timer.
+>&#13;   Your script can also be terminated by the built-in script timer.
    The default timeout is 30 seconds.  It can be changed using
    the max_execution_time php3.ini directive or the corresponding
    php3_max_execution_time Apache .conf directive as well as with
    the <A
 HREF="function.set-time-limit.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >set_time_limit()</B
 ></A
 > function.  When the timer
@@ -171,13 +174,13 @@ CLASS="FUNCTION"
    <A
 HREF="function.connection-timeout.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >connection_timeout()</B
 ></A
 > function.  This function will
    return true if a timeout caused the shutdown function to be called.</P
 ><P
->   One thing to note is that both the ABORTED and the TIMEOUT states
+>&#13;   One thing to note is that both the ABORTED and the TIMEOUT states
    can be active at the same time.  This is possible if you tell
    PHP to ignore user aborts.  PHP will still note the fact that
    a user may have broken the connection, but the script will keep
@@ -186,14 +189,14 @@ CLASS="FUNCTION"
    you will find that <A
 HREF="function.connection-timeout.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >connection_timeout()</B
 ></A
 >
    and <A
 HREF="function.connection-aborted.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >connection_aborted()</B
 ></A
 > return true.
@@ -201,7 +204,7 @@ CLASS="FUNCTION"
    <A
 HREF="function.connection-status.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >connection_status()</B
 ></A
 >.  This function returns a
@@ -261,7 +264,7 @@ HREF="features.html"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->Persistent database connections</TD
+>Persistent Database Connections</TD
 ></TR
 ></TABLE
 ></DIV

@@ -4,7 +4,7 @@
 >ftp_connect</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="FTP functions"
 HREF="ref.ftp.html"><LINK
 REL="NEXT"
 TITLE="ftp_login"
-HREF="function.ftp-login.html"></HEAD
+HREF="function.ftp-login.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,50 +68,55 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.FTP-CONNECT"
+NAME="function.ftp-connect"
 >ftp_connect</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN9756"
+NAME="AEN11313"
 ></A
->ftp_connect -- Opens up an FTP connection</DIV
+><P
+>    (PHP3 &#62;= 3.0.13, PHP4 &#62;= 4.0b4)</P
+>ftp_connect&nbsp;--&nbsp;Opens up an FTP connection</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN9759"
+NAME="AEN11316"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int ftp_connect</CODE
->(string host, int [<SPAN
-CLASS="OPTIONAL"
->port</SPAN
->]
-      );<P
+>int <B
+CLASS="function"
+>ftp_connect</B
+></CODE
+> (string host [, int port])</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Returns a FTP stream on success, false on error.</P
+>&#13;     Returns a FTP stream on success, false on error.</P
 ><P
->     <B
-CLASS="FUNCTION"
+>&#13;     <B
+CLASS="function"
 >ftp_connect()</B
 > opens up a FTP connection to the
      specified <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >host</I
 ></TT
 >.  The <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >port</I
 ></TT

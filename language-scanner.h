@@ -24,13 +24,13 @@
    | If you did not, or have any questions about PHP licensing, please    |
    | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
-   | Authors: Andi Gutmans <andi@php.net>                                 |
+   | Authors: Andi Gutmans <andi@zend.com>                                |
    |          Zeev Suraski <zeev@zend.com>                                |
    +----------------------------------------------------------------------+
  */
 
 
-/* $Id: language-scanner.h,v 1.21 2000/02/07 23:54:50 zeev Exp $ */
+/* $Id: language-scanner.h,v 1.22 2000/04/10 19:29:36 andi Exp $ */
 
 
 #ifndef _LANGUAGE_SCANNER_H

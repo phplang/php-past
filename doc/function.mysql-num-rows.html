@@ -4,7 +4,7 @@
 >mysql_num_rows</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="mysql_num_fields"
 HREF="function.mysql-num-fields.html"><LINK
 REL="NEXT"
 TITLE="mysql_pconnect"
-HREF="function.mysql-pconnect.html"></HEAD
+HREF="function.mysql-pconnect.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,67 +68,87 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.MYSQL-NUM-ROWS"
+NAME="function.mysql-num-rows"
 >mysql_num_rows</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN18387"
+NAME="AEN23304"
 ></A
->mysql_num_rows -- Get number of rows in result</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>mysql_num_rows&nbsp;--&nbsp;Get number of rows in result</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN18390"
+NAME="AEN23307"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int mysql_num_rows</CODE
->(int result);<P
+>int <B
+CLASS="function"
+>mysql_num_rows</B
+></CODE
+> (int result)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     <B
-CLASS="FUNCTION"
+>&#13;     <B
+CLASS="function"
 >mysql_num_rows()</B
 > returns the number of rows in
-     a result set.</P
+     a result set. This command is only valid for SELECT statements. 
+     To retrieve the number of rows returned from a INSERT, UPDATE or 
+     DELETE, use <A
+HREF="function.mysql-affected-rows.html"
+><B
+CLASS="function"
+>mysql_affected_rows()</B
+></A
+>.
+    </P
 ><P
->     See also:  
+>&#13;     See also:  
      <A
 HREF="function.mysql-db-query.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >mysql_db_query()</B
 ></A
 >, 
      <A
 HREF="function.mysql-query.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >mysql_query()</B
 ></A
 > and, 
      <A
 HREF="function.mysql-fetch-row.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >mysql_fetch_row()</B
 ></A
->.</P
+>.
+    </P
 ><P
->     For downward compatibility <B
-CLASS="FUNCTION"
+>&#13;     For downward compatibility <B
+CLASS="function"
 >mysql_numrows()</B
 > can
-     also be used.</P
+     also be used.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

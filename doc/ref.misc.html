@@ -4,7 +4,7 @@
 >Miscellaneous functions</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -15,9 +15,12 @@ REL="PREVIOUS"
 TITLE="mssql_select_db"
 HREF="function.mssql-select-db.html"><LINK
 REL="NEXT"
-TITLE="connection_aborted"
-HREF="function.connection-aborted.html"></HEAD
+TITLE="create_function"
+HREF="function.create-function.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="reference"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -55,7 +58,7 @@ WIDTH="10%"
 ALIGN="right"
 VALIGN="bottom"
 ><A
-HREF="function.connection-aborted.html"
+HREF="function.create-function.html"
 >Next</A
 ></TD
 ></TR
@@ -64,23 +67,24 @@ HREF="function.connection-aborted.html"
 ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><DIV
-CLASS="REFERENCE"
+CLASS="reference"
 ><A
-NAME="REF.MISC"
+NAME="ref.misc"
 ></A
 ><DIV
 CLASS="TITLEPAGE"
 ><H1
-CLASS="TITLE"
->XXXII. Miscellaneous functions</H1
+CLASS="title"
+>XXXVIII. Miscellaneous functions</H1
 ><DIV
 CLASS="PARTINTRO"
 ><A
-NAME="AEN16620"
+NAME="AEN21166"
 ></A
 ><P
->    These functions were placed here because none of the other
-    categories seemed to fit.</P
+>&#13;    These functions were placed here because none of the other
+    categories seemed to fit.
+   </P
 ></DIV
 ><DIV
 CLASS="TOC"
@@ -89,6 +93,11 @@ CLASS="TOC"
 ><B
 >Table of Contents</B
 ></DT
+><DT
+><A
+HREF="function.create-function.html"
+>create_function</A
+> &#8212; Create an anonymous (lambda-style) function</DT
 ><DT
 ><A
 HREF="function.connection-aborted.html"
@@ -113,12 +122,16 @@ HREF="function.define.html"
 ><A
 HREF="function.defined.html"
 >defined</A
-> &#8212; Checks whether a given named constant exists.</DT
+> &#8212; 
+     Checks whether a given named constant exists
+    </DT
 ><DT
 ><A
 HREF="function.die.html"
 >die</A
-> &#8212; Output a message and terminate the current script</DT
+> &#8212; 
+     Output a message and terminate the current script
+    </DT
 ><DT
 ><A
 HREF="function.eval.html"
@@ -133,41 +146,63 @@ HREF="function.exit.html"
 ><A
 HREF="function.func-get-arg.html"
 >func_get_arg</A
-> &#8212; Return an item from the argument list.</DT
+> &#8212; Return an item from the argument list</DT
 ><DT
 ><A
 HREF="function.func-get-args.html"
 >func_get_args</A
-> &#8212; Returns an array comprising a function's argument list.</DT
+> &#8212; 
+     Returns an array comprising a function's argument list
+    </DT
 ><DT
 ><A
 HREF="function.func-num-args.html"
 >func_num_args</A
-> &#8212; Returns the number of arguments passed to the function.</DT
+> &#8212; 
+     Returns the number of arguments passed to the function
+    </DT
 ><DT
 ><A
 HREF="function.function-exists.html"
 >function_exists</A
-> &#8212; Return true if the given function has been defined</DT
+> &#8212; 
+     Return true if the given function has been defined
+    </DT
 ><DT
 ><A
 HREF="function.get-browser.html"
 >get_browser</A
-> &#8212; Tells what the user's browser is capable of.</DT
+> &#8212; 
+     Tells what the user's browser is capable of
+    </DT
+><DT
+><A
+HREF="function.highlight-file.html"
+>highlight_file</A
+> &#8212; Syntax highlighting of a file</DT
+><DT
+><A
+HREF="function.highlight-string.html"
+>highlight_string</A
+> &#8212; Syntax highlighting of a string</DT
 ><DT
 ><A
 HREF="function.ignore-user-abort.html"
 >ignore_user_abort</A
-> &#8212; Set whether a client disconnect should abort script execution</DT
+> &#8212; 
+     Set whether a client disconnect should abort script execution
+    </DT
 ><DT
 ><A
 HREF="function.iptcparse.html"
 >iptcparse</A
-> &#8212; Parse a binary IPTC <A
+> &#8212; 
+     Parse a binary IPTC <A
 HREF="http://www.xe.net/iptc/"
 TARGET="_top"
->      http://www.xe.net/iptc/</A
-> block into single tags.
+>http://www.xe.net/iptc/</A
+>
+     block into single tags.
     </DT
 ><DT
 ><A
@@ -178,17 +213,40 @@ HREF="function.leak.html"
 ><A
 HREF="function.pack.html"
 >pack</A
-> &#8212; pack data into binary string</DT
+> &#8212; Pack data into binary string.</DT
 ><DT
 ><A
 HREF="function.register-shutdown-function.html"
 >register_shutdown_function</A
-> &#8212; Register a function for execution on shutdown.</DT
+> &#8212; 
+     Register a function for execution on shutdown
+    </DT
+><DT
+><A
+HREF="function.restore-error-handler.html"
+>restore_error_handler</A
+> &#8212; 
+     Restores the previous error handler function
+    </DT
 ><DT
 ><A
 HREF="function.serialize.html"
 >serialize</A
-> &#8212; generates a storable representation of a value</DT
+> &#8212; 
+     Generates a storable representation of a value
+    </DT
+><DT
+><A
+HREF="function.set-error-handler.html"
+>set_error_handlers</A
+> &#8212; 
+     Sets a user-defined error handler function.  
+    </DT
+><DT
+><A
+HREF="function.show-source.html"
+>show_source</A
+> &#8212; Syntax highlighting of a file</DT
 ><DT
 ><A
 HREF="function.sleep.html"
@@ -196,19 +254,35 @@ HREF="function.sleep.html"
 > &#8212; Delay execution</DT
 ><DT
 ><A
+HREF="function.trigger-error.html"
+>trigger_error</A
+> &#8212; 
+     Generates a user-level error/warning/notice message
+    </DT
+><DT
+><A
 HREF="function.uniqid.html"
 >uniqid</A
-> &#8212; Generate a unique id.</DT
+> &#8212; Generate a unique id</DT
 ><DT
 ><A
 HREF="function.unpack.html"
 >unpack</A
-> &#8212; unpack data from binary string</DT
+> &#8212; Unpack data from binary string</DT
 ><DT
 ><A
 HREF="function.unserialize.html"
 >unserialize</A
-> &#8212; creates a PHP value from a stored representation</DT
+> &#8212; 
+     Creates a PHP value from a stored representation
+    </DT
+><DT
+><A
+HREF="function.user-error.html"
+>user_error</A
+> &#8212; 
+     Generates a user-level error/warning/notice message
+    </DT
 ><DT
 ><A
 HREF="function.usleep.html"
@@ -249,7 +323,7 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><A
-HREF="function.connection-aborted.html"
+HREF="function.create-function.html"
 >Next</A
 ></TD
 ></TR
@@ -271,7 +345,7 @@ HREF="funcref.html"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->connection_aborted</TD
+>create_function</TD
 ></TR
 ></TABLE
 ></DIV

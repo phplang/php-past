@@ -4,20 +4,23 @@
 >imap_num_msg</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
-TITLE="IMAP functions"
+TITLE="IMAP, POP3 and NNTP functions"
 HREF="ref.imap.html"><LINK
 REL="PREVIOUS"
 TITLE="imap_mail_move"
 HREF="function.imap-mail-move.html"><LINK
 REL="NEXT"
 TITLE="imap_num_recent"
-HREF="function.imap-num-recent.html"></HEAD
+HREF="function.imap-num-recent.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,35 +68,46 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.IMAP-NUM-MSG"
+NAME="function.imap-num-msg"
 >imap_num_msg</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN12951"
+NAME="AEN15467"
 ></A
->imap_num_msg -- Gives the number of messages in the current
-    mailbox</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>imap_num_msg&nbsp;--&nbsp;
+     Gives the number of messages in the current mailbox
+    </DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN12954"
+NAME="AEN15470"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int imap_num_msg</CODE
->(int stream_id);<P
+>int <B
+CLASS="function"
+>imap_num_msg</B
+></CODE
+> (int imap_stream)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Return the number of messages in the current mailbox.</P
+>&#13;     Return the number of messages in the current mailbox.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

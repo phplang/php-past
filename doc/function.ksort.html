@@ -4,20 +4,23 @@
 >ksort</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
-TITLE="Array functions"
+TITLE="Array Functions"
 HREF="ref.array.html"><LINK
 REL="PREVIOUS"
 TITLE="krsort"
 HREF="function.krsort.html"><LINK
 REL="NEXT"
 TITLE="list"
-HREF="function.list.html"></HEAD
+HREF="function.list.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,37 +68,46 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.KSORT"
+NAME="function.ksort"
 >ksort</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN4288"
+NAME="AEN4642"
 ></A
->ksort -- Sort an array by key</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>ksort&nbsp;--&nbsp;Sort an array by key</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN4291"
+NAME="AEN4645"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int ksort</CODE
->(array array);<P
+>int <B
+CLASS="function"
+>ksort</B
+></CODE
+> (array array [, int 
+       sort_flags])</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Sorts an array by key, maintaining key to data correlations. This
+>&#13;     Sorts an array by key, maintaining key to data correlations. This
      is useful mainly for associative arrays.
-
-    <TABLE
+     <TABLE
 WIDTH="100%"
 BORDER="0"
 CELLPADDING="0"
@@ -104,61 +116,118 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
 >Example 1. <B
-CLASS="FUNCTION"
->ksort()</B
+CLASS="function"
+>Ksort()</B
 > example</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->$fruits = array("d"=&#62;"lemon","a"=&#62;"orange","b"=&#62;"banana","c"=&#62;"apple");
-ksort($fruits);
-for(reset($fruits); $key = key($fruits); next($fruits)) {
-    echo "fruits[$key] = ".$fruits[$key]."\n";
-}</PRE
+CLASS="programlisting"
+>&#13;$fruits = array ("d"=&#62;"lemon", "a"=&#62;"orange", "b"=&#62;"banana", "c"=&#62;"apple");
+ksort ($fruits);
+reset ($fruits);
+while (list ($key, $val) = each ($fruits)) {
+    echo "$key -&#62; $val\n";
+}
+      </PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR
 ></TABLE
 >
-     This example would display:
-     <TT
-CLASS="COMPUTEROUTPUT"
->fruits[a] = orange
+    </P
+><P
+>&#13;     This example would display:
+    </P
+><P
+>&#13;     <DIV
+CLASS="informalexample"
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;fruits[a] = orange
 fruits[b] = banana
 fruits[c] = apple
-fruits[d] = lemon</TT
-></P
+fruits[d] = lemon
+      </PRE
+></TD
+></TR
+></TABLE
 ><P
->     See also <A
+></P
+></DIV
+>     
+    </P
+><P
+>&#13;     You may modify the behavior of the sort using the optional
+     parameter <TT
+CLASS="parameter"
+><I
+>sort_flags</I
+></TT
+>, for details 
+     see <A
+HREF="function.sort.html"
+><B
+CLASS="function"
+>sort()</B
+></A
+>.
+    </P
+><P
+>&#13;     See also <A
 HREF="function.asort.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >asort()</B
 ></A
 >, <A
 HREF="function.arsort.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >arsort()</B
 ></A
 >, 
      <A
 HREF="function.sort.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >sort()</B
 ></A
->, and <A
+>, <A
+HREF="function.natsort.html"
+><B
+CLASS="function"
+>natsort()</B
+></A
+>, and 
+     <A
 HREF="function.rsort.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >rsort()</B
 ></A
->.</P
+>.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

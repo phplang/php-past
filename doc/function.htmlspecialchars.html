@@ -4,7 +4,7 @@
 >htmlspecialchars</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="htmlentities"
 HREF="function.htmlentities.html"><LINK
 REL="NEXT"
 TITLE="implode"
-HREF="function.implode.html"></HEAD
+HREF="function.implode.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,90 +68,109 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.HTMLSPECIALCHARS"
+NAME="function.htmlspecialchars"
 >htmlspecialchars</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN25118"
+NAME="AEN33492"
 ></A
->htmlspecialchars --      Convert special characters to HTML entities
+><P
+>    (PHP3 , PHP4 )</P
+>htmlspecialchars&nbsp;--&nbsp;
+     Convert special characters to HTML entities
     </DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN25121"
+NAME="AEN33495"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->string htmlspecialchars</CODE
->(string string);<P
+>string <B
+CLASS="function"
+>htmlspecialchars</B
+></CODE
+> (string string)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Certain characters have special significance in HTML, and should
+>&#13;     Certain characters have special significance in HTML, and should
      be represented by HTML entities if they are to preserve their
      meanings. This function returns a string with these conversions
-     made.</P
+     made.
+    </P
 ><P
->     This function is useful in preventing user-supplied text from
+>&#13;     This function is useful in preventing user-supplied text from
      containing HTML markup, such as in a message board or guest book
-     application.</P
+     application.
+    </P
 ><P
->     At present, the translations that are done are:
+>&#13;     At present, the translations that are done are:
      <P
 ></P
 ><UL
 ><LI
 ><P
->        '&amp;' (ampersand) becomes '&amp;amp;'</P
+>&#13;        '&#38;' (ampersand) becomes '&#38;amp;'
+       </P
 ></LI
 ><LI
 ><P
->        '&quot;' (double quote) becomes '&amp;quot;'</P
+>&#13;        '"' (double quote) becomes '&#38;quot;'
+       </P
 ></LI
 ><LI
 ><P
->        '&lt;' (less than) becomes '&amp;lt;'</P
+>&#13;        '&#60;' (less than) becomes '&#38;lt;'
+       </P
 ></LI
 ><LI
 ><P
->        '&gt;' (greater than) becomes '&amp;gt;'</P
+>&#13;        '&#62;' (greater than) becomes '&#38;gt;'
+       </P
 ></LI
 ></UL
-></P
+>
+    </P
 ><P
->     Note that this functions does not translate anything beyond what
+>&#13;     Note that this functions does not translate anything beyond what
      is listed above. For full entity translation, see
      <A
 HREF="function.htmlentities.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >htmlentities()</B
 ></A
->.</P
+>.
+    </P
 ><P
->     See also <A
+>&#13;     See also <A
 HREF="function.htmlentities.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >htmlentities()</B
 ></A
 > and
      <A
 HREF="function.nl2br.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >nl2br()</B
 ></A
->.</P
+>.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

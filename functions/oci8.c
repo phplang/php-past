@@ -33,7 +33,7 @@
 
 #define OCI8_USE_EMALLOC 0		/* set this to 1 if you want to use the php memory manager! */
 
-/* $Id: oci8.c,v 1.132 2000/03/23 09:20:33 thies Exp $ */
+/* $Id: oci8.c,v 1.134 2000/06/08 09:51:41 thies Exp $ */
 
 /* TODO list:
  *
@@ -634,6 +634,15 @@ _oci8_close_conn(oci8_connection *connection)
 	}
 
 	if (connection->pServiceContext) {
+    	connection->error =
+        	OCITransRollback(connection->pServiceContext,
+                         	connection->pError,
+                         	(ub4)0);
+ 
+    	if (connection->error) {
+        	oci8_error(connection->pError, "failed to rollback outstanding transactions!", connection->error);
+    	}
+
 		OCIHandleFree((dvoid *) connection->pServiceContext, (ub4) OCI_HTYPE_SVCCTX);
 	}
 
@@ -1308,6 +1317,7 @@ oci8_fetch(oci8_statement *statement, ub4 nrows, char *func)
 			_php3_hash_destroy(statement->columns);
 			efree(statement->columns);
 			statement->columns = 0;
+			statement->ncolumns = 0;
 		}
 		statement->executed = 0;
 

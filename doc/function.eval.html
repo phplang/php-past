@@ -4,7 +4,7 @@
 >eval</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="die"
 HREF="function.die.html"><LINK
 REL="NEXT"
 TITLE="exit"
-HREF="function.exit.html"></HEAD
+HREF="function.exit.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,72 +68,107 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.EVAL"
+NAME="function.eval"
 >eval</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN16738"
+NAME="AEN21326"
 ></A
->eval -- Evaluate a string as PHP code</DIV
+><P
+>    (unknown)</P
+>eval&nbsp;--&nbsp;Evaluate a string as PHP code</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN16741"
+NAME="AEN21329"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->void eval</CODE
->(string code_str);<P
+>mixed <B
+CLASS="function"
+>eval</B
+></CODE
+> (string code_str)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     <B
-CLASS="FUNCTION"
+>&#13;     <B
+CLASS="function"
 >eval()</B
 > evaluates the string given in
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >code_str</I
 ></TT
 > as PHP code. Among other things,
      this can be useful for storing code in a database text field for
-     later execution.</P
+     later execution.
+    </P
 ><P
->     There are some factors to keep in mind when using
+>&#13;     There are some factors to keep in mind when using
      <B
-CLASS="FUNCTION"
+CLASS="function"
 >eval()</B
 >. Remember that the string passed must
      be valid PHP code, including things like terminating statements
      with a semicolon so the parser doesn't die on the line after the
      <B
-CLASS="FUNCTION"
+CLASS="function"
 >eval()</B
 >, and properly escaping things in
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >code_str</I
 ></TT
->.</P
+>.
+    </P
 ><P
->     Also remember that variables given values under
+>&#13;     Also remember that variables given values under
      <B
-CLASS="FUNCTION"
+CLASS="function"
 >eval()</B
 > will retain these values in the main
-     script afterwards.</P
+     script afterwards.
+    </P
 ><P
->     <TABLE
+>&#13;     A <TT
+CLASS="literal"
+>return</TT
+> statement will terminate the evaluation of 
+     the string immediatley. In PHP4 you may use <TT
+CLASS="literal"
+>return</TT
+>
+     to return a value that will become the result of the 
+     <B
+CLASS="function"
+>eval()</B
+> function while in PHP3 
+     <B
+CLASS="function"
+>eval()</B
+> was of type <TT
+CLASS="literal"
+>void</TT
+> and did 
+     never return anything.
+    </P
+><P
+>&#13;     <TABLE
 WIDTH="100%"
 BORDER="0"
 CELLPADDING="0"
@@ -139,35 +177,60 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
->Example 1. eval() example - simple text merge</B
+>Example 1. 
+       <B
+CLASS="function"
+>Eval()</B
+> example - simple text merge
+      </B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->&lt;?php
+CLASS="programlisting"
+>&#13;&#60;?php
 $string = 'cup';
 $name = 'coffee';
-$str = 'This is a $string with my $name in it.&lt;br&gt;';
+$str = 'This is a $string with my $name in it.&#60;br&#62;';
 echo $str;
-eval( "\$str = \"$str\";" );
+eval ("\$str = \"$str\";");
 echo $str;
-?&gt;
+?&#62;
       </PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR
 ></TABLE
-></P
+>
+    </P
 ><P
->     The above example will show:
-      <PRE
-CLASS="PROGRAMLISTING"
->This is a $string with my $name in it.
+>&#13;     The above example will show:
+     <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;This is a $string with my $name in it.
 This is a cup with my coffee in it.
-      </PRE
-></P
+     </PRE
+></TD
+></TR
+></TABLE
+>
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

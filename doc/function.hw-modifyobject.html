@@ -4,7 +4,7 @@
 >hw_Modifyobject</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="hw_mapid"
 HREF="function.hw-mapid.html"><LINK
 REL="NEXT"
 TITLE="hw_New_Document"
-HREF="function.hw-new-document.html"></HEAD
+HREF="function.hw-new-document.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,74 +68,83 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.HW-MODIFYOBJECT"
+NAME="function.hw-modifyobject"
 >hw_Modifyobject</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN11222"
+NAME="AEN12873"
 ></A
->hw_Modifyobject -- modifies object record</DIV
+><P
+>    (PHP3 &#62;= 3.0.7, PHP4 &#62;= 4.0b2)</P
+>hw_Modifyobject&nbsp;--&nbsp;modifies object record</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN11225"
+NAME="AEN12876"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int hw_modifyobject</CODE
->(int connection, int object_to_change, array remove, array add, int mode);<P
+>int <B
+CLASS="function"
+>hw_modifyobject</B
+></CODE
+> (int connection, int object_to_change, array remove, array add, int mode)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     This command allows to remove, add, or modify individual attributes
+>&#13;     This command allows to remove, add, or modify individual attributes
      of an object record.  The object is specified by the Object ID
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >object_to_change</I
 ></TT
 >. The first array
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >remove</I
 ></TT
 > is a list of attributes to remove.
      The second array <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >add</I
 ></TT
 > is a list of attributes
      to add. In order to modify an attribute one will have to remove
      the old one and add a new one. <B
-CLASS="FUNCTION"
+CLASS="function"
 >hw_modifyobject()</B
 >
      will always remove the attributes before it adds attributes unless
      the value of the attribute to remove is not a string or array.</P
 ><P
->     The last parameter determines if the modification is performed
+>&#13;     The last parameter determines if the modification is performed
      recursively. 1 means recurive modification. If some of the objects
      cannot be modified they will be skiped without notice.
      <A
 HREF="function.hw-error.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >hw_error()</B
 ></A
 > may not indicate an error though
      some of the objects could not be modified.</P
 ><P
->     The keys of both arrays are the attributes name. The value of each
+>&#13;     The keys of both arrays are the attributes name. The value of each
      array element can either be an array, a string or anything else.
      If it is an array
      each attribute value is constructed by the key of each element plus
@@ -149,10 +161,10 @@ CLASS="FUNCTION"
      for that attribute to e.g. 0 would not even try to remove it and
      the addition will work.</P
 ><P
->     If you would like to change the attribute 'Name' with the current
+>&#13;     If you would like to change the attribute 'Name' with the current
      value 'books' into 'articles' you will have to create two arrays
      and call <B
-CLASS="FUNCTION"
+CLASS="function"
 >hw_modifyobject()</B
 >.
      <TABLE
@@ -164,19 +176,28 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
 >Example 1. modifying an attribute</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->       // $connect is an existing connection to the Hyperwave server
+CLASS="programlisting"
+>&#13;       // $connect is an existing connection to the Hyperwave server
        // $objid is the ID of the object to modify
        $remarr = array("Name" =&#62; "books");
        $addarr = array("Name" =&#62; "articles");
        $hw_modifyobject($connect, $objid, $remarr, $addarr);
       </PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR
@@ -195,33 +216,43 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
 >Example 2. adding a completely new attribute</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->       // $connect is an existing connection to the Hyperwave server
+CLASS="programlisting"
+>&#13;       // $connect is an existing connection to the Hyperwave server
        // $objid is the ID of the object to modify
        $remarr = array("Name" =&#62; 0);
        $addarr = array("Name" =&#62; "articles");
        $hw_modifyobject($connect, $objid, $remarr, $addarr);
       </PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR
 ></TABLE
 ></P
 ><P
->     <DIV
-CLASS="NOTE"
+>&#13;     <DIV
+CLASS="note"
 ><BLOCKQUOTE
-CLASS="NOTE"
+CLASS="note"
 ><P
 ><B
 >Note: </B
->       Multilingual attributes, e.g. 'Title', can be modified in two
+>
+       Multilingual attributes, e.g. 'Title', can be modified in two
        ways. Either by providing the attributes value in its native
        form 'language':'title' or by providing an array with elements
        for each language as described above. The above example would
@@ -238,17 +269,26 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
 >Example 3. modifying Title attribute</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->       $remarr = array("Title" =&#62; "en:Books");
+CLASS="programlisting"
+>&#13;       $remarr = array("Title" =&#62; "en:Books");
        $addarr = array("Title" =&#62; "en:Articles");
        $hw_modifyobject($connect, $objid, $remarr, $addarr);
       </PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR
@@ -264,17 +304,26 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
 >Example 4. modifying Title attribute</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->       $remarr = array("Title" =&#62; array("en" =&#62; "Books"));
+CLASS="programlisting"
+>&#13;       $remarr = array("Title" =&#62; array("en" =&#62; "Books"));
        $addarr = array("Title" =&#62; array("en" =&#62; "Articles", "ge"=&#62;"Artikel"));
        $hw_modifyobject($connect, $objid, $remarr, $addarr);
       </PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR
@@ -291,26 +340,35 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
 >Example 5. removing attribute</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->       $remarr = array("Title" =&#62; "");
+CLASS="programlisting"
+>&#13;       $remarr = array("Title" =&#62; "");
        $addarr = array("Title" =&#62; "en:Articles");
        $hw_modifyobject($connect, $objid, $remarr, $addarr);
       </PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR
 ></TABLE
 >
      <DIV
-CLASS="NOTE"
+CLASS="note"
 ><BLOCKQUOTE
-CLASS="NOTE"
+CLASS="note"
 ><P
 ><B
 >Note: </B
@@ -323,25 +381,27 @@ CLASS="NOTE"
 ></DIV
 >
      <DIV
-CLASS="NOTE"
+CLASS="note"
 ><BLOCKQUOTE
-CLASS="NOTE"
+CLASS="note"
 ><P
 ><B
 >Note: </B
->       If you need to delete all attributes with a certain name you
+>
+       If you need to delete all attributes with a certain name you
        will have to pass an empty string as the attribute value.</P
 ></BLOCKQUOTE
 ></DIV
 >
     <DIV
-CLASS="NOTE"
+CLASS="note"
 ><BLOCKQUOTE
-CLASS="NOTE"
+CLASS="note"
 ><P
 ><B
 >Note: </B
->     Only the attributes 'Title', 'Description' and 'Keyword' will
+>
+     Only the attributes 'Title', 'Description' and 'Keyword' will
      properly handle the language prefix. If those attributes don't carry
      a language prefix, the prefix 'xx' will be assigned.
     </P
@@ -349,13 +409,14 @@ CLASS="NOTE"
 ></DIV
 >
     <DIV
-CLASS="NOTE"
+CLASS="note"
 ><BLOCKQUOTE
-CLASS="NOTE"
+CLASS="note"
 ><P
 ><B
 >Note: </B
->     The 'Name' attribute is somewhat special. In some cases it cannot 
+>
+     The 'Name' attribute is somewhat special. In some cases it cannot 
      be complete removed. You will get an error message 'Change of base
      attribute' (not clear when this happens). Therefore you will always
      have to add a new Name first and than remove the old one.
@@ -364,28 +425,29 @@ CLASS="NOTE"
 ></DIV
 >
     <DIV
-CLASS="NOTE"
+CLASS="note"
 ><BLOCKQUOTE
-CLASS="NOTE"
+CLASS="note"
 ><P
 ><B
 >Note: </B
->      You may not suround this function by calls to
+>
+      You may not suround this function by calls to
       <A
 HREF="function.hw-getandlock.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >hw_getandlock()</B
 ></A
 > and <A
 HREF="function.hw-unlock.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >hw_unlock()</B
 ></A
 >.
       <B
-CLASS="FUNCTION"
+CLASS="function"
 >hw_modifyobject()</B
 > does this internally.
     </P
@@ -393,7 +455,7 @@ CLASS="FUNCTION"
 ></DIV
 ></P
 ><P
->     Returns TRUE if no error occurs otherwise FALSE.</P
+>&#13;     Returns TRUE if no error occurs otherwise FALSE.</P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

@@ -23,12 +23,12 @@
    | If you did not, or have any questions about PHP licensing, please    |
    | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
-   | Authors: Andi Gutmans <andi@php.net>                                 |
+   | Authors: Andi Gutmans <andi@zend.com>                                |
    |          Zeev Suraski <zeev@zend.com>                                |
    +----------------------------------------------------------------------+
  */
 
-/* $Id: highlight.c,v 1.40 2000/02/07 23:54:49 zeev Exp $ */
+/* $Id: highlight.c,v 1.41 2000/04/10 19:29:36 andi Exp $ */
 
 #define YY_TLS_VARS
 extern char *phptext;

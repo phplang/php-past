@@ -26,7 +26,7 @@
    | Authors: Rasmus Lerdorf <rasmus@php.net>                             |
    +----------------------------------------------------------------------+
  */
-/* $Id: mime.c,v 1.61 2000/01/01 04:31:16 sas Exp $ */
+/* $Id: mime.c,v 1.63 2000/09/09 21:05:45 zeev Exp $ */
 #include <stdio.h>
 #include "php.h"
 #include "internal_functions.h"
@@ -49,7 +49,7 @@ void php3_mime_split(char *buf, int cnt, char *boundary, pval *http_post_vars)
 	char *ptr, *loc, *loc2, *s, *name, *filename, *u, *fn;
 	int len, state = 0, Done = 0, rem, urem;
 	long bytes, max_file_size = 0;
-	char *namebuf=NULL, *filenamebuf=NULL, *lbuf=NULL, *abuf=NULL;
+	char *namebuf=NULL, *filenamebuf=NULL, *lbuf=NULL, *abuf=NULL, *sbuf=NULL;
 	char sbytes[16];
 	FILE *fp;
 	int itype;
@@ -136,8 +136,10 @@ void php3_mime_split(char *buf, int cnt, char *boundary, pval *http_post_vars)
 						}
 						abuf = estrndup(namebuf, strlen(namebuf) - 2);
 						sprintf(lbuf, "%s_name[]", abuf);
+						sbuf=estrdup(abuf);
 					} else {
 						sprintf(lbuf, "%s_name", namebuf);
+						sbuf=estrdup(namebuf);
 					}
 					s = strrchr(filenamebuf, '\\');
 					if (s && s > filenamebuf) {
@@ -181,8 +183,10 @@ void php3_mime_split(char *buf, int cnt, char *boundary, pval *http_post_vars)
 				}
 				*(loc - 4) = '\0';
 
-				/* Magic function that figures everything out */
-				_php3_parse_gpc_data(ptr,namebuf,http_post_vars);
+				/* Check to make sure we are not overwriting special file upload variables */
+				if(memcmp(namebuf,sbuf,strlen(sbuf))) {
+					_php3_parse_gpc_data(ptr,namebuf,http_post_vars);
+				}
 
 				/* And a little kludge to pick out special MAX_FILE_SIZE */
 				itype = php3_check_ident_type(namebuf);
@@ -246,6 +250,11 @@ void php3_mime_split(char *buf, int cnt, char *boundary, pval *http_post_vars)
 					}
 					bytes = fwrite(ptr, 1, loc - ptr - 4, fp);
 					fclose(fp);
+					{
+						int dummy=1;
+
+						_php3_hash_add(&GLOBAL(request_info).rfc1867_uploaded_files, fn, strlen(fn)+1, &dummy, sizeof(int), NULL);
+					}
 					php3_list_do_insert(&GLOBAL(list),fn,GLOBAL(le_uploads));  /* Tell PHP about the file so the destructor can unlink it later */
 					if (bytes < (loc - ptr - 4)) {
 						php3_error(E_WARNING, "Only %d bytes were written, expected to write %ld", bytes, loc - ptr - 4);
@@ -271,6 +280,7 @@ void php3_mime_split(char *buf, int cnt, char *boundary, pval *http_post_vars)
 				break;
 		}
 	}
+	if(sbuf) efree(sbuf);
 	SAFE_RETURN;
 }
 

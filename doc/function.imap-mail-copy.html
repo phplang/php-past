@@ -4,20 +4,23 @@
 >imap_mail_copy</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
-TITLE="IMAP functions"
+TITLE="IMAP, POP3 and NNTP functions"
 HREF="ref.imap.html"><LINK
 REL="PREVIOUS"
 TITLE="imap_getsubscribed"
 HREF="function.imap-getsubscribed.html"><LINK
 REL="NEXT"
 TITLE="imap_mail_move"
-HREF="function.imap-mail-move.html"></HEAD
+HREF="function.imap-mail-move.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,65 +68,85 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.IMAP-MAIL-COPY"
+NAME="function.imap-mail-copy"
 >imap_mail_copy</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN12905"
+NAME="AEN15409"
 ></A
->imap_mail_copy -- Copy specified messages to a mailbox</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>imap_mail_copy&nbsp;--&nbsp;Copy specified messages to a mailbox</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN12908"
+NAME="AEN15412"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int imap_mail_copy</CODE
->(int imap_stream, string msglist, string mbox, int flags);<P
+>int <B
+CLASS="function"
+>imap_mail_copy</B
+></CODE
+> (int imap_stream, string msglist, string mbox [, int 
+       flags])</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Returns true on success and false on error.</P
+>&#13;     Returns true on success and false on error.
+    </P
 ><P
 > 
      Copies mail messages specified by <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >msglist</I
 ></TT
 >
      to specified mailbox. <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >msglist</I
 ></TT
 > is a range
-     not just message numbers.</P
+     not just message numbers (as described in 
+     <A
+HREF="http://www.faqs.org/rfcs/rfc2060.html"
+TARGET="_top"
+>RFC2060</A
+>).
+    </P
 ><P
->     flags is a bitmask of one or more of
+>&#13;     Flags is a bitmask of one or more of
      <P
 ></P
 ><UL
 ><LI
 ><P
->	CP_UID - the sequence numbers contain UIDS</P
+>&#13;	CP_UID - the sequence numbers contain UIDS
+       </P
 ></LI
 ><LI
 ><P
->	CP_MOVE - Delete the messages from the current mailbox after
-	copying</P
+>&#13;	CP_MOVE - Delete the messages from the current mailbox after
+	copying
+       </P
 ></LI
 ></UL
-></P
+>
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

@@ -4,7 +4,7 @@
 >PDF_put_image</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="PDF_place_image"
 HREF="function.pdf-place-image.html"><LINK
 REL="NEXT"
 TITLE="PDF_execute_image"
-HREF="function.pdf-execute-image.html"></HEAD
+HREF="function.pdf-execute-image.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,64 +68,67 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.PDF-PUT-IMAGE"
+NAME="function.pdf-put-image"
 >PDF_put_image</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN21900"
+NAME="AEN27718"
 ></A
->PDF_put_image -- Stores an image in the PDF for later use</DIV
+><P
+>    (PHP3 &#62;= 3.0.7, 4.0b2 - 4.0b4 only)</P
+>PDF_put_image&nbsp;--&nbsp;Stores an image in the PDF for later use</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN21903"
+NAME="AEN27721"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->void pdf_put_image</CODE
->(int pdf document, int image);<P
+>void <B
+CLASS="function"
+>pdf_put_image</B
+></CODE
+> (int pdf document, int image)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     The PDF_put_image function places an image
+>&#13;     The <B
+CLASS="function"
+>PDF_put_image()</B
+> function places an image
      in the PDF file without showing it. The stored image can be
-     displayed with the <A
-HREF="function.pdf-execute-image.html"
-><B
-CLASS="FUNCTION"
+     displayed with the <B
+CLASS="function"
 >PDF_execute_image()</B
-></A
 >
      function as many times as needed. This is useful when using the same
      image multiple times in order to keep the file size small. Using
-     <A
-HREF="function.pdf-put-image.html"
-><B
-CLASS="FUNCTION"
+     <B
+CLASS="function"
 >PDF_put_image()</B
-></A
 > and
-     <A
-HREF="function.pdf-execute-image.html"
-><B
-CLASS="FUNCTION"
+     <B
+CLASS="function"
 >PDF_execute_image()</B
-></A
 > is highly recommended for
      larger images (several kb) if they show up more than once in the
      document.
     <DIV
-CLASS="NOTE"
+CLASS="note"
 ><BLOCKQUOTE
-CLASS="NOTE"
+CLASS="note"
 ><P
 ><B
 >Note: </B
@@ -132,26 +138,17 @@ CLASS="NOTE"
 ></DIV
 ></P
 ><P
->     See also <A
-HREF="function.pdf-put-image.html"
-><B
-CLASS="FUNCTION"
+>&#13;     See also <B
+CLASS="function"
 >PDF_put_image()</B
-></A
 >,
-              <A
-HREF="function.pdf-place-image.html"
-><B
-CLASS="FUNCTION"
+              <B
+CLASS="function"
 >PDF_place_image()</B
-></A
 >,
-              <A
-HREF="function.pdf-execute-image.html"
-><B
-CLASS="FUNCTION"
+              <B
+CLASS="function"
 >PDF_execute_image()</B
-></A
 >.</P
 ></DIV
 ><DIV

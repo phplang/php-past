@@ -4,20 +4,23 @@
 >imap_undelete</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
-TITLE="IMAP functions"
+TITLE="IMAP, POP3 and NNTP functions"
 HREF="ref.imap.html"><LINK
 REL="PREVIOUS"
 TITLE="imap_subscribe"
 HREF="function.imap-subscribe.html"><LINK
 REL="NEXT"
 TITLE="imap_unsubscribe"
-HREF="function.imap-unsubscribe.html"></HEAD
+HREF="function.imap-unsubscribe.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,30 +68,41 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.IMAP-UNDELETE"
+NAME="function.imap-undelete"
 >imap_undelete</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN13084"
+NAME="AEN15626"
 ></A
->imap_undelete -- Unmark the message which is marked deleted</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>imap_undelete&nbsp;--&nbsp;
+     Unmark the message which is marked deleted
+    </DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN13087"
+NAME="AEN15629"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int imap_undelete</CODE
->(int imap_stream, int msg_number);<P
+>int <B
+CLASS="function"
+>imap_undelete</B
+></CODE
+> (int imap_stream, int msg_number)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
@@ -97,12 +111,21 @@ CLASS="FUNCDEF"
      which is set by <A
 HREF="function.imap-delete.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >imap_delete()</B
 ></A
->.</P
+> or
+     <A
+HREF="function.imap-mail-move.html"
+><B
+CLASS="function"
+>imap_mail_move()</B
+></A
+>.
+    </P
 ><P
->     Returns true on success and false on error.</P
+>&#13;     Returns true on success and false on error.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

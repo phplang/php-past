@@ -4,20 +4,23 @@
 >shm_detach</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
-TITLE="Semaphore and shared memory functions"
+TITLE="Semaphore and Shared Memory Functions"
 HREF="ref.sem.html"><LINK
 REL="PREVIOUS"
 TITLE="shm_attach"
 HREF="function.shm-attach.html"><LINK
 REL="NEXT"
 TITLE="shm_remove"
-HREF="function.shm-remove.html"></HEAD
+HREF="function.shm-remove.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,39 +68,48 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.SHM-DETACH"
+NAME="function.shm-detach"
 >shm_detach</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN24148"
+NAME="AEN31081"
 ></A
->shm_detach -- Disconnects from shared memory segment</DIV
+><P
+>    (PHP3 &#62;= 3.0.6, PHP4 )</P
+>shm_detach&nbsp;--&nbsp;Disconnects from shared memory segment</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN24151"
+NAME="AEN31084"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int shm_detach</CODE
->(int shm_identifier);<P
+>int <B
+CLASS="function"
+>shm_detach</B
+></CODE
+> (int shm_identifier)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     <B
-CLASS="FUNCTION"
->shm_detach()</B
+>&#13;     <B
+CLASS="function"
+>Shm_detach()</B
 > disconnects from the shared
      memory given by the <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >shm_identifier</I
 ></TT
@@ -105,11 +117,12 @@ CLASS="PARAMETER"
      by <A
 HREF="function.shm-attach.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >shm_attach()</B
 ></A
 >. Remember, that shared memory
-     still exist in the Unix system and the data is still present.</P
+     still exist in the Unix system and the data is still present.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

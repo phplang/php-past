@@ -4,7 +4,7 @@
 >hw_PipeDocument</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="hw_pConnect"
 HREF="function.hw-pconnect.html"><LINK
 REL="NEXT"
 TITLE="hw_Root"
-HREF="function.hw-root.html"></HEAD
+HREF="function.hw-root.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,36 +68,45 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.HW-PIPEDOCUMENT"
+NAME="function.hw-pipedocument"
 >hw_PipeDocument</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN11358"
+NAME="AEN13014"
 ></A
->hw_PipeDocument -- retrieve any document</DIV
+><P
+>    (PHP3 &#62;= 3.0.3, PHP4 )</P
+>hw_PipeDocument&nbsp;--&nbsp;retrieve any document</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN11361"
+NAME="AEN13017"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int hw_pipedocument</CODE
->(int connection, int objectID);<P
+>int <B
+CLASS="function"
+>hw_pipedocument</B
+></CODE
+> (int connection, int objectID)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Returns the Hyperwave document with object ID
+>&#13;     Returns the Hyperwave document with object ID
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >objectID</I
 ></TT
@@ -103,37 +115,25 @@ CLASS="PARAMETER"
      The document will be transfered via a special data connection which
      does not block the control connection.</P
 ><P
->     See also <A
-HREF="function.hw-gettext.html"
-><B
-CLASS="FUNCTION"
+>&#13;     See also <B
+CLASS="function"
 >hw_GetText()</B
-></A
 > for more on link insertion,
               <B
-CLASS="FUNCTION"
+CLASS="function"
 >hw_FreeDocument()</B
 >,
-              <A
-HREF="function.hw-documentsize.html"
-><B
-CLASS="FUNCTION"
+              <B
+CLASS="function"
 >hw_DocumentSize()</B
-></A
 >,
-              <A
-HREF="function.hw-documentbodytag.html"
-><B
-CLASS="FUNCTION"
+              <B
+CLASS="function"
 >hw_DocumentBodyTag()</B
-></A
 >,
-              <A
-HREF="function.hw-outputdocument.html"
-><B
-CLASS="FUNCTION"
+              <B
+CLASS="function"
 >hw_OutputDocument()</B
-></A
 >.</P
 ></DIV
 ><DIV

@@ -4,7 +4,7 @@
 >system</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -15,9 +15,12 @@ REL="PREVIOUS"
 TITLE="passthru"
 HREF="function.passthru.html"><LINK
 REL="NEXT"
-TITLE="GNU Recode functions"
-HREF="ref.recode.html"></HEAD
+TITLE="Pspell Functions"
+HREF="ref.pspell.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -55,7 +58,7 @@ WIDTH="10%"
 ALIGN="right"
 VALIGN="bottom"
 ><A
-HREF="ref.recode.html"
+HREF="ref.pspell.html"
 >Next</A
 ></TD
 ></TR
@@ -65,116 +68,121 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.SYSTEM"
+NAME="function.system"
 >system</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN23769"
+NAME="AEN30022"
 ></A
->system -- Execute an external program and display output</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>system&nbsp;--&nbsp;Execute an external program and display output</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN23772"
+NAME="AEN30025"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->string system</CODE
->(string command, int [<SPAN
-CLASS="OPTIONAL"
->return_var</SPAN
->]);<P
+>string <B
+CLASS="function"
+>system</B
+></CODE
+> (string command [, int 
+       return_var])</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->    <A
-HREF="function.system.html"
-><B
-CLASS="FUNCTION"
+>&#13;     <B
+CLASS="function"
 >System()</B
-></A
-> is just like the C version of the function in that it executes
-    the given <TT
-CLASS="PARAMETER"
+> is just like the C version of the
+     function in that it executes the given
+     <TT
+CLASS="parameter"
 ><I
 >command</I
 ></TT
-> and outputs the result.  If a variable is provided as
-    the second argument, then the return status code of the executed command
-    will be written to this variable.</P
+> and outputs the result.  If a
+     variable is provided as the second argument, then the return
+     status code of the executed command will be written to this
+     variable.
+    </P
 ><P
->    Note, that if you are going to allow data coming from user input to be passed to this function,
-    then you should be using the <A
-HREF="function.escapeshellcmd.html"
-><B
-CLASS="FUNCTION"
+>&#13;     Note, that if you are going to allow data coming from user input
+     to be passed to this function, then you should be using the
+     <B
+CLASS="function"
 >EscapeShellCmd()</B
-></A
-> function
-    to make sure that users cannot trick the system into executing arbitrary commands.</P
+> function to make sure that
+     users cannot trick the system into executing arbitrary
+     commands.
+    </P
 ><P
->    The <A
-HREF="function.system.html"
-><B
-CLASS="FUNCTION"
+>&#13;     Note also that if you start a program using this function and want
+     to leave it running in the background, you have to make sure that
+     the output of that program is redirected to a file or some other
+     output stream or else PHP will hang until the execution of the
+     program ends.
+    </P
+><P
+>&#13;     The <B
+CLASS="function"
 >System()</B
-></A
-> call also tries to automatically flush the web server's  output
-    buffer after each line of output if PHP is running as a server module.</P
+> call also tries to automatically
+     flush the web server's output buffer after each line of output if
+     PHP is running as a server module.
+    </P
 ><P
->	 Returns the last line of the command output on success, and false on failure.
-	</P
+>&#13;     Returns the last line of the command output on success, and false
+     on failure.
+    </P
 ><P
->    If you need to execute a command and have all the data from the command passed
-    directly back without any interference, use the <A
-HREF="function.passthru.html"
-><B
-CLASS="FUNCTION"
+>&#13;     If you need to execute a command and have all the data from the
+     command passed directly back without any interference, use the
+     <B
+CLASS="function"
 >PassThru()</B
-></A
->
-    function.
-	</P
+> function.
+    </P
 ><P
->	 See also <A
+>&#13;     See also <A
 HREF="function.exec.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >exec()</B
 ></A
 >,
-	 <A
-HREF="function.passthru.html"
-><B
-CLASS="FUNCTION"
+     <B
+CLASS="function"
 >PassThru()</B
-></A
 >, <A
 HREF="function.popen.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >popen()</B
 ></A
 >,
-	 <A
-HREF="function.escapeshellcmd.html"
-><B
-CLASS="FUNCTION"
+     <B
+CLASS="function"
 >EscapeShellCmd()</B
-></A
 >, and the <A
 HREF="language.operators.execution.html"
 >backtick operator</A
 >.
-	</P
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -207,7 +215,7 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><A
-HREF="ref.recode.html"
+HREF="ref.pspell.html"
 >Next</A
 ></TD
 ></TR
@@ -229,7 +237,7 @@ HREF="ref.exec.html"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->GNU Recode functions</TD
+>Pspell Functions</TD
 ></TR
 ></TABLE
 ></DIV

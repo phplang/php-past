@@ -4,20 +4,23 @@
 >imap_expunge</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
-TITLE="IMAP functions"
+TITLE="IMAP, POP3 and NNTP functions"
 HREF="ref.imap.html"><LINK
 REL="PREVIOUS"
 TITLE="imap_deletemailbox"
 HREF="function.imap-deletemailbox.html"><LINK
 REL="NEXT"
 TITLE="imap_fetchbody"
-HREF="function.imap-fetchbody.html"></HEAD
+HREF="function.imap-fetchbody.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,47 +68,72 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.IMAP-EXPUNGE"
+NAME="function.imap-expunge"
 >imap_expunge</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN12649"
+NAME="AEN15054"
 ></A
->imap_expunge -- Delete all messages marked for deletion</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>imap_expunge&nbsp;--&nbsp;Delete all messages marked for deletion</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN12652"
+NAME="AEN15057"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int imap_expunge</CODE
->(int imap_stream);<P
+>int <B
+CLASS="function"
+>imap_expunge</B
+></CODE
+> (int imap_stream)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
 >  
      <B
-CLASS="FUNCTION"
+CLASS="function"
 >imap_expunge()</B
 > deletes all the messages marked
      for deletion by <A
 HREF="function.imap-delete.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >imap_delete()</B
 ></A
->.</P
+>, 
+     <A
+HREF="function.imap-mail-move.html"
+><B
+CLASS="function"
+>imap_mail_move()</B
+></A
+>, or 
+     <A
+HREF="function.imap-setflag-full.html"
+><B
+CLASS="function"
+>imap_setflag_full()</B
+></A
+>.
+    </P
 ><P
->     Returns true.</P
+>&#13;     Returns true.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

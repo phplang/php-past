@@ -4,7 +4,7 @@
 >POSIX functions</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -12,12 +12,15 @@ REL="UP"
 TITLE="Function Reference"
 HREF="funcref.html"><LINK
 REL="PREVIOUS"
-TITLE="set_time_limit"
-HREF="function.set-time-limit.html"><LINK
+TITLE="get_included_files"
+HREF="function.get-included-files.html"><LINK
 REL="NEXT"
 TITLE="posix_kill"
-HREF="function.posix-kill.html"></HEAD
+HREF="function.posix-kill.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="reference"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -42,7 +45,7 @@ WIDTH="10%"
 ALIGN="left"
 VALIGN="bottom"
 ><A
-HREF="function.set-time-limit.html"
+HREF="function.get-included-files.html"
 >Prev</A
 ></TD
 ><TD
@@ -64,22 +67,22 @@ HREF="function.posix-kill.html"
 ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><DIV
-CLASS="REFERENCE"
+CLASS="reference"
 ><A
-NAME="REF.POSIX"
+NAME="ref.posix"
 ></A
 ><DIV
 CLASS="TITLEPAGE"
 ><H1
-CLASS="TITLE"
->XLIII. POSIX functions</H1
+CLASS="title"
+>XLVIII. POSIX functions</H1
 ><DIV
 CLASS="PARTINTRO"
 ><A
-NAME="AEN22691"
+NAME="AEN28707"
 ></A
 ><P
->    This module contains an interface to those functions defined in the
+>&#13;    This module contains an interface to those functions defined in the
     IEEE 1003.1 (POSIX.1) standards document which are not accessible
     through other means. POSIX.1 for example defined the open(), read(),
     write() and close() functions, too, which traditionally have been
@@ -114,43 +117,50 @@ HREF="function.posix-getppid.html"
 ><A
 HREF="function.posix-getuid.html"
 >posix_getuid</A
-> &#8212;      Return the real user ID of the current process
+> &#8212; 
+     Return the real user ID of the current process
     </DT
 ><DT
 ><A
 HREF="function.posix-geteuid.html"
 >posix_geteuid</A
-> &#8212;      Return the effective user ID of the current process
+> &#8212; 
+     Return the effective user ID of the current process
     </DT
 ><DT
 ><A
 HREF="function.posix-getgid.html"
 >posix_getgid</A
-> &#8212;      Return the real group ID of the current process
+> &#8212; 
+     Return the real group ID of the current process
     </DT
 ><DT
 ><A
 HREF="function.posix-getegid.html"
 >posix_getegid</A
-> &#8212;      Return the effective group ID of the current process
+> &#8212; 
+     Return the effective group ID of the current process
     </DT
 ><DT
 ><A
 HREF="function.posix-setuid.html"
 >posix_setuid</A
-> &#8212;      Set the effective UID of the current process
+> &#8212; 
+     Set the effective UID of the current process
     </DT
 ><DT
 ><A
 HREF="function.posix-setgid.html"
 >posix_setgid</A
-> &#8212;      Set the effective GID of the current process
+> &#8212; 
+     Set the effective GID of the current process
     </DT
 ><DT
 ><A
 HREF="function.posix-getgroups.html"
 >posix_getgroups</A
-> &#8212;      Return the group set of the current process
+> &#8212; 
+     Return the group set of the current process
     </DT
 ><DT
 ><A
@@ -161,7 +171,8 @@ HREF="function.posix-getlogin.html"
 ><A
 HREF="function.posix-getpgrp.html"
 >posix_getpgrp</A
-> &#8212;      Return the current process group identifier
+> &#8212; 
+     Return the current process group identifier
     </DT
 ><DT
 ><A
@@ -181,7 +192,7 @@ HREF="function.posix-getpgid.html"
 ><DT
 ><A
 HREF="function.posix-getsid.html"
->posix_setsid</A
+>posix_getsid</A
 > &#8212; Get the current sid of the process</DT
 ><DT
 ><A
@@ -207,7 +218,8 @@ HREF="function.posix-ttyname.html"
 ><A
 HREF="function.posix-isatty.html"
 >posix_isatty</A
-> &#8212;      Determine if a file descriptor is an interactive terminal
+> &#8212; 
+     Determine if a file descriptor is an interactive terminal
     </DT
 ><DT
 ><A
@@ -218,7 +230,8 @@ HREF="function.posix-getcwd.html"
 ><A
 HREF="function.posix-mkfifo.html"
 >posix_mkfifo</A
-> &#8212;      Create a fifo special file (a named pipe)
+> &#8212; 
+     Create a fifo special file (a named pipe)
     </DT
 ><DT
 ><A
@@ -234,7 +247,7 @@ HREF="function.posix-getgrgid.html"
 ><A
 HREF="function.posix-getpwnam.html"
 >posix_getpwnam</A
-> &#8212; Return info about a user by name</DT
+> &#8212; Return info about a user by username</DT
 ><DT
 ><A
 HREF="function.posix-getpwuid.html"
@@ -264,7 +277,7 @@ WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
 ><A
-HREF="function.set-time-limit.html"
+HREF="function.get-included-files.html"
 >Prev</A
 ></TD
 ><TD
@@ -289,7 +302,7 @@ HREF="function.posix-kill.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->set_time_limit</TD
+>get_included_files</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"

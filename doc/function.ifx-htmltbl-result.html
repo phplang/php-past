@@ -4,7 +4,7 @@
 >ifx_htmltbl_result</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="ifx_fetch_row"
 HREF="function.ifx-fetch-row.html"><LINK
 REL="NEXT"
 TITLE="ifx_fieldtypes"
-HREF="function.ifx-fieldtypes.html"></HEAD
+HREF="function.ifx-fieldtypes.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,47 +68,56 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.IFX-HTMLTBL-RESULT"
+NAME="function.ifx-htmltbl-result"
 >ifx_htmltbl_result</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN13824"
+NAME="AEN16648"
 ></A
->ifx_htmltbl_result -- Formats all rows of a query into a HTML table</DIV
+><P
+>    (PHP3 &#62;= 3.0.3, PHP4 )</P
+>ifx_htmltbl_result&nbsp;--&nbsp;
+     Formats all rows of a query into a HTML table
+    </DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN13827"
+NAME="AEN16651"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int ifx_htmltbl_result</CODE
->(int result_id, string [<SPAN
-CLASS="OPTIONAL"
->html_table_options</SPAN
->]);<P
+>int <B
+CLASS="function"
+>ifx_htmltbl_result</B
+></CODE
+> (int result_id [, string 
+       html_table_options])</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Returns the number of rows fetched or FALSE on error.
+>&#13;     Returns the number of rows fetched or FALSE on error.
     </P
 ><P
->     Formats all rows of the <TT
-CLASS="PARAMETER"
+>&#13;     Formats all rows of the <TT
+CLASS="parameter"
 ><I
 >result_id</I
 ></TT
 > query
      into a html table. The optional second argument is a string of
-     &lt;table&gt; tag options
+     &#60;table&#62; tag options
     </P
 ><TABLE
 WIDTH="100%"
@@ -116,22 +128,28 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
 >Example 1. Informix results as HTML table</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->$rid = ifx_prepare ("select * from emp where name like " . $name,
+CLASS="programlisting"
+>&#13;$rid = ifx_prepare ("select * from emp where name like " . $name,
                      $connid, IFX_SCROLL);
 if (! $rid) {
    ... error ...
 }
 $rowcount = ifx_affected_rows ($rid);
 if ($rowcount &#62; 1000) {
-    printf ("Too many rows in result set (%d)\n&lt;br&#62;", $rowcount);
-    die ("Please restrict your query&lt;br&#62;\n");
+    printf ("Too many rows in result set (%d)\n&#60;br&#62;", $rowcount);
+    die ("Please restrict your query&#60;br&#62;\n");
 }
 if (! ifx_do($rid) {
   ... error ...
@@ -140,7 +158,10 @@ if (! ifx_do($rid) {
 ifx_htmltbl_result ($rid, "border=\"2\"");
 
 ifx_free_result($rid);
-      </PRE
+     </PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR

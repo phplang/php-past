@@ -26,7 +26,7 @@
    | Authors: Rasmus Lerdorf <rasmus@lerdorf.on.ca>                       |
    +----------------------------------------------------------------------+
  */
-/* $Id: head.c,v 1.125 2000/02/20 22:21:04 eschmid Exp $ */
+/* $Id: head.c,v 1.126 2000/04/28 17:20:01 hholzgra Exp $ */
 #include <stdio.h>
 #include "php.h"
 #include "internal_functions.h"
@@ -111,6 +111,13 @@ PHPAPI void _php3_Header(char *strHeader)
 	char temp2[32];
 #endif
 TLS_VARS;
+
+        for(r=strHeader;*r;r++) {}
+        for(--r;r>=strHeader;--r)
+		if(isspace(*r))
+			*r='\0';
+		else
+			break;
 
 	if (GLOBAL(php3_HeaderPrinted) == 1) {
 		php3_error(E_WARNING, "Cannot add more header information - the header was already sent "

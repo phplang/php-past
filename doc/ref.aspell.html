@@ -4,7 +4,7 @@
 >Aspell functions</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="usort"
 HREF="function.usort.html"><LINK
 REL="NEXT"
 TITLE="aspell_new"
-HREF="function.aspell-new.html"></HEAD
+HREF="function.aspell-new.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="reference"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -64,32 +67,53 @@ HREF="function.aspell-new.html"
 ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><DIV
-CLASS="REFERENCE"
+CLASS="reference"
 ><A
-NAME="REF.ASPELL"
+NAME="ref.aspell"
 ></A
 ><DIV
 CLASS="TITLEPAGE"
 ><H1
-CLASS="TITLE"
->V. Aspell functions</H1
+CLASS="title"
+>III. Aspell functions</H1
 ><DIV
 CLASS="PARTINTRO"
 ><A
-NAME="AEN4592"
+NAME="AEN5085"
 ></A
 ><P
->    The <B
-CLASS="FUNCTION"
+>&#13;    The <B
+CLASS="function"
 >aspell()</B
 > functions allows you to check the
-    spelling on a word and offer suggestions.</P
+    spelling on a word and offer suggestions.
+   </P
+><DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
 ><P
->    You need the aspell library, available from: <A
-HREF="http://metalab.unc.edu/kevina/aspell/"
+><B
+>Note: </B
+>
+    aspell works only with very old (up to .27.* or so) versions of aspell
+	library. Neither this module, nor those versions of aspell library are
+	supported any longer. If you want to use spell-checking capabilities in
+	php, use <A
+HREF="ref.pspell.html"
+>pspell</A
+> instead. It uses
+	pspell library and works with newer versions of aspell.
+   </P
+></BLOCKQUOTE
+></DIV
+><P
+>&#13;    You need the aspell library, available from: <A
+HREF="http://aspell.sourceforge.net/"
 TARGET="_top"
->http://metalab.unc.edu/kevina/aspell/</A
-></P
+>http://aspell.sourceforge.net/</A
+>.
+   </P
 ></DIV
 ><DIV
 CLASS="TOC"
@@ -102,23 +126,24 @@ CLASS="TOC"
 ><A
 HREF="function.aspell-new.html"
 >aspell_new</A
-> &#8212; load a new dictionary</DT
+> &#8212; Load a new dictionary</DT
 ><DT
 ><A
 HREF="function.aspell-check.html"
 >aspell_check</A
-> &#8212; check a word</DT
+> &#8212; Check a word</DT
 ><DT
 ><A
 HREF="function.aspell-check-raw.html"
 >aspell_check-raw</A
-> &#8212; check a word without changing its case or trying to
-    trim it</DT
+> &#8212; 
+     Check a word without changing its case or trying to trim it
+    </DT
 ><DT
 ><A
 HREF="function.aspell-suggest.html"
 >aspell_suggest</A
-> &#8212; suggest spellings of a word</DT
+> &#8212; Suggest spellings of a word</DT
 ></DL
 ></DIV
 ></DIV

@@ -23,12 +23,12 @@
    | If you did not, or have any questions about PHP licensing, please    |
    | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
-   | Authors: Andi Gutmans <andi@php.net>                                 |
+   | Authors: Andi Gutmans <andi@zend.com>                                |
    |          Zeev Suraski <zeev@zend.com>                                |
    |          Rasmus Lerdorf <rasmus@php.net>                             |
    +----------------------------------------------------------------------+
  */
-/* $Id: datetime.c,v 1.85 2000/02/25 17:16:41 sas Exp $ */
+/* $Id: datetime.c,v 1.88 2000/07/14 01:10:49 rasmus Exp $ */
 #include "php.h"
 #include "internal_functions.h"
 #include "operators.h"
@@ -490,7 +490,7 @@ char *php3_std_date(time_t t)
 	tm1 = gmtime(&t);
 	str = emalloc(81);
 	if (php3_ini.y2k_compliance) {
-		snprintf(str, 80, "%s, %02d %s %04d %02d:%02d:%02d GMT",
+		snprintf(str, 80, "%s, %02d-%s-%04d %02d:%02d:%02d GMT",
 				day_short_names[tm1->tm_wday],
 				tm1->tm_mday,
 				mon_short_names[tm1->tm_mon],
@@ -498,7 +498,7 @@ char *php3_std_date(time_t t)
 				tm1->tm_hour, tm1->tm_min, tm1->tm_sec);
 	} else {
 		snprintf(str, 80, "%s, %02d-%s-%02d %02d:%02d:%02d GMT",
-				day_full_names[tm1->tm_wday],
+				day_short_names[tm1->tm_wday],
 				tm1->tm_mday,
 				mon_short_names[tm1->tm_mon],
 				((tm1->tm_year)%100),

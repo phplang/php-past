@@ -4,7 +4,7 @@
 >mssql_pconnect</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="mssql_num_rows"
 HREF="function.mssql-num-rows.html"><LINK
 REL="NEXT"
 TITLE="mssql_query"
-HREF="function.mssql-query.html"></HEAD
+HREF="function.mssql-query.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,51 +68,69 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.MSSQL-PCONNECT"
+NAME="function.mssql-pconnect"
 >mssql_pconnect</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN16531"
+NAME="AEN21064"
 ></A
->mssql_pconnect -- open persistent MS SQL connection</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>mssql_pconnect&nbsp;--&nbsp;Open persistent MS SQL connection</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN16534"
+NAME="AEN21067"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int mssql_pconnect</CODE
->(string servername, string username, string password);<P
+>int <B
+CLASS="function"
+>mssql_pconnect</B
+></CODE
+> ([string 
+       servername [, string 
+       username [, string 
+       password]]])</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
 > 
      Returns: A positive MS SQL persistent link identifier on success,
-     or false on error</P
+     or false on error.
+    </P
 ><P
->     mssql_pconnect() acts very much like
+>&#13;     <B
+CLASS="function"
+>Mssql_pconnect()</B
+> acts very much like
      <A
 HREF="function.mssql-connect.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >mssql_connect()</B
 ></A
-> with two major differences.</P
+> with two major differences.
+    </P
 ><P
 > 
      First, when connecting, the function would first try to find a
      (persistent) link that's already open with the same host,
      username and password.  If one is found, an identifier for it
-     will be returned instead of opening a new connection.</P
+     will be returned instead of opening a new connection.
+    </P
 ><P
 > 
      Second, the connection to the SQL server will not be closed when
@@ -117,17 +138,19 @@ CLASS="FUNCTION"
      open for future use (<A
 HREF="function.mssql-close.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >mssql_close()</B
 ></A
 > will not
-     close links established by <TT
-CLASS="LITERAL"
->mssql_pconnect()</TT
->).</P
+     close links established by <B
+CLASS="function"
+>mssql_pconnect()</B
+>).
+    </P
 ><P
 > 
-     This type of links is therefore called 'persistent'.</P
+     This type of links is therefore called 'persistent'.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

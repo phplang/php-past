@@ -4,7 +4,7 @@
 >Ora_Parse</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="Ora_Open"
 HREF="function.ora-open.html"><LINK
 REL="NEXT"
 TITLE="Ora_Rollback"
-HREF="function.ora-rollback.html"></HEAD
+HREF="function.ora-rollback.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,36 +68,68 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.ORA-PARSE"
+NAME="function.ora-parse"
 >Ora_Parse</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN19947"
+NAME="AEN25588"
 ></A
->Ora_Parse -- parse an SQL statement</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>Ora_Parse&nbsp;--&nbsp;parse an SQL statement</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN19950"
+NAME="AEN25591"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int ora_parse</CODE
->(int cursor_ind, string sql_statement, int defer);<P
+>int <B
+CLASS="function"
+>ora_parse</B
+></CODE
+> (int cursor_ind, string sql_statement, int defer)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     This function parses an SQL statement or a PL/SQL block and
-     associates it with the given cursor.  Returns 0 on success or -1 on
-     error.</P
+>&#13;     This function parses an SQL statement or a PL/SQL block and
+     associates it with the given cursor. Returns 0 on success or -1 on
+     error.
+    </P
+><P
+>&#13;     See also <A
+HREF="function.ora-exec.html"
+><B
+CLASS="function"
+>ora_exec()</B
+></A
+>,
+     <A
+HREF="function.ora-fetch.html"
+><B
+CLASS="function"
+>ora_fetch()</B
+></A
+>, and <A
+HREF="function.ora-do.html"
+><B
+CLASS="function"
+>ora_do()</B
+></A
+>.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

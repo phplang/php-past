@@ -23,11 +23,11 @@
    | If you did not, or have any questions about PHP licensing, please    |
    | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
-   | Modified for PHP by Andi Gutmans <andi@php.net>                      |
+   | Modified for PHP by Andi Gutmans <andi@zend.com>                     |
    +----------------------------------------------------------------------+
  */
 
-/* $Id: number.h,v 1.19 2000/01/01 04:44:09 sas Exp $
+/* $Id: number.h,v 1.20 2000/04/10 19:29:37 andi Exp $
    Arbitrary precision numbers header file. */
 
 /*  This file is part of GNU bc.

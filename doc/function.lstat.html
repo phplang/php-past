@@ -4,7 +4,7 @@
 >lstat</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -15,9 +15,12 @@ REL="PREVIOUS"
 TITLE="stat"
 HREF="function.stat.html"><LINK
 REL="NEXT"
-TITLE="symlink"
-HREF="function.symlink.html"></HEAD
+TITLE="realpath"
+HREF="function.realpath.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -55,7 +58,7 @@ WIDTH="10%"
 ALIGN="right"
 VALIGN="bottom"
 ><A
-HREF="function.symlink.html"
+HREF="function.realpath.html"
 >Next</A
 ></TD
 ></TR
@@ -65,51 +68,64 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.LSTAT"
+NAME="function.lstat"
 >lstat</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN9377"
+NAME="AEN10759"
 ></A
->lstat -- give information about a file or symbolic link</DIV
+><P
+>    (PHP3 &#62;= 3.0.4, PHP4 )</P
+>lstat&nbsp;--&nbsp;
+     Gives information about a file or symbolic link
+    </DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN9380"
+NAME="AEN10762"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->array lstat</CODE
->(string filename);<P
+>array <B
+CLASS="function"
+>lstat</B
+></CODE
+> (string filename)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Gathers the statistics of the file or symbolic link named by filename.
-     This function is identical to the <A
+>&#13;     Gathers the statistics of the file or symbolic link named by
+     filename.  This function is identical to the
+     <A
 HREF="function.stat.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >stat()</B
 ></A
-> function
-     except that if the <TT
-CLASS="PARAMETER"
+> function except that if the
+     <TT
+CLASS="parameter"
 ><I
 >filename</I
 ></TT
-> parameter is a
-     symbolic link, the status of the symbolic link is returned, not
-     the status of the file pointed to by the symbolic link.</P
+> parameter is a symbolic link, the
+     status of the symbolic link is returned, not the status of the
+     file pointed to by the symbolic link.
+    </P
 ><P
->     Returns an array with the statistics of the file with the
+>&#13;     Returns an array with the statistics of the file with the
      following elements:
      <P
 ></P
@@ -168,14 +184,15 @@ TYPE="1"
      * - only valid on systems supporting the st_blksize type--other
      systems (i.e. Windows) return -1</P
 ><P
->     The results of this function are cached. See
+>&#13;     The results of this function are cached. See
      <A
 HREF="function.clearstatcache.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >clearstatcache()</B
 ></A
-> for more details.</P
+> for more details.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -208,7 +225,7 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><A
-HREF="function.symlink.html"
+HREF="function.realpath.html"
 >Next</A
 ></TD
 ></TR
@@ -230,7 +247,7 @@ HREF="ref.filesystem.html"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->symlink</TD
+>realpath</TD
 ></TR
 ></TABLE
 ></DIV

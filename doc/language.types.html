@@ -4,7 +4,7 @@
 >Types</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="Comments"
 HREF="language.basic-syntax.comments.html"><LINK
 REL="NEXT"
 TITLE="Floating point numbers"
-HREF="language.types.double.html"></HEAD
+HREF="language.types.double.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="chapter"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -64,10 +67,10 @@ HREF="language.types.double.html"
 ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><DIV
-CLASS="CHAPTER"
+CLASS="chapter"
 ><H1
 ><A
-NAME="LANGUAGE.TYPES"
+NAME="language.types"
 >Chapter 6. Types</A
 ></H1
 ><DIV
@@ -79,7 +82,7 @@ CLASS="TOC"
 ></DT
 ><DT
 ><A
-HREF="language.types.html#LANGUAGE.TYPES.INTEGER"
+HREF="language.types.html#language.types.integer"
 >Integers</A
 ></DT
 ><DT
@@ -105,19 +108,18 @@ HREF="language.types.object.html"
 ><DT
 ><A
 HREF="language.types.type-juggling.html"
->Type juggling</A
+>Type Juggling</A
 ></DT
 ></DL
 ></DIV
 ><P
->    PHP supports the following types:
-
+>&#13;   PHP supports the following types:
    <P
 ></P
 ><UL
 ><LI
 ><P
->      <A
+>&#13;      <A
 HREF="language.types.array.html"
 >array</A
 >
@@ -125,23 +127,24 @@ HREF="language.types.array.html"
 ></LI
 ><LI
 ><P
->      <A
+>&#13;      <A
 HREF="language.types.double.html"
->floating-point numbers</A
+>floating-point numbers
+      </A
 >
      </P
 ></LI
 ><LI
 ><P
->      <A
-HREF="language.types.html#LANGUAGE.TYPES.INTEGER"
+>&#13;      <A
+HREF="language.types.html#language.types.integer"
 >integer</A
 >
      </P
 ></LI
 ><LI
 ><P
->      <A
+>&#13;      <A
 HREF="language.types.object.html"
 >object</A
 >
@@ -149,7 +152,7 @@ HREF="language.types.object.html"
 ></LI
 ><LI
 ><P
->      <A
+>&#13;      <A
 HREF="language.types.string.html"
 >string</A
 >
@@ -159,26 +162,26 @@ HREF="language.types.string.html"
 >
   </P
 ><P
->   The type of a variable is usually not set by the programmer;
+>&#13;   The type of a variable is usually not set by the programmer;
    rather, it is decided at runtime by PHP depending on the context in
    which that variable is used.
   </P
 ><P
->   If you would like to force a variable to be converted to a certain
+>&#13;   If you would like to force a variable to be converted to a certain
    type, you may either <A
-HREF="language.types.type-juggling.html#LANGUAGE.TYPES.TYPECASTING"
+HREF="language.types.type-juggling.html#language.types.typecasting"
 >cast</A
 > the variable or
    use the <A
 HREF="function.settype.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >settype()</B
 ></A
 > function on it.
   </P
 ><P
->   Note that a variable may behave in different manners in certain
+>&#13;   Note that a variable may behave in different manners in certain
    situations, depending on what type it is at the time. For more
    information, see the section on <A
 HREF="language.types.type-juggling.html"
@@ -186,30 +189,42 @@ HREF="language.types.type-juggling.html"
 >.
   </P
 ><DIV
-CLASS="SECT1"
+CLASS="sect1"
 ><H1
-CLASS="SECT1"
+CLASS="sect1"
 ><A
-NAME="LANGUAGE.TYPES.INTEGER"
+NAME="language.types.integer"
 >Integers</A
 ></H1
 ><P
->    Integers can be specified using any of the following syntaxes:
+>&#13;    Integers can be specified using any of the following syntaxes:
     <DIV
-CLASS="INFORMALEXAMPLE"
+CLASS="informalexample"
 ><P
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->$a = 1234; # decimal number
+CLASS="programlisting"
+>&#13;$a = 1234; # decimal number
 $a = -123; # a negative number
 $a = 0123; # octal number (equivalent to 83 decimal)
 $a = 0x12; # hexadecimal number (equivalent to 18 decimal)
      </PRE
+></TD
+></TR
+></TABLE
 ><P
 ></P
 ></DIV
 >
+    The size of an integer is platform-dependent, although a 
+    maximum value of about 2 billion is the usual value 
+    (that's 32 bits signed).
    </P
 ></DIV
 ></DIV

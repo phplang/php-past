@@ -4,20 +4,23 @@
 >icap_snooze</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
-TITLE="ICAP functions"
+TITLE="ICAP Functions"
 HREF="ref.icap.html"><LINK
 REL="PREVIOUS"
 TITLE="icap_delete_event"
 HREF="function.icap-delete-event.html"><LINK
 REL="NEXT"
 TITLE="icap_list_alarms"
-HREF="function.icap-list-alarms.html"></HEAD
+HREF="function.icap-list-alarms.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,43 +68,57 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.ICAP-SNOOZE"
+NAME="function.icap-snooze"
 >icap_snooze</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN9988"
+NAME="AEN13288"
 ></A
->icap_snooze -- turn off an alarm for an event</DIV
+><P
+>    (PHP4 &#62;= 4.0b4)</P
+>icap_snooze&nbsp;--&nbsp;Snooze an alarm</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN9991"
+NAME="AEN13291"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int icap_snooze</CODE
->(int uid);<P
+>string <B
+CLASS="function"
+>icap_snooze</B
+></CODE
+> (int stream_id, int uid)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
 >  
      <B
-CLASS="FUNCTION"
->icap_snooze()</B
-> turns off an alarm for a
-     calendar event specified by the uid.
+CLASS="function"
+>Icap_snooze()</B
+> turns on an alarm for a
+     calendar event specified by the <TT
+CLASS="parameter"
+><I
+>uid</I
+></TT
+>.
     </P
 ><P
->     Returns true.
-   </P
+>&#13;     Returns true.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

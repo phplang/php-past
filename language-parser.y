@@ -25,13 +25,13 @@
    | If you did not, or have any questions about PHP licensing, please    |
    | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
-   | Authors: Andi Gutmans <andi@php.net>                                 |
+   | Authors: Andi Gutmans <andi@zend.com>                                |
    |          Zeev Suraski <zeev@zend.com>                                |
    +----------------------------------------------------------------------+
 */
 
 
-/* $Id: language-parser.y,v 1.184 2000/02/07 23:54:50 zeev Exp $ */
+/* $Id: language-parser.y,v 1.186 2000/08/11 22:24:55 martin Exp $ */
 
 
 /* 
@@ -444,7 +444,7 @@ class_statement_list:
 
 
 class_statement:
-		VAR class_variable_decleration ';'
+		VAR class_variable_declaration ';'
 	|	OLD_FUNCTION STRING { start_function_decleration(_INLINE_TLS_VOID); } 
 			parameter_list '(' statement_list ')' ';' { end_function_decleration(&$1,&$2 _INLINE_TLS); }
 	|	FUNCTION STRING '(' { start_function_decleration(_INLINE_TLS_VOID); }
@@ -453,9 +453,9 @@ class_statement:
 ;
 
 
-class_variable_decleration:
-		class_variable_decleration ',' '$' varname_scalar { declare_class_variable(&$4,NULL _INLINE_TLS); }
-	|	class_variable_decleration ',' '$' varname_scalar '=' expr { declare_class_variable(&$4,&$6 _INLINE_TLS); }
+class_variable_declaration:
+		class_variable_declaration ',' '$' varname_scalar { declare_class_variable(&$4,NULL _INLINE_TLS); }
+	|	class_variable_declaration ',' '$' varname_scalar '=' expr { declare_class_variable(&$4,&$6 _INLINE_TLS); }
 	|	'$' varname_scalar { declare_class_variable(&$2,NULL _INLINE_TLS); }
 	|	'$' varname_scalar '=' expr { declare_class_variable(&$2,&$4 _INLINE_TLS); }
 ;

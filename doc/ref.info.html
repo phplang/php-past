@@ -4,7 +4,7 @@
 >PHP options &#38; information</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -12,12 +12,15 @@ REL="UP"
 TITLE="Function Reference"
 HREF="funcref.html"><LINK
 REL="PREVIOUS"
-TITLE="Pattern Syntax"
-HREF="pcre.pattern.syntax.html"><LINK
+TITLE="pfpro_version"
+HREF="function.pfpro-version.html"><LINK
 REL="NEXT"
-TITLE="error_log"
-HREF="function.error-log.html"></HEAD
+TITLE="assert"
+HREF="function.assert.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="reference"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -42,7 +45,7 @@ WIDTH="10%"
 ALIGN="left"
 VALIGN="bottom"
 ><A
-HREF="pcre.pattern.syntax.html"
+HREF="function.pfpro-version.html"
 >Prev</A
 ></TD
 ><TD
@@ -55,7 +58,7 @@ WIDTH="10%"
 ALIGN="right"
 VALIGN="bottom"
 ><A
-HREF="function.error-log.html"
+HREF="function.assert.html"
 >Next</A
 ></TD
 ></TR
@@ -64,15 +67,15 @@ HREF="function.error-log.html"
 ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><DIV
-CLASS="REFERENCE"
+CLASS="reference"
 ><A
-NAME="REF.INFO"
+NAME="ref.info"
 ></A
 ><DIV
 CLASS="TITLEPAGE"
 ><H1
-CLASS="TITLE"
->XLII. PHP options &#38; information</H1
+CLASS="title"
+>XLVII. PHP options &#38; information</H1
 ><DIV
 CLASS="TOC"
 ><DL
@@ -80,6 +83,16 @@ CLASS="TOC"
 ><B
 >Table of Contents</B
 ></DT
+><DT
+><A
+HREF="function.assert.html"
+>assert</A
+> &#8212; Checks if assertion is false</DT
+><DT
+><A
+HREF="function.assert_options.html"
+>assert-options</A
+> &#8212; Set/get the various assert flags</DT
 ><DT
 ><A
 HREF="function.error-log.html"
@@ -104,22 +117,31 @@ HREF="function.getenv.html"
 ><A
 HREF="function.get-cfg-var.html"
 >get_cfg_var</A
-> &#8212; Get the value of a PHP configuration option.</DT
+> &#8212; 
+     Get the value of a PHP configuration option.
+    </DT
 ><DT
 ><A
 HREF="function.get-current-user.html"
 >get_current_user</A
-> &#8212; Get the name of the owner of the current PHP script.</DT
+> &#8212; 
+     Get the name of the owner of the current PHP script.
+    </DT
 ><DT
 ><A
 HREF="function.get-magic-quotes-gpc.html"
 >get_magic_quotes_gpc</A
-> &#8212; Get the current active configuration setting of magic quotes gpc.</DT
+> &#8212; 
+     Get the current active configuration setting of magic quotes gpc.
+    </DT
 ><DT
 ><A
 HREF="function.get-magic-quotes-runtime.html"
 >get_magic_quotes_runtime</A
-> &#8212; Get the current active configuration setting of magic_quotes_runtime.</DT
+> &#8212; 
+     Get the current active configuration setting of
+     magic_quotes_runtime.
+    </DT
 ><DT
 ><A
 HREF="function.getlastmod.html"
@@ -147,6 +169,11 @@ HREF="function.getrusage.html"
 > &#8212; Get the current resource usages.</DT
 ><DT
 ><A
+HREF="function.phpcredits.html"
+>phpcredits</A
+> &#8212; Prints out the credits for PHP.</DT
+><DT
+><A
 HREF="function.phpinfo.html"
 >phpinfo</A
 > &#8212; Output lots of PHP information.</DT
@@ -157,6 +184,18 @@ HREF="function.phpversion.html"
 > &#8212; Get the current PHP version.</DT
 ><DT
 ><A
+HREF="function.php-logo-guid.html"
+>php_logo_guid</A
+> &#8212; Get the logo guid</DT
+><DT
+><A
+HREF="function.php-sapi-name.html"
+>php_sapi_name</A
+> &#8212; 
+     Returns the type of interface between web server and PHP
+    </DT
+><DT
+><A
 HREF="function.putenv.html"
 >putenv</A
 > &#8212; Set the value of an environment variable.</DT
@@ -164,12 +203,51 @@ HREF="function.putenv.html"
 ><A
 HREF="function.set-magic-quotes-runtime.html"
 >set_magic_quotes_runtime</A
-> &#8212; Set the current active configuration setting of magic_quotes_runtime.</DT
+> &#8212; 
+     Set the current active configuration setting of
+     magic_quotes_runtime.
+    </DT
 ><DT
 ><A
 HREF="function.set-time-limit.html"
 >set_time_limit</A
 > &#8212; limit the maximum execution time</DT
+><DT
+><A
+HREF="function.zend-logo-guid.html"
+>zend_logo_guid</A
+> &#8212; Get the zend guid</DT
+><DT
+><A
+HREF="function.get-loaded-extensions.html"
+>get_loaded_extensions</A
+> &#8212; 
+     Returns an array with the names of all modules compiled and
+     loaded
+    </DT
+><DT
+><A
+HREF="function.get-extension-funcs.html"
+>get_extension_funcs</A
+> &#8212; 
+     Returns an array with the names of the functions of a module
+    </DT
+><DT
+><A
+HREF="function.get-required-files.html"
+>get_required_files</A
+> &#8212; 
+     Returns an array with the names of the files require_once()'d in
+     a script
+    </DT
+><DT
+><A
+HREF="function.get-included-files.html"
+>get_included_files</A
+> &#8212; 
+     Returns an array with the names of the files include_once()'d in
+     a script
+    </DT
 ></DL
 ></DIV
 ></DIV
@@ -189,7 +267,7 @@ WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
 ><A
-HREF="pcre.pattern.syntax.html"
+HREF="function.pfpro-version.html"
 >Prev</A
 ></TD
 ><TD
@@ -205,7 +283,7 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><A
-HREF="function.error-log.html"
+HREF="function.assert.html"
 >Next</A
 ></TD
 ></TR
@@ -214,7 +292,7 @@ HREF="function.error-log.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->Pattern Syntax</TD
+>pfpro_version</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"
@@ -227,7 +305,7 @@ HREF="funcref.html"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->error_log</TD
+>assert</TD
 ></TR
 ></TABLE
 ></DIV

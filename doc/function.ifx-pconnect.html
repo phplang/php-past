@@ -4,7 +4,7 @@
 >ifx_pconnect</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="ifx_connect"
 HREF="function.ifx-connect.html"><LINK
 REL="NEXT"
 TITLE="ifx_close"
-HREF="function.ifx-close.html"></HEAD
+HREF="function.ifx-close.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,66 +68,68 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.IFX-PCONNECT"
+NAME="function.ifx-pconnect"
 >ifx_pconnect</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN13548"
+NAME="AEN16362"
 ></A
->ifx_pconnect -- Open persistent Informix connection</DIV
+><P
+>    (PHP3 &#62;= 3.0.3, PHP4 )</P
+>ifx_pconnect&nbsp;--&nbsp;Open persistent Informix connection</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN13551"
+NAME="AEN16365"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int ifx_pconnect</CODE
->(string [<SPAN
-CLASS="OPTIONAL"
->database</SPAN
->]
-                      , string [<SPAN
-CLASS="OPTIONAL"
->userid</SPAN
->]
-                      , string [<SPAN
-CLASS="OPTIONAL"
->password</SPAN
->]
-                      );<P
+>int <B
+CLASS="function"
+>ifx_pconnect</B
+></CODE
+> ([string 
+       database [, string 
+       userid [, string 
+       password]]])</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
 > 
      Returns: A positive Informix persistent link identifier on success,
-     or false on error</P
+     or false on error
+    </P
 ><P
->     <B
-CLASS="FUNCTION"
+>&#13;     <B
+CLASS="function"
 >ifx_pconnect()</B
 > acts very much like
      <A
 HREF="function.ifx-connect.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >ifx_connect()</B
 ></A
-> with two major differences.</P
+> with two major differences.
+    </P
 ><P
 > 
      This function behaves exactly like <A
 HREF="function.ifx-connect.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >ifx_connect()</B
 ></A
 >
@@ -132,7 +137,8 @@ CLASS="FUNCTION"
      First, when connecting, the function would first try to find a
      (persistent) link that's already open with the same host,
      username and password.  If one is found, an identifier for it
-     will be returned instead of opening a new connection.</P
+     will be returned instead of opening a new connection.
+    </P
 ><P
 > 
      Second, the connection to the SQL server will not be closed when
@@ -140,26 +146,28 @@ CLASS="FUNCTION"
      open for future use (<A
 HREF="function.ifx-close.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >ifx_close()</B
 ></A
 > will not
      close links established by <B
-CLASS="FUNCTION"
+CLASS="function"
 >ifx_pconnect()</B
->).</P
+>).
+    </P
 ><P
 > 
-     This type of links is therefore called 'persistent'.</P
+     This type of links is therefore called 'persistent'.
+    </P
 ><P
->     See also:  
-     <A
+>&#13;     See also: <A
 HREF="function.ifx-connect.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >ifx_connect()</B
 ></A
->.</P
+>.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

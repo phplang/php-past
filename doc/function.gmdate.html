@@ -4,7 +4,7 @@
 >gmdate</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="gettimeofday"
 HREF="function.gettimeofday.html"><LINK
 REL="NEXT"
 TITLE="gmmktime"
-HREF="function.gmmktime.html"></HEAD
+HREF="function.gmmktime.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,44 +68,52 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.GMDATE"
+NAME="function.gmdate"
 >gmdate</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN7170"
+NAME="AEN8383"
 ></A
->gmdate -- format a GMT/CUT date/time</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>gmdate&nbsp;--&nbsp;Format a GMT/CUT date/time</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN7173"
+NAME="AEN8386"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->string gmdate</CODE
->(string format, int timestamp);<P
+>string <B
+CLASS="function"
+>gmdate</B
+></CODE
+> (string format, int timestamp)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Identical to the <A
+>&#13;     Identical to the <A
 HREF="function.date.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >date()</B
 ></A
->
-     function except that the time returned is Greenwich Mean Time
-     (GMT). For example, when run in Finland (GMT +0200), the first
-     line below prints "Jan 01 1998 00:00:00", while the second prints
-     "Dec 31 1997 22:00:00".
+> function except that
+     the time returned is Greenwich Mean Time (GMT). For example, when
+     run in Finland (GMT +0200), the first line below prints "Jan 01
+     1998 00:00:00", while the second prints "Dec 31 1997 22:00:00".
      <TABLE
 WIDTH="100%"
 BORDER="0"
@@ -112,19 +123,28 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
 >Example 1. <B
-CLASS="FUNCTION"
->gmdate()</B
+CLASS="function"
+>Gmdate()</B
 > example</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->echo date( "M d Y H:i:s",mktime(0,0,0,1,1,1998) );
-echo gmdate( "M d Y H:i:s",mktime(0,0,0,1,1,1998) );
+CLASS="programlisting"
+>&#13;echo date ("M d Y H:i:s", mktime (0,0,0,1,1,1998));
+echo gmdate ("M d Y H:i:s", mktime (0,0,0,1,1,1998));
       </PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR
@@ -132,23 +152,23 @@ echo gmdate( "M d Y H:i:s",mktime(0,0,0,1,1,1998) );
 >
     </P
 ><P
->     See also <A
+>&#13;     See also <A
 HREF="function.date.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >date()</B
 ></A
->,
-     <A
+>, <A
 HREF="function.mktime.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >mktime()</B
 ></A
-> and <A
+>,
+     and <A
 HREF="function.gmmktime.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >gmmktime()</B
 ></A
 >.

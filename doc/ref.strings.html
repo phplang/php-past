@@ -4,7 +4,7 @@
 >String functions</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -12,12 +12,15 @@ REL="UP"
 TITLE="Function Reference"
 HREF="funcref.html"><LINK
 REL="PREVIOUS"
-TITLE="solid_result"
-HREF="function.solid-result.html"><LINK
+TITLE="snmp_set_quick_print"
+HREF="function.snmp-set-quick-print.html"><LINK
 REL="NEXT"
 TITLE="AddCSlashes"
-HREF="function.addcslashes.html"></HEAD
+HREF="function.addcslashes.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="reference"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -42,7 +45,7 @@ WIDTH="10%"
 ALIGN="left"
 VALIGN="bottom"
 ><A
-HREF="function.solid-result.html"
+HREF="function.snmp-set-quick-print.html"
 >Prev</A
 ></TD
 ><TD
@@ -64,24 +67,25 @@ HREF="function.addcslashes.html"
 ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><DIV
-CLASS="REFERENCE"
+CLASS="reference"
 ><A
-NAME="REF.STRINGS"
+NAME="ref.strings"
 ></A
 ><DIV
 CLASS="TITLEPAGE"
 ><H1
-CLASS="TITLE"
->LII. String functions</H1
+CLASS="title"
+>LX. String functions</H1
 ><DIV
 CLASS="PARTINTRO"
 ><A
-NAME="AEN24787"
+NAME="AEN33042"
 ></A
 ><P
->    These functions all manipulate strings in various ways. Some more
+>&#13;    These functions all manipulate strings in various ways. Some more
     specialized sections can be found in the regular expression and
-    URL handling sections.</P
+    URL handling sections.
+   </P
 ></DIV
 ><DIV
 CLASS="TOC"
@@ -104,13 +108,14 @@ HREF="function.addslashes.html"
 ><A
 HREF="function.bin2hex.html"
 >bin2hex</A
-> &#8212;      Convert binary data into hexadecimal representation
+> &#8212; 
+     Convert binary data into hexadecimal representation
     </DT
 ><DT
 ><A
 HREF="function.chop.html"
 >Chop</A
-> &#8212; remove trailing whitespace</DT
+> &#8212; Remove trailing whitespace</DT
 ><DT
 ><A
 HREF="function.chr.html"
@@ -125,8 +130,21 @@ HREF="function.chunk-split.html"
 ><A
 HREF="function.convert-cyr-string.html"
 >convert_cyr_string</A
-> &#8212;      Convert from one Cyrillic character set to another
+> &#8212; 
+     Convert from one Cyrillic character set to another
     </DT
+><DT
+><A
+HREF="function.count-chars.html"
+>count_chars</A
+> &#8212; 
+     Return information abouts characters used in a string
+    </DT
+><DT
+><A
+HREF="function.crc32.html"
+>crc32</A
+> &#8212; Calculates the crc32 polynomial of a string</DT
 ><DT
 ><A
 HREF="function.crypt.html"
@@ -151,18 +169,19 @@ HREF="function.flush.html"
 ><A
 HREF="function.get-html-translation-table.html"
 >get_html_translation_table</A
-> &#8212;      Returns the translation table used by
+> &#8212; 
+     Returns the translation table used by
      <A
 HREF="function.htmlspecialchars.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >htmlspecialchars()</B
 ></A
 > and
      <A
 HREF="function.htmlentities.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >htmlentities()</B
 ></A
 >
@@ -171,20 +190,37 @@ CLASS="FUNCTION"
 ><A
 HREF="function.get-meta-tags.html"
 >get_meta_tags</A
-> &#8212;      Extracts all meta tag content attributes from a file and returns
+> &#8212; 
+     Extracts all meta tag content attributes from a file and returns
      an array
+    </DT
+><DT
+><A
+HREF="function.hebrev.html"
+>hebrev</A
+> &#8212; 
+     Convert logical Hebrew text to visual text
+    </DT
+><DT
+><A
+HREF="function.hebrevc.html"
+>hebrevc</A
+> &#8212; 
+     Convert logical Hebrew text to visual text with newline conversion
     </DT
 ><DT
 ><A
 HREF="function.htmlentities.html"
 >htmlentities</A
-> &#8212;      Convert all applicable characters to HTML entities
+> &#8212; 
+     Convert all applicable characters to HTML entities
     </DT
 ><DT
 ><A
 HREF="function.htmlspecialchars.html"
 >htmlspecialchars</A
-> &#8212;      Convert special characters to HTML entities
+> &#8212; 
+     Convert special characters to HTML entities
     </DT
 ><DT
 ><A
@@ -198,9 +234,17 @@ HREF="function.join.html"
 > &#8212; Join array elements with a string</DT
 ><DT
 ><A
+HREF="function.levenshtein.html"
+>levenshtein</A
+> &#8212; 
+     Calculate Levenshtein distance between two strings		
+    </DT
+><DT
+><A
 HREF="function.ltrim.html"
 >ltrim</A
-> &#8212;      Strip whitespace from the beginning of a string
+> &#8212; 
+     Strip whitespace from the beginning of a string
     </DT
 ><DT
 ><A
@@ -216,7 +260,47 @@ HREF="function.metaphone.html"
 ><A
 HREF="function.nl2br.html"
 >nl2br</A
-> &#8212; Converts newlines to HTML line breaks.</DT
+> &#8212; Converts newlines to HTML line breaks</DT
+><DT
+><A
+HREF="function.ob-start.html"
+>ob_start</A
+> &#8212; Turn on output buffering</DT
+><DT
+><A
+HREF="function.ob-get-contents.html"
+>ob_get_contents</A
+> &#8212; 
+     Return the contents of the output buffer
+    </DT
+><DT
+><A
+HREF="function.ob-get-length.html"
+>ob_get_length</A
+> &#8212; 
+     Return the length of the output buffer
+    </DT
+><DT
+><A
+HREF="function.ob-end-flush.html"
+>ob_end_flush</A
+> &#8212; 
+     Flush (send) the output buffer and turn off output buffering    
+    </DT
+><DT
+><A
+HREF="function.ob-end-clean.html"
+>ob_end_clean</A
+> &#8212; 
+     Clean (erase) the output buffer and turn off output buffering
+    </DT
+><DT
+><A
+HREF="function.ob-implicit-flush.html"
+>ob_implicit_flush</A
+> &#8212; 
+     Turn implicit flush on/off 
+    </DT
 ><DT
 ><A
 HREF="function.ord.html"
@@ -236,27 +320,29 @@ HREF="function.print.html"
 ><A
 HREF="function.printf.html"
 >printf</A
-> &#8212; output a formatted string</DT
+> &#8212; Output a formatted string</DT
 ><DT
 ><A
 HREF="function.quoted-printable-decode.html"
 >quoted_printable_decode</A
-> &#8212; Convert a quoted-printable string to an 8 bit string</DT
+> &#8212; 
+     Convert a quoted-printable string to an 8 bit string
+    </DT
 ><DT
 ><A
 HREF="function.quotemeta.html"
->QuoteMeta</A
-> &#8212; quote meta characters</DT
+>quotemeta</A
+> &#8212; Quote meta characters</DT
 ><DT
 ><A
-HREF="function.rawurldecode.html"
->rawurldecode</A
-> &#8212; Decode URL-encoded strings</DT
+HREF="function.rtrim.html"
+>rtrim</A
+> &#8212; Remove trailing whitespace.</DT
 ><DT
 ><A
-HREF="function.rawurlencode.html"
->rawurlencode</A
-> &#8212; URL-encode according to RFC1738</DT
+HREF="function.sscanf.html"
+>sscanf</A
+> &#8212; Parses input from a string according to a format</DT
 ><DT
 ><A
 HREF="function.setlocale.html"
@@ -266,7 +352,9 @@ HREF="function.setlocale.html"
 ><A
 HREF="function.similar-text.html"
 >similar_text</A
-> &#8212; Calculate the similarity between two strings</DT
+> &#8212; 
+     Calculate the similarity between two strings
+    </DT
 ><DT
 ><A
 HREF="function.soundex.html"
@@ -281,13 +369,15 @@ HREF="function.sprintf.html"
 ><A
 HREF="function.strcasecmp.html"
 >strcasecmp</A
-> &#8212;      Binary safe case-insensitive string comparison
+> &#8212; 
+     Binary safe case-insensitive string comparison
     </DT
 ><DT
 ><A
 HREF="function.strchr.html"
 >strchr</A
-> &#8212;      Find the first occurrence of a character.
+> &#8212; 
+     Find the first occurrence of a character
     </DT
 ><DT
 ><A
@@ -298,7 +388,8 @@ HREF="function.strcmp.html"
 ><A
 HREF="function.strcspn.html"
 >strcspn</A
-> &#8212;      Find length of initial segment not matching mask
+> &#8212; 
+     Find length of initial segment not matching mask
     </DT
 ><DT
 ><A
@@ -308,21 +399,38 @@ HREF="function.strip-tags.html"
 ><DT
 ><A
 HREF="function.stripcslashes.html"
->StripCSlashes</A
-> &#8212; un-quote string quoted with addcslashes</DT
+>stripcslashes</A
+> &#8212; 
+     Un-quote string quoted with <A
+HREF="function.addcslashes.html"
+><B
+CLASS="function"
+>addcslashes()</B
+></A
+>
+    </DT
 ><DT
 ><A
 HREF="function.stripslashes.html"
->StripSlashes</A
-> &#8212; Un-quote string quoted with addslashes</DT
+>stripslashes</A
+> &#8212; 
+     Un-quote string quoted with <A
+HREF="function.addslashes.html"
+><B
+CLASS="function"
+>addslashes()</B
+></A
+>
+    </DT
 ><DT
 ><A
 HREF="function.stristr.html"
 >stristr</A
-> &#8212;      Case-insensitive <A
+> &#8212; 
+     Case-insensitive <A
 HREF="function.strstr.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >strstr()</B
 ></A
 >
@@ -334,15 +442,43 @@ HREF="function.strlen.html"
 > &#8212; Get string length</DT
 ><DT
 ><A
+HREF="function.strnatcmp.html"
+>strnatcmp</A
+> &#8212; 
+	 String comparisons using a "natural order" algorithm
+	</DT
+><DT
+><A
+HREF="function.strnatcasecmp.html"
+>strnatcasecmp</A
+> &#8212; 
+	 Case insensitive string comparisons using a "natural order" algorithm
+	</DT
+><DT
+><A
+HREF="function.strncmp.html"
+>strncmp</A
+> &#8212; 
+	 Binary safe string comparison of the first n characters
+	</DT
+><DT
+><A
+HREF="function.str-pad.html"
+>str_pad</A
+> &#8212; Pad a string to a certain length with another string</DT
+><DT
+><A
 HREF="function.strpos.html"
 >strpos</A
-> &#8212;      Find position of first occurrence of a string
+> &#8212; 
+     Find position of first occurrence of a string
     </DT
 ><DT
 ><A
 HREF="function.strrchr.html"
 >strrchr</A
-> &#8212;      Find the last occurrence of a character in a string
+> &#8212; 
+     Find the last occurrence of a character in a string
     </DT
 ><DT
 ><A
@@ -358,19 +494,21 @@ HREF="function.strrev.html"
 ><A
 HREF="function.strrpos.html"
 >strrpos</A
-> &#8212;      Find position of last occurrence of a char in a string
+> &#8212; 
+     Find position of last occurrence of a char in a string
     </DT
 ><DT
 ><A
 HREF="function.strspn.html"
 >strspn</A
-> &#8212;      Find length of initial segment matching mask
+> &#8212; 
+     Find length of initial segment matching mask
     </DT
 ><DT
 ><A
 HREF="function.strstr.html"
 >strstr</A
-> &#8212; Find first occurrence of a string.</DT
+> &#8212; Find first occurrence of a string</DT
 ><DT
 ><A
 HREF="function.strtok.html"
@@ -390,7 +528,8 @@ HREF="function.strtoupper.html"
 ><A
 HREF="function.str-replace.html"
 >str_replace</A
-> &#8212;      Replace all occurrences of needle in haystack with str
+> &#8212; 
+     Replace all occurrences of needle in haystack with str
     </DT
 ><DT
 ><A
@@ -404,26 +543,40 @@ HREF="function.substr.html"
 > &#8212; Return part of a string</DT
 ><DT
 ><A
+HREF="function.substr-count.html"
+>substr_count</A
+> &#8212; Count the number of substring occurrences</DT
+><DT
+><A
 HREF="function.substr-replace.html"
 >substr_replace</A
-> &#8212; Replace text within a portion of a string.</DT
+> &#8212; Replace text within a portion of a string</DT
 ><DT
 ><A
 HREF="function.trim.html"
 >trim</A
-> &#8212;      Strip whitespace from the beginning and end of a string
+> &#8212; 
+     Strip whitespace from the beginning and end of a string
     </DT
 ><DT
 ><A
 HREF="function.ucfirst.html"
 >ucfirst</A
-> &#8212;      Make a string's first character uppercase
-    </DT
+> &#8212; Make a string's first character uppercase</DT
 ><DT
 ><A
 HREF="function.ucwords.html"
 >ucwords</A
-> &#8212;      Uppercase the first character of each word in a string
+> &#8212; 
+     Uppercase the first character of each word in a string
+    </DT
+><DT
+><A
+HREF="function.wordwrap.html"
+>wordwrap</A
+> &#8212; 
+     Wraps a string to a given number of characters using a string
+     break character.
     </DT
 ></DL
 ></DIV
@@ -444,7 +597,7 @@ WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
 ><A
-HREF="function.solid-result.html"
+HREF="function.snmp-set-quick-print.html"
 >Prev</A
 ></TD
 ><TD
@@ -469,7 +622,7 @@ HREF="function.addcslashes.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->solid_result</TD
+>snmp_set_quick_print</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"

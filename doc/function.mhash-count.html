@@ -4,20 +4,23 @@
 >mhash_count</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
-TITLE="Hash functions"
+TITLE="Mhash Functions"
 HREF="ref.mhash.html"><LINK
 REL="PREVIOUS"
 TITLE="mhash_get_block_size"
 HREF="function.mhash-get-block-size.html"><LINK
 REL="NEXT"
 TITLE="mhash"
-HREF="function.mhash.html"></HEAD
+HREF="function.mhash.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,40 +68,50 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.MHASH-COUNT"
+NAME="function.mhash-count"
 >mhash_count</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN10176"
+NAME="AEN20705"
 ></A
->mhash_count -- Get the highest available hash id</DIV
+><P
+>    (PHP3 &#62;= 3.0.9, PHP4 )</P
+>mhash_count&nbsp;--&nbsp;Get the highest available hash id</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN10179"
+NAME="AEN20708"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int mhash_count</CODE
->(void );<P
+>int <B
+CLASS="function"
+>mhash_count</B
+></CODE
+> (void)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     <B
-CLASS="FUNCTION"
->mhash_count()</B
+>&#13;     <B
+CLASS="function"
+>Mhash_count()</B
 > returns the highest available hash
-     id. Hashes are numbered from 0 to this hash id.</P
+     id. Hashes are numbered from 0 to this hash id.
+    </P
 ><P
->     <TABLE
+>&#13;     <TABLE
 WIDTH="100%"
 BORDER="0"
 CELLPADDING="0"
@@ -107,29 +120,39 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
 >Example 1. Traversing all hashes</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->&lt;?php
+CLASS="programlisting"
+>&#13;&#60;?php
 
 $nr = mhash_count();
 
-for($i = 0; $i &lt;= $nr; $i++) {
-    echo sprintf("The blocksize of %s is %d\n", 
-            mhash_get_hash_name($i),
-            mhash_get_block_size($i));
+for ($i = 0; $i &#60;= $nr; $i++) {
+    echo sprintf ("The blocksize of %s is %d\n", 
+        mhash_get_hash_name ($i),
+        mhash_get_block_size ($i));
 }
-?&gt;
+?&#62;
       </PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR
 ></TABLE
-></P
+>
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

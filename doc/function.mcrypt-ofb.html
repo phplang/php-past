@@ -4,20 +4,23 @@
 >mcrypt_ofb</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
-TITLE="Encryption functions"
+TITLE="Mcrypt Encryption Functions"
 HREF="ref.mcrypt.html"><LINK
 REL="PREVIOUS"
 TITLE="mcrypt_ecb"
 HREF="function.mcrypt-ecb.html"><LINK
 REL="NEXT"
-TITLE="filePro functions"
-HREF="ref.filepro.html"></HEAD
+TITLE="mcrypt_list_algorithms"
+HREF="function.mcrypt-list-algorithms.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -55,7 +58,7 @@ WIDTH="10%"
 ALIGN="right"
 VALIGN="bottom"
 ><A
-HREF="ref.filepro.html"
+HREF="function.mcrypt-list-algorithms.html"
 >Next</A
 ></TD
 ></TR
@@ -65,120 +68,158 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.MCRYPT-OFB"
+NAME="function.mcrypt-ofb"
 >mcrypt_ofb</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN8124"
+NAME="AEN20076"
 ></A
->mcrypt_ofb -- Encrypt/decrypt data in OFB mode</DIV
+><P
+>    (PHP3 &#62;= 3.0.8, PHP4 )</P
+>mcrypt_ofb&nbsp;--&nbsp;Encrypt/decrypt data in OFB mode</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN8127"
+NAME="AEN20079"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int mcrypt_ofb</CODE
->(int cipher, string key, string data, int mode, string iv);<P
+>string <B
+CLASS="function"
+>mcrypt_ofb</B
+></CODE
+> (int cipher, string key, string data, int mode, string iv)</CODE
+></P
+><P
+></P
+></DIV
+><DIV
+CLASS="funcsynopsis"
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>string <B
+CLASS="function"
+>mcrypt_ofb</B
+></CODE
+> (string cipher, string key, string data, int mode [, string 
+       iv])</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     <B
-CLASS="FUNCTION"
->mcrypt_ofb()</B
-> encrypts or decrypts (depending on
-     <TT
-CLASS="PARAMETER"
+>&#13;     The first prototype is when linked against libmcrypt 2.2.x, the
+     second when linked against libmcrypt 2.4.x.
+    </P
+><P
+>&#13;     <B
+CLASS="function"
+>Mcrypt_ofb()</B
+> encrypts or decrypts (depending
+     on <TT
+CLASS="parameter"
 ><I
 >mode</I
 ></TT
 >) the <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >data</I
 ></TT
-> with
-     <TT
-CLASS="PARAMETER"
+>
+     with <TT
+CLASS="parameter"
 ><I
 >cipher</I
 ></TT
 > and <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >key</I
 ></TT
-> in OFB cipher
-     mode and returns the resulting string.</P
+>
+     in OFB cipher mode and returns the resulting string.
+    </P
 ><P
->     <TT
-CLASS="PARAMETER"
+>&#13;     <TT
+CLASS="parameter"
 ><I
->cipher</I
+>Cipher</I
 ></TT
-> is one of the MCRYPT_ciphername constants.</P
+> is one of the MCRYPT_ciphername
+     constants.
+    </P
 ><P
->     <TT
-CLASS="PARAMETER"
+>&#13;     <TT
+CLASS="parameter"
 ><I
->key</I
+>Key</I
 ></TT
-> is the key supplied to the algorithm. It must
-     be kept secret.</P
+> is the key supplied to the
+     algorithm. It must be kept secret.
+    </P
 ><P
->     <TT
-CLASS="PARAMETER"
+>&#13;     <TT
+CLASS="parameter"
 ><I
->data</I
+>Data</I
 ></TT
 > is the data which shall be
-     encrypted/decrypted.</P
+     encrypted/decrypted.
+    </P
 ><P
->     <TT
-CLASS="PARAMETER"
+>&#13;     <TT
+CLASS="parameter"
 ><I
->mode</I
+>Mode</I
 ></TT
-> is MCRYPT_ENCRYPT or MCRYPT_DECRYPT.</P
+> is MCRYPT_ENCRYPT or MCRYPT_DECRYPT.
+    </P
 ><P
->     <TT
-CLASS="PARAMETER"
+>&#13;     <TT
+CLASS="parameter"
 ><I
->iv</I
+>IV</I
 ></TT
-> is the initialization vector.</P
+> is the initialization vector.
+    </P
 ><P
->     See also:
-     <A
+>&#13;     See also: <A
 HREF="function.mcrypt-cbc.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >mcrypt_cbc()</B
 ></A
 >,
      <A
 HREF="function.mcrypt-cfb.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >mcrypt_cfb()</B
 ></A
->,
+>, and
      <A
 HREF="function.mcrypt-ecb.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >mcrypt_ecb()</B
 ></A
-></P
+>.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -211,7 +252,7 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><A
-HREF="ref.filepro.html"
+HREF="function.mcrypt-list-algorithms.html"
 >Next</A
 ></TD
 ></TR
@@ -233,7 +274,7 @@ HREF="ref.mcrypt.html"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->filePro functions</TD
+>mcrypt_list_algorithms</TD
 ></TR
 ></TABLE
 ></DIV

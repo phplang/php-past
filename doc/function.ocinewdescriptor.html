@@ -4,7 +4,7 @@
 >OCINewDescriptor</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="OCIRollback"
 HREF="function.ocirollback.html"><LINK
 REL="NEXT"
 TITLE="OCIRowCount"
-HREF="function.ocirowcount.html"></HEAD
+HREF="function.ocirowcount.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,52 +68,56 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.OCINEWDESCRIPTOR"
+NAME="function.ocinewdescriptor"
 >OCINewDescriptor</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN20185"
+NAME="AEN25841"
 ></A
->OCINewDescriptor -- Initialize a new empty descriptor LOB/FILE (LOB is default)</DIV
+><P
+>    (PHP3 &#62;= 3.0.7, PHP4 )</P
+>OCINewDescriptor&nbsp;--&nbsp;Initialize a new empty descriptor LOB/FILE (LOB is default)</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN20188"
+NAME="AEN25844"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->string OCINewDescriptor</CODE
->(int connection, int [<SPAN
-CLASS="OPTIONAL"
->type</SPAN
->]);<P
+>string <B
+CLASS="function"
+>OCINewDescriptor</B
+></CODE
+> (int connection [, int type])</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     <A
-HREF="function.ocinewdescriptor.html"
-><B
-CLASS="FUNCTION"
+>&#13;     <B
+CLASS="function"
 >OCINewDescriptor()</B
-></A
-> Allocates storage to hold descriptors or LOB locators.   
-      Valid values for the valid <TT
-CLASS="PARAMETER"
+> Allocates storage to hold
+     descriptors or LOB locators. Valid values for the valid 
+     <TT
+CLASS="parameter"
 ><I
 >type</I
 ></TT
 > are OCI_D_FILE, OCI_D_LOB, OCI_D_ROWID.
-      For LOB desriptors, the methods load, save, and savefile are associated with the descriptor,
-      for BFILE only the load method exists. See the second example usage hints.
-
+     For LOB desriptors, the methods load, save, and savefile are 
+     associated with the descriptor, for BFILE only the load method exists. 
+     See the second example usage hints.
     </P
 ><TABLE
 WIDTH="100%"
@@ -121,14 +128,20 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
 >Example 1. OCINewDescriptor</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->&lt;?php   
+CLASS="programlisting"
+>&#13;&#60;?php   
     /* This script is designed to be called from a HTML form.
      * It expects $user, $password, $table, $where, and $commitsize
      * to be passed in from the form.  The script then deletes
@@ -155,28 +168,38 @@ CLASS="PROGRAMLISTING"
     OCIFreeStatement($stmt);  
     OCILogoff($conn);
 ?&#62;  
-   </PRE
+     </PRE
+></TD
+></TR
+></TABLE
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->&lt;?php
+CLASS="programlisting"
+>&#13;&#60;?php
     /* This script demonstrates file upload to LOB columns
      * The formfield used for this example looks like this
-     * &lt;form action="upload.php3" method="post" enctype="multipart/form-data"&#62;
-     * &lt;input type="file" name="lob_upload"&#62;
+     * &#60;form action="upload.php3" method="post" enctype="multipart/form-data"&#62;
+     * &#60;input type="file" name="lob_upload"&#62;
      * ...
      */
   if(!isset($lob_upload) || $lob_upload == 'none'){
 ?&#62;
-&lt;form action="upload.php3" method="post" enctype="multipart/form-data"&#62;
-Upload file: &lt;input type="file" name="lob_upload"&#62;&lt;br&#62;
-&lt;input type="submit" value="Upload"&#62; - &lt;input type="reset"&#62;
-&lt;/form&#62;
-&lt;?php
+&#60;form action="upload.php3" method="post" enctype="multipart/form-data"&#62;
+Upload file: &#60;input type="file" name="lob_upload"&#62;&#60;br&#62;
+&#60;input type="submit" value="Upload"&#62; - &#60;input type="reset"&#62;
+&#60;/form&#62;
+&#60;?php
   } else {
      // $lob_upload contains the temporary filename of the uploaded file
      $conn = OCILogon($user, $password);
      $lob = OCINewDescriptor($conn, OCI_D_LOB);
-     $stmt = OCIParse($conn,"insert into $table (id, the_blob) values(my_seq.NEXTVAL, EMPTY_BLOB()) returning the_blob into :the_blob");
+     $stmt = OCIParse($conn,"insert into $table (id, the_blob) 
+               values(my_seq.NEXTVAL, EMPTY_BLOB()) returning the_blob into :the_blob");
      OCIBindByName($stmt, ':the_blob', &#38;$lob, -1, OCI_B_BLOB);
      OCIExecute($stmt);
      if($lob-&#62;savefile($lob_upload)){
@@ -190,7 +213,10 @@ Upload file: &lt;input type="file" name="lob_upload"&#62;&lt;br&#62;
      OCILogoff($conn);
   }
 ?&#62;
-   </PRE
+     </PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR

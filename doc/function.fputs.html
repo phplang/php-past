@@ -4,7 +4,7 @@
 >fputs</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="fpassthru"
 HREF="function.fpassthru.html"><LINK
 REL="NEXT"
 TITLE="fread"
-HREF="function.fread.html"></HEAD
+HREF="function.fread.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,54 +68,62 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.FPUTS"
+NAME="function.fputs"
 >fputs</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN8886"
+NAME="AEN10126"
 ></A
->fputs -- write to a file pointer</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>fputs&nbsp;--&nbsp;Writes to a file pointer</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN8889"
+NAME="AEN10129"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int fputs</CODE
->(int fp, string str, int [<SPAN
-CLASS="OPTIONAL"
->length</SPAN
->]);<P
+>int <B
+CLASS="function"
+>fputs</B
+></CODE
+> (int fp, string str [, int 
+       length])</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     <B
-CLASS="FUNCTION"
->fputs()</B
+>&#13;     <B
+CLASS="function"
+>Fputs()</B
 > is an alias to
      <A
 HREF="function.fwrite.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >fwrite()</B
 ></A
->, and is identical in every way.  Note that the 
-	 <TT
-CLASS="PARAMETER"
+>, and is identical in every way.  Note
+     that the <TT
+CLASS="parameter"
 ><I
 >length</I
 ></TT
-> parameter is optional and if not specified the
-	 entire string will be written.</P
+> parameter is optional and
+     if not specified the entire string will be written.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

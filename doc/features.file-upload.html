@@ -4,7 +4,7 @@
 >Handling file uploads</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="Cookies"
 HREF="features.cookies.html"><LINK
 REL="NEXT"
 TITLE="Common Pitfalls"
-HREF="features.file-upload.common-pitfalls.html"></HEAD
+HREF="features.file-upload.common-pitfalls.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="chapter"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -64,11 +67,11 @@ HREF="features.file-upload.common-pitfalls.html"
 ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><DIV
-CLASS="CHAPTER"
+CLASS="chapter"
 ><H1
 ><A
-NAME="FEATURES.FILE-UPLOAD"
->Chapter 18. Handling file uploads</A
+NAME="features.file-upload"
+>Chapter 19. Handling file uploads</A
 ></H1
 ><DIV
 CLASS="TOC"
@@ -79,7 +82,7 @@ CLASS="TOC"
 ></DT
 ><DT
 ><A
-HREF="features.file-upload.html#FEATURES.FILE-UPLOAD.POST-METHOD"
+HREF="features.file-upload.html#features.file-upload.post-method"
 >POST method uploads</A
 ></DT
 ><DT
@@ -100,15 +103,15 @@ HREF="features.file-upload.put-method.html"
 ></DL
 ></DIV
 ><DIV
-CLASS="SECT1"
+CLASS="sect1"
 ><H1
-CLASS="SECT1"
+CLASS="sect1"
 ><A
-NAME="FEATURES.FILE-UPLOAD.POST-METHOD"
+NAME="features.file-upload.post-method"
 >POST method uploads</A
 ></H1
 ><P
->    PHP is capable of receiving file uploads from any RFC-1867
+>&#13;    PHP is capable of receiving file uploads from any RFC-1867
     compliant browser (which includes Netscape Navigator 3 or later,
     Microsoft Internet Explorer 3 with a patch from Microsoft, or
     later without a patch).  This feature lets people upload both text
@@ -117,16 +120,16 @@ NAME="FEATURES.FILE-UPLOAD.POST-METHOD"
     what is to be done with the file once it has been uploaded.
    </P
 ><P
->    Note that PHP also supports PUT-method file uploads as used by 
+>&#13;    Note that PHP also supports PUT-method file uploads as used by
     Netscape Composer and W3C's Amaya clients.  See the <A
 HREF="features.file-upload.put-method.html"
->PUT Method Support</A
->
-    for more details.</P
+>PUT Method
+    Support</A
+> for more details.
+   </P
 ><P
->    A file upload screen can be built by creating a special form which
+>&#13;    A file upload screen can be built by creating a special form which
     looks something like this:
-
     <TABLE
 WIDTH="100%"
 BORDER="0"
@@ -136,91 +139,103 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
->Example 18-1. File Upload Form</B
+>Example 19-1. File Upload Form</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->&lt;FORM ENCTYPE=&quot;multipart/form-data&quot; ACTION=&quot;_URL_&quot; METHOD=POST&gt;
-&lt;INPUT TYPE=&quot;hidden&quot; name=&quot;MAX_FILE_SIZE&quot; value=&quot;1000&quot;&gt;
-Send this file: &lt;INPUT NAME=&quot;userfile&quot; TYPE=&quot;file&quot;&gt;
-&lt;INPUT TYPE=&quot;submit&quot; VALUE=&quot;Send File&quot;&gt;
-&lt;/FORM&gt;
-    </PRE
+CLASS="programlisting"
+>&#13;&#60;FORM ENCTYPE="multipart/form-data" ACTION="_URL_" METHOD=POST&#62;
+&#60;INPUT TYPE="hidden" name="MAX_FILE_SIZE" value="1000"&#62;
+Send this file: &#60;INPUT NAME="userfile" TYPE="file"&#62;
+&#60;INPUT TYPE="submit" VALUE="Send File"&#62;
+&#60;/FORM&#62;
+     </PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR
 ></TABLE
 >
-    
     The _URL_ should point to a PHP file.  The MAX_FILE_SIZE hidden
     field must precede the file input field and its value is the maximum
     filesize accepted.  The value is in bytes.  In this destination file,
-    the following variables will be defined upon a successful upload:</P
+    the following variables will be defined upon a successful upload:
+   </P
 ><P
->    <P
+>&#13;    <P
 ></P
 ><UL
 ><LI
 ><P
->       $userfile - The temporary filename in which the uploaded file
+>&#13;       $userfile - The temporary filename in which the uploaded file
        was stored on the server machine.
       </P
 ></LI
 ><LI
 ><P
->       $userfile_name - The original name of the file on the sender's
-       system.
+>&#13;       $userfile_name - The original name or path of the file on the 
+       sender's system.
       </P
 ></LI
 ><LI
 ><P
->       $userfile_size - The size of the uploaded file in bytes.
+>&#13;       $userfile_size - The size of the uploaded file in bytes.
       </P
 ></LI
 ><LI
 ><P
->       $userfile_type - The mime type of the file if the browser
+>&#13;       $userfile_type - The mime type of the file if the browser
        provided this information.  An example would be
-       &quot;image/gif&quot;.
+       "image/gif".
       </P
 ></LI
 ></UL
 >
-    
-    Note that the &quot;$userfile&quot; part of the above variables is
+    Note that the "$userfile" part of the above variables is
     whatever the name of the INPUT field of TYPE=file is in the upload
     form.  In the above upload form example, we chose to call it
-    &quot;userfile&quot;.</P
+    "userfile".
+   </P
 ><P
->    Files will by default be stored in the server's default temporary
+>&#13;    Files will by default be stored in the server's default temporary
     directory.  This can be changed by setting the environment variable
     <TT
-CLASS="ENVAR"
+CLASS="envar"
 >TMPDIR</TT
 > in the environment in which PHP runs.  Setting
     it using <A
 HREF="function.putenv.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >putenv()</B
 ></A
 > from within a PHP script will
-    not work.</P
+    not work.
+   </P
 ><P
->    The PHP script which receives the uploaded file should implement
+>&#13;    The PHP script which receives the uploaded file should implement
     whatever logic is necessary for determining what should be done
     with the uploaded file.  You can for example use the $file_size
     variable to throw away any files that are either too small or too
     big.  You could use the $file_type variable to throw away any
     files that didn't match a certain type criteria.  Whatever the
     logic, you should either delete the file from the temporary
-    directory or move it elsewhere.</P
+    directory or move it elsewhere.
+   </P
 ><P
->    The file will be deleted from the temporary directory at the end
-    of the request if it has not been moved away or renamed.</P
+>&#13;    The file will be deleted from the temporary directory at the end
+    of the request if it has not been moved away or renamed.
+   </P
 ></DIV
 ></DIV
 ><DIV

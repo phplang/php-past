@@ -4,7 +4,7 @@
 >ImagePolygon</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="ImageLoadFont"
 HREF="function.imageloadfont.html"><LINK
 REL="NEXT"
 TITLE="ImagePSBBox"
-HREF="function.imagepsbbox.html"></HEAD
+HREF="function.imagepsbbox.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,47 +68,72 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.IMAGEPOLYGON"
+NAME="function.imagepolygon"
 >ImagePolygon</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN12050"
+NAME="AEN14242"
 ></A
->ImagePolygon -- draw a polygon</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>ImagePolygon&nbsp;--&nbsp;Draw a polygon</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN12053"
+NAME="AEN14245"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int imagepolygon</CODE
->(int im, array points, int num_points, int col);<P
+>int <B
+CLASS="function"
+>imagepolygon</B
+></CODE
+> (int im, array points, int num_points, int col)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
 > 
-     ImagePolygon creates a polygon in image id.  points is a PHP
-     array containing the polygon's vertices, ie. points[0] = x0,
-     points[1] = y0, points[2] = x1, points[3] = y1, etc.  num_points
-     is the total number of vertices.</P
+     <B
+CLASS="function"
+>ImagePolygon()</B
+> creates a polygon in image id.
+     <TT
+CLASS="parameter"
+><I
+>Points</I
+></TT
+> is a PHP array containing the
+     polygon's vertices, ie. points[0] = x0, points[1] = y0, points[2]
+     = x1, points[3] = y1, etc.  <TT
+CLASS="parameter"
+><I
+>Num_points</I
+></TT
+> is
+     the total number of vertices.
+    </P
 ><P
->    
+> 
      See also <A
 HREF="function.imagecreate.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >imagecreate()</B
 ></A
->.</P
+>.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

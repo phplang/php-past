@@ -4,20 +4,23 @@
 >mcrypt_create_iv</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
-TITLE="Encryption functions"
+TITLE="Mcrypt Encryption Functions"
 HREF="ref.mcrypt.html"><LINK
 REL="PREVIOUS"
 TITLE="mcrypt_get_key_size"
 HREF="function.mcrypt-get-key-size.html"><LINK
 REL="NEXT"
 TITLE="mcrypt_cbc"
-HREF="function.mcrypt-cbc.html"></HEAD
+HREF="function.mcrypt-cbc.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,62 +68,77 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.MCRYPT-CREATE-IV"
+NAME="function.mcrypt-create-iv"
 >mcrypt_create_iv</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN7986"
+NAME="AEN19885"
 ></A
->mcrypt_create_iv -- Create an initialization vector (IV) from a random source</DIV
+><P
+>    (PHP3 &#62;= 3.0.8, PHP4 )</P
+>mcrypt_create_iv&nbsp;--&nbsp;
+     Create an initialization vector (IV) from a random source
+    </DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN7989"
+NAME="AEN19888"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
 >string
-     mcrypt_create_iv</CODE
->(int size, int source);<P
+      <B
+CLASS="function"
+>mcrypt_create_iv</B
+></CODE
+> (int size, int source)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     <B
-CLASS="FUNCTION"
->mcrypt_create_iv()</B
-> is used to create an IV.</P
+>&#13;     <B
+CLASS="function"
+>Mcrypt_create_iv()</B
+> is used to create an IV.
+    </P
 ><P
->     <B
-CLASS="FUNCTION"
+>&#13;     <B
+CLASS="function"
 >mcrypt_create_iv()</B
 > takes two arguments,
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >size</I
 ></TT
 > determines the size of the IV,
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >source</I
 ></TT
-> specifies the source of the IV.</P
+> specifies the source of the IV.
+    </P
 ><P
->     The source can be MCRYPT_RAND (system random number generator),
-     MCRYPT_DEV_RANDOM (read data from /dev/random) and MCRYPT_DEV_URANDOM
-     (read data from /dev/urandom). If you use MCRYPT_RAND, make sure to call
-     srand() before to initialize the random number generator.</P
+>&#13;     The source can be MCRYPT_RAND (system random number generator),
+     MCRYPT_DEV_RANDOM (read data from /dev/random) and
+     MCRYPT_DEV_URANDOM (read data from /dev/urandom). If you use
+     MCRYPT_RAND, make sure to call srand() before to initialize the
+     random number generator.
+    </P
 ><P
->     <TABLE
+>&#13;     <TABLE
 WIDTH="100%"
 BORDER="0"
 CELLPADDING="0"
@@ -129,24 +147,37 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
->Example 1. mcrypt_create_iv example</B
+>Example 1. <B
+CLASS="function"
+>Mcrypt_create_iv()</B
+> example</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->&lt;?php
+CLASS="programlisting"
+>&#13;&#60;?php
 $cipher = MCRYPT_TripleDES;
-$block_size = mcrypt_get_block_size($cipher);
-$iv = mcrypt_create_iv($block_size, MCRYPT_DEV_RANDOM);
-?&gt;
+$block_size = mcrypt_get_block_size ($cipher);
+$iv = mcrypt_create_iv ($block_size, MCRYPT_DEV_RANDOM);
+?&#62;
       </PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR
 ></TABLE
-></P
+>
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

@@ -27,7 +27,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: request_info.c,v 1.43 2000/01/01 04:31:13 sas Exp $ */
+/* $Id: request_info.c,v 1.44 2000/09/09 21:05:45 zeev Exp $ */
 #include "php.h"
 
 php3_request_info request_info;
@@ -87,6 +87,7 @@ int php3_init_request_info(void *conf)
 		GLOBAL(request_info).filename = NULL;
 	}
 #endif
+	_php3_hash_init(&GLOBAL(request_info).rfc1867_uploaded_files, 5, NULL, NULL, 0);
 	return SUCCESS;
 }
 
@@ -94,6 +95,7 @@ int php3_destroy_request_info(void *conf)
 {
 	TLS_VARS;
 	STR_FREE(GLOBAL(request_info).current_user);
+	_php3_hash_destroy(&GLOBAL(request_info).rfc1867_uploaded_files);
 	return SUCCESS;
 }
 #endif

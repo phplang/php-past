@@ -4,20 +4,23 @@
 >gzgets</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
-TITLE="Compression functions"
+TITLE="Zlib Compression Functions"
 HREF="ref.zlib.html"><LINK
 REL="PREVIOUS"
 TITLE="gzgetc"
 HREF="function.gzgetc.html"><LINK
 REL="NEXT"
 TITLE="gzgetss"
-HREF="function.gzgetss.html"></HEAD
+HREF="function.gzgetss.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,69 +68,85 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.GZGETS"
+NAME="function.gzgets"
 >gzgets</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN6374"
+NAME="AEN37771"
 ></A
->gzgets -- get line from file pointer</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>gzgets&nbsp;--&nbsp;Get line from file pointer</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN6377"
+NAME="AEN37774"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->string gzgets</CODE
->(int zp, int length);<P
+>string <B
+CLASS="function"
+>gzgets</B
+></CODE
+> (int zp, int length)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Returns a (uncompressed) string of up to length - 1 bytes read
+>&#13;     Returns a (uncompressed) string of up to length - 1 bytes read
      from the file pointed to by fp. Reading ends when length - 1
      bytes have been read, on a newline, or on EOF (whichever comes
-     first).</P
+     first).
+    </P
 ><P
-> If an error occurs, returns false.</P
+> 
+     If an error occurs, returns false.
+    </P
 ><P
-> The file pointer must be valid, and must point to a file
+> 
+     The file pointer must be valid, and must point to a file
      successfully opened by <A
 HREF="function.gzopen.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >gzopen()</B
 ></A
->.</P
+>.
+    </P
 ><P
-> See also <A
+> 
+     See also <A
 HREF="function.gzopen.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >gzopen()</B
 ></A
 >,
      <A
 HREF="function.gzgetc.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >gzgetc()</B
 ></A
 >, and <A
 HREF="function.fgets.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >fgets()</B
 ></A
->.</P
+>.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

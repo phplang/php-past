@@ -1,7 +1,22 @@
 PHP 3.0 CHANGE LOG                                                    ChangeLog
 |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 
-April 05, Version 3.0.16
+?, 200x, Version 3.0.17
+- Add optional charset parameter to sybase_[p]connect (alf@alpha.ulatina.ac.cr)
+- Fixed incorrect handling of 0-precision strings (e.g., %4.0s)
+  in printf (Ken Coar)
+- You can now call Ora_Error() without prameters to get the reason
+  for a failed connection attempt. (Kirill Maximov)
+- Fixed crash in OCIFetchStatement() when trying to read after
+  all data has already been read. (Thies)
+- added --enable-sigchild. Use this option if you encounter
+  <defunc> processes when using Oracle 8i. (Thies)
+- Uncommitted outstanding OCI8 transactions are now rolled back
+  before the connection is closed. (Thies)
+- Improved configure checks for Oracle 8i. (Thies)
+- Added imap_mime_header_decode() function (Skalski)
+
+April 05, 2000, Version 3.0.16
 - Fixed semaphore problem (Sascha)
   Reported by: ilia@astrive.com
 - Fixed pcre, dbase dupe symbol problems (Sascha)
@@ -16,7 +31,7 @@ April 05, Version 3.0.16
 - Enhanced resolution of microtime() on OS/2 by using the high resolution timer
   API. (Brian Havard)
 
-February 25, Version 3.0.15
+February 25, 2000, Version 3.0.15
 - Fixed crash in preg_match_all(). (Andrei)
 - Backported safe_mode_protected_env_vars and safe_mode_allowed_env_vars INI
   directives from PHP 4.0 (Zeev)

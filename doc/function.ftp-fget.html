@@ -4,7 +4,7 @@
 >ftp_fget</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="ftp_get"
 HREF="function.ftp-get.html"><LINK
 REL="NEXT"
 TITLE="ftp_put"
-HREF="function.ftp-put.html"></HEAD
+HREF="function.ftp-put.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,53 +68,62 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.FTP-FGET"
+NAME="function.ftp-fget"
 >ftp_fget</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN9948"
+NAME="AEN11517"
 ></A
->ftp_fget -- Downloads a file from the FTP server and saves to an
+><P
+>    (PHP3 &#62;= 3.0.13, PHP4 &#62;= 4.0b4)</P
+>ftp_fget&nbsp;--&nbsp;Downloads a file from the FTP server and saves to an
      open file.</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN9951"
+NAME="AEN11520"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int ftp_fget</CODE
->(int ftp_stream, int fp, string remote_file, int mode);<P
+>int <B
+CLASS="function"
+>ftp_fget</B
+></CODE
+> (int ftp_stream, int fp, string remote_file, int mode)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Returns true on success, false on error.</P
+>&#13;     Returns true on success, false on error.</P
 ><P
->     <B
-CLASS="FUNCTION"
+>&#13;     <B
+CLASS="function"
 >ftp_fget()</B
 > retrieves <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >remote_file</I
 ></TT
 >
      from the FTP server, and writes it to the given file pointer,
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >fp</I
 ></TT
 >.  The transfer <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >mode</I
 ></TT

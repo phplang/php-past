@@ -4,7 +4,7 @@
 >Ora_Logoff</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="Ora_GetColumn"
 HREF="function.ora-getcolumn.html"><LINK
 REL="NEXT"
 TITLE="Ora_Logon"
-HREF="function.ora-logon.html"></HEAD
+HREF="function.ora-logon.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,49 +68,68 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.ORA-LOGOFF"
+NAME="function.ora-logoff"
 >Ora_Logoff</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN19892"
+NAME="AEN25478"
 ></A
->Ora_Logoff -- close an Oracle connection</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>Ora_Logoff&nbsp;--&nbsp;close an Oracle connection</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN19895"
+NAME="AEN25481"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int ora_logoff</CODE
->(int connection);<P
+>int <B
+CLASS="function"
+>ora_logoff</B
+></CODE
+> (int connection)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Returns true on success, False on error.  Details about the error
+>&#13;     Returns true on success, False on error. Details about the error
      can be retrieved using the <A
 HREF="function.ora-error.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >ora_error()</B
 ></A
-> and <A
+> and
+     <A
 HREF="function.ora-errorcode.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >ora_errorcode()</B
 ></A
->
-     functions.  Logs out the user and disconnects from the
-     server.</P
+> functions.  Logs out the user
+     and disconnects from the server.
+    </P
+><P
+>&#13;     See also <A
+HREF="function.ora-logon.html"
+><B
+CLASS="function"
+>ora_logon()</B
+></A
+>.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

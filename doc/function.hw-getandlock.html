@@ -4,7 +4,7 @@
 >hw_GetAndLock</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="hw_GetObject"
 HREF="function.hw-getobject.html"><LINK
 REL="NEXT"
 TITLE="hw_GetText"
-HREF="function.hw-gettext.html"></HEAD
+HREF="function.hw-gettext.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,36 +68,45 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.HW-GETANDLOCK"
+NAME="function.hw-getandlock"
 >hw_GetAndLock</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN10838"
+NAME="AEN12470"
 ></A
->hw_GetAndLock -- return bject record and lock object</DIV
+><P
+>    (PHP3 &#62;= 3.0.3, PHP4 )</P
+>hw_GetAndLock&nbsp;--&nbsp;return bject record and lock object</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN10841"
+NAME="AEN12473"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->string hw_getandlock</CODE
->(int connection, int objectID);<P
+>string <B
+CLASS="function"
+>hw_getandlock</B
+></CODE
+> (int connection, int objectID)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Returns the object record for the object with ID
+>&#13;     Returns the object record for the object with ID
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >objectID</I
 ></TT
@@ -102,19 +114,13 @@ CLASS="PARAMETER"
      It will also lock the object, so other users cannot access
      it until it is unlocked.</P
 ><P
->     See also <A
-HREF="function.hw-unlock.html"
-><B
-CLASS="FUNCTION"
+>&#13;     See also <B
+CLASS="function"
 >hw_Unlock()</B
-></A
 >,
-              <A
-HREF="function.hw-getobject.html"
-><B
-CLASS="FUNCTION"
+              <B
+CLASS="function"
 >hw_GetObject()</B
-></A
 >.</P
 ></DIV
 ><DIV

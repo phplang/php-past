@@ -4,7 +4,7 @@
 >strtok</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="strstr"
 HREF="function.strstr.html"><LINK
 REL="NEXT"
 TITLE="strtolower"
-HREF="function.strtolower.html"></HEAD
+HREF="function.strtolower.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,35 +68,44 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.STRTOK"
+NAME="function.strtok"
 >strtok</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN25898"
+NAME="AEN34635"
 ></A
->strtok -- Tokenize string</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>strtok&nbsp;--&nbsp;Tokenize string</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN25901"
+NAME="AEN34638"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->string strtok</CODE
->(string arg1, string arg2);<P
+>string <B
+CLASS="function"
+>strtok</B
+></CODE
+> (string arg1, string arg2)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     <B
-CLASS="FUNCTION"
+>&#13;     <B
+CLASS="function"
 >strtok()</B
 > is used to tokenize a string.  That
      is, if you have a string like "This is an example string" you
@@ -108,55 +120,68 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
 >Example 1. <B
-CLASS="FUNCTION"
->strtok()</B
+CLASS="function"
+>Strtok()</B
 > example</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->    $string = "This is an example string";
-    $tok = strtok($string," ");
-    while($tok) {
-        echo "Word=$tok&lt;br&#62;";
-        $tok = strtok(" ");
-    }
+CLASS="programlisting"
+>&#13;$string = "This is an example string";
+$tok = strtok ($string," ");
+while ($tok) {
+    echo "Word=$tok&#60;br&#62;";
+    $tok = strtok (" ");
+}
       </PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR
 ></TABLE
-></P
+>
+    </P
 ><P
->     Note that only the first call to strtok uses the string argument.
+>&#13;     Note that only the first call to strtok uses the string argument.
      Every subsequent call to strtok only needs the token to use, as
      it keeps track of where it is in the current string.  To start
      over, or to tokenize a new string you simply call strtok with the
      string argument again to initialize it.  Note that you may put
      multiple tokens in the token parameter.  The string will be
      tokenized when any one of the characters in the argument are
-     found.</P
+     found.
+    </P
 ><P
->     Also be careful that your tokens may be equal to "0". This
-     evaluates to false in conditional expressions.</P
+>&#13;     Also be careful that your tokens may be equal to "0". This
+     evaluates to false in conditional expressions.
+    </P
 ><P
->     See also <A
+>&#13;     See also <A
 HREF="function.split.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >split()</B
 ></A
 > and
      <A
 HREF="function.explode.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >explode()</B
 ></A
->.</P
+>.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

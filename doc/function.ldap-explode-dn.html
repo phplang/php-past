@@ -4,7 +4,7 @@
 >ldap_explode_dn</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -12,12 +12,15 @@ REL="UP"
 TITLE="LDAP functions"
 HREF="ref.ldap.html"><LINK
 REL="PREVIOUS"
-TITLE="ldap_dn2ufn"
-HREF="function.ldap-dn2ufn.html"><LINK
+TITLE="ldap_error"
+HREF="function.ldap-error.html"><LINK
 REL="NEXT"
 TITLE="ldap_first_attribute"
-HREF="function.ldap-first-attribute.html"></HEAD
+HREF="function.ldap-first-attribute.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -42,7 +45,7 @@ WIDTH="10%"
 ALIGN="left"
 VALIGN="bottom"
 ><A
-HREF="function.ldap-dn2ufn.html"
+HREF="function.ldap-error.html"
 >Prev</A
 ></TD
 ><TD
@@ -65,52 +68,61 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.LDAP-EXPLODE-DN"
+NAME="function.ldap-explode-dn"
 >ldap_explode_dn</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN14574"
+NAME="AEN17628"
 ></A
->ldap_explode_dn -- Splits DN into its component parts</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>ldap_explode_dn&nbsp;--&nbsp;Splits DN into its component parts</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN14577"
+NAME="AEN17631"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->array ldap_explode_dn</CODE
->(string dn, int with_attrib);<P
+>array <B
+CLASS="function"
+>ldap_explode_dn</B
+></CODE
+> (string dn, int with_attrib)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     <B
-CLASS="FUNCTION"
+>&#13;     <B
+CLASS="function"
 >ldap_explode_dn()</B
 > function is used to split
      the a DN returned by <A
 HREF="function.ldap-get-dn.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >ldap_get_dn()</B
 ></A
 > and breaks
      it up into its component parts. Each part is known as Relative
      Distinguished Name, or RDN.  <B
-CLASS="FUNCTION"
+CLASS="function"
 >ldap_explode_dn()</B
 >
      returns an array of all those components.
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >with_attrib</I
 ></TT
@@ -118,7 +130,7 @@ CLASS="PARAMETER"
      are returned with only values or their attributes as well.  To
      get RDNs with the attributes (i.e. in attribute=value format) set
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >with_attrib</I
 ></TT
@@ -140,7 +152,7 @@ WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
 ><A
-HREF="function.ldap-dn2ufn.html"
+HREF="function.ldap-error.html"
 >Prev</A
 ></TD
 ><TD
@@ -165,7 +177,7 @@ HREF="function.ldap-first-attribute.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->ldap_dn2ufn</TD
+>ldap_error</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"

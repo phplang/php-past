@@ -4,7 +4,7 @@
 >hw_GetRemote</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="hw_GetChildCollObj"
 HREF="function.hw-getchildcollobj.html"><LINK
 REL="NEXT"
 TITLE="hw_GetRemoteChildren"
-HREF="function.hw-getremotechildren.html"></HEAD
+HREF="function.hw-getremotechildren.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,58 +68,61 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.HW-GETREMOTE"
+NAME="function.hw-getremote"
 >hw_GetRemote</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN10754"
+NAME="AEN12382"
 ></A
->hw_GetRemote -- Gets a remote document</DIV
+><P
+>    (PHP3 &#62;= 3.0.3, PHP4 )</P
+>hw_GetRemote&nbsp;--&nbsp;Gets a remote document</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN10757"
+NAME="AEN12385"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int hw_getremote</CODE
->(int connection, int objectID);<P
+>int <B
+CLASS="function"
+>hw_getremote</B
+></CODE
+> (int connection, int objectID)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     Returns a remote document. Remote documents in Hyperwave notation
+>&#13;     Returns a remote document. Remote documents in Hyperwave notation
      are documents retrieved from an external source. Common remote
      documents are for example external web pages or queries in
      a database.  In order to be able to access external sources
      throught remote documents Hyperwave introduces the HGI (Hyperwave
      Gateway Interface) which is similar to the CGI. Currently, only
      ftp, http-servers and some databases can be accessed by the HGI.
-     Calling <A
-HREF="function.hw-getremote.html"
-><B
-CLASS="FUNCTION"
+     Calling <B
+CLASS="function"
 >hw_GetRemote()</B
-></A
 > returns the document from
      the external source.  If you want to use this function you should be
      very familiar with HGIs.  You should also consider to use PHP instead
      of Hyperwave to access external sources. Adding database support
      by a Hyperwave gateway should be more difficult than doing it in PHP.</P
 ><P
->     See also <A
-HREF="function.hw-getremotechildren.html"
-><B
-CLASS="FUNCTION"
+>&#13;     See also <B
+CLASS="function"
 >hw_GetRemoteChildren()</B
-></A
 >.</P
 ></DIV
 ><DIV

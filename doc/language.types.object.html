@@ -4,7 +4,7 @@
 >Objects</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -15,9 +15,12 @@ REL="PREVIOUS"
 TITLE="Arrays"
 HREF="language.types.array.html"><LINK
 REL="NEXT"
-TITLE="Type juggling"
-HREF="language.types.type-juggling.html"></HEAD
+TITLE="Type Juggling"
+HREF="language.types.type-juggling.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="sect1"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -64,44 +67,64 @@ HREF="language.types.type-juggling.html"
 ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><DIV
-CLASS="SECT1"
+CLASS="sect1"
 ><H1
-CLASS="SECT1"
+CLASS="sect1"
 ><A
-NAME="LANGUAGE.TYPES.OBJECT"
+NAME="language.types.object"
 >Objects</A
 ></H1
 ><DIV
-CLASS="SECT2"
+CLASS="sect2"
 ><H2
-CLASS="SECT2"
+CLASS="sect2"
 ><A
-NAME="LANGUAGE.TYPES.OBJECT.INIT"
+NAME="language.types.object.init"
 >Object Initialization</A
 ></H2
 ><P
->     To initialize an object, you use the new statement to instantiate
-     the object to a variable.
+>&#13;     To initialize an object, you use the <TT
+CLASS="literal"
+>new</TT
+>
+     statement to instantiate the object to a variable.
 
      <DIV
-CLASS="INFORMALEXAMPLE"
+CLASS="informalexample"
 ><P
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->class foo {
-    function do_foo () { 
+CLASS="programlisting"
+>&#13;&#60;?php
+class foo {
+    function do_foo() { 
         echo "Doing foo."; 
     }
 }
 
 $bar = new foo;
 $bar-&#62;do_foo();
+?&#62;
       </PRE
+></TD
+></TR
+></TABLE
 ><P
 ></P
 ></DIV
 >
+    </P
+><P
+>&#13;     For a full discussion, please read the section <A
+HREF="language.oop.html"
+>Classes and Objects</A
+>.
     </P
 ></DIV
 ></DIV
@@ -158,7 +181,7 @@ HREF="language.types.html"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->Type juggling</TD
+>Type Juggling</TD
 ></TR
 ></TABLE
 ></DIV

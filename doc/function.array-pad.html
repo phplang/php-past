@@ -4,20 +4,23 @@
 >array_pad</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
-TITLE="Array functions"
+TITLE="Array Functions"
 HREF="ref.array.html"><LINK
 REL="PREVIOUS"
-TITLE="array_merge"
-HREF="function.array-merge.html"><LINK
+TITLE="array_multisort"
+HREF="function.array-multisort.html"><LINK
 REL="NEXT"
 TITLE="array_pop"
-HREF="function.array-pop.html"></HEAD
+HREF="function.array-pop.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -42,7 +45,7 @@ WIDTH="10%"
 ALIGN="left"
 VALIGN="bottom"
 ><A
-HREF="function.array-merge.html"
+HREF="function.array-multisort.html"
 >Prev</A
 ></TD
 ><TD
@@ -65,70 +68,81 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.ARRAY-PAD"
+NAME="function.array-pad"
 >array_pad</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN3630"
+NAME="AEN3876"
 ></A
->array_pad -- Pad array to the specified length with a value</DIV
+><P
+>    (PHP4 &#62;= 4.0b4)</P
+>array_pad&nbsp;--&nbsp;
+     Pad array to the specified length with a value
+    </DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN3633"
+NAME="AEN3879"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->array array_pad</CODE
->(array input, int pad_size, mixed pad_value);<P
+>array <B
+CLASS="function"
+>array_pad</B
+></CODE
+> (array input, int pad_size, mixed pad_value)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     <B
-CLASS="FUNCTION"
->array_pad()</B
+>&#13;     <B
+CLASS="function"
+>Array_pad()</B
 > returns a copy of the
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >input</I
 ></TT
 > padded to size specified by
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >pad_size</I
 ></TT
 > with value
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >pad_value</I
 ></TT
 >. If
      <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >pad_size</I
 ></TT
 > is positive then the array is
      padded on the right, if it's negative then on the left. If the
      absolute value of <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >pad_size</I
 ></TT
 > is less than or
      equal to the length of the <TT
-CLASS="PARAMETER"
+CLASS="parameter"
 ><I
 >input</I
 ></TT
@@ -136,7 +150,7 @@ CLASS="PARAMETER"
      padding takes place.
     </P
 ><P
->     <TABLE
+>&#13;     <TABLE
 WIDTH="100%"
 BORDER="0"
 CELLPADDING="0"
@@ -145,27 +159,36 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
 >Example 1. <B
-CLASS="FUNCTION"
->array_pad()</B
+CLASS="function"
+>Array_pad()</B
 > example</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->$input = array(12, 10, 9);
+CLASS="programlisting"
+>&#13;$input = array (12, 10, 9);
 
-$result = array_pad($input, 5, 0);
-// result is array(12, 10, 9, 0, 0)
+$result = array_pad ($input, 5, 0);
+// result is array (12, 10, 9, 0, 0)
 
-$result = array_pad($input, -7, -1);
-// result is array(-1, -1, -1, -1, 12, 10, 9)
+$result = array_pad ($input, -7, -1);
+// result is array (-1, -1, -1, -1, 12, 10, 9)
 
-$result = array_pad($input, 2, "noop");
+$result = array_pad ($input, 2, "noop");
 // not padded
       </PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR
@@ -188,7 +211,7 @@ WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
 ><A
-HREF="function.array-merge.html"
+HREF="function.array-multisort.html"
 >Prev</A
 ></TD
 ><TD
@@ -213,7 +236,7 @@ HREF="function.array-pop.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->array_merge</TD
+>array_multisort</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"

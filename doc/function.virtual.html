@@ -4,20 +4,23 @@
 >virtual</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
-TITLE="Apache-specific functions"
+TITLE="Apache-specific Functions"
 HREF="ref.apache.html"><LINK
 REL="PREVIOUS"
 TITLE="getallheaders"
 HREF="function.getallheaders.html"><LINK
 REL="NEXT"
-TITLE="Arbitrary precision mathematics functions"
-HREF="ref.bc.html"></HEAD
+TITLE="Array Functions"
+HREF="ref.array.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -55,7 +58,7 @@ WIDTH="10%"
 ALIGN="right"
 VALIGN="bottom"
 ><A
-HREF="ref.bc.html"
+HREF="ref.array.html"
 >Next</A
 ></TD
 ></TR
@@ -65,61 +68,71 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.VIRTUAL"
+NAME="function.virtual"
 >virtual</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN3303"
+NAME="AEN3590"
 ></A
->virtual -- Perform an Apache sub-request</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>virtual&nbsp;--&nbsp;Perform an Apache sub-request</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN3306"
+NAME="AEN3593"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int virtual</CODE
->(string filename);<P
+>int <B
+CLASS="function"
+>virtual</B
+></CODE
+> (string filename)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     <B
-CLASS="FUNCTION"
->virtual()</B
+>&#13;     <B
+CLASS="function"
+>Virtual()</B
 > is an Apache-specific function which
-     is equivalent to &lt;!--#include virtual...--&gt; in mod_include.
-     It performs an Apache sub-request.  It is useful for including CGI
-     scripts or .shtml files, or anything else that you would parse
-     through Apache.  Note that for a CGI script, the script must
-     generate valid CGI headers.  At the minimum that means it must
-     generate a Content-type header.  For PHP files, you need to use
-     <A
+     is equivalent to &#60;!--#include virtual...--&#62; in mod_include.
+     It performs an Apache sub-request.  It is useful for including
+     CGI scripts or .shtml files, or anything else that you would
+     parse through Apache.  Note that for a CGI script, the script
+     must generate valid CGI headers.  At the minimum that means it
+     must generate a Content-type header.  For PHP files, you need to
+     use <A
 HREF="function.include.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >include()</B
 ></A
 > or <A
 HREF="function.require.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >require()</B
 ></A
 >;
      <B
-CLASS="FUNCTION"
+CLASS="function"
 >virtual()</B
-> cannot be used to include a
-     document which is itself a PHP file..</P
+> cannot be used to include a document
+     which is itself a PHP file.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -152,7 +165,7 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><A
-HREF="ref.bc.html"
+HREF="ref.array.html"
 >Next</A
 ></TD
 ></TR
@@ -174,7 +187,7 @@ HREF="ref.apache.html"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->Arbitrary precision mathematics functions</TD
+>Array Functions</TD
 ></TR
 ></TABLE
 ></DIV

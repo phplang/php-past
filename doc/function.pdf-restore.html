@@ -4,7 +4,7 @@
 >PDF_restore</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="PDF_save"
 HREF="function.pdf-save.html"><LINK
 REL="NEXT"
 TITLE="PDF_translate"
-HREF="function.pdf-translate.html"></HEAD
+HREF="function.pdf-translate.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,50 +68,51 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.PDF-RESTORE"
+NAME="function.pdf-restore"
 >PDF_restore</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN21133"
+NAME="AEN26875"
 ></A
->PDF_restore -- Restores formerly saved environment</DIV
+><P
+>    (PHP3 &#62;= 3.0.6, PHP4 )</P
+>PDF_restore&nbsp;--&nbsp;Restores formerly saved environment</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN21136"
+NAME="AEN26878"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->void pdf_restore</CODE
->(int pdf document);<P
+>void <B
+CLASS="function"
+>pdf_restore</B
+></CODE
+> (int pdf document)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->     The <A
-HREF="function.pdf-restore.html"
-><B
-CLASS="FUNCTION"
+>&#13;     The <B
+CLASS="function"
 >PDF_restore()</B
-></A
 > function restores the
-     environment saved with <A
-HREF="function.pdf-save.html"
-><B
-CLASS="FUNCTION"
+     environment saved with <B
+CLASS="function"
 >PDF_save()</B
-></A
 >. It works
-     like the postscript command grestore. Very
-     useful if you want to translate or rotate an object without effecting
-     other objects.
+     like the postscript command grestore.
 
      <TABLE
 WIDTH="100%"
@@ -119,28 +123,35 @@ CLASS="EXAMPLE"
 ><TR
 ><TD
 ><DIV
-CLASS="EXAMPLE"
+CLASS="example"
 ><P
 ><B
 >Example 1. Save and Restore</B
 ></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
-CLASS="PROGRAMLISTING"
->&lt;?php PDF_save($pdf);
+CLASS="programlisting"
+>&#13;&#60;?php PDF_save($pdf);
 // do all kinds of rotations, transformations, ...
-PDF_restore($pdf) ?&#62;</PRE
+PDF_restore($pdf) ?&#62;
+</PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ></TD
 ></TR
 ></TABLE
 ></P
 ><P
->     See also <A
-HREF="function.pdf-save.html"
-><B
-CLASS="FUNCTION"
+>&#13;     See also <B
+CLASS="function"
 >PDF_save()</B
-></A
 >.</P
 ></DIV
 ><DIV

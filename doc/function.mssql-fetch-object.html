@@ -4,7 +4,7 @@
 >mssql_fetch_object</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -16,8 +16,11 @@ TITLE="mssql_fetch_field"
 HREF="function.mssql-fetch-field.html"><LINK
 REL="NEXT"
 TITLE="mssql_fetch_row"
-HREF="function.mssql-fetch-row.html"></HEAD
+HREF="function.mssql-fetch-row.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
+CLASS="refentry"
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
 LINK="#0000FF"
@@ -65,78 +68,94 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="FUNCTION.MSSQL-FETCH-OBJECT"
+NAME="function.mssql-fetch-object"
 >mssql_fetch_object</A
 ></H1
 ><DIV
-CLASS="REFNAMEDIV"
+CLASS="refnamediv"
 ><A
-NAME="AEN16426"
+NAME="AEN20867"
 ></A
->mssql_fetch_object -- fetch row as object</DIV
+><P
+>    (PHP3 , PHP4 )</P
+>mssql_fetch_object&nbsp;--&nbsp;Fetch row as object</DIV
 ><DIV
-CLASS="REFSECT1"
+CLASS="refsect1"
 ><A
-NAME="AEN16429"
+NAME="AEN20870"
 ></A
 ><H2
 >Description</H2
 ><DIV
-CLASS="FUNCSYNOPSIS"
+CLASS="funcsynopsis"
 ><P
 ></P
+><P
+><CODE
 ><CODE
 CLASS="FUNCDEF"
->int mssql_fetch_object</CODE
->(int result);<P
+>int <B
+CLASS="function"
+>mssql_fetch_object</B
+></CODE
+> (int result)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
-> Returns: An object with properties that correspond to the
-    fetched row, or false if there are no more rows.
+> 
+     Returns: An object with properties that correspond to the fetched
+     row, or false if there are no more rows.
     </P
 ><P
-> mssql_fetch_object() is similar to
-    <A
+> 
+     <B
+CLASS="function"
+>Mssql_fetch_object()</B
+> is similar to
+     <A
 HREF="function.mssql-fetch-array.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >mssql_fetch_array()</B
 ></A
 >, with one difference - an
-    object is returned, instead of an array.  Indirectly, that means
-    that you can only access the data by the field names, and not by
-    their offsets (numbers are illegal property names).</P
+     object is returned, instead of an array.  Indirectly, that means
+     that you can only access the data by the field names, and not by
+     their offsets (numbers are illegal property names).
+    </P
 ><P
->    Speed-wise, the function is identical to
-    <A
+>&#13;     Speed-wise, the function is identical to
+     <A
 HREF="function.mssql-fetch-array.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >mssql_fetch_array()</B
 ></A
 >, and almost as quick as
-    <A
+     <A
 HREF="function.mssql-fetch-row.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >mssql_fetch_row()</B
 ></A
 > (the difference is
-    insignificant).
+     insignificant).
     </P
 ><P
-> See also: <A
+> 
+     See also: <A
 HREF="function.mssql-fetch-array.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >mssql_fetch-array()</B
 ></A
 > and
-                     <A
+     <A
 HREF="function.mssql-fetch-row.html"
 ><B
-CLASS="FUNCTION"
+CLASS="function"
 >mssql_fetch-row()</B
 ></A
 >.
