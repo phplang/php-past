@@ -1,0 +1,237 @@
+<HTML
+><HEAD
+><TITLE
+>pdf_translate</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="PDF functions"
+HREF="ref.pdf.html"><LINK
+REL="PREVIOUS"
+TITLE="pdf_restore"
+HREF="function.pdf-restore.html"><LINK
+REL="NEXT"
+TITLE="pdf_scale"
+HREF="function.pdf-scale.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.pdf-restore.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.pdf-scale.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.pdf-translate"
+>pdf_translate</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN28803"
+></A
+><P
+>    (PHP3 &#62;= 3.0.6, PHP4 )</P
+>pdf_translate&nbsp;--&nbsp;Sets origin of coordinate system</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN28806"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN28808"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>void <B
+CLASS="function"
+>pdf_translate</B
+></CODE
+> (int pdf document, double x-coor, double y-coor)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     The <B
+CLASS="function"
+>pdf_translate()</B
+> function sets the origin of
+     coordinate system to the point (<TT
+CLASS="parameter"
+><I
+>x-coor</I
+></TT
+>,
+     <TT
+CLASS="parameter"
+><I
+>y-coor</I
+></TT
+>) relativ the current origin.
+     The following example draws
+     a line from (0, 0) to (200, 200) relative to the initial coordinate
+     system. You have to set the current point after
+     <B
+CLASS="function"
+>pdf_translate()</B
+> and before you start drawing
+     more objects.
+
+     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN28823"
+></A
+><P
+><B
+>Example 1. Translation</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;&#60;?php pdf_moveto($pdf, 0, 0);
+pdf_lineto($pdf, 100, 100);
+pdf_stroke($pdf);
+pdf_translate($pdf, 100, 100);
+pdf_moveto($pdf, 0, 0);
+pdf_lineto($pdf, 100, 100);
+pdf_stroke($pdf);
+?&#62;
+</PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+></P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.pdf-restore.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.pdf-scale.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>pdf_restore</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.pdf.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>pdf_scale</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,635 @@
+<HTML
+><HEAD
+><TITLE
+>Predefined variables</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Variables"
+HREF="language.variables.html"><LINK
+REL="PREVIOUS"
+TITLE="Variables"
+HREF="language.variables.html"><LINK
+REL="NEXT"
+TITLE="Variable scope"
+HREF="language.variables.scope.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="language.variables.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 7. Variables</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="language.variables.scope.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="language.variables.predefined"
+>Predefined variables</A
+></H1
+><P
+>&#13;    PHP provides a large number of predefined variables to any script
+    which it runs. Many of these variables, however, cannot be fully
+    documented as they are dependent upon which server is running, the
+    version and setup of the server, and other factors. Some of these
+    variables will not be available when PHP is run on the
+    command-line.
+   </P
+><P
+>&#13;    Despite these factors, here is a list of predefined variables
+    available under a stock installation of PHP 3 running as a module
+    under a stock installation of <A
+HREF="http://www.apache.org/"
+TARGET="_top"
+>Apache</A
+> 1.3.6.
+   </P
+><P
+>&#13;    For a list of all predefined variables (and lots of other useful
+    information), please see (and use) <A
+HREF="function.phpinfo.html"
+><B
+CLASS="function"
+>phpinfo()</B
+></A
+>.
+   </P
+><DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
+><P
+><B
+>Note: </B
+>
+     This list is neither exhaustive nor intended to be. It is simply
+     a guideline as to what sorts of predefined variables you can
+     expect to have access to in your script.
+    </P
+></BLOCKQUOTE
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="language.variables.predefined.apache"
+>Apache variables</A
+></H2
+><P
+>&#13;     These variables are created by the <A
+HREF="http://www.apache.org/"
+TARGET="_top"
+>Apache</A
+> webserver. If you are running
+     another webserver, there is no guarantee that it will provide the
+     same variables; it may omit some, or provide others not listed
+     here. That said, a large number of these variables are accounted
+     for in the <A
+HREF="http://hoohoo.ncsa.uiuc.edu/cgi/env.html"
+TARGET="_top"
+>CGI 1.1
+     specification</A
+>, so you should be able to expect those.
+    </P
+><P
+>&#13;     Note that few, if any, of these will be available (or indeed have
+     any meaning) if running PHP on the command line.
+    </P
+><P
+>&#13;     <P
+></P
+><DIV
+CLASS="variablelist"
+><DL
+><DT
+>GATEWAY_INTERFACE</DT
+><DD
+><P
+>&#13;         What revision of the CGI specification the server is using;
+         i.e. 'CGI/1.1'.
+        </P
+></DD
+><DT
+>SERVER_NAME</DT
+><DD
+><P
+>&#13;         The name of the server host under which the current script is
+         executing. If the script is running on a virtual host, this
+         will be the value defined for that virtual host.
+        </P
+></DD
+><DT
+>SERVER_SOFTWARE</DT
+><DD
+><P
+>&#13;         Server identification string, given in the headers when
+         responding to requests.
+        </P
+></DD
+><DT
+>SERVER_PROTOCOL</DT
+><DD
+><P
+>&#13;         Name and revision of the information protocol via which the
+         page was requested; i.e. 'HTTP/1.0';
+        </P
+></DD
+><DT
+>REQUEST_METHOD</DT
+><DD
+><P
+>&#13;         Which request method was used to access the page; i.e. 'GET',
+         'HEAD', 'POST', 'PUT'.
+        </P
+></DD
+><DT
+>QUERY_STRING</DT
+><DD
+><P
+>&#13;         The query string, if any, via which the page was accessed.
+        </P
+></DD
+><DT
+>DOCUMENT_ROOT</DT
+><DD
+><P
+>&#13;         The document root directory under which the current script is
+         executing, as defined in the server's configuration file.
+        </P
+></DD
+><DT
+>HTTP_ACCEPT</DT
+><DD
+><P
+>&#13;         Contents of the <TT
+CLASS="literal"
+>Accept:</TT
+> header from the
+         current request, if there is one.
+        </P
+></DD
+><DT
+>HTTP_ACCEPT_CHARSET</DT
+><DD
+><P
+>&#13;         Contents of the <TT
+CLASS="literal"
+>Accept-Charset:</TT
+> header
+         from the current request, if there is one. Example:
+         'iso-8859-1,*,utf-8'.
+        </P
+></DD
+><DT
+>HTTP_ENCODING</DT
+><DD
+><P
+>&#13;         Contents of the <TT
+CLASS="literal"
+>Accept-Encoding:</TT
+> header
+         from the current request, if there is one. Example: 'gzip'.
+        </P
+></DD
+><DT
+>HTTP_ACCEPT_LANGUAGE</DT
+><DD
+><P
+>&#13;         Contents of the <TT
+CLASS="literal"
+>Accept-Language:</TT
+> header
+         from the current request, if there is one. Example: 'en'.
+        </P
+></DD
+><DT
+>HTTP_CONNECTION</DT
+><DD
+><P
+>&#13;         Contents of the <TT
+CLASS="literal"
+>Connection:</TT
+> header from
+         the current request, if there is one. Example: 'Keep-Alive'.
+        </P
+></DD
+><DT
+>HTTP_HOST</DT
+><DD
+><P
+>&#13;         Contents of the <TT
+CLASS="literal"
+>Host:</TT
+> header from the
+         current request, if there is one.
+        </P
+></DD
+><DT
+>HTTP_REFERER</DT
+><DD
+><P
+>&#13;         The address of the page (if any) which referred the browser
+         to the current page. This is set by the user's browser; not
+         all browsers will set this.
+        </P
+></DD
+><DT
+>HTTP_USER_AGENT</DT
+><DD
+><P
+>&#13;         Contents of the <TT
+CLASS="literal"
+>User_Agent:</TT
+> header from
+         the current request, if there is one. This is a string
+         denoting the browser software being used to view the current
+         page; i.e. <TT
+CLASS="computeroutput"
+>Mozilla/4.5 [en] (X11; U; Linux
+         2.2.9 i586)</TT
+>. Among other things, you can use
+         this value with <A
+HREF="function.get-browser.html"
+><B
+CLASS="function"
+>get_browser()</B
+></A
+> to tailor
+         your page's functionality to the capabilities of the user's
+         browser.
+        </P
+></DD
+><DT
+>REMOTE_ADDR</DT
+><DD
+><P
+>&#13;         The IP address from which the user is viewing the current
+         page.
+        </P
+></DD
+><DT
+>REMOTE_PORT</DT
+><DD
+><P
+>&#13;         The port being used on the user's machine to communicate with
+         the web server.
+        </P
+></DD
+><DT
+>SCRIPT_FILENAME</DT
+><DD
+><P
+>&#13;         The absolute pathname of the currently executing script.
+        </P
+></DD
+><DT
+>SERVER_ADMIN</DT
+><DD
+><P
+>&#13;         The value given to the SERVER_ADMIN (for Apache) directive in
+         the web server configuration file. If the script is running
+         on a virtual host, this will be the value defined for that
+         virtual host.
+        </P
+></DD
+><DT
+>SERVER_PORT</DT
+><DD
+><P
+>&#13;         The port on the server machine being used by the web server
+         for communication. For default setups, this will be '80';
+         using SSL, for instance, will change this to whatever your
+         defined secure HTTP port is.
+        </P
+></DD
+><DT
+>SERVER_SIGNATURE</DT
+><DD
+><P
+>&#13;         String containing the server version and virtual host name
+         which are added to server-generated pages, if enabled.
+        </P
+></DD
+><DT
+>PATH_TRANSLATED</DT
+><DD
+><P
+>&#13;         Filesystem- (not document root-) based path to the current
+         script, after the server has done any virtual-to-real
+         mapping.
+        </P
+></DD
+><DT
+>SCRIPT_NAME</DT
+><DD
+><P
+>&#13;         Contains the current script's path. This is useful for pages
+         which need to point to themselves.
+        </P
+></DD
+><DT
+>REQUEST_URI</DT
+><DD
+><P
+>&#13;         The URI which was given in order to access this page; for
+         instance, '/index.html'.
+        </P
+></DD
+></DL
+></DIV
+>
+    </P
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="language.variables.predefined.environment"
+>Environment variables</A
+></H2
+><P
+>&#13;     These variables are imported into PHP's global namespace from the
+     environment under which the PHP parser is running. Many are
+     provided by the shell under which PHP is running and different
+     systems are likely running different kinds of shells, a
+     definitive list is impossible. Please see your shell's
+     documentation for a list of defined environment variables.
+    </P
+><P
+>&#13;     Other environment variables include the CGI variables, placed
+     there regardless of whether PHP is running as a server module or
+     CGI processor.
+    </P
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="language.variables.predefined.php"
+>PHP variables</A
+></H2
+><P
+>&#13;     These variables are created by PHP itself. The
+     <TT
+CLASS="varname"
+>$HTTP_*_VARS</TT
+> variables are available only if
+     the <A
+HREF="configuration.html#ini.track-vars"
+>track_vars</A
+>
+     configuration is turned on.
+    </P
+><DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
+><P
+><B
+>Note: </B
+>
+      As of PHP 4.0.3, <A
+HREF="configuration.html#ini.track-vars"
+>track_vars</A
+> is always turned on,
+      regardless of the configuration file setting.
+     </P
+></BLOCKQUOTE
+></DIV
+><P
+>&#13;     If the <A
+HREF="configuration.html#ini.register-globals"
+>register_globals</A
+> directive
+     is set, then these variables will also be made available in the
+     global scope of the script; i.e., separate from the
+     <TT
+CLASS="varname"
+>$HTTP_*_VARS</TT
+> arrays. This feature should be
+     used with care, and turned off if possible; while the
+     <TT
+CLASS="varname"
+>$HTTP_*_VARS</TT
+> variables are safe, the bare
+     global equivalents can be overwritten by user input, with
+     possibly malicious intent. If you cannot turn off <A
+HREF="configuration.html#ini.register-globals"
+>register_globals</A
+>, you must
+     take whatever steps are necessary to ensure that the data you are
+     using is safe.
+    </P
+><P
+>&#13;     <P
+></P
+><DIV
+CLASS="variablelist"
+><DL
+><DT
+>argv</DT
+><DD
+><P
+>&#13;         Array of arguments passed to the script. When the script is
+         run on the command line, this gives C-style access to the
+         command line parameters. When called via the GET method, this
+         will contain the query string.
+        </P
+></DD
+><DT
+>argc</DT
+><DD
+><P
+>&#13;         Contains the number of command line parameters passed to the
+         script (if run on the command line).
+        </P
+></DD
+><DT
+>PHP_SELF</DT
+><DD
+><P
+>&#13;         The filename of the currently executing script, relative to
+         the document root. If PHP is running as a command-line
+         processor, this variable is not available.
+        </P
+></DD
+><DT
+>HTTP_COOKIE_VARS</DT
+><DD
+><P
+>&#13;         An associative array of variables passed to the current
+         script via HTTP cookies. 
+        </P
+></DD
+><DT
+>HTTP_GET_VARS</DT
+><DD
+><P
+>&#13;         An associative array of variables passed to the current
+         script via the HTTP GET method.
+        </P
+></DD
+><DT
+>HTTP_POST_VARS</DT
+><DD
+><P
+>&#13;         An associative array of variables passed to the current
+         script via the HTTP POST method.
+        </P
+></DD
+><DT
+>HTTP_POST_FILES</DT
+><DD
+><P
+>&#13;         An associative array of variables containing information
+         about files uploaded via the HTTP POST method. See <A
+HREF="features.file-upload.html#features.file-upload.post-method"
+>POST method
+         uploads</A
+> for information on the contents of
+         <TT
+CLASS="varname"
+>$HTTP_POST_FILES</TT
+>.
+        </P
+><P
+>&#13;         <TT
+CLASS="varname"
+>$HTTP_POST_FILES</TT
+> is available only in PHP
+         4.0.0 and later.
+        </P
+></DD
+><DT
+>HTTP_ENV_VARS</DT
+><DD
+><P
+>&#13;         An associative array of variables passed to the current
+         script via the parent environment. 
+        </P
+></DD
+><DT
+>HTTP_SERVER_VARS</DT
+><DD
+><P
+>&#13;         An associative array of variables passed to the current
+         script from the HTTP server. These variables are analogous to
+         the Apache variables described above.
+        </P
+></DD
+></DL
+></DIV
+>
+    </P
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="language.variables.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="language.variables.scope.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Variables</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="language.variables.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Variable scope</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

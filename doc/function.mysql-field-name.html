@@ -1,0 +1,294 @@
+<HTML
+><HEAD
+><TITLE
+>mysql_field_name</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="MySQL functions"
+HREF="ref.mysql.html"><LINK
+REL="PREVIOUS"
+TITLE="mysql_field_flags"
+HREF="function.mysql-field-flags.html"><LINK
+REL="NEXT"
+TITLE="mysql_field_len"
+HREF="function.mysql-field-len.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.mysql-field-flags.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.mysql-field-len.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.mysql-field-name"
+>mysql_field_name</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN24427"
+></A
+><P
+>    (PHP3 , PHP4 )</P
+>mysql_field_name&nbsp;--&nbsp;
+     Get the name of the specified field in a result
+    </DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN24430"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN24432"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>string <B
+CLASS="function"
+>mysql_field_name</B
+></CODE
+> (int result, int field_index)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     <B
+CLASS="function"
+>mysql_field_name()</B
+> returns the name of the
+     specified field index. <TT
+CLASS="parameter"
+><I
+>result</I
+></TT
+> must be a
+     valid result identifier and <TT
+CLASS="parameter"
+><I
+>field_index</I
+></TT
+> is
+     the numerical offset of the field.
+    </P
+><DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
+><P
+><B
+>Note: </B
+>
+      <TT
+CLASS="parameter"
+><I
+>field_index</I
+></TT
+> starts at 0.
+     </P
+><P
+>&#13;      e.g. The index of the third field would actually be 2, the index
+      of the fourth field would be 3 and so on.
+     </P
+></BLOCKQUOTE
+></DIV
+><P
+>&#13;     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN24449"
+></A
+><P
+><B
+>Example 1. <B
+CLASS="function"
+>mysql_field_name()</B
+> example</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;// The users table consists of three fields: 
+//   user_id
+//   username
+//   password.
+
+$res = mysql_db_query("users", "select * from users", $link);
+
+echo mysql_field_name($res, 0) . "\n";
+echo mysql_field_name($res, 2);
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+    </P
+><P
+>&#13;     The above example would produce the following output:
+     <DIV
+CLASS="informalexample"
+><A
+NAME="AEN24454"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;user_id
+password
+      </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+>
+    </P
+><P
+>&#13;     For downwards compatibility <B
+CLASS="function"
+>mysql_fieldname()</B
+>
+     can also be used.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.mysql-field-flags.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.mysql-field-len.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>mysql_field_flags</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.mysql.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>mysql_field_len</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

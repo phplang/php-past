@@ -1,0 +1,236 @@
+<HTML
+><HEAD
+><TITLE
+>pdf_set_font</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="PDF functions"
+HREF="ref.pdf.html"><LINK
+REL="PREVIOUS"
+TITLE="pdf_show_xy"
+HREF="function.pdf-show-xy.html"><LINK
+REL="NEXT"
+TITLE="pdf_set_leading"
+HREF="function.pdf-set-leading.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.pdf-show-xy.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.pdf-set-leading.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.pdf-set-font"
+>pdf_set_font</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN28390"
+></A
+><P
+>    (PHP3 &#62;= 3.0.6, PHP4 )</P
+>pdf_set_font&nbsp;--&nbsp;Selects a font face and size</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN28393"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN28395"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>void <B
+CLASS="function"
+>pdf_set_font</B
+></CODE
+> (int pdf document, string font name, double size, string encoding [, int embed])</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     The <B
+CLASS="function"
+>pdf_set_font()</B
+> function sets the
+     current font face, font size and encoding. If you use pdflib 0.6
+     you will need to
+     provide the Adobe Font Metrics (afm-files) for the font in the
+     font path (default is ./fonts). If you use php3 or a version of
+     pdflib older than 2.20 the fourth parameter
+     <TT
+CLASS="parameter"
+><I
+>encoding</I
+></TT
+> can take the following values:
+     0 = builtin, 1 = pdfdoc, 2 = macroman, 3 = macexpert, 4 = winansi.
+     An encoding greater than 4 and less than 0 will default to winansi.
+     winansi is often a good choice.
+     If you use php4 and a version of pdflib &#62;= 2.20 the encoding parameter
+     has changed to a string. Use 'winansi', 'builtin', 'host', 'macroman' etc. instead.
+     If the last parameter is set to
+     1 the font is embedded into the pdf document otherwise it is not.
+     To embed a font is usually a good idea if the font is not widely spread
+     and you cannot ensure that the person watching your document has
+     access on fonts in the document.
+     I font is only embedded once even if you call 
+     <B
+CLASS="function"
+>pdf_set_font()</B
+> several times.
+    </P
+><DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
+><P
+><B
+>Note: </B
+>
+      This function has to be called after
+      <A
+HREF="function.pdf-begin-page.html"
+><B
+CLASS="function"
+>pdf_begin_page()</B
+></A
+> in order to create a valid
+      pdf document.
+     </P
+></BLOCKQUOTE
+></DIV
+><DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
+><P
+><B
+>Note: </B
+>
+      If you reference a font in a .upr file make sure the name
+      in the afm file and the font name are the same. Otherwise,
+      the font will be embedded several times (Thanks to Paul Haddon
+      for finding this.)
+     </P
+></BLOCKQUOTE
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.pdf-show-xy.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.pdf-set-leading.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>pdf_show_xy</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.pdf.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>pdf_set_leading</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,305 @@
+<HTML
+><HEAD
+><TITLE
+>mt_rand</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Mathematical Functions"
+HREF="ref.math.html"><LINK
+REL="PREVIOUS"
+TITLE="min"
+HREF="function.min.html"><LINK
+REL="NEXT"
+TITLE="mt_srand"
+HREF="function.mt-srand.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.min.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.mt-srand.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.mt-rand"
+>mt_rand</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN20063"
+></A
+><P
+>    (PHP3 &#62;= 3.0.6, PHP4 )</P
+>mt_rand&nbsp;--&nbsp;Generate a better random value</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN20066"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN20068"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int <B
+CLASS="function"
+>mt_rand</B
+></CODE
+> ([int
+       min [, int
+       max]])</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     Many random number generators of older libcs have dubious or
+     unknown characteristics and are slow. By default, PHP uses the
+     libc random number generator with the <A
+HREF="function.rand.html"
+><B
+CLASS="function"
+>rand()</B
+></A
+>
+     function.  <B
+CLASS="function"
+>mt_rand()</B
+> function is a drop-in
+     replacement for this.  It uses a random number generator with
+     known characteristics, the Mersenne Twister, which will produce
+     random numbers that should be suitable for seeding some kinds
+     of cryptography (see the home pages for details) and is four
+     times faster than what the average libc provides. The Homepage
+     of the Mersenne Twister can be found at
+     <A
+HREF="http://www.math.keio.ac.jp/~matumoto/emt.html"
+TARGET="_top"
+>http://www.math.keio.ac.jp/~matumoto/emt.html</A
+>, and an
+     optimized version of the MT source is available from
+     <A
+HREF="http://www.scp.syr.edu/~marc/hawk/twister.html"
+TARGET="_top"
+>http://www.scp.syr.edu/~marc/hawk/twister.html
+     </A
+>.
+    </P
+><P
+>&#13;     If called without the optional <TT
+CLASS="parameter"
+><I
+>min</I
+></TT
+>,
+     <TT
+CLASS="parameter"
+><I
+>max</I
+></TT
+> arguments <B
+CLASS="function"
+>mt_rand()</B
+>
+     returns a pseudo-random value between 0 and
+     <TT
+CLASS="constant"
+>RAND_MAX</TT
+>.  If you want a random number
+     between 5 and 15 (inclusive), for example, use <TT
+CLASS="literal"
+>mt_rand
+     (5, 15)</TT
+>.
+    </P
+><P
+>&#13;     Remember to seed the random number generator before use with
+     <A
+HREF="function.mt-srand.html"
+><B
+CLASS="function"
+>mt_srand()</B
+></A
+>.
+    </P
+><DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
+><P
+><B
+>Note: </B
+>
+      In versions before 3.0.7 the meaning of
+      <TT
+CLASS="parameter"
+><I
+>max</I
+></TT
+> was <TT
+CLASS="parameter"
+><I
+>range</I
+></TT
+>. To
+      get the same results in these versions the short example should
+      be <TT
+CLASS="literal"
+>mt_rand (5, 11)</TT
+> to get a random number
+      between 5 and 15.
+     </P
+></BLOCKQUOTE
+></DIV
+><P
+>&#13;     See also <A
+HREF="function.mt-srand.html"
+><B
+CLASS="function"
+>mt_srand()</B
+></A
+>,
+     <A
+HREF="function.mt-getrandmax.html"
+><B
+CLASS="function"
+>mt_getrandmax()</B
+></A
+>, <A
+HREF="function.srand.html"
+><B
+CLASS="function"
+>srand()</B
+></A
+>,
+     <A
+HREF="function.rand.html"
+><B
+CLASS="function"
+>rand()</B
+></A
+> and <A
+HREF="function.getrandmax.html"
+><B
+CLASS="function"
+>getrandmax()</B
+></A
+>.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.min.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.mt-srand.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>min</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.math.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>mt_srand</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

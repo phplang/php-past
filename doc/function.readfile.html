@@ -1,0 +1,263 @@
+<HTML
+><HEAD
+><TITLE
+>readfile</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Filesystem functions"
+HREF="ref.filesystem.html"><LINK
+REL="PREVIOUS"
+TITLE="popen"
+HREF="function.popen.html"><LINK
+REL="NEXT"
+TITLE="readlink"
+HREF="function.readlink.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.popen.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.readlink.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.readfile"
+>readfile</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN11791"
+></A
+><P
+>    (PHP3 , PHP4 )</P
+>readfile&nbsp;--&nbsp;Outputs a file</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN11794"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN11796"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int <B
+CLASS="function"
+>readfile</B
+></CODE
+> (string filename [, int 
+       use_include_path])</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     Reads a file and writes it to standard output.
+    </P
+><P
+>&#13;     Returns the number of bytes read from the file. If an error
+     occurs, false is returned and unless the function was called as
+     @readfile, an error message is printed.
+    </P
+><P
+>&#13;     If <TT
+CLASS="parameter"
+><I
+>filename</I
+></TT
+> begins with "http://"
+     (not case sensitive), an HTTP 1.0 connection is opened to the
+     specified server and the text of the response is written to
+     standard output.
+    </P
+><P
+>&#13;     Does not handle HTTP redirects, so you must include trailing
+     slashes on directories.
+    </P
+><P
+>&#13;     If <TT
+CLASS="parameter"
+><I
+>filename</I
+></TT
+> begins with "ftp://"
+     (not case sensitive), an ftp connection to the specified server is
+     opened and the requested file is written to standard output. If the server
+     does not support passive mode ftp, this will fail.
+    </P
+><P
+>&#13;     If <TT
+CLASS="parameter"
+><I
+>filename</I
+></TT
+> begins with neither
+     of these strings, the file will be opened from the filesystem and
+     its contents written to standard output.
+    </P
+><P
+>&#13;     You can use the optional second parameter and set it to "1", if
+     you want to search for the file in the <A
+HREF="configuration.html#ini.include-path"
+>include_path</A
+>, too.
+    </P
+><P
+>&#13;     See also <A
+HREF="function.fpassthru.html"
+><B
+CLASS="function"
+>fpassthru()</B
+></A
+>,
+     <A
+HREF="function.file.html"
+><B
+CLASS="function"
+>file()</B
+></A
+>, <A
+HREF="function.fopen.html"
+><B
+CLASS="function"
+>fopen()</B
+></A
+>,
+     <A
+HREF="function.include.html"
+><B
+CLASS="function"
+>include()</B
+></A
+>, <A
+HREF="function.require.html"
+><B
+CLASS="function"
+>require()</B
+></A
+>, and
+     <A
+HREF="function.virtual.html"
+><B
+CLASS="function"
+>virtual()</B
+></A
+>.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.popen.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.readlink.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>popen</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.filesystem.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>readlink</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

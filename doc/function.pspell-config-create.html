@@ -1,0 +1,306 @@
+<HTML
+><HEAD
+><TITLE
+>pspell_config_create</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Pspell Functions"
+HREF="ref.pspell.html"><LINK
+REL="PREVIOUS"
+TITLE="pspell_clear_session"
+HREF="function.pspell-clear-session.html"><LINK
+REL="NEXT"
+TITLE="pspell_config_ignore"
+HREF="function.pspell-config-ignore.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.pspell-clear-session.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.pspell-config-ignore.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.pspell-config-create"
+>pspell_config_create</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN32230"
+></A
+><P
+>    (PHP4 &#62;= 4.0.2)</P
+>pspell_config_create&nbsp;--&nbsp;Create a config used to open a dictionary.</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN32233"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN32235"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int <B
+CLASS="function"
+>pspell_config_create</B
+></CODE
+> (string language [, string 
+       spelling [, string 
+       jargon [, string 
+       encoding]]])</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     <B
+CLASS="function"
+>Pspell_config_create()</B
+> has a very similar syntax to
+	 <A
+HREF="function.pspell-new.html"
+><B
+CLASS="function"
+>pspell_new()</B
+></A
+>. In fact, using 
+	 <B
+CLASS="function"
+>pspell_config_create()</B
+> immediatelly followed by 
+	 <A
+HREF="function.pspell-new-config.html"
+><B
+CLASS="function"
+>pspell_new_config()</B
+></A
+> will produce the exact same result.
+	 However, after creating a new config, you can also use
+	 <B
+CLASS="function"
+>pspell_config_*()</B
+> functions before calling
+	 <A
+HREF="function.pspell-new-config.html"
+><B
+CLASS="function"
+>pspell_new_config()</B
+></A
+> to take advantage of some
+	 advanced functionality.
+    </P
+><P
+>&#13;     The language parameter is the language code which consists of the
+     two letter ISO 639 language code and an optional two letter ISO
+     3166 country code after a dash or underscore. 
+    </P
+><P
+>&#13;     The spelling parameter is the requested spelling for languages
+     with more than one spelling such as English. Known values are
+     'american', 'british', and 'canadian'.
+    </P
+><P
+>&#13;     The jargon parameter contains extra information to distinguish
+     two different words lists that have the same language and
+     spelling parameters.
+    </P
+><P
+>&#13;     The encoding parameter is the encoding that words are expected to
+     be in.  Valid values are 'utf-8', 'iso8859-*', 'koi8-r',
+     'viscii', 'cp1252', 'machine unsigned 16', 'machine unsigned
+     32'. This parameter is largely untested, so be careful when
+     using.
+    </P
+><P
+>&#13;     The mode parameter is the mode in which spellchecker will work.
+     There are several modes available:
+     <P
+></P
+><UL
+><LI
+><P
+>&#13;	PSPELL_FAST - Fast mode (least number of suggestions)
+       </P
+></LI
+><LI
+><P
+>&#13;	PSPELL_NORMAL - Normal mode (more suggestions)
+       </P
+></LI
+><LI
+><P
+>&#13;	PSPELL_BAD_SPELLERS - Slow mode (a lot of suggestions)
+       </P
+></LI
+></UL
+>
+    </P
+><P
+>&#13;     For more information and examples, check out inline manual pspell
+     website:<A
+HREF="http://pspell.sourceforge.net/"
+TARGET="_top"
+>http://pspell.sourceforge.net/</A
+>.
+    </P
+><P
+>&#13;     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN32272"
+></A
+><P
+><B
+>Example 1. <B
+CLASS="function"
+>Pspell_config_create()</B
+></B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;$pspell_config = pspell_config_create ("en");
+pspell_config_personal ($pspell_config, "/var/dictionaries/custom.pws");
+pspell_config_repl ($pspell_config, "/var/dictionaries/custom.repl");
+$pspell_link = pspell_new_personal (pspell_config);
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.pspell-clear-session.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.pspell-config-ignore.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>pspell_clear_session</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.pspell.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>pspell_config_ignore</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

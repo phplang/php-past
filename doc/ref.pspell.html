@@ -1,0 +1,264 @@
+<HTML
+><HEAD
+><TITLE
+>Pspell Functions</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Function Reference"
+HREF="funcref.html"><LINK
+REL="PREVIOUS"
+TITLE="system"
+HREF="function.system.html"><LINK
+REL="NEXT"
+TITLE="pspell_add_to_personal"
+HREF="function.pspell-add-to-personal.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="reference"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.system.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.pspell-add-to-personal.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="reference"
+><A
+NAME="ref.pspell"
+></A
+><DIV
+CLASS="TITLEPAGE"
+><H1
+CLASS="title"
+>LIII. Pspell Functions</H1
+><DIV
+CLASS="PARTINTRO"
+><A
+NAME="AEN32141"
+></A
+><P
+>&#13;    These functions allow you to check the spelling of a word and offer
+	suggestions.
+   </P
+><P
+>&#13;    You need the aspell and pspell libraries, available from <A
+HREF="http://aspell.sourceforge.net/"
+TARGET="_top"
+>http://aspell.sourceforge.net/</A
+> and
+    <A
+HREF="http://pspell.sourceforge.net/"
+TARGET="_top"
+>http://pspell.sourceforge.net/</A
+> respectively, and
+    add the <TT
+CLASS="option"
+>--with-pspell[=dir]</TT
+> option
+    when compiling php.
+   </P
+></DIV
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Table of Contents</B
+></DT
+><DT
+><A
+HREF="function.pspell-add-to-personal.html"
+>pspell_add_to_personal</A
+> &#8212; Add the word to a personal wordlist.</DT
+><DT
+><A
+HREF="function.pspell-add-to-session.html"
+>pspell_add_to_session</A
+> &#8212; Add the word to the wordlist in the current session.
+	</DT
+><DT
+><A
+HREF="function.pspell-check.html"
+>pspell_check</A
+> &#8212; Check a word</DT
+><DT
+><A
+HREF="function.pspell-clear-session.html"
+>pspell_clear_session</A
+> &#8212; Clear the current session.</DT
+><DT
+><A
+HREF="function.pspell-config-create.html"
+>pspell_config_create</A
+> &#8212; Create a config used to open a dictionary.</DT
+><DT
+><A
+HREF="function.pspell-config-ignore.html"
+>pspell_config_ignore</A
+> &#8212; Ignore words less than N characters long.</DT
+><DT
+><A
+HREF="function.pspell-config-mode.html"
+>pspell_config_mode</A
+> &#8212; Change the mode number of suggestions returned.</DT
+><DT
+><A
+HREF="function.pspell-config-personal.html"
+>pspell_config_personal</A
+> &#8212; Set a file that contains personal wordlist.</DT
+><DT
+><A
+HREF="function.pspell-config-repl.html"
+>pspell_config_repl</A
+> &#8212; Set a file that contains replacement pairs.</DT
+><DT
+><A
+HREF="function.pspell-config-runtogether.html"
+>pspell_config_runtogether</A
+> &#8212; Consider run-together words as valid compounds.</DT
+><DT
+><A
+HREF="function.pspell-config-save-repl.html"
+>pspell_config_save_repl</A
+> &#8212; Determine whether to save a replacement pairs list
+	along with the wordlist.</DT
+><DT
+><A
+HREF="function.pspell-new.html"
+>pspell_new</A
+> &#8212; Load a new dictionary</DT
+><DT
+><A
+HREF="function.pspell-new-config.html"
+>pspell_new_config</A
+> &#8212; Load a new dictionary with settings based on a given config
+	</DT
+><DT
+><A
+HREF="function.pspell-new-personal.html"
+>pspell_new_personal</A
+> &#8212; Load a new dictionary with personal wordlist</DT
+><DT
+><A
+HREF="function.pspell-save-wordlist.html"
+>pspell_save_wordlist</A
+> &#8212; Save the personal wordlist to a file.</DT
+><DT
+><A
+HREF="function.pspell-store-replacement.html"
+>pspell_store_replacement</A
+> &#8212; Store a replacement pair for a word</DT
+><DT
+><A
+HREF="function.pspell-suggest.html"
+>pspell_suggest</A
+> &#8212; Suggest spellings of a word</DT
+></DL
+></DIV
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.system.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.pspell-add-to-personal.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>system</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="funcref.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>pspell_add_to_personal</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

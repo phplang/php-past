@@ -1,0 +1,454 @@
+<HTML
+><HEAD
+><TITLE
+>Array Functions</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Function Reference"
+HREF="funcref.html"><LINK
+REL="PREVIOUS"
+TITLE="virtual"
+HREF="function.virtual.html"><LINK
+REL="NEXT"
+TITLE="array"
+HREF="function.array.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="reference"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.virtual.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.array.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="reference"
+><A
+NAME="ref.array"
+></A
+><DIV
+CLASS="TITLEPAGE"
+><H1
+CLASS="title"
+>II. Array Functions</H1
+><DIV
+CLASS="PARTINTRO"
+><A
+NAME="AEN4434"
+></A
+><P
+>&#13;    These functions allow you to interact with and manipulate
+    arrays in various ways. Arrays are essential for storing,
+    managing, and operating on sets of variables.
+   </P
+><P
+>&#13;    Simple and multi-dimensional arrays are supported, and may be
+    either user created or created by another function.
+    There are specific database handling functions for populating
+    arrays from database queries, and several functions return arrays.
+   </P
+></DIV
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Table of Contents</B
+></DT
+><DT
+><A
+HREF="function.array.html"
+>array</A
+> &#8212; 
+     Create an array
+    </DT
+><DT
+><A
+HREF="function.array-count-values.html"
+>array_count_values</A
+> &#8212; Counts all the values of an array</DT
+><DT
+><A
+HREF="function.array-diff.html"
+>array_diff</A
+> &#8212; Computes the difference of arrays</DT
+><DT
+><A
+HREF="function.array-flip.html"
+>array_flip</A
+> &#8212; Flip all the values of an array</DT
+><DT
+><A
+HREF="function.array-intersect.html"
+>array_intersect</A
+> &#8212; Computes the intersection of arrays</DT
+><DT
+><A
+HREF="function.array-keys.html"
+>array_keys</A
+> &#8212; Return all the keys of an array</DT
+><DT
+><A
+HREF="function.array-merge.html"
+>array_merge</A
+> &#8212; Merge two or more arrays</DT
+><DT
+><A
+HREF="function.array-merge-recursive.html"
+>array_merge_recursive</A
+> &#8212; Merge two or more arrays recursively</DT
+><DT
+><A
+HREF="function.array-multisort.html"
+>array_multisort</A
+> &#8212; Sort multiple or multi-dimensional arrays</DT
+><DT
+><A
+HREF="function.array-pad.html"
+>array_pad</A
+> &#8212; 
+     Pad array to the specified length with a value
+    </DT
+><DT
+><A
+HREF="function.array-pop.html"
+>array_pop</A
+> &#8212; Pop the element off the end of array</DT
+><DT
+><A
+HREF="function.array-push.html"
+>array_push</A
+> &#8212; 
+     Push one or more elements onto the end of array
+    </DT
+><DT
+><A
+HREF="function.array-rand.html"
+>array_rand</A
+> &#8212; 
+     Pick one or more random entries out of an array
+    </DT
+><DT
+><A
+HREF="function.array-reverse.html"
+>array_reverse</A
+> &#8212; 
+     Return an array with elements in reverse order
+    </DT
+><DT
+><A
+HREF="function.array-shift.html"
+>array_shift</A
+> &#8212; 
+     Pop an element off the beginning of array
+    </DT
+><DT
+><A
+HREF="function.array-slice.html"
+>array_slice</A
+> &#8212; Extract a slice of the array</DT
+><DT
+><A
+HREF="function.array-splice.html"
+>array_splice</A
+> &#8212; 
+     Remove a portion of the array and replace it with something
+     else
+    </DT
+><DT
+><A
+HREF="function.array-unique.html"
+>array_unique</A
+> &#8212; Removes duplicate values from an array</DT
+><DT
+><A
+HREF="function.array-unshift.html"
+>array_unshift</A
+> &#8212; 
+     Push one or more elements onto the beginning of array
+    </DT
+><DT
+><A
+HREF="function.array-values.html"
+>array_values</A
+> &#8212; Return all the values of an array</DT
+><DT
+><A
+HREF="function.array-walk.html"
+>array_walk</A
+> &#8212; 
+     Apply a user function to every member of an array
+    </DT
+><DT
+><A
+HREF="function.arsort.html"
+>arsort</A
+> &#8212; 
+     Sort an array in reverse order and maintain index association
+    </DT
+><DT
+><A
+HREF="function.asort.html"
+>asort</A
+> &#8212; Sort an array and maintain index association</DT
+><DT
+><A
+HREF="function.compact.html"
+>compact</A
+> &#8212; 
+     Create array containing variables and their values
+    </DT
+><DT
+><A
+HREF="function.count.html"
+>count</A
+> &#8212; Count elements in a variable</DT
+><DT
+><A
+HREF="function.current.html"
+>current</A
+> &#8212; Return the current element in an array</DT
+><DT
+><A
+HREF="function.each.html"
+>each</A
+> &#8212; 
+     Return the next key and value pair from an array
+    </DT
+><DT
+><A
+HREF="function.end.html"
+>end</A
+> &#8212; 
+     Set the internal pointer of an array to its last element
+    </DT
+><DT
+><A
+HREF="function.extract.html"
+>extract</A
+> &#8212; 
+     Import variables into the symbol table from an array
+    </DT
+><DT
+><A
+HREF="function.in-array.html"
+>in_array</A
+> &#8212; Return true if a value exists in an array</DT
+><DT
+><A
+HREF="function.key.html"
+>key</A
+> &#8212; Fetch a key from an associative array</DT
+><DT
+><A
+HREF="function.krsort.html"
+>krsort</A
+> &#8212; Sort an array by key in reverse order</DT
+><DT
+><A
+HREF="function.ksort.html"
+>ksort</A
+> &#8212; Sort an array by key</DT
+><DT
+><A
+HREF="function.list.html"
+>list</A
+> &#8212; 
+     Assign variables as if they were an array
+    </DT
+><DT
+><A
+HREF="function.natsort.html"
+>natsort</A
+> &#8212; 
+     Sort an array using a "natural order" algorithm
+    </DT
+><DT
+><A
+HREF="function.natcasesort.html"
+>natcasesort</A
+> &#8212; 
+     Sort an array using a case insensitive "natural order" algorithm
+    </DT
+><DT
+><A
+HREF="function.next.html"
+>next</A
+> &#8212; 
+     Advance the internal array pointer of an array
+    </DT
+><DT
+><A
+HREF="function.pos.html"
+>pos</A
+> &#8212; Get the current element from an array</DT
+><DT
+><A
+HREF="function.prev.html"
+>prev</A
+> &#8212; Rewind the internal array pointer</DT
+><DT
+><A
+HREF="function.range.html"
+>range</A
+> &#8212; 
+     Create an array containing a range of integers
+    </DT
+><DT
+><A
+HREF="function.reset.html"
+>reset</A
+> &#8212; 
+     Set the internal pointer of an array to its first element
+    </DT
+><DT
+><A
+HREF="function.rsort.html"
+>rsort</A
+> &#8212; Sort an array in reverse order</DT
+><DT
+><A
+HREF="function.shuffle.html"
+>shuffle</A
+> &#8212; Shuffle an array</DT
+><DT
+><A
+HREF="function.sizeof.html"
+>sizeof</A
+> &#8212; Get the number of elements in an array</DT
+><DT
+><A
+HREF="function.sort.html"
+>sort</A
+> &#8212; Sort an array</DT
+><DT
+><A
+HREF="function.uasort.html"
+>uasort</A
+> &#8212; 
+     Sort an array with a user-defined comparison function and
+     maintain index association
+    </DT
+><DT
+><A
+HREF="function.uksort.html"
+>uksort</A
+> &#8212; 
+     Sort an array by keys using a user-defined comparison function
+    </DT
+><DT
+><A
+HREF="function.usort.html"
+>usort</A
+> &#8212; 
+     Sort an array by values using a user-defined comparison function
+    </DT
+></DL
+></DIV
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.virtual.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.array.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>virtual</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="funcref.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>array</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,272 @@
+<HTML
+><HEAD
+><TITLE
+>DBM Functions</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Function Reference"
+HREF="funcref.html"><LINK
+REL="PREVIOUS"
+TITLE="dbase_numrecords"
+HREF="function.dbase-numrecords.html"><LINK
+REL="NEXT"
+TITLE="dbmopen"
+HREF="function.dbmopen.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="reference"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.dbase-numrecords.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.dbmopen.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="reference"
+><A
+NAME="ref.dbm"
+></A
+><DIV
+CLASS="TITLEPAGE"
+><H1
+CLASS="title"
+>XV. DBM Functions</H1
+><DIV
+CLASS="PARTINTRO"
+><A
+NAME="AEN9814"
+></A
+><P
+>&#13;    These functions allow you to store records stored in a dbm-style
+    database. This type of database (supported by the Berkeley DB,
+    GDBM, and some system libraries, as well as a built-in flatfile
+    library) stores key/value pairs (as opposed to the full-blown
+    records supported by relational databases).
+   </P
+><P
+>&#13;    <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN9817"
+></A
+><P
+><B
+>Example 1. DBM example</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;$dbm = dbmopen ("lastseen", "w");
+if (dbmexists ($dbm, $userid)) {
+    $last_seen = dbmfetch ($dbm, $userid);
+} else {
+    dbminsert ($dbm, $userid, time());
+}
+do_stuff();
+dbmreplace ($dbm, $userid, time());
+dbmclose ($dbm);
+     </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+   </P
+></DIV
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Table of Contents</B
+></DT
+><DT
+><A
+HREF="function.dbmopen.html"
+>dbmopen</A
+> &#8212; Opens a DBM database</DT
+><DT
+><A
+HREF="function.dbmclose.html"
+>dbmclose</A
+> &#8212; Closes a dbm database</DT
+><DT
+><A
+HREF="function.dbmexists.html"
+>dbmexists</A
+> &#8212; 
+     Tells if a value exists for a key in a DBM database
+    </DT
+><DT
+><A
+HREF="function.dbmfetch.html"
+>dbmfetch</A
+> &#8212; 
+     Fetches a value for a key from a DBM database
+    </DT
+><DT
+><A
+HREF="function.dbminsert.html"
+>dbminsert</A
+> &#8212; 
+     Inserts a value for a key in a DBM database
+    </DT
+><DT
+><A
+HREF="function.dbmreplace.html"
+>dbmreplace</A
+> &#8212; 
+     Replaces the value for a key in a DBM database
+    </DT
+><DT
+><A
+HREF="function.dbmdelete.html"
+>dbmdelete</A
+> &#8212; 
+     Deletes the value for a key from a DBM database
+    </DT
+><DT
+><A
+HREF="function.dbmfirstkey.html"
+>dbmfirstkey</A
+> &#8212; 
+     Retrieves the first key from a DBM database
+    </DT
+><DT
+><A
+HREF="function.dbmnextkey.html"
+>dbmnextkey</A
+> &#8212; 
+     Retrieves the next key from a DBM database</DT
+><DT
+><A
+HREF="function.dblist.html"
+>dblist</A
+> &#8212; 
+     Describes the DBM-compatible library being used
+    </DT
+></DL
+></DIV
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.dbase-numrecords.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.dbmopen.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>dbase_numrecords</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="funcref.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>dbmopen</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

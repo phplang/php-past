@@ -1,0 +1,257 @@
+<HTML
+><HEAD
+><TITLE
+>mysql_data_seek</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="MySQL functions"
+HREF="ref.mysql.html"><LINK
+REL="PREVIOUS"
+TITLE="mysql_create_db"
+HREF="function.mysql-create-db.html"><LINK
+REL="NEXT"
+TITLE="mysql_db_name"
+HREF="function.mysql-db-name.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.mysql-create-db.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.mysql-db-name.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.mysql-data-seek"
+>mysql_data_seek</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN24071"
+></A
+><P
+>    (PHP3 , PHP4 )</P
+>mysql_data_seek&nbsp;--&nbsp;Move internal result pointer</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN24074"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN24076"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int <B
+CLASS="function"
+>mysql_data_seek</B
+></CODE
+> (int result_identifier, int row_number)</CODE
+></P
+><P
+></P
+></DIV
+><P
+> 
+     Returns: true on success, false on failure.
+    </P
+><P
+> 
+     <B
+CLASS="function"
+>mysql_data_seek()</B
+> moves the internal row
+     pointer of the MySQL result associated with the specified result
+     identifier to point to the specified row number.  The next call
+     to <A
+HREF="function.mysql-fetch-row.html"
+><B
+CLASS="function"
+>mysql_fetch_row()</B
+></A
+> would return that row.
+    </P
+><P
+>&#13;     <TT
+CLASS="parameter"
+><I
+>Row_number</I
+></TT
+> starts at 0.
+    </P
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN24090"
+></A
+><P
+><B
+>Example 1. MySQL data seek example</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;&#60;?php
+    $link = mysql_pconnect ("kron", "jutta", "geheim")
+        or die ("Could not connect");
+
+    mysql_select_db ("samp_db")
+        or die ("Could not select database");
+
+    $query = "SELECT last_name, first_name FROM friends";
+    $result = mysql_query ($query)
+        or die ("Query failed");
+
+    # fetch rows in reverse order
+
+    for ($i = mysql_num_rows ($result) - 1; $i &#62;=0; $i--) {
+        if (!mysql_data_seek ($result, $i)) {
+            printf ("Cannot seek to row %d\n", $i);
+            continue;
+        }
+
+        if(!($row = mysql_fetch_object ($result)))
+            continue;
+
+        printf ("%s %s&#60;BR&#62;\n", $row-&#62;last_name, $row-&#62;first_name);
+    }
+
+    mysql_free_result ($result);
+?&#62;
+     </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.mysql-create-db.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.mysql-db-name.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>mysql_create_db</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.mysql.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>mysql_db_name</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

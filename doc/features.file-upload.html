@@ -1,0 +1,543 @@
+<HTML
+><HEAD
+><TITLE
+>Handling file uploads</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Features"
+HREF="features.html"><LINK
+REL="PREVIOUS"
+TITLE="Cookies"
+HREF="features.cookies.html"><LINK
+REL="NEXT"
+TITLE="Common Pitfalls"
+HREF="features.file-upload.common-pitfalls.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="chapter"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="features.cookies.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="features.file-upload.common-pitfalls.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="chapter"
+><H1
+><A
+NAME="features.file-upload"
+>Chapter 19. Handling file uploads</A
+></H1
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Table of Contents</B
+></DT
+><DT
+><A
+HREF="features.file-upload.html#features.file-upload.post-method"
+>POST method uploads</A
+></DT
+><DT
+><A
+HREF="features.file-upload.common-pitfalls.html"
+>Common Pitfalls</A
+></DT
+><DT
+><A
+HREF="feature-fileupload.multiple.html"
+>Uploading multiple files</A
+></DT
+><DT
+><A
+HREF="features.file-upload.put-method.html"
+>PUT method support</A
+></DT
+></DL
+></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="features.file-upload.post-method"
+>POST method uploads</A
+></H1
+><P
+>&#13;    PHP is capable of receiving file uploads from any RFC-1867
+    compliant browser (which includes Netscape Navigator 3 or later,
+    Microsoft Internet Explorer 3 with a patch from Microsoft, or
+    later without a patch).  This feature lets people upload both text
+    and binary files.  With PHP's authentication and file manipulation
+    functions, you have full control over who is allowed to upload and
+    what is to be done with the file once it has been uploaded.
+   </P
+><P
+>&#13;    Note that PHP also supports PUT-method file uploads as used by
+    Netscape Composer and W3C's Amaya clients.  See the <A
+HREF="features.file-upload.put-method.html"
+>PUT Method
+    Support</A
+> for more details.
+   </P
+><P
+>&#13;    A file upload screen can be built by creating a special form which
+    looks something like this:
+    <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN4137"
+></A
+><P
+><B
+>Example 19-1. File Upload Form</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;&#60;FORM ENCTYPE="multipart/form-data" ACTION="_URL_" METHOD=POST&#62;
+&#60;INPUT TYPE="hidden" name="MAX_FILE_SIZE" value="1000"&#62;
+Send this file: &#60;INPUT NAME="userfile" TYPE="file"&#62;
+&#60;INPUT TYPE="submit" VALUE="Send File"&#62;
+&#60;/FORM&#62;
+     </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+    The _URL_ should point to a PHP file.  The MAX_FILE_SIZE hidden
+    field must precede the file input field and its value is the
+    maximum filesize accepted.  The value is in bytes.
+   </P
+><P
+>&#13;    In PHP 3, the following variables will be defined within the
+    destination script upon a successful upload, assuming that <A
+HREF="configuration.html#ini.register-globals"
+>register_globals</A
+> is turned
+    on in <TT
+CLASS="filename"
+>php.ini</TT
+>. If <A
+HREF="configuration.html#ini.track-vars"
+>track_vars</A
+> is turned on, they will
+    also be available within the global array
+    <TT
+CLASS="varname"
+>$HTTP_POST_VARS</TT
+>. Note that the following
+    variable names assume the use of the file upload name 'userfile',
+    as used in the example above:
+
+    <P
+></P
+><UL
+><LI
+><P
+>&#13;       <TT
+CLASS="varname"
+>$userfile</TT
+> - The temporary filename in which
+       the uploaded file was stored on the server machine.
+      </P
+></LI
+><LI
+><P
+>&#13;       <TT
+CLASS="varname"
+>$userfile_name</TT
+> - The original name or path
+       of the file on the sender's system.
+      </P
+></LI
+><LI
+><P
+>&#13;       <TT
+CLASS="varname"
+>$userfile_size</TT
+> - The size of the uploaded
+       file in bytes.
+      </P
+></LI
+><LI
+><P
+>&#13;       <TT
+CLASS="varname"
+>$userfile_type</TT
+> - The mime type of the file
+       if the browser provided this information.  An example would be
+       "image/gif".
+      </P
+></LI
+></UL
+>
+    Note that the "$userfile" part of the above variables is
+    whatever the name of the INPUT field of TYPE=file is in the upload
+    form.  In the above upload form example, we chose to call it
+    "userfile"
+   </P
+><P
+>&#13;    In PHP 4, the behaviour is slightly different, in that the new
+    global array <TT
+CLASS="varname"
+>$HTTP_POST_FILES</TT
+> is provided to
+    contain the uploaded file information. This is still only
+    available if <A
+HREF="configuration.html#ini.track-vars"
+>track_vars</A
+> is
+    turned on, but <A
+HREF="configuration.html#ini.track-vars"
+>track_vars</A
+> is
+    always turned on in versions of PHP after PHP 4.0.2.
+   </P
+><P
+>&#13;    The contents of <TT
+CLASS="varname"
+>$HTTP_POST_FILES</TT
+> are as
+    follows. Note that this assumes the use of the file upload name
+    'userfile', as used in the example above:
+    <P
+></P
+><DIV
+CLASS="variablelist"
+><DL
+><DT
+><TT
+CLASS="varname"
+>$HTTP_POST_FILES['userfile']['name']</TT
+></DT
+><DD
+><P
+>&#13;        The original name of the file on the client machine.
+       </P
+></DD
+><DT
+><TT
+CLASS="varname"
+>$HTTP_POST_FILES['userfile']['type']</TT
+></DT
+><DD
+><P
+>&#13;        The mime type of the file, if the browser provided this
+        information.  An example would be
+        <TT
+CLASS="literal"
+>"image/gif"</TT
+>.
+        </P
+></DD
+><DT
+><TT
+CLASS="varname"
+>$HTTP_POST_FILES['userfile']['size']</TT
+></DT
+><DD
+><P
+>&#13;        The size, in bytes, of the uploaded file.
+       </P
+></DD
+><DT
+><TT
+CLASS="varname"
+>$HTTP_POST_FILES['userfile']['tmp_name']</TT
+></DT
+><DD
+><P
+>&#13;        The temporary filename of the file in which the uploaded file
+        was stored on the server.
+       </P
+></DD
+></DL
+></DIV
+>
+   </P
+><P
+>&#13;    Files will by default be stored in the server's default temporary
+    directory, unless another location has been given with the <A
+HREF="configuration.html#ini.upload-tmp-dir"
+>upload_tmp_dir</A
+> directive in
+    <TT
+CLASS="filename"
+>php.ini</TT
+>. The server's default directory can
+    be changed by setting the environment variable
+    <TT
+CLASS="envar"
+>TMPDIR</TT
+> in the environment in which PHP runs.
+    Setting it using <A
+HREF="function.putenv.html"
+><B
+CLASS="function"
+>putenv()</B
+></A
+> from within a PHP
+    script will not work. This environment variable can also be used
+    to make sure that other operations are working on uploaded files,
+    as well.
+    <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN4191"
+></A
+><P
+><B
+>Example 19-2. Validating file uploads</B
+></P
+><P
+>&#13;      The following examples are for versions of PHP 3 greater than
+      3.0.16, and versions of PHP 4 greater than 4.0.2. See the
+      function entries for <A
+HREF="function.is-uploaded-file.html"
+><B
+CLASS="function"
+>is_uploaded_file()</B
+></A
+> and
+      <A
+HREF="function.move-uploaded-file.html"
+><B
+CLASS="function"
+>move_uploaded_file()</B
+></A
+>.
+     </P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;&#60;?php 
+if (is_uploaded_file($userfile)) {
+    copy($userfile, "/place/to/put/uploaded/file");
+} else {
+    echo "Possible file upload attack: filename '$userfile'.";
+}
+/* ...or... */
+move_uploaded_file($userfile, "/place/to/put/uploaded/file");
+?&#62;
+     </PRE
+></TD
+></TR
+></TABLE
+><P
+>&#13;      For earlier versions of PHP, you'll need to do something like
+      the following.
+      <DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
+><P
+><B
+>Note: </B
+>
+        This will <I
+CLASS="emphasis"
+>not</I
+> work in versions of PHP 4
+        after 4.0.2. It depends on internal functionality of PHP which
+        changed after that version.
+       </P
+></BLOCKQUOTE
+></DIV
+>
+     </P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;&#60;?php 
+/* Userland test for uploaded file. */ 
+function is_uploaded_file($filename) {
+    if (!$tmp_file = get_cfg_var('upload_tmp_dir')) {
+        $tmp_file = dirname(tempnam('', ''));
+    }
+    $tmp_file .= '/' . basename($filename);
+    /* User might have trailing slash in php.ini... */
+    return (ereg_replace('/+', '/', $tmp_file) == $filename);
+}
+
+if (is_uploaded_file($userfile)) {
+    copy($userfile, "/place/to/put/uploaded/file");
+} else {
+    echo "Possible file upload attack: filename '$userfile'.";
+}
+?&#62;
+     </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+   </P
+><P
+>&#13;    The PHP script which receives the uploaded file should implement
+    whatever logic is necessary for determining what should be done
+    with the uploaded file.  You can for example use the
+    <TT
+CLASS="varname"
+>$file_size</TT
+> variable to throw away any files
+    that are either too small or too big.  You could use the
+    <TT
+CLASS="varname"
+>$file_type</TT
+> variable to throw away any files
+    that didn't match a certain type criteria.  Whatever the logic,
+    you should either delete the file from the temporary directory or
+    move it elsewhere.
+   </P
+><P
+>&#13;    The file will be deleted from the temporary directory at the end
+    of the request if it has not been moved away or renamed.
+   </P
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="features.cookies.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="features.file-upload.common-pitfalls.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Cookies</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="features.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Common Pitfalls</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

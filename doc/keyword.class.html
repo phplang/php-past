@@ -1,0 +1,332 @@
+<HTML
+><HEAD
+><TITLE
+>class</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Control Structures"
+HREF="control-structures.html"><LINK
+REL="PREVIOUS"
+TITLE="include"
+HREF="function.include.html"><LINK
+REL="NEXT"
+TITLE="Functions"
+HREF="functions.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.include.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 11. Control Structures</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="functions.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="KEYWORD.CLASS"
+><TT
+CLASS="LITERAL"
+>class</TT
+></A
+></H1
+><P
+>     A class is a collection of variables and functions working with
+     these variables.  A class is defined using the following syntax:
+ 
+     <DIV
+CLASS="INFORMALEXAMPLE"
+><P
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+> &lt;?php
+ class Cart {
+     var $items;  // Items in our shopping cart
+   
+     // Add $num articles of $artnr to the cart
+ 
+     function add_item ($artnr, $num) {
+         $this-&#62;items[$artnr] += $num;
+     }
+   
+     // Take $num articles of $artnr out of the cart
+ 
+     function remove_item ($artnr, $num) {
+         if ($this-&#62;items[$artnr] &#62; $num) {
+             $this-&#62;items[$artnr] -= $num;
+             return true;
+         } else {
+             return false;
+         }   
+     }
+ }
+ ?&#62;
+      </PRE
+><P
+></P
+></DIV
+>
+ 
+    </P
+><P
+>     This defines a class named Cart that consists of an associative
+     array of articles in the cart and two functions to add and remove
+     items from this cart.
+ 
+    </P
+><P
+>     Classes are types, that is, they are blueprints for actual
+     variables. You have to create a variables of the desired type with
+     the new operator.
+    </P
+><DIV
+CLASS="INFORMALEXAMPLE"
+><P
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+> $cart = new Cart;
+ $cart-&#62;add_item("10", 1);
+     </PRE
+><P
+></P
+></DIV
+><P
+>     This creates an object $cart of the class Cart. The function
+     add_item() of that object is being called to add 1 item of article
+     number 10 to the cart.
+    </P
+><P
+>     Classes can be extensions of other classes. The extended or
+     derived class has all variables and functions of the base class
+     and what you add in the extended definition.  This is done using
+     the extends keyword.
+    </P
+><DIV
+CLASS="INFORMALEXAMPLE"
+><P
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+> class Named_Cart extends Cart {
+     var $owner;
+  
+     function set_owner ($name) {
+         $this-&#62;owner = $name;
+     }
+ }
+     </PRE
+><P
+></P
+></DIV
+><P
+>     This defines a class Named_Cart that has all variables and
+     functions of Cart plus an additional variable $owner and an
+     additional function set_owner(). You create a named cart the usual
+     way and can now set and get the carts owner. You can still use
+     normal cart functions on named carts:
+    </P
+><DIV
+CLASS="INFORMALEXAMPLE"
+><P
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+> $ncart = new Named_Cart;    // Create a named cart
+ $ncart-&#62;set_owner ("kris"); // Name that cart
+ print $ncart-&#62;owner;        // print the cart owners name
+ $ncart-&#62;add_item ("10", 1); // (inherited functionality from cart)
+     </PRE
+><P
+></P
+></DIV
+><P
+>     Within functions of a class the variable $this means this
+     object. You have to use $this-&#62;something to access any variable or
+     function named something within your current object.
+    </P
+><P
+>     Constructors are functions in a class that are automatically 
+     called when you create a new instance of a class. A function 
+     becomes a constructor when it has the same name as the class.
+    </P
+><DIV
+CLASS="INFORMALEXAMPLE"
+><P
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+> class Auto_Cart extends Cart {
+     function Auto_Cart () {
+         $this-&#62;add_item ("10", 1);
+     }
+ }
+     </PRE
+><P
+></P
+></DIV
+><P
+>     This defines a class Auto_Cart that is a Cart plus a constructor
+     which initializes the cart with one item of article number "10"
+     each time a new Auto_Cart is being made with "new". Constructors
+     can also take arguments and these arguments can be optional, which
+     makes them much more useful.
+    </P
+><DIV
+CLASS="INFORMALEXAMPLE"
+><P
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+> class Constructor_Cart {
+     function Constructor_Cart ($item = "10", $num = 1) {
+         $this-&#62;add_item ($item, $num);
+     }
+ }
+ 
+ // Shop the same old boring stuff.
+ 
+ $default_cart   = new Constructor_Cart;
+ 
+ // Shop for real...
+ 
+ $different_cart = new Constructor_Cart ("20", 17);
+     </PRE
+><P
+></P
+></DIV
+><DIV
+CLASS="CAUTION"
+><P
+></P
+><TABLE
+CLASS="CAUTION"
+BORDER="1"
+WIDTH="100%"
+><TR
+><TD
+ALIGN="CENTER"
+><B
+>Caution</B
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+><P
+>      For derived classes, the constructor of the parent class is not
+      automatically called when the derived class's constructor is called.
+    </P
+></TD
+></TR
+></TABLE
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.include.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="functions.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><TT
+CLASS="LITERAL"
+>include</TT
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="control-structures.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Functions</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,294 @@
+<HTML
+><HEAD
+><TITLE
+>preg_quote</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Regular Expression Functions (Perl-Compatible)"
+HREF="ref.pcre.html"><LINK
+REL="PREVIOUS"
+TITLE="preg_split"
+HREF="function.preg-split.html"><LINK
+REL="NEXT"
+TITLE="preg_grep"
+HREF="function.preg-grep.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.preg-split.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.preg-grep.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.preg-quote"
+>preg_quote</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN33050"
+></A
+><P
+>    (PHP3 &#62;= 3.0.9, PHP4 )</P
+>preg_quote&nbsp;--&nbsp;Quote regular expression characters</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN33053"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN33055"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>string <B
+CLASS="function"
+>preg_quote</B
+></CODE
+> (string str [, string 
+       delimiter])</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     <B
+CLASS="function"
+>preg_quote()</B
+> takes <TT
+CLASS="parameter"
+><I
+>str</I
+></TT
+>
+     and puts a backslash in front of every character that is part of
+     the regular expression syntax.  This is useful if you have a
+     run-time string that you need to match in some text and the
+     string may contain special regex characters.
+    </P
+><P
+>&#13;     If the optional <TT
+CLASS="parameter"
+><I
+>delimiter</I
+></TT
+> is specified, it
+     will also be escaped.  This is useful for escaping the delimeter
+     that is required by the PCRE functions. The / is the most commonly
+     used delimiter.</P
+><P
+>&#13;     The special regular expression characters are:
+     <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="screen"
+>. \\ + * ? [ ^ ] $ ( ) { } = ! &#60; &#62; | :</PRE
+></TD
+></TR
+></TABLE
+>
+    </P
+><P
+>&#13;     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN33072"
+></A
+><P
+><B
+>Example 1. </B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;$keywords = "$40 for a g3/400";
+$keywords = preg_quote ($keywords, "/");
+echo $keywords; // returns \$40 for a g3\/400
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN33075"
+></A
+><P
+><B
+>Example 2. Italicizing a word within some text</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;
+// In this example, preg_quote($word) is used to keep the
+// asterisks from having special meaning to the regular
+// expression.
+
+$textbody = "This book is *very* difficult to find.";
+$word = "*very*";
+$textbody = preg_replace ("/".preg_quote($word)."/",
+                          "&#60;i&#62;".$word."&#60;/i&#62;",
+                          $textbody);
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.preg-split.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.preg-grep.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>preg_split</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.pcre.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>preg_grep</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

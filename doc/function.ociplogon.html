@@ -1,0 +1,191 @@
+<HTML
+><HEAD
+><TITLE
+>OCIPLogon</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Oracle 8 functions"
+HREF="ref.oci8.html"><LINK
+REL="PREVIOUS"
+TITLE="OCILogon"
+HREF="function.ocilogon.html"><LINK
+REL="NEXT"
+TITLE="OCINLogon"
+HREF="function.ocinlogon.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.ocilogon.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.ocinlogon.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.ociplogon"
+>OCIPLogon</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN26854"
+></A
+><P
+>    (PHP3 &#62;= 3.0.8, PHP4 )</P
+>OCIPLogon&nbsp;--&nbsp;Connect to an Oracle database and log on using a persistant connection. 
+    Returns a new session.</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN26857"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN26859"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int <B
+CLASS="function"
+>OCIPLogon</B
+></CODE
+> (string username, string password [, string db])</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     <B
+CLASS="function"
+>OCIPLogon()</B
+> creates a persistent connection to
+     an Oracle 8 database and logs on.  The optional third parameter
+     can either contain the name of the local Oracle instance or the
+     name of the entry in tnsnames.ora to which you want to connect.
+     If the optional third parameter is not specified, PHP uses the
+     environment variables ORACLE_SID (Oracle instance) or TWO_TASK
+     (tnsnames.ora) to determine which database to connect to.
+    </P
+><P
+>&#13;     See also <B
+CLASS="function"
+>OCILogon()</B
+> and
+     <B
+CLASS="function"
+>OCINLogon()</B
+>.</P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.ocilogon.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.ocinlogon.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>OCILogon</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.oci8.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>OCINLogon</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,372 @@
+<HTML
+><HEAD
+><TITLE
+>ereg_replace</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Regular Expression Functions (POSIX Extended)"
+HREF="ref.regex.html"><LINK
+REL="PREVIOUS"
+TITLE="ereg"
+HREF="function.ereg.html"><LINK
+REL="NEXT"
+TITLE="eregi"
+HREF="function.eregi.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.ereg.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.eregi.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.ereg-replace"
+>ereg_replace</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN33258"
+></A
+><P
+>    (PHP3 , PHP4 )</P
+>ereg_replace&nbsp;--&nbsp;Replace regular expression</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN33261"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN33263"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>string <B
+CLASS="function"
+>ereg_replace</B
+></CODE
+> (string pattern, string replacement, string string)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     This function scans <TT
+CLASS="parameter"
+><I
+>string</I
+></TT
+> for matches to
+     <TT
+CLASS="parameter"
+><I
+>pattern</I
+></TT
+>, then replaces the matched text
+     with <TT
+CLASS="parameter"
+><I
+>replacement</I
+></TT
+>.
+    </P
+><P
+>&#13;     The modified string is returned. (Which may mean that the
+     original string is returned if there are no matches to be
+     replaced.)
+    </P
+><P
+>&#13;     If <TT
+CLASS="parameter"
+><I
+>pattern</I
+></TT
+> contains parenthesized
+     substrings, <TT
+CLASS="parameter"
+><I
+>replacement</I
+></TT
+> may contain
+     substrings of the form
+     <TT
+CLASS="literal"
+>\\<TT
+CLASS="replaceable"
+><I
+>digit</I
+></TT
+></TT
+>, which will
+     be replaced by the text matching the digit'th parenthesized
+     substring; <TT
+CLASS="literal"
+>\\0</TT
+> will produce the entire
+     contents of string.  Up to nine substrings may be used.
+     Parentheses may be nested, in which case they are counted by the
+     opening parenthesis.
+    </P
+><P
+>&#13;     If no matches are found in <TT
+CLASS="parameter"
+><I
+>string</I
+></TT
+>, then
+     <TT
+CLASS="parameter"
+><I
+>string</I
+></TT
+> will be returned unchanged.
+    </P
+><P
+>&#13;     For example, the following code snippet prints "This was a test"
+     three times:
+     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN33288"
+></A
+><P
+><B
+>Example 1. <B
+CLASS="function"
+>Ereg_replace()</B
+> Example</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;$string = "This is a test";
+echo ereg_replace (" is", " was", $string);
+echo ereg_replace ("( )is", "\\1was", $string);
+echo ereg_replace ("(( )is)", "\\2was", $string);
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+    </P
+><P
+>&#13;     One thing to take note of is that if you use an integer value as
+     the <TT
+CLASS="parameter"
+><I
+>replacement</I
+></TT
+> parameter, you may not get
+     the results you expect. This is because
+     <B
+CLASS="function"
+>ereg_replace()</B
+> will interpret the number as
+     the ordinal value of a character, and apply that. For instance:
+     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN33295"
+></A
+><P
+><B
+>Example 2. <B
+CLASS="function"
+>ereg_replace()</B
+> Example</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;&#60;?php
+/* This will not work as expected. */
+$num = 4;
+$string = "This string has four words.";
+$string = ereg_replace('four', $num, $string);
+echo $string;   /* Output: 'This string has   words.' */
+
+/* This will work. */
+$num = '4';
+$string = "This string has four words.";
+$string = ereg_replace('four', $num, $string);
+echo $string;   /* Output: 'This string has 4 words.' */
+?&#62;
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+    </P
+><P
+>&#13;     See also <A
+HREF="function.ereg.html"
+><B
+CLASS="function"
+>ereg()</B
+></A
+>, <A
+HREF="function.eregi.html"
+><B
+CLASS="function"
+>eregi()</B
+></A
+>,
+     and <A
+HREF="function.eregi-replace.html"
+><B
+CLASS="function"
+>eregi_replace()</B
+></A
+>.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.ereg.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.eregi.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>ereg</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.regex.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>eregi</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,205 @@
+<HTML
+><HEAD
+><TITLE
+>socket_set_blocking</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Network Functions"
+HREF="ref.network.html"><LINK
+REL="PREVIOUS"
+TITLE="socket_get_status"
+HREF="function.socket-get-status.html"><LINK
+REL="NEXT"
+TITLE="socket_set_timeout"
+HREF="function.socket-set-timeout.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.socket-get-status.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.socket-set-timeout.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.set-socket-blocking"
+>socket_set_blocking</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN25393"
+></A
+><P
+>    (PHP4 &#62;= 4.0b4)</P
+>socket_set_blocking&nbsp;--&nbsp;Set blocking/non-blocking mode on a socket</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN25396"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN25398"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int <B
+CLASS="function"
+>socket_set_blocking</B
+></CODE
+> (int socket descriptor, int mode)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     If <TT
+CLASS="parameter"
+><I
+>mode</I
+></TT
+> is false, the given socket
+     descriptor will be switched to non-blocking mode, and if true, it
+     will be switched to blocking mode.  This affects calls like
+     <A
+HREF="function.fgets.html"
+><B
+CLASS="function"
+>fgets()</B
+></A
+> that read from the socket.  In
+     non-blocking mode an <A
+HREF="function.fgets.html"
+><B
+CLASS="function"
+>fgets()</B
+></A
+> call will always
+     return right away while in blocking mode it will wait for data to
+     become available on the socket.
+    </P
+><P
+>&#13;     This function was previously called as
+     <A
+HREF="function.set-socket-blocking.html"
+><B
+CLASS="function"
+>set_socket_blocking()</B
+></A
+> but this usage is deprecated.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.socket-get-status.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.socket-set-timeout.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>socket_get_status</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.network.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>socket_set_timeout</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

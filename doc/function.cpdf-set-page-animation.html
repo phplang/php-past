@@ -1,0 +1,241 @@
+<HTML
+><HEAD
+><TITLE
+>cpdf_set_page_animation</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="ClibPDF functions"
+HREF="ref.cpdf.html"><LINK
+REL="PREVIOUS"
+TITLE="cpdf_add_outline"
+HREF="function.cpdf-add-outline.html"><LINK
+REL="NEXT"
+TITLE="cpdf_import_jpeg"
+HREF="function.cpdf-import-jpeg.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.cpdf-add-outline.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.cpdf-import-jpeg.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.cpdf-set-page-animation"
+>cpdf_set_page_animation</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN8275"
+></A
+><P
+>    (PHP3 &#62;= 3.0.9, PHP4 &#62;= 4.0b4)</P
+>cpdf_set_page_animation&nbsp;--&nbsp;Sets duration between pages</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN8278"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN8280"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>void <B
+CLASS="function"
+>cpdf_set_page_animation</B
+></CODE
+> (int pdf document, int transition, double duration)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     The <B
+CLASS="function"
+>cpdf_set_page_animation()</B
+> function set the
+     transition between following pages.
+    </P
+><P
+>&#13;     The value of <TT
+CLASS="parameter"
+><I
+>transition</I
+></TT
+>
+     can be
+     <P
+></P
+><TABLE
+BORDER="0"
+><TBODY
+><TR
+><TD
+>0 for none,</TD
+></TR
+><TR
+><TD
+>&#13;       1 for two lines sweeping across the screen reveal the page,
+      </TD
+></TR
+><TR
+><TD
+>&#13;       2 for multiple lines sweeping across the screen reveal the page,
+      </TD
+></TR
+><TR
+><TD
+>3 for a box reveals the page,</TD
+></TR
+><TR
+><TD
+>&#13;       4 for a single line sweeping across the screen reveals the page,
+      </TD
+></TR
+><TR
+><TD
+>5 for the old page dissolves to reveal the page,</TD
+></TR
+><TR
+><TD
+>&#13;       6 for the dissolve effect moves from one screen edge to another,
+      </TD
+></TR
+><TR
+><TD
+>&#13;       7 for the old page is simply replaced by the new page (default)
+      </TD
+></TR
+></TBODY
+></TABLE
+><P
+></P
+>
+    </P
+><P
+>&#13;     The value of <TT
+CLASS="parameter"
+><I
+>duration</I
+></TT
+> is the number of seconds
+     between page flipping.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.cpdf-add-outline.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.cpdf-import-jpeg.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>cpdf_add_outline</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.cpdf.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>cpdf_import_jpeg</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,477 @@
+<HTML
+><HEAD
+><TITLE
+>Oracle 8 functions</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Function Reference"
+HREF="funcref.html"><LINK
+REL="PREVIOUS"
+TITLE="odbc_statistics"
+HREF="function.odbc-statistics.html"><LINK
+REL="NEXT"
+TITLE="OCIDefineByName"
+HREF="function.ocidefinebyname.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="reference"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.odbc-statistics.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.ocidefinebyname.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="reference"
+><A
+NAME="ref.oci8"
+></A
+><DIV
+CLASS="TITLEPAGE"
+><H1
+CLASS="title"
+>XLIV. Oracle 8 functions</H1
+><DIV
+CLASS="PARTINTRO"
+><A
+NAME="AEN26734"
+></A
+><P
+>&#13;    These functions allow you to access Oracle8 and Oracle7 databases.
+    It uses the Oracle8 Call-Interface (OCI8). You will need the Oracle8
+    client libraries to use this extension.
+   </P
+><P
+>&#13;    This extension is more flexible than the standard Oracle
+    extension. It supports binding of global and local PHP variables
+    to Oracle placeholders, has full LOB, FILE and ROWID support
+    and allows you to use user-supplied define variables.
+   </P
+><P
+>&#13;    Before using this extension, make sure that you have set up your
+    oracle environment variables properly for the Oracle user, as well
+    as your web daemon user. The variables you might need to set are as
+    follows:
+    <P
+></P
+><UL
+><LI
+><P
+>&#13;       ORACLE_HOME
+      </P
+></LI
+><LI
+><P
+>&#13;       ORACLE_SID
+      </P
+></LI
+><LI
+><P
+>&#13;       LD_PRELOAD
+      </P
+></LI
+><LI
+><P
+>&#13;       LD_LIBRARY_PATH
+      </P
+></LI
+><LI
+><P
+>&#13;       NLS_LANG
+      </P
+></LI
+><LI
+><P
+>&#13;       ORA_NLS33
+      </P
+></LI
+></UL
+>
+   </P
+><P
+>&#13;    After setting up the environment variables for your webserver user,
+    be sure to also add the webserver user (nobody, www) to the oracle
+    group.
+   </P
+><P
+>&#13;    <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN26753"
+></A
+><P
+><B
+>Example 1. OCI Hints</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;&#60;?php
+// by sergo@bacup.ru
+
+// Use option: OCI_DEFAULT for execute command to delay execution
+OCIExecute($stmt, OCI_DEFAULT);
+
+// for retrieve data use (after fetch):
+
+$result = OCIResult($stmt, $n);
+if (is_object ($result)) $result = $result-&#62;load();
+
+// For INSERT or UPDATE statetment use:
+
+$sql = "insert into table (field1, field2) values (field1 = 'value',
+ field2 = empty_clob()) returning field2 into :field2";
+OCIParse($conn, $sql);
+$clob = OCINewDescriptor($conn, OCI_D_LOB);
+OCIBindByName ($stmt, ":field2", &#38;$clob, -1, OCI_B_CLOB);
+OCIExecute($stmt, OCI_DEFAULT);
+$clob-&#62;save ("some text");
+
+?&#62;
+     </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+   </P
+><P
+>&#13;    You can easily access stored procedures in the same way as you
+    would from the commands line.
+    <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN26757"
+></A
+><P
+><B
+>Example 2. Using Stored Procedures</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;&#60;?php
+// by webmaster@remoterealty.com
+$sth = OCIParse ( $dbh, "begin sp_newaddress( :address_id, '$firstname',
+ '$lastname', '$company', '$address1', '$address2', '$city', '$state',
+ '$postalcode', '$country', :error_code );end;" );
+
+// This calls stored procedure sp_newaddress, with :address_id being an
+// in/out variable and :error_code being an out variable. 
+// Then you do the binding:
+
+   OCIBindByName ( $sth, ":address_id", $addr_id, 10 );
+   OCIBindByName ( $sth, ":error_code", $errorcode, 10 );
+   OCIExecute ( $sth );
+
+?&#62;
+     </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+   </P
+></DIV
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Table of Contents</B
+></DT
+><DT
+><A
+HREF="function.ocidefinebyname.html"
+>OCIDefineByName</A
+> &#8212; 
+     Use a PHP variable for the define-step during a SELECT
+    </DT
+><DT
+><A
+HREF="function.ocibindbyname.html"
+>OCIBindByName</A
+> &#8212; Bind a PHP variable to an Oracle Placeholder</DT
+><DT
+><A
+HREF="function.ocilogon.html"
+>OCILogon</A
+> &#8212; Establishes a connection to Oracle</DT
+><DT
+><A
+HREF="function.ociplogon.html"
+>OCIPLogon</A
+> &#8212; Connect to an Oracle database and log on using a persistant connection. 
+    Returns a new session.</DT
+><DT
+><A
+HREF="function.ocinlogon.html"
+>OCINLogon</A
+> &#8212; Connect to an Oracle database and log on using a new connection. 
+    Returns a new session.</DT
+><DT
+><A
+HREF="function.ocilogoff.html"
+>OCILogOff</A
+> &#8212; Disconnects from Oracle</DT
+><DT
+><A
+HREF="function.ociexecute.html"
+>OCIExecute</A
+> &#8212; Execute a statement</DT
+><DT
+><A
+HREF="function.ocicommit.html"
+>OCICommit</A
+> &#8212; Commits outstanding transactions</DT
+><DT
+><A
+HREF="function.ocirollback.html"
+>OCIRollback</A
+> &#8212; Rolls back outstanding transactions</DT
+><DT
+><A
+HREF="function.ocinewdescriptor.html"
+>OCINewDescriptor</A
+> &#8212; Initialize a new empty descriptor LOB/FILE (LOB is default)</DT
+><DT
+><A
+HREF="function.ocirowcount.html"
+>OCIRowCount</A
+> &#8212; Gets the number of affected rows</DT
+><DT
+><A
+HREF="function.ocinumcols.html"
+>OCINumCols</A
+> &#8212; Return the number of result columns in a statement</DT
+><DT
+><A
+HREF="function.ociresult.html"
+>OCIResult</A
+> &#8212; Returns coulumn value for fetched row</DT
+><DT
+><A
+HREF="function.ocifetch.html"
+>OCIFetch</A
+> &#8212; Fetches the next row into result-buffer</DT
+><DT
+><A
+HREF="function.ocifetchinto.html"
+>OCIFetchInto</A
+> &#8212; Fetches the next row into result-array</DT
+><DT
+><A
+HREF="function.ocifetchstatement.html"
+>OCIFetchStatement</A
+> &#8212; Fetch all rows of result data into an array.</DT
+><DT
+><A
+HREF="function.ocicolumnisnull.html"
+>OCIColumnIsNULL</A
+> &#8212; test whether a result column is NULL</DT
+><DT
+><A
+HREF="function.ocicolumnsize.html"
+>OCIColumnSize</A
+> &#8212; return result column size</DT
+><DT
+><A
+HREF="function.ociserverversion.html"
+>OCIServerVersion</A
+> &#8212; Return a string containing server version information.</DT
+><DT
+><A
+HREF="function.ocistatementtype.html"
+>OCIStatementType</A
+> &#8212; Return the type of an OCI statement.</DT
+><DT
+><A
+HREF="function.ocinewcursor.html"
+>OCINewCursor</A
+> &#8212; return a new cursor (Statement-Handle) - use this to bind ref-cursors!</DT
+><DT
+><A
+HREF="function.ocifreestatement.html"
+>OCIFreeStatement</A
+> &#8212; Free all resources associated with a statement.</DT
+><DT
+><A
+HREF="function.ocifreecursor.html"
+>OCIFreeCursor</A
+> &#8212; Free all resources associated with a cursor.</DT
+><DT
+><A
+HREF="function.ocifreedesc.html"
+>OCIFreeDesc</A
+> &#8212; Deletes a large object descriptor.</DT
+><DT
+><A
+HREF="function.ocicolumnname.html"
+>OCIColumnName</A
+> &#8212; Returns the name of a column.</DT
+><DT
+><A
+HREF="function.ocicolumntype.html"
+>OCIColumnType</A
+> &#8212; Returns the data type of a column.</DT
+><DT
+><A
+HREF="function.ociparse.html"
+>OCIParse</A
+> &#8212; Parse a query and return a statement</DT
+><DT
+><A
+HREF="function.ocierror.html"
+>OCIError</A
+> &#8212; Return the last error of stmt|conn|global. 
+     If no error happened returns false.
+    </DT
+><DT
+><A
+HREF="function.ociinternaldebug.html"
+>OCIInternalDebug</A
+> &#8212; 
+     Enables or disables internal debug output.  By default it is
+     disabled
+    </DT
+></DL
+></DIV
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.odbc-statistics.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.ocidefinebyname.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>odbc_statistics</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="funcref.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>OCIDefineByName</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

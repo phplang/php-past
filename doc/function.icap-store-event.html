@@ -1,0 +1,258 @@
+<HTML
+><HEAD
+><TITLE
+>icap_store_event</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="ICAP Functions"
+HREF="ref.icap.html"><LINK
+REL="PREVIOUS"
+TITLE="icap_list_events"
+HREF="function.icap-list-events.html"><LINK
+REL="NEXT"
+TITLE="icap_delete_event"
+HREF="function.icap-delete-event.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.icap-list-events.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.icap-delete-event.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.icap-store-event"
+>icap_store_event</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN14597"
+></A
+><P
+>    (PHP4 &#62;= 4.0b4)</P
+>icap_store_event&nbsp;--&nbsp;Store an event into an ICAP calendar</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN14600"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN14602"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>string <B
+CLASS="function"
+>icap_store_event</B
+></CODE
+> (int stream_id, object event)</CODE
+></P
+><P
+></P
+></DIV
+><P
+> 
+     <B
+CLASS="function"
+>Icap_store_event()</B
+> Stores an event into
+     an ICAP calendar.  An event object consists of:
+     <P
+></P
+><UL
+><LI
+><P
+>&#13;	int public - 1 if public, 0 if private;
+       </P
+></LI
+><LI
+><P
+>&#13;	string caegory - Category string of the event.
+       </P
+></LI
+><LI
+><P
+>&#13;	string title - Title string of the event.
+       </P
+></LI
+><LI
+><P
+>&#13;	string description - Description string of the event.
+       </P
+></LI
+><LI
+><P
+>&#13;	int alarm - Number of minutes before the event to sned out an alarm.
+       </P
+></LI
+><LI
+><P
+>&#13;	datetime start - datetime object of the start of the event.
+       </P
+></LI
+><LI
+><P
+>&#13;	datetime end - datetime object of the end of the event.
+       </P
+></LI
+></UL
+>
+    </P
+><P
+>&#13;     All datetime entries consist of an object that contains:
+     <P
+></P
+><UL
+><LI
+><P
+>&#13;	int year - year
+       </P
+></LI
+><LI
+><P
+>&#13;	int month - month
+       </P
+></LI
+><LI
+><P
+>&#13;	int mday  - day of month
+       </P
+></LI
+><LI
+><P
+>&#13;	int hour  - hour
+       </P
+></LI
+><LI
+><P
+>&#13;	int min   - minutes
+       </P
+></LI
+><LI
+><P
+>&#13;	int sec   - seconds
+       </P
+></LI
+></UL
+>
+    </P
+><P
+>&#13;     Returns true on success and false on error.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.icap-list-events.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.icap-delete-event.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>icap_list_events</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.icap.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>icap_delete_event</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

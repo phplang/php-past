@@ -1,0 +1,374 @@
+<HTML
+><HEAD
+><TITLE
+>error_log</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Error Handling and Logging Functions"
+HREF="ref.errorfunc.html"><LINK
+REL="PREVIOUS"
+TITLE="Error Handling and Logging Functions"
+HREF="ref.errorfunc.html"><LINK
+REL="NEXT"
+TITLE="error_reporting"
+HREF="function.error-reporting.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="ref.errorfunc.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.error-reporting.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.error-log"
+>error_log</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN10223"
+></A
+><P
+>    (PHP3 , PHP4 )</P
+>error_log&nbsp;--&nbsp;send an error message somewhere</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN10226"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN10228"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int <B
+CLASS="function"
+>error_log</B
+></CODE
+> (string message, int message_type [, string 
+       destination [, string 
+       extra_headers]])</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     Sends an error message to the web server's error log, a
+     <SPAN
+CLASS="acronym"
+>TCP</SPAN
+> port or to a file.  The first parameter,
+     <TT
+CLASS="parameter"
+><I
+>message</I
+></TT
+>, is the error message that should
+     be logged.  The second parameter,
+     <TT
+CLASS="parameter"
+><I
+>message_type</I
+></TT
+> says where the message should
+     go:
+     <DIV
+CLASS="table"
+><A
+NAME="AEN10246"
+></A
+><P
+><B
+>Table 1. <B
+CLASS="function"
+>error_log()</B
+> log types</B
+></P
+><TABLE
+BORDER="1"
+CLASS="CALSTABLE"
+><TBODY
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>0</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;      <TT
+CLASS="parameter"
+><I
+>message</I
+></TT
+> is sent to PHP's system
+      logger, using the Operating System's system logging
+      mechanism or a file, depending on what the <A
+HREF="configuration.html#ini.error-log"
+>error_log</A
+> configuration
+      directive is set to.
+     </TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>1</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;      <TT
+CLASS="parameter"
+><I
+>message</I
+></TT
+> is sent by email to the
+      address in the <TT
+CLASS="parameter"
+><I
+>destination</I
+></TT
+> parameter.
+      This is the only message type where the fourth parameter,
+      <TT
+CLASS="parameter"
+><I
+>extra_headers</I
+></TT
+> is used.  This message
+      type uses the same internal function as
+      <B
+CLASS="function"
+>Mail()</B
+> does.
+     </TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>2</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;      <TT
+CLASS="parameter"
+><I
+>message</I
+></TT
+> is sent through the PHP debugging
+      connection.  This option is only available if <A
+HREF="install.configure.html#install.configure.enable-debugger"
+>remote debugging has
+      been enabled</A
+>.  In this case, the
+      <TT
+CLASS="parameter"
+><I
+>destination</I
+></TT
+> parameter specifies the host
+      name or IP address and optionally, port number, of the socket
+      receiving the debug information.
+     </TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>3</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;      <TT
+CLASS="parameter"
+><I
+>message</I
+></TT
+> is appended to the file
+      <TT
+CLASS="parameter"
+><I
+>destination</I
+></TT
+>.
+     </TD
+></TR
+></TBODY
+></TABLE
+></DIV
+>
+    </P
+><P
+>&#13;     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN10275"
+></A
+><P
+><B
+>Example 1. <B
+CLASS="function"
+>error_log()</B
+> examples</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;// Send notification through the server log if we can not
+// connect to the database.
+if (!Ora_Logon ($username, $password)) {
+    error_log ("Oracle database not available!", 0);
+}
+
+// Notify administrator by email if we run out of FOO
+if (!($foo = allocate_new_foo()) {
+    error_log ("Big trouble, we're all out of FOOs!", 1,
+               "operator@mydomain.com");
+}
+
+// other ways of calling error_log():
+error_log ("You messed up!", 2, "127.0.0.1:7000");
+error_log ("You messed up!", 2, "loghost");
+error_log ("You messed up!", 3, "/var/tmp/my-errors.log");
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="ref.errorfunc.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.error-reporting.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Error Handling and Logging Functions</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.errorfunc.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>error_reporting</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

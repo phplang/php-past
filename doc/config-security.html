@@ -1,0 +1,564 @@
+<HTML
+><HEAD
+><TITLE
+>Security</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Configuration"
+HREF="configuration.html"><LINK
+REL="PREVIOUS"
+TITLE="Virtual hosts"
+HREF="config-virtualhost.html"><LINK
+REL="NEXT"
+TITLE="Security"
+HREF="security.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="config-virtualhost.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 3. Configuration</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="security.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="CONFIG-SECURITY"
+>Security</A
+></H1
+><P
+>    PHP is a powerful language and the interpreter, whether included
+    in a web server as a module or executed as a separate
+    <SPAN
+CLASS="ACRONYM"
+>CGI</SPAN
+> binary, is able to access files, execute
+    commands and open network connections on the server.  These
+    properties make anything run on a web server insecure by default.
+    PHP is designed specifically to be a more secure language for
+    writing CGI programs than Perl or C, and with correct selection of
+    compile-time and runtime configuration options it gives you
+    exactly the combination of freedom and security you need.
+
+   </P
+><P
+>    As there are many different ways of utilizing PHP, there are many
+    configuration options controlling its behaviour.  A large
+    selection of options guarantees you can use PHP for a lot of
+    purposes, but it also means there are combinations of these
+    options and server configurations that result in an insecure
+    setup.  This chapter explains the different configuration option
+    combinations and the situations they can be safely used.
+
+   </P
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="CONFIG-SECURITY-CGI"
+>CGI binary</A
+></H2
+><DIV
+CLASS="SECT3"
+><H3
+CLASS="SECT3"
+><A
+NAME="CONFIG-SECURITY-CGI-PREFACE"
+>Possible attacks</A
+></H3
+><P
+>      Using PHP as a <SPAN
+CLASS="ACRONYM"
+>CGI</SPAN
+> binary is an option for
+      setups that for some reason do not wish to integrate PHP as a
+      module into server software (like Apache), or will use PHP with
+      different kinds of CGI wrappers to create safe chroot and setuid
+      environments for scripts.  This setup usually involves
+      installing executable PHP binary to the web server cgi-bin
+      directory.  CERT advisory <A
+HREF="http://www.cert.org/advisories/CA-96.11.interpreters_in_cgi_bin_dir.html"
+TARGET="_top"
+>CA-96.11</A
+>
+      recommends agains placing any interpreters into cgi-bin.  Even
+      if the PHP binary can be used as a standalone interpreter, PHP
+      is designed to prevent the attacks this setup makes possible:
+
+     </P
+><P
+></P
+><UL
+><LI
+><P
+>Accessing system files:
+        <TT
+CLASS="FILENAME"
+>http://my.host/cgi-bin/php?/etc/passwd</TT
+>
+
+       </P
+><P
+>        The query information in an url after the question mark (?)
+	is passed as command line arguments to the interpreter by the
+	CGI interface.  Usually interpreters open and execute the
+	file specified as the first argument on the command line.
+
+       </P
+><P
+>        When invoked as a CGI binary, PHP refuses to interpret the
+	command	line arguments.
+       </P
+></LI
+><LI
+><P
+>Accessing any web document on server:
+	<TT
+CLASS="FILENAME"
+>http://my.host/cgi-bin/php/secret/doc.html</TT
+>
+
+       </P
+><P
+>	The path information part of the url after the PHP binary
+	name, <TT
+CLASS="FILENAME"
+>/secret/doc.html</TT
+> is
+	conventionally used to specify the name of the file to be
+	opened and interpreted by the <SPAN
+CLASS="ACRONYM"
+>CGI</SPAN
+> program.
+	Usually some web server configuration directives (Apache:
+	Action) are used to redirect requests to documents like
+	<TT
+CLASS="FILENAME"
+>http://my.host/secret/script.php3</TT
+> to the
+	PHP interpreter.  With this setup, the web server first checks
+	the access permissions to the directory <TT
+CLASS="FILENAME"
+>/secret</TT
+>, and after that creates the
+	redirected request <TT
+CLASS="FILENAME"
+>http://my.host/cgi-bin/php/secret/script.php3</TT
+>.
+	Unfortunately, if the request is originally given in this
+	form, no access checks are made by web server for file
+	<TT
+CLASS="FILENAME"
+>/secret/script.php3</TT
+>, but only
+	for the <TT
+CLASS="FILENAME"
+>/cgi-bin/php</TT
+> file.  This
+	way any user able to access <TT
+CLASS="FILENAME"
+>/cgi-bin/php</TT
+> is able to access any
+	protected document on the web server.
+
+       </P
+><P
+>	In PHP, compile-time configuration option <A
+HREF="install-unix.html#ENABLE-FORCE-CGI-REDIRECT"
+>--enable-force-cgi-redirect</A
+>
+	and runtime configuration directives <A
+HREF="configuration.html#INI.DOC-ROOT"
+>doc_root</A
+> and <A
+HREF="configuration.html#INI.USER-DIR"
+>user_dir</A
+> can be used to prevent
+	this attack, if the server document tree has any directories
+	with access restrictions.  See below for full explanation of
+	different combinations.
+
+       </P
+></LI
+></UL
+></DIV
+><DIV
+CLASS="SECT3"
+><H3
+CLASS="SECT3"
+><A
+NAME="CONFIG-SECURITY-CGI-PUBLIC"
+>Case 1: only public files served</A
+></H3
+><P
+>      If your server does not have any content that is not restricted
+      by password or ip based access control, there is no need for
+      these configuration options.  If your web server does not allow
+      you to do redirects, or the server does not have a way to
+      communicate with the PHP binary that the request is a safely
+      redirected request, you can specify the option <A
+HREF="install-unix.html#ENABLE-FORCE-CGI-REDIRECT"
+>--disable-force-cgi-redirect</A
+>
+      to the configure script.  You still have to make sure your PHP
+      scripts do not rely on one or another way of calling the script,
+      neither by directly <TT
+CLASS="FILENAME"
+>http://my.host/cgi-bin/php/dir/script.php3</TT
+>
+      nor by redirection <TT
+CLASS="FILENAME"
+>http://my.host/dir/script.php3</TT
+>.
+
+     </P
+><P
+>      Redirection can be configured for example in apache by
+      directives AddHandler and Action (see below).
+    </P
+></DIV
+><DIV
+CLASS="SECT3"
+><H3
+CLASS="SECT3"
+><A
+NAME="CONFIG-SECURITY-CGI-FORCE"
+>Case 2: using --enable-force-cgi-redirect</A
+></H3
+><P
+>      This compile-time option prevents anyone from calling PHP
+      directly with a url like <TT
+CLASS="FILENAME"
+>http://my.host/cgi-bin/php/secretdir/script.php3</TT
+>.
+      Instead, PHP will only parse in this mode if it has gone through
+      a web server redirect rule.
+     </P
+><P
+>      Usually the redirection in the Apache configuration is done with
+      the following directives:
+     </P
+><PRE
+CLASS="PROGRAMLISTING"
+>Action php3-script /cgi-bin/php
+AddHandler php3-script .php3</PRE
+><P
+>      This option has only been tested with the Apache web server, and
+      relies on Apache to set the non-standard CGI environment
+      variable <TT
+CLASS="ENVAR"
+>REDIRECT_STATUS</TT
+> on redirected requests.
+      If your web server does not support any way of telling if the
+      request is direct or redirected, you cannot use this option and
+      you must use one of the other ways of running the CGI version
+      documented here.
+    </P
+></DIV
+><DIV
+CLASS="SECT3"
+><H3
+CLASS="SECT3"
+><A
+NAME="CONFIG-SECURITY-CGI-DOCROOT"
+>Case 3: setting doc_root or user_dir</A
+></H3
+><P
+>      To include active content, like scripts and executables, in the
+      web server document directories is sometimes consider an
+      insecure practice.  If for some configuration mistake the
+      scripts are not executed but displayed as usual HTML documents,
+      this may result in leakage of intellectual property or security
+      information like passwords.  Therefore many sysadmins will
+      prefer setting up another directory structure for scripts that
+      is only accessible through the PHP CGI, and therefore always
+      interpreted and not displayed as such.
+      
+     </P
+><P
+>      Also if the method for making sure the requests are not
+      redirected, as described in the previous section, is not
+      available, it is necessary to set up a script doc_root that is
+      different from web document root.
+      
+     </P
+><P
+>      You can set the PHP script document root by the configuration
+      directive <A
+HREF="configuration.html#INI.DOC-ROOT"
+>doc_root</A
+> in the
+      <A
+HREF="configuration.html#PHP3.INI"
+>php3.ini</A
+> file, or you can set
+      the environment variable <TT
+CLASS="ENVAR"
+>PHP_DOCUMENT_ROOT</TT
+>.  If
+      it is set, the CGI version of PHP will always construct the file
+      name to open with this <TT
+CLASS="PARAMETER"
+><I
+>doc_root</I
+></TT
+> and the
+      path information in the request, so you can be sure no script is
+      executed outside this directory (except for
+      <TT
+CLASS="PARAMETER"
+><I
+>user_dir</I
+></TT
+> below).
+      
+     </P
+><P
+>      Another option usable here is <A
+HREF="configuration.html#INI.USER-DIR"
+>user_dir</A
+>.  When user_dir is unset,
+      only thing controlling the opened file name is
+      <TT
+CLASS="PARAMETER"
+><I
+>doc_root</I
+></TT
+>.  Opening an url like <TT
+CLASS="FILENAME"
+>http://my.host/~user/doc.php3</TT
+> does not
+      result in opening a file under users home directory, but a file
+      called <TT
+CLASS="FILENAME"
+>~user/doc.php3</TT
+> under
+      doc_root (yes, a directory name starting with a tilde
+      [<TT
+CLASS="LITERAL"
+>~</TT
+>]).
+      
+     </P
+><P
+>      If user_dir is set to for example <TT
+CLASS="FILENAME"
+>public_php</TT
+>, a request like <TT
+CLASS="FILENAME"
+>http://my.host/~user/doc.php3</TT
+> will open a
+      file called <TT
+CLASS="FILENAME"
+>doc.php3</TT
+> under the directory
+      named <TT
+CLASS="FILENAME"
+>public_php</TT
+> under the home
+      directory of the user.  If the home of the user is <TT
+CLASS="FILENAME"
+>/home/user</TT
+>, the file executed is
+      <TT
+CLASS="FILENAME"
+>/home/user/public_php/doc.php3</TT
+>.
+      
+     </P
+><P
+>      <TT
+CLASS="PARAMETER"
+><I
+>user_dir</I
+></TT
+> expansion happens regardless of
+      the <TT
+CLASS="PARAMETER"
+><I
+>doc_root</I
+></TT
+> setting, so you can control
+      the document root and user directory access separately.
+      
+    </P
+></DIV
+><DIV
+CLASS="SECT3"
+><H3
+CLASS="SECT3"
+><A
+NAME="CONFIG-SECURITY-CGI-SHELL"
+>Case 4: PHP parser outside of web tree</A
+></H3
+><P
+>      A very secure option is to put the PHP parser binary somewhere
+      outside of the web tree of files.  In <TT
+CLASS="FILENAME"
+>/usr/local/bin</TT
+>, for example.  The only real
+      downside to this option is that you will now have to put a line
+      similar to:
+      
+      <DIV
+CLASS="INFORMALEXAMPLE"
+><P
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>#!/usr/local/bin/php
+       </PRE
+><P
+></P
+></DIV
+>
+	
+      as the first line of any file containing PHP tags.  You will
+      also need to make the file executable.  That is, treat it
+      exactly as you would treat any other CGI script written in Perl
+      or sh or any other common scripting language which uses the
+      <TT
+CLASS="LITERAL"
+>#!</TT
+> shell-escape mechanism for launching
+      itself.
+     </P
+><P
+>      To get PHP to handle <TT
+CLASS="ENVAR"
+>PATH_INFO</TT
+> and
+      <TT
+CLASS="ENVAR"
+>PATH_TRANSLATED</TT
+> information correctly with this
+      setup, the php parser should be compiled with the <A
+HREF="install-unix.html#ENABLE-DISCARD-PATH"
+>--enable-discard-path</A
+>
+      configure option.
+
+    </P
+></DIV
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="CONFIG-SECURITY-APACHE"
+>Apache module</A
+></H2
+><P
+>     When PHP is used as an Apache module it inherits Apache's user
+     permissions (typically those of the "nobody" user).
+    
+   </P
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="config-virtualhost.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="security.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Virtual hosts</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="configuration.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Security</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

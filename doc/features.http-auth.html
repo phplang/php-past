@@ -1,0 +1,304 @@
+<HTML
+><HEAD
+><TITLE
+>HTTP authentication with PHP</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Features"
+HREF="features.html"><LINK
+REL="PREVIOUS"
+TITLE="Creating and manipulating images"
+HREF="features.images.html"><LINK
+REL="NEXT"
+TITLE="Cookies"
+HREF="features.cookies.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="chapter"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="features.images.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="features.cookies.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="chapter"
+><H1
+><A
+NAME="features.http-auth"
+>Chapter 17. HTTP authentication with PHP</A
+></H1
+><P
+>&#13;   The HTTP Authentication hooks in PHP are only available when it is
+   running as an Apache module and is hence not available in the CGI version.
+   In an Apache module PHP script, it is possible to use the 
+   <B
+CLASS="function"
+>Header()</B
+> function to send an "Authentication Required" 
+   message to the client browser causing it to pop up a Username/Password 
+   input window.  Once the user has filled in a username and a password, 
+  the URL containing the PHP script will be called again with the variables,
+   $PHP_AUTH_USER, $PHP_AUTH_PW and $PHP_AUTH_TYPE set to the user
+   name, password and authentication type respectively.  Only "Basic"
+   authentication is supported at this point. See the <B
+CLASS="function"
+>Header()</B
+>
+   function for more information.</P
+><P
+>&#13;   An example script fragment which would force client authentication
+   on a page would be the following:
+
+   <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN4104"
+></A
+><P
+><B
+>Example 17-1. HTTP Authentication example</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;&#60;?php
+  if(!isset($PHP_AUTH_USER)) {
+    Header("WWW-Authenticate: Basic realm=\"My Realm\"");
+    Header("HTTP/1.0 401 Unauthorized");
+    echo "Text to send if user hits Cancel button\n";
+    exit;
+  } else {
+    echo "Hello $PHP_AUTH_USER.&#60;P&#62;";
+    echo "You entered $PHP_AUTH_PW as your password.&#60;P&#62;";
+  }
+?&#62;
+    </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+></P
+><P
+>&#13;   Instead of simply printing out the $PHP_AUTH_USER and
+   $PHP_AUTH_PW, you would probably want to check the username and
+   password for validity.  Perhaps by sending a query to a database,
+   or by looking up the user in a dbm file.</P
+><P
+>&#13;   Watch out for buggy Internet Explorer browsers out there.  They
+   seem very picky about the order of the headers.  Sending the
+   <I
+CLASS="emphasis"
+>WWW-Authenticate</I
+> header before the
+   <SPAN
+CLASS="errorcode"
+>HTTP/1.0 401</SPAN
+> header seems to do the trick
+   for now.</P
+><P
+>&#13;   In order to prevent someone from writing a script which reveals
+   the password for a page that was authenticated through a
+   traditional external mechanism, the PHP_AUTH variables will not be
+   set if external authentication is enabled for that particular
+   page. In this case, the $REMOTE_USER variable can be used to
+   identify the externally-authenticated user.</P
+><P
+>&#13;   Note, however, that the above does not prevent someone who
+   controls a non-authenticated URL from stealing passwords from
+   authenticated URLs on the same server.</P
+><P
+>&#13;   Both Netscape and Internet Explorer will clear the local browser
+   window's authentication cache for the realm upon receiving a
+   server response of 401. This can effectively "log out" a user,
+   forcing them to re-enter their username and password. Some people
+   use this to "time out" logins, or provide a "log-out" button.</P
+><P
+></P
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN4115"
+></A
+><P
+><B
+>Example 17-2. HTTP Authentication example forcing a new name/password</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;&#60;?php
+  function  authenticate()  {
+      Header( "WWW-authenticate: basic  realm=\"Test  Authentication  System\"");
+      Header( "HTTP/1.0  401  Unauthorized");
+      echo  "You  must  enter  a  valid  login  ID  and  password  to  access  this  resource\n";
+      exit;
+  }
+
+  if(!isset($PHP_AUTH_USER)  ||  ($SeenBefore ==  1  &#38;&#38;  !strcmp($OldAuth,  $PHP_AUTH_USER))  )  {
+    authenticate();
+  }  
+  else  {
+    echo  "Welcome:  $PHP_AUTH_USER&#60;BR&#62;";
+    echo  "Old:  $OldAuth";
+    echo  "&#60;FORM  ACTION=\"$PHP_SELF\"  METHOD=POST&#62;\n";
+    echo  "&#60;INPUT  TYPE=HIDDEN  NAME=\"SeenBefore\"  VALUE=\"1\"&#62;\n";
+    echo  "&#60;INPUT  TYPE=HIDDEN  NAME=\"OldAuth\"  VALUE=\"$PHP_AUTH_USER\"&#62;\n";
+    echo  "&#60;INPUT  TYPE=Submit  VALUE=\"Re  Authenticate\"&#62;\n";
+    echo  "&#60;/FORM&#62;\n";
+
+}
+?&#62;
+   </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+><P
+>&#13;   This behavior is not required by the HTTP Basic authentication
+   standard, so you should never depend on this. Testing with Lynx
+   has shown that Lynx does not clear the authentication credentials
+   with a 401 server response, so pressing back and then forward
+   again will open the resource (as long as the credential
+   requirements haven't changed).</P
+><P
+>&#13;   Also note that this does not work using Microsoft's IIS server and
+   the CGI version of PHP due to a limitation of IIS.</P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="features.images.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="features.cookies.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Creating and manipulating images</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="features.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Cookies</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

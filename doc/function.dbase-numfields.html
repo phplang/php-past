@@ -1,0 +1,218 @@
+<HTML
+><HEAD
+><TITLE
+>dbase_numfields</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="dBase functions"
+HREF="ref.dbase.html"><LINK
+REL="PREVIOUS"
+TITLE="dbase_get_record_with_names"
+HREF="function.dbase-get-record-with-names.html"><LINK
+REL="NEXT"
+TITLE="dbase_numrecords"
+HREF="function.dbase-numrecords.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.dbase-get-record-with-names.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.dbase-numrecords.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.dbase-numfields"
+>dbase_numfields</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN9782"
+></A
+><P
+>    (PHP3 , PHP4 )</P
+>dbase_numfields&nbsp;--&nbsp;
+     Find out how many fields are in a dBase database
+    </DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN9785"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN9787"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int <B
+CLASS="function"
+>dbase_numfields</B
+></CODE
+> (int dbase_identifier)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     Returns the number of fields (columns) in the specified
+     database. Field numbers are between 0 and dbase_numfields($db)-1,
+     while record numbers are between 1 and dbase_numrecords($db).
+     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN9794"
+></A
+><P
+><B
+>Example 1. Using <B
+CLASS="function"
+>dbase_numfields()</B
+></B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;$rec = dbase_get_record($db, $recno);
+$nf  = dbase_numfields($db);
+for ($i=0; $i &#60; $nf; $i++) {
+    print $rec[$i]."&#60;br&#62;\n";
+}
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.dbase-get-record-with-names.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.dbase-numrecords.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>dbase_get_record_with_names</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.dbase.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>dbase_numrecords</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

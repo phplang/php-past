@@ -1,0 +1,257 @@
+<HTML
+><HEAD
+><TITLE
+>Persistent Database Connections</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Features"
+HREF="features.html"><LINK
+REL="PREVIOUS"
+TITLE="Connection handling"
+HREF="features.connection-handling.html"><LINK
+REL="NEXT"
+TITLE="Function Reference"
+HREF="funcref.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="chapter"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="features.connection-handling.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="funcref.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="chapter"
+><H1
+><A
+NAME="features.persistent-connections"
+>Chapter 22. Persistent Database Connections</A
+></H1
+><P
+>&#13;   Persistent connections are SQL links that do not close when the
+   execution of your script ends. When a persistent connection is
+   requested, PHP checks if there's already an identical persistent
+   connection (that remained open from earlier) - and if it exists, it
+   uses it. If it does not exist, it creates the link. An 'identical'
+   connection is a connection that was opened to the same host, with
+   the same username and the same password (where applicable).
+  </P
+><P
+>&#13;   People who aren't thoroughly familiar with the way web servers work
+   and distribute the load may mistake persistent connects for what
+   they're not. In particular, they do <I
+CLASS="emphasis"
+>not</I
+> give
+   you an ability to open 'user sessions' on the same SQL link, they
+   do <I
+CLASS="emphasis"
+>not</I
+> give you an ability to build up a
+   transaction efficently, and they don't do a whole lot of other
+   things. In fact, to be extremely clear about the subject,
+   persistent connections don't give you <I
+CLASS="emphasis"
+>any</I
+>
+   functionality that wasn't possible with their non-persistent
+   brothers.
+  </P
+><P
+>&#13;   Why?
+  </P
+><P
+>&#13;   This has to do with the way web servers work. There are three ways
+   in which your web server can utilize PHP to generate web pages.
+  </P
+><P
+>&#13;   The first method is to use PHP as a CGI "wrapper". When run this
+   way, an instance of the PHP interpreter is created and destroyed
+   for every page request (for a PHP page) to your web server.
+   Because it is destroyed after every request, any resources that it
+   acquires (such as a link to an SQL database server) are closed when
+   it is destroyed. In this case, you do not gain anything from trying
+   to use persistent connections -- they simply don't persist.
+  </P
+><P
+>&#13;   The second, and most popular, method is to run PHP as a module in a
+   multiprocess web server, which currently only includes Apache. A
+   multiprocess server typically has one process (the parent) which
+   coordinates a set of processes (its children) who actually do the
+   work of serving up web pages. When each request comes in from a a
+   client, it is handed off to one of the children that is not already
+   serving another client. This means that when the same client makes
+   a second request to the server, it may be serviced by a different
+   child process than the first time. What a persistent connection
+   does for you in this case it make it so each child process only
+   needs to connect to your SQL server the first time that it serves a
+   page that makes us of such a connection. When another page then
+   requires a connection to the SQL server, it can reuse the
+   connection that child established earlier.
+  </P
+><P
+>&#13;   The last method is to use PHP as a plug-in for a multithreaded web
+   server. Currently this is only theoretical -- PHP does not yet work
+   as a plug-in for any multithreaded web servers. Work is progressing
+   on support for ISAPI, WSAPI, and NSAPI (on Windows), which will all
+   allow PHP to be used as a plug-in on multithreaded servers like
+   Netscape FastTrack, Microsoft's Internet Information Server (IIS),
+   and O'Reilly's WebSite Pro. When this happens, the behavior will be
+   essentially the same as for the multiprocess model described
+   before.
+  </P
+><P
+>&#13;   If persistent connections don't have any added functionality, what
+   are they good for?
+  </P
+><P
+>&#13;   The answer here is extremely simple -- efficiency. Persistent
+   connections are good if the overhead to create a link to your SQL
+   server is high. Whether or not this overhead is really high depends
+   on many factors. Like, what kind of database it is, whether or not
+   it sits on the same computer on which your web server sits, how
+   loaded the machine the SQL server sits on is and so forth. The
+   bottom line is that if that connection overhead is high, persistent
+   connections help you considerably. They cause the child process to
+   simply connect only once for its entire lifespan, instead of every
+   time it processes a page that requires connecting to the SQL
+   server. This means that for every child that opened a persistent
+   connection will have its own open persistent connection to the
+   server. For example, if you had 20 different child processes that
+   ran a script that made a persistent connection to your SQL server,
+   you'd have 20 different connections to the SQL server, one from
+   each child.
+  </P
+><P
+>&#13;   Note, however, that this can have some drawbacks if you are using a
+   database with connection limits that are exceeded by persistant
+   child connections. If your database has a limit of 16 simultaneous
+   connections, and in the course of a busy server session, 17 child
+   threads attempt to connect, one will not be able to. If there are
+   bugs in your scripts which do not allow the connections to shut
+   down (such as infinite loops), a database with only 32 connections
+   may be rapidly swamped. Check your database documentation for
+   information on handling abandoned or idle connections.
+  </P
+><P
+>&#13;   An important summary. Persistent connections were designed to have
+   one-to-one mapping to regular connections. That means that you
+   should <I
+CLASS="emphasis"
+>always</I
+> be able to replace persistent
+   connections with non-persistent connections, and it won't change
+   the way your script behaves. It <I
+CLASS="emphasis"
+>may</I
+> (and
+   probably will) change the efficiency of the script, but not its
+   behavior!
+  </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="features.connection-handling.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="funcref.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Connection handling</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="features.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Function Reference</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

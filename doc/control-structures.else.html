@@ -1,0 +1,239 @@
+<HTML
+><HEAD
+><TITLE
+>else</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Control Structures"
+HREF="control-structures.html"><LINK
+REL="PREVIOUS"
+TITLE="Control Structures"
+HREF="control-structures.html"><LINK
+REL="NEXT"
+TITLE="elseif"
+HREF="control-structures.elseif.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="control-structures.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 11. Control Structures</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="control-structures.elseif.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="control-structures.else"
+><TT
+CLASS="literal"
+>else</TT
+></A
+></H1
+><P
+>&#13;    Often you'd want to execute a statement if a certain condition is
+    met, and a different statement if the condition is not met.  This
+    is what <TT
+CLASS="literal"
+>else</TT
+> is for.  <TT
+CLASS="literal"
+>else</TT
+>
+    extends an <TT
+CLASS="literal"
+>if</TT
+> statement to execute a statement
+    in case the expression in the <TT
+CLASS="literal"
+>if</TT
+> statement
+    evaluates to <TT
+CLASS="literal"
+>FALSE</TT
+>.  For example, the following
+    code would display <TT
+CLASS="computeroutput"
+>a is bigger than
+    b</TT
+> if <TT
+CLASS="replaceable"
+><I
+>$a</I
+></TT
+> is bigger than
+    <TT
+CLASS="replaceable"
+><I
+>$b</I
+></TT
+>, and <TT
+CLASS="computeroutput"
+>a is NOT bigger
+    than b</TT
+> otherwise:
+    <DIV
+CLASS="informalexample"
+><A
+NAME="AEN3334"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;if ($a &#62; $b) {
+    print "a is bigger than b";
+} else {
+    print "a is NOT bigger than b";
+}
+     </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+>
+
+    The <TT
+CLASS="literal"
+>else</TT
+> statement is only executed if the
+    <TT
+CLASS="literal"
+>if</TT
+> expression evaluated to
+    <TT
+CLASS="literal"
+>FALSE</TT
+>, and if there were any
+    <TT
+CLASS="literal"
+>elseif</TT
+> expressions - only if they evaluated to
+    <TT
+CLASS="literal"
+>FALSE</TT
+> as well (see <A
+HREF="control-structures.elseif.html"
+>elseif</A
+>).
+
+   </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="control-structures.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="control-structures.elseif.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Control Structures</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="control-structures.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><TT
+CLASS="literal"
+>elseif</TT
+></TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

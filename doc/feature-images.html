@@ -1,0 +1,183 @@
+<HTML
+><HEAD
+><TITLE
+>GIF creation with PHP</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+REL="HOME"
+TITLE="PHP3 Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Features"
+HREF="features.html"><LINK
+REL="PREVIOUS"
+TITLE="Features"
+HREF="features.html"><LINK
+REL="NEXT"
+TITLE="File upload support"
+HREF="feature-fileupload.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP3 Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="features.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 4. Features</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="feature-fileupload.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="FEATURE-IMAGES"
+>GIF creation with PHP</A
+></H1
+><P
+>    PHP is not limited to creating just HTML output.  It can also be
+    used to create GIF image files, or even more convenient GIF image
+    streams.  You will need to compile PHP with the GD library of
+    image functions for this to work.
+   </P
+><P
+>    <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="EXAMPLE"
+><P
+><B
+>Example 4-3. GIF creation with PHP</B
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>&lt;?php
+    Header("Content-type: image/gif");
+    $string=implode($argv," ");
+    $im = imagecreatefromgif("images/button1.gif");
+    $orange = ImageColorAllocate($im, 220, 210, 60);
+    $px = (imagesx($im)-7.5*strlen($string))/2;
+    ImageString($im,3,$px,9,$string,$orange);
+    ImageGif($im);
+    ImageDestroy($im);
+?&#62;
+     </PRE
+></DIV
+></TD
+></TR
+></TABLE
+>
+
+    This example would be called from a page with a tag like: &lt;img
+    src=&quot;button.php3?text&quot;&gt; The above button.php3 script
+    then takes this &quot;text&quot; string an overlays it on top of a
+    base image which in this case is &quot;images/button1.gif&quot;
+    and outputs the resulting image.  This is a very convenient way to
+    avoid having to draw new button images every time you want to
+    change the text of a button.  With this method they are
+    dynamically generated.
+   </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="features.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="feature-fileupload.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Features</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="features.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>File upload support</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

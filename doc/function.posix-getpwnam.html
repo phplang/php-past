@@ -1,0 +1,314 @@
+<HTML
+><HEAD
+><TITLE
+>posix_getpwnam</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="POSIX functions"
+HREF="ref.posix.html"><LINK
+REL="PREVIOUS"
+TITLE="posix_getgrgid"
+HREF="function.posix-getgrgid.html"><LINK
+REL="NEXT"
+TITLE="posix_getpwuid"
+HREF="function.posix-getpwuid.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.posix-getgrgid.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.posix-getpwuid.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.posix-getpwnam"
+>posix_getpwnam</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN31067"
+></A
+><P
+>    (PHP3 &#62;= 3.0.13, PHP4 &#62;= 4.0b4)</P
+>posix_getpwnam&nbsp;--&nbsp;Return info about a user by username</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN31070"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN31072"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>array <B
+CLASS="function"
+>posix_getpwnam</B
+></CODE
+> (string username)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     Returns an associative array containing information about a
+     user referenced by an alphanumeric username, passed in the
+     <TT
+CLASS="parameter"
+><I
+>username</I
+></TT
+> parameter.
+    </P
+><P
+>&#13;     The array elements returned are:
+     <DIV
+CLASS="table"
+><A
+NAME="AEN31081"
+></A
+><P
+><B
+>Table 1. The user information array</B
+></P
+><TABLE
+BORDER="1"
+CLASS="CALSTABLE"
+><THEAD
+><TR
+><TH
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Element</TH
+><TH
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Description</TH
+></TR
+></THEAD
+><TBODY
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>name</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;          The name element contains the username of the user. This is
+          a short, usually less than 16 character "handle" of the user,
+          not her real, full name. This should be the same as the
+          <TT
+CLASS="parameter"
+><I
+>username</I
+></TT
+> parameter used when calling the
+          function, and hence redundant.
+         </TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>passwd</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;          The passwd element contains the user's password in an encrypted
+          format. Often, for example on a system employing "shadow"
+          passwords, an asterisk is returned instead.
+         </TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>uid</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;          User ID of the user in numeric form.
+         </TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>gid</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;          The group ID of the user. Use the function
+          <A
+HREF="function.posix-getgrgid.html"
+><B
+CLASS="function"
+>posix_getgrgid()</B
+></A
+> to resolve the
+          group name and a list of its members.
+         </TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>gecos</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;          GECOS is an obsolete term that refers to the finger information
+          field on a Honeywell batch processing system. The field, however,
+          lives on, and its contents have been formalized by POSIX. The
+          field contains a comma separated list containing the user's full
+          name, office phone, office number, and home phone number. On most
+          systems, only the user's full name is available.
+         </TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>dir</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;          This element contains the absolute path to the
+          home directory of the user.
+         </TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>shell</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;          The shell element contains the absolute path to the executable of
+          the user's default shell.
+         </TD
+></TR
+></TBODY
+></TABLE
+></DIV
+>
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.posix-getgrgid.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.posix-getpwuid.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>posix_getgrgid</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.posix.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>posix_getpwuid</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

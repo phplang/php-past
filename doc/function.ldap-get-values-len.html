@@ -1,0 +1,211 @@
+<HTML
+><HEAD
+><TITLE
+>ldap_get_values_len</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="LDAP functions"
+HREF="ref.ldap.html"><LINK
+REL="PREVIOUS"
+TITLE="ldap_get_values"
+HREF="function.ldap-get-values.html"><LINK
+REL="NEXT"
+TITLE="ldap_list"
+HREF="function.ldap-list.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.ldap-get-values.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.ldap-list.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.ldap-get-values-len"
+>ldap_get_values_len</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN19217"
+></A
+><P
+>    (PHP3 &#62;= 3.0.13, PHP4 &#62;= 4.0RC2)</P
+>ldap_get_values_len&nbsp;--&nbsp;Get all binary values from a result entry</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN19220"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN19222"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>array <B
+CLASS="function"
+>ldap_get_values_len</B
+></CODE
+> (int link_identifier, int result_entry_identifier, string attribute)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     Returns an array of values for the attribute on success and false
+     on error.</P
+><P
+>  
+     <B
+CLASS="function"
+>ldap_get_values_len()</B
+> function is used to read all
+     the values of the attribute in the entry in the result. entry is
+     specified by the
+     <TT
+CLASS="parameter"
+><I
+>result_entry_identifier</I
+></TT
+>. The number of
+     values can be found by indexing "count" in the resultant
+     array. Individual values are accessed by integer index in the
+     array.  The first index is 0.</P
+><P
+>&#13;     This function is used exactly like
+     <A
+HREF="function.ldap-get-values.html"
+><B
+CLASS="function"
+>ldap_get_values()</B
+></A
+> except that it handles
+     binary data and not string data.</P
+><DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
+><P
+><B
+>Note: </B
+>
+      This function was added in 4.0.
+     </P
+></BLOCKQUOTE
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.ldap-get-values.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.ldap-list.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>ldap_get_values</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.ldap.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>ldap_list</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,280 @@
+<HTML
+><HEAD
+><TITLE
+>imap_delete</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="IMAP, POP3 and NNTP functions"
+HREF="ref.imap.html"><LINK
+REL="PREVIOUS"
+TITLE="imap_createmailbox"
+HREF="function.imap-createmailbox.html"><LINK
+REL="NEXT"
+TITLE="imap_deletemailbox"
+HREF="function.imap-deletemailbox.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.imap-createmailbox.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.imap-deletemailbox.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.imap-delete"
+>imap_delete</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN16376"
+></A
+><P
+>    (PHP3 , PHP4 )</P
+>imap_delete&nbsp;--&nbsp;
+     Mark a messge for deletion from current mailbox
+    </DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN16379"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN16381"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int <B
+CLASS="function"
+>imap_delete</B
+></CODE
+> (int imap_stream, int msg_number [, int 
+       flags])</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     Returns true.
+    </P
+><P
+> 
+     <B
+CLASS="function"
+>imap_delete()</B
+> function marks message pointed
+     by <TT
+CLASS="parameter"
+><I
+>msg_number</I
+></TT
+> for deletion.  The optional
+     <TT
+CLASS="parameter"
+><I
+>flags</I
+></TT
+> parameter only has a single option,
+     <TT
+CLASS="parameter"
+><I
+>FT_UID</I
+></TT
+>, which tells the function to treat
+     the <TT
+CLASS="parameter"
+><I
+>msg_number</I
+></TT
+> argument as a
+     <TT
+CLASS="parameter"
+><I
+>UID</I
+></TT
+>.  Messages marked for deletion will
+     stay in the mailbox until either
+     <A
+HREF="function.imap-expunge.html"
+><B
+CLASS="function"
+>imap_expunge()</B
+></A
+> is called or
+     <A
+HREF="function.imap-close.html"
+><B
+CLASS="function"
+>imap_close()</B
+></A
+> is called with the optional
+     parameter CL_EXPUNGE.
+    </P
+><P
+>     
+     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN16403"
+></A
+><P
+><B
+>Example 1. <B
+CLASS="function"
+>Imap_delete()</B
+> Beispiel</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;$mbox = imap_open ("{your.imap.host}INBOX", "username", "password")
+    || die ("can't connect: " . imap_last_error());
+
+$check = imap_mailboxmsginfo ($mbox);
+print "Messages before delete: " . $check-&#62;Nmsgs . "&#60;br&#62;\n" ;
+imap_delete ($mbox, 1);
+$check = imap_mailboxmsginfo ($mbox);
+print "Messages after  delete: " . $check-&#62;Nmsgs . "&#60;br&#62;\n" ;
+imap_expunge ($mbox);
+$check = imap_mailboxmsginfo ($mbox);
+print "Messages after expunge: " . $check-&#62;Nmsgs . "&#60;br&#62;\n" ;
+imap_close ($mbox);
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.imap-createmailbox.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.imap-deletemailbox.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>imap_createmailbox</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.imap.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>imap_deletemailbox</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

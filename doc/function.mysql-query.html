@@ -1,0 +1,417 @@
+<HTML
+><HEAD
+><TITLE
+>mysql_query</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="MySQL functions"
+HREF="ref.mysql.html"><LINK
+REL="PREVIOUS"
+TITLE="mysql_pconnect"
+HREF="function.mysql-pconnect.html"><LINK
+REL="NEXT"
+TITLE="mysql_result"
+HREF="function.mysql-result.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.mysql-pconnect.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.mysql-result.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.mysql-query"
+>mysql_query</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN24751"
+></A
+><P
+>    (PHP3 , PHP4 )</P
+>mysql_query&nbsp;--&nbsp;Send a MySQL query</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN24754"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN24756"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int <B
+CLASS="function"
+>mysql_query</B
+></CODE
+> (string query [, int 
+       link_identifier])</CODE
+></P
+><P
+></P
+></DIV
+><P
+> 
+     <B
+CLASS="function"
+>mysql_query()</B
+> sends a query to the currently
+     active database on the server that's associated with the
+     specified link identifier.  If
+     <TT
+CLASS="parameter"
+><I
+>link_identifier</I
+></TT
+> isn't specified, the last
+     opened link is assumed.  If no link is open, the function tries
+     to establish a link as if <A
+HREF="function.mysql-connect.html"
+><B
+CLASS="function"
+>mysql_connect()</B
+></A
+> was
+     called with no arguments, and use it.
+    </P
+><DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
+><P
+><B
+>Note: </B
+>
+      The query string should not end with a semicolon.
+     </P
+></BLOCKQUOTE
+></DIV
+><P
+>&#13;     <B
+CLASS="function"
+>mysql_query()</B
+> returns TRUE (non-zero) or FALSE
+     to indicate whether or not the query succeeded.  A return value
+     of TRUE means that the query was legal and could be executed by
+     the server.  It does not indicate anything about the number of
+     rows affected or returned. It is perfectly possible for a query
+     to succeed but affect no rows or return no rows.
+    </P
+><P
+>&#13;     The following query is syntactically invalid, so
+     <B
+CLASS="function"
+>mysql_query()</B
+> fails and returns FALSE:
+     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN24775"
+></A
+><P
+><B
+>Example 1. <B
+CLASS="function"
+>mysql_query()</B
+></B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;&#60;?php
+$result = mysql_query ("SELECT * WHERE 1=1")
+    or die ("Invalid query");
+?&#62;
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+    </P
+><P
+>&#13;     The following query is semantically invalid if
+     <TT
+CLASS="literal"
+>my_col</TT
+> is not a column in the table
+     <TT
+CLASS="literal"
+>my_tbl</TT
+>, so <B
+CLASS="function"
+>mysql_query()</B
+>
+     fails and returns FALSE:
+     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN24783"
+></A
+><P
+><B
+>Example 2. <B
+CLASS="function"
+>mysql_query()</B
+></B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;&#60;?php
+$result = mysql_query ("SELECT my_col FROM my_tbl")
+    or die ("Invalid query");
+?&#62;
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+    </P
+><P
+>&#13;     <B
+CLASS="function"
+>mysql_query()</B
+> will also fail and return FALSE
+     if you don't have permission to access the table(s) referenced by
+     the query.
+    </P
+><P
+>&#13;     Assuming the query succeeds, you can call
+     <A
+HREF="function.mysql-num-rows.html"
+><B
+CLASS="function"
+>mysql_num_rows()</B
+></A
+> to find out how many rows
+     were returned for a SELECT statment or
+     <A
+HREF="function.mysql-affected-rows.html"
+><B
+CLASS="function"
+>mysql_affected_rows()</B
+></A
+> to find out how many
+     rows were affected by a DELETE, INSERT, REPLACE, or UPDATE
+     statement.
+    </P
+><P
+>&#13;     For SELECT statements, <B
+CLASS="function"
+>mysql_query()</B
+> returns a
+     new result identifier that you can pass to
+     <A
+HREF="function.mysql-result.html"
+><B
+CLASS="function"
+>mysql_result()</B
+></A
+>.  When you are done with the
+     result set, you can free the resources associated with it by
+     calling <A
+HREF="function.mysql-free-result.html"
+><B
+CLASS="function"
+>mysql_free_result()</B
+></A
+>.  Although, the
+     memory will automatically be freed at the end of the script's
+     execution.
+    </P
+><P
+>&#13;     See also: <A
+HREF="function.mysql-affected-rows.html"
+><B
+CLASS="function"
+>mysql_affected_rows()</B
+></A
+>,
+     <A
+HREF="function.mysql-db-query.html"
+><B
+CLASS="function"
+>mysql_db_query()</B
+></A
+>,
+     <A
+HREF="function.mysql-free-result.html"
+><B
+CLASS="function"
+>mysql_free_result()</B
+></A
+>,
+     <A
+HREF="function.mysql-result.html"
+><B
+CLASS="function"
+>mysql_result()</B
+></A
+>,
+     <A
+HREF="function.mysql-select-db.html"
+><B
+CLASS="function"
+>mysql_select_db()</B
+></A
+>, and
+     <A
+HREF="function.mysql-connect.html"
+><B
+CLASS="function"
+>mysql_connect()</B
+></A
+>.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.mysql-pconnect.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.mysql-result.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>mysql_pconnect</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.mysql.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>mysql_result</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

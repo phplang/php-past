@@ -1,0 +1,239 @@
+<HTML
+><HEAD
+><TITLE
+>mysql_tablename</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="MySQL functions"
+HREF="ref.mysql.html"><LINK
+REL="PREVIOUS"
+TITLE="mysql_select_db"
+HREF="function.mysql-select-db.html"><LINK
+REL="NEXT"
+TITLE="Network Functions"
+HREF="ref.network.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.mysql-select-db.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="ref.network.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.mysql-tablename"
+>mysql_tablename</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN24858"
+></A
+><P
+>    (PHP3 , PHP4 )</P
+>mysql_tablename&nbsp;--&nbsp;Get table name of field</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN24861"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN24863"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>string <B
+CLASS="function"
+>mysql_tablename</B
+></CODE
+> (int result, int i)</CODE
+></P
+><P
+></P
+></DIV
+><P
+> 
+     <B
+CLASS="function"
+>mysql_tablename()</B
+> takes a result pointer
+     returned by the <A
+HREF="function.mysql-list-tables.html"
+><B
+CLASS="function"
+>mysql_list_tables()</B
+></A
+> function
+     as well as an integer index and returns the name of a table. The
+     <A
+HREF="function.mysql-num-rows.html"
+><B
+CLASS="function"
+>mysql_num_rows()</B
+></A
+> function may be used to
+     determine the number of tables in the result pointer.
+     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN24875"
+></A
+><P
+><B
+>Example 1. <B
+CLASS="function"
+>Mysql_tablename()</B
+> Example</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;&#60;?php 
+mysql_connect ("localhost:3306");
+$result = mysql_list_tables ("wisconsin");
+$i = 0;
+while ($i &#60; mysql_num_rows ($result)) {
+    $tb_names[$i] = mysql_tablename ($result, $i);
+    echo $tb_names[$i] . "&#60;BR&#62;";
+    $i++;
+}
+?&#62;
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.mysql-select-db.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="ref.network.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>mysql_select_db</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.mysql.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Network Functions</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,246 @@
+<HTML
+><HEAD
+><TITLE
+>dir</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Directory functions"
+HREF="ref.dir.html"><LINK
+REL="PREVIOUS"
+TITLE="chdir"
+HREF="function.chdir.html"><LINK
+REL="NEXT"
+TITLE="closedir"
+HREF="function.closedir.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.chdir.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.closedir.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="class.dir"
+>dir</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN10002"
+></A
+><P
+>    (PHP3 , PHP4 )</P
+>dir&nbsp;--&nbsp;directory class</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN10005"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN10007"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>new <B
+CLASS="function"
+>dir</B
+></CODE
+> (string directory)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     A pseudo-object oriented mechanism for reading a directory.  The
+     given <TT
+CLASS="parameter"
+><I
+>directory</I
+></TT
+> is opened.  Two properties
+     are available once directory has been opened.  The handle
+     property can be used with other directory functions such as
+     <A
+HREF="function.readdir.html"
+><B
+CLASS="function"
+>readdir()</B
+></A
+>, <A
+HREF="function.rewinddir.html"
+><B
+CLASS="function"
+>rewinddir()</B
+></A
+> and
+     <A
+HREF="function.closedir.html"
+><B
+CLASS="function"
+>closedir()</B
+></A
+>.  The path property is set to path
+     the directory that was opened.  Three methods are available:
+     read, rewind and close.
+     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN10018"
+></A
+><P
+><B
+>Example 1. <B
+CLASS="function"
+>Dir()</B
+> Example</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;$d = dir("/etc");
+echo "Handle: ".$d-&#62;handle."&#60;br&#62;\n";
+echo "Path: ".$d-&#62;path."&#60;br&#62;\n";
+while($entry=$d-&#62;read()) {
+    echo $entry."&#60;br&#62;\n";
+}
+$d-&#62;close();
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.chdir.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.closedir.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>chdir</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.dir.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>closedir</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

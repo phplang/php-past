@@ -1,0 +1,201 @@
+<HTML
+><HEAD
+><TITLE
+>set_time_limit</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="PHP options & information"
+HREF="ref.info.html"><LINK
+REL="PREVIOUS"
+TITLE="set_magic_quotes_runtime"
+HREF="function.set-magic-quotes-runtime.html"><LINK
+REL="NEXT"
+TITLE="zend_logo_guid"
+HREF="function.zend-logo-guid.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.set-magic-quotes-runtime.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.zend-logo-guid.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.set-time-limit"
+>set_time_limit</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN30564"
+></A
+><P
+>    (PHP3 , PHP4 )</P
+>set_time_limit&nbsp;--&nbsp;limit the maximum execution time</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN30567"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN30569"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>void <B
+CLASS="function"
+>set_time_limit</B
+></CODE
+> (int seconds)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     Set the number of seconds a script is allowed to run.  If this is
+     reached, the script returns a fatal error.  The default limit is
+     30 seconds or, if it exists, the max_execution_time value defined
+     in the <A
+HREF="configuration.html#configuration.file"
+>configuration
+     file</A
+>.  If seconds is set to zero, no time limit is
+     imposed.
+    </P
+><P
+>&#13;     When called, <B
+CLASS="function"
+>set_time_limit()</B
+> restarts the
+     timeout counter from zero. In other words, if the timeout is the
+     default 30 seconds, and 25 seconds into script execution a call
+     such as set_time_limit(20) is made, the script will run for a
+     total of 45 seconds before timing out.
+    </P
+><P
+>&#13;     Note that <B
+CLASS="function"
+>set_time_limit()</B
+> has no effect when
+     PHP is running in safe mode. There is no workaround other than
+     turning off safe mode or changing the time limit in the <A
+HREF="configuration.html#configuration.file"
+>configuration file</A
+>.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.set-magic-quotes-runtime.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.zend-logo-guid.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>set_magic_quotes_runtime</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.info.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>zend_logo_guid</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

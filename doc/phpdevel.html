@@ -1,0 +1,1473 @@
+<HTML
+><HEAD
+><TITLE
+>PHP development</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Appendixes"
+HREF="appendixes.html"><LINK
+REL="PREVIOUS"
+TITLE="Other incompatibilities"
+HREF="migration-other.html"><LINK
+REL="NEXT"
+TITLE="Calling User Functions"
+HREF="calling-user-functions.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="appendix"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="migration-other.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="calling-user-functions.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="appendix"
+><H1
+><A
+NAME="phpdevel"
+>Appendix B. PHP development</A
+></H1
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Table of Contents</B
+></DT
+><DT
+><A
+HREF="phpdevel.html#phpdevel-addfunc"
+>Adding functions to PHP 3</A
+></DT
+><DT
+><A
+HREF="calling-user-functions.html"
+>Calling User Functions</A
+></DT
+><DT
+><A
+HREF="phpdevel-errors.html"
+>Reporting Errors</A
+></DT
+></DL
+></DIV
+><P
+></P
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="phpdevel-addfunc"
+>Adding functions to PHP 3</A
+></H1
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="phpdevel-addfunc-prototype"
+>Function Prototype</A
+></H2
+><P
+>&#13;    All functions look like this:
+    <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>       
+void php3_foo(INTERNAL_FUNCTION_PARAMETERS) {
+     
+}
+    </PRE
+></TD
+></TR
+></TABLE
+>
+    Even if your function doesn't take any arguments, this is how it is
+    called.</P
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="phpdevel-addfunc-args"
+>Function Arguments</A
+></H2
+><P
+>&#13;    Arguments are always of type pval.  This type contains a union
+    which has the actual type of the argument.  So, if your function
+    takes two arguments, you would do something like the following at
+    the top of your function:</P
+><P
+>&#13;    <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN41430"
+></A
+><P
+><B
+>Example B-1. Fetching function arguments</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;pval *arg1, *arg2;
+if (ARG_COUNT(ht) != 2 || getParameters(ht,2,&#38;arg1,&#38;arg2)==FAILURE) {
+   WRONG_PARAM_COUNT;
+}
+     </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+    
+    NOTE: Arguments can be passed either by value or by reference. In
+    both cases you will need to pass &#38;(pval *) to getParameters. If
+    you want to check if the n'th parameter was sent to you by
+    reference or not, you can use the function,
+    ParameterPassedByReference(ht,n). It will return either 1 or 0.</P
+><P
+>&#13;    When you change any of the passed parameters, whether they are
+    sent by reference or by value, you can either start over with the
+    parameter by calling pval_destructor on it, or if it's an ARRAY
+    you want to add to, you can use functions similar to the ones in
+    internal_functions.h which manipulate return_value as an ARRAY.</P
+><P
+>&#13;    Also if you change a parameter to IS_STRING make sure you first
+    assign the new estrdup()'ed string and the string length, and only
+    later change the type to IS_STRING. If you change the string of a
+    parameter which already IS_STRING or IS_ARRAY you should run
+    pval_destructor on it first.</P
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="phpdevel-addfunc-varargs"
+>Variable Function Arguments</A
+></H2
+><P
+>&#13;    A function can take a variable number of arguments.  If your function can
+    take either 2 or 3 arguments, use the following:</P
+><P
+>&#13;    <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN41439"
+></A
+><P
+><B
+>Example B-2. Variable function arguments</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;pval *arg1, *arg2, *arg3;
+int arg_count = ARG_COUNT(ht);
+
+if (arg_count &#60; 2 || arg_count &#62; 3 ||
+    getParameters(ht,arg_count,&#38;arg1,&#38;arg2,&#38;arg3)==FAILURE) {
+    WRONG_PARAM_COUNT;
+}
+    </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+></P
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="phpdevel-addfunc-using-args"
+>Using the Function Arguments</A
+></H2
+><P
+>&#13;    The type of each argument is stored in the pval type field. This
+    type can be any of the following:
+    
+    <DIV
+CLASS="table"
+><A
+NAME="AEN41445"
+></A
+><P
+><B
+>Table B-1. PHP Internal Types</B
+></P
+><TABLE
+BORDER="1"
+CLASS="CALSTABLE"
+><TBODY
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>IS_STRING</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>String</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>IS_DOUBLE</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Double-precision floating point</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>IS_LONG</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Long integer</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>IS_ARRAY</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Array</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>IS_EMPTY</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>None</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>IS_USER_FUNCTION</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>??</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>IS_INTERNAL_FUNCTION</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>?? (if some of these cannot be passed to a function - delete)</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>IS_CLASS</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>??</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>IS_OBJECT</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>??</TD
+></TR
+></TBODY
+></TABLE
+></DIV
+></P
+><P
+>&#13;    If you get an argument of one type and would like to use it as
+    another, or if you just want to force the argument to be of a
+    certain type, you can use one of the following conversion
+    functions:
+
+    <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;convert_to_long(arg1);
+convert_to_double(arg1);
+convert_to_string(arg1); 
+convert_to_boolean_long(arg1); /* If the string is "" or "0" it becomes 0, 1 otherwise */
+convert_string_to_number(arg1);  /* Converts string to either LONG or DOUBLE depending on string */
+     </PRE
+></TD
+></TR
+></TABLE
+></P
+><P
+>&#13;    These function all do in-place conversion.  They do not return anything.</P
+><P
+>&#13;    The actual argument is stored in a union; the members are:
+    <P
+></P
+><UL
+><LI
+><P
+>IS_STRING: arg1-&#62;value.str.val</P
+></LI
+><LI
+><P
+>IS_LONG: arg1-&#62;value.lval</P
+></LI
+><LI
+><P
+>IS_DOUBLE: arg1-&#62;value.dval</P
+></LI
+></UL
+></P
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="phpdevel-addfunc-memmgmt"
+>Memory Management in Functions</A
+></H2
+><P
+>&#13;    Any memory needed by a function should be allocated with either
+    emalloc() or estrdup().  These are memory handling abstraction
+    functions that look and smell like the normal malloc() and
+    strdup() functions.  Memory should be freed with efree().</P
+><P
+>&#13;    There are two kinds of memory in this program: memory which is
+    returned to the parser in a variable, and memory which you need for
+    temporary storage in your internal function.  When you assign a
+    string to a variable which is returned to the parser you need to
+    make sure you first allocate the memory with either emalloc() or
+    estrdup().  This memory should NEVER be freed by you, unless you
+    later in the same function overwrite your original assignment
+    (this kind of programming practice is not good though).</P
+><P
+>&#13;    For any temporary/permanent memory you need in your
+    functions/library you should use the three emalloc(), estrdup(),
+    and efree() functions. They behave EXACTLY like their counterpart
+    functions. Anything you emalloc() or estrdup() you have to efree()
+    at some point or another, unless it's supposed to stick around
+    until the end of the program; otherwise, there will be a memory
+    leak. The meaning of "the functions behave exactly like their
+    counterparts" is: if you efree() something which was not
+    emalloc()'ed nor estrdup()'ed you might get a segmentation
+    fault. So please take care and free all of your wasted memory.</P
+><P
+>&#13;    If you compile with "-DDEBUG", PHP 3 will print out a list of all
+    memory that was allocated using emalloc() and estrdup() but never
+    freed with efree() when it is done running the specified script.</P
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="phpdevel-addfunc-symtab"
+>Setting Variables in the Symbol Table</A
+></H2
+><P
+>&#13;    A number of macros are available which make it easier to set a
+    variable in the symbol table:
+    
+    <P
+></P
+><UL
+><LI
+><P
+>SET_VAR_STRING(name,value) <A
+HREF="phpdevel.html#FTN.symtab-1"
+>[1]</A
+></P
+></LI
+><LI
+><P
+>SET_VAR_DOUBLE(name,value)</P
+></LI
+><LI
+><P
+>SET_VAR_LONG(name,value)</P
+></LI
+></UL
+></P
+><P
+>&#13;    <A
+NAME="symtab-1"
+HREF="#FTN.symtab-1"
+>[1]</A
+></P
+><P
+>&#13;    Symbol tables in PHP 3.0 are implemented as hash tables.  At any
+    given time, &#38;symbol_table is a pointer to the 'main' symbol
+    table, and active_symbol_table points to the currently active
+    symbol table (these may be identical like in startup, or
+    different, if you're inside a function).</P
+><P
+>&#13;    The following examples use 'active_symbol_table'.  You should
+    replace it with &#38;symbol_table if you specifically want to work
+    with the 'main' symbol table.  Also, the same functions may be
+    applied to arrays, as explained below.</P
+><P
+>&#13;    <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN41510"
+></A
+><P
+><B
+>Example B-3. Checking whether $foo exists in a symbol table</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;if (hash_exists(active_symbol_table,"foo",sizeof("foo"))) { exists... }
+else { doesn't exist }
+     </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+
+    <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN41513"
+></A
+><P
+><B
+>Example B-4. Finding a variable's size in a symbol table</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;hash_find(active_symbol_table,"foo",sizeof("foo"),&#38;pvalue);
+check(pvalue.type);
+     </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+    
+    Arrays in PHP 3.0 are implemented using the same hashtables as
+    symbol tables.  This means the two above functions can also be
+    used to check variables inside arrays.</P
+><P
+>&#13;    If you want to define a new array in a symbol table, you should do
+    the following.</P
+><P
+>&#13;    First, you may want to check whether it exists and abort
+    appropiately, using hash_exists() or hash_find().</P
+><P
+>&#13;    Next, initialize the array:</P
+><P
+>&#13;    <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN41520"
+></A
+><P
+><B
+>Example B-5. Initializing a new array</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;pval arr;
+  
+if (array_init(&#38;arr) == FAILURE) { failed... };
+hash_update(active_symbol_table,"foo",sizeof("foo"),&#38;arr,sizeof(pval),NULL);
+     </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+    
+    This code declares a new array, named $foo, in the active symbol
+    table. This array is empty.</P
+><P
+>&#13;    Here's how to add new entries to it:</P
+><P
+>&#13;    <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN41525"
+></A
+><P
+><B
+>Example B-6. Adding entries to a new array</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;pval entry;
+  
+entry.type = IS_LONG;
+entry.value.lval = 5;
+  
+/* defines $foo["bar"] = 5 */
+hash_update(arr.value.ht,"bar",sizeof("bar"),&#38;entry,sizeof(pval),NULL); 
+
+/* defines $foo[7] = 5 */
+hash_index_update(arr.value.ht,7,&#38;entry,sizeof(pval),NULL); 
+
+/* defines the next free place in $foo[],
+ * $foo[8], to be 5 (works like php2)
+ */
+hash_next_index_insert(arr.value.ht,&#38;entry,sizeof(pval),NULL); 
+     </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+     
+    If you'd like to modify a value that you inserted to a hash, you
+    must first retrieve it from the hash.  To prevent that overhead,
+    you can supply a pval ** to the hash add function, and it'll be
+    updated with the pval * address of the inserted element inside the
+    hash.  If that value is NULL (like in all of the above examples) -
+    that parameter is ignored.</P
+><P
+>&#13;    hash_next_index_insert() uses more or less the same logic as
+    "$foo[] = bar;" in PHP 2.0.</P
+><P
+>&#13;    If you are building an array to return from a function, you can
+    initialize the array just like above by doing:</P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;if (array_init(return_value) == FAILURE) { failed...; }
+   </PRE
+></TD
+></TR
+></TABLE
+><P
+>&#13;    ...and then adding values with the helper functions:</P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;add_next_index_long(return_value,long_value);
+add_next_index_double(return_value,double_value);
+add_next_index_string(return_value,estrdup(string_value));
+   </PRE
+></TD
+></TR
+></TABLE
+><P
+>&#13;    Of course, if the adding isn't done right after the array
+    initialization, you'd probably have to look for the array first:
+      
+    <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;pval *arr;
+  
+if (hash_find(active_symbol_table,"foo",sizeof("foo"),(void **)&#38;arr)==FAILURE) { can't find... }
+else { use arr-&#62;value.ht... }
+    </PRE
+></TD
+></TR
+></TABLE
+></P
+><P
+>&#13;    Note that hash_find receives a pointer to a pval pointer, and not
+    a pval pointer.</P
+><P
+>&#13;    Just about any hash function returns SUCCESS or FAILURE (except
+    for hash_exists(), which returns a boolean truth value).</P
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="phpdevel-addfunc-retsimple"
+>Returning simple values</A
+></H2
+><P
+>&#13;    A number of macros are available to make returning values from a
+    function easier.</P
+><P
+>&#13;    The RETURN_* macros all set the return value and return from the
+    function:
+    <P
+></P
+><UL
+><LI
+><P
+>RETURN</P
+></LI
+><LI
+><P
+>RETURN_FALSE</P
+></LI
+><LI
+><P
+>RETURN_TRUE</P
+></LI
+><LI
+><P
+>RETURN_LONG(l)</P
+></LI
+><LI
+><P
+>RETURN_STRING(s,dup)   If dup is true, duplicates the string</P
+></LI
+><LI
+><P
+>RETURN_STRINGL(s,l,dup)   Return string (s) specifying length (l).</P
+></LI
+><LI
+><P
+>RETURN_DOUBLE(d)</P
+></LI
+></UL
+></P
+><P
+>&#13;    The RETVAL_* macros set the return value, but do not return.
+    <P
+></P
+><UL
+><LI
+><P
+>RETVAL_FALSE</P
+></LI
+><LI
+><P
+>RETVAL_TRUE</P
+></LI
+><LI
+><P
+>RETVAL_LONG(l)</P
+></LI
+><LI
+><P
+>RETVAL_STRING(s,dup)   If dup is true, duplicates the string</P
+></LI
+><LI
+><P
+>RETVAL_STRINGL(s,l,dup)   Return string (s) specifying length (l).</P
+></LI
+><LI
+><P
+>RETVAL_DOUBLE(d)</P
+></LI
+></UL
+></P
+><P
+>&#13;    The string macros above will all estrdup() the passed 's'
+    argument, so you can safely free the argument after calling the
+    macro, or alternatively use statically allocated memory.</P
+><P
+>&#13;    If your function returns boolean success/error responses, always
+    use RETURN_TRUE and RETURN_FALSE respectively.</P
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="phpdevel-addfunc-retcomplex"
+>Returning complex values</A
+></H2
+><P
+>&#13;    Your function can also return a complex data type such as an
+    object or an array.</P
+><P
+>&#13;    Returning an object:
+
+    <P
+></P
+><OL
+TYPE="1"
+><LI
+><P
+>Call object_init(return_value).</P
+></LI
+><LI
+><P
+>Fill it up with values. The functions available
+       for this purpose are listed below.</P
+></LI
+><LI
+><P
+> Possibly, register functions for this object.
+       In order to obtain values from the object, the function would
+       have to fetch "this" from the active_symbol_table.  Its type
+       should be IS_OBJECT, and it's basically a regular hash table
+       (i.e., you can use regular hash functions on .value.ht).  The
+       actual registration of the function can be done using:
+       <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;add_method( return_value, function_name, function_ptr );
+       </PRE
+></TD
+></TR
+></TABLE
+></P
+></LI
+></OL
+></P
+><P
+>&#13;    The functions used to populate an object are:
+    <P
+></P
+><UL
+><LI
+><P
+>add_property_long( return_value,
+       property_name, l ) - Add a property named 'property_name', of
+       type long, equal to 'l'</P
+></LI
+><LI
+><P
+>add_property_double( return_value,
+       property_name, d ) - Same, only adds a double</P
+></LI
+><LI
+><P
+>add_property_string( return_value,
+       property_name, str ) - Same, only adds a string</P
+></LI
+><LI
+><P
+>add_property_stringl( return_value,
+       property_name, str, l ) - Same, only adds a string of length 'l'</P
+></LI
+></UL
+></P
+><P
+>&#13;    Returning an array:
+    
+    <P
+></P
+><OL
+TYPE="1"
+><LI
+><P
+>Call array_init(return_value).</P
+></LI
+><LI
+><P
+>Fill it up with values. The functions available
+     for this purpose are listed below.</P
+></LI
+></OL
+></P
+><P
+>&#13;    The functions used to populate an array are:
+    <P
+></P
+><UL
+><LI
+><P
+>add_assoc_long(return_value,key,l) - add
+     associative entry with key 'key' and long value 'l'</P
+></LI
+><LI
+><P
+>add_assoc_double(return_value,key,d)</P
+></LI
+><LI
+><P
+>add_assoc_string(return_value,key,str,duplicate)</P
+></LI
+><LI
+><P
+>add_assoc_stringl(return_value,key,str,length,duplicate)
+     specify the string length</P
+></LI
+><LI
+><P
+>add_index_long(return_value,index,l) - add
+     entry in index 'index' with long value 'l'</P
+></LI
+><LI
+><P
+>add_index_double(return_value,index,d)</P
+></LI
+><LI
+><P
+>add_index_string(return_value,index,str)</P
+></LI
+><LI
+><P
+>add_index_stringl(return_value,index,str,length)
+     - specify the string length</P
+></LI
+><LI
+><P
+>add_next_index_long(return_value,l) - add an
+     array entry in the next free offset with long value 'l'</P
+></LI
+><LI
+><P
+>add_next_index_double(return_value,d)</P
+></LI
+><LI
+><P
+>add_next_index_string(return_value,str)</P
+></LI
+><LI
+><P
+>add_next_index_stringl(return_value,str,length)
+     - specify the string length</P
+></LI
+></UL
+></P
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="phpdevel-addfunc-reslist"
+>Using the resource list</A
+></H2
+><P
+>&#13;    PHP 3.0 has a standard way of dealing with various types of
+    resources. This replaces all of the local linked lists in PHP 2.0.</P
+><P
+>&#13;    Available functions:
+
+    <P
+></P
+><UL
+><LI
+><P
+>php3_list_insert(ptr, type) - returns the 'id'
+       of the newly inserted resource</P
+></LI
+><LI
+><P
+>php3_list_delete(id) - delete the resource
+       with the specified id</P
+></LI
+><LI
+><P
+>php3_list_find(id,*type)
+       - returns the pointer of the resource with the specified id,
+       updates 'type' to the resource's type</P
+></LI
+></UL
+>
+
+    Typically, these functions are used for SQL drivers but they can
+    be used for anything else; for instance, maintaining file
+    descriptors.</P
+><P
+>&#13;    Typical list code would look like this:</P
+><P
+>&#13;    <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN41639"
+></A
+><P
+><B
+>Example B-7. Adding a new resource</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;RESOURCE *resource;
+
+/* ...allocate memory for resource and acquire resource... */
+/* add a new resource to the list */
+return_value-&#62;value.lval = php3_list_insert((void *) resource, LE_RESOURCE_TYPE);
+return_value-&#62;type = IS_LONG;
+     </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+
+    <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN41642"
+></A
+><P
+><B
+>Example B-8. Using an existing resource</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;pval *resource_id;
+RESOURCE *resource;
+int type;
+
+convert_to_long(resource_id);
+resource = php3_list_find(resource_id-&#62;value.lval, &#38;type);
+if (type != LE_RESOURCE_TYPE) {
+	php3_error(E_WARNING,"resource index %d has the wrong type",resource_id-&#62;value.lval);
+	RETURN_FALSE;
+}
+/* ...use resource... */
+     </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+
+    <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN41645"
+></A
+><P
+><B
+>Example B-9. Deleting an existing resource</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;pval *resource_id;
+RESOURCE *resource;
+int type;
+
+convert_to_long(resource_id);
+php3_list_delete(resource_id-&#62;value.lval);
+     </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+   
+    The resource types should be registered in php3_list.h, in enum
+    list_entry_type.  In addition, one should add shutdown code for
+    any new resource type defined, in list.c's list_entry_destructor()
+    (even if you don't have anything to do on shutdown, you must add
+    an empty case).</P
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="phpdevel-addfunc-prestable"
+>Using the persistent resource table</A
+></H2
+><P
+>&#13;    PHP 3.0 has a standard way of storing persistent resources (i.e.,
+    resources that are kept in between hits).  The first module to use
+    this feature was the MySQL module, and mSQL followed it, so one
+    can get the general impression of how a persistent resource should
+    be used by reading mysql.c.  The functions you should look at are:
+
+    <P
+></P
+><TABLE
+BORDER="0"
+><TBODY
+><TR
+><TD
+>php3_mysql_do_connect</TD
+></TR
+><TR
+><TD
+>php3_mysql_connect()</TD
+></TR
+><TR
+><TD
+>php3_mysql_pconnect()</TD
+></TR
+></TBODY
+></TABLE
+><P
+></P
+></P
+><P
+>&#13;    The general idea of persistence modules is this:
+    <P
+></P
+><OL
+TYPE="1"
+><LI
+><P
+>Code all of your module to work with the
+       regular resource list mentioned in section (9).</P
+></LI
+><LI
+><P
+>Code extra connect functions that check if the
+       resource already exists in the persistent resource list.  If it
+       does, register it as in the regular resource list as a pointer to
+       the persistent resource list (because of 1., the rest of the code
+       should work immediately).  If it doesn't, then create it, add it
+       to the persistent resource list AND add a pointer to it from the
+       regular resource list, so all of the code would work since it's
+       in the regular resource list, but on the next connect, the
+       resource would be found in the persistent resource list and be
+       used without having to recreate it.  You should register these
+       resources with a different type (e.g.  LE_MYSQL_LINK for
+       non-persistent link and LE_MYSQL_PLINK for a persistent link).</P
+></LI
+></OL
+></P
+><P
+>&#13;    If you read mysql.c, you'll notice that except for the more
+    complex connect function, nothing in the rest of the module has to
+    be changed.</P
+><P
+>&#13;    The very same interface exists for the regular resource list and
+    the persistent resource list, only 'list' is replaced with
+    'plist':</P
+><P
+></P
+><UL
+><LI
+><P
+>php3_plist_insert(ptr, type) - returns the 'id'
+       of the newly inserted resource</P
+></LI
+><LI
+><P
+>php3_plist_delete(id) - delete the resource
+       with the specified id</P
+></LI
+><LI
+><P
+>php3_plist_find(id,*type)
+       - returns the pointer of the resource with the specified id,
+       updates 'type' to the resource's type</P
+></LI
+></UL
+><P
+>&#13;    However, it's more than likely that these functions would prove to
+    be useless for you when trying to implement a persistent module.
+    Typically, one would want to use the fact that the persistent
+    resource list is really a hash table.  For instance, in the
+    MySQL/mSQL modules, when there's a pconnect() call (persistent
+    connect), the function builds a string out of the host/user/passwd
+    that were passed to the function, and hashes the SQL link with
+    this string as a key.  The next time someone calls a pconnect()
+    with the same host/user/passwd, the same key would be generated,
+    and the function would find the SQL link in the persistent list.</P
+><P
+>&#13;    Until further documented, you should look at mysql.c or msql.c to
+    see how one should use the plist's hash table abilities.</P
+><P
+>&#13;    One important thing to note: resources going into the persistent
+    resource list must *NOT* be allocated with PHP's memory manager,
+    i.e., they should NOT be created with emalloc(), estrdup(), etc.
+    Rather, one should use the regular malloc(), strdup(), etc.  The
+    reason for this is simple - at the end of the request (end of the
+    hit), every memory chunk that was allocated using PHP's memory
+    manager is deleted.  Since the persistent list isn't supposed to
+    be erased at the end of a request, one mustn't use PHP's memory
+    manager for allocating resources that go to it.</P
+><P
+>&#13;    When you register a resource that's going to be in the persistent
+    list, you should add destructors to it both in the non-persistent
+    list and in the persistent list.  The destructor in the
+    non-persistent list destructor shouldn't do anything.  The one in
+    the persistent list destructor should properly free any resources
+    obtained by that type (e.g. memory, SQL links, etc).  Just like
+    with the non-persistent resources, you *MUST* add destructors for
+    every resource, even it requires no destructotion and the
+    destructor would be empty.  Remember, since emalloc() and friends
+    aren't to be used in conjunction with the persistent list, you
+    mustn't use efree() here either.</P
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="phpdevel-addfunc-addcfg"
+>Adding runtime configuration directives</A
+></H2
+><P
+>&#13;    Many of the features of PHP 3 can be configured at runtime.  These
+    configuration directives can appear in either the designated
+    php3.ini file, or in the case of the Apache module version in the
+    Apache .conf files.  The advantage of having them in the Apache
+    .conf files is that they can be configured on a per-directory
+    basis.  This means that one directory may have a certain
+    safemodeexecdir for example, while another directory may have
+    another.  This configuration granularity is especially handy when
+    a server supports multiple virtual hosts.</P
+><P
+>&#13;    The steps required to add a new directive:
+
+    <P
+></P
+><OL
+TYPE="1"
+><LI
+><P
+>Add directive to php3_ini_structure struct in mod_php3.h.</P
+></LI
+><LI
+><P
+>In main.c, edit the php3_module_startup
+       function and add the appropriate cfg_get_string() or
+       cfg_get_long() call.</P
+></LI
+><LI
+><P
+>Add the directive, restrictions and a comment
+       to the php3_commands structure in mod_php3.c.  Note the
+       restrictions part.  RSRC_CONF are directives that can only be
+       present in the actual Apache .conf files.  Any OR_OPTIONS
+       directives can be present anywhere, include normal .htaccess
+       files.</P
+></LI
+><LI
+><P
+>In either php3take1handler() or
+       php3flaghandler() add the appropriate entry for your directive.</P
+></LI
+><LI
+><P
+>In the configuration section of the
+       _php3_info() function in functions/info.c you need to add your
+       new directive.</P
+></LI
+><LI
+><P
+>And last, you of course have to use your new
+       directive somewhere.  It will be addressable as
+       php3_ini.directive.</P
+></LI
+></OL
+></P
+></DIV
+></DIV
+></DIV
+><H3
+CLASS="FOOTNOTES"
+>Notes</H3
+><TABLE
+BORDER="0"
+CLASS="FOOTNOTES"
+WIDTH="100%"
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="5%"
+><A
+NAME="FTN.symtab-1"
+HREF="phpdevel.html#symtab-1"
+>[1]</A
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="95%"
+><P
+>&#13;      Be careful here.  The value part must be malloc'ed manually because
+      the memory management code will try to free this pointer later.  Do
+      not pass statically allocated memory into a SET_VAR_STRING.</P
+></TD
+></TR
+></TABLE
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="migration-other.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="calling-user-functions.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Other incompatibilities</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="appendixes.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Calling User Functions</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

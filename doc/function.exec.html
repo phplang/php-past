@@ -1,0 +1,274 @@
+<HTML
+><HEAD
+><TITLE
+>exec</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Program Execution functions"
+HREF="ref.exec.html"><LINK
+REL="PREVIOUS"
+TITLE="escapeshellcmd"
+HREF="function.escapeshellcmd.html"><LINK
+REL="NEXT"
+TITLE="passthru"
+HREF="function.passthru.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.escapeshellcmd.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.passthru.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.exec"
+>exec</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN32038"
+></A
+><P
+>    (PHP3 , PHP4 )</P
+>exec&nbsp;--&nbsp;Execute an external program</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN32041"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN32043"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>string <B
+CLASS="function"
+>exec</B
+></CODE
+> (string command [, string 
+       array [, int 
+       return_var]])</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     <B
+CLASS="function"
+>exec()</B
+> executes the given
+     <TT
+CLASS="parameter"
+><I
+>command</I
+></TT
+>, however it does not output
+     anything.  It simply returns the last line from the result of the
+     command.  If you need to execute a command and have all the data
+     from the command passed directly back without any interference,
+     use the <B
+CLASS="function"
+>PassThru()</B
+> function.
+    </P
+><P
+>&#13;     If the <TT
+CLASS="parameter"
+><I
+>array</I
+></TT
+> argument is present, then the
+     specified array will be filled with every line of output from the
+     command.  Note that if the array already contains some elements,
+     <B
+CLASS="function"
+>exec()</B
+> will append to the end of the array.
+     If you do not want the function to append elements, call
+     <A
+HREF="function.unset.html"
+><B
+CLASS="function"
+>unset()</B
+></A
+> on the array before passing it to
+     <B
+CLASS="function"
+>exec()</B
+>.
+    </P
+><P
+>&#13;     If the <TT
+CLASS="parameter"
+><I
+>return_var</I
+></TT
+> argument is present
+     along with the <TT
+CLASS="parameter"
+><I
+>array</I
+></TT
+> argument, then the
+     return status of the executed command will be written to this
+     variable.
+    </P
+><P
+>&#13;     Note that if you are going to allow data coming from user input
+     to be passed to this function, then you should be using
+     <B
+CLASS="function"
+>EscapeShellCmd()</B
+> to make sure that users
+     cannot trick the system into executing arbitrary commands.
+    </P
+><P
+>&#13;     Note also that if you start a program using this function and
+     want to leave it running in the background, you have to make
+     sure that the output of that program is redirected to a file or
+     some other output stream or else PHP will hang until the
+     execution of the program ends.
+    </P
+><P
+>&#13;     See also <A
+HREF="function.system.html"
+><B
+CLASS="function"
+>system()</B
+></A
+>,
+     <B
+CLASS="function"
+>PassThru()</B
+>, <A
+HREF="function.popen.html"
+><B
+CLASS="function"
+>popen()</B
+></A
+>,
+     <B
+CLASS="function"
+>EscapeShellCmd()</B
+>, and the <A
+HREF="language.operators.execution.html"
+>backtick operator</A
+>.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.escapeshellcmd.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.passthru.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>escapeshellcmd</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.exec.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>passthru</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

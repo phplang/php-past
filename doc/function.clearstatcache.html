@@ -1,0 +1,316 @@
+<HTML
+><HEAD
+><TITLE
+>clearstatcache</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Filesystem functions"
+HREF="ref.filesystem.html"><LINK
+REL="PREVIOUS"
+TITLE="chown"
+HREF="function.chown.html"><LINK
+REL="NEXT"
+TITLE="copy"
+HREF="function.copy.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.chown.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.copy.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.clearstatcache"
+>clearstatcache</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN10655"
+></A
+><P
+>    (PHP3 , PHP4 )</P
+>clearstatcache&nbsp;--&nbsp;Clears file stat cache</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN10658"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN10660"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>void <B
+CLASS="function"
+>clearstatcache</B
+></CODE
+>(void);</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     Invoking the <SPAN
+CLASS="systemitem"
+>stat</SPAN
+> or
+     <SPAN
+CLASS="systemitem"
+>lstat</SPAN
+> system call on most systems is
+     quite expensive. Therefore, the result of the last call to any of
+     the status functions (listed below) is stored for use on the next
+     such call using the same filename. If you wish to force a new
+     status check, for instance if the file is being checked many
+     times and may change or disappear, use this function to clear the
+     results of the last call from memory.
+    </P
+><P
+>&#13;     This value is only cached for the lifetime of a single request.
+    </P
+><P
+>&#13;     Affected functions include <A
+HREF="function.stat.html"
+><B
+CLASS="function"
+>stat()</B
+></A
+>,
+     <A
+HREF="function.lstat.html"
+><B
+CLASS="function"
+>lstat()</B
+></A
+>,
+     <A
+HREF="function.file-exists.html"
+><B
+CLASS="function"
+>file_exists()</B
+></A
+>,
+     <A
+HREF="function.is-writeable.html"
+><B
+CLASS="function"
+>is_writeable()</B
+></A
+>,
+     <A
+HREF="function.is-readable.html"
+><B
+CLASS="function"
+>is_readable()</B
+></A
+>,
+     <A
+HREF="function.is-executable.html"
+><B
+CLASS="function"
+>is_executable()</B
+></A
+>,
+     <A
+HREF="function.is-file.html"
+><B
+CLASS="function"
+>is_file()</B
+></A
+>,
+     <A
+HREF="function.is-dir.html"
+><B
+CLASS="function"
+>is_dir()</B
+></A
+>,
+     <A
+HREF="function.is-link.html"
+><B
+CLASS="function"
+>is_link()</B
+></A
+>,
+     <A
+HREF="function.filectime.html"
+><B
+CLASS="function"
+>filectime()</B
+></A
+>,
+     <A
+HREF="function.fileatime.html"
+><B
+CLASS="function"
+>fileatime()</B
+></A
+>,
+     <A
+HREF="function.filemtime.html"
+><B
+CLASS="function"
+>filemtime()</B
+></A
+>,
+     <A
+HREF="function.fileinode.html"
+><B
+CLASS="function"
+>fileinode()</B
+></A
+>,
+     <A
+HREF="function.filegroup.html"
+><B
+CLASS="function"
+>filegroup()</B
+></A
+>,
+     <A
+HREF="function.fileowner.html"
+><B
+CLASS="function"
+>fileowner()</B
+></A
+>,
+     <A
+HREF="function.filesize.html"
+><B
+CLASS="function"
+>filesize()</B
+></A
+>,
+     <A
+HREF="function.filetype.html"
+><B
+CLASS="function"
+>filetype()</B
+></A
+>, and
+     <A
+HREF="function.fileperms.html"
+><B
+CLASS="function"
+>fileperms()</B
+></A
+>.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.chown.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.copy.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>chown</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.filesystem.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>copy</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

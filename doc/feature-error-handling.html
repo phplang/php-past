@@ -1,0 +1,197 @@
+<HTML
+><HEAD
+><TITLE
+>Error handling</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+REL="HOME"
+TITLE="PHP3 Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Features"
+HREF="features.html"><LINK
+REL="PREVIOUS"
+TITLE="Regular expressions"
+HREF="feature-regexps.html"><LINK
+REL="NEXT"
+TITLE="Connection  Handling"
+HREF="feature-connection-handling.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP3 Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="feature-regexps.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 4. Features</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="feature-connection-handling.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="FEATURE-ERROR-HANDLING"
+>Error handling</A
+></H1
+><P
+>    There are 4 types of errors and warnings in PHP.  They are:
+
+    <P
+></P
+><UL
+><LI
+><P
+>1 - Normal Function Errors
+     </P
+></LI
+><LI
+><P
+>2 - Normal Warnings 
+     </P
+></LI
+><LI
+><P
+>4 - Parser Errors 
+     </P
+></LI
+><LI
+><P
+>8 - Notices (warnings you can ignore but which
+      may imply a bug in your code)
+    </P
+></LI
+></UL
+>
+
+   </P
+><P
+>    The above 4 numbers are added up to define an error reporting
+    level.  The default error reporting level is 7 which is 1 + 2 + 4,
+    or everything except notices.  This level can be changed in the
+    php3.ini file with the error_reporting directive.  It can also be
+    set in your Apache httpd.conf file with the php3_error_reporting
+    directive or lastly it may be set at runtime within a script using
+    the <A
+HREF="function.error-reporting.html"
+><B
+CLASS="FUNCTION"
+>error_reporting()</B
+></A
+> function.
+	
+   </P
+><P
+>	
+    All <A
+HREF="expressions.html"
+>PHP expressions</A
+> can also be called
+    with the "@" prefix, which turns off error reporting for that particular
+    expression.  If an error occurred during such an expression and the
+    <A
+HREF="configuration.html#INI.TRACK-ERRORS"
+>track_errors</A
+> feature
+    is enabled, you can find the error message in the global variable
+    $php_errormsg.
+
+  </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="feature-regexps.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="feature-connection-handling.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Regular expressions</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="features.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Connection  Handling</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,404 @@
+<HTML
+><HEAD
+><TITLE
+>substr</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="String functions"
+HREF="ref.strings.html"><LINK
+REL="PREVIOUS"
+TITLE="strtr"
+HREF="function.strtr.html"><LINK
+REL="NEXT"
+TITLE="substr_count"
+HREF="function.substr-count.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.strtr.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.substr-count.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.substr"
+>substr</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN37829"
+></A
+><P
+>    (PHP3 , PHP4 )</P
+>substr&nbsp;--&nbsp;Return part of a string</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN37832"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN37834"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>string <B
+CLASS="function"
+>substr</B
+></CODE
+> (string string, int start [, int 
+       length])</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     Substr returns the portion of <TT
+CLASS="parameter"
+><I
+>string</I
+></TT
+>
+     specified by the <TT
+CLASS="parameter"
+><I
+>start</I
+></TT
+> and
+     <TT
+CLASS="parameter"
+><I
+>length</I
+></TT
+> parameters.
+    </P
+><P
+>&#13;     If <TT
+CLASS="parameter"
+><I
+>start</I
+></TT
+> is positive, the returned string
+     will start at the <TT
+CLASS="parameter"
+><I
+>start</I
+></TT
+>'th position in
+     <TT
+CLASS="parameter"
+><I
+>string</I
+></TT
+>, counting from zero. For instance,
+     in the string '<TT
+CLASS="literal"
+>abcdef</TT
+>', the character at
+     position <TT
+CLASS="literal"
+>0</TT
+> is '<TT
+CLASS="literal"
+>a</TT
+>', the
+     character at position <TT
+CLASS="literal"
+>2</TT
+> is
+     '<TT
+CLASS="literal"
+>c</TT
+>', and so forth.
+    </P
+><P
+>&#13;     Examples:
+     <DIV
+CLASS="informalexample"
+><A
+NAME="AEN37859"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;$rest = substr ("abcdef", 1);    // returns "bcdef"
+$rest = substr ("abcdef", 1, 3); // returns "bcd"
+      </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+>
+    </P
+><P
+>&#13;     If <TT
+CLASS="parameter"
+><I
+>start</I
+></TT
+> is negative, the returned string
+     will start at the <TT
+CLASS="parameter"
+><I
+>start</I
+></TT
+>'th character
+     from the end of <TT
+CLASS="parameter"
+><I
+>string</I
+></TT
+>.</P
+><P
+>&#13;     Examples:
+     <DIV
+CLASS="informalexample"
+><A
+NAME="AEN37866"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;$rest = substr ("abcdef", -1);    // returns "f"
+$rest = substr ("abcdef", -2);    // returns "ef"
+$rest = substr ("abcdef", -3, 1); // returns "d"
+      </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+>
+    </P
+><P
+>&#13;     If <TT
+CLASS="parameter"
+><I
+>length</I
+></TT
+> is given and is positive, the
+     string returned will end <TT
+CLASS="parameter"
+><I
+>length</I
+></TT
+> characters
+     from <TT
+CLASS="parameter"
+><I
+>start</I
+></TT
+>. If this would result in a
+     string with negative length (because the start is past the end of
+     the string), then the returned string will contain the single
+     character at <TT
+CLASS="parameter"
+><I
+>start</I
+></TT
+>.
+    </P
+><P
+>&#13;     If <TT
+CLASS="parameter"
+><I
+>length</I
+></TT
+> is given and is negative, the
+     string returned will end <TT
+CLASS="parameter"
+><I
+>length</I
+></TT
+> characters
+     from the end of <TT
+CLASS="parameter"
+><I
+>string</I
+></TT
+>. If this would
+     result in a string with negative length, then the returned string
+     will contain the single character at
+     <TT
+CLASS="parameter"
+><I
+>start</I
+></TT
+>.
+    </P
+><P
+>&#13;     Examples:
+     <DIV
+CLASS="informalexample"
+><A
+NAME="AEN37879"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;$rest = substr ("abcdef", 1, -1); // returns "bcde"
+      </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+>
+    </P
+><P
+>&#13;     See also <A
+HREF="function.strrchr.html"
+><B
+CLASS="function"
+>strrchr()</B
+></A
+> and
+     <A
+HREF="function.ereg.html"
+><B
+CLASS="function"
+>ereg()</B
+></A
+>.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.strtr.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.substr-count.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>strtr</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.strings.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>substr_count</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

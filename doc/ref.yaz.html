@@ -1,0 +1,411 @@
+<HTML
+><HEAD
+><TITLE
+>YAZ functions</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Function Reference"
+HREF="funcref.html"><LINK
+REL="PREVIOUS"
+TITLE="utf8_encode"
+HREF="function.utf8-encode.html"><LINK
+REL="NEXT"
+TITLE="yaz_addinfo"
+HREF="function.yaz-addinfo.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="reference"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.utf8-encode.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.yaz-addinfo.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="reference"
+><A
+NAME="ref.yaz"
+></A
+><DIV
+CLASS="TITLEPAGE"
+><H1
+CLASS="title"
+>LXXII. YAZ functions</H1
+><DIV
+CLASS="PARTINTRO"
+><A
+NAME="AEN40494"
+></A
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="yaz.intro"
+>Introduction</A
+></H1
+><P
+>&#13;    This extension offers a PHP interface to the
+    <SPAN
+CLASS="productname"
+>YAZ</SPAN
+> toolkit that implements the Z39.50
+    protocol for information retrieval. With this extension you can easily
+    implement a Z39.50 origin (client) that searches Z39.50 targets
+    (servers) in parallel.
+   </P
+><P
+>&#13;    <SPAN
+CLASS="productname"
+>YAZ</SPAN
+> is available at <A
+HREF="http://www.indexdata.dk/yaz/"
+TARGET="_top"
+>http://www.indexdata.dk/yaz/</A
+>. You can find news information,
+    example scripts, etc. for this extension at <A
+HREF="http://www.indexdata.dk/phpyaz/"
+TARGET="_top"
+>http://www.indexdata.dk/phpyaz/</A
+>.
+   </P
+><P
+>&#13;    The module hides most of the complexity of Z39.50 so it should be
+    fairly easy to use. It supports persistent stateless connections very
+    similar to those offered by the various SQL APIs that are available
+    for PHP. This means that sessions are stateless but shared amongst
+    users, thus saving the connect and initialize phase steps in most cases.
+   </P
+></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="yaz.install"
+>Installation</A
+></H1
+><P
+>&#13;    Compile YAZ and install it. Build PHP with your favourite
+    modules and add option --with-yaz. Your task is roughly the
+    following:
+   </P
+><P
+>&#13;   <DIV
+CLASS="informalexample"
+><A
+NAME="AEN40508"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;gunzip -c yaz-1.6.tar.gz|tar xf -
+gunzip -c php-4.0.X.tar.gz|tar xf -
+cd yaz-1.6
+./configure --prefix=/usr
+make
+make install
+cd ../php-4.0.X
+./configure --with-yaz=/usr/bin
+make
+make install
+    </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+>
+   </P
+></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="yaz.example"
+>Example</A
+></H1
+><P
+>&#13;    PHP/YAZ keeps track of connections with targets
+    (Z-Associations). A positive integer represents the ID of a
+    particular association.
+   </P
+><P
+>&#13;    The script below demonstrates the parallel searching feature of
+    the API. When invoked with no arguments it prints a query form; else
+    (arguments are supplied) it searches the targets as given in in array
+    host.
+   </P
+><P
+>&#13;   <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN40515"
+></A
+><P
+><B
+>Example 1. <B
+CLASS="function"
+>YAZ()</B
+></B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;$num_hosts = count ($host);
+if (empty($term) || count($host) == 0) {
+    echo '&#60;form method="get"&#62;
+    &#60;input type="checkbox"
+    name="host[]" value="bagel.indexdata.dk/gils"&#62;
+        GILS test
+    &#60;input type="checkbox"
+    name="host[]" value="localhost:9999/Default"&#62;
+        local test
+    &#60;input type="checkbox" checked="1"
+    name="host[]" value="z3950.bell-labs.com/books"&#62;
+        BELL Labs Library
+    &#60;br&#62;
+    RPN Query:
+    &#60;input type="text" size="30" name="term"&#62;
+    &#60;input type="submit" name="action" value="Search"&#62;
+    ';        
+} else {
+    echo 'You searced for ' . htmlspecialchars($term) . '&#60;br&#62;';
+    for ($i = 0; $i &#60; $num_hosts; $i++) {
+        $id[] = yaz_connect($host[$i]);
+        yaz_syntax($id[$i],"sutrs");
+        yaz_search($id[$i],"rpn",$term);
+    }
+    yaz_wait();
+    for ($i = 0; $i &#60; $num_hosts; $i++) {
+        echo '&#60;hr&#62;' . $host[$i] . ":";
+        $error = yaz_error($id[$i]);
+        if (!empty($error)) {
+            echo "Error: $error";
+        } else {
+            $hits = yaz_hits($id[$i]);
+            echo "Result Count $hits";
+        }
+        echo '&#60;dl&#62;';
+        for ($p = 1; $p &#60;= 10; $p++) {
+            $rec = yaz_record($id[$i],$p,"string");
+            if (empty($rec)) continue;
+            echo "&#60;dt&#62;&#60;b&#62;$p&#60;/b&#62;&#60;/dt&#62;&#60;dd&#62;";
+            echo ereg_replace("\n", "&#60;br&#62;\n",$rec);
+            echo "&#60;/dd&#62;";
+        }
+        echo '&#60;/dl&#62;';
+    }
+}
+    </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+   </P
+></DIV
+></DIV
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Table of Contents</B
+></DT
+><DT
+><A
+HREF="function.yaz-addinfo.html"
+>yaz_addinfo</A
+> &#8212; Returns additional error information</DT
+><DT
+><A
+HREF="function.yaz-close.html"
+>yaz_close</A
+> &#8212; Closes a YAZ connection</DT
+><DT
+><A
+HREF="function.yaz-connect.html"
+>yaz_connect</A
+> &#8212; 
+     Returns a positive association ID on success; zero on failure
+    </DT
+><DT
+><A
+HREF="function.yaz-errno.html"
+>yaz_errno</A
+> &#8212; Returns error number</DT
+><DT
+><A
+HREF="function.yaz-error.html"
+>yaz_error</A
+> &#8212; Returns error description</DT
+><DT
+><A
+HREF="function.yaz-hits.html"
+>yaz_hits</A
+> &#8212; Returns number of hits for last search</DT
+><DT
+><A
+HREF="function.yaz-range.html"
+>yaz_range</A
+> &#8212; 
+     Specifies the maximum number of records to retrieve
+    </DT
+><DT
+><A
+HREF="function.yaz-record.html"
+>yaz_record</A
+> &#8212; Returns a record</DT
+><DT
+><A
+HREF="function.yaz-search.html"
+>yaz_search</A
+> &#8212; Prepares for a search</DT
+><DT
+><A
+HREF="function.yaz-syntax.html"
+>yaz_syntax</A
+> &#8212; 
+     Specifies the object identifier (OID) for the preferred record syntax
+     for retrieval.
+    </DT
+><DT
+><A
+HREF="function.yaz-wait.html"
+>yaz_wait</A
+> &#8212; Executes queries</DT
+></DL
+></DIV
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.utf8-encode.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.yaz-addinfo.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>utf8_encode</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="funcref.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>yaz_addinfo</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

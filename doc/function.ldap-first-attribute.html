@@ -1,0 +1,220 @@
+<HTML
+><HEAD
+><TITLE
+>ldap_first_attribute</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="LDAP functions"
+HREF="ref.ldap.html"><LINK
+REL="PREVIOUS"
+TITLE="ldap_explode_dn"
+HREF="function.ldap-explode-dn.html"><LINK
+REL="NEXT"
+TITLE="ldap_first_entry"
+HREF="function.ldap-first-entry.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.ldap-explode-dn.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.ldap-first-entry.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.ldap-first-attribute"
+>ldap_first_attribute</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN19055"
+></A
+><P
+>    (PHP3 , PHP4 )</P
+>ldap_first_attribute&nbsp;--&nbsp;Return first attribute</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN19058"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN19060"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>string <B
+CLASS="function"
+>ldap_first_attribute</B
+></CODE
+> (int link_identifier, int result_entry_identifier, int ber_identifier)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     Returns the first attribute in the entry on success and false on
+     error.
+    </P
+><P
+> 
+     Similar to reading entries, attributes are also read one by one
+     from a particular entry.
+     <B
+CLASS="function"
+>ldap_first_attribute()</B
+> returns the first
+     attribute in the entry pointed by the entry identifier.
+     Remaining attributes are retrieved by calling
+     <A
+HREF="function.ldap-next-attribute.html"
+><B
+CLASS="function"
+>ldap_next_attribute()</B
+></A
+> successively.
+     <TT
+CLASS="parameter"
+><I
+>ber_identifier</I
+></TT
+> is the identifier to
+     internal memory location pointer. It is passed by reference. The
+     same <TT
+CLASS="parameter"
+><I
+>ber_identifier</I
+></TT
+> is passed to the
+     <A
+HREF="function.ldap-next-attribute.html"
+><B
+CLASS="function"
+>ldap_next_attribute()</B
+></A
+> function, which modifies
+     that pointer.
+    </P
+><P
+>&#13;     see also <A
+HREF="function.ldap-get-attributes.html"
+><B
+CLASS="function"
+>ldap_get_attributes()</B
+></A
+></P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.ldap-explode-dn.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.ldap-first-entry.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>ldap_explode_dn</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.ldap.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>ldap_first_entry</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

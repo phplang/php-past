@@ -1,0 +1,202 @@
+<HTML
+><HEAD
+><TITLE
+>ldap_explode_dn</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="LDAP functions"
+HREF="ref.ldap.html"><LINK
+REL="PREVIOUS"
+TITLE="ldap_error"
+HREF="function.ldap-error.html"><LINK
+REL="NEXT"
+TITLE="ldap_first_attribute"
+HREF="function.ldap-first-attribute.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.ldap-error.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.ldap-first-attribute.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.ldap-explode-dn"
+>ldap_explode_dn</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN19035"
+></A
+><P
+>    (PHP3 , PHP4 )</P
+>ldap_explode_dn&nbsp;--&nbsp;Splits DN into its component parts</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN19038"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN19040"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>array <B
+CLASS="function"
+>ldap_explode_dn</B
+></CODE
+> (string dn, int with_attrib)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     <B
+CLASS="function"
+>ldap_explode_dn()</B
+> function is used to split
+     the a DN returned by <A
+HREF="function.ldap-get-dn.html"
+><B
+CLASS="function"
+>ldap_get_dn()</B
+></A
+> and breaks
+     it up into its component parts. Each part is known as Relative
+     Distinguished Name, or RDN.  <B
+CLASS="function"
+>ldap_explode_dn()</B
+>
+     returns an array of all those components.
+     <TT
+CLASS="parameter"
+><I
+>with_attrib</I
+></TT
+> is used to request if the RDNs
+     are returned with only values or their attributes as well.  To
+     get RDNs with the attributes (i.e. in attribute=value format) set
+     <TT
+CLASS="parameter"
+><I
+>with_attrib</I
+></TT
+> to 0 and to get only values
+     set it to 1.</P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.ldap-error.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.ldap-first-attribute.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>ldap_error</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.ldap.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>ldap_first_attribute</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,330 @@
+<HTML
+><HEAD
+><TITLE
+>urlencode</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="URL Functions"
+HREF="ref.url.html"><LINK
+REL="PREVIOUS"
+TITLE="urldecode"
+HREF="function.urldecode.html"><LINK
+REL="NEXT"
+TITLE="Variable Functions"
+HREF="ref.var.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.urldecode.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="ref.var.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.urlencode"
+>urlencode</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN38525"
+></A
+><P
+>    (PHP3 , PHP4 )</P
+>urlencode&nbsp;--&nbsp;URL-encodes string</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN38528"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN38530"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>string <B
+CLASS="function"
+>urlencode</B
+></CODE
+> (string str)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     Returns a string in which all non-alphanumeric characters except
+     <TT
+CLASS="literal"
+>-_.</TT
+> have been replaced with a percent
+     (<TT
+CLASS="literal"
+>%</TT
+>) sign followed by two hex digits and spaces
+     encoded as plus (<TT
+CLASS="literal"
+>+</TT
+>) signs.  It is encoded the
+     same way that the posted data from a WWW form is encoded, that is
+     the same way as in
+     <TT
+CLASS="literal"
+>application/x-www-form-urlencoded</TT
+> media type.
+     This differs from the RFC1738 encoding (see
+     <A
+HREF="function.rawurlencode.html"
+><B
+CLASS="function"
+>rawurlencode()</B
+></A
+>) in that for historical
+     reasons, spaces are encoded as plus (+) signs.  This function is
+     convenient when encoding a string to be used in a query part of
+     an URL, as a convenient way to pass variables to the next page:
+     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN38542"
+></A
+><P
+><B
+>Example 1. <B
+CLASS="function"
+>Urlencode()</B
+> example</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;echo '&#60;A HREF="mycgi?foo=', urlencode ($userinput), '"&#62;';
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+    </P
+><P
+>Note: Be careful about variables that may match HTML entities.  
+	Things like &#38;amp, &#38;copy and &#38;pound are parsed by the browser
+	and the actual entity is used instead of the desired variable name.  This 
+	is an obvious hassle that the W3C has been telling people about for years.
+	The reference is here: <A
+HREF="http://www.w3.org/TR/html4/appendix/notes.html#h-B.2.2"
+TARGET="_top"
+>http://www.w3.org/TR/html4/appendix/notes.html#h-B.2.2</A
+>
+	PHP supports changing the argument separator to the W3C-suggested
+	semi-colon through the arg_separator .ini directive.  Unfortunately most
+	user agents do not send form data in this semi-colon separated format.
+	A more portable way around this is to use &#38;amp; instead of &#38; as the
+    separator.  You don't need to change PHP's arg_separator for this.  Leave
+	it as &#38;, but simply encode your URLs using <A
+HREF="function.htmlentities.html"
+><B
+CLASS="function"
+>htmlentities()</B
+></A
+>(urlencode($data)).
+     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN38549"
+></A
+><P
+><B
+>Example 2. <B
+CLASS="function"
+>Urlencode/htmlentities()</B
+> example</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;echo '&#60;A HREF="mycgi?foo=', htmlentities (urlencode ($userinput) ), '"&#62;';
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+	</P
+><P
+>&#13;     See also <A
+HREF="function.urldecode.html"
+><B
+CLASS="function"
+>urldecode()</B
+></A
+>,
+		          <A
+HREF="function.htmlentities.html"
+><B
+CLASS="function"
+>htmlentities()</B
+></A
+>,
+		          <A
+HREF="function.rawurldecode.html"
+><B
+CLASS="function"
+>rawurldecode()</B
+></A
+>,
+							<A
+HREF="function.rawurlencode.html"
+><B
+CLASS="function"
+>rawurlencode()</B
+></A
+>.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.urldecode.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="ref.var.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>urldecode</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.url.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Variable Functions</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

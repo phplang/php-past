@@ -1,0 +1,203 @@
+<HTML
+><HEAD
+><TITLE
+>gzseek</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Zlib Compression Functions"
+HREF="ref.zlib.html"><LINK
+REL="PREVIOUS"
+TITLE="gzrewind"
+HREF="function.gzrewind.html"><LINK
+REL="NEXT"
+TITLE="gztell"
+HREF="function.gztell.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.gzrewind.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.gztell.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.gzseek"
+>gzseek</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN41150"
+></A
+><P
+>    (PHP3 , PHP4 )</P
+>gzseek&nbsp;--&nbsp;Seek on a gz-file pointer</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN41153"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN41155"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int <B
+CLASS="function"
+>gzseek</B
+></CODE
+> (int zp, int offset)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     Sets the file position indicator for the file referenced by zp to
+     offset bytes into the file stream. Equivalent to calling (in C)
+     <TT
+CLASS="literal"
+>gzseek( zp, offset, SEEK_SET )</TT
+>.
+    </P
+><P
+>&#13;     If the file is opened for reading, this function is emulated but
+     can be extremely slow. If the file is opened for writing, only
+     forward seeks are supported; gzseek then compresses a sequence of
+     zeroes up to the new starting position.
+    </P
+><P
+>&#13;     Upon success, returns 0; otherwise, returns -1. Note that seeking
+     past EOF is not considered an error.
+    </P
+><P
+>&#13;     See also <A
+HREF="function.gztell.html"
+><B
+CLASS="function"
+>gztell()</B
+></A
+> and
+     <A
+HREF="function.gzrewind.html"
+><B
+CLASS="function"
+>gzrewind()</B
+></A
+>.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.gzrewind.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.gztell.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>gzrewind</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.zlib.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>gztell</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

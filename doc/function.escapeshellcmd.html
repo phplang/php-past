@@ -1,0 +1,255 @@
+<HTML
+><HEAD
+><TITLE
+>escapeshellcmd</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Program Execution functions"
+HREF="ref.exec.html"><LINK
+REL="PREVIOUS"
+TITLE="escapeshellarg"
+HREF="function.escapeshellarg.html"><LINK
+REL="NEXT"
+TITLE="exec"
+HREF="function.exec.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.escapeshellarg.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.exec.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.escapeshellcmd"
+>escapeshellcmd</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN32012"
+></A
+><P
+>    (PHP3 , PHP4 )</P
+>escapeshellcmd&nbsp;--&nbsp;escape shell metacharacters</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN32015"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN32017"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>string <B
+CLASS="function"
+>escapeshellcmd</B
+></CODE
+> (string command)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     <B
+CLASS="function"
+>EscapeShellCmd()</B
+> escapes any characters in a
+     string that might be used to trick a shell command into executing
+     arbitrary commands.  This function should be used to make sure
+     that any data coming from user input is escaped before this data
+     is passed to the <A
+HREF="function.exec.html"
+><B
+CLASS="function"
+>exec()</B
+></A
+> or
+     <A
+HREF="function.system.html"
+><B
+CLASS="function"
+>system()</B
+></A
+> functions, or to the <A
+HREF="language.operators.execution.html"
+>backtick
+     operator</A
+>. A standard use would be:</P
+><P
+>&#13;     <DIV
+CLASS="informalexample"
+><A
+NAME="AEN32029"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;$e = EscapeShellCmd($userinput);
+system("echo $e"); // here we don't care if $e has spaces
+$f = EscapeShellCmd($filename);
+system("touch \"/tmp/$f\"; ls -l \"/tmp/$f\""); // and here we do, so we use quotes
+      </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+>
+    </P
+><P
+>&#13;     See also <A
+HREF="function.escapeshellarg.html"
+><B
+CLASS="function"
+>escapeshellarg()</B
+></A
+>, <A
+HREF="function.exec.html"
+><B
+CLASS="function"
+>exec()</B
+></A
+>, 
+	 <A
+HREF="function.popen.html"
+><B
+CLASS="function"
+>popen()</B
+></A
+>, <A
+HREF="function.system.html"
+><B
+CLASS="function"
+>system()</B
+></A
+>, and the <A
+HREF="language.operators.execution.html"
+>backtick operator</A
+>.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.escapeshellarg.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.exec.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>escapeshellarg</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.exec.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>exec</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

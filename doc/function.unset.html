@@ -1,0 +1,499 @@
+<HTML
+><HEAD
+><TITLE
+>unset</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Variable Functions"
+HREF="ref.var.html"><LINK
+REL="PREVIOUS"
+TITLE="unserialize"
+HREF="function.unserialize.html"><LINK
+REL="NEXT"
+TITLE="var_dump"
+HREF="function.var-dump.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.unserialize.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.var-dump.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.unset"
+>unset</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN39102"
+></A
+><P
+>    (unknown)</P
+>unset&nbsp;--&nbsp;Unset a given variable</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN39105"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN39107"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int <B
+CLASS="function"
+>unset</B
+></CODE
+> (mixed var [, mixed var [, ...]])</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     <B
+CLASS="function"
+>unset()</B
+> destroys the specified variables and
+     returns true.
+    </P
+><P
+>&#13;     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN39122"
+></A
+><P
+><B
+>Example 1. <B
+CLASS="function"
+>Unset()</B
+> example</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;// destroy a single variable
+unset ($foo);
+
+// destroy a single element of an array
+unset ($bar['quux']);
+
+// destroy more than one variable
+unset ($foo1, $foo2, $foo3);
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+    </P
+><P
+>&#13;     The behavior of <B
+CLASS="function"
+>unset()</B
+> inside of a function
+     can vary depending on what type of variable you are attempting to
+     destroy.
+    </P
+><P
+>&#13;     If a globalized variable is <B
+CLASS="function"
+>unset()</B
+> inside of
+     a function, only the local variable is destroyed.  The variable
+     in the calling environment will retain the same value as before
+     <B
+CLASS="function"
+>unset()</B
+> was called.
+     <DIV
+CLASS="informalexample"
+><A
+NAME="AEN39131"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;function destroy_foo() {
+    global $foo;
+    unset($foo);
+}
+
+$foo = 'bar';
+destroy_foo();
+echo $foo;
+      </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+>
+     The above example would output:
+     <DIV
+CLASS="informalexample"
+><A
+NAME="AEN39133"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;bar
+      </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+>
+    </P
+><P
+>&#13;     If a variable that is PASSED BY REFERENCE is
+     <B
+CLASS="function"
+>unset()</B
+> inside of a function, only the local
+     variable is destroyed.  The variable in the calling environment
+     will retain the same value as before <B
+CLASS="function"
+>unset()</B
+>
+     was called.
+     <DIV
+CLASS="informalexample"
+><A
+NAME="AEN39138"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;function foo(&#38;$bar) { 
+    unset($bar); 
+    $bar = "blah"; 
+}
+
+$bar = 'something';
+echo "$bar\n";
+
+foo($bar);
+echo "$bar\n";
+      </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+>
+     The above example would output:
+     <DIV
+CLASS="informalexample"
+><A
+NAME="AEN39140"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;something
+something
+      </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+>
+    </P
+><P
+>&#13;     If a static variable is <B
+CLASS="function"
+>unset()</B
+> inside of a
+     function, <B
+CLASS="function"
+>unset()</B
+> unsets the reference to the
+     static variable, rather than the static variable itself.
+     <DIV
+CLASS="informalexample"
+><A
+NAME="AEN39145"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;function foo() { 
+    static $a;
+    $a++;
+       echo "$a\n";
+
+    unset($a);
+}
+
+foo();
+foo();
+foo();
+      </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+>
+     The above example would output:
+     <DIV
+CLASS="informalexample"
+><A
+NAME="AEN39147"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;1
+2
+3
+      </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+>
+    </P
+><P
+>&#13;     If you would like to <B
+CLASS="function"
+>unset()</B
+> a global variable inside of a function, you can use the <TT
+CLASS="parameter"
+><I
+>$GLOBALS</I
+></TT
+> array to do so:
+     <DIV
+CLASS="informalexample"
+><A
+NAME="AEN39152"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;function foo() {
+    unset($GLOBALS['bar']);       
+}
+
+$bar = "something";
+foo();
+      </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+>
+    </P
+><P
+>&#13;     See also <A
+HREF="function.isset.html"
+><B
+CLASS="function"
+>isset()</B
+></A
+> and
+     <A
+HREF="function.empty.html"
+><B
+CLASS="function"
+>empty()</B
+></A
+>.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.unserialize.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.var-dump.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>unserialize</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.var.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>var_dump</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

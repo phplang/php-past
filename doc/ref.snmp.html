@@ -1,0 +1,221 @@
+<HTML
+><HEAD
+><TITLE
+>SNMP functions</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Function Reference"
+HREF="funcref.html"><LINK
+REL="PREVIOUS"
+TITLE="swf_posround"
+HREF="function.swf-posround.html"><LINK
+REL="NEXT"
+TITLE="snmpget"
+HREF="function.snmpget.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="reference"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.swf-posround.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.snmpget.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="reference"
+><A
+NAME="ref.snmp"
+></A
+><DIV
+CLASS="TITLEPAGE"
+><H1
+CLASS="title"
+>LXIII. SNMP functions</H1
+><DIV
+CLASS="PARTINTRO"
+><A
+NAME="AEN35684"
+></A
+><P
+>&#13;    In order to use the SNMP functions on Unix you need to install the <A
+HREF="http://ucd-snmp.ucdavis.edu/"
+TARGET="_top"
+>UCD SNMP</A
+> package. On Windows these functions
+    are only available on NT and not on Win95/98.</P
+><P
+>&#13;    Important: In order to use the UCD SNMP package, you need to define
+    NO_ZEROLENGTH_COMMUNITY to 1 before compiling it. After configuring UCD
+    SNMP, edit config.h and search for NO_ZEROLENGTH_COMMUNITY. Uncomment the
+    #define line. It should look like this afterwards:</P
+><P
+>&#13;    <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;#define NO_ZEROLENGTH_COMMUNITY 1
+    </PRE
+></TD
+></TR
+></TABLE
+>
+   </P
+><P
+>&#13;    If you see strange segmentation faults in combination with SNMP commands,
+    you did not follow the above instructions. If you do not want to recompile
+    UCD SNMP, you can compile PHP with the --enable-ucd-snmp-hack switch which
+    will work around the misfeature.</P
+></DIV
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Table of Contents</B
+></DT
+><DT
+><A
+HREF="function.snmpget.html"
+>snmpget</A
+> &#8212; Fetch an SNMP object</DT
+><DT
+><A
+HREF="function.snmpset.html"
+>snmpset</A
+> &#8212; Set an SNMP object</DT
+><DT
+><A
+HREF="function.snmpwalk.html"
+>snmpwalk</A
+> &#8212; Fetch all the SNMP objects from an agent</DT
+><DT
+><A
+HREF="function.snmpwalkoid.html"
+>snmpwalkoid</A
+> &#8212; Query for a tree of information about a network entity
+    </DT
+><DT
+><A
+HREF="function.snmp-get-quick-print.html"
+>snmp_get_quick_print</A
+> &#8212; Fetch the current value of the UCD library's quick_print setting
+    </DT
+><DT
+><A
+HREF="function.snmp-set-quick-print.html"
+>snmp_set_quick_print</A
+> &#8212; Set the value of quick_print within the UCD SNMP library.
+    </DT
+></DL
+></DIV
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.swf-posround.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.snmpget.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>swf_posround</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="funcref.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>snmpget</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,259 @@
+<HTML
+><HEAD
+><TITLE
+>dba_replace</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Database (dbm-style) abstraction layer functions"
+HREF="ref.dba.html"><LINK
+REL="PREVIOUS"
+TITLE="dba_optimize"
+HREF="function.dba-optimize.html"><LINK
+REL="NEXT"
+TITLE="dba_sync"
+HREF="function.dba-sync.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.dba-optimize.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.dba-sync.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.dba-replace"
+>dba_replace</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN9052"
+></A
+><P
+>    (PHP3 &#62;= 3.0.8, PHP4 &#62;= 4.0b2)</P
+>dba_replace&nbsp;--&nbsp;Replace or insert entry</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN9055"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN9057"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>bool <B
+CLASS="function"
+>dba_replace</B
+></CODE
+> (string key, string value, int handle)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     <B
+CLASS="function"
+>dba_replace()</B
+> replaces or inserts the entry described
+     with <TT
+CLASS="parameter"
+><I
+>key</I
+></TT
+> and <TT
+CLASS="parameter"
+><I
+>value</I
+></TT
+> into the
+     database specified by <TT
+CLASS="parameter"
+><I
+>handle</I
+></TT
+>.
+    </P
+><P
+>&#13;     <TT
+CLASS="parameter"
+><I
+>key</I
+></TT
+> is the key of the entry to be inserted.
+    </P
+><P
+>&#13;     <TT
+CLASS="parameter"
+><I
+>value</I
+></TT
+> is the value to be inserted.
+    </P
+><P
+>&#13;     <TT
+CLASS="parameter"
+><I
+>handle</I
+></TT
+> is a database handle returned by
+     <A
+HREF="function.dba-open.html"
+><B
+CLASS="function"
+>dba_open()</B
+></A
+>.
+    </P
+><P
+>&#13;     <B
+CLASS="function"
+>dba_replace()</B
+> returns true or false, depending on
+     whether it succeeds of fails, respectively.
+    </P
+><P
+>&#13;     See also: <A
+HREF="function.dba-exists.html"
+><B
+CLASS="function"
+>dba_exists()</B
+></A
+>,
+     <A
+HREF="function.dba-delete.html"
+><B
+CLASS="function"
+>dba_delete()</B
+></A
+>, <A
+HREF="function.dba-fetch.html"
+><B
+CLASS="function"
+>dba_fetch()</B
+></A
+>,
+     and <A
+HREF="function.dba-insert.html"
+><B
+CLASS="function"
+>dba_insert()</B
+></A
+>.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.dba-optimize.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.dba-sync.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>dba_optimize</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.dba.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>dba_sync</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

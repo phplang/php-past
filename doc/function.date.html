@@ -1,0 +1,478 @@
+<HTML
+><HEAD
+><TITLE
+>date</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Date and Time functions"
+HREF="ref.datetime.html"><LINK
+REL="PREVIOUS"
+TITLE="checkdate"
+HREF="function.checkdate.html"><LINK
+REL="NEXT"
+TITLE="getdate"
+HREF="function.getdate.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.checkdate.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.getdate.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.date"
+>date</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN9139"
+></A
+><P
+>    (PHP3 , PHP4 )</P
+>date&nbsp;--&nbsp;Format a local time/date</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN9142"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN9144"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>string <B
+CLASS="function"
+>date</B
+></CODE
+> (string format [, int 
+       timestamp])</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     Returns a string formatted according to the given format string
+     using the given <TT
+CLASS="parameter"
+><I
+>timestamp</I
+></TT
+> or the current
+     local time if no timestamp is given.
+    </P
+><P
+>&#13;     The following characters are recognized in the format string:
+     <P
+></P
+><UL
+><LI
+><P
+>&#13;        a - "am" or "pm"
+       </P
+></LI
+><LI
+><P
+>&#13;        A - "AM" or "PM"
+       </P
+></LI
+><LI
+><P
+>&#13;        B - Swatch Internet time
+       </P
+></LI
+><LI
+><P
+>&#13;        d - day of the month, 2 digits with leading zeros; i.e. "01"
+        to "31"
+       </P
+></LI
+><LI
+><P
+>&#13;        D - day of the week, textual, 3 letters; i.e. "Fri"
+       </P
+></LI
+><LI
+><P
+>&#13;        F - month, textual, long; i.e. "January"
+       </P
+></LI
+><LI
+><P
+>&#13;        g - hour, 12-hour format without leading zeros; i.e. "1" to
+        "12"
+       </P
+></LI
+><LI
+><P
+>&#13;        G - hour, 24-hour format without leading zeros; i.e. "0" to
+        "23"
+       </P
+></LI
+><LI
+><P
+>&#13;        h - hour, 12-hour format; i.e. "01" to "12"
+       </P
+></LI
+><LI
+><P
+>&#13;        H - hour, 24-hour format; i.e. "00" to "23"
+       </P
+></LI
+><LI
+><P
+>&#13;        i - minutes; i.e. "00" to "59"
+       </P
+></LI
+><LI
+><P
+>&#13;        I (capital i) - "1" if Daylight Savings Time, "0" otherwise.
+       </P
+></LI
+><LI
+><P
+>&#13;        j - day of the month without leading zeros; i.e. "1" to "31"
+       </P
+></LI
+><LI
+><P
+>&#13;        l (lowercase 'L') - day of the week, textual, long;
+        i.e. "Friday"
+       </P
+></LI
+><LI
+><P
+>&#13;        L - boolean for whether it is a leap year; i.e. "0" or "1"
+       </P
+></LI
+><LI
+><P
+>&#13;        m - month; i.e. "01" to "12"
+       </P
+></LI
+><LI
+><P
+>&#13;        M - month, textual, 3 letters; i.e. "Jan"
+       </P
+></LI
+><LI
+><P
+>&#13;        n - month without leading zeros; i.e. "1" to "12"
+       </P
+></LI
+><LI
+><P
+>&#13;        s - seconds; i.e. "00" to "59"
+       </P
+></LI
+><LI
+><P
+>&#13;        S - English ordinal suffix, textual, 2 characters; i.e. "th",
+        "nd"
+       </P
+></LI
+><LI
+><P
+>&#13;        t - number of days in the given month; i.e. "28" to "31"
+       </P
+></LI
+><LI
+><P
+>&#13;        T - Timezone setting of this machine; i.e. "MDT"
+       </P
+></LI
+><LI
+><P
+>&#13;        U - seconds since the epoch
+       </P
+></LI
+><LI
+><P
+>&#13;        w - day of the week, numeric, i.e. "0" (Sunday) to "6"
+        (Saturday)
+       </P
+></LI
+><LI
+><P
+>&#13;        Y - year, 4 digits; i.e. "1999"
+       </P
+></LI
+><LI
+><P
+>&#13;        y - year, 2 digits; i.e. "99"
+       </P
+></LI
+><LI
+><P
+>&#13;        z - day of the year; i.e. "0" to "365"
+       </P
+></LI
+><LI
+><P
+>&#13;        Z - timezone offset in seconds (i.e. "-43200" to "43200")
+       </P
+></LI
+></UL
+>
+     Unrecognized characters in the format string will be printed
+     as-is.  The "Z" format will always return "0" when using
+     <A
+HREF="function.gmdate.html"
+><B
+CLASS="function"
+>gmdate()</B
+></A
+>.
+     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN9214"
+></A
+><P
+><B
+>Example 1. <B
+CLASS="function"
+>Date()</B
+> example</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;print (date ("l dS of F Y h:i:s A"));
+print ("July 1, 2000 is on a " . date ("l", mktime(0,0,0,7,1,2000)));
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+    </P
+><P
+>&#13;     It is possible to use <B
+CLASS="function"
+>date()</B
+> and
+     <A
+HREF="function.mktime.html"
+><B
+CLASS="function"
+>mktime()</B
+></A
+> together to find dates in the future
+     or the past.
+     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN9221"
+></A
+><P
+><B
+>Example 2. 
+       <B
+CLASS="function"
+>Date()</B
+> and <A
+HREF="function.mktime.html"
+><B
+CLASS="function"
+>mktime()</B
+></A
+>
+       example
+      </B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;$tomorrow  = mktime (0,0,0,date("m")  ,date("d")+1,date("Y"));
+$lastmonth = mktime (0,0,0,date("m")-1,date("d"),  date("Y"));
+$nextyear  = mktime (0,0,0,date("m"),  date("d"),  date("Y")+1);
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+    </P
+><P
+>&#13;     To format dates in other languages, you should use the
+     <A
+HREF="function.setlocale.html"
+><B
+CLASS="function"
+>setlocale()</B
+></A
+> and <A
+HREF="function.strftime.html"
+><B
+CLASS="function"
+>strftime()</B
+></A
+>
+     functions.
+    </P
+><P
+>&#13;     See also <A
+HREF="function.gmdate.html"
+><B
+CLASS="function"
+>gmdate()</B
+></A
+> and
+     <A
+HREF="function.mktime.html"
+><B
+CLASS="function"
+>mktime()</B
+></A
+>.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.checkdate.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.getdate.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>checkdate</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.datetime.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>getdate</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,285 @@
+<HTML
+><HEAD
+><TITLE
+>fgetcsv</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Filesystem functions"
+HREF="ref.filesystem.html"><LINK
+REL="PREVIOUS"
+TITLE="fgetc"
+HREF="function.fgetc.html"><LINK
+REL="NEXT"
+TITLE="fgets"
+HREF="function.fgets.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.fgetc.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.fgets.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.fgetcsv"
+>fgetcsv</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN10827"
+></A
+><P
+>    (PHP3 &#62;= 3.0.8, PHP4 )</P
+>fgetcsv&nbsp;--&nbsp;
+     Gets line from file pointer and parse for CSV fields
+    </DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN10830"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN10832"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>array <B
+CLASS="function"
+>fgetcsv</B
+></CODE
+> (int fp, int length [, string 
+       delimiter])</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     Similar to <A
+HREF="function.fgets.html"
+><B
+CLASS="function"
+>fgets()</B
+></A
+> except that
+     <B
+CLASS="function"
+>fgetcsv()</B
+> parses the line it reads for fields
+     in <SPAN
+CLASS="acronym"
+>CSV</SPAN
+> format and returns an array containing
+     the fields read.  The field delimiter is a comma, unless you
+     specify another delimiter with the optional third parameter.
+    </P
+><P
+>&#13;     <TT
+CLASS="parameter"
+><I
+>Fp</I
+></TT
+> must be a valid file pointer to a file
+     successfully opened by <A
+HREF="function.fopen.html"
+><B
+CLASS="function"
+>fopen()</B
+></A
+>,
+     <A
+HREF="function.popen.html"
+><B
+CLASS="function"
+>popen()</B
+></A
+>, or <A
+HREF="function.fsockopen.html"
+><B
+CLASS="function"
+>fsockopen()</B
+></A
+>
+    </P
+><P
+>&#13;     Length must be greater than the longest line to be found in the
+     CSV file (allowing for trailing line-end characters).
+    </P
+><P
+>&#13;     <B
+CLASS="function"
+>Fgetcsv()</B
+> returns false on error, including
+     end of file.
+    </P
+><P
+>&#13;     N.B. A blank line in a CSV file will be returned as an array
+     comprising a single null field, and will not be treated as an
+     error.
+    </P
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN10856"
+></A
+><P
+><B
+>Example 1. 
+      <B
+CLASS="function"
+>Fgetcsv()</B
+> example - Read and print entire
+      contents of a CSV file
+     </B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;$row = 1;
+$fp = fopen ("test.csv","r");
+while ($data = fgetcsv ($fp, 1000, ",")) {
+    $num = count ($data);
+    print "&#60;p&#62; $num fields in line $row: &#60;br&#62;";
+    $row++;
+    for ($c=0; $c&#60;$num; $c++) {
+        print $data[$c] . "&#60;br&#62;";
+    }
+}
+fclose ($fp);
+     </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.fgetc.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.fgets.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>fgetc</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.filesystem.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>fgets</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

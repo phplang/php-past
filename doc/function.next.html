@@ -1,0 +1,261 @@
+<HTML
+><HEAD
+><TITLE
+>next</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Array Functions"
+HREF="ref.array.html"><LINK
+REL="PREVIOUS"
+TITLE="natcasesort"
+HREF="function.natcasesort.html"><LINK
+REL="NEXT"
+TITLE="pos"
+HREF="function.pos.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.natcasesort.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.pos.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.next"
+>next</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN5585"
+></A
+><P
+>    (PHP3 , PHP4 )</P
+>next&nbsp;--&nbsp;
+     Advance the internal array pointer of an array
+    </DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN5588"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN5590"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>mixed <B
+CLASS="function"
+>next</B
+></CODE
+> (array array)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     Returns the array element in the next place that's pointed by the
+     internal array pointer, or false if there are no more elements.
+    </P
+><P
+>&#13;     <B
+CLASS="function"
+>Next()</B
+> behaves like
+     <A
+HREF="function.current.html"
+><B
+CLASS="function"
+>current()</B
+></A
+>, with one difference.  It advances
+     the internal array pointer one place forward before returning the
+     element.  That means it returns the next array element and
+     advances the internal array pointer by one.  If advancing the
+     internal array pointer results in going beyond the end of the
+     element list, <B
+CLASS="function"
+>next()</B
+> returns false.
+     <DIV
+CLASS="warning"
+><P
+></P
+><TABLE
+CLASS="warning"
+BORDER="1"
+WIDTH="100%"
+><TR
+><TD
+ALIGN="CENTER"
+><B
+>Warning</B
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+><P
+>&#13;       If the array contains empty elements, or elements that have a key
+       value of 0 then this function will return false for these elements 
+       as well.  To properly traverse an array which may contain empty 
+       elements or elements with key values of 0 see the
+       <A
+HREF="function.each.html"
+><B
+CLASS="function"
+>each()</B
+></A
+> function.
+      </P
+></TD
+></TR
+></TABLE
+></DIV
+>
+    </P
+><P
+>&#13;     See also:
+     <A
+HREF="function.current.html"
+><B
+CLASS="function"
+>current()</B
+></A
+>, <A
+HREF="function.end.html"
+><B
+CLASS="function"
+>end()</B
+></A
+>,
+     <A
+HREF="function.prev.html"
+><B
+CLASS="function"
+>prev()</B
+></A
+>, and <A
+HREF="function.reset.html"
+><B
+CLASS="function"
+>reset()</B
+></A
+>.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.natcasesort.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.pos.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>natcasesort</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.array.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>pos</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,271 @@
+<HTML
+><HEAD
+><TITLE
+>snmpwalk</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="SNMP functions"
+HREF="ref.snmp.html"><LINK
+REL="PREVIOUS"
+TITLE="snmpset"
+HREF="function.snmpset.html"><LINK
+REL="NEXT"
+TITLE="snmpwalkoid"
+HREF="function.snmpwalkoid.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.snmpset.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.snmpwalkoid.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.snmpwalk"
+>snmpwalk</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN35755"
+></A
+><P
+>    (PHP3 , PHP4 )</P
+>snmpwalk&nbsp;--&nbsp;Fetch all the SNMP objects from an agent</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN35758"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN35760"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>array <B
+CLASS="function"
+>snmpwalk</B
+></CODE
+> (string hostname, string community, string object_id [, int timeout [, int retries]])</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     Returns an array of SNMP object values starting from the
+     <B
+CLASS="function"
+>object_id()</B
+> as root and false on error.</P
+><P
+> 
+     <B
+CLASS="function"
+>snmpwalk()</B
+> function is used to read all the
+     values from an SNMP agent specified by the
+     <TT
+CLASS="parameter"
+><I
+>hostname</I
+></TT
+>. <TT
+CLASS="parameter"
+><I
+>Community</I
+></TT
+>
+     specifies the read community for that agent. A null
+     <TT
+CLASS="parameter"
+><I
+>object_id</I
+></TT
+> is taken as the root of the SNMP
+     objects tree and all objects under that tree are returned as an
+     array. If <TT
+CLASS="parameter"
+><I
+>object_id</I
+></TT
+> is specified, all the
+     SNMP objects below that <TT
+CLASS="parameter"
+><I
+>object_id</I
+></TT
+> are
+     returned.
+
+     <DIV
+CLASS="informalexample"
+><A
+NAME="AEN35785"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+> 
+$a = snmpwalk("127.0.0.1", "public", ""); 
+      </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+></P
+><P
+>&#13;     Above function call would return all the SNMP objects from the
+     SNMP agent running on localhost. One can step through the values
+     with a loop
+
+     <DIV
+CLASS="informalexample"
+><A
+NAME="AEN35788"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;for ($i=0; $i&#60;count($a); $i++) {
+    echo $a[$i];
+}
+      </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+></P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.snmpset.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.snmpwalkoid.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>snmpset</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.snmp.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>snmpwalkoid</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

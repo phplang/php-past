@@ -1,0 +1,300 @@
+<HTML
+><HEAD
+><TITLE
+>ImageLoadFont</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Image functions"
+HREF="ref.image.html"><LINK
+REL="PREVIOUS"
+TITLE="ImageLine"
+HREF="function.imageline.html"><LINK
+REL="NEXT"
+TITLE="ImagePolygon"
+HREF="function.imagepolygon.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.imageline.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.imagepolygon.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.imageloadfont"
+>ImageLoadFont</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN15567"
+></A
+><P
+>    (PHP3 , PHP4 )</P
+>ImageLoadFont&nbsp;--&nbsp;Load a new font</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN15570"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN15572"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int <B
+CLASS="function"
+>imageloadfont</B
+></CODE
+> (string file)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     <B
+CLASS="function"
+>ImageLoadFont()</B
+> loads a user-defined bitmap
+     font and returns an identifier for the font (that is always
+     greater than 5, so it will not conflict with the built-in fonts).
+    </P
+><P
+>&#13;     The font file format is currently binary and architecture
+     dependent.  This means you should generate the font files on the
+     same type of CPU as the machine you are running PHP on.
+    </P
+><P
+>&#13;     <DIV
+CLASS="table"
+><A
+NAME="AEN15582"
+></A
+><P
+><B
+>Table 1. Font file format</B
+></P
+><TABLE
+BORDER="1"
+CLASS="CALSTABLE"
+><THEAD
+><TR
+><TH
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>byte position</TH
+><TH
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>C data type</TH
+><TH
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>description</TH
+></TR
+></THEAD
+><TBODY
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>byte 0-3</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>int</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>number of characters in the font</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>byte 4-7</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>int</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;	  value of first character in the font (often 32 for space)
+	 </TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>byte 8-11</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>int</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>pixel width of each character</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>byte 12-15</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>int</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>pixel height of each character</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>byte 16-</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>char</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;	  array with character data, one byte per pixel in each
+	  character, for a total of (nchars*width*height) bytes.
+	 </TD
+></TR
+></TBODY
+></TABLE
+></DIV
+>
+    </P
+><P
+>&#13;     See also <B
+CLASS="function"
+>ImageFontWidth()</B
+> and
+     <B
+CLASS="function"
+>ImageFontHeight()</B
+>.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.imageline.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.imagepolygon.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>ImageLine</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.image.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>ImagePolygon</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

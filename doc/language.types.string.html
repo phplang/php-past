@@ -1,0 +1,566 @@
+<HTML
+><HEAD
+><TITLE
+>Strings</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Types"
+HREF="language.types.html"><LINK
+REL="PREVIOUS"
+TITLE="Floating point numbers"
+HREF="language.types.double.html"><LINK
+REL="NEXT"
+TITLE="Arrays"
+HREF="language.types.array.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="language.types.double.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 6. Types</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="language.types.array.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="language.types.string"
+>Strings</A
+></H1
+><P
+>&#13;    Strings can be specified using one of two sets of delimiters.
+   </P
+><P
+>&#13;    If the string is enclosed in double-quotes ("), variables within
+    the string will be expanded (subject to some parsing
+    limitations). As in C and Perl, the backslash ("\") character can
+    be used in specifying special characters:
+    <DIV
+CLASS="table"
+><A
+NAME="AEN2366"
+></A
+><P
+><B
+>Table 6-1. Escaped characters</B
+></P
+><TABLE
+BORDER="1"
+CLASS="CALSTABLE"
+><THEAD
+><TR
+><TH
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>sequence</TH
+><TH
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>meaning</TH
+></TR
+></THEAD
+><TBODY
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+><TT
+CLASS="literal"
+>\n</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>linefeed (LF or 0x0A in ASCII)</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+><TT
+CLASS="literal"
+>\r</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>carriage return (CR or 0x0D in ASCII)</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+><TT
+CLASS="literal"
+>\t</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>horizontal tab (HT or 0x09 in ASCII)</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+><TT
+CLASS="literal"
+>\\</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>backslash</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+><TT
+CLASS="literal"
+>\$</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>dollar sign</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+><TT
+CLASS="literal"
+>\"</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>double-quote</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+><TT
+CLASS="literal"
+>\[0-7]{1,3}</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;         the sequence of characters matching the regular
+         expression is a character in octal notation
+        </TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+><TT
+CLASS="literal"
+>\x[0-9A-Fa-f]{1,2}</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;         the sequence of characters matching the regular
+         expression is a character in hexadecimal notation
+        </TD
+></TR
+></TBODY
+></TABLE
+></DIV
+>
+   </P
+><P
+>&#13;    You can escape any other character, but a warning will be issued
+    at the highest warning level.
+   </P
+><P
+>&#13;    The second way to delimit a string uses the single-quote ("'")
+    character. When a string is enclosed in single quotes, the only
+    escapes that will be understood are "\\" and "\'". This is for
+    convenience, so that you can have single-quotes and backslashes in
+    a single-quoted string. Variables will <I
+CLASS="emphasis"
+>not</I
+> be
+    expanded inside a single-quoted string.
+   </P
+><P
+>&#13;    Another way to delimit strings is by using here doc syntax
+    ("&#60;&#60;&#60;").  One should provide an identifier after
+    <TT
+CLASS="literal"
+>&#60;&#60;&#60;</TT
+>, then the string, and then the
+    same identifier to close the quotation. The closing identifier
+    <I
+CLASS="emphasis"
+>must</I
+> begin in the first column of the line.
+    The label used must follow the same naming rules as any other
+    label in PHP: it must contain only alphanumeric characters and
+    underscores, and must start with a non-digit character or
+    underscore.
+   </P
+><P
+>&#13;    Here doc text behaves just like a double-quoted string, without
+    the double-quotes. This means that you do not need to escape quotes
+    in your here docs, but you can still use the escape codes listed
+    above. Variables are expanded, but the same care must be taken
+    when expressing complex variables inside a here doc as with
+    strings.
+    <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN2413"
+></A
+><P
+><B
+>Example 6-1. Here doc string quoting example</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;&#60;?php
+$str = &#60;&#60;&#60;EOD
+Example of string
+spanning multiple lines
+using heredoc syntax.
+EOD;
+
+/* More complex example, with variables. */
+class foo {
+    var $foo;
+    var $bar;
+
+    function foo() {
+        $this-&#62;foo = 'Foo';
+        $this-&#62;bar = array('Bar1', 'Bar2', 'Bar3');
+    }
+}
+
+$foo = new foo();
+$name = 'MyName';
+
+echo &#60;&#60;&#60;EOT
+My name is "$name". I am printing some $foo-&#62;foo.
+Now, I am printing some {$foo-&#62;bar[1]}.
+This should print a capital 'A': \x41
+EOT;
+?&#62;
+     </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+   </P
+><DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
+><P
+><B
+>Note: </B
+>
+     Here doc support was added in PHP 4.
+    </P
+></BLOCKQUOTE
+></DIV
+><P
+>&#13;    Strings may be concatenated using the '.' (dot) operator. Note
+    that the '+' (addition) operator will not work for this. Please
+    see <A
+HREF="language.operators.string.html"
+>String
+    operators</A
+> for more information.
+   </P
+><P
+>&#13;    Characters within strings may be accessed by treating the string
+    as a numerically-indexed array of characters, using C-like
+    syntax. See below for examples.
+   </P
+><P
+>&#13;    <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN2422"
+></A
+><P
+><B
+>Example 6-2. Some string examples</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;&#60;?php
+/* Assigning a string. */
+$str = "This is a string";
+
+/* Appending to it. */
+$str = $str . " with some more text";
+
+/* Another way to append, includes an escaped newline. */
+$str .= " and a newline at the end.\n";
+
+/* This string will end up being '&#60;p&#62;Number: 9&#60;/p&#62;' */
+$num = 9;
+$str = "&#60;p&#62;Number: $num&#60;/p&#62;";
+
+/* This one will be '&#60;p&#62;Number: $num&#60;/p&#62;' */
+$num = 9;
+$str = '&#60;p&#62;Number: $num&#60;/p&#62;';
+
+/* Get the first character of a string  */
+$str = 'This is a test.';
+$first = $str[0];
+
+/* Get the last character of a string. */
+$str = 'This is still a test.';
+$last = $str[strlen($str)-1];
+?&#62;	  
+     </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+   </P
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="language.types.string.conversion"
+>String conversion</A
+></H2
+><P
+>&#13;     When a string is evaluated as a numeric value, the resulting
+     value and type are determined as follows.
+    </P
+><P
+>&#13;     The string will evaluate as a double if it contains any of the
+     characters '.', 'e', or 'E'. Otherwise, it will evaluate as an
+     integer.
+    </P
+><P
+>&#13;     The value is given by the initial portion of the string. If the
+     string starts with valid numeric data, this will be the value
+     used. Otherwise, the value will be 0 (zero). Valid numeric data
+     is an optional sign, followed by one or more digits (optionally
+     containing a decimal point), followed by an optional
+     exponent. The exponent is an 'e' or 'E' followed by one or more
+     digits.
+    </P
+><P
+>&#13;     When the first expression is a string, the type of the variable
+     will depend on the second expression.
+    </P
+><DIV
+CLASS="informalexample"
+><A
+NAME="AEN2431"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;$foo = 1 + "10.5";              // $foo is double (11.5)
+$foo = 1 + "-1.3e3";            // $foo is double (-1299)
+$foo = 1 + "bob-1.3e3";         // $foo is integer (1)
+$foo = 1 + "bob3";              // $foo is integer (1)
+$foo = 1 + "10 Small Pigs";     // $foo is integer (11)
+$foo = 1 + "10 Little Piggies"; // $foo is integer (11)
+$foo = "10.0 pigs " + 1;        // $foo is integer (11)
+$foo = "10.0 pigs " + 1.0;      // $foo is double (11)     
+     </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+><P
+>&#13;     For more information on this conversion, see the Unix manual page
+     for strtod(3).
+    </P
+><P
+>&#13;     If you would like to test any of the examples in this section,
+     you can cut and paste the examples and insert the following line
+     to see for yourself what's going on:
+     <DIV
+CLASS="informalexample"
+><A
+NAME="AEN2435"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;echo "\$foo==$foo; type is " . gettype ($foo) . "&#60;br&#62;\n";
+      </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+>
+    </P
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="language.types.double.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="language.types.array.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Floating point numbers</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="language.types.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Arrays</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

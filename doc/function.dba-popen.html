@@ -1,0 +1,254 @@
+<HTML
+><HEAD
+><TITLE
+>dba_popen</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Database (dbm-style) abstraction layer functions"
+HREF="ref.dba.html"><LINK
+REL="PREVIOUS"
+TITLE="dba_nextkey"
+HREF="function.dba-nextkey.html"><LINK
+REL="NEXT"
+TITLE="dba_open"
+HREF="function.dba-open.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.dba-nextkey.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.dba-open.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.dba-popen"
+>dba_popen</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN8956"
+></A
+><P
+>    (PHP3 &#62;= 3.0.8, PHP4 &#62;= 4.0b2)</P
+>dba_popen&nbsp;--&nbsp;Open database persistently</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN8959"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN8961"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int <B
+CLASS="function"
+>dba_popen</B
+></CODE
+> (string path, string mode, string handler [, ...])</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     <B
+CLASS="function"
+>dba_popen()</B
+> establishes a persistent database instance
+     for <TT
+CLASS="parameter"
+><I
+>path</I
+></TT
+> with <TT
+CLASS="parameter"
+><I
+>mode</I
+></TT
+> using
+     <TT
+CLASS="parameter"
+><I
+>handler</I
+></TT
+>.
+    </P
+><P
+>&#13;     <TT
+CLASS="parameter"
+><I
+>path</I
+></TT
+> is commonly a regular path in your filesystem.
+    </P
+><P
+>&#13;     <TT
+CLASS="parameter"
+><I
+>mode</I
+></TT
+> is "r" for read access, "w" for read/write
+     access to an already existing database, "c" for read/write access
+     and database creation if it doesn't currently exist, and "n" for
+     create, truncate and read/write access.
+    </P
+><P
+>&#13;     <TT
+CLASS="parameter"
+><I
+>handler</I
+></TT
+> is the name of the handler which shall be
+     used for accessing <TT
+CLASS="parameter"
+><I
+>path</I
+></TT
+>. It is passed all optional
+     parameters given to <B
+CLASS="function"
+>dba_popen()</B
+> and can act on behalf
+     of them.
+    </P
+><P
+>&#13;     <B
+CLASS="function"
+>dba_popen()</B
+> returns a positive handler id or false, in
+     the case the open is successful or fails, respectively.
+    </P
+><P
+>&#13;     See also:
+     <A
+HREF="function.dba-open.html"
+><B
+CLASS="function"
+>dba_open()</B
+></A
+>
+     <A
+HREF="function.dba-close.html"
+><B
+CLASS="function"
+>dba_close()</B
+></A
+>
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.dba-nextkey.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.dba-open.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>dba_nextkey</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.dba.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>dba_open</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

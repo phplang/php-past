@@ -1,0 +1,247 @@
+<HTML
+><HEAD
+><TITLE
+>base_convert</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Mathematical Functions"
+HREF="ref.math.html"><LINK
+REL="PREVIOUS"
+TITLE="atan2"
+HREF="function.atan2.html"><LINK
+REL="NEXT"
+TITLE="bindec"
+HREF="function.bindec.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.atan2.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.bindec.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.base-convert"
+>base_convert</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN19767"
+></A
+><P
+>    (PHP3 &#62;= 3.0.6, PHP4 )</P
+>base_convert&nbsp;--&nbsp;Convert a number between arbitrary bases</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN19770"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN19772"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>string <B
+CLASS="function"
+>base_convert</B
+></CODE
+> (string number, int frombase, int tobase)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     Returns a string containing <TT
+CLASS="parameter"
+><I
+>number</I
+></TT
+>
+     represented in base <TT
+CLASS="parameter"
+><I
+>tobase</I
+></TT
+>.  The base in
+     which <TT
+CLASS="parameter"
+><I
+>number</I
+></TT
+> is given is specified in
+     <TT
+CLASS="parameter"
+><I
+>frombase</I
+></TT
+>.  Both
+     <TT
+CLASS="parameter"
+><I
+>frombase</I
+></TT
+> and <TT
+CLASS="parameter"
+><I
+>tobase</I
+></TT
+>
+     have to be between 2 and 36, inclusive.  Digits in numbers with a
+     base higher than 10 will be represented with the letters a-z,
+     with a meaning 10, b meaning 11 and z meaning 35.
+     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN19789"
+></A
+><P
+><B
+>Example 1. <B
+CLASS="function"
+>Base_convert()</B
+></B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;$binary = base_convert ($hexadecimal, 16, 2);
+</PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.atan2.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.bindec.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>atan2</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.math.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>bindec</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

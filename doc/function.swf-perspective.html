@@ -1,0 +1,224 @@
+<HTML
+><HEAD
+><TITLE
+>swf_perspective</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Shockwave Flash functions"
+HREF="ref.swf.html"><LINK
+REL="PREVIOUS"
+TITLE="swf_ortho2"
+HREF="function.swf-ortho2.html"><LINK
+REL="NEXT"
+TITLE="swf_polarview"
+HREF="function.swf-polarview.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.swf-ortho2.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.swf-polarview.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.swf-perspective"
+>swf_perspective</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN35498"
+></A
+><P
+>    (PHP4 &#62;= 4.0RC2)</P
+>swf_perspective&nbsp;--&nbsp;
+     Define a perspective projection transformation
+    </DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN35501"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN35503"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>void 
+       <B
+CLASS="function"
+>swf_perspective</B
+>
+      </CODE
+> (double 
+       fovy, double 
+       aspect, double 
+       near, double 
+       far)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     The <B
+CLASS="function"
+>swf_perspective()</B
+> function defines a
+     perspective projection transformation.  The
+     <TT
+CLASS="parameter"
+><I
+>fovy</I
+></TT
+> parameter is field-of-view angle in
+     the y direction.  The <TT
+CLASS="parameter"
+><I
+>aspect</I
+></TT
+> parameter
+     should be set to the aspect ratio of the viewport that is being
+     drawn onto.  The <TT
+CLASS="parameter"
+><I
+>near</I
+></TT
+> parameter is the
+     near clipping plane and the <TT
+CLASS="parameter"
+><I
+>far</I
+></TT
+> parameter
+     is the far clipping plane.
+    </P
+><DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
+><P
+><B
+>Note: </B
+>
+      Various distortion artifacts may appear when performing a
+      perspective projection, this is because Flash players only have
+      a two dimensional matrix.  Some are not to pretty.
+     </P
+></BLOCKQUOTE
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.swf-ortho2.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.swf-polarview.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>swf_ortho2</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.swf.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>swf_polarview</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

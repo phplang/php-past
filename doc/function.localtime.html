@@ -1,0 +1,252 @@
+<HTML
+><HEAD
+><TITLE
+>localtime</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Date and Time functions"
+HREF="ref.datetime.html"><LINK
+REL="PREVIOUS"
+TITLE="gmstrftime"
+HREF="function.gmstrftime.html"><LINK
+REL="NEXT"
+TITLE="microtime"
+HREF="function.microtime.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.gmstrftime.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.microtime.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.localtime"
+>localtime</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN9362"
+></A
+><P
+>    (PHP4 &#62;= 4.0RC2)</P
+>localtime&nbsp;--&nbsp;Get the local time</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN9365"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN9367"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>array <B
+CLASS="function"
+>localtime</B
+></CODE
+> ([int
+       timestamp [, bool 
+       is_associative]])</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     The <B
+CLASS="function"
+>localtime()</B
+> function returns an array
+     identical to that of the structure returned by the C function
+     call.  The first argument to <B
+CLASS="function"
+>localtime()</B
+> is
+     the timestamp, if this is not given the current time is used.
+     The second argument to the <B
+CLASS="function"
+>localtime()</B
+> is the
+     <TT
+CLASS="parameter"
+><I
+>is_associative</I
+></TT
+>, if this is set to 0 or not
+     supplied than the array is returned as a regular, numerically
+     indexed array.  If the argument is set to 1 then
+     <B
+CLASS="function"
+>localtime()</B
+> is an associative array containing
+     all the different elements of the structure returned by the C
+     function call to localtime.  The names of the different keys of
+     the associative array are as follows:
+     <P
+></P
+><UL
+><LI
+><P
+>&#13;	"tm_sec" - seconds
+       </P
+></LI
+><LI
+><P
+>&#13;	"tm_min" - minutes
+       </P
+></LI
+><LI
+><P
+>&#13;	"tm_hour" - hour
+       </P
+></LI
+><LI
+><P
+>&#13;	"tm_mday" - day of the month
+       </P
+></LI
+><LI
+><P
+>&#13;	"tm_mon" - month of the year
+       </P
+></LI
+><LI
+><P
+>&#13;	"tm_year" - Year, not y2k compliant
+       </P
+></LI
+><LI
+><P
+>&#13;	"tm_wday" - Day of the week
+       </P
+></LI
+><LI
+><P
+>&#13;	"tm_yday" - Day of the year
+       </P
+></LI
+><LI
+><P
+>&#13;	"tm_isdst" - Is daylight savings time in effect
+       </P
+></LI
+></UL
+>
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.gmstrftime.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.microtime.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>gmstrftime</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.datetime.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>microtime</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

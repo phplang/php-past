@@ -1,0 +1,198 @@
+<HTML
+><HEAD
+><TITLE
+>imap_clearflag_full</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="IMAP, POP3 and NNTP functions"
+HREF="ref.imap.html"><LINK
+REL="PREVIOUS"
+TITLE="imap_setflag_full"
+HREF="function.imap-setflag-full.html"><LINK
+REL="NEXT"
+TITLE="imap_sort"
+HREF="function.imap-sort.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.imap-setflag-full.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.imap-sort.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.imap-clearflag-full"
+>imap_clearflag_full</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN17264"
+></A
+><P
+>    (PHP3 &#62;= 3.0.3, PHP4 )</P
+>imap_clearflag_full&nbsp;--&nbsp;Clears flags on messages</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN17267"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN17269"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>string 
+       <B
+CLASS="function"
+>imap_clearflag_full</B
+>
+      </CODE
+> (int stream, string sequence, string flag, string options)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     This function causes a store to delete the specified flag to the
+     flags set for the messages in the specified sequence.
+     The flags which you can unset are "\\Seen", "\\Answered",
+     "\\Flagged", "\\Deleted", "\\Draft", and "\\Recent" (as defined
+     by RFC2060).
+    </P
+><P
+>&#13;     The options are a bit mask with one or more of the following:
+     <DIV
+CLASS="informalexample"
+><A
+NAME="AEN17283"
+></A
+><P
+></P
+><P
+CLASS="literallayout"
+><br>
+ST_UID&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;sequence&nbsp;argument&nbsp;contains&nbsp;UIDs&nbsp;instead&nbsp;of<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sequence&nbsp;numbers<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</P
+><P
+></P
+></DIV
+>
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.imap-setflag-full.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.imap-sort.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>imap_setflag_full</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.imap.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>imap_sort</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

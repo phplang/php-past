@@ -1,0 +1,214 @@
+<HTML
+><HEAD
+><TITLE
+>imap_check</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="IMAP, POP3 and NNTP functions"
+HREF="ref.imap.html"><LINK
+REL="PREVIOUS"
+TITLE="imap_body"
+HREF="function.imap-body.html"><LINK
+REL="NEXT"
+TITLE="imap_close"
+HREF="function.imap-close.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.imap-body.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.imap-close.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.imap-check"
+>imap_check</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN16303"
+></A
+><P
+>    (PHP3 , PHP4 )</P
+>imap_check&nbsp;--&nbsp;Check current mailbox</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN16306"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN16308"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>object <B
+CLASS="function"
+>imap_check</B
+></CODE
+> (int imap_stream)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     Returns information about the current mailbox. Returns FALSE on
+     failure.
+    </P
+><P
+> 
+     The <B
+CLASS="function"
+>imap_check()</B
+> function checks the current
+     mailbox status on the server and returns the information in an
+     object with following properties:
+    </P
+><P
+>&#13;     <P
+></P
+><UL
+><LI
+><P
+>&#13;        Date - last change of mailbox contents
+       </P
+></LI
+><LI
+><P
+>&#13;	Driver - protocol used to access this mailbox: POP3, IMAP, NNTP
+       </P
+></LI
+><LI
+><P
+>&#13;	Mailbox - the mailbox name
+       </P
+></LI
+><LI
+><P
+>&#13;	Nmsgs - number of messages in the mailbox
+       </P
+></LI
+><LI
+><P
+>&#13;	Recent - number of recent messages in the mailbox
+       </P
+></LI
+></UL
+>
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.imap-body.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.imap-close.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>imap_body</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.imap.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>imap_close</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

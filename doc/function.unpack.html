@@ -1,0 +1,249 @@
+<HTML
+><HEAD
+><TITLE
+>unpack</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Miscellaneous functions"
+HREF="ref.misc.html"><LINK
+REL="PREVIOUS"
+TITLE="uniqid"
+HREF="function.uniqid.html"><LINK
+REL="NEXT"
+TITLE="usleep"
+HREF="function.usleep.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.uniqid.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.usleep.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.unpack"
+>unpack</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN23143"
+></A
+><P
+>    (PHP3 , PHP4 )</P
+>unpack&nbsp;--&nbsp;Unpack data from binary string</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN23146"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN23148"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>array <B
+CLASS="function"
+>unpack</B
+></CODE
+> (string format, string data)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     <B
+CLASS="function"
+>Unpack()</B
+> from binary string into array
+     according to <TT
+CLASS="parameter"
+><I
+>format</I
+></TT
+>. Returns array
+     containing unpacked elements of binary string.
+    </P
+><P
+>&#13;     <B
+CLASS="function"
+>Unpack()</B
+> works slightly different from Perl as
+     the unpacked data is stored in an associative array. To
+     accomplish this you have to name the different format codes and
+     separate them by a slash /.
+     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN23161"
+></A
+><P
+><B
+>Example 1. <B
+CLASS="function"
+>Unpack()</B
+> format string</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;$array = unpack ("c2chars/nint", $binarydata);
+      </PRE
+></TD
+></TR
+></TABLE
+><P
+>&#13;       The resulting array will contain the entries "chars1",
+       "chars2" and "int".
+      </P
+></DIV
+></TD
+></TR
+></TABLE
+>
+    </P
+><P
+>&#13;     For an explanation of the format codes see also:
+     <A
+HREF="function.pack.html"
+><B
+CLASS="function"
+>pack()</B
+></A
+>
+    </P
+><P
+>&#13;     Note that PHP internally stores integral values as signed. If you
+     unpack a large unsigned long and it is of the same size as PHP
+     internally stored values the result will be a negative number
+     even though unsigned unpacking was specified.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.uniqid.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.usleep.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>uniqid</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.misc.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>usleep</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

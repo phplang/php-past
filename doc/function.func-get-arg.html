@@ -1,0 +1,266 @@
+<HTML
+><HEAD
+><TITLE
+>func_get_arg</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Function Handling functions"
+HREF="ref.funchand.html"><LINK
+REL="PREVIOUS"
+TITLE="create_function"
+HREF="function.create-function.html"><LINK
+REL="NEXT"
+TITLE="func_get_args"
+HREF="function.func-get-args.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.create-function.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.func-get-args.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.func-get-arg"
+>func_get_arg</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN12960"
+></A
+><P
+>    (PHP4 &#62;= 4.0b4)</P
+>func_get_arg&nbsp;--&nbsp;Return an item from the argument list</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN12963"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN12965"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>mixed <B
+CLASS="function"
+>func_get_arg</B
+></CODE
+> (int arg_num)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     Returns the argument which is at the
+     <TT
+CLASS="parameter"
+><I
+>arg_num</I
+></TT
+>'th offset into a user-defined
+     function's argument list. Function arguments are counted starting
+     from zero. <B
+CLASS="function"
+>Func_get_arg()</B
+> will generate a
+     warning if called from outside of a function definition.
+    </P
+><P
+>&#13;     If <TT
+CLASS="parameter"
+><I
+>arg_num</I
+></TT
+> is greater than the number of
+     arguments actually passed, a warning will be generated and
+     <B
+CLASS="function"
+>func_get_arg()</B
+> will return FALSE.
+    </P
+><P
+>&#13;     <DIV
+CLASS="informalexample"
+><A
+NAME="AEN12978"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;&#60;?php
+function foo() {
+     $numargs = func_num_args();
+     echo "Number of arguments: $numargs&#60;br&#62;\n";
+     if ($numargs &#62;= 2) {
+     echo "Second argument is: " . func_get_arg (1) . "&#60;br&#62;\n";
+     }
+} 
+
+foo (1, 2, 3);
+?&#62;
+      </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+>
+    </P
+><P
+>&#13;     <B
+CLASS="function"
+>Func_get_arg()</B
+> may be used in conjunction with
+     <A
+HREF="function.func-num-args.html"
+><B
+CLASS="function"
+>func_num_args()</B
+></A
+> and
+     <A
+HREF="function.func-get-args.html"
+><B
+CLASS="function"
+>func_get_args()</B
+></A
+> to allow user-defined
+     functions to accept variable-length argument lists.
+    </P
+><DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
+><P
+><B
+>Note: </B
+>
+      This function was added in PHP 4.
+     </P
+></BLOCKQUOTE
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.create-function.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.func-get-args.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>create_function</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.funchand.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>func_get_args</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

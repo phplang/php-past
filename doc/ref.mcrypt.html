@@ -1,0 +1,799 @@
+<HTML
+><HEAD
+><TITLE
+>Mcrypt Encryption Functions</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Function Reference"
+HREF="funcref.html"><LINK
+REL="PREVIOUS"
+TITLE="mcal_expunge"
+HREF="function.mcal-expunge.html"><LINK
+REL="NEXT"
+TITLE="mcrypt_get_cipher_name"
+HREF="function.mcrypt-get-cipher-name.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="reference"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.mcal-expunge.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.mcrypt-get-cipher-name.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="reference"
+><A
+NAME="ref.mcrypt"
+></A
+><DIV
+CLASS="TITLEPAGE"
+><H1
+CLASS="title"
+>XXXVI. Mcrypt Encryption Functions</H1
+><DIV
+CLASS="PARTINTRO"
+><A
+NAME="AEN21198"
+></A
+><P
+>&#13;    These functions work using <A
+HREF="ftp://argeas.cs-net.gr/pub/unix/mcrypt/"
+TARGET="_top"
+>mcrypt</A
+>.
+   </P
+><P
+>&#13;    This is an interface to the mcrypt library, which supports a wide
+    variety of block algorithms such as DES, TripleDES, Blowfish
+    (default), 3-WAY, SAFER-SK64, SAFER-SK128, TWOFISH, TEA, RC2 and
+    GOST in CBC, OFB, CFB and ECB cipher modes. Additionally, it
+    supports RC6 and IDEA which are considered "non-free".
+   </P
+><P
+>&#13;    If you linked against libmcrypt 2.4.x, the following additional
+    block algorithms are supported: CAST, LOKI97, RIJNDAEL, SAFERPLUS,
+    SERPENT and the following stream ciphers: ENIGMA (crypt), PANAMA,
+    RC4 and WAKE. With libmcrypt 2.4.x another cipher mode is also
+    available; nOFB.
+   </P
+><P
+>&#13;    To use it, download libmcrypt-x.x.tar.gz from <A
+HREF="ftp://argeas.cs-net.gr/pub/unix/mcrypt/"
+TARGET="_top"
+>here</A
+> and follow the included
+    installation instructions. You need to compile PHP with the
+    <TT
+CLASS="option"
+>--with-mcrypt</TT
+> parameter to
+    enable this extension. Make sure you compile libmcrypt with the
+    option <TT
+CLASS="option"
+>--disable-posix-threads</TT
+>.
+   </P
+><P
+>&#13;    Mcrypt can be used to encrypt and decrypt using the above
+    mentioned ciphers. If you linked against libmcrypt-2.2.x, the
+    four important mcrypt commands (<A
+HREF="function.mcrypt-cfb.html"
+><B
+CLASS="function"
+>mcrypt_cfb()</B
+></A
+>,
+    <A
+HREF="function.mcrypt-cbc.html"
+><B
+CLASS="function"
+>mcrypt_cbc()</B
+></A
+>, <A
+HREF="function.mcrypt-ecb.html"
+><B
+CLASS="function"
+>mcrypt_ecb()</B
+></A
+>,
+    and <A
+HREF="function.mcrypt-ofb.html"
+><B
+CLASS="function"
+>mcrypt_ofb()</B
+></A
+>) can operate in both modes
+    which are named MCRYPT_ENCRYPT and MCRYPT_DECRYPT, respectively.
+    <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN21212"
+></A
+><P
+><B
+>Example 1. Encrypt an input value with TripleDES in ECB mode</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;&#60;?php
+$key = "this is a very secret key";
+$input = "Let us meet at 9 o'clock at the secret place.";
+
+$encrypted_data = mcrypt_ecb (MCRYPT_TripleDES, $key, $input, MCRYPT_ENCRYPT);
+?&#62;
+     </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+    This example will give you the encrypted data as a string in
+    <TT
+CLASS="literal"
+>$encrypted_data</TT
+>.
+   </P
+><P
+>&#13;    If you linked against libmcrypt 2.4.x, these functions are still
+    available, but it is recommended that you use the advanced functions.
+    <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN21217"
+></A
+><P
+><B
+>Example 2. Encrypt an input value with TripleDES in ECB mode</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;&#60;?php
+$key = "this is a very secret key";
+$input = "Let us meet at 9 o'clock at the secret place.";
+
+$td = mcrypt_module_open (MCRYPT_TripleDES, "", MCRYPT_MODE_ECB, "");
+$iv = mcrypt_create_iv (mcrypt_enc_get_iv_size ($td), MCRYPT_RAND);
+mcrypt_generic_init ($td, $key, $iv);
+$encrypted_data = mcrypt_generic ($td, $input);
+mcrypt_generic_end ($td);
+?&#62;
+     </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+    This example will give you the encrypted data as a string in
+    <TT
+CLASS="literal"
+>$encrypted_data</TT
+>.
+   </P
+><P
+>&#13;    Mcrypt can operate in four block cipher modes (CBC, OFB, CFB, and
+    ECB). If linked against libmcrypt-2.4.x mcrypt can also operate
+    in the block cipher mode nOFB and in STREAM mode. Then there are
+    also constants in the form MCRYPT_MODE_mode for use with several
+    functions. We will outline the normal use for each of these modes.
+    For a more complete reference and discussion see 
+    Applied Cryptography by Schneier (ISBN 0-471-11709-9).
+    <P
+></P
+><UL
+><LI
+><P
+>&#13;       ECB (electronic codebook) is suitable for random data, such as
+       encrypting other keys. Since data there is short and random,
+       the disadvantages of ECB have a favorable negative
+       effect.
+      </P
+></LI
+><LI
+><P
+>&#13;       CBC (cipher block chaining) is especially suitable for
+       encrypting files where the security is increased over ECB
+       significantly.
+      </P
+></LI
+><LI
+><P
+>&#13;       CFB (cipher feedback) is the best mode for encrypting byte
+       streams where single bytes must be encrypted.
+      </P
+></LI
+><LI
+><P
+>&#13;       OFB (output feedback, in 8bit) is comparable to CFB, but
+       can be used in applications where error propagation cannot
+       be tolerated. It's insecure (because it operates in 8bit
+       mode) so it is not recommended to use it.
+      </P
+></LI
+><LI
+><P
+>&#13;       nOFB (output feedback, in nbit) is comparable to OFB, but
+       more secure because it operates on the block size of the
+       algorithm.
+      </P
+></LI
+><LI
+><P
+>&#13;       STREAM is an extra mode to include some stream algorithms
+       like WAKE or RC4.
+      </P
+></LI
+></UL
+>
+   </P
+><P
+>&#13;    PHP does not support encrypting/decrypting bit streams
+    currently. As of now, PHP only supports handling of strings.
+   </P
+><P
+>&#13;    For a complete list of supported ciphers, see the defines at the
+    end of <TT
+CLASS="filename"
+>mcrypt.h</TT
+>. The general rule with the
+    mcrypt-2.2.x API is that you can access the cipher from PHP with
+    MCRYPT_ciphername. With the mcrypt-2.4.x API these constants also
+    work, but it is possible to specify the name of the cipher as
+    a string with a call to <A
+HREF="function.mcrypt-module-open.html"
+><B
+CLASS="function"
+>mcrypt_module_open()</B
+></A
+>.
+   </P
+><P
+>&#13;    Here is a short list of ciphers which are currently supported by
+    the mcrypt extension. If a cipher is not listed here, but is
+    listed by mcrypt as supported, you can safely assume that this
+    documentation is outdated.
+    <P
+></P
+><UL
+><LI
+><P
+>&#13;       MCRYPT_ARCFOUR_IV (libmcrypt 2.4.x only)
+      </P
+></LI
+><LI
+><P
+>&#13;       MCRYPT_ARCFOUR (libmcrypt 2.4.x only)
+      </P
+></LI
+><LI
+><P
+>&#13;       MCRYPT_BLOWFISH
+      </P
+></LI
+><LI
+><P
+>&#13;       MCRYPT_CAST_128
+      </P
+></LI
+><LI
+><P
+>&#13;       MCRYPT_CAST_256
+      </P
+></LI
+><LI
+><P
+>&#13;       MCRYPT_CRYPT
+      </P
+></LI
+><LI
+><P
+>&#13;       MCRYPT_DES
+      </P
+></LI
+><LI
+><P
+>&#13;       MCRYPT_DES_COMPAT (libmcrypt 2.2.x only)
+      </P
+></LI
+><LI
+><P
+>&#13;       MCRYPT_ENIGMA (libmcrypt 2.4.x only, alias for MCRYPT_CRYPT)
+      </P
+></LI
+><LI
+><P
+>&#13;       MCRYPT_GOST
+      </P
+></LI
+><LI
+><P
+>&#13;       MCRYPT_IDEA (non-free)
+      </P
+></LI
+><LI
+><P
+>&#13;       MCRYPT_LOKI97 (libmcrypt 2.4.x only)
+      </P
+></LI
+><LI
+><P
+>&#13;       MCRYPT_MARS (libmcrypt 2.4.x only, non-free)
+      </P
+></LI
+><LI
+><P
+>&#13;       MCRYPT_PANAMA (libmcrypt 2.4.x only)
+      </P
+></LI
+><LI
+><P
+>&#13;       MCRYPT_RIJNDAEL_128 (libmcrypt 2.4.x only)
+      </P
+></LI
+><LI
+><P
+>&#13;       MCRYPT_RIJNDAEL_192 (libmcrypt 2.4.x only)
+      </P
+></LI
+><LI
+><P
+>&#13;       MCRYPT_RIJNDAEL_256 (libmcrypt 2.4.x only)
+      </P
+></LI
+><LI
+><P
+>&#13;       MCRYPT_RC2
+      </P
+></LI
+><LI
+><P
+>&#13;       MCRYPT_RC4 (libmcrypt 2.2.x only)
+      </P
+></LI
+><LI
+><P
+>&#13;       MCRYPT_RC6 (libmcrypt 2.4.x only)
+      </P
+></LI
+><LI
+><P
+>&#13;       MCRYPT_RC6_128 (libmcrypt 2.2.x only)
+      </P
+></LI
+><LI
+><P
+>&#13;       MCRYPT_RC6_192 (libmcrypt 2.2.x only)
+      </P
+></LI
+><LI
+><P
+>&#13;       MCRYPT_RC6_256 (libmcrypt 2.2.x only)
+      </P
+></LI
+><LI
+><P
+>&#13;       MCRYPT_SAFER64
+      </P
+></LI
+><LI
+><P
+>&#13;       MCRYPT_SAFER128
+      </P
+></LI
+><LI
+><P
+>&#13;       MCRYPT_SAFERPLUS (libmcrypt 2.4.x only)
+      </P
+></LI
+><LI
+><P
+>&#13;       MCRYPT_SERPENT (libmcrypt 2.4.x only)
+      </P
+></LI
+><LI
+><P
+>&#13;       MCRYPT_SERPENT_128 (libmcrypt 2.2.x only)
+      </P
+></LI
+><LI
+><P
+>&#13;       MCRYPT_SERPENT_192 (libmcrypt 2.2.x only)
+      </P
+></LI
+><LI
+><P
+>&#13;       MCRYPT_SERPENT_256 (libmcrypt 2.2.x only)
+      </P
+></LI
+><LI
+><P
+>&#13;       MCRYPT_SKIPJACK (libmcrypt 2.4.x only)
+      </P
+></LI
+><LI
+><P
+>&#13;       MCRYPT_TEAN (libmcrypt 2.2.x only)
+      </P
+></LI
+><LI
+><P
+>&#13;       MCRYPT_THREEWAY
+      </P
+></LI
+><LI
+><P
+>&#13;       MCRYPT_TRIPLEDES
+      </P
+></LI
+><LI
+><P
+>&#13;       MCRYPT_TWOFISH (for older mcrypt 2.x versions, or mcrypt 2.4.x )
+      </P
+></LI
+><LI
+><P
+>&#13;       MCRYPT_TWOFISH128 (TWOFISHxxx are available in newer 2.x versions, but not in the 2.4.x versions)
+      </P
+></LI
+><LI
+><P
+>&#13;       MCRYPT_TWOFISH192
+      </P
+></LI
+><LI
+><P
+>&#13;       MCRYPT_TWOFISH256
+      </P
+></LI
+><LI
+><P
+>&#13;       MCRYPT_WAKE (libmcrypt 2.4.x only)
+      </P
+></LI
+><LI
+><P
+>&#13;       MCRYPT_XTEA (libmcrypt 2.4.x only)
+      </P
+></LI
+></UL
+>
+   </P
+><P
+>&#13;    You must (in CFB and OFB mode) or can (in CBC mode) supply an
+    initialization vector (IV) to the respective cipher function. The
+    IV must be unique and must be the same when
+    decrypting/encrypting. With data which is stored encrypted, you
+    can take the output of a function of the index under which the
+    data is stored (e.g.  the MD5 key of the filename).
+    Alternatively, you can transmit the IV together with the encrypted
+    data (see chapter 9.3 of Applied Cryptography by Schneier (ISBN 0-471-11709-9) for a
+    discussion of this topic).
+   </P
+></DIV
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Table of Contents</B
+></DT
+><DT
+><A
+HREF="function.mcrypt-get-cipher-name.html"
+>mcrypt_get_cipher_name</A
+> &#8212; Get the name of the specified cipher</DT
+><DT
+><A
+HREF="function.mcrypt-get-block-size.html"
+>mcrypt_get_block_size</A
+> &#8212; Get the block size of the specified cipher</DT
+><DT
+><A
+HREF="function.mcrypt-get-key-size.html"
+>mcrypt_get_key_size</A
+> &#8212; Get the key size of the specified cipher</DT
+><DT
+><A
+HREF="function.mcrypt-create-iv.html"
+>mcrypt_create_iv</A
+> &#8212; 
+     Create an initialization vector (IV) from a random source
+    </DT
+><DT
+><A
+HREF="function.mcrypt-cbc.html"
+>mcrypt_cbc</A
+> &#8212; Encrypt/decrypt data in CBC mode</DT
+><DT
+><A
+HREF="function.mcrypt-cfb.html"
+>mcrypt_cfb</A
+> &#8212; Encrypt/decrypt data in CFB mode</DT
+><DT
+><A
+HREF="function.mcrypt-ecb.html"
+>mcrypt_ecb</A
+> &#8212; Encrypt/decrypt data in ECB mode</DT
+><DT
+><A
+HREF="function.mcrypt-ofb.html"
+>mcrypt_ofb</A
+> &#8212; Encrypt/decrypt data in OFB mode</DT
+><DT
+><A
+HREF="function.mcrypt-list-algorithms.html"
+>mcrypt_list_algorithms</A
+> &#8212; Get an array of all supported ciphers</DT
+><DT
+><A
+HREF="function.mcrypt-list-modes.html"
+>mcrypt_list_modes</A
+> &#8212; Get an array of all supported modes</DT
+><DT
+><A
+HREF="function.mcrypt-get-iv-size.html"
+>mcrypt_get_iv_size</A
+> &#8212; Returns the size of the IV belonging to a specific cipher/mode combination</DT
+><DT
+><A
+HREF="function.mcrypt-encrypt.html"
+>mcrypt_encrypt</A
+> &#8212; Encrypts plaintext with given parameters</DT
+><DT
+><A
+HREF="function.mcrypt-decrypt.html"
+>mcrypt_decrypt</A
+> &#8212; Decrypts crypttext with given parameters</DT
+><DT
+><A
+HREF="function.mcrypt-module-open.html"
+>mcrypt_module_open</A
+> &#8212; This function opens the module of the algorithm and the mode to be used</DT
+><DT
+><A
+HREF="function.mcrypt-generic-init.html"
+>mcrypt_generic_init</A
+> &#8212; This function initializes all buffers needed for encryption</DT
+><DT
+><A
+HREF="function.mcrypt-generic.html"
+>mcrypt_generic</A
+> &#8212; This function encrypts data</DT
+><DT
+><A
+HREF="function.mdecrypt-generic.html"
+>mdecrypt_generic</A
+> &#8212; This function decrypts data</DT
+><DT
+><A
+HREF="function.mcrypt-generic-end.html"
+>mcrypt_generic_end</A
+> &#8212; This function terminates encryption</DT
+><DT
+><A
+HREF="function.mcrypt-enc-self-test.html"
+>mcrypt_enc_self_test</A
+> &#8212; This function runs a self test on the opened module</DT
+><DT
+><A
+HREF="function.mcrypt-enc-is-block-algorithm-mode.html"
+>mcrypt_enc_is_block_algorithm_mode</A
+> &#8212; Checks whether the encryption of the opened mode works on blocks</DT
+><DT
+><A
+HREF="function.mcrypt-enc-is-block-algorithm.html"
+>mcrypt_enc_is_block_algorithm</A
+> &#8212; Checks whether the algorithm of the opened mode is a block algorithm</DT
+><DT
+><A
+HREF="function.mcrypt-enc-is-block-mode.html"
+>mcrypt_enc_is_block_mode</A
+> &#8212; Checks whether the opened mode outputs blocks</DT
+><DT
+><A
+HREF="function.mcrypt-enc-get-block-size.html"
+>mcrypt_enc_get_block_size</A
+> &#8212; Returns the blocksize of the opened algorithm</DT
+><DT
+><A
+HREF="function.mcrypt-enc-get-key-size.html"
+>mcrypt_enc_get_key_size</A
+> &#8212; Returns the maximum supported keysize of the opened mode</DT
+><DT
+><A
+HREF="function.mcrypt-enc-get-supported-key-sizes.html"
+>mcrypt_enc_get_supported_key_sizes</A
+> &#8212; Returns an array with the supported keysizes of the opened algorithm</DT
+><DT
+><A
+HREF="function.mcrypt-enc-get-iv-size.html"
+>mcrypt_enc_get_iv_size</A
+> &#8212; Returns the size of the IV of the opened algorithm</DT
+><DT
+><A
+HREF="function.mcrypt-enc-get-algorithms-name.html"
+>mcrypt_enc_get_algorithms_name</A
+> &#8212; Returns the name of the opened algorithm</DT
+><DT
+><A
+HREF="function.mcrypt-enc-get-modes-name.html"
+>mcrypt_enc_get_modes_name</A
+> &#8212; Returns the name of the opened mode</DT
+><DT
+><A
+HREF="function.mcrypt-module-self-test.html"
+>mcrypt_module_self_test</A
+> &#8212; This function runs a self test on the specified module</DT
+><DT
+><A
+HREF="function.mcrypt-module-is-block-algorithm-mode.html"
+>mcrypt_module_is_block_algorithm_mode</A
+> &#8212; This function returns if the the specified module is a block algorithm or not</DT
+><DT
+><A
+HREF="function.mcrypt-module-is-block-algorithm.html"
+>mcrypt_module_is_block_algorithm</A
+> &#8212; This function checks whether the specified algorithm is a block algorithm</DT
+><DT
+><A
+HREF="function.mcrypt-module-is-block-mode.html"
+>mcrypt_module_is_block_mode</A
+> &#8212; This function returns if the the specified mode outputs blocks or not</DT
+><DT
+><A
+HREF="function.mcrypt-module-get-algo-block-size.html"
+>mcrypt_module_get_algo_block_size</A
+> &#8212; Returns the blocksize of the specified algorithm</DT
+><DT
+><A
+HREF="function.mcrypt-module-get-algo-key-size.html"
+>mcrypt_module_get_algo_key_size</A
+> &#8212; Returns the maximum supported keysize of the opened mode</DT
+><DT
+><A
+HREF="function.mcrypt-module-get-algo-supported-key-sizes.html"
+>mcrypt_module_get_algo_supported_key_sizes</A
+> &#8212; Returns an array with the supported keysizes of the opened algorithm</DT
+></DL
+></DIV
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.mcal-expunge.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.mcrypt-get-cipher-name.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>mcal_expunge</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="funcref.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>mcrypt_get_cipher_name</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

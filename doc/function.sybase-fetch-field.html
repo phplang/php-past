@@ -1,0 +1,215 @@
+<HTML
+><HEAD
+><TITLE
+>sybase_fetch_field</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Sybase functions"
+HREF="ref.sybase.html"><LINK
+REL="PREVIOUS"
+TITLE="sybase_fetch_array"
+HREF="function.sybase-fetch-array.html"><LINK
+REL="NEXT"
+TITLE="sybase_fetch_object"
+HREF="function.sybase-fetch-object.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.sybase-fetch-array.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.sybase-fetch-object.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.sybase-fetch-field"
+>sybase_fetch_field</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN38173"
+></A
+><P
+>    (PHP3 , PHP4 )</P
+>sybase_fetch_field&nbsp;--&nbsp;get field information</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN38176"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN38178"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>object <B
+CLASS="function"
+>sybase_fetch_field</B
+></CODE
+> (int result, int field_offset)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     Returns an object containing field information.  
+    </P
+><P
+>&#13;     sybase_fetch_field() can be used in order to obtain information about
+     fields in a certain query result.  If the field offset isn't
+     specified, the next field that wasn't yet retreived by
+     sybase_fetch_field() is retreived.
+    </P
+><P
+>&#13;     The properties of the object are:
+    </P
+><P
+></P
+><UL
+><LI
+><P
+>&#13;	name - column name.  if the column is a result of a function, this property is set to computed#N,
+	where #N is a serial number.
+       </P
+></LI
+><LI
+><P
+>&#13;	column_source - the table from which the column was taken
+       </P
+></LI
+><LI
+><P
+>&#13;	max_length - maximum length of the column
+       </P
+></LI
+><LI
+><P
+>&#13;	numeric - 1 if the column is numeric
+       </P
+></LI
+></UL
+><P
+>&#13;     See also <A
+HREF="function.sybase-field-seek.html"
+><B
+CLASS="function"
+>sybase_field_seek()</B
+></A
+>
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.sybase-fetch-array.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.sybase-fetch-object.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>sybase_fetch_array</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.sybase.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>sybase_fetch_object</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

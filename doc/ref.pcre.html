@@ -1,0 +1,310 @@
+<HTML
+><HEAD
+><TITLE
+>Regular Expression Functions (Perl-Compatible)</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Function Reference"
+HREF="funcref.html"><LINK
+REL="PREVIOUS"
+TITLE="recode_file"
+HREF="function.recode-file.html"><LINK
+REL="NEXT"
+TITLE="preg_match"
+HREF="function.preg-match.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="reference"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.recode-file.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.preg-match.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="reference"
+><A
+NAME="ref.pcre"
+></A
+><DIV
+CLASS="TITLEPAGE"
+><H1
+CLASS="title"
+>LVI. Regular Expression Functions (Perl-Compatible)</H1
+><DIV
+CLASS="PARTINTRO"
+><A
+NAME="AEN32808"
+></A
+><P
+>&#13;    The syntax for patterns used in these functions closely resembles
+    Perl. The expression should be enclosed in the delimiters, a
+    forward slash (/),  for example.  Any character can be used for
+    delimiter as long as it's not alphanumeric or backslash (\). If
+    the delimiter character has to be used in the expression itself,
+    it needs to be escaped by backslash.
+   </P
+><P
+>&#13;    The ending delimiter may be followed by various modifiers that
+    affect the matching. 
+    See <A
+HREF="pcre.pattern.modifiers.html"
+>Pattern Modifiers</A
+>.
+   </P
+><P
+>&#13;    <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN32813"
+></A
+><P
+><B
+>Example 1. Examples of valid patterns</B
+></P
+><P
+></P
+><UL
+><LI
+><P
+>/&#60;\/\w+&#62;/</P
+></LI
+><LI
+><P
+>|(\d{3})-\d+|Sm</P
+></LI
+><LI
+><P
+>/^(?i)php[34]/</P
+></LI
+></UL
+></DIV
+></TD
+></TR
+></TABLE
+>
+   </P
+><P
+>&#13;    <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN32823"
+></A
+><P
+><B
+>Example 2. Examples of invalid patterns</B
+></P
+><P
+></P
+><UL
+><LI
+><P
+>&#13;	/href='(.*)' - missing ending delimiter
+       </P
+></LI
+><LI
+><P
+>&#13;	/\w+\s*\w+/J - unknown modifier 'J'
+       </P
+></LI
+><LI
+><P
+>&#13;	1-\d3-\d3-\d4| - missing starting delimiter
+       </P
+></LI
+></UL
+></DIV
+></TD
+></TR
+></TABLE
+>
+   </P
+><DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
+><P
+><B
+>Note: </B
+>
+     The Perl-compatible regular expression functions are available in
+     PHP 4 and in PHP 3.0.9 and up.
+    </P
+></BLOCKQUOTE
+></DIV
+></DIV
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Table of Contents</B
+></DT
+><DT
+><A
+HREF="function.preg-match.html"
+>preg_match</A
+> &#8212; Perform a regular expression match</DT
+><DT
+><A
+HREF="function.preg-match-all.html"
+>preg_match_all</A
+> &#8212; Perform a global regular expression match</DT
+><DT
+><A
+HREF="function.preg-replace.html"
+>preg_replace</A
+> &#8212; Perform a regular expression search and replace</DT
+><DT
+><A
+HREF="function.preg-split.html"
+>preg_split</A
+> &#8212; Split string by a regular expression</DT
+><DT
+><A
+HREF="function.preg-quote.html"
+>preg_quote</A
+> &#8212; Quote regular expression characters</DT
+><DT
+><A
+HREF="function.preg-grep.html"
+>preg_grep</A
+> &#8212; 
+     Return array entries that match the pattern
+    </DT
+><DT
+><A
+HREF="pcre.pattern.modifiers.html"
+>Pattern Modifiers</A
+> &#8212; Describes possible modifiers in regex
+     patterns</DT
+><DT
+><A
+HREF="pcre.pattern.syntax.html"
+>Pattern Syntax</A
+> &#8212; Describes PCRE regex syntax</DT
+></DL
+></DIV
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.recode-file.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.preg-match.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>recode_file</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="funcref.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>preg_match</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

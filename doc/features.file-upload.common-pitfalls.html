@@ -1,0 +1,153 @@
+<HTML
+><HEAD
+><TITLE
+>Common Pitfalls</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Handling file uploads"
+HREF="features.file-upload.html"><LINK
+REL="PREVIOUS"
+TITLE="Handling file uploads"
+HREF="features.file-upload.html"><LINK
+REL="NEXT"
+TITLE="Uploading multiple files"
+HREF="feature-fileupload.multiple.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="features.file-upload.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 19. Handling file uploads</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="feature-fileupload.multiple.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="features.file-upload.common-pitfalls"
+>Common Pitfalls</A
+></H1
+><P
+>&#13;    The MAX_FILE_SIZE item cannot specify a file size greater than the file 
+    size that has been set in the upload_max_filesize in the PHP 3.ini file
+    or the corresponding php3_upload_max_filesize Apache .conf directive. 
+    The default is 2 Megabytes.
+   </P
+><P
+>&#13;    Not validating which file you operate on may mean that users can access
+    sensitive information in other directories.
+   </P
+><P
+>&#13;    Please note that the CERN httpd seems to strip off everything
+    starting at the first whitespace in the content-type mime header
+    it gets from the client.  As long as this is the case, CERN httpd
+    will not support the file upload feature.
+   </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="features.file-upload.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="feature-fileupload.multiple.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Handling file uploads</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="features.file-upload.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Uploading multiple files</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

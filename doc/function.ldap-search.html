@@ -1,0 +1,377 @@
+<HTML
+><HEAD
+><TITLE
+>ldap_search</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="LDAP functions"
+HREF="ref.ldap.html"><LINK
+REL="PREVIOUS"
+TITLE="ldap_read"
+HREF="function.ldap-read.html"><LINK
+REL="NEXT"
+TITLE="ldap_unbind"
+HREF="function.ldap-unbind.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.ldap-read.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.ldap-unbind.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.ldap-search"
+>ldap_search</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN19456"
+></A
+><P
+>    (PHP3 , PHP4 )</P
+>ldap_search&nbsp;--&nbsp;Search LDAP tree</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN19459"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN19461"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int <B
+CLASS="function"
+>ldap_search</B
+></CODE
+> (int link_identifier, string base_dn, string filter [, array 
+       attributes [, int 
+       attrsonly [, int 
+       sizelimit [, int 
+       timelimit [, int 
+       deref]]]]])</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     Returns a search result identifier or false on error.</P
+><P
+>  
+     <B
+CLASS="function"
+>ldap_search()</B
+> performs the search for a
+     specified filter on the directory with the scope of
+     LDAP_SCOPE_SUBTREE. This is equivalent to searching the entire
+     directory. <TT
+CLASS="parameter"
+><I
+>base_dn</I
+></TT
+> specifies the base DN
+     for the directory.</P
+><P
+>&#13;     There is a optional fourth parameter, that can be added to
+     restrict the attributes and values returned by the server to just
+     those required. This is much more efficient than the default
+     action (which is to return all attributes and their associated
+     values). The use of the fourth parameter should therefore be
+     considered good practice.</P
+><P
+>&#13;     The fourth parameter is a standard PHP string array of the
+     required attributes, eg array("mail","sn","cn") Note that the
+     "dn" is always returned irrespective of which attributes types
+     are requested.</P
+><P
+>&#13;     Note too that some directory server hosts will be configured to
+     return no more than a preset number of entries. If this occurs,
+     the server will indicate that it has only returned a partial
+     results set. This occurs also if the sixth parameter 
+     <TT
+CLASS="parameter"
+><I
+>sizelimit</I
+></TT
+> has been used to limit the count 
+     of fetched entries.
+    </P
+><P
+>&#13;     The fifth parameter <TT
+CLASS="parameter"
+><I
+>attrsonly</I
+></TT
+> should be 
+     set to 1 if only attribute types are wanted. 
+     If set to 0 both attributes types and attribute values are fetched
+     which is the default behaviour.
+    </P
+><P
+>&#13;     With the sixth parameter <TT
+CLASS="parameter"
+><I
+>sizelimit</I
+></TT
+> it is 
+     possible to limit the count of entries fetched. 
+     Setting this to 0 means no limit. 
+     NOTE: This parameter can NOT override server-side preset sizelimit. 
+     You can set it lower though.
+    </P
+><P
+>&#13;     The seventh parameter <TT
+CLASS="parameter"
+><I
+>timelimit</I
+></TT
+> sets the number 
+     of seconds how long is spend on the search. 
+     Setting this to 0 means no limit.
+     NOTE: This parameter can NOT override server-side preset timelimit. 
+     You can set it lower though.
+    </P
+><P
+>&#13;     The eigth parameter <TT
+CLASS="parameter"
+><I
+>deref</I
+></TT
+> specifies how aliases 
+     should be handled during the search. It can be one of the following:
+     <P
+></P
+><UL
+><LI
+><P
+>&#13;       LDAP_DEREF_NEVER - (default) aliases are never dereferenced.
+      </P
+></LI
+><LI
+><P
+>&#13;       LDAP_DEREF_SEARCHING - aliases should be dereferenced during the search
+       but not when locating the base object of the search.
+      </P
+></LI
+><LI
+><P
+>&#13;       LDAP_DEREF_FINDING - aliases should be dereferenced when 
+       locating the base object but not during the search.
+      </P
+></LI
+><LI
+><P
+>&#13;       LDAP_DEREF_ALWAYS - aliases should be dereferenced always.
+      </P
+></LI
+></UL
+>
+    </P
+><P
+>&#13;	  These optional parameters were added in 4.0.2:
+      <TT
+CLASS="parameter"
+><I
+>attrsonly</I
+></TT
+>,
+      <TT
+CLASS="parameter"
+><I
+>sizelimit</I
+></TT
+>,
+      <TT
+CLASS="parameter"
+><I
+>timelimit</I
+></TT
+>,
+      <TT
+CLASS="parameter"
+><I
+>deref</I
+></TT
+>.
+    </P
+><P
+>&#13;     The search filter can be simple or advanced, using boolean
+     operators in the format described in the LDAP doumentation (see
+     the <A
+HREF="http://developer.netscape.com/docs/manuals/directory/41/ag/find.htm"
+TARGET="_top"
+>Netscape Directory SDK</A
+>
+     for full information on filters).</P
+><P
+>&#13;     The example below retrieves the organizational unit, surname,
+     given name and email address for all people in "My Company" where
+     the surname or given name contains the substring $person. This
+     example uses a boolean filter to tell the server to look for
+     information in more than one attribute.
+
+     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN19519"
+></A
+><P
+><B
+>Example 1. LDAP search</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;// $ds is a valid link identifier for a directory server
+
+// $person is all or part of a person's name, eg "Jo"
+
+$dn = "o=My Company, c=US";
+$filter="(|(sn=$person*)(givenname=$person*))";
+$justthese = array( "ou", "sn", "givenname", "mail");
+
+$sr=ldap_search($ds, $dn, $filter, $justthese);
+
+$info = ldap_get_entries($ds, $sr);
+
+print $info["count"]." entries returned&#60;p&#62;";
+</PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+></P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.ldap-read.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.ldap-unbind.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>ldap_read</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.ldap.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>ldap_unbind</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,204 @@
+<HTML
+><HEAD
+><TITLE
+>sem_acquire</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Semaphore and Shared Memory Functions"
+HREF="ref.sem.html"><LINK
+REL="PREVIOUS"
+TITLE="sem_get"
+HREF="function.sem-get.html"><LINK
+REL="NEXT"
+TITLE="sem_release"
+HREF="function.sem-release.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.sem-get.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.sem-release.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.sem-acquire"
+>sem_acquire</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN33616"
+></A
+><P
+>    (PHP3 &#62;= 3.0.6, PHP4 )</P
+>sem_acquire&nbsp;--&nbsp;Acquire a semaphore</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN33619"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN33621"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int <B
+CLASS="function"
+>sem_acquire</B
+></CODE
+> (int sem_identifier)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     Returns: true on success, false on error.
+    </P
+><P
+>&#13;     <B
+CLASS="function"
+>Sem_acquire()</B
+> blocks (if necessary) until the
+     semaphore can be acquired.  A process attempting to acquire a
+     semaphore which it has already acquired will block forever
+     if acquiring the semaphore would cause its max_acquire value to
+     be exceeded.
+    </P
+><P
+>&#13;     After processing a request, any semaphores acquired by the
+     process but not explicitly released will be released automatically
+     and a warning will be generated.
+    </P
+><P
+> 
+     See also: <A
+HREF="function.sem-get.html"
+><B
+CLASS="function"
+>sem_get()</B
+></A
+> and
+     <A
+HREF="function.sem-release.html"
+><B
+CLASS="function"
+>sem_release()</B
+></A
+>.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.sem-get.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.sem-release.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>sem_get</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.sem.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>sem_release</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,371 @@
+<HTML
+><HEAD
+><TITLE
+>for</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Control Structures"
+HREF="control-structures.html"><LINK
+REL="PREVIOUS"
+TITLE="do..while"
+HREF="control-structures.do.while.html"><LINK
+REL="NEXT"
+TITLE="foreach"
+HREF="control-structures.foreach.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="control-structures.do.while.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 11. Control Structures</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="control-structures.foreach.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="control-structures.for"
+><TT
+CLASS="literal"
+>for</TT
+></A
+></H1
+><P
+>&#13;    <TT
+CLASS="literal"
+>for</TT
+> loops are the most complex loops in PHP.
+    They behave like their C counterparts.  The syntax of a
+    <TT
+CLASS="literal"
+>for</TT
+> loop is:
+    <DIV
+CLASS="informalexample"
+><A
+NAME="AEN3454"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;for (expr1; expr2; expr3) statement
+     </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+>
+   </P
+><P
+>&#13;    The first expression (<TT
+CLASS="replaceable"
+><I
+>expr1</I
+></TT
+>) is
+    evaluated (executed) once unconditionally at the beginning of the
+    loop.
+   </P
+><P
+>&#13;    In the beginning of each iteration,
+    <TT
+CLASS="replaceable"
+><I
+>expr2</I
+></TT
+> is evaluated.  If it evaluates to
+    <TT
+CLASS="literal"
+>TRUE</TT
+>, the loop continues and the nested
+    statement(s) are executed.  If it evaluates to
+    <TT
+CLASS="literal"
+>FALSE</TT
+>, the execution of the loop ends.
+   </P
+><P
+>&#13;    At the end of each iteration, <TT
+CLASS="replaceable"
+><I
+>expr3</I
+></TT
+> is
+    evaluated (executed).
+   </P
+><P
+>&#13;    Each of the expressions can be empty.
+    <TT
+CLASS="replaceable"
+><I
+>expr2</I
+></TT
+> being empty means the loop should
+    be run indefinitely (PHP implicitly considers it as
+    <TT
+CLASS="literal"
+>TRUE</TT
+>, like C).  This may not be as useless as
+    you might think, since often you'd want to end the loop using a
+    conditional <A
+HREF="control-structures.break.html"
+><TT
+CLASS="literal"
+>break</TT
+></A
+>
+    statement instead of using the <TT
+CLASS="literal"
+>for</TT
+> truth
+    expression.
+   </P
+><P
+>&#13;    Consider the following examples.  All of them display numbers from
+    1 to 10:
+    <DIV
+CLASS="informalexample"
+><A
+NAME="AEN3471"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;/* example 1 */
+ 
+for ($i = 1; $i &#60;= 10; $i++) {
+    print $i;
+}
+ 
+/* example 2 */
+ 
+for ($i = 1;;$i++) {
+    if ($i &#62; 10) {
+        break;
+    }
+    print $i;
+}
+ 
+/* example 3 */
+ 
+$i = 1;
+for (;;) {
+    if ($i &#62; 10) {
+        break;
+    }
+    print $i;
+    $i++;
+}
+ 
+/* example 4 */
+ 
+for ($i = 1; $i &#60;= 10; print $i, $i++) ;
+     </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+>
+   </P
+><P
+>&#13;    Of course, the first example appears to be the nicest one (or
+    perhaps the fourth), but you may find that being able to use empty
+    expressions in <TT
+CLASS="literal"
+>for</TT
+> loops comes in handy in many
+    occasions.
+   </P
+><P
+>&#13;    PHP also supports the alternate "colon syntax" for
+    <TT
+CLASS="literal"
+>for</TT
+> loops.
+    <DIV
+CLASS="informalexample"
+><A
+NAME="AEN3477"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;for (expr1; expr2; expr3): statement; ...; endfor;
+     </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+>
+   </P
+><P
+>&#13;    Other languages have a <TT
+CLASS="literal"
+>foreach</TT
+> statement to
+    traverse an array or hash. PHP 3 has no such construct; PHP 4 does
+    (see <A
+HREF="control-structures.foreach.html"
+>foreach</A
+>). In PHP 3, you
+    can combine <A
+HREF="control-structures.while.html"
+>while</A
+>
+    with the <A
+HREF="function.list.html"
+><B
+CLASS="function"
+>list()</B
+></A
+> and <A
+HREF="function.each.html"
+><B
+CLASS="function"
+>each()</B
+></A
+>
+    functions to achieve the same effect. See the documentation for
+    these functions for an example.
+   </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="control-structures.do.while.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="control-structures.foreach.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><TT
+CLASS="literal"
+>do..while</TT
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="control-structures.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><TT
+CLASS="literal"
+>foreach</TT
+></TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,537 @@
+<HTML
+><HEAD
+><TITLE
+>hw_Modifyobject</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Hyperwave functions"
+HREF="ref.hyperwave.html"><LINK
+REL="PREVIOUS"
+TITLE="hw_mapid"
+HREF="function.hw-mapid.html"><LINK
+REL="NEXT"
+TITLE="hw_New_Document"
+HREF="function.hw-new-document.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.hw-mapid.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.hw-new-document.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.hw-modifyobject"
+>hw_Modifyobject</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN14241"
+></A
+><P
+>    (PHP3 &#62;= 3.0.7, PHP4 &#62;= 4.0b2)</P
+>hw_Modifyobject&nbsp;--&nbsp;modifies object record</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN14244"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN14246"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int <B
+CLASS="function"
+>hw_modifyobject</B
+></CODE
+> (int connection, int object_to_change, array remove, array add, int mode)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     This command allows to remove, add, or modify individual attributes
+     of an object record.  The object is specified by the Object ID
+     <TT
+CLASS="parameter"
+><I
+>object_to_change</I
+></TT
+>. The first array
+     <TT
+CLASS="parameter"
+><I
+>remove</I
+></TT
+> is a list of attributes to remove.
+     The second array <TT
+CLASS="parameter"
+><I
+>add</I
+></TT
+> is a list of attributes
+     to add. In order to modify an attribute one will have to remove
+     the old one and add a new one. <B
+CLASS="function"
+>hw_modifyobject()</B
+>
+     will always remove the attributes before it adds attributes unless
+     the value of the attribute to remove is not a string or array.</P
+><P
+>&#13;     The last parameter determines if the modification is performed
+     recursively. 1 means recurive modification. If some of the objects
+     cannot be modified they will be skiped without notice.
+     <A
+HREF="function.hw-error.html"
+><B
+CLASS="function"
+>hw_error()</B
+></A
+> may not indicate an error though
+     some of the objects could not be modified.</P
+><P
+>&#13;     The keys of both arrays are the attributes name. The value of each
+     array element can either be an array, a string or anything else.
+     If it is an array
+     each attribute value is constructed by the key of each element plus
+     a colon and the value of each element. If it is a string it is taken
+     as the attribute value. An empty string will result in a complete
+     removal of that attribute. If the value is neither a string nor an
+     array but something else, e.g. an integer, no operation at all will
+     be performed on the attribute. This is neccessary if you want to
+     to add a completely new attribute not just a new value for an existing
+     attribute. If the remove array contained
+     an empty string for that attribute, the attribute would be tried to be
+     removed which would fail since it doesn't exist. The following addition of
+     a new value for that attribute would also fail. Setting the value
+     for that attribute to e.g. 0 would not even try to remove it and
+     the addition will work.</P
+><P
+>&#13;     If you would like to change the attribute 'Name' with the current
+     value 'books' into 'articles' you will have to create two arrays
+     and call <B
+CLASS="function"
+>hw_modifyobject()</B
+>.
+     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN14270"
+></A
+><P
+><B
+>Example 1. modifying an attribute</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;       // $connect is an existing connection to the Hyperwave server
+       // $objid is the ID of the object to modify
+       $remarr = array("Name" =&#62; "books");
+       $addarr = array("Name" =&#62; "articles");
+       $hw_modifyobject($connect, $objid, $remarr, $addarr);
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+     In order to delete/add a name=value pair from/to the object record just
+     pass the remove/add array and set the last/third parameter to an empty
+     array. If the attribute is the first one with that name to add, set
+     attribute value in the remove array to an integer.
+     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN14273"
+></A
+><P
+><B
+>Example 2. adding a completely new attribute</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;       // $connect is an existing connection to the Hyperwave server
+       // $objid is the ID of the object to modify
+       $remarr = array("Name" =&#62; 0);
+       $addarr = array("Name" =&#62; "articles");
+       $hw_modifyobject($connect, $objid, $remarr, $addarr);
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+></P
+><P
+>&#13;     <DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
+><P
+><B
+>Note: </B
+>
+       Multilingual attributes, e.g. 'Title', can be modified in two
+       ways. Either by providing the attributes value in its native
+       form 'language':'title' or by providing an array with elements
+       for each language as described above. The above example would
+       than be:</P
+></BLOCKQUOTE
+></DIV
+>
+     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN14279"
+></A
+><P
+><B
+>Example 3. modifying Title attribute</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;       $remarr = array("Title" =&#62; "en:Books");
+       $addarr = array("Title" =&#62; "en:Articles");
+       $hw_modifyobject($connect, $objid, $remarr, $addarr);
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+      or
+     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN14282"
+></A
+><P
+><B
+>Example 4. modifying Title attribute</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;       $remarr = array("Title" =&#62; array("en" =&#62; "Books"));
+       $addarr = array("Title" =&#62; array("en" =&#62; "Articles", "ge"=&#62;"Artikel"));
+       $hw_modifyobject($connect, $objid, $remarr, $addarr);
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+     This removes the english title 'Books' and adds the english title
+     'Articles' and the german title 'Artikel'.
+     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN14285"
+></A
+><P
+><B
+>Example 5. removing attribute</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;       $remarr = array("Title" =&#62; "");
+       $addarr = array("Title" =&#62; "en:Articles");
+       $hw_modifyobject($connect, $objid, $remarr, $addarr);
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+     <DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
+><P
+><B
+>Note: </B
+> 
+       This will remove all attributes with the name 'Title' and adds
+       a new 'Title' attribute. This comes in handy if you want to
+       remove attributes recursively.  
+      </P
+></BLOCKQUOTE
+></DIV
+>
+     <DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
+><P
+><B
+>Note: </B
+>
+       If you need to delete all attributes with a certain name you
+       will have to pass an empty string as the attribute value.</P
+></BLOCKQUOTE
+></DIV
+>
+    <DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
+><P
+><B
+>Note: </B
+>
+     Only the attributes 'Title', 'Description' and 'Keyword' will
+     properly handle the language prefix. If those attributes don't carry
+     a language prefix, the prefix 'xx' will be assigned.
+    </P
+></BLOCKQUOTE
+></DIV
+>
+    <DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
+><P
+><B
+>Note: </B
+>
+     The 'Name' attribute is somewhat special. In some cases it cannot 
+     be complete removed. You will get an error message 'Change of base
+     attribute' (not clear when this happens). Therefore you will always
+     have to add a new Name first and than remove the old one.
+    </P
+></BLOCKQUOTE
+></DIV
+>
+    <DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
+><P
+><B
+>Note: </B
+>
+      You may not suround this function by calls to
+      <A
+HREF="function.hw-getandlock.html"
+><B
+CLASS="function"
+>hw_getandlock()</B
+></A
+> and <A
+HREF="function.hw-unlock.html"
+><B
+CLASS="function"
+>hw_unlock()</B
+></A
+>.
+      <B
+CLASS="function"
+>hw_modifyobject()</B
+> does this internally.
+    </P
+></BLOCKQUOTE
+></DIV
+></P
+><P
+>&#13;     Returns TRUE if no error occurs otherwise FALSE.</P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.hw-mapid.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.hw-new-document.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>hw_mapid</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.hyperwave.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>hw_New_Document</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

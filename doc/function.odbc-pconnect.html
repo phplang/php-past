@@ -1,0 +1,240 @@
+<HTML
+><HEAD
+><TITLE
+>odbc_pconnect</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Unified ODBC functions"
+HREF="ref.odbc.html"><LINK
+REL="PREVIOUS"
+TITLE="odbc_num_fields"
+HREF="function.odbc-num-fields.html"><LINK
+REL="NEXT"
+TITLE="odbc_prepare"
+HREF="function.odbc-prepare.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.odbc-num-fields.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.odbc-prepare.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.odbc-pconnect"
+>odbc_pconnect</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN25997"
+></A
+><P
+>    (PHP3 &#62;= 3.0.6, PHP4 )</P
+>odbc_pconnect&nbsp;--&nbsp;Open a persistent database connection</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN26000"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN26002"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int <B
+CLASS="function"
+>odbc_pconnect</B
+></CODE
+> (string dsn, string user, string password [, int cursor_type])</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     Returns an ODBC connection id or 0 (<TT
+CLASS="literal"
+>false</TT
+>) on
+     error.  This function is much like
+     <A
+HREF="function.odbc-connect.html"
+><B
+CLASS="function"
+>odbc_connect()</B
+></A
+>, except that the connection is
+     not really closed when the script has finished.  Future requests
+     for a connection with the same <TT
+CLASS="parameter"
+><I
+>dsn</I
+></TT
+>,
+     <TT
+CLASS="parameter"
+><I
+>user</I
+></TT
+>, <TT
+CLASS="parameter"
+><I
+>password</I
+></TT
+>
+     combination (via <A
+HREF="function.odbc-connect.html"
+><B
+CLASS="function"
+>odbc_connect()</B
+></A
+> and
+     <B
+CLASS="function"
+>odbc_pconnect()</B
+>) can reuse the persistent
+     connection.
+    </P
+><P
+>&#13;     <DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
+><P
+><B
+>Note: </B
+>
+       Persistent connections have no effect if PHP is used as a CGI
+       program.
+      </P
+></BLOCKQUOTE
+></DIV
+>
+    </P
+><P
+>&#13;     For information about the optional cursor_type parameter see the
+     <A
+HREF="function.odbc-connect.html"
+><B
+CLASS="function"
+>odbc_connect()</B
+></A
+> function.  For more information
+     on persistent connections, refer to the PHP FAQ.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.odbc-num-fields.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.odbc-prepare.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>odbc_num_fields</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.odbc.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>odbc_prepare</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

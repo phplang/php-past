@@ -1,0 +1,319 @@
+<HTML
+><HEAD
+><TITLE
+>ImagePSBBox</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Image functions"
+HREF="ref.image.html"><LINK
+REL="PREVIOUS"
+TITLE="ImagePolygon"
+HREF="function.imagepolygon.html"><LINK
+REL="NEXT"
+TITLE="ImagePSEncodeFont"
+HREF="function.imagepsencodefont.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.imagepolygon.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.imagepsencodefont.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.imagepsbbox"
+>ImagePSBBox</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN15639"
+></A
+><P
+>    (PHP3 &#62;= 3.0.9, PHP4 &#62;= 4.0RC1)</P
+>ImagePSBBox&nbsp;--&nbsp;
+     Give the bounding box of a text rectangle using PostScript Type1
+     fonts
+    </DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN15642"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN15644"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>array <B
+CLASS="function"
+>imagepsbbox</B
+></CODE
+> (string text, int font, int size [, int space [, int tightness [, float angle]]])</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     <TT
+CLASS="parameter"
+><I
+>Size</I
+></TT
+> is expressed in pixels.
+    </P
+><P
+>&#13;     <TT
+CLASS="parameter"
+><I
+>Space</I
+></TT
+> allows you to change the default
+     value of a space in a font.  This amount is added to the normal
+     value and can also be negative.
+    </P
+><P
+>&#13;     <TT
+CLASS="parameter"
+><I
+>Tightness</I
+></TT
+> allows you to control the amount
+     of white space between characters. This amount is added to the
+     normal character width and can also be negative.
+    </P
+><P
+>&#13;     <TT
+CLASS="parameter"
+><I
+>Angle</I
+></TT
+> is in degrees.
+    </P
+><P
+>&#13;     Parameters <TT
+CLASS="parameter"
+><I
+>space</I
+></TT
+> and
+     <TT
+CLASS="parameter"
+><I
+>tightness</I
+></TT
+> are expressed in character space
+     units, where 1 unit is 1/1000th of an em-square.
+    </P
+><P
+>&#13;     Parameters <TT
+CLASS="parameter"
+><I
+>space</I
+></TT
+>,
+     <TT
+CLASS="parameter"
+><I
+>tightness</I
+></TT
+>, and <TT
+CLASS="parameter"
+><I
+>angle</I
+></TT
+>
+     are optional.
+    </P
+><P
+>&#13;     The bounding box is calculated using information available from
+     character metrics, and unfortunately tends to differ slightly
+     from the results achieved by actually rasterizing the text. If
+     the angle is 0 degrees, you can expect the text to need 1 pixel
+     more to every direction.
+    </P
+><P
+>&#13;     This function returns an array containing the following elements:
+     <DIV
+CLASS="informaltable"
+><A
+NAME="AEN15680"
+></A
+><P
+></P
+><TABLE
+BORDER="1"
+CLASS="CALSTABLE"
+><TBODY
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>0</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>lower left x-coordinate</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>1</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>lower left y-coordinate</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>2</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>upper right x-coordinate</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>3</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>upper right y-coordinate</TD
+></TR
+></TBODY
+></TABLE
+><P
+></P
+></DIV
+>
+    </P
+><P
+>&#13;     See also <A
+HREF="function.imagepstext.html"
+><B
+CLASS="function"
+>imagepstext()</B
+></A
+>.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.imagepolygon.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.imagepsencodefont.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>ImagePolygon</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.image.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>ImagePSEncodeFont</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,508 @@
+<HTML
+><HEAD
+><TITLE
+>require</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Control Structures"
+HREF="control-structures.html"><LINK
+REL="PREVIOUS"
+TITLE="switch"
+HREF="control-structures.switch.html"><LINK
+REL="NEXT"
+TITLE="include"
+HREF="function.include.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="control-structures.switch.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 11. Control Structures</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.include.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="function.require"
+><A
+HREF="function.require.html"
+><B
+CLASS="function"
+>require()</B
+></A
+></A
+></H1
+><P
+>&#13;    The <A
+HREF="function.require.html"
+><B
+CLASS="function"
+>require()</B
+></A
+> statement replaces itself with
+    the specified file, much like the C preprocessor's
+    <TT
+CLASS="literal"
+>#include</TT
+> works.
+   </P
+><P
+>&#13;    If "URL fopen wrappers" are enabled in PHP (which they are in the
+    default configuration), you can specify the file to be
+    <A
+HREF="function.require.html"
+><B
+CLASS="function"
+>require()</B
+></A
+>ed using an URL instead of a local
+    pathname. See <A
+HREF="features.remote-files.html"
+>Remote
+    files</A
+> and <A
+HREF="function.fopen.html"
+><B
+CLASS="function"
+>fopen()</B
+></A
+> for more information.
+   </P
+><P
+>&#13;    An important note about how this works is that when a file is
+    <A
+HREF="function.include.html"
+><B
+CLASS="function"
+>include()</B
+></A
+>ed or <A
+HREF="function.require.html"
+><B
+CLASS="function"
+>require()</B
+></A
+>ed,
+    parsing drops out of PHP mode and into HTML mode at the beginning
+    of the target file, and resumes PHP mode again at the end. For
+    this reason, any code inside the target file which should be
+    executed as PHP code must be enclosed within <A
+HREF="language.basic-syntax.html#language.basic-syntax.phpmode"
+>valid PHP start and end
+    tags</A
+>.
+   </P
+><P
+>&#13;    <A
+HREF="function.require.html"
+><B
+CLASS="function"
+>require()</B
+></A
+> is not actually a function in PHP;
+    rather, it is a language construct. It is subject to some
+    different rules than functions are. For instance,
+    <A
+HREF="function.require.html"
+><B
+CLASS="function"
+>require()</B
+></A
+> is not subject to any containing
+    control structures. For another, it does not return any value;
+    attempting to read a return value from a
+    <A
+HREF="function.require.html"
+><B
+CLASS="function"
+>require()</B
+></A
+> call results in a parse error.
+   </P
+><P
+>&#13;    Unlike <A
+HREF="function.include.html"
+><B
+CLASS="function"
+>include()</B
+></A
+>, <A
+HREF="function.require.html"
+><B
+CLASS="function"
+>require()</B
+></A
+>
+    will <I
+CLASS="emphasis"
+>always</I
+> read in the target file,
+    <I
+CLASS="emphasis"
+>even if the line it's on never executes</I
+>. If
+    you want to conditionally include a file, use
+    <A
+HREF="function.include.html"
+><B
+CLASS="function"
+>include()</B
+></A
+>. The conditional statement won't
+    affect the <A
+HREF="function.require.html"
+><B
+CLASS="function"
+>require()</B
+></A
+>. However, if the line on
+    which the <A
+HREF="function.require.html"
+><B
+CLASS="function"
+>require()</B
+></A
+> occurs is not executed,
+    neither will any of the code in the target file be executed.
+   </P
+><P
+>&#13;    Similarly, looping structures do not affect the behaviour of
+    <A
+HREF="function.require.html"
+><B
+CLASS="function"
+>require()</B
+></A
+>. Although the code contained in the
+    target file is still subject to the loop, the
+    <A
+HREF="function.require.html"
+><B
+CLASS="function"
+>require()</B
+></A
+> itself happens only once.
+   </P
+><P
+>&#13;    This means that you can't put a <A
+HREF="function.require.html"
+><B
+CLASS="function"
+>require()</B
+></A
+>
+    statement inside of a loop structure and expect it to include the
+    contents of a different file on each iteration. To do that, use an
+    <A
+HREF="function.include.html"
+><B
+CLASS="function"
+>include()</B
+></A
+> statement.
+    <DIV
+CLASS="informalexample"
+><A
+NAME="AEN3610"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;require ('header.inc');
+     </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+>
+   </P
+><P
+>&#13;    When a file is <A
+HREF="function.require.html"
+><B
+CLASS="function"
+>require()</B
+></A
+>ed, the code it
+    contains inherits the variable scope of the line on which the
+    <A
+HREF="function.require.html"
+><B
+CLASS="function"
+>require()</B
+></A
+> occurs. Any variables available at
+    that line in the calling file will be available within the called
+    file. If the <A
+HREF="function.require.html"
+><B
+CLASS="function"
+>require()</B
+></A
+> occurs inside a
+    function within the calling file, then all of the code contained
+    in the called file will behave as though it had been defined
+    inside that function.
+   </P
+><P
+>&#13;    If the <A
+HREF="function.require.html"
+><B
+CLASS="function"
+>require()</B
+></A
+>ed file is called via HTTP
+    using the fopen wrappers, and if the target server interprets the
+    target file as PHP code, variables may be passed to the
+    <A
+HREF="function.require.html"
+><B
+CLASS="function"
+>require()</B
+></A
+>ed file using an URL request string as
+    used with HTTP GET. This is not strictly speaking the same thing
+    as <A
+HREF="function.require.html"
+><B
+CLASS="function"
+>require()</B
+></A
+>ing the file and having it inherit
+    the parent file's variable scope; the script is actually being run
+    on the remote server and the result is then being included into
+    the local script.
+    <DIV
+CLASS="informalexample"
+><A
+NAME="AEN3620"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;/* This example assumes that someserver is configured to parse .php
+ * files and not .txt files. Also, 'works' here means that the variables 
+ * $varone and $vartwo are available within the require()ed file. */
+
+/* Won't work; file.txt wasn't handled by someserver. */
+require ("http://someserver/file.txt?varone=1&#38;vartwo=2");
+
+/* Won't work; looks for a file named 'file.php?varone=1&#38;vartwo=2'
+ * on the local filesystem. */
+require ("file.php?varone=1&#38;vartwo=2");               
+
+/* Works. */
+require ("http://someserver/file.php?varone=1&#38;vartwo=2"); 
+
+$varone = 1;
+$vartwo = 2;
+require ("file.txt");  /* Works. */
+require ("file.php");  /* Works. */
+     </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+>
+   </P
+><P
+>&#13;    In PHP 3, it is possible to execute a <TT
+CLASS="literal"
+>return</TT
+>
+    statement inside a <A
+HREF="function.require.html"
+><B
+CLASS="function"
+>require()</B
+></A
+>ed file, as long as
+    that statement occurs in the global scope of the
+    <A
+HREF="function.require.html"
+><B
+CLASS="function"
+>require()</B
+></A
+>ed file. It may not occur within any
+    block (meaning inside braces ({}). In PHP 4, however, this ability
+    has been discontinued. If you need this functionality, see
+    <A
+HREF="function.include.html"
+><B
+CLASS="function"
+>include()</B
+></A
+>.
+   </P
+><P
+>&#13;    See also <A
+HREF="function.include.html"
+><B
+CLASS="function"
+>include()</B
+></A
+>, <A
+HREF="function.require-once.html"
+><B
+CLASS="function"
+>require_once()</B
+></A
+>,
+    <A
+HREF="function.include-once.html"
+><B
+CLASS="function"
+>include_once()</B
+></A
+>, <A
+HREF="function.readfile.html"
+><B
+CLASS="function"
+>readfile()</B
+></A
+>,
+	and <A
+HREF="function.virtual.html"
+><B
+CLASS="function"
+>virtual()</B
+></A
+>.
+   </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="control-structures.switch.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.include.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><TT
+CLASS="literal"
+>switch</TT
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="control-structures.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.include.html"
+><B
+CLASS="function"
+>include()</B
+></A
+></TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

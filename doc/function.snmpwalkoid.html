@@ -1,0 +1,282 @@
+<HTML
+><HEAD
+><TITLE
+>snmpwalkoid</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="SNMP functions"
+HREF="ref.snmp.html"><LINK
+REL="PREVIOUS"
+TITLE="snmpwalk"
+HREF="function.snmpwalk.html"><LINK
+REL="NEXT"
+TITLE="snmp_get_quick_print"
+HREF="function.snmp-get-quick-print.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.snmpwalk.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.snmp-get-quick-print.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.snmpwalkoid"
+>snmpwalkoid</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN35791"
+></A
+><P
+>    (PHP3 &#62;= 3.0.8, PHP4 &#62;= 4.0b2)</P
+>snmpwalkoid&nbsp;--&nbsp;Query for a tree of information about a network entity
+    </DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN35794"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN35796"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>array <B
+CLASS="function"
+>snmpwalkoid</B
+></CODE
+> (string hostname, string community, string object_id [, int timeout [, int retries]])</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     Returns an associative array with object ids and their respective
+     object value starting from the <TT
+CLASS="parameter"
+><I
+>object_id</I
+></TT
+>
+     as root and false on error.</P
+><P
+>&#13;     <B
+CLASS="function"
+>snmpwalkoid()</B
+> function is used to read all
+     object ids and their respective values from an SNMP agent
+     specified by the hostname. Community specifies the read
+     <TT
+CLASS="parameter"
+><I
+>community</I
+></TT
+> for that agent. A null
+     <TT
+CLASS="parameter"
+><I
+>object_id</I
+></TT
+> is taken as the root of the SNMP
+     objects tree and all objects under that tree are returned as an
+     array. If <TT
+CLASS="parameter"
+><I
+>object_id</I
+></TT
+> is specified, all the
+     SNMP objects below that <TT
+CLASS="parameter"
+><I
+>object_id</I
+></TT
+> are
+     returned.</P
+><P
+>&#13;     The existence of <B
+CLASS="function"
+>snmpwalkoid()</B
+> and
+     <A
+HREF="function.snmpwalk.html"
+><B
+CLASS="function"
+>snmpwalk()</B
+></A
+> has historical reasons.  Both
+     functions are provided for backward compatibility.
+
+     <DIV
+CLASS="informalexample"
+><A
+NAME="AEN35823"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+> 
+$a = snmpwalkoid("127.0.0.1", "public", ""); 
+      </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+></P
+><P
+>&#13;     Above function call would return all the SNMP objects from the
+     SNMP agent running on localhost. One can step through the values
+     with a loop
+
+     <DIV
+CLASS="informalexample"
+><A
+NAME="AEN35826"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;for (reset($a); $i = key($a); next($a)) {
+    echo "$i: $a[$i]&#60;br&#62;\n";
+}
+      </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+></P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.snmpwalk.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.snmp-get-quick-print.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>snmpwalk</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.snmp.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>snmp_get_quick_print</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

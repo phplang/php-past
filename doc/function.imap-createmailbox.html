@@ -1,0 +1,304 @@
+<HTML
+><HEAD
+><TITLE
+>imap_createmailbox</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="IMAP, POP3 and NNTP functions"
+HREF="ref.imap.html"><LINK
+REL="PREVIOUS"
+TITLE="imap_close"
+HREF="function.imap-close.html"><LINK
+REL="NEXT"
+TITLE="imap_delete"
+HREF="function.imap-delete.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.imap-close.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.imap-delete.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.imap-createmailbox"
+>imap_createmailbox</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN16347"
+></A
+><P
+>    (PHP3 , PHP4 )</P
+>imap_createmailbox&nbsp;--&nbsp;Create a new mailbox</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN16350"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN16352"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int <B
+CLASS="function"
+>imap_createmailbox</B
+></CODE
+> (int imap_stream, string mbox)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>  
+     <B
+CLASS="function"
+>imap_createmailbox()</B
+> creates a new mailbox
+     specified by <TT
+CLASS="parameter"
+><I
+>mbox</I
+></TT
+>. Names containing 
+     international characters should be encoded by <A
+HREF="function.imap-utf7-encode.html"
+><B
+CLASS="function"
+>imap_utf7_encode()</B
+></A
+>
+    </P
+><P
+>&#13;     Returns true on success and false on error.
+    </P
+><P
+>&#13;     See also <A
+HREF="function.imap-renamemailbox.html"
+><B
+CLASS="function"
+>imap_renamemailbox()</B
+></A
+>,
+     <A
+HREF="function.imap-deletemailbox.html"
+><B
+CLASS="function"
+>imap_deletemailbox()</B
+></A
+> and
+     <A
+HREF="function.imap-open.html"
+><B
+CLASS="function"
+>imap_open()</B
+></A
+> for the format 
+     of <TT
+CLASS="parameter"
+><I
+>mbox</I
+></TT
+> names. 
+    </P
+><P
+>     
+     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN16371"
+></A
+><P
+><B
+>Example 1. <B
+CLASS="function"
+>imap_createmailbox()</B
+> example</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;$mbox = imap_open("{your.imap.host}","username","password",OP_HALFOPEN)
+     || die("can't connect: ".imap_last_error());
+
+$name1 = "phpnewbox";
+$name2 = imap_utf7_encode("phpnewböx");
+
+$newname = $name1;
+
+echo "Newname will be '$name1'&#60;br&#62;\n";
+
+# we will now create a new mailbox "phptestbox" in your inbox folder,
+# check its status after creation and finaly remove it to restore
+# your inbox to its initial state 
+if(@imap_createmailbox($mbox,imap_utf7_encode("{your.imap.host}INBOX.$newname"))) {
+  $status = @imap_status($mbox,"{your.imap.host}INBOX.$newname",SA_ALL);
+  if($status) {
+    print("your new mailbox '$name1' has the following status:&#60;br&#62;\n");
+    print("Messages:   ". $status-&#62;messages   )."&#60;br&#62;\n";
+    print("Recent:     ". $status-&#62;recent     )."&#60;br&#62;\n";
+    print("Unseen:     ". $status-&#62;unseen     )."&#60;br&#62;\n";
+    print("UIDnext:    ". $status-&#62;uidnext    )."&#60;br&#62;\n";
+    print("UIDvalidity:". $status-&#62;uidvalidity)."&#60;br&#62;\n";
+    
+    if(imap_renamemailbox($mbox,"{your.imap.host}INBOX.$newname","{your.imap.host}INBOX.$name2")) {
+      echo "renamed new mailbox from '$name1' to '$name2'&#60;br&#62;\n";
+      $newname=$name2;
+    } else {
+      print "imap_renamemailbox on new mailbox failed: ".imap_last_error()."&#60;br&#62;\n";
+    }
+  } else {
+    print  "imap_status on new mailbox failed: ".imap_last_error()."&#60;br&#62;\n";
+  }
+  if(@imap_deletemailbox($mbox,"{your.imap.host}INBOX.$newname")) {
+    print "new mailbox removed to restore initial state&#60;br&#62;\n";
+  } else {
+    print  "imap_deletemailbox on new mailbox failed: ".implode("&#60;br&#62;\n",imap_errors())."&#60;br&#62;\n";
+  }
+  
+} else {
+  print  "could not create new mailbox: ".implode("&#60;br&#62;\n",imap_errors())."&#60;br&#62;\n";
+}
+
+imap_close($mbox);
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.imap-close.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.imap-delete.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>imap_close</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.imap.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>imap_delete</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

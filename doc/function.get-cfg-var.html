@@ -1,0 +1,195 @@
+<HTML
+><HEAD
+><TITLE
+>get_cfg_var</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="PHP options & information"
+HREF="ref.info.html"><LINK
+REL="PREVIOUS"
+TITLE="getenv"
+HREF="function.getenv.html"><LINK
+REL="NEXT"
+TITLE="get_current_user"
+HREF="function.get-current-user.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.getenv.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.get-current-user.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.get-cfg-var"
+>get_cfg_var</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN30147"
+></A
+><P
+>    (PHP3 , PHP4 )</P
+>get_cfg_var&nbsp;--&nbsp;
+     Get the value of a PHP configuration option.
+    </DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN30150"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN30152"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>string <B
+CLASS="function"
+>get_cfg_var</B
+></CODE
+> (string varname)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     Returns the current value of the PHP configuration variable
+     specified by <TT
+CLASS="parameter"
+><I
+>varname</I
+></TT
+>, or false if an error
+     occurs.
+    </P
+><P
+>&#13;     It will not return configuration information set when the PHP was
+     compiled, or read from an Apache configuration file (using the
+     php3_configuration_option directives).
+    </P
+><P
+>&#13;     To check whether the system is using a <A
+HREF="configuration.html#configuration.file"
+>configuration file</A
+>, try
+     retrieving the value of the cfg_file_path configuration
+     setting. If this is available, a configuration file is being
+     used.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.getenv.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.get-current-user.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>getenv</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.info.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>get_current_user</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,476 @@
+<HTML
+><HEAD
+><TITLE
+>Class/Object Functions</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Function Reference"
+HREF="funcref.html"><LINK
+REL="PREVIOUS"
+TITLE="com_set"
+HREF="function.com-set.html"><LINK
+REL="NEXT"
+TITLE="call_user_method"
+HREF="function.call-user-method.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="reference"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.com-set.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.call-user-method.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="reference"
+><A
+NAME="ref.classobj"
+></A
+><DIV
+CLASS="TITLEPAGE"
+><H1
+CLASS="title"
+>VIII. Class/Object Functions</H1
+><DIV
+CLASS="PARTINTRO"
+><A
+NAME="AEN6681"
+></A
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="classobj.partintro"
+>Introduction</A
+></H1
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="classobj.intro"
+>About</A
+></H2
+><P
+>&#13;      These functions allow you to obtain information about classes
+      and instance objects. You can obtain the name of the class to
+      which a object belongs, as well as its member properties and 
+      methods. Using these functions, you can find out not only the
+      class membership of an object, but also its parentage (i.e.
+      what class is the object class extending).
+     </P
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="AEN6687"
+>An example of use</A
+></H2
+><P
+>&#13;      In this example, we first define a base class and an extension
+      of the class. The base class describes a general vegetable,
+      whether it is edible or not and what is its color. The subclass
+      <TT
+CLASS="varname"
+>Spinach</TT
+> adds a method to cook it and another to
+      find out if it is cooked.
+     </P
+><P
+>&#13;      <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN6692"
+></A
+><P
+><B
+>Example 1. classes.inc</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;&#60;?php
+
+// base class with member properties and methods
+class Vegetable {
+
+    var $edible;
+    var $color;
+
+    function Vegetable( $edible, $color="green" ) {
+        $this-&#62;edible = $edible;
+        $this-&#62;color = $color;
+    }
+
+    function is_edible() {
+        return $this-&#62;edible;
+    }
+
+    function what_color() {
+        return $this-&#62;color;
+    }
+    
+} // end of class Vegetable
+
+
+// extends the base class
+class Spinach extends Vegetable {
+
+    var $cooked = false;
+
+    function Spinach() {
+        $this-&#62;Vegetable( true, "green" );
+    }
+
+    function cook_it() {
+        $this-&#62;cooked = true;
+    }
+
+    function is_cooked() {
+        return $this-&#62;cooked;
+    }
+    
+} // end of class Spinach
+
+?&#62;
+       </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+     </P
+><P
+>&#13;     We then instantiate 2 objects from these classes and print out
+     information about them, including their class parentage.
+     We also define some utility functions, mainly to have a nice printout
+     of the variables.
+     </P
+><P
+>&#13;      <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN6697"
+></A
+><P
+><B
+>Example 2. test_script.php</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;&#60;pre&#62;
+&#60;?php
+
+include "classes.inc";
+
+// utility functions
+
+function print_vars($obj) {
+    $arr = get_object_vars($obj);
+    while (list($prop, $val) = each($arr))
+        echo "\t$prop = $val\n";
+}
+
+function print_methods($obj) {
+    $arr = get_class_methods(get_class($obj));
+    foreach ($arr as $method)
+        echo "\tfunction $method()\n";
+}
+
+function class_parentage($obj, $class) {
+    global $$obj;
+    if (is_subclass_of($$obj, $class)) {
+        echo "Object $obj belongs to class ".get_class($$obj);
+        echo " a subclass of $class\n";
+    } else {
+        echo "Object $obj does not belong to a subclass of $class\n";
+    }
+}
+
+// instantiate 2 objects
+
+$veggie = new Vegetable(true,"blue");
+$leafy = new Spinach();
+
+// print out information about objects
+echo "veggie: CLASS ".get_class($veggie)."\n";
+echo "leafy: CLASS ".get_class($leafy);
+echo ", PARENT ".get_parent_class($leafy)."\n";
+
+// show veggie properties
+echo "\nveggie: Properties\n";
+print_vars($veggie);
+
+// and leafy methods
+echo "\nleafy: Methods\n";
+print_methods($leafy);
+
+echo "\nParentage:\n";
+class_parentage("leafy", "Spinach");
+class_parentage("leafy", "Vegetable");
+?&#62;
+&#60;/pre&#62;
+       </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+     </P
+><P
+>&#13;      One important thing to note in the example above is that
+      the object <TT
+CLASS="varname"
+>$leafy</TT
+> is an instance of the class
+      <TT
+CLASS="classname"
+>Spinach</TT
+> which is a subclass of 
+      <TT
+CLASS="classname"
+>Vegetable</TT
+>,
+      therefore the last part of the script above will output:
+     </P
+><P
+>&#13;      <DIV
+CLASS="informalexample"
+><A
+NAME="AEN6705"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;       [...]
+Parentage:
+Object leafy does not belong to a subclass of Spinach
+Object leafy belongs to class spinach a subclass of Vegetable
+       </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+>
+     </P
+></DIV
+></DIV
+></DIV
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Table of Contents</B
+></DT
+><DT
+><A
+HREF="function.call-user-method.html"
+>call_user_method</A
+> &#8212; 
+     Call a user method on an specific object
+    </DT
+><DT
+><A
+HREF="function.class-exists.html"
+>class_exists</A
+> &#8212; Checks if the class has been defined</DT
+><DT
+><A
+HREF="function.get-class.html"
+>get_class</A
+> &#8212; Returns the name of the class of an object</DT
+><DT
+><A
+HREF="function.get-class-methods.html"
+>get_class_methods</A
+> &#8212; Returns an array of class methods' names</DT
+><DT
+><A
+HREF="function.get-class-vars.html"
+>get_class_vars</A
+> &#8212; 
+     Returns an array of default properties of the class
+    </DT
+><DT
+><A
+HREF="function.get-declared-classes.html"
+>get_declared_classes</A
+> &#8212; Returns an array with the name of the defined classes</DT
+><DT
+><A
+HREF="function.get-object-vars.html"
+>get_object_vars</A
+> &#8212; Returns an associative array of object properties</DT
+><DT
+><A
+HREF="function.get-parent-class.html"
+>get_parent_class</A
+> &#8212; Returns the name of the parent class of an object</DT
+><DT
+><A
+HREF="function.is-subclass-of.html"
+>is_subclass_of</A
+> &#8212; 
+     Determines if an object belongs to a subclass
+     of the specified class
+    </DT
+><DT
+><A
+HREF="function.method-exists.html"
+>method_exists</A
+> &#8212; Checks if the class method exists</DT
+></DL
+></DIV
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.com-set.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.call-user-method.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>com_set</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="funcref.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>call_user_method</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

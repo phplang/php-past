@@ -1,0 +1,303 @@
+<HTML
+><HEAD
+><TITLE
+>odbc_foreignkeys</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Unified ODBC functions"
+HREF="ref.odbc.html"><LINK
+REL="PREVIOUS"
+TITLE="odbc_primarykeys"
+HREF="function.odbc-primarykeys.html"><LINK
+REL="NEXT"
+TITLE="odbc_procedures"
+HREF="function.odbc-procedures.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.odbc-primarykeys.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.odbc-procedures.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.odbc-foreignkeys"
+>odbc_foreignkeys</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN26460"
+></A
+><P
+>    (PHP4 &#62;= 4.0b4)</P
+>odbc_foreignkeys&nbsp;--&nbsp;
+     Returns a list of foreign keys in the specified table or a list
+     of foreign keys in other tables that refer to the primary key in
+     the specified table
+    </DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN26463"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN26465"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int <B
+CLASS="function"
+>odbc_foreignkeys</B
+></CODE
+> (int connection_id, string pk_qualifier, string pk_owner, string pk_table, string fk_qualifier, string fk_owner, string fk_table)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     <B
+CLASS="function"
+>Odbc_foreignkeys()</B
+> retrieves information about
+     foreign keys. Returns an ODBC result identifier or
+     <TT
+CLASS="literal"
+>false</TT
+> on failure.
+    </P
+><P
+>&#13;     The result set has the following columns:
+     <P
+></P
+><UL
+><LI
+><P
+>PKTABLE_QUALIFIER</P
+></LI
+><LI
+><P
+>PKTABLE_OWNER</P
+></LI
+><LI
+><P
+>PKTABLE_NAME</P
+></LI
+><LI
+><P
+>PKCOLUMN_NAME</P
+></LI
+><LI
+><P
+>FKTABLE_QUALIFIER</P
+></LI
+><LI
+><P
+>FKTABLE_OWNER</P
+></LI
+><LI
+><P
+>FKTABLE_NAME</P
+></LI
+><LI
+><P
+>FKCOLUMN_NAME</P
+></LI
+><LI
+><P
+>KEY_SEQ</P
+></LI
+><LI
+><P
+>UPDATE_RULE</P
+></LI
+><LI
+><P
+>DELETE_RULE</P
+></LI
+><LI
+><P
+>FK_NAME</P
+></LI
+><LI
+><P
+>PK_NAME</P
+></LI
+></UL
+>
+    </P
+><P
+>&#13;     If <TT
+CLASS="parameter"
+><I
+>pk_table</I
+></TT
+> contains a table name,
+     <B
+CLASS="function"
+>odbc_foreignkeys()</B
+> returns a result set
+     containing the primary key of the specified table and all of the
+     foreign keys that refer to it.
+    </P
+><P
+>&#13;     If <TT
+CLASS="parameter"
+><I
+>fk_table</I
+></TT
+> contains a table name,
+     <B
+CLASS="function"
+>odbc_foreignkeys()</B
+> returns a result set
+     containing all of the foreign keys in the specified table and the
+     primary keys (in other tables) to which they refer.
+    </P
+><P
+>&#13;     If both <TT
+CLASS="parameter"
+><I
+>pk_table</I
+></TT
+> and
+     <TT
+CLASS="parameter"
+><I
+>fk_table</I
+></TT
+> contain table names,
+     <B
+CLASS="function"
+>odbc_foreignkeys()</B
+> returns the foreign keys in
+     the table specified in <TT
+CLASS="parameter"
+><I
+>fk_table</I
+></TT
+> that refer
+     to the primary key of the table specified in
+     <TT
+CLASS="parameter"
+><I
+>pk_table</I
+></TT
+>. This should be one key at most.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.odbc-primarykeys.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.odbc-procedures.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>odbc_primarykeys</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.odbc.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>odbc_procedures</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

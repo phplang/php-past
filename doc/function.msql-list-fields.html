@@ -1,0 +1,228 @@
+<HTML
+><HEAD
+><TITLE
+>msql_list_fields</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="mSQL functions"
+HREF="ref.msql.html"><LINK
+REL="PREVIOUS"
+TITLE="msql_freeresult"
+HREF="function.msql-freeresult.html"><LINK
+REL="NEXT"
+TITLE="msql_listfields"
+HREF="function.msql-listfields.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.msql-freeresult.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.msql-listfields.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.msql-list-fields"
+>msql_list_fields</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN23639"
+></A
+><P
+>    (PHP3 , PHP4 )</P
+>msql_list_fields&nbsp;--&nbsp;List result fields</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN23642"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN23644"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int <B
+CLASS="function"
+>msql_list_fields</B
+></CODE
+> (string database, string tablename)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     <B
+CLASS="function"
+>msql_list_fields()</B
+> retrieves information about
+     the given tablename. Arguments are the database name and the
+     table name. A result pointer is returned which can be used with
+     <A
+HREF="function.msql-fieldflags.html"
+><B
+CLASS="function"
+>msql_fieldflags()</B
+></A
+>,
+     <A
+HREF="function.msql-fieldlen.html"
+><B
+CLASS="function"
+>msql_fieldlen()</B
+></A
+>,
+     <A
+HREF="function.msql-fieldname.html"
+><B
+CLASS="function"
+>msql_fieldname()</B
+></A
+>, and
+     <A
+HREF="function.msql-fieldtype.html"
+><B
+CLASS="function"
+>msql_fieldtype()</B
+></A
+>.  A query identifier is a
+     positive integer. The function returns <TT
+CLASS="literal"
+>-1</TT
+> if a
+     error occurs. A string describing the error will be placed in
+     <TT
+CLASS="literal"
+>$phperrmsg</TT
+>, and unless the function was called
+     as <TT
+CLASS="literal"
+>@msql_list_fields()</TT
+> then this error string
+     will also be printed out.
+    </P
+><P
+>&#13;     See also <A
+HREF="function.msql-error.html"
+><B
+CLASS="function"
+>msql_error()</B
+></A
+>.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.msql-freeresult.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.msql-listfields.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>msql_freeresult</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.msql.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>msql_listfields</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,321 @@
+<HTML
+><HEAD
+><TITLE
+>get_browser</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Miscellaneous functions"
+HREF="ref.misc.html"><LINK
+REL="PREVIOUS"
+TITLE="exit"
+HREF="function.exit.html"><LINK
+REL="NEXT"
+TITLE="highlight_file"
+HREF="function.highlight-file.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.exit.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.highlight-file.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.get-browser"
+>get_browser</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN22873"
+></A
+><P
+>    (PHP3 , PHP4 )</P
+>get_browser&nbsp;--&nbsp;
+     Tells what the user's browser is capable of
+    </DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN22876"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN22878"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>object <B
+CLASS="function"
+>get_browser</B
+></CODE
+> ([string 
+       user_agent])</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     <B
+CLASS="function"
+>get_browser()</B
+> attempts to determine the
+     capabilities of the user's browser. This is done by looking up
+     the browser's information in the
+     <TT
+CLASS="filename"
+>browscap.ini</TT
+> file. By default, the value of
+     $HTTP_USER_AGENT is used; however, you can alter this (i.e., look
+     up another browser's info) by passing the optional
+     <TT
+CLASS="parameter"
+><I
+>user_agent</I
+></TT
+> parameter to
+     <B
+CLASS="function"
+>get_browser()</B
+>.
+    </P
+><P
+>&#13;     The information is returned in an object, which will contain
+     various data elements representing, for instance, the browser's
+     major and minor version numbers and ID string; true/false values
+     for features such as frames, JavaScript, and cookies; and so
+     forth.
+    </P
+><P
+>&#13;     While <TT
+CLASS="filename"
+>browscap.ini</TT
+> contains information on
+     many browsers, it relies on user updates to keep the database
+     current. The format of the file is fairly self-explanatory.
+    </P
+><P
+>&#13;     The following example shows how one might list all available
+     information retrieved about the user's browser.
+     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN22894"
+></A
+><P
+><B
+>Example 1. <B
+CLASS="function"
+>Get_browser()</B
+> example</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;&#60;?php
+function list_array ($array) {
+    while (list ($key, $value) = each ($array)) {
+    $str .= "&#60;b&#62;$key:&#60;/b&#62; $value&#60;br&#62;\n";
+    }
+    return $str;
+}
+echo "$HTTP_USER_AGENT&#60;hr&#62;\n";
+$browser = get_browser();
+echo list_array ((array) $browser);
+?&#62;
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+    </P
+><P
+>&#13;     The output of the above script would look something like this:
+    </P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;Mozilla/4.5 [en] (X11; U; Linux 2.2.9 i586)&#60;hr&#62;
+&#60;b&#62;browser_name_pattern:&#60;/b&#62; Mozilla/4\.5.*&#60;br&#62;
+&#60;b&#62;parent:&#60;/b&#62; Netscape 4.0&#60;br&#62;
+&#60;b&#62;platform:&#60;/b&#62; Unknown&#60;br&#62;
+&#60;b&#62;majorver:&#60;/b&#62; 4&#60;br&#62;
+&#60;b&#62;minorver:&#60;/b&#62; 5&#60;br&#62;
+&#60;b&#62;browser:&#60;/b&#62; Netscape&#60;br&#62;
+&#60;b&#62;version:&#60;/b&#62; 4&#60;br&#62;
+&#60;b&#62;frames:&#60;/b&#62; 1&#60;br&#62;
+&#60;b&#62;tables:&#60;/b&#62; 1&#60;br&#62;
+&#60;b&#62;cookies:&#60;/b&#62; 1&#60;br&#62;
+&#60;b&#62;backgroundsounds:&#60;/b&#62; &#60;br&#62;
+&#60;b&#62;vbscript:&#60;/b&#62; &#60;br&#62;
+&#60;b&#62;javascript:&#60;/b&#62; 1&#60;br&#62;
+&#60;b&#62;javaapplets:&#60;/b&#62; 1&#60;br&#62;
+&#60;b&#62;activexcontrols:&#60;/b&#62; &#60;br&#62;
+&#60;b&#62;beta:&#60;/b&#62; &#60;br&#62;
+&#60;b&#62;crawler:&#60;/b&#62; &#60;br&#62;
+&#60;b&#62;authenticodeupdate:&#60;/b&#62; &#60;br&#62;
+&#60;b&#62;msn:&#60;/b&#62; &#60;br&#62;
+    </PRE
+></TD
+></TR
+></TABLE
+><P
+>&#13;     In order for this to work, your <A
+HREF="configuration.html#ini.sect.browscap"
+>browscap</A
+> configuration file
+     setting must point to the correct location of the
+     <TT
+CLASS="filename"
+>browscap.ini</TT
+> file.
+    </P
+><P
+>&#13;     For more information (including locations from which you may
+     obtain a <TT
+CLASS="filename"
+>browscap.ini</TT
+> file), check the PHP
+     FAQ at <A
+HREF="http://www.php.net/FAQ.php"
+TARGET="_top"
+>http://www.php.net/FAQ.php</A
+>.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.exit.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.highlight-file.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>exit</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.misc.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>highlight_file</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

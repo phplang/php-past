@@ -1,0 +1,244 @@
+<HTML
+><HEAD
+><TITLE
+>move_uploaded_file</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Filesystem functions"
+HREF="ref.filesystem.html"><LINK
+REL="PREVIOUS"
+TITLE="mkdir"
+HREF="function.mkdir.html"><LINK
+REL="NEXT"
+TITLE="pclose"
+HREF="function.pclose.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.mkdir.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.pclose.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.move-uploaded-file"
+>move_uploaded_file</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN11715"
+></A
+><P
+>    (PHP4 CVS only)</P
+>move_uploaded_file&nbsp;--&nbsp;Moves an uploaded file to a new location.</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN11718"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN11720"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>bool <B
+CLASS="function"
+>move_uploaded_file</B
+></CODE
+> (string filename, string destination)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     This function is available only in versions of PHP 3 after PHP
+     3.0.16, and in versions of PHP 4 after 4.0.2.
+    </P
+><P
+>&#13;     This function checks to ensure that the file designated by
+     <TT
+CLASS="parameter"
+><I
+>filename</I
+></TT
+> is a valid upload file (meaning
+     that it was uploaded via PHP's HTTP POST upload mechanism). If
+     the file is valid, it will be moved to the filename given by
+     <TT
+CLASS="parameter"
+><I
+>destination</I
+></TT
+>.
+    </P
+><P
+>&#13;     If <TT
+CLASS="parameter"
+><I
+>filename</I
+></TT
+> is not a valid upload file,
+     then no action will occur, and
+     <B
+CLASS="function"
+>move_uploaded_file()</B
+> will return
+     <TT
+CLASS="literal"
+>false</TT
+>. 
+    </P
+><P
+>&#13;     If <TT
+CLASS="parameter"
+><I
+>filename</I
+></TT
+> is a valid upload file, but
+     cannot be moved for some reason, no action will occur, and
+     <B
+CLASS="function"
+>move_uploaded_file()</B
+> will return
+     <TT
+CLASS="literal"
+>false</TT
+>. Additionally, a warning will be issued.
+    </P
+><P
+>&#13;     This sort of check is especially important if there is any chance
+     that anything done with uploaded files could reveal their
+     contents to the user, or even to other users on the same
+     system.
+    </P
+><P
+>&#13;     See also <A
+HREF="function.is-uploaded-file.html"
+><B
+CLASS="function"
+>is_uploaded_file()</B
+></A
+>, and the section
+     <A
+HREF="features.file-upload.html"
+>Handling file uploads</A
+>
+     for a simple usage example.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.mkdir.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.pclose.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>mkdir</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.filesystem.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>pclose</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

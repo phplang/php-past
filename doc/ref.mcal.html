@@ -1,0 +1,478 @@
+<HTML
+><HEAD
+><TITLE
+>MCAL functions</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Function Reference"
+HREF="funcref.html"><LINK
+REL="PREVIOUS"
+TITLE="tan"
+HREF="function.tan.html"><LINK
+REL="NEXT"
+TITLE="mcal_open"
+HREF="function.mcal-open.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="reference"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.tan.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.mcal-open.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="reference"
+><A
+NAME="ref.mcal"
+></A
+><DIV
+CLASS="TITLEPAGE"
+><H1
+CLASS="title"
+>XXXV. MCAL functions</H1
+><DIV
+CLASS="PARTINTRO"
+><A
+NAME="AEN20362"
+></A
+><P
+>&#13;    MCAL stands for Modular Calendar Access Library.
+   </P
+><P
+>&#13;    Libmcal is a C library for accessing calendars. It's written to be
+    very modular, with plugable drivers. MCAL is the calendar
+    equivalent of the IMAP module for mailboxes.
+   </P
+><P
+>&#13;    With mcal support, a calendar stream can be opened much like the
+    mailbox stream with the IMAP support. Calendars can be local file
+    stores, remote ICAP servers, or other formats that are supported
+    by the mcal library.
+   </P
+><P
+>&#13;    Calendar events can be pulled up, queried, and stored. There is
+    also support for calendar triggers (alarms) and reoccuring events.
+   </P
+><P
+>&#13;    With libmcal, central calendar servers can be accessed and used,
+    removing the need for any specific database or local file
+    programming.
+   </P
+><P
+>&#13;    To get these functions to work, you have to compile PHP with
+    <TT
+CLASS="option"
+>--with-mcal</TT
+>. That requires the
+    mcal library to be installed. Grab the latest version from
+    <A
+HREF="http://mcal.chek.com/"
+TARGET="_top"
+>http://mcal.chek.com/</A
+> and compile and install
+    it.
+   </P
+><P
+>&#13;    The following constants are defined when using the MCAL module:
+
+    MCAL_SUNDAY,
+    MCAL_MONDAY,
+    MCAL_TUESDAY,
+    MCAL_WEDNESDAY,
+    MCAL_THURSDAY,
+    MCAL_FRIDAY,
+    MCAL_SATURDAY,
+
+    MCAL_RECUR_NONE,
+    MCAL_RECUR_DAILY,
+    MCAL_RECUR_WEEKLY,
+    MCAL_RECUR_MONTHLY_MDAY,
+    MCAL_RECUR_MONTHLY_WDAY,
+    MCAL_RECUR_YEARLY,
+
+    MCAL_JANUARY,
+    MCAL_FEBRUARY,
+    MCAL_MARCH,
+    MCAL_APRIL,
+    MCAL_MAY,
+    MCAL_JUNE,
+    MCAL_JULY,
+    MCAL_AUGUGT,
+    MCAL_SEPTEMBER,
+    MCAL_OCTOBER,
+    MCAL_NOVEMBER, and
+    MCAL_DECEMBER.
+
+    Most of the functions use an internal event structure that is
+    unique for each stream.  This alleviates the need to pass around
+    large objects between functions. There are convenience functions
+    for setting, initializing, and retrieving the event structure
+    values.
+   </P
+></DIV
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Table of Contents</B
+></DT
+><DT
+><A
+HREF="function.mcal-open.html"
+>mcal_open</A
+> &#8212; Opens up an MCAL connection</DT
+><DT
+><A
+HREF="function.mcal-popen.html"
+>mcal_popen</A
+> &#8212; Opens up a persistant MCAL connection</DT
+><DT
+><A
+HREF="function.mcal-reopen.html"
+>mcal_reopen</A
+> &#8212; Reopens an MCAL connection</DT
+><DT
+><A
+HREF="function.mcal-close.html"
+>mcal_close</A
+> &#8212; Close an MCAL stream</DT
+><DT
+><A
+HREF="function.mcal-create-calendar.html"
+>mcal_create_calendar</A
+> &#8212; Create a new MCAL calendar </DT
+><DT
+><A
+HREF="function.mcal-rename-calendar.html"
+>mcal_rename_calendar</A
+> &#8212; Rename an MCAL calendar </DT
+><DT
+><A
+HREF="function.mcal-delete-calendar.html"
+>mcal_delete_calendar</A
+> &#8212; Delete an MCAL calendar </DT
+><DT
+><A
+HREF="function.mcal-fetch-event.html"
+>mcal_fetch_event</A
+> &#8212; 
+     Fetches an event from the calendar stream
+    </DT
+><DT
+><A
+HREF="function.mcal-list-events.html"
+>mcal_list_events</A
+> &#8212; 
+     Return a list of IDs for a date or a range of dates.
+    </DT
+><DT
+><A
+HREF="function.mcal-append-event.html"
+>mcal_append_event</A
+> &#8212; Store a new event into an MCAL calendar</DT
+><DT
+><A
+HREF="function.mcal-store-event.html"
+>mcal_store_event</A
+> &#8212; Modify an existing event in an MCAL calendar</DT
+><DT
+><A
+HREF="function.mcal-delete-event.html"
+>mcal_delete_event</A
+> &#8212; Delete an event from an MCAL calendar</DT
+><DT
+><A
+HREF="function.mcal-snooze.html"
+>mcal_snooze</A
+> &#8212; Turn off an alarm for an event</DT
+><DT
+><A
+HREF="function.mcal-list-alarms.html"
+>mcal_list_alarms</A
+> &#8212; 
+     Return a list of events that has an alarm triggered at the given
+     datetime
+    </DT
+><DT
+><A
+HREF="function.mcal-event-init.html"
+>mcal_event_init</A
+> &#8212; 
+     Initializes a streams global event structure
+    </DT
+><DT
+><A
+HREF="function.mcal-event-set-category.html"
+>mcal_event_set_category</A
+> &#8212; 
+     Sets the category of the streams global event structure
+    </DT
+><DT
+><A
+HREF="function.mcal-event-set-title.html"
+>mcal_event_set_title</A
+> &#8212; 
+     Sets the title of the streams global event structure
+    </DT
+><DT
+><A
+HREF="function.mcal-event-set-description.html"
+>mcal_event_set_description</A
+> &#8212; 
+     Sets the description of the streams global event structure
+    </DT
+><DT
+><A
+HREF="function.mcal-event-set-start.html"
+>mcal_event_set_start</A
+> &#8212; 
+     Sets the start date and time of the streams global event
+     structure
+    </DT
+><DT
+><A
+HREF="function.mcal-event-set-end.html"
+>mcal_event_set_end</A
+> &#8212; 
+     Sets the end date and time of the streams global event structure
+    </DT
+><DT
+><A
+HREF="function.mcal-event-set-alarm.html"
+>mcal_event_set_alarm</A
+> &#8212; 
+     Sets the alarm of the streams global event structure
+    </DT
+><DT
+><A
+HREF="function.mcal-event-set-class.html"
+>mcal_event_set_class</A
+> &#8212; 
+     Sets the class of the streams global event structure
+    </DT
+><DT
+><A
+HREF="function.mcal-is-leap-year.html"
+>mcal_is_leap_year</A
+> &#8212; 
+     Returns if the given year is a leap year or not
+    </DT
+><DT
+><A
+HREF="function.mcal-days-in-month.html"
+>mcal_days_in_month</A
+> &#8212; 
+     Returns the number of days in the given month
+    </DT
+><DT
+><A
+HREF="function.mcal-date-valid.html"
+>mcal_date_valid</A
+> &#8212; 
+     Returns true if the given year, month, day is a valid date
+    </DT
+><DT
+><A
+HREF="function.mcal-time-valid.html"
+>mcal_time_valid</A
+> &#8212; 
+     Returns true if the given year, month, day is a valid time
+    </DT
+><DT
+><A
+HREF="function.mcal-day-of-week.html"
+>mcal_day_of_week</A
+> &#8212; 
+     Returns the day of the week of the given date
+    </DT
+><DT
+><A
+HREF="function.mcal-day-of-year.html"
+>mcal_day_of_year</A
+> &#8212; 
+     Returns the day of the year of the given date
+    </DT
+><DT
+><A
+HREF="function.mcal-date-compare.html"
+>mcal_date_compare</A
+> &#8212; Compares two dates</DT
+><DT
+><A
+HREF="function.mcal-next-recurrence.html"
+>mcal_next_recurrence</A
+> &#8212; Returns the next recurrence of the event</DT
+><DT
+><A
+HREF="function.mcal-event-set-recur-none.html"
+>mcal_event_set_recur_none</A
+> &#8212; 
+     Sets the recurrence of the streams global event structure
+    </DT
+><DT
+><A
+HREF="function.mcal-event-set-recur-daily.html"
+>mcal_event_set_recur_daily</A
+> &#8212; 
+     Sets the recurrence of the streams global event structure
+    </DT
+><DT
+><A
+HREF="function.mcal-event-set-recur-weekly.html"
+>mcal_event_set_recur_weekly</A
+> &#8212; 
+     Sets the recurrence of the streams global event structure
+    </DT
+><DT
+><A
+HREF="function.mcal-event-set-recur-monthly-mday.html"
+>mcal_event_set_recur_monthly_mday</A
+> &#8212; 
+     Sets the recurrence of the streams global event structure
+    </DT
+><DT
+><A
+HREF="function.mcal-event-set-recur-monthly-wday.html"
+>mcal_event_set_recur_monthly_wday</A
+> &#8212; 
+     Sets the recurrence of the streams global event structure
+    </DT
+><DT
+><A
+HREF="function.mcal-event-set-recur-yearly.html"
+>mcal_event_set_recur_yearly</A
+> &#8212; 
+     Sets the recurrence of the streams global event structure
+    </DT
+><DT
+><A
+HREF="function.mcal-fetch-current-stream-event.html"
+>mcal_fetch_current_stream_event</A
+> &#8212; 
+     Returns an object containing the current streams event structure
+    </DT
+><DT
+><A
+HREF="function.mcal-event-add-attribute.html"
+>mcal_event_add_attribute</A
+> &#8212; 
+     Adds an attribute and a value to the streams global event structure
+    </DT
+><DT
+><A
+HREF="function.mcal-expunge.html"
+>mcal_expunge</A
+> &#8212; 
+     Deletes all events marked for being expunged.
+    </DT
+></DL
+></DIV
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.tan.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.mcal-open.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>tan</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="funcref.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>mcal_open</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

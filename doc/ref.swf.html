@@ -1,0 +1,665 @@
+<HTML
+><HEAD
+><TITLE
+>Shockwave Flash functions</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Function Reference"
+HREF="funcref.html"><LINK
+REL="PREVIOUS"
+TITLE="shm_close"
+HREF="function.shm_close.html"><LINK
+REL="NEXT"
+TITLE="swf_openfile"
+HREF="function.swf-openfile.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="reference"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.shm_close.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.swf-openfile.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="reference"
+><A
+NAME="ref.swf"
+></A
+><DIV
+CLASS="TITLEPAGE"
+><H1
+CLASS="title"
+>LXII. Shockwave Flash functions</H1
+><DIV
+CLASS="PARTINTRO"
+><A
+NAME="AEN34398"
+></A
+><P
+>&#13;    PHP offers the ability to create Shockwave Flash files via Paul
+    Haeberli's libswf module.  You can download libswf at <A
+HREF="http://reality.sgi.com/grafica/flash/"
+TARGET="_top"
+>http://reality.sgi.com/grafica/flash/</A
+>.  Once you have libswf all you
+    need to do is to configure <TT
+CLASS="option"
+>--with-swf[=DIR]</TT
+> where DIR is a location
+    containing the directories include and lib. The include directory
+    has to contain the swf.h file and the lib directory has to contain
+    the libswf.a file. If you unpack the libswf distribution the two
+    files will be in one directory. Consequently you will have to copy
+    the files to the proper location manually.
+   </P
+><P
+>&#13;    Once you've successfully installed PHP with Shockwave Flash
+    support you can then go about creating Shockwave files from PHP.
+    You would be surprised at what you can do, take the following
+    code:
+    <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN34403"
+></A
+><P
+><B
+>Example 1. SWF example</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;&#60;?php
+swf_openfile ("test.swf", 256, 256, 30, 1, 1, 1);
+swf_ortho2 (-100, 100, -100, 100);
+swf_defineline (1, -70, 0, 70, 0, .2);
+swf_definerect (4, 60, -10, 70, 0, 0);
+swf_definerect (5, -60, 0, -70, 10, 0);
+swf_addcolor (0, 0, 0, 0);
+
+swf_definefont (10, "Mod");
+swf_fontsize (5);
+swf_fontslant (10);
+swf_definetext (11, "This be Flash wit PHP!", 1);
+
+swf_pushmatrix ();
+swf_translate (-50, 80, 0);
+swf_placeobject (11, 60);
+swf_popmatrix ();
+
+for ($i = 0; $i &#60; 30; $i++) {
+    $p = $i/(30-1);
+    swf_pushmatrix ();
+    swf_scale (1-($p*.9), 1, 1);
+    swf_rotate (60*$p,  'z');
+    swf_translate (20+20*$p, $p/1.5, 0);
+    swf_rotate (270*$p,  'z');
+    swf_addcolor ($p, 0, $p/1.2, -$p);
+    swf_placeobject (1, 50);
+    swf_placeobject (4, 50);
+    swf_placeobject (5, 50);
+    swf_popmatrix ();
+    swf_showframe ();
+}
+
+for ($i = 0; $i &#60; 30; $i++) {
+    swf_removeobject (50);
+    if (($i%4) == 0) {
+        swf_showframe ();
+    }
+}
+
+swf_startdoaction ();
+swf_actionstop ();
+swf_enddoaction ();
+
+swf_closefile ();
+?&#62;
+     </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+    It will produce the animation found at the following <A
+HREF="http://www.designmultimedia.com/swfphp/test.swf"
+TARGET="_top"
+>url</A
+>.
+   </P
+><DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
+><P
+><B
+>Note: </B
+>
+     SWF support was added in PHP 4 RC2.
+    </P
+></BLOCKQUOTE
+></DIV
+></DIV
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Table of Contents</B
+></DT
+><DT
+><A
+HREF="function.swf-openfile.html"
+>swf_openfile</A
+> &#8212; Open a new Shockwave Flash file</DT
+><DT
+><A
+HREF="function.swf-closefile.html"
+>swf_closefile</A
+> &#8212; Close the current Shockwave Flash file</DT
+><DT
+><A
+HREF="function.swf-labelframe.html"
+>swf_labelframe</A
+> &#8212; Label the current frame</DT
+><DT
+><A
+HREF="function.swf-showframe.html"
+>swf_showframe</A
+> &#8212; Display the current frame</DT
+><DT
+><A
+HREF="function.swf-setframe.html"
+>swf_setframe</A
+> &#8212; Switch to a specified frame</DT
+><DT
+><A
+HREF="function.swf-getframe.html"
+>swf_getframe</A
+> &#8212; Get the frame number of the current frame</DT
+><DT
+><A
+HREF="function.swf-mulcolor.html"
+>swf_mulcolor</A
+> &#8212; 
+     Sets the global multiply color to the rgba value specified
+    </DT
+><DT
+><A
+HREF="function.swf-addcolor.html"
+>swf_addcolor</A
+> &#8212; 
+     Set the global add color to the rgba value specified
+    </DT
+><DT
+><A
+HREF="function.swf-placeobject.html"
+>swf_placeobject</A
+> &#8212; Place an object onto the screen</DT
+><DT
+><A
+HREF="function.swf-modifyobject.html"
+>swf_modifyobject</A
+> &#8212; Modify an object</DT
+><DT
+><A
+HREF="function.swf-removeobject.html"
+>swf_removeobject</A
+> &#8212; Remove an object</DT
+><DT
+><A
+HREF="function.swf-nextid.html"
+>swf_nextid</A
+> &#8212; Returns the next free object id</DT
+><DT
+><A
+HREF="function.swf-startdoaction.html"
+>swf_startdoaction</A
+> &#8212; 
+     Start a description of an action list for the current frame
+    </DT
+><DT
+><A
+HREF="function.swf-actiongotoframe.html"
+>swf_actiongotoframe</A
+> &#8212; Play a frame and then stop</DT
+><DT
+><A
+HREF="function.swf-actiongeturl.html"
+>swf_actiongeturl</A
+> &#8212; Get a URL from a Shockwave Flash movie</DT
+><DT
+><A
+HREF="function.swf-actionnextframe.html"
+>swf_actionnextframe</A
+> &#8212; Go foward one frame</DT
+><DT
+><A
+HREF="function.swf-actionprevframe.html"
+>swf_actionprevframe</A
+> &#8212; Go backwards one frame</DT
+><DT
+><A
+HREF="function.swf-actionplay.html"
+>swf_actionplay</A
+> &#8212; 
+     Start playing the flash movie from the current frame
+    </DT
+><DT
+><A
+HREF="function.swf-actionstop.html"
+>swf_actionstop</A
+> &#8212; 
+     Stop playing the flash movie at the current frame
+    </DT
+><DT
+><A
+HREF="function.swf-actiontogglequality.html"
+>swf_actiontogglequality</A
+> &#8212; 
+     Toggle between low and high quality
+    </DT
+><DT
+><A
+HREF="function.swf-actionwaitforframe.html"
+>swf_actionwaitforframe</A
+> &#8212; 
+     Skip actions if a frame has not been loaded
+    </DT
+><DT
+><A
+HREF="function.swf-actionsettarget.html"
+>swf_actionsettarget</A
+> &#8212; Set the context for actions</DT
+><DT
+><A
+HREF="function.swf-actiongotolabel.html"
+>swf_actiongotolabel</A
+> &#8212; 
+     Display a frame with the specified label
+    </DT
+><DT
+><A
+HREF="function.swf-enddoaction.html"
+>swf_enddoaction</A
+> &#8212; End the current action</DT
+><DT
+><A
+HREF="function.swf-defineline.html"
+>swf_defineline</A
+> &#8212; Define a line</DT
+><DT
+><A
+HREF="function.swf-definerect.html"
+>swf_definerect</A
+> &#8212; Define a rectangle</DT
+><DT
+><A
+HREF="function.swf-definepoly.html"
+>swf_definepoly</A
+> &#8212; 
+     Define a polygon
+    </DT
+><DT
+><A
+HREF="function.swf-startshape.html"
+>swf_startshape</A
+> &#8212; Start a complex shape</DT
+><DT
+><A
+HREF="function.swf-shapelinesold.html"
+>swf_shapelinesolid</A
+> &#8212; Set the current line style</DT
+><DT
+><A
+HREF="function.swf-shapefilloff.html"
+>swf_shapefilloff</A
+> &#8212; Turns off filling</DT
+><DT
+><A
+HREF="function.swf-shapefillsolid.html"
+>swf_shapefillsolid</A
+> &#8212; 
+     Set the current fill style to the specified color
+    </DT
+><DT
+><A
+HREF="function.swf-shapefillbitmapclip.html"
+>swf_shapefillbitmapclip</A
+> &#8212; 
+     Set current fill mode to clipped bitmap
+    </DT
+><DT
+><A
+HREF="function.swf-shapefillbitmaptile.html"
+>swf_shapefillbitmaptile</A
+> &#8212; 
+     Set current fill mode to tiled bitmap
+    </DT
+><DT
+><A
+HREF="function.swf-shapemoveto.html"
+>swf_shapemoveto</A
+> &#8212; Move the current position</DT
+><DT
+><A
+HREF="function.swf-shapelineto.html"
+>swf_shapelineto</A
+> &#8212; Draw a line</DT
+><DT
+><A
+HREF="function.swf-shapecurveto.html"
+>swf_shapecurveto</A
+> &#8212; 
+     Draw a quadratic bezier curve between two points
+    </DT
+><DT
+><A
+HREF="function.swf-shapecurveto3.html"
+>swf_shapecurveto3</A
+> &#8212; Draw a cubic bezier curve</DT
+><DT
+><A
+HREF="function.swf-shapearc.html"
+>swf_shapearc</A
+> &#8212; Draw a circular arc</DT
+><DT
+><A
+HREF="function.swf-endshape.html"
+>swf_endshape</A
+> &#8212; 
+     Completes the definition of the current shape
+    </DT
+><DT
+><A
+HREF="function.swf-definefont.html"
+>swf_definefont</A
+> &#8212; 
+     Defines a font
+    </DT
+><DT
+><A
+HREF="function.swf-setfont.html"
+>swf_setfont</A
+> &#8212; Change the current font</DT
+><DT
+><A
+HREF="function.swf-fontsize.html"
+>swf_fontsize</A
+> &#8212; Change the font size</DT
+><DT
+><A
+HREF="function.swf-fontslant.html"
+>swf_fontslant</A
+> &#8212; Set the font slant</DT
+><DT
+><A
+HREF="function.swf-fonttracking.html"
+>swf_fonttracking</A
+> &#8212; Set the current font tracking</DT
+><DT
+><A
+HREF="function.swf-getfontinfo.html"
+>swf_getfontinfo</A
+> &#8212; 
+     The height in pixels of a capital A and a lowercase x
+    </DT
+><DT
+><A
+HREF="function.swf-definetext.html"
+>swf_definetext</A
+> &#8212; Define a text string</DT
+><DT
+><A
+HREF="function.swf-textwidth.html"
+>swf_textwidth</A
+> &#8212; Get the width of a string</DT
+><DT
+><A
+HREF="function.swf-definebitmap.html"
+>swf_definebitmap</A
+> &#8212; Define a bitmap</DT
+><DT
+><A
+HREF="function.swf-getbitmapinfo.html"
+>swf_getbitmapinfo</A
+> &#8212; Get information about a bitmap</DT
+><DT
+><A
+HREF="function.swf-startsymbol.html"
+>swf_startsymbol</A
+> &#8212; Define a symbol</DT
+><DT
+><A
+HREF="function.swf-endsymbol.html"
+>swf_endsymbol</A
+> &#8212; End the definition of a symbol</DT
+><DT
+><A
+HREF="function.swf-startbutton.html"
+>swf_startbutton</A
+> &#8212; Start the definition of a button</DT
+><DT
+><A
+HREF="function.swf-addbuttonrecord.html"
+>swf_addbuttonrecord</A
+> &#8212; 
+     Controls location, appearance and active area of the current button
+    </DT
+><DT
+><A
+HREF="function.swf-oncondition.html"
+>swf_oncondition</A
+> &#8212; 
+     Describe a transition used to trigger an action list
+    </DT
+><DT
+><A
+HREF="function.swf-endbutton.html"
+>swf_endbutton</A
+> &#8212; 
+     End the definition of the current button
+    </DT
+><DT
+><A
+HREF="function.swf-viewport.html"
+>swf_viewport</A
+> &#8212; Select an area for future drawing</DT
+><DT
+><A
+HREF="function.swf-ortho.html"
+>swf_ortho</A
+> &#8212; 
+     Defines an orthographic mapping of user coordinates onto the
+     current viewport
+    </DT
+><DT
+><A
+HREF="function.swf-ortho2.html"
+>swf_ortho2</A
+> &#8212; 
+     Defines 2D orthographic mapping of user coordinates onto the
+     current viewport
+    </DT
+><DT
+><A
+HREF="function.swf-perspective.html"
+>swf_perspective</A
+> &#8212; 
+     Define a perspective projection transformation
+    </DT
+><DT
+><A
+HREF="function.swf-polarview.html"
+>swf_polarview</A
+> &#8212; 
+     Define the viewer's position with polar coordinates
+    </DT
+><DT
+><A
+HREF="function.swf-lookat.html"
+>swf_lookat</A
+> &#8212; Define a viewing transformation</DT
+><DT
+><A
+HREF="function.swf-pushmatrix.html"
+>swf_pushmatrix</A
+> &#8212; 
+     Push the current transformation matrix back unto the stack
+    </DT
+><DT
+><A
+HREF="function.swf-popmatrix.html"
+>swf_popmatrix</A
+> &#8212; 
+     Restore a previous transformation matrix
+    </DT
+><DT
+><A
+HREF="function.swf-scale.html"
+>swf_scale</A
+> &#8212; Scale the current transformation</DT
+><DT
+><A
+HREF="function.swf-translate.html"
+>swf_translate</A
+> &#8212; Translate the current transformations</DT
+><DT
+><A
+HREF="function.swf-rotate.html"
+>swf_rotate</A
+> &#8212; Rotate the current transformation</DT
+><DT
+><A
+HREF="function.swf-posround.html"
+>swf_posround</A
+> &#8212; 
+     Enables or Disables the rounding of the translation when objects
+     are placed or moved
+    </DT
+></DL
+></DIV
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.shm_close.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.swf-openfile.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>shm_close</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="funcref.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>swf_openfile</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

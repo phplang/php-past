@@ -1,0 +1,267 @@
+<HTML
+><HEAD
+><TITLE
+>odbc_fetch_row</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Unified ODBC functions"
+HREF="ref.odbc.html"><LINK
+REL="PREVIOUS"
+TITLE="odbc_fetch_into"
+HREF="function.odbc-fetch-into.html"><LINK
+REL="NEXT"
+TITLE="odbc_field_name"
+HREF="function.odbc-field-name.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.odbc-fetch-into.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.odbc-field-name.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.odbc-fetch-row"
+>odbc_fetch_row</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN25802"
+></A
+><P
+>    (PHP3 &#62;= 3.0.6, PHP4 )</P
+>odbc_fetch_row&nbsp;--&nbsp;Fetch a row</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN25805"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN25807"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int <B
+CLASS="function"
+>odbc_fetch_row</B
+></CODE
+> (int result_id [, int row_number])</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     If <B
+CLASS="function"
+>odbc_fetch_row()</B
+> was succesful (there was a
+     row), <TT
+CLASS="literal"
+>true</TT
+> is returned.  If there are no more
+     rows, <TT
+CLASS="literal"
+>false</TT
+> is returned.
+    </P
+><P
+>&#13;     <B
+CLASS="function"
+>odbc_fetch_row()</B
+> fetches a row of the data
+     that was returned by <A
+HREF="function.odbc-do.html"
+><B
+CLASS="function"
+>odbc_do()</B
+></A
+> /
+     <A
+HREF="function.odbc-exec.html"
+><B
+CLASS="function"
+>odbc_exec()</B
+></A
+>.  After
+     <B
+CLASS="function"
+>odbc_fetch_row()</B
+> is called, the fields of that
+     row can be accessed with <A
+HREF="function.odbc-result.html"
+><B
+CLASS="function"
+>odbc_result()</B
+></A
+>.
+    </P
+><P
+>&#13;     If <TT
+CLASS="parameter"
+><I
+>row_number</I
+></TT
+> is not specified,
+     <B
+CLASS="function"
+>odbc_fetch_row()</B
+> will try to fetch the next
+     row in the result set. Calls to
+     <B
+CLASS="function"
+>odbc_fetch_row()</B
+> with and without
+     <TT
+CLASS="parameter"
+><I
+>row_number</I
+></TT
+> can be mixed.
+    </P
+><P
+>&#13;     To step through the result more than once, you can call
+     <B
+CLASS="function"
+>odbc_fetch_row()</B
+> with
+     <TT
+CLASS="parameter"
+><I
+>row_number</I
+></TT
+> 1, and then continue doing
+     <B
+CLASS="function"
+>odbc_fetch_row()</B
+> without
+     <TT
+CLASS="parameter"
+><I
+>row_number</I
+></TT
+> to review the result.  If a
+     driver doesn't support fetching rows by number, the
+     <TT
+CLASS="parameter"
+><I
+>row_number</I
+></TT
+> parameter is ignored.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.odbc-fetch-into.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.odbc-field-name.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>odbc_fetch_into</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.odbc.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>odbc_field_name</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

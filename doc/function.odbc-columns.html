@@ -1,0 +1,271 @@
+<HTML
+><HEAD
+><TITLE
+>odbc_columns</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Unified ODBC functions"
+HREF="ref.odbc.html"><LINK
+REL="PREVIOUS"
+TITLE="odbc_tableprivileges"
+HREF="function.odbc-tableprivileges.html"><LINK
+REL="NEXT"
+TITLE="odbc_columnprivileges"
+HREF="function.odbc-columnprivileges.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.odbc-tableprivileges.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.odbc-columnprivileges.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.odbc-columns"
+>odbc_columns</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN26271"
+></A
+><P
+>    (PHP4 &#62;= 4.0b4)</P
+>odbc_columns&nbsp;--&nbsp;
+     Lists the column names in specified tables. Returns a result
+     identifier containing the information.
+    </DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN26274"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN26276"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int <B
+CLASS="function"
+>odbc_columns</B
+></CODE
+> (int connection_id [, string qualifier [, string owner [, string table_name [, string column_name]]]])</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     Lists all columns in the requested range.  Returns an ODBC result
+     identifier or <TT
+CLASS="literal"
+>false</TT
+> on failure.
+    </P
+><P
+>&#13;     The result set has the following columns:
+     <P
+></P
+><UL
+><LI
+><P
+>TABLE_QUALIFIER</P
+></LI
+><LI
+><P
+>TABLE_OWNER</P
+></LI
+><LI
+><P
+>TABLE_NAME</P
+></LI
+><LI
+><P
+>COLUMN_NAME</P
+></LI
+><LI
+><P
+>DATA_TYPE</P
+></LI
+><LI
+><P
+>TYPE_NAME</P
+></LI
+><LI
+><P
+>PRECISION</P
+></LI
+><LI
+><P
+>LENGTH</P
+></LI
+><LI
+><P
+>SCALE</P
+></LI
+><LI
+><P
+>RADIX</P
+></LI
+><LI
+><P
+>NULLABLE</P
+></LI
+><LI
+><P
+>REMARKS</P
+></LI
+></UL
+>
+    </P
+><P
+>&#13;     The result set is ordered by TABLE_QUALIFIER, TABLE_OWNER and
+     TABLE_NAME.
+    </P
+><P
+>&#13;     The <TT
+CLASS="parameter"
+><I
+>owner</I
+></TT
+>,
+     <TT
+CLASS="parameter"
+><I
+>table_name</I
+></TT
+> and
+     <TT
+CLASS="parameter"
+><I
+>column_name</I
+></TT
+> arguments accept search
+     patterns ('%' to match zero or more characters and '_' to match a
+     single character).
+    </P
+><P
+>&#13;     See also <A
+HREF="function.odbc-columnprivileges.html"
+><B
+CLASS="function"
+>odbc_columnprivileges()</B
+></A
+> to retrieve
+     associated privileges.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.odbc-tableprivileges.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.odbc-columnprivileges.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>odbc_tableprivileges</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.odbc.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>odbc_columnprivileges</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

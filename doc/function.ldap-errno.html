@@ -1,0 +1,254 @@
+<HTML
+><HEAD
+><TITLE
+>ldap_errno</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="LDAP functions"
+HREF="ref.ldap.html"><LINK
+REL="PREVIOUS"
+TITLE="ldap_err2str"
+HREF="function.ldap-err2str.html"><LINK
+REL="NEXT"
+TITLE="ldap_error"
+HREF="function.ldap-error.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.ldap-err2str.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.ldap-error.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.ldap-errno"
+>ldap_errno</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN18993"
+></A
+><P
+>    (PHP3 &#62;= 3.0.12, PHP4 &#62;= 4.0RC2)</P
+>ldap_errno&nbsp;--&nbsp;
+     Return the LDAP error number of the last LDAP command
+    </DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN18996"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN18998"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int <B
+CLASS="function"
+>ldap_errno</B
+></CODE
+> (int link_id)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     return the LDAP error number of the last LDAP command for this
+     link.</P
+><P
+>&#13;     This function returns the standardized error number returned by
+     the last LDAP command for the given link identifier. This number
+     can be converted into a textual error message using
+     <A
+HREF="function.ldap-err2str.html"
+><B
+CLASS="function"
+>ldap_err2str()</B
+></A
+>.</P
+><P
+>&#13;     Unless you lower your warning level in your php3.ini sufficiently
+     or prefix your LDAP commands with @ (at) characters to suppress
+     warning output, the errors generated will also show up in your
+     HTML output.
+     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN19008"
+></A
+><P
+><B
+>Example 1. Generating and catching an error</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;&#60;?php
+// This example contains an error, which we will catch.
+$ld = ldap_connect("localhost");
+$bind = ldap_bind($ld);
+// syntax error in filter expression (errno 87),
+// must be "objectclass=*" to work.
+$res =  @ldap_search($ld, "o=Myorg, c=DE", "objectclass");
+if (!$res) {
+    printf("LDAP-Errno: %s&#60;br&#62;\n", ldap_errno($ld));
+    printf("LDAP-Error: %s&#60;br&#62;\n", ldap_error($ld));
+    die("Argh!&#60;br&#62;\n");
+}
+$info = ldap_get_entries($ld, $res);
+printf("%d matching entries.&#60;br&#62;\n", $info["count"]);
+?&#62;
+</PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+></P
+><P
+>&#13;     see also <A
+HREF="function.ldap-err2str.html"
+><B
+CLASS="function"
+>ldap_err2str()</B
+></A
+> and
+     <A
+HREF="function.ldap-error.html"
+><B
+CLASS="function"
+>ldap_error()</B
+></A
+>.</P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.ldap-err2str.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.ldap-error.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>ldap_err2str</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.ldap.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>ldap_error</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,266 @@
+<HTML
+><HEAD
+><TITLE
+>Oracle functions</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Function Reference"
+HREF="funcref.html"><LINK
+REL="PREVIOUS"
+TITLE="OCIInternalDebug"
+HREF="function.ociinternaldebug.html"><LINK
+REL="NEXT"
+TITLE="Ora_Bind"
+HREF="function.ora-bind.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="reference"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.ociinternaldebug.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.ora-bind.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="reference"
+><A
+NAME="ref.oracle"
+></A
+><DIV
+CLASS="TITLEPAGE"
+><H1
+CLASS="title"
+>XLV. Oracle functions</H1
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Table of Contents</B
+></DT
+><DT
+><A
+HREF="function.ora-bind.html"
+>Ora_Bind</A
+> &#8212; bind a PHP variable to an Oracle parameter</DT
+><DT
+><A
+HREF="function.ora-close.html"
+>Ora_Close</A
+> &#8212; close an Oracle cursor</DT
+><DT
+><A
+HREF="function.ora-columnname.html"
+>Ora_ColumnName</A
+> &#8212; get name of Oracle result column</DT
+><DT
+><A
+HREF="function.ora-columnsize.html"
+>Ora_ColumnSize</A
+> &#8212; get size of Oracle result column</DT
+><DT
+><A
+HREF="function.ora-columntype.html"
+>Ora_ColumnType</A
+> &#8212; get type of Oracle result column</DT
+><DT
+><A
+HREF="function.ora-commit.html"
+>Ora_Commit</A
+> &#8212; commit an Oracle transaction</DT
+><DT
+><A
+HREF="function.ora-commitoff.html"
+>Ora_CommitOff</A
+> &#8212; disable automatic commit</DT
+><DT
+><A
+HREF="function.ora-commiton.html"
+>Ora_CommitOn</A
+> &#8212; enable automatic commit</DT
+><DT
+><A
+HREF="function.ora-do.html"
+>Ora_Do</A
+> &#8212; Parse, Exec, Fetch</DT
+><DT
+><A
+HREF="function.ora-error.html"
+>Ora_Error</A
+> &#8212; get Oracle error message</DT
+><DT
+><A
+HREF="function.ora-errorcode.html"
+>Ora_ErrorCode</A
+> &#8212; get Oracle error code</DT
+><DT
+><A
+HREF="function.ora-exec.html"
+>Ora_Exec</A
+> &#8212; execute parsed statement on an Oracle cursor</DT
+><DT
+><A
+HREF="function.ora-fetch.html"
+>Ora_Fetch</A
+> &#8212; fetch a row of data from a cursor</DT
+><DT
+><A
+HREF="function.ora-fetch-into.html"
+>Ora_Fetch_Into</A
+> &#8212; Fetch a row into the specified result array</DT
+><DT
+><A
+HREF="function.ora-getcolumn.html"
+>Ora_GetColumn</A
+> &#8212; get data from a fetched column</DT
+><DT
+><A
+HREF="function.ora-logoff.html"
+>Ora_Logoff</A
+> &#8212; close an Oracle connection</DT
+><DT
+><A
+HREF="function.ora-logon.html"
+>Ora_Logon</A
+> &#8212; open an Oracle connection</DT
+><DT
+><A
+HREF="function.ora-plogon.html"
+>Ora_pLogon</A
+> &#8212; 
+     Open a persistent Oracle connection
+    </DT
+><DT
+><A
+HREF="function.ora-numcols.html"
+>Ora_Numcols</A
+> &#8212; Returns the number of columns</DT
+><DT
+><A
+HREF="function.ora-numrows.html"
+>Ora_Numrows</A
+> &#8212; Returns the number of rows</DT
+><DT
+><A
+HREF="function.ora-open.html"
+>Ora_Open</A
+> &#8212; open an Oracle cursor</DT
+><DT
+><A
+HREF="function.ora-parse.html"
+>Ora_Parse</A
+> &#8212; parse an SQL statement</DT
+><DT
+><A
+HREF="function.ora-rollback.html"
+>Ora_Rollback</A
+> &#8212; roll back transaction</DT
+></DL
+></DIV
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.ociinternaldebug.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.ora-bind.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>OCIInternalDebug</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="funcref.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Ora_Bind</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,264 @@
+<HTML
+><HEAD
+><TITLE
+>array_pad</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Array Functions"
+HREF="ref.array.html"><LINK
+REL="PREVIOUS"
+TITLE="array_multisort"
+HREF="function.array-multisort.html"><LINK
+REL="NEXT"
+TITLE="array_pop"
+HREF="function.array-pop.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.array-multisort.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.array-pop.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.array-pad"
+>array_pad</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN4707"
+></A
+><P
+>    (PHP4 &#62;= 4.0b4)</P
+>array_pad&nbsp;--&nbsp;
+     Pad array to the specified length with a value
+    </DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN4710"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN4712"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>array <B
+CLASS="function"
+>array_pad</B
+></CODE
+> (array input, int pad_size, mixed pad_value)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     <B
+CLASS="function"
+>Array_pad()</B
+> returns a copy of the
+     <TT
+CLASS="parameter"
+><I
+>input</I
+></TT
+> padded to size specified by
+     <TT
+CLASS="parameter"
+><I
+>pad_size</I
+></TT
+> with value
+     <TT
+CLASS="parameter"
+><I
+>pad_value</I
+></TT
+>. If
+     <TT
+CLASS="parameter"
+><I
+>pad_size</I
+></TT
+> is positive then the array is
+     padded on the right, if it's negative then on the left. If the
+     absolute value of <TT
+CLASS="parameter"
+><I
+>pad_size</I
+></TT
+> is less than or
+     equal to the length of the <TT
+CLASS="parameter"
+><I
+>input</I
+></TT
+> then no
+     padding takes place.
+    </P
+><P
+>&#13;     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN4731"
+></A
+><P
+><B
+>Example 1. <B
+CLASS="function"
+>Array_pad()</B
+> example</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;$input = array (12, 10, 9);
+
+$result = array_pad ($input, 5, 0);
+// result is array (12, 10, 9, 0, 0)
+
+$result = array_pad ($input, -7, -1);
+// result is array (-1, -1, -1, -1, 12, 10, 9)
+
+$result = array_pad ($input, 2, "noop");
+// not padded
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.array-multisort.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.array-pop.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>array_multisort</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.array.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>array_pop</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

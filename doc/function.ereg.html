@@ -1,0 +1,318 @@
+<HTML
+><HEAD
+><TITLE
+>ereg</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Regular Expression Functions (POSIX Extended)"
+HREF="ref.regex.html"><LINK
+REL="PREVIOUS"
+TITLE="Regular Expression Functions (POSIX Extended)"
+HREF="ref.regex.html"><LINK
+REL="NEXT"
+TITLE="ereg_replace"
+HREF="function.ereg-replace.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="ref.regex.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.ereg-replace.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.ereg"
+>ereg</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN33216"
+></A
+><P
+>    (PHP3 , PHP4 )</P
+>ereg&nbsp;--&nbsp;Regular expression match</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN33219"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN33221"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int <B
+CLASS="function"
+>ereg</B
+></CODE
+> (string pattern, string string [, array 
+       regs])</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     Searches a <TT
+CLASS="parameter"
+><I
+>string</I
+></TT
+> for matches to the regular
+     expression given in <TT
+CLASS="parameter"
+><I
+>pattern</I
+></TT
+>.
+    </P
+><P
+>&#13;     If matches are found for parenthesized substrings of
+     <TT
+CLASS="parameter"
+><I
+>pattern</I
+></TT
+> and the function is called with
+     the third argument <TT
+CLASS="parameter"
+><I
+>regs</I
+></TT
+>, the matches will
+     be stored in the elements of the array
+     <TT
+CLASS="parameter"
+><I
+>regs</I
+></TT
+>. $regs[1] will contain the substring
+     which starts at the first left parenthesis; $regs[2] will contain
+     the substring starting at the second, and so on. $regs[0] will
+     contain a copy of <TT
+CLASS="parameter"
+><I
+>string</I
+></TT
+>.
+    </P
+><P
+>&#13;     If <B
+CLASS="function"
+>ereg()</B
+> finds any matches at all, $regs will
+     be filled with exactly ten elements, even though more or fewer
+     than ten parenthesized substrings may actually have matched.
+     This has no effect on <B
+CLASS="function"
+>ereg()</B
+>'s ability to
+     match more substrings. If no matches are found, $regs will not be
+     altered by <B
+CLASS="function"
+>ereg()</B
+>.
+    </P
+><P
+>&#13;     Searching is case sensitive.
+    </P
+><P
+>&#13;     Returns true if a match for <TT
+CLASS="parameter"
+><I
+>pattern</I
+></TT
+> was
+     found in <TT
+CLASS="parameter"
+><I
+>string</I
+></TT
+>, or false if no matches
+     were found or an error occurred.
+    </P
+><P
+>&#13;     The following code snippet takes a date in ISO format
+     (YYYY-MM-DD) and prints it in DD.MM.YYYY format:
+     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN33249"
+></A
+><P
+><B
+>Example 1. <B
+CLASS="function"
+>Ereg()</B
+> Example</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;if (ereg ("([0-9]{4})-([0-9]{1,2})-([0-9]{1,2})", $date, $regs)) {
+    echo "$regs[3].$regs[2].$regs[1]";
+} else {
+    echo "Invalid date format: $date";
+}
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+    </P
+><P
+>&#13;     See also <A
+HREF="function.eregi.html"
+><B
+CLASS="function"
+>eregi()</B
+></A
+>,
+     <A
+HREF="function.ereg-replace.html"
+><B
+CLASS="function"
+>ereg_replace()</B
+></A
+>, and
+     <A
+HREF="function.eregi-replace.html"
+><B
+CLASS="function"
+>eregi_replace()</B
+></A
+>.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="ref.regex.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.ereg-replace.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Regular Expression Functions (POSIX Extended)</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.regex.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>ereg_replace</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

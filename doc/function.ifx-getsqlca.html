@@ -1,0 +1,258 @@
+<HTML
+><HEAD
+><TITLE
+>ifx_getsqlca</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Informix functions"
+HREF="ref.ifx.html"><LINK
+REL="PREVIOUS"
+TITLE="ifx_affected_rows"
+HREF="function.ifx-affected-rows.html"><LINK
+REL="NEXT"
+TITLE="ifx_fetch_row"
+HREF="function.ifx-fetch-row.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.ifx-affected-rows.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.ifx-fetch-row.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.ifx-getsqlca"
+>ifx_getsqlca</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN17997"
+></A
+><P
+>    (PHP3 &#62;= 3.0.8, PHP4 )</P
+>ifx_getsqlca&nbsp;--&nbsp;
+     Get the contents of sqlca.sqlerrd[0..5] after a query
+    </DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN18000"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN18002"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>array <B
+CLASS="function"
+>ifx_getsqlca</B
+></CODE
+> (int result_id)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     <TT
+CLASS="parameter"
+><I
+>result_id</I
+></TT
+> is a valid result id returned by
+     <A
+HREF="function.ifx-query.html"
+><B
+CLASS="function"
+>ifx_query()</B
+></A
+> or
+     <A
+HREF="function.ifx-prepare.html"
+><B
+CLASS="function"
+>ifx_prepare()</B
+></A
+>. 
+    </P
+><P
+> 
+     Returns a pseudo-row (assiociative array) with sqlca.sqlerrd[0]
+     ... sqlca.sqlerrd[5] after the query associated with
+     <TT
+CLASS="parameter"
+><I
+>result_id</I
+></TT
+>.
+    </P
+><P
+> 
+     For inserts, updates and deletes the values returned are those as
+     set by the server after executing the query. This gives access to
+     the number of affected rows and the serial insert value. For
+     SELECTs the values are those saved after the PREPARE
+     statement. This gives access to the *estimated* number of
+     affected rows. The use of this function saves the overhead of
+     executing a "select dbinfo('sqlca.sqlerrdx')" query, as it
+     retrieves the values that were saved by the ifx driver at the
+     appropriate moment.
+    </P
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN18015"
+></A
+><P
+><B
+>Example 1. Retrieve Informix sqlca.sqlerrd[x] values</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;/* assume the first column of 'sometable' is a serial */
+$qid = ifx_query("insert into sometable 
+                  values (0, '2nd column', 'another column') ", $connid);
+if (! $qid) {
+    ... error ...
+}
+$sqlca = ifx_getsqlca ($qid);
+$serial_value = $sqlca["sqlerrd1"];
+echo "The serial value of the inserted row is : " . $serial_value&#60;br&#62;\n"; 
+     </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.ifx-affected-rows.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.ifx-fetch-row.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>ifx_affected_rows</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.ifx.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>ifx_fetch_row</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

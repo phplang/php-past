@@ -1,0 +1,236 @@
+<HTML
+><HEAD
+><TITLE
+>ifx_error</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Informix functions"
+HREF="ref.ifx.html"><LINK
+REL="PREVIOUS"
+TITLE="ifx_do"
+HREF="function.ifx-do.html"><LINK
+REL="NEXT"
+TITLE="ifx_errormsg"
+HREF="function.ifx-errormsg.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.ifx-do.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.ifx-errormsg.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.ifx-error"
+>ifx_error</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN17924"
+></A
+><P
+>    (PHP3 &#62;= 3.0.3, PHP4 )</P
+>ifx_error&nbsp;--&nbsp;Returns error code of last Informix call</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN17927"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN17929"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>string <B
+CLASS="function"
+>ifx_error</B
+></CODE
+>(void);</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     The Informix error codes (SQLSTATE &#38; SQLCODE) formatted as
+     follows :
+    </P
+><P
+>&#13;     x [SQLSTATE = aa bbb SQLCODE=cccc]
+    </P
+><P
+>&#13;     where x = space : no error
+    </P
+><P
+> 
+     E : error
+    </P
+><P
+> 
+     N : no more data
+    </P
+><P
+>        
+     W : warning
+    </P
+><P
+>        
+     ? : undefined
+    </P
+><P
+>&#13;     If the "x" character is anything other than space, SQLSTATE and
+     SQLCODE describe the error in more detail.
+    </P
+><P
+>&#13;     See the Informix manual for the description of SQLSTATE and
+     SQLCODE
+    </P
+><P
+>&#13;     Returns in a string one character describing the general results
+     of a statement and both SQLSTATE and SQLCODE associated with the
+     most recent SQL statement executed. The format of the string is
+     "(char) [SQLSTATE=(two digits) (three digits) SQLCODE=(one
+     digit)]". The first character can be '<TT
+CLASS="literal"
+> </TT
+>'
+     (space) (success), '<TT
+CLASS="literal"
+>W</TT
+>' (the statement caused
+     some warning), '<TT
+CLASS="literal"
+>E</TT
+>' (an error happened when
+     executing the statement) or '<TT
+CLASS="literal"
+>N</TT
+>' (the statement
+     didn't return any data).  
+    </P
+><P
+> 
+     See also: <A
+HREF="function.ifx-errormsg.html"
+><B
+CLASS="function"
+>ifx_errormsg()</B
+></A
+>
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.ifx-do.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.ifx-errormsg.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>ifx_do</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.ifx.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>ifx_errormsg</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

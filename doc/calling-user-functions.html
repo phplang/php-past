@@ -1,0 +1,262 @@
+<HTML
+><HEAD
+><TITLE
+>Calling User Functions</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="PHP development"
+HREF="phpdevel.html"><LINK
+REL="PREVIOUS"
+TITLE="PHP development"
+HREF="phpdevel.html"><LINK
+REL="NEXT"
+TITLE="Reporting Errors"
+HREF="phpdevel-errors.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="phpdevel.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Appendix B. PHP development</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="phpdevel-errors.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="calling-user-functions"
+>Calling User Functions</A
+></H1
+><P
+>&#13;   To call user functions from an internal function, you should use
+   the <B
+CLASS="function"
+>call_user_function()</B
+> function.
+  </P
+><P
+>&#13;   <B
+CLASS="function"
+>call_user_function()</B
+> returns SUCCESS on success,
+   and FAILURE in case the function cannot be found.  You should check
+   that return value!  If it returns SUCCESS, you are responsible for
+   destroying the retval pval yourself (or return it as the return value
+   of your function). If it returns FAILURE, the value of retval is
+   undefined, and you mustn't touch it.
+  </P
+><P
+>&#13;   All internal functions that call user functions
+   <I
+CLASS="emphasis"
+>must</I
+> be reentrant.  Among other things, this
+   means they must not use globals or static variables.
+  </P
+><P
+>&#13;   <B
+CLASS="function"
+>call_user_function()</B
+> takes six arguments:
+  </P
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="calling-user-functions.function-table"
+>HashTable *function_table</A
+></H2
+><P
+>&#13;    This is the hash table in which the function is to be looked up.
+   </P
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="calling-user-functions.object"
+>pval *object</A
+></H2
+><P
+>&#13;    This is a pointer to an object on which the function is invoked.
+    This should be NULL if a global function is called.  If it's not
+    NULL (i.e.  it points to an object), the function_table argument is
+    ignored, and instead taken from the object's hash.  The object *may*
+    be modified by the function that is invoked on it (that function
+    will have access to it via $this).  If for some reason you don't
+    want that to happen, send a copy of the object instead.
+   </P
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="calling-user-functions.function-name"
+>pval *function_name</A
+></H2
+><P
+>&#13;    The name of the function to call.  Must be a pval of type
+    IS_STRING with function_name.str.val and function_name.str.len
+    set to the appropriate values.  The function_name is modified by
+    call_user_function() - it's converted to lowercase.  If you need to
+    preserve the case, send a copy of the function name instead.
+   </P
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="calling-user-functions.retval"
+>pval *retval</A
+></H2
+><P
+>&#13;    A pointer to a pval structure, into which the return value of
+    the invoked function is saved.  The structure must be previously
+    allocated - <B
+CLASS="function"
+>call_user_function()</B
+> does NOT allocate
+    it by itself.
+   </P
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="calling-user-functions.param-count"
+>int param_count</A
+></H2
+><P
+>&#13;    The number of parameters being passed to the function.
+   </P
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="calling-user-functions.params"
+>pval *params[]</A
+></H2
+><P
+>&#13;    An array of pointers to values that will be passed as arguments to the
+    function, the first argument being in offset 0, the second in offset
+    1, etc.  The array is an array of pointers to pval's;  The pointers
+    are sent as-is to the function, which means if the function modifies
+    its arguments, the original values are changed (passing by reference).
+    If you don't want that behavior, pass a copy instead.
+   </P
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="phpdevel.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="phpdevel-errors.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>PHP development</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="phpdevel.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Reporting Errors</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

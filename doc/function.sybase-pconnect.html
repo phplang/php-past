@@ -1,0 +1,206 @@
+<HTML
+><HEAD
+><TITLE
+>sybase_pconnect</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Sybase functions"
+HREF="ref.sybase.html"><LINK
+REL="PREVIOUS"
+TITLE="sybase_num_rows"
+HREF="function.sybase-num-rows.html"><LINK
+REL="NEXT"
+TITLE="sybase_query"
+HREF="function.sybase-query.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.sybase-num-rows.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.sybase-query.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.sybase-pconnect"
+>sybase_pconnect</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN38312"
+></A
+><P
+>    (PHP3 , PHP4 )</P
+>sybase_pconnect&nbsp;--&nbsp;open persistent Sybase connection</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN38315"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN38317"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int <B
+CLASS="function"
+>sybase_pconnect</B
+></CODE
+> (string servername, string username, string password)</CODE
+></P
+><P
+></P
+></DIV
+><P
+> 
+     Returns: A positive Sybase persistent link identifier on success,
+     or false on error</P
+><P
+>&#13;     sybase_pconnect() acts very much like
+     <A
+HREF="function.sybase-connect.html"
+><B
+CLASS="function"
+>sybase_connect()</B
+></A
+> with two major differences.</P
+><P
+> 
+     First, when connecting, the function would first try to find a
+     (persistent) link that's already open with the same host,
+     username and password.  If one is found, an identifier for it
+     will be returned instead of opening a new connection.</P
+><P
+> 
+     Second, the connection to the SQL server will not be closed when
+     the execution of the script ends.  Instead, the link will remain
+     open for future use (<A
+HREF="function.sybase-close.html"
+><B
+CLASS="function"
+>sybase_close()</B
+></A
+> will not
+     close links established by <TT
+CLASS="literal"
+>sybase_pconnect()</TT
+>).</P
+><P
+> 
+     This type of links is therefore called 'persistent'.</P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.sybase-num-rows.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.sybase-query.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>sybase_num_rows</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.sybase.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>sybase_query</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,466 @@
+<HTML
+><HEAD
+><TITLE
+>Database (dbm-style) abstraction layer functions</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Function Reference"
+HREF="funcref.html"><LINK
+REL="PREVIOUS"
+TITLE="cybercash_base64_decode"
+HREF="function.cybercash-base64-decode.html"><LINK
+REL="NEXT"
+TITLE="dba_close"
+HREF="function.dba-close.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="reference"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.cybercash-base64-decode.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.dba-close.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="reference"
+><A
+NAME="ref.dba"
+></A
+><DIV
+CLASS="TITLEPAGE"
+><H1
+CLASS="title"
+>XII. Database (dbm-style) abstraction layer functions</H1
+><DIV
+CLASS="PARTINTRO"
+><A
+NAME="AEN8721"
+></A
+><P
+>&#13;    These functions build the foundation for accessing Berkeley DB
+    style databases.
+   </P
+><P
+>&#13;    This is a general abstraction layer for several file-based databases. As
+    such, functionality is limited to a subset of features modern databases
+    such as <A
+HREF="http://www.sleepycat.com/"
+TARGET="_top"
+>Sleepycat Software's DB2</A
+>
+    support. (This is not to be confused with IBM's DB2 software, which is
+    supported through the <A
+HREF="ref.odbc.html"
+>ODBC functions</A
+>.)
+   </P
+><P
+>&#13;    The behaviour of various aspects depend on the implementation of the
+    underlying database. Functions such as <A
+HREF="function.dba-optimize.html"
+><B
+CLASS="function"
+>dba_optimize()</B
+></A
+>
+    and <A
+HREF="function.dba-sync.html"
+><B
+CLASS="function"
+>dba_sync()</B
+></A
+> will do what they promise for one
+    database and will do nothing for others.
+   </P
+><P
+>&#13;    To add support for any of the following handlers, add the
+    specified --with configure switch to your PHP configure line:
+    <P
+></P
+><UL
+><LI
+><P
+>&#13;       Dbm is the oldest (original) type of Berkeley DB style
+       databases. You should avoid it, if possible. We do not support
+       the compatibility functions built into DB2 and gdbm, because
+       they are only compatible on the source code level, but cannot
+       handle the original dbm format.  (--with-dbm)
+      </P
+></LI
+><LI
+><P
+>&#13;       Ndbm is a newer type and more flexible than dbm. It still has
+       most of the arbitrary limits of dbm (therefore it is
+       deprecated).  (--with-ndbm)
+      </P
+></LI
+><LI
+><P
+>&#13;       Gdbm is the <A
+HREF="ftp://ftp.gnu.org/pub/gnu/gdbm/"
+TARGET="_top"
+>GNU database
+       manager</A
+>.  (--with-gdbm)
+      </P
+></LI
+><LI
+><P
+>&#13;       DB2 is <A
+HREF="http://www.sleepycat.com/"
+TARGET="_top"
+>Sleepycat Software's
+       DB2</A
+>. It is described as "a programmatic toolkit that
+       provides high-performance built-in database support for both
+       standalone and client/server applications."  (--with-db2)
+      </P
+></LI
+><LI
+><P
+>&#13;       DB3 is <A
+HREF="http://www.sleepycat.com/"
+TARGET="_top"
+>Sleepycat Software's
+       DB3</A
+>.  (--with-db3)
+      </P
+></LI
+><LI
+><P
+>&#13;       Cdb is "a fast, reliable, lightweight package for creating and
+       reading constant databases." It is from the author of qmail and
+       can be found <A
+HREF="http://pobox.com/~djb/cdb.html"
+TARGET="_top"
+>here</A
+>. Since it is
+       constant, we support only reading operations.  (--with-cdb)
+      </P
+></LI
+></UL
+>
+   </P
+><P
+>&#13;    <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN8748"
+></A
+><P
+><B
+>Example 1. DBA example</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;&#60;?php
+
+$id = dba_open ("/tmp/test.db", "n", "db2");
+
+if (!$id) {
+    echo "dba_open failed\n";
+    exit;
+}
+
+dba_replace ("key", "This is an example!", $id);
+
+if (dba_exists ("key", $id)) {
+    echo dba_fetch ("key", $id);
+    dba_delete ("key", $id);
+}
+
+dba_close ($id);
+?&#62;
+     </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+   </P
+><P
+>&#13;    DBA is binary safe and does not have any arbitrary limits. It inherits all
+    limits set by the underlying database implementation.
+   </P
+><P
+>&#13;    All file-based databases must provide a way of setting the file
+    mode of a new created database, if that is possible at all. The
+    file mode is commonly passed as the fourth argument to
+    <A
+HREF="function.dba-open.html"
+><B
+CLASS="function"
+>dba_open()</B
+></A
+> or <A
+HREF="function.dba-popen.html"
+><B
+CLASS="function"
+>dba_popen()</B
+></A
+>.
+   </P
+><P
+>&#13;    You can access all entries of a database in a linear way by using the
+    <A
+HREF="function.dba-firstkey.html"
+><B
+CLASS="function"
+>dba_firstkey()</B
+></A
+> and <A
+HREF="function.dba-nextkey.html"
+><B
+CLASS="function"
+>dba_nextkey()</B
+></A
+>
+    functions. You may not change the database while traversing it.
+   </P
+><P
+>&#13;    <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN8759"
+></A
+><P
+><B
+>Example 2. Traversing a database</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;&#60;?php
+
+# ...open database...
+
+$key = dba_firstkey ($id);
+
+while ($key != false) {
+    if (...) { # remember the key to perform some action later
+        $handle_later[] = $key;
+    }
+    $key = dba_nextkey ($id);
+}
+
+for ($i = 0; $i &#60; count($handle_later); $i++)
+    dba_delete ($handle_later[$i], $id);
+
+?&#62;
+     </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+   </P
+></DIV
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Table of Contents</B
+></DT
+><DT
+><A
+HREF="function.dba-close.html"
+>dba_close</A
+> &#8212; Close database</DT
+><DT
+><A
+HREF="function.dba-delete.html"
+>dba_delete</A
+> &#8212; Delete entry specified by key</DT
+><DT
+><A
+HREF="function.dba-exists.html"
+>dba_exists</A
+> &#8212; Check whether key exists</DT
+><DT
+><A
+HREF="function.dba-fetch.html"
+>dba_fetch</A
+> &#8212; Fetch data specified by key</DT
+><DT
+><A
+HREF="function.dba-firstkey.html"
+>dba_firstkey</A
+> &#8212; Fetch first key</DT
+><DT
+><A
+HREF="function.dba-insert.html"
+>dba_insert</A
+> &#8212; Insert entry</DT
+><DT
+><A
+HREF="function.dba-nextkey.html"
+>dba_nextkey</A
+> &#8212; Fetch next key</DT
+><DT
+><A
+HREF="function.dba-popen.html"
+>dba_popen</A
+> &#8212; Open database persistently</DT
+><DT
+><A
+HREF="function.dba-open.html"
+>dba_open</A
+> &#8212; Open database</DT
+><DT
+><A
+HREF="function.dba-optimize.html"
+>dba_optimize</A
+> &#8212; Optimize database</DT
+><DT
+><A
+HREF="function.dba-replace.html"
+>dba_replace</A
+> &#8212; Replace or insert entry</DT
+><DT
+><A
+HREF="function.dba-sync.html"
+>dba_sync</A
+> &#8212; Synchronize database</DT
+></DL
+></DIV
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.cybercash-base64-decode.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.dba-close.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>cybercash_base64_decode</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="funcref.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>dba_close</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

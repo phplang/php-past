@@ -1,0 +1,307 @@
+<HTML
+><HEAD
+><TITLE
+>mysql_connect</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="MySQL functions"
+HREF="ref.mysql.html"><LINK
+REL="PREVIOUS"
+TITLE="mysql_close"
+HREF="function.mysql-close.html"><LINK
+REL="NEXT"
+TITLE="mysql_create_db"
+HREF="function.mysql-create-db.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.mysql-close.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.mysql-create-db.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.mysql-connect"
+>mysql_connect</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN24005"
+></A
+><P
+>    (PHP3 , PHP4 )</P
+>mysql_connect&nbsp;--&nbsp;Open a connection to a MySQL Server</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN24008"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN24010"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int <B
+CLASS="function"
+>mysql_connect</B
+></CODE
+> ([string 
+       hostname
+ 	[:port]
+ 	[:/path/to/socket] [, string 
+       username [, string 
+       password]]])</CODE
+></P
+><P
+></P
+></DIV
+><P
+> 
+     Returns a positive MySQL link identifier on success, or an error
+     message on failure.
+    </P
+><P
+>&#13;     <B
+CLASS="function"
+>mysql_connect()</B
+> establishes a connection
+     to a MySQL server.  The following defaults are assumed for
+     missing optional parameters: <TT
+CLASS="parameter"
+><I
+>host:port</I
+></TT
+> =
+     'localhost:3306', <TT
+CLASS="parameter"
+><I
+>username</I
+></TT
+> = name of the
+     user that owns the server process and 
+     <TT
+CLASS="parameter"
+><I
+>password</I
+></TT
+> = empty password.
+    </P
+><P
+>&#13;     The hostname string can also include a port
+     number. eg. "hostname:port" or a path to a socket
+     eg. ":/path/to/socket" for the localhost.
+     <DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
+><P
+><B
+>Note: </B
+>
+       Support for ":port" was added in PHP 3.0B4.
+      </P
+><P
+>&#13;       Support for ":/path/to/socket" was added in
+       PHP 3.0.10.
+      </P
+><P
+>&#13;      You can suppress the error message on failure by prepending '@'
+      to the function name.
+      </P
+></BLOCKQUOTE
+></DIV
+>
+    </P
+><P
+>&#13;     If a second call is made to <B
+CLASS="function"
+>mysql_connect()</B
+>
+     with the same arguments, no new link will be established, but
+     instead, the link identifier of the already opened link will be
+     returned.
+    </P
+><P
+>&#13;     The link to the server will be closed as soon as the execution of
+     the script ends, unless it's closed earlier by explicitly calling
+     <A
+HREF="function.mysql-close.html"
+><B
+CLASS="function"
+>mysql_close()</B
+></A
+>.
+    </P
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN24040"
+></A
+><P
+><B
+>Example 1. MySQL connect example</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;&#60;?php
+    $link = mysql_connect ("kraemer", "marliesle", "secret")
+        or die ("Could not connect");
+    print ("Connected successfully");
+    mysql_close ($link);
+?&#62;
+     </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+><P
+> See also
+     <A
+HREF="function.mysql-pconnect.html"
+><B
+CLASS="function"
+>mysql_pconnect()</B
+></A
+>, and
+     <A
+HREF="function.mysql-close.html"
+><B
+CLASS="function"
+>mysql_close()</B
+></A
+>.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.mysql-close.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.mysql-create-db.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>mysql_close</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.mysql.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>mysql_create_db</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

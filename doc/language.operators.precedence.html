@@ -1,0 +1,396 @@
+<HTML
+><HEAD
+><TITLE
+>Operator Precedence</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Operators"
+HREF="language.operators.html"><LINK
+REL="PREVIOUS"
+TITLE="Logical Operators"
+HREF="language.operators.logical.html"><LINK
+REL="NEXT"
+TITLE="String Operators"
+HREF="language.operators.string.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="language.operators.logical.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 10. Operators</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="language.operators.string.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="language.operators.precedence"
+>Operator Precedence</A
+></H1
+><P
+>&#13;    The precedence of an operator specifies how "tightly" it binds two
+    expressions together. For example, in the expression <TT
+CLASS="literal"
+>1 +
+    5 * 3</TT
+>, the answer is <TT
+CLASS="literal"
+>16</TT
+> and not
+    <TT
+CLASS="literal"
+>18</TT
+> because the multiplication ("*") operator
+    has a higher precedence than the addition ("+") operator.
+    Parentheses may be used to force precedence, if necessary. For
+    instance: <TT
+CLASS="literal"
+>(1 + 5) * 3</TT
+> evaluates to
+    <TT
+CLASS="literal"
+>18</TT
+>.
+   </P
+><P
+>&#13;    The following table lists the precedence of operators with the
+    lowest-precedence operators listed first.
+    <DIV
+CLASS="table"
+><A
+NAME="AEN3214"
+></A
+><P
+><B
+>Table 10-6. Operator Precedence</B
+></P
+><TABLE
+BORDER="1"
+CLASS="CALSTABLE"
+><THEAD
+><TR
+><TH
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Associativity</TH
+><TH
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Operators</TH
+></TR
+></THEAD
+><TBODY
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>left</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>,</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>left</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>or</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>left</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>xor</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>left</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>and</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>right</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>print</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>left</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;         = += -= *= /= .= %= &#38;= |= ^= ~= &#60;&#60;= &#62;&#62;=
+        </TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>left</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>? :</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>left</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>||</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>left</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#38;&#38;</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>left</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>|</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>left</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>^</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>left</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#38;</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>non-associative</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>== != === !==</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>non-associative</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#60; &#60;= &#62; &#62;=</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>left</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#60;&#60; &#62;&#62;</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>left</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>+ - .</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>left</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>* / %</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>right</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>! ~ ++ -- (int) (double) (string) (array) (object) @</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>right</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>[</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>non-associative</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>new</TD
+></TR
+></TBODY
+></TABLE
+></DIV
+>
+   </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="language.operators.logical.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="language.operators.string.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Logical Operators</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="language.operators.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>String Operators</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

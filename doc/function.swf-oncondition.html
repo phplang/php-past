@@ -1,0 +1,279 @@
+<HTML
+><HEAD
+><TITLE
+>swf_oncondition</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Shockwave Flash functions"
+HREF="ref.swf.html"><LINK
+REL="PREVIOUS"
+TITLE="swf_addbuttonrecord"
+HREF="function.swf-addbuttonrecord.html"><LINK
+REL="NEXT"
+TITLE="swf_endbutton"
+HREF="function.swf-endbutton.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.swf-addbuttonrecord.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.swf-endbutton.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.swf-oncondition"
+>swf_oncondition</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN35366"
+></A
+><P
+>    (PHP4 &#62;= 4.0RC2)</P
+>swf_oncondition&nbsp;--&nbsp;
+     Describe a transition used to trigger an action list
+    </DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN35369"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN35371"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>void 
+       <B
+CLASS="function"
+>swf_oncondition</B
+>
+      </CODE
+> (int
+       transition)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     The <B
+CLASS="function"
+>swf_onCondition()</B
+> function describes a
+     transition that will trigger an action list.  There are several
+     types of possible transitions, the following are for buttons
+     defined as TYPE_MENUBUTTON:
+     <P
+></P
+><UL
+><LI
+><P
+>&#13;	IdletoOverUp
+       </P
+></LI
+><LI
+><P
+>&#13;	OverUptoIdle
+       </P
+></LI
+><LI
+><P
+>&#13;	OverUptoOverDown
+       </P
+></LI
+><LI
+><P
+>&#13;	OverDowntoOverUp
+       </P
+></LI
+><LI
+><P
+>&#13;	IdletoOverDown
+       </P
+></LI
+><LI
+><P
+>&#13;	OutDowntoIdle
+       </P
+></LI
+><LI
+><P
+>&#13;	MenuEnter (IdletoOverUp|IdletoOverDown)
+       </P
+></LI
+><LI
+><P
+>&#13;	MenuExit (OverUptoIdle|OverDowntoIdle)
+       </P
+></LI
+></UL
+>
+     For TYPE_PUSHBUTTON there are the following options:
+     <P
+></P
+><UL
+><LI
+><P
+>&#13;	IdletoOverUp
+       </P
+></LI
+><LI
+><P
+>&#13;	OverUptoIdle
+       </P
+></LI
+><LI
+><P
+>&#13;	OverUptoOverDown
+       </P
+></LI
+><LI
+><P
+>&#13;	OverDowntoOverUp
+       </P
+></LI
+><LI
+><P
+>&#13;	OverDowntoOutDown
+       </P
+></LI
+><LI
+><P
+>&#13;	OutDowntoOverDown
+       </P
+></LI
+><LI
+><P
+>&#13;	OutDowntoIdle
+       </P
+></LI
+><LI
+><P
+>&#13;	ButtonEnter (IdletoOverUp|OutDowntoOverDown)
+       </P
+></LI
+><LI
+><P
+>&#13;	ButtonExit  (OverUptoIdle|OverDowntoOutDown)
+       </P
+></LI
+></UL
+>
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.swf-addbuttonrecord.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.swf-endbutton.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>swf_addbuttonrecord</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.swf.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>swf_endbutton</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

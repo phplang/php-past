@@ -1,0 +1,612 @@
+<HTML
+><HEAD
+><TITLE
+>imap_fetchstructure</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="IMAP, POP3 and NNTP functions"
+HREF="ref.imap.html"><LINK
+REL="PREVIOUS"
+TITLE="imap_fetchbody"
+HREF="function.imap-fetchbody.html"><LINK
+REL="NEXT"
+TITLE="imap_headerinfo"
+HREF="function.imap-headerinfo.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.imap-fetchbody.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.imap-headerinfo.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.imap-fetchstructure"
+>imap_fetchstructure</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN16480"
+></A
+><P
+>    (PHP3 , PHP4 )</P
+>imap_fetchstructure&nbsp;--&nbsp;
+     Read the structure of a particular message
+    </DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN16483"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN16485"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>object
+       <B
+CLASS="function"
+>imap_fetchstructure</B
+>
+      </CODE
+> (int imap_stream, int msg_number [, int 
+       flags])</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     This function fetches all the structured information for a given
+     message. The optional <TT
+CLASS="parameter"
+><I
+>flags</I
+></TT
+> parameter only
+     has a single option, <TT
+CLASS="parameter"
+><I
+>FT_UID</I
+></TT
+>, which tells
+     the function to treat the <TT
+CLASS="parameter"
+><I
+>msg_number</I
+></TT
+>
+     argument as a <TT
+CLASS="parameter"
+><I
+>UID</I
+></TT
+>. The returned object
+     includes the envelope, internal date, size, flags and body
+     structure along with a similar object for each mime
+     attachement. The structure of the returned objects is as follows:
+    </P
+><P
+>&#13;     <DIV
+CLASS="table"
+><A
+NAME="AEN16502"
+></A
+><P
+><B
+>Table 1. 
+       Returned Objects for <B
+CLASS="function"
+>imap_fetchstructure()</B
+>
+      </B
+></P
+><TABLE
+BORDER="1"
+CLASS="CALSTABLE"
+><TBODY
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>type</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Primary body type</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>encoding</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Body transfer encoding</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>ifsubtype</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>True if there is a subtype string</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>subtype</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+><SPAN
+CLASS="acronym"
+>MIME</SPAN
+> subtype</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>ifdescription</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>True if there is a description string</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>description</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Content description string</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>ifid</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>True if there is an identification string</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>id</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Identification string</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>lines</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Number of lines</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>bytes</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Number of bytes</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>ifdisposition</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>True if there is a disposition string</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>disposition</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Disposition string</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>ifdparameters</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>True if the dparameters array exists</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>dparameters</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Disposition parameter array</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>ifparameters</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>True if the parameters array exists</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>parameters</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+><SPAN
+CLASS="acronym"
+>MIME</SPAN
+> parameters array</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>parts</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Array of objects describing each message part</TD
+></TR
+></TBODY
+></TABLE
+></DIV
+>
+    </P
+><DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
+><P
+></P
+><OL
+TYPE="1"
+><LI
+><P
+>&#13;	dparameters is an array of objects where each object has an
+	"attribute" and a "value" property.
+       </P
+></LI
+><LI
+><P
+>&#13;	Parameter is an array of objects where each object has an
+	"attributte" and a "value" property.
+       </P
+></LI
+><LI
+><P
+>&#13;	Parts is an array of objects identical in structure to the
+	top-level object, with the limitation that it cannot contain
+	further 'parts' objects.
+       </P
+></LI
+></OL
+></BLOCKQUOTE
+></DIV
+><P
+>&#13;     <DIV
+CLASS="table"
+><A
+NAME="AEN16569"
+></A
+><P
+><B
+>Table 2. Primary body type</B
+></P
+><TABLE
+BORDER="1"
+CLASS="CALSTABLE"
+><TBODY
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>0</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>text</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>1</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>multipart</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>2</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>message</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>3</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>application</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>4</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>audio</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>5</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>image</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>6</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>video</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>7</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>other</TD
+></TR
+></TBODY
+></TABLE
+></DIV
+>
+    </P
+><P
+>&#13;     <DIV
+CLASS="table"
+><A
+NAME="AEN16598"
+></A
+><P
+><B
+>Table 3. Transfer encodings</B
+></P
+><TABLE
+BORDER="1"
+CLASS="CALSTABLE"
+><TBODY
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>0</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>7BIT</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>1</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>8BIT</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>2</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>BINARY</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>3</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>BASE64</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>4</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>QUOTED-PRINTABLE</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>5</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>OTHER</TD
+></TR
+></TBODY
+></TABLE
+></DIV
+>
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.imap-fetchbody.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.imap-headerinfo.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>imap_fetchbody</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.imap.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>imap_headerinfo</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

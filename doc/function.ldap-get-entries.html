@@ -1,0 +1,229 @@
+<HTML
+><HEAD
+><TITLE
+>ldap_get_entries</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="LDAP functions"
+HREF="ref.ldap.html"><LINK
+REL="PREVIOUS"
+TITLE="ldap_get_dn"
+HREF="function.ldap-get-dn.html"><LINK
+REL="NEXT"
+TITLE="ldap_get_values"
+HREF="function.ldap-get-values.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.ldap-get-dn.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.ldap-get-values.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.ldap-get-entries"
+>ldap_get_entries</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN19164"
+></A
+><P
+>    (PHP3 , PHP4 )</P
+>ldap_get_entries&nbsp;--&nbsp;Get all result entries</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN19167"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN19169"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>array <B
+CLASS="function"
+>ldap_get_entries</B
+></CODE
+> (int link_identifier, int result_identifier)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     Returns a complete result information in a multi-dimenasional
+     array on success and false on error.</P
+><P
+>  
+     <B
+CLASS="function"
+>ldap_get_entries()</B
+> function is used to
+     simplify reading multiple entries from the result and then
+     reading the attributes and multiple values. The entire
+     information is returned by one function call in a
+     multi-dimensional array. The structure of the array is as
+     follows.</P
+><P
+>&#13;     The attribute index is converted to lowercase. (Attributes are
+     case-insensitive for directory servers, but not when used as
+     array indices)
+
+    <DIV
+CLASS="informalexample"
+><A
+NAME="AEN19181"
+></A
+><P
+></P
+><P
+CLASS="literallayout"
+><br>
+return_value["count"]&nbsp;=&nbsp;number&nbsp;of&nbsp;entries&nbsp;in&nbsp;the&nbsp;result<br>
+return_value[0]&nbsp;:&nbsp;refers&nbsp;to&nbsp;the&nbsp;details&nbsp;of&nbsp;first&nbsp;entry<br>
+<br>
+return_value[i]["dn"]&nbsp;=&nbsp;&nbsp;DN&nbsp;of&nbsp;the&nbsp;ith&nbsp;entry&nbsp;in&nbsp;the&nbsp;result<br>
+<br>
+return_value[i]["count"]&nbsp;=&nbsp;number&nbsp;of&nbsp;attributes&nbsp;in&nbsp;ith&nbsp;entry<br>
+return_value[i][j]&nbsp;=&nbsp;jth&nbsp;attribute&nbsp;in&nbsp;the&nbsp;ith&nbsp;entry&nbsp;in&nbsp;the&nbsp;result<br>
+<br>
+return_value[i]["attribute"]["count"]&nbsp;=&nbsp;number&nbsp;of&nbsp;values&nbsp;for&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;attribute&nbsp;in&nbsp;ith&nbsp;entry<br>
+return_value[i]["attribute"][j]&nbsp;=&nbsp;jth&nbsp;value&nbsp;of&nbsp;attribute&nbsp;in&nbsp;ith&nbsp;entry<br>
+</P
+><P
+></P
+></DIV
+></P
+><P
+>&#13;      see also <A
+HREF="function.ldap-first-entry.html"
+><B
+CLASS="function"
+>ldap_first_entry()</B
+></A
+> and
+      <A
+HREF="function.ldap-next-entry.html"
+><B
+CLASS="function"
+>ldap_next_entry()</B
+></A
+></P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.ldap-get-dn.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.ldap-get-values.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>ldap_get_dn</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.ldap.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>ldap_get_values</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,243 @@
+<HTML
+><HEAD
+><TITLE
+>Ora_Logon</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Oracle functions"
+HREF="ref.oracle.html"><LINK
+REL="PREVIOUS"
+TITLE="Ora_Logoff"
+HREF="function.ora-logoff.html"><LINK
+REL="NEXT"
+TITLE="Ora_pLogon"
+HREF="function.ora-plogon.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.ora-logoff.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.ora-plogon.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.ora-logon"
+>Ora_Logon</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN27718"
+></A
+><P
+>    (PHP3 , PHP4 )</P
+>Ora_Logon&nbsp;--&nbsp;open an Oracle connection</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN27721"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN27723"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int <B
+CLASS="function"
+>ora_logon</B
+></CODE
+> (string user, string password)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     Establishes a connection between PHP and an Oracle database with the
+     given username and password.
+    </P
+><P
+>&#13;     Connections can be made using <SPAN
+CLASS="productname"
+>SQL*Net</SPAN
+>
+     by supplying the <SPAN
+CLASS="acronym"
+>TNS</SPAN
+> name to
+     <TT
+CLASS="parameter"
+><I
+>user</I
+></TT
+> like this:
+     <DIV
+CLASS="informalexample"
+><A
+NAME="AEN27736"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;$conn = Ora_Logon("user<I
+CLASS="emphasis"
+>@TNSNAME</I
+>", "pass");
+</PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+>
+    </P
+><P
+>&#13;     If you have character data with non-ASCII characters, you should
+     make sure that <TT
+CLASS="envar"
+>NLS_LANG</TT
+> is set in your
+     environment. For server modules, you should set it in the
+     server's environment before starting the server.
+    </P
+><P
+>&#13;     Returns a connection index on success, or false on failure.
+     Details about the error can be retrieved using the
+     <A
+HREF="function.ora-error.html"
+><B
+CLASS="function"
+>ora_error()</B
+></A
+> and <A
+HREF="function.ora-errorcode.html"
+><B
+CLASS="function"
+>ora_errorcode()</B
+></A
+>
+     functions.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.ora-logoff.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.ora-plogon.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Ora_Logoff</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.oracle.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Ora_pLogon</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

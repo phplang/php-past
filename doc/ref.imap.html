@@ -1,0 +1,660 @@
+<HTML
+><HEAD
+><TITLE
+>IMAP, POP3 and NNTP functions</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Function Reference"
+HREF="funcref.html"><LINK
+REL="PREVIOUS"
+TITLE="read_exif_data"
+HREF="function.read-exif-data.html"><LINK
+REL="NEXT"
+TITLE="imap_append"
+HREF="function.imap-append.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="reference"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.read-exif-data.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.imap-append.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="reference"
+><A
+NAME="ref.imap"
+></A
+><DIV
+CLASS="TITLEPAGE"
+><H1
+CLASS="title"
+>XXIX. IMAP, POP3 and NNTP functions</H1
+><DIV
+CLASS="PARTINTRO"
+><A
+NAME="AEN16177"
+></A
+><P
+>&#13;    To get these functions to work, you have to compile PHP with
+    <TT
+CLASS="option"
+>--with-imap</TT
+>. That requires the
+    c-client library to be installed. Grab the latest version from
+    <A
+HREF="ftp://ftp.cac.washington.edu/imap/"
+TARGET="_top"
+>ftp://ftp.cac.washington.edu/imap/</A
+> and compile it. Then
+    copy <TT
+CLASS="filename"
+>c-client/c-client.a</TT
+> to
+    <TT
+CLASS="filename"
+>/usr/local/lib/libc-client.a</TT
+> or some other 
+    directory on your link path and copy 
+    <TT
+CLASS="filename"
+>c-client/rfc822.h</TT
+>,
+    <TT
+CLASS="filename"
+>mail.h</TT
+> and <TT
+CLASS="filename"
+>linkage.h</TT
+> to
+    <TT
+CLASS="filename"
+>/usr/local/include</TT
+> or some other directory in
+    your include path.
+   </P
+><P
+>&#13;    Note that these functions are not limited to the
+    <SPAN
+CLASS="acronym"
+>IMAP</SPAN
+> protocol, despite their name.  The
+    underlying c-client library also supports <SPAN
+CLASS="acronym"
+>NNTP</SPAN
+>,
+    <SPAN
+CLASS="acronym"
+>POP3</SPAN
+> and local mailbox access methods. 
+   </P
+><P
+>&#13;    This document can't go into detail on all the topics touched by
+		the provided functions. Further information is provided by the
+		documentation of the c-client library source
+		(<TT
+CLASS="filename"
+>docs/internal.txt</TT
+>). and the following RFC
+		documents:
+    <P
+></P
+><UL
+><LI
+><P
+>&#13;       <A
+HREF="http://www.faqs.org/rfcs/rfc821.html"
+TARGET="_top"
+>RFC821</A
+>: Simple Mail
+			 Transfer Protocol (SMTP).
+      </P
+></LI
+><LI
+><P
+>&#13;       <A
+HREF="http://www.faqs.org/rfcs/rfc822.html"
+TARGET="_top"
+>RFC822</A
+>: Standard for
+			 ARPA internet text messages.
+      </P
+></LI
+><LI
+><P
+>&#13;       <A
+HREF="http://www.faqs.org/rfcs/rfc2060.html"
+TARGET="_top"
+>RFC2060</A
+>: Internet
+			 Message Access Protocol (IMAP) Version 4rev1. 
+      </P
+></LI
+><LI
+><P
+>&#13;       <A
+HREF="http://www.faqs.org/rfcs/rfc1939.html"
+TARGET="_top"
+>RFC1939</A
+>:  Post
+			 Office Protocol Version 3 (POP3).
+      </P
+></LI
+><LI
+><P
+>&#13;       <A
+HREF="http://www.faqs.org/rfcs/rfc977.html"
+TARGET="_top"
+>RFC977</A
+>: Network News
+			 Transfer Protocol (NNTP).
+      </P
+></LI
+><LI
+><P
+>&#13;       <A
+HREF="http://www.faqs.org/rfcs/rfc2076.html"
+TARGET="_top"
+>RFC2076</A
+>: Common
+			 Internet Message Headers.
+      </P
+></LI
+><LI
+><P
+>&#13;       <A
+HREF="http://www.faqs.org/rfcs/rfc2045.html"
+TARGET="_top"
+>RFC2045</A
+> , <A
+HREF="http://www.faqs.org/rfcs/rfc2046.html"
+TARGET="_top"
+>RFC2046</A
+> , <A
+HREF="http://www.faqs.org/rfcs/rfc2047.html"
+TARGET="_top"
+>RFC2047</A
+> , <A
+HREF="http://www.faqs.org/rfcs/rfc2048.html"
+TARGET="_top"
+>RFC2048</A
+> &#38; <A
+HREF="http://www.faqs.org/rfcs/rfc2049.html"
+TARGET="_top"
+>RFC2049</A
+>: Multipurpose
+			 Internet Mail Extensions (MIME).
+      </P
+></LI
+></UL
+> 
+		A detailed overview is also available in the books
+		<A
+HREF="http://www.oreilly.com/catalog/progintemail/noframes.html"
+TARGET="_top"
+>Programming Internet Email</A
+>
+		by David Wood and  <A
+HREF="http://www.oreilly.com/catalog/mimap/noframes.html"
+TARGET="_top"
+>Managing
+		 IMAP</A
+> by Dianna Mullet &#38; Kevin Mullet.
+   </P
+></DIV
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Table of Contents</B
+></DT
+><DT
+><A
+HREF="function.imap-append.html"
+>imap_append</A
+> &#8212; 
+     Append a string message to a specified mailbox
+    </DT
+><DT
+><A
+HREF="function.imap-base64.html"
+>imap_base64</A
+> &#8212; Decode BASE64 encoded text</DT
+><DT
+><A
+HREF="function.imap-body.html"
+>imap_body</A
+> &#8212; Read the message body</DT
+><DT
+><A
+HREF="function.imap-check.html"
+>imap_check</A
+> &#8212; Check current mailbox</DT
+><DT
+><A
+HREF="function.imap-close.html"
+>imap_close</A
+> &#8212; Close an IMAP stream</DT
+><DT
+><A
+HREF="function.imap-createmailbox.html"
+>imap_createmailbox</A
+> &#8212; Create a new mailbox</DT
+><DT
+><A
+HREF="function.imap-delete.html"
+>imap_delete</A
+> &#8212; 
+     Mark a messge for deletion from current mailbox
+    </DT
+><DT
+><A
+HREF="function.imap-deletemailbox.html"
+>imap_deletemailbox</A
+> &#8212; Delete a mailbox</DT
+><DT
+><A
+HREF="function.imap-expunge.html"
+>imap_expunge</A
+> &#8212; Delete all messages marked for deletion</DT
+><DT
+><A
+HREF="function.imap-fetchbody.html"
+>imap_fetchbody</A
+> &#8212; 
+     Fetch a particular section of the body of the message
+    </DT
+><DT
+><A
+HREF="function.imap-fetchstructure.html"
+>imap_fetchstructure</A
+> &#8212; 
+     Read the structure of a particular message
+    </DT
+><DT
+><A
+HREF="function.imap-headerinfo.html"
+>imap_headerinfo</A
+> &#8212; Read the header of the message</DT
+><DT
+><A
+HREF="function.imap-header.html"
+>imap_header</A
+> &#8212; Read the header of the message</DT
+><DT
+><A
+HREF="function.imap-rfc822-parse-headers.html"
+>imap_rfc822_parse_headers</A
+> &#8212; Parse mail headers from a string</DT
+><DT
+><A
+HREF="function.imap-headers.html"
+>imap_headers</A
+> &#8212; 
+     Returns headers for all messages in a mailbox
+    </DT
+><DT
+><A
+HREF="function.imap-listmailbox.html"
+>imap_listmailbox</A
+> &#8212; Read the list of mailboxes</DT
+><DT
+><A
+HREF="function.imap-getmailboxes.html"
+>imap_getmailboxes</A
+> &#8212; 
+     Read the list of mailboxes, returning detailed information on
+     each one
+    </DT
+><DT
+><A
+HREF="function.imap-listsubscribed.html"
+>imap_listsubscribed</A
+> &#8212; List all the subscribed mailboxes</DT
+><DT
+><A
+HREF="function.imap-getsubscribed.html"
+>imap_getsubscribed</A
+> &#8212; List all the subscribed mailboxes</DT
+><DT
+><A
+HREF="function.imap-mail-copy.html"
+>imap_mail_copy</A
+> &#8212; Copy specified messages to a mailbox</DT
+><DT
+><A
+HREF="function.imap-mail-move.html"
+>imap_mail_move</A
+> &#8212; Move specified messages to a mailbox</DT
+><DT
+><A
+HREF="function.imap-num-msg.html"
+>imap_num_msg</A
+> &#8212; 
+     Gives the number of messages in the current mailbox
+    </DT
+><DT
+><A
+HREF="function.imap-num-recent.html"
+>imap_num_recent</A
+> &#8212; Gives the number of recent messages in current
+    mailbox</DT
+><DT
+><A
+HREF="function.imap-open.html"
+>imap_open</A
+> &#8212; Open an IMAP stream to a mailbox</DT
+><DT
+><A
+HREF="function.imap-ping.html"
+>imap_ping</A
+> &#8212; Check if the IMAP stream is still active</DT
+><DT
+><A
+HREF="function.imap-renamemailbox.html"
+>imap_renamemailbox</A
+> &#8212; Rename an old mailbox to new mailbox</DT
+><DT
+><A
+HREF="function.imap-reopen.html"
+>imap_reopen</A
+> &#8212; Reopen IMAP stream to new mailbox</DT
+><DT
+><A
+HREF="function.imap-subscribe.html"
+>imap_subscribe</A
+> &#8212; Subscribe to a mailbox</DT
+><DT
+><A
+HREF="function.imap-undelete.html"
+>imap_undelete</A
+> &#8212; 
+     Unmark the message which is marked deleted
+    </DT
+><DT
+><A
+HREF="function.imap-unsubscribe.html"
+>imap_unsubscribe</A
+> &#8212; Unsubscribe from a mailbox</DT
+><DT
+><A
+HREF="function.imap-qprint.html"
+>imap_qprint</A
+> &#8212; Convert a quoted-printable string to an 8 bit
+    string</DT
+><DT
+><A
+HREF="function.imap-8bit.html"
+>imap_8bit</A
+> &#8212; 
+     Convert an 8bit string to a quoted-printable string
+    </DT
+><DT
+><A
+HREF="function.imap-binary.html"
+>imap_binary</A
+> &#8212; 
+     Convert an 8bit string to a base64 string
+    </DT
+><DT
+><A
+HREF="function.imap-scanmailbox.html"
+>imap_scanmailbox</A
+> &#8212; 
+     Read the list of mailboxes, takes a string to search for in the
+     text of the mailbox
+    </DT
+><DT
+><A
+HREF="function.imap-mailboxmsginfo.html"
+>imap_mailboxmsginfo</A
+> &#8212; Get information about the current mailbox</DT
+><DT
+><A
+HREF="function.imap-rfc822-write-address.html"
+>imap_rfc822_write_address</A
+> &#8212; 
+     Returns a properly formatted email address given the mailbox,
+     host, and personal info.
+    </DT
+><DT
+><A
+HREF="function.imap-rfc822-parse-adrlist.html"
+>imap_rfc822_parse_adrlist</A
+> &#8212; Parses an address string</DT
+><DT
+><A
+HREF="function.imap-setflag-full.html"
+>imap_setflag_full</A
+> &#8212; Sets flags on messages</DT
+><DT
+><A
+HREF="function.imap-clearflag-full.html"
+>imap_clearflag_full</A
+> &#8212; Clears flags on messages</DT
+><DT
+><A
+HREF="function.imap-sort.html"
+>imap_sort</A
+> &#8212; Sort an array of message headers</DT
+><DT
+><A
+HREF="function.imap-fetchheader.html"
+>imap_fetchheader</A
+> &#8212; Returns header for a message</DT
+><DT
+><A
+HREF="function.imap-uid.html"
+>imap_uid</A
+> &#8212; 
+     This function returns the UID for the given message sequence
+     number
+    </DT
+><DT
+><A
+HREF="function.imap-msgno.html"
+>imap_msgno</A
+> &#8212; 
+     This function returns the message sequence number for the given
+     UID
+    </DT
+><DT
+><A
+HREF="function.imap-search.html"
+>imap_search</A
+> &#8212; 
+     This function returns an array of messages matching the given
+     search criteria
+    </DT
+><DT
+><A
+HREF="function.imap-last-error.html"
+>imap_last_error</A
+> &#8212; 
+     This function returns the last IMAP error (if any) that occurred
+     during this page request
+    </DT
+><DT
+><A
+HREF="function.imap-errors.html"
+>imap_errors</A
+> &#8212; 
+     This function returns all of the IMAP errors (if any) that have
+     occurred during this page request or since the error stack was
+     reset.
+    </DT
+><DT
+><A
+HREF="function.imap-alerts.html"
+>imap_alerts</A
+> &#8212; 
+     This function returns all IMAP alert messages (if any) that have
+     occurred during this page request or since the alert stack was
+     reset
+    </DT
+><DT
+><A
+HREF="function.imap-status.html"
+>imap_status</A
+> &#8212; 
+     This function returns status information on a mailbox other than
+     the current one
+    </DT
+><DT
+><A
+HREF="function.imap-utf7-decode.html"
+>imap_utf7_decode</A
+> &#8212; 
+     Decodes a modified UTF-7 encoded string.
+    </DT
+><DT
+><A
+HREF="function.imap-utf7-encode.html"
+>imap_utf7_encode</A
+> &#8212; 
+     Converts 8bit data to modified UTF-7 text.
+    </DT
+><DT
+><A
+HREF="function.imap-utf8.html"
+>imap_utf8</A
+> &#8212; 
+      Converts text to UTF8
+    </DT
+><DT
+><A
+HREF="function.imap-fetch-overview.html"
+>imap_fetch_overview</A
+> &#8212; 
+     Read an overview of the information in the headers of the given message
+    </DT
+><DT
+><A
+HREF="function.imap-mime-header-decode.html"
+>imap_mime_header_decode</A
+> &#8212; Decode MIME header elements</DT
+><DT
+><A
+HREF="function.imap-mail-compose.html"
+>imap_mail_compose</A
+> &#8212; 
+     Create a MIME message based on given envelope and body sections 
+    </DT
+><DT
+><A
+HREF="function.imap-mail.html"
+>imap_mail</A
+> &#8212; 
+     Send an email message
+    </DT
+></DL
+></DIV
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.read-exif-data.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.imap-append.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>read_exif_data</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="funcref.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>imap_append</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

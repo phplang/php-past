@@ -1,0 +1,223 @@
+<HTML
+><HEAD
+><TITLE
+>odbc_autocommit</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Unified ODBC functions"
+HREF="ref.odbc.html"><LINK
+REL="PREVIOUS"
+TITLE="Unified ODBC functions"
+HREF="ref.odbc.html"><LINK
+REL="NEXT"
+TITLE="odbc_binmode"
+HREF="function.odbc-binmode.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="ref.odbc.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.odbc-binmode.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.odbc-autocommit"
+>odbc_autocommit</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN25526"
+></A
+><P
+>    (PHP3 &#62;= 3.0.6, PHP4 )</P
+>odbc_autocommit&nbsp;--&nbsp;Toggle autocommit behaviour</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN25529"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN25531"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int <B
+CLASS="function"
+>odbc_autocommit</B
+></CODE
+> (int connection_id [, int OnOff])</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     Without the <TT
+CLASS="parameter"
+><I
+>OnOff</I
+></TT
+> parameter, this function
+     returns auto-commit status for
+     <TT
+CLASS="parameter"
+><I
+>connection_id</I
+></TT
+>.  True is returned if
+     auto-commit is on, false if it is off or an error occurs.
+    </P
+><P
+>&#13;     If <TT
+CLASS="parameter"
+><I
+>OnOff</I
+></TT
+> is true, auto-commit is enabled,
+     if it is false auto-commit is disabled.  Returns
+     <TT
+CLASS="literal"
+>true</TT
+> on success, <TT
+CLASS="literal"
+>false</TT
+> on
+     failure.
+    </P
+><P
+>&#13;     By default, auto-commit is on for a connection.  Disabling
+     auto-commit is equivalent with starting a transaction.
+    </P
+><P
+>&#13;     See also
+     <A
+HREF="function.odbc-commit.html"
+><B
+CLASS="function"
+>odbc_commit()</B
+></A
+> and
+     <A
+HREF="function.odbc-rollback.html"
+><B
+CLASS="function"
+>odbc_rollback()</B
+></A
+>.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="ref.odbc.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.odbc-binmode.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Unified ODBC functions</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.odbc.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>odbc_binmode</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

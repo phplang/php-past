@@ -1,0 +1,226 @@
+<HTML
+><HEAD
+><TITLE
+>imap_sort</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="IMAP, POP3 and NNTP functions"
+HREF="ref.imap.html"><LINK
+REL="PREVIOUS"
+TITLE="imap_clearflag_full"
+HREF="function.imap-clearflag-full.html"><LINK
+REL="NEXT"
+TITLE="imap_fetchheader"
+HREF="function.imap-fetchheader.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.imap-clearflag-full.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.imap-fetchheader.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.imap-sort"
+>imap_sort</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN17286"
+></A
+><P
+>    (PHP3 &#62;= 3.0.3, PHP4 )</P
+>imap_sort&nbsp;--&nbsp;Sort an array of message headers</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN17289"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN17291"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>array <B
+CLASS="function"
+>imap_sort</B
+></CODE
+> (int stream, int criteria, int reverse, int options)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     Returns an array of message numbers sorted by the given
+     parameters.
+    </P
+><P
+>&#13;     <TT
+CLASS="parameter"
+><I
+>Reverse</I
+></TT
+> is 1 for reverse-sorting.
+    </P
+><P
+>&#13;     Criteria can be one (and only one) of the following:
+     <DIV
+CLASS="informalexample"
+><A
+NAME="AEN17307"
+></A
+><P
+></P
+><P
+CLASS="literallayout"
+><br>
+SORTDATE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;message&nbsp;Date<br>
+SORTARRIVAL&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;arrival&nbsp;date<br>
+SORTFROM&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mailbox&nbsp;in&nbsp;first&nbsp;From&nbsp;address<br>
+SORTSUBJECT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;message&nbsp;Subject<br>
+SORTTO&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mailbox&nbsp;in&nbsp;first&nbsp;To&nbsp;address&nbsp;<br>
+SORTCC&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mailbox&nbsp;in&nbsp;first&nbsp;cc&nbsp;address&nbsp;<br>
+SORTSIZE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;size&nbsp;of&nbsp;message&nbsp;in&nbsp;octets<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</P
+><P
+></P
+></DIV
+>
+    </P
+><P
+>&#13;     The flags are a bitmask of one or more of the following:
+     <DIV
+CLASS="informalexample"
+><A
+NAME="AEN17310"
+></A
+><P
+></P
+><P
+CLASS="literallayout"
+><br>
+SE_UID&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Return&nbsp;UIDs&nbsp;instead&nbsp;of&nbsp;sequence&nbsp;numbers<br>
+SE_NOPREFETCH&nbsp;&nbsp;&nbsp;Don't&nbsp;prefetch&nbsp;searched&nbsp;messages.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</P
+><P
+></P
+></DIV
+>
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.imap-clearflag-full.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.imap-fetchheader.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>imap_clearflag_full</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.imap.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>imap_fetchheader</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

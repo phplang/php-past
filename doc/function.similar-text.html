@@ -1,0 +1,189 @@
+<HTML
+><HEAD
+><TITLE
+>similar_text</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="String functions"
+HREF="ref.strings.html"><LINK
+REL="PREVIOUS"
+TITLE="setlocale"
+HREF="function.setlocale.html"><LINK
+REL="NEXT"
+TITLE="soundex"
+HREF="function.soundex.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.setlocale.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.soundex.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.similar-text"
+>similar_text</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN37043"
+></A
+><P
+>    (PHP3 &#62;= 3.0.7, PHP4 &#62;= 4.0b2)</P
+>similar_text&nbsp;--&nbsp;
+     Calculate the similarity between two strings
+    </DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN37046"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN37048"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int <B
+CLASS="function"
+>similar_text</B
+></CODE
+> (string first, string second [, double 
+       percent])</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     This calculates the similarity between two strings as described
+     in Oliver [1993]. Note that this implementation does not use a
+     stack as in Oliver's pseudo code, but recursive calls which may
+     or may not speed up the whole process. Note also that the
+     complexity of this algorithm is O(N**3) where N is the length of
+     the longest string.
+    </P
+><P
+>&#13;     By passing a reference as third argument,
+     <B
+CLASS="function"
+>similar_text()</B
+> will calculate the similarity
+     in percent for you. It returns the number of matching chars in
+     both strings.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.setlocale.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.soundex.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>setlocale</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.strings.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>soundex</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

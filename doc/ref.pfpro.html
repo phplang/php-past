@@ -1,0 +1,270 @@
+<HTML
+><HEAD
+><TITLE
+>Verisign Payflow Pro functions</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Function Reference"
+HREF="funcref.html"><LINK
+REL="PREVIOUS"
+TITLE="pdf_set_border_dash"
+HREF="function.pdf-set-border-dash.html"><LINK
+REL="NEXT"
+TITLE="pfpro_init"
+HREF="function.pfpro-init.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="reference"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.pdf-set-border-dash.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.pfpro-init.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="reference"
+><A
+NAME="ref.pfpro"
+></A
+><DIV
+CLASS="TITLEPAGE"
+><H1
+CLASS="title"
+>XLVIII. Verisign Payflow Pro functions</H1
+><DIV
+CLASS="PARTINTRO"
+><A
+NAME="AEN29848"
+></A
+><P
+>&#13;    This extension allows you to process credit cards and other financial
+    transactions using Verisign Payment Services, formerly known as Signio
+    (<A
+HREF="http://www.verisign.com/payment/"
+TARGET="_top"
+>http://www.verisign.com/payment/</A
+>).
+   </P
+><P
+>&#13;    These functions are only available if PHP has been compiled with the
+    <TT
+CLASS="option"
+>--with-pfpro[=DIR]</TT
+> option. You will
+    require the appropriate SDK for your platform, which may be
+    downloaded <A
+HREF="https://testmanager.signio.com/Downloads/Downloads_secure.htm"
+TARGET="_top"
+>from within the manager
+    interface</A
+> once you have registered.
+   </P
+><P
+>&#13;    Once you have downloaded the SDK you should copy the files from
+    the <TT
+CLASS="filename"
+>lib</TT
+> directory of the
+    distribution. Copy the header file <TT
+CLASS="filename"
+>pfpro.h</TT
+>
+    to <TT
+CLASS="filename"
+>/usr/local/include</TT
+>
+    and the library file <TT
+CLASS="filename"
+>libpfpro.so</TT
+> to
+    <TT
+CLASS="filename"
+>/usr/local/lib</TT
+>.
+   </P
+><P
+>&#13;    When using these functions, you may omit calls to
+    <A
+HREF="function.pfpro-init.html"
+><B
+CLASS="function"
+>pfpro_init()</B
+></A
+> and <A
+HREF="function.pfpro-cleanup.html"
+><B
+CLASS="function"
+>pfpro_cleanup()</B
+></A
+>
+    as this extension will do so automatically if required. However the
+    functions are still available in case you are processing a number of
+    transactions and require fine control over the library.
+    You may perform any number
+    of transactions using <A
+HREF="function.pfpro-process.html"
+><B
+CLASS="function"
+>pfpro_process()</B
+></A
+> between the two.
+   </P
+><P
+>&#13;    These functions have been added in PHP 4.0.2.
+   </P
+><DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
+><P
+><B
+>Note: </B
+>
+    These functions only provide a link to Verisign Payment Services. Be sure
+    to read the Payflow Pro Developers Guide for full details of the required
+    parameters.
+   </P
+></BLOCKQUOTE
+></DIV
+></DIV
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Table of Contents</B
+></DT
+><DT
+><A
+HREF="function.pfpro-init.html"
+>pfpro_init</A
+> &#8212; Initialises the Payflow Pro library</DT
+><DT
+><A
+HREF="function.pfpro-cleanup.html"
+>pfpro_cleanup</A
+> &#8212; Shuts down the Payflow Pro library</DT
+><DT
+><A
+HREF="function.pfpro-process.html"
+>pfpro_process</A
+> &#8212; Process a transaction with Payflow Pro</DT
+><DT
+><A
+HREF="function.pfpro-process-raw.html"
+>pfpro_process_raw</A
+> &#8212; Process a raw transaction with Payflow Pro</DT
+><DT
+><A
+HREF="function.pfpro-version.html"
+>pfpro_version</A
+> &#8212; Returns the version of the Payflow Pro software</DT
+></DL
+></DIV
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.pdf-set-border-dash.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.pfpro-init.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>pdf_set_border_dash</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="funcref.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>pfpro_init</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

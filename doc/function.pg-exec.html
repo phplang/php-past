@@ -1,0 +1,202 @@
+<HTML
+><HEAD
+><TITLE
+>pg_exec</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="PostgreSQL functions"
+HREF="ref.pgsql.html"><LINK
+REL="PREVIOUS"
+TITLE="pg_errormessage"
+HREF="function.pg-errormessage.html"><LINK
+REL="NEXT"
+TITLE="pg_fetch_array"
+HREF="function.pg-fetch-array.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.pg-errormessage.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.pg-fetch-array.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.pg-exec"
+>pg_exec</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN31328"
+></A
+><P
+>    (PHP3 , PHP4 )</P
+>pg_exec&nbsp;--&nbsp;Execute a query</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN31331"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN31333"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int <B
+CLASS="function"
+>pg_exec</B
+></CODE
+> (int connection, string query)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     Returns a result index if query could be executed, false on
+     failure or if connection is not a valid connection index. Details
+     about the error can be retrieved using the
+     <B
+CLASS="function"
+>pg_ErrorMessage()</B
+> function if connection is
+     valid.  Sends an SQL statement to the PostgreSQL database
+     specified by the connection index. The connection must be a valid
+     index that was returned by <B
+CLASS="function"
+>pg_Connect()</B
+>.  The
+     return value of this function is an index to be used to access
+     the results from other PostgreSQL functions.  
+     <DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
+><P
+><B
+>Note: </B
+>
+       PHP/FI returned 1 if the query was not expected to return data
+       (inserts or updates, for example) and greater than 1 even on
+       selects that did not return anything. No such assumption can be
+       made in PHP.  
+      </P
+></BLOCKQUOTE
+></DIV
+>
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.pg-errormessage.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.pg-fetch-array.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>pg_errormessage</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.pgsql.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>pg_fetch_array</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

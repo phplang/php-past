@@ -1,0 +1,330 @@
+<HTML
+><HEAD
+><TITLE
+>GetImageSize</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Image functions"
+HREF="ref.image.html"><LINK
+REL="PREVIOUS"
+TITLE="Image functions"
+HREF="ref.image.html"><LINK
+REL="NEXT"
+TITLE="ImageArc"
+HREF="function.imagearc.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="ref.image.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.imagearc.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.getimagesize"
+>GetImageSize</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN14730"
+></A
+><P
+>    (PHP3 , PHP4 )</P
+>GetImageSize&nbsp;--&nbsp;Get the size of a GIF, JPEG, PNG or SWF image</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN14733"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN14735"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>array <B
+CLASS="function"
+>getimagesize</B
+></CODE
+> (string filename [, array 
+       imageinfo])</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     The <B
+CLASS="function"
+>GetImageSize()</B
+> function will determine the
+     size of any <SPAN
+CLASS="acronym"
+>GIF</SPAN
+>, <SPAN
+CLASS="acronym"
+>JPG</SPAN
+>,
+     <SPAN
+CLASS="acronym"
+>PNG</SPAN
+> or <SPAN
+CLASS="acronym"
+>SWF</SPAN
+> image file and
+     return the dimensions along with the file type and a height/width
+     text string to be used inside a normal <SPAN
+CLASS="acronym"
+>HTML</SPAN
+>
+     <TT
+CLASS="sgmltag"
+>IMG</TT
+> tag.
+    </P
+><P
+>&#13;     Returns an array with 4 elements.  Index 0 contains the width of
+     the image in pixels.  Index 1 contains the height.  Index 2 a
+     flag indicating the type of the image.  1 = GIF, 2 = JPG, 3 =
+     PNG, 4 = SWF.  Index 3 is a text string with the correct
+     "height=xxx width=xxx" string that can be used directly in an IMG
+     tag.
+     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN14753"
+></A
+><P
+><B
+>Example 1. GetImageSize</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;&#60;?php $size = GetImageSize ("img/flag.jpg"); ?&#62;
+&#60;IMG SRC="img/flag.jpg" &#60;?php echo $size[3]; ?&#62;
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+    </P
+><P
+>&#13;     The optional <TT
+CLASS="parameter"
+><I
+>imageinfo</I
+></TT
+> parameter allows
+     you to extract some extended information from the image
+     file. Currently this will return the diffrent
+     <SPAN
+CLASS="acronym"
+>JPG</SPAN
+> APP markers in an associative Array. Some
+     Programs use these APP markers to embedd text information in
+     images. A very common one in to embed <SPAN
+CLASS="acronym"
+>IPTC</SPAN
+>
+     <A
+HREF="http://www.xe.net/iptc/"
+TARGET="_top"
+>http://www.xe.net/iptc/</A
+> information in the
+     APP13 marker. You can use the <A
+HREF="function.iptcparse.html"
+><B
+CLASS="function"
+>iptcparse()</B
+></A
+>
+     function to parse the binary APP13 marker into something
+     readable.
+     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN14762"
+></A
+><P
+><B
+>Example 2. GetImageSize returning IPTC</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;&#60;?php 
+    $size = GetImageSize ("testimg.jpg",&#38;$info);
+    if (isset ($info["APP13"])) {
+        $iptc = iptcparse ($info["APP13"]);
+        var_dump ($iptc);
+    }
+?&#62;
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+     <DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
+><P
+><B
+>Note: </B
+>
+       This function does not require the GD image library.
+      </P
+></BLOCKQUOTE
+></DIV
+>
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="ref.image.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.imagearc.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Image functions</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.image.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>ImageArc</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

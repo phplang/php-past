@@ -1,0 +1,310 @@
+<HTML
+><HEAD
+><TITLE
+>sscanf</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="String functions"
+HREF="ref.strings.html"><LINK
+REL="PREVIOUS"
+TITLE="rtrim"
+HREF="function.rtrim.html"><LINK
+REL="NEXT"
+TITLE="setlocale"
+HREF="function.setlocale.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.rtrim.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.setlocale.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.sscanf"
+>sscanf</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN36971"
+></A
+><P
+>    (PHP4 &#62;= 4.0.1)</P
+>sscanf&nbsp;--&nbsp;Parses input from a string according to a format</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN36974"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN36976"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>mixed <B
+CLASS="function"
+>sscanf</B
+></CODE
+> (string str, string format [, string 
+       var1...])</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;	 The function <B
+CLASS="function"
+>sscanf()</B
+> is the input analog of
+	 <A
+HREF="function.printf.html"
+><B
+CLASS="function"
+>printf()</B
+></A
+>. <B
+CLASS="function"
+>Sscanf()</B
+> reads from
+	 the string <TT
+CLASS="parameter"
+><I
+>str</I
+></TT
+> and interprets it according to
+	 the specified <TT
+CLASS="parameter"
+><I
+>format</I
+></TT
+>. If only two parameters were
+	 passed to this function, the values parsed will be returned as an array.
+	 <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN36993"
+></A
+><P
+><B
+>Example 1. <B
+CLASS="function"
+>Sscanf()</B
+> Example</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;// getting the serial number
+$serial = sscanf("SN/2350001","SN/%d");
+// and the date of manufacturing
+$mandate = "January 01 2000";
+list($month, $day, $year) = sscanf($mandate,"%s %d %d");
+echo "Item $serial was manufactured on: $year-".substr($month,0,3)."-$day\n";
+	 </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+	 If optional parameters are passed, the function will return the number of
+	 assigned values. The optional parameters must be passed by reference.
+ <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN36997"
+></A
+><P
+><B
+>Example 2. <B
+CLASS="function"
+>Sscanf()</B
+> - using optional parameters</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;// get author info and generate DocBook entry
+$auth = "24\tLewis Carroll";
+$n = sscanf($auth,"%d\t%s %s", &#38;$id, &#38;$first, &#38;$last);
+echo "&#60;author id='$id'&#62;
+	&#60;firstname&#62;$first&#60;/firstname&#62;
+	&#60;surname&#62;$last&#60;/surname&#62;
+&#60;/author&#62;\n";
+	 </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+    </P
+><P
+>&#13;     See also: <A
+HREF="function.fscanf.html"
+><B
+CLASS="function"
+>fscanf()</B
+></A
+>, <A
+HREF="function.printf.html"
+><B
+CLASS="function"
+>printf()</B
+></A
+>,
+     and <A
+HREF="function.sprintf.html"
+><B
+CLASS="function"
+>sprintf()</B
+></A
+>. 
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.rtrim.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.setlocale.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>rtrim</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.strings.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>setlocale</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

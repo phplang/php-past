@@ -1,0 +1,189 @@
+<HTML
+><HEAD
+><TITLE
+>yaz_connect</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="YAZ functions"
+HREF="ref.yaz.html"><LINK
+REL="PREVIOUS"
+TITLE="yaz_close"
+HREF="function.yaz-close.html"><LINK
+REL="NEXT"
+TITLE="yaz_errno"
+HREF="function.yaz-errno.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.yaz-close.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.yaz-errno.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.yaz-connect"
+>yaz_connect</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN40546"
+></A
+><P
+>    (PHP4 &#62;= 4.0.1)</P
+>yaz_connect&nbsp;--&nbsp;
+     Returns a positive association ID on success; zero on failure
+    </DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN40549"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN40551"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int <B
+CLASS="function"
+>yaz_connect</B
+></CODE
+> (string zurl)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     <B
+CLASS="function"
+>Yaz_connect()</B
+> prepares for a connection to a
+     Z39.50 target. The zurl argument takes the form
+     host[:port][/database]. If port is omitted 210 is used. If
+     database is omitted Default is used. This function is
+     non-blocking and doesn't attempt to establish a socket - it
+     merely prepares a connect to be performed later when
+     <A
+HREF="function.yaz-wait.html"
+><B
+CLASS="function"
+>yaz_wait()</B
+></A
+> is called.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.yaz-close.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.yaz-errno.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>yaz_close</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.yaz.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>yaz_errno</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,575 @@
+<HTML
+><HEAD
+><TITLE
+>LDAP functions</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Function Reference"
+HREF="funcref.html"><LINK
+REL="PREVIOUS"
+TITLE="ibase_num_fields"
+HREF="function.ibase-num-fields.html"><LINK
+REL="NEXT"
+TITLE="ldap_add"
+HREF="function.ldap-add.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="reference"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.ibase-num-fields.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.ldap-add.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="reference"
+><A
+NAME="ref.ldap"
+></A
+><DIV
+CLASS="TITLEPAGE"
+><H1
+CLASS="title"
+>XXXII. LDAP functions</H1
+><DIV
+CLASS="PARTINTRO"
+><A
+NAME="AEN18754"
+></A
+><H1
+>Introduction to LDAP</H1
+><P
+>&#13;     LDAP is the Lightweight Directory Access Protocol, and is a
+     protocol used to access "Directory Servers".  The Directory is a
+     special kind of database that holds information in a tree
+     structure.  
+    </P
+><P
+> 
+     The concept is similar to your hard disk directory structure,
+     except that in this context, the root directory is "The world"
+     and the first level subdirectories are "countries".  Lower levels
+     of the directory structure contain entries for companies,
+     organisations or places, while yet lower still we find directory
+     entries for people, and perhaps equipment or documents.
+    </P
+><P
+>&#13;     To refer to a file in a subdirectory on your hard disk, you might
+     use something like
+    </P
+><P
+CLASS="literallayout"
+><br>
+&nbsp;&nbsp;&nbsp;&nbsp;/usr/local/myapp/docs<br>
+</P
+><P
+>&#13;     The forwards slash marks each division in the reference, and the
+     sequence is read from left to right.
+    </P
+><P
+> 
+     The equivalent to the fully qualified file reference in LDAP is
+     the "distinguished name", referred to simply as "dn".  An example
+     dn might be.
+    </P
+><P
+CLASS="literallayout"
+><br>
+&nbsp;&nbsp;&nbsp;&nbsp;cn=John&nbsp;Smith,ou=Accounts,o=My&nbsp;Company,c=US<br>
+</P
+><P
+>&#13;     The comma marks each division in the reference, and the sequence
+     is read from right to left.  You would read this dn as ..
+    </P
+><P
+CLASS="literallayout"
+><br>
+&nbsp;&nbsp;&nbsp;&nbsp;country&nbsp;=&nbsp;US<br>
+&nbsp;&nbsp;&nbsp;&nbsp;organization&nbsp;=&nbsp;My&nbsp;Company<br>
+&nbsp;&nbsp;&nbsp;&nbsp;organizationalUnit&nbsp;=&nbsp;Accounts<br>
+&nbsp;&nbsp;&nbsp;&nbsp;commonName&nbsp;=&nbsp;John&nbsp;Smith<br>
+</P
+><P
+>&#13;     In the same way as there are no hard rules about how you organise
+     the directory structure of a hard disk, a directory server
+     manager can set up any structure that is meaningful for the
+     purpose.  However, there are some conventions that are used.  The
+     message is that you can not write code to access a directory
+     server unless you know something about its structure, any more
+     than you can use a database without some knowledge of what is
+     available.
+    </P
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="ldap-example"
+>Complete code example</A
+></H1
+><P
+>&#13;      Retrieve information for all entries where the surname starts
+      with "S" from a directory server, displaying an extract with
+      name and email address.
+     </P
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN18769"
+></A
+><P
+><B
+>Example 1. LDAP search example</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;&#60;?php
+// basic sequence with LDAP is connect, bind, search, interpret search
+// result, close connection
+
+echo "&#60;h3&#62;LDAP query test&#60;/h3&#62;";
+echo "Connecting ...";
+$ds=ldap_connect("localhost");  // must be a valid LDAP server!
+echo "connect result is ".$ds."&#60;p&#62;";
+
+if ($ds) { 
+    echo "Binding ..."; 
+    $r=ldap_bind($ds);     // this is an "anonymous" bind, typically
+                           // read-only access
+    echo "Bind result is ".$r."&#60;p&#62;";
+
+    echo "Searching for (sn=S*) ...";
+    // Search surname entry
+    $sr=ldap_search($ds,"o=My Company, c=US", "sn=S*");  
+    echo "Search result is ".$sr."&#60;p&#62;";
+
+    echo "Number of entires returned is ".ldap_count_entries($ds,$sr)."&#60;p&#62;";
+
+    echo "Getting entries ...&#60;p&#62;";
+    $info = ldap_get_entries($ds, $sr);
+    echo "Data for ".$info["count"]." items returned:&#60;p&#62;";
+
+    for ($i=0; $i&#60;$info["count"]; $i++) {
+        echo "dn is: ". $info[$i]["dn"] ."&#60;br&#62;";
+        echo "first cn entry is: ". $info[$i]["cn"][0] ."&#60;br&#62;";
+        echo "first email entry is: ". $info[$i]["mail"][0] ."&#60;p&#62;";
+    }
+
+    echo "Closing connection";
+    ldap_close($ds);
+
+} else {
+    echo "&#60;h4&#62;Unable to connect to LDAP server&#60;/h4&#62;";
+}
+?&#62;
+</PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="AEN18772"
+>Using the PHP LDAP calls</A
+></H2
+><P
+>&#13;      You will need to get and compile LDAP client libraries from
+      either the University of Michigan ldap-3.3 package or the
+      Netscape Directory SDK 3.0.  You will also need to recompile PHP
+      with LDAP support enabled before PHP's LDAP calls will work.
+     </P
+><P
+>&#13;      Before you can use the LDAP calls you will need to know ..
+
+    <P
+></P
+><UL
+><LI
+><P
+>&#13;       The name or address of the directory server you will use
+      </P
+></LI
+><LI
+><P
+>&#13;       The "base dn" of the server (the part of the world directory
+       that is held on this server, which could be "o=My
+       Company,c=US")
+      </P
+></LI
+><LI
+><P
+>&#13;       Whether you need a password to access the server (many servers
+       will provide read access for an "anonymous bind" but require a
+       password for anything else)
+      </P
+></LI
+></UL
+></P
+><P
+>&#13;      The typical sequence of LDAP calls you will make in an
+      application will follow this pattern:
+<P
+CLASS="literallayout"
+><br>
+&nbsp;&nbsp;ldap_connect()&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;establish&nbsp;connection&nbsp;to&nbsp;server<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|<br>
+&nbsp;&nbsp;ldap_bind()&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;anonymous&nbsp;or&nbsp;authenticated&nbsp;"login"<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|<br>
+&nbsp;&nbsp;do&nbsp;something&nbsp;like&nbsp;search&nbsp;or&nbsp;update&nbsp;the&nbsp;directory<br>
+&nbsp;&nbsp;and&nbsp;display&nbsp;the&nbsp;results<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|<br>
+&nbsp;&nbsp;ldap_close()&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;"logout"<br>
+</P
+></P
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="AEN18785"
+>More Information</A
+></H2
+><P
+>&#13;      Lots of information about LDAP can be found at
+     </P
+><P
+></P
+><UL
+><LI
+><P
+>&#13;       <A
+HREF="http://developer.netscape.com/tech/directory/"
+TARGET="_top"
+>Netscape</A
+>
+      </P
+></LI
+><LI
+><P
+>&#13;       <A
+HREF="http://www.umich.edu/~dirsvcs/ldap/index.html"
+TARGET="_top"
+>University of Michigan</A
+>
+      </P
+></LI
+><LI
+><P
+>&#13;       <A
+HREF="http://www.openldap.org/"
+TARGET="_top"
+>OpenLDAP Project</A
+>
+      </P
+></LI
+><LI
+><P
+>&#13;       <A
+HREF="http://elvira.innosoft.com/ldapworld"
+TARGET="_top"
+>LDAP World</A
+>
+      </P
+></LI
+></UL
+><P
+>    
+      The Netscape SDK contains a helpful Programmer's Guide in .html
+      format.
+     </P
+></DIV
+></DIV
+></DIV
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Table of Contents</B
+></DT
+><DT
+><A
+HREF="function.ldap-add.html"
+>ldap_add</A
+> &#8212; Add entries to LDAP directory</DT
+><DT
+><A
+HREF="function.ldap-bind.html"
+>ldap_bind</A
+> &#8212; Bind to LDAP directory</DT
+><DT
+><A
+HREF="function.ldap-close.html"
+>ldap_close</A
+> &#8212; Close link to LDAP server</DT
+><DT
+><A
+HREF="function.ldap-compare.html"
+>ldap_compare</A
+> &#8212; Compare value of attribute found in entry specified with DN</DT
+><DT
+><A
+HREF="function.ldap-connect.html"
+>ldap_connect</A
+> &#8212; Connect to an LDAP server</DT
+><DT
+><A
+HREF="function.ldap-count-entries.html"
+>ldap_count_entries</A
+> &#8212; Count the number of entries in a search</DT
+><DT
+><A
+HREF="function.ldap-delete.html"
+>ldap_delete</A
+> &#8212; Delete an entry from a directory</DT
+><DT
+><A
+HREF="function.ldap-dn2ufn.html"
+>ldap_dn2ufn</A
+> &#8212; Convert DN to User Friendly Naming format</DT
+><DT
+><A
+HREF="function.ldap-err2str.html"
+>ldap_err2str</A
+> &#8212; 
+     Convert LDAP error number into string error message
+    </DT
+><DT
+><A
+HREF="function.ldap-errno.html"
+>ldap_errno</A
+> &#8212; 
+     Return the LDAP error number of the last LDAP command
+    </DT
+><DT
+><A
+HREF="function.ldap-error.html"
+>ldap_error</A
+> &#8212; 
+     Return the LDAP error message of the last LDAP command
+    </DT
+><DT
+><A
+HREF="function.ldap-explode-dn.html"
+>ldap_explode_dn</A
+> &#8212; Splits DN into its component parts</DT
+><DT
+><A
+HREF="function.ldap-first-attribute.html"
+>ldap_first_attribute</A
+> &#8212; Return first attribute</DT
+><DT
+><A
+HREF="function.ldap-first-entry.html"
+>ldap_first_entry</A
+> &#8212; Return first result id</DT
+><DT
+><A
+HREF="function.ldap-free-result.html"
+>ldap_free_result</A
+> &#8212; Free result memory</DT
+><DT
+><A
+HREF="function.ldap-get-attributes.html"
+>ldap_get_attributes</A
+> &#8212; Get attributes from a search result entry</DT
+><DT
+><A
+HREF="function.ldap-get-dn.html"
+>ldap_get_dn</A
+> &#8212; Get the DN of a result entry</DT
+><DT
+><A
+HREF="function.ldap-get-entries.html"
+>ldap_get_entries</A
+> &#8212; Get all result entries</DT
+><DT
+><A
+HREF="function.ldap-get-values.html"
+>ldap_get_values</A
+> &#8212; Get all values from a result entry</DT
+><DT
+><A
+HREF="function.ldap-get-values-len.html"
+>ldap_get_values_len</A
+> &#8212; Get all binary values from a result entry</DT
+><DT
+><A
+HREF="function.ldap-list.html"
+>ldap_list</A
+> &#8212; Single-level search</DT
+><DT
+><A
+HREF="function.ldap-modify.html"
+>ldap_modify</A
+> &#8212; Modify an LDAP entry</DT
+><DT
+><A
+HREF="function.ldap-mod-add.html"
+>ldap_mod_add</A
+> &#8212; Add attribute values to current attributes</DT
+><DT
+><A
+HREF="function.ldap-mod-del.html"
+>ldap_mod_del</A
+> &#8212; Delete attribute values from current attributes</DT
+><DT
+><A
+HREF="function.ldap-mod-replace.html"
+>ldap_mod_replace</A
+> &#8212; Replace attribute values with new ones</DT
+><DT
+><A
+HREF="function.ldap-next-attribute.html"
+>ldap_next_attribute</A
+> &#8212; Get the next attribute in result</DT
+><DT
+><A
+HREF="function.ldap-next-entry.html"
+>ldap_next_entry</A
+> &#8212; Get next result entry</DT
+><DT
+><A
+HREF="function.ldap-read.html"
+>ldap_read</A
+> &#8212; Read an entry</DT
+><DT
+><A
+HREF="function.ldap-search.html"
+>ldap_search</A
+> &#8212; Search LDAP tree</DT
+><DT
+><A
+HREF="function.ldap-unbind.html"
+>ldap_unbind</A
+> &#8212; Unbind from LDAP directory</DT
+></DL
+></DIV
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.ibase-num-fields.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.ldap-add.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>ibase_num_fields</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="funcref.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>ldap_add</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

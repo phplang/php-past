@@ -1,0 +1,219 @@
+<HTML
+><HEAD
+><TITLE
+>mcrypt_get_iv_size</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Mcrypt Encryption Functions"
+HREF="ref.mcrypt.html"><LINK
+REL="PREVIOUS"
+TITLE="mcrypt_list_modes"
+HREF="function.mcrypt-list-modes.html"><LINK
+REL="NEXT"
+TITLE="mcrypt_encrypt"
+HREF="function.mcrypt-encrypt.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.mcrypt-list-modes.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.mcrypt-encrypt.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.mcrypt-get-iv-size"
+>mcrypt_get_iv_size</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN21705"
+></A
+><P
+>    (PHP4 &#62;= 4.0.2)</P
+>mcrypt_get_iv_size&nbsp;--&nbsp;Returns the size of the IV belonging to a specific cipher/mode combination</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN21708"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN21710"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int <B
+CLASS="function"
+>mcrypt_get_iv_size</B
+></CODE
+> (string cipher, string mode)</CODE
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int <B
+CLASS="function"
+>mcrypt_get_iv_size</B
+></CODE
+> (resource td)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     The first prototype is when linked against libmcrypt 2.2.x, the
+     second when linked against libmcrypt 2.4.x.
+    </P
+><P
+>&#13;     <B
+CLASS="function"
+>Mcrypt_get_iv_size()</B
+> returns the size of
+     the Initialisation Vector (IV) in bytes. On error the function
+     returns FALSE. If the IV is ignored in the specified cipher/mode
+     combination zero is returned.
+    </P
+><P
+>&#13;     <TT
+CLASS="parameter"
+><I
+>Cipher</I
+></TT
+> is one of the MCRYPT_ciphername
+     constants of the name of the algorithm as string.
+    </P
+><P
+>&#13;     <TT
+CLASS="parameter"
+><I
+>Mode</I
+></TT
+> is one of the MCRYPT_MODE_modename
+     constants of one of "ecb", "cbc", "cfb", "ofb", "nofb" or 
+     "stream".
+    </P
+><P
+>&#13;     <TT
+CLASS="parameter"
+><I
+>Td</I
+></TT
+> is the algorithm specified.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.mcrypt-list-modes.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.mcrypt-encrypt.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>mcrypt_list_modes</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.mcrypt.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>mcrypt_encrypt</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

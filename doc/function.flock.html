@@ -1,0 +1,269 @@
+<HTML
+><HEAD
+><TITLE
+>flock</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Filesystem functions"
+HREF="ref.filesystem.html"><LINK
+REL="PREVIOUS"
+TITLE="filetype"
+HREF="function.filetype.html"><LINK
+REL="NEXT"
+TITLE="fopen"
+HREF="function.fopen.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.filetype.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.fopen.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.flock"
+>flock</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN11120"
+></A
+><P
+>    (PHP3 &#62;= 3.0.7, PHP4 )</P
+>flock&nbsp;--&nbsp;Portable advisory file locking</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN11123"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN11125"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>bool <B
+CLASS="function"
+>flock</B
+></CODE
+> (int fp, int operation [, int 
+       wouldblock])</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     PHP supports a portable way of locking complete files in an
+     advisory way (which means all accessing programs have to use the
+     same way of locking or it will not work).
+    </P
+><P
+>&#13;     <B
+CLASS="function"
+>flock()</B
+> operates on <TT
+CLASS="parameter"
+><I
+>fp</I
+></TT
+>
+     which must be an open file
+     pointer. <TT
+CLASS="parameter"
+><I
+>operation</I
+></TT
+> is one of the following
+     values:
+    </P
+><P
+>&#13;     <P
+></P
+><UL
+><LI
+><P
+>&#13;	To acquire a shared lock (reader), set
+	<TT
+CLASS="parameter"
+><I
+>operation</I
+></TT
+> to LOCK_SH (set to 1 prior to
+	PHP 4.0.1).
+       </P
+></LI
+><LI
+><P
+>&#13;	To acquire an exclusive lock (writer), set
+	<TT
+CLASS="parameter"
+><I
+>operation</I
+></TT
+> to LOCK_EX (set to 2 prior to
+	PHP 4.0.1).
+       </P
+></LI
+><LI
+><P
+>&#13;	To release a lock (shared or exclusive), set
+	<TT
+CLASS="parameter"
+><I
+>operation</I
+></TT
+> to LOCK_UN (set to 3 prior to
+	PHP 4.0.1).
+       </P
+></LI
+><LI
+><P
+>&#13;	If you don't want <B
+CLASS="function"
+>flock()</B
+> to block while
+	locking, add LOCK_NB (4 prior to PHP 4.0.1) to
+	<TT
+CLASS="parameter"
+><I
+>operation</I
+></TT
+>.
+       </P
+></LI
+></UL
+>
+    </P
+><P
+>&#13;     <B
+CLASS="function"
+>Flock()</B
+> allows you to perform a simple
+     reader/writer model which can be used on virtually every platform
+     (including most Unices and even Windows).  The optional 3rd
+     argument is set to true if the lock would block (EWOULDBLOCK
+     errno condition)
+    </P
+><P
+>&#13;     <B
+CLASS="function"
+>Flock()</B
+> returns true on success and false on
+     error (e.g. when a lock could not be acquired).
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.filetype.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.fopen.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>filetype</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.filesystem.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>fopen</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

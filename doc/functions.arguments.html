@@ -1,0 +1,503 @@
+<HTML
+><HEAD
+><TITLE
+>Function arguments</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Functions"
+HREF="functions.html"><LINK
+REL="PREVIOUS"
+TITLE="Functions"
+HREF="functions.html"><LINK
+REL="NEXT"
+TITLE="Returning values"
+HREF="functions.returning-values.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="functions.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 12. Functions</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="functions.returning-values.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="functions.arguments"
+>Function arguments</A
+></H1
+><P
+>&#13;    Information may be passed to functions via the argument list,
+    which is a comma-delimited list of variables and/or constants.
+   </P
+><P
+>&#13;     PHP supports passing arguments by value (the default), <A
+HREF="functions.arguments.html#functions.arguments.by-reference"
+>passing by
+     reference</A
+>, and <A
+HREF="functions.arguments.html#functions.arguments.default"
+>default argument
+     values</A
+>. Variable-length argument lists are supported only
+     in PHP 4 and later; see <A
+HREF="functions.arguments.html#functions.variable-arg-list"
+>Variable-length argument
+     lists</A
+> and the function references for
+     <A
+HREF="function.func-num-args.html"
+><B
+CLASS="function"
+>func_num_args()</B
+></A
+>,
+     <A
+HREF="function.func-get-arg.html"
+><B
+CLASS="function"
+>func_get_arg()</B
+></A
+>, and
+     <A
+HREF="function.func-get-args.html"
+><B
+CLASS="function"
+>func_get_args()</B
+></A
+> for more information. A
+     similar effect can be achieved in PHP 3 by passing an array of
+     arguments to a function:
+ 
+    <DIV
+CLASS="informalexample"
+><A
+NAME="AEN3806"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;function takes_array($input) {
+    echo "$input[0] + $input[1] = ", $input[0]+$input[1];
+}
+     </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+>
+   </P
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="functions.arguments.by-reference"
+>Making arguments be passed by reference</A
+></H2
+><P
+>&#13;     By default, function arguments are passed by value (so that if
+     you change the value of the argument within the function, it does
+     not get changed outside of the function). If you wish to allow a
+     function to modify its arguments, you must pass them by
+     reference.
+    </P
+><P
+>&#13;     If you want an argument to a function to always be passed by
+     reference, you can prepend an ampersand (&#38;) to the argument
+     name in the function definition:
+ 
+     <DIV
+CLASS="informalexample"
+><A
+NAME="AEN3812"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;function add_some_extra(&#38;$string) {
+    $string .= 'and something extra.';
+}
+$str = 'This is a string, ';
+add_some_extra($str);
+echo $str;    // outputs 'This is a string, and something extra.'
+      </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+>
+    </P
+><P
+>&#13;     If you wish to pass a variable by reference to a function which
+     does not do this by default, you may prepend an ampersand to the
+     argument name in the function call:
+ 
+     <DIV
+CLASS="informalexample"
+><A
+NAME="AEN3815"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;function foo ($bar) {
+    $bar .= ' and something extra.';
+}
+$str = 'This is a string, ';
+foo ($str);
+echo $str;    // outputs 'This is a string, '
+foo (&#38;$str);
+echo $str;    // outputs 'This is a string, and something extra.'
+      </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+>
+    </P
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="functions.arguments.default"
+>Default argument values</A
+></H2
+><P
+>&#13;     A function may define C++-style default values for scalar
+     arguments as follows:
+ 
+     <DIV
+CLASS="informalexample"
+><A
+NAME="AEN3820"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;function makecoffee ($type = "cappucino") {
+    return "Making a cup of $type.\n";
+}
+echo makecoffee ();
+echo makecoffee ("espresso");
+      </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+>
+    </P
+><P
+>&#13;     The output from the above snippet is:
+ 
+     <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="screen"
+>&#13;Making a cup of cappucino.
+Making a cup of espresso.
+     </PRE
+></TD
+></TR
+></TABLE
+>
+    </P
+><P
+>&#13;     The default value must be a constant expression, not (for
+     example) a variable or class member.
+    </P
+><P
+>&#13;     Note that when using default arguments, any defaults should be on
+     the right side of any non-default arguments; otherwise, things
+     will not work as expected. Consider the following code snippet:
+ 
+     <DIV
+CLASS="informalexample"
+><A
+NAME="AEN3826"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;function makeyogurt ($type = "acidophilus", $flavour) {
+    return "Making a bowl of $type $flavour.\n";
+}
+ 
+echo makeyogurt ("raspberry");   // won't work as expected
+      </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+>
+    </P
+><P
+>&#13;     The output of the above example is:
+ 
+     <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="screen"
+>&#13;Warning: Missing argument 2 in call to makeyogurt() in 
+/usr/local/etc/httpd/htdocs/php3test/functest.html on line 41
+Making a bowl of raspberry .
+     </PRE
+></TD
+></TR
+></TABLE
+>
+    </P
+><P
+>&#13;     Now, compare the above with this:
+ 
+     <DIV
+CLASS="informalexample"
+><A
+NAME="AEN3831"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;function makeyogurt ($flavour, $type = "acidophilus") {
+    return "Making a bowl of $type $flavour.\n";
+}
+ 
+echo makeyogurt ("raspberry");   // works as expected
+      </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+>
+    </P
+><P
+>&#13;     The output of this example is:
+ 
+     <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="screen"
+>&#13;Making a bowl of acidophilus raspberry.
+     </PRE
+></TD
+></TR
+></TABLE
+>
+    </P
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="functions.variable-arg-list"
+>Variable-length argument lists</A
+></H2
+><P
+>&#13;     PHP 4 has support for variable-length argument lists in
+     user-defined functions. This is really quite easy, using the
+     <A
+HREF="function.func-num-args.html"
+><B
+CLASS="function"
+>func_num_args()</B
+></A
+>,
+     <A
+HREF="function.func-get-arg.html"
+><B
+CLASS="function"
+>func_get_arg()</B
+></A
+>, and
+     <A
+HREF="function.func-get-args.html"
+><B
+CLASS="function"
+>func_get_args()</B
+></A
+> functions.
+    </P
+><P
+>&#13;     No special syntax is required, and argument lists may still be
+     explicitly provided with function definitions and will behave as
+     normal.
+    </P
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="functions.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="functions.returning-values.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Functions</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="functions.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Returning values</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

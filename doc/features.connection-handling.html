@@ -1,0 +1,273 @@
+<HTML
+><HEAD
+><TITLE
+>Connection handling</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Features"
+HREF="features.html"><LINK
+REL="PREVIOUS"
+TITLE="Using remote files"
+HREF="features.remote-files.html"><LINK
+REL="NEXT"
+TITLE="Persistent Database Connections"
+HREF="features.persistent-connections.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="chapter"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="features.remote-files.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="features.persistent-connections.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="chapter"
+><H1
+><A
+NAME="features.connection-handling"
+>Chapter 21. Connection handling</A
+></H1
+><DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
+><P
+><B
+>Note: </B
+>The following applies to 3.0.7 and later.</P
+></BLOCKQUOTE
+></DIV
+><P
+>&#13;   Internally in PHP a connection status is maintained.  There are 3
+   possible states:
+   <P
+></P
+><UL
+><LI
+><P
+>0 - NORMAL</P
+></LI
+><LI
+><P
+>1 - ABORTED</P
+></LI
+><LI
+><P
+>2 - TIMEOUT</P
+></LI
+></UL
+>
+  </P
+><P
+>&#13;   When a PHP script is running normally the NORMAL state, is active.
+   If the remote client disconnects the ABORTED state flag is
+   turned on.  A remote client disconnect is usually caused by the
+   user hitting his STOP button.  If the PHP-imposed time limit (see
+   <A
+HREF="function.set-time-limit.html"
+><B
+CLASS="function"
+>set_time_limit()</B
+></A
+>) is hit, the TIMEOUT state flag
+   is turned on.</P
+><P
+>&#13;   You can decide whether or not you want a client disconnect to cause
+   your script to be aborted.  Sometimes it is handy to always have your
+   scripts run to completion even if there is no remote browser receiving
+   the output.  The default behaviour is however for your script to be
+   aborted when the remote client disconnects.  This behaviour can be
+   set via the ignore_user_abort php3.ini directive as well as through
+   the corresponding php3_ignore_user_abort Apache .conf directive or
+   with the <A
+HREF="function.ignore-user-abort.html"
+><B
+CLASS="function"
+>ignore_user_abort()</B
+></A
+> function.  If you do
+   not tell PHP to ignore a user abort and the user aborts, your script
+   will terminate.  The one exception is if you have registered a shutdown
+   function using <A
+HREF="function.register-shutdown-function.html"
+><B
+CLASS="function"
+>register_shutdown_function()</B
+></A
+>.  With a
+   shutdown function, when the remote user hits his STOP button, the
+   next time your script tries to output something PHP will detect that
+   the connection has been aborted and the shutdown function is called.
+   This shutdown function will also get called at the end of your script
+   terminating normally, so to do something different in case of a client
+   diconnect you can use the <A
+HREF="function.connection-aborted.html"
+><B
+CLASS="function"
+>connection_aborted()</B
+></A
+>
+   function.  This function will return true if the connection was
+   aborted.</P
+><P
+>&#13;   Your script can also be terminated by the built-in script timer.
+   The default timeout is 30 seconds.  It can be changed using
+   the max_execution_time php3.ini directive or the corresponding
+   php3_max_execution_time Apache .conf directive as well as with
+   the <A
+HREF="function.set-time-limit.html"
+><B
+CLASS="function"
+>set_time_limit()</B
+></A
+> function.  When the timer
+   expires the script will be aborted and as with the above client
+   disconnect case, if a shutdown function has been registered it will
+   be called.  Within this shutdown function you can check to see if
+   a timeout caused the shutdown function to be called by calling the
+   <A
+HREF="function.connection-timeout.html"
+><B
+CLASS="function"
+>connection_timeout()</B
+></A
+> function.  This function will
+   return true if a timeout caused the shutdown function to be called.</P
+><P
+>&#13;   One thing to note is that both the ABORTED and the TIMEOUT states
+   can be active at the same time.  This is possible if you tell
+   PHP to ignore user aborts.  PHP will still note the fact that
+   a user may have broken the connection, but the script will keep
+   running.  If it then hits the time limit it will be aborted and
+   your shutdown function, if any, will be called.  At this point
+   you will find that <A
+HREF="function.connection-timeout.html"
+><B
+CLASS="function"
+>connection_timeout()</B
+></A
+>
+   and <A
+HREF="function.connection-aborted.html"
+><B
+CLASS="function"
+>connection_aborted()</B
+></A
+> return true.
+   You can also check both states in a single call by using the
+   <A
+HREF="function.connection-status.html"
+><B
+CLASS="function"
+>connection_status()</B
+></A
+>.  This function returns a
+   bitfield of the active states.  So, if both states are active it
+   would return 3, for example.</P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="features.remote-files.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="features.persistent-connections.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Using remote files</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="features.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Persistent Database Connections</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

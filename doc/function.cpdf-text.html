@@ -1,0 +1,229 @@
+<HTML
+><HEAD
+><TITLE
+>cpdf_text</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="ClibPDF functions"
+HREF="ref.cpdf.html"><LINK
+REL="PREVIOUS"
+TITLE="cpdf_show_xy"
+HREF="function.cpdf-show-xy.html"><LINK
+REL="NEXT"
+TITLE="cpdf_set_font"
+HREF="function.cpdf-set-font.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.cpdf-show-xy.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.cpdf-set-font.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.cpdf-text"
+>cpdf_text</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN7286"
+></A
+><P
+>    (PHP3 &#62;= 3.0.8, PHP4 &#62;= 4.0b4)</P
+>cpdf_text&nbsp;--&nbsp;Output text with parameters</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN7289"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN7291"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>void <B
+CLASS="function"
+>cpdf_text</B
+></CODE
+> (int pdf document, string text, double x-coor, double y-coor [, int mode [, double orientation [, int alignmode]]])</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     The <B
+CLASS="function"
+>cpdf_text()</B
+> function outputs the string
+     <TT
+CLASS="parameter"
+><I
+>text</I
+></TT
+> at position with coordinates
+     (<TT
+CLASS="parameter"
+><I
+>x-coor</I
+></TT
+>, <TT
+CLASS="parameter"
+><I
+>y-coor</I
+></TT
+>).
+    </P
+><P
+>&#13;     The optional parameter <TT
+CLASS="parameter"
+><I
+>mode</I
+></TT
+> determines the
+     unit length. If it's 0 or omitted the default unit as specified
+     for the page is used. Otherwise the coordinates are measured in
+     postscript points disregarding the current unit. The optional
+     parameter <TT
+CLASS="parameter"
+><I
+>orientation</I
+></TT
+> is the rotation of
+     the text in degree. The optional parameter
+     <TT
+CLASS="parameter"
+><I
+>alignmode</I
+></TT
+> determines how the text is
+     aligned.
+    </P
+><P
+>&#13;     See the ClibPDF documentation for possible values.
+    </P
+><P
+>&#13;     See also <A
+HREF="function.cpdf-show-xy.html"
+><B
+CLASS="function"
+>cpdf_show_xy()</B
+></A
+>.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.cpdf-show-xy.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.cpdf-set-font.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>cpdf_show_xy</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.cpdf.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>cpdf_set_font</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

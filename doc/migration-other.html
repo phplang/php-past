@@ -1,0 +1,329 @@
+<HTML
+><HEAD
+><TITLE
+>Other incompatibilities</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Migrating from PHP/FI 2.0 to PHP 3.0"
+HREF="migration.html"><LINK
+REL="PREVIOUS"
+TITLE="Function true/false return values"
+HREF="migration-truefalse.html"><LINK
+REL="NEXT"
+TITLE="PHP development"
+HREF="phpdevel.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="migration-truefalse.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Appendix A. Migrating from PHP/FI 2.0 to PHP 3.0</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="phpdevel.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="migration-other"
+>Other incompatibilities</A
+></H1
+><P
+></P
+><UL
+><LI
+><P
+>&#13;      The PHP 3.0 Apache module no longer supports Apache versions
+      prior to 1.2.  Apache 1.2 or later is required.</P
+></LI
+><LI
+><P
+> <A
+HREF="function.echo.html"
+><B
+CLASS="function"
+>echo()</B
+></A
+> no longer
+    supports a format string.  Use the
+    <A
+HREF="function.printf.html"
+><B
+CLASS="function"
+>printf()</B
+></A
+> function instead.</P
+></LI
+><LI
+><P
+>&#13;      In PHP/FI 2.0, an implementation side-effect caused
+      <TT
+CLASS="literal"
+>$foo[0]</TT
+> to have the same effect as
+      <TT
+CLASS="literal"
+>$foo</TT
+>.  This is not true for PHP 3.0.</P
+></LI
+><LI
+><P
+>&#13;      Reading arrays with <TT
+CLASS="literal"
+>$array[]</TT
+> is no longer
+      supported</P
+><P
+>&#13;      That is, you cannot traverse an array by having a loop that does
+      <TT
+CLASS="literal"
+>$data = $array[]</TT
+>.  Use
+      <A
+HREF="function.current.html"
+><B
+CLASS="function"
+>current()</B
+></A
+> and <A
+HREF="function.next.html"
+><B
+CLASS="function"
+>next()</B
+></A
+>
+      instead.</P
+><P
+>&#13;      Also, <TT
+CLASS="literal"
+>$array1[] = $array2</TT
+> does not append the
+      values of <TT
+CLASS="literal"
+>$array2</TT
+> to <TT
+CLASS="literal"
+>$array1</TT
+>,
+      but appends <TT
+CLASS="literal"
+>$array2</TT
+> as the last entry of
+      <TT
+CLASS="literal"
+>$array1</TT
+>.  See also multidimensional array
+      support.</P
+></LI
+><LI
+><P
+> <TT
+CLASS="literal"
+>"+"</TT
+> is no longer overloaded as a
+     concatenation operator for strings, instead it converts it's
+     arguments to numbers and performs numeric addition. Use
+     <TT
+CLASS="literal"
+>"."</TT
+> instead.</P
+></LI
+></UL
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN41409"
+></A
+><P
+><B
+>Example A-11. Migration from 2.0: concatenation for strings</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;echo "1" + "1";
+</PRE
+></TD
+></TR
+></TABLE
+><P
+> 
+          In PHP 2.0 this would echo 11, in PHP 3.0 it would echo 2. Instead
+          use:
+
+          <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;echo "1"."1";
+</PRE
+></TD
+></TR
+></TABLE
+>
+
+          <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;$a = 1;
+$b = 1;
+echo $a + $b;
+</PRE
+></TD
+></TR
+></TABLE
+></P
+><P
+>  
+          This would echo 2 in both PHP 2.0 and 3.0.
+
+          <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;$a = 1;
+$b = 1;
+echo $a.$b;
+</PRE
+></TD
+></TR
+></TABLE
+>
+          This will echo 11 in PHP 3.0.</P
+></DIV
+></TD
+></TR
+></TABLE
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="migration-truefalse.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="phpdevel.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Function true/false return values</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="migration.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>PHP development</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

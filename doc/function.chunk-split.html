@@ -1,0 +1,253 @@
+<HTML
+><HEAD
+><TITLE
+>chunk_split</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="String functions"
+HREF="ref.strings.html"><LINK
+REL="PREVIOUS"
+TITLE="Chr"
+HREF="function.chr.html"><LINK
+REL="NEXT"
+TITLE="convert_cyr_string"
+HREF="function.convert-cyr-string.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.chr.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.convert-cyr-string.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.chunk-split"
+>chunk_split</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN36262"
+></A
+><P
+>    (PHP3 &#62;= 3.0.6, PHP4 )</P
+>chunk_split&nbsp;--&nbsp;Split a string into smaller chunks</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN36265"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN36267"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>string <B
+CLASS="function"
+>chunk_split</B
+></CODE
+> (string string [, int 
+       chunklen [, string 
+       end]])</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     Can be used to split a string into smaller chunks which is useful
+     for e.g. converting <A
+HREF="function.base64-encode.html"
+>base64_encode</A
+> output to
+     match RFC 2045 semantics. It inserts every
+     <TT
+CLASS="parameter"
+><I
+>chunklen</I
+></TT
+> (defaults to 76) chars the string
+     <TT
+CLASS="parameter"
+><I
+>end</I
+></TT
+> (defaults to "\r\n").  It returns the
+     new string leaving the original string untouched.
+     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN36283"
+></A
+><P
+><B
+>Example 1. <B
+CLASS="function"
+>Chunk_split()</B
+> example</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;# format $data using RFC 2045 semantics
+
+$new_string = chunk_split (base64_encode($data));
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+     This function is significantly faster than
+     <A
+HREF="function.ereg-replace.html"
+><B
+CLASS="function"
+>ereg_replace()</B
+></A
+>.
+     <DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
+><P
+><B
+>Note: </B
+>
+       This function was added in 3.0.6.
+      </P
+></BLOCKQUOTE
+></DIV
+>
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.chr.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.convert-cyr-string.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Chr</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.strings.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>convert_cyr_string</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

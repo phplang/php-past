@@ -1,0 +1,190 @@
+<HTML
+><HEAD
+><TITLE
+>pg_loexport</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="PostgreSQL functions"
+HREF="ref.pgsql.html"><LINK
+REL="PREVIOUS"
+TITLE="pg_locreate"
+HREF="function.pg-locreate.html"><LINK
+REL="NEXT"
+TITLE="pg_loimport"
+HREF="function.pg-loimport.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.pg-locreate.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.pg-loimport.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.pg-loexport"
+>pg_loexport</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN31620"
+></A
+><P
+>    (PHP4 &#62;= 4.0.1)</P
+>pg_loexport&nbsp;--&nbsp;Export a large object to file</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN31623"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN31625"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>bool <B
+CLASS="function"
+>pg_loexport</B
+></CODE
+> (int
+       oid, int
+       file [, int
+       connection_id])</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     The <TT
+CLASS="parameter"
+><I
+>oid</I
+></TT
+> argument specifies the object id
+     of the large object to export and the
+     <TT
+CLASS="parameter"
+><I
+>filename</I
+></TT
+> argument specifies the pathname
+     of the file. Returns FALSE if an error occurred, TRUE
+     otherwise. Remember that handling large objects in PostgreSQL
+     must happen inside a transaction.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.pg-locreate.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.pg-loimport.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>pg_locreate</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.pgsql.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>pg_loimport</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

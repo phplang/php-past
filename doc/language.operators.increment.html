@@ -1,0 +1,276 @@
+<HTML
+><HEAD
+><TITLE
+>Incrementing/Decrementing Operators</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Operators"
+HREF="language.operators.html"><LINK
+REL="PREVIOUS"
+TITLE="Execution Operators"
+HREF="language.operators.execution.html"><LINK
+REL="NEXT"
+TITLE="Logical Operators"
+HREF="language.operators.logical.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="language.operators.execution.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 10. Operators</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="language.operators.logical.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="language.operators.increment"
+>Incrementing/Decrementing Operators</A
+></H1
+><P
+>&#13;    PHP supports C-style pre- and post-increment and decrement
+    operators.
+   </P
+><DIV
+CLASS="table"
+><A
+NAME="AEN3140"
+></A
+><P
+><B
+>Table 10-4. Increment/decrement Operators</B
+></P
+><TABLE
+BORDER="1"
+CLASS="CALSTABLE"
+><THEAD
+><TR
+><TH
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Example</TH
+><TH
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Name</TH
+><TH
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Effect</TH
+></TR
+></THEAD
+><TBODY
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>++$a</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Pre-increment</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Increments $a by one, then returns $a.</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>$a++</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Post-increment</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Returns $a, then increments $a by one.</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>--$a</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Pre-decrement</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Decrements $a by one, then returns $a.</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>$a--</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Post-decrement</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Returns $a, then decrements $a by one.</TD
+></TR
+></TBODY
+></TABLE
+></DIV
+><P
+>&#13;    Here's a simple example script:
+    <DIV
+CLASS="informalexample"
+><A
+NAME="AEN3166"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;&#60;?php
+echo "&#60;h3&#62;Postincrement&#60;/h3&#62;";
+$a = 5;
+echo "Should be 5: " . $a++ . "&#60;br&#62;\n";
+echo "Should be 6: " . $a . "&#60;br&#62;\n";
+
+echo "&#60;h3&#62;Preincrement&#60;/h3&#62;";
+$a = 5;
+echo "Should be 6: " . ++$a . "&#60;br&#62;\n";
+echo "Should be 6: " . $a . "&#60;br&#62;\n";
+
+echo "&#60;h3&#62;Postdecrement&#60;/h3&#62;";
+$a = 5;
+echo "Should be 5: " . $a-- . "&#60;br&#62;\n";
+echo "Should be 4: " . $a . "&#60;br&#62;\n";
+
+echo "&#60;h3&#62;Predecrement&#60;/h3&#62;";
+$a = 5;
+echo "Should be 4: " . --$a . "&#60;br&#62;\n";
+echo "Should be 4: " . $a . "&#60;br&#62;\n";
+?&#62;
+     </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+>
+   </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="language.operators.execution.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="language.operators.logical.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Execution Operators</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="language.operators.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Logical Operators</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

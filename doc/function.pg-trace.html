@@ -1,0 +1,242 @@
+<HTML
+><HEAD
+><TITLE
+>pg_trace</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="PostgreSQL functions"
+HREF="ref.pgsql.html"><LINK
+REL="PREVIOUS"
+TITLE="pg_client_encoding"
+HREF="function.pg-client-encoding.html"><LINK
+REL="NEXT"
+TITLE="pg_tty"
+HREF="function.pg-tty.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.pg-client-encoding.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.pg-tty.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.pg-trace"
+>pg_trace</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN31920"
+></A
+><P
+>    (PHP4 &#62;= 4.0.1)</P
+>pg_trace&nbsp;--&nbsp;Enable tracing a PostgreSQL connection</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN31923"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN31925"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>bool <B
+CLASS="function"
+>pg_trace</B
+></CODE
+> (string
+       filename [, string
+       mode [, int
+       connection]])</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     Enables tracing of the PostgreSQL frontend/backend communication
+     to a debugging file. To fully understand the results one needs to
+     be familiar with the internals of PostgreSQL communication
+     protocol.  For those who are not, it can still be useful for
+     tracing errors in queries sent to the server, you could do for
+     example <B
+CLASS="command"
+>grep '^To backend' trace.log</B
+> and see
+     what query actually were sent to the PostgreSQL server.
+    </P
+><P
+>&#13;     <TT
+CLASS="parameter"
+><I
+>Filename</I
+></TT
+> and <TT
+CLASS="parameter"
+><I
+>mode</I
+></TT
+>
+     are the same as in <A
+HREF="function.fopen.html"
+><B
+CLASS="function"
+>fopen()</B
+></A
+>
+     (<TT
+CLASS="parameter"
+><I
+>mode</I
+></TT
+> defaults to 'w'),
+     <TT
+CLASS="parameter"
+><I
+>connection</I
+></TT
+> specifies the connection to
+     trace and defaults to the last one opened.
+    </P
+><P
+>&#13;     Returns TRUE if <TT
+CLASS="parameter"
+><I
+>filename</I
+></TT
+> could be opened
+     for logging, FALSE otherwise.
+    </P
+><P
+>&#13;     See also <A
+HREF="function.fopen.html"
+><B
+CLASS="function"
+>fopen()</B
+></A
+> and
+     <A
+HREF="function.pg-untrace.html"
+><B
+CLASS="function"
+>pg_untrace()</B
+></A
+>.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.pg-client-encoding.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.pg-tty.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>pg_client_encoding</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.pgsql.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>pg_tty</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

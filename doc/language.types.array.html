@@ -1,0 +1,561 @@
+<HTML
+><HEAD
+><TITLE
+>Arrays</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Types"
+HREF="language.types.html"><LINK
+REL="PREVIOUS"
+TITLE="Strings"
+HREF="language.types.string.html"><LINK
+REL="NEXT"
+TITLE="Objects"
+HREF="language.types.object.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="language.types.string.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 6. Types</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="language.types.object.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="language.types.array"
+>Arrays</A
+></H1
+><P
+>&#13;    Arrays actually act like both hash tables (associative arrays) and
+    indexed arrays (vectors).
+   </P
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="language.types.array.single-dim"
+>Single Dimension Arrays</A
+></H2
+><P
+>&#13;     PHP supports both scalar and associative arrays. In fact, there
+     is no difference between the two.  You can create an array using
+     the <A
+HREF="function.list.html"
+><B
+CLASS="function"
+>list()</B
+></A
+> or <A
+HREF="function.array.html"
+><B
+CLASS="function"
+>array()</B
+></A
+>
+     functions, or you can explicitly set each array element value.
+     <DIV
+CLASS="informalexample"
+><A
+NAME="AEN2445"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+> 
+$a[0] = "abc"; 
+$a[1] = "def"; 
+$b["foo"] = 13;
+      </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+>
+    </P
+><P
+>&#13;     You can also create an array by simply adding values to the
+     array. When you assign a value to an array variable using empty
+     brackets, the value will be added onto the end of the array.
+     <DIV
+CLASS="informalexample"
+><A
+NAME="AEN2448"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+> 
+$a[] = "hello"; // $a[2] == "hello"
+$a[] = "world"; // $a[3] == "world" 
+      </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+>
+    </P
+><P
+>&#13;     Arrays may be sorted using the <A
+HREF="function.asort.html"
+><B
+CLASS="function"
+>asort()</B
+></A
+>,
+     <A
+HREF="function.arsort.html"
+><B
+CLASS="function"
+>arsort()</B
+></A
+>, <A
+HREF="function.ksort.html"
+><B
+CLASS="function"
+>ksort()</B
+></A
+>,
+     <A
+HREF="function.rsort.html"
+><B
+CLASS="function"
+>rsort()</B
+></A
+>, <A
+HREF="function.sort.html"
+><B
+CLASS="function"
+>sort()</B
+></A
+>,
+     <A
+HREF="function.uasort.html"
+><B
+CLASS="function"
+>uasort()</B
+></A
+>, <A
+HREF="function.usort.html"
+><B
+CLASS="function"
+>usort()</B
+></A
+>, and
+     <A
+HREF="function.uksort.html"
+><B
+CLASS="function"
+>uksort()</B
+></A
+> functions depending on the type of
+     sort you want.
+    </P
+><P
+>&#13;     You can count the number of items in an array using the
+     <A
+HREF="function.count.html"
+><B
+CLASS="function"
+>count()</B
+></A
+> function.
+    </P
+><P
+>&#13;     You can traverse an array using <A
+HREF="function.next.html"
+><B
+CLASS="function"
+>next()</B
+></A
+> and
+     <A
+HREF="function.prev.html"
+><B
+CLASS="function"
+>prev()</B
+></A
+> functions.  Another common way to
+     traverse an array is to use the <A
+HREF="function.each.html"
+><B
+CLASS="function"
+>each()</B
+></A
+>
+     function.
+    </P
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="language.types.array.multi-dim"
+>Multi-Dimensional Arrays</A
+></H2
+><P
+>&#13;     Multi-dimensional arrays are actually pretty simple.  For each
+     dimension of the array, you add another [key] value to the end:
+     <DIV
+CLASS="informalexample"
+><A
+NAME="AEN2468"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+> 
+$a[1]      = $f;               # one dimensional examples
+$a["foo"]  = $f;   
+
+$a[1][0]     = $f;             # two dimensional
+$a["foo"][2] = $f;             # (you can mix numeric and associative indices)
+$a[3]["bar"] = $f;             # (you can mix numeric and associative indices)
+
+$a["foo"][4]["bar"][0] = $f;   # four dimensional!
+      </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+>
+    </P
+><P
+>&#13;     In PHP 3 it is not possible to reference multidimensional arrays
+     directly within strings. For instance, the following will not
+     have the desired result:
+     <DIV
+CLASS="informalexample"
+><A
+NAME="AEN2471"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+> 
+$a[3]['bar'] = 'Bob';
+echo "This won't work: $a[3][bar]";
+      </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+>
+     In PHP 3, the above will output <TT
+CLASS="computeroutput"
+>This won't work:
+     Array[bar]</TT
+>. The string concatenation operator,
+     however, can be used to overcome this:
+     <DIV
+CLASS="informalexample"
+><A
+NAME="AEN2474"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;$a[3]['bar'] = 'Bob';
+echo "This will work: " . $a[3][bar];
+      </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+>
+    </P
+><P
+>&#13;     In PHP 4, however, the whole problem may be circumvented by
+     enclosing the array reference (inside the string) in curly
+     braces:
+     <DIV
+CLASS="informalexample"
+><A
+NAME="AEN2477"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;$a[3]['bar'] = 'Bob';
+echo "This will work: {$a[3][bar]}";
+      </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+>
+    </P
+><P
+>&#13;     You can "fill up" multi-dimensional arrays in many ways, but the
+     trickiest one to understand is how to use the
+     <A
+HREF="function.array.html"
+><B
+CLASS="function"
+>array()</B
+></A
+> command for associative arrays.  These
+     two snippets of code fill up the one-dimensional array in the
+     same way:
+     <DIV
+CLASS="informalexample"
+><A
+NAME="AEN2481"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+> 
+# Example 1:
+
+$a["color"]	= "red";
+$a["taste"]	= "sweet";
+$a["shape"]	= "round";
+$a["name"]	= "apple";
+$a[3]		= 4;
+
+# Example 2:
+$a = array(
+     "color" =&#62; "red",
+     "taste" =&#62; "sweet",
+     "shape" =&#62; "round",
+     "name"  =&#62; "apple",
+     3       =&#62; 4
+);
+      </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+>
+    </P
+><P
+>&#13;     The <A
+HREF="function.array.html"
+><B
+CLASS="function"
+>array()</B
+></A
+> function can be nested for
+     multi-dimensional arrays:
+     <DIV
+CLASS="informalexample"
+><A
+NAME="AEN2485"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+> 
+&#60;?
+$a = array(
+     "apple"  =&#62; array(
+          "color"  =&#62; "red",
+          "taste"  =&#62; "sweet",
+          "shape"  =&#62; "round"
+     ),
+     "orange"  =&#62; array(
+          "color"  =&#62; "orange",
+          "taste"  =&#62; "tart",
+          "shape"  =&#62; "round"
+     ),
+     "banana"  =&#62; array(
+          "color"  =&#62; "yellow",
+          "taste"  =&#62; "paste-y",
+          "shape"  =&#62; "banana-shaped"
+     )
+);
+
+echo $a["apple"]["taste"];    # will output "sweet"
+?&#62;
+      </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+>
+    </P
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="language.types.string.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="language.types.object.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Strings</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="language.types.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Objects</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

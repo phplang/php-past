@@ -1,0 +1,304 @@
+<HTML
+><HEAD
+><TITLE
+>xml_set_default_handler</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="XML parser functions"
+HREF="ref.xml.html"><LINK
+REL="PREVIOUS"
+TITLE="xml_set_processing_instruction_handler"
+HREF="function.xml-set-processing-instruction-handler.html"><LINK
+REL="NEXT"
+TITLE="xml_set_unparsed_entity_decl_handler"
+HREF="function.xml-set-unparsed-entity-decl-handler.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.xml-set-processing-instruction-handler.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.xml-set-unparsed-entity-decl-handler.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.xml-set-default-handler"
+>xml_set_default_handler</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN39840"
+></A
+><P
+>    (PHP3 &#62;= 3.0.6, PHP4 )</P
+>xml_set_default_handler&nbsp;--&nbsp;set up default handler</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN39843"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN39845"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int 
+       <B
+CLASS="function"
+>xml_set_default_handler</B
+>
+      </CODE
+> (int parser, string handler)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     Sets the default handler function for the XML parser
+     <TT
+CLASS="parameter"
+><I
+>parser</I
+></TT
+>.  <TT
+CLASS="parameter"
+><I
+>handler</I
+></TT
+> is
+     a string containing the name of a function that must exist when
+     <A
+HREF="function.xml-parse.html"
+><B
+CLASS="function"
+>xml_parse()</B
+></A
+> is called for
+     <TT
+CLASS="parameter"
+><I
+>parser</I
+></TT
+>.</P
+><P
+>&#13;     The function named by <TT
+CLASS="parameter"
+><I
+>handler</I
+></TT
+> must accept
+     two parameters:
+     <DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN39860"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+><TT
+CLASS="replaceable"
+><I
+>handler</I
+></TT
+></CODE
+> (int parser, string data)</CODE
+></P
+><P
+></P
+></DIV
+>
+     <P
+></P
+><DIV
+CLASS="variablelist"
+><DL
+><DT
+><TT
+CLASS="parameter"
+><I
+>parser</I
+></TT
+></DT
+><DD
+><P
+>&#13;	 The first parameter, <TT
+CLASS="replaceable"
+><I
+>parser</I
+></TT
+>, is a
+	 reference to the XML parser calling the
+	 handler.
+	</P
+></DD
+><DT
+><TT
+CLASS="parameter"
+><I
+>data</I
+></TT
+></DT
+><DD
+><P
+>&#13;	 The second parameter, <TT
+CLASS="parameter"
+><I
+>data</I
+></TT
+>, contains
+	 the character data.  This may be the XML declaration,
+	 document type declaration, entities or other data for which
+	 no other handler exists.
+	</P
+></DD
+></DL
+></DIV
+>
+    </P
+><P
+>&#13;     If a handler function is set to an empty string, or
+     <TT
+CLASS="literal"
+>false</TT
+>, the handler in question is disabled.
+    </P
+><P
+>&#13;     True is returned if the handler is set up, false if
+     <TT
+CLASS="parameter"
+><I
+>parser</I
+></TT
+> is not a parser.
+    </P
+><P
+>&#13;     There is currently no support for object/method handlers.  See
+     <A
+HREF="function.xml-set-object.html"
+><B
+CLASS="function"
+>xml_set_object()</B
+></A
+> for using the XML parser
+     within an object.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.xml-set-processing-instruction-handler.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.xml-set-unparsed-entity-decl-handler.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>xml_set_processing_instruction_handler</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.xml.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>xml_set_unparsed_entity_decl_handler</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

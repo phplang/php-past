@@ -1,0 +1,219 @@
+<HTML
+><HEAD
+><TITLE
+>sybase_fetch_object</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Sybase functions"
+HREF="ref.sybase.html"><LINK
+REL="PREVIOUS"
+TITLE="sybase_fetch_field"
+HREF="function.sybase-fetch-field.html"><LINK
+REL="NEXT"
+TITLE="sybase_fetch_row"
+HREF="function.sybase-fetch-row.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.sybase-fetch-field.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.sybase-fetch-row.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.sybase-fetch-object"
+>sybase_fetch_object</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN38201"
+></A
+><P
+>    (PHP3 , PHP4 )</P
+>sybase_fetch_object&nbsp;--&nbsp;fetch row as object</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN38204"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN38206"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int <B
+CLASS="function"
+>sybase_fetch_object</B
+></CODE
+> (int result)</CODE
+></P
+><P
+></P
+></DIV
+><P
+> Returns: An object with properties that correspond to the
+    fetched row, or false if there are no more rows.
+    </P
+><P
+> sybase_fetch_object() is similar to
+    <A
+HREF="function.sybase-fetch-array.html"
+><B
+CLASS="function"
+>sybase_fetch_array()</B
+></A
+>, with one difference - an
+    object is returned, instead of an array.  Indirectly, that means
+    that you can only access the data by the field names, and not by
+    their offsets (numbers are illegal property names).</P
+><P
+>&#13;    Speed-wise, the function is identical to
+    <A
+HREF="function.sybase-fetch-array.html"
+><B
+CLASS="function"
+>sybase_fetch_array()</B
+></A
+>, and almost as quick as
+    <A
+HREF="function.sybase-fetch-row.html"
+><B
+CLASS="function"
+>sybase_fetch_row()</B
+></A
+> (the difference is
+    insignificant).
+    </P
+><P
+> See also: <A
+HREF="function.sybase-fetch-array.html"
+><B
+CLASS="function"
+>sybase_fetch-array()</B
+></A
+> and
+                     <A
+HREF="function.sybase-fetch-row.html"
+><B
+CLASS="function"
+>sybase_fetch-row()</B
+></A
+>.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.sybase-fetch-field.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.sybase-fetch-row.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>sybase_fetch_field</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.sybase.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>sybase_fetch_row</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,341 @@
+<HTML
+><HEAD
+><TITLE
+>Regular Expression Functions (POSIX Extended)</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Function Reference"
+HREF="funcref.html"><LINK
+REL="PREVIOUS"
+TITLE="Pattern Syntax"
+HREF="pcre.pattern.syntax.html"><LINK
+REL="NEXT"
+TITLE="ereg"
+HREF="function.ereg.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="reference"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="pcre.pattern.syntax.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.ereg.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="reference"
+><A
+NAME="ref.regex"
+></A
+><DIV
+CLASS="TITLEPAGE"
+><H1
+CLASS="title"
+>LVII. Regular Expression Functions (POSIX Extended)</H1
+><DIV
+CLASS="PARTINTRO"
+><A
+NAME="AEN33189"
+></A
+><P
+>&#13;    Regular expressions are used for complex string manipulation in
+    PHP. The functions that support regular expressions are:
+    <P
+></P
+><UL
+><LI
+><P
+><A
+HREF="function.ereg.html"
+><B
+CLASS="function"
+>ereg()</B
+></A
+></P
+></LI
+><LI
+><P
+><A
+HREF="function.ereg-replace.html"
+><B
+CLASS="function"
+>ereg_replace()</B
+></A
+></P
+></LI
+><LI
+><P
+><A
+HREF="function.eregi.html"
+><B
+CLASS="function"
+>eregi()</B
+></A
+></P
+></LI
+><LI
+><P
+><A
+HREF="function.eregi-replace.html"
+><B
+CLASS="function"
+>eregi_replace()</B
+></A
+></P
+></LI
+><LI
+><P
+><A
+HREF="function.split.html"
+><B
+CLASS="function"
+>split()</B
+></A
+></P
+></LI
+><LI
+><P
+><A
+HREF="function.spliti.html"
+><B
+CLASS="function"
+>spliti()</B
+></A
+></P
+></LI
+></UL
+>
+    These functions all take a regular expression string as their
+    first argument.  PHP uses the POSIX extended regular expressions
+    as defined by POSIX 1003.2.  For a full description of POSIX
+    regular expressions see the regex man pages included in the regex
+    directory in the PHP distribution. It's in manpage format, so
+    you'll want to do something along the lines of <B
+CLASS="command"
+>man
+    /usr/local/src/regex/regex.7</B
+> in order to read it.
+
+    
+
+   </P
+><P
+>&#13;    <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN33212"
+></A
+><P
+><B
+>Example 1. Regular Expression Examples</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;ereg ("abc", $string);            
+/* Returns true if "abc"
+   is found anywhere in $string. */
+
+ereg ("^abc", $string);
+/* Returns true if "abc"
+   is found at the beginning of $string. */
+
+ereg ("abc$", $string);
+/* Returns true if "abc"
+   is found at the end of $string. */
+
+eregi ("(ozilla.[23]|MSIE.3)", $HTTP_USER_AGENT);  
+/* Returns true if client browser
+   is Netscape 2, 3 or MSIE 3. */
+
+ereg ("([[:alnum:]]+) ([[:alnum:]]+) ([[:alnum:]]+)", $string,$regs); 
+/* Places three space separated words
+   into $regs[1], $regs[2] and $regs[3]. */
+
+$string = ereg_replace ("^", "&#60;BR&#62;", $string); 
+/* Put a &#60;BR&#62; tag at the beginning of $string. */
+ 
+$string = ereg_replace ("$", "&#60;BR&#62;", $string); 
+/* Put a &#60;BR&#62; tag at the end of $string. */
+
+$string = ereg_replace ("\n", "", $string);
+/* Get rid of any newline
+   characters in $string. */
+     </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+   </P
+></DIV
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Table of Contents</B
+></DT
+><DT
+><A
+HREF="function.ereg.html"
+>ereg</A
+> &#8212; Regular expression match</DT
+><DT
+><A
+HREF="function.ereg-replace.html"
+>ereg_replace</A
+> &#8212; Replace regular expression</DT
+><DT
+><A
+HREF="function.eregi.html"
+>eregi</A
+> &#8212; case insensitive regular expression match</DT
+><DT
+><A
+HREF="function.eregi-replace.html"
+>eregi_replace</A
+> &#8212; replace regular expression case insensitive</DT
+><DT
+><A
+HREF="function.split.html"
+>split</A
+> &#8212; split string into array by regular expression</DT
+><DT
+><A
+HREF="function.spliti.html"
+>spliti</A
+> &#8212; 
+     Split string into array by regular expression case insensitive
+    </DT
+><DT
+><A
+HREF="function.sql-regcase.html"
+>sql_regcase</A
+> &#8212; 
+     Make regular expression for case insensitive match
+    </DT
+></DL
+></DIV
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="pcre.pattern.syntax.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.ereg.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Pattern Syntax</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="funcref.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>ereg</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

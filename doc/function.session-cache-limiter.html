@@ -1,0 +1,280 @@
+<HTML
+><HEAD
+><TITLE
+>session_cache_limiter</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Session handling functions"
+HREF="ref.session.html"><LINK
+REL="PREVIOUS"
+TITLE="session_set_save_handler"
+HREF="function.session-set-save-handler.html"><LINK
+REL="NEXT"
+TITLE="Shared Memory Functions"
+HREF="ref.shmop.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.session-set-save-handler.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="ref.shmop.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.session-cache-limiter"
+>session_cache_limiter</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN34196"
+></A
+><P
+>    (PHP4 CVS only)</P
+>session_cache_limiter&nbsp;--&nbsp;Get and/or set the current cache limiter</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN34199"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN34201"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>string <B
+CLASS="function"
+>session_cache_limiter</B
+></CODE
+> ([string 
+       cache_limiter])</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     <B
+CLASS="function"
+>session_cache_limiter()</B
+> returns the name of the
+     current cache limiter. If <TT
+CLASS="parameter"
+><I
+>cache_limiter</I
+></TT
+> is
+     specified, the name of the current cache limiter is changed to the
+     new value.
+    </P
+><P
+>&#13;     The cache limiter controls the cache control HTTP headers sent to the
+     client.  These headers determine the rules by which the page content
+     may be cached.  Setting the cache limiter to <TT
+CLASS="literal"
+>nocache</TT
+>,
+     for example, would disallow any client-side caching.  A value of
+     <TT
+CLASS="literal"
+>public</TT
+>, however, would permit caching.  It can also
+     be set to <TT
+CLASS="literal"
+>private</TT
+>, which is slightly more restrictive
+     than <TT
+CLASS="literal"
+>public</TT
+>.
+    </P
+><P
+>&#13;     The cache limiter is reset to the default value stored in
+     <TT
+CLASS="literal"
+>session.cache_limiter</TT
+> at request startup time. Thus,
+     you need to call <B
+CLASS="function"
+>session_cache_limiter()</B
+> for every
+     request (and before <A
+HREF="function.session-start.html"
+><B
+CLASS="function"
+>session_start()</B
+></A
+> is called).
+    </P
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN34220"
+></A
+><P
+><B
+>Example 1. <B
+CLASS="function"
+>session_cache_limiter()</B
+> examples</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;&#60;?php
+
+# set the cache limiter to 'private'
+
+session_cache_limiter('private');
+$cache_limiter = session_cache_limiter();
+
+echo "The cache limiter is now set to $cache_limiter&#60;p&#62;";
+?&#62;
+     </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+><DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
+><P
+><B
+>Note: </B
+>
+      This function was added in PHP 4.0.3.
+     </P
+></BLOCKQUOTE
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.session-set-save-handler.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="ref.shmop.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>session_set_save_handler</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.session.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Shared Memory Functions</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,273 @@
+<HTML
+><HEAD
+><TITLE
+>imap_status</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="IMAP, POP3 and NNTP functions"
+HREF="ref.imap.html"><LINK
+REL="PREVIOUS"
+TITLE="imap_alerts"
+HREF="function.imap-alerts.html"><LINK
+REL="NEXT"
+TITLE="imap_utf7_decode"
+HREF="function.imap-utf7-decode.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.imap-alerts.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.imap-utf7-decode.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.imap-status"
+>imap_status</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN17476"
+></A
+><P
+>    (PHP3 &#62;= 3.0.4, PHP4 )</P
+>imap_status&nbsp;--&nbsp;
+     This function returns status information on a mailbox other than
+     the current one
+    </DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN17479"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN17481"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>object <B
+CLASS="function"
+>imap_status</B
+></CODE
+> (int imap_stream, string mailbox, int options)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     This function returns an object containing status
+     information. Valid flags are:
+     <P
+></P
+><UL
+><LI
+><P
+>&#13;	SA_MESSAGES - set status-&#62;messages to the number of messages
+	in the mailbox
+       </P
+></LI
+><LI
+><P
+>&#13;	SA_RECENT - set status-&#62;recent to the number of recent
+	messages in the mailbox
+       </P
+></LI
+><LI
+><P
+>&#13;	SA_UNSEEN - set status-&#62;unseen to the number of unseen (new)
+	messages in the mailbox
+       </P
+></LI
+><LI
+><P
+>&#13;	SA_UIDNEXT - set status-&#62;uidnext to the next uid to be used in
+	the mailbox
+       </P
+></LI
+><LI
+><P
+>&#13;	SA_UIDVALIDITY - set status-&#62;uidvalidity to a constant that
+	changes when uids for the mailbox may no longer be valid
+       </P
+></LI
+><LI
+><P
+>&#13;	SA_ALL - set all of the above
+       </P
+></LI
+></UL
+>
+    </P
+><P
+>&#13;     status-&#62;flags is also set, which contains a bitmask which can be
+     checked against any of the above constants.
+    </P
+><P
+>&#13;     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN17507"
+></A
+><P
+><B
+>Example 1. <B
+CLASS="function"
+>imap_status()</B
+> example</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;$mbox = imap_open("{your.imap.host}","username","password",OP_HALFOPEN)
+      || die("can't connect: ".imap_last_error());
+ 
+$status = imap_status($mbox,"{your.imap.host}INBOX",SA_ALL);
+if($status) {
+  print("Messages:   ". $status-&#62;messages   )."&#60;br&#62;\n";
+  print("Recent:     ". $status-&#62;recent     )."&#60;br&#62;\n";
+  print("Unseen:     ". $status-&#62;unseen     )."&#60;br&#62;\n";
+  print("UIDnext:    ". $status-&#62;uidnext    )."&#60;br&#62;\n";
+  print("UIDvalidity:". $status-&#62;uidvalidity)."&#60;br&#62;\n"; 
+} else
+  print "imap_status failed: ".imap_lasterror()."\n";
+ 
+imap_close($mbox);
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.imap-alerts.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.imap-utf7-decode.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>imap_alerts</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.imap.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>imap_utf7_decode</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

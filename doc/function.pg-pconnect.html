@@ -1,0 +1,237 @@
+<HTML
+><HEAD
+><TITLE
+>pg_pconnect</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="PostgreSQL functions"
+HREF="ref.pgsql.html"><LINK
+REL="PREVIOUS"
+TITLE="pg_options"
+HREF="function.pg-options.html"><LINK
+REL="NEXT"
+TITLE="pg_port"
+HREF="function.pg-port.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.pg-options.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.pg-port.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.pg-pconnect"
+>pg_pconnect</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN31790"
+></A
+><P
+>    (PHP3 , PHP4 )</P
+>pg_pconnect&nbsp;--&nbsp;Open a persistant PostgreSQL connection</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN31793"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN31795"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int <B
+CLASS="function"
+>pg_pconnect</B
+></CODE
+> (string conn_string)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     Returns a connection index on success, or false if the connection
+     could not be made.  Opens a connection to a PostgreSQL database.
+     The arguments should be within a quoted string.
+     The arguments available include <TT
+CLASS="parameter"
+><I
+>dbname</I
+></TT
+> 
+     <TT
+CLASS="parameter"
+><I
+>port</I
+></TT
+>, <TT
+CLASS="parameter"
+><I
+>host</I
+></TT
+>, 
+     <TT
+CLASS="parameter"
+><I
+>tty</I
+></TT
+>, <TT
+CLASS="parameter"
+><I
+>options</I
+></TT
+>,
+     <TT
+CLASS="parameter"
+><I
+>user</I
+></TT
+>, and <TT
+CLASS="parameter"
+><I
+>password</I
+></TT
+>
+    </P
+><P
+>&#13;     This function returns a connection index that is needed by other
+     PostgreSQL functions. You can have multiple connections open at
+     once.
+    </P
+><P
+>&#13;     The previous syntax of:
+     <B
+CLASS="command"
+>$conn = pg_pconnect ("host", "port", "options", "tty",
+    "dbname")
+     </B
+>
+     has been deprecated.
+    </P
+><P
+>&#13;     See also <A
+HREF="function.pg-connect.html"
+><B
+CLASS="function"
+>pg_connect()</B
+></A
+>.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.pg-options.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.pg-port.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>pg_options</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.pgsql.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>pg_port</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

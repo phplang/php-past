@@ -1,0 +1,214 @@
+<HTML
+><HEAD
+><TITLE
+>ifx_do</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Informix functions"
+HREF="ref.ifx.html"><LINK
+REL="PREVIOUS"
+TITLE="ifx_prepare"
+HREF="function.ifx-prepare.html"><LINK
+REL="NEXT"
+TITLE="ifx_error"
+HREF="function.ifx-error.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.ifx-prepare.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.ifx-error.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.ifx-do"
+>ifx_do</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN17903"
+></A
+><P
+>    (PHP3 &#62;= 3.0.4, PHP4 )</P
+>ifx_do&nbsp;--&nbsp;
+     Execute a previously prepared SQL-statement
+    </DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN17906"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN17908"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int <B
+CLASS="function"
+>ifx_do</B
+></CODE
+> (int result_id)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     Returns TRUE on success, FALSE on error.  
+    </P
+><P
+> 
+     Executes a previously prepared query or opens a cursor for it.
+    </P
+><P
+> 
+     Does NOT free <TT
+CLASS="parameter"
+><I
+>result_id</I
+></TT
+> on error.
+    </P
+><P
+> 
+     Also sets the real number of
+     <A
+HREF="function.ifx-affected-rows.html"
+><B
+CLASS="function"
+>ifx_affected_rows()</B
+></A
+> for non-select statements
+     for retrieval by <A
+HREF="function.ifx-affected-rows.html"
+><B
+CLASS="function"
+>ifx_affected_rows()</B
+></A
+>
+    </P
+><P
+>&#13;     See also: <A
+HREF="function.ifx-prepare.html"
+><B
+CLASS="function"
+>ifx_prepare()</B
+></A
+>. There is a example.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.ifx-prepare.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.ifx-error.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>ifx_prepare</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.ifx.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>ifx_error</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

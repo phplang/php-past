@@ -1,0 +1,266 @@
+<HTML
+><HEAD
+><TITLE
+>mysql_insert_id</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="MySQL functions"
+HREF="ref.mysql.html"><LINK
+REL="PREVIOUS"
+TITLE="mysql_free_result"
+HREF="function.mysql-free-result.html"><LINK
+REL="NEXT"
+TITLE="mysql_list_dbs"
+HREF="function.mysql-list-dbs.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.mysql-free-result.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.mysql-list-dbs.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.mysql-insert-id"
+>mysql_insert_id</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN24555"
+></A
+><P
+>    (PHP3 , PHP4 )</P
+>mysql_insert_id&nbsp;--&nbsp;
+     Get the id generated from the previous INSERT operation
+    </DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN24558"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN24560"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int <B
+CLASS="function"
+>mysql_insert_id</B
+></CODE
+> ([int 
+       link_identifier])</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     <B
+CLASS="function"
+>mysql_insert_id()</B
+> returns the ID generated for
+     an AUTO_INCREMENT column by the previous INSERT query using the
+     given <TT
+CLASS="parameter"
+><I
+>link_identifier</I
+></TT
+>.  If
+     <TT
+CLASS="parameter"
+><I
+>link_identifier</I
+></TT
+> isn't specified, the last
+     opened link is assumed.
+    </P
+><P
+>&#13;     <B
+CLASS="function"
+>mysql_insert_id()</B
+> returns 0 if the previous
+     query does not generate an AUTO_INCREMENT value. If you need to
+     save the value for later, be sure to call mysql_insert_id()
+     immediately after the query that generates the value.
+    </P
+><DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
+><P
+><B
+>Note: </B
+>
+      The value of the MySQL SQL function
+      <TT
+CLASS="literal"
+>LAST_INSERT_ID()</TT
+> always contains the most
+      recently generated AUTO_INCREMENT value, and is not reset
+      between queries.
+    </P
+></BLOCKQUOTE
+></DIV
+><DIV
+CLASS="warning"
+><P
+></P
+><TABLE
+CLASS="warning"
+BORDER="1"
+WIDTH="100%"
+><TR
+><TD
+ALIGN="CENTER"
+><B
+>Warning</B
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+><P
+>&#13;      <B
+CLASS="function"
+>mysql_insert_id()</B
+> converts the return type of
+      the native MySQL C API function
+      <TT
+CLASS="literal"
+>mysql_insert_id()</TT
+> to a type of
+      <TT
+CLASS="literal"
+>long</TT
+>.  If your AUTO_INCREMENT column has
+      a column type of BIGINT, the value returned by
+      <B
+CLASS="function"
+>mysql_insert_id()</B
+> will be incorrect.
+      Instead, use the internal MySQL SQL function
+      <TT
+CLASS="literal"
+>LAST_INSERT_ID()</TT
+>.
+     </P
+></TD
+></TR
+></TABLE
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.mysql-free-result.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.mysql-list-dbs.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>mysql_free_result</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.mysql.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>mysql_list_dbs</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,267 @@
+<HTML
+><HEAD
+><TITLE
+>ifx_connect</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Informix functions"
+HREF="ref.ifx.html"><LINK
+REL="PREVIOUS"
+TITLE="Informix functions"
+HREF="ref.ifx.html"><LINK
+REL="NEXT"
+TITLE="ifx_pconnect"
+HREF="function.ifx-pconnect.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="ref.ifx.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.ifx-pconnect.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.ifx-connect"
+>ifx_connect</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN17731"
+></A
+><P
+>    (PHP3 &#62;= 3.0.3, PHP4 )</P
+>ifx_connect&nbsp;--&nbsp;Open Informix server connection</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN17734"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN17736"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int <B
+CLASS="function"
+>ifx_connect</B
+></CODE
+> ([string database [, string userid [, string password]]])</CODE
+></P
+><P
+></P
+></DIV
+><P
+> 
+     Returns a connection identifier on success, or FALSE on
+     error.
+    </P
+><P
+> 
+     <B
+CLASS="function"
+>ifx_connect()</B
+> establishes a connection to an
+     Informix server.  All of the arguments are optional, and if
+     they're missing, defaults are taken from values supplied in <A
+HREF="configuration.html#configuration.file"
+>configuration file</A
+>
+     (ifx.default_host for the host (Informix libraries will use
+     <TT
+CLASS="envar"
+>INFORMIXSERVER</TT
+> environment value if not defined),
+     ifx.default_user for user, ifx.default_password for the password
+     (none if not defined).
+    </P
+><P
+> 
+     In case a second call is made to
+     <B
+CLASS="function"
+>ifx_connect()</B
+> with the same arguments, no
+     new link will be established, but instead, the link identifier of
+     the already opened link will be returned.
+    </P
+><P
+> 
+     The link to the server will be closed as soon as the execution of
+     the script ends, unless it's closed earlier by explicitly calling
+     <A
+HREF="function.ifx-close.html"
+><B
+CLASS="function"
+>ifx_close()</B
+></A
+>.
+    </P
+><P
+> 
+     See also <A
+HREF="function.ifx-pconnect.html"
+><B
+CLASS="function"
+>ifx_pconnect()</B
+></A
+>, and
+     <A
+HREF="function.ifx-close.html"
+><B
+CLASS="function"
+>ifx_close()</B
+></A
+>.
+     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN17761"
+></A
+><P
+><B
+>Example 1. Connect to a Informix database</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;$conn_id = ifx_connect ("mydb@ol_srv1", "imyself", "mypassword");
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="ref.ifx.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.ifx-pconnect.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Informix functions</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.ifx.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>ifx_pconnect</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

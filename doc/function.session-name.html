@@ -1,0 +1,267 @@
+<HTML
+><HEAD
+><TITLE
+>session_name</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Session handling functions"
+HREF="ref.session.html"><LINK
+REL="PREVIOUS"
+TITLE="session_destroy"
+HREF="function.session-destroy.html"><LINK
+REL="NEXT"
+TITLE="session_module_name"
+HREF="function.session-module-name.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.session-destroy.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.session-module-name.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.session-name"
+>session_name</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN33937"
+></A
+><P
+>    (PHP4 )</P
+>session_name&nbsp;--&nbsp;Get and/or set the current session name</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN33940"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN33942"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>string <B
+CLASS="function"
+>session_name</B
+></CODE
+> ([string 
+       name])</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     <B
+CLASS="function"
+>session_name()</B
+> returns the name of the current
+     session. If <TT
+CLASS="parameter"
+><I
+>name</I
+></TT
+> is specified, the name of
+     the current session is changed to its value.
+    </P
+><P
+>&#13;     The session name references the session id in cookies and
+     URLs. It should contain only alphanumeric characters; it should
+     be short and descriptive (i.e. for users with enabled cookie
+     warnings). The session name is reset to the default value
+     stored in <TT
+CLASS="literal"
+>session.name</TT
+> at request startup
+     time. Thus, you need to call <B
+CLASS="function"
+>session_name()</B
+>
+     for every request (and before <A
+HREF="function.session-start.html"
+><B
+CLASS="function"
+>session_start()</B
+></A
+>
+     or <A
+HREF="function.session-register.html"
+><B
+CLASS="function"
+>session_register()</B
+></A
+> are called).
+    </P
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN33957"
+></A
+><P
+><B
+>Example 1. <B
+CLASS="function"
+>session_name()</B
+> examples</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;&#60;?php
+
+# set the session name to WebsiteID
+
+$previous_name = session_name ("WebsiteID");
+
+echo "The previous session name was $previous_name&#60;p&#62;";
+?&#62;
+     </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+><DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
+><P
+><B
+>Note: </B
+>
+      This function was added in PHP 4.0.
+     </P
+></BLOCKQUOTE
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.session-destroy.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.session-module-name.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>session_destroy</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.session.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>session_module_name</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

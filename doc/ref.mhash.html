@@ -1,0 +1,324 @@
+<HTML
+><HEAD
+><TITLE
+>Mhash Functions</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Function Reference"
+HREF="funcref.html"><LINK
+REL="PREVIOUS"
+TITLE="mcrypt_module_get_algo_supported_key_sizes"
+HREF="function.mcrypt-module-get-algo-supported-key-sizes.html"><LINK
+REL="NEXT"
+TITLE="mhash_get_hash_name"
+HREF="function.mhash-get-hash-name.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="reference"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.mcrypt-module-get-algo-supported-key-sizes.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.mhash-get-hash-name.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="reference"
+><A
+NAME="ref.mhash"
+></A
+><DIV
+CLASS="TITLEPAGE"
+><H1
+CLASS="title"
+>XXXVII. Mhash Functions</H1
+><DIV
+CLASS="PARTINTRO"
+><A
+NAME="AEN22161"
+></A
+><P
+>&#13;    These functions are intended to work with <A
+HREF="http://mhash.sourceforge.net/"
+TARGET="_top"
+>mhash</A
+>.</P
+><P
+>&#13;    This is an interface to the mhash library. mhash supports a wide
+    variety of hash algorithms such as MD5, SHA1, GOST, and many
+    others.
+   </P
+><P
+>&#13;    To use it, download the mhash distribution from <A
+HREF="http://mhash.sourceforge.net/"
+TARGET="_top"
+>its web site</A
+> and follow the included
+    installation instructions. You need to compile PHP with the
+    <TT
+CLASS="option"
+>--with-mhash</TT
+> parameter to enable
+    this extension.
+   </P
+><P
+>&#13;    Mhash can be used to create checksums, message digests, and
+    more.
+   </P
+><P
+>&#13;    <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN22170"
+></A
+><P
+><B
+>Example 1. Compute the SHA1 key and print it out as hex</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;&#60;?php
+$input = "Let us meet at 9 o' clock at the secret place.";
+$hash = mhash (MHASH_SHA1, $input);
+
+print "The hash is ".bin2hex ($hash)."\n";
+?&#62;
+     </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+    This will produce:
+    <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;The hash is d3b85d710d8f6e4e5efd4d5e67d041f9cecedafe
+    </PRE
+></TD
+></TR
+></TABLE
+>
+    For a complete list of supported hashes, refer to the
+    documentation of mhash. The general rule is that you can access
+    the hash algorithm from PHP with MHASH_HASHNAME. For example, to
+    access HAVAL you use the PHP constant MHASH_HAVAL.
+   </P
+><P
+>&#13;    Here is a list of hashes which are currently supported by mhash. If a
+    hash is not listed here, but is listed by mhash as supported, you can
+    safely assume that this documentation is outdated.
+    <P
+></P
+><UL
+><LI
+><P
+>&#13;       MHASH_MD5
+      </P
+></LI
+><LI
+><P
+>&#13;       MHASH_SHA1
+      </P
+></LI
+><LI
+><P
+>&#13;       MHASH_HAVAL
+      </P
+></LI
+><LI
+><P
+>&#13;       MHASH_RIPEMD160
+      </P
+></LI
+><LI
+><P
+>&#13;       MHASH_RIPEMD128
+      </P
+></LI
+><LI
+><P
+>&#13;       MHASH_SNEFRU
+      </P
+></LI
+><LI
+><P
+>&#13;       MHASH_TIGER
+      </P
+></LI
+><LI
+><P
+>&#13;       MHASH_GOST
+      </P
+></LI
+><LI
+><P
+>&#13;       MHASH_CRC32
+      </P
+></LI
+><LI
+><P
+>&#13;       MHASH_CRC32B
+      </P
+></LI
+></UL
+>
+   </P
+></DIV
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Table of Contents</B
+></DT
+><DT
+><A
+HREF="function.mhash-get-hash-name.html"
+>mhash_get_hash_name</A
+> &#8212; Get the name of the specified hash</DT
+><DT
+><A
+HREF="function.mhash-get-block-size.html"
+>mhash_get_block_size</A
+> &#8212; Get the block size of the specified hash</DT
+><DT
+><A
+HREF="function.mhash-count.html"
+>mhash_count</A
+> &#8212; Get the highest available hash id</DT
+><DT
+><A
+HREF="function.mhash.html"
+>mhash</A
+> &#8212; Compute hash</DT
+></DL
+></DIV
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.mcrypt-module-get-algo-supported-key-sizes.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.mhash-get-hash-name.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>mcrypt_module_get_algo_supported_key_sizes</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="funcref.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>mhash_get_hash_name</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

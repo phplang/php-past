@@ -1,0 +1,457 @@
+<HTML
+><HEAD
+><TITLE
+>fsockopen</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Network Functions"
+HREF="ref.network.html"><LINK
+REL="PREVIOUS"
+TITLE="define_syslog_variables"
+HREF="function.define-syslog-variables.html"><LINK
+REL="NEXT"
+TITLE="gethostbyaddr"
+HREF="function.gethostbyaddr.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.define-syslog-variables.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.gethostbyaddr.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.fsockopen"
+>fsockopen</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN24970"
+></A
+><P
+>    (PHP3 , PHP4 )</P
+>fsockopen&nbsp;--&nbsp;
+     Open Internet or Unix domain socket connection
+    </DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN24973"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN24975"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int <B
+CLASS="function"
+>fsockopen</B
+></CODE
+> (string [udp://]hostname, int port [, int 
+       errno [, string 
+       errstr [, double
+       timeout]]])</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     Initiates a stream connection in the Internet (AF_INET, using TCP
+     or UDP) or Unix (AF_UNIX) domain. For the Internet domain, it
+     will open a TCP socket connection to
+     <TT
+CLASS="parameter"
+><I
+>hostname</I
+></TT
+> on port
+     <TT
+CLASS="parameter"
+><I
+>port</I
+></TT
+>.  <TT
+CLASS="parameter"
+><I
+>hostname</I
+></TT
+> may
+     in this case be either a fully qualified domain name or an IP
+     address. For UDP connections, you need to explicitly specify the
+     protocol: <TT
+CLASS="parameter"
+><I
+>udp://hostname</I
+></TT
+>.  For the Unix
+     domain, <TT
+CLASS="parameter"
+><I
+>hostname</I
+></TT
+> will be used as the path
+     to the socket, <TT
+CLASS="parameter"
+><I
+>port</I
+></TT
+> must be set to 0 in
+     this case.  The optional <TT
+CLASS="parameter"
+><I
+>timeout</I
+></TT
+> can be
+     used to set a timeout in seconds for the connect system call.
+    </P
+><P
+>&#13;     <B
+CLASS="function"
+>Fsockopen()</B
+> returns a file pointer which may
+     be used together with the other file functions (such as
+     <A
+HREF="function.fgets.html"
+><B
+CLASS="function"
+>fgets()</B
+></A
+>, <A
+HREF="function.fgetss.html"
+><B
+CLASS="function"
+>fgetss()</B
+></A
+>,
+     <A
+HREF="function.fputs.html"
+><B
+CLASS="function"
+>fputs()</B
+></A
+>, <A
+HREF="function.fclose.html"
+><B
+CLASS="function"
+>fclose()</B
+></A
+>, and
+     <A
+HREF="function.feof.html"
+><B
+CLASS="function"
+>feof()</B
+></A
+>).
+    </P
+><P
+>&#13;     If the call fails, it will return false and if the optional
+     <TT
+CLASS="parameter"
+><I
+>errno</I
+></TT
+> and <TT
+CLASS="parameter"
+><I
+>errstr</I
+></TT
+>
+     arguments are present they will be set to indicate the actual
+     system level error that occurred on the system-level
+     <TT
+CLASS="literal"
+>connect()</TT
+> call. If the returned errno is 0 and
+     the function returned false, it is an indication that the error
+     occurred before the <TT
+CLASS="literal"
+>connect()</TT
+> call. This is
+     most likely due to a problem initializing the socket. Note that
+     the <TT
+CLASS="parameter"
+><I
+>errno</I
+></TT
+> and
+     <TT
+CLASS="parameter"
+><I
+>errstr</I
+></TT
+> arguments must be passed by
+     reference.
+    </P
+><P
+>&#13;     Depending on the environment, the Unix domain or the optional
+     connect timeout may not be available.
+    </P
+><P
+>&#13;     The socket will by default be opened in blocking mode.  You can
+     switch it to non-blocking mode by using
+     <B
+CLASS="function"
+>socket_set_blocking()</B
+>.
+     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN25018"
+></A
+><P
+><B
+>Example 1. <B
+CLASS="function"
+>Fsockopen()</B
+> Example</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;$fp = fsockopen ("www.php.net", 80, &#38;$errno, &#38;$errstr, 30);
+if (!$fp) {
+    echo "$errstr ($errno)&#60;br&#62;\n";
+} else {
+    fputs ($fp, "GET / HTTP/1.0\r\n\r\n");
+    while (!feof($fp)) {
+        echo fgets ($fp,128);
+    }
+    fclose ($fp);
+}
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+     The example below shows how to retrieve the day and time
+     from the UDP service "daytime" (port 13) in your own machine.
+     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN25022"
+></A
+><P
+><B
+>Example 2. Using UDP connection</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;&#60;?php
+$fp = fsockopen("udp://127.0.0.1", 13, &#38;$errno, &#38;$errstr);
+if (!$fp) {
+    echo "ERROR: $errno - $errstr&#60;br&#62;\n";
+} else {
+    fwrite($fp,"\n");
+    echo fread($fp, 26);
+    fclose($fp);
+}
+?&#62;
+     </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+     See also: <A
+HREF="function.pfsockopen.html"
+><B
+CLASS="function"
+>pfsockopen()</B
+></A
+>, 
+     <B
+CLASS="function"
+>socket_set_blocking()</B
+>,
+     <A
+HREF="function.socket-set-timeout.html"
+><B
+CLASS="function"
+>socket_set_timeout()</B
+></A
+>, <A
+HREF="function.fgets.html"
+><B
+CLASS="function"
+>fgets()</B
+></A
+>,
+     <A
+HREF="function.fgetss.html"
+><B
+CLASS="function"
+>fgetss()</B
+></A
+>, <A
+HREF="function.fputs.html"
+><B
+CLASS="function"
+>fputs()</B
+></A
+>,
+     <A
+HREF="function.fclose.html"
+><B
+CLASS="function"
+>fclose()</B
+></A
+>, and <A
+HREF="function.feof.html"
+><B
+CLASS="function"
+>feof()</B
+></A
+>).
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.define-syslog-variables.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.gethostbyaddr.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>define_syslog_variables</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.network.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>gethostbyaddr</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

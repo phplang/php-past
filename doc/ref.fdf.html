@@ -1,0 +1,424 @@
+<HTML
+><HEAD
+><TITLE
+>Forms Data Format functions</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Function Reference"
+HREF="funcref.html"><LINK
+REL="PREVIOUS"
+TITLE="unlink"
+HREF="function.unlink.html"><LINK
+REL="NEXT"
+TITLE="fdf_open"
+HREF="function.fdf-open.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="reference"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.unlink.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.fdf-open.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="reference"
+><A
+NAME="ref.fdf"
+></A
+><DIV
+CLASS="TITLEPAGE"
+><H1
+CLASS="title"
+>XXI. Forms Data Format functions</H1
+><DIV
+CLASS="PARTINTRO"
+><A
+NAME="AEN12134"
+></A
+><P
+>&#13;    Forms Data Format (FDF) is a format for handling
+    forms within PDF documents. You should read the documentation at 
+		  <A
+HREF="http://partners.adobe.com/asn/developer/acrosdk/forms.html"
+TARGET="_top"
+>http://partners.adobe.com/asn/developer/acrosdk/forms.html</A
+>
+    for more information on what FDF is and how it is used in general.
+   </P
+><DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
+><P
+><B
+>Note: </B
+>
+    If you run into problems configuring php with fdftk support, check
+    whether the header file FdfTk.h and the library libFdfTk.so are at
+    the right place. They should be in fdftk-dir/include and
+    fdftk-dir/lib. This will not be the case if you just unpack
+    the FdfTk distribution.
+   </P
+></BLOCKQUOTE
+></DIV
+><P
+>&#13;    The general idea of FDF is similar to HTML forms. The diffence is
+    basically the format how data is transmitted to the server when the submit
+    button is pressed (this is actually the Form Data Format) and the format
+    of the form itself (which is the Portable Document Format, PDF).
+    Processing the FDF data is one of the features provided by the fdf
+    functions. But there is more.  One may as well take an existing PDF form
+    and populated the input fields with data without modifying the form
+    itself. In such a case one would create a FDF document
+    (<A
+HREF="function.fdf-create.html"
+><B
+CLASS="function"
+>fdf_create()</B
+></A
+>) set the values of each input field
+    (<A
+HREF="function.fdf-set-value.html"
+><B
+CLASS="function"
+>fdf_set_value()</B
+></A
+>) and associate it with a PDF form
+    (<A
+HREF="function.fdf-set-file.html"
+><B
+CLASS="function"
+>fdf_set_file()</B
+></A
+>). Finally it has to be sent to the
+    browser with MimeType <TT
+CLASS="literal"
+>application/vnd.fdf</TT
+>. The Acrobat
+    reader plugin of your browser recognizes the MimeType,  reads the
+    associated PDF form and fills in the data from the FDF document.
+   </P
+><P
+>&#13;    If you look at an FDF-document with a text editor you will find a
+    catalogue object with the name <TT
+CLASS="literal"
+>FDF</TT
+>. Such an object may
+    contain a number of entries like <TT
+CLASS="literal"
+>Fields</TT
+>,
+    <TT
+CLASS="literal"
+>F</TT
+>, <TT
+CLASS="literal"
+>Status</TT
+> etc..
+    The most commonly used entries are <TT
+CLASS="literal"
+>Fields</TT
+> whicht points
+    to a list of input fields, and <TT
+CLASS="literal"
+>F</TT
+> which contains the
+    filename of the PDF-document this data belongs to. Those entries are
+    referred to in the FDF documention as /F-Key or /Status-Key.
+    Modifying this entries
+    is done by functions like <A
+HREF="function.fdf-set-file.html"
+><B
+CLASS="function"
+>fdf_set_file()</B
+></A
+> and
+    <A
+HREF="function.fdf-set-status.html"
+><B
+CLASS="function"
+>fdf_set_status()</B
+></A
+>. Fields are modified with
+    <A
+HREF="function.fdf-set-value.html"
+><B
+CLASS="function"
+>fdf_set_value()</B
+></A
+>, <A
+HREF="function.fdf-set-opt.html"
+><B
+CLASS="function"
+>fdf_set_opt()</B
+></A
+> etc..
+   </P
+><P
+>&#13;    The following examples shows just the evaluation of form data.</P
+><P
+></P
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN12157"
+></A
+><P
+><B
+>Example 1. Evaluating a FDF document</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;&#60;?php
+// Save the FDF data into a temp file
+$fdffp = fopen("test.fdf", "w");
+fwrite($fdffp, $HTTP_FDF_DATA, strlen($HTTP_FDF_DATA));
+fclose($fdffp);
+
+// Open temp file and evaluate data
+// The pdf form contained several input text fields with the names
+// volume, date, comment, publisher, preparer, and two checkboxes
+// show_publisher and show_preparer.
+$fdf = fdf_open("test.fdf");
+$volume = fdf_get_value($fdf, "volume");
+echo "The volume field has the value '&#60;B&#62;$volume&#60;/B&#62;'&#60;BR&#62;";
+
+$date = fdf_get_value($fdf, "date");
+echo "The date field has the value '&#60;B&#62;$date&#60;/B&#62;'&#60;BR&#62;";
+
+$comment = fdf_get_value($fdf, "comment");
+echo "The comment field has the value '&#60;B&#62;$comment&#60;/B&#62;'&#60;BR&#62;";
+
+if(fdf_get_value($fdf, "show_publisher") == "On") {
+  $publisher = fdf_get_value($fdf, "publisher");
+  echo "The publisher field has the value '&#60;B&#62;$publisher&#60;/B&#62;'&#60;BR&#62;";
+} else
+  echo "Publisher shall not be shown.&#60;BR&#62;";
+
+if(fdf_get_value($fdf, "show_preparer") == "On") {
+  $preparer = fdf_get_value($fdf, "preparer");
+  echo "The preparer field has the value '&#60;B&#62;$preparer&#60;/B&#62;'&#60;BR&#62;";
+} else
+  echo "Preparer shall not be shown.&#60;BR&#62;";
+fdf_close($fdf);
+?&#62;
+     </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+></DIV
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Table of Contents</B
+></DT
+><DT
+><A
+HREF="function.fdf-open.html"
+>fdf_open</A
+> &#8212; Open a FDF document</DT
+><DT
+><A
+HREF="function.fdf-close.html"
+>fdf_close</A
+> &#8212; Close an FDF document</DT
+><DT
+><A
+HREF="function.fdf-create.html"
+>fdf_create</A
+> &#8212; Create a new FDF document</DT
+><DT
+><A
+HREF="function.fdf-save.html"
+>fdf_save</A
+> &#8212; Save a FDF document</DT
+><DT
+><A
+HREF="function.fdf-get-value.html"
+>fdf_get_value</A
+> &#8212; Get the value of a field</DT
+><DT
+><A
+HREF="function.fdf-set-value.html"
+>fdf_set_value</A
+> &#8212; Set the value of a field</DT
+><DT
+><A
+HREF="function.fdf-next-field-name.html"
+>fdf_next_field_name</A
+> &#8212; Get the next field name</DT
+><DT
+><A
+HREF="function.fdf-set-ap.html"
+>fdf_set_ap</A
+> &#8212; Set the appearance of a field</DT
+><DT
+><A
+HREF="function.fdf-set-status.html"
+>fdf_set_status</A
+> &#8212; Set the value of the /STATUS key</DT
+><DT
+><A
+HREF="function.fdf-get-status.html"
+>fdf_get_status</A
+> &#8212; Get the value of the /STATUS key</DT
+><DT
+><A
+HREF="function.fdf-set-file.html"
+>fdf_set_file</A
+> &#8212; Set the value of the /F key</DT
+><DT
+><A
+HREF="function.fdf-get-file.html"
+>fdf_get_file</A
+> &#8212; Get the value of the /F key</DT
+><DT
+><A
+HREF="function.fdf-set-flags.html"
+>fdf_set_flags</A
+> &#8212; Sets a flag of a field</DT
+><DT
+><A
+HREF="function.fdf-set-opt.html"
+>fdf_set_opt</A
+> &#8212; Sets an option of a field</DT
+><DT
+><A
+HREF="function.fdf-set-submit-form-action.html"
+>fdf_set_submit_form_action</A
+> &#8212; Sets an javascript action of a field</DT
+><DT
+><A
+HREF="function.fdf-set-javascript-action.html"
+>fdf_set_javascript_action</A
+> &#8212; Sets an javascript action of a field</DT
+></DL
+></DIV
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.unlink.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.fdf-open.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>unlink</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="funcref.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>fdf_open</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

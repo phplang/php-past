@@ -1,0 +1,341 @@
+<HTML
+><HEAD
+><TITLE
+>Comparison Operators</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Operators"
+HREF="language.operators.html"><LINK
+REL="PREVIOUS"
+TITLE="Bitwise Operators"
+HREF="language.operators.bitwise.html"><LINK
+REL="NEXT"
+TITLE="Error Control Operators"
+HREF="language.operators.errorcontrol.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="language.operators.bitwise.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 10. Operators</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="language.operators.errorcontrol.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="language.operators.comparison"
+>Comparison Operators</A
+></H1
+><P
+>&#13;    Comparison operators, as their name implies, allow you to compare
+    two values.
+   </P
+><DIV
+CLASS="table"
+><A
+NAME="AEN3066"
+></A
+><P
+><B
+>Table 10-3. Comparison Operators</B
+></P
+><TABLE
+BORDER="1"
+CLASS="CALSTABLE"
+><THEAD
+><TR
+><TH
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Example</TH
+><TH
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Name</TH
+><TH
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Result</TH
+></TR
+></THEAD
+><TBODY
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>$a == $b</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Equal</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>True if $a is equal to $b.</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>$a === $b</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Identical</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;	True if $a is equal to $b, and they are of the same
+	type. (PHP 4 only)
+       </TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>$a != $b</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Not equal</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>True if $a is not equal to $b.</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>$a !== $b</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Not identical</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;	True if $a is not equal to $b, or they are not of the same
+	type. (PHP 4 only)
+       </TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>$a &#60; $b</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Less than</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>True if $a is strictly less than $b.</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>$a &#62; $b</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Greater than</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>True if $a is strictly greater than $b.</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>$a &#60;= $b</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Less than or equal to </TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>True if $a is less than or equal to $b.</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>$a &#62;= $b</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Greater than or equal to </TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>True if $a is greater than or equal to $b.</TD
+></TR
+></TBODY
+></TABLE
+></DIV
+><P
+>&#13;    Another conditional operator is the "?:" (or trinary) operator,
+    which operates as in C and many other languages.
+    <DIV
+CLASS="informalexample"
+><A
+NAME="AEN3108"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;(expr1) ? (expr2) : (expr3);
+     </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+> 
+    This expression evaluates to <TT
+CLASS="replaceable"
+><I
+>expr2</I
+></TT
+> if
+    <TT
+CLASS="replaceable"
+><I
+>expr1</I
+></TT
+> evaluates to true, and
+    <TT
+CLASS="replaceable"
+><I
+>expr3</I
+></TT
+> if
+    <TT
+CLASS="replaceable"
+><I
+>expr1</I
+></TT
+> evaluates to false.
+   </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="language.operators.bitwise.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="language.operators.errorcontrol.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Bitwise Operators</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="language.operators.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Error Control Operators</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

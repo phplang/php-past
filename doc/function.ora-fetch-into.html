@@ -1,0 +1,242 @@
+<HTML
+><HEAD
+><TITLE
+>Ora_Fetch_Into</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Oracle functions"
+HREF="ref.oracle.html"><LINK
+REL="PREVIOUS"
+TITLE="Ora_Fetch"
+HREF="function.ora-fetch.html"><LINK
+REL="NEXT"
+TITLE="Ora_GetColumn"
+HREF="function.ora-getcolumn.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.ora-fetch.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.ora-getcolumn.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.ora-fetch-into"
+>Ora_Fetch_Into</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN27657"
+></A
+><P
+>    (PHP3 , PHP4 )</P
+>Ora_Fetch_Into&nbsp;--&nbsp;Fetch a row into the specified result array</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN27660"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN27662"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int <B
+CLASS="function"
+>ora_fetch_into</B
+></CODE
+> (int cursor, array result [, int
+       flags])</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     You can fetch a row into an array with this function.
+     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN27674"
+></A
+><P
+><B
+>Example 1. Oracle fetch into array</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;&#60;?php
+array($results);
+ora_fetch_into($cursor, &#38;$results);
+echo $results[0];
+echo $results[1];
+?&#62;
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+     Note that you need to fetch the array by reference.
+    </P
+><P
+>&#13;     See also <A
+HREF="function.ora-parse.html"
+><B
+CLASS="function"
+>ora_parse()</B
+></A
+>,<A
+HREF="function.ora-exec.html"
+><B
+CLASS="function"
+>ora_exec()</B
+></A
+>,
+     <A
+HREF="function.ora-fetch.html"
+><B
+CLASS="function"
+>ora_fetch()</B
+></A
+>, and <A
+HREF="function.ora-do.html"
+><B
+CLASS="function"
+>ora_do()</B
+></A
+>.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.ora-fetch.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.ora-getcolumn.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Ora_Fetch</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.oracle.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Ora_GetColumn</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

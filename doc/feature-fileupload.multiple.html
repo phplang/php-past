@@ -1,0 +1,269 @@
+<HTML
+><HEAD
+><TITLE
+>Uploading multiple files</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Handling file uploads"
+HREF="features.file-upload.html"><LINK
+REL="PREVIOUS"
+TITLE="Common Pitfalls"
+HREF="features.file-upload.common-pitfalls.html"><LINK
+REL="NEXT"
+TITLE="PUT method support"
+HREF="features.file-upload.put-method.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="features.file-upload.common-pitfalls.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 19. Handling file uploads</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="features.file-upload.put-method.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="feature-fileupload.multiple"
+>Uploading multiple files</A
+></H1
+><P
+>&#13;    It is possible to upload multiple files simultaneously and have
+    the information organized automatically in arrays for you. To
+    do so, you need to use the same array submission syntax in the
+    HTML form as you do with multiple selects and checkboxes:
+   </P
+><DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
+><P
+><B
+>Note: </B
+>
+     Support for multiple file uploads was added in version 3.0.10.
+    </P
+></BLOCKQUOTE
+></DIV
+><P
+>&#13;    <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN4217"
+></A
+><P
+><B
+>Example 19-3. Uploading multiple files</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;&#60;form action="file-upload.html" method="post" enctype="multipart/form-data"&#62;
+  Send these files:&#60;br&#62;
+  &#60;input name="userfile[]" type="file"&#62;&#60;br&#62;
+  &#60;input name="userfile[]" type="file"&#62;&#60;br&#62;
+  &#60;input type="submit" value="Send files"&#62;
+&#60;/form&#62;
+     </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+   </P
+><P
+>&#13;    When the above form is submitted, the arrays
+    <TT
+CLASS="computeroutput"
+>$userfile</TT
+>,
+    <TT
+CLASS="computeroutput"
+>$userfile_name</TT
+>, and
+    <TT
+CLASS="computeroutput"
+>$userfile_size</TT
+> will be formed in
+    the global scope (as well as in $HTTP_POST_FILES ($HTTP_POST_VARS
+    in PHP 3)). Each of these will be a numerically indexed array of
+    the appropriate values for the submitted files.
+   </P
+><P
+>&#13;    For instance, assume that the filenames
+    <TT
+CLASS="filename"
+>/home/test/review.html</TT
+> and
+    <TT
+CLASS="filename"
+>/home/test/xwp.out</TT
+> are submitted.  In this
+    case, <TT
+CLASS="computeroutput"
+>$userfile_name[0]</TT
+> would
+    contain the value <TT
+CLASS="computeroutput"
+>review.html</TT
+>,
+    and <TT
+CLASS="computeroutput"
+>$userfile_name[1]</TT
+> would
+    contain the value
+    <TT
+CLASS="computeroutput"
+>xwp.out</TT
+>. Similarly,
+    <TT
+CLASS="computeroutput"
+>$userfile_size[0]</TT
+> would contain
+    <TT
+CLASS="filename"
+>review.html</TT
+>'s filesize, and so forth.
+   </P
+><P
+>&#13;    <TT
+CLASS="computeroutput"
+>$userfile['name'][0]</TT
+>,
+    <TT
+CLASS="computeroutput"
+>$userfile['tmp_name'][0]</TT
+>,
+    <TT
+CLASS="computeroutput"
+>$userfile['size'][0]</TT
+>, and
+    <TT
+CLASS="computeroutput"
+>$userfile['type'][0]</TT
+> are also set.
+   </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="features.file-upload.common-pitfalls.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="features.file-upload.put-method.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Common Pitfalls</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="features.file-upload.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>PUT method support</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

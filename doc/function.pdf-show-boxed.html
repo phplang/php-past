@@ -1,0 +1,259 @@
+<HTML
+><HEAD
+><TITLE
+>pdf_show_boxed</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="PDF functions"
+HREF="ref.pdf.html"><LINK
+REL="PREVIOUS"
+TITLE="pdf_show"
+HREF="function.pdf-show.html"><LINK
+REL="NEXT"
+TITLE="pdf_show_xy"
+HREF="function.pdf-show-xy.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.pdf-show.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.pdf-show-xy.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.pdf-show-boxed"
+>pdf_show_boxed</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN28323"
+></A
+><P
+>    (PHP4 &#62;= 4.0RC1)</P
+>pdf_show_boxed&nbsp;--&nbsp;Output text in a box</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN28326"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN28328"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int <B
+CLASS="function"
+>pdf_show_boxed</B
+></CODE
+> (int pdf document, string text, double x-coor, double y-coor, double width, double height, string mode)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     The <B
+CLASS="function"
+>pdf_show_boxed()</B
+> function outputs the
+     string <TT
+CLASS="parameter"
+><I
+>text</I
+></TT
+> in a box with its lower left position
+     at (<TT
+CLASS="parameter"
+><I
+>x-coor</I
+></TT
+>, <TT
+CLASS="parameter"
+><I
+>y-coor</I
+></TT
+>).
+     The boxes dimension is <TT
+CLASS="parameter"
+><I
+>height</I
+></TT
+> by 
+     <TT
+CLASS="parameter"
+><I
+>width</I
+></TT
+>. The parameter <TT
+CLASS="parameter"
+><I
+>mode</I
+></TT
+>
+     determines how the text is type set. If <TT
+CLASS="parameter"
+><I
+>width</I
+></TT
+>
+     and <TT
+CLASS="parameter"
+><I
+>height</I
+></TT
+> are zero, the
+     <TT
+CLASS="parameter"
+><I
+>mode</I
+></TT
+> can be "left", "right" or "center".
+     If <TT
+CLASS="parameter"
+><I
+>width</I
+></TT
+> or <TT
+CLASS="parameter"
+><I
+>height</I
+></TT
+> is
+     unequal zero it can also be "justify" and "fulljustify".
+    </P
+><P
+>Returns the number of characters that could not be processed because
+     they did not fit into the box.
+    </P
+><P
+>&#13;     See also <A
+HREF="function.pdf-show.html"
+><B
+CLASS="function"
+>pdf_show()</B
+></A
+>,
+     <A
+HREF="function.pdf-show-xy.html"
+><B
+CLASS="function"
+>pdf_show_xy()</B
+></A
+>.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.pdf-show.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.pdf-show-xy.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>pdf_show</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.pdf.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>pdf_show_xy</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,230 @@
+<HTML
+><HEAD
+><TITLE
+>mdecrypt_generic</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Mcrypt Encryption Functions"
+HREF="ref.mcrypt.html"><LINK
+REL="PREVIOUS"
+TITLE="mcrypt_generic"
+HREF="function.mcrypt-generic.html"><LINK
+REL="NEXT"
+TITLE="mcrypt_generic_end"
+HREF="function.mcrypt-generic-end.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.mcrypt-generic.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.mcrypt-generic-end.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.mdecrypt-generic"
+>mdecrypt_generic</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN21874"
+></A
+><P
+>    (PHP4 &#62;= 4.0.2)</P
+>mdecrypt_generic&nbsp;--&nbsp;This function decrypts data</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN21877"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN21879"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>string <B
+CLASS="function"
+>mdecrypt_generic</B
+></CODE
+> (resource td, string data)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     This function decrypts data. Note that the length of the
+     returned string can in fact be longer then the unencrypted
+     string, due to the padding of the data.
+    </P
+><P
+>&#13;     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN21889"
+></A
+><P
+><B
+>Example 1. <B
+CLASS="function"
+>Mdecrypt_generic()</B
+> Example</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;&#60;?php
+$iv_size = mcrypt_enc_get_iv_size ($td));
+$iv = @mcrypt_create_iv ($iv_size, MCRYPT_RAND);
+
+if (@mcrypt_generic_init ($td, $key, $iv) != -1)
+{
+    $c_t = mcrypt_generic ($td, $plain_text);
+    @mcrypt_generic_init ($td, $key, $iv);
+    $p_t = mdecrypt_generic ($td, $c_t);
+}
+if (strncmp ($p_t, $plain_text, strlen($plain_text)) == 0)
+    echo "ok";
+else
+    echo "error";
+?&#62;
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+     The above example shows how to check if the data before the
+     encryption is the same as the data after the decryption.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.mcrypt-generic.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.mcrypt-generic-end.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>mcrypt_generic</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.mcrypt.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>mcrypt_generic_end</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

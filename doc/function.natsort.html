@@ -1,0 +1,306 @@
+<HTML
+><HEAD
+><TITLE
+>natsort</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Array Functions"
+HREF="ref.array.html"><LINK
+REL="PREVIOUS"
+TITLE="list"
+HREF="function.list.html"><LINK
+REL="NEXT"
+TITLE="natcasesort"
+HREF="function.natcasesort.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.list.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.natcasesort.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.natsort"
+>natsort</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN5533"
+></A
+><P
+>    (PHP4 &#62;= 4.0RC2)</P
+>natsort&nbsp;--&nbsp;
+     Sort an array using a "natural order" algorithm
+    </DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN5536"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN5538"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>void <B
+CLASS="function"
+>natsort</B
+></CODE
+> (array array)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     This function implements a sort algorithm that orders
+     alphanumeric strings in the way a human being would.  This is
+     described as a "natural ordering". An example of the difference
+     between this algorithm and the regular computer string sorting
+     algorithms (used in <A
+HREF="function.sort.html"
+><B
+CLASS="function"
+>sort()</B
+></A
+>) can be seen below:
+    </P
+><P
+>&#13;     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN5547"
+></A
+><P
+><B
+>Example 1. <B
+CLASS="function"
+>natsort()</B
+> example</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;$array1 = $array2 = array ("img12.png","img10.png","img2.png","img1.png");          
+
+sort($array1);
+echo "Standard sorting\n";
+print_r($array1);
+
+natsort($array2);
+echo "\nNatural order sorting\n";
+print_r($array2);
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+    </P
+><P
+>&#13;     The code above will generate the following output:
+    </P
+><P
+>&#13;     <DIV
+CLASS="informalexample"
+><A
+NAME="AEN5553"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;Standard sorting
+Array
+(
+    [0] =&#62; img1.png
+    [1] =&#62; img10.png
+    [2] =&#62; img12.png
+    [3] =&#62; img2.png
+)
+
+Natural order sorting
+Array
+(
+    [3] =&#62; img1.png
+    [2] =&#62; img2.png
+    [1] =&#62; img10.png
+    [0] =&#62; img12.png
+)
+      </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+>
+     For more infomation see: Martin Pool's <A
+HREF="http://www.linuxcare.com.au/projects/natsort/"
+TARGET="_top"
+>Natural Order String Comparison</A
+>
+     page.
+    </P
+><P
+>&#13;     See also <A
+HREF="function.natcasesort.html"
+><B
+CLASS="function"
+>natcasesort()</B
+></A
+>,
+     <A
+HREF="function.strnatcmp.html"
+><B
+CLASS="function"
+>strnatcmp()</B
+></A
+> and
+     <A
+HREF="function.strnatcasecmp.html"
+><B
+CLASS="function"
+>strnatcasecmp()</B
+></A
+>.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.list.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.natcasesort.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>list</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.array.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>natcasesort</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,345 @@
+<HTML
+><HEAD
+><TITLE
+>FTP functions</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Function Reference"
+HREF="funcref.html"><LINK
+REL="PREVIOUS"
+TITLE="fdf_set_javascript_action"
+HREF="function.fdf-set-javascript-action.html"><LINK
+REL="NEXT"
+TITLE="ftp_connect"
+HREF="function.ftp-connect.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="reference"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.fdf-set-javascript-action.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.ftp-connect.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="reference"
+><A
+NAME="ref.ftp"
+></A
+><DIV
+CLASS="TITLEPAGE"
+><H1
+CLASS="title"
+>XXII. FTP functions</H1
+><DIV
+CLASS="PARTINTRO"
+><A
+NAME="AEN12492"
+></A
+><P
+>&#13;    FTP stands for File Transfer Protocol.</P
+><P
+>&#13;    The following constants are defined when using the FTP module:
+    <TT
+CLASS="constant"
+>FTP_ASCII</TT
+> and <TT
+CLASS="constant"
+>FTP_BINARY</TT
+>.
+   </P
+><P
+>&#13;    <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN12498"
+></A
+><P
+><B
+>Example 1. <B
+CLASS="function"
+>ftp()</B
+> example</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;&#60;?php
+// set up basic connection
+$conn_id = ftp_connect("$ftp_server"); 
+
+// login with username and password
+$login_result = ftp_login($conn_id, "$ftp_user_name", "$ftp_user_pass"); 
+
+// check connection
+if ((!$conn_id) || (!$login_result)) { 
+        echo "Ftp connection has failed!";
+        echo "Attempted to connect to $ftp_server for user $user"; 
+        die; 
+    } else {
+        echo "Connected to $ftp_server, for user $user";
+    }
+
+// upload the file
+$upload = ftp_put($conn_id, "$destination_file", "$source_file", FTP_BINARY); 
+
+// check upload status
+if (!$upload) { 
+        echo "Ftp upload has failed!";
+    } else {
+        echo "Uploaded $source_file to $ftp_server as $destination_file";
+    }
+
+// close the FTP stream 
+ftp_quit($conn_id); 
+?&#62;
+     </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+   </P
+></DIV
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Table of Contents</B
+></DT
+><DT
+><A
+HREF="function.ftp-connect.html"
+>ftp_connect</A
+> &#8212; Opens up an FTP connection</DT
+><DT
+><A
+HREF="function.ftp-login.html"
+>ftp_login</A
+> &#8212; Logs in an FTP connection</DT
+><DT
+><A
+HREF="function.ftp-pwd.html"
+>ftp_pwd</A
+> &#8212; Returns the current directory name</DT
+><DT
+><A
+HREF="function.ftp-cdup.html"
+>ftp_cdup</A
+> &#8212; Changes to the parent directory</DT
+><DT
+><A
+HREF="function.ftp-chdir.html"
+>ftp_chdir</A
+> &#8212; Changes directories on a FTP server</DT
+><DT
+><A
+HREF="function.ftp-mkdir.html"
+>ftp_mkdir</A
+> &#8212; Creates a directory</DT
+><DT
+><A
+HREF="function.ftp-rmdir.html"
+>ftp_rmdir</A
+> &#8212; Removes a directory</DT
+><DT
+><A
+HREF="function.ftp-nlist.html"
+>ftp_nlist</A
+> &#8212; Returns a list of files in the given directory.</DT
+><DT
+><A
+HREF="function.ftp-rawlist.html"
+>ftp_rawlist</A
+> &#8212; 
+     Returns a detailed list of files in the given directory.
+    </DT
+><DT
+><A
+HREF="function.ftp-systype.html"
+>ftp_systype</A
+> &#8212; 
+     Returns the system type identifier of the remote FTP server.
+    </DT
+><DT
+><A
+HREF="function.ftp-pasv.html"
+>ftp_pasv</A
+> &#8212; Turns passive mode on or off.</DT
+><DT
+><A
+HREF="function.ftp-get.html"
+>ftp_get</A
+> &#8212; Downloads a file from the FTP server.</DT
+><DT
+><A
+HREF="function.ftp-fget.html"
+>ftp_fget</A
+> &#8212; Downloads a file from the FTP server and saves to an
+     open file.</DT
+><DT
+><A
+HREF="function.ftp-put.html"
+>ftp_put</A
+> &#8212; Uploads a file to the FTP server.</DT
+><DT
+><A
+HREF="function.ftp-fput.html"
+>ftp_fput</A
+> &#8212; Uploads from an open file to the FTP server.</DT
+><DT
+><A
+HREF="function.ftp-size.html"
+>ftp_size</A
+> &#8212; Returns the size of the given file.</DT
+><DT
+><A
+HREF="function.ftp-mdtm.html"
+>ftp_mdtm</A
+> &#8212; Returns the last modified time of the given file.</DT
+><DT
+><A
+HREF="function.ftp-rename.html"
+>ftp_rename</A
+> &#8212; Renames a file on the ftp server.</DT
+><DT
+><A
+HREF="function.ftp-delete.html"
+>ftp_delete</A
+> &#8212; Deletes a file on the ftp server.</DT
+><DT
+><A
+HREF="function.ftp-site.html"
+>ftp_site</A
+> &#8212; Sends a SITE command to the server.</DT
+><DT
+><A
+HREF="function.ftp-quit.html"
+>ftp_quit</A
+> &#8212; Closes an FTP connection</DT
+></DL
+></DIV
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.fdf-set-javascript-action.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.ftp-connect.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>fdf_set_javascript_action</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="funcref.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>ftp_connect</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,322 @@
+<HTML
+><HEAD
+><TITLE
+>imap_search</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="IMAP, POP3 and NNTP functions"
+HREF="ref.imap.html"><LINK
+REL="PREVIOUS"
+TITLE="imap_msgno"
+HREF="function.imap-msgno.html"><LINK
+REL="NEXT"
+TITLE="imap_last_error"
+HREF="function.imap-last-error.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.imap-msgno.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.imap-last-error.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.imap-search"
+>imap_search</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN17366"
+></A
+><P
+>    (PHP3 &#62;= 3.0.12, PHP4 &#62;= 4.0b4)</P
+>imap_search&nbsp;--&nbsp;
+     This function returns an array of messages matching the given
+     search criteria
+    </DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN17369"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN17371"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>array <B
+CLASS="function"
+>imap_search</B
+></CODE
+> (int imap_stream, string criteria, int flags)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     This function performs a search on the mailbox currently opened
+     in the given imap stream. <TT
+CLASS="parameter"
+><I
+>criteria</I
+></TT
+> is a
+     string, delimited by spaces, in which the following keywords are
+     allowed. Any multi-word arguments (eg. FROM "joey smith") must be
+     quoted.
+     <P
+></P
+><UL
+><LI
+><P
+>&#13;	ALL - return all messages matching the rest of the criteria
+       </P
+></LI
+><LI
+><P
+>&#13;	ANSWERED - match messages with the \\ANSWERED flag set
+       </P
+></LI
+><LI
+><P
+>&#13;	BCC "string" - match messages with "string" in the Bcc: field
+       </P
+></LI
+><LI
+><P
+>&#13;	BEFORE "date" - match messages with Date: before "date"
+       </P
+></LI
+><LI
+><P
+>&#13;	BODY "string" - match messages with "string" in the body of the message
+       </P
+></LI
+><LI
+><P
+>&#13;	CC "string" - match messages with "string" in the Cc: field
+       </P
+></LI
+><LI
+><P
+>&#13;	DELETED - match deleted messages
+       </P
+></LI
+><LI
+><P
+>&#13;	FLAGGED - match messages with the \\FLAGGED (sometimes
+	referred to as Important or Urgent) flag set
+       </P
+></LI
+><LI
+><P
+>&#13;	FROM "string" - match messages with "string" in the From: field
+       </P
+></LI
+><LI
+><P
+>&#13;	KEYWORD "string" - match messages with "string" as a keyword
+       </P
+></LI
+><LI
+><P
+>&#13;	NEW - match new messages
+       </P
+></LI
+><LI
+><P
+>&#13;	OLD - match old messages
+       </P
+></LI
+><LI
+><P
+>&#13;	ON "date" - match messages with Date: matching "date"
+       </P
+></LI
+><LI
+><P
+>&#13;	RECENT - match messages with the \\RECENT flag set
+       </P
+></LI
+><LI
+><P
+>&#13;	SEEN - match messages that have been read (the \\SEEN flag is set)
+       </P
+></LI
+><LI
+><P
+>&#13;	SINCE "date" - match messages with Date: after "date"
+       </P
+></LI
+><LI
+><P
+>&#13;	SUBJECT "string" - match messages with "string" in the Subject:
+       </P
+></LI
+><LI
+><P
+>&#13;	TEXT "string" - match messages with text "string"
+       </P
+></LI
+><LI
+><P
+>&#13;	TO "string" - match messages with "string" in the To:
+       </P
+></LI
+><LI
+><P
+>&#13;	UNANSWERED - match messages that have not been answered
+       </P
+></LI
+><LI
+><P
+>&#13;	UNDELETED - match messages that are not deleted
+       </P
+></LI
+><LI
+><P
+>&#13;	UNFLAGGED - match messages that are not flagged
+       </P
+></LI
+><LI
+><P
+>&#13;	UNKEYWORD "string" - match messages that do not have the
+	keyword "string"
+       </P
+></LI
+><LI
+><P
+>&#13;	UNSEEN - match messages which have not been read yet
+       </P
+></LI
+></UL
+>
+    </P
+><P
+>&#13;     For example, to match all unanswered messages sent by Mom, you'd
+     use: "UNANSWERED FROM mom". Searches appear to be case
+     insensitive. This list of criteria is from a reading of the UW
+     c-client source code and may be uncomplete or
+     inaccurate (see also RFC2060, section 6.4.4).
+    </P
+><P
+>&#13;     Valid values for flags are SE_UID, which causes the returned
+     array to contain UIDs instead of messages sequence numbers.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.imap-msgno.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.imap-last-error.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>imap_msgno</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.imap.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>imap_last_error</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

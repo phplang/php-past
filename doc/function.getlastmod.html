@@ -1,0 +1,253 @@
+<HTML
+><HEAD
+><TITLE
+>getlastmod</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="PHP options & information"
+HREF="ref.info.html"><LINK
+REL="PREVIOUS"
+TITLE="get_magic_quotes_runtime"
+HREF="function.get-magic-quotes-runtime.html"><LINK
+REL="NEXT"
+TITLE="getmyinode"
+HREF="function.getmyinode.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.get-magic-quotes-runtime.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.getmyinode.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.getlastmod"
+>getlastmod</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN30213"
+></A
+><P
+>    (PHP3 , PHP4 )</P
+>getlastmod&nbsp;--&nbsp;Get time of last page modification.</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN30216"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN30218"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int <B
+CLASS="function"
+>getlastmod</B
+></CODE
+> (void)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     Returns the time of the last modification of the current
+     page. The value returned is a Unix timestamp, suitable for
+     feeding to <A
+HREF="function.date.html"
+><B
+CLASS="function"
+>date()</B
+></A
+>. Returns false on error.
+     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN30225"
+></A
+><P
+><B
+>Example 1. getlastmod() example</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;// outputs e.g. 'Last modified: March 04 1998 20:43:59.'
+echo "Last modified: ".date ("F d Y H:i:s.", getlastmod());
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+    </P
+><P
+>&#13;     See alse <A
+HREF="function.date.html"
+><B
+CLASS="function"
+>date()</B
+></A
+>,
+     <A
+HREF="function.getmyuid.html"
+><B
+CLASS="function"
+>getmyuid()</B
+></A
+>,
+     <A
+HREF="function.get-current-user.html"
+><B
+CLASS="function"
+>get_current_user()</B
+></A
+>,
+     <A
+HREF="function.getmyinode.html"
+><B
+CLASS="function"
+>getmyinode()</B
+></A
+>, and
+     <A
+HREF="function.getmypid.html"
+><B
+CLASS="function"
+>getmypid()</B
+></A
+>.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.get-magic-quotes-runtime.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.getmyinode.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>get_magic_quotes_runtime</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.info.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>getmyinode</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

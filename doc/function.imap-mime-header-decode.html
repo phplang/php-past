@@ -1,0 +1,238 @@
+<HTML
+><HEAD
+><TITLE
+>imap_mime_header_decode</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="IMAP, POP3 and NNTP functions"
+HREF="ref.imap.html"><LINK
+REL="PREVIOUS"
+TITLE="imap_fetch_overview"
+HREF="function.imap-fetch-overview.html"><LINK
+REL="NEXT"
+TITLE="imap_mail_compose"
+HREF="function.imap-mail-compose.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.imap-fetch-overview.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.imap-mail-compose.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.imap-mime-header-decode"
+>imap_mime_header_decode</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN17616"
+></A
+><P
+>    (PHP3 CVS only, PHP4 &#62;= 4.0RC1)</P
+>imap_mime_header_decode&nbsp;--&nbsp;Decode MIME header elements</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN17619"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN17621"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>array <B
+CLASS="function"
+>imap_header_decode</B
+></CODE
+> (string text)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     <B
+CLASS="function"
+>imap_mime_header_decode()</B
+> function decodes 
+     MIME message header extensions that are non ASCII text 
+     (see <A
+HREF="http://www.faqs.org/rfcs/rfc2047.html"
+TARGET="_top"
+>RFC2047</A
+>) 
+     The decoded elements are returned in an array of objects, 
+     where each object has two properties, "charset" &#38; "text".
+     If the element hasn't been encoded, and in other words is in 
+     plain US-ASCII,the "charset" property of that element is set to 
+     "default".
+    </P
+><P
+>&#13;     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN17631"
+></A
+><P
+><B
+>Example 1. <B
+CLASS="function"
+>imap_mime_header_decode()</B
+> example</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;$text="=?ISO-8859-1?Q?Keld_J=F8rn_Simonsen?= &#60;keld@dkuug.dk&#62;";
+
+$elements=imap_mime_header_decode($text);
+for($i=0;$i&#60;count($elements);$i++) {
+	echo "Charset: {$elements[$i]-&#62;charset}\n";
+	echo "Text: {$elements[$i]-&#62;text}\n\n";
+}
+
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+    </P
+><P
+>&#13;     In the above example we would have two elements, whereas the first
+     element had previously been encoded with ISO-8859-1, and the second
+     element would be plain US-ASCII.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.imap-fetch-overview.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.imap-mail-compose.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>imap_fetch_overview</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.imap.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>imap_mail_compose</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

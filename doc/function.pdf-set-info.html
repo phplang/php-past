@@ -1,0 +1,257 @@
+<HTML
+><HEAD
+><TITLE
+>pdf_set_info</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="PDF functions"
+HREF="ref.pdf.html"><LINK
+REL="PREVIOUS"
+TITLE="PDF functions"
+HREF="ref.pdf.html"><LINK
+REL="NEXT"
+TITLE="pdf_open"
+HREF="function.pdf-open.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="ref.pdf.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.pdf-open.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.pdf-set-info"
+>pdf_set_info</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN28196"
+></A
+><P
+>    (PHP4 &#62;= 4.0.1)</P
+>pdf_set_info&nbsp;--&nbsp;Fills a field of the document information</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN28199"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN28201"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>void <B
+CLASS="function"
+>pdf_set_info</B
+></CODE
+> (int pdf document, string fieldname, string value)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     The <B
+CLASS="function"
+>pdf_set_info()</B
+> function sets an information field
+     of a pdf document.
+     Possible values for the fieldname are 'Subject', 'Title', 'Creator',
+     'Author', 'Keywords' and one user-defined name.
+     It can be called before beginning a page.
+
+     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN28213"
+></A
+><P
+><B
+>Example 1. Setting document information</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;&#60;?php 
+$fd = fopen("test.pdf", "w");
+$pdfdoc = pdf_open($fd);
+pdf_set_info($pdfdoc, "Author", "Uwe Steinmann");
+pdf_set_info($pdfdoc, "Creator", "Uwe Steinmann");
+pdf_set_info($pdfdoc, "Title", "Testing Info Fields");
+pdf_set_info($pdfdoc, "Subject", "Test");
+pdf_set_info($pdfdoc, "Keywords", "Test, Fields");
+pdf_set_info($pdfdoc, "CustomField", "What ever makes sense");
+pdf_begin_page($pdfdoc, 595, 842);
+pdf_end_page($pdfdoc);
+pdf_close($pdfdoc);
+?&#62;
+</PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+></P
+><DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
+><P
+><B
+>Note: </B
+>
+     This function replaces <B
+CLASS="function"
+>pdf_set_info_keywords()</B
+>,
+              <B
+CLASS="function"
+>pdf_set_info_title()</B
+>,
+              <B
+CLASS="function"
+>pdf_set_info_subject()</B
+>,
+              <B
+CLASS="function"
+>pdf_set_info_creator()</B
+>,
+              <B
+CLASS="function"
+>pdf_set_info_sybject()</B
+>.
+    </P
+></BLOCKQUOTE
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="ref.pdf.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.pdf-open.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>PDF functions</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.pdf.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>pdf_open</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

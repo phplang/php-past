@@ -1,0 +1,214 @@
+<HTML
+><HEAD
+><TITLE
+>CCVS API Functions</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Function Reference"
+HREF="funcref.html"><LINK
+REL="PREVIOUS"
+TITLE="jdtounix"
+HREF="function.jdtounix.html"><LINK
+REL="NEXT"
+HREF="r6529.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="reference"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.jdtounix.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="r6529.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="reference"
+><A
+NAME="ref.ccvs"
+></A
+><DIV
+CLASS="TITLEPAGE"
+><H1
+CLASS="title"
+>VI. CCVS API Functions</H1
+><DIV
+CLASS="PARTINTRO"
+><A
+NAME="AEN6518"
+></A
+><P
+>&#13;    These functions interface the CCVS API, allowing you to directly
+    work with CCVS from your PHP scripts.  CCVS is <A
+HREF="http://www.redhat.com/"
+TARGET="_top"
+>RedHat's</A
+> solution to the "middle-man"
+    in credit card processing.  It lets you directly address the
+    credit card clearing houses via your *nix box and a modem.  Using
+    the CCVS module for PHP, you can process credit cards directly
+    through CCVS via your PHP Scripts.  The following references will
+    outline the process.
+   </P
+><P
+>&#13;    To enable CCVS Support in PHP, first verify your CCVS installation
+    directory.  You will then need to configure PHP with the <TT
+CLASS="option"
+>--with-ccvs</TT
+> option. If you use this
+    option without specifying the path to your CCVS installation, PHP
+    Will attempt to look in the default CCVS Install location
+    (/usr/local/ccvs). If CCVS is in a non-standard location, run
+    configure with: <TT
+CLASS="option"
+>--with-ccvs=$ccvs_path</TT
+>, where $ccvs_path
+    is the path to your CCVS installation.  Please note that CCVS
+    support requires that $ccvs_path/lib and $ccvs_path/include exist,
+    and include cv_api.h under the include directory and libccvs.a
+    under the lib directory.
+   </P
+><P
+>&#13;    Additionally, a ccvsd process will need to be running for the
+    configurations you intend to use in your PHP scripts. You will
+    also need to make sure the PHP Processes are running under the
+    same user as your CCVS was installed as (e.g. if you installed
+    CCVS as user 'ccvs', your PHP processes must run as 'ccvs' as
+    well.)
+   </P
+><P
+>&#13;    Additional information about CCVS can be found at <A
+HREF="http://www.redhat.com/products/ccvs"
+TARGET="_top"
+>http://www.redhat.com/products/ccvs</A
+>.
+   </P
+><P
+>&#13;    This documentation section is being worked on.  Until then, RedHat
+    maintains slightly outdated but still useful documentation at
+    <A
+HREF="http://www.redhat.com/products/ccvs/support/CCVS3.3docs/ProgPHP.html"
+TARGET="_top"
+>http://www.redhat.com/products/ccvs/support/CCVS3.3docs/ProgPHP.html</A
+>.
+   </P
+></DIV
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Table of Contents</B
+></DT
+><DT
+><A
+HREF="r6529.html"
+></A
+> &#8212; </DT
+></DL
+></DIV
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.jdtounix.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="r6529.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>jdtounix</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="funcref.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+></TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

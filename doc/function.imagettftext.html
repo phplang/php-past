@@ -1,0 +1,350 @@
+<HTML
+><HEAD
+><TITLE
+>ImageTTFText</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Image functions"
+HREF="ref.image.html"><LINK
+REL="PREVIOUS"
+TITLE="ImageTTFBBox"
+HREF="function.imagettfbbox.html"><LINK
+REL="NEXT"
+TITLE="ImageTypes"
+HREF="function.imagetypes.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.imagettfbbox.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.imagetypes.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.imagettftext"
+>ImageTTFText</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN16082"
+></A
+><P
+>    (PHP3 , PHP4 )</P
+>ImageTTFText&nbsp;--&nbsp;
+     Write text to the image using TrueType fonts
+    </DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN16085"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN16087"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>array <B
+CLASS="function"
+>imagettftext</B
+></CODE
+> (int im, int size, int angle, int x, int y, int col, string fontfile, string text)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     <B
+CLASS="function"
+>ImageTTFText()</B
+> draws the string
+     <TT
+CLASS="parameter"
+><I
+>text</I
+></TT
+> in the image identified by
+     <TT
+CLASS="parameter"
+><I
+>im</I
+></TT
+>, starting at coordinates
+     <TT
+CLASS="parameter"
+><I
+>x</I
+></TT
+>, <TT
+CLASS="parameter"
+><I
+>y</I
+></TT
+> (top left is
+     0, 0), at an angle of <TT
+CLASS="parameter"
+><I
+>angle</I
+></TT
+> in color
+     <TT
+CLASS="parameter"
+><I
+>col</I
+></TT
+>, using the TrueType font file
+     identified by <TT
+CLASS="parameter"
+><I
+>fontfile</I
+></TT
+>.
+    </P
+><P
+>&#13;     The coordinates given by <TT
+CLASS="parameter"
+><I
+>x</I
+></TT
+>,
+     <TT
+CLASS="parameter"
+><I
+>y</I
+></TT
+> will define the basepoint of the first
+     character (roughly the lower-left corner of the character).  This
+     is different from the <B
+CLASS="function"
+>ImageString()</B
+>, where x,
+     y define the upper-right corner of the first character.
+    </P
+><P
+>&#13;     <TT
+CLASS="parameter"
+><I
+>Angle</I
+></TT
+> is in degrees, with 0 degrees being
+     left-to-right reading text (3 o'clock direction), and higher
+     values representing a counter-clockwise rotation.  (i.e., a value
+     of 90 would result in bottom-to-top reading text).
+    </P
+><P
+>&#13;     <TT
+CLASS="parameter"
+><I
+>Fontfile</I
+></TT
+> is the path to the TrueType font
+     you wish to use.
+    </P
+><P
+>&#13;     <TT
+CLASS="parameter"
+><I
+>Text</I
+></TT
+> is the text string which may include
+     UTF-8 character sequences (of the form: &#38;#123;) to access
+     characters in a font beyond the first 255.
+    </P
+><P
+>&#13;     <TT
+CLASS="parameter"
+><I
+>Col</I
+></TT
+> is the color index.  Using the
+     negative of a color index has the effect of turning off
+     antialiasing.
+    </P
+><P
+>&#13;     <B
+CLASS="function"
+>ImageTTFText()</B
+> returns an array with 8
+     elements representing four points making the bounding box of the
+     text.  The order of the points is upper left, upper right, lower
+     right, lower left.  The points are relative to the text
+     regardless of the angle, so "upper left" means in the top
+     left-hand corner when you see the text horizontallty.
+    </P
+><P
+>&#13;     This example script will produce a black GIF 400x30 pixels, with
+     the words "Testing..."  in white in the font Arial.
+     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN16131"
+></A
+><P
+><B
+>Example 1. ImageTTFText</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;&#60;?php
+Header ("Content-type: image/gif");
+$im = imagecreate (400, 30);
+$black = ImageColorAllocate ($im, 0, 0, 0);
+$white = ImageColorAllocate ($im, 255, 255, 255);
+ImageTTFText ($im, 20, 0, 10, 20, $white, "/path/arial.ttf", 
+              "Testing... Omega: &#38;#937;");
+ImageGif ($im);
+ImageDestroy ($im);
+?&#62;
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+    </P
+><P
+>&#13;     This function requires both the GD library and the <A
+HREF="http://www.freetype.org/"
+TARGET="_top"
+>FreeType</A
+> library.
+    </P
+><P
+>&#13;     See also <B
+CLASS="function"
+>ImageTTFBBox()</B
+>.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.imagettfbbox.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.imagetypes.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>ImageTTFBBox</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.image.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>ImageTypes</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

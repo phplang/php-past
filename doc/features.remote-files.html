@@ -1,0 +1,329 @@
+<HTML
+><HEAD
+><TITLE
+>Using remote files</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Features"
+HREF="features.html"><LINK
+REL="PREVIOUS"
+TITLE="PUT method support"
+HREF="features.file-upload.put-method.html"><LINK
+REL="NEXT"
+TITLE="Connection handling"
+HREF="features.connection-handling.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="chapter"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="features.file-upload.put-method.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="features.connection-handling.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="chapter"
+><H1
+><A
+NAME="features.remote-files"
+>Chapter 20. Using remote files</A
+></H1
+><P
+>&#13;   As long as support for the "URL fopen wrapper" is enabled when
+   you configure PHP (which it is unless you explicitly pass the
+   <TT
+CLASS="option"
+>--disable-url-fopen-wrapper</TT
+> flag to configure),
+   you can use HTTP and FTP URLs with most functions that take a
+   filename as a parameter, including the <A
+HREF="function.require.html"
+><B
+CLASS="function"
+>require()</B
+></A
+>
+   and <A
+HREF="function.include.html"
+><B
+CLASS="function"
+>include()</B
+></A
+> statements.
+  </P
+><P
+>&#13;   <DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
+><P
+><B
+>Note: </B
+>
+     You can't use remote files in <A
+HREF="function.include.html"
+><B
+CLASS="function"
+>include()</B
+></A
+> and
+     <A
+HREF="function.require.html"
+><B
+CLASS="function"
+>require()</B
+></A
+> statements on Windows.
+    </P
+></BLOCKQUOTE
+></DIV
+>
+  </P
+><P
+>&#13;   For example, you can use this to open a file on a remote web server,
+   parse the output for the data you want, and then use that data in a
+   database query, or simply to output it in a style matching the rest
+   of your website.
+  </P
+><P
+>&#13;   <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN4267"
+></A
+><P
+><B
+>Example 20-1. Getting the title of a remote page</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;
+&#60;?php
+$file = fopen ("http://www.php.net/", "r");
+if (!$file) {
+    echo "&#60;p&#62;Unable to open remote file.\n";
+    exit;
+}
+while (!feof ($file)) {
+    $line = fgets ($file, 1024);
+    /* This only works if the title and its tags are on one line */
+    if (eregi ("&#60;title&#62;(.*)&#60;/title&#62;", $line, $out)) {
+        $title = $out[1];
+        break;
+    }
+}
+fclose($file);
+?&#62;
+
+    </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+  </P
+><P
+>&#13;   You can also write to files on an FTP as long you connect as a user
+   with the correct access rights, and the file doesn't exist already.
+   To connect as a user other than 'anonymous', you need to specify
+   the username (and possibly password) within the URL, such as
+   'ftp://user:password@ftp.example.com/path/to/file'. (You can use the
+   same sort of syntax to access files via HTTP when they require Basic
+   authentication.)
+  </P
+><P
+>&#13;   <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN4272"
+></A
+><P
+><B
+>Example 20-2. Storing data on a remote server</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;
+&#60;?php
+$file = fopen ("ftp://ftp.php.net/incoming/outputfile", "w");
+if (!$file) {
+    echo "&#60;p&#62;Unable to open remote file for writing.\n";
+    exit;
+}
+/* Write the data here. */
+fputs ($file, "$HTTP_USER_AGENT\n");
+fclose ($file);
+?&#62;
+  
+    </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+  </P
+><P
+>&#13;   <DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
+><P
+><B
+>Note: </B
+>
+     You might get the idea from the example above to use this
+     technique to write to a remote log, but as mentioned above, you
+     can only write to a new file using the URL fopen() wrappers. To
+     do distributed logging like that, you should take a look at
+     <A
+HREF="function.syslog.html"
+><B
+CLASS="function"
+>syslog()</B
+></A
+>.
+    </P
+></BLOCKQUOTE
+></DIV
+>
+  </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="features.file-upload.put-method.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="features.connection-handling.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>PUT method support</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="features.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Connection handling</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,413 @@
+<HTML
+><HEAD
+><TITLE
+>Classes and Objects</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Language Reference"
+HREF="langref.html"><LINK
+REL="PREVIOUS"
+TITLE="Variable functions"
+HREF="functions.variable-functions.html"><LINK
+REL="NEXT"
+TITLE="Features"
+HREF="features.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="functions.variable-functions.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="features.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="chapter"
+><H1
+><A
+NAME="oop"
+>Chapter 13. Classes and Objects</A
+></H1
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Table of Contents</B
+></DT
+><DT
+><A
+HREF="oop.html#keyword.class"
+><TT
+CLASS="literal"
+>class</TT
+></A
+></DT
+></DL
+></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="keyword.class"
+><TT
+CLASS="literal"
+>class</TT
+></A
+></H1
+><P
+>&#13;    A class is a collection of variables and functions working with
+    these variables.  A class is defined using the following syntax:
+ 
+    <DIV
+CLASS="informalexample"
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>  1&nbsp;
+  2&nbsp;&#60;?php
+  3&nbsp;class Cart {
+  4&nbsp;    var $items;  // Items in our shopping cart
+  5&nbsp;   
+  6&nbsp;    // Add $num articles of $artnr to the cart
+  7&nbsp; 
+  8&nbsp;    function add_item ($artnr, $num) {
+  9&nbsp;        $this-&#62;items[$artnr] += $num;
+ 10&nbsp;    }
+ 11&nbsp;   
+ 12&nbsp;    // Take $num articles of $artnr out of the cart
+ 13&nbsp; 
+ 14&nbsp;    function remove_item ($artnr, $num) {
+ 15&nbsp;        if ($this-&#62;items[$artnr] &#62; $num) {
+ 16&nbsp;            $this-&#62;items[$artnr] -= $num;
+ 17&nbsp;            return true;
+ 18&nbsp;        } else {
+ 19&nbsp;            return false;
+ 20&nbsp;        }   
+ 21&nbsp;    }
+ 22&nbsp;}
+ 23&nbsp;?&#62;
+ 24&nbsp;     </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+>
+   </P
+><P
+>&#13;    This defines a class named Cart that consists of an associative
+    array of articles in the cart and two functions to add and remove
+    items from this cart.
+   </P
+><P
+>&#13;    Classes are types, that is, they are blueprints for actual
+    variables. You have to create a variable of the desired type with
+    the new operator.
+   </P
+><DIV
+CLASS="informalexample"
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>  1&nbsp;
+  2&nbsp; $cart = new Cart;
+  3&nbsp; $cart-&#62;add_item("10", 1);
+  4&nbsp;    </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+><P
+>&#13;    This creates an object $cart of the class Cart. The function
+    add_item() of that object is being called to add 1 item of article
+    number 10 to the cart.  </P
+><P
+> Classes can be extensions of
+    other classes. The extended or derived class has all variables and
+    functions of the base class and what you add in the extended
+    definition.  This is done using the extends keyword. Multiple
+    inheritance is not supported.
+   </P
+><DIV
+CLASS="informalexample"
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>  1&nbsp;
+  2&nbsp;class Named_Cart extends Cart {
+  3&nbsp;    var $owner;
+  4&nbsp;  
+  5&nbsp;    function set_owner ($name) {
+  6&nbsp;        $this-&#62;owner = $name;
+  7&nbsp;    }
+  8&nbsp;}
+  9&nbsp;    </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+><P
+>&#13;    This defines a class Named_Cart that has all variables and
+    functions of Cart plus an additional variable $owner and an
+    additional function set_owner(). You create a named cart the usual
+    way and can now set and get the carts owner. You can still use
+    normal cart functions on named carts:
+   </P
+><DIV
+CLASS="informalexample"
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>  1&nbsp;
+  2&nbsp;$ncart = new Named_Cart;    // Create a named cart
+  3&nbsp;$ncart-&#62;set_owner ("kris"); // Name that cart
+  4&nbsp;print $ncart-&#62;owner;        // print the cart owners name
+  5&nbsp;$ncart-&#62;add_item ("10", 1); // (inherited functionality from cart)
+  6&nbsp;    </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+><P
+>&#13;    Within functions of a class the variable $this means this
+    object. You have to use $this-&#62;something to access any variable or
+    function named something within your current object.
+   </P
+><P
+>&#13;    Constructors are functions in a class that are automatically
+    called when you create a new instance of a class. A function
+    becomes a constructor when it has the same name as the class.
+   </P
+><DIV
+CLASS="informalexample"
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>  1&nbsp;
+  2&nbsp;class Auto_Cart extends Cart {
+  3&nbsp;    function Auto_Cart () {
+  4&nbsp;        $this-&#62;add_item ("10", 1);
+  5&nbsp;    }
+  6&nbsp;}
+  7&nbsp;    </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+><P
+>&#13;    This defines a class Auto_Cart that is a Cart plus a constructor
+    which initializes the cart with one item of article number "10"
+    each time a new Auto_Cart is being made with "new". Constructors
+    can also take arguments and these arguments can be optional, which
+    makes them much more useful.
+   </P
+><DIV
+CLASS="informalexample"
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>  1&nbsp;
+  2&nbsp;class Constructor_Cart extends Cart {
+  3&nbsp;    function Constructor_Cart ($item = "10", $num = 1) {
+  4&nbsp;        $this-&#62;add_item ($item, $num);
+  5&nbsp;    }
+  6&nbsp;}
+  7&nbsp; 
+  8&nbsp;// Shop the same old boring stuff.
+  9&nbsp; 
+ 10&nbsp;$default_cart   = new Constructor_Cart;
+ 11&nbsp; 
+ 12&nbsp;// Shop for real...
+ 13&nbsp; 
+ 14&nbsp;$different_cart = new Constructor_Cart ("20", 17);
+ 15&nbsp;    </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+><DIV
+CLASS="caution"
+><P
+></P
+><TABLE
+CLASS="caution"
+BORDER="1"
+WIDTH="100%"
+><TR
+><TD
+ALIGN="CENTER"
+><B
+>Caution</B
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+><P
+>&#13;     For derived classes, the constructor of the parent class is not
+     automatically called when the derived class's constructor is
+     called.
+    </P
+></TD
+></TR
+></TABLE
+></DIV
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="functions.variable-functions.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="features.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Variable functions</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="langref.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Features</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,371 @@
+<HTML
+><HEAD
+><TITLE
+>imap_open</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="IMAP, POP3 and NNTP functions"
+HREF="ref.imap.html"><LINK
+REL="PREVIOUS"
+TITLE="imap_num_recent"
+HREF="function.imap-num-recent.html"><LINK
+REL="NEXT"
+TITLE="imap_ping"
+HREF="function.imap-ping.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.imap-num-recent.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.imap-ping.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.imap-open"
+>imap_open</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN16896"
+></A
+><P
+>    (PHP3 , PHP4 )</P
+>imap_open&nbsp;--&nbsp;Open an IMAP stream to a mailbox</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN16899"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN16901"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int <B
+CLASS="function"
+>imap_open</B
+></CODE
+> (string mailbox, string username, string password [, int 
+       flags])</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     Returns an IMAP stream on success and false on error.  This
+     function can also be used to open streams to POP3 and NNTP
+     servers, but some functions and features are not available
+     on IMAP servers.  
+    </P
+><P
+>&#13;     A mailbox name consists of a server part and a mailbox path on
+     this server. The special name INBOX stands for the current users
+     personal mailbox. The server part, which is enclosed in '{' and
+     '}', consists of the servers name or ip address, a protocol
+     secification (beginning with '/') and an optional port specifier
+     beginnung with ':'. The server part is mandatory in all mailbox
+     parameters. Mailbox names that contain international characters
+     besides those in the printable ASCII space have to be encoded 
+     with <A
+HREF="function.imap-utf7-encode.html"
+><B
+CLASS="function"
+>imap_utf7_encode()</B
+></A
+>.
+    </P
+><P
+>&#13;     The options are a bit mask with one or more of the following:
+     <P
+></P
+><UL
+><LI
+><P
+>&#13;	OP_READONLY - Open mailbox read-only
+       </P
+></LI
+><LI
+><P
+>&#13;	OP_ANONYMOUS - Dont use or update a
+	<TT
+CLASS="filename"
+>.newsrc</TT
+> for news (NNTP only)
+       </P
+></LI
+><LI
+><P
+>&#13;	OP_HALFOPEN - For IMAP and NNTP names, open a connection but
+	dont open a mailbox
+       </P
+></LI
+><LI
+><P
+>&#13;	CL_EXPUNGE - Expunge mailbox automatically upon mailbox close
+       </P
+></LI
+></UL
+>
+    </P
+><P
+>&#13;     To connect to an IMAP server running on port 143 on the
+     local machine, do the following:
+     <DIV
+CLASS="informalexample"
+><A
+NAME="AEN16929"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+> 
+$mbox = imap_open ("{localhost:143}INBOX", "user_id", "password");
+      </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+>
+     To connect to a POP3 server on port 110 on the local server, use:
+     <DIV
+CLASS="informalexample"
+><A
+NAME="AEN16931"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;$mbox = imap_open ("{localhost/pop3:110}INBOX", "user_id", "password");
+      </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+>
+     To connect to an NNTP server on port 119 on the local server, use:
+     <DIV
+CLASS="informalexample"
+><A
+NAME="AEN16933"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;$nntp = imap_open ("{localhost/nntp:119}comp.test", "", "");
+      </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+>
+     To connect to a remote server replace "localhost" with the name
+     or the IP address of the server you want to connect to.
+    </P
+><P
+>&#13;     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN16936"
+></A
+><P
+><B
+>Example 1. <B
+CLASS="function"
+>imap_open()</B
+> example</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;$mbox = imap_open ("{your.imap.host:143}", "username", "password");
+
+echo "&#60;p&#62;&#60;h1&#62;Mailboxes&#60;/h1&#62;\n";
+$folders = imap_listmailbox ($mbox, "{your.imap.host:143}", "*");
+
+if ($folders == false) {
+    echo "Call failed&#60;br&#62;\n";
+} else {
+    while (list ($key, $val) = each ($folders)) {
+        echo $val."&#60;br&#62;\n";
+    }
+}
+
+echo "&#60;p&#62;&#60;h1&#62;Headers in INBOX&#60;/h1&#62;\n";
+$headers = imap_headers ($mbox);
+
+if ($headers == false) {
+    echo "Call failed&#60;br&#62;\n";
+} else {
+    while (list ($key,$val) = each ($headers)) {
+        echo $val."&#60;br&#62;\n";
+    }
+}
+
+imap_close($mbox);
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.imap-num-recent.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.imap-ping.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>imap_num_recent</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.imap.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>imap_ping</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

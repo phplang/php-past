@@ -1,0 +1,313 @@
+<HTML
+><HEAD
+><TITLE
+>strtr</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="String functions"
+HREF="ref.strings.html"><LINK
+REL="PREVIOUS"
+TITLE="str_replace"
+HREF="function.str-replace.html"><LINK
+REL="NEXT"
+TITLE="substr"
+HREF="function.substr.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.str-replace.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.substr.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.strtr"
+>strtr</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN37791"
+></A
+><P
+>    (PHP3 , PHP4 )</P
+>strtr&nbsp;--&nbsp;Translate certain characters</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN37794"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN37796"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>string <B
+CLASS="function"
+>strtr</B
+></CODE
+> (string str, string from, string to)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     This function operates on <TT
+CLASS="parameter"
+><I
+>str</I
+></TT
+>, translating
+     all occurrences of each character in <TT
+CLASS="parameter"
+><I
+>from</I
+></TT
+>
+     to the corresponding character in <TT
+CLASS="parameter"
+><I
+>to</I
+></TT
+> and
+     returning the result.
+    </P
+><P
+>&#13;     If <TT
+CLASS="parameter"
+><I
+>from</I
+></TT
+> and <TT
+CLASS="parameter"
+><I
+>to</I
+></TT
+> are
+     different lengths, the extra characters in the longer of the two
+     are ignored.
+     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN37813"
+></A
+><P
+><B
+>Example 1. <B
+CLASS="function"
+>Strtr()</B
+> example</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;$addr = strtr($addr, "дец", "aao");
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+    </P
+><P
+>&#13;     <B
+CLASS="function"
+>strtr()</B
+> can be called with only two
+     arguments. If called with two arguments it behaves in a new way:
+     <TT
+CLASS="parameter"
+><I
+>from</I
+></TT
+> then has to be an array that contains
+     string -&#62; string pairs that will be replaced in the source
+     string. <B
+CLASS="function"
+>strtr()</B
+> will always look for the
+     longest possible match first and will *NOT* try to replace stuff
+     that it has already worked on.
+    </P
+><P
+>&#13;     Examples:
+     <DIV
+CLASS="informalexample"
+><A
+NAME="AEN37822"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;$trans = array ("hello" =&#62; "hi", "hi" =&#62; "hello");
+echo strtr("hi all, I said hello", $trans) . "\n";
+      </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+>
+     This will show: "hello all, I said hi",
+    </P
+><DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
+><P
+><B
+>Note: </B
+>
+      This feature (two arguments) was added in PHP 4.0.
+     </P
+></BLOCKQUOTE
+></DIV
+><P
+>&#13;     See also <A
+HREF="function.ereg-replace.html"
+><B
+CLASS="function"
+>ereg_replace()</B
+></A
+>.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.str-replace.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.substr.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>str_replace</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.strings.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>substr</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

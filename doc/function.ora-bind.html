@@ -1,0 +1,252 @@
+<HTML
+><HEAD
+><TITLE
+>Ora_Bind</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Oracle functions"
+HREF="ref.oracle.html"><LINK
+REL="PREVIOUS"
+TITLE="Oracle functions"
+HREF="ref.oracle.html"><LINK
+REL="NEXT"
+TITLE="Ora_Close"
+HREF="function.ora-close.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="ref.oracle.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.ora-close.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.ora-bind"
+>Ora_Bind</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN27383"
+></A
+><P
+>    (PHP3 , PHP4 )</P
+>Ora_Bind&nbsp;--&nbsp;bind a PHP variable to an Oracle parameter</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN27386"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN27388"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int <B
+CLASS="function"
+>ora_bind</B
+></CODE
+> (int cursor, string PHP variable name, string SQL parameter name, int length [, int type])</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     Returns true if the bind succeeds, otherwise false. Details
+     about the error can be retrieved using the
+     <A
+HREF="function.ora-error.html"
+><B
+CLASS="function"
+>ora_error()</B
+></A
+> and
+     <A
+HREF="function.ora-errorcode.html"
+><B
+CLASS="function"
+>ora_errorcode()</B
+></A
+> functions.
+    </P
+><P
+>&#13;     This function binds the named PHP variable with a SQL parameter.
+     The SQL parameter must be in the form ":name". With the optional
+     type parameter, you can define whether the SQL parameter is an
+     in/out (0, default), in (1) or out (2) parameter. As of PHP
+     3.0.1, you can use the constants ORA_BIND_INOUT, ORA_BIND_IN and
+     ORA_BIND_OUT instead of the numbers.
+    </P
+><P
+>&#13;     ora_bind must be called after <A
+HREF="function.ora-parse.html"
+><B
+CLASS="function"
+>ora_parse()</B
+></A
+> and
+     before <A
+HREF="function.ora-exec.html"
+><B
+CLASS="function"
+>ora_exec()</B
+></A
+>. Input values can be given  
+     by assignment to the bound PHP variables, after calling 
+     <A
+HREF="function.ora-exec.html"
+><B
+CLASS="function"
+>ora_exec()</B
+></A
+> the bound PHP variables contain the output
+     values if available. 
+     <DIV
+CLASS="informalexample"
+><A
+NAME="AEN27411"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;&#60;?php
+ora_parse($curs, "declare tmp INTEGER; begin tmp := :in; :out := tmp; :x := 7.77; end;");
+ora_bind($curs, "result", ":x", $len, 2);
+ora_bind($curs, "input", ":in", 5, 1);
+ora_bind($curs, "output", ":out", 5, 2);
+$input = 765;
+ora_exec($curs);
+echo "Result: $result&#60;BR&#62;Out: $output&#60;BR&#62;In: $input";
+?&#62;
+      </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+>
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="ref.oracle.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.ora-close.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Oracle functions</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.oracle.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Ora_Close</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

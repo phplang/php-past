@@ -1,0 +1,453 @@
+<HTML
+><HEAD
+><TITLE
+>strftime</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Date and Time functions"
+HREF="ref.datetime.html"><LINK
+REL="PREVIOUS"
+TITLE="mktime"
+HREF="function.mktime.html"><LINK
+REL="NEXT"
+TITLE="time"
+HREF="function.time.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.mktime.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.time.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.strftime"
+>strftime</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN9467"
+></A
+><P
+>    (PHP3 , PHP4 )</P
+>strftime&nbsp;--&nbsp;
+     Format a local time/date according to locale settings
+    </DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN9470"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN9472"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>string <B
+CLASS="function"
+>strftime</B
+></CODE
+> (string format [, int 
+       timestamp])</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     Returns a string formatted according to the given format string
+     using the given <TT
+CLASS="parameter"
+><I
+>timestamp</I
+></TT
+> or the current
+     local time if no timestamp is given.  Month and weekday names and
+     other language dependent strings respect the current locale set
+     with <A
+HREF="function.setlocale.html"
+><B
+CLASS="function"
+>setlocale()</B
+></A
+>.
+    </P
+><P
+>&#13;     The following conversion specifiers are recognized in the format
+     string:
+     <P
+></P
+><UL
+><LI
+><P
+>&#13;	%a - abbreviated weekday name according to the current locale
+       </P
+></LI
+><LI
+><P
+>&#13;	%A - full weekday name according to the current locale
+       </P
+></LI
+><LI
+><P
+>&#13;	%b - abbreviated month name according to the current locale
+       </P
+></LI
+><LI
+><P
+>&#13;	%B - full month name according to the current locale
+       </P
+></LI
+><LI
+><P
+>&#13;	%c - preferred date and time representation for the current
+	locale
+       </P
+></LI
+><LI
+><P
+>&#13;	%C - century number (the year divided by 100 and truncated to
+	an integer, range 00 to 99)
+       </P
+></LI
+><LI
+><P
+>&#13;	%d - day of the month as a decimal number (range 00 to 31)
+       </P
+></LI
+><LI
+><P
+>&#13;	%D - same as %m/%d/%y
+       </P
+></LI
+><LI
+><P
+>&#13;	%e - day of the month as a decimal number, a single digit is
+	preceded by a space (range ' 1' to '31')
+       </P
+></LI
+><LI
+><P
+>&#13;	%h - same as %b
+       </P
+></LI
+><LI
+><P
+>&#13;	%H - hour as a decimal number using a 24-hour clock (range 00
+	to 23)
+       </P
+></LI
+><LI
+><P
+>&#13;	%I - hour as a decimal number using a 12-hour clock (range 01
+	to 12)
+       </P
+></LI
+><LI
+><P
+>&#13;	%j - day of the year as a decimal number (range 001 to 366)
+       </P
+></LI
+><LI
+><P
+>&#13;	%m - month as a decimal number (range 01 to 12)
+       </P
+></LI
+><LI
+><P
+>&#13;	%M - minute as a decimal number
+       </P
+></LI
+><LI
+><P
+>&#13;	%n - newline character
+       </P
+></LI
+><LI
+><P
+>&#13;	%p - either `am' or `pm' according to the given time value, or
+	the corresponding strings for the current locale
+       </P
+></LI
+><LI
+><P
+>&#13;	%r - time in a.m. and p.m. notation
+       </P
+></LI
+><LI
+><P
+>&#13;	%R - time in 24 hour notation
+       </P
+></LI
+><LI
+><P
+>&#13;	%S - second as a decimal number
+       </P
+></LI
+><LI
+><P
+>&#13;	%t - tab character
+       </P
+></LI
+><LI
+><P
+>&#13;	%T - current time, equal to %H:%M:%S
+       </P
+></LI
+><LI
+><P
+>&#13;	%u - weekday as a decimal number [1,7], with 1 representing
+	Monday
+       </P
+></LI
+><LI
+><P
+>&#13;	%U - week number of the current year as a decimal number,
+	starting with the first Sunday as the first day of the first
+	week
+       </P
+></LI
+><LI
+><P
+> 
+        %V - The  ISO 8601:1988 week number of the current year as a
+        decimal number, range 01 to 53, where week 1 is the first
+        week that has at least 4 days in the current year, and with
+        Monday as the first day of the week.
+       </P
+></LI
+><LI
+><P
+>&#13;	%W - week number of the current year as a decimal number,
+	starting with the first Monday as the first day of the first
+	week
+       </P
+></LI
+><LI
+><P
+>&#13;	%w - day of the week as a decimal, Sunday being 0
+       </P
+></LI
+><LI
+><P
+>&#13;	%x - preferred date representation for the current locale
+	without the time
+       </P
+></LI
+><LI
+><P
+>&#13;	%X - preferred time representation for the current locale
+	without the date
+       </P
+></LI
+><LI
+><P
+>&#13;	%y - year as a decimal number without a century (range 00 to
+	99)
+       </P
+></LI
+><LI
+><P
+>&#13;	%Y - year as a decimal number including the century
+       </P
+></LI
+><LI
+><P
+>&#13;	%Z - time zone or name or abbreviation
+       </P
+></LI
+><LI
+><P
+>&#13;	%% - a literal `%' character
+       </P
+></LI
+></UL
+>
+     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN9552"
+></A
+><P
+><B
+>Example 1. <B
+CLASS="function"
+>Strftime()</B
+> example</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;setlocale ("LC_TIME", "C");
+print (strftime ("%A in Finnish is "));
+setlocale ("LC_TIME", "fi_FI");
+print (strftime ("%A, in French "));
+setlocale ("LC_TIME", "fr_CA");
+print (strftime ("%A and in German "));
+setlocale ("LC_TIME", "de_DE");
+print (strftime ("%A.\n"));
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+     This example works if you have the respective locales installed
+     in your system.
+    </P
+><P
+>&#13;     See also <A
+HREF="function.setlocale.html"
+><B
+CLASS="function"
+>setlocale()</B
+></A
+> and
+     <A
+HREF="function.mktime.html"
+><B
+CLASS="function"
+>mktime()</B
+></A
+> and the <A
+HREF="http://www.opengroup.org/onlinepubs/7908799/xsh/strftime.html"
+TARGET="_top"
+>&#13;     Open Group specification of
+     <B
+CLASS="function"
+>strftime()</B
+></A
+>.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.mktime.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.time.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>mktime</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.datetime.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>time</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,239 @@
+<HTML
+><HEAD
+><TITLE
+>get_meta_tags</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="String functions"
+HREF="ref.strings.html"><LINK
+REL="PREVIOUS"
+TITLE="get_html_translation_table"
+HREF="function.get-html-translation-table.html"><LINK
+REL="NEXT"
+TITLE="hebrev"
+HREF="function.hebrev.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.get-html-translation-table.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.hebrev.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.get-meta-tags"
+>get_meta_tags</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN36515"
+></A
+><P
+>    (PHP3 &#62;= 3.0.4, PHP4 )</P
+>get_meta_tags&nbsp;--&nbsp;
+     Extracts all meta tag content attributes from a file and returns
+     an array
+    </DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN36518"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN36520"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>array <B
+CLASS="function"
+>get_meta_tags</B
+></CODE
+> (string filename [, int
+       use_include_path])</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     Opens <TT
+CLASS="parameter"
+><I
+>filename</I
+></TT
+> and parses it line by line
+     for &#60;meta&#62; tags of the form
+     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN36531"
+></A
+><P
+><B
+>Example 1. Meta Tags Example</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;&#60;meta name="author" content="name"&#62;
+&#60;meta name="tags" content="php3 documentation"&#62;
+&#60;/head&#62; &#60;!-- parsing stops here --&#62;
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+     (pay attention to line endings - PHP uses a native function to
+     parse the input, so a Mac file won't work on Unix).
+    </P
+><P
+> 
+     The value of the name property becomes the key, the value of the
+     content property becomes the value of the returned array, so you
+     can easily use standard array functions to traverse it or access
+     single values. Special characters in the value of the name
+     property are substituted with '_', the rest is converted to lower
+     case.
+    </P
+><P
+>&#13;     Setting <TT
+CLASS="parameter"
+><I
+>use_include_path</I
+></TT
+> to 1 will result
+     in PHP trying to open the file along the standard include path.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.get-html-translation-table.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.hebrev.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>get_html_translation_table</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.strings.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>hebrev</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

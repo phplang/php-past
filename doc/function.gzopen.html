@@ -1,0 +1,266 @@
+<HTML
+><HEAD
+><TITLE
+>gzopen</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Zlib Compression Functions"
+HREF="ref.zlib.html"><LINK
+REL="PREVIOUS"
+TITLE="gzgetss"
+HREF="function.gzgetss.html"><LINK
+REL="NEXT"
+TITLE="gzpassthru"
+HREF="function.gzpassthru.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.gzgetss.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.gzpassthru.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.gzopen"
+>gzopen</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN41029"
+></A
+><P
+>    (PHP3 , PHP4 )</P
+>gzopen&nbsp;--&nbsp;Open gz-file</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN41032"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN41034"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int <B
+CLASS="function"
+>gzopen</B
+></CODE
+> (string filename, string mode [, int 
+       use_include_path])</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     Opens a gzip (.gz) file for reading or writing. The mode
+     parameter is as in <A
+HREF="function.fopen.html"
+><B
+CLASS="function"
+>fopen()</B
+></A
+> ("rb" or "wb") but
+     can also include a compression level ("wb9") or a strategy: 'f'
+     for filtered data as in "wb6f", 'h' for Huffman only compression
+     as in "wb1h". (See the description of deflateInit2 in zlib.h for
+     more information about the strategy parameter.)
+    </P
+><P
+>&#13;     <B
+CLASS="function"
+>Gzopen()</B
+> can be used to read a file which is
+     not in gzip format; in this case <A
+HREF="function.gzread.html"
+><B
+CLASS="function"
+>gzread()</B
+></A
+> will
+     directly read from the file without decompression.
+    </P
+><P
+>&#13;     <B
+CLASS="function"
+>Gzopen()</B
+> returns a file pointer to the file
+     opened, after that, everything you read from this file descriptor
+     will be transparently decompressed and what you write gets
+     compressed.
+    </P
+><P
+>&#13;     If the open fails, the function returns false.
+    </P
+><P
+>&#13;     You can use the optional third parameter and set it to "1", if
+     you want to search for the file in the <A
+HREF="configuration.html#ini.include-path"
+>include_path</A
+>, too.
+    </P
+><P
+>&#13;     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN41056"
+></A
+><P
+><B
+>Example 1. <B
+CLASS="function"
+>Gzopen()</B
+> Example</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;$fp = gzopen ("/tmp/file.gz", "r");
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+    </P
+><P
+>&#13;     See also <A
+HREF="function.gzclose.html"
+><B
+CLASS="function"
+>gzclose()</B
+></A
+>.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.gzgetss.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.gzpassthru.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>gzgetss</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.zlib.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>gzpassthru</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

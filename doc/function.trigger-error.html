@@ -1,0 +1,260 @@
+<HTML
+><HEAD
+><TITLE
+>trigger_error</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Error Handling and Logging Functions"
+HREF="ref.errorfunc.html"><LINK
+REL="PREVIOUS"
+TITLE="set_error_handler"
+HREF="function.set-error-handler.html"><LINK
+REL="NEXT"
+TITLE="user_error"
+HREF="function.user-error.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.set-error-handler.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.user-error.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.trigger-error"
+>trigger_error</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN10401"
+></A
+><P
+>    (PHP4 &#62;= 4.0.1)</P
+>trigger_error&nbsp;--&nbsp;
+     Generates a user-level error/warning/notice message
+    </DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN10404"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN10406"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>void <B
+CLASS="function"
+>trigger_error</B
+></CODE
+> (string error_msg [, int
+       error_type])</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     Used to trigger a user error condition, it can be used by in conjunction
+     with the built-in error handler, or with a user defined function that has
+     been set as the new error handler
+     (<A
+HREF="function.set-error-handler.html"
+><B
+CLASS="function"
+>set_error_handler()</B
+></A
+>). This function is useful when
+     you need to generate a particular response to an exception at runtime.
+     For example:
+     <DIV
+CLASS="informalexample"
+><A
+NAME="AEN10417"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;if (assert ($divisor == 0))
+   trigger_error ("Cannot divide by zero", E_USER_ERROR);
+      </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+>
+     <DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
+><P
+><B
+>Note: </B
+>
+     See <A
+HREF="function.set-error-handler.html"
+><B
+CLASS="function"
+>set_error_handler()</B
+></A
+> for a more extensive example.
+     </P
+></BLOCKQUOTE
+></DIV
+>
+    </P
+><P
+>&#13;     See also <A
+HREF="function.error-reporting.html"
+><B
+CLASS="function"
+>error_reporting()</B
+></A
+>,
+     <A
+HREF="function.set-error-handler.html"
+><B
+CLASS="function"
+>set_error_handler()</B
+></A
+>,
+     <A
+HREF="function.restore-error-handler.html"
+><B
+CLASS="function"
+>restore_error_handler()</B
+></A
+>, 
+     <A
+HREF="function.user-error.html"
+><B
+CLASS="function"
+>user_error()</B
+></A
+>
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.set-error-handler.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.user-error.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>set_error_handler</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.errorfunc.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>user_error</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

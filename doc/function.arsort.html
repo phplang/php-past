@@ -1,0 +1,301 @@
+<HTML
+><HEAD
+><TITLE
+>arsort</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Array Functions"
+HREF="ref.array.html"><LINK
+REL="PREVIOUS"
+TITLE="array_walk"
+HREF="function.array-walk.html"><LINK
+REL="NEXT"
+TITLE="asort"
+HREF="function.asort.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.array-walk.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.asort.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.arsort"
+>arsort</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN5103"
+></A
+><P
+>    (PHP3 , PHP4 )</P
+>arsort&nbsp;--&nbsp;
+     Sort an array in reverse order and maintain index association
+    </DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN5106"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN5108"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>void <B
+CLASS="function"
+>arsort</B
+></CODE
+> (array array [, int 
+       sort_flags])</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     This function sorts an array such that array indices maintain
+     their correlation with the array elements they are associated
+     with.  This is used mainly when sorting associative arrays where
+     the actual element order is significant.
+     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN5118"
+></A
+><P
+><B
+>Example 1. <B
+CLASS="function"
+>Arsort()</B
+> example</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;$fruits = array ("d"=&#62;"lemon", "a"=&#62;"orange", "b"=&#62;"banana", "c"=&#62;"apple");
+arsort ($fruits);
+reset ($fruits);
+while (list ($key, $val) = each ($fruits)) {
+    echo "$key = $val\n";
+}
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+    </P
+><P
+>&#13;     This example would display:
+    </P
+><P
+>&#13;     <DIV
+CLASS="informalexample"
+><A
+NAME="AEN5124"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;fruits[a] = orange
+fruits[d] = lemon
+fruits[b] = banana
+fruits[c] = apple
+      </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+>
+    </P
+><P
+>&#13;     The fruits have been sorted in reverse alphabetical order, and
+     the index associated with each element has been maintained.
+    </P
+><P
+>&#13;     You may modify the behavior of the sort using the optional
+     parameter <TT
+CLASS="parameter"
+><I
+>sort_flags</I
+></TT
+>, for details 
+     see <A
+HREF="function.sort.html"
+><B
+CLASS="function"
+>sort()</B
+></A
+>.
+    </P
+><P
+>&#13;     See also: <A
+HREF="function.asort.html"
+><B
+CLASS="function"
+>asort()</B
+></A
+>, <A
+HREF="function.rsort.html"
+><B
+CLASS="function"
+>rsort()</B
+></A
+>,
+     <A
+HREF="function.ksort.html"
+><B
+CLASS="function"
+>ksort()</B
+></A
+>, and <A
+HREF="function.sort.html"
+><B
+CLASS="function"
+>sort()</B
+></A
+>.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.array-walk.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.asort.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>array_walk</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.array.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>asort</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

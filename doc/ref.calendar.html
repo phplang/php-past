@@ -1,0 +1,267 @@
+<HTML
+><HEAD
+><TITLE
+>Calendar functions</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Function Reference"
+HREF="funcref.html"><LINK
+REL="PREVIOUS"
+TITLE="bcsub"
+HREF="function.bcsub.html"><LINK
+REL="NEXT"
+TITLE="JDToGregorian"
+HREF="function.jdtogregorian.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="reference"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.bcsub.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.jdtogregorian.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="reference"
+><A
+NAME="ref.calendar"
+></A
+><DIV
+CLASS="TITLEPAGE"
+><H1
+CLASS="title"
+>V. Calendar functions</H1
+><DIV
+CLASS="PARTINTRO"
+><A
+NAME="AEN6220"
+></A
+><P
+>&#13;    The calendar functions are only available if you have compiled
+    the calendar extension, found in either the "dl" or "ext"
+    subdirectories of your PHP source code.
+    Please see the README file before using it.
+   </P
+><P
+>&#13;    The calendar extension presents a series of functions to simplify
+    converting between different calendar formats.  The intermediary
+    or standard it is based on is the Julian Day Count.  The Julian
+    Day Count is a count of days starting way earlier than any date
+    most people would need to track (somewhere around 4000bc).  To
+    convert between calendar systems, you must first convert to Julian
+    Day Count, then to the calendar system of your choice.  Julian Day
+    Count is very different from the Julian Calendar!  For more
+    information on calendar systems visit <A
+HREF="http://genealogy.org/~scottlee/cal-overview.html"
+TARGET="_top"
+>http://genealogy.org/~scottlee/cal-overview.html</A
+>.  Excerpts from this
+    page are included in these instructions, and are in quotes.
+   </P
+></DIV
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Table of Contents</B
+></DT
+><DT
+><A
+HREF="function.jdtogregorian.html"
+>JDToGregorian</A
+> &#8212; Converts Julian Day Count to Gregorian date</DT
+><DT
+><A
+HREF="function.gregoriantojd.html"
+>GregorianToJD</A
+> &#8212; 
+     Converts a Gregorian date to Julian Day Count
+    </DT
+><DT
+><A
+HREF="function.jdtojulian.html"
+>JDToJulian</A
+> &#8212; 
+     Converts a Julian Day Count to a Julian Calendar Date
+    </DT
+><DT
+><A
+HREF="function.juliantojd.html"
+>JulianToJD</A
+> &#8212; 
+     Converts a Julian Calendar date to Julian Day Count
+    </DT
+><DT
+><A
+HREF="function.jdtojewish.html"
+>JDToJewish</A
+> &#8212; 
+     Converts a Julian Day Count to the Jewish Calendar
+    </DT
+><DT
+><A
+HREF="function.jewishtojd.html"
+>JewishToJD</A
+> &#8212; 
+     Converts a date in the Jewish Calendar to Julian Day Count
+    </DT
+><DT
+><A
+HREF="function.jdtofrench.html"
+>JDToFrench</A
+> &#8212; 
+     Converts a Julian Day Count to the French Republican Calendar
+    </DT
+><DT
+><A
+HREF="function.frenchtojd.html"
+>FrenchToJD</A
+> &#8212; 
+     Converts a date from the French Republican Calendar to a Julian
+     Day Count
+    </DT
+><DT
+><A
+HREF="function.jdmonthname.html"
+>JDMonthName</A
+> &#8212; Returns a month name</DT
+><DT
+><A
+HREF="function.jddayofweek.html"
+>JDDayOfWeek</A
+> &#8212; Returns the day of the week</DT
+><DT
+><A
+HREF="function.easter-date.html"
+>easter_date</A
+> &#8212; 
+     Get UNIX timestamp for midnight on Easter of a given year
+    </DT
+><DT
+><A
+HREF="function.easter-days.html"
+>easter_days</A
+> &#8212; 
+     Get number of days after March 21 on which Easter falls for a
+     given year
+    </DT
+><DT
+><A
+HREF="function.unixtojd.html"
+>unixtojd</A
+> &#8212; Convert UNIX timestamp to Julian Day</DT
+><DT
+><A
+HREF="function.jdtounix.html"
+>jdtounix</A
+> &#8212; Convert Julian Day to UNIX timestamp</DT
+></DL
+></DIV
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.bcsub.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.jdtogregorian.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>bcsub</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="funcref.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>JDToGregorian</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

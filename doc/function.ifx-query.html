@@ -1,0 +1,371 @@
+<HTML
+><HEAD
+><TITLE
+>ifx_query</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Informix functions"
+HREF="ref.ifx.html"><LINK
+REL="PREVIOUS"
+TITLE="ifx_close"
+HREF="function.ifx-close.html"><LINK
+REL="NEXT"
+TITLE="ifx_prepare"
+HREF="function.ifx-prepare.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.ifx-close.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.ifx-prepare.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.ifx-query"
+>ifx_query</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN17822"
+></A
+><P
+>    (PHP3 &#62;= 3.0.3, PHP4 )</P
+>ifx_query&nbsp;--&nbsp;Send Informix query</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN17825"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN17827"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int <B
+CLASS="function"
+>ifx_query</B
+></CODE
+> (string query [, int 
+       link_identifier [, int 
+       cursor_type [, mixed 
+       blobidarray]]])</CODE
+></P
+><P
+></P
+></DIV
+><P
+> 
+     Returns: A positive Informix result identifier on success, or
+     false on error.  
+    </P
+><P
+> 
+     A "result_id" resource used by other functions to retrieve the
+     query results.  Sets "affected_rows" for retrieval by the
+     <A
+HREF="function.ifx-affected-rows.html"
+><B
+CLASS="function"
+>ifx_affected_rows()</B
+></A
+> function.
+    </P
+><P
+> 
+     <B
+CLASS="function"
+>ifx_query()</B
+> sends a query to the currently
+     active database on the server that's associated with the
+     specified link identifier.  If the link identifier isn't
+     specified, the last opened link is assumed.  If no link is open,
+     the function tries to establish a link as if
+     <A
+HREF="function.ifx-connect.html"
+><B
+CLASS="function"
+>ifx_connect()</B
+></A
+> was called, and use it.
+    </P
+><P
+>&#13;     Executes <TT
+CLASS="parameter"
+><I
+>query</I
+></TT
+> on connection
+     <TT
+CLASS="parameter"
+><I
+>conn_id</I
+></TT
+>. For "select-type" queries a
+     cursor is declared and opened. The optional
+     <TT
+CLASS="parameter"
+><I
+>cursor_type</I
+></TT
+> parameter allows you to make
+     this a "scroll" and/or "hold" cursor.  It's a bitmask and can be
+     either IFX_SCROLL, IFX_HOLD, or both or'ed together. Non-select
+     queries are "execute immediate".  IFX_SCROLL and IFX_HOLD are
+     symbolic constants and as such shouldn't be between quotes. I you
+     omit this parameter the cursor is a normal sequential cursor.
+    </P
+><P
+>&#13;     For either query type the number of (estimated or real) affected
+     rows is saved for retrieval by
+     <A
+HREF="function.ifx-affected-rows.html"
+><B
+CLASS="function"
+>ifx_affected_rows()</B
+></A
+>.
+    </P
+><P
+>&#13;     If you have BLOB (BYTE or TEXT) columns in an update query, you
+     can add a <TT
+CLASS="parameter"
+><I
+>blobidarray</I
+></TT
+> parameter containing
+     the corresponding "blob ids", and you should replace those
+     columns with a "?" in the query text.
+    </P
+><P
+>&#13;     If the contents of the TEXT (or BYTE) column allow it, you can
+     also use "ifx_textasvarchar(1)" and "ifx_byteasvarchar(1)".  This
+     allows you to treat TEXT (or BYTE) columns just as if they were
+     ordinary (but long) VARCHAR columns for select queries, and you
+     don't need to bother with blob id's.
+    </P
+><P
+>&#13;     With ifx_textasvarchar(0) or ifx_byteasvarchar(0) (the default
+     situation), select queries will return BLOB columns as blob id's
+     (integer value).  You can get the value of the blob as a string
+     or file with the blob functions (see below).
+    </P
+><P
+>&#13;     See also: <A
+HREF="function.ifx-connect.html"
+><B
+CLASS="function"
+>ifx_connect()</B
+></A
+>.
+     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN17860"
+></A
+><P
+><B
+>Example 1. 
+       Show all rows of the "orders" table as a html table
+      </B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;ifx_textasvarchar(1);      // use "text mode" for blobs
+$res_id = ifx_query("select * from orders", $conn_id);
+if (! $res_id) {
+    printf("Can't select orders : %s\n&#60;br&#62;%s&#60;br&#62;\n", ifx_error());
+    ifx_errormsg();
+    die;
+}
+ifx_htmltbl_result($res_id, "border=\"1\"");
+ifx_free_result($res_id);
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN17863"
+></A
+><P
+><B
+>Example 2. Insert some values into the "catalog" table</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;                      // create blob id's for a byte and text column
+$textid = ifx_create_blob(0, 0, "Text column in memory");
+$byteid = ifx_create_blob(1, 0, "Byte column in memory");
+                      // store blob id's in a blobid array
+$blobidarray[] = $textid;
+$blobidarray[] = $byteid;
+                      // launch query
+$query = "insert into catalog (stock_num, manu_code, " .
+         "cat_descr,cat_picture) values(1,'HRO',?,?)";
+$res_id = ifx_query($query, $conn_id, $blobidarray);
+if (! $res_id) {
+  ... error ...
+}
+                     // free result id
+ifx_free_result($res_id);
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.ifx-close.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.ifx-prepare.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>ifx_close</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.ifx.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>ifx_prepare</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,212 @@
+<HTML
+><HEAD
+><TITLE
+>dba_firstkey</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Database (dbm-style) abstraction layer functions"
+HREF="ref.dba.html"><LINK
+REL="PREVIOUS"
+TITLE="dba_fetch"
+HREF="function.dba-fetch.html"><LINK
+REL="NEXT"
+TITLE="dba_insert"
+HREF="function.dba-insert.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.dba-fetch.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.dba-insert.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.dba-firstkey"
+>dba_firstkey</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN8876"
+></A
+><P
+>    (PHP3 &#62;= 3.0.8, PHP4 &#62;= 4.0b2)</P
+>dba_firstkey&nbsp;--&nbsp;Fetch first key</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN8879"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN8881"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>string <B
+CLASS="function"
+>dba_firstkey</B
+></CODE
+> (int handle)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     <B
+CLASS="function"
+>Dba_firstkey()</B
+> returns the first key of the
+     database specified by <TT
+CLASS="parameter"
+><I
+>handle</I
+></TT
+> and resets
+     the internal key pointer. This permits a linear search through
+     the whole database.
+    </P
+><P
+>&#13;     <TT
+CLASS="parameter"
+><I
+>Handle</I
+></TT
+> is a database handle returned by
+     <A
+HREF="function.dba-open.html"
+><B
+CLASS="function"
+>dba_open()</B
+></A
+>.
+    </P
+><P
+>&#13;     <B
+CLASS="function"
+>Dba_firstkey()</B
+> returns the key or false
+     depending on whether it succeeds or fails, respectively.
+    </P
+><P
+>&#13;     See also:
+     <B
+CLASS="function"
+>Dba_nextkey()</B
+>
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.dba-fetch.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.dba-insert.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>dba_fetch</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.dba.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>dba_insert</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

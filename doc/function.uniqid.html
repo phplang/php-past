@@ -1,0 +1,267 @@
+<HTML
+><HEAD
+><TITLE
+>uniqid</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Miscellaneous functions"
+HREF="ref.misc.html"><LINK
+REL="PREVIOUS"
+TITLE="sleep"
+HREF="function.sleep.html"><LINK
+REL="NEXT"
+TITLE="unpack"
+HREF="function.unpack.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.sleep.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.unpack.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.uniqid"
+>uniqid</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN23112"
+></A
+><P
+>    (PHP3 , PHP4 )</P
+>uniqid&nbsp;--&nbsp;Generate a unique id</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN23115"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN23117"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int <B
+CLASS="function"
+>uniqid</B
+></CODE
+> (string prefix [, boolean 
+       lcg])</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     <B
+CLASS="function"
+>Uniqid()</B
+> returns a prefixed unique identifier
+     based on the current time in microseconds. The prefix can be
+     useful for instance if you generate identifiers simultaneously on
+     several hosts that might happen to generate the identifier at the
+     same microsecond.    <TT
+CLASS="parameter"
+><I
+>Prefix</I
+></TT
+> can be up to 114
+     characters long.
+    </P
+><P
+>&#13;     If the optional <TT
+CLASS="parameter"
+><I
+>lcg</I
+></TT
+> parameter is true,
+     <B
+CLASS="function"
+>uniqid()</B
+> will add additional "combined LCG"
+     entropy at the end of the return value, which should make the
+     results more unique.
+    </P
+><P
+>&#13;     With an empty <TT
+CLASS="parameter"
+><I
+>prefix</I
+></TT
+>, the returned string
+     will be 13 characters long.  If <TT
+CLASS="parameter"
+><I
+>lcg</I
+></TT
+> is
+     true, it will be 23 characters.
+    </P
+><DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
+><P
+><B
+>Note: </B
+>
+      The <TT
+CLASS="parameter"
+><I
+>lcg</I
+></TT
+> parameter is only available in
+      PHP 4 and PHP 3.0.13 and later.
+     </P
+></BLOCKQUOTE
+></DIV
+><P
+>&#13;     If you need a unique identifier or token and you intend to give
+     out that token to the user via the network (i.e. session cookies),
+     it is recommended that you use something along the lines of
+     <DIV
+CLASS="informalexample"
+><A
+NAME="AEN23139"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;$token = md5 (uniqid ("")); // no random portion
+$better_token = md5 (uniqid (rand())); // better, difficult to guess
+      </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+>
+    </P
+><P
+>&#13;     This will create a 32 character identifier (a 128 bit hex number)
+     that is extremely difficult to predict.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.sleep.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.unpack.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>sleep</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.misc.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>unpack</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

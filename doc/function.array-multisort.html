@@ -1,0 +1,328 @@
+<HTML
+><HEAD
+><TITLE
+>array_multisort</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Array Functions"
+HREF="ref.array.html"><LINK
+REL="PREVIOUS"
+TITLE="array_merge_recursive"
+HREF="function.array-merge-recursive.html"><LINK
+REL="NEXT"
+TITLE="array_pad"
+HREF="function.array-pad.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.array-merge-recursive.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.array-pad.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.array-multisort"
+>array_multisort</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN4656"
+></A
+><P
+>    (PHP4 &#62;= 4.0b4)</P
+>array_multisort&nbsp;--&nbsp;Sort multiple or multi-dimensional arrays</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN4659"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN4661"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>bool <B
+CLASS="function"
+>array_multisort</B
+></CODE
+> (array ar1 [, mixed
+       arg [, mixed
+       ... [, array
+       ...]]])</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     <B
+CLASS="function"
+>Array_multisort()</B
+> can be used to sort several
+     arrays at once or a multi-dimensional array according by one of
+     more dimensions. It maintains key association when sorting.
+    </P
+><P
+>&#13;     The input arrays are treated as columns of a table to be sorted
+     by rows - this resembles the functionality of SQL ORDER BY
+     clause. The first array is the primary one to sort by. The rows
+     (values) in that array that compare the same are sorted by the
+     next input array, and so on.
+    </P
+><P
+>&#13;     The argument structure of this function is a bit unusual, but
+     flexible. The very first argument has to be an
+     array. Subsequently, each argument can be either an array or a
+     sorting flag from the following lists.
+    </P
+><P
+>&#13;     Sorting order flags:
+     <P
+></P
+><UL
+><LI
+><P
+>SORT_ASC - sort in ascending order</P
+></LI
+><LI
+><P
+>SORT_DESC - sort in descending order</P
+></LI
+></UL
+>
+    </P
+><P
+>&#13;     Sorting type flags:
+     <P
+></P
+><UL
+><LI
+><P
+>SORT_REGULAR - compare items normally</P
+></LI
+><LI
+><P
+>SORT_NUMERIC - compare items numerically</P
+></LI
+><LI
+><P
+>SORT_STRING - compare items as strings</P
+></LI
+></UL
+>
+    </P
+><P
+>&#13;     No two sorting flags of the same type can be specified after each
+     array. The sortings flags specified after an array argument apply
+     only to that array - they are reset to default SORT_ASC and
+     SORT_REGULAR after before each new array argument.
+    </P
+><P
+>&#13;     Returns true on success, false on failure.
+    </P
+><P
+>&#13;     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN4697"
+></A
+><P
+><B
+>Example 1. Sorting multiple arrays</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;$ar1 = array ("10", 100, 100, "a");
+$ar2 = array (1, 3, "2", 1);
+array_multisort ($ar1, $ar2);
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+    </P
+><P
+>&#13;     In this example, after sorting, the first array will contain 10,
+     "a", 100, 100. The second array will contain 1, 1, 2, "3". The
+     entries in the second array corresponding to the identical
+     entries in the first array (100 and 100) were sorted as well.
+    </P
+><P
+>&#13;     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN4702"
+></A
+><P
+><B
+>Example 2. Sorting multi-dimensional array</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;$ar = array (array ("10", 100, 100, "a"), array (1, 3, "2", 1));
+array_multisort ($ar[0], SORT_ASC, SORT_STRING, 
+                 $ar[1], SORT_NUMERIC, SORT_DESC);
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+    </P
+><P
+>&#13;     In this example, after sorting, the first array will contain 10,
+     100, 100, "a" (it was sorted as strings in ascending order), and
+     the second one will contain 1, 3, "2", 1 (sorted as numbers, in
+     descending order).
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.array-merge-recursive.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.array-pad.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>array_merge_recursive</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.array.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>array_pad</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,224 @@
+<HTML
+><HEAD
+><TITLE
+>msql_select_db</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="mSQL functions"
+HREF="ref.msql.html"><LINK
+REL="PREVIOUS"
+TITLE="msql_result"
+HREF="function.msql-result.html"><LINK
+REL="NEXT"
+TITLE="msql_selectdb"
+HREF="function.msql-selectdb.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.msql-result.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.msql-selectdb.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.msql-select-db"
+>msql_select_db</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN23869"
+></A
+><P
+>    (PHP3 , PHP4 )</P
+>msql_select_db&nbsp;--&nbsp;Select mSQL database</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN23872"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN23874"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int <B
+CLASS="function"
+>msql_select_db</B
+></CODE
+> (string database_name, int link_identifier)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     Returns true on success, false on error.
+    </P
+><P
+>  
+     <B
+CLASS="function"
+>msql_select_db()</B
+> sets the current active
+     database on the server that's associated with the specified link
+     identifier.  If no link identifier is specified, the last opened
+     link is assumed.  If no link is open, the function will try to
+     establish a link as if <A
+HREF="function.msql-connect.html"
+><B
+CLASS="function"
+>msql_connect()</B
+></A
+> was
+     called, and use it.
+    </P
+><P
+> 
+     Every subsequent call to <A
+HREF="function.msql-query.html"
+><B
+CLASS="function"
+>msql_query()</B
+></A
+> will be
+     made on the active database.
+    </P
+><P
+>&#13;     See also: <A
+HREF="function.msql-connect.html"
+><B
+CLASS="function"
+>msql_connect()</B
+></A
+>,
+     <A
+HREF="function.msql-pconnect.html"
+><B
+CLASS="function"
+>msql_pconnect()</B
+></A
+>, and
+     <A
+HREF="function.msql-query.html"
+><B
+CLASS="function"
+>msql_query()</B
+></A
+>.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.msql-result.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.msql-selectdb.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>msql_result</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.msql.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>msql_selectdb</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

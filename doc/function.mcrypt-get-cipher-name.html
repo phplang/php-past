@@ -1,0 +1,266 @@
+<HTML
+><HEAD
+><TITLE
+>mcrypt_get_cipher_name</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Mcrypt Encryption Functions"
+HREF="ref.mcrypt.html"><LINK
+REL="PREVIOUS"
+TITLE="Mcrypt Encryption Functions"
+HREF="ref.mcrypt.html"><LINK
+REL="NEXT"
+TITLE="mcrypt_get_block_size"
+HREF="function.mcrypt-get-block-size.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="ref.mcrypt.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.mcrypt-get-block-size.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.mcrypt-get-cipher-name"
+>mcrypt_get_cipher_name</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN21323"
+></A
+><P
+>    (PHP3 &#62;= 3.0.8, PHP4 )</P
+>mcrypt_get_cipher_name&nbsp;--&nbsp;Get the name of the specified cipher</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN21326"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN21328"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>string <B
+CLASS="function"
+>mcrypt_get_cipher_name</B
+></CODE
+> (int cipher)</CODE
+></P
+><P
+></P
+></DIV
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN21334"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>string <B
+CLASS="function"
+>mcrypt_get_cipher_name</B
+></CODE
+> (string cipher)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     <B
+CLASS="function"
+>Mcrypt_get_cipher_name()</B
+> is used to get the
+     name of the specified cipher.
+    </P
+><P
+>&#13;     <B
+CLASS="function"
+>Mcrypt_get_cipher_name()</B
+> takes the cipher
+     number as an argument (libmcrypt 2.2.x) or takes the cipher name
+     as an argument (libmcrypt 2.4.x) and returns the name of the cipher
+     or false, if the cipher does not exist.
+    </P
+><P
+>&#13;     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN21345"
+></A
+><P
+><B
+>Example 1. <B
+CLASS="function"
+>Mcrypt_get_cipher_name()</B
+> Example</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;&#60;?php
+$cipher = MCRYPT_TripleDES;
+
+print mcrypt_get_cipher_name ($cipher);
+?&#62;
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+    </P
+><P
+>&#13;     The above example will produce:
+     <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;TripleDES
+     </PRE
+></TD
+></TR
+></TABLE
+>
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="ref.mcrypt.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.mcrypt-get-block-size.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Mcrypt Encryption Functions</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.mcrypt.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>mcrypt_get_block_size</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

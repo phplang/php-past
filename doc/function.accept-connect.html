@@ -1,0 +1,294 @@
+<HTML
+><HEAD
+><TITLE
+>accept_connect</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Socket functions"
+HREF="ref.sockets.html"><LINK
+REL="PREVIOUS"
+TITLE="Socket functions"
+HREF="ref.sockets.html"><LINK
+REL="NEXT"
+TITLE="bind"
+HREF="function.bind.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="ref.sockets.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.bind.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.accept-connect"
+>accept_connect</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN35898"
+></A
+><P
+>    (PHP4 &#62;= 4.0.2)</P
+>accept_connect&nbsp;--&nbsp;Accepts a connection on a socket</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN35901"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN35903"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int <B
+CLASS="function"
+>accept_connect</B
+></CODE
+> (int socket)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     After the socket <TT
+CLASS="parameter"
+><I
+>socket</I
+></TT
+> has been created
+     using <A
+HREF="function.socket.html"
+><B
+CLASS="function"
+>socket()</B
+></A
+>, bound to a name with
+     <A
+HREF="function.bind.html"
+><B
+CLASS="function"
+>bind()</B
+></A
+>, and told to listen for connections
+     with <A
+HREF="function.listen.html"
+><B
+CLASS="function"
+>listen()</B
+></A
+>, this function will accept
+     incoming connections on that socket. Once a successful connection
+     is made, a new socket descriptor is returned, which may be used
+     for communication. If there are multiple connections queued on
+     the socket, the first will be used. If there are no pending
+     connections, <B
+CLASS="function"
+>accept_connect()</B
+> will block until
+     a connection becomes present. If <TT
+CLASS="parameter"
+><I
+>socket</I
+></TT
+>
+     has been made non-blocking using
+     <B
+CLASS="function"
+>socket_set_blocking()</B
+> or
+     <B
+CLASS="function"
+>set_nonblock()</B
+>, an error code will be
+     returned.
+    </P
+><P
+>&#13;     The socket descriptor returned by
+     <B
+CLASS="function"
+>accept_connect()</B
+> may not be used to accept new
+     connections. The original listening socket
+     <TT
+CLASS="parameter"
+><I
+>socket</I
+></TT
+>, however, remains open and may be
+     reused.
+    </P
+><P
+>&#13;     Returns a new socket descriptor on success, or a negative error
+     code on failure. This code may be passed to
+     <A
+HREF="function.strerror.html"
+><B
+CLASS="function"
+>strerror()</B
+></A
+> to get a textual explanation of the
+     error.
+    </P
+><P
+>&#13;     See also 
+     <A
+HREF="function.bind.html"
+><B
+CLASS="function"
+>bind()</B
+></A
+>,
+     <A
+HREF="function.connect.html"
+><B
+CLASS="function"
+>connect()</B
+></A
+>,
+     <A
+HREF="function.listen.html"
+><B
+CLASS="function"
+>listen()</B
+></A
+>,
+     <A
+HREF="function.socket.html"
+><B
+CLASS="function"
+>socket()</B
+></A
+>,
+     <A
+HREF="function.socket-get-status.html"
+><B
+CLASS="function"
+>socket_get_status()</B
+></A
+>, and
+     <A
+HREF="function.strerror.html"
+><B
+CLASS="function"
+>strerror()</B
+></A
+>.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="ref.sockets.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.bind.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Socket functions</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.sockets.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>bind</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

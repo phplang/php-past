@@ -1,0 +1,224 @@
+<HTML
+><HEAD
+><TITLE
+>sem_get</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Semaphore and Shared Memory Functions"
+HREF="ref.sem.html"><LINK
+REL="PREVIOUS"
+TITLE="Semaphore and Shared Memory Functions"
+HREF="ref.sem.html"><LINK
+REL="NEXT"
+TITLE="sem_acquire"
+HREF="function.sem-acquire.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="ref.sem.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.sem-acquire.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.sem-get"
+>sem_get</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN33588"
+></A
+><P
+>    (PHP3 &#62;= 3.0.6, PHP4 )</P
+>sem_get&nbsp;--&nbsp;Get a semaphore id</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN33591"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN33593"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int <B
+CLASS="function"
+>sem_get</B
+></CODE
+> (int key [, int 
+       max_acquire [, int 
+       perm]])</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     Returns: A positive semaphore identifier on success, or false on
+     error.
+    </P
+><P
+>&#13;     <B
+CLASS="function"
+>Sem_get()</B
+> returns an id that can be used to
+     access the System V semaphore with the given key.  The semaphore
+     is created if necessary using the permission bits specified in
+     perm (defaults to 0666).  The number of processes that can
+     acquire the semaphore simultaneously is set to max_acquire
+     (defaults to 1).  Actually this value is set only if the process
+     finds it is the only process currently attached to the semaphore.
+    </P
+><P
+>&#13;     A second call to <B
+CLASS="function"
+>sem_get()</B
+> for the same key
+     will return a different semaphore identifier, but both
+     identifiers access the same underlying semaphore.
+    </P
+><P
+> 
+     See also: <A
+HREF="function.sem-acquire.html"
+><B
+CLASS="function"
+>sem_acquire()</B
+></A
+> and
+     <A
+HREF="function.sem-release.html"
+><B
+CLASS="function"
+>sem_release()</B
+></A
+>.
+    </P
+><DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
+><P
+><B
+>Note: </B
+>
+      This function does not work on Windows systems
+     </P
+></BLOCKQUOTE
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="ref.sem.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.sem-acquire.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Semaphore and Shared Memory Functions</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.sem.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>sem_acquire</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

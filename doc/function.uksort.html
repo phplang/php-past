@@ -1,0 +1,314 @@
+<HTML
+><HEAD
+><TITLE
+>uksort</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Array Functions"
+HREF="ref.array.html"><LINK
+REL="PREVIOUS"
+TITLE="uasort"
+HREF="function.uasort.html"><LINK
+REL="NEXT"
+TITLE="usort"
+HREF="function.usort.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.uasort.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.usort.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.uksort"
+>uksort</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN5839"
+></A
+><P
+>    (PHP3 &#62;= 3.0.4, PHP4 )</P
+>uksort&nbsp;--&nbsp;
+     Sort an array by keys using a user-defined comparison function
+    </DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN5842"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN5844"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>void <B
+CLASS="function"
+>uksort</B
+></CODE
+> (array array, function cmp_function)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     This function will sort the keys of an array using a
+     user-supplied comparison function.  If the array you wish to sort
+     needs to be sorted by some non-trivial criteria, you should use
+     this function.
+    </P
+><P
+>&#13;     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN5854"
+></A
+><P
+><B
+>Example 1. <B
+CLASS="function"
+>Uksort()</B
+> example</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;function cmp ($a, $b) {   
+    if ($a == $b) return 0;
+    return ($a &#62; $b) ? -1 : 1;
+}
+
+$a = array (4 =&#62; "four", 3 =&#62; "three", 20 =&#62; "twenty", 10 =&#62; "ten");
+
+uksort ($a, "cmp");
+
+while (list ($key, $value) = each ($a)) {
+    echo "$key: $value\n";
+}
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+    </P
+><P
+>&#13;     This example would display:
+    </P
+><P
+>&#13;     <DIV
+CLASS="informalexample"
+><A
+NAME="AEN5860"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;20: twenty
+10: ten
+4: four
+3: three
+      </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+>
+    </P
+><P
+>&#13;     See also: <A
+HREF="function.usort.html"
+><B
+CLASS="function"
+>usort()</B
+></A
+>, <A
+HREF="function.uasort.html"
+><B
+CLASS="function"
+>uasort()</B
+></A
+>, 
+     <A
+HREF="function.sort.html"
+><B
+CLASS="function"
+>sort()</B
+></A
+>, <A
+HREF="function.asort.html"
+><B
+CLASS="function"
+>asort()</B
+></A
+>, 
+     <A
+HREF="function.arsort.html"
+><B
+CLASS="function"
+>arsort()</B
+></A
+>, <A
+HREF="function.ksort.html"
+><B
+CLASS="function"
+>ksort()</B
+></A
+>,
+     <A
+HREF="function.natsort.html"
+><B
+CLASS="function"
+>natsort()</B
+></A
+> and <A
+HREF="function.rsort.html"
+><B
+CLASS="function"
+>rsort()</B
+></A
+>.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.uasort.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.usort.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>uasort</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.array.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>usort</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

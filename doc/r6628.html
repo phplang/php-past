@@ -1,0 +1,394 @@
+<HTML
+><HEAD
+><TITLE
+>Database (dbm-style) abstraction layer functions</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Function Reference"
+HREF="funcref.html"><LINK
+REL="PREVIOUS"
+TITLE="readgzfile"
+HREF="function.readgzfile.html"><LINK
+REL="NEXT"
+TITLE="dba_close"
+HREF="r6669.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.readgzfile.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="r6669.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="REFERENCE"
+><A
+NAME="AEN6628"
+></A
+><DIV
+CLASS="TITLEPAGE"
+><H1
+CLASS="TITLE"
+>IX. Database (dbm-style) abstraction layer functions</H1
+><DIV
+CLASS="PARTINTRO"
+><A
+NAME="AEN6631"
+></A
+><P
+>    These functions build the foundation for accessing Berkeley DB style
+    databases.</P
+><P
+>    This is a general abstraction layer for several file-based databases. As
+    such, functionality is limited to a subset of features modern databases
+    such as <A
+HREF=""
+TARGET="_top"
+>Sleepycat Software's DB2</A
+>
+    support. (This is not to be confused with IBM's DB2 software, which is
+    supported through the <A
+HREF="ref.odbc.html"
+>ODBC functions</A
+>.)</P
+><P
+>    The behaviour of various aspects depend on the implementation of the
+    underlying database. Functions such as <B
+CLASS="FUNCTION"
+>dba_optimize()</B
+>
+    and <B
+CLASS="FUNCTION"
+>dba_sync()</B
+> will do what they promise for one
+    database and will do nothing for others.</P
+><P
+>    The following handlers are supported:
+
+    <P
+></P
+><UL
+><LI
+><P
+>      dbm is the oldest (original) type of Berkeley DB style databases. You
+      should avoid it, if possible. We do not support the compatibility
+      functions built into DB2 and gdbm, because they are only compatible on
+      the source code level, but cannot handle the original dbm format.</P
+></LI
+><LI
+><P
+>      ndbm is a newer type and more flexible than dbm. It still has most of the
+      arbitrary limits of dbm (therefore it is deprecated).</P
+></LI
+><LI
+><P
+>      gdbm is the <A
+HREF=""
+TARGET="_top"
+>GNU database manager</A
+>.</P
+></LI
+><LI
+><P
+>      db2 is <A
+HREF=""
+TARGET="_top"
+>Sleepycat Software's DB2</A
+>. It
+      is described as "a programmatic toolkit that provides high-performance
+      built-in database support for both standalone and client/server
+      applications."</P
+></LI
+><LI
+><P
+>      cdb is "a fast, reliable, lightweight package for creating and reading
+      constant databases." It is from the author of qmail and can be found
+      <A
+HREF=""
+TARGET="_top"
+>here</A
+>. Since it is constant, we support
+      only reading operations.</P
+></LI
+></UL
+></P
+><P
+>    <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="EXAMPLE"
+><P
+><B
+>Example 1. DBA example</B
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>&lt;?php
+
+$id = dba_open("/tmp/test.db", "n", "db2");
+
+if(!$id) {
+    echo "dba_open failed\n";
+    exit;
+}
+
+dba_replace("key", "This is an example!", $id);
+
+if(dba_exists("key", $id)) {
+    echo dba_fetch("key", $id);
+    dba_delete("key", $id);
+}
+
+dba_close($id);
+?&gt;</PRE
+></DIV
+></TD
+></TR
+></TABLE
+></P
+><P
+>    DBA is binary safe and does not have any arbitrary limits. It inherits all
+    limits set by the underlying database implementation.</P
+><P
+>    All file-based databases must provide a way of setting the file mode of a
+    new created database, if that is possible at all. The file mode is commonly
+    passed as the fourth argument to <B
+CLASS="FUNCTION"
+>dba_open()</B
+> or
+    <B
+CLASS="FUNCTION"
+>dba_popen()</B
+>.</P
+><P
+>    You can access all entries of a database in a linear way by using the
+    <B
+CLASS="FUNCTION"
+>dba_firstkey()</B
+> and <B
+CLASS="FUNCTION"
+>dba_nextkey()</B
+>
+    functions. You may not change the database while traversing it.</P
+><P
+>    <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="EXAMPLE"
+><P
+><B
+>Example 2. Traversing a database</B
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>&lt;?php
+
+# ...open database...
+
+$key = dba_firstkey($id);
+
+while($key != false) {
+    if(...) { # remember the key to perform some action later
+        $handle_later[] = $key;
+    }
+    $key = dba_nextkey($id);
+}
+
+for($i = 0; $i &lt; count($handle_later); $i++)
+    dba_delete($handle_later[$i], $id);
+
+?&gt;
+	 </PRE
+></DIV
+></TD
+></TR
+></TABLE
+>
+   </P
+></DIV
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Table of Contents</B
+></DT
+><DT
+><A
+HREF="r6669.html"
+>dba_close</A
+> &#8212; Close database</DT
+><DT
+><A
+HREF="r6691.html"
+>dba_delete</A
+> &#8212; Delete entry specified by key</DT
+><DT
+><A
+HREF="r6720.html"
+>dba_exists</A
+> &#8212; Check whether key exists</DT
+><DT
+><A
+HREF="r6749.html"
+>dba_fetch</A
+> &#8212; Fetch data specified by key</DT
+><DT
+><A
+HREF="r6778.html"
+>dba_firstkey</A
+> &#8212; Fetch first key</DT
+><DT
+><A
+HREF="r6799.html"
+>dba_insert</A
+> &#8212; Insert entry</DT
+><DT
+><A
+HREF="r6834.html"
+>dba_nextkey</A
+> &#8212; Fetch next key</DT
+><DT
+><A
+HREF="r6855.html"
+>dba_popen</A
+> &#8212; Open database persistently</DT
+><DT
+><A
+HREF="r6891.html"
+>dba_open</A
+> &#8212; Open database</DT
+><DT
+><A
+HREF="r6927.html"
+>dba_optimize</A
+> &#8212; Optimize database</DT
+><DT
+><A
+HREF="r6948.html"
+>dba_replace</A
+> &#8212; Replace or insert entry</DT
+><DT
+><A
+HREF="r6982.html"
+>dba_sync</A
+> &#8212; Synchronize database</DT
+></DL
+></DIV
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.readgzfile.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="r6669.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>readgzfile</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="funcref.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>dba_close</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,314 @@
+<HTML
+><HEAD
+><TITLE
+>OCILogon</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Oracle 8 functions"
+HREF="ref.oci8.html"><LINK
+REL="PREVIOUS"
+TITLE="OCIBindByName"
+HREF="function.ocibindbyname.html"><LINK
+REL="NEXT"
+TITLE="OCIPLogon"
+HREF="function.ociplogon.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.ocibindbyname.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.ociplogon.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.ocilogon"
+>OCILogon</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN26826"
+></A
+><P
+>    (PHP3 &#62;= 3.0.4, PHP4 )</P
+>OCILogon&nbsp;--&nbsp;Establishes a connection to Oracle</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN26829"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN26831"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int <B
+CLASS="function"
+>OCILogon</B
+></CODE
+> (string username, string password [, string db])</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     <B
+CLASS="function"
+>OCILogon()</B
+> returns an connection identifier
+     needed for most other OCI calls.  The optional third parameter
+     can either contain the name of the local Oracle instance or the
+     name of the entry in tnsnames.ora to which you want to connect.
+     If the optional third parameter is not specified, PHP uses the
+     environment variables ORACLE_SID (Oracle instance) or TWO_TASK
+     (tnsnames.ora) to determine which database to connect to.
+    </P
+><P
+>Connections are shared at the page level when using
+     <B
+CLASS="function"
+>OCILogon()</B
+>.  This means that commits and
+     rollbacks apply to all open transactions in the page, even if you
+     have created multiple connections.
+    </P
+><P
+>&#13;     This example demonstrates how the connections are shared.
+     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN26847"
+></A
+><P
+><B
+>Example 1. OCILogon</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;&#60;?php
+print "&#60;HTML&#62;&#60;PRE&#62;";
+$db = "";
+
+$c1 = ocilogon("scott","tiger",$db);
+$c2 = ocilogon("scott","tiger",$db);
+
+function create_table($conn)
+{ $stmt = ociparse($conn,"create table scott.hallo (test varchar2(64))");
+  ociexecute($stmt);
+  echo $conn." created table\n\n";
+}
+
+function drop_table($conn)
+{ $stmt = ociparse($conn,"drop table scott.hallo");
+  ociexecute($stmt);
+  echo $conn." dropped table\n\n";
+}
+
+function insert_data($conn)
+{ $stmt = ociparse($conn,"insert into scott.hallo 
+            values('$conn' || ' ' || to_char(sysdate,'DD-MON-YY HH24:MI:SS'))");
+  ociexecute($stmt,OCI_DEFAULT);
+  echo $conn." inserted hallo\n\n";
+}
+
+function delete_data($conn)
+{ $stmt = ociparse($conn,"delete from scott.hallo");
+  ociexecute($stmt,OCI_DEFAULT);
+  echo $conn." deleted hallo\n\n";
+}
+
+function commit($conn)
+{ ocicommit($conn);
+  echo $conn." commited\n\n";
+}
+
+function rollback($conn)
+{ ocirollback($conn);
+  echo $conn." rollback\n\n";
+}
+
+function select_data($conn)
+{ $stmt = ociparse($conn,"select * from scott.hallo");
+  ociexecute($stmt,OCI_DEFAULT);
+  echo $conn."----selecting\n\n";
+  while (ocifetch($stmt))
+    echo $conn." &#60;".ociresult($stmt,"TEST")."&#62;\n\n";
+  echo $conn."----done\n\n";
+}
+
+create_table($c1);
+insert_data($c1);   // Insert a row using c1
+insert_data($c2);   // Insert a row using c2
+
+select_data($c1);   // Results of both inserts are returned
+select_data($c2);   
+
+rollback($c1);      // Rollback using c1
+
+select_data($c1);   // Both inserts have been rolled back
+select_data($c2);   
+
+insert_data($c2);   // Insert a row using c2
+commit($c2);        // commit using c2
+
+select_data($c1);   // result of c2 insert is returned
+
+delete_data($c1);   // delete all rows in table using c1
+select_data($c1);   // no rows returned
+select_data($c2);   // no rows returned
+commit($c1);        // commit using c1
+
+select_data($c1);   // no rows returned
+select_data($c2);   // no rows returned
+
+
+drop_table($c1);
+print "&#60;/PRE&#62;&#60;/HTML&#62;";
+?&#62;</PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+></P
+><P
+>&#13;     See also <B
+CLASS="function"
+>OCIPLogon()</B
+> and
+     <B
+CLASS="function"
+>OCINLogon()</B
+>.</P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.ocibindbyname.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.ociplogon.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>OCIBindByName</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.oci8.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>OCIPLogon</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

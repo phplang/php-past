@@ -1,0 +1,381 @@
+<HTML
+><HEAD
+><TITLE
+>split</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Regular Expression Functions (POSIX Extended)"
+HREF="ref.regex.html"><LINK
+REL="PREVIOUS"
+TITLE="eregi_replace"
+HREF="function.eregi-replace.html"><LINK
+REL="NEXT"
+TITLE="spliti"
+HREF="function.spliti.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.eregi-replace.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.spliti.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.split"
+>split</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN33349"
+></A
+><P
+>    (PHP3 , PHP4 )</P
+>split&nbsp;--&nbsp;split string into array by regular expression</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN33352"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN33354"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>array <B
+CLASS="function"
+>split</B
+></CODE
+> (string pattern, string string [, int 
+       limit])</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     Returns an array of strings, each of which is a substring of
+     <TT
+CLASS="parameter"
+><I
+>string</I
+></TT
+> formed by splitting it on
+     boundaries formed by the regular expression
+     <TT
+CLASS="parameter"
+><I
+>pattern</I
+></TT
+>.  If <TT
+CLASS="parameter"
+><I
+>limit</I
+></TT
+>
+     is set, the returned array will contain a maximum of
+     <TT
+CLASS="parameter"
+><I
+>limit</I
+></TT
+> elements with the last element
+     containing the whole rest of <TT
+CLASS="parameter"
+><I
+>string</I
+></TT
+>.  If
+     an error occurs, <B
+CLASS="function"
+>split()</B
+> returns false.
+    </P
+><P
+>&#13;     To get the first five fields from a line from
+     <TT
+CLASS="filename"
+>/etc/passwd</TT
+>:
+     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN33374"
+></A
+><P
+><B
+>Example 1. <B
+CLASS="function"
+>Split()</B
+> Example</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;$passwd_list = split (":", $passwd_line, 5);
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+    </P
+><P
+>&#13;     To parse a date which may be delimited with slashes, dots, or
+     hyphens:
+     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN33379"
+></A
+><P
+><B
+>Example 2. <B
+CLASS="function"
+>Split()</B
+> Example</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;$date = "04/30/1973";  // Delimiters may be slash, dot, or hyphen
+list ($month, $day, $year) = split ('[/.-]', $date);
+echo "Month: $month; Day: $day; Year: $year&#60;br&#62;\n";
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+    </P
+><P
+>&#13;     Note that <TT
+CLASS="parameter"
+><I
+>pattern</I
+></TT
+> is case-sensitive.
+    </P
+><P
+>&#13;     Note that if you don't require the power of regular expressions,
+     it is faster to use <A
+HREF="function.explode.html"
+><B
+CLASS="function"
+>explode()</B
+></A
+>, which doesn't
+     incur the overhead of the regular expression engine.
+    </P
+><P
+>&#13;     For users looking for a way to emulate perl's <B
+CLASS="command"
+>$chars =
+      split('', $str)</B
+> behaviour, please see the examples for
+     <A
+HREF="function.preg-split.html"
+><B
+CLASS="function"
+>preg_split()</B
+></A
+>.
+    </P
+><P
+>&#13;     Please note that <TT
+CLASS="parameter"
+><I
+>pattern</I
+></TT
+> is a regular
+     expression.  If you want to split on any of the characters which
+     are considered special by regular expressions, you'll need to
+     escape them first. If you think <B
+CLASS="function"
+>split()</B
+> (or
+     any other regex function, for that matter) is doing something
+     weird, please read the file <TT
+CLASS="filename"
+>regex.7</TT
+>,
+     included in the <TT
+CLASS="filename"
+>regex/</TT
+> subdirectory of the
+     PHP distribution. It's in manpage format, so you'll want to do
+     something along the lines of <B
+CLASS="command"
+>man
+     /usr/local/src/regex/regex.7</B
+> in order to read it.
+    </P
+><P
+>&#13;     See also: <A
+HREF="function.spliti.html"
+><B
+CLASS="function"
+>spliti()</B
+></A
+>,
+     <A
+HREF="function.explode.html"
+><B
+CLASS="function"
+>explode()</B
+></A
+>, and <A
+HREF="function.implode.html"
+><B
+CLASS="function"
+>implode()</B
+></A
+>.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.eregi-replace.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.spliti.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>eregi_replace</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.regex.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>spliti</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

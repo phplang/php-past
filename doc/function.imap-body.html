@@ -1,0 +1,230 @@
+<HTML
+><HEAD
+><TITLE
+>imap_body</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="IMAP, POP3 and NNTP functions"
+HREF="ref.imap.html"><LINK
+REL="PREVIOUS"
+TITLE="imap_base64"
+HREF="function.imap-base64.html"><LINK
+REL="NEXT"
+TITLE="imap_check"
+HREF="function.imap-check.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.imap-base64.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.imap-check.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.imap-body"
+>imap_body</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN16270"
+></A
+><P
+>    (PHP3 , PHP4 )</P
+>imap_body&nbsp;--&nbsp;Read the message body</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN16273"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN16275"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>string <B
+CLASS="function"
+>imap_body</B
+></CODE
+> (int imap_stream, int msg_number [, int flags])</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     <B
+CLASS="function"
+>imap_body()</B
+> returns the body of the message,
+     numbered <TT
+CLASS="parameter"
+><I
+> msg_number</I
+></TT
+> in the current
+     mailbox. The optional <TT
+CLASS="parameter"
+><I
+>flags</I
+></TT
+> are a bit mask
+     with one or more of the following:
+     <P
+></P
+><UL
+><LI
+><P
+>&#13;	FT_UID - The <TT
+CLASS="parameter"
+><I
+>msgno</I
+></TT
+> is a UID
+       </P
+></LI
+><LI
+><P
+>&#13;	FT_PEEK - Do not set the \Seen flag if not already set
+       </P
+></LI
+><LI
+><P
+>&#13;	FT_INTERNAL - The return string is in internal format, will
+	not canonicalize to CRLF.
+       </P
+></LI
+></UL
+>
+    </P
+><P
+>&#13;     <B
+CLASS="function"
+>imap_body()</B
+> will only return a verbatim copy of the 
+     message body. To extract single parts of a multipart MIME-encoded 
+     message you have to use <B
+CLASS="function"
+>imap_fetch_structure()</B
+> to
+     analyze its structure and <B
+CLASS="function"
+>imap_fetch_body()</B
+> to
+	 	 extract a copy of a single body component.     
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.imap-base64.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.imap-check.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>imap_base64</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.imap.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>imap_check</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,366 @@
+<HTML
+><HEAD
+><TITLE
+>pack</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Miscellaneous functions"
+HREF="ref.misc.html"><LINK
+REL="PREVIOUS"
+TITLE="leak"
+HREF="function.leak.html"><LINK
+REL="NEXT"
+TITLE="show_source"
+HREF="function.show-source.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.leak.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.show-source.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.pack"
+>pack</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN23005"
+></A
+><P
+>    (PHP3 , PHP4 )</P
+>pack&nbsp;--&nbsp;Pack data into binary string.</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN23008"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN23010"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>string <B
+CLASS="function"
+>pack</B
+></CODE
+> (string format [, mixed 
+       args ...])</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     Pack given arguments into binary string according to
+     <TT
+CLASS="parameter"
+><I
+>format</I
+></TT
+>. Returns binary string containing
+     data.
+    </P
+><P
+>&#13;     The idea to this function was taken from Perl and all formatting
+     codes work the same as there, however, there are some formatting
+     codes that are missing such as Perl's "u" format code. The format
+     string consists of format codes followed by an optional repeater
+     argument. The repeater argument can be either an integer value or
+     * for repeating to the end of the input data. For a, A, h, H the
+     repeat count specifies how many characters of one data argument
+     are taken, for @ it is the absolute position where to put the
+     next data, for everything else the repeat count specifies how
+     many data arguments are consumed and packed into the resulting
+     binary string. Currently implemented are
+     <P
+></P
+><UL
+><LI
+><P
+>&#13;    a NUL-padded string
+       </P
+></LI
+><LI
+><P
+>&#13;    A SPACE-padded string
+       </P
+></LI
+><LI
+><P
+>&#13;    h Hex string, low nibble first
+       </P
+></LI
+><LI
+><P
+>&#13;    H Hex string, high nibble first
+       </P
+></LI
+><LI
+><P
+>&#13;    c signed char
+       </P
+></LI
+><LI
+><P
+>&#13;    C unsigned char
+       </P
+></LI
+><LI
+><P
+>&#13;    s signed short (always 16 bit, machine byte order)
+       </P
+></LI
+><LI
+><P
+>&#13;    S unsigned short (always 16 bit, machine byte order)
+       </P
+></LI
+><LI
+><P
+>&#13;    n unsigned short (always 16 bit, big endian byte order)
+       </P
+></LI
+><LI
+><P
+>&#13;    v unsigned short (always 16 bit, little endian byte order)
+       </P
+></LI
+><LI
+><P
+>&#13;    i signed integer (machine dependent size and byte order)
+       </P
+></LI
+><LI
+><P
+>&#13;    I unsigned integer (machine dependent size and byte order)
+       </P
+></LI
+><LI
+><P
+>&#13;    l signed long (always 32 bit, machine byte order)
+       </P
+></LI
+><LI
+><P
+>&#13;    L unsigned long (always 32 bit, machine byte order)
+       </P
+></LI
+><LI
+><P
+>&#13;    N unsigned long (always 32 bit, big endian byte order)
+       </P
+></LI
+><LI
+><P
+>&#13;    V unsigned long (always 32 bit, little endian byte order)
+       </P
+></LI
+><LI
+><P
+>&#13;    f float (machine dependent size and representation)
+       </P
+></LI
+><LI
+><P
+>&#13;    d double (machine dependent size and representation)
+       </P
+></LI
+><LI
+><P
+>&#13;    x NUL byte
+       </P
+></LI
+><LI
+><P
+>&#13;    X Back up one byte
+       </P
+></LI
+><LI
+><P
+>&#13;    @ NUL-fill to absolute position
+       </P
+></LI
+></UL
+>
+     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN23065"
+></A
+><P
+><B
+>Example 1. <B
+CLASS="function"
+>Pack()</B
+> format string</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;$binarydata = pack ("nvc*", 0x1234, 0x5678, 65, 66);
+      </PRE
+></TD
+></TR
+></TABLE
+><P
+>&#13;       The resulting binary string will be 6 bytes long and contain
+       the byte sequence 0x12, 0x34, 0x78, 0x56, 0x41, 0x42.
+      </P
+></DIV
+></TD
+></TR
+></TABLE
+>
+    </P
+><P
+>&#13;     Note that the distinction between signed and unsigned values only 
+     affects the function <A
+HREF="function.unpack.html"
+><B
+CLASS="function"
+>unpack()</B
+></A
+>, where as
+     function <B
+CLASS="function"
+>pack()</B
+> gives the same result for
+     signed and unsigned format codes.
+    </P
+><P
+>&#13;     Also note that PHP internally stores integral values as signed
+     values of a machine dependent size. If you give it an unsigned
+     integral value too large to be stored that way it is converted to
+     a double which often yields an undesired result.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.leak.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.show-source.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>leak</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.misc.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>show_source</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

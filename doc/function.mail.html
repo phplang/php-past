@@ -1,0 +1,269 @@
+<HTML
+><HEAD
+><TITLE
+>mail</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Mail functions"
+HREF="ref.mail.html"><LINK
+REL="PREVIOUS"
+TITLE="Mail functions"
+HREF="ref.mail.html"><LINK
+REL="NEXT"
+TITLE="ezmlm_hash"
+HREF="function.ezmlm-hash.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="ref.mail.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.ezmlm-hash.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.mail"
+>mail</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN19544"
+></A
+><P
+>    (PHP3 , PHP4 )</P
+>mail&nbsp;--&nbsp;send mail</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN19547"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN19549"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>bool <B
+CLASS="function"
+>mail</B
+></CODE
+> (string to, string subject, string message [, string additional_headers])</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;      <B
+CLASS="function"
+>Mail()</B
+> automatically mails the message specified
+      in <TT
+CLASS="parameter"
+><I
+>message</I
+></TT
+> to the receiver specified in
+      <TT
+CLASS="parameter"
+><I
+>to</I
+></TT
+>. Multiple recipients can be specified by
+      putting a comma between each address in <TT
+CLASS="parameter"
+><I
+>to</I
+></TT
+>.</P
+><P
+>&#13;     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN19568"
+></A
+><P
+><B
+>Example 1. Sending mail.</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;mail("rasmus@lerdorf.on.ca", "My Subject", "Line 1\nLine 2\nLine 3");
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+></P
+><P
+>&#13;     If a fourth string argument is passed, this string is inserted at
+     the end of the header.  This is typically used to add extra
+     headers.  Multiple extra headers are separated with a newline.</P
+><P
+>&#13;     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN19573"
+></A
+><P
+><B
+>Example 2. Sending mail with extra headers.</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;mail("nobody@aol.com", "the subject", $message,
+     "From: webmaster@$SERVER_NAME\nReply-To: webmaster@$SERVER_NAME\nX-Mailer: PHP/" . phpversion());
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+></P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="ref.mail.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.ezmlm-hash.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Mail functions</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.mail.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>ezmlm_hash</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

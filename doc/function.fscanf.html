@@ -1,0 +1,322 @@
+<HTML
+><HEAD
+><TITLE
+>fscanf</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Filesystem functions"
+HREF="ref.filesystem.html"><LINK
+REL="PREVIOUS"
+TITLE="fread"
+HREF="function.fread.html"><LINK
+REL="NEXT"
+TITLE="fseek"
+HREF="function.fseek.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.fread.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.fseek.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.fscanf"
+>fscanf</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN11302"
+></A
+><P
+>    (PHP4 &#62;= 4.0.1)</P
+>fscanf&nbsp;--&nbsp;Parses input from a file according to a format</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN11305"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN11307"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>mixed <B
+CLASS="function"
+>fscanf</B
+></CODE
+> (int handle, string format [, string 
+       var1...])</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     The function <B
+CLASS="function"
+>fscanf()</B
+> is similar to
+     <A
+HREF="function.sscanf.html"
+><B
+CLASS="function"
+>sscanf()</B
+></A
+>, but it takes its input from a file
+     associated with <TT
+CLASS="parameter"
+><I
+>handle</I
+></TT
+> and interprets the
+     input according to the specified
+     <TT
+CLASS="parameter"
+><I
+>format</I
+></TT
+>. If only two parameters were passed
+     to this function, the values parsed will be returned as an array.
+     Otherwise, if optional parameters are passed, the function will
+     return the number of assigned values. The optional parameters
+     must be passed by reference.
+     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN11323"
+></A
+><P
+><B
+>Example 1. <B
+CLASS="function"
+>Fscanf()</B
+> Example</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;$fp = fopen ("users.txt","r");
+while ($userinfo = fscanf ($fp, "%s\t%s\t%s\n")) {
+    list ($name, $profession, $countrycode) = $userinfo;
+    //... do something with the values
+}
+fclose($fp);
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN11327"
+></A
+><P
+><B
+>Example 2. users.txt</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;javier  argonaut        pe
+hiroshi sculptor        jp
+robert  slacker us
+luigi   florist it
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+    </P
+><P
+>&#13;     See also <A
+HREF="function.fread.html"
+><B
+CLASS="function"
+>fread()</B
+></A
+>, <A
+HREF="function.fgets.html"
+><B
+CLASS="function"
+>fgets()</B
+></A
+>,
+     <A
+HREF="function.fgetss.html"
+><B
+CLASS="function"
+>fgetss()</B
+></A
+>, <A
+HREF="function.sscanf.html"
+><B
+CLASS="function"
+>sscanf()</B
+></A
+>,
+     <A
+HREF="function.printf.html"
+><B
+CLASS="function"
+>printf()</B
+></A
+>, and <A
+HREF="function.sprintf.html"
+><B
+CLASS="function"
+>sprintf()</B
+></A
+>.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.fread.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.fseek.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>fread</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.filesystem.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>fseek</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,395 @@
+<HTML
+><HEAD
+><TITLE
+>MySQL functions</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Function Reference"
+HREF="funcref.html"><LINK
+REL="PREVIOUS"
+TITLE="msql_tablename"
+HREF="function.msql-tablename.html"><LINK
+REL="NEXT"
+TITLE="mysql_affected_rows"
+HREF="function.mysql-affected-rows.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="reference"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.msql-tablename.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.mysql-affected-rows.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="reference"
+><A
+NAME="ref.mysql"
+></A
+><DIV
+CLASS="TITLEPAGE"
+><H1
+CLASS="title"
+>XLI. MySQL functions</H1
+><DIV
+CLASS="PARTINTRO"
+><A
+NAME="AEN23925"
+></A
+><P
+>&#13;    These functions allow you to access MySQL database servers. In
+    order to have these functions available, you must compile php
+    with mysql support by using the
+    <TT
+CLASS="option"
+>--with-mysql</TT
+> option. If you
+    use this option without specifying the path to mysql, php will
+    use the built-in mysql client libraries. Users who run other
+    applications that use mysql (for example, running php3 and php4
+    as concurrent apache modules, or auth-mysql) should always
+    specify the path to mysql:
+    <TT
+CLASS="option"
+>--with-mysql=/path/to/mysql</TT
+>.
+    This will force php to use the client libraries installed by
+    mysql, avoiding any conflicts.
+   </P
+><P
+>&#13;    More information about MySQL can be found at <A
+HREF="http://www.mysql.com/"
+TARGET="_top"
+>http://www.mysql.com/</A
+>.
+   </P
+><P
+>&#13;    Documentation for MySQL can be found at <A
+HREF="http://www.mysql.com/documentation/"
+TARGET="_top"
+>http://www.mysql.com/documentation/</A
+>.
+   </P
+></DIV
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Table of Contents</B
+></DT
+><DT
+><A
+HREF="function.mysql-affected-rows.html"
+>mysql_affected_rows</A
+> &#8212; Get number of affected rows in previous MySQL
+     operation</DT
+><DT
+><A
+HREF="function.mysql-change-user.html"
+>mysql_change_user</A
+> &#8212; 
+     Change logged in user of the active connection
+    </DT
+><DT
+><A
+HREF="function.mysql-close.html"
+>mysql_close</A
+> &#8212; Close MySQL connection</DT
+><DT
+><A
+HREF="function.mysql-connect.html"
+>mysql_connect</A
+> &#8212; Open a connection to a MySQL Server</DT
+><DT
+><A
+HREF="function.mysql-create-db.html"
+>mysql_create_db</A
+> &#8212; Create a MySQL database</DT
+><DT
+><A
+HREF="function.mysql-data-seek.html"
+>mysql_data_seek</A
+> &#8212; Move internal result pointer</DT
+><DT
+><A
+HREF="function.mysql-db-name.html"
+>mysql_db_name</A
+> &#8212; Get result data</DT
+><DT
+><A
+HREF="function.mysql-db-query.html"
+>mysql_db_query</A
+> &#8212; Send a MySQL query</DT
+><DT
+><A
+HREF="function.mysql-drop-db.html"
+>mysql_drop_db</A
+> &#8212; Drop (delete) a MySQL database</DT
+><DT
+><A
+HREF="function.mysql-errno.html"
+>mysql_errno</A
+> &#8212; Returns the numerical value of the error message from previous
+     MySQL operation</DT
+><DT
+><A
+HREF="function.mysql-error.html"
+>mysql_error</A
+> &#8212; Returns the text of the error message from previous
+     MySQL operation</DT
+><DT
+><A
+HREF="function.mysql-fetch-array.html"
+>mysql_fetch_array</A
+> &#8212; 
+     Fetch a result row as an associative array, a numeric array, or both.
+    </DT
+><DT
+><A
+HREF="function.mysql-fetch-assoc.html"
+>mysql_fetch_assoc</A
+> &#8212; 
+     Fetch a result row as an associative array
+    </DT
+><DT
+><A
+HREF="function.mysql-fetch-field.html"
+>mysql_fetch_field</A
+> &#8212; 
+     Get column information from a result and return as an object
+    </DT
+><DT
+><A
+HREF="function.mysql-fetch-lengths.html"
+>mysql_fetch_lengths</A
+> &#8212; 
+     Get the length of each output in a result
+    </DT
+><DT
+><A
+HREF="function.mysql-fetch-object.html"
+>mysql_fetch_object</A
+> &#8212; Fetch a result row as an object</DT
+><DT
+><A
+HREF="function.mysql-fetch-row.html"
+>mysql_fetch_row</A
+> &#8212; Get a result row as an enumerated array</DT
+><DT
+><A
+HREF="function.mysql-field-flags.html"
+>mysql_field_flags</A
+> &#8212; 
+     Get the flags associated with the specified field in a result
+    </DT
+><DT
+><A
+HREF="function.mysql-field-name.html"
+>mysql_field_name</A
+> &#8212; 
+     Get the name of the specified field in a result
+    </DT
+><DT
+><A
+HREF="function.mysql-field-len.html"
+>mysql_field_len</A
+> &#8212; 
+     Returns the length of the specified field
+    </DT
+><DT
+><A
+HREF="function.mysql-field-seek.html"
+>mysql_field_seek</A
+> &#8212; 
+     Set result pointer to a specified field offset
+    </DT
+><DT
+><A
+HREF="function.mysql-field-table.html"
+>mysql_field_table</A
+> &#8212; 
+     Get name of the table the specified field is in
+    </DT
+><DT
+><A
+HREF="function.mysql-field-type.html"
+>mysql_field_type</A
+> &#8212; 
+     Get the type of the specified field in a result
+    </DT
+><DT
+><A
+HREF="function.mysql-free-result.html"
+>mysql_free_result</A
+> &#8212; Free result memory</DT
+><DT
+><A
+HREF="function.mysql-insert-id.html"
+>mysql_insert_id</A
+> &#8212; 
+     Get the id generated from the previous INSERT operation
+    </DT
+><DT
+><A
+HREF="function.mysql-list-dbs.html"
+>mysql_list_dbs</A
+> &#8212; 
+     List databases available on a MySQL server
+    </DT
+><DT
+><A
+HREF="function.mysql-list-fields.html"
+>mysql_list_fields</A
+> &#8212; List MySQL result fields</DT
+><DT
+><A
+HREF="function.mysql-list-tables.html"
+>mysql_list_tables</A
+> &#8212; List tables in a MySQL database</DT
+><DT
+><A
+HREF="function.mysql-num-fields.html"
+>mysql_num_fields</A
+> &#8212; Get number of fields in result</DT
+><DT
+><A
+HREF="function.mysql-num-rows.html"
+>mysql_num_rows</A
+> &#8212; Get number of rows in result</DT
+><DT
+><A
+HREF="function.mysql-pconnect.html"
+>mysql_pconnect</A
+> &#8212; 
+     Open a persistent connection to a MySQL Server
+    </DT
+><DT
+><A
+HREF="function.mysql-query.html"
+>mysql_query</A
+> &#8212; Send a MySQL query</DT
+><DT
+><A
+HREF="function.mysql-result.html"
+>mysql_result</A
+> &#8212; Get result data</DT
+><DT
+><A
+HREF="function.mysql-select-db.html"
+>mysql_select_db</A
+> &#8212; Select a MySQL database</DT
+><DT
+><A
+HREF="function.mysql-tablename.html"
+>mysql_tablename</A
+> &#8212; Get table name of field</DT
+></DL
+></DIV
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.msql-tablename.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.mysql-affected-rows.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>msql_tablename</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="funcref.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>mysql_affected_rows</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

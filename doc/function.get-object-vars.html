@@ -1,0 +1,279 @@
+<HTML
+><HEAD
+><TITLE
+>get_object_vars</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Class/Object Functions"
+HREF="ref.classobj.html"><LINK
+REL="PREVIOUS"
+TITLE="get_declared_classes"
+HREF="function.get-declared-classes.html"><LINK
+REL="NEXT"
+TITLE="get_parent_class"
+HREF="function.get-parent-class.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.get-declared-classes.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.get-parent-class.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.get-object-vars"
+>get_object_vars</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN6821"
+></A
+><P
+>    (PHP4 &#62;= 4.0RC1)</P
+>get_object_vars&nbsp;--&nbsp;Returns an associative array of object properties</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN6824"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN6826"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>array <B
+CLASS="function"
+>get_object_vars</B
+></CODE
+> (object obj)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     This function returns an associative array of defined object properties 
+     for the specified object <TT
+CLASS="parameter"
+><I
+>obj</I
+></TT
+>. If variables
+     declared in the class of which the <TT
+CLASS="parameter"
+><I
+>obj</I
+></TT
+> is an
+     instance, have not been assigned a value, those will not be returned 
+     in the array.
+     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN6835"
+></A
+><P
+><B
+>Example 1. Use of <B
+CLASS="function"
+>get_object_vars()</B
+></B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;&#60;?php
+class Point2D {
+    var $x, $y;
+    var $label;
+
+    function Point2D($x, $y) {
+        $this-&#62;x = $x;
+        $this-&#62;y = $y;
+    }
+
+    function setLabel($label) {
+        $this-&#62;label = $label;
+    }
+
+    function getPoint() {
+        return array("x" =&#62; $this-&#62;x,
+                     "y" =&#62; $this-&#62;y,
+                     "label" =&#62; $this-&#62;label);
+    }
+}
+
+$p1 = new Point2D(1.233, 3.445);
+print_r(get_object_vars($p1));
+// "$label" is declared but not defined
+// Array
+// (
+//     [x] =&#62; 1.233
+//     [y] =&#62; 3.445
+// )
+
+$p1-&#62;setLabel("point #1");
+print_r(get_object_vars($p1));
+// Array
+// (
+//     [x] =&#62; 1.233
+//     [y] =&#62; 3.445
+//     [label] =&#62; point #1
+// )
+
+?&#62;
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+    </P
+><P
+>&#13;     See also <A
+HREF="function.get-class-methods.html"
+><B
+CLASS="function"
+>get_class_methods()</B
+></A
+>,
+     <A
+HREF="function.get-class-vars.html"
+><B
+CLASS="function"
+>get_class_vars()</B
+></A
+>
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.get-declared-classes.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.get-parent-class.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>get_declared_classes</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.classobj.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>get_parent_class</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

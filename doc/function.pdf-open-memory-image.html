@@ -1,0 +1,271 @@
+<HTML
+><HEAD
+><TITLE
+>pdf_open_memory_image</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="PDF functions"
+HREF="ref.pdf.html"><LINK
+REL="PREVIOUS"
+TITLE="pdf_open_image_file"
+HREF="function.pdf-open-image-file.html"><LINK
+REL="NEXT"
+TITLE="pdf_open_jpeg"
+HREF="function.pdf-open-jpeg.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.pdf-open-image-file.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.pdf-open-jpeg.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.pdf-open-memory-image"
+>pdf_open_memory_image</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN29567"
+></A
+><P
+>    (PHP3 &#62;= 3.0.10, PHP4 &#62;= 4.0b2)</P
+>pdf_open_memory_image&nbsp;--&nbsp;Opens an image created with PHP's image functions</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN29570"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN29572"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int <B
+CLASS="function"
+>pdf_open_memory_image</B
+></CODE
+> (int pdf document, int image)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     The <B
+CLASS="function"
+>pdf_open_memory_image()</B
+> function takes
+     an image created with the PHP's image functions and makes it available
+     for the pdf document. The function returns a pdf
+     image identifier.
+
+     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN29582"
+></A
+><P
+><B
+>Example 1. Including a memory image</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;&#60;?php
+$im = ImageCreate(100, 100);
+$col = ImageColorAllocate($im, 80, 45, 190);
+ImageFill($im, 10, 10, $col);
+$pim = pdf_open_memory_image($pdf, $im);
+ImageDestroy($im);
+pdf_place_image($pdf, $pim, 100, 100, 1);
+pdf_close_image($pdf, $pim);
+?&#62;
+     </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+></P
+><P
+>&#13;     See also <A
+HREF="function.pdf-close-image.html"
+><B
+CLASS="function"
+>pdf_close_image()</B
+></A
+>,
+              <A
+HREF="function.pdf-open-jpeg.html"
+><B
+CLASS="function"
+>pdf_open_jpeg()</B
+></A
+>,
+              <A
+HREF="function.pdf-open-gif.html"
+><B
+CLASS="function"
+>pdf_open_gif()</B
+></A
+>,
+              <A
+HREF="function.pdf-open-png.html"
+><B
+CLASS="function"
+>pdf_open_png()</B
+></A
+>
+              <A
+HREF="function.pdf-execute-image.html"
+><B
+CLASS="function"
+>pdf_execute_image()</B
+></A
+>,
+              <A
+HREF="function.pdf-place-image.html"
+><B
+CLASS="function"
+>pdf_place_image()</B
+></A
+>,
+              <A
+HREF="function.pdf-put-image.html"
+><B
+CLASS="function"
+>pdf_put_image()</B
+></A
+>.</P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.pdf-open-image-file.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.pdf-open-jpeg.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>pdf_open_image_file</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.pdf.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>pdf_open_jpeg</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

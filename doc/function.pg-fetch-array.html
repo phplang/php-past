@@ -1,0 +1,298 @@
+<HTML
+><HEAD
+><TITLE
+>pg_fetch_array</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="PostgreSQL functions"
+HREF="ref.pgsql.html"><LINK
+REL="PREVIOUS"
+TITLE="pg_exec"
+HREF="function.pg-exec.html"><LINK
+REL="NEXT"
+TITLE="pg_fetch_object"
+HREF="function.pg-fetch-object.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.pg-exec.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.pg-fetch-object.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.pg-fetch-array"
+>pg_fetch_array</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN31347"
+></A
+><P
+>    (PHP3 &#62;= 3.0.1, PHP4 )</P
+>pg_fetch_array&nbsp;--&nbsp;Fetch a row as an array</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN31350"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN31352"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>array <B
+CLASS="function"
+>pg_fetch_array</B
+></CODE
+> (int result, int row [, int 
+       result_type])</CODE
+></P
+><P
+></P
+></DIV
+><P
+> 
+     Returns: An array that corresponds to the fetched row, or false
+     if there are no more rows.
+    </P
+><P
+>&#13;     <B
+CLASS="function"
+>Pg_fetch_array()</B
+> is an extended version of
+     <A
+HREF="function.pg-fetch-row.html"
+><B
+CLASS="function"
+>pg_fetch_row()</B
+></A
+>.  In addition to storing the
+     data in the numeric indices of the result array, it also stores
+     the data in associative indices, using the field names as keys.
+    </P
+><P
+>&#13;     The third optional argument <TT
+CLASS="parameter"
+><I
+>result_type</I
+></TT
+> in
+     <B
+CLASS="function"
+>pg_fetch_array()</B
+> is a constant and can take the
+     following values: PGSQL_ASSOC, PGSQL_NUM, and PGSQL_BOTH.
+     <DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
+><P
+><B
+>Note: </B
+>
+       <TT
+CLASS="parameter"
+><I
+>Result_type</I
+></TT
+> was added in PHP 4.0.
+      </P
+></BLOCKQUOTE
+></DIV
+>
+    </P
+><P
+>&#13;     An important thing to note is that using
+     <B
+CLASS="function"
+>pg_fetch_array()</B
+> is NOT significantly
+     slower than using <A
+HREF="function.pg-fetch-row.html"
+><B
+CLASS="function"
+>pg_fetch_row()</B
+></A
+>, while it
+     provides a significant added value.
+    </P
+><P
+>&#13;     For further details, see also
+     <A
+HREF="function.pg-fetch-row.html"
+><B
+CLASS="function"
+>pg_fetch_row()</B
+></A
+>
+    </P
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN31378"
+></A
+><P
+><B
+>Example 1. PostgreSQL fetch array</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;&#60;?php 
+$conn = pg_pconnect ("dbname=publisher");
+if (!$conn) {
+    echo "An error occured.\n";
+    exit;
+}
+
+$result = pg_Exec ($conn, "SELECT * FROM authors");
+if (!$result) {
+    echo "An error occured.\n";
+    exit;
+}
+
+$arr = pg_fetch_array ($result, 0);
+echo $arr[0] . " &#60;- array\n";
+
+$arr = pg_fetch_array ($result, 1);
+echo $arr["author"] . " &#60;- array\n";
+?&#62;
+     </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.pg-exec.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.pg-fetch-object.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>pg_exec</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.pgsql.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>pg_fetch_object</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

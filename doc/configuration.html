@@ -1,0 +1,2766 @@
+<HTML
+><HEAD
+><TITLE
+>Configuration</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Getting Started"
+HREF="getting-started.html"><LINK
+REL="PREVIOUS"
+TITLE="Problems?"
+HREF="install-problems.html"><LINK
+REL="NEXT"
+TITLE="Security"
+HREF="security.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="chapter"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="install-problems.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="security.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="chapter"
+><H1
+><A
+NAME="configuration"
+>Chapter 3. Configuration</A
+></H1
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Table of Contents</B
+></DT
+><DT
+><A
+HREF="configuration.html#configuration.file"
+>The configuration file</A
+></DT
+></DL
+></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="configuration.file"
+>The configuration file</A
+></H1
+><P
+>&#13;    The configuration file (called <TT
+CLASS="filename"
+>php3.ini</TT
+> in
+    PHP 3.0, and simply <TT
+CLASS="filename"
+>php.ini</TT
+> as of PHP 4.0)
+    is read when PHP starts up. For the server module versions of PHP,
+    this happens only once when the web server is started.  For the
+    <SPAN
+CLASS="acronym"
+>CGI</SPAN
+> version, it happens on every invocation.</P
+><P
+>&#13;    When using PHP as an Apache module, you can also change the
+    configuration settings using directives in Apache configuration
+    files and .htaccess files.</P
+><P
+>&#13;    With PHP 3.0, there are Apache directives that correspond to each
+    configuration setting in the <TT
+CLASS="filename"
+>php3.ini</TT
+> name,
+    except the name is prefixed by "php3_".</P
+><P
+>&#13;    With PHP 4.0, there are just a few Apache directives that allow you
+    to change the PHP configuration settings.
+    <P
+></P
+><DIV
+CLASS="variablelist"
+><DL
+><DT
+><SPAN
+CLASS="systemitem"
+>php_value</SPAN
+>
+       <TT
+CLASS="parameter"
+><I
+>name</I
+></TT
+>
+       <TT
+CLASS="parameter"
+><I
+>value</I
+></TT
+></DT
+><DD
+><P
+>&#13;        This sets the value of the specified variable.</P
+></DD
+><DT
+><SPAN
+CLASS="systemitem"
+>php_flag</SPAN
+>
+       <TT
+CLASS="parameter"
+><I
+>name</I
+></TT
+>
+       <TT
+CLASS="parameter"
+><I
+>on|off</I
+></TT
+></DT
+><DD
+><P
+>&#13;        This is used to set a Boolean configuration option.</P
+></DD
+><DT
+><SPAN
+CLASS="systemitem"
+>php_admin_value</SPAN
+>
+       <TT
+CLASS="parameter"
+><I
+>name</I
+></TT
+>
+       <TT
+CLASS="parameter"
+><I
+>value</I
+></TT
+></DT
+><DD
+><P
+>&#13;        This sets the value of the specified variable. "Admin"
+        configuration settings can only be set from within the
+        main Apache configuration files, and not from .htaccess
+        files.</P
+></DD
+><DT
+><SPAN
+CLASS="systemitem"
+>php_admin_flag</SPAN
+>
+       <TT
+CLASS="parameter"
+><I
+>name</I
+></TT
+>
+       <TT
+CLASS="parameter"
+><I
+>on|off</I
+></TT
+></DT
+><DD
+><P
+>&#13;        This is used to set a Boolean configuration option.</P
+></DD
+></DL
+></DIV
+></P
+><P
+>&#13;    You can view the settings of the configuration values in
+    the output of <A
+HREF="function.phpinfo.html"
+><B
+CLASS="function"
+>phpinfo()</B
+></A
+>. You can also
+    access the values of individial configuration settings using
+    <A
+HREF="function.get-cfg-var.html"
+><B
+CLASS="function"
+>get_cfg_var()</B
+></A
+>.</P
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="ini.sect.general"
+>General Configuration Directives</A
+></H2
+><P
+>&#13;     <P
+></P
+><DIV
+CLASS="variablelist"
+><DL
+><DT
+><A
+NAME="ini.asp-tags"
+><TT
+CLASS="parameter"
+><I
+>asp_tags</I
+></TT
+>
+		<SPAN
+CLASS="type"
+>boolean</SPAN
+></A
+></DT
+><DD
+><P
+>&#13;		 Enables the use of ASP-like &#60;% %&#62; tags in addition to
+		 the usual &#60;?php ?&#62; tags. This includes the
+		 variable-value printing shorthand of &#60;%= $value %&#62;. For 
+		 more information, see <A
+HREF="language.basic-syntax.html#language.basic-syntax.phpmode"
+>Escaping from HTML</A
+>.
+		</P
+><DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
+><P
+><B
+>Note: </B
+>Support for ASP-style tags was added in 3.0.4.</P
+></BLOCKQUOTE
+></DIV
+></DD
+><DT
+><A
+NAME="ini.auto-append-file"
+><TT
+CLASS="parameter"
+><I
+>auto_append_file</I
+></TT
+>
+	<SPAN
+CLASS="type"
+>string</SPAN
+></A
+></DT
+><DD
+><P
+>&#13;	 Specifies the name of a file that is automatically parsed
+	 after the main file.  The file is included as if it was
+	 called with the <A
+HREF="function.include.html"
+><B
+CLASS="function"
+>include()</B
+></A
+> function, so
+	 <A
+HREF="configuration.html#ini.include-path"
+>include_path</A
+> is used.</P
+><P
+>&#13;	 The special value <SPAN
+CLASS="systemitem"
+>none</SPAN
+> disables auto-appending.
+	 <DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
+><P
+><B
+>Note: </B
+>
+	   If the script is terminated with <A
+HREF="function.exit.html"
+><B
+CLASS="function"
+>exit()</B
+></A
+>,
+	   auto-append will <I
+CLASS="emphasis"
+>not</I
+> occur.</P
+></BLOCKQUOTE
+></DIV
+></P
+></DD
+><DT
+><A
+NAME="ini.auto-prepend-file"
+><TT
+CLASS="parameter"
+><I
+>auto_prepend_file</I
+></TT
+>
+	<SPAN
+CLASS="type"
+>string</SPAN
+></A
+></DT
+><DD
+><P
+>&#13;	 Specifies the name of a file that is automatically parsed
+	 before the main file.  The file is included as if it was
+	 called with the <A
+HREF="function.include.html"
+><B
+CLASS="function"
+>include()</B
+></A
+> function, so
+	 <A
+HREF="configuration.html#ini.include-path"
+>include_path</A
+> is used.</P
+><P
+>&#13;	 The special value <SPAN
+CLASS="systemitem"
+>none</SPAN
+> disables auto-prepending.</P
+></DD
+><DT
+><A
+NAME="ini.cgi-ext"
+><TT
+CLASS="parameter"
+><I
+>cgi_ext</I
+></TT
+>
+	<SPAN
+CLASS="type"
+>string</SPAN
+></A
+></DT
+><DD
+><P
+>&#13;	</P
+></DD
+><DT
+><A
+NAME="ini.display-errors"
+><TT
+CLASS="parameter"
+><I
+>display_errors</I
+></TT
+>
+	<SPAN
+CLASS="type"
+>boolean</SPAN
+></A
+></DT
+><DD
+><P
+>&#13;	 This determines whether errors should be printed to the screen
+	 as part of the HTML output or not.
+	</P
+></DD
+><DT
+><A
+NAME="ini.doc-root"
+><TT
+CLASS="parameter"
+><I
+>doc_root</I
+></TT
+>
+	<SPAN
+CLASS="type"
+>string</SPAN
+></A
+></DT
+><DD
+><P
+>&#13;	 PHP's "root directory" on the server.  Only used if
+	 non-empty.  If PHP is configured with <A
+HREF="configuration.html#ini.safe-mode"
+>safe mode</A
+>, no files outside
+	 this directory are served.
+	</P
+></DD
+><DT
+><A
+NAME="ini.engine"
+><TT
+CLASS="parameter"
+><I
+>engine</I
+></TT
+>
+	<SPAN
+CLASS="type"
+>boolean</SPAN
+></A
+></DT
+><DD
+><P
+>&#13;	 This directive is really only useful in the Apache module
+	 version of PHP.  It is used by sites that would like to turn
+	 PHP parsing on and off on a per-directory or per-virtual
+	 server basis.  By putting <TT
+CLASS="userinput"
+><B
+>engine
+	 off</B
+></TT
+> in the appropriate places in the
+	 <TT
+CLASS="filename"
+>httpd.conf</TT
+> file, PHP can be enabled or
+	 disabled.
+	</P
+></DD
+><DT
+><A
+NAME="ini.error-log"
+><TT
+CLASS="parameter"
+><I
+>error_log</I
+></TT
+>
+	<SPAN
+CLASS="type"
+>string</SPAN
+></A
+></DT
+><DD
+><P
+>&#13;	 Name of file where script errors should be logged.  If the
+	 special value <TT
+CLASS="literal"
+>syslog</TT
+> is used, the errors
+	 are sent to the system logger instead.  On UNIX, this means
+	 syslog(3) and on Windows NT it means the event log.  The
+	 system logger is not supported on Windows 95.</P
+></DD
+><DT
+><A
+NAME="ini.error-reporting"
+><TT
+CLASS="parameter"
+><I
+>error_reporting</I
+></TT
+>
+	<SPAN
+CLASS="type"
+>integer</SPAN
+></A
+></DT
+><DD
+><P
+>&#13;	 Set the error reporting level.  The parameter is an integer
+	 representing a bit field.  Add the values of the error
+	 reporting levels you want.
+	 <DIV
+CLASS="table"
+><A
+NAME="AEN1614"
+></A
+><P
+><B
+>Table 3-1. Error Reporting Levels</B
+></P
+><TABLE
+BORDER="1"
+CLASS="CALSTABLE"
+><THEAD
+><TR
+><TH
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>bit value</TH
+><TH
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>enabled reporting</TH
+></TR
+></THEAD
+><TBODY
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>1</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>normal errors</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>2</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>normal warnings</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>4</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>parser errors</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>8</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>non-critical style-related warnings</TD
+></TR
+></TBODY
+></TABLE
+></DIV
+>
+	 The default value for this directive is 7 (normal errors,
+	 normal warnings and parser errors are shown).
+	</P
+></DD
+><DT
+><A
+NAME="ini.open-basedir"
+><TT
+CLASS="parameter"
+><I
+>open_basedir</I
+></TT
+>
+	<SPAN
+CLASS="type"
+>string</SPAN
+></A
+></DT
+><DD
+><P
+>&#13;	 Limit the files that can be opened by PHP to the specified
+	 directory-tree.
+	</P
+><P
+>&#13;	 When a script tries to open a file with,
+	 for example, fopen or gzopen, the location of the file is
+	 checked. When the file is outside the specified directory-tree,
+	 PHP will refuse to open it. All symbolic links are resolved,
+	 so it's not possible to avoid this restriction with a symlink.
+	</P
+><P
+>&#13;	 The special value <SPAN
+CLASS="systemitem"
+>.</SPAN
+>
+	 indicates that the directory in which the script is stored will
+	 be used as base-directory.
+	</P
+><P
+>&#13;	 Under Windows, separate the directories with a semicolon. On all
+	 other systems, separate the directories with a colon. As an Apache
+	 module, open_basedir paths from parent directories are now
+	 automatically inherited.
+	</P
+><DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
+><P
+><B
+>Note: </B
+>Support for multiple directories was added in 3.0.7.</P
+></BLOCKQUOTE
+></DIV
+><P
+>&#13;	 The default is to allow all files to be opened.
+	</P
+></DD
+><DT
+><A
+NAME="ini.gpc-order"
+><TT
+CLASS="parameter"
+><I
+>gpc_order</I
+></TT
+>
+	<SPAN
+CLASS="type"
+>string</SPAN
+></A
+></DT
+><DD
+><P
+>&#13;	 Set the order of GET/POST/COOKIE variable parsing.  The
+	 default setting of this directive is "GPC".  Setting this to
+	 "GP", for example, will cause PHP to completely ignore cookies
+	 and to overwrite any GET method variables with POST-method
+	 variables of the same name.
+	</P
+></DD
+><DT
+><A
+NAME="ini.ignore-user-abort"
+><TT
+CLASS="parameter"
+><I
+>ignore_user_abort</I
+></TT
+>
+	<SPAN
+CLASS="type"
+>string</SPAN
+></A
+></DT
+><DD
+><P
+>&#13;	 On by default.  If changed to Off scripts will be terminated as
+     soon as they try to output something after a client has aborted
+     their connection.
+	 <A
+HREF="function.ignore-user-abort.html"
+><B
+CLASS="function"
+>ignore_user_abort()</B
+></A
+>.
+	</P
+></DD
+><DT
+><A
+NAME="ini.include-path"
+><TT
+CLASS="parameter"
+><I
+>include_path</I
+></TT
+>
+	<SPAN
+CLASS="type"
+>string</SPAN
+></A
+></DT
+><DD
+><P
+>&#13;	 Specifies a list of directories where the
+	 <A
+HREF="function.require.html"
+><B
+CLASS="function"
+>require()</B
+></A
+>, <A
+HREF="function.include.html"
+><B
+CLASS="function"
+>include()</B
+></A
+>
+	 and <B
+CLASS="function"
+>fopen_with_path()</B
+> functions look for
+	 files.  The format is like the system's <TT
+CLASS="envar"
+>PATH</TT
+>
+	 environment variable: a list of directories separated with a
+	 colon in UNIX or semicolon in Windows.
+	 <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN1670"
+></A
+><P
+><B
+>Example 3-1. UNIX include_path</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;include_path=.:/home/httpd/php-lib
+</PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+	 <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN1673"
+></A
+><P
+><B
+>Example 3-2. Windows include_path</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;include_path=".;c:\www\phplib"
+</PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+	 The default value for this directive is <TT
+CLASS="literal"
+>.</TT
+>
+	 (only the current directory).</P
+></DD
+><DT
+><A
+NAME="ini.isapi-ext"
+><TT
+CLASS="parameter"
+><I
+>isapi_ext</I
+></TT
+>
+	<SPAN
+CLASS="type"
+>string</SPAN
+></A
+></DT
+><DD
+><P
+>&#13;	</P
+></DD
+><DT
+><A
+NAME="ini.log-errors"
+><TT
+CLASS="parameter"
+><I
+>log_errors</I
+></TT
+>
+	<SPAN
+CLASS="type"
+>boolean</SPAN
+></A
+></DT
+><DD
+><P
+>&#13;	 Tells whether script error messages should be logged to the
+	 server's error log.  This option is thus server-specific.</P
+></DD
+><DT
+><A
+NAME="ini.magic-quotes-gpc"
+><TT
+CLASS="parameter"
+><I
+>magic_quotes_gpc</I
+></TT
+>
+	<SPAN
+CLASS="type"
+>boolean</SPAN
+></A
+></DT
+><DD
+><P
+>&#13;	 Sets the magic_quotes state for GPC (Get/Post/Cookie)
+	 operations.  When magic_quotes are on, all ' (single-quote),
+	 " (double quote), \ (backslash) and NUL's are escaped
+	 with a backslash automatically.  If magic_quotes_sybase is
+	 also on, a single-quote is escaped with a single-quote
+	 instead of a backslash.
+	</P
+></DD
+><DT
+><A
+NAME="ini.magic-quotes-runtime"
+><TT
+CLASS="parameter"
+><I
+>magic_quotes_runtime</I
+></TT
+>
+	<SPAN
+CLASS="type"
+>boolean</SPAN
+></A
+></DT
+><DD
+><P
+>&#13;	 If <TT
+CLASS="parameter"
+><I
+>magic_quotes_runtime</I
+></TT
+> is enabled,
+	 most functions that return data from any sort of external
+	 source including databases and text files will have quotes
+	 escaped with a backslash.  If
+	 <TT
+CLASS="parameter"
+><I
+>magic_quotes_sybase</I
+></TT
+> is also on, a
+	 single-quote is escaped with a single-quote instead of a
+	 backslash.
+	</P
+></DD
+><DT
+><A
+NAME="ini.magic-quotes-sybase"
+><TT
+CLASS="parameter"
+><I
+>magic_quotes_sybase</I
+></TT
+>
+	<SPAN
+CLASS="type"
+>boolean</SPAN
+></A
+></DT
+><DD
+><P
+>&#13;         If <TT
+CLASS="parameter"
+><I
+>magic_quotes_sybase</I
+></TT
+> is also on, a
+         single-quote is escaped with a single-quote instead of a
+         backslash if <TT
+CLASS="parameter"
+><I
+>magic_quotes_gpc</I
+></TT
+> or
+         <TT
+CLASS="parameter"
+><I
+>magic_quotes_runtime</I
+></TT
+> is enabled.
+	</P
+></DD
+><DT
+><A
+NAME="ini.max-execution-time"
+><TT
+CLASS="parameter"
+><I
+>max_execution_time</I
+></TT
+>
+        <SPAN
+CLASS="type"
+>integer</SPAN
+></A
+></DT
+><DD
+><P
+>&#13;         This sets the maximum time in seconds a script is allowed to
+         take before it is terminated by the parser.  This helps
+         prevent poorly written scripts from tying up the server. The
+         default setting is <TT
+CLASS="literal"
+>30</TT
+>.
+        </P
+></DD
+><DT
+><A
+NAME="ini.memory-limit"
+><TT
+CLASS="parameter"
+><I
+>memory_limit</I
+></TT
+>
+	<SPAN
+CLASS="type"
+>integer</SPAN
+></A
+></DT
+><DD
+><P
+>&#13;	 This sets the maximum amount of memory in bytes that a script
+	 is allowed to allocate.  This helps prevent poorly written
+	 scripts for eating up all available memory on a server.
+	</P
+></DD
+><DT
+><A
+NAME="ini.nsapi-ext"
+><TT
+CLASS="parameter"
+><I
+>nsapi_ext</I
+></TT
+>
+	<SPAN
+CLASS="type"
+>string</SPAN
+></A
+></DT
+><DD
+><P
+>&#13;	</P
+></DD
+><DT
+><A
+NAME="ini.register-globals"
+><TT
+CLASS="parameter"
+><I
+>register_globals</I
+></TT
+>
+        <SPAN
+CLASS="type"
+>boolean</SPAN
+></A
+></DT
+><DD
+><P
+>&#13;         Tells whether or not to register the EGPCS (Environment, GET,
+         POST, Cookie, Server) variables as global variables. You may
+         want to turn this off if you don't want to clutter your
+         scripts' global scope with user data.  This makes the most
+         sense when coupled with <A
+HREF="configuration.html#ini.track-vars"
+>track_vars</A
+> - in which case
+         you can access all of the EGPCS variables through the
+         <TT
+CLASS="varname"
+>$HTTP_ENV_VARS</TT
+>,
+         <TT
+CLASS="varname"
+>$HTTP_GET_VARS</TT
+>,
+         <TT
+CLASS="varname"
+>$HTTP_POST_VARS</TT
+>,
+         <TT
+CLASS="varname"
+>$HTTP_COOKIE_VARS</TT
+>, and
+         <TT
+CLASS="varname"
+>$HTTP_SERVER_VARS</TT
+>
+         arrays in the global scope.
+        </P
+></DD
+><DT
+><A
+NAME="ini.short-open-tag"
+><TT
+CLASS="parameter"
+><I
+>short_open_tag</I
+></TT
+>
+	<SPAN
+CLASS="type"
+>boolean</SPAN
+></A
+></DT
+><DD
+><P
+>&#13;	 Tells whether the short form (<TT
+CLASS="userinput"
+><B
+>&#60;? ?&#62;</B
+></TT
+>of
+	 PHP's open tag should be allowed.  If you want to use PHP in
+	 combination with XML, you have to disable this option.  If
+	 disabled, you must use the long form of the open tag
+	 (<TT
+CLASS="userinput"
+><B
+>&#60;?php ?&#62;</B
+></TT
+>).</P
+></DD
+><DT
+><A
+NAME="ini.sql.safe-mode"
+><TT
+CLASS="parameter"
+><I
+>sql.safe_mode</I
+></TT
+>
+	<SPAN
+CLASS="type"
+>boolean</SPAN
+></A
+></DT
+><DD
+><P
+>&#13;	</P
+></DD
+><DT
+><A
+NAME="ini.track-errors"
+><TT
+CLASS="parameter"
+><I
+>track_errors</I
+></TT
+>
+	<SPAN
+CLASS="type"
+>boolean</SPAN
+></A
+></DT
+><DD
+><P
+>&#13;	 If enabled, the last error message will always be present in the
+	 global variable <SPAN
+CLASS="symbol"
+>$php_errormsg</SPAN
+>.</P
+></DD
+><DT
+><A
+NAME="ini.track-vars"
+><TT
+CLASS="parameter"
+><I
+>track_vars</I
+></TT
+>
+        <SPAN
+CLASS="type"
+>boolean</SPAN
+></A
+></DT
+><DD
+><P
+>&#13;         If enabled, then Environment, GET, POST, Cookie, and Server
+         variables can be found in the global associative arrays
+         <TT
+CLASS="varname"
+>$HTTP_ENV_VARS</TT
+>,
+         <TT
+CLASS="varname"
+>$HTTP_GET_VARS</TT
+>,
+         <TT
+CLASS="varname"
+>$HTTP_POST_VARS</TT
+>,
+         <TT
+CLASS="varname"
+>$HTTP_COOKIE_VARS</TT
+>, and
+         <TT
+CLASS="varname"
+>$HTTP_SERVER_VARS</TT
+>.
+        </P
+><P
+>&#13;         Note that as of PHP 4.0.3, <SPAN
+CLASS="systemitem"
+>track_vars</SPAN
+> is always turned on.
+        </P
+></DD
+><DT
+><A
+NAME="ini.upload-tmp-dir"
+><TT
+CLASS="parameter"
+><I
+>upload_tmp_dir</I
+></TT
+>
+	<SPAN
+CLASS="type"
+>string</SPAN
+></A
+></DT
+><DD
+><P
+>&#13;	 The temporary directory used for storing files when doing
+	 file upload.  Must be writable by whatever user PHP is
+	 running as.</P
+></DD
+><DT
+><A
+NAME="ini.user-dir"
+><TT
+CLASS="parameter"
+><I
+>user_dir</I
+></TT
+>
+	<SPAN
+CLASS="type"
+>string</SPAN
+></A
+></DT
+><DD
+><P
+>&#13;	 The base name of the directory used on a user's home
+	 directory for PHP files, for example
+	 <TT
+CLASS="literal"
+>public_html</TT
+>.</P
+></DD
+><DT
+><A
+NAME="ini.warn-plus-overloading"
+><TT
+CLASS="parameter"
+><I
+>warn_plus_overloading</I
+></TT
+>
+	<SPAN
+CLASS="type"
+>boolean</SPAN
+></A
+></DT
+><DD
+><P
+>&#13;	 If enabled, this option makes PHP output a warning when the
+	 plus (<TT
+CLASS="literal"
+>+</TT
+>) operator is used on strings.
+	 This is to make it easier to find scripts that need to be
+	 rewritten to using the string concatenator instead
+	 (<TT
+CLASS="literal"
+>.</TT
+>).</P
+></DD
+></DL
+></DIV
+>
+    </P
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="ini.sect.mail"
+>Mail Configuration Directives</A
+></H2
+><P
+></P
+><DIV
+CLASS="variablelist"
+><DL
+><DT
+><A
+NAME="ini.smtp"
+><TT
+CLASS="parameter"
+><I
+>SMTP</I
+></TT
+>
+       <SPAN
+CLASS="type"
+>string</SPAN
+></A
+></DT
+><DD
+><P
+>&#13;	DNS name or IP address of the SMTP server PHP under Windows
+	should use for mail sent with the <A
+HREF="function.mail.html"
+><B
+CLASS="function"
+>mail()</B
+></A
+>
+	function.</P
+></DD
+><DT
+><A
+NAME="ini.sendmail-from"
+><TT
+CLASS="parameter"
+><I
+>sendmail_from</I
+></TT
+>
+       <SPAN
+CLASS="type"
+>string</SPAN
+></A
+></DT
+><DD
+><P
+>&#13;	Which "From:" mail address should be used in mail sent from
+	PHP under Windows.</P
+></DD
+><DT
+><A
+NAME="ini.sendmail-path"
+><TT
+CLASS="parameter"
+><I
+>sendmail_path</I
+></TT
+>
+       <SPAN
+CLASS="type"
+>string</SPAN
+></A
+></DT
+><DD
+><P
+>&#13;	Where the <B
+CLASS="command"
+>sendmail</B
+> program can be found,
+	usually <TT
+CLASS="filename"
+>/usr/sbin/sendmail</TT
+> or
+	<TT
+CLASS="filename"
+>/usr/lib/sendmail</TT
+>
+	<B
+CLASS="command"
+>configure</B
+> does an honest attempt of
+	locating this one for you and set a default, but if it fails,
+	you can set it here.</P
+><P
+>&#13;	Systems not using sendmail should set this directive to the
+	sendmail wrapper/replacement their mail system offers, if any.
+	For example, <A
+HREF="http://www.qmail.org/"
+TARGET="_top"
+>Qmail</A
+>
+	users can normally set it to
+	<TT
+CLASS="filename"
+>/var/qmail/bin/sendmail</TT
+>.</P
+></DD
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="ini.sect.safe-mode"
+>Safe Mode Configuration Directives</A
+></H2
+><P
+></P
+><DIV
+CLASS="variablelist"
+><DL
+><DT
+><A
+NAME="ini.safe-mode"
+><TT
+CLASS="parameter"
+><I
+>safe_mode</I
+></TT
+>
+       <SPAN
+CLASS="type"
+>boolean</SPAN
+></A
+></DT
+><DD
+><P
+>&#13;	Whether to enable PHP's safe mode. Read the <A
+HREF="security.html"
+>Security chapter</A
+> for more
+	more information.</P
+></DD
+><DT
+><A
+NAME="ini.safe-mode-exec-dir"
+><TT
+CLASS="parameter"
+><I
+>safe_mode_exec_dir</I
+></TT
+>
+       <SPAN
+CLASS="type"
+>string</SPAN
+></A
+></DT
+><DD
+><P
+>&#13;	If PHP is used in safe mode, <A
+HREF="function.system.html"
+><B
+CLASS="function"
+>system()</B
+></A
+> and
+	the other functions executing system programs refuse to start
+	programs that are not in this directory.</P
+></DD
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="ini.sect.debugger"
+>Debugger Configuration Directives</A
+></H2
+><P
+></P
+><DIV
+CLASS="variablelist"
+><DL
+><DT
+><A
+NAME="ini.debugger.host"
+><TT
+CLASS="parameter"
+><I
+>debugger.host</I
+></TT
+>
+       <SPAN
+CLASS="type"
+>string</SPAN
+></A
+></DT
+><DD
+><P
+>&#13;	DNS name or IP address of host used by the debugger.</P
+></DD
+><DT
+><A
+NAME="ini.debugger.port"
+><TT
+CLASS="parameter"
+><I
+>debugger.port</I
+></TT
+>
+       <SPAN
+CLASS="type"
+>string</SPAN
+></A
+></DT
+><DD
+><P
+>&#13;	Port number used by the debugger.</P
+></DD
+><DT
+><A
+NAME="ini.debugger.enabled"
+><TT
+CLASS="parameter"
+><I
+>debugger.enabled</I
+></TT
+>
+       <SPAN
+CLASS="type"
+>boolean</SPAN
+></A
+></DT
+><DD
+><P
+>&#13;	Whether the debugger is enabled.</P
+></DD
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="ini.sect.extension"
+>Extension Loading Directives</A
+></H2
+><P
+></P
+><DIV
+CLASS="variablelist"
+><DL
+><DT
+><A
+NAME="ini.enable-dl"
+><TT
+CLASS="parameter"
+><I
+>enable_dl</I
+></TT
+>
+	<SPAN
+CLASS="type"
+>boolean</SPAN
+></A
+></DT
+><DD
+><P
+>&#13;	 This directive is really only useful in the Apache module
+	 version of PHP. You can turn dynamic loading of PHP
+	 extensions with <A
+HREF="function.dl.html"
+><B
+CLASS="function"
+>dl()</B
+></A
+> on and off per
+	 virtual server or per directory.
+	</P
+><P
+>&#13;	 The main reason for turning dynamic loading off is
+	 security. With dynamic loading, it's possible to ignore all
+	 the safe_mode and open_basedir restrictions.
+	</P
+><P
+>&#13;	 The default is to allow dynamic loading, except when using
+	 safe-mode.  In safe-mode, it's always imposible to use
+	 <A
+HREF="function.dl.html"
+><B
+CLASS="function"
+>dl()</B
+></A
+>.
+	</P
+></DD
+><DT
+><A
+NAME="ini.extension-dir"
+><TT
+CLASS="parameter"
+><I
+>extension_dir</I
+></TT
+>
+       <SPAN
+CLASS="type"
+>string</SPAN
+></A
+></DT
+><DD
+><P
+>&#13;	In what directory PHP should look for dynamically loadable
+	extensions.</P
+></DD
+><DT
+><A
+NAME="ini.extension"
+><TT
+CLASS="parameter"
+><I
+>extension</I
+></TT
+>
+       <SPAN
+CLASS="type"
+>string</SPAN
+></A
+></DT
+><DD
+><P
+>&#13;	Which dynamically loadable extensions to load when PHP starts
+	up.</P
+></DD
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="ini.sect.mysql"
+>MySQL Configuration Directives</A
+></H2
+><P
+></P
+><DIV
+CLASS="variablelist"
+><DL
+><DT
+><A
+NAME="ini.mysql.allow-persistent"
+><TT
+CLASS="parameter"
+><I
+>mysql.allow_persistent</I
+></TT
+>
+       <SPAN
+CLASS="type"
+>boolean</SPAN
+></A
+></DT
+><DD
+><P
+>&#13;		Whether to allow persistent MySQL connections.</P
+></DD
+><DT
+><A
+NAME="ini.mysql.default-host"
+><TT
+CLASS="parameter"
+><I
+>mysql.default_host</I
+></TT
+>
+       <SPAN
+CLASS="type"
+>string</SPAN
+></A
+></DT
+><DD
+><P
+>&#13;		The default server host to use when connecting to the database
+		server if no other host is specified.
+       </P
+></DD
+><DT
+><A
+NAME="ini.mysql.default-user"
+><TT
+CLASS="parameter"
+><I
+>mysql.default_user</I
+></TT
+>
+       <SPAN
+CLASS="type"
+>string</SPAN
+></A
+></DT
+><DD
+><P
+>&#13;		The default user name to use when connecting to the database
+		server if no other name is specified.
+       </P
+></DD
+><DT
+><A
+NAME="ini.mysql.default-password"
+><TT
+CLASS="parameter"
+><I
+>mysql.default_password</I
+></TT
+>
+       <SPAN
+CLASS="type"
+>string</SPAN
+></A
+></DT
+><DD
+><P
+>&#13;		The default password to use when connecting to the database
+		server if no other password is specified.
+       </P
+></DD
+><DT
+><A
+NAME="ini.mysql.max-persistent"
+><TT
+CLASS="parameter"
+><I
+>mysql.max_persistent</I
+></TT
+>
+       <SPAN
+CLASS="type"
+>integer</SPAN
+></A
+></DT
+><DD
+><P
+>&#13;		The maximum number of persistent MySQL connections per
+		process.
+       </P
+></DD
+><DT
+><A
+NAME="ini.mysql.max-links"
+><TT
+CLASS="parameter"
+><I
+>mysql.max_links</I
+></TT
+>
+       <SPAN
+CLASS="type"
+>integer</SPAN
+></A
+></DT
+><DD
+><P
+>&#13;		The maximum number of MySQL connections per process, including
+		persistent connections.
+       </P
+></DD
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="ini.sect.msql"
+>mSQL Configuration Directives</A
+></H2
+><P
+></P
+><DIV
+CLASS="variablelist"
+><DL
+><DT
+><A
+NAME="ini.msql.allow-persistent"
+><TT
+CLASS="parameter"
+><I
+>msql.allow_persistent</I
+></TT
+>
+       <SPAN
+CLASS="type"
+>boolean</SPAN
+></A
+></DT
+><DD
+><P
+>&#13;	Whether to allow persistent mSQL connections.
+       </P
+></DD
+><DT
+><A
+NAME="ini.msql.max-persistent"
+><TT
+CLASS="parameter"
+><I
+>msql.max_persistent</I
+></TT
+>
+       <SPAN
+CLASS="type"
+>integer</SPAN
+></A
+></DT
+><DD
+><P
+>&#13;	The maximum number of persistent mSQL connections per process.
+       </P
+></DD
+><DT
+><A
+NAME="ini.msql.max-links"
+><TT
+CLASS="parameter"
+><I
+>msql.max_links</I
+></TT
+>
+       <SPAN
+CLASS="type"
+>integer</SPAN
+></A
+></DT
+><DD
+><P
+>&#13;	The maximum number of mSQL connections per process, including
+	persistent connections.
+       </P
+></DD
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="ini.sect.pgsql"
+>Postgres Configuration Directives</A
+></H2
+><P
+></P
+><DIV
+CLASS="variablelist"
+><DL
+><DT
+><A
+NAME="ini.pgsql.allow-persistent"
+><TT
+CLASS="parameter"
+><I
+>pgsql.allow_persistent</I
+></TT
+>
+       <SPAN
+CLASS="type"
+>boolean</SPAN
+></A
+></DT
+><DD
+><P
+>&#13;	Whether to allow persistent Postgres connections.
+       </P
+></DD
+><DT
+><A
+NAME="ini.pgsql.max-persistent"
+><TT
+CLASS="parameter"
+><I
+>pgsql.max_persistent</I
+></TT
+>
+       <SPAN
+CLASS="type"
+>integer</SPAN
+></A
+></DT
+><DD
+><P
+>&#13;	The maximum number of persistent Postgres connections per
+	process.
+       </P
+></DD
+><DT
+><A
+NAME="ini.pgsql.max-links"
+><TT
+CLASS="parameter"
+><I
+>pgsql.max_links</I
+></TT
+>
+       <SPAN
+CLASS="type"
+>integer</SPAN
+></A
+></DT
+><DD
+><P
+>&#13;	The maximum number of Postgres connections per process,
+	including persistent connections.
+       </P
+></DD
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="ini.sect.sybase"
+>Sybase Configuration Directives</A
+></H2
+><P
+></P
+><DIV
+CLASS="variablelist"
+><DL
+><DT
+><A
+NAME="ini.sybase.allow-persistent"
+><TT
+CLASS="parameter"
+><I
+>sybase.allow_persistent</I
+></TT
+>
+       <SPAN
+CLASS="type"
+>boolean</SPAN
+></A
+></DT
+><DD
+><P
+>&#13;	Whether to allow persistent Sybase connections.
+       </P
+></DD
+><DT
+><A
+NAME="ini.sybase.max-persistent"
+><TT
+CLASS="parameter"
+><I
+>sybase.max_persistent</I
+></TT
+>
+       <SPAN
+CLASS="type"
+>integer</SPAN
+></A
+></DT
+><DD
+><P
+>&#13;	The maximum number of persistent Sybase connections per
+	process.
+       </P
+></DD
+><DT
+><A
+NAME="ini.sybase.max-links"
+><TT
+CLASS="parameter"
+><I
+>sybase.max_links</I
+></TT
+>
+       <SPAN
+CLASS="type"
+>integer</SPAN
+></A
+></DT
+><DD
+><P
+>&#13;	The maximum number of Sybase connections per process,
+	including persistent connections.
+       </P
+></DD
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="ini.sect.sybct"
+>Sybase-CT Configuration Directives</A
+></H2
+><P
+></P
+><DIV
+CLASS="variablelist"
+><DL
+><DT
+><A
+NAME="ini.sybct.allow-persistent"
+><TT
+CLASS="parameter"
+><I
+>sybct.allow_persistent</I
+></TT
+>
+       <SPAN
+CLASS="type"
+>boolean</SPAN
+></A
+></DT
+><DD
+><P
+>&#13;	Whether to allow persistent Sybase-CT connections.
+	The default is on.
+       </P
+></DD
+><DT
+><A
+NAME="ini.sybct.max-persistent"
+><TT
+CLASS="parameter"
+><I
+>sybct.max_persistent</I
+></TT
+>
+       <SPAN
+CLASS="type"
+>integer</SPAN
+></A
+></DT
+><DD
+><P
+>&#13;	The maximum number of persistent Sybase-CT connections per
+	process.  The default is -1 meaning unlimited.
+       </P
+></DD
+><DT
+><A
+NAME="ini.sybct.max-links"
+><TT
+CLASS="parameter"
+><I
+>sybct.max_links</I
+></TT
+>
+       <SPAN
+CLASS="type"
+>integer</SPAN
+></A
+></DT
+><DD
+><P
+>&#13;	The maximum number of Sybase-CT connections per process,
+	including persistent connections.  The default is -1 meaning
+	unlimited.
+       </P
+></DD
+><DT
+><A
+NAME="ini.sybct.min-server-severity"
+><TT
+CLASS="parameter"
+><I
+>sybct.min_server_severity</I
+></TT
+>
+       <SPAN
+CLASS="type"
+>integer</SPAN
+></A
+></DT
+><DD
+><P
+>&#13;        Server messages with severity greater than or equal to
+        sybct.min_server_severity will be reported as warnings.  This
+        value can also be set from a script by calling
+        <B
+CLASS="function"
+>sybase_min_server_severity()</B
+>.  The default
+        is 10 which reports errors of information severity or greater.
+       </P
+></DD
+><DT
+><A
+NAME="ini.sybct.min-client-severity"
+><TT
+CLASS="parameter"
+><I
+>sybct.min_client_severity</I
+></TT
+>
+       <SPAN
+CLASS="type"
+>integer</SPAN
+></A
+></DT
+><DD
+><P
+>&#13;        Client library messages with severity greater than or equal to
+        sybct.min_client_severity will be reported as warnings.  This
+        value can also be set from a script by calling
+        <B
+CLASS="function"
+>sybase_min_client_severity()</B
+>.  The default
+        is 10 which effectively disables reporting.
+       </P
+></DD
+><DT
+><A
+NAME="ini.sybct.login-timeout"
+><TT
+CLASS="parameter"
+><I
+>sybct.login_timeout</I
+></TT
+>
+       <SPAN
+CLASS="type"
+>integer</SPAN
+></A
+></DT
+><DD
+><P
+>&#13;        The maximum time in seconds to wait for a connection attempt
+        to succeed before returning failure.  Note that if
+        max_execution_time has been exceeded when a connection attempt
+        times out, your script will be terminated before it can take
+        action on failure.  The default is one minute.
+       </P
+></DD
+><DT
+><A
+NAME="ini.sybct.timeout"
+><TT
+CLASS="parameter"
+><I
+>sybct.timeout</I
+></TT
+>
+       <SPAN
+CLASS="type"
+>integer</SPAN
+></A
+></DT
+><DD
+><P
+>&#13;        The maximum time in seconds to wait for a select_db or query
+        operation to succeed before returning failure.  Note that if
+        max_execution_time has been exceeded when am operation times
+        out, your script will be terminated before it can take action
+        on failure.  The default is no limit.
+       </P
+></DD
+><DT
+><A
+NAME="ini.sybct.hostname"
+><TT
+CLASS="parameter"
+><I
+>sybct.hostname</I
+></TT
+>
+       <SPAN
+CLASS="type"
+>string</SPAN
+></A
+></DT
+><DD
+><P
+>&#13;        The name of the host you claim to be connecting from, for
+        display by sp_who.  The default is none.
+       </P
+></DD
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="ini.sect.informix"
+>Informix Configuration Directives</A
+></H2
+><P
+></P
+><DIV
+CLASS="variablelist"
+><DL
+><DT
+><A
+NAME="ini.ifx.allow-persistent"
+><TT
+CLASS="parameter"
+><I
+>ifx.allow_persistent</I
+></TT
+>
+       <SPAN
+CLASS="type"
+>boolean</SPAN
+></A
+></DT
+><DD
+><P
+>&#13;        Whether to allow persistent Informix connections.
+       </P
+></DD
+><DT
+><A
+NAME="ini.ifx.max-persistent"
+><TT
+CLASS="parameter"
+><I
+>ifx.max_persistent</I
+></TT
+>
+       <SPAN
+CLASS="type"
+>integer</SPAN
+></A
+></DT
+><DD
+><P
+>&#13;        The maximum number of persistent Informix connections per
+        process.
+       </P
+></DD
+><DT
+><A
+NAME="ini.ifx.max-links"
+><TT
+CLASS="parameter"
+><I
+>ifx.max_links</I
+></TT
+>
+       <SPAN
+CLASS="type"
+>integer</SPAN
+></A
+></DT
+><DD
+><P
+>&#13;        The maximum number of Informix connections per process, including
+        persistent connections.
+       </P
+></DD
+><DT
+><A
+NAME="ini.ifx.default-host"
+><TT
+CLASS="parameter"
+><I
+>ifx.default_host</I
+></TT
+>
+       <SPAN
+CLASS="type"
+>string</SPAN
+></A
+></DT
+><DD
+><P
+>&#13;        The default host to connect to when no host is specified
+        in <A
+HREF="function.ifx-connect.html"
+><B
+CLASS="function"
+>ifx_connect()</B
+></A
+> or 
+        <A
+HREF="function.ifx-pconnect.html"
+><B
+CLASS="function"
+>ifx_pconnect()</B
+></A
+>.
+       </P
+></DD
+><DT
+><A
+NAME="ini.ifx.default-user"
+><TT
+CLASS="parameter"
+><I
+>ifx.default_user</I
+></TT
+>
+       <SPAN
+CLASS="type"
+>string</SPAN
+></A
+></DT
+><DD
+><P
+>&#13;        The default user id to use when none is specified 
+        in <A
+HREF="function.ifx-connect.html"
+><B
+CLASS="function"
+>ifx_connect()</B
+></A
+> or 
+        <A
+HREF="function.ifx-pconnect.html"
+><B
+CLASS="function"
+>ifx_pconnect()</B
+></A
+>.
+       </P
+></DD
+><DT
+><A
+NAME="ini.ifx.default-password"
+><TT
+CLASS="parameter"
+><I
+>ifx.default_password</I
+></TT
+>
+       <SPAN
+CLASS="type"
+>string</SPAN
+></A
+></DT
+><DD
+><P
+>&#13;        The default password to use when none is specified 
+        in <A
+HREF="function.ifx-connect.html"
+><B
+CLASS="function"
+>ifx_connect()</B
+></A
+> or 
+        <A
+HREF="function.ifx-pconnect.html"
+><B
+CLASS="function"
+>ifx_pconnect()</B
+></A
+>.
+       </P
+></DD
+><DT
+><A
+NAME="ini.ifx.blobinfile"
+><TT
+CLASS="parameter"
+><I
+>ifx.blobinfile</I
+></TT
+>
+       <SPAN
+CLASS="type"
+>boolean</SPAN
+></A
+></DT
+><DD
+><P
+>&#13;        Set to true if you want to return blob columns
+        in a file, false if you want them in memory. You can
+        override the setting at runtime 
+        with <A
+HREF="function.ifx-blobinfile-mode.html"
+><B
+CLASS="function"
+>ifx_blobinfile_mode()</B
+></A
+>.
+       </P
+></DD
+><DT
+><A
+NAME="ini.ifx.textasvarchar"
+><TT
+CLASS="parameter"
+><I
+>ifx.textasvarchar</I
+></TT
+>
+       <SPAN
+CLASS="type"
+>boolean</SPAN
+></A
+></DT
+><DD
+><P
+>&#13;        Set to true if you want to return TEXT columns
+        as normal strings in select statements,
+        false if you want to use blob id parameters. You can
+        override the setting at runtime with 
+       <A
+HREF="function.ifx-textasvarchar.html"
+><B
+CLASS="function"
+>ifx_textasvarchar()</B
+></A
+>.
+       </P
+></DD
+><DT
+><A
+NAME="ini.ifx.byteasvarchar"
+><TT
+CLASS="parameter"
+><I
+>ifx.byteasvarchar</I
+></TT
+>
+       <SPAN
+CLASS="type"
+>boolean</SPAN
+></A
+></DT
+><DD
+><P
+>&#13;        Set to true if you want to return BYTE columns
+        as normal strings in select queries, 
+        false if you want to use blob id parameters. You can
+        override the setting at runtime with 
+        <A
+HREF="function.ifx-textasvarchar.html"
+><B
+CLASS="function"
+>ifx_textasvarchar()</B
+></A
+>.
+       </P
+></DD
+><DT
+><A
+NAME="ini.ifx.charasvarchar"
+><TT
+CLASS="parameter"
+><I
+>ifx.charasvarchar</I
+></TT
+>
+       <SPAN
+CLASS="type"
+>boolean</SPAN
+></A
+></DT
+><DD
+><P
+>&#13;        Set to true if you want to trim trailing spaces
+        from CHAR columns when fetching them.
+       </P
+></DD
+><DT
+><A
+NAME="ini.ifx.nullformat"
+><TT
+CLASS="parameter"
+><I
+>ifx.nullformat</I
+></TT
+>
+       <SPAN
+CLASS="type"
+>boolean</SPAN
+></A
+></DT
+><DD
+><P
+>&#13;        Set to true if you want to return NULL columns
+        as the literal string "NULL", false if you want
+        them returned as the empty string "". You can
+        override this setting at runtime with 
+        <A
+HREF="function.ifx-nullformat.html"
+><B
+CLASS="function"
+>ifx_nullformat()</B
+></A
+>.
+       </P
+></DD
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="ini.sect.bcmath"
+>BC Math Configuration Directives</A
+></H2
+><P
+></P
+><DIV
+CLASS="variablelist"
+><DL
+><DT
+><A
+NAME="ini.bcmath.scale"
+><TT
+CLASS="parameter"
+><I
+>bcmath.scale</I
+></TT
+>
+       <SPAN
+CLASS="type"
+>integer</SPAN
+></A
+></DT
+><DD
+><P
+>&#13;	Number of decimal digits for all bcmath functions.
+       </P
+></DD
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="ini.sect.browscap"
+>Browser Capability Configuration Directives</A
+></H2
+><P
+></P
+><DIV
+CLASS="variablelist"
+><DL
+><DT
+><A
+NAME="ini.browscap"
+><TT
+CLASS="parameter"
+><I
+>browscap</I
+></TT
+>
+       <SPAN
+CLASS="type"
+>string</SPAN
+></A
+></DT
+><DD
+><P
+>&#13;		Name of browser capabilities file. See also
+		<A
+HREF="function.get-browser.html"
+><B
+CLASS="function"
+>get_browser()</B
+></A
+>.
+       </P
+></DD
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="ini.sect.uodbc"
+>Unified ODBC Configuration Directives</A
+></H2
+><P
+></P
+><DIV
+CLASS="variablelist"
+><DL
+><DT
+><A
+NAME="ini.uodbc.default-db"
+><TT
+CLASS="parameter"
+><I
+>uodbc.default_db</I
+></TT
+>
+       <SPAN
+CLASS="type"
+>string</SPAN
+></A
+></DT
+><DD
+><P
+>&#13;	ODBC data source to use if none is specified in
+	<A
+HREF="function.odbc-connect.html"
+><B
+CLASS="function"
+>odbc_connect()</B
+></A
+> or
+	<A
+HREF="function.odbc-pconnect.html"
+><B
+CLASS="function"
+>odbc_pconnect()</B
+></A
+>.
+       </P
+></DD
+><DT
+><A
+NAME="ini.uodbc.default-user"
+><TT
+CLASS="parameter"
+><I
+>uodbc.default_user</I
+></TT
+>
+       <SPAN
+CLASS="type"
+>string</SPAN
+></A
+></DT
+><DD
+><P
+>&#13;	User name to use if none is specified in
+	<A
+HREF="function.odbc-connect.html"
+><B
+CLASS="function"
+>odbc_connect()</B
+></A
+> or
+	<A
+HREF="function.odbc-pconnect.html"
+><B
+CLASS="function"
+>odbc_pconnect()</B
+></A
+>.
+       </P
+></DD
+><DT
+><A
+NAME="ini.uodbc.default-pw"
+><TT
+CLASS="parameter"
+><I
+>uodbc.default_pw</I
+></TT
+>
+       <SPAN
+CLASS="type"
+>string</SPAN
+></A
+></DT
+><DD
+><P
+>&#13;	Password to use if none is specified in
+	<A
+HREF="function.odbc-connect.html"
+><B
+CLASS="function"
+>odbc_connect()</B
+></A
+> or
+	<A
+HREF="function.odbc-pconnect.html"
+><B
+CLASS="function"
+>odbc_pconnect()</B
+></A
+>.
+       </P
+></DD
+><DT
+><A
+NAME="ini.uodbc.allow-persistent"
+><TT
+CLASS="parameter"
+><I
+>uodbc.allow_persistent</I
+></TT
+>
+       <SPAN
+CLASS="type"
+>boolean</SPAN
+></A
+></DT
+><DD
+><P
+>&#13;	Whether to allow persistent ODBC connections.
+       </P
+></DD
+><DT
+><A
+NAME="ini.uodbc.max-persistent"
+><TT
+CLASS="parameter"
+><I
+>uodbc.max_persistent</I
+></TT
+>
+       <SPAN
+CLASS="type"
+>integer</SPAN
+></A
+></DT
+><DD
+><P
+>&#13;	The maximum number of persistent ODBC connections per process.
+       </P
+></DD
+><DT
+><A
+NAME="ini.uodbc.max-links"
+><TT
+CLASS="parameter"
+><I
+>uodbc.max_links</I
+></TT
+>
+       <SPAN
+CLASS="type"
+>integer</SPAN
+></A
+></DT
+><DD
+><P
+>&#13;	The maximum number of ODBC connections per process, including
+	persistent connections.
+       </P
+></DD
+></DL
+></DIV
+></DIV
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="install-problems.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="security.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Problems?</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="getting-started.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Security</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

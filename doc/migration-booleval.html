@@ -1,0 +1,155 @@
+<HTML
+><HEAD
+><TITLE
+>Short-circuited boolean evaluation</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Migrating from PHP/FI 2.0 to PHP 3.0"
+HREF="migration.html"><LINK
+REL="PREVIOUS"
+TITLE="Error messages have changed"
+HREF="migration-errors.html"><LINK
+REL="NEXT"
+TITLE="Function true/false return values"
+HREF="migration-truefalse.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="migration-errors.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Appendix A. Migrating from PHP/FI 2.0 to PHP 3.0</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="migration-truefalse.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="migration-booleval"
+>Short-circuited boolean evaluation</A
+></H1
+><P
+>&#13;   In PHP 3.0 boolean evaluation is short-circuited.  This means that
+   in an expression like <TT
+CLASS="literal"
+>(1 || test_me())</TT
+>, the
+   function <B
+CLASS="function"
+>test_me()</B
+> would not be executed since
+   nothing can change the result of the expression after the
+   <TT
+CLASS="literal"
+>1</TT
+>.</P
+><P
+>&#13;   This is a minor compatibility issue, but may cause unexpected
+   side-effects.</P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="migration-errors.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="migration-truefalse.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Error messages have changed</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="migration.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Function true/false return values</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,190 @@
+<HTML
+><HEAD
+><TITLE
+>ImagePSEncodeFont</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Image functions"
+HREF="ref.image.html"><LINK
+REL="PREVIOUS"
+TITLE="ImagePSBBox"
+HREF="function.imagepsbbox.html"><LINK
+REL="NEXT"
+TITLE="ImagePSFreeFont"
+HREF="function.imagepsfreefont.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.imagepsbbox.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.imagepsfreefont.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.imagepsencodefont"
+>ImagePSEncodeFont</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN15698"
+></A
+><P
+>    (PHP3 &#62;= 3.0.9, PHP4 &#62;= 4.0RC1)</P
+>ImagePSEncodeFont&nbsp;--&nbsp;
+     Change the character encoding vector of a font
+    </DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN15701"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN15703"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int <B
+CLASS="function"
+>imagepsencodefont</B
+></CODE
+> (string encodingfile)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     Loads a character encoding vector from from a file and changes
+     the fonts encoding vector to it. As a PostScript fonts default
+     vector lacks most of the character positions above 127, you'll
+     definitely want to change this if you use an other language than
+     english. The exact format of this file is described in T1libs
+     documentation. T1lib comes with two ready-to-use files,
+     IsoLatin1.enc and IsoLatin2.enc.
+    </P
+><P
+>&#13;     If you find yourself using this function all the time, a much
+     better way to define the encoding is to set ps.default_encoding in
+     the <A
+HREF="configuration.html#configuration.file"
+>configuration file</A
+>
+     to point to the right encoding file and all fonts you load will
+     automatically have the right encoding.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.imagepsbbox.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.imagepsfreefont.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>ImagePSBBox</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.image.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>ImagePSFreeFont</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

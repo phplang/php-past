@@ -1,0 +1,236 @@
+<HTML
+><HEAD
+><TITLE
+>PDF_set_info_keywords</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="PDF functions"
+HREF="ref.pdf.html"><LINK
+REL="PREVIOUS"
+TITLE="PDF_set_info_subject"
+HREF="function.pdf-set-info-subject.html"><LINK
+REL="NEXT"
+TITLE="PDF_set_info_author"
+HREF="function.pdf-set-info-author.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.pdf-set-info-subject.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.pdf-set-info-author.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.pdf-set-info-keywords"
+>PDF_set_info_keywords</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN21284"
+></A
+>PDF_set_info_keywords -- Fills the keywords field of the info structure</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN21287"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><P
+></P
+><CODE
+CLASS="FUNCDEF"
+>void pdf_set_info_keywords</CODE
+>(info info, string keywords);<P
+></P
+></DIV
+><P
+>&#13;     The <B
+CLASS="function"
+>PDF_set_info_keywords()</B
+> function sets the
+     keywords of a pdf document. It has to be called after
+     <B
+CLASS="function"
+>PDF_get_info()</B
+> and before
+     <B
+CLASS="function"
+>PDF_open()</B
+>. Calling it after <B
+CLASS="function"
+>PDF_open()</B
+>
+     will have no effect on the document.
+
+     <DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
+><P
+><B
+>Note: </B
+>
+       This function is not part of the pdf library.
+      </P
+></BLOCKQUOTE
+></DIV
+>
+
+    <DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
+><P
+><B
+>Note: </B
+>
+     This function takes a different first parameter if pdflib 2.0 support
+     is activated. The first parameter has to be the identifier of the
+     pdf document as returned by <A
+HREF="function.pdf-open.html"
+><B
+CLASS="function"
+>pdf_open()</B
+></A
+>. Consequently,
+     <A
+HREF="function.pdf-open.html"
+><B
+CLASS="function"
+>pdf_open()</B
+></A
+> has to be called before this function.
+    </P
+></BLOCKQUOTE
+></DIV
+></P
+><P
+>&#13;     See also <B
+CLASS="function"
+>PDF_get_info()</B
+>,
+              <B
+CLASS="function"
+>PDF_set_info_creator()</B
+>,
+              <B
+CLASS="function"
+>PDF_set_info_author()</B
+>,
+              <B
+CLASS="function"
+>PDF_set_info_title()</B
+>,
+              <B
+CLASS="function"
+>PDF_set_info_subject()</B
+>.</P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.pdf-set-info-subject.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.pdf-set-info-author.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>PDF_set_info_subject</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.pdf.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>PDF_set_info_author</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

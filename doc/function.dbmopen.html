@@ -1,0 +1,204 @@
+<HTML
+><HEAD
+><TITLE
+>dbmopen</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="DBM Functions"
+HREF="ref.dbm.html"><LINK
+REL="PREVIOUS"
+TITLE="DBM Functions"
+HREF="ref.dbm.html"><LINK
+REL="NEXT"
+TITLE="dbmclose"
+HREF="function.dbmclose.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="ref.dbm.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.dbmclose.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.dbmopen"
+>dbmopen</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN9821"
+></A
+><P
+>    (PHP3 , PHP4 )</P
+>dbmopen&nbsp;--&nbsp;Opens a DBM database</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN9824"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN9826"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int <B
+CLASS="function"
+>dbmopen</B
+></CODE
+> (string filename, string flags)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     The first argument is the full-path filename of the DBM file to
+     be opened and the second is the file open mode which is one of
+     "r", "n", "c" or "w" for read-only, new (implies read-write, and
+     most likely will truncate an already-existing database of the
+     same name), create (implies read-write, and will not truncate an
+     already-existing database of the same name) and read-write
+     respectively.
+    </P
+><P
+>&#13;     Returns an identifer to be passed to the other DBM functions on
+     success, or false on failure.
+    </P
+><P
+>&#13;     If NDBM support is used, NDBM will actually create filename.dir
+     and filename.pag files. GDBM only uses one file, as does the
+     internal flat-file support, and Berkeley DB creates a
+     <TT
+CLASS="filename"
+>filename.db</TT
+> file. Note that PHP does its own
+     file locking in addition to any file locking that may be done by
+     the DBM library itself. PHP does not delete the
+     <TT
+CLASS="filename"
+>.lck</TT
+> files it creates. It uses these files
+     simply as fixed inodes on which to do the file locking. For more
+     information on DBM files, see your Unix man pages, or obtain
+     <A
+HREF="ftp://ftp.gnu.org/pub/gnu/gdbm/"
+TARGET="_top"
+>GNU's GDBM</A
+>.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="ref.dbm.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.dbmclose.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>DBM Functions</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.dbm.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>dbmclose</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,211 @@
+<HTML
+><HEAD
+><TITLE
+>ldap_next_attribute</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="LDAP functions"
+HREF="ref.ldap.html"><LINK
+REL="PREVIOUS"
+TITLE="ldap_mod_replace"
+HREF="function.ldap-mod-replace.html"><LINK
+REL="NEXT"
+TITLE="ldap_next_entry"
+HREF="function.ldap-next-entry.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.ldap-mod-replace.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.ldap-next-entry.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.ldap-next-attribute"
+>ldap_next_attribute</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN19364"
+></A
+><P
+>    (PHP3 , PHP4 )</P
+>ldap_next_attribute&nbsp;--&nbsp;Get the next attribute in result</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN19367"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN19369"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>string <B
+CLASS="function"
+>ldap_next_attribute</B
+></CODE
+> (int link_identifier, int result_entry_identifier, int ber_identifier)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     Returns the next attribute in an entry on success and false on
+     error.</P
+><P
+>  
+     <B
+CLASS="function"
+>ldap_next_attribute()</B
+> is called to retrieve
+     the attributes in an entry.  The internal state of the pointer is
+     maintained by the <TT
+CLASS="parameter"
+><I
+>ber_identifier</I
+></TT
+>.  It is
+     passed by reference to the function. The first call to
+     <B
+CLASS="function"
+>ldap_next_attribute()</B
+> is made with the
+     <TT
+CLASS="parameter"
+><I
+>result_entry_identifier</I
+></TT
+> returned from
+     <A
+HREF="function.ldap-first-attribute.html"
+><B
+CLASS="function"
+>ldap_first_attribute()</B
+></A
+>.</P
+><P
+>&#13;     see also <A
+HREF="function.ldap-get-attributes.html"
+><B
+CLASS="function"
+>ldap_get_attributes()</B
+></A
+></P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.ldap-mod-replace.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.ldap-next-entry.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>ldap_mod_replace</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.ldap.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>ldap_next_entry</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

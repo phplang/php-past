@@ -1,0 +1,242 @@
+<HTML
+><HEAD
+><TITLE
+>mcrypt_list_algorithms</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Mcrypt Encryption Functions"
+HREF="ref.mcrypt.html"><LINK
+REL="PREVIOUS"
+TITLE="mcrypt_ofb"
+HREF="function.mcrypt-ofb.html"><LINK
+REL="NEXT"
+TITLE="mcrypt_list_modes"
+HREF="function.mcrypt-list-modes.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.mcrypt-ofb.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.mcrypt-list-modes.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.mcrypt-list-algorithms"
+>mcrypt_list_algorithms</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN21657"
+></A
+><P
+>    (PHP4 &#62;= 4.0.2)</P
+>mcrypt_list_algorithms&nbsp;--&nbsp;Get an array of all supported ciphers</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN21660"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN21662"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>array <B
+CLASS="function"
+>mcrypt_list_algorithms</B
+></CODE
+> ([string
+	   lib_dir])</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     <B
+CLASS="function"
+>Mcrypt_list_algorithms()</B
+> is used to get an
+     array of all supported algorithms in the
+    </P
+><P
+>&#13;     <TT
+CLASS="parameter"
+><I
+>lib_dir</I
+></TT
+>.
+     <B
+CLASS="function"
+>Mcrypt_list_algorithms()</B
+> takes as optional
+     parameter a directory which specifies the directory where all
+     algorithms are located. If not specifies, the value of the
+	 mcrypt.algorithms_dir php.ini directive is used.
+    </P
+><P
+>&#13;     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN21675"
+></A
+><P
+><B
+>Example 1. <B
+CLASS="function"
+>Mcrypt_list_algorithms()</B
+> Example</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;&#60;?php
+$algorithms = mcrypt_list_algorithms ("/usr/local/lib/libmcrypt");
+
+foreach ($algorithms as $cipher) {
+	echo $cipher."/n";
+}
+?&#62;
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+    </P
+><P
+>&#13;     The above example will produce a list with all supported
+	 algorithms in the "/usr/local/lib/libmcrypt" directory.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.mcrypt-ofb.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.mcrypt-list-modes.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>mcrypt_ofb</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.mcrypt.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>mcrypt_list_modes</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,305 @@
+<HTML
+><HEAD
+><TITLE
+>utf8_encode</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="XML parser functions"
+HREF="ref.xml.html"><LINK
+REL="PREVIOUS"
+TITLE="utf8_decode"
+HREF="function.utf8-decode.html"><LINK
+REL="NEXT"
+TITLE="YAZ functions"
+HREF="ref.yaz.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.utf8-decode.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="ref.yaz.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.utf8-encode"
+>utf8_encode</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN40445"
+></A
+><P
+>    (PHP3 &#62;= 3.0.6, PHP4 )</P
+>utf8_encode&nbsp;--&nbsp;encodes an ISO-8859-1 string to UTF-8</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN40448"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN40450"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>string <B
+CLASS="function"
+>utf8_encode</B
+></CODE
+> (string data)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     This function encodes the string <TT
+CLASS="parameter"
+><I
+>data</I
+></TT
+> to
+     <TT
+CLASS="literal"
+>UTF-8</TT
+>, and returns the encoded version.
+     <TT
+CLASS="literal"
+>UTF-8</TT
+> is a standard mechanism used by
+     <SPAN
+CLASS="acronym"
+>Unicode</SPAN
+>for encoding <I
+CLASS="glossterm"
+>wide
+     character</I
+> values into a byte stream.
+     <TT
+CLASS="literal"
+>UTF-8</TT
+> is transparent to plain
+     <SPAN
+CLASS="abbrev"
+>ASCII</SPAN
+> characters, is self-synchronized (meaning
+     it is possible for a program to figure out where in the
+     bytestream characters start) and can be used with normal string
+     comparison functions for sorting and such.  PHP encodes
+     <TT
+CLASS="literal"
+>UTF-8</TT
+> characters in up to four bytes, like
+     this:
+     <DIV
+CLASS="table"
+><A
+NAME="AEN40465"
+></A
+><P
+><B
+>Table 1. UTF-8 encoding</B
+></P
+><TABLE
+BORDER="1"
+CLASS="CALSTABLE"
+><THEAD
+><TR
+><TH
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>bytes</TH
+><TH
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>bits</TH
+><TH
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>representation</TH
+></TR
+></THEAD
+><TBODY
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>1</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>7</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>0bbbbbbb</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>2</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>11</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>110bbbbb 10bbbbbb</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>3</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>16</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>1110bbbb 10bbbbbb 10bbbbbb</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>4</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>21</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>11110bbb 10bbbbbb 10bbbbbb 10bbbbbb</TD
+></TR
+></TBODY
+></TABLE
+></DIV
+>
+     Each <TT
+CLASS="replaceable"
+><I
+>b</I
+></TT
+> represents a bit that can be
+     used to store character data.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.utf8-decode.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="ref.yaz.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>utf8_decode</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.xml.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>YAZ functions</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

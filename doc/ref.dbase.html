@@ -1,0 +1,246 @@
+<HTML
+><HEAD
+><TITLE
+>dBase functions</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Function Reference"
+HREF="funcref.html"><LINK
+REL="PREVIOUS"
+TITLE="strtotime"
+HREF="function.strtotime.html"><LINK
+REL="NEXT"
+TITLE="dbase_create"
+HREF="function.dbase-create.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="reference"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.strtotime.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.dbase-create.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="reference"
+><A
+NAME="ref.dbase"
+></A
+><DIV
+CLASS="TITLEPAGE"
+><H1
+CLASS="title"
+>XIV. dBase functions</H1
+><DIV
+CLASS="PARTINTRO"
+><A
+NAME="AEN9598"
+></A
+><P
+>&#13;    These functions allow you to access records stored in dBase-format
+    (dbf) databases.
+   </P
+><P
+>&#13;    There is no support for indexes or memo fields. There is no
+    support for locking, too. Two concurrent webserver processes
+    modifying the same dBase file will very likely ruin your database.
+   </P
+><P
+>&#13;    Unlike SQL databases, dBase "databases" cannot change the database
+    definition afterwards.  Once the file is created, the database
+    definition is fixed. There are no indexes that speed searching or
+    otherwise organize your data. dBase files are simple sequential
+    files of fixed length records. Records are appended to the end of
+    the file and delete records are kept until you call
+    <B
+CLASS="function"
+>dbase_pack()()</B
+>.
+   </P
+><P
+>&#13;    We recommend that you do not use dBase files as your production
+    database. Choose any real SQL server instead; MySQL or Postgres
+    are common choices with PHP. dBase support is here to allow you to
+    import and export data to and from your web database, since the
+    file format is commonly understood with Windows spreadsheets and
+    organizers. Import and export of data is about all that dBase
+    support is good for.
+   </P
+></DIV
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Table of Contents</B
+></DT
+><DT
+><A
+HREF="function.dbase-create.html"
+>dbase_create</A
+> &#8212; Creates a dBase database</DT
+><DT
+><A
+HREF="function.dbase-open.html"
+>dbase_open</A
+> &#8212; Opens a dBase database</DT
+><DT
+><A
+HREF="function.dbase-close.html"
+>dbase_close</A
+> &#8212; Close a dBase database</DT
+><DT
+><A
+HREF="function.dbase-pack.html"
+>dbase_pack</A
+> &#8212; Packs a dBase database</DT
+><DT
+><A
+HREF="function.dbase-add-record.html"
+>dbase_add_record</A
+> &#8212; Add a record to a dBase database</DT
+><DT
+><A
+HREF="function.dbase-replace-record.html"
+>dbase_replace_record</A
+> &#8212; Replace a record in a dBase database</DT
+><DT
+><A
+HREF="function.dbase-delete-record.html"
+>dbase_delete_record</A
+> &#8212; Deletes a record from a dBase database</DT
+><DT
+><A
+HREF="function.dbase-get-record.html"
+>dbase_get_record</A
+> &#8212; Gets a record from a dBase database</DT
+><DT
+><A
+HREF="function.dbase-get-record-with-names.html"
+>dbase_get_record_with_names</A
+> &#8212; 
+     Gets a record from a dBase database as an associative array
+    </DT
+><DT
+><A
+HREF="function.dbase-numfields.html"
+>dbase_numfields</A
+> &#8212; 
+     Find out how many fields are in a dBase database
+    </DT
+><DT
+><A
+HREF="function.dbase-numrecords.html"
+>dbase_numrecords</A
+> &#8212; 
+     Find out how many records are in a dBase database
+    </DT
+></DL
+></DIV
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.strtotime.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.dbase-create.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>strtotime</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="funcref.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>dbase_create</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

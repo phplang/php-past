@@ -1,0 +1,250 @@
+<HTML
+><HEAD
+><TITLE
+>OCIFetchInto</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Oracle 8 functions"
+HREF="ref.oci8.html"><LINK
+REL="PREVIOUS"
+TITLE="OCIFetch"
+HREF="function.ocifetch.html"><LINK
+REL="NEXT"
+TITLE="OCIFetchStatement"
+HREF="function.ocifetchstatement.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.ocifetch.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.ocifetchstatement.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.ocifetchinto"
+>OCIFetchInto</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN27060"
+></A
+><P
+>    (PHP3 &#62;= 3.0.4, PHP4 )</P
+>OCIFetchInto&nbsp;--&nbsp;Fetches the next row into result-array</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN27063"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN27065"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int <B
+CLASS="function"
+>OCIFetchInto</B
+></CODE
+> (int stmt, array &#38;result [, int mode])</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     <B
+CLASS="function"
+>OCIFetchInto()</B
+> fetches the next row (for SELECT statements)
+	 into the <TT
+CLASS="parameter"
+><I
+>result</I
+></TT
+> array. <B
+CLASS="function"
+>OCIFetchInto()</B
+>
+	 will overwrite the previous content of <TT
+CLASS="parameter"
+><I
+>result</I
+></TT
+>. By default 
+	 <TT
+CLASS="parameter"
+><I
+>result</I
+></TT
+> will contain a one-based array of all columns 
+	 that are not NULL.
+    </P
+><P
+>&#13;	 The <TT
+CLASS="parameter"
+><I
+>mode</I
+></TT
+> parameter allows you to change the default 
+	 behaviour. You can specify more than one flag by simply addig them up 
+	 (eg OCI_ASSOC+OCI_RETURN_NULLS). The known flags are:
+
+     <P
+></P
+><TABLE
+BORDER="0"
+><TBODY
+><TR
+><TD
+><TT
+CLASS="literal"
+>OCI_ASSOC</TT
+> Return an associative array.</TD
+></TR
+><TR
+><TD
+><TT
+CLASS="literal"
+>OCI_NUM</TT
+> Return an numbered array 
+	   starting with one. (DEFAULT)</TD
+></TR
+><TR
+><TD
+><TT
+CLASS="literal"
+>OCI_RETURN_NULLS</TT
+> Return empty columns.</TD
+></TR
+><TR
+><TD
+><TT
+CLASS="literal"
+>OCI_RETURN_LOBS</TT
+> Return the value of a LOB instead of the desxriptor.</TD
+></TR
+></TBODY
+></TABLE
+><P
+></P
+>
+
+	</P
+><P
+>&#13;	</P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.ocifetch.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.ocifetchstatement.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>OCIFetch</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.oci8.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>OCIFetchStatement</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

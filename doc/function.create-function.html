@@ -1,0 +1,435 @@
+<HTML
+><HEAD
+><TITLE
+>create_function</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Function Handling functions"
+HREF="ref.funchand.html"><LINK
+REL="PREVIOUS"
+TITLE="call_user_func"
+HREF="function.call-user-func.html"><LINK
+REL="NEXT"
+TITLE="func_get_arg"
+HREF="function.func-get-arg.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.call-user-func.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.func-get-arg.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.create-function"
+>create_function</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN12926"
+></A
+><P
+>    (PHP4 &#62;= 4.0.1)</P
+>create_function&nbsp;--&nbsp;Create an anonymous (lambda-style) function</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN12929"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN12931"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>string <B
+CLASS="function"
+>create_function</B
+></CODE
+> (string args, string code)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     Creates an anonymous function from the parameters passed, and
+     returns a unique name for it. Usually the
+     <TT
+CLASS="parameter"
+><I
+>args</I
+></TT
+> will be passed as a single quote
+     delimited string, and this is also recommended for the
+     <TT
+CLASS="parameter"
+><I
+>code</I
+></TT
+>. The reason for using single quoted
+     strings, is to protect
+     the variable names from parsing, otherwise, if you use double
+     quotes there will be a need to escape the variable names, e.g. 
+     <TT
+CLASS="literal"
+>\$avar</TT
+>.
+    </P
+><P
+>&#13;     You can use this function, to (for example) create a function
+     from information gathered at run time:
+     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN12944"
+></A
+><P
+><B
+>Example 1. 
+       Creating an anonymous function with <B
+CLASS="function"
+>create_function()</B
+>
+      </B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;$newfunc = create_function('$a,$b','return "ln($a) + ln($b) = ".log($a * $b);');
+echo "New anonymous function: $newfunc\n";
+echo $newfunc(2,M_E)."\n";
+// outputs
+// New anonymous function: lambda_1
+// ln(2) + ln(2.718281828459) = 1.6931471805599
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+     Or, perhaps to have general handler function that can apply a set
+     of operations to a list of parameters:
+     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN12948"
+></A
+><P
+><B
+>Example 2. 
+       Making a general processing function with
+       <B
+CLASS="function"
+>create_function()</B
+>
+      </B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;function process($var1, $var2, $farr) {
+    for ($f=0; $f &#60; count($farr); $f++)
+    echo $farr[$f]($var1,$var2)."\n";
+}
+
+// create a bunch of math functions
+$f1 = 'if ($a &#62;=0) {return "b*a^2 = ".$b*sqrt($a);} else {return false;}';
+$f2 = "return \"min(b^2+a, a^2,b) = \".min(\$a*\$a+\$b,\$b*\$b+\$a);";
+$f3 = 'if ($a &#62; 0 &#38;&#38; $b != 0) {return "ln(a)/b = ".log($a)/$b;} else {return false;}';
+$farr = array(
+    create_function('$x,$y', 'return "some trig: ".(sin($x) + $x*cos($y));'),
+    create_function('$x,$y', 'return "a hypotenuse: ".sqrt($x*$x + $y*$y);'),
+    create_function('$a,$b', $f1),
+    create_function('$a,$b', $f2),
+    create_function('$a,$b', $f3)
+    );
+
+echo "\nUsing the first array of anonymous functions\n";
+echo "parameters: 2.3445, M_PI\n";
+process(2.3445, M_PI, $farr);
+
+// now make a bunch of string processing functions
+$garr = array(
+    create_function('$b,$a','if (strncmp($a,$b,3) == 0) return "** \"$a\" '.
+    'and \"$b\"\n** Look the same to me! (looking at the first 3 chars)";'),
+    create_function('$a,$b','; return "CRCs: ".crc32($a)." , ".crc32(b);'),
+    create_function('$a,$b','; return "similar(a,b) = ".similar_text($a,$b,&#38;$p)."($p%)";')
+    );
+echo "\nUsing the second array of anonymous functions\n";
+process("Twas brilling and the slithy toves", "Twas the night", $garr);
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+     and when you run the code above, the output will be:
+     <DIV
+CLASS="informalexample"
+><A
+NAME="AEN12952"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;Using the first array of anonymous functions
+parameters: 2.3445, M_PI
+some trig: -1.6291725057799
+a hypotenuse: 3.9199852871011
+b*a^2 = 4.8103313314525
+min(b^2+a, a^2,b) = 8.6382729035898
+ln(a/b) = 0.27122299212594
+
+Using the second array of anonymous functions
+** "Twas the night" and "Twas brilling and the slithy toves"
+** Look the same to me! (looking at the first 3 chars)
+CRCs: -725381282 , 1908338681
+similar(a,b) = 11(45.833333333333%)
+      </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+>
+    But perhaps the most common use for of lambda-style (anonymous) functions
+    is to create callback functions, for example when using
+    <A
+HREF="function.array-walk.html"
+><B
+CLASS="function"
+>array_walk()</B
+></A
+> or <A
+HREF="function.usort.html"
+><B
+CLASS="function"
+>usort()</B
+></A
+>
+    <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN12956"
+></A
+><P
+><B
+>Example 3. Using anonymous functions as callback functions</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;$av = array("the ","a ","that ","this ");
+array_walk($av, create_function('&#38;$v,$k','$v = $v."mango";'));
+print_r($av);  // for PHP 3 use var_dump()
+// outputs:
+// Array
+// (
+//   [0] =&#62; the mango
+//   [1] =&#62; a mango
+//   [2] =&#62; that mango
+//   [3] =&#62; this mango
+// )
+
+// an array of strings ordered from shorter to longer
+$sv = array("small","larger","a big string","it is a string thing");
+print_r($sv);
+// outputs:
+// Array
+// (
+//   [0] =&#62; small
+//   [1] =&#62; larger
+//   [2] =&#62; a big string
+//   [3] =&#62; it is a string thing
+// )
+
+// sort it from longer to shorter
+usort($sv, create_function('$a,$b','return strlen($b) - strlen($a);'));
+print_r($sv);
+// outputs:
+// Array
+// (
+//   [0] =&#62; it is a string thing
+//   [1] =&#62; a big string
+//   [2] =&#62; larger
+//   [3] =&#62; small
+// )
+     </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.call-user-func.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.func-get-arg.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>call_user_func</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.funchand.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>func_get_arg</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

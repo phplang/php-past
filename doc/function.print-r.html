@@ -1,0 +1,256 @@
+<HTML
+><HEAD
+><TITLE
+>print_r</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Variable Functions"
+HREF="ref.var.html"><LINK
+REL="PREVIOUS"
+TITLE="isset"
+HREF="function.isset.html"><LINK
+REL="NEXT"
+TITLE="serialize"
+HREF="function.serialize.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.isset.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.serialize.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.print-r"
+>print_r</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN38969"
+></A
+><P
+>    (PHP4 )</P
+>print_r&nbsp;--&nbsp;
+     Prints human-readable information about a variable
+    </DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN38972"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN38974"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>void <B
+CLASS="function"
+>print_r</B
+></CODE
+> (mixed expression)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     This function displays information about the values of variables
+     in a way that's readable by humans.  If given a string, integer
+     or double, the value itself will be printed.  If given an array,
+     values will be presented in a format that shows keys and
+     elements.  Similar notation is used for objects.
+    </P
+><P
+>&#13;     Compare <B
+CLASS="function"
+>print_r()</B
+> to
+     <A
+HREF="function.var-dump.html"
+><B
+CLASS="function"
+>var_dump()</B
+></A
+>.
+    </P
+><P
+>&#13;     <DIV
+CLASS="informalexample"
+><A
+NAME="AEN38985"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;&#60;?php
+$a = array (1, 2, array ("a", "b", "c"));
+print_r ($a);
+?&#62;
+      </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+>
+    </P
+><DIV
+CLASS="warning"
+><P
+></P
+><TABLE
+CLASS="warning"
+BORDER="1"
+WIDTH="100%"
+><TR
+><TD
+ALIGN="CENTER"
+><B
+>Warning</B
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+><P
+>&#13;      This function will continue forever if given an array or object 
+      that contains a direct or indirect reference to itself or that 
+      contains an array or object on a deeper level that does so.
+      This is especially true for <TT
+CLASS="literal"
+>print_r($GLOBALS)</TT
+>, 
+      as <TT
+CLASS="literal"
+>$GLOBALS</TT
+> is itself a global variable and
+      contains a reference to itself as such.
+     </P
+></TD
+></TR
+></TABLE
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.isset.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.serialize.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>isset</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.var.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>serialize</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

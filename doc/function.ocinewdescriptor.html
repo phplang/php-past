@@ -1,0 +1,290 @@
+<HTML
+><HEAD
+><TITLE
+>OCINewDescriptor</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Oracle 8 functions"
+HREF="ref.oci8.html"><LINK
+REL="PREVIOUS"
+TITLE="OCIRollback"
+HREF="function.ocirollback.html"><LINK
+REL="NEXT"
+TITLE="OCIRowCount"
+HREF="function.ocirowcount.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.ocirollback.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.ocirowcount.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.ocinewdescriptor"
+>OCINewDescriptor</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN26970"
+></A
+><P
+>    (PHP3 &#62;= 3.0.7, PHP4 )</P
+>OCINewDescriptor&nbsp;--&nbsp;Initialize a new empty descriptor LOB/FILE (LOB is default)</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN26973"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN26975"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>string <B
+CLASS="function"
+>OCINewDescriptor</B
+></CODE
+> (int connection [, int type])</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     <B
+CLASS="function"
+>OCINewDescriptor()</B
+> Allocates storage to hold
+     descriptors or LOB locators. Valid values for the valid 
+     <TT
+CLASS="parameter"
+><I
+>type</I
+></TT
+> are OCI_D_FILE, OCI_D_LOB, OCI_D_ROWID.
+     For LOB desriptors, the methods load, save, and savefile are 
+     associated with the descriptor, for BFILE only the load method exists. 
+     See the second example usage hints.
+    </P
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN26987"
+></A
+><P
+><B
+>Example 1. OCINewDescriptor</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;&#60;?php   
+    /* This script is designed to be called from a HTML form.
+     * It expects $user, $password, $table, $where, and $commitsize
+     * to be passed in from the form.  The script then deletes
+     * the selected rows using the ROWID and commits after each
+     * set of $commitsize rows. (Use with care, there is no rollback)
+     */
+    $conn = OCILogon($user, $password);
+    $stmt = OCIParse($conn,"select rowid from $table $where");
+    $rowid = OCINewDescriptor($conn,OCI_D_ROWID);
+    OCIDefineByName($stmt,"ROWID",&#38;$rowid);   
+    OCIExecute($stmt);
+    while ( OCIFetch($stmt) ) {      
+       $nrows = OCIRowCount($stmt);
+       $delete = OCIParse($conn,"delete from $table where ROWID = :rid");
+       OCIBindByName($delete,":rid",&#38;$rowid,-1,OCI_B_ROWID);
+       OCIExecute($delete);      
+       print "$nrows\n";
+       if ( ($nrows % $commitsize) == 0 ) {
+           OCICommit($conn);      
+       }   
+    }
+    $nrows = OCIRowCount($stmt);   
+    print "$nrows deleted...\n";
+    OCIFreeStatement($stmt);  
+    OCILogoff($conn);
+?&#62;  
+     </PRE
+></TD
+></TR
+></TABLE
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;&#60;?php
+    /* This script demonstrates file upload to LOB columns
+     * The formfield used for this example looks like this
+     * &#60;form action="upload.php3" method="post" enctype="multipart/form-data"&#62;
+     * &#60;input type="file" name="lob_upload"&#62;
+     * ...
+     */
+  if(!isset($lob_upload) || $lob_upload == 'none'){
+?&#62;
+&#60;form action="upload.php3" method="post" enctype="multipart/form-data"&#62;
+Upload file: &#60;input type="file" name="lob_upload"&#62;&#60;br&#62;
+&#60;input type="submit" value="Upload"&#62; - &#60;input type="reset"&#62;
+&#60;/form&#62;
+&#60;?php
+  } else {
+     // $lob_upload contains the temporary filename of the uploaded file
+     $conn = OCILogon($user, $password);
+     $lob = OCINewDescriptor($conn, OCI_D_LOB);
+     $stmt = OCIParse($conn,"insert into $table (id, the_blob) 
+               values(my_seq.NEXTVAL, EMPTY_BLOB()) returning the_blob into :the_blob");
+     OCIBindByName($stmt, ':the_blob', &#38;$lob, -1, OCI_B_BLOB);
+     OCIExecute($stmt);
+     if($lob-&#62;savefile($lob_upload)){
+        OCICommit($conn);
+        echo "Blob successfully uploaded\n";
+     }else{
+        echo "Couldn't upload Blob\n";
+     }
+     OCIFreeDesc($lob);
+     OCIFreeStatement($stmt);
+     OCILogoff($conn);
+  }
+?&#62;
+     </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.ocirollback.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.ocirowcount.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>OCIRollback</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.oci8.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>OCIRowCount</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

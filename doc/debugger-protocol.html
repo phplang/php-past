@@ -1,0 +1,656 @@
+<HTML
+><HEAD
+><TITLE
+>Debugger Protocol</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="The PHP Debugger"
+HREF="debugger.html"><LINK
+REL="PREVIOUS"
+TITLE="The PHP Debugger"
+HREF="debugger.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="debugger.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Appendix C. The PHP Debugger</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+>&nbsp;</TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="debugger-protocol"
+>Debugger Protocol</A
+></H1
+><P
+>&#13;    The debugger protocol is line-based.  Each line has a
+    <I
+CLASS="emphasis"
+>type</I
+>, and several lines compose a
+    <I
+CLASS="emphasis"
+>message</I
+>.  Each message starts with a line of
+    the type <TT
+CLASS="literal"
+>start</TT
+> and terminates with a line of
+    the type <TT
+CLASS="literal"
+>end</TT
+>.  PHP may send lines for different
+    messages simultaneously.
+   </P
+><P
+>&#13;    A line has this format:
+    <DIV
+CLASS="informalexample"
+><A
+NAME="AEN41797"
+></A
+><P
+></P
+><P
+CLASS="literallayout"
+><br>
+<TT
+CLASS="replaceable"
+><I
+>date</I
+></TT
+>&nbsp;<TT
+CLASS="replaceable"
+><I
+>time</I
+></TT
+><br>
+<TT
+CLASS="replaceable"
+><I
+>host</I
+></TT
+>(<TT
+CLASS="replaceable"
+><I
+>pid</I
+></TT
+>)<br>
+<TT
+CLASS="replaceable"
+><I
+>type</I
+></TT
+>:<br>
+<TT
+CLASS="replaceable"
+><I
+>message-data</I
+></TT
+><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</P
+><P
+></P
+></DIV
+>
+    <P
+></P
+><DIV
+CLASS="variablelist"
+><DL
+><DT
+><TT
+CLASS="replaceable"
+><I
+>date</I
+></TT
+></DT
+><DD
+><P
+>&#13;	Date in ISO 8601 format
+	(<TT
+CLASS="replaceable"
+><I
+>yyyy</I
+></TT
+>-<TT
+CLASS="replaceable"
+><I
+>mm</I
+></TT
+>-<TT
+CLASS="replaceable"
+><I
+>dd</I
+></TT
+>)
+       </P
+></DD
+><DT
+><TT
+CLASS="replaceable"
+><I
+>time</I
+></TT
+></DT
+><DD
+><P
+>Time including microseconds:
+	<TT
+CLASS="replaceable"
+><I
+>hh</I
+></TT
+>:<TT
+CLASS="replaceable"
+><I
+>mm</I
+></TT
+>:<TT
+CLASS="replaceable"
+><I
+>uuuuuu</I
+></TT
+>
+       </P
+></DD
+><DT
+><TT
+CLASS="replaceable"
+><I
+>host</I
+></TT
+></DT
+><DD
+><P
+>&#13;	DNS name or IP address of the host where the script error was
+	generated.
+       </P
+></DD
+><DT
+><TT
+CLASS="replaceable"
+><I
+>pid</I
+></TT
+></DT
+><DD
+><P
+>&#13;	PID (process id) on <TT
+CLASS="replaceable"
+><I
+>host</I
+></TT
+> of the
+	process with the PHP script that generated this error.
+       </P
+></DD
+><DT
+><TT
+CLASS="replaceable"
+><I
+>type</I
+></TT
+></DT
+><DD
+><P
+>&#13;	Type of line.  Tells the receiving program about what it
+	should treat the following data as:
+	<DIV
+CLASS="table"
+><A
+NAME="AEN41838"
+></A
+><P
+><B
+>Table C-1. Debugger Line Types</B
+></P
+><TABLE
+BORDER="1"
+CLASS="CALSTABLE"
+><THEAD
+><TR
+><TH
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Name</TH
+><TH
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Meaning</TH
+></TR
+></THEAD
+><TBODY
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+><TT
+CLASS="literal"
+>start</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;	     Tells the receiving program that a debugger message
+	     starts here.  The contents of
+	     <TT
+CLASS="replaceable"
+><I
+>data</I
+></TT
+> will be the type of error
+	     message, listed below.
+	    </TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+><TT
+CLASS="literal"
+>message</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>The PHP error message.</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+><TT
+CLASS="literal"
+>location</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;	     File name and line number where the error occured.  The
+	     first <TT
+CLASS="literal"
+>location</TT
+> line will always
+	     contain the top-level location.
+	     <TT
+CLASS="replaceable"
+><I
+>data</I
+></TT
+> will contain
+	     <TT
+CLASS="literal"
+><TT
+CLASS="replaceable"
+><I
+>file</I
+></TT
+>:<TT
+CLASS="replaceable"
+><I
+>line</I
+></TT
+></TT
+>.
+	     There will always be a <TT
+CLASS="literal"
+>location</TT
+> line
+	     after <TT
+CLASS="literal"
+>message</TT
+> and after every
+	     <TT
+CLASS="literal"
+>function</TT
+>.
+	    </TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;	     <TT
+CLASS="literal"
+>frames</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Number of frames
+	     in the following stack dump.  If there are four frames,
+	     expect information about four levels of called functions.
+	     If no "frames" line is given, the depth should be assumed
+	     to be 0 (the error occured at top-level).
+	    </TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;	     <TT
+CLASS="literal"
+>function</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;	     Name of function where the error occured.  Will be
+	     repeated once for every level in the function call
+	     stack.
+	    </TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+><TT
+CLASS="literal"
+>end</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;	     Tells the receiving program that a debugger message ends
+	     here.
+	    </TD
+></TR
+></TBODY
+></TABLE
+></DIV
+>
+       </P
+></DD
+><DT
+><TT
+CLASS="replaceable"
+><I
+>data</I
+></TT
+></DT
+><DD
+><P
+>Line data.</P
+></DD
+></DL
+></DIV
+>
+
+    <DIV
+CLASS="table"
+><A
+NAME="AEN41884"
+></A
+><P
+><B
+>Table C-2. Debugger Error Types</B
+></P
+><TABLE
+BORDER="1"
+CLASS="CALSTABLE"
+><THEAD
+><TR
+><TH
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Debugger</TH
+><TH
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>PHP Internal</TH
+></TR
+></THEAD
+><TBODY
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+><SPAN
+CLASS="errortype"
+>warning</SPAN
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+><SPAN
+CLASS="errortype"
+>E_WARNING</SPAN
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+><SPAN
+CLASS="errortype"
+>error</SPAN
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+><SPAN
+CLASS="errortype"
+>E_ERROR</SPAN
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+><SPAN
+CLASS="errortype"
+>parse</SPAN
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+><SPAN
+CLASS="errortype"
+>E_PARSE</SPAN
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+><SPAN
+CLASS="errortype"
+>notice</SPAN
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+><SPAN
+CLASS="errortype"
+>E_NOTICE</SPAN
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+><SPAN
+CLASS="errortype"
+>core-error</SPAN
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+><SPAN
+CLASS="errortype"
+>E_CORE_ERROR</SPAN
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+><SPAN
+CLASS="errortype"
+>core-warning</SPAN
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+><SPAN
+CLASS="errortype"
+>E_CORE_WARNING</SPAN
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+><SPAN
+CLASS="errortype"
+>unknown</SPAN
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>(any other)</TD
+></TR
+></TBODY
+></TABLE
+></DIV
+>
+    
+    <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN41926"
+></A
+><P
+><B
+>Example C-1. Example Debugger Message</B
+></P
+><P
+CLASS="literallayout"
+><br>
+1998-04-05&nbsp;23:27:400966&nbsp;lucifer.guardian.no(20481)&nbsp;start:&nbsp;notice<br>
+1998-04-05&nbsp;23:27:400966&nbsp;lucifer.guardian.no(20481)&nbsp;message:&nbsp;Uninitialized&nbsp;variable<br>
+1998-04-05&nbsp;23:27:400966&nbsp;lucifer.guardian.no(20481)&nbsp;location:&nbsp;(null):7<br>
+1998-04-05&nbsp;23:27:400966&nbsp;lucifer.guardian.no(20481)&nbsp;frames:&nbsp;1<br>
+1998-04-05&nbsp;23:27:400966&nbsp;lucifer.guardian.no(20481)&nbsp;function:&nbsp;display<br>
+1998-04-05&nbsp;23:27:400966&nbsp;lucifer.guardian.no(20481)&nbsp;location:&nbsp;/home/ssb/public_html/test.php3:10<br>
+1998-04-05&nbsp;23:27:400966&nbsp;lucifer.guardian.no(20481)&nbsp;end:&nbsp;notice<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</P
+></DIV
+></TD
+></TR
+></TABLE
+>
+   </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="debugger.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>&nbsp;</TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>The PHP Debugger</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="debugger.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>&nbsp;</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

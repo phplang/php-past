@@ -1,0 +1,326 @@
+<HTML
+><HEAD
+><TITLE
+>Constants</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+REL="HOME"
+TITLE="PHP3 Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Syntax and grammar"
+HREF="lang-syntax.html"><LINK
+REL="PREVIOUS"
+TITLE="Variables"
+HREF="variables.html"><LINK
+REL="NEXT"
+TITLE="Expressions"
+HREF="expressions.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP3 Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="variables.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 5. Syntax and grammar</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="expressions.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="CONSTANTS"
+>Constants</A
+></H1
+><P
+>    PHP defines several constants and provides a mechanism for defining
+    more at run-time. Constants are much like variables, save for the two
+	facts that constants must be defined using the
+	<B
+CLASS="FUNCTION"
+>define()</B
+> function, and that they cannot later
+	be redefined to another value.
+
+   </P
+><P
+>	The predefined constants (always available) are:
+
+	<P
+></P
+><DL
+><DT
+>__FILE__</DT
+><DD
+><P
+>		The name of the script file presently being parsed. If used
+		within a file which has been included or required, then the
+		name of the included file is given, and not the name of the
+		parent file.
+	   </P
+></DD
+><DT
+>__LINE__</DT
+><DD
+><P
+>		The number of the line within the current script file which is
+		being parsed. If used within a file which has been included or
+		required, then the position within the included file is given.
+	   </P
+></DD
+><DT
+>PHP_VERSION</DT
+><DD
+><P
+>		The string representation of the version of the PHP parser
+		presently in use; e.g. '3.0.8-dev'.
+	   </P
+></DD
+><DT
+>PHP_OS</DT
+><DD
+><P
+>		The name of the operating system on which the PHP parser is
+		executing; e.g. 'Linux'.
+	   </P
+></DD
+><DT
+>TRUE</DT
+><DD
+><P
+>		A true value.
+	   </P
+></DD
+><DT
+>FALSE</DT
+><DD
+><P
+>		A false value.
+	   </P
+></DD
+><DT
+>E_ERROR</DT
+><DD
+><P
+>		Denotes an error other than a parsing error from which
+		recovery is not possible. 
+	   </P
+></DD
+><DT
+>E_WARNING</DT
+><DD
+><P
+>		Denotes a condition where PHP knows something is wrong, but
+		will continue anyway; these can be caught by the script
+		itself. An example would be an invalid regexp in
+		<A
+HREF="function.ereg.html"
+><B
+CLASS="FUNCTION"
+>ereg()</B
+></A
+>. 
+	   </P
+></DD
+><DT
+>E_PARSE</DT
+><DD
+><P
+>		The parser choked on invalid syntax in the script
+		file. Recovery is not possible.
+	   </P
+></DD
+><DT
+>E_NOTICE</DT
+><DD
+><P
+>		Something happened which may or may not be an error. Execution 
+		continues. Examples include using an unquoted string as a
+		hash index, or accessing a variable which has not been set.
+	   </P
+></DD
+></DL
+>
+
+   </P
+><P
+>	The E_* constants are typically used with the
+	<A
+HREF="function.error-reporting.html"
+><B
+CLASS="FUNCTION"
+>error_reporting()</B
+></A
+> function for setting the
+	error reporting level.
+
+   </P
+><P
+>    You can define additional constants using the
+    <B
+CLASS="FUNCTION"
+>define()</B
+> function.
+	
+   </P
+><P
+>	Note that these are constants, not C-style macros; only valid
+	scalar data may be represented by a constant.
+
+    <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="EXAMPLE"
+><P
+><B
+>Example 5-5. Defining Constants</B
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>&lt;?php
+define("CONSTANT", "Hello world.");
+echo CONSTANT; // outputs "Hello world."
+?&gt;
+     </PRE
+></DIV
+></TD
+></TR
+></TABLE
+>
+
+    <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="EXAMPLE"
+><P
+><B
+>Example 5-6. Using __FILE__ and __LINE__</B
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>&lt;?php
+function report_error($file, $line, $message) {
+    echo "An error occured in $file on line $line: $message.";
+}
+
+report_error(__FILE__,__LINE__, "Something went wrong!");
+?&gt;
+     </PRE
+></DIV
+></TD
+></TR
+></TABLE
+>
+  </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="variables.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="expressions.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Variables</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="lang-syntax.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Expressions</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

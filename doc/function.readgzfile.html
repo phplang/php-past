@@ -1,0 +1,236 @@
+<HTML
+><HEAD
+><TITLE
+>readgzfile</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Zlib Compression Functions"
+HREF="ref.zlib.html"><LINK
+REL="PREVIOUS"
+TITLE="gzwrite"
+HREF="function.gzwrite.html"><LINK
+REL="NEXT"
+TITLE="gzcompress"
+HREF="function.gzcompress.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.gzwrite.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.gzcompress.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.readgzfile"
+>readgzfile</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN41224"
+></A
+><P
+>    (PHP3 , PHP4 )</P
+>readgzfile&nbsp;--&nbsp;Output a gz-file</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN41227"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN41229"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int <B
+CLASS="function"
+>readgzfile</B
+></CODE
+> (string filename [, int 
+       use_include_path])</CODE
+></P
+><P
+></P
+></DIV
+><P
+> 
+     Reads a file, decompresses it and writes it to standard
+     output.
+    </P
+><P
+>&#13;     <B
+CLASS="function"
+>Readgzfile()</B
+> can be used to read a file which
+     is not in gzip format; in this case
+     <B
+CLASS="function"
+>readgzfile()</B
+> will directly read from the file
+     without decompression.
+    </P
+><P
+> 
+     Returns the number of (uncompressed) bytes read from the file. If
+     an error occurs, false is returned and unless the function was
+     called as <TT
+CLASS="literal"
+>@readgzfile</TT
+>, an error message is
+     printed.
+    </P
+><P
+> 
+     The file <TT
+CLASS="parameter"
+><I
+>filename</I
+></TT
+> will be opened from the
+     filesystem and its contents written to standard output.
+    </P
+><P
+>&#13;     You can use the optional second parameter and set it to "1", if
+     you want to search for the file in the <A
+HREF="configuration.html#ini.include-path"
+>include_path</A
+>, too.
+    </P
+><P
+>&#13;     See also <A
+HREF="function.gzpassthru.html"
+><B
+CLASS="function"
+>gzpassthru()</B
+></A
+>,
+     <A
+HREF="function.gzfile.html"
+><B
+CLASS="function"
+>gzfile()</B
+></A
+>, and <A
+HREF="function.gzopen.html"
+><B
+CLASS="function"
+>gzopen()</B
+></A
+>.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.gzwrite.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.gzcompress.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>gzwrite</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.zlib.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>gzcompress</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,217 @@
+<HTML
+><HEAD
+><TITLE
+>chgrp</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Filesystem functions"
+HREF="ref.filesystem.html"><LINK
+REL="PREVIOUS"
+TITLE="basename"
+HREF="function.basename.html"><LINK
+REL="NEXT"
+TITLE="chmod"
+HREF="function.chmod.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.basename.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.chmod.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.chgrp"
+>chgrp</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN10583"
+></A
+><P
+>    (PHP3 , PHP4 )</P
+>chgrp&nbsp;--&nbsp;Changes file group</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN10586"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN10588"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int <B
+CLASS="function"
+>chgrp</B
+></CODE
+> (string filename, mixed group)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     Attempts to change the group of the file
+     <TT
+CLASS="parameter"
+><I
+>filename</I
+></TT
+> to
+     <TT
+CLASS="parameter"
+><I
+>group</I
+></TT
+>. Only the superuser may change the
+     group of a file arbitrarily; other users may change the group of
+     a file to any group of which that user is a member.
+    </P
+><P
+>&#13;     Returns true on success; otherwise returns false.
+    </P
+><P
+>&#13;     See also <A
+HREF="function.chown.html"
+><B
+CLASS="function"
+>chown()</B
+></A
+> and
+     <A
+HREF="function.chmod.html"
+><B
+CLASS="function"
+>chmod()</B
+></A
+>.
+    </P
+><DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
+><P
+><B
+>Note: </B
+>
+      This function does not work on Windows systems
+     </P
+></BLOCKQUOTE
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.basename.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.chmod.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>basename</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.filesystem.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>chmod</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

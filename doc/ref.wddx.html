@@ -1,0 +1,339 @@
+<HTML
+><HEAD
+><TITLE
+>WDDX functions</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Function Reference"
+HREF="funcref.html"><LINK
+REL="PREVIOUS"
+TITLE="vm_deluser"
+HREF="function.vm-deluser.html"><LINK
+REL="NEXT"
+TITLE="wddx_serialize_value"
+HREF="function.wddx-serialize-value.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="reference"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.vm-deluser.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.wddx-serialize-value.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="reference"
+><A
+NAME="ref.wddx"
+></A
+><DIV
+CLASS="TITLEPAGE"
+><H1
+CLASS="title"
+>LXX. WDDX functions</H1
+><DIV
+CLASS="PARTINTRO"
+><A
+NAME="AEN39297"
+></A
+><P
+>&#13;    These functions are intended for work with <A
+HREF="http://www.wddx.org/"
+TARGET="_top"
+>WDDX</A
+>.</P
+><P
+>&#13;    Note that all the functions that serialize variables use the first
+    element of an array to determine whether the array is to be
+    serialized into an array or structure.  If the first element has
+    string key, then it is serialized into a structure, otherwise,
+    into an array.
+
+    <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN39301"
+></A
+><P
+><B
+>Example 1. Serializing a single value</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;&#60;?php
+print wddx_serialize_value("PHP to WDDX packet example", "PHP packet");
+?&#62;
+     </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+></P
+><P
+>&#13;    This example will produce:
+    <DIV
+CLASS="informalexample"
+><A
+NAME="AEN39305"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;&#60;wddxPacket version='1.0'&#62;&#60;header comment='PHP packet'/&#62;&#60;data&#62;
+&#60;string&#62;PHP to WDDX packet example&#60;/string&#62;&#60;/data&#62;&#60;/wddxPacket&#62;
+     </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+>
+
+    <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN39307"
+></A
+><P
+><B
+>Example 2. Using incremental packets</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;&#60;?php
+$pi = 3.1415926;
+$packet_id = wddx_packet_start("PHP");
+wddx_add_vars($packet_id, "pi");
+
+/* Suppose $cities came from database */
+$cities = array("Austin", "Novato", "Seattle");
+wddx_add_vars($packet_id, "cities");
+
+$packet = wddx_packet_end($packet_id);
+print $packet;
+?&#62;
+     </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+></P
+><P
+>&#13;    This example will produce:
+
+    <DIV
+CLASS="informalexample"
+><A
+NAME="AEN39311"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;&#60;wddxPacket version='1.0'&#62;&#60;header comment='PHP'/&#62;&#60;data&#62;&#60;struct&#62;
+&#60;var name='pi'&#62;&#60;number&#62;3.1415926&#60;/number&#62;&#60;/var&#62;&#60;var name='cities'&#62;
+&#60;array length='3'&#62;&#60;string&#62;Austin&#60;/string&#62;&#60;string&#62;Novato&#60;/string&#62;
+&#60;string&#62;Seattle&#60;/string&#62;&#60;/array&#62;&#60;/var&#62;&#60;/struct&#62;&#60;/data&#62;&#60;/wddxPacket&#62;
+     </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+></P
+></DIV
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Table of Contents</B
+></DT
+><DT
+><A
+HREF="function.wddx-serialize-value.html"
+>wddx_serialize_value</A
+> &#8212; Serialize a single value into a WDDX packet</DT
+><DT
+><A
+HREF="function.wddx-serialize-vars.html"
+>wddx_serialize_vars</A
+> &#8212; Serialize variables into a WDDX packet</DT
+><DT
+><A
+HREF="function.wddx-packet-start.html"
+>wddx_packet_start</A
+> &#8212; Starts a new WDDX packet with structure inside it</DT
+><DT
+><A
+HREF="function.wddx-packet-end.html"
+>wddx_packet_end</A
+> &#8212; Ends a WDDX packet with the specified ID</DT
+><DT
+><A
+HREF="function.wddx-add-vars.html"
+>wddx_add_vars</A
+> &#8212; Ends a WDDX packet with the specified ID</DT
+><DT
+><A
+HREF="function.wddx-deserialize.html"
+>wddx_deserialize</A
+> &#8212; Deserializes a WDDX packet</DT
+></DL
+></DIV
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.vm-deluser.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.wddx-serialize-value.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>vm_deluser</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="funcref.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>wddx_serialize_value</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,229 @@
+<HTML
+><HEAD
+><TITLE
+>swf_placeobject</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Shockwave Flash functions"
+HREF="ref.swf.html"><LINK
+REL="PREVIOUS"
+TITLE="swf_addcolor"
+HREF="function.swf-addcolor.html"><LINK
+REL="NEXT"
+TITLE="swf_modifyobject"
+HREF="function.swf-modifyobject.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.swf-addcolor.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.swf-modifyobject.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.swf-placeobject"
+>swf_placeobject</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN34575"
+></A
+><P
+>    (PHP4 &#62;= 4.0RC2)</P
+>swf_placeobject&nbsp;--&nbsp;Place an object onto the screen</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN34578"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN34580"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>void
+       <B
+CLASS="function"
+>swf_placeobject</B
+>
+      </CODE
+> (int 
+       objid, int 
+       depth)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     Places the object specified by <TT
+CLASS="parameter"
+><I
+>objid</I
+></TT
+> in
+     the current frame at a depth of <TT
+CLASS="parameter"
+><I
+>depth</I
+></TT
+>.
+     The <TT
+CLASS="parameter"
+><I
+>objid</I
+></TT
+> parameter and the
+     <TT
+CLASS="parameter"
+><I
+>depth</I
+></TT
+> must be between 1 and 65535.
+    </P
+><P
+>&#13;     This uses the current mulcolor (specified by
+     <A
+HREF="function.swf-mulcolor.html"
+><B
+CLASS="function"
+>swf_mulcolor()</B
+></A
+>) and the current addcolor
+     (specified by <A
+HREF="function.swf-addcolor.html"
+><B
+CLASS="function"
+>swf_addcolor()</B
+></A
+>) to color the
+     object and it uses the current matrix to position the object.
+    </P
+><DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
+><P
+><B
+>Note: </B
+>
+      Full RGBA colors are supported.
+     </P
+></BLOCKQUOTE
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.swf-addcolor.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.swf-modifyobject.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>swf_addcolor</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.swf.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>swf_modifyobject</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

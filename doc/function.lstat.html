@@ -1,0 +1,263 @@
+<HTML
+><HEAD
+><TITLE
+>lstat</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Filesystem functions"
+HREF="ref.filesystem.html"><LINK
+REL="PREVIOUS"
+TITLE="stat"
+HREF="function.stat.html"><LINK
+REL="NEXT"
+TITLE="realpath"
+HREF="function.realpath.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.stat.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.realpath.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.lstat"
+>lstat</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN11940"
+></A
+><P
+>    (PHP3 &#62;= 3.0.4, PHP4 )</P
+>lstat&nbsp;--&nbsp;
+     Gives information about a file or symbolic link
+    </DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN11943"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN11945"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>array <B
+CLASS="function"
+>lstat</B
+></CODE
+> (string filename)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     Gathers the statistics of the file or symbolic link named by
+     filename.  This function is identical to the
+     <A
+HREF="function.stat.html"
+><B
+CLASS="function"
+>stat()</B
+></A
+> function except that if the
+     <TT
+CLASS="parameter"
+><I
+>filename</I
+></TT
+> parameter is a symbolic link, the
+     status of the symbolic link is returned, not the status of the
+     file pointed to by the symbolic link.
+    </P
+><P
+>&#13;     Returns an array with the statistics of the file with the
+     following elements:
+     <P
+></P
+><OL
+TYPE="1"
+><LI
+><P
+>device</P
+></LI
+><LI
+><P
+>inode</P
+></LI
+><LI
+><P
+>inode protection mode</P
+></LI
+><LI
+><P
+>number of links</P
+></LI
+><LI
+><P
+>user id of owner</P
+></LI
+><LI
+><P
+>group id owner</P
+></LI
+><LI
+><P
+>device type if inode device *</P
+></LI
+><LI
+><P
+>size in bytes</P
+></LI
+><LI
+><P
+>time of last access</P
+></LI
+><LI
+><P
+>time of last modification</P
+></LI
+><LI
+><P
+>time of last change</P
+></LI
+><LI
+><P
+>blocksize for filesystem I/O *</P
+></LI
+><LI
+><P
+>number of blocks allocated</P
+></LI
+></OL
+>
+     * - only valid on systems supporting the st_blksize type--other
+     systems (i.e. Windows) return -1</P
+><P
+>&#13;     The results of this function are cached. See
+     <A
+HREF="function.clearstatcache.html"
+><B
+CLASS="function"
+>clearstatcache()</B
+></A
+> for more details.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.stat.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.realpath.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>stat</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.filesystem.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>realpath</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,277 @@
+<HTML
+><HEAD
+><TITLE
+>mcal_fetch_event</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="MCAL functions"
+HREF="ref.mcal.html"><LINK
+REL="PREVIOUS"
+TITLE="mcal_delete_calendar"
+HREF="function.mcal-delete-calendar.html"><LINK
+REL="NEXT"
+TITLE="mcal_list_events"
+HREF="function.mcal-list-events.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.mcal-delete-calendar.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.mcal-list-events.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.mcal-fetch-event"
+>mcal_fetch_event</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN20501"
+></A
+><P
+>    (PHP3 &#62;= 3.0.13, PHP4 &#62;= 4.0b4)</P
+>mcal_fetch_event&nbsp;--&nbsp;
+     Fetches an event from the calendar stream
+    </DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN20504"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN20506"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>object <B
+CLASS="function"
+>mcal_fetch_event</B
+></CODE
+> (int mcal_stream, int event_id [, int options])</CODE
+></P
+><P
+></P
+></DIV
+><P
+>  
+     <B
+CLASS="function"
+>mcal_fetch_event()</B
+> fetches an event from the 
+     calendar stream specified by <TT
+CLASS="parameter"
+><I
+>id</I
+></TT
+>.
+    </P
+><P
+>&#13;     Returns an event object consisting of:
+     <P
+></P
+><UL
+><LI
+><P
+>&#13;	int id - ID of that event.</P
+></LI
+><LI
+><P
+>&#13;	int public - TRUE if the event if public, FALSE if it is
+	private.</P
+></LI
+><LI
+><P
+>&#13;	string category - Category string of the event.</P
+></LI
+><LI
+><P
+>&#13;	string title - Title string of the event.</P
+></LI
+><LI
+><P
+>&#13;	string description - Description string of the event.</P
+></LI
+><LI
+><P
+>&#13;	int alarm - number of minutes before the event to send an
+	alarm/reminder.</P
+></LI
+><LI
+><P
+>&#13;	object start - Object containing a datetime entry.</P
+></LI
+><LI
+><P
+>&#13;	object end - Object containing a datetime entry.</P
+></LI
+><LI
+><P
+>&#13;	int recur_type   - recurrence type</P
+></LI
+><LI
+><P
+>&#13;	int recur_interval   - recurrence interval</P
+></LI
+><LI
+><P
+>&#13;	datetime recur_enddate   - recurrence end date</P
+></LI
+><LI
+><P
+>&#13;	int recur_data   - recurrence data</P
+></LI
+></UL
+>
+
+     All datetime entries consist of an object that contains:
+
+     <P
+></P
+><UL
+><LI
+><P
+>&#13;	int year - year</P
+></LI
+><LI
+><P
+>&#13;	int month - month</P
+></LI
+><LI
+><P
+>&#13;	int mday  - day of month</P
+></LI
+><LI
+><P
+>&#13;	int hour  - hour</P
+></LI
+><LI
+><P
+>&#13;	int min   - minutes</P
+></LI
+><LI
+><P
+>&#13;	int sec   - seconds</P
+></LI
+><LI
+><P
+>&#13;	int alarm   - minutes before event to send an alarm</P
+></LI
+></UL
+></P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.mcal-delete-calendar.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.mcal-list-events.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>mcal_delete_calendar</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.mcal.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>mcal_list_events</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

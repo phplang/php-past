@@ -1,0 +1,281 @@
+<HTML
+><HEAD
+><TITLE
+>mcrypt_ecb</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Mcrypt Encryption Functions"
+HREF="ref.mcrypt.html"><LINK
+REL="PREVIOUS"
+TITLE="mcrypt_cfb"
+HREF="function.mcrypt-cfb.html"><LINK
+REL="NEXT"
+TITLE="mcrypt_ofb"
+HREF="function.mcrypt-ofb.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.mcrypt-cfb.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.mcrypt-ofb.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.mcrypt-ecb"
+>mcrypt_ecb</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN21549"
+></A
+><P
+>    (PHP3 &#62;= 3.0.8, PHP4 )</P
+>mcrypt_ecb&nbsp;--&nbsp;Encrypt/decrypt data in ECB mode</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN21552"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN21554"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>string <B
+CLASS="function"
+>mcrypt_ecb</B
+></CODE
+> (int cipher, string key, string data, int mode)</CODE
+></P
+><P
+></P
+></DIV
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN21566"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>string <B
+CLASS="function"
+>mcrypt_ecb</B
+></CODE
+> (string cipher, string key, string data, int mode [, string 
+       iv])</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     The first prototype is when linked against libmcrypt 2.2.x, the
+     second when linked against libmcrypt 2.4.x.
+    </P
+><P
+>&#13;     <B
+CLASS="function"
+>Mcrypt_ecb()</B
+> encrypts or decrypts (depending
+     on <TT
+CLASS="parameter"
+><I
+>mode</I
+></TT
+>) the <TT
+CLASS="parameter"
+><I
+>data</I
+></TT
+>
+     with <TT
+CLASS="parameter"
+><I
+>cipher</I
+></TT
+> and <TT
+CLASS="parameter"
+><I
+>key</I
+></TT
+>
+     in ECB cipher mode and returns the resulting string.
+    </P
+><P
+>&#13;     <TT
+CLASS="parameter"
+><I
+>Cipher</I
+></TT
+> is one of the MCRYPT_ciphername
+     constants.
+    </P
+><P
+>&#13;     <TT
+CLASS="parameter"
+><I
+>Key</I
+></TT
+> is the key supplied to the
+     algorithm. It must be kept secret.
+    </P
+><P
+>&#13;     <TT
+CLASS="parameter"
+><I
+>Data</I
+></TT
+> is the data which shall be
+     encrypted/decrypted.
+    </P
+><P
+>&#13;     <TT
+CLASS="parameter"
+><I
+>Mode</I
+></TT
+> is MCRYPT_ENCRYPT or MCRYPT_DECRYPT.
+    </P
+><P
+>&#13;     See also: <A
+HREF="function.mcrypt-cbc.html"
+><B
+CLASS="function"
+>mcrypt_cbc()</B
+></A
+>,
+     <A
+HREF="function.mcrypt-cfb.html"
+><B
+CLASS="function"
+>mcrypt_cfb()</B
+></A
+>, and
+     <A
+HREF="function.mcrypt-ofb.html"
+><B
+CLASS="function"
+>mcrypt_ofb()</B
+></A
+>.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.mcrypt-cfb.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.mcrypt-ofb.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>mcrypt_cfb</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.mcrypt.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>mcrypt_ofb</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,271 @@
+<HTML
+><HEAD
+><TITLE
+>rand</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Mathematical Functions"
+HREF="ref.math.html"><LINK
+REL="PREVIOUS"
+TITLE="rad2deg"
+HREF="function.rad2deg.html"><LINK
+REL="NEXT"
+TITLE="round"
+HREF="function.round.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.rad2deg.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.round.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.rand"
+>rand</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN20235"
+></A
+><P
+>    (PHP3 , PHP4 )</P
+>rand&nbsp;--&nbsp;Generate a random value</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN20238"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN20240"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int <B
+CLASS="function"
+>rand</B
+></CODE
+> ([int min [, int max]])</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     If called without the optional <TT
+CLASS="parameter"
+><I
+>min</I
+></TT
+>,
+     <TT
+CLASS="parameter"
+><I
+>max</I
+></TT
+> arguments <B
+CLASS="function"
+>rand()</B
+>
+     returns a pseudo-random value between 0 and
+     <TT
+CLASS="constant"
+>RAND_MAX</TT
+>.  If you want a random number
+     between 5 and 15 (inclusive), for example, use <TT
+CLASS="literal"
+>rand (5,
+     15)</TT
+>. 
+    </P
+><P
+>&#13;     Remember to seed the random number generator before use with
+     <A
+HREF="function.srand.html"
+><B
+CLASS="function"
+>srand()</B
+></A
+>.
+    </P
+><DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
+><P
+><B
+>Note: </B
+>
+      In versions before 3.0.7 the meaning of
+      <TT
+CLASS="parameter"
+><I
+>max</I
+></TT
+> was <TT
+CLASS="parameter"
+><I
+>range</I
+></TT
+>. To
+      get the same results in these versions the short example should
+      be <TT
+CLASS="literal"
+>rand (5, 11)</TT
+> to get a random number
+      between 5 and 15.
+     </P
+></BLOCKQUOTE
+></DIV
+><P
+>&#13;     See also <A
+HREF="function.srand.html"
+><B
+CLASS="function"
+>srand()</B
+></A
+>,
+     <A
+HREF="function.getrandmax.html"
+><B
+CLASS="function"
+>getrandmax()</B
+></A
+>, <A
+HREF="function.mt-rand.html"
+><B
+CLASS="function"
+>mt_rand()</B
+></A
+>,
+     <A
+HREF="function.mt-srand.html"
+><B
+CLASS="function"
+>mt_srand()</B
+></A
+>, and
+     <A
+HREF="function.mt-getrandmax.html"
+><B
+CLASS="function"
+>mt_getrandmax()</B
+></A
+>.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.rad2deg.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.round.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>rad2deg</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.math.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>round</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

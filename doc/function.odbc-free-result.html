@@ -1,0 +1,222 @@
+<HTML
+><HEAD
+><TITLE
+>odbc_free_result</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Unified ODBC functions"
+HREF="ref.odbc.html"><LINK
+REL="PREVIOUS"
+TITLE="odbc_field_scale"
+HREF="function.odbc-field-scale.html"><LINK
+REL="NEXT"
+TITLE="odbc_longreadlen"
+HREF="function.odbc-longreadlen.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.odbc-field-scale.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.odbc-longreadlen.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.odbc-free-result"
+>odbc_free_result</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN25941"
+></A
+><P
+>    (PHP3 &#62;= 3.0.6, PHP4 )</P
+>odbc_free_result&nbsp;--&nbsp;Free resources associated with a result</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN25944"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN25946"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int <B
+CLASS="function"
+>odbc_free_result</B
+></CODE
+> (int result_id)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     Always returns <TT
+CLASS="literal"
+>true</TT
+>.
+    </P
+><P
+>&#13;     <B
+CLASS="function"
+>odbc_free_result()</B
+> only needs to be called if
+     you are worried about using too much memory while your script is
+     running.  All result memory will automatically be freed when the
+     script is finished.  But, if you are sure you are not going to
+     need the result data anymore in a script, you may call
+     <B
+CLASS="function"
+>odbc_free_result()</B
+>, and the memory associated
+     with <TT
+CLASS="parameter"
+><I
+>result_id</I
+></TT
+> will be freed.
+    </P
+><P
+>&#13;     <DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
+><P
+><B
+>Note: </B
+>
+       If auto-commit is disabled (see
+       <A
+HREF="function.odbc-autocommit.html"
+><B
+CLASS="function"
+>odbc_autocommit()</B
+></A
+>) and you call
+       <B
+CLASS="function"
+>odbc_free_result()</B
+> before commiting, all
+       pending transactions are rolled back.
+      </P
+></BLOCKQUOTE
+></DIV
+>
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.odbc-field-scale.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.odbc-longreadlen.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>odbc_field_scale</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.odbc.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>odbc_longreadlen</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

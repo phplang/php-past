@@ -1,0 +1,225 @@
+<HTML
+><HEAD
+><TITLE
+>htmlentities</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="String functions"
+HREF="ref.strings.html"><LINK
+REL="PREVIOUS"
+TITLE="hebrevc"
+HREF="function.hebrevc.html"><LINK
+REL="NEXT"
+TITLE="htmlspecialchars"
+HREF="function.htmlspecialchars.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.hebrevc.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.htmlspecialchars.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.htmlentities"
+>htmlentities</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN36577"
+></A
+><P
+>    (PHP3 , PHP4 )</P
+>htmlentities&nbsp;--&nbsp;
+     Convert all applicable characters to HTML entities
+    </DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN36580"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN36582"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>string <B
+CLASS="function"
+>htmlentities</B
+></CODE
+> (string string [, int quote_style])</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     This function is identical to
+     <A
+HREF="function.htmlspecialchars.html"
+><B
+CLASS="function"
+>htmlspecialchars()</B
+></A
+> in all ways, except that
+     all characters which have HTML character entity equivalents are
+     translated into these entities.  Like
+     <A
+HREF="function.htmlspecialchars.html"
+><B
+CLASS="function"
+>htmlspecialchars()</B
+></A
+>, it takes an optional
+     second argument which indicates what should be done with single
+     and double quotes.  <TT
+CLASS="constant"
+>ENT_COMPAT</TT
+> (the default)
+     will only convert double-quotes and leave single-quotes alone.
+     <TT
+CLASS="constant"
+>ENT_QUOTES</TT
+> will convert both double and
+     single quotes, and <TT
+CLASS="constant"
+>ENT_NOQUOTES</TT
+> will leave
+     both double and single quotes unconverted.
+    </P
+><P
+>&#13;     At present, the ISO-8859-1 character set is used.  Note that the optional
+	 second argument was added in PHP 3.0.17 and PHP 4.0.3.
+    </P
+><P
+>&#13;     See also <A
+HREF="function.htmlspecialchars.html"
+><B
+CLASS="function"
+>htmlspecialchars()</B
+></A
+> and
+     <A
+HREF="function.nl2br.html"
+><B
+CLASS="function"
+>nl2br()</B
+></A
+>.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.hebrevc.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.htmlspecialchars.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>hebrevc</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.strings.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>htmlspecialchars</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,216 @@
+<HTML
+><HEAD
+><TITLE
+>ibase_pconnect</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="InterBase functions"
+HREF="ref.ibase.html"><LINK
+REL="PREVIOUS"
+TITLE="ibase_connect"
+HREF="function.ibase-connect.html"><LINK
+REL="NEXT"
+TITLE="ibase_close"
+HREF="function.ibase-close.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.ibase-connect.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.ibase-close.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.ibase-pconnect"
+>ibase_pconnect</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN18535"
+></A
+><P
+>    (PHP3 &#62;= 3.0.6, PHP4 )</P
+>ibase_pconnect&nbsp;--&nbsp;
+     Creates an persistent connection to an InterBase database
+    </DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN18538"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN18540"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int <B
+CLASS="function"
+>ibase_connect</B
+></CODE
+> (string database [, string 
+       username [, string 
+       password [, string 
+       charset [, string 
+       role]]]])</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     <B
+CLASS="function"
+>ibase_pconnect()</B
+> acts very much like
+     <A
+HREF="function.ibase-connect.html"
+><B
+CLASS="function"
+>ibase_connect()</B
+></A
+> with two major differences.
+     First, when connecting, the function will first try to find a
+     (persistent) link that's already opened with the same parameters.
+     If one is found, an identifier for it will be returned instead of
+     opening a new connection. Second, the connection to the InterBase
+     server will not be closed when the execution of the script ends.
+     Instead, the link will remain open for future use
+     (<A
+HREF="function.ibase-close.html"
+><B
+CLASS="function"
+>ibase_close()</B
+></A
+> will not close links established
+     by <B
+CLASS="function"
+>ibase_pconnect()</B
+>). This type of link is
+     therefore called 'persistent'.
+    </P
+><P
+>&#13;     See also <A
+HREF="function.ibase-connect.html"
+><B
+CLASS="function"
+>ibase_connect()</B
+></A
+> for the meaning of
+     parameters passed to this function. They are exactly the same.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.ibase-connect.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.ibase-close.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>ibase_connect</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.ibase.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>ibase_close</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,203 @@
+<HTML
+><HEAD
+><TITLE
+>sybase_affected_rows</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Sybase functions"
+HREF="ref.sybase.html"><LINK
+REL="PREVIOUS"
+TITLE="Sybase functions"
+HREF="ref.sybase.html"><LINK
+REL="NEXT"
+TITLE="sybase_close"
+HREF="function.sybase-close.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="ref.sybase.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.sybase-close.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.sybase-affected-rows"
+>sybase_affected_rows</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN38073"
+></A
+><P
+>    (PHP3 &#62;= 3.0.6, PHP4 )</P
+>sybase_affected_rows&nbsp;--&nbsp;get number of affected rows in last query</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN38076"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN38078"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int <B
+CLASS="function"
+>sybase_affected_rows</B
+></CODE
+> ([int link_identifier])</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     Returns: The number of affected rows by the last query.</P
+><P
+>&#13;     <B
+CLASS="function"
+>sybase_affected_rows()</B
+> returns the number of
+     rows affected by the last INSERT, UPDATE or DELETE query on the
+     server associated with the specified link identifier.  If the
+     link identifier isn't specified, the last opened link is assumed.</P
+><P
+>&#13;     This command is not effective for SELECT statements, only on
+     statements which modify records. To retrieve the number of rows
+     returned from a SELECT, use <A
+HREF="function.sybase-num-rows.html"
+><B
+CLASS="function"
+>sybase_num_rows()</B
+></A
+>.
+    <DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
+><P
+><B
+>Note: </B
+>
+      This function is only available using the CT library interface
+      to Sybase, and not the DB library.
+     </P
+></BLOCKQUOTE
+></DIV
+></P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="ref.sybase.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.sybase-close.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Sybase functions</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.sybase.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>sybase_close</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

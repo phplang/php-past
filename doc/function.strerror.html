@@ -1,0 +1,301 @@
+<HTML
+><HEAD
+><TITLE
+>strerror</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Socket functions"
+HREF="ref.sockets.html"><LINK
+REL="PREVIOUS"
+TITLE="socket"
+HREF="function.socket.html"><LINK
+REL="NEXT"
+TITLE="String functions"
+HREF="ref.strings.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.socket.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="ref.strings.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.strerror"
+>strerror</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN36112"
+></A
+><P
+>    (PHP4 &#62;= 4.0.2)</P
+>strerror&nbsp;--&nbsp;Return a string describing a socket error</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN36115"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN36117"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>string <B
+CLASS="function"
+>strerror</B
+></CODE
+> (int errno)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     <B
+CLASS="function"
+>strerror()</B
+> takes as its
+     <TT
+CLASS="parameter"
+><I
+>errno</I
+></TT
+> parameter the return value of one of
+     the socket functions, and returns the corresponding explanatory
+     text. This makes it a bit more pleasant to figure out why
+     something didn't work; for instance, instead of having to track
+     down a system include file to find out what '-111' means, you
+     just pass it to <B
+CLASS="function"
+>strerror()</B
+>, and it tells you
+     what happened.
+    </P
+><P
+>&#13;     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN36128"
+></A
+><P
+><B
+>Example 1. <B
+CLASS="function"
+>strerror()</B
+> example</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;&#60;?php
+if (($socket = socket (AF_INET, SOCK_STREAM, 0)) &#60; 0) {
+   echo "socket() failed: reason: " . strerror ($socket) . "\n";
+} 
+
+if (($ret = bind ($socket, '127.0.0.1', 80)) &#60; 0) {
+   echo "bind() failed: reason: " . strerror ($ret) . "\n";
+}
+?&#62;
+      </PRE
+></TD
+></TR
+></TABLE
+><P
+>&#13;       The expected output from the above example (assuming the script
+       is not run with root privileges):
+       <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="screen"
+>&#13;        bind() failed: reason: Permission denied
+       </PRE
+></TD
+></TR
+></TABLE
+>
+      </P
+></DIV
+></TD
+></TR
+></TABLE
+>
+    </P
+><P
+>&#13;     See also 
+     <A
+HREF="function.accept-connect.html"
+><B
+CLASS="function"
+>accept_connect()</B
+></A
+>,
+     <A
+HREF="function.bind.html"
+><B
+CLASS="function"
+>bind()</B
+></A
+>,
+     <A
+HREF="function.connect.html"
+><B
+CLASS="function"
+>connect()</B
+></A
+>,
+     <A
+HREF="function.listen.html"
+><B
+CLASS="function"
+>listen()</B
+></A
+>,
+     <A
+HREF="function.socket.html"
+><B
+CLASS="function"
+>socket()</B
+></A
+>, and
+     <A
+HREF="function.socket-get-status.html"
+><B
+CLASS="function"
+>socket_get_status()</B
+></A
+>.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.socket.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="ref.strings.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>socket</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.sockets.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>String functions</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,409 @@
+<HTML
+><HEAD
+><TITLE
+>syslog</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Network Functions"
+HREF="ref.network.html"><LINK
+REL="PREVIOUS"
+TITLE="socket_set_timeout"
+HREF="function.socket-set-timeout.html"><LINK
+REL="NEXT"
+TITLE="Unified ODBC functions"
+HREF="ref.odbc.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.socket-set-timeout.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="ref.odbc.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.syslog"
+>syslog</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN25442"
+></A
+><P
+>    (PHP3 , PHP4 )</P
+>syslog&nbsp;--&nbsp;Generate a system log message</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN25445"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN25447"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int <B
+CLASS="function"
+>syslog</B
+></CODE
+> (int priority, string message)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     <B
+CLASS="function"
+>Syslog()</B
+> generates a log message that will be
+     distributed by the system logger.
+     <TT
+CLASS="parameter"
+><I
+>priority</I
+></TT
+> is a combination of the facility
+     and the level, values for which are given in the next section.
+     The remaining argument is the message to send, except that the
+     two characters <TT
+CLASS="literal"
+>%m</TT
+> will be replaced by the
+     error message string (strerror) corresponding to the present
+     value of <SPAN
+CLASS="errortype"
+>errno</SPAN
+>.
+    </P
+><P
+>&#13;     <DIV
+CLASS="table"
+><A
+NAME="AEN25461"
+></A
+><P
+><B
+>Table 1. <B
+CLASS="function"
+>Syslog()</B
+> Priorities (in descending order)</B
+></P
+><TABLE
+BORDER="1"
+CLASS="CALSTABLE"
+><THEAD
+><TR
+><TH
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Constant</TH
+><TH
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Description</TH
+></TR
+></THEAD
+><TBODY
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>LOG_EMERG</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>system is unusable</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>LOG_ALERT</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>action must be taken immediately</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>LOG_CRIT</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>critical conditions</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>LOG_ERR</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>error conditions</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>LOG_WARNING</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>warning conditions</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>LOG_NOTICE</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>normal, but significant, condition</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>LOG_INFO</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>informational message</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>LOG_DEBUG</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>debug-level message</TD
+></TR
+></TBODY
+></TABLE
+></DIV
+>
+    </P
+><P
+>&#13;     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN25495"
+></A
+><P
+><B
+>Example 1. Using <B
+CLASS="function"
+>syslog()</B
+></B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;&#60;?php
+define_syslog_variables();
+// open syslog, include the process ID and also send
+// the log to standard error, and use a user defined
+// logging mechanism
+openlog("myScripLog", LOG_PID | LOG_PERROR, LOG_LOCAL0);
+
+// some code
+
+if (authorized_client()) {
+    // do something
+} else {
+    // unauthorized client!
+    // log the attempt
+    $access = date("Y/m/d H:i:s");
+    syslog(LOG_WARNING,"Unauthorized client: $access $REMOTE_ADDR ($HTTP_USER_AGENT)");
+}
+
+closelog();
+?&#62;
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+     For information on setting up a user defined log handler, see the
+     <SPAN
+CLASS="citerefentry"
+><SPAN
+CLASS="refentrytitle"
+>syslog.conf</SPAN
+>(5)</SPAN
+> Unix manual page.  More
+     information on the syslog facilities and option can be found in the man
+     pages for <SPAN
+CLASS="citerefentry"
+><SPAN
+CLASS="refentrytitle"
+>syslog</SPAN
+>(3)</SPAN
+> on Unix machines.
+    </P
+><P
+>&#13;     On Windows NT, the syslog service is emulated using the Event
+     Log.
+    </P
+><P
+>&#13;     See also <A
+HREF="function.define-syslog-variables.html"
+><B
+CLASS="function"
+>define_syslog_variables()</B
+></A
+>,
+     <A
+HREF="function.openlog.html"
+><B
+CLASS="function"
+>openlog()</B
+></A
+> and
+     <A
+HREF="function.closelog.html"
+><B
+CLASS="function"
+>closelog()</B
+></A
+>.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.socket-set-timeout.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="ref.odbc.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>socket_set_timeout</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.network.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Unified ODBC functions</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

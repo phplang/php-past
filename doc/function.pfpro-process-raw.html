@@ -1,0 +1,275 @@
+<HTML
+><HEAD
+><TITLE
+>pfpro_process_raw</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Verisign Payflow Pro functions"
+HREF="ref.pfpro.html"><LINK
+REL="PREVIOUS"
+TITLE="pfpro_process"
+HREF="function.pfpro-process.html"><LINK
+REL="NEXT"
+TITLE="pfpro_version"
+HREF="function.pfpro-version.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.pfpro-process.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.pfpro-version.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.pfpro-process-raw"
+>pfpro_process_raw</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN29947"
+></A
+><P
+>    (PHP4 &#62;= 4.0.2)</P
+>pfpro_process_raw&nbsp;--&nbsp;Process a raw transaction with Payflow Pro</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN29950"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN29952"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>string <B
+CLASS="function"
+>pfpro_process_raw</B
+></CODE
+> (string parameters [, string
+       address [, int
+       port [, int
+       timeout [, string
+       proxy address [, int
+       proxy port [, string
+       proxy logon [, string
+       proxy password]]]]]]])</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     Returns: A string containing the response.
+    </P
+><P
+> 
+     <B
+CLASS="function"
+>pfpro_process_raw()</B
+> processes a raw transaction
+     string with Payflow Pro. You should really use
+     <A
+HREF="function.pfpro-process.html"
+><B
+CLASS="function"
+>pfpro_process()</B
+></A
+> instead, as the encoding
+     rules of these transactions are non-standard.
+    </P
+><P
+>&#13;     The first parameter in this case is a string containing the raw
+     transaction request. All other parameters are the same as with
+     <A
+HREF="function.pfpro-process.html"
+><B
+CLASS="function"
+>pfpro_process()</B
+></A
+>. The return value is a string
+     containing the raw response.
+    </P
+><DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
+><P
+><B
+>Note: </B
+>
+     Be sure to read the Payflow Pro Developers Guide for full details
+     of the required parameters and encoding rules. You would be
+     well advised to use <A
+HREF="function.pfpro-process.html"
+><B
+CLASS="function"
+>pfpro_process()</B
+></A
+> instead.
+    </P
+></BLOCKQUOTE
+></DIV
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN29988"
+></A
+><P
+><B
+>Example 1. Payflow Pro raw example</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;&#60;?php
+
+pfpro_init();
+
+$response = pfpro_process("USER=mylogin&#38;PWD[5]=m&#38;ndy&#38;TRXTYPE=S&#38;TENDER=C&#38;AMT=1.50&#38;ACCT=4111111111111111&#38;EXPDATE=0904");
+
+if (!$response) {
+  die("Couldn't establish link to Verisign.\n");
+}
+
+echo "Verisign raw response was ".$response;
+
+pfpro_cleanup();
+
+?&#62;
+     </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.pfpro-process.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.pfpro-version.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>pfpro_process</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.pfpro.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>pfpro_version</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

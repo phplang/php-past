@@ -1,0 +1,457 @@
+<HTML
+><HEAD
+><TITLE
+>Variable scope</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Variables"
+HREF="language.variables.html"><LINK
+REL="PREVIOUS"
+TITLE="Predefined variables"
+HREF="language.variables.predefined.html"><LINK
+REL="NEXT"
+TITLE="Variable variables"
+HREF="language.variables.variable.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="language.variables.predefined.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 7. Variables</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="language.variables.variable.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="language.variables.scope"
+>Variable scope</A
+></H1
+><P
+>&#13;    The scope of a variable is the context within which it is defined.
+    For the most part all PHP variables only have a single scope.
+    This single scope spans included and required files as well.  For
+    example:
+   </P
+><DIV
+CLASS="informalexample"
+><A
+NAME="AEN2755"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;$a = 1;
+include "b.inc";
+    </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+><P
+>&#13;    Here the <TT
+CLASS="varname"
+>$a</TT
+> variable will be available within
+    the included <TT
+CLASS="filename"
+>b.inc</TT
+> script.  However, within
+    user-defined functions a local function scope is introduced.  Any
+    variable used inside a function is by default limited to the local
+    function scope.  For example:
+   </P
+><DIV
+CLASS="informalexample"
+><A
+NAME="AEN2760"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+> 
+$a = 1; /* global scope */ 
+
+Function Test () { 
+    echo $a; /* reference to local scope variable */ 
+} 
+
+Test ();
+    </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+><P
+>&#13;    This script will not produce any output because the echo statement
+    refers to a local version of the <TT
+CLASS="varname"
+>$a</TT
+> variable,
+    and it has not been assigned a value within this scope.  You may
+    notice that this is a little bit different from the C language in
+    that global variables in C are automatically available to
+    functions unless specifically overridden by a local definition.
+    This can cause some problems in that people may inadvertently
+    change a global variable.  In PHP global variables must be
+    declared global inside a function if they are going to be used in
+    that function.  An example:
+   </P
+><DIV
+CLASS="informalexample"
+><A
+NAME="AEN2764"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;$a = 1;
+$b = 2;
+
+Function Sum () {
+    global $a, $b;
+
+    $b = $a + $b;
+} 
+
+Sum ();
+echo $b;
+    </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+><P
+>&#13;    The above script will output "3".  By declaring
+    <TT
+CLASS="varname"
+>$a</TT
+> and <TT
+CLASS="varname"
+>$b</TT
+> global within the
+    function, all references to either variable will refer to the
+    global version.  There is no limit to the number of global
+    variables that can be manipulated by a function.
+   </P
+><P
+>&#13;    A second way to access variables from the global scope is to use
+    the special PHP-defined <TT
+CLASS="varname"
+>$GLOBALS</TT
+> array.  The
+    previous example can be rewritten as:
+   </P
+><DIV
+CLASS="informalexample"
+><A
+NAME="AEN2771"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;$a = 1;
+$b = 2;
+
+Function Sum () {
+    $GLOBALS["b"] = $GLOBALS["a"] + $GLOBALS["b"];
+} 
+
+Sum ();
+echo $b;
+    </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+><P
+>&#13;    The <TT
+CLASS="varname"
+>$GLOBALS</TT
+> array is an associative array with
+    the name of the global variable being the key and the contents of
+    that variable being the value of the array element.
+   </P
+><P
+>&#13;    Another important feature of variable scoping is the
+    <I
+CLASS="emphasis"
+>static</I
+> variable.  A static variable exists
+    only in a local function scope, but it does not lose its value
+    when program execution leaves this scope.  Consider the following
+    example:
+   </P
+><DIV
+CLASS="informalexample"
+><A
+NAME="AEN2777"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;Function Test () {
+    $a = 0;
+    echo $a;
+    $a++;
+}
+    </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+><P
+>&#13;    This function is quite useless since every time it is called it
+    sets <TT
+CLASS="varname"
+>$a</TT
+> to <TT
+CLASS="literal"
+>0</TT
+> and prints
+    "0".  The <TT
+CLASS="varname"
+>$a</TT
+>++ which increments the
+    variable serves no purpose since as soon as the function exits the
+    <TT
+CLASS="varname"
+>$a</TT
+> variable disappears.  To make a useful
+    counting function which will not lose track of the current count,
+    the <TT
+CLASS="varname"
+>$a</TT
+> variable is declared static:
+   </P
+><DIV
+CLASS="informalexample"
+><A
+NAME="AEN2785"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;Function Test () {
+    static $a = 0;
+    echo $a;
+    $a++;
+}
+    </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+><P
+>&#13;    Now, every time the Test() function is called it will print the
+    value of <TT
+CLASS="varname"
+>$a</TT
+> and increment it.
+   </P
+><P
+>&#13;    Static variables also provide one way to deal with recursive
+    functions. A recursive function is one which calls itself.  Care
+    must be taken when writing a recursive function because it is
+    possible to make it recurse indefinitely.  You must make sure you
+    have an adequate way of terminating the recursion.  The following
+    simple function recursively counts to 10, using the static
+    variable <TT
+CLASS="varname"
+>$count</TT
+> to know when to stop:
+   </P
+><DIV
+CLASS="informalexample"
+><A
+NAME="AEN2791"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;Function Test () {
+    static $count = 0;
+
+    $count++;
+    echo $count;
+    if ($count &#60; 10) {
+        Test ();
+    }
+    $count--;
+}
+    </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="language.variables.predefined.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="language.variables.variable.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Predefined variables</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="language.variables.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Variable variables</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,231 @@
+<HTML
+><HEAD
+><TITLE
+>ibase_query</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="InterBase functions"
+HREF="ref.ibase.html"><LINK
+REL="PREVIOUS"
+TITLE="ibase_close"
+HREF="function.ibase-close.html"><LINK
+REL="NEXT"
+TITLE="ibase_fetch_row"
+HREF="function.ibase-fetch-row.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.ibase-close.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.ibase-fetch-row.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.ibase-query"
+>ibase_query</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN18581"
+></A
+><P
+>    (PHP3 &#62;= 3.0.6, PHP4 )</P
+>ibase_query&nbsp;--&nbsp;Execute a query on an InterBase database</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN18584"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN18586"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int <B
+CLASS="function"
+>ibase_query</B
+></CODE
+> ([int 
+       link_identifier, string
+       query [, int 
+       bind_args]])</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     Performs a query on an InterBase database, returning a result
+     identifier for use with <A
+HREF="function.ibase-fetch-row.html"
+><B
+CLASS="function"
+>ibase_fetch_row()</B
+></A
+>,
+     <A
+HREF="function.ibase-fetch-object.html"
+><B
+CLASS="function"
+>ibase_fetch_object()</B
+></A
+>,
+     <A
+HREF="function.ibase-free-result.html"
+><B
+CLASS="function"
+>ibase_free_result()</B
+></A
+> and
+     <A
+HREF="function.ibase-free-query.html"
+><B
+CLASS="function"
+>ibase_free_query()</B
+></A
+>.
+    </P
+><DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
+><P
+><B
+>Note: </B
+>
+      Although this function supports variable binding to parameter
+      placeholders, there is not very much meaning using this capability
+      with it. For real life use and an example, see
+      <A
+HREF="function.ibase-prepare.html"
+><B
+CLASS="function"
+>ibase_prepare()</B
+></A
+> and
+      <A
+HREF="function.ibase-execute.html"
+><B
+CLASS="function"
+>ibase_execute()</B
+></A
+>.
+     </P
+></BLOCKQUOTE
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.ibase-close.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.ibase-fetch-row.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>ibase_close</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.ibase.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>ibase_fetch_row</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

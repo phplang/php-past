@@ -1,0 +1,374 @@
+<HTML
+><HEAD
+><TITLE
+>mSQL functions</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Function Reference"
+HREF="funcref.html"><LINK
+REL="PREVIOUS"
+TITLE="usleep"
+HREF="function.usleep.html"><LINK
+REL="NEXT"
+TITLE="msql"
+HREF="function.msql.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="reference"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.usleep.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.msql.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="reference"
+><A
+NAME="ref.msql"
+></A
+><DIV
+CLASS="TITLEPAGE"
+><H1
+CLASS="title"
+>XL. mSQL functions</H1
+><DIV
+CLASS="PARTINTRO"
+><A
+NAME="AEN23191"
+></A
+><P
+>&#13;    These functions allow you to access mSQL database servers. In
+    order to have these functions available, you must compile php
+    with msql support by using the
+    <TT
+CLASS="option"
+>--with-msql[=dir]</TT
+> option. The default
+    location is /usr/local/Hughes.
+   </P
+><P
+>&#13;    More information about mSQL can be found at <A
+HREF="http://www.hughes.com.au/"
+TARGET="_top"
+>http://www.hughes.com.au/</A
+>.
+   </P
+></DIV
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Table of Contents</B
+></DT
+><DT
+><A
+HREF="function.msql.html"
+>msql</A
+> &#8212; Send mSQL query</DT
+><DT
+><A
+HREF="function.msql-affected-rows.html"
+>msql_affected_rows</A
+> &#8212; Returns number of affected rows</DT
+><DT
+><A
+HREF="function.msql-close.html"
+>msql_close</A
+> &#8212; Close mSQL connection</DT
+><DT
+><A
+HREF="function.msql-connect.html"
+>msql_connect</A
+> &#8212; Open mSQL connection</DT
+><DT
+><A
+HREF="function.msql-create-db.html"
+>msql_create_db</A
+> &#8212; Create mSQL database</DT
+><DT
+><A
+HREF="function.msql-createdb.html"
+>msql_createdb</A
+> &#8212; Create mSQL database</DT
+><DT
+><A
+HREF="function.msql-data-seek.html"
+>msql_data_seek</A
+> &#8212; Move internal row pointer</DT
+><DT
+><A
+HREF="function.msql-dbname.html"
+>msql_dbname</A
+> &#8212; Get current mSQL database name</DT
+><DT
+><A
+HREF="function.msql-drop-db.html"
+>msql_drop_db</A
+> &#8212; Drop (delete) mSQL database</DT
+><DT
+><A
+HREF="function.msql-dropdb.html"
+>msql_dropdb</A
+> &#8212; Drop (delete) mSQL database</DT
+><DT
+><A
+HREF="function.msql-error.html"
+>msql_error</A
+> &#8212; Returns error message of last msql call</DT
+><DT
+><A
+HREF="function.msql-fetch-array.html"
+>msql_fetch_array</A
+> &#8212; Fetch row as array</DT
+><DT
+><A
+HREF="function.msql-fetch-field.html"
+>msql_fetch_field</A
+> &#8212; Get field information</DT
+><DT
+><A
+HREF="function.msql-fetch-object.html"
+>msql_fetch_object</A
+> &#8212; Fetch row as object</DT
+><DT
+><A
+HREF="function.msql-fetch-row.html"
+>msql_fetch_row</A
+> &#8212; Get row as enumerated array</DT
+><DT
+><A
+HREF="function.msql-fieldname.html"
+>msql_fieldname</A
+> &#8212; Get field name</DT
+><DT
+><A
+HREF="function.msql-field-seek.html"
+>msql_field_seek</A
+> &#8212; Set field offset</DT
+><DT
+><A
+HREF="function.msql-fieldtable.html"
+>msql_fieldtable</A
+> &#8212; Get table name for field</DT
+><DT
+><A
+HREF="function.msql-fieldtype.html"
+>msql_fieldtype</A
+> &#8212; Get field type</DT
+><DT
+><A
+HREF="function.msql-fieldflags.html"
+>msql_fieldflags</A
+> &#8212; Get field flags</DT
+><DT
+><A
+HREF="function.msql-fieldlen.html"
+>msql_fieldlen</A
+> &#8212; Get field length</DT
+><DT
+><A
+HREF="function.msql-free-result.html"
+>msql_free_result</A
+> &#8212; Free result memory</DT
+><DT
+><A
+HREF="function.msql-freeresult.html"
+>msql_freeresult</A
+> &#8212; Free result memory</DT
+><DT
+><A
+HREF="function.msql-list-fields.html"
+>msql_list_fields</A
+> &#8212; List result fields</DT
+><DT
+><A
+HREF="function.msql-listfields.html"
+>msql_listfields</A
+> &#8212; List result fields</DT
+><DT
+><A
+HREF="function.msql-list-dbs.html"
+>msql_list_dbs</A
+> &#8212; List mSQL databases on server</DT
+><DT
+><A
+HREF="function.msql-listdbs.html"
+>msql_listdbs</A
+> &#8212; List mSQL databases on server</DT
+><DT
+><A
+HREF="function.msql-list-tables.html"
+>msql_list_tables</A
+> &#8212; List tables in an mSQL database</DT
+><DT
+><A
+HREF="function.msql-listtables.html"
+>msql_listtables</A
+> &#8212; List tables in an mSQL database</DT
+><DT
+><A
+HREF="function.msql-num-fields.html"
+>msql_num_fields</A
+> &#8212; Get number of fields in result</DT
+><DT
+><A
+HREF="function.msql-num-rows.html"
+>msql_num_rows</A
+> &#8212; Get number of rows in result</DT
+><DT
+><A
+HREF="function.msql-numfields.html"
+>msql_numfields</A
+> &#8212; Get number of fields in result</DT
+><DT
+><A
+HREF="function.msql-numrows.html"
+>msql_numrows</A
+> &#8212; Get number of rows in result</DT
+><DT
+><A
+HREF="function.msql-pconnect.html"
+>msql_pconnect</A
+> &#8212; Open persistent mSQL connection</DT
+><DT
+><A
+HREF="function.msql-query.html"
+>msql_query</A
+> &#8212; Send mSQL query</DT
+><DT
+><A
+HREF="function.msql-regcase.html"
+>msql_regcase</A
+> &#8212; 
+     Make regular expression for case insensitive match
+    </DT
+><DT
+><A
+HREF="function.msql-result.html"
+>msql_result</A
+> &#8212; Get result data</DT
+><DT
+><A
+HREF="function.msql-select-db.html"
+>msql_select_db</A
+> &#8212; Select mSQL database</DT
+><DT
+><A
+HREF="function.msql-selectdb.html"
+>msql_selectdb</A
+> &#8212; Select mSQL database</DT
+><DT
+><A
+HREF="function.msql-tablename.html"
+>msql_tablename</A
+> &#8212; Get table name of field</DT
+></DL
+></DIV
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.usleep.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.msql.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>usleep</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="funcref.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>msql</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,505 @@
+<HTML
+><HEAD
+><TITLE
+>openlog</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Network Functions"
+HREF="ref.network.html"><LINK
+REL="PREVIOUS"
+TITLE="long2ip"
+HREF="function.long2ip.html"><LINK
+REL="NEXT"
+TITLE="pfsockopen"
+HREF="function.pfsockopen.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.long2ip.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.pfsockopen.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.openlog"
+>openlog</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN25232"
+></A
+><P
+>    (PHP3 , PHP4 )</P
+>openlog&nbsp;--&nbsp;Open connection to system logger</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN25235"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN25237"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int <B
+CLASS="function"
+>openlog</B
+></CODE
+> (string ident, int option, int facility)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     <B
+CLASS="function"
+>Openlog()</B
+> opens a connection to the system
+     logger for a program.  The string <TT
+CLASS="parameter"
+><I
+>ident</I
+></TT
+> is
+     added to each message.  Values for <TT
+CLASS="parameter"
+><I
+>option</I
+></TT
+>
+     and <TT
+CLASS="parameter"
+><I
+>facility</I
+></TT
+> are given below.
+     The <TT
+CLASS="parameter"
+><I
+>option</I
+></TT
+> argument is used to indicate
+     what loggin options will be used when generating a log message.
+     The <TT
+CLASS="parameter"
+><I
+>facility</I
+></TT
+> argument is used to specify what
+     type of program is logging the message. This allows you to specify 
+     (in your machine's syslog configuration) how messages coming from
+     different facilities will be handled.
+     The use of <B
+CLASS="function"
+>openlog()</B
+> is optional. It
+     will automatically be called by <A
+HREF="function.syslog.html"
+><B
+CLASS="function"
+>syslog()</B
+></A
+> if
+     necessary, in which case <TT
+CLASS="parameter"
+><I
+>ident</I
+></TT
+> will default
+     to false.
+    </P
+><P
+>&#13;     <DIV
+CLASS="table"
+><A
+NAME="AEN25258"
+></A
+><P
+><B
+>Table 1. <B
+CLASS="function"
+>Openlog()</B
+> Options</B
+></P
+><TABLE
+BORDER="1"
+CLASS="CALSTABLE"
+><THEAD
+><TR
+><TH
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Constant</TH
+><TH
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Description</TH
+></TR
+></THEAD
+><TBODY
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>LOG_CONS</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;          if there is an error while sending data to the system logger,
+          write directly to the system console
+         </TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>LOG_NDELAY</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;          open the connection to the logger immediately 
+         </TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>LOG_ODELAY</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;          (default) delay openning the connection until the first
+          message is logged
+         </TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>LOG_PERROR</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>print log message also to standard error</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>LOG_PID</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>include PID with each message</TD
+></TR
+></TBODY
+></TABLE
+></DIV
+>
+     You can use one or more of this options. When using multiple options
+     you need to <TT
+CLASS="literal"
+>OR</TT
+> them, i.e. to open the connection
+     immediately, write to the consoloe and include the PID in each message, 
+     you will use: <TT
+CLASS="literal"
+>LOG_CONS | LOG_NDELAY | LOG_PID</TT
+>
+    </P
+><P
+>&#13;     <DIV
+CLASS="table"
+><A
+NAME="AEN25285"
+></A
+><P
+><B
+>Table 2. <B
+CLASS="function"
+>Openlog()</B
+> Facilities</B
+></P
+><TABLE
+BORDER="1"
+CLASS="CALSTABLE"
+><THEAD
+><TR
+><TH
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Constant</TH
+><TH
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Description</TH
+></TR
+></THEAD
+><TBODY
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>LOG_AUTH</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;          security/authorization messages (use LOG_AUTHPRIV instead 
+          in systems where that constant is defined)
+         </TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>LOG_AUTHPRIV</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>security/authorization messages (private)</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>LOG_CRON</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>clock daemon (cron and at)</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>LOG_DAEMON</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>other system daemons</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>LOG_KERN</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>kernel messages</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>LOG_LOCAL0 ... LOG_LOCAL7</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>reserved for local use</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>LOG_LPR</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>line printer subsystem</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>LOG_MAIL</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>mail subsystem</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>LOG_NEWS</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>USENET news subsystem</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>LOG_SYSLOG</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>messages generated internally by syslogd</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>LOG_USER</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>generic user-level messages</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>LOG_UUCP</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>UUCP subsystem</TD
+></TR
+></TBODY
+></TABLE
+></DIV
+>
+    </P
+><P
+>&#13;     See also <A
+HREF="function.define-syslog-variables.html"
+><B
+CLASS="function"
+>define_syslog_variables()</B
+></A
+>,
+     <A
+HREF="function.syslog.html"
+><B
+CLASS="function"
+>syslog()</B
+></A
+> and
+     <A
+HREF="function.closelog.html"
+><B
+CLASS="function"
+>closelog()</B
+></A
+>.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.long2ip.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.pfsockopen.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>long2ip</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.network.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>pfsockopen</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

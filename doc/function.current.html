@@ -1,0 +1,257 @@
+<HTML
+><HEAD
+><TITLE
+>current</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Array Functions"
+HREF="ref.array.html"><LINK
+REL="PREVIOUS"
+TITLE="count"
+HREF="function.count.html"><LINK
+REL="NEXT"
+TITLE="each"
+HREF="function.each.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.count.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.each.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.current"
+>current</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN5224"
+></A
+><P
+>    (PHP3 , PHP4 )</P
+>current&nbsp;--&nbsp;Return the current element in an array</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN5227"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN5229"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>mixed <B
+CLASS="function"
+>current</B
+></CODE
+> (array array)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     Every array has an internal pointer to its "current" element,
+     which is initialized to the first element inserted into the
+     array.
+    </P
+><P
+>&#13;     The <B
+CLASS="function"
+>current()</B
+> function simply returns the
+     array element that's currently being pointed by the internal
+     pointer.  It does not move the pointer in any way.  If the
+     internal pointer points beyond the end of the elements list,
+     <B
+CLASS="function"
+>current()</B
+> returns false.
+     <DIV
+CLASS="warning"
+><P
+></P
+><TABLE
+CLASS="warning"
+BORDER="1"
+WIDTH="100%"
+><TR
+><TD
+ALIGN="CENTER"
+><B
+>Warning</B
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+><P
+> 
+       If the array contains empty elements (0 or "", the empty
+       string) then this function will return false for these elements
+       as well.  This makes it impossible to determine if you are
+       really at the end of the list in such an array using
+       <B
+CLASS="function"
+>current()</B
+>.  To properly traverse an array
+       that may contain empty elements, use the
+       <A
+HREF="function.each.html"
+><B
+CLASS="function"
+>each()</B
+></A
+> function.  
+      </P
+></TD
+></TR
+></TABLE
+></DIV
+>
+    </P
+><P
+>&#13;     See also: <A
+HREF="function.end.html"
+><B
+CLASS="function"
+>end()</B
+></A
+>, <A
+HREF="function.next.html"
+><B
+CLASS="function"
+>next()</B
+></A
+>,
+     <A
+HREF="function.prev.html"
+><B
+CLASS="function"
+>prev()</B
+></A
+>, and <A
+HREF="function.reset.html"
+><B
+CLASS="function"
+>reset()</B
+></A
+>.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.count.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.each.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>count</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.array.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>each</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

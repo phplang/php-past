@@ -1,0 +1,199 @@
+<HTML
+><HEAD
+><TITLE
+>virtual</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Apache-specific Functions"
+HREF="ref.apache.html"><LINK
+REL="PREVIOUS"
+TITLE="getallheaders"
+HREF="function.getallheaders.html"><LINK
+REL="NEXT"
+TITLE="Array Functions"
+HREF="ref.array.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.getallheaders.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="ref.array.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.virtual"
+>virtual</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN4415"
+></A
+><P
+>    (PHP3 , PHP4 )</P
+>virtual&nbsp;--&nbsp;Perform an Apache sub-request</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN4418"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN4420"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int <B
+CLASS="function"
+>virtual</B
+></CODE
+> (string filename)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     <B
+CLASS="function"
+>Virtual()</B
+> is an Apache-specific function which
+     is equivalent to &#60;!--#include virtual...--&#62; in mod_include.
+     It performs an Apache sub-request.  It is useful for including
+     CGI scripts or .shtml files, or anything else that you would
+     parse through Apache.  Note that for a CGI script, the script
+     must generate valid CGI headers.  At the minimum that means it
+     must generate a Content-type header.  For PHP files, you need to
+     use <A
+HREF="function.include.html"
+><B
+CLASS="function"
+>include()</B
+></A
+> or <A
+HREF="function.require.html"
+><B
+CLASS="function"
+>require()</B
+></A
+>;
+     <B
+CLASS="function"
+>virtual()</B
+> cannot be used to include a document
+     which is itself a PHP file.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.getallheaders.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="ref.array.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>getallheaders</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.apache.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Array Functions</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,294 @@
+<HTML
+><HEAD
+><TITLE
+>ifx_fetch_row</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Informix functions"
+HREF="ref.ifx.html"><LINK
+REL="PREVIOUS"
+TITLE="ifx_getsqlca"
+HREF="function.ifx-getsqlca.html"><LINK
+REL="NEXT"
+TITLE="ifx_htmltbl_result"
+HREF="function.ifx-htmltbl-result.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.ifx-getsqlca.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.ifx-htmltbl-result.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.ifx-fetch-row"
+>ifx_fetch_row</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN18019"
+></A
+><P
+>    (PHP3 &#62;= 3.0.3, PHP4 )</P
+>ifx_fetch_row&nbsp;--&nbsp;Get row as enumerated array</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN18022"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN18024"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>array <B
+CLASS="function"
+>ifx_fetch_row</B
+></CODE
+> (int result_id [, mixed 
+       position])</CODE
+></P
+><P
+></P
+></DIV
+><P
+> 
+     Returns an associative array that corresponds to the fetched row,
+     or false if there are no more rows.
+    </P
+><P
+>&#13;     Blob columns are returned as integer blob id values for use in
+     <A
+HREF="function.ifx-get-blob.html"
+><B
+CLASS="function"
+>ifx_get_blob()</B
+></A
+> unless you have used
+     ifx_textasvarchar(1) or ifx_byteasvarchar(1), in which case blobs
+     are returned as string values.  Returns FALSE on error
+    </P
+><P
+>&#13;     <TT
+CLASS="parameter"
+><I
+>result_id</I
+></TT
+> is a valid resultid returned by
+     <A
+HREF="function.ifx-query.html"
+><B
+CLASS="function"
+>ifx_query()</B
+></A
+> or
+     <A
+HREF="function.ifx-prepare.html"
+><B
+CLASS="function"
+>ifx_prepare()</B
+></A
+> (select type queries only!).
+    </P
+><P
+>&#13;     <TT
+CLASS="parameter"
+><I
+>position</I
+></TT
+> is an
+     optional parameter for a "fetch" operation on "scroll" cursors:
+     "NEXT", "PREVIOUS", "CURRENT", "FIRST", "LAST" or a number.  If
+     you specify a number, an "absolute" row fetch is executed.  This
+     parameter is optional, and only valid for SCROLL cursors.
+    </P
+><P
+>&#13;     <B
+CLASS="function"
+>ifx_fetch_row()</B
+> fetches one row of data from
+     the result associated with the specified result identifier.  The
+     row is returned as an array.  Each result column is stored in an
+     array offset, starting at offset 0, with the column name as key.
+    </P
+><P
+>&#13;     Subsequent calls to <B
+CLASS="function"
+>ifx_fetch_row()</B
+> would
+     return the next row in the result set, or false if there are no
+     more rows.
+    </P
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN18047"
+></A
+><P
+><B
+>Example 1. Informix fetch rows</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;$rid = ifx_prepare ("select * from emp where name like " . $name,
+                     $connid, IFX_SCROLL);
+if (! $rid) {
+    ... error ...
+}
+$rowcount = ifx_affected_rows($rid);
+if ($rowcount &#62; 1000) {
+    printf ("Too many rows in result set (%d)\n&#60;br&#62;", $rowcount);
+    die ("Please restrict your query&#60;br&#62;\n");
+}
+if (! ifx_do ($rid)) {
+   ... error ...
+}
+$row = ifx_fetch_row ($rid, "NEXT");
+while (is_array($row)) {
+    for(reset($row); $fieldname=key($row); next($row)) {
+        $fieldvalue = $row[$fieldname];
+        printf ("%s = %s,", $fieldname, $fieldvalue);
+    }
+    printf("\n&#60;br&#62;");
+    $row = ifx_fetch_row ($rid, "NEXT");
+}
+ifx_free_result ($rid);
+     </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.ifx-getsqlca.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.ifx-htmltbl-result.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>ifx_getsqlca</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.ifx.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>ifx_htmltbl_result</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,243 @@
+<HTML
+><HEAD
+><TITLE
+>count_chars</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="String functions"
+HREF="ref.strings.html"><LINK
+REL="PREVIOUS"
+TITLE="convert_cyr_string"
+HREF="function.convert-cyr-string.html"><LINK
+REL="NEXT"
+TITLE="crc32"
+HREF="function.crc32.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.convert-cyr-string.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.crc32.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.count-chars"
+>count_chars</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN36323"
+></A
+><P
+>    (PHP4 &#62;= 4.0b4)</P
+>count_chars&nbsp;--&nbsp;
+     Return information abouts characters used in a string
+    </DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN36326"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN36328"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>mixed <B
+CLASS="function"
+>count_chars</B
+></CODE
+> (string string [, mode])</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     Counts the number of occurances of every byte-value (0..255) in
+     <TT
+CLASS="parameter"
+><I
+>string</I
+></TT
+> and returns it in various ways.
+     The optional parameter <TT
+CLASS="parameter"
+><I
+>Mode</I
+></TT
+> default to
+     0. Depending on <TT
+CLASS="parameter"
+><I
+>mode</I
+></TT
+>
+     <B
+CLASS="function"
+>count_chars()</B
+> returns one of the following:
+     <P
+></P
+><UL
+><LI
+><P
+>&#13;	0 - an array with the byte-value as key and the freqency of
+	every byte as value.
+       </P
+></LI
+><LI
+><P
+>&#13;	1 - same as 0 but only byte-values with a frequency greater
+	than zero are listed.
+       </P
+></LI
+><LI
+><P
+>&#13;	2 - same as 0 but only byte-values with a frequency equal to
+	zero are listed.  
+       </P
+></LI
+><LI
+><P
+> 
+	3 - a string containing all used byte-values is returned.
+       </P
+></LI
+><LI
+><P
+> 
+	4 - a string containing all not used byte-values is returned.
+       </P
+></LI
+></UL
+>
+    </P
+><DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
+><P
+><B
+>Note: </B
+>
+      This function was added in PHP 4.0.
+     </P
+></BLOCKQUOTE
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.convert-cyr-string.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.crc32.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>convert_cyr_string</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.strings.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>crc32</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

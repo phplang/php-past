@@ -1,0 +1,329 @@
+<HTML
+><HEAD
+><TITLE
+>pg_fetch_object</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="PostgreSQL functions"
+HREF="ref.pgsql.html"><LINK
+REL="PREVIOUS"
+TITLE="pg_fetch_array"
+HREF="function.pg-fetch-array.html"><LINK
+REL="NEXT"
+TITLE="pg_fetch_row"
+HREF="function.pg-fetch-row.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.pg-fetch-array.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.pg-fetch-row.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.pg-fetch-object"
+>pg_fetch_object</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN31382"
+></A
+><P
+>    (PHP3 &#62;= 3.0.1, PHP4 )</P
+>pg_fetch_object&nbsp;--&nbsp;Fetch a row as an object</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN31385"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN31387"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>object <B
+CLASS="function"
+>pg_fetch_object</B
+></CODE
+> (int result, int row [, int 
+       result_type])</CODE
+></P
+><P
+></P
+></DIV
+><P
+> 
+     Returns: An object with properties that correspond to the fetched
+     row, or false if there are no more rows.
+    </P
+><P
+> 
+     <B
+CLASS="function"
+>Pg_fetch_object()</B
+> is similar to
+     <A
+HREF="function.pg-fetch-array.html"
+><B
+CLASS="function"
+>pg_fetch_array()</B
+></A
+>, with one difference - an
+     object is returned, instead of an array.  Indirectly, that means
+     that you can only access the data by the field names, and not by
+     their offsets (numbers are illegal property names).
+    </P
+><P
+>&#13;     The third optional argument <TT
+CLASS="parameter"
+><I
+>result_type</I
+></TT
+> in
+     <B
+CLASS="function"
+>pg_fetch_object()</B
+> is a constant and can take the
+     following values: PGSQL_ASSOC, PGSQL_NUM, and PGSQL_BOTH.
+     <DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
+><P
+><B
+>Note: </B
+>
+       <TT
+CLASS="parameter"
+><I
+>Result_type</I
+></TT
+> was added in PHP 4.0.
+      </P
+></BLOCKQUOTE
+></DIV
+>
+    </P
+><P
+>&#13;     Speed-wise, the function is identical to
+     <A
+HREF="function.pg-fetch-array.html"
+><B
+CLASS="function"
+>pg_fetch_array()</B
+></A
+>, and almost as quick as
+     <A
+HREF="function.pg-fetch-row.html"
+><B
+CLASS="function"
+>pg_fetch_row()</B
+></A
+> (the difference is
+     insignificant).
+    </P
+><P
+> 
+     See also: <A
+HREF="function.pg-fetch-array.html"
+><B
+CLASS="function"
+>pg_fetch_array()</B
+></A
+> and
+     <A
+HREF="function.pg-fetch-row.html"
+><B
+CLASS="function"
+>pg_fetch_row()</B
+></A
+>.
+     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN31414"
+></A
+><P
+><B
+>Example 1. Postgres fetch object</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;&#60;?php 
+$database = "verlag";
+$db_conn = pg_connect ("host=localhost port=5432 dbname=$database");
+if (!$db_conn): ?&#62;
+    &#60;H1&#62;Failed connecting to postgres database &#60;? echo $database ?&#62;&#60;/H1&#62; &#60;?
+    exit;
+endif;
+
+$qu = pg_exec ($db_conn, "SELECT * FROM verlag ORDER BY autor");
+$row = 0; // postgres needs a row counter other dbs might not 
+
+while ($data = pg_fetch_object ($qu, $row)):
+    echo $data-&#62;autor." (";
+    echo $data-&#62;jahr ."): ";
+    echo $data-&#62;titel."&#60;BR&#62;";
+    $row++;
+endwhile; ?&#62;
+
+&#60;PRE&#62;&#60;?php
+$fields[] = Array ("autor", "Author");
+$fields[] = Array ("jahr",  "  Year");
+$fields[] = Array ("titel", " Title");
+
+$row= 0; // postgres needs a row counter other dbs might not
+while ($data = pg_fetch_object ($qu, $row)):
+    echo "----------\n";
+    reset ($fields);
+    while (list (,$item) = each ($fields)):
+        echo $item[1].": ".$data-&#62;$item[0]."\n";
+    endwhile;
+    $row++;
+endwhile;
+echo "----------\n"; ?&#62;
+&#60;/PRE&#62; &#60;?php
+pg_freeResult ($qu);
+pg_close ($db_conn);
+?&#62;
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.pg-fetch-array.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.pg-fetch-row.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>pg_fetch_array</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.pgsql.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>pg_fetch_row</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

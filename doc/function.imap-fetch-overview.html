@@ -1,0 +1,324 @@
+<HTML
+><HEAD
+><TITLE
+>imap_fetch_overview</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="IMAP, POP3 and NNTP functions"
+HREF="ref.imap.html"><LINK
+REL="PREVIOUS"
+TITLE="imap_utf8"
+HREF="function.imap-utf8.html"><LINK
+REL="NEXT"
+TITLE="imap_mime_header_decode"
+HREF="function.imap-mime-header-decode.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.imap-utf8.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.imap-mime-header-decode.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.imap-fetch-overview"
+>imap_fetch_overview</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN17561"
+></A
+><P
+>    (PHP3 &#62;= 3.0.4, PHP4 )</P
+>imap_fetch_overview&nbsp;--&nbsp;
+     Read an overview of the information in the headers of the given message
+    </DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN17564"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN17566"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>array <B
+CLASS="function"
+>imap_fetch_overview</B
+></CODE
+> (int imap_stream, string sequence [, int flags])</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     This function fetches mail headers for the given
+     <TT
+CLASS="parameter"
+><I
+>sequence</I
+></TT
+> and returns an overview of their
+     contents. <TT
+CLASS="parameter"
+><I
+>sequence</I
+></TT
+> will contain a sequence
+     of message indices or UIDs, if <TT
+CLASS="parameter"
+><I
+>flags</I
+></TT
+>
+     contains FT_UID. The returned value is an array of objects
+     describing one message header each:
+     <P
+></P
+><UL
+><LI
+><P
+>&#13;        subject - the messages subject
+       </P
+></LI
+><LI
+><P
+>&#13;        from - who sent it
+       </P
+></LI
+><LI
+><P
+>&#13;        date - when was it sent
+       </P
+></LI
+><LI
+><P
+>&#13;        message_id - Message-ID 
+       </P
+></LI
+><LI
+><P
+>&#13;        references - is a reference to this message id
+       </P
+></LI
+><LI
+><P
+>&#13;        size - size in bytes
+       </P
+></LI
+><LI
+><P
+>&#13;        uid - UID the message has in the mailbox
+       </P
+></LI
+><LI
+><P
+>&#13;        msgno - message sequence number in the maibox
+       </P
+></LI
+><LI
+><P
+>&#13;        recent - this message is flagged as recent
+       </P
+></LI
+><LI
+><P
+>&#13;        flagged -  this message is flagged
+       </P
+></LI
+><LI
+><P
+>&#13;        answered -  this message is flagged as answered
+       </P
+></LI
+><LI
+><P
+>&#13;        deleted -  this message is flagged for deletion
+       </P
+></LI
+><LI
+><P
+>&#13;        seen -  this message is flagged as already read
+       </P
+></LI
+><LI
+><P
+>&#13;        draft -  this message is flagged as being a draft
+       </P
+></LI
+></UL
+>
+    </P
+><P
+>&#13;     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN17611"
+></A
+><P
+><B
+>Example 1. <B
+CLASS="function"
+>imap_fetch_overview()</B
+> example</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;$mbox = imap_open("{your.imap.host:143}","username","password")
+     || die("can't connect: ".imap_last_error());
+ 
+$overview = imap_fetch_overview($mbox,"2,4:6",0);
+ 
+if(is_array($overview)) {
+        reset($overview);
+        while( list($key,$val) = each($overview)) {
+                print     $val-&#62;msgno
+                . " - " . $val-&#62;date
+                . " - " . $val-&#62;subject
+                . "\n";
+        }
+}
+ 
+imap_close($mbox);
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.imap-utf8.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.imap-mime-header-decode.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>imap_utf8</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.imap.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>imap_mime_header_decode</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

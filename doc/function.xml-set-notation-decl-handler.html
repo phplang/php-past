@@ -1,0 +1,388 @@
+<HTML
+><HEAD
+><TITLE
+>xml_set_notation_decl_handler</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="XML parser functions"
+HREF="ref.xml.html"><LINK
+REL="PREVIOUS"
+TITLE="xml_set_unparsed_entity_decl_handler"
+HREF="function.xml-set-unparsed-entity-decl-handler.html"><LINK
+REL="NEXT"
+TITLE="xml_set_external_entity_ref_handler"
+HREF="function.xml-set-external-entity-ref-handler.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.xml-set-unparsed-entity-decl-handler.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.xml-set-external-entity-ref-handler.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.xml-set-notation-decl-handler"
+>xml_set_notation_decl_handler</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN39973"
+></A
+><P
+>    (PHP3 &#62;= 3.0.6, PHP4 )</P
+>xml_set_notation_decl_handler&nbsp;--&nbsp;set up notation declaration handler</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN39976"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN39978"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int 
+       <B
+CLASS="function"
+>xml_set_notation_decl_handler</B
+>
+      </CODE
+> (int parser, string handler)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     Sets the notation declaration handler function for the XML parser
+     <TT
+CLASS="parameter"
+><I
+>parser</I
+></TT
+>.  <TT
+CLASS="parameter"
+><I
+>handler</I
+></TT
+> is
+     a string containing the name of a function that must exist when
+     <A
+HREF="function.xml-parse.html"
+><B
+CLASS="function"
+>xml_parse()</B
+></A
+> is called for
+     <TT
+CLASS="parameter"
+><I
+>parser</I
+></TT
+>.
+    </P
+><P
+>&#13;     A notation declaration is part of the document's DTD and has the
+     following format: <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#60;!NOTATION
+     <TT
+CLASS="parameter"
+><I
+>name</I
+></TT
+> {<TT
+CLASS="parameter"
+><I
+>systemId</I
+></TT
+> |
+     <TT
+CLASS="parameter"
+><I
+>publicId</I
+></TT
+>}&#62;</PRE
+></TD
+></TR
+></TABLE
+> See <A
+HREF="http://www.w3.org/TR/1998/REC-xml-19980210#Notations"
+TARGET="_top"
+>section 4.7 of the XML 1.0
+     spec</A
+> for the definition of notation declarations.
+    </P
+><P
+>&#13;     The function named by <TT
+CLASS="parameter"
+><I
+>handler</I
+></TT
+> must accept
+     five parameters:
+     <DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN39999"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+><TT
+CLASS="replaceable"
+><I
+>handler</I
+></TT
+></CODE
+> (int parser, string notationName, string base, string systemId, string publicId)</CODE
+></P
+><P
+></P
+></DIV
+>
+     <P
+></P
+><DIV
+CLASS="variablelist"
+><DL
+><DT
+><TT
+CLASS="parameter"
+><I
+>parser</I
+></TT
+></DT
+><DD
+><P
+>&#13;	 The first parameter, <TT
+CLASS="replaceable"
+><I
+>parser</I
+></TT
+>, is a
+	 reference to the XML parser calling the
+	 handler.
+	</P
+></DD
+><DT
+><TT
+CLASS="parameter"
+><I
+>notationName</I
+></TT
+></DT
+><DD
+><P
+>&#13;	 This is the notation's <TT
+CLASS="parameter"
+><I
+>name</I
+></TT
+>, as per
+	 the notation format described above.
+	</P
+></DD
+><DT
+><TT
+CLASS="parameter"
+><I
+>base</I
+></TT
+></DT
+><DD
+><P
+>&#13;	 This is the base for resolving the system identifier
+	 (<TT
+CLASS="parameter"
+><I
+>systemId</I
+></TT
+>) of the notation
+	 declaration.  Currently this parameter will always be set to
+	 an empty string.
+	</P
+></DD
+><DT
+><TT
+CLASS="parameter"
+><I
+>systemId</I
+></TT
+></DT
+><DD
+><P
+>&#13;	 System identifier of the external notation
+	 declaration.
+	</P
+></DD
+><DT
+><TT
+CLASS="parameter"
+><I
+>publicId</I
+></TT
+></DT
+><DD
+><P
+>&#13;	 Public identifier of the external notation
+	 declaration.
+	</P
+></DD
+></DL
+></DIV
+>
+    </P
+><P
+>&#13;     If a handler function is set to an empty string, or
+     <TT
+CLASS="literal"
+>false</TT
+>, the handler in question is
+     disabled.
+    </P
+><P
+>&#13;     True is returned if the handler is set up, false if
+     <TT
+CLASS="parameter"
+><I
+>parser</I
+></TT
+> is not a parser.
+    </P
+><P
+>&#13;     There is currently no support for object/method handlers.  See
+     <A
+HREF="function.xml-set-object.html"
+><B
+CLASS="function"
+>xml_set_object()</B
+></A
+> for using the XML parser
+     within an object.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.xml-set-unparsed-entity-decl-handler.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.xml-set-external-entity-ref-handler.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>xml_set_unparsed_entity_decl_handler</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.xml.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>xml_set_external_entity_ref_handler</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

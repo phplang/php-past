@@ -1,0 +1,318 @@
+<HTML
+><HEAD
+><TITLE
+>xml_parser_set_option</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="XML parser functions"
+HREF="ref.xml.html"><LINK
+REL="PREVIOUS"
+TITLE="xml_parser_free"
+HREF="function.xml-parser-free.html"><LINK
+REL="NEXT"
+TITLE="xml_parser_get_option"
+HREF="function.xml-parser-get-option.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.xml-parser-free.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.xml-parser-get-option.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.xml-parser-set-option"
+>xml_parser_set_option</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN40337"
+></A
+><P
+>    (PHP3 &#62;= 3.0.6, PHP4 )</P
+>xml_parser_set_option&nbsp;--&nbsp;set options in an XML parser</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN40340"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN40342"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int <B
+CLASS="function"
+>xml_parser_set_option</B
+></CODE
+> (int parser, int option, mixed value)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     <P
+></P
+><DIV
+CLASS="variablelist"
+><DL
+><DT
+><TT
+CLASS="parameter"
+><I
+>parser</I
+></TT
+></DT
+><DD
+><P
+>&#13;	 A reference to the XML parser to set an option in.
+	</P
+></DD
+><DT
+><TT
+CLASS="parameter"
+><I
+>option</I
+></TT
+></DT
+><DD
+><P
+>&#13;	 Which option to set.  See below.
+	</P
+></DD
+><DT
+><TT
+CLASS="parameter"
+><I
+>value</I
+></TT
+></DT
+><DD
+><P
+>&#13;	 The option's new value.
+	</P
+></DD
+></DL
+></DIV
+>
+    </P
+><P
+>&#13;     This function returns false if <TT
+CLASS="parameter"
+><I
+>parser</I
+></TT
+> does
+     not refer to a valid parser, or if the option could not be set.
+     Else the option is set and true is returned.
+    </P
+><P
+>&#13;     The following options are available:
+     <DIV
+CLASS="table"
+><A
+NAME="AEN40372"
+></A
+><P
+><B
+>Table 1. XML parser options</B
+></P
+><TABLE
+BORDER="1"
+CLASS="CALSTABLE"
+><THEAD
+><TR
+><TH
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Option constant</TH
+><TH
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Data type</TH
+><TH
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Description</TH
+></TR
+></THEAD
+><TBODY
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>XML_OPTION_CASE_FOLDING</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>integer</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;	  Controls whether <A
+HREF="ref.xml.html#xml.case-folding"
+>case-folding</A
+> is enabled
+	  for this XML parser.  Enabled by default.
+	 </TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>XML_OPTION_TARGET_ENCODING</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>string</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;	  Sets which <A
+HREF="ref.xml.html#xml.encoding"
+>target
+	  encoding</A
+> to use in this XML parser.  By default, it
+	  is set to the same as the source encoding used by
+	  <A
+HREF="function.xml-parser-create.html"
+><B
+CLASS="function"
+>xml_parser_create()</B
+></A
+>.  Supported target
+	  encodings are <TT
+CLASS="literal"
+>ISO-8859-1</TT
+>,
+	  <TT
+CLASS="literal"
+>US-ASCII</TT
+> and <TT
+CLASS="literal"
+>UTF-8</TT
+>.
+	 </TD
+></TR
+></TBODY
+></TABLE
+></DIV
+>
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.xml-parser-free.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.xml-parser-get-option.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>xml_parser_free</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.xml.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>xml_parser_get_option</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

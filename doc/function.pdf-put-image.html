@@ -1,0 +1,228 @@
+<HTML
+><HEAD
+><TITLE
+>pdf_put_image</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="PDF functions"
+HREF="ref.pdf.html"><LINK
+REL="PREVIOUS"
+TITLE="pdf_place_image"
+HREF="function.pdf-place-image.html"><LINK
+REL="NEXT"
+TITLE="pdf_execute_image"
+HREF="function.pdf-execute-image.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.pdf-place-image.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.pdf-execute-image.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.pdf-put-image"
+>pdf_put_image</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN29696"
+></A
+><P
+>    (PHP3 &#62;= 3.0.7, 4.0b2 - 4.0b4 only)</P
+>pdf_put_image&nbsp;--&nbsp;Stores an image in the PDF for later use</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN29699"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN29701"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>void <B
+CLASS="function"
+>pdf_put_image</B
+></CODE
+> (int pdf document, int image)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     The <B
+CLASS="function"
+>pdf_put_image()</B
+> function places an image
+     in the PDF file without showing it. The stored image can be
+     displayed with the <A
+HREF="function.pdf-execute-image.html"
+><B
+CLASS="function"
+>pdf_execute_image()</B
+></A
+>
+     function as many times as needed. This is useful when using the same
+     image multiple times in order to keep the file size small. Using
+     <B
+CLASS="function"
+>pdf_put_image()</B
+> and
+     <A
+HREF="function.pdf-execute-image.html"
+><B
+CLASS="function"
+>pdf_execute_image()</B
+></A
+> is highly recommended for
+     larger images (several kb) if they show up more than once in the
+     document.
+    <DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
+><P
+><B
+>Note: </B
+>This function has become meaningless with version
+     2.01 of pdflib. It will just output a warning.</P
+></BLOCKQUOTE
+></DIV
+></P
+><P
+>&#13;     See also <B
+CLASS="function"
+>pdf_put_image()</B
+>,
+              <A
+HREF="function.pdf-place-image.html"
+><B
+CLASS="function"
+>pdf_place_image()</B
+></A
+>,
+              <A
+HREF="function.pdf-execute-image.html"
+><B
+CLASS="function"
+>pdf_execute_image()</B
+></A
+>.</P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.pdf-place-image.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.pdf-execute-image.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>pdf_place_image</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.pdf.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>pdf_execute_image</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

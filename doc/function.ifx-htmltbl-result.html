@@ -1,0 +1,235 @@
+<HTML
+><HEAD
+><TITLE
+>ifx_htmltbl_result</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Informix functions"
+HREF="ref.ifx.html"><LINK
+REL="PREVIOUS"
+TITLE="ifx_fetch_row"
+HREF="function.ifx-fetch-row.html"><LINK
+REL="NEXT"
+TITLE="ifx_fieldtypes"
+HREF="function.ifx-fieldtypes.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.ifx-fetch-row.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.ifx-fieldtypes.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.ifx-htmltbl-result"
+>ifx_htmltbl_result</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN18051"
+></A
+><P
+>    (PHP3 &#62;= 3.0.3, PHP4 )</P
+>ifx_htmltbl_result&nbsp;--&nbsp;
+     Formats all rows of a query into a HTML table
+    </DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN18054"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN18056"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int <B
+CLASS="function"
+>ifx_htmltbl_result</B
+></CODE
+> (int result_id [, string 
+       html_table_options])</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     Returns the number of rows fetched or FALSE on error.
+    </P
+><P
+>&#13;     Formats all rows of the <TT
+CLASS="parameter"
+><I
+>result_id</I
+></TT
+> query
+     into a html table. The optional second argument is a string of
+     &#60;table&#62; tag options
+    </P
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN18068"
+></A
+><P
+><B
+>Example 1. Informix results as HTML table</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;$rid = ifx_prepare ("select * from emp where name like " . $name,
+                     $connid, IFX_SCROLL);
+if (! $rid) {
+   ... error ...
+}
+$rowcount = ifx_affected_rows ($rid);
+if ($rowcount &#62; 1000) {
+    printf ("Too many rows in result set (%d)\n&#60;br&#62;", $rowcount);
+    die ("Please restrict your query&#60;br&#62;\n");
+}
+if (! ifx_do($rid) {
+  ... error ...
+}
+
+ifx_htmltbl_result ($rid, "border=\"2\"");
+
+ifx_free_result($rid);
+     </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.ifx-fetch-row.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.ifx-fieldtypes.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>ifx_fetch_row</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.ifx.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>ifx_fieldtypes</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

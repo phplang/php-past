@@ -1,0 +1,266 @@
+<HTML
+><HEAD
+><TITLE
+>mysql_db_name</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="MySQL functions"
+HREF="ref.mysql.html"><LINK
+REL="PREVIOUS"
+TITLE="mysql_data_seek"
+HREF="function.mysql-data-seek.html"><LINK
+REL="NEXT"
+TITLE="mysql_db_query"
+HREF="function.mysql-db-query.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.mysql-data-seek.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.mysql-db-query.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.mysql-db-name"
+>mysql_db_name</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN24094"
+></A
+><P
+>    (PHP3 &#62;= 3.0.6, PHP4 )</P
+>mysql_db_name&nbsp;--&nbsp;Get result data</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN24097"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN24099"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int <B
+CLASS="function"
+>mysql_db_name</B
+></CODE
+> (int result, int row [, mixed 
+       field])</CODE
+></P
+><P
+></P
+></DIV
+><P
+> 
+     <B
+CLASS="function"
+>mysql_db_name()</B
+> takes as its first parameter
+     the result pointer from a call to
+     <A
+HREF="function.mysql-list-dbs.html"
+><B
+CLASS="function"
+>mysql_list_dbs()</B
+></A
+>. The
+     <TT
+CLASS="parameter"
+><I
+>row</I
+></TT
+> parameter is an index into the result
+     set.
+    </P
+><P
+>&#13;     If an error occurs, FALSE is returned. Use
+     <A
+HREF="function.mysql-errno.html"
+><B
+CLASS="function"
+>mysql_errno()</B
+></A
+> and
+     <A
+HREF="function.mysql-error.html"
+><B
+CLASS="function"
+>mysql_error()</B
+></A
+> to determine the nature of the
+     error.
+    </P
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN24117"
+></A
+><P
+><B
+>Example 1. <B
+CLASS="function"
+>Mysql_db_name()</B
+> example</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;&#60;?php 
+error_reporting(E_ALL);
+
+mysql_connect('dbhost', 'username', 'password');
+$db_list = mysql_list_dbs();
+
+$i = 0;
+$cnt = mysql_numrows($db_list);
+while ($i &#60; $cnt) {
+    echo mysql_db_name($db_list, $i) . "\n";
+    $i++;
+}
+?&#62;
+     </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+><P
+>&#13;     For backward compatibility, <B
+CLASS="function"
+>mysql_dbname()</B
+> is
+     also accepted. This is deprecated, however.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.mysql-data-seek.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.mysql-db-query.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>mysql_data_seek</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.mysql.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>mysql_db_query</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

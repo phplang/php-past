@@ -1,0 +1,225 @@
+<HTML
+><HEAD
+><TITLE
+>imap_reopen</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="IMAP, POP3 and NNTP functions"
+HREF="ref.imap.html"><LINK
+REL="PREVIOUS"
+TITLE="imap_renamemailbox"
+HREF="function.imap-renamemailbox.html"><LINK
+REL="NEXT"
+TITLE="imap_subscribe"
+HREF="function.imap-subscribe.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.imap-renamemailbox.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.imap-subscribe.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.imap-reopen"
+>imap_reopen</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN16981"
+></A
+><P
+>    (PHP3 , PHP4 )</P
+>imap_reopen&nbsp;--&nbsp;Reopen IMAP stream to new mailbox</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN16984"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN16986"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int <B
+CLASS="function"
+>imap_reopen</B
+></CODE
+> (int imap_stream, string mailbox [, string
+       flags])</CODE
+></P
+><P
+></P
+></DIV
+><P
+>  
+     This function reopens the specified stream to a new mailbox on
+     an IMAP or NNTP server.
+    </P
+><P
+>&#13;     The options are a bit mask with one or more of the following:
+     <P
+></P
+><UL
+><LI
+><P
+>&#13;	OP_READONLY - Open mailbox read-only
+       </P
+></LI
+><LI
+><P
+>&#13;	OP_ANONYMOUS - Dont use or update a
+	<TT
+CLASS="filename"
+>.newsrc</TT
+> for news (NNTP only)
+       </P
+></LI
+><LI
+><P
+>&#13;	OP_HALFOPEN - For IMAP and NNTP names, open a connection but
+	dont open a mailbox.
+       </P
+></LI
+><LI
+><P
+>&#13;	CL_EXPUNGE - Expunge mailbox automatically upon mailbox close
+	(see also <A
+HREF="function.imap-delete.html"
+><B
+CLASS="function"
+>imap_delete()</B
+></A
+> and
+	<A
+HREF="function.imap-expunge.html"
+><B
+CLASS="function"
+>imap_expunge()</B
+></A
+>)
+       </P
+></LI
+></UL
+>
+    </P
+><P
+>&#13;     Returns true on success and false on error.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.imap-renamemailbox.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.imap-subscribe.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>imap_renamemailbox</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.imap.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>imap_subscribe</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,233 @@
+<HTML
+><HEAD
+><TITLE
+>getmxrr</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Network Functions"
+HREF="ref.network.html"><LINK
+REL="PREVIOUS"
+TITLE="gethostbynamel"
+HREF="function.gethostbynamel.html"><LINK
+REL="NEXT"
+TITLE="getprotobyname"
+HREF="function.getprotobyname.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.gethostbynamel.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.getprotobyname.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.getmxrr"
+>getmxrr</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN25087"
+></A
+><P
+>    (PHP3 , PHP4 )</P
+>getmxrr&nbsp;--&nbsp;
+     Get MX records corresponding to a given Internet host name
+    </DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN25090"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN25092"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int <B
+CLASS="function"
+>getmxrr</B
+></CODE
+> (string hostname, array mxhosts [, array 
+       weight])</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     Searches DNS for MX records corresponding to
+     <TT
+CLASS="parameter"
+><I
+>hostname</I
+></TT
+>. Returns true if any records are
+     found; returns false if no records were found or if an error
+     occurred.
+    </P
+><P
+>&#13;     A list of the MX records found is placed into the array
+     <TT
+CLASS="parameter"
+><I
+>mxhosts</I
+></TT
+>. If the
+     <TT
+CLASS="parameter"
+><I
+>weight</I
+></TT
+> array is given, it will be filled
+     with the weight information gathered.
+    </P
+><P
+>&#13;     See also <A
+HREF="function.checkdnsrr.html"
+><B
+CLASS="function"
+>checkdnsrr()</B
+></A
+>,
+     <A
+HREF="function.gethostbyname.html"
+><B
+CLASS="function"
+>gethostbyname()</B
+></A
+>,
+     <A
+HREF="function.gethostbynamel.html"
+><B
+CLASS="function"
+>gethostbynamel()</B
+></A
+>,
+     <A
+HREF="function.gethostbyaddr.html"
+><B
+CLASS="function"
+>gethostbyaddr()</B
+></A
+>, and the
+     <TT
+CLASS="literal"
+>named(8)</TT
+> manual page.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.gethostbynamel.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.getprotobyname.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>gethostbynamel</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.network.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>getprotobyname</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,262 @@
+<HTML
+><HEAD
+><TITLE
+>mcrypt_module_open</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Mcrypt Encryption Functions"
+HREF="ref.mcrypt.html"><LINK
+REL="PREVIOUS"
+TITLE="mcrypt_decrypt"
+HREF="function.mcrypt-decrypt.html"><LINK
+REL="NEXT"
+TITLE="mcrypt_generic_init"
+HREF="function.mcrypt-generic-init.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.mcrypt-decrypt.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.mcrypt-generic-init.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.mcrypt-module-open"
+>mcrypt_module_open</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN21806"
+></A
+><P
+>    (PHP4 &#62;= 4.0.2)</P
+>mcrypt_module_open&nbsp;--&nbsp;This function opens the module of the algorithm and the mode to be used</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN21809"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN21811"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>resource <B
+CLASS="function"
+>mcrypt_module_open</B
+></CODE
+> (string algorithm, string algorithm_directory, string mode, string mode_directory)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     This function opens the module of the algorithm and the mode
+     to be used. The name of the algorithm is specified in algorithm,
+     eg "twofish" or is one of the MCRYPT_ciphername constants.
+     The library is closed by calling 
+     <B
+CLASS="function"
+>mcrypt_module_close()</B
+>, but there is no need
+     to call that function if <A
+HREF="function.mcrypt-generic-end.html"
+><B
+CLASS="function"
+>mcrypt_generic_end()</B
+></A
+>
+     is called. Normally it returns an encryption descriptor, or
+     FALSE on error.
+    </P
+><P
+>&#13;     The <TT
+CLASS="parameter"
+><I
+>algorithm_directory</I
+></TT
+> and
+     <TT
+CLASS="parameter"
+><I
+>mode_directory</I
+></TT
+> are used to locate the
+     encryption modules. When you supply a directory name, it is used.
+     When you set one of these to the empty string (""), the value set
+     by the <TT
+CLASS="parameter"
+><I
+>mcrypt.algorithms_dir</I
+></TT
+> or
+     <TT
+CLASS="parameter"
+><I
+>mcrypt.modes_dir</I
+></TT
+> ini-directive is used.
+     When these are not set, the default directory are used that are
+     compiled in into libmcrypt (usally /usr/local/lib/libmcrypt).
+    </P
+><P
+>&#13;     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN21832"
+></A
+><P
+><B
+>Example 1. <B
+CLASS="function"
+>Mcrypt_module_open()</B
+> Example</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;&#60;?php
+$td = mcrypt_module_open (MCRYPT_DES, "", MCRYPT_MODE_ECB, "/usr/lib/mcrypt-modes");
+?&#62;
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+     The above example will try to open the DES cipher from the default
+     directory and the EBC mode from the directory /usr/lib/mcrypt-modes.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.mcrypt-decrypt.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.mcrypt-generic-init.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>mcrypt_decrypt</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.mcrypt.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>mcrypt_generic_init</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,341 @@
+<HTML
+><HEAD
+><TITLE
+>Zlib Compression Functions</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Function Reference"
+HREF="funcref.html"><LINK
+REL="PREVIOUS"
+TITLE="yp_next"
+HREF="function.yp-next.html"><LINK
+REL="NEXT"
+TITLE="gzclose"
+HREF="function.gzclose.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="reference"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.yp-next.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.gzclose.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="reference"
+><A
+NAME="ref.zlib"
+></A
+><DIV
+CLASS="TITLEPAGE"
+><H1
+CLASS="title"
+>LXXIV. Zlib Compression Functions</H1
+><DIV
+CLASS="PARTINTRO"
+><A
+NAME="AEN40894"
+></A
+><P
+>&#13;   This module uses the functions of <A
+HREF="http://www.info-zip.org/pub/infozip/zlib/"
+TARGET="_top"
+>zlib</A
+> by Jean-loup Gailly and Mark Adler to
+   transparently read and write gzip (.gz) compressed files. You have
+   to use a zlib version &#62;= 1.0.9 with this module.
+  </P
+><P
+>&#13;   This module contains versions of most of the <A
+HREF="ref.filesystem.html"
+>filesystem</A
+> functions which work
+   with gzip-compressed files (and uncompressed files, too, but not
+   with sockets).
+  </P
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="zlib-example"
+>Small code example</A
+></H1
+><P
+>&#13;     Opens a temporary file and writes a test string to it, then it
+     prints out the content of this file twice.
+    </P
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN40902"
+></A
+><P
+><B
+>Example 1. Small Zlib Example</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;&#60;?php
+
+$filename = tempnam ('/tmp', 'zlibtest').'.gz';
+print "&#60;html&#62;\n&#60;head&#62;&#60;/head&#62;\n&#60;body&#62;\n&#60;pre&#62;\n";
+$s = "Only a test, test, test, test, test, test, test, test!\n";
+
+// open file for writing with maximum compression
+$zp = gzopen($filename, "w9");
+
+// write string to file
+gzwrite($zp, $s);
+
+// close file
+gzclose($zp);
+
+// open file for reading
+$zp = gzopen($filename, "r");
+
+// read 3 char
+print gzread($zp, 3);
+
+// output until end of the file and close it.
+gzpassthru($zp);
+
+print "\n";
+
+// open file and print content (the 2nd time).
+if (readgzfile($filename) != strlen($s)) {
+        echo "Error with zlib functions!";
+}
+unlink($filename);
+print "&#60;/pre&#62;\n&#60;/h1&#62;&#60;/body&#62;\n&#60;/html&#62;\n";
+
+?&#62;
+     </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+></DIV
+></DIV
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Table of Contents</B
+></DT
+><DT
+><A
+HREF="function.gzclose.html"
+>gzclose</A
+> &#8212; Close an open gz-file pointer</DT
+><DT
+><A
+HREF="function.gzeof.html"
+>gzeof</A
+> &#8212; Test for end-of-file on a gz-file pointer</DT
+><DT
+><A
+HREF="function.gzfile.html"
+>gzfile</A
+> &#8212; Read entire gz-file into an array</DT
+><DT
+><A
+HREF="function.gzgetc.html"
+>gzgetc</A
+> &#8212; Get character from gz-file pointer</DT
+><DT
+><A
+HREF="function.gzgets.html"
+>gzgets</A
+> &#8212; Get line from file pointer</DT
+><DT
+><A
+HREF="function.gzgetss.html"
+>gzgetss</A
+> &#8212; 
+     Get line from gz-file pointer and strip HTML tags
+    </DT
+><DT
+><A
+HREF="function.gzopen.html"
+>gzopen</A
+> &#8212; Open gz-file</DT
+><DT
+><A
+HREF="function.gzpassthru.html"
+>gzpassthru</A
+> &#8212; 
+     Output all remaining data on a gz-file pointer
+    </DT
+><DT
+><A
+HREF="function.gzputs.html"
+>gzputs</A
+> &#8212; Write to a gz-file pointer</DT
+><DT
+><A
+HREF="function.gzread.html"
+>gzread</A
+> &#8212; Binary-safe gz-file read</DT
+><DT
+><A
+HREF="function.gzrewind.html"
+>gzrewind</A
+> &#8212; Rewind the position of a gz-file pointer</DT
+><DT
+><A
+HREF="function.gzseek.html"
+>gzseek</A
+> &#8212; Seek on a gz-file pointer</DT
+><DT
+><A
+HREF="function.gztell.html"
+>gztell</A
+> &#8212; Tell gz-file pointer read/write position</DT
+><DT
+><A
+HREF="function.gzwrite.html"
+>gzwrite</A
+> &#8212; Binary-safe gz-file write</DT
+><DT
+><A
+HREF="function.readgzfile.html"
+>readgzfile</A
+> &#8212; Output a gz-file</DT
+><DT
+><A
+HREF="function.gzcompress.html"
+>gzcompress</A
+> &#8212; Gz-compress a string</DT
+><DT
+><A
+HREF="function.gzuncompress.html"
+>gzuncompress</A
+> &#8212; Uncompress a gz-compressed string</DT
+></DL
+></DIV
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.yp-next.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.gzclose.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>yp_next</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="funcref.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>gzclose</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

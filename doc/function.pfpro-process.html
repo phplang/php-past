@@ -1,0 +1,295 @@
+<HTML
+><HEAD
+><TITLE
+>pfpro_process</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Verisign Payflow Pro functions"
+HREF="ref.pfpro.html"><LINK
+REL="PREVIOUS"
+TITLE="pfpro_cleanup"
+HREF="function.pfpro-cleanup.html"><LINK
+REL="NEXT"
+TITLE="pfpro_process_raw"
+HREF="function.pfpro-process-raw.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.pfpro-cleanup.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.pfpro-process-raw.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.pfpro-process"
+>pfpro_process</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN29900"
+></A
+><P
+>    (PHP4 &#62;= 4.0.2)</P
+>pfpro_process&nbsp;--&nbsp;Process a transaction with Payflow Pro</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN29903"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN29905"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>array <B
+CLASS="function"
+>pfpro_process</B
+></CODE
+> (array parameters [, string
+       address [, int
+       port [, int
+       timeout [, string
+       proxy address [, int
+       proxy port [, string
+       proxy logon [, string
+       proxy password]]]]]]])</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     Returns: An associative array containing the response
+    </P
+><P
+> 
+     <B
+CLASS="function"
+>pfpro_process()</B
+> processes a transaction
+     with Payflow Pro. The first parameter is an associative
+     array containing keys and values that will be encoded and
+     passed to the processor.
+    </P
+><P
+>&#13;     The second parameter is optional and specifies the host
+     to connect to. By default this is "test.signio.com", so
+     you will certainly want to change this to "connect.signio.com"
+     in order to process live transactions.
+    </P
+><P
+>&#13;     The third parameter specifies the port to connect on. It
+     defaults to 443, the standard SSL port.
+    </P
+><P
+>&#13;     The fourth parameter specifies the timeout to be used, in seconds.
+     This defaults to 30 seconds. Note that this timeout appears to only
+     begin once a link to the processor has been established and so your
+     script could potentially continue for a very long time in the event
+     of DNS or network problems.
+    </P
+><P
+>&#13;     The fifth parameter, if required, specifies the hostname of your
+     SSL proxy. The sixth parameter specifies the port to use.
+    </P
+><P
+>&#13;     The seventh and eighth parameters specify the logon identity
+     and password to use on the proxy.
+    </P
+><P
+>&#13;     The function returns an associative array of the keys and values
+     in the response.
+    </P
+><DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
+><P
+><B
+>Note: </B
+>
+     Be sure to read the Payflow Pro Developers Guide for full details
+     of the required parameters.
+    </P
+></BLOCKQUOTE
+></DIV
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN29943"
+></A
+><P
+><B
+>Example 1. Payflow Pro example</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;&#60;?php
+
+pfpro_init();
+
+$transaction = array(USER	=&#62; 'mylogin',
+		     PWD	=&#62; 'mypassword',
+		     TRXTYPE	=&#62; 'S',
+		     TENDER	=&#62; 'C',
+		     AMT	=&#62; 1.50,
+		     ACCT	=&#62; '4111111111111111',
+		     EXPDATE	=&#62; '0904'
+		     );
+
+$response = pfpro_process($transaction);
+
+if (!$response) {
+  die("Couldn't establish link to Verisign.\n");
+}
+
+echo "Verisign response code was ".$response[RESULT];
+echo ", which means: ".$response[RESPMSG]."\n";
+
+echo "\nThe transaction request: ";
+print_r($transaction);
+
+echo "\nThe response: ";
+print_r($response);
+
+pfpro_cleanup();
+
+?&#62;
+     </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.pfpro-cleanup.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.pfpro-process-raw.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>pfpro_cleanup</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.pfpro.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>pfpro_process_raw</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

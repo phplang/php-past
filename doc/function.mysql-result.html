@@ -1,0 +1,224 @@
+<HTML
+><HEAD
+><TITLE
+>mysql_result</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="MySQL functions"
+HREF="ref.mysql.html"><LINK
+REL="PREVIOUS"
+TITLE="mysql_query"
+HREF="function.mysql-query.html"><LINK
+REL="NEXT"
+TITLE="mysql_select_db"
+HREF="function.mysql-select-db.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.mysql-query.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.mysql-select-db.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.mysql-result"
+>mysql_result</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN24804"
+></A
+><P
+>    (PHP3 , PHP4 )</P
+>mysql_result&nbsp;--&nbsp;Get result data</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN24807"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN24809"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>mixed <B
+CLASS="function"
+>mysql_result</B
+></CODE
+> (int result, int row [, mixed 
+       field])</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     <B
+CLASS="function"
+>mysql_result()</B
+> returns the contents of one
+     cell from a MySQL result set.  The field argument can be the
+     field's offset, or the field's name, or the field's table dot
+     field's name (fieldname.tablename).  If the column name has been
+     aliased ('select foo as bar from...'), use the alias instead of
+     the column name.
+    </P
+><P
+>&#13;     When working on large result sets, you should consider using one
+     of the functions that fetch an entire row (specified below).  As
+     these functions return the contents of multiple cells in one
+     function call, they're MUCH quicker than
+     <B
+CLASS="function"
+>mysql_result()</B
+>.  Also, note that specifying a
+     numeric offset for the field argument is much quicker than
+     specifying a fieldname or tablename.fieldname argument.
+    </P
+><P
+>&#13;     Calls to <B
+CLASS="function"
+>mysql_result()</B
+> should not be mixed
+     with calls to other functions that deal with the result set.
+    </P
+><P
+>&#13;     Recommended high-performance alternatives:
+     <A
+HREF="function.mysql-fetch-row.html"
+><B
+CLASS="function"
+>mysql_fetch_row()</B
+></A
+>, 
+     <A
+HREF="function.mysql-fetch-array.html"
+><B
+CLASS="function"
+>mysql_fetch_array()</B
+></A
+>, and
+     <A
+HREF="function.mysql-fetch-object.html"
+><B
+CLASS="function"
+>mysql_fetch_object()</B
+></A
+>.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.mysql-query.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.mysql-select-db.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>mysql_query</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.mysql.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>mysql_select_db</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,230 @@
+<HTML
+><HEAD
+><TITLE
+>readline</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="GNU Readline"
+HREF="ref.readline.html"><LINK
+REL="PREVIOUS"
+TITLE="GNU Readline"
+HREF="ref.readline.html"><LINK
+REL="NEXT"
+TITLE="readline_add_history"
+HREF="function.readline-add-history.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="ref.readline.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.readline-add-history.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.readline"
+>readline</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN32632"
+></A
+><P
+>    (PHP4 &#62;= 4.0b4)</P
+>readline&nbsp;--&nbsp;Reads a line</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN32635"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN32637"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>string <B
+CLASS="function"
+>readline</B
+></CODE
+> ([string 
+       prompt])</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     This function returns a single string from the user.  You may
+     specify a string with which to prompt the user.  The line
+     returned has the ending newline removed.  You must add this line
+     to the history yourself using
+     <A
+HREF="function.readline-add-history.html"
+><B
+CLASS="function"
+>readline_add_history()</B
+></A
+>.
+    </P
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN32646"
+></A
+><P
+><B
+>Example 1. <B
+CLASS="function"
+>Readline()</B
+></B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;//get 3 commands from user
+for ($i=0; $i &#60; 3; $i++) {
+        $line = readline ("Command: ");
+        readline_add_history ($line);
+}
+
+//dump history
+print_r (readline_list_history());
+
+//dump variables
+print_r (readline_info());
+     </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="ref.readline.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.readline-add-history.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>GNU Readline</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.readline.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>readline_add_history</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

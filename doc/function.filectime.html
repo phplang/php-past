@@ -1,0 +1,210 @@
+<HTML
+><HEAD
+><TITLE
+>filectime</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Filesystem functions"
+HREF="ref.filesystem.html"><LINK
+REL="PREVIOUS"
+TITLE="fileatime"
+HREF="function.fileatime.html"><LINK
+REL="NEXT"
+TITLE="filegroup"
+HREF="function.filegroup.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.fileatime.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.filegroup.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.filectime"
+>filectime</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN10985"
+></A
+><P
+>    (PHP3 , PHP4 )</P
+>filectime&nbsp;--&nbsp;Gets inode change time of file</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN10988"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN10990"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int <B
+CLASS="function"
+>filectime</B
+></CODE
+> (string filename)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     Returns the time the file was last changed, or false in case of
+     an error. The time is returned as a Unix timestamp.
+    </P
+><P
+>&#13;     The results of this function are cached. See
+     <A
+HREF="function.clearstatcache.html"
+><B
+CLASS="function"
+>clearstatcache()</B
+></A
+> for more details.
+    </P
+><P
+>Note: In most Unix filesystem, a file is considered
+     changed, when it's Inode data is changed, that is, when
+     the permissions, the owner, the group or other metadata
+     from the Inode is written to. See also 
+     <A
+HREF="function.filemtime.html"
+><B
+CLASS="function"
+>filemtime()</B
+></A
+> (this is what you want to use
+     when you want to create "Last Modified" footers on web pages) and 
+     <A
+HREF="function.fileatime.html"
+><B
+CLASS="function"
+>fileatime()</B
+></A
+>.
+    </P
+><P
+>Note: In some Unix texts the ctime of a file is being
+     referred to as the creation time of the file. This is wrong.
+     There is no creation time for Unix files in most Unix 
+     filesystems.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.fileatime.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.filegroup.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>fileatime</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.filesystem.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>filegroup</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

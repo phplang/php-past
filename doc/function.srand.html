@@ -1,0 +1,240 @@
+<HTML
+><HEAD
+><TITLE
+>srand</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Mathematical Functions"
+HREF="ref.math.html"><LINK
+REL="PREVIOUS"
+TITLE="sqrt"
+HREF="function.sqrt.html"><LINK
+REL="NEXT"
+TITLE="tan"
+HREF="function.tan.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.sqrt.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.tan.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.srand"
+>srand</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN20322"
+></A
+><P
+>    (PHP3 , PHP4 )</P
+>srand&nbsp;--&nbsp;Seed the random number generator</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN20325"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN20327"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>void <B
+CLASS="function"
+>srand</B
+></CODE
+> (int seed)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     Seeds the random number generator with
+     <TT
+CLASS="parameter"
+><I
+>seed</I
+></TT
+>.
+     <DIV
+CLASS="informalexample"
+><A
+NAME="AEN20335"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;// seed with microseconds since last "whole" second
+srand ((double) microtime() * 1000000);
+$randval = rand();
+      </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+>
+    </P
+><P
+>&#13;     See also <A
+HREF="function.rand.html"
+><B
+CLASS="function"
+>rand()</B
+></A
+>,
+     <A
+HREF="function.getrandmax.html"
+><B
+CLASS="function"
+>getrandmax()</B
+></A
+>, <A
+HREF="function.mt-rand.html"
+><B
+CLASS="function"
+>mt_rand()</B
+></A
+>,
+     <A
+HREF="function.mt-srand.html"
+><B
+CLASS="function"
+>mt_srand()</B
+></A
+>, and
+     <A
+HREF="function.mt-getrandmax.html"
+><B
+CLASS="function"
+>mt_getrandmax()</B
+></A
+>.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.sqrt.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.tan.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>sqrt</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.math.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>tan</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,210 @@
+<HTML
+><HEAD
+><TITLE
+>hw_Mv</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Hyperwave functions"
+HREF="ref.hyperwave.html"><LINK
+REL="PREVIOUS"
+TITLE="hw_GetAnchorsObj"
+HREF="function.hw-getanchorsobj.html"><LINK
+REL="NEXT"
+TITLE="hw_Identify"
+HREF="function.hw-identify.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.hw-getanchorsobj.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.hw-identify.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.hw-mv"
+>hw_Mv</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN14050"
+></A
+><P
+>    (PHP3 &#62;= 3.0.3, PHP4 )</P
+>hw_Mv&nbsp;--&nbsp;moves objects</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN14053"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN14055"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int <B
+CLASS="function"
+>hw_mv</B
+></CODE
+> (int connection, array object id array, int source id, int destination id)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     Moves the objects with object ids as specified in the second
+     parameter from the collection with id <TT
+CLASS="parameter"
+><I
+>source id</I
+></TT
+>
+     to the collection with the id <TT
+CLASS="parameter"
+><I
+>destination id</I
+></TT
+>.
+     If the destination id is 0 the objects will
+     be unlinked from the source collection. If this is the last instance
+     of that object it will be deleted. If you want to delete all instances
+     at once, use <A
+HREF="function.hw-deleteobject.html"
+><B
+CLASS="function"
+>hw_deleteobject()</B
+></A
+>.</P
+><P
+>&#13;     The value return is the number of moved objects.</P
+><P
+>&#13;     See also <A
+HREF="function.hw-cp.html"
+><B
+CLASS="function"
+>hw_cp()</B
+></A
+>,
+              <A
+HREF="function.hw-deleteobject.html"
+><B
+CLASS="function"
+>hw_deleteobject()</B
+></A
+>.</P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.hw-getanchorsobj.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.hw-identify.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>hw_GetAnchorsObj</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.hyperwave.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>hw_Identify</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,200 @@
+<HTML
+><HEAD
+><TITLE
+>Creating and manipulating images</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Features"
+HREF="features.html"><LINK
+REL="PREVIOUS"
+TITLE="Error Handling"
+HREF="features.error-handling.html"><LINK
+REL="NEXT"
+TITLE="HTTP authentication with PHP"
+HREF="features.http-auth.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="chapter"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="features.error-handling.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="features.http-auth.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="chapter"
+><H1
+><A
+NAME="features.images"
+>Chapter 16. Creating and manipulating images</A
+></H1
+><P
+>&#13;   PHP is not limited to creating just HTML output.  It can also be
+   used to create and manipulate image files in a variety of different
+   image formats, including gif, png, jpg, wbmp, and xpm. Even more
+   convenient, php can output image streams directly to a browser. You
+   will need to compile PHP with the GD library of image functions for
+   this to work. GD and PHP may also require other libraries, depending
+   on which image formats you want to work with.
+  </P
+><P
+>&#13;   <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN4095"
+></A
+><P
+><B
+>Example 16-1. GIF creation with PHP</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;&#60;?php
+    Header("Content-type: image/gif");
+    $string=implode($argv," ");
+    $im = imagecreatefromgif("images/button1.gif");
+    $orange = ImageColorAllocate($im, 220, 210, 60);
+    $px = (imagesx($im)-7.5*strlen($string))/2;
+    ImageString($im,3,$px,9,$string,$orange);
+    ImageGif($im);
+    ImageDestroy($im);
+?&#62;
+    </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+
+   This example would be called from a page with a tag like: &#60;img
+   src="button.php?text"&#62; The above button.php script
+   then takes this "text" string an overlays it on top of a
+   base image which in this case is "images/button1.gif"
+   and outputs the resulting image.  This is a very convenient way to
+   avoid having to draw new button images every time you want to
+   change the text of a button.  With this method they are
+   dynamically generated.
+  </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="features.error-handling.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="features.http-auth.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Error Handling</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="features.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>HTTP authentication with PHP</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

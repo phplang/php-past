@@ -1,0 +1,206 @@
+<HTML
+><HEAD
+><TITLE
+>is_uploaded_file</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Filesystem functions"
+HREF="ref.filesystem.html"><LINK
+REL="PREVIOUS"
+TITLE="is_writeable"
+HREF="function.is-writeable.html"><LINK
+REL="NEXT"
+TITLE="link"
+HREF="function.link.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.is-writeable.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.link.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.is-uploaded-file"
+>is_uploaded_file</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN11631"
+></A
+><P
+>    (PHP3 CVS only, PHP4 CVS only)</P
+>is_uploaded_file&nbsp;--&nbsp;Tells whether the file was uploaded via HTTP POST.</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN11634"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN11636"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>bool <B
+CLASS="function"
+>is_uploaded_file</B
+></CODE
+> (string filename)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     This function is available only in versions of PHP 3 after PHP
+     3.0.16, and in versions of PHP 4 after 4.0.2.
+    </P
+><P
+>&#13;     Returns true if the file named by <TT
+CLASS="varname"
+>filename</TT
+> was
+     uploaded via HTTP POST. This is useful to help ensure that a
+     malicious user hasn't tried to trick the script into working on
+     files upon which it should not be working--for instance,
+     <TT
+CLASS="filename"
+>/etc/passwd</TT
+>.
+    </P
+><P
+>&#13;     This sort of check is especially important if there is any chance
+     that anything done with uploaded files could reveal their
+     contents to the user, or even to other users on the same
+     system.
+    </P
+><P
+>&#13;     See also <A
+HREF="function.move-uploaded-file.html"
+><B
+CLASS="function"
+>move_uploaded_file()</B
+></A
+>, and the section
+     <A
+HREF="features.file-upload.html"
+>Handling file uploads</A
+>
+     for a simple usage example.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.is-writeable.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.link.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>is_writeable</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.filesystem.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>link</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

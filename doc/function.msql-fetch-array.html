@@ -1,0 +1,233 @@
+<HTML
+><HEAD
+><TITLE
+>msql_fetch_array</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="mSQL functions"
+HREF="ref.msql.html"><LINK
+REL="PREVIOUS"
+TITLE="msql_error"
+HREF="function.msql-error.html"><LINK
+REL="NEXT"
+TITLE="msql_fetch_field"
+HREF="function.msql-fetch-field.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.msql-error.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.msql-fetch-field.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.msql-fetch-array"
+>msql_fetch_array</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN23402"
+></A
+><P
+>    (PHP3 , PHP4 )</P
+>msql_fetch_array&nbsp;--&nbsp;Fetch row as array</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN23405"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN23407"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int <B
+CLASS="function"
+>msql_fetch_array</B
+></CODE
+> (int query_identifier [, int 
+       result_type])</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     Returns an array that corresponds to the fetched row, or false if
+     there are no more rows.
+    </P
+><P
+>&#13;     <B
+CLASS="function"
+>msql_fetch_array()</B
+> is an extended version of
+     <A
+HREF="function.msql-fetch-row.html"
+><B
+CLASS="function"
+>msql_fetch_row()</B
+></A
+>.  In addition to storing the
+     data in the numeric indices of the result array, it also stores
+     the data in associative indices, using the field names as keys.
+    </P
+><P
+>&#13;     The second optional argument <TT
+CLASS="parameter"
+><I
+>result_type</I
+></TT
+>
+     in <B
+CLASS="function"
+>msql_fetch_array()</B
+> is a constant and can
+     take the following values: MSQL_ASSOC, MSQL_NUM, and MYSQL_BOTH.
+    </P
+><P
+>&#13;     Be careful if you are retrieving results from a query that may
+     return a record that contains only one field that has a value of
+     0 (or an empty string, or NULL).
+    </P
+><P
+> 
+     An important thing to note is that using
+     <B
+CLASS="function"
+>msql_fetch_array()</B
+> is NOT significantly slower
+     than using <A
+HREF="function.msql-fetch-row.html"
+><B
+CLASS="function"
+>msql_fetch_row()</B
+></A
+>, while it provides
+     a significant added value.
+    </P
+><P
+>&#13;     For further details, also see
+     <A
+HREF="function.msql-fetch-row.html"
+><B
+CLASS="function"
+>msql_fetch_row()</B
+></A
+>.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.msql-error.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.msql-fetch-field.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>msql_error</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.msql.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>msql_fetch_field</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

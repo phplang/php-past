@@ -1,0 +1,354 @@
+<HTML
+><HEAD
+><TITLE
+>levenshtein</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="String functions"
+HREF="ref.strings.html"><LINK
+REL="PREVIOUS"
+TITLE="join"
+HREF="function.join.html"><LINK
+REL="NEXT"
+TITLE="ltrim"
+HREF="function.ltrim.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.join.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.ltrim.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.levenshtein"
+>levenshtein</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN36685"
+></A
+><P
+>    (PHP3 CVS only, PHP4 &#62;= 4.0.1)</P
+>levenshtein&nbsp;--&nbsp;
+     Calculate Levenshtein distance between two strings		
+    </DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN36688"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN36690"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int <B
+CLASS="function"
+>levenshtein</B
+></CODE
+> (string str1, string str2)</CODE
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int <B
+CLASS="function"
+>levenshtein</B
+></CODE
+> (string str1, string str2, int cost_ins, int cost_rep, int cost_del)</CODE
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int <B
+CLASS="function"
+>levenshtein</B
+></CODE
+> (string str1, string str2, function cost)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;		 This function returns the Levenshtein-Distance between the
+     two argument strings or -1, if one of the argument strings
+     is longer than the limit of 255 characters (255 should be
+		 more than enough for name or dictionary comparison, and 
+     nobody serious would be doing genetic analysis with PHP).
+    </P
+><P
+>&#13;     The Levenshtein distance is defined as the minimal number of
+     characters you have to replace, insert or delete to transform
+     <TT
+CLASS="parameter"
+><I
+>str1</I
+></TT
+> into <TT
+CLASS="parameter"
+><I
+>str2</I
+></TT
+>.
+     The complexity of the algorithm is <TT
+CLASS="literal"
+>O(m*n)</TT
+>,
+     where <TT
+CLASS="literal"
+>n</TT
+> and <TT
+CLASS="literal"
+>m</TT
+> are the
+     length of <TT
+CLASS="parameter"
+><I
+>str1</I
+></TT
+> and
+     <TT
+CLASS="parameter"
+><I
+>str2</I
+></TT
+> (rather good when compared to
+     <A
+HREF="function.similar-text.html"
+><B
+CLASS="function"
+>similar_text()</B
+></A
+>, which is O(max(n,m)**3),
+     but still expensive).  
+    </P
+><P
+>&#13;		 In its simpelest form the function will take only the two
+     strings as parameter and will calculate just the number of
+     insert, replace and delete operations needed to transform
+     <TT
+CLASS="parameter"
+><I
+>str1</I
+></TT
+> into <TT
+CLASS="parameter"
+><I
+>str2</I
+></TT
+>.
+    </P
+><P
+> 
+		 A second variant will take three additional parameters that
+		 define the cost of insert, replace and delete operations.
+     This is more general and adaptive than variant one, but not
+     as efficient.
+		</P
+><P
+>  
+		 The third variant (which is not implemented yet) will be
+		 the  most general and adaptive, but also the slowest alternative.
+		 It will call a user-supplied function that will determine the
+		 cost for every possible operation.
+		</P
+><P
+>&#13;		 The user-supplied function will be called with the following 
+     arguments:
+     <P
+></P
+><UL
+><LI
+><P
+>&#13;		 	  operation to apply: 'I', 'R' or 'D'
+       </P
+></LI
+><LI
+><P
+>&#13;		 	  actual character in string 1
+       </P
+></LI
+><LI
+><P
+>&#13;			  actual character in string 2
+       </P
+></LI
+><LI
+><P
+>&#13;			  position in string 1
+       </P
+></LI
+><LI
+><P
+>&#13;		 	  position in string 2
+       </P
+></LI
+><LI
+><P
+>&#13;			  remaining characters in string 1
+       </P
+></LI
+><LI
+><P
+>&#13;			  remaining characters in string 2
+       </P
+></LI
+></UL
+>
+		 The user-supplied function has to return a positive integer
+		 describing the cost for this particular operation, but it
+		 may decide to use only some of the supplied arguments.
+		</P
+><P
+> 
+		 The user-supplied function approach offers the possibility to
+		 take into account the relevance of and/or difference between 
+     certain symbols (characters) or even the context those symbols
+     appear in to determine the cost of insert, replace and delete 
+     operations, but at the cost of loosing all optimizations done
+     regarding cpu register utilization and cache misses that have
+     been worked into the other two variants. 
+		</P
+><P
+>&#13;     See also <A
+HREF="function.soundex.html"
+><B
+CLASS="function"
+>soundex()</B
+></A
+>, 
+     <A
+HREF="function.similar-text.html"
+><B
+CLASS="function"
+>similar_text()</B
+></A
+>
+		 and <A
+HREF="function.metaphone.html"
+><B
+CLASS="function"
+>metaphone()</B
+></A
+>.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.join.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.ltrim.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>join</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.strings.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>ltrim</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

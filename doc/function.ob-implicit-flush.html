@@ -1,0 +1,227 @@
+<HTML
+><HEAD
+><TITLE
+>ob_implicit_flush</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Output Control Functions"
+HREF="ref.outcontrol.html"><LINK
+REL="PREVIOUS"
+TITLE="ob_end_clean"
+HREF="function.ob-end-clean.html"><LINK
+REL="NEXT"
+TITLE="PDF functions"
+HREF="ref.pdf.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.ob-end-clean.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="ref.pdf.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.ob-implicit-flush"
+>ob_implicit_flush</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN27966"
+></A
+><P
+>    (PHP4 &#62;= 4.0b4)</P
+>ob_implicit_flush&nbsp;--&nbsp;
+     Turn implicit flush on/off 
+    </DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN27969"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN27971"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>void <B
+CLASS="function"
+>ob_implicit_flush</B
+></CODE
+> ([int 
+       flag])</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     <B
+CLASS="function"
+>ob_implicit_flush()</B
+> will turn implicit
+     flushing on or off (if no <TT
+CLASS="parameter"
+><I
+>flag</I
+></TT
+> is given,
+     it defaults to on).  Implicit flushing will result in a flush
+     operation after every output call, so that explicit calls to
+     <A
+HREF="function.flush.html"
+><B
+CLASS="function"
+>flush()</B
+></A
+> will no longer be needed.
+    </P
+><P
+>&#13;     Turning implicit flushing on will disable output buffering, the
+     output buffers current output will be sent as if
+     <A
+HREF="function.ob-end-flush.html"
+><B
+CLASS="function"
+>ob_end_flush()</B
+></A
+> had been called.
+    </P
+><P
+>&#13;     See also <A
+HREF="function.flush.html"
+><B
+CLASS="function"
+>flush()</B
+></A
+>,
+     <A
+HREF="function.ob-start.html"
+><B
+CLASS="function"
+>ob_start()</B
+></A
+>, and
+     <A
+HREF="function.ob-end-flush.html"
+><B
+CLASS="function"
+>ob_end_flush()</B
+></A
+>.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.ob-end-clean.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="ref.pdf.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>ob_end_clean</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.outcontrol.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>PDF functions</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

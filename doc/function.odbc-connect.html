@@ -1,0 +1,238 @@
+<HTML
+><HEAD
+><TITLE
+>odbc_connect</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Unified ODBC functions"
+HREF="ref.odbc.html"><LINK
+REL="PREVIOUS"
+TITLE="odbc_commit"
+HREF="function.odbc-commit.html"><LINK
+REL="NEXT"
+TITLE="odbc_cursor"
+HREF="function.odbc-cursor.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.odbc-commit.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.odbc-cursor.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.odbc-connect"
+>odbc_connect</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN25671"
+></A
+><P
+>    (PHP3 &#62;= 3.0.6, PHP4 )</P
+>odbc_connect&nbsp;--&nbsp;Connect to a datasource</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN25674"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN25676"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int <B
+CLASS="function"
+>odbc_connect</B
+></CODE
+> (string dsn, string user, string password [, int cursor_type])</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     Returns an ODBC connection id or 0 (<TT
+CLASS="literal"
+>false</TT
+>) on
+     error.
+    </P
+><P
+>&#13;     The connection id returned by this functions is needed by other
+     ODBC functions. You can have multiple connections open at once.
+     The optional fourth parameter sets the type of cursor to be used
+     for this connection. This parameter is not normally needed, but
+     can be useful for working around problems with some ODBC drivers.
+    </P
+><P
+>&#13;     With some ODBC drivers, executing a complex stored procedure may
+     fail with an error similar to: "Cannot open a cursor on a stored
+     procedure that has anything other than a single select statement
+     in it".  Using SQL_CUR_USE_ODBC may avoid that error. Also, some
+     drivers don't support the optional row_number parameter in
+     <A
+HREF="function.odbc-fetch-row.html"
+><B
+CLASS="function"
+>odbc_fetch_row()</B
+></A
+>. SQL_CUR_USE_ODBC might help
+     in that case, too.
+    </P
+><P
+>&#13;     The following constants are defined for cursortype:
+    </P
+><P
+>&#13;     <P
+></P
+><UL
+><LI
+><P
+>&#13;	SQL_CUR_USE_IF_NEEDED
+       </P
+></LI
+><LI
+><P
+>&#13;	SQL_CUR_USE_ODBC
+       </P
+></LI
+><LI
+><P
+>&#13;	SQL_CUR_USE_DRIVER
+       </P
+></LI
+><LI
+><P
+>&#13;	SQL_CUR_DEFAULT
+       </P
+></LI
+></UL
+>
+    </P
+><P
+>&#13;     For persistent connections see
+     <A
+HREF="function.odbc-pconnect.html"
+><B
+CLASS="function"
+>odbc_pconnect()</B
+></A
+>.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.odbc-commit.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.odbc-cursor.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>odbc_commit</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.odbc.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>odbc_cursor</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

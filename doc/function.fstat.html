@@ -1,0 +1,252 @@
+<HTML
+><HEAD
+><TITLE
+>fstat</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Filesystem functions"
+HREF="ref.filesystem.html"><LINK
+REL="PREVIOUS"
+TITLE="fseek"
+HREF="function.fseek.html"><LINK
+REL="NEXT"
+TITLE="ftell"
+HREF="function.ftell.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.fseek.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.ftell.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.fstat"
+>fstat</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN11377"
+></A
+><P
+>    (PHP4 &#62;= 4.0RC1)</P
+>fstat&nbsp;--&nbsp;
+     Gets information about a file using an open file pointer
+    </DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN11380"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN11382"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>array <B
+CLASS="function"
+>fstat</B
+></CODE
+> (int fp)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     Gathers the statistics of the file opened by the file
+     pointer fp.  This function is similar to the
+     <A
+HREF="function.stat.html"
+><B
+CLASS="function"
+>stat()</B
+></A
+> function except that it operates
+     on an open file pointer instead of a filename.
+    </P
+><P
+>&#13;     Returns an array with the statistics of the file with the
+     following elements:
+     <P
+></P
+><OL
+TYPE="1"
+><LI
+><P
+>device</P
+></LI
+><LI
+><P
+>inode</P
+></LI
+><LI
+><P
+>number of links</P
+></LI
+><LI
+><P
+>user id of owner</P
+></LI
+><LI
+><P
+>group id owner</P
+></LI
+><LI
+><P
+>device type if inode device *</P
+></LI
+><LI
+><P
+>size in bytes</P
+></LI
+><LI
+><P
+>time of last access</P
+></LI
+><LI
+><P
+>time of last modification</P
+></LI
+><LI
+><P
+>time of last change</P
+></LI
+><LI
+><P
+>blocksize for filesystem I/O *</P
+></LI
+><LI
+><P
+>number of blocks allocated</P
+></LI
+></OL
+>
+     * - only valid on systems supporting the st_blksize type--other
+     systems (i.e. Windows) return -1</P
+><P
+>&#13;     The results of this function are cached. See
+     <A
+HREF="function.clearstatcache.html"
+><B
+CLASS="function"
+>clearstatcache()</B
+></A
+> for more details.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.fseek.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.ftell.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>fseek</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.filesystem.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>ftell</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

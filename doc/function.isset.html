@@ -1,0 +1,234 @@
+<HTML
+><HEAD
+><TITLE
+>isset</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Variable Functions"
+HREF="ref.var.html"><LINK
+REL="PREVIOUS"
+TITLE="is_string"
+HREF="function.is-string.html"><LINK
+REL="NEXT"
+TITLE="print_r"
+HREF="function.print-r.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.is-string.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.print-r.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.isset"
+>isset</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN38947"
+></A
+><P
+>    (unknown)</P
+>isset&nbsp;--&nbsp;Determine whether a variable is set</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN38950"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN38952"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int <B
+CLASS="function"
+>isset</B
+></CODE
+> (mixed var)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     Returns true if <TT
+CLASS="parameter"
+><I
+>var</I
+></TT
+> exists;
+     false otherwise.
+    </P
+><P
+>&#13;     If a variable has been unset with <A
+HREF="function.unset.html"
+><B
+CLASS="function"
+>unset()</B
+></A
+>,
+     it will no longer be <B
+CLASS="function"
+>isset()</B
+>.
+     <DIV
+CLASS="informalexample"
+><A
+NAME="AEN38963"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;$a = "test";
+echo isset ($a); // true
+unset ($a);
+echo isset ($a); // false
+      </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+>
+    </P
+><P
+>&#13;     See also <A
+HREF="function.empty.html"
+><B
+CLASS="function"
+>empty()</B
+></A
+> and
+     <A
+HREF="function.unset.html"
+><B
+CLASS="function"
+>unset()</B
+></A
+>.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.is-string.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.print-r.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>is_string</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.var.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>print_r</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,258 @@
+<HTML
+><HEAD
+><TITLE
+>imap_rfc822_parse_adrlist</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="IMAP, POP3 and NNTP functions"
+HREF="ref.imap.html"><LINK
+REL="PREVIOUS"
+TITLE="imap_rfc822_write_address"
+HREF="function.imap-rfc822-write-address.html"><LINK
+REL="NEXT"
+TITLE="imap_setflag_full"
+HREF="function.imap-setflag-full.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.imap-rfc822-write-address.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.imap-setflag-full.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.imap-rfc822-parse-adrlist"
+>imap_rfc822_parse_adrlist</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN17205"
+></A
+><P
+>    (PHP3 &#62;= 3.0.2, PHP4 )</P
+>imap_rfc822_parse_adrlist&nbsp;--&nbsp;Parses an address string</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN17208"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN17210"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>array
+       <B
+CLASS="function"
+>imap_rfc822_parse_adrlist</B
+>
+      </CODE
+> (string address, string default_host)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     This function parses the address string as defined in 
+     <A
+HREF="http://www.faqs.org/rfcs/rfc822.html"
+TARGET="_top"
+>RFC822</A
+> and 
+     for each address, returns an array of objects.  
+     The objects properties are:
+    </P
+><P
+>&#13;     <P
+></P
+><UL
+><LI
+><P
+>&#13;        mailbox  - the mailbox name (username)
+       </P
+></LI
+><LI
+><P
+>&#13;        host - the host name
+       </P
+></LI
+><LI
+><P
+>&#13;        personal - the personal name
+       </P
+></LI
+><LI
+><P
+>&#13;        adl - at domain source route
+       </P
+></LI
+></UL
+>
+    </P
+><P
+>&#13;     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN17231"
+></A
+><P
+><B
+>Example 1. <B
+CLASS="function"
+>imap_rfc822_parse_adrlist()</B
+> example</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;$address_string = "Hartmut Holzgraefe &#60;hartmut@cvs.php.net&#62;, postmaster@somedomain.net, root";
+$address_array  = imap_rfc822_parse_adrlist($address_string,"somedomain.net");
+if(! is_array($address_array)) die("somethings wrong\n");
+ 
+reset($address_array);
+while(list($key,$val)=each($address_array)){
+  print "mailbox : ".$val-&#62;mailbox."&#60;br&#62;\n";
+  print "host    : ".$val-&#62;host."&#60;br&#62;\n";
+  print "personal: ".$val-&#62;personal."&#60;br&#62;\n";
+  print "adl     : ".$val-&#62;adl."&#60;p&#62;\n";
+} 
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.imap-rfc822-write-address.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.imap-setflag-full.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>imap_rfc822_write_address</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.imap.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>imap_setflag_full</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

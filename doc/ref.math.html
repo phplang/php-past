@@ -1,0 +1,643 @@
+<HTML
+><HEAD
+><TITLE
+>Mathematical Functions</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Function Reference"
+HREF="funcref.html"><LINK
+REL="PREVIOUS"
+TITLE="ezmlm_hash"
+HREF="function.ezmlm-hash.html"><LINK
+REL="NEXT"
+TITLE="abs"
+HREF="function.abs.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="reference"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.ezmlm-hash.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.abs.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="reference"
+><A
+NAME="ref.math"
+></A
+><DIV
+CLASS="TITLEPAGE"
+><H1
+CLASS="title"
+>XXXIV. Mathematical Functions</H1
+><DIV
+CLASS="PARTINTRO"
+><A
+NAME="AEN19597"
+></A
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="AEN19598"
+>Introduction</A
+></H1
+><P
+>&#13;     These math functions will only handle values within the range of
+     the long and double types on your computer.  If you need to
+     handle bigger numbers, take a look at the <A
+HREF="ref.bc.html"
+>arbitrary precision math functions</A
+>.
+    </P
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="AEN19602"
+>Math constants</A
+></H2
+><P
+>&#13;      The following values are defined as constants in PHP by the math
+      extension:
+      <DIV
+CLASS="table"
+><A
+NAME="AEN19605"
+></A
+><P
+><B
+>Table 1. Math constants</B
+></P
+><TABLE
+BORDER="1"
+CLASS="CALSTABLE"
+><THEAD
+><TR
+><TH
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Constant</TH
+><TH
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Value</TH
+><TH
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Description</TH
+></TR
+></THEAD
+><TBODY
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>M_PI</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>3.14159265358979323846</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Der Wert &#960; (Pi)</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>M_E</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>2.7182818284590452354</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>e</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>M_LOG2E</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>1.4426950408889634074</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>log_2 e</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>M_LOG10E</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>0.43429448190325182765</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>log_10 e</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>M_LN2</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>0.69314718055994530942</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>log_e 2</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>M_LN10</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>2.30258509299404568402</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>log_e 10</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>M_PI_2</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>1.57079632679489661923</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>pi/2</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>M_PI_4</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>0.78539816339744830962</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>pi/4</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>M_1_PI</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>0.31830988618379067154</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>1/pi</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>M_2_PI</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>0.63661977236758134308</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>2/pi</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>M_SQRTPI</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>1.77245385090551602729</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>sqrt(pi) [4.0.2]</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>M_2_SQRTPI</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>1.12837916709551257390</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>2/sqrt(pi)</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>M_SQRT2</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>1.41421356237309504880</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>sqrt(2)</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>M_SQRT3</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>1.73205080756887729352</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>sqrt(3) [4.0.2]</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>M_SQRT1_2</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>0.70710678118654752440</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>1/sqrt(2)</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>M_LNPI</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>1.14472988584940017414</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>log_e(pi) [4.0.2]</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>M_EULER</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>0.57721566490153286061</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Euler constant [4.0.2]</TD
+></TR
+></TBODY
+></TABLE
+></DIV
+>
+     Only M_PI is available in PHP versions up to and including PHP4RC1.
+     All other constants are available starting with PHP 4.0. Constants
+	 labelled [4.0.2] were added in PHP 4.0.2.
+     </P
+></DIV
+></DIV
+></DIV
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Table of Contents</B
+></DT
+><DT
+><A
+HREF="function.abs.html"
+>abs</A
+> &#8212; Absolute value</DT
+><DT
+><A
+HREF="function.acos.html"
+>acos</A
+> &#8212; Arc cosine</DT
+><DT
+><A
+HREF="function.asin.html"
+>asin</A
+> &#8212; Arc sine</DT
+><DT
+><A
+HREF="function.atan.html"
+>atan</A
+> &#8212; Arc tangent</DT
+><DT
+><A
+HREF="function.atan2.html"
+>atan2</A
+> &#8212; arc tangent of two variables</DT
+><DT
+><A
+HREF="function.base-convert.html"
+>base_convert</A
+> &#8212; Convert a number between arbitrary bases</DT
+><DT
+><A
+HREF="function.bindec.html"
+>bindec</A
+> &#8212; Binary to decimal</DT
+><DT
+><A
+HREF="function.ceil.html"
+>ceil</A
+> &#8212; Round fractions up</DT
+><DT
+><A
+HREF="function.cos.html"
+>cos</A
+> &#8212; Cosine</DT
+><DT
+><A
+HREF="function.decbin.html"
+>decbin</A
+> &#8212; Decimal to binary</DT
+><DT
+><A
+HREF="function.dechex.html"
+>dechex</A
+> &#8212; Decimal to hexadecimal</DT
+><DT
+><A
+HREF="function.decoct.html"
+>decoct</A
+> &#8212; Decimal to octal</DT
+><DT
+><A
+HREF="function.deg2rad.html"
+>deg2rad</A
+> &#8212; 
+     Converts the number in degrees to the radian equivalent
+    </DT
+><DT
+><A
+HREF="function.exp.html"
+>exp</A
+> &#8212; e to the power of ...</DT
+><DT
+><A
+HREF="function.floor.html"
+>floor</A
+> &#8212; Round fractions down</DT
+><DT
+><A
+HREF="function.getrandmax.html"
+>getrandmax</A
+> &#8212; Show largest possible random value</DT
+><DT
+><A
+HREF="function.hexdec.html"
+>hexdec</A
+> &#8212; Hexadecimal to decimal</DT
+><DT
+><A
+HREF="function.lcg-value.html"
+>lcg_value</A
+> &#8212; Combined linear congruential generator</DT
+><DT
+><A
+HREF="function.log.html"
+>log</A
+> &#8212; Natural logarithm</DT
+><DT
+><A
+HREF="function.log10.html"
+>log10</A
+> &#8212; Base-10 logarithm</DT
+><DT
+><A
+HREF="function.max.html"
+>max</A
+> &#8212; Find highest value</DT
+><DT
+><A
+HREF="function.min.html"
+>min</A
+> &#8212; Find lowest value</DT
+><DT
+><A
+HREF="function.mt-rand.html"
+>mt_rand</A
+> &#8212; Generate a better random value</DT
+><DT
+><A
+HREF="function.mt-srand.html"
+>mt_srand</A
+> &#8212; Seed the better random number generator</DT
+><DT
+><A
+HREF="function.mt-getrandmax.html"
+>mt_getrandmax</A
+> &#8212; Show largest possible random value</DT
+><DT
+><A
+HREF="function.number-format.html"
+>number_format</A
+> &#8212; Format a number with grouped thousands</DT
+><DT
+><A
+HREF="function.octdec.html"
+>octdec</A
+> &#8212; Octal to decimal</DT
+><DT
+><A
+HREF="function.pi.html"
+>pi</A
+> &#8212; Get value of pi</DT
+><DT
+><A
+HREF="function.pow.html"
+>pow</A
+> &#8212; Exponential expression</DT
+><DT
+><A
+HREF="function.rad2deg.html"
+>rad2deg</A
+> &#8212; 
+     Converts the radian number to the equivalent number in degrees
+    </DT
+><DT
+><A
+HREF="function.rand.html"
+>rand</A
+> &#8212; Generate a random value</DT
+><DT
+><A
+HREF="function.round.html"
+>round</A
+> &#8212; Rounds a float</DT
+><DT
+><A
+HREF="function.sin.html"
+>sin</A
+> &#8212; Sine</DT
+><DT
+><A
+HREF="function.sqrt.html"
+>sqrt</A
+> &#8212; Square root</DT
+><DT
+><A
+HREF="function.srand.html"
+>srand</A
+> &#8212; Seed the random number generator</DT
+><DT
+><A
+HREF="function.tan.html"
+>tan</A
+> &#8212; Tangent</DT
+></DL
+></DIV
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.ezmlm-hash.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.abs.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>ezmlm_hash</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="funcref.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>abs</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,334 @@
+<HTML
+><HEAD
+><TITLE
+>highlight_file</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Miscellaneous functions"
+HREF="ref.misc.html"><LINK
+REL="PREVIOUS"
+TITLE="get_browser"
+HREF="function.get-browser.html"><LINK
+REL="NEXT"
+TITLE="highlight_string"
+HREF="function.highlight-string.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.get-browser.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.highlight-string.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.highlight-file"
+>highlight_file</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN22907"
+></A
+><P
+>    (PHP4 )</P
+>highlight_file&nbsp;--&nbsp;Syntax highlighting of a file</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN22910"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN22912"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>void <B
+CLASS="function"
+>highlight_file</B
+></CODE
+> (string filename)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     The <B
+CLASS="function"
+>highlight_file()</B
+> function prints out a syntax
+     higlighted version of the code contained in <TT
+CLASS="parameter"
+><I
+>filename</I
+></TT
+> 
+     using the colors defined in the built-in syntax highlighter for PHP.
+    </P
+><P
+>&#13;     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN22922"
+></A
+><P
+><B
+>Example 1. Creating a source highlighting URL</B
+></P
+><P
+>&#13;       To setup a URL that can code hightlight any script that you pass to
+       it, we will make use of the "ForceType" directive in
+       Apache to generate a nice URL pattern, and use the 
+       function <B
+CLASS="function"
+>highlight_file()</B
+> to show a nice looking
+       code list.
+      </P
+><P
+>&#13;       In your httpd.conf you can add the following:
+      </P
+><P
+>&#13;       <DIV
+CLASS="informalexample"
+><A
+NAME="AEN22928"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;&#60;Location /source&#62;
+    ForceType application/x-httpd-php
+&#60;/Location&#62;
+       </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+>
+      </P
+><P
+>&#13;       And then make a file named "source" and put it in your
+       web root directory.
+      </P
+><P
+>&#13;       <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;&#60;HTML&#62;
+&#60;HEAD&#62;
+&#60;TITLE&#62;Source Display&#60;/TITLE&#62;
+&#60;/HEAD&#62;
+&#60;BODY BGCOLOR="white"&#62;
+&#60;?php
+    $script = getenv ("PATH_TRANSLATED");
+    if(!$script) {
+    echo "&#60;BR&#62;&#60;B&#62;ERROR: Script Name needed&#60;/B&#62;&#60;BR&#62;";
+    } else {
+    if (ereg("(\.php|\.inc)$",$script)) {
+    echo "&#60;H1&#62;Source of: $PATH_INFO&#60;/H1&#62;\n&#60;HR&#62;\n";
+    highlight_file($script);
+    } else {
+    echo "&#60;H1&#62;ERROR: Only PHP or include script names are allowed&#60;/H1&#62;"; 
+    }
+    }
+    echo "&#60;HR&#62;Processed: ".date("Y/M/d H:i:s",time());
+?&#62;
+&#60;/BODY&#62;
+&#60;/HTML&#62;
+       </PRE
+></TD
+></TR
+></TABLE
+>
+      </P
+><P
+>&#13;       Then you can use an URL like the one below to display a colorized
+       version of a script located in "/path/to/script.php" 
+       in your web site.
+      </P
+><P
+>&#13;       <DIV
+CLASS="informalexample"
+><A
+NAME="AEN22935"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;http://your.server.com/source/path/to/script.php
+    </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+>
+      </P
+></DIV
+></TD
+></TR
+></TABLE
+>
+    </P
+><P
+>&#13;     See also <A
+HREF="function.highlight-string.html"
+><B
+CLASS="function"
+>highlight_string()</B
+></A
+>,
+     <A
+HREF="function.show-source.html"
+><B
+CLASS="function"
+>show_source()</B
+></A
+>.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.get-browser.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.highlight-string.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>get_browser</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.misc.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>highlight_string</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,348 @@
+<HTML
+><HEAD
+><TITLE
+>ibase_connect</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="InterBase functions"
+HREF="ref.ibase.html"><LINK
+REL="PREVIOUS"
+TITLE="InterBase functions"
+HREF="ref.ibase.html"><LINK
+REL="NEXT"
+TITLE="ibase_pconnect"
+HREF="function.ibase-pconnect.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="ref.ibase.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.ibase-pconnect.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.ibase-connect"
+>ibase_connect</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN18480"
+></A
+><P
+>    (PHP3 &#62;= 3.0.6, PHP4 )</P
+>ibase_connect&nbsp;--&nbsp;
+     Open a connection to an InterBase database
+    </DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN18483"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN18485"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int <B
+CLASS="function"
+>ibase_connect</B
+></CODE
+> (string database [, string 
+       username [, string 
+       password [, string 
+       charset [, int 
+       buffers [, int 
+       dialect [, string 
+       role]]]]]])</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     Establishes a connection to an InterBase server.
+     The <TT
+CLASS="parameter"
+><I
+>database</I
+></TT
+> argument
+     has to be a valid path to database file on the server it resides on.
+     If the server is not local, it must be prefixed with either
+     'hostname:' (TCP/IP), '//hostname/' (NetBEUI) or 'hostname@' (IPX/SPX),
+     depending on the connection protocol used. <TT
+CLASS="parameter"
+><I
+>username</I
+></TT
+>
+     and <TT
+CLASS="parameter"
+><I
+>password</I
+></TT
+> can also
+     be specified with PHP configuration directives ibase.default_user and
+     ibase.default_password. <TT
+CLASS="parameter"
+><I
+>charset</I
+></TT
+> is the default
+     character set for a database. <TT
+CLASS="parameter"
+><I
+>buffers</I
+></TT
+> is the number
+     of database buffers to allocate for the server-side cache. If 0 or omitted,
+     server chooses its own default. <TT
+CLASS="parameter"
+><I
+>dialect</I
+></TT
+> selects
+     the default SQL dialect for any statement executed within a connection,
+     and it defaults to the highest one supported by client libraries.
+    </P
+><P
+>&#13;     In case a second call is made to
+     <B
+CLASS="function"
+>ibase_connect()</B
+> with the same arguments, no new link
+     will be established, but instead, the link identifier of the already opened
+     link will be returned. The link to the server will be closed as soon as the
+     execution of the script ends, unless it's closed earlier by explicitly calling
+     <A
+HREF="function.ibase-close.html"
+><B
+CLASS="function"
+>ibase_close()</B
+></A
+>. 
+     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN18519"
+></A
+><P
+><B
+>Example 1. <B
+CLASS="function"
+>Ibase_connect()</B
+> example</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;&#60;?php
+    $dbh = ibase_connect ($host, $username, $password);
+    $stmt = 'SELECT * FROM tblname';
+    $sth = ibase_query ($dbh, $stmt);
+    while ($row = ibase_fetch_object ($sth)) {
+        print $row-&#62;email . "\n";
+    }
+    ibase_close ($dbh);
+?&#62;
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+    </P
+><DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
+><P
+><B
+>Note: </B
+>
+      <TT
+CLASS="parameter"
+><I
+>buffers</I
+></TT
+> was added in PHP4-RC2.
+     </P
+></BLOCKQUOTE
+></DIV
+><DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
+><P
+><B
+>Note: </B
+>
+      <TT
+CLASS="parameter"
+><I
+>dialect</I
+></TT
+> was added in PHP4-RC2. It is functional
+       only with InterBase 6 and versions higher than that.
+     </P
+></BLOCKQUOTE
+></DIV
+><DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
+><P
+><B
+>Note: </B
+>
+      <TT
+CLASS="parameter"
+><I
+>role</I
+></TT
+> was added in PHP4-RC2. It is functional
+       only with InterBase 5 and versions higher than that.
+     </P
+></BLOCKQUOTE
+></DIV
+><P
+>&#13;     See also: <A
+HREF="function.ibase-pconnect.html"
+><B
+CLASS="function"
+>ibase_pconnect()</B
+></A
+>.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="ref.ibase.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.ibase-pconnect.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>InterBase functions</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.ibase.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>ibase_pconnect</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

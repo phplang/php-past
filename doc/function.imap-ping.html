@@ -1,0 +1,184 @@
+<HTML
+><HEAD
+><TITLE
+>imap_ping</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="IMAP, POP3 and NNTP functions"
+HREF="ref.imap.html"><LINK
+REL="PREVIOUS"
+TITLE="imap_open"
+HREF="function.imap-open.html"><LINK
+REL="NEXT"
+TITLE="imap_renamemailbox"
+HREF="function.imap-renamemailbox.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.imap-open.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.imap-renamemailbox.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.imap-ping"
+>imap_ping</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN16941"
+></A
+><P
+>    (PHP3 , PHP4 )</P
+>imap_ping&nbsp;--&nbsp;Check if the IMAP stream is still active</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN16944"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN16946"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int <B
+CLASS="function"
+>imap_ping</B
+></CODE
+> (int imap_stream)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>  
+     Returns true if the stream is still alive, false otherwise.
+    </P
+><P
+>&#13;     <B
+CLASS="function"
+>imap_ping()</B
+> function pings the stream to see
+     it is still active. It may discover new mail; this is the
+     preferred method for a periodic "new mail check" as well as a
+     "keep alive" for servers which have inactivity timeout.
+     (As PHP scripts do not tend to run that long, i can hardly
+     imagine that this function will be usefull to anyone.)
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.imap-open.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.imap-renamemailbox.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>imap_open</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.imap.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>imap_renamemailbox</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

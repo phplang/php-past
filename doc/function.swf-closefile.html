@@ -1,0 +1,293 @@
+<HTML
+><HEAD
+><TITLE
+>swf_closefile</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Shockwave Flash functions"
+HREF="ref.swf.html"><LINK
+REL="PREVIOUS"
+TITLE="swf_openfile"
+HREF="function.swf-openfile.html"><LINK
+REL="NEXT"
+TITLE="swf_labelframe"
+HREF="function.swf-labelframe.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.swf-openfile.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.swf-labelframe.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.swf-closefile"
+>swf_closefile</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN34445"
+></A
+><P
+>    (PHP4 &#62;= 4.0RC2)</P
+>swf_closefile&nbsp;--&nbsp;Close the current Shockwave Flash file</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN34448"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN34450"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>void 
+       <B
+CLASS="function"
+>swf_closefile</B
+>
+      </CODE
+> ([int
+       return_file])</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     Close a file that was opened by the
+     <A
+HREF="function.swf-openfile.html"
+><B
+CLASS="function"
+>swf_openfile()</B
+></A
+> function.  If the 
+     <TT
+CLASS="parameter"
+><I
+>return_file</I
+></TT
+> parameter is set then the contents
+     of the SWF file are returned from the function.
+    </P
+><P
+>&#13;     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN34461"
+></A
+><P
+><B
+>Example 1. 
+       Creating a simple flash file based on user input and outputting it
+       and saving it in a database
+      </B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;&#60;?php
+
+// The $text variable is submitted by the
+// user
+
+// Global variables for database
+// access (used in the swf_savedata() function)
+$DBHOST = "localhost";
+$DBUSER = "sterling";
+$DBPASS = "secret";
+
+swf_openfile ("php://stdout", 256, 256, 30, 1, 1, 1);
+
+    swf_definefont (10, "Ligon-Bold");
+        swf_fontsize (12);
+        swf_fontslant (10);
+    
+    swf_definetext (11, $text, 1);
+    
+    swf_pushmatrix ();
+        swf_translate (-50, 80, 0);
+        swf_placeobject (11, 60);
+    swf_popmatrix ();
+
+    swf_showframe ();
+  
+    swf_startdoaction ();
+        swf_actionstop ();
+    swf_enddoaction ();
+
+$data = swf_closefile (1);
+
+$data ?
+  swf_savedata ($data) :
+  die ("Error could not save SWF file");
+
+// void swf_savedata (string data)
+// Save the generated file a database
+// for later retrieval
+function swf_savedata ($data)
+{
+    global $DBHOST, 
+           $DBUSER,
+           $DBPASS;
+    
+    $dbh = @mysql_connect ($DBHOST, $DBUSER, $DBPASS);
+
+    if (!$dbh) {
+        die (sprintf ("Error [%d]: %s",
+                      mysql_errno (), mysql_error ()));
+    }
+
+    $stmt = "INSERT INTO swf_files (file) VALUES ('$data')";
+
+    $sth = @mysql_query ($stmt, $dbh);
+
+    if (!$sth) {
+        die (sprintf ("Error [%d]: %s",
+                      mysql_errno (), mysql_error ()));
+    }
+
+    @mysql_free_result ($sth);
+    @mysql_close ($dbh);
+}
+?&#62;
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.swf-openfile.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.swf-labelframe.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>swf_openfile</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.swf.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>swf_labelframe</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

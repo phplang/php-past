@@ -1,0 +1,238 @@
+<HTML
+><HEAD
+><TITLE
+>assert</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="PHP options & information"
+HREF="ref.info.html"><LINK
+REL="PREVIOUS"
+TITLE="PHP options & information"
+HREF="ref.info.html"><LINK
+REL="NEXT"
+TITLE="assert_options"
+HREF="function.assert-options.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="ref.info.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.assert-options.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.assert"
+>assert</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN30008"
+></A
+><P
+>    (PHP4 &#62;= 4.0b4)</P
+>assert&nbsp;--&nbsp;Checks if assertion is false</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN30011"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN30013"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int <B
+CLASS="function"
+>assert</B
+></CODE
+> (string|bool assertion)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     <B
+CLASS="function"
+>assert()</B
+> will check the given 
+     <TT
+CLASS="parameter"
+><I
+>assertion</I
+></TT
+> and take appropriate 
+     action if its result is <TT
+CLASS="literal"
+>false</TT
+>.
+    </P
+><P
+>&#13;     If the <TT
+CLASS="parameter"
+><I
+>assertion</I
+></TT
+> is given as a string it
+     will be evaluated as PHP code by <B
+CLASS="function"
+>assert()</B
+>.
+     The advantages of a string <TT
+CLASS="parameter"
+><I
+>assertion</I
+></TT
+> 
+     are less overhead when assertion checking is off and messages
+     containing the <TT
+CLASS="parameter"
+><I
+>assertion</I
+></TT
+> expression when
+     an assertion failes.
+    </P
+><P
+>&#13;     Assertion should be used as a debugging feature only. You may
+     use them for sanity-checks that test for conditions that should
+     always be true and that indicate some programming errors if not
+     or to check for the presence of certain features like extension
+     functions or certain system limits and features.
+    </P
+><P
+>&#13;     Assertions should not be used for normal runtime operations 
+     like input parameter checks. As a rule of thumb your code
+     should always be able to work correct if assertion checking
+     is not activated.
+    </P
+><P
+>&#13;     The behavior of <B
+CLASS="function"
+>assert()</B
+> may be configured
+     by <A
+HREF="function.assert-options.html"
+><B
+CLASS="function"
+>assert_options()</B
+></A
+> or by .ini-settings 
+     described in that functions manual page.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="ref.info.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.assert-options.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>PHP options &#38; information</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.info.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>assert_options</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

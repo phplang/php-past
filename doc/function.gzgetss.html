@@ -1,0 +1,231 @@
+<HTML
+><HEAD
+><TITLE
+>gzgetss</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Zlib Compression Functions"
+HREF="ref.zlib.html"><LINK
+REL="PREVIOUS"
+TITLE="gzgets"
+HREF="function.gzgets.html"><LINK
+REL="NEXT"
+TITLE="gzopen"
+HREF="function.gzopen.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.gzgets.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.gzopen.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.gzgetss"
+>gzgetss</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN41001"
+></A
+><P
+>    (PHP3 , PHP4 )</P
+>gzgetss&nbsp;--&nbsp;
+     Get line from gz-file pointer and strip HTML tags
+    </DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN41004"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN41006"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>string <B
+CLASS="function"
+>gzgetss</B
+></CODE
+> (int zp, int length [, string 
+       allowable_tags])</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     Identical to <A
+HREF="function.gzgets.html"
+><B
+CLASS="function"
+>gzgets()</B
+></A
+>, except that
+     <B
+CLASS="function"
+>gzgetss()</B
+> attempts to strip any HTML and PHP
+     tags from the text it reads.
+    </P
+><P
+>&#13;     You can use the optional third parameter to specify tags which
+     should not be stripped.
+     <DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
+><P
+><B
+>Note: </B
+>
+       <TT
+CLASS="parameter"
+><I
+>Allowable_tags</I
+></TT
+> was added in PHP 3.0.13,
+       PHP4B3.
+      </P
+></BLOCKQUOTE
+></DIV
+>
+    </P
+><P
+>&#13;     See also <A
+HREF="function.gzgets.html"
+><B
+CLASS="function"
+>gzgets()</B
+></A
+>,
+     <A
+HREF="function.gzopen.html"
+><B
+CLASS="function"
+>gzopen()</B
+></A
+>, and <A
+HREF="function.strip-tags.html"
+><B
+CLASS="function"
+>strip_tags()</B
+></A
+>.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.gzgets.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.gzopen.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>gzgets</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.zlib.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>gzopen</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

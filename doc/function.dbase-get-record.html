@@ -1,0 +1,191 @@
+<HTML
+><HEAD
+><TITLE
+>dbase_get_record</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="dBase functions"
+HREF="ref.dbase.html"><LINK
+REL="PREVIOUS"
+TITLE="dbase_delete_record"
+HREF="function.dbase-delete-record.html"><LINK
+REL="NEXT"
+TITLE="dbase_get_record_with_names"
+HREF="function.dbase-get-record-with-names.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.dbase-delete-record.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.dbase-get-record-with-names.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.dbase-get-record"
+>dbase_get_record</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN9746"
+></A
+><P
+>    (PHP3 , PHP4 )</P
+>dbase_get_record&nbsp;--&nbsp;Gets a record from a dBase database</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN9749"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN9751"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>array <B
+CLASS="function"
+>dbase_get_record</B
+></CODE
+> (int dbase_identifier, int record)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     Returns the data from <TT
+CLASS="parameter"
+><I
+>record</I
+></TT
+> in an
+     array. The array is indexed starting at 0, and includes an
+     associative member named 'deleted' which is set to 1 if the
+     record has been marked for deletion (see
+     <A
+HREF="function.dbase-delete-record.html"
+><B
+CLASS="function"
+>dbase_delete_record()</B
+></A
+>.
+    </P
+><P
+>&#13;     Each field is converted to the appropriate PHP type. (Dates are
+     left as strings.)
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.dbase-delete-record.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.dbase-get-record-with-names.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>dbase_delete_record</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.dbase.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>dbase_get_record_with_names</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,171 @@
+<HTML
+><HEAD
+><TITLE
+>HTTP cookie support</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+REL="HOME"
+TITLE="PHP3 Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Features"
+HREF="features.html"><LINK
+REL="PREVIOUS"
+TITLE="PUT Method Support"
+HREF="feature-putsupport.html"><LINK
+REL="NEXT"
+TITLE="Regular expressions"
+HREF="feature-regexps.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP3 Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="feature-putsupport.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 4. Features</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="feature-regexps.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="FEATURE-COOKIES"
+>HTTP cookie support</A
+></H1
+><P
+>    PHP transparently supports HTTP cookies.  Cookies are a mechanism
+    for storing data in the remote browser and thus tracking or
+    identifying return users.  You can set cookies using the
+    <A
+HREF="function.setcookie.html"
+><B
+CLASS="FUNCTION"
+>setcookie()</B
+></A
+> function.  Cookies are part of the
+    HTTP header, so the SetCookie() function must be called before any
+    output is sent to the browser.  This is the same restriction as
+    for the <A
+HREF="function.header.html"
+><B
+CLASS="FUNCTION"
+>Header()</B
+></A
+> function.
+   </P
+><P
+>    Any cookies sent to you from the client will automatically be
+    turned into a PHP variable just like GET and POST method data.  If
+    you wish to assign multiple values to a single cookie, just add
+    <I
+CLASS="EMPHASIS"
+>[]</I
+> to the cookie name.  For more details see
+    the <A
+HREF="function.setcookie.html"
+><B
+CLASS="FUNCTION"
+>setcookie()</B
+></A
+> function.
+  </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="feature-putsupport.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="feature-regexps.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>PUT Method Support</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="features.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Regular expressions</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,282 @@
+<HTML
+><HEAD
+><TITLE
+>set_file_buffer</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Filesystem functions"
+HREF="ref.filesystem.html"><LINK
+REL="PREVIOUS"
+TITLE="fwrite"
+HREF="function.fwrite.html"><LINK
+REL="NEXT"
+TITLE="is_dir"
+HREF="function.is-dir.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.fwrite.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.is-dir.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.set-file-buffer"
+>set_file_buffer</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN11490"
+></A
+><P
+>    (PHP3 &#62;= 3.0.8, PHP4 &#62;= 4.0.1)</P
+>set_file_buffer&nbsp;--&nbsp;
+     Sets file buffering on the given file pointer
+    </DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN11493"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN11495"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int <B
+CLASS="function"
+>set_file_buffer</B
+></CODE
+> (int fp, int buffer)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     Output using <A
+HREF="function.fwrite.html"
+><B
+CLASS="function"
+>fwrite()</B
+></A
+> is normally buffered at
+     8K.  This means that if there are two processess wanting to write
+     to the same output stream (a file), each is paused after 8K of
+     data to allow the other to write.  <B
+CLASS="function"
+>set_file_buffer()</B
+>
+     sets the buffering for write operations on the given filepointer
+     <TT
+CLASS="parameter"
+><I
+>fp</I
+></TT
+> to <TT
+CLASS="parameter"
+><I
+>buffer</I
+></TT
+> bytes.
+     If <TT
+CLASS="parameter"
+><I
+>buffer</I
+></TT
+> is 0 then write operations are
+     unbuffered.  This ensures that all writes with
+     <A
+HREF="function.fwrite.html"
+><B
+CLASS="function"
+>fwrite()</B
+></A
+> are completed before other processes
+     are allowed to write to that output stream.
+    </P
+><P
+>&#13;     The function returns 0 on success, or EOF if the request cannot
+     be honored.
+    </P
+><P
+>&#13;     The following example demonstrates how to use
+     <B
+CLASS="function"
+>set_file_buffer()</B
+> to create an unbuffered stream.
+     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN11513"
+></A
+><P
+><B
+>Example 1. <B
+CLASS="function"
+>set_file_buffer()</B
+> example</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;$fp=fopen($file, "w");
+if($fp){
+  set_file_buffer($fp, 0);
+  fputs($fp, $output);
+  fclose($fp);
+}
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+    </P
+><P
+>&#13;     See also <A
+HREF="function.fopen.html"
+><B
+CLASS="function"
+>fopen()</B
+></A
+>, <A
+HREF="function.fwrite.html"
+><B
+CLASS="function"
+>fwrite()</B
+></A
+>.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.fwrite.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.is-dir.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>fwrite</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.filesystem.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>is_dir</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

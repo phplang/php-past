@@ -1,0 +1,286 @@
+<HTML
+><HEAD
+><TITLE
+>Semaphore and Shared Memory Functions</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Function Reference"
+HREF="funcref.html"><LINK
+REL="PREVIOUS"
+TITLE="satellite_exception_value"
+HREF="function.satellite_exception_value.html"><LINK
+REL="NEXT"
+TITLE="sem_get"
+HREF="function.sem-get.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="reference"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.satellite_exception_value.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.sem-get.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="reference"
+><A
+NAME="ref.sem"
+></A
+><DIV
+CLASS="TITLEPAGE"
+><H1
+CLASS="title"
+>LIX. Semaphore and Shared Memory Functions</H1
+><DIV
+CLASS="PARTINTRO"
+><A
+NAME="AEN33566"
+></A
+><P
+>&#13;    This module provides semaphore functions using System V
+    semaphores.  Semaphores may be used to provide exclusive access to
+    resources on the current machine, or to limit the number of
+    processes that may simultaneously use a resource.
+   </P
+><P
+>&#13;    This module provides also shared memory functions using System V
+    shared memory. Shared memory may be used to provide access to
+    global variables. Different httpd-daemons and even other programs
+    (such as Perl, C, ...) are able to access this data to provide a
+    global data-exchange. Remember, that shared memory is NOT safe
+    against simultaneous access. Use semaphores for synchronization.
+    <DIV
+CLASS="table"
+><A
+NAME="AEN33569"
+></A
+><P
+><B
+>Table 1. Limits of Shared Memory by the Unix OS</B
+></P
+><TABLE
+BORDER="1"
+CLASS="CALSTABLE"
+><TBODY
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>SHMMAX</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>max size of shared memory, normally 131072 bytes</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>SHMMIN</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>minimum size of shared memory, normally 1 byte</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>SHMMNI</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>max amount of shared memory segments, normally 100</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>SHMSEG</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>max amount of shared memory per process, normally 6</TD
+></TR
+></TBODY
+></TABLE
+></DIV
+>
+   </P
+><DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
+><P
+><B
+>Note: </B
+>
+     These functions do not work on Windows systems.
+    </P
+></BLOCKQUOTE
+></DIV
+></DIV
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Table of Contents</B
+></DT
+><DT
+><A
+HREF="function.sem-get.html"
+>sem_get</A
+> &#8212; Get a semaphore id</DT
+><DT
+><A
+HREF="function.sem-acquire.html"
+>sem_acquire</A
+> &#8212; Acquire a semaphore</DT
+><DT
+><A
+HREF="function.sem-release.html"
+>sem_release</A
+> &#8212; Release a semaphore</DT
+><DT
+><A
+HREF="function.shm-attach.html"
+>shm_attach</A
+> &#8212; Creates or open a shared memory segment</DT
+><DT
+><A
+HREF="function.shm-detach.html"
+>shm_detach</A
+> &#8212; Disconnects from shared memory segment</DT
+><DT
+><A
+HREF="function.shm-remove.html"
+>shm_remove</A
+> &#8212; Removes shared memory from Unix systems</DT
+><DT
+><A
+HREF="function.shm-put-var.html"
+>shm_put_var</A
+> &#8212; Inserts or updates a variable in shared
+     memory</DT
+><DT
+><A
+HREF="function.shm-get-var.html"
+>shm_get_var</A
+> &#8212; Returns a variable from shared memory
+    </DT
+><DT
+><A
+HREF="function.shm-remove-var.html"
+>shm_remove_var</A
+> &#8212; Removes a variable from shared memory
+    </DT
+></DL
+></DIV
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.satellite_exception_value.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.sem-get.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>satellite_exception_value</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="funcref.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>sem_get</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,248 @@
+<HTML
+><HEAD
+><TITLE
+>gzwrite</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Zlib Compression Functions"
+HREF="ref.zlib.html"><LINK
+REL="PREVIOUS"
+TITLE="gztell"
+HREF="function.gztell.html"><LINK
+REL="NEXT"
+TITLE="readgzfile"
+HREF="function.readgzfile.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.gztell.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.readgzfile.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.gzwrite"
+>gzwrite</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN41192"
+></A
+><P
+>    (PHP3 , PHP4 )</P
+>gzwrite&nbsp;--&nbsp;Binary-safe gz-file write</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN41195"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN41197"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int <B
+CLASS="function"
+>gzwrite</B
+></CODE
+> (int zp, string string [, int 
+       length])</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     <B
+CLASS="function"
+>Gzwrite()</B
+> writes the contents of
+     <TT
+CLASS="parameter"
+><I
+>string</I
+></TT
+> to the gz-file stream pointed to by
+     <TT
+CLASS="parameter"
+><I
+>zp</I
+></TT
+>. If the <TT
+CLASS="parameter"
+><I
+>length</I
+></TT
+>
+     argument is given, writing will stop after
+     <TT
+CLASS="parameter"
+><I
+>length</I
+></TT
+> (uncompressed) bytes have been
+     written or the end of <TT
+CLASS="parameter"
+><I
+>string</I
+></TT
+> is reached,
+     whichever comes first.
+    </P
+><P
+>&#13;     Note that if the <TT
+CLASS="parameter"
+><I
+>length</I
+></TT
+> argument is given,
+     then the <A
+HREF="configuration.html#ini.magic-quotes-runtime"
+>magic_quotes_runtime</A
+>
+     configuration option will be ignored and no slashes will be
+     stripped from <TT
+CLASS="parameter"
+><I
+>string</I
+></TT
+>.
+    </P
+><P
+>&#13;     See also <A
+HREF="function.gzread.html"
+><B
+CLASS="function"
+>gzread()</B
+></A
+>, <A
+HREF="function.gzopen.html"
+><B
+CLASS="function"
+>gzopen()</B
+></A
+>,
+     and <A
+HREF="function.gzputs.html"
+><B
+CLASS="function"
+>gzputs()</B
+></A
+>.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.gztell.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.readgzfile.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>gztell</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.zlib.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>readgzfile</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

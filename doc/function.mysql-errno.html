@@ -1,0 +1,241 @@
+<HTML
+><HEAD
+><TITLE
+>mysql_errno</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="MySQL functions"
+HREF="ref.mysql.html"><LINK
+REL="PREVIOUS"
+TITLE="mysql_drop_db"
+HREF="function.mysql-drop-db.html"><LINK
+REL="NEXT"
+TITLE="mysql_error"
+HREF="function.mysql-error.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.mysql-drop-db.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.mysql-error.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.mysql-errno"
+>mysql_errno</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN24170"
+></A
+><P
+>    (PHP3 , PHP4 )</P
+>mysql_errno&nbsp;--&nbsp;Returns the numerical value of the error message from previous
+     MySQL operation</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN24173"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN24175"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int <B
+CLASS="function"
+>mysql_errno</B
+></CODE
+> ([int 
+       link_identifier])</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     Returns the error number from the last mySQL function, or
+     <TT
+CLASS="literal"
+>0</TT
+> (zero) if no error occurred.
+    </P
+><P
+>&#13;     Errors coming back from the mySQL database backend no longer
+     issue warnings. Instead, use <B
+CLASS="function"
+>mysql_errno()</B
+> to
+     retrieve the error code. Note that this function only returns the
+     error code from the most recently executed mySQL function (not
+     including <A
+HREF="function.mysql-error.html"
+><B
+CLASS="function"
+>mysql_error()</B
+></A
+> and
+     <B
+CLASS="function"
+>mysql_errno()</B
+>), so if you want to use it,
+     make sure you check the value before calling another mySQL
+     function.
+     <DIV
+CLASS="informalexample"
+><A
+NAME="AEN24188"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;&#60;?php
+mysql_connect("marliesle");
+echo mysql_errno().": ".mysql_error()."&#60;BR&#62;";
+mysql_select_db("nonexistentdb");
+echo mysql_errno().": ".mysql_error()."&#60;BR&#62;";
+$conn = mysql_query("SELECT * FROM nonexistenttable");
+echo mysql_errno().": ".mysql_error()."&#60;BR&#62;";
+?&#62;
+      </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+>
+    </P
+><P
+> 
+     See also: <A
+HREF="function.mysql-error.html"
+><B
+CLASS="function"
+>mysql_error()</B
+></A
+>
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.mysql-drop-db.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.mysql-error.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>mysql_drop_db</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.mysql.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>mysql_error</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

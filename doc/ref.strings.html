@@ -1,0 +1,612 @@
+<HTML
+><HEAD
+><TITLE
+>String functions</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Function Reference"
+HREF="funcref.html"><LINK
+REL="PREVIOUS"
+TITLE="strerror"
+HREF="function.strerror.html"><LINK
+REL="NEXT"
+TITLE="AddCSlashes"
+HREF="function.addcslashes.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="reference"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.strerror.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.addcslashes.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="reference"
+><A
+NAME="ref.strings"
+></A
+><DIV
+CLASS="TITLEPAGE"
+><H1
+CLASS="title"
+>LXV. String functions</H1
+><DIV
+CLASS="PARTINTRO"
+><A
+NAME="AEN36144"
+></A
+><P
+>&#13;    These functions all manipulate strings in various ways. Some more
+    specialized sections can be found in the regular expression and
+    URL handling sections.
+   </P
+><P
+>&#13;    For information on how strings behave, especially with regard to
+    usage of single quotes, double quotes, and escape sequences, see
+    the <A
+HREF="language.types.string.html"
+>Strings</A
+> entry in
+    the <A
+HREF="language.types.html"
+>Types</A
+> section of the
+    manual. 
+   </P
+></DIV
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Table of Contents</B
+></DT
+><DT
+><A
+HREF="function.addcslashes.html"
+>AddCSlashes</A
+> &#8212; Quote string with slashes in a C style</DT
+><DT
+><A
+HREF="function.addslashes.html"
+>AddSlashes</A
+> &#8212; Quote string with slashes</DT
+><DT
+><A
+HREF="function.bin2hex.html"
+>bin2hex</A
+> &#8212; 
+     Convert binary data into hexadecimal representation
+    </DT
+><DT
+><A
+HREF="function.chop.html"
+>Chop</A
+> &#8212; Remove trailing whitespace</DT
+><DT
+><A
+HREF="function.chr.html"
+>Chr</A
+> &#8212; Return a specific character</DT
+><DT
+><A
+HREF="function.chunk-split.html"
+>chunk_split</A
+> &#8212; Split a string into smaller chunks</DT
+><DT
+><A
+HREF="function.convert-cyr-string.html"
+>convert_cyr_string</A
+> &#8212; 
+     Convert from one Cyrillic character set to another
+    </DT
+><DT
+><A
+HREF="function.count-chars.html"
+>count_chars</A
+> &#8212; 
+     Return information abouts characters used in a string
+    </DT
+><DT
+><A
+HREF="function.crc32.html"
+>crc32</A
+> &#8212; Calculates the crc32 polynomial of a string</DT
+><DT
+><A
+HREF="function.crypt.html"
+>crypt</A
+> &#8212; DES-encrypt a string</DT
+><DT
+><A
+HREF="function.echo.html"
+>echo</A
+> &#8212; Output one or more strings</DT
+><DT
+><A
+HREF="function.explode.html"
+>explode</A
+> &#8212; Split a string by string</DT
+><DT
+><A
+HREF="function.get-html-translation-table.html"
+>get_html_translation_table</A
+> &#8212; 
+     Returns the translation table used by
+     <A
+HREF="function.htmlspecialchars.html"
+><B
+CLASS="function"
+>htmlspecialchars()</B
+></A
+> and
+     <A
+HREF="function.htmlentities.html"
+><B
+CLASS="function"
+>htmlentities()</B
+></A
+>
+    </DT
+><DT
+><A
+HREF="function.get-meta-tags.html"
+>get_meta_tags</A
+> &#8212; 
+     Extracts all meta tag content attributes from a file and returns
+     an array
+    </DT
+><DT
+><A
+HREF="function.hebrev.html"
+>hebrev</A
+> &#8212; 
+     Convert logical Hebrew text to visual text
+    </DT
+><DT
+><A
+HREF="function.hebrevc.html"
+>hebrevc</A
+> &#8212; 
+     Convert logical Hebrew text to visual text with newline conversion
+    </DT
+><DT
+><A
+HREF="function.htmlentities.html"
+>htmlentities</A
+> &#8212; 
+     Convert all applicable characters to HTML entities
+    </DT
+><DT
+><A
+HREF="function.htmlspecialchars.html"
+>htmlspecialchars</A
+> &#8212; 
+     Convert special characters to HTML entities
+    </DT
+><DT
+><A
+HREF="function.implode.html"
+>implode</A
+> &#8212; Join array elements with a string</DT
+><DT
+><A
+HREF="function.join.html"
+>join</A
+> &#8212; Join array elements with a string</DT
+><DT
+><A
+HREF="function.levenshtein.html"
+>levenshtein</A
+> &#8212; 
+     Calculate Levenshtein distance between two strings		
+    </DT
+><DT
+><A
+HREF="function.ltrim.html"
+>ltrim</A
+> &#8212; 
+     Strip whitespace from the beginning of a string
+    </DT
+><DT
+><A
+HREF="function.md5.html"
+>md5</A
+> &#8212; Calculate the md5 hash of a string</DT
+><DT
+><A
+HREF="function.metaphone.html"
+>Metaphone</A
+> &#8212; Calculate the metaphone key of a string</DT
+><DT
+><A
+HREF="function.nl2br.html"
+>nl2br</A
+> &#8212; Converts newlines to HTML line breaks</DT
+><DT
+><A
+HREF="function.ord.html"
+>Ord</A
+> &#8212; Return ASCII value of character</DT
+><DT
+><A
+HREF="function.parse-str.html"
+>parse_str</A
+> &#8212; Parses the string into variables</DT
+><DT
+><A
+HREF="function.print.html"
+>print</A
+> &#8212; Output a string</DT
+><DT
+><A
+HREF="function.printf.html"
+>printf</A
+> &#8212; Output a formatted string</DT
+><DT
+><A
+HREF="function.quoted-printable-decode.html"
+>quoted_printable_decode</A
+> &#8212; 
+     Convert a quoted-printable string to an 8 bit string
+    </DT
+><DT
+><A
+HREF="function.quotemeta.html"
+>quotemeta</A
+> &#8212; Quote meta characters</DT
+><DT
+><A
+HREF="function.rtrim.html"
+>rtrim</A
+> &#8212; Remove trailing whitespace.</DT
+><DT
+><A
+HREF="function.sscanf.html"
+>sscanf</A
+> &#8212; Parses input from a string according to a format</DT
+><DT
+><A
+HREF="function.setlocale.html"
+>setlocale</A
+> &#8212; Set locale information</DT
+><DT
+><A
+HREF="function.similar-text.html"
+>similar_text</A
+> &#8212; 
+     Calculate the similarity between two strings
+    </DT
+><DT
+><A
+HREF="function.soundex.html"
+>soundex</A
+> &#8212; Calculate the soundex key of a string</DT
+><DT
+><A
+HREF="function.sprintf.html"
+>sprintf</A
+> &#8212; Return a formatted string</DT
+><DT
+><A
+HREF="function.strcasecmp.html"
+>strcasecmp</A
+> &#8212; 
+     Binary safe case-insensitive string comparison
+    </DT
+><DT
+><A
+HREF="function.strchr.html"
+>strchr</A
+> &#8212; 
+     Find the first occurrence of a character
+    </DT
+><DT
+><A
+HREF="function.strcmp.html"
+>strcmp</A
+> &#8212; Binary safe string comparison</DT
+><DT
+><A
+HREF="function.strcspn.html"
+>strcspn</A
+> &#8212; 
+     Find length of initial segment not matching mask
+    </DT
+><DT
+><A
+HREF="function.strip-tags.html"
+>strip_tags</A
+> &#8212; Strip HTML and PHP tags from a string</DT
+><DT
+><A
+HREF="function.stripcslashes.html"
+>stripcslashes</A
+> &#8212; 
+     Un-quote string quoted with <A
+HREF="function.addcslashes.html"
+><B
+CLASS="function"
+>addcslashes()</B
+></A
+>
+    </DT
+><DT
+><A
+HREF="function.stripslashes.html"
+>stripslashes</A
+> &#8212; 
+     Un-quote string quoted with <A
+HREF="function.addslashes.html"
+><B
+CLASS="function"
+>addslashes()</B
+></A
+>
+    </DT
+><DT
+><A
+HREF="function.stristr.html"
+>stristr</A
+> &#8212; 
+     Case-insensitive <A
+HREF="function.strstr.html"
+><B
+CLASS="function"
+>strstr()</B
+></A
+>
+    </DT
+><DT
+><A
+HREF="function.strlen.html"
+>strlen</A
+> &#8212; Get string length</DT
+><DT
+><A
+HREF="function.strnatcmp.html"
+>strnatcmp</A
+> &#8212; 
+	 String comparisons using a "natural order" algorithm
+	</DT
+><DT
+><A
+HREF="function.strnatcasecmp.html"
+>strnatcasecmp</A
+> &#8212; 
+	 Case insensitive string comparisons using a "natural order" algorithm
+	</DT
+><DT
+><A
+HREF="function.strncmp.html"
+>strncmp</A
+> &#8212; 
+	 Binary safe string comparison of the first n characters
+	</DT
+><DT
+><A
+HREF="function.str-pad.html"
+>str_pad</A
+> &#8212; Pad a string to a certain length with another string</DT
+><DT
+><A
+HREF="function.strpos.html"
+>strpos</A
+> &#8212; 
+     Find position of first occurrence of a string
+    </DT
+><DT
+><A
+HREF="function.strrchr.html"
+>strrchr</A
+> &#8212; 
+     Find the last occurrence of a character in a string
+    </DT
+><DT
+><A
+HREF="function.str-repeat.html"
+>str_repeat</A
+> &#8212; Repeat a string</DT
+><DT
+><A
+HREF="function.strrev.html"
+>strrev</A
+> &#8212; Reverse a string</DT
+><DT
+><A
+HREF="function.strrpos.html"
+>strrpos</A
+> &#8212; 
+     Find position of last occurrence of a char in a string
+    </DT
+><DT
+><A
+HREF="function.strspn.html"
+>strspn</A
+> &#8212; 
+     Find length of initial segment matching mask
+    </DT
+><DT
+><A
+HREF="function.strstr.html"
+>strstr</A
+> &#8212; Find first occurrence of a string</DT
+><DT
+><A
+HREF="function.strtok.html"
+>strtok</A
+> &#8212; Tokenize string</DT
+><DT
+><A
+HREF="function.strtolower.html"
+>strtolower</A
+> &#8212; Make a string lowercase</DT
+><DT
+><A
+HREF="function.strtoupper.html"
+>strtoupper</A
+> &#8212; Make a string uppercase</DT
+><DT
+><A
+HREF="function.str-replace.html"
+>str_replace</A
+> &#8212; 
+     Replace all occurrences of needle in haystack with str
+    </DT
+><DT
+><A
+HREF="function.strtr.html"
+>strtr</A
+> &#8212; Translate certain characters</DT
+><DT
+><A
+HREF="function.substr.html"
+>substr</A
+> &#8212; Return part of a string</DT
+><DT
+><A
+HREF="function.substr-count.html"
+>substr_count</A
+> &#8212; Count the number of substring occurrences</DT
+><DT
+><A
+HREF="function.substr-replace.html"
+>substr_replace</A
+> &#8212; Replace text within a portion of a string</DT
+><DT
+><A
+HREF="function.trim.html"
+>trim</A
+> &#8212; 
+     Strip whitespace from the beginning and end of a string
+    </DT
+><DT
+><A
+HREF="function.ucfirst.html"
+>ucfirst</A
+> &#8212; Make a string's first character uppercase</DT
+><DT
+><A
+HREF="function.ucwords.html"
+>ucwords</A
+> &#8212; 
+     Uppercase the first character of each word in a string
+    </DT
+><DT
+><A
+HREF="function.wordwrap.html"
+>wordwrap</A
+> &#8212; 
+     Wraps a string to a given number of characters using a string
+     break character.
+    </DT
+></DL
+></DIV
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.strerror.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.addcslashes.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>strerror</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="funcref.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>AddCSlashes</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

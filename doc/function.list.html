@@ -1,0 +1,256 @@
+<HTML
+><HEAD
+><TITLE
+>list</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Array Functions"
+HREF="ref.array.html"><LINK
+REL="PREVIOUS"
+TITLE="ksort"
+HREF="function.ksort.html"><LINK
+REL="NEXT"
+TITLE="natsort"
+HREF="function.natsort.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.ksort.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.natsort.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.list"
+>list</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN5512"
+></A
+><P
+>    (unknown)</P
+>list&nbsp;--&nbsp;
+     Assign variables as if they were an array
+    </DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN5515"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN5517"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>void <B
+CLASS="function"
+>list</B
+></CODE
+>(...);</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     Like <A
+HREF="function.array.html"
+><B
+CLASS="function"
+>array()</B
+></A
+>, this is not really a function,
+     but a language construct.  <B
+CLASS="function"
+>list()</B
+> is used to
+     assign a list of variables in one operation.
+     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN5525"
+></A
+><P
+><B
+>Example 1. <B
+CLASS="function"
+>List()</B
+> example</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;&#60;table&#62;
+ &#60;tr&#62;
+  &#60;th&#62;Employee name&#60;/th&#62;
+  &#60;th&#62;Salary&#60;/th&#62;
+ &#60;/tr&#62;
+
+&#60;?php
+
+$result = mysql ($conn, "SELECT id, name, salary FROM employees");
+while (list ($id, $name, $salary) = mysql_fetch_row ($result)) {
+    print (" &#60;tr&#62;\n".
+           "  &#60;td&#62;&#60;a href=\"info.php3?id=$id\"&#62;$name&#60;/a&#62;&#60;/td&#62;\n".
+           "  &#60;td&#62;$salary&#60;/td&#62;\n".
+           " &#60;/tr&#62;\n");
+}
+
+?&#62;
+
+&#60;/table&#62;
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+    </P
+><P
+>&#13;     See also <A
+HREF="function.each.html"
+><B
+CLASS="function"
+>each()</B
+></A
+> and <A
+HREF="function.array.html"
+><B
+CLASS="function"
+>array()</B
+></A
+>.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.ksort.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.natsort.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>ksort</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.array.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>natsort</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

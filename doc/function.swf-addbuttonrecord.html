@@ -1,0 +1,251 @@
+<HTML
+><HEAD
+><TITLE
+>swf_addbuttonrecord</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Shockwave Flash functions"
+HREF="ref.swf.html"><LINK
+REL="PREVIOUS"
+TITLE="swf_startbutton"
+HREF="function.swf-startbutton.html"><LINK
+REL="NEXT"
+TITLE="swf_oncondition"
+HREF="function.swf-oncondition.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.swf-startbutton.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.swf-oncondition.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.swf-addbuttonrecord"
+>swf_addbuttonrecord</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN35341"
+></A
+><P
+>    (PHP4 &#62;= 4.0RC2)</P
+>swf_addbuttonrecord&nbsp;--&nbsp;
+     Controls location, appearance and active area of the current button
+    </DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN35344"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN35346"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>void 
+       <B
+CLASS="function"
+>swf_addbuttonrecord</B
+>
+      </CODE
+> (int 
+       states, int 
+       shapeid, int 
+       depth)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     The <B
+CLASS="function"
+>swf_addbuttonrecord()</B
+> function allows you
+     to define the specifics of using a button.  The first parameter,
+     <TT
+CLASS="parameter"
+><I
+>states</I
+></TT
+>, defines what states the button can
+     have, these can be any or all of the following constants:
+     BSHitTest, BSDown, BSOver or BSUp.  The second parameter, the
+     <TT
+CLASS="parameter"
+><I
+>shapeid</I
+></TT
+> is the look of the button, this is
+     usually the object id of the shape of the button.  The
+     <TT
+CLASS="parameter"
+><I
+>depth</I
+></TT
+> parameter is the placement of the
+     button in the current frame.
+     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN35361"
+></A
+><P
+><B
+>Example 1. 
+       <B
+CLASS="function"
+>Swf_addbuttonrecord()</B
+> function example
+      </B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;swf_startButton ($objid, TYPE_MENUBUTTON);
+    swf_addButtonRecord (BSDown|BSOver, $buttonImageId, 340);
+    swf_onCondition (MenuEnter);
+        swf_actionGetUrl ("http://www.designmultimedia.com", "_level1");
+    swf_onCondition (MenuExit);
+        swf_actionGetUrl ("", "_level1");
+swf_endButton ();
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.swf-startbutton.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.swf-oncondition.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>swf_startbutton</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.swf.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>swf_oncondition</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

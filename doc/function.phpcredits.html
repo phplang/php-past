@@ -1,0 +1,406 @@
+<HTML
+><HEAD
+><TITLE
+>phpcredits</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="PHP options & information"
+HREF="ref.info.html"><LINK
+REL="PREVIOUS"
+TITLE="ini_set"
+HREF="function.ini-set.html"><LINK
+REL="NEXT"
+TITLE="phpinfo"
+HREF="function.phpinfo.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.ini-set.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.phpinfo.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.phpcredits"
+>phpcredits</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN30385"
+></A
+><P
+>    (PHP4 )</P
+>phpcredits&nbsp;--&nbsp;Prints out the credits for PHP.</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN30388"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN30390"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>void <B
+CLASS="function"
+>phpcredits</B
+></CODE
+> (int flag)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     This function prints out the credits listing the PHP developers,
+     modules, etc. It generates the appropriate HTML codes to insert
+     the information in a page. A parameter indicating what will be
+     printed (a pre-defined constant flag, see table below) needs
+     to be passed. For example to print the general credits, you will
+     use somewhere in your code:
+     <DIV
+CLASS="informalexample"
+><A
+NAME="AEN30397"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;...
+phpcredits(CREDITS_GENERAL);
+...
+      </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+>
+     And if you want to print the core developers and the documentation
+     group, in a page of its own, you will use:
+     <DIV
+CLASS="informalexample"
+><A
+NAME="AEN30399"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;&#60;?php
+  phpcredits(CREDITS_GROUP + CREDITS_DOCS + CREDITS_FULLPAGE);
+?&#62;  
+      </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+>
+     And if you feel like embedding all the credits in your page, then
+     code like the one below will do it:
+     <DIV
+CLASS="informalexample"
+><A
+NAME="AEN30401"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;&#60;html&#62;
+  &#60;head&#62;
+    &#60;title&#62;My credits page&#60;/title&#62;
+  &#60;/head&#62;
+  &#60;body&#62;
+  &#60;?php
+    // some code of your own
+    phpcredits(CREDITS_ALL + CREDITS_FULLPAGE);
+    // some more code
+  ?&#62;
+  &#60;/body&#62;
+&#60;/html&#62;
+      </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+>
+    </P
+><P
+>&#13;    </P
+><P
+>&#13;    <DIV
+CLASS="table"
+><A
+NAME="AEN30405"
+></A
+><P
+><B
+>Table 1. Pre-defined <B
+CLASS="function"
+>phpcredits()</B
+> flags</B
+></P
+><TABLE
+BORDER="1"
+CLASS="CALSTABLE"
+><THEAD
+><TR
+><TH
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>name</TH
+><TH
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>description</TH
+></TR
+></THEAD
+><TBODY
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>CREDITS_ALL</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;      All the credits, equivalent to using: CREDITS_DOCS + CREDITS_GENERAL + 
+      CREDITS_GROUP + CREDITS_MODULES + CREDITS_FULLPAGE. It generates a
+      complete stand-alone HTML page with the appropriate tags.
+     </TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>CREDITS_DOCS</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>The credits for the documentation team</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>CREDITS_FULLPAGE</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;      Usually used in combination with the other flags.
+      Indicates that the a complete stand-alone HTML page
+      needs to be printed including the information indicated
+      by the other flags.
+     </TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>CREDITS_GENERAL</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;      General credits: Language design and concept, PHP 4.0 authors
+      and SAPI module.
+     </TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>CREDITS_GROUP</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>A list of the core developers</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>CREDITS_MODULES</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>A list of the extension modules for PHP, and their authors</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>CREDITS_SAPI</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>This flag is defined but, as of PHP 4.0.1pl2, it is not used</TD
+></TR
+></TBODY
+></TABLE
+></DIV
+>
+    </P
+><P
+>&#13;     See also <A
+HREF="function.phpinfo.html"
+><B
+CLASS="function"
+>phpinfo()</B
+></A
+>,
+     <A
+HREF="function.phpversion.html"
+><B
+CLASS="function"
+>phpversion()</B
+></A
+>,
+     <A
+HREF="function.php-logo-guid.html"
+><B
+CLASS="function"
+>php_logo_guid()</B
+></A
+>.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.ini-set.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.phpinfo.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>ini_set</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.info.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>phpinfo</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,291 @@
+<HTML
+><HEAD
+><TITLE
+>Network Functions</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Function Reference"
+HREF="funcref.html"><LINK
+REL="PREVIOUS"
+TITLE="mysql_tablename"
+HREF="function.mysql-tablename.html"><LINK
+REL="NEXT"
+TITLE="checkdnsrr"
+HREF="function.checkdnsrr.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="reference"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.mysql-tablename.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.checkdnsrr.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="reference"
+><A
+NAME="ref.network"
+></A
+><DIV
+CLASS="TITLEPAGE"
+><H1
+CLASS="title"
+>XLII. Network Functions</H1
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Table of Contents</B
+></DT
+><DT
+><A
+HREF="function.checkdnsrr.html"
+>checkdnsrr</A
+> &#8212; 
+     Check DNS records corresponding to a given Internet host name or
+     IP address
+    </DT
+><DT
+><A
+HREF="function.closelog.html"
+>closelog</A
+> &#8212; Close connection to system logger</DT
+><DT
+><A
+HREF="function.debugger-off.html"
+>debugger_off</A
+> &#8212; Disable internal PHP debugger</DT
+><DT
+><A
+HREF="function.debugger-on.html"
+>debugger_on</A
+> &#8212; Enable internal PHP debugger</DT
+><DT
+><A
+HREF="function.define-syslog-variables.html"
+>define_syslog_variables</A
+> &#8212; Initializes all syslog related constants</DT
+><DT
+><A
+HREF="function.fsockopen.html"
+>fsockopen</A
+> &#8212; 
+     Open Internet or Unix domain socket connection
+    </DT
+><DT
+><A
+HREF="function.gethostbyaddr.html"
+>gethostbyaddr</A
+> &#8212; 
+     Get the Internet host name corresponding to a given IP address
+    </DT
+><DT
+><A
+HREF="function.gethostbyname.html"
+>gethostbyname</A
+> &#8212; 
+     Get the IP address corresponding to a given Internet host name
+    </DT
+><DT
+><A
+HREF="function.gethostbynamel.html"
+>gethostbynamel</A
+> &#8212; 
+     Get a list of IP addresses corresponding to a given Internet host
+     name
+    </DT
+><DT
+><A
+HREF="function.getmxrr.html"
+>getmxrr</A
+> &#8212; 
+     Get MX records corresponding to a given Internet host name
+    </DT
+><DT
+><A
+HREF="function.getprotobyname.html"
+>getprotobyname</A
+> &#8212; 
+     Get protocol number associated with protocol name
+    </DT
+><DT
+><A
+HREF="function.getprotobynumber.html"
+>getprotobynumber</A
+> &#8212; 
+     Get protocol name associated with protocol number
+    </DT
+><DT
+><A
+HREF="function.getservbyname.html"
+>getservbyname</A
+> &#8212; 
+     Get port number associated with an Internet service and protocol
+    </DT
+><DT
+><A
+HREF="function.getservbyport.html"
+>getservbyport</A
+> &#8212; 
+     Get Internet service which corresponds to port and protocol
+    </DT
+><DT
+><A
+HREF="function.ip2long.html"
+>ip2long</A
+> &#8212; 
+      Converts a string containing an (IPv4) Internet Protocol dotted address
+      into a proper address.
+    </DT
+><DT
+><A
+HREF="function.long2ip.html"
+>long2ip</A
+> &#8212; 
+      Converts an (IPv4) Internet network address into a string in Internet
+      standard dotted format 
+    </DT
+><DT
+><A
+HREF="function.openlog.html"
+>openlog</A
+> &#8212; Open connection to system logger</DT
+><DT
+><A
+HREF="function.pfsockopen.html"
+>pfsockopen</A
+> &#8212; 
+     Open persistent Internet or Unix domain socket connection
+    </DT
+><DT
+><A
+HREF="function.socket-get-status.html"
+>socket_get_status</A
+> &#8212; 
+     Returns information about existing socket resource
+    </DT
+><DT
+><A
+HREF="function.set-socket-blocking.html"
+>socket_set_blocking</A
+> &#8212; Set blocking/non-blocking mode on a socket</DT
+><DT
+><A
+HREF="function.socket-set-timeout.html"
+>socket_set_timeout</A
+> &#8212; Set timeout period on a socket</DT
+><DT
+><A
+HREF="function.syslog.html"
+>syslog</A
+> &#8212; Generate a system log message</DT
+></DL
+></DIV
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.mysql-tablename.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.checkdnsrr.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>mysql_tablename</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="funcref.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>checkdnsrr</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

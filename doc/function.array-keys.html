@@ -1,0 +1,312 @@
+<HTML
+><HEAD
+><TITLE
+>array_keys</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Array Functions"
+HREF="ref.array.html"><LINK
+REL="PREVIOUS"
+TITLE="array_intersect"
+HREF="function.array-intersect.html"><LINK
+REL="NEXT"
+TITLE="array_merge"
+HREF="function.array-merge.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.array-intersect.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.array-merge.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.array-keys"
+>array_keys</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN4564"
+></A
+><P
+>    (PHP4 )</P
+>array_keys&nbsp;--&nbsp;Return all the keys of an array</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN4567"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN4569"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>array <B
+CLASS="function"
+>array_keys</B
+></CODE
+> (array input [, mixed
+       search_value])</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     <B
+CLASS="function"
+>Array_keys()</B
+> returns the keys, numeric and
+     string, from the <TT
+CLASS="parameter"
+><I
+>input</I
+></TT
+> array.
+    </P
+><P
+>&#13;     If the optional <TT
+CLASS="parameter"
+><I
+>search_value</I
+></TT
+> is specified,
+     then only the keys for that value are returned. Otherwise, all
+     the keys from the <TT
+CLASS="parameter"
+><I
+>input</I
+></TT
+> are returned.
+    </P
+><P
+>&#13;     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN4585"
+></A
+><P
+><B
+>Example 1. <B
+CLASS="function"
+>Array_keys()</B
+> example</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;$array = array (0 =&#62; 100, "color" =&#62; "red");
+array_keys ($array);       // returns array (0, "color")
+
+$array = array ("blue", "red", "green", "blue", "blue");
+array_keys ($array, "blue");  //  returns array (0, 3, 4) 
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+    </P
+><DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
+><P
+><B
+>Note: </B
+>
+      This function was added to PHP 4, below is an implementation for
+      those still using PHP 3.
+      <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN4591"
+></A
+><P
+><B
+>Example 2. 
+	Implementation of <B
+CLASS="function"
+>array_keys()</B
+> for PHP 3
+	users
+       </B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;function array_keys ($arr, $term="") {
+    $t = array();
+    while (list($k,$v) = each($arr)) {
+        if ($term &#38;&#38; $v != $term)
+            continue;
+            $t[] = $k;
+        }
+        return $t;
+}
+       </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+     </P
+></BLOCKQUOTE
+></DIV
+><P
+>&#13;     See also <A
+HREF="function.array-values.html"
+><B
+CLASS="function"
+>array_values()</B
+></A
+>.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.array-intersect.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.array-merge.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>array_intersect</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.array.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>array_merge</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

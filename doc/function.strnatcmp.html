@@ -1,0 +1,360 @@
+<HTML
+><HEAD
+><TITLE
+>strnatcmp</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="String functions"
+HREF="ref.strings.html"><LINK
+REL="PREVIOUS"
+TITLE="strlen"
+HREF="function.strlen.html"><LINK
+REL="NEXT"
+TITLE="strnatcasecmp"
+HREF="function.strnatcasecmp.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.strlen.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.strnatcasecmp.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.strnatcmp"
+>strnatcmp</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN37356"
+></A
+><P
+>    (PHP4 &#62;= 4.0RC2)</P
+>strnatcmp&nbsp;--&nbsp;
+	 String comparisons using a "natural order" algorithm
+	</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN37359"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN37361"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int <B
+CLASS="function"
+>strnatcmp</B
+></CODE
+> (string str1, string str2)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;	 This function implements a comparison algorithm that orders
+	 alphanumeric strings in the way a human being would, this is
+	 described as a "natural ordering".  An example of the difference
+	 between this algorithm and the regular computer string sorting
+	 algorithms (used in <A
+HREF="function.strcmp.html"
+><B
+CLASS="function"
+>strcmp()</B
+></A
+>) can be seen
+	 below:
+	 <DIV
+CLASS="informalexample"
+><A
+NAME="AEN37371"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;$arr1 = $arr2 = array ("img12.png","img10.png","img2.png","img1.png");
+echo "Standard string comparison\n";
+usort($arr1,"strcmp");
+print_r($arr1);
+echo "\nNatural order string comparison\n";
+usort($arr2,"strnatcmp");
+print_r($arr2);
+	  </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+>
+	 The code above will generate the following output:
+	 <DIV
+CLASS="informalexample"
+><A
+NAME="AEN37373"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;Standard string comparison
+Array
+(
+    [0] =&#62; img1.png
+    [1] =&#62; img10.png
+    [2] =&#62; img12.png
+    [3] =&#62; img2.png
+)
+
+Natural order string comparison
+Array
+(
+    [0] =&#62; img1.png
+    [1] =&#62; img2.png
+    [2] =&#62; img10.png
+    [3] =&#62; img12.png
+)
+	  </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+>
+	 For more infomation see: Martin Pool's <A
+HREF="http://www.linuxcare.com.au/projects/natsort/"
+TARGET="_top"
+>Natural Order String Comparison</A
+>
+	 page.
+	</P
+><P
+>&#13;	 Similar to other string comparison functions, this one returns
+	 &#60; 0 if <TT
+CLASS="parameter"
+><I
+>str1</I
+></TT
+> is less than
+	 <TT
+CLASS="parameter"
+><I
+>str2</I
+></TT
+>; &#62; 0 if <TT
+CLASS="parameter"
+><I
+>str1</I
+></TT
+>
+	 is greater than <TT
+CLASS="parameter"
+><I
+>str2</I
+></TT
+>, and 0 if they are
+	 equal.
+    </P
+><P
+>&#13;     Note that this comparison is case sensitive.
+    </P
+><P
+>&#13;     See also <A
+HREF="function.ereg.html"
+><B
+CLASS="function"
+>ereg()</B
+></A
+>,
+     <A
+HREF="function.strcasecmp.html"
+><B
+CLASS="function"
+>strcasecmp()</B
+></A
+>, <A
+HREF="function.substr.html"
+><B
+CLASS="function"
+>substr()</B
+></A
+>,
+     <A
+HREF="function.stristr.html"
+><B
+CLASS="function"
+>stristr()</B
+></A
+>, <A
+HREF="function.strcmp.html"
+><B
+CLASS="function"
+>strcmp()</B
+></A
+>,
+     <A
+HREF="function.strncmp.html"
+><B
+CLASS="function"
+>strncmp()</B
+></A
+>, <A
+HREF="function.strnatcasecmp.html"
+><B
+CLASS="function"
+>strnatcasecmp()</B
+></A
+>,
+     <A
+HREF="function.strstr.html"
+><B
+CLASS="function"
+>strstr()</B
+></A
+>, <A
+HREF="function.natsort.html"
+><B
+CLASS="function"
+>natsort()</B
+></A
+> and
+     <A
+HREF="function.natcasesort.html"
+><B
+CLASS="function"
+>natcasesort()</B
+></A
+>.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.strlen.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.strnatcasecmp.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>strlen</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.strings.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>strnatcasecmp</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

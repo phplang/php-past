@@ -1,0 +1,424 @@
+<HTML
+><HEAD
+><TITLE
+>Socket functions</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Function Reference"
+HREF="funcref.html"><LINK
+REL="PREVIOUS"
+TITLE="snmp_set_quick_print"
+HREF="function.snmp-set-quick-print.html"><LINK
+REL="NEXT"
+TITLE="accept_connect"
+HREF="function.accept-connect.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="reference"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.snmp-set-quick-print.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.accept-connect.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="reference"
+><A
+NAME="ref.sockets"
+></A
+><DIV
+CLASS="TITLEPAGE"
+><H1
+CLASS="title"
+>LXIV. Socket functions</H1
+><DIV
+CLASS="PARTINTRO"
+><A
+NAME="AEN35874"
+></A
+><P
+>&#13;    The socket extension implements a low-level interface to the
+    socket communication functions, providing the possibility to act
+    as a socket server as well as a client.
+   </P
+><P
+>&#13;    The socket functions described here are part of an extension to
+    PHP which must be enabled at compile time by giving the <TT
+CLASS="option"
+>--enable-sockets</TT
+> option to
+    <B
+CLASS="command"
+>configure</B
+>.
+   </P
+><P
+>&#13;    For a more generic client-side socket interface, see
+    <A
+HREF="function.fsockopen.html"
+><B
+CLASS="function"
+>fsockopen()</B
+></A
+> and
+    <A
+HREF="function.pfsockopen.html"
+><B
+CLASS="function"
+>pfsockopen()</B
+></A
+>.
+   </P
+><P
+>&#13;    When using these functions, it is important to remember that while
+    many of them have identical names to their C counterparts, they
+    often have different declarations. Please be sure to read the
+    descriptions to avoid confusion.
+   </P
+><P
+>&#13;    That said, those unfamiliar with socket programming can still find
+    a lot of useful material in the appropriate Unix man pages, and
+    there is a great deal of tutorial information on socket
+    programming in C on the web, much of which can be applied, with
+    slight modifications, to socket programming in PHP.
+   </P
+><P
+>&#13;    <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN35885"
+></A
+><P
+><B
+>Example 1. Socket example: Simple TCP/IP server</B
+></P
+><P
+>&#13;      This example shows a simple talkback server. Change the
+      <TT
+CLASS="varname"
+>address</TT
+> and <TT
+CLASS="varname"
+>port</TT
+> variables
+      to suit your setup and execute. You may then connect to the
+      server with a command similar to: <B
+CLASS="command"
+>telnet 192.168.1.53
+      10000</B
+> (where the address and port match your
+      setup). Anything you type will then be output on the server
+      side, and echoed back to you. To disconnect, enter 'quit'.
+     </P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;&#60;?php
+error_reporting (E_ALL);
+
+/* Allow the script to hang around waiting for connections. */
+set_time_limit (0);
+
+$address = '192.168.1.53';
+$port = 10000;
+
+if (($sock = socket (AF_INET, SOCK_STREAM, 0)) &#60; 0) {
+    echo "socket() failed: reason: " . strerror ($sock) . "\n";
+}
+
+if (($ret = bind ($sock, $address, $port)) &#60; 0) {
+    echo "bind() failed: reason: " . strerror ($ret) . "\n";
+}
+
+if (($ret = listen ($sock, 5)) &#60; 0) {
+    echo "listen() failed: reason: " . strerror ($ret) . "\n";
+}
+
+do {
+    if (($msgsock = accept_connect($sock)) &#60; 0) {
+        echo "accept_connect() failed: reason: " . strerror ($msgsock) . "\n";
+        break;
+    }
+    do {
+        $buf = '';
+        $ret = read ($msgsock, $buf, 2048);
+        if ($ret &#60; 0) {
+            echo "read() failed: reason: " . strerror ($ret) . "\n";
+            break 2;
+        }
+        if ($ret == 0) {
+            break 2;
+        }
+        $buf = trim ($buf);
+        if ($buf == 'quit') {
+            close ($msgsock);
+            break 2;
+        }
+        $talkback = "PHP: You said '$buf'.\n";
+        write ($msgsock, $talkback, strlen ($talkback));
+        echo "$buf\n";
+    } while (true);
+    close ($msgsock);
+} while (true);
+
+close ($sock);
+?&#62;
+     </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+   </P
+><P
+>&#13;    <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN35893"
+></A
+><P
+><B
+>Example 2. Socket example: Simple TCP/IP client</B
+></P
+><P
+>&#13;      This example shows a simple, one-shot HTTP client. It simply
+      connects to a page, submits a HEAD request, echoes the reply,
+      and exits.
+     </P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;&#60;?php
+error_reporting (E_ALL);
+
+echo "&#60;h2&#62;TCP/IP Connection&#60;/h2&#62;\n";
+
+/* Get the port for the WWW service. */
+$service_port = getservbyname ('www', 'tcp');
+
+/* Get the IP address for the target host. */
+$address = gethostbyname ('www.php.net');
+
+/* Create a TCP/IP socket. */
+$socket = socket (AF_INET, SOCK_STREAM, 0);
+if ($socket &#60; 0) {
+    echo "socket() failed: reason: " . strerror ($socket) . "\n";
+} else {
+    "socket() successful: " . strerror ($socket) . "\n";
+}
+
+echo "Attempting to connect to '$address' on port '$service_port'...";
+$result = connect ($socket, $address, $service_port);
+if ($result &#60; 0) {
+    echo "connect() failed.\nReason: ($result) " . strerror($result) . "\n";
+} else {
+    echo "OK.\n";
+}
+
+$in = "HEAD / HTTP/1.0\r\n\r\n";
+$out = '';
+
+echo "Sending HTTP HEAD request...";
+write ($socket, $in, strlen ($in));
+echo "OK.\n";
+
+echo "Reading response:\n\n";
+while (read ($socket, $out, 2048)) {
+    echo $out;
+}
+
+echo "Closing socket...";
+close ($socket);
+echo "OK.\n\n";
+?&#62;
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+    </P
+></DIV
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Table of Contents</B
+></DT
+><DT
+><A
+HREF="function.accept-connect.html"
+>accept_connect</A
+> &#8212; Accepts a connection on a socket</DT
+><DT
+><A
+HREF="function.bind.html"
+>bind</A
+> &#8212; Binds a name to a socket</DT
+><DT
+><A
+HREF="function.close.html"
+>close</A
+> &#8212; Closes a file descriptor</DT
+><DT
+><A
+HREF="function.connect.html"
+>connect</A
+> &#8212; Initiates a connection on a socket</DT
+><DT
+><A
+HREF="function.listen.html"
+>listen</A
+> &#8212; Listens for a connection on a socket</DT
+><DT
+><A
+HREF="function.socket.html"
+>socket</A
+> &#8212; Create a socket (endpoint for communication)</DT
+><DT
+><A
+HREF="function.strerror.html"
+>strerror</A
+> &#8212; Return a string describing a socket error</DT
+></DL
+></DIV
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.snmp-set-quick-print.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.accept-connect.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>snmp_set_quick_print</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="funcref.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>accept_connect</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

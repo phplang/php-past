@@ -1,0 +1,251 @@
+<HTML
+><HEAD
+><TITLE
+>get_loaded_extensions</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="PHP options & information"
+HREF="ref.info.html"><LINK
+REL="PREVIOUS"
+TITLE="zend_logo_guid"
+HREF="function.zend-logo-guid.html"><LINK
+REL="NEXT"
+TITLE="get_extension_funcs"
+HREF="function.get-extension-funcs.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.zend-logo-guid.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.get-extension-funcs.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.get-loaded-extensions"
+>get_loaded_extensions</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN30597"
+></A
+><P
+>    (PHP4 &#62;= 4.0b4)</P
+>get_loaded_extensions&nbsp;--&nbsp;
+     Returns an array with the names of all modules compiled and
+     loaded
+    </DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN30600"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN30602"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>array <B
+CLASS="function"
+>get_loaded_extensions</B
+></CODE
+> (void)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     This function returns the names of all the modules compiled and
+     loaded in the PHP interpreter.
+    </P
+><P
+>&#13;     For example the line below
+     <DIV
+CLASS="informalexample"
+><A
+NAME="AEN30609"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;print_r (get_loaded_extensions());
+      </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+>
+     will print a list like:
+     <DIV
+CLASS="informalexample"
+><A
+NAME="AEN30611"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;Array
+(
+    [0] =&#62; xml
+    [1] =&#62; wddx
+    [2] =&#62; standard
+    [3] =&#62; session
+    [4] =&#62; posix
+    [5] =&#62; pgsql
+    [6] =&#62; pcre
+    [7] =&#62; gd
+    [8] =&#62; ftp
+    [9] =&#62; db
+    [10] =&#62; Calendar
+    [11] =&#62; bcmath
+)
+      </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+>
+    </P
+><P
+>&#13;     See also: <A
+HREF="function.get-extension-funcs.html"
+><B
+CLASS="function"
+>get_extension_funcs()</B
+></A
+>.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.zend-logo-guid.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.get-extension-funcs.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>zend_logo_guid</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.info.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>get_extension_funcs</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,360 @@
+<HTML
+><HEAD
+><TITLE
+>imap_getmailboxes</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="IMAP, POP3 and NNTP functions"
+HREF="ref.imap.html"><LINK
+REL="PREVIOUS"
+TITLE="imap_listmailbox"
+HREF="function.imap-listmailbox.html"><LINK
+REL="NEXT"
+TITLE="imap_listsubscribed"
+HREF="function.imap-listsubscribed.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.imap-listmailbox.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.imap-listsubscribed.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.imap-getmailboxes"
+>imap_getmailboxes</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN16728"
+></A
+><P
+>    (PHP3 &#62;= 3.0.12, PHP4 &#62;= 4.0b4)</P
+>imap_getmailboxes&nbsp;--&nbsp;
+     Read the list of mailboxes, returning detailed information on
+     each one
+    </DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN16731"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN16733"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>array <B
+CLASS="function"
+>imap_getmailboxes</B
+></CODE
+> (int imap_stream, string ref, string pattern)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     Returns an array of objects containing mailbox information. Each
+     object has the attributes <TT
+CLASS="parameter"
+><I
+>name</I
+></TT
+>, specifying
+     the full name of the mailbox; <TT
+CLASS="parameter"
+><I
+>delimiter</I
+></TT
+>,
+     which is the hierarchy delimiter for the part of the hierarchy
+     this mailbox is in; and
+     <TT
+CLASS="parameter"
+><I
+>attributes</I
+></TT
+>. <TT
+CLASS="parameter"
+><I
+>Attributes</I
+></TT
+>
+     is a bitmask that can be tested against:
+     <P
+></P
+><UL
+><LI
+><P
+>&#13;	LATT_NOINFERIORS - This mailbox has no "children" (there are
+	no mailboxes below this one).
+       </P
+></LI
+><LI
+><P
+>&#13;	LATT_NOSELECT - This is only a container, not a mailbox - you
+	cannot open it.
+       </P
+></LI
+><LI
+><P
+>&#13;	LATT_MARKED - This mailbox is marked. Only used by UW-IMAPD.
+       </P
+></LI
+><LI
+><P
+> 
+	LATT_UNMARKED - This mailbox is not marked. Only used by
+	UW-IMAPD.
+       </P
+></LI
+></UL
+>
+    </P
+><P
+>&#13;     Mailbox names containing international Characters outside the
+     printable ASCII range will be encoded and may be decoded by
+     <A
+HREF="function.imap-utf7-decode.html"
+><B
+CLASS="function"
+>imap_utf7_decode()</B
+></A
+>.
+    </P
+><P
+>&#13;     <TT
+CLASS="parameter"
+><I
+>ref</I
+></TT
+> should normally be just the server
+     specification as described in <A
+HREF="function.imap-open.html"
+><B
+CLASS="function"
+>imap_open()</B
+></A
+>, and
+     <TT
+CLASS="parameter"
+><I
+>pattern</I
+></TT
+> specifies where in the mailbox
+     hierarchy to start searching. If you want all mailboxes, pass
+     '*' for <TT
+CLASS="parameter"
+><I
+>pattern</I
+></TT
+>.
+    </P
+><P
+>&#13;     There are two special characters you can pass as part of the
+     <TT
+CLASS="parameter"
+><I
+>pattern</I
+></TT
+>: '*' and '%'. '*' means to return
+     all mailboxes. If you pass <TT
+CLASS="parameter"
+><I
+>pattern</I
+></TT
+> as '*',
+     you will get a list of the entire mailbox hierarchy. '%' means to
+     return the current level only. '%' as the
+     <TT
+CLASS="parameter"
+><I
+>pattern</I
+></TT
+> parameter will return only the top
+     level mailboxes; '~/mail/%' on UW_IMAPD will return every mailbox
+     in the ~/mail directory, but none in subfolders of that
+     directory.
+    </P
+><P
+>&#13;     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN16769"
+></A
+><P
+><B
+>Example 1. <B
+CLASS="function"
+>imap_getmailboxes()</B
+> example</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;$mbox = imap_open("{your.imap.host}","username","password",OP_HALFOPEN)
+      || die("can't connect: ".imap_last_error());
+ 
+$list = imap_getmailboxes($mbox,"{your.imap.host}","*");
+if(is_array($list)) {
+  reset($list);
+  while (list($key, $val) = each($list))
+  {
+    print "($key) ";
+    print imap_utf7_decode($val-&#62;name).",";
+    print "'".$val-&#62;delimiter."',";
+    print $val-&#62;attributes."&#60;br&#62;\n";
+  }
+} else
+  print "imap_getmailboxes failed: ".imap_last_error()."\n";
+ 
+imap_close($mbox);                                                                
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+    </P
+><P
+>&#13;		 See also <A
+HREF="function.imap-getsubscribed.html"
+><B
+CLASS="function"
+>imap_getsubscribed()</B
+></A
+>.
+		</P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.imap-listmailbox.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.imap-listsubscribed.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>imap_listmailbox</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.imap.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>imap_listsubscribed</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

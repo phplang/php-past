@@ -1,0 +1,837 @@
+<HTML
+><HEAD
+><TITLE
+>Session handling functions</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Function Reference"
+HREF="funcref.html"><LINK
+REL="PREVIOUS"
+TITLE="shm_remove_var"
+HREF="function.shm-remove-var.html"><LINK
+REL="NEXT"
+TITLE="session_start"
+HREF="function.session-start.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="reference"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.shm-remove-var.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.session-start.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="reference"
+><A
+NAME="ref.session"
+></A
+><DIV
+CLASS="TITLEPAGE"
+><H1
+CLASS="title"
+>LX. Session handling functions</H1
+><DIV
+CLASS="PARTINTRO"
+><A
+NAME="AEN33776"
+></A
+><P
+>&#13;    Session support in PHP consists of a way to preserve certain data
+    across subsequent accesses. This enables you to build more
+    customized applications and increase the appeal of your web site.
+   </P
+><P
+>&#13;    If you are familiar with the session management of PHPLIB, you
+    will notice that some concepts are similar to PHP's session
+    support.
+   </P
+><P
+>&#13;    A visitor accessing your web site is assigned an unique id, the
+    so-called session id. This is either stored in a cookie on the
+    user side or is propagated in the URL.
+   </P
+><P
+>&#13;    The session support allows you to register arbitrary numbers of
+    variables to be preserved across requests. When a visitor accesses
+    your site, PHP will check automatically (if session.auto_start is
+    set to 1) or on your request (explicitly through
+    <A
+HREF="function.session-start.html"
+><B
+CLASS="function"
+>session_start()</B
+></A
+> or implicitly through
+    <A
+HREF="function.session-register.html"
+><B
+CLASS="function"
+>session_register()</B
+></A
+>) whether a specific session
+    id has been sent with the request. If this is the case, the prior
+    saved environment is recreated.
+   </P
+><P
+>&#13;    All registered variables are serialized after the request
+    finishes.  Registered variables which are undefined are marked as
+    being not defined.  On subsequent accesses, these are not defined
+    by the session module unless the user defines them later.
+   </P
+><P
+>&#13;    The <A
+HREF="configuration.html#ini.track-vars"
+><TT
+CLASS="literal"
+>track_vars</TT
+></A
+> and
+    <A
+HREF="configuration.html#ini.register-globals"
+><TT
+CLASS="literal"
+>register_globals</TT
+></A
+>
+    configuration settings influence how the session variables get
+    stored and restored.
+   </P
+><DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
+><P
+><B
+>Note: </B
+>
+     As of PHP 4.0.3, <A
+HREF="configuration.html#ini.track-vars"
+><TT
+CLASS="literal"
+>track_vars</TT
+></A
+> is
+     always turned on.
+    </P
+></BLOCKQUOTE
+></DIV
+><P
+>&#13;    If <A
+HREF="configuration.html#ini.track-vars"
+><TT
+CLASS="literal"
+>track_vars</TT
+></A
+> is
+    enabled and <A
+HREF="configuration.html#ini.register-globals"
+><TT
+CLASS="literal"
+>register_globals</TT
+></A
+>
+    is disabled, only members of the global associative array
+    $HTTP_SESSION_VARS can be registered as session variables. The
+    restored session variables will only be available in the array
+    $HTTP_SESSION_VARS.
+  <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN33798"
+></A
+><P
+><B
+>Example 1. 
+      Registering a variable with <A
+HREF="configuration.html#ini.track-vars"
+><TT
+CLASS="literal"
+>track_vars</TT
+></A
+>
+      enabled
+     </B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;&#60;?php
+session_register("count");
+$HTTP_SESSION_VARS["count"]++;
+?&#62;
+     </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+   </P
+><P
+>&#13;    If <A
+HREF="configuration.html#ini.register-globals"
+><TT
+CLASS="literal"
+>register_globals</TT
+></A
+>
+    is enabled, then all global variables can be registered as session
+    variables and the session variables will be restored to
+    corresponding global variables.
+  <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN33806"
+></A
+><P
+><B
+>Example 2. 
+      Registering a variable with <A
+HREF="configuration.html#ini.register-globals"
+><TT
+CLASS="literal"
+>register_globals</TT
+></A
+>
+      enabled
+     </B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;&#60;?php
+session_register("count");
+$count++;
+?&#62;
+     </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+   </P
+><P
+>&#13;    If both <A
+HREF="configuration.html#ini.track-vars"
+><TT
+CLASS="literal"
+>track_vars</TT
+></A
+> and
+    <A
+HREF="configuration.html#ini.register-globals"
+><TT
+CLASS="literal"
+>register_globals</TT
+></A
+>
+    are enabled, then the globals variables and the $HTTP_SESSION_VARS
+    entries will reference the same value.
+   </P
+><P
+>&#13;    There are two methods to propagate a session id:
+    <P
+></P
+><UL
+><LI
+><P
+>&#13;       Cookies
+      </P
+></LI
+><LI
+><P
+>&#13;       URL parameter
+      </P
+></LI
+></UL
+>
+   </P
+><P
+>&#13;    The session module supports both methods. Cookies are optimal, but
+    since they are not reliable (clients are not bound to accept
+    them), we cannot rely on them. The second method embeds the
+    session id directly into URLs.
+   </P
+><P
+>&#13;    PHP is capable of doing this transparently when compiled with
+    <TT
+CLASS="literal"
+>--enable-trans-sid</TT
+>. If you enable this option,
+    relative URIs will be changed to contain the session id
+    automatically.  Alternatively, you can use the constant
+    <TT
+CLASS="literal"
+>SID</TT
+> which is defined, if the client did not
+    send the appropriate cookie.  <TT
+CLASS="literal"
+>SID</TT
+> is either of
+    the form <TT
+CLASS="literal"
+>session_name=session_id</TT
+> or is an empty
+    string.
+   </P
+><P
+>&#13;    The following example demonstrates how to register a variable, and
+    how to link correctly to another page using SID.
+    <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN33829"
+></A
+><P
+><B
+>Example 3. Counting the number of hits of a single user</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;&#60;?php
+session_register ("count");
+$count++;
+?&#62;
+
+Hello visitor, you have seen this page &#60;? echo $count; ?&#62; times.&#60;p&#62;
+
+&#60;php?
+# the &#60;?=SID?&#62; is necessary to preserve the session id
+# in the case that the user has disabled cookies
+?&#62;
+
+To continue, &#60;A HREF="nextpage.php?&#60;?=SID?&#62;"&#62;click here&#60;/A&#62;
+     </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+   </P
+><P
+>&#13;    The <TT
+CLASS="literal"
+>&#60;?=SID?&#62;</TT
+> is not necessary, if
+    <TT
+CLASS="literal"
+>--enable-trans-sid</TT
+> was used to compile PHP.
+   </P
+><P
+>&#13;    To implement database storage, or any other storage method, you
+    will need to use <A
+HREF="function.session-set-save-handler.html"
+><B
+CLASS="function"
+>session_set_save_handler()</B
+></A
+> to
+    create a set of user-level storage functions.
+   </P
+><P
+>&#13;    The session management system supports a number of configuration
+    options which you can place in your php.ini file. We will give a
+    short overview.
+    <P
+></P
+><UL
+><LI
+><P
+>&#13;       <TT
+CLASS="literal"
+>session.save_handler</TT
+> defines the name of the
+       handler which is used for storing and retrieving data
+       associated with a session.  Defaults to
+       <TT
+CLASS="literal"
+>files</TT
+>.
+      </P
+></LI
+><LI
+><P
+>&#13;       <TT
+CLASS="literal"
+>session.save_path</TT
+> defines the argument which
+       is passed to the save handler. If you choose the default files
+       handler, this is the path where the files are created.
+       Defaults to <TT
+CLASS="literal"
+>/tmp</TT
+>.
+      </P
+></LI
+><LI
+><P
+>&#13;       <TT
+CLASS="literal"
+>session.name</TT
+> specifies the name of the
+       session which is used as cookie name. It should only contain
+       alphanumeric characters.  Defaults to
+       <TT
+CLASS="literal"
+>PHPSESSID</TT
+>.
+      </P
+></LI
+><LI
+><P
+>&#13;       <TT
+CLASS="literal"
+>session.auto_start</TT
+> specifies whether the
+       session module starts a session automatically on request
+       startup. Defaults to <TT
+CLASS="literal"
+>0</TT
+> (disabled).
+      </P
+></LI
+><LI
+><P
+>&#13;       <TT
+CLASS="literal"
+>session.cookie_lifetime</TT
+> specifies the lifetime of
+       the cookie in seconds which is sent to the browser. The value 0
+       means "until the browser is closed." Defaults to
+       <TT
+CLASS="literal"
+>0</TT
+>.
+      </P
+></LI
+><LI
+><P
+>&#13;       <TT
+CLASS="literal"
+>session.serialize_handler</TT
+> defines the name
+       of the handler which is used to serialize/deserialize
+       data. Currently, a PHP internal format (name
+       <TT
+CLASS="literal"
+>php</TT
+>) and WDDX is supported (name
+       <TT
+CLASS="literal"
+>wddx</TT
+>). WDDX is only available, if PHP is
+       compiled with <A
+HREF="ref.wddx.html"
+>WDDX
+       support</A
+>. Defaults to <TT
+CLASS="literal"
+>php</TT
+>.
+       </P
+></LI
+><LI
+><P
+>&#13;       <TT
+CLASS="literal"
+>session.gc_probability</TT
+> specifies the
+       probability that the gc (garbage collection) routine is started
+       on each request in percent. Defaults to <TT
+CLASS="literal"
+>1</TT
+>.
+      </P
+></LI
+><LI
+><P
+>&#13;       <TT
+CLASS="literal"
+>session.gc_maxlifetime</TT
+> specifies the number
+       of seconds after which data will be seen as 'garbage' and
+       cleaned up.  
+      </P
+></LI
+><LI
+><P
+>&#13;       <TT
+CLASS="literal"
+>session.referer_check</TT
+> contains the substring you
+       want to check each HTTP Referer for. If the Referer was sent by the
+       client and the substring was not found, the embedded session id will 
+       be marked as invalid. Defaults to the empty string.
+      </P
+></LI
+><LI
+><P
+>&#13;       <TT
+CLASS="literal"
+>session.entropy_file</TT
+> gives a path to an
+       external resource (file) which will be used as an additional
+       entropy source in the session id creation process. Examples are
+       <TT
+CLASS="literal"
+>/dev/random</TT
+> or
+       <TT
+CLASS="literal"
+>/dev/urandom</TT
+> which are available on many
+       Unix systems.
+      </P
+></LI
+><LI
+><P
+>&#13;       <TT
+CLASS="literal"
+>session.entropy_length</TT
+> specifies the number
+       of bytes which will be read from the file specified
+       above. Defaults to <TT
+CLASS="literal"
+>0</TT
+> (disabled).
+      </P
+></LI
+><LI
+><P
+>&#13;       <TT
+CLASS="literal"
+>session.use_cookies</TT
+> specifies whether the
+       module will use cookies to store the session id on the client
+       side. Defaults to <TT
+CLASS="literal"
+>1</TT
+> (enabled).
+      </P
+></LI
+><LI
+><P
+>&#13;       <TT
+CLASS="literal"
+>session.cookie_path</TT
+> specifies path to set 
+				in session_cookie. Defaults to <TT
+CLASS="literal"
+>/</TT
+>.
+      </P
+></LI
+><LI
+><P
+>&#13;       <TT
+CLASS="literal"
+>session.cookie_domain</TT
+> specifies domain to 
+				set in session_cookie. Default is none at all. 
+      </P
+></LI
+><LI
+><P
+>&#13;       <TT
+CLASS="literal"
+>session.cache_limiter</TT
+> specifies cache control
+ 			  method to use for session pages (nocache/private/public). 
+			  Defaults to <TT
+CLASS="literal"
+>nocache</TT
+>.
+      </P
+></LI
+><LI
+><P
+>&#13;       <TT
+CLASS="literal"
+>session.cache_expire</TT
+> specifies time-to-live
+        for cached session pages in minutes, this has no effect for
+        nocache limiter. Defaults to <TT
+CLASS="literal"
+>180</TT
+>.
+      </P
+></LI
+></UL
+>
+    <DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
+><P
+><B
+>Note: </B
+>
+      Session handling was added in PHP 4.0.
+     </P
+></BLOCKQUOTE
+></DIV
+>
+   </P
+></DIV
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Table of Contents</B
+></DT
+><DT
+><A
+HREF="function.session-start.html"
+>session_start</A
+> &#8212; Initialize session data</DT
+><DT
+><A
+HREF="function.session-destroy.html"
+>session_destroy</A
+> &#8212; Destroys all data registered to a session</DT
+><DT
+><A
+HREF="function.session-name.html"
+>session_name</A
+> &#8212; Get and/or set the current session name</DT
+><DT
+><A
+HREF="function.session-module-name.html"
+>session_module_name</A
+> &#8212; Get and/or set the current session module</DT
+><DT
+><A
+HREF="function.session-save-path.html"
+>session_save_path</A
+> &#8212; Get and/or set the current session save path</DT
+><DT
+><A
+HREF="function.session-id.html"
+>session_id</A
+> &#8212; Get and/or set the current session id</DT
+><DT
+><A
+HREF="function.session-register.html"
+>session_register</A
+> &#8212; 
+     Register one or more variables with the current session
+    </DT
+><DT
+><A
+HREF="function.session-unregister.html"
+>session_unregister</A
+> &#8212; 
+     Unregister a variable from the current session
+    </DT
+><DT
+><A
+HREF="function.session-unset.html"
+>session_unset</A
+> &#8212; 
+     Free all session variables
+    </DT
+><DT
+><A
+HREF="function.session-is-registered.html"
+>session_is_registered</A
+> &#8212; 
+     Find out if a variable is registered in a session
+    </DT
+><DT
+><A
+HREF="function.session-get-cookie-params.html"
+>session_get_cookie_params</A
+> &#8212; 
+     Get the session cookie parameters
+    </DT
+><DT
+><A
+HREF="function.session-set-cookie-params.html"
+>session_set_cookie_params</A
+> &#8212; 
+     Set the session cookie parameters
+    </DT
+><DT
+><A
+HREF="function.session-decode.html"
+>session_decode</A
+> &#8212; Decodes session data from a string</DT
+><DT
+><A
+HREF="function.session-encode.html"
+>session_encode</A
+> &#8212; 
+     Encodes the current session data as a string
+    </DT
+><DT
+><A
+HREF="function.session-set-save-handler.html"
+>session_set_save_handler</A
+> &#8212; 
+     Sets user-level session storage functions
+    </DT
+><DT
+><A
+HREF="function.session-cache-limiter.html"
+>session_cache_limiter</A
+> &#8212; Get and/or set the current cache limiter</DT
+></DL
+></DIV
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.shm-remove-var.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.session-start.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>shm_remove_var</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="funcref.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>session_start</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

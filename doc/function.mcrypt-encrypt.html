@@ -1,0 +1,299 @@
+<HTML
+><HEAD
+><TITLE
+>mcrypt_encrypt</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Mcrypt Encryption Functions"
+HREF="ref.mcrypt.html"><LINK
+REL="PREVIOUS"
+TITLE="mcrypt_get_iv_size"
+HREF="function.mcrypt-get-iv-size.html"><LINK
+REL="NEXT"
+TITLE="mcrypt_decrypt"
+HREF="function.mcrypt-decrypt.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.mcrypt-get-iv-size.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.mcrypt-decrypt.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.mcrypt-encrypt"
+>mcrypt_encrypt</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN21733"
+></A
+><P
+>    (PHP4 &#62;= 4.0.2)</P
+>mcrypt_encrypt&nbsp;--&nbsp;Encrypts plaintext with given parameters</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN21736"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN21738"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>string <B
+CLASS="function"
+>mcrypt_encrypt</B
+></CODE
+> (string cipher, string key, string data, string mode [, string 
+       iv])</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     <B
+CLASS="function"
+>Mcrypt_encrypt()</B
+> encrypts the data
+     and returns the encrypted data.
+    </P
+><P
+>&#13;     <TT
+CLASS="parameter"
+><I
+>Cipher</I
+></TT
+> is one of the MCRYPT_ciphername
+     constants of the name of the algorithm as string.
+    </P
+><P
+>&#13;     <TT
+CLASS="parameter"
+><I
+>Key</I
+></TT
+> is the key with which the data
+     will be encrypted. If it's smaller that the required keysize, it
+     is padded with '\0'.
+    </P
+><P
+>&#13;     <TT
+CLASS="parameter"
+><I
+>Data</I
+></TT
+> is the data that will be encrypted
+     with the given cipher and mode. If the size of the data is not
+     n * blocksize, the data will be padded with '\0'. The returned
+     crypttext can be larger that the size of the data that is given
+     by <TT
+CLASS="parameter"
+><I
+>data</I
+></TT
+>.
+    </P
+><P
+>&#13;     <TT
+CLASS="parameter"
+><I
+>Mode</I
+></TT
+> is one of the MCRYPT_MODE_modename
+     constants of one of "ecb", "cbc", "cfb", "ofb", "nofb" or 
+     "stream".
+    </P
+><P
+>&#13;     The <TT
+CLASS="parameter"
+><I
+>IV</I
+></TT
+> parameter is used for the
+     initialisation in CBC, CFB, OFB modes, and in some algorithms
+     in STREAM mode. If you do not supply an IV, while it is needed
+     for an algorithm, the function issues a warning and uses an
+     IV with all bytes set to '\0'.
+    </P
+><P
+>&#13;     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN21767"
+></A
+><P
+><B
+>Example 1. <B
+CLASS="function"
+>Mcrypt_encrypt()</B
+> Example</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;&#60;?php
+$iv = mcrypt_create_iv (mcrypt_get_iv_size (MCRYPT_RIJNDAEL_256, MCRYPT_MODE_ECB), MCRYPT_RAND);
+$key = "This is a very secret key";
+$text = "Meet me at 11 o'clock behind the monument.";
+echo strlen ($text)."\n";
+
+$crypttext = mcrypt_encrypt (MCRYPT_RIJNDAEL_256, $key, $text, MCRYPT_MODE_ECB, $iv);
+echo strlen ($crypttext)."\n";
+?&#62;
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+     The above example will print out:
+     <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;42
+64
+     </PRE
+></TD
+></TR
+></TABLE
+>
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.mcrypt-get-iv-size.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.mcrypt-decrypt.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>mcrypt_get_iv_size</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.mcrypt.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>mcrypt_decrypt</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,283 @@
+<HTML
+><HEAD
+><TITLE
+>dbase_create</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="dBase functions"
+HREF="ref.dbase.html"><LINK
+REL="PREVIOUS"
+TITLE="dBase functions"
+HREF="ref.dbase.html"><LINK
+REL="NEXT"
+TITLE="dbase_open"
+HREF="function.dbase-open.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="ref.dbase.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.dbase-open.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.dbase-create"
+>dbase_create</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN9605"
+></A
+><P
+>    (PHP3 , PHP4 )</P
+>dbase_create&nbsp;--&nbsp;Creates a dBase database</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN9608"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN9610"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int <B
+CLASS="function"
+>dbase_create</B
+></CODE
+> (string filename, array fields)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     The <TT
+CLASS="parameter"
+><I
+>fields</I
+></TT
+> parameter is an array of
+     arrays, each array describing the format of one field in the
+     database. Each field consists of a name, a character indicating
+     the field type, a length, and a precision.
+    </P
+><P
+>&#13;     The types of fields available are:
+     <P
+></P
+><DIV
+CLASS="variablelist"
+><DL
+><DT
+>L</DT
+><DD
+><P
+>&#13;	 Boolean. These do not have a length or precision.
+	</P
+></DD
+><DT
+>M</DT
+><DD
+><P
+>&#13;	 Memo. (Note that these aren't supported by PHP.)  These do
+	 not have a length or precision.
+	</P
+></DD
+><DT
+>D</DT
+><DD
+><P
+>&#13;	 Date (stored as YYYYMMDD).  These do not have a length or
+	 precision.
+	</P
+></DD
+><DT
+>N</DT
+><DD
+><P
+>&#13;	 Number. These have both a length and a precision (the number
+	 of digits after the decimal point).
+	</P
+></DD
+><DT
+>C</DT
+><DD
+><P
+>&#13;	 String.
+	</P
+></DD
+></DL
+></DIV
+>
+    </P
+><P
+>&#13;     If the database is successfully created, a dbase_identifier is
+     returned, otherwise false is returned.
+     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN9643"
+></A
+><P
+><B
+>Example 1. Creating a dBase database file</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;// "database" name
+$dbname = "/tmp/test.dbf";
+
+// database "definition"
+$def =
+    array(
+        array("date",     "D"),
+        array("name",     "C",  50),
+        array("age",      "N",   3, 0),
+        array("email",    "C", 128),
+        array("ismember", "L")
+    );
+
+// creation
+if (!dbase_create($dbname, $def))
+    print "&#60;strong&#62;Error!&#60;/strong&#62;";
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="ref.dbase.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.dbase-open.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>dBase functions</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.dbase.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>dbase_open</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

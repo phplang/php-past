@@ -1,0 +1,216 @@
+<HTML
+><HEAD
+><TITLE
+>mssql_result</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Microsoft SQL Server functions"
+HREF="ref.mssql.html"><LINK
+REL="PREVIOUS"
+TITLE="mssql_query"
+HREF="function.mssql-query.html"><LINK
+REL="NEXT"
+TITLE="mssql_select_db"
+HREF="function.mssql-select-db.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.mssql-query.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.mssql-select-db.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.mssql-result"
+>mssql_result</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN22648"
+></A
+><P
+>    (PHP3 , PHP4 )</P
+>mssql_result&nbsp;--&nbsp;Get result data</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN22651"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN22653"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int <B
+CLASS="function"
+>mssql_result</B
+></CODE
+> (int result, int i, mixed field)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     <B
+CLASS="function"
+>Mssql_result()</B
+> returns the contents of one
+     cell from a MS SQL result set.  The field argument can be the
+     field's offset, the field's name or the field's table dot
+     field's name (tablename.fieldname).  If the column name has been
+     aliased ('select foo as bar from...'), it uses the alias instead of
+     the column name.
+    </P
+><P
+>&#13;     When working on large result sets, you should consider using one
+     of the functions that fetch an entire row (specified below).  As
+     these functions return the contents of multiple cells in one
+     function call, they're MUCH quicker than
+     <B
+CLASS="function"
+>mssql_result()</B
+>.  Also, note that specifying a
+     numeric offset for the field argument is much quicker than
+     specifying a fieldname or tablename.fieldname argument.
+    </P
+><P
+>&#13;     Recommended high-performance alternatives:
+     <A
+HREF="function.mssql-fetch-row.html"
+><B
+CLASS="function"
+>mssql_fetch_row()</B
+></A
+>,
+     <A
+HREF="function.mssql-fetch-array.html"
+><B
+CLASS="function"
+>mssql_fetch_array()</B
+></A
+>, and
+     <A
+HREF="function.mssql-fetch-object.html"
+><B
+CLASS="function"
+>mssql_fetch_object()</B
+></A
+>.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.mssql-query.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.mssql-select-db.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>mssql_query</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.mssql.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>mssql_select_db</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

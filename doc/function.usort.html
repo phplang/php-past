@@ -1,0 +1,460 @@
+<HTML
+><HEAD
+><TITLE
+>usort</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Array Functions"
+HREF="ref.array.html"><LINK
+REL="PREVIOUS"
+TITLE="uksort"
+HREF="function.uksort.html"><LINK
+REL="NEXT"
+TITLE="Aspell functions"
+HREF="ref.aspell.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.uksort.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="ref.aspell.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.usort"
+>usort</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN5872"
+></A
+><P
+>    (PHP3 &#62;= 3.0.3, PHP4 )</P
+>usort&nbsp;--&nbsp;
+     Sort an array by values using a user-defined comparison function
+    </DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN5875"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN5877"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>void <B
+CLASS="function"
+>usort</B
+></CODE
+> (array array, string cmp_function)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     This function will sort an array by its values using a
+     user-supplied comparison function.  If the array you wish to sort
+     needs to be sorted by some non-trivial criteria, you should use
+     this function.
+    </P
+><P
+>&#13;     The comparison function must return an integer less than, equal
+     to, or greater than zero if the first argument is considered to
+     be respectively less than, equal to, or greater than the
+     second. If two members compare as equal, their order in the
+     sorted array is undefined.
+    </P
+><P
+>&#13;     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN5888"
+></A
+><P
+><B
+>Example 1. <B
+CLASS="function"
+>Usort()</B
+> example</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;function cmp ($a, $b) {   
+    if ($a == $b) return 0;
+    return ($a &#62; $b) ? -1 : 1;
+}
+
+$a = array (3, 2, 5, 6, 1);
+
+usort ($a, "cmp");
+
+while (list ($key, $value) = each ($a)) {
+    echo "$key: $value\n";
+}
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+    </P
+><P
+>&#13;     This example would display:
+    </P
+><P
+>&#13;     <DIV
+CLASS="informalexample"
+><A
+NAME="AEN5894"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;0: 6
+1: 5
+2: 3
+3: 2
+4: 1
+      </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+>
+    </P
+><DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
+><P
+><B
+>Note: </B
+>
+      Obviously in this trivial case the <A
+HREF="function.rsort.html"
+><B
+CLASS="function"
+>rsort()</B
+></A
+>
+      function would be more appropriate.
+     </P
+></BLOCKQUOTE
+></DIV
+><P
+>&#13;     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN5900"
+></A
+><P
+><B
+>Example 2. 
+       <B
+CLASS="function"
+>Usort()</B
+> example using multi-dimensional array
+      </B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;function cmp ($a, $b) {
+    return strcmp($a["fruit"],$b["fruit"]);
+} 
+
+$fruits[0]["fruit"] = "lemons";
+$fruits[1]["fruit"] = "apples";
+$fruits[2]["fruit"] = "grapes";
+
+usort($fruits, "cmp"); 
+
+while (list ($key, $value) = each ($fruits)) {
+    echo "\$fruits[$key]: " . $value["fruit"] . "\n";
+}
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+    </P
+><P
+>&#13;     When sorting a multi-dimensional array, $a and $b contain
+     references to the first index of the array.
+    </P
+><P
+>&#13;     This example would display:
+    </P
+><P
+>&#13;     <DIV
+CLASS="informalexample"
+><A
+NAME="AEN5907"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;$fruits[0]: apples
+$fruits[1]: grapes
+$fruits[2]: lemons
+      </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+>
+    </P
+><P
+>&#13;     <DIV
+CLASS="warning"
+><P
+></P
+><TABLE
+CLASS="warning"
+BORDER="1"
+WIDTH="100%"
+><TR
+><TD
+ALIGN="CENTER"
+><B
+>Warning</B
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+><P
+>&#13;       The underlying quicksort function in some C libraries (such as
+       on Solaris systems) may cause PHP to crash if the comparison
+       function does not return consistent values.
+      </P
+></TD
+></TR
+></TABLE
+></DIV
+>
+    </P
+><P
+>&#13;     See also: <A
+HREF="function.uasort.html"
+><B
+CLASS="function"
+>uasort()</B
+></A
+>, <A
+HREF="function.uksort.html"
+><B
+CLASS="function"
+>uksort()</B
+></A
+>, 
+     <A
+HREF="function.sort.html"
+><B
+CLASS="function"
+>sort()</B
+></A
+>, <A
+HREF="function.asort.html"
+><B
+CLASS="function"
+>asort()</B
+></A
+>,
+     <A
+HREF="function.arsort.html"
+><B
+CLASS="function"
+>arsort()</B
+></A
+>,<A
+HREF="function.ksort.html"
+><B
+CLASS="function"
+>ksort()</B
+></A
+>,
+     <A
+HREF="function.natsort.html"
+><B
+CLASS="function"
+>natsort()</B
+></A
+>, and <A
+HREF="function.rsort.html"
+><B
+CLASS="function"
+>rsort()</B
+></A
+>.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.uksort.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="ref.aspell.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>uksort</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.array.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Aspell functions</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

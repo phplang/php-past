@@ -1,0 +1,223 @@
+<HTML
+><HEAD
+><TITLE
+>Migrating from PHP/FI 2.0 to PHP 3.0</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Appendixes"
+HREF="appendixes.html"><LINK
+REL="PREVIOUS"
+TITLE="Appendixes"
+HREF="appendixes.html"><LINK
+REL="NEXT"
+TITLE="Start/end tags"
+HREF="migration-startendtags.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="appendix"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="appendixes.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="migration-startendtags.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="appendix"
+><H1
+><A
+NAME="migration"
+>Appendix A. Migrating from PHP/FI 2.0 to PHP 3.0</A
+></H1
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Table of Contents</B
+></DT
+><DT
+><A
+HREF="migration.html#migration-about"
+>About the incompatbilities in 3.0</A
+></DT
+><DT
+><A
+HREF="migration-startendtags.html"
+>Start/end tags</A
+></DT
+><DT
+><A
+HREF="migration-if-endif.html"
+>if..endif syntax</A
+></DT
+><DT
+><A
+HREF="migration-while.html"
+>while syntax</A
+></DT
+><DT
+><A
+HREF="migration-expr.html"
+>Expression types</A
+></DT
+><DT
+><A
+HREF="migration-errors.html"
+>Error messages have changed</A
+></DT
+><DT
+><A
+HREF="migration-booleval.html"
+>Short-circuited boolean evaluation</A
+></DT
+><DT
+><A
+HREF="migration-truefalse.html"
+>Function true/false return values</A
+></DT
+><DT
+><A
+HREF="migration-other.html"
+>Other incompatibilities</A
+></DT
+></DL
+></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="migration-about"
+>About the incompatbilities in 3.0</A
+></H1
+><P
+>&#13;   PHP 3.0 is rewritten from the ground up.  It has a proper parser
+   that is much more robust and consistent than 2.0's.  3.0 is also
+   significantly faster, and uses less memory.  However, some of
+   these improvements have not been possible without compatibility
+   changes, both in syntax and functionality.</P
+><P
+>&#13;   In addition, PHP's developers have tried to clean up both PHP's
+   syntax and semantics in version 3.0, and this has also caused some
+   incompatibilities.  In the long run, we believe that these changes
+   are for the better.</P
+><P
+>&#13;   This chapter will try to guide you through the incompatibilities
+   you might run into when going from PHP/FI 2.0 to PHP 3.0 and help
+   you resolve them.  New features are not mentioned here unless
+   necessary.</P
+><P
+>&#13;   A conversion program that can automatically convert your old
+   PHP/FI 2.0 scripts exists.  It can be found in the <TT
+CLASS="filename"
+>convertor</TT
+> subdirectory of the PHP 3.0
+   distribution.  This program only catches the syntax changes though,
+   so you should read this chapter carefully anyway.</P
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="appendixes.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="migration-startendtags.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Appendixes</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="appendixes.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Start/end tags</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

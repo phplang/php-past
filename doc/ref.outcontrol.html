@@ -1,0 +1,316 @@
+<HTML
+><HEAD
+><TITLE
+>Output Control Functions</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Function Reference"
+HREF="funcref.html"><LINK
+REL="PREVIOUS"
+TITLE="Ora_Rollback"
+HREF="function.ora-rollback.html"><LINK
+REL="NEXT"
+TITLE="flush"
+HREF="function.flush.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="reference"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.ora-rollback.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.flush.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="reference"
+><A
+NAME="ref.outcontrol"
+></A
+><DIV
+CLASS="TITLEPAGE"
+><H1
+CLASS="title"
+>XLVI. Output Control Functions</H1
+><DIV
+CLASS="PARTINTRO"
+><A
+NAME="AEN27852"
+></A
+><P
+>&#13;    The Output Control functions allow you to control when output is
+    sent from the script.  This can be useful in several different
+    situations, especially if you need to send headers to the browser
+    after your script has began outputing data.  The Output Control
+    functions do not affect headers sent using
+    <A
+HREF="function.header.html"
+><B
+CLASS="function"
+>header()</B
+></A
+> or <A
+HREF="function.setcookie.html"
+><B
+CLASS="function"
+>setcookie()</B
+></A
+>,
+    only functions such as <A
+HREF="function.echo.html"
+><B
+CLASS="function"
+>echo()</B
+></A
+> and data between
+    blocks of PHP code.
+   </P
+><P
+>&#13;    <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN27858"
+></A
+><P
+><B
+>Example 1. Output Control example</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;&#60;?php
+
+ob_start();
+echo "Hello\n";
+
+setcookie ("cookiename", "cookiedata");
+
+ob_end_flush();
+
+?&#62;
+     </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+   </P
+><P
+>&#13;    In the above example, the output from <A
+HREF="function.echo.html"
+><B
+CLASS="function"
+>echo()</B
+></A
+>
+    would be stored in the output buffer until
+    <A
+HREF="function.ob-end-flush.html"
+><B
+CLASS="function"
+>ob_end_flush()</B
+></A
+> was called.  In the mean time,
+    the call to <A
+HREF="function.setcookie.html"
+><B
+CLASS="function"
+>setcookie()</B
+></A
+> successfully stored a
+    cookie without causing an error. (You can not normally send
+    headers to the browser after data has already been sent.)
+   </P
+><P
+>&#13;    See also <A
+HREF="function.header.html"
+><B
+CLASS="function"
+>header()</B
+></A
+> and
+    <A
+HREF="function.setcookie.html"
+><B
+CLASS="function"
+>setcookie()</B
+></A
+>.
+   </P
+></DIV
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Table of Contents</B
+></DT
+><DT
+><A
+HREF="function.flush.html"
+>flush</A
+> &#8212; Flush the output buffer</DT
+><DT
+><A
+HREF="function.ob-start.html"
+>ob_start</A
+> &#8212; Turn on output buffering</DT
+><DT
+><A
+HREF="function.ob-get-contents.html"
+>ob_get_contents</A
+> &#8212; 
+     Return the contents of the output buffer
+    </DT
+><DT
+><A
+HREF="function.ob-get-length.html"
+>ob_get_length</A
+> &#8212; 
+     Return the length of the output buffer
+    </DT
+><DT
+><A
+HREF="function.ob-end-flush.html"
+>ob_end_flush</A
+> &#8212; 
+     Flush (send) the output buffer and turn off output buffering    
+    </DT
+><DT
+><A
+HREF="function.ob-end-clean.html"
+>ob_end_clean</A
+> &#8212; 
+     Clean (erase) the output buffer and turn off output buffering
+    </DT
+><DT
+><A
+HREF="function.ob-implicit-flush.html"
+>ob_implicit_flush</A
+> &#8212; 
+     Turn implicit flush on/off 
+    </DT
+></DL
+></DIV
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.ora-rollback.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.flush.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Ora_Rollback</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="funcref.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>flush</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

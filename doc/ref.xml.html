@@ -1,0 +1,1335 @@
+<HTML
+><HEAD
+><TITLE
+>XML parser functions</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Function Reference"
+HREF="funcref.html"><LINK
+REL="PREVIOUS"
+TITLE="wddx_deserialize"
+HREF="function.wddx-deserialize.html"><LINK
+REL="NEXT"
+TITLE="xml_parser_create"
+HREF="function.xml-parser-create.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="reference"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.wddx-deserialize.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.xml-parser-create.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="reference"
+><A
+NAME="ref.xml"
+></A
+><DIV
+CLASS="TITLEPAGE"
+><H1
+CLASS="title"
+>LXXI. XML parser functions</H1
+><DIV
+CLASS="PARTINTRO"
+><A
+NAME="AEN39427"
+></A
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="xml.partintro"
+>Introduction</A
+></H1
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="xml.intro"
+>About XML</A
+></H2
+><P
+>&#13;      XML (eXtensible Markup Language) is a data format for structured
+      document interchange on the Web.  It is a standard defined by
+      The World Wide Web consortium (W3C).  Information about XML and
+      related technologies can be found at <A
+HREF="http://www.w3.org/XML/"
+TARGET="_top"
+>http://www.w3.org/XML/</A
+>.
+     </P
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="xml.install"
+>Installation</A
+></H2
+><P
+>&#13;      This extension uses <SPAN
+CLASS="productname"
+>expat</SPAN
+>, which can
+      be found at <A
+HREF="http://www.jclark.com/xml/"
+TARGET="_top"
+>http://www.jclark.com/xml/</A
+>.  The
+      Makefile that comes with expat does not build a library by
+      default, you can use this make rule for that:
+      <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;libexpat.a: $(OBJS)
+	ar -rc $@ $(OBJS)
+	ranlib $@
+      </PRE
+></TD
+></TR
+></TABLE
+>
+      A source RPM package of expat can be found at <A
+HREF="http://www.guardian.no/~ssb/phpxml.html"
+TARGET="_top"
+>http://www.guardian.no/~ssb/phpxml.html</A
+>.
+     </P
+><P
+>&#13;      Note that if you are using Apache-1.3.7 or later, you already
+      have the required expat library.  Simply configure PHP using
+      <TT
+CLASS="option"
+>--with-xml</TT
+> (without any
+      additional path) and it will automatically use the expat library
+      built into Apache.
+     </P
+><P
+>&#13;      On UNIX, run <B
+CLASS="command"
+>configure</B
+> with the <TT
+CLASS="option"
+>--with-xml</TT
+> option.  The
+      <SPAN
+CLASS="productname"
+>expat</SPAN
+> library should be installed
+      somewhere your compiler can find it.  If you compile PHP as a
+      module for Apache 1.3.9 or later, PHP will automatically use the
+      bundled <SPAN
+CLASS="productname"
+>expat</SPAN
+> library from Apache.
+      You may need to set <TT
+CLASS="envar"
+>CPPFLAGS</TT
+> and
+      <TT
+CLASS="envar"
+>LDFLAGS</TT
+> in your environment before running
+      configure if you have installed expat somewhere exotic.
+     </P
+><P
+>&#13;      Build PHP.  <I
+CLASS="emphasis"
+>Tada!</I
+>  That should be it.
+     </P
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="xml.about"
+>About This Extension</A
+></H2
+><P
+>&#13;      This PHP extension implements support for James Clark's
+      <SPAN
+CLASS="productname"
+>expat</SPAN
+> in PHP.  This toolkit lets you
+      parse, but not validate, XML documents.  It supports three
+      source <A
+HREF="ref.xml.html#xml.encoding"
+>character encodings</A
+>
+      also provided by PHP: <TT
+CLASS="literal"
+>US-ASCII</TT
+>,
+      <TT
+CLASS="literal"
+>ISO-8859-1</TT
+> and <TT
+CLASS="literal"
+>UTF-8</TT
+>.
+      <TT
+CLASS="literal"
+>UTF-16</TT
+> is not supported.
+     </P
+><P
+>&#13;      This extension lets you <A
+HREF="function.xml-parser-create.html"
+>create XML parsers</A
+>
+      and then define <I
+CLASS="emphasis"
+>handlers</I
+> for different XML
+      events.  Each XML parser also has a few <A
+HREF="function.xml-parser-set-option.html"
+>parameters</A
+> you
+      can adjust.
+     </P
+><P
+>&#13;      The XML event handlers defined are:
+      <DIV
+CLASS="table"
+><A
+NAME="AEN39466"
+></A
+><P
+><B
+>Table 1. Supported XML handlers</B
+></P
+><TABLE
+BORDER="1"
+CLASS="CALSTABLE"
+><THEAD
+><TR
+><TH
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>PHP function to set handler</TH
+><TH
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Event description</TH
+></TR
+></THEAD
+><TBODY
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+><A
+HREF="function.xml-set-element-handler.html"
+><B
+CLASS="function"
+>xml_set_element_handler()</B
+></A
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;	   Element events are issued whenever the XML parser
+	   encounters start or end tags.  There are separate handlers
+	   for start tags and end tags.
+	  </TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;	   <A
+HREF="function.xml-set-character-data-handler.html"
+><B
+CLASS="function"
+>xml_set_character_data_handler()</B
+></A
+>
+	  </TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;	   Character data is roughly all the non-markup contents of
+	   XML documents, including whitespace between tags.  Note
+	   that the XML parser does not add or remove any whitespace,
+	   it is up to the application (you) to decide whether
+	   whitespace is significant.
+	  </TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;	   <A
+HREF="function.xml-set-processing-instruction-handler.html"
+><B
+CLASS="function"
+>xml_set_processing_instruction_handler()</B
+></A
+>
+	  </TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13; 	   PHP programmers should be familiar with processing
+	   instructions (PIs) already.  &#60;?php ?&#62; is a processing
+	   instruction, where <TT
+CLASS="replaceable"
+><I
+>php</I
+></TT
+> is called
+	   the "PI target".  The handling of these are
+	   application-specific, except that all PI targets starting
+	   with "XML" are reserved.
+	  </TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+><A
+HREF="function.xml-set-default-handler.html"
+><B
+CLASS="function"
+>xml_set_default_handler()</B
+></A
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;	   What goes not to another handler goes to the default
+	   handler.  You will get things like the XML and document
+	   type declarations in the default handler.
+	  </TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;	   <A
+HREF="function.xml-set-unparsed-entity-decl-handler.html"
+><B
+CLASS="function"
+>xml_set_unparsed_entity_decl_handler()</B
+></A
+>
+	  </TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;	   This handler will be called for declaration of an unparsed
+	   (NDATA) entity.
+	  </TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;	   <A
+HREF="function.xml-set-notation-decl-handler.html"
+><B
+CLASS="function"
+>xml_set_notation_decl_handler()</B
+></A
+>
+	  </TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;	   This handler is called for declaration of a notation.
+	  </TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;	   <A
+HREF="function.xml-set-external-entity-ref-handler.html"
+><B
+CLASS="function"
+>xml_set_external_entity_ref_handler()</B
+></A
+>
+	  </TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;	   This handler is called when the XML parser finds a
+	   reference to an external parsed general entity.  This can
+	   be a reference to a file or URL, for example.  See <A
+HREF="ref.xml.html#example.xml-external-entity"
+>the external entity
+	   example</A
+> for a demonstration.
+	  </TD
+></TR
+></TBODY
+></TABLE
+></DIV
+>
+     </P
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="xml.case-folding"
+>Case Folding</A
+></H2
+><P
+>&#13;      The element handler functions may get their element names
+      <I
+CLASS="glossterm"
+>case-folded</I
+>.  Case-folding is defined by
+      the XML standard as "a process applied to a sequence of
+      characters, in which those identified as non-uppercase are
+      replaced by their uppercase equivalents".  In other words, when
+      it comes to XML, case-folding simply means uppercasing.
+     </P
+><P
+>&#13;      By default, all the element names that are passed to the handler
+      functions are case-folded.  This behaviour can be queried and
+      controlled per XML parser with the
+      <A
+HREF="function.xml-parser-get-option.html"
+><B
+CLASS="function"
+>xml_parser_get_option()</B
+></A
+> and
+      <A
+HREF="function.xml-parser-set-option.html"
+><B
+CLASS="function"
+>xml_parser_set_option()</B
+></A
+> functions,
+      respectively.
+     </P
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="xml.error-codes"
+>Error Codes</A
+></H2
+><P
+>&#13;      The following constants are defined for XML error codes (as
+      returned by <A
+HREF="function.xml-parse.html"
+><B
+CLASS="function"
+>xml_parse()</B
+></A
+>):
+      <P
+></P
+><TABLE
+BORDER="0"
+><TBODY
+><TR
+><TD
+>XML_ERROR_NONE</TD
+></TR
+><TR
+><TD
+>XML_ERROR_NO_MEMORY</TD
+></TR
+><TR
+><TD
+>XML_ERROR_SYNTAX</TD
+></TR
+><TR
+><TD
+>XML_ERROR_NO_ELEMENTS</TD
+></TR
+><TR
+><TD
+>XML_ERROR_INVALID_TOKEN</TD
+></TR
+><TR
+><TD
+>XML_ERROR_UNCLOSED_TOKEN</TD
+></TR
+><TR
+><TD
+>XML_ERROR_PARTIAL_CHAR</TD
+></TR
+><TR
+><TD
+>XML_ERROR_TAG_MISMATCH</TD
+></TR
+><TR
+><TD
+>XML_ERROR_DUPLICATE_ATTRIBUTE</TD
+></TR
+><TR
+><TD
+>XML_ERROR_JUNK_AFTER_DOC_ELEMENT</TD
+></TR
+><TR
+><TD
+>XML_ERROR_PARAM_ENTITY_REF</TD
+></TR
+><TR
+><TD
+>XML_ERROR_UNDEFINED_ENTITY</TD
+></TR
+><TR
+><TD
+>XML_ERROR_RECURSIVE_ENTITY_REF</TD
+></TR
+><TR
+><TD
+>XML_ERROR_ASYNC_ENTITY</TD
+></TR
+><TR
+><TD
+>XML_ERROR_BAD_CHAR_REF</TD
+></TR
+><TR
+><TD
+>XML_ERROR_BINARY_ENTITY_REF</TD
+></TR
+><TR
+><TD
+>XML_ERROR_ATTRIBUTE_EXTERNAL_ENTITY_REF</TD
+></TR
+><TR
+><TD
+>XML_ERROR_MISPLACED_XML_PI</TD
+></TR
+><TR
+><TD
+>XML_ERROR_UNKNOWN_ENCODING</TD
+></TR
+><TR
+><TD
+>XML_ERROR_INCORRECT_ENCODING</TD
+></TR
+><TR
+><TD
+>XML_ERROR_UNCLOSED_CDATA_SECTION</TD
+></TR
+><TR
+><TD
+>XML_ERROR_EXTERNAL_ENTITY_HANDLING</TD
+></TR
+></TBODY
+></TABLE
+><P
+></P
+>
+     </P
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="xml.encoding"
+>Character Encoding</A
+></H2
+><P
+>&#13;      PHP's XML extension supports the <A
+HREF="http://www.unicode.org/"
+TARGET="_top"
+>Unicode</A
+> character set through
+      different <I
+CLASS="glossterm"
+>character encoding</I
+>s.  There are
+      two types of character encodings, <I
+CLASS="glossterm"
+>source
+      encoding</I
+> and <I
+CLASS="glossterm"
+>target encoding</I
+>.
+      PHP's internal representation of the document is always encoded
+      with <TT
+CLASS="literal"
+>UTF-8</TT
+>.
+     </P
+><P
+>&#13;      Source encoding is done when an XML document is <A
+HREF="function.xml-parse.html"
+>parsed</A
+>.  Upon <A
+HREF="function.xml-parser-create.html"
+>creating an XML
+      parser</A
+>, a source encoding can be specified (this encoding
+      can not be changed later in the XML parser's lifetime).  The
+      supported source encodings are <TT
+CLASS="literal"
+>ISO-8859-1</TT
+>,
+      <TT
+CLASS="literal"
+>US-ASCII</TT
+> and <TT
+CLASS="literal"
+>UTF-8</TT
+>.  The
+      former two are single-byte encodings, which means that each
+      character is represented by a single byte.
+      <TT
+CLASS="literal"
+>UTF-8</TT
+> can encode characters composed by a
+      variable number of bits (up to 21) in one to four bytes.  The
+      default source encoding used by PHP is
+      <TT
+CLASS="literal"
+>ISO-8859-1</TT
+>.
+     </P
+><P
+>&#13;      Target encoding is done when PHP passes data to XML handler
+      functions.  When an XML parser is created, the target encoding
+      is set to the same as the source encoding, but this may be
+      changed at any point.  The target encoding will affect character
+      data as well as tag names and processing instruction targets.
+     </P
+><P
+>&#13;      If the XML parser encounters characters outside the range that
+      its source encoding is capable of representing, it will return
+      an error.  
+     </P
+><P
+>&#13;      If PHP encounters characters in the parsed XML document that can
+      not be represented in the chosen target encoding, the problem
+      characters will be "demoted".  Currently, this means that such
+      characters are replaced by a question mark.
+     </P
+></DIV
+></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="xml.examples"
+>Some Examples</A
+></H1
+><P
+>&#13;     Here are some example PHP scripts parsing XML documents.
+    </P
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="example.xml-structure"
+>XML Element Structure Example</A
+></H2
+><P
+>&#13;      This first example displays the stucture of the start elements in
+      a document with indentation.
+      <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN39563"
+></A
+><P
+><B
+>Example 1. Show XML Element Structure</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;$file = "data.xml";
+$depth = array();
+
+function startElement($parser, $name, $attrs) {
+    global $depth;
+    for ($i = 0; $i &#60; $depth[$parser]; $i++) {
+        print "  ";
+    }
+    print "$name\n";
+    $depth[$parser]++;
+}
+
+function endElement($parser, $name) {
+    global $depth;
+    $depth[$parser]--;
+}
+
+$xml_parser = xml_parser_create();
+xml_set_element_handler($xml_parser, "startElement", "endElement");
+if (!($fp = fopen($file, "r"))) {
+    die("could not open XML input");
+}
+
+while ($data = fread($fp, 4096)) {
+    if (!xml_parse($xml_parser, $data, feof($fp))) {
+        die(sprintf("XML error: %s at line %d",
+                    xml_error_string(xml_get_error_code($xml_parser)),
+                    xml_get_current_line_number($xml_parser)));
+    }
+}
+xml_parser_free($xml_parser);
+       </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+     </P
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="example.xml-map-tags"
+>XML Tag Mapping Example</A
+></H2
+><P
+>&#13;      <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN39569"
+></A
+><P
+><B
+>Example 2. Map XML to HTML</B
+></P
+><P
+>&#13;	This example maps tags in an XML document directly to HTML
+	tags.  Elements not found in the "map array" are ignored.  Of
+	course, this example will only work with a specific XML
+	document type.
+	<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;$file = "data.xml";
+$map_array = array(
+    "BOLD"     =&#62; "B",
+    "EMPHASIS" =&#62; "I",
+    "LITERAL"  =&#62; "TT"
+);
+
+function startElement($parser, $name, $attrs) {
+    global $map_array;
+    if ($htmltag = $map_array[$name]) {
+        print "&#60;$htmltag&#62;";
+    }
+}
+
+function endElement($parser, $name) {
+    global $map_array;
+    if ($htmltag = $map_array[$name]) {
+        print "&#60;/$htmltag&#62;";
+    }
+}
+
+function characterData($parser, $data) {
+    print $data;
+}
+
+$xml_parser = xml_parser_create();
+// use case-folding so we are sure to find the tag in $map_array
+xml_parser_set_option($xml_parser, XML_OPTION_CASE_FOLDING, true);
+xml_set_element_handler($xml_parser, "startElement", "endElement");
+xml_set_character_data_handler($xml_parser, "characterData");
+if (!($fp = fopen($file, "r"))) {
+    die("could not open XML input");
+}
+
+while ($data = fread($fp, 4096)) {
+    if (!xml_parse($xml_parser, $data, feof($fp))) {
+        die(sprintf("XML error: %s at line %d",
+                    xml_error_string(xml_get_error_code($xml_parser)),
+                    xml_get_current_line_number($xml_parser)));
+    }
+}
+xml_parser_free($xml_parser);
+	</PRE
+></TD
+></TR
+></TABLE
+>
+       </P
+></DIV
+></TD
+></TR
+></TABLE
+>
+     </P
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="example.xml-external-entity"
+>XML External Entity Example</A
+></H2
+><P
+>&#13;      This example highlights XML code.  It illustrates how to use an
+      external entity reference handler to include and parse other
+      documents, as well as how PIs can be processed, and a way of
+      determining "trust" for PIs containing code.
+     </P
+><P
+>&#13;      XML documents that can be used for this example are found below
+      the example (<TT
+CLASS="filename"
+>xmltest.xml</TT
+> and
+      <TT
+CLASS="filename"
+>xmltest2.xml</TT
+>.)
+     </P
+><P
+>&#13;      <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN39580"
+></A
+><P
+><B
+>Example 3. External Entity Example</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;$file = "xmltest.xml";
+
+function trustedFile($file) {
+    // only trust local files owned by ourselves
+    if (!eregi("^([a-z]+)://", $file) 
+        &#38;&#38; fileowner($file) == getmyuid()) {
+            return true;
+    }
+    return false;
+}
+
+function startElement($parser, $name, $attribs) {
+    print "&#38;lt;&#60;font color=\"#0000cc\"&#62;$name&#60;/font&#62;";
+    if (sizeof($attribs)) {
+        while (list($k, $v) = each($attribs)) {
+            print " &#60;font color=\"#009900\"&#62;$k&#60;/font&#62;=\"&#60;font 
+                   color=\"#990000\"&#62;$v&#60;/font&#62;\"";
+        }
+    }
+    print "&#38;gt;";
+}
+
+function endElement($parser, $name) {
+    print "&#38;lt;/&#60;font color=\"#0000cc\"&#62;$name&#60;/font&#62;&#38;gt;";
+}
+
+function characterData($parser, $data) {
+    print "&#60;b&#62;$data&#60;/b&#62;";
+}
+
+function PIHandler($parser, $target, $data) {
+    switch (strtolower($target)) {
+        case "php":
+            global $parser_file;
+            // If the parsed document is "trusted", we say it is safe
+            // to execute PHP code inside it.  If not, display the code
+            // instead.
+            if (trustedFile($parser_file[$parser])) {
+                eval($data);
+            } else {
+                printf("Untrusted PHP code: &#60;i&#62;%s&#60;/i&#62;", 
+                        htmlspecialchars($data));
+            }
+            break;
+    }
+}
+
+function defaultHandler($parser, $data) {
+    if (substr($data, 0, 1) == "&#38;" &#38;&#38; substr($data, -1, 1) == ";") {
+        printf('&#60;font color="#aa00aa"&#62;%s&#60;/font&#62;', 
+                htmlspecialchars($data));
+    } else {
+        printf('&#60;font size="-1"&#62;%s&#60;/font&#62;', 
+                htmlspecialchars($data));
+    }
+}
+
+function externalEntityRefHandler($parser, $openEntityNames, $base, $systemId,
+                                  $publicId) {
+    if ($systemId) {
+        if (!list($parser, $fp) = new_xml_parser($systemId)) {
+            printf("Could not open entity %s at %s\n", $openEntityNames,
+                   $systemId);
+            return false;
+        }
+        while ($data = fread($fp, 4096)) {
+            if (!xml_parse($parser, $data, feof($fp))) {
+                printf("XML error: %s at line %d while parsing entity %s\n",
+                       xml_error_string(xml_get_error_code($parser)),
+                       xml_get_current_line_number($parser), $openEntityNames);
+                xml_parser_free($parser);
+                return false;
+            }
+        }
+        xml_parser_free($parser);
+        return true;
+    }
+    return false;
+}
+
+
+function new_xml_parser($file) {
+    global $parser_file;
+
+    $xml_parser = xml_parser_create();
+    xml_parser_set_option($xml_parser, XML_OPTION_CASE_FOLDING, 1);
+    xml_set_element_handler($xml_parser, "startElement", "endElement");
+    xml_set_character_data_handler($xml_parser, "characterData");
+    xml_set_processing_instruction_handler($xml_parser, "PIHandler");
+    xml_set_default_handler($xml_parser, "defaultHandler");
+    xml_set_external_entity_ref_handler($xml_parser, "externalEntityRefHandler");
+    
+    if (!($fp = @fopen($file, "r"))) {
+        return false;
+    }
+    if (!is_array($parser_file)) {
+        settype($parser_file, "array");
+    }
+    $parser_file[$xml_parser] = $file;
+    return array($xml_parser, $fp);
+}
+
+if (!(list($xml_parser, $fp) = new_xml_parser($file))) {
+    die("could not open XML input");
+}
+
+print "&#60;pre&#62;";
+while ($data = fread($fp, 4096)) {
+    if (!xml_parse($xml_parser, $data, feof($fp))) {
+        die(sprintf("XML error: %s at line %d\n",
+                    xml_error_string(xml_get_error_code($xml_parser)),
+                    xml_get_current_line_number($xml_parser)));
+    }
+}
+print "&#60;/pre&#62;";
+print "parse complete\n";
+xml_parser_free($xml_parser);
+
+?&#62;
+       </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+     </P
+><P
+>&#13;      <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN39584"
+></A
+><P
+><B
+>Example 4. xmltest.xml</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;&#60;?xml version='1.0'?&#62;
+&#60;!DOCTYPE chapter SYSTEM "/just/a/test.dtd" [
+&#60;!ENTITY plainEntity "FOO entity"&#62;
+&#60;!ENTITY systemEntity SYSTEM "xmltest2.xml"&#62;
+]&#62;
+&#60;chapter&#62;
+ &#60;TITLE&#62;Title &#38;plainEntity;&#60;/TITLE&#62;
+ &#60;para&#62;
+  &#60;informaltable&#62;
+   &#60;tgroup cols="3"&#62;
+    &#60;tbody&#62;
+     &#60;row&#62;&#60;entry&#62;a1&#60;/entry&#62;&#60;entry morerows="1"&#62;b1&#60;/entry&#62;&#60;entry&#62;c1&#60;/entry&#62;&#60;/row&#62;
+     &#60;row&#62;&#60;entry&#62;a2&#60;/entry&#62;&#60;entry&#62;c2&#60;/entry&#62;&#60;/row&#62;
+     &#60;row&#62;&#60;entry&#62;a3&#60;/entry&#62;&#60;entry&#62;b3&#60;/entry&#62;&#60;entry&#62;c3&#60;/entry&#62;&#60;/row&#62;
+    &#60;/tbody&#62;
+   &#60;/tgroup&#62;
+  &#60;/informaltable&#62;
+ &#60;/para&#62;
+ &#38;systemEntity;
+ &#60;sect1 id="about"&#62;
+  &#60;title&#62;About this Document&#60;/title&#62;
+  &#60;para&#62;
+   &#60;!-- this is a comment --&#62;
+   &#60;?php print 'Hi!  This is PHP version '.phpversion(); ?&#62;
+  &#60;/para&#62;
+ &#60;/sect1&#62;
+&#60;/chapter&#62;
+       </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+     </P
+><P
+>&#13;      This file is included from <TT
+CLASS="filename"
+>xmltest.xml</TT
+>:
+      <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN39589"
+></A
+><P
+><B
+>Example 5. xmltest2.xml</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;&#60;?xml version="1.0"?&#62;
+&#60;!DOCTYPE foo [
+&#60;!ENTITY testEnt "test entity"&#62;
+]&#62;
+&#60;foo&#62;
+   &#60;element attrib="value"/&#62;
+   &#38;testEnt;
+   &#60;?php print "This is some more PHP code being executed."; ?&#62;
+&#60;/foo&#62;
+       </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+     </P
+></DIV
+></DIV
+></DIV
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Table of Contents</B
+></DT
+><DT
+><A
+HREF="function.xml-parser-create.html"
+>xml_parser_create</A
+> &#8212; create an XML parser</DT
+><DT
+><A
+HREF="function.xml-set-object.html"
+>xml_set_object</A
+> &#8212; Use XML Parser within an object</DT
+><DT
+><A
+HREF="function.xml-set-element-handler.html"
+>xml_set_element_handler</A
+> &#8212; set up start and end element handlers</DT
+><DT
+><A
+HREF="function.xml-set-character-data-handler.html"
+>xml_set_character_data_handler</A
+> &#8212; set up character data handler</DT
+><DT
+><A
+HREF="function.xml-set-processing-instruction-handler.html"
+>xml_set_processing_instruction_handler</A
+> &#8212; 
+     Set up processing instruction (PI) handler
+    </DT
+><DT
+><A
+HREF="function.xml-set-default-handler.html"
+>xml_set_default_handler</A
+> &#8212; set up default handler</DT
+><DT
+><A
+HREF="function.xml-set-unparsed-entity-decl-handler.html"
+>xml_set_unparsed_entity_decl_handler</A
+> &#8212; 
+     Set up unparsed entity declaration handler
+    </DT
+><DT
+><A
+HREF="function.xml-set-notation-decl-handler.html"
+>xml_set_notation_decl_handler</A
+> &#8212; set up notation declaration handler</DT
+><DT
+><A
+HREF="function.xml-set-external-entity-ref-handler.html"
+>xml_set_external_entity_ref_handler</A
+> &#8212; set up external entity reference handler</DT
+><DT
+><A
+HREF="function.xml-parse.html"
+>xml_parse</A
+> &#8212; start parsing an XML document</DT
+><DT
+><A
+HREF="function.xml-get-error-code.html"
+>xml_get_error_code</A
+> &#8212; get XML parser error code</DT
+><DT
+><A
+HREF="function.xml-error-string.html"
+>xml_error_string</A
+> &#8212; get XML parser error string</DT
+><DT
+><A
+HREF="function.xml-get-current-line-number.html"
+>xml_get_current_line_number</A
+> &#8212; get current line number for an XML parser</DT
+><DT
+><A
+HREF="function.xml-get-current-column-number.html"
+>xml_get_current_column_number</A
+> &#8212; 
+     Get current column number for an XML parser
+    </DT
+><DT
+><A
+HREF="function.xml-get-current-byte-index.html"
+>xml_get_current_byte_index</A
+> &#8212; get current byte index for an XML parser</DT
+><DT
+><A
+HREF="function.xml-parse-into-struct.html"
+>xml_parse_into_struct</A
+> &#8212; Parse XML data into an array structure</DT
+><DT
+><A
+HREF="function.xml-parser-free.html"
+>xml_parser_free</A
+> &#8212; Free an XML parser</DT
+><DT
+><A
+HREF="function.xml-parser-set-option.html"
+>xml_parser_set_option</A
+> &#8212; set options in an XML parser</DT
+><DT
+><A
+HREF="function.xml-parser-get-option.html"
+>xml_parser_get_option</A
+> &#8212; get options from an XML parser</DT
+><DT
+><A
+HREF="function.utf8-decode.html"
+>utf8_decode</A
+> &#8212; 
+     Converts a string with ISO-8859-1 characters encoded with UTF-8
+     to single-byte ISO-8859-1.
+    </DT
+><DT
+><A
+HREF="function.utf8-encode.html"
+>utf8_encode</A
+> &#8212; encodes an ISO-8859-1 string to UTF-8</DT
+></DL
+></DIV
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.wddx-deserialize.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.xml-parser-create.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>wddx_deserialize</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="funcref.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>xml_parser_create</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

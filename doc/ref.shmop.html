@@ -1,0 +1,260 @@
+<HTML
+><HEAD
+><TITLE
+>Shared Memory Functions</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Function Reference"
+HREF="funcref.html"><LINK
+REL="PREVIOUS"
+TITLE="session_cache_limiter"
+HREF="function.session-cache-limiter.html"><LINK
+REL="NEXT"
+TITLE="shm_open"
+HREF="function.shm_open.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="reference"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.session-cache-limiter.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.shm_open.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="reference"
+><A
+NAME="ref.shmop"
+></A
+><DIV
+CLASS="TITLEPAGE"
+><H1
+CLASS="title"
+>LXI. Shared Memory Functions</H1
+><DIV
+CLASS="PARTINTRO"
+><A
+NAME="AEN34229"
+></A
+><P
+>&#13;    Shmop is an easy to use set of functions that allows php to read,
+    write, create and delete UNIX shared memory segments. The functions
+    will not work on windows, as it does not support shared memory. To
+    use shmop you will need to compile php with the --enable-shmop parameter
+    in your configure line.
+   </P
+><P
+>&#13;    <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN34232"
+></A
+><P
+><B
+>Example 1. Shared Memory Operations Overview</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;&#60;?php
+   
+// Create 100 byte shared memory block with system id if 0xff3
+$shm_id = shm_open(0xff3, "c", 0644, 100);
+if(!$shm_id) {
+	echo "Couldn't create shared memory segment\n";
+}
+
+// Get shared memory block's size
+$shm_size = shm_size($shm_id);
+echo "SHM Block Size: ".$shm_size. " has been created.\n";
+
+// Lets write a test string into shared memory
+$shm_bytes_written = shm_write($shm_id, "my shared memory block", 0);
+if($shm_bytes_written != strlen("my shared memory block")) {
+	echo "Couldn't write the entire length of data\n";
+}
+
+// Now lets read the string back
+$my_string = shm_read($shm_id, 0, $shm_size);
+if(!$my_string) {
+	echo "Couldn't read from shared memory block\n";
+}
+echo "The data inside shared memory was: ".$my_string."\n";
+
+//Now lets delete the block and close the shared memory segment
+if(!shm_delete($shm_id)) {
+	echo "Couldn't mark shared memory block for deletion.
+}
+shm_close($shm_id);
+   
+?&#62;
+     </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+   </P
+></DIV
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Table of Contents</B
+></DT
+><DT
+><A
+HREF="function.shm_open.html"
+>shm_open</A
+> &#8212; Create or open shared memory block</DT
+><DT
+><A
+HREF="function.shm_read.html"
+>shm_read</A
+> &#8212; Read data from shared memory block</DT
+><DT
+><A
+HREF="function.shm_write.html"
+>shm_write</A
+> &#8212; Write data into shared memory block</DT
+><DT
+><A
+HREF="function.size.html"
+>shm_size</A
+> &#8212; Get size of shared memory block</DT
+><DT
+><A
+HREF="function.shm_delete.html"
+>shm_delete</A
+> &#8212; Delete shared memory block</DT
+><DT
+><A
+HREF="function.shm_close.html"
+>shm_close</A
+> &#8212; Close shared memory block</DT
+></DL
+></DIV
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.session-cache-limiter.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.shm_open.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>session_cache_limiter</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="funcref.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>shm_open</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

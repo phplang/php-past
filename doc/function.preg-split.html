@@ -1,0 +1,307 @@
+<HTML
+><HEAD
+><TITLE
+>preg_split</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Regular Expression Functions (Perl-Compatible)"
+HREF="ref.pcre.html"><LINK
+REL="PREVIOUS"
+TITLE="preg_replace"
+HREF="function.preg-replace.html"><LINK
+REL="NEXT"
+TITLE="preg_quote"
+HREF="function.preg-quote.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.preg-replace.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.preg-quote.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.preg-split"
+>preg_split</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN33008"
+></A
+><P
+>    (PHP3 &#62;= 3.0.9, PHP4 )</P
+>preg_split&nbsp;--&nbsp;Split string by a regular expression</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN33011"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN33013"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>array preg_split</CODE
+> (string pattern, string subject [, int 
+       limit [, int 
+       flags]])</CODE
+></P
+><P
+></P
+></DIV
+><DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
+><P
+><B
+>Note: </B
+>
+      Parameter <TT
+CLASS="parameter"
+><I
+>flags</I
+></TT
+> was added in PHP 4 Beta 3.
+     </P
+></BLOCKQUOTE
+></DIV
+><P
+>&#13;     Returns an array containing substrings of
+     <TT
+CLASS="parameter"
+><I
+>subject</I
+></TT
+> split along boundaries matched by
+     <TT
+CLASS="parameter"
+><I
+>pattern</I
+></TT
+>.
+    </P
+><P
+>&#13;     If <TT
+CLASS="parameter"
+><I
+>limit</I
+></TT
+> is specified, then only substrings
+     up to <TT
+CLASS="parameter"
+><I
+>limit</I
+></TT
+> are returned.
+    </P
+><P
+>&#13;     If flags is <TT
+CLASS="constant"
+>PREG_SPLIT_NO_EMPTY</TT
+> then only
+     non-empty pieces will be returned by <B
+CLASS="function"
+>preg_split()</B
+>.
+    </P
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN33038"
+></A
+><P
+><B
+>Example 1. <B
+CLASS="function"
+>preg_split()</B
+> example</B
+></P
+><P
+>&#13;      Get the parts of a search string.
+     </P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;// split the phrase by any number of commas or space characters,
+// which include " ", \r, \t, \n and \f
+$keywords = preg_split ("/[\s,]+/", "hypertext language, programming");
+     </PRE
+></TD
+></TR
+></TABLE
+><P
+>&#13;      Splitting a string into component characters.
+     </P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;$str = 'string';
+$chars = preg_split('//', $str, 0, PREG_SPLIT_NO_EMPTY);
+print_r($chars);
+     </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+><P
+>&#13;     See also <A
+HREF="function.preg-match.html"
+><B
+CLASS="function"
+>preg_match()</B
+></A
+>,
+     <A
+HREF="function.preg-match-all.html"
+><B
+CLASS="function"
+>preg_match_all()</B
+></A
+>, and
+     <A
+HREF="function.preg-replace.html"
+><B
+CLASS="function"
+>preg_replace()</B
+></A
+>.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.preg-replace.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.preg-quote.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>preg_replace</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.pcre.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>preg_quote</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

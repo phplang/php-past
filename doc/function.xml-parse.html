@@ -1,0 +1,283 @@
+<HTML
+><HEAD
+><TITLE
+>xml_parse</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="XML parser functions"
+HREF="ref.xml.html"><LINK
+REL="PREVIOUS"
+TITLE="xml_set_external_entity_ref_handler"
+HREF="function.xml-set-external-entity-ref-handler.html"><LINK
+REL="NEXT"
+TITLE="xml_get_error_code"
+HREF="function.xml-get-error-code.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.xml-set-external-entity-ref-handler.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.xml-get-error-code.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.xml-parse"
+>xml_parse</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN40123"
+></A
+><P
+>    (PHP3 &#62;= 3.0.6, PHP4 )</P
+>xml_parse&nbsp;--&nbsp;start parsing an XML document</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN40126"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN40128"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int <B
+CLASS="function"
+>xml_parse</B
+></CODE
+> (int parser, string data [, int 
+       isFinal])</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     <P
+></P
+><DIV
+CLASS="variablelist"
+><DL
+><DT
+><TT
+CLASS="parameter"
+><I
+>parser</I
+></TT
+></DT
+><DD
+><P
+>&#13;	 A reference to the XML parser to use.
+	</P
+></DD
+><DT
+><TT
+CLASS="parameter"
+><I
+>data</I
+></TT
+></DT
+><DD
+><P
+>&#13;	 Chunk of data to parse.  A document may be parsed piece-wise
+	 by calling <B
+CLASS="function"
+>xml_parse()</B
+> several times with
+	 new data, as long as the <TT
+CLASS="parameter"
+><I
+>isFinal</I
+></TT
+>
+	 parameter is set and true when the last data is parsed.
+	</P
+></DD
+><DT
+><TT
+CLASS="parameter"
+><I
+>isFinal</I
+></TT
+> (optional)</DT
+><DD
+><P
+>&#13;	 If set and true, <TT
+CLASS="parameter"
+><I
+>data</I
+></TT
+> is the last
+	 piece of data sent in this parse.
+	</P
+></DD
+></DL
+></DIV
+>
+    </P
+><P
+>&#13;     When the XML document is parsed, the handlers for the configured
+     events are called as many times as necessary, after which this
+     function returns true or false.
+    </P
+><P
+>&#13;     True is returned if the parse was successful, false if it was not
+     successful, or if <TT
+CLASS="parameter"
+><I
+>parser</I
+></TT
+> does not refer to
+     a valid parser.  For unsuccessful parses, error information can
+     be retrieved with <A
+HREF="function.xml-get-error-code.html"
+><B
+CLASS="function"
+>xml_get_error_code()</B
+></A
+>,
+     <A
+HREF="function.xml-error-string.html"
+><B
+CLASS="function"
+>xml_error_string()</B
+></A
+>,
+     <A
+HREF="function.xml-get-current-line-number.html"
+><B
+CLASS="function"
+>xml_get_current_line_number()</B
+></A
+>,
+     <A
+HREF="function.xml-get-current-column-number.html"
+><B
+CLASS="function"
+>xml_get_current_column_number()</B
+></A
+> and
+     <A
+HREF="function.xml-get-current-byte-index.html"
+><B
+CLASS="function"
+>xml_get_current_byte_index()</B
+></A
+>.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.xml-set-external-entity-ref-handler.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.xml-get-error-code.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>xml_set_external_entity_ref_handler</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.xml.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>xml_get_error_code</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

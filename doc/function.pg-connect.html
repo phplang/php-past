@@ -1,0 +1,279 @@
+<HTML
+><HEAD
+><TITLE
+>pg_connect</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="PostgreSQL functions"
+HREF="ref.pgsql.html"><LINK
+REL="PREVIOUS"
+TITLE="pg_cmdtuples"
+HREF="function.pg-cmdtuples.html"><LINK
+REL="NEXT"
+TITLE="pg_dbname"
+HREF="function.pg-dbname.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.pg-cmdtuples.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.pg-dbname.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.pg-connect"
+>pg_connect</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN31256"
+></A
+><P
+>    (PHP3 , PHP4 )</P
+>pg_connect&nbsp;--&nbsp;Open a PostgreSQL connection</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN31259"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN31261"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int <B
+CLASS="function"
+>pg_connect</B
+></CODE
+> (string conn_string)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     Returns a connection index on success, or false if the connection
+     could not be made.  Opens a connection to a PostgreSQL database.
+     The arguments should be within a quoted string.
+     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN31268"
+></A
+><P
+><B
+>Example 1. Using pg_connect arguments</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;&#60;?php
+$dbconn = pg_Connect ("dbname=mary");
+//connect to a database named "mary"
+$dbconn2 = pg_Connect ("host=localhost port=5432 dbname=mary");
+//connect to a database named "mary" on "localhost" at port "5432"
+$dbconn3 = pg_Connect ("user=lamb passwd=baaaa dbname=mary ");
+//connect to a database named "mary" with a username and password
+?&#62;
+     </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+     The arguments available include <TT
+CLASS="parameter"
+><I
+>dbname</I
+></TT
+> 
+     <TT
+CLASS="parameter"
+><I
+>port</I
+></TT
+>, <TT
+CLASS="parameter"
+><I
+>host</I
+></TT
+>, 
+     <TT
+CLASS="parameter"
+><I
+>tty</I
+></TT
+>, <TT
+CLASS="parameter"
+><I
+>options</I
+></TT
+>,
+     <TT
+CLASS="parameter"
+><I
+>user</I
+></TT
+>, and <TT
+CLASS="parameter"
+><I
+>password</I
+></TT
+>
+    </P
+><P
+>&#13;     This function returns a connection index that is needed by other
+     PostgreSQL functions. You can have multiple connections open at
+     once.
+    </P
+><P
+>&#13;     The previous syntax of:
+     <B
+CLASS="command"
+>$conn = pg_connect ("host", "port", "options", "tty",
+    "dbname")
+     </B
+>
+     has been deprecated.
+    </P
+><P
+>&#13;     See also <A
+HREF="function.pg-pconnect.html"
+><B
+CLASS="function"
+>pg_pconnect()</B
+></A
+>.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.pg-cmdtuples.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.pg-dbname.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>pg_cmdtuples</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.pgsql.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>pg_dbname</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,205 @@
+<HTML
+><HEAD
+><TITLE
+>hw_Objrec2Array</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Hyperwave functions"
+HREF="ref.hyperwave.html"><LINK
+REL="PREVIOUS"
+TITLE="hw_New_Document"
+HREF="function.hw-new-document.html"><LINK
+REL="NEXT"
+TITLE="hw_OutputDocument"
+HREF="function.hw-outputdocument.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.hw-new-document.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.hw-outputdocument.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.hw-objrec2array"
+>hw_Objrec2Array</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN14330"
+></A
+><P
+>    (PHP3 &#62;= 3.0.3, PHP4 )</P
+>hw_Objrec2Array&nbsp;--&nbsp;convert attributes from object record to object array</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN14333"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN14335"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>array <B
+CLASS="function"
+>hw_objrec2array</B
+></CODE
+> (string object_record [, array
+       format])</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     Converts an <TT
+CLASS="parameter"
+><I
+>object_record</I
+></TT
+> into an object array.
+     The keys of the resulting array are the attributes names.
+     Multi-value attributes like 'Title' in different languages form its own
+     array. The keys of this array are the left part to the colon of the
+     attribute value. This left part must be two characters long.
+     Other multi-value attributes without a prefix form an indexed array.
+     If the optional parameter is missing the 
+     attributes 'Title', 'Description'
+     and 'Keyword' are treated as language attributes and the attributes
+     'Group', 'Parent' and 'HtmlAttr' as non-prefixed multi-value attributes.
+     By passing an array holding the type for each attribute you can
+     alter this behaviour. The array is an associated array with the attribute
+     name as its key and the value being one of
+     <TT
+CLASS="literal"
+>HW_ATTR_LANG</TT
+> or <TT
+CLASS="literal"
+>HW_ATTR_NONE</TT
+>
+    </P
+><P
+>&#13;     See also <A
+HREF="function.hw-array2objrec.html"
+><B
+CLASS="function"
+>hw_array2objrec()</B
+></A
+>.</P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.hw-new-document.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.hw-outputdocument.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>hw_New_Document</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.hyperwave.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>hw_OutputDocument</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

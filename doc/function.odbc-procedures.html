@@ -1,0 +1,235 @@
+<HTML
+><HEAD
+><TITLE
+>odbc_procedures</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Unified ODBC functions"
+HREF="ref.odbc.html"><LINK
+REL="PREVIOUS"
+TITLE="odbc_foreignkeys"
+HREF="function.odbc-foreignkeys.html"><LINK
+REL="NEXT"
+TITLE="odbc_procedurecolumns"
+HREF="function.odbc-procedurecolumns.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.odbc-foreignkeys.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.odbc-procedurecolumns.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.odbc-procedures"
+>odbc_procedures</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN26527"
+></A
+><P
+>    (PHP4 &#62;= 4.0b4)</P
+>odbc_procedures&nbsp;--&nbsp;
+     Get the list of procedures stored in a specific data source.
+     Returns a result identifier containing the information.
+    </DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN26530"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN26532"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int <B
+CLASS="function"
+>odbc_procedures</B
+></CODE
+> (int connection_id [, string qualifier [, string owner [, string name]]])</CODE
+></P
+><P
+></P
+></DIV
+><P
+> 
+     Lists all procedures in the requested range.  Returns an ODBC
+     result identifier or <TT
+CLASS="literal"
+>false</TT
+> on failure.
+    </P
+><P
+>&#13;     The result set has the following columns:
+     <P
+></P
+><UL
+><LI
+><P
+>PROCEDURE_QUALIFIER</P
+></LI
+><LI
+><P
+>PROCEDURE_OWNER</P
+></LI
+><LI
+><P
+>PROCEDURE_NAME</P
+></LI
+><LI
+><P
+>NUM_INPUT_PARAMS</P
+></LI
+><LI
+><P
+>NUM_OUTPUT_PARAMS</P
+></LI
+><LI
+><P
+>NUM_RESULT_SETS</P
+></LI
+><LI
+><P
+>REMARKS</P
+></LI
+><LI
+><P
+>PROCEDURE_TYPE</P
+></LI
+></UL
+>
+    </P
+><P
+>&#13;     The <TT
+CLASS="parameter"
+><I
+>owner</I
+></TT
+> and <TT
+CLASS="parameter"
+><I
+>name</I
+></TT
+>
+     arguments accept search patterns ('%' to match zero or more
+     characters and '_' to match a single character).
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.odbc-foreignkeys.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.odbc-procedurecolumns.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>odbc_foreignkeys</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.odbc.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>odbc_procedurecolumns</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

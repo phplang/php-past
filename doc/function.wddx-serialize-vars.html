@@ -1,0 +1,248 @@
+<HTML
+><HEAD
+><TITLE
+>wddx_serialize_vars</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="WDDX functions"
+HREF="ref.wddx.html"><LINK
+REL="PREVIOUS"
+TITLE="wddx_serialize_value"
+HREF="function.wddx-serialize-value.html"><LINK
+REL="NEXT"
+TITLE="wddx_packet_start"
+HREF="function.wddx-packet-start.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.wddx-serialize-value.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.wddx-packet-start.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.wddx-serialize-vars"
+>wddx_serialize_vars</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN39333"
+></A
+><P
+>    (PHP3 &#62;= 3.0.7, PHP4 &#62;= 4.0b2)</P
+>wddx_serialize_vars&nbsp;--&nbsp;Serialize variables into a WDDX packet</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN39336"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN39338"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>string <B
+CLASS="function"
+>wddx_serialize_vars</B
+></CODE
+> (mixed var_name [, mixed 
+       ...])</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     <B
+CLASS="function"
+>wddx_serialize_vars()</B
+> is used to create a WDDX
+     packet with a structure that contains the serialized
+     representation of the passed variables.</P
+><P
+>&#13;     <B
+CLASS="function"
+>wddx_serialize_vars()</B
+> takes a variable number
+     of arguments, each of which can be either a string naming a
+     variable or an array containing strings naming the variables or
+     another array, etc.</P
+><P
+>&#13;     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN39352"
+></A
+><P
+><B
+>Example 1. wddx_serialize_vars example</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;&#60;?php
+$a = 1;
+$b = 5.5;
+$c = array("blue", "orange", "violet");
+$d = "colors";
+
+$clvars = array("c", "d");
+print wddx_serialize_vars("a", "b", $clvars);
+?&#62;
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+></P
+><P
+>&#13;     The above example will produce:
+     <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;&#60;wddxPacket version='1.0'&#62;&#60;header/&#62;&#60;data&#62;&#60;struct&#62;&#60;var name='a'&#62;&#60;number&#62;1&#60;/number&#62;&#60;/var&#62;
+&#60;var name='b'&#62;&#60;number&#62;5.5&#60;/number&#62;&#60;/var&#62;&#60;var name='c'&#62;&#60;array length='3'&#62;
+&#60;string&#62;blue&#60;/string&#62;&#60;string&#62;orange&#60;/string&#62;&#60;string&#62;violet&#60;/string&#62;&#60;/array&#62;&#60;/var&#62;
+&#60;var name='d'&#62;&#60;string&#62;colors&#60;/string&#62;&#60;/var&#62;&#60;/struct&#62;&#60;/data&#62;&#60;/wddxPacket&#62;
+     </PRE
+></TD
+></TR
+></TABLE
+></P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.wddx-serialize-value.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.wddx-packet-start.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>wddx_serialize_value</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.wddx.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>wddx_packet_start</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

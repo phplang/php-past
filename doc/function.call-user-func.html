@@ -1,0 +1,214 @@
+<HTML
+><HEAD
+><TITLE
+>call_user_func</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Function Handling functions"
+HREF="ref.funchand.html"><LINK
+REL="PREVIOUS"
+TITLE="Function Handling functions"
+HREF="ref.funchand.html"><LINK
+REL="NEXT"
+TITLE="create_function"
+HREF="function.create-function.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="ref.funchand.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.create-function.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.call-user-func"
+>call_user_func</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN12904"
+></A
+><P
+>    (PHP3 &#62;= 3.0.3, PHP4 )</P
+>call_user_func&nbsp;--&nbsp;
+     Call a user function given by the first parameter
+    </DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN12907"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN12909"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>mixed 
+       <B
+CLASS="function"
+>call_user_func</B
+>
+      </CODE
+> (string 
+       function_name [, mixed 
+       parameter [, mixed 
+       ...]])</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     Call a user defined function given by the
+     <TT
+CLASS="parameter"
+><I
+>function_name</I
+></TT
+> parameter.  Take the
+     following:
+     <DIV
+CLASS="informalexample"
+><A
+NAME="AEN12923"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;function barber ($type) {
+    print "You wanted a $type haircut, no problem";
+}
+call_user_func ('barber', "mushroom");
+call_user_func ('barber', "shave");
+      </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+>
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="ref.funchand.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.create-function.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Function Handling functions</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.funchand.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>create_function</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

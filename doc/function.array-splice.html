@@ -1,0 +1,404 @@
+<HTML
+><HEAD
+><TITLE
+>array_splice</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Array Functions"
+HREF="ref.array.html"><LINK
+REL="PREVIOUS"
+TITLE="array_slice"
+HREF="function.array-slice.html"><LINK
+REL="NEXT"
+TITLE="array_unique"
+HREF="function.array-unique.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.array-slice.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.array-unique.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.array-splice"
+>array_splice</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN4918"
+></A
+><P
+>    (PHP4 )</P
+>array_splice&nbsp;--&nbsp;
+     Remove a portion of the array and replace it with something
+     else
+    </DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN4921"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN4923"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>array <B
+CLASS="function"
+>array_splice</B
+></CODE
+> (array input, int offset [, int
+       length [, array
+       replacement]])</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     <B
+CLASS="function"
+>Array_splice()</B
+> removes the elements designated
+     by <TT
+CLASS="parameter"
+><I
+>offset</I
+></TT
+> and
+     <TT
+CLASS="parameter"
+><I
+>length</I
+></TT
+> from the
+     <TT
+CLASS="parameter"
+><I
+>input</I
+></TT
+> array, and replaces them with the
+     elements of the <TT
+CLASS="parameter"
+><I
+>replacement</I
+></TT
+> array, if
+     supplied.
+    </P
+><P
+>&#13;     If <TT
+CLASS="parameter"
+><I
+>offset</I
+></TT
+> is positive then the start of
+     removed portion is at that offset from the beginning of the
+     <TT
+CLASS="parameter"
+><I
+>input</I
+></TT
+> array.  If
+     <TT
+CLASS="parameter"
+><I
+>offset</I
+></TT
+> is negative then it starts that far
+     from the end of the <TT
+CLASS="parameter"
+><I
+>input</I
+></TT
+> array.
+    </P
+><P
+>&#13;     If <TT
+CLASS="parameter"
+><I
+>length</I
+></TT
+> is omitted, removes everything
+     from <TT
+CLASS="parameter"
+><I
+>offset</I
+></TT
+> to the end of the array.  If
+     <TT
+CLASS="parameter"
+><I
+>length</I
+></TT
+> is specified and is positive, then
+     that many elements will be removed. If
+     <TT
+CLASS="parameter"
+><I
+>length</I
+></TT
+> is specified and is negative then
+     the end of the removed portion will be that many elements from
+     the end of the array.  Tip: to remove everything from
+     <TT
+CLASS="parameter"
+><I
+>offset</I
+></TT
+> to the end of the array when
+     <TT
+CLASS="parameter"
+><I
+>replacement</I
+></TT
+> is also specified, use
+     <TT
+CLASS="literal"
+>count($input)</TT
+> for
+     <TT
+CLASS="parameter"
+><I
+>length</I
+></TT
+>.
+    </P
+><P
+>&#13;     If <TT
+CLASS="parameter"
+><I
+>replacement</I
+></TT
+> array is specified, then
+     the removed elements are replaced with elements from this array.
+     If <TT
+CLASS="parameter"
+><I
+>offset</I
+></TT
+> and
+     <TT
+CLASS="parameter"
+><I
+>length</I
+></TT
+> are such that nothing is removed,
+     then the elements from the <TT
+CLASS="parameter"
+><I
+>replacement</I
+></TT
+>
+     array are inserted in the place specified by the
+     <TT
+CLASS="parameter"
+><I
+>offset</I
+></TT
+>. Tip: if the replacement is just
+     one element it is not necessary to put <TT
+CLASS="literal"
+>array()</TT
+>
+     around it, unless the element is an array itself.
+    </P
+><P
+>&#13;     The following equivalences hold:
+     <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;array_push ($input, $x, $y)     array_splice ($input, count ($input), 0, 
+                                             array ($x, $y))
+array_pop ($input)              array_splice ($input, -1)
+array_shift ($input)            array_splice ($input, 0, 1)
+array_unshift ($input, $x, $y)  array_splice ($input, 0, 0, array ($x, $y))
+$a[$x] = $y                     array_splice ($input, $x, 1, $y)
+     </PRE
+></TD
+></TR
+></TABLE
+>
+    </P
+><P
+>&#13;     Returns the array consisting of removed elements.
+    </P
+><P
+>&#13;     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN4968"
+></A
+><P
+><B
+>Example 1. <B
+CLASS="function"
+>Array_splice()</B
+> examples</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;$input = array ("red", "green", "blue", "yellow");
+
+array_splice ($input, 2);      // $input is now array ("red", "green")
+array_splice ($input, 1, -1);  // $input is now array ("red", "yellow")
+array_splice ($input, 1, count($input), "orange");  
+                               // $input is now array ("red", "orange")
+array_splice ($input, -1, 1, array("black", "maroon")); 
+                               // $input is now array ("red", "green", 
+                               //          "blue", "black", "maroon")
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+    </P
+><P
+>&#13;     See also <A
+HREF="function.array-slice.html"
+><B
+CLASS="function"
+>array_slice()</B
+></A
+>.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.array-slice.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.array-unique.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>array_slice</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.array.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>array_unique</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,282 @@
+<HTML
+><HEAD
+><TITLE
+>AddCSlashes</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="String functions"
+HREF="ref.strings.html"><LINK
+REL="PREVIOUS"
+TITLE="String functions"
+HREF="ref.strings.html"><LINK
+REL="NEXT"
+TITLE="AddSlashes"
+HREF="function.addslashes.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="ref.strings.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.addslashes.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.addcslashes"
+>AddCSlashes</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN36150"
+></A
+><P
+>    (PHP4 &#62;= 4.0b4)</P
+>AddCSlashes&nbsp;--&nbsp;Quote string with slashes in a C style</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN36153"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN36155"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>string <B
+CLASS="function"
+>addcslashes</B
+></CODE
+> (string str, string charlist)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     Returns a string with backslashes before characters that are
+     listed in <TT
+CLASS="parameter"
+><I
+>charlist</I
+></TT
+> parameter. It escapes
+     <TT
+CLASS="literal"
+>\n</TT
+>, <TT
+CLASS="literal"
+>\r</TT
+> etc. in C-like
+     style, characters with ASCII code lower than 32 and higher than
+     126 are converted to octal representation. Be carefull when
+     escaping alphanumeric characters. You can specify a range in
+     <TT
+CLASS="parameter"
+><I
+>charlist</I
+></TT
+> like "\0..\37", which would
+     escape all characters with ASCII code between 0 and 31.
+     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN36168"
+></A
+><P
+><B
+>Example 1. <B
+CLASS="function"
+>Addcslashes()</B
+> example</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;$escaped = addcslashes ($not_escaped, "\0..\37!@\177..\377");
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+     <DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
+><P
+><B
+>Note: </B
+>
+       Added in PHP4b3-dev.</P
+></BLOCKQUOTE
+></DIV
+>
+    </P
+><P
+>&#13;     See also <A
+HREF="function.stripcslashes.html"
+><B
+CLASS="function"
+>stripcslashes()</B
+></A
+>, 
+     <A
+HREF="function.stripslashes.html"
+><B
+CLASS="function"
+>stripslashes()</B
+></A
+>, 
+     <A
+HREF="function.htmlspecialchars.html"
+><B
+CLASS="function"
+>htmlspecialchars()</B
+></A
+>,
+     <A
+HREF="function.htmlspecialchars.html"
+><B
+CLASS="function"
+>htmlspecialchars()</B
+></A
+>, and 
+     <A
+HREF="function.quotemeta.html"
+><B
+CLASS="function"
+>quotemeta()</B
+></A
+>.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="ref.strings.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.addslashes.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>String functions</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.strings.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>AddSlashes</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,268 @@
+<HTML
+><HEAD
+><TITLE
+>OCIStatementType</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Oracle 8 functions"
+HREF="ref.oci8.html"><LINK
+REL="PREVIOUS"
+TITLE="OCIServerVersion"
+HREF="function.ociserverversion.html"><LINK
+REL="NEXT"
+TITLE="OCINewCursor"
+HREF="function.ocinewcursor.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.ociserverversion.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.ocinewcursor.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.ocistatementtype"
+>OCIStatementType</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN27175"
+></A
+><P
+>    (PHP3 &#62;= 3.0.5, PHP4 )</P
+>OCIStatementType&nbsp;--&nbsp;Return the type of an OCI statement.</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN27178"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN27180"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>string <B
+CLASS="function"
+>OCIStatementType</B
+></CODE
+> (int stmt)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     <B
+CLASS="function"
+>OCIStatementType()</B
+> returns on of the following values:
+     <P
+></P
+><OL
+TYPE="1"
+><LI
+><P
+>			"SELECT"</P
+></LI
+><LI
+><P
+>			"UPDATE"</P
+></LI
+><LI
+><P
+>			"DELETE"</P
+></LI
+><LI
+><P
+>			"INSERT"</P
+></LI
+><LI
+><P
+>			"CREATE"</P
+></LI
+><LI
+><P
+>			"DROP"</P
+></LI
+><LI
+><P
+>			"ALTER"</P
+></LI
+><LI
+><P
+>			"BEGIN"</P
+></LI
+><LI
+><P
+>			"DECLARE"</P
+></LI
+><LI
+><P
+>			"UNKNOWN"</P
+></LI
+></OL
+></P
+><P
+>&#13;     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN27210"
+></A
+><P
+><B
+>Example 1. Code examples</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;&#60;?php
+    print "&#60;HTML&#62;&#60;PRE&#62;";
+    $conn = OCILogon("scott","tiger");
+    $sql  = "delete from emp where deptno = 10";
+   
+    $stmt = OCIParse($conn,$sql);
+    if ( OCIStatementType($stmt) == "DELETE" ) {
+        die "You are not allowed to delete from this table&#60;BR&#62;";
+    }
+   
+    OCILogoff($conn);
+    print "&#60;/PRE&#62;&#60;/HTML&#62;";
+?&#62;
+</PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+></P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.ociserverversion.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.ocinewcursor.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>OCIServerVersion</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.oci8.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>OCINewCursor</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

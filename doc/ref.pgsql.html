@@ -1,0 +1,582 @@
+<HTML
+><HEAD
+><TITLE
+>PostgreSQL functions</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Function Reference"
+HREF="funcref.html"><LINK
+REL="PREVIOUS"
+TITLE="posix_getrlimit"
+HREF="function.posix-getrlimit.html"><LINK
+REL="NEXT"
+TITLE="pg_close"
+HREF="function.pg-close.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="reference"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.posix-getrlimit.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.pg-close.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="reference"
+><A
+NAME="ref.pgsql"
+></A
+><DIV
+CLASS="TITLEPAGE"
+><H1
+CLASS="title"
+>LI. PostgreSQL functions</H1
+><DIV
+CLASS="PARTINTRO"
+><A
+NAME="AEN31174"
+></A
+><P
+>&#13;    Postgres, developed originally in the UC Berkeley Computer Science 
+    Department, pioneered many of the object-relational concepts now
+    becoming available in some commercial databases.  It provides
+    SQL92/SQL3 language support, transaction integrity, and type
+    extensibility.  PostgreSQL is a public-domain, open source
+    descendant of this original Berkeley code.
+   </P
+><P
+>&#13;    PostgreSQL is available without cost. The current version is
+    available at <A
+HREF="http://www.postgresql.org/"
+TARGET="_top"
+>www.PostgreSQL.org</A
+>.
+   </P
+><P
+>&#13;    Since version 6.3 (03/02/1998) PostgreSQL uses unix domain sockets.
+    A table is shown below describing these new connection possibilities.
+    This socket will be found in <TT
+CLASS="filename"
+>/tmp/.s.PGSQL.5432</TT
+>.
+    This option can be enabled with the '-i' flag to <B
+CLASS="command"
+>postmaster
+    </B
+> and it's meaning is: "listen on TCP/IP sockets as well as
+    Unix domain sockets".
+    <DIV
+CLASS="table"
+><A
+NAME="AEN31181"
+></A
+><P
+><B
+>Table 1. Postmaster and PHP</B
+></P
+><TABLE
+BORDER="1"
+CLASS="CALSTABLE"
+><THEAD
+><TR
+><TH
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Postmaster</TH
+><TH
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>PHP</TH
+><TH
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Status</TH
+></TR
+></THEAD
+><TBODY
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>postmaster &#38;</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>pg_connect("dbname=MyDbName");</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>OK</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>postmaster -i &#38;</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>pg_connect("dbname=MyDbName");</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>OK</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>postmaster &#38;</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>pg_connect("host=localhost dbname=MyDbName");</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;	 Unable to connect to PostgreSQL server: connectDB() failed:
+	 Is the postmaster running and accepting TCP/IP (with -i)
+	 connection at 'localhost' on port '5432'? in
+	 /path/to/file.php3 on line 20.
+	</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>postmaster -i &#38;</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>pg_connect("host=localhost dbname=MyDbName");</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>OK</TD
+></TR
+></TBODY
+></TABLE
+></DIV
+>
+   </P
+><P
+>&#13;    One can establish a connection with the following value pairs
+    set in the command string:
+    <B
+CLASS="command"
+>$conn = pg_Connect("host=myHost port=myPort tty=myTTY
+    options=myOptions user=myUser password=myPassword dbname=myDB");
+    </B
+>
+   </P
+><P
+>&#13;    The previous syntax of:
+    <B
+CLASS="command"
+>$conn = pg_connect ("host", "port", "options", "tty",
+    "dbname")
+    </B
+>
+    has been deprecated.
+   </P
+><P
+>&#13;    To use the large object (lo) interface, it is necessary to enclose
+    it within a transaction block. A transaction block starts with a
+    <B
+CLASS="command"
+>begin</B
+> and if the transaction was valid ends
+    with <B
+CLASS="command"
+>commit</B
+> or <B
+CLASS="command"
+>end</B
+>.  If the
+    transaction fails the transaction should be closed with
+    <B
+CLASS="command"
+>rollback</B
+> or <B
+CLASS="command"
+>abort</B
+>.
+    <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN31216"
+></A
+><P
+><B
+>Example 1. Using Large Objects</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;&#60;?php
+    $database = pg_Connect ("dbname=jacarta");
+    pg_exec ($database, "begin");
+    $oid = pg_locreate ($database);
+    echo ("$oid\n");
+    $handle = pg_loopen ($database, $oid, "w");
+    echo ("$handle\n");
+    pg_lowrite ($handle, "gaga");
+    pg_loclose ($handle);
+    pg_exec ($database, "commit");
+?&#62;
+     </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+   </P
+></DIV
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Table of Contents</B
+></DT
+><DT
+><A
+HREF="function.pg-close.html"
+>pg_close</A
+> &#8212; Close a PostgreSQL connection</DT
+><DT
+><A
+HREF="function.pg-cmdtuples.html"
+>pg_cmdtuples</A
+> &#8212; Returns number of affected tuples</DT
+><DT
+><A
+HREF="function.pg-connect.html"
+>pg_connect</A
+> &#8212; Open a PostgreSQL connection</DT
+><DT
+><A
+HREF="function.pg-dbname.html"
+>pg_dbname</A
+> &#8212; Get the database name</DT
+><DT
+><A
+HREF="function.pg-end-copy.html"
+>pg_end_copy</A
+> &#8212; Sync with PostgreSQL backend</DT
+><DT
+><A
+HREF="function.pg-errormessage.html"
+>pg_errormessage</A
+> &#8212; Get the error message string</DT
+><DT
+><A
+HREF="function.pg-exec.html"
+>pg_exec</A
+> &#8212; Execute a query</DT
+><DT
+><A
+HREF="function.pg-fetch-array.html"
+>pg_fetch_array</A
+> &#8212; Fetch a row as an array</DT
+><DT
+><A
+HREF="function.pg-fetch-object.html"
+>pg_fetch_object</A
+> &#8212; Fetch a row as an object</DT
+><DT
+><A
+HREF="function.pg-fetch-row.html"
+>pg_fetch_row</A
+> &#8212; Get a row as an enumerated array</DT
+><DT
+><A
+HREF="function.pg-fieldisnull.html"
+>pg_fieldisnull</A
+> &#8212; Test if a field is NULL</DT
+><DT
+><A
+HREF="function.pg-fieldname.html"
+>pg_fieldname</A
+> &#8212; Returns the name of a field</DT
+><DT
+><A
+HREF="function.pg-fieldnum.html"
+>pg_fieldnum</A
+> &#8212; Returns the field number of the named field</DT
+><DT
+><A
+HREF="function.pg-fieldprtlen.html"
+>pg_fieldprtlen</A
+> &#8212; Returns the printed length</DT
+><DT
+><A
+HREF="function.pg-fieldsize.html"
+>pg_fieldsize</A
+> &#8212; 
+     Returns the internal storage size of the named field
+    </DT
+><DT
+><A
+HREF="function.pg-fieldtype.html"
+>pg_fieldtype</A
+> &#8212; 
+     Returns the type name for the corresponding field number
+    </DT
+><DT
+><A
+HREF="function.pg-freeresult.html"
+>pg_freeresult</A
+> &#8212; Free reult memory</DT
+><DT
+><A
+HREF="function.pg-getlastoid.html"
+>pg_getlastoid</A
+> &#8212; Returns the last object identifier</DT
+><DT
+><A
+HREF="function.pg-host.html"
+>pg_host</A
+> &#8212; 
+     Returns the host name associated with the connection
+    </DT
+><DT
+><A
+HREF="function.pg-loclose.html"
+>pg_loclose</A
+> &#8212; Close a large object</DT
+><DT
+><A
+HREF="function.pg-locreate.html"
+>pg_locreate</A
+> &#8212; Create a large object</DT
+><DT
+><A
+HREF="function.pg-loexport.html"
+>pg_loexport</A
+> &#8212; Export a large object to file</DT
+><DT
+><A
+HREF="function.pg-loimport.html"
+>pg_loimport</A
+> &#8212; Import a large object from file</DT
+><DT
+><A
+HREF="function.pg-loopen.html"
+>pg_loopen</A
+> &#8212; Open a large object</DT
+><DT
+><A
+HREF="function.pg-loread.html"
+>pg_loread</A
+> &#8212; Read a large object</DT
+><DT
+><A
+HREF="function.pg-loreadall.html"
+>pg_loreadall</A
+> &#8212; 
+     Read a entire large object and send straight to browser
+    </DT
+><DT
+><A
+HREF="function.pg-lounlink.html"
+>pg_lounlink</A
+> &#8212; Delete a large object</DT
+><DT
+><A
+HREF="function.pg-lowrite.html"
+>pg_lowrite</A
+> &#8212; Write a large object</DT
+><DT
+><A
+HREF="function.pg-numfields.html"
+>pg_numfields</A
+> &#8212; Returns the number of fields</DT
+><DT
+><A
+HREF="function.pg-numrows.html"
+>pg_numrows</A
+> &#8212; Returns the number of rows</DT
+><DT
+><A
+HREF="function.pg-options.html"
+>pg_options</A
+> &#8212; Get the options associated with the connection</DT
+><DT
+><A
+HREF="function.pg-pconnect.html"
+>pg_pconnect</A
+> &#8212; Open a persistant PostgreSQL connection</DT
+><DT
+><A
+HREF="function.pg-port.html"
+>pg_port</A
+> &#8212; 
+     Return the port number associated with the connection
+    </DT
+><DT
+><A
+HREF="function.pg-put-line.html"
+>pg_put_line</A
+> &#8212; Send a NULL-terminated string to PostgreSQL backend</DT
+><DT
+><A
+HREF="function.pg-result.html"
+>pg_result</A
+> &#8212; Returns values from a result identifier</DT
+><DT
+><A
+HREF="function.pg-set-client-encoding.html"
+>pg_set_client_encoding</A
+> &#8212; 
+     Set the client encoding
+    </DT
+><DT
+><A
+HREF="function.pg-client-encoding.html"
+>pg_client_encoding</A
+> &#8212; 
+     Get the client encoding
+    </DT
+><DT
+><A
+HREF="function.pg-trace.html"
+>pg_trace</A
+> &#8212; Enable tracing a PostgreSQL connection</DT
+><DT
+><A
+HREF="function.pg-tty.html"
+>pg_tty</A
+> &#8212; 
+     Return the tty name associated with the connection
+    </DT
+><DT
+><A
+HREF="function.pg-untrace.html"
+>pg_untrace</A
+> &#8212; Disable tracing of a PostgreSQL connection</DT
+></DL
+></DIV
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.posix-getrlimit.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.pg-close.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>posix_getrlimit</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="funcref.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>pg_close</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

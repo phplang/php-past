@@ -1,0 +1,313 @@
+<HTML
+><HEAD
+><TITLE
+>mysql_fetch_array</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="MySQL functions"
+HREF="ref.mysql.html"><LINK
+REL="PREVIOUS"
+TITLE="mysql_error"
+HREF="function.mysql-error.html"><LINK
+REL="NEXT"
+TITLE="mysql_fetch_assoc"
+HREF="function.mysql-fetch-assoc.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.mysql-error.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.mysql-fetch-assoc.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.mysql-fetch-array"
+>mysql_fetch_array</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN24216"
+></A
+><P
+>    (PHP3 , PHP4 )</P
+>mysql_fetch_array&nbsp;--&nbsp;
+     Fetch a result row as an associative array, a numeric array, or both.
+    </DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN24219"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN24221"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>array <B
+CLASS="function"
+>mysql_fetch_array</B
+></CODE
+> (int result [, int
+       result_type])</CODE
+></P
+><P
+></P
+></DIV
+><P
+> 
+     Returns an array that corresponds to the fetched row, or false
+     if there are no more rows.</P
+><P
+>&#13;     <B
+CLASS="function"
+>mysql_fetch_array()</B
+> is an extended version of
+     <A
+HREF="function.mysql-fetch-row.html"
+><B
+CLASS="function"
+>mysql_fetch_row()</B
+></A
+>.  In addition to storing the
+     data in the numeric indices of the result array, it also stores
+     the data in associative indices, using the field names as keys.
+    </P
+><P
+>&#13;     If two or more columns of the result have the same field names,
+     the last column will take precedence. To access the other column(s)
+     of the same name, you must the numeric index of the column or
+     make an alias for the column.
+     <DIV
+CLASS="informalexample"
+><A
+NAME="AEN24235"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;select t1.f1 as foo t2.f1 as bar from t1, t2
+      </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+>
+    </P
+><P
+>&#13;     An important thing to note is that using
+     <B
+CLASS="function"
+>mysql_fetch_array()</B
+> is NOT significantly
+     slower than using <A
+HREF="function.mysql-fetch-row.html"
+><B
+CLASS="function"
+>mysql_fetch_row()</B
+></A
+>, while it
+     provides a significant added value.
+    </P
+><P
+>&#13;     The optional second argument <TT
+CLASS="parameter"
+><I
+>result_type</I
+></TT
+>
+     in <B
+CLASS="function"
+>mysql_fetch_array()</B
+> is a constant and can
+     take the following values: MYSQL_ASSOC, MYSQL_NUM, and
+     MYSQL_BOTH. (This feature was added in PHP 3.0.7)
+    </P
+><P
+>&#13;     For further details, see also
+     <A
+HREF="function.mysql-fetch-row.html"
+><B
+CLASS="function"
+>mysql_fetch_row()</B
+></A
+> and <A
+HREF="function.mysql-fetch-assoc.html"
+><B
+CLASS="function"
+>mysql_fetch_assoc()</B
+></A
+>.
+    </P
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN24246"
+></A
+><P
+><B
+>Example 1. <B
+CLASS="function"
+>Mysql_fetch_array()</B
+></B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;&#60;?php 
+mysql_connect ($host, $user, $password);
+$result = mysql_db_query ("database","select user_id, fullname from table");
+while ($row = mysql_fetch_array ($result)) {
+    echo "user_id: ".$row["user_id"]."&#60;br&#62;\n";
+    echo "user_id: ".$row[0]."&#60;br&#62;\n";
+    echo "fullname: ".$row["fullname"]."&#60;br&#62;\n";
+    echo "fullname: ".$row[1]."&#60;br&#62;\n";
+}
+mysql_free_result ($result);
+?&#62;
+     </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.mysql-error.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.mysql-fetch-assoc.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>mysql_error</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.mysql.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>mysql_fetch_assoc</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,451 @@
+<HTML
+><HEAD
+><TITLE
+>Unified ODBC functions</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Function Reference"
+HREF="funcref.html"><LINK
+REL="PREVIOUS"
+TITLE="syslog"
+HREF="function.syslog.html"><LINK
+REL="NEXT"
+TITLE="odbc_autocommit"
+HREF="function.odbc-autocommit.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="reference"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.syslog.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.odbc-autocommit.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="reference"
+><A
+NAME="ref.odbc"
+></A
+><DIV
+CLASS="TITLEPAGE"
+><H1
+CLASS="title"
+>XLIII. Unified ODBC functions</H1
+><DIV
+CLASS="PARTINTRO"
+><A
+NAME="AEN25513"
+></A
+><P
+>&#13;    In addition to normal ODBC support, the Unified ODBC functions in
+    PHP allow you to access several databases that have borrowed the
+    semantics of the ODBC API to implement their own API.  Instead of
+    maintaining multiple database drivers that were all nearly
+    identical, these drivers have been unified into a single set of
+    ODBC functions.
+   </P
+><P
+>&#13;    The following databases are supported by the Unified ODBC
+    functions: <A
+HREF="http://www.adabas.com/"
+TARGET="_top"
+>Adabas D</A
+>, <A
+HREF="http://www.ibm.com/db2/"
+TARGET="_top"
+>IBM DB2</A
+>, <A
+HREF="http://www.iodbc.org/"
+TARGET="_top"
+>iODBC</A
+>, <A
+HREF="http://www.solidtech.com/"
+TARGET="_top"
+>Solid</A
+>, and <A
+HREF="http://www.sybase.com/"
+TARGET="_top"
+>Sybase SQL Anywhere</A
+>.
+   </P
+><P
+>&#13;    Please see the <A
+HREF="install.unix.html#database-support-options"
+>Installation on Unix
+    Systems</A
+> chapter for more information about configuring PHP
+    with these databases.
+   </P
+><DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
+><P
+><B
+>Note: </B
+>
+     There is no ODBC involved when connecting to the above
+     databases. The functions that you use to speak natively to them
+     just happen to share the same names and syntax as the ODBC
+     functions.
+    </P
+></BLOCKQUOTE
+></DIV
+></DIV
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Table of Contents</B
+></DT
+><DT
+><A
+HREF="function.odbc-autocommit.html"
+>odbc_autocommit</A
+> &#8212; Toggle autocommit behaviour</DT
+><DT
+><A
+HREF="function.odbc-binmode.html"
+>odbc_binmode</A
+> &#8212; Handling of binary column data</DT
+><DT
+><A
+HREF="function.odbc-close.html"
+>odbc_close</A
+> &#8212; Close an ODBC connection</DT
+><DT
+><A
+HREF="function.odbc-close-all.html"
+>odbc_close_all</A
+> &#8212; Close all ODBC connections</DT
+><DT
+><A
+HREF="function.odbc-commit.html"
+>odbc_commit</A
+> &#8212; Commit an ODBC transaction</DT
+><DT
+><A
+HREF="function.odbc-connect.html"
+>odbc_connect</A
+> &#8212; Connect to a datasource</DT
+><DT
+><A
+HREF="function.odbc-cursor.html"
+>odbc_cursor</A
+> &#8212; Get cursorname</DT
+><DT
+><A
+HREF="function.odbc-do.html"
+>odbc_do</A
+> &#8212; Synonym for <A
+HREF="function.odbc-exec.html"
+><B
+CLASS="function"
+>odbc_exec()</B
+></A
+></DT
+><DT
+><A
+HREF="function.odbc-exec.html"
+>odbc_exec</A
+> &#8212; Prepare and execute a SQL statement</DT
+><DT
+><A
+HREF="function.odbc-execute.html"
+>odbc_execute</A
+> &#8212; Execute a prepared statement</DT
+><DT
+><A
+HREF="function.odbc-fetch-into.html"
+>odbc_fetch_into</A
+> &#8212; Fetch one result row into array</DT
+><DT
+><A
+HREF="function.odbc-fetch-row.html"
+>odbc_fetch_row</A
+> &#8212; Fetch a row</DT
+><DT
+><A
+HREF="function.odbc-field-name.html"
+>odbc_field_name</A
+> &#8212; Get the columnname</DT
+><DT
+><A
+HREF="function.odbc-field-num.html"
+>odbc_field_num</A
+> &#8212; Return column number</DT
+><DT
+><A
+HREF="function.odbc-field-type.html"
+>odbc_field_type</A
+> &#8212; Datatype of a field</DT
+><DT
+><A
+HREF="function.odbc-field-len.html"
+>odbc_field_len</A
+> &#8212; Get the length (precision) of a field</DT
+><DT
+><A
+HREF="function.odbc-field-precision.html"
+>odbc_field_precision</A
+> &#8212; Synonym for <A
+HREF="function.odbc-field-len.html"
+><B
+CLASS="function"
+>odbc_field_len()</B
+></A
+></DT
+><DT
+><A
+HREF="function.odbc-field-scale.html"
+>odbc_field_scale</A
+> &#8212; Get the scale of a field</DT
+><DT
+><A
+HREF="function.odbc-free-result.html"
+>odbc_free_result</A
+> &#8212; Free resources associated with a result</DT
+><DT
+><A
+HREF="function.odbc-longreadlen.html"
+>odbc_longreadlen</A
+> &#8212; Handling of LONG columns</DT
+><DT
+><A
+HREF="function.odbc-num-fields.html"
+>odbc_num_fields</A
+> &#8212; Number of columns in a result</DT
+><DT
+><A
+HREF="function.odbc-pconnect.html"
+>odbc_pconnect</A
+> &#8212; Open a persistent database connection</DT
+><DT
+><A
+HREF="function.odbc-prepare.html"
+>odbc_prepare</A
+> &#8212; Prepares a statement for execution</DT
+><DT
+><A
+HREF="function.odbc-num-rows.html"
+>odbc_num_rows</A
+> &#8212; Number of rows in a result</DT
+><DT
+><A
+HREF="function.odbc-result.html"
+>odbc_result</A
+> &#8212; Get result data</DT
+><DT
+><A
+HREF="function.odbc-result-all.html"
+>odbc_result_all</A
+> &#8212; Print result as HTML table</DT
+><DT
+><A
+HREF="function.odbc-rollback.html"
+>odbc_rollback</A
+> &#8212; Rollback a transaction</DT
+><DT
+><A
+HREF="function.odbc-setoption.html"
+>odbc_setoption</A
+> &#8212; 
+     Adjust ODBC settings. Returns false if an error occurs, otherwise
+     true.
+    </DT
+><DT
+><A
+HREF="function.odbc-tables.html"
+>odbc_tables</A
+> &#8212; 
+     Get the list of table names stored in a specific data source.
+     Returns a result identifier containing the
+     information.
+    </DT
+><DT
+><A
+HREF="function.odbc-tableprivileges.html"
+>odbc_tableprivileges</A
+> &#8212; 
+     Lists tables and the privileges associated with each table
+    </DT
+><DT
+><A
+HREF="function.odbc-columns.html"
+>odbc_columns</A
+> &#8212; 
+     Lists the column names in specified tables. Returns a result
+     identifier containing the information.
+    </DT
+><DT
+><A
+HREF="function.odbc-columnprivileges.html"
+>odbc_columnprivileges</A
+> &#8212; 
+     Returns a result identifier that can be used to fetch a list of
+     columns and associated privileges
+    </DT
+><DT
+><A
+HREF="function.odbc-gettypeinfo.html"
+>odbc_gettypeinfo</A
+> &#8212; 
+     Returns a result identifier containing information about data
+     types supported by the data source.
+    </DT
+><DT
+><A
+HREF="function.odbc-primarykeys.html"
+>odbc_primarykeys</A
+> &#8212; 
+     Returns a result identifier that can be used to fetch the column
+     names that comprise the primary key for a table
+    </DT
+><DT
+><A
+HREF="function.odbc-foreignkeys.html"
+>odbc_foreignkeys</A
+> &#8212; 
+     Returns a list of foreign keys in the specified table or a list
+     of foreign keys in other tables that refer to the primary key in
+     the specified table
+    </DT
+><DT
+><A
+HREF="function.odbc-procedures.html"
+>odbc_procedures</A
+> &#8212; 
+     Get the list of procedures stored in a specific data source.
+     Returns a result identifier containing the information.
+    </DT
+><DT
+><A
+HREF="function.odbc-procedurecolumns.html"
+>odbc_procedurecolumns</A
+> &#8212; 
+     Retrieve information about parameters to procedures
+    </DT
+><DT
+><A
+HREF="function.odbc-specialcolumns.html"
+>odbc_specialcolumns</A
+> &#8212; 
+     Returns either the optimal set of columns that uniquely
+     identifies a row in the table or columns that are automatically
+     updated when any value in the row is updated by a transaction
+    </DT
+><DT
+><A
+HREF="function.odbc-statistics.html"
+>odbc_statistics</A
+> &#8212; Retrieve statistics about a table</DT
+></DL
+></DIV
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.syslog.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.odbc-autocommit.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>syslog</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="funcref.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>odbc_autocommit</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

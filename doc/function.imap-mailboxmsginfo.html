@@ -1,0 +1,352 @@
+<HTML
+><HEAD
+><TITLE
+>imap_mailboxmsginfo</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="IMAP, POP3 and NNTP functions"
+HREF="ref.imap.html"><LINK
+REL="PREVIOUS"
+TITLE="imap_scanmailbox"
+HREF="function.imap-scanmailbox.html"><LINK
+REL="NEXT"
+TITLE="imap_rfc822_write_address"
+HREF="function.imap-rfc822-write-address.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.imap-scanmailbox.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.imap-rfc822-write-address.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.imap-mailboxmsginfo"
+>imap_mailboxmsginfo</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN17132"
+></A
+><P
+>    (PHP3 &#62;= 3.0.2, PHP4 )</P
+>imap_mailboxmsginfo&nbsp;--&nbsp;Get information about the current mailbox</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN17135"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN17137"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>object <B
+CLASS="function"
+>imap_mailboxmsginfo</B
+></CODE
+> (int imap_stream)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     Returns information about the current mailbox. Returns FALSE on
+     failure.
+    </P
+><P
+> 
+     The <B
+CLASS="function"
+>imap_mailboxmsginfo()</B
+> function checks the
+     current mailbox status on the server. It is similar to 
+     <A
+HREF="function.imap-status.html"
+><B
+CLASS="function"
+>imap_status()</B
+></A
+>, but will additionally sum up the
+     size of all messages in the mailbox, which will take some additional
+     time to execute. It returns the information
+     in an object with following properties.
+    </P
+><P
+>&#13;     <DIV
+CLASS="table"
+><A
+NAME="AEN17148"
+></A
+><P
+><B
+>Table 1. Mailbox properties</B
+></P
+><TABLE
+BORDER="1"
+CLASS="CALSTABLE"
+><TBODY
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Date</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>date of last change</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Driver</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>driver</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Mailbox</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>name of the mailbox</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Nmsgs</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>number of messages</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Recent</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>number of recent messages</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Unread</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>number of unread messages</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Deleted</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>number of deleted messages</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Size</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>mailbox size</TD
+></TR
+></TBODY
+></TABLE
+></DIV
+>
+    </P
+><P
+>&#13;     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN17177"
+></A
+><P
+><B
+>Example 1. <B
+CLASS="function"
+>imap_mailboxmsginfo()</B
+> example</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;&#60;?php
+
+$mbox = imap_open("{your.imap.host}INBOX","username", "password")
+      || die("can't connect: ".imap_last_error());
+ 
+$check = imap_mailboxmsginfo($mbox);
+ 
+if($check) {
+    print "Date: "    . $check-&#62;Date    ."&#60;br&#62;\n" ;
+    print "Driver: "  . $check-&#62;Driver  ."&#60;br&#62;\n" ;
+    print "Mailbox: " . $check-&#62;Mailbox ."&#60;br&#62;\n" ;
+    print "Messages: ". $check-&#62;Nmsgs   ."&#60;br&#62;\n" ;
+    print "Recent: "  . $check-&#62;Recent  ."&#60;br&#62;\n" ;
+    print "Unread: "  . $check-&#62;Unread  ."&#60;br&#62;\n" ;
+    print "Deleted: " . $check-&#62;Deleted ."&#60;br&#62;\n" ;
+    print "Size: "    . $check-&#62;Size    ."&#60;br&#62;\n" ;
+} else {
+    print "imap_check() failed: ".imap_lasterror(). "&#60;br&#62;\n";
+}
+ 
+imap_close($mbox);
+
+?&#62;
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.imap-scanmailbox.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.imap-rfc822-write-address.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>imap_scanmailbox</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.imap.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>imap_rfc822_write_address</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

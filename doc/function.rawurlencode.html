@@ -1,0 +1,296 @@
+<HTML
+><HEAD
+><TITLE
+>rawurlencode</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="URL Functions"
+HREF="ref.url.html"><LINK
+REL="PREVIOUS"
+TITLE="rawurldecode"
+HREF="function.rawurldecode.html"><LINK
+REL="NEXT"
+TITLE="urldecode"
+HREF="function.urldecode.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.rawurldecode.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.urldecode.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.rawurlencode"
+>rawurlencode</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN38475"
+></A
+><P
+>    (PHP3 , PHP4 )</P
+>rawurlencode&nbsp;--&nbsp;URL-encode according to RFC1738</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN38478"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN38480"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>string <B
+CLASS="function"
+>rawurlencode</B
+></CODE
+> (string str)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     Returns a string in which all non-alphanumeric characters except
+     <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="screen"
+>-_.</PRE
+></TD
+></TR
+></TABLE
+> have been replaced with a percent
+     (<TT
+CLASS="literal"
+>%</TT
+>) sign followed by two hex digits.  This is
+     the encoding described in RFC1738 for protecting literal
+     characters from being interpreted as special URL delimiters, and
+     for protecting URL's from being mangled by transmission media
+     with character conversions (like some email systems).  For
+     example, if you want to include a password in an ftp url:
+     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN38489"
+></A
+><P
+><B
+>Example 1. <B
+CLASS="function"
+>Rawurlencode()</B
+> example 1</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;echo '&#60;A HREF="ftp://user:', rawurlencode ('foo @+%/'),
+     '@ftp.my.com/x.txt"&#62;';
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+     Or, if you pass information in a path info component of the url:
+     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN38493"
+></A
+><P
+><B
+>Example 2. <B
+CLASS="function"
+>Rawurlencode()</B
+> example 2</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;echo '&#60;A HREF="http://x.com/department_list_script/',
+    rawurlencode ('sales and marketing/Miami'), '"&#62;';
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+    </P
+><P
+>&#13;     See also <A
+HREF="function.rawurldecode.html"
+><B
+CLASS="function"
+>rawurldecode()</B
+></A
+>,
+		          <A
+HREF="function.urldecode.html"
+><B
+CLASS="function"
+>urldecode()</B
+></A
+>,
+							<A
+HREF="function.urlencode.html"
+><B
+CLASS="function"
+>urlencode()</B
+></A
+>.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.rawurldecode.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.urldecode.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>rawurldecode</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.url.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>urldecode</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

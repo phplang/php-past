@@ -1,0 +1,713 @@
+<HTML
+><HEAD
+><TITLE
+>include</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Control Structures"
+HREF="control-structures.html"><LINK
+REL="PREVIOUS"
+TITLE="require"
+HREF="function.require.html"><LINK
+REL="NEXT"
+TITLE="require_once"
+HREF="function.require-once.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.require.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 11. Control Structures</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.require-once.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="function.include"
+><A
+HREF="function.include.html"
+><B
+CLASS="function"
+>include()</B
+></A
+></A
+></H1
+><P
+>&#13;    The <A
+HREF="function.include.html"
+><B
+CLASS="function"
+>include()</B
+></A
+> statement includes and evaluates
+    the specified file.
+   </P
+><P
+>&#13;    If "URL fopen wrappers" are enabled in PHP (which they are in the
+    default configuration), you can specify the file to be
+    <A
+HREF="function.include.html"
+><B
+CLASS="function"
+>include()</B
+></A
+>ed using an URL instead of a local
+    pathname. See <A
+HREF="features.remote-files.html"
+>Remote
+    files</A
+> and <A
+HREF="function.fopen.html"
+><B
+CLASS="function"
+>fopen()</B
+></A
+> for more information.
+   </P
+><P
+>&#13;    An important note about how this works is that when a file is
+    <A
+HREF="function.include.html"
+><B
+CLASS="function"
+>include()</B
+></A
+>ed or <A
+HREF="function.require.html"
+><B
+CLASS="function"
+>require()</B
+></A
+>ed,
+    parsing drops out of PHP mode and into HTML mode at the beginning
+    of the target file, and resumes again at the end. For this reason,
+    any code inside the target file which should be executed as PHP
+    code must be enclosed within <A
+HREF="language.basic-syntax.html#language.basic-syntax.phpmode"
+>valid PHP start and end
+    tags</A
+>.
+   </P
+><P
+>&#13;    This happens each time the <A
+HREF="function.include.html"
+><B
+CLASS="function"
+>include()</B
+></A
+> statement
+    is encountered, so you can use an <A
+HREF="function.include.html"
+><B
+CLASS="function"
+>include()</B
+></A
+>
+    statement within a looping structure to include a number of
+    different files.
+    <DIV
+CLASS="informalexample"
+><A
+NAME="AEN3649"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;$files = array ('first.inc', 'second.inc', 'third.inc');
+for ($i = 0; $i &#60; count($files); $i++) {
+    include $files[$i];
+}
+     </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+>
+   </P
+><P
+>&#13;    <A
+HREF="function.include.html"
+><B
+CLASS="function"
+>include()</B
+></A
+> differs from
+    <A
+HREF="function.require.html"
+><B
+CLASS="function"
+>require()</B
+></A
+> in that the include statement is
+    re-evaluated each time it is encountered (and only when it is
+    being executed), whereas the <A
+HREF="function.require.html"
+><B
+CLASS="function"
+>require()</B
+></A
+>
+    statement is replaced by the required file when it is first
+    encountered, whether the contents of the file will be evaluated or
+    not (for example, if it is inside an <A
+HREF="control-structures.html#control-structures.if"
+>if</A
+> statement whose
+    condition evaluated to false).
+   </P
+><P
+>&#13;    Because <A
+HREF="function.include.html"
+><B
+CLASS="function"
+>include()</B
+></A
+> is a special language
+    construct, you must enclose it within a statement block if it is
+    inside a conditional block.
+    <DIV
+CLASS="informalexample"
+><A
+NAME="AEN3658"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;/* This is WRONG and will not work as desired. */
+ 
+if ($condition)
+    include($file);
+else
+    include($other);
+ 
+/* This is CORRECT. */
+ 
+if ($condition) {
+    include($file);
+} else {
+    include($other);
+}
+     </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+>
+   </P
+><P
+>&#13;    In both PHP 3 and PHP 4, it is possible to execute a
+    <TT
+CLASS="literal"
+>return</TT
+> statement inside an
+    <A
+HREF="function.include.html"
+><B
+CLASS="function"
+>include()</B
+></A
+>ed file, in order to terminate
+    processing in that file and return to the script which called
+    it. Some differences in the way this works exist, however. The
+    first is that in PHP 3, the <TT
+CLASS="literal"
+>return</TT
+> may not
+    appear inside a block unless it's a function block, in which case
+    the <TT
+CLASS="literal"
+>return</TT
+> applies to that function and not the
+    whole file. In PHP 4, however, this restriction does not
+    exist. Also, PHP 4 allows you to return values from
+    <A
+HREF="function.include.html"
+><B
+CLASS="function"
+>include()</B
+></A
+>ed files. You can take the value of
+    the <A
+HREF="function.include.html"
+><B
+CLASS="function"
+>include()</B
+></A
+> call as you would a normal
+    function. This generates a parse error in PHP 3.
+   </P
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN3667"
+></A
+><P
+><B
+>Example 11-1. <A
+HREF="function.include.html"
+><B
+CLASS="function"
+>include()</B
+></A
+> in PHP 3 and PHP 4</B
+></P
+><P
+>&#13;     Assume the existence of the following file (named
+     <TT
+CLASS="filename"
+>test.inc</TT
+>) in the same directory as the main
+     file:
+     <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;&#60;?php
+echo "Before the return &#60;br&#62;\n";
+if (1) {
+    return 27;
+}
+echo "After the return &#60;br&#62;\n";
+?&#62;
+     </PRE
+></TD
+></TR
+></TABLE
+>
+    </P
+><P
+>&#13;     Assume that the main file (<TT
+CLASS="filename"
+>main.html</TT
+>)
+     contains the following:
+     <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;&#60;?php
+$retval = include ('test.inc');
+echo "File returned: '$retval'&#60;br&#62;\n";
+?&#62;
+     </PRE
+></TD
+></TR
+></TABLE
+>
+    </P
+><P
+>&#13;     When <TT
+CLASS="filename"
+>main.html</TT
+> is called in PHP 3, it will
+     generate a parse error on line 2; you can't take the value of an
+     <A
+HREF="function.include.html"
+><B
+CLASS="function"
+>include()</B
+></A
+> in PHP 3. In PHP 4, however, the
+     result will be:
+     <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="screen"
+>&#13;Before the return
+File returned: '27'
+     </PRE
+></TD
+></TR
+></TABLE
+>
+    </P
+><P
+>&#13;     Now, assume that <TT
+CLASS="filename"
+>main.html</TT
+> has been altered
+     to contain the following:
+     <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;&#60;?php
+include ('test.inc');
+echo "Back in main.html&#60;br&#62;\n";
+?&#62;
+     </PRE
+></TD
+></TR
+></TABLE
+>
+    </P
+><P
+>&#13;     In PHP 4, the output will be:
+     <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="screen"
+>&#13;Before the return
+Back in main.html
+     </PRE
+></TD
+></TR
+></TABLE
+>
+     However, PHP 3 will give the following output:
+     <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="screen"
+>&#13;Before the return 
+27Back in main.html
+
+Parse error: parse error in /home/torben/public_html/phptest/main.html on line 5
+     </PRE
+></TD
+></TR
+></TABLE
+>
+    </P
+><P
+>&#13;     The above parse error is a result of the fact that the
+     <TT
+CLASS="literal"
+>return</TT
+> statement is enclosed in a non-function
+     block within <TT
+CLASS="filename"
+>test.inc</TT
+>. When the return is
+     moved outside of the block, the output is:
+     <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="screen"
+>&#13;Before the return
+27Back in main.html
+     </PRE
+></TD
+></TR
+></TABLE
+>
+    </P
+><P
+>&#13;     The spurious '27' is due to the fact that PHP 3 does not support
+     <TT
+CLASS="literal"
+>return</TT
+>ing values from files like that.
+    </P
+></DIV
+></TD
+></TR
+></TABLE
+><P
+>&#13;    When a file is <A
+HREF="function.include.html"
+><B
+CLASS="function"
+>include()</B
+></A
+>ed, the code it
+    contains inherits the variable scope of the line on which the
+    <A
+HREF="function.include.html"
+><B
+CLASS="function"
+>include()</B
+></A
+> occurs. Any variables available at
+    that line in the calling file will be available within the called
+    file. If the <A
+HREF="function.include.html"
+><B
+CLASS="function"
+>include()</B
+></A
+> occurs inside a
+    function within the calling file, then all of the code contained
+    in the called file will behave as though it had been defined
+    inside that function.
+   </P
+><P
+>&#13;    If the <A
+HREF="function.include.html"
+><B
+CLASS="function"
+>include()</B
+></A
+>ed file is called via HTTP
+    using the fopen wrappers, and if the target server interprets the
+    target file as PHP code, variables may be passed to the
+    <A
+HREF="function.include.html"
+><B
+CLASS="function"
+>include()</B
+></A
+>ed file using an URL request string as
+    used with HTTP GET. This is not strictly speaking the same thing
+    as <A
+HREF="function.include.html"
+><B
+CLASS="function"
+>include()</B
+></A
+>ing the file and having it inherit
+    the parent file's variable scope; the script is actually being run
+    on the remote server and the result is then being included into
+    the local script.
+    <DIV
+CLASS="informalexample"
+><A
+NAME="AEN3700"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;/* This example assumes that someserver is configured to parse .php
+ * files and not .txt files. Also, 'works' here means that the variables 
+ * $varone and $vartwo are available within the include()ed file. */
+
+/* Won't work; file.txt wasn't handled by someserver. */
+include ("http://someserver/file.txt?varone=1&#38;vartwo=2");
+
+/* Won't work; looks for a file named 'file.php?varone=1&#38;vartwo=2'
+ * on the local filesystem. */
+include ("file.php?varone=1&#38;vartwo=2");               
+
+/* Works. */
+include ("http://someserver/file.php?varone=1&#38;vartwo=2"); 
+
+$varone = 1;
+$vartwo = 2;
+include ("file.txt");  /* Works. */
+include ("file.php");  /* Works. */
+     </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+>
+   </P
+><P
+>&#13;    See also <A
+HREF="function.require.html"
+><B
+CLASS="function"
+>require()</B
+></A
+>, <A
+HREF="function.require-once.html"
+><B
+CLASS="function"
+>require_once()</B
+></A
+>,
+    <A
+HREF="function.include-once.html"
+><B
+CLASS="function"
+>include_once()</B
+></A
+>, <A
+HREF="function.readfile.html"
+><B
+CLASS="function"
+>readfile()</B
+></A
+>,
+	and <A
+HREF="function.virtual.html"
+><B
+CLASS="function"
+>virtual()</B
+></A
+>.
+   </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.require.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.require-once.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.require.html"
+><B
+CLASS="function"
+>require()</B
+></A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="control-structures.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.require-once.html"
+><B
+CLASS="function"
+>require_once()</B
+></A
+></TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,256 @@
+<HTML
+><HEAD
+><TITLE
+>setlocale</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="String functions"
+HREF="ref.strings.html"><LINK
+REL="PREVIOUS"
+TITLE="sscanf"
+HREF="function.sscanf.html"><LINK
+REL="NEXT"
+TITLE="similar_text"
+HREF="function.similar-text.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.sscanf.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.similar-text.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.setlocale"
+>setlocale</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN37006"
+></A
+><P
+>    (PHP3 , PHP4 )</P
+>setlocale&nbsp;--&nbsp;Set locale information</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN37009"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN37011"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>string <B
+CLASS="function"
+>setlocale</B
+></CODE
+> (string category, string locale)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     <TT
+CLASS="parameter"
+><I
+>Category</I
+></TT
+> is a string specifying the
+     category of the functions affected by the locale setting:
+     <P
+></P
+><UL
+><LI
+><P
+>&#13;	LC_ALL for all of the below
+       </P
+></LI
+><LI
+><P
+>&#13;	LC_COLLATE for string comparison - not currently implemented in PHP
+       </P
+></LI
+><LI
+><P
+>&#13;	LC_CTYPE for character classification and conversion, for
+	example <A
+HREF="function.strtoupper.html"
+><B
+CLASS="function"
+>strtoupper()</B
+></A
+>
+       </P
+></LI
+><LI
+><P
+>&#13;	LC_MONETARY for localeconv() - not currently implemented in
+	PHP
+       </P
+></LI
+><LI
+><P
+> 
+	LC_NUMERIC for decimal separator
+       </P
+></LI
+><LI
+><P
+>&#13;	LC_TIME for date and time formatting with
+	<A
+HREF="function.strftime.html"
+><B
+CLASS="function"
+>strftime()</B
+></A
+>
+       </P
+></LI
+></UL
+>
+    </P
+><P
+>&#13;     If <TT
+CLASS="parameter"
+><I
+>locale</I
+></TT
+> is the empty string
+     <TT
+CLASS="literal"
+>""</TT
+>, the locale names will be set from the
+     values of environment variables with the same names as the above
+     categories, or from "LANG".
+    </P
+><P
+>&#13;     If locale is zero or <TT
+CLASS="literal"
+>"0"</TT
+>, the locale setting
+     is not affected, only the current setting is returned.
+    </P
+><P
+>&#13;     Setlocale returns the new current locale, or false if the locale
+     functionality is not implemented in the plattform, the specified
+     locale does not exist or the category name is invalid.
+     An invalid category name also causes a warning message.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.sscanf.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.similar-text.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>sscanf</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.strings.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>similar_text</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

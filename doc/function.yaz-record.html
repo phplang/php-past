@@ -1,0 +1,186 @@
+<HTML
+><HEAD
+><TITLE
+>yaz_record</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="YAZ functions"
+HREF="ref.yaz.html"><LINK
+REL="PREVIOUS"
+TITLE="yaz_range"
+HREF="function.yaz-range.html"><LINK
+REL="NEXT"
+TITLE="yaz_search"
+HREF="function.yaz-search.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.yaz-range.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.yaz-search.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.yaz-record"
+>yaz_record</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN40627"
+></A
+><P
+>    (PHP4 &#62;= 4.0.1)</P
+>yaz_record&nbsp;--&nbsp;Returns a record</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN40630"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN40632"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int <B
+CLASS="function"
+>yaz_record</B
+></CODE
+> (int id, int pos, string type)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     Returns record at position or empty string if no record exists at
+     given position.
+    </P
+><P
+>&#13;     The <B
+CLASS="function"
+>yaz_record()</B
+> function inspects a record in
+     the current result set at the position specified. If no database
+     record exists at the given position an empty string is
+     returned. The argument, type, specifies the form of the returned
+     record. If type is "string" the record is returned in a string
+     representation suitable for printing (for XML and SUTRS). If type
+     is "array" the record is returned as an array representation (for
+     structured records).
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.yaz-range.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.yaz-search.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>yaz_range</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.yaz.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>yaz_search</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,238 @@
+<HTML
+><HEAD
+><TITLE
+>checkdnsrr</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Network Functions"
+HREF="ref.network.html"><LINK
+REL="PREVIOUS"
+TITLE="Network Functions"
+HREF="ref.network.html"><LINK
+REL="NEXT"
+TITLE="closelog"
+HREF="function.closelog.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="ref.network.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.closelog.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.checkdnsrr"
+>checkdnsrr</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN24883"
+></A
+><P
+>    (PHP3 , PHP4 )</P
+>checkdnsrr&nbsp;--&nbsp;
+     Check DNS records corresponding to a given Internet host name or
+     IP address
+    </DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN24886"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN24888"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int <B
+CLASS="function"
+>checkdnsrr</B
+></CODE
+> (string host [, string 
+       type])</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     Searches DNS for records of type <TT
+CLASS="parameter"
+><I
+>type</I
+></TT
+>
+     corresponding to <TT
+CLASS="parameter"
+><I
+>host</I
+></TT
+>. Returns true if any
+     records are found; returns false if no records were found or if
+     an error occurred.
+    </P
+><P
+>&#13;     <TT
+CLASS="parameter"
+><I
+>type</I
+></TT
+> may be any one of: A, MX, NS, SOA,
+     PTR, CNAME, or ANY.  The default is MX.
+    </P
+><P
+>&#13;     <TT
+CLASS="parameter"
+><I
+>Host</I
+></TT
+> may either be the IP address in
+     dotted-quad notation or the host name.
+    </P
+><P
+>&#13;     See also <A
+HREF="function.getmxrr.html"
+><B
+CLASS="function"
+>getmxrr()</B
+></A
+>,
+     <A
+HREF="function.gethostbyaddr.html"
+><B
+CLASS="function"
+>gethostbyaddr()</B
+></A
+>,
+     <A
+HREF="function.gethostbyname.html"
+><B
+CLASS="function"
+>gethostbyname()</B
+></A
+>,
+     <A
+HREF="function.gethostbynamel.html"
+><B
+CLASS="function"
+>gethostbynamel()</B
+></A
+>, and the named(8) manual
+     page.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="ref.network.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.closelog.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Network Functions</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.network.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>closelog</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

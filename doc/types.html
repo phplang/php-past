@@ -1,0 +1,734 @@
+<HTML
+><HEAD
+><TITLE
+>Types</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+REL="HOME"
+TITLE="PHP3 Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Syntax and grammar"
+HREF="lang-syntax.html"><LINK
+REL="PREVIOUS"
+TITLE="Syntax and grammar"
+HREF="lang-syntax.html"><LINK
+REL="NEXT"
+TITLE="Variables"
+HREF="variables.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP3 Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="lang-syntax.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 5. Syntax and grammar</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="variables.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="TYPES"
+>Types</A
+></H1
+><P
+>    PHP supports the following types:
+
+    <P
+></P
+><UL
+><LI
+><P
+><A
+HREF="types.html#TYPES.INTEGER"
+>integer</A
+>
+     </P
+></LI
+><LI
+><P
+><A
+HREF="types.html#TYPES.DOUBLE"
+>floating-point numbers</A
+>
+     </P
+></LI
+><LI
+><P
+><A
+HREF="types.html#TYPES.STRING"
+>string</A
+>
+     </P
+></LI
+><LI
+><P
+><A
+HREF="types.html#TYPES.ARRAY"
+>array</A
+>
+     </P
+></LI
+><LI
+><P
+><A
+HREF="types.html#TYPES.OBJECT"
+>object</A
+>
+    </P
+></LI
+></UL
+>
+
+   </P
+><P
+>    The type of a variable is usually not set by the programmer;
+    rather, it is decided at runtime by PHP depending on the context
+    in which that variable is used.
+
+   </P
+><P
+>    If you would like to force a variable to be converted to a certain 
+    type, you may either <A
+HREF="variables.html#LANG-SYNTAX.TYPECASTING"
+>cast</A
+> the variable or use 
+    the <A
+HREF="function.settype.html"
+><B
+CLASS="FUNCTION"
+>settype()</B
+></A
+> function on it.
+
+   </P
+><P
+>    Note that a variable may behave in different manners in certain
+    situations, depending on what type it is a the time. For more
+    information, see the section on <A
+HREF="variables.html#VARIABLES.TYPE-JUGGLING"
+>Type Juggling</A
+>.
+
+   </P
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="TYPES.INTEGER"
+>Integers</A
+></H2
+><P
+>     Integers can be specified using any of the following syntaxes:
+    <DIV
+CLASS="INFORMALEXAMPLE"
+><P
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>$a = 1234; # decimal number
+$a = -123; # a negative number
+$a = 0123; # octal number (equivalent to 83 decimal)
+$a = 0x12; # hexadecimal number (equivalent to 18 decimal)</PRE
+><P
+></P
+></DIV
+>
+
+   </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="TYPES.DOUBLE"
+>Floating point numbers</A
+></H2
+><P
+>     Floating point numbers ("doubles") can be specified using any
+     of the following syntaxes:
+    <DIV
+CLASS="INFORMALEXAMPLE"
+><P
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>$a = 1.234;
+$a = 1.2e3;</PRE
+><P
+></P
+></DIV
+>
+
+   </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="TYPES.STRING"
+>Strings</A
+></H2
+><P
+>     Strings can be specified using one of two sets of delimiters.
+    </P
+><P
+>     If the string is enclosed in double-quotes ("), variables
+     within the string will be expanded (subject to some parsing
+     limitations). As in C and Perl, the backslash ("\") character
+     can be used in specifying special characters:
+    <DIV
+CLASS="TABLE"
+><P
+><B
+>Table 5-1. Escaped characters</B
+></P
+><TABLE
+BORDER="1"
+CLASS="CALSTABLE"
+><TR
+><TH
+ALIGN="LEFT"
+VALIGN="TOP"
+>sequence</TH
+><TH
+ALIGN="LEFT"
+VALIGN="TOP"
+>meaning</TH
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="LITERAL"
+>\n</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>newline</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="LITERAL"
+>\r</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>carriage</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="LITERAL"
+>\t</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>horizontal tab</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="LITERAL"
+>\\</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>backslash</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="LITERAL"
+>\$</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>dollar sign</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="LITERAL"
+>\"</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>double-quote</TD
+></TR
+></TABLE
+></DIV
+>
+    </P
+><P
+>     You can escape any other character, but a warning will be issued
+     at the highest warning level.
+    </P
+><P
+>     The second way to delimit a string uses the single-quote ("'")
+     character, which does not do any variable expansion or backslash
+     processing (except for "\\" and "\'" so you can insert backslashes
+     and single-quotes in a singly-quoted string).
+
+   </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="TYPES.ARRAY"
+>Arrays</A
+></H2
+><P
+>     Arrays actually act like both hash tables (associative arrays)
+     and indexed arrays (vectors).
+
+    </P
+><DIV
+CLASS="SECT3"
+><H3
+CLASS="SECT3"
+><A
+NAME="TYPES.ARRAY.SINGLE-DIM"
+>Single Dimension Arrays</A
+></H3
+><P
+>      PHP supports both scalar and associative arrays. In fact, there
+      is no difference between the two.  You can create an array using
+      the <A
+HREF="function.list.html"
+><B
+CLASS="FUNCTION"
+>list()</B
+></A
+> or <A
+HREF="function.array.html"
+><B
+CLASS="FUNCTION"
+>array()</B
+></A
+>
+      functions, or you can explicitly set each array element value.
+
+     <DIV
+CLASS="INFORMALEXAMPLE"
+><P
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+> 
+$a[0] = "abc"; 
+$a[1] = "def"; 
+$b["foo"] = 13;
+      </PRE
+><P
+></P
+></DIV
+>
+
+     </P
+><P
+>      You can also create an array by simply adding values to
+      the array.
+
+     <DIV
+CLASS="INFORMALEXAMPLE"
+><P
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+> 
+$a[] = "hello"; // $a[2] == "hello"
+$a[] = "world"; // $a[3] == "world" 
+      </PRE
+><P
+></P
+></DIV
+>
+
+     </P
+><P
+>      Arrays may be sorted using the <A
+HREF="function.asort.html"
+><B
+CLASS="FUNCTION"
+>asort()</B
+></A
+>,
+      <A
+HREF="function.arsort.html"
+><B
+CLASS="FUNCTION"
+>arsort()</B
+></A
+>, <A
+HREF="function.ksort.html"
+><B
+CLASS="FUNCTION"
+>ksort()</B
+></A
+>,
+      <A
+HREF="function.rsort.html"
+><B
+CLASS="FUNCTION"
+>rsort()</B
+></A
+>, <A
+HREF="function.sort.html"
+><B
+CLASS="FUNCTION"
+>sort()</B
+></A
+>,
+      <A
+HREF="function.uasort.html"
+><B
+CLASS="FUNCTION"
+>uasort()</B
+></A
+>, <A
+HREF="function.usort.html"
+><B
+CLASS="FUNCTION"
+>usort()</B
+></A
+>, and
+      <A
+HREF="function.uksort.html"
+><B
+CLASS="FUNCTION"
+>uksort()</B
+></A
+> functions depending on the type of
+      sort you want.
+
+     </P
+><P
+>      You can count the number of items in an array using the
+      <A
+HREF="function.count.html"
+><B
+CLASS="FUNCTION"
+>count()</B
+></A
+> function.
+
+     </P
+><P
+>      You can traverse an array using <A
+HREF="function.next.html"
+><B
+CLASS="FUNCTION"
+>next()</B
+></A
+> and
+      <A
+HREF="function.prev.html"
+><B
+CLASS="FUNCTION"
+>prev()</B
+></A
+> functions.  Another common way to
+      traverse an array is to use the <A
+HREF="function.each.html"
+><B
+CLASS="FUNCTION"
+>each()</B
+></A
+>
+      function.
+
+    </P
+></DIV
+><DIV
+CLASS="SECT3"
+><H3
+CLASS="SECT3"
+><A
+NAME="TYPES.ARRAY.MULTI-DIM"
+>Multi-Dimensional Arrays</A
+></H3
+><P
+>      Multi-dimensional arrays are actually pretty simple.  For each
+      dimension of the array, you add another [key] value to the end:
+
+     <DIV
+CLASS="INFORMALEXAMPLE"
+><P
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+> 
+$a[1]      = $f;               # one dimensional examples
+$a["foo"]  = $f;   
+
+$a[1][0]     = $f;             # two dimensional
+$a["foo"][2] = $f;             # (you can mix numeric and associative indices)
+$a[3]["bar"] = $f;             # (you can mix numeric and associative indices)
+
+$a["foo"][4]["bar"][0] = $f;   # four dimensional!
+      </PRE
+><P
+></P
+></DIV
+>
+
+     </P
+><P
+>      You can "fill up" multi-dimensional arrays in many ways,
+      but the trickiest one to understand is how to use the
+      <A
+HREF="function.array.html"
+><B
+CLASS="FUNCTION"
+>array()</B
+></A
+> command for associative arrays.
+      These two snippets of code fill up the one-dimensional array in
+      the same way:
+
+     <DIV
+CLASS="INFORMALEXAMPLE"
+><P
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+> 
+# Example 1:
+
+$a["color"]	= "red";
+$a["taste"]	= "sweet";
+$a["shape"]	= "round";
+$a["name"]	= "apple";
+$a[3]		= 4;
+
+
+# Example 2:
+$a = array(
+     "color" =&#62; "red",
+     "taste" =&#62; "sweet",
+     "shape" =&#62; "round",
+     "name"  =&#62; "apple",
+     3       =&#62; 4
+);
+      </PRE
+><P
+></P
+></DIV
+>
+
+     </P
+><P
+>      The <A
+HREF="function.array.html"
+><B
+CLASS="FUNCTION"
+>array()</B
+></A
+> function can be nested for 
+      multi-dimensional arrays:
+
+     <DIV
+CLASS="INFORMALEXAMPLE"
+><P
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+> 
+&lt;?
+$a = array(
+     "apple"  =&#62; array(
+          "color"  =&#62; "red",
+          "taste"  =&#62; "sweet",
+          "shape"  =&#62; "round"
+     ),
+     "orange"  =&#62; array(
+          "color"  =&#62; "orange",
+          "taste"  =&#62; "sweet",
+          "shape"  =&#62; "round"
+     ),
+     "banana"  =&#62; array(
+          "color"  =&#62; "yellow",
+          "taste"  =&#62; "paste-y",
+          "shape"  =&#62; "banana-shaped"
+     )
+);
+
+echo $a["apple"]["taste"];    # will output "sweet"
+?&#62;
+      </PRE
+><P
+></P
+></DIV
+>
+
+   </P
+></DIV
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="TYPES.OBJECT"
+>Objects</A
+></H2
+><DIV
+CLASS="SECT3"
+><H3
+CLASS="SECT3"
+><A
+NAME="TYPES.OBJECT.INIT"
+>Object Initialization</A
+></H3
+><P
+>      To initialize an object, you use the new statement to instantiate
+      the object to a variable.
+
+      <DIV
+CLASS="INFORMALEXAMPLE"
+><P
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>class foo {
+    function do_foo () { 
+        echo "Doing foo."; 
+    }
+}
+
+$bar = new foo;
+$bar -&#62; do_foo ();
+       </PRE
+><P
+></P
+></DIV
+>
+
+  </P
+></DIV
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="lang-syntax.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="variables.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Syntax and grammar</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="lang-syntax.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Variables</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

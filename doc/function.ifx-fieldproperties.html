@@ -1,0 +1,227 @@
+<HTML
+><HEAD
+><TITLE
+>ifx_fieldproperties</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Informix functions"
+HREF="ref.ifx.html"><LINK
+REL="PREVIOUS"
+TITLE="ifx_fieldtypes"
+HREF="function.ifx-fieldtypes.html"><LINK
+REL="NEXT"
+TITLE="ifx_num_fields"
+HREF="function.ifx-num-fields.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.ifx-fieldtypes.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.ifx-num-fields.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.ifx-fieldproperties"
+>ifx_fieldproperties</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN18089"
+></A
+><P
+>    (PHP3 &#62;= 3.0.3, PHP4 )</P
+>ifx_fieldproperties&nbsp;--&nbsp;List of SQL fieldproperties</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN18092"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN18094"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>array <B
+CLASS="function"
+>ifx_fieldproperties</B
+></CODE
+> (int result_id)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     Returns an associative array with fieldnames as key and the SQL
+     fieldproperties as data for a query with
+     <TT
+CLASS="parameter"
+><I
+>result_id</I
+></TT
+>.  Returns FALSE on error.
+    </P
+><P
+>&#13;     Returns the Informix SQL fieldproperies of every field in the
+     query as an associative array.  Properties are encoded as:
+     "SQLTYPE;length;precision;scale;ISNULLABLE" where SQLTYPE = the
+     Informix type like "SQLVCHAR" etc. and ISNULLABLE = "Y" or "N".
+    </P
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN18103"
+></A
+><P
+><B
+>Example 1. Informix SQL fieldproperties</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;$properties = ifx_fieldproperties ($resultid);
+if (! isset($properties)) {
+  ... error ...
+}
+for ($i = 0; $i &#60; count($properties); $i++) {
+    $fname = key ($properties);
+    printf ("%s:\t type =  %s\n", $fname, $properties[$fname]);
+    next ($properties);
+}
+     </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.ifx-fieldtypes.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.ifx-num-fields.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>ifx_fieldtypes</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.ifx.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>ifx_num_fields</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

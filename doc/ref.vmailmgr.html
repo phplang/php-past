@@ -1,0 +1,274 @@
+<HTML
+><HEAD
+><TITLE
+>Vmailmgr functions</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Function Reference"
+HREF="funcref.html"><LINK
+REL="PREVIOUS"
+TITLE="var_dump"
+HREF="function.var-dump.html"><LINK
+REL="NEXT"
+TITLE="vm_adduser"
+HREF="function.vm-adduser.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="reference"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.var-dump.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.vm-adduser.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="reference"
+><A
+NAME="ref.vmailmgr"
+></A
+><DIV
+CLASS="TITLEPAGE"
+><H1
+CLASS="title"
+>LXIX. Vmailmgr functions</H1
+><DIV
+CLASS="PARTINTRO"
+><A
+NAME="AEN39179"
+></A
+><P
+>&#13;    These functions require <A
+HREF="http://www.qmail.org/"
+TARGET="_top"
+>qmail</A
+> and the
+    <A
+HREF="http://www.qcc.sk.ca/~bguenter/distrib/vmailmgr/"
+TARGET="_top"
+>vmailmgr package</A
+> by Bruce Guenter.</P
+><P
+>&#13;    For all functions, the following two variables are defined as:
+    string vdomain the domain name of your virtual domain
+    (vdomain.com) string basepwd the password of the 'real' user that
+    holds the virtual users</P
+><P
+>&#13;    Only up to 8 characters are recognized in passwords for virtual
+    users</P
+><P
+>&#13;    Return status for all functions matches response in response.h</P
+><P
+>&#13;
+    <P
+></P
+><TABLE
+BORDER="0"
+><TBODY
+><TR
+><TD
+>O ok</TD
+></TR
+><TR
+><TD
+>1 bad</TD
+></TR
+><TR
+><TD
+>2 error</TD
+></TR
+><TR
+><TD
+>3 error connecting</TD
+></TR
+></TBODY
+></TABLE
+><P
+></P
+></P
+><P
+>&#13;    Known problems: <A
+HREF="function.vm-deluser.html"
+><B
+CLASS="function"
+>vm_deluser()</B
+></A
+> does not delete
+    the user directory as it should.  <A
+HREF="function.vm-addalias.html"
+><B
+CLASS="function"
+>vm_addalias()</B
+></A
+>
+    currently does not work correctly.</P
+><P
+>&#13;    <DIV
+CLASS="informalexample"
+><A
+NAME="AEN39196"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;&#60;?php
+dl("php3_vmailmgr.so"); //load the shared library
+$vdomain="vdomain.com";
+$basepwd="password";
+?&#62;
+      </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+></P
+></DIV
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Table of Contents</B
+></DT
+><DT
+><A
+HREF="function.vm-adduser.html"
+>vm_adduser</A
+> &#8212; Add a new virtual user with a password</DT
+><DT
+><A
+HREF="function.vm-addalias.html"
+>vm_addalias</A
+> &#8212; Add an alias to a virtual user</DT
+><DT
+><A
+HREF="function.vm-passwd.html"
+>vm_passwd</A
+> &#8212; Changes a virtual users password</DT
+><DT
+><A
+HREF="function.vm-delalias.html"
+>vm_delalias</A
+> &#8212; Removes an alias</DT
+><DT
+><A
+HREF="function.vm-deluser.html"
+>vm_deluser</A
+> &#8212; Removes a virtual user</DT
+></DL
+></DIV
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.var-dump.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.vm-adduser.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>var_dump</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="funcref.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>vm_adduser</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

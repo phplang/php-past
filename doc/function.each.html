@@ -1,0 +1,446 @@
+<HTML
+><HEAD
+><TITLE
+>each</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Array Functions"
+HREF="ref.array.html"><LINK
+REL="PREVIOUS"
+TITLE="current"
+HREF="function.current.html"><LINK
+REL="NEXT"
+TITLE="end"
+HREF="function.end.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.current.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.end.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.each"
+>each</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN5249"
+></A
+><P
+>    (PHP3 , PHP4 )</P
+>each&nbsp;--&nbsp;
+     Return the next key and value pair from an array
+    </DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN5252"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN5254"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>array <B
+CLASS="function"
+>each</B
+></CODE
+> (array array)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     Returns the current key and value pair from the array
+     <TT
+CLASS="parameter"
+><I
+>array</I
+></TT
+> and advances the array cursor. This
+     pair is returned in a four-element array, with the keys
+     <I
+CLASS="emphasis"
+>0</I
+>, <I
+CLASS="emphasis"
+>1</I
+>,
+     <I
+CLASS="emphasis"
+>key</I
+>, and
+     <I
+CLASS="emphasis"
+>value</I
+>. Elements <I
+CLASS="emphasis"
+>0</I
+> and
+     <I
+CLASS="emphasis"
+>key</I
+> contain the key name of the array
+     element, and <I
+CLASS="emphasis"
+>1</I
+> and
+     <I
+CLASS="emphasis"
+>value</I
+> contain the data.
+    </P
+><P
+>&#13;     If the internal pointer for the array points past the end of the
+     array contents, <B
+CLASS="function"
+>each()</B
+> returns false.
+    </P
+><P
+>&#13;     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN5273"
+></A
+><P
+><B
+>Example 1. <B
+CLASS="function"
+>Each()</B
+> examples</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;$foo = array ("bob", "fred", "jussi", "jouni", "egon", "marliese");
+$bar = each ($foo);
+      </PRE
+></TD
+></TR
+></TABLE
+><P
+>&#13;       <TT
+CLASS="varname"
+>$bar</TT
+> now contains the following key/value
+       pairs:
+       <P
+></P
+><UL
+COMPACT="COMPACT"
+><LI
+><SPAN
+>0 =&#62; 0</SPAN
+></LI
+><LI
+><SPAN
+>1 =&#62; 'bob'</SPAN
+></LI
+><LI
+><SPAN
+>key =&#62; 0</SPAN
+></LI
+><LI
+><SPAN
+>value =&#62; 'bob'</SPAN
+></LI
+></UL
+>
+       <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;$foo = array ("Robert" =&#62; "Bob", "Seppo" =&#62; "Sepi");
+$bar = each ($foo);
+       </PRE
+></TD
+></TR
+></TABLE
+>
+      </P
+><P
+>&#13;       <TT
+CLASS="varname"
+>$bar</TT
+> now contains the following key/value
+       pairs:
+       <P
+></P
+><UL
+COMPACT="COMPACT"
+><LI
+><SPAN
+>0 =&#62; 'Robert'</SPAN
+></LI
+><LI
+><SPAN
+>1 =&#62; 'Bob'</SPAN
+></LI
+><LI
+><SPAN
+>key =&#62; 'Robert'</SPAN
+></LI
+><LI
+><SPAN
+>value =&#62; 'Bob'</SPAN
+></LI
+></UL
+>
+      </P
+></DIV
+></TD
+></TR
+></TABLE
+>
+    </P
+><P
+>&#13;     <B
+CLASS="function"
+>Each()</B
+> is typically used in conjunction with
+     <A
+HREF="function.list.html"
+><B
+CLASS="function"
+>list()</B
+></A
+> to traverse an array; for instance,
+     <TT
+CLASS="varname"
+>$HTTP_POST_VARS</TT
+>: 
+     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN5304"
+></A
+><P
+><B
+>Example 2. 
+       Traversing <TT
+CLASS="varname"
+>$HTTP_POST_VARS</TT
+> with
+       <B
+CLASS="function"
+>each()</B
+>
+      </B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;echo "Values submitted via POST method:&#60;br&#62;";
+reset ($HTTP_POST_VARS);
+while (list ($key, $val) = each ($HTTP_POST_VARS)) {
+    echo "$key =&#62; $val&#60;br&#62;";
+}
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+    </P
+><P
+>&#13;     After <B
+CLASS="function"
+>each()</B
+> has executed, the array cursor
+     will be left on the next element of the array, or on the last
+     element if it hits the end of the array.
+    </P
+><P
+>&#13;     See also <A
+HREF="function.key.html"
+><B
+CLASS="function"
+>key()</B
+></A
+>, <A
+HREF="function.list.html"
+><B
+CLASS="function"
+>list()</B
+></A
+>,
+     <A
+HREF="function.current.html"
+><B
+CLASS="function"
+>current()</B
+></A
+>, <A
+HREF="function.reset.html"
+><B
+CLASS="function"
+>reset()</B
+></A
+>,
+     <A
+HREF="function.next.html"
+><B
+CLASS="function"
+>next()</B
+></A
+>, and <A
+HREF="function.prev.html"
+><B
+CLASS="function"
+>prev()</B
+></A
+>.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.current.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.end.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>current</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.array.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>end</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,460 @@
+<HTML
+><HEAD
+><TITLE
+>error_reporting</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Error Handling and Logging Functions"
+HREF="ref.errorfunc.html"><LINK
+REL="PREVIOUS"
+TITLE="error_log"
+HREF="function.error-log.html"><LINK
+REL="NEXT"
+TITLE="restore_error_handler"
+HREF="function.restore-error-handler.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.error-log.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.restore-error-handler.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.error-reporting"
+>error_reporting</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN10280"
+></A
+><P
+>    (PHP3 , PHP4 )</P
+>error_reporting&nbsp;--&nbsp;set which PHP errors are reported</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN10283"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN10285"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int <B
+CLASS="function"
+>error_reporting</B
+></CODE
+> ([int
+       level])</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     Sets PHP's error reporting level and returns the old level.  The
+     error reporting level is either a bitmask, or named constant. Using
+     named constants is strongly encouraged to ensure compatibility for
+     future versions. As error levels are added, the range of integers
+     increases, so older integer-based error levels will not always
+     behave as expected.
+     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN10293"
+></A
+><P
+><B
+>Example 1. Error Integer changes</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;error_reporting (55);   // PHP 3 equivalent to E_ALL ^ E_NOTICE
+
+/* ...in PHP 4, '55' would mean (E_ERROR | E_WARNING | E_PARSE |
+E_CORE_ERROR | E_CORE_WARNING) */
+
+error_reporting (2039); // PHP 4 equivalent to E_ALL ^ E_NOTICE
+
+error_reporting (E_ALL ^ E_NOTICE); // The same in both PHP 3 and 4
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+     Follow the links for the internal values to get their meanings:
+     <DIV
+CLASS="table"
+><A
+NAME="AEN10296"
+></A
+><P
+><B
+>Table 1. <B
+CLASS="function"
+>error_reporting()</B
+> bit values</B
+></P
+><TABLE
+BORDER="1"
+CLASS="CALSTABLE"
+><THEAD
+><TR
+><TH
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>constant</TH
+><TH
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>value</TH
+></TR
+></THEAD
+><TBODY
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>1</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;	  <A
+HREF="phpdevel-errors.html#internal.e-error"
+>E_ERROR</A
+>
+	 </TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>2</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;	  <A
+HREF="phpdevel-errors.html#internal.e-warning"
+>E_WARNING</A
+>
+	 </TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>4</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;	  <A
+HREF="phpdevel-errors.html#internal.e-parse"
+>E_PARSE</A
+>
+	 </TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>8</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;	  <A
+HREF="phpdevel-errors.html#internal.e-notice"
+>E_NOTICE</A
+>
+	 </TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>16</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;	  <A
+HREF="phpdevel-errors.html#internal.e-core-error"
+>E_CORE_ERROR</A
+>
+	 </TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>32</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;	  <A
+HREF="phpdevel-errors.html#internal.e-core-warning"
+>E_CORE_WARNING</A
+>
+	 </TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>64</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;	  <A
+HREF="phpdevel-errors.html#internal.e-compile-error"
+>E_COMPILE_ERROR</A
+>
+	 </TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>128</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;	  <A
+HREF="phpdevel-errors.html#internal.e-compile-warning"
+>E_COMPILE_WARNING</A
+>
+	 </TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>256</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;	  <A
+HREF="phpdevel-errors.html#internal.e-user-error"
+>E_USER_ERROR</A
+>
+	 </TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>512</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;	  <A
+HREF="phpdevel-errors.html#internal.e-user-warning"
+>E_USER_WARNING</A
+>
+	 </TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>1024</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;	  <A
+HREF="phpdevel-errors.html#internal.e-user-error"
+>E_USER_NOTICE</A
+>
+	 </TD
+></TR
+></TBODY
+></TABLE
+></DIV
+>
+    </P
+><P
+>&#13;     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN10350"
+></A
+><P
+><B
+>Example 2. <B
+CLASS="function"
+>error_reporting()</B
+> examples</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;error_reporting(0);
+/* Turn off all reporting */
+
+error_reporting (7); // Old syntax, PHP 2/3
+error_reporting  (E_ERROR | E_WARNING | E_PARSE); // New syntax for PHP 3/4
+/* Good to use for simple running errors  */
+
+error_reporting  (15); // Old syntax, PHP 2/3
+error_reporting (E_ERROR | E_WARNING | E_PARSE | E_NOTICE); // New syntax for PHP 3/4
+/*  good for code authoring to report uninitialized or (possibly mis-spelled) variables */
+
+error_reporting (63); // Old syntax, PHP 2/3
+error_reporting (E_ALL); // New syntax for PHP 3/4
+/* report all PHP errors */
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.error-log.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.restore-error-handler.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>error_log</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.errorfunc.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>restore_error_handler</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,194 @@
+<HTML
+><HEAD
+><TITLE
+>imap_utf7_encode</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="IMAP, POP3 and NNTP functions"
+HREF="ref.imap.html"><LINK
+REL="PREVIOUS"
+TITLE="imap_utf7_decode"
+HREF="function.imap-utf7-decode.html"><LINK
+REL="NEXT"
+TITLE="imap_utf8"
+HREF="function.imap-utf8.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.imap-utf7-decode.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.imap-utf8.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.imap-utf7-encode"
+>imap_utf7_encode</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN17529"
+></A
+><P
+>    (PHP3 &#62;= 3.0.15, PHP4 &#62;= 4.0b4)</P
+>imap_utf7_encode&nbsp;--&nbsp;
+     Converts 8bit data to modified UTF-7 text.
+    </DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN17532"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN17534"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>string <B
+CLASS="function"
+>imap_utf7_encode</B
+></CODE
+> (string data)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     Converts 8bit <TT
+CLASS="parameter"
+><I
+>data</I
+></TT
+> to modified UTF-7
+     text. This is needed to encode mailbox names that contain
+     international characters outside of the printable ASCII
+     range. The modified UTF-7 encoding is defined in <A
+HREF="http://www.faqs.org/rfcs/rfc2060.html"
+TARGET="_top"
+>RFC 2060</A
+>, section 5.1.3
+     (original UTF-7 was defned in <A
+HREF="http://www.faqs.org/rfcs/rfc1642.html"
+TARGET="_top"
+>RFC1642</A
+>).
+    </P
+><P
+>&#13;     Returns the modified UTF-7 text.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.imap-utf7-decode.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.imap-utf8.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>imap_utf7_decode</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.imap.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>imap_utf8</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,248 @@
+<HTML
+><HEAD
+><TITLE
+>passthru</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Program Execution functions"
+HREF="ref.exec.html"><LINK
+REL="PREVIOUS"
+TITLE="exec"
+HREF="function.exec.html"><LINK
+REL="NEXT"
+TITLE="system"
+HREF="function.system.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.exec.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.system.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.passthru"
+>passthru</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN32077"
+></A
+><P
+>    (PHP3 , PHP4 )</P
+>passthru&nbsp;--&nbsp;
+     Execute an external program and display raw output
+    </DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN32080"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN32082"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>void <B
+CLASS="function"
+>passthru</B
+></CODE
+> (string command [, int 
+       return_var])</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     The <B
+CLASS="function"
+>passthru()</B
+> function is similar to the
+     <B
+CLASS="function"
+>Exec()</B
+> function in that it executes a
+     <TT
+CLASS="parameter"
+><I
+>command</I
+></TT
+>.  If the
+     <TT
+CLASS="parameter"
+><I
+>return_var</I
+></TT
+> argument is present, the return
+     status of the Unix command will be placed here.  This function
+     should be used in place of <B
+CLASS="function"
+>Exec()</B
+> or
+     <B
+CLASS="function"
+>System()</B
+> when the output from the Unix command
+     is binary data which needs to be passed directly back to the
+     browser.  A common use for this is to execute something like the
+     pbmplus utilities that can output an image stream directly.  By
+     setting the content-type to <I
+CLASS="emphasis"
+>image/gif</I
+> and
+     then calling a pbmplus program to output a gif, you can create
+     PHP scripts that output images directly.</P
+><P
+>&#13;     Note that if you start a program using this function and want to
+     leave it running in the background, you have to make sure that the
+     output of that program is redirected to a file or some other
+     output stream or else PHP will hang until the execution of the
+     program ends.
+    </P
+><P
+>&#13;     See also <A
+HREF="function.exec.html"
+><B
+CLASS="function"
+>exec()</B
+></A
+>, <A
+HREF="function.system.html"
+><B
+CLASS="function"
+>system()</B
+></A
+>,
+     <A
+HREF="function.popen.html"
+><B
+CLASS="function"
+>popen()</B
+></A
+>, <B
+CLASS="function"
+>EscapeShellCmd()</B
+>,
+     and the <A
+HREF="language.operators.execution.html"
+>backtick
+     operator</A
+>.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.exec.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.system.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>exec</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.exec.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>system</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

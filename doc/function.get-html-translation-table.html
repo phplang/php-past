@@ -1,0 +1,384 @@
+<HTML
+><HEAD
+><TITLE
+>get_html_translation_table</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="String functions"
+HREF="ref.strings.html"><LINK
+REL="PREVIOUS"
+TITLE="explode"
+HREF="function.explode.html"><LINK
+REL="NEXT"
+TITLE="get_meta_tags"
+HREF="function.get-meta-tags.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.explode.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.get-meta-tags.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.get-html-translation-table"
+>get_html_translation_table</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN36468"
+></A
+><P
+>    (PHP4 &#62;= 4.0b4)</P
+>get_html_translation_table&nbsp;--&nbsp;
+     Returns the translation table used by
+     <A
+HREF="function.htmlspecialchars.html"
+><B
+CLASS="function"
+>htmlspecialchars()</B
+></A
+> and
+     <A
+HREF="function.htmlentities.html"
+><B
+CLASS="function"
+>htmlentities()</B
+></A
+>
+    </DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN36473"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN36475"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>string 
+       <B
+CLASS="function"
+>get_html_translation_table</B
+>
+      </CODE
+> (int table [, int quote_style])</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     <B
+CLASS="function"
+>get_html_translation_table()</B
+> will return the
+     translation table that is used internally for
+     <A
+HREF="function.htmlspecialchars.html"
+><B
+CLASS="function"
+>htmlspecialchars()</B
+></A
+> and
+     <A
+HREF="function.htmlentities.html"
+><B
+CLASS="function"
+>htmlentities()</B
+></A
+>. There are two new defines
+     (<TT
+CLASS="parameter"
+><I
+>HTML_ENTITIES</I
+></TT
+>,
+     <TT
+CLASS="parameter"
+><I
+>HTML_SPECIALCHARS</I
+></TT
+>) that allow you to
+     specify the table you want.  And as in the
+	 <A
+HREF="function.htmlspecialchars.html"
+><B
+CLASS="function"
+>htmlspecialchars()</B
+></A
+> and
+	 <A
+HREF="function.htmlentities.html"
+><B
+CLASS="function"
+>htmlentities()</B
+></A
+> functions you can optionally specify the 
+	 quote_style you are working with.  The default is ENT_COMPAT mode.  See
+	 the description of these modes in <A
+HREF="function.htmlspecialchars.html"
+><B
+CLASS="function"
+>htmlspecialchars()</B
+></A
+>.
+     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN36493"
+></A
+><P
+><B
+>Example 1. Translation Table Example</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;$trans = get_html_translation_table (HTML_ENTITIES);
+$str = "Hallo &#38; &#60;Frau&#62; &#38; Krämer";
+$encoded = strtr ($str, $trans);
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+     The <TT
+CLASS="literal"
+>$encoded</TT
+> variable will now contain: "Hallo
+     &#38;<TT
+CLASS="sgmltag"
+>amp</TT
+>;
+     &#38;<TT
+CLASS="sgmltag"
+>lt</TT
+>;Frau&#38;<TT
+CLASS="sgmltag"
+>gt</TT
+>;
+     &#38;<TT
+CLASS="sgmltag"
+>amp</TT
+>; Kr&#38;<TT
+CLASS="sgmltag"
+>auml</TT
+>;mer".
+    </P
+><P
+>&#13;     The cool thing is using <A
+HREF="function.array-flip.html"
+><B
+CLASS="function"
+>array_flip()</B
+></A
+> to change
+     the direction of the translation.
+     <DIV
+CLASS="informalexample"
+><A
+NAME="AEN36504"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;$trans = array_flip ($trans);
+$original = strtr ($str, $trans);
+      </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+>
+      The content of <TT
+CLASS="literal"
+>$original</TT
+> would be: "Hallo &#38;
+      &#60;Frau&#62; &#38; Krämer".
+     <DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
+><P
+><B
+>Note: </B
+>
+       This function was added in PHP 4.0.
+      </P
+></BLOCKQUOTE
+></DIV
+>
+    </P
+><P
+>&#13;     See also: <A
+HREF="function.htmlspecialchars.html"
+><B
+CLASS="function"
+>htmlspecialchars()</B
+></A
+>,
+     <A
+HREF="function.htmlentities.html"
+><B
+CLASS="function"
+>htmlentities()</B
+></A
+>, <A
+HREF="function.strtr.html"
+><B
+CLASS="function"
+>strtr()</B
+></A
+>,
+     and <A
+HREF="function.array-flip.html"
+><B
+CLASS="function"
+>array_flip()</B
+></A
+>.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.explode.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.get-meta-tags.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>explode</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.strings.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>get_meta_tags</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

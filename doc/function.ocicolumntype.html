@@ -1,0 +1,250 @@
+<HTML
+><HEAD
+><TITLE
+>OCIColumnType</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Oracle 8 functions"
+HREF="ref.oci8.html"><LINK
+REL="PREVIOUS"
+TITLE="OCIColumnName"
+HREF="function.ocicolumnname.html"><LINK
+REL="NEXT"
+TITLE="OCIParse"
+HREF="function.ociparse.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.ocicolumnname.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.ociparse.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.ocicolumntype"
+>OCIColumnType</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN27302"
+></A
+><P
+>    (PHP3 &#62;= 3.0.4, PHP4 )</P
+>OCIColumnType&nbsp;--&nbsp;Returns the data type of a column.</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN27305"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN27307"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>mixed <B
+CLASS="function"
+>OCIColumnType</B
+></CODE
+> (int stmt, int col)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     <B
+CLASS="function"
+>OCIColumnType()</B
+> returns the data type of the column 
+      corresponding to the column number (1-based) that is passed in.</P
+><P
+>&#13;     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN27318"
+></A
+><P
+><B
+>Example 1. OCIColumnType</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;&#60;?php   
+    print "&#60;HTML&#62;&#60;PRE&#62;\n";   
+    $conn = OCILogon("scott", "tiger");
+    $stmt = OCIParse($conn,"select * from emp");
+    OCIExecute($stmt);
+    print "&#60;TABLE BORDER=\"1\"&#62;";
+    print "&#60;TR&#62;";
+    print "&#60;TH&#62;Name&#60;/TH&#62;";
+    print "&#60;TH&#62;Type&#60;/TH&#62;";
+    print "&#60;TH&#62;Length&#60;/TH&#62;";
+    print "&#60;/TR&#62;";
+    $ncols = OCINumCols($stmt);
+    for ( $i = 1; $i &#60;= $ncols; $i++ ) {
+        $column_name  = OCIColumnName($stmt,$i);
+        $column_type  = OCIColumnType($stmt,$i);
+        $column_size  = OCIColumnSize($stmt,$i);
+        print "&#60;TR&#62;";
+        print "&#60;TD&#62;$column_name&#60;/TD&#62;";
+        print "&#60;TD&#62;$column_type&#60;/TD&#62;";
+        print "&#60;TD&#62;$column_size&#60;/TD&#62;";
+        print "&#60;/TR&#62;";
+    }
+    OCIFreeStatement($stmt);  
+    OCILogoff($conn);   
+    print "&#60;/PRE&#62;";
+    print "&#60;/HTML&#62;\n"; 
+?&#62;   
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+    </P
+><P
+>&#13;     See also <B
+CLASS="function"
+>OCINumCols()</B
+>, <B
+CLASS="function"
+>OCIColumnName()</B
+>, 
+     and <B
+CLASS="function"
+>OCIColumnSize()</B
+>.</P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.ocicolumnname.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.ociparse.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>OCIColumnName</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.oci8.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>OCIParse</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

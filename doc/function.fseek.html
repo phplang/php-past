@@ -1,0 +1,292 @@
+<HTML
+><HEAD
+><TITLE
+>fseek</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Filesystem functions"
+HREF="ref.filesystem.html"><LINK
+REL="PREVIOUS"
+TITLE="fscanf"
+HREF="function.fscanf.html"><LINK
+REL="NEXT"
+TITLE="fstat"
+HREF="function.fstat.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.fscanf.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.fstat.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.fseek"
+>fseek</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN11338"
+></A
+><P
+>    (PHP3 , PHP4 )</P
+>fseek&nbsp;--&nbsp;Seeks on a file pointer</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN11341"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN11343"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int <B
+CLASS="function"
+>fseek</B
+></CODE
+> (int fp, int offset [, int 
+       whence])</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     Sets the file position indicator for the file referenced by
+     <TT
+CLASS="parameter"
+><I
+>fp</I
+></TT
+>.The new position, measured in bytes
+     from the beginning of the file, is obtained by adding
+     <TT
+CLASS="parameter"
+><I
+>offset</I
+></TT
+> to the position specified by
+     <TT
+CLASS="parameter"
+><I
+>whence</I
+></TT
+>, whose values are defined as
+     follows:
+     <P
+></P
+><TABLE
+BORDER="0"
+><TBODY
+><TR
+><TD
+>SEEK_SET - Set position equal to
+      <TT
+CLASS="parameter"
+><I
+>offset</I
+></TT
+> bytes.</TD
+></TR
+><TR
+><TD
+>SEEK_CUR -
+      Set position to current location plus
+      <TT
+CLASS="parameter"
+><I
+>offset</I
+></TT
+>.</TD
+></TR
+><TR
+><TD
+>SEEK_END - Set
+      position to end-of-file plus
+      <TT
+CLASS="parameter"
+><I
+>offset</I
+></TT
+>.</TD
+></TR
+></TBODY
+></TABLE
+><P
+></P
+>
+    </P
+><P
+>If <TT
+CLASS="parameter"
+><I
+>whence is not specified, it is assumed to be
+    SEEK_SET.</I
+></TT
+>
+    </P
+><P
+>&#13;     Upon success, returns 0; otherwise, returns -1. Note that seeking
+     past EOF is not considered an error.
+    </P
+><P
+>&#13;     May not be used on file pointers returned by
+     <A
+HREF="function.fopen.html"
+><B
+CLASS="function"
+>fopen()</B
+></A
+> if they use the "http://" or "ftp://"
+     formats.
+    </P
+><DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
+><P
+><B
+>Note: </B
+>
+      The <TT
+CLASS="parameter"
+><I
+>whence</I
+></TT
+> argument was added after PHP 4.0 RC1.
+     </P
+></BLOCKQUOTE
+></DIV
+><P
+>&#13;     See also <A
+HREF="function.ftell.html"
+><B
+CLASS="function"
+>ftell()</B
+></A
+> and
+     <A
+HREF="function.rewind.html"
+><B
+CLASS="function"
+>rewind()</B
+></A
+>.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.fscanf.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.fstat.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>fscanf</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.filesystem.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>fstat</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

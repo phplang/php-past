@@ -1,0 +1,262 @@
+<HTML
+><HEAD
+><TITLE
+>socket_set_timeout</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Network Functions"
+HREF="ref.network.html"><LINK
+REL="PREVIOUS"
+TITLE="socket_set_blocking"
+HREF="function.set-socket-blocking.html"><LINK
+REL="NEXT"
+TITLE="syslog"
+HREF="function.syslog.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.set-socket-blocking.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.syslog.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.socket-set-timeout"
+>socket_set_timeout</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN25413"
+></A
+><P
+>    (PHP4 &#62;= 4.0b4)</P
+>socket_set_timeout&nbsp;--&nbsp;Set timeout period on a socket</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN25416"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN25418"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>bool <B
+CLASS="function"
+>socket_set_timeout</B
+></CODE
+> (int socket descriptor, int seconds, int microseconds)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     Sets the timeout value on <TT
+CLASS="parameter"
+><I
+>socket descriptor</I
+></TT
+>,
+     expressed in the sum of <TT
+CLASS="parameter"
+><I
+>seconds</I
+></TT
+> and
+     <TT
+CLASS="parameter"
+><I
+>microseconds</I
+></TT
+>.
+     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN25432"
+></A
+><P
+><B
+>Example 1. <B
+CLASS="function"
+>socket_set_timeout()</B
+> Example</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;&#60;?php
+$fp = fsockopen("http://www.php.net", 80);
+if(!$fp) {
+    echo "Unable to open\n";
+} else {
+    fputs($fp,"GET / HTTP/1.0\n\n");
+    $start = time();
+    socket_set_timeout($fp, 2);
+    $res = fread($fp, 2000);
+    var_dump(socket_get_status($fp));
+    fclose($fp);
+    print $res;
+}
+?&#62;
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+    </P
+><P
+>&#13;     This function was previously called as
+     <B
+CLASS="function"
+>set_socket_timeout()</B
+> but this usage is deprecated.
+    </P
+><P
+>&#13;     See also: <A
+HREF="function.fsockopen.html"
+><B
+CLASS="function"
+>fsockopen()</B
+></A
+> and <A
+HREF="function.fopen.html"
+><B
+CLASS="function"
+>fopen()</B
+></A
+>.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.set-socket-blocking.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.syslog.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>socket_set_blocking</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.network.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>syslog</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

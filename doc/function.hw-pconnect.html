@@ -1,0 +1,195 @@
+<HTML
+><HEAD
+><TITLE
+>hw_pConnect</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Hyperwave functions"
+HREF="ref.hyperwave.html"><LINK
+REL="PREVIOUS"
+TITLE="hw_OutputDocument"
+HREF="function.hw-outputdocument.html"><LINK
+REL="NEXT"
+TITLE="hw_PipeDocument"
+HREF="function.hw-pipedocument.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.hw-outputdocument.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.hw-pipedocument.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.hw-pconnect"
+>hw_pConnect</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN14364"
+></A
+><P
+>    (PHP3 &#62;= 3.0.3, PHP4 )</P
+>hw_pConnect&nbsp;--&nbsp;make a persistent database connection</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN14367"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN14369"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int <B
+CLASS="function"
+>hw_pconnect</B
+></CODE
+> (string host, int port, string username, string password)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     Returns a connection index on success, or false if the connection
+     could not be made.  Opens a persistent connection to a Hyperwave
+     server. Each of the arguments should be a quoted string,
+     except for the port number. The <TT
+CLASS="parameter"
+><I
+>username</I
+></TT
+>
+     and <TT
+CLASS="parameter"
+><I
+>password</I
+></TT
+> arguments are
+     optional and can be left out. In such a case no identification with
+     the server will be done. It is similar to identify as user anonymous.
+     This function returns a connection
+     index that is needed by other Hyperwave functions. You can have
+     multiple persistent connections open at once.</P
+><P
+>&#13;     See also <B
+CLASS="function"
+>hw_Connect()</B
+>.</P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.hw-outputdocument.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.hw-pipedocument.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>hw_OutputDocument</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.hyperwave.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>hw_PipeDocument</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

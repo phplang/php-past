@@ -1,0 +1,324 @@
+<HTML
+><HEAD
+><TITLE
+>get_required_files</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="PHP options & information"
+HREF="ref.info.html"><LINK
+REL="PREVIOUS"
+TITLE="get_extension_funcs"
+HREF="function.get-extension-funcs.html"><LINK
+REL="NEXT"
+TITLE="get_included_files"
+HREF="function.get-included-files.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.get-extension-funcs.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.get-included-files.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.get-required-files"
+>get_required_files</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN30637"
+></A
+><P
+>    (PHP4 &#62;= 4.0RC2)</P
+>get_required_files&nbsp;--&nbsp;
+     Returns an array with the names of the files require_once()'d in
+     a script
+    </DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN30640"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN30642"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>array <B
+CLASS="function"
+>get_required_files</B
+></CODE
+> (void)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     This function returns an associtative array of the names of all
+     the files that have been loaded into a script using
+     <A
+HREF="function.require-once.html"
+><B
+CLASS="function"
+>require_once()</B
+></A
+>. The indexes of the array are
+     the file names as used in the <A
+HREF="function.require-once.html"
+><B
+CLASS="function"
+>require_once()</B
+></A
+>
+     without the ".php" extension.
+    </P
+><P
+>&#13;     The example below
+     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN30651"
+></A
+><P
+><B
+>Example 1. Printing the required and included files</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;&#60;?php
+
+require_once ("local.php");
+require_once ("../inc/global.php");
+
+for ($i=1; $i&#60;5; $i++)
+    include "util".$i."php";
+
+echo "Required_once files\n";
+print_r (get_required_files());
+
+echo "Included_once files\n";
+print_r (get_included_files());
+?&#62;
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+     will generate the following output:
+     <DIV
+CLASS="informalexample"
+><A
+NAME="AEN30654"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;Required_once files
+Array
+(
+    [local] =&#62; local.php 
+    [../inc/global] =&#62; /full/path/to/inc/global.php
+)
+
+Included_once files
+Array
+(
+    [util1] =&#62; util1.php 
+    [util2] =&#62; util2.php 
+    [util3] =&#62; util3.php 
+    [util4] =&#62; util4.php 
+)
+      </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+>
+    </P
+><P
+>&#13;     <DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
+><P
+><B
+>Note: </B
+>
+       As of PHP 4.0.1pl2 this function assumes that the
+       <TT
+CLASS="varname"
+>required_once</TT
+> files end in the extension
+       ".php", other extensions do not work.
+      </P
+></BLOCKQUOTE
+></DIV
+>
+    </P
+><P
+>&#13;     See also: <A
+HREF="function.require-once.html"
+><B
+CLASS="function"
+>require_once()</B
+></A
+>,
+     <A
+HREF="function.include-once.html"
+><B
+CLASS="function"
+>include_once()</B
+></A
+>,
+     <A
+HREF="function.get-included-files.html"
+><B
+CLASS="function"
+>get_included_files()</B
+></A
+>
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.get-extension-funcs.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.get-included-files.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>get_extension_funcs</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.info.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>get_included_files</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

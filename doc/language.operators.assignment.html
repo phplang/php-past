@@ -1,0 +1,223 @@
+<HTML
+><HEAD
+><TITLE
+>Assignment Operators</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Operators"
+HREF="language.operators.html"><LINK
+REL="PREVIOUS"
+TITLE="Operators"
+HREF="language.operators.html"><LINK
+REL="NEXT"
+TITLE="Bitwise Operators"
+HREF="language.operators.bitwise.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="language.operators.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 10. Operators</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="language.operators.bitwise.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="language.operators.assignment"
+>Assignment Operators</A
+></H1
+><P
+>&#13;    The basic assignment operator is "=". Your first inclination might
+    be to think of this as "equal to". Don't. It really means that the
+    the left operand gets set to the value of the expression on the
+    rights (that is, "gets set to").
+   </P
+><P
+>&#13;    The value of an assignment expression is the value assigned. That
+    is, the value of "$a = 3" is 3. This allows you to do some tricky
+    things: 
+    <DIV
+CLASS="informalexample"
+><A
+NAME="AEN3019"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+> 
+$a = ($b = 4) + 5; // $a is equal to 9 now, and $b has been set to 4.
+     </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+>
+   </P
+><P
+>&#13;    In addition to the basic assignment operator, there are "combined
+    operators" for all of the binary arithmetic and string operators
+    that allow you to use a value in an expression and then set its
+    value to the result of that expression. For example:
+    <DIV
+CLASS="informalexample"
+><A
+NAME="AEN3022"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;$a = 3;
+$a += 5; // sets $a to 8, as if we had said: $a = $a + 5;
+$b = "Hello ";
+$b .= "There!"; // sets $b to "Hello There!", just like $b = $b . "There!";
+     </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+>
+   </P
+><P
+>&#13;    Note that the assignment copies the original variable to the new
+    one (assignment by value), so changes to one will not affect the
+    other. This may also have relevance if you need to copy something
+    like a large array inside a tight loop. PHP 4 supports assignment
+    by reference, using the <TT
+CLASS="computeroutput"
+>$var =
+    &#38;$othervar;</TT
+> syntax, but this is not possible
+    in PHP 3. 'Assignment by reference' means that both variables end
+    up pointing at the same data, and nothing is copied anywhere. 
+    To learn more about references, please read <A
+HREF="language.references.html"
+>References explained</A
+>.
+   </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="language.operators.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="language.operators.bitwise.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Operators</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="language.operators.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Bitwise Operators</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

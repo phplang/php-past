@@ -1,0 +1,275 @@
+<HTML
+><HEAD
+><TITLE
+>elseif</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Control Structures"
+HREF="control-structures.html"><LINK
+REL="PREVIOUS"
+TITLE="else"
+HREF="control-structures.else.html"><LINK
+REL="NEXT"
+TITLE="Alternative syntax for control structures"
+HREF="control-structures.alternative-syntax.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="control-structures.else.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 11. Control Structures</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="control-structures.alternative-syntax.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="control-structures.elseif"
+><TT
+CLASS="literal"
+>elseif</TT
+></A
+></H1
+><P
+>&#13;    <TT
+CLASS="literal"
+>elseif</TT
+>, as its name suggests, is a combination
+    of <TT
+CLASS="literal"
+>if</TT
+> and <TT
+CLASS="literal"
+>else</TT
+>.  Like
+    <TT
+CLASS="literal"
+>else</TT
+>, it extends an <TT
+CLASS="literal"
+>if</TT
+>
+    statement to execute a different statement in case the original
+    <TT
+CLASS="literal"
+>if</TT
+> expression evaluates to
+    <TT
+CLASS="literal"
+>FALSE</TT
+>.  However, unlike
+    <TT
+CLASS="literal"
+>else</TT
+>, it will execute that alternative
+    expression only if the <TT
+CLASS="literal"
+>elseif</TT
+> conditional
+    expression evaluates to <TT
+CLASS="literal"
+>TRUE</TT
+>.  For example, the
+    following code would display <TT
+CLASS="computeroutput"
+>a is bigger than
+    b</TT
+>, <TT
+CLASS="computeroutput"
+>a equal to b</TT
+>
+    or <TT
+CLASS="computeroutput"
+>a is smaller than b</TT
+>:
+    <DIV
+CLASS="informalexample"
+><A
+NAME="AEN3359"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;if ($a &#62; $b) {
+    print "a is bigger than b";
+} elseif ($a == $b) {
+    print "a is equal to b";
+} else {
+    print "a is smaller than b";
+}
+     </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+>
+   </P
+><P
+>&#13;    There may be several <TT
+CLASS="literal"
+>elseif</TT
+>s within the same
+    <TT
+CLASS="literal"
+>if</TT
+> statement.  The first
+    <TT
+CLASS="literal"
+>elseif</TT
+> expression (if any) that evaluates to
+    <TT
+CLASS="literal"
+>true</TT
+> would be executed.  In PHP, you can also
+    write 'else if' (in two words) and the behavior would be identical
+    to the one of 'elseif' (in a single word).  The syntactic meaning
+    is slightly different (if you're familiar with C, this is the same
+    behavior) but the bottom line is that both would result in exactly
+    the same behavior.
+   </P
+><P
+>&#13;    The <TT
+CLASS="literal"
+>elseif</TT
+> statement is only executed if the
+    preceding <TT
+CLASS="literal"
+>if</TT
+> expression and any preceding
+    <TT
+CLASS="literal"
+>elseif</TT
+> expressions evaluated to
+    <TT
+CLASS="literal"
+>FALSE</TT
+>, and the current
+    <TT
+CLASS="literal"
+>elseif</TT
+> expression evaluated to
+    <TT
+CLASS="literal"
+>TRUE</TT
+>.
+   </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="control-structures.else.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="control-structures.alternative-syntax.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><TT
+CLASS="literal"
+>else</TT
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="control-structures.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Alternative syntax for control structures</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

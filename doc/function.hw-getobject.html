@@ -1,0 +1,221 @@
+<HTML
+><HEAD
+><TITLE
+>hw_GetObject</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Hyperwave functions"
+HREF="ref.hyperwave.html"><LINK
+REL="PREVIOUS"
+TITLE="hw_GetSrcByDestObj"
+HREF="function.hw-getsrcbydestobj.html"><LINK
+REL="NEXT"
+TITLE="hw_GetAndLock"
+HREF="function.hw-getandlock.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.hw-getsrcbydestobj.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.hw-getandlock.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.hw-getobject"
+>hw_GetObject</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN13804"
+></A
+><P
+>    (PHP3 &#62;= 3.0.3, PHP4 )</P
+>hw_GetObject&nbsp;--&nbsp;object record</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN13807"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN13809"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>array <B
+CLASS="function"
+>hw_getobject</B
+></CODE
+> (int connection, [int|array] objectID, string query)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     Returns the object record for the object with ID
+     <TT
+CLASS="parameter"
+><I
+>objectID</I
+></TT
+> if the second parameter is an integer.
+     If the second parameter is an array of integer the function will
+     return an array of object records. In such a case the last
+     parameter is also evaluated which is a query string.</P
+><P
+>&#13;     The query string has the following syntax:</P
+><P
+>&#13;     &#60;expr&#62; ::= "(" &#60;expr&#62; ")" |</P
+><P
+>&#13;             "!" &#60;expr&#62; |          /* NOT */</P
+><P
+>&#13;             &#60;expr&#62; "||" &#60;expr&#62; |  /* OR */</P
+><P
+>&#13;             &#60;expr&#62; "&#38;&#38;" &#60;expr&#62; |  /* AND */</P
+><P
+>&#13;             &#60;attribute&#62; &#60;operator&#62; &#60;value&#62;</P
+><P
+>&#13;
+  &#60;attribute&#62; ::= /* any attribute name (Title, Author, DocumentType ...) */</P
+><P
+>&#13;
+  &#60;operator&#62; ::= "=" |    /* equal */</P
+><P
+>&#13;                 "&#60;" |    /* less than (string compare) */</P
+><P
+>&#13;                 "&#62;" |    /* greater than (string compare) */</P
+><P
+>&#13;                 "~"      /* regular expression matching */</P
+><P
+></P
+><P
+>&#13;     The query allows to further select certain objects from the list
+     of given objects. Unlike the other
+     query functions, this query may use not indexed attributes. How many
+     object records are returned depends on the query and if access to
+     the object is allowed.</P
+><P
+>&#13;     See also <B
+CLASS="function"
+>hw_GetAndLock()</B
+>,
+              <B
+CLASS="function"
+>hw_GetObjectByQuery()</B
+>.</P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.hw-getsrcbydestobj.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.hw-getandlock.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>hw_GetSrcByDestObj</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.hyperwave.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>hw_GetAndLock</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

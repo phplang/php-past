@@ -1,0 +1,336 @@
+<HTML
+><HEAD
+><TITLE
+>Variables</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Language Reference"
+HREF="langref.html"><LINK
+REL="PREVIOUS"
+TITLE="Type Juggling"
+HREF="language.types.type-juggling.html"><LINK
+REL="NEXT"
+TITLE="Predefined variables"
+HREF="language.variables.predefined.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="chapter"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="language.types.type-juggling.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="language.variables.predefined.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="chapter"
+><H1
+><A
+NAME="language.variables"
+>Chapter 7. Variables</A
+></H1
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Table of Contents</B
+></DT
+><DT
+><A
+HREF="language.variables.html#language.variables.basics"
+>Basics</A
+></DT
+><DT
+><A
+HREF="language.variables.predefined.html"
+>Predefined variables</A
+></DT
+><DT
+><A
+HREF="language.variables.scope.html"
+>Variable scope</A
+></DT
+><DT
+><A
+HREF="language.variables.variable.html"
+>Variable variables</A
+></DT
+><DT
+><A
+HREF="language.variables.external.html"
+>Variables from outside PHP</A
+></DT
+></DL
+></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="language.variables.basics"
+>Basics</A
+></H1
+><P
+>&#13;    Variables in PHP are represented by a dollar sign followed by the
+    name of the variable. The variable name is case-sensitive.
+   </P
+><P
+>&#13;    Variable names follow the same rules as other labels in PHP. A
+    valid variable name starts with a letter or underscore, followed
+    by any number of letters, numbers, or underscores. As a regular
+    expression, it would be expressed thus:
+    '[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*'
+   </P
+><DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
+><P
+><B
+>Note: </B
+>
+     For our purposes here, a letter is a-z, A-Z, and the ASCII
+     characters from 127 through 255 (0x7f-0xff).
+    </P
+></BLOCKQUOTE
+></DIV
+><P
+>&#13;    <DIV
+CLASS="informalexample"
+><A
+NAME="AEN2559"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+> 
+$var = "Bob";
+$Var = "Joe";
+echo "$var, $Var";      // outputs "Bob, Joe"
+
+$4site = 'not yet';     // invalid; starts with a number
+$_4site = 'not yet';    // valid; starts with an underscore
+$täyte = 'mansikka';    // valid; 'ä' is ASCII 228.
+     </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+>
+   </P
+><P
+>&#13;    In PHP 3, variables are always assigned by value. That is to say,
+    when you assign an expression to a variable, the entire value of
+    the original expression is copied into the destination
+    variable. This means, for instance, that after assigning one
+    variable's value to another, changing one of those variables will
+    have no effect on the other. For more information on this kind of
+    assignment, see <A
+HREF="language.expressions.html"
+>Expressions</A
+>.
+   </P
+><P
+>&#13;    PHP 4 offers another way to assign values to variables:
+    <I
+CLASS="emphasis"
+>assign by reference</I
+>. This means that the new
+    variable simply references (in other words, "becomes an alias for"
+    or "points to") the original variable. Changes to the new variable
+    affect the original, and vice versa. This also means that no
+    copying is performed; thus, the assignment happens more
+    quickly. However, any speedup will likely be noticed only in tight
+    loops or when assigning large arrays or objects.
+   </P
+><P
+>&#13;    To assign by reference, simply prepend an ampersand (&#38;) to the
+    beginning of the variable which is being assigned (the source
+    variable). For instance, the following code snippet outputs 'My
+    name is Bob' twice:
+
+    <DIV
+CLASS="informalexample"
+><A
+NAME="AEN2566"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;&#60;?php
+$foo = 'Bob';              // Assign the value 'Bob' to $foo
+$bar = &#38;$foo;          // Reference $foo via $bar.
+$bar = "My name is $bar";  // Alter $bar...
+echo $foo;                 // $foo is altered too.
+echo $bar;
+?&#62;
+     </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+>
+   </P
+><P
+>&#13;    One important thing to note is that only named variables may be
+    assigned by reference.
+    <DIV
+CLASS="informalexample"
+><A
+NAME="AEN2569"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;&#60;?php
+$foo = 25;
+$bar = &#38;$foo;      // This is a valid assignment.
+$bar = &#38;(24 * 7);  // Invalid; references an unnamed expression.
+
+function test() {
+   return 25;
+}
+
+$bar = &#38;test();    // Invalid.
+?&#62;
+     </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+>
+   </P
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="language.types.type-juggling.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="language.variables.predefined.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Type Juggling</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="langref.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Predefined variables</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

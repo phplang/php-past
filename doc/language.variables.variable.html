@@ -1,0 +1,289 @@
+<HTML
+><HEAD
+><TITLE
+>Variable variables</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Variables"
+HREF="language.variables.html"><LINK
+REL="PREVIOUS"
+TITLE="Variable scope"
+HREF="language.variables.scope.html"><LINK
+REL="NEXT"
+TITLE="Variables from outside PHP"
+HREF="language.variables.external.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="language.variables.scope.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 7. Variables</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="language.variables.external.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="language.variables.variable"
+>Variable variables</A
+></H1
+><P
+>&#13;    Sometimes it is convenient to be able to have variable variable
+    names.  That is, a variable name which can be set and used
+    dynamically.  A normal variable is set with a statement such as:
+   </P
+><DIV
+CLASS="informalexample"
+><A
+NAME="AEN2796"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;$a = "hello";
+    </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+><P
+>&#13;    A variable variable takes the value of a variable and treats that
+    as the name of a variable.  In the above example,
+    <I
+CLASS="emphasis"
+>hello</I
+>, can be used as the name of a variable
+    by using two dollar signs. i.e.
+   </P
+><DIV
+CLASS="informalexample"
+><A
+NAME="AEN2800"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;$$a = "world";
+    </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+><P
+>&#13;    At this point two variables have been defined and stored in the
+    PHP symbol tree: <TT
+CLASS="varname"
+>$a</TT
+> with contents "hello" and
+    <TT
+CLASS="varname"
+>$hello</TT
+> with contents "world".  Therefore, this
+    statement:
+   </P
+><DIV
+CLASS="informalexample"
+><A
+NAME="AEN2805"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;echo "$a ${$a}";
+    </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+><P
+>&#13;    produces the exact same output as:
+   </P
+><DIV
+CLASS="informalexample"
+><A
+NAME="AEN2808"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;echo "$a $hello";
+    </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+><P
+>&#13;    i.e. they both produce: <TT
+CLASS="computeroutput"
+>hello world</TT
+>.
+   </P
+><P
+>&#13;    In order to use variable variables with arrays, you have to
+    resolve an ambiguity problem.  That is, if you write
+    <TT
+CLASS="varname"
+>$$a[1]</TT
+> then the parser needs to know if you
+    meant to use <TT
+CLASS="varname"
+>$a[1]</TT
+> as a variable, or if you
+    wanted <TT
+CLASS="varname"
+>$$a</TT
+> as the variable and then the [1]
+    index from that variable.  The syntax for resolving this ambiguity
+    is: <TT
+CLASS="varname"
+>${$a[1]}</TT
+> for the first case and
+    <TT
+CLASS="varname"
+>${$a}[1]</TT
+> for the second.
+   </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="language.variables.scope.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="language.variables.external.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Variable scope</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="language.variables.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Variables from outside PHP</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

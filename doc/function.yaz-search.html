@@ -1,0 +1,431 @@
+<HTML
+><HEAD
+><TITLE
+>yaz_search</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="YAZ functions"
+HREF="ref.yaz.html"><LINK
+REL="PREVIOUS"
+TITLE="yaz_record"
+HREF="function.yaz-record.html"><LINK
+REL="NEXT"
+TITLE="yaz_syntax"
+HREF="function.yaz-syntax.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.yaz-record.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.yaz-syntax.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.yaz-search"
+>yaz_search</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN40646"
+></A
+><P
+>    (PHP4 &#62;= 4.0.1)</P
+>yaz_search&nbsp;--&nbsp;Prepares for a search</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN40649"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN40651"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int <B
+CLASS="function"
+>yaz_search</B
+></CODE
+> (int id, string type, string query)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     <B
+CLASS="function"
+>yaz_search()</B
+> prepares for a search on the
+     target with given id. The type represents the query type - only
+     "rpn" is supported now in which case the third argument specifies
+     a Type-1 query (RPN). Like <A
+HREF="function.yaz-connect.html"
+><B
+CLASS="function"
+>yaz_connect()</B
+></A
+> this
+     function is non-blocking and only prepares for a search to be
+     executed later when <A
+HREF="function.yaz-wait.html"
+><B
+CLASS="function"
+>yaz_wait()</B
+></A
+> is called.
+    </P
+></DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN40665"
+></A
+><H2
+>The RPN query</H2
+><P
+>&#13;     The RPN query is a textual represenation of the Type-1 query as
+     defined by the Z39.50 standard. However, in the text representation
+     as used by YAZ a prefix notation is used, that is the operater
+     precedes the operands. The query string is a sequence of tokens where
+     white space is ignored is ignored unless surrounded by double
+     quotes. Tokens beginning with an at-character (<TT
+CLASS="literal"
+>@</TT
+>)
+     are considered operators, otherwise they are treated as search terms.
+    </P
+><DIV
+CLASS="table"
+><A
+NAME="AEN40669"
+></A
+><P
+><B
+>Table 1. RPN Operators</B
+></P
+><TABLE
+BORDER="1"
+CLASS="CALSTABLE"
+><THEAD
+><TR
+><TH
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Syntax</TH
+><TH
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Description</TH
+></TR
+></THEAD
+><TBODY
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+><TT
+CLASS="literal"
+>@and query1 query2</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>intersection of query1 and query2</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+><TT
+CLASS="literal"
+>@or query1 query2</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>union of query1 and query2</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+><TT
+CLASS="literal"
+>@not query1 query2</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>query1 and not query2</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+><TT
+CLASS="literal"
+>@set name</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>result set reference</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+><TT
+CLASS="literal"
+>@attrset set query</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>specifies attribute-set for query. This construction is only
+                allowed once - in the beginning of the whole query</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+><TT
+CLASS="literal"
+>@attr set type=value query</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>applies attribute to query. The type and value are
+                 integers specifying the attribute-type and attribute-value
+                 respectively. The set, if given, specifies the
+                 attribute-set.</TD
+></TR
+></TBODY
+></TABLE
+></DIV
+><P
+>&#13;     The following illustrates valid query constructions:
+     <DIV
+CLASS="informalexample"
+><A
+NAME="AEN40702"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="screen"
+>computer</PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+>
+      Matches documents where "computer" occur. No attributes are specified.
+    </P
+><P
+>&#13;     <DIV
+CLASS="informalexample"
+><A
+NAME="AEN40705"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="screen"
+>"donald knuth"</PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+>
+     Matches documents where "donald knuth" occur.
+    </P
+><P
+>&#13;     <DIV
+CLASS="informalexample"
+><A
+NAME="AEN40708"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="screen"
+>@attr 1=4 art</PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+>
+     Attribute type is 1 (Bib-1 use), attribute value is 4
+     Title), so this should match documents where "art" occur
+     in the title.
+    </P
+><P
+>&#13;     <DIV
+CLASS="informalexample"
+><A
+NAME="AEN40711"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="screen"
+>@attrset gils @and @attr 1=4 art @attr 1=1003 "donald knuth"</PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+>
+     The query as a whole uses the GILS attributeset. The query matches
+     documents where "art" occur in the title and in which "donald knuth"
+     occur in the author.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.yaz-record.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.yaz-syntax.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>yaz_record</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.yaz.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>yaz_syntax</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

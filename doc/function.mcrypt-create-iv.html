@@ -1,0 +1,247 @@
+<HTML
+><HEAD
+><TITLE
+>mcrypt_create_iv</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Mcrypt Encryption Functions"
+HREF="ref.mcrypt.html"><LINK
+REL="PREVIOUS"
+TITLE="mcrypt_get_key_size"
+HREF="function.mcrypt-get-key-size.html"><LINK
+REL="NEXT"
+TITLE="mcrypt_cbc"
+HREF="function.mcrypt-cbc.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.mcrypt-get-key-size.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.mcrypt-cbc.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.mcrypt-create-iv"
+>mcrypt_create_iv</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN21410"
+></A
+><P
+>    (PHP3 &#62;= 3.0.8, PHP4 )</P
+>mcrypt_create_iv&nbsp;--&nbsp;
+     Create an initialization vector (IV) from a random source
+    </DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN21413"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN21415"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>string
+      <B
+CLASS="function"
+>mcrypt_create_iv</B
+></CODE
+> (int size, int source)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     <B
+CLASS="function"
+>Mcrypt_create_iv()</B
+> is used to create an IV.
+    </P
+><P
+>&#13;     <B
+CLASS="function"
+>mcrypt_create_iv()</B
+> takes two arguments,
+     <TT
+CLASS="parameter"
+><I
+>size</I
+></TT
+> determines the size of the IV,
+     <TT
+CLASS="parameter"
+><I
+>source</I
+></TT
+> specifies the source of the IV.
+    </P
+><P
+>&#13;     The source can be MCRYPT_RAND (system random number generator),
+     MCRYPT_DEV_RANDOM (read data from /dev/random) and
+     MCRYPT_DEV_URANDOM (read data from /dev/urandom). If you use
+     MCRYPT_RAND, make sure to call srand() before to initialize the
+     random number generator.
+    </P
+><P
+>&#13;     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN21431"
+></A
+><P
+><B
+>Example 1. <B
+CLASS="function"
+>Mcrypt_create_iv()</B
+> example</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;&#60;?php
+$cipher = MCRYPT_TripleDES;
+$block_size = mcrypt_get_block_size ($cipher);
+$iv = mcrypt_create_iv ($block_size, MCRYPT_DEV_RANDOM);
+?&#62;
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.mcrypt-get-key-size.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.mcrypt-cbc.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>mcrypt_get_key_size</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.mcrypt.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>mcrypt_cbc</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,324 @@
+<HTML
+><HEAD
+><TITLE
+>POSIX functions</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Function Reference"
+HREF="funcref.html"><LINK
+REL="PREVIOUS"
+TITLE="get_included_files"
+HREF="function.get-included-files.html"><LINK
+REL="NEXT"
+TITLE="posix_kill"
+HREF="function.posix-kill.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="reference"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.get-included-files.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.posix-kill.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="reference"
+><A
+NAME="ref.posix"
+></A
+><DIV
+CLASS="TITLEPAGE"
+><H1
+CLASS="title"
+>L. POSIX functions</H1
+><DIV
+CLASS="PARTINTRO"
+><A
+NAME="AEN30689"
+></A
+><P
+>&#13;    This module contains an interface to those functions defined in the
+    IEEE 1003.1 (POSIX.1) standards document which are not accessible
+    through other means. POSIX.1 for example defined the open(), read(),
+    write() and close() functions, too, which traditionally have been
+    part of PHP 3 for a long time. Some more system specific functions
+    have not been available before, though, and this module tries to
+    remedy this by providing easy access to these functions.
+   </P
+></DIV
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Table of Contents</B
+></DT
+><DT
+><A
+HREF="function.posix-kill.html"
+>posix_kill</A
+> &#8212; Send a signal to a process</DT
+><DT
+><A
+HREF="function.posix-getpid.html"
+>posix_getpid</A
+> &#8212; Return the current process identifier</DT
+><DT
+><A
+HREF="function.posix-getppid.html"
+>posix_getppid</A
+> &#8212; Return the parent process identifier</DT
+><DT
+><A
+HREF="function.posix-getuid.html"
+>posix_getuid</A
+> &#8212; 
+     Return the real user ID of the current process
+    </DT
+><DT
+><A
+HREF="function.posix-geteuid.html"
+>posix_geteuid</A
+> &#8212; 
+     Return the effective user ID of the current process
+    </DT
+><DT
+><A
+HREF="function.posix-getgid.html"
+>posix_getgid</A
+> &#8212; 
+     Return the real group ID of the current process
+    </DT
+><DT
+><A
+HREF="function.posix-getegid.html"
+>posix_getegid</A
+> &#8212; 
+     Return the effective group ID of the current process
+    </DT
+><DT
+><A
+HREF="function.posix-setuid.html"
+>posix_setuid</A
+> &#8212; 
+     Set the effective UID of the current process
+    </DT
+><DT
+><A
+HREF="function.posix-setgid.html"
+>posix_setgid</A
+> &#8212; 
+     Set the effective GID of the current process
+    </DT
+><DT
+><A
+HREF="function.posix-getgroups.html"
+>posix_getgroups</A
+> &#8212; 
+     Return the group set of the current process
+    </DT
+><DT
+><A
+HREF="function.posix-getlogin.html"
+>posix_getlogin</A
+> &#8212; Return login name</DT
+><DT
+><A
+HREF="function.posix-getpgrp.html"
+>posix_getpgrp</A
+> &#8212; 
+     Return the current process group identifier
+    </DT
+><DT
+><A
+HREF="function.posix-setsid.html"
+>posix_setsid</A
+> &#8212; Make the current process a session leader</DT
+><DT
+><A
+HREF="function.posix-setpgid.html"
+>posix_setpgid</A
+> &#8212; set process group id for job control</DT
+><DT
+><A
+HREF="function.posix-getpgid.html"
+>posix_getpgid</A
+> &#8212; Get process group id for job control</DT
+><DT
+><A
+HREF="function.posix-getsid.html"
+>posix_getsid</A
+> &#8212; Get the current sid of the process</DT
+><DT
+><A
+HREF="function.posix-uname.html"
+>posix_uname</A
+> &#8212; Get system name</DT
+><DT
+><A
+HREF="function.posix-times.html"
+>posix_times</A
+> &#8212; Get process times</DT
+><DT
+><A
+HREF="function.posix-ctermid.html"
+>posix_ctermid</A
+> &#8212; Get path name of controlling terminal</DT
+><DT
+><A
+HREF="function.posix-ttyname.html"
+>posix_ttyname</A
+> &#8212; Determine terminal device name</DT
+><DT
+><A
+HREF="function.posix-isatty.html"
+>posix_isatty</A
+> &#8212; 
+     Determine if a file descriptor is an interactive terminal
+    </DT
+><DT
+><A
+HREF="function.posix-getcwd.html"
+>posix_getcwd</A
+> &#8212; Pathname of current directory</DT
+><DT
+><A
+HREF="function.posix-mkfifo.html"
+>posix_mkfifo</A
+> &#8212; 
+     Create a fifo special file (a named pipe)
+    </DT
+><DT
+><A
+HREF="function.posix-getgrnam.html"
+>posix_getgrnam</A
+> &#8212; Return info about a group by name</DT
+><DT
+><A
+HREF="function.posix-getgrgid.html"
+>posix_getgrgid</A
+> &#8212; Return info about a group by group id</DT
+><DT
+><A
+HREF="function.posix-getpwnam.html"
+>posix_getpwnam</A
+> &#8212; Return info about a user by username</DT
+><DT
+><A
+HREF="function.posix-getpwuid.html"
+>posix_getpwuid</A
+> &#8212; Return info about a user by user id</DT
+><DT
+><A
+HREF="function.posix-getrlimit.html"
+>posix_getrlimit</A
+> &#8212; Return info about system ressource limits</DT
+></DL
+></DIV
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.get-included-files.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.posix-kill.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>get_included_files</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="funcref.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>posix_kill</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,199 @@
+<HTML
+><HEAD
+><TITLE
+>hw_InCollections</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Hyperwave functions"
+HREF="ref.hyperwave.html"><LINK
+REL="PREVIOUS"
+TITLE="hw_Identify"
+HREF="function.hw-identify.html"><LINK
+REL="NEXT"
+TITLE="hw_Info"
+HREF="function.hw-info.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.hw-identify.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.hw-info.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.hw-incollections"
+>hw_InCollections</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN14095"
+></A
+><P
+>    (PHP3 &#62;= 3.0.3, PHP4 )</P
+>hw_InCollections&nbsp;--&nbsp;check if object ids in collections</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN14098"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN14100"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>array <B
+CLASS="function"
+>hw_incollections</B
+></CODE
+> (int connection, array object_id_array, array collection_id_array, int return_collections)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     Checks whether a set of objects (documents or collections)
+     specified by the <TT
+CLASS="parameter"
+><I
+>object_id_array</I
+></TT
+> is part of
+     the collections listed in <TT
+CLASS="parameter"
+><I
+>collection_id_array</I
+></TT
+>.
+     When the fourth parameter <TT
+CLASS="parameter"
+><I
+>return_collections</I
+></TT
+> is 0,
+     the subset of object ids that is part of the collections (i.e.,
+     the documents or collections that are children of one or more
+     collections of collection ids or their subcollections, recursively)
+     is returned as an array. When the fourth parameter is 1, however, the
+     set of collections that have one or more objects of this subset as
+     children are returned as an array. This option allows a client to,
+     e.g., highlight the part of the collection hierarchy that contains
+     the matches of a previous query, in a graphical overview.</P
+><P
+></P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.hw-identify.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.hw-info.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>hw_Identify</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.hyperwave.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>hw_Info</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,282 @@
+<HTML
+><HEAD
+><TITLE
+>ldap_get_values</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="LDAP functions"
+HREF="ref.ldap.html"><LINK
+REL="PREVIOUS"
+TITLE="ldap_get_entries"
+HREF="function.ldap-get-entries.html"><LINK
+REL="NEXT"
+TITLE="ldap_get_values_len"
+HREF="function.ldap-get-values-len.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.ldap-get-entries.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.ldap-get-values-len.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.ldap-get-values"
+>ldap_get_values</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN19187"
+></A
+><P
+>    (PHP3 , PHP4 )</P
+>ldap_get_values&nbsp;--&nbsp;Get all values from a result entry</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN19190"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN19192"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>array <B
+CLASS="function"
+>ldap_get_values</B
+></CODE
+> (int link_identifier, int result_entry_identifier, string attribute)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     Returns an array of values for the attribute on success and false
+     on error.</P
+><P
+>  
+     <B
+CLASS="function"
+>ldap_get_values()</B
+> function is used to read all
+     the values of the attribute in the entry in the result. entry is
+     specified by the
+     <TT
+CLASS="parameter"
+><I
+>result_entry_identifier</I
+></TT
+>. The number of
+     values can be found by indexing "count" in the resultant
+     array. Individual values are accessed by integer index in the
+     array.  The first index is 0.</P
+><P
+>&#13;     This call needs a <TT
+CLASS="parameter"
+><I
+>result_entry_identifier</I
+></TT
+>,
+     so needs to be preceded by one of the ldap search calls and one
+     of the calls to get an individual entry.</P
+><P
+>&#13;     You application will either be hard coded to look for certain
+     attributes (such as "surname" or "mail") or you will have to use
+     the <A
+HREF="function.ldap-get-attributes.html"
+><B
+CLASS="function"
+>ldap_get_attributes()</B
+></A
+> call to work out
+     what attributes exist for a given entry.</P
+><P
+>&#13;     LDAP allows more than one entry for an attribute, so it can, for
+     example, store a number of email addresses for one person's
+     directory entry all labeled with the attribute "mail"
+
+    <DIV
+CLASS="informalexample"
+><A
+NAME="AEN19211"
+></A
+><P
+></P
+><P
+CLASS="literallayout"
+><br>
+return_value["count"]&nbsp;=&nbsp;number&nbsp;of&nbsp;values&nbsp;for&nbsp;attribute<br>
+return_value[0]&nbsp;=&nbsp;first&nbsp;value&nbsp;of&nbsp;attribute<br>
+return_value[i]&nbsp;=&nbsp;ith&nbsp;value&nbsp;of&nbsp;attribute<br>
+</P
+><P
+></P
+></DIV
+>
+
+     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN19213"
+></A
+><P
+><B
+>Example 1. List all values of the "mail" attribute for a 
+       directory entry </B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;// $ds is a valid link identifier for a directory server
+
+// $sr is a valid search result from a prior call to
+//     one of the ldap directory search calls
+
+// $entry is a valid entry identifier from a prior call to
+//        one of the calls that returns a directory entry
+
+$values = ldap_get_values($ds, $entry,"mail");
+
+echo $values["count"]." email addresses for this entry.&#60;p&#62;";
+
+for ($i=0; $i &#60; $values["count"]; $i++)
+    echo $values[$i]."&#60;br&#62;";
+</PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+></P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.ldap-get-entries.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.ldap-get-values-len.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>ldap_get_entries</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.ldap.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>ldap_get_values_len</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

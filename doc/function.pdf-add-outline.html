@@ -1,0 +1,201 @@
+<HTML
+><HEAD
+><TITLE
+>pdf_add_outline</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="PDF functions"
+HREF="ref.pdf.html"><LINK
+REL="PREVIOUS"
+TITLE="pdf_setrgbcolor"
+HREF="function.pdf-setrgbcolor.html"><LINK
+REL="NEXT"
+TITLE="pdf_set_transition"
+HREF="function.pdf-set-transition.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.pdf-setrgbcolor.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.pdf-set-transition.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.pdf-add-outline"
+>pdf_add_outline</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN29402"
+></A
+><P
+>    (PHP3 &#62;= 3.0.6, PHP4 )</P
+>pdf_add_outline&nbsp;--&nbsp;Adds bookmark for current page</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN29405"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN29407"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int <B
+CLASS="function"
+>pdf_add_outline</B
+></CODE
+> (int pdf document, string text [, int parent [, int open]])</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     The <B
+CLASS="function"
+>pdf_add_outline()</B
+> function adds a bookmark
+     with text <TT
+CLASS="parameter"
+><I
+>text</I
+></TT
+> that points to the current page.
+     The bookmark is inserted as a child of <TT
+CLASS="parameter"
+><I
+>parent</I
+></TT
+> and
+     is by default open if <TT
+CLASS="parameter"
+><I
+>open</I
+></TT
+> is not 0. The
+     return value is an identifier for the bookmark which can be used
+     as a parent for other bookmarks. Therefore you can build up hierarchies
+     of bookmarks.
+    </P
+><P
+>&#13;     Unfortunately pdflib does not make a copy of the string, which forces
+     PHP to allocate the memory. Currently this piece of memory is not
+     been freed by any PDF function but it will be taken care of by the
+     PHP memory manager.</P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.pdf-setrgbcolor.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.pdf-set-transition.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>pdf_setrgbcolor</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.pdf.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>pdf_set_transition</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>
