@@ -22,7 +22,7 @@
 /*
  * Contributed by Stig Bakken - Guardian Networks AS <ssb@guardian.no>
  *
- * $Source: /u/local/src/repository/phpfi/src/syslog.c,v $
+ * $Source: /u/rasmus/repository/phpfi/src/syslog.c,v $
  * $Id: syslog.c,v 1.1 1997/02/18 01:54:28 cvswrite Exp $
  *
  */

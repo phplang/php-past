@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: gd.c,v 1.15 1997/04/16 17:38:13 rasmus Exp $ */
+/* $Id: gd.c,v 1.16 1997/05/26 22:35:43 rasmus Exp $ */
 /* gd 1.2 is copyright 1994, 1995, Quest Protein Database Center, 
    Cold Spring Harbor Labs. */
 
@@ -27,6 +27,9 @@
 
 #include "php.h"
 #include "parse.h"
+#ifdef HAVE_SYS_WAIT_H
+#include <sys/wait.h>
+#endif
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
 #endif

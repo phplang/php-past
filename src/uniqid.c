@@ -22,7 +22,7 @@
 /*
  * Contributed by Stig Bakken - Guardian Networks AS <ssb@guardian.no>
  *
- * $Source: /u/local/src/repository/phpfi/src/uniqid.c,v $
+ * $Source: /u/rasmus/repository/phpfi/src/uniqid.c,v $
  * $Id: uniqid.c,v 1.3 1997/04/15 14:30:57 cvswrite Exp $
  *
  */

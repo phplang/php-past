@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: head.c,v 1.33 1997/04/21 13:12:06 rasmus Exp $ */
+/* $Id: head.c,v 1.35 1997/05/26 22:35:44 rasmus Exp $ */
 #include "php.h"
 #include "parse.h"
 #ifdef TM_IN_SYS_TIME
@@ -50,6 +50,14 @@ void NoHeader(void) {
 void Header(void) {
 	Stack *s;
 	char *r;
+#if APACHE
+	char *rr=NULL;
+#endif
+#if SAFE_MODE
+	char *temp=NULL;
+	char temp2[32];
+	long myuid=0L;
+#endif
 
 	s = Pop();
 	if(!s) {
@@ -78,14 +86,36 @@ void Header(void) {
 				php_rqst->content_type = estrdup(0,r+1);
 		} else {
 			if(*(r+1)==' ') 
-				table_set(php_rqst->headers_out,s->strval,r+2);
+				rr=r+2;
 			else
-				table_set(php_rqst->headers_out,s->strval,r+1);
-		}
-		if(!strcasecmp(s->strval,"location")) php_rqst->status = REDIRECT;
+				rr=r+1;
+#if SAFE_MODE
+			if(!strcasecmp(s->strval,"WWW-authenticate")) {
+				myuid=getmyuid();
+				sprintf(temp2,"realm=\"%ld ",myuid);
+				temp=_ERegReplace("realm=\"",temp2,rr,1);
+				if(!strcmp(temp,rr)) {
+					sprintf(temp2,"realm=%ld",myuid);
+					temp=_ERegReplace("realm=",temp2,rr,1);
+					if(!strcmp(temp,rr)) {
+						sprintf(temp2," realm=%ld",myuid);
+						temp=_ERegReplace("$",temp2,rr,1);
+					}
+				}
 #if DEBUG
-		Debug("Redirecting to: %s\n",s->strval);
+				Debug("header to [%s]\n",temp);
 #endif
+				table_set(php_rqst->headers_out,s->strval,temp);
+			} else 
+#endif
+				table_set(php_rqst->headers_out,s->strval,rr);
+		}
+		if(!strcasecmp(s->strval,"location")) {
+			php_rqst->status = REDIRECT;
+#if DEBUG
+			Debug("Redirecting to: %s\n",s->strval);
+#endif
+		}
 		*r=':';
 		HeaderPrinted = 2;
 	}		

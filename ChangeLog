@@ -1,5 +1,55 @@
 PHP/FI CHANGE LOG                                                    ChangeLog
 |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+June 16 Version 2.0b12
+- Fix spinning httpd problem <terrym@iquest.net>
+- Was munmap'ing 1 too few bytes - fixed
+- Add array regression tests <fick@toadfish.fgm.com>
+- Don't free returned pointer from getlogin() <kalkin@Ix.netcom.com>
+- Fix core dump problems on some platforms caused by calling Exit from within
+  a function in an included file
+- Optional conversion of postgress field names to lower case in pg_result() 
+  function (See PHP_PG_LOWER in php.h)
+- Array assignment bug fixes
+- Fix Include from inside a user-defined function
+- Fix Set/Unset/Set count bug
+- Have mysql interface check both getlogin and cuserid to find the current
+  user id.
+- Added ClearStack() hack/workaround function
+- Fixed potential mmap leak
+- ++ and -- on first 2 elements of an array were broken in 2.0b11 - fixed
+- Fix bug associated with sorting an array with deleted items
+- Fix command-line php.cgi argv bug
+- Change UrlEncode to encode a space with a +
+- Fix PATH_DIR bug introduced in b11's security fix code
+- Add Flush() command to flush output buffer for both module and CGI version
+- Make System() call flush after each line of output
+- Prepend owner uid to http auth realm string in safe mode
+- Add $req_* variables for accessing request header values
+- Fix SAFE_MODE Exec() calls to not cut off command line arguments
+- Make pclose() return the status of the executed command
+- Fix StrongHold related core dump
+- Fix core dump in count() function when called with a bogus array
+- Fix Eval() stack problem
+- Fix Safe Mode problems related to dealing with non-existant files
+- Fixed compiler warnings
+- Fixed Solid_Close() bug
+- Postgres install patch <jafo@tummy.com>
+- Add Oracle install/Makefile support <pvanhaes@be.oracle.com>
+- Add LogAs() function <eden@queer.org.au>
+- Add NOLOGSUCCESSIVE directive to php.h <eden@queer.org.au>
+- Unset single element array bug fix <edell@EECS.Berkeley.EDU>
+- Add regression test for the above
+- Fix MySQL username confusion
+- Add Stronghold compile option to install program
+- Fix global variable scope bug
+- Solid BLOB field fix <sopwith@redhat.com>
+- Change php* Apache directives to be accessible from .htaccess when 
+  AllowOverride Options is set as opposed to FileInfo
+- Add phpEngine Apache directive that is only callable from *.conf
+  files and not .htaccess to let ISP's disable PHP engine while
+  allowing other .htaccess Options to be overridden by .htaccess
+- dbm content-dsize fix
+
 Apr. 23 Version 2.0b11
 - Change phpXBitHack default setting to off
 - Make sure default logging is not mysql if mysql is not available
@@ -73,7 +123,7 @@ Apr. 23 Version 2.0b11
 - Add Username/Password support in all mysql functions <bonis@kiss.de>
 - Add cleanup function to make aborted Apache module requests clean up cleanly
 - Remove trailing slash exception on PATTERN_RESTRICT
-	
+
 Jan. 12/97 Version 2.0b10
 - Add missing windows_install.txt file
 - Add Sybase support <ma_muquit@fccc.edu>

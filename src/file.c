@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: file.c,v 1.61 1997/04/23 02:50:23 rasmus Exp $ */
+/* $Id: file.c,v 1.68 1997/06/03 10:31:13 rasmus Exp $ */
 #include "php.h"
 #include <stdlib.h>
 #ifdef HAVE_UNISTD_H
@@ -145,24 +145,23 @@ int OpenFile(char *filename, int top, long *file_size) {
 		return(-1);
 	}
 #if DEBUG
-		Debug("Checking pattern restriction: \"%s\" against \"%s\"\n",PATTERN_RESTRICT,fn);
+	Debug("Checking pattern restriction: \"%s\" against \"%s\"\n",PATTERN_RESTRICT,fn);
 #endif
-		err = regexec(&re,fn,(size_t)1,subs,0);
-		if(err && err!= REG_NOMATCH) {
-			len = regerror(err, &re, erbuf, sizeof(erbuf));
-			Error("Regex error %s, %d/%d `%s'\n", reg_eprint(err), len, sizeof(erbuf), erbuf);
+	err = regexec(&re,fn,(size_t)1,subs,0);
+	if(err && err!= REG_NOMATCH) {
+		len = regerror(err, &re, erbuf, sizeof(erbuf));
+		Error("Regex error %s, %d/%d `%s'\n", reg_eprint(err), len, sizeof(erbuf), erbuf);
+		regfree(&re);
+		return(-1);
+	}
+	if(err==REG_NOMATCH) {
+		if(getenv("PATH_TRANSLATED")) {   /* ie. don't apply restriction when run from command line */
+			Error("Sorry, you are not permitted to load that file through PHP/FI.");
 			regfree(&re);
 			return(-1);
 		}
-		if(err==REG_NOMATCH) {
-			if(getenv("PATH_TRANSLATED")) {   /* ie. don't apply restriction when run from command line */
-				Error("Sorry, you are not permitted to load that file through PHP/FI.");
-				regfree(&re);
-				return(-1);
-			}
-		}
-		regfree(&re);
 	}
+	regfree(&re);
 #endif
 	/* Make sure the is no '..' in the path */
 	if(top) {
@@ -307,7 +306,7 @@ int OpenFile(char *filename, int top, long *file_size) {
 char *FixFilename(char *filename, int cd, int *ret, int careful) {
 	static char temp[1024];
 	char path[1024];
-	char fn[128], user[128], *s;
+	char fn[512], user[128], *s;
 	struct passwd *pw=NULL;
 	int st=0;
 	char o='\0';
@@ -663,14 +662,14 @@ void TempNam(void) {
 	Stack *s;
 	char *d;
 	char *t;
-	char p[32];
+	char p[64];
 
 	s = Pop();
 	if(!s) {
 		Error("Stack error in tempnam");
 		return;
 	}
-	strncpy(p,s->strval,31);
+	strncpy(p,s->strval,sizeof(p));
 
 	s = Pop();
 	if(!s) {
@@ -697,7 +696,7 @@ void Unlink(void) {
 		return;
 	}
 #if PHP_SAFE_MODE
-	if(!CheckUid(s->strval)) {
+	if(!CheckUid(s->strval,1)) {
 		Error("SAFE MODE Restriction in effect.  Invalid owner of file to be unlinked.");
 		Push("-1", LNUMBER);
 		return;	
@@ -799,7 +798,7 @@ void SymLink(void) {
 	}
 
 #if PHP_SAFE_MODE
-	if(!CheckUid(s->strval)) {
+	if(!CheckUid(s->strval,2)) {
 		Error("SAFE MODE Restriction in effect.  Invalid owner of file to be linked.");
 		Push("-1", LNUMBER);
 		return;	
@@ -849,7 +848,7 @@ void Link(void) {
 		return;
 	}
 #if PHP_SAFE_MODE
-	if(!CheckUid(s->strval)) {
+	if(!CheckUid(s->strval,2)) {
 		Error("SAFE MODE Restriction in effect.  Invalid owner of file to be linked.");
 		Push("-1", LNUMBER);
 		return;	
@@ -897,7 +896,7 @@ void Rename(void) {
 		return;
 	}
 #if PHP_SAFE_MODE
-	if(!CheckUid(s->strval)) {
+	if(!CheckUid(s->strval,2)) {
 		Error("SAFE MODE Restriction in effect.  Invalid owner of file to be renamed.");
 		Push("-1", LNUMBER);
 		return;	
@@ -1044,7 +1043,7 @@ void Fopen(void) {
 	StripSlashes(s->strval);
 
 #if PHP_SAFE_MODE
-	if(!CheckUid(s->strval)) {
+	if(!CheckUid(s->strval,2)) {
 		Error("SAFE MODE Restriction in effect.  Invalid owner of file to be opened.");
 		Push("-1",LNUMBER);
 		return;
@@ -1146,7 +1145,8 @@ void Popen(void) {
 
 void Pclose(void) {
 	Stack *s;
-	int id;
+	int id,ret;
+	char temp[8];
 	FILE *fp;
 
 	s = Pop();
@@ -1162,9 +1162,10 @@ void Pclose(void) {
 		Push("-1", LNUMBER);
 		return;
 	}
-	pclose(fp);
+	ret=pclose(fp);
 	FpDel(id);
-	Push("0", LNUMBER);
+	sprintf(temp,"%d",ret);	
+	Push(temp, LNUMBER);
 }
 
 void Feof(void) {
@@ -1461,14 +1462,19 @@ void SetIncludePath(char *path) {
 #if APACHE
 void SetCurrentPD(char *pd) {
 	char *s;
+	int l=0;
+	char *env;
+
 #ifdef PHP_ROOT_DIR
-	char *env = emalloc(0,sizeof(char) * (strlen(pd) + strlen(PHP_ROOT_DIR) + 2));
+	l = sizeof(char)*(strlen(pd) + strlen(PHP_ROOT_DIR) + 2);
+	env = emalloc(0,l);
 #else
-	char *env = emalloc(0,sizeof(char) * (strlen(pd)+2));
+	l = sizeof(char)*(strlen(pd)+2);
+	env = emalloc(0,l);
 #endif
 	s = strrchr(pd,'/');
 #ifdef PHP_ROOT_DIR
-	if(!s) strncpy(env,PHP_ROOT_DIR,sizeof(env));
+	if(!s) strncpy(env,PHP_ROOT_DIR,l);
 #else
 	if(!s) strcpy(env,"/");
 #endif
@@ -1476,9 +1482,9 @@ void SetCurrentPD(char *pd) {
 		*s='\0';
 #ifdef PHP_ROOT_DIR
 		strcpy(env,PHP_ROOT_DIR);
-		strncat(env,pd,sizeof(env));
+		strncat(env,pd,l);
 #else
-		strncpy(env,pd,sizeof(env));
+		strncpy(env,pd,l);
 #endif
 		*s='/';
 	}
@@ -1508,7 +1514,7 @@ void ChMod(void) {
 		return;
 	}
 #if PHP_SAFE_MODE
-	if(!CheckUid(s->strval)) {
+	if(!CheckUid(s->strval,1)) {
 		Error("SAFE MODE Restriction in effect.  Invalid owner of file to be changed.");
 		Push("-1",LNUMBER);
 		return;
@@ -1545,7 +1551,7 @@ void ChOwn(void) {
 		return;
 	}
 #if PHP_SAFE_MODE
-	if(!CheckUid(s->strval)) {
+	if(!CheckUid(s->strval,1)) {
 		Error("SAFE MODE Restriction in effect.  Invalid owner of file to be changed.");
 		Push("-1",LNUMBER);
 		return;
@@ -1582,7 +1588,7 @@ void ChGrp(void) {
 		return;
 	}
 #if PHP_SAFE_MODE
-	if(!CheckUid(s->strval)) {
+	if(!CheckUid(s->strval,1)) {
 		Error("SAFE MODE Restriction in effect.  Invalid owner of file to be changed.");
 		Push("-1",LNUMBER);
 		return;
@@ -1632,7 +1638,7 @@ void RmDir(void) {
 		return;
 	}
 #if PHP_SAFE_MODE
-	if(!CheckUid(s->strval)) {
+	if(!CheckUid(s->strval,1)) {
 		Error("SAFE MODE Restriction in effect.  Invalid owner of directory to be removed.");
 		Push("-1",LNUMBER);
 		return;
@@ -1664,7 +1670,7 @@ void PHPFile(void) {
 	}
 
 #if PHP_SAFE_MODE
-	if(!CheckUid(s->strval)) {
+	if(!CheckUid(s->strval,1)) {
 		Error("SAFE MODE Restriction in effect.  Invalid owner of file to be read.");
 		Push("-1",LNUMBER);
 		return;
@@ -1818,7 +1824,7 @@ void ReadFile(void) {
 	StripSlashes(s->strval);
 
 #if PHP_SAFE_MODE
-	if(!CheckUid(s->strval)) {
+	if(!CheckUid(s->strval,1)) {
 		Error("SAFE MODE Restriction in effect.  Invalid owner of file to be read.");
 		Push("-1",LNUMBER);
 		return;
@@ -1871,16 +1877,29 @@ void FileUmask(int args) {
 	Push(buf, LNUMBER);
 }
 
-int CheckUid(char *fn) {
+/*
+ * CheckUid
+ *
+ * This function has three modes:
+ * 
+ * 0 - return invalid (0) if file does not exist
+ * 1 - return valid (1)  if file does not exist
+ * 2 - if file does not exist, check directory
+ */
+int CheckUid(char *fn, int mode) {
 	struct stat sb;
 	int ret;
 	long uid=0L, duid=0L;
 	char *s;
 
+	if(!fn) return(0); /* path must be provided */
+
 	ret = stat(fn,&sb);
-	if(ret<0) return(0);
-	uid=sb.st_uid;
-	if(uid==getmyuid()) return(1);
+	if(ret<0 && mode < 2) return(mode);
+	if(ret>-1) {
+		uid=sb.st_uid;
+		if(uid==getmyuid()) return(1);
+	}
 	s = strrchr(fn,'/');
 
 	/* This loop gets rid of trailing slashes which could otherwise be
@@ -1895,14 +1914,14 @@ int CheckUid(char *fn) {
 		*s='\0';
 		ret = stat(fn,&sb);
 		*s='/';
-		if(!ret) return(0);
+		if(ret<0) return(0);
 		duid = sb.st_uid;
 	} else {
 		s = getcwd(NULL,1024);
 		if(!s) return(0);
 		ret = stat(s,&sb);
 		free(s);
-		if(!ret) return(0);
+		if(ret<0) return(0);
 		duid = sb.st_uid;
 	}
 	if(duid == getmyuid()) return(1);

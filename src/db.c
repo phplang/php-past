@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: db.c,v 1.18 1997/04/17 17:48:27 rasmus Exp $ */
+/* $Id: db.c,v 1.19 1997/06/16 12:57:35 rasmus Exp $ */
 #include <stdlib.h>
 #include <string.h>
 #include <errno.h>
@@ -615,7 +615,7 @@ int _dbmInsert(char *filename, char *keystr, char *contentstr) {
 	StripSlashes(contentstr);
 	StripSlashes(keystr);
 	content.dptr = estrdup(1,contentstr);
-	content.dsize = strlen(contentstr)+1;
+	content.dsize = strlen(contentstr);
 	key.dptr = estrdup(1,keystr);
 	key.dsize = strlen(keystr);
 
@@ -862,7 +862,7 @@ int _dbmReplace(char *filename, char *keystr, char *contentstr) {
 #endif
 
 	content.dptr = estrdup(1,contentstr);
-	content.dsize = strlen(contentstr)+1;
+	content.dsize = strlen(contentstr);  
 	key.dptr = estrdup(1,keystr);
 	key.dsize = strlen(keystr);
 

@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: info.c,v 1.32 1997/04/13 04:51:46 rasmus Exp $ */
+/* $Id: info.c,v 1.33 1997/05/26 22:35:45 rasmus Exp $ */
 #include "php.h"
 #include "parse.h"
 #include <stdlib.h>
@@ -52,7 +52,9 @@ void Info(void) {
 	int i;
 	VarTree *var;
 #endif	
+#ifndef WINNT
 	FILE *fp;
+#endif
 
 	php_header(0,NULL);
 	sprintf(buf,"<html><head><title>PHP/FI</title></head><body><h1>PHP/FI Version %s</h1>by Rasmus Lerdorf (<a href=\"mailto:rasmus@lerdorf.on.ca\">rasmus@lerdorf.on.ca</a>)<p>The PHP/FI Web Site is at <a href=\"http://www.vex.net/php/\">http://www.vex.net/php/</a><p>\n",PHP_VERSION);
@@ -69,7 +71,7 @@ void Info(void) {
 	PUTS("along with this program; if not, write to the Free Software\n");
 	PUTS("Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.<p>\n");
 #ifdef WINNT
-	PUTS("<hr><b><i>Windows95/NT Version compiled with cygnus-2.7.2-961023</i></b>\n");
+	PUTS("<hr><b><i>Windows95/NT Version compiled with cygnus-2.7.2-970404</i></b>\n");
 #else
 	PUTS("<hr><b><i>Unix version:</i></b> ");
 	fp = popen("uname -a","r");

@@ -111,8 +111,8 @@ on any compiler switches you need to make your compiler as ANSI
 compliant as possible.  The package is known to compile without
 problems on the following systems.  If you manage to compile the
 package on a system not listed here, please send me some e-mail
-at: rasmus@io.org with the name of your OS and the version number
-and any other details I should know.
+at: rasmus@lerdorf.on.ca with the name of your OS and the version 
+number and any other details I should know.
 
 Solaris 2.4
 Solaris 2.5[.1]

@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: reg.c,v 1.22 1997/04/13 04:51:52 rasmus Exp $ */
+/* $Id: reg.c,v 1.23 1997/05/15 14:16:07 rasmus Exp $ */
 #include <stdlib.h>
 #include "php.h"
 #include "parse.h"
@@ -484,9 +484,6 @@ char *_ERegReplace(char *pattern, char *replace, char *string, int icase) {
 	if(!l) return(string);
 
 	if(icase) copts = REG_ICASE;
-#if DEBUG
-	Debug("ereg_replace pattern = [%s]\n",pattern);
-#endif
 	err = regcomp(&re, pattern, REG_EXTENDED | copts);
 	if(err) {
 		len = regerror(err, &re, erbuf, sizeof(erbuf));
@@ -560,9 +557,6 @@ char *_ERegReplace(char *pattern, char *replace, char *string, int icase) {
 			}	
 			strcat(buf,&string[i]);
 		}	
-#if DEBUG
-		Debug("so=%d eo=%d\n",subs[0].rm_so,subs[0].rm_eo);
-#endif
 		if(*pattern=='^') {
 			new_l = strlen(buf)+strlen(&string[subs[0].rm_eo]);
 			if(new_l > allo) {

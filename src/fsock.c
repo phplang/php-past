@@ -23,7 +23,7 @@
  * Contributed by Paul Panotzki - Bunyip Information Systems
  *                                                         
  */
-/* $Id: fsock.c,v 1.11 1997/04/15 03:40:08 rasmus Exp $ */
+/* $Id: fsock.c,v 1.12 1997/05/11 17:30:32 rasmus Exp $ */
 #include "php.h"
 #include <stdlib.h>
 #ifdef HAVE_UNISTD_H
@@ -31,7 +31,9 @@
 #endif
 
 #include <sys/types.h>
+#ifdef HAVE_SYS_SOCKET_H
 #include <sys/socket.h>
+#endif
 #include <netinet/in.h>
 #include <netdb.h>
 #if WINNT

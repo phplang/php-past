@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: post.c,v 1.28 1997/01/19 03:28:53 rasmus Exp $ */
+/* $Id: post.c,v 1.30 1997/05/21 13:14:18 rasmus Exp $ */
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -145,7 +145,7 @@ char *getpost(void) {
 
 		hard_timeout("copy script args", php_rqst); /* start timeout timer */
 		handler = signal(SIGPIPE, SIG_IGN); /* Ignore sigpipes for now */
-		while((len_read = get_client_block (php_rqst, argsbuffer, HUGE_STRING_LEN))) {
+		while((len_read = get_client_block (php_rqst, argsbuffer, HUGE_STRING_LEN)) > 0) {
 #if DEBUG
 			Debug("len_read = %d\n",len_read);
 #endif
@@ -346,14 +346,14 @@ void TreatHeaders(void) {
 #if APACHE	
 #if PHP_AUTH_VARS
 #if MODULE_MAGIC_NUMBER > 19961007
-	const char *s;
+	const char *s=NULL;
 #else
-	char *s;
+	char *s=NULL;
 #endif
 	char *t;
 	char *user, *type;
 
-	s = table_get(php_rqst->headers_in,"Authorization");
+	if(php_rqst->headers_in) s = table_get(php_rqst->headers_in,"Authorization");
 	if(!s) return;
 
 	/* Check to make sure that this URL isn't authenticated

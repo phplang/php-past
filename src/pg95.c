@@ -38,7 +38,7 @@
 \****************************************************************************/
 /* Patches marked 'john:' by John Robinson <john@intelligent.co.uk> */
 
-/* $Id: pg95.c,v 1.19 1997/01/04 15:17:02 rasmus Exp $ */
+/* $Id: pg95.c,v 1.21 1997/06/12 18:59:40 rasmus Exp $ */
 
 #include "php.h"
 #include <stdlib.h>
@@ -445,7 +445,11 @@ void PG_result(void) {
 	}
 	if (s->strval)
 		if (s->type == STRING)
-			field = estrdup(1,s->strval);
+#if PHP_PG_LOWER
+			field = estrdup(1,_strtolower(s->strval)); /* lower case field names */
+#else
+			field = estrdup(1,s->strval); /* case-sensitive field names */
+#endif
 		else
 			field_ind = s->intval;
 		

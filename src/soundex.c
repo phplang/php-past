@@ -22,7 +22,7 @@
 /*
  * Contributed by Bjørn Borud - Guardian Networks AS <borud@guardian.no>
  *
- * $Source: /u/local/src/repository/phpfi/src/soundex.c,v $
+ * $Source: /u/rasmus/repository/phpfi/src/soundex.c,v $
  * $Id: soundex.c,v 1.2 1997/01/21 01:12:53 rasmus Exp $
  *
  */

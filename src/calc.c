@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: calc.c,v 1.18 1997/02/21 19:26:12 rasmus Exp $ */
+/* $Id: calc.c,v 1.19 1997/05/05 12:14:42 rasmus Exp $ */
 #include <stdlib.h>
 #include <string.h>
 #include "php.h"
@@ -208,11 +208,11 @@ int CalcInc(int op) {
 					sprintf(temp,"%ld",s->intval);		
 					if(!s->var) Push(temp,LNUMBER);
 					else {
-						if(s->var->count > 1) {
+						if(s->var->iname) {
 							Push(s->var->iname,STRING);
 							Push(temp,LNUMBER);
 							SetVar(s->var->name,2,0);
-						} else {	
+						} else {
 							Push(temp,LNUMBER);
 							SetVar(s->var->name,0,0);
 						}
@@ -223,7 +223,7 @@ int CalcInc(int op) {
 					sprintf(temp,"%ld",s->intval);
 					if(!s->var) Push(temp,LNUMBER);
 					else {
-						if(s->var->count > 1) {
+						if(s->var->iname) {
 							Push(s->var->iname,STRING);
 							Push(temp,LNUMBER);
 							SetVar(s->var->name,2,0);
@@ -242,7 +242,7 @@ int CalcInc(int op) {
 					sprintf(temp,"%.10f",s->douval);
 					if(!s->var) Push(temp,DNUMBER);
 					else {
-						if(s->var->count > 1) {
+						if(s->var->iname) {
 							Push(s->var->iname,STRING);
 							Push(temp,DNUMBER);
 							SetVar(s->var->name,2,0);
@@ -257,7 +257,7 @@ int CalcInc(int op) {
 					sprintf(temp,"%.10f",s->douval);
 					if(!s->var) Push(temp,DNUMBER);
 					else {
-						if(s->var->count > 1) {
+						if(s->var->iname) {
 							Push(s->var->iname,STRING);
 							Push(temp,DNUMBER);
 							SetVar(s->var->name,2,0);
@@ -295,7 +295,7 @@ void Neg(void) {
 	}
 	if(!s->var) Push(temp,LNUMBER);
 	else {
-		if(s->var->count > 1) {
+		if(s->var->iname) {
 			Push(s->var->iname,STRING);
 			Push(temp,LNUMBER);
 			SetVar(s->var->name,2,0);
@@ -328,7 +328,7 @@ void BitNot(void) {
 	}
 	if(!s->var) Push(temp,LNUMBER);
 	else {
-		if(s->var->count > 1) {
+		if(s->var->iname) {
 			Push(s->var->iname,STRING);
 			Push(temp,LNUMBER);
 			SetVar(s->var->name,2,0);

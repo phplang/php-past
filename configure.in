@@ -1,4 +1,4 @@
-dnl $Id: configure.in,v 1.15 1997/04/22 18:08:50 rasmus Exp $
+dnl $Id: configure.in,v 1.19 1997/05/26 22:35:40 rasmus Exp $
 dnl Process this file with autoconf to produce a configure script.
 
 AC_INIT(src/main.c)
@@ -32,14 +32,14 @@ AC_CHECK_LIB(crypt, crypt)
 dnl Checks for header files.
 AC_HEADER_STDC
 AC_HEADER_DIRENT
-AC_CHECK_HEADERS(fcntl.h unistd.h crypt.h sys/file.h memory.h pwd.h grp.h)
+AC_CHECK_HEADERS(fcntl.h unistd.h crypt.h sys/file.h memory.h pwd.h grp.h sys/socket.h sys/wait.h)
 
 dnl Checks for typedefs, structures, and compiler characteristics.
 AC_STRUCT_TM
 
 dnl Checks for library functions.
 AC_FUNC_VPRINTF
-AC_CHECK_FUNCS(memcpy memmove strdup strerror strcasecmp strstr flock lockf mmap putenv tempnam usleep setlocale gettimeofday setvbuf srand48 lrand48 link symlink regcomp)
+AC_CHECK_FUNCS(memcpy memmove strdup strerror strcasecmp strstr flock lockf mmap putenv tempnam usleep setlocale gettimeofday setvbuf srand48 lrand48 link symlink regcomp getlogin cuserid)
 AC_FUNC_ALLOCA
 AC_CHECK_FUNC(crypt, 
               AC_DEFINE(HAVE_CRYPT), 

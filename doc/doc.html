@@ -21,6 +21,7 @@ when it is bad, it is better than nothing.
 	<LI><A HREF="#safemode">Safe Mode</A>
 	<LI><A HREF="#commandline">Running PHP/FI from the Command Line</A>
 	<LI><A HREF="#http_auth">HTTP Authentication</A>
+	<LI><A HREF="#requestvars">Apache Request Variables</A>
 	<LI><A HREF="#module">Apache Module Notes</A>
 	<LI><A HREF="#directives">Apache Module Configuration Directives</A>
 	<LI><A HREF="#fastcgi">FastCGI Support</A>
@@ -37,13 +38,14 @@ when it is bad, it is better than nothing.
 	<LI><A HREF="#upload">File Upload Support</A>
 	<LI><A HREF="#cookies">Cookie Support</A>
 	<LI><A HREF="#msql_support">mSQL Support</A>
-	<LI><A HREF="#pg95_support">Postgres95 Support</A>
+	<LI><A HREF="#pg95_support">Postgres95/PostgreSQL Support</A>
 	<LI><A HREF="#mysql_support">mysql Support</A>
 	<LI><A HREF="#solid_support">Solid Support</A>
 	<LI><A HREF="#sybase_support">Sybase Support</A>
 	<LI><A HREF="#oracle_support">Oracle Support</A>
 	<LI><A HREF="#regexp">Regular Expressions</A>
 	<LI><A HREF="#escapes">Escape Characters</A>
+	<LI><A HREF="#octal">Octal notation of Unix file permissions</A>
 	<LI><A HREF="#script">PHP/FI Script Language</A>
 <UL>
 	<LI><A HREF="#syntax">Syntax</A>
@@ -146,7 +148,7 @@ knows the particulars of the destination system well.<P></DD>
 <DD><P>- If you have mSQL installed on your system, you need to know the
   base directory of this installation.<P></DD>
 
-<DD><P>- If you have Postgres95 installed on your system, you need to
+<DD><P>- If you have Postgres95 or PostgreSQL installed on your system, you need to
   know the base directory of this installation.<P></DD>
 
 <DD><P>- If you are going to be storing log and access configuration files
@@ -344,9 +346,9 @@ SQL queries right in your .HTML files.  Adding a database back-end to a web page
 has never been easier.  See the section on <A HREF="#msql_support">mSQL Support</A>
 for more information.<P>
 <P>
-PHP/FI has support for the Postgres95 database package. It supports
+PHP/FI has support for the Postgres95/PostgreSQL database package. It supports
 embedded SQL queries in your .HTML files.  See the section on
-<A HREF="#pg95_support">Postgres95 Support</A> for more information.<P>
+<A HREF="#pg95_support">Postgres95/PostgreSQL Support</A> for more information.<P>
 <P>
 PHP/FI also has support for the mysql database package. It supports
 embedded SQL queries in your .HTML files.  See the section on
@@ -503,7 +505,15 @@ PHP's Safe Mode tries to solve the common problem faced by many ISP's regarding
 letting all their users run CGI programs.  The common mechanism for making
 shared CGI access more secure is to use a cgi wrapper like the su_exec
 utility that comes with Apache.  This will not work for PHP when it is running
-as a module because it is not a separate process that can be setuid'ed.  <P>
+as a module because it is not a separate process that can be setuid'ed.  
+<P>
+It is based on a file permission scheme.  Simply put, if a file is either owned
+by the same user id as the script that is trying to access it, or if the file is
+in a directory that is owned by the same user as the script that is trying to
+access it, then the access is allowed.  One caveat here is that you must make sure
+that your OS does not allow non-root user to chown away the ownership on one of their
+files.  Many older SysV systems allow this.  The most common one is Irix.  It is
+possible to change this behaviour at the OS level on Irix.  
 <P>
 Safe Mode applies to each function which could possibly be a security risk.
 Below is the current list of checks applied to each relevant function.  In
@@ -522,6 +532,11 @@ defined by the PHP_SAFE_MODE_EXEC_DIR #define in php.h when PHP is compiled.
 database.  When in safe mode, this username must either be the username of
 the owner of the current file being parsed, or the name of the httpd user
 (usually nobody).
+<dt>HTTP Authentication
+<dd>The numerical user id of the owner of the script containing the HTTP Authentication
+code will be prepended to the authentication realm.  This is to prevent someone from
+writing a password grabbing script which spoofs another authenticated page on the
+same server.
 </dl><P>
 
 <HR>
@@ -553,6 +568,7 @@ page would be the following:<P>
         if(!$PHP_AUTH_USER) {
             Header(&quot;WWW-authenticate: basic realm=\&quot;My Realm\&quot;&quot;);
             Header(&quot;HTTP/1.0 401 Unauthorized&quot;);
+			echo &quot;Text to send if user hits Cancel button\n&quot;
             exit;
         } else {
             echo &quot;Hello $PHP_AUTH_USER.&lt;P&gt;&quot;;
@@ -578,6 +594,22 @@ non-authenticated URL from stealing passwords from authenticated URL's on the
 same server.  The PHP_AUTH_VARS define in <em>php.h</em> can be undefined to
 make sure that these variables will never be set and thus disable anybody 
 from using mod_php to try to steal passwords.<P>
+<HR>
+<H2><A NAME="requestvars">Apache Request Variables</A></H2>
+<P>
+When running PHP as an Apache module, you may access the request header
+variables sent by the remote browser by prepending <B>$req_</B> to the
+beginning of the header value you would like to use.  The <a href="#phpinfo">
+phpinfo()</a> function can be used to display all the request headers.<P>
+eg.
+<PRE>    &lt;
+        echo "$req_connection<br>";
+        echo "$req_host<br>";
+    &gt;</PRE>
+The above simple script might output:
+<PRE>    Keep-Alive
+    www.host.com</PRE>
+				
 <HR>
 <H2><A NAME="module">Apache Module Notes</A></H2>
 <P>
@@ -622,7 +654,10 @@ sections at the end of this document for further details.
 The following directives can be placed either in the <EM>srm.conf</EM> file, or
 within &lt;Directory&gt;...&lt;/Directory&gt; tags in <EM>access.conf</EM> or in
 &lt;Location /path&gt;...&lt/Location&gt; tags in <EM>access.conf</EM> or in
-individual <EM>.htaccess</EM> files:<P>
+individual <EM>.htaccess</EM> files. In order for the directives to work in
+.htaccess files, the Options override must be set on the AllowOverride Apache
+directive, with the exception of the phpEngine directive which is only 
+available in the *.conf files.<P>
 <DL>
 <DT><STRONG>phpShowInfo <EM>on</EM>|<EM>off</EM></STRONG>
 <DD>Turn the PHP info footers on or off.  Default is on.<P>
@@ -648,6 +683,14 @@ but it may also limit people from writing complex scripts.  The default is 8K.<P
 <DD>A colon-separated list of directories where php will look for
 files in when running <A HREF="#include">include()</A>.  The default
 is to look only in the current directory. 
+<DT><STRONG>phpEngine <EM>on</EM>|<EM>off</EM></STRONG>
+<DD>Turn the PHP parsing engine on or off.  The default is <em>on</em> and
+this directive is only useful for sites that wish to allow directives from the AllowOverride Options
+list of directives to function in .htaccess files while at the same time restricting mod_php access.
+The common way to handle per-virtual host php installs is to enable the PHP mime type with an AddType
+directive on a per virtual host basis and then put &quote;phpEngine off&quot; in the non-PHP virtual
+host blocks.  If a non PHP customer tries to circumvent things by placing the PHP mime type in
+their .htaccess, the phpEngine off setting restricts the PHP parser from functioning.
 </DL>
 <P>
 All of these directives are optional.  If a directive is not specified anywhere,
@@ -1111,14 +1154,14 @@ If the MAGIC_QUOTES variable is defined in the <EM>php.h</EM> file then
 these quotes will be automatically escaped making it easier to pass
 form data directly to msql queries.<P>
 <HR>
-<H2><A NAME="pg95_support">Postgres95 Support</A></H2>
+<H2><A NAME="pg95_support">Postgres95/PostgreSQL Support</A></H2>
 <P>
-Postgres95 is a powerful public domain database that implements a significant
+Postgres95/PostgreSQL is a powerful public domain database that implements a significant
 subset of the SQL language.  It supports many datatypes and commands that
-are not available in mSQL.  More information about Postgres95 and the software
+are not available in mSQL.  More information about Postgres and the software
 itself can be found at this URL:
-<A HREF="http://epoch.cs.berkeley.edu:8000/postgres95/">
-http://epoch.cs.berkeley.edu:8000/postgres95/</A>.<P>
+<A HREF="http://www.postgreSQL.org/">
+http://www.postgreSQL.org/</A>.<P>
 <P>
 The following PHP functions are available for Postgres95:<P>
 <DL>
@@ -1150,9 +1193,9 @@ In addition to these functions, PHP/FI can also be compiled to automatically
 escape any forward single quote ( ' ) and double quote ( &quot; ) characters 
 found in GET or POST data.  If the MAGIC_QUOTES variable is defined in the 
 <EM>php.h</EM> file then these quotes will be automatically escaped making 
-it easier to pass form data directly to Postgres95 queries.<P>
+it easier to pass form data directly to Postgres queries.<P>
 <P>
-Here is a sample script that connects to Postgres95 database on localhost
+Here is a sample script that connects to Postgres database on localhost
 called 'mydb' and retrieves the names and ages of people in a table:<P>
 <P>
 <PRE>
@@ -1226,6 +1269,8 @@ form data directly to mysql queries.<P>
 The Solid server is a high-volume SQL server. It supports the ANSI SQL2, ODBC,
 SAG CLI and X/Open SQL standards. More information about the Solid server is
 available at <A HREF="http://www.solidtech.com/">www.solidtech.com</A>.
+The Solid interface to PHP was developed by 
+<a href="solid.digiface.nl">DigiFace Internet Services</a>.
 <P>
 The following PHP functions are available for the Solid Server:<P>
 <DL>
@@ -1246,7 +1291,7 @@ If the MAGIC_QUOTES variable is defined in the <EM>php.h</EM> file then
 these quotes will be automatically escaped making it easier to pass
 form data directly to Solid queries.<P>
 <P>
-Here is the same script that was shown in the Postgres95 section, adapted for
+Here is the same script that was shown in the Postgres section, adapted for
 the Solid server.
 <P>
 <PRE>
@@ -1356,8 +1401,9 @@ while ($err == 1) {
     while ($i &lt; $ncol) {
         $col = Ora_GetColumn($cursor, $i);
         echo("got: $col (" + GetType($col) + ")\n");
-	$i++;
+        $i++;
     }
+    $err = Ora_Fetch($cursor);
 }
 
 Ora_Close($cursor);
@@ -1424,6 +1470,37 @@ quoted string argument is used:
 	\nnn --&gt; octal char
 	\xXX --&gt; hex char</pre>
 </blockquote><P>
+<HR>
+<H2><A NAME="octal">Octal Notation of Unix file permissions</a></H2>
+<P>
+A couple of functions in the PHP/FI script language epxect octal arguments
+to denote Unix-style permission parameters.
+In this octal notation 3 bits are used to represent the values 0-7.  Each bit of
+the three represents a specific permission.  Octal is traditionally noted
+in some contexts by a leading 0, such as 0755.  You do not need to use this 
+leading 0 in PHP since the functions that expect octal parameters are will
+simplyassume that the parameter is octal.  Using the leading 0 is however good
+practise to remind yourself that you are no longer dealing with a base 10 value.
+<P><B>Bit Description</B>
+<PRE>    xxx
+    ^^^
+    ||+----1 bit (execute permission)
+    |+-----2 bit (write permission)
+    +------4 bit (read permission)</PRE>
+
+These three bits are repeated three times for owner, group, and world.
+Thus 0755 means:
+
+<PRE>    owner: r,w,x
+    group: r, ,x
+    world: r, ,x</PRE>
+
+Note that the execute bit on a directory means 'access', not 'execute'.
+There are also the extended bits in the fourth octal nibble, like 0?755:
+<PRE>    4: suid bit   (set userid)
+    2: sgid bit   (set group id)
+    1: sticky bit (on a directory, only the owner can delete a file)</PRE>
+<P>
 <HR>
 <H2><A NAME="script">PHP/FI Script Language</A></H2>
 <P>
@@ -1827,7 +1904,7 @@ You can loop within a PHP script by using the <EM>while(); endwhile;</EM> constr
 <P>
 <PRE>	&lt;?
 	  $a=0;
-	  while($a<100) {
+	  while($a&lt;100) {
 		  $a++;
 		  echo $list[$a];	
 	  } 
@@ -2080,7 +2157,8 @@ specified in the argument.<P>
 <DT><A NAME="chmod"><FONT SIZE="+1">ChMod(file,perms)</FONT></A>
 <DD>
 <P>ChMod changes the file permissions of the specified file.  The
-<EM>perms</EM> parameter must be specified in octal.<P>
+<EM>perms</EM> parameter must be specified in <a href="#octal">octal</a>
+notation. eg. ChMod($filename,0755)<P>
 
 <DT><A NAME="chown"><FONT SIZE="+1">ChOwn(file,owner)</FONT></A>
 <DD>
@@ -2096,6 +2174,21 @@ spaces and returns the new string.<P>
 <DT><A NAME="chr"><FONT SIZE="+1">Chr(arg)</FONT></A>
 <DD>
 <P>Chr returns the ASCII character represented by the integer argument.<P>
+
+<DT><A NAME="clearstack"><FONT SIZE="+1">ClearStack()</FONT></A>
+<DD>
+<P>The ClearStack() function is a hack/workaround for a deficiency in the
+PHP parser.  This dificiency is that PHP only has a single expression stack.
+When inside a user-defined function this expression stack is never cleared
+because its contents may be needed within a complex expression in the
+context from which the user-defined function was called.  This means that
+if you have a while loop with a lot of iterations inside an user-defined 
+function, you may be chewing up a lot of stack space.  You may even be
+hitting the max data space limit.  You can put a call to ClearStack() inside
+your while loop to prevent this memory consumption, but the trade-off is that
+you cannot use your function within any sort of context. ie. you have to
+assign the output of the function to a temporary variable and then use this
+temporary variable in whatever context you need.<P>
 
 <DT><A NAME="clearstatcache"><FONT SIZE="+1">ClearStatCache()</FONT></A>
 <DD>
@@ -2555,6 +2648,15 @@ should be called before the call to the file* function.<P>
 regular file, fifo special, character special, block special and symbolic
 link, respectively.<P>
 
+<DT><A NAME="flush"><FONT SIZE="+1">Flush()</FONT></A>
+<DD>
+<P>The Flush() function is used to Flush the output buffer.  For the Apache module,
+it flushes Apache's output buffer, and for the CGI version it simply flushes stdout.
+When running as a CGI under Apache, the server will buffer the CGI script's output, so 
+this Flush() function won't help much there.  Look at running your script as an nph- script
+if you are running the CGI version of PHP under the Apache web server.  Or, alternatively, 
+run the Apache module version of PHP.<P>
+
 <DT><A NAME="fopen"><FONT SIZE="+1">$fp = fopen(filename,mode)</FONT></A>
 <DD>
 <P>fopen() opens a file and returns a file pointer index.  If the file
@@ -3006,6 +3108,11 @@ Returns -1 in case of error.<P>
 <DD>
 <P>Log10 returns the base-10 logarithm of arg.<P>
 
+<DT><A NAME="logas"><FONT SIZE="+1">LogAs(filename)</FONT></A>
+<DD>
+<P>The LogAs() function will treat the hit on the current page as if it 
+as actually received on the argument filename.<P>
+
 <DT><A NAME="mail"><FONT SIZE="+1">Mail(to,subject,message[,headers])</FONT></A>
 <DD>
 <P>Mail automatically mails the message specified in the message argument
@@ -3049,7 +3156,7 @@ array if it were sorted.<P>
 <DT><A NAME="mkdir"><FONT SIZE="+1">MkDir(dir,mode)</FONT></A>
 <DD>
 <P>MkDir creates a directory.  The <EM>mode</EM> parameter must be
-given in octal notation.<P>
+given in <a href="#octal">octal</a> notation.  eg. MkDir("DirName",0755);<P>
 
 <DT><A NAME="mktime"><FONT SIZE="+1">MkTime(hour,min,sec,mon,day,year)</FONT></A>
 <DD>
@@ -3058,7 +3165,18 @@ corresponds to the date and time specified by the arguments.  Arguments may be
 left out in which case the given component is set to the current value
 according to the current local time and date.  These left out arguments may only
 be left out from right to left.  ie. <TT>MkTime(hour,min,sec)</TT> is valid,
-but <TT>MkTime(mon,day,year)</TT> is not valid.<P>
+but <TT>MkTime(mon,day,year)</TT> is not valid.  Note that this function can
+be very handy as a tool for doing both date arithmetic and date validation.
+You can feed it invalid parameters, such as a month greater than 12, or a day
+greater than 31 and it will figure out the right date anyway.  It will also
+generate an error message if any of the parameters are outside the normal
+values.  Use the <a href="#seterrorreporting">SetErrorReporting(0)</a> 
+function to turn this error reporting off before calling the function and you
+may then check the $phperrmsg for any errors that may have occurred.<P>
+eg.<PRE>        SetErrorReporting(0);
+        $a = MkTime(0,0,0,13,1,1997);
+        SetErrorReporting(1);
+        echo $phperrmsg;</PRE>
 
 <DT><A NAME="msql"><FONT SIZE="+1">$result = msql($database,$query)</FONT></A>
 <DD>
@@ -3599,29 +3717,29 @@ function.<P>
 
 <DT><A NAME="pg_close"><FONT SIZE="+1">pg_Close(connection_id)</FONT></A>
 <DD>
-<P>pg_Close will close down the connection to a Postgres95 database
+<P>pg_Close will close down the connection to a Postgres database
 associated with the given connection identifier.<P>
 <P>
-This function is only available if Postgres95 support has been enabled in PHP.<P>
+This function is only available if Postgres support has been enabled in PHP.<P>
 
 <DT><A NAME="pg_connect"><FONT SIZE="+1">$connection = pg_Connect(host, port, options, tty,
 dbname)</FONT></A>
 <DD>
-<P>pg_Connect opens a connection to a Postgres95 database.  Each
+<P>pg_Connect opens a connection to a Postgres database.  Each
 of the arguments should be a quoted string, including the port number.
 The options and tty arguments are optional and can be empty strings.
 This function returns a connection_id.  This identifier is needed by other
-Postgres95 functions.  You can have multiple connections open at once.
+Postgres functions.  You can have multiple connections open at once.
 This function will return <STRONG>0</STRONG> on error.<P>
 <P>
-This function is only available if Postgres95 support has been enabled in PHP.<P>
+This function is only available if Postgres support has been enabled in PHP.<P>
 
 <DT><A NAME="pg_dbname"><FONT SIZE="+1">pg_DBname(connection_id)</FONT></A>
 <DD>
 <P>pg_DBname will return the name of the database that the given
-Postgres95 connection identifier is connected to.<P>
+Postgres connection identifier is connected to.<P>
 <P>
-This function is only available if Postgres95 support has been enabled in PHP.<P>
+This function is only available if Postgres support has been enabled in PHP.<P>
 
 <DT><A NAME="pg_errorMessage"><FONT SIZE="+1">pg_ErrorMessage(connection_id)</FONT></A>
 <DD>
@@ -3631,63 +3749,63 @@ exists, this function will return a string containing the error message
 generated by the back-end server.
 <P>
 <P>
-This function is only available if Postgres95 support has been enabled in PHP.<P>
+This function is only available if Postgres support has been enabled in PHP.<P>
 
 <DT><A NAME="pg_exec"><FONT SIZE="+1">$result = pg_Exec(connection_id, query_string)</FONT></A>
 <DD>
-<P>pg_Exec will send an SQL statement to the Postgres95 database specified by
+<P>pg_Exec will send an SQL statement to the Postgres database specified by
 the connection_id.  The connection_id must be a valid identifier
 that was returned by pg_Connect.  The return value of this function
 is an identifier to be used to access the results from other
-Postgres95 functions.  This function will return <STRONG>0</STRONG> on error.
+Postgres functions.  This function will return <STRONG>0</STRONG> on error.
 It will return <STRONG>1</STRONG> when the command executed correctly but
 are not expected to returned data (insert or update commands, for
 example).  Note that selects which return no data will still return a
 valid result greater than 1.<P>
 <P>
-This function is only available if Postgres95 support has been enabled in PHP.<P>
+This function is only available if Postgres support has been enabled in PHP.<P>
 
 <DT><A NAME="pg_fieldname"><FONT SIZE="+1">pg_FieldName(result_id, field_number)</FONT></A>
 <DD>
 <P>pg_FieldName will return the name of the field occupying the
-given column number in the given Postgres95 result identifier.  Field numbering
+given column number in the given Postgres result identifier.  Field numbering
 starts from 0.<P>
 <P>
-This function is only available if Postgres95 support has been enabled in PHP.<P>
+This function is only available if Postgres support has been enabled in PHP.<P>
 
 <DT><A NAME="pg_fieldprtlen"><FONT SIZE="+1">pg_FieldPrtLen(result_id, row_number,
 field_name)</FONT></A>
 <DD>
 <P>pg_FieldPrtLen will return the actual printed length (number of
-characters) of a specific value in a Postgres95 result.  Row numbering starts at 0. This function
+characters) of a specific value in a Postgres result.  Row numbering starts at 0. This function
 will return <STRONG>-1</STRONG> on an error.<P>
 <P>
-This function is only available if Postgres95 support has been enabled in PHP.<P>
+This function is only available if Postgres support has been enabled in PHP.<P>
 
 <DT><A NAME="pg_fieldnum"><FONT SIZE="+1">pg_FieldNum(result_id, field_name)</FONT></A>
 <DD>
 <P>pg_FieldNum will return the number of the column slot that
-corresponds to the named field in the given Postgres95 result identifier.  Field
+corresponds to the named field in the given Postgres result identifier.  Field
 numbering starts at 0. This function
 will return <STRONG>-1</STRONG> on error.<P>
 <P>
-This function is only available if Postgres95 support has been enabled in PHP.<P>
+This function is only available if Postgres support has been enabled in PHP.<P>
 
 <DT><A NAME="pg_fieldsize"><FONT SIZE="+1">pg_FieldSize(result_id, field_name)</FONT></A>
 <DD>
 <P>pg_FieldSize will return the internal storage size (in bytes) of
-the named field in the given Postgres95 result.  A field size of 0 indicates
+the named field in the given Postgres result.  A field size of 0 indicates
 a variable length field. This function
 will return <STRONG>-1</STRONG> on error.<P>
 <P>
-This function is only available if Postgres95 support has been enabled in PHP.<P>
+This function is only available if Postgres support has been enabled in PHP.<P>
 
 <DT><A NAME="pg_fieldtype"><FONT SIZE="+1">pg_FieldType(result_id, field_number)</FONT></A>
 <DD>
 <P>pg_FieldType will return a string containing the type name of
-the given field in the given Postgres95 result identifier.  Field numbering starts at 0.<P>
+the given field in the given Postgres result identifier.  Field numbering starts at 0.<P>
 <P>
-This function is only available if Postgres95 support has been enabled in PHP.<P>
+This function is only available if Postgres support has been enabled in PHP.<P>
 
 <DT><A NAME="pg_freeresult"><FONT SIZE="+1">pg_FreeResult(result_id)</FONT></A>
 <DD>
@@ -3698,7 +3816,7 @@ sure you are not going to need the result data anymore in a script,
 you may call pg_freeresult with the result identifier as an
 argument and the associated result memory will be freed.<P>
 <P>
-This function is only available if Postgres95 support has been enabled in PHP.<P>
+This function is only available if Postgres support has been enabled in PHP.<P>
 
 <DT><A NAME="pg_getlastoid"><FONT SIZE="+1">pg_GetLastOid()</FONT></A>
 <DD>
@@ -3708,45 +3826,45 @@ SQL Insert.  This function will return a positive integer if
 there was a valid Oid.  It will return <STRONG>-1</STRONG> if an error
 occured or the last command sent via pg_Exec was not an Insert.<P>
 <P>
-This function is only available if Postgres95 support has been enabled in PHP.<P>
+This function is only available if Postgres support has been enabled in PHP.<P>
 
 <DT><A NAME="pg_host"><FONT SIZE="+1">pg_Host(connection_id)</FONT></A>
 <DD>
-<P>pg_Host will return the host name the the given Postgres95
+<P>pg_Host will return the host name the the given Postgres
 connection identifier is connected to.<P>
 <P>
-This function is only available if Postgres95 support has been enabled in PHP.<P>
+This function is only available if Postgres support has been enabled in PHP.<P>
 
 <DT><A NAME="pg_numfields"><FONT SIZE="+1">pg_NumFields(result_id)</FONT></A>
 <DD>
 <P>pg_NumFields will return the number of fields (columns) in
-a Postgres95 result.  The argument is a valid result identifier returned
+a Postgres result.  The argument is a valid result identifier returned
 by pg_Exec. This function
 will return <STRONG>-1</STRONG> on error.<P>
 <P>
-This function is only available if Postgres95 support has been enabled in PHP.<P>
+This function is only available if Postgres support has been enabled in PHP.<P>
 
 <DT><A NAME="pg_numrows"><FONT SIZE="+1">pg_NumRows(result_id)</FONT></A>
 <DD>
-<P>pg_NumRows will return the number of rows in a Postgres95 result.  The argument
+<P>pg_NumRows will return the number of rows in a Postgres result.  The argument
 is a valid result identifier returned by pg_Exec. This function
 will return <STRONG>-1</STRONG> on error.<P>
 <P>
-This function is only available if Postgres95 support has been enabled in PHP.<P>
+This function is only available if Postgres support has been enabled in PHP.<P>
 
 <DT><A NAME="pg_options"><FONT SIZE="+1">pg_Options(connection_id)</FONT></A>
 <DD>
 <P>pg_Options will return a string containing the options specified
-on the given Postgres95 connection identifier.<P>
+on the given Postgres connection identifier.<P>
 <P>
-This function is only available if Postgres95 support has been enabled in PHP.<P>
+This function is only available if Postgres support has been enabled in PHP.<P>
 
 <DT><A NAME="pg_port"><FONT SIZE="+1">pg_Port(connection_id)</FONT></A>
 <DD>
-<P>pg_Port will return the port number that the given Postgres95
+<P>pg_Port will return the port number that the given Postgres
 connection identifier is connected to.<P>
 <P>
-This function is only available if Postgres95 support has been enabled in PHP.<P>
+This function is only available if Postgres support has been enabled in PHP.<P>
 
 <DT><A NAME="pg_result"><FONT SIZE="+1">pg_Result(result_id, row_number, field name/index)</FONT></A>
 <DD>
@@ -3756,24 +3874,24 @@ cell in the table of results to return. Row numbering starts from
 0.  Instead of naming the field, you may use the field index as
 an unquoted number.  Field indices start from 0.<P>
 <P>
-Postgres95 has many built in types and only the basic ones are
+Postgres has many built in types and only the basic ones are
 directly supported here.  All forms of integer, boolean and oid
 types are returned as integer values.  All forms of float, and real
 types are returned as double values.  All other types, including
-arrays are returned as strings formatted in the same default Postgres95
+arrays are returned as strings formatted in the same default Postgres
 manner that you would see in the 'monitor' or 'psql' programs.<P>
 <P>
 Support for returning PHP arrays of numerical and string data
-from a Postgres95 result is planned for a later date.<P>
+from a Postgres result is planned for a later date.<P>
 <P>
-This function is only available if Postgres95 support has been enabled in PHP.<P>
+This function is only available if Postgres support has been enabled in PHP.<P>
 
 <DT><A NAME="pg_tty"><FONT SIZE="+1">pg_tty(connection_id)</FONT></A>
 <DD>
 <P>pg_tty will return the tty name that server side debugging output
-is sent to on the given Postgres95 connection identifier.<P>
+is sent to on the given Postgres connection identifier.<P>
 <P>
-This function is only available if Postgres95 support has been enabled in PHP.<P>
+This function is only available if Postgres support has been enabled in PHP.<P>
 
 <DT><A NAME="phpinfo"><FONT SIZE="+1">phpInfo()</FONT></A>
 <DD>
@@ -4438,6 +4556,8 @@ will be written to this variable.  Note, that if
 you are going to allow data coming from user input to be passed to this System function,
 then you should be using the <A HREF="#escapeshellcmd">EscapeShellCmd()</A> function
 to make sure that users cannot trick the system into executing arbitrary commands.
+The System() call also automatically flushes the Apache output buffer after each
+line of output if PHP is running as an Apache module.  
 If you need to execute a command and have all the data from the command passed
 directly back without any interference, use the <a href="#passthru">PassThru()</a>
 function.  See also the <A HREF="#exec">Exec</A> function.<P>
@@ -4465,7 +4585,8 @@ granularity, use the <A HREF="#microtime">Microtime</A> function.<P>
 <P>Umask(<i>mask</i>) sets PHP's umask to <i>mask</i> &amp; 0777 and
 returns the old umask.  If PHP/FI is an Apache module, Apache's old
 umask is restored when PHP/FI has finished.  <i>mask</i> must be
-specified in octal, like for <a href="#chmod">ChMod()</a>.  Umask()
+specified in <a href="#octal">octal</a> notation, like for 
+<a href="#chmod">ChMod()</a>.  Umask()
 without arguments simply returns the current umask.<P>
 
 <DT><A NAME="uniqid"><FONT SIZE="+1">UniqId()</FONT></A>

@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: lex.c,v 1.152 1997/04/22 14:46:11 rasmus Exp $ */
+/* $Id: lex.c,v 1.169 1997/06/04 18:02:28 rasmus Exp $ */
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
@@ -34,6 +34,7 @@
 #include "parse.h"
 #if APACHE
 #include "http_protocol.h"
+#include "http_config.h"
 #endif
 
 #ifdef PHP_HAVE_MMAP
@@ -143,6 +144,7 @@ static cmd_table_t cmd_table[PHP_MAX_CMD_LEN+1][PHP_MAX_CMD_NUM+1] = {
 	  { "break",BREAK,NULL },
 	  { "isset",ISSET,NULL },
 	  { "count",INTFUNC1,Count },
+	  { "flush",INTFUNC0,PHPFlush },
 	  { "eregi",EREGI,NULL },
 	  { "crypt",CRYPT,NULL },
 	  { "srand",INTFUNC1,Srand },
@@ -165,6 +167,7 @@ static cmd_table_t cmd_table[PHP_MAX_CMD_LEN+1][PHP_MAX_CMD_NUM+1] = {
 	  { "mysql",INTFUNC2,MYsql },
 	  { "asort",PHPASORT,NULL },
 	  { "umask",UMASK,NULL },
+	  { "logas", INTFUNC1,LogAs },
 	  { NULL,0,NULL } }, 
 
 	{ { "elseif",ELSEIF,NULL }, /* 6 */
@@ -295,7 +298,8 @@ static cmd_table_t cmd_table[PHP_MAX_CMD_LEN+1][PHP_MAX_CMD_NUM+1] = {
 	  { "checkdate", INTFUNC3,CheckDate },
 	  { NULL,0,NULL } },
 
-	{ { "strtoupper", INTFUNC1,StrToUpper }, /* 10 */
+	{ { "clearstack", INTFUNC0,ClearStack }, /* 10 */
+	  { "strtoupper", INTFUNC1,StrToUpper },
 	  { "strtolower", INTFUNC1,StrToLower },
 	  { "reg_search", REG_SEARCH,NULL },
 	  { "dbmreplace", INTFUNC3,dbmReplace },
@@ -488,20 +492,18 @@ char *FilePop(void) {
 #endif
 	FileStack *s;
 
-	if((top && top->fd != -1) || !top) {
 #ifdef PHP_HAVE_MMAP
-		if(pa && !cur_func && !eval_mode) {
+	if((pa && !eval_mode && top && gfd != -1) || (!top && !cur_func && pa && !eval_mode && gfd != -1)) {
 #if DEBUG
-			Debug("munmap'ing %ld bytes\n",gsize);
+		Debug("munmap'ing %ld bytes\n",gsize+1);
 #endif
-			munmap(pa,gsize);
-			pa=NULL;
-			close(gfd);
-		}
-#else
-		if(pa && !cur_func && !eval_mode) pa=NULL;
-#endif
+		munmap(pa,gsize+1);
+		pa=NULL;
+		close(gfd);
 	}
+#else
+	if((pa && !eval_mode && top) || (!top && !cur_func && pa && !eval_mode)) pa=NULL;
+#endif
 	if(top) {
 		pa = top->pa;
 		gfd = top->fd;
@@ -509,7 +511,8 @@ char *FilePop(void) {
 		state = top->state;
 		lstate = top->lstate;
 		yylex_linenumber = top->lineno;
-		if(cur_func) {
+		if(cur_func || eval_mode) {
+			eval_mode=0;
 			PopStackFrame();
 			PopCondMatchMarks();
 			PopWhileMark();
@@ -523,11 +526,6 @@ char *FilePop(void) {
 				SetCurrentFileSize(top->size);
 				cur_func=NULL; 
 			}
-		} else {
-			eval_mode=0;
-			PopCondMatchMarks();
-			PopWhileMark();
-			PopCounters();
 		}
 		pa_pos = top->pos;
 		s = top;
@@ -621,19 +619,21 @@ void Include(void) {
 		}
 #endif
 #if PHP_SAFE_MODE
-		if(!CheckUid(file_to_include)) {
+		if(!CheckUid(file_to_include,1)) {
 			Error("SAFE_MODE Restriction in effect.  Invalid owner of file to be included");
 			return;
 		}
 #endif
 		fd = OpenFile((char *)file_to_include,0,&file_size);
 		if(fd>-1) {
-			FilePush(ofn,ofile_size,gfd);
 			if(cur_func) {
+				FilePush(cur_func->name,gsize,-1);
 				PushStackFrame();
 				PushCounters();
 				PushCondMatchMarks();
 				PushWhileMark();
+			} else {
+				FilePush(ofn,ofile_size,gfd);
 			}
 			gfd = fd;
 			ParserInit(fd,file_size,no_httpd,NULL);
@@ -666,12 +666,12 @@ void Eval(void) {
 		ParseEscapes((char *)s->strval);
 		StripSlashes((char *)s->strval);
 		ParserInit(-1,strlen((char *)s->strval),no_httpd,s->strval);
-		PushCondMatchMarks();
-		PushWhileMark();
 		if(cur_func) {
 			PushStackFrame();
 			PushCounters();
 		}
+		PushCondMatchMarks();
+		PushWhileMark();
 		yyparse();
 		if(ExitCalled) state=99;
 	}
@@ -856,13 +856,19 @@ int yylex(YYSTYPE *lvalp) {
 
 	php_pool_clear(1);
 
-	cst = GetCurrentState(&active);	
 	if(lstate==99) {
 #if DEBUG
 		Debug("Parser exiting\n");
 #endif
+		if(ExitCalled) return(END_OF_FILE);
 		return(0);
 	}
+	if(ExitCalled) {
+			lstate=99;
+			state=0;
+			return(END_OF_FILE);		
+	}
+	cst = GetCurrentState(&active);	
 	if(ClearIt && LastToken!=RETURN && !cur_func && !eval_mode && cst) { 
 		ClearStack(); 
 		ClearIt=0; 
@@ -955,7 +961,7 @@ int yylex(YYSTYPE *lvalp) {
 				NewExpr=0;
 				return(c);
 			}	
-			if(c=='#' && inpos==1) {
+			if(c=='#') {
 				state=80;
 				break;
 			}
@@ -1329,7 +1335,7 @@ int yylex(YYSTYPE *lvalp) {
 		case 99: /* EOF reached */
 			lstate=99;
 			state=0;
-			pa = FilePop();
+			if(!ExitCalled) pa = FilePop();
 			return(END_OF_FILE);		
 	}
 } /* yylex */
@@ -1411,6 +1417,7 @@ void ParserInit(int fd, long file_size, int nh, char *fbuf) {
 		state = 2;
 		pa = fbuf;
 		pa_pos = 0L;
+		gfd=-1;
 	}
 	gsize = file_size;
 	inpos = -1;
@@ -1443,18 +1450,24 @@ int NewWhileIteration(long sp) {
  * not trigger these mechanisms.
  */
 void Exit(int footer) {
-#if DEBUG
-	Debug("Exit called\n");
-#endif
 	if(!ExitCalled) ExitCalled=1;
 	else return;
+
+#if DEBUG
+	/* call it only if Exit wasn't called already; previous */
+ 	/* Exit() closed fpdebug, and Debug() would open DEBUG_FILE */
+	/* again if fpdebug is NULL; this will truncate all previous */
+	/* debug output */
+	Debug("Exit called\n");
+#endif
+
 	php_header(0,NULL); /* just in case it hasn't been sent yet. */
 #ifdef PHP_HAVE_MMAP
 	if(pa) {
 #if DEBUG
-		Debug("munmap'ing %ld bytes\n",gsize);
+		Debug("munmap'ing %ld bytes\n",gsize+1);
 #endif
-		munmap(pa,gsize);
+		munmap(pa,gsize+1);
 		pa=NULL;
 #ifndef APACHE
 		close(gfd);
@@ -1689,4 +1702,16 @@ void PopCounters(void) {
 	counter_top = cs->next;
 	inIf = cs->inif;
 	inWhile = cs->inwhile;
+}
+
+void PHPFlush(void) {
+#if APACHE
+#if MODULE_MAGIC_NUMBER > 19970110
+	rflush(php_rqst);
+#else
+	bflush(php_rqst->connection->client);
+#endif
+#else
+	fflush(stdout);
+#endif
 }

@@ -2,7 +2,7 @@
 #
 # PHP/FI Install Script
 #
-# $Id: install,v 1.40 1997/04/21 05:22:56 rasmus Exp $
+# $Id: install,v 1.46 1997/06/07 21:43:06 rasmus Exp $
 #
 DEF_LOG_DIR=/usr/local/etc/httpd/cgi-data
 DEF_ACC_DIR=/usr/local/etc/httpd/cgi-data
@@ -54,16 +54,33 @@ else
     SYB_TOP=
 fi
 
-$ECHO_N "Do you have Postgres95 installed in this system? [yN] $ECHO_C"
-read a
-if [ "$a" = "y" ] || [ "$a" = "Y" ]
+#
+#  Postgres may be installed in either directory
+PGDEFANS=n
+PGDEFQUE=yN
+PGDEFDIR=/usr/local/postgres95
+if [ -d "$PGDEFDIR" ]
 then
-$ECHO_N "Top of your Postgres95 install tree? [/usr/local/postgres95] $ECHO_C"
+      PGDEFANS=y
+      PGDEFQUE=Yn
+fi
+if [ -d /usr/local/pgsql ]
+then
+      PGDEFANS=y
+      PGDEFQUE=Yn
+      PGDEFDIR=/usr/local/pgsql
+fi
+
+$ECHO_N "Do you have Postgres installed in this system? [$PGDEFQUE] $ECHO_C"
+read a
+if [ ".$a" = "." -a "$PGDEFANS" = "y" ] || [ "$a" = "y" ] || [ "$a" = "Y" ]
+then
+$ECHO_N "Top of your Postgres install tree? [$PGDEFDIR] $ECHO_C"
 HLP=-DHAVE_LIBPQ=1
 read PGINST_TOP
 if [ "$PGINST_TOP." = "." ]
 then
-	PGINST_TOP=/usr/local/postgres95
+      PGINST_TOP=$PGDEFDIR
 fi
 else
 	PGINST_TOP=
@@ -99,6 +116,21 @@ else
    SOLIDINST_TOP=
 fi
 
+$ECHO_N "Do you have Oracle installed in this system? [yN] $ECHO_C"
+read a
+if [ "$a" = "y" ] || [ "$a" = "Y" ]
+then
+$ECHO_N "Top of your Oracle install tree? [$ORACLE_HOME] $ECHO_C"
+HLO=-DHAVE_LIBOCIC=1
+read ORACLEINST_TOP
+if [ "$ORACLEINST_TOP." = "." ]
+then
+   ORACLEINST_TOP=$ORACLE_HOME
+fi
+else
+   ORACLEINST_TOP=
+fi
+
 $ECHO_N "Would you like to compile PHP/FI as an Apache module? [yN] $ECHO_C"
 read a
 if [ "$a" = "y" ] || [ "$a" = "Y" ]
@@ -110,6 +142,15 @@ then
 	APACHE_API=-DAPACHE_NEWAPI=1
 else
 	APACHE_API=
+fi
+
+$ECHO_N "Are you using Apache-Stronghold? [yN] $ECHO_C"
+read STRONGHOLD
+if [ "$STRONGHOLD." = "." ] || [ "$STRONGHOLD" = "n" ] || [ "$STRONGHOLD" = "N" ]
+then
+	STRONGHOLD=
+else
+	STRONGHOLD=-DSTRONGHOLD=1
 fi
 
 $ECHO_N "Does your Apache server support ELF dynamic loading? [yN] $ECHO_C"
@@ -158,7 +199,7 @@ else
 	read b
 	if [ "$b." = "." ]
 	then
-		$b="/usr/local/etc/htdocs"
+		b="/usr/local/etc/htdocs"
 	fi
 	PHP_DOCUMENT_ROOT=-DPHP_DOCUMENT_ROOT=\\\\\"$b\\\\\"
 fi
@@ -476,6 +517,100 @@ SED_SOLID="     s,@SOLID_INCLUDE@,-I$SOLIDINST_TOP/$SOLID_INCDIR,
                 s,@SOLID_LIB@,,"
 fi
 
+# Oracle part of sed command
+
+if [ "$ORACLEINST_TOP." = "." ]
+then
+SED_ORACLE="    s,@LIBORACLE@,,
+                s,@STATICLIBORACLE@,,
+                s,@ORACLE_LIB@,,
+                s,@ORACLE_INCLUDE@,,
+                s,@ORACLE_DEF@,,"
+else
+
+# Oracle include files
+if [ -d "$ORACLEINST_TOP/rdbms/demo" ]
+then
+    # V7.[0123]
+    ORACLE_INCDIR=rdbms/demo
+fi
+
+# Oracle libs - nightmare :-)
+# Need to know the version, otherwhise we will mixup nlsrtl
+if [ -f "$ORACLEINST_TOP/orainst/unix.rgs" ]
+then
+    set -- `grep '"ocommon"' $ORACLEINST_TOP/orainst/unix.rgs`
+    ORACLE_VERSION="`echo $5 | cut -c 2-4`"
+    test -z "$ORACLE_VERSION" && ORACLE_VERSION=7.3
+else
+    ORACLE_VERSION=7.3
+fi
+echo "Configuring for Oracle $ORACLE_VERSION"
+
+ORACLE_LIBDIR=lib
+if [ -f "$ORACLEINST_TOP/rdbms/lib/sysliblist" ]
+then
+    ORA_SYSLIB="`cat $ORACLEINST_TOP/rdbms/lib/sysliblist`"
+else
+    ORA_SYSLIB="-lm"
+fi
+
+# Oracle Static libs
+case $ORACLE_VERSION in
+  7.0|7.1)
+    ORACLE_STLIBS="-locic $ORACLEINST_TOP/$ORACLE_LIBDIR/osntab.o -lsqlnet \
+        -lora -lsqlnet -lnlsrtl -lcv6 -lcore -lnlsrtl -lcv6 -lcore $ORA_SYSLIB \
+        -lcore $ORA_SYSLIB"
+    ;;
+  7.2)
+    ORACLE_STLIBS="-locic $ORACLEINST_TOP/$ORACLE_LIBDIR/osntab.o -lsqlnet \
+        -lora -lsqlnet -lora -lnlsrtl3 -lc3v6 -lcore3 -lnlsrtl3 -lcore3 \
+        $ORA_SYSLIB -lcore3 $ORA_SYSLIB"
+    ;;
+  7.3)
+    ORACLE_STLIBS="-lclient -lsqlnet -lncr -lsqlnet -lclient -lcommon \
+        -lgeneric -lsqlnet -lncr -lsqlnet -lclient -lcommon -lgeneric -lepc \
+        -lnlsrtl3 -lc3v6 -lcore3 -lnlsrtl3 -lcore3 -lnlsrtl3 $ORA_SYSLIB \
+        -lcore3 $ORA_SYSLIB"
+    ;;
+  *)
+    ORACLE_STLIBS=
+    ;;
+esac
+
+# Oracle shared libs
+case $ORACLE_VERSION in
+  7.0)
+    # shared libs not supported
+    ORACLE_SHLIBS="$ORACLE_STLIBS"
+    ;;
+  7.1)
+    if [ -f $ORACLEINST_TOP/$ORACLE_LIBDIR/liboracle.s? ]
+    then
+      ORACLE_SHLIBS="-loracle $ORA_SYSLIB"
+    else
+      ORACLE_SHLIBS="$ORACLE_STLIBS"
+    fi
+    ;;
+  7.2|7.3)
+    if [ -f $ORACLEINST_TOP/$ORACLE_LIBDIR/libclntsh.s? ]
+    then
+      ORACLE_SHLIBS="-lclntsh $ORA_SYSLIB"
+    else
+      ORACLE_SHLIBS="$ORACLE_STLIBS"
+    fi
+    ;;
+  *)
+    ORACLE_SHLIBS=
+    ;;
+esac
+
+SED_ORACLE="    s,@LIBORACLE@,$ORACLE_SHLIBS,
+                s,@STATICLIBORACLE@,$ORACLE_STLIBS,
+                s,@ORACLE_LIB@,-L$ORACLEINST_TOP/$ORACLE_LIBDIR,
+                s,@ORACLE_INCLUDE@,-I$ORACLEINST_TOP/$ORACLE_INCDIR,
+                s,@ORACLE_DEF@,$HLO,"
+fi
 
 # FastCGI substitutions
 if [ "$PHPFASTCGI." = "." ]
@@ -578,6 +713,7 @@ sed "		$SED_MSQL
 		$SED_PG95
 		$SED_MYSQL
 		$SED_SOLID
+		$SED_ORACLE
 		$SED_APACHE
 		$SED_FCGI
 		s,@USEDLIBS@,$USEDLIBS,
@@ -597,6 +733,7 @@ sed "		$SED_MSQL
 		s,@APACHE@,$APACHE,
 		s,@APACHE_DIR@,$APACHE_DIR,
 		s,@APACHE_API@,$APACHE_API,
+		s,@STRONGHOLD@,$STRONGHOLD,
 		s,@PRG@,$PRG,
 		s,@DEBIAN@,$DEBIAN,
 		s,@MODULE_TARGET@,$MODULE_TARGET,
@@ -631,7 +768,7 @@ rm -f src/libphp.a
 fi
 
 echo "If none of -ldbm, -ldb nor -lgdbm were found, you should"
-echo "probably get one of them.  It will work without these, but"
+echo "probably get one of them.  It will work without these,"
 echo "but performance-wise you will gain a lot by installing"
 echo "gdbm."
 echo ""

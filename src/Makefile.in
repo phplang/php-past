@@ -1,4 +1,4 @@
-# $Id: Makefile.in,v 1.68 1997/04/17 23:00:34 cvswrite Exp $
+# $Id: Makefile.in,v 1.83 1997/06/16 22:10:15 rasmus Exp $
 #
 # Makefile for PHP/FI
 # Copyright 1995,1996,1997 Rasmus Lerdorf
@@ -35,16 +35,16 @@ AR = ar rc
 RANLIB = @RANLIB@
 CC = @CC@
 YACC = @YACC@ -d -l
-LIBS = -L. @HLNK@ @LIBS@ @best_dbm@ @LIBMSQL@ @LIBSYB@ @LIBPQ@ @LIBMYSQL@ @LIBSOLID@ @LIBFCGI@ @LIBREGEX@
-STATICLIBS = @best_dbm@ @LIBS@ @STATICLIBMSQL@ @STATICLIBSYB@ @STATICLIBPQ@ @STATICLIBMYSQL@ @STATICLIBSOLID@ @STATICLIBFCGI@ @STATICLIBREGEX@
+LIBS = -L. @HLNK@ @LIBS@ @best_dbm@ @LIBMSQL@ @LIBSYB@ @LIBPQ@ @LIBMYSQL@ @LIBSOLID@ @LIBORACLE@ @LIBFCGI@ @LIBREGEX@
+STATICLIBS = @best_dbm@ @LIBS@ @STATICLIBMSQL@ @STATICLIBSYB@ @STATICLIBPQ@ @STATICLIBMYSQL@ @STATICLIBSOLID@ @STATICLIBORACLE@ @STATICLIBFCGI@ @STATICLIBREGEX@
 USEDLIBS = @USEDLIBS@
 OPT_CFLAGS = @OPT_CFLAGS@
 INC_CFLAGS = @INC_CFLAGS@
 SYS_CFLAGS = @SYS_CFLAGS@
 CFLAGS = $(OPT_CFLAGS) $(INC_CFLAGS) $(SYS_CFLAGS)
-LDFLAGS = @LDFLAGS@ @MSQL_LIB@ @MYSQL_LIB@ @SYB_LIB@ @SOLID_LIB@ @PQ_LIB@ @FCGI_LIB@ @LIBREGEXDIR@
+LDFLAGS = @LDFLAGS@ @MSQL_LIB@ @MYSQL_LIB@ @SYB_LIB@ @SOLID_LIB@ @ORACLE_LIB@ @PQ_LIB@ @FCGI_LIB@ @LIBREGEXDIR@
 #DEBUG=-g -Wall -DDEBUG
-CPPFLAGS = @REGEX_INCLUDE@ -I. @CPPFLAGS@ @MSQL_INCLUDE@ @MSQL_DEF@ @SYB_DEF@ @SYB_INCLUDE@ @MYSQL_INCLUDE@ @SOLID_INCLUDE@ @SOLID_DEF@ @MYSQL_DEF@ @PQ_INCLUDE@ @PQ_DEF@ @FCGI_INCLUDE@ @FCGI_DEF@ @APACHE_INCLUDE@ @ACCESS_CONTROL@ @ACCESS_DIR@ @LOGGING@ @LOG_DIR@ @HGD@ @FILE_UPLOAD@ @APACHE@ @APACHE_API@ @PHPSENDMAIL@ -DSENDMAIL=\""@SENDMAIL@ -t"\" @PHP_DOCUMENT_ROOT@ $(DEBUG) 
+CPPFLAGS = @REGEX_INCLUDE@ -I. @CPPFLAGS@ @MSQL_INCLUDE@ @MSQL_DEF@ @SYB_DEF@ @SYB_INCLUDE@ @MYSQL_INCLUDE@ @SOLID_INCLUDE@ @SOLID_DEF@ @ORACLE_INCLUDE@ @ORACLE_DEF@ @MYSQL_DEF@ @PQ_INCLUDE@ @PQ_DEF@ @FCGI_INCLUDE@ @FCGI_DEF@ @APACHE_INCLUDE@ @STRONGHOLD@ @ACCESS_CONTROL@ @ACCESS_DIR@ @LOGGING@ @LOG_DIR@ @HGD@ @FILE_UPLOAD@ @APACHE@ @APACHE_API@ @PHPSENDMAIL@ -DSENDMAIL=\""@SENDMAIL@ -t"\" @PHP_DOCUMENT_ROOT@ $(DEBUG) 
 
 PHP_PROGS: @OURREGEX@ @PRG@ @MODULE_TARGET@
 
@@ -114,7 +114,11 @@ DISTFILES = ChangeLog README COPYING \
 	test/lang/013.tst test/lang/014.tst test/lang/015.tst test/lang/015.inc \
 	test/lang/016.tst test/lang/016.inc test/lang/017.tst \
 	test/pg95/001.tst test/pg95/002.tst test/pg95/003.tst test/pg95/004.tst \
-	test/pg95/005.tst test/pg95/README
+	test/pg95/005.tst test/pg95/README \
+	test/ary/001.tst test/ary/002.tst test/ary/003.tst test/ary/004.tst \
+	test/ary/005.tst test/ary/006.tst test/ary/007.tst test/ary/008.tst \
+	test/ary/009.tst test/ary/010.tst test/ary/011.tst test/ary/012.tst \
+	test/ary/013.tst test/ary/014.tst
 
 install: all 
 	test/dbm/*.tst test/lang/*.tst
@@ -178,12 +182,12 @@ module_user_build: $(OBJS)
 	@echo "You now need to recompile your Apache server."
 	@echo "mod_php.* and libphp.a should have been copied to your"
 	@echo "Apache src directory, if they weren't, do so manually."
-	@echo "Then edit your Confiration file for Apache and look for"
+	@echo "Then edit your Configuration file for Apache, look for"
 	@echo "the EXTRA_CFLAGS line and add "
-	@echo "-DSERVER_SUBVERSION=\\\"PHP/FI-2.0b11\\\", then on"
-	@echo "the \"EXTRA_LIBS\" line and add the following to that line:"
+	@echo "-DSERVER_SUBVERSION=\\\"PHP/FI-2.0b12\\\", then on"
+	@echo "the \"EXTRA_LIBS\" (not \"EXTRA_LFLAGS\"!) line, add:"
 	@echo ""
-	@echo "-L. -lphp @HLNK@ @best_dbm@ @MSQL_LIB@ @MYSQL_LIB@ @LIBMSQL@ @SYB_LIB@ @LIBSYB@ @LIBMYSQL@ @SOLID_LIB@ @LIBSOLID@ @PQ_LIB@ @LIBPQ@ -lm"
+	@echo "-L. -lphp @HLNK@ @best_dbm@ @MSQL_LIB@ @MYSQL_LIB@ @LIBMSQL@ @SYB_LIB@ @LIBSYB@ @LIBMYSQL@ @SOLID_LIB@ @LIBSOLID@ @ORACLE_LIB@ @LIBORACLE@ @PQ_LIB@ @LIBPQ@ -lm"
 	@echo ""
 	@echo "If you have the GD library, you will need to add -lgd to the above."
 	@echo "Make sure you add -lgd before -lm on the above line."
@@ -196,6 +200,8 @@ module_user_build: $(OBJS)
 	@echo "After compiling and testing your httpd binary, you may want to"
 	@echo "strip it of its debugging symbols with: strip httpd"
 	@echo ""
+	@echo "If you get a linker error referring to the regerror() function, then edit"
+	@echo "the Apache Makefile and change the REGLIB and LIBS order in the httpd make rule"
 
 parser:
 	mv parse.raw parse.y
@@ -204,8 +210,11 @@ parser:
 	mv *.tab.h parse.h
 	mv parse.y parse.raw
 
+distclean: clean
+	rm -f Makefile ../config.status ../config.cache ../config.log 
+
 clean:
-	rm -f Makefile ../config.status ../config.cache ../config.log php.cgi *.o core *.so.* regex/*.a regex/*.o
+	rm -f php.cgi libphp.a *.o core *.so.* regex/*.a regex/*.o
 
 tags:
 	etags ${srcdir}/*.c ${srcdir}/*.h ${srcdir}/[a-z]*.in
@@ -231,6 +240,7 @@ dist: $(DISTDEP)
 	mkdir ../$$distname/test/func; \
 	mkdir ../$$distname/test/reg; \
 	mkdir ../$$distname/test/dbm; \
+	mkdir ../$$distname/test/ary; \
 	mkdir ../$$distname/test/msql; \
 	mkdir ../$$distname/test/pg95; \
 	for file in $(DISTFILES); do \

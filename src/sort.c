@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: sort.c,v 1.7 1997/04/06 15:59:42 rasmus Exp $ */
+/* $Id: sort.c,v 1.8 1997/05/06 22:41:34 rasmus Exp $ */
 #include "php.h"
 #include <stdlib.h>
 #include "parse.h"
@@ -77,9 +77,11 @@ void Sort(int mode) {
 	type = var->type;
 	array = (Array *)emalloc(1,num*sizeof(Array));	
 	while(var) {
-		array[count].ptr = var->strval;
-		array[count].iname = var->iname;
-		count++;
+		if(!var->deleted) {
+			array[count].ptr = var->strval;
+			array[count].iname = var->iname;
+			count++;
+		}
 		var = var->next;
 		if(count>=num) {
 			new_array = emalloc(1, ++size * num * sizeof(Array));
@@ -108,13 +110,15 @@ void Sort(int mode) {
 	var = s->var;
 	count=0;
 	while(var) {
-		var->strval = array[count].ptr;	
-		var->intval = atol(var->strval);
-		var->douval = atof(var->strval);
-		if(mode) {
-			var->iname = array[count].iname;
+		if(!var->deleted) {
+			var->strval = array[count].ptr;	
+			var->intval = atol(var->strval);
+			var->douval = atof(var->strval);
+			if(mode) {
+				var->iname = array[count].iname;
+			}
+			count++;
 		}
 		var = var->next;
-		count++;
 	}
 }

@@ -1,4 +1,4 @@
-/***[oracle.c]****************************************************[TAB=4]****\
+/***[oracle.h]****************************************************[TAB=4]****\
 *                                                                            *
 * PHP/FI                                                                     *
 *                                                                            *
@@ -24,7 +24,7 @@
 *                                                                            *
 * Oracle functions for PHP.                                                  *
 *                                                                            *
-*  $Id: oracle.h,v 1.1 1997/04/17 23:00:40 cvswrite Exp $                                                                      *
+*  $Id: oracle.h,v 1.2 1997/06/12 06:20:36 cvswrite Exp $                                                                      *
 *                                                                            *
 * © Copyright (C) Guardian Networks AS 1997                                  *
 * Authors: Stig Sæther Bakken <ssb@guardian.no>                              *
@@ -68,6 +68,10 @@
 
 #define FC_OOPEN			14
 
+/* stubs */
+#define ora_free_cursor(x)
+#define ora_free_conn(x)
+
 
 
 typedef struct oraConnection {
@@ -76,6 +80,7 @@ typedef struct oraConnection {
 	ub1 hda[HDA_SIZE];
 	char userid[ORAUIDLEN];
 	char password[ORAPWLEN];
+	struct oraConnection *prev;
 	struct oraConnection *next;
 } oraConnection;
 
@@ -99,6 +104,7 @@ typedef struct oraColumn {
 typedef struct oraCursor {
 	int ind;
 	Cda_Def cda;
+	struct oraCursor *prev;
 	struct oraCursor *next;
 	text *currentQuery;
 	oraColumn *column_top;
@@ -115,6 +121,7 @@ static oraCursor *ora_get_cursor(int);
 static void ora_del_cursor(int);
 static char *ora_error(Cda_Def *);
 static int ora_describe_define(oraCursor *);
+static void ora_closeall();
 
 static const text *ora_func_tab[] =  {(text *) "unused",
 /*  1, 2  */       (text *) "unused", (text *) "OSQL",

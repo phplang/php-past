@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: stack.c,v 1.31 1997/03/09 21:12:42 rasmus Exp $ */
+/* $Id: stack.c,v 1.33 1997/05/08 12:59:25 rasmus Exp $ */
 /* Expression Stack */
 #include <stdlib.h>
 #include <string.h>
@@ -91,11 +91,11 @@ void Push(char *value, int type) {
 		if(*value == VAR_INIT_CHAR) {
 			t = GetVar(value+1,NULL,0);
 			if(t && t->strval) {
-				name = strdup(t->strval);
+				name = estrdup(2,t->strval);
 				t2 = GetVar(t->strval,NULL,0);
 				t = t2;
 			} else {
-				name = strdup(value+1);
+				name = estrdup(2,value+1);
 			}
 		} else {
 			t = GetVar(value,NULL,0);
@@ -111,7 +111,6 @@ void Push(char *value, int type) {
 			Push("",STRING);	
 			if(name && *value == VAR_INIT_CHAR) {
 				SetVar(name,0,-2);
-				free(name);	
 				t = GetVar(value,NULL,0);
 			} else {
 				SetVar(value,0,-2);
@@ -125,7 +124,8 @@ void Push(char *value, int type) {
 			new->douval = t->douval;
 			new->type = t->type;
 			new->var = t;
-			new->flag = (t->next)?1:0;
+/*			new->flag = (t->next)?1:0;  */
+			new->flag = 1;
 		}
 	} else if(type==ARRAY) {
 		if(!next) t = GetVar(value,s->strval,0);
@@ -145,7 +145,8 @@ void Push(char *value, int type) {
 			new->douval = t->douval;
 			new->type = t->type;
 			new->var = t;
-			new->flag = 1;
+		/*	new->flag = 1; */
+			new->flag = 0;
 		}
 	}
 	new->next = top;

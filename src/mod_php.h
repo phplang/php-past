@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: mod_php.h,v 1.8 1997/01/25 07:39:17 rasmus Exp $ */
+/* $Id: mod_php.h,v 1.11 1997/06/16 14:13:43 rasmus Exp $ */
 
 typedef struct {
 	int ShowInfo;
@@ -33,4 +33,5 @@ typedef struct {
 	int XBitHack;        
 	int MaxDataSpace;
 	int Debug;
+	int engine;
 } php_module_conf;

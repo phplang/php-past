@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: local.c,v 1.9 1997/04/22 18:08:51 rasmus Exp $ */
+/* $Id: local.c,v 1.11 1997/04/29 18:03:12 rasmus Exp $ */
 #include "php.h"
 #include <string.h>
 

@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: main.c,v 1.45 1997/04/13 19:27:04 rasmus Exp $ */
+/* $Id: main.c,v 1.50 1997/06/16 14:11:43 rasmus Exp $ */
 #include <stdlib.h>
 #include "php.h"
 #ifdef HAVE_UNISTD_H
@@ -92,10 +92,10 @@ int main(int argc, char **argv) {
 		if(!getenv("QUERY_STRING")) {
 			{
 				char *astr=NULL; 
-				int ai, al=0;
+				int ai, al=1;
 
 				for(ai=1;ai<argc;ai++) al+=strlen(argv[ai])+1;
-				astr = emalloc(0,al+14);
+				astr = malloc(al+14); /* This space can't be freed anyway, so let it leak */
 				strcpy(astr,"QUERY_STRING=");	
 				for(ai=1;ai<argc;ai++) {
 					strcat(astr,php_urlencode(argv[ai]));
@@ -182,7 +182,7 @@ int apache_php_module_main(request_rec *r, php_module_conf *conf, int fd) {
 	php_init_gd();
 #endif
 	php_init_cond();
-
+	
 	TreatHeaders();  /* Check to see if there are any special HTTP headers */
 
 	if(r->args) {

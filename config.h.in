@@ -75,6 +75,12 @@
 /* Define if you have the regcomp function.  */
 #undef HAVE_REGCOMP
 
+/* Define if you have the cuserid function.  */
+#undef HAVE_CUSERID
+
+/* Define if you have the getlogin function.  */
+#undef HAVE_GETLOGIN
+
 /* Define if you have the alloca function.  */
 #undef HAVE_ALLOCA
 
@@ -113,6 +119,12 @@
 
 /* Define if you have the <syslog.h> header file.  */
 #undef HAVE_SYSLOG_H
+
+/* Define if you have the <sys/socket.h> header file.  */
+#undef HAVE_SYS_SOCKET_H
+
+/* Define if you have the <sys/wait.h> header file.  */
+#undef HAVE_SYS_WAIT_H
 
 /* Define if you an ndbm compatible library (-ldbm).  */
 #undef NDBM

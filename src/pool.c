@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: pool.c,v 1.21 1997/04/23 02:50:27 rasmus Exp $ */
+/* $Id: pool.c,v 1.23 1997/06/16 14:14:24 rasmus Exp $ */
 /*
  * Memory Pool Management with hooks for Apache sub-pool handling
  * for Apache module

@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: log.c,v 1.32 1997/01/19 03:28:52 rasmus Exp $ */
+/* $Id: log.c,v 1.33 1997/06/04 18:02:31 rasmus Exp $ */
 #include "php.h"
 #include <stdlib.h>
 #ifdef HAVE_UNISTD_H
@@ -52,6 +52,7 @@ static char *last_email=NULL;
 static char *last_ref=NULL;
 static char *last_browser=NULL;
 static char *logfile=NULL;
+static char *forcelogfile=NULL;
 static long MyUid=-1;
 static long MyInode=-1;
 #if LOGGING
@@ -83,6 +84,7 @@ void php_init_log(void) {
 	last_ref=NULL;
 	last_browser=NULL;
 	logfile=NULL;
+	forcelogfile=NULL;
 	MyUid=-1;
 	MyInode=-1;
 #if LOGGING
@@ -119,6 +121,7 @@ void SetStatInfo(struct stat *sb) {
 char *filename_to_logfn(char *filename) {
 	char *lfn, *lp, *ret;
 
+	if (forcelogfile) { filename = forcelogfile; }
 	lfn = estrdup(1,filename);
 	lp = lfn;
 	while(*lp == '/') lp++;
@@ -140,6 +143,9 @@ void Log(char *filename) {
 	char key[32];
 	char buf[512];
 	char *host,*email,*ref,*browser;
+#if NOLOGSUCCESSIVE
+	char *lasthost;
+#endif
 	struct stat sb;
 	time_t t;
 	int try=0,retries=0;
@@ -199,6 +205,13 @@ void Log(char *filename) {
 		loadlastinfo(temp,filename);
 	}
 	host = getremotehostname();	
+#if NOLOGSUCCESSIVE
+	lasthost = getlasthost();
+	if (strncmp(host?host:"",lasthost?lasthost:"",128)==0) {
+		_dbmClose(temp);
+		return;
+	}
+#endif
 	email = getemailaddr();
 	ref = getrefdoc();
 	if(ref) {
@@ -447,6 +460,23 @@ int gettoday(void) {
 void GetLogFile(void) {
 	if(!logfile) Push("",STRING);
 	else Push(logfile,STRING);
+}
+
+void LogAs(void) {
+	Stack *s;
+	static char temp[1024];
+
+	s = Pop();
+	if (!s) {
+		Error("Stack error in LogAs");
+		return;
+	}
+
+	strncpy(temp,s->strval,1023);
+	forcelogfile = temp;
+
+	Push(forcelogfile,STRING);
+	return;
 }
 
 void GetLastHost(void) {
@@ -708,6 +738,9 @@ void SQLLog(char *filename) {
 	struct tm *tm1;
 	int day1, day2;
 	char *s,*fn,*host,*email,*lref,*ref,*browser;
+#if NOLOGSUCCESSIVE
+	char *lasthost;
+#endif
 	char hs=0,es=0,ls=0,bs=0;
 
 #if DEBUG
@@ -768,6 +801,12 @@ void SQLLog(char *filename) {
 	t = time(NULL);
 
 	host = getremotehostname();	
+#if NOLOGSUCCESSIVE
+	lasthost = getlasthost();
+	if (strncmp(host?host:"",lasthost?lasthost:"",128)==0) {
+		return;
+	}
+#endif
 	email = getemailaddr();
 	ref = getrefdoc();
 	lref=NULL;
@@ -778,10 +817,10 @@ void SQLLog(char *filename) {
 		if(strlen(lref)>128) lref[127]='\0';	
 	}
 	browser = getbrowser();	
-#if DEBUG
-	Debug("SQLLog: filename = [%s]\n",filename?filename:"null");
-#endif
-	if(!filename || (filename && strlen(filename)<1)) fn = GetCurrentFilename();
+	if (forcelogfile) { 
+		fn = forcelogfile; 
+	}
+	else if(!filename || (filename && strlen(filename)<1)) fn = GetCurrentFilename();
 	else fn = filename;
 
 	if(fn && strlen(fn)>63) {

@@ -1528,7 +1528,7 @@ fi
 
 fi
 
-for ac_hdr in fcntl.h unistd.h crypt.h sys/file.h memory.h pwd.h grp.h
+for ac_hdr in fcntl.h unistd.h crypt.h sys/file.h memory.h pwd.h grp.h sys/socket.h sys/wait.h
 do
 ac_safe=`echo "$ac_hdr" | sed 'y%./+-%__p_%'`
 echo $ac_n "checking for $ac_hdr""... $ac_c" 1>&6
@@ -1709,7 +1709,7 @@ fi
 
 fi
 
-for ac_func in memcpy memmove strdup strerror strcasecmp strstr flock lockf mmap putenv tempnam usleep setlocale gettimeofday setvbuf srand48 lrand48 link symlink regcomp
+for ac_func in memcpy memmove strdup strerror strcasecmp strstr flock lockf mmap putenv tempnam usleep setlocale gettimeofday setvbuf srand48 lrand48 link symlink regcomp getlogin cuserid
 do
 echo $ac_n "checking for $ac_func""... $ac_c" 1>&6
 echo "configure:1716: checking for $ac_func" >&5

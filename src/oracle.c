@@ -24,8 +24,6 @@
 *                                                                            *
 * Oracle functions for PHP.                                                  *
 *                                                                            *
-*  $Id: oracle.c,v 1.4 1997/04/18 13:14:36 cvswrite Exp $                                                                      *
-*                                                                            *
 * © Copyright (C) Guardian Networks AS 1997                                  *
 * Authors: Stig Sæther Bakken <ssb@guardian.no>                              *
 *                                                                            *
@@ -33,6 +31,8 @@
 \****************************************************************************/
 
 /*
+ *  $Id: oracle.c,v 1.6 1997/06/12 06:20:35 cvswrite Exp $
+ *
  * TODO:
  * - use MAGIC_QUOTES
  * - bind variables
@@ -88,7 +88,7 @@ static oraCursor *ora_cursor_top = (void *)NULL;
 
 static int ora_conn_index = 0;
 static int ora_cursor_index = 0;
-static int ora_numwidth = 8;
+static int ora_numwidth = 38;
 
 #endif
 
@@ -233,7 +233,6 @@ Ora_Close() /* conn_index */
 #if HAVE_LIBOCIC
 	Stack *s;
 	oraCursor *cursor;
-	char retval[16];
 	int cursor_ind;
 
 	s = Pop();
@@ -242,7 +241,9 @@ Ora_Close() /* conn_index */
 		return;
 	}
 
-	cursor = ora_get_cursor(s->intval);
+	cursor_ind = s->intval;
+
+	cursor = ora_get_cursor(cursor_ind);
 
 	if (cursor == NULL) {
 		Error("Invalid cursor index %d", cursor_ind);
@@ -665,6 +666,19 @@ Ora_GetColumn() /* cursor_index, column_index */
 }
 
 #if HAVE_LIBOCIC
+
+void
+php_init_oracle(void)
+{
+	ora_closeall();
+
+	ora_conn_index = 0;
+	ora_cursor_index = 0;
+
+	ora_conn_top = NULL;
+	ora_cursor_top = NULL;
+}
+
 /*
 ** Functions internal to this module.
 */
@@ -672,31 +686,33 @@ Ora_GetColumn() /* cursor_index, column_index */
 static oraConnection *
 ora_add_conn()
 {
-	oraConnection *new;
+	oraConnection *new, *conn;
 
 	if (ora_conn_top == NULL) {
 		new = emalloc(0, sizeof(oraConnection));
 		if (!new) {
 			Error("Out of memory");
+			return NULL;
 		}
 		ora_conn_top = new;
+		new->prev = NULL;
 	}
 	else {
-		new = ora_conn_top;
-		while (new->next) {
-			new = new->next;
+		conn = ora_conn_top;
+		while (conn->next) {
+			conn = conn->next;
 		}
-		new->next = emalloc(0, sizeof(oraConnection));
-		if (new->next == NULL) {
+		new = emalloc(0, sizeof(oraConnection));
+		if (!new) {
 			Error("Out of memory");
+			return NULL;
 		}
-		else {
-			new = new->next;
-		}
+		new->prev = conn;
+		conn->next = new;
 	}
 
 	new->ind = ++ora_conn_index;
-	new->next  = NULL;
+	new->next = NULL;
 
 	return new;
 }
@@ -723,12 +739,13 @@ ora_del_conn(int ind) {
 	oraConnection *conn, *before, *after;
 
 	conn = ora_get_conn(ind);
-	before = ora_get_conn(ind - 1);
-	after = ora_get_conn(ind + 2);
 
 	if (conn == NULL) {
 		return;
 	}
+
+	before = conn->prev;
+	after = conn->next;
 
 	if (before == NULL) {
 		if (after == NULL) {
@@ -736,37 +753,42 @@ ora_del_conn(int ind) {
 		}
 		else {
 			ora_conn_top = after;
+			ora_conn_top->prev = NULL;
 		}
 	}
 	else {
 		before->next = after;
+		after->prev = before;
 	}
 }
 
 static oraCursor *
 ora_add_cursor()
 {
-	oraCursor *new;
+	oraCursor *new, *cursor;
 
 	if (ora_cursor_top == NULL) {
+		/* ...there are no cursors allocated already */
 		new = emalloc(0, sizeof(oraCursor));
 		if (!new) {
 			Error("Out of memory");
+			return NULL;
 		}
 		ora_cursor_top = new;
+		new->prev = NULL;
 	}
 	else {
-		new = ora_cursor_top;
-		while (new->next) {
-			new = new->next;
+		cursor = ora_cursor_top;
+		while (cursor && cursor->next) {
+			cursor = cursor->next;
 		}
-		new->next = emalloc(0, sizeof(oraCursor));
-		if (new->next == NULL) {
+		new = emalloc(0, sizeof(oraCursor));
+		if (new == NULL) {
 			Error("Out of memory");
+			return NULL;
 		}
-		else {
-			new = new->next;
-		}
+		new->prev = cursor;
+		cursor->next = new;
 	}
 
 	new->ind = ++ora_cursor_index;
@@ -798,12 +820,13 @@ ora_del_cursor(int ind) {
 	oraCursor *cursor, *before, *after;
 
 	cursor = ora_get_cursor(ind);
-	before = ora_get_cursor(ind - 1);
-	after = ora_get_cursor(ind + 2);
 
 	if (cursor == NULL) {
 		return;
 	}
+
+	before = cursor->prev;
+	after = cursor->next;
 
 	if (before == NULL) {
 		if (after == NULL) {
@@ -811,10 +834,12 @@ ora_del_cursor(int ind) {
 		}
 		else {
 			ora_cursor_top = after;
+			ora_cursor_top->prev = NULL;
 		}
 	}
 	else {
 		before->next = after;
+		after->prev = before;
 	}
 }
 
@@ -962,6 +987,29 @@ ora_describe_define(oraCursor *cursor)
 	cursor->ncols = col;
     return col;
 }
+
+static void
+ora_closeall()
+{
+	oraCursor *cursor, *next_cursor;
+	oraConnection *conn, *next_conn;
+
+	cursor = ora_cursor_top;
+	conn = ora_conn_top;
+
+	while (cursor) {
+		next_cursor = cursor->next;
+		ora_free_cursor(cursor);
+		cursor = next_cursor;
+	}
+
+	while (conn) {
+		next_conn = conn->next;
+		ora_free_conn(conn);
+		conn = next_conn;
+	}
+}
+
 #endif
 
 /*

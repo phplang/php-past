@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: mysql.c,v 1.18 1997/04/23 02:50:26 rasmus Exp $ */
+/* $Id: mysql.c,v 1.24 1997/06/16 12:57:39 rasmus Exp $ */
 /* mSQL is Copyright (c) 1993-1995 David J. Hughes */
 
 /* Note that there is no mySQL code in this file */
@@ -42,7 +42,6 @@
 #define MYSQL void
 #endif
 MYSQL *mysqlGetDbSock();
-void mysqlSetCurrent(MYSQL *sock, char *newdb);
 
 #ifdef HAVE_LIBMYSQL
 typedef struct ResultList {
@@ -64,6 +63,9 @@ static int mysql_ind=1;
 
 void php_init_mysql(char *defaulthost) {
 #ifdef HAVE_LIBMYSQL
+#ifdef HAVE_PWD_H
+	struct passwd *pwd;
+#endif
 	char * name;
 	static char junk[1];
 	CurrentTcpPort=&junk[0];
@@ -72,11 +74,28 @@ void php_init_mysql(char *defaulthost) {
 	result_top=NULL;
 	junk[0]='\0';
 	/* set CurrentUser to current uid's login name */
+	CurrentUser=NULL;
+	name=NULL;
+#ifdef HAVE_PWD_H
+	pwd = getpwuid(getuid());
+	CurrentUser= estrdup(0, pwd->pw_name);
+#endif
+#if PHP_MYSQL_GETLOGIN
+#ifdef HAVE_GETLOGIN
 	name = getlogin();
 	if(name) {
-		CurrentUser= estrdup(1, name);
-		free(name);
+		CurrentUser= estrdup(0, name);
 	}
+#endif
+#ifdef HAVE_CUSERID
+	if(!name) {
+		name = cuserid(NULL);
+		if(name) {
+			CurrentUser= estrdup(0, name);
+		}
+	}
+#endif
+#endif
 	CurrentHost=defaulthost;
 	CurrentPassword=NULL;
 	CurrentDB[0]='\0';

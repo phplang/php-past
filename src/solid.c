@@ -65,6 +65,7 @@ typedef struct SolidResultList {
 	SolidResult            *result;
 	int                    index;
 	struct SolidResultList *next;
+	int conn_index;
 } SolidResultList;
 
 typedef struct SolidConnList {
@@ -97,7 +98,7 @@ void php_init_solid(void) {
  ***************************************************/
 
 #ifdef HAVE_LIBSOLID
-int solid_add_result(SolidResult *result) {
+int solid_add_result(SolidResult *result, int conn_in) {
 	SolidResultList *new;
 
 	new = solid_result_top;
@@ -121,6 +122,7 @@ int solid_add_result(SolidResult *result) {
 
 	new->result = result;
 	new->index  = solid_ind++;
+	new->conn_index = conn_in;
 	new->next   = NULL;
 	return solid_ind-1;
 }
@@ -169,20 +171,13 @@ int solid_add_conn(HDBC conn) {
 	new = solid_conn_top;
 	if (!new) {
 		new = emalloc(0,sizeof(SolidConnList));
-		if (new == NULL)
-			Error("Out of memory");
 		solid_conn_top = new;
 	} 
 	else {
 		while (new->next) 
 			new=new->next;
 		new->next = emalloc(0,sizeof(SolidConnList));
-		if (new->next == NULL) {
-			Error("Out of memory");
-		} 
-		else {
-			new = new->next;
-		}
+		new = new->next;
 	}
 
 	new->conn  = conn;
@@ -243,8 +238,10 @@ void Solid_closeAll(void) {
 	cnew = solid_conn_top;
 	while (cnew) {
 		cnext = cnew->next;
-		SQLDisconnect(cnew->conn);
-		SQLFreeConnect(cnew->conn);
+		if(cnew->conn) {
+			SQLDisconnect(cnew->conn);
+			SQLFreeConnect(cnew->conn);
+		}
 		cnew=cnext;
 	}
 	solid_conn_top = NULL;
@@ -337,17 +334,16 @@ void Solid_exec(void) {
 				SQLColAttributes(result->stmt, i+1, SQL_COLUMN_DISPLAY_SIZE,
 					NULL, 0, NULL, &displaysize);
 				result->values[i].value = (char *)emalloc(0, displaysize + 1);
-				if (result->values[i].value == NULL) {
-					Error("Out of memory");
-		            Push("0", LNUMBER);
-					return;
-				}
+				if (result->values[i].value != NULL)
+				/* Should we use SQL_C_BINARY here instead? */
 				SQLBindCol(result->stmt, i+1, SQL_C_CHAR, 
 					result->values[i].value, displaysize+1,
 					&result->values[i].vallen);
-
+				/* else, we try to do SQLGetData in
+				   Solid_result() in case
+				   this is a BLOB field - sopwith */
 			}
-		    j = solid_add_result(result);
+		    j = solid_add_result(result,conn);
 		}
 	}
 
@@ -498,9 +494,49 @@ void Solid_result(void) {
 
 	if (result->values[field_ind].vallen == SQL_NULL_DATA)
 		Push("", STRING); /* FIXME: better value for null ? */
-	else
-		Push(AddSlashes(result->values[field_ind].value,0), STRING);
-
+	else {
+		if(result->values[field_ind].value != NULL)
+			Push(AddSlashes(result->values[field_ind].value,0), STRING);
+		else {
+			/* All this ugly code here is the fault of
+			   sopwith@redhat.com :) If there
+			   is no value pointer set up where we do
+			   the SQLBindCol, then we know that we
+			   should at least try to get the size of the
+			   field as we go - i.e. for BLOB fields
+			   & etc. */
+			char c, *realval = &c;
+			SDWORD fieldsize = 12345;
+			/* This first SQLGetData is used just to
+			   find out the exact size of the field - 
+			   that is why we only get one char
+			   (it doesn't seem to want to get 0 chars) */
+			if(SQLGetData(result->stmt, field_ind + 1, SQL_C_CHAR,
+				realval, 1, &fieldsize) == SQL_ERROR) {
+				char msgbuf[512];
+				UCHAR szSqlState;
+				SDWORD pfNativeError;
+				SWORD foo;
+				SQLError(henv, solid_conn_top->conn,
+					result->stmt, &szSqlState,
+					&pfNativeError, msgbuf, 511,
+					&foo);
+				Error("Initial SQLGetData failed");
+				Error(msgbuf);
+			} else {
+				realval = emalloc(0, fieldsize + 2);
+				if(realval == NULL
+					|| SQLGetData(result->stmt,
+						field_ind + 1, SQL_C_CHAR,
+                                               realval, fieldsize + 1,
+						&fieldsize) == SQL_ERROR) {
+					Error("Out of memory");
+					Push("<Out of memory>", STRING);
+				} else
+					Push(AddSlashes(realval, 0), STRING);
+			}
+		}
+	}
 	return;
 
 #else
@@ -617,6 +653,7 @@ void Solid_close(void) {
 	Stack *s;
 	int   conn_ind;
 	HDBC  conn;
+	SolidResultList *lnew, *lnext;
 
 	s = Pop();
 	if (!s) {
@@ -629,7 +666,23 @@ void Solid_close(void) {
 		conn_ind = 0;
 
 	conn = solid_get_conn(conn_ind);
-	if(conn) solid_del_conn(conn);
+	if(conn) {
+		/* This next bit of code is needed to make sure that we delete any
+		 * result pointers associated with the connection we are about to
+		 * close.  If we don't do this, the Solid client library will SEGV
+		 * on us if we later let SolidCloseAll() attempt to free these
+		 * result pointers by calling SQLFreeStmt().  I still think this
+		 * is a problem that should be fixed on the Solid side, but this should
+		 * suffice for now.
+		 */
+		lnew = solid_result_top; 
+		while(lnew) {
+			lnext = lnew->next;
+			if(lnew->conn_index == conn_ind) del_solid_result(lnew->index);
+			lnew = lnext;
+		}
+		solid_del_conn(conn);
+	}
 #else
 	Pop();
 	Error("No Solid support");

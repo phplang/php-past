@@ -19,12 +19,13 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: exec.c,v 1.17 1997/04/20 12:17:24 rasmus Exp $ */
+/* $Id: exec.c,v 1.22 1997/05/17 13:32:25 rasmus Exp $ */
 #include "php.h"
 #include "parse.h"
 #include <ctype.h>
 #if APACHE
 #include "http_protocol.h"
+#include "http_config.h"
 #endif
 
 /*
@@ -42,10 +43,10 @@
 void Exec(char *name, char *retname, int type) {
 	FILE *fp;
 	Stack *s;
-	char buf[4096];
+	char buf[EXEC_INPUT_BUF];
 	int t,l,ret;
 #if PHP_SAFE_MODE
-	char *b, *c;
+	char *b, *c, *d;
 #endif
 
 	s = Pop();
@@ -54,6 +55,7 @@ void Exec(char *name, char *retname, int type) {
 		return;
 	}	
 #if PHP_SAFE_MODE
+	l = strlen(s->strval)+strlen(PHP_SAFE_MODE_EXEC_DIR)+2;
 	c = strchr(s->strval,' ');
 	if(c) *c='\0';
 	if(strstr(s->strval,"..")) {
@@ -62,19 +64,27 @@ void Exec(char *name, char *retname, int type) {
 		return;
 	}
 	b = strrchr(s->strval,'/');
-	strncpy(buf,PHP_SAFE_MODE_EXEC_DIR,sizeof(buf));
+	d = emalloc(0,l);
+	strncpy(d,PHP_SAFE_MODE_EXEC_DIR,l-1);
 	if(b) {
-		strncat(buf,b,sizeof(buf));
-		buf[sizeof(buf)-1]='\0';  /* watch out for overflows */
+		strncat(d,b,l-1);
+		d[l-1]='\0';  /* watch out for overflows */
 	} else {
-		strcat(buf,"/");
-		strncat(buf,s->strval,sizeof(buf));
-		buf[sizeof(buf)-1]='\0';  /* watch out for overflows */
+		strcat(d,"/");
+		strncat(d,s->strval,l-1);
+		d[l-1]='\0';  /* watch out for overflows */
 	}
-	if(c) *c=' ';
-	fp = popen(buf,"r");
+	if(c) {
+		*c=' ';
+		strncat(d,c,l-1);
+		d[l-1]='\0';
+	}
+#if DEBUG
+	Debug("Executing [%s]\n",d);
+#endif
+	fp = popen(d,"r");
 	if(!fp) {
-		Error("Unable to fork [%s]",buf);
+		Error("Unable to fork [%s]",d);
 		Push("", STRING);
 		return;
 	}
@@ -91,9 +101,19 @@ void Exec(char *name, char *retname, int type) {
 		php_header(0,NULL);
 	}		
 	if(type != 3) {
-		while(fgets(buf,4095,fp)) {
-			if(type==1)
+		while(fgets(buf,EXEC_INPUT_BUF-1,fp)) {
+			if(type==1) {
 			    PUTS(buf);
+#if APACHE
+#if MODULE_MAGIC_NUMBER > 19970110
+				rflush(php_rqst);
+#else
+				bflush(php_rqst->connection->client);
+#endif
+#else
+				fflush(stdout);
+#endif
+			}
 			else if(type==2) {
 				l = strlen(buf);
 				t = l;

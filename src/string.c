@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: string.c,v 1.24 1997/04/15 16:12:42 cvswrite Exp $ */
+/* $Id: string.c,v 1.25 1997/05/09 23:58:16 rasmus Exp $ */
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
@@ -322,7 +322,9 @@ char *php_urlencode(char *s) {
 	str = emalloc(1,3 * strlen(s) + 1); 
     for(x=0,y=0; s[x]; x++,y++) {
 		str[y] = s[x];
-		if((str[y] < '0' && str[y]!='-' && str[y]!='.') ||
+		if(str[y]==' ') {
+			str[y]='+';
+		} else if((str[y] < '0' && str[y]!='-' && str[y]!='.') ||
 		   (str[y] < 'A' && str[y] >'9') ||
 		   (str[y] > 'Z' && str[y] <'a' && str[y]!='_') ||
 		   (str[y] > 'z')) {

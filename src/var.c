@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: var.c,v 1.76 1997/04/23 02:50:28 rasmus Exp $ */
+/* $Id: var.c,v 1.83 1997/06/07 23:19:58 rasmus Exp $ */
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -71,15 +71,15 @@ void php_init_symbol_tree(void) {
  *
  */
 void SetVar(char *name, int mode, int inc) {
-	VarTree *t, *ot=NULL, *tt, *ptt, *ftt, *var, *o, *rt;
+	VarTree *t, *ot=NULL, *tt, *ptt, *ftt, *ntt, *var, *o, *rt;
 	VarTree a, b;
 	Stack *st;
 	char *s, *buf=NULL;
 	int done=0;
 	int i=0, oi=0;
-	int count=0;
+	int count=0, in_num=0;
 	int whole_array=0, array_cnt=0;
-	char temp[64];
+	char temp[256];
 	int data_len=0;
 	VarTree *new_name=NULL;
 
@@ -216,6 +216,7 @@ void SetVar(char *name, int mode, int inc) {
 							}
 						}
 						t->type = b.type;
+						if(t->deleted) t->count++;
 						t->deleted = 0; 
 						if (var && whole_array && var->iname) {
 							if(t->iname) {
@@ -585,6 +586,7 @@ void SetVar(char *name, int mode, int inc) {
 					tt=t;
 					rt=t;
 					ftt=t;
+					ntt=NULL;
 					count=0;
 					while(tt) {
 						if(!tt->deleted) {
@@ -617,25 +619,32 @@ void SetVar(char *name, int mode, int inc) {
 					}
 
 					if(!tt) {
-						sprintf(temp,"%d",count);
+						if(ftt) {
+							in_num = atoi(ftt->iname);
+						} else {
+							in_num=count;
+						}
+						sprintf(temp,"%d",in_num);
 						tt = GetVar(name,temp,0);
 						while(tt) {
-							sprintf(temp,"%d",++count);
+							sprintf(temp,"%d",++in_num);
 							tt = GetVar(name,temp,0);
 						}
-						if(!ftt->next) {
+						if(ftt==t && t->deleted) {
+							tt=t;
+						} else if(!ftt->next) {
 							tt = emalloc(0,sizeof(VarTree));
+							ntt = tt;
 							tt->name = estrdup(0,name);
 							tt->next=NULL;
 							tt->left = t->left;
 							tt->right = t->right;
 						} else {
-							if(ftt==t && t->deleted) tt=t;
-							else tt = ftt->next;
+							tt = ftt->next;
 						}
 						tt->intval = b.intval;
 						tt->douval = b.douval;
-						if(!ftt->next) {
+						if(ntt) {
 							tt->strval = estrdup(0,b.strval);
 							tt->allocated = b.allocated;
 						} else {
@@ -650,19 +659,20 @@ void SetVar(char *name, int mode, int inc) {
 						tt->flag = (inc==-2)?0:inc;
 						tt->scope = mode&60;	
 						tt->deleted=0;
-						if(!ftt->next) {
-							if(var && whole_array && var->next && strcmp(t->iname,"0") && array_cnt) {
-								tt->iname = estrdup(0,var->iname);
-							} else {
-								sprintf(temp,"%d",count);
-								tt->iname=estrdup(0,temp);
-							}
+						if(var && whole_array && var->next && strcmp(t->iname,"0") && array_cnt) {
+							tt->iname = estrdup(0,var->iname);
+						} else {
+							sprintf(temp,"%d",in_num);
+							tt->iname=estrdup(0,temp);
+						}
+						if(ntt) {
 							ptt->next = tt;
 							if(tt!=ptt) tt->prev = ptt;
 							else tt->prev = (VarTree *)-1;
 						}
 						t->count++;
-						tt->count = t->count-1;
+						if(t!=tt)
+							tt->count = t->count-1;
 						t->lastnode = tt;
 					} else {
 						tt=ptt;
@@ -1025,6 +1035,10 @@ VarTree *GetVar(char *name, char *index, int mode) {
 	int i=0, ind=0, frames=0;
 	char o='\0';
 	VarTree *new_name;
+#if APACHE
+	array_header *env_arr;
+	table_entry *tenv;
+#endif
 
 	if(*name==VAR_INIT_CHAR) {
 		new_name = GetVar(name+1,NULL,0);
@@ -1247,6 +1261,40 @@ VarTree *GetVar(char *name, char *index, int mode) {
 		if(sss) *sss=o;
 		return(env);		
 	}
+#if APACHE
+	/* Ok, it could be a request header */
+#if SAFE_MODE
+	if(!strncasecmp(name,"req_authorization")) {
+		Error("The PHP module is running in SAFE MODE.  You may not access $req_authorization in this mode.");
+		return(NULL);
+	}
+#endif
+	if(!strncasecmp(name,"req_",4)) {
+		env_arr = table_elts(php_rqst->headers_in);
+		tenv = (table_entry *)env_arr->elts;
+		for(i = 0; i < env_arr->nelts; ++i) {
+			if(!tenv[i].key) continue;
+			if(!strcasecmp(name+4,tenv[i].key)) {
+				env = emalloc(2,sizeof(VarTree));
+				env->strval = NULL;
+				env->iname = NULL;
+				env->next = NULL;
+				env->prev = (VarTree *)-1;
+				env->left = NULL;
+				env->right = NULL;
+				env->lacc = NULL;
+				env->lastnode = env;
+				env->intval = atol(tenv[i].val);
+				env->douval = atof(tenv[i].val);
+				env->strval = estrdup(2,tenv[i].val);
+				env->allocated = strlen(tenv[i].val) + 1;
+				env->name = estrdup(2,name);
+				env->type = STRING;
+				return(env);		
+			}
+		}
+	}
+#endif
 	return(NULL);
 }
 
@@ -1465,8 +1513,10 @@ void Count(void) {
 	}
 
  	t = s->var;	
-	while(t->prev!=(VarTree *)-1) {
-		t = t->prev;
+	if(t) {
+		while(t->prev!=(VarTree *)-1) {
+			t = t->prev;
+		}
 	}
 	if(t && t->allocated) sprintf(temp,"%d",t->count);	
 	else strcpy(temp,"0");
@@ -1792,7 +1842,8 @@ void PopStackFrame(void) {
 	if(fs_top) {
 		old = fs_top;
 		fs_top = fs_top->next;
-		if(fs_top == NULL || (fs_top && fs_top->frame==NULL)) var_top = var_main;
+/* ??	if(fs_top == NULL || (fs_top && fs_top->frame==NULL)) var_top = var_main; ?? */
+		if(fs_top == NULL) var_top = var_main;
 		else var_top = fs_top->frame;
 	}
 }
@@ -1924,7 +1975,9 @@ void copyarray(VarTree *dvar, VarTree *svar, VarTree *dtop, int renum) {
  */
 void deletearray(VarTree *old) {
 	VarTree *o;
-
+#if DEBUG
+	Debug("deletearray called for %s\n",old->name);
+#endif
 	if(!old) return;
 	o = old->next;
 	while(o) {

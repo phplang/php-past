@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: php.h,v 1.160 1997/04/22 14:46:20 rasmus Exp $ */
+/* $Id: php.h,v 1.171 1997/06/16 12:57:41 rasmus Exp $ */
 #include <stdio.h>
 #include <time.h>
 #include <sys/types.h>
@@ -157,6 +157,15 @@ extern request_rec *php_rqst;
 #define SQLLOGTMP "/tmp"
 
 /*
+ * NOLOGSUCCESSIVE should be set to 1 if you want multiple successive hits
+ * from the same remote host to be ignored (e.g. someone repeatedly 
+ * reloading the same page).  If undefined or set to 0, successive hits 
+ * from the same remote host will be logged (and counted on the page counter).
+ * The default is set to 0.
+ */
+#define NOLOGSUCCESSIVE 0
+
+/*
  * INCLUDEPATH is a colon-separated list of directories where php will
  * look for files in when running include().  The default is to look
  * only in the current directory.
@@ -184,13 +193,20 @@ extern request_rec *php_rqst;
  * The EXEC_DIR is the directory where Exec(), System(), PassThru() and 
  * Popen() calls are allowed to execute binaries from in SAFE MODE.
  */
-/* #define PHP_SAFE_MODE 1 */
-/* #define PHP_SAFE_MODE_EXEC_DIR "/usr/local/bin" */
+/*
+#define PHP_SAFE_MODE 1
+#define PHP_SAFE_MODE_EXEC_DIR "/usr/local/bin"
+*/
 
 /*
  * Max size of a single line of input in the HTML files
  */
 #define LINEBUFSIZE	4096
+
+/*
+ * Input buffer size for Exec() commands
+ */
+#define EXEC_INPUT_BUF 4096
 
 /*
  * ECHO_BUF sets the size of the echo overflow buffer
@@ -202,7 +218,9 @@ extern request_rec *php_rqst;
  * DEFAULT_MAX_DATA_SPACE
  *
  * Set this to the maximum size a memory sub-pool is allowed to grow
- * to.  (number of kilo bytes)
+ * to.  (number of kilo bytes)  
+ * In the Apache module version, this can be overwritten by the
+ * phpMaxDataSpace Apache configuration directive.
  */
 #define DEFAULT_MAX_DATA_SPACE 8192
 
@@ -245,9 +263,28 @@ extern request_rec *php_rqst;
  */
 /* #define PHP_SNMP_SUPPORT 1 */
 
+/*
+ * PHP_PG_LOWER
+ *
+ * Define the PHP_PG_LOWER variable if you want to force PHP to lower-case
+ * Postgres field names.
+ *
+ */
+/* #define PHP_PG_LOWER 1 */
+
+/*
+ * PHP_MYSQL_GETLOGIN
+ *
+ * If you want the default mysql user to be fetched via the getlogin()
+ * call and then if that fails by cuserid(), then uncomment the following
+ * line.  Otherwise the default mysql user will be set to the current user
+ * that the process is running as.
+ */
+/* #define PHP_MYSQL_GETLOGIN 1 */
+
 /*-- Do not touch anything after this point unless you are very brave --*/
 
-#define PHP_VERSION "2.0b11"
+#define PHP_VERSION "2.0b12"
 
 #define VAR_INIT_CHAR	'$'
 
@@ -540,6 +577,7 @@ void PushCounters(void);
 void PopCounters(void);
 void SetHeaderCalled(void);
 long GetSeekPos(void);
+void PHPFlush(void);
 
 /* date.c */
 void Date(int, int);
@@ -865,7 +903,7 @@ void Virtual(void);
 #endif
 void ReadFile(void);
 void FileUmask(int);
-int CheckUid(char *);
+int CheckUid(char *, int);
 
 /* crypt.c */
 void Crypt(int);
@@ -955,6 +993,7 @@ void GetLastAccess(void);
 void GetStartLogging(void);
 void GetLastRef(void);
 void GetLogFile(void);
+void LogAs(void);
 void GetLastMod(void);
 void GetTotal(void);
 void GetToday(void);
@@ -1087,6 +1126,7 @@ void MYsqlDropDB(void);
 void MYsqlCreateDB(void);
 void MYsqlInsertId(void);
 void MYsqlAffectedRows(void);
+void mysqlSetCurrent();
 
 /* solid.c */
 void Solid_exec(void);

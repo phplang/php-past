@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: echo.c,v 1.39 1997/04/15 16:12:39 cvswrite Exp $ */
+/* $Id: echo.c,v 1.40 1997/06/12 04:46:26 rasmus Exp $ */
 #include <stdlib.h>
 #include "php.h"
 #include "parse.h"
@@ -388,7 +388,7 @@ char *AddSlashes(char *string, int freeit) {
 	}
 #if HAVE_LIBPQ
 	if(strchr(string,'\"')) {
-		temp = _RegReplace("'","\\\"",string);
+		temp = _RegReplace("\"","\\\"",string);
 		if(freeit) {
 			if(temp!=string) string=temp;
 		} else {

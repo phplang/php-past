@@ -58,6 +58,15 @@ int send_parsed_php(request_rec *r) {
 	/* grab configuration settings */
 	conf = (php_module_conf *)get_module_config(r->per_dir_config,&php_module);
 
+	/* 
+	 * If PHP parser engine has been turned off with the phpEngine off directive,
+	 * then decline to handle this request
+	 */
+	if(!conf->engine) {
+		r->content_type = "text/html";		
+		return DECLINED;
+	}
+
 	/* Open the file */	
 	if((fd=popenf(r->pool, r->filename, O_RDONLY, 0))==-1) {
 		log_reason("file permissions deny server access", r->filename, r);
@@ -105,6 +114,7 @@ void *php_create_conf(pool *p, char *dummy) {
 	new->XBitHack=DEFAULT_PHP_XBITHACK;
 	new->IncludePath=NULL;
 	new->Debug = 0;
+	new->engine = 1;
 	return new;
 }
 
@@ -127,6 +137,9 @@ char *phpflaghandler(cmd_parms *cmd, php_module_conf *conf, int val) {
 		break;
 	case 3:
 		conf->Debug = val;
+		break;
+	case 4:
+		conf->engine = val;
 		break;
 	}			
 	return NULL;
@@ -182,19 +195,20 @@ handler_rec php_handlers[] = {
 
 
 command_rec php_commands[] = {
-	{ "phpShowInfo",phpflaghandler,(void *)0,OR_FILEINFO,FLAG,"on|off" },
-	{ "phpLogging",phpflaghandler,(void *)1,OR_FILEINFO,FLAG,"on|off" },
-	{ "phpDebug",phpflaghandler,(void *)3,OR_FILEINFO,FLAG,"on|off" },
-	{ "phpUploadTmpDir",phptake1handler,(void *)0,OR_FILEINFO,TAKE1,"directory" },
-	{ "phpDbmLogDir",phptake1handler,(void *)1,OR_FILEINFO,TAKE1,"directory" },
-	{ "phpMsqlLogDB",phptake1handler,(void *)2,OR_FILEINFO,TAKE1,"database" },
-	{ "phpSQLLogDB",phptake1handler,(void *)2,OR_FILEINFO,TAKE1,"database" },
-	{ "phpAccessDir",phptake1handler,(void *)3,OR_FILEINFO,TAKE1,"directory" },
-	{ "phpMaxDataSpace",phptake1handler,(void *)4,OR_FILEINFO,TAKE1,"number of kilobytes" },
-	{ "phpMsqlLogHost",phptake1handler,(void *)5,OR_FILEINFO,TAKE1,"hostname" },
-	{ "phpSQLLogHost",phptake1handler,(void *)5,OR_FILEINFO,TAKE1,"hostname" },
-	{ "phpXBitHack", phpflaghandler, (void *)2, OR_FILEINFO, FLAG, "on|off" },
-	{ "phpIncludePath",phptake1handler,(void *)6,OR_FILEINFO,TAKE1,"colon-separated path" },
+	{ "phpShowInfo",phpflaghandler,(void *)0,OR_OPTIONS,FLAG,"on|off" },
+	{ "phpLogging",phpflaghandler,(void *)1,OR_OPTIONS,FLAG,"on|off" },
+	{ "phpDebug",phpflaghandler,(void *)3,OR_OPTIONS,FLAG,"on|off" },
+	{ "phpUploadTmpDir",phptake1handler,(void *)0,OR_OPTIONS,TAKE1,"directory" },
+	{ "phpDbmLogDir",phptake1handler,(void *)1,OR_OPTIONS,TAKE1,"directory" },
+	{ "phpMsqlLogDB",phptake1handler,(void *)2,OR_OPTIONS,TAKE1,"database" },
+	{ "phpSQLLogDB",phptake1handler,(void *)2,OR_OPTIONS,TAKE1,"database" },
+	{ "phpAccessDir",phptake1handler,(void *)3,OR_OPTIONS,TAKE1,"directory" },
+	{ "phpMaxDataSpace",phptake1handler,(void *)4,OR_OPTIONS,TAKE1,"number of kilobytes" },
+	{ "phpMsqlLogHost",phptake1handler,(void *)5,OR_OPTIONS,TAKE1,"hostname" },
+	{ "phpSQLLogHost",phptake1handler,(void *)5,OR_OPTIONS,TAKE1,"hostname" },
+	{ "phpXBitHack", phpflaghandler, (void *)2, OR_OPTIONS, FLAG, "on|off" },
+	{ "phpIncludePath",phptake1handler,(void *)6,OR_OPTIONS,TAKE1,"colon-separated path" },
+	{ "phpEngine",phpflaghandler,(void *)4,RSRC_CONF,FLAG,"on|off" },
 	{ NULL }
 };
 
