@@ -1,0 +1,23 @@
+#!/bin/sh
+rm -f phpfi.in phpfi.out phpfi.test phpfi.desc
+CMD=`awk -f testphp.awk $1`
+eval $CMD
+cat phpfi.test | tr -d '\015' | awk '{ if(length($0)) print $0 }' > a.tmp
+awk '{ if(length($0)) print $0 }' phpfi.out >b.tmp
+#rm -f phpfi.test phpfi.out
+diff -w b.tmp a.tmp >/dev/null
+ret=$?
+if [ -f phpfi.desc ]; then
+	cat phpfi.desc
+	if [ "$ret" = "1" ]; then
+		echo FAIL
+	else
+		echo PASS
+	fi
+else
+	if [ "$ret" = "1" ]; then
+		echo "$1 ... FAIL"
+	else
+		echo "$1 ... PASS"
+	fi
+fi

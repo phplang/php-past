@@ -1,0 +1,237 @@
+<html><head><title>Access Log Viewer</title></head>
+<body>
+<center><h1>Access Log Viewer</h1></center>
+<?
+if(!$argc && !$ShowPage && !$ShowLastAcc && !$ShowTotal && !$ShowToday && !$ShowHost && !$ShowEmail && !$ShowRef && !$ShowBrowser);
+	$ShowPage="on";
+	$ShowLastAcc="on";
+	$ShowTotal="on";
+	$ShowToday="on";
+	$ShowHost="on";
+endif;
+if($argc && !$ShowLastAcc && !$ShowHost && !$ShowEmail && !$ShowRef && !$ShowBrowser);
+	$ShowLastAcc="on";
+	$ShowHost="on";
+	$ShowBrowser="on";
+endif;
+$logdir = getlogdir();
+$uid = getmyuid();
+$logdir = $logdir+"/$uid";
+$i=0;
+opendir($logdir);
+$entry=readdir();
+while($entry);
+	$dirs[$i] = $entry;
+	$i++;
+	$entry=readdir();
+endwhile;
+closedir();
+$first=0;
+$ii=0;
+$entry = $dirs[$ii];
+while ($entry);
+	if (reg_match(".*\.log$",$entry) || reg_match(".*\.log.dir$",$entry) || reg_match(".*\.log.db$",$entry));
+		if (reg_match(".*\.log.dir$",$entry));
+			$logfile = $logdir+"/$entry" - strrchr($entry,".dir");
+		elseif (reg_match(".*\.log.db$",$entry));
+			$logfile = $logdir+"/$entry" - strrchr($entry,".db");
+		else;
+			$logfile = $logdir+"/$entry";
+		endif;
+		$err = dbmopen($logfile,"r");
+		$i=0;
+		$last = dbmfetch($logfile,"last");
+		$filename = strtok($last," ");
+		$total = strtok(" ");
+		if($total);
+		if ($filename==$argv[0]);
+			$jj=0;
+			$key[$jj] = dbmfirstkey($logfile);
+			while($key[$jj]);
+				$jj++;
+				$key[$jj] = dbmnextkey($logfile,$key[$jj-1]);
+			endwhile;
+			$count = $jj;
+			$i=0;
+			sort($key[$i]);
+			while ($i<$count);
+				if ($i==0)>
+					<center><table border=3 cellpadding=3 cellspacing=3>
+					<caption>
+					<?if (reg_match(".*\.phtml$",$filename))>
+						<a href="<?echo $filename>"><?echo $filename></a>
+					<?else>
+						<?if (!reg_match("^/.*",$filename))>
+							<a href="<?echo "$SCRIPT_NAME/"; echo $filename>"><?echo $filename></a>
+						<?else>
+							<a href="<?echo $SCRIPT_NAME; echo $filename>"><?echo $filename></a>
+						<?endif>
+					<?endif>
+					</caption>
+					<tr>
+					<?if ($ShowLastAcc)>
+						<th>Date/Time</th>
+					<?endif;
+					if ($ShowHost)>
+						<th>Host</th>
+					<?endif;
+					if ($ShowEmail)>
+						<th>E-Mail</th>
+					<?endif;
+					if ($ShowRef)>
+						<th>RefDoc</th>
+					<?endif;
+					if ($ShowBrowser)>
+						<th>Browser</th>
+					<?endif>
+					</tr>
+				<?endif;
+				if ($key[$i] != "last" && $key[$i] != "first" && $key[$i]>0);
+					if ($argv[1]=="all" || $argv[1]=="today" && date("z y",$key[$i])==date("z y"))>
+						<tr>
+						<?if ($ShowLastAcc)>
+							<td align="center"><?echo date("D M d/y H:i:s",$key[$i])></td>
+						<?endif;
+						$temp = strtok(dbmfetch($logfile,$key[$i]),27);
+						if ($ShowHost)>
+							<td><?echo $temp></td>
+						<?endif;
+						$temp = strtok(27);
+						if ($ShowEmail)>
+							<td>
+							<a href="mailto:<?echo $temp>"><?echo $temp></a>
+							</td>
+						<?endif;
+						$temp = strtok(27);
+						if ($ShowRef)>
+							<td>
+							<a href="<?echo $temp>"><?echo $temp></a>
+							</td>
+						<?endif;
+						$temp = strtok(27);
+						if ($ShowBrowser)>
+							<td><?echo $temp></td>
+						<?endif>
+						</tr>
+					<?endif;
+				endif;
+				$i++;
+			endwhile>
+			</table></center>
+			<?dbmclose($logfile);
+		elseif (!$argc);
+			dbmclose($logfile);
+			if ($first==0)>
+				<center><table border=2 cellspacing=3 cellpadding=3>
+				<tr>
+				<?if ($ShowPage)>
+					<th>Page</th>
+				<?endif;
+				if ($ShowLastAcc)>
+					<th>Last Access</th>
+				<?endif;
+				if ($ShowTotal)>
+					<th>Total</th>
+				<?endif;
+				if ($ShowToday)>
+					<th>Today</th>
+				<?endif;
+				if ($ShowHost)>
+					<th>Host</th>
+				<?endif;
+				if ($ShowEmail)>
+					<th>E-Mail</th>
+				<?endif;
+				if ($ShowRef)>
+					<th>RefDoc</th>
+				<?endif;
+				if ($ShowBrowser)>
+					<th>Browser</th>
+				<?endif>
+				</tr>
+				<?$first=1;
+			endif>
+			<tr>
+			<?if ($ShowPage)>
+				<td align="center">
+				<?if (reg_match(".*\.phtml$",$filename))>
+					<a href="<?echo $filename>"><?echo $filename></a>
+				<?else>
+					<?if (!reg_match("^/.*",$filename))>
+						<a href="<?echo "$SCRIPT_NAME/"; echo $filename>"><?echo $filename></a>
+					<?else>
+						<a href="<?echo $SCRIPT_NAME; echo $filename>"><?echo $filename></a>
+					<?endif>
+				<?endif>
+				</td>
+			<?endif;
+			$temp = strtok($last," ");
+			$temp = strtok(" ");
+			$tod = date("z y",$temp);
+			if ($ShowLastAcc)>
+				<td align="center"><?echo date("D M d/y H:i:s",$temp)></td>
+			<?endif;
+			$temp = strtok(" ");
+			if ($ShowTotal)>
+				<td align="center"><a href="<?echo $PHP_SELF>?<?echo $filename>+all<?if($PASSWORD); echo "+PASSWORD=$PASSWORD"; endif>"><?echo strval($temp)></a></td>
+			<?endif;
+			$temp = strtok(" ");
+			if ($ShowToday);
+				if ($tod == date("z y"))>
+					<td align="center"><a href="<?echo $PHP_SELF>?<?echo $filename>+today<?if($PASSWORD); echo "+PASSWORD=$PASSWORD"; endif>"><?echo strval($temp)></a></td>
+				<?else>
+					<td align="center">0</td>
+				<?endif;
+			endif;
+			$temp = strtok(27);
+			if ($ShowHost)>
+				<td><?echo $temp></td>
+			<?endif;
+			$temp = strtok(27);
+			if ($ShowEmail)>
+				<td>
+				<a href="mailto:<?echo $temp>"><?echo $temp></a>
+				</td>
+			<?endif;
+			$temp = strtok(27);
+			if ($ShowRef)>
+				<td>
+				<a href="<?echo $temp>"><?echo $temp></a></td>
+			<?endif;
+			$temp = strtok(27);
+			if ($ShowBrowser)>
+				<td><?echo $temp></td>
+			<?endif>
+			</tr>
+		<?endif;
+		endif;
+	endif;
+	$ii++;
+	$entry = $dirs[$ii];
+endwhile;
+if ($first==1)>
+	</table></center>
+<?endif>
+<center><form action="<?echo $PHP_SELF><?if($QUERY_STRING)>?<?echo $QUERY_STRING><?endif>" method="POST">
+<?if ($argc)>
+<input type="checkbox" name="ShowLastAcc" <?if ($ShowLastAcc)>CHECKED<?endif>>Date
+<input type="checkbox" name="ShowHost" <?if ($ShowHost)>CHECKED<?endif>>Host
+<input type="checkbox" name="ShowEmail" <?if ($ShowEmail)>CHECKED<?endif>>E-Mail
+<input type="checkbox" name="ShowRef" <?if ($ShowRef)>CHECKED<?endif>>RefDoc
+<input type="checkbox" name="ShowBrowser" <?if ($ShowBrowser)>CHECKED<?endif>>Browser<br>
+<input type="hidden" name="PASSWORD" value="<?echo $PASSWORD>">
+<input type="submit" value="Redisplay">
+<?else>
+<input type="checkbox" name="ShowPage" <?if ($ShowPage)>CHECKED<?endif>>Page
+<input type="checkbox" name="ShowLastAcc" <?if ($ShowLastAcc)>CHECKED<?endif>>Last Access
+<input type="checkbox" name="ShowTotal" <?if ($ShowTotal)>CHECKED<?endif>>Total
+<input type="checkbox" name="ShowToday" <?if ($ShowToday)>CHECKED<?endif>>Today<br>
+<input type="checkbox" name="ShowHost" <?if ($ShowHost)>CHECKED<?endif>>Host
+<input type="checkbox" name="ShowEmail" <?if ($ShowEmail)>CHECKED<?endif>>E-Mail
+<input type="checkbox" name="ShowRef" <?if ($ShowRef)>CHECKED<?endif>>RefDoc
+<input type="checkbox" name="ShowBrowser" <?if ($ShowBrowser)>CHECKED<?endif>>Browser<br>
+<input type="hidden" name="PASSWORD" value="<?echo $PASSWORD>">
+<input type="submit" value="Redisplay">
+</form></center>
+</body>
+</html>

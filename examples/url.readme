@@ -1,0 +1,68 @@
+#
+# To install this example, create a database "url_mgr" is the default,
+# but you may edit this name at the top of each of the 3 url_*.html 
+# files.  Then load this file into msql with:
+#
+# msql url_mgr <url.readme
+#
+# Then copy these url_*.html files to a www directory somewhere and
+# load up http://your.machine.domain/cgi-bin/php.cgi/path/url_main.html
+#
+# Note that this example is known not to work with NCSA httpd1.5b2
+# due to some obscure bug in the httpd code.  It appears to work
+# fine with NCSA httpd1.5b6
+#
+# mSQL Dump  (requires mSQL-1.0.6 or better)
+#
+# Host: localhost    Database: rasmus
+#--------------------------------------------------------
+
+
+#
+# Table structure for table 'urls'
+#
+CREATE TABLE urls (
+  url CHAR(128) NOT NULL PRIMARY KEY,
+  category CHAR(32),
+  description CHAR(256),
+  hits_total INT,
+  hits_today INT
+) \g
+
+
+#
+# Dumping data for table 'urls'
+#
+
+INSERT INTO urls VALUES ('http://www.io.org/~rasmus','Home Pages','Rasmus\' home page at io.org',0,0)\g
+INSERT INTO urls VALUES ('http://madhaus.utcs.utoronto.ca/~rasmus','Home Pages','Rasmus\' home page at U of T',0,0)\g
+INSERT INTO urls VALUES ('http://www.yahoo.com','Search Engines','Yahoo\'s Search Engine',0,0)\g
+INSERT INTO urls VALUES ('http://www.w3.org/hypertext/WWW/MarkUp/html3/Contents.html','Specifications','HTML 3.0 Specification',0,0)\g
+INSERT INTO urls VALUES ('http://query1.lycos.cs.cmu.edu/lycos-form.html','Search Engines','Lycos Search Form',0,0)\g
+INSERT INTO urls VALUES ('http://www.daimi.aau.dk/~rorschak/sl/ecfix.html','Sports','European Cup Qualifying Standings',0,0)\g
+INSERT INTO urls VALUES ('http://www.hal.com/~barry/Links/html.html','Web Documentation','Set of links to documentation on advanced HTML features',0,0)\g
+INSERT INTO urls VALUES ('http://www.mecklerweb.com/imall/','Shopping','Big shopping mall with lots of different things',0,0)\g
+INSERT INTO urls VALUES ('http://www.mbp.duke.edu/christensen/sitesG.html','Unix','Solaris Software Resources',0,0)\g
+INSERT INTO urls VALUES ('http://infotique.lm.com/cgi-bin/phpl.cgi?megamain.html','Shopping','Another shopping mall',0,0)\g
+
+#
+# Table structure for table 'categories'
+#
+CREATE TABLE categories (
+  name CHAR(32) NOT NULL PRIMARY KEY,
+  description CHAR(256)
+) \g
+
+
+#
+# Dumping data for table 'categories'
+#
+
+INSERT INTO categories VALUES ('Specifications','Technical specifications')\g
+INSERT INTO categories VALUES ('Search Engines','Good places to go look for things')\g
+INSERT INTO categories VALUES ('Home Pages','Personal Home pages')\g
+INSERT INTO categories VALUES ('Sports','Various sports related links')\g
+INSERT INTO categories VALUES ('Web Documentation','Documentation related to designing web pages')\g
+INSERT INTO categories VALUES ('Shopping','Sites where you can buy things on the net')\g
+INSERT INTO categories VALUES ('Unix','Sites with technical Unix material')\g
+

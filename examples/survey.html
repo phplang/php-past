@@ -1,0 +1,117 @@
+<?
+	$survey_www_dir = "/tmp";      /* Set this to a writable dir on www path */
+	$survey_real_dir = "/opt/www/html/tmp"; /* Set this to the Unix equivalent of the above */
+	$survey_name = "example";      /* Set this to the name of the survey */
+>
+<html><head><title>Example Survey</title></head>
+<body>
+<?if ($argv!="results")>
+	<center><h1>Example Survey</h1></center>
+	This is an example survey which can be used as a template for 
+	a more complete survey script.  It is completely written in the PHP
+	Script language using PHP's GD support to draw the bar chart on the
+	results page.<p>
+
+	What do you think of this survey?
+
+	<form action="<?echo $PHP_SELF>?results" method="POST">
+	<input type="radio" name="survey" value="a"> <b>A.</b> It sucks<br>
+	<input type="radio" name="survey" value="b"> <b>B.</b> It will do<br>
+	<input type="radio" name="survey" value="c" CHECKED> <b>C.</b> The best survey I have ever seen<br>
+	<input type="radio" name="survey" value="d"> <b>D.</b> What survey?<br>
+	<input type="submit" value=" Submit ">
+	</form>
+	<center>
+	<a href="<?echo $PHP_SELF>?results">[See Results]</a>
+	</center>
+	</body></html>
+	<?	
+	/* The following is to clean up old gif files that are lying around. 
+	 * Unfortunately we cannot delete the temporary gif file right after
+	 * creating it and sending the img tag because there is no way to know
+	 * when httpd is done sending it to the client.  So, every time someone
+	 * brings up this survey page we'll scan for old files older than 10 minutes
+	 * and delete them.
+	 */
+	$t = time() - 600;
+	opendir($survey_real_dir);
+	$file = readdir();
+	while($file);
+		if(reg_match("simg.*\.gif$",$file));
+			$full = $survey_real_dir + "/" + $file;
+			if(filemtime($full) < $t);
+				unlink($full);
+			endif;
+		endif;
+		$file = readdir();
+	endwhile;
+	closedir();
+	exit;
+elseif ($argv[1]=="results");
+	/* If there are results coming, record them in a dbm file */
+	$dbm = $survey_real_dir + "/" + $survey_name;
+	if($survey);
+		if(fileinode($dbm)==-1);
+			dbmopen($dbm,"n");
+		else;
+			dbmopen($dbm,"w");
+		endif;
+		dbminsert($dbm,date("U"),$survey+" "+$REMOTE_HOST);
+		dbmclose($dbm);
+	endif;
+	if(fileinode($dbm)==-1);
+		echo "No results yet.  Why don't you start it off?<p>";
+	else>
+		<center><h1>Survey Results</h1></center>	
+		<?/* If there are results in the dbm file, display them graphically */
+		dbmopen($dbm,"r");
+		$key = dbmfirstkey($dbm);
+		$results["a"] = 0;
+		$results["b"] = 0;
+		$results["c"] = 0;
+		$results["d"] = 0;
+		while($key);
+			$res = dbmfetch($dbm,$key);
+			$a = strtok($res," ");
+			$results[$a]++;
+			$key = dbmnextkey($dbm,$key);
+		endwhile;
+		dbmclose($dbm);
+		$xm = 4 * 32;
+		$ym = max($results);
+		$ym = $ym+12;
+		$im = ImageCreate($xm,$ym+12);
+		$black = ImageColorAllocate($im,0, 0, 0);
+		$white = ImageColorAllocate($im,255, 255, 255);
+		$red = ImageColorAllocate($im,255,10,10);
+		$green = ImageColorAllocate($im,10,255,10);
+		$blue = ImageColorAllocate($im,10,10,255);
+		$yellow = ImageColorAllocate($im,255,255,0);
+		/* Now draw the simple bar chart */
+		ImageFilledRectangle($im,0,$ym-$results["a"],$xm/4,$ym,$red);
+		ImageFilledRectangle($im,$xm/4+1,$ym-$results["b"],$xm/2,$ym,$yellow);
+		ImageFilledRectangle($im,$xm/2+1,$ym-$results["c"],3*$xm/4,$ym,$blue);
+		ImageFilledRectangle($im,3*$xm/4+1,$ym-$results["d"],$xm,$ym,$green);
+		ImageString($im,3,$xm/8-6,$ym-$results["a"]-12,$results["a"],$white);
+		ImageString($im,3,$xm/4+$xm/8-6,$ym-$results["b"]-12,$results["b"],$white);
+		ImageString($im,3,$xm/2+$xm/8-6,$ym-$results["c"]-12,$results["c"],$white);
+		ImageString($im,3,3*$xm/4+$xm/8-6,$ym-$results["d"]-12,$results["d"],$white);
+		ImageChar($im,3,$xm/8-1,$ym+1,"A",$white);
+		ImageChar($im,3,$xm/4+$xm/8-1,$ym+1,"B",$white);
+		ImageChar($im,3,$xm/2+$xm/8-1,$ym+1,"C",$white);
+		ImageChar($im,3,3*$xm/4+$xm/8-1,$ym+1,"D",$white);
+		$fn = tempnam($survey_real_dir,"simg");
+		$fn = $fn + ".gif";	
+		ImageColorTransparent($im,$black);
+		ImageInterlace($im,1);
+		ImageGif($im,$fn);
+		$nfn = strrchr($fn,"/");
+		$nfn = $survey_www_dir + $nfn>
+		<center><img src="<?echo $nfn>" width=<?echo $xm> height=<?echo $ym+12>></center>
+		<?ImageDestroy($im);
+	endif>
+	<br>
+	<center>
+	<a href="<?echo $PHP_SELF>">[Survey Question]</a>
+	</center>
+</body></html>

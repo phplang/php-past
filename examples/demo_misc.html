@@ -1,0 +1,73 @@
+<html><head><title>Miscellaneous Functions Demo</title></head>
+<body>
+<center><h1>Miscellaneous Functions Demo</h1></center>
+<dl>
+<dt>Functions demonstrated
+<dd><tt>&lt;?sort($array)&gt;</tt><br>
+<tt>&lt;?include $filename&gt;</tt><br>
+<tt>&lt;?header &quot;header_string&quot;&gt;</tt><br>
+<tt>&lt;?exit&gt;</tt><br>
+<tt>&lt;?count($array)&gt;</tt><br>
+<tt>&lt;?system($command_string)&gt;</tt><br>
+<tt>&lt;?exec($command_string)&gt;</tt><br>
+<tt>&lt;?crypt($string,$salt)&gt;</tt><p>
+</dl>
+The <b>sort()</b> function can be used to sort a PHP array.  eg. 
+<pre>&lt;?
+	$a[0] = 2;
+	$a[1] = 1;
+	$a[2] = 3;
+	sort($a[0]);
+	$i=0;
+	while($i<3);
+		echo &quot;$a[$i]&lt;br&gt;&quot;;
+		$i++;
+	endwhile;
+&gt;</pre><p>
+
+This results in:<br>
+<?
+    $a[0] = 2;
+    $a[1] = 1;
+    $a[2] = 3;
+    sort($a[0]);
+    $i=0;
+    while($i<3);
+        echo "$a[$i]<br>";
+        $i++;
+    endwhile;
+><p>
+The <b>include</b> command can be used to insert other files into the current
+html file.  This is extremely handy for headers and footers which may need
+to be included in hundreds of html files.  By using an include command you then
+only need to modify the header or footer file in one place when it needs to be
+changed.  Since full PHP parsing is done on the included file, you can also
+use the include command to include common PHP scripts you may have written.  Sort
+of like having a primitive shared library of scripts you can call from your HTML 
+file.  The format of the command is: <tt><b>&lt?include "fullpath_filename"&gt;</b></tt>.<p>
+
+The <b>crypt()</b> command will encrypt a string using the standard Unix DES
+encryption method.  Arguments are a string to be encrypted and an optional
+two-character salt string to base the encryption on.  See the Unix man page for
+your crypt function for more information.  If you do not have a crypt function
+on your Unix system, you can use Michael Glad's public domain UFC-Crypt package
+which was developed in Denmark and hence not restricted by US export laws as long 
+as you ftp it from an non-US site.<p>
+
+The <b>header</b> command is used at the top of an html file to send raw HTTP
+headers.  See the 
+<a href="http://www.w3.org/hypertext/WWW/Protocols/HTTP1.0/draft-ietf-http-spec.html">
+http specification</a> for more information on raw http headers.<p>
+
+The <b>exit</b> command can be used to end parsing right away at this tag.<p>
+
+The <b>count()</b> function returns the number of items in an array variable.  If the
+variable is not an array, the return value will be 1.<p>
+
+The <b>system()</b> is just like the C system() command in that it excutes
+the given unix command and output the result.<p>
+
+The <b>exec()</b> function also executes the given unix command, however it does not
+output anything.  It simply returns the last line from the result of the command.<p>
+
+</body></html>

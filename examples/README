@@ -1,0 +1,7 @@
+The demo_* files in this directory are a bit out of date.  They
+still show interesting parts of the PHP/FI script language, but
+they should not be thought of as a complete demonstration of the
+software.  The doc/doc.html file should be used as the
+complete reference manual for this software and in case of
+any discrepancies between things in the demo_* files and
+the doc.html documentation, the doc.html will have authority.

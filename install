@@ -1,0 +1,312 @@
+#!/bin/sh
+#
+# PHP/FI Install Script
+#
+# $Id: install,v 1.14 1996/05/17 16:20:20 rasmus Exp $
+#
+DEF_LOG_DIR=/usr/local/etc/httpd/cgi-data
+DEF_ACC_DIR=/usr/local/etc/httpd/cgi-data
+
+if echo '\c' | grep -s c >/dev/null 2>&1
+then
+	ECHO_N="echo -n"
+	ECHO_C=""
+else
+	ECHO_N="echo"
+	ECHO_C='\c'
+fi
+
+echo
+echo "PHP/FI Installation"
+echo
+echo "If you do not understand any of the following questions,"
+echo "then the default should be safe - simply hit 'Return'."
+echo
+
+$ECHO_N "Do you have mSQL installed on this system? [yN] $ECHO_C"
+read a
+if [ "$a" = "y" ] || [ "$a" = "Y" ]
+then
+$ECHO_N "Top of your mSQL install tree? [/usr/local/Minerva] $ECHO_C"
+HLM=-DHAVE_LIBMSQL=1
+read INST_TOP
+if [ "$INST_TOP." = "." ]
+then
+	INST_TOP=/usr/local/Minerva
+fi
+else
+	INST_TOP=
+fi
+
+$ECHO_N "Do you have Postgres95 installed in this system? [yN] $ECHO_C"
+read a
+if [ "$a" = "y" ] || [ "$a" = "Y" ]
+then
+$ECHO_N "Top of your Postgres95 install tree? [/usr/local/postgres95] $ECHO_C"
+HLP=-DHAVE_LIBPQ=1
+read PGINST_TOP
+if [ "$PGINST_TOP." = "." ]
+then
+	PGINST_TOP=/usr/local/postgres95
+fi
+else
+	PGINST_TOP=
+fi
+
+$ECHO_N "Would you like to compile PHP/FI as an Apache module? [yN] $ECHO_C"
+read a
+if [ "$a" = "y" ] || [ "$a" = "Y" ]
+then
+$ECHO_N "Are you compiling for an Apache 1.1 or later server? [Yn] $ECHO_C"
+read APACHE_API
+if [ "$APACHE_API." = "." ] || [ "$APACHE_API" = "y" ] || [ "$APACHE_API" = "Y" ]
+then
+	APACHE_API=-DAPACHE_NEWAPI=1
+else
+	APACHE_API=
+fi
+$ECHO_N "Apache source directory (which has httpd.h)? [/usr/local/etc/httpd/src] $ECHO_C"
+APACHE=-DAPACHE=1
+PRG=libphp.a
+read APACHE_DIR
+if [ "$APACHE_DIR." = "." ]
+then
+	APACHE_DIR=/usr/local/etc/httpd/src
+fi
+else
+	APACHE=
+	PRG=php.cgi
+fi
+
+if [ "$APACHE." = "." ]
+then
+$ECHO_N "Would you like to compile PHP/FI with FastCGI support? [yN] $ECHO_C"
+read a
+if [ "$a" = "y" ] || [ "$a" = "Y" ]
+then
+$ECHO_N "FastCGI development kit source directory? [/usr/local/etc/httpd/fcgi-devel-kit] $ECHO_C"
+PHPFASTCGI=-DPHPFASTCGI=1
+PRG=php.cgi
+read FCGI_DIR
+if [ "$FCGI_DIR." = "." ]
+then
+	FCGI_DIR=/usr/local/etc/httpd/fcgi-devel-kit
+fi
+else
+	PHPFASTCGI=
+	PRG=php.cgi
+fi
+fi
+
+$ECHO_N "Would you like to include access control support? [Yn] $ECHO_C"
+read a
+if [ "$a." = "." ] || [ "$a" = "y" ] || [ "$a" = "Y" ]
+then
+	ACCESS_CONTROL=-DACCESS_CONTROL
+	echo 
+	echo "You need to choose an access control directory."
+	echo "This directory must be readable and writable by the"
+	echo "user id under which your http server runs."
+	echo
+	$ECHO_N "Access control directory? [$DEF_ACC_DIR] $ECHO_C"
+	read b
+	if [ "$b." = "." ]
+	then
+		b=$DEF_ACC_DIR
+	fi
+	ACCESS_DIR=-DACCESS_DIR=\\\\\"$b\\\\\"
+else
+	ACCESS_CONTROL=
+	ACCESS_DIR=
+fi
+
+$ECHO_N "Would you like to include page logging support? [Yn] $ECHO_C"
+read a
+if [ "$a." = "." ] || [ "$a" = "y" ] || [ "$a" = "Y" ]
+then
+	if [ "$HLM" = "-DHAVE_LIBMSQL=1" ]
+	then
+		$ECHO_N "Would you like to store your log files in dbm or mSQL format? [dm] $ECHO_C"
+		read a
+		if [ "$a" = "d" ] || [ "$a" = "D" ]
+		then	
+			LOGGING=-DLOGGING=1
+			echo 
+			echo "You need to choose a page logging directory."
+			echo "This directory must be readable and writable by the"
+			echo "user id under which your http server runs."
+			echo
+			$ECHO_N "Page logging directory? [$DEF_LOG_DIR] $ECHO_C"
+			read b
+			if [ "$b." = "." ]
+			then
+				b=$DEF_LOG_DIR
+			fi
+			LOG_DIR=-DLOG_DIR=\\\\\"$b\\\\\"
+		else
+			LOGGING=-DMSQLLOGGING=1
+			echo
+			echo "mSQL Logging enabled.  Note that you will need to create a"
+			echo "phpfi database and appropriate tables for each user id for"
+			echo "which logging should be done.  See the documentation doc/doc.html"
+			echo "for details."
+			echo 
+		fi
+	else
+		LOGGING=-DLOGGING=1
+		echo 
+		echo "You need to choose a page logging directory."
+		echo "This directory must be readable and writable by the"
+		echo "user id under which your http server runs."
+		echo
+		$ECHO_N "Page logging directory? [$DEF_LOG_DIR] $ECHO_C"
+		read b
+		if [ "$b." = "." ]
+		then
+			b=$DEF_LOG_DIR
+		fi
+		LOG_DIR=-DLOG_DIR=\\\\\"$b\\\\\"
+	fi
+else
+	LOGGING=
+	LOG_DIR=
+fi
+
+$ECHO_N "Would you like to include file upload support? [Yn] $ECHO_C"
+read a
+if [ "$a." = "." ] || [ "$a" = "y" ] || [ "$a" = "Y" ]
+then
+	FILE_UPLOAD=-DFILE_UPLOAD
+else
+	FILE_UPLOAD=
+fi
+
+$ECHO_N "Additional directories to search for .h files []: $ECHO_C"
+read a
+if [ "$a." = "." ]
+then
+	ADD_INC_DIRS=
+	CFLAGS=-O
+else
+	ADD_INC_DIRS=`echo "$a" | sed 's@  *@ @g; s@^\([^ ]\)@-I\1@; s@ \([^ ]\)@ -I\1@g'`
+	CFLAGS="$ADD_INC_DIRS -O"
+	export CFLAGS
+fi
+
+$ECHO_N "Additional directories to search for library files []: $ECHO_C"
+read a
+if [ "$a." = "." ]
+then
+	ADD_LIB_DIRS=
+else
+	ADD_LIB_DIRS=`echo "$a" | sed 's@  *@ @g; s@^\([^ ]\)@-L\1@; s@ \([^ ]\)@ -L\1@g'`
+	LDFLAGS=$ADD_LIB_DIRS
+	export LDFLAGS
+fi
+
+./configure
+
+mv src/Makefile src/Makefile.$$
+
+echo "$SED_MSQL"
+# mSQL part of sed  command
+if [ "$INST_TOP." = "." ]
+then
+SED_MSQL="      s,@MSQL_INCLUDE@,,
+                s,@LIBMSQL@,,
+                s,@MSQL_DEF@,,
+                s,@MSQL_LIB@,,"
+else
+SED_MSQL="      s,@MSQL_INCLUDE@,-I$INST_TOP/include,
+                s,@LIBMSQL@,-lmsql,
+                s,@MSQL_DEF@,$HLM,
+                s,@MSQL_LIB@,-L$INST_TOP/lib,"
+fi
+
+# Postgres95 part of sed command
+
+if [ "$PGINST_TOP." = "." ]
+then
+SED_PG95="      s,@PQ_INCLUDE@,,
+                s,@LIBPQ@,,
+                s,@PQ_DEF@,,
+                s,@PQ_LIB@,,"
+else
+SED_PG95="      s,@PQ_INCLUDE@,-I$PGINST_TOP/include,
+                s,@LIBPQ@,-lpq,
+                s,@PQ_DEF@,$HLP,
+                s,@PQ_LIB@,-L$PGINST_TOP/lib,"
+fi
+
+# FastCGI substitutions
+if [ "$PHPFASTCGI." = "." ]
+then
+SED_FCGI="      s,@FCGI_INCLUDE@,,
+                s,@LIBFCGI@,,
+                s,@FCGI_LIB@,,
+                s,@FCGI_DEF@,,"
+else
+SED_FCGI="      s,@FCGI_INCLUDE@,-I$FCGI_DIR/include,
+				s,@FCGI_DEF@,$PHPFASTCGI,
+                s,@LIBFCGI@,-lfcgi,
+                s,@FCGI_LIB@,-L$FCGI_DIR/libfcgi,"
+fi
+
+# Apache module section
+
+if [ "$APACHE_DIR." = "." ]
+then
+SED_APACHE="      s,@APACHE_INCLUDE@,,"
+else
+SED_APACHE="      s,@APACHE_INCLUDE@,-I$APACHE_DIR,"
+fi
+
+# sed commmand
+sed "		$SED_MSQL
+		$SED_PG95
+		$SED_APACHE
+		$SED_FCGI
+		s,@HGD@,$HGD,
+		s,@HLNK@,$HLNK,
+		s,@ACCESS_CONTROL@,$ACCESS_CONTROL,
+		s,@ACCESS_DIR@,$ACCESS_DIR,
+		s,@LOGGING@,$LOGGING,
+		s,@LOG_DIR@,$LOG_DIR,
+		s,@FILE_UPLOAD@,$FILE_UPLOAD,
+		s,@APACHE@,$APACHE,
+		s,@APACHE_DIR@,$APACHE_DIR,
+		s,@APACHE_API@,$APACHE_API,
+		s,@PRG@,$PRG,
+" < src/Makefile.$$ > src/Makefile
+rm src/Makefile.$$
+
+sed "s,HAVE_MMAP,PHP_HAVE_MMAP," < config.h >config.$$
+mv config.$$ config.h
+
+if [ -f src/main.o ]
+then
+rm src/*.o 
+fi
+
+if [ -f src/php.cgi ]
+then
+rm src/php.cgi
+fi
+
+if [ -f src/libphp.a ]
+then
+rm src/libphp.a
+fi
+
+echo "If none of -ldbm, -ldb nor -lgdbm were found, you should"
+echo "probably get one of them.  It will work without these, but"
+echo "but performance-wise you will gain a lot by installing"
+echo "gdbm."
+echo ""
+echo "If the above item is ok, you are ready to compile"
+if [ -f src/parse.c ]
+then
+echo "the package.  Type: cd src; make"
+else
+echo "the package.  Type: cd src; make parser; make"
+fi

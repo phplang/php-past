@@ -1,0 +1,6 @@
+The log.html file is the Access Log Viewer.  To install it,
+simply copy the file to a www directory somewhere and load
+it with:
+
+  http://your.machine.domain/cgi-bin/path/log.html
+

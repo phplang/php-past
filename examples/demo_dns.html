@@ -1,0 +1,26 @@
+<html><head><title>DNS Functions Demo</title></head>
+<body>
+<center><h1>DNS Functions Demo</h1></center>
+<dl>
+<dt>Commands demonstrated
+<dd><tt>&lt;?gethostbyname()&gt;</tt><br>
+<tt>&lt;?gethostbyaddr()&gt;</tt><p>
+</dl>
+These functions are used to translate IP addresses into domain
+names and vice versa.  To convert from an IP address to a domain
+name use <b>gethostbyaddr("IP")</b>.  And to convert from a
+domain name to an IP address use <b>gethostbyname("domain.name")</b>.<p>
+
+Example.<p>
+
+Convert the IP address 18.159.0.42 into its domain name.  To do this
+we execute the following command:<br><br>
+<tt>&lt;?echo gethostbyadrr("18.159.0.42")&gt;<tt><br><br>
+The result is: <?echo gethostbyaddr("18.159.0.42")><p>
+
+And to convert from an address like <i>www.yahoo.com</i> to its
+IP address we execute this command:<br><br>
+<tt>&lt;?echo gethostbyname("www.yahoo.com")&gt;<tt><br><br>
+The result is: <?echo gethostbyname("www.yahoo.com")><p>
+
+</body></html>

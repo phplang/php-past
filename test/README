@@ -1,0 +1,35 @@
+PHP/FI Regression Tests
+=======================
+
+Simply type: testmenu
+to run the tests.
+
+You may use the testphp program to write your own regression tests
+or to test your scripts.
+
+The format of the .tst files is quite simple.  There are 5 possible
+sections.  Test, Post, Get, File and Expect.  The Test section 
+contains the description of the test.  The Post section contains any
+post data that the script might need.  The Get section contains any
+Get data.  Note that both the Post and the Get sections need to have
+this data in url-encoded format.  The File section contains the actual
+script and the Expect section is the expected output.  Blank lines are
+ignored in the expected output.
+
+A simple example which takes one argument through the POST method
+and one through the GET and displays these would be:
+
+--TEST--
+Simple GET and POST test                                      ...
+--POST--
+a=Hello
+--GET--
+b=There
+--FILE--
+<?echo "$a $b">
+--EXPECT--
+Content-type: text/html
+Hello There
+
+Note that in order to run the mSQL tests, you need to create a test
+database.  See msql/README.

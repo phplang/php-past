@@ -1,0 +1,7 @@
+--TEST--
+                                                              ...
+--POST--
+--GET--
+--FILE--
+--EXPECT--
+Content-type: text/html

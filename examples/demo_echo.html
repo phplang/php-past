@@ -1,0 +1,52 @@
+<html><head><title>Echo Demo</title></head>
+<body>
+<center><h1>Echo Demo</h1></center>
+<dl>
+<dt>Commands demonstrated
+<dd><tt>&lt;?echo [format_string] expression [, expression ...]&gt;</tt><p>
+</dl>
+The <b>echo()</b> command is used to display results of
+PHP functions or PHP variables.  The format_string is
+optional and if not present, no output formatting will be done.<p>
+
+The simple case of the command is to display a variable.  For example,
+the following would display your browser's identification string:<br><br>
+<tt>&lt;?echo $HTTP_USER_AGENT&gt</tt><br><br>
+
+This looks like this: <?echo $HTTP_USER_AGENT><p>
+
+We can also display multiple variables with one echo statement.  
+For example, <tt>&lt;? echo $HTTP_USER_AGENT, &quot;Yet another variable&quot;
+&gt;</tt>
+<br><br>
+This looks like this: <?echo $HTTP_USER_AGENT, "Yet another variable"><p>
+
+The optional formatting string is especially handy for numerical
+display.  Assume for some reason we wanted to display floating
+point numbers to different levels of precision.  
+
+Note that 10.0 and 3.0 we'll use instead of 10 and 3.  Without the .0's
+the result will be treated as an integer and not a floating
+point value.<p>
+<tt>&lt?echo &quot;%7.2f&quot; 10.0 / 3.0&gt;</tt><br><br>
+
+This looks like this: <?echo "%7.2f" 10.0 / 3.0><p>
+
+The &quot;%.2f&quot; instructs <b>echo</b> to display 3.3333 as floating
+point number with 2 significant digits after the decimal place.<p>
+The &quot;%7f&quot; instructs <b>echo</b> to display 3.3333 in a 
+field that is at least 7 characters wide.<p>
+
+Now we will display 10.0 / 3.0 with:<br><br>
+<tt>&lt?echo &quot;%.9f&quot; 10.0 / 3.0&gt;</tt><br><br>
+
+This looks like this: <?echo "%.9f" 10.0 / 3.0><p>
+
+See your Unix man pages, or any C language manual for the
+formatting arguments for the <i>printf</i> function for a
+complete list of all the formatting parameters available.  The
+<b>echo</b> command supports most of the same features and they
+are too exhaustive to cover completely here.<p>
+Also, read the php/doc/doc.html file for more information on the
+echo command.<p>
+</body></html>

@@ -1,0 +1,42 @@
+<?
+/* This modifies the "first" stamp in the dbm logging directory to a
+   given date.  It will only modify the log files of the user who owns
+   this file. */
+/* Set the following to the timestamp you want (0,0,0,month,day,year) */
+$dt = mktime(0,0,0,1,2,1996);
+
+$logdir = getlogdir();
+$uid = getmyuid();
+$logdir = $logdir+"/$uid";
+$i=0;
+opendir($logdir);
+$entry=readdir();
+while($entry);
+	$dirs[$i] = $entry;
+	$i++;
+	$entry=readdir();
+endwhile;
+closedir();
+$first=0;
+$ii=0;
+$entry = $dirs[$ii];
+while ($entry);
+	if (reg_match(".*\.log$",$entry) || reg_match(".*\.log.dir$",$entry) || reg_match(".*\.log.db$",$entry));
+		if (reg_match(".*\.log.dir$",$entry));
+			$logfile = $logdir+"/$entry" - strrchr($entry,".dir");
+		elseif (reg_match(".*\.log.db$",$entry));
+			$logfile = $logdir+"/$entry" - strrchr($entry,".db");
+		else;
+			$logfile = $logdir+"/$entry";
+		endif;
+		$err = dbmopen($logfile,"w");
+		dbmreplace($logfile,"first",$dt);
+		dbmclose($logfile);
+	endif;
+	$ii++;
+	$entry = $dirs[$ii];
+endwhile;
+setlogging(0);
+setshowinfo(0);
+>
+Done.

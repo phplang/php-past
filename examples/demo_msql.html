@@ -1,0 +1,94 @@
+<html><head><title>mSQL Functions Demo</title></head>
+<body>
+<center><h1>mSQL Functions Demo</h1></center>
+<dl>
+<dt>Functions demonstrated
+<dd>&lt;?msql_connect($hostname)&gt;<br>
+&lt;?$result = msql($database,$query&gt;<br>
+&lt;?msql_result($result,$i,$field)&gt;<br>
+&lt;?msql_freeresult($result)&gt;<br>
+&lt;?msql_numrows($result)&gt;<br>
+&lt;?msql_numfields($result)&gt;<br>
+&lt;?msql_fieldname($result,$i)&gt;<br>
+&lt;?msql_fieldtype($result,$i)&gt;<br>
+&lt;?msql_fieldlen($result,$i)&gt;<br>
+&lt;?msql_fieldflags($result,$i)&gt;<p>
+</dl>
+
+mSQL is a lightweight SQL database engine for Unix systems.  It is
+extremely easy to install and configure and it does a great job of
+handling simple SQL queries.  It is perfect for small-scale database
+needs such as those encountered by most web site designers these days.
+mSQL was written in Australia by David J. Hughes and is available from
+ftp.bond.edu.au.<p>
+
+<b>msql_connect()</b> specifies the host name or IP on which the mSQL database
+engine resides.  This is equivalent to the msqlConnect() function in the msql C
+API.  The one difference between this function and the C API equivalent is that
+if the function isn't called, a connection to the local host is made by default
+on the first call to the msql() function.  And, there is no need for an msql_close
+function since only one connection may be active at any one time.  If a second call
+to msql_connect() is made in a file, then the connection to the first host is
+automatically closed.  To explicitly connect to the msql daemon on the local host, use: 
+<b><tt>&lt?msql_connect(&quot;localhost&quot;)&gt</tt></b><p>
+
+<b>msql()</b> sends an mSQL query.  Arguments are the database name and the query
+string.  ie. <b><tt>&lt?msql(&quot;MyDatabase&quot;quot;select * from table&quot;)&gt</tt></b>.
+The return value from this function is a result identifier to be used to access the results
+from the following functions.<p>
+
+<b>msql_result()</b> displays a field from a returned record.  Arguments are the result
+identifier returned by the msql() function, an integer which is the index of the record 
+to be viewed and a field name.  This is perhaps best illustrated with a complete example:<p>
+<pre>
+&lt;?
+	msqlsethost(&quot;localhost&quot;);
+	$name = &quot;bob&quot;;	
+	$result = msql($database,&quot;select * from table where firstname='$name'&quot;);
+	$num = msql_numrows($result);
+	echo &quot;$num records found!&ltp&gt;&quot;;
+	$i=0;
+	while($i<$num);
+		echo msql_result($result,$i,&quot;fullname&quot;);
+		echo &quot;&ltbr&gt&quot;;
+		echo msql_result($result,$i,&quot;address&quot;);
+		echo &quot;&ltbr&gt&quot;;
+		$i++;
+	endwhile;
+&gt;</pre>
+The above script connects to the mSQL engine on the local machine, sets the <i>name</i>
+variable to <i>bob</i> and sends a query which asks for all the fields from a
+table where the <i>firstname</i> field is set to <i>bob</i>.  It then displays the
+number of records it found after which it loops through each of the found
+records and displays the <i>fullname</i> and <i>address</i> fields for each record.
+As you can see, it would be trivial to add HTML markup tags around the printed
+fields to format the results in a table or in whatever manner is desired.<p>
+
+<b>msql_freeresult()</b> only needs to be called if you are worried about using
+too much memory while your script is running.  All result memory will automatically
+be freed when the script is finished.  But, if you are sure you are not going to
+need the result data anymore in a script, you may call msql_freeresult with the
+result identifier as an argument and the associated result memory will be freed.<p>
+
+<b>msql_numrows()</b> simply returns the number of rows in a result.  The argument
+is the result identifier returned by the msql() function.<p>
+
+<b>msql_numfields()</b> returns the number of fields in a result.  The argument is
+the result identifier returned by the msql() function.<p>
+
+<b>msql_fieldname()</b> returns the name of the specified field.  Arguments to the
+function is the result identifier and the field index.  ie. <tt>msql_fieldname($result,2);</tt>
+will return the name of the second field in the result associated with the $result
+identifier.<p>
+
+<b>msql_fieldtype()</b> is similar to the msql_fieldname() function.  The arguments are
+identical, but the field type is returned.  This will be one of "int", "char" or "real".<p>
+
+<b>msql_fieldlen()</b> again takes the same arguments as msql_fieldname() but returns
+the length of the field.<p>
+
+<b>msql_fieldflags()</b> takes the same arguments as msql_fieldname() and returns the
+field flags.  Currently this is either, "not null", "primary key", a combination
+of the two or "" (an empty string).<p>
+
+</body></html>

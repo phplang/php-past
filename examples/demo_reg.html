@@ -1,0 +1,31 @@
+<html><head><title>Regular Expression Demo</title></head>
+<body>
+<center><h1>Regular Expression Demo</h1></center>
+<dl>
+<dt>Functions demonstrated
+<dd><tt>&lt;?reg_match($expr,$arg)&gt;</tt><br>
+<tt>&lt;?reg_search($expr, A4rg)&gt;</tt><br>
+<tt>&lt;?reg_replace($expr,$replace,$arg)&gt;</tt><p>
+</dl>
+These functions allow you to perform regular expression operations
+on strings.  The regular expression language used is compatible with
+the extended regular expression syntax as specified in the egrep man
+page on most Unix systems.<p>
+
+<b>reg_match()</b> returns non-zero if the regular expression is matched
+in the argument string.  For example, the condition, <tt>&lt?if (reg_match(&quot;^This.*&quot;,
+&quot;This is an example string&quot;)&gt;</tt> would be true since the &quot;^This.*&quot;
+expression says to match the word <b>This</b> at the beginning of the string and then
+match any characters afterwards.<p>
+
+<b>reg_search()</b> will scan the entire argument string for any matches to
+the given regular expression.  If a match is found, it will return the portion
+of the string starting at where the patch occurred.  If no match is found a
+zero-length string is returned.<p>
+
+<b>reg_replace()</b> scans the entire argument string and replaces any portions
+of the string matched by the given expression with the replacement string.  For
+examples, in the string, <tt>&quot;This is an example string&quot;</tt> we could 
+very easily replace every space with a dash with the command: 
+<b>reg_replace(" ","-","This is an example string")</b>.<p>
+</body></html>

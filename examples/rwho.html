@@ -1,0 +1,55 @@
+<html><head><title>RWHO PHP Example</title></head>
+<body>
+<center><h1>RWHO PHP Example</h1></center>
+<center>
+<table border=2>
+<tr><th>User</th><th>Machine</th><th>TTY</th><th>Since</th><th>Idle</th>
+<?
+	exec("rwho -a", $list);
+	$cnt = count($list);
+	$i=0;
+	while($i < $cnt);
+		/* Collapse multiple spaces into one */	
+		$line = reg_replace("  *"," ",$list[$i])>
+		<tr><td align="center">
+		<?echo strtok($line," ")>
+		</td><td align="center">
+		<?echo strtok(":")>
+		</td><td align="center">
+		<?echo strtok(" ")>
+		</td><td align="center">
+		<?echo strtok(" ")>
+		<?echo strtok(" ")>
+		<?echo strtok(" ")>
+		</td><td align="center">
+		<?echo strtok(" ")>
+		</td></tr>
+		<?$i++;
+	endwhile;
+>
+</table>
+</center><p>
+<center>The PHP code for this looks like this:</center>
+<center><table border=1><tr><td><pre>    exec(&quot;rwho -a&quot;, $list);
+    $cnt = count($list);
+    $i=0;
+    while($i < $cnt);
+        /* Collapse multiple spaces into one */
+        $line = reg_replace("  *"," ",$list[$i])&gt;
+        &lt;tr&gt;&lt;td align="center"&gt;
+        &lt;?echo strtok($line," ")&gt;
+        &lt;/td&gt;&lt;td align="center"&gt;
+        &lt;?echo strtok(":")&gt;
+        &lt;/td&gt;&lt;td align="center"&gt;
+        &lt;?echo strtok(" ")&gt;
+        &lt;/td&gt;&lt;td align="center"&gt;
+        &lt;?echo strtok(" ")&gt;
+        &lt;?echo strtok(" ")&gt;
+        &lt;?echo strtok(" ")&gt;
+        &lt;/td&gt;&lt;td align="center"&gt;
+        &lt;?echo strtok(" ")&gt;
+        &lt;/td>&lt;/tr&gt;
+        &lt;?$i++;
+    endwhile;</pre></td></tr></table></center>
+
+</body></html>

@@ -1,0 +1,310 @@
+<html><head><title>GuestBook</title></head>
+<body>
+<center><h1>GuestBook</h1></center>
+<?
+/* Choose a guestbook filename by getting the path of this
+   file and stripping off the .html part.  You can hardcode
+   a filename here if you want */
+$fn = $PATH_TRANSLATED; 
+$fn = $fn - "\.html";
+
+/* Check if we are in read mode by checking the command line argument */
+if ($argv[0]=="read");
+	/* Check if the file exists */
+	$err = fileinode($fn);
+	if($err<0)>
+		Guestbook is empty!<p>
+		</body></html>
+		<?exit;
+	endif;
+	/* check command line argument */
+	$days = intval($argv[1]);
+	/* override command line argument with post data variable if present */
+	if(strtoupper($DAYS)=="ALL");
+		$days=0;
+	elseif ($DAYS > 0);
+		$days = $DAYS;
+	endif>
+	<form action="<?echo $PHP_SELF>?read" method="POST">
+	<center>Show entries for the past	
+	<?if($days==0)>
+		<input type="text" name="DAYS" value="All" size=4 maxlength=4>
+	<?else>
+		<input type="text" name="DAYS" value="<?echo $days>" size=4 maxlength=4>
+	<?endif>
+	days. (0 = All entries)</center></form><hr>
+	<?		
+	echo "<center><strong>";
+	/* Title switch */
+	switch($days);
+	case 0;
+		echo "Showing all entries";
+		break;
+	case 1;
+		echo "Showing today's entries";
+		break;
+	case 2;
+		echo "Showing entries for today and yesterday";
+		break;
+	default;
+		echo "Showing entries for the past $days days";
+		break;
+	endswitch;
+	echo "</strong></center>";
+	echo "<hr>";
+	/* Now open the actual dbm file */
+	dbmopen($fn,"r");
+	$i=0;
+	/* First we load in all the keys that match the viewing criteria */
+	$getkey = dbmfirstkey($fn)>
+	<?while($getkey);
+		if($getkey!="GUESTBOOKPASS");
+			$keyday = intval(date("Y",$getkey))*365+date("z",$getkey); 
+			$today = intval(date("Y"))*365+date("z");
+			if(($today - $keyday < $days) || $days==0);
+				$key[$i] = $getkey;
+				$i++;
+			endif;	
+		endif;
+		$getkey = dbmnextkey($fn,$getkey);
+	endwhile;
+	/* Then we sort them */
+	sort($key[0]);
+	$j=$i-1;
+	/* Now we display them in reverse order */
+	while($j>=0);
+		/* Look up the key */
+		$entry = dbmfetch($fn,$key[$j]);
+		/* Fields are separated by ESC chars, so tokenize on char 27 */
+		$name = strtok($entry,27);
+		$email = strtok(27);
+		$comment = strtok(27)>
+		<b><i><?echo $name></i></b> 
+		&lt;<a href="mailto: <?echo $email>"><?echo $email></a>&gt;
+		<b><?echo date("D M d/y H:i:s",$key[$j])></b>
+		<font size=-1><a href="<?echo $PHP_SELF>?edit+<?echo $key[$j]>">
+		&lt;entry id: <?echo $key[$j]>&gt;</a></font>
+		<br><?echo $comment><hr>
+		<?$j--;
+	endwhile;
+	/* Don't forget to close the dbm file */
+	dbmclose($fn)>
+	<center>
+	<a href="<?echo $PHP_SELF>"> [Top] </a>
+	<a href="<?echo $PHP_SELF>?read+1"> [Read] </a>
+	<a href="<?echo $PHP_SELF>?admin"> [Admin] </a>
+	</center>
+	</body></html>
+	<?exit>
+<?endif;
+$a=$argv[0];
+if(strlen($GUESTBOOKPASS) && $a!="admin");
+	dbmopen($fn,"w");
+	$gp = dbmfetch($fn,"GUESTBOOKPASS");
+	if($gp)>
+		Sorry, this guestbook already has a password<p>
+		<center>
+		<a href="<?echo $PHP_SELF>"> [Top] </a>
+		<a href="<?echo $PHP_SELF>?read+1"> [Read] </a>
+		<a href="<?echo $PHP_SELF>?admin"> [Admin] </a>
+		</center>
+		</body></html>
+		<?exit;
+	endif;
+	dbminsert($fn,"GUESTBOOKPASS",$GUESTBOOKPASS)>
+	Password registered!<p>	
+	<?dbmclose($fn);
+elseif($GUESTBOOKPASS);
+	dbmopen($fn,"r");
+	$gp = dbmfetch($fn,"GUESTBOOKPASS");
+	dbmclose($fn);
+	if(!$gp)>
+		There is no password set for this guestbook.  Please set one.<p>
+		<form action="<?echo $PHP_SELF>" method="POST">
+		<center><input type="password" name="GUESTBOOKPASS">
+		<input type="submit" value=" Ok "></center>
+		</form>
+	<?endif;
+	if($gp!=$GUESTBOOKPASS)>
+		Sorry, wrong password.<p>
+		<center>
+		<a href="<?echo $PHP_SELF>"> [Top] </a>
+		<a href="<?echo $PHP_SELF>?read+1"> [Read] </a>
+		<a href="<?echo $PHP_SELF>?admin"> [Admin] </a>
+		</center>
+		</body></html>
+		<?exit;
+	endif>
+	<?if (!$GUESTBOOKFUNC)>
+	<center><h2>Administrative Screen</h2></center>
+
+	<center>
+	<form action="<?echo $PHP_SELF>?admin" method="POST">
+	<input type="hidden" name="GUESTBOOKPASS" value="<?echo $GUESTBOOKPASS>">
+	<input type="hidden" name="GUESTBOOKFUNC" value="clear">
+	<input type="submit" value="Clear all entries">
+	</form>
+	</center>
+
+	<center>
+	<form action="<?echo $PHP_SELF>?admin" method="POST">
+	<input type="hidden" name="GUESTBOOKPASS" value="<?echo $GUESTBOOKPASS>">
+	<input type="hidden" name="GUESTBOOKFUNC" value="delete">
+	Delete all entries older than 
+	<input type="text" name="GUESTBOOKARG" value="30" size=4 maxlength=4> days.
+	<input type="submit" value=" Ok ">
+	</form>
+	</center>
+
+	<center>
+	<form action="<?echo $PHP_SELF>?admin" method="POST">
+	<input type="hidden" name="GUESTBOOKPASS" value="<?echo $GUESTBOOKPASS>">
+	<input type="hidden" name="GUESTBOOKFUNC" value="edit">
+	entry id: <input type="text" name="GUESTBOOKARG">
+	<input type="submit" value="Edit Entry">
+	</form>
+	</center>
+
+	<center>
+	<form action="<?echo $PHP_SELF>?admin" method="POST">
+	<input type="hidden" name="GUESTBOOKPASS" value="<?echo $GUESTBOOKPASS>">
+	<input type="hidden" name="GUESTBOOKFUNC" value="change_password">
+	Change password to: <input type="password" name="GUESTBOOKARG">
+	<input type="submit" value=" Ok ">
+	</form>
+	</center>
+	<?else;
+	switch($GUESTBOOKFUNC);
+	case "clear";
+		dbmopen($fn,"w");
+		$dkey=dbmfirstkey($fn);
+		while($dkey);
+			dbmdelete($fn,$dkey);
+			$dkey = dbmfirstkey($fn);
+		endwhile;
+		dbminsert($fn,"GUESTBOOKPASS",$GUESTBOOKPASS);
+		dbmclose($fn);
+		echo "All Guestbook entries deleted<p>";
+		break;
+	case "delete";
+		dbmopen($fn,"w");
+		$dkey=dbmfirstkey($fn);
+		$i=0;
+		while($dkey);
+			$age = intval(date("Yz")) - intval(date("Yz",$dkey));
+			if($age > $GUESTBOOKARG);
+				$dead[$i] = $dkey;
+				$i++;
+			endif;
+			$dkey = dbmnextkey($fn,$dkey);
+		endwhile;
+		$j=0;
+		while($j<$i);
+			dbmdelete($fn,$dead[$j]);
+			$j++;
+		endwhile;	
+		dbmclose($fn);
+		echo "$i entries deleted<p>";
+		break;	
+	case "change_password";
+		dbmopen($fn,"w");
+		dbmreplace($fn,"GUESTBOOKPASS",$GUESTBOOKARG);
+		dbmclose($fn);
+		echo "Password changed<p>";
+		break;
+	case "edit";
+		dbmopen($fn,"r");
+		$entry=dbmfetch($fn,$GUESTBOOKARG);
+		dbmclose($fn);
+		if(!$entry);
+			echo "Entry not found<p>";
+		else;
+			$name = strtok($entry,27);
+			$email = strtok(27);
+			$comment = strtok(27)>
+			<form action="<?echo $PHP_SELF>?admin" method="POST">
+			<input type="hidden" name="GUESTBOOKPASS" value="<?echo $GUESTBOOKPASS>">
+			<input type="hidden" name="GUESTBOOKARG" value="<?echo $GUESTBOOKARG>">
+			<input type="hidden" name="GUESTBOOKFUNC" value="editsave">
+			<font size=-1><tt><b>Name</b></tt></font><br>
+			<input type="text" name="EditGuestName" value="<?echo $name>"><br><br>
+			<font size=-1><tt><b>E-Mail</b></tt></font><br>
+			<input type="text" name="EditGuestEmail" value="<?echo $email>"><br><br>
+			<font size=-1><tt><b>Comment</b></tt></font><br>
+			<textarea name="EditGuestComment" rows=8 cols=70><?echo $comment></textarea><br><br>
+			<center><input type="submit" value=" Submit Changed Record "></center>
+		<?endif;	
+		break;
+	case "editsave";
+		dbmopen($fn,"w");
+		dbmreplace($fn,$GUESTBOOKARG,"$EditGuestName$EditGuestEmail$EditGuestComment");
+		dbmclose($fn);
+		echo "Changed record saved.<p>";	
+		break;
+	endswitch;
+	endif>
+	<center>
+	<a href="<?echo $PHP_SELF>"> [Top] </a>
+	<a href="<?echo $PHP_SELF>?read+1"> [Read] </a>
+	<a href="<?echo $PHP_SELF>?admin"> [Admin] </a>
+	</center>
+	</body></html>
+	<?exit;
+elseif($argv[0]=="admin" || $argv[0]=="edit")>
+	Please enter your guestbook admin password:
+	<form action="<?echo $PHP_SELF>?admin" method="POST">
+	<?if ($argv[0]=="edit")>
+		<input type="hidden" name="GUESTBOOKFUNC" value="edit">
+		<input type="hidden" name="GUESTBOOKARG" value="<?echo $argv[1]>">
+	<?endif>	
+	<input type="password" name="GUESTBOOKPASS">	
+	<input type="submit" value=" Ok ">
+	</form>
+	</body></html>
+	<?exit;
+endif;
+if (!$GuestComment)>
+Fill in the fields below to leave an entry in the guestbook.  Or you may
+<a href="<?echo $PHP_SELF>?read+1">Read the Guestbook</a>.  The
+owner of this guestbook may <a href="<?echo $PHP_SELF>?admin">
+Adminstrate the Guestbook</a>.
+<hr>
+<form action="<?echo $PHP_SELF>" method="POST">
+<font size=-1><tt><b>Name</b></tt></font><br>
+<input type="text" name="GuestName"><br><br>
+<font size=-1><tt><b>E-Mail</b></tt></font><br>
+<input type="text" name="GuestEmail" value="<?echo $EMAIL_ADDR>"><br><br>
+<font size=-1><tt><b>Comment</b></tt></font><br>
+<textarea name="GuestComment" rows=8 cols=70></textarea><br><br>
+<center><input type="submit" value=" Submit Comment "></center>
+<?else>
+<?
+	/* Incoming guestbook data */
+	$err = fileinode($fn);
+	if($err<0);
+		/* if file doesn't exists, make a new one */
+		dbmopen($fn,"n")>
+		This is a new guestbook.  Please select an administrative password
+		for this guestbook.  You will need this password to manipulate the
+		guestbook later on.<p>
+		<form action="<?echo $PHP_SELF>" method="POST">
+		<center><input type="password" name="GUESTBOOKPASS">
+		<input type="submit" value=" Ok "></center>
+		</form>
+		</body></html>
+		<?exit;	
+	else;
+		/* if it does exist, just open for write */
+		dbmopen($fn,"w");
+	endif;
+	/* insert the guestbook data */
+	dbminsert($fn,time(),"$GuestName$GuestEmail$GuestComment");
+	dbmclose($fn);
+>
+Thank you, your entry has been added.<p>
+<center>
+<a href="<?echo $PHP_SELF>"> [Top] </a>
+<a href="<?echo $PHP_SELF>?read+1"> [Read] </a>
+<a href="<?echo $PHP_SELF>?admin"> [Admin] </a>
+</center>
+</body></html>

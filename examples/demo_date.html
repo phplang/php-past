@@ -1,0 +1,46 @@
+<html><head><title>Date/Time Functions Demo</title></head>
+<body>
+<center><h1>Date/Time Functions Demo</h1></center>
+<dl>
+<dt>Functions demonstrated
+<dd><tt>&lt;?date($format,$time)&gt;</tt><br>
+<tt>&lt;?gmdate($format,$time)&gt;</tt><br>
+<tt>&lt;?time()&gt;</tt><p>
+</dl>
+The <b>date()</b> function is used to display times and dates in various
+ways.  The function takes a format string and a time as arguments.  If the
+time argument is left off, the current time and date will be used.  The time
+argument is specified as an integer in number of seconds since the Unix
+Epoch on Jan.1 1970.  The format string is used to indicate which date/time 
+components should be displayed and how they should be formatted.<p>
+
+For example, if we wanted to print the current date and time, we might
+use a tag like: <tt>&lt;?echo date(&quot;D M d, Y H:i:s&quot;)&gt;</tt>.  This 
+looks like: <b><?echo date("D M d, Y H:i:s")></b><p>
+
+In the above you will find that the various characters in the formatting
+string were replaced with a date/time component.  Any characters not replaced
+with anything were displayed verbosely.  The valid formatting characters are:<br><br>
+<tt><ul>
+<li>Y - Year eg. <?echo date("Y")>
+<li>y - Year eg. <?echo date("y")>
+<li>M - Month eg. <?echo date("M")>
+<li>m - Month eg. <?echo date("m")>
+<li>D - Day eg. <?echo date("D")>
+<li>d - Day eg. <?echo date("d")>
+<li>z - Day of the year eg. <?echo date("z")>
+<li>H - Hours in 24 hour format eg. <?echo date("H")>
+<li>h - Hours in 12 hour format eg. <?echo date("h")>
+<li>i - Minutes eg. <?echo date("i")>
+<li>s - Seconds eg. <?echo date("s")>
+<li>U - Seconds since epoch eg. <?echo date("U")>
+</ul></tt><p>
+
+The <b>gmdate()</b> function is identical to the <b>date()</b> function
+except for the fact that it uses Greenwich Mean Time instead of the current
+local time.<p>
+
+The <b>time()</b> function simply returns the current local time in seconds
+since Unix epoch.  It is equivalent to calling <tt><b>date(&quot;U&quot;)</b></tt>.<p>
+
+</body></html>

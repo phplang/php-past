@@ -1,0 +1,57 @@
+<html><head><title>DBM Functions Demo</title></head>
+<body>
+<center><h1>DBM Functions Demo</h1></center>
+<dl>
+<dt>Functions demonstrated
+<dd><tt>&lt;?dbmopen($filename)&gt;</tt><br>
+<tt>&lt;?dbmclose($filename)&gt;</tt><br>
+<tt>&lt;?dbminsert($filename,$key,$content)&gt;</tt><br>
+<tt>&lt;?dbmreplace($filename,$key,$content)&gt;</tt><br>
+<tt>&lt;?dbmfetch($filename,$key)&gt;</tt><br>
+<tt>&lt;?dbmdelete($filename,$key)&gt;</tt><br>
+<tt>&lt;?dbmfirstkey($filename)&gt;</tt><br>
+<tt>&lt;?dbmnextkey($filename,$key)&gt;</tt><p>
+</dl>
+These functions should look very familiar to anybody who has
+worked with dbm files from C before.  For those of you that haven't,
+dbm files are hashed files containing key/content pairs of data.
+They allow you to quickly look up keyed data stored on disk.<p>
+The unique aspect of the dbm support in PHP is that it works with
+ndbm, GNU's gdbm, Berkeley's libdb or even no dbm support in which
+case an internal flat ascii file format is used.  GNU's gdbm library
+available from prep.ai.mit.edu is probably your best choice if you don't
+have built-in ndbm support in your operating system.<p>
+
+<b>dbmopen()</b> opens a dbm file.  The argument is the full-path filename
+of the dbm file to be opened.  Note that if ndbm support is used, ndbm will
+actually create <i>$filename.dir</i> and <i>$filename.pag</i> files.  gdbm
+only uses one file, as does the internal flat ascii file support.  Note that
+PHP does its own file locking in addition to any file locking this may be
+done by the dbm library itself.<p>
+
+<b>dbmclose()</b> simply closes the specified dbm file.  It will also
+remove any lock files, so it is important to close any dbm files that
+have been opened.<p>
+
+<b>dbminsert()</b> inserts a new key/content data pair into a dbm file.  If the
+key already exists, the insert will fail.<p>
+
+<b>dbmreplace()</b> is similar to the <b>dbminsert()</b> function, the only
+difference being that if the key already exists, the old content string will
+be replaced with the new.<p>
+
+<b>dbmfetch()</b> will return the content string associated with the given key.<p>
+
+<b>dbmdelete()</b> will delete the key/content pair specified by the given key argument.<p>
+
+<b>dbmfirstkey()</b> returns the first key in the dbm file.  Note that no particular
+order is guaranteed since the order depends on hash table values calculated within the
+dbm implementation.  You may use the <b>sort</b> function to sort arrays of data
+from the dbm file if necessary.<p>
+
+<b>dbmnextkey()</b> returns the next key after the specified key.  By calling <b>dbmfirstkey()</b>
+followed by successive calls to <b>dbmnextkey()</b> it is possible to visit every key/content
+pair in the dbm file.<p>
+
+See the dbm man pages on your Unix system for more information on dbm files.<p>
+</body></html>

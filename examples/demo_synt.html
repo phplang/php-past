@@ -1,0 +1,129 @@
+<html><head><title>PHP Syntax Demo</title></head>
+<body>
+<center><h1>PHP Syntax Demo</h1></center>
+The PHP language uses a syntax very similar to the C language.
+Each PHP instruction starts with <b>&lt;?</b> and ends with a
+<b>&gt;</b>.  Or, instructions may be grouped inside a single
+<b>&lt;? &gt;</b> pair and separated by <b>;</b> characters.<p>
+
+Variables are supported and are indicated by preceding the
+variable name with a <b>$</b>.  So, for example, to set a
+variable to 5 and then display this variable, the following
+is valid:<br><br>
+<tt>&lt?$a = 5&gt;</tt><br>
+<tt>&lt?echo $a&gt;</tt><br><br>
+
+This is the same as writing:<br><br>
+<tt>&lt?$a = 5; echo $a&gt;</tt><br><br>
+
+Or even:<br><br>
+<tt>&lt?<br>$a = 5;<br>echo $a;<br>&gt;</tt><br><br>
+
+Extra white space characters such as spaces, tabs and new-lines
+are ignored.  Case is relevant in variable names, but not in 
+function calls.<p>
+
+Comments are supported.  A comment is written just like comments in
+the C language.  <b>/*</b> starts a comment and <b>*/</b> ends a
+comment.<p>
+
+Three types of variables are supported.  <b>Long integer</b>, 
+<b>Double precision floating point</b> and <b>character strings</b>.
+They are automatically detected.  For example:<br><br>
+<tt>&lt;?$a = 5&gt;</tt><br><br>
+causes $a to become a variable of type INTEGER.<br><br>
+<tt>&lt;?$a = 5.0&gt;</tt><br><br>
+causes $a to become a variable of type DOUBLE.<br><br>
+<tt>&lt;?$a = "5"&gt;</tt><br><br>
+causes $a to become a variable of type STRING.<br><br>
+The type of the variable is not generally important.  Every variable
+regardless of its type is converted to all three types internally and
+the various functions will try to use the correct type.  There are
+only a few functions affected by the type of the variable.<p>
+
+All three variable types may also be treated as arrays by appending
+<b>[value]</b> to their names.  Unlike C, these are actually
+named arrays similar to those used in Perl.  The following would
+be valid:<br><br>
+<tt>&lt;?<br>
+$a[0] = 5;<br>
+$a["hello"] = 6;<br>
+echo $a[0];<br>
+echo $a["hello"];</tt><br>
+&gt;<p>
+
+As far as language constructs are concerned, the PHP language is
+quite simple.  The following commands are used to guide the control
+flow through a file:<br><br>
+<ul>
+<li>if (condition)
+<li>else
+<li>elseif (condition)
+<li>endif
+<li>switch(expression)
+<li>case expression
+<li>default
+<li>break
+<li>endswitch
+<li>while
+<li>endwhile
+<li>include
+<li>exit
+</ul>
+
+The syntax of conditions are similar to that of the C language.
+<b>==</b> tests for equality.  <b>!=</b> means not equal.  Also
+supported are: <b>&gt;</b>, <b>&lt;</b>, <b>&gt;=</b>, <b>&lt;=</b>.
+Conditional AND is <b>&&</b>, conditional OR is <b>||</b>. 
+
+Examples:<p>
+<pre>&lt;?
+if($a==5 && $b!=0 );
+	$c = 100 + $a / $b;
+endif;
+&gt;</pre>
+Note that another difference between the PHP language and the C language
+is that no curly braces are used and that you need to put a separator
+after <b>if</b> and <b>while</b> statements.<p>
+Also introduced in the above example was a mathematical expression.
+PHP supports full mathematical operations anywhere an expression is
+expected.  Order of operations are considered as well.<p>
+<pre>&lt;?
+$a=0;
+while($a<100);
+	$a++;
+	echo $list[$a];	
+endwhile;
+&gt;</pre>
+This example shows the use of a while loop to display the contents of
+an array.  <b>WARNING</b> although the PHP language supports incremental
+operators such as <b>++</b> and <b>--</b> to increment and decrement
+a variable, they are not treated exactly like they would be in the
+C language.  The variable is incremented right away.  There is no
+concept of incrementing the variable before or after the operation
+as there is in C.<p>
+
+<pre>&lt;?
+$a=0;
+switch($a);
+	case 1;
+		echo "a is 1";
+		break;
+	case "hello";
+		echo "a is hello";
+		break;
+	default;
+		echo "a is unknown";
+		break;
+endswitch;
+&gt;</pre>
+
+The above is an example of a switch construct.  It is similar to a
+series of if/elseif/else constructs but easier to read.  The only
+difference between the PHP switch construct and that of the C 
+language is that semi-colons are used to terminate every line.  There
+are no braces nor colons.<p>
+
+All of these various constructs can of course be nested and used
+inside each other just like C.<p>
+</body></html>

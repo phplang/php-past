@@ -1,0 +1,12 @@
+# In order to run the mSQL test cases, you need to create a database
+# called test and create the following table:  
+
+DROP TABLE test\g
+
+CREATE TABLE test (
+	name	CHAR(32),
+	age		INT
+)\g
+
+# You can simply type: msql test <README
+# to create this table.

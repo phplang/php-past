@@ -1,0 +1,42 @@
+<html><head><title>Directory routines demo</title></head>
+<body>
+<center><h1>Directory routines demo</h1></center>
+<dl>
+<dt>Functions demonstrated
+<dd><tt>&lt;?opendir("/path/dir")&gt;</tt><br>
+<tt>&lt;?closedir()&gt;</tt><br>
+<tt>&lt;?readdirdir()&gt;</tt><br>
+<tt>&lt;?rewinddir()&gt;</tt><p>
+</dl>
+It is often important to be able to &quot;walk&quot; through
+a directory and do something based on the files in the 
+directory.  PHP includes functions that will let you do just
+that.  The first thing to do is to open the directory.  The
+syntax for doing is:<br><br>
+<tt>&lt;?opendir("/path/dir")&gt;</tt><br><br>
+
+Once opened, the <b>readdir()</b> function may be used to
+read entries in the directory sequentially.  The first call
+to readdir() will return the first entry and the second
+call the second entry, etc.<p>
+
+The <b>rewinddir()</b> function can be used to move the
+directory pointer back to the beginning resulting in the
+next call to readdir() returning the first entry in the
+directory.<p>
+
+And, at the end, the <b>closedir()</b> function should be
+called.<p>
+
+Below is a simple example which reads the contents of the
+directory in which the PHP program resides.<p>
+<hr>
+<?opendir(".")>
+<?$dir = readdir()>
+<?while($dir)>
+	<?echo $dir><br>
+	<?$dir = readdir()>
+<?endwhile>
+closedir();
+<hr>
+</body></html>

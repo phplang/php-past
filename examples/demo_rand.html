@@ -1,0 +1,37 @@
+<html><head><title>Generating Random numbers Demo</title></head>
+<body>
+<center><h1>Generating Random numbers Demo</h1></center>
+<dl>
+<dt>Functions demonstrated
+<dd><tt>&lt;?srand(integer)&gt;</tt><br>
+<tt>&lt;?$number = rand()&gt;</tt><br>
+<tt>&lt;?$number = getrandmax()&gt;</tt><p>
+</dl>
+See the man pages for the srand() and rand()
+C library functions for more information.  Note that these
+functions are not very good random number generators, but they
+should be adequate for most purposes.  <p>
+
+The first thing to do is to seed the random number generator.
+Do this with the <b>srand()</b> function.  This function takes
+any integer as an argument.  One choice is to use the <b>date</b>
+function to give you the current number of seconds past the minute.
+ie.<br><br>
+<tt>&lt;?srand(date(&quot;s&quot))&gt;</tt><br><br>
+<?srand(date("s"))>
+Now you can generate random numbers by simply calling the rand() function.
+ie. <br><br>
+<tt>&lt;?$number = rand()&gt;</tt><br><br>
+You can use the getmaxrand() function to check what the maximum
+possible number is on your system.  You can also adjust the  
+range of possible random values by using the mod operator.  ie.<br><br>
+<tt>&lt;?$number = rand() % 100&gt;</tt><br><br>
+This would always produce a random number between 0 and 100.<p>
+
+Random number between 0 and <?echo getrandmax()-1>: <?echo rand()><p>
+Random number between 0 and 99: <?echo rand() % 100><p>
+Random number between 50 and 59: <?echo 50 + rand()%10><p>
+You may reload this page many times to verify that the generated
+random numbers are within the specified ranges.  Note that the
+ranges include both endpoints.<p>
+</body></html>

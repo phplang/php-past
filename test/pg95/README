@@ -1,0 +1,5 @@
+In order for these tests to run, the user that runs
+them must be able to create and destroy databases.
+
+These tests expect to find a postmaster on localhost
+at port 5432.

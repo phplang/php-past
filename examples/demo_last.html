@@ -1,0 +1,56 @@
+<html><head><title>Last Access Information Demo</title></head>
+<body>
+<center><h1>Last Access Information Demo</h1></center>
+<dl>
+<dt>Functions demonstrated
+<dd><tt>&lt;?getlasthost()&gt;</tt><br>
+<tt>&lt;?getlastemail()&gt;</tt><br>
+<tt>&lt;?getlastmod()&gt;</tt><br>
+<tt>&lt;?getlastref()&gt;</tt><br>
+<tt>&lt;?getlastbrowser()&gt;</tt><br>
+<tt>&lt;?getlastaccess()&gt;</tt><br>
+<tt>&lt;?gettotal()&gt;</tt><br>
+<tt>&lt;?gettoday()&gt;</tt><br>
+</dl>
+These functions all return information about the previous hit
+on a page.  They will only function if access logging was
+compiled into the PHP program.<p>
+<b>getlasthost()</b> returns the previous user's hostname.<p>
+<b>getlastemail()</b> returns the previous user's e-mail address if
+he or she provided it.<p>
+<b>getlastmod()</b> returns the date and time in unix time format of
+the last time the page was modified.  This value can be passed to
+the <a href="<?echo $SCRIPT_NAME><?echo reg_replace("demo_last","demo_date",$PATH_INFO)>"><b>date()</b></a>
+function for formatting.<p>
+<b>getlastref()</b> returns the URL of the referring document from the
+previous hit.<p>
+<b>getlastbrowser()</b> returns the identification string for the
+browser used for the previous hit.<p>
+<b>getlastaccess()</b> returns the date and time in Unix time format
+of the last time the page was hit.<p>
+<b>gettotal()</b> returns the total number of hits (counting your own)
+on the current page.<p>
+<b>gettoday()</b> returns the number of hits today (counting your own)
+on the current page.<p>
+Below is a demo of how an information footer can be put together
+using these functions.  In fact, the PHP-generated automatic footer
+can be turned off and a customized one could be used with the &lt;?include &gt;
+function.<p>
+<hr>
+<?$lasthost = getlasthost()>
+<?$lastemail = getlastemail()>
+<center>
+Last access on <?echo date("D M d H:i:s",getlastaccess())>
+<?if ($lastemail)>
+	by <?echo $lastemail>
+<?else>
+	from <?echo $lasthost>
+<?endif>
+<br>
+This page has been accessed a total of <?echo gettotal()> times now.  
+<?echo gettoday()> times today.<br>
+Last modified on <?echo date("D M d H:i:s",getlastmod())><br>
+</center>
+<hr>
+</body>
+</html>

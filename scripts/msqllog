@@ -1,0 +1,24 @@
+#!/bin/sh
+UID=`id $1 | cut -d= -f2 | cut -d\( -f1`
+echo "Creating tables for user id $UID..."
+msql phpfi <<EOF
+CREATE TABLE log$UID (
+	timestamp	INT,
+	filename	CHAR(64),
+	host		CHAR(64),
+	email		CHAR(64),
+	lref		CHAR(64),
+	browser		CHAR(64)
+)\g
+CREATE TABLE last$UID (
+	filename	CHAR(64) NOT NULL PRIMARY KEY,
+	timestamp	INT,
+	total		INT,
+	today		INT,
+	stimestamp	INT,
+	host		CHAR(64),
+	email		CHAR(64),
+	lref		CHAR(64),
+	browser		CHAR(64)
+)\g
+EOF

@@ -1,0 +1,36 @@
+<html><head><title>File Stat Functions Demo</title></head>
+<body>
+<center><h1>File Stat Functions Demo</h1></center>
+<dl>
+<dt>Functions demonstrated
+<dd><tt>&lt;?fileperms($filename)&gt;</tt><br>
+<tt>&lt;?fileinode($filename)&gt;</tt><br>
+<tt>&lt;?filesize($filename)&gt;</tt><br>
+<tt>&lt;?fileowner($filename)&gt;</tt><br>
+<tt>&lt;?filegroup($filename)&gt;</tt><br>
+<tt>&lt;?fileatime($filename)&gt;</tt><br>
+<tt>&lt;?filemtime($filename)&gt;</tt><br>
+<tt>&lt;?filectime($filename)&gt;</tt><p>
+</dl>
+These functions return information about the given file.  This information
+is the same as that returned by the C stat() function.  See the man page
+for the stat function for a complete description of the nature of the
+returned data.<p>
+
+<b>fileperms</b> returns the permission bits of the file.  This is the
+<i>st_mode</i> of the stat structure.<p>
+
+<b>fileinode</b> returns the file's inode.<p>
+
+<b>filesize</b> returns the size of the file in bytes.<p>
+
+<b>fileowner</b> returns the uid of the owner.<p>
+
+<b>filegroup</b> returns the gid of the owner.<p>
+
+<b>fileatime</b> returns the time of last data access.<p>
+
+<b>filemtime</b> returns the time of last data modification.<p>
+
+<b>filectime</b> returns the time of last status change.<p>
+</body></html>

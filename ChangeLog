@@ -1,0 +1,571 @@
+PHP/FI CHANGE LOG                                                    ChangeLog
+|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+May. 31 Version 1.99s
+- Fix Header problem caused by the buffered output code change (patch r1)
+- Change direct rputs() call to PUTS macro in lex.c (patch r2)
+- Fix MsqlConnect to make it close an existing connection (patch r2)
+- Change from right to left recursion in parser to prevent parser stack 
+  overflows (patch r2)
+- Added support for <!?...> tag-style (patch r3)
+- Hopefully fixed parser problems with dos-style line endings (patch r3)
+- Fixed GetVar problem in CGI version (patch r3)
+- Made backslash escape sequences work in echo format string (patch r3)
+- Fix bug in HtmlSpecialChars function
+- Added a couple of regexp regression tests
+- Changed undefined variable to be treated like a 0 length string-type instead
+  of as an integer.  This should lessen the confusion regarding overloaded
+  operator comparison problems.
+- Added EscapeShellCmd() function for escaping user input to exec and system
+  calls.
+- Fixed bug which caused an Exit call to not work inside a function
+- Fixed bug in '@' handling
+
+May. 22 Version 1.99r
+- Forgot to clear out CGI-based memory pools - fixed
+- Added buffered output of normal HTML text (stuff outside <? > tags)
+- Added feof() function
+- Added fgetss() function
+- Stripped any backslashes from fopen() and popen() filename arguments
+- Cleaner version of ParseEscapes() function from Tom Javen <tom@instmel.fi>
+- Changed mail form example to use a pipe rather than a temp file
+
+May. 17 Version 1.99q
+- Fixed Apache module bug for user-defined functions in included files (p1)
+- Added FastCGI support (p1)
+- Added Unix domain socket support to fsockopen() call - thanks to patch from
+  Vivek Khera <khera@kciLink.com>
+- Fixed bug in SubVar routine
+- Implemented memory pools for CGI version - should stop all memory leaks
+- Removed "no file" error message on file upload
+- Made CGI version completely re-entrant
+- Removed all references to "efree"
+- Included parser is now built using Bison 1.25 instead of 1.24
+- configure script is built using Autoconf 2.10 instead of 2.9
+- Fixed typo in var.c which caused problems when re-assigning array elements
+- Block alarms in Apache module during an mSQL query to avoid bleeding memory
+  in the mSQL API
+- Added  & " < >  to the list of characters to be expanded by the 
+  HtmlSpecialChars function
+- Added popen() and pclose() functions for opening and closing pipes
+- Added Eval() function
+- Fixed HAVE_MMAP macro name conflict
+
+May. 11 Version 1.99p
+- Changed memory management from a singe session pool to multiple sub-pools
+  in Apache module
+- Made while loops stop pushing and popping things onto and from the while
+  stack on every iteration
+- Added a variation of Tim Hoek's formatted Echo enhancements
+- Echo now supports up to 5 arguments along with the formatting string
+- Added format string checking to Sprintf function
+- Fixed PATH_DIR core and include bugs
+- Optimized conditional stack handling to re-use allocated stack structures
+- Optimized variable re-assignment to only allocate a new block of memory
+  if new value will not fit in the previously allocated space 
+- Fixed curly-brace problem when used within functions
+- Changed Makefile to copy libphp.a to Apache directory - suggested by Thomas
+  Bullinger
+
+May. 7 Version 1.99o
+- Fixed bug related to unset() command
+- Fixed stack frame bug which caused problems with static variables in nested
+  function calls
+- Fix parser stack problems when a function returned early from inside an
+  if/while/switch construct
+- Minor SunOS4 configuration/install changes
+- Upgraded from Autoconf-2.4 to Autoconf-2.9 and fixed configure.in to be
+  more intelligent.  
+- Added extra GD functions - ImageCreateFromGif() and ImageCopyResized()
+  from patch by Endaf Jones <ejones@zener.com>
+- Clean up doc.html tags - thanks to David Perry
+- Moved basic function calls to lexical analyzer - cut parse.c size in half
+  Note the change to the procedure for adding new functions to PHP
+- Implemented { and } which means you can now do: if(...) { ...; } as well as
+  the old: if(...); ...; endif;
+- Re-arranged some things in the lexical analyzer to try to get some
+  better performance out of the parser (didn't help much)
+- Fixed $PATH_DIR bug
+- Fixed Exit bug - it didn't exit when called from an included file
+
+Apr. 30 Version 1.99n
+- Fixed GET method variable core dump in Apache module version (patch m1)
+- Fix problem with Header command in Apache module version (patch m1)
+- Added phpVersion() function (patch m1)
+- Fixed Apache Module initialization problem when compiled without access 
+  control (patch m2)
+- $PATH_INFO fix for Apache module version (patch m2)
+- Caused fatal exit if debug file cannot be opened in DEBUG mode (patch m3)
+- Fixed nasty GetVar bug introduced in m2 (patch m3)
+- Added $PHP_SELF variable to represent document's own URL correctly in both
+  Apache module and regular CGI version.  This should be used in place of
+  $SCRIPT_NAME$PATH_INFO - example scripts have been updated to reflect this
+- Blanked out $SCRIPT_NAME variable when running as Apache module
+- Fixed core dump in reg_search() function
+- Fixed potential memory leak in deletearray function
+- Fixed potential busy-loop in parser if a comment was not terminated
+- Added ability to do a #!/bin/php.cgi when running from the command line
+  to use php.cgi as a command line scripting language (Not sure why anybody
+  would want to do this though)
+- Fixed core dump when include file could not be found from command line
+- Fixed Apache module coredump in dbm interface
+- Added $PATH_TRANSLATED to Apache module for CGI compatibility
+
+Apr. 25 Version 1.99m
+- Fixed various small compile problems
+- Fixed memory re-allocation bug in stack.c/var.c - This bug affected variable
+  substitution when the variable content was excessively long.
+- Fixed broken regression testing scripts (make test)
+- Fixed off-by-one memory allocation error in the RegReplace code
+- Made Apache module version compatible with the 1.0 Apache API
+- Made ?config screen work in Apache module
+ 
+Apr. 23 Version 1.99l
+- Initial Apache Module Support (For Apache 1.1 API)
+- Added phpinfo() function to aid in debugging
+- Removed stack check from SetVar function
+- Fixed stack problem in mktime() function
+- Added Chr() function
+- Fix buffer limit in Debug() function
+- Fix Msql() return codes
+
+Apr. 16 Version 1.99k
+- Added support for the postgres95 database. [Adam Sussman (asussman@vidya.com)]
+- Added File() function
+- Fixed bug in DecBin() function
+- Added setsince.html to examples directory (sets "hits since" date for dbm
+  logs)
+- Added unset() function to undefine a variable
+
+Apr. 10 Version 1.99j
+- Added "first" key handling to examples/log.html
+- Moved comment identifying from parser to lexer - now all sorts of
+  combinations of comments are handled correctly - thanks to suggestion
+  from alex@2win.com
+- Fixed order problem with extra libraries in install
+- Fixed Error print state problem
+- Added SetErrorReporting() function as a more general way to disable
+  error message printing
+- Documented the above and fixed up the cgi redirection section
+- Made mlog.phtml log viewer propogate password/email 
+- Added sprintf function
+- Documented sprintf function and added section on handling SELECT MULTIPLE
+- Made non-MMAP systems buffer entire file to avoid any file seeks
+- Removed incomplete and outdated NSAPI code
+- Added ability to define functions and call them
+- Fixed annoying Header problem in error.c
+- Added global and static variable support to function mechanism
+- Added regression tests for function mechanism
+- Added function parameter passing and return values
+- Made parser re-entrant (Bison pure_parser) - This has the slight drawback
+  that the parser is now GNU Bison dependant.  "make parser" now requires
+  bison to generate a correct parser
+- Documented new function feature
+
+Apr. 2 Version 1.99i
+- Added urlencode() function
+- Added Sin(), Cos(), Tan(), Exp(), Log(), Log10() and Abs() math functions
+- Added Ord(), QuoteMeta() and UcFirst() functions
+- Added "first" access dbm entry to dbm-based logging - thanks to Greg Sawicki
+- Ouch!  Non-code related bug.  My hand broke.
+- Fixed GD-related documentation typos
+- Fixed PHP_ROOT_DIR related core dump - thanks to Greg Sawicki
+- Fixed core dump in malformed regexp register expressions
+
+Mar. 26 Version 1.99h
+- Minor fixes to doc.html documentation (g1)
+- Fixed compiler warning in rand.c (g1)
+- Changed install script to correct inconsistency in CFLAGS (g1)
+- Fixed TEXTAREA file upload bug in mime.c.  Thanks to a patch from
+  Marc Druilhe <M.Druilhe@frld.bull.fr> (g1)
+- Added getenv() function (g1)
+- Documented getenv() function
+- Fixed bug in msql_listdbs() function
+- Made parser ignore cr/lf and other control chars within <? > blocks
+- Changed dbm logging to get its "start_logging" data from the first log entry
+  instead of trying to get it from the stat struct for the log file
+- Added return status to exec() and system() commands.  For backwards 
+  compatibility the return status is returned in a passed variable. ie.
+  exec("cmd",$array,$ret) and system("cmd",$ret)  The return status will be
+  in $ret
+- Cleaned up date formatting command
+- Fixed numerous typos in documentation
+- Added register support to regular expression functions
+- Added long section on regular expressions to documentation
+- Added section to README on how to access the PHP source tree with CVS
+
+Mar. 18 Version 1.99g
+- Fixed typos in msql.c (f1)
+- Added default log/acc dir stuff to install program (f1)
+- Re-fixed logging bug (this was fixed in patch e2 but somehow escaped) (f2)
+- Fixed missing entity in HtmlSpecialChars function
+- Modified ParseEscapes() function to make it possible to escape \n with \\n
+  in a reg_replace() call or anywhere else for that matter(f3)
+- Fixed documentation bug in strrchr() explanation - from Robert J. Lebowitz
+- Added msql_ListDbs(), msql_dbName(), msql_DropDB(), msql_CreateDB() from
+  patch by cwcheng@ucla.edu
+- Documented the above
+- Made install/configure script much smarter thanks to work by Gary Shea
+  <shea@xmission.com>  install will now ask for any extra include/lib 
+  directories that should be searched for the various libraries needed
+  by PHP/FI
+- Made configure look for lrand48() function which it will use instead
+  of rand() if present - suggested by Kenneth Holmlund
+- Changed VarTree data structure to support doubly-linked lists in order
+  to be better able to traverse arrays
+- Added Reset() function to reset an array pointer back to the beginning
+- Added End() function to move an array pointer to the end
+- Added Next() and Prev() functions to move array pointer ahead and back one
+- Added Key() function to determine the index of the current array item
+- Documented the above functions
+
+Mar. 8 Version 1.99f
+- Fixed compile problem for non-mSQL systems (patch e1)
+- Fixes to examples/mlog.html msql-log viewer
+- Fix logging bug on pages on which logging is turned off (patch e2)
+- When no logging was enabled, a footer would still appear -fixed (patch e3)
+- Added msql_listtables() and msql_tablename() functions from patch by
+  mark@opencad.com and cwcheng@ucla.edu
+- Fixed ?config bug on internally generated pages
+- Fixed core dump when called from command line with invalid filename
+- Added HtmlSpecialChars() function
+
+Mar. 6 Version 1.99e
+- Added socket and microtime functions contributed by Paul Panotzki
+- Fixed re-allocation bug in var.c which broke things when a variable
+  substition resulted in a string longer than 1024 bytes
+- Added option to store log data in an mSQL database as opposed to a
+  dbm file
+- Added PATTERN_RESTRICT compile-time option - this enables you to compile
+  php/fi to allow it to only open files whose names match the given pattern
+- Added blurb on non-indexed arrays to documentation
+- Cleanups in file.c - added filename to "Unable to open file" message
+- Fixed bug in post.c which caused GET method array variables to be rejected
+  by the security mechanisms
+- Fixed fseek() yacc bug in parse.raw
+- Moved logging calls to Exit() routine in lex.c to enable logging on pages
+  that call exit()
+- Removed dependency between setlogging() and setshowinfo()
+- Logging for both dbm and msql based methods behaves slightly differently
+  now.  The page footer is now shown before any log entries are added.
+- Fixed header bug which caused the default "content-type: text/html" header
+  to be sent prematurely.
+- Fixed PHP_ROOT_DIR bugs - thanks to 
+  Georg Hessmann <hessmann@informatik.uni-hamburg.de>
+- Added blurb on using the new Netscape Server Redirection Module to the 
+  documentation
+- Added "Security Issues" blurb to documentation
+- Added GetStartLogging() function - this returns the time when access logging
+  commenced for a given page
+- Added mlog.html log database viewer application to view msql-based logs. 
+  This corresponds to the log.html application used for dbm-based logging.
+
+Feb. 19 Version 1.99d
+- The rewritten ParseEscapes function was broken in a major away (patch c1)
+- Logging bugs (patches c2 and c3)
+- Fgets needs to have special characters escaped (patch c4)
+- Once again fixed logging problems related to the include command (patch c5)
+- Added setlocale() call to beginning of main() for non-English language
+  support (patch c6)
+- Small change to _RegReplace to not print an error when the string argument
+  is an empty string <patch c7)
+- Various typo-fixes and clarifications in doc.html
+- Fixed potential core dump in dbm code. (patch c8)
+- Made setlocale() support optional with a #define in php.h
+- Fixed broken getlastmod() when file has an include in it
+- Added regression tests (make test)
+
+Feb. 12 Version 1.99c
+- Oops.  Fixed small bug in msql_regcase()
+- Fixed documentation bugs in doc/doc.html
+- Replaced hard-coded '$' references with VAR_INIT_CHAR (defined in php.h)
+- Added mkdir() function
+- msql() function now only returns -1 on an error.  0 is returned if query
+  didn't return anything (and wasn't supposed to) and a positive integer
+  is returned if a result pointer was allocated.  (doc.html updated to reflect 
+  this)
+- Fixed log.html bug
+- Fixed bug in logging related to log.html bug
+- Added .phtml (Apache cgi_redirect_module check to log.html)
+- Fixed isset() parser bug and related potential core dump in var.c
+- Changed documentation to reflect new location of GD library 
+  (www.boutell.com/gd)
+- Wrote more descriptive chapter on Apache httpd and how to configure
+  a cgi redirection module with Apache
+- Memory handling changes to _RegReplace function in reg.c - fixed potential
+  memory leak
+- Wrote long chapter in doc.html on how to add your own functions to PHP/FI
+- Added @ (no error printing) version of fopen call
+- Fixed silly coredump in fopen() function
+- Fixed file upload bug - normal form fields are not url encoded when they
+  come as part of the form-data in an upload.  I had incorrectly assumed
+  that they would be encoded and attempted to decode them.
+- Fixed AddSlashes bug which caused memory corruption when special characters
+  needed to be escaped - lots of memory weirdness here.  Hopefully it is 
+  clean now.
+- Rewrote ParseEscapes function in echo.c - Another source of memory 
+  allocation confusion cleared up.
+
+Feb. 5 Version 1.99b 
+- Fixed #if -> #ifdef typo in mime.c
+- Added check to OpenFile() to disallow loading files that look like temporary
+  files from the File Upload function
+- Added check for a MAX_FILE_SIZE variable to be defined as a hidden field
+  before the file field in a file upload form.  If present, it gives the max
+  size in bytes an uploaded file may be.
+- Cleaned up error reporting a bit
+- Fixed year 2000 bug in date() function
+- Added install question to query whether or not file upload support is desired
+- Added a "BROKEN_CONFIG_PW" #define to php.h for those people who cannot
+  get ?config to accept their password no matter what they do.
+- Windows versions of NetScape seem to send the full local pathname of a
+  file in the file upload feature - added code to only store the last component
+  of this path.
+- Added #if LOGGING code around Logging lines in acc.c to fix compile problem
+  when access control is selected without logging
+- Fixed putenv-free bug in file.c - Thanks to Kenneth Holmlund for finding this 
+  one
+- Added \n \r \t processing to "header" command
+- Added $$variable syntax to support variable variable names
+- Did more work on the NSAPI support - still not functional yet
+- Initial work for supporting Empress (a full commercial RDBMS)
+- Made msql() function return "-1" on a failed query
+- New internal variable: $phperrmsg - This will contain any error message that
+  may be generated by PHP.  Especially useful in conjunction with the '@'
+  character which hides error messages from being shown from certain functions
+- Fixed logging bug related to "include" command
+- Made msql_regcase() a bit smarter so it doesn't do [11][22] for example
+- Added stuff to doc/doc.html
+- Added chmod(), chown() and chgrp() native PHP functions
+
+Jan. 24 Version 1.99a (Not quite ready to call it 2.0 yet)
+- Fixed floating point multiplication bug
+- Fixed Guestbook bug
+- Fixed SecureVar() bug
+- Fixed core dump which happened when running PHP from the command line
+  and the file the file argument pointed to did not exist
+- Added setshowinfo() and setlogging() functions to be able to enable/disable
+  logging and info blocks from within a script as opposed to having to use
+  the ?config screen to do it
+- Actual log entry is done after page is loaded now both in order for
+  setlogging() to work and for performance reasons
+- Fixed bug in CheckType function which would incorrectly cast a posted
+  variable like "-0.5" to be a string instead of a double.
+- Fixed bug in lex.c which prevented something like: $a = .05; from parsing 
+  correctly
+- Added usleep() function
+- Fixed \\" bug.  Two backslashes followed by a quote character would
+  mess up parsing from thereon.
+- Removed the StripSlashes() call right before the msqlQuery() call in msql.c.
+  We don't want the slashes stripped at this point.
+- Added a MAGIC_QUOTE #define to php.h.  If MAGIC_QUOTES is defined, then the
+  single quote (') character will automatically be escaped when it is found
+  in a variable which comes from either a GET or a POST method form.
+- Added File Upload support.
+- Finally fixed the bug which caused the page counter to be stuck at 1 for the first
+  two hits on a page.
+- log filenames are no longer based on inodes, but on the actual filename.
+  *NOTE* This makes logs from previous versions incompatible!
+- Fixed a number of logging related bugs which could potentially have caused core
+  dumps in earlier versions.
+- Added a default password of "php" to the ?config screen.  This password will be
+  used in case the getpwuid() call to get a user's alphanumeric user id fails.
+  ie. if you run PHP ?config for the first time and your user id does not work
+  as your password, try entering: php
+
+Dec. 8 Version 1.99
+- Fixed minor compile problem related to compiling without MMAP support
+- Added rwho.html example
+- Fixed compile problem in var.c
+- Added |= and &= operators
+- Added support for \n, \r and \t within strings
+- Cleaned up regexpr code to make it more ANSI compliant to be able to use 
+  bounds-checking version of gcc (xgcc)
+- Cleaned up bison-generated parser code to make it more ANSI compliant
+  to be able to use xgcc
+- Fixed inconsistencies in StrTok() function (found by xgcc)
+- Fixed nasty "off-by-one" memory allocation bug in dbm module (found by xgcc)
+- Package is now distributed under GPL
+- Changed from a dynamically to a statically allocated buffer in TempNam() to
+  get around xgcc (perhaps unfounded?) complaints
+- Fixed potential core dump in log.c found by xgcc
+- Fixed potential core dump in exec.c found by xgcc
+- Added mail.html example to examples directory
+
+Nov. 18 Version 1.98
+- Added msql_regcase() function which changes a string like "abc" to 
+  "[aA][bB][cC]"
+- Added C-like += and -= operators to parser
+- Changed StrVal() function to return the argument's string value
+- Added IntVal() and DoubleVal() functions to return the argument's
+  integer and double values respectively
+- Added SetType() and GetType() functions to set/get a variable type
+- Added sys/types.h include to php.h to fix problem on BSDi 1.1
+- Major Makefile modifications to prepare for NSAPI support
+- Code changes to prepare for NSAPI support
+- Added mktime() function
+- Changed escape character (backslash) handling
+- Fixed error reporting bug when an error occurs after an included file
+  (the wrong filename was showing up in the error message)
+- Added "table.field" syntax for getting results of joins in msql_result()
+  function
+- When a variable is used as both indexed and unindexed, the unindexed
+  contents is synomymous with index "0" - Using a veriable in this manner
+  core dumped php previously
+- Small change to the FixFilename() function to load file.htm if file.html
+  is not found and file.htm is present
+- Added SecureVar() function to be able to mark variables as not being allowed
+  to be set by the GET method.  This is to prevent people from faking variable
+  settings in secure environments.
+- Added BinDec() function to convert a string representing a binary number to 
+  decimal
+- Added DecBin() function to convert a long integer to a binary number in a 
+  string
+- Added HexDec() function to convert from a hex string to a long integer
+- Added DecHex() function to convert from a long integer to a hex string
+- Added OctDec() function to convert from an octal to a decimal number
+- Added DecOct() function to convert from a decimal to an octal number
+- Added SubStr() function 
+- Lots of new stuff in the doc/php.html documentation
+- Increased parser stack size (should make parser stack overflow errors go away)
+- Major changes to parser yacc code to reduce shift/reduce conflicts and 
+  completely eliminate reduce/reduce conflicts
+- Added Fopen(), Fclose(), Fgets(), Fputs(), Rewind(), Ftell() and Fseek()
+  functions for manipulating text files
+- MAJOR performance enhancement!  Files are now mapped directly into memory
+  using the mmap() system call.  This will improve performance on all
+  page loads, but will be most apparent on pages with while loops with
+  many iterations.
+- Fixed long-standing bug related to initial access logging
+- Removed **, // and %% operators.  They didn't make much sense and only
+  served to make the parser more complex than necessary
+- Fixed bug in log.html where first entry would always show a date in 1969
+- Minor fixes to survey.html and guestbook.html examples.  ie. replace strval()
+  with intval() calls
+- Made PHP script error message reporting more informative.  The actual
+  character which triggered the error is highlighted now.
+- Added GetMyPid() function - returns current php process id
+- Fixed busy-loop problem on bogus URL's which occurred on certain
+  systems.  Linux/Apache systems seemed to be most sensitive to it.
+- Added missing "division by zero" check
+- Added &, | and ^ operators - mathematical AND, OR and XOR
+- Added ChDir() function
+- VAR_INIT_CHAR definition in php.h to allow customization of variable
+  designation character
+
+Nov. 7 Version 1.97
+- Removed extraneous debug message from conf.c
+- Small changes in dns.c regarding error reporting
+- Stripped any trailing whitespaces from end of exec strings
+- Fixed array variable substitution in " " expressions bug
+- Added PutEnv() function
+- Fixed bug in Header command - it wasn't sending a carriage return
+- Included Bison 1.24 generated parse.c file
+- Changed Makefile to not try to generate parse.c 
+  ('make parser' to generate parse.c if you need to)
+- Fixed possible infinite loop in RegReplace() function
+- Modified mSQL support to allow for multiple connections to multiple
+  msql daemons on either the same machine or on different machines.
+  (To work correctly, this requires some minor mSQL modifications)
+- Removed length check on EMAIL_ADDR variable
+- Fixed \" bug - now any character may be escaped inside a quoted string
+- Removed "." default directory suggestion from install script
+- Small fixes to survey.html and guestbook.html example programs
+
+Nov. 1 Version 1.96
+- Fixed bug in log.html - missing dbmclose() call.
+- Fixed various type-related issues which should make PHP compile and
+  work nicely on 64-bit architectures like DEC's Alpha.  
+- Added VIRTUAL_HOST #define to php.h to overcome SCRIPT_NAME bug
+  on some httpd's when virtual hosts are used.
+- Fixed space problem in form GET/POST data support.
+
+Oct. 30 Version 1.95
+- Fixed ?config problem related to matching on e-mail addresses
+- Added ability to edit entries in example guestbook
+- Added YYMAXDEPTH 50000 definition to parse.y to eliminate stack overflows in
+  older versions of bison
+- Added support for Tom Boutell's GD library
+- Added ImageCreate(), ImageDestroy(), ImageGif(), ImageSetPixel(), 
+  ImageLine(), ImageRectangle(), ImageFilledRectangle(), 
+  ImageArc(), ImageFillToBorder(), ImageFill(), ImageColorAllocate(),
+  ImageColorTransparent(), ImageInterlace() functions
+- Added tempnam() function
+- Added unlink() function
+- Added rename() function
+- Added sleep() function
+- Added ?url to Location directive on external E-mail and Password forms
+  enabling people to write these external forms and use $argv[0] as the
+  form to go to once an e-mail address/password has been entered
+- Added the ability to specify an array variable in the exec() call to
+  store all lines of output from the given Unix command in
+- Fixed linenumber report inconsistency in error message when file had a while loop
+- Added Max() and Min() functions to return the maximum or minimum element of an array
+- Improved the docs/php.html documentation
+- Fixed bug in file...() functions
+- Added ImagePolygon() and ImageFilledPolygon() functions which take a
+  PHP array of x,y points as arguments
+- Changed msql_result() to ensure it never returned NULL
+- Changed echo command to not print an error if argument is NULL
+- Rewrote FixFilename function to allow ~username expansion.  Also made
+  it chdir() to the directory where the current html file is located to
+  allow relative paths in the <IMG > tag.  Also made it first try to
+  load index.html and then Overview.html if given filename is a directory.
+- Added PATH_DIR variable to be only the directory portion of PATH_INFO
+- Fixed potential bug in Exec()/System() functions
+- Optimized stat code to remove redundant calls
+- Added PHP_PUB_DIRNAME and PHP_ROOT_DIR configurable options to php.h
+- Added ImageChar(), ImageCharUp(), ImageString() and ImageStringUp() functions
+- Added survey.html example 
+- Added traditional GET method support 
+- Added explanation to php.html on how to propogate e-mail addresses using new GET
+  method support
+  
+Oct. 22 Version 1.94
+- Fixed numerical variable name bug in var.c
+- Fixed potential floating point exception core dump
+- Fixed Arithmetic snafu
+- Fixed unary minus bug
+- Fixed include command bug
+- Change in acc.c to convert domain name and e-mail address to lower case
+  before doing a match.
+- Change in file.c to look for given file relative to location of php binary
+  if file cannot be found relative to server's root_dir.
+- Change in file.c to force loading of either index.html or Overview.html if the
+  given path is a directory
+- Added guestbook to examples directory
+- Fixed day of week bug in date.c
+- Added support for brackets in conditional expressions
+- Fixed sort bug and made sort function type aware
+- Fixed bug in Exit() - I was closing a null fp in some cases
+
+Oct. 19 Version 1.93
+- Changed /bin/more to /usr/bin/more in install
+- Fixed typo in config.h.in -lgdbm comment
+- Fixed compile problem when access control and access logging is disabled
+- Changed internal re_* function names to php_re_* to avoid conflicts on SGI boxes
+- Changed msqlsethost() function name to msql_connect() to be consistent
+- Added multiple result cursors to mSQL support
+- Changed syntax of msql_result() function
+- Added msql_freeresult() function
+- Added msql_fieldname() function
+- Added msql_fieldtype() function
+- Added msql_fieldlen() function
+- Added msql_fieldflags() function
+- Added msql_numrows() function
+- Added msql_numfields() function
+- Updated demo_msql.html to reflect above changes
+- Fixed various minor things to get it to compile cleanly on SunOS4.1.3
+- Fixed msql library detection problem
+- Fixed Makefile bug which caused ACCESS_DIR error messages on some systems
+- Added some more info to the ?info screen
+
+Oct. 17 Version 1.92
+- First public release of the code
+
+Oct. 9 Version 1.91
+- Complete rewrite of original PHP and integrated into code
+
+Sept. 18 Version 1.90
+- Complete rewrite of original FI.
+
+|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||

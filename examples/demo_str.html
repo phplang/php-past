@@ -1,0 +1,67 @@
+<html><head><title>String Manipulation Demo</title></head>
+<body>
+<center><h1>String Manipulation Demo</h1></center>
+<dl>
+<dt>Functions demonstrated
+<dd><tt>&lt;?strlen($string)&gt;</tt><br>
+<tt>&lt;?strval($string)&gt;</tt><br>
+<tt>&lt;?strtok($string,$arg)&gt;</tt><br>
+<tt>&lt;?strtoupper($string)&gt;</tt><br>
+<tt>&lt;?strtolower($string)&gt;</tt><br>
+<tt>&lt;?strstr($string,$arg)&gt;</tt><br>
+<tt>&lt;?strchr($string,$arg)&gt;</tt><br>
+<tt>&lt;?strrchr($string,$arg)&gt;</tt><p>
+</dl>
+These functions allow you to manipulate strings in various ways.
+They are similar in functionality to the corresponding C versions,
+so you may simply read the C man pages on your system to get a better
+idea of how they work.<p>
+
+<b>strlen()</b> returns the length of the string argument.<p>
+<b>strval()</b> returns the integer value of the string.  The C equivalent of this
+function is the atol() function.<p>
+<b>strtok()</b> is used to tokenize a string.  That is, if you have a string like
+<b>&quot;This is an example string&quot;</b> you could tokenize this string into
+its individual works by using the space character as the token.  You would use 
+the following script code:<br><br>
+<pre>&lt?
+	$string = &quot;This is an example string&quot;;
+	$tok = strtok($string,&quot; &quot;);
+	while($tok);
+		echo "Word=$tok&lt;br&gt;";
+		$tok = strtok(&quot; &quot;);
+	endwhile;
+&gt;</pre>
+
+The output looks like this:<br><br>
+<tt><?
+	$string = "This is an example string";
+    $tok = strtok($string," ");
+    while($tok);
+        echo "Word=$tok<br>";   
+        $tok = strtok(" ");
+    endwhile;  
+></tt><p>
+Note that only the first call to <b>strtok</b> uses the string argument.  Every
+subsequent call to strtok only needs the token to use as it keeps track of where
+it is in the current string.  To start over, or to tokenize a new string you
+simply call strtok with the string argument again to initialize it.<p>	
+
+<b>strtoupper()</b> and <b>strtolower()</b> converts the string argument to
+all upper and all lower case characters respectively.<p>
+
+<b>strstr()</b> and <b>strchr()</b> are actually identical functions.  They
+can be used interchangebly and both are included only for completeness sake.
+They will return the portion of the string argument starting at the point
+where the given sub-string is found.  For example, in our example string from
+above, the call: <tt>&lt;echo strstr($string,&quot;an &quot;)&gt;</tt> would 
+return the string: <tt>&quotan example string&quot</tt>.<p>
+
+<b>strrchr()</b> is identical to <b>strchr</b> except for the fact that it
+will start at the end of the string and search backwards for a match.<p>
+
+Another important set of functions to know about when dealing with strings
+are the regular expression functions demonstrated in the 
+<a href="<?echo $SCRIPT_NAME><?echo reg_replace("demo_str","demo_reg",$PATH_INFO)>">
+Regular Expression Demo</a>.<p>
+</body></html>

@@ -1,0 +1,42 @@
+dnl $Id: configure.in,v 1.6 1996/05/02 18:25:38 rasmus Exp $
+dnl Process this file with autoconf to produce a configure script.
+
+AC_INIT(src/main.c)
+AC_CONFIG_HEADER(config.h)
+
+dnl Checks for programs.
+AC_PROG_YACC
+AC_PROG_CC
+AC_PROG_INSTALL
+AC_PROG_RANLIB
+
+dnl Checks for libraries.
+dnl use gdbm, Berkeley DB, ndbm/dbm in that order
+AC_CHECKING(Trying to determine best dbm library available on system)
+AC_CHECK_LIB(dbm, dbm_open, AC_DEFINE(NDBM) best_dbm=-ldbm)
+AC_CHECK_LIB(db, dbm_open, AC_DEFINE(NDBM) best_dbm=-ldb)
+AC_CHECK_LIB(gdbm, gdbm_open, AC_DEFINE(GDBM) best_dbm=-lgdbm)
+AC_SUBST(best_dbm)
+if test "a$best_dbm" = a; then
+	AC_MSG_WARN(No dbm library found - install gdbm to get dbm support in the package)
+else
+	AC_MSG_RESULT($best_dbm chosen)
+fi
+AC_CHECK_LIB(nsl, t_accept)
+AC_CHECK_LIB(socket, socket)
+AC_CHECK_LIB(m, sin)
+AC_CHECK_LIB(gd, gdImageLine)
+
+dnl Checks for header files.
+AC_HEADER_STDC
+AC_HEADER_DIRENT
+AC_CHECK_HEADERS(fcntl.h unistd.h crypt.h sys/file.h memory.h)
+
+dnl Checks for typedefs, structures, and compiler characteristics.
+AC_STRUCT_TM
+
+dnl Checks for library functions.
+AC_FUNC_VPRINTF
+AC_CHECK_FUNCS(crypt memcpy strdup strerror strcasecmp strstr flock lockf mmap putenv tempnam usleep setlocale gettimeofday setvbuf srand48 lrand48)
+
+AC_OUTPUT(src/Makefile)

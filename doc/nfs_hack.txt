@@ -1,0 +1,41 @@
+Many ISP's have a separate web server machine and users' home pages
+are located in their public_html directories which are mounted via
+NFS.  Many ISP's also use rather primitive Unix systems that do not
+provide the rpc.statd and rpc.lockd facility for locking files over
+NFS.
+
+If you install PHP2 and get error messages similar to "Can't be WRITER"
+then this is most likely the problem.  Talk to your system 
+administrator and ask him or her whether or not your directory is
+NFS mounted on the web server machine, and if so, whether or not
+the system support NFS file locking.
+
+To get around this problem, you need to do two things.
+
+1) Edit src/Makefile and add -DNFS_HACK to the end of the CPPFLAGS line.
+
+2) Use a dbm library that does not use flock or lockf file locking.  
+   The easiest thing to do is to grab the GNU gdbm distribution from 
+   prep.ai.mit.edu and edit the systems.h file.  Use the following
+   definitions in place of the ones that are there:
+
+        #define UNLOCK_FILE(dbf) dbf=dbf
+        #define READLOCK_FILE(dbf) lock_val=0
+        #define WRITELOCK_FILE(dbf) lock_val=0
+
+   The compile this new libgdbm.a file and link php with this library.
+   Make sure that you have 
+
+        #define GDBM 1
+
+   in the php config.h file and that in src/Makefile you link php with
+   your newly created libgdbm.a with a line something like:
+
+        LIBS =  -L../../lib -lgdbm
+
+   Be aware that this gdbm library now doesn't do any file locking.  PHP
+   will use standard .lck files to manage the file locking over NFS, but
+   other package that might rely on libgdbm.a will not know that it has
+   been modified, so you should probably name it something else to make
+   sure you don't accidentally link something else with this library later
+   on.

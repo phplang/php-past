@@ -1,0 +1,42 @@
+<html><head><title>Category Manager</title></head>
+<body>
+<?
+$database="url_mgr";
+if($delete);
+	msql($database,"delete from categories where name='$delete'");
+endif;
+if($add);
+	msql($database,"insert into categories values ('$name','$description')");
+endif>
+
+<center><h1>Category Manager</h1></center>
+<table border=1>
+<tr><th>Name</th><th>Description</th></tr>
+<?$result = msql($database,"select * from categories order by name");
+$num = msql_numrows($result);
+$i=0;
+
+while ($i<$num)>
+	<tr><td><?$name=msql_result($result,$i,"name")><?echo $name></td>
+	<td><?echo msql_result($result,$i,"description")></td>
+	<td>
+	<form action="/cgi-bin/php.cgi/~rasmus/url_cat.html" method="POST">
+	<input type="hidden" name="delete" value="<?echo $name>">
+	<input type="submit" value="Delete">
+	</td></form></tr>
+	<?$i++>
+<?endwhile>
+
+<form action="<?echo $PHP_SELF>" method="POST">
+<input type="hidden" name="add" value="add">
+<tr><td>
+<input type="text" name="name" value="" maxlength=32 size=20>
+</td><td>
+<input type="text" name="description" value="" maxlength=256 size=40>
+</td><td>
+<input type="submit" value="Add">
+</td></tr>
+</form>
+</table><hr>
+<a href="<?echo $SCRIPT_NAME>url_main.html">Back to Top Menu</a>
+</body></html>

@@ -1,0 +1,63 @@
+#!/bin/sh
+if echo '\c' | grep -s c >/dev/null 2>&1
+then
+	ECHO_N="echo -n"
+	ECHO_C=""
+else
+	ECHO_N="echo"
+	ECHO_C='\c'
+fi
+
+cat <<EOF
+PHP/FI Regression Test Menu
+
+1) Basic Tests
+2) Language Construct Tests
+3) Regular Expression Tests
+4) Built-in Function Tests
+5) DBM Tests
+6) mSQL Tests
+7) Postgres95 Tests
+0) Run All Tests
+q) Quit
+EOF
+$ECHO_N "? $ECHO_C"
+read a
+if [ "$a" = "q" ] || [ "$a" = "Q" ]
+then
+	exit
+fi
+case $a in
+1) for i in basic/*.tst; do
+   ./testphp $i
+   done
+   ;;
+2) for i in lang/*.tst; do
+   ./testphp $i
+   done
+   ;;
+3) for i in reg/*.tst; do
+   ./testphp $i
+   done
+   ;;
+4) for i in func/*.tst; do
+   ./testphp $i
+   done
+   ;;
+5) for i in dbm/*.tst; do
+   ./testphp $i
+   done
+   ;;
+6) for i in msql/*.tst; do
+   ./testphp $i
+   done
+   ;;
+7) for i in pg95/*.tst; do
+   ./testphp $i
+   done
+   ;;
+0) for i in basic/*.tst lang/*.tst reg/*.tst func/*.tst dbm/*.tst msql/*.tst pg95/*.tst; do
+   ./testphp $i
+   done
+   ;;
+esac

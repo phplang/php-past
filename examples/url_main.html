@@ -1,0 +1,72 @@
+<html><head><title>URL Manager</title></head>
+<body>
+<center><h1>URL Manager</h1></center>
+<?$database="url_mgr">
+
+To see a subset of the URL list, you may enter a keyword and/or a category
+you are interested in below.  You may also 
+<a href="/cgi-bin/php.cgi/~rasmus/url_add.html">Add a URL</a>
+or <a href="/cgi-bin/php.cgi/~rasmus/url_cat.html">Manage the Categories</a>.<br>
+<center>
+<form action="/cgi-bin/php.cgi/~rasmus/url_main.html" method="POST">
+KeyWord: <input type="text" name="keyword" value="<?echo $keyword>" maxlength=30 size=30>
+Category: <select name="category">
+
+<?if ($category)>
+<option SELECTED><?echo $category>
+<?endif>
+
+<?if ($category != "All")>
+<option>All
+<?else>
+<option SELECTED>All
+<?endif>
+
+<?$result = msql($database,"select name from categories where name<>'$category' order by name")>
+<?$i=0>
+<?$num = msql_numrows($result)>
+<?while($i<$num)>
+	<option><?echo msql_result($result,$i,"name")>
+	<?$i++>
+<?endwhile>
+</select><br>
+<input type="submit" value="Show URL's">
+</form></center>
+
+
+<?if (!$category)>
+	</body></html>
+	<?exit>
+<?endif>
+
+<center>
+<table border=1>
+<tr><th>URL</th><th>Description</th><th>Category</th></tr>
+
+<?if($category=="All");
+	$result = msql($database,"select url,description,category from urls where url like '%$keyword%' or description like '%$keyword%' order by url");
+	$num = msql_numrows($result);
+else;
+	$result = msql($database,"select url,description,category from urls where url like '%$keyword%' or description like '%$keyword%' and category='$category' order by url");
+	$num = msql_numrows($result);
+endif;
+
+$i=0;
+while ($i<$num)>
+	<tr>
+	<td>
+	<?$url=msql_result($result,$i,"url")>
+	<a href="<?echo $url>"><?echo $url></a>
+	</td>
+	<td>
+	<?echo msql_result($result,$i,"description")>
+	</td>
+	<td>
+	<?echo msql_result($result,$i,"category")>
+	</td>
+	</tr>
+	<?$i++>
+<?endwhile>
+</table>
+
+</body></html>

@@ -1,69 +1,267 @@
-PHP Tools - Personal Home Page Tools
-====================================
- Copyright (C) 1995 Rasmus Lerdorf
-====================================
+PHP/FI                                                                   README
+|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 
-This software is distributed under the GPL (GNU Public License).  Please
-see the accompanying "License" file for a complete description of the
-terms of this license if you are not familiar with them.
+Legal Stuff
+-----------
 
-====================================
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation; either version 2 of the License, or
+  (at your option) any later version.
 
-INSTALLATION:
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
 
-Step 1: Edit config.h and modify for your system.  Defaults should be
-        fine for most systems.  Then edit the Makefile and set the OPTIONS
-        variable to match your system configuration.
+  You should have received a copy of the GNU General Public License
+  along with this program; if not, write to the Free Software
+  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-Step 2: Type: make
+  See the file, COPYING, for the complete terms of the GPL.
 
-Step 3: Copy the cgi binaries to you cgi directory.  For most sites
-        running NCSA HTTPD you can just name them filename.cgi and
-        place them in your ~/public_html directory.  Or you may need to
-        put them in ~/public_html/cgi-bin.  Ask your system administrator
-        how to run your own cgi programs on your system.
 
-        ie.    cp *.cgi ~/public_html
+Before You Begin
+----------------
 
-Step 4: I'd recommend you run these scripts under your own user id as
-        opposed to under the httpd user id.  To do this you must set 
-        the setuid bit.  type:
+If you have absolutely no Unix experience, you may want to ask around
+for someone with a little bit of Unix knowledge to help you through 
+this installation.  Every attempt has been made to make it as simple
+as possible, but since the software is quite involved and relies on a
+number of different components, it is not realistic to assume it will
+go smoothly on all systems.  You will probably need someone around who
+knows the particulars of the destination system well.
 
-               chmod u+s ~/public_html/php*.cgi
 
-        It is possible to run without setuid, and on some systems
-        paranoid admins have user directories on non setuid filesystems.
-        The only thing to be aware of if you don't run setuid is that
-        access restrictions will not be completely secure, and you will
-        have a bit of a hassle editing the various log files this
-        package generates.
+Things You Need To Know Before Installing
+-----------------------------------------
 
-Step 5: Check http://www.io.org/~rasmus for complete installation and
-        configuration instructions.  (Yes, I am lazy.  I don't feel like
-        typing everything out twice.)
-        
-        Even if you don't think you need help, you might want to check this
-        URL anyway to check whether or not you have the latest version.
-        The easiest way to check the current version is to enter this
-        url into your browser:
+- Can you run both GET and POST method cgi programs on your server?
 
-        http://www.io.org/~rasmus/phpl.cgi?version
+  If not, you can not use this package.  On many public ISP's CGI
+  programs are either disallowed or severely restricted.  If this is
+  the case on your system, talk to your system administrator and ask
+  him/her to have a look at this package and see if they will install
+  it for you.
 
-        You can of course do that to your own version of the phpl.cgi 
-        binary to verify whether you have that version yet or not.
+- If you have mSQL installed on your system, you need to know the
+  base directory of this installation.
 
-Step 6: This step is very optional.  But if you wish, subscribe to the
-        PHP Mailing list by sending an e-mail message to:
+- If you have Postgres95 installed on your system, you need to know the
+  base directory of this installation.
 
-        majordomo@kajen.malmo.se
+- You need an ANSI-C compatible C compiler (gcc is fine).
 
-        with the line:
+- If you are going to be using this with mSQL, you need to install
+  mSQL before you install PHP/FI.
 
-        subscribe php-list your_email_address
+- If you are going to be using this with Postgres95, you need to
+  install at least the libpq.a library from the Postgres95 
+  distribution before installing PHP/FI.
 
-        in the body of the message.  The subject line is ignored.
-        This list will put you in touch with other people using the PHP
-        Tools and it will be a good source of information once you get
-        going.  
+- If you are going to be using gdbm, install gdbm before installing
+  PHP.
 
-                                          Rasmus Lerdorf <rasmus@io.org>
+- If you are going to be using GD, install GD before installing PHP/FI.
+
+- If you are installing the Apache module version, you will need to 
+  know the Apache src code directory location.
+
+
+FI Notes
+---------
+
+FI is a subset of the PHP distribution.  Throughout the documentation
+PHP and FI will be used interchangeably or together.  They refer to
+the same thing.  On my system here the difference between FI and PHP
+is that the FI binary is compiled without the access logging and
+access restriction code thus producing a faster parser for doing simple
+database-enabled web pages.
+
+
+Installation Instructions
+-------------------------
+
+If you do not have gcc installed on your system, make sure you turn 
+on any compiler switches you need to make your compiler as ANSI 
+compliant as possible.  The package is known to compile without
+problems on the following systems.  If you manage to compile the
+package on a system not listed here, please send me some e-mail
+at: rasmus@io.org with the name of your OS and the version number
+and any other details I should know.
+
+Solaris 2.4
+Solaris 2.5
+SunOS 1.4.2
+SunOS 1.4.3
+SunOS 1.4.4
+Linux 1.3.89
+BSDi 2.0
+OSF1 (disable MMAP in config.h after running install)
+FreeBSD
+Irix
+Ultrix
+
+Step 1.
+
+  Run the install program: ./install
+
+  You will be asked a number of questions.  If you do not understand
+  what is being asked, simply hit return.  The default choice should
+  be safe on most systems.
+
+Step 2.
+
+  Go into the src directory: cd src
+
+Step 3.
+
+  type: make
+
+  This will create the actual executable program file named php.cgi
+  by default.  
+
+Step 4. (If you are NOT installing the Apache module version)
+  
+  Copy the php.cgi binary to your system's cgi-bin directory.  If you
+  do not have access to do this and wish to install it in your own
+  personal directory, you may do so, but you should set the setuid
+  bit on the executable with: chmod u+s /path/php.cgi
+  Setting the setuid bit is not crucial.  The benefit is that any files
+  created by php will be owned by you.  This means that you can edit
+  and delete such files directly.  Without the setuid bit set these
+  files will be owned by the httpd user id.
+
+Step 4. (if you are installing the Apache module version)
+
+  Change to your Apache src directory where the mod_php.c and mod_php.h
+  files should have been copied to. If they weren't which usually happens
+  because of permission problems, copy these two files there manually. Edit
+  your Apache Configuration file and add the EXTRA_LIBS line which was
+  produced at the end of Step 3. And add:
+
+    Module php_module mod_php.o
+
+  to the very end of the file. Then type: ./Configure and then make to rebuild
+  your Apache httpd binary. Install this binary.
+
+  Next you need to edit your Apache conf/srm.conf file and add a line like:
+
+    AddType application/x-httpd-php .phtml
+
+  This defines a new MIME, application/x-httpd-php, which will trigger the
+  PHP module to parse any file ending with the .phtml extension. You can pick
+  any extension you like for this.
+
+  Now you are ready to restar your httpd server. See the Apache Module
+  Notes for more details on configuring the PHP Module.
+
+Step 5.
+
+  Copy the doc/doc.html file to somewhere in your web document tree
+  and read it using your favourite browser.  This file is the overall
+  documentation for the package.
+
+
+Testing the software
+--------------------
+
+  Once installed you can test to see if your executable works by 
+  entering a URL similar to the following in your browser:
+
+  http://your.site.domain/cgi-bin/php.cgi
+
+  This should show you a page which contains the version number along
+  with various other useful information. 
+
+  To test the Apache module version, create any file with a .phtml
+  extension and put a tag like: <?phpinfo()> in the file and see if
+  it gets parsed.
+
+
+Using the software
+------------------
+
+  To actually use the software on an existing HTML file, you can 
+  simply append the path to your file to the above URL.  ie.
+
+  http://your.site.domain/cgi-bin/php.cgi/path/file.html
+
+  There are ways to automatically run your files through PHP.  These
+  methods are discussed in detail in the documentation.  
+
+  Have a look in the examples directory for some examples of web pages
+  developed using PHP/FI.
+
+  Documentation, such that it is, can be found in the doc directory.
+
+
+Troubleshooting
+---------------
+
+  There is a PHP mailing-list available for general discussion about
+  PHP/FI.  If you are having difficulties, this is probably
+  the best place to ask.  To sign up, send a message to:
+
+  majordomo@holli.com
+
+  and in the body of your message put:
+
+  subscribe php-list <your email address (without the brackets)>
+
+  Please make sure you have read through doc/doc.html before asking
+  questions on the mailing list. 
+
+  Online documentation, plus the latest version of the software can
+  be found at http://www.vex.net/php
+
+
+Getting Updates
+---------------
+
+  Entire new distributions of the package are made available frequently
+  in the file archive at http://www.vex.net/php/files
+
+  If you don't like re-installing every time you want to update your
+  package, or if you are a programmer and want to make sure you always
+  have the latest bleeding-edge version of the package, get a package
+  called CVS.  It is available at prep.ai.mit.edu:/pub/gnu.  Get version
+  1.7 or later.  Compile and install this package.  Make sure you enable
+  client support.  Check the cvs-1.7/src/options.h file and verify that
+  AUTH_CLIENT_SUPPORT is defined.
+
+  Now type the following:
+
+    cvs -d :pserver:cvsread@vex.net:/u/local/src/repository login
+
+  When it asks you for a password enter: phpfi
+
+  Then type:
+
+    cvs checkout phpfi
+
+  This will create a phpfi directory in your current directory.  It will
+  take a bit of time, especially if your network connection is slow.  
+  But once it is done, you will have an up to date copy of the master
+  CVS source tree.  You can then at any time cd into this directory and
+  type:
+  
+    cvs update
+
+  to update your source tree to be in sync with the master tree.
+
+  In order to compile php from this master source tree you will need the GNU
+  yacc replacement called Bison.  The only difference between the CVS tree and 
+  the tree you get from the file archive is that the CVS tree does not come 
+  with a pre-made parser.  You will need to type: 
+
+    make parser
+
+  in order to create the parse.c file.
+
+  Keep in mind that the CVS version may not always compile, or if it does
+  compile, it may not be stable.  The CVS version is a development version
+  and should be treated as such.
+  
+
+|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
