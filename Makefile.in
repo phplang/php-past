@@ -24,7 +24,7 @@
 # +----------------------------------------------------------------------+
 
 #
-# $Id: Makefile.in,v 1.361 2000/05/23 19:34:47 hholzgra Exp $
+# $Id: Makefile.in,v 1.362 2000/10/03 19:37:55 sas Exp $
 #
 
 prefix = @prefix@
@@ -138,26 +138,26 @@ dbase/libdbf.a:
 functions/ifx.c: functions/ifx.ec
 	@IFX_C_MAKE@
 
-functions/parsedate.h functions/parsedate.c:  $(srcdir)/functions/parsedate.y
-	$(YACC) -v -d $(srcdir)/functions/parsedate.y -o functions/parsedate.c
+$(srcdir)/functions/parsedate.h $(srcdir)/functions/parsedate.c:  $(srcdir)/functions/parsedate.y
+	$(YACC) -v -d $(srcdir)/functions/parsedate.y -o $(srcdir)/functions/parsedate.c
 
-language-parser.tab.h language-parser.tab.c: $(srcdir)/language-parser.y
-	$(YACC) -p php -v -d $(srcdir)/language-parser.y -o language-parser.tab.c
+$(srcdir)/language-parser.tab.h $(srcdir)/language-parser.tab.c: $(srcdir)/language-parser.y
+	$(YACC) -p php -v -d $(srcdir)/language-parser.y -o $(srcdir)/language-parser.tab.c
 
-language-scanner.o: language-scanner.c
-	$(CC) $(CFLAGS) $(LEX_CFLAGS) -c language-scanner.c
+language-scanner.o: $(srcdir)/language-scanner.c
+	$(CC) $(CFLAGS) $(LEX_CFLAGS) -c $(srcdir)/language-scanner.c
 
-language-scanner.c:  $(srcdir)/language-scanner.lex
-	flex -Pphp -olanguage-scanner.c -i $(srcdir)/language-scanner.lex
+$(srcdir)/language-scanner.c:  $(srcdir)/language-scanner.lex
+	flex -Pphp -o$(srcdir)/language-scanner.c -i $(srcdir)/language-scanner.lex
 
-configuration-parser.tab.h configuration-parser.tab.c:	$(srcdir)/configuration-parser.y
-	$(YACC) -p cfg -v -d $(srcdir)/configuration-parser.y -o configuration-parser.tab.c
+$(srcdir)/configuration-parser.tab.h $(srcdir)/configuration-parser.tab.c:	$(srcdir)/configuration-parser.y
+	$(YACC) -p cfg -v -d $(srcdir)/configuration-parser.y -o $(srcdir)/configuration-parser.tab.c
 
-configuration-scanner.o: configuration-scanner.c
-	$(CC) $(CFLAGS) $(LEX_CFLAGS) -c configuration-scanner.c
+configuration-scanner.o: $(srcdir)/configuration-scanner.c
+	$(CC) $(CFLAGS) $(LEX_CFLAGS) -c $(srcdir)/configuration-scanner.c
 
-configuration-scanner.c:	$(srcdir)/configuration-scanner.lex
-	flex -Pcfg -oconfiguration-scanner.c -i $(srcdir)/configuration-scanner.lex
+$(srcdir)/configuration-scanner.c:	$(srcdir)/configuration-scanner.lex
+	flex -Pcfg -o$(srcdir)/configuration-scanner.c -i $(srcdir)/configuration-scanner.lex
 
 clean:  
 	-rm -f libphp3.a libmodphp3.a libphp3.so libmodphp3-so.a php *.o

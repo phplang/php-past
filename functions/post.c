@@ -161,7 +161,23 @@ static char *php3_getpost(pval *http_post_vars)
 		file_upload = 1;
 		mb = strchr(ctype, '=');
 		if (mb) {
-			strncpy(boundary, mb + 1, sizeof(boundary));
+			size_t len;
+
+			mb++;
+			
+			len = strlen(mb);
+			if (len >= sizeof(boundary)) {
+				php3_error(E_WARNING, "File Upload Error: Boundary length exceeds limit.");
+				return NULL;
+			}
+
+			if (mb[0] == '"' && mb[len-1] == '"') {
+				memcpy(boundary, mb + 1, len - 2);
+				boundary[len - 2] = '\0';
+			} else {
+				/* Copies the NUL byte */
+				memcpy(boundary, mb, len + 1);
+			}
 		} else {
 			php3_error(E_WARNING, "File Upload Error: No MIME boundary found");
 			php3_error(E_WARNING, "There should have been a \"boundary=something\" in the Content-Type string");

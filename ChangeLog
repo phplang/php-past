@@ -1,7 +1,7 @@
 PHP 3.0 CHANGE LOG                                                    ChangeLog
 |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 
-October 09, 2000, Version 3.0.17
+October 11, 2000, Version 3.0.17
 - Fixed output functions (Sascha)
 - Added odbc_tables() (Frank)
 - Fixed htmlspecialchars/htmlentities inconsistencies (Rasmus)

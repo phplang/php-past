@@ -29,7 +29,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: main.c,v 1.515 2000/09/30 17:32:44 sas Exp $ */
+/* $Id: main.c,v 1.516 2000/10/11 09:31:30 kk Exp $ */
 
 /* #define CRASH_DETECTION */
 
@@ -1671,7 +1671,13 @@ int main(int argc, char *argv[])
 			GLOBAL(request_info).php_argv0 = strdup(argv[1]);
 		else GLOBAL(request_info).php_argv0 = NULL;
 #if FORCE_CGI_REDIRECT
-		if (!getenv("REDIRECT_STATUS")) {
+                /* Apache will generate REDIRECT_STATUS,
+                 * Netscape and redirect.so will generate HTTP_REDIRECT_STATUS.
+                 * redirect.so and installation instructions available from
+                 * http://www.koehntopp.de/php.
+                 *   -- kk@netuse.de
+                 */
+		if (!getenv("REDIRECT_STATUS") && !getenv ("HTTP_REDIRECT_STATUS")) {
 			if (php3_header())
 				PUTS("<b>Security Alert!</b>  PHP CGI cannot be accessed directly.\n\
 \n\
