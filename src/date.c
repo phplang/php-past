@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: date.c,v 1.12 1996/07/19 13:16:50 rasmus Exp $ */
+/* $Id: date.c,v 1.13 1996/08/27 01:25:12 rasmus Exp $ */
 #include <stdlib.h>
 #if TM_IN_SYS_TIME
 #include <sys/time.h>
@@ -164,6 +164,14 @@ void Date(int arg, int type) {
 			case 'A':
 				if(tm1->tm_hour > 11) strcat(out, "PM");
 				else strcat(out,"AM");
+				break;
+			case '\\':
+				s++;
+				if (*s == '\\') strcat(out,"\\");
+				else {
+					sprintf(temp,"%c",*s);
+					strcat(out,temp);
+				}
 				break;
 			default:
 				sprintf(temp,"%c",*s);

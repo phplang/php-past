@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: post.c,v 1.15 1996/08/18 12:30:58 rasmus Exp $ */
+/* $Id: post.c,v 1.16 1996/09/09 13:51:22 rasmus Exp $ */
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -317,15 +317,15 @@ void TreatHeaders(void) {
     type = "Basic";
 
 	if(user) {
-		Push(user,STRING);
+		Push(AddSlashes(user,1),STRING);
 		SetVar("PHP_AUTH_USER",0,0);
 	}
 	if(t) {
-		Push(t,STRING);
+		Push(AddSlashes(t,1),STRING);
 		SetVar("PHP_AUTH_PW",0,0);
 	}
 	if(type) {
-		Push(type,STRING);
+		Push(AddSlashes(type,1),STRING);
 		SetVar("PHP_AUTH_TYPE",0,0);
 	}
 #endif

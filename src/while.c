@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: while.c,v 1.15 1996/07/11 14:12:54 rasmus Exp $ */
+/* $Id: while.c,v 1.16 1996/09/05 06:13:26 rasmus Exp $ */
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -100,7 +100,7 @@ void PopWhileMark(void) {
 	}
 }
 
-void While(void) {
+void While(long sp) {
 	Stack *s;
 	int active, state, c;
 	
@@ -113,7 +113,7 @@ void While(void) {
 		}
 		c = CheckCond(s);
 		top->state = c;
-		if(NewWhileIteration()) {
+		if(NewWhileIteration(sp)) {
 			CondPush(c,-4);
 			BracePush(ENDWHILE);
 		} else {

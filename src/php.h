@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: php.h,v 1.95 1996/08/18 12:30:58 rasmus Exp $ */
+/* $Id: php.h,v 1.100 1996/09/10 13:18:57 rasmus Exp $ */
 #include <stdio.h>
 #include <time.h>
 #include <sys/types.h>
@@ -183,7 +183,7 @@ extern request_rec *php_rqst;
 
 /*-- Do not touch anything after this point unless you are very brave --*/
 
-#define PHP_VERSION "2.0b5"
+#define PHP_VERSION "2.0b6"
 
 #define VAR_INIT_CHAR	'$'
 
@@ -472,11 +472,13 @@ void ClearFuncArgList(void);
 void Return(void);
 void php_init_lex(void);
 void IntFunc(char *);
-int NewWhileIteration(void);
+int NewWhileIteration(long);
 void Eval(void);
 void set_text_magic(int);
 void PushCounters(void);
 void PopCounters(void);
+void SetHeaderCalled(void);
+long GetSeekPos(void);
 
 /* date.c */
 void Date(int, int);
@@ -495,7 +497,9 @@ void Neg(void);
 void BinDec(void);
 void DecBin(void);
 void DecHex(void);
+long _HexDec(char *);
 void HexDec(void);
+long _OctDec(char *);
 void OctDec(void);
 void DecOct(void);
 void Sin(void);
@@ -547,6 +551,8 @@ char *AddSlashes(char *, int);
 void ParseEscapes(char *);
 void HtmlSpecialChars(void);
 int FormatCheck(char **, char **, char **);
+void _AddSlashes(void);
+void _StripSlashes(void);
 
 /* cond.c */
 int Compare(int);
@@ -612,7 +618,7 @@ void php_init_db(void);
 /* while.c */
 void WhilePush(long, int, int);
 WhileStack *WhilePop(void);
-void While(void);
+void While(long);
 void EndWhile(void);
 void PushWhileMark(void);
 void PopWhileMark(void);

@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: file.c,v 1.28 1996/07/26 05:21:57 rasmus Exp $ */
+/* $Id: file.c,v 1.29 1996/09/04 02:16:51 rasmus Exp $ */
 #include "php.h"
 #include <stdlib.h>
 #if HAVE_UNISTD_H
@@ -886,7 +886,6 @@ void Popen(void) {
 #if DEBUG
 	Debug("Opening pipe to [%s] with mode [%s]\n",s->strval,p);
 #endif
-	StripSlashes(s->strval);
 	fp = popen(s->strval,p);
 	if(!fp) {
 		Error("popen(\"%s\",\"%s\") - %s",s->strval,p,strerror(errno));

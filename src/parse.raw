@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: parse.raw,v 1.40 1996/08/18 12:30:57 rasmus Exp $ */
+/* $Id: parse.raw,v 1.41 1996/09/05 06:13:23 rasmus Exp $ */
 %{
 #include <stdio.h>
 #include <stdlib.h>
@@ -34,10 +34,12 @@
 static int inElseIf=0;
 static int inCase=0;
 static int errPrintState;
+static long my_seekpos;
 
 void php_init_yacc(void) {
 	inElseIf=0;
 	inCase=0;
+	my_seekpos=0L;
 }
 %}
 
@@ -256,9 +258,12 @@ primitive:
 		{
 			if(GetCurrentState(NULL) || GetCurrentActive()==-2 || inElseIf) Default();
 		}
-	| WHILE '(' cond ')' eocb
+	|	{
+			my_seekpos = GetSeekPos();
+		} 
+	  WHILE '(' cond ')' eocb
 		{
-			if(GetCurrentState(NULL) || GetCurrentActive()==-4) While();
+			if(GetCurrentState(NULL) || GetCurrentActive()==-4) While(my_seekpos);
 			else BracePush(ENDWHILE);
 		}
 	| ENDWHILE eoc

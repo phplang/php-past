@@ -37,6 +37,7 @@ when it is bad, it is better than nothing.
 	<LI><A HREF="#msql_support">mSQL Support</A>
 	<LI><A HREF="#pg95_support">Postgres95 Support</A>
 	<LI><A HREF="#regexp">Regular Expressions</A>
+	<LI><A HREF="#escapes">Escape Characters</A>
 	<LI><A HREF="#script">PHP/FI Script Language</A>
 <UL>
 	<LI><A HREF="#syntax">Syntax</A>
@@ -257,7 +258,7 @@ version)</STRONG></EM><P>
 <P>
 You should have a look at the <A HREF="#redirect">CGI Redirection</A>
 section of this documentation.  Running PHP/FI through a redirect
-means you can automatically have a URL like <EM>http:/your.site.domain/file.phtml</EM>
+means you can automatically have a URL like <EM>http://your.site.domain/file.phtml</EM>
 be parsed by PHP/FI.<P>
 <P>
 This does not apply to Apace module users.<P>
@@ -494,7 +495,7 @@ page would be the following:<P>
 <PRE>    &lt;?
         if(!$PHP_AUTH_USER) {
             Header(&quot;HTTP/1.0 401 Unauthorized&quot;);
-			Header(&quot;WWW-authenticate: basic realm=\&quot;My Realm\&quot;&quot;);
+			Header(&quot;WWW-authenticate: basic realm=&quot;My Realm&quot;&quot;);
             exit;
         } else {
             echo &quot;Hello $PHP_AUTH_USER.&lt;P&gt;&quot;;
@@ -1303,6 +1304,20 @@ the PHP/FI parser:<P>
 </blockquote>
 
 <HR>
+<H2><A NAME="escapes">Escape Characters</A></H2>
+<P>
+The following escape sequences are supported in most placed where a
+quoted string argument is used:
+<blockquote>
+<pre>	\a --> bell
+	\b --> backspace
+	\n --> linefeed
+	\r --> carriage return
+	\t --> tab
+	\nnn --> octal char
+	\xXX --> hex char</pre>
+</blockquote><P>
+<HR>
 <H2><A NAME="script">PHP/FI Script Language</A></H2>
 <P>
 The PHP script language is similar in syntax to the C language in many ways.
@@ -1501,7 +1516,8 @@ Examples:
         $c = 100 + $a / $b;
       endif;
     &gt;</PRE><P>
-<P>The above may also be written in standard C syntax:<P>
+<P>The above may also be written in standard C syntax:<BR>
+In this case, there is no need for a semicolon after the closing curly brace.
 <P>
 <PRE>    &lt;?
       if($a==5 && $b!=0) {
@@ -1619,7 +1635,7 @@ This function is quite useless since every time it is called it sets $a to 0 and
 prints &quot;0&quot;.  The $a++ which increments the variable serves no purpose
 since as soon as the function exits the $a variable disappears.  To make a useful
 counting function which will not lose track of the current count, the $a variable
-s declared static:<P>
+is declared static:<P>
 <P>
 <PRE>    Function Test (
       static $a=0;
@@ -1903,6 +1919,11 @@ This assigns the return value of the <EM>time()</EM> function to the
 <DD>
 <P>Abs returns the absolute value of arg.<P>
 
+<DT><A NAME="addslashes"><FONT SIZE="+1">AddSlashes(arg)</FONT></A>
+<DD>
+<P>Escapes any $ \ or ' (if MAGIC_QUOTES is set) with a backslash.  See 
+also <a href="#stripslashes">StripSlashes()</a>.<P>
+
 <DT><A NAME="bindec"><FONT SIZE="+1">BinDec(binary_string)</FONT></A>
 <DD>
 <P>BinDec returns the decimal equivalent of the binary number
@@ -1978,7 +1999,7 @@ character is printed verbosely:<P>
 	<LI><TT>y - Year eg. 95</TT>
 	<LI><TT>M - Month eg. Oct</TT>
 	<LI><TT>m - Month eg. 10</TT>
-	<LI><TT>M - Month eg. October</TT>
+	<LI><TT>F - Month eg. October</TT>
 	<LI><TT>D - Day eg. Fri</TT>
 	<LI><TT>l - Day eg. Friday</TT>
 	<LI><TT>d - Day eg. 27</TT>
@@ -2005,7 +2026,11 @@ have been opened.<P>
 
 <DT><A NAME="dbmdelete"><FONT SIZE="+1">dbmDelete(filename,key)</FONT></A>
 <DD>
-<P>dbmdelete will delete the key/content pair specified by the given key argument.<P>
+<P>dbmDelete will delete the key/content pair specified by the given key argument.<P>
+
+<DT><A NAME="dbmexists"><FONT SIZE="+1">dbmExists(filename,key)</FONT></A>
+<DD>
+<P>dbmExists will return 1 if the key exists and 0 otherwise.<P>
 
 <DT><A NAME="dbmfetch"><FONT SIZE="+1">dbmFetch(filename,key)</FONT></A>
 <DD>
@@ -2080,9 +2105,8 @@ functions.<P>
 <DD>
 <P>Echo is not a function.  ie. you do not put brackets around the
 arguments to it.  It is used to display results of
-PHP functions or PHP variables.  The special escape characters,
-<STRONG>\n</STRONG>, <STRONG>\r</STRONG> and <STRONG>\t</STRONG> can be used to output newlines,
-carriage returns and tabs respectively.  The format_string is
+PHP functions or PHP variables.  See the <a href="#escapes">Escape Character Section</a> for a list of special characters supported.
+The format_string is
 optional and if not present, no output formatting will be done.
 The format string is similar to the format string of the C <EM>printf</EM>
 function.  See the man page for <EM>printf</EM> for more details.
@@ -2481,7 +2505,9 @@ local time.<P>
 <P>The Header command is used at the top of an HTML file to send
 raw HTTP header strings.  See the
 <A HREF="http://www.w3.org/hypertext/WWW/Protocols/HTTP1.0/draft-ietf-http-spec.html">
-HTTP Specification</A> for more information on raw http headers.<P>
+HTTP Specification</A> for more information on raw http headers.  Remember that the
+Header() command must be used before any actual output is sent either by normal
+HTML tags or by PHP echo commands.<P>
 
 <DT><A NAME="hexdec"><FONT SIZE="+1">HexDec(hex_string)</FONT></A>
 <DD>
@@ -3317,7 +3343,7 @@ as returned by the <a href="#time">time()</a> or
     SetCookie("TestCookie",$value,time()+3600,"/~rasmus/",".utoronto.ca",1);</PRE>
 <P>Note that the value portion of the cookie will automatically be urlencoded when
 you send the cookie, and when it is received, it is automatically decoded and assigned
-an assigned to a variable by the same name as the cookie name.  ie. to see the contents 
+to a variable by the same name as the cookie name.  ie. to see the contents 
 of our test cookie in a script, simply do:<P>
 <PRE>    echo $TestCookie;</PRE>
 
@@ -3404,6 +3430,11 @@ where the given sub-string is found.  For example, in the string,
 &quot;This is an example string&quot; above, the call:
 <TT>&lt;echo strstr($string,&quot;an &quot;)&gt;</TT> would
 return the string: <TT>&quot;an example string&quot;</TT>.<P>
+
+<DT><A NAME="stripslashes"><FONT SIZE="+1">StripSlashes(arg)</FONT></A>
+<DD>
+<P>StripSlashes unescapes the string argument.  See also
+<a href="#addslashes">AddSlashes()</a>.<P>
 
 <DT><A NAME="strlen"><FONT SIZE="+1">strlen(string)</FONT></A>
 <DD>

@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: echo.c,v 1.27 1996/07/26 05:08:17 rasmus Exp $ */
+/* $Id: echo.c,v 1.29 1996/09/10 13:18:56 rasmus Exp $ */
 #include <stdlib.h>
 #include "php.h"
 #include "parse.h"
@@ -274,6 +274,18 @@ int FormatCheck(char **format, char **beg, char **fmt) {
 	return(done);
 }
 
+void _StripSlashes(void) {
+	Stack *s;
+
+	s = Pop();
+	if(!s) {
+		Error("Stack error in StripSlashes()\n");
+		return;
+	}
+	StripSlashes(s->strval);
+	Push(s->strval,STRING);
+}
+
 void StripSlashes(char *string) {
 	char *s,*t;
 	int l;
@@ -323,6 +335,17 @@ void StripDollarSlashes(char *string) {
 	if(s!=t) *s='\0';
 }
 
+void _AddSlashes(void) {
+	Stack *s;
+
+	s = Pop();
+	if(!s) {
+		Error("Stack error in AddSlashes()\n");
+		return;
+	}
+	Push(AddSlashes(s->strval,0),STRING);
+}
+
 /* 
  * If freeit is non-zero, then this function is allowed to free the
  * argument string.  If zero, it cannot free it
@@ -360,8 +383,9 @@ char *AddSlashes(char *string, int freeit) {
 }
 
 void ParseEscapes(char *string) {
-	char *s,*t;
-	int l;
+	char *s,*t, *r;
+	char sv;
+	int l,i;
 
 	l = strlen(string); 
 	s = string;
@@ -383,6 +407,40 @@ void ParseEscapes(char *string) {
 		} else if(*t=='\\' && *(t+1)=='r') {
 			t+=2;
 			*s++='\r';
+			l-=2;
+		} else if(*t=='\\' && *(t+1)=='a') {
+			t+=2;
+			*s++=7;
+			l-=2;
+		} else if(*t=='\\' && *(t+1)=='b') {
+			t+=2;
+			*s++=8;
+			l-=2;
+		} else if(*t=='\\' && *(t+1)>='0' && *(t+1)<='7') {
+			r=t+1;
+			i=0;
+			while(*r >='0' && *r <='7' && i<3) {
+				i++;
+				r++;
+			}
+			sv = *r;
+			*r='\0';	
+			*s++=_OctDec(t+1);
+			t+=1+i;
+			*r = sv;	
+			l-=2;
+		} else if(*t=='\\' && (*(t+1)=='x' || *(t+1)=='X')) {
+			r=t+2;
+			i=0;
+			while(((*r >='0' && *r <='9') || (*r >='a' && *r <='f') || (*r >='A' && *r <='F')) && i<2) {
+				i++;
+				r++;
+			}
+			sv = *r;
+			*r='\0';	
+			*s++=_HexDec(t+1);
+			t+=2+i;
+			*r = sv;	
 			l-=2;
 		} else if(*t=='\\') {
 			*s++=*(t+1);

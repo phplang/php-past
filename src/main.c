@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: main.c,v 1.31 1996/07/25 05:29:27 rasmus Exp $ */
+/* $Id: main.c,v 1.32 1996/08/27 03:18:46 rasmus Exp $ */
 #include <stdlib.h>
 #include "php.h"
 #if HAVE_UNISTD_H
@@ -93,6 +93,21 @@ int main(int argc, char **argv) {
 		} else if(!strcasecmp(argv[argc-1],"text_magic")) {
 			set_text_magic(1);
 #endif
+		}
+		if(!getenv("QUERY_STRING")) {
+			{
+				char *astr=NULL; 
+				int ai, al=0;
+
+				for(ai=1;ai<argc;ai++) al+=strlen(argv[ai])+1;
+				astr = emalloc(0,al+14);
+				strcpy(astr,"QUERY_STRING=");	
+				for(ai=1;ai<argc;ai++) {
+					strcat(astr,php_urlencode(argv[ai]));
+					if(ai<argc-1) strcat(astr,"+");
+				}
+				putenv(astr);
+			}
 		}
 	}
 	s = getenv("REQUEST_METHOD");

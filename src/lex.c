@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: lex.c,v 1.83 1996/08/21 02:25:54 rasmus Exp $ */
+/* $Id: lex.c,v 1.89 1996/09/09 13:51:20 rasmus Exp $ */
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
@@ -278,6 +278,7 @@ static cmd_table_t cmd_table[22][35] = {
 	  { "pg_options", INTFUNC1,PGoptions },
 	  { "pg_connect", INTFUNC5,PGconnect },
 	  { "phpversion", INTFUNC0,PHPVersion },
+	  { "addslashes", INTFUNC1,_AddSlashes },
 	  { NULL,0,NULL } },
 
 	{ { "msql_result", INTFUNC3,MsqlResult }, /* 11 */
@@ -289,7 +290,7 @@ static cmd_table_t cmd_table[22][35] = {
 	  { "imagestring", IMAGESTRING,NULL },
 	  { "setshowinfo", INTFUNC1,SetShowInfo },
 	  { "msql_dbname", INTFUNC2,MsqlDBName },
-	  { "msql_dropdb", INTFUNC2,MsqlDropDB },
+	  { "msql_dropdb", INTFUNC1,MsqlDropDB },
 	  { "pg_fieldnum", INTFUNC2,PGfieldNum },
 	  { NULL,0,NULL } },
 
@@ -304,6 +305,7 @@ static cmd_table_t cmd_table[22][35] = {
 	  { "pg_fieldname", INTFUNC2,PGfieldName },
 	  { "pg_fieldtype", INTFUNC2,PGfieldType },
 	  { "pg_fieldsize", INTFUNC2,PGfieldSize },
+	  { "stripslashes", INTFUNC1,_StripSlashes },
 	  { NULL,0,NULL } }, 
 
 	{ { "gethostbyaddr", INTFUNC1,GetHostByAddr }, /* 13 */
@@ -387,9 +389,6 @@ void FilePush(char *fn, long file_size, int fd) {
 	new->lstate = lstate;
 	new->next = top;
 	new->lineno = yylex_linenumber-1;
-#if DEBUG
-	Debug("Filename/Function name pushed onto file/function stack: [%s]\n",fn);
-#endif
 	new->filename = estrdup(0,fn);  /* Also holds function names */
 	top = new;
 }
@@ -427,23 +426,14 @@ char *FilePop(void) {
 			PopStackFrame();
 			PopCondMatchMarks();
 			PopCounters();
-#if DEBUG
-			Debug("Calling PopStackFrame() from FilePop\n");
-#endif
 		}
 		if(!eval_mode) {
 			if(top->fd==-1) { /* nested function call */
 				cur_func = FindFunc(top->filename,&gsize,NULL);
-#if DEBUG
-				Debug("Current function is now [%s]\n",cur_func->name);
-#endif
 			} else {
 				SetCurrentFilename(top->filename);
 				SetCurrentFileSize(top->size);
 				cur_func=NULL; 
-#if DEBUG
-				Debug("Current Function set to NULL\n");
-#endif
 			}
 		} else {
 			eval_mode=0;
@@ -480,6 +470,11 @@ void Include(void) {
 		fd = OpenFile((char *)s->strval,0,&file_size);
 		if(fd>-1) {
 			FilePush(ofn,ofile_size,gfd);
+			if(cur_func) {
+				PushStackFrame();
+				PushCounters();
+				PushCondMatchMarks();
+			}
 			gfd = fd;
 			ParserInit(fd,file_size,no_httpd,NULL);
 			yyparse();
@@ -514,9 +509,6 @@ void Eval(void) {
 
 int outputchar(char ch) {
 	if(GetCurrentState(NULL)) {
-#if DEBUG
-		Debug("Calling php_header from outputchar()\n");
-#endif
 		php_header(0,NULL);
 #if APACHE
 		if(rputc(ch,php_rqst)==EOF) {
@@ -533,16 +525,16 @@ int outputchar(char ch) {
 	return(0);
 }
 
+void SetHeaderCalled(void) {
+	header_called=1;
+}
+
 int outputline(char *line) {
 	line[outpos]='\0';
 	outpos=0;
 	if(GetCurrentState(NULL)) {
-#if DEBUG
-		Debug("Calling php_header from outputline()\n");
-#endif
 		if(!header_called && line[0]!=10 && line[0]!=13) {
 			php_header(0,NULL);
-			header_called=1;
 		} else if(!header_called && (line[0]==10 || line[0]==13)) return(0);
 #if APACHE
 		if(PUTS((char *)line)==EOF) {
@@ -550,9 +542,6 @@ int outputline(char *line) {
 			return(-1);
 		}
 #else
-#if DEBUG
-		Debug("sending line [%s]\n",(char *)line);
-#endif
 #if TEXT_MAGIC
 		if(TextMagic) text_magic((char *)line);
 #endif
@@ -563,6 +552,10 @@ int outputline(char *line) {
 #endif
 	}
 	return(0);
+}
+
+long GetSeekPos(void) {
+	return(SeekPos);
 }
 
 /*
@@ -625,12 +618,15 @@ char *lookaheadword(void) {
 		ch = *(pa + pa_pos + inpos - inlength + i++);
 		if(!st && isspace(ch)) continue;
 		if(!st) st=pa+pa_pos + inpos - inlength + (i-1);
-		if(isspace(ch) || !ch) break;
+		if(isspace(ch) || ch=='{' || !ch) break;
 		l++;
 	}	
 	if(!st) return NULL;
 	if(l>31) l=31;
 	strncpy(temp,st,l);	
+#if DEBUG
+	Debug("lookahead: %s\n",temp);
+#endif
 	return(temp);
 }
 
@@ -1256,8 +1252,8 @@ void WhileFinish(void) {
 	iterwhile=-1L;
 }
 
-int NewWhileIteration(void) {
-	return(iterwhile!=SeekPos);
+int NewWhileIteration(long sp) {
+	return(iterwhile!=sp);
 }
 
 /*
@@ -1272,9 +1268,6 @@ void Exit(int footer) {
 #endif
 	if(!ExitCalled) ExitCalled=1;
 	else return;
-#if DEBUG
-	Debug("Calling php_header from Exit()\n");
-#endif
 	php_header(0,NULL); /* just in case it hasn't been sent yet. */
 #if PHP_HAVE_MMAP
 	if(pa) {

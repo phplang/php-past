@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: cond.c,v 1.13 1996/07/11 14:12:35 rasmus Exp $ */
+/* $Id: cond.c,v 1.14 1996/09/05 06:13:20 rasmus Exp $ */
 #include <stdlib.h>
 #include <string.h>
 #include "php.h"
@@ -101,6 +101,9 @@ void BracePush(int token) {
 		new = emalloc(0,sizeof(EndBraceStack));
 	}
 	new->token = token;
+#if DEBUG
+	Debug("BracePush; token = %d\n",token);
+#endif
 	new->next = btop;
 	btop=new;
 }
@@ -118,11 +121,22 @@ int BracePop(void) {
 	btop=btop->next;
 	s->next=ru_btop;
 	ru_btop=s;
+#if DEBUG
+	Debug("BracePop; token = %d\n",ret);
+#endif
 	return(ret);
 }
 
 int BraceCheck(void) {
-	if(btop) return(btop->token);
+	if(btop) {
+#if DEBUG
+		Debug("BraceCheck: token = %d\n",btop->token);
+#endif
+		return(btop->token);
+	}
+#if DEBUG
+		Debug("BraceCheck: no btop\n");
+#endif
 	return(0);
 }
 

@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: calc.c,v 1.10 1996/08/04 04:10:18 rasmus Exp $ */
+/* $Id: calc.c,v 1.11 1996/09/10 13:18:56 rasmus Exp $ */
 #include <stdlib.h>
 #include <string.h>
 #include "php.h"
@@ -390,8 +390,6 @@ void DecHex(void) {
 /* Hexadecimal to Decimal */
 void HexDec(void) {
 	Stack *s;
-	long mult=1, num=0;
-	int i,c;
 	char temp[32];
 
 	s = Pop();
@@ -399,23 +397,28 @@ void HexDec(void) {
 		Error("Stack error in hexdec");
 		return;
 	}
-	i = strlen(s->strval)-1;
+	sprintf(temp,"%ld",_HexDec(s->strval));
+	Push(temp,LNUMBER);
+}
+
+long _HexDec(char *s) {
+	long mult=1, num=0;
+	int i,c;
+
+	i = strlen(s)-1;
 	while(i>-1) {
-		c = toupper((s->strval)[i--]);
+		c = toupper(s[i--]);
 		if(c<'0' || c > 'F') continue;
 		if(c <= '9') num+=mult*(c-'0');
 		else num+=mult*(c-'A'+10);
 		mult *= 16;
 	}
-	sprintf(temp,"%ld",num);
-	Push(temp,LNUMBER);
+	return(num);
 }
 
 /* Octal to Decimal */
 void OctDec(void) {
 	Stack *s;
-	long mult=1, num=0;
-	int i,c;
 	char temp[32];
 
 	s = Pop();
@@ -423,15 +426,22 @@ void OctDec(void) {
 		Error("Stack error in octdec");
 		return;
 	}
-	i = strlen(s->strval)-1;
+	sprintf(temp,"%ld",_OctDec(s->strval));
+	Push(temp,LNUMBER);
+}
+
+long _OctDec(char *s) {
+	long mult=1, num=0;
+	int i,c;
+
+	i = strlen(s)-1;
 	while(i>-1) {
-		c = (s->strval)[i--];
+		c = s[i--];
 		if(c<'0' || c > '7') continue;
 		num+=mult*(c-'0');
 		mult *= 8;
 	}
-	sprintf(temp,"%ld",num);
-	Push(temp,LNUMBER);
+	return(num);
 }
 
 /* Decimal to Octal */

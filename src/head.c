@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: head.c,v 1.21 1996/08/23 13:06:13 rasmus Exp $ */
+/* $Id: head.c,v 1.24 1996/08/27 03:18:44 rasmus Exp $ */
 #include "php.h"
 #include "parse.h"
 #if TM_IN_SYS_TIME
@@ -34,22 +34,19 @@
 static int HeaderPrinted=0;
 static int PrintHeader=1;
 static CookieList *top = NULL;
+static char *cont_type = NULL;
 
 void php_init_head(void) {
 	HeaderPrinted=0;
 	PrintHeader=1;
 	top = NULL;
+	cont_type = NULL;
 }
 
 void Header(void) {
 	Stack *s;
-#if APACHE
 	char *r;
-#endif
 
-#ifndef APACHE
-	HeaderPrinted=1;
-#endif
 	s = Pop();
 	if(!s) {
 		Error("Stack error in echo\n");
@@ -88,9 +85,22 @@ void Header(void) {
 		php_rqst->status_line = estrdup(0,&((s->strval)[9]));
 	}	
 #else
-	ParseEscapes(s->strval);
-	PUTS(s->strval);
-	PUTS("\015\012");
+	r = strchr(s->strval,':');
+	if(r) {
+		*r='\0';
+		if(!strcasecmp(s->strval,"content-type")) {
+			cont_type = estrdup(0,r+1);;
+		} else {
+			*r=':';
+			ParseEscapes(s->strval);
+			PUTS(s->strval);
+			PUTS("\015\012");
+		}
+	} else {
+		ParseEscapes(s->strval);
+		PUTS(s->strval);
+		PUTS("\015\012");
+	}
 #endif
 }
 
@@ -153,6 +163,7 @@ void php_header(int type,char *str) {
 		}
 #endif
         HeaderPrinted = 1;
+		SetHeaderCalled();
 #if DEBUG
 		Debug("Sending header\n");
 #endif
@@ -206,9 +217,16 @@ void php_header(int type,char *str) {
 			fputs(str,stdout);
 			fputs("\015\012\015\012",stdout);
 		} else {
-	        fputs("Content-type: text/html\015\012\015\012",stdout); 
+			if(!cont_type) {
+	        	fputs("Content-type: text/html\015\012\015\012",stdout); 
+			} else {
+				fputs("Content-type:",stdout);
+				fputs(cont_type,stdout);
+				fputs("\015\012\015\012",stdout);
+			}
 		}
         HeaderPrinted = 1;
+		SetHeaderCalled();
     }
 #endif
 }

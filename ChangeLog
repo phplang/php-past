@@ -1,5 +1,19 @@
 PHP/FI CHANGE LOG                                                    ChangeLog
 |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Sept. 10 Version 2.0b6
+- Add escapes to Date() format string <niew@phoenix.cis.mcmaster.ca>
+- Fix Include() from within a function bug
+- Fix Header/SetCookie CGI bug
+- Fix content-type CGI header bug
+- Fix lexer code to be more intelligent about which CR/LF's to ignore
+- Add ability to use $argv[0]...$argv[n] to get command line arguments
+- Fix msqlDropDB number of arguments bug <mp@Nova-Ratio.de>
+- Fix stray StripSlashes() call in Popen() function
+- Nasty curly brace bugs fixed
+- Escape $ \ and ' in PHP_AUTH_* vars
+- Added StripSlashes and AddSlashes functions
+- Added escape support for hexadecimal and octal (see #escapes in doc.html)
+
 Aug. 23 Version 2.0b5
 - Add StripSlashes() call to crypt() function
 - Check for fields longer than 63 chars in mSQL logging code since latest
