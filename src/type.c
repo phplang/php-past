@@ -2,7 +2,7 @@
 *                                                                            *
 * PHP/FI                                                                     *
 *                                                                            *
-* Copyright 1995,1996 Rasmus Lerdorf                                         *
+* Copyright 1995,1996,1997 Rasmus Lerdorf                                    *
 *                                                                            *
 *  This program is free software; you can redistribute it and/or modify      *
 *  it under the terms of the GNU General Public License as published by      *
@@ -19,24 +19,30 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: type.c,v 1.2 1996/07/11 14:12:53 rasmus Exp $ */
+/* $Id: type.c,v 1.4 1997/01/04 15:17:09 rasmus Exp $ */
 #include <stdio.h>
 #include "php.h"
 #include "parse.h"
 
 /*
  * Determines if 'str' is an integer, real number or a string
+ *
+ * Note that leading zeroes automatically force a STRING type
  */
 int CheckType(char *str) {
 	char *s;
 	int type=LNUMBER;
 
 	s = str;
-	if(*s=='+' || *s=='-' || (*s>='0' && *s <='9') || *s=='.') {
+	if(*s=='0' && *(s+1)!='.') return(STRING);
+	if(*s=='+' || *s=='-' || (*s>='0' && *s <='9') || *s=='.' ) {
 		if(*s=='.') type=DNUMBER;
 		s++;
 		while(*s) {
-			if(*s>='0' && *s<='9') { s++; continue; }
+			if(*s>='0' && *s<='9') { 
+				s++; 
+				continue; 
+			}
 			else if(*s=='.' && type==LNUMBER) { type=DNUMBER; s++; continue; }
 			else return(STRING);
 		}

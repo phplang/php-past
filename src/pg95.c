@@ -2,7 +2,7 @@
 *                                                                            *
 * PHP/FI                                                                     *
 *                                                                            *
-* Copyright 1995,1996 Rasmus Lerdorf                                         *
+* Copyright 1995,1996,1997 Rasmus Lerdorf                                    *
 *                                                                            *
 *  This program is free software; you can redistribute it and/or modify      *
 *  it under the terms of the GNU General Public License as published by      *
@@ -36,8 +36,9 @@
 *  owned code in this file.                                                  *
 *                                                                            *
 \****************************************************************************/
+/* Patches marked 'john:' by John Robinson <john@intelligent.co.uk> */
 
-/* $Id: pg95.c,v 1.15 1996/09/19 04:50:01 rasmus Exp $ */
+/* $Id: pg95.c,v 1.19 1997/01/04 15:17:02 rasmus Exp $ */
 
 #include "php.h"
 #include <stdlib.h>
@@ -320,7 +321,7 @@ void PGexec(void) {
 	char	*query;
 	int	j;
 	char	temp[16];
-	char	*tmpoid;
+	const char *tmpoid;
 	PGresult *result=NULL;
 	PGconn	 *curr_conn=NULL;
 
@@ -376,7 +377,7 @@ void PGexec(void) {
 #endif
 	result = PQexec(curr_conn, query);
 	if (result == NULL) 
-		stat = PQstatus(curr_conn);
+		stat = (ExecStatusType) PQstatus(curr_conn);
 	else
 		stat = PQresultStatus(result);
 
@@ -537,9 +538,13 @@ void PG_result(void) {
 		return;
 	}
 
-	/* cover int, int2, int4, integer, bool, oid, smallint */
-	if (strstr (ftype, "int")  ||
-	    !strcmp(ftype, "bool") ||
+	/* cover int, int2, int4, integer, oid, smallint */
+	/* john: this used to accidentally pick up "point" because
+	** strstr(ftype, "int") matches "point". Never mind, I've
+	** refudged it so it doesn't any more
+	** john: not bool, which should have been parsed from 't' or 'f'
+	*/
+	if ((strstr (ftype, "int") && strcmp(ftype, "point")) ||
 	    strstr (ftype, "oid")) {
 
 		Push(tmp, LNUMBER);
@@ -557,8 +562,10 @@ void PG_result(void) {
 	/* cover bpchar, bytea, char, char2, char4, char8, char16,
 	 * name, text, varchar, abstime, date, reltime, time,
 	 * tinterval
+	 * john: and bool as 't' or 'f', which is what pg95 1.09 returns
 	 */
 	if ( strstr(ftype, "char")  ||
+	    !strcmp(ftype, "bool")  ||
 	    !strcmp(ftype, "name")  ||
 	    !strcmp(ftype, "text")  ||
 	     strstr(ftype, "time")  ||

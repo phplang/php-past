@@ -1,4 +1,4 @@
-dnl $Id: configure.in,v 1.9 1996/09/22 23:30:04 rasmus Exp $
+dnl $Id: configure.in,v 1.13 1996/12/05 02:26:45 rasmus Exp $
 dnl Process this file with autoconf to produce a configure script.
 
 AC_INIT(src/main.c)
@@ -9,10 +9,11 @@ AC_PROG_YACC
 AC_PROG_CC
 AC_PROG_INSTALL
 AC_PROG_RANLIB
+AC_PATH_PROG(SENDMAIL, sendmail, /usr/lib/sendmail, $PATH:/usr/bin:/usr/sbin:/usr/etc:etc)
 
 dnl Checks for libraries.
 dnl use gdbm, Berkeley DB, ndbm/dbm in that order
-AC_CHECKING(Trying to determine best dbm library available on system)
+AC_CHECKING(best dbm library available on system)
 AC_CHECK_LIB(dbm, dbm_open, AC_DEFINE(NDBM) best_dbm=-ldbm)
 AC_CHECK_LIB(db, dbm_open, AC_DEFINE(NDBM) best_dbm=-ldb)
 AC_CHECK_LIB(gdbm, gdbm_open, AC_DEFINE(GDBM) best_dbm=-lgdbm)
@@ -30,13 +31,13 @@ AC_CHECK_LIB(gd, gdImageLine)
 dnl Checks for header files.
 AC_HEADER_STDC
 AC_HEADER_DIRENT
-AC_CHECK_HEADERS(fcntl.h unistd.h crypt.h sys/file.h memory.h)
+AC_CHECK_HEADERS(fcntl.h unistd.h crypt.h sys/file.h memory.h pwd.h grp.h)
 
 dnl Checks for typedefs, structures, and compiler characteristics.
 AC_STRUCT_TM
 
 dnl Checks for library functions.
 AC_FUNC_VPRINTF
-AC_CHECK_FUNCS(crypt memcpy strdup strerror strcasecmp strstr flock lockf mmap putenv tempnam usleep setlocale gettimeofday setvbuf srand48 lrand48 link symlink regcomp)
+AC_CHECK_FUNCS(crypt memcpy memmove strdup strerror strcasecmp strstr flock lockf mmap putenv tempnam usleep setlocale gettimeofday setvbuf srand48 lrand48 link symlink regcomp)
 
 AC_OUTPUT(src/Makefile)

@@ -2,7 +2,7 @@
 *                                                                            *
 * PHP/FI                                                                     *
 *                                                                            *
-* Copyright 1995,1996 Rasmus Lerdorf                                         *
+* Copyright 1995,1996,1997 Rasmus Lerdorf                                    *
 *                                                                            *
 *  This program is free software; you can redistribute it and/or modify      *
 *  it under the terms of the GNU General Public License as published by      *
@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: pool.c,v 1.14 1996/09/19 04:50:02 rasmus Exp $ */
+/* $Id: pool.c,v 1.18 1997/01/05 16:25:54 rasmus Exp $ */
 /*
  * Memory Pool Management with hooks for Apache sub-pool handling
  * for Apache module
@@ -44,6 +44,10 @@ static pool *php_pool[] = { NULL,  /* 0 - Stack pointer - no clear */
 static long php_pool_size[] = { 0L, 0L, 0L };
 static long max_data_space=DEFAULT_MAX_DATA_SPACE;
 static int already_over=0;
+
+#if DEBUG
+static int memdbg=0;
+#endif
 
 #if APACHE
 void php_init_pool(php_module_conf *conf) {
@@ -70,6 +74,10 @@ char *file, int line,
 #endif
 int num, int bytes) {
 	void *ptr;
+
+#if DEBUG
+	if(memdbg && num==0) Debug("%s:%d emalloc(%d,%d)\n",file,line,num,bytes);
+#endif
 
 	if(!php_pool[num]) {
 #if APACHE
@@ -99,6 +107,10 @@ char *file, int line,
 int num, char *str) {
 	char *ret;
 	int l = strlen(str);
+
+#if DEBUG
+	if(memdbg && num==0) Debug("%s:%d estrdup(%d,%s)\n",file,line,num,str);
+#endif
 
 	if(!php_pool[num]) {
 #if APACHE
@@ -151,6 +163,19 @@ void php_pool_show(void) {
 	Debug("MaxDataSpace set to %ld\n",max_data_space);
 }
 #endif
+
+void ShowPool(void) {
+	int i;
+	char temp[32];
+
+	for(i=0; i<MAXSUBPOOLS; i++) {
+		printf("Pool %d: %ld bytes\n",i,php_pool_size[i]);
+	}
+	printf("MaxDataSpace set to %ld\n",max_data_space);
+	sprintf(temp,"%ld",max_data_space);	
+	Push(temp,LNUMBER);
+	SetVar("maxdataspace",48,0);
+}
 
 #ifndef APACHE
 /* Portions of the following code was borrowed from the Apache HTTPD

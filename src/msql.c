@@ -2,7 +2,7 @@
 *                                                                            *
 * PHP/FI                                                                     *
 *                                                                            *
-* Copyright 1995,1996 Rasmus Lerdorf                                         *
+* Copyright 1995,1996,1997 Rasmus Lerdorf                                    *
 *                                                                            *
 *  This program is free software; you can redistribute it and/or modify      *
 *  it under the terms of the GNU General Public License as published by      *
@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: msql.c,v 1.17 1996/09/19 04:50:00 rasmus Exp $ */
+/* $Id: msql.c,v 1.20 1996/12/18 13:47:01 rasmus Exp $ */
 /* mSQL is Copyright (c) 1993-1995 David J. Hughes */
 
 /* Note that there is no mSQL code in this file */
@@ -47,7 +47,7 @@ static char *CurrentUnixPort=NULL;
 static int msql_ind=1;
 #endif
 
-void php_init_msql(void) {
+void php_init_msql(char *defaulthost) {
 #ifdef HAVE_LIBMSQL
 	static char junk[1];
 	CurrentTcpPort=&junk[0];
@@ -55,7 +55,7 @@ void php_init_msql(void) {
 	dbsock=-1;
 	result_top=NULL;
 	junk[0]='\0';
-	CurrentHost=NULL;
+	CurrentHost=defaulthost;
 	CurrentDB[0]='\0';
 	msql_ind=1;
 #endif
@@ -141,6 +141,7 @@ void Msql(void) {
 	char temp[16];
 	m_result *result=NULL;
 	char *tcpPort, *unixPort;
+	int count=0;
 
 #ifndef APACHE
 	if(First) {
@@ -226,7 +227,8 @@ void Msql(void) {
 #if APACHE
 	block_alarms();
 #endif
-	if(msqlQuery(dbsock,query)<0) {
+	/* For mSQL 2.0, the return value is useful.  For 1.0 it isn't. */
+	if((count=msqlQuery(dbsock,query))<0) {
 #if APACHE
 		unblock_alarms();
 #endif
@@ -238,6 +240,8 @@ void Msql(void) {
 	unblock_alarms();
 #endif
 	result = msqlStoreResult();	
+#ifndef LAST_REAL_TYPE
+	/* Here we try to add some intelligence to the return value for mSQL 1.0 */
 	if(result) j = add_result(result);
 	else {
 		if(!strncasecmp(query,"insert",6) || !strncasecmp(query,"update",6) || !strncasecmp(query,"create",6) || !strncasecmp(query,"drop",4) || !strncasecmp(query,"delete",6))
@@ -245,6 +249,11 @@ void Msql(void) {
 		else
 			j=-1;
 	}
+#else
+	/* For mSQL 2.0, the return value is already intelligent. No need for the hack */
+	if(result) j = add_result(result);
+	else j = count;
+#endif
 	sprintf(temp,"%d",j);
 	Push(temp,LNUMBER);
 #else
@@ -542,7 +551,7 @@ void MsqlField(int type) {
 	case 4:
 		flg = msql_field->flags;
 		temp[0]='\0';
-		if(flg & PRI_KEY_FLAG) strcat(temp,"primary key");
+/*		if(flg & PRI_KEY_FLAG) strcat(temp,"primary key"); */
 		if(flg & NOT_NULL_FLAG) {
 			if(strlen(temp))
 				strcat(temp," not null");
@@ -728,6 +737,119 @@ void MsqlListTables(void) {
 	Pop();
 	Push("0", LNUMBER);
 	Error("No mSQL support");
+#endif
+}
+
+void MsqlListIndex(void) {
+#if defined(HAVE_LIBMSQL) && defined(LAST_REAL_TYPE)
+	char *dbname, *tablename, *indexname;
+	Stack *s;
+	m_result *res=NULL;
+	int tb_res; 
+#ifndef APACHE
+	static int First=1;
+	char junk[1];
+#endif
+	char *tcpPort, *unixPort;
+	char temp[16];
+
+#ifndef APACHE
+	if(First) {
+		CurrentDB[0] = '\0';
+		junk[0]='\0';
+		CurrentTcpPort=&junk[0];
+		CurrentUnixPort=&junk[0];
+		First=0;
+	}
+#endif
+
+	s = Pop();
+	if(!s) {
+		Error("Stack error in msqllistindex expression");
+		return;
+	}
+	if(!s->strval) {
+		Error("Invalid ndex name expression in msqllistindex");
+		return;
+	}
+	else indexname=(char*)estrdup(1,s->strval);
+
+	s = Pop();
+	if(!s) {
+		Error("Stack error in msqllistindex expression");
+		return;
+	}
+	if(!s->strval) {
+		Error("Invalid table name expression in msqllistindex");
+		return;
+	}
+	else tablename=(char*)estrdup(1,s->strval);
+	
+	s = Pop();
+	if(!s) {
+		Error("Stack error in msqllistindex expression");
+		return;
+	}
+	if(!s->strval) {
+		Error("Invalid dbname expression in msqllistindex");
+		return;
+	}
+	else dbname=(char*)estrdup(1,s->strval);
+
+	if(dbsock==-1) {
+		dbsock = msqlConnect(CurrentHost);
+		if(dbsock<0) {
+			Error("Unable to connect to mSQL socket (%s)",msqlErrMsg);
+			return;
+		}
+		CurrentTcpPort = getenv("MSQL_TCP_PORT");
+		CurrentUnixPort = getenv("MSQL_UNIX_PORT");
+	} else {
+#if DEBUG
+		Debug("Open socket found, checking to see if still valid\n");
+#endif
+		tcpPort = getenv("MSQL_TCP_PORT");
+		unixPort = getenv("MSQL_UNIX_PORT");
+		if((tcpPort && strcmp(tcpPort,CurrentTcpPort)) || (unixPort && strcmp(unixPort,CurrentUnixPort))) {
+#if DEBUG
+			Debug("Not valid, need to reopen\n");
+#endif
+			MsqlClose();
+#if DEBUG
+			Debug("About to connect\n");
+#endif
+			dbsock = msqlConnect(CurrentHost);
+#if DEBUG
+			Debug("After connect\n");
+#endif
+			if(dbsock<0) {
+				Error("Unable to connect to mSQL socket (%s)",msqlErrMsg);
+				return;
+			}
+			CurrentTcpPort = tcpPort;
+			CurrentUnixPort = unixPort;
+		}
+	}
+
+	if(msqlSelectDB(dbsock,dbname)<0){
+		Error("Unable to select mSQL table (%s)", msqlErrMsg);
+		return;
+	}
+
+	res = msqlListIndex(dbsock,tablename,indexname);
+	if (res) tb_res=add_result(res);
+	else {
+		Error("Unable to find an index in %s", dbname); 
+		return;
+	}
+
+	sprintf(temp, "%d", tb_res);
+	Push(temp, LNUMBER);
+
+#else
+	Pop();
+	Push("0", LNUMBER);
+	Error("No support for MsqlListIndex function");
 #endif
 }
 

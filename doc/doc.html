@@ -36,6 +36,9 @@ when it is bad, it is better than nothing.
 	<LI><A HREF="#cookies">Cookie Support</A>
 	<LI><A HREF="#msql_support">mSQL Support</A>
 	<LI><A HREF="#pg95_support">Postgres95 Support</A>
+	<LI><A HREF="#mysql_support">mysql Support</A>
+	<LI><A HREF="#solid_support">Solid Support</A>
+	<LI><A HREF="#sybase_support">Sybase Support</A>
 	<LI><A HREF="#regexp">Regular Expressions</A>
 	<LI><A HREF="#escapes">Escape Characters</A>
 	<LI><A HREF="#script">PHP/FI Script Language</A>
@@ -336,10 +339,13 @@ SQL queries right in your .HTML files.  Adding a database back-end to a web page
 has never been easier.  See the section on <A HREF="#msql_support">mSQL Support</A>
 for more information.<P>
 <P>
-PHP/FI also has support for the Postgres95 database package. It supports
+PHP/FI has support for the Postgres95 database package. It supports
 embedded SQL queries in your .HTML files.  See the section on
 <A HREF="#pg95_support">Postgres95 Support</A> for more information.<P>
 <P>
+PHP/FI also has support for the mysql database package. It supports
+embedded SQL queries in your .HTML files.  See the section on
+<A HREF="#mysql_support">mysql Support</A> for more information.<P>
 <HR>
 <H2><A NAME="redirect">CGI Redirection</A></H2>
 
@@ -454,11 +460,12 @@ code.  A patch to do this with NCSA 1.5 is available in the
 <HR><P>
 <H2><A NAME="security">Security Issues</A></H2>
 <P>
-PHP/FI does <STRONG>not</STRONG> read any <EM>.htaccess</EM> files which
-may be present in a directory.  This means that if you have files that
-are protected using the standard .htaccess server-based access control
-feature, people could potentially circumvent this security by loading the
-page through PHP/FI.<P>
+The CGI version of PHP/FI does <STRONG>not</STRONG> read any 
+<EM>.htaccess</EM> files which may be present in a directory.  This 
+means that if you have files that are protected using the standard .htaccess 
+server-based access control feature, people could potentially circumvent 
+this security by loading the page through PHP/FI.  Note that this is not
+an issue for the Apache module version of PHP/FI.<P>
 <P>
 There are a couple of different solutions to this problem.  The easiest
 is probably to use the <STRONG>PATTERN_RESTRICT</STRONG> feature found
@@ -494,12 +501,12 @@ supported at this point.<P>
 page would be the following:<P>
 <PRE>    &lt;?
         if(!$PHP_AUTH_USER) {
-			Header(&quot;WWW-authenticate: basic realm=\&quot;My Realm\&quot;&quot;);
+            Header(&quot;WWW-authenticate: basic realm=\&quot;My Realm\&quot;&quot;);
             Header(&quot;HTTP/1.0 401 Unauthorized&quot;);
             exit;
         } else {
             echo &quot;Hello $PHP_AUTH_USER.&lt;P&gt;&quot;;
-			echo &quot;You entered $PHP_AUTH_PW as your password.&lt;P&gt;&quot;;
+            echo &quot;You entered $PHP_AUTH_PW as your password.&lt;P&gt;&quot;;
         }
     &gt;</PRE>
 <P>
@@ -566,14 +573,20 @@ individual <EM>.htaccess</EM> files:<P>
 <DD>Set the directory where form-uploaded files will be placed.<P>
 <DT><STRONG>phpDbmLogDir <EM>directory</EM></STRONG>
 <DD>Set the directory where dbm-based logging files will be written.<P>
-<DT><STRONG>phpMsqlLogDB <EM>database</EM></STRONG>
-<DD>Set name of mSQL database to use for logging.<P>
+<DT><STRONG>phpSQLLogDB <EM>database</EM></STRONG>
+<DD>Set name of SQL database to use for logging.<P>
+<DT><STRONG>phpSQLLogHost <EM>hostname</EM></STRONG>
+<DD>Set hostname where SQL database to use for logging is found.<P>
 <DT><STRONG>phpAccessDir <EM>directory</EM></STRONG>
 <DD>Set the directory where PHP-internal access control files are stored.<P>
 <DT><STRONG>phpMaxDataSpace <EM>KiloBytes</EM></STRONG>
 <DD>Max size a sub-pool can grow to within the PHP module.  Setting this value
 to a low number will minimize the impact that mod_php will have on your system,
 but it may also limit people from writing complex scripts.<P>
+<DT><STRONG>phpIncludePath <EM>colon-separated path</EM></STRONG>
+<DD>A colon-separated list of directories where php will look for
+files in when running <A HREF="#include">include()</A>.  The default
+is to look only in the current directory. 
 </DL>
 <P>
 All of these directives are optional.  If a directive is not specified anywhere,
@@ -662,53 +675,72 @@ details.<P>
 <P>
 Access Logging is another optional feature which can be enabled at compile-time
 by answering <EM>Yes</EM> to the question in the install script.  You may either
-store your access log data in dbm files or in an mSQL database.  The latter
-is more powerful, but is also a bit more difficult to set up.<P>
+store your access log data in dbm files, in an mSQL database, or in an mysql
+database.  The latter two are more powerful, but is also a bit more difficult 
+to set up.<P>
 <P>
-To use dbm files for storing your access logs, you will need to specify a directory
-in which log files can be written.  PHP will try to create this directory if it doesn't
-exist, but to make sure it has the proper permissions, you may want to create
-this directory yourself before running PHP for the first time.  The permissions
-on the directory should be such that the user id under which the PHP cgi program
-will run can write to the directory.<P>
+To use dbm files for storing your access logs, you will need to specify a 
+directory in which log files can be written.  PHP will try to create this 
+directory if it doesn't exist, but to make sure it has the proper 
+permissions, you may want to create this directory yourself before running 
+PHP for the first time.  The permissions on the directory should be such 
+that the user id under which the PHP cgi program will run can write to the 
+directory.<P>
 <P>
-To use an mSQL database for storing your access log data, you need to first
-make sure you have mSQL installed and running on your system.  Then you need
-to create a database.  The default name is &quot;phpfi&quot; although this
-can be changed in <EM>src/php.h</EM>.  To create this database, type:<P>
+To use an mSQL or mysql database for storing your access log data, you need 
+to first make sure you have mSQL or mysql installed and running on your 
+system.  Then you need to create a database.  The default name is 
+&quot;phpfi&quot; although this can be changed in <EM>src/php.h</EM>.  
+To create this database for mSQL, type:<P>
 <P>
 <PRE>    msqladmin create phpfi</PRE><P>
+or for mysql type:
+<PRE>    mysqladmin create phpfi</PRE><P>
 <P>
-Then edit your <EM>msql.acl</EM> file and make sure the permissions on the database
-are correct.  Something like the following should suffice:<P>
+Then for mSQL, edit your <EM>msql.acl</EM> file and make sure the permissions 
+on the database are correct.  Something like the following should suffice:<P>
 <P>
 <PRE>    database=phpfi
     read=*
     write=nobody,&lt;your user id&gt;
     access=local</PRE><P>
 <P>
+For mysql, you need to make sure the httpd user (usually &quot;nobody&quot;)
+has access to the database.  Unlike mSQL, mysql stores access control data
+in a database.  Assuming default permissions, you should be able to simply
+execute the following command:<P>
+<PRE>    echo "INSERT INTO user VALUES ('localhost','nobody','','Y','Y','Y','Y','Y','Y','Y','Y','Y');" | mysql mysql</PRE><P>
+Don't forget to load this new configuration with:<P>
+<PRE>    mysqladmin reload</PRE><P>
 For each user id for whom you want to store log data, you need to create two
 tables.  The <EM>msqllog</EM> shell script in the scripts directory will do
 this for you.  Simply type:<P>
 <P>
 <PRE>    msqllog &lt;user id&gt; </PRE><P>
+or for mysql, type:
+<PRE>    mysqllog &lt;user id&gt; </PRE><P>
 <P>
 and the script will create the appropriate tables.  You may need to edit the
 script to make it reflect where things are stored on your system.<P>
 <P>
 You may want to have a look at this script.  It defines the field sizes of your
-log tables.  If, for example, you know that your file paths exceed 64 characters,
-you need to bump up the filename size in both the <EM>logN</EM> and the <EM>lastN</EM>
-tables in this <EM>msqllog</EM> file.<P>
+log tables.  If, for example, you know that your file paths exceed 64 
+characters, you need to bump up the filename size in both the <EM>logN</EM> 
+and the <EM>lastN</EM> tables in this <EM>msqllog</EM> or <EM>mysqllog</EM> 
+file.<P>
 <P>
 Access logging stores information about each &quot;hit&quot; on a page.  This
 information can then be summarized by examining these log files.  An example
-log file summarizing script is included in the package.  It is the <TT>log.html</TT>
-file in the <TT>examples</TT> directory.  This is the dbm log file analyzer.  The
-msql log file analyzer is called <TT>mlog.html</TT>.  To run it, copy it to a
-directory accessible from your web server and type:<P>
-<P>
-<TT>http://your.machine.domain/cgi-bin/php.cgi/path/log.html</TT><P>
+log file summarizing script is included in the package.  It is the 
+<TT>log.html</TT> file in the <TT>examples</TT> directory.  This is the dbm 
+log file analyzer.  The mSQL log file analyzer is called <TT>mlog.html</TT>.  
+And the mysql log file analyzer is called <TT>mylog.html</TT>.
+To run it, copy it and the other mlog.* files to a directory accessible from 
+your web server and type:<P>
+<PRE>    http://your.machine.domain/cgi-bin/php.cgi/path/mlog.html</PRE><P>
+Or, if you are using the Apache module version, you can give the script
+a &quot;.phtml&quot; extension and call it with:<P>
+<PRE>    http://your.machine.domain/path/mlog.phtml</PRE>
 <P>
 By default, if you have compiled PHP with access logging enabled, then your
 pages will appear with a footer containing some access information.
@@ -792,12 +824,12 @@ Any component of the GET data (the data following a '?' in the URL) which is
 of the form, <EM>word=something</EM> will define the variable <EM>$word</EM> to
 contain the value <EM>something</EM>.  Even if the data is not of this form,
 it can be accessed with the $argv built-in array.  For example, in a URL like:<P>
-<PRE>    /cgi-bin/php.cgi/file.html?abc+def+EMAIL_ADDR=rasmus@vex.net&amp;var==value</PRE>
+<PRE>    /cgi-bin/php.cgi/file.html?abc+def+EMAIL_ADDR=rasmus@vex.net&amp;var=value</PRE>
 The relevant components of the PHP symbol table will be:<P>
 <PRE>    $argc       = 4
     $argv[0]    = abc
     $argv[1]    = def
-    $argv[2]    = EMAIL_ADDR=rasmus@vex.net&amp;var==value
+    $argv[2]    = EMAIL_ADDR=rasmus@vex.net&amp;var=value
     $EMAIL_ADDR = rasmus@vex.net
     $var        = value</PRE>
 <P>
@@ -985,6 +1017,7 @@ PHP/FI supports has a rich set of mSQL support functions:
 <P>
 <DL>
 <DT><A HREF="#msql">msql()</A>
+<DT><A HREF="#msql_close">msql_Close()</A>
 <DT><A HREF="#msql_connect">msql_Connect()</A>
 <DT><A HREF="#msql_createdb">msql_CreateDB()</A>
 <DT><A HREF="#msql_dbname">msql_dbName()</A>
@@ -1046,10 +1079,10 @@ The following PHP functions are available for Postgres95:<P>
 <P>
 <P>
 In addition to these functions, PHP/FI can also be compiled to automatically
-escape any forward single quote ( ' ) characters found in GET or POST data.
-If the MAGIC_QUOTES variable is defined in the <EM>php.h</EM> file then
-these quotes will be automatically escaped making it easier to pass
-form data directly to Postgres95 queries.<P>
+escape any forward single quote ( ' ) and double quote ( &quot; ) characters 
+found in GET or POST data.  If the MAGIC_QUOTES variable is defined in the 
+<EM>php.h</EM> file then these quotes will be automatically escaped making 
+it easier to pass form data directly to Postgres95 queries.<P>
 <P>
 Here is a sample script that connects to Postgres95 database on localhost
 called 'mydb' and retrieves the names and ages of people in a table:<P>
@@ -1084,6 +1117,120 @@ called 'mydb' and retrieves the names and ages of people in a table:<P>
    pg_Close($conn);
 &gt;
 </PRE><P>
+
+<HR>
+<H2><A NAME="mysql_support">mysql Support</A></H2>
+<P>mysql is an clone of the mSQL package.  You can get a copy from
+<A HREF="http://www.tcx.se/">http://www.tcx.se/</A><P>
+<P>
+PHP/FI supports has a rich set of mysql support functions:
+<P>
+<DL>
+<DT><A HREF="#mysql">mysql()</A>
+<DT><A HREF="#mysql_close">mysql_Close()</A>
+<DT><A HREF="#mysql_connect">mysql_Connect()</A>
+<DT><A HREF="#mysql_createdb">mysql_CreateDB()</A>
+<DT><A HREF="#mysql_dbname">mysql_dbName()</A>
+<DT><A HREF="#mysql_dropdb">mysql_DropDB()</A>
+<DT><A HREF="#mysql_fieldflags">mysql_FieldFlags()</A>
+<DT><A HREF="#mysql_fieldlen">mysql_FieldLen()</A>
+<DT><A HREF="#mysql_fieldname">mysql_FieldName()</A>
+<DT><A HREF="#mysql_fieldtype">mysql_FieldType()</A>
+<DT><A HREF="#mysql_freeresult">mysql_FreeResult()</A>
+<DT><A HREF="#mysql_listdbs">mysql_ListDBs()</A>
+<DT><A HREF="#mysql_listfields">mysql_Listfields()</A>
+<DT><A HREF="#mysql_listtables">mysql_ListTables()</A>
+<DT><A HREF="#mysql_numfields">mysql_NumFields()</A>
+<DT><A HREF="#mysql_numrows">mysql_NumRows()</A>
+<DT><A HREF="#mysql_regcase">mysql_RegCase()</A>
+<DT><A HREF="#mysql_result">mysql_Result()</A>
+<DT><A HREF="#mysql_tablename">mysql_TableName()</A>
+</DL>
+<P>
+In addition to these functions, PHP/FI can also be compiled to automatically
+escape any forward single quote ( ' ) characters found in GET or POST data.
+If the MAGIC_QUOTES variable is defined in the <EM>php.h</EM> file then
+these quotes will be automatically escaped making it easier to pass
+form data directly to mysql queries.<P>
+<HR>
+<H2><A NAME="solid_support">Solid Support</A></H2>
+<P>
+The Solid server is a high-volume SQL server. It supports the ANSI SQL2, ODBC,
+SAG CLI and X/Open SQL standards. More information about the Solid server is
+available at <A HREF="http://solid.digiface.nl/">solid.digiface.nl</A>.
+<P>
+The following PHP functions are available for the Solid Server:<P>
+<DL>
+<DT><A HREF="#solid_connect">Solid_Connect()</A>
+<DT><A HREF="#solid_close">Solid_Close()</A>
+<DT><A HREF="#solid_exec">Solid_Exec()</A>
+<DT><A HREF="#solid_result">Solid_Result()</A>
+<DT><A HREF="#solid_freeresult">Solid_FreeResult()</A>
+<DT><A HREF="#solid_numrows">Solid_NumRows()</A>
+<DT><A HREF="#solid_numfields">Solid_NumFields()</A>
+<DT><A HREF="#solid_fieldnum">Solid_FieldNum()</A>
+<DT><A HREF="#solid_fieldname">Solid_FieldName()</A>
+</DL>
+<P>
+In addition to these functions, PHP/FI can also be compiled to automatically
+escape any forward single quote ( ' ) characters found in GET or POST data.
+If the MAGIC_QUOTES variable is defined in the <EM>php.h</EM> file then
+these quotes will be automatically escaped making it easier to pass
+form data directly to Solid queries.<P>
+<P>
+Here is the same script that was shown in the Postgres95 section, adapted for
+the Solid server.
+<P>
+<PRE>
+&lt;?
+   $conn = Solid_Connect("", "username", "password");
+   if (!$conn) {
+      echo "An error occured.\n";
+      exit;
+   }
+
+   $result = Solid_Exec($conn, "select * from table1");
+   if (!$result) {
+      echo "An error occured.\n";
+      exit;
+   }
+
+   while (Solid_FetchRow($result)) {
+      echo "name: ";
+      echo Solid_Result($result, "name");
+      echo "  age: ";
+      echo Solid_Result($result, "age");
+      echo "&lt;BR&gt;";
+   }
+
+   Solid_FreeResult($result);
+   Solid_Close($conn);
+&gt;
+</PRE><P>
+
+<HR>
+<H2><A NAME="sybase_support">Sybase Support</A></H2>
+The supporting functions uses Sybase DB library API calls. Therefore
+you must have sybase API libraries and headers files installed in your
+system in order to compile PHP/FI with sybase support. 
+<p>
+The following PHP/FI functions are available for Sybase. <P>
+<DL>
+<DT><A HREF="#sybsql_connect">SybSQL_Connect()</A>
+<DT><A HREF="#sybsql_DBuse">SybSQL_DBuse()</A>
+<DT><A HREF="#sybsql_fieldname">SybSQL_Fieldname()</A>
+<DT><A HREF="#sybsql_getfield">SybSQL_GetField()</A>
+<DT><A HREF="#sybsql_isrow">SybSQL_IsRow()</A>
+<DT><A HREF="#sybsql_nextrow">SybSQL_NextRow()</A>
+<DT><A HREF="#sybsql_numfields">SybSQL_NumFields()</A>
+<DT><A HREF="#sybsql_numrows">SybSQL_NumRows()</A>
+<DT><A HREF="#sybsql_query">SybSQL_Query()</A>
+<DT><A HREF="#sybsql_result">SybSQL_Result()</A>
+<DT><A HREF="#sybsql_result_all">SybSQL_Result_All()</A>
+<DT><A HREF="#sybsql_seek">SybSQL_Seek()</A>
+</DL><P>
+For a complete example, see the example following the 
+<A HREF="#sybsql_result">sybSQL_Result()</A> function.<P>
 
 <HR>
 <H2><A NAME="regexp">Regular Expressions</A></H2>
@@ -1128,10 +1275,11 @@ Some examples of regular expressions and what they do:<p>
 <dt><tt>ereg_replace(13,"&lt;BR&gt;",$string);</tt>
 <dd>Replace all carriage returns with a &lt;BR&gt; tag in $string.<P>
 </dl>
+</blockquote>
 <HR>
 <H2><A NAME="escapes">Escape Characters</A></H2>
 <P>
-The following escape sequences are supported in most placed where a
+The following escape sequences are supported in most places where a
 quoted string argument is used:
 <blockquote>
 <pre>	\a --> bell
@@ -1247,8 +1395,22 @@ index 0, the second index 1, etc.  Therefore the above items may be
 printed out with:<P>
 <P>
 <PRE>    echo $a[0];
-    echo $a[1];</PRE><P>
-    <P>
+    echo $a[1];
+	</PRE><P>
+Arrays can be copied by a simple assignment.  If $b is an array, then
+all the values can be copied to a new array named $a with:<P>
+<PRE>    $a = $b;</PRE><P>
+<P>
+The [] notation is also used to indicate that arrays are to be appended.
+If $a and $b are both arrays, then $b can be appended to $a by:<P>
+<PRE>    $a[] = $b;</PRE><P>
+<P>
+In the above, there will be a difference between associative arrays and
+normal numbered arrays.  Numbered arrays will be renumbered such that all
+elements from $b will come after the original elements from $a.  While with
+associative arrays, elements in $b will be merged with elements in $a.
+Any elements (items with the same index name) which already exist in $a
+will be overwritten by $b elements.<P>
 You can use the <A HREF="#count">count()</A> function to determine the
 number of items in any array.<P>
 <P>
@@ -1497,7 +1659,8 @@ are the valid operators:<P>
 	&lt;? $a = 2 - 1 &gt; <EM>Subtraction</EM>
 	&lt;? $a = 2 * 1 &gt; <EM>Multiplication</EM>
 	&lt;? $a = 2 / 1 &gt; <EM>Division</EM>
-	&lt;? $a = 2 % 1 &gt; <EM>Modulus</EM></PRE><P>
+	&lt;? $a = 2 % 1 &gt; <EM>Modulus</EM>
+	&lt;? $a = 2 ^ 1 &gt; <EM>Bit-wise Exclusive OR</EM></PRE><P>
 <P>
 Both bracketing and order of operations is supported, so the following
 is valid:<P>
@@ -1513,10 +1676,10 @@ This is equivalent to:<P>
 <P>
 <PRE>    &lt;? $a = $a + $b&gt;</PRE><P>
 <P>
-The C-like bit-wise operators <TT>&amp;=</TT> and <TT>|=</TT> are
+The C-like bit-wise operators <TT>&amp;=</TT>, <TT>|=</TT> and <TT>^=</TT> are
 supported. ie.<P>
 <P>
-<PRE>    &lt;? $a &== 4&gt;</PRE>
+<PRE>    &lt;? $a &= 4&gt;</PRE>
 This is equivalent to:<P>
 <P>
 <PRE>    &lt;? $a = $a &  4&gt;</PRE><P>
@@ -1781,6 +1944,17 @@ generally a good idea).<P>
 <DD>
 <P>Chr returns the ASCII character represented by the integer argument.<P>
 
+<DT><A NAME="clearstatcache"><FONT SIZE="+1">ClearStatCache()</FONT></A>
+<DD>
+<P>The stat() system call is normally an expensive operation on most
+operating systems.  In order to make sure that repeated calls to the
+various File* functions like <a href="#fileperms">FilePerms()</a>, 
+<a href="#fileinode">FileInode()</a>, etc. the result of the last stat()
+call is always cached.  If one of the File* functions is called again
+with the same argument, the cached stat() result will be used.  In order
+to force a new stat() system call this ClearStatCache() function may be
+called to clear the cached stat() result.<P>
+
 <DT><A NAME="closedir"><FONT SIZE="+1">closeDir()</FONT></A>
 <DD>
 <P>closeDir closes a directory opened using the <A HREF="#opendir">
@@ -1836,7 +2010,8 @@ character is printed verbosely:<P>
 	<LI><TT>U - Seconds since epoch eg. 814807830</TT>
 	<LI><TT>A - AM/PM</TT>
 	<LI><TT>a - am/pm</TT>
-</UL>
+</UL><P>
+See also the <a href="#mktime">MkTime()</a> function.
 <P>
 
 <DT><A NAME="dblist"><FONT SIZE="+1">dbList()</FONT></A>
@@ -2141,50 +2316,74 @@ containing a line of the file starting with array index <STRONG>0</STRONG>.<P>
 <DD>
 <P>fileAtime returns the time of last data access.  If the file does
 not exist, or if it for some other reason could not be accessed,
-this function returns -1.<P>
+this function returns -1.  If repeated calls to fileAtime and the rest
+ofthe file* functions are to be made and the file being accessed might
+change or disappear, the <a href="#clearstatcache">ClearStatCache()</a>
+should be called before the call to the file* function.<P>
 
 <DT><A NAME="filectime"><FONT SIZE="+1">fileCtime(filename)</FONT></A>
 <DD>
 <P>fileCtime returns the time of last status change.  If the file does
 not exist, or if it for some other reason could not be accessed,
-this function returns -1.<P>
+this function returns -1.  If repeated calls to fileCtime and the rest
+ofthe file* functions are to be made and the file being accessed might
+change or disappear, the <a href="#clearstatcache">ClearStatCache()</a>
+should be called before the call to the file* function.<P>
 
 <DT><A NAME="filegroup"><FONT SIZE="+1">fileGroup(filename)</FONT></A>
 <DD>
 <P>fileGroup returns the group id of the owner of the file.  If the file does
 not exist, or if it for some other reason could not be accessed,
-this function returns -1.<P>
+this function returns -1.  If repeated calls to fileGroup and the rest
+ofthe file* functions are to be made and the file being accessed might
+change or disappear, the <a href="#clearstatcache">ClearStatCache()</a>
+should be called before the call to the file* function.<P>
 
 <DT><A NAME="fileinode"><FONT SIZE="+1">fileInode(filename)</FONT></A>
 <DD>
 <P>fileInode returns the file's inode.  If the file does
 not exist, or if it for some other reason could not be accessed,
-this function returns -1.<P>
+this function returns -1.  If repeated calls to fileInode and the rest
+ofthe file* functions are to be made and the file being accessed might
+change or disappear, the <a href="#clearstatcache">ClearStatCache()</a>
+should be called before the call to the file* function.<P>
 
 <DT><A NAME="filemtime"><FONT SIZE="+1">fileMtime(filename)</FONT></A>
 <DD>
 <P>fileMtime returns the time of last data modification.  If the file does
 not exist, or if it for some other reason could not be accessed,
-this function returns -1.<P>
+this function returns -1.  If repeated calls to fileMtime and the rest
+ofthe file* functions are to be made and the file being accessed might
+change or disappear, the <a href="#clearstatcache">ClearStatCache()</a>
+should be called before the call to the file* function.<P>
 
 <DT><A NAME="fileowner"><FONT SIZE="+1">fileOwner(filename)</FONT></A>
 <DD>
 <P>fileOwner returns the uid of the owner of the file.  If the file does
 not exist, or if it for some other reason could not be accessed,
-this function returns -1.<P>
+this function returns -1.  If repeated calls to fileOwner and the rest
+ofthe file* functions are to be made and the file being accessed might
+change or disappear, the <a href="#clearstatcache">ClearStatCache()</a>
+should be called before the call to the file* function.<P>
 
 <DT><A NAME="fileperms"><FONT SIZE="+1">filePerms(filename)</FONT></A>
 <DD>
 <P>filePerms returns the permission bits of the file.  This is the
 <EM>st_mode</EM> field of the Unix C stat structure.  If the file does
 not exist, or if it for some other reason could not be accessed,
-this function returns -1.<P>
+this function returns -1.  If repeated calls to filePerms and the rest
+ofthe file* functions are to be made and the file being accessed might
+change or disappear, the <a href="#clearstatcache">ClearStatCache()</a>
+should be called before the call to the file* function.<P>
 
 <DT><A NAME="filesize"><FONT SIZE="+1">fileSize(filename)</FONT></A>
 <DD>
 <P>fileSize returns the size of the file in bytes.  If the file does
 not exist, or if it for some other reason could not be accessed,
-this function returns -1.<P>
+this function returns -1.  If repeated calls to fileSize and the rest
+ofthe file* functions are to be made and the file being accessed might
+change or disappear, the <a href="#clearstatcache">ClearStatCache()</a>
+should be called before the call to the file* function.<P>
 
 <DT><A NAME="fopen"><FONT SIZE="+1">$fp = fopen(filename,mode)</FONT></A>
 <DD>
@@ -2362,14 +2561,16 @@ See also the <A HREF="#settype">SetType()</A> function<P>
 except for the fact that it uses Greenwich Mean Time instead of the current
 local time.<P>
 
-<DT><A NAME="header"><FONT SIZE="+1">Header &quot;header_string&quot;</FONT></A>
+<DT><A NAME="header"><FONT SIZE="+1">Header(header_string)</FONT></A>
 <DD>
 <P>The Header command is used at the top of an HTML file to send
 raw HTTP header strings.  See the
 <A HREF="http://www.w3.org/hypertext/WWW/Protocols/HTTP1.0/draft-ietf-http-spec.html">
 HTTP Specification</A> for more information on raw http headers.  Remember that the
 Header() command must be used before any actual output is sent either by normal
-HTML tags or by PHP echo commands.<P>
+HTML tags or by PHP echo commands.<BR>
+Usage examples can be found in the <A HREF="#http_auth">HTTP Authentication</A>
+section.<P>
 
 <DT><A NAME="hexdec"><FONT SIZE="+1">HexDec(hex_string)</FONT></A>
 <DD>
@@ -2380,7 +2581,8 @@ the <A HREF="#dechex">DecHex()</A> function.<P>
 <DD>
 <P>HtmlSpecialChars converts any characters with ascii codes in the string
 argument between 160 and 255 inclusive to their corresponding HTML Entity names.
-The function returns the converted string.<P>
+The function returns the converted string.  The <b>&lt;</b>, <b>&gt;</b>, 
+<b>&amp;</b> and <b>&quot;</b> are also converted.<P>
 
 <DT><A NAME="imagearc"><FONT SIZE="+1">ImageArc(im, cx, cy, w, h, s, e, col)</FONT></A>
 <DD>
@@ -2546,16 +2748,23 @@ has been enabled in PHP.<P>
 <DD>
 <P>ImageSY returns the height of the image identified by <em>im</em>.<P>
 
-<DT><A NAME="include"><FONT SIZE="+1">Include filename</FONT></A>
+<DT><A NAME="include"><FONT SIZE="+1">Include(filename)</FONT></A>
 <DD>
 <P>The Include command can be used to insert other files into the current
 html file.  This is extremely handy for headers and footers which may need
 to be included in hundreds of HTML files.  By using an include command you then
 only need to modify the header or footer file in one place when it needs to be
 changed.  Since full PHP parsing is done on the included file, you can also
-use the include command to include common PHP scripts you may have written.  Sort
-of like having a primitive shared library of scripts you can call from your HTML
-file.<P>
+use the include command to include common PHP scripts you may have
+written.  Sort of like having a primitive shared library of scripts
+you can call from your HTML file.  You can place such common library
+files in one directory and set PHP's include path and not have to
+refer to the files with pathnames.  For Apache module users this can be
+configured with the <STRONG>phpIncludePath</STRONG> directive, for CGI
+users with the PHP_INCLUDE_PATH environment variable.  This path is
+colon-separated just like <CODE>$PATH</CODE> is in your UNIX shell.
+eg.<PRE>    &lt;?include(&quot;/path/filename.txt&quot;)&gt;</PRE>
+<P>
 
 <DT><A NAME="intval"><FONT SIZE="+1">intval(variable)</FONT></A>
 <DD>
@@ -2598,6 +2807,15 @@ Returns -1 in case of error.<P>
 <DT><A NAME="log10"><FONT SIZE="+1">Log10(arg)</FONT></A>
 <DD>
 <P>Log10 returns the base-10 logarithm of arg.<P>
+
+<DT><A NAME="mail"><FONT SIZE="+1">Mail(to,subject,message)</FONT></A>
+<DD>
+<P>Mail automatically mails the message specified in the message argument
+to the receiver specified in the to argument.  Multiple recipients can
+be specified by spaces between them in the to argument.<P>
+eg. <PRE>   mail(&quot;rasmus@vex.net&quot;, 
+        &quot;My Subject&quot;, 
+        &quot;Line 1\nLine 2\nLine 3&quot;);</PRE>
 
 <DT><A NAME="max"><FONT SIZE="+1">Max(array)</FONT></A>
 <DD>
@@ -2647,7 +2865,15 @@ any queries that do not return anything, such as <EM>create</EM>, <EM>update</EM
 <EM>delete</EM>. The function will return <STRONG>-1</STRONG> if an error occurs.  A string
 describing the error will be placed in $phperrmsg, and unless the function was called
 as <STRONG>@msql()</STRONG> then this error string will also be printed out.
+For mSQL 2.0, the $result variable will contain the number of rows affected by
+the SQL command performed.  If you want your application to be portable to mSQL 1.0, 
+do not rely on this.
 <BR>This function is only available if mSQL support has been enabled in PHP.<P>
+
+<DT><A NAME="msql_close"><FONT SIZE="+1">msql_close($hostname)</FONT></A>
+<DD>
+<P>msql_Close closes the socket connection to the msql daemon, if an open
+connection exists.<P>
 
 <DT><A NAME="msql_connect"><FONT SIZE="+1">msql_connect($hostname)</FONT></A>
 <DD>
@@ -2815,6 +3041,190 @@ determine the number of tables in the result pointer.  An example would be:<P>
     &gt;</PRE>
 <BR>This function is only available if mSQL support has been enabled in PHP.<P>
 
+<DT><A NAME="mysql"><FONT SIZE="+1">$result = mysql($database,$query)</FONT></A>
+<DD>
+<P>mysql sends a mysql query.  Arguments are the database name and the query
+string.  ie. <STRONG><TT>&lt;?mysql(&quot;MyDatabase&quot; , &quot;select * from
+table&quot;)&gt;</TT></STRONG>.
+The return value from this function is a result identifier to be used to access the results
+from the other mysql_ functions.  A result identifier is a positive integer.  The function
+returns <STRONG>0</STRONG> when no result identifier is created.  This is the case with
+any queries that do not return anything, such as <EM>create</EM>, <EM>update</EM>,
+<EM>drop</EM>, <EM>insert</EM> and
+<EM>delete</EM>. The function will return <STRONG>-1</STRONG> if an error occurs.  A string
+describing the error will be placed in $phperrmsg, and unless the function was called
+as <STRONG>@mysql()</STRONG> then this error string will also be printed out.
+<BR>This function is only available if mysql support has been enabled in PHP.<P>
+
+<DT><A NAME="mysql_close"><FONT SIZE="+1">mysql_close()</FONT></A>
+<DD>
+<P>mysql_Close closes the socket connection to the mysql daemon, if an open
+connection exists.<P>
+
+<DT><A NAME="mysql_connect"><FONT SIZE="+1">mysql_connect($hostname)</FONT></A>
+<DD>
+<P>mysql_Connect specifies the host name or IP on which the mysql database
+engine resides.  This is equivalent to the mysqlConnect() function in the mysql C
+API.  The one difference between this function and the C API equivalent is that
+if the function isn't called, a connection to the local host is made by default
+on the first call to the mysql() function.  And, there is no need for an mysql_close
+function since only one connection may be active at any one time.  If a second call
+to mysql_connect() is made in a file, then the connection to the first host is
+automatically closed.  To explicitly connect to the mysql daemon on the local host, use:
+<STRONG><TT>&lt;?mysql_connect(&quot;localhost&quot;)&gt;</TT></STRONG><BR>This function is only
+available if mysql support has been enabled in PHP.<P>
+
+<DT><A NAME="mysql_createdb"><FONT SIZE="+1">mysql_CreateDB($database)</FONT></A>
+<DD>
+<P>mysql_CreateDB creates the given database.
+<BR>This function is only available if mysql support has been enabled in PHP.<P>
+
+<DT><A NAME="mysql_dbname"><FONT SIZE="+1">mysql_dbName($result,$i)</FONT></A>
+<DD>
+<P>mysql_dbName returns the database name stored in position <EM>$i</EM> of
+the result pointer returned from the <A HREF="#mysql_listdbs">mysql_ListDbs()</A>
+function.  The <A HREF="#mysql_numrows">mysql_NumRows()</A> function can
+be used to determine how many database names are available.
+<BR>This function is only available if mysql support has been enabled in PHP.<P>
+
+<DT><A NAME="mysql_dropdb"><FONT SIZE="+1">mysql_DropDB($database)</FONT></A>
+<DD>
+<P>mysql_DropDB deletes the given mysql database.  Use this with caution
+as all data in the database will be lost.
+<BR>This function is only available if mysql support has been enabled in PHP.<P>
+
+<DT><A NAME="mysql_fieldflags"><FONT SIZE="+1">mysql_FieldFlags($result,$i)</FONT></A>
+<DD>
+<P>mysql_FieldFlags returns the field flags of the specified field.
+Currently this is either, "not null", "primary key", a combination
+of the two or "" (an empty string).
+<BR>This function is only available if mysql support has been enabled in PHP.<P>
+
+<DT><A NAME="mysql_fieldlen"><FONT SIZE="+1">mysql_FieldLen($result,$i)</FONT></A>
+<DD>
+<P>mysql_FieldLen returns the length of the specified field.
+<BR>This function is only available if mysql support has been enabled in PHP.<P>
+
+<DT><A NAME="mysql_fieldname"><FONT SIZE="+1">mysql_FieldName($result,$i)</FONT></A>
+<DD>
+<P>mysql_FieldName returns the name of the specified field.  Arguments to the
+function is the result identifier and the field index.  ie. <TT>mysql_FieldName($result,2);</TT>
+will return the name of the second field in the result associated with the result
+identifier.  <BR>This function is only available if mysql support has been enabled in PHP.<P>
+
+<DT><A NAME="mysql_fieldtype"><FONT SIZE="+1">mysql_FieldType($result,$i)</FONT></A>
+<DD>
+<P>mysql_FieldType is similar to the mysql_FieldName() function.  The arguments are
+identical, but the field type is returned.  This will be one of "int", "char" or "real".
+<BR>This function is only available if mysql support has been enabled in PHP.<P>
+
+<DT><A NAME="mysql_freeresult"><FONT SIZE="+1">mysql_FreeResult($result)</FONT></A>
+<DD>
+<P>mysql_FreeResult only needs to be called if you are worried about using
+too much memory while your script is running.  All result memory will automatically
+be freed when the script is finished.  But, if you are sure you are not going to
+need the result data anymore in a script, you may call mysql_freeresult with the
+result identifier as an argument and the associated result memory will be freed.
+<BR>This function is only available if mysql support has been enabled in PHP.<P>
+
+<DT><A NAME="mysql_listdbs"><FONT SIZE="+1">$result = mysql_ListDBs()</FONT></A>
+<DD>
+<P>mysql_ListDBs will return a result pointer containing the databases
+available from the current mysql daemon.  Use the <A HREF="#mysql_dbname">
+mysql_dbName()</A> function to traverse this result pointer.
+<BR>This function is only available if mysql support has been enabled in PHP.<P>
+
+<DT><A NAME="mysql_listfields"><FONT SIZE="+1">$result = mysql_Listfields($database,$tablename)</FONT></A>
+<DD>
+<P>mysql_listfields retrieves information about the the given tablename. 
+Arguments are the database name and the table name.
+A result pointer is returned which can be used with mysql_fieldflags,
+mysql_fieldlen, mysql_fieldname, mysql_fieldtype.  A result identifier is a
+positive integer.  The function returns -1 if a error occurs. A string 
+describing the error will be placed in $phperrmsg, and unless the function 
+was called as @mysql() then this error string will also be printed out.
+<BR>This function is only available if mysql support has been enabled in PHP.<P>
+
+<DT><A NAME="mysql_listtables"><FONT SIZE="+1">$result = mysql_ListTables($database)</FONT></A>
+<DD>
+<P>mysql_ListTables takes a database name and result pointer much like the
+<A HREF="#mysql">mysql()</A> function.  The <A HREF="#mysql_tablename">mysql_TableName()</A>
+function should be used to extract the actual table names from the result pointer.
+<BR>This function is only available if mysql support has been enabled in PHP.<P>
+
+<DT><A NAME="mysql_numfields"><FONT SIZE="+1">mysql_NumFields($result)</FONT></A>
+<DD>
+<P>mysql_NumFields returns the number of fields in a result.  The argument is
+the result identifier returned by the mysql() function.
+<BR>This function is only available if mysql support has been enabled in PHP.<P>
+
+<DT><A NAME="mysql_numrows"><FONT SIZE="+1">mysql_NumRows($result)</FONT></A>
+<DD>
+<P>mysql_NumRows simply returns the number of rows in a result.  The argument
+is the result identifier returned by the mysql() function.
+<BR>This function is only available if mysql support has been enabled in PHP.<P>
+
+<DT><A NAME="mysql_result"><FONT SIZE="+1">mysql_Result($result,$i,field)</FONT></A>
+<DD>
+<P>mysql_Result displays a field from a returned record.  Arguments are the result
+identifier returned by the mysql() function, an integer which is the index of the record
+to be viewed and a field name.  The field argument supports the &quot;table.field&quot;
+syntax for handling results from a join.  One difference between mSQL 1.0 and mysql is 
+that mysql supports functions that can act on the result data.  These functions can 
+be applied in this function.  This function is perhaps best illustrated with
+a complete example:<P>
+<P>
+<PRE>
+    &lt;?
+      $name = &quot;bob&quot;;	
+      $result = mysql($database,&quot;select * from table where firstname='$name'&quot;);
+      $num = mysql_numrows($result);
+      echo &quot;$num records found!&lt;p&gt;&quot;;
+      $i=0;
+      while($i<$num);
+        echo mysql_result($result,$i,&quot;lcase(fullname)&quot;);
+        echo &quot;&lt;br&gt;&quot;;
+        echo mysql_result($result,$i,&quot;address&quot;);
+        echo &quot;&lt;br&gt;&quot;;
+        $i++;
+      endwhile;
+    &gt;</PRE><P>
+<P>
+The above script connects to the mysql engine on the local machine, sets the <EM>name</EM>
+variable to <EM>bob</EM> and sends a query which asks for all the fields from a
+table where the <EM>firstname</EM> field is set to <EM>bob</EM>.  It then displays the
+number of records it found after which it loops through each of the found
+records and displays the <EM>fullname</EM> and <EM>address</EM> fields for each record.
+The lcase() call in the result function changes the returned string to lower case.
+For a complete set of functions that can be applied to the result data, see your 
+mysql documentation.
+As you can see, it would be trivial to add HTML markup tags around the printed
+fields to format the results in a table or in whatever manner is desired.  Note
+that there is no mysql_connect() call.  mysql_connect need only be called if a connection
+to a remote database is desired.<P>
+<P>
+This function is only available if mysql support has been enabled in PHP.<P>
+
+<DT><A NAME="mysql_tablename"><FONT SIZE="+1">mysql_TableName($result,$i)</FONT></A>
+<DD>
+<P>mysql_TableName takes a result pointer returned by the <A HREF="#mysql_listtables">
+mysql_ListTables()</A> function as well as an integer index and returns the name of
+a table.  The <A HREF="#mysql_numrows">mysql_NumRows()</A> function may be used to
+determine the number of tables in the result pointer.  An example would be:<P>
+<P>
+<PRE>
+    &lt;?
+      $result = mysql_listtables(&quot;dbname&quot;);
+      $i=0;
+      while($i <  mysql_numrows($result));
+        $tb_names[$i]=mysql_tablename($result, $i);
+        echo $tb_names[$i];
+        echo "&lt;BR&gt;";
+        $i++;
+      endwhile;
+    &gt;</PRE>
+<BR>This function is only available if mysql support has been enabled in PHP.<P>
+
 <DT><A NAME="next"><FONT SIZE="+1">Next(variable)</FONT></A>
 <DD>
 <P>Next moves the internal array pointer to the next item in the array.
@@ -2851,6 +3261,21 @@ closeDir</A> function.<P>
 <DT><A NAME="ord"><FONT SIZE="+1">Ord(arg)</FONT></A>
 <DD>
 <P>Ord returns the ASCII value of the first character of arg.<P>
+
+<DT><A NAME="parse_str"><FONT SIZE="+1">Parse_Str(arg)</FONT></A>
+<DD>
+<P>Parse_str takes a string identical to a regular URL encoded
+string and extracts variables and their values.<br>
+ex.
+<PRE>    &lt;? parse_str("a[]=hello+world&amp;a[]=second+variable");
+        echo $a[],"&lt;br&gt;";
+        echo $a[],"&lt;br&gt;";
+    &gt;
+
+produces
+
+hello world
+second variable</PRE>
 
 <DT><A NAME="passthru"><FONT SIZE="+1">PassThru(command_string [,return_var])</FONT></A>
 <DD>
@@ -3097,9 +3522,12 @@ special characters escaped with a backslash.<P>
 
 <DT><A NAME="rand"><FONT SIZE="+1">Rand()</FONT></A>
 <DD>
-<P>Rand returns a random number between 0 and RANDMAX.  RANDMAX can be
-determined with the <A HREF="#getrandmax">getRandMax</A> function.  Normally
-a specific range is chosen by simply using the modulus operator on the result.<P>
+<P>Rand returns a random number between 0 and RANDMAX.  <B>Remember</B> to
+seed your random number generator with a call to <a href="#srand">srand()</a> 
+before calling rand().  You only need to seed the random number generator
+once.  RANDMAX can be determined with the <A HREF="#getrandmax">getRandMax</A>
+function.  Normally a specific range is chosen by simply using the modulus 
+operator on the result.<P>
 
 <DT><A NAME="readdir"><FONT SIZE="+1">readDir()</FONT></A>
 <DD>
@@ -3258,6 +3686,120 @@ and <A HREF="#tan">Tan()</A><P>
 <P>Sleep will delay for secs seconds.  Similar to the Unix C sleep()
 function.  See also the <A HREF="#usleep">USleep()</A> function.<P>
 
+<DT><A NAME="solid_close"><FONT SIZE="+1">Solid_Close(connection_id)</FONT></A>
+<DD>
+<P>Solid_Close will close down the connection to the Solid server associated
+with the given connection identifier.<P>
+<P>
+This function is only available if Solid support has been enabled in PHP.<P>
+
+<DT><A NAME="solid_connect"><FONT SIZE="+1">$connection = Solid_Connect(data source name, username, password)</FONT>
+<DD>
+<P>Solid_Connect opens a connection to a Solid server. Each of the arguments
+should be a quoted string. The first parameter (data source name) can be an
+empty string, resulting in a connection to the default server on the localhost.
+This function returns a connection_id. This identifier is needed by other
+Solid functions. You can have multiple connections open at once. This function
+will return <STRONG>0</STRONG> on error.
+<P>
+This function is only available if Solid support has been enabled in PHP.<P>
+
+<DT><A NAME="solid_exec"><FONT SIZE="+1">$result = Solid_Exec(connection_id, query_string)</FONT>
+<DD>
+<P>Solid_Exec will send an SQL statement to the Solid server specified by
+the connection_id. The connection_id must be a valid identifier
+that was returned by Solid_Connect. The return value of this function
+is an identifier to be used to access the results by other Solid functions.
+This function will return <STRONG>0</STRONG> on error. It will return
+<STRONG>1</STRONG> when the command executed correctly but are not expected to
+returned data (insert or update commands, for example). Note that selects which
+return no data will still return a valid result greater than 1.
+<P>
+This function is only available if Solid support has been enabled in PHP.<P>
+
+<DT><A NAME="solid_fetchrow"><FONT SIZE="+1">Solid_FetchRow(result_id)</FONT>
+<DD>
+<P>Solid_FetchRow fetches a row of the data that was returned by Solid_Exec.
+After Solid_FetchRow is called, the fields of that row can be access with
+Solid_Result. Every time Solid_FetchRow is called a new row can be accessed by
+Solid_Result. If Solid_FetchRow was succesful (there was a new row),
+<STRONG>1</STRONG> is returned, if there are no more rows, Solid_FetchRow will
+return <STRONG>0</STRONG>. The return value of Solid_FetchRow can be used as
+the condition of a while loop.
+<P>
+This function is only available if Solid support has been enabled in PHP.<P>
+
+<DT><A NAME="solid_fieldname"><FONT SIZE="+1">Solid_FieldName(result_id, field_number)</FONT>
+<DD>
+<P>Solid_FieldName will return the name of the field occupying the given column
+number in the given Solid result identifier. Field numbering starts from 0.
+<P>
+This function is only available if Solid support has been enabled in PHP.<P>
+
+<DT><A NAME="solid_fieldnum"><FONT SIZE="+1">Solid_FieldNum(result_id, field_name)</FONT>
+<DD>
+<P>Solid_FieldNum will return the number of the column slot that corresponds to
+the named field in the given Solid result identifier. Field numbering starts at
+0. This function will return <STRONG>-1</STRONG> on error.
+<P>
+This function is only available if Solid support has been enabled in PHP.<P>
+
+<DT><A NAME="solid_freeresult"><FONT SIZE="+1">Solid_FreeResult(result_id)</FONT>
+<DD>
+<P>Solid_FreeResult only needs to be called if you are worried about using too
+much memory while your script is running. All result memory will automatically
+be freed when the script is finished. But, if you are sure you are not going to
+need the result data anymore in a script, you may call Solid_FreeResult with
+the result identifier as an argument and the associated result memory will be
+freed.
+<P>
+This function is only available if Solid support has been enabled in PHP.<P>
+
+<DT><A NAME="solid_numfields"><FONT SIZE="+1">Solid_NumFields(result_id)</FONT>
+<DD>
+<P>Solid_NumFields will return the number of fields (columns) in a Solid
+result. The argument is a valid result identifier returned by Solid_Exec.
+This function will return <STRONG>-1</STRONG> on error.<P>
+<P>
+This function is only available if Solid support has been enabled in PHP.<P>
+
+<DT><A NAME="solid_numrows"><FONT SIZE="+1">Solid_NumRows(result_id)</FONT>
+<DD>
+<P>Solid_NumRows will return the number of rows in a Solid result. The argument
+is a valid result identifier returned by Solid_Exec. This function will return
+<STRONG>-1</STRONG> on error.  <B>Large Caveat:</B> 
+The SOLID SQL server uses ODBC as it's primary (and only) interface.
+SolidNumRows() uses SQLRowCount at the low-level to get the number of
+rows.  SQLRowCount follows the age-old Microsoft
+tradition of unnecessary limitations, strange exceptions and other odd things.
+This means that the function will only return the number of rows affected
+by an INSERT, UPDATE or a DELETE clause.  No SELECT!  As a workaround you can 
+try the count() statement of SQL or a while-loop that counts the number 
+of rows.  If you need Solid_NumRows() to figure out how many records to
+read after a SELECT clause, try checking the return value from 
+<a href="#solid_fetchrow">Solid_FetchRow()</a> instead.  So instead of:<P>
+<PRE>     $num = Solid_NumRows();
+    $i=0;
+    while ($i < $num) {
+        /* print results... */
+        $i++;
+    }</PRE><P>
+you might try:<P>
+<PRE>    while(Solid_FetchRow($result)) {
+        /* print results... */
+    }</PRE>
+<P>
+This function is only available if Solid support has been enabled in PHP.<P>
+
+<DT><A NAME="solid_result"><FONT SIZE="+1">Solid_Result(result_id, field name/index)</FONT>
+<DD>
+<P>Solid_Result will return values from a result identifier produced by
+Solid_Exec. The field name specify what cell in the row to return. Instead of
+naming the field, you may use the field index as an unquoted number. Field
+indices start from 0.
+<P>
+This function is only available if Solid support has been enabled in PHP.<P>
+
 <DT><A NAME="sort"><FONT SIZE="+1">Sort(array)</FONT></A>
 <DD>
 <P>Sort is used to sort a PHP array in ascending order.  It understands
@@ -3300,7 +3842,7 @@ can be used interchangeably and both are included for completeness sake.
 They will return the portion of the string argument starting at the point
 where the given sub-string is found.  For example, in the string,
 &quot;This is an example string&quot; above, the call:
-<TT>&lt;echo strstr($string,&quot;an &quot;)&gt;</TT> would
+<TT>&lt;?echo strchr($string,&quot;an &quot;)&gt;</TT> would
 return the string: <TT>&quot;an example string&quot;</TT>.<P>
 
 <DT><A NAME="stripslashes"><FONT SIZE="+1">StripSlashes(arg)</FONT></A>
@@ -3326,7 +3868,7 @@ can be used interchangeably and both are included for completeness sake.
 They will return the portion of the string argument starting at the point
 where the given sub-string is found.  For example, in the string,
 &quot;This is an example string&quot; above, the call:
-<TT>&lt;echo strstr($string,&quot;an &quot;)&gt;</TT> would
+<TT>&lt;?echo strstr($string,&quot;an &quot;)&gt;</TT> would
 return the string: <TT>&quot;an example string&quot;</TT>.<P>
 
 <DT><A NAME="strtok"><FONT SIZE="+1">strtok(string,arg)</FONT></A>
@@ -3348,7 +3890,9 @@ the following script code:
 Note that only the first call to strtok uses the string argument.  Every
 subsequent call to strtok only needs the token to use, as it keeps track of where
 it is in the current string.  To start over, or to tokenize a new string you
-simply call strtok with the string argument again to initialize it.<P>	
+simply call strtok with the string argument again to initialize it.  Note
+that you may put multiple tokens in the <i>arg</i> parameter.  The string
+will be tokenized when any one of the characters in the argument are found.<P>	
 
 <DT><A NAME="strtolower"><FONT SIZE="+1">strtolower(string)</FONT></A>
 <DD>
@@ -3370,6 +3914,163 @@ functions.<P>
 by the start argument.  The first position in a string is position 0.  And the
 length argument specifies the number of characters to return from the start
 position.<P>
+
+<DT><A NAME="sybsql_dbuse"><FONT SIZE="+1">sybSQL_DBuse(database)</FONT></A>
+<DD><P>This function issues a Sybase Transact-SQL <b>use</b> command for the 
+specified database. The only argument to the function is the name of the
+database to use. Example: <code>sybsql_dbuse("pubs2");</code>
+<P>
+The function returns 1 on success and 0 on failure.<P>
+
+
+<DT><A NAME="sybsql_connect"><FONT SIZE="+1">sybSQL_Connect()</FONT></A>
+<DD>
+<P>This function opens a network connection to the sybase server. This
+function depends on several environment variables which must be set by
+the caller before calling this function. 
+<P>
+The environment variables are:
+<P>
+<b>DSQUERY</b> - the alias of the sybase server as defined in the sybase
+interface file.
+<br>
+<b>DBUSER</b> - connect to the sybase server as this user.
+<br>
+<b>DBPW</b> - password of the user.
+<P>
+These variables can be set in several ways. If php/fi is running as a CGI
+program, then a shell wrapper can be used to set these variables or you can
+set these variables directly in the HTML page using the builtin PHP/FI
+function <b><a href="#putenv">putenv()</a></b>. 
+Instead of using the values directly in
+<b><a href="#putenv">putenv()</a></b>, the values can be obtained from form 
+input. The variables can be defined in a file and included in the html files 
+with PHP/FI 
+<code><a href="#include">include</a></code> statement.
+<p>
+The function returns 1 on success and 0 on failure.<P>
+
+<DT><A NAME="sybsql_fieldname"><FONT SIZE="+1">sybSQL_Fieldname(index)</FONT></A>
+<DD><P>
+This function returns the field name of a regular result column. The argument
+to the function is the field index. Example: <code>sybsql_fieldname(0);</code>.
+NOTE: the field index starts at 0.
+<P>
+If the the result column does not have any name, the function returns an
+empty string ("").<P>
+
+<DT><A NAME="sybsql_getfield"><FONT SIZE="+1">sybSQL_GetField(field)</FONT></A>
+<DD><P>
+This function gets the value of a specific column of the current result
+row. The only argument to the function is the string specifying the field.
+Example: <code>$value=sybsql_getfield("@10");</code> 
+<b>NOTE</b>: <a href="#sybsql_nextrow">sybsql_nextrow()</a> must be called 
+before calling this function.  sybsql_nextrow() must be called if the row 
+pointer needs to be incremented, because this function only reads the current 
+row in the row buffer.
+<P>
+If the specified column has a value, the function returns the value as a
+string otherwise the function returns an empty string ("").<P>
+
+<DT><A NAME="sybsql_isrow"><FONT SIZE="+1">sybSQL_IsRow()</FONT></A>
+<DD><P>
+This function indicates if the current SQL command returned any rows.<P>
+The function returns 1 if the SQL command returned any rows and 0 if the
+command didn't return any rows.<P>
+
+<DT><A NAME="sybsql_nextrow"><FONT SIZE="+1">sybSQL_NextRow()</FONT></A>
+<DD><P>
+This function increments the row pointer to the next result row.<P>
+The function returns 1 as long as there are rows left to read. If there are
+no more rows left to read or in case of error the function returns 0.<P>
+
+<DT><A NAME="sybsql_numfields"><FONT SIZE="+1">sybSQL_NumFields()</FONT></A>
+<DD><P>
+This function returns the number of fields in a current result row.<P>
+The function returns the number of rows in the current result row. If there are
+no fields, the function returns 0.<P>
+
+<DT><A NAME="sybsql_numrows"><FONT SIZE="+1">sybSQL_NumRows()</FONT></A>
+<DD><P>
+This function returns the number of rows in the current result buffer.
+<b>NOTE:</b> 
+when this function is called, it will seek to the first row right
+away, then it will call dbnextrow() until there are no more rows and
+increment a internal counter to calculate the number of rows in the
+result buffer. Then it points back to the very first row. Therefore,
+after calling this function row counter always points to the very
+first row. It's ugly but I don't know any other way at this time.
+<p>
+If there are no rows in the result buffer, the function will return 0.<P>
+
+<DT><A NAME="sybsql_query"><FONT SIZE="+1">sybSQL_Query()</FONT></A>
+<DD><P>
+This function submits a Sybase SQL query request to the server.
+The only argument to the function is the query string.
+Example:
+<code>$rc=sybsql_query("select * from authors");</code><P>
+The function returns 1, if the query is passed successfully and returns 0
+if the request fails.<P>
+
+<DT><A NAME="sybsql_result"><FONT SIZE="+1">sybSQL_Result(string)</FONT></A>
+<DD><P>
+This function prints specific fields of the current result row. The only
+argument to the function is a string which holds information about the
+fields to be printed. A field is specified with a @ followed by a number.
+For example, @0 means first row, @10 means 11th row. Note that the field
+number starts at 0. The function is perhaps best illustrated with a
+complete example:<P>
+<pre>&lt;?
+    /*
+    ** assuming all the necessary variables for 
+    ** connection is already set. please note, NO error checking is
+    ** done. You should always check return code of a function.
+    */
+
+    /* connect */
+    $rc=sybsql_connect();
+
+    /* use the pub2 database */
+    $rc=sybsql_dbuse(&quot;pubs2&quot;);
+
+    /* send the SQL request */
+    $rc=sybsql_query(&quot;select * from authors&quot;);
+    $i=0;
+
+    /* find the no of rows returned */
+    $nrows=sybsql_numrows();
+
+    /* start table */
+    echo &quot;&lt;table border&gt;\n&quot;;
+    /*
+    ** print only first and 2nd field
+    */
+    while($i&lt;$nrows) {
+        sybsql_result(&quot;&lt;tr&gt;&lt;td&gt;@0&lt;/td&gt;@1&lt;/td&gt;&lt;/tr&gt;\n&quot;);
+        $i++;
+    }
+    /* end table */
+    echo &quot;&lt;/table&gt;\n&quot;;
+&gt;</pre><P>
+The above example uses HTML table to format the output. Of course, any
+other valid HTML tags can be used.<P>
+
+<DT><A NAME="sybsql_result_all"><FONT SIZE="+1">sybSQL_Result_All()</FONT></A>
+<DD><P>
+This function prints all rows in the current result buffer. The result is
+printed in a hard coded HTML table format. Note that this function
+should not be called inside a loop. The function will print the name of
+the columns if there are any column headings in the output.<P>
+
+<DT><A NAME="sybsql_seek"><FONT SIZE="+1">sybSQL_Seek(row)</FONT></A>
+<DD><P>
+This function sets the requested row number as the current row in the row
+buffer. The only argument to the function is the row number. Example:
+<code>$rc=sybsql_seek(10);</code> Note, row number starts at 0.<P>
+The function returns 1 if the seek succeeds and 0 if the seek fails. When 
+all of the rows in the current result buffer have been visited, the row 
+pointer points to the last row. If it is needed to go backward and visit 
+some more rows, this function can be used for this purpose.<P>
 
 <DT><A NAME="symlink"><FONT SIZE="+1">Symlink(target,link)</FONT></A>
 <DD>
@@ -3406,6 +4107,15 @@ Unix C tempnam() function.<P>
 since Unix epoch (00:00:00 Jan. 1 1970).  It is equivalent to calling
 <A HREF="#date">Date(&quot;U&quot;)</A>.  If you need better than per-second
 granularity, use the <A HREF="#microtime">Microtime</A> function.<P>
+
+<DT><A NAME="uniqid"><FONT SIZE="+1">UniqId()</FONT></A>
+<DD>
+<P>UniqId returns a prefixed unique identifier based on current time
+in microseconds.  The prefix can be useful for instance if you
+generate identifiers simultaneously on several hosts that might happen
+to generate the identifier at the same microsecond.  The prefix can be
+up to 114 characters long.
+<P>
 
 <DT><A NAME="unlink"><FONT SIZE="+1">Unlink(filename)</FONT></A>
 <DD>

@@ -2,7 +2,7 @@
 *                                                                            *
 * PHP/FI                                                                     *
 *                                                                            *
-* Copyright 1995,1996 Rasmus Lerdorf                                         *
+* Copyright 1995,1996,1997 Rasmus Lerdorf                                    *
 *                                                                            *
 *  This program is free software; you can redistribute it and/or modify      *
 *  it under the terms of the GNU General Public License as published by      *
@@ -19,9 +19,12 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: local.c,v 1.4 1996/07/11 14:12:44 rasmus Exp $ */
+/* $Id: local.c,v 1.7 1997/01/04 15:16:58 rasmus Exp $ */
 #include "php.h"
 #include <string.h>
+#ifdef WINDOWS
+#define u_char unsigned char
+#endif
 
 #ifndef HAVE_STRCASECMP
 static u_char charmap[] = {
@@ -102,5 +105,21 @@ char *strerror(int errnum) {
 	if((unsigned int)errnum < sys_nerr) return(sys_errlist[errnum]);
 	(void)sprintf(ebuf, "Unknown error: %d", errnum);
 	return(ebuf);
+}
+#endif
+
+#ifndef HAVE_MEMMOVE
+void *memmove(void *dv, const void *sv, size_t len) {
+	char *d = (char *)dv, *s = (char *)sv;
+    
+	if (s >= d + len || s + len <= d)
+		memcpy (d, s, len);	/* No overlap; do whatever's fastest */
+	else if (d < s)
+		while (len--)
+			*d++ = *s++;
+	else 
+		for (d += len, s += len; len > 0; --len)
+			*--d = *--s;
+    return dv;
 }
 #endif

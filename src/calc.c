@@ -2,7 +2,7 @@
 *                                                                            *
 * PHP/FI                                                                     *
 *                                                                            *
-* Copyright 1995,1996 Rasmus Lerdorf                                         *
+* Copyright 1995,1996,1997 Rasmus Lerdorf                                    *
 *                                                                            *
 *  This program is free software; you can redistribute it and/or modify      *
 *  it under the terms of the GNU General Public License as published by      *
@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: calc.c,v 1.12 1996/09/16 12:50:03 rasmus Exp $ */
+/* $Id: calc.c,v 1.16 1997/01/04 15:16:48 rasmus Exp $ */
 #include <stdlib.h>
 #include <string.h>
 #include "php.h"
@@ -306,6 +306,39 @@ void Neg(void) {
 	}
 }
 
+void BitNot(void) {
+	Stack *s;
+	char temp[128];
+ 
+	s = Pop();
+	if(!s) {
+		Error("Stack Error - Expecting value after ~ operator");
+		return;
+	}
+	switch(s->type) {
+		case LNUMBER:
+			sprintf(temp,"%ld",~s->intval);
+			break;
+		case DNUMBER:
+			sprintf(temp,"%.10f",(double)(~(int)s->douval));
+			break;
+		case STRING:
+			sprintf(temp,"%d",~(int)strlen(s->strval));
+			break;
+	}
+	if(!s->var) Push(temp,LNUMBER);
+	else {
+		if(s->var->count > 1) {
+			Push(s->var->iname,STRING);
+			Push(temp,LNUMBER);
+			SetVar(s->var->name,2,0);
+		} else {	
+			Push(temp,LNUMBER);
+			SetVar(s->var->name,0,0);
+		}
+	}
+}
+
 /* Binary to Decimal conversion */
 void BinDec(void) {
 	Stack *s;
@@ -329,11 +362,11 @@ void BinDec(void) {
 	Push(temp,LNUMBER);
 }
 
-/* Decimal to Binary Conversion */
+/* Decimal to Binary */
 void DecBin(void) {
 	Stack *s;
 	char temp[48];
-	long num, exp;
+	long num;
 	int i=0;
 
 	s = Pop();
@@ -342,20 +375,21 @@ void DecBin(void) {
 		return;
 	}
 	num = s->intval;
-	exp = log(num)/log(2);
-	temp[0] = '1';
-	temp[1] = '\0';
-	i = 1;
-	num -= pow(2,exp--);
-	while(exp>-1) {
-		if(num >= pow(2,exp)) {
-			temp[i]='1';
-			num -= pow(2,exp);
-		} else temp[i]='0';
-		temp[++i] = '\0';
-		exp--;
+	if (num==0){
+		Push("0",STRING);
+		return;
 	}
-	Push(temp,STRING);
+	i = 46;
+	temp[47]='\0';
+	while(num>0) {
+		if(num % 2 ) 
+			temp[i]='1';
+		else 
+			temp[i]='0';
+		i--;
+		num/=2;
+	}
+	Push(temp+i+1,STRING);
 }
 
 /* Decimal to Hexadecimal */

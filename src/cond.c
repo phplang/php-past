@@ -2,7 +2,7 @@
 *                                                                            *
 * PHP/FI                                                                     *
 *                                                                            *
-* Copyright 1995,1996 Rasmus Lerdorf                                         *
+* Copyright 1995,1996,1997 Rasmus Lerdorf                                    *
 *                                                                            *
 *  This program is free software; you can redistribute it and/or modify      *
 *  it under the terms of the GNU General Public License as published by      *
@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: cond.c,v 1.14 1996/09/05 06:13:20 rasmus Exp $ */
+/* $Id: cond.c,v 1.16 1997/01/04 15:16:49 rasmus Exp $ */
 #include <stdlib.h>
 #include <string.h>
 #include "php.h"
@@ -101,9 +101,6 @@ void BracePush(int token) {
 		new = emalloc(0,sizeof(EndBraceStack));
 	}
 	new->token = token;
-#if DEBUG
-	Debug("BracePush; token = %d\n",token);
-#endif
 	new->next = btop;
 	btop=new;
 }
@@ -121,21 +118,15 @@ int BracePop(void) {
 	btop=btop->next;
 	s->next=ru_btop;
 	ru_btop=s;
-#if DEBUG
-	Debug("BracePop; token = %d\n",ret);
-#endif
 	return(ret);
 }
 
 int BraceCheck(void) {
 	if(btop) {
-#if DEBUG
-		Debug("BraceCheck: token = %d\n",btop->token);
-#endif
 		return(btop->token);
 	}
 #if DEBUG
-		Debug("BraceCheck: no btop\n");
+	Debug("BraceCheck: no btop\n");
 #endif
 	return(0);
 }

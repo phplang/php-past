@@ -2,7 +2,7 @@
 *                                                                            *
 * PHP/FI                                                                     *
 *                                                                            *
-* Copyright 1995,1996 Rasmus Lerdorf                                         *
+* Copyright 1995,1996,1997 Rasmus Lerdorf                                    *
 *                                                                            *
 *  This program is free software; you can redistribute it and/or modify      *
 *  it under the terms of the GNU General Public License as published by      *
@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: lex.c,v 1.93 1996/09/22 22:07:52 rasmus Exp $ */
+/* $Id: lex.c,v 1.123 1997/01/09 16:37:05 rasmus Exp $ */
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
@@ -63,9 +63,6 @@ static int ExitCalled=0;
 static int ClearIt=0;
 static long iterwhile=-1L;
 static int LastToken=0;
-#if TEXT_MAGIC
-static int TextMagic=0;
-#endif
 static int header_called=0;
 
 static FileStack *top = NULL;
@@ -132,6 +129,7 @@ static cmd_table_t cmd_table[22][35] = {
 	  { "sqrt",INTFUNC1,Sqrt },
 	  { "file",INTFUNC1,File },
 	  { "link",INTFUNC2,Link },
+	  { "mail",INTFUNC3,Mail },
 	  { NULL,0,NULL } }, 
 
 	{ { "endif",ENDIF,NULL },   /* 5 */
@@ -142,7 +140,11 @@ static cmd_table_t cmd_table[22][35] = {
 	  { "eregi",EREGI,NULL },
 	  { "crypt",CRYPT,NULL },
 	  { "srand",INTFUNC1,Srand },
+#ifdef WINDOWS
+	  { "sleep",INTFUNC1,_Sleep },
+#else
 	  { "sleep",INTFUNC1,Sleep },
+#endif
 	  { "fopen",INTFUNC2,Fopen },
 	  { "popen",INTFUNC2,Popen },
 	  { "fgets",INTFUNC2,Fgets },
@@ -158,6 +160,7 @@ static cmd_table_t cmd_table[22][35] = {
 	  { "rmdir",INTFUNC1,RmDir },
 	  { "log10",INTFUNC1,mathLog10 },
 	  { "unset",UNSET,NULL },
+	  { "mysql",INTFUNC2,MYsql },
 	  { NULL,0,NULL } }, 
 
 	{ { "elseif",ELSEIF,NULL }, /* 6 */
@@ -193,6 +196,7 @@ static cmd_table_t cmd_table[22][35] = {
 	  { "usleep",INTFUNC1,USleep },
 	  { "pg_tty",INTFUNC1,PGtty },
 	  { "fgetss",INTFUNC2,Fgetss },
+	  { "uniqid",INTFUNC1,UniqId },
 	  { NULL,0,NULL } }, 
 
 	{ { "default", DEFAULT,NULL }, /* 7 */
@@ -250,6 +254,7 @@ static cmd_table_t cmd_table[22][35] = {
 	  { "filemtime", FILEMTIME,NULL },
 	  { "filectime", FILECTIME,NULL },
 	  { "getlogdir", INTFUNC0,GetLogDir },
+	  { "getloghost", INTFUNC0,GetLogHost },
 	  { "getaccdir", INTFUNC0,GetAccDir },
 	  { "imageline", INTFUNC6,ImageLine },
 	  { "imagefill", INTFUNC4,ImageFill },
@@ -264,6 +269,7 @@ static cmd_table_t cmd_table[22][35] = {
 	  { "pg_result", INTFUNC3,PG_result },
 	  { "pg_dbname", INTFUNC1,PGdbName },
 	  { "setcookie", SETCOOKIE,NULL },
+	  { "parse_str", PARSESTR,NULL },
 	  { NULL,0,NULL } },        
 
 	{ { "strtoupper", INTFUNC1,StrToUpper }, /* 10 */
@@ -282,6 +288,8 @@ static cmd_table_t cmd_table[22][35] = {
 	  { "pg_connect", INTFUNC5,PGconnect },
 	  { "phpversion", INTFUNC0,PHPVersion },
 	  { "addslashes", INTFUNC1,_AddSlashes },
+	  { "msql_close", INTFUNC0,MsqlClose },
+	  { "solid_exec", INTFUNC2,Solid_exec },
 	  { NULL,0,NULL } },
 
 	{ { "msql_result", INTFUNC3,MsqlResult }, /* 11 */
@@ -295,6 +303,10 @@ static cmd_table_t cmd_table[22][35] = {
 	  { "msql_dbname", INTFUNC2,MsqlDBName },
 	  { "msql_dropdb", INTFUNC1,MsqlDropDB },
 	  { "pg_fieldnum", INTFUNC2,PGfieldNum },
+	  { "mysql_close", INTFUNC0,MYsqlClose },
+	  { "solid_close", INTFUNC1,Solid_close },
+      { "sybsql_seek",INTFUNC1,SybsqlSeek},
+	  { "phpshowpool",INTFUNC0,ShowPool },
 	  { NULL,0,NULL } },
 
 	{ { "getlastemail", INTFUNC0,GetLastEmail }, /* 12 */
@@ -310,6 +322,13 @@ static cmd_table_t cmd_table[22][35] = {
 	  { "pg_fieldtype", INTFUNC2,PGfieldType },
 	  { "pg_fieldsize", INTFUNC2,PGfieldSize },
 	  { "stripslashes", INTFUNC1,_StripSlashes },
+	  { "mysql_result", INTFUNC3, MYsqlResult },
+	  { "mysql_dbname", INTFUNC2,MYsqlDBName },
+	  { "mysql_dropdb", INTFUNC1,MYsqlDropDB },
+	  { "solid_result", INTFUNC2,Solid_result },
+      { "sybsql_dbuse", INTFUNC1,SybsqlDbuse },
+      { "sybsql_query", INTFUNC1,SybsqlQuery },
+      { "sybsql_isrow", INTFUNC0,SybsqlIsRow }, 
 	  { NULL,0,NULL } }, 
 
 	{ { "gethostbyaddr", INTFUNC1,GetHostByAddr }, /* 13 */
@@ -322,6 +341,12 @@ static cmd_table_t cmd_table[22][35] = {
 	  { "msql_createdb", INTFUNC1,MsqlCreateDB },
 	  { "pg_freeresult", INTFUNC1,PGfreeResult },
 	  { "pg_getlastoid", INTFUNC0,PGgetlastoid },
+	  { "mysql_connect", INTFUNC1,MYsqlConnect },
+	  { "mysql_numrows", INTFUNC1,MYsqlNumRows },
+	  { "mysql_listdbs", INTFUNC0,MYsqlListDBs },
+	  { "solid_numrows", INTFUNC1,Solid_numRows },
+	  { "solid_connect", INTFUNC3,Solid_connect },
+      { "sybsql_result", INTFUNC1,SybsqlResult}, 
 	  { NULL,0,NULL } },
 
 	{ { "getlastbrowser", INTFUNC0,GetLastBrowser }, /* 14 */
@@ -333,6 +358,15 @@ static cmd_table_t cmd_table[22][35] = {
 	  { "msql_tablename", INTFUNC2,MsqlTableName },
 	  { "pg_fieldprtlen", INTFUNC3,PGfieldPrtLen },
 	  { "escapeshellcmd", INTFUNC1,EscapeShellCmd },
+	  { "mysql_fieldlen", MYSQL_FIELDLEN,NULL },
+	  { "mysql_createdb", INTFUNC1,MYsqlCreateDB },   
+	  { "solid_fieldnum", INTFUNC2,Solid_fieldNum },
+	  { "solid_fetchrow", INTFUNC1,Solid_fetchRow },
+	  { "msql_listindex", INTFUNC3,MsqlListIndex },
+      { "sybsql_connect", INTFUNC0,SybsqlConnect }, 
+      { "sybsql_nextrow", INTFUNC0,SybsqlNextRow },
+      { "sybsql_numrows", INTFUNC0,SybsqlNumRows},
+      { "clearstatcache", INTFUNC0,ClearStatCache},
 	  { NULL,0,NULL } },
 
 	{ { "msql_freeresult", INTFUNC1,MsqlFreeResult }, /* 15 */
@@ -341,14 +375,29 @@ static cmd_table_t cmd_table[22][35] = {
 	  { "msql_listfields", INTFUNC2,MsqlListFields },
 	  { "getstartlogging", INTFUNC0,GetStartLogging },
 	  { "pg_errormessage", INTFUNC1,PGerrorMessage },
+	  { "mysql_fieldname", MYSQL_FIELDNAME,NULL },
+	  { "mysql_fieldtype", MYSQL_FIELDTYPE,NULL },
+	  { "mysql_numfields", INTFUNC1,MYsqlNumFields },
+	  { "mysql_tablename", INTFUNC2,MYsqlTableName },
+	  { "solid_numfields", INTFUNC1,Solid_numFields },
+	  { "solid_fieldname", INTFUNC2,Solid_fieldName },
+      { "sybsql_getfield", INTFUNC1,SybsqlGetField},
 	  { NULL,0,NULL } },
 
 	{ { "htmlspecialchars", INTFUNC1,HtmlSpecialChars }, /* 16 */
 	  { "imagecopyresized", IMAGECOPYRESIZED,NULL },
+	  { "mysql_freeresult", INTFUNC1,MYsqlFreeResult },
+	  { "mysql_fieldflags", MYSQL_FIELDFLAGS,NULL },
+	  { "mysql_listtables", INTFUNC1,MYsqlListTables },
+	  { "mysql_listfields", INTFUNC2,MYsqlListFields },
+	  { "solid_freeresult", INTFUNC1,Solid_freeResult },
+      { "sybsql_numfields", INTFUNC0,SybsqlNumFields},
+      { "sybsql_fieldname", INTFUNC1,SybsqlFieldName},
 	  { NULL,0,NULL } }, /* 16 */
 
 	{ { "imagefilltoborder", INTFUNC5,ImageFillToBorder }, /* 17 */
 	  { "seterrorreporting", INTFUNC1,SetErrorReporting }, 
+      { "sybsql_result_all", INTFUNC0,SybsqlResultAll },
 	  { NULL,0,NULL } }, 
 
 	{ { "imagecolorallocate", INTFUNC4,ImageColorAllocate }, /* 18 */
@@ -430,6 +479,7 @@ char *FilePop(void) {
 		if(cur_func) {
 			PopStackFrame();
 			PopCondMatchMarks();
+			PopWhileMark();
 			PopCounters();
 		}
 		if(!eval_mode) {
@@ -443,6 +493,7 @@ char *FilePop(void) {
 		} else {
 			eval_mode=0;
 			PopCondMatchMarks();
+			PopWhileMark();
 			PopCounters();
 		}
 		pa_pos = top->pos;
@@ -454,31 +505,101 @@ char *FilePop(void) {
 	} else return(NULL);
 }
 
+#ifndef PATH_MAX
+#define PATH_MAX 255
+#endif
+
 void Include(void) {
 	Stack *s;
 	int fd;
 	char *ofn=NULL;
 	long file_size=0L;
 	long ofile_size=0L;
+	char *file_to_include = NULL;
+	char *incpath = NULL;
+	char incfile[PATH_MAX];
 
 	s = Pop();
 	if(!s) {
 		Error("Stack error in include");
 		return;
 	}
-	if(s->strval) {
+	file_to_include = s->strval;
+	if(file_to_include) {
 #if DEBUG
-		Debug("Include %s\n",s->strval);
+		Debug("Include %s\n",file_to_include);
 #endif
 		ofn = estrdup(0,GetCurrentFilename());
 		ofile_size = GetCurrentFileSize();
-		fd = OpenFile((char *)s->strval,0,&file_size);
+		incpath = GetIncludePath();
+		if (incpath != NULL) {
+			char *path = incpath;
+			char *maxpath;
+			char *lim = NULL;
+			int len;
+			struct stat fs;
+			maxpath = path + strlen(path);
+#if DEBUG
+			Debug(" IncludePath=%s\n", incpath);
+#endif
+			while (*path) {
+				lim = strchr(path, ':');
+				if (lim == NULL) {
+					len = strlen(path);
+				}
+				else {
+					len = lim - path;
+				}
+				if (len > 0) {
+					strncpy(incfile, path, PATH_MAX);
+					strncpy(incfile + len, "/", PATH_MAX - len - 1);
+					len++;
+				}
+				strncpy(incfile + len, file_to_include, PATH_MAX - len - 1);
+				if (stat(incfile, &fs) != -1) {
+					file_to_include = incfile;
+#if DEBUG
+					Debug("  found file at %s\n", incfile);
+#endif
+					break;
+				}
+#if DEBUG
+				else {
+					Debug("  no file at %s\n", incfile);
+				}
+#endif
+				if (len == 0) {
+					path++;
+				}
+				else if (path + len <= maxpath) {
+					path += len;
+				}
+				else {
+#if DEBUG
+					Debug("  giving up\n");
+#endif
+					break;
+				}
+			}
+		}
+#if DEBUG
+		else {
+			Debug("No IncludePath\n");
+		}
+#endif
+
+#ifdef WINDOWS
+		fd = _OpenFile((char *)file_to_include,0,&file_size);
+#else
+		fd = OpenFile((char *)file_to_include,0,&file_size);
+#endif
 		if(fd>-1) {
 			FilePush(ofn,ofile_size,gfd);
 			if(cur_func) {
 				PushStackFrame();
 				PushCounters();
 				PushCondMatchMarks();
+				PushWhileMark();
 			}
 			gfd = fd;
 			ParserInit(fd,file_size,no_httpd,NULL);
@@ -507,6 +628,7 @@ void Eval(void) {
 		StripSlashes((char *)s->strval);
 		ParserInit(-1,strlen((char *)s->strval),no_httpd,s->strval);
 		PushCondMatchMarks();
+		PushWhileMark();
 		yyparse();
 		if(ExitCalled) state=99;
 	}
@@ -547,9 +669,6 @@ int outputline(char *line) {
 			return(-1);
 		}
 #else
-#if TEXT_MAGIC
-		if(TextMagic) text_magic((char *)line);
-#endif
 		if(fputs((char *)line,stdout)==EOF) {
 			/* browser has probably gone away */
 			return(-1);
@@ -578,7 +697,7 @@ char getnextchar(void) {
 		inlength=0;
 		while(g_length==0) {
 			SeekPos = pa_pos;
-			if(SeekPos > gsize) {
+			if(SeekPos >= gsize) {
 #if DEBUG
 				Debug("End of File/Function\n");
 #endif
@@ -587,9 +706,9 @@ char getnextchar(void) {
 			yylex_linenumber++;
 			cont=1;
 			i=0;
-			while(cont) {
+			while(cont && i<LINEBUFSIZE-1) {
 				ch = *(pa+pa_pos+i);
-				if(ch==10 || ch==13 || ch==0 || i==LINEBUFSIZE-1) cont=0;
+				if(ch==10 || ch==13 || ch==0) cont=0;
 				inbuf[i++] = ch;
 			}
 			g_length=i;
@@ -608,14 +727,23 @@ char getnextchar(void) {
 
 char *lookaheadword(void) {
 	static char temp[32];
-	char ch, *st=NULL;
+	char ch,lch='\0', *st=NULL;
 	int i=0,l=0; 
 	
 	while(1) {
 		ch = *(pa + pa_pos + inpos - inlength + i++);
 		if(!st && isspace(ch)) continue;
+		if(ch=='/' && *(pa + pa_pos + inpos - inlength + i) == '*') {
+			i+=1;
+			while(1) {
+				ch = *(pa + pa_pos + inpos - inlength + i++);
+				if((ch=='/' && lch=='*') || (!ch)) break;
+				lch = ch;
+			}
+			continue;
+		}
 		if(!st) st=pa+pa_pos + inpos - inlength + (i-1);
-		if(isspace(ch) || ch=='{' || !ch) break;
+		if(isspace(ch) || ch=='{' || ch=='(' || !ch) break;
 		l++;
 	}	
 	if(!st) return NULL;
@@ -623,7 +751,7 @@ char *lookaheadword(void) {
 	strncpy(temp,st,l);	
 	temp[l]='\0';
 #if DEBUG
-	Debug("lookahead: %s\n",temp);
+	Debug("lookahead is [%s]\n",temp);
 #endif
 	return(temp);
 }
@@ -785,6 +913,10 @@ int yylex(YYSTYPE *lvalp) {
 				NewExpr=0;
 				return(c);
 			}	
+			if(c=='#' && inpos==1) {
+				state=80;
+				break;
+			}
 			if(c=='>') { state=20; break; }
 			if(c=='<') { state=21; break; }
 			if(c==' ' || c=='\t' || c=='\n' || c==10 || c==13) break;
@@ -820,6 +952,8 @@ int yylex(YYSTYPE *lvalp) {
 			if(c=='/') { state=18; break; }
 			if(c=='%') { state=8; break; }
 			if(c=='*') { state=19; break; }
+			if(c=='~') { state=22; break; }
+			if(c=='^') { state=23; break; }
 			if(c==',') { 
 				NewExpr=1;
 				return(','); 
@@ -1094,6 +1228,30 @@ int yylex(YYSTYPE *lvalp) {
 			}
 			return('<');
 
+		case 22: /* ~ */
+			lstate=22;
+			NewExpr=1;
+			c = getnextchar();
+			state=2;
+			if(c=='=') return(NOTEQ);
+			else {
+				putback(c);
+				return('~');
+			}
+			break;
+
+		case 23: /* ^ */
+			lstate=23;
+			NewExpr=1;
+			c = getnextchar();
+			state=2;
+			if(c=='=') return(XOREQ);
+			else {
+				putback(c);
+				return('^');
+			}
+			break;
+
 		case 30: /* string */
 			lstate=30;
 			NewExpr=0;
@@ -1185,16 +1343,7 @@ void php_init_lex(void) {
 	ExitCalled=0;
 	eval_mode=0;
 	header_called=0;
-#if TEXT_MAGIC
-	TextMagic=0;
-#endif
 }
-
-#if TEXT_MAGIC
-void set_text_magic(int mode) {
-	TextMagic=mode;
-}
-#endif
 
 /* Initializes the parser by filling the input buffer, if needed,
  * and setting various lexer variables
@@ -1205,9 +1354,9 @@ void ParserInit(int fd, long file_size, int nh, char *fbuf) {
 	if(fd!=-1) {
 #ifdef PHP_HAVE_MMAP
 #if DEBUG
-		Debug("mmap'ing %ld bytes\n",file_size);
+		Debug("mmap'ing %ld bytes\n",file_size+1);
 #endif
-		pa = mmap(NULL, file_size, PROT_READ, MAP_PRIVATE, fd, 0);
+		pa = mmap(NULL, file_size+1, PROT_READ, MAP_PRIVATE, fd, 0);
 		pa_pos = 0L;
 #else
 		{
@@ -1282,12 +1431,12 @@ void Exit(int footer) {
 	pa=NULL;
 #endif
 	if(!no_httpd) {
-#if defined(LOGGING) || defined(MSQLLOGGING)
+#if defined(LOGGING) || defined(MSQLLOGGING) || defined(MYSQLLOGGING)
 		if(footer && getshowinfo()) ShowPageInfo();
 #endif
 		if(footer && getlogging()) {
-#if MSQLLOGGING
-			MsqlLog(GetCurrentPI());
+#if defined(MSQLLOGGING) || defined(MYSQLLOGGING)
+			SQLLog(GetCurrentPI());
 #endif
 #if LOGGING
 			Log(GetCurrentPI());
@@ -1338,7 +1487,7 @@ void DefineFunc(char *fnc) {
 	bufsize = i;
 	buf = emalloc(0,bufsize+1);
 	memcpy(buf,pa+cfstart+1,bufsize-1);
-	buf[bufsize]='\0';
+	buf[bufsize-1]='\0';
 
 	new = emalloc(0,sizeof(FuncStack));
 	new->next = functop;
@@ -1424,6 +1573,7 @@ void RunFunc(char *name) {
 	PushStackFrame();
 	PushCounters();
 	PushCondMatchMarks();
+	PushWhileMark();
 	arg = f->params;
 	while(arg) {
 		SetVar((char *)arg->arg,0,0);
@@ -1436,14 +1586,25 @@ void RunFunc(char *name) {
 /* Doubly-linked argument list */
 void AddToArgList(char *arg) {
 	FuncArgList *new;
+	VarTree *var;
 
-	new = emalloc(0,sizeof(FuncArgList));
-	new->next = funcarg_top;
-	if(new->next) new->next->prev = new;
-	else funcarg_bot = new;
-	new->prev = NULL;
-	new->arg = estrdup(0,(char *)arg);
-	funcarg_top = new;
+	if(*arg == VAR_INIT_CHAR) {
+		var = GetVar(arg+1,NULL,0);
+		if(var && var->strval) {
+			arg = var->strval;
+		} else {
+			arg=NULL;
+		}
+	}
+	if(arg) {
+		new = emalloc(0,sizeof(FuncArgList));
+		new->next = funcarg_top;
+		if(new->next) new->next->prev = new;
+		else funcarg_bot = new;
+		new->prev = NULL;
+		new->arg = estrdup(0,(char *)arg);
+		funcarg_top = new;
+	}
 }
 
 FuncArgList *GetFuncArgList(void) {

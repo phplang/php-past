@@ -2,7 +2,7 @@
 *                                                                            *
 * PHP/FI                                                                     *
 *                                                                            *
-* Copyright 1995,1996 Rasmus Lerdorf                                         *
+* Copyright 1995,1996,1997 Rasmus Lerdorf                                    *
 *                                                                            *
 *  This program is free software; you can redistribute it and/or modify      *
 *  it under the terms of the GNU General Public License as published by      *
@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: php.h,v 1.105 1996/09/22 23:30:05 rasmus Exp $ */
+/* $Id: php.h,v 1.132 1997/01/12 21:51:39 rasmus Exp $ */
 #include <stdio.h>
 #include <time.h>
 #include <sys/types.h>
@@ -48,6 +48,7 @@ extern request_rec *php_rqst;
  * srm.conf on your system for proper ~username expansion 
  */
 #define PHP_PUB_DIRNAME	"public_html"
+
 /*
  * You can override this setting with the PHP_USERDIR env. var if you
  * change your config.
@@ -74,7 +75,11 @@ extern request_rec *php_rqst;
  * points to a valid path and that PHP is allowed to create/write to
  * this file.
  */
+#ifdef WINDOWS
+#define DEBUG_FILE	"php.err"
+#else
 #define DEBUG_FILE	"/tmp/php.err"
+#endif
 
 /*
  * If you are using a virtual domain on a braindead http server which
@@ -90,7 +95,8 @@ extern request_rec *php_rqst;
  * will be automatically escaped if it is found in a posted form variable.
  * This is useful when mSQL or Postgres95 support is enabled since the 
  * single quote has to be escaped when it is part of an mSQL  or Postgres95
- * query.  
+ * query.  In the case of Postgres95, the double quote character will also
+ * be escaped.
  */
 #define MAGIC_QUOTES 1
 
@@ -122,22 +128,37 @@ extern request_rec *php_rqst;
 /* #define SETLOCALE 1 */
 
 /*
- * MSQLLOGDB should be set to the database name you wish to use to store
+ * SQLLOGDB should be set to the database name you wish to use to store
  * log data if you are using PHP/FI with mSQL-based logging.  Remember
  * to create this database before trying to run PHP/FI in mSQL logging mode.
  *
- * NOTE: For Apache module, set this via phpMsqlLogDB configuration directive
+ * NOTE: For Apache module, set this via phpSQLLogDB configuration directive
  */
-#define MSQLLOGDB "phpfi"
+#define SQLLOGDB "phpfi"
 
 /*
- * MSQLLOGTMP is set to the directory where you want temporary lock
- * files created when MSQL LOGGING is used.  Since mSQL does not support
- * atomic updates of counters, an external lock file unfortunately needs
- * to be used.  With mSQL-2, these lock files can be eliminated, but at
- * the time of this writing, mSQL-2 is not available as of yet.
+ * SQLLOGHOST should be set to the database host you wish to use to store
+ * log data if you are using PHP/FI with SQL-based logging.  
+ *
+ * NOTE: For Apache module, set this via phpSQLLogHost configuration directive
  */
-#define MSQLLOGTMP "/tmp"
+#define SQLLOGHOST "localhost"
+
+/*
+ * SQLLOGTMP is set to the directory where you want temporary lock
+ * files created when SQL LOGGING is used.  Since mSQL 1 does not support
+ * atomic updates of counters, an external lock file unfortunately needs
+ * to be used.  Atomic counter updates are used when the SQL engine supports
+ * them.
+ */
+#define SQLLOGTMP "/tmp"
+
+/*
+ * INCLUDEPATH is a colon-separated list of directories where php will
+ * look for files in when running include().  The default is to look
+ * only in the current directory.
+ */
+#define INCLUDEPATH "."
 
 /*
  * PATTERN_RESTRICT can be enabled for security reasons to restrict php/fi
@@ -194,7 +215,7 @@ extern request_rec *php_rqst;
 
 /*-- Do not touch anything after this point unless you are very brave --*/
 
-#define PHP_VERSION "2.0b7"
+#define PHP_VERSION "2.0b10"
 
 #define VAR_INIT_CHAR	'$'
 
@@ -485,7 +506,6 @@ void php_init_lex(void);
 void IntFunc(char *);
 int NewWhileIteration(long);
 void Eval(void);
-void set_text_magic(int);
 void PushCounters(void);
 void PopCounters(void);
 void SetHeaderCalled(void);
@@ -497,6 +517,9 @@ void UnixTime(void);
 void MkTime(int);
 char *std_date(time_t);
 
+/* uniqid.c */
+void UniqId(void);
+
 /* parse.c */
 int yyparse(void);
 void php_init_yacc(void);
@@ -505,6 +528,7 @@ void php_init_yacc(void);
 int Calc(int);
 int CalcInc(int);
 void Neg(void);
+void BitNot(void);
 void BinDec(void);
 void DecBin(void);
 void DecHex(void);
@@ -551,7 +575,7 @@ void End(char *);
 void PushStackFrame(void);
 void PopStackFrame(void);
 void Global(void);
-void copyarray(VarTree *, VarTree *);
+void copyarray(VarTree *, VarTree *, VarTree *, int);
 void deletearray(VarTree *);
 void UnSet(char *);
 
@@ -680,7 +704,23 @@ void MsqlListDBs(void);
 void MsqlDBName(void);
 void MsqlDropDB(void);
 void MsqlCreateDB(void);
-void php_init_msql(void);
+void MsqlListIndex(void);
+void php_init_msql(char *);
+
+/* sybsql.c */  /*muquit, # ma_muquit@fccc.edu, Sep-15-96 */
+void SybsqlConnect(void);
+void SybsqlDbuse(void);
+void SybsqlQuery(void);
+void SybsqlIsRow(void);
+void SybsqlNumRows(void);
+void SybsqlNextRow(void);
+void SybsqlPrintRows(void);
+void SybsqlResult(void);
+void SybsqlSeek(void);
+void SybsqlNumFields(void);
+void SybsqlFieldName(void);
+void SybsqlResultAll(void);
+void SybsqlGetField(void);
 
 /* pg95.c */
 void PGcloseAll(void);
@@ -722,13 +762,20 @@ void Exec(char *, char *, int);
 void EscapeShellCmd(void);
 
 /* file.c */
+#ifdef WINDOWS
+int _OpenFile(char *, int, long *);
+#else
 int OpenFile(char *, int, long *);
+#endif
 char *GetCurrentFilename(void);
 void SetCurrentFilename(char *);
 long GetCurrentFileSize(void);
 void SetCurrentFileSize(long);
+char *GetIncludePath(void);
+void SetIncludePath(char *);
 char *FixFilename(char *, int, int *);
 char *getfilename(char *, int);
+void ClearStatCache(void);
 void FileFunc(int);
 void TempNam(void);
 void Link(void);
@@ -737,7 +784,11 @@ void ReadLink(void);
 void LinkInfo(void);
 void Unlink(void);
 void Rename(void);
+#ifdef WINDOWS
+void _Sleep(void);
+#else
 void Sleep(void);
+#endif
 void USleep(void);
 void Fopen(void);
 void Fclose(void);
@@ -757,7 +808,11 @@ void MkDir(void);
 void RmDir(void);
 int  FpPush(FILE *, char *, int);
 void File(void);
+#if APACHE
+void php_init_file(php_module_conf *);
+#else
 void php_init_file(void);
+#endif
 void set_path_dir(char *);
 void Popen(void);
 void Pclose(void);
@@ -858,14 +913,16 @@ void GetLastMod(void);
 void GetTotal(void);
 void GetToday(void);
 void GetLogDir(void);
+void GetLogHost(void);
 char *getlogdir(void);
+char *getloghost(void);
 void GetMyUid(void);
 void GetMyInode(void);
 void SetStatInfo(struct stat *);
 void GetMyPid(void);
 long getmyuid(void);
-void MsqlLog(char *);
-void msqlloadlastinfo(char *);
+void SQLLog(char *);
+void sqlloadlastinfo(char *);
 #if APACHE
 void php_init_log(php_module_conf *);
 #else
@@ -951,6 +1008,7 @@ struct pool *php_make_sub_pool(struct pool *);
 void php_clear_pool(struct pool *);
 void php_destroy_pool(struct pool *);
 #endif
+void ShowPool(void);
 
 /* local.c */
 #ifndef HAVE_STRCASECMP
@@ -964,3 +1022,36 @@ char *strdup(char *);
 char *strerror(int);
 #endif
 
+/* mysql.c */
+void php_init_mysql(char *);
+void MYsql(void);
+void MYsqlResult(void);
+void MYsqlClose(void);
+void MYsqlConnect(void);
+void MYsqlFreeResult(void);
+void MYsqlNumRows(void);
+void MYsqlNumFields(void);
+void MYsqlField(int);
+void MYsqlListTables(void);
+void MYsqlListFields(void);
+void MYsqlTableName(void);
+void MYsqlListDBs(void);
+void MYsqlDBName(void);
+void MYsqlDropDB(void);
+void MYsqlCreateDB(void);
+
+/* solid.c */
+void Solid_exec(void);
+void Solid_close(void);
+void Solid_result(void);
+void Solid_numRows(void);
+void Solid_connect(void);
+void Solid_fieldNum(void);
+void Solid_fetchRow(void);
+void Solid_numFields(void);
+void Solid_fieldName(void);
+void Solid_freeResult(void);
+void php_init_solid(void);
+
+/* mail.c */
+void Mail(void);

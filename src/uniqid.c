@@ -1,8 +1,8 @@
-/***[tmagic.c]****************************************************[TAB=4]****\
+/***[uniqid.c]****************************************************[TAB=4]****\
 *                                                                            *
 * PHP/FI                                                                     *
 *                                                                            *
-* Copyright 1995,1996 Rasmus Lerdorf                                         *
+* Copyright 1995,1996,1997 Rasmus Lerdorf                                    *
 *                                                                            *
 *  This program is free software; you can redistribute it and/or modify      *
 *  it under the terms of the GNU General Public License as published by      *
@@ -19,35 +19,63 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: tmagic.c,v 1.3 1996/07/18 18:20:30 rasmus Exp $ */
+/*
+ * Contributed by Stig Bakken - Guardian Networks AS <ssb@guardian.no>
+ *
+ * $Source: /u/local/src/repository/phpfi/src/uniqid.c,v $
+ * $Id: uniqid.c,v 1.2 1997/01/04 15:17:10 rasmus Exp $
+ *
+ */
+
 #include "php.h"
+#include <stdlib.h>
+#ifdef HAVE_UNISTD_H
+#include <unistd.h>
+#endif
+
+#include <string.h>
+#include <errno.h>
 #include "parse.h"
-#if APACHE
-#include "http_protocol.h"
-#endif
 
-#if TEXT_MAGIC
-void text_magic(char *str) {
-	VarTree *var;
-	int cnt;
-	char *new;
+#include <stdio.h>
+#include <sys/time.h>
 
-	var = GetVar("tm",NULL,0);
-	if(!var) {
-#if DEBUG
-		Debug("tm is not set\n");
-#endif
-		return;
-	}
-	cnt = var->count;	
-	while(cnt && var) {
-		if(!var->deleted) {
-			new = _RegReplace(var->strval,"XXXXXXX",str);
-			if(new!=str) strcpy(str,new);
-			php_pool_clear(1);
-		}
-		cnt--;
-		var=var->next;
-	}
+void UniqId(void)
+{
+#ifdef HAVE_GETTIMEOFDAY
+    char *prefix;
+    char uniqid[128];
+    int sec, usec;
+    struct timeval tv;
+    Stack *s;
+
+    s = Pop();
+    if (!s) {
+	Error("Stack Error in uniqid function");
+	return;
+    }
+
+    prefix = s->strval;
+
+    /* Do some bounds checking since we are using a char array.
+     */
+    if (strlen(prefix) > 114) {
+	Error("The prefix to uniqid should not be more than 114 characters.");
+	return;
+    }
+
+    gettimeofday((struct timeval *)&tv, (struct timezone *)NULL);
+    sec = (int)tv.tv_sec;
+    usec = (int)(tv.tv_usec % 1000000);
+
+    /* The max value usec can have is 0xF423F, so we use only five hex
+     * digits for usecs:
+     */
+    sprintf(uniqid, "%s%08x%05x", prefix, sec, usec);
+    Push(uniqid, STRING);
+
+#else
+    Error("UniqId function not available");	
+    Push("0",STRING);
+#endif    
 }
-#endif

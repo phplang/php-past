@@ -1,0 +1,25 @@
+Example of sybase support to php/fi
+
+This is the booksmarks database example comes with w3-msql. 
+
+* create a directory say bookmarks inside your public_html or wherever
+  you keep your web pages. creating directory is not necessary but it will
+  not clutter your stuff. Then copy *.html and *.gif to that directory.
+
+* look at phpwrap.sh, define the necessary variables
+  copy phpwra.sh to your cgi-bin directory. make sure php.cgi is there as 
+  well.
+
+* look at crtab.sql
+    it will use the default database.
+    if a table named bookmarks exists, it'll drop it first, so careful.
+
+* isql -i crtab.sql
+
+* load index.html in your browser.
+
+
+--
+Muhammd A Muquit
+http://www.fccc.edu/users/muquit
+Dec-08-1996

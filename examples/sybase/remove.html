@@ -1,0 +1,33 @@
+<html>
+<head>
+<title>Bookmark deletion</title>
+</head>
+<body bgcolor="#ffffff" link="#0000ff" vlink="#ff0000" 
+alink="#ff0000" text="#000000">
+<center><H1>
+<img src=/bookmarks/mark-big.gif >
+The Bookmark Database</H1>
+<P>
+<BR><BR><BR>
+
+<H2>Bookmark Removal Result</H2>
+<BR><BR>
+
+<?
+    $rc=sybsql_connect();
+    $rc=sybsql_dbuse("mtest");
+    $qs="delete from bookmarks where path='$path'";
+    echo "<h4>$qs</h4>";
+    $rc=sybsql_query($qs);
+    if ($rc == 1);
+        echo "<h2>Bookmark removed!</h2>";
+    else;
+        echo "<h2>problem deleting bookmark!</h2>";
+    endif;
+
+    echo "<A HREF=/cgi-bin/phpwrap.sh/bookmarks/bookmarks.html?parent=$parent>";
+>
+<IMG src=/bookmarks/back.gif></A>
+</center>
+</body>
+</html>

@@ -2,7 +2,7 @@
 *                                                                            *
 * PHP/FI                                                                     *
 *                                                                            *
-* Copyright 1995,1996 Rasmus Lerdorf                                         *
+* Copyright 1995,1996,1997 Rasmus Lerdorf                                    *
 *                                                                            *
 *  This program is free software; you can redistribute it and/or modify      *
 *  it under the terms of the GNU General Public License as published by      *
@@ -19,15 +19,22 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: info.c,v 1.21 1996/09/19 04:49:57 rasmus Exp $ */
+/* $Id: info.c,v 1.27 1997/01/08 04:33:24 cvswrite Exp $ */
 #include "php.h"
 #include "parse.h"
 #include <stdlib.h>
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
 #endif
+#ifdef HAVE_PWD_H
 #include <pwd.h>
+#endif
+#ifdef HAVE_GRP_H
 #include <grp.h>
+#endif
+#ifdef WINDOWS
+#include <dir.h>
+#endif
 #include <time.h>
 #if APACHE
 #include "http_protocol.h"
@@ -45,7 +52,11 @@ void Info(void) {
 	int i;
 	VarTree *var;
 #endif	
+#ifdef WINDOWS
+	int i;
+#else
 	FILE *fp;
+#endif
 
 	php_header(0,NULL);
 	sprintf(buf,"<html><head><title>PHP/FI</title></head><body><h1>PHP/FI Version %s</h1>by Rasmus Lerdorf (<a href=\"mailto:rasmus@vex.net\">rasmus@vex.net</a>)<p>The PHP/FI Web Site is at <a href=\"http://www.vex.net/php\">http://www.vex.net/php</a><p>\n",PHP_VERSION);
@@ -61,7 +72,14 @@ void Info(void) {
 	PUTS("You should have received a copy of the GNU General Public License\n");
 	PUTS("along with this program; if not, write to the Free Software\n");
 	PUTS("Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.<p>\n");
-
+#ifdef WINDOWS
+	PUTS("Windows Version by Jesus Blanco je-blanc@uniandes.edu.co\n<p>");
+		i=0;
+		while (_environ[i]) {
+			PUTS(_environ[i++]);
+			PUTS("\n<br>");
+		}
+#else
 	PUTS("<hr><b><i>Unix version:</i></b> ");
 	fp = popen("uname -a","r");
 	if(fp) {
@@ -79,6 +97,7 @@ void Info(void) {
 		}
 		pclose(fp);
 	}
+#endif
 #ifndef APACHE
 	{
 		char *sn, *pi;
@@ -185,6 +204,7 @@ void Info(void) {
 			PUTS(buf);
 			sprintf(buf,"<b>Number of Links:</b> <i>%ld</i><br>\n",(long)sb.st_nlink);
 			PUTS(buf);
+#ifdef HAVE_PWD_H
 #if APACHE
 			pw = getpwuid(php_rqst->finfo.st_uid);
 #else
@@ -195,6 +215,9 @@ void Info(void) {
 				sprintf(buf,"<b>Owner:</b> <i>%s</i> <b>From Group:</b> <i>%s</i><br>\n",pw->pw_name,gr->gr_name);
 				PUTS(buf);
 			}
+#endif
+
+#ifdef HAVE_GRP_H
 #if APACHE
 			gr = getgrgid(php_rqst->finfo.st_gid);
 #else
@@ -204,6 +227,7 @@ void Info(void) {
 				sprintf(buf,"<b>Group:</b> <i>%s</i><br>\n",gr->gr_name);
 				PUTS(buf);
 			}
+#endif
 			sprintf(buf,"<b>Size:</b> <i>%ld</i><br>\n",
 #if APACHE
 				(long)php_rqst->finfo.st_size);
@@ -236,11 +260,17 @@ void Info(void) {
 		}
 #endif
 	}
+	PUTS("<hr>\n");
 	path = getcwd(NULL,1024);
 	if(path) {
-		sprintf(buf,"<hr><b>Working Directory:</b> <i>%s</i><br>\n",path);
+		sprintf(buf,"<b>Working Directory:</b> <i>%s</i><br>\n",path);
 		PUTS(buf);
 		free(path);
+	}
+	path = GetIncludePath();
+	if (path) {
+		sprintf(buf,"<b>Include Path:</b> <i>%s</i><br>\n",path);
+		PUTS(buf);
 	}
 #if ACCESS_CONTROL
 	sprintf(buf,"<b>Access Control enabled using:</b> <i>%s</i><br>\n",getaccdir());
@@ -251,14 +281,27 @@ void Info(void) {
 	PUTS(buf);
 #endif
 #if MSQLLOGGING
-	sprintf(buf,"<b>Access Logging enabled using mSQL in db:</b> <i>%s</i><br>\n",getlogdir());
+	sprintf(buf,"<b>Access Logging enabled using mSQL in db:</b> <i>%s</i> <b>host:</b><i>%s</i><br>\n",getlogdir(),getloghost());
+	PUTS(buf);
+#endif
+#if MYSQLLOGGING
+	sprintf(buf,"<b>Access Logging enabled using mySQL in db:</b> <i>%s</i> <b>host:</b><i>%s</i><br>\n",getlogdir(),getloghost());
 	PUTS(buf);
 #endif
 #ifdef HAVE_LIBMSQL
 	PUTS("<b>mSQL support enabled</b><br>\n");
 #endif
+#ifdef HAVE_LIBMYSQL
+	PUTS("<b>mysql support enabled</b><br>\n");
+#endif
 #ifdef HAVE_LIBPQ
 	PUTS("<B>Postgres95 support enabled</b><br>\n");
+#endif
+#ifdef HAVE_LIBSOLID
+	PUTS("<B>Solid support enabled</b><br>\n");
+#endif
+#ifdef HAVE_SYBASE
+	PUTS("<B>Sybase support enabled</b><br>\n");
 #endif
 #ifdef GDBM
 	PUTS("<b>GDBM support enabled</b><br>\n");

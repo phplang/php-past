@@ -6,7 +6,7 @@ SHELL = /bin/sh
 # Put -Dconst= in for a pre-ANSI compiler.
 # Do not take -DPOSIX_MISTAKE out.
 # REGCFLAGS isn't important to you (it's for my use in some special contexts).
-CFLAGS=-I. -DPOSIX_MISTAKE $(AUX_CFLAGS)
+CFLAGS=-I. -DPOSIX_MISTAKE $(AUX_CFLAGS) -g
 
 # If you have a pre-ANSI compiler, put -o into MKHFLAGS.  If you want
 # the Berkeley __P macro, put -b in.

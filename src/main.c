@@ -2,7 +2,7 @@
 *                                                                            *
 * PHP/FI                                                                     *
 *                                                                            *
-* Copyright 1995,1996 Rasmus Lerdorf                                         *
+* Copyright 1995,1996,1997 Rasmus Lerdorf                                    *
 *                                                                            *
 *  This program is free software; you can redistribute it and/or modify      *
 *  it under the terms of the GNU General Public License as published by      *
@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: main.c,v 1.33 1996/09/19 04:50:00 rasmus Exp $ */
+/* $Id: main.c,v 1.41 1997/01/04 22:17:53 rasmus Exp $ */
 #include <stdlib.h>
 #include "php.h"
 #ifdef HAVE_UNISTD_H
@@ -68,8 +68,10 @@ int main(int argc, char **argv) {
 	php_init_switch();
 	php_init_db();
 	php_init_while();
-	php_init_msql();
+	php_init_msql(NULL);
+	php_init_mysql(NULL);
 	php_init_pg95();
+	php_init_solid();
 	php_init_file();
 	php_init_head();
 	php_init_dir();
@@ -88,10 +90,6 @@ int main(int argc, char **argv) {
 			if(s && !strcasecmp(s,"post")) TreatData(0);  /* POST Data */
 			Configuration(argc, argv);	
 			exit(0);
-#endif
-#if TEXT_MAGIC
-		} else if(!strcasecmp(argv[argc-1],"text_magic")) {
-			set_text_magic(1);
 #endif
 		}
 		if(!getenv("QUERY_STRING")) {
@@ -115,8 +113,18 @@ int main(int argc, char **argv) {
 	TreatData(2); /* Cookie Data */
 	TreatData(1); /* GET Data */
 
-	if(no_httpd && argv[1]) fd=OpenFile(argv[1],1,&file_size);
-	else fd=OpenFile(NULL,1,&file_size);
+	if(no_httpd && argv[1]) 
+#ifdef WINDOWS
+		fd=_OpenFile(argv[1],1,&file_size);
+#else
+		fd=OpenFile(argv[1],1,&file_size);
+#endif
+	else 
+#ifdef WINDOWS
+		fd=_OpenFile(NULL,1,&file_size);
+#else
+		fd=OpenFile(NULL,1,&file_size);
+#endif
 	if(fd==-1) return(-1);
 	ParserInit(fd,file_size,no_httpd,NULL);	
 	yyparse();
@@ -157,12 +165,23 @@ int apache_php_module_main(request_rec *r, php_module_conf *conf, int fd) {
 	php_init_db();
 	php_init_while();
 #ifdef HAVE_LIBMSQL
-	php_init_msql();
+	php_init_msql(conf->SQLLogHost);
+#endif
+
+#ifdef HAVE_SYBASE
+    php_init_sybsql();
+#endif
+
+#ifdef HAVE_LIBMYSQL
+	php_init_mysql(conf->SQLLogHost);
 #endif
 #ifdef HAVE_LIBPQ
 	php_init_pg95();
 #endif
-	php_init_file();
+#ifdef HAVE_LIBSOLID
+	php_init_solid();
+#endif
+	php_init_file(conf);
 	php_init_head();
 	php_init_dir();
 	php_init_mime(conf);

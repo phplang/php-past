@@ -2,7 +2,7 @@
 *                                                                            *
 * PHP/FI                                                                     *
 *                                                                            *
-* Copyright 1995,1996 Rasmus Lerdorf                                         *
+* Copyright 1995,1996,1997 Rasmus Lerdorf                                    *
 *                                                                            *
 *  This program is free software; you can redistribute it and/or modify      *
 *  it under the terms of the GNU General Public License as published by      *
@@ -19,14 +19,17 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: mod_php.h,v 1.2 1996/05/09 21:37:28 rasmus Exp $ */
+/* $Id: mod_php.h,v 1.7 1997/01/04 22:17:57 rasmus Exp $ */
 
 typedef struct {
 	int ShowInfo;
 	int Logging;
 	char *UploadTmpDir;
 	char *dbmLogDir;
-	char *MsqlLogDB;
+	char *SQLLogDB;
+	char *SQLLogHost;
 	char *AccessDir;
+	char *IncludePath;
+	int XBitHack;        
 	int MaxDataSpace;
 } php_module_conf;

@@ -2,7 +2,7 @@
 *                                                                            *
 * PHP/FI                                                                     *
 *                                                                            *
-* Copyright 1995,1996 Rasmus Lerdorf                                         *
+* Copyright 1995,1996,1997 Rasmus Lerdorf                                    *
 *                                                                            *
 *  This program is free software; you can redistribute it and/or modify      *
 *  it under the terms of the GNU General Public License as published by      *
@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: post.c,v 1.17 1996/09/22 22:07:54 rasmus Exp $ */
+/* $Id: post.c,v 1.27 1997/01/04 15:17:04 rasmus Exp $ */
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -30,6 +30,7 @@
 #include "http_protocol.h"
 #include "http_core.h"
 #include "http_config.h"
+#include "http_main.h"
 #endif
 
 #define ishex(x) (((x) >= '0' && (x) <= '9') || ((x) >= 'a' && (x) <= 'f') || \
@@ -73,7 +74,12 @@ void parse_url(char *data) {
  */
 char *getpost(void) {
 	static char *buf=NULL;
-	int bytes, length, cnt=0;
+#if MODULE_MAGIC_NUMBER > 19961007
+	char argsbuffer[HUGE_STRING_LEN];
+#else
+	int bytes;
+#endif
+	int length, cnt;
 #if FILE_UPLOAD
 	int file_upload=0;
 	char *mb;
@@ -123,11 +129,7 @@ char *getpost(void) {
 	}
 	
 	length = atoi(buf);
-#if APACHE
-#if (MODULE_MAGIC_NUMBER >= 19960725)
-	length+=1;  /* Apache 1.2 */
-#endif
-#endif
+	cnt = length;
 	buf = (char *)emalloc(1,(length+1)*sizeof(char));
 	if(!buf) {
 		Error("Unable to allocate memory in getpost()");
@@ -136,20 +138,40 @@ char *getpost(void) {
 #if DEBUG
 	Debug("Allocated %d bytes for post buffer\n",length);
 #endif
+#if MODULE_MAGIC_NUMBER > 19961007
+	if(should_client_block(php_rqst)) {
+		void (*handler)();
+		int dbsize, len_read,dbpos=0;
+
+		hard_timeout("copy script args", php_rqst); /* start timeout timer */
+		handler = signal(SIGPIPE, SIG_IGN); /* Ignore sigpipes for now */
+		while((len_read = get_client_block (php_rqst, argsbuffer, HUGE_STRING_LEN))) {
+#if DEBUG
+			Debug("len_read = %d\n",len_read);
+#endif
+			if((dbpos + len_read) > length) dbsize = length - dbpos;
+			else dbsize = len_read;
+			reset_timeout(php_rqst);  /* Make sure we don't timeout */
+			memcpy(buf + dbpos, argsbuffer, dbsize);
+#if DEBUG
+			Debug("here buf = \"%s\"\n",buf);
+#endif
+			dbpos += dbsize;
+		}
+		signal(SIGPIPE, handler); /* restore normal sigpipe handling */
+		kill_timeout(php_rqst); /* stop timeout timer */
+	}	
+#else
+	cnt = 0;
 	do {
 #if APACHE
-#if (MODULE_MAGIC_NUMBER >= 19960725)
-		php_rqst->remaining = length - cnt; /* Apache 1.2 bug? */
-#endif
 		bytes = read_client_block(php_rqst, buf + cnt, length - cnt);
-#if DEBUG
-		Debug("%d bytes read\n",bytes);
-#endif
 #else
 		bytes = fread(buf + cnt, 1, length - cnt, stdin);
 #endif
 		cnt += bytes;
 	} while(bytes && cnt<length);
+#endif
 #if FILE_UPLOAD
 	if(file_upload) {
 		mime_split(buf,cnt,boundary);
@@ -202,6 +224,7 @@ void dot_to_underscore(char *str) {
  * arg = 0  Post Data
  * arg = 1  Get Data
  * arg = 2  Cookie Data
+ * arg = 3  String Data
  */
 void TreatData(int arg) {
 	char *res=NULL, *s, *t, *tt, *u=NULL;
@@ -210,6 +233,7 @@ void TreatData(int arg) {
 	int itype;
 	int inc = 0;
 	VarTree *v;
+	Stack *ss;
 
 	if(arg==0) res = getpost();
 	else if(arg==1) { /* Get data */
@@ -234,7 +258,19 @@ void TreatData(int arg) {
 			res = (char *)estrdup(1,s);
 		}
 		inc = -1;
+	} else if(arg==3) { /* String data */
+		ss = Pop();
+		if(!ss) {
+			Error("Stack error in TreatData");
+			return;
+		}
+		res=ss->strval;
+		if(res && *res) {
+			res = (char *)estrdup(1,ss->strval);
+		}
+		inc = -1;
 	}
+
 	if(!(res && *res)) return;
 #if DEBUG
 	Debug("TreatData: [%s]\n",res);
@@ -292,6 +328,7 @@ void TreatData(int arg) {
 			if (arg==0) SetVar("PHP_POSTVARS",1,0);
 			else if (arg==1) SetVar("PHP_GETVARS",1,0);
 			else if (arg==2) SetVar("PHP_COOKIEVARS",1,0);
+			else if (arg==3) SetVar("PHP_STRINGVARS",1,0);
 			else Pop();
 #endif
 
@@ -305,7 +342,13 @@ void TreatData(int arg) {
 void TreatHeaders(void) {
 #if APACHE	
 #if PHP_AUTH_VARS
-	char *s, *t, *user, *type;
+#if MODULE_MAGIC_NUMBER > 19961007
+	const char *s;
+#else
+	char *s;
+#endif
+	char *t;
+	char *user, *type;
 
 	s = table_get(php_rqst->headers_in,"Authorization");
 	if(!s) return;
@@ -328,7 +371,11 @@ void TreatHeaders(void) {
 	}
 
 	t = uudecode(php_rqst->pool, s);
+#if MODULE_MAGIC_NUMBER > 19961007
+    user = getword_nulls_nc(php_rqst->pool, &t, ':');
+#else
     user = getword(php_rqst->pool, &t, ':');
+#endif
     type = "Basic";
 
 	if(user) {

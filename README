@@ -33,6 +33,14 @@ go smoothly on all systems.  You will probably need someone around who
 knows the particulars of the destination system well.
 
 
+Windows NT Version
+------------------
+
+The code should compile on Windows 95/NT.  See the windows_install.txt
+file for more details.  All of the accompanying documentation refers
+to the Unix version.  
+
+
 Things You Need To Know Before Installing
 -----------------------------------------
 
@@ -47,7 +55,14 @@ Things You Need To Know Before Installing
 - If you have mSQL installed on your system, you need to know the
   base directory of this installation.
 
+- If you are going to be using this with sybase, you must have sybase db
+  library and include files available. If you are not using this on DEC OSF1,
+  remove the -ldnet_stub from src/Makefile, after running install.
+
 - If you have Postgres95 installed on your system, you need to know the
+  base directory of this installation.
+
+- If you have mysql installed on your system, you need to know the
   base directory of this installation.
 
 - You need an ANSI-C compatible C compiler (gcc is fine).
@@ -71,6 +86,9 @@ Things You Need To Know Before Installing
 FI Notes
 ---------
 
+[This is more of a historical sub-note now.  I use the entire a
+ single form now linked directly into the Apache web server as a module]
+ 
 FI is a subset of the PHP distribution.  Throughout the documentation
 PHP and FI will be used interchangeably or together.  They refer to
 the same thing.  On my system here the difference between FI and PHP
@@ -121,7 +139,7 @@ Step 3.
   type: make
 
   This will create the actual executable program file named php.cgi
-  by default.  
+  by default.  (If you are NOT installing the Apache module version)
 
 Step 4. (If you are NOT installing the Apache module version)
   
@@ -136,11 +154,11 @@ Step 4. (If you are NOT installing the Apache module version)
 
 Step 4. (if you are installing the Apache module version)
 
-  Change to your Apache src directory where the mod_php.c and mod_php.h
-  files should have been copied to. If they weren't which usually happens
-  because of permission problems, copy these two files there manually. Edit
-  your Apache Configuration file and add the EXTRA_LIBS line which was
-  produced at the end of Step 3. And add:
+  Change to your Apache src directory where the mod_php.c ,mod_php.h
+  and libphp.a files should have been copied to. If they weren't which 
+  usually happens because of permission problems, copy these three files 
+  there manually. Edit your Apache Configuration file and add the 
+  EXTRA_LIBS line which was produced at the end of Step 3. And add:
 
     Module php_module mod_php.o
 
@@ -155,7 +173,7 @@ Step 4. (if you are installing the Apache module version)
   PHP module to parse any file ending with the .phtml extension. You can pick
   any extension you like for this.
 
-  Now you are ready to restar your httpd server. See the Apache Module
+  Now you are ready to restart your httpd server. See the Apache Module
   Notes for more details on configuring the PHP Module.
 
 Step 5.
@@ -205,7 +223,7 @@ Troubleshooting and Mailing Lists
   PHP/FI.  If you are having difficulties, this is probably
   the best place to ask.  To sign up, send a message to:
 
-  php-list-request@holli.com
+  php-list-request@vex.net
 
   and in the subject of your message, put:
 
@@ -226,7 +244,7 @@ Troubleshooting and Mailing Lists
 
   subscribe
 
-  All announcements will also be sent to the php-list@holli.com mailing
+  All announcements will also be sent to the php-list@vex.net mailing
   list, so you need not sign up to both.
 
   If you are interested in helping out with the development of PHP/FI,
@@ -238,8 +256,48 @@ Troubleshooting and Mailing Lists
   You will not be popular if you post general beginner questions here.
   There are also quite a few CVS commit log messages posted here.
   Especially during heavy hacking periods.
- 
 
+
+Sending in Bug Reports 
+----------------------
+
+  I appreciate receiving well-versed bug reports.  If they include a
+  possible fix for the problem, I become quite estatic.  If you think
+  you have found a bug and you can reproduce it, try to simplify the
+  script that illustrates the bug to the least number of lines of
+  code as possible.  Try compiling the CGI version of the package
+  and pass it through that.  ie. ./php.cgi filename.phtml
+  
+  If you are using the Apache module version and you get a 
+  "Document contains no data" error, it is likely that the web server
+  process core dumped.  Check your web server's error_log file.  If
+  you are getting a core dump and you can reproduce it, I would very
+  much like to receive a gdb (GNU Debugger) backtrace of the core
+  file.  Here are the steps to generate it.
+
+  1. Make sure you compile the PHP Apache module with debugging 
+     symbols included.  ie. compile with -g and do not strip the
+     final httpd binary.
+
+  2. Make your server root directory writable to the world to allow
+     the web server process to write its core file.  
+     eg. chmod 777 /usr/local/etc/httpd
+
+  3. Do whatever you need to do to cause the problem
+
+  4. Run gdb on the core and binary files.
+     eg. gdb /usr/local/etc/httpd/bin/httpd /usr/local/etc/httpd/core
+     and at the gdb prompt type: bt
+     Then send me the output.
+
+  If you are unable to perform step 4 in the above but manage to get
+  through step 3 and have a "core" file, then send me some email.
+  I may be able to get a copy of your httpd and your core file and
+  do the debugging on these files myself.
+
+  Bug reports should be sent to rasmus@vex.net
+  
+     
 Getting Updates
 ---------------
 
@@ -252,7 +310,8 @@ Getting Updates
   called CVS.  It is available at prep.ai.mit.edu:/pub/gnu.  Get version
   1.7 or later.  Compile and install this package.  Make sure you enable
   client support.  Check the cvs-1.7/src/options.h file and verify that
-  AUTH_CLIENT_SUPPORT is defined.
+  AUTH_CLIENT_SUPPORT is defined.  (This probably isn't needed for
+  later versions of CVS)
 
   Now type the following:
 

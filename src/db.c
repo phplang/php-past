@@ -2,7 +2,7 @@
 *                                                                            *
 * PHP/FI                                                                     *
 *                                                                            *
-* Copyright 1995,1996 Rasmus Lerdorf                                         *
+* Copyright 1995,1996,1997 Rasmus Lerdorf                                    *
 *                                                                            *
 *  This program is free software; you can redistribute it and/or modify      *
 *  it under the terms of the GNU General Public License as published by      *
@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: db.c,v 1.12 1996/09/19 04:49:52 rasmus Exp $ */
+/* $Id: db.c,v 1.16 1997/01/04 15:16:51 rasmus Exp $ */
 #include <stdlib.h>
 #include <string.h>
 #include <errno.h>
@@ -42,6 +42,9 @@
 #endif
 #endif
 #include "parse.h"
+#ifdef WINDOWS
+#include <io.h>
+#endif
 
 static dbmStack *top = NULL;
 
@@ -66,6 +69,12 @@ void ListSupportedDBs(void) {
 #endif
 #ifdef HAVE_LIBPQ
 	strcat(temp,"Postgres95 support enabled<br>\n");
+#endif
+#ifdef HAVE_LIBMYSQL
+	strcat(temp,"mysql support enabled<br>\n");
+#endif
+#ifdef HAVE_LIBSOLID
+	strcat(temp,"Solid support enabled<br>\n");
 #endif
 #if NFS_HACK
 	strcat(temp,"NFS hack in effect<br>\n");
@@ -908,7 +917,7 @@ char *_dbmFetch(char *filename, char *keystr) {
 	static char temp[1] = { '\0' };
 	static datum key, content;
 #ifndef APACHE
-	static First=1;
+	static int First=1;
 #endif
 	static char *ret=NULL;
 #ifdef GDBM

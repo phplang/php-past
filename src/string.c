@@ -2,7 +2,7 @@
 *                                                                            *
 * PHP/FI                                                                     *
 *                                                                            *
-* Copyright 1995,1996 Rasmus Lerdorf                                         *
+* Copyright 1995,1996,1997 Rasmus Lerdorf                                    *
 *                                                                            *
 *  This program is free software; you can redistribute it and/or modify      *
 *  it under the terms of the GNU General Public License as published by      *
@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: string.c,v 1.14 1996/07/19 13:16:52 rasmus Exp $ */
+/* $Id: string.c,v 1.17 1997/01/12 20:51:38 rasmus Exp $ */
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
@@ -57,7 +57,7 @@ void GetType(void) {
 
 	s = Pop();
 	if(!s) {
-		Error("Stack Error in strval function");
+		Error("Stack Error in gettype function");
 		return;
 	}
 	switch(s->type) {
@@ -129,6 +129,7 @@ void StrTok(int init) {
 	static char *pos2=NULL;
 	char *temp=NULL;
 	char *token=NULL;
+	char *first=NULL;
 
 	s = Pop();
 	if(!s) {
@@ -155,7 +156,12 @@ void StrTok(int init) {
 		pos2=NULL;
 	}
 	if(pos1 && *pos1) {
-		pos2 = strstr(pos1,token);
+		for (/* NOP */;token && *token;token++) {
+			pos2 = strchr(pos1,(int) *token);
+			if (!first || (pos2 && pos2 < first))
+				first = pos2;
+		} /* NB: token is unusable now */
+		pos2 = first;
 		if(pos2) {
 			*pos2='\0';
 		}	
@@ -260,7 +266,7 @@ void StrrChr(void) {
 
 	s = Pop();
 	if(!s) {
-		Error("Stack Error in strstr function");
+		Error("Stack Error in strchr function");
 		return;
 	}
 	a = estrdup(1,s->strval);
@@ -411,7 +417,7 @@ void UcFirst(void) {
 
 	s = Pop();
 	if(!s) {
-		Error("Stack Error in ord function");
+		Error("Stack Error in ucfirst function");
 		return;
 	}
 	if(!*s->strval) {

@@ -2,7 +2,7 @@
 *                                                                            *
 * PHP/FI                                                                     *
 *                                                                            *
-* Copyright 1995,1996 Rasmus Lerdorf                                         *
+* Copyright 1995,1996,1997 Rasmus Lerdorf                                    *
 *                                                                            *
 *  This program is free software; you can redistribute it and/or modify      *
 *  it under the terms of the GNU General Public License as published by      *
@@ -19,15 +19,19 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: file.c,v 1.32 1996/09/22 22:07:51 rasmus Exp $ */
+/* $Id: file.c,v 1.42 1997/01/04 15:16:54 rasmus Exp $ */
 #include "php.h"
 #include <stdlib.h>
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
 #endif
 #include <string.h>
+#ifdef HAVE_PWD_H
 #include <pwd.h>
+#endif
+#ifdef HAVE_GRP_H
 #include <grp.h>
+#endif
 #include <errno.h>
 #include "parse.h"
 #include <ctype.h>
@@ -35,23 +39,51 @@
 #include "http_protocol.h"
 #include "http_request.h"
 #endif
+#ifdef WINDOWS
+#include <dos.h>
+#include <sys\stat.h>
+#include <dir.h>
+#include <io.h>
+#endif
 
 static char *CurrentFilename=NULL;
 static char *CurrentStatFile=NULL;
+static int CurrentStatLength=0;
 static char *CurrentPI=NULL;
 static long CurrentFileSize=0L;
 static struct stat gsb;
 static int fgetss_state=0;
+static char *IncludePath = NULL;
 
 static FpStack *fp_top = NULL;
 
+#if APACHE
+void php_init_file(php_module_conf *conf) {
+#else
 void php_init_file(void) {
+#endif
 	CurrentFilename=NULL;
 	CurrentStatFile=NULL;
+	CurrentStatLength=0;
 	CurrentPI=NULL;
 	CurrentFileSize=0L;
 	fp_top = NULL;
 	fgetss_state=0;
+#if APACHE
+	if (conf->IncludePath) {
+	    IncludePath = conf->IncludePath;
+	}
+#endif
+	if (IncludePath == NULL) {
+		char *path;
+		path = getenv("PHP_INCLUDE_PATH");
+		if(path) {
+			IncludePath = estrdup(0, path);
+		}
+	}
+	if (IncludePath == NULL) {
+	    IncludePath = estrdup(0, INCLUDEPATH);
+	}
 }
 
 void StripLastSlash(char *str) {
@@ -63,25 +95,24 @@ void StripLastSlash(char *str) {
 	}
 }
 
+#ifdef WINDOWS
+int _OpenFile(char *filename, int top, long *file_size) {
+#else
 int OpenFile(char *filename, int top, long *file_size) {
+#endif
 	char *fn, *pi, *sn, *fn2=NULL, *fn3=NULL;
 	char *s=NULL, *ss=NULL;
 	int ret=-1;
 	int no_httpd=0, include=0;
 	int fd;
 #ifdef PATTERN_RESTRICT
-	int pret;
-	char *cp;
-	struct re_pattern_buffer exp;
-	struct re_registers regs;
-	char fastmap[256];
+	int err, len;
+	char erbuf[100];
+	regex_t re;
+	regmatch_t subs[1];
 #endif
 #ifdef PHP_ROOT_DIR
 	char temp[1024];
-#endif
-
-#if DEBUG	
-	Debug("OpenFile called with %s\n",filename?filename:"null");
 #endif
 
 	if(!filename) {
@@ -118,32 +149,34 @@ int OpenFile(char *filename, int top, long *file_size) {
 	}
 #ifdef PATTERN_RESTRICT
 	if(fn[strlen(fn)-1]!='/') {
-		exp.allocated = 0;
-		exp.buffer = 0;
-		exp.translate = NULL;
-		exp.fastmap = fastmap;
-		cp = php_re_compile_pattern(PATTERN_RESTRICT,strlen(PATTERN_RESTRICT),&exp);
-		if(cp) {
-			Error("Regular Expression error in PATTERN_RESTRICT: %s",cp);
+		err = regcomp(&re, PATTERN_RESTRICT, 0);
+		if(err) {
+			len = regerror(err, &re, erbuf, sizeof(erbuf));
+			Error("Regex error %s, %d/%d `%s'\n", reg_eprint(err), len, sizeof(erbuf), erbuf);
 			return(-1);
 		}
-		php_re_compile_fastmap(&exp);
 #if DEBUG
 		Debug("Checking pattern restriction: \"%s\" against \"%s\"\n",PATTERN_RESTRICT,fn);
 #endif
-		if((pret = php_re_match(&exp,fn,strlen(fn),0,&regs))<0) {
-			Error("Sorry, you are not permitted to load that file through PHP/FI.",pret);
+		err = regexec(&re,fn,(size_t)1,subs,0);
+		if(err && err!= REG_NOMATCH) {
+			len = regerror(err, &re, erbuf, sizeof(erbuf));
+			Error("Regex error %s, %d/%d `%s'\n", reg_eprint(err), len, sizeof(erbuf), erbuf);
+			regfree(&re);
 			return(-1);
 		}
+		if(err==REG_NOMATCH) {
+			Error("Sorry, you are not permitted to load that file through PHP/FI.");
+			regfree(&re);
+			return(-1);
+		}
+		regfree(&re);
 	}
 #endif
 
 	fn = (char *)estrdup(1,FixFilename(fn,top,&ret));
 	*file_size = (long)gsb.st_size;
 	CurrentFileSize = (long)gsb.st_size;
-#if DEBUG
-	Debug("OpenFile: fn = [%s]\n",fn);
-#endif
 	fd=ret;
 	if(ret==-1) {
 #if DEBUG
@@ -240,9 +273,6 @@ int OpenFile(char *filename, int top, long *file_size) {
 #endif
 		Error("Unable to open: <i>%s</i>",ss?ss:"null");
 	}
-#if DEBUG
-	if(fd>0) Debug("CurrentFilename is [%s]\n",CurrentFilename);
-#endif
 	return(fd);
 }
 
@@ -259,6 +289,9 @@ char *FixFilename(char *filename, int cd, int *ret) {
 	int st=0;
 	char o='\0';
 	int l=0;
+#ifdef WINDOWS
+	FILE *stream;
+#endif
 
 	s = strrchr(filename,'/');
 	if(s) {
@@ -291,6 +324,7 @@ char *FixFilename(char *filename, int cd, int *ret) {
 				*s=o;		
 				strcpy(temp,s);
 			} else temp[0]='\0';
+#ifdef HAVE_PWD_H
 			if(*user) {
 				pw = getpwnam(user);	
 				if(pw) {
@@ -302,6 +336,7 @@ char *FixFilename(char *filename, int cd, int *ret) {
 				  sprintf(path,"%s/%s%s",pw->pw_dir,pd,temp);
 				}
 			}
+#endif
 		} else if(*path=='/' && *(path+1)=='~') {
 			s = strchr(path+1,'/');
 			if(s) {
@@ -313,6 +348,7 @@ char *FixFilename(char *filename, int cd, int *ret) {
 				*s=o;		
 				strcpy(temp,s);
 			} else temp[0]='\0';
+#if HAVE_PWD_H
 			if(*user) {
 				pw = getpwnam(user);	
 				if(pw) {
@@ -323,6 +359,7 @@ char *FixFilename(char *filename, int cd, int *ret) {
 				  if (pd == 0) pd = PHP_PUB_DIRNAME;
 				  sprintf(path,"%s/%s%s",pw->pw_dir,pd,temp);			}
 			}
+#endif
 		}
 		temp[0]='\0';
 		if(cd) {
@@ -334,7 +371,16 @@ char *FixFilename(char *filename, int cd, int *ret) {
 		}
 		if(*fn) {
 			sprintf(temp,"%s/%s",path,fn);
+#ifndef WINDOWS
 			st = stat(temp,&gsb);
+#else
+			stream=fopen(temp, "r");
+			if (stream) {
+				st = stat(temp,&gsb);
+				fclose(stream);
+			} else
+				st = -1;
+#endif
 			if((st!=-1) && (gsb.st_mode&S_IFMT)==S_IFDIR) {
 				sprintf(temp,"%s/%s/index.html",path,fn);
 				st = stat(temp,&gsb);
@@ -353,7 +399,16 @@ char *FixFilename(char *filename, int cd, int *ret) {
 				}
 			}
 		} else {
+#ifndef WINDOWS
 			st = stat(path,&gsb);
+#else
+			stream=fopen(path, "r");
+			if (stream) {
+				st = stat(path,&gsb);
+				fclose(stream);
+			} else
+				st = -1;
+#endif
 			if((st!=-1) && (gsb.st_mode&S_IFMT)==S_IFDIR) {
 				sprintf(temp,"%s/index.html",path);
 				st = stat(temp,&gsb);
@@ -364,7 +419,16 @@ char *FixFilename(char *filename, int cd, int *ret) {
 			} else strcpy(temp,path);
 		}
 	} else {
+#ifndef WINDOWS
 		st = stat(fn,&gsb);
+#else
+		stream=fopen(fn, "r");
+		if (stream) {
+			st = stat(fn,&gsb);
+			fclose(stream);
+		} else
+			st = -1;
+#endif
 		if((st!=-1) && (gsb.st_mode&S_IFMT)==S_IFDIR) {
 			sprintf(temp,"%s/index.html",fn);
 			st = stat(temp,&gsb);
@@ -389,9 +453,6 @@ char *GetCurrentFilename(void) {
 
 
 void SetCurrentFilename(char *filename) {
-#if DEBUG
-	Debug("Setting CurrentFilename to [%s]\n",filename);
-#endif
 	if(filename) CurrentFilename = estrdup(0,filename);
 	else CurrentFilename=NULL;
 }
@@ -421,6 +482,10 @@ char *getfilename(char *path, int ext) {
 	}
 	return(filename);
 }	
+
+void ClearStatCache(void) {
+	*CurrentStatFile=0;
+}
 
 void FileFunc(int type) {
 	Stack *s;
@@ -458,10 +523,18 @@ void FileFunc(int type) {
 		return;
 	}
 #if APACHE
-	if(!CurrentStatFile) CurrentStatFile = estrdup(0,php_rqst->filename);
+	if(!CurrentStatFile) {
+		CurrentStatFile = estrdup(0,php_rqst->filename);
+		CurrentStatLength = strlen(php_rqst->filename);
+	}
 #endif
 	if(!CurrentStatFile || (CurrentStatFile && strcmp(s->strval,CurrentStatFile))) {
-		CurrentStatFile = estrdup(0,s->strval);
+		if(strlen(s->strval) > CurrentStatLength) {
+			CurrentStatFile = estrdup(0,s->strval);
+			CurrentStatLength = strlen(s->strval);
+		} else {
+			strcpy(CurrentStatFile,s->strval);
+		}
 		if(stat(CurrentStatFile,&sb)==-1) {
 			*CurrentStatFile=0;
 			Push("-1",LNUMBER);
@@ -544,6 +617,7 @@ void Unlink(void) {
 }
 
 void ReadLink(void) {
+#ifndef WINDOWS
 	Stack *s;
 	int ret;
 	char buf[256];
@@ -567,9 +641,14 @@ void ReadLink(void) {
 		buf[ret] = '\0';
 		Push(buf,STRING);
 	}
+#else
+	Pop();
+	Error("ReadLink not available on this system");
+#endif
 }
 
 void LinkInfo(void) {
+#ifndef WINDOWS
 	Stack *s;
 	struct stat sb;	
 	int ret;
@@ -592,6 +671,10 @@ void LinkInfo(void) {
 		sprintf(temp,"%ld",(long)sb.st_dev);
 		Push(temp,LNUMBER);
 	}
+#else
+	Pop();
+	Error("LinkInfo not available on this system");
+#endif
 }
  
 void SymLink(void) {
@@ -705,7 +788,11 @@ void Rename(void) {
 	Push(temp,LNUMBER);
 }
 
+#ifdef WINDOWS
+void _Sleep(void) {
+#else
 void Sleep(void) {
+#endif
 	Stack *s;
 
 	s = Pop();
@@ -798,7 +885,9 @@ void FpCloseAll(void) {
 			fclose(f->fp);
 			break;
 		case 2:
+#ifndef WINDOWS
 			pclose(f->fp);
+#endif
 			break;
 		}	
 		f = f->next;
@@ -870,6 +959,7 @@ void Fclose(void) {
 }
 
 void Popen(void) {
+#ifndef WINDOWS
 	Stack *s;
 	char temp[8];
 	FILE *fp;
@@ -907,9 +997,16 @@ void Popen(void) {
 	id = FpPush(fp,s->strval,2);
 	sprintf(temp,"%d",id);	
 	Push(temp,LNUMBER);
+#else
+	Pop();
+	Pop();
+	Push("-1",LNUMBER);
+	Error("Popen not available on this system");
+#endif
 }
 
 void Pclose(void) {
+#ifndef WINDOWS
 	Stack *s;
 	int id;
 	FILE *fp;
@@ -928,6 +1025,10 @@ void Pclose(void) {
 	}
 	pclose(fp);
 	FpDel(id);
+#else
+	Pop();
+	Error("Popen not available on this system");
+#endif
 }
 
 void Feof(void) {
@@ -1200,6 +1301,17 @@ void SetCurrentPI(char *pi) {
 		CurrentPI = NULL;
 }
 
+char *GetIncludePath(void) {
+    return(IncludePath);
+}
+
+void SetIncludePath(char *path) {
+	if (path)
+		IncludePath = estrdup(0, path);
+	else
+		IncludePath = NULL;
+}
+
 #if APACHE
 void SetCurrentPD(char *pd) {
 #if DEBUG
@@ -1233,6 +1345,7 @@ void ChMod(void) {
 }	
 
 void ChOwn(void) {
+#ifndef WINDOWS
 	Stack *s;
 	int ret;
 	char temp[8];
@@ -1256,9 +1369,15 @@ void ChOwn(void) {
 	ret = chown(s->strval,pw->pw_uid,-1);
 	sprintf(temp,"%d",ret);
 	Push(temp,LNUMBER);
+#else
+	Pop();
+	Pop();
+	Error("Chown not available on this system");
+#endif
 }	
 
 void ChGrp(void) {
+#ifndef WINDOWS
 	Stack *s;
 	int ret;
 	char temp[8];
@@ -1282,6 +1401,11 @@ void ChGrp(void) {
 	ret = chown(s->strval,-1,gr->gr_gid);
 	sprintf(temp,"%d",ret);
 	Push(temp,LNUMBER);
+#else
+	Pop();
+	Pop();
+	Error("Chgrp not available on this system");
+#endif
 }
 
 void MkDir(void) {
@@ -1301,7 +1425,11 @@ void MkDir(void) {
 		Error("Stack error in mkdir()");
 		return;
 	}
+#ifdef WINDOWS
+	ret = mkdir(s->strval);
+#else
 	ret = mkdir(s->strval,mode);
+#endif
 	sprintf(temp,"%d",ret);
 	Push(temp,LNUMBER);
 }	
@@ -1324,7 +1452,7 @@ void RmDir(void) {
 void File(void) {
 	Stack *s;
 	FILE *fp;
-	char buf[2048];
+	char buf[8192];
 	VarTree *var;
 	int l,t;
 
@@ -1345,10 +1473,13 @@ void File(void) {
 	}
 	var = GetVar("__filetmp__",NULL,0);
 	if(var) deletearray(var);
-	while(fgets(buf,2047,fp)) {
+	while(fgets(buf,8191,fp)) {
+#if DEBUG
+		Debug("File() read line \"%s\"\n",buf);
+#endif
 		l = strlen(buf);
 		t = l;
-		while(isspace(buf[--l])); 
+		while(l>0 && isspace(buf[--l])); 
 		if(l<t) buf[l+1]='\0';	
 		Push(AddSlashes(buf,0),STRING);
 		SetVar("__filetmp__",1,0);

@@ -16,7 +16,8 @@ typedef unsigned char uch;
 #endif
 #include <assert.h>
 
+#include "../../config.h"
 /* for old systems with bcopy() but no memmove() */
-#ifdef USEBCOPY
+#ifndef HAVE_MEMMOVE
 #define	memmove(d, s, c)	bcopy(s, d, c)
 #endif

@@ -2,7 +2,7 @@
 *                                                                            *
 * PHP/FI                                                                     *
 *                                                                            *
-* Copyright 1995,1996 Rasmus Lerdorf                                         *
+* Copyright 1995,1996,1997 Rasmus Lerdorf                                    *
 *                                                                            *
 *  This program is free software; you can redistribute it and/or modify      *
 *  it under the terms of the GNU General Public License as published by      *
@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: exec.c,v 1.10 1996/08/18 12:30:55 rasmus Exp $ */
+/* $Id: exec.c,v 1.13 1997/01/04 15:16:54 rasmus Exp $ */
 #include "php.h"
 #include "parse.h"
 #include <ctype.h>
@@ -41,6 +41,7 @@
  */
 void Exec(char *name, char *retname, int type) {
 	FILE *fp;
+#ifndef WINDOWS
 	Stack *s;
 	char buf[4096];
 	int t,l,ret;
@@ -91,6 +92,11 @@ void Exec(char *name, char *retname, int type) {
 		Push(buf,LNUMBER);
 		SetVar(retname,0,0);
 	}
+#else
+	Pop();
+	Error("Exec not available on this system");
+	Push("0",LNUMBER);
+#endif
 }
 
 int php_ind(char *s, char c) {
@@ -116,7 +122,7 @@ void EscapeShellCmd(void) {
 	cmd = emalloc(1,2*l);
 	strcpy(cmd,s->strval);
     for(x=0;cmd[x];x++) {
-        if(php_ind("&;`'\"|*?~<>^()[]{}$\\\x0A",cmd[x]) != -1){
+        if(php_ind("&;`'\"|*?~<>^()[]{}$\\\x0A\xFF",cmd[x]) != -1){
             for(y=l+1;y>x;y--)
                 cmd[y] = cmd[y-1];
             l++; /* length has been increased */

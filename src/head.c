@@ -2,7 +2,7 @@
 *                                                                            *
 * PHP/FI                                                                     *
 *                                                                            *
-* Copyright 1995,1996 Rasmus Lerdorf                                         *
+* Copyright 1995,1996,1997 Rasmus Lerdorf                                    *
 *                                                                            *
 *  This program is free software; you can redistribute it and/or modify      *
 *  it under the terms of the GNU General Public License as published by      *
@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: head.c,v 1.25 1996/09/19 04:49:57 rasmus Exp $ */
+/* $Id: head.c,v 1.28 1997/01/04 15:16:57 rasmus Exp $ */
 #include "php.h"
 #include "parse.h"
 #ifdef TM_IN_SYS_TIME
@@ -68,9 +68,16 @@ void Header(void) {
 	if(r) {
 		*r='\0';
 		if(!strcasecmp(s->strval,"content-type")) {
-			php_rqst->content_type = estrdup(0,r+1);
-		} else
-			table_set(php_rqst->headers_out,s->strval,r+1);
+			if(*(r+1)==' ') 
+				php_rqst->content_type = estrdup(0,r+2);
+			else
+				php_rqst->content_type = estrdup(0,r+1);
+		} else {
+			if(*(r+1)==' ') 
+				table_set(php_rqst->headers_out,s->strval,r+2);
+			else
+				table_set(php_rqst->headers_out,s->strval,r+1);
+		}
 		if(!strcasecmp(s->strval,"location")) php_rqst->status = REDIRECT;
 #if DEBUG
 		Debug("Redirecting to: %s\n",s->strval);
@@ -218,11 +225,19 @@ void php_header(int type,char *str) {
 			fputs("\015\012\015\012",stdout);
 		} else {
 			if(!cont_type) {
+#ifdef WINDOWS
+				printf("Content-type: text/html%c%c",10,10);
+#else
 	        	fputs("Content-type: text/html\015\012\015\012",stdout); 
+#endif
 			} else {
 				fputs("Content-type:",stdout);
 				fputs(cont_type,stdout);
+#ifdef WINDOWS
+				printf("%c%c",10,10);
+#else
 				fputs("\015\012\015\012",stdout);
+#endif
 			}
 		}
         HeaderPrinted = 1;

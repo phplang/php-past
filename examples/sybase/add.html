@@ -1,0 +1,50 @@
+<html>
+<head>
+    <title>Bookmark Creation</title>
+</head>
+<body bgcolor="#ffffff" link="#0000ff" vlink="#ff0000" 
+    alink="#ff0000" text="#000000">
+<center>
+<h1>
+<img src=/bookmarks/mark-big.gif >
+The Bookmark Database</i></H1>
+<P>
+<BR><BR><BR>
+
+<H2>Bookmark Creation Result</H2>
+<BR><BR>
+<?
+    /*
+    ** replace space with _
+    */
+    $name=reg_replace(" ","_",$name);
+    $rc=sybsql_connect();
+    $rc=sybsql_dbuse("mtest");
+    /*
+    ** check if the thing already exists
+    */
+    $qs="select name from bookmarks where name='$name' and parent='$parent'";
+    $rc=sybsql_query($qs);
+    if($rc == 1);
+        $nr=sybsql_numrows();
+        if ($nr > 0);
+            echo "<b>Creation Failed!!!</b><br>";
+            echo "<b>Bookmark of that name exists at that level<br>";
+            exit;
+        endif;
+    endif;
+    $qs="insert into bookmarks (type,parent,path,name,url) values ('$type','$parent', '$parent/$name','$name','$url')";
+    $rc=sybsql_query($qs);
+    echo "<font size=+1>Bookmark added!</font><p>";
+>
+<br>
+<br>
+<center>
+<?
+    echo "<a href=/cgi-bin/phpwrap.sh/bookmarks/bookmarks.html?parent=$parent>"
+>
+</center>
+<IMG src=/bookmarks/back.gif></A>
+</center>
+</body>
+</html>

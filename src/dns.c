@@ -2,7 +2,7 @@
 *                                                                            *
 * PHP/FI                                                                     *
 *                                                                            *
-* Copyright 1995,1996 Rasmus Lerdorf                                         *
+* Copyright 1995,1996,1997 Rasmus Lerdorf                                    *
 *                                                                            *
 *  This program is free software; you can redistribute it and/or modify      *
 *  it under the terms of the GNU General Public License as published by      *
@@ -19,15 +19,18 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: dns.c,v 1.4 1996/09/19 04:49:54 rasmus Exp $ */
+/* $Id: dns.c,v 1.6 1997/01/04 15:16:52 rasmus Exp $ */
 #include "php.h"
 #include "parse.h"
+#ifndef WINDOWS
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <netdb.h>
+#endif
 
 void GetHostByAddr(void) {
+#ifndef WINDOWS
 	Stack *s;
 
 	s = Pop();
@@ -36,6 +39,11 @@ void GetHostByAddr(void) {
 		return;
 	}
 	Push((char *)_GetHostByAddr(s->strval),STRING);
+#else
+	Pop();
+	Error("GetHostByAddr not available on this system");
+	Push("",STRING);
+#endif
 }
 
 
@@ -43,6 +51,7 @@ const char *_GetHostByAddr(char *ip) {
 	unsigned long addr;
 	static struct hostent *hp;
 
+#ifndef WINDOWS
 #if DEBUG
 	Debug("_GetHostByAddr called with [%s]\n",ip);
 #endif
@@ -63,20 +72,28 @@ const char *_GetHostByAddr(char *ip) {
 	Debug("_GetHostByAddr returning [%s]\n",hp->h_name);
 #endif
 	return(hp->h_name);
+#endif
 }
 
 void GetHostByName(void) {
 	Stack *s;
 
+#ifndef WINDOWS
 	s = Pop();
 	if(!s) {
 		Error("Stack error in echo\n");
 		return;
 	}
 	Push(_GetHostByName(s->strval),STRING);
+#else
+	Pop();
+	Error("GetHostByName not available on this system");
+	Push("",STRING);
+#endif
 }
 
 char *_GetHostByName(char *name) {
+#ifndef WINDOWS
 	static struct hostent *hp;
 	static struct in_addr in;
 
@@ -87,4 +104,5 @@ char *_GetHostByName(char *name) {
 	}
 	memcpy(&in.s_addr, *(hp->h_addr_list), sizeof (in.s_addr));
 	return(inet_ntoa(in));
+#endif
 }

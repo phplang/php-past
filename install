@@ -2,7 +2,7 @@
 #
 # PHP/FI Install Script
 #
-# $Id: install,v 1.17 1996/09/22 23:30:04 rasmus Exp $
+# $Id: install,v 1.35 1997/01/12 21:53:05 rasmus Exp $
 #
 DEF_LOG_DIR=/usr/local/etc/httpd/cgi-data
 DEF_ACC_DIR=/usr/local/etc/httpd/cgi-data
@@ -38,6 +38,22 @@ else
 	INST_TOP=
 fi
 
+shome="/usr/local/sybase"
+$ECHO_N "Do you have Sybase libraries installed on this system [yN] $ECHO_C"
+read a
+if [ "$a" = "y" ] || [ "$a" = "Y" ]
+then
+$ECHO_N "Sybase home [$shome] $ECHO_C"
+HLS=-DHAVE_SYBASE=1
+read SYB_TOP
+if [ "$SYB_TOP." = "." ]
+then
+    SYB_TOP=$shome
+fi
+else
+    SYB_TOP=
+fi
+
 $ECHO_N "Do you have Postgres95 installed in this system? [yN] $ECHO_C"
 read a
 if [ "$a" = "y" ] || [ "$a" = "Y" ]
@@ -51,6 +67,36 @@ then
 fi
 else
 	PGINST_TOP=
+fi
+
+$ECHO_N "Do you have mysql installed on this system? [yN] $ECHO_C"
+read a
+if [ "$a" = "y" ] || [ "$a" = "Y" ]
+then
+$ECHO_N "Top of your mysql install tree? [/usr/local/mysql] $ECHO_C"
+HLMY=-DHAVE_LIBMYSQL=1
+read INST_TOPY
+if [ "$INST_TOPY." = "." ]
+then
+	INST_TOPY=/usr/local/mysql
+fi
+else
+	INST_TOPY=
+fi
+
+$ECHO_N "Do you have Solid installed in this system? [yN] $ECHO_C"
+read a
+if [ "$a" = "y" ] || [ "$a" = "Y" ]
+then
+$ECHO_N "Top of your Solid install tree? [/usr/local/solid] $ECHO_C"
+HLS=-DHAVE_LIBSOLID=1
+read SOLIDINST_TOP
+if [ "$SOLIDINST_TOP." = "." ]
+then
+   SOLIDINST_TOP=/usr/local/solid
+fi
+else
+   SOLIDINST_TOP=
 fi
 
 $ECHO_N "Would you like to compile PHP/FI as an Apache module? [yN] $ECHO_C"
@@ -139,7 +185,7 @@ else
 fi
 fi
 
-$ECHO_N "Would you like to include access control support? [Ny] $ECHO_C"
+$ECHO_N "Would you like to include access control support? [yN] $ECHO_C"
 read a
 if [ "$a." = "." ] || [ "$a" = "n" ] || [ "$a" = "N" ]
 then
@@ -167,7 +213,12 @@ if [ "$a." = "." ] || [ "$a" = "y" ] || [ "$a" = "Y" ]
 then
 	if [ "$HLM" = "-DHAVE_LIBMSQL=1" ]
 	then
-		$ECHO_N "Would you like to store your log files in dbm or mSQL format? [dm] $ECHO_C"
+		if [ "$HLMY" = "-DHAVE_LIBMYSQL=1" ]
+		then
+			$ECHO_N "Would you like to store your log files in dbm, mSQL, or mysql format? [dmy] $ECHO_C"
+		else
+			$ECHO_N "Would you like to store your log files in dbm or mSQL format? [dm] $ECHO_C"
+		fi
 		read a
 		if [ "$a" = "d" ] || [ "$a" = "D" ]
 		then	
@@ -185,28 +236,69 @@ then
 			fi
 			LOG_DIR=-DLOG_DIR=\\\\\"$b\\\\\"
 		else
-			LOGGING=-DMSQLLOGGING=1
-			echo
-			echo "mSQL Logging enabled.  Note that you will need to create a"
-			echo "phpfi database and appropriate tables for each user id for"
-			echo "which logging should be done.  See the documentation doc/doc.html"
-			echo "for details."
-			echo 
+			if [ "$a" = "m" ] || [ "$a" = "M" ]
+			then
+				LOGGING=-DMSQLLOGGING=1
+				echo
+				echo "mSQL Logging enabled.  Note that you will need to create a"
+				echo "phpfi database and appropriate tables for each user id for"
+				echo "which logging should be done.  See the documentation doc/doc.html"
+				echo "for details."
+				echo 
+			else
+				LOGGING=-DMYSQLLOGGING=1
+				echo
+				echo "mysql Logging enabled.  Note that you will need to create a"
+				echo "phpfi database and appropriate tables for each user id for"
+				echo "which logging should be done.  See the documentation doc/doc.html"
+				echo "for details."
+				echo 
+			fi
 		fi
 	else
-		LOGGING=-DLOGGING=1
-		echo 
-		echo "You need to choose a page logging directory."
-		echo "This directory must be readable and writable by the"
-		echo "user id under which your http server runs."
-		echo
-		$ECHO_N "Page logging directory? [$DEF_LOG_DIR] $ECHO_C"
-		read b
-		if [ "$b." = "." ]
+		if [ "$HLMY" = "-DHAVE_LIBMYSQL=1" ]
 		then
-			b=$DEF_LOG_DIR
+			$ECHO_N "Would you like to store your log files in dbm or mysql format? [dy] $ECHO_C"
+			read a
+			if [ "$a" = "d" ] || [ "$a" = "D" ]
+			then	
+				LOGGING=-DLOGGING=1
+				echo 
+				echo "You need to choose a page logging directory."
+				echo "This directory must be readable and writable by the"
+				echo "user id under which your http server runs."
+				echo
+				$ECHO_N "Page logging directory? [$DEF_LOG_DIR] $ECHO_C"
+				read b
+				if [ "$b." = "." ]
+				then
+					b=$DEF_LOG_DIR
+				fi
+				LOG_DIR=-DLOG_DIR=\\\\\"$b\\\\\"
+			else
+				LOGGING=-DMYSQLLOGGING=1
+				echo
+				echo "mysql Logging enabled.  Note that you will need to create a"
+				echo "phpfi database and appropriate tables for each user id for"
+				echo "which logging should be done.  See the documentation doc/doc.html"
+				echo "for details."
+				echo 
+			fi
+		else
+			LOGGING=-DLOGGING=1
+			echo 
+			echo "You need to choose a page logging directory."
+			echo "This directory must be readable and writable by the"
+			echo "user id under which your http server runs."
+			echo
+			$ECHO_N "Page logging directory? [$DEF_LOG_DIR] $ECHO_C"
+			read b
+			if [ "$b." = "." ]
+			then
+				b=$DEF_LOG_DIR
+			fi
+			LOG_DIR=-DLOG_DIR=\\\\\"$b\\\\\"
 		fi
-		LOG_DIR=-DLOG_DIR=\\\\\"$b\\\\\"
 	fi
 else
 	LOGGING=
@@ -286,6 +378,23 @@ SED_MSQL="      s,@MSQL_INCLUDE@,-I$INST_TOP/include$MSQL_INCDIR,
                 s,@MSQL_LIB@,-L$INST_TOP/lib$MSQL_LIBDIR,"
 fi
 
+# Sybase part of sed command   
+# ma_muquit@fccc.edu, Sep-15-96
+if [ "$SYB_TOP." = "." ]
+then
+SED_SYB="      s,@SYB_INCLUDE@,,
+               s,@LIBSYB@,,
+               s,@STATICLIBSYB@,,
+               s,@SYB_DEF@,,
+               s,@SYB_LIB@,,"
+else
+SED_SYB="      s,@SYB_INCLUDE@,-I$SYB_TOP/include,
+               s,@LIBSYB@, -lsybdb -ldnet_stub,
+               s,@STATICLIBSYB@,-lsybdb -ldnet_stub,
+               s,@SYB_DEF@,$HLS,
+               s,@SYB_LIB@,-L$SYB_TOP/lib,"
+fi  
+
 # Postgres95 part of sed command
 
 if [ "$PGINST_TOP." = "." ]
@@ -310,6 +419,56 @@ SED_PG95="      s,@PQ_INCLUDE@,-I$PGINST_TOP/include$PG95_INCDIR,
                 s,@PQ_DEF@,$HLP,
                 s,@PQ_LIB@,-L$PGINST_TOP/lib$PG95_LIBDIR,"
 fi
+
+# mysql part of sed  command
+if [ "$INST_TOPY." = "." ]
+then
+SED_MYSQL="      s,@MYSQL_INCLUDE@,,
+                s,@LIBMYSQL@,,
+		s,@STATICLIBMYSQL@,,
+                s,@MYSQL_DEF@,,
+                s,@MYSQL_LIB@,,"
+else
+if [ -d "$INST_TOPY/include/mysql" ]
+then
+    MYSQL_INCDIR=/mysql
+fi
+if [ -d "$INST_TOPY/lib/mysql" ]
+then
+    MYSQL_LIBDIR=/msql
+fi
+SED_MYSQL="      s,@MYSQL_INCLUDE@,-I$INST_TOPY/include$MYSQL_INCDIR,
+                s,@LIBMYSQL@,-lmysql -lmysys -lstrings,
+		s,@STATICLIBMYSQL@,$INST_TOPY/lib$MYSQL_LIBDIR/libmysql.a,
+                s,@MYSQL_DEF@,$HLMY,
+                s,@MYSQL_LIB@,-L$INST_TOPY/lib$MYSQL_LIBDIR,"
+fi
+
+# Solid part of sed command
+
+if [ "$SOLIDINST_TOP." = "." ]
+then
+SED_SOLID="     s,@SOLID_INCLUDE@,,
+                s,@LIBSOLID@,,
+                s,@STATICLIBSOLID@,,
+                s,@SOLID_DEF@,,
+                s,@SOLID_LIB@,,"
+else
+if [ -d "$SOLIDINST_TOP/include" ]
+then
+    SOLID_INCDIR=include
+fi
+if [ -d "$SOLIDINST_TOP/lib" ]
+then
+    SOLID_LIBDIR=lib
+fi
+SED_SOLID="     s,@SOLID_INCLUDE@,-I$SOLIDINST_TOP/$SOLID_INCDIR,
+                s,@LIBSOLID@,$SOLIDINST_TOP/$SOLID_LIBDIR/solcli.a,
+               s,@STATICLIBSOLID@,$SOLIDINST_TOP/$SOLID_LIBDIR/solcli.a,
+                s,@SOLID_DEF@,$HLS,
+                s,@SOLID_LIB@,,"
+fi
+
 
 # FastCGI substitutions
 if [ "$PHPFASTCGI." = "." ]
@@ -343,34 +502,82 @@ else
     DEBIAN=
 fi
 
+if grep "sendmail" config.cache >/dev/null 2>&1
+then
+	PHPSENDMAIL="-DPHPSENDMAIL=1"
+else
+	PHPSENDMAIL=""
+fi
+
 if grep "#define HAVE_REGCOMP 1" config.h >/dev/null 2>&1
 then
-	echo "Using your system's Posix regular expression library"
+	echo "Your system appears to have a Posix compliant regex library";
+	echo "On some systems this library is broken.  UnixWare 2.0.x is an"
+	echo "example.  Answering [Y]es to the following question will"
+	echo "compile in the bundled regex library instead of yours."
+	echo "Note that if you are compiling the module version for"
+	echo "Apache 1.1.1 or earlier, answer No here.  Unless you are"
+	echo "certain that your system library is broken, answer No here."
 	echo ""
-	LIBREGEX=
-	STATICLIBREGEX=
-	LIBREGEXDIR=
-	REGEX_INCLUDE=
-	OURREGEX=
+	echo "*IMPORTANT* If you are compiling the Apache module, make sure"
+	echo "you set Apache's regexp setting accordingly in the Configuration"
+	echo "file.  ie. WANTHSREGEX=no if you answer No here."
+	echo ""
+	$ECHO_N "Would you like the bundled regex library? [yN] $ECHO_C"
+	read a
+	if [ "$a" = y -o "$a" = Y ]
+	then
+		echo "Using the included Posix regular expression library"
+		echo ""
+		LIBREGEX=-lregex	
+		LIBREGEXDIR=-L./regex
+		REGEX_INCLUDE=-I./regex
+		OURREGEX=regex/libregex.a
+		REGEXMSG1="For Apache 1.1.1 or below you must copy src/regex/libregex.a to $APACHE_DIR and add -llibregex.a to the above"
+		REGEXMSG2="For Apache 1.2 or higher you must set the WANTHSREGEX Configuration parameter to 'yes'"
+		STATICLIBREGEX=regex/libregex.a
+		sed "s,HAVE_REGCOMP,PHP_BROKEN_SYSTEM_REGEX," <config.h >config.$$
+		rm -f config.h
+		mv config.$$ config.h
+	else
+		echo "Using your system's Posix regular expression library"
+		echo ""
+		LIBREGEX=
+		STATICLIBREGEX=
+		LIBREGEXDIR=
+		REGEX_INCLUDE=
+		OURREGEX=
+		REGEXMSG1=""
+		REGEXMSG2="For Apache 1.2 you must set the WANTHSREGEX Configuration parameter to 'no'"
+	fi
 else
-	echo "Using the included Posix regular expression library"
+	echo "Using the bundled Posix regular expression library."
+	echo "If you are compiling the module for Apache 1.1.1 or earlier"
+	echo "you may experience difficulties.  It is strongly advised"
+	echo "that you upgrade to Apache 1.2"
 	echo ""
 	LIBREGEX=-lregex	
 	LIBREGEXDIR=-L./regex
 	REGEX_INCLUDE=-I./regex
 	OURREGEX=regex/libregex.a
+	REGEXMSG1="For Apache 1.1.1 you must copy src/regex/libregex.a to $APACHE_DIR and add -llibregex.a to the above"
+	REGEXMSG2="For Apache 1.2 you must set the WANTHSREGEX Configuration parameter to 'yes' for Apache 1.2"
 	STATICLIBREGEX=regex/libregex.a
 fi
 
 # sed commmand
 sed "		$SED_MSQL
+        $SED_SYB
 		$SED_PG95
+		$SED_MYSQL
+		$SED_SOLID
 		$SED_APACHE
 		$SED_FCGI
 		s,@USEDLIBS@,$USEDLIBS,
 		s,@OPT_CFLAGS@,$OPT_CFLAGS,
 		s,@INC_CFLAGS@,$INC_CFLAGS,
 		s,@SYS_CFLAGS@,$SYS_CFLAGS,
+		s,@PHPSENDMAIL@,$PHPSENDMAIL,
 		s,@HGD@,$HGD,
 		s,@HLNK@,$HLNK,
 		s,@ACCESS_CONTROL@,$ACCESS_CONTROL,
@@ -388,6 +595,8 @@ sed "		$SED_MSQL
 		s,@SHLIB_TARGET@,$SHLIB_TARGET,
 		s,@PHPLIB_TARGET@,$PHPLIB_TARGET,
 		s,@LIBREGEX@,$LIBREGEX,
+		s,@REGEXMSG1@,$REGEXMSG1,
+		s,@REGEXMSG2@,$REGEXMSG2,
 		s,@LIBREGEXDIR@,$LIBREGEXDIR,
 		s,@REGEX_INCLUDE@,$REGEX_INCLUDE,
 		s,@OURREGEX@,$OURREGEX,
@@ -400,7 +609,7 @@ mv config.$$ config.h
 
 if [ -f src/main.o ]
 then
-rm -f src/*.o 
+rm -f src/*.o src/*.a src/regex/*.o src/regex/*.a
 fi
 
 if [ -f src/php.cgi ]

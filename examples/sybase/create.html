@@ -1,0 +1,45 @@
+<html>
+<head>
+    <title>Create New Bookmark</title>
+</head>
+<body bgcolor="#ffffff" link="#0000ff" vlink="#ff0000" 
+    alink="#ff0000" text="#000000">
+
+<center>
+<h1>
+<img src=/bookmarks/mark-big.gif>
+The Bookmark Database
+</h1>
+<h2>Create New Bookmark</h2>
+</center>
+<form method=get action=/cgi-bin/phpwrap.sh/bookmarks/add.html>
+<input type=hidden name=parent value=<? echo "$parent">>
+<BR><BR><BR>
+<CENTER>
+<font size=+1>
+Please fill in the details of the new bookmark or folder below.  If
+you are creating a folder rather than a bookmark to a specific URL, the
+URL field is ignored.
+</font>
+<p>
+<br><br>
+<TABLE border cellspacing=0 cellpadding=4>
+<tr>
+<TD bgcolor="gray"><b>New Bookmark Title</b>
+<TD bgcolor="green"> <input name="name">
+</tr>
+<tr>
+<TD bgcolor="gray"><b>New Bookmark URL</H2></b>
+<TD bgcolor="green"> <input name="url"></td>
+<tr>
+<TD bgcolor="gray"><b>New Bookmark Type</H2></b>
+<TD align=center bgcolor="green">
+<SELECT name=type><option value=B>Bookmark<option value=F>Folder</SELECT>
+</td>
+</TR>
+</TABLE>
+<br>
+<INPUT TYPE=submit VALUE="Create Bookmark"
+</form>
+</body>
+</html>

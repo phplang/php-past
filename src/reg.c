@@ -2,7 +2,7 @@
 *                                                                            *
 * PHP/FI                                                                     *
 *                                                                            *
-* Copyright 1995,1996 Rasmus Lerdorf                                         *
+* Copyright 1995,1996,1997 Rasmus Lerdorf                                    *
 *                                                                            *
 *  This program is free software; you can redistribute it and/or modify      *
 *  it under the terms of the GNU General Public License as published by      *
@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: reg.c,v 1.14 1996/09/22 23:30:05 rasmus Exp $ */
+/* $Id: reg.c,v 1.21 1997/01/04 15:17:05 rasmus Exp $ */
 #include <stdlib.h>
 #include "php.h"
 #include "parse.h"
@@ -30,6 +30,7 @@
  * reg_eprint - convert error number to name
  */
 char *reg_eprint(int err) {
+#ifndef WINDOWS
 	static char epbuf[150];
 	size_t len;
 
@@ -39,13 +40,18 @@ char *reg_eprint(int err) {
 	len = regerror(err, (regex_t *)NULL, epbuf, sizeof(epbuf));
 #endif
 	if(len > sizeof(epbuf)) {
-		epbuf[sizeof(epbuf)]='\0';
+		epbuf[sizeof(epbuf)-1]='\0';
 	}
 	return(epbuf);
+#else
+	Error("regex not available on this system");
+	return NULL;
+#endif
 }
 
 void RegMatch(char *reg_name, int search) {
 	Stack *s;	
+#ifndef WINDOWS
 	regex_t re;
 	regmatch_t subs[NS];
 	int err, len, i, l;
@@ -139,6 +145,12 @@ void RegMatch(char *reg_name, int search) {
 		}
 	}
 	regfree(&re);
+#else
+	Pop();
+	Pop();
+	Error("Regex not available on this system");
+	Push("",STRING);
+#endif
 }
 
 /*
@@ -153,6 +165,7 @@ void RegMatch(char *reg_name, int search) {
  */
 void RegReplace(void) {
 	Stack *s;	
+#ifndef WINDOWS
 	char *pattern;
 	char *string;
 	char *replace;
@@ -199,9 +212,17 @@ void RegReplace(void) {
 		return;	
 	}
 	Push(ret,STRING);
+#else
+	Pop();
+	Pop();
+	Pop();
+	Error("Regex not available on this system");
+	Push("0",LNUMBER);
+#endif
 }
 
 char *_RegReplace(char *pattern, char *replace, char *string) {
+#ifndef WINDOWS
 	char *buf, *nbuf;
 	char o;
 	int i,l,ll,new_l,allo;
@@ -209,7 +230,7 @@ char *_RegReplace(char *pattern, char *replace, char *string) {
 	regmatch_t subs[NS];
 	char erbuf[150];
 	int err, len;
-#ifndef REG_STARTEND
+#ifdef HAVE_REGCOMP
 	char oo;
 #endif
 
@@ -220,7 +241,6 @@ char *_RegReplace(char *pattern, char *replace, char *string) {
 	if(err) {
 		len = regerror(err, &re, erbuf, sizeof(erbuf));
 		Error("Regex error %s, %d/%d `%s'\n", reg_eprint(err), len, sizeof(erbuf), erbuf);
-		regfree(&re);
 		return((char *)-1);
 	}	
 
@@ -236,7 +256,7 @@ char *_RegReplace(char *pattern, char *replace, char *string) {
 	buf[0] = '\0';	
 	ll = strlen(replace);
 	while(!err) {
-#ifdef REG_STARTEND
+#ifndef HAVE_REGCOMP
 		subs[0].rm_so = i;
 		subs[0].rm_eo = l;
 		err = regexec(&re, string, (size_t)NS, subs, REG_STARTEND);
@@ -283,10 +303,15 @@ char *_RegReplace(char *pattern, char *replace, char *string) {
 	}
 	regfree(&re);
 	return(buf);
+#else
+	Error("Regex not available on this system");
+	return((char *)-1);
+#endif
 }
 
 void EReg(char *reg_name, int icase) {
 	Stack *s;	
+#ifndef WINDOWS
 	regex_t re;
 	regmatch_t subs[NS];
 	int err, len, i, l;
@@ -324,7 +349,6 @@ void EReg(char *reg_name, int icase) {
 	if(err) {
 		len = regerror(err, &re, erbuf, sizeof(erbuf));
 		Error("Regex error %s, %d/%d `%s'\n", reg_eprint(err), len, sizeof(erbuf), erbuf);
-		regfree(&re);
 		return;
 	}	
 	err = regexec(&re, string, (size_t)NS, subs, 0);
@@ -368,10 +392,17 @@ void EReg(char *reg_name, int icase) {
 		Push(temp2,LNUMBER);
 	}
 	regfree(&re);
+#else
+	Pop();
+	Pop();
+	Error("Regex not available on this system");
+	Push("0",LNUMBER);
+#endif
 }
 
 void ERegReplace(void) {
 	Stack *s;	
+#ifndef WINDOWS
 	char *pattern;
 	char *string;
 	char *replace;
@@ -418,10 +449,18 @@ void ERegReplace(void) {
 		return;	
 	}
 	Push(ret,STRING);
+#else
+	Pop();
+	Pop();
+	Pop();
+	Error("Regex not available on this system");
+	Push("0",LNUMBER);
+#endif
 }
 
 void ERegiReplace(void) {
 	Stack *s;	
+#ifndef WINDOWS
 	char *pattern;
 	char *string;
 	char *replace;
@@ -468,9 +507,17 @@ void ERegiReplace(void) {
 		return;	
 	}
 	Push(ret,STRING);
+#else
+	Pop();
+	Pop();
+	Pop();
+	Error("Regex not available on this system");
+	Push("0",LNUMBER);
+#endif
 }
 
 char *_ERegReplace(char *pattern, char *replace, char *string, int icase) {
+#ifndef WINDOWS
 	char *buf, *nbuf;
 	char o;
 	int i,ni,l,ll,new_l,allo;
@@ -478,7 +525,7 @@ char *_ERegReplace(char *pattern, char *replace, char *string, int icase) {
 	regmatch_t subs[NS];
 	char erbuf[150];
 	int err, len, copts=0;
-#ifndef REG_STARTEND
+#ifdef HAVE_REGCOMP
 	char oo;
 #endif
 
@@ -493,7 +540,6 @@ char *_ERegReplace(char *pattern, char *replace, char *string, int icase) {
 	if(err) {
 		len = regerror(err, &re, erbuf, sizeof(erbuf));
 		Error("Regex error %s, %d/%d `%s'\n", reg_eprint(err), len, sizeof(erbuf), erbuf);
-		regfree(&re);
 		return((char *)-1);
 	}	
 
@@ -510,7 +556,7 @@ char *_ERegReplace(char *pattern, char *replace, char *string, int icase) {
 	buf[0] = '\0';	
 	ll = strlen(replace);
 	while(!err) {
-#ifdef REG_STARTEND
+#ifndef HAVE_REGCOMP
 		subs[0].rm_so = i;
 		subs[0].rm_eo = l;
 		err = regexec(&re, string, (size_t)NS, subs, REG_STARTEND);
@@ -519,8 +565,13 @@ char *_ERegReplace(char *pattern, char *replace, char *string, int icase) {
 		string[l] = '\0';
 		err = regexec(&re, &string[i], (size_t)NS, subs, 0);
 		string[l] = oo;				
-		subs[0].rm_so += i;
-		subs[0].rm_eo += i;
+		if(!err) {
+			subs[0].rm_so += i;
+			subs[0].rm_eo += i;
+		} else {
+			subs[0].rm_so = 0;
+			subs[0].rm_eo = 0;
+		}
 #endif
 		if(err && err!=REG_NOMATCH) {
 			len = regerror(err, &re, erbuf, sizeof(erbuf));
@@ -576,4 +627,8 @@ char *_ERegReplace(char *pattern, char *replace, char *string, int icase) {
 	}
 	regfree(&re);
 	return(buf);
+#else
+	Error("Regex not available on this system");
+	return ((char *)-1);
+#endif
 }

@@ -2,7 +2,7 @@
 *                                                                            *
 * PHP/FI                                                                     *
 *                                                                            *
-* Copyright 1995,1996 Rasmus Lerdorf                                         *
+* Copyright 1995,1996,1997 Rasmus Lerdorf                                    *
 *                                                                            *
 *  This program is free software; you can redistribute it and/or modify      *
 *  it under the terms of the GNU General Public License as published by      *
@@ -23,7 +23,7 @@
  * Contributed by Paul Panotzki - Bunyip Information Systems
  *                                                         
  */
-/* $Id: fsock.c,v 1.7 1996/09/19 04:49:55 rasmus Exp $ */
+/* $Id: fsock.c,v 1.9 1997/01/04 15:16:56 rasmus Exp $ */
 #include "php.h"
 #include <stdlib.h>
 #ifdef HAVE_UNISTD_H
@@ -31,18 +31,21 @@
 #endif
 
 #include <sys/types.h>
+#ifndef WINDOWS
 #include <sys/socket.h>
+#include <netinet/in.h>
+#include <netdb.h>
+#endif
 #if defined(AF_UNIX)
 #include <sys/un.h>
 #endif
-#include <netinet/in.h>
-#include <netdb.h>
 
 #include <string.h>
 #include <errno.h>
 #include "parse.h"
 
 void FSockOpen(void) {
+#ifndef WINDOWS
 	Stack *s;
 	char temp[8];
 	FILE *fp;
@@ -132,4 +135,10 @@ void FSockOpen(void) {
 	id = FpPush(fp,s->strval,1);
 	sprintf(temp,"%d",id);	
 	Push(temp,LNUMBER);
+#else
+	Pop();
+	Pop();
+	Error("FSockOpen not available on this system");
+	Push("0",LNUMBER);
+#endif
 }	

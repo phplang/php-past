@@ -2,7 +2,7 @@
 *                                                                            *
 * PHP/FI                                                                     *
 *                                                                            *
-* Copyright 1995,1996 Rasmus Lerdorf                                         *
+* Copyright 1995,1996,1997 Rasmus Lerdorf                                    *
 *                                                                            *
 *  This program is free software; you can redistribute it and/or modify      *
 *  it under the terms of the GNU General Public License as published by      *
@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: date.c,v 1.14 1996/09/19 04:49:52 rasmus Exp $ */
+/* $Id: date.c,v 1.16 1997/01/04 15:16:50 rasmus Exp $ */
 #include <stdlib.h>
 #ifdef TM_IN_SYS_TIME
 #include <sys/time.h>
@@ -73,7 +73,7 @@ void Date(int arg, int type) {
 	char temp[32];
 	time_t t;
 	char *format;
-	int y;
+	int y,h;
 
 	t = time(NULL);
 	if(arg) {
@@ -146,7 +146,9 @@ void Date(int arg, int type) {
 				strcat(out,temp);
 				break;
 			case 'h':
-				sprintf(temp,"%02d",tm1->tm_hour%12);
+				h = tm1->tm_hour%12;
+				if(h==0) h=12;
+				sprintf(temp,"%02d",h);
 				strcat(out,temp);
 				break;
 			case 'i':

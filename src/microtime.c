@@ -1,8 +1,8 @@
-/***[head.c]******************************************************[TAB=4]****\
+/***[microtime.c]*************************************************[TAB=4]****\
 *                                                                            *
 * PHP/FI                                                                     *
 *                                                                            *
-* Copyright 1995,1996 Rasmus Lerdorf                                         *
+* Copyright 1995,1996,1997 Rasmus Lerdorf                                    *
 *                                                                            *
 *  This program is free software; you can redistribute it and/or modify      *
 *  it under the terms of the GNU General Public License as published by      *
@@ -22,7 +22,7 @@
 /*
  * Contributed by Paul Panotzki - Bunyip Information Systems
  */
-/* $Id: microtime.c,v 1.7 1996/09/19 04:50:00 rasmus Exp $ */
+/* $Id: microtime.c,v 1.10 1997/01/04 15:16:59 rasmus Exp $ */
 #include "php.h"
 #include <stdlib.h>
 #ifdef HAVE_UNISTD_H
@@ -34,7 +34,9 @@
 #include "parse.h"
 
 #include <stdio.h>
+#ifdef HAVE_GETTIMEOFDAY
 #include <sys/time.h>
+#endif
 
 #define NUL  '\0'
 #define MICRO_IN_SEC 1000000.00

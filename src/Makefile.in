@@ -1,7 +1,7 @@
-# $Id: Makefile.in,v 1.30 1996/09/22 22:07:50 rasmus Exp $
+# $Id: Makefile.in,v 1.53 1997/01/12 21:51:38 rasmus Exp $
 #
 # Makefile for PHP/FI
-# Copyright 1995,1996 Rasmus Lerdorf
+# Copyright 1995,1996,1997 Rasmus Lerdorf
 #
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -35,16 +35,16 @@ AR = ar rc
 RANLIB = @RANLIB@
 CC = @CC@
 YACC = @YACC@ -d -l
-LIBS = -L. @HLNK@ @LIBS@ @best_dbm@ @LIBMSQL@ @LIBPQ@ @LIBFCGI@ @LIBREGEX@
-STATICLIBS = @best_dbm@ @LIBS@ @STATICLIBMSQL@ @STATICLIBPQ@ @STATICLIBFCGI@ @STATICLIBREGEX@
+LIBS = -L. @HLNK@ @LIBS@ @best_dbm@ @LIBMSQL@ @LIBSYB@ @LIBPQ@ @LIBMYSQL@ @LIBSOLID@ @LIBFCGI@ @LIBREGEX@
+STATICLIBS = @best_dbm@ @LIBS@ @STATICLIBMSQL@ @STATICLIBSYB@ @STATICLIBPQ@ @STATICLIBMYSQL@ @STATICLIBSOLID@ @STATICLIBFCGI@ @STATICLIBREGEX@
 USEDLIBS = @USEDLIBS@
 OPT_CFLAGS = @OPT_CFLAGS@
 INC_CFLAGS = @INC_CFLAGS@
 SYS_CFLAGS = @SYS_CFLAGS@
-CFLAGS = $(OPT_CFLAGS) $(INC_CFLAGS) $(SYS_CFLAGS)
-LDFLAGS = @LDFLAGS@ @MSQL_LIB@ @PQ_LIB@ @FCGI_LIB@ @LIBREGEXDIR@
+CFLAGS = $(OPT_CFLAGS) $(INC_CFLAGS) $(SYS_CFLAGS) @PHPSENDMAIL@ -DSENDMAIL=\""@SENDMAIL@ -t"\"
+LDFLAGS = @LDFLAGS@ @MSQL_LIB@ @MYSQL_LIB@ @SYB_LIB@ @SOLID_LIB@ @PQ_LIB@ @FCGI_LIB@ @LIBREGEXDIR@
 #DEBUG=-g -Wall -DDEBUG
-CPPFLAGS = -I. @CPPFLAGS@ @MSQL_INCLUDE@ @MSQL_DEF@ @PQ_INCLUDE@ @PQ_DEF@ @FCGI_INCLUDE@ @FCGI_DEF@ @REGEX_INCLUDE@ @APACHE_INCLUDE@ @ACCESS_CONTROL@ @ACCESS_DIR@ @LOGGING@ @LOG_DIR@ @HGD@ @FILE_UPLOAD@ @APACHE@ @APACHE_API@ $(DEBUG) 
+CPPFLAGS = @REGEX_INCLUDE@ -I. @CPPFLAGS@ @MSQL_INCLUDE@ @MSQL_DEF@ @SYB_DEF@ @SYB_INCLUDE@ @MYSQL_INCLUDE@ @SOLID_INCLUDE@ @SOLID_DEF@ @MYSQL_DEF@ @PQ_INCLUDE@ @PQ_DEF@ @FCGI_INCLUDE@ @FCGI_DEF@ @APACHE_INCLUDE@ @ACCESS_CONTROL@ @ACCESS_DIR@ @LOGGING@ @LOG_DIR@ @HGD@ @FILE_UPLOAD@ @APACHE@ @APACHE_API@ $(DEBUG) 
 
 PHP_PROGS: @OURREGEX@ @PRG@ @MODULE_TARGET@
 
@@ -56,19 +56,21 @@ DISTFILES = ChangeLog README COPYING \
 	install-sh install src/parse.raw src/lex.c src/main.c src/error.c \
 	src/date.c src/stack.c src/calc.c src/var.c src/echo.c src/php.h \
 	src/cond.c src/switch.c src/db.c src/while.c src/parse.h \
-	src/string.c src/msql.c src/pg95.c src/reg.c src/exec.c \
+	src/string.c src/msql.c src/sybsql.c src/pg95.c src/reg.c src/exec.c\
+	src/uniqid.c \
 	src/file.c src/crypt.c src/head.c src/info.c src/post.c src/type.c \
 	src/conf.c src/acc.c src/local.c src/dns.c src/log.c src/sort.c src/dir.c \
 	src/rand.c src/gd.c examples/log.html examples/log.readme examples/clock.html \
 	src/parse.c src/mime.c src/fsock.c src/microtime.c src/mod_php.c src/mod_php.h \
-	src/pool.c src/tmagic.c src/regex/COPYRIGHT src/regex/Makefile \
+	src/pool.c src/regex/COPYRIGHT src/regex/Makefile \
 	src/regex/README src/regex/WHATSNEW src/regex/cclass.h \
 	src/regex/cname.h src/regex/debug.c src/regex/engine.c \
 	src/regex/main.c src/regex/mkh src/regex/regcomp.c src/regex/regerror.c \
 	src/regex/regex.3 src/regex/regex.7 src/regex/regex.h \
 	src/regex/regex2.h src/regex/regexec.c src/regex/regfree.c \
 	src/regex/split.c src/regex/tests src/regex/utils.h \
-	scripts/msqllog \
+	src/mysql.c src/solid.c src/mail.c \
+	scripts/msqllog scripts/mysqllog \
 	examples/url.readme examples/url_add.html examples/url_cat.html \
 	examples/url_main.html examples/demo_main.html examples/demo_dir.html \
 	examples/demo_echo.html examples/demo_last.html examples/demo_rand.html \
@@ -78,8 +80,19 @@ DISTFILES = ChangeLog README COPYING \
 	examples/guestbook.html examples/survey.html examples/rwho.html \
 	examples/mail.html examples/README examples/mlog.html examples/mlog_today.inc \
 	examples/mlog_total.inc examples/mlog_yesterday.inc examples/mlog_ref.inc \
-	examples/mlog_top.inc examples/setsince.html doc/doc.html doc/nfs_hack.txt \
-	doc/config.gif \
+	examples/mlog_top.inc examples/setsince.html \
+	examples/mylog.html examples/mylog_today.inc \
+	examples/mylog_total.inc examples/mylog_yesterday.inc \
+	examples/mylog_ref.inc examples/mylog_top.inc \
+	examples/sybase/README examples/sybase/add.html examples/sybase/back.gif \
+	examples/sybase/book.gif examples/sybase/bookmarks.html \
+	examples/sybase/create.gif examples/sybase/create.html \
+	examples/sybase/crtab.sql examples/sybase/delete.gif \
+	examples/sybase/delete.html examples/sybase/folder.gif \
+	examples/sybase/index.html examples/sybase/mark-big.gif \
+	examples/sybase/phpwrap.sh examples/sybase/remove.html \
+	examples/sybase/wood.gif \
+	doc/doc.html doc/nfs_hack.txt doc/config.gif doc/faq.phtml \
 	test/testphp test/testmenu test/testphp.awk test/template test/README \
 	test/basic/001.tst test/basic/002.tst test/basic/003.tst test/basic/004.tst \
 	test/basic/005.tst test/basic/006.tst test/basic/007.tst test/basic/008.tst \
@@ -102,15 +115,16 @@ install: all
 	test/dbm/*.tst test/lang/*.tst
 
 OBJS= parse.o lex.o main.o error.o date.o stack.o calc.o var.o \
-	  echo.o cond.o switch.o db.o while.o string.o msql.o \
+	  echo.o cond.o switch.o db.o while.o string.o msql.o sybsql.o\
 	  reg.o exec.o file.o crypt.o head.o info.o post.o \
 	  type.o conf.o acc.o local.o dns.o log.o sort.o dir.o rand.o \
-	  gd.o mime.o fsock.o microtime.o pg95.o pool.o tmagic.o
+	  gd.o mime.o fsock.o microtime.o pg95.o pool.o \
+	  uniqid.o mysql.o solid.o mail.o
 
 all: $(PHP_PROGS) @MODULE_TARGET@
 
 regex/libregex.a:
-	cd regex; make lib CC=$(CC) AUX_CFLAGS="$(CFLAGS)" RANLIB=$(RANLIB)
+	cd regex; make lib CC=$(CC) AUX_CFLAGS='$(CFLAGS)' RANLIB=$(RANLIB)
 
 .c.o:
 	$(CC) $(CFLAGS) $(SYSTEM) $(NSAPI_DEFS) $(NSAPI_INCLUDE) $(CPPFLAGS) -c $<
@@ -130,7 +144,7 @@ libphp.so: libphp.so.1
 libphp.so.1: libphp.so.1.0
 	ln -s $< $@
 libphp.so.1.0: $(OBJS)
-	$(CC) -shared -Wl,-soname,libphp.1 -o $@ $(OBJS)
+	$(CC) -shared -Wl,-soname,libphp.so.1 -o $@ $(OBJS)
 
 staticlib: libphp.a
 libphp.a: $(OBJS)
@@ -146,7 +160,7 @@ mod_php-static.so: mod_php.o
 	$(CC) -shared $< $(LDFLAGS) -L. -lphp $(STATICLIBS) -lm -o $@
 
 module_auto_build: @MODULE_PHP@
-	@echo "The PHP module has been built for ELF synamic linking."
+	@echo "The PHP module has been built for ELF dynamic linking."
 	@echo "Please install it where it belongs (usually in the"
 	@echo "/usr/local/lib/apache/modules or /usr/lib/apache/modules"
 	@echo "directories) and add a LoadModule line to your httpd.conf"
@@ -159,11 +173,15 @@ module_user_build: $(OBJS)
 	@echo "mod_php.* and libphp.a should have been copied to your"
 	@echo "Apache src directory, if they weren't, do so manually."
 	@echo "Then edit your Confiration file for Apache and look for"
+	@echo "the EXTRA_CFLAGS line and add -D\\\"PHP/FI-2.0b10\\\", then on"
 	@echo "the \"EXTRA_LIBS\" line and add the following to that line:"
 	@echo ""
-	@echo "-L. -lphp @HLNK@ @best_dbm@ @MSQL_LIB@ @LIBMSQL@ @PQ_LIB@ @LIBPQ@ -lm"
+	@echo "-L. -lphp @HLNK@ @best_dbm@ @MSQL_LIB@ @MYSQL_LIB@ @LIBMSQL@ @SYB_LIB@ @LIBSYB@ @LIBMYSQL@ @SOLID_LIB@ @LIBSOLID@ @PQ_LIB@ @LIBPQ@ -lm"
 	@echo ""
 	@echo "If you have the GD library, you will need to add -lgd to the above."
+	@echo "Make sure you add -lgd before -lm on the above line."
+	@echo "@REGEXMSG1@"
+	@echo "@REGEXMSG2@"
 	@echo "Then add the following line to the very end of the Configuration file:"
 	@echo ""
 	@echo "Module php_module   mod_php.o"
@@ -180,7 +198,7 @@ parser:
 	mv parse.y parse.raw
 
 clean:
-	rm -f Makefile ../config.status ../config.cache ../config.log php.cgi *.o core *.so.*
+	rm -f Makefile ../config.status ../config.cache ../config.log php.cgi *.o core *.so.* regex/*.a regex/*.o
 
 tags:
 	etags ${srcdir}/*.c ${srcdir}/*.h ${srcdir}/[a-z]*.in
@@ -195,6 +213,7 @@ dist: $(DISTDEP)
 	rm -fr ../$$distname; \
 	mkdir ../$$distname; \
 	mkdir ../$$distname/examples; \
+	mkdir ../$$distname/examples/sybase; \
 	mkdir ../$$distname/src; \
 	mkdir ../$$distname/src/regex; \
 	mkdir ../$$distname/doc; \
@@ -248,4 +267,9 @@ gd.o: gd.c parse.h php.h
 fsock.o: fsock.c php.h parse.h
 microtime.o: microtime.c php.h parse.h
 pg95.o: pg95.c php.h parse.h
+mysql.o: mysql.c php.h parse.h
+solid.o: solid.c php.h parse.h
+mail.o: mail.c php.h parse.h
+uniqid.o: uniqid.c php.h parse.h
+sybsql.o: sybsql.c php.h parse.h
 install: all 

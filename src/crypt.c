@@ -2,7 +2,7 @@
 *                                                                            *
 * PHP/FI                                                                     *
 *                                                                            *
-* Copyright 1995,1996 Rasmus Lerdorf                                         *
+* Copyright 1995,1996,1997 Rasmus Lerdorf                                    *
 *                                                                            *
 *  This program is free software; you can redistribute it and/or modify      *
 *  it under the terms of the GNU General Public License as published by      *
@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: crypt.c,v 1.4 1996/09/19 04:49:51 rasmus Exp $ */
+/* $Id: crypt.c,v 1.5 1997/01/04 15:16:50 rasmus Exp $ */
 #include "php.h"
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>

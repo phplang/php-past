@@ -2,7 +2,7 @@
 *                                                                            *
 * PHP/FI                                                                     *
 *                                                                            *
-* Copyright 1995,1996 Rasmus Lerdorf                                         *
+* Copyright 1995,1996,1997 Rasmus Lerdorf                                    *
 *                                                                            *
 *  This program is free software; you can redistribute it and/or modify      *
 *  it under the terms of the GNU General Public License as published by      *
@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: gd.c,v 1.11 1996/09/19 04:49:56 rasmus Exp $ */
+/* $Id: gd.c,v 1.13 1997/01/04 15:16:56 rasmus Exp $ */
 /* gd 1.2 is copyright 1994, 1995, Quest Protein Database Center, 
    Cold Spring Harbor Labs. */
 
@@ -316,7 +316,7 @@ void ImageGif(int args) {
 			Error("Unable to fdopen readable end of pipe");
 			return;
 		}
-
+		fflush(stdout);
 		if((po = fdopen(fds [1], "w")) == NULL) {
 			Error("Unable to fdopen writeable end of pipe");
 			return;

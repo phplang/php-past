@@ -2,7 +2,7 @@
 *                                                                            *
 * PHP/FI                                                                     *
 *                                                                            *
-* Copyright 1995,1996 Rasmus Lerdorf                                         *
+* Copyright 1995,1996,1997 Rasmus Lerdorf                                    *
 *                                                                            *
 *  This program is free software; you can redistribute it and/or modify      *
 *  it under the terms of the GNU General Public License as published by      *
@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: acc.c,v 1.23 1996/09/22 22:07:50 rasmus Exp $ */
+/* $Id: acc.c,v 1.27 1997/01/08 04:33:23 cvswrite Exp $ */
 #include "php.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -41,7 +41,7 @@ static char *RemoteHostName=NULL;
 static char *EmailAddr=NULL;
 static char *RefDoc=NULL;
 static char *Browser=NULL;
-#if defined(LOGGING) || defined(MSQLLOGGING)
+#if defined(LOGGING) || defined(MSQLLOGGING) || defined(MYSQLLOGGING)
 static int Logging=1;
 #endif
 static int ShowInfo=1;
@@ -59,7 +59,7 @@ void php_init_acc(void) {
 	EmailAddr=NULL;
 	RefDoc=NULL;
 	Browser=NULL;
-#if defined(LOGGING) || defined(MSQLLOGGING)
+#if defined(LOGGING) || defined(MSQLLOGGING) || defined(MYSQLLOGGING)
 #if APACHE
 	Logging=conf->Logging;
 #else
@@ -415,7 +415,6 @@ int CheckAccess(char *filename, long uid) {
 		if(err) {
 			len = regerror(err, &re, erbuf, sizeof(erbuf));
 			Error("Regex error %s, %d/%d `%s'\n", reg_eprint(err), len, sizeof(erbuf), erbuf);
-			regfree(&re);
 			continue;	
 		}
 		switch(ac->type) {
@@ -475,12 +474,12 @@ int CheckAccess(char *filename, long uid) {
 			}
 			break;	
 		case 16: /* NoLogging */
-#if defined(LOGGING) || defined(MSQLLOGGING)
+#if defined(LOGGING) || defined(MSQLLOGGING) || defined(MYSQLLOGGING)
 			Logging=0;
 #endif
 			break;
 		case 32: /* Logging */
-#if defined(LOGGING) || defined(MSQLLOGGING)
+#if defined(LOGGING) || defined(MSQLLOGGING) || defined(MYSQLLOGGING)
 			Logging=1;
 #endif
 			break;
@@ -677,7 +676,7 @@ char *getbrowser(void) {
 }
 
 int getlogging(void) {
-#if defined(LOGGING) || defined(MSQLLOGGING)
+#if defined(LOGGING) || defined(MSQLLOGGING) || defined(MYSQLLOGGING)
 	return(Logging);
 #else
 	return(0);
@@ -685,7 +684,7 @@ int getlogging(void) {
 }
 
 void setlogging(int val) {
-#if defined(LOGGING) || defined(MSQLLOGGING)
+#if defined(LOGGING) || defined(MSQLLOGGING) || defined(MYSQLLOGGING)
 	Logging = val;
 #endif
 }

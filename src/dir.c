@@ -2,7 +2,7 @@
 *                                                                            *
 * PHP/FI                                                                     *
 *                                                                            *
-* Copyright 1995,1996 Rasmus Lerdorf                                         *
+* Copyright 1995,1996,1997 Rasmus Lerdorf                                    *
 *                                                                            *
 *  This program is free software; you can redistribute it and/or modify      *
 *  it under the terms of the GNU General Public License as published by      *
@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: dir.c,v 1.5 1996/09/19 04:49:53 rasmus Exp $ */
+/* $Id: dir.c,v 1.7 1997/01/04 15:16:52 rasmus Exp $ */
 #include "php.h"
 #include <dirent.h>
 #ifdef HAVE_UNISTD_H
@@ -27,6 +27,9 @@
 #endif
 #include <errno.h>
 #include "parse.h"
+#ifdef WINDOWS
+#include <dir.h>
+#endif
 
 static DIR *dirp=NULL;
 

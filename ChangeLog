@@ -1,5 +1,80 @@
 PHP/FI CHANGE LOG                                                    ChangeLog
 |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Jan. 12/97 Version 2.0b10
+- Add missing windows_install.txt file
+- Add Sybase support <ma_muquit@fccc.edu>
+- Fix broken DecBin() function <h-zubiet@uniandes.edu.co>
+- Updated lex.c and mysql.c for better mysql support <eugene@acenet.com.sg>
+- Fix bug which caused problems with binary file uploads <fegli@goldnet.ch>
+- Add reset_timeout() call to make sure long file uploads don't time out
+- Update mysql documentation
+- Remove useless mysql_regcase() function
+- Fixed postgres95 support for point and bool types <john@intelligent.co.uk>
+- Add IncludePath directive
+- Fix inline ImageGif double-header problem <chall@koz.com>
+- Fix getnextchar() function which read 1 char too many
+- phpXBitHack support <root@thing.leech.com>
+- Added ClearStatCache() function to be used before File* functions
+  if cacheing is not desired.
+- While-loop memory optimizations
+- Add internal mechanism for creating read-only variables
+- Cleaned up array copying code; associative arrays can now be merged,
+  and normal arrays can be appended to each other with $a[]=$b;
+- Escape double-quotes as well as single quotes for Postgres95 if 
+  MAGIC_QUOTES is enabled.
+- Fix non-indexed array handling bug
+- Fix /* comment */ bug
+- Add support for global variable variables in functions
+- Add mysql-based logging (thanks to Wojciech Tryc <wojtek@tryc.on.ca>
+  for the debugging help)
+- Add mysql-based log analyzer (examples/mylog.html)
+- Add Sybase documentation
+- Fix SubVar bug
+- StrTok multiple delimiter bug fix <zeller@fh-heilbronn.de>
+
+Dec. 5 Version 2.0b9
+- Document msql_close function
+- Fix large int bug introduced in b8
+- Fix decimal point bug introduced in b8
+- Fix 'h' Date() problem 00 should be 12
+- Fix floating point bug introduced in b8
+- Fix some Irix compiler warnings
+- Add UniqId() function <ssb@guardian.no>
+- Add initial rough mysql support <eugene@acenet.com.sg>
+- Fix memmove compile problem for SunOS4
+- Remove tmagic.c file - an idea that never went anywhere
+- By popular demand, values with leading zeroes received through
+  GET/POST/COOKIE data are now typed as strings
+- Add bitwise XOR (^) and bitwise NOT (~) operators to parser
+- Add mysql documentation to doc.html
+- Add some helpful hints regarding libgd and libregex to install/Makefile.in
+- Fix core dump which happened when going off the end of a deleted array
+- Add very limited Windows 95/NT support <je-blanc@uniandes.edu.co>
+- Add initial support for the Solid SQL Engine <jvdmost@digiface.digiface.nl>
+- Add Mail function <jvdmost@digiface.digiface.nl>
+- Add mSQL 2.0 specific support
+- Add MsqlListIndex() function for mSQL 2.0
+
+Nov. 13 Version 2.0b8
+- Fix broken PATTERN_RESTRICT code (I broke it in 2.0b7)
+- Fix array copying bug <dirk@merlin.nbg.sub.org>
+- Add Parse_Str function <veebert@dimensional.com>
+- Fix unset($array) bug
+- Reuse memory of unset arrays
+- A lot of regex libraries out there seem to be broken.  The default is now
+  to use the bundled regex library
+- Fixed nasty nested user Function/while loop parser bug
+- Fix silly elseif() bug
+- Add phpMsqlLogHost Apache directive <topping@mauswerks.com>
+- Fix ereg_replace() core dump
+- Fix off-by-one error in lex.c which caused garbage chars on some platforms
+  Many thanks to "Craig P. Forbes" <craig@mccabe.com> for catching this one.
+- Fix stack inconsistency which caused 01 != 1
+- Add user-callable msql_close() function
+- Add Apache 1.2 version of old get_client_block() code
+- Add # comments - # has to be first char on a line inside <? > block
+- Eliminate extraneous space in custom header fields in Apache module version
+
 Sept. 22 Version 2.0b7
 - Make max file size unlimited unless MAX_FILE_SIZE is specified
 - Fix parser problem which would ignore the last line of a file unless there
@@ -23,7 +98,7 @@ Sept. 22 Version 2.0b7
   older versions of gcc
 - Switched to Posix regular expression library calls
 - Included Henry Spencer's Posix-compatible regex library for systems that do
-  not have natic Posix regexp support
+  not have native Posix regexp support
 - Added new Extended Regular expression calls Ereg(), Eregi(), Ereg_Replace()
   and Eregi_Replace()
 - For backward compatibility, reg_match(), reg_search() and reg_replace()

@@ -2,7 +2,7 @@
 *                                                                            *
 * PHP/FI                                                                     *
 *                                                                            *
-* Copyright 1995,1996 Rasmus Lerdorf                                         *
+* Copyright 1995,1996,1997 Rasmus Lerdorf                                    *
 *                                                                            *
 *  This program is free software; you can redistribute it and/or modify      *
 *  it under the terms of the GNU General Public License as published by      *
@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: stack.c,v 1.21 1996/07/18 18:20:30 rasmus Exp $ */
+/* $Id: stack.c,v 1.29 1997/01/09 16:37:10 rasmus Exp $ */
 /* Expression Stack */
 #include <stdlib.h>
 #include <string.h>
@@ -53,8 +53,9 @@ void ClearStack(void) {
 	
 void Push(char *value, int type) {
 	Stack *new, *s=NULL;
-	VarTree *t;
-	int next=0;
+	VarTree *t, *t2=NULL;
+	int next=0,skip=0;
+	char *name=NULL;
 
 	if(!value) return;
 	if(type==ARRAY) {
@@ -69,16 +70,36 @@ void Push(char *value, int type) {
 	new->next   = NULL;
 	new->strval = NULL;
 	new->var = NULL;
-	if(type==DNUMBER || type==LNUMBER) {
-		new->strval = estrdup(2,value);
+	new->flag = 0;
+	if(type==DNUMBER) {
 		new->intval = atol(value);
 		new->douval = atof(value);
+		while(*(value+skip) && *(value+skip)=='0' && *(value+skip+1)!='.') skip++;
+		if(strlen(value+skip)) new->strval = estrdup(2,value+skip);
+		else new->strval = estrdup(2,"0");
+ 	} else if(type==LNUMBER) {
+		new->intval = atol(value);
+		new->douval = atof(value);
+		while(*(value+skip) && *(value+skip)=='0' && *(value+skip+1)!='.') skip++;
+		if(strlen(value+skip)) new->strval = estrdup(2,value+skip);
+		else new->strval = estrdup(2,"0");
 	} else if(type==STRING) {
 		new->strval = SubVar(estrdup(2,value));
 		new->intval = atol(new->strval);
 		new->douval = atof(new->strval);
 	} else if(type==VAR) {
-		t = GetVar(value,NULL,0);
+		if(*value == VAR_INIT_CHAR) {
+			t = GetVar(value+1,NULL,0);
+			if(t && t->strval) {
+				name = strdup(t->strval);
+				t2 = GetVar(t->strval,NULL,0);
+				t = t2;
+			} else {
+				name = strdup(value+1);
+			}
+		} else {
+			t = GetVar(value,NULL,0);
+		}
 		if(!t) {
 #if DEBUG
 			Debug("Undefined variable: %s\n",value);
@@ -87,6 +108,17 @@ void Push(char *value, int type) {
 			new->intval = 0;
 			new->douval = 0;
 			new->type = STRING;
+			Push("",STRING);	
+			if(name && *value == VAR_INIT_CHAR) {
+				SetVar(name,0,0);
+				free(name);	
+				t = GetVar(value,NULL,0);
+			} else {
+				SetVar(value,0,0);
+				t = GetVar(value,NULL,0);
+			}
+			new->var = t;
+			new->flag = 1;
 		} else {
 			new->strval = estrdup(2,t->strval);
 			new->intval = t->intval;

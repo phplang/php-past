@@ -18,6 +18,9 @@
 /* Define if you have the memcpy function.  */
 #undef HAVE_MEMCPY
 
+/* Define if you have the memmove function.  */
+#undef HAVE_MEMMOVE
+
 /* Define if you have the strdup function.  */
 #undef HAVE_STRDUP
 
@@ -98,6 +101,12 @@
 
 /* Define if you have the <memory.h> header file.  */
 #undef HAVE_MEMORY_H
+
+/* Define if you have the <pwd.h> header file.  */
+#undef HAVE_PWD_H
+
+/* Define if you have the <grp.h> header file.  */
+#undef HAVE_GRP_H
 
 /* Define if you an ndbm compatible library (-ldbm).  */
 #undef NDBM

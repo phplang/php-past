@@ -2,7 +2,7 @@
 *                                                                            *
 * PHP/FI                                                                     *
 *                                                                            *
-* Copyright 1995,1996 Rasmus Lerdorf                                         *
+* Copyright 1995,1996,1997 Rasmus Lerdorf                                    *
 *                                                                            *
 *  This program is free software; you can redistribute it and/or modify      *
 *  it under the terms of the GNU General Public License as published by      *
@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: sort.c,v 1.3 1996/07/11 14:12:51 rasmus Exp $ */
+/* $Id: sort.c,v 1.4 1997/01/04 15:17:07 rasmus Exp $ */
 #include "php.h"
 #include <stdlib.h>
 #include "parse.h"

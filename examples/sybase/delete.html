@@ -1,0 +1,56 @@
+<html>
+<head>
+    <title>Delete Bookmark</title>
+</head>
+<body bgcolor="#ffffff" link="#0000ff" vlink="#ff0000" 
+    alink="#ff0000" text="#000000">
+
+<BODY background="/bookmarks/wood.gif">
+<center><H1>
+<img src=/bookmarks/mark-big.gif >
+Delete Bookmark</H1>
+<P><BR><BR>
+</center>
+
+<?
+    $rc=sybsql_connect();
+    $rc=sybsql_dbuse("mtest");
+
+    if ($parent == "/");
+        $prefix="";
+    else;
+        $prefix="/";
+    endif;
+>
+<BR>
+<CENTER>
+<H2>Select the entry to be deleted</H2>
+<H3>Warning : This cannot be undone!</H3>
+</CENTER>
+<br><br>
+<?
+    $qs="select name,path from bookmarks where type='F' and parent='$parent' order by name";
+    $rc=sybsql_query($qs);
+    $nrows=sybsql_numrows();
+    if ($nrows > 0);
+        $i=0;
+        while($i<$nrows);
+        sybsql_result("<img src=/bookmarks/folder.gif align=middle> <A href=/cgi-bin/phpwrap.sh/bookmarks/remove.html?parent=$parent&path=@1>@0</a><br>");
+        $i++;
+        endwhile;
+    endif;
+
+    $qs="select name,path from bookmarks where type='B' and parent='$parent' order by name";
+    $rc=sybsql_query($qs);
+    $nrows=sybsql_numrows();
+    if ($nrows > 0);
+        $i=0;
+        while ($i<$nrows);
+        sybsql_result("<img src=/bookmarks/book.gif align=middle><a href=/cgi-bin/phpwrap.sh/bookmarks/remove.html?parent=$parent&path=@1>@0</a><br>");
+            $i++;
+        endwhile;
+    endif;
+
+>
+</body>
+</html>

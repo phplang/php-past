@@ -2,7 +2,7 @@
 *                                                                            *
 * PHP/FI                                                                     *
 *                                                                            *
-* Copyright 1995,1996 Rasmus Lerdorf                                         *
+* Copyright 1995,1996,1997 Rasmus Lerdorf                                    *
 *                                                                            *
 *  This program is free software; you can redistribute it and/or modify      *
 *  it under the terms of the GNU General Public License as published by      *
@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: echo.c,v 1.29 1996/09/10 13:18:56 rasmus Exp $ */
+/* $Id: echo.c,v 1.37 1997/01/04 15:16:53 rasmus Exp $ */
 #include <stdlib.h>
 #include "php.h"
 #include "parse.h"
@@ -37,9 +37,6 @@ void Echo(char *format, int args) {
 	int num=args, done=0, type;
 	char *t,*st,*beg,*fmt;
 
-#if DEBUG
-	Debug("Calling php_header from Echo\n");
-#endif
 	php_header(0,NULL);
 	while(num) {	
 		s = Pop();
@@ -60,7 +57,6 @@ void Echo(char *format, int args) {
 		}
 		return;
 	}
-	st = t;
 	ParseEscapes(format);
 	t = format;
 	num=0;
@@ -121,9 +117,10 @@ void Echo(char *format, int args) {
 	}
 }
 
-/* originally from Perl 5, and copyright'd to Larry Wall, but I've rewritten
+/* 
+ * Originally from Perl 5, and copyright'd to Larry Wall, but I've rewritten
  * so much now that, aside from the quote below and a few odd
- * ideosyncrasies (sp?), it is entirely unrecognizable.
+ * ideosyncrasies, it is entirely unrecognizable.
  *
  * Please note that this is not an example of my finest coding abilities. :( 
  * Tim Vanderhoek (ac199@freenet.hamilton.on.ca)
@@ -348,7 +345,7 @@ void _AddSlashes(void) {
 
 /* 
  * If freeit is non-zero, then this function is allowed to free the
- * argument string.  If zero, it cannot free it
+ * argument string.  If zero, it cannot free it.
  */
 char *AddSlashes(char *string, int freeit) {
 	static char *temp=NULL;
@@ -378,6 +375,16 @@ char *AddSlashes(char *string, int freeit) {
 			if(temp!=string) strcpy(string,temp);
 		}
 	}
+#if HAVE_LIBPQ
+	if(strchr(string,'\"')) {
+		temp = _RegReplace("'","\\\"",string);
+		if(freeit) {
+			if(temp!=string) string=temp;
+		} else {
+			if(temp!=string) strcpy(string,temp);
+		}
+	}
+#endif
 #endif
 	return(string);
 }

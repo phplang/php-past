@@ -2,7 +2,7 @@
 *                                                                            *
 * PHP/FI                                                                     *
 *                                                                            *
-* Copyright 1995,1996 Rasmus Lerdorf                                         *
+* Copyright 1995,1996,1997 Rasmus Lerdorf                                    *
 *                                                                            *
 *  This program is free software; you can redistribute it and/or modify      *
 *  it under the terms of the GNU General Public License as published by      *
@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: rand.c,v 1.5 1996/09/19 04:50:03 rasmus Exp $ */
+/* $Id: rand.c,v 1.6 1997/01/04 15:17:04 rasmus Exp $ */
 #include <stdlib.h>
 #include "php.h"
 #include "parse.h"
