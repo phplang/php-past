@@ -1,0 +1,57 @@
+<html><head><title>Add a URL</title></head>
+<?SetErrorReporting(0)>
+<body>
+<center><h1>Add a URL</h1></center>
+
+<?$dbname="url_mgr">
+<?$pghost="localhost">
+<?$pgport="5432">
+<?
+   $database = pg_Connect($pghost, $pgport, "", "", $dbname);
+   if (!$database) {
+      echo "<hr><center><strong>";
+      echo "An error occured connecting to the database.<br>";
+      echo "Is the postmaster running on $pghost using port $pgport.<br>";
+      echo "<hr></strong></center>";
+      exit;
+   }
+>
+
+<?
+if($url);
+	$result = pg_Exec($database,"insert into urls values ('$url','$category','$description',0,0)");
+	if(!$result);
+        	echo "<center>";
+        	echo "<hr><strong>PostgreSQL :",pg_ErrorMessage($database),"</strong><hr>";
+        	echo "</center></body></html>";
+        	exit;
+	endif;
+
+endif>
+
+<center><table border=1>
+<form action="<?echo $PHP_SELF>" method="POST">
+<tr><td align="right">URL:</td>
+<td><input type="text" name="url" maxlength=128 size=40></td></tr>
+<tr><td align="right">Description:</td>
+<td><input type="text" name="description" maxlength=256 size=40></td></tr>
+<tr><td align="right">Category:</td>
+<td align="center">
+
+<select name="category">
+<?$result = pg_Exec($database,"select name from categories order by name");
+$num = pg_NumRows($result);
+$i=0>
+<option SELECTED><?echo pg_Result($result,$i,"name")>
+<?$i++>
+<?while ($i<$num)>
+<option><?echo pg_Result($result,$i,"name")>
+<?$i++>
+<?endwhile>
+</select>
+</td></tr>
+</table>
+<input type="submit" value="Add URL">
+</form></center></hr>
+<a href="<?echo $SCRIPT_NAME>pgurl_main.phtml">Back to Top Menu</a>
+</body></html>

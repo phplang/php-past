@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: info.c,v 1.27 1997/01/08 04:33:24 cvswrite Exp $ */
+/* $Id: info.c,v 1.32 1997/04/13 04:51:46 rasmus Exp $ */
 #include "php.h"
 #include "parse.h"
 #include <stdlib.h>
@@ -32,13 +32,12 @@
 #ifdef HAVE_GRP_H
 #include <grp.h>
 #endif
-#ifdef WINDOWS
-#include <dir.h>
-#endif
 #include <time.h>
 #if APACHE
 #include "http_protocol.h"
 #endif
+
+extern char **environ;
 
 void Info(void) {
 	struct stat sb;
@@ -46,20 +45,17 @@ void Info(void) {
 	struct passwd *pw;
 	struct group *gr;
 	char buf[512];
+	char **envp;
 #if APACHE
 	array_header *env_arr;
 	table_entry *env;
 	int i;
 	VarTree *var;
 #endif	
-#ifdef WINDOWS
-	int i;
-#else
 	FILE *fp;
-#endif
 
 	php_header(0,NULL);
-	sprintf(buf,"<html><head><title>PHP/FI</title></head><body><h1>PHP/FI Version %s</h1>by Rasmus Lerdorf (<a href=\"mailto:rasmus@vex.net\">rasmus@vex.net</a>)<p>The PHP/FI Web Site is at <a href=\"http://www.vex.net/php\">http://www.vex.net/php</a><p>\n",PHP_VERSION);
+	sprintf(buf,"<html><head><title>PHP/FI</title></head><body><h1>PHP/FI Version %s</h1>by Rasmus Lerdorf (<a href=\"mailto:rasmus@lerdorf.on.ca\">rasmus@lerdorf.on.ca</a>)<p>The PHP/FI Web Site is at <a href=\"http://www.vex.net/php/\">http://www.vex.net/php/</a><p>\n",PHP_VERSION);
 	PUTS(buf);
 	PUTS("This program is free software; you can redistribute it and/or modify\n");
 	PUTS("it under the terms of the GNU General Public License as published by\n");
@@ -72,13 +68,8 @@ void Info(void) {
 	PUTS("You should have received a copy of the GNU General Public License\n");
 	PUTS("along with this program; if not, write to the Free Software\n");
 	PUTS("Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.<p>\n");
-#ifdef WINDOWS
-	PUTS("Windows Version by Jesus Blanco je-blanc@uniandes.edu.co\n<p>");
-		i=0;
-		while (_environ[i]) {
-			PUTS(_environ[i++]);
-			PUTS("\n<br>");
-		}
+#ifdef WINNT
+	PUTS("<hr><b><i>Windows95/NT Version compiled with cygnus-2.7.2-961023</i></b>\n");
 #else
 	PUTS("<hr><b><i>Unix version:</i></b> ");
 	fp = popen("uname -a","r");
@@ -88,16 +79,14 @@ void Info(void) {
 		}
 		pclose(fp);
 	}
+#endif
 	
 	PUTS("<hr><b><i>Environment:</i></b><pre>");
-	fp = popen("env","r");
-	if(fp) {
-		while(fgets(buf,255,fp)) {
-			PUTS(buf);	
-		}
-		pclose(fp);
+	envp = environ;
+	while (*envp) {
+	    PUTS(*envp++);
+	    PUTS("\n");
 	}
-#endif
 #ifndef APACHE
 	{
 		char *sn, *pi;
@@ -320,6 +309,9 @@ void Info(void) {
 #endif
 #if PHPFASTCGI
 	PUTS("<b>FastCGI support enabled</b><br>\n");
+#endif
+#if PHP_SAFE_MODE
+	PUTS("<b>SAFE MODE Enabled!</b><br>\n");
 #endif
 	PUTS("</body></html>");
 }

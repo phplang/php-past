@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: calc.c,v 1.16 1997/01/04 15:16:48 rasmus Exp $ */
+/* $Id: calc.c,v 1.18 1997/02/21 19:26:12 rasmus Exp $ */
 #include <stdlib.h>
 #include <string.h>
 #include "php.h"
@@ -392,33 +392,43 @@ void DecBin(void) {
 	Push(temp+i+1,STRING);
 }
 
-/* Decimal to Hexadecimal */
+/* Decimal to Hexadecimal - Ben Eng */ 
 void DecHex(void) {
 	Stack *s;
-	char hex[17] = { '0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F',0 };
-	long num,exp,val;
-	char temp[32];
-	int i=0;
+	static char hex_digit[] = "0123456789abcdef";
+	char temp[64];
+	char *result;
+	int nibbles = sizeof( long ) * 2 ;
+	int i; /* char offset in buf */
+	int value;
+	long n;
 
 	s = Pop();
 	if(!s) {
-		Error("Stack error in dechex");
+		Error("Stack error in hexdec");
 		return;
 	}
-	num = s->intval;
-	if(num==0) {
-		Push("0",STRING);
-		return;
+	n = s->intval;	
+	i = nibbles; /* char offset in buffer */
+	result = temp + nibbles - 1; /* ensure at least one digit is returned */
+	while( --i >= 0 ) {
+		/* mask the low nibble */
+		value = n & 0x0f;
+		temp[i] = hex_digit[value];
+
+		/* shift over the next nibble */
+		if( i > 0 ) {
+			n >>= 4;
+
+			/* another significant digit? */
+			if( n != 0 ) result = temp + i - 1;
+		}
 	}
-	exp = log(num)/log(16);
-	while(exp>-1) {
-		val = num/pow(16,exp);
-		temp[i++] = hex[val];
-		temp[i]='\0';
-		if(val) num -= val*pow(16,exp);
-		exp--;
-	}
-	Push(temp,STRING);
+
+	/* terminate the string */
+	temp[nibbles] = '\0';
+
+	Push(result,STRING);
 }	
 
 /* Hexadecimal to Decimal */
@@ -481,25 +491,40 @@ long _OctDec(char *s) {
 /* Decimal to Octal */
 void DecOct(void) {
 	Stack *s;
-	long num,exp,val;
-	char temp[32];
-	int i=0;
+	long n;
+	char temp[128];
+	char *result;
+	int nibbles = sizeof( long ) * 5/2;
+	int i; /* char offset in buf */
+	int value;
 
 	s = Pop();
 	if(!s) {
 		Error("Stack error in decoct");
 		return;
 	}
-	num = s->intval;
-	exp = log(num)/log(8);
-	while(exp>-1) {
-		val = num/pow(8,exp);
-		temp[i++] = '0'+val;
-		temp[i]='\0';
-		if(val) num -= val*pow(8,exp);
-		exp--;
+	n = s->intval;
+
+	i = nibbles; /* char offset in buffer */
+	result = temp + nibbles - 1; /* ensure at least one digit is returned */
+	while( --i >= 0 ) {
+		/* mask the low nibble */
+		value = n & 0x07;
+		temp[i] = '0'+value;
+
+		/* shift over the next nibble */
+		if( i > 0 ) {
+			n >>= 3;
+
+			/* another significant digit? */
+			if( n != 0 ) result = temp + i - 1;
+		}
 	}
-	Push(temp,STRING);
+
+	/* terminate the string */
+	temp[nibbles] = '\0';
+
+	Push(result,STRING);
 }	
 
 void Abs(void) {

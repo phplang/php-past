@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: file.c,v 1.42 1997/01/04 15:16:54 rasmus Exp $ */
+/* $Id: file.c,v 1.61 1997/04/23 02:50:23 rasmus Exp $ */
 #include "php.h"
 #include <stdlib.h>
 #ifdef HAVE_UNISTD_H
@@ -38,12 +38,6 @@
 #if APACHE
 #include "http_protocol.h"
 #include "http_request.h"
-#endif
-#ifdef WINDOWS
-#include <dos.h>
-#include <sys\stat.h>
-#include <dir.h>
-#include <io.h>
 #endif
 
 static char *CurrentFilename=NULL;
@@ -95,22 +89,19 @@ void StripLastSlash(char *str) {
 	}
 }
 
-#ifdef WINDOWS
-int _OpenFile(char *filename, int top, long *file_size) {
-#else
+/* 
+ * Opens a file for parsing.  This function is overly complex and
+ * could use a rewrite/rethink.
+ */
 int OpenFile(char *filename, int top, long *file_size) {
-#endif
 	char *fn, *pi, *sn, *fn2=NULL, *fn3=NULL;
 	char *s=NULL, *ss=NULL;
-	int ret=-1;
-	int no_httpd=0, include=0;
+	int ret=-1, careful=1;
 	int fd;
-#ifdef PATTERN_RESTRICT
 	int err, len;
 	char erbuf[100];
 	regex_t re;
 	regmatch_t subs[1];
-#endif
 #ifdef PHP_ROOT_DIR
 	char temp[1024];
 #endif
@@ -137,8 +128,7 @@ int OpenFile(char *filename, int top, long *file_size) {
 	} else {
 		fn = filename;
 		pi = filename;
-		if(top) no_httpd=1;
-		else include=1;
+		careful=0;
 	}
 	/*
 	 * To prevent someone from uploading a file and then running it through php
@@ -148,13 +138,12 @@ int OpenFile(char *filename, int top, long *file_size) {
 		return(-1);
 	}
 #ifdef PATTERN_RESTRICT
-	if(fn[strlen(fn)-1]!='/') {
-		err = regcomp(&re, PATTERN_RESTRICT, 0);
-		if(err) {
-			len = regerror(err, &re, erbuf, sizeof(erbuf));
-			Error("Regex error %s, %d/%d `%s'\n", reg_eprint(err), len, sizeof(erbuf), erbuf);
-			return(-1);
-		}
+	err = regcomp(&re, PATTERN_RESTRICT, 0);
+	if(err) {
+		len = regerror(err, &re, erbuf, sizeof(erbuf));
+		Error("Regex error %s, %d/%d `%s'\n", reg_eprint(err), len, sizeof(erbuf), erbuf);
+		return(-1);
+	}
 #if DEBUG
 		Debug("Checking pattern restriction: \"%s\" against \"%s\"\n",PATTERN_RESTRICT,fn);
 #endif
@@ -166,15 +155,38 @@ int OpenFile(char *filename, int top, long *file_size) {
 			return(-1);
 		}
 		if(err==REG_NOMATCH) {
-			Error("Sorry, you are not permitted to load that file through PHP/FI.");
+			if(getenv("PATH_TRANSLATED")) {   /* ie. don't apply restriction when run from command line */
+				Error("Sorry, you are not permitted to load that file through PHP/FI.");
+				regfree(&re);
+				return(-1);
+			}
+		}
+		regfree(&re);
+	}
+#endif
+	/* Make sure the is no '..' in the path */
+	if(top) {
+		err = regcomp(&re, "\\.\\.", 0);
+		if(err) {
+			len = regerror(err, &re, erbuf, sizeof(erbuf));
+			Error("Regex error %s, %d/%d `%s'\n", reg_eprint(err), len, sizeof(erbuf), erbuf);
+			return(-1);
+		}
+		err = regexec(&re,fn,(size_t)1,subs,0);
+		if(err && err!= REG_NOMATCH) {
+			len = regerror(err, &re, erbuf, sizeof(erbuf));
+			Error("Regex error %s, %d/%d `%s'\n", reg_eprint(err), len, sizeof(erbuf), erbuf);
+			regfree(&re);
+			return(-1);
+		}
+		if(err!=REG_NOMATCH) {
+			Error("Sorry, you are not permitted to use '..' in your pathname.");
 			regfree(&re);
 			return(-1);
 		}
 		regfree(&re);
 	}
-#endif
-
-	fn = (char *)estrdup(1,FixFilename(fn,top,&ret));
+	fn = (char *)estrdup(1,FixFilename(fn,top,&ret,careful));
 	*file_size = (long)gsb.st_size;
 	CurrentFileSize = (long)gsb.st_size;
 	fd=ret;
@@ -192,12 +204,13 @@ int OpenFile(char *filename, int top, long *file_size) {
 #endif
 #endif
 		if(sn) {
-			fn = emalloc(1,sizeof(char) * (strlen(pi)+strlen(sn)+1));
+			fn = emalloc(1,sizeof(char) * (strlen(pi)+strlen(sn)+3));
 			strcpy(fn,sn);
 			s = strrchr(fn,'/');
 			if(s) *s='\0';
+			if(*pi!='/') strcat(fn,"/");
 			strcat(fn,pi);
-			fn2 = (char *) estrdup(1,FixFilename(fn,1,&ret));
+			fn2 = (char *) estrdup(1,FixFilename(fn,1,&ret,careful));
 			if(ret==-1) fn2 = NULL;
 		} else {
 			fd=-1;
@@ -232,18 +245,27 @@ int OpenFile(char *filename, int top, long *file_size) {
 			}
 		}
 		if(fn3 && *fn3) {
+#if DEBUG
+			Debug("Opening fn3 [%s]\n",fn3);
+#endif
 			fd = open(fn3,O_RDONLY);
 			if(fd==-1) {
 				Error("Unable to open <i>%s</i>",fn3);
 				return(-1);
 			}
 		} else if(!fn2) {
+#if DEBUG
+			Debug("Opening fn [%s]\n",fn);
+#endif
 			fd = open(fn,O_RDONLY);
 			if(fd==-1) {
 				Error("Unable to open <i>%s</i>",fn);
 				return(-1);
 			}
 		} else {
+#if DEBUG
+			Debug("Opening fn2 [%s]\n",fn2);
+#endif
 			fd = open(fn2,O_RDONLY);
 			if(fd==-1) {
 				Error("Unable to open <i>%s</i>",fn2);
@@ -253,7 +275,7 @@ int OpenFile(char *filename, int top, long *file_size) {
 		if(top) SetStatInfo(&gsb);
 		
 #if ACCESS_CONTROL
-		if(!no_httpd && !include) {
+		if(top) {
 			if(CheckAccess(pi,gsb.st_uid)<0) return(-1);
 		}
 #endif
@@ -271,7 +293,8 @@ int OpenFile(char *filename, int top, long *file_size) {
 #else
 		ss = getenv("PATH_INFO");
 #endif
-		Error("Unable to open: <i>%s</i>",ss?ss:"null");
+		if(!ss) Error("Unable to open: <i>%s</i>",filename?filename:"null");
+		else Error("Unable to open: <i>%s</i>",ss);
 	}
 	return(fd);
 }
@@ -281,7 +304,7 @@ int OpenFile(char *filename, int top, long *file_size) {
  * directory portion of the passed path and the PATH_DIR
  * environment variable will be set
  */
-char *FixFilename(char *filename, int cd, int *ret) {
+char *FixFilename(char *filename, int cd, int *ret, int careful) {
 	static char temp[1024];
 	char path[1024];
 	char fn[128], user[128], *s;
@@ -289,27 +312,33 @@ char *FixFilename(char *filename, int cd, int *ret) {
 	int st=0;
 	char o='\0';
 	int l=0;
-#ifdef WINDOWS
-	FILE *stream;
-#endif
 
 	s = strrchr(filename,'/');
 	if(s) {
-		strcpy(fn,s+1);
+		strncpy(fn,s+1,sizeof(fn));
+		fn[sizeof(fn) - 1]='\0';
 		o=*s;
 		*s='\0';
-		strcpy(path,filename);
+		if(strlen(filename)==0) {
+			strcpy(path,"/");
+		} else {
+			strncpy(path,filename,sizeof(path));
+			path[sizeof(path) - 1]='\0';
+		}
 		*s=o;
 	} else {
 #ifdef PHP_ROOT_DIR
-		strcpy(path,PHP_ROOT_DIR);	
+		strncpy(path,PHP_ROOT_DIR,sizeof(path));	
+		path[sizeof(path)-1]='\0';
 #else
 		path[0] = '\0';
 #endif
-		strcpy(fn,filename);
+		strncpy(fn,filename,sizeof(path));
+		fn[sizeof(fn)-1]='\0';
 	}
 	if(fn && *fn=='~') {
-		strcpy(path,fn);
+		strncpy(path,fn,sizeof(path));
+		path[sizeof(path)-1]='\0';
 		fn[0]='\0';
 	}
 	if(*path) {
@@ -319,7 +348,7 @@ char *FixFilename(char *filename, int cd, int *ret) {
 				o=*s;
 				*s='\0';
 			}
-			strcpy(user,path+1);
+			strcpy(user,path+1); /* This strcpy is safe, path size is known */
 			if(s) {
 				*s=o;		
 				strcpy(temp,s);
@@ -333,7 +362,10 @@ char *FixFilename(char *filename, int cd, int *ret) {
 				  pd = getenv(PHP_PUB_DIRNAME_ENV);
 #endif
 				  if (pd == 0) pd = PHP_PUB_DIRNAME;
-				  sprintf(path,"%s/%s%s",pw->pw_dir,pd,temp);
+				  strcpy (path,pw->pw_dir);
+				  strcat (path,"/");
+				  strncat (path, pd, sizeof(path) - strlen(path) - 1);
+				  strncat (path, temp, sizeof(path) - strlen(path) - 1);
 				}
 			}
 #endif
@@ -343,9 +375,11 @@ char *FixFilename(char *filename, int cd, int *ret) {
 				o=*s;
 				*s='\0';
 			}
+			/* path contents is known to be safe here */
 			strcpy(user,path+2);
 			if(s) {
 				*s=o;		
+				/* s is derived from path and thus also safe */
 				strcpy(temp,s);
 			} else temp[0]='\0';
 #if HAVE_PWD_H
@@ -357,38 +391,66 @@ char *FixFilename(char *filename, int cd, int *ret) {
 				  pd = getenv(PHP_PUB_DIRNAME_ENV);
 #endif
 				  if (pd == 0) pd = PHP_PUB_DIRNAME;
-				  sprintf(path,"%s/%s%s",pw->pw_dir,pd,temp);			}
+				  sprintf(path,"%s/%s%s",pw->pw_dir,pd,temp);
+				  strcpy(path,pw->pw_dir);
+				  strcat(path,"/");
+				  strncat(path, pd, sizeof(path) - strlen(path) - 1);
+				  strncat(path, temp, sizeof (path) - strlen(path) - 1);
+				}
+			}
+#endif
+		} else if(*path=='/') {
+#ifdef PHP_DOCUMENT_ROOT
+			if(strncmp(path,PHP_DOCUMENT_ROOT,strlen(PHP_DOCUMENT_ROOT))) {
+				strcpy(temp,PHP_DOCUMENT_ROOT);
+				if(strlen(path)>1) strcat(temp,path);
+				strncpy(path,temp,sizeof(path));
+				path[sizeof(path)-1]='\0';	
 			}
 #endif
 		}
 		temp[0]='\0';
 		if(cd) {
-			if(chdir(path)<0) {
+		strncpy(temp,path,sizeof(temp));
+retry:
+#if DEBUG
+			Debug("ChDir to %s\n",temp);
+#endif
+			if(chdir(temp)<0) {
 #if DEBUG
 				Debug("%d [%s]",errno,strerror(errno));
 #endif
+				s = strrchr(temp,'/');
+				if(s) {
+					*s='\0';
+					goto retry;
+				}
 			}
 		}
 		if(*fn) {
-			sprintf(temp,"%s/%s",path,fn);
-#ifndef WINDOWS
+			strncpy(temp,path,sizeof(temp));
+			strcat(temp,"/");
+			strncat(temp,fn,sizeof(temp)-strlen(path)-1);
+			temp[sizeof(temp)-1]='\0';
 			st = stat(temp,&gsb);
-#else
-			stream=fopen(temp, "r");
-			if (stream) {
-				st = stat(temp,&gsb);
-				fclose(stream);
-			} else
-				st = -1;
-#endif
 			if((st!=-1) && (gsb.st_mode&S_IFMT)==S_IFDIR) {
-				sprintf(temp,"%s/%s/index.html",path,fn);
+				strncpy(temp,path,sizeof(temp));
+				strcat(temp,"/");
+				strncat(temp,fn,sizeof(temp)-strlen(path)-1);
+				strcat(temp,"/index.html");
+				temp[sizeof(temp)-1]='\0';
 				st = stat(temp,&gsb);
 				if(st==-1) {
-					sprintf(temp,"%s/%s/index.phtml",path,fn);
+					strncpy(temp,path,sizeof(temp));
+					strcat(temp,"/");
+					strncat(temp,fn,sizeof(temp)-strlen(path)-1);
+					strcat(temp,"/index.phtml");
+					temp[sizeof(temp)-1]='\0';
 					st = stat(temp,&gsb);
 				}
-				sprintf(path,"%s/%s",path,fn);
+				strcat(path,"/");
+				strncat(path,fn,sizeof(path));
+				path[sizeof(path)-1]='\0';
 			} else if(st==-1) {
 				l = strlen(temp);
 				if(strlen(fn)>4) {
@@ -399,44 +461,33 @@ char *FixFilename(char *filename, int cd, int *ret) {
 				}
 			}
 		} else {
-#ifndef WINDOWS
 			st = stat(path,&gsb);
-#else
-			stream=fopen(path, "r");
-			if (stream) {
-				st = stat(path,&gsb);
-				fclose(stream);
-			} else
-				st = -1;
-#endif
 			if((st!=-1) && (gsb.st_mode&S_IFMT)==S_IFDIR) {
+				/* path is safe, this sprintf is fine */
 				sprintf(temp,"%s/index.html",path);
 				st = stat(temp,&gsb);
 				if(st==-1) {
+					/* this one is safe too */
 					sprintf(temp,"%s/index.phtml",path);
 					st = stat(temp,&gsb);
 				}
-			} else strcpy(temp,path);
+			} else strcpy(temp,path); /* ditto */
 		}
 	} else {
-#ifndef WINDOWS
 		st = stat(fn,&gsb);
-#else
-		stream=fopen(fn, "r");
-		if (stream) {
-			st = stat(fn,&gsb);
-			fclose(stream);
-		} else
-			st = -1;
-#endif
 		if((st!=-1) && (gsb.st_mode&S_IFMT)==S_IFDIR) {
-			sprintf(temp,"%s/index.html",fn);
+			strncpy(temp,fn,sizeof(temp)-12);
+			strcat(temp,"/index.html");
 			st = stat(temp,&gsb);
 			if(st==-1) {
-				sprintf(temp,"%s/index.phtml",fn);
+				strncpy(temp,fn,sizeof(temp)-13);
+				strcat(temp,"/index.phtml");
 				st = stat(temp,&gsb);
 			}
-		} else strcpy(temp,fn);
+		} else {
+			strncpy(temp,fn,sizeof(temp));
+			temp[sizeof(temp)-1]='\0';
+		}
 	}		
 	*ret=st;	
 	return(temp);
@@ -471,9 +522,9 @@ char *getfilename(char *path, int ext) {
 
 	s = strrchr(path,'/');
 	if(s) {
-		strcpy(filename,s);
+		strncpy(filename,s,sizeof(filename));
 	} else {
-		strcpy(filename,path);
+		strncpy(filename,path,sizeof(filename));
 	}
 
 	if(!ext) {
@@ -484,7 +535,7 @@ char *getfilename(char *path, int ext) {
 }	
 
 void ClearStatCache(void) {
-	*CurrentStatFile=0;
+	if(CurrentStatFile) *CurrentStatFile=0;
 }
 
 void FileFunc(int type) {
@@ -519,17 +570,25 @@ void FileFunc(int type) {
 		case 7:
 			Error("Stack error in filectime");
 			break;
+		case 8:
+			Error("Stack error in filetype");
+			break;
 		}
 		return;
 	}
 #if APACHE
-	if(!CurrentStatFile) {
-		CurrentStatFile = estrdup(0,php_rqst->filename);
-		CurrentStatLength = strlen(php_rqst->filename);
-	}
+    if(!CurrentStatFile) {
+        CurrentStatFile = estrdup(0,php_rqst->filename);
+        CurrentStatLength = strlen(php_rqst->filename);
+		if(stat(CurrentStatFile,&sb)==-1) {
+			*CurrentStatFile=0;
+			Push("-1",LNUMBER);
+			return;
+		}
+    }
 #endif
-	if(!CurrentStatFile || (CurrentStatFile && strcmp(s->strval,CurrentStatFile))) {
-		if(strlen(s->strval) > CurrentStatLength) {
+	if (!CurrentStatFile || strcmp(s->strval,CurrentStatFile)) {
+		if (strlen(s->strval) > CurrentStatLength) {
 			CurrentStatFile = estrdup(0,s->strval);
 			CurrentStatLength = strlen(s->strval);
 		} else {
@@ -574,6 +633,29 @@ void FileFunc(int type) {
 		sprintf(temp,"%ld",(long)sb.st_ctime);
 		Push(temp,LNUMBER);
 		break;
+	case 8: /* filetype */
+		switch(sb.st_mode&S_IFMT) {
+		case S_IFIFO:
+			Push("fifo",STRING);
+			break;
+		case S_IFCHR:
+			Push("char",STRING);
+			break;
+		case S_IFDIR:
+			Push("dir",STRING);
+			break;
+		case S_IFBLK:
+			Push("block",STRING);
+			break;
+		case S_IFREG:
+			lstat(CurrentStatFile,&sb);
+			if((sb.st_mode&S_IFMT) == S_IFLNK)
+				Push("link",STRING);
+			else
+				Push("file",STRING);
+			break;	
+		}
+		break;
 	}
 }
 
@@ -585,14 +667,14 @@ void TempNam(void) {
 
 	s = Pop();
 	if(!s) {
-		Error("Stack error in tmpname");
+		Error("Stack error in tempnam");
 		return;
 	}
 	strncpy(p,s->strval,31);
 
 	s = Pop();
 	if(!s) {
-		Error("Stack error in tmpname");
+		Error("Stack error in tempnam");
 		return;
 	}
 	d = (char *) estrdup(1,s->strval);
@@ -611,13 +693,26 @@ void Unlink(void) {
 	}
 	if(!s->strval || (s->strval && !*(s->strval))) {
 		Error("Invalid filename in unlink");
+		Push("-1", LNUMBER);
 		return;
 	}
-	unlink(s->strval);
+#if PHP_SAFE_MODE
+	if(!CheckUid(s->strval)) {
+		Error("SAFE MODE Restriction in effect.  Invalid owner of file to be unlinked.");
+		Push("-1", LNUMBER);
+		return;	
+	}
+#endif
+	if (unlink(s->strval) == 0) {
+		Push("0", LNUMBER);
+	}
+	else {
+		Error("Unlink failed (%s)", strerror(errno));
+		Push("-1", LNUMBER);
+	}
 }
 
 void ReadLink(void) {
-#ifndef WINDOWS
 	Stack *s;
 	int ret;
 	char buf[256];
@@ -629,11 +724,14 @@ void ReadLink(void) {
 	}
 	if(!s->strval || (s->strval && !*(s->strval))) {
 		Error("Invalid path in ReadLink");
+		Push("-1", LNUMBER);
 		return;
 	}
 	ret = readlink(s->strval, buf , 256);
-	if(ret==-1) 
+	if(ret==-1) {
+		Error("ReadLink failed (%s)", strerror(errno));
 		Push("-1",LNUMBER);
+	}
 	else {
 		/*
 		 * Append NULL to the end of the string
@@ -641,14 +739,9 @@ void ReadLink(void) {
 		buf[ret] = '\0';
 		Push(buf,STRING);
 	}
-#else
-	Pop();
-	Error("ReadLink not available on this system");
-#endif
 }
 
 void LinkInfo(void) {
-#ifndef WINDOWS
 	Stack *s;
 	struct stat sb;	
 	int ret;
@@ -661,20 +754,19 @@ void LinkInfo(void) {
 	}
 	if(!s->strval || (s->strval && !*(s->strval))) {
 		Error("Invalid path in LinkInfo");
+		Push("-1", LNUMBER);
 		return;
 	}
 	ret = lstat(s->strval,&sb);
-	if(ret==-1) 
+	if(ret==-1) {
+		Error("LinkInfo failed (%s)", strerror(errno));
 		Push("-1",LNUMBER);
+	}
 	else
 	{
 		sprintf(temp,"%ld",(long)sb.st_dev);
 		Push(temp,LNUMBER);
 	}
-#else
-	Pop();
-	Error("LinkInfo not available on this system");
-#endif
 }
  
 void SymLink(void) {
@@ -691,6 +783,7 @@ void SymLink(void) {
 	}
 	if(!s->strval || (s->strval && !*(s->strval))) {
 		Error("Invalid filename in symlink");
+		Push("-1", LNUMBER);
 		return;
 	}
 	new = (char *) estrdup(1,s->strval);
@@ -701,11 +794,21 @@ void SymLink(void) {
 	}
 	if(!s->strval || (s->strval && !*(s->strval))) {
 		Error("Invalid filename in symlink");
+		Push("-1", LNUMBER);
 		return;
 	}
+
+#if PHP_SAFE_MODE
+	if(!CheckUid(s->strval)) {
+		Error("SAFE MODE Restriction in effect.  Invalid owner of file to be linked.");
+		Push("-1", LNUMBER);
+		return;	
+	}
+#endif
+
 	ret = symlink(s->strval, new);	
 	if(ret==-1) {
-		Error("%d [%s]",errno, strerror(errno));
+		Error("SymLink failed (%s)", strerror(errno));
 	}
 	sprintf(temp,"%d",ret);
 	Push(temp,LNUMBER);
@@ -713,6 +816,7 @@ void SymLink(void) {
 	Pop();
 	Pop();
 	Error("SymLink not available on this system");
+	Push("0", LNUMBER);
 #endif
 }
 
@@ -730,6 +834,7 @@ void Link(void) {
 	}
 	if(!s->strval || (s->strval && !*(s->strval))) {
 		Error("Invalid filename in link");
+		Push("-1", LNUMBER);
 		return;
 	}
 	new = (char *) estrdup(1,s->strval);
@@ -740,11 +845,19 @@ void Link(void) {
 	}
 	if(!s->strval || (s->strval && !*(s->strval))) {
 		Error("Invalid filename in link");
+		Push("-1", LNUMBER);
 		return;
 	}
+#if PHP_SAFE_MODE
+	if(!CheckUid(s->strval)) {
+		Error("SAFE MODE Restriction in effect.  Invalid owner of file to be linked.");
+		Push("-1", LNUMBER);
+		return;	
+	}
+#endif
 	ret = link(s->strval, new);	
 	if(ret==-1) {
-		Error("%d [%s]",errno, strerror(errno));
+		Error("Link failed (%s)", strerror(errno));
 	}
 	sprintf(temp,"%d",ret);
 	Push(temp,LNUMBER);
@@ -752,6 +865,7 @@ void Link(void) {
 	Pop();
 	Pop();
 	Error("Link not available on this system");
+	Push("0", LNUMBER);
 #endif
 }
 
@@ -768,6 +882,7 @@ void Rename(void) {
 	}
 	if(!s->strval || (s->strval && !*(s->strval))) {
 		Error("Invalid filename in rename");
+		Push("-1", LNUMBER);
 		return;
 	}
 	new = (char *) estrdup(1,s->strval);
@@ -778,21 +893,25 @@ void Rename(void) {
 	}
 	if(!s->strval || (s->strval && !*(s->strval))) {
 		Error("Invalid filename in rename");
+		Push("-1", LNUMBER);
 		return;
 	}
+#if PHP_SAFE_MODE
+	if(!CheckUid(s->strval)) {
+		Error("SAFE MODE Restriction in effect.  Invalid owner of file to be renamed.");
+		Push("-1", LNUMBER);
+		return;	
+	}
+#endif
 	ret = rename(s->strval, new);	
 	if(ret==-1) {
-		Error("%d [%s]",errno, strerror(errno));
+		Error("Rename failed (%s)", strerror(errno));
 	}
 	sprintf(temp,"%d",ret);
 	Push(temp,LNUMBER);
 }
 
-#ifdef WINDOWS
-void _Sleep(void) {
-#else
 void Sleep(void) {
-#endif
 	Stack *s;
 
 	s = Pop();
@@ -885,9 +1004,7 @@ void FpCloseAll(void) {
 			fclose(f->fp);
 			break;
 		case 2:
-#ifndef WINDOWS
 			pclose(f->fp);
-#endif
 			break;
 		}	
 		f = f->next;
@@ -925,6 +1042,15 @@ void Fopen(void) {
 	Debug("Opening [%s] with mode [%s]\n",s->strval,p);
 #endif
 	StripSlashes(s->strval);
+
+#if PHP_SAFE_MODE
+	if(!CheckUid(s->strval)) {
+		Error("SAFE MODE Restriction in effect.  Invalid owner of file to be opened.");
+		Push("-1",LNUMBER);
+		return;
+	}
+#endif
+
 	fp = fopen(s->strval,p);
 	if(!fp) {
 		Error("fopen(\"%s\",\"%s\") - %s",s->strval,p,strerror(errno));
@@ -952,19 +1078,23 @@ void Fclose(void) {
 	fp = FpFind(id);
 	if(!fp) {
 		Error("Unable to find file identifier %d",id);
+		Push("-1", LNUMBER);
 		return;
 	}
 	fclose(fp);
 	FpDel(id);
+	Push("0", LNUMBER);
 }
 
 void Popen(void) {
-#ifndef WINDOWS
 	Stack *s;
 	char temp[8];
 	FILE *fp;
 	int id;
 	char *p;
+#if PHP_SAFE_MODE
+	char *b, buf[1024];
+#endif
 
 	s = Pop();
 	if(!s) {
@@ -988,25 +1118,33 @@ void Popen(void) {
 #if DEBUG
 	Debug("Opening pipe to [%s] with mode [%s]\n",s->strval,p);
 #endif
+#if PHP_SAFE_MODE
+	b = strrchr(s->strval,'/');
+	if(b) {
+		sprintf(buf,"%s%s",PHP_SAFE_MODE_EXEC_DIR,b);
+	} else {
+		sprintf(buf,"%s/%s",PHP_SAFE_MODE_EXEC_DIR,s->strval);
+	}
+	fp = popen(buf,p);
+	if(!fp) {
+		Error("popen(\"%s\",\"%s\") - %s",buf,p,strerror(errno));
+		Push("-1",LNUMBER);
+		return;
+	}
+#else
 	fp = popen(s->strval,p);
 	if(!fp) {
 		Error("popen(\"%s\",\"%s\") - %s",s->strval,p,strerror(errno));
 		Push("-1",LNUMBER);
 		return;
 	}
+#endif
 	id = FpPush(fp,s->strval,2);
 	sprintf(temp,"%d",id);	
 	Push(temp,LNUMBER);
-#else
-	Pop();
-	Pop();
-	Push("-1",LNUMBER);
-	Error("Popen not available on this system");
-#endif
 }
 
 void Pclose(void) {
-#ifndef WINDOWS
 	Stack *s;
 	int id;
 	FILE *fp;
@@ -1021,14 +1159,12 @@ void Pclose(void) {
 	fp = FpFind(id);
 	if(!fp) {
 		Error("Unable to find file identifier %d",id);
+		Push("-1", LNUMBER);
 		return;
 	}
 	pclose(fp);
 	FpDel(id);
-#else
-	Pop();
-	Error("Popen not available on this system");
-#endif
+	Push("0", LNUMBER);
 }
 
 void Feof(void) {
@@ -1045,10 +1181,13 @@ void Feof(void) {
 	fp = FpFind(id);
 	if(!fp) {
 		Error("Unable to find file identifier %d",id);
+		Push("-1", LNUMBER);
 		return;
 	}
-	if(feof(fp)) Push("1",LNUMBER);
-	else Push("0",LNUMBER);
+	if(feof(fp))
+		Push("1",LNUMBER);
+	else
+		Push("0",LNUMBER);
 }
 
 void Fgets(void) {
@@ -1075,6 +1214,7 @@ void Fgets(void) {
 	fp = FpFind(id);
 	if(!fp) {
 		Error("Unable to find file identifier %d",id);
+		Push("", STRING);
 		return;
 	}
 	buf = emalloc(1,sizeof(char) * (len + 1));
@@ -1110,6 +1250,7 @@ void Fgetss(void) {
 	fp = FpFind(id);
 	if(!fp) {
 		Error("Unable to find file identifier %d",id);
+		Push("", STRING);
 		return;
 	}
 	buf = emalloc(1,sizeof(char) * (len + 1));
@@ -1210,6 +1351,7 @@ void Fputs(void) {
 	fp = FpFind(id);
 	if(!fp) {
 		Error("Unable to find file identifier %d",id);
+		Push("", STRING);
 		return;
 	}
 	ParseEscapes(buf);
@@ -1233,9 +1375,11 @@ void Rewind(void) {
 	fp = FpFind(id);
 	if(!fp) {
 		Error("Unable to find file identifier %d",id);
+		Push("-1", LNUMBER);
 		return;
 	}
 	rewind(fp);
+	Push("0", LNUMBER);
 }
 
 void Ftell(void) {
@@ -1254,6 +1398,7 @@ void Ftell(void) {
 	fp = FpFind(id);
 	if(!fp) {
 		Error("Unable to find file identifier %d",id);
+		Push("-1", LNUMBER);
 		return;
 	}
 	pos = ftell(fp);
@@ -1283,6 +1428,7 @@ void Fseek(void) {
 	fp = FpFind(id);
 	if(!fp) {
 		Error("Unable to find file identifier %d",id);
+		Push("-1", LNUMBER);
 		return;
 	}
 	ret = fseek(fp,pos,SEEK_SET);
@@ -1314,11 +1460,33 @@ void SetIncludePath(char *path) {
 
 #if APACHE
 void SetCurrentPD(char *pd) {
+	char *s;
+#ifdef PHP_ROOT_DIR
+	char *env = emalloc(0,sizeof(char) * (strlen(pd) + strlen(PHP_ROOT_DIR) + 2));
+#else
+	char *env = emalloc(0,sizeof(char) * (strlen(pd)+2));
+#endif
+	s = strrchr(pd,'/');
+#ifdef PHP_ROOT_DIR
+	if(!s) strncpy(env,PHP_ROOT_DIR,sizeof(env));
+#else
+	if(!s) strcpy(env,"/");
+#endif
+	else {
+		*s='\0';
+#ifdef PHP_ROOT_DIR
+		strcpy(env,PHP_ROOT_DIR);
+		strncat(env,pd,sizeof(env));
+#else
+		strncpy(env,pd,sizeof(env));
+#endif
+		*s='/';
+	}
 #if DEBUG
-	Debug("Setting PATH_DIR to %s\n",pd);
+	Debug("Setting PATH_DIR to %s\n",env);
 #endif
 	if(pd)
-		table_set(php_rqst->subprocess_env,"PATH_DIR",pd);
+		table_set(php_rqst->subprocess_env,"PATH_DIR",env);
 }
 #endif
 
@@ -1339,13 +1507,22 @@ void ChMod(void) {
 		Error("Stack error in chmod()");
 		return;
 	}
+#if PHP_SAFE_MODE
+	if(!CheckUid(s->strval)) {
+		Error("SAFE MODE Restriction in effect.  Invalid owner of file to be changed.");
+		Push("-1",LNUMBER);
+		return;
+	}
+#endif
 	ret = chmod(s->strval,mode);
+	if (ret < 0) {
+		Error("ChMod failed (%s)", strerror(errno));
+	}
 	sprintf(temp,"%d",ret);
 	Push(temp,LNUMBER);
 }	
 
 void ChOwn(void) {
-#ifndef WINDOWS
 	Stack *s;
 	int ret;
 	char temp[8];
@@ -1359,6 +1536,7 @@ void ChOwn(void) {
 	pw = getpwnam(s->strval);
 	if(!pw) {
 		Error("Unable to find entry for %s in passwd file",s->strval);
+		Push("-1", LNUMBER);
 		return;
 	}
 	s = Pop();	
@@ -1366,18 +1544,22 @@ void ChOwn(void) {
 		Error("Stack error in chown()");
 		return;
 	}
+#if PHP_SAFE_MODE
+	if(!CheckUid(s->strval)) {
+		Error("SAFE MODE Restriction in effect.  Invalid owner of file to be changed.");
+		Push("-1",LNUMBER);
+		return;
+	}
+#endif
 	ret = chown(s->strval,pw->pw_uid,-1);
+	if (ret < 0) {
+		Error("ChOwn failed (%s)", strerror(errno));
+	}
 	sprintf(temp,"%d",ret);
 	Push(temp,LNUMBER);
-#else
-	Pop();
-	Pop();
-	Error("Chown not available on this system");
-#endif
 }	
 
 void ChGrp(void) {
-#ifndef WINDOWS
 	Stack *s;
 	int ret;
 	char temp[8];
@@ -1391,6 +1573,7 @@ void ChGrp(void) {
 	if(s->intval != -1) gr = getgrnam(s->strval);
 	if(!gr) {
 		Error("Unable to find entry for %s in groups file",s->strval);
+		Push("-1", LNUMBER);
 		return;
 	}
 	s = Pop();	
@@ -1398,14 +1581,19 @@ void ChGrp(void) {
 		Error("Stack error in chown()");
 		return;
 	}
+#if PHP_SAFE_MODE
+	if(!CheckUid(s->strval)) {
+		Error("SAFE MODE Restriction in effect.  Invalid owner of file to be changed.");
+		Push("-1",LNUMBER);
+		return;
+	}
+#endif
 	ret = chown(s->strval,-1,gr->gr_gid);
+	if (ret < 0) {
+		Error("ChGrp failed (%s)", strerror(errno));
+	}
 	sprintf(temp,"%d",ret);
 	Push(temp,LNUMBER);
-#else
-	Pop();
-	Pop();
-	Error("Chgrp not available on this system");
-#endif
 }
 
 void MkDir(void) {
@@ -1425,11 +1613,10 @@ void MkDir(void) {
 		Error("Stack error in mkdir()");
 		return;
 	}
-#ifdef WINDOWS
-	ret = mkdir(s->strval);
-#else
 	ret = mkdir(s->strval,mode);
-#endif
+	if (ret < 0) {
+		Error("MkDir failed (%s)", strerror(errno));
+	}
 	sprintf(temp,"%d",ret);
 	Push(temp,LNUMBER);
 }	
@@ -1444,12 +1631,22 @@ void RmDir(void) {
 		Error("Stack error in rmdir()");
 		return;
 	}
+#if PHP_SAFE_MODE
+	if(!CheckUid(s->strval)) {
+		Error("SAFE MODE Restriction in effect.  Invalid owner of directory to be removed.");
+		Push("-1",LNUMBER);
+		return;
+	}
+#endif
 	ret = rmdir(s->strval);
+	if (ret < 0) {
+		Error("RmDir failed (%s)", strerror(errno));
+	}
 	sprintf(temp,"%d",ret);
 	Push(temp,LNUMBER);
 }	
 
-void File(void) {
+void PHPFile(void) {
 	Stack *s;
 	FILE *fp;
 	char buf[8192];
@@ -1465,6 +1662,15 @@ void File(void) {
 		Push("-1",LNUMBER);
 		return;
 	}
+
+#if PHP_SAFE_MODE
+	if(!CheckUid(s->strval)) {
+		Error("SAFE MODE Restriction in effect.  Invalid owner of file to be read.");
+		Push("-1",LNUMBER);
+		return;
+	}
+#endif
+		
 	fp = fopen(s->strval,"r");
 	if(!fp) {
 		Error("file(\"%s\") - %s",s->strval,strerror(errno));
@@ -1516,7 +1722,7 @@ void set_path_dir(char *pi) {
 	}
 #if APACHE
 #if DEBUG
-	Debug("Setting PATH_DIR to %s\n",env);
+	Debug("1. Setting PATH_DIR to %s\n",env);
 #endif
 	table_set(php_rqst->subprocess_env,"PATH_DIR",env);
 #else
@@ -1550,13 +1756,17 @@ void Virtual(void) {
 
 	if (!(rr = sub_req_lookup_uri (file, php_rqst))) {
 		Error("Unable to include file: %s", file);
-		if (rr) destroy_sub_req (rr);
+		if (rr)
+			destroy_sub_req (rr);
+		Push("-1", LNUMBER);
 		return;
 	}
 
 	if (rr->status != 200) {
 		Error("Unable to include file: %s", file);
-		if (rr) destroy_sub_req (rr);
+		if (rr)
+			destroy_sub_req (rr);
+		Push("-1", LNUMBER);
 		return;
 	}
 
@@ -1564,14 +1774,137 @@ void Virtual(void) {
 	if (rr->content_type &&
 		!strcmp(rr->content_type, "application/x-httpd-php")) {
 		Error("Cannot include a PHP/FI file "
-			"(use <code>&lt;?include \"%s\"&gt;</code> instead)", file);
-		if (rr) destroy_sub_req (rr);
+			  "(use <code>&lt;?include \"%s\"&gt;</code> instead)", file);
+		if (rr)
+			destroy_sub_req (rr);
+		Push("-1", LNUMBER);
 		return;
 	}
 
-	if (run_sub_req(rr))
+	if (run_sub_req(rr)) {
 		Error("Unable to include file: %s", file);
+		Push("-1", LNUMBER);
+	}
+	else {
+		Push("0", LNUMBER);
+	}
 
-	if (rr) destroy_sub_req (rr);
+	if (rr)
+		destroy_sub_req (rr);
 }
 #endif
+
+/*
+ * Read a file and write the ouput to stdout
+ */
+void ReadFile(void) {
+	Stack *s;
+	char buf[8092],temp[8];
+	FILE *fp;
+	int b,i, size;
+
+	s = Pop();
+	if(!s) {
+		Error("Stack error in ReadFile");
+		return;
+	}
+	if(!*(s->strval)) {
+		Push("-1",LNUMBER);
+		return;
+	}
+#if DEBUG
+	Debug("Opening [%s]\n",s->strval);
+#endif
+	StripSlashes(s->strval);
+
+#if PHP_SAFE_MODE
+	if(!CheckUid(s->strval)) {
+		Error("SAFE MODE Restriction in effect.  Invalid owner of file to be read.");
+		Push("-1",LNUMBER);
+		return;
+	}
+#endif
+	fp = fopen(s->strval,"r");
+	if(!fp) {
+		Error("ReadFile(\"%s\") - %s",s->strval,strerror(errno));
+		Push("-1",LNUMBER);
+		return;
+	}
+	size= 0;
+	php_header(0,NULL);
+	while((b = fread(buf, 1, sizeof(buf), fp)) > 0) {
+		for(i = 0; i < b; i++)
+			PUTC(buf [i]);
+		size += b ;
+	}
+	fclose(fp);
+	sprintf(temp,"%d",size);	
+	Push(temp,LNUMBER);
+}	
+
+/*
+ * Return or change the umask.
+ */
+void FileUmask(int args) {
+    char buf[16];
+    int oldumask;
+	Stack *s;
+
+    oldumask = umask(077);
+
+	if (args == 0) {
+		umask(oldumask);
+    }
+    else {
+		OctDec();
+		s = Pop();
+		if (!s) {
+			umask(oldumask); /* In case of errors the umask should
+							  * be changed back. */
+			Error("Stack error in Umask");
+			return;
+		}
+		umask(s->intval);
+    }
+
+    sprintf(buf, "%o", oldumask);
+	Push(buf, LNUMBER);
+}
+
+int CheckUid(char *fn) {
+	struct stat sb;
+	int ret;
+	long uid=0L, duid=0L;
+	char *s;
+
+	ret = stat(fn,&sb);
+	if(ret<0) return(0);
+	uid=sb.st_uid;
+	if(uid==getmyuid()) return(1);
+	s = strrchr(fn,'/');
+
+	/* This loop gets rid of trailing slashes which could otherwise be
+	 * used to confuse the function.
+	 */
+	while(s && *(s+1)=='\0' && s>fn) {
+		s='\0';
+		s = strrchr(fn,'/');
+	}
+
+	if(s) {
+		*s='\0';
+		ret = stat(fn,&sb);
+		*s='/';
+		if(!ret) return(0);
+		duid = sb.st_uid;
+	} else {
+		s = getcwd(NULL,1024);
+		if(!s) return(0);
+		ret = stat(s,&sb);
+		free(s);
+		if(!ret) return(0);
+		duid = sb.st_uid;
+	}
+	if(duid == getmyuid()) return(1);
+	else return(0);
+}

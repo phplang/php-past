@@ -23,7 +23,7 @@
  * Contributed by Paul Panotzki - Bunyip Information Systems
  *                                                         
  */
-/* $Id: fsock.c,v 1.9 1997/01/04 15:16:56 rasmus Exp $ */
+/* $Id: fsock.c,v 1.11 1997/04/15 03:40:08 rasmus Exp $ */
 #include "php.h"
 #include <stdlib.h>
 #ifdef HAVE_UNISTD_H
@@ -31,10 +31,11 @@
 #endif
 
 #include <sys/types.h>
-#ifndef WINDOWS
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <netdb.h>
+#if WINNT
+#undef AF_UNIX
 #endif
 #if defined(AF_UNIX)
 #include <sys/un.h>
@@ -45,7 +46,6 @@
 #include "parse.h"
 
 void FSockOpen(void) {
-#ifndef WINDOWS
 	Stack *s;
 	char temp[8];
 	FILE *fp;
@@ -135,10 +135,4 @@ void FSockOpen(void) {
 	id = FpPush(fp,s->strval,1);
 	sprintf(temp,"%d",id);	
 	Push(temp,LNUMBER);
-#else
-	Pop();
-	Pop();
-	Error("FSockOpen not available on this system");
-	Push("0",LNUMBER);
-#endif
 }	

@@ -1,5 +1,79 @@
 PHP/FI CHANGE LOG                                                    ChangeLog
 |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Apr. 23 Version 2.0b11
+- Change phpXBitHack default setting to off
+- Make sure default logging is not mysql if mysql is not available
+- Rebuild configure script with AutoConf 2.12
+- Fixed parse_str() bug which prevented parse_str to set a variable a 2nd time
+- FastCGI fixes
+- Fix bugs in Reset(), Next(), Prev(), Key() and End() functions
+- Date() changes - 0 year arg allowed, return integer type when appropriate
+- mysql install changes to reflect new single client library setup of 3.20.3+
+- Added soundex() function <borud@guardian.no>
+- Fix IsSet() function which was broken in 2.0b10
+- Fix ClearStatCache() bug
+- Added phpDebug Apache configuration directive to turn off ?info screen
+- Made ?info screen be off by default
+- Changed mechanism for fetching environment variables on ?info screen
+- Fixed various array-related problems introduced in 2.0b10
+- Fixed mysql hanging connection bug
+- Extend configure check for crypt() <scrappy@hub.org>
+- Fix sort() function to make it work properly with associative arrays
+- Fix sort() to handle any arbitrary array size
+- Add Pos() function
+- Add pgurl example <emkxp01@mtcc.demon.co.uk>
+- Add GetImageSize() function based on code from Daniel Schmitt
+- Fix echo format string escape character bug
+- Add PNG image format support to GetImageSize() function
+- Add syslog(3) support <ssb@guardian.no>
+- Add md5() function - Lachlan Roche
+- Add support for mSQL 2.0 specific data types
+- Add Chop() function
+- Add ReadFile() function <adelino@infologia.pt>
+- Add mysql_insert_id() function <adelino@infologia.pt>
+- Add mysql_affected_rows() function <adelino@infologia.pt>
+- Rewrite DecHex() and DecOct() to not use floating point <ben@jetpen.com>
+- Fix Apache PATH_DIR bug
+- Fix bug in End() and Prev() functions
+- Fix Unset/UserDefinedFunction interaction bug
+- Fix core dump caused by user defined function names longer than 21 chars
+- Parse escapes before passing argument to Eval()
+- Fix typo in internal comp_long() function <deleeuw@stat.ucla.edu>
+- A number of fixes related to unsetting of arrays
+- Make HEAD requests to Apache module behave correctly
+- Fix Solid_FetchRow() bug <mvberkum@sci.kun.nl>
+- Close any open Solid connections upon script termination
+- Solid_Result($result,<number>) should work now. This used to SIGSEGV
+- Better handling of the column length.
+- Solid Date and time values should be visible now
+- Solid varchar(5) was always truncated to 4 characters - fixed
+- Fix MkTime() arg check bug
+- Fix Eval() so it works when called from inside a function
+- Add Asort() function to sort an associative array and remove confusing
+  guessing code from the Sort() function
+- Add basic SNMP support
+- Fix PATTERN_RESTRICT bug
+- Add SAFE MODE for shared access restrictions geared at ISP setups
+- Added Username/Password support to the mysql_connect function
+- Fix "$a[01]" vs. $a[01] bug
+- Add Umask() function <ssb@guardian.no>
+- Remove windows support files completely - Windows binary available now
+- Add "-q" flag to CGI version to suppress Content-type header from command 
+  line
+- Sprintf() enhancement by Jaromir Dolecek <dolecek@ics.muni.cz>
+- Fix zombie process bug in GD interface <copan@ppp.fastnet.or.jp>
+- Add PHP_DOCUMENT_ROOT by default for CGI version (security advisory related) 
+- Check for '..' in path for CGI version (security advisory related)
+- Fix buffer overflow problems in FixFilename() function (security advisory)
+- Add initial support for Oracle databases <ssb@guardian.no>
+- Add headers option to Mail() <ssb@guardian.no>
+- Add FileType() function
+- Add CheckDate() function - Mitsuhiro Maeda <mitsu@tramp.co.jp>
+- Add alloca() function to local.c for systems that don't have it.
+- Add Username/Password support in all mysql functions <bonis@kiss.de>
+- Add cleanup function to make aborted Apache module requests clean up cleanly
+- Remove trailing slash exception on PATTERN_RESTRICT
+	
 Jan. 12/97 Version 2.0b10
 - Add missing windows_install.txt file
 - Add Sybase support <ma_muquit@fccc.edu>
@@ -10,7 +84,7 @@ Jan. 12/97 Version 2.0b10
 - Update mysql documentation
 - Remove useless mysql_regcase() function
 - Fixed postgres95 support for point and bool types <john@intelligent.co.uk>
-- Add IncludePath directive
+- Add IncludePath directive <ssb@guardian.no>
 - Fix inline ImageGif double-header problem <chall@koz.com>
 - Fix getnextchar() function which read 1 char too many
 - phpXBitHack support <root@thing.leech.com>

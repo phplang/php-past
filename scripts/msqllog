@@ -23,7 +23,7 @@ fi
 
 
 echo "Creating tables for user id $UUID..."
-/usr/local/mSQL/bin/msql phpfi <<EOF
+/usr/local/Minerva/bin/msql phpfi <<EOF
 CREATE TABLE log$UUID (
 	timestamp	INT,
 	filename	CHAR(64),

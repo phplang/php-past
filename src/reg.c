@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: reg.c,v 1.21 1997/01/04 15:17:05 rasmus Exp $ */
+/* $Id: reg.c,v 1.22 1997/04/13 04:51:52 rasmus Exp $ */
 #include <stdlib.h>
 #include "php.h"
 #include "parse.h"
@@ -30,7 +30,6 @@
  * reg_eprint - convert error number to name
  */
 char *reg_eprint(int err) {
-#ifndef WINDOWS
 	static char epbuf[150];
 	size_t len;
 
@@ -43,15 +42,10 @@ char *reg_eprint(int err) {
 		epbuf[sizeof(epbuf)-1]='\0';
 	}
 	return(epbuf);
-#else
-	Error("regex not available on this system");
-	return NULL;
-#endif
 }
 
 void RegMatch(char *reg_name, int search) {
 	Stack *s;	
-#ifndef WINDOWS
 	regex_t re;
 	regmatch_t subs[NS];
 	int err, len, i, l;
@@ -145,12 +139,6 @@ void RegMatch(char *reg_name, int search) {
 		}
 	}
 	regfree(&re);
-#else
-	Pop();
-	Pop();
-	Error("Regex not available on this system");
-	Push("",STRING);
-#endif
 }
 
 /*
@@ -165,7 +153,6 @@ void RegMatch(char *reg_name, int search) {
  */
 void RegReplace(void) {
 	Stack *s;	
-#ifndef WINDOWS
 	char *pattern;
 	char *string;
 	char *replace;
@@ -212,17 +199,9 @@ void RegReplace(void) {
 		return;	
 	}
 	Push(ret,STRING);
-#else
-	Pop();
-	Pop();
-	Pop();
-	Error("Regex not available on this system");
-	Push("0",LNUMBER);
-#endif
 }
 
 char *_RegReplace(char *pattern, char *replace, char *string) {
-#ifndef WINDOWS
 	char *buf, *nbuf;
 	char o;
 	int i,l,ll,new_l,allo;
@@ -303,15 +282,10 @@ char *_RegReplace(char *pattern, char *replace, char *string) {
 	}
 	regfree(&re);
 	return(buf);
-#else
-	Error("Regex not available on this system");
-	return((char *)-1);
-#endif
 }
 
 void EReg(char *reg_name, int icase) {
 	Stack *s;	
-#ifndef WINDOWS
 	regex_t re;
 	regmatch_t subs[NS];
 	int err, len, i, l;
@@ -392,17 +366,10 @@ void EReg(char *reg_name, int icase) {
 		Push(temp2,LNUMBER);
 	}
 	regfree(&re);
-#else
-	Pop();
-	Pop();
-	Error("Regex not available on this system");
-	Push("0",LNUMBER);
-#endif
 }
 
 void ERegReplace(void) {
 	Stack *s;	
-#ifndef WINDOWS
 	char *pattern;
 	char *string;
 	char *replace;
@@ -449,18 +416,10 @@ void ERegReplace(void) {
 		return;	
 	}
 	Push(ret,STRING);
-#else
-	Pop();
-	Pop();
-	Pop();
-	Error("Regex not available on this system");
-	Push("0",LNUMBER);
-#endif
 }
 
 void ERegiReplace(void) {
 	Stack *s;	
-#ifndef WINDOWS
 	char *pattern;
 	char *string;
 	char *replace;
@@ -507,17 +466,9 @@ void ERegiReplace(void) {
 		return;	
 	}
 	Push(ret,STRING);
-#else
-	Pop();
-	Pop();
-	Pop();
-	Error("Regex not available on this system");
-	Push("0",LNUMBER);
-#endif
 }
 
 char *_ERegReplace(char *pattern, char *replace, char *string, int icase) {
-#ifndef WINDOWS
 	char *buf, *nbuf;
 	char o;
 	int i,ni,l,ll,new_l,allo;
@@ -627,8 +578,4 @@ char *_ERegReplace(char *pattern, char *replace, char *string, int icase) {
 	}
 	regfree(&re);
 	return(buf);
-#else
-	Error("Regex not available on this system");
-	return ((char *)-1);
-#endif
 }

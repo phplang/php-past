@@ -1,4 +1,4 @@
-# $Id: Makefile.in,v 1.53 1997/01/12 21:51:38 rasmus Exp $
+# $Id: Makefile.in,v 1.68 1997/04/17 23:00:34 cvswrite Exp $
 #
 # Makefile for PHP/FI
 # Copyright 1995,1996,1997 Rasmus Lerdorf
@@ -41,10 +41,10 @@ USEDLIBS = @USEDLIBS@
 OPT_CFLAGS = @OPT_CFLAGS@
 INC_CFLAGS = @INC_CFLAGS@
 SYS_CFLAGS = @SYS_CFLAGS@
-CFLAGS = $(OPT_CFLAGS) $(INC_CFLAGS) $(SYS_CFLAGS) @PHPSENDMAIL@ -DSENDMAIL=\""@SENDMAIL@ -t"\"
+CFLAGS = $(OPT_CFLAGS) $(INC_CFLAGS) $(SYS_CFLAGS)
 LDFLAGS = @LDFLAGS@ @MSQL_LIB@ @MYSQL_LIB@ @SYB_LIB@ @SOLID_LIB@ @PQ_LIB@ @FCGI_LIB@ @LIBREGEXDIR@
 #DEBUG=-g -Wall -DDEBUG
-CPPFLAGS = @REGEX_INCLUDE@ -I. @CPPFLAGS@ @MSQL_INCLUDE@ @MSQL_DEF@ @SYB_DEF@ @SYB_INCLUDE@ @MYSQL_INCLUDE@ @SOLID_INCLUDE@ @SOLID_DEF@ @MYSQL_DEF@ @PQ_INCLUDE@ @PQ_DEF@ @FCGI_INCLUDE@ @FCGI_DEF@ @APACHE_INCLUDE@ @ACCESS_CONTROL@ @ACCESS_DIR@ @LOGGING@ @LOG_DIR@ @HGD@ @FILE_UPLOAD@ @APACHE@ @APACHE_API@ $(DEBUG) 
+CPPFLAGS = @REGEX_INCLUDE@ -I. @CPPFLAGS@ @MSQL_INCLUDE@ @MSQL_DEF@ @SYB_DEF@ @SYB_INCLUDE@ @MYSQL_INCLUDE@ @SOLID_INCLUDE@ @SOLID_DEF@ @MYSQL_DEF@ @PQ_INCLUDE@ @PQ_DEF@ @FCGI_INCLUDE@ @FCGI_DEF@ @APACHE_INCLUDE@ @ACCESS_CONTROL@ @ACCESS_DIR@ @LOGGING@ @LOG_DIR@ @HGD@ @FILE_UPLOAD@ @APACHE@ @APACHE_API@ @PHPSENDMAIL@ -DSENDMAIL=\""@SENDMAIL@ -t"\" @PHP_DOCUMENT_ROOT@ $(DEBUG) 
 
 PHP_PROGS: @OURREGEX@ @PRG@ @MODULE_TARGET@
 
@@ -53,23 +53,28 @@ DISTDEP = Makefile
 # Files to distribute.
 DISTFILES = ChangeLog README COPYING \
 	src/Makefile.in config.h.in configure.in configure \
-	install-sh install src/parse.raw src/lex.c src/main.c src/error.c \
+	install-sh install \
+	src/parse.raw src/lex.c src/main.c \
+	src/error.c \
 	src/date.c src/stack.c src/calc.c src/var.c src/echo.c src/php.h \
 	src/cond.c src/switch.c src/db.c src/while.c src/parse.h \
 	src/string.c src/msql.c src/sybsql.c src/pg95.c src/reg.c src/exec.c\
-	src/uniqid.c \
+	src/uniqid.c src/soundex.c src/syslog.c src/oracle.c src/oracle.h \
 	src/file.c src/crypt.c src/head.c src/info.c src/post.c src/type.c \
 	src/conf.c src/acc.c src/local.c src/dns.c src/log.c src/sort.c src/dir.c \
-	src/rand.c src/gd.c examples/log.html examples/log.readme examples/clock.html \
+	src/rand.c src/gd.c src/snmp.c \
+	examples/log.html examples/log.readme examples/clock.html \
+	examples/pgurl.readme examples/pgurl_add.phtml examples/pgurl_cat.phtml \
+	examples/pgurl_main.phtml \
 	src/parse.c src/mime.c src/fsock.c src/microtime.c src/mod_php.c src/mod_php.h \
-	src/pool.c src/regex/COPYRIGHT src/regex/Makefile \
+	src/pool.c src/md5.c src/md5.h src/global.h src/regex/COPYRIGHT src/regex/Makefile \
 	src/regex/README src/regex/WHATSNEW src/regex/cclass.h \
 	src/regex/cname.h src/regex/debug.c src/regex/engine.c \
 	src/regex/main.c src/regex/mkh src/regex/regcomp.c src/regex/regerror.c \
 	src/regex/regex.3 src/regex/regex.7 src/regex/regex.h \
 	src/regex/regex2.h src/regex/regexec.c src/regex/regfree.c \
 	src/regex/split.c src/regex/tests src/regex/utils.h \
-	src/mysql.c src/solid.c src/mail.c \
+	src/mysql.c src/solid.c src/mail.c src/image.c \
 	scripts/msqllog scripts/mysqllog \
 	examples/url.readme examples/url_add.html examples/url_cat.html \
 	examples/url_main.html examples/demo_main.html examples/demo_dir.html \
@@ -119,7 +124,8 @@ OBJS= parse.o lex.o main.o error.o date.o stack.o calc.o var.o \
 	  reg.o exec.o file.o crypt.o head.o info.o post.o \
 	  type.o conf.o acc.o local.o dns.o log.o sort.o dir.o rand.o \
 	  gd.o mime.o fsock.o microtime.o pg95.o pool.o \
-	  uniqid.o mysql.o solid.o mail.o
+	  uniqid.o soundex.o syslog.o mysql.o solid.o mail.o image.o md5.o \
+	  snmp.o oracle.o
 
 all: $(PHP_PROGS) @MODULE_TARGET@
 
@@ -173,7 +179,8 @@ module_user_build: $(OBJS)
 	@echo "mod_php.* and libphp.a should have been copied to your"
 	@echo "Apache src directory, if they weren't, do so manually."
 	@echo "Then edit your Confiration file for Apache and look for"
-	@echo "the EXTRA_CFLAGS line and add -D\\\"PHP/FI-2.0b10\\\", then on"
+	@echo "the EXTRA_CFLAGS line and add "
+	@echo "-DSERVER_SUBVERSION=\\\"PHP/FI-2.0b11\\\", then on"
 	@echo "the \"EXTRA_LIBS\" line and add the following to that line:"
 	@echo ""
 	@echo "-L. -lphp @HLNK@ @best_dbm@ @MSQL_LIB@ @MYSQL_LIB@ @LIBMSQL@ @SYB_LIB@ @LIBSYB@ @LIBMYSQL@ @SOLID_LIB@ @LIBSOLID@ @PQ_LIB@ @LIBPQ@ -lm"
@@ -270,6 +277,11 @@ pg95.o: pg95.c php.h parse.h
 mysql.o: mysql.c php.h parse.h
 solid.o: solid.c php.h parse.h
 mail.o: mail.c php.h parse.h
+md5.o: md5.c md5.h global.h php.h parse.h
 uniqid.o: uniqid.c php.h parse.h
+soundex.o: soundex.c php.h parse.h
 sybsql.o: sybsql.c php.h parse.h
+image.o: image.c php.h parse.h
+syslog.o: syslog.c php.h parse.h
+oracle.o: oracle.c oracle.h php.h parse.h
 install: all 

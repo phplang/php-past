@@ -1,0 +1,82 @@
+--  This is a PostgreSQL V6.0 version of the URL Manager pages presented
+--  in the examples section of the php-2.0b10 distribution.
+--
+--  We assume PHP/FI is compiled and installed as an Apache module.
+--
+--  It may not be perfect but it's a working example of what can be done
+--  with PostgresSQL and PHP/FI together.
+-- 
+--                           Keith Parks <emkxp01@mtcc.demon.co.uk>
+-- 
+--  To install this example, create a database, "url_mgr" is the default,
+--  but you may edit this name at the top of each of the 3 pgurl_*.phtml 
+--  files.
+-- 
+--  The user that httpd operates as must be declared to postgres. ie.
+--
+--    unix_prompt% createuser nobody
+-- 
+--  Then load this file into postgreSQL with:-
+--
+--    unix_prompt% psql -e url_mgr <pgurl.readme
+-- 
+--  Remember the owner of this database must grant update permissions on
+--  the tables to the owner of the httpd processes. ie.
+--
+--    url_mgr=> GRANT UPDATE on urls to nobody;
+--    url_mgr=> GRANT UPDATE on categories to nobody;
+--
+--  Then copy these pgurl_*.phtml files to a www directory somewhere and
+--  load up http://your.machine.domain/path/pgurl_main.phtml
+-- 
+CREATE TABLE urls (
+        url varchar(128),
+        category varchar(32),
+        description varchar(256),
+        hits_total int4,
+        hits_today int4
+);
+CREATE TABLE categories (name varchar(32),
+        description varchar(256)
+);
+insert into urls
+  values ('http://www.io.org/~rasmus','Home Pages','Rasmus'' home page at io.org',0,0);
+insert into urls
+  values ('http://madhaus.utcs.utoronto.ca/~rasmus','Home Pages','Rasmus'' home page at U of T',0,0);
+insert into urls
+  values ('http://www.yahoo.com','Search Engines','Yahoo''s Search Engine',0,0);
+insert into urls
+  values ('http://www.w3.org/hypertext/WWW/MarkUp/html3/Contents.html','Specifications','HTML 3.0 Specification',0,0);
+insert into urls
+  values ('http://query1.lycos.cs.cmu.edu/lycos-form.html','Search Engines','Lycos Search Form',0,0);
+insert into urls
+  values ('http://www.daimi.aau.dk/~rorschak/sl/ecfix.html','Sports','European Cup Qualifying Standings',0,0);
+insert into urls
+  values ('http://www.hal.com/~barry/Links/html.html','Web Documentation','Set of links to documentation on advanced HTML features',0,0);
+insert into urls
+  values ('http://www.mecklerweb.com/imall/','Shopping','Big shopping mall with lots of different things',0,0);
+insert into urls
+  values ('http://www.mbp.duke.edu/christensen/sitesG.html','Unix','Solaris Software Resources',0,0);
+insert into urls
+  values ('http://infotique.lm.com/cgi-bin/phpl.cgi?megamain.html','Shopping','Another shopping mall',0,0);
+insert into urls
+  values ('http://www.ednet.ns.ca/auto/rddc?submit=View+Diffs','Linux','DOSEmu Development Directory',0,0);
+insert into urls
+  values ('ftp://ftp.cs.helsinki.fi/pub/People/Torvalds_Linus/v2.0','Linux','Directory of /pub/People/Torvalds_Linus/v2.0',0,0);
+insert into urls
+  values ('ftp://ftp.ods.com/pub/linux/','Linux','Ods Com - Home of ld-so.',0,0);
+insert into urls
+insert into urls values ('ftp://tsx-11.mit.edu/pub/linux/','Linux','TSX-11 Linux areas',0,0);
+insert into urls values ('http://sunsite.unc.edu/pub/Linux','Linux','Sunsite Linux areas',0,0);
+insert into urls values ('ftp://tsx-11.mit.edu/pub/linux/ALPHA/Wine/development/','Linux','Wine Development',0,0);
+insert into categories values ('Specifications','Technical specifications');
+insert into categories values ('Search Engines','Good places to go look for things');
+insert into categories values ('Home Pages','Personal Home pages');
+insert into categories values ('Sports','Various sports related links');
+insert into categories values ('Web Documentation','Documentation related to designing web pages');
+insert into categories values ('Shopping','Sites where you can buy things on the net');
+insert into categories values ('Unix','Sites with technical Unix material');
+insert into categories values ('Linux','Linux OS related sites');
+CREATE UNIQUE INDEX name_u_btr_idx on categories using btree ( name );
+CREATE UNIQUE INDEX url_u_btr_idx on urls using btree ( url );
+VACUUM;

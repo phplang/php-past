@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: php.h,v 1.132 1997/01/12 21:51:39 rasmus Exp $ */
+/* $Id: php.h,v 1.160 1997/04/22 14:46:20 rasmus Exp $ */
 #include <stdio.h>
 #include <time.h>
 #include <sys/types.h>
@@ -35,6 +35,9 @@
 #include <regex.h>
 #else
 #include "regex.h"
+#endif
+#if PHPFASTCGI
+#include "fcgi_stdio.h"
 #endif
 #if APACHE
 #include "httpd.h"
@@ -172,6 +175,19 @@ extern request_rec *php_rqst;
 /* #define PATTERN_RESTRICT ".*\\.phtml$" */
 
 /*
+ * PHP_SAFE_MODE should be set if you are running PHP on a shared server
+ * and you want to restrict users from being able to access each others
+ * files and do other nasty things related to the fact that everyones'
+ * scripts all run as the same user id.  See the documentation for a
+ * full description of PHP's Safe Mode.
+ *
+ * The EXEC_DIR is the directory where Exec(), System(), PassThru() and 
+ * Popen() calls are allowed to execute binaries from in SAFE MODE.
+ */
+/* #define PHP_SAFE_MODE 1 */
+/* #define PHP_SAFE_MODE_EXEC_DIR "/usr/local/bin" */
+
+/*
  * Max size of a single line of input in the HTML files
  */
 #define LINEBUFSIZE	4096
@@ -213,9 +229,25 @@ extern request_rec *php_rqst;
  */
 #define PHP_AUTH_VARS 1
 
+/*
+ * SNMP Support
+ *
+ * The SNMP support in PHP is very rough.  It was written for ucd-snmp-3.1.3
+ * available from ftp.ece.ucdavis.edu:/pub/snmp/ucd-snmp.tar.gz or from
+ * sunsite.cnlab-switch.ch:/mirror/ucd-snmp/ucd-snmp.tar.gz
+ *
+ * To enable it, set the following #define to 1 and edit your Makefile's
+ * LIBS line adding something like, "-lsnmp" assuming you have put
+ * libsnmp.a somewhere on your linker path
+ *
+ * (Please do not send me SNMP related questions.  I know just enough
+ *  about SNMP to hack support into PHP for it, but nothing more.)
+ */
+/* #define PHP_SNMP_SUPPORT 1 */
+
 /*-- Do not touch anything after this point unless you are very brave --*/
 
-#define PHP_VERSION "2.0b10"
+#define PHP_VERSION "2.0b11"
 
 #define VAR_INIT_CHAR	'$'
 
@@ -262,8 +294,6 @@ extern request_rec *php_rqst;
 #define memcpy(d, s, n)		bcopy((s), (d), (n))
 #endif
 #endif
-
-#define MAX_CMD_LEN 21
 
 #define YYSTYPE long
 
@@ -516,9 +546,19 @@ void Date(int, int);
 void UnixTime(void);
 void MkTime(int);
 char *std_date(time_t);
+void CheckDate(void);
 
 /* uniqid.c */
 void UniqId(void);
+
+/* soundex.c */
+void Soundex(void);
+
+/* syslog.c */
+void OpenLog(void);
+void CloseLog(void);
+void Syslog(void);
+void php_init_syslog();
 
 /* parse.c */
 int yyparse(void);
@@ -578,6 +618,7 @@ void Global(void);
 void copyarray(VarTree *, VarTree *, VarTree *, int);
 void deletearray(VarTree *);
 void UnSet(char *);
+void Pos(void);
 
 /* echo.c */
 void Echo(char *, int);
@@ -682,8 +723,9 @@ char *php_urlencode(char *);
 void Ord(void);
 void QuoteMeta(void);
 void UcFirst(void);
-void Sprintf(void);
+void Sprintf(int);
 void Chr(void);
+void Chop(void);
 
 /* msql.c */
 void Msql(void);
@@ -773,7 +815,7 @@ long GetCurrentFileSize(void);
 void SetCurrentFileSize(long);
 char *GetIncludePath(void);
 void SetIncludePath(char *);
-char *FixFilename(char *, int, int *);
+char *FixFilename(char *, int, int *, int);
 char *getfilename(char *, int);
 void ClearStatCache(void);
 void FileFunc(int);
@@ -807,7 +849,7 @@ void ChGrp(void);
 void MkDir(void);
 void RmDir(void);
 int  FpPush(FILE *, char *, int);
-void File(void);
+void PHPFile(void);
 #if APACHE
 void php_init_file(php_module_conf *);
 #else
@@ -821,6 +863,9 @@ void FpCloseAll(void);
 #if APACHE
 void Virtual(void);
 #endif
+void ReadFile(void);
+void FileUmask(int);
+int CheckUid(char *);
 
 /* crypt.c */
 void Crypt(int);
@@ -832,6 +877,7 @@ void php_init_head(void);
 void SetCookie(int);
 void PushCookieList(char *, char *, time_t, char *, char *, int);
 CookieList *PopCookieList(void);
+void NoHeader(void);
 
 /* info.c */
 void Info(void);
@@ -930,7 +976,7 @@ void php_init_log(void);
 #endif
 
 /* sort.c */
-void Sort(void);
+void Sort(int);
 
 /* dir.c */
 void OpenDir(void);
@@ -1027,7 +1073,7 @@ void php_init_mysql(char *);
 void MYsql(void);
 void MYsqlResult(void);
 void MYsqlClose(void);
-void MYsqlConnect(void);
+void MYsqlConnect(int);
 void MYsqlFreeResult(void);
 void MYsqlNumRows(void);
 void MYsqlNumFields(void);
@@ -1039,6 +1085,8 @@ void MYsqlListDBs(void);
 void MYsqlDBName(void);
 void MYsqlDropDB(void);
 void MYsqlCreateDB(void);
+void MYsqlInsertId(void);
+void MYsqlAffectedRows(void);
 
 /* solid.c */
 void Solid_exec(void);
@@ -1051,7 +1099,35 @@ void Solid_fetchRow(void);
 void Solid_numFields(void);
 void Solid_fieldName(void);
 void Solid_freeResult(void);
+void Solid_closeAll(void);
 void php_init_solid(void);
 
 /* mail.c */
-void Mail(void);
+void Mail(int);
+
+/* md5.c */
+void Md5(void);
+
+/* image.c */
+void GetImageSize(void);
+
+#if PHP_SNMP_SUPPORT
+/* snmp.c */
+void phpsnmpget(void);
+void phpsnmpwalk(void);
+void phpsnmp(int);
+#endif
+
+/* oracle.c */
+void Ora_Close(void);
+void Ora_Commit(void);
+void Ora_CommitOff(void);
+void Ora_CommitOn(void);
+void Ora_Exec(void);
+void Ora_Fetch(void);
+void Ora_GetColumn(void);
+void Ora_Logoff(void);
+void Ora_Logon(void);
+void Ora_Open(void);
+void Ora_Parse(int);
+void Ora_Rollback();

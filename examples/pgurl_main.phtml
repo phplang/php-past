@@ -1,0 +1,91 @@
+<html><head><title>URL Manager</title></head>
+<body>
+<center><h1>URL Manager</h1></center>
+<?SetErrorReporting(0)>
+<?$dbname="url_mgr">
+<?$pghost="localhost">
+<?$pgport="5432">
+<?
+   $database = pg_Connect($pghost, $pgport, "", "", $dbname);
+   if (!$database) {
+      echo "<hr><center><strong>";
+      echo "An error occured connecting to the database.<br>";
+      echo "Is the postmaster running on $pghost using port $pgport.<br>";
+      echo "<hr></strong></center>";
+      exit;
+   }
+>
+
+To see a subset of the URL list, you may enter a keyword and/or a category
+you are interested in below.  You may also 
+<a href="<?echo $SCRIPT_NAME>pgurl_add.phtml">Add a URL</a>
+or <a href="<?echo $SCRIPT_NAME>pgurl_cat.phtml">Manage the Categories</a>.<br>
+<center>
+<form action="<?echo $SCRIPT_NAME>pgurl_main.phtml" method="POST">
+KeyWord: <input type="text" name="keyword" value="<?echo $keyword>" maxlength=30 size=30><br>
+Category: <select name="category">
+
+<?if ($category)>
+<option SELECTED><?echo $category>
+<?endif>
+
+<?if ($category != "All")>
+<option>All
+<?else>
+<option SELECTED>All
+<?endif>
+
+<?$result = pg_Exec($database,"select name from categories where name<>'$category' order by name")>
+<?$i=0>
+<?$num = pg_NumRows($result)>
+<?while($i<$num)>
+	<option><?echo pg_Result($result,$i,"name")>
+	<?$i++>
+<?endwhile>
+</select><br>
+<input type="submit" value="Show URL's">
+</form></center>
+
+
+<?if (!$category)>
+	</body></html>
+	<?exit>
+<?endif>
+
+<?if($category=="All");
+	$result = pg_Exec($database,"select url,description,category from urls where url like '%$keyword%' or description like '%$keyword%' order by url");
+else;
+	$result = pg_Exec($database,"select url,description,category from urls where ( url like '%$keyword%' or description like '%$keyword%' ) and category='$category' order by url");
+endif;
+
+if(!$result);
+        echo "<center>";
+        echo "<hr><strong>PostgreSQL :",pg_ErrorMessage($database),"</strong><hr>";
+        echo "</center></body></html>";
+        exit;
+endif;
+
+$num = pg_NumRows($result);>
+
+<center>
+<table border=1>
+<tr><th>URL</th><th>Description</th><th>Category</th></tr>
+<?$i=0;
+while ($i<$num)>
+	<tr>
+	<td>
+	<?$url=pg_Result($result,$i,"url")>
+	<a href="<?echo $url>"><?echo $url></a>
+	</td>
+	<td>
+	<?echo pg_Result($result,$i,"description")>
+	</td>
+	<td>
+	<?echo pg_Result($result,$i,"category")>
+	</td>
+	</tr>
+	<?$i++>
+<?endwhile>
+</table>
+
+</body></html>

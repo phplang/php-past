@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: log.c,v 1.31 1997/01/10 17:31:40 cvswrite Exp $ */
+/* $Id: log.c,v 1.32 1997/01/19 03:28:52 rasmus Exp $ */
 #include "php.h"
 #include <stdlib.h>
 #ifdef HAVE_UNISTD_H
@@ -813,9 +813,9 @@ void SQLLog(char *filename) {
 #endif
 #if MYSQLLOGGING
 	if(mysql_query(dbsock,query)<0) {
-#endif
 #if DEBUG
 		Debug("Query failed! (%s)\n",mysql_error(mysql));
+#endif
 #endif
 	}
 

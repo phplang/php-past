@@ -29,17 +29,27 @@
 #include "mod_php.h"
 
 module php_module;
+int saved_umask;
    
 #ifdef PHP_XBITHACK
-#define DEFAULT_PHP_XBITHACK 0
-#else
 #define DEFAULT_PHP_XBITHACK 1
+#else
+#define DEFAULT_PHP_XBITHACK 0
 #endif
 
 extern int apache_php_module_main(request_rec *r, php_module_conf *, int);
 
+void save_umask() {
+    saved_umask = umask(077);
+	umask(saved_umask);
+}
+
+void restore_umask() {
+	umask(saved_umask);
+}
+
 int send_parsed_php(request_rec *r) {
-	int fd, retval, errstatus;
+	int fd, retval;
 	php_module_conf *conf;
     
 	/* Make sure file exists */
@@ -66,19 +76,14 @@ int send_parsed_php(request_rec *r) {
 	/* Init timeout */
 	hard_timeout ("send", r);
 
-	if(r->header_only) {
-		send_http_header(r);
-		kill_timeout (r);
-		pclosef(r->pool, fd);
-		return OK;
-    }
-
+	save_umask();
 	chdir_file(r->filename);
 	add_common_vars(r);
 	add_cgi_vars(r);
 	apache_php_module_main(r,conf,fd);
 
-	/* Done, turn off timeout, close file and return */
+	/* Done, restore umask, turn off timeout, close file and return */
+	restore_umask();
 	kill_timeout (r);
 	pclosef(r->pool, fd);
 	return OK;
@@ -99,6 +104,7 @@ void *php_create_conf(pool *p, char *dummy) {
 	new->MaxDataSpace=8192;
 	new->XBitHack=DEFAULT_PHP_XBITHACK;
 	new->IncludePath=NULL;
+	new->Debug = 0;
 	return new;
 }
 
@@ -118,6 +124,9 @@ char *phpflaghandler(cmd_parms *cmd, php_module_conf *conf, int val) {
 		break;
 	case 2:
 		conf->XBitHack = val;
+		break;
+	case 3:
+		conf->Debug = val;
 		break;
 	}			
 	return NULL;
@@ -175,6 +184,7 @@ handler_rec php_handlers[] = {
 command_rec php_commands[] = {
 	{ "phpShowInfo",phpflaghandler,(void *)0,OR_FILEINFO,FLAG,"on|off" },
 	{ "phpLogging",phpflaghandler,(void *)1,OR_FILEINFO,FLAG,"on|off" },
+	{ "phpDebug",phpflaghandler,(void *)3,OR_FILEINFO,FLAG,"on|off" },
 	{ "phpUploadTmpDir",phptake1handler,(void *)0,OR_FILEINFO,TAKE1,"directory" },
 	{ "phpDbmLogDir",phptake1handler,(void *)1,OR_FILEINFO,TAKE1,"directory" },
 	{ "phpMsqlLogDB",phptake1handler,(void *)2,OR_FILEINFO,TAKE1,"database" },

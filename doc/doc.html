@@ -18,6 +18,8 @@ when it is bad, it is better than nothing.
 	<LI><A HREF="#starting">So, what can I do with PHP/FI?</A>
 	<LI><A HREF="#redirect">CGI Redirection</A>
 	<LI><A HREF="#security">Security Issues</A>
+	<LI><A HREF="#safemode">Safe Mode</A>
+	<LI><A HREF="#commandline">Running PHP/FI from the Command Line</A>
 	<LI><A HREF="#http_auth">HTTP Authentication</A>
 	<LI><A HREF="#module">Apache Module Notes</A>
 	<LI><A HREF="#directives">Apache Module Configuration Directives</A>
@@ -39,6 +41,7 @@ when it is bad, it is better than nothing.
 	<LI><A HREF="#mysql_support">mysql Support</A>
 	<LI><A HREF="#solid_support">Solid Support</A>
 	<LI><A HREF="#sybase_support">Sybase Support</A>
+	<LI><A HREF="#oracle_support">Oracle Support</A>
 	<LI><A HREF="#regexp">Regular Expressions</A>
 	<LI><A HREF="#escapes">Escape Characters</A>
 	<LI><A HREF="#script">PHP/FI Script Language</A>
@@ -181,6 +184,8 @@ the Apache src code directory location.<P></DD>
 <EM><STRONG>Step 2.</STRONG></EM><P>
 <P>
   Go into the src directory: <TT>cd src</TT><P>
+  Have a look at the php.h file.  There are a number of compile-time
+  options that can be set here.
 <P>
 <EM><STRONG>Step 3.</STRONG></EM><P>
 <P>
@@ -350,7 +355,7 @@ embedded SQL queries in your .HTML files.  See the section on
 <H2><A NAME="redirect">CGI Redirection</A></H2>
 
 <DL>
-<DT><STRONG>Apache</STRONG>
+<DT><STRONG>Apache 1.0.x Notes</STRONG>
 <DD>
 <P>A good way to run PHP/FI is by using a cgi redirection module
 with the Apache server.  Please note that you do not need to worry
@@ -467,6 +472,10 @@ server-based access control feature, people could potentially circumvent
 this security by loading the page through PHP/FI.  Note that this is not
 an issue for the Apache module version of PHP/FI.<P>
 <P>
+A second problem with the CGI version is that if it is placed in the system's
+cgi-bin directory it can be used to view any file on your system as long as
+the user id it runs as has access to it.
+<P>
 There are a couple of different solutions to this problem.  The easiest
 is probably to use the <STRONG>PATTERN_RESTRICT</STRONG> feature found
 in <EM>php.h</EM>.  This lets you define an extension (or a pattern of
@@ -484,7 +493,48 @@ up to run setuid as any user you wish.  Then files that are to be read
 by PHP/FI can be given appropriate permissions and files not to be read
 by PHP/FI should be owned by another user id and have their permissions
 changed accordingly.<P>
+<P>
+For additional security options related to sites which provide shared access
+to PHP, see the <a href="#safemode">Safe Mode</a> section.<P>
+<HR>
+<H2><A NAME="safemode">Safe Mode</A></H2>
+<P>
+PHP's Safe Mode tries to solve the common problem faced by many ISP's regarding
+letting all their users run CGI programs.  The common mechanism for making
+shared CGI access more secure is to use a cgi wrapper like the su_exec
+utility that comes with Apache.  This will not work for PHP when it is running
+as a module because it is not a separate process that can be setuid'ed.  <P>
+<P>
+Safe Mode applies to each function which could possibly be a security risk.
+Below is the current list of checks applied to each relevant function.  In
+the following list, PHP UID refers to the user id of the owner of the current
+file being parsed by PHP, and HTTP UID refers to the user id the httpd process
+is running as (usually nobody).
+<dl>
+<dt>Include, ReadFile, Fopen, File, Link, Unlink, Symlink, Rename, RmDir, ChMod, ChOwn, ChGrp
+<dd>Owner of file to be included must either be the PHP UID or the directory in which the
+file resides must be owned by the PHP UID.
+<dt>Exec, System, PassThru and Popen
+<dd>Executables to be forked and executed must reside in the directory
+defined by the PHP_SAFE_MODE_EXEC_DIR #define in php.h when PHP is compiled.
+<dt>Mysql_Connect
+<dd>This function takes an optional username to use to connect to an MySQL
+database.  When in safe mode, this username must either be the username of
+the owner of the current file being parsed, or the name of the httpd user
+(usually nobody).
+</dl><P>
 
+<HR>
+<H2><A NAME="commandline">Running PHP/FI from the command line</A></H2>
+<P>
+If you build the CGI version of PHP/FI, you can use it from the command line
+simply typing: <tt> php.cgi filename</tt> where filename is the file you want 
+to parse.  You can also create standalone PHP/FI scripts by making the first
+line of your script look something like:
+<PRE>    #!/usr/local/bin/php.cgi -q</PRE>
+The &quot;-q&quot; suppresses the printing of the HTTP headers.  You can leave
+off this option if you like.
+<P>
 <HR>
 <H2><A NAME="http_auth">HTTP Authentication</A></H2>
 <P>
@@ -556,6 +606,15 @@ authentication.  See <A HREF="#http_auth">HTTP Authentication</A>.<P>
 on startup using the same configuration files used to configure the httpd process.
 The module can even be configured on a per-directory basis by placing the
 <A HREF="#directives">PHP configuration directives</A> in the <EM>.htaccess</EM> files.<P>
+
+<DT><STRONG>Basis for custom server-based function</STRONG>
+<DD>
+<P>For C programmers interested in accessing their functions from within
+Apache, the PHP/FI framework provides a very simple interface to Apache
+and to PHP itself.  It is much easier to add a function to PHP and call that
+from a parsed page than it is to write an entire Apache module from scratch.
+See the <a href="#addfunc">Adding your own internal functions to PHP/FI</a>
+sections at the end of this document for further details.
 </DL>
 
 <H2><A NAME="directives">Apache Module Configuration Directives</A></H2>
@@ -566,23 +625,25 @@ within &lt;Directory&gt;...&lt;/Directory&gt; tags in <EM>access.conf</EM> or in
 individual <EM>.htaccess</EM> files:<P>
 <DL>
 <DT><STRONG>phpShowInfo <EM>on</EM>|<EM>off</EM></STRONG>
-<DD>Turn the PHP info footers on or off.<P>
+<DD>Turn the PHP info footers on or off.  Default is on.<P>
 <DT><STRONG>phpLogging <EM>on</EM>|<EM>off</EM></STRONG>
-<DD>Turn logging on or off.<P>
+<DD>Turn logging on or off.  Default is on.<P>
+<DT><STRONG>phpDebug <EM>on</EM>|<EM>off</EM></STRONG>
+<DD>Turn automatic ?info debug screen on or off.  Default is off.<P>
 <DT><STRONG>phpUploadTmpDir <EM>directory</EM></STRONG>
 <DD>Set the directory where form-uploaded files will be placed.<P>
 <DT><STRONG>phpDbmLogDir <EM>directory</EM></STRONG>
 <DD>Set the directory where dbm-based logging files will be written.<P>
 <DT><STRONG>phpSQLLogDB <EM>database</EM></STRONG>
-<DD>Set name of SQL database to use for logging.<P>
+<DD>Set name of SQL database to use for logging.  Default is &quot;phpfi&quot;<P>
 <DT><STRONG>phpSQLLogHost <EM>hostname</EM></STRONG>
-<DD>Set hostname where SQL database to use for logging is found.<P>
+<DD>Set hostname where SQL database to use for logging is found.  Default is localhost.<P>
 <DT><STRONG>phpAccessDir <EM>directory</EM></STRONG>
 <DD>Set the directory where PHP-internal access control files are stored.<P>
 <DT><STRONG>phpMaxDataSpace <EM>KiloBytes</EM></STRONG>
 <DD>Max size a sub-pool can grow to within the PHP module.  Setting this value
 to a low number will minimize the impact that mod_php will have on your system,
-but it may also limit people from writing complex scripts.<P>
+but it may also limit people from writing complex scripts.  The default is 8K.<P>
 <DT><STRONG>phpIncludePath <EM>colon-separated path</EM></STRONG>
 <DD>A colon-separated list of directories where php will look for
 files in when running <A HREF="#include">include()</A>.  The default
@@ -622,6 +683,10 @@ CGI Redirection mechanisms are available for NCSA and Netscape servers at the
 <A HREF="http://www.vex.net/php/files">PHP/FI File Archive</A>.<P>
 <HR>
 <H2><A NAME="access">Access Control</A></H2>
+<P>
+Note that the built-in PHP/FI based access control is likely to be discontinued
+in future versions.  You should seriously consider using the security mechanism
+that comes with your web server instead.
 <P>
 If you chose to include access control when you compiled the package, you
 may append <EM>?config</EM> to any URL to edit the access control file.  ie.<P>
@@ -744,10 +809,13 @@ a &quot;.phtml&quot; extension and call it with:<P>
 <P>
 By default, if you have compiled PHP with access logging enabled, then your
 pages will appear with a footer containing some access information.
-You may not want to see this footer, but still log hits.  You may turn these
-log footers off either by creating a rule in the <A HREF="#access">?config</A>
-section for the page, or by adding a tag like this to your
-page:<P><P><TT>&lt;?setshowinfo(0)&gt;</TT><P>
+You may not want to see this footer, but still log hits.  You can turn off this
+footer with a &quot;phpShowInfo off&quot; line in your Apache httpd.conf or 
+.htaccess files if you are running Apache.  If you are not running Apache, 
+you may turn these log footers off either by creating a rule in the 
+<A HREF="#access">?config</A> section for the page, or by adding a tag like this 
+to your page:<P><P><TT>&lt;?setshowinfo(0)&gt;</TT><P>
+
 <HR><H2><A NAME="relative">Relative vs. Absolute URL's - or, Why do my Images Break?</A></H2>
 <P>A problem common to all CGI wrappers is that the HTTPD program changes the current
 directory to the directory where whatever it is loading is stored.  In the case
@@ -1157,7 +1225,7 @@ form data directly to mysql queries.<P>
 <P>
 The Solid server is a high-volume SQL server. It supports the ANSI SQL2, ODBC,
 SAG CLI and X/Open SQL standards. More information about the Solid server is
-available at <A HREF="http://solid.digiface.nl/">solid.digiface.nl</A>.
+available at <A HREF="http://www.solidtech.com/">www.solidtech.com</A>.
 <P>
 The following PHP functions are available for the Solid Server:<P>
 <DL>
@@ -1233,6 +1301,72 @@ For a complete example, see the example following the
 <A HREF="#sybsql_result">sybSQL_Result()</A> function.<P>
 
 <HR>
+<H2><A NAME="oracle_support">Oracle Support</A></H2>
+The PHP/FI interface to Oracle uses the Oracle Call Interface (OCI).
+You need the OCI libraries on your system to compile PHP/FI with
+Oracle support.
+<P>
+The following PHP/FI functions are available for Oracle: <P>
+<DL>
+<DT><A HREF="#ora_close">Ora_Close()</A>
+<DT><A HREF="#ora_commit">Ora_Commit()</A>
+<DT><A HREF="#ora_commitoff">Ora_CommitOff()</A>
+<DT><A HREF="#ora_commiton">Ora_CommitOn()</A>
+<DT><A HREF="#ora_exec">Ora_Exec()</A>
+<DT><A HREF="#ora_fetch">Ora_Fetch()</A>
+<DT><A HREF="#ora_getcolumn">Ora_GetColumn()</A>
+<DT><A HREF="#ora_logoff">Ora_Logoff()</A>
+<DT><A HREF="#ora_logon">Ora_Logon()</A>
+<DT><A HREF="#ora_open">Ora_Open()</A>
+<DT><A HREF="#ora_parse">Ora_Parse()</A>
+<DT><A HREF="#ora_rollback">Ora_Rollback()</A>
+</DL><P>
+An example PHP/FI Oracle application:
+<PRE>
+&lt;?
+PutEnv("ORACLE_SID", "database");
+
+$conn = Ora_Logon("username", "password");
+
+if ($conn < 0) {
+    echo("Could not connect to Oracle.\n");
+    exit;
+}
+
+$cursor = Ora_Open($conn);
+
+if ($cursor &lt; 0) {
+    echo("Could not open a cursor.\n");
+    Ora_Logoff($conn);
+    exit;
+}
+
+Ora_CommitOff($cursor);
+
+if (Ora_Parse($cursor, "SELECT * FROM students") &lt; 0) {
+    echo("Parse failed!\n");
+    Ora_Logoff($conn);
+    exit;
+}
+
+$ncols = Ora_Exec($cursor);
+$err = Ora_Fetch($cursor);
+while ($err == 1) {
+    $i = 0;
+    while ($i &lt; $ncol) {
+        $col = Ora_GetColumn($cursor, $i);
+        echo("got: $col (" + GetType($col) + ")\n");
+	$i++;
+    }
+}
+
+Ora_Close($cursor);
+Ora_Logoff($conn);
+&gt;
+</PRE>
+<P>
+
+<HR>
 <H2><A NAME="regexp">Regular Expressions</A></H2>
 <P>
 Regular expressions are used for complex string manipulation in PHP/FI.
@@ -1282,13 +1416,13 @@ Some examples of regular expressions and what they do:<p>
 The following escape sequences are supported in most places where a
 quoted string argument is used:
 <blockquote>
-<pre>	\a --> bell
-	\b --> backspace
-	\n --> linefeed
-	\r --> carriage return
-	\t --> tab
-	\nnn --> octal char
-	\xXX --> hex char</pre>
+<pre>	\a --&gt; bell
+	\b --&gt; backspace
+	\n --&gt; linefeed
+	\r --&gt; carriage return
+	\t --&gt; tab
+	\nnn --&gt; octal char
+	\xXX --&gt; hex char</pre>
 </blockquote><P>
 <HR>
 <H2><A NAME="script">PHP/FI Script Language</A></H2>
@@ -1400,6 +1534,9 @@ printed out with:<P>
 Arrays can be copied by a simple assignment.  If $b is an array, then
 all the values can be copied to a new array named $a with:<P>
 <PRE>    $a = $b;</PRE><P>
+<P>Please not that if PHP does not force you to define variables before
+using them.  If in the above statement, $b was undefined, then $a would
+be set to an empty string (&quot;&quot;).</P>
 <P>
 The [] notation is also used to indicate that arrays are to be appended.
 If $a and $b are both arrays, then $b can be appended to $a by:<P>
@@ -1698,7 +1835,7 @@ You can loop within a PHP script by using the <EM>while(); endwhile;</EM> constr
 <P>
 The above example shows the use of a while loop to display the contents of
 an array.  <STRONG>WARNING</STRONG> although the PHP language supports incremental
-operators such as <STRONG>++</STRONG> and <STRONG>--</STRONG> to increment and decrement
+operators such as <STRONG>++</STRONG> and <STRONG>-<!>-</STRONG> to increment and decrement
 a variable, they are not treated exactly like they would be in the
 C language.  The variable is incremented right away.  There is no
 concept of incrementing the variable before or after the operation
@@ -1827,7 +1964,7 @@ actually is.  So, when I say:<P>
 Internally in the symbol table I store 3 versions.
 <P>
 <P>
-<PRE>    Integer:  1    <--- flag
+<PRE>    Integer:  1    &lt;-- flag
     Double :  1.0
     String :  "1"</PRE><P>
 <P>
@@ -1912,6 +2049,17 @@ This assigns the return value of the <EM>time()</EM> function to the
 <P>Escapes any $ \ or ' (if MAGIC_QUOTES is set) with a backslash.  See 
 also <a href="#stripslashes">StripSlashes()</a>.<P>
 
+<DT><A NAME="asort"><FONT SIZE="+1">ASort(array)</FONT></A>
+<DD>
+<P>Sort is used to sort a PHP associative array in ascending order.  Unlike the
+<a href="#sort">Sort()</a> function, ASort() maintains index-value pairings. 
+It understands the three variable types and will sort alphabetically if the array
+contains strings, and numerically if the array contains numbers.  In
+the case of an array which contains a mixture of types, the first type
+in the array will specify the sort method.  Note that if you are going to
+sort a non-associative array, you should use the <a href="#sort">Sort()</a>
+function.<P>
+
 <DT><A NAME="bindec"><FONT SIZE="+1">BinDec(binary_string)</FONT></A>
 <DD>
 <P>BinDec returns the decimal equivalent of the binary number
@@ -1931,14 +2079,19 @@ specified in the argument.<P>
 
 <DT><A NAME="chmod"><FONT SIZE="+1">ChMod(file,perms)</FONT></A>
 <DD>
-<P>ChMod changes the file permissions of the specified file.  The <EM>perms</EM>
-parameter must be specified in octal.<P>
+<P>ChMod changes the file permissions of the specified file.  The
+<EM>perms</EM> parameter must be specified in octal.<P>
 
 <DT><A NAME="chown"><FONT SIZE="+1">ChOwn(file,owner)</FONT></A>
 <DD>
 <P>ChOwn changes the specified file to be owned by the specified owner.  Note
 that this will only work if the PHP/FI binary is running as root (which is not
 generally a good idea).<P>
+
+<DT><A NAME="chop"><FONT SIZE="+1">Chop(string)</FONT></A>
+<DD>
+<P>Chop removes all trailing whitespaces including new-lines, tabs and
+spaces and returns the new string.<P>
 
 <DT><A NAME="chr"><FONT SIZE="+1">Chr(arg)</FONT></A>
 <DD>
@@ -1960,9 +2113,18 @@ called to clear the cached stat() result.<P>
 <P>closeDir closes a directory opened using the <A HREF="#opendir">
 openDir</A> function.<P>
 
+<DT><A NAME="closelog"><FONT SIZE="+1">CloseLog()</FONT></A>
+<DD>
+<P>
+CloseLog() closes the descriptor Syslog() uses to write to the system
+logger.  See the closelog(3) UNIX man page for more details.  See also <a
+href="#syslog">Syslog()</a>, <a href="#openlog">OpenLog()</a> and <a
+href="#initsyslog">InitSyslog()</a>.
+<P>
+
 <DT><A NAME="cos"><FONT SIZE="+1">Cos(arg)</FONT></A>
 <DD>
-<P>Sin returns the cosine of arg in radians.  See also <A HREF="#sin">Sin()</A>
+<P>Cos returns the cosine of arg in radians.  See also <A HREF="#sin">Sin()</A>
 and <A HREF="#tan">Tan()</A><P>
 
 <DT><A NAME="count"><FONT SIZE="+1">Count(array)</FONT></A>
@@ -2385,6 +2547,14 @@ ofthe file* functions are to be made and the file being accessed might
 change or disappear, the <a href="#clearstatcache">ClearStatCache()</a>
 should be called before the call to the file* function.<P>
 
+<DT><A NAME="filetype"><FONT SIZE="+1">fileType(filename)</FONT></A>
+<DD>
+<P>fileType returns the type of the file.  The return values are one of:
+&quot;dir&quot;, &quot;file&quot;,&quot;fifo&quot;,&quot;char&quot;,
+&quot;block&quot;, or &quot;link&quot;.  These are for, directory, 
+regular file, fifo special, character special, block special and symbolic
+link, respectively.<P>
+
 <DT><A NAME="fopen"><FONT SIZE="+1">$fp = fopen(filename,mode)</FONT></A>
 <DD>
 <P>fopen() opens a file and returns a file pointer index.  If the file
@@ -2463,6 +2633,22 @@ in nnn.nnn.nnn.nnn format.<P>
 <P>getHostByAddr converts the given IP address in nnn.nnn.nnn.nnn
 format into a fully qualified domain name.<P>
 
+<DT><A NAME="getimagesize"><FONT SIZE="+1">GetImageSize(filename)</FONT></A>
+<DD>
+<P>The GetImageSize() function takes either a full path filename, or a
+relative path relative to the location of the calling script.  It returns a
+3 element array consisting of width, height and type.  Width and height are
+in pixels, and a type of 1 means GIF, a 2 indicates a JPG file and a 3
+indicates a PNG file.  Other file types are not supported.  The fourth element
+in the returned array is a string containing, &quot;width=x height=y&quot; that
+is suitable for using directly in an IMG tag.  It is important to 
+note that the GD image library is not needed to use this function.  An example 
+follows:</P>
+<P><PRE>    &lt;?
+        $result = GetImageSize("img/flag.jpg");
+    &gt;
+    &lt;IMG SRC=&quot;img/flag.jpg&quot; ?echo $result[3]&gt; &gt;</PRE></P>
+
 <DT><A NAME="getlastaccess"><FONT SIZE="+1">getLastAccess()</FONT></A>
 <DD>
 <P>getLastAccess returns the date and time in unix time format of
@@ -2516,7 +2702,7 @@ of the file they represent as the primary component of the filename.<P>
 
 <DT><A NAME="getmypid"><FONT SIZE="+1">getMyPid()</FONT></A>
 <DD>
-<P>getMyPid() returns the current process id of the php parsing
+<P>getMyPid() returns the current process id of the PHP parsing
 process.<P>
 
 <DT><A NAME="getmyuid"><FONT SIZE="+1">getMyUid()</FONT></A>
@@ -2766,6 +2952,18 @@ colon-separated just like <CODE>$PATH</CODE> is in your UNIX shell.
 eg.<PRE>    &lt;?include(&quot;/path/filename.txt&quot;)&gt;</PRE>
 <P>
 
+<DT><A NAME="initsyslog"><FONT SIZE="+1">InitSyslog()</FONT></A>
+<DD>
+<P>
+InitSyslog() defines some PHP variables that you need when using
+OpenLog() and Syslog().  These variables are not defined by default
+for efficiency reasons.  The variables are named in the same way as in
+the &lt;syslog.h&gt; C include file (such as $LOG_LOCAL0).  See your
+syslog(3) UNIX manual page for more details.  See also <a
+href="#initsyslog">InitSyslog()</a>, <a href="#syslog">Syslog()</a>
+and <a href="#closelog">CloseLog()</a>.
+<P>
+
 <DT><A NAME="intval"><FONT SIZE="+1">intval(variable)</FONT></A>
 <DD>
 <P>intval returns the long integer value of the variable.  See also
@@ -2808,7 +3006,7 @@ Returns -1 in case of error.<P>
 <DD>
 <P>Log10 returns the base-10 logarithm of arg.<P>
 
-<DT><A NAME="mail"><FONT SIZE="+1">Mail(to,subject,message)</FONT></A>
+<DT><A NAME="mail"><FONT SIZE="+1">Mail(to,subject,message[,headers])</FONT></A>
 <DD>
 <P>Mail automatically mails the message specified in the message argument
 to the receiver specified in the to argument.  Multiple recipients can
@@ -2817,12 +3015,22 @@ eg. <PRE>   mail(&quot;rasmus@vex.net&quot;,
         &quot;My Subject&quot;, 
         &quot;Line 1\nLine 2\nLine 3&quot;);</PRE>
 
+If a fourth string argument is passed, this string is inserted at the
+end of the header, example: <PRE>
+   mail(&quot;ssb@guardian.no&quot;, &quot;the subject&quot;, $message,
+        &quot;X-Mailer: PHP/FI &quot; + phpversion());
+</PRE>
+
 <DT><A NAME="max"><FONT SIZE="+1">Max(array)</FONT></A>
 <DD>
 <P>Max returns the maximum value of a PHP array.  ie. it will search through
 the entire array looking for the max element.  If it is an array of strings,
 the returned string is the string which would be alphabetically last in the
 array if it were sorted.<P>
+
+<DT><A NAME="md5"><FONT SIZE="+1">Md5(message)</FONT></A>
+<DD>
+<P>Md5 returns the MD5 hash of a string value.<P>
 
 <DT><A NAME="microtime"><FONT SIZE="+1">Microtime()</FONT></A>
 <DD>
@@ -2870,10 +3078,11 @@ the SQL command performed.  If you want your application to be portable to mSQL 
 do not rely on this.
 <BR>This function is only available if mSQL support has been enabled in PHP.<P>
 
-<DT><A NAME="msql_close"><FONT SIZE="+1">msql_close($hostname)</FONT></A>
+<DT><A NAME="msql_close"><FONT SIZE="+1">msql_close()</FONT></A>
 <DD>
 <P>msql_Close closes the socket connection to the msql daemon, if an open
-connection exists.<P>
+connection exists.  Note, since only one concurrent mSQL session can be open
+at any one time, this function does not take an argument.<P>
 
 <DT><A NAME="msql_connect"><FONT SIZE="+1">msql_connect($hostname)</FONT></A>
 <DD>
@@ -3056,12 +3265,17 @@ describing the error will be placed in $phperrmsg, and unless the function was c
 as <STRONG>@mysql()</STRONG> then this error string will also be printed out.
 <BR>This function is only available if mysql support has been enabled in PHP.<P>
 
+<DT><A NAME="mysql_affected_rows"><FONT SIZE="+1">mysql_affected_rows()</FONT></A>
+<DD>
+<P>mysql_affected_rows() returns number of rows affected by the last INSERT, UPDATE
+or DELETE query.<P>
+
 <DT><A NAME="mysql_close"><FONT SIZE="+1">mysql_close()</FONT></A>
 <DD>
 <P>mysql_Close closes the socket connection to the mysql daemon, if an open
 connection exists.<P>
 
-<DT><A NAME="mysql_connect"><FONT SIZE="+1">mysql_connect($hostname)</FONT></A>
+<DT><A NAME="mysql_connect"><FONT SIZE="+1">mysql_connect($hostname [,username [,password]])</FONT></A>
 <DD>
 <P>mysql_Connect specifies the host name or IP on which the mysql database
 engine resides.  This is equivalent to the mysqlConnect() function in the mysql C
@@ -3070,7 +3284,11 @@ if the function isn't called, a connection to the local host is made by default
 on the first call to the mysql() function.  And, there is no need for an mysql_close
 function since only one connection may be active at any one time.  If a second call
 to mysql_connect() is made in a file, then the connection to the first host is
-automatically closed.  To explicitly connect to the mysql daemon on the local host, use:
+automatically closed.<P>
+An optional username and password may be provided.  Note that when PHP is compiled to run in <a href="#safemode">SAFE MODE</a> then the username must either
+be the same as the owner of the file being processed, or the owner of the httpd
+process (usually nobody).  Any other username will fail.<P>
+To explicitly connect to the mysql daemon on the local host, use:
 <STRONG><TT>&lt;?mysql_connect(&quot;localhost&quot;)&gt;</TT></STRONG><BR>This function is only
 available if mysql support has been enabled in PHP.<P>
 
@@ -3126,6 +3344,12 @@ be freed when the script is finished.  But, if you are sure you are not going to
 need the result data anymore in a script, you may call mysql_freeresult with the
 result identifier as an argument and the associated result memory will be freed.
 <BR>This function is only available if mysql support has been enabled in PHP.<P>
+
+<DT><A NAME="mysql_insert_id"><FONT SIZE="+1">mysql_insert_id()</FONT></A>
+<DD>
+<P>mysql_insert_id() returns the ID generated for an AUTO_INCREMENT field.  This function
+takes no arguments.  It will return the auto-generated ID returned by the last INSERT query 
+performed.<P>
 
 <DT><A NAME="mysql_listdbs"><FONT SIZE="+1">$result = mysql_ListDBs()</FONT></A>
 <DD>
@@ -3258,6 +3482,85 @@ are read using the <A HREF="#readdir">readDir</A> function, and an
 opened directory should be closed with the <A HREF="#closedir">
 closeDir</A> function.<P>
 
+<DT><A NAME="openlog"><FONT SIZE="+1">OpenLog(ident,options,facility)</FONT></A>
+<DD>
+<P>
+OpenLog() initializes the system for further Syslog() calls.  See the
+openlog(3) UNIX man page for more details.  See also <a
+href="#initsyslog">InitSyslog()</a>, <a href="#syslog">Syslog()</a> and <a
+href="#closelog">CloseLog()</a>.
+<P>
+
+<DT><A NAME="ora_close"><FONT SIZE="+1">Ora_Close(conn_ind)</FONT></A>
+<DD>Ora_Close() closes the Oracle connection identified by
+<var>conn_ind</var>.  Returns 0 upon success, -1 upon failure.
+<P>
+
+<DT><A NAME="ora_commit"><FONT SIZE="+1">Ora_Commit(conn_ind)</FONT></A>
+<DD>Commits the current transaction on <var>conn_ind</var>.  The
+current transaction starts from the <A
+HREF="#ora_logon">Ora_Logon()</A> call or from the last Ora_Commit()
+or <A HREF="#ora_rollback">Ora_Rollback()</A>, and lasts until an
+Ora_Commit(), <A HREF="#ora_rollback">Ora_Rollback()</A> or <A
+HREF="#ora_logoff">Ora_Logoff()</A> call is issued.  Ora_Commit()
+returns -1 (and an error message) upon failure. <P>
+
+<DT><A NAME="ora_commitoff"><FONT SIZE="+1">Ora_CommitOff(conn_ind)</FONT></A>
+<DD>Ora_CommitOff() turns off autocommit (automatic commit of every
+SQL data manipulation statement) on the Oracle connection
+<var>conn_ind</var>. <P>
+
+<DT><A NAME="ora_commiton"><FONT SIZE="+1">Ora_CommitOn(conn_ind)</FONT></A>
+<DD>Ora_CommitOff() turns on autocommit (automatic commit of every
+SQL data manipulation statement) on the Oracle connection
+<var>conn_ind</var>. <P>
+
+<DT><A NAME="ora_exec"><FONT SIZE="+1">Ora_Exec(cursor_ind)</FONT></A>
+<DD>Ora_Exec() executes the SQL statement associated with
+<var>cursor_ind</var> and prepares storage for select-list items.
+The return value is the number of columns for selects, or -1 on
+error. <P>
+
+<DT><A NAME="ora_fetch"><FONT SIZE="+1">Ora_Fetch(cursor_ind)</FONT></A>
+<DD>Ora_Fetch() retrieves a row from the database.  Returns 1 if a
+column was retrieved, 0 if there are no more columns to retrieve or -1
+on error. <P>
+
+<DT><A NAME="ora_getcolumn"><FONT SIZE="+1">Ora_GetColumn(cursor_ind,
+column)</FONT></A>
+<DD>Ora_GetColumn() fetches data for a single column in a returned
+row.  <A HREF="ora_fetch">Ora_Fetch()</A> must have been called prior
+to Ora_GetColumn().<P>
+
+<DT><A NAME="ora_logoff"><FONT
+SIZE="+1">Ora_Logoff(conn_ind)</FONT></A>
+<DD>Ora_Logoff() disconnects the logon data area belonging to
+<var>conn_ind</var> and frees used Oracle resources. <P>
+
+<DT><A NAME="ora_logoff"><FONT
+SIZE="+1">Ora_Logon(userid, password)</FONT></A>
+<DD>Ora_Logon() establishes a connection between PHP and an Oracle
+database with the given user id and password.  Returns 0 on success
+and -1 on failure.
+<P>
+
+<DT><A NAME="ora_open"><FONT SIZE="+1">Ora_Open(conn_ind)</FONT></A>
+<DD>Ora_Open() opens a cursor in Oracle that maintains state
+information about the processing of a SQL statement.  Returns a cursor
+index or -1 on error. <P>
+
+<DT><A NAME="ora_parse"><FONT SIZE="+1">Ora_Parse(cursor_ind,
+sql_statement [, defer])</FONT></A>
+<DD>Ora_Parse() parses a SQL statement or PL/SQL block and associates
+it with a cursor.  An optional third argument can be set to 1 to defer
+the parse.  Returns 0 on success or -1 on error. <P>
+
+<DT><A NAME="ora_rollback"><FONT
+SIZE="+1">Ora_Rollback(cursor_ind)</FONT></A>
+<DD>Ora_Rollback() rolls back the current transaction.  See <A
+HREF="#ora_commit">Ora_Commit()</A> for a definition of the current
+transaction. <P>
+
 <DT><A NAME="ord"><FONT SIZE="+1">Ord(arg)</FONT></A>
 <DD>
 <P>Ord returns the ASCII value of the first character of arg.<P>
@@ -3292,6 +3595,7 @@ a gif, you can create PHP/FI scripts that output images directly.  <P>
 <DD>
 <P>Pclose closes a pipe opened using the <A HREF="#popen">popen()</A>
 function.<P>
+
 
 <DT><A NAME="pg_close"><FONT SIZE="+1">pg_Close(connection_id)</FONT></A>
 <DD>
@@ -3493,6 +3797,12 @@ for write.  See the UNIX C library popen man page for more details.
 Any file opened with popen() should be closed using the 
 <A HREF="#pclose">pclose()</A> function.<P>
 
+<DT><A NAME="pos"><FONT SIZE="+1">pos(var)</FONT></A>
+<DD>
+<P>The Pos() function returns the numerical position of an array element within
+that array.  This is not very useful for normal arrays, but for associative 
+arrays it can be handy.</P>
+
 <DT><A NAME="pow"><FONT SIZE="+1">pow(x,y)</FONT></A>
 <DD>
 <P>Evaluates x raised to the power of y.  See also <a href="#exp">Exp()</a><P>
@@ -3537,6 +3847,14 @@ advanced to the next entry in the directory and the
 next call to this function will return the next entry in the
 directory.  Use the <A HREF="#opendir">openDir</A>
 function to open a directory before calling this function.<P>
+
+<DT><A NAME="readfile"><FONT SIZE="+1">ReadFile(filename)</FONT></A>
+<DD>
+<P>$size = ReadFile(Filename) - Reads the file filename and simply outputs
+it directly.  It returns the number of bytes actually read.  It is different
+from the File() command in that it does not store the file in memory, and it is
+safe for use on binary files.  This function is generally used where one might
+otherwise do a PassThru("cat filename").  Using ReadFile is more efficient.<P>
 
 <DT><A NAME="readlink"><FONT SIZE="+1">ReadLink(path)</FONT></A>
 <DD>ReadLink does the same as the readlink C function
@@ -3806,19 +4124,44 @@ This function is only available if Solid support has been enabled in PHP.<P>
 the three variable types and will sort alphabetically if the array
 contains strings, and numerically if the array contains numbers.  In
 the case of an array which contains a mixture of types, the first type
-in the array will specify the sort method.<P>
+in the array will specify the sort method.  Note that if you are going to
+sort an associative array, you should use the <a href="#asort">ASort()</a>
+function.<P>
+     
+<DT><A NAME="soundex"><FONT SIZE="+1">Soundex(string)</FONT></A>
+<DD>
+<P>This function takes a string argument and returns the soundex key
+   for the string.  Soundex keys have the property that words
+   pronounced similarly produce the same soundex key, and can thus
+   be used to simplify searches in databases where you know the
+   pronunciation but not the spelling.  This soundex function returns
+   a string 4 characters long, starting with a letter.<BR>
+   This particular soundex function is one described by Donald Knuth
+   in "The Art Of Computer Programming, vol. 3: Sorting And
+   Searching",  Addison-Wesley (1973), pp. 391-392.
+   <BR>
+   Example:
+   <PRE>
+   Euler and Ellery map to E460
+   Gauss and Ghosh map to G200
+   Hilbert and Heilbronn map to H416
+   Knuth and Kant map to K530
+   Lloyd and Ladd map to L300
+   Lukasiewicz and Lissajous map to L222
+     </PRE>
+     <P>
 
-<DT><A NAME="sprintf"><FONT SIZE="+1">Sprintf(format,arg)</FONT></A>
+<DT><A NAME="sprintf"><FONT SIZE="+1">Sprintf(format,arg [,arg,arg,arg,arg])</FONT></A>
 <DD>
 <P>Sprintf returns the string created by the formatted output defined
 by the format argument and arg.  It is similar to the formatted version
 of the <A HREF="#echo">echo</A> command, except this just returns the
 string while echo displays it.  It is also similar to the C function
 by the same name.  The difference being that this version does not
-accept multiple <EM>arg</EM> arguments.  If you need to format multiple
-arguments into a single string, simply call sprintf() once for each
-argument.  Note that the type of the argument doesn't affect the
-output.  The argument type is automagically converted to match the
+accept more than 5 <EM>arg</EM> arguments.  If you need to format more than
+5 arguments into a single string, simply call sprintf() multiple times
+for each group of arguments.  Note that the type of the argument doesn't 
+affect the output.  The argument type is automagically converted to match the
 type specified in the format string.<P>
 
 <DT><A NAME="sqrt"><FONT SIZE="+1">Sqrt(arg)</FONT></A>
@@ -4077,6 +4420,15 @@ some more rows, this function can be used for this purpose.<P>
 <P>Symlink() creates a symbolic link.  See the <a href="#link">Link()</a>
 function to create hard links.<P>
 
+<DT><A NAME="syslog"><FONT SIZE="+1">Syslog(level,message)</FONT></A>
+<DD>
+<P>
+Syslog() logs messages to the system using UNIX's syslog(3) feature.
+See your UNIX man page for more details.  See also <a
+href="#initsyslog">InitSyslog()</a>, <a href="#openlog">OpenLog()</a>
+and <a href="#closelog">CloseLog()</a>.
+<P>
+
 <DT><A NAME="system"><FONT SIZE="+1">System(command_string [,return_var])</FONT></A>
 <DD>
 <P>System is just like the C <EM>system()</EM> command in that it executes
@@ -4107,6 +4459,14 @@ Unix C tempnam() function.<P>
 since Unix epoch (00:00:00 Jan. 1 1970).  It is equivalent to calling
 <A HREF="#date">Date(&quot;U&quot;)</A>.  If you need better than per-second
 granularity, use the <A HREF="#microtime">Microtime</A> function.<P>
+
+<DT><A NAME="umask"><FONT SIZE="+1">Umask([mask])</FONT></A>
+<DD>
+<P>Umask(<i>mask</i>) sets PHP's umask to <i>mask</i> &amp; 0777 and
+returns the old umask.  If PHP/FI is an Apache module, Apache's old
+umask is restored when PHP/FI has finished.  <i>mask</i> must be
+specified in octal, like for <a href="#chmod">ChMod()</a>.  Umask()
+without arguments simply returns the current umask.<P>
 
 <DT><A NAME="uniqid"><FONT SIZE="+1">UniqId()</FONT></A>
 <DD>
@@ -4276,7 +4636,8 @@ following line is added:<P>
 <DD>
 <P>You have to remember to re-make the parser whenever you make a change
 to the <EM>parse.raw</EM> file.  Type: <STRONG>make parser</STRONG> to
-do this.  Then do a normal compile by typing: <STRONG>make</STRONG>
+do this.  You must have at least version 1.25 of Bison in order to make
+the PHP parser.  Then do a normal compile by typing: <STRONG>make</STRONG>
 once that is done.<P>
 
 <DT><STRONG>Step 6 - Send me your additions!</STRONG>

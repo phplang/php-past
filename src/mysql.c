@@ -19,20 +19,25 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: mysql.c,v 1.8 1997/01/04 22:17:58 rasmus Exp $ */
+/* $Id: mysql.c,v 1.18 1997/04/23 02:50:26 rasmus Exp $ */
 /* mSQL is Copyright (c) 1993-1995 David J. Hughes */
 
 /* Note that there is no mySQL code in this file */
 
 #include "php.h"
 #include <stdlib.h>
+#if HAVE_UNISTD_H
+#include <unistd.h>
+#endif
+#if HAVE_PWD_H
+#include <pwd.h>
+#endif
 #ifdef HAVE_LIBMYSQL
 #include <mysql.h>
 #endif
 #include "parse.h"
 #include <ctype.h>
 
-/* <-- By CYC : 3 function declaration  */
 #ifndef HAVE_LIBMYSQL
 #define MYSQL void
 #endif
@@ -45,10 +50,13 @@ typedef struct ResultList {
 	int ind;
 	struct ResultList *next;
 } ResultList;
-static MYSQL *dbsock=NULL, mysql;	/* <-- new structure mysql */
+
+static MYSQL *dbsock=NULL, mysql;
 static char CurrentDB[128];
 static ResultList *result_top=NULL;
 static char *CurrentHost=NULL;
+static char *CurrentUser=NULL;
+static char *CurrentPassword=NULL;
 static char *CurrentTcpPort=NULL;
 static char *CurrentUnixPort=NULL;
 static int mysql_ind=1;
@@ -56,20 +64,28 @@ static int mysql_ind=1;
 
 void php_init_mysql(char *defaulthost) {
 #ifdef HAVE_LIBMYSQL
+	char * name;
 	static char junk[1];
 	CurrentTcpPort=&junk[0];
 	CurrentUnixPort=&junk[0];
-	dbsock=NULL;				/* <--  */
+	dbsock=NULL;
 	result_top=NULL;
 	junk[0]='\0';
+	/* set CurrentUser to current uid's login name */
+	name = getlogin();
+	if(name) {
+		CurrentUser= estrdup(1, name);
+		free(name);
+	}
 	CurrentHost=defaulthost;
+	CurrentPassword=NULL;
 	CurrentDB[0]='\0';
 	mysql_ind=1;
 #endif
 }
 
 #ifdef HAVE_LIBMYSQL
-int mysql_add_result(MYSQL_RES *result) {	/* <-- to differetial from msql */
+int mysql_add_result(MYSQL_RES *result) {
 	ResultList *new;
 
 	new = result_top;
@@ -87,7 +103,7 @@ int mysql_add_result(MYSQL_RES *result) {	/* <-- to differetial from msql */
 	return(mysql_ind-1);
 }
 
-MYSQL_RES *mysql_get_result(int count) {	/* <-- to differential from msql */
+MYSQL_RES *mysql_get_result(int count) {
 	ResultList *new;
 
 	new = result_top;
@@ -99,7 +115,7 @@ MYSQL_RES *mysql_get_result(int count) {	/* <-- to differential from msql */
 }
 #endif
 
-void mysql_del_result(int count) {		/* <-- to differential from msql */
+void mysql_del_result(int count) {
 #ifdef HAVE_LIBMYSQL
 	ResultList *new, *prev, *next;
 
@@ -130,8 +146,8 @@ void MYsqlClose(void) {
 		new = next;
 	}
 	result_top = NULL;
-	if(dbsock != NULL) mysql_close(dbsock);		/* <--  */
-	dbsock=NULL;					/* <--  */
+	if(dbsock != NULL) mysql_close(dbsock);
+	dbsock=NULL;
 	CurrentDB[0]='\0';
 #endif
 }
@@ -183,8 +199,8 @@ void MYsql(void) {
 		return;
 	}
 	if(dbsock==NULL) {
-		dbsock = mysql_connect(&mysql, CurrentHost, 0, 0);  	/* <--  */
-		if(!dbsock) {		/* <-- */
+		dbsock = mysql_connect(&mysql, CurrentHost, CurrentUser?CurrentUser:0, CurrentPassword?CurrentPassword:0); 
+		if(!dbsock) {
 			Error("Unable to connect to mySQL socket (%s)",mysql_error(&mysql));
 			Push("-1",LNUMBER);
 			return;
@@ -201,15 +217,15 @@ void MYsql(void) {
 #if DEBUG
 			Debug("Not valid, need to reopen\n");
 #endif
-			MYsqlClose(); 		/* <-- */
+			MYsqlClose();
 #if DEBUG
 			Debug("About to connect\n");
 #endif
-			dbsock = mysql_connect(&mysql, CurrentHost, 0, 0);	/* <-- */
+			dbsock = mysql_connect(&mysql, CurrentHost, CurrentUser?CurrentUser:0, CurrentPassword?CurrentPassword:0);
 #if DEBUG
 			Debug("After connect\n");
 #endif
-			if(!dbsock) {		/* <-- */
+			if(!dbsock) {
 				Error("Unable to connect to mySQL socket (%s)",mysql_error(&mysql));
 				Push("-1",LNUMBER);
 				return;
@@ -244,8 +260,8 @@ void MYsql(void) {
 #if APACHE
 	unblock_alarms();
 #endif
-	result = mysql_store_result(dbsock);		/* <-- 	*/
-	if(result) j = mysql_add_result(result);	/* <--  */
+	result = mysql_store_result(dbsock);
+	if(result) j = mysql_add_result(result);
 	else {
 		if(!strncasecmp(query,"insert",6) || !strncasecmp(query,"update",6) || !strncasecmp(query,"create",6) || !strncasecmp(query,"drop",4) || !strncasecmp(query,"delete",6))
 			j=0;
@@ -262,10 +278,40 @@ void MYsql(void) {
 #endif
 } 
 
-void MYsqlConnect(void) {
+void MYsqlConnect(int t) {
 #ifdef HAVE_LIBMYSQL
 	Stack *s;
 
+	if(t>1) {
+		s = Pop();
+		if(!s) {
+			Error("Stack error in mysql_connect");
+			Push("-1",LNUMBER);
+			return;
+		}
+		if(strlen(s->strval)==0) CurrentPassword=NULL;
+		else {
+#if DEBUG
+			Debug("Setting password to: %s\n",s->strval);
+#endif
+			CurrentPassword = (char *)estrdup(0,s->strval);
+		}
+	}
+	if(t>0) {
+		s = Pop();
+		if(!s) {
+			Error("Stack error in mysql_connect");
+			Push("-1",LNUMBER);
+			return;
+		}
+		if(strlen(s->strval)==0) CurrentUser=NULL;
+		else {
+#if DEBUG
+			Debug("CurrentUser set to %s\n",s->strval);
+#endif
+			CurrentUser = (char *)estrdup(0,s->strval);
+		}
+	}
 	s = Pop();
 	if(!s) {
 		Error("Stack error in mysql_connect");
@@ -338,9 +384,10 @@ void MYsqlResult(void) {
 		Error("Invalid result index in mysql_result");
 		return;
 	}	
-	result = mysql_get_result(result_ind);		/* <-- */
+	result = mysql_get_result(result_ind);
 	if(!result) {
 		Error("Unable to find result index %d",result_ind);
+		Push("", STRING);
 		return;
 	}
 	i = mysql_num_rows(result);
@@ -415,7 +462,7 @@ void MYsqlFreeResult(void) {
 		return;
 	}
 	if(s->strval) {
-		mysql_del_result(s->intval);		/* <-- */
+		mysql_del_result(s->intval);
 	} else {
 		Error("Invalid result index in mysql_freeresult");
 		return;
@@ -438,19 +485,22 @@ void MYsqlNumRows(void) {
 		return;
 	}
 	if(s->strval) {
-		result = mysql_get_result(s->intval);		/* <-- */
+		result = mysql_get_result(s->intval);
 		if(!result) {
 			Error("Unable to find result index %d",s->intval);
+			Push("-1", LNUMBER);
 			return;
 		}
 		sprintf(temp,"%ld",mysql_num_rows(result));
 	} else {
 		Error("Invalid result index in mysql_numrows");
+		Push("-1", LNUMBER);
 		return;
 	}	
 	Push(temp,LNUMBER);
 #else
 	Pop();
+	Push("-1", LNUMBER);
 	Error("No mySQL support");
 #endif
 }
@@ -467,20 +517,23 @@ void MYsqlNumFields(void) {
 		return;
 	}
 	if(s->strval) {
-		result = mysql_get_result(s->intval);		/* <--	*/
+		result = mysql_get_result(s->intval);
 		if(!result) {
 			Error("Unable to find result index %d",s->intval);
+			Push("-1", LNUMBER);
 			return;
 		}
 		sprintf(temp,"%d",mysql_num_fields(result));
 	} else {
 		Error("Invalid result index in mysql_numfields");
+		Push("-1", LNUMBER);
 		return;
 	}	
 	Push(temp,LNUMBER);
 #else
 	Pop();
 	Error("No mySQL support");
+	Push("-1", LNUMBER);
 #endif
 }
 
@@ -517,7 +570,7 @@ void MYsqlField(int type) {
 		return;
 	}
 	if(s->strval) {
-		result = mysql_get_result(s->intval);	/* <--	*/
+		result = mysql_get_result(s->intval);
 		if(!result) {
 			Error("Unable to find result index %d",s->intval);
 			return;
@@ -607,6 +660,7 @@ void MYsqlField(int type) {
 #else
 	Pop();
 	Error("No mySQL support");
+	Push("", STRING);
 #endif
 } 
 
@@ -640,9 +694,10 @@ void MYsqlTableName(void){
 	}
 	res_index=s->intval;
 
-	res=mysql_get_result(res_index);	/* <-- */
+	res=mysql_get_result(res_index);
 	if(!res) {
 		Error("Unable to find result index %d",res_index);
+		Push("", STRING);
 		return;
 	}
 	mysql_data_seek(res, tb_index);
@@ -694,10 +749,11 @@ void MYsqlListTables(void) {
 	}
 	else dbname=(char*)estrdup(1,s->strval);
 
-	if(dbsock==NULL) {	/* <-- */
-		dbsock = mysql_connect(&mysql, CurrentHost, 0, 0);	/* <-- */
-		if(!dbsock) { 	/* <-- */
+	if(dbsock==NULL) {
+		dbsock = mysql_connect(&mysql, CurrentHost, CurrentUser?CurrentUser:0, CurrentPassword?CurrentPassword:0); 
+		if(!dbsock) {
 			Error("Unable to connect to mySQL socket (%s)",mysql_error(&mysql));
+			Push("-1", LNUMBER);
 			return;
 		}
 		CurrentTcpPort = getenv("MYSQL_TCP_PORT");
@@ -712,16 +768,17 @@ void MYsqlListTables(void) {
 #if DEBUG
 			Debug("Not valid, need to reopen\n");
 #endif
-			MYsqlClose();		/* <-- */
+			MYsqlClose();
 #if DEBUG
 			Debug("About to connect\n");
 #endif
-			dbsock = mysql_connect(&mysql, CurrentHost, 0, 0);
+			dbsock = mysql_connect(&mysql, CurrentHost, CurrentUser?CurrentUser:0, CurrentPassword?CurrentPassword:0); 
 #if DEBUG
 			Debug("After connect\n");
 #endif
-			if(!dbsock) {		/* <-- */
+			if(!dbsock) {
 				Error("Unable to connect to mySQL socket (%s)",mysql_error(&mysql));
+				Push("-1", LNUMBER);
 				return;
 			}
 			CurrentTcpPort = tcpPort;
@@ -731,13 +788,15 @@ void MYsqlListTables(void) {
 
 	if(mysql_select_db(dbsock,dbname)<0){
 		Error("Unable to select mySQL table (%s)", mysql_error(&mysql));
+		Push("-1", LNUMBER);
 		return;
 	}
 
 	res = mysql_list_tables(dbsock, 0);
-	if (res) tb_res=mysql_add_result(res); 	/* <-- */
+	if (res) tb_res=mysql_add_result(res);
 	else {
 		Error("Unable to find any table in %s", dbname); 
+		Push("-1", LNUMBER);
 		return;
 	}
 
@@ -807,9 +866,9 @@ void MYsqlCreateDB(void) {
 	}
 	dbname=(char*)estrdup(1,s->strval);
 
-	if(dbsock==NULL) {		/* <-- */
-		dbsock = mysql_connect(&mysql, CurrentHost, 0, 0);	/* <-- */
-		if(!dbsock) {		/* <-- */
+	if(dbsock==NULL) {
+		dbsock = mysql_connect(&mysql, CurrentHost, CurrentUser?CurrentUser:0, CurrentPassword?CurrentPassword:0); 
+		if(!dbsock) {
 			Error("Unable to connect to mySQL socket (%s)",mysql_error(&mysql));
 			return;
 		}
@@ -829,11 +888,11 @@ void MYsqlCreateDB(void) {
 #if DEBUG
 			Debug("About to connect\n");
 #endif
-			dbsock = mysql_connect(&mysql, CurrentHost, 0, 0);
+			dbsock = mysql_connect(&mysql, CurrentHost, CurrentUser?CurrentUser:0, CurrentPassword?CurrentPassword:0); 
 #if DEBUG
 			Debug("After connect\n");
 #endif
-			if(!dbsock) {	/* <-- */
+			if(!dbsock) {
 				Error("Unable to connect to mySQL socket (%s)",mysql_error(&mysql));
 				return;
 			}
@@ -842,7 +901,7 @@ void MYsqlCreateDB(void) {
 		}
 	}
  
-	if(mysql_create_db(dbsock,dbname)<0){	/* <-- */
+	if(mysql_create_db(dbsock,dbname)<0) {
 		Error("Unable to create mySQL Data Base (%s)", mysql_error(&mysql));
 		return;
 	}
@@ -883,9 +942,9 @@ void MYsqlDropDB(void) {
 	}
 	dbname=(char*)estrdup(1,s->strval);
  
-	if(dbsock==NULL) {	/* <-- */
-		dbsock = mysql_connect(&mysql, CurrentHost, 0, 0);	/* <-- */
-		if(!dbsock) {	/* <-- */
+	if(dbsock==NULL) {
+		dbsock = mysql_connect(&mysql, CurrentHost, CurrentUser?CurrentUser:0, CurrentPassword?CurrentPassword:0); 
+		if(!dbsock) {
 			Error("Unable to connect to mySQL socket (%s)",mysql_error(&mysql));
 			return;
 		}
@@ -901,15 +960,15 @@ void MYsqlDropDB(void) {
 #if DEBUG
 			Debug("Not valid, need to reopen\n");
 #endif
-			MYsqlClose();		/* <-- */
+			MYsqlClose();
 #if DEBUG
 			Debug("About to connect\n");
 #endif
-			dbsock = mysql_connect(&mysql, CurrentHost, 0, 0);
+			dbsock = mysql_connect(&mysql, CurrentHost, CurrentUser?CurrentUser:0, CurrentPassword?CurrentPassword:0); 
 #if DEBUG
 			Debug("After connect\n");
 #endif
-			if(!dbsock) {		/* <-- */
+			if(!dbsock) {
 				Error("Unable to connect to mySQL socket (%s)",mysql_error(&mysql));
 				return;
 			}
@@ -950,10 +1009,11 @@ void MYsqlListDBs(void) {
 	}
 #endif
  
-	if(dbsock==NULL) {	/* <-- */
-		dbsock = mysql_connect(&mysql, CurrentHost, 0, 0);	/* <-- */
-		if(!dbsock) {	/* <-- */
+	if(dbsock==NULL) {
+		dbsock = mysql_connect(&mysql, CurrentHost, CurrentUser?CurrentUser:0, CurrentPassword?CurrentPassword:0); 
+		if(!dbsock) {
 			Error("Unable to connect to mySQL socket (%s)",mysql_error(&mysql));
+			Push("-1", LNUMBER);
 			return;
 		}
 		CurrentTcpPort = getenv("MYSQL_TCP_PORT");
@@ -968,27 +1028,29 @@ void MYsqlListDBs(void) {
 #if DEBUG
 			Debug("Not valid, need to reopen\n");
 #endif
-			MYsqlClose();	/* <-- */
+			MYsqlClose();
 #if DEBUG
 			Debug("About to connect\n");
 #endif
-			dbsock = mysql_connect(&mysql, CurrentHost, 0, 0);
+			dbsock = mysql_connect(&mysql, CurrentHost, CurrentUser?CurrentUser:0, CurrentPassword?CurrentPassword:0); 
 #if DEBUG
 			Debug("After connect\n");
 #endif
-			if(!dbsock) {	/* <-- */
+			if(!dbsock) {
 				Error("Unable to connect to mySQL socket (%s)",mysql_error(&mysql));
+				Push("-1", LNUMBER);
 				return;
 			}
 			CurrentTcpPort = tcpPort;
 			CurrentUnixPort = unixPort;
 		}
 	}
-	hostname=(char*)estrdup(1,mysql_get_host_info(dbsock));	/* <-- diff function */
-	res = mysql_list_dbs(dbsock, 0);		/* <-- different function para */
-	if (res) db_res=mysql_add_result(res);		/* <-- */
+	hostname=(char*)estrdup(1,mysql_get_host_info(dbsock));
+	res = mysql_list_dbs(dbsock, 0);
+	if (res) db_res=mysql_add_result(res);
 	else {
 		Error("Unable to find any data bases in host: %s", hostname); 
+		Push("-1", LNUMBER);
 		return;
 	}
 
@@ -1035,9 +1097,10 @@ void MYsqlDBName(void){
 	}
 	res_index=s->intval;
 
-	res=mysql_get_result(res_index);	/* <-- */
+	res=mysql_get_result(res_index);
 	if(!res) {
 		Error("Unable to find result index %d",res_index);
+		Push("", STRING);
 		return;
 	}
 	mysql_data_seek(res, db_index);
@@ -1101,9 +1164,9 @@ void MYsqlListFields(void) {
 		Push("-1",LNUMBER);
 		return;
 	}
-	if(dbsock==NULL) {	/* <-- */
-		dbsock = mysql_connect(&mysql, CurrentHost, 0, 0);	/* <-- */
-		if(!dbsock) {	/* <-- */
+	if(dbsock==NULL) {	
+		dbsock = mysql_connect(&mysql, CurrentHost, CurrentUser?CurrentUser:0, CurrentPassword?CurrentPassword:0); 
+		if(!dbsock) {	
 			Error("Unable to connect to mySQL socket (%s)",mysql_error(&mysql));
 			Push("-1",LNUMBER);
 			return;
@@ -1120,15 +1183,15 @@ void MYsqlListFields(void) {
 #if DEBUG
 			Debug("Not valid, need to reopen\n");
 #endif
-			MYsqlClose();		/* <-- */
+			MYsqlClose();
 #if DEBUG
 			Debug("About to connect\n");
 #endif
-			dbsock = mysql_connect(&mysql, CurrentHost, 0, 0);	/* <-- */
+			dbsock = mysql_connect(&mysql, CurrentHost, CurrentUser?CurrentUser:0, CurrentPassword?CurrentPassword:0); 
 #if DEBUG
 			Debug("After connect\n");
 #endif
-			if(!dbsock) {	/* <-- */
+			if(!dbsock) {
 				Error("Unable to connect to mySQL socket (%s)",mysql_error(&mysql));
 				Push("-1",LNUMBER);
 				return;
@@ -1152,7 +1215,7 @@ void MYsqlListFields(void) {
 #if APACHE
 	block_alarms();
 #endif
-	result=mysql_list_fields(dbsock,tablename, 0);	/* <-- different func para */
+	result=mysql_list_fields(dbsock,tablename, 0);
 	if(mysql_num_fields(result)<1) {
 #if APACHE
 		unblock_alarms();
@@ -1177,3 +1240,43 @@ void MYsqlListFields(void) {
 	Error("No mySQL support");
 #endif
 }  /* MsqlListFields */
+
+void MYsqlInsertId(void) {
+#ifdef HAVE_LIBMYSQL
+	char temp[16];
+	MYSQL *res;
+	
+	res = mysqlGetDbSock();
+	if(res != NULL) 
+		sprintf(temp,"%ld",mysql_insert_id(res));
+	else {
+		Error("Invalid result index in mysql_insert_id");
+		Push("-1", LNUMBER);
+		return;
+	}	
+	Push(temp,LNUMBER);
+#else
+	Error("No mySQL support");
+	Push("0", LNUMBER);
+#endif
+}
+
+void MYsqlAffectedRows(void) {
+#ifdef HAVE_LIBMYSQL
+	char temp[16];
+	MYSQL *res;
+
+	res = mysqlGetDbSock();
+	if(res) {
+		sprintf(temp,"%ld",mysql_affected_rows(res));
+	} else {
+		Error("Invalid database identifier in mysql_affected_rows");
+		Push("-1", LNUMBER);
+		return;
+	}	
+	Push(temp,LNUMBER);
+#else
+	Error("No mySQL support");
+	Push("0", LNUMBER);
+#endif
+}

@@ -36,9 +36,15 @@ knows the particulars of the destination system well.
 Windows NT Version
 ------------------
 
-The code should compile on Windows 95/NT.  See the windows_install.txt
-file for more details.  All of the accompanying documentation refers
-to the Unix version.  
+The code compiles almost cleanly using gnu-win32 gcc from Cygnus.
+See http://www.cygnus.com/gnu-win32/
+
+A pre-compiled Windows95/NT binary is available in the file archive at
+http://www.vex.net/php/
+
+You will need the Cygnus GCC DLL file available at:
+ftp://ftp.cygnus.com/pub/gnu-win32/latest/cygwin.dll
+Install this dll somewhere on your path.
 
 
 Things You Need To Know Before Installing
@@ -109,7 +115,7 @@ at: rasmus@io.org with the name of your OS and the version number
 and any other details I should know.
 
 Solaris 2.4
-Solaris 2.5
+Solaris 2.5[.1]
 SunOS 1.4.2
 SunOS 1.4.3
 SunOS 1.4.4
@@ -133,6 +139,9 @@ Step 1.
 Step 2.
 
   Go into the src directory: cd src
+
+  Have a look at the php.h file.  There are a number of compile-time
+  options that can be set here.
 
 Step 3.
 
@@ -295,7 +304,7 @@ Sending in Bug Reports
   I may be able to get a copy of your httpd and your core file and
   do the debugging on these files myself.
 
-  Bug reports should be sent to rasmus@vex.net
+  Bug reports should be sent to rasmus@lerdorf.on.ca
   
      
 Getting Updates
@@ -347,6 +356,7 @@ Getting Updates
   and should be treated as such.
  
   If you plan on making significant contributions to the PHP/FI code, 
-  CVS write access is available.  E-mail rasmus@vex.net for more information. 
+  CVS write access is available.  E-mail rasmus@lerdorf.on.ca for more 
+  information. 
 
 |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||

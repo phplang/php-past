@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: date.c,v 1.16 1997/01/04 15:16:50 rasmus Exp $ */
+/* $Id: date.c,v 1.20 1997/04/22 15:52:33 rasmus Exp $ */
 #include <stdlib.h>
 #ifdef TM_IN_SYS_TIME
 #include <sys/time.h>
@@ -48,6 +48,9 @@ static char *FullDays[] = {
 	"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"
 };
 
+static int  phpday_tab[2][12] = {
+	{31,28,31,30,31,30,31,31,30,31,30,31},
+	{31,29,31,30,31,30,31,31,30,31,30,31}  };
 
 /*
  * Date
@@ -182,7 +185,8 @@ void Date(int arg, int type) {
 		}
 		s++;
 	}
-	Push((char *)out,STRING);
+	y = CheckType(out);
+	Push((char *)out,(y==LNUMBER)?LNUMBER:STRING); /* no floating point here */
 }
 
 void UnixTime(void) {
@@ -257,16 +261,16 @@ void MkTime(int args) {
 	if(tm1.tm_min > 60 || tm1.tm_min < 0) {
 		Error("Minute argument to mktime is invalid");
 	}
-	if(tm1.tm_sec > 61 || tm1.tm_min < 0) {
+	if(tm1.tm_sec > 61 || tm1.tm_sec < 0) {
 		Error("Second argument to mktime is invalid");
 	}
-	if(tm1.tm_mon > 11 || tm1.tm_min < 0) {
+	if(tm1.tm_mon > 11 || tm1.tm_mon < 0) {
 		Error("Month argument to mktime is invalid");
 	}
-	if(tm1.tm_mday > 31 || tm1.tm_min < 0) {
+	if(tm1.tm_mday > 31 || tm1.tm_mday < 0) {
 		Error("Day of month argument to mktime is invalid");
 	}
-	if(tm1.tm_year > 138 || tm1.tm_year < 70) {
+	if(tm1.tm_year && (tm1.tm_year > 138 || tm1.tm_year < 70)) {
 		Error("Calendar times before 00:00:00 UTC, January 1, 1970 or after 03:14:07 UTS, January 19, 2038 cannot be represented by mktime");
 	}
 	t = mktime(&tm1);
@@ -286,4 +290,51 @@ char *std_date(time_t t) {
 		tm1->tm_year,
 		tm1->tm_hour, tm1->tm_min, tm1->tm_sec);
 	return(str);
+}
+
+/* 
+ * CheckDate(month, day, year);
+ *  returns True(1) if it is valid date style
+ *
+ */
+#define isleap(year) (((year%4) == 0 && (year%100)!=0) || (year%400)==0)
+void CheckDate(void) {
+ 	Stack *s;
+ 	int m, d, y;
+ 	s = Pop();
+ 	if(!s) {
+ 		Error("Stack error in CheckDate");
+ 		return;
+ 	}
+ 	y = s->intval;
+ 	if(y<100) y += 1900;
+ 
+ 	s = Pop();
+ 	if(!s) {
+ 		Error("Stack error in CheckDate");
+ 	return;
+ 	}
+ 	d = s->intval;
+ 
+ 	s = Pop();
+ 	if(!s) {
+ 		Error("Stack error in CheckDate");
+ 		return;
+ 	}
+	m = s->intval;
+ 
+ 	if(y<0 || y>32767) {
+ 		Push("0", LNUMBER); /* False */
+ 		return;
+ 	}
+ 	if(m<1 || m>12) {
+ 		Push("0", LNUMBER); /* False */
+ 		return;
+ 	}
+ 	if(d<1 || d>phpday_tab[isleap(y)][m-1]) {
+ 		Push("0", LNUMBER); /* False */
+ 		return;
+ 	}
+ 	Push("1", LNUMBER); /* True : This month,day,year arguments are valid */
+	return;
 }

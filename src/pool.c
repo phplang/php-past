@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: pool.c,v 1.18 1997/01/05 16:25:54 rasmus Exp $ */
+/* $Id: pool.c,v 1.21 1997/04/23 02:50:27 rasmus Exp $ */
 /*
  * Memory Pool Management with hooks for Apache sub-pool handling
  * for Apache module
@@ -50,6 +50,12 @@ static int memdbg=0;
 #endif
 
 #if APACHE
+static void php_cleanup(void *ptr) {
+	Exit(0);
+}
+#endif
+
+#if APACHE
 void php_init_pool(php_module_conf *conf) {
 #else
 void php_init_pool(void) {
@@ -61,7 +67,11 @@ void php_init_pool(void) {
 		php_pool_size[i] = 0L;
 	}	
 #if APACHE
-	max_data_space = conf->MaxDataSpace*1024;
+	if (conf->MaxDataSpace) max_data_space = conf->MaxDataSpace*1024;
+	else max_data_space = DEFAULT_MAX_DATA_SPACE*1024;
+	block_alarms();
+	register_cleanup(php_rqst->pool,NULL,php_cleanup,php_cleanup);
+	unblock_alarms();
 #else
 	max_data_space = DEFAULT_MAX_DATA_SPACE*1024;
 #endif

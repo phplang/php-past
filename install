@@ -2,7 +2,7 @@
 #
 # PHP/FI Install Script
 #
-# $Id: install,v 1.35 1997/01/12 21:53:05 rasmus Exp $
+# $Id: install,v 1.40 1997/04/21 05:22:56 rasmus Exp $
 #
 DEF_LOG_DIR=/usr/local/etc/httpd/cgi-data
 DEF_ACC_DIR=/usr/local/etc/httpd/cgi-data
@@ -154,6 +154,13 @@ fi
 else
 	APACHE=
 	PRG=php.cgi
+	$ECHO_N "Please specify the DOCUMENT ROOT directory of your web server [/usr/local/etc/htdocs] $ECHO_C"
+	read b
+	if [ "$b." = "." ]
+	then
+		$b="/usr/local/etc/htdocs"
+	fi
+	PHP_DOCUMENT_ROOT=-DPHP_DOCUMENT_ROOT=\\\\\"$b\\\\\"
 fi
 
 if [ "$APACHE." = "." ]
@@ -236,7 +243,7 @@ then
 			fi
 			LOG_DIR=-DLOG_DIR=\\\\\"$b\\\\\"
 		else
-			if [ "$a" = "m" ] || [ "$a" = "M" ]
+			if [ "$HLMY." = "." ] || [ "$a" = "m" ] || [ "$a" = "M" ]
 			then
 				LOGGING=-DMSQLLOGGING=1
 				echo
@@ -433,15 +440,15 @@ if [ -d "$INST_TOPY/include/mysql" ]
 then
     MYSQL_INCDIR=/mysql
 fi
-if [ -d "$INST_TOPY/lib/mysql" ]
+if [ -d "$INST_TOPY/client/mysql" ]
 then
     MYSQL_LIBDIR=/msql
 fi
 SED_MYSQL="      s,@MYSQL_INCLUDE@,-I$INST_TOPY/include$MYSQL_INCDIR,
-                s,@LIBMYSQL@,-lmysql -lmysys -lstrings,
-		s,@STATICLIBMYSQL@,$INST_TOPY/lib$MYSQL_LIBDIR/libmysql.a,
+                s,@LIBMYSQL@,-lmysqlclient,
+		s,@STATICLIBMYSQL@,$INST_TOPY/client$MYSQL_LIBDIR/libmysqlclient.a,
                 s,@MYSQL_DEF@,$HLMY,
-                s,@MYSQL_LIB@,-L$INST_TOPY/lib$MYSQL_LIBDIR,"
+                s,@MYSQL_LIB@,-L$INST_TOPY/client$MYSQL_LIBDIR,"
 fi
 
 # Solid part of sed command
@@ -580,6 +587,7 @@ sed "		$SED_MSQL
 		s,@PHPSENDMAIL@,$PHPSENDMAIL,
 		s,@HGD@,$HGD,
 		s,@HLNK@,$HLNK,
+		s,@PHP_DOCUMENT_ROOT@,$PHP_DOCUMENT_ROOT,
 		s,@ACCESS_CONTROL@,$ACCESS_CONTROL,
 		s,@ACCESS_DIR@,$ACCESS_DIR,
 		s,@LOGGING@,$LOGGING,
@@ -634,3 +642,7 @@ echo "the package.  Type: cd src; make"
 else
 echo "the package.  Type: cd src; make parser; make"
 fi
+echo ""
+echo "If you are an ISP, you should consider turning on SAFE MODE"
+echo "to improve inter-client security.   Read about it in"
+echo "doc/doc.html and set it in src/php.h before compiling."

@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: exec.c,v 1.13 1997/01/04 15:16:54 rasmus Exp $ */
+/* $Id: exec.c,v 1.17 1997/04/20 12:17:24 rasmus Exp $ */
 #include "php.h"
 #include "parse.h"
 #include <ctype.h>
@@ -41,28 +41,59 @@
  */
 void Exec(char *name, char *retname, int type) {
 	FILE *fp;
-#ifndef WINDOWS
 	Stack *s;
 	char buf[4096];
 	int t,l,ret;
+#if PHP_SAFE_MODE
+	char *b, *c;
+#endif
 
 	s = Pop();
-	if(!s) {
+	if(!s || (s && !s->strval)) {
 		Error("Stack error in exec");
 		return;
 	}	
+#if PHP_SAFE_MODE
+	c = strchr(s->strval,' ');
+	if(c) *c='\0';
+	if(strstr(s->strval,"..")) {
+		Error("No '..' components allowed in path");
+		Push("", STRING);
+		return;
+	}
+	b = strrchr(s->strval,'/');
+	strncpy(buf,PHP_SAFE_MODE_EXEC_DIR,sizeof(buf));
+	if(b) {
+		strncat(buf,b,sizeof(buf));
+		buf[sizeof(buf)-1]='\0';  /* watch out for overflows */
+	} else {
+		strcat(buf,"/");
+		strncat(buf,s->strval,sizeof(buf));
+		buf[sizeof(buf)-1]='\0';  /* watch out for overflows */
+	}
+	if(c) *c=' ';
+	fp = popen(buf,"r");
+	if(!fp) {
+		Error("Unable to fork [%s]",buf);
+		Push("", STRING);
+		return;
+	}
+#else
 	fp = popen(s->strval,"r");
 	if(!fp) {
 		Error("Unable to fork [%s]",s->strval);
+		Push("", STRING);
 		return;
 	}
+#endif
 	buf[0]='\0';	
 	if(type==1 || type==3) {
 		php_header(0,NULL);
 	}		
 	if(type != 3) {
 		while(fgets(buf,4095,fp)) {
-			if(type==1) PUTS(buf);
+			if(type==1)
+			    PUTS(buf);
 			else if(type==2) {
 				l = strlen(buf);
 				t = l;
@@ -92,11 +123,6 @@ void Exec(char *name, char *retname, int type) {
 		Push(buf,LNUMBER);
 		SetVar(retname,0,0);
 	}
-#else
-	Pop();
-	Error("Exec not available on this system");
-	Push("0",LNUMBER);
-#endif
 }
 
 int php_ind(char *s, char c) {

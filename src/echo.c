@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: echo.c,v 1.37 1997/01/04 15:16:53 rasmus Exp $ */
+/* $Id: echo.c,v 1.39 1997/04/15 16:12:39 cvswrite Exp $ */
 #include <stdlib.h>
 #include "php.h"
 #include "parse.h"
@@ -57,7 +57,18 @@ void Echo(char *format, int args) {
 		}
 		return;
 	}
+
+        /* if format contains $var, we must expand it */
+	if (strchr(format, VAR_INIT_CHAR))
+	{
+		Stack * var;
+
+		Push(format, STRING);
+		var = Pop();
+		if (var && var->strval)  format = estrdup(1, var->strval);
+	}
 	ParseEscapes(format);
+	StripSlashes(format);
 	t = format;
 	num=0;
 	while(num<args && !done) {	

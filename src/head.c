@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: head.c,v 1.28 1997/01/04 15:16:57 rasmus Exp $ */
+/* $Id: head.c,v 1.33 1997/04/21 13:12:06 rasmus Exp $ */
 #include "php.h"
 #include "parse.h"
 #ifdef TM_IN_SYS_TIME
@@ -43,13 +43,17 @@ void php_init_head(void) {
 	cont_type = NULL;
 }
 
+void NoHeader(void) {
+	PrintHeader=0;
+}
+
 void Header(void) {
 	Stack *s;
 	char *r;
 
 	s = Pop();
 	if(!s) {
-		Error("Stack error in echo\n");
+		Error("Stack error in header\n");
 		return;
 	}
 #if APACHE
@@ -111,6 +115,11 @@ void Header(void) {
 #endif
 }
 
+/*
+ * php_header() flushes the header info built up using calls to
+ * the Header() function.  If type is 1, a redirect to str is done.
+ * Otherwise type should be 0 and str NULL.
+ */
 void php_header(int type,char *str) {
 	CookieList *cookie;
 	char *tempstr;
@@ -175,6 +184,9 @@ void php_header(int type,char *str) {
 		Debug("Sending header\n");
 #endif
         send_http_header(php_rqst);
+		if(php_rqst->header_only) {
+			Exit(0);
+		}
     }
 #else
     if(PrintHeader && !HeaderPrinted) { 
@@ -225,19 +237,11 @@ void php_header(int type,char *str) {
 			fputs("\015\012\015\012",stdout);
 		} else {
 			if(!cont_type) {
-#ifdef WINDOWS
-				printf("Content-type: text/html%c%c",10,10);
-#else
 	        	fputs("Content-type: text/html\015\012\015\012",stdout); 
-#endif
 			} else {
 				fputs("Content-type:",stdout);
 				fputs(cont_type,stdout);
-#ifdef WINDOWS
-				printf("%c%c",10,10);
-#else
 				fputs("\015\012\015\012",stdout);
-#endif
 			}
 		}
         HeaderPrinted = 1;

@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: string.c,v 1.17 1997/01/12 20:51:38 rasmus Exp $ */
+/* $Id: string.c,v 1.24 1997/04/15 16:12:42 cvswrite Exp $ */
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
@@ -428,50 +428,95 @@ void UcFirst(void) {
 	Push(s->strval,s->type);
 }
 
-void Sprintf(void) {
-	Stack *s;
-	char *temp;
-	int len, targ, type;
-	char *sarg, *t;
-	long larg;
-	double darg;
+void Sprintf(int argc) {
+	Stack *s=NULL;
+	Stack sarg[5]; /* Max 5 args to keep things simple in the parser */
+	int num=0, done=0, type, concat_len=0;
+	char *format,*t,*beg,*fmt,*buf,*concat;
 
+	num = argc;
+	while(num) {
+		s = Pop();
+		if(!s) {
+			Error("Stack error in sprintf");
+			return;
+		}
+		num--;
+		memcpy(&(sarg[num]),s,sizeof(Stack));
+		if(s->strval) sarg[num].strval = estrdup(1,s->strval);
+	}
 	s = Pop();
 	if(!s) {
-		Error("Stack error in sprintf");
+		Error("No format string");
+		Push("", STRING);
 		return;
 	}
-	sarg = estrdup(1,s->strval);
-	larg = s->intval;
-	darg = s->douval;	
-	targ = s->type;
-	s = Pop();
-	if(!s) {
-		Error("Stack error in sprintf");
-		return;
+	format = estrdup(1,s->strval);	
+	ParseEscapes(format);
+	StripSlashes(format);
+	t = format;
+	num=0;
+	concat = (char *) "";  /* some dummy starting value */
+	while(num<argc && !done) {
+		type = FormatCheck(&t,&beg,&fmt);
+		if(type==0 || type==-1) break;
+		if(beg && *beg) {
+			ParseEscapes(beg);
+			StripSlashes(beg);
+			buf = emalloc(1,strlen(concat)+strlen(beg) + ECHO_BUF);
+			strcpy(buf, concat);
+			strcat(buf, beg); 
+			concat = buf;
+		}
+		if(type==1) {
+			buf = emalloc(1,strlen(concat)+strlen("%") + ECHO_BUF);
+			strcpy(buf, concat);
+			strcat(buf, "%");
+			concat = buf;
+			continue;
+		}
+		switch(type) {
+			case LNUMBER:
+                        ParseEscapes(fmt);
+                        StripSlashes(fmt);
+			concat_len = strlen(concat);
+                        buf = emalloc(1,concat_len+strlen(fmt)+strlen(sarg[num].strval)+ECHO_BUF);
+                        strcpy(buf, concat);
+                        sprintf(&buf[concat_len],fmt,sarg[num].intval);
+                        concat = buf;
+                        num++;
+                        break;
+			case DNUMBER:
+                        ParseEscapes(fmt);
+                        StripSlashes(fmt);
+			concat_len = strlen(concat);
+                        buf = emalloc(1,concat_len+strlen(fmt)+strlen(sarg[num].strval)+ECHO_BUF);
+                        strcpy(buf, concat);
+                        sprintf(&buf[concat_len],fmt,sarg[num].douval);
+                        concat = buf;
+                        num++;
+                        break;
+			case STRING:
+                        ParseEscapes(fmt);
+                        StripSlashes(fmt);
+                        ParseEscapes(sarg[num].strval);
+                        StripSlashes(sarg[num].strval);
+			concat_len = strlen(concat);
+                        buf = emalloc(1,concat_len+strlen(fmt)+strlen(sarg[num].strval)+ECHO_BUF);
+                        strcpy(buf, concat);
+                        sprintf(&buf[concat_len],fmt,sarg[num].strval);
+                        concat = buf;
+                        num++;
+                        break;
+		}
 	}
-	len = 2 * (strlen(s->strval) + strlen(sarg) + ECHO_BUF); 
-	temp = emalloc(1,len);
-	t = s->strval;
-	while(1) {
-		type = FormatCheck(&t,NULL,NULL);
-		if(type!=1) break;
+	if(t && *t) {
+		buf = emalloc(1,strlen(concat) + strlen(t) + ECHO_BUF);
+		strcpy(buf, concat);
+		strcat(buf, t);
+		concat = buf;
 	}
-	switch(type) {
-		case LNUMBER:
-			sprintf(temp,s->strval,larg);
-			break;
-		case DNUMBER:
-			sprintf(temp,s->strval,darg);
-			break;
-		case STRING:
-			sprintf(temp,s->strval,sarg);
-			break;
-		case 0:
-			strcpy(temp,s->strval);
-			break;
-	}
-	Push(temp,STRING);
+	Push(concat, STRING);
 }
 
 void Chr(void) {
@@ -489,4 +534,20 @@ void Chr(void) {
 	}
 	sprintf(temp,"%c",(char)s->intval);
 	Push(temp,STRING);
+}
+
+void Chop(void) {
+	Stack *s;
+	char *ns,*p;
+
+	s = Pop();
+	if(!s) {
+		Error("Stack error in Chop function");
+		return;
+	}
+	ns = estrdup(1,s->strval);
+	p = ns + strlen(ns) - 1;
+	while(isspace(*p) && p>=ns) p--;
+	*(p+1)='\0';	
+	Push(ns,STRING);
 }

@@ -1,4 +1,4 @@
-/***[microtime.c]*************************************************[TAB=4]****\
+/***[sybsql.c]****************************************************[TAB=4]****\
 *                                                                            *
 * PHP/FI                                                                     *
 *                                                                            *
@@ -23,8 +23,8 @@
  *  Sybase SQL - WWW interface
  *
  *  RCS:
- *      $Revision: 1.3 $
- *      $Date: 1997/01/04 15:27:11 $
+ *      $Revision: 1.4 $
+ *      $Date: 1997/04/15 14:30:55 $
  *
  *  Description:
  *
@@ -132,8 +132,8 @@ void php_init_sybsql(void)
  *  SybsqlConnect() -   connect to the sybase server
  *
  *  RCS:
- *      $Revision: 1.3 $
- *      $Date: 1997/01/04 15:27:11 $
+ *      $Revision: 1.4 $
+ *      $Date: 1997/04/15 14:30:55 $
  *
  *  Description:
  *
@@ -236,8 +236,8 @@ void SybsqlConnect(void)
  *  MdbInit - actually connects to the sybase server
  *
  *  RCS:
- *      $Revision: 1.3 $
- *      $Date: 1997/01/04 15:27:11 $
+ *      $Revision: 1.4 $
+ *      $Date: 1997/04/15 14:30:55 $
  *
  *  Description:
  *
@@ -513,8 +513,8 @@ static int MdberrHandler (DBPROCESS *dbproc,int severity,int dberr,
  *  SybsqlDbuse - use a requested database
  *
  *  RCS:
- *      $Revision: 1.3 $
- *      $Date: 1997/01/04 15:27:11 $
+ *      $Revision: 1.4 $
+ *      $Date: 1997/04/15 14:30:55 $
  *
  *  Description:
  *
@@ -608,8 +608,8 @@ void SybsqlDbuse(void)
  *  SybsqlQuery - submits query to sybase server
  *
  *  RCS:
- *      $Revision: 1.3 $
- *      $Date: 1997/01/04 15:27:11 $
+ *      $Revision: 1.4 $
+ *      $Date: 1997/04/15 14:30:55 $
  *
  *  Description:
  *
@@ -717,8 +717,8 @@ return;
  *  SubmitQuery - submits sql query to sybase server
  *
  *  RCS:
- *      $Revision: 1.3 $
- *      $Date: 1997/01/04 15:27:11 $
+ *      $Revision: 1.4 $
+ *      $Date: 1997/04/15 14:30:55 $
  *
  *  Description:
  *
@@ -787,8 +787,8 @@ return (n);
  *  SybsqlIsRow - indicates if currect sql command returned any rows
  *
  *  RCS:
- *      $Revision: 1.3 $
- *      $Date: 1997/01/04 15:27:11 $
+ *      $Revision: 1.4 $
+ *      $Date: 1997/04/15 14:30:55 $
  *
  *  Description:
  *
@@ -863,8 +863,8 @@ void SybsqlIsRow(void)
  *  SybsqlPrintArow - print the requested fields of the current row
  *
  *  RCS:
- *      $Revision: 1.3 $
- *      $Date: 1997/01/04 15:27:11 $
+ *      $Revision: 1.4 $
+ *      $Date: 1997/04/15 14:30:55 $
  *
  *  Description:
  *
@@ -936,8 +936,8 @@ void SybsqlPrintArow(void)
  *  SybsqlNextRow - reads the next result row
  *
  *  RCS:
- *      $Revision: 1.3 $
- *      $Date: 1997/01/04 15:27:11 $
+ *      $Revision: 1.4 $
+ *      $Date: 1997/04/15 14:30:55 $
  *
  *  Description:
  *
@@ -1022,8 +1022,8 @@ void SybsqlNextRow(void)
  *  SubstSybCol - substitutes a field with value at this field
  *
  *  RCS:
- *      $Revision: 1.3 $
- *      $Date: 1997/01/04 15:27:11 $
+ *      $Revision: 1.4 $
+ *      $Date: 1997/04/15 14:30:55 $
  *
  *  Description:
  *
@@ -1180,8 +1180,8 @@ return (buf);
  *  col2char - converts any column data to an array of char
  *
  *  RCS:
- *      $Revision: 1.3 $
- *      $Date: 1997/01/04 15:27:11 $
+ *      $Revision: 1.4 $
+ *      $Date: 1997/04/15 14:30:55 $
  *
  *  Description:
  *
@@ -1275,8 +1275,8 @@ static char *col2char(int j)
  *  aprintf - formatted print to newly allocated space
  *
  *  RCS:
- *      $Revision: 1.3 $
- *      $Date: 1997/01/04 15:27:11 $
+ *      $Revision: 1.4 $
+ *      $Date: 1997/04/15 14:30:55 $
  *
  *  Description:
  *
@@ -1342,8 +1342,8 @@ static char *aprintf(char *format,...)
  *  SybsqlNumRows - number of rows in a result
  *
  *  RCS:
- *      $Revision: 1.3 $
- *      $Date: 1997/01/04 15:27:11 $
+ *      $Revision: 1.4 $
+ *      $Date: 1997/04/15 14:30:55 $
  *
  *  Description:
  *
@@ -1433,8 +1433,8 @@ void SybsqlNumRows(void)
  *  SybsqlPrintAllRows - print specified fields of all rows
  *
  *  RCS:
- *      $Revision: 1.3 $
- *      $Date: 1997/01/04 15:27:11 $
+ *      $Revision: 1.4 $
+ *      $Date: 1997/04/15 14:30:55 $
  *
  *  Description:
  *
@@ -1484,8 +1484,8 @@ void SybsqlPrintAllRows(void)
  *  SybsqlResult - prints specific fields of the current row
  *
  *  RCS:
- *      $Revision: 1.3 $
- *      $Date: 1997/01/04 15:27:11 $
+ *      $Revision: 1.4 $
+ *      $Date: 1997/04/15 14:30:55 $
  *
  *  Description:
  *
@@ -1571,8 +1571,8 @@ void SybsqlResult(void)
  *  SybsqlSeek - sets a row to the current row
  *
  *  RCS:
- *      $Revision: 1.3 $
- *      $Date: 1997/01/04 15:27:11 $
+ *      $Revision: 1.4 $
+ *      $Date: 1997/04/15 14:30:55 $
  *
  *  Description:
  *
@@ -1683,8 +1683,8 @@ void SybsqlSeek(void)
  *  SybsqlNumFields - number of fields in a result
  *
  *  RCS:
- *      $Revision: 1.3 $
- *      $Date: 1997/01/04 15:27:11 $
+ *      $Revision: 1.4 $
+ *      $Date: 1997/04/15 14:30:55 $
  *
  *  Description:
  *
@@ -1745,8 +1745,8 @@ void SybsqlNumFields(void)
  *  SybsqlFieldName - name of a column
  *
  *  RCS:
- *      $Revision: 1.3 $
- *      $Date: 1997/01/04 15:27:11 $
+ *      $Revision: 1.4 $
+ *      $Date: 1997/04/15 14:30:55 $
  *
  *  Description:
  *
@@ -1838,8 +1838,8 @@ void SybsqlFieldName(void)
  *  SybsqlResultAll - prints all rows and columns
  *
  *  RCS:
- *      $Revision: 1.3 $
- *      $Date: 1997/01/04 15:27:11 $
+ *      $Revision: 1.4 $
+ *      $Date: 1997/04/15 14:30:55 $
  *
  *  Description:
  *
@@ -1971,8 +1971,8 @@ void SybsqlResultAll(void)
  *  SybsqlGetField() -   gets the value of a specific field
  *
  *  RCS:
- *      $Revision: 1.3 $
- *      $Date: 1997/01/04 15:27:11 $
+ *      $Revision: 1.4 $
+ *      $Date: 1997/04/15 14:30:55 $
  *
  *  Description:
  *

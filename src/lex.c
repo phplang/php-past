@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: lex.c,v 1.123 1997/01/09 16:37:05 rasmus Exp $ */
+/* $Id: lex.c,v 1.152 1997/04/22 14:46:11 rasmus Exp $ */
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
@@ -88,7 +88,10 @@ typedef struct _cmd_table_t {
  * The hash is extremely simplistic and just based on the length of the
  * command.
  */
-static cmd_table_t cmd_table[22][35] = {
+#define PHP_MAX_CMD_LEN 21
+#define PHP_MAX_CMD_NUM 36
+
+static cmd_table_t cmd_table[PHP_MAX_CMD_LEN+1][PHP_MAX_CMD_NUM+1] = {
 	{ { NULL,0,NULL } },        /* 0 */
 
 	{ { NULL,0,NULL } },        /* 1 */
@@ -109,6 +112,8 @@ static cmd_table_t cmd_table[22][35] = {
 	  { "ord", INTFUNC1,Ord },
 	  { "chr", INTFUNC1,Chr },
 	  { "pow", INTFUNC2,Pow },
+	  { "pos", INTFUNC1,Pos },
+	  { "md5", INTFUNC1,Md5 },
 	  { NULL,0,NULL } }, 
 
 	{ { "echo",PHPECHO,NULL },     /* 4 */
@@ -124,12 +129,13 @@ static cmd_table_t cmd_table[22][35] = {
 	  { "date",DATE,NULL },
 	  { "next",PHPNEXT,NULL },
 	  { "prev",PREV,NULL },
-	  { "sort",INTFUNC1,Sort },
+	  { "sort",PHPSORT,NULL },
 	  { "rand",INTFUNC0,Rand },
 	  { "sqrt",INTFUNC1,Sqrt },
-	  { "file",INTFUNC1,File },
+	  { "file",INTFUNC1,PHPFile },
 	  { "link",INTFUNC2,Link },
-	  { "mail",INTFUNC3,Mail },
+	  { "mail",PHPMAIL,NULL },
+	  { "chop",INTFUNC1,Chop },
 	  { NULL,0,NULL } }, 
 
 	{ { "endif",ENDIF,NULL },   /* 5 */
@@ -140,11 +146,7 @@ static cmd_table_t cmd_table[22][35] = {
 	  { "eregi",EREGI,NULL },
 	  { "crypt",CRYPT,NULL },
 	  { "srand",INTFUNC1,Srand },
-#ifdef WINDOWS
-	  { "sleep",INTFUNC1,_Sleep },
-#else
 	  { "sleep",INTFUNC1,Sleep },
-#endif
 	  { "fopen",INTFUNC2,Fopen },
 	  { "popen",INTFUNC2,Popen },
 	  { "fgets",INTFUNC2,Fgets },
@@ -161,6 +163,8 @@ static cmd_table_t cmd_table[22][35] = {
 	  { "log10",INTFUNC1,mathLog10 },
 	  { "unset",UNSET,NULL },
 	  { "mysql",INTFUNC2,MYsql },
+	  { "asort",PHPASORT,NULL },
+	  { "umask",UMASK,NULL },
 	  { NULL,0,NULL } }, 
 
 	{ { "elseif",ELSEIF,NULL }, /* 6 */
@@ -197,6 +201,7 @@ static cmd_table_t cmd_table[22][35] = {
 	  { "pg_tty",INTFUNC1,PGtty },
 	  { "fgetss",INTFUNC2,Fgetss },
 	  { "uniqid",INTFUNC1,UniqId },
+	  { "syslog",INTFUNC2,Syslog },
 	  { NULL,0,NULL } }, 
 
 	{ { "default", DEFAULT,NULL }, /* 7 */
@@ -205,7 +210,7 @@ static cmd_table_t cmd_table[22][35] = {
 	  { "include", INCLUDE,NULL },
 	  { "dbmopen", INTFUNC2,dbmOpen },
 	  { "strrchr", INTFUNC2,StrrChr },
-	  { "sprintf", INTFUNC2,Sprintf },
+	  { "sprintf", SPRINTF,NULL },
 	  { "opendir", INTFUNC1,OpenDir },
 	  { "readdir", INTFUNC0,ReadDir },
 	  { "tempnam", INTFUNC2,TempNam }, 
@@ -220,6 +225,11 @@ static cmd_table_t cmd_table[22][35] = {
 	  { "virtual", INTFUNC1,Virtual },
 #endif
 	  { "symlink", INTFUNC2,SymLink },
+	  { "soundex", INTFUNC1,Soundex },
+	  { "openlog", INTFUNC3,OpenLog },
+#if PHP_SNMP_SUPPORT
+	  { "snmpget", INTFUNC3,phpsnmpget },
+#endif
 	  { NULL,0,NULL } },
 
 	{ { "endwhile",ENDWHILE,NULL }, /* 8 */
@@ -238,6 +248,14 @@ static cmd_table_t cmd_table[22][35] = {
 	  { "passthru",PASSTHRU,NULL },
 	  { "readlink",INTFUNC1,ReadLink },
 	  { "linkinfo",INTFUNC1,LinkInfo },
+	  { "closelog",INTFUNC0,CloseLog },
+	  { "readfile",INTFUNC1,ReadFile },	  
+	  { "ora_open",INTFUNC1,Ora_Open },
+	  { "ora_exec",INTFUNC1,Ora_Exec },
+#if PHP_SNMP_SUPPORT
+	  { "snmpwalk", INTFUNC3,phpsnmpwalk },
+#endif
+	  { "filetype", FILETYPE,NULL },
 	  { NULL,0,NULL } },
 
 	{ { "endswitch", ENDSWITCH,NULL }, /* 9 */
@@ -270,7 +288,12 @@ static cmd_table_t cmd_table[22][35] = {
 	  { "pg_dbname", INTFUNC1,PGdbName },
 	  { "setcookie", SETCOOKIE,NULL },
 	  { "parse_str", PARSESTR,NULL },
-	  { NULL,0,NULL } },        
+	  { "ora_logon", INTFUNC2,Ora_Logon },
+	  { "ora_close", INTFUNC1,Ora_Close },
+	  { "ora_parse", ORA_PARSE,NULL },
+	  { "ora_fetch", INTFUNC1,Ora_Fetch },
+	  { "checkdate", INTFUNC3,CheckDate },
+	  { NULL,0,NULL } },
 
 	{ { "strtoupper", INTFUNC1,StrToUpper }, /* 10 */
 	  { "strtolower", INTFUNC1,StrToLower },
@@ -290,6 +313,9 @@ static cmd_table_t cmd_table[22][35] = {
 	  { "addslashes", INTFUNC1,_AddSlashes },
 	  { "msql_close", INTFUNC0,MsqlClose },
 	  { "solid_exec", INTFUNC2,Solid_exec },
+	  { "initsyslog", INTFUNC0,php_init_syslog },
+	  { "ora_logoff", INTFUNC1,Ora_Logoff },
+	  { "ora_commit", INTFUNC1,Ora_Commit },
 	  { NULL,0,NULL } },
 
 	{ { "msql_result", INTFUNC3,MsqlResult }, /* 11 */
@@ -329,6 +355,9 @@ static cmd_table_t cmd_table[22][35] = {
       { "sybsql_dbuse", INTFUNC1,SybsqlDbuse },
       { "sybsql_query", INTFUNC1,SybsqlQuery },
       { "sybsql_isrow", INTFUNC0,SybsqlIsRow }, 
+	  { "getimagesize", INTFUNC1,GetImageSize },
+	  { "ora_commiton", INTFUNC1,Ora_CommitOn },
+	  { "ora_rollback", INTFUNC1,Ora_Rollback },
 	  { NULL,0,NULL } }, 
 
 	{ { "gethostbyaddr", INTFUNC1,GetHostByAddr }, /* 13 */
@@ -341,12 +370,14 @@ static cmd_table_t cmd_table[22][35] = {
 	  { "msql_createdb", INTFUNC1,MsqlCreateDB },
 	  { "pg_freeresult", INTFUNC1,PGfreeResult },
 	  { "pg_getlastoid", INTFUNC0,PGgetlastoid },
-	  { "mysql_connect", INTFUNC1,MYsqlConnect },
+	  { "mysql_connect", MYSQL_CONNECT,NULL },
 	  { "mysql_numrows", INTFUNC1,MYsqlNumRows },
 	  { "mysql_listdbs", INTFUNC0,MYsqlListDBs },
 	  { "solid_numrows", INTFUNC1,Solid_numRows },
 	  { "solid_connect", INTFUNC3,Solid_connect },
       { "sybsql_result", INTFUNC1,SybsqlResult}, 
+	  { "ora_commitoff", INTFUNC1,Ora_CommitOff },
+	  { "ora_getcolumn", INTFUNC2,Ora_GetColumn },
 	  { NULL,0,NULL } },
 
 	{ { "getlastbrowser", INTFUNC0,GetLastBrowser }, /* 14 */
@@ -379,6 +410,7 @@ static cmd_table_t cmd_table[22][35] = {
 	  { "mysql_fieldtype", MYSQL_FIELDTYPE,NULL },
 	  { "mysql_numfields", INTFUNC1,MYsqlNumFields },
 	  { "mysql_tablename", INTFUNC2,MYsqlTableName },
+	  { "mysql_insert_id", INTFUNC0,MYsqlInsertId },	  
 	  { "solid_numfields", INTFUNC1,Solid_numFields },
 	  { "solid_fieldname", INTFUNC2,Solid_fieldName },
       { "sybsql_getfield", INTFUNC1,SybsqlGetField},
@@ -404,8 +436,9 @@ static cmd_table_t cmd_table[22][35] = {
 	  { "imagefilledpolygon", IMAGEFILLEDPOLYGON,NULL },
 	  { "imagecreatefromgif", INTFUNC1,ImageCreateFromGif },
 	  { NULL,0,NULL } },
-
-	{ { NULL,0,NULL } }, /* 19 */
+	  
+	{ { "mysql_affected_rows", INTFUNC0, MYsqlAffectedRows }, /* 19 */
+	  { NULL,0,NULL } },
 
 	{ { "imagefilledrectangle", INTFUNC6,ImageFilledRectangle }, /* 20 */
 	  { NULL,0,NULL } }, 
@@ -587,12 +620,13 @@ void Include(void) {
 			Debug("No IncludePath\n");
 		}
 #endif
-
-#ifdef WINDOWS
-		fd = _OpenFile((char *)file_to_include,0,&file_size);
-#else
-		fd = OpenFile((char *)file_to_include,0,&file_size);
+#if PHP_SAFE_MODE
+		if(!CheckUid(file_to_include)) {
+			Error("SAFE_MODE Restriction in effect.  Invalid owner of file to be included");
+			return;
+		}
 #endif
+		fd = OpenFile((char *)file_to_include,0,&file_size);
 		if(fd>-1) {
 			FilePush(ofn,ofile_size,gfd);
 			if(cur_func) {
@@ -624,11 +658,20 @@ void Eval(void) {
 		Debug("Eval %s\n",s->strval);
 #endif
 		eval_mode=1;
-		FilePush(GetCurrentFilename(),GetCurrentFileSize(),gfd);
+		if(cur_func) { /* Eval call inside function */
+			FilePush(cur_func->name,gsize,-1);
+		} else {
+			FilePush(GetCurrentFilename(),GetCurrentFileSize(),gfd);
+		}
+		ParseEscapes((char *)s->strval);
 		StripSlashes((char *)s->strval);
 		ParserInit(-1,strlen((char *)s->strval),no_httpd,s->strval);
 		PushCondMatchMarks();
 		PushWhileMark();
+		if(cur_func) {
+			PushStackFrame();
+			PushCounters();
+		}
 		yyparse();
 		if(ExitCalled) state=99;
 	}
@@ -638,6 +681,7 @@ int outputchar(char ch) {
 	if(GetCurrentState(NULL)) {
 		php_header(0,NULL);
 #if APACHE
+		if(!pa) return(0);   /* HEAD request should not output anything */
 		if(rputc(ch,php_rqst)==EOF) {
 			/* browser has probably gone away */
 			return(-1);
@@ -691,6 +735,7 @@ char getnextchar(void) {
 	int i=0;
 	int cont=1;
 
+	if(!pa) return(0);
 	if(inpos==-1 || inpos>=g_length) {
 		/* Read the next line with something on it into the buffer */
 		g_length=0;
@@ -750,9 +795,6 @@ char *lookaheadword(void) {
 	if(l>31) l=31;
 	strncpy(temp,st,l);	
 	temp[l]='\0';
-#if DEBUG
-	Debug("lookahead is [%s]\n",temp);
-#endif
 	return(temp);
 }
 
@@ -791,7 +833,7 @@ char *MakeToken(char *string, int len) {
 int CommandLookup(int cmdlen, YYSTYPE *lvalp) {
 	register int i=0;
 
-	while(cmd_table[cmdlen][i].cmd) {
+	if(cmdlen<=PHP_MAX_CMD_LEN) while(cmd_table[cmdlen][i].cmd) {
 		if(!strncasecmp(&inbuf[tokenmarker],cmd_table[cmdlen][i].cmd,cmdlen)) {
 			*lvalp = (YYSTYPE) MakeToken(&inbuf[tokenmarker],cmdlen);
 			LastToken = cmd_table[cmdlen][i].token;
@@ -1009,15 +1051,6 @@ int yylex(YYSTYPE *lvalp) {
 				}
 			}
 				
-			if(tokenlen > MAX_CMD_LEN) {
-				/* unrecognized command */
-				if(output_from_marker()<0) {
-					lstate=4;
-					state=99; break;
-				}
-				state=0;
-				break;
-			}
 			state=2;
 			if(tokenlen==2 && !strncasecmp(&inbuf[tokenmarker],"if",2)) {
 				inIf++;
@@ -1443,10 +1476,12 @@ void Exit(int footer) {
 #endif
 		}
 	}
+	MYsqlClose();
 	MsqlClose();
 	PGcloseAll();
 	dbmCloseAll();
 	FpCloseAll();
+	Solid_closeAll();
 #if DEBUG
 	php_pool_show();
 	CloseDebug();
@@ -1470,7 +1505,7 @@ void DefineFunc(char *fnc) {
 
 	/* Check to see if we have an internal function by this name */
 	len = strlen((char *)fnc);
-	while(cmd_table[len][i].cmd) {
+	if(len<=PHP_MAX_CMD_LEN) while(cmd_table[len][i].cmd) {
 		if(!strncasecmp(fnc,cmd_table[len][i].cmd,len)) {
 			Error("\"%s\" is the name of an internal function",(char *)fnc);
 			return;
@@ -1577,6 +1612,9 @@ void RunFunc(char *name) {
 	arg = f->params;
 	while(arg) {
 		SetVar((char *)arg->arg,0,0);
+#if DEBUG
+		Debug("Setting function argument [%s]\n",(char *)arg->arg);
+#endif
 		arg = arg->prev;
 	}	
 	yyparse();

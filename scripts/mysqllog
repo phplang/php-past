@@ -23,7 +23,7 @@ fi
 
 
 echo "Creating tables for user id $UUID..."
-/usr/local/mysql/bin/mysql phpfi <<EOF
+/usr/local/bin/mysql phpfi <<EOF
 CREATE TABLE log$UUID (
 	timestmp	INT,
 	filename	CHAR(64),

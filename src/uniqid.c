@@ -23,7 +23,7 @@
  * Contributed by Stig Bakken - Guardian Networks AS <ssb@guardian.no>
  *
  * $Source: /u/local/src/repository/phpfi/src/uniqid.c,v $
- * $Id: uniqid.c,v 1.2 1997/01/04 15:17:10 rasmus Exp $
+ * $Id: uniqid.c,v 1.3 1997/04/15 14:30:57 cvswrite Exp $
  *
  */
 
@@ -61,6 +61,7 @@ void UniqId(void)
      */
     if (strlen(prefix) > 114) {
 	Error("The prefix to uniqid should not be more than 114 characters.");
+	Push("", STRING);
 	return;
     }
 

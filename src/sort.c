@@ -19,39 +19,53 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: sort.c,v 1.4 1997/01/04 15:17:07 rasmus Exp $ */
+/* $Id: sort.c,v 1.7 1997/04/06 15:59:42 rasmus Exp $ */
 #include "php.h"
 #include <stdlib.h>
 #include "parse.h"
 
-int comp_string(char **a, char **b) {
-	return(strcmp(*a,*b));
+typedef struct _array {
+	char *ptr;
+	char *iname;
+} Array;
+
+int comp_string(Array *a, Array *b) {
+	return(strcmp(a->ptr,b->ptr));
 }
 
-int comp_real(char **a, char **b) {
+int comp_real(Array *a, Array *b) {
 	double f, s;
 	
-	f = atof(*a);
-	s = atof(*b);
+	f = atof(a->ptr);
+	s = atof(b->ptr);
 	if(f==s) return(0);
 	return(f>s?1:-1);	
 }
 
-int comp_long(char **a, char **b) {
+int comp_long(Array *a, Array *b) {
 	long f, s;
 
-	f = atol(*a);
-	s = atof(*b);
+	f = atol(a->ptr);
+	s = atol(b->ptr);
 	if(f==s) return(0);
 	return(f>s?1:-1);
 }
 
-void Sort(void) {
+/*
+ * Sort has two modes.  Associative (mode=1) and non-associative (mode=0)
+ * In associative mode, the index-value pairings are maintained and the array
+ * is sorted such that it can be stepped through using the next()/prev() functions.
+ * In non-associated mode (mode=0) the indices stay as in the original order and 
+ * the values are shuffled around.
+ */
+void Sort(int mode) {
 	Stack *s;
 	VarTree *var;
-	static char **array;
+	Array *array;
+	Array *old_array;
+	Array *new_array;
 	int num=1024,count=0;
-	int type;
+	int type, size=1;
 
 	s = Pop();
 	if(!s) {
@@ -61,38 +75,45 @@ void Sort(void) {
 	var = s->var;
 	if(!var) return;
 	type = var->type;
-	array = (char **)emalloc(1,num*sizeof(char *));	
+	array = (Array *)emalloc(1,num*sizeof(Array));	
 	while(var) {
-		array[count] = var->strval;
+		array[count].ptr = var->strval;
+		array[count].iname = var->iname;
 		count++;
 		var = var->next;
 		if(count>=num) {
-			/* FIXME - no realloc's allowed!! */
-			array = realloc(array, num*2*sizeof(char *));
-			num = num*2;
+			new_array = emalloc(1, ++size * num * sizeof(Array));
+			memcpy(new_array,array,(size-1)*num*sizeof(Array));
+			array = new_array;
+			num = size*num;
 		}
 	}
+	old_array = emalloc(1,count*sizeof(Array));
+	memcpy(old_array,array,count*sizeof(Array));
 #if DEBUG
 	Debug("count = %d\n",count);
 #endif
 
 	switch(type) {
 	case STRING:
-		(void)qsort(array,count,sizeof(char *),(int (*)(const void *, const void *))comp_string);
+		(void)qsort(array,count,sizeof(Array),(int (*)(const void *, const void *))comp_string);
 		break;
 	case LNUMBER:
-		(void)qsort(array,count,sizeof(char *),(int (*)(const void *, const void *))comp_long);
+		(void)qsort(array,count,sizeof(Array),(int (*)(const void *, const void *))comp_long);
 		break;
 	case DNUMBER:
-		(void)qsort(array,count,sizeof(char *),(int (*)(const void *, const void *))comp_real);
+		(void)qsort(array,count,sizeof(Array),(int (*)(const void *, const void *))comp_real);
 		break;
 	}
-	count=0;
 	var = s->var;
+	count=0;
 	while(var) {
-		var->strval = array[count];	
+		var->strval = array[count].ptr;	
 		var->intval = atol(var->strval);
 		var->douval = atof(var->strval);
+		if(mode) {
+			var->iname = array[count].iname;
+		}
 		var = var->next;
 		count++;
 	}

@@ -19,13 +19,13 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: conf.c,v 1.16 1997/01/04 15:16:50 rasmus Exp $ */
+/* $Id: conf.c,v 1.17 1997/04/13 04:51:36 rasmus Exp $ */
 #include "php.h"
 #include <stdlib.h>
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
 #endif
-#ifndef WINDOWS
+#if HAVE_PWD_H
 #include <pwd.h>
 #endif
 #ifdef HAVE_CRYPT_H

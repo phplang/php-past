@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: db.c,v 1.16 1997/01/04 15:16:51 rasmus Exp $ */
+/* $Id: db.c,v 1.18 1997/04/17 17:48:27 rasmus Exp $ */
 #include <stdlib.h>
 #include <string.h>
 #include <errno.h>
@@ -42,9 +42,6 @@
 #endif
 #endif
 #include "parse.h"
-#ifdef WINDOWS
-#include <io.h>
-#endif
 
 static dbmStack *top = NULL;
 
@@ -298,7 +295,7 @@ int _dbmOpen(char *filename, char *mode) {
 			lock=0;
 			break;
 	}
-	fn = FixFilename(filename,0,&ret);
+	fn = FixFilename(filename,0,&ret,0);
 #ifdef GDBM 
 	if(lock) {
 		lockfn = emalloc(1,strlen(fn)+10);

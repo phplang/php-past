@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: var.c,v 1.63 1997/01/11 18:28:50 rasmus Exp $ */
+/* $Id: var.c,v 1.76 1997/04/23 02:50:28 rasmus Exp $ */
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -60,7 +60,8 @@ void php_init_symbol_tree(void) {
  *       16 = set read-only bit
  *       32 = set to super-global
  *   
- * inc:  -1 = set variable from a GET method argument
+ * inc:  -2 = define variable placeholder
+ *       -1 = set variable from a GET method argument
  *        0 = set the variable to value on expression stack 
  *        1 = increment by value on expression stack
  *        2 = decrement by value on expression stack
@@ -70,14 +71,14 @@ void php_init_symbol_tree(void) {
  *
  */
 void SetVar(char *name, int mode, int inc) {
-	VarTree *t, *ot=NULL, *tt, *ptt, *ftt, *var, *o;
+	VarTree *t, *ot=NULL, *tt, *ptt, *ftt, *var, *o, *rt;
 	VarTree a, b;
 	Stack *st;
 	char *s, *buf=NULL;
 	int done=0;
 	int i=0, oi=0;
 	int count=0;
-	int whole_array=0;
+	int whole_array=0, array_cnt=0;
 	char temp[64];
 	int data_len=0;
 	VarTree *new_name=NULL;
@@ -95,10 +96,26 @@ void SetVar(char *name, int mode, int inc) {
 	b.intval = st->intval;
 	b.douval = st->douval;
 	var = st->var;
-	whole_array = st->flag&1;	/* indicates that src data is an entire array */
+	whole_array = st->flag&1;	/* indicates that src data could be an entire array */
+	if(whole_array) {
+		array_cnt=0;
+		t=var;
+		while(t && !done) {
+			if(!t->deleted) {
+				array_cnt=1;
+				done=1;
+			} else {
+				t=t->next;
+			}
+		}
+		done=0;
+	} else {
+		array_cnt=1;
+	}
    	if(st->strval) {
 		b.strval = estrdup(1,st->strval);
-		b.allocated = strlen(st->strval) + 1;
+		if(inc==-2) b.allocated = 0;
+		else b.allocated = strlen(st->strval) + 1;
 		data_len = strlen(b.strval);
 	}
 
@@ -174,6 +191,7 @@ void SetVar(char *name, int mode, int inc) {
 					done=1;
 					switch(inc) {
 					case 0: /* absolute set */
+					case -2:
 						t->douval = b.douval;
 						t->intval = b.intval;
 						/* check if we need a new bit of memory to store value */
@@ -181,13 +199,13 @@ void SetVar(char *name, int mode, int inc) {
 							if(t->strval) {
 								if(data_len >= t->allocated) {
 									t->strval = estrdup(0,b.strval);
-									t->allocated = strlen(b.strval) + 1;
+									t->allocated = b.allocated;
 								} else {
 									strcpy(t->strval,b.strval);	
 								}
 							} else {
 								t->strval = estrdup(0,b.strval);
-								t->allocated = strlen(b.strval) + 1;
+								t->allocated = b.allocated;
 							}							
 						} 
 						else {
@@ -198,7 +216,7 @@ void SetVar(char *name, int mode, int inc) {
 							}
 						}
 						t->type = b.type;
-						t->deleted = 0;
+						t->deleted = 0; 
 						if (var && whole_array && var->iname) {
 							if(t->iname) {
 								if(strlen(var->iname) > strlen(t->iname)) {
@@ -210,19 +228,16 @@ void SetVar(char *name, int mode, int inc) {
 								t->iname=estrdup(0,var->iname);
 							}
 						}
-						if(var && whole_array && var->next) {
-#if DEBUG
-							Debug("copyarray - absolute\n");
-#endif
+						if(var && whole_array && var->next && array_cnt) {
 							o=t->next;
 							while(o) {
 								o->deleted=1;
 								o = o->next;	
 							}
 							t->count = 1;
+							t->lastnode=t->next;
 							t->prev=(VarTree *)-1;
 							t->lacc = (VarTree *)-1;
-							t->lastnode=t->next;
 							copyarray(t,var->next,t,0);
 						}
 						break;
@@ -563,26 +578,28 @@ void SetVar(char *name, int mode, int inc) {
 							break;
 						}	
 					}
-					t->flag = inc;
+					t->flag = (inc==-2)?0:inc;
 					break;
 				case 1: /* append to end of array */
 					ptt=t;
 					tt=t;
+					rt=t;
 					ftt=t;
 					count=0;
 					while(tt) {
 						if(!tt->deleted) {
 							count++;
+							if(count==1) {
+								rt=tt;
+							}
 							ftt=tt;
 						}
 						ptt=tt;
 						tt=tt->next;
 					}
-					if(var && whole_array && var->next) {
-#if DEBUG
-						Debug("Checking for %s[%s]\n",name,var->iname);
-#endif
-						tt = GetVar(name,var->iname,0);
+					if(var && whole_array && var->next && (ptt->deleted || strcmp(rt->iname,"0")) && array_cnt) {
+						if(ptt->deleted) tt=ptt;
+						else tt = GetVar(name,var->iname,0);
 						if(tt) {
 							if(strlen(var->strval)>tt->allocated) {
 								tt->strval = estrdup(0,var->strval);
@@ -593,14 +610,12 @@ void SetVar(char *name, int mode, int inc) {
 							tt->intval = var->intval;
 							tt->douval = var->douval;
 							tt->type = var->type;
-							tt->flag = inc;
+							tt->flag = (inc==-2)?0:inc;
 							tt->scope = mode&60;	
 							tt->deleted=0;
 						}
-#if DEBUG
-						if(tt) Debug("Found %s[%s]\n",name,var->iname);
-#endif
 					}
+
 					if(!tt) {
 						sprintf(temp,"%d",count);
 						tt = GetVar(name,temp,0);
@@ -622,51 +637,45 @@ void SetVar(char *name, int mode, int inc) {
 						tt->douval = b.douval;
 						if(!ftt->next) {
 							tt->strval = estrdup(0,b.strval);
-							tt->allocated = strlen(b.strval) + 1;
+							tt->allocated = b.allocated;
 						} else {
 							if(strlen(b.strval)+1 > tt->allocated) {
 								tt->strval = estrdup(0,b.strval);
-								tt->allocated = strlen(b.strval) + 1;
+								tt->allocated = b.allocated;
 							} else {
 								strcpy(tt->strval,b.strval);
 							}
 						}
 						tt->type = b.type;
-						tt->flag = inc;
+						tt->flag = (inc==-2)?0:inc;
 						tt->scope = mode&60;	
 						tt->deleted=0;
 						if(!ftt->next) {
-							if(var && whole_array && var->next && strcmp(t->iname,"0")) {
+							if(var && whole_array && var->next && strcmp(t->iname,"0") && array_cnt) {
 								tt->iname = estrdup(0,var->iname);
 							} else {
 								sprintf(temp,"%d",count);
 								tt->iname=estrdup(0,temp);
-#if DEBUG
-								Debug("Set %s[%s] = %s\n",tt->name,tt->iname,tt->strval);
-#endif
 							}
 							ptt->next = tt;
 							if(tt!=ptt) tt->prev = ptt;
 							else tt->prev = (VarTree *)-1;
 						}
 						t->count++;
-						tt->count = t->count;
+						tt->count = t->count-1;
 						t->lastnode = tt;
 					} else {
 						tt=ptt;
 					}
 					done = 1;
-					if(var && whole_array && var->next) {
-#if DEBUG
-						Debug("copyarray - append\n");
-#endif
+					if(var && whole_array && var->next && array_cnt) {
 						/* Here we will guess that if the first
 						   element of the destination array does 
 						   not have an index of "0", then we are 
 						   dealing with an associative array and
 						   we will merge indeces instead of
 						   renumbering */
-						if(!strcmp(t->iname,"0")) {
+						if(!strcmp(rt->iname,"0")) {
 							copyarray(tt,var->next,t,1);
 						} else {
 							copyarray(tt,var->next,t,2);
@@ -685,6 +694,7 @@ void SetVar(char *name, int mode, int inc) {
 					if(tt) { /* Found absolute index, re-assign */
 						switch(inc) {	
 						case 0:
+						case -2:
 							tt->douval = b.douval;
 							tt->intval = b.intval;
 							data_len = strlen(b.strval);
@@ -692,13 +702,13 @@ void SetVar(char *name, int mode, int inc) {
 								if(tt->strval) {
 									if(data_len >= tt->allocated) {
 										tt->strval = estrdup(0,b.strval);
-										tt->allocated = strlen(b.strval) + 1;
+										tt->allocated = b.allocated;
 									} else {
 										strcpy(tt->strval,b.strval);	
 									}
 								} else {
 									tt->strval = estrdup(0,b.strval);
-									tt->allocated = strlen(b.strval) + 1;
+									tt->allocated = b.allocated;
 								}							
 							}
 							else {
@@ -876,35 +886,29 @@ void SetVar(char *name, int mode, int inc) {
 							}	
 							break;
 						}
-						tt->flag = inc;
+						tt->flag = (inc==-2)?0:inc;
 					} else { /* Wasn't found, create it */
 						tt = emalloc(0,sizeof(VarTree));
 						tt->name = estrdup(0,name);
 						tt->strval = estrdup(0,b.strval);
-						tt->allocated = strlen(b.strval) + 1;
+						tt->allocated = b.allocated;
 						tt->left = t->left;
 						tt->right = t->right;
 						tt->next=NULL;
-						tt->count=count+1;
+						tt->count=t->count;
 						tt->intval = b.intval;
 						tt->douval = b.douval;
 						tt->type = b.type;
-						tt->flag = inc;
+						tt->flag = (inc==-2)?0:inc;
 						tt->scope = mode&60;
 						tt->deleted=0;
 						tt->iname=estrdup(0,a.strval);
-#if DEBUG
-						Debug("a.strval set to %s\n",a.strval);
-#endif
 						ptt->next = tt;
 						if(tt!=ptt) tt->prev = ptt;
 						else tt->prev = (VarTree *)-1;
 						t->count++;
 						t->lastnode = tt;
-						if(var && whole_array && var->next) {
-#if DEBUG
-							Debug("copyarray - new\n");
-#endif
+						if(var && whole_array && var->next && array_cnt) {
 							copyarray(tt,var->next,t,0);
 						}
 					}	
@@ -937,17 +941,17 @@ void SetVar(char *name, int mode, int inc) {
 		t->prev=(VarTree *)-1;
 		t->lacc = (VarTree *)-1;
 		t->count=1;
+		t->deleted = 0;
 		t->lastnode = t;
 		t->intval = b.intval;
 		t->douval = b.douval;
 		t->strval = estrdup(0,b.strval);
-		t->allocated = strlen(b.strval) + 1;
+		t->allocated = b.allocated;
 		t->name = estrdup(0,s);
 		t->iname=NULL;
 		t->type = b.type;
-		t->flag = inc;
+		t->flag = (inc==-2)?0:inc;
 		t->scope = mode&28;
-		t->deleted = 0;
 		if(!t->iname && var && whole_array && (mode==0 || mode==1)) {
 			if(var->iname) t->iname=estrdup(0,var->iname);
 		} 
@@ -955,10 +959,7 @@ void SetVar(char *name, int mode, int inc) {
 		else if(!t->iname && mode&2) {
 			t->iname=estrdup(0,a.strval);
 		}
-		if(var && whole_array && var->next) {
-#if DEBUG
-			Debug("copyarray - new 2\n");
-#endif
+		if(var && whole_array && var->next && array_cnt) {
 			copyarray(t,var->next,t,0);
 		}
 		if(mode&8 && fs_top) { /* Creating static var in function frame */
@@ -991,11 +992,11 @@ void SetVar(char *name, int mode, int inc) {
 		t->intval = b.intval;
 		t->douval = b.douval;
 		t->strval = estrdup(0,b.strval);
-		t->allocated = strlen(b.strval) + 1;
+		t->allocated = b.allocated;
 		t->name = estrdup(0,s);
 		t->iname=NULL;
 		t->type = b.type;
-		t->flag = inc;
+		t->flag = (inc==-2)?0:inc;
 		t->scope = mode&60;
 		t->deleted = 0;
 		if(!t->iname && var && whole_array && (mode==0 || mode==1)) {
@@ -1005,10 +1006,7 @@ void SetVar(char *name, int mode, int inc) {
 		else if(!t->iname && mode&2) {
 			t->iname=estrdup(0,a.strval);
 		}
-		if(var && whole_array && var->next) {
-#if DEBUG
-			Debug("copyarray - new 2\n");
-#endif
+		if(var && whole_array && var->next && array_cnt) {
 			copyarray(t,var->next,t,0);
 		}
 	}
@@ -1049,7 +1047,7 @@ VarTree *GetVar(char *name, char *index, int mode) {
 				t=t->right; i=0;
 			} else if( *(s+i) == *(t->name+i)) {
 				if(i==0 && !strcmp(s,t->name)) {
-					if(t->flag == -2) return(NULL);  /* GET method var accessed in secure mode */
+					if(t->flag==-2) return(NULL);  /* GET method var accessed in secure mode */
 					if(t->deleted && t->count==0) return(NULL);
 					if(t->scope&4 && fs_top && var_top != var_main) { /* Global variable placeholder */
 						var_top = var_main; /* switch to global frame */
@@ -1063,14 +1061,14 @@ VarTree *GetVar(char *name, char *index, int mode) {
 						return(t);
 					}
 					if(!index && !mode) {
-						while(t->deleted) t=t->next;
+						while(t && t->deleted) t=t->next;
 						return(t);
 					}
 					else if(index) {
 						tt = t;
 						while(tt) {
 							if(!strcmp(tt->iname,index)) {
-								tt->count = t->count;
+/*								tt->count = t->count;  */
 								if(tt->deleted) return(NULL);
 								return(tt);
 							}
@@ -1080,7 +1078,7 @@ VarTree *GetVar(char *name, char *index, int mode) {
 					} else {
 						if(t->lacc == (VarTree *)-1) { 
 							t->lacc=t;
-							while(t->deleted) t=t->next;
+							while(t && t->deleted) t=t->next;
 							return(t);
 						} else if(t->lacc==NULL) return(NULL);
 						tt = t->lacc->next;
@@ -1117,11 +1115,11 @@ VarTree *GetVar(char *name, char *index, int mode) {
 			env->name = estrdup(2,name);
 			env->type = STRING;
 			env->next = NULL;
-			env->prev = NULL;
+			env->prev = (VarTree *)-1;
 			env->left = NULL;
 			env->right = NULL;
 			env->lacc = NULL;
-			env->lastnode = NULL;
+			env->lastnode = env;
 			return(env);		
 		}
 	} else s=NULL;
@@ -1153,15 +1151,13 @@ VarTree *GetVar(char *name, char *index, int mode) {
 	if(s) {
 		env = emalloc(2,sizeof(VarTree));
 		env->strval = NULL;
-		env->allocated = 0;
-		env->name = NULL;
 		env->iname = NULL;
 		env->next = NULL;
-		env->prev = NULL;
+		env->prev = (VarTree *)-1;
 		env->left = NULL;
 		env->right = NULL;
 		env->lacc = NULL;
-		env->lastnode = NULL;
+		env->lastnode = env;
 		env->intval = atol(s);
 		env->douval = atof(s);
 		env->strval = estrdup(2,s);
@@ -1187,15 +1183,13 @@ VarTree *GetVar(char *name, char *index, int mode) {
 		}
 		env = emalloc(2,sizeof(VarTree));
 		env->strval = NULL;
-		env->allocated = 0;
-		env->name = NULL;
 		env->iname = NULL;
 		env->next = NULL;
-		env->prev = NULL;
+		env->prev = (VarTree *)-1;
 		env->left = NULL;
 		env->right = NULL;
 		env->lacc = NULL;
-		env->lastnode = NULL;
+		env->lastnode = env;
 		env->intval = i;
 		env->douval = i;
 		sprintf(temp,"%d",i);
@@ -1228,16 +1222,13 @@ VarTree *GetVar(char *name, char *index, int mode) {
 			*sss='\0';
 		}
 		env = emalloc(2,sizeof(VarTree));
-		env->strval = NULL;
-		env->allocated = 0;
-		env->name = NULL;
 		env->iname = NULL;
 		env->next = NULL;
-		env->prev = NULL;
+		env->prev = (VarTree *)-1;
 		env->left = NULL;
 		env->right = NULL;
 		env->lacc = NULL;
-		env->lastnode = NULL;
+		env->lastnode = env;
 		if(ma) env->intval = atol(ma);
 		else env->intval=0;
 		if(ma) env->douval = atof(ma);
@@ -1264,7 +1255,7 @@ void IsSet(char *name) {
 	VarTree *t;
 
 	t = GetVar(name,NULL,0);
-	if(!t) {
+	if(!t || (t && !t->allocated)) {
 		Push("0",LNUMBER);
 	} else {
 		Push("1",LNUMBER);
@@ -1273,22 +1264,27 @@ void IsSet(char *name) {
 
 /* Move array pointer to the beginning of array */
 void Reset(char *name) {
-	VarTree *t;
+	VarTree *t, *tt;
 
 	t = GetVar(name,NULL,0);
-	if(t) {
+	if(t && t->allocated) {
 		t->lacc = (VarTree *)-1;
-		Push(t->strval,t->type);	
+		tt=t;
+		while(tt && tt->deleted) tt=tt->next;
+		if(tt) Push(t->strval,t->type);	
+		else Push("",STRING);
 	} else Push("",STRING);
 }
 
 void End(char *name) {
-	VarTree *t;
+	VarTree *t,*tt;
 
 	t = GetVar(name,NULL,0);
-	if(t) {
+	if(t && t->allocated) {
 		t->lacc = t->lastnode->prev;
-		if(t->lastnode) Push(t->lastnode->strval,t->lastnode->type);
+		tt=t->lastnode;
+		while(tt && tt->deleted) tt=tt->prev;
+		if(tt) Push(tt->strval,t->lastnode->type);
 		else Push("",STRING);
 	} else Push("",STRING);
 }
@@ -1298,9 +1294,10 @@ void Key(char *name) {
 	VarTree *t, *tt;
 
 	t = GetVar(name,NULL,0);
-	if(t) {
+	if(t && t->allocated) {
 		if(t->lacc != (VarTree *)-1 && t->lacc != NULL) tt=t->lacc->next;
 		else tt=t;
+		while(tt && tt->deleted) tt=tt->next;
 		if(tt) Push(tt->iname,STRING);
 		else Push("",STRING);
 	} else Push("",STRING);
@@ -1311,11 +1308,13 @@ void Next(char *name) {
 	VarTree *t, *tt;
 
 	t = GetVar(name,NULL,0);
-	if(t) {
+	if(t && t->allocated) {
 		if(t->lacc == (VarTree *)-1) tt=t;	
 		else if(t->lacc == NULL) tt=NULL;
 		else tt=t->lacc->next;
-		t->lacc = tt;
+		while(tt && tt->deleted) tt=tt->next;	
+		if(!tt) t->lacc = t->lastnode;
+		else t->lacc = tt;
 		if(tt) Push(tt->strval,tt->type);
 		else Push("",STRING);
 	} else Push("",STRING);
@@ -1326,11 +1325,16 @@ void Prev(char *name) {
 	VarTree *t, *tt;
 
 	t = GetVar(name,NULL,0);
-	if(t) {
+	if(t && t->allocated) {
 		if(t->lacc == (VarTree *)-1) tt=(VarTree *)-1;	
 		else if(t->lacc == NULL) tt=t->lastnode;
-		else tt=t->lacc->prev;
-		t->lacc = tt;
+		else tt=t->lacc;
+		while(tt!=(VarTree *)-1 && tt && tt->deleted) tt=tt->prev;	
+		if(!tt || tt==(VarTree *)-1) {
+			t->lacc = (VarTree *)-1;
+		} else {
+			t->lacc = tt->prev;
+		}
 		if(tt!=NULL && tt!=(VarTree *)-1) Push(tt->strval,tt->type);
 		else Push("",STRING);
 	} else Push("",STRING);
@@ -1341,7 +1345,8 @@ char *SubVar(char *string) {
 	char *allocated, *s, *t, o='\0', *ind, *inde, *rind=NULL;
 	VarTree *var, *var2=NULL;
 	char *ret, *sret;
-	int l, ll, mode=0;
+	int l, ll, mode=0, cz=0;
+	char buf[64];
 
 	if(!strchr(string,VAR_INIT_CHAR)) return(estrdup(2,string));
 	l = strlen(string) + 1024;	
@@ -1410,15 +1415,23 @@ char *SubVar(char *string) {
 			o = *s;
 			*s = '\0';
 			if(*(t+1) == VAR_INIT_CHAR) {
-				var2 = GetVar(t+2,ind,mode);
+				if(ind) while(*(ind+cz)=='0') cz++;	
+				if(ind && cz && CheckType(ind+cz)==LNUMBER) {
+					sprintf(buf,"%ld",atol(ind));
+					var2 = GetVar(t+2,buf,mode);
+				} else var2 = GetVar(t+2,ind,mode);
 				if(var2 && var2->strval) {
 					var = GetVar(var2->strval,ind,mode);
 				} else var=NULL;
 			} else {
-				var = GetVar(t+1,ind,mode);
+				if(ind) while(*(ind+cz)=='0') cz++;	
+				if(ind && cz && CheckType(ind+cz)==LNUMBER) {
+					sprintf(buf,"%ld",atol(ind));
+					var = GetVar(t+1,buf,mode);
+				} else var = GetVar(t+1,ind,mode);
 			}
 			if(rind) rind=NULL;
-			if(var) {
+			if(var && var->allocated) {
 				ll = strlen(var->strval);
 				if(ret-sret > l-1-ll) {
 					sret = emalloc(2,2*l+ll);
@@ -1452,8 +1465,34 @@ void Count(void) {
 	}
 
  	t = s->var;	
-	if(t) sprintf(temp,"%d",s->var->count);	
+	while(t->prev!=(VarTree *)-1) {
+		t = t->prev;
+	}
+	if(t && t->allocated) sprintf(temp,"%d",t->count);	
 	else strcpy(temp,"0");
+	Push(temp,LNUMBER);
+}
+
+/* Return the position of an array element */
+void Pos(void) {
+	Stack *s;
+	VarTree *t;	
+	char temp[16];
+
+	s = Pop();
+	if(!s) {
+		Error("Stack error in count");
+		return;
+	}
+
+ 	t = s->var;	
+	if(t && t->allocated) {
+		if(t->prev!=(VarTree *)-1) {
+			sprintf(temp,"%d",t->count);	
+		} else {
+			sprintf(temp,"%d",0);	
+		}
+	} else strcpy(temp,"-1");
 	Push(temp,LNUMBER);
 }
 
@@ -1468,7 +1507,7 @@ void ArrayMax(void) {
 		return;
 	}
 	t = s->var;
-	if(t) {
+	if(t && t->allocated) {
 		max=t;
 		tt=t->next;
 		while(tt) {
@@ -1524,7 +1563,7 @@ void ArrayMin(void) {
 		return;
 	}
 	t = s->var;
-	if(t) {
+	if(t && t->allocated) {
 		min=t;
 		tt=t->next;
 		while(tt) {
@@ -1642,7 +1681,6 @@ void *PtrPop(void) {
 }
 	
 void SecureVar(void) {
-#ifndef WINDOWS
 	Stack *s;
 	VarTree *v;
     regex_t re;
@@ -1733,10 +1771,6 @@ right:
 	}
 end: ;
 	regfree(&re);
-#else
-	Pop();
-	Error("SecureVAr not available on this system");
-#endif
 }
 
 /* Create a new stack frame and make it the current one */
@@ -1774,7 +1808,7 @@ void Global(void) {
 		args = GetFuncArgList();
 		while(args) {
 			var = GetVar(args->arg,NULL,0);
-			if(!var) { /* if it doesn't exist, create it */
+			if(!var || (var && !var->allocated)) { /* if it doesn't exist, create it */
 				Push(def_val,LNUMBER);
 				SetVar(args->arg,4,0); 
 			}
@@ -1793,20 +1827,12 @@ void copyarray(VarTree *dvar, VarTree *svar, VarTree *dtop, int renum) {
 	int lname,lstrval,liname;
 	char newnum[32];
 
-#if DEBUG
-	Debug("copyarray %s[%s] to %s[%s]\n",svar->name,svar->iname,dvar->name,dvar->iname);
-#endif
 	s = svar;
 	d = dvar;
 	count = dtop->count;
-#if DEBUG
-	Debug("Count is %d\n",count);
-#endif
 	while(s && d) {
+		if(!s->deleted) {
 		if(renum==2) {
-#if DEBUG
-			Debug("Checking for %s[%s]\n",d->name,s->iname);
-#endif
 			new = GetVar(d->name,s->iname,0);
 			if(new) {
 				if(strlen(s->strval)>new->allocated) {
@@ -1818,10 +1844,7 @@ void copyarray(VarTree *dvar, VarTree *svar, VarTree *dtop, int renum) {
 				new->intval = s->intval;
 				new->douval = s->douval;
 				new->type = s->type;
-				new->deleted=0;
-#if DEBUG
-				Debug("Found %s[%s]\n",d->name,s->iname);
-#endif
+				new->deleted = s->deleted;
 				d = d->next;
 				s = s->next;	
 				new=d;
@@ -1834,9 +1857,6 @@ void copyarray(VarTree *dvar, VarTree *svar, VarTree *dtop, int renum) {
 			lname=0;
 			lstrval=0;
 			liname=0;
-#if DEBUG
-			Debug("Creating node %d (s->strval=%s)\n",count,s->strval);
-#endif
 			memcpy(new,s,sizeof(VarTree));
 			new->next = NULL;
 		} else {
@@ -1844,9 +1864,6 @@ void copyarray(VarTree *dvar, VarTree *svar, VarTree *dtop, int renum) {
 			lname = strlen(new->name);
 			lstrval = new->allocated-1;
 			liname = strlen(new->iname);
-#if DEBUG
-			Debug("re-assigning node %d\n",count);
-#endif
 		}
 		if(lname==0 || strlen(s->name)>lname) {
 			new->name = estrdup(0,s->name);
@@ -1862,6 +1879,7 @@ void copyarray(VarTree *dvar, VarTree *svar, VarTree *dtop, int renum) {
 		}
 		new->intval = s->intval;
 		new->douval = s->douval;
+		new->count = s->count;
 		if(renum==0) {
 			if(liname==0 || strlen(s->iname)>liname) {
 				new->iname = estrdup(0,s->iname);
@@ -1876,16 +1894,17 @@ void copyarray(VarTree *dvar, VarTree *svar, VarTree *dtop, int renum) {
 				strcpy(new->iname,newnum);
 			}
 		}	
-		new->deleted=0;
+		new->deleted=s->deleted;
 		new->prev = d;
 		new->left = NULL;
 		new->right = NULL;
 		new->lacc = (VarTree *)-1;
-		new->lastnode = NULL;
+		new->lastnode = new;
 		new->type = s->type;
 		new->flag = s->flag;
 		d->next = new;
 		d = d->next;
+		}
 		s = s->next;	
 	}
 	dtop->count = count;
@@ -1923,7 +1942,7 @@ void UnSet(char *name) {
 	VarTree *var;
 
 	var = GetVar(name,NULL,0);
-	if(var) {
+	if(var && var->allocated) {
 		deletearray(var);
 	}
 }

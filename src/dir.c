@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: dir.c,v 1.7 1997/01/04 15:16:52 rasmus Exp $ */
+/* $Id: dir.c,v 1.9 1997/04/15 14:30:44 cvswrite Exp $ */
 #include "php.h"
 #include <dirent.h>
 #ifdef HAVE_UNISTD_H
@@ -27,9 +27,6 @@
 #endif
 #include <errno.h>
 #include "parse.h"
-#ifdef WINDOWS
-#include <dir.h>
-#endif
 
 static DIR *dirp=NULL;
 
@@ -45,15 +42,21 @@ void OpenDir(void) {
         Error("Stack error in opendir");
         return;
     }
-	if(dirp) closedir(dirp);
+	if(dirp)
+		closedir(dirp);
 	dirp = opendir(s->strval);
 	if(!dirp) {
 		Error("%d:%s",errno,strerror(errno));
+		Push("-1",LNUMBER);
+	}
+	else {
+		Push("0",LNUMBER);
 	}
 } 
 
 void CloseDir(void) {
-	if(dirp) closedir(dirp);
+	if(dirp)
+		closedir(dirp);
 	dirp=NULL;
 } 
 
@@ -69,8 +72,11 @@ void ChDir(void) {
 	ret = chdir(s->strval);
 	if(ret<0) {
 		Error("%d:%s",errno,strerror(errno));
+		Push("-1",LNUMBER);
 	}
-	Push("-1",LNUMBER);
+	else {
+		Push("0",LNUMBER);
+	}
 }
 
 void RewindDir(void) {
@@ -82,9 +88,12 @@ void ReadDir(void) {
 
 	if(!dirp) {
 		Error("No current directory pointer - call opendir() first");
+		Push("", STRING);
 		return;
 	}
 	direntp = readdir(dirp);
-	if(direntp) Push(direntp->d_name,STRING);
-	else Push("",STRING);
+	if(direntp)
+		Push(direntp->d_name,STRING);
+	else
+		Push("",STRING);
 }

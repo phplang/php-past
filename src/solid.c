@@ -51,6 +51,7 @@
 typedef struct {
 	char name[32];
 	char *value;
+	long int vallen;
 } ResultValue;
 
 typedef struct SolidResult {
@@ -86,7 +87,6 @@ void php_init_solid(void) {
 	solid_ind=2;
 	solid_conn_ind=1;
 	SQLAllocEnv(&henv);
-	/*setenv("SOLIDDIR", "/home/jvdmost/ftp/solid/server", 1);*/
 #endif
 }
 
@@ -263,8 +263,8 @@ void Solid_exec(void) {
 	SolidResult *result=NULL;
 	HDBC        curr_conn=NULL;
 	short       resultcols;
-	SWORD       colnamelen, coltype, scale, nullable; /* Not used */
-    UDWORD      collen;       /* Not used */
+	SWORD       colnamelen; /* Not used */
+	SDWORD      displaysize;
 	RETCODE     rc;
 	char        state[6];     /* Not used */
 	SDWORD      error;        /* Not used */
@@ -331,17 +331,21 @@ void Solid_exec(void) {
 			result->fetched = 0;
 			result->values = (ResultValue *)emalloc(0, sizeof(ResultValue)*resultcols);
 			for (i = 0; i < resultcols; i++) {
-				SQLDescribeCol(result->stmt, i+1, result->values[i].name, 
-					sizeof(result->values[i].name), &colnamelen, &coltype, 
-					&collen, &scale, &nullable);
-				result->values[i].value = (char *)emalloc(0, collen + 1);
+				SQLColAttributes(result->stmt, i+1, SQL_COLUMN_NAME,
+					result->values[i].name, sizeof(result->values[i].name),
+					&colnamelen, NULL);
+				SQLColAttributes(result->stmt, i+1, SQL_COLUMN_DISPLAY_SIZE,
+					NULL, 0, NULL, &displaysize);
+				result->values[i].value = (char *)emalloc(0, displaysize + 1);
 				if (result->values[i].value == NULL) {
 					Error("Out of memory");
 		            Push("0", LNUMBER);
 					return;
 				}
 				SQLBindCol(result->stmt, i+1, SQL_C_CHAR, 
-					result->values[i].value, collen, NULL);
+					result->values[i].value, displaysize+1,
+					&result->values[i].vallen);
+
 			}
 		    j = solid_add_result(result);
 		}
@@ -362,7 +366,6 @@ void Solid_fetchRow(void) {
 	Stack       *s;
 	int         res_ind;
 	SolidResult *result;
-	HDBC        curr_conn;
 	RETCODE     rc;
 
 	s = Pop();
@@ -410,14 +413,9 @@ void Solid_result(void) {
 #ifdef HAVE_LIBSOLID
 	Stack       *s;
 	char        *field;
-	char        *ftype;
 	int         res_ind;
 	int         field_ind;
 	SolidResult *result;
-	HDBC        curr_conn;
-	char        *value;
-	char        *tmp;
-	char        *ret;
 	int         i;
 	RETCODE     rc;
 
@@ -479,6 +477,13 @@ void Solid_result(void) {
 			Push("", STRING);
 			return;
 		}
+      } else {
+      /* check for limits of field_ind if the field parameter was an int */
+              if (field_ind >= result->numcols || field_ind <0) {
+                      Error("Field index is larger than the number of fields");
+                      Push("", STRING);
+                      return;
+              }
 	}
 
     if (result->fetched==0) {
@@ -491,11 +496,14 @@ void Solid_result(void) {
 		result->fetched++;
 	}
 
-	Push((ret=AddSlashes(result->values[i].value,0)), STRING);
+	if (result->values[field_ind].vallen == SQL_NULL_DATA)
+		Push("", STRING); /* FIXME: better value for null ? */
+	else
+		Push(AddSlashes(result->values[field_ind].value,0), STRING);
+
 	return;
 
 #else
-	Pop();
 	Pop();
 	Pop();
 	Push("", STRING);
@@ -592,7 +600,7 @@ void Solid_connect(void) {
 	}
 	else {
 		j = solid_add_conn(new_conn);
-		temp = (char*) emalloc(1,(j%10)+3); /* FIXME: question: why j%10 ??? */
+		temp = (char*) emalloc(1,11);
 		sprintf(temp, "%d", j);
 	}
 	Push(temp, LNUMBER);
@@ -621,8 +629,7 @@ void Solid_close(void) {
 		conn_ind = 0;
 
 	conn = solid_get_conn(conn_ind);
-
-	solid_del_conn(conn);
+	if(conn) solid_del_conn(conn);
 #else
 	Pop();
 	Error("No Solid support");
@@ -662,7 +669,7 @@ void Solid_numRows(void) {
 
     /*SQLNumResultCols(result->stmt, &cols);*/
 	SQLRowCount(result->stmt, &rows);
-	sprintf(temp, "%d", rows);
+	sprintf(temp, "%ld", rows);
 	Push(temp, LNUMBER);
 #else
 	Pop();

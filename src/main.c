@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: main.c,v 1.41 1997/01/04 22:17:53 rasmus Exp $ */
+/* $Id: main.c,v 1.45 1997/04/13 19:27:04 rasmus Exp $ */
 #include <stdlib.h>
 #include "php.h"
 #ifdef HAVE_UNISTD_H
@@ -30,9 +30,6 @@
 #endif
 #if APACHE
 #include "http_protocol.h"
-#endif
-#if PHPFASTCGI
-#include "fcgi_stdio.h"
 #endif
 
 #if APACHE
@@ -114,18 +111,13 @@ int main(int argc, char **argv) {
 	TreatData(1); /* GET Data */
 
 	if(no_httpd && argv[1]) 
-#ifdef WINDOWS
-		fd=_OpenFile(argv[1],1,&file_size);
-#else
-		fd=OpenFile(argv[1],1,&file_size);
-#endif
+		if(argv[2] && !strcmp(argv[1],"-q")) {
+			NoHeader();	
+			fd=OpenFile(argv[2],1,&file_size);
+		} else fd=OpenFile(argv[1],1,&file_size);
 	else 
-#ifdef WINDOWS
-		fd=_OpenFile(NULL,1,&file_size);
-#else
 		fd=OpenFile(NULL,1,&file_size);
-#endif
-	if(fd==-1) return(-1);
+	if(fd==-1) { fflush(stdout); return(-1); }
 	ParserInit(fd,file_size,no_httpd,NULL);	
 	yyparse();
 	Exit(1);
@@ -135,6 +127,7 @@ int main(int argc, char **argv) {
 #if PHPFASTCGI
 	}
 #endif
+	fflush(stdout);
 	return(0);
 }
 #else
@@ -195,7 +188,7 @@ int apache_php_module_main(request_rec *r, php_module_conf *conf, int fd) {
 	if(r->args) {
 		last_arg = strrchr(r->args,'&');
 		if(!last_arg) last_arg = r->args;	
-		if(!strcasecmp(last_arg,"info")) {
+		if(conf->Debug && !strcasecmp(last_arg,"info")) {
 			Info();
 			return 0;
 #if ACCESS_CONTROL

@@ -1,0 +1,67 @@
+<html><head><title>Category Manager</title></head>
+<?SetErrorReporting(0)>
+<body>
+<center><h1>Category Manager</h1></center>
+<?$dbname="url_mgr">
+<?$pghost="localhost">
+<?$pgport="5432">
+<?
+   $database = pg_Connect($pghost, $pgport, "", "", $dbname);
+   if (!$database) {
+      echo "<hr><center><strong>";
+      echo "An error occured connecting to the database.<br>";
+      echo "Is the postmaster running on $pghost using port $pgport.<br>";
+      echo "<hr></strong></center>";
+      exit;
+   }
+
+if($delete);
+	$res=pg_Exec($database,"delete from categories where name='$delete'");
+	if(!$res);
+		$error = pg_ErrorMessage($database);
+	endif;
+endif;
+if($add);
+	$res=pg_Exec($database,"insert into categories values ('$name','$description')");
+	if(!$res);
+		$error = pg_ErrorMessage($database);
+	endif;
+endif>
+
+<table border=1 cellpadding=5 units=relative>
+<tr><th>Name</th><th>Description</th></tr>
+<?$result = pg_Exec($database,"select * from categories order by name");
+$num = pg_NumRows($result);
+$i=0;
+
+while ($i<$num)>
+	<tr><td><?$name=pg_Result($result,$i,"name")><?echo $name></td>
+	<td><?echo pg_Result($result,$i,"description")></td>
+	<td>
+	<form action="<?echo $SCRIPT_NAME>pgurl_cat.phtml" method="POST">
+	<input type="hidden" name="delete" value="<?echo $name>">
+	<input type="submit" value="Delete">
+	</td></form></tr>
+	<?$i++>
+<?endwhile>
+
+<form action="<?echo $PHP_SELF>" method="POST">
+<input type="hidden" name="add" value="add">
+<tr><td>
+<input type="text" name="name" value="" maxlength=32 size=15>
+</td><td>
+<input type="text" name="description" value="" maxlength=256 size=30>
+</td><td>
+<input type="submit" value="Add">
+</td></tr>
+</form>
+</table><hr>
+<?if($error)>
+<strong>
+<? echo $error>
+</strong>
+<hr>
+<?endif>
+
+<a href="<?echo $SCRIPT_NAME>pgurl_main.phtml">Back to Top Menu</a>
+</body></html>

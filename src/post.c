@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: post.c,v 1.27 1997/01/04 15:17:04 rasmus Exp $ */
+/* $Id: post.c,v 1.28 1997/01/19 03:28:53 rasmus Exp $ */
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -320,8 +320,11 @@ void TreatData(int arg) {
 			}
 			parse_url(t+1);
 			tmp = estrdup(1,t+1);
+#if DEBUG
+			Debug("TreatData: setting $%s=%s (%d,%d)\n",s,tmp,itype,inc);
+#endif
 			Push((ret=AddSlashes(tmp,1)),CheckType(t+1));
-			SetVar(s,itype,inc);
+			SetVar(s,itype,(arg==3)?0:inc);
 
 #if PHP_TRACK_VARS
 			Push((ret=AddSlashes(s,1)),STRING);

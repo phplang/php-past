@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: msql.c,v 1.20 1996/12/18 13:47:01 rasmus Exp $ */
+/* $Id: msql.c,v 1.22 1997/04/15 14:30:50 cvswrite Exp $ */
 /* mSQL is Copyright (c) 1993-1995 David J. Hughes */
 
 /* Note that there is no mSQL code in this file */
@@ -338,11 +338,13 @@ void MsqlResult(void) {
 		result_ind = s->intval;
 	} else {
 		Error("Invalid result index in msql_result");
+		Push("", STRING);
 		return;
 	}	
 	result = get_result(result_ind);
 	if(!result) {
 		Error("Unable to find result index %d",result_ind);
+		Push("", STRING);
 		return;
 	}
 	i = msqlNumRows(result);
@@ -361,11 +363,17 @@ void MsqlResult(void) {
 			if(strlen(tablename)==0 || (strlen(tablename) > 0 && strcmp(msql_field->table,tablename)==0)) {
 				switch(msql_field->type) {
 				case INT_TYPE:
+#ifdef LAST_REAL_TYPE
+				case UINT_TYPE:
+#endif
 					if(record[i]) {
 						Push(record[i],LNUMBER);
 					} else Push("",STRING);
 					break;
 				case CHAR_TYPE:
+#ifdef LAST_REAL_TYPE
+				case TEXT_TYPE:
+#endif
 					if(record[i]) {
 						tmp = estrdup(1,record[i]);
 						Push((ret=AddSlashes(tmp,1)),STRING);
@@ -388,6 +396,7 @@ void MsqlResult(void) {
 		i++;
 	}
 #else
+	Pop();
 	Pop();
 	Pop();
 	Push("",STRING);
@@ -431,17 +440,20 @@ void MsqlNumRows(void) {
 		result = get_result(s->intval);	
 		if(!result) {
 			Error("Unable to find result index %d",s->intval);
+			Push("-1", LNUMBER);
 			return;
 		}
 		sprintf(temp,"%d",msqlNumRows(result));
 	} else {
 		Error("Invalid result index in msql_numrows");
+		Push("-1", LNUMBER);
 		return;
 	}	
 	Push(temp,LNUMBER);
 #else
 	Pop();
 	Error("No mSQL support");
+	Push("-1", LNUMBER);
 #endif
 }
 
@@ -460,17 +472,20 @@ void MsqlNumFields(void) {
 		result = get_result(s->intval);	
 		if(!result) {
 			Error("Unable to find result index %d",s->intval);
+			Push("-1", LNUMBER);
 			return;
 		}
 		sprintf(temp,"%d",msqlNumFields(result));
 	} else {
 		Error("Invalid result index in msql_numfields");
+		Push("-1", LNUMBER);
 		return;
 	}	
 	Push(temp,LNUMBER);
 #else
 	Pop();
 	Error("No mSQL support");
+	Push("-1", LNUMBER);
 #endif
 }
 
@@ -539,6 +554,23 @@ void MsqlField(int type) {
 		case NULL_TYPE:
 			Push("null",STRING);
 			break;
+#ifdef LAST_REAL_TYPE
+		case TEXT_TYPE:
+			Push("text",STRING);
+			break;
+		case UINT_TYPE:
+			Push("uint",STRING);
+			break;
+		case IDX_TYPE:
+			Push("index",STRING);
+			break;
+		case SYSVAR_TYPE:
+			Push("sysvar",STRING);
+			break;
+		case ANY_TYPE:
+			Push("any",STRING);
+			break;
+#endif
 		default:
 			Push("unknown",STRING);
 			break;
@@ -564,6 +596,7 @@ void MsqlField(int type) {
 #else
 	Pop();
 	Error("No mSQL support");
+	Push("", STRING);
 #endif
 } 
 
@@ -632,6 +665,7 @@ void MsqlTableName(void){
 	res=get_result(res_index);
 	if(!res) {
 		Error("Unable to find result index %d",res_index);
+		Push("", STRING);
 		return;
 	}
 	msqlDataSeek(res, tb_index);
@@ -679,6 +713,7 @@ void MsqlListTables(void) {
 	}
 	if(!s->strval) {
 		Error("Invalid dbname expression in msqllisttables");
+		Push("-1", LNUMBER);
 		return;
 	}
 	else dbname=(char*)estrdup(1,s->strval);
@@ -800,6 +835,7 @@ void MsqlListIndex(void) {
 		dbsock = msqlConnect(CurrentHost);
 		if(dbsock<0) {
 			Error("Unable to connect to mSQL socket (%s)",msqlErrMsg);
+			Push("-1", LNUMBER);
 			return;
 		}
 		CurrentTcpPort = getenv("MSQL_TCP_PORT");
@@ -824,6 +860,7 @@ void MsqlListIndex(void) {
 #endif
 			if(dbsock<0) {
 				Error("Unable to connect to mSQL socket (%s)",msqlErrMsg);
+				Push("-1", LNUMBER);
 				return;
 			}
 			CurrentTcpPort = tcpPort;
@@ -833,6 +870,7 @@ void MsqlListIndex(void) {
 
 	if(msqlSelectDB(dbsock,dbname)<0){
 		Error("Unable to select mSQL table (%s)", msqlErrMsg);
+		Push("-1", LNUMBER);
 		return;
 	}
 
@@ -840,6 +878,7 @@ void MsqlListIndex(void) {
 	if (res) tb_res=add_result(res);
 	else {
 		Error("Unable to find an index in %s", dbname); 
+		Push("-1", LNUMBER);
 		return;
 	}
 
@@ -1049,6 +1088,7 @@ void MsqlListDBs(void) {
 		dbsock = msqlConnect(CurrentHost);
 		if(dbsock<0) {
 			Error("Unable to connect to mSQL socket (%s)",msqlErrMsg);
+			Push("-1", LNUMBER);
 			return;
 		}
 		CurrentTcpPort = getenv("MSQL_TCP_PORT");
@@ -1073,6 +1113,7 @@ void MsqlListDBs(void) {
 #endif
 			if(dbsock<0) {
 				Error("Unable to connect to mSQL socket (%s)",msqlErrMsg);
+				Push("-1", LNUMBER);
 				return;
 			}
 			CurrentTcpPort = tcpPort;
@@ -1084,6 +1125,7 @@ void MsqlListDBs(void) {
 	if (res) db_res=add_result(res);
 	else {
 		Error("Unable to find any data bases in host: %s", hostname); 
+		Push("-1", LNUMBER);
 		return;
 	}
 
@@ -1133,6 +1175,7 @@ void MsqlDBName(void){
 	res=get_result(res_index);
 	if(!res) {
 		Error("Unable to find result index %d",res_index);
+		Push("", STRING);
 		return;
 	}
 	msqlDataSeek(res, db_index);

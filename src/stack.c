@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: stack.c,v 1.29 1997/01/09 16:37:10 rasmus Exp $ */
+/* $Id: stack.c,v 1.31 1997/03/09 21:12:42 rasmus Exp $ */
 /* Expression Stack */
 #include <stdlib.h>
 #include <string.h>
@@ -110,22 +110,22 @@ void Push(char *value, int type) {
 			new->type = STRING;
 			Push("",STRING);	
 			if(name && *value == VAR_INIT_CHAR) {
-				SetVar(name,0,0);
+				SetVar(name,0,-2);
 				free(name);	
 				t = GetVar(value,NULL,0);
 			} else {
-				SetVar(value,0,0);
+				SetVar(value,0,-2);
 				t = GetVar(value,NULL,0);
 			}
 			new->var = t;
-			new->flag = 1;
+			new->flag = 0;
 		} else {
 			new->strval = estrdup(2,t->strval);
 			new->intval = t->intval;
 			new->douval = t->douval;
 			new->type = t->type;
 			new->var = t;
-			new->flag = 1;
+			new->flag = (t->next)?1:0;
 		}
 	} else if(type==ARRAY) {
 		if(!next) t = GetVar(value,s->strval,0);
@@ -138,13 +138,14 @@ void Push(char *value, int type) {
 			new->intval = 0;
 			new->douval = 0;
 			new->type = STRING;
+			new->flag=0;
 		} else {
 			new->strval = estrdup(2,t->strval);
 			new->intval = t->intval;
 			new->douval = t->douval;
 			new->type = t->type;
 			new->var = t;
-			new->flag = 0;
+			new->flag = 1;
 		}
 	}
 	new->next = top;

@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: parse.raw,v 1.46 1996/12/18 13:37:15 rasmus Exp $ */
+/* $Id: parse.raw,v 1.56 1997/04/22 04:03:23 rasmus Exp $ */
 %{
 #include <stdio.h>
 #include <stdlib.h>
@@ -111,6 +111,7 @@ void php_init_yacc(void) {
 %token FILEATIME
 %token FILEMTIME
 %token FILECTIME
+%token FILETYPE
 %token IMAGEGIF
 %token IMAGEARC
 %token IMAGECHAR
@@ -141,6 +142,7 @@ void php_init_yacc(void) {
 %token INTFUNC5
 %token INTFUNC6
 %token SETCOOKIE
+%token SPRINTF
 %token EREG
 %token EREGI
 %token PARSESTR
@@ -148,6 +150,12 @@ void php_init_yacc(void) {
 %token MYSQL_FIELDTYPE
 %token MYSQL_FIELDLEN
 %token MYSQL_FIELDFLAGS
+%token PHPSORT
+%token PHPASORT
+%token UMASK
+%token MYSQL_CONNECT
+%token ORA_PARSE
+%token PHPMAIL
 
 /* Precedence */
 %left '+' '-'
@@ -214,7 +222,6 @@ primitive:
 		{
 			if(GetCurrentState(NULL)) Echo((char *)$2,5);
 		}
-		
 	| IF '(' cond ')' eocb
 		{
 			If();
@@ -615,6 +622,26 @@ func:
 		{
 			if(GetCurrentState(NULL) || inCase || inElseIf) StrTok(1);
 		}
+	| SPRINTF '(' expr ',' expr ')'
+		{
+			if(GetCurrentState(NULL)) Sprintf(1);
+		}
+	| SPRINTF '(' expr ',' expr ',' expr ')'
+		{
+			if(GetCurrentState(NULL)) Sprintf(2);
+		}
+	| SPRINTF '(' expr ',' expr ',' expr ',' expr ')'
+		{
+			if(GetCurrentState(NULL)) Sprintf(3);
+		}
+	| SPRINTF '(' expr ',' expr ',' expr ',' expr ',' expr ')'
+		{
+			if(GetCurrentState(NULL)) Sprintf(4);
+		}
+	| SPRINTF '(' expr ',' expr ',' expr ',' expr ',' expr ',' expr ')'
+		{
+			if(GetCurrentState(NULL)) Sprintf(5);
+		}
 	| MSQL_FIELDNAME '(' expr ',' expr ')'
 		{
 			if(GetCurrentState(NULL) || inCase || inElseIf) MsqlField(1);
@@ -749,6 +776,10 @@ func:
 		{
 			if(GetCurrentState(NULL) || inCase || inElseIf) FileFunc(7);
 		}
+	| FILETYPE '(' expr ')'
+		{
+			if(GetCurrentState(NULL) || inCase || inElseIf) FileFunc(8);
+		}
 	| IMAGEGIF '(' expr ',' expr ')'
 		{
 			if(GetCurrentState(NULL) || inCase || inElseIf) ImageGif(2);
@@ -870,6 +901,50 @@ func:
 	| PARSESTR '(' expr ')'
 		{
 			if(GetCurrentState(NULL) || inCase || inElseIf) TreatData(3);
+		}
+	| PHPSORT '(' expr ')'
+		{
+			if(GetCurrentState(NULL) || inCase || inElseIf) Sort(0);
+		}
+	| PHPASORT '(' expr ')'
+		{
+			if(GetCurrentState(NULL) || inCase || inElseIf) Sort(1);
+		}
+	| UMASK '(' ')'
+		{
+			if(GetCurrentState(NULL) || inCase || inElseIf) FileUmask(0);
+		}
+	| UMASK '(' expr ')'
+		{
+			if(GetCurrentState(NULL) || inCase || inElseIf) FileUmask(1);
+		}
+	| MYSQL_CONNECT '(' expr ')'
+		{
+			if(GetCurrentState(NULL) || inCase || inElseIf) MYsqlConnect(0);
+		}
+	| MYSQL_CONNECT '(' expr ',' expr ')'
+		{
+			if(GetCurrentState(NULL) || inCase || inElseIf) MYsqlConnect(1);
+		}
+	| MYSQL_CONNECT '(' expr ',' expr ',' expr ')'
+		{
+			if(GetCurrentState(NULL) || inCase || inElseIf) MYsqlConnect(2);
+		}
+	| ORA_PARSE '(' expr ',' expr ')'
+		{
+			if(GetCurrentState(NULL) || inCase || inElseIf) Ora_Parse(0);
+		}
+	| ORA_PARSE '(' expr ',' expr ',' expr ')'
+		{
+			if(GetCurrentState(NULL) || inCase || inElseIf) Ora_Parse(1);
+		}
+	| PHPMAIL '(' expr ',' expr ',' expr ')'
+		{
+			if(GetCurrentState(NULL) || inCase || inElseIf) Mail(0);
+		}
+	| PHPMAIL '(' expr ',' expr ',' expr ',' expr ')'
+		{
+			if(GetCurrentState(NULL) || inCase || inElseIf) Mail(1);
 		}
 
 val:

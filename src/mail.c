@@ -1,4 +1,4 @@
-/***[solid.c]*****************************************************[TAB=4]****\
+/***[mail.c]******************************************************[TAB=4]****\
 *                                                                            *
 * PHP/FI                                                                     *
 *                                                                            *
@@ -30,16 +30,27 @@
 #endif
 #endif
 
-void Mail(void) {
-#if defined(PHPSENDMAIL) && !defined(WINDOWS)
+void Mail(int flag) {
+#if defined(PHPSENDMAIL) && !defined(WINNT)
 	Stack *s;
 	char  temp[16];
 	char  *message;
 	char  *subject;
 	char  *to;
+	char  *headers = NULL;
 	FILE  *sendmail;
 
 	/* get args */
+
+	if (flag) {
+		s = Pop(); /* (optional) Extra headers */
+		if (!s) {
+			Error("Stack error in mail");
+			return;
+		}
+		headers = (char *)estrdup(1,s->strval);
+		ParseEscapes(headers);
+	}
 
 	s = Pop(); /* Message text */
 	if (!s) {
@@ -89,6 +100,9 @@ void Mail(void) {
 	if (sendmail) {
 		fprintf(sendmail, "To: %s\n", to);
 		fprintf(sendmail, "Subject: %s\n", subject);
+		if (headers != NULL) {
+			fprintf(sendmail, "%s\n", headers);
+		}
 		fprintf(sendmail, "\n%s\n.\n", message);
         sprintf(temp, "%d", pclose(sendmail));
 	    Push(temp,LNUMBER);
@@ -97,6 +111,9 @@ void Mail(void) {
 	    Push("-1",LNUMBER);
 	}
 #else
+	if (flag) {
+	    Pop();
+	}
 	Pop();
 	Pop();
 	Pop();
@@ -104,3 +121,9 @@ void Mail(void) {
 	Push("0", LNUMBER);
 #endif
 }
+
+/*
+ * Local variables:
+ * tab-width: 4
+ * End:
+ */
