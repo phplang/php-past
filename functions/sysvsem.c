@@ -27,7 +27,7 @@
    +----------------------------------------------------------------------+
  */
  
-/* $Id: sysvsem.c,v 1.8 2000/01/01 04:31:17 sas Exp $ */
+/* $Id: sysvsem.c,v 1.9 2000/04/03 18:23:19 sas Exp $ */
 
 /* This has been built and tested on Solaris 2.6 and Linux 2.1.122.
  * It may not compile or execute correctly on other systems.
@@ -137,11 +137,17 @@ int php3_minit_sysvsem(INIT_FUNC_ARGS)
 	return SUCCESS;
 }
 
-#define SETVAL_WANTS_PTR
+/*
+ * SETVAL_WANTS_PTR was defined in the original module. I have however
+ * not found any evidence that SETVAL wants its argument passed by
+ * reference. The following OS were considered: FreeBSD 2.2.8, 3.4, 4.0,
+ * Linux 2.0, 2.2, Solaris 7, AIX 4.2. The comment in the code suggests
+ * that Solaris 2.6 requires SETVAL_WANTS_PTR. Neither Advanced Programming
+ * in the Unix Environment, or Unix Network Programming, Vol II, or the
+ * Solaris 2 FAQ say so.
+ */
 
-#if defined(_AIX)
 #undef SETVAL_WANTS_PTR
-#endif
 
 /* {{{ proto int sem_get(int key [, int max_acquire [, int perm]])
    Return an id for the semaphore with the given key, and allow max_acquire (default 1) processes to acquire it simultaneously. */

@@ -28,7 +28,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: basic_functions.c,v 1.285 2000/02/23 22:57:21 zeev Exp $ */
+/* $Id: basic_functions.c,v 1.286 2000/02/25 20:00:51 sas Exp $ */
 #include "php.h"
 #include "modules.h"
 #include "internal_functions.h"
@@ -431,9 +431,11 @@ int php3_minit_basic(INIT_FUNC_ARGS)
 }
 
 
-int php3_mshutdown_basic(void)
+int php3_mshutdown_basic(SHUTDOWN_FUNC_ARGS)
 {
 	_php3_hash_destroy(&sm_protected_env_vars);
+
+	return SUCCESS;
 }
 
 

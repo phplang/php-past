@@ -28,7 +28,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: math.c,v 1.50 2000/02/22 15:13:57 eschmid Exp $ */
+/* $Id: math.c,v 1.51 2000/03/01 19:36:15 hholzgra Exp $ */
 #include "php.h"
 #include "internal_functions.h"
 #include "phpmath.h"
@@ -145,7 +145,10 @@ void php3_round(INTERNAL_FUNCTION_PARAMETERS)
 		convert_string_to_number(value);
 	}
 	if (value->type == IS_DOUBLE) {
-		RETURN_DOUBLE(rint(value->value.dval));
+		double d;
+		d=rint(value->value.dval);
+		if(d==0.0) d=0.0; /* workaround for rint() returning -0 instead of 0 */
+		RETURN_DOUBLE(d);
 	}
 	if (value->type == IS_LONG) {
 		RETURN_DOUBLE((double)value->value.lval);

@@ -29,7 +29,7 @@
  */
 
 
-/* $Id: php3_gd.h,v 1.42 2000/01/30 20:48:36 markonen Exp $ */
+/* $Id: php3_gd.h,v 1.43 2000/03/13 03:30:55 rasmus Exp $ */
 
 #ifndef _PHP3_GD_H
 #define _PHP3_GD_H
@@ -80,6 +80,10 @@ extern void php3_imagegif(INTERNAL_FUNCTION_PARAMETERS);
 #if HAVE_GD_PNG
 extern void php3_imagecreatefrompng (INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_imagepng(INTERNAL_FUNCTION_PARAMETERS);
+#endif
+#if HAVE_GD_JPG
+extern void php3_imagecreatefromjpeg (INTERNAL_FUNCTION_PARAMETERS);
+extern void php3_imagejpeg(INTERNAL_FUNCTION_PARAMETERS);
 #endif
 extern void php3_imagewbmp(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_imagedestroy(INTERNAL_FUNCTION_PARAMETERS);

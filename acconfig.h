@@ -90,6 +90,7 @@
 
 #undef HAVE_GD_PNG 
 #undef HAVE_GD_GIF
+#undef HAVE_GD_JPG
 #undef HAVE_GD_LZW
 #undef HAVE_GD_COLORRESOLVE
 #undef HAVE_GD_ANCIENT

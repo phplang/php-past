@@ -24,7 +24,7 @@
 # +----------------------------------------------------------------------+
 
 #
-# $Id: Makefile.in,v 1.359 2000/01/07 10:36:28 sas Exp $
+# $Id: Makefile.in,v 1.360 2000/03/30 04:14:21 sas Exp $
 #
 
 prefix = @prefix@
@@ -124,7 +124,7 @@ libmodphp3-so.a: $(OBJS) $(FUNCTIONS) @PCRE_LIB@ @DBASE_LIB@
 libphp3.so: mod_php3.c libmodphp3-so.a @DBASE_LIB@ @PCRE_LIB@
 	-@test -f ./mod_php3.c || test -L ./mod_php3.c || $(LN_S) $(srcdir)/mod_php3.c ./mod_php3.c
 	-@test -f ./mod_php3.c || test -h ./mod_php3.c || $(LN_S) $(srcdir)/mod_php3.c ./mod_php3.c
-	$(APXS) -c -o libphp3.so @VERSION_SCRIPT@ -I$(srcdir) -I. @RPATHS@ ./mod_php3.c libmodphp3-so.a $(APXS_LDFLAGS) @APXS_EXP@ @PCRE_LIBS@
+	$(APXS) -c -o libphp3.so @VERSION_SCRIPT@ -I$(srcdir) -I. @RPATHS@ ./mod_php3.c libmodphp3-so.a $(APXS_LDFLAGS) @APXS_EXP@
 
 pcrelib/libpcre.a:
 	(cd pcrelib; $(MAKE))

@@ -33,7 +33,7 @@
 
 #define OCI8_USE_EMALLOC 0		/* set this to 1 if you want to use the php memory manager! */
 
-/* $Id: oci8.c,v 1.131 2000/01/01 04:31:16 sas Exp $ */
+/* $Id: oci8.c,v 1.132 2000/03/23 09:20:33 thies Exp $ */
 
 /* TODO list:
  *
@@ -59,20 +59,20 @@
 /* {{{ includes & stuff */
 
 #if defined(COMPILE_DL)
-# include "dl/phpdl.h"
+#include "dl/phpdl.h"
 #endif
 
 #include "php.h"
 
 #if PHP_API_VERSION < 19990421 
-  #include "internal_functions.h"
-  #include "php3_list.h"
-  #include "head.h"
-  #define HASH_DTOR (void (*)(void *))
+#include "internal_functions.h"
+#include "php3_list.h"
+#include "head.h"
+#define HASH_DTOR (void (*)(void *))
 #else
-  #include "ext/standard/head.h"
-  #define php3tls_pval_destructor(a) zval_dtor(a)
-  #define HASH_DTOR (int (*)(void *))
+#include "ext/standard/head.h"
+#define php3tls_pval_destructor(a) zval_dtor(a)
+#define HASH_DTOR (int (*)(void *))
 #endif
 
 
@@ -87,19 +87,19 @@
 */
 
 #ifndef SQLT_BFILEE
-  #define SQLT_BFILEE 114
+#define SQLT_BFILEE 114
 #endif
 #ifndef SQLT_CFILEE
-  #define SQLT_CFILEE 115
+#define SQLT_CFILEE 115
 #endif
 
 
 #define SAFE_STRING(s) ((s)?(s):"")
 
 #if !(WIN32|WINNT)
-# include "build-defs.h"
+#include "build-defs.h"
 #else
-# define O_RDONLY _O_RDONLY
+#define O_RDONLY _O_RDONLY
 #endif
 #include "snprintf.h"
 

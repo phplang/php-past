@@ -29,7 +29,7 @@
  */
 
 
-/* $Id: operators.c,v 1.105 2000/02/07 23:54:50 zeev Exp $ */
+/* $Id: operators.c,v 1.106 2000/03/20 16:38:06 askalski Exp $ */
 
 #include "php.h"
 #include "functions/number.h"
@@ -1077,21 +1077,18 @@ inline int php3_binary_strcasecmp(pval *s1, pval *s2)
 	const unsigned char *p1 = (const unsigned char *) s1->value.str.val;
 	const unsigned char *p2 = (const unsigned char *) s2->value.str.val;
 	unsigned char c1=0, c2=0;
-	int len, len2;
-
-	len  = s1->value.str.len;
-	len2 = s2->value.str.len;
+	int len;
 	
-	if (len != len2 || !len)
-		return len - len2;
-	
+	len = MIN(s1->value.str.len, s2->value.str.len);
 	while(len--) {
 		c1 = tolower(*p1++);
 		c2 = tolower(*p2++);
-		if (c1 != c2) break;
+		if (c1 != c2) {
+			return c1 - c2;
+		}
 	}
-	
-	return c1 - c2;
+
+	return s1->value.str.len - s2->value.str.len;
 }
 
 inline int php3_binary_strcmp(pval *s1, pval *s2)

@@ -1,6 +1,21 @@
 PHP 3.0 CHANGE LOG                                                    ChangeLog
 |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 
+April 05, Version 3.0.16
+- Fixed semaphore problem (Sascha)
+  Reported by: ilia@astrive.com
+- Fixed pcre, dbase dupe symbol problems (Sascha)
+- Fixed pcre, regex, dbase relocation problems (Sascha)
+- Added UCD-SNMP 4.1.x support (Sascha)
+- Make it possible to set both the socket and the port at the same time
+  in mysql_[p]connect() (Rasmus)
+- Fixed exec() and friends and make them return last line of output 
+  again.  (Rasmus)
+- Added check and support for JPEG format available in gd-1.8+ (Rasmus)
+- Fixed Solid 2.3 support on glibc2 systems (Stig)
+- Enhanced resolution of microtime() on OS/2 by using the high resolution timer
+  API. (Brian Havard)
+
 February 25, Version 3.0.15
 - Fixed crash in preg_match_all(). (Andrei)
 - Backported safe_mode_protected_env_vars and safe_mode_allowed_env_vars INI
@@ -20,7 +35,7 @@ February 25, Version 3.0.15
 - Added ImageWbmp() for outputting WAP's Wireless Bitmaps (markonen)
 - Support for LZW-compressed GIFs with gd 1.5, gd/freetype cleanups (markonen)
 - Added IMAP modified UTF-7 encode/decode routines (Andrew Skalski)
-- Add .ini option to set the default charset for the default text/html mime
+- Added .ini option to set the default charset for the default text/html mime
   type that php serves up (Rasmus)
 
 January 11, 2000, Version 3.0.14

@@ -27,7 +27,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: microtime.c,v 1.37 2000/02/23 17:42:01 sas Exp $ */
+/* $Id: microtime.c,v 1.38 2000/02/26 09:03:55 bjh Exp $ */
 
 #include "php.h"
 #include <stdlib.h>
@@ -63,6 +63,11 @@
 #define NUL  '\0'
 #define MICRO_IN_SEC 1000000.00
 
+#if OS2
+#define INCL_DOSPROFILE
+#include <os2.h>
+#endif
+
 /* {{{ proto string microtime(void)
    Returns a string containing the current time in seconds and microseconds */
 #ifdef __cplusplus
@@ -73,9 +78,31 @@ void php3_microtime(INTERNAL_FUNCTION_PARAMETERS)
 {
 #if HAVE_GETTIMEOFDAY
 	struct timeval tp;
+	char ret[100];
+
+#if OS2
+    static ULONG hrtimerHz = 0;
+    /* Number of hrtimerHz between 1 Jan 1970 & base of DosTmrQueryTime() */
+    static unsigned long long hradjust; 
+    QWORD qwNow;
+    unsigned long long llNow;
+
+    if (hrtimerHz == 0) {
+        DosTmrQueryFreq(&hrtimerHz);
+        gettimeofday(&tp, NULL);
+        DosTmrQueryTime(&qwNow);
+        llNow = ((unsigned long long)qwNow.ulHi << 32) | qwNow.ulLo;
+        hradjust = (unsigned long long)tp.tv_sec * hrtimerHz + (tp.tv_usec * hrtimerHz / MICRO_IN_SEC) - llNow;
+    }
+
+    DosTmrQueryTime(&qwNow);
+    llNow = ((unsigned long long)qwNow.ulHi << 32) | qwNow.ulLo;
+    llNow += hradjust;
+    snprintf(ret, 100, "%.8f %ld", (double)(llNow % hrtimerHz)/hrtimerHz, llNow / hrtimerHz);
+    RETVAL_STRING(ret,1);
+#else
 	long sec = 0L;
 	double msec = 0.0;
-	char ret[100];
 	TLS_VARS;
 	
 	if (gettimeofday((struct timeval *) &tp, (NUL)) == 0) {
@@ -85,6 +112,7 @@ void php3_microtime(INTERNAL_FUNCTION_PARAMETERS)
 	if (msec >= 1.0) msec -= (long) msec;
 	snprintf(ret, 100, "%.8f %ld", msec, sec);
 	RETVAL_STRING(ret,1);
+#endif
 #endif
 }
 /* }}} */

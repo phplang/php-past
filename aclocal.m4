@@ -1,9 +1,10 @@
-dnl $Id: aclocal.m4,v 1.49 2000/01/01 02:30:52 sas Exp $
+dnl $Id: aclocal.m4,v 1.51 2000/03/29 17:45:33 sas Exp $
 dnl
 dnl This file contains local autoconf functions.
 
 dnl dummy function for PHP4 compatibility
 AC_DEFUN(PHP_EXTENSION,[])
+AC_DEFUN(PHP_SUBST,[AC_SUBST($1)])
 
 dnl
 dnl AC_PHP_ONCE(namespace, variable, code)
@@ -161,7 +162,25 @@ AC_DEFUN(AC_FIND_SOLID_LIBS,[
   if test ! -f $SOLID_LIBS; then
     SOLID_LIBS=`echo $1/bcl${ac_solid_os}*.a | cut -d' ' -f1`
   fi
+  if test ! -f $SOLID_LIBS; then
+    SOLID_LIBS="-L$1 -lsolcli"
+  fi
   AC_MSG_RESULT(`echo $SOLID_LIBS | sed -e 's!.*/!!'`)
+  AC_SOLID_PTHREADS
+])
+
+dnl
+dnl Figure out whether Solid needs to be linked with pthreads.
+dnl
+AC_DEFUN(AC_SOLID_PTHREADS,[
+  AC_MSG_CHECKING([whether Solid needs pthreads])
+  save_LIBS=$LIBS
+  LIBS="$SOLID_LIBS"
+  AC_TRY_LINK_FUNC(SQLAllocEnv,
+                   [LIBS="$save_LIBS"
+                    AC_MSG_RESULT(no)],
+                   [LIBS="-lpthread $save_LIBS"
+                    AC_MSG_RESULT(yes)])
 ])
 
 dnl

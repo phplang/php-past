@@ -23,10 +23,10 @@
    | If you did not, or have any questions about PHP licensing, please    |
    | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
-   | Author: Rasmus Lerdorf   <rasmus@lerdorf.on.ca>                      |
+   | Author: Rasmus Lerdorf   <rasmus@php.net>                            |
    +----------------------------------------------------------------------+
  */
-/* $Id: exec.c,v 1.90 2000/02/20 20:42:14 eschmid Exp $ */
+/* $Id: exec.c,v 1.92 2000/03/20 14:23:12 andrei Exp $ */
 #include <stdio.h>
 #include "php.h"
 #include <ctype.h>
@@ -199,6 +199,15 @@ static int _Exec(int type, char *cmd, pval *array, pval *return_value)
 		while (l && isspace((int)buf[--l]));
 		if (l < t) buf[l + 1] = '\0';
 
+		/* Return last line from the shell command */
+		if(php3_ini.magic_quotes_runtime) {
+			int len;
+		
+			tmp = _php3_addslashes(buf, 0, &len, 0);
+			RETVAL_STRINGL(tmp,len,0);
+		} else {
+			RETVAL_STRINGL(buf,l+1,1);
+		}
 	} else {
 		int b, i;
 
@@ -208,14 +217,6 @@ static int _Exec(int type, char *cmd, pval *array, pval *return_value)
 		}
 	}
 
-	/* Return last line from the shell command */
-	if (php3_ini.magic_quotes_runtime && type!=3) {
-		int len;
-		
-		tmp = _php3_addslashes(buf, 0, &len, 0);
-		RETVAL_STRINGL(tmp,len,0);
-	}
-	
 	ret = pclose(fp);
 #ifdef HAVE_SYS_WAIT_H
 	if (WIFEXITED(ret)) {

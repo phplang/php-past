@@ -30,7 +30,7 @@
    | Based on code from: Shawn Cokus <Cokus@math.washington.edu>          |
    +----------------------------------------------------------------------+
  */
-/* $Id: rand.c,v 1.36 2000/01/01 04:31:16 sas Exp $ */
+/* $Id: rand.c,v 1.37 2000/03/02 16:00:32 bjh Exp $ */
 
 #include <stdlib.h>
 
@@ -207,7 +207,7 @@ static inline uint32 randomMT(void)
 }
 
 
-#if HAVE_LRAND48
+#if HAVE_LRAND48 || (OS2 && HAVE_RANDOM)
 #define PHP_RAND_MAX 2147483647
 #else
 #define PHP_RAND_MAX RAND_MAX

@@ -2,7 +2,7 @@
 
 AR = ar cq
 CC = @CC@
-CFLAGS = @CFLAGS@
+CFLAGS = @CFLAGS@ @CFLAGS_SHLIB@
 RANLIB = @RANLIB@
 VPATH = @srcdir@
 

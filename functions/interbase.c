@@ -1,34 +1,34 @@
 /*
    +----------------------------------------------------------------------+
-   | PHP HTML Embedded Scripting Language Version 3.0			          |
+   | PHP HTML Embedded Scripting Language Version 3.0                     |
    +----------------------------------------------------------------------+
-   | Copyright (c) 1997-2000 PHP Development Team (See Credits file)	  |
+   | Copyright (c) 1997-2000 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
-   | it under the terms of one of the following licenses:		          |
-   |									                                  |
+   | it under the terms of one of the following licenses:                 |
+   |                                                                      |
    |  A) the GNU General Public License as published by the Free Software |
    |	 Foundation; either version 2 of the License, or (at your option) |
-   |	 any later version.						                          |
-   |									                                  |
+   |	 any later version.                                               |
+   |                                                                      |
    |  B) the PHP License as published by the PHP Development Team and	  |
-   |	 included in the distribution in the file: LICENSE		          |
-   |									                                  |
-   | This program is distributed in the hope that it will be useful,	  |
-   | but WITHOUT ANY WARRANTY; without even the implied warranty of	      |
-   | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the	      |
-   | GNU General Public License for more details.			              |
-   |									                                  |
+   |	 included in the distribution in the file: LICENSE                |
+   |                                                                      |
+   | This program is distributed in the hope that it will be useful,      |
+   | but WITHOUT ANY WARRANTY; without even the implied warranty of       |
+   | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the        |
+   | GNU General Public License for more details.                         |
+   |                                                                      |
    | You should have received a copy of both licenses referred to here.	  |
    | If you did not, or have any questions about PHP licensing, please	  |
-   | contact core@php.net.						                          |
+   | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
-   | Authors: Jouni Ahto <jah@mork.net>					                  |
-   |		  Andrew Avdeev <andy@rsc.mv.ru>			                  |
+   | Authors: Jouni Ahto <jah@mork.net>                                   |
+   |		  Andrew Avdeev <andy@rsc.mv.ru>                          |
    +----------------------------------------------------------------------+
  */
 
-/* $Id: interbase.c,v 1.24 2000/02/22 15:13:57 eschmid Exp $ */
+/* $Id: interbase.c,v 1.29 2000/03/13 18:50:55 jah Exp $ */
 
 /* TODO: Arrays, roles?
 A lot... */
@@ -43,9 +43,20 @@ A lot... */
 			- safe rinit/rfinish: check for NULL so
 			  rfinish could be called repeatedly
 			  emalloc & co. replaced with malloc & co.
+		2000-2-20: Nicolas Moreau <nicolas@enttec.com>
+			- Modify to compile and create a Windows DLL
 */
 
+#ifndef MSVC5
 #include "config.h"
+#endif
+
+
+#if MSVC5
+#include <windows.h>
+#endif
+
+
 #include "php.h"
 #include "internal_functions.h"
 #include "php3_interbase.h"
@@ -61,6 +72,8 @@ A lot... */
 #include "php3_string.h"
 #include "fsock.h"
 #include "head.h"
+
+#define SAFE_STRING(s) ((s)?(s):"") 
 
 /* {{{ extension definition structures */
 function_entry ibase_functions[] = {
@@ -91,7 +104,11 @@ function_entry ibase_functions[] = {
 	PHP_FE(ibase_blob_open, NULL)
 	PHP_FE(ibase_blob_get, NULL)
 	PHP_FE(ibase_blob_echo, NULL)
-	PHP_FE(ibase_blob_import, NULL)
+#ifndef MSVC5	
+
+	PHP_FE(ibase_blob_import, NULL) 
+
+#endif
 
 	PHP_FE(ibase_errmsg, NULL)
 
@@ -110,9 +127,9 @@ php3_module_entry ibase_module_entry =
 	STANDARD_MODULE_PROPERTIES
 };
 
-#if defined(COMPILE_DL)
-
-php3_module_entry *get_module() { return &ibase_module_entry; }
+#if COMPILE_DL
+#include "dl/phpdl.h"
+DLEXPORT php3_module_entry *get_module() { return &ibase_module_entry; }
 
 #define DL_MALLOC(size) malloc(size)
 #define DL_STRDUP(str) strdup(str)
@@ -514,7 +531,7 @@ void php3_info_ibase(void)
 
     php3_printf(
                 "<table>"
-                "<tr><td>Revision:</td><td>$Revision: 1.24 $</td></tr>\n"
+                "<tr><td>Revision:</td><td>$Revision: 1.29 $</td></tr>\n"
 #ifdef COMPILE_DL
                 "<tr><td>Dynamic module:</td><td>Yes</td></tr>\n"
 #endif
@@ -658,7 +675,7 @@ static void _php3_ibase_connect(INTERNAL_FUNCTION_PARAMETERS, int persistent)
 	efree(args);
 	
 	hashed_details = (char *) emalloc(hashed_details_length+strlen("ibase_%s_%s_%s_%s")+1);
-	sprintf(hashed_details, "ibase_%s_%s_%s_%s", ib_server, ib_uname, ib_passwd, ib_charset);
+	sprintf(hashed_details, "ibase_%s_%s_%s_%s", SAFE_STRING(ib_server), SAFE_STRING(ib_uname), SAFE_STRING(ib_passwd), SAFE_STRING(ib_charset));
 
 	if (persistent) {
 		list_entry *le;
@@ -1024,8 +1041,8 @@ _php3_ibase_alloc_query_error:
 /* }}} */
 
 
-/* {{{ _php3_ibase_bind() */
-/* bind php variables to XSQLDA */
+/* {{{ proto int ibase_bind(int query)
+   Bind parameter placeholders in a previously prepared query */
 static int _php3_ibase_bind(XSQLDA *sqlda, pval **b_vars, BIND_BUF *buf)
 {
 	XSQLVAR *var;
@@ -1079,7 +1096,7 @@ static int _php3_ibase_bind(XSQLDA *sqlda, pval **b_vars, BIND_BUF *buf)
 					
 					convert_to_string(b_var);
 					
-#if HAVE_STRFTIME /*FIXME: HAVE_STRPTIME ?*/
+#if HAVE_STRPTIME /*FIXME: HAVE_STRPTIME ?*/
 					
 					strptime(b_var->value.str.val, IBASE_GLOBAL(php3_ibase_module).timeformat, &t);
 #else
@@ -2525,12 +2542,16 @@ PHP_FUNCTION(ibase_blob_echo)
 	RETURN_TRUE;
 }
 /* }}} */
+#ifndef MSVC5
+
 
 extern int le_fp,le_pp;
 extern int wsa_fp; /*to handle reading and writing to windows sockets*/
 
 /* {{{ proto string ibase_blob_import([link_identifier,] file_id)
    Create blob, copy file in it, and close it */
+
+
 PHP_FUNCTION(ibase_blob_import)
 {
 	pval *link_arg, *file_arg;
@@ -2617,7 +2638,7 @@ PHP_FUNCTION(ibase_blob_import)
 	RETVAL_STRINGL((char *)&ib_blob, sizeof(ibase_blob_handle), 1);
 }
 /* }}} */
-
+#endif
 
 
 #endif

@@ -74,8 +74,6 @@
 
 #undef ushort
 
-#undef UCD_SNMP_HACK
-
 /* Define if you want dmalloc checking */
 #define HAVE_DMALLOC 0
 
@@ -154,6 +152,7 @@
 
 #undef HAVE_GD_PNG 
 #undef HAVE_GD_GIF
+#undef HAVE_GD_JPG
 #undef HAVE_GD_LZW
 #undef HAVE_GD_COLORRESOLVE
 #undef HAVE_GD_ANCIENT
@@ -227,9 +226,6 @@
 
 /* Define if you want the Cybercash MCK support */
 #define HAVE_MCK 0
-
-/* Define if you want the SNMP interface */
-#define HAVE_SNMP 0
 
 /* Define if you want the IMAP directory interface */
 #define HAVE_IMAP 0
@@ -563,6 +559,9 @@
 /* Define if you have the <dbm.h> header file.  */
 #undef HAVE_DBM_H
 
+/* Define if you have the <default_store.h> header file.  */
+#undef HAVE_DEFAULT_STORE_H
+
 /* Define if you have the <dirent.h> header file.  */
 #undef HAVE_DIRENT_H
 
@@ -664,4 +663,10 @@
 
 /* Whether system headers declare timezone */
 #undef HAVE_DECLARED_TIMEZONE
+
+/*   */
+#undef HAVE_SNMP
+
+/*   */
+#undef UCD_SNMP_HACK
 

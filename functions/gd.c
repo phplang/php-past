@@ -23,13 +23,13 @@
    | If you did not, or have any questions about PHP licensing, please    |
    | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
-   | Authors: Rasmus Lerdorf <rasmus@lerdorf.on.ca>                       |
+   | Authors: Rasmus Lerdorf <rasmus@php.net>                             |
    |          Stig Bakken <ssb@fast.no>                                   |
    |          Jim Winstead <jimw@php.net>                                 |
    +----------------------------------------------------------------------+
  */
 
-/* $Id: gd.c,v 1.145 2000/02/20 20:42:14 eschmid Exp $ */
+/* $Id: gd.c,v 1.148 2000/03/13 20:10:40 eschmid Exp $ */
 
 /* gd 1.2 is copyright 1994, 1995, Quest Protein Database Center, 
    Cold Spring Harbor Labs. */
@@ -104,6 +104,10 @@ function_entry gd_functions[] = {
 #if HAVE_GD_PNG
       {"imagecreatefrompng",          php3_imagecreatefrompng,        NULL},
       {"imagepng",                            php3_imagepng,                          NULL},
+#endif
+#if HAVE_GD_JPG
+      {"imagecreatefromjpeg",          php3_imagecreatefromjpeg,        NULL},
+      {"imagejpeg",                            php3_imagejpeg,                          NULL},
 #endif
 	{"imagewbmp",				php3_imagewbmp,				NULL},
 	{"imagedestroy",			php3_imagedestroy,			NULL},
@@ -378,7 +382,7 @@ void php3_imagecreate(INTERNAL_FUNCTION_PARAMETERS) {
 
 #if HAVE_GD_GIF
 /* {{{ proto int imagecreatefromgif(string filename)
-   Create a new image from file or URL */
+   Create a new image from GIF file or URL */
 void php3_imagecreatefromgif (INTERNAL_FUNCTION_PARAMETERS) {
 	pval *file;
 	int ind;
@@ -422,7 +426,7 @@ void php3_imagecreatefromgif (INTERNAL_FUNCTION_PARAMETERS) {
 
 #if HAVE_GD_PNG
 /* {{{ proto int imagecreatefrompng(string filename)
-   Create a new image from file or URL */
+   Create a new image from PNG file or URL */
 void php3_imagecreatefrompng (INTERNAL_FUNCTION_PARAMETERS) {
       pval *file;
       int ind;
@@ -463,6 +467,50 @@ void php3_imagecreatefrompng (INTERNAL_FUNCTION_PARAMETERS) {
 }
 /* }}} */
 #endif /* HAVE_GD_PNG */
+
+#if HAVE_GD_JPG
+/* {{{ proto int imagecreatefromjpeg(string filename)
+   Create a new image from JPEG file or URL */
+void php3_imagecreatefromjpeg (INTERNAL_FUNCTION_PARAMETERS) {
+	pval *file;
+	int ind;
+	gdImagePtr im;
+	char *fn=NULL;
+	FILE *fp;
+	int issock=0, socketd=0;
+	GD_TLS_VARS;
+
+	if (ARG_COUNT(ht) != 1 || getParameters(ht, 1, &file) == FAILURE) {
+		WRONG_PARAM_COUNT;
+	}
+
+	convert_to_string(file);
+
+	fn = file->value.str.val;
+
+#if WIN32|WINNT
+	fp = fopen(file->value.str.val, "rb");
+#else
+	fp = php3_fopen_wrapper(file->value.str.val, "r", IGNORE_PATH|IGNORE_URL_WIN, &issock, &socketd);
+#endif
+	if (!fp) {
+		php3_strip_url_passwd(fn);
+		php3_error(E_WARNING,
+					"ImageCreateFromJpeg: Unable to open %s for reading", fn);
+		RETURN_FALSE;
+	}
+
+	im = gdImageCreateFromJpeg (fp);
+
+	fflush(fp);
+	fclose(fp);
+
+	ind = php3_list_insert(im, GD_GLOBAL(le_gd));
+
+	RETURN_LONG(ind);
+}
+/* }}} */
+#endif /* HAVE_GD_JPG */
 
 /* {{{ proto int imagedestroy(int im)
    Destroy an image */
@@ -774,7 +822,7 @@ void php3_imagecolorsforindex(INTERNAL_FUNCTION_PARAMETERS) {
 
 #if HAVE_GD_GIF
 /* {{{ proto int imagegif(int im [, string filename])
-   Output image to browser or file */
+   Output GIF image to browser or file */
 void php3_imagegif (INTERNAL_FUNCTION_PARAMETERS) {
 	pval *imgind, *file;
 	gdImagePtr im;
@@ -861,7 +909,7 @@ void php3_imagegif (INTERNAL_FUNCTION_PARAMETERS) {
 
 #if HAVE_GD_PNG
 /* {{{ proto int imagepng(int im [, string filename])
-   Output image to browser or file */
+   Output PNG image to browser or file */
 void php3_imagepng (INTERNAL_FUNCTION_PARAMETERS) {
       pval *imgind, *file;
       gdImagePtr im;
@@ -938,8 +986,92 @@ void php3_imagepng (INTERNAL_FUNCTION_PARAMETERS) {
 /* }}} */
 #endif /* HAVE_GD_PNG */
 
+#if HAVE_GD_JPG
+/* {{{ proto int imagejpeg(int im [, string filename [, int quality]])
+   Output JPEG image to browser or file */
+void php3_imagejpeg (INTERNAL_FUNCTION_PARAMETERS) {
+      pval *imgind, *file, *qual;
+      gdImagePtr im;
+      char *fn=NULL;
+      FILE *fp;
+      int argc;
+      int ind_type;
+      int output=1, q=-1;
+      GD_TLS_VARS;
+
+      argc = ARG_COUNT(ht);
+      if (argc < 1 || argc > 3 || getParameters(ht, argc, &imgind, &file, &qual) == FAILURE) {
+              WRONG_PARAM_COUNT;
+      }
+
+      convert_to_long(imgind);
+	  
+	  if (argc == 3) {
+			  convert_to_long(qual);
+			  q = qual->value.lval;
+	  }
+
+      if (argc > 1) {
+              convert_to_string(file);
+              fn = file->value.str.val;
+              if (fn && strlen(fn) && _php3_check_open_basedir(fn)) {
+                      php3_error(E_WARNING, "ImageJpeg: Invalid filename");
+                      RETURN_FALSE;
+              }
+      }
+
+      im = php3_list_find(imgind->value.lval, &ind_type);
+      if (!im || ind_type != GD_GLOBAL(le_gd)) {
+              php3_error(E_WARNING, "ImageJpeg: unable to find image pointer");
+              RETURN_FALSE;
+      }
+
+      if (fn && strlen(fn) && argc > 1) {
+              fp = fopen(fn, "wb");
+              if (!fp) {
+                     php3_error(E_WARNING, "ImageJpeg: unable to open %s for writing", fn);
+                     RETURN_FALSE;
+              }
+              gdImageJpeg (im,fp,q);
+              fflush(fp);
+              fclose(fp);
+      }
+      else {
+              int   b;
+              FILE *tmp;
+              char  buf[4096];
+
+              tmp = tmpfile();
+              if (tmp == NULL) {
+                      php3_error(E_WARNING, "Unable to open temporary file");
+                      RETURN_FALSE;
+              }
+
+              output = php3_header();
+
+              if (output) {
+                      gdImageJpeg (im, tmp, q);
+			fseek(tmp, 0, SEEK_SET);
+#if APACHE && defined(CHARSET_EBCDIC)
+			/* This is a binary file already: avoid EBCDIC->ASCII conversion */
+			ap_bsetflag(php3_rqst->connection->client, B_EBCDIC2ASCII, 0);
+#endif
+			while ((b = fread(buf, 1, sizeof(buf), tmp)) > 0) {
+				php3_write(buf, b);
+			}
+		}
+
+		fclose(tmp);
+		/* the temporary file is automatically deleted */
+	}
+
+	RETURN_TRUE;
+}
+/* }}} */
+#endif
+
 /* {{{ proto int imagewbmp(int im [, string filename])
-   Output wbmp image to browser or file */
+   Output WBMP image to browser or file */
 void php3_imagewbmp (INTERNAL_FUNCTION_PARAMETERS) {
       pval *imgind, *file;
       gdImagePtr im;
@@ -1827,7 +1959,7 @@ void php3_imagestringup(INTERNAL_FUNCTION_PARAMETERS) {
 }
 /* }}} */
 
-/* {{{ proto int imagecopy(int dst_im, int src_im, int dstX, int dstY, int srcX, int srcY, int srcW, int srcH)
+/* {{{ proto int imagecopy(int dst_im, int src_im, int dst_x, int dst_y, int src_x, int src_y, int src_w, int src_h)
    Copy part of an image */ 
 void php3_imagecopy(INTERNAL_FUNCTION_PARAMETERS)
 {
@@ -1877,7 +2009,7 @@ void php3_imagecopy(INTERNAL_FUNCTION_PARAMETERS)
 }
 /* }}} */
 
-/* {{{ proto int imagecopyresized(int dst_im, int src_im, int dstX, int dstY, int srcX, int srcY, int dstW, int dstH, int srcW, int srcH);
+/* {{{ proto int imagecopyresized(int dst_im, int src_im, int dst_x, int dst_y, int src_x, int src_y, int dst_w, int dst_h, int src_w, int src_h);
    Copy and resize part of an image */
 void php3_imagecopyresized(INTERNAL_FUNCTION_PARAMETERS)
 {

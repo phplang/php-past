@@ -182,7 +182,7 @@ typedef enum {
 } iv_source;
 
 /* {{{ proto string mcrypt_create_iv(int size, int source)
-   Create an initializing vector (IV) */
+   Create an initializing vector (IV) from a random source */
 PHP_FUNCTION(mcrypt_create_iv)
 {
 	pval *size, *psource;
@@ -228,7 +228,7 @@ PHP_FUNCTION(mcrypt_create_iv)
 /* }}} */
 
 /* {{{ proto string mcrypt_get_cipher_name(int cipher)
-   Get the name of cipher */
+   Get the name of the specified cipher */
 PHP_FUNCTION(mcrypt_get_cipher_name)
 {
 	pval *cipher;
@@ -252,7 +252,7 @@ PHP_FUNCTION(mcrypt_get_cipher_name)
 /* }}} */
 
 /* {{{ proto int mcrypt_get_key_size(int cipher)
-   Get the key size of cipher */
+   Get the key size of the specified cipher */
 PHP_FUNCTION(mcrypt_get_key_size)
 {
 	pval *cipher;
@@ -268,7 +268,7 @@ PHP_FUNCTION(mcrypt_get_key_size)
 /* }}} */
 
 /* {{{ proto int mcrypt_get_block_size(int cipher)
-   Get the block size of cipher */
+   Get the block size of the specified cipher */
 PHP_FUNCTION(mcrypt_get_block_size)
 {
 	pval *cipher;
@@ -283,8 +283,8 @@ PHP_FUNCTION(mcrypt_get_block_size)
 }
 /* }}} */
 
-/* {{{ proto int mcrypt_ofb(int cipher, string key, string data, int mode, string iv)
-   OFB crypt/decrypt data using key key with cipher cipher starting with iv */
+/* {{{ proto string mcrypt_ofb(int cipher, string key, string data, int mode, string iv)
+   OFB crypt/decrypt data using key key with cipher cipher starting with IV */
 PHP_FUNCTION(mcrypt_ofb)
 {
 	MCRYPT_ARGS;
@@ -305,8 +305,8 @@ PHP_FUNCTION(mcrypt_ofb)
 }
 /* }}} */
 
-/* {{{ proto int mcrypt_cfb(int cipher, string key, string data, int mode, string iv)
-   CFB crypt/decrypt data using key key with cipher cipher starting with iv */
+/* {{{ proto string mcrypt_cfb(int cipher, string key, string data, int mode, string iv)
+   CFB crypt/decrypt data using key key with cipher cipher starting with IV */
 PHP_FUNCTION(mcrypt_cfb)
 {
 	MCRYPT_ARGS;
@@ -327,8 +327,8 @@ PHP_FUNCTION(mcrypt_cfb)
 }
 /* }}} */
 
-/* {{{ proto int mcrypt_cbc(int cipher, string key, string data, int mode [,string iv])
-   CBC crypt/decrypt data using key key with cipher cipher using optional iv */
+/* {{{ proto string mcrypt_cbc(int cipher, string key, string data, int mode [, string iv])
+   CBC crypt/decrypt data using key key with cipher cipher using optional IV */
 PHP_FUNCTION(mcrypt_cbc)
 {
 	MCRYPT_ARGS;
@@ -358,7 +358,7 @@ PHP_FUNCTION(mcrypt_cbc)
 }
 /* }}} */
 
-/* {{{ proto int mcrypt_ecb(int cipher, string key, string data, int mode)
+/* {{{ proto string mcrypt_ecb(int cipher, string key, string data, int mode)
    ECB crypt/decrypt data using key key with cipher cipher */
 PHP_FUNCTION(mcrypt_ecb)
 {

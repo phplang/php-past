@@ -29,7 +29,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: dl.c,v 1.104 2000/02/07 23:54:51 zeev Exp $ */
+/* $Id: dl.c,v 1.105 2000/03/30 01:22:37 sas Exp $ */
 #include "php.h"
 #include "internal_functions.h"
 #include "dl.h"
@@ -121,6 +121,9 @@ void php3_dl(pval *file,int type,pval *return_value)
 		RETURN_FALSE;
 	}
 	get_module = (php3_module_entry *(*)(void)) dlsym(handle, "get_module");
+	
+	if (!get_module)
+		get_module = (php3_module_entry *(*)(void)) dlsym(handle, "_get_module");
 	
 	if (!get_module) {
 		dlclose(handle);

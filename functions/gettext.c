@@ -27,7 +27,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: gettext.c,v 1.2 2000/01/01 04:31:15 sas Exp $ */
+/* $Id: gettext.c,v 1.3 2000/03/19 23:40:57 chagenbu Exp $ */
 
 #include <stdio.h>
 #include "php.h"
@@ -57,6 +57,8 @@ void php3_info_gettext(void)
 	php3_printf("GNU gettext support active.");
 }
 
+/* {{{ proto string textdomain(string domain)
+   Set the textdomain to "domain". Returns the current domain. */
 void php3_textdomain(INTERNAL_FUNCTION_PARAMETERS)
 {
     pval *domain;
@@ -79,7 +81,10 @@ void php3_textdomain(INTERNAL_FUNCTION_PARAMETERS)
 
     RETURN_STRING(retval, 1);
 }
+/* }}} */
 
+/* {{{ proto string gettext(string msgid)
+   Return the translation of msgid for the current domain, or msgid unaltered if a translation does not exist. */
 void php3_gettext(INTERNAL_FUNCTION_PARAMETERS)
 {
     pval *msgid;
@@ -94,7 +99,10 @@ void php3_gettext(INTERNAL_FUNCTION_PARAMETERS)
 
     RETURN_STRING(msgstr, 1);
 }
+/* }}} */
 
+/* {{{ proto string dgettext(string domain_name, string msgid)
+   Return the translation of msgid for domain_name, or msgid unaltered if a translation does not exist. */
 void php3_dgettext(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *domain_name, *msgid;
@@ -112,7 +120,10 @@ void php3_dgettext(INTERNAL_FUNCTION_PARAMETERS)
 
 	RETURN_STRING(msgstr, 1);
 }
+/* }}} */
 
+/* {{{ proto string dcgettext(string domain_name, string msgid, long category)
+   Return the translation of msgid for domain_name and category, or msgid unaltered if a translation does not exist. */
 void php3_dcgettext(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *domain_name, *msgid, *category;
@@ -133,7 +144,10 @@ void php3_dcgettext(INTERNAL_FUNCTION_PARAMETERS)
 
 	RETURN_STRING(msgstr, 1);
 }
+/* }}} */
 
+/* {{{ proto string bindtextdomain(string domain_name, string dir)
+   Bind to the text domain domain_name, looking for translations in dir. Returns the current domain. */
 void php3_bindtextdomain(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *domain_name, *dir;
@@ -159,6 +173,7 @@ void php3_bindtextdomain(INTERNAL_FUNCTION_PARAMETERS)
 
 	RETURN_STRING(retval, 1);
 }
+/* }}} */
 
 #endif /* HAVE_LIBINTL */
 

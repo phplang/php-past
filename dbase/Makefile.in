@@ -11,7 +11,7 @@ BIN=@bindir@
 LIB=@libdir@
 
 CC=@CC@
-CFLAGS=-I. -I@srcdir@ @CFLAGS@
+CFLAGS=-I. -I@srcdir@ @CFLAGS@ @CFLAGS_SHLIB@
 RANLIB=@RANLIB@
 
 TARGETS = dbflst tmpl dbfadd dbfdel dbfpack dbfget dbfndx dbfcreat \

@@ -1,4 +1,4 @@
-dnl $Id: configure.in,v 1.495 2000/02/23 18:16:20 sas Exp $
+dnl $Id: configure.in,v 1.501 2000/04/03 18:24:29 sas Exp $
 dnl Process this file with autoconf to produce a configure script.
 
 AC_INIT(main.c)
@@ -294,7 +294,7 @@ AC_ARG_WITH(apxs,
         withval=apxs
     fi
     APXS="$withval"
-	APXS_LDFLAGS="@EXTRA_LIBS@ @SYBASE_CT_LFLAGS@ @SYBASE_CT_LIBS@ @FHTTPD_LIB@ @ORACLE_LFLAGS@ @ORACLE_LIBS@ @IODBC_LFLAGS@ @IODBC_LIBS@ @SYBASE_LFLAGS@ @SYBASE_LIBS@ @SYBASE_CT_LFLAGS@ @SYBASE_CT_LIBS@ @ADA_LFLAGS@ @ADA_LIBS@ @SOLID_LIBS@ @EMPRESS_LIBS@ @OPENLINK_LFLAGS@ @OPENLINK_LIBS@ @VELOCIS_LIBS@ @CODBC_LFLAGS@ @CODBC_LIBS@ @ZLIB_LIBS@ @PDFLIB_LIBS@ @CPDFLIB_LIBS@ @FDFLIB_LIBS@ @IFX_LFLAGS@ @IFX_LIBS@ @IBASE_LFLAGS@ @IBASE_LIBS@ @DBM_LIB@ @DBASE_LIBS@ @PCRE_LIB@"
+	APXS_LDFLAGS="@EXTRA_LIBS@ @SYBASE_CT_LFLAGS@ @SYBASE_CT_LIBS@ @FHTTPD_LIB@ @ORACLE_LFLAGS@ @ORACLE_LIBS@ @IODBC_LFLAGS@ @IODBC_LIBS@ @SYBASE_LFLAGS@ @SYBASE_LIBS@ @SYBASE_CT_LFLAGS@ @SYBASE_CT_LIBS@ @ADA_LFLAGS@ @ADA_LIBS@ @SOLID_LIBS@ @EMPRESS_LIBS@ @OPENLINK_LFLAGS@ @OPENLINK_LIBS@ @VELOCIS_LIBS@ @CODBC_LFLAGS@ @CODBC_LIBS@ @ZLIB_LIBS@ @PDFLIB_LIBS@ @CPDFLIB_LIBS@ @FDFLIB_LIBS@ @IFX_LFLAGS@ @IFX_LIBS@ @IBASE_LFLAGS@ @IBASE_LIBS@ @DBM_LIB@"
 
     APACHE_INCLUDE="-I`$APXS -q INCLUDEDIR`"
     BINNAME=libphp3.so
@@ -782,6 +782,27 @@ AC_ARG_WITH(gd,
         AC_ADD_LIBRARY(png)
         AC_ADD_LIBRARY(z)
       fi
+
+      old_LIBS=$LIBS
+      AC_MSG_CHECKING([for libjpeg (needed by gd-1.8+)])
+      AC_ARG_WITH(jpeg-dir,
+      [  --with-jpeg-dir[=DIR]   jpeg dir for gd-1.8+],[
+        AC_MSG_RESULT(yes)
+        if test -z $withval; then
+          withval="/usr/local"
+        fi
+        LIBS="$LIBS -L$withval/lib -ljpeg"
+        AC_CHECK_LIB(jpeg,jpeg_read_header, [LIBS="$LIBS -L$withval/lib -ljpeg"],,)
+      ],[
+        AC_MSG_RESULT(no)
+        AC_MSG_WARN(If configure fails try --with-jpeg-dir=<DIR>)
+      ]) 
+      withval=$old_withval
+      AC_CHECK_LIB(gd,gdImageCreateFromJpeg,[AC_DEFINE(HAVE_GD_JPG)])
+      LIBS=$old_LIBS
+      if test "$ac_cv_lib_gd_gdImageCreateFromJpeg" = "yes"; then
+        AC_ADD_LIBRARY(jpeg)
+      fi
       
       AC_CHECK_LIB(gd,gdImageCreateFromGif,[AC_DEFINE(HAVE_GD_GIF)])
       AC_CHECK_LIB(gd,gdImageLzw,          [AC_DEFINE(HAVE_GD_LZW)])
@@ -846,6 +867,7 @@ AC_ARG_WITH(gd,
         AC_CHECK_LIB(z,compress, LIBS="$LIBS -lz",,)
         AC_CHECK_LIB(png,png_info_init, LIBS="$LIBS -lpng",,)
         AC_CHECK_LIB(gd, gdImageCreateFromPng, [AC_DEFINE(HAVE_GD_PNG)])
+        AC_CHECK_LIB(gd,gdImageCreateFromJpeg,[AC_DEFINE(HAVE_GD_JPG)])
         LIBS=$old_LIBS
         if test "$ac_cv_lib_gd_gdImageCreateFromPng" = "yes"; then
           AC_ADD_LIBRARY(png)
@@ -886,6 +908,7 @@ AC_ARG_WITH(gd,
     AC_CHECK_LIB(z,compress, LIBS="$LIBS -lz",,)
     AC_CHECK_LIB(png,png_info_init, LIBS="$LIBS -lpng",,)
     AC_CHECK_LIB(gd, gdImageCreateFromPng, [AC_DEFINE(HAVE_GD_PNG)])
+    AC_CHECK_LIB(gd,gdImageCreateFromJpeg,[AC_DEFINE(HAVE_GD_JPG)])
     LIBS=$old_LIBS
     if test "$ac_cv_lib_gd_gdImageCreateFromPng" = "yes"; then
       AC_ADD_LIBRARY(png)
@@ -986,6 +1009,7 @@ AC_ARG_ENABLE(t1lib,
       AC_DEFINE(HAVE_LIBT1_OUTLINE)
       T1LIB_WARNING="WARNING: You *must* read README.t1lib for a necessary patch"
     ])
+    AC_CHECK_LIB(t1, T1_GetExtend, [ T1LIB_WARNING="" ])dnl New version, bug fixed
     AC_ADD_LIBRARY(t1)
     AC_MSG_CHECKING(whether to enable t1lib support)
     AC_MSG_RESULT(yes)
@@ -1767,38 +1791,7 @@ AC_SUBST(MCK_LIBS)
 AC_SUBST(MCK_LFLAGS)
 AC_SUBST(MCK_INCLUDE)
 
-AC_MSG_CHECKING(for SNMP support)
-AC_ARG_WITH(snmp,
-[  --with-snmp[=DIR]       Include SNMP support.  DIR is the SNMP base
-                          install directory, defaults to searching through
-                          a number of common locations for the snmp install.],
-[
-  if test "$withval" != "no"; then
-  	if test "$withval" = "yes"; then
-	   	SNMP_INCDIR=/usr/local/include
-   		SNMP_LIBDIR=/usr/local/lib
-   		test -d /usr/local/include/ucd-snmp && SNMP_INCDIR=/usr/local/include/ucd-snmp
-   		test -d /usr/include/ucd-snmp && SNMP_INCDIR=/usr/include/ucd-snmp
-		test -f /usr/lib/libsnmp.a && SNMP_LIBDIR=/usr/lib
-   	else
-   		SNMP_INCDIR=$withval/include
-   		test -d $withval/include/snmp     && SNMP_INCDIR=$withval/include/snmp
-   		test -d $withval/include/ucd-snmp && SNMP_INCDIR=$withval/include/ucd-snmp
-   		SNMP_LIBDIR=$withval/lib
-   	fi
-    AC_ADD_LIBRARY_WITH_PATH(snmp, $SNMP_LIBDIR)
-    AC_ADD_INCLUDE($SNMP_INCDIR)
-    AC_CHECK_LIB(kstat, kstat_read, [AC_ADD_LIBRARY(kstat)])
-
-    AC_DEFINE(HAVE_SNMP)
-
-    AC_MSG_RESULT(yes)
-  else
-  	AC_MSG_RESULT(no)
-  fi
-],[
-  AC_MSG_RESULT(no)
-])
+sinclude(snmp.m4)
 
 AC_MSG_CHECKING(for Velocis support)
 AC_ARG_WITH(velocis,
@@ -2927,19 +2920,6 @@ AC_ARG_WITH(mhash,
 
     AC_MSG_RESULT(yes)
     PHP_EXTENSION(mhash)
-  else
-    AC_MSG_RESULT(no)
-  fi
-],[
-  AC_MSG_RESULT(no)
-])
-
-AC_MSG_CHECKING(whether to enable UCD SNMP hack)
-AC_ARG_ENABLE(ucd-snmp-hack,
-[  --enable-ucd-snmp-hack  Enable UCD SNMP hack],[
-  if test "$enableval" = "yes" ; then
-    AC_DEFINE(UCD_SNMP_HACK, 1)
-    AC_MSG_RESULT(yes)
   else
     AC_MSG_RESULT(no)
   fi

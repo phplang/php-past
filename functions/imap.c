@@ -33,7 +33,7 @@
    |          Andrew Skalski      <askalski@chek.com>                  |
    +----------------------------------------------------------------------+
  */
-/* $Id: imap.c,v 1.82 2000/02/14 13:11:46 hholzgra Exp $ */
+/* $Id: imap.c,v 1.87 2000/03/26 04:29:35 chagenbu Exp $ */
 
 #define IMAP41
 
@@ -1554,7 +1554,7 @@ void php3_imap_delete(INTERNAL_FUNCTION_PARAMETERS)
 	pils *imap_le_struct;
 	int myargc=ARG_COUNT(ht);
 
-	if ( myargc < 3 || myargc > 4 || getParameters(ht,myargc,&streamind,&sequence,&flags) == FAILURE) {
+	if ( myargc < 2 || myargc > 3 || getParameters(ht,myargc,&streamind,&sequence,&flags) == FAILURE) {
 		WRONG_PARAM_COUNT;
 	}
 
@@ -1569,7 +1569,7 @@ void php3_imap_delete(INTERNAL_FUNCTION_PARAMETERS)
 		RETURN_FALSE;
 	}
 
-	mail_setflag_full(imap_le_struct->imap_stream,sequence->value.str.val,"\\DELETED",myargc == 4 ? flags->value.lval : NIL);
+	mail_setflag_full(imap_le_struct->imap_stream,sequence->value.str.val,"\\DELETED",myargc == 3 ? flags->value.lval : NIL);
 	RETVAL_TRUE;
 }
 /* }}} */
@@ -1583,7 +1583,7 @@ void php3_imap_undelete(INTERNAL_FUNCTION_PARAMETERS)
 	pils *imap_le_struct;
 	int myargc=ARG_COUNT(ht);
 
-	if ( myargc < 3 || myargc > 4 || getParameters(ht,myargc,&streamind,&sequence,&flags) == FAILURE) {
+	if ( myargc < 2 || myargc > 3 || getParameters(ht,myargc,&streamind,&sequence,&flags) == FAILURE) {
 		WRONG_PARAM_COUNT;
 	}
 	convert_to_long(streamind);
@@ -1597,7 +1597,7 @@ void php3_imap_undelete(INTERNAL_FUNCTION_PARAMETERS)
 		RETURN_FALSE;
 	}
 
-	mail_clearflag_full(imap_le_struct->imap_stream,sequence->value.str.val,"\\DELETED",myargc == 4 ? flags->value.lval : NIL);
+	mail_clearflag_full(imap_le_struct->imap_stream,sequence->value.str.val,"\\DELETED",myargc == 3 ? flags->value.lval : NIL);
 	RETVAL_TRUE;
 }
 /* }}} */
@@ -1651,297 +1651,296 @@ void php3_imap_headerinfo(INTERNAL_FUNCTION_PARAMETERS)
 
 
     mystring=mail_fetchheader_full(imap_le_struct->imap_stream,msgno->value.lval,NIL,&length,NIL);
-if(myargc ==5)
-rfc822_parse_msg (&en,NULL,mystring,length,NULL,defaulthost->value.str.val,NIL);
-else
-rfc822_parse_msg (&en,NULL,mystring,length,NULL,"UNKNOWN",NIL);
+	if(myargc ==5)
+		rfc822_parse_msg (&en,NULL,mystring,length,NULL,defaulthost->value.str.val,NIL);
+	else
+		rfc822_parse_msg (&en,NULL,mystring,length,NULL,"UNKNOWN",NIL);
 
-    if(en->remail) add_property_string(return_value,"remail",en->remail,1);
-    if(en->date) add_property_string(return_value,"date",en->date,1);
-    if(en->date) add_property_string(return_value,"Date",en->date,1);
-    if(en->subject)add_property_string(return_value,"subject",en->subject,1);
-    if(en->subject)add_property_string(return_value,"Subject",en->subject,1);
-    if(en->in_reply_to)add_property_string(return_value,"in_reply_to",en->in_reply_to,1);
-    if(en->message_id)add_property_string(return_value,"message_id",en->message_id,1);
-    if(en->newsgroups)add_property_string(return_value,"newsgroups",en->newsgroups,1);
-    if(en->followup_to)add_property_string(return_value,"followup_to",en->followup_to,1);
-    if(en->references)add_property_string(return_value,"references",en->references,1);
+    if (en->remail) add_property_string(return_value,"remail",en->remail,1);
+    if (en->date) add_property_string(return_value,"date",en->date,1);
+    if (en->date) add_property_string(return_value,"Date",en->date,1);
+    if (en->subject) add_property_string(return_value,"subject",en->subject,1);
+    if (en->subject) add_property_string(return_value,"Subject",en->subject,1);
+    if (en->in_reply_to) add_property_string(return_value,"in_reply_to",en->in_reply_to,1);
+    if (en->message_id) add_property_string(return_value,"message_id",en->message_id,1);
+    if (en->newsgroups) add_property_string(return_value,"newsgroups",en->newsgroups,1);
+    if (en->followup_to) add_property_string(return_value,"followup_to",en->followup_to,1);
+    if (en->references) add_property_string(return_value,"references",en->references,1);
 
-if(en->to)
-{
-  int ok=1;
-  addresstmp=en->to;
-  fulladdress[0]=0x00;
+	if (en->to) {
+		int ok=1;
+		addresstmp=en->to;
+		fulladdress[0]=0x00;
 
-  while(ok && addresstmp) /* while length < 1000 and we are not at the end of the list */
-    {
-      addresstmp2=addresstmp->next; /* save the pointer to the next address */
-      addresstmp->next=NULL; /* make this address the only one now. */
-      tempaddress[0]=0x00; /* reset tempaddress buffer */
-      rfc822_write_address(tempaddress,addresstmp); /* ok, write the address into tempaddress string */
-      if((strlen(tempaddress) + strlen(fulladdress)) < 1000) /* is the new address + total address < 1000 */
-	{                /* yes */
-	  if(strlen(fulladdress)) strcat(fulladdress,","); /* put in a comma */ 
-	  strcat(fulladdress,tempaddress); /* put in the new address */
+		while(ok && addresstmp) /* while length < 1000 and we are not at the end of the list */
+			{
+				addresstmp2=addresstmp->next; /* save the pointer to the next address */
+				addresstmp->next=NULL; /* make this address the only one now. */
+				tempaddress[0]=0x00; /* reset tempaddress buffer */
+				rfc822_write_address(tempaddress,addresstmp); /* ok, write the address into tempaddress string */
+				if((strlen(tempaddress) + strlen(fulladdress)) < 1000) /* is the new address + total address < 1000 */
+					{                /* yes */
+						if(strlen(fulladdress)) strcat(fulladdress,","); /* put in a comma */ 
+						strcat(fulladdress,tempaddress); /* put in the new address */
+					}
+				else        /* no */
+					{
+						ok=0;  /* stop looping */
+						strcat(fulladdress,", ...");
+					}
+				addresstmp->next=addresstmp2; /* reset the pointer to the next address first! */
+				addresstmp=addresstmp->next;
+			}
+
+		if(fulladdress) add_property_string( return_value, "toaddress", fulladdress, 1);
+		addresstmp=en->to;
+		array_init( &to );
+		do {
+			object_init( &tovals);
+			if(addresstmp->personal) add_property_string( &tovals, "personal", addresstmp->personal, 1);
+			if(addresstmp->adl) add_property_string( &tovals, "adl", addresstmp->adl, 1);
+			if(addresstmp->mailbox) add_property_string( &tovals, "mailbox", addresstmp->mailbox, 1);
+			if(addresstmp->host) add_property_string( &tovals, "host", addresstmp->host, 1);
+			add_next_index_object( &to, tovals );
+		} while ( (addresstmp = addresstmp->next) );
+		add_assoc_object( return_value, "to", to );
 	}
-      else        /* no */
-	{
-	ok=0;  /* stop looping */
-	strcat(fulladdress,", ...");
-	}
-      addresstmp->next=addresstmp2; /* reset the pointer to the next address first! */
-	  addresstmp=addresstmp->next;
-    }
 
-  if(fulladdress) add_property_string( return_value, "toaddress", fulladdress, 1);
-  addresstmp=en->to;
-    array_init( &to );
-    do {
-      object_init( &tovals);
-      if(addresstmp->personal) add_property_string( &tovals, "personal", addresstmp->personal, 1);
-      if(addresstmp->adl) add_property_string( &tovals, "adl", addresstmp->adl, 1);
-      if(addresstmp->mailbox) add_property_string( &tovals, "mailbox", addresstmp->mailbox, 1);
-      if(addresstmp->host) add_property_string( &tovals, "host", addresstmp->host, 1);
-      add_next_index_object( &to, tovals );
-    } while ( (addresstmp = addresstmp->next) );
-    add_assoc_object( return_value, "to", to );
-}
-
-if(en->from)
-{
-  int ok=1;
-  addresstmp=en->from;
-  fulladdress[0]=0x00;
+	if(en->from)
+		{
+			int ok=1;
+			addresstmp=en->from;
+			fulladdress[0]=0x00;
   
-  while(ok && addresstmp) /* while length < 1000 and we are not at the end of the list */
-    {
-      addresstmp2=addresstmp->next; /* save the pointer to the next address */
-      addresstmp->next=NULL; /* make this address the only one now. */
-      tempaddress[0]=0x00; /* reset tempaddress buffer */
-      rfc822_write_address(tempaddress,addresstmp); /* ok, write the address into tempaddress string */
-      if((strlen(tempaddress) + strlen(fulladdress)) < 1000) /* is the new address + total address < 1000 */
-	{                /* yes */
-	  if(strlen(fulladdress)) strcat(fulladdress,","); /* put in a comma */ 
-	  strcat(fulladdress,tempaddress); /* put in the new address */
-	}
-      else        /* no */
-	{
-	ok=0;  /* stop looping */
-	strcat(fulladdress,", ...");
-	}
-      addresstmp->next=addresstmp2; /* reset the pointer to the next address first! */
-	  addresstmp=addresstmp->next;
-    }
+			while(ok && addresstmp) /* while length < 1000 and we are not at the end of the list */
+				{
+					addresstmp2=addresstmp->next; /* save the pointer to the next address */
+					addresstmp->next=NULL; /* make this address the only one now. */
+					tempaddress[0]=0x00; /* reset tempaddress buffer */
+					rfc822_write_address(tempaddress,addresstmp); /* ok, write the address into tempaddress string */
+					if((strlen(tempaddress) + strlen(fulladdress)) < 1000) /* is the new address + total address < 1000 */
+						{                /* yes */
+							if(strlen(fulladdress)) strcat(fulladdress,","); /* put in a comma */ 
+							strcat(fulladdress,tempaddress); /* put in the new address */
+						}
+					else        /* no */
+						{
+							ok=0;  /* stop looping */
+							strcat(fulladdress,", ...");
+						}
+					addresstmp->next=addresstmp2; /* reset the pointer to the next address first! */
+					addresstmp=addresstmp->next;
+				}
 
-      if(fulladdress) add_property_string( return_value, "fromaddress", fulladdress, 1);
-  addresstmp=en->from;
-    array_init( &from );
-    do {
-      object_init( &fromvals);
-      if(addresstmp->personal) add_property_string( &fromvals, "personal", addresstmp->personal, 1);
-      if(addresstmp->adl) add_property_string( &fromvals, "adl", addresstmp->adl, 1);
-      if(addresstmp->mailbox) add_property_string( &fromvals, "mailbox", addresstmp->mailbox, 1);
-      if(addresstmp->host) add_property_string( &fromvals, "host", addresstmp->host, 1);
-      add_next_index_object( &from, fromvals );
-    } while ( (addresstmp = addresstmp->next) );
-    add_assoc_object( return_value, "from", from );
-}
+			if(fulladdress) add_property_string( return_value, "fromaddress", fulladdress, 1);
+			addresstmp=en->from;
+			array_init( &from );
+			do {
+				object_init( &fromvals);
+				if(addresstmp->personal) add_property_string( &fromvals, "personal", addresstmp->personal, 1);
+				if(addresstmp->adl) add_property_string( &fromvals, "adl", addresstmp->adl, 1);
+				if(addresstmp->mailbox) add_property_string( &fromvals, "mailbox", addresstmp->mailbox, 1);
+				if(addresstmp->host) add_property_string( &fromvals, "host", addresstmp->host, 1);
+				add_next_index_object( &from, fromvals );
+			} while ( (addresstmp = addresstmp->next) );
+			add_assoc_object( return_value, "from", from );
+		}
 
-if(en->cc)
-{
-  int ok=1;
-  addresstmp=en->cc;
-  fulladdress[0]=0x00;
+	if(en->cc)
+		{
+			int ok=1;
+			addresstmp=en->cc;
+			fulladdress[0]=0x00;
   
-  while(ok && addresstmp) /* while length < 1000 and we are not at the end of the list */
-    {
-      addresstmp2=addresstmp->next; /* save the pointer to the next address */
-      addresstmp->next=NULL; /* make this address the only one now. */
-      tempaddress[0]=0x00; /* reset tempaddress buffer */
-      rfc822_write_address(tempaddress,addresstmp); /* ok, write the address into tempaddress string */
-      if((strlen(tempaddress) + strlen(fulladdress)) < 1000) /* is the new address + total address < 1000 */
-	{                /* yes */
-	  if(strlen(fulladdress)) strcat(fulladdress,","); /* put in a comma */ 
-	  strcat(fulladdress,tempaddress); /* put in the new address */
-	}
-      else        /* no */
-	{
-	ok=0;  /* stop looping */
-        strcat(fulladdress,", ..."); 
-	}
-      addresstmp->next=addresstmp2; /* reset the pointer to the next address first! */
-	  addresstmp=addresstmp->next;
-    }
+			while(ok && addresstmp) /* while length < 1000 and we are not at the end of the list */
+				{
+					addresstmp2=addresstmp->next; /* save the pointer to the next address */
+					addresstmp->next=NULL; /* make this address the only one now. */
+					tempaddress[0]=0x00; /* reset tempaddress buffer */
+					rfc822_write_address(tempaddress,addresstmp); /* ok, write the address into tempaddress string */
+					if((strlen(tempaddress) + strlen(fulladdress)) < 1000) /* is the new address + total address < 1000 */
+						{                /* yes */
+							if(strlen(fulladdress)) strcat(fulladdress,","); /* put in a comma */ 
+							strcat(fulladdress,tempaddress); /* put in the new address */
+						}
+					else        /* no */
+						{
+							ok=0;  /* stop looping */
+							strcat(fulladdress,", ..."); 
+						}
+					addresstmp->next=addresstmp2; /* reset the pointer to the next address first! */
+					addresstmp=addresstmp->next;
+				}
 
-      if(fulladdress) add_property_string( return_value, "ccaddress", fulladdress, 1);
-  addresstmp=en->cc;
-    array_init( &cc );
-    do {
-      object_init( &ccvals);
-      if(addresstmp->personal) add_property_string( &ccvals, "personal", addresstmp->personal, 1);
-      if(addresstmp->adl) add_property_string( &ccvals, "adl", addresstmp->adl, 1);
-      if(addresstmp->mailbox) add_property_string( &ccvals, "mailbox", addresstmp->mailbox, 1);
-      if(addresstmp->host) add_property_string( &ccvals, "host", addresstmp->host, 1);
-      add_next_index_object( &cc, ccvals );
-    } while ( (addresstmp = addresstmp->next) );
-    add_assoc_object( return_value, "cc", cc );
-}
+			if(fulladdress) add_property_string( return_value, "ccaddress", fulladdress, 1);
+			addresstmp=en->cc;
+			array_init( &cc );
+			do {
+				object_init( &ccvals);
+				if(addresstmp->personal) add_property_string( &ccvals, "personal", addresstmp->personal, 1);
+				if(addresstmp->adl) add_property_string( &ccvals, "adl", addresstmp->adl, 1);
+				if(addresstmp->mailbox) add_property_string( &ccvals, "mailbox", addresstmp->mailbox, 1);
+				if(addresstmp->host) add_property_string( &ccvals, "host", addresstmp->host, 1);
+				add_next_index_object( &cc, ccvals );
+			} while ( (addresstmp = addresstmp->next) );
+			add_assoc_object( return_value, "cc", cc );
+		}
 
-if(en->bcc)
-{
-  int ok=1;
-  addresstmp=en->bcc;
-  fulladdress[0]=0x00;
-  while(ok && addresstmp) /* while length < 1000 and we are not at the end of the list */
-    {
-      addresstmp2=addresstmp->next; /* save the pointer to the next address */
-      addresstmp->next=NULL; /* make this address the only one now. */
-      tempaddress[0]=0x00; /* reset tempaddress buffer */
-      rfc822_write_address(tempaddress,addresstmp); /* ok, write the address into tempaddress string */
-      if((strlen(tempaddress) + strlen(fulladdress)) < 1000) /* is the new address + total address < 1000 */
-	{                /* yes */
-	  if(strlen(fulladdress)) strcat(fulladdress,","); /* put in a comma */ 
-	  strcat(fulladdress,tempaddress); /* put in the new address */
-	}
-      else        /* no */
-	{
-	ok=0;  /* stop looping */
-        strcat(fulladdress,", ..."); 
-	}
-      addresstmp->next=addresstmp2; /* reset the pointer to the next address first! */
-	  addresstmp=addresstmp->next;
-    }
+	if(en->bcc)
+		{
+			int ok=1;
+			addresstmp=en->bcc;
+			fulladdress[0]=0x00;
+			while(ok && addresstmp) /* while length < 1000 and we are not at the end of the list */
+				{
+					addresstmp2=addresstmp->next; /* save the pointer to the next address */
+					addresstmp->next=NULL; /* make this address the only one now. */
+					tempaddress[0]=0x00; /* reset tempaddress buffer */
+					rfc822_write_address(tempaddress,addresstmp); /* ok, write the address into tempaddress string */
+					if((strlen(tempaddress) + strlen(fulladdress)) < 1000) /* is the new address + total address < 1000 */
+						{                /* yes */
+							if(strlen(fulladdress)) strcat(fulladdress,","); /* put in a comma */ 
+							strcat(fulladdress,tempaddress); /* put in the new address */
+						}
+					else        /* no */
+						{
+							ok=0;  /* stop looping */
+							strcat(fulladdress,", ..."); 
+						}
+					addresstmp->next=addresstmp2; /* reset the pointer to the next address first! */
+					addresstmp=addresstmp->next;
+				}
 
-      if(fulladdress) add_property_string( return_value, "bccaddress", fulladdress, 1);
-  addresstmp=en->bcc;
-    array_init( &bcc );
-    do {
-      object_init( &bccvals);
-      if(addresstmp->personal) add_property_string( &bccvals, "personal", addresstmp->personal, 1);
-      if(addresstmp->adl) add_property_string( &bccvals, "adl", addresstmp->adl, 1);
-      if(addresstmp->mailbox) add_property_string( &bccvals, "mailbox", addresstmp->mailbox, 1);
-      if(addresstmp->host) add_property_string( &bccvals, "host", addresstmp->host, 1);
-      add_next_index_object( &bcc, bccvals );
-    } while ( (addresstmp = addresstmp->next) );
-    add_assoc_object( return_value, "bcc", bcc );
-}
+			if(fulladdress) add_property_string( return_value, "bccaddress", fulladdress, 1);
+			addresstmp=en->bcc;
+			array_init( &bcc );
+			do {
+				object_init( &bccvals);
+				if(addresstmp->personal) add_property_string( &bccvals, "personal", addresstmp->personal, 1);
+				if(addresstmp->adl) add_property_string( &bccvals, "adl", addresstmp->adl, 1);
+				if(addresstmp->mailbox) add_property_string( &bccvals, "mailbox", addresstmp->mailbox, 1);
+				if(addresstmp->host) add_property_string( &bccvals, "host", addresstmp->host, 1);
+				add_next_index_object( &bcc, bccvals );
+			} while ( (addresstmp = addresstmp->next) );
+			add_assoc_object( return_value, "bcc", bcc );
+		}
 
-if(en->reply_to)
-{
-  int ok=1;
-  addresstmp=en->reply_to;
-  fulladdress[0]=0x00;
-  while(ok && addresstmp) /* while length < 1000 and we are not at the end of the list */
-    {
-      addresstmp2=addresstmp->next; /* save the pointer to the next address */
-      addresstmp->next=NULL; /* make this address the only one now. */
-      tempaddress[0]=0x00; /* reset tempaddress buffer */
-      rfc822_write_address(tempaddress,addresstmp); /* ok, write the address into tempaddress string */
-      if((strlen(tempaddress) + strlen(fulladdress)) < 1000) /* is the new address + total address < 1000 */
-	{                /* yes */
-	  if(strlen(fulladdress)) strcat(fulladdress,","); /* put in a comma */ 
-	  strcat(fulladdress,tempaddress); /* put in the new address */
-	}
-      else        /* no */
-	{
-	ok=0;  /* stop looping */
-        strcat(fulladdress,", ..."); 
-	}
-      addresstmp->next=addresstmp2; /* reset the pointer to the next address first! */
-	  addresstmp=addresstmp->next;
-    }
+	if(en->reply_to)
+		{
+			int ok=1;
+			addresstmp=en->reply_to;
+			fulladdress[0]=0x00;
+			while(ok && addresstmp) /* while length < 1000 and we are not at the end of the list */
+				{
+					addresstmp2=addresstmp->next; /* save the pointer to the next address */
+					addresstmp->next=NULL; /* make this address the only one now. */
+					tempaddress[0]=0x00; /* reset tempaddress buffer */
+					rfc822_write_address(tempaddress,addresstmp); /* ok, write the address into tempaddress string */
+					if((strlen(tempaddress) + strlen(fulladdress)) < 1000) /* is the new address + total address < 1000 */
+						{                /* yes */
+							if(strlen(fulladdress)) strcat(fulladdress,","); /* put in a comma */ 
+							strcat(fulladdress,tempaddress); /* put in the new address */
+						}
+					else        /* no */
+						{
+							ok=0;  /* stop looping */
+							strcat(fulladdress,", ..."); 
+						}
+					addresstmp->next=addresstmp2; /* reset the pointer to the next address first! */
+					addresstmp=addresstmp->next;
+				}
 
-      if(fulladdress) add_property_string( return_value, "reply_toaddress", fulladdress, 1);
-  addresstmp=en->reply_to;
-    array_init( &reply_to );
-    do {
-      object_init( &reply_tovals);
-      if(addresstmp->personal) add_property_string( &reply_tovals, "personal", addresstmp->personal, 1);
-      if(addresstmp->adl) add_property_string( &reply_tovals, "adl", addresstmp->adl, 1);
-      if(addresstmp->mailbox) add_property_string( &reply_tovals, "mailbox", addresstmp->mailbox, 1);
-      if(addresstmp->host) add_property_string( &reply_tovals, "host", addresstmp->host, 1);
-      add_next_index_object( &reply_to, reply_tovals );
-    } while ( (addresstmp = addresstmp->next) );
-    add_assoc_object( return_value, "reply_to", reply_to );
-}
+			if(fulladdress) add_property_string( return_value, "reply_toaddress", fulladdress, 1);
+			addresstmp=en->reply_to;
+			array_init( &reply_to );
+			do {
+				object_init( &reply_tovals);
+				if(addresstmp->personal) add_property_string( &reply_tovals, "personal", addresstmp->personal, 1);
+				if(addresstmp->adl) add_property_string( &reply_tovals, "adl", addresstmp->adl, 1);
+				if(addresstmp->mailbox) add_property_string( &reply_tovals, "mailbox", addresstmp->mailbox, 1);
+				if(addresstmp->host) add_property_string( &reply_tovals, "host", addresstmp->host, 1);
+				add_next_index_object( &reply_to, reply_tovals );
+			} while ( (addresstmp = addresstmp->next) );
+			add_assoc_object( return_value, "reply_to", reply_to );
+		}
 
-if(en->sender)
-{
-  int ok=1;
-  addresstmp=en->sender;
-  fulladdress[0]=0x00;
-  while(ok && addresstmp) /* while length < 1000 and we are not at the end of the list */
-    {
-      addresstmp2=addresstmp->next; /* save the pointer to the next address */
-      addresstmp->next=NULL; /* make this address the only one now. */
-      tempaddress[0]=0x00; /* reset tempaddress buffer */
-      rfc822_write_address(tempaddress,addresstmp); /* ok, write the address into tempaddress string */
-      if((strlen(tempaddress) + strlen(fulladdress)) < 1000) /* is the new address + total address < 1000 */
-	{                /* yes */
-	  if(strlen(fulladdress)) strcat(fulladdress,","); /* put in a comma */ 
-	  strcat(fulladdress,tempaddress); /* put in the new address */
-	}
-      else        /* no */
-	{
-	  ok=0;  /* stop looping */
-	  strcat(fulladdress,", ..."); 
-	}
-      addresstmp->next=addresstmp2; /* reset the pointer to the next address first! */
-	  addresstmp=addresstmp->next;
-    }
+	if(en->sender)
+		{
+			int ok=1;
+			addresstmp=en->sender;
+			fulladdress[0]=0x00;
+			while(ok && addresstmp) /* while length < 1000 and we are not at the end of the list */
+				{
+					addresstmp2=addresstmp->next; /* save the pointer to the next address */
+					addresstmp->next=NULL; /* make this address the only one now. */
+					tempaddress[0]=0x00; /* reset tempaddress buffer */
+					rfc822_write_address(tempaddress,addresstmp); /* ok, write the address into tempaddress string */
+					if((strlen(tempaddress) + strlen(fulladdress)) < 1000) /* is the new address + total address < 1000 */
+						{                /* yes */
+							if(strlen(fulladdress)) strcat(fulladdress,","); /* put in a comma */ 
+							strcat(fulladdress,tempaddress); /* put in the new address */
+						}
+					else        /* no */
+						{
+							ok=0;  /* stop looping */
+							strcat(fulladdress,", ..."); 
+						}
+					addresstmp->next=addresstmp2; /* reset the pointer to the next address first! */
+					addresstmp=addresstmp->next;
+				}
 
-      if(fulladdress) add_property_string( return_value, "senderaddress", fulladdress, 1);
-  addresstmp=en->sender;
-    array_init( &sender );
-    do {
-      object_init( &sendervals);
-      if(addresstmp->personal) add_property_string( &sendervals, "personal", addresstmp->personal, 1);
-      if(addresstmp->adl) add_property_string( &sendervals, "adl", addresstmp->adl, 1);
-      if(addresstmp->mailbox) add_property_string( &sendervals, "mailbox", addresstmp->mailbox, 1);
-      if(addresstmp->host) add_property_string( &sendervals, "host", addresstmp->host, 1);
-      add_next_index_object( &sender, sendervals );
-    } while ( (addresstmp = addresstmp->next) );
-    add_assoc_object( return_value, "sender", sender );
-}
+			if(fulladdress) add_property_string( return_value, "senderaddress", fulladdress, 1);
+			addresstmp=en->sender;
+			array_init( &sender );
+			do {
+				object_init( &sendervals);
+				if(addresstmp->personal) add_property_string( &sendervals, "personal", addresstmp->personal, 1);
+				if(addresstmp->adl) add_property_string( &sendervals, "adl", addresstmp->adl, 1);
+				if(addresstmp->mailbox) add_property_string( &sendervals, "mailbox", addresstmp->mailbox, 1);
+				if(addresstmp->host) add_property_string( &sendervals, "host", addresstmp->host, 1);
+				add_next_index_object( &sender, sendervals );
+			} while ( (addresstmp = addresstmp->next) );
+			add_assoc_object( return_value, "sender", sender );
+		}
 
-if(en->return_path)
-{
-  int ok=1;
-  addresstmp=en->return_path;
-  fulladdress[0]=0x00;
-  while(ok && addresstmp) /* while length < 1000 and we are not at the end of the list */
-    {
-      addresstmp2=addresstmp->next; /* save the pointer to the next address */
-      addresstmp->next=NULL; /* make this address the only one now. */
-      tempaddress[0]=0x00; /* reset tempaddress buffer */
-      rfc822_write_address(tempaddress,addresstmp); /* ok, write the address into tempaddress string */
-      if((strlen(tempaddress) + strlen(fulladdress)) < 1000) /* is the new address + total address < 1000 */
-	{                /* yes */
-	  if(strlen(fulladdress)) strcat(fulladdress,","); /* put in a comma */ 
-	  strcat(fulladdress,tempaddress); /* put in the new address */
-	}
-      else        /* no */
-	{
-	  ok=0;  /* stop looping */
-	  strcat(fulladdress,", ..."); 
-	}
-      addresstmp->next=addresstmp2; /* reset the pointer to the next address first! */
-	  addresstmp=addresstmp->next;
-    }
+	if(en->return_path)
+		{
+			int ok=1;
+			addresstmp=en->return_path;
+			fulladdress[0]=0x00;
+			while(ok && addresstmp) /* while length < 1000 and we are not at the end of the list */
+				{
+					addresstmp2=addresstmp->next; /* save the pointer to the next address */
+					addresstmp->next=NULL; /* make this address the only one now. */
+					tempaddress[0]=0x00; /* reset tempaddress buffer */
+					rfc822_write_address(tempaddress,addresstmp); /* ok, write the address into tempaddress string */
+					if((strlen(tempaddress) + strlen(fulladdress)) < 1000) /* is the new address + total address < 1000 */
+						{                /* yes */
+							if(strlen(fulladdress)) strcat(fulladdress,","); /* put in a comma */ 
+							strcat(fulladdress,tempaddress); /* put in the new address */
+						}
+					else        /* no */
+						{
+							ok=0;  /* stop looping */
+							strcat(fulladdress,", ..."); 
+						}
+					addresstmp->next=addresstmp2; /* reset the pointer to the next address first! */
+					addresstmp=addresstmp->next;
+				}
   
-  if(fulladdress) add_property_string( return_value, "return_pathaddress", fulladdress, 1);
-  addresstmp=en->return_path;
-    array_init( &return_path );
-    do {
-      object_init( &return_pathvals);
-      if(addresstmp->personal) add_property_string( &return_pathvals, "personal", addresstmp->personal, 1);
-      if(addresstmp->adl) add_property_string( &return_pathvals, "adl", addresstmp->adl, 1);
-      if(addresstmp->mailbox) add_property_string( &return_pathvals, "mailbox", addresstmp->mailbox, 1);
-      if(addresstmp->host) add_property_string( &return_pathvals, "host", addresstmp->host, 1);
-      add_next_index_object( &return_path, return_pathvals );
-    } while ( (addresstmp = addresstmp->next) );
-    add_assoc_object( return_value, "return_path", return_path );
-}
+			if(fulladdress) add_property_string( return_value, "return_pathaddress", fulladdress, 1);
+			addresstmp=en->return_path;
+			array_init( &return_path );
+			do {
+				object_init( &return_pathvals);
+				if(addresstmp->personal) add_property_string( &return_pathvals, "personal", addresstmp->personal, 1);
+				if(addresstmp->adl) add_property_string( &return_pathvals, "adl", addresstmp->adl, 1);
+				if(addresstmp->mailbox) add_property_string( &return_pathvals, "mailbox", addresstmp->mailbox, 1);
+				if(addresstmp->host) add_property_string( &return_pathvals, "host", addresstmp->host, 1);
+				add_next_index_object( &return_path, return_pathvals );
+			} while ( (addresstmp = addresstmp->next) );
+			add_assoc_object( return_value, "return_path", return_path );
+		}
 	add_property_string(return_value,"Recent",cache->recent ? (cache->seen ? "R": "N") : " ",1);
 	add_property_string(return_value,"Unseen",(cache->recent | cache->seen) ? " " : "U",1);
 	add_property_string(return_value,"Flagged",cache->flagged ? "F" : " ",1);
@@ -1956,18 +1955,18 @@ if(en->return_path)
     add_property_string(return_value,"Size",dummy,1);
     add_property_long(return_value,"udate",mail_longdate(cache));
  
-if(en->from && fromlength)
-{
-fulladdress[0]=0x00;
-mail_fetchfrom(fulladdress,imap_le_struct->imap_stream,msgno->value.lval,fromlength->value.lval);
-add_property_string(return_value,"fetchfrom",fulladdress,1);
-}
-if(en->subject && subjectlength)
-{
-fulladdress[0]=0x00;
-mail_fetchsubject(fulladdress,imap_le_struct->imap_stream,msgno->value.lval,subjectlength->value.lval);
-add_property_string(return_value,"fetchsubject",fulladdress,1);
-}
+	if(en->from && fromlength)
+		{
+			fulladdress[0]=0x00;
+			mail_fetchfrom(fulladdress,imap_le_struct->imap_stream,msgno->value.lval,fromlength->value.lval);
+			add_property_string(return_value,"fetchfrom",fulladdress,1);
+		}
+	if(en->subject && subjectlength)
+		{
+			fulladdress[0]=0x00;
+			mail_fetchsubject(fulladdress,imap_le_struct->imap_stream,msgno->value.lval,subjectlength->value.lval);
+			add_property_string(return_value,"fetchsubject",fulladdress,1);
+		}
 }
 /* }}} */
 
@@ -2615,6 +2614,7 @@ void php3_imap_utf7_decode(INTERNAL_FUNCTION_PARAMETERS)
 			case ST_DECODE0:
 				state++;
 			case ST_NORMAL:
+				break;
 			}
 		}
 	}
@@ -2671,6 +2671,7 @@ void php3_imap_utf7_decode(INTERNAL_FUNCTION_PARAMETERS)
 				*outp++ |= UNB64(*inp);
 				state = ST_DECODE0;
 			case ST_NORMAL:
+				break;
 			}
 		}
 	}
@@ -2797,6 +2798,7 @@ void php3_imap_utf7_encode(INTERNAL_FUNCTION_PARAMETERS)
 				*outp++ = B64(*inp++);
 				state = ST_ENCODE0;
 			case ST_NORMAL:
+				break;
 			}
 		}
 	}
@@ -2877,6 +2879,7 @@ void php3_imap_clearflag_full(INTERNAL_FUNCTION_PARAMETERS)
 		RETURN_FALSE;
 	}
 	mail_clearflag_full(imap_le_struct->imap_stream,sequence->value.str.val,flag->value.str.val,myargc == 4 ? flags->value.lval : NIL);
+        RETURN_TRUE;
 }
 /* }}} */
 
@@ -2952,6 +2955,12 @@ void php3_imap_fetchheader(INTERNAL_FUNCTION_PARAMETERS)
 		php3_error(E_WARNING, "Unable to find stream pointer");
 		RETURN_FALSE;
 	}
+	
+	if ((msgno->value.lval < 1) || (msgno->value.lval > imap_le_struct->imap_stream->nmsgs)) {
+		php3_error(E_WARNING, "Bad message number");
+		RETURN_FALSE;
+	}
+	
 	RETVAL_STRING(mail_fetchheader_full (imap_le_struct->imap_stream,msgno->value.lval,NIL,NIL,myargc == 3 ? flags->value.lval : NIL),1);
 
 }
