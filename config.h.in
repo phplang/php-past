@@ -28,6 +28,13 @@
 /* Define if your struct stat has st_rdev.  */
 #undef HAVE_ST_RDEV
 
+/* Define if your struct tm has tm_zone.  */
+#undef HAVE_TM_ZONE
+
+/* Define if you don't have tm_zone but do have the external array
+   tzname.  */
+#undef HAVE_TZNAME
+
 /* Define if utime(file, NULL) sets file's timestamp to the present.  */
 #undef HAVE_UTIME_NULL
 
@@ -62,14 +69,28 @@
 #define CONFIGURATION_FILE_PATH "php3.ini"
 #define USE_CONFIG_FILE 1
 
+/* Some global constants defined by conigure */
+#undef PHP_BUILD_DATE
+#undef PHP_OS
+#undef PHP_UNAME 
+
+/* define uint by configure if it is missed (QNX and BSD derived) */
+#undef uint
+
 /* Define if you have the gd library (-lgd). */
 #define HAVE_LIBGD 0
+
+/* Define if you have the zlib library */
+#define HAVE_ZLIB 0
+
+/* Define if you have the gd version 1.3 library (-lgd). */
+#define HAVE_LIBGD13 0
 
 /* Define if you want safe mode enabled by default. */
 #define PHP_SAFE_MODE 0
 
 /* Set to the path to the dir containing safe mode executables */
-#define PHP_SAFE_MODE_EXEC_DIR /usr/local/bin
+#define PHP_SAFE_MODE_EXEC_DIR /usr/local/php/bin
 
 /* Define if you want POST/GET/Cookie track variables by default */
 #define PHP_TRACK_VARS 0
@@ -110,6 +131,9 @@
 /* Define if you want the LDAP directory interface */
 #define HAVE_LDAP 0
 
+/* Define if you want to use a custom ODBC database driver */
+#define HAVE_CODBC 0
+
 /* Define to use the unified ODBC interface */
 #define HAVE_UODBC 0
 
@@ -134,6 +158,15 @@
 /* Define if you are compiling PHP as an Apache module */
 #define APACHE 0
 
+/* Define if you are compiling PHP as an fhttpd module */
+#define FHTTPD 0
+
+/* Define if your Apache creates an ap_config.h header file (only 1.3b6 and later) */
+#define HAVE_AP_CONFIG_H 0
+
+/* Define if your Apache has src/include/compat.h */
+#define HAVE_AP_COMPAT_H 0
+
 #define HAVE_SYBASE 0
 #define HAVE_SYBASE_CT 0
 
@@ -147,6 +180,14 @@
 
 #ifndef HAVE_PGSQL
 #define HAVE_PGSQL 0
+#endif
+
+#ifndef HAVE_VELOCIS
+#define HAVE_VELOCIS 0
+#endif
+
+#ifndef HAVE_PQCMDTUPLES
+#define HAVE_PQCMDTUPLES 0
 #endif
 
 #define MSQL1 0
@@ -163,6 +204,9 @@
 /* Define if you want to prevent the CGI from working unless REDIRECT_STATUS is defined in the environment */
 #define FORCE_CGI_REDIRECT 0
 
+/* Define if you want to prevent the CGI from using path_info and path_translated */
+#define DISCARD_PATH 0
+
 /* Define if you want to enable memory limit support */
 #define MEMORY_LIMIT 0
 
@@ -173,6 +217,9 @@
 
 /* Define if you have broken header files like SunOS 4 */
 #define MISSING_FCLOSE_DECL 0
+
+/* Define if you have broken sprintf function like SunOS 4 */
+#define BROKEN_SPRINTF 0
 
 /* Define if you have the crypt function.  */
 #undef HAVE_CRYPT
@@ -228,6 +275,9 @@
 /* Define if you have the setlocale function.  */
 #undef HAVE_SETLOCALE
 
+/* Define if you have the setsockopt function.  */
+#undef HAVE_SETSOCKOPT
+
 /* Define if you have the setvbuf function.  */
 #undef HAVE_SETVBUF
 
@@ -249,6 +299,9 @@
 /* Define if you have the strerror function.  */
 #undef HAVE_STRERROR
 
+/* Define if you have the strftime function.  */
+#undef HAVE_STRFTIME
+
 /* Define if you have the strstr function.  */
 #undef HAVE_STRSTR
 
@@ -257,6 +310,12 @@
 
 /* Define if you have the tempnam function.  */
 #undef HAVE_TEMPNAM
+
+/* Define if you have the tzset function.  */
+#undef HAVE_TZSET
+
+/* Define if you have the unsetenv function.  */
+#undef HAVE_UNSETENV
 
 /* Define if you have the usleep function.  */
 #undef HAVE_USLEEP
@@ -273,6 +332,9 @@
 /* Define if you have the <dirent.h> header file.  */
 #undef HAVE_DIRENT_H
 
+/* Define if you have the <dlfcn.h> header file.  */
+#undef HAVE_DLFCN_H
+
 /* Define if you have the <errmsg.h> header file.  */
 #undef HAVE_ERRMSG_H
 
@@ -281,6 +343,9 @@
 
 /* Define if you have the <grp.h> header file.  */
 #undef HAVE_GRP_H
+
+/* Define if you have the <limits.h> header file.  */
+#undef HAVE_LIMITS_H
 
 /* Define if you have the <memory.h> header file.  */
 #undef HAVE_MEMORY_H
@@ -318,6 +383,9 @@
 /* Define if you have the <sys/time.h> header file.  */
 #undef HAVE_SYS_TIME_H
 
+/* Define if you have the <sys/types.h> header file.  */
+#undef HAVE_SYS_TYPES_H
+
 /* Define if you have the <sys/varargs.h> header file.  */
 #undef HAVE_SYS_VARARGS_H
 
@@ -330,5 +398,17 @@
 /* Define if you have the <unistd.h> header file.  */
 #undef HAVE_UNISTD_H
 
+/* Define if you have the <unix.h> header file.  */
+#undef HAVE_UNIX_H
+
+/* Define if you have the gd library (-lgd).  */
+#undef HAVE_LIBGD
+
 /* Define if you have the m library (-lm).  */
 #undef HAVE_LIBM
+
+/* Define if you have the resolv library (-lresolv).  */
+#undef HAVE_LIBRESOLV
+
+/* Define if you have the ttf library (-lttf).  */
+#undef HAVE_LIBTTF

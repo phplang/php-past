@@ -5,18 +5,23 @@
    | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
-   | it under the terms of the GNU General Public License as published by |
-   | the Free Software Foundation; either version 2 of the License, or    |
-   | (at your option) any later version.                                  |
+   | it under the terms of one of the following licenses:                 |
+   |                                                                      |
+   |  A) the GNU General Public License as published by the Free Software |
+   |     Foundation; either version 2 of the License, or (at your option) |
+   |     any later version.                                               |
+   |                                                                      |
+   |  B) the PHP License as published by the PHP Development Team and     |
+   |     included in the distribution in the file: LICENSE                |
    |                                                                      |
    | This program is distributed in the hope that it will be useful,      |
    | but WITHOUT ANY WARRANTY; without even the implied warranty of       |
    | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the        |
    | GNU General Public License for more details.                         |
    |                                                                      |
-   | You should have received a copy of the GNU General Public License    |
-   | along with this program; if not, write to the Free Software          |
-   | Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.            |
+   | You should have received a copy of both licenses referred to here.   |
+   | If you did not, or have any questions about PHP licensing, please    |
+   | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
    | Authors: Rasmus Lerdorf <rasmus@lerdorf.on.ca>                       |
    +----------------------------------------------------------------------+
@@ -25,7 +30,7 @@
 #ifdef THREAD_SAFE
 #include "tls.h"
 #endif
-#include "parser.h"
+#include "php.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -44,7 +49,7 @@
 #include "head.h"
 #include "internal_functions.h"
 #include "safe_mode.h"
-#include "list.h"
+#include "php3_list.h"
 #include "php3_string.h"
 #include "pack.h"
 #if HAVE_PWD_H
@@ -67,14 +72,14 @@ function_entry pack_functions[] = {
 };
 
 php3_module_entry pack_module_entry = {
-	"PHP_pack", pack_functions, php3_minit_pack, NULL, NULL, NULL, NULL, 0, 0, 0, NULL
+	"PHP_pack", pack_functions, php3_minit_pack, NULL, NULL, NULL, NULL, STANDARD_MODULE_PROPERTIES
 };
 
 /* pack() idea stolen from Perl. Implemented formats are a,a,c,C,s,S,i,I,l,L,n,N,f,d,x,X,@.
  * 'h' is also implemented, but I'm not sure if it works the same way as Perl
  */
 void php3_pack(INTERNAL_FUNCTION_PARAMETERS) {
-	YYSTYPE **args;
+	pval **args;
 	int argc, currarg = 1, size = 240;
 	const char *format;
 	char thisformat = '\0';
@@ -96,7 +101,7 @@ void php3_pack(INTERNAL_FUNCTION_PARAMETERS) {
 	if (argc < 1) {
 		WRONG_PARAM_COUNT;
 	}
-	args = emalloc(argc * sizeof(YYSTYPE *));
+	args = emalloc(argc * sizeof(pval *));
 
 	if (getParametersArray(ht, argc, args) == FAILURE) {
 		efree(args);
@@ -117,7 +122,7 @@ void php3_pack(INTERNAL_FUNCTION_PARAMETERS) {
 		currarg++;\
 		break;
 
-	format = args[0]->value.strval;
+	format = args[0]->value.str.val;
 	while (*format || repeat) {
 		char repeatbuf[32];
 		int inpos;
@@ -149,17 +154,17 @@ void php3_pack(INTERNAL_FUNCTION_PARAMETERS) {
 			case 'a':
 				convert_to_string(args[currarg]);
 				for (inpos = 0; inpos < repeat; inpos++)
-					if (inpos >= args[currarg]->strlen)
+					if (inpos >= args[currarg]->value.str.len)
 						*(out++) = (thisformat == 'A') ? ' ' : '\0';
 					else
-						*(out++) = args[currarg]->value.strval[inpos];
+						*(out++) = args[currarg]->value.str.val[inpos];
 				repeat = 0;
 				currarg++;
 				break;
 			case 'h':
 				convert_to_string(args[currarg]);
-				for (inpos = 0; inpos < args[currarg]->strlen; inpos++) {
-					sprintf(out, "%02x", (int)args[currarg]->value.strval[inpos]);
+				for (inpos = 0; inpos < args[currarg]->value.str.len; inpos++) {
+					sprintf(out, "%02x", (int)args[currarg]->value.str.val[inpos]);
 					out += 2;
 				}
 				currarg++;
@@ -240,7 +245,7 @@ void php3_pack(INTERNAL_FUNCTION_PARAMETERS) {
 #undef CASEFOR
 	
 	efree(args);
-	RETVAL_STRINGL(outstart, out - outstart);
+	RETVAL_STRINGL(outstart, out - outstart, 1);
 	efree(outstart);
 
 	return;
@@ -262,7 +267,7 @@ void php3_unpack(INTERNAL_FUNCTION_PARAMETERS) {
 }
 
 
-int php3_minit_pack(INITFUNCARG)
+int php3_minit_pack(INIT_FUNC_ARGS)
 {
 	TLS_VARS;
 	

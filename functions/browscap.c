@@ -5,18 +5,23 @@
    | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
-   | it under the terms of the GNU General Public License as published by |
-   | the Free Software Foundation; either version 2 of the License, or    |
-   | (at your option) any later version.                                  |
+   | it under the terms of one of the following licenses:                 |
+   |                                                                      |
+   |  A) the GNU General Public License as published by the Free Software |
+   |     Foundation; either version 2 of the License, or (at your option) |
+   |     any later version.                                               |
+   |                                                                      |
+   |  B) the PHP License as published by the PHP Development Team and     |
+   |     included in the distribution in the file: LICENSE                |
    |                                                                      |
    | This program is distributed in the hope that it will be useful,      |
    | but WITHOUT ANY WARRANTY; without even the implied warranty of       |
    | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the        |
    | GNU General Public License for more details.                         |
    |                                                                      |
-   | You should have received a copy of the GNU General Public License    |
-   | along with this program; if not, write to the Free Software          |
-   | Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.            |
+   | You should have received a copy of both licenses referred to here.   |
+   | If you did not, or have any questions about PHP licensing, please    |
+   | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
    | Authors: Zeev Suraski <bourbon@netvision.net.il>                     |
    +----------------------------------------------------------------------+
@@ -25,14 +30,14 @@
 #ifdef THREAD_SAFE
 #include "tls.h"
 #endif
-#include "parser.h"
+#include "php.h"
 #include "internal_functions.h"
 #include "php3_browscap.h"
 
 #ifndef THREAD_SAFE
 HashTable browser_hash;
 static char *lookup_browser_name;
-static YYSTYPE *found_browser_entry;
+static pval *found_browser_entry;
 #endif
 
 function_entry browscap_functions[] = {
@@ -41,13 +46,13 @@ function_entry browscap_functions[] = {
 };
 
 php3_module_entry browscap_module_entry = {
-	"browscap", browscap_functions, php3_minit_browscap, php3_mshutdown_browscap, NULL, NULL, NULL, 0, 0, 0, NULL
+	"browscap", browscap_functions, php3_minit_browscap, php3_mshutdown_browscap, NULL, NULL, NULL, STANDARD_MODULE_PROPERTIES
 };
 
 
-static int browser_reg_compare(YYSTYPE *browser)
+static int browser_reg_compare(pval *browser)
 {
-	YYSTYPE *browser_name;
+	pval *browser_name;
 	regex_t r;
 	TLS_VARS;
 
@@ -55,10 +60,10 @@ static int browser_reg_compare(YYSTYPE *browser)
 		return 0;
 	}
 	hash_find(browser->value.ht,"browser_name_pattern",sizeof("browser_name_pattern"),(void **) &browser_name);
-	if (!strchr(browser_name->value.strval,'*')) {
+	if (!strchr(browser_name->value.str.val,'*')) {
 		return 0;
 	}
-	if (regcomp(&r,browser_name->value.strval,REG_NOSUB)!=0) {
+	if (regcomp(&r,browser_name->value.str.val,REG_NOSUB)!=0) {
 		return 0;
 	}
 	if (regexec(&r,GLOBAL(lookup_browser_name),0,NULL,0)==0) {
@@ -70,7 +75,7 @@ static int browser_reg_compare(YYSTYPE *browser)
 
 void php3_get_browser(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *agent_name,*agent,tmp;
+	pval *agent_name,*agent,tmp;
 	TLS_VARS;
 
 	if (!php3_ini.browscap) {
@@ -96,8 +101,8 @@ void php3_get_browser(INTERNAL_FUNCTION_PARAMETERS)
 	
 	convert_to_string(agent_name);
 
-	if (hash_find(&GLOBAL(browser_hash), agent_name->value.strval, agent_name->strlen+1, (void **) &agent)==FAILURE) {
-		GLOBAL(lookup_browser_name) = agent_name->value.strval;
+	if (hash_find(&GLOBAL(browser_hash), agent_name->value.str.val, agent_name->value.str.len+1, (void **) &agent)==FAILURE) {
+		GLOBAL(lookup_browser_name) = agent_name->value.str.val;
 		GLOBAL(found_browser_entry) = NULL;
 		hash_apply(&GLOBAL(browser_hash),(int (*)(void *)) browser_reg_compare);
 		
@@ -111,13 +116,13 @@ void php3_get_browser(INTERNAL_FUNCTION_PARAMETERS)
 	*return_value = *agent;
 	return_value->type = IS_OBJECT;
 	yystype_copy_constructor(return_value);
-	return_value->value.ht->pDestructor = YYSTYPE_DESTRUCTOR;
+	return_value->value.ht->pDestructor = pval_DESTRUCTOR;
 
 	while (hash_find(agent->value.ht, "parent", sizeof("parent"), (void **) &agent_name)==SUCCESS) {
-		if (hash_find(&GLOBAL(browser_hash), agent_name->value.strval, agent_name->strlen+1, (void **) &agent)==FAILURE) {
+		if (hash_find(&GLOBAL(browser_hash), agent_name->value.str.val, agent_name->value.str.len+1, (void **) &agent)==FAILURE) {
 			break;
 		}
-		hash_merge(return_value->value.ht,agent->value.ht,(void (*)(void *pData)) yystype_copy_constructor, (void *) &tmp, sizeof(YYSTYPE));
+		hash_merge(return_value->value.ht,agent->value.ht,(void (*)(void *pData)) yystype_copy_constructor, (void *) &tmp, sizeof(pval));
 	}
 }
 

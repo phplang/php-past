@@ -5,25 +5,30 @@
    | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
-   | it under the terms of the GNU General Public License as published by |
-   | the Free Software Foundation; either version 2 of the License, or    |
-   | (at your option) any later version.                                  |
+   | it under the terms of one of the following licenses:                 |
+   |                                                                      |
+   |  A) the GNU General Public License as published by the Free Software |
+   |     Foundation; either version 2 of the License, or (at your option) |
+   |     any later version.                                               |
+   |                                                                      |
+   |  B) the PHP License as published by the PHP Development Team and     |
+   |     included in the distribution in the file: LICENSE                |
    |                                                                      |
    | This program is distributed in the hope that it will be useful,      |
    | but WITHOUT ANY WARRANTY; without even the implied warranty of       |
    | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the        |
    | GNU General Public License for more details.                         |
    |                                                                      |
-   | You should have received a copy of the GNU General Public License    |
-   | along with this program; if not, write to the Free Software          |
-   | Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.            |
+   | You should have received a copy of both licenses referred to here.   |
+   | If you did not, or have any questions about PHP licensing, please    |
+   | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
    | Authors: Zeev Suraski <bourbon@netvision.net.il>                     |
    +----------------------------------------------------------------------+
  */
 
 
-/* $Id: php3_sybase.h,v 1.29 1998/02/04 11:48:48 zeev Exp $ */
+/* $Id: php3_sybase.h,v 1.36 1998/05/16 11:53:44 zeev Exp $ */
 
 #ifndef _PHP3_SYBASE_H
 #define _PHP3_SYBASE_H
@@ -38,8 +43,8 @@
 extern php3_module_entry sybase_module_entry;
 #define sybase_module_ptr &sybase_module_entry
 
-extern int php3_minit_sybase(INITFUNCARG);
-extern int php3_rinit_sybase(INITFUNCARG);
+extern int php3_minit_sybase(INIT_FUNC_ARGS);
+extern int php3_rinit_sybase(INIT_FUNC_ARGS);
 extern int php3_mshutdown_sybase(void);
 extern int php3_rshutdown_sybase(void);
 extern void php3_info_sybase(void);
@@ -87,6 +92,8 @@ extern void php3_sybase_field_flags(INTERNAL_FUNCTION_PARAMETERS);
 #define charcol(i) ((DBCHAR *) dbdata(sybase_ptr->link,i))
 #define floatcol(i) ((float) *(DBFLT8 *) dbdata(sybase_ptr->link,i))
 
+typedef struct sybase_link_struct sybase_link;
+
 typedef struct {
 	long default_link;
 	long num_links,num_persistent;
@@ -97,23 +104,25 @@ typedef struct {
 	int le_link,le_plink,le_result;
 	long min_error_severity,min_message_severity;
 	long cfg_min_error_severity,cfg_min_message_severity;
+	void (*get_column_content)(sybase_link *sybase_ptr,int offset,pval *result,int column_type);
 } sybase_module;
 
-typedef struct {
+struct sybase_link_struct {
 	LOGINREC *login;
 	DBPROCESS *link;
 	int valid;
-} sybase_link;
+};
 
 #define SYBASE_ROWS_BLOCK 128
 
 typedef struct {
 	char *name,*column_source;
-	int max_length;
+	int max_length, numeric;
+	int type;
 } sybase_field;
 
 typedef struct {
-	YYSTYPE **data;
+	pval **data;
 	sybase_field *fields;
 	sybase_link *sybase_ptr;
 	int cur_row,cur_field;

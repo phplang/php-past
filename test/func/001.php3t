@@ -3,7 +3,7 @@ Strlen() function test                                        ...
 --POST--
 --GET--
 --FILE--
-<?echo strlen("abcdef")?>
+<?php echo strlen("abcdef")?>
 --EXPECT--
 Content-type: text/html
 6

@@ -5,18 +5,23 @@
    | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
-   | it under the terms of the GNU General Public License as published by |
-   | the Free Software Foundation; either version 2 of the License, or    |
-   | (at your option) any later version.                                  |
+   | it under the terms of one of the following licenses:                 |
+   |                                                                      |
+   |  A) the GNU General Public License as published by the Free Software |
+   |     Foundation; either version 2 of the License, or (at your option) |
+   |     any later version.                                               |
+   |                                                                      |
+   |  B) the PHP License as published by the PHP Development Team and     |
+   |     included in the distribution in the file: LICENSE                |
    |                                                                      |
    | This program is distributed in the hope that it will be useful,      |
    | but WITHOUT ANY WARRANTY; without even the implied warranty of       |
    | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the        |
    | GNU General Public License for more details.                         |
    |                                                                      |
-   | You should have received a copy of the GNU General Public License    |
-   | along with this program; if not, write to the Free Software          |
-   | Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.            |
+   | You should have received a copy of both licenses referred to here.   |
+   | If you did not, or have any questions about PHP licensing, please    |
+   | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
    | Authors: Andi Gutmans <andi@php.net>                                 |
    |          Zeev Suraski <bourbon@netvision.net.il>                     |
@@ -24,78 +29,85 @@
  */
 
 
-/* $Id: control_structures_inline.h,v 1.149 1998/02/28 21:49:18 zeev Exp $ */
+/* $Id: control_structures_inline.h,v 1.168 1998/05/25 20:56:51 zeev Exp $ */
 
 #ifdef THREAD_SAFE
 #include "tls.h"
 #endif
-#include "parser.h"
+#include "php.h"
 #include "internal_functions.h"
 #include "functions/head.h"
 #include <stdio.h>
 #include <string.h>
 
 #ifndef THREAD_SAFE
-extern YYSTYPE *array_ptr;
-static YYSTYPE return_value;
+extern pval *array_ptr;
+static pval return_value;
 static HashTable list, plist;
 #endif
 
-extern inline int cs_global_variable(YYSTYPE *varname INLINE_TLS);
-extern inline int cs_static_variable(YYSTYPE *varname, YYSTYPE *value INLINE_TLS);
-extern inline void cs_start_while(YYSTYPE *expr INLINE_TLS);
-extern inline void cs_end_while(YYSTYPE *while_token INLINE_TLS);
-extern inline void cs_start_do_while( INLINE_TLS_VOID);
+extern inline int cs_global_variable(pval *varname INLINE_TLS);
+extern inline int cs_static_variable(pval *varname, pval *value INLINE_TLS);
+extern inline void cs_start_while(pval *while_token, pval *expr INLINE_TLS);
+extern inline void cs_end_while(pval *while_token, int *yychar INLINE_TLS);
+extern inline void cs_start_do_while(pval *do_token INLINE_TLS);
 extern inline void cs_force_eval_do_while( INLINE_TLS_VOID);
-extern inline void cs_end_do_while(YYSTYPE *do_token, YYSTYPE *expr INLINE_TLS);
-extern inline void cs_start_if(YYSTYPE *expr INLINE_TLS);
-extern inline void cs_end_if( INLINE_TLS_VOID);
-extern inline int cs_break_continue(YYSTYPE *expr, int op_type INLINE_TLS);
+extern inline void cs_end_do_while(pval *do_token, pval *expr, int *yychar INLINE_TLS);
+extern inline void cs_start_if (pval *expr INLINE_TLS);
+extern inline void cs_end_if ( INLINE_TLS_VOID);
+extern inline int cs_break_continue(pval *expr, int op_type INLINE_TLS);
 extern inline void cs_elseif_start_evaluate( INLINE_TLS_VOID);
 extern inline void cs_elseif_end_evaluate( INLINE_TLS_VOID);
-extern inline void cs_start_elseif(YYSTYPE *expr INLINE_TLS);
+extern inline void cs_start_elseif (pval *expr INLINE_TLS);
 extern inline void cs_start_else( INLINE_TLS_VOID);
-extern inline void get_function_parameter(YYSTYPE *varname INLINE_TLS);
-extern inline void pass_parameter_by_value(YYSTYPE *expr INLINE_TLS);
-extern inline void start_function_decleration(YYSTYPE *function_token, YYSTYPE *function_name INLINE_TLS);
-extern inline void end_function_decleration( INLINE_TLS_VOID);
-extern inline void for_pre_expr1(YYSTYPE *for_token INLINE_TLS);
-extern inline void for_pre_expr2(YYSTYPE *for_token INLINE_TLS);
-extern inline void for_pre_expr3(YYSTYPE *for_token, YYSTYPE *expr2 INLINE_TLS);
-extern inline void for_pre_statement(YYSTYPE *for_token, YYSTYPE *expr2, YYSTYPE *expr3 INLINE_TLS);
-extern inline void for_post_statement(YYSTYPE *for_token, YYSTYPE *first_semicolon, YYSTYPE *second_semicolon, YYSTYPE *close_parentheses INLINE_TLS);
-extern inline void cs_return(YYSTYPE *expr INLINE_TLS);
-extern inline void cs_start_include(YYSTYPE *include_token INLINE_TLS);
-extern inline void cs_end_include(YYSTYPE *include_token, YYSTYPE *expr INLINE_TLS);
-extern inline void cs_show_source(YYSTYPE *expr INLINE_TLS);
-extern inline void cs_pre_boolean_or(YYSTYPE *left_expr INLINE_TLS);
-extern inline void cs_post_boolean_or(YYSTYPE *result, YYSTYPE *left_expr, YYSTYPE *right_expr INLINE_TLS);
-extern inline void cs_pre_boolean_and(YYSTYPE *left_expr INLINE_TLS);
-extern inline void cs_post_boolean_and(YYSTYPE *result, YYSTYPE *left_expr, YYSTYPE *right_expr INLINE_TLS);
-extern inline void cs_questionmark_op_pre_expr1(YYSTYPE *truth_value INLINE_TLS);
-extern inline void cs_questionmark_op_pre_expr2(YYSTYPE *truth_value INLINE_TLS);
-extern inline void cs_questionmark_op_post_expr2(YYSTYPE *result, YYSTYPE *truth_value, YYSTYPE *expr1, YYSTYPE *expr2 INLINE_TLS);
-extern inline void cs_functioncall_pre_variable_passing(YYSTYPE *function_name, YYSTYPE *class_ptr INLINE_TLS);
-extern inline void cs_functioncall_post_variable_passing(YYSTYPE *function_name INLINE_TLS);
-extern inline void cs_functioncall_end(YYSTYPE *result, YYSTYPE *function_name, YYSTYPE *close_parentheses INLINE_TLS);
-extern inline void cs_switch_start(YYSTYPE *switch_token, YYSTYPE *expr INLINE_TLS);
-extern inline void cs_switch_case_pre(YYSTYPE *case_expr INLINE_TLS);
+extern inline void get_function_parameter(pval *varname, unsigned char type, pval *default_value INLINE_TLS);
+extern inline void pass_parameter_by_value(pval *expr INLINE_TLS);
+extern inline void start_function_decleration( INLINE_TLS_VOID);
+extern inline void end_function_decleration(pval *function_token, pval *function_name INLINE_TLS);
+extern inline void for_pre_expr1(pval *for_token INLINE_TLS);
+extern inline void for_pre_expr2(pval *for_token INLINE_TLS);
+extern inline void for_pre_expr3(pval *for_token, pval *expr2 INLINE_TLS);
+extern inline void for_pre_statement(pval *for_token, pval *expr2, pval *expr3 INLINE_TLS);
+extern inline void for_post_statement(pval *for_token, pval *first_semicolon, pval *second_semicolon, pval *close_parentheses, int *yychar INLINE_TLS);
+extern inline void cs_return(pval *expr INLINE_TLS);
+extern inline void cs_start_include(pval *include_token INLINE_TLS);
+extern inline void cs_end_include(pval *include_token, pval *expr INLINE_TLS);
+extern inline void cs_show_source(pval *expr INLINE_TLS);
+extern inline void cs_pre_boolean_or(pval *left_expr INLINE_TLS);
+extern inline void cs_post_boolean_or(pval *result, pval *left_expr, pval *right_expr INLINE_TLS);
+extern inline void cs_pre_boolean_and(pval *left_expr INLINE_TLS);
+extern inline void cs_post_boolean_and(pval *result, pval *left_expr, pval *right_expr INLINE_TLS);
+extern inline void cs_questionmark_op_pre_expr1(pval *truth_value INLINE_TLS);
+extern inline void cs_questionmark_op_pre_expr2(pval *truth_value INLINE_TLS);
+extern inline void cs_questionmark_op_post_expr2(pval *result, pval *truth_value, pval *expr1, pval *expr2 INLINE_TLS);
+extern inline void cs_functioncall_pre_variable_passing(pval *function_name, pval *class_ptr INLINE_TLS);
+extern inline void cs_functioncall_post_variable_passing(pval *function_name, int *yychar INLINE_TLS);
+extern inline void cs_functioncall_end(pval *result, pval *function_name, pval *close_parentheses, int *yychar INLINE_TLS);
+extern inline void cs_switch_start(pval *switch_token, pval *expr INLINE_TLS);
+extern inline void cs_switch_case_pre(pval *case_expr INLINE_TLS);
 extern inline void cs_switch_case_post( INLINE_TLS_VOID);
-extern inline void cs_switch_end(YYSTYPE *expr INLINE_TLS);
-extern inline void cs_start_class_decleration(YYSTYPE *classname, YYSTYPE *parent INLINE_TLS);
+extern inline void cs_switch_end(pval *expr INLINE_TLS);
+extern inline void cs_start_class_decleration(pval *classname, pval *parent INLINE_TLS);
 extern inline void cs_end_class_decleration( INLINE_TLS_VOID);
-extern inline void start_array_parsing(YYSTYPE *array_name,YYSTYPE *class_ptr INLINE_TLS);
-extern inline void start_dimensions_parsing(YYSTYPE *result INLINE_TLS);
-extern inline void fetch_array_index(YYSTYPE *result, YYSTYPE *expr, YYSTYPE *dimension INLINE_TLS);
-extern inline void end_array_parsing(YYSTYPE *result, YYSTYPE *dimensions INLINE_TLS);
+extern inline void start_array_parsing(pval *array_name,pval *class_ptr INLINE_TLS);
+extern inline void start_dimensions_parsing(pval *result INLINE_TLS);
+extern inline void fetch_array_index(pval *result, pval *expr, pval *dimension INLINE_TLS);
+extern inline void end_array_parsing(pval *result, pval *dimensions INLINE_TLS);
 extern inline void clean_unassigned_variable_top(int delete_var INLINE_TLS);
-extern inline void get_class_variable_pointer(YYSTYPE *result, YYSTYPE *class_ptr, YYSTYPE *varname INLINE_TLS);
-extern inline void pass_parameter(YYSTYPE *var, int by_reference INLINE_TLS);
-extern inline void cs_system(YYSTYPE *result, YYSTYPE *expr INLINE_TLS);
+extern inline void get_class_variable_pointer(pval *result, pval *class_ptr, pval *varname INLINE_TLS);
+extern inline void pass_parameter(pval *var, int by_reference INLINE_TLS);
+extern inline void cs_system(pval *result, pval *expr INLINE_TLS);
+extern inline void add_regular_encapsed_variable(pval *result,pval *encaps,pval *varname  INLINE_TLS);
+extern inline void add_assoc_array_encapsed_variable(pval *result, pval *encaps, pval *varname, pval *index INLINE_TLS);
+extern inline void add_regular_array_encapsed_variable(pval *result, pval *encaps, pval *varname, pval *index INLINE_TLS);
+extern inline void add_variable_array_encapsed_variable(pval *result, pval *encaps, pval *varname, pval *var_index INLINE_TLS);
+extern inline void add_encapsed_object_property(pval *result, pval *encaps, pval *object, pval *property INLINE_TLS);
+extern inline void add_indirect_encapsed_variable(pval *result,pval *encaps,pval *varname INLINE_TLS);
 
-inline int cs_global_variable(YYSTYPE *varname INLINE_TLS)
+
+inline int cs_global_variable(pval *varname INLINE_TLS)
 {
-	YYSTYPE *localdata;
+	pval *localdata;
 
 	if (GLOBAL(Execute)) {
 		if (!GLOBAL(function_state).function_name) {
@@ -107,42 +119,42 @@ inline int cs_global_variable(YYSTYPE *varname INLINE_TLS)
 			php3_error(E_WARNING, "Incorrect variable type or name in global in function %s()", GLOBAL(function_state).function_name);
 			return FAILURE;
 		}
-		if (hash_find(GLOBAL(active_symbol_table), varname->value.strval, varname->strlen+1, (void **) &localdata) == SUCCESS) {
+		if (hash_find(GLOBAL(active_symbol_table), varname->value.str.val, varname->value.str.len+1, (void **) &localdata) == SUCCESS) {
 			php3_error(E_WARNING, "Variable used in global statement already exists in the function");
-			STR_FREE(varname->value.strval);
+			STR_FREE(varname->value.str.val);
 			return FAILURE;
 		}
-		if (hash_find(&GLOBAL(symbol_table), varname->value.strval, varname->strlen+1, (void **) &localdata) == FAILURE) {
-			YYSTYPE tmp;
+		if (hash_find(&GLOBAL(symbol_table), varname->value.str.val, varname->value.str.len+1, (void **) &localdata) == FAILURE) {
+			pval tmp;
 		
 			tmp.type = IS_STRING;
-			tmp.value.strval = undefined_variable_string;	
-			tmp.strlen = 0;
+			tmp.value.str.val = undefined_variable_string;	
+			tmp.value.str.len = 0;
 			
-			if (hash_update(&GLOBAL(symbol_table), varname->value.strval, varname->strlen+1, (void *) &tmp, sizeof(YYSTYPE), (void **) &localdata)==FAILURE) {
-				php3_error(E_WARNING, "Unable to initialize global variable $%s",varname->value.strval);
-				STR_FREE(varname->value.strval);
+			if (hash_update(&GLOBAL(symbol_table), varname->value.str.val, varname->value.str.len+1, (void *) &tmp, sizeof(pval), (void **) &localdata)==FAILURE) {
+				php3_error(E_WARNING, "Unable to initialize global variable $%s",varname->value.str.val);
+				STR_FREE(varname->value.str.val);
 				return FAILURE;
 			}
 		}
-		if (hash_pointer_update(GLOBAL(active_symbol_table), varname->value.strval, varname->strlen+1, (void *) localdata) == FAILURE) {
+		if (hash_pointer_update(GLOBAL(active_symbol_table), varname->value.str.val, varname->value.str.len+1, (void *) localdata) == FAILURE) {
 			php3_error(E_WARNING, "Error updating symbol table");
-			STR_FREE(varname->value.strval);
+			STR_FREE(varname->value.str.val);
 			return FAILURE;
 		}
-		STR_FREE(varname->value.strval);
+		STR_FREE(varname->value.str.val);
 	}
 	return SUCCESS;
 }
 
-inline int cs_static_variable(YYSTYPE *varname, YYSTYPE *value INLINE_TLS)
+inline int cs_static_variable(pval *varname, pval *value INLINE_TLS)
 {
 	if (GLOBAL(Execute)) {
-		YYSTYPE *func_ent, *variable_entry, tmp;
+		pval *func_ent, *variable_entry, tmp;
 
 		if (!GLOBAL(function_state).function_name) {
 			php3_error(E_WARNING, "STATIC variable decleration meaningless in main() scope");
-			STR_FREE(varname->value.strval);
+			STR_FREE(varname->value.str.val);
 			if (value) {
 				yystype_destructor(value _INLINE_TLS);
 			}
@@ -154,28 +166,28 @@ inline int cs_static_variable(YYSTYPE *varname, YYSTYPE *value INLINE_TLS)
 			php3_error(E_WARNING, "Incorrect variable type or name in static in function %s()", GLOBAL(function_state).function_name);
 			return FAILURE;
 		}
-		if (hash_find(&GLOBAL(function_table), GLOBAL(function_state).function_name, strlen(GLOBAL(function_state).function_name)+1, (void **) &func_ent) == FAILURE) {
-			STR_FREE(varname->value.strval);
+		if (hash_find(GLOBAL(function_state).hosting_function_table, GLOBAL(function_state).function_name, strlen(GLOBAL(function_state).function_name)+1, (void **) &func_ent) == FAILURE) {
+			STR_FREE(varname->value.str.val);
 			if (value) {
 				yystype_destructor(value _INLINE_TLS);
 			}
 			return FAILURE;
 		}
-		if (!func_ent->value.ht) {
- 			func_ent->value.ht = (HashTable *) emalloc(sizeof(HashTable));
-			hash_init(func_ent->value.ht, 0, NULL, YYSTYPE_DESTRUCTOR, 0);
+		if (!func_ent->value.func.addr.statics) {
+ 			func_ent->value.func.addr.statics = (HashTable *) emalloc(sizeof(HashTable));
+			hash_init(func_ent->value.func.addr.statics, 0, NULL, pval_DESTRUCTOR, 0);
 		}
-		if (hash_find(func_ent->value.ht, varname->value.strval, varname->strlen+1, (void **) &variable_entry) == FAILURE) {
+		if (hash_find(func_ent->value.func.addr.statics, varname->value.str.val, varname->value.str.len+1, (void **) &variable_entry) == FAILURE) {
 			if (value) {
-				hash_update(func_ent->value.ht, varname->value.strval, varname->strlen+1, value, sizeof(YYSTYPE), (void **) &variable_entry);
+				hash_update(func_ent->value.func.addr.statics, varname->value.str.val, varname->value.str.len+1, value, sizeof(pval), (void **) &variable_entry);
 			} else {
-				var_reset(&tmp);
-				hash_update(func_ent->value.ht, varname->value.strval, varname->strlen+1, &tmp, sizeof(YYSTYPE), (void **) &variable_entry);
+				var_uninit(&tmp);
+				hash_update(func_ent->value.func.addr.statics, varname->value.str.val, varname->value.str.len+1, &tmp, sizeof(pval), (void **) &variable_entry);
 			}
 			/*
-			if (hash_find(func_ent->value.ht, varname->value.strval, varname->strlen+1, (void **) &variable_entry) == FAILURE) {
+			if (hash_find(func_ent->value.func.addr.statics, varname->value.str.val, varname->value.str.len+1, (void **) &variable_entry) == FAILURE) {
 				php3_error(E_ERROR, "Inserted static variable got lost");
-				STR_FREE(varname->value.strval);
+				STR_FREE(varname->value.str.val);
 				if (value) {
 					yystype_destructor(value);
 				}
@@ -183,27 +195,28 @@ inline int cs_static_variable(YYSTYPE *varname, YYSTYPE *value INLINE_TLS)
 			}
 			*/
 		}
-		if (hash_pointer_update(GLOBAL(active_symbol_table), varname->value.strval, varname->strlen+1, (void *) variable_entry) == FAILURE) {
+		if (hash_pointer_update(GLOBAL(active_symbol_table), varname->value.str.val, varname->value.str.len+1, (void *) variable_entry) == FAILURE) {
 			php3_error(E_ERROR, "Unable to initialize static variable");
-			STR_FREE(varname->value.strval);
+			STR_FREE(varname->value.str.val);
 			if (value) {
 				yystype_destructor(value _INLINE_TLS);
 			}
 			return FAILURE;
 		} else {
-			hash_find(GLOBAL(active_symbol_table), varname->value.strval, varname->strlen+1, (void **) &variable_entry);
+			hash_find(GLOBAL(active_symbol_table), varname->value.str.val, varname->value.str.len+1, (void **) &variable_entry);
 		}
-		STR_FREE(varname->value.strval);
+		STR_FREE(varname->value.str.val);
 	}
 	return SUCCESS;
 }
 
-inline void cs_start_while(YYSTYPE *expr INLINE_TLS)
+inline void cs_start_while(pval *while_token, pval *expr INLINE_TLS)
 {
 	GLOBAL(function_state).loop_nest_level++;
 	stack_push(&GLOBAL(css), &GLOBAL(ExecuteFlag), sizeof(int));
 
 	if (GLOBAL(Execute)) {
+		tc_set_token(&GLOBAL(token_cache_manager), while_token->offset, WHILE);
 		if (yystype_true(expr)) {
 			GLOBAL(ExecuteFlag) = EXECUTE;
 			GLOBAL(Execute) = SHOULD_EXECUTE;
@@ -215,18 +228,20 @@ inline void cs_start_while(YYSTYPE *expr INLINE_TLS)
 	}
 }
 
-inline void cs_end_while(YYSTYPE *while_token INLINE_TLS)
+inline void cs_end_while(pval *while_token,int *yychar INLINE_TLS)
 {
 #if (_DEBUG_ & CONTROL_DEBUG)
 	fprintf(stderr, "end of while, execute=%d, changecount=%d, changetype=%d\n", Execute, GLOBAL(function_state).loop_change_level, GLOBAL(function_state).loop_change_level);
 #endif
 
 	if (GLOBAL(Execute)) {
- 		seek_token(&GLOBAL(token_cache_manager), while_token->offset);
+		tc_set_token(&GLOBAL(token_cache_manager), while_token->offset, CONTINUED_WHILE);
+ 		seek_token(&GLOBAL(token_cache_manager), while_token->offset, yychar);
 	} else {
 		if ((GLOBAL(function_state).loop_change_type != DO_NOTHING) && (GLOBAL(function_state).loop_change_level == GLOBAL(function_state).loop_nest_level)) {
 			if (GLOBAL(function_state).loop_change_type == DO_CONTINUE) {
-				seek_token(&GLOBAL(token_cache_manager), while_token->offset);
+				tc_set_token(&GLOBAL(token_cache_manager), while_token->offset, CONTINUED_WHILE);
+				seek_token(&GLOBAL(token_cache_manager), while_token->offset, yychar);
 			}
 			GLOBAL(function_state).loop_change_type = DO_NOTHING;
 			GLOBAL(function_state).loop_change_level = 0;
@@ -239,10 +254,13 @@ inline void cs_end_while(YYSTYPE *while_token INLINE_TLS)
 }
 
 
-inline void cs_start_do_while( INLINE_TLS_VOID)
+inline void cs_start_do_while(pval *do_token INLINE_TLS)
 {
 	GLOBAL(function_state).loop_nest_level++;
 	stack_push(&GLOBAL(css), &GLOBAL(ExecuteFlag), sizeof(int));
+	if (GLOBAL(Execute)) {
+		tc_set_token(&GLOBAL(token_cache_manager), do_token->offset, DO);
+	}
 }
 
 
@@ -259,7 +277,7 @@ inline void cs_force_eval_do_while( INLINE_TLS_VOID)
 }
 
 
-inline void cs_end_do_while(YYSTYPE *do_token, YYSTYPE *expr INLINE_TLS)
+inline void cs_end_do_while(pval *do_token, pval *expr, int *yychar INLINE_TLS)
 {
 #if (_DEBUG_ & CONTROL_DEBUG)
 	fprintf(stderr, "end of while, execute=%d, changecount=%d, changetype=%d\n", Execute, GLOBAL(function_state).loop_change_level, GLOBAL(function_state).loop_change_level);
@@ -267,7 +285,8 @@ inline void cs_end_do_while(YYSTYPE *do_token, YYSTYPE *expr INLINE_TLS)
 
 	if (GLOBAL(Execute) && yystype_true(expr)) {
 		yystype_destructor(expr _INLINE_TLS);
-		seek_token(&GLOBAL(token_cache_manager), do_token->offset);
+		tc_set_token(&GLOBAL(token_cache_manager), do_token->offset, CONTINUED_DOWHILE);
+		seek_token(&GLOBAL(token_cache_manager), do_token->offset, yychar);
 	} else {
 		if (GLOBAL(Execute)) {
 			yystype_destructor(expr _INLINE_TLS);
@@ -284,7 +303,7 @@ inline void cs_end_do_while(YYSTYPE *do_token, YYSTYPE *expr INLINE_TLS)
 }
 
 
-inline void cs_start_if(YYSTYPE *expr INLINE_TLS)
+inline void cs_start_if (pval *expr INLINE_TLS)
 {
 	stack_push(&GLOBAL(css), &GLOBAL(ExecuteFlag), sizeof(int));	/* push current state to stack */
 
@@ -303,7 +322,7 @@ inline void cs_start_if(YYSTYPE *expr INLINE_TLS)
 }
 
 
-inline void cs_end_if( INLINE_TLS_VOID)
+inline void cs_end_if ( INLINE_TLS_VOID)
 {
 	/* restore previous status */
 	GLOBAL(ExecuteFlag) = stack_int_top(&GLOBAL(css));
@@ -312,7 +331,7 @@ inline void cs_end_if( INLINE_TLS_VOID)
 }
 
 
-inline int cs_break_continue(YYSTYPE *expr, int op_type INLINE_TLS)
+inline int cs_break_continue(pval *expr, int op_type INLINE_TLS)
 {
 	if (GLOBAL(Execute)) {
 		if (expr) {
@@ -370,7 +389,7 @@ inline void cs_elseif_end_evaluate( INLINE_TLS_VOID)
 }
 
 
-inline void cs_start_elseif(YYSTYPE *expr INLINE_TLS)
+inline void cs_start_elseif (pval *expr INLINE_TLS)
 {
 	if (GLOBAL(ExecuteFlag) == EXECUTE) {
 		GLOBAL(ExecuteFlag) = DONT_EXECUTE;
@@ -399,31 +418,60 @@ inline void cs_start_else( INLINE_TLS_VOID)
 }
 
 
-inline void get_function_parameter(YYSTYPE *varname INLINE_TLS)
+inline void get_function_parameter(pval *varname, unsigned char type, pval *default_value INLINE_TLS)
 {
 	if (GLOBAL(Execute)) {
-		YYSTYPE tmp,*data;
+		pval tmp,*data;
 
 		if (hash_index_find(GLOBAL(active_symbol_table), GLOBAL(param_index), (void **) &data) == FAILURE) {
-			if (!php3_ini.ignore_missing_userfunc_args)
+			if (default_value) {
+				tmp = *default_value;
+			} else {
 				php3_error(E_WARNING, "Missing argument %d in call to %s()",GLOBAL(param_index)+1,GLOBAL(function_state).function_name);
-			var_reset(&tmp);
-			hash_update(GLOBAL(active_symbol_table), varname->value.strval, varname->strlen+1, &tmp, sizeof(YYSTYPE), NULL);
+				var_uninit(&tmp);
+			}
+			hash_update(GLOBAL(active_symbol_table), varname->value.str.val, varname->value.str.len+1, &tmp, sizeof(pval), NULL);
 		} else if (!hash_index_is_pointer(GLOBAL(active_symbol_table), GLOBAL(param_index))) { /* passed by value */
 			tmp = *data;
 			yystype_copy_constructor(&tmp);
-			hash_update(GLOBAL(active_symbol_table), varname->value.strval, varname->strlen+1, &tmp, sizeof(YYSTYPE), NULL);
+			hash_update(GLOBAL(active_symbol_table), varname->value.str.val, varname->value.str.len+1, &tmp, sizeof(pval), NULL);
+			if (default_value) {
+				yystype_destructor(default_value _INLINE_TLS);
+			}
 		} else { /* passed by reference */
-			hash_pointer_update(GLOBAL(active_symbol_table), varname->value.strval, varname->strlen+1, data);
+			hash_pointer_update(GLOBAL(active_symbol_table), varname->value.str.val, varname->value.str.len+1, data);
 			hash_index_del(GLOBAL(active_symbol_table), GLOBAL(param_index));
+			if (default_value) {
+				yystype_destructor(default_value _INLINE_TLS);
+			}
 		}
-
-		GLOBAL(param_index)++;
+	} else {
+		switch(type) {
+			case BYREF_NONE:  /* passed by value */
+				break;
+			case BYREF_FORCE:  /* passed by reference */
+			case BYREF_ALLOW:  /* passed by value reference (well, not exactly:) */
+				if (!GLOBAL(function_state).func_arg_types) {
+					GLOBAL(function_state).func_arg_types = ecalloc(sizeof(unsigned char),(GLOBAL(param_index)+2));
+				} else {
+					unsigned int i;
+					
+					GLOBAL(function_state).func_arg_types = erealloc(GLOBAL(function_state).func_arg_types,sizeof(unsigned char)*(GLOBAL(param_index)+2));
+					for (i=GLOBAL(function_state).func_arg_types[0]+1; i<GLOBAL(param_index)+2-1; i++) {
+						GLOBAL(function_state).func_arg_types[i]=0;
+					}
+					
+				}
+				GLOBAL(function_state).func_arg_types[0] = GLOBAL(param_index)+1;
+				GLOBAL(function_state).func_arg_types[GLOBAL(param_index)+1]=type;
+				break;
+		}
 	}
+	GLOBAL(param_index)++;
 }
 
 
-inline void pass_parameter_by_value(YYSTYPE *expr INLINE_TLS)
+inline void pass_parameter_by_value(pval *expr INLINE_TLS)
 {
 	if (GLOBAL(Execute)) {
 		if (GLOBAL(function_state).func_arg_types) {
@@ -432,13 +480,11 @@ inline void pass_parameter_by_value(YYSTYPE *expr INLINE_TLS)
 			if (argument_offset<=GLOBAL(function_state).func_arg_types[0]
 				&& GLOBAL(function_state).func_arg_types[argument_offset]==BYREF_FORCE) {
 				php3_error(E_WARNING,"Cannot pass expression as argument %d by reference",argument_offset);
-				yystype_destructor(expr _INLINE_TLS);
 				GLOBAL(function_state).function_type = 0;	/* don't execute the function call */
-				return;
 			}
 		}
 		
-		if (hash_next_index_insert(GLOBAL(function_state).function_symbol_table, expr, sizeof(YYSTYPE),NULL) == FAILURE) {
+		if (hash_next_index_insert(GLOBAL(function_state).function_symbol_table, expr, sizeof(pval),NULL) == FAILURE) {
 			php3_error(E_WARNING, "Error updating symbol table");
 			yystype_destructor(expr _INLINE_TLS);
 			GLOBAL(function_state).function_type = 0;	/* don't execute the function call */
@@ -447,51 +493,52 @@ inline void pass_parameter_by_value(YYSTYPE *expr INLINE_TLS)
 }
 
 
-inline void start_function_decleration(YYSTYPE *function_token, YYSTYPE *function_name INLINE_TLS)
+inline void start_function_decleration( INLINE_TLS_VOID)
 {
-	HashTable *target_symbol_table;
-	
 	if (GLOBAL(Execute)) {
-		yystype_copy_constructor(function_name);
-		
-		php3_str_tolower(function_name->value.strval, function_name->strlen);
-		if (GLOBAL(class_name)) {
-			target_symbol_table = GLOBAL(class_symbol_table);
-			hash_del(GLOBAL(class_symbol_table), function_name->value.strval, function_name->strlen+1);	/* for inheritance */
-		} else {
-			target_symbol_table = &GLOBAL(function_table);
-		}
-		if (hash_exists(target_symbol_table, function_name->value.strval, function_name->strlen+1)) {
-			php3_error(E_ERROR, "Can't redeclare already declared function");
-			yystype_destructor(function_name _INLINE_TLS);
-			return;
-		}
-		function_token->type = IS_USER_FUNCTION;
-		function_token->value.ht = NULL;
-		function_token->func_arg_types = NULL;
-		hash_update(target_symbol_table, function_name->value.strval, function_name->strlen+1, function_token, sizeof(YYSTYPE), NULL);
-		yystype_destructor(function_name _INLINE_TLS);
-	}
+		GLOBAL(function_state).func_arg_types = NULL;
+	}	
 	stack_push(&GLOBAL(css), &GLOBAL(ExecuteFlag), sizeof(int));
 	GLOBAL(ExecuteFlag) = DONT_EXECUTE;
 	GLOBAL(Execute) = SHOULD_EXECUTE;
 }
 
 
-inline void end_function_decleration( INLINE_TLS_VOID)
+inline void end_function_decleration(pval *function_token, pval *function_name INLINE_TLS)
 {
+	HashTable *target_symbol_table;
+	
 	GLOBAL(ExecuteFlag) = stack_int_top(&GLOBAL(css));
 	GLOBAL(Execute) = SHOULD_EXECUTE;
 	stack_del_top(&GLOBAL(css));
+	
+	if (GLOBAL(Execute)) {
+		php3_str_tolower(function_name->value.str.val, function_name->value.str.len);
+		if (GLOBAL(class_name)) {
+			target_symbol_table = GLOBAL(class_symbol_table);
+			hash_del(GLOBAL(class_symbol_table), function_name->value.str.val, function_name->value.str.len+1);	/* for inheritance */
+		} else {
+			target_symbol_table = &GLOBAL(function_table);
+		}
+		if (hash_exists(target_symbol_table, function_name->value.str.val, function_name->value.str.len+1)) {
+			php3_error(E_ERROR, "Can't redeclare already declared function");
+			return;
+		}
+		function_token->type = IS_USER_FUNCTION;
+		function_token->value.func.addr.statics = NULL;
+		function_token->value.func.arg_types = GLOBAL(function_state).func_arg_types;
+		hash_update(target_symbol_table, function_name->value.str.val, function_name->value.str.len+1, function_token, sizeof(pval), NULL);
+	}
 }
 
 
 /* don't execute expr1 except for the first iteration */
-inline void for_pre_expr1(YYSTYPE *for_token INLINE_TLS)
+inline void for_pre_expr1(pval *for_token INLINE_TLS)
 {
 	GLOBAL(function_state).loop_nest_level++;
 	stack_push(&GLOBAL(css), &GLOBAL(ExecuteFlag), sizeof(int));
 	if (GLOBAL(Execute)) {
+		tc_set_token(&GLOBAL(token_cache_manager), for_token->offset, FOR);
 		if (stack_int_top(&GLOBAL(for_stack)) == (long) for_token->offset) {	/* 2nd or later iteration */
 			GLOBAL(ExecuteFlag) = DONT_EXECUTE;
 			GLOBAL(Execute) = SHOULD_EXECUTE;
@@ -504,7 +551,7 @@ inline void for_pre_expr1(YYSTYPE *for_token INLINE_TLS)
  * iteration, and execute it otherwise.
  * if we're not switched, it's the truth value, and we want to evaluate it anyway.
  */
-inline void for_pre_expr2(YYSTYPE *for_token INLINE_TLS)
+inline void for_pre_expr2(pval *for_token INLINE_TLS)
 {	
 	GLOBAL(ExecuteFlag) = stack_int_top(&GLOBAL(css));
 	GLOBAL(Execute) = SHOULD_EXECUTE;
@@ -519,7 +566,7 @@ inline void for_pre_expr2(YYSTYPE *for_token INLINE_TLS)
  * in the first iteration.  since not being switched --> first iteration,
  * we don't have to check the for_stack.
  */
-inline void for_pre_expr3(YYSTYPE *for_token, YYSTYPE *expr2 INLINE_TLS)
+inline void for_pre_expr3(pval *for_token, pval *expr2 INLINE_TLS)
 {
 	if (for_token->cs_data.switched && stack_int_top(&GLOBAL(for_stack)) != (long) for_token->offset) {
 		var_reset(expr2);
@@ -533,7 +580,7 @@ inline void for_pre_expr3(YYSTYPE *for_token, YYSTYPE *expr2 INLINE_TLS)
 }
 
 
-inline void for_pre_statement(YYSTYPE *for_token, YYSTYPE *expr2, YYSTYPE *expr3 INLINE_TLS)
+inline void for_pre_statement(pval *for_token, pval *expr2, pval *expr3 INLINE_TLS)
 {
 	GLOBAL(ExecuteFlag) = stack_int_top(&GLOBAL(css));
 	GLOBAL(Execute) = SHOULD_EXECUTE;
@@ -561,7 +608,7 @@ inline void for_pre_statement(YYSTYPE *for_token, YYSTYPE *expr2, YYSTYPE *expr3
 	}
 }
 
-inline void for_post_statement(YYSTYPE *for_token, YYSTYPE *first_semicolon, YYSTYPE *second_semicolon, YYSTYPE *close_parentheses INLINE_TLS)
+inline void for_post_statement(pval *for_token, pval *first_semicolon, pval *second_semicolon, pval *close_parentheses, int *yychar INLINE_TLS)
 {
 	if (stack_int_top(&GLOBAL(for_stack)) != (long) for_token->offset) {	/* first iteration */
 		stack_push(&GLOBAL(for_stack), &for_token->offset, sizeof(int));
@@ -571,11 +618,13 @@ inline void for_post_statement(YYSTYPE *for_token, YYSTYPE *first_semicolon, YYS
 		tc_set_switched(&GLOBAL(token_cache_manager), for_token->offset);
 	}
 	if (GLOBAL(Execute)) {
-		seek_token(&GLOBAL(token_cache_manager), for_token->offset);
+		tc_set_token(&GLOBAL(token_cache_manager), for_token->offset, CONTINUED_FOR);
+		seek_token(&GLOBAL(token_cache_manager), for_token->offset, yychar);
 	} else {
 		if ((GLOBAL(function_state).loop_change_type != DO_NOTHING) && (GLOBAL(function_state).loop_change_level == GLOBAL(function_state).loop_nest_level)) {
 			if (GLOBAL(function_state).loop_change_type == DO_CONTINUE) {
-				seek_token(&GLOBAL(token_cache_manager), for_token->offset);
+				tc_set_token(&GLOBAL(token_cache_manager), for_token->offset, CONTINUED_FOR);
+				seek_token(&GLOBAL(token_cache_manager), for_token->offset, yychar);
 			} else {
 				if (stack_int_top(&GLOBAL(for_stack)) == (long) for_token->offset) {
 #if (_DEBUG_ & CONTROL_DEBUG)
@@ -603,7 +652,7 @@ inline void for_post_statement(YYSTYPE *for_token, YYSTYPE *first_semicolon, YYS
 }
 
 
-inline void cs_return(YYSTYPE *expr INLINE_TLS)
+inline void cs_return(pval *expr INLINE_TLS)
 {
 	if (GLOBAL(Execute)) {
 		if (expr) {
@@ -618,11 +667,14 @@ inline void cs_return(YYSTYPE *expr INLINE_TLS)
 }
 
 
-inline void cs_start_include(YYSTYPE *include_token INLINE_TLS)
+inline void cs_start_include(pval *include_token INLINE_TLS)
 {
 	/* evaluate the expression even at Execute=0, if it's the first time we see this include(), otherwise,
 	 * don't evaluate it.
 	 */
+	if (GLOBAL(php3_display_source)) {
+		return;
+	}
 	stack_push(&GLOBAL(css), &GLOBAL(ExecuteFlag), sizeof(int));
 	if (!include_token->cs_data.included) {
 		GLOBAL(ExecuteFlag) = EXECUTE;
@@ -633,8 +685,11 @@ inline void cs_start_include(YYSTYPE *include_token INLINE_TLS)
 	}
 }
 
-inline void cs_end_include(YYSTYPE *include_token, YYSTYPE *expr INLINE_TLS)
+inline void cs_end_include(pval *include_token, pval *expr INLINE_TLS)
 {
+	if (GLOBAL(php3_display_source)) {
+		return;
+	}
 	GLOBAL(ExecuteFlag) = stack_int_top(&GLOBAL(css));
 	stack_del_top(&GLOBAL(css));
 	GLOBAL(Execute) = SHOULD_EXECUTE;
@@ -651,16 +706,16 @@ inline void cs_end_include(YYSTYPE *include_token, YYSTYPE *expr INLINE_TLS)
 
 inline void start_display_source(int start_in_php INLINE_TLS)
 {
-	php3_header(0, NULL);
+	php3_header();
 	stack_push(&GLOBAL(css), &GLOBAL(ExecuteFlag), sizeof(int));
 	GLOBAL(ExecuteFlag) = DONT_EXECUTE;
 	GLOBAL(Execute) = 0;
 	GLOBAL(php3_display_source)=1;
-	php3_printf("<font color=%s>", (start_in_php?php3_ini.highlight_default:php3_ini.highlight_html));
+	php3_printf("<FONT color=%s>", (start_in_php?php3_ini.highlight_default:php3_ini.highlight_html));
 }
 
 
-inline void cs_show_source(YYSTYPE *expr INLINE_TLS)
+inline void cs_show_source(pval *expr INLINE_TLS)
 {
 	if (include_file(expr,1)==SUCCESS) {
 		start_display_source(0 _INLINE_TLS);
@@ -669,7 +724,7 @@ inline void cs_show_source(YYSTYPE *expr INLINE_TLS)
 }
 
 
-inline void cs_pre_boolean_or(YYSTYPE *left_expr INLINE_TLS)
+inline void cs_pre_boolean_or(pval *left_expr INLINE_TLS)
 {
 	stack_push(&GLOBAL(css), &GLOBAL(ExecuteFlag), sizeof(int));
 	if (GLOBAL(Execute) && yystype_true(left_expr)) {
@@ -679,7 +734,7 @@ inline void cs_pre_boolean_or(YYSTYPE *left_expr INLINE_TLS)
 }
 
 
-inline void cs_post_boolean_or(YYSTYPE *result, YYSTYPE *left_expr, YYSTYPE *right_expr INLINE_TLS)
+inline void cs_post_boolean_or(pval *result, pval *left_expr, pval *right_expr INLINE_TLS)
 {
 	GLOBAL(ExecuteFlag) = stack_int_top(&GLOBAL(css));
 	stack_del_top(&GLOBAL(css));
@@ -690,7 +745,7 @@ inline void cs_post_boolean_or(YYSTYPE *result, YYSTYPE *left_expr, YYSTYPE *rig
 }
 
 
-inline void cs_pre_boolean_and(YYSTYPE *left_expr INLINE_TLS)
+inline void cs_pre_boolean_and(pval *left_expr INLINE_TLS)
 {
 	stack_push(&GLOBAL(css), &GLOBAL(ExecuteFlag), sizeof(int));
 	if (GLOBAL(Execute) && !yystype_true(left_expr)) {
@@ -700,7 +755,7 @@ inline void cs_pre_boolean_and(YYSTYPE *left_expr INLINE_TLS)
 }
 
 
-inline void cs_post_boolean_and(YYSTYPE *result, YYSTYPE *left_expr, YYSTYPE *right_expr INLINE_TLS)
+inline void cs_post_boolean_and(pval *result, pval *left_expr, pval *right_expr INLINE_TLS)
 {
 	GLOBAL(ExecuteFlag) = stack_int_top(&GLOBAL(css));
 	stack_del_top(&GLOBAL(css));
@@ -711,7 +766,7 @@ inline void cs_post_boolean_and(YYSTYPE *result, YYSTYPE *left_expr, YYSTYPE *ri
 }
 
 
-inline void cs_questionmark_op_pre_expr1(YYSTYPE *truth_value INLINE_TLS)
+inline void cs_questionmark_op_pre_expr1(pval *truth_value INLINE_TLS)
 {
 	stack_push(&GLOBAL(css), &GLOBAL(ExecuteFlag), sizeof(int));
 	if (GLOBAL(Execute) && !yystype_true(truth_value)) {
@@ -721,7 +776,7 @@ inline void cs_questionmark_op_pre_expr1(YYSTYPE *truth_value INLINE_TLS)
 }
 
 
-inline void cs_questionmark_op_pre_expr2(YYSTYPE *truth_value INLINE_TLS)
+inline void cs_questionmark_op_pre_expr2(pval *truth_value INLINE_TLS)
 {
 	GLOBAL(ExecuteFlag) = stack_int_top(&GLOBAL(css));
 	GLOBAL(Execute) = SHOULD_EXECUTE;
@@ -732,7 +787,7 @@ inline void cs_questionmark_op_pre_expr2(YYSTYPE *truth_value INLINE_TLS)
 }
 
 
-inline void cs_questionmark_op_post_expr2(YYSTYPE *result, YYSTYPE *truth_value, YYSTYPE *expr1, YYSTYPE *expr2 INLINE_TLS)
+inline void cs_questionmark_op_post_expr2(pval *result, pval *truth_value, pval *expr1, pval *expr2 INLINE_TLS)
 {
 	GLOBAL(ExecuteFlag) = stack_int_top(&GLOBAL(css));
 	stack_del_top(&GLOBAL(css));
@@ -748,18 +803,18 @@ inline void cs_questionmark_op_post_expr2(YYSTYPE *result, YYSTYPE *truth_value,
 }
 
 
-inline void cs_functioncall_pre_variable_passing(YYSTYPE *function_name, YYSTYPE *class_ptr INLINE_TLS)
+inline void cs_functioncall_pre_variable_passing(pval *function_name, pval *class_ptr INLINE_TLS)
 {
 	int minus_one = -1;
 	HashTable *target_symbol_table;	/* the symbol table in which the function would be searched */
-	YYSTYPE *object=NULL;
+	pval *object=NULL;
 
 	target_symbol_table = &GLOBAL(function_table);
 	if (GLOBAL(Execute)) {
-		YYSTYPE *data;
+		pval *data;
 		
 		if (class_ptr) {		/* use member function rather than global function */
-			object = (YYSTYPE *) class_ptr->value.yystype_ptr;
+			object = (pval *) class_ptr->value.varptr.yystype;
 			
 			if (!object) {
 				yystype_destructor(function_name _INLINE_TLS);
@@ -773,13 +828,13 @@ inline void cs_functioncall_pre_variable_passing(YYSTYPE *function_name, YYSTYPE
 			yystype_destructor(function_name _INLINE_TLS);
 			return;
 		}
-		php3_str_tolower(function_name->value.strval, function_name->strlen);
-		if (hash_find(target_symbol_table, function_name->value.strval, function_name->strlen+1, (void **) &data) == SUCCESS) {
+		php3_str_tolower(function_name->value.str.val, function_name->value.str.len);
+		if (hash_find(target_symbol_table, function_name->value.str.val, function_name->value.str.len+1, (void **) &data) == SUCCESS) {
 			if (!(data->type & VALID_FUNCTION)) {
 				if (data->type == IS_UNSUPPORTED_FUNCTION) {
-					php3_error(E_ERROR, "Function %s() is not supported in this compilation", function_name->value.strval);
+					php3_error(E_ERROR, "Function %s() is not supported in this compilation", function_name->value.str.val);
 				} else {
-					php3_error(E_ERROR, "Function call to a non-function (%s)", function_name->value.strval);
+					php3_error(E_ERROR, "Function call to a non-function (%s)", function_name->value.str.val);
 				}
 				function_name->cs_data.function_call_type=0;
 				return;
@@ -790,17 +845,18 @@ inline void cs_functioncall_pre_variable_passing(YYSTYPE *function_name, YYSTYPE
 			function_name->cs_data.function_call_type = data->type;
 			function_name->offset = data->offset;
 			GLOBAL(function_state).function_symbol_table = (HashTable *) emalloc(sizeof(HashTable));
-			GLOBAL(function_state).function_name = function_name->value.strval;
+			GLOBAL(function_state).function_name = function_name->value.str.val;
 			GLOBAL(function_state).function_type = data->type;
-			GLOBAL(function_state).handler = (void (*)(INTERNAL_FUNCTION_PARAMETERS)) data->value.internal_function;
-			GLOBAL(function_state).func_arg_types = data->func_arg_types;
+			GLOBAL(function_state).handler = (void (*)(INTERNAL_FUNCTION_PARAMETERS)) data->value.func.addr.internal;
+			GLOBAL(function_state).func_arg_types = data->value.func.arg_types;
 			GLOBAL(function_state).lineno = GLOBAL(current_lineno);
+			GLOBAL(function_state).hosting_function_table = target_symbol_table;
 			if (!GLOBAL(function_state).function_symbol_table) {
 				php3_error(E_ERROR, "Unable to allocate necessary memory for function call");
 				function_name->cs_data.function_call_type=0;
 				return;
 			}
-			if (hash_init(GLOBAL(function_state).function_symbol_table, 0, NULL, YYSTYPE_DESTRUCTOR, 0) == FAILURE) {
+			if (hash_init(GLOBAL(function_state).function_symbol_table, 0, NULL, pval_DESTRUCTOR, 0) == FAILURE) {
 				php3_error(E_ERROR, "Unable to initialize new symbol table in function call");
 				function_name->cs_data.function_call_type=0;
 				return;
@@ -808,12 +864,14 @@ inline void cs_functioncall_pre_variable_passing(YYSTYPE *function_name, YYSTYPE
 			/* push GLOBAL */
 			GLOBAL(globals).type = IS_ARRAY;
 			GLOBAL(globals).value.ht = &GLOBAL(symbol_table);
-			hash_pointer_update(GLOBAL(function_state).function_symbol_table, "GLOBALS", sizeof("GLOBALS"), (void *) &GLOBAL(globals));
+			if (data->type==IS_USER_FUNCTION) {
+				hash_pointer_update(GLOBAL(function_state).function_symbol_table, "GLOBALS", sizeof("GLOBALS"), (void *) &GLOBAL(globals));
+			}
 			if (object) {	/* push $this */
 				hash_pointer_update(GLOBAL(function_state).function_symbol_table, "this", sizeof("this"), (void *) object);
 			}
 		} else {
-			php3_error(E_ERROR, "Call to unsupported or undefined function %s()", function_name->value.strval);
+			php3_error(E_ERROR, "Call to unsupported or undefined function %s()", function_name->value.str.val);
 			function_name->cs_data.function_call_type=0;
 			return;
 		}
@@ -823,21 +881,21 @@ inline void cs_functioncall_pre_variable_passing(YYSTYPE *function_name, YYSTYPE
 }
 
 
-inline void cs_functioncall_post_variable_passing(YYSTYPE *function_name INLINE_TLS)
+inline void cs_functioncall_post_variable_passing(pval *function_name, int *yychar INLINE_TLS)
 {
 	if (function_name->cs_data.function_call_type) {
 		stack_push(&GLOBAL(css), &GLOBAL(ExecuteFlag), sizeof(int));
 
 		/* prepare a new function state */
 		GLOBAL(function_state).symbol_table = GLOBAL(function_state).function_symbol_table;
-		GLOBAL(active_symbol_table) = GLOBAL(function_state).symbol_table;
 		GLOBAL(function_state).function_symbol_table = NULL;
 		GLOBAL(function_state).loop_nest_level = GLOBAL(function_state).loop_change_level = GLOBAL(function_state).loop_change_type = 0;
 
 		var_reset(&GLOBAL(return_value)); 
 		switch (GLOBAL(function_state).function_type) {
 			case IS_USER_FUNCTION:
-				seek_token(&GLOBAL(token_cache_manager), function_name->offset);
+				GLOBAL(active_symbol_table) = GLOBAL(function_state).symbol_table;
+				seek_token(&GLOBAL(token_cache_manager), function_name->offset, yychar);
 				break;
 			case IS_INTERNAL_FUNCTION:
 				GLOBAL(function_state).handler(GLOBAL(function_state).symbol_table,&GLOBAL(return_value),&GLOBAL(list),&GLOBAL(plist));
@@ -849,7 +907,7 @@ inline void cs_functioncall_post_variable_passing(YYSTYPE *function_name INLINE_
 }
 
 
-inline void cs_functioncall_end(YYSTYPE *result, YYSTYPE *function_name, YYSTYPE *close_parentheses INLINE_TLS)
+inline void cs_functioncall_end(pval *result, pval *function_name, pval *close_parentheses, int *yychar INLINE_TLS)
 {
 	if (function_name->cs_data.function_call_type) {
 		FunctionState *fs_ptr;
@@ -873,7 +931,7 @@ inline void cs_functioncall_end(YYSTYPE *result, YYSTYPE *function_name, YYSTYPE
 	
 		/* jump back */
 		if (GLOBAL(function_state).function_type == IS_USER_FUNCTION) {
-			seek_token(&GLOBAL(token_cache_manager), close_parentheses->offset + 1);
+			seek_token(&GLOBAL(token_cache_manager), close_parentheses->offset + 1, yychar);
 		}
 		
 		
@@ -892,7 +950,7 @@ inline void cs_functioncall_end(YYSTYPE *result, YYSTYPE *function_name, YYSTYPE
 }
 
 
-inline void cs_switch_start(YYSTYPE *switch_token, YYSTYPE *expr INLINE_TLS)
+inline void cs_switch_start(pval *switch_token, pval *expr INLINE_TLS)
 {
 	switch_expr se;
 
@@ -901,16 +959,17 @@ inline void cs_switch_start(YYSTYPE *switch_token, YYSTYPE *expr INLINE_TLS)
 
 	se.expr = *expr;
 	se.offset = switch_token->offset;
+	se.Execute = GLOBAL(Execute);
 	stack_push(&GLOBAL(switch_stack), &se, sizeof(switch_expr));
 }
 
 
 /* if case_expr is NULL, assume default */
-inline void cs_switch_case_pre(YYSTYPE *case_expr INLINE_TLS)
+inline void cs_switch_case_pre(pval *case_expr INLINE_TLS)
 {
 	if (GLOBAL(Execute)) {
 		switch_expr *se;
-		YYSTYPE expr, result;
+		pval expr, result;
 		int is_equal = 0;
 
 		stack_top(&GLOBAL(switch_stack), (void **) &se);
@@ -945,8 +1004,10 @@ inline void cs_switch_case_post( INLINE_TLS_VOID)
 }
 
 
-inline void cs_switch_end(YYSTYPE *expr INLINE_TLS)
+inline void cs_switch_end(pval *expr INLINE_TLS)
 {
+	switch_expr *se;
+	
 	if (!GLOBAL(Execute)) {
 		if (GLOBAL(function_state).loop_change_level == GLOBAL(function_state).loop_nest_level) {
 			GLOBAL(function_state).loop_change_type = DO_NOTHING;
@@ -955,7 +1016,9 @@ inline void cs_switch_end(YYSTYPE *expr INLINE_TLS)
 	GLOBAL(ExecuteFlag) = stack_int_top(&GLOBAL(css));
 	stack_del_top(&GLOBAL(css));
 	GLOBAL(Execute) = SHOULD_EXECUTE;
-	if (GLOBAL(Execute)) {
+	
+	stack_top(&GLOBAL(switch_stack), (void **) &se);
+	if (se->Execute) {
 		yystype_destructor(expr _INLINE_TLS);
 	}
 	stack_del_top(&GLOBAL(switch_stack));
@@ -963,17 +1026,17 @@ inline void cs_switch_end(YYSTYPE *expr INLINE_TLS)
 }
 
 
-inline void cs_start_class_decleration(YYSTYPE *classname, YYSTYPE *parent INLINE_TLS)
+inline void cs_start_class_decleration(pval *classname, pval *parent INLINE_TLS)
 {
 	if (GLOBAL(Execute)) {
-		YYSTYPE new_class, *parent_ptr;
+		pval new_class, *parent_ptr;
 
-		if (hash_exists(&GLOBAL(function_table), classname->value.strval, classname->strlen+1)) {
-			php3_error(E_ERROR,"%s is already a function or class",classname->value.strval);
+		if (hash_exists(&GLOBAL(function_table), classname->value.str.val, classname->value.str.len+1)) {
+			php3_error(E_ERROR,"%s is already a function or class",classname->value.str.val);
 		}
 		if (parent) {
-			if (hash_find(&GLOBAL(function_table), parent->value.strval, parent->strlen+1, (void **) &parent_ptr) == FAILURE) {
-				php3_error(E_ERROR, "Cannot extend non existant class %s", parent->value.strval);
+			if (hash_find(&GLOBAL(function_table), parent->value.str.val, parent->value.str.len+1, (void **) &parent_ptr) == FAILURE) {
+				php3_error(E_ERROR, "Cannot extend non existant class %s", parent->value.str.val);
 				return;
 			}
 			new_class = *parent_ptr;
@@ -981,12 +1044,12 @@ inline void cs_start_class_decleration(YYSTYPE *classname, YYSTYPE *parent INLIN
 		} else {
 			new_class.type = IS_CLASS;
 			new_class.value.ht = (HashTable *) emalloc(sizeof(HashTable));
-			hash_init(new_class.value.ht, 0, NULL, YYSTYPE_DESTRUCTOR, 0);
+			hash_init(new_class.value.ht, 0, NULL, pval_DESTRUCTOR, 0);
 		}
-		if (hash_update(&GLOBAL(function_table), classname->value.strval, classname->strlen+1, &new_class, sizeof(YYSTYPE),NULL) == FAILURE) {
+		if (hash_update(&GLOBAL(function_table), classname->value.str.val, classname->value.str.len+1, &new_class, sizeof(pval),NULL) == FAILURE) {
 			php3_error(E_ERROR, "Unable to initialize new class");
 		}
-		GLOBAL(class_name) = classname->value.strval;
+		GLOBAL(class_name) = classname->value.str.val;
 		GLOBAL(class_symbol_table) = new_class.value.ht;
 	}
 }
@@ -1001,7 +1064,7 @@ inline void cs_end_class_decleration( INLINE_TLS_VOID)
 }
 
 
-inline void start_array_parsing(YYSTYPE *array_name,YYSTYPE *class_ptr INLINE_TLS)
+inline void start_array_parsing(pval *array_name,pval *class_ptr INLINE_TLS)
 {
 	if (GLOBAL(Execute)) {
 		HashTable *target_symbol_table=GLOBAL(active_symbol_table);
@@ -1011,7 +1074,7 @@ inline void start_array_parsing(YYSTYPE *array_name,YYSTYPE *class_ptr INLINE_TL
 			GLOBAL(array_ptr) = NULL;
 		} else {
 			if (class_ptr) {
-				YYSTYPE *object=(YYSTYPE *) class_ptr->value.yystype_ptr;
+				pval *object=(pval *) class_ptr->value.varptr.yystype;
 				
 				if (!object) {
 					GLOBAL(array_ptr)=NULL;
@@ -1020,24 +1083,24 @@ inline void start_array_parsing(YYSTYPE *array_name,YYSTYPE *class_ptr INLINE_TL
 				}
 				target_symbol_table = object->value.ht;
 			}
-			if (hash_find(target_symbol_table,array_name->value.strval, array_name->strlen+1, (void **)&GLOBAL(array_ptr)) == FAILURE) {
-				YYSTYPE tmp;
+			if (hash_find(target_symbol_table,array_name->value.str.val, array_name->value.str.len+1, (void **)&GLOBAL(array_ptr)) == FAILURE) {
+				pval tmp;
 				variable_tracker vt;
 
 				array_init(&tmp);
-				hash_update(target_symbol_table,array_name->value.strval,array_name->strlen+1,(void *) &tmp, sizeof(YYSTYPE),(void **) &GLOBAL(array_ptr));
+				hash_update(target_symbol_table,array_name->value.str.val,array_name->value.str.len+1,(void *) &tmp, sizeof(pval),(void **) &GLOBAL(array_ptr));
 				GLOBAL(array_ptr)->cs_data.array_write=1;
 								
 				vt.type = IS_STRING;
-				vt.strlen = array_name->strlen;
-				vt.strval = estrndup(array_name->value.strval,vt.strlen);
+				vt.strlen = array_name->value.str.len;
+				vt.strval = estrndup(array_name->value.str.val,vt.strlen);
 				vt.ht = target_symbol_table;
 				stack_push(&GLOBAL(variable_unassign_stack),(void *) &vt, sizeof(variable_tracker));
 			} else {
 				GLOBAL(array_ptr)->cs_data.array_write=0;
 			}
 			if (GLOBAL(array_ptr)->type != IS_ARRAY && GLOBAL(array_ptr)->type != IS_STRING) {
-	            php3_error(E_WARNING, "Variable $%s is not an array or string", array_name->value.strval);
+	            php3_error(E_WARNING, "Variable $%s is not an array or string", array_name->value.str.val);
 				GLOBAL(array_ptr) = NULL;
 			}
 		}
@@ -1045,56 +1108,56 @@ inline void start_array_parsing(YYSTYPE *array_name,YYSTYPE *class_ptr INLINE_TL
 	}
 }
 
-inline void start_dimensions_parsing(YYSTYPE *result INLINE_TLS)
+inline void start_dimensions_parsing(pval *result INLINE_TLS)
 {
 	if (GLOBAL(Execute)) {
-		result->value.yystype_ptr = GLOBAL(array_ptr);
+		result->value.varptr.yystype = GLOBAL(array_ptr);
 		if (GLOBAL(array_ptr)) {
 			result->cs_data.array_write=GLOBAL(array_ptr)->cs_data.array_write;
 		}
-		result->strlen=-1;
+		result->value.varptr.string_offset=-1;
 	}
 }
   
-inline void fetch_array_index(YYSTYPE *result, YYSTYPE *expr, YYSTYPE *dimension INLINE_TLS)
+inline void fetch_array_index(pval *result, pval *expr, pval *dimension INLINE_TLS)
 {
 	if (GLOBAL(Execute)) {
 		int original_array_write = dimension->cs_data.array_write;
 		
 		result->cs_data.array_write = dimension->cs_data.array_write;
 			
-		if (dimension->value.yystype_ptr) {
-			YYSTYPE *localdata,tmp,*arr_ptr=dimension->value.yystype_ptr;
+		if (dimension->value.varptr.yystype) {
+			pval *localdata,tmp,*arr_ptr=dimension->value.varptr.yystype;
 			int new_array=0; /* whether we created the array just now */
 	
-			if (arr_ptr->type==IS_STRING && arr_ptr->value.strval!=empty_string && arr_ptr->value.strval!=undefined_variable_string) {
-				if (dimension->strlen == -1) { /* ok */
+			if (arr_ptr->type==IS_STRING && arr_ptr->value.str.val!=empty_string && arr_ptr->value.str.val!=undefined_variable_string) {
+				if (dimension->value.varptr.string_offset == -1) { /* ok */
 					if (!expr) {
 						php3_error(E_WARNING,"No string index specified");
-						result->value.yystype_ptr=NULL;
+						result->value.varptr.yystype=NULL;
 						return;
 					}
 					convert_to_long(expr);
-					if (expr->value.lval<0 || expr->value.lval>=arr_ptr->strlen) {
+					if (expr->value.lval<0 || expr->value.lval>=arr_ptr->value.str.len) {
 						php3_error(E_WARNING,"Illegal string index");
-						result->value.yystype_ptr=NULL;
+						result->value.varptr.yystype=NULL;
 						return;
 					}
-					result->strlen = expr->value.lval;
+					result->value.varptr.string_offset = expr->value.lval;
 					return;
 				} else {
 					php3_error(E_WARNING,"Cannot index a string index");
-					result->value.yystype_ptr=NULL;
+					result->value.varptr.yystype=NULL;
 					return;
 				}
 			}
 			if (arr_ptr->type==IS_NULL || (arr_ptr->type==IS_STRING && 
-				(arr_ptr->value.strval==empty_string || arr_ptr->value.strval==undefined_variable_string))) {
+				(arr_ptr->value.str.val==empty_string || arr_ptr->value.str.val==undefined_variable_string))) {
 				array_init(arr_ptr);
 				new_array=1;
 			} else if (arr_ptr->type!=IS_ARRAY) {
 				php3_error(E_WARNING,"Index referencing a non-array");
-				result->value.yystype_ptr=NULL;
+				result->value.varptr.yystype=NULL;
 				yystype_destructor(expr _INLINE_TLS);
 				return;
 			}
@@ -1105,8 +1168,8 @@ inline void fetch_array_index(YYSTYPE *result, YYSTYPE *expr, YYSTYPE *dimension
 						convert_to_long(expr);
 						if (new_array || hash_index_find(arr_ptr->value.ht, expr->value.lval, (void **) &localdata) == FAILURE) {
 							tmp.type = IS_NULL;
-							hash_index_update(arr_ptr->value.ht, expr->value.lval, (void *)&tmp, sizeof(YYSTYPE),(void **) &localdata);
-							result->value.yystype_ptr = localdata;
+							hash_index_update(arr_ptr->value.ht, expr->value.lval, (void *)&tmp, sizeof(pval),(void **) &localdata);
+							result->value.varptr.yystype = localdata;
 							result->cs_data.array_write = 1;
 							if (!original_array_write) { /* we raised the write flag just now, record this variable */
 								variable_tracker vt;
@@ -1117,34 +1180,34 @@ inline void fetch_array_index(YYSTYPE *result, YYSTYPE *expr, YYSTYPE *dimension
 								stack_push(&GLOBAL(variable_unassign_stack),(void *) &vt, sizeof(variable_tracker));
 							}
 						} else {
-							result->value.yystype_ptr = localdata;
+							result->value.varptr.yystype = localdata;
 						}
 						break;
 					case IS_STRING:
-						if (new_array || hash_find(arr_ptr->value.ht, expr->value.strval, expr->strlen+1, (void **) &localdata)==FAILURE) {
+						if (new_array || hash_find(arr_ptr->value.ht, expr->value.str.val, expr->value.str.len+1, (void **) &localdata)==FAILURE) {
 							tmp.type = IS_NULL;
-							if (hash_update(arr_ptr->value.ht, expr->value.strval, expr->strlen+1, (void *) &tmp, sizeof(YYSTYPE),(void **) &localdata)==FAILURE) {
-								result->value.yystype_ptr=NULL;
-								STR_FREE(expr->value.strval);
+							if (hash_update(arr_ptr->value.ht, expr->value.str.val, expr->value.str.len+1, (void *) &tmp, sizeof(pval),(void **) &localdata)==FAILURE) {
+								result->value.varptr.yystype=NULL;
+								STR_FREE(expr->value.str.val);
 								return;
 							}
-							result->value.yystype_ptr = localdata;
+							result->value.varptr.yystype = localdata;
 							result->cs_data.array_write = 1;
 							if (!original_array_write) { /* we raised the write flag just now, record this variable */
 								variable_tracker vt;
 								
 								vt.type = IS_STRING;
-								vt.strval = estrndup(expr->value.strval,expr->strlen);
-								vt.strlen = expr->strlen;
+								vt.strval = estrndup(expr->value.str.val,expr->value.str.len);
+								vt.strlen = expr->value.str.len;
 								vt.ht = arr_ptr->value.ht;
 								stack_push(&GLOBAL(variable_unassign_stack),(void *) &vt, sizeof(variable_tracker));
 							}
 						} else {
-							result->value.yystype_ptr = localdata;
+							result->value.varptr.yystype = localdata;
 						}
 						break;
 					default:
-						result->value.yystype_ptr = NULL;
+						result->value.varptr.yystype = NULL;
 						php3_error(E_WARNING, "Illegal index type");
 						break;
 				}
@@ -1152,8 +1215,8 @@ inline void fetch_array_index(YYSTYPE *result, YYSTYPE *expr, YYSTYPE *dimension
 				int new_index=hash_next_free_element(arr_ptr->value.ht);
 				
 				tmp.type = IS_NULL;
-				hash_next_index_insert(arr_ptr->value.ht, (void *) &tmp, sizeof(YYSTYPE), (void **) &localdata);
-				result->value.yystype_ptr = localdata;
+				hash_next_index_insert(arr_ptr->value.ht, (void *) &tmp, sizeof(pval), (void **) &localdata);
+				result->value.varptr.yystype = localdata;
 				result->cs_data.array_write=1;
 				if (!original_array_write) { /* we raised the write flag just now, record this variable */
 					variable_tracker vt;
@@ -1165,7 +1228,7 @@ inline void fetch_array_index(YYSTYPE *result, YYSTYPE *expr, YYSTYPE *dimension
 				}
 			}
 		} else {
-			result->value.yystype_ptr=NULL;
+			result->value.varptr.yystype=NULL;
 		}
 		if (expr) {
 			yystype_destructor(expr _INLINE_TLS);
@@ -1174,10 +1237,10 @@ inline void fetch_array_index(YYSTYPE *result, YYSTYPE *expr, YYSTYPE *dimension
 }	
 
 
-inline void end_array_parsing(YYSTYPE *result, YYSTYPE *dimensions INLINE_TLS)
+inline void end_array_parsing(pval *result, pval *dimensions INLINE_TLS)
 {
 	if (GLOBAL(Execute)) {
-		YYSTYPE *ptr=(YYSTYPE *) dimensions->value.yystype_ptr;
+		pval *ptr=(pval *) dimensions->value.varptr.yystype;
 
 		*result = *dimensions;
 		if (ptr && ptr->type==IS_NULL) {
@@ -1210,52 +1273,52 @@ inline void clean_unassigned_variable_top(int delete_var INLINE_TLS)
 }
 
 
-inline void get_class_variable_pointer(YYSTYPE *result, YYSTYPE *class_ptr, YYSTYPE *varname INLINE_TLS)
+inline void get_class_variable_pointer(pval *result, pval *class_ptr, pval *varname INLINE_TLS)
 {
 	if (GLOBAL(Execute)) {
-		YYSTYPE *object = (YYSTYPE *) class_ptr->value.yystype_ptr;
+		pval *object = (pval *) class_ptr->value.varptr.yystype;
 		
 		if (!object) {
-			result->value.yystype_ptr = NULL;
+			result->value.varptr.yystype = NULL;
 			yystype_destructor(varname _INLINE_TLS);
 			return;
 		}
 		if ((varname->type != IS_STRING)) {
 			php3_error(E_WARNING,"Illegal property name");
-			result->value.yystype_ptr = NULL;
+			result->value.varptr.yystype = NULL;
 			yystype_destructor(varname _INLINE_TLS);
 			return;
 		} else {
-			YYSTYPE *data;
+			pval *data;
 
-			if (hash_find(object->value.ht,varname->value.strval, varname->strlen+1, (void **)&data) == FAILURE) {
-				YYSTYPE tmp;
+			if (hash_find(object->value.ht,varname->value.str.val, varname->value.str.len+1, (void **)&data) == FAILURE) {
+				pval tmp;
 				variable_tracker vt;
 
 				var_reset(&tmp);
-				hash_update(object->value.ht,varname->value.strval,varname->strlen+1,(void *) &tmp, sizeof(YYSTYPE),(void **) &data);
+				hash_update(object->value.ht,varname->value.str.val,varname->value.str.len+1,(void *) &tmp, sizeof(pval),(void **) &data);
 				
 				vt.type = IS_STRING;
-				vt.strlen = varname->strlen;
-				vt.strval = estrndup(varname->value.strval,vt.strlen);
+				vt.strlen = varname->value.str.len;
+				vt.strval = estrndup(varname->value.str.val,vt.strlen);
 				vt.ht = object->value.ht;
 				stack_push(&GLOBAL(variable_unassign_stack),(void *) &vt, sizeof(variable_tracker));
 				result->cs_data.array_write = 1;
 			} else {
 				result->cs_data.array_write = 0;
 			}
-			result->value.yystype_ptr = data;
-			result->strlen = -1; /* Not indexed string */
+			result->value.varptr.yystype = data;
+			result->value.str.len = -1; /* Not indexed string */
 			yystype_destructor(varname _INLINE_TLS);
 		}
 	}
 }
 
 
-inline void pass_parameter(YYSTYPE *var, int by_reference INLINE_TLS)
+inline void pass_parameter(pval *var, int by_reference INLINE_TLS)
 {
 	if (GLOBAL(Execute)) {
-		YYSTYPE tmp;
+		pval tmp;
 		/* ... check if we need to force by reference (set by_reference=1) */
 
 		if (GLOBAL(function_state).func_arg_types) {
@@ -1269,7 +1332,7 @@ inline void pass_parameter(YYSTYPE *var, int by_reference INLINE_TLS)
 				
 		if (!by_reference) {
 			read_pointer_value(&tmp,var _INLINE_TLS);
-			if (hash_next_index_insert(GLOBAL(function_state).function_symbol_table, &tmp, sizeof(YYSTYPE),NULL) == FAILURE) {
+			if (hash_next_index_insert(GLOBAL(function_state).function_symbol_table, &tmp, sizeof(pval),NULL) == FAILURE) {
 				php3_error(E_WARNING, "Error updating symbol table");
 				yystype_destructor(&tmp _INLINE_TLS);
 				GLOBAL(function_state).function_type = 0;	/* don't execute the function call */
@@ -1279,11 +1342,11 @@ inline void pass_parameter(YYSTYPE *var, int by_reference INLINE_TLS)
 			if (var->cs_data.array_write) {
 				clean_unassigned_variable_top(0 _INLINE_TLS);
 			}
-			if (var->value.yystype_ptr==NULL) {
+			if (var->value.varptr.yystype==NULL) {
 				GLOBAL(function_state).function_type = 0;
 				return;
 			}
-			if (hash_next_index_pointer_insert(GLOBAL(function_state).function_symbol_table, (void *) var->value.yystype_ptr) == FAILURE) {
+			if (hash_next_index_pointer_insert(GLOBAL(function_state).function_symbol_table, (void *) var->value.varptr.yystype) == FAILURE) {
 				php3_error(E_WARNING, "Error updating symbol table");
 				GLOBAL(function_state).function_type = 0;	/* don't execute the function call */
 				return;
@@ -1293,7 +1356,7 @@ inline void pass_parameter(YYSTYPE *var, int by_reference INLINE_TLS)
 }
 
 
-inline void cs_system(YYSTYPE *result,YYSTYPE *expr INLINE_TLS)
+inline void cs_system(pval *result,pval *expr INLINE_TLS)
 {
 	if (GLOBAL(Execute)) {
 		FILE *in;
@@ -1308,38 +1371,38 @@ inline void cs_system(YYSTYPE *result,YYSTYPE *expr INLINE_TLS)
 
 		convert_to_string(expr);
 #if WIN32|WINNT
-		if ((in=popen(expr->value.strval,"rt"))==NULL) {
+		if ((in=popen(expr->value.str.val,"rt"))==NULL) {
 #else
-		if ((in=popen(expr->value.strval,"r"))==NULL) {
+		if ((in=popen(expr->value.str.val,"r"))==NULL) {
 #endif
-			php3_error(E_WARNING,"Unable to execute '%s'",expr->value.strval);
+			php3_error(E_WARNING,"Unable to execute '%s'",expr->value.str.val);
 		}
 		allocated_space = EXEC_INPUT_BUF;
-		result->value.strval = (char *) emalloc(allocated_space);
+		result->value.str.val = (char *) emalloc(allocated_space);
 		while (1) {
-			readbytes = fread(result->value.strval+total_readbytes,1,EXEC_INPUT_BUF,in);
+			readbytes = fread(result->value.str.val+total_readbytes,1,EXEC_INPUT_BUF,in);
 			if (readbytes<=0) {
 				break;
 			}
 			total_readbytes += readbytes;
 			allocated_space = total_readbytes+EXEC_INPUT_BUF;
-			result->value.strval = (char *) erealloc(result->value.strval,allocated_space);
+			result->value.str.val = (char *) erealloc(result->value.str.val,allocated_space);
 		}
 		fclose(in);
 		
-		result->value.strval = erealloc(result->value.strval,total_readbytes+1);
-		result->value.strval[total_readbytes]=0;
-		result->strlen = total_readbytes;
+		result->value.str.val = erealloc(result->value.str.val,total_readbytes+1);
+		result->value.str.val[total_readbytes]=0;
+		result->value.str.len = total_readbytes;
 		result->type = IS_STRING;
-		STR_FREE(expr->value.strval);
+		STR_FREE(expr->value.str.val);
 	}
 }
 
 
-inline void add_regular_encapsed_variable(YYSTYPE *result,YYSTYPE *encaps,YYSTYPE *varname  INLINE_TLS)
+inline void add_regular_encapsed_variable(pval *result,pval *encaps,pval *varname  INLINE_TLS)
 {
 	if (GLOBAL(Execute)) {
-		YYSTYPE tmp;
+		pval tmp;
 		
 		get_regular_variable_contents(&tmp,varname,0 _INLINE_TLS);
 		concat_function(result,encaps,&tmp,1 _INLINE_TLS);
@@ -1347,20 +1410,20 @@ inline void add_regular_encapsed_variable(YYSTYPE *result,YYSTYPE *encaps,YYSTYP
 }
 
 
-inline void add_assoc_array_encapsed_variable(YYSTYPE *result, YYSTYPE *encaps, YYSTYPE *varname, YYSTYPE *index INLINE_TLS)
+inline void add_assoc_array_encapsed_variable(pval *result, pval *encaps, pval *varname, pval *index INLINE_TLS)
 {
 	if (GLOBAL(Execute)) {
-		YYSTYPE tmp;
+		pval tmp;
 				
 		get_array_variable(&tmp,varname,index _INLINE_TLS);
 		concat_function(result,encaps,&tmp,1 _INLINE_TLS);
 	}
 }
 
-inline void add_regular_array_encapsed_variable(YYSTYPE *result, YYSTYPE *encaps, YYSTYPE *varname, YYSTYPE *index INLINE_TLS)
+inline void add_regular_array_encapsed_variable(pval *result, pval *encaps, pval *varname, pval *index INLINE_TLS)
 {
 	if (GLOBAL(Execute)) {
-		YYSTYPE tmp;
+		pval tmp;
 
 		COPY_STRING(*index);
 		convert_to_long(index);
@@ -1370,22 +1433,23 @@ inline void add_regular_array_encapsed_variable(YYSTYPE *result, YYSTYPE *encaps
 }
 
 
-inline void add_variable_array_encapsed_variable(YYSTYPE *result, YYSTYPE *encaps, YYSTYPE *varname, YYSTYPE *var_index INLINE_TLS)
+inline void add_variable_array_encapsed_variable(pval *result, pval *encaps, pval *varname, pval *var_index INLINE_TLS)
 {
 	if (GLOBAL(Execute)) {
-		YYSTYPE index,tmp;
+		pval index,tmp;
 		
 		get_regular_variable_contents(&index,var_index,0 _INLINE_TLS);
 		get_array_variable(&tmp,varname,&index _INLINE_TLS);
 		concat_function(result,encaps,&tmp,1 _INLINE_TLS);
+		yystype_destructor(&index _INLINE_TLS);
 	}
 }
 
 
-inline void add_encapsed_object_property(YYSTYPE *result, YYSTYPE *encaps, YYSTYPE *object, YYSTYPE *property INLINE_TLS)
+inline void add_encapsed_object_property(pval *result, pval *encaps, pval *object, pval *property INLINE_TLS)
 {
 	if (GLOBAL(Execute)) {
-		YYSTYPE tmp;
+		pval tmp;
 				
 		get_array_variable(&tmp,object,property _INLINE_TLS);
 		concat_function(result,encaps,&tmp,1 _INLINE_TLS);
@@ -1393,10 +1457,10 @@ inline void add_encapsed_object_property(YYSTYPE *result, YYSTYPE *encaps, YYSTY
 }
 
 
-inline void add_indirect_encapsed_variable(YYSTYPE *result,YYSTYPE *encaps,YYSTYPE *varname INLINE_TLS)
+inline void add_indirect_encapsed_variable(pval *result,pval *encaps,pval *varname INLINE_TLS)
 {
 	if (GLOBAL(Execute)) {
-		YYSTYPE tmp,tmp2;
+		pval tmp,tmp2;
 		
 		get_regular_variable_contents(&tmp,varname,0 _INLINE_TLS);
 		

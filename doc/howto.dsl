@@ -5,7 +5,7 @@
 
 <!--
 
-  $Id: howto.dsl,v 1.2 1998/03/02 13:59:02 ssb Exp $
+  $Id: howto.dsl,v 1.3 1998/04/19 21:37:27 eschmid Exp $
 
   This file contains HTML-specific stylesheet customization for
   the SGML HOWTO.
@@ -13,6 +13,8 @@
 -->
 
 <style-specification id="local-docbook" use="docbook">
+
+(define %html-ext% ".html")
 
 (define (toc-depth nd)
   (if (string=? (gi nd) "ARTICLE")

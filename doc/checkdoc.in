@@ -1,8 +1,9 @@
 #!@PERL_PATH@
+# -*- perl -*-
 #
 # Script that checks which functions are documented in the manual.
 #
-# $Id: checkdoc.in,v 1.2 1998/03/02 00:37:31 ssb Exp $
+# $Id: checkdoc.in,v 1.6 1998/03/29 21:38:11 ssb Exp $
 #
 # Author: Stig Bakken <ssb@guardian.no>
 #
@@ -24,8 +25,22 @@ if ($ARGV[0] eq '-m') {
     foreach $function (sort @functions) {
 	printf("%-32s    %s\n", $function, $func_in_file{$function});
     }
+    @fif = keys %func_in_file;
+    $n_functions = $#functions + 1;
+    $n_documented = $#fif + 1;
+    $percent_done = int(($n_documented * 100) / $n_functions);
+
+    printf("\n%d of %d functions documented (%d%% done, %d%% remaining).\n",
+	   $n_documented, $n_functions, $percent_done, 100-$percent_done);
 }
 
+foreach $func (@functions) {
+    $in_funclist{$func}++;
+}
+foreach $func (sort keys %func_in_file) {
+    next if $in_funclist{$func};
+    print STDERR "possibly missing in $funclist: $func\n";
+}
 
 ### Subroutines:
 
@@ -50,7 +65,7 @@ sub check_functions {
 	    while (<SGML>) {
 		next unless (m!(^|\s+)id\s*=\s*(['\"])([^\2]*?)\2\s*!);
 		$func = $3;
-		next unless ($func =~ s!^function\.!!);
+		next unless ($func =~ s!^(function|class)\.!!);
 		$func =~ s/-/_/g;
 		$func_in_file{$func} = $sgml_file;
 	    }
@@ -61,6 +76,7 @@ sub check_functions {
     
     if (open(FUNCLIST, $funclist)) {
 	while (<FUNCLIST>) {
+	    next if /^#/;
 	    s!\s*!!g;
 	    $len = length($_);
 	    $longest = $len if ($len > $longest);

@@ -7,7 +7,7 @@ dl("crypt.dll");
 $key16 = "abcdefghijklmnop"; //16 bytes long
 $key8 = "abcdefgh"; //8 bytes long
 $key48 = $key16.$key16.$key16;
-$string = "Jack and Jill went up the hill!!!";
+$string = "Jack and Jill went up the hill!!! Jack";
 $crypted = encrypt($string,0,$key16);
 $decrypted = decrypt($crypted,0,$key16);
 

@@ -1,0 +1,628 @@
+ <reference id="ref.imap">
+  <title>IMAP Functions</title>
+  <titleabbrev>IMAP</titleabbrev>
+
+  <refentry id="function.imap-append">
+   <refnamediv>
+    <refname>imap_append</refname>
+    <refpurpose>Append a string message to a specified mailbox</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>imap_append</function></funcdef>
+     <paramdef>int <parameter>imap_stream</parameter></paramdef>
+     <paramdef>string <parameter>mbox</parameter></paramdef>
+     <paramdef>string <parameter>message</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+	Returns true on sucess, false on error.
+    <para>  
+	imap_append() function appends a string message to the specified
+	mailbox <parameter>mbox</parameter>.
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.imap-base64">
+   <refnamediv>
+    <refname>imap_base64</refname>
+    <refpurpose>Decode BASE64 encoded text</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>string <function>imap_base64</function></funcdef>
+     <paramdef>string <parameter>text</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+	imap_base64() function decodes a BASE64 encoded text. The decoded
+	message is retunred as a string. 
+	<para>
+	Note: This function uses built in c-client base64 decoding, not an
+	internal routine, so one must load the imap.so library to use this 
+	function.
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.imap-body">
+   <refnamediv>
+    <refname>imap_body</refname>
+    <refpurpose>Read the message body</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>string <function>imap_body</function></funcdef>
+     <paramdef>int <parameter>imap_stream</parameter></paramdef>
+     <paramdef>int <parameter>msg_number</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+	imap_body() returns the body of the message, numbered <parameter>
+	msg_number</parameter> in the current mailbox.
+    <para>  
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.imap-check">
+   <refnamediv>
+    <refname>imap_check</refname>
+    <refpurpose>Check current mailbox</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>array <function>imap_check</function></funcdef>
+     <paramdef>int <parameter>imap_stream</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+	Returns false if there are no new messages, else returns information
+	about the current mailbox.
+    <para>  
+	imap_check() function checks the current mailbox status on the server
+	and returns the information in an associative array with following
+	elements.
+	<para>
+	<informalexample>
+	<literallayout>
+	Date : date of the message
+	Driver : driver
+	Mailbox : name of the mailbox	
+	Nmsgs : number of messages	
+	Recent : number of recent messages
+	</literallayout>
+	</informalexample>
+   </refsect1>
+  </refentry>
+
+
+
+  <refentry id="function.imap-close">
+   <refnamediv>
+    <refname>imap_close</refname>
+    <refpurpose>Close an IMAP stream</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>imap_close</function></funcdef>
+     <paramdef>int <parameter>imap_stream</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+	Returns true on success and false on error.
+    <para>  
+	Close the imap stream.
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.imap-createmailbox">
+   <refnamediv>
+    <refname>imap_createmailbox</refname>
+    <refpurpose>Create a new mailbox</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>imap_createmailbox</function></funcdef>
+     <paramdef>int <parameter>imap_stream</parameter></paramdef>
+     <paramdef>string <parameter>mbox</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+	Returns true on success and false on error.
+    <para>  
+	imap_createmailbox() creates a new mailbox specified by mbox.
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.imap-delete">
+   <refnamediv>
+    <refname>imap_delete</refname>
+    <refpurpose>Mark a messge for deletion from current mailbox</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>imap_delete</function></funcdef>
+     <paramdef>int <parameter>imap_stream</parameter></paramdef>
+     <paramdef>int <parameter>msg_number</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+	Returns true on success and false on error.
+    <para>  
+	imap_delete() function marks message pointed by msg_number for
+	deletion. Actual deletion of the messages is done by <function>
+	imap_expunge </function>.
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.imap-deletemailbox">
+   <refnamediv>
+    <refname>imap_deletemailbox</refname>
+    <refpurpose>Delete a mailbox</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>imap_deletemailbox</function></funcdef>
+     <paramdef>int <parameter>imap_stream</parameter></paramdef>
+     <paramdef>string <parameter>mbox</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+	Returns true on success and false on error.
+    <para>  
+	imap_deletemailbox() deteles the specified mailbox.
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.imap-expunge">
+   <refnamediv>
+    <refname>imap_expunge</refname>
+    <refpurpose>Delete all messages marked for deletion</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>imap_expunge</function></funcdef>
+     <paramdef>int <parameter>imap_stream</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+	Returns true on success and false on error.
+    <para>  
+	imap_expunge() deletes all the messages marked for deletion by 
+	<function>imap_delete</function>.
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.imap-fetchbody">
+   <refnamediv>
+    <refname>imap_fetchbody</refname>
+    <refpurpose>Fetch a particular section of the body of the message</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>string <function>imap_fetchbody</function></funcdef>
+     <paramdef>int <parameter>imap_stream</parameter></paramdef>
+     <paramdef>int <parameter>msg_number</parameter></paramdef>
+     <paramdef>int <parameter>part_number</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+	This function causes a fetch of a particular section of the body of the
+	specified messages as a text string and returns that text string. The
+	section specification is a string of integers delimited by period which
+	index into a body part list as per the IMAP4 specification. Body parts
+	are not decoded by this function.
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.imap-fetchstructure">
+   <refnamediv>
+    <refname>imap_fetchstructure</refname>
+    <refpurpose>Read the structure of a particular message</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>array <function>imap_fetchstructure</function></funcdef>
+     <paramdef>int <parameter>imap_stream</parameter></paramdef>
+     <paramdef>int <parameter>msg_number</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+	This function causes a fetch of all the structured information for the
+	given msg_number. The returned value is an object with following
+	elements.
+    <para>  
+	<informalexample><literallayout>
+	type, encoding, ifsubtype, subtype, ifdescription, description, ifid,
+	id, lines, bytes, ifparameters
+	</literallayout></informalexample>
+	<para>
+	It also returns an array of objects called parameters[]. This object
+	has following properties.
+	<informalexample><literallayout>
+	attribute, value
+	</literallayout></informalexample>
+	In case of multipart, it also returns an array of objects of all the
+	properties, called parts[].
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.imap-header">
+   <refnamediv>
+    <refname>imap_header</refname>
+    <refpurpose>Read the header of the message</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>array <function>imap_header</function></funcdef>
+     <paramdef>int <parameter>imap_stream</parameter></paramdef>
+     <paramdef>int <parameter>msg_number</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+	This function returns an associative array of various header elements
+	of the specified message.
+    <para>  
+	<informalexample><literallayout>
+	Date, From, From2, Subject, To, cc, ReplyTo, Recent, Unseen,
+	Flagged, Deleted, Msgno, MailDate, Size
+	</literallayout></informalexample>
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.imap-headerinfo">
+   <refnamediv>
+    <refname>imap_headerinfo</refname>
+    <refpurpose>Read the header of the messsage</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>array <function>imap_headerinfo</function></funcdef>
+     <paramdef>int <parameter>imap_stream</parameter></paramdef>
+     <paramdef>int <parameter>msg_number</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+	Same as <function>imap_header</function>
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.imap-headers">
+   <refnamediv>
+    <refname>imap_headers</refname>
+    <refpurpose>Returns headers for all messages in a mailbox</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>array <function>imap_headers</function></funcdef>
+     <paramdef>int <parameter>imap_stream</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+	Returns an array of string formatted with header info. One element per
+	mail message.	
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.imap-listmailbox">
+   <refnamediv>
+    <refname>imap_listmailbox</refname>
+    <refpurpose>Read the list of mailboxes</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>array <function>imap_listmailbox</function></funcdef>
+     <paramdef>int <parameter>imap_stream</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+	Returns an array containing the names of the mailboxes.
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.imap-listsubscribed">
+   <refnamediv>
+    <refname>imap_listsubscribed</refname>
+    <refpurpose>List all the subscribed mailboxes</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>array <function>imap_listsubscribed</function></funcdef>
+     <paramdef>int <parameter>imap_stream</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+	Returns an array of all the mailboxes that you have subscribed.
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.imap-mail-copy">
+   <refnamediv>
+    <refname>imap_mail_copy</refname>
+    <refpurpose>Copy specified messages to a mailbox</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>imap_mail_copy</function></funcdef>
+     <paramdef>int <parameter>imap_stream</parameter></paramdef>
+     <paramdef>string <parameter>mbox</parameter></paramdef>
+     <paramdef>string <parameter>msglist</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+	Returns true on success and false on error.
+    <para>  
+	Copies mail messages specified by <parameter>msglist</parameter> to
+	specified mailbox. msglist is a range not just message numbers.
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.imap-mail-move">
+   <refnamediv>
+    <refname>imap_mail_move</refname>
+    <refpurpose>Move specified messages to a mailbox</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>imap_mail_move</function></funcdef>
+     <paramdef>int <parameter>imap_stream</parameter></paramdef>
+     <paramdef>string <parameter>mbox</parameter></paramdef>
+     <paramdef>string <parameter>msglist</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+	Returns true on success and false on error.
+    <para>  
+	Moves mail messages specified by <parameter>msglist</parameter> to
+	specified mailbox. msglist is a range not just message numbers.
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.imap-num-msg">
+   <refnamediv>
+    <refname>imap_num_msg</refname>
+    <refpurpose>Gives the number of messages in the current mailbox</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>imap_num_msg</function></funcdef>
+     <void>
+    </funcsynopsis>
+    <para>
+	Return the number of messages in the current mailbox.
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.imap-num-recent">
+   <refnamediv>
+    <refname>imap_num_recent</refname>
+    <refpurpose>Gives the number of recent messages in current mailbox</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>imap_num_recent</function></funcdef>
+     <paramdef>int <parameter>imap_stream</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+	Returns the number of recent messages in the current mailbox.
+    <para>  
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.imap-open">
+   <refnamediv>
+    <refname>imap_open</refname>
+    <refpurpose>Open an IMAP stream to a mailbox</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>imap_open</function></funcdef>
+     <paramdef>string <parameter>mailbox</parameter></paramdef>
+     <paramdef>string <parameter>username</parameter></paramdef>
+     <paramdef>string <parameter>password</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+	Returns an IMAP stream on success and false on error.
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.imap-ping">
+   <refnamediv>
+    <refname>imap_ping</refname>
+    <refpurpose>Check if the IMAP stream is still active</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>imap_ping</function></funcdef>
+     <paramdef>int <parameter>imap_stream</parameter></paramdef>
+    </funcsynopsis>
+    <para>  
+	Returns true if the stream is still alive, false otherwise.
+    <para>
+	imap_ping() function pings the stream to see it is still active. It may
+	discover new mail; this is the preferred method for a periodic "new
+	mail check" as well as a "keep alive" for servers which have inactivity
+	timeout. 
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.imap-renamemailbox">
+   <refnamediv>
+    <refname>imap_renamemailbox</refname>
+    <refpurpose>Rename an old mailbox to new mailbox</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>imap_renamemailbox</function></funcdef>
+     <paramdef>int <parameter>imap_stream</parameter></paramdef>
+     <paramdef>string <parameter>old_mbox</parameter></paramdef>
+     <paramdef>string <parameter>new_mbox</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+	Returns true on success and false on error.
+    <para>  
+	This function renames on old mailbox to new mailbox.
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.imap-reopen">
+   <refnamediv>
+    <refname>imap_reopen</refname>
+    <refpurpose>Reopen IMAP stream to new mailbox</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>imap_reopen</function></funcdef>
+     <paramdef>string <parameter>imap_stream</parameter></paramdef>
+     <paramdef>string <parameter>username</parameter></paramdef>
+     <paramdef>string <parameter>password</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+	Returns true on success and false on error.
+    <para>  
+	This function reopens the specified stream to new mailbox.
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.imap-subscribe">
+   <refnamediv>
+    <refname>imap_subscribe</refname>
+    <refpurpose>Subscribe to a mailbox</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>imap_subscribe</function></funcdef>
+     <paramdef>int <parameter>imap_stream</parameter></paramdef>
+     <paramdef>string <parameter>mbox</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+	Returns true on success and false on error.
+    <para>  
+	Subscribe to a new mailbox.
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.imap-undelete">
+   <refnamediv>
+    <refname>imap_undelete</refname>
+    <refpurpose>Unmark the message which is marked deleted</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>imap_undelete</function></funcdef>
+     <paramdef>int <parameter>imap_stream</parameter></paramdef>
+     <paramdef>int <parameter>msg_number</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+	Returns true on success and false on error.
+    <para>  
+	This function removes the deletion flag for a specified message, which
+	is set by <function>imap_delete</function>.
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.imap-unsubscribe">
+   <refnamediv>
+    <refname>imap_unsubscribe</refname>
+    <refpurpose>Unsubscribe from a mailbox</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>imap_unsubscribe</function></funcdef>
+     <paramdef>int <parameter>imap_stream</parameter></paramdef>
+     <paramdef>string <parameter>mbox</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+	Returns true on success and false on error.
+    <para>  
+	Unsubscribe from a specified mailbox.
+   </refsect1>
+  </refentry>
+
+  <refentry id="function.imap-qprint">
+   <refnamediv>
+    <refname>imap_qprint</refname>
+    <refpurpose>Convert a quoted-printable string to an 8 bit string</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>imap_unsubscribe</function></funcdef>
+     <paramdef>string <parameter>string</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+	Returns an 8 bit (binary) string
+    <para>  
+	Convert a quoted-printable string to an 8 bit string
+   </refsect1>
+  </refentry>
+
+  <refentry id="function.imap-8bit">
+   <refnamediv>
+    <refname>imap_8bit</refname>
+    <refpurpose>Convert an 8bit string to a quoted-printable string.</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>imap_8bit</function></funcdef>
+     <paramdef>string <parameter>string</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+	Returns a quoted-printable string
+    <para>  
+	Convert an 8bit string to a quoted-printable string.
+   </refsect1>
+  </refentry>
+
+ </reference>
+
+<!-- Keep this comment at the end of the file
+Local variables:
+mode: sgml
+sgml-omittag:t
+sgml-shorttag:t
+sgml-minimize-attributes:nil
+sgml-always-quote-attributes:t
+sgml-indent-step:1
+sgml-indent-data:t
+sgml-parent-document:nil
+sgml-default-dtd-file:"../manual.ced"
+sgml-exposed-tags:nil
+sgml-local-catalogs:nil
+sgml-local-ecat-files:nil
+End:
+-->

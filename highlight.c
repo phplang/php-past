@@ -5,18 +5,23 @@
    | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
-   | it under the terms of the GNU General Public License as published by |
-   | the Free Software Foundation; either version 2 of the License, or    |
-   | (at your option) any later version.                                  |
+   | it under the terms of one of the following licenses:                 |
+   |                                                                      |
+   |  A) the GNU General Public License as published by the Free Software |
+   |     Foundation; either version 2 of the License, or (at your option) |
+   |     any later version.                                               |
+   |                                                                      |
+   |  B) the PHP License as published by the PHP Development Team and     |
+   |     included in the distribution in the file: LICENSE                |
    |                                                                      |
    | This program is distributed in the hope that it will be useful,      |
    | but WITHOUT ANY WARRANTY; without even the implied warranty of       |
    | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the        |
    | GNU General Public License for more details.                         |
    |                                                                      |
-   | You should have received a copy of the GNU General Public License    |
-   | along with this program; if not, write to the Free Software          |
-   | Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.            |
+   | You should have received a copy of both licenses referred to here.   |
+   | If you did not, or have any questions about PHP licensing, please    |
+   | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
    | Authors: Andi Gutmans <andi@php.net>                                 |
    |          Zeev Suraski <bourbon@netvision.net.il>                     |
@@ -32,7 +37,7 @@ extern int phpleng;
 extern int ExecuteFlag,Execute; /* remove me */
 #endif
 
-#include "parser.h"
+#include "php.h"
 #include "language-parser.tab.h"
 #include "main.h"
 #include "highlight.h"
@@ -47,6 +52,7 @@ void syntax_highlight(Token *next_token)
 	switch (next_token->token_type) {
 		case FUNCTION:
 		case OLD_FUNCTION:
+		case PHP_CONST:
 		case CLASS:
 		case EXTENDS:
 		case VAR:
@@ -72,42 +78,44 @@ void syntax_highlight(Token *next_token)
 		case PHP_LIST:
 		case PHP_LINE:
 		case PHP_FILE:
-		case PHP_TRUE:
-		case PHP_FALSE:
 		case '{':
 		case '}':
 		case '(':
 		case ')':
-		case '"':
-		case '\'':
-		case '`':
 			highlight_keyword=1;
 			break;
 		case ';':
-			if (phpleng == 1) {
-				PUTS("<font color=\"");
+			if (phpleng == 1) { /* a real ;, as opposed to an implicit ; at the end of a PHP block */
+				PUTS("<FONT color=\"");
 				PUTS(php3_ini.highlight_keyword);
 				PUTS("\">");
+				html_putc(';');
+				PUTS("</FONT>");
 			}
-			highlight_keyword=0;
+			return;
+			break;
+		case '\'':
+		case '"':
+		case '`':
+			return; /* handled in the scanner */
 			break;
 		default:
 			highlight_keyword=0;
 			break;
 	}
 	if (highlight_keyword) {
-		PUTS("<font color=\"");
+		PUTS("<FONT color=\"");
 		PUTS(php3_ini.highlight_keyword);
 		PUTS("\">");
 	}
 	for (i = 0; i < phpleng; i++) {
 		html_putc(phptext[i]);
 	}
-	if (highlight_keyword || next_token->token_type==';') {
-		PUTS("</font>");
+	if (highlight_keyword) {
+		PUTS("</FONT>");
 	}
 	if (next_token->phplval.type==IS_STRING) {
-		efree(next_token->phplval.value.strval);
+		STR_FREE(next_token->phplval.value.str.val);
 	}
 }
 

@@ -30,18 +30,18 @@ Table of Contents
 
 2. Function Arguments
 
-   Arguments are always of type YYSTYPE.  This type contains a union which
+   Arguments are always of type pval.  This type contains a union which
    has the actual type of the argument.  So, if your function takes two
    arguments, you would do something like the following at the top of your
    function:
 
-       YYSTYPE *arg1, *arg2;
+       pval *arg1, *arg2;
        if (ARG_COUNT(ht) != 2 || getParameters(ht,2,&arg1,&arg2)==FAILURE) {
            WRONG_PARAM_COUNT;
        }
 
    NOTE: Arguments can be passed either by value or by reference. In both
-   cases you will need to pass &(YYSTYPE *) to getParameters. If you want to
+   cases you will need to pass &(pval *) to getParameters. If you want to
    check if the n'th parameter was sent to you by reference or not, you can
    use the function, ParameterPassedByReference(ht,n). It will return either
    1 or 0.
@@ -64,7 +64,7 @@ Table of Contents
    A function can take a variable number of arguments.  If your function can
    take either 2 or 3 arguments, use the following:
 
-       YYSTYPE *arg1, *arg2, *arg3;
+       pval *arg1, *arg2, *arg3;
        int arg_count = ARG_COUNT(ht);
 
        if (arg_count<2 || arg_count>3 ||
@@ -76,7 +76,7 @@ Table of Contents
 
 4. Using the function arguments
 
-   The type of each argument is stored in the YYSTYPE type field:
+   The type of each argument is stored in the pval type field:
 
 
    This type can be any of the following:
@@ -109,7 +109,7 @@ Table of Contents
 
    The actual argument is stored in a union.  
 
-   For type IS_STRING, use arg1->value.strval
+   For type IS_STRING, use arg1->value.str.val
             IS_LONG        arg1->value.lval
             IS_DOUBLE      arg1->value.dval
  
@@ -171,11 +171,11 @@ Table of Contents
   Also, the same funcions may be applied to arrays, as explained below.
   
   * To check whether a variable named $foo already exists in a symbol table:
-    if (hash_exists(active_symbol_table,"foo",strlen("foo"))) { exists... }
+    if (hash_exists(active_symbol_table,"foo",sizeof("foo"))) { exists... }
     else { doesn't exist }
   
   * If you also need to get the type of the variable, you can use:
-    hash_find(active_symbol_table,"foo",strlen("foo"),&yystype);
+    hash_find(active_symbol_table,"foo",sizeof("foo"),&yystype);
     check(yystype.type);
   
   Arrays in PHP 3.0 are implemented using the same hashtables as symbol tables.
@@ -188,30 +188,30 @@ Table of Contents
           or hash_find().
       2.  Code:
   
-      YYSTYPE arr;
+      pval arr;
   
       if (array_init(&arr) == FAILURE) { failed... };
-      hash_update(active_symbol_table,"foo",strlen("foo"),&arr,sizeof(YYSTYPE),NULL);
+      hash_update(active_symbol_table,"foo",sizeof("foo"),&arr,sizeof(pval),NULL);
   
   This code declares a new array, named $foo, in the active symbol table.
   This array is empty.
   
   Here's how to add new entries to it:
   
-      YYSTYPE entry;
+      pval entry;
   
       entry.type = IS_LONG;
       entry.value.lval = 5;
   
-      hash_update(arr.value.ht,"bar",strlen("bar"),&entry,sizeof(YYSTYPE),NULL); /* defines $foo["bar"] = 5 */
-      hash_index_update(arr.value.ht,7,&entry,sizeof(YYSTYPE),NULL); /* defines $foo[7] = 5 */
-      hash_next_index_insert(arr.value.ht,&entry,sizeof(YYSTYPE),NULL); /* defines the next free place in $foo[],
+      hash_update(arr.value.ht,"bar",sizeof("bar"),&entry,sizeof(pval),NULL); /* defines $foo["bar"] = 5 */
+      hash_index_update(arr.value.ht,7,&entry,sizeof(pval),NULL); /* defines $foo[7] = 5 */
+      hash_next_index_insert(arr.value.ht,&entry,sizeof(pval),NULL); /* defines the next free place in $foo[],
                                                                          * $foo[8], to be 5 (works like php2)
                                                                          */
   
   If you'd like to modify a value that you inserted to a hash, you must first retreive it from the hash.  To
-  prevent that overhead, you can supply a YYSTYPE ** to the hash add function, and it'll be updated with the
-  YYSTYPE * address of the inserted element inside the hash.  If that value is NULL (like in all of the
+  prevent that overhead, you can supply a pval ** to the hash add function, and it'll be updated with the
+  pval * address of the inserted element inside the hash.  If that value is NULL (like in all of the
   above examples) - that parameter is ignored.
 
   hash_next_index_insert() works more or less using the same logic
@@ -231,13 +231,13 @@ Table of Contents
   Of course, if the adding isn't done right after the array
   initialization, you'd probably have to look for the array first:
   
-    YYSTYPE *arr;
+    pval *arr;
   
-    if (hash_find(active_symbol_table,"foo",strlen("foo"),(void **)&arr)==FAILURE) { can't find... }
+    if (hash_find(active_symbol_table,"foo",sizeof("foo"),(void **)&arr)==FAILURE) { can't find... }
     else { use arr->value.ht... }
   
-  Note that hash_find receives a pointer to a YYSTYPE pointer, and
-  not a YYSTYPE pointer.
+  Note that hash_find receives a pointer to a pval pointer, and
+  not a pval pointer.
   
   Just about any hash function returns SUCCESS or FAILURE (except for
   hash_exists() that returns a boolean truth value).
@@ -254,8 +254,8 @@ Table of Contents
    RETURN_FALSE
    RETURN_TRUE
    RETURN_LONG(l)
-   RETURN_STRING(s)
-   RETURN_STRINGL(s,l)     Return string (s) specifying length (l).
+   RETURN_STRING(s,dup)        If dup is true, duplicates the string
+   RETURN_STRINGL(s,l,dup)     Return string (s) specifying length (l).
    RETURN_DOUBLE(d)
 
    These only set the return value:
@@ -263,8 +263,8 @@ Table of Contents
    RETVAL_FALSE
    RETVAL_TRUE
    RETVAL_LONG(l)
-   RETVAL_STRING(s)
-   RETVAL_STRINGL(s,l)     Return string (s) specifying length (l).
+   RETVAL_STRING(s,dup)       If dup is true, duplicates the string
+   RETVAL_STRINGL(s,l,dup)    Return string (s) specifying length (l).
    RETVAL_DOUBLE(d)
 
    The string macros above will all estrdup() the passed 's' argument,
@@ -351,7 +351,7 @@ Table of Contents
 
 	Using an existing resource:
 
-		YYSTYPE *resource_id;
+		pval *resource_id;
 		RESOURCE *resource;
 		int type;
 
@@ -365,7 +365,7 @@ Table of Contents
 
 	Deleting an existing resource:
 
-		YYSTYPE *resource_id;
+		pval *resource_id;
 		RESOURCE *resource;
 		int type;
 
@@ -373,7 +373,7 @@ Table of Contents
 		php3_list_delete(resource_id->value.lval);
    
 
-   The resource types should be registered in list.h, in enum
+   The resource types should be registered in php3_list.h, in enum
    list_entry_type.  In addition, one should add shutdown code for any
    new resource type defined, in list.c's list_entry_destructor() (even if
    you don't have anything to do on shutdown, you must add an empty case).

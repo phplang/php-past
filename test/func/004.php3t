@@ -3,7 +3,7 @@ General function test                                         ...
 --POST--
 --GET--
 --FILE--
-<?
+<?php 
 
 echo "Before function decleration...\n";
 

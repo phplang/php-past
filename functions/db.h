@@ -5,25 +5,30 @@
    | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
-   | it under the terms of the GNU General Public License as published by |
-   | the Free Software Foundation; either version 2 of the License, or    |
-   | (at your option) any later version.                                  |
+   | it under the terms of one of the following licenses:                 |
+   |                                                                      |
+   |  A) the GNU General Public License as published by the Free Software |
+   |     Foundation; either version 2 of the License, or (at your option) |
+   |     any later version.                                               |
+   |                                                                      |
+   |  B) the PHP License as published by the PHP Development Team and     |
+   |     included in the distribution in the file: LICENSE                |
    |                                                                      |
    | This program is distributed in the hope that it will be useful,      |
    | but WITHOUT ANY WARRANTY; without even the implied warranty of       |
    | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the        |
    | GNU General Public License for more details.                         |
    |                                                                      |
-   | You should have received a copy of the GNU General Public License    |
-   | along with this program; if not, write to the Free Software          |
-   | Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.            |
+   | You should have received a copy of both licenses referred to here.   |
+   | If you did not, or have any questions about PHP licensing, please    |
+   | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
    | Authors: Rasmus Lerdorf <rasmus@lerdorf.on.ca>                       |
    |          Jim Winstead <jimw@php.net>                                 |
    +----------------------------------------------------------------------+
  */
 
-/* $Id: db.h,v 1.16 1998/02/20 22:49:06 shane Exp $ */
+/* $Id: db.h,v 1.21 1998/05/15 10:57:20 zeev Exp $ */
 
 #ifndef _PHP3_DB_H
 #define _PHP3_DB_H
@@ -53,7 +58,7 @@ extern php3_module_entry dbm_module_entry;
 #define dbm_module_ptr NULL
 #endif
 
-dbm_info *_php3_finddbm(YYSTYPE *id,HashTable *list);
+dbm_info *_php3_finddbm(pval *id,HashTable *list);
 int _php3_dbmclose(dbm_info *info);
 dbm_info *_php3_dbmopen(char *filename, char *mode);
 int _php3_dbminsert(dbm_info *info, char *key, char *value);
@@ -65,8 +70,8 @@ char *_php3_dbmfirstkey(dbm_info *info);
 char *_php3_dbmnextkey(dbm_info *info, char *key);
 
 /* db file functions */
-extern int php3_minit_db(INITFUNCARG);
-extern int php3_rinit_db(INITFUNCARG);
+extern int php3_minit_db(INIT_FUNC_ARGS);
+extern int php3_rinit_db(INIT_FUNC_ARGS);
 extern void php3_info_db(void);
 extern void php3_dblist(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_dbmopen(INTERNAL_FUNCTION_PARAMETERS);

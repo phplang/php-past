@@ -3,7 +3,7 @@ Assigning from a function                                     ...
 --POST--
 --GET--
 --FILE--
-<?
+<?php 
 
   function rtn($rtn)
   {

@@ -5,18 +5,23 @@
    | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
-   | it under the terms of the GNU General Public License as published by |
-   | the Free Software Foundation; either version 2 of the License, or    |
-   | (at your option) any later version.                                  |
+   | it under the terms of one of the following licenses:                 |
+   |                                                                      |
+   |  A) the GNU General Public License as published by the Free Software |
+   |     Foundation; either version 2 of the License, or (at your option) |
+   |     any later version.                                               |
+   |                                                                      |
+   |  B) the PHP License as published by the PHP Development Team and     |
+   |     included in the distribution in the file: LICENSE                |
    |                                                                      |
    | This program is distributed in the hope that it will be useful,      |
    | but WITHOUT ANY WARRANTY; without even the implied warranty of       |
    | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the        |
    | GNU General Public License for more details.                         |
    |                                                                      |
-   | You should have received a copy of the GNU General Public License    |
-   | along with this program; if not, write to the Free Software          |
-   | Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.            |
+   | You should have received a copy of both licenses referred to here.   |
+   | If you did not, or have any questions about PHP licensing, please    |
+   | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
    | Authors: Jim Winstead (jimw@php.net)                                 |
    +----------------------------------------------------------------------+
@@ -30,9 +35,9 @@
 #endif
 #include <stdlib.h>
 
-#include "parser.h"
+#include "php.h"
 #include "internal_functions.h"
-#include "list.h"
+#include "php3_list.h"
 
 #if DBASE
 #include "../dbase/dbf.h"
@@ -68,7 +73,7 @@ static void _close_dbase(dbhead_t *dbhead)
 }
 
 
-int php3_minit_dbase(INITFUNCARG)
+int php3_minit_dbase(INIT_FUNC_ARGS)
 {
 #if defined(THREAD_SAFE)
 	dbase_global_struct *dbase_globals;
@@ -76,8 +81,8 @@ int php3_minit_dbase(INITFUNCARG)
 	CREATE_MUTEX(dbase_mutex,"DBase_TLS");
 	SET_MUTEX(dbase_mutex);
 	numthreads++;
-	if(numthreads==1){
-	if((DbaseTls=TlsAlloc())==0xFFFFFFFF){
+	if (numthreads==1){
+	if ((DbaseTls=TlsAlloc())==0xFFFFFFFF){
 		FREE_MUTEX(dbase_mutex);
 		return 0;
 	}}
@@ -99,8 +104,8 @@ static int php3_mend_dbase(void){
 #if !defined(COMPILE_DL)
 	SET_MUTEX(dbase_mutex);
 	numthreads--;
-	if(!numthreads){
-	if(!TlsFree(DbaseTls)){
+	if (!numthreads){
+	if (!TlsFree(DbaseTls)){
 		FREE_MUTEX(dbase_mutex);
 		return 0;
 	}}
@@ -111,7 +116,7 @@ static int php3_mend_dbase(void){
 }
 
 void php3_dbase_open(INTERNAL_FUNCTION_PARAMETERS) {
-	YYSTYPE *dbf_name, *options;
+	pval *dbf_name, *options;
 	dbhead_t *dbh;
 	int handle;
 	DBase_TLS_VARS;
@@ -122,9 +127,9 @@ void php3_dbase_open(INTERNAL_FUNCTION_PARAMETERS) {
 	convert_to_string(dbf_name);
 	convert_to_long(options);
 
-	dbh = dbf_open(dbf_name->value.strval, options->value.lval);
+	dbh = dbf_open(dbf_name->value.str.val, options->value.lval);
 	if (dbh == NULL) {
-		php3_error(E_WARNING, "unable to open database %s", dbf_name->value.strval);
+		php3_error(E_WARNING, "unable to open database %s", dbf_name->value.str.val);
 		RETURN_FALSE;
 	}
 
@@ -133,7 +138,7 @@ void php3_dbase_open(INTERNAL_FUNCTION_PARAMETERS) {
 }
 
 void php3_dbase_close(INTERNAL_FUNCTION_PARAMETERS) {
-	YYSTYPE *dbh_id;
+	pval *dbh_id;
 	dbhead_t *dbh;
 	int dbh_type;
 	DBase_TLS_VARS;
@@ -149,10 +154,11 @@ void php3_dbase_close(INTERNAL_FUNCTION_PARAMETERS) {
 	}
 
 	php3_list_delete(dbh_id->value.lval);
+	RETURN_TRUE;
 }
 
 void php3_dbase_numrecords(INTERNAL_FUNCTION_PARAMETERS) {
-	YYSTYPE *dbh_id;
+	pval *dbh_id;
 	dbhead_t *dbh;
 	int dbh_type;
 	DBase_TLS_VARS;
@@ -171,7 +177,7 @@ void php3_dbase_numrecords(INTERNAL_FUNCTION_PARAMETERS) {
 }
 
 void php3_dbase_numfields(INTERNAL_FUNCTION_PARAMETERS) {
-	YYSTYPE *dbh_id;
+	pval *dbh_id;
 	dbhead_t *dbh;
 	int dbh_type;
 	DBase_TLS_VARS;
@@ -190,7 +196,7 @@ void php3_dbase_numfields(INTERNAL_FUNCTION_PARAMETERS) {
 }
 
 void php3_dbase_pack(INTERNAL_FUNCTION_PARAMETERS) {
-	YYSTYPE *dbh_id;
+	pval *dbh_id;
 	dbhead_t *dbh;
 	int dbh_type;
 	DBase_TLS_VARS;
@@ -207,10 +213,11 @@ void php3_dbase_pack(INTERNAL_FUNCTION_PARAMETERS) {
 
         pack_dbf(dbh);
         put_dbf_info(dbh);
+	RETURN_TRUE;
 }
 
 void php3_dbase_add_record(INTERNAL_FUNCTION_PARAMETERS) {
-	YYSTYPE *dbh_id, *fields, *field;
+	pval *dbh_id, *fields, *field;
 	dbhead_t *dbh;
 	int dbh_type;
 
@@ -257,7 +264,7 @@ void php3_dbase_add_record(INTERNAL_FUNCTION_PARAMETERS) {
 			RETURN_FALSE;
 		}
 		convert_to_string(field);
-		sprintf(t_cp, cur_f->db_format, field->value.strval); 
+		sprintf(t_cp, cur_f->db_format, field->value.str.val); 
 		t_cp += cur_f->db_flen;
 	}
 
@@ -270,10 +277,12 @@ void php3_dbase_add_record(INTERNAL_FUNCTION_PARAMETERS) {
 
         put_dbf_info(dbh);
 	efree(cp);
+
+	RETURN_TRUE;
 }
 
 void php3_dbase_delete_record(INTERNAL_FUNCTION_PARAMETERS) {
-	YYSTYPE *dbh_id, *record;
+	pval *dbh_id, *record;
 	dbhead_t *dbh;
 	int dbh_type;
 	DBase_TLS_VARS;
@@ -296,13 +305,15 @@ void php3_dbase_delete_record(INTERNAL_FUNCTION_PARAMETERS) {
 		} else {
 			php3_error(E_WARNING, "unable to delete record %d", record->value.lval);
 		}
+		RETURN_FALSE;
 	}
 
         put_dbf_info(dbh);
+	RETURN_TRUE;
 }
 
 void php3_dbase_get_record(INTERNAL_FUNCTION_PARAMETERS) {
-	YYSTYPE *dbh_id, *record;
+	pval *dbh_id, *record;
 	dbhead_t *dbh;
 	int dbh_type;
 	dbfield_t *dbf, *cur_f;
@@ -341,11 +352,11 @@ void php3_dbase_get_record(INTERNAL_FUNCTION_PARAMETERS) {
 		/* now convert it to the right php internal type */
 	        switch (cur_f->db_type) {
 		case 'C':
+		case 'D':
 			add_next_index_string(return_value,str_value,1);
 			break;
 		case 'N':	/* FALLS THROUGH */
 		case 'L':	/* FALLS THROUGH */
-		case 'D':
 			if (cur_f->db_fdc == 0) {
 				add_next_index_long(return_value, strtol(str_value, NULL, 10));
 			} else {
@@ -376,7 +387,7 @@ void php3_dbase_get_record(INTERNAL_FUNCTION_PARAMETERS) {
 }
 
 void php3_dbase_create(INTERNAL_FUNCTION_PARAMETERS) {
-	YYSTYPE *filename, *fields, *field, *value;
+	pval *filename, *fields, *field, *value;
 	int fd;
 	dbhead_t *dbh;
 
@@ -395,7 +406,7 @@ void php3_dbase_create(INTERNAL_FUNCTION_PARAMETERS) {
 		RETURN_FALSE;
 	}
 
-	if ((fd = open(filename->value.strval, O_RDWR|O_CREAT, 0644)) < 0) {
+	if ((fd = open(filename->value.str.val, O_RDWR|O_CREAT, 0644)) < 0) {
 		php3_error(E_WARNING, "Unable to create database (%d): %s", errno, strerror(errno));
 		RETURN_FALSE;
 	}
@@ -443,7 +454,12 @@ void php3_dbase_create(INTERNAL_FUNCTION_PARAMETERS) {
 			RETURN_FALSE;
 		}
 		convert_to_string(value);
-		copy_crimp(cur_f->db_fname, value->value.strval, value->strlen);
+		if (value->value.str.len > 10 || value->value.str.len == 0) {
+			php3_error(E_WARNING, "invalid field name '%s' (must be non-empty and less than or equal to 10 characters)", value->value.str.val);
+			free_dbf_head(dbh);
+			RETURN_FALSE;
+		}
+		copy_crimp(cur_f->db_fname, value->value.str.val, value->value.str.len);
 
 		/* field type */
 		if (hash_index_find(field->value.ht,1,(void **)&value) == FAILURE) {
@@ -451,7 +467,7 @@ void php3_dbase_create(INTERNAL_FUNCTION_PARAMETERS) {
 			RETURN_FALSE;
 		}
 		convert_to_string(value);
-		cur_f->db_type = toupper(*value->value.strval);
+		cur_f->db_type = toupper(*value->value.str.val);
 
 		cur_f->db_fdc = 0;
 
@@ -519,7 +535,7 @@ function_entry dbase_functions[] = {
 };
 
 php3_module_entry dbase_module_entry = {
-	"DBase", dbase_functions, php3_minit_dbase, php3_mend_dbase, NULL, NULL, NULL, 0, 0, 0, NULL
+	"DBase", dbase_functions, php3_minit_dbase, php3_mend_dbase, NULL, NULL, NULL, STANDARD_MODULE_PROPERTIES
 };
 
 
@@ -534,22 +550,6 @@ BOOL WINAPI DllMain(HANDLE hModule,
                       DWORD  ul_reason_for_call, 
                       LPVOID lpReserved)
 {
-    switch( ul_reason_for_call ) {
-    case DLL_PROCESS_ATTACH:
-		if((DbaseTls=TlsAlloc())==0xFFFFFFFF){
-			return 0;
-		}
-		break;    
-    case DLL_THREAD_ATTACH:
-		break;
-    case DLL_THREAD_DETACH:
-		break;
-	case DLL_PROCESS_DETACH:
-		if(!TlsFree(DbaseTls)){
-			return 0;
-		}
-		break;
-    }
     return 1;
 }
 #endif

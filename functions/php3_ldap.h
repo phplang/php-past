@@ -5,18 +5,23 @@
    | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
-   | it under the terms of the GNU General Public License as published by |
-   | the Free Software Foundation; either version 2 of the License, or    |
-   | (at your option) any later version.                                  |
+   | it under the terms of one of the following licenses:                 |
+   |                                                                      |
+   |  A) the GNU General Public License as published by the Free Software |
+   |     Foundation; either version 2 of the License, or (at your option) |
+   |     any later version.                                               |
+   |                                                                      |
+   |  B) the PHP License as published by the PHP Development Team and     |
+   |     included in the distribution in the file: LICENSE                |
    |                                                                      |
    | This program is distributed in the hope that it will be useful,      |
    | but WITHOUT ANY WARRANTY; without even the implied warranty of       |
    | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the        |
    | GNU General Public License for more details.                         |
    |                                                                      |
-   | You should have received a copy of the GNU General Public License    |
-   | along with this program; if not, write to the Free Software          |
-   | Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.            |
+   | You should have received a copy of both licenses referred to here.   |
+   | If you did not, or have any questions about PHP licensing, please    |
+   | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
    | Authors: Amitay Isaacs <amitay@cse.iitb.ernet.in>                    |
    |          Eric Warnke   <ericw@albany.edu>                            |
@@ -24,7 +29,7 @@
  */
 
 
-/* $Id: php3_ldap.h,v 1.11 1998/02/18 00:02:49 amitay Exp $ */
+/* $Id: php3_ldap.h,v 1.18 1998/05/15 10:57:33 zeev Exp $ */
 
 #ifndef _PHP3_LDAP_H
 #define _PHP3_LDAP_H
@@ -40,7 +45,7 @@ extern php3_module_entry ldap_module_entry;
 #define ldap_module_ptr &ldap_module_entry
 
 /* LDAP functions */
-extern int php3_minit_ldap(INITFUNCARG);
+extern int php3_minit_ldap(INIT_FUNC_ARGS);
 
 extern void php3_info_ldap(void);
 
@@ -69,7 +74,6 @@ extern void php3_ldap_get_values(INTERNAL_FUNCTION_PARAMETERS);
 
 /*extern void php3_ber_free(INTERNAL_FUNCTION_PARAMETERS);*/
 extern void php3_ldap_get_dn(INTERNAL_FUNCTION_PARAMETERS);
-extern void php3_ldap_explode_rdn(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_ldap_explode_dn(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_ldap_dn2ufn(INTERNAL_FUNCTION_PARAMETERS);
 

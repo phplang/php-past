@@ -1,2 +1,2 @@
 <!ENTITY php.version "@PHP_VERSION@">
-<!ENTITY php.build-date "@BUILD_DATE@">
+<!ENTITY php.build-date "@PHP_BUILD_DATE@">

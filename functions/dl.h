@@ -5,18 +5,23 @@
    | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
-   | it under the terms of the GNU General Public License as published by |
-   | the Free Software Foundation; either version 2 of the License, or    |
-   | (at your option) any later version.                                  |
+   | it under the terms of one of the following licenses:                 |
+   |                                                                      |
+   |  A) the GNU General Public License as published by the Free Software |
+   |     Foundation; either version 2 of the License, or (at your option) |
+   |     any later version.                                               |
+   |                                                                      |
+   |  B) the PHP License as published by the PHP Development Team and     |
+   |     included in the distribution in the file: LICENSE                |
    |                                                                      |
    | This program is distributed in the hope that it will be useful,      |
    | but WITHOUT ANY WARRANTY; without even the implied warranty of       |
    | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the        |
    | GNU General Public License for more details.                         |
    |                                                                      |
-   | You should have received a copy of the GNU General Public License    |
-   | along with this program; if not, write to the Free Software          |
-   | Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.            |
+   | You should have received a copy of both licenses referred to here.   |
+   | If you did not, or have any questions about PHP licensing, please    |
+   | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
    | Authors: Brian Schaffner <brian@tool.net>                            |
    |          Shane Caraveo <shane@caraveo.com>                           |
@@ -25,12 +30,12 @@
  */
 
 
-/* $Id: dl.h,v 1.15 1997/12/31 15:56:23 rasmus Exp $ */
+/* $Id: dl.h,v 1.20 1998/05/15 10:57:21 zeev Exp $ */
 
 #ifndef _DL_H
 #define _DL_H
 
-extern void php3_dl(YYSTYPE *file,int type,YYSTYPE *return_value);
+extern void php3_dl(pval *file,int type,pval *return_value);
 
 
 #if HAVE_LIBDL
@@ -40,7 +45,7 @@ extern php3_module_entry dl_module_entry;
 
 /* dynamic loading functions */
 extern void dl(INTERNAL_FUNCTION_PARAMETERS);
-extern int php3_minit_dl(INITFUNCARG);
+extern int php3_minit_dl(INIT_FUNC_ARGS);
 extern int php3_mshutdown_dl(void);
 extern int php3_rshutdown_dl(void);
 extern void php3_info_dl(void);

@@ -3,7 +3,7 @@ Passing to a function                                         ...
 --POST--
 --GET--
 --FILE--
-<?
+<?php 
 
 function ary ($b)
 {

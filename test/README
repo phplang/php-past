@@ -31,5 +31,3 @@ b=There
 Content-type: text/html
 Hello There
 
-Note that in order to run the mSQL tests, you need to create a test
-database.  See msql/README.

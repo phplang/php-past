@@ -21,7 +21,7 @@ static int
 optiserr(int argc, char * const *argv, int oint, const char *optstr,
          int optchr, int err)
 {
-    if(opterr)
+    if (opterr)
     {
         fprintf(stderr, "Error in argument %d, char %d: ", oint, optchr+1);
         switch(err)
@@ -52,11 +52,11 @@ getopt(int argc, char* const *argv, const char *optstr)
 
     char *cp;
 
-    if(optind >= argc)
+    if (optind >= argc)
         return(EOF);
-    if(!dash && (argv[optind][0] !=  '-'))
+    if (!dash && (argv[optind][0] !=  '-'))
         return(EOF);
-    if(!dash && (argv[optind][0] ==  '-') && !argv[optind][1])
+    if (!dash && (argv[optind][0] ==  '-') && !argv[optind][1])
     {
         /*
          * use to specify stdin. Need to let pgm process this and
@@ -64,13 +64,13 @@ getopt(int argc, char* const *argv, const char *optstr)
          */
         return(EOF);
     }
-    if((argv[optind][0] == '-') && (argv[optind][1] == '-'))
+    if ((argv[optind][0] == '-') && (argv[optind][1] == '-'))
     {
         /* -- indicates end of args */
         optind++;
         return(EOF);
     }
-    if(!dash)
+    if (!dash)
     {
         assert((argv[optind][0] == '-') && argv[optind][1]);
         dash = 1;
@@ -79,18 +79,18 @@ getopt(int argc, char* const *argv, const char *optstr)
 
     /* Check if the guy tries to do a -: kind of flag */
     assert(dash);
-    if(argv[optind][optchr] == ':')
+    if (argv[optind][optchr] == ':')
     {
         dash = 0;
         optind++;
         return(optiserr(argc, argv, optind-1, optstr, optchr, OPTERRCOLON));
     }
-    if(!(cp = strchr(optstr, argv[optind][optchr])))
+    if (!(cp = strchr(optstr, argv[optind][optchr])))
     {
         int errind = optind;
         int errchr = optchr;
 
-        if(!argv[optind][optchr+1])
+        if (!argv[optind][optchr+1])
         {
             dash = 0;
             optind++;
@@ -99,18 +99,18 @@ getopt(int argc, char* const *argv, const char *optstr)
             optchr++;
         return(optiserr(argc, argv, errind, optstr, errchr, OPTERRNF));
     }
-    if(cp[1] == ':')
+    if (cp[1] == ':')
     {
         dash = 0;
         optind++;
-        if(optind == argc)
+        if (optind == argc)
             return(optiserr(argc, argv, optind-1, optstr, optchr, OPTERRARG));
         optarg = argv[optind++];
         return(*cp);
     }
     else
     {
-        if(!argv[optind][optchr+1])
+        if (!argv[optind][optchr+1])
         {
             dash = 0;
             optind++;

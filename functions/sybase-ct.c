@@ -5,30 +5,35 @@
    | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
-   | it under the terms of the GNU General Public License as published by |
-   | the Free Software Foundation; either version 2 of the License, or    |
-   | (at your option) any later version.                                  |
+   | it under the terms of one of the following licenses:                 |
+   |                                                                      |
+   |  A) the GNU General Public License as published by the Free Software |
+   |     Foundation; either version 2 of the License, or (at your option) |
+   |     any later version.                                               |
+   |                                                                      |
+   |  B) the PHP License as published by the PHP Development Team and     |
+   |     included in the distribution in the file: LICENSE                |
    |                                                                      |
    | This program is distributed in the hope that it will be useful,      |
    | but WITHOUT ANY WARRANTY; without even the implied warranty of       |
    | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the        |
    | GNU General Public License for more details.                         |
    |                                                                      |
-   | You should have received a copy of the GNU General Public License    |
-   | along with this program; if not, write to the Free Software          |
-   | Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.            |
+   | You should have received a copy of both licenses referred to here.   |
+   | If you did not, or have any questions about PHP licensing, please    |
+   | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
    | Authors: Zeev Suraski <bourbon@netvision.net.il>                     |
    +----------------------------------------------------------------------+
  */
  
-/* $Id: sybase-ct.c,v 1.28 1998/02/24 14:48:17 zeev Exp $ */
+/* $Id: sybase-ct.c,v 1.41 1998/05/16 11:53:44 zeev Exp $ */
 
 
 #ifndef MSVC5
 #include "config.h"
 #endif
-#include "parser.h"
+#include "php.h"
 #include "internal_functions.h"
 #include "php3_sybase-ct.h"
 #include "php3_string.h"
@@ -36,7 +41,7 @@
 #if HAVE_SYBASE_CT
 
 #include <ctpublic.h>
-#include "list.h"
+#include "php3_list.h"
 
 
 function_entry sybct_functions[] = {
@@ -78,7 +83,7 @@ function_entry sybct_functions[] = {
 };
 
 php3_module_entry sybct_module_entry = {
-	"Sybase SQL - CT", sybct_functions, php3_minit_sybct, php3_mshutdown_sybct, php3_rinit_sybct, php3_rshutdown_sybct, php3_info_sybct, 0, 0, 0, NULL
+	"Sybase SQL - CT", sybct_functions, php3_minit_sybct, php3_mshutdown_sybct, php3_rinit_sybct, php3_rshutdown_sybct, php3_info_sybct, STANDARD_MODULE_PROPERTIES
 };
 
 #if COMPILE_DL
@@ -171,7 +176,7 @@ static CS_RETCODE _server_message_handler(CS_CONTEXT *context, CS_CONNECTION *co
 }
 
 
-int php3_minit_sybct(INITFUNCARG)
+int php3_minit_sybct(INIT_FUNC_ARGS)
 {
 	if (cs_ctx_alloc(CTLIB_VERSION, &context)!=CS_SUCCEED || ct_init(context,CTLIB_VERSION)!=CS_SUCCEED) {
 		return FAILURE;
@@ -212,7 +217,7 @@ int php3_minit_sybct(INITFUNCARG)
 }
 
 
-int php3_rinit_sybct(INITFUNCARG)
+int php3_rinit_sybct(INIT_FUNC_ARGS)
 {
 	php3_sybct_module.default_link=-1;
 	php3_sybct_module.num_links = php3_sybct_module.num_persistent;
@@ -257,37 +262,37 @@ static void php3_sybct_do_connect(INTERNAL_FUNCTION_PARAMETERS,int persistent)
 			strcpy(hashed_details,"sybct___");
 			break;
 		case 1: {
-				YYSTYPE *yyhost;
+				pval *yyhost;
 				
 				if (getParameters(ht, 1, &yyhost)==FAILURE) {
 					RETURN_FALSE;
 				}
 				convert_to_string(yyhost);
-				host = yyhost->value.strval;
+				host = yyhost->value.str.val;
 				user=passwd=NULL;
-				hashed_details_length = yyhost->strlen+5+3;
+				hashed_details_length = yyhost->value.str.len+5+3;
 				hashed_details = (char *) emalloc(hashed_details_length+1);
-				sprintf(hashed_details,"sybct_%s__",yyhost->value.strval);
+				sprintf(hashed_details,"sybct_%s__",yyhost->value.str.val);
 			}
 			break;
 		case 2: {
-				YYSTYPE *yyhost,*yyuser;
+				pval *yyhost,*yyuser;
 				
 				if (getParameters(ht, 2, &yyhost, &yyuser)==FAILURE) {
 					RETURN_FALSE;
 				}
 				convert_to_string(yyhost);
 				convert_to_string(yyuser);
-				host = yyhost->value.strval;
-				user = yyuser->value.strval;
+				host = yyhost->value.str.val;
+				user = yyuser->value.str.val;
 				passwd=NULL;
-				hashed_details_length = yyhost->strlen+yyuser->strlen+5+3;
+				hashed_details_length = yyhost->value.str.len+yyuser->value.str.len+5+3;
 				hashed_details = (char *) emalloc(hashed_details_length+1);
-				sprintf(hashed_details,"sybct_%s_%s_",yyhost->value.strval,yyuser->value.strval);
+				sprintf(hashed_details,"sybct_%s_%s_",yyhost->value.str.val,yyuser->value.str.val);
 			}
 			break;
 		case 3: {
-				YYSTYPE *yyhost,*yyuser,*yypasswd;
+				pval *yyhost,*yyuser,*yypasswd;
 			
 				if (getParameters(ht, 3, &yyhost, &yyuser, &yypasswd) == FAILURE) {
 					RETURN_FALSE;
@@ -295,12 +300,12 @@ static void php3_sybct_do_connect(INTERNAL_FUNCTION_PARAMETERS,int persistent)
 				convert_to_string(yyhost);
 				convert_to_string(yyuser);
 				convert_to_string(yypasswd);
-				host = yyhost->value.strval;
-				user = yyuser->value.strval;
-				passwd = yypasswd->value.strval;
-				hashed_details_length = yyhost->strlen+yyuser->strlen+yypasswd->strlen+5+3;
+				host = yyhost->value.str.val;
+				user = yyuser->value.str.val;
+				passwd = yypasswd->value.str.val;
+				hashed_details_length = yyhost->value.str.len+yyuser->value.str.len+yypasswd->value.str.len+5+3;
 				hashed_details = (char *) emalloc(hashed_details_length+1);
-				sprintf(hashed_details,"sybct_%s_%s_%s",yyhost->value.strval,yyuser->value.strval,yypasswd->value.strval); /* SAFE */
+				sprintf(hashed_details,"sybct_%s_%s_%s",yyhost->value.str.val,yyuser->value.str.val,yypasswd->value.str.val); /* SAFE */
 			}
 			break;
 		default:
@@ -491,7 +496,7 @@ void php3_sybct_pconnect(INTERNAL_FUNCTION_PARAMETERS)
 
 void php3_sybct_close(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *sybct_link_index;
+	pval *sybct_link_index;
 	int id,type;
 	
 	switch (ARG_COUNT(ht)) {
@@ -568,7 +573,7 @@ static int exec_cmd(sybct_link *sybct_ptr,char *cmdbuf)
 
 void php3_sybct_select_db(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *db,*sybct_link_index;
+	pval *db,*sybct_link_index;
 	int id,type;
 	char *cmdbuf;
 	sybct_link  *sybct_ptr;
@@ -601,8 +606,8 @@ void php3_sybct_select_db(INTERNAL_FUNCTION_PARAMETERS)
 	}
 	
 	convert_to_string(db);
-	cmdbuf = (char *) emalloc(sizeof("use ")+db->strlen+1);
-	sprintf(cmdbuf,"use %s",db->value.strval); /* SAFE */
+	cmdbuf = (char *) emalloc(sizeof("use ")+db->value.str.len+1);
+	sprintf(cmdbuf,"use %s",db->value.str.val); /* SAFE */
 
 	if (exec_cmd(sybct_ptr,cmdbuf)==FAILURE) {
 		efree(cmdbuf);
@@ -616,7 +621,7 @@ void php3_sybct_select_db(INTERNAL_FUNCTION_PARAMETERS)
 
 void php3_sybct_query(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *query,*sybct_link_index;
+	pval *query,*sybct_link_index;
 	int id,type;
 	sybct_link *sybct_ptr;
 	sybct_result *result;
@@ -630,6 +635,8 @@ void php3_sybct_query(INTERNAL_FUNCTION_PARAMETERS)
 	CS_INT *lengths;
 	CS_SMALLINT *indicators;
 	int failure=0;
+	unsigned char *numerics;
+	CS_INT *types;
 	
 	switch(ARG_COUNT(ht)) {
 		case 1:
@@ -658,7 +665,7 @@ void php3_sybct_query(INTERNAL_FUNCTION_PARAMETERS)
 	
 	convert_to_string(query);
 	
-	if (ct_command(sybct_ptr->cmd, CS_LANG_CMD, query->value.strval, CS_NULLTERM, CS_UNUSED)!=CS_SUCCEED) {
+	if (ct_command(sybct_ptr->cmd, CS_LANG_CMD, query->value.str.val, CS_NULLTERM, CS_UNUSED)!=CS_SUCCEED) {
 		RETURN_FALSE;
 	}
 	if (ct_send(sybct_ptr->cmd)!=CS_SUCCEED) {
@@ -698,7 +705,7 @@ void php3_sybct_query(INTERNAL_FUNCTION_PARAMETERS)
 	}
 	
 	result = (sybct_result *) emalloc(sizeof(sybct_result));
-	result->data = (YYSTYPE **) emalloc(sizeof(YYSTYPE *)*SYBASE_ROWS_BLOCK);
+	result->data = (pval **) emalloc(sizeof(pval *)*SYBASE_ROWS_BLOCK);
 	result->sybct_ptr = sybct_ptr;
 	result->cur_field=result->cur_row=result->num_rows=0;
 	result->num_fields = num_fields;
@@ -707,50 +714,63 @@ void php3_sybct_query(INTERNAL_FUNCTION_PARAMETERS)
 	lengths = (CS_INT *) emalloc(sizeof(CS_INT)*num_fields);
 	indicators = (CS_SMALLINT *) emalloc(sizeof(CS_INT)*num_fields);
 	datafmt = (CS_DATAFMT *) emalloc(sizeof(CS_DATAFMT)*num_fields);
+	numerics = (unsigned char *) emalloc(sizeof(unsigned char)*num_fields);
+	types = (CS_INT *) emalloc(sizeof(CS_INT)*num_fields);
 	
 
 	for (i=0; i<num_fields; i++) {
 		ct_describe(sybct_ptr->cmd,i+1,&datafmt[i]);
+		types[i] = datafmt[i].datatype;
 		switch (datafmt[i].datatype) {
 			case CS_CHAR_TYPE:
 			case CS_VARCHAR_TYPE:
 			case CS_TEXT_TYPE:
 			case CS_IMAGE_TYPE:
 				datafmt[i].maxlength++;
+				numerics[i] = 0;
 				break;
 			case CS_BINARY_TYPE:
 			case CS_VARBINARY_TYPE:
 				datafmt[i].maxlength *= 2;
 				datafmt[i].maxlength++;
+				numerics[i] = 0;
 				break;
 			case CS_BIT_TYPE:
 			case CS_TINYINT_TYPE:
-				datafmt[i].maxlength = 3;
+				datafmt[i].maxlength = 4;
+				numerics[i] = 1;
 				break;
 			case CS_SMALLINT_TYPE:
 				datafmt[i].maxlength = 6;
+				numerics[i] = 1;
 				break;
 			case CS_INT_TYPE:
 				datafmt[i].maxlength = 11;
+				numerics[i] = 1;
 				break;
 			case CS_REAL_TYPE:
 			case CS_FLOAT_TYPE:
 				datafmt[i].maxlength = 20;
+				numerics[i] = 1;
 				break;
 			case CS_MONEY_TYPE:
 			case CS_MONEY4_TYPE:
 				datafmt[i].maxlength = 24;
+				numerics[i] = 0;
 				break;
 			case CS_DATETIME_TYPE:
 			case CS_DATETIME4_TYPE:
 				datafmt[i].maxlength = 30;
+				numerics[i] = 0;
 				break;
 			case CS_NUMERIC_TYPE:
 			case CS_DECIMAL_TYPE:
 				datafmt[i].maxlength = CS_MAX_PREC+1;
+				numerics[i] = 1;
 				break;
 			default:
 				datafmt[i].maxlength++;
+				numerics[i] = 0;
 				break;
 		}
 		tmp_buffer[i] = (char *)emalloc(datafmt[i].maxlength);
@@ -764,7 +784,7 @@ void php3_sybct_query(INTERNAL_FUNCTION_PARAMETERS)
 			|| retcode==CS_ROW_FAIL) {
 		result->num_rows += rows_read;
 		if (result->num_rows > blocks_initialized*SYBASE_ROWS_BLOCK) {
-			result->data = (YYSTYPE **) erealloc(result->data,sizeof(YYSTYPE *)*SYBASE_ROWS_BLOCK*(++blocks_initialized));
+			result->data = (pval **) erealloc(result->data,sizeof(pval *)*SYBASE_ROWS_BLOCK*(++blocks_initialized));
 		}
 		/*
 		if (retcode==CS_ROW_FAIL) {
@@ -774,13 +794,13 @@ void php3_sybct_query(INTERNAL_FUNCTION_PARAMETERS)
 		if (rows_read<=0) {
 			break;
 		}
-		result->data[result->num_rows-1] = (YYSTYPE *) emalloc(sizeof(YYSTYPE)*num_fields);
+		result->data[result->num_rows-1] = (pval *) emalloc(sizeof(pval)*num_fields);
 		for (j=0; j<num_fields; j++) {
 			if (indicators[j] && (!tmp_buffer[j] || lengths[j]==0)) { /* null value */
 				var_reset(&result->data[i][j]);
 			} else {
-				result->data[i][j].strlen = lengths[j]-1;  /* we don't need the NULL in the length */
-				result->data[i][j].value.strval = estrndup(tmp_buffer[j],lengths[j]);
+				result->data[i][j].value.str.len = lengths[j]-1;  /* we don't need the NULL in the length */
+				result->data[i][j].value.str.val = estrndup(tmp_buffer[j],lengths[j]);
 				result->data[i][j].type = IS_STRING;
 			}
 		}
@@ -805,10 +825,14 @@ void php3_sybct_query(INTERNAL_FUNCTION_PARAMETERS)
 		}
 		result->fields[i].column_source = empty_string;
 		result->fields[i].max_length = datafmt[i].maxlength-1;
+		result->fields[i].numeric = numerics[i];
+		result->fields[i].type = types[i];
 	}
 	efree(datafmt);
 	efree(lengths);
 	efree(indicators);
+	efree(numerics);
+	efree(types);
 	for (i=0; i<num_fields; i++) {
 		efree(tmp_buffer[i]);
 	}
@@ -844,7 +868,7 @@ void php3_sybct_query(INTERNAL_FUNCTION_PARAMETERS)
 
 void php3_sybct_free_result(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *sybct_result_index;
+	pval *sybct_result_index;
 	sybct_result *result;
 	int type;
 	
@@ -853,6 +877,9 @@ void php3_sybct_free_result(INTERNAL_FUNCTION_PARAMETERS)
 	}
 	
 	convert_to_long(sybct_result_index);
+	if (sybct_result_index->value.lval==0) {
+		RETURN_FALSE;
+	}
 	result = (sybct_result *) php3_list_find(sybct_result_index->value.lval,&type);
 	
 	if (type!=php3_sybct_module.le_result) {
@@ -860,6 +887,7 @@ void php3_sybct_free_result(INTERNAL_FUNCTION_PARAMETERS)
 		RETURN_FALSE;
 	}
 	php3_list_delete(sybct_result_index->value.lval);
+	RETURN_TRUE;
 }
 
 
@@ -867,7 +895,7 @@ void php3_sybct_free_result(INTERNAL_FUNCTION_PARAMETERS)
 void php3_sybct_get_last_message(INTERNAL_FUNCTION_PARAMETERS)
 {
 	if (php3_sybct_module.server_message) {
-		RETURN_STRING(php3_sybct_module.server_message);
+		RETURN_STRING(php3_sybct_module.server_message,1);
 	}
 }
 #endif 
@@ -875,7 +903,7 @@ void php3_sybct_get_last_message(INTERNAL_FUNCTION_PARAMETERS)
 
 void php3_sybct_num_rows(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *result_index;
+	pval *result_index;
 	int type,id;
 	sybct_result *result;
 	
@@ -899,7 +927,7 @@ void php3_sybct_num_rows(INTERNAL_FUNCTION_PARAMETERS)
 
 void php3_sybct_num_fields(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *result_index;
+	pval *result_index;
 	int type,id;
 	sybct_result *result;
 	
@@ -923,10 +951,10 @@ void php3_sybct_num_fields(INTERNAL_FUNCTION_PARAMETERS)
 
 void php3_sybct_fetch_row(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *sybct_result_index;
+	pval *sybct_result_index;
 	int type,i,id;
 	sybct_result *result;
-	YYSTYPE field_content;
+	pval field_content;
 
 	if (ARG_COUNT(ht)!=1 || getParameters(ht, 1, &sybct_result_index)==FAILURE) {
 		WRONG_PARAM_COUNT;
@@ -949,7 +977,7 @@ void php3_sybct_fetch_row(INTERNAL_FUNCTION_PARAMETERS)
 	for (i=0; i<result->num_fields; i++) {
 		field_content = result->data[result->cur_row][i];
 		yystype_copy_constructor(&field_content);
-		hash_index_update(return_value->value.ht, i, (void *) &field_content, sizeof(YYSTYPE),NULL);
+		hash_index_update(return_value->value.ht, i, (void *) &field_content, sizeof(pval),NULL);
 	}
 	result->cur_row++;
 }
@@ -957,11 +985,11 @@ void php3_sybct_fetch_row(INTERNAL_FUNCTION_PARAMETERS)
 
 static void php3_sybct_fetch_hash(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *sybct_result_index;
+	pval *sybct_result_index;
 	sybct_result *result;
 	int type;
 	int i;
-	YYSTYPE *yystype_ptr,tmp;
+	pval *yystype_ptr,tmp;
 	
 	if (ARG_COUNT(ht)!=1 || getParameters(ht, 1, &sybct_result_index)==FAILURE) {
 		WRONG_PARAM_COUNT;
@@ -987,9 +1015,9 @@ static void php3_sybct_fetch_hash(INTERNAL_FUNCTION_PARAMETERS)
 		tmp = result->data[result->cur_row][i];
 		yystype_copy_constructor(&tmp);
 		if (php3_ini.magic_quotes_runtime && tmp.type == IS_STRING) {
-			tmp.value.strval = _php3_addslashes(tmp.value.strval,1);
+			tmp.value.str.val = _php3_addslashes(tmp.value.str.val,tmp.value.str.len,&tmp.value.str.len,1);
 		}
-		hash_index_update(return_value->value.ht, i, (void *) &tmp, sizeof(YYSTYPE), (void **) &yystype_ptr);
+		hash_index_update(return_value->value.ht, i, (void *) &tmp, sizeof(pval), (void **) &yystype_ptr);
 		hash_pointer_update(return_value->value.ht, result->fields[i].name, strlen(result->fields[i].name)+1, yystype_ptr);
 	}
 	result->cur_row++;
@@ -1012,7 +1040,7 @@ void php3_sybct_fetch_array(INTERNAL_FUNCTION_PARAMETERS)
 
 void php3_sybct_data_seek(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *sybct_result_index,*offset;
+	pval *sybct_result_index,*offset;
 	int type,id;
 	sybct_result *result;
 
@@ -1040,9 +1068,53 @@ void php3_sybct_data_seek(INTERNAL_FUNCTION_PARAMETERS)
 }
 
 
+static char *php3_sybct_get_field_name(CS_INT type)
+{
+	switch (type) {
+		case CS_CHAR_TYPE:
+		case CS_VARCHAR_TYPE:
+		case CS_TEXT_TYPE:
+			return "string";
+			break;
+		case CS_IMAGE_TYPE:
+			return "image";
+			break;
+		case CS_BINARY_TYPE:
+		case CS_VARBINARY_TYPE:
+			return "blob";
+			break;
+		case CS_BIT_TYPE:
+			return "bit";
+			break;
+		case CS_TINYINT_TYPE:
+		case CS_SMALLINT_TYPE:
+		case CS_INT_TYPE:
+			return "int";
+			break;
+		case CS_REAL_TYPE:
+		case CS_FLOAT_TYPE:
+		case CS_NUMERIC_TYPE:
+		case CS_DECIMAL_TYPE:
+			return "real";
+			break;
+		case CS_MONEY_TYPE:
+		case CS_MONEY4_TYPE:
+			return "money";
+			break;
+		case CS_DATETIME_TYPE:
+		case CS_DATETIME4_TYPE:
+			return "datetime";
+			break;
+		default:
+			return "unknown";
+			break;
+	}
+}
+
+
 void php3_sybct_fetch_field(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *sybct_result_index,*offset;
+	pval *sybct_result_index,*offset;
 	int type,id,field_offset;
 	sybct_result *result;
 
@@ -1092,11 +1164,14 @@ void php3_sybct_fetch_field(INTERNAL_FUNCTION_PARAMETERS)
 	add_property_string(return_value, "name",result->fields[field_offset].name, 1);
 	add_property_long(return_value, "max_length",result->fields[field_offset].max_length);
 	add_property_string(return_value, "column_source",result->fields[field_offset].column_source, 1);
+	add_property_long(return_value, "numeric", result->fields[field_offset].numeric);
+	add_property_string(return_value, "type", php3_sybct_get_field_name(result->fields[field_offset].type), 1);
 }
+
 
 void php3_sybct_field_seek(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *sybct_result_index,*offset;
+	pval *sybct_result_index,*offset;
 	int type,id,field_offset;
 	sybct_result *result;
 
@@ -1128,7 +1203,7 @@ void php3_sybct_field_seek(INTERNAL_FUNCTION_PARAMETERS)
 
 void php3_sybct_result(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *row, *field, *sybct_result_index;
+	pval *row, *field, *sybct_result_index;
 	int id,type,field_offset=0;
 	sybct_result *result;
 	
@@ -1157,13 +1232,13 @@ void php3_sybct_result(INTERNAL_FUNCTION_PARAMETERS)
 			int i;
 
 			for (i=0; i<result->num_fields; i++) {
-				if (!strcasecmp(result->fields[i].name,field->value.strval)) {
+				if (!strcasecmp(result->fields[i].name,field->value.str.val)) {
 					field_offset = i;
 					break;
 				}
 			}
 			if (i>=result->num_fields) { /* no match found */
-				php3_error(E_WARNING,"Sybase:  %s field not found in result",field->value.strval);
+				php3_error(E_WARNING,"Sybase:  %s field not found in result",field->value.str.val);
 				RETURN_FALSE;
 			}
 			break;
@@ -1214,7 +1289,7 @@ void php3_info_sybct(void)
 
 void php3_sybct_min_client_severity(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *severity;
+	pval *severity;
 	
 	if (ARG_COUNT(ht)!=1 || getParameters(ht, 1, &severity)==FAILURE) {
 		WRONG_PARAM_COUNT;
@@ -1226,7 +1301,7 @@ void php3_sybct_min_client_severity(INTERNAL_FUNCTION_PARAMETERS)
 
 void php3_sybct_min_server_severity(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *severity;
+	pval *severity;
 	
 	if (ARG_COUNT(ht)!=1 || getParameters(ht, 1, &severity)==FAILURE) {
 		WRONG_PARAM_COUNT;

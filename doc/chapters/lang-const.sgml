@@ -163,10 +163,11 @@ $h = $g += 10;      /* first, $g is incremented by 10 and ends with the value of
     dedicated boolean type).  The truth value of expressions in PHP is
     calculated in a similar way to perl.  Any numeric non-zero numeric
     value is TRUE, zero is FALSE.  Be sure to note that negative
-    values are non-zero and are thus considered TRUE!  Any non-empty
-    string is considered to be TRUE; empty strings are FALSE.  With
-    non-scalar values (arrays and objects) - if the value contains no
-    elements it's considered FALSE, otherwise it's considered TRUE.
+    values are non-zero and are thus considered TRUE!  The empty
+    string and the string "0" are FALSE; all other strings are TRUE.
+    With non-scalar values (arrays and objects) - if the value
+    contains no elements it's considered FALSE, otherwise it's
+    considered TRUE.
    <simpara>
     PHP 3 provides a full and powerful implementation of expressions,
     and documenting it entirely goes beyond the scope of this manual.
@@ -175,7 +176,7 @@ $h = $g += 10;      /* first, $g is incremented by 10 and ends with the value of
     Throughout the rest of this manual we'll write 'expr' to mark any
     valid PHP3 expression.
     
-  <sect1>
+  <sect1 id="construct.if">
    <title>IF</title>
    <para>
     The IF construct is one of the most important features of many
@@ -217,10 +218,10 @@ if ($a>$b) {
    <simpara>
     If statements can be nested indefinitely within other IF
     statements, which provides you with complete flexibility for
-    conditional execution of the various parts of your pgoram.
+    conditional execution of the various parts of your program.
   </sect1>
 
-  <sect1>
+  <sect1 id="construct.else">
    <title>ELSE</title>
    <para>
     Often you'd want to execute a statement if a certain condition is
@@ -242,7 +243,7 @@ if ($a>$b) {
     to FALSE, and if there were any ELSEIF expressions - only if they
     evaluated to FALSE as well (see below).
 
-  <sect1>
+  <sect1 id="construct.elseif">
    <title>ELSEIF</title>
 
    <para>ELSEIF, as its name suggests, is a combination of IF and
@@ -311,7 +312,7 @@ else
 endif;
 </programlisting></informalexample>
 
-  <sect1>
+  <sect1 id="construct.while">
    <title>WHILE</title>
 
    <para>
@@ -360,7 +361,7 @@ endwhile;
 </programlisting></informalexample>
 
 
-  <sect1>
+  <sect1 id="construct.do.while">
    <title>DO..WHILE</title>
    <simpara>
     DO..WHILE loops are very similar to WHILE loops, except the truth
@@ -411,7 +412,7 @@ do {
     You can code scripts and even powerful scripts without using this
     `feature'.
 
-  <sect1>
+  <sect1 id="construct.for">
    <title>FOR</title>
 
    <para>
@@ -476,7 +477,7 @@ for (;;) {
 </programlisting></informalexample>
 
 
-  <sect1>
+  <sect1 id="construct.switch">
    <title>SWITCH</title>
 
    <simpara>
@@ -575,19 +576,206 @@ switch ($i) {
 
   <sect1 id="function.require">
    <title>REQUIRE</title>
-   <simpara></simpara>
+   <simpara>
+    The REQUIRE statement replaces itself with the specified file,
+    much like the C preprocessor's #include works.
+   <para>
+    This means that you can't put a require() statement inside of
+    a loop structure and expect it to include the contents of a
+    different file on each iteration. To do that, use an INCLUDE
+    statement.
+
+   <informalexample><programlisting>
+require('header.inc');
+</programlisting></informalexample>
 
   <sect1 id="function.include">
    <title>INCLUDE</title>
-   <simpara></simpara>
+   <simpara>
+    The INCLUDE statement includes the specified file.
+   <para>
+    This happens each time the INCLUDE statement is encountered,
+    so you can use an INCLUDE statement within a looping structure
+    to include a number of different file.
+   <informalexample><programlisting>
+$files = array('first.inc', 'second.inc', 'third.inc');
+for ($i = 0; $i < count($files); $i++) {
+  include($files[$i]);
+}
+</programlisting></informalexample>
 
   <sect1 id="keyword.function">
    <title>FUNCTION</title>
-   <simpara></simpara>
+   <para>
+    A function may be defined using syntax such as the following:
+    <informalexample>
+     <programlisting>
+function foo( $arg_1, $arg_2, ..., $arg_n ) {
+   echo "Example function.\n";
+   return $retval;
+}
+     </programlisting>
+    </informalexample>
+    
+   <simpara>
+    Any valid PHP3 code may appear inside a function, even other
+    functions and <link linkend="keyword.class">class</link> definitions.
+    
+   <sect2 id="keyword.function.return">
+    <title>Returning values</title>
+    <para>
+     Values are returned by using the optional return statement. Any 
+     type may be returned, including lists and objects. 
+     <informalexample>
+      <programlisting>
+function my_sqrt( $num ) {
+   return $num * $num;
+}
+echo my_sqrt( 4 );   // outputs '16'.
+      </programlisting>
+     </informalexample>
+     
+    <para>
+     Multiple values may not be returned, but the same effect can be
+     achieved by returning a list:
+     <informalexample>
+      <programlisting>
+function foo() {
+   return array( 0, 1, 2 );
+}
+list( $zero, $one, $two ) = foo();
+      </programlisting>
+     </informalexample>
+   </sect2>
 
+   <sect2 id="keyword.function.arguments">
+    <title>Arguments</title>
+
+    <simpara>
+     Information may be passed to functions via the argument list,
+     which is a comma-delimited list of variables and/or constants.
+
+    <para>
+     PHP3 supports passing arguments by value (the default), <link
+     linkend="keyword.function.arguments.reference">passing by
+     reference</link>, and <link
+      linkend="keyword.function.arguments.default">default argument
+      values</link>. Variable-length argument lists are not supported, 
+     but a similar effect may be achieved by passing arrays.
+
+    <sect3 id="keyword.function.arguments.reference">
+     <title>Passing by reference</title>
+     <simpara>
+      By default, function arguments are passed by value. If you wish
+      to allow a function to modify its arguments, you may pass them
+      by reference.
+      
+     <para>
+      If you wish a function's argument to always be passed by
+      reference, you can prepend an ampersand (&amp;) to the argument
+      name in the function definition:
+      <informalexample>
+       <programlisting>
+function foo( &amp;$bar ) {
+   $bar .= ' and something extra.';
+}
+$str = 'This is a string, ';
+foo2( $str );
+echo $str;    // outputs 'This is a string, and something extra.'
+       </programlisting>
+      </informalexample>
+
+     <para>
+      If you wish to pass a variable by reference to a function which
+      does not do this by default, you may prepend an ampersand to the 
+      argument name in the function call:
+      <informalexample>
+       <programlisting>
+function foo( $bar ) {
+   $bar .= ' and something extra.';
+}
+$str = 'This is a string, ';
+foo2( $str );
+echo $str;    // outputs 'This is a string, '
+foo2( &amp;$str );
+echo $str;    // outputs 'This is a string, and something extra.'
+       </programlisting>
+      </informalexample>
+
+    </sect3>
+
+    <sect3 id="keyword.function.arguments.default">
+     <title>Default values</title>
+     <para>
+      A function may define C++-style default values for scalar
+      arguments as follows:
+      <informalexample>
+       <programlisting>
+function makecoffee( $type = "cappucino" ) {
+   echo "Making a cup of $type.\n";
+}
+echo makecoffee();
+echo makecoffee( "espresso" );
+       </programlisting>
+      </informalexample>
+
+     <para>
+      The output from the above snippet is:
+      <screen>
+Making a cup of cappucino.
+Making a cup of espresso.
+      </screen>
+
+     <para>
+      Note that when using default arguments, any defaults should be on
+      the right side of any non-default arguments; otherwise, things
+      will not work as expected. Consider the following code snippet:
+      <informalexample>
+       <programlisting>
+function makeyogurt( $type = "acidophilus", $flavour ) {
+   return "Making a bowl of $type $flavour.\n";
+}
+echo makeyogurt( "raspberry" );   // won't work as expected
+       </programlisting>
+      </informalexample>
+
+     <para>
+      The output of the above example is:
+      <screen>
+Warning: Missing argument 2 in call to makeyogurt() in /usr/local/etc/httpd/htdocs/php3test/functest.html on line 41
+Making a bowl of raspberry .
+      </screen>
+
+     <para>
+      Now, compare the above with this:
+      <informalexample>
+       <programlisting>
+function makeyogurt( $flavour, $type = "acidophilus" ) {
+   return "Making a bowl of $type $flavour.\n";
+}
+echo makeyogurt( "raspberry" );   // works as expected
+       </programlisting>
+      </informalexample>
+
+     <para>
+      The output of this example is:
+      <screen>
+Making a bowl of acidophilus raspberry.
+     </screen>
+    </sect3>
+
+   </sect2>
+  </sect1>
+           
   <sect1 id="keyword.old-function">
    <title>OLD_FUNCTION</title>
-   <simpara></simpara>
+   <simpara>
+    The OLD_FUNCTION statement allows you to declare a function using
+    a syntax identical to PHP/FI2 (except you must replace 'function'
+    with 'old_function'.
+   <para>
+    This is a deprecated feature, and should only be used by the
+    PHP/FI2->PHP3 convertor.
 
   <sect1 id="keyword.class">
    <title>CLASS</title>

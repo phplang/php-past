@@ -5,31 +5,36 @@
    | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
-   | it under the terms of the GNU General Public License as published by |
-   | the Free Software Foundation; either version 2 of the License, or    |
-   | (at your option) any later version.                                  |
+   | it under the terms of one of the following licenses:                 |
+   |                                                                      |
+   |  A) the GNU General Public License as published by the Free Software |
+   |     Foundation; either version 2 of the License, or (at your option) |
+   |     any later version.                                               |
+   |                                                                      |
+   |  B) the PHP License as published by the PHP Development Team and     |
+   |     included in the distribution in the file: LICENSE                |
    |                                                                      |
    | This program is distributed in the hope that it will be useful,      |
    | but WITHOUT ANY WARRANTY; without even the implied warranty of       |
    | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the        |
    | GNU General Public License for more details.                         |
    |                                                                      |
-   | You should have received a copy of the GNU General Public License    |
-   | along with this program; if not, write to the Free Software          |
-   | Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.            |
+   | You should have received a copy of both licenses referred to here.   |
+   | If you did not, or have any questions about PHP licensing, please    |
+   | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
    | Authors:                                                             |
    +----------------------------------------------------------------------+
  */
 
-/* $Id: dir.c,v 1.40 1998/01/23 01:29:43 zeev Exp $ */
+/* $Id: dir.c,v 1.49 1998/05/15 10:57:21 zeev Exp $ */
 
 #ifdef THREAD_SAFE
 #include "tls.h"
 #endif
-#include "parser.h"
+#include "php.h"
 #include "internal_functions.h"
-#include "list.h"
+#include "php3_list.h"
 
 #include "php3_dir.h"
 
@@ -66,11 +71,11 @@ function_entry php3_dir_functions[] = {
 };
 
 php3_module_entry php3_dir_module_entry = {
-	"PHP_dir", php3_dir_functions, php3_minit_dir, NULL, NULL, NULL, NULL, 0, 0, 0, NULL
+	"PHP_dir", php3_dir_functions, php3_minit_dir, NULL, NULL, NULL, NULL, STANDARD_MODULE_PROPERTIES
 };
 
 
-int php3_minit_dir(INITFUNCARG)
+int php3_minit_dir(INIT_FUNC_ARGS)
 {
 	TLS_VARS;
 	
@@ -80,7 +85,7 @@ int php3_minit_dir(INITFUNCARG)
 
 void php3_opendir(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *arg;
+	pval *arg;
 	DIR *dirp;
 	int ret;
 	TLS_VARS;
@@ -90,7 +95,7 @@ void php3_opendir(INTERNAL_FUNCTION_PARAMETERS)
 	}
 	convert_to_string(arg);
 
-	dirp = opendir(arg->value.strval);
+	dirp = opendir(arg->value.str.val);
 	if (!dirp) {
 		php3_error(E_WARNING, "OpenDir: %s (errno %d)", strerror(errno),errno);
 		RETURN_FALSE;
@@ -102,7 +107,7 @@ void php3_opendir(INTERNAL_FUNCTION_PARAMETERS)
 
 void php3_closedir(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *id, *tmp;
+	pval *id, *tmp;
 	int id_to_find;
 	DIR *dirp;
 	int dirp_type;
@@ -135,7 +140,7 @@ void php3_closedir(INTERNAL_FUNCTION_PARAMETERS)
 
 void php3_chdir(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *arg;
+	pval *arg;
 	int ret;
 	TLS_VARS;
 	
@@ -143,7 +148,7 @@ void php3_chdir(INTERNAL_FUNCTION_PARAMETERS)
 		WRONG_PARAM_COUNT;
 	}
 	convert_to_string(arg);
-	ret = chdir(arg->value.strval);
+	ret = chdir(arg->value.str.val);
 
 	if (ret < 0) {
 		php3_error(E_WARNING, "ChDir: %s (errno %d)", strerror(errno), errno);
@@ -154,7 +159,7 @@ void php3_chdir(INTERNAL_FUNCTION_PARAMETERS)
 
 void php3_rewinddir(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *id, *tmp;
+	pval *id, *tmp;
 	int id_to_find;
 	DIR *dirp;
 	int dirp_type;
@@ -187,7 +192,7 @@ void php3_rewinddir(INTERNAL_FUNCTION_PARAMETERS)
 
 void php3_readdir(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *id, *tmp;
+	pval *id, *tmp;
 	int id_to_find;
 	DIR *dirp;
 	int dirp_type;
@@ -218,13 +223,13 @@ void php3_readdir(INTERNAL_FUNCTION_PARAMETERS)
 	}
 	direntp = readdir(dirp);
 	if (direntp) {
-		RETURN_STRINGL(direntp->d_name, strlen(direntp->d_name));
+		RETURN_STRINGL(direntp->d_name, strlen(direntp->d_name), 1);
 	}
 	RETURN_FALSE;
 }
 
 void php3_getdir(INTERNAL_FUNCTION_PARAMETERS) {
-	YYSTYPE *arg;
+	pval *arg;
 	DIR *dirp;
 	int ret;
 	TLS_VARS;
@@ -234,7 +239,7 @@ void php3_getdir(INTERNAL_FUNCTION_PARAMETERS) {
 	}
 	convert_to_string(arg);
 
-	dirp = opendir(arg->value.strval);
+	dirp = opendir(arg->value.str.val);
 	if (!dirp) {
 		php3_error(E_WARNING, "OpenDir: %s (errno %d)", strerror(errno), errno);
 		RETURN_FALSE;
@@ -245,7 +250,7 @@ void php3_getdir(INTERNAL_FUNCTION_PARAMETERS) {
 	/* construct an object with some methods */
 	object_init(return_value);
 	add_property_long(return_value, "handle", ret);
-	add_property_stringl(return_value, "path", arg->value.strval, arg->strlen, 1);
+	add_property_stringl(return_value, "path", arg->value.str.val, arg->value.str.len, 1);
 	add_method(return_value, "read", php3_readdir);
 	add_method(return_value, "rewind", php3_rewinddir);
 	add_method(return_value, "close", php3_closedir);

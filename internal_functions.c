@@ -5,18 +5,23 @@
    | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
-   | it under the terms of the GNU General Public License as published by |
-   | the Free Software Foundation; either version 2 of the License, or    |
-   | (at your option) any later version.                                  |
+   | it under the terms of one of the following licenses:                 |
+   |                                                                      |
+   |  A) the GNU General Public License as published by the Free Software |
+   |     Foundation; either version 2 of the License, or (at your option) |
+   |     any later version.                                               |
+   |                                                                      |
+   |  B) the PHP License as published by the PHP Development Team and     |
+   |     included in the distribution in the file: LICENSE                |
    |                                                                      |
    | This program is distributed in the hope that it will be useful,      |
    | but WITHOUT ANY WARRANTY; without even the implied warranty of       |
    | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the        |
    | GNU General Public License for more details.                         |
    |                                                                      |
-   | You should have received a copy of the GNU General Public License    |
-   | along with this program; if not, write to the Free Software          |
-   | Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.            |
+   | You should have received a copy of both licenses referred to here.   |
+   | If you did not, or have any questions about PHP licensing, please    |
+   | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
    | Authors: Andi Gutmans <andi@php.net>                                 |
    |          Zeev Suraski <bourbon@netvision.net.il>                     |
@@ -24,33 +29,22 @@
  */
 
 
-/* $Id: internal_functions.c,v 1.303 1998/02/18 21:15:00 andi Exp $ */
+/* $Id: internal_functions.c,v 1.316 1998/05/29 21:53:11 zeev Exp $ */
 
 #ifdef THREAD_SAFE
 #include "tls.h"
 #endif
 
-#include "parser.h"
+#include "php.h"
 #ifndef MSVC5
 #endif
 #include "internal_functions.h"
 #include "internal_functions_registry.h"
-#include "list.h"
+#include "php3_list.h"
 #include "modules.h"
 #include <stdarg.h>
 #include <stdlib.h>
 #include <stdio.h>
-
-#if HAVE_LIBDL
-# if MSVC5
-#  include <windows.h>
-#  define dlclose FreeLibrary
-#  define dlopen(a,b) LoadLibrary(a)
-#  define dlsym GetProcAddress
-# else
-#  include <dlfcn.h>
-# endif
-#endif
 
 #include "functions/php3_ldap.h"
 #include "functions/php3_mysql.h"
@@ -64,6 +58,7 @@
 #include "functions/php3_dir.h"
 #include "functions/dns.h"
 #include "functions/php3_pgsql.h"
+#include "functions/php3_velocis.h"
 #include "functions/php3_sybase.h"
 #include "functions/php3_sybase-ct.h"
 #include "functions/reg.h"
@@ -76,7 +71,6 @@
 #include "functions/post.h"
 #include "functions/exec.h"
 #include "functions/php3_solid.h"
-#include "functions/sybsql.h"
 #include "functions/adabasd.h"
 #include "functions/file.h"
 #include "functions/dbase.h"
@@ -89,12 +83,15 @@
 #include "php3_debugger.h"
 #include "functions/php3_unified_odbc.h"
 #include "dl/snmp/php3_snmp.h"
+#include "functions/php3_zlib.h"
 
 extern php3_ini_structure php3_ini;
 extern php3_ini_structure php3_ini_master;
 
 #ifndef THREAD_SAFE
 HashTable list_destructors,module_registry;
+static int module_count;
+int current_module_being_cleaned;
 #endif
 
 unsigned char first_arg_force_ref[] = { 1, BYREF_FORCE };
@@ -117,10 +114,10 @@ php3_builtin_module php3_builtin_modules[] =
 	{"mSQL",						msql_module_ptr},
 	{"PostgresSQL",					pgsql_module_ptr},
 	{"LDAP",						ldap_module_ptr},
+	{"Velocis",                                     velocis_module_ptr},
 	{"FilePro",						filepro_module_ptr},
 	{"Sybase SQL",					sybase_module_ptr},
 	{"Sybase SQL - CT",				sybct_module_ptr},
-	{"Sybase SQL - old",			sybase_old_module_ptr},
 	{"Unified ODBC",				uodbc_module_ptr},
 	{"DBase",						dbase_module_ptr},
 	{"Regular Expressions",			regexp_module_ptr},
@@ -135,6 +132,7 @@ php3_builtin_module php3_builtin_modules[] =
 	{"browscap",					browscap_module_ptr},
 	{"SNMP",						snmp_module_ptr},
 	{"Pack/Unpack",					pack_module_ptr},
+	{"Zlib",						php3_zlib_module_ptr},
 	{NULL,							NULL}
 };
 
@@ -143,13 +141,13 @@ php3_builtin_module php3_builtin_modules[] =
 PHPAPI int getParameters(HashTable *ht, int param_count,...)
 {
 	va_list ptr;
-	YYSTYPE **param, *tmp = NULL;
+	pval **param, *tmp = NULL;
 	int i;
 
 	va_start(ptr, param_count);
 
 	for (i = 0; i < param_count; i++) {
-		param = va_arg(ptr, YYSTYPE **);
+		param = va_arg(ptr, pval **);
 		if (hash_index_find(ht, i, (void **) &tmp) == FAILURE) {
 			va_end(ptr);
 			return FAILURE;
@@ -161,10 +159,10 @@ PHPAPI int getParameters(HashTable *ht, int param_count,...)
 }
 
 
-PHPAPI int getParametersArray(HashTable *ht, int param_count, YYSTYPE **argument_array)
+PHPAPI int getParametersArray(HashTable *ht, int param_count, pval **argument_array)
 {
 	int i;
-	YYSTYPE *data;
+	pval *data;
 
 	for (i = 0; i < param_count; i++) {
 		if (hash_index_find(ht, i, (void **) &data) == FAILURE) {
@@ -175,8 +173,8 @@ PHPAPI int getParametersArray(HashTable *ht, int param_count, YYSTYPE **argument
 	return SUCCESS;
 }
 
-PHPAPI int getThis(YYSTYPE **this) {
-	YYSTYPE *data;
+PHPAPI int getThis(pval **this) {
+	pval *data;
 	TLS_VARS;
 
 	if (hash_find(GLOBAL(active_symbol_table), "this", sizeof("this"), (void **)&data) == FAILURE) {
@@ -200,10 +198,10 @@ PHPAPI void wrong_param_count()
 }
 
 	
-inline PHPAPI int array_init(YYSTYPE *arg)
+inline PHPAPI int array_init(pval *arg)
 {
 	arg->value.ht = (HashTable *) emalloc(sizeof(HashTable));
-	if (!arg->value.ht || hash_init(arg->value.ht, 0, NULL, YYSTYPE_DESTRUCTOR, 0)) {
+	if (!arg->value.ht || hash_init(arg->value.ht, 0, NULL, pval_DESTRUCTOR, 0)) {
 		php3_error(E_CORE_ERROR, "Cannot allocate memory for array");
 		return FAILURE;
 	}
@@ -211,10 +209,10 @@ inline PHPAPI int array_init(YYSTYPE *arg)
 	return SUCCESS;
 }
 
-inline PHPAPI int object_init(YYSTYPE *arg)
+inline PHPAPI int object_init(pval *arg)
 {
 	arg->value.ht = (HashTable *) emalloc(sizeof(HashTable));
-	if (!arg->value.ht || hash_init(arg->value.ht, 0, NULL, YYSTYPE_DESTRUCTOR, 0)) {
+	if (!arg->value.ht || hash_init(arg->value.ht, 0, NULL, pval_DESTRUCTOR, 0)) {
 		php3_error(E_CORE_ERROR, "Cannot allocate memory for array");
 		return FAILURE;
 	}
@@ -223,231 +221,254 @@ inline PHPAPI int object_init(YYSTYPE *arg)
 }
 
 
-inline PHPAPI int add_assoc_long(YYSTYPE *arg, char *key, long n)
+inline PHPAPI int add_assoc_long(pval *arg, char *key, long n)
 {
-	YYSTYPE tmp;
+	pval tmp;
 
 	tmp.type = IS_LONG;
 	tmp.value.lval = n;
-	return hash_update(arg->value.ht, key, strlen(key)+1, (void *) &tmp, sizeof(YYSTYPE), NULL);
+	return hash_update(arg->value.ht, key, strlen(key)+1, (void *) &tmp, sizeof(pval), NULL);
 }
 
 
-inline PHPAPI int add_assoc_double(YYSTYPE *arg, char *key, double d)
+inline PHPAPI int add_assoc_double(pval *arg, char *key, double d)
 {
-	YYSTYPE tmp;
+	pval tmp;
 
 	tmp.type = IS_DOUBLE;
 	tmp.value.dval = d;
-	return hash_update(arg->value.ht, key, strlen(key)+1, (void *) &tmp, sizeof(YYSTYPE), NULL);
+	return hash_update(arg->value.ht, key, strlen(key)+1, (void *) &tmp, sizeof(pval), NULL);
 }
 
 
-inline PHPAPI int add_assoc_string(YYSTYPE *arg, char *key, char *str, int duplicate)
+inline PHPAPI int add_assoc_string(pval *arg, char *key, char *str, int duplicate)
 {
-	YYSTYPE tmp;
+	pval tmp;
 
 	tmp.type = IS_STRING;
-	tmp.strlen = strlen(str);
+	tmp.value.str.len = strlen(str);
 	if (duplicate) {
-		tmp.value.strval = estrndup(str,tmp.strlen);
+		tmp.value.str.val = estrndup(str,tmp.value.str.len);
 	} else {
-		tmp.value.strval = str;
+		tmp.value.str.val = str;
 	}
-	return hash_update(arg->value.ht, key, strlen(key)+1, (void *) &tmp, sizeof(YYSTYPE), NULL);
+	return hash_update(arg->value.ht, key, strlen(key)+1, (void *) &tmp, sizeof(pval), NULL);
 }
 
 
-inline PHPAPI int add_assoc_stringl(YYSTYPE *arg, char *key, char *str, uint length, int duplicate)
+inline PHPAPI int add_assoc_stringl(pval *arg, char *key, char *str, uint length, int duplicate)
 {
-	YYSTYPE tmp;
+	pval tmp;
 
 	tmp.type = IS_STRING;
-	tmp.strlen = length;
+	tmp.value.str.len = length;
 	if (duplicate) {
-		tmp.value.strval = estrndup(str,tmp.strlen);
+		tmp.value.str.val = estrndup(str,tmp.value.str.len);
 	} else {
-		tmp.value.strval = str;
+		tmp.value.str.val = str;
 	}
-	return hash_update(arg->value.ht, key, strlen(key)+1, (void *) &tmp, sizeof(YYSTYPE), NULL);
+	return hash_update(arg->value.ht, key, strlen(key)+1, (void *) &tmp, sizeof(pval), NULL);
 }
 
 
-inline PHPAPI int add_assoc_function(YYSTYPE *arg, char *key,void (*function_ptr)(INTERNAL_FUNCTION_PARAMETERS))
+inline PHPAPI int add_assoc_function(pval *arg, char *key,void (*function_ptr)(INTERNAL_FUNCTION_PARAMETERS))
 {
-	YYSTYPE tmp;
+	pval tmp;
 	
 	tmp.type = IS_INTERNAL_FUNCTION;
-	tmp.value.internal_function = function_ptr;
-	return hash_update(arg->value.ht, key, strlen(key)+1, (void *) &tmp, sizeof(YYSTYPE), NULL);
+	tmp.value.func.addr.internal = function_ptr;
+	return hash_update(arg->value.ht, key, strlen(key)+1, (void *) &tmp, sizeof(pval), NULL);
 }
 
 
-inline PHPAPI int add_index_long(YYSTYPE *arg, uint index, long n)
+inline PHPAPI int add_index_long(pval *arg, uint index, long n)
 {
-	YYSTYPE tmp;
+	pval tmp;
 
 	tmp.type = IS_LONG;
 	tmp.value.lval = n;
-	return hash_index_update(arg->value.ht, index, (void *) &tmp, sizeof(YYSTYPE),NULL);
+	return hash_index_update(arg->value.ht, index, (void *) &tmp, sizeof(pval),NULL);
 }
 
 
-inline PHPAPI int add_index_double(YYSTYPE *arg, uint index, double d)
+inline PHPAPI int add_index_double(pval *arg, uint index, double d)
 {
-	YYSTYPE tmp;
+	pval tmp;
 
 	tmp.type = IS_DOUBLE;
 	tmp.value.dval = d;
-	return hash_index_update(arg->value.ht, index, (void *) &tmp, sizeof(YYSTYPE),NULL);
+	return hash_index_update(arg->value.ht, index, (void *) &tmp, sizeof(pval),NULL);
 }
 
 
-inline PHPAPI int add_index_string(YYSTYPE *arg, uint index, char *str, int duplicate)
+inline PHPAPI int add_index_string(pval *arg, uint index, char *str, int duplicate)
 {
-	YYSTYPE tmp;
+	pval tmp;
 
 	tmp.type = IS_STRING;
-	tmp.strlen = strlen(str);
+	tmp.value.str.len = strlen(str);
 	if (duplicate) {
-		tmp.value.strval = estrndup(str,tmp.strlen);
+		tmp.value.str.val = estrndup(str,tmp.value.str.len);
 	} else {
-		tmp.value.strval = str;
+		tmp.value.str.val = str;
 	}
-	return hash_index_update(arg->value.ht, index, (void *) &tmp, sizeof(YYSTYPE),NULL);
+	return hash_index_update(arg->value.ht, index, (void *) &tmp, sizeof(pval),NULL);
 }
 
 
-inline PHPAPI int add_index_stringl(YYSTYPE *arg, uint index, char *str, uint length, int duplicate)
+inline PHPAPI int add_index_stringl(pval *arg, uint index, char *str, uint length, int duplicate)
 {
-	YYSTYPE tmp;
+	pval tmp;
 
 	tmp.type = IS_STRING;
-	tmp.strlen = length;
+	tmp.value.str.len = length;
 	if (duplicate) {
-		tmp.value.strval = estrndup(str,tmp.strlen);
+		tmp.value.str.val = estrndup(str,tmp.value.str.len);
 	} else {
-		tmp.value.strval = str;
+		tmp.value.str.val = str;
 	}
-	return hash_index_update(arg->value.ht, index, (void *) &tmp, sizeof(YYSTYPE),NULL);
+	return hash_index_update(arg->value.ht, index, (void *) &tmp, sizeof(pval),NULL);
 }
 
-inline PHPAPI int add_next_index_long(YYSTYPE *arg, long n)
+inline PHPAPI int add_next_index_long(pval *arg, long n)
 {
-	YYSTYPE tmp;
+	pval tmp;
 
 	tmp.type = IS_LONG;
 	tmp.value.lval = n;
-	return hash_next_index_insert(arg->value.ht, &tmp, sizeof(YYSTYPE),NULL);
+	return hash_next_index_insert(arg->value.ht, &tmp, sizeof(pval),NULL);
 }
 
 
-inline PHPAPI int add_next_index_double(YYSTYPE *arg, double d)
+inline PHPAPI int add_next_index_double(pval *arg, double d)
 {
-	YYSTYPE tmp;
+	pval tmp;
 
 	tmp.type = IS_DOUBLE;
 	tmp.value.dval = d;
-	return hash_next_index_insert(arg->value.ht, &tmp, sizeof(YYSTYPE),NULL);
+	return hash_next_index_insert(arg->value.ht, &tmp, sizeof(pval),NULL);
 }
 
 
-inline PHPAPI int add_next_index_string(YYSTYPE *arg, char *str, int duplicate)
+inline PHPAPI int add_next_index_string(pval *arg, char *str, int duplicate)
 {
-	YYSTYPE tmp;
+	pval tmp;
 
 	tmp.type = IS_STRING;
-	tmp.strlen = strlen(str);
+	tmp.value.str.len = strlen(str);
 	if (duplicate) {
-		tmp.value.strval = estrndup(str,tmp.strlen);
+		tmp.value.str.val = estrndup(str,tmp.value.str.len);
 	} else {
-		tmp.value.strval = str;
+		tmp.value.str.val = str;
 	}
-	return hash_next_index_insert(arg->value.ht, &tmp, sizeof(YYSTYPE),NULL);
+	return hash_next_index_insert(arg->value.ht, &tmp, sizeof(pval),NULL);
 }
 
 
-inline PHPAPI int add_next_index_stringl(YYSTYPE *arg, char *str, uint length, int duplicate)
+inline PHPAPI int add_next_index_stringl(pval *arg, char *str, uint length, int duplicate)
 {
-	YYSTYPE tmp;
+	pval tmp;
 
 	tmp.type = IS_STRING;
-	tmp.strlen = length;
+	tmp.value.str.len = length;
 	if (duplicate) {
-		tmp.value.strval = estrndup(str,tmp.strlen);
+		tmp.value.str.val = estrndup(str,tmp.value.str.len);
 	} else {
-		tmp.value.strval = str;
+		tmp.value.str.val = str;
 	}
-	return hash_next_index_insert(arg->value.ht, &tmp, sizeof(YYSTYPE),NULL);
+	return hash_next_index_insert(arg->value.ht, &tmp, sizeof(pval),NULL);
 }
 
 
-inline PHPAPI int add_get_assoc_string(YYSTYPE *arg, char *key, char *str, void **dest, int duplicate)
+inline PHPAPI int add_get_assoc_string(pval *arg, char *key, char *str, void **dest, int duplicate)
 {
-	YYSTYPE tmp;
+	pval tmp;
 
 	tmp.type = IS_STRING;
-	tmp.strlen = strlen(str);
+	tmp.value.str.len = strlen(str);
 	if (duplicate) {
-		tmp.value.strval = estrndup(str,tmp.strlen);
+		tmp.value.str.val = estrndup(str,tmp.value.str.len);
 	} else {
-		tmp.value.strval = str;
+		tmp.value.str.val = str;
 	}
-	return hash_update(arg->value.ht, key, strlen(key)+1, (void *) &tmp, sizeof(YYSTYPE), dest);
+	return hash_update(arg->value.ht, key, strlen(key)+1, (void *) &tmp, sizeof(pval), dest);
 }
 
 
-inline PHPAPI int add_get_assoc_stringl(YYSTYPE *arg, char *key, char *str, uint length, void **dest, int duplicate)
+inline PHPAPI int add_get_assoc_stringl(pval *arg, char *key, char *str, uint length, void **dest, int duplicate)
 {
-	YYSTYPE tmp;
+	pval tmp;
 
 	tmp.type = IS_STRING;
-	tmp.strlen = length;
+	tmp.value.str.len = length;
 	if (duplicate) {
-		tmp.value.strval = estrndup(str,tmp.strlen);
+		tmp.value.str.val = estrndup(str,tmp.value.str.len);
 	} else {
-		tmp.value.strval = str;
+		tmp.value.str.val = str;
 	}
-	return hash_update(arg->value.ht, key, strlen(key)+1, (void *) &tmp, sizeof(YYSTYPE), dest);
-}
-
-inline PHPAPI int add_get_index_string(YYSTYPE *arg, uint index, char *str, void **dest, int duplicate)
-{
-	YYSTYPE tmp;
-
-	tmp.type = IS_STRING;
-	tmp.strlen = strlen(str);
-	if (duplicate) {
-		tmp.value.strval = estrndup(str,tmp.strlen);
-	} else {
-		tmp.value.strval = str;
-	}
-	return hash_index_update(arg->value.ht, index, (void *) &tmp, sizeof(YYSTYPE),dest);
+	return hash_update(arg->value.ht, key, strlen(key)+1, (void *) &tmp, sizeof(pval), dest);
 }
 
 
-inline PHPAPI int add_get_index_stringl(YYSTYPE *arg, uint index, char *str, uint length, void **dest, int duplicate)
+inline PHPAPI int add_get_index_long(pval *arg, uint index, long l, void **dest)
 {
-	YYSTYPE tmp;
+	pval tmp;
+
+	tmp.type = IS_LONG;
+	tmp.value.lval= l;
+	return hash_index_update(arg->value.ht, index, (void *) &tmp, sizeof(pval),dest);
+}
+
+inline PHPAPI int add_get_index_double(pval *arg, uint index, double d, void **dest)
+{
+	pval tmp;
+
+	tmp.type = IS_DOUBLE;
+	tmp.value.dval= d;
+	return hash_index_update(arg->value.ht, index, (void *) &tmp, sizeof(pval),dest);
+}
+
+
+inline PHPAPI int add_get_index_string(pval *arg, uint index, char *str, void **dest, int duplicate)
+{
+	pval tmp;
 
 	tmp.type = IS_STRING;
-	tmp.strlen = length;
+	tmp.value.str.len = strlen(str);
 	if (duplicate) {
-		tmp.value.strval = estrndup(str,tmp.strlen);
+		tmp.value.str.val = estrndup(str,tmp.value.str.len);
 	} else {
-		tmp.value.strval = str;
+		tmp.value.str.val = str;
 	}
-	return hash_index_update(arg->value.ht, index, (void *) &tmp, sizeof(YYSTYPE),dest);
+	return hash_index_update(arg->value.ht, index, (void *) &tmp, sizeof(pval),dest);
+}
+
+
+inline PHPAPI int add_get_index_stringl(pval *arg, uint index, char *str, uint length, void **dest, int duplicate)
+{
+	pval tmp;
+
+	tmp.type = IS_STRING;
+	tmp.value.str.len = length;
+	if (duplicate) {
+		tmp.value.str.val = estrndup(str,tmp.value.str.len);
+	} else {
+		tmp.value.str.val = str;
+	}
+	return hash_index_update(arg->value.ht, index, (void *) &tmp, sizeof(pval),dest);
 }
 
 int module_startup_modules(void)
 {
 	php3_builtin_module *ptr = php3_builtin_modules;
+	TLS_VARS;
+	GLOBAL(module_count) = 0;
 
 	while (ptr->name) {
 		if (ptr->module) {
+			ptr->module->module_number = _php3_next_free_module();
 			if (ptr->module->module_startup_func) {
-				if (ptr->module->module_startup_func(MODULE_PERSISTENT)==FAILURE) {
+				if (ptr->module->module_startup_func(MODULE_PERSISTENT, ptr->module->module_number)==FAILURE) {
 					php3_error(E_CORE_ERROR,"Unable to start %s module",ptr->name);
 					return FAILURE;
 				}
@@ -461,13 +482,19 @@ int module_startup_modules(void)
 }
 
 
-int _register_list_destructors(void (*list_destructor)(void *), void (*plist_destructor)(void *))
+int _register_list_destructors(void (*list_destructor)(void *), void (*plist_destructor)(void *), int module_number)
 {
 	list_destructors_entry ld;
 	TLS_VARS;
 	
+#if 0
+	printf("Registering destructors %d for module %d\n", GLOBAL(list_destructors).nNextFreeElement, module_number);
+#endif
+	
 	ld.list_destructor=(void (*)(void *)) list_destructor;
 	ld.plist_destructor=(void (*)(void *)) plist_destructor;
+	ld.module_number = module_number;
+	ld.resource_id = GLOBAL(list_destructors).nNextFreeElement;
 	
 	if (hash_next_index_insert(&GLOBAL(list_destructors),(void *) &ld,sizeof(list_destructors_entry),NULL)==FAILURE) {
 		return FAILURE;
@@ -480,20 +507,20 @@ int _register_list_destructors(void (*list_destructor)(void *), void (*plist_des
 PHPAPI int register_functions(function_entry *functions)
 {
 	function_entry *ptr = functions;
-	YYSTYPE phps;
+	pval phps;
 	int count=0,unload=0;
 	TLS_VARS;
 
 	while (ptr->fname) {
-		phps.value.internal_function = ptr->handler;
+		phps.value.func.addr.internal = ptr->handler;
 		phps.type = IS_INTERNAL_FUNCTION;
-		phps.func_arg_types = ptr->func_arg_types;
-		if (!phps.value.internal_function) {
+		phps.value.func.arg_types = ptr->func_arg_types;
+		if (!phps.value.func.addr.internal) {
 			php3_error(E_CORE_WARNING,"Null function defined as active function");
 			unregister_functions(functions,count);
 			return FAILURE;
 		}
-		if (hash_add(&GLOBAL(function_table), ptr->fname, strlen(ptr->fname)+1, &phps, sizeof(YYSTYPE), NULL) == FAILURE) {
+		if (hash_add(&GLOBAL(function_table), ptr->fname, strlen(ptr->fname)+1, &phps, sizeof(pval), NULL) == FAILURE) {
 			unload=1;
 			break;
 		}
@@ -541,7 +568,7 @@ int register_module(php3_module_entry *module)
 	TLS_VARS;
 
 #if 0
-	php3_printf("%s:  Registering module\n",module->name);
+	php3_printf("%s:  Registering module %d\n",module->name, module->module_number);
 #endif
 	if (register_functions(module->functions)==FAILURE) {
 		php3_error(E_CORE_WARNING,"%s:  Unable to register functions, unable to load",module->name);
@@ -554,6 +581,12 @@ int register_module(php3_module_entry *module)
 
 void module_destructor(php3_module_entry *module)
 {
+	TLS_VARS;
+	if (module->type == MODULE_TEMPORARY) {
+		hash_apply_with_argument(&GLOBAL(list_destructors), (int (*)(void *,void *)) clean_module_resource_destructors, (void *) &(module->module_number));
+		clean_module_constants(module->module_number);
+	}
+
 	if (module->request_started && module->request_shutdown_func) {
 #if 0
 		php3_printf("%s:  Request shutdown\n",module->name);
@@ -569,6 +602,7 @@ void module_destructor(php3_module_entry *module)
 	}
 	module->module_started=0;
 	unregister_functions(module->functions,-1);
+
 #if HAVE_LIBDL
 	if (module->handle) {
 		dlclose(module->handle);
@@ -584,7 +618,7 @@ int module_registry_request_startup(php3_module_entry *module)
 #if 0
 		php3_printf("%s:  Request startup\n",module->name);
 #endif
-		module->request_startup_func(module->type);
+		module->request_startup_func(module->type, module->module_number);
 	}
 	module->request_started=1;
 	return 0;
@@ -614,6 +648,13 @@ int module_registry_cleanup(php3_module_entry *module)
 	return 0;
 }
 
+
+/* return the next free module number */
+int _php3_next_free_module()
+{
+	TLS_VARS;
+	return ++GLOBAL(module_count);
+}
 
 /*
  * Local variables:

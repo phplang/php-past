@@ -5,23 +5,28 @@
    | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
-   | it under the terms of the GNU General Public License as published by |
-   | the Free Software Foundation; either version 2 of the License, or    |
-   | (at your option) any later version.                                  |
+   | it under the terms of one of the following licenses:                 |
+   |                                                                      |
+   |  A) the GNU General Public License as published by the Free Software |
+   |     Foundation; either version 2 of the License, or (at your option) |
+   |     any later version.                                               |
+   |                                                                      |
+   |  B) the PHP License as published by the PHP Development Team and     |
+   |     included in the distribution in the file: LICENSE                |
    |                                                                      |
    | This program is distributed in the hope that it will be useful,      |
    | but WITHOUT ANY WARRANTY; without even the implied warranty of       |
    | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the        |
    | GNU General Public License for more details.                         |
    |                                                                      |
-   | You should have received a copy of the GNU General Public License    |
-   | along with this program; if not, write to the Free Software          |
-   | Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.            |
+   | You should have received a copy of both licenses referred to here.   |
+   | If you did not, or have any questions about PHP licensing, please    |
+   | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
    | Authors: Rasmus Lerdorf                                              |
    +----------------------------------------------------------------------+
  */
-/* $Id: image.c,v 1.27 1998/01/23 01:29:44 zeev Exp $ */
+/* $Id: image.c,v 1.33 1998/05/21 23:57:30 zeev Exp $ */
 /* 
  * Based on Daniel Schmitt's imageinfo.c which carried the following
  * Copyright notice.
@@ -42,7 +47,7 @@
  *
  */
 
-#include "parser.h"
+#include "php.h"
 #include <stdio.h>
 #if HAVE_FCNTL_H
 #include <fcntl.h>
@@ -70,7 +75,7 @@ struct gfxinfo {
 };
 
 /* routine to handle GIF files. If only everything were that easy... ;} */
-static struct gfxinfo *php3_handle_gif(int infile)
+static struct gfxinfo *php3_handle_gif (int infile)
 {
 	struct gfxinfo *result = NULL;
 	unsigned char a[2];
@@ -219,7 +224,7 @@ static struct gfxinfo *php3_handle_jpeg(int infile)
 /* main function */
 void php3_getimagesize(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *arg1;
+	pval *arg1;
 	int filehandle, itype = 0;
 	char filetype[3];
 	char pngtype[8];
@@ -231,13 +236,13 @@ void php3_getimagesize(INTERNAL_FUNCTION_PARAMETERS)
 	}
 	convert_to_string(arg1);
 
-	if ((filehandle = open(arg1->value.strval, O_RDONLY)) < 0) {
-		php3_error(E_WARNING, "Unable to open %s", arg1->value.strval);
+	if ((filehandle = open(arg1->value.str.val, O_RDONLY)) < 0) {
+		php3_error(E_WARNING, "Unable to open %s", arg1->value.str.val);
 		return;
 	}
 	read(filehandle, filetype, sizeof(filetype));
 	if (!memcmp(filetype, php3_sig_gif, 3)) {
-		result = php3_handle_gif(filehandle);
+		result = php3_handle_gif (filehandle);
 		itype = 1;
 	} else if (!memcmp(filetype, php3_sig_jpg, 3)) {
 		result = php3_handle_jpeg(filehandle);
@@ -256,7 +261,7 @@ void php3_getimagesize(INTERNAL_FUNCTION_PARAMETERS)
 	if (result) {
 		if (array_init(return_value) == FAILURE) {
 			php3_error(E_ERROR, "Unable to initialize array");
-			if(result) efree(result);
+			if (result) efree(result);
 			return;
 		}
 		add_index_long(return_value, 0, result->width);

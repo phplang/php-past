@@ -4,7 +4,7 @@ Assign Indexed, then and Auto assign                          ...
 --GET--
 --FILE--
 <HR> Assign Index from 0, then Auto assign
-<?
+<?php 
   $z[0]="a";
   $z[1]="b";
   $z[2]="c";
@@ -25,7 +25,7 @@ Assign Indexed, then and Auto assign                          ...
   echo "count(): $cz\n";
 ?>
 <HR> Assign Index from 1, then Auto assign
-<?
+<?php 
   $a[1]="a";
   $a[2]="b";
   $a[3]="c";
@@ -46,7 +46,7 @@ Assign Indexed, then and Auto assign                          ...
   echo "count(): $ca\n";
 ?>
 <HR> Assign Index from 2, then Auto assign
-<?
+<?php 
   $b[2]="a";
   $b[3]="b";
   $b[4]="c";
@@ -67,7 +67,7 @@ Assign Indexed, then and Auto assign                          ...
   echo "count(): $cb\n";
 ?>
 <HR> Assign Index from 3, then Auto assign
-<?
+<?php 
   $c[3]="a";
   $c[4]="b";
   $c[5]="c";
@@ -88,7 +88,7 @@ Assign Indexed, then and Auto assign                          ...
   echo "count(): $cc\n";
 ?>
 <HR> Assign Index from 4, then Auto assign
-<?
+<?php 
   $d[4]="a";
   $d[5]="b";
   $d[6]="c";
@@ -109,7 +109,7 @@ Assign Indexed, then and Auto assign                          ...
   echo "count(): $cd\n";
 ?>
 <HR> Assign Index from 5, then Auto assign
-<?
+<?php 
   $e[5]="a";
   $e[6]="b";
   $e[7]="c";
@@ -130,7 +130,7 @@ Assign Indexed, then and Auto assign                          ...
   echo "count(): $ce\n";
 ?>
 <HR> Assign Index from 6, then Auto assign
-<?
+<?php 
   $f[6]="a";
   $f[7]="b";
   $f[8]="c";
@@ -151,7 +151,7 @@ Assign Indexed, then and Auto assign                          ...
   echo "count(): $cf\n";
 ?>
 <HR> Assign Index from 7, then Auto assign
-<?
+<?php 
   $g[7]="a";
   $g[8]="b";
   $g[9]="c";

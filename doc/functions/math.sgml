@@ -1,7 +1,7 @@
 
  <reference id="ref.math">
   <title>Mathematical Functions</title>
-
+  <titleabbrev>Math.</titleabbrev>
 
   <refentry id="function.abs">
    <refnamediv>
@@ -37,8 +37,7 @@
      Returns the arc cosine of arg in radians.
 
     <para>
-     See also <link linkend="function.asin">asin</link> and <link
-     linkend="function.atan">atan</link>.
+     See also <function>asin</function> and <function>atan</function>.
 
    </refsect1>
   </refentry>
@@ -59,8 +58,7 @@
      Returns the arc sine of arg in radians.
 
     <para>
-     See also <link linkend="function.acos">acos</link> and <link
-     linkend="function.atan">atan</link>.
+     See also <function>acos</function> and <function>atan</function>.
 
    </refsect1>
   </refentry>
@@ -81,8 +79,7 @@
      Returns the arc tangent of arg in radians.
      
     <para>
-     See also <link linkend="function.acos">acos</link> and <link
-      linkend="function.atan">atan</link>.
+     See also <function>acos</function> and <function>atan</function>.
 
    </refsect1>
   </refentry>
@@ -109,7 +106,7 @@
      decimal.
 
     <para>
-     See also the <link linkend="function.decbin">decbin</link>
+     See also the <function>decbin</function>
      function.
 
    </refsect1>
@@ -127,15 +124,18 @@
      <funcdef>int <function>ceil</function></funcdef>
      <paramdef>float <parameter>number</parameter></paramdef>
     </funcsynopsis>
-    <para>
-     Returns an int value up to the next integer from number.  Using
-     ceil() on int is absolutely waste time.
+    <simpara>
+     Returns the next highest integer value from
+     <parameter>number</parameter>. Using <function>ceil</function>
+     on integers is absolutely a waste of time.
+     
+    <simpara>
+     NOTE: PHP/FI 2's <function>ceil</function> returned a
+     float. Use: <literal>$new = (double)ceil($number);</literal> to
+     get the old behaviour.
 
-    <para>
-     See also <link linkend="function.floor">floor</link>.  NOTE:
-    PHP2 used to return. Use: <literal>$new =
-    (double)Ceil($number);</literal>
-    to get the old behaviour.
+    <simpara>
+     See also <function>floor</function> and <function>round</function>.
 
    </refsect1>
   </refentry>
@@ -156,8 +156,7 @@
      Returns the cosine of arg in radians.
 
     <para>
-     See also <link linkend="function.sin">sin</link> and <link
-     linkend="function.tan">tan</link>.
+     See also <function>sin</function> and <function>tan</function>.
 
    </refsect1>
   </refentry>
@@ -180,7 +179,7 @@
      2147483647 in decimal resulting to a string of 31 1's.
 
     <para>
-     See also the <link linkend="function.bindec">bindec</link>
+     See also the <function>bindec</function>
      function.
 
    </refsect1>
@@ -204,7 +203,7 @@
      be converted is 2147483647 in decimal resulting to "7fffffff".
 
     <para>
-     See also the <link linkend="function.hexdec">hexdec</link>
+     See also the <function>hexdec</function>
      function.
 
    </refsect1>
@@ -225,8 +224,7 @@
     <para>
      Returns a string containing an octal representation of the given
      number argument.  The largest number that can be converted is
-     2147483647 in decimal resulting to "17777777777". See also <link
-     linkend="function.octdec">octdec</link>.
+     2147483647 in decimal resulting to "17777777777". See also <function>octdec</function>.
 
    </refsect1>
   </refentry>
@@ -247,7 +245,7 @@
      Returns e raised to the power of <parameter>arg</parameter>.
 
     <para>
-     See also <link linkend="function.pow">pow</link>.
+     See also <function>pow</function>.
 
    </refsect1>
   </refentry>
@@ -264,13 +262,42 @@
      <funcdef>int <function>floor</function></funcdef>
      <paramdef>float <parameter>number</parameter></paramdef>
     </funcsynopsis>
-    <para>
-     Returns an int value down to the previous integer from number.
-     Using floor() on int is absolutely waste of time.
-    <para>
-     See also <link linkend="function.ceil">ceil</link>. NOTE:
-     PHP2 used to return float. Use: <literal>$new =
-      (double)Floor($number);</literal> to get the old behaviour.
+    <simpara>
+     Returns the next lowest integer value from
+     <parameter>number</parameter>. Using <function>floor</function>
+     on integers is absolutely a waste of time.
+
+    <simpara>
+     NOTE: PHP/FI 2's <function>floor</function> returned a
+     float. Use: <literal>$new = (double)floor($number);</literal> to
+     get the old behaviour.
+
+    <simpara>
+     See also <function>ceil</function> and <function>round</function>.
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.getrandmax">
+   <refnamediv>
+    <refname>getrandmax</refname>
+    <refpurpose>show largest possible random value</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>getrandmax</function></funcdef>
+     <paramdef>void </paramdef>
+    </funcsynopsis>
+    
+    <simpara>
+     Returns the maximum value that can be returned by a call to
+     <function>rand</function>.
+
+    <simpara>
+     See also <function>rand</function> and
+     <function>srand</function>.
+    
    </refsect1>
   </refentry>
 
@@ -293,7 +320,7 @@
      can be converted is 7fffffff or 2147483647 in decimal.
 
     <para>
-     See also the <link linkend="function.dechex">dechex</link>
+     See also the <function>dechex</function>
      function.
 
    </refsect1>
@@ -350,14 +377,15 @@
      <paramdef>mixed <parameter>argn</parameter></paramdef>
     </funcsynopsis>
     <para>
-     Max() returns the numerically highest of the parameter values.
+     <function>max</function> returns the numerically highest of the
+     parameter values.
 
     <para>
-     If the first parameter is an array, max() returns the highest
-     value in that array.  If the first parameter is an integer,
-     string or double, you need at least two parameters and max()
-     returns the biggest of these values.  You can compare an
-     unlimited number of values.
+     If the first parameter is an array, <function>max</function>
+     returns the highest value in that array.  If the first parameter
+     is an integer, string or double, you need at least two parameters
+     and <function>max</function> returns the biggest of these values.
+     You can compare an unlimited number of values.
 
     <para>
      If one or more of the values is a double, all the values will be
@@ -367,7 +395,6 @@
 
    </refsect1>
   </refentry>
-
 
   <refentry id="function.min">
    <refnamediv>
@@ -383,21 +410,19 @@
      <paramdef>mixed <parameter>argn</parameter></paramdef>
     </funcsynopsis>
     <para>
-     Min() returns the numerically highest of the parameter values.
-
+     <function>min</function> returns the numerically lowest of the
+     parameter values.
     <para>
-     If the first parameter is an array, min() returns the lowest
-     value in that array.  If the first parameter is an integer, string
-     or double, you need at least two parameters and min() returns the
-     lowest of these values.  You can compare an unlimited number of
-     values.
-
+     If the first parameter is an array, <function>min</function>
+     returns the lowest value in that array.  If the first parameter
+     is an integer, string or double, you need at least two parameters
+     and <function>min</function> returns the lowest of these values.
+     You can compare an unlimited number of values.
     <para>
      If one or more of the values is a double, all the values will be
      treated as doubles, and a double is returned.  If none of the
      values is a double, all of them will be treated as integers, and
      an integer is returned.
-
    </refsect1>
   </refentry>
 
@@ -421,7 +446,25 @@
      decimal.
 
     <para>
-     See also <link linkend="function.decoct">decoct</link>.
+     See also <function>decoct</function>.
+
+   </refsect1>
+  </refentry>
+
+  <refentry id="function.pi">
+   <refnamediv>
+    <refname>pi</refname>
+    <refpurpose>get value of pi</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>double <function>pi</function></funcdef>
+     <paramdef>void </paramdef>
+    </funcsynopsis>
+
+    <simpara>
+     Returns an approximation of pi.
 
    </refsect1>
   </refentry>
@@ -442,7 +485,64 @@
     <para>
      Returns base raised to the power of exp.
 
-    <para> See also <link linkend="function.exp">exp</link>.
+    <para> See also <function>exp</function>.
+
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.rand">
+   <refnamediv>
+    <refname>rand</refname>
+    <refpurpose>generate a random value</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>rand</function></funcdef>
+     <paramdef>void </paramdef>
+    </funcsynopsis>
+
+    <simpara>
+     Returns a pseudo-random value between 0 and RAND_MAX.
+
+    <simpara>
+     Remember to seed the random number generator before use with
+     <function>srand</function>.
+
+    <simpara>
+     See also <function>srand</function> and
+     <function>getrandmax</function>.
+
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.round">
+   <refnamediv>
+    <refname>round</refname>
+    <refpurpose>Rounds a float.</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>double <function>round</function></funcdef>
+     <paramdef>double <parameter>val</parameter></paramdef>
+    </funcsynopsis>
+
+    <para>
+     Returns the rounded value of <parameter>val</parameter>. 
+
+     <informalexample>
+      <programlisting>
+$foo = round( 3.4 );   // $foo == 3.0
+$foo = round( 3.5 );   // $foo == 4.0
+$foo = round( 3.6 );   // $foo == 4.0
+      </programlisting>
+     </informalexample>
+
+    <simpara>
+     See also <function>ceil</function> and <function>floor</function>.
 
    </refsect1>
   </refentry>
@@ -463,8 +563,7 @@
      Returns the sine of arg in radians.
 
     <para>
-     See also <link linkend="function.cos">cos</link> and <link
-     linkend="function.tan">tan</link>.
+     See also <function>cos</function> and <function>tan</function>.
 
    </refsect1>
   </refentry>
@@ -489,6 +588,37 @@
   </refentry>
 
 
+  <refentry id="function.srand">
+   <refnamediv>
+    <refname>srand</refname>
+    <refpurpose>seed the random number generator</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>void <function>srand</function></funcdef>
+     <paramdef>int <parameter>seed</parameter></paramdef>
+    </funcsynopsis>
+    
+    <para>
+     Seeds the random number generator with
+     <parameter>seed</parameter>.
+
+     <informalexample>
+      <programlisting>
+// seed with microseconds since last "whole" second
+srand((double)microtime()*1000000);
+$randval = rand();
+      </programlisting>
+     </informalexample>
+ 
+    <simpara>
+     See also <function>rand</function> and <function>getrandmax</function>.
+    
+   </refsect1>
+  </refentry>
+
+
   <refentry id="function.tan">
    <refnamediv>
     <refname>Tan</refname>
@@ -504,8 +634,7 @@
      Returns the tangent of arg in radians.
 
     <para>
-     See also <link linkend="function.sin">sin</link> and <link
-     linkend="function.cos">cos</link>.
+     See also <function>sin</function> and <function>cos</function>.
 
    </refsect1>
   </refentry>

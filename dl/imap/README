@@ -125,31 +125,56 @@ added by
     Gives the numbers of recent messages in the mailbox. Almost the same as
     imap_num_msg
 
-<title> Imap Example </title>
-</head>
-<body>
-<?
-    dl("/your/path/to/dl/imap.so");
-    $mbox=imap_open("{Imap host}INBOX","?user?","?password?");
-    $check=imap_check($mbox);
-    echo  
-    echo $check->Date,"<br>\n";
-    echo "Connection Type: ",$check->Driver,"<br>\n";
-    echo "Mbox: ",$check->Mailbox,"<br>\n";
-    echo "Number Messages: ",$check->Nmsgs;
-    echo " Recent: ",$check->Recent,"<br>\n";
-    $num=imap_num_msg($mbox);
-    for ( $i=1 ; $i <= $num ; $i++){
-        echo"<hr>\n";
-        $h=imap_header($mbox,$i);
-        if ($h->Date[0] == "D") echo $h->Date,"<br>\n";
-        if ($h->To[0] == "T") echo $h->To,"<br>\n";
-        if ($h->From[0] == "F") echo $h->From,"<br>\n";
-        if ($h->cc[0] == "C") echo $h->cc,"<br>\n";
-        if ($h->ReplyTo[0] == "R") echo $h->ReplyTo,"<br>\n";
-        if ($h->Subject) echo $h->Subject,"<br>\n";
-        echo "<pre>\n",imap_body($mbox,$i),"\n</pre>";
-    }
-    imap_close($mbox);
-?>
-</body>
+-------contributions by Antoni Pamies Olive toni@readysoft.net  ----------
+-- imap_fetchstructure(IMAP_stream mbox,long msgno)
+     This function causes a fetch of all the structured information
+     (envelope, internal date, RFC 822 size, flags, and body structure) for
+     the given msgno.
+     The returned values is an object. The properties of this object are:
+     type,encoding,ifsubtype,subtype,ifdescription,description,ifid,id,
+     lines,bytes,ifparameters
+     It also returns an array of objects called parameters[]. This object has
+     the following properties:
+      attribute,value
+    in the case of multipart, it also returns an array of objects of all of the above
+    properties, called parts[].
+      
+-- imap_append(IMAP_stream mbox,string folder, string message)
+   puts the given string message into the given mailbox.
+   
+-- imap_ping(IMAP_stream mbox)
+     The function pings the stream to see if it is still active.  It may
+     discover new mail; this is the preferred method for a periodic "new mail
+     check" as well as a "keep alive" for servers which have an inactivity
+     timeout.  It returns not NIL if the stream is still alive, NIL otherwise.
+
+-- imap_fetchbody(IMAP_stream mbox,long msgno,long part)
+     This function causes a fetch of the particular section of the
+     body of the specified message as a text string and returns that text
+     string.  The section specification is a string of integers delimited by
+     period which index into a body part list as per the IMAP4
+     specification.  Body parts are not decoded by this function.
+
+-------------------------------------------------------------------
+
+-----Contributions by Mark Musone musone@afterfive.com --------
+
+-- imap_base64(string text)
+      This function decodes a BASE64 body part given a source string.  
+      The decoded body part as a string is returned. NOTE, unlike the
+      base64_decode function in the standard php functions, this is
+      binary string safe. This also uses the built in c-client base64
+      decoding, not an internal routine, so you must still load the imap.so
+      library to use this.
+
+
+-----Contributions by Brian Wang brian@vividnet.com
+
+-- imap_8bit(string TEXT)
+This function returns a quoted-printable string given an 8bit
+source string.
+
+--imap_qprint(string TEXT)
+This function returns a string given a quoted-printable source string.
+The decoded body part as an 8-bit character string is returned.
+

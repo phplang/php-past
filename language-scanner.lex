@@ -7,26 +7,29 @@
    | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
-   | it under the terms of the GNU General Public License as published by |
-   | the Free Software Foundation; either version 2 of the License, or    |
-   | (at your option) any later version.                                  |
+   | it under the terms of one of the following licenses:                 |
+   |                                                                      |
+   |  A) the GNU General Public License as published by the Free Software |
+   |     Foundation; either version 2 of the License, or (at your option) |
+   |     any later version.                                               |
+   |                                                                      |
+   |  B) the PHP License as published by the PHP Development Team and     |
+   |     included in the distribution in the file: LICENSE                |
    |                                                                      |
    | This program is distributed in the hope that it will be useful,      |
    | but WITHOUT ANY WARRANTY; without even the implied warranty of       |
    | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the        |
    | GNU General Public License for more details.                         |
    |                                                                      |
-   | You should have received a copy of the GNU General Public License    |
-   | along with this program; if not, write to the Free Software          |
-   | Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.            |
+   | You should have received a copy of both licenses referred to here.   |
+   | If you did not, or have any questions about PHP licensing, please    |
+   | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
    | Authors: Andi Gutmans <andi@php.net>                                 |
    |          Zeev Suraski <bourbon@netvision.net.il>                     |
    +----------------------------------------------------------------------+
 */
 
-
-/* $Id: language-scanner.lex,v 1.135 1998/02/20 04:03:56 zeev Exp $ */
 
 %}
 
@@ -41,25 +44,26 @@
 #include <winsock.h>
 #endif
 
+#include <errno.h>
+
 #ifdef THREAD_SAFE
 #include "tls.h"
 #endif
-#include "parser.h"
+
+#include "php.h"
 #include "language-parser.tab.h"
 #include "language-scanner.h"
 #include "main.h"
 #include "control_structures.h"
 #include "highlight.h"
 #include "functions/post.h"
+#include "constants.h"
+
 #if WIN32|WINNT
-/*
-  just redefine what we need from winsock.h so
-  we dont have to deal with typedef conflicts
-  between flex and winsock.h
-*/
+extern int php3_get_constant(char *name, uint name_len, pval *result);
 #endif
 
-#define YY_DECL int lex_scan(YYSTYPE *phplval)
+#define YY_DECL int lex_scan(pval *phplval)
 #define ECHO { PHPWRITE( yytext, yyleng ); }
 
 #ifdef __cplusplus
@@ -134,14 +138,25 @@ void initialize_input_file_buffer(FILE *f)
 }
 
 
-int include_file(YYSTYPE *file, int display_source)
+static void html_puts(char *s, uint len)
+{
+	register char *ptr=s, *end=s+len;
+	int add_lineno=0;
+	
+	while (ptr<end) {
+		html_putc(*ptr++);
+	}
+}
+
+
+int include_file(pval *file, int display_source)
 { 
 	FILE *tmp;
 	YY_TLS_VARS
 	YY_BUFFER_STATE buffer_state = YY_CURRENT_BUFFER;
 	PHPLexState lex_state;
 	char *filename;
-	SOCK_VARS /* They don't actually get used, but we have to have 'em */
+	int issock=0, socketd=0; 
 	TLS_VARS;
 
 	convert_to_string(file);
@@ -154,14 +169,18 @@ int include_file(YYSTYPE *file, int display_source)
 	lex_state.lineno = GLOBAL(phplineno);
 	lex_state.state = YYSTATE;
 	lex_state.in_eval = GLOBAL(in_eval);
+	lex_state.in = yyin;
 	GLOBAL(in_eval)=0;
 	
 	stack_push(&GLOBAL(input_source_stack),&lex_state,sizeof(PHPLexState));
 
-	tmp = php3_fopen_wrapper(file->value.strval, "r", USE_PATH|IGNORE_URL_WIN SOCK_PARG);
+	tmp = php3_fopen_wrapper(file->value.str.val, "r", USE_PATH|IGNORE_URL_WIN, &issock, &socketd);
+	if(issock) {
+		tmp = fdopen(socketd,"r");
+	}
 	if (!tmp) {
 		php3_error(E_ERROR,"Failed opening required '%s'",
-			    php3_strip_url_passwd(file->value.strval));
+			    php3_strip_url_passwd(file->value.str.val));
 		stack_del_top(&GLOBAL(input_source_stack));
 		return FAILURE;
 	}
@@ -170,28 +189,27 @@ int include_file(YYSTYPE *file, int display_source)
 	BEGIN(INITIAL);
 	GLOBAL(include_count)++;
 	GLOBAL(phplineno)=1+MAX_TOKENS_PER_CACHE*GLOBAL(include_count);
-	filename = estrndup(file->value.strval,file->strlen);
+	filename = estrndup(file->value.str.val,file->value.str.len);
 	hash_index_update(&GLOBAL(include_names),GLOBAL(include_count),(void *) &filename,sizeof(char *),NULL);
 	
-
 	return SUCCESS;
 }
 
 
-void eval_string(YYSTYPE *str,YYSTYPE *return_offset, int display_source INLINE_TLS)
+void eval_string(pval *str,pval *return_offset, int display_source INLINE_TLS)
 {
-	PHPLexState lex_state,*ls;
+	PHPLexState lex_state;
 	YY_TLS_VARS
 	YY_BUFFER_STATE buffer_state = YY_CURRENT_BUFFER;
 
 	convert_to_string(str);
 	
-	if (str->value.strval[0]=='\0') { /* optimize empty eval's */
+	if (str->value.str.val[0]=='\0') { /* optimize empty eval's */
 		return;
 	}
 	/* enforce two trailing NULLs for flex... */
-	str->value.strval = (char *) erealloc(str->value.strval,str->strlen+2);
-	str->value.strval[str->strlen+1]=0;
+	str->value.str.val = (char *) erealloc(str->value.str.val,str->value.str.len+2);
+	str->value.str.val[str->value.str.len+1]=0;
 
 	memcpy(&lex_state.buffer_state,&buffer_state,sizeof(YY_BUFFER_STATE));
 	if (!display_source) {
@@ -201,16 +219,17 @@ void eval_string(YYSTYPE *str,YYSTYPE *return_offset, int display_source INLINE_
 		lex_state.type = LEX_STATE_HIGHLIGHT_STRING;
 	}
 	lex_state.state = YYSTATE;
-	lex_state.eval_string = str->value.strval;
+	lex_state.eval_string = str->value.str.val;
 	lex_state.lineno = GLOBAL(phplineno);
 	lex_state.in_eval = GLOBAL(in_eval);
+	lex_state.in = yyin;
 	GLOBAL(phplineno) = GLOBAL(current_lineno);
 	GLOBAL(in_eval)=1;
 	stack_push(&GLOBAL(input_source_stack),&lex_state,sizeof(PHPLexState));
+	yyin=NULL;
 
 	if (!display_source) {
 		tcm_new(&GLOBAL(token_cache_manager));
-		
 	} else {
 		if (display_source==2 && !yystype_true(return_offset)) {
 			display_source=1;
@@ -223,18 +242,18 @@ void eval_string(YYSTYPE *str,YYSTYPE *return_offset, int display_source INLINE_
 		}
 	}
 
-	yy_scan_buffer(str->value.strval, str->strlen+2);
+	yy_scan_buffer(str->value.str.val, str->value.str.len+2);
 }
 
 
-int conditional_include_file(YYSTYPE *file,YYSTYPE *return_offset INLINE_TLS)
+int conditional_include_file(pval *file,pval *return_offset INLINE_TLS)
 {
-	PHPLexState lex_state,*ls;
+	PHPLexState lex_state;
 	YY_TLS_VARS
 	YY_BUFFER_STATE buffer_state = YY_CURRENT_BUFFER;
 	FILE *tmp;
 	char *filename;
-	SOCK_VARS;
+	int issock=0, socketd=0;;
 
 	convert_to_string(file);
 
@@ -244,13 +263,17 @@ int conditional_include_file(YYSTYPE *file,YYSTYPE *return_offset INLINE_TLS)
 	lex_state.return_offset = return_offset->offset+1;
 	lex_state.lineno = GLOBAL(phplineno);
 	lex_state.in_eval = GLOBAL(in_eval);
+	lex_state.in = yyin;
 	GLOBAL(in_eval) = 0;
 	stack_push(&GLOBAL(input_source_stack),&lex_state,sizeof(PHPLexState));
 
-	tmp = php3_fopen_wrapper(file->value.strval, "r", USE_PATH|IGNORE_URL_WIN SOCK_PARG);
+	tmp = php3_fopen_wrapper(file->value.str.val, "r", USE_PATH|IGNORE_URL_WIN, &issock, &socketd);
+	if(issock) {
+		tmp = fdopen(socketd,"r");
+	}
 	if (!tmp) {
 		php3_error(E_WARNING,"Failed opening '%s' for inclusion",
-			    php3_strip_url_passwd(file->value.strval));
+			    php3_strip_url_passwd(file->value.str.val));
 		stack_del_top(&GLOBAL(input_source_stack));
 		yystype_destructor(file _INLINE_TLS);
 		return FAILURE;
@@ -260,12 +283,41 @@ int conditional_include_file(YYSTYPE *file,YYSTYPE *return_offset INLINE_TLS)
 	BEGIN(INITIAL);
 	GLOBAL(include_count)++;
 	GLOBAL(phplineno)=1+MAX_TOKENS_PER_CACHE*GLOBAL(include_count);
-	filename = file->value.strval;
+	filename = file->value.str.val;
 	hash_index_update(&GLOBAL(include_names),GLOBAL(include_count),(void *) &filename,sizeof(char *),NULL);
 	
 	tcm_new(&GLOBAL(token_cache_manager));
 	return SUCCESS;
 }
+
+
+void clean_input_source_stack(void)
+{
+	PHPLexState *lex_state;
+	YY_TLS_VARS
+	TLS_VARS;
+
+	if (yyin) {
+		fclose(yyin);
+	}
+	while (stack_top(&GLOBAL(input_source_stack), (void **) &lex_state) != FAILURE) {
+		switch(lex_state->type) {
+			case LEX_STATE_EVAL:
+			case LEX_STATE_HIGHLIGHT_STRING:
+				STR_FREE(lex_state->eval_string);
+				break;
+		}
+		if (lex_state->in && lex_state->in!=yyin) {
+			fclose(lex_state->in);
+		}
+		yy_delete_buffer(YY_CURRENT_BUFFER);
+		yy_switch_to_buffer(lex_state->buffer_state);
+		stack_del_top(&GLOBAL(input_source_stack));
+	}
+	stack_destroy(&GLOBAL(input_source_stack));
+	GLOBAL(initialized) &= ~INIT_INCLUDE_STACK;
+}
+
 
 /* redefine YY_INPUT to handle urls for win32*/
 #if 0 /*WIN32|WINNT*/
@@ -310,7 +362,8 @@ int conditional_include_file(YYSTYPE *file,YYSTYPE *return_offset INLINE_TLS)
 %}
 
 LNUM	[0-9]+
-DNUM	[0-9]*[\.][0-9]+
+DNUM	([0-9]*[\.][0-9]+)|([0-9]+[\.][0-9]*)
+EXPONENT_DNUM	(({LNUM}|{DNUM})[eE][+-]?{LNUM})
 HNUM	"0x"[0-9a-fA-F]+
 LABEL	[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*
 WHITESPACE [ \n\r\t]+
@@ -340,6 +393,10 @@ TLS_VARS;
 
 <IN_PHP>"function"|"cfunction" {
 	return FUNCTION;
+}
+
+<IN_PHP>"const" {
+	return PHP_CONST;
 }
 
 <IN_PHP>"return" {
@@ -444,6 +501,14 @@ TLS_VARS;
 
 <IN_PHP>"("{TABS_AND_SPACES}"string"{TABS_AND_SPACES}")" {
 	return STRING_CAST;
+}
+
+<IN_PHP>"("{TABS_AND_SPACES}"array"{TABS_AND_SPACES}")" {
+	return ARRAY_CAST;
+}
+
+<IN_PHP>"("{TABS_AND_SPACES}"object"{TABS_AND_SPACES}")" {
+	return OBJECT_CAST;
 }
 
 <IN_PHP>"eval" {
@@ -584,35 +649,29 @@ TLS_VARS;
 }
 
 <IN_PHP>{LNUM}|{HNUM} {
+	errno = 0;
 	phplval->value.lval = strtol(yytext, NULL, 0);
-	phplval->type = IS_LONG;
-	return LNUMBER;
+	if (errno == ERANGE) { /* overflow */
+		phplval->value.dval = strtod(yytext,NULL);
+		phplval->type = IS_DOUBLE;
+		return DNUMBER;
+	} else {
+		phplval->type = IS_LONG;
+		return LNUMBER;
+	}
 }
 
 <DOUBLE_QUOTES,BACKQUOTE>{LNUM}|{HNUM} { /* treat numbers (almost) as strings inside encapsulated strings */
-	phplval->value.strval = (char *)estrndup(yytext, yyleng);
-	phplval->strlen = yyleng;
+	phplval->value.str.val = (char *)estrndup(yytext, yyleng);
+	phplval->value.str.len = yyleng;
 	phplval->type = IS_STRING;
 	return NUM_STRING;
 }
 
-<IN_PHP>{DNUM} {
-	phplval->value.dval = atof(yytext);
+<IN_PHP>{DNUM}|{EXPONENT_DNUM} {
+	phplval->value.dval = strtod(yytext,NULL);
 	phplval->type = IS_DOUBLE;
 	return DNUMBER;
-}
-
-<IN_PHP>"TRUE" {
-	phplval->value.lval = 1;
-	phplval->type = IS_LONG;
-	return PHP_TRUE;
-}
-
-<IN_PHP>"FALSE" {
-	phplval->value.strval = empty_string;
-	phplval->strlen = 0;
-	phplval->type = IS_STRING;
-	return PHP_FALSE;
 }
 
 <IN_PHP>"__LINE__" {
@@ -624,35 +683,37 @@ TLS_VARS;
 <IN_PHP>"__FILE__" {
 	char *filename = php3_get_filename(GLOBAL(current_lineno));
 	
-	phplval->strlen = strlen(filename);
-	phplval->value.strval = estrndup(filename,phplval->strlen);
+	phplval->value.str.len = strlen(filename);
+	phplval->value.str.val = estrndup(filename,phplval->value.str.len);
 	phplval->type = IS_STRING;
 	return PHP_FILE;
 }
 
 
 <INITIAL>(([^<]|"<"[^?s]){1,400})|"<s" {
-	phplval->value.strval = (char *) estrndup(yytext, yyleng);
-	phplval->strlen = yyleng;
+	phplval->value.str.val = (char *) estrndup(yytext, yyleng);
+	phplval->value.str.len = yyleng;
 	phplval->type = IS_STRING;
 	HANDLE_NEWLINES(yytext,yyleng);
 	return INLINE_HTML;
 }
 
 <INITIAL>"<?"|"<script"{WHITESPACE}+"language"{WHITESPACE}*"="{WHITESPACE}*("php"|"\"php\""|"\'php\'"){WHITESPACE}*">" {
-	if (php3_ini.short_open_tag) {
+	if (php3_ini.short_open_tag || yyleng>2) { /* yyleng>2 means it's not <? but <script> */
 		if (!(GLOBAL(initialized) & INIT_ENVIRONMENT)) {
 			hash_environment();
 		}
 		BEGIN(IN_PHP);
 		if (GLOBAL(php3_display_source)) {
 			BEGIN_COLOR(php3_ini.highlight_default);
-			PUTS("&lt;?");
+			html_puts(yytext,yyleng);
 		}
+		HANDLE_NEWLINES(yytext,yyleng);
 	} else {
-		phplval->value.strval = (char *) estrndup(yytext, yyleng);
-		phplval->strlen = yyleng;
+		phplval->value.str.val = (char *) estrndup(yytext, yyleng);
+		phplval->value.str.len = yyleng;
 		phplval->type = IS_STRING;
+		HANDLE_NEWLINES(yytext,yyleng);
 		return INLINE_HTML;
 	}
 }
@@ -665,7 +726,7 @@ TLS_VARS;
 	BEGIN(IN_PHP);
 	if (GLOBAL(php3_display_source)) {
 		BEGIN_COLOR(php3_ini.highlight_default);
-		PUTS("&lt;?php ");
+		html_puts(yytext,yyleng);
 	}
 }
 
@@ -674,14 +735,39 @@ TLS_VARS;
 	HANDLE_NEWLINE(yytext[yyleng-1]);
 	if (GLOBAL(php3_display_source)) {
 		BEGIN_COLOR(php3_ini.highlight_default);
-		PUTS("&lt;?php_track_vars?&gt; ");
+		html_puts(yytext,yyleng);
 	}
 }
 
 
-<IN_PHP,DOUBLE_QUOTES,BACKQUOTE>{LABEL} {
-	phplval->value.strval = (char *)estrndup(yytext, yyleng);
-	phplval->strlen = yyleng;
+<IN_PHP>{LABEL} {
+	pval result;
+	
+	if (!last_token_suggests_variable_reference() && php3_get_constant(yytext, yyleng, &result)) {
+		*phplval = result;
+		switch (result.type) {
+			case IS_LONG:
+				return LNUMBER;
+				break;
+			case IS_DOUBLE:
+				return DNUMBER;
+				break;
+			case IS_STRING:
+				return STRING_CONSTANT;
+				break;
+		}
+	} else {
+		phplval->value.str.val = (char *)estrndup(yytext, yyleng);
+		phplval->value.str.len = yyleng;
+		phplval->type = IS_STRING;
+		return STRING;
+	}
+}
+
+
+<DOUBLE_QUOTES,BACKQUOTE>{LABEL} {
+	phplval->value.str.val = (char *)estrndup(yytext, yyleng);
+	phplval->value.str.len = yyleng;
 	phplval->type = IS_STRING;
 	return STRING;
 }
@@ -690,11 +776,7 @@ TLS_VARS;
 <IN_PHP>{WHITESPACE} {
 	HANDLE_NEWLINES(yytext,yyleng);
 	if (GLOBAL(php3_display_source)) {
-		register int i;
-		
-		for (i=0; i<yyleng; i++) {
-			html_putc(yytext[i]);
-		}
+		html_puts(yytext, yyleng);
 	}
 }
 
@@ -705,7 +787,7 @@ TLS_VARS;
 		END_COLOR();
 		BEGIN_ITALIC();
 		BEGIN_COLOR_SIZE(php3_ini.highlight_comment, "-1");
-		PUTS(yytext);
+		html_puts(yytext,yyleng);
 		END_COLOR();
 		END_ITALIC();
 		BEGIN_COLOR(php3_ini.highlight_default);
@@ -723,7 +805,7 @@ TLS_VARS;
 		END_COLOR();
 		BEGIN_ITALIC();
 		BEGIN_COLOR_SIZE(php3_ini.highlight_comment, "-1");
-		PUTS(yytext);
+		html_puts(yytext,yyleng);
 	}
 	for (;;) {
 		if (GLOBAL(php3_display_source)) {
@@ -769,6 +851,10 @@ TLS_VARS;
 <IN_PHP>("?>"|"</script"{WHITESPACE}*">")([\n]|"\r\n")? {
 	HANDLE_NEWLINE(yytext[yyleng-1]);
 	BEGIN(INITIAL);
+	if (GLOBAL(php3_display_source)) {
+		html_puts(yytext,yyleng);
+		END_COLOR();
+	}
 	return ';';  /* implicit ';' at php-end tag */
 }
 
@@ -777,6 +863,7 @@ TLS_VARS;
 	if (GLOBAL(php3_display_source)) {
 		BEGIN_COLOR(php3_ini.highlight_string);
 		BEGIN_STRONG();
+		html_putc(yytext[0]);
 	}
 	return '\"';
 }
@@ -786,6 +873,7 @@ TLS_VARS;
 	if (GLOBAL(php3_display_source)) {
 		BEGIN_COLOR(php3_ini.highlight_string);
 		BEGIN_STRONG();
+		html_putc(yytext[0]);
 	}
 	return '`';
 }
@@ -796,6 +884,7 @@ TLS_VARS;
 	if (GLOBAL(php3_display_source)) {
 		BEGIN_COLOR(php3_ini.highlight_string);
 		BEGIN_STRONG();
+		html_putc(yytext[0]);
 	}
 	return '\'';
 }
@@ -803,16 +892,16 @@ TLS_VARS;
 
 <DOUBLE_QUOTES,BACKQUOTE>{ESCAPED_AND_WHITESPACE} {
 	HANDLE_NEWLINES(yytext,yyleng);
-	phplval->value.strval = (char *) estrndup(yytext, yyleng);
-	phplval->strlen = yyleng;
+	phplval->value.str.val = (char *) estrndup(yytext, yyleng);
+	phplval->value.str.len = yyleng;
 	phplval->type = IS_STRING;
 	return ENCAPSED_AND_WHITESPACE;
 }
 
 <SINGLE_QUOTE>([^'\\]|\\[^'\\])+ {
 	HANDLE_NEWLINES(yytext,yyleng);
-	phplval->value.strval = (char *) estrndup(yytext, yyleng);
-	phplval->strlen = yyleng;
+	phplval->value.str.val = (char *) estrndup(yytext, yyleng);
+	phplval->value.str.len = yyleng;
 	phplval->type = IS_STRING;
 	return ENCAPSED_AND_WHITESPACE;
 }
@@ -821,8 +910,8 @@ TLS_VARS;
 <DOUBLE_QUOTES>[`]+ {
 	int i;
 
-	phplval->value.strval = (char *) estrndup(yytext, yyleng);
-	phplval->strlen = yyleng;
+	phplval->value.str.val = (char *) estrndup(yytext, yyleng);
+	phplval->value.str.len = yyleng;
 	phplval->type = IS_STRING;
 	return ENCAPSED_AND_WHITESPACE;
 }
@@ -831,8 +920,8 @@ TLS_VARS;
 <BACKQUOTE>["]+ {
 	int i;
 
-	phplval->value.strval = (char *) estrndup(yytext, yyleng);
-	phplval->strlen = yyleng;
+	phplval->value.str.val = (char *) estrndup(yytext, yyleng);
+	phplval->value.str.len = yyleng;
 	phplval->type = IS_STRING;
 	return ENCAPSED_AND_WHITESPACE;
 }
@@ -871,6 +960,16 @@ TLS_VARS;
 	return CHARACTER;
 }
 
+<DOUBLE_QUOTES,BACKQUOTE>"\\"[0-7]{1,3} {
+	phplval->value.chval = (char) strtol (yytext+1, NULL, 8);
+	return CHARACTER;
+}
+
+<DOUBLE_QUOTES,BACKQUOTE>"\\x"[0-9A-Fa-f]{1,2} {
+	phplval->value.chval = (char) strtol (yytext+2, NULL, 16);
+	return CHARACTER;
+}
+
 <DOUBLE_QUOTES,BACKQUOTE>"\\". {
 	switch (yytext[1]) {
 		case 'n':
@@ -888,12 +987,9 @@ TLS_VARS;
 		case '$':
 			phplval->value.chval=yytext[1];
 			break;
-		case '0':
-			phplval->value.chval='\0';
-			break;
 		default:
-			phplval->value.strval = estrndup(yytext,yyleng);
-			phplval->strlen = yyleng;
+			phplval->value.str.val = estrndup(yytext,yyleng);
+			phplval->value.str.len = yyleng;
 			phplval->type = IS_STRING;
 			return BAD_CHARACTER;
 			break;
@@ -904,6 +1000,7 @@ TLS_VARS;
 <DOUBLE_QUOTES>["] {
 	BEGIN(IN_PHP);
 	if (GLOBAL(php3_display_source)) {
+		html_putc(yytext[0]);
 		END_STRONG(); END_COLOR();
 	}
 	return '\"';
@@ -913,6 +1010,7 @@ TLS_VARS;
 <BACKQUOTE>[`] {
 	BEGIN(IN_PHP);
 	if (GLOBAL(php3_display_source)) {
+		html_putc(yytext[0]);
 		END_STRONG(); END_COLOR();
 	}
 	return '`';
@@ -922,6 +1020,7 @@ TLS_VARS;
 <SINGLE_QUOTE>['] {
 	BEGIN(IN_PHP);
 	if (GLOBAL(php3_display_source)) {
+		html_putc(yytext[0]);
 		END_STRONG(); END_COLOR();
 	}
 	return '\'';
@@ -942,16 +1041,16 @@ TLS_VARS;
 		
 		switch(lex_state->type) {
 			case LEX_STATE_CONDITIONAL_INCLUDE: /* switching out of include() */
-				seek_token(&GLOBAL(token_cache_manager),lex_state->return_offset);
+				seek_token(&GLOBAL(token_cache_manager),lex_state->return_offset, NULL);
 #if WIN32|WINNT
 				if(yyin->_tmpfname=="url"){
 					closesocket(yyin->_file);
 					efree(yyin);
 				} else {
-#endif
-				fclose(yyin);
-#if WIN32|WINNT
+					fclose(yyin);
 				}
+#else
+				fclose(yyin);
 #endif
 				BEGIN(lex_state->state);
 				yy_switch_to_buffer(lex_state->buffer_state);
@@ -959,7 +1058,7 @@ TLS_VARS;
 				return DONE_EVAL;
 				break;
 			case LEX_STATE_EVAL: /* switching out of eval() */
-				seek_token(&GLOBAL(token_cache_manager),lex_state->return_offset);
+				seek_token(&GLOBAL(token_cache_manager),lex_state->return_offset, NULL);
 				BEGIN(lex_state->state);
 				yy_switch_to_buffer(lex_state->buffer_state);
 				STR_FREE(lex_state->eval_string);
@@ -990,10 +1089,10 @@ TLS_VARS;
 					closesocket(yyin->_file);
 					efree(yyin);
 				} else {
-#endif
-				fclose(yyin);
-#if WIN32|WINNT
+					fclose(yyin);
 				}
+#else
+				fclose(yyin);
 #endif
 				BEGIN(lex_state->state);
 				yy_switch_to_buffer(lex_state->buffer_state);

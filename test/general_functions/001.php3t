@@ -3,7 +3,7 @@ sprintf() function                                            ...
 --POST--
 --GET--
 --FILE--
-<?
+<?php 
 
 $agent = sprintf("%.5s", "James Bond, 007");
 

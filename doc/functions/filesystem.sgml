@@ -1,6 +1,40 @@
 
  <reference id="ref.filesystem">
   <title>Filesystem Functions</title>
+  <titleabbrev>Filesystem</titleabbrev>
+
+  <refentry id="function.basename">
+   <refnamediv>
+    <refname>basename</refname>
+    <refpurpose>return file name part of path</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>string <function>basename</function></funcdef>
+     <paramdef>string <parameter>path</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+     Given a string containing a path to a file, this function will
+     return the base name of the file.
+    <para>
+     On Windows, both slash (<literal>/</literal>) and backslash
+     (<literal>\</literal>) are used as path separator character.  In
+     other environments, it is the forward slash
+     (<literal>/</literal>).
+    <para>
+     <example><title><function>basename</function> example</title>
+      <programlisting>
+$path = "/home/httpd/html/index.php3";
+$file = basename($path); // $file is set to "index.php3"
+</programlisting>
+     </example>
+
+    <para>
+     See also:
+     <function>dirname</function>
+   </refsect1>
+  </refentry>
 
 
   <refentry id="function.chgrp">
@@ -20,17 +54,12 @@
      the superuser may change the group of a file arbitrarily; other
      users may change the group of a file to any group of which that
      user is a member.
-
     <para>
      Returns true on success; otherwise returns false.
-
     <para>
      On Windows, does nothing and returns true.
-
     <para>
-     See also <link linkend="function.chown">chown</link> and <link
-      linkend="function.chgrp">chmod</link>.
-  
+     See also <function>chown</function> and <function>chmod</function>.
    </refsect1>
   </refentry>
 
@@ -49,14 +78,26 @@
     </funcsynopsis>
     <para>
      Attempts to change the mode of the file specified by
-     filename to that given in mode. 
+     <parameter>filename</parameter> to that given in
+     <parameter>mode</parameter>.
+
+    <para>
+     Note that <parameter>mode</parameter> is not automatically
+     assumed to be an octal value. To ensure the expected operation,
+     you need to prefix <parameter>mode</parameter> with a zero (0):
+
+     <informalexample>
+      <programlisting>
+chmod( "/somedir/somefile", 755 );   // decimal; probably incorrect       
+chmod( "/somedir/somefile", 0755 );  // octal; correct value of mode
+      </programlisting>
+     </informalexample>
 
     <para>
      Returns true on success and false otherwise.
 
     <para>
-     See also <link linkend="function.chown">chown</link> and <link
-      linkend="function.chgrp">chgrp</link>.
+     See also <function>chown</function> and <function>chgrp</function>.
    </refsect1>
   </refentry>
 
@@ -85,9 +126,8 @@
      </note>
 
     <para>
-     See also <link linkend="function.chown">chown</link> and <link
-      linkend="function.chmod">chgrp</link>.
-  
+     See also <function>chown</function> and <function>chmod</function>.
+
    </refsect1>
   </refentry>
 
@@ -113,17 +153,81 @@
      results of the last call from memory.
 
     <para>
-     Affected functions include <link
-     linkend="function.stat">stat</link>, <link
-     linkend="function.filectime">filectime</link>, <link
-     linkend="function.fileatime">fileatime</link>, <link
-     linkend="function.fileinode">fileinode</link>, <link
-     linkend="function.filegroup">filegroup</link>, <link
-     linkend="function.fileowner">fileowner</link>, <link
-     linkend="function.filesize">filesize</link>, <link
-     linkend="function.filetype">filetype</link>, and <link
-     linkend="function.fileperms">fileperms</link>.
-  
+     Affected functions include <function>stat</function>,
+     <function>file_exists</function>,
+     <function>filectime</function>,
+     <function>fileatime</function>,
+     <function>fileinode</function>,
+     <function>filegroup</function>,
+     <function>fileowner</function>,
+     <function>filesize</function>,
+     <function>filetype</function>, and
+     <function>fileperms</function>.
+
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.copy">
+   <refnamediv>
+    <refname>copy</refname>
+    <refpurpose>copy file</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>copy</function></funcdef>
+     <paramdef>string <parameter>source</parameter></paramdef>
+     <paramdef>string <parameter>dest</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+     Makes a copy of a file.  Returns true if the copy succeeded,
+     false otherwise.
+     <example><title><function>copy</function> example</title>
+      <programlisting>
+if (!copy($file, $file.'.bak')) {
+    print("failed to copy $file...&lt;br>\n");
+}
+</programlisting>
+     </example>
+
+    <para>
+     See also:
+     <function>rename</function>
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.dirname">
+   <refnamediv>
+    <refname>dirname</refname>
+    <refpurpose>return file name part of path</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>string <function>dirname</function></funcdef>
+     <paramdef>string <parameter>path</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+     Given a string containing a path to a file, this function will
+     return the name of the directory.
+    <para>
+     On Windows, both slash (<literal>/</literal>) and backslash
+     (<literal>\</literal>) are used as path separator character.  In
+     other environments, it is the forward slash
+     (<literal>/</literal>).
+    <para>
+     <example><title><function>dirname</function> example</title>
+      <programlisting>
+$path = "/etc/passwd";
+$file = dirname($path); // $file is set to "/etc"
+</programlisting>
+     </example>
+
+    <para>
+     See also:
+     <function>basename</function>
    </refsect1>
   </refentry>
 
@@ -147,8 +251,8 @@
 
     <para>
      The file pointer must be valid, and must point to a file
-     successfully opened by <link
-      linkend="function.fopen">fopen</link>.
+     successfully opened by <function>fopen</function> or
+     <function>fsockopen</function>. 
 
    </refsect1>
   </refentry>
@@ -171,9 +275,8 @@
 
     <para>
      The file pointer must be valid, and must point to a file
-      successfully opened by <link
-      linkend="function.fopen">fopen</link> or <link
-      linkend="function.popen">popen</link>.
+     successfully opened by <function>fopen</function>,
+     <function>popen</function>, or <function>fsockopen</function>.
 
    </refsect1>
   </refentry>
@@ -190,24 +293,22 @@
      <funcdef>string <function>fgetc</function></funcdef>
      <paramdef>int <parameter>fp</parameter></paramdef>
     </funcsynopsis>
-    <para>    
+    <para>
      Returns a string containing a single character read from the
      file pointed to by fp.  Returns FALSE on EOF (as does
-     <link linkend="function.feof">feof</link>).
-    <para>    
+     <function>feof</function>).
+    <para>
      The file pointer must be valid, and must point to a file
-     successfully opened by <link
-     linkend="function.fopen">fopen</link>, or
-     <link linkend="function.popen">popen</link>.  
+     successfully opened by <function>fopen</function>,
+     <function>popen</function>, or <function>fsockopen</function>.
 
-    <para> See also
-     <link linkend="function.fopen">fopen</link>, <link
-      linkend="function.popen">popen</link>, and <link
-      linkend="function.fgets">fgets</link>.
+    <para> See also <function>fopen</function>,
+    <function>popen</function>, <function>fsockopen</function>, and
+    <function>fgets</function>.
 
    </refsect1>
   </refentry>
-  
+
 
   <refentry id="function.fgets">
    <refnamediv>
@@ -222,23 +323,21 @@
      <paramdef>int <parameter>length</parameter></paramdef>
     </funcsynopsis>
 
-    <para>    
+    <para>
      Returns a string of up to length - 1 bytes read from the file
      pointed to by fp. Reading ends when length - 1 bytes have been
-     read, on a newline, or on EOF (whichever comes first).  
+     read, on a newline, or on EOF (whichever comes first).
 
-    <para> If an error occurs, returns false.  
+    <para> If an error occurs, returns false.
 
     <para> The file pointer must be valid, and must point to a file
-     successfully opened by <link
-      linkend="function.fopen">fopen</link>, or
-     <link linkend="function.popen">popen</link>.  
+     successfully opened by <function>fopen</function>,
+     <function>popen</function>, or <function>fsockopen</function>.
 
     <para> See also
-     <link linkend="function.fopen">fopen</link>, <link
-      linkend="function.popen">popen</link>, and <link
-      linkend="function.fgetc">fgetc</link>.
-  
+     <function>fopen</function>, <function>popen</function>, 
+     <function>fgetc</function>, and <function>fsockopen</function>.
+
    </refsect1>
   </refentry>
 
@@ -256,14 +355,13 @@
      <paramdef>int <parameter>length</parameter></paramdef>
     </funcsynopsis>
     <para>
-     Identical to <link linkend="function.fgets">fgets</link>,
+     Identical to <function>fgets</function>,
      except that fgetss attempts to strip any HTML and PHP tags from
      the text it reads.
 
     <para>
-     See also <link linkend="function.fgets">fgets</link>, <link
-     linkend="function.fopen">fopen</link>, and <link
-     linkend="function.popen">popen</link>.
+     See also <function>fgets</function>, <function>fopen</function>,
+     <function>fsockopen</function>, and <function>popen</function>.
 
    </refsect1>
   </refentry>
@@ -271,8 +369,8 @@
 
   <refentry id="function.file">
    <refnamediv>
-    <refname>file</refname> <refpurpose>read entire file into an
-    array</refpurpose>
+    <refname>file</refname> 
+    <refpurpose>read entire file into an array</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
@@ -280,15 +378,38 @@
      <funcdef>array <function>file</function></funcdef>
      <paramdef>string <parameter>filename</parameter></paramdef>
     </funcsynopsis>
-    <para> Identical to <link
-      linkend="function.readfile">readfile</link>, except that file()
-     returns the file in an array.  
 
-    <para> See also <link
-      linkend="function.readfile">readfile</link>, <link
-      linkend="function.fopen">fopen</link>, and <link
-      linkend="function.popen">popen</link>.
+    <para> 
+     Identical to <function>readfile</function>, except that file()
+     returns the file in an array.
      
+    <para> 
+     See also <function>readfile</function>,
+     <function>fopen</function>, and <function>popen</function>.
+
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.file-exists">
+   <refnamediv>
+    <refname>file_exists</refname>
+    <refpurpose>Check whether a file exists.</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>file_exists</function></funcdef>
+     <paramdef>string <parameter>filename</parameter></paramdef>
+    </funcsynopsis>
+
+    <simpara>
+     Returns true if the file specified by
+     <parameter>filename</parameter> exists; false otherwise.
+
+    <simpara>
+     See also <function>clearstatcache</function>.
+
    </refsect1>
   </refentry>
 
@@ -306,7 +427,7 @@
     </funcsynopsis>
     <para> Returns the time the file was last accessed, or false in case
     of an error.
-    
+
    </refsect1>
   </refentry>
 
@@ -324,7 +445,7 @@
     </funcsynopsis>
 <para>    Returns the time the file was last changed, or false in case of an
     error.
-  
+
    </refsect1>
   </refentry>
 
@@ -342,7 +463,7 @@
     </funcsynopsis>
 <para>    Returns the group ID of the owner of the file, or false in case of an
     error.
-  
+
    </refsect1>
   </refentry>
 
@@ -359,7 +480,7 @@
      <paramdef>string <parameter>filename</parameter></paramdef>
     </funcsynopsis>
 <para>    Returns the inode number of the file, or false in case of an error.
-  
+
    </refsect1>
   </refentry>
 
@@ -377,7 +498,7 @@
     </funcsynopsis>
 <para>    Returns the time the file was last modified, or false in case of an
     error.
-  
+
    </refsect1>
   </refentry>
 
@@ -395,7 +516,7 @@
     </funcsynopsis>
 <para>    Returns the user ID of the owner of the file, or false in case of an
     error.
-  
+
    </refsect1>
   </refentry>
 
@@ -412,7 +533,7 @@
      <paramdef>string <parameter>filename</parameter></paramdef>
     </funcsynopsis>
 <para>    Returns the permissions on the file, or false in case of an error.
-  
+
    </refsect1>
   </refentry>
 
@@ -429,7 +550,7 @@
      <paramdef>string <parameter>filename</parameter></paramdef>
     </funcsynopsis>
 <para>    Returns the size of the file, or false in case of an error.
-  
+
    </refsect1>
   </refentry>
 
@@ -450,7 +571,7 @@
     block, link, file, and
     unknown.
   <para>    Returns false if an error occurs.
-  
+
    </refsect1>
   </refentry>
 
@@ -464,7 +585,7 @@
     <title>Description</title>
     <funcsynopsis>
      <funcdef>int <function>fileumask</function></funcdef>
-     <paramdef>int <parameter>umask</parameter></paramdef>
+     <paramdef>int <parameter><optional>umask</optional></parameter></paramdef>
     </funcsynopsis>
 <para>    Sets the umask to umask & 0777.
   <para>    Returns the old umask.
@@ -507,7 +628,7 @@
 
     <para>
      If the open fails, the function returns false.
-    
+
     <para><example>
       <title>fopen() example</title>
       <programlisting>
@@ -516,7 +637,8 @@ $fp = fopen( "http://www.php.net/", "r" );
 </programlisting></example>
 
     <para>
-     See also <link linkend="function.fclose">fclose</link>.
+     See also <function>fclose</function>,
+     <function>fsockopen</function>, and <function>popen</function>.
 
    </refsect1>
   </refentry>
@@ -542,9 +664,8 @@ $fp = fopen( "http://www.php.net/", "r" );
 
     <para>
      The file pointer must be valid, and must point to a file
-     successfully opened by <link
-      linkend="function.fopen">fopen</link> or
-     <link linkend="function.popen">popen</link>.
+     successfully opened by <function>fopen</function>,
+     <function>popen</function>, or <function>fsockopen</function>.
 
    </refsect1>
   </refentry>
@@ -557,26 +678,55 @@ $fp = fopen( "http://www.php.net/", "r" );
    </refnamediv>
    <refsect1>
     <title>Description</title>
-    <funcsynopsis> 
+    <funcsynopsis>
      <funcdef>int <function>fputs</function></funcdef>
-     <paramdef>int <parameter>fp</parameter></paramdef> 
+     <paramdef>int <parameter>fp</parameter></paramdef>
      <paramdef>string <parameter>str</parameter></paramdef>
+     <paramdef>int <parameter><optional>length</optional></parameter></paramdef>
     </funcsynopsis>
-    <para> 
-     Writes str to the file stream pointed to by fp.  
+    <para>
+     <function>fputs</function> is an alias to
+     <function>fwrite</function>, and is identical in every way.
+
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.fread">
+   <refnamediv>
+    <refname>fread</refname>
+    <refpurpose>Binary-safe file read</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>string <function>fread</function></funcdef>
+     <paramdef>int <parameter>fp</parameter></paramdef>
+     <paramdef>int <parameter>length</parameter></paramdef>
+    </funcsynopsis>
+    <simpara>
+     <function>fread</function> reads up to
+     <parameter>length</parameter> bytes from the file pointer
+     referenced by <parameter>fp</parameter>. Reading stops when
+     <parameter>length</parameter> bytes have been read or EOF is
+     reached, whichever comes first. 
 
     <para>
-     Returns the number of characters written, or false if an error
-     occurs.
+    <informalexample>
+      <programlisting>
+// get contents of a file into a string
+$filename = "/usr/local/something.txt";
+$fd = fopen( $filename, "r" );
+$contents = fread( $fd, filesize( $filename ) );
+fclose( $fd );
+      </programlisting>
+     </informalexample>
 
-    <para> The file pointer must
-     be valid, and must point to a file successfully opened by <link
-      linkend="function.fopen">fopen</link> or <link
-      linkend="function.popen">popen</link>.  
-
-    <para> See also <link linkend="function.fgets">fgets</link> and
-     <link linkend="function.fgetss">fgetss</link>.
-     
+    <simpara>
+     See also <function>fwrite</function>, <function>fopen</function>,
+     <function>fsockopen</function>, <function>popen</function>,
+     <function>fgets</function>, <function>fgetss</function>,
+     <function>file</function>, and <function>fpassthru</function>.
    </refsect1>
   </refentry>
 
@@ -601,15 +751,14 @@ $fp = fopen( "http://www.php.net/", "r" );
     <para>
      Upon success, returns 0; otherwise, returns -1. Note that seeking
      past EOF is not considered an error.
-     
-    <para>
-     May not be used on file pointers returned by <link
-     linkend="function.fopen">fopen</link> if they use the
-     "http://" or "ftp://" formats.
 
-    <para>    
-     See also <link linkend="function.ftell">ftell</link> and
-     <link linkend="function.rewind">rewind</link>.
+    <para>
+     May not be used on file pointers returned by <function>fopen</function>
+     if they use the "http://" or "ftp://" formats.
+
+    <para>
+     See also <function>ftell</function> and
+     <function>rewind</function>.
 
    </refsect1>
   </refentry>
@@ -635,15 +784,209 @@ $fp = fopen( "http://www.php.net/", "r" );
 
     <para>
      The file pointer must be valid, and must point to a file
-     successfully opened by <link
-     linkend="function.fopen">fopen</link> or <link
-     linkend="function.popen">popen</link>.
+     successfully opened by <function>fopen</function> or
+     <function>popen</function>.
 
-    <para> See also <link linkend="function.fopen">fopen</link>, <link
-    linkend="function.popen">popen</link>, <link
-    linkend="function.fseek">fseek</link> and <link
-    linkend="function.rewind">rewind</link>.
-     
+    <para> See also <function>fopen</function>,
+    <function>popen</function>, <function>fseek</function> and
+    <function>rewind</function>.
+
+   </refsect1>
+  </refentry>
+
+  <refentry id="function.fwrite">
+   <refnamediv>
+    <refname>fwrite</refname>
+    <refpurpose>Binary-safe file write</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>fwrite</function></funcdef>
+     <paramdef>int <parameter>fp</parameter></paramdef>
+     <paramdef>string <parameter>string</parameter></paramdef>
+     <paramdef>int <parameter><optional>length</optional></parameter></paramdef>
+    </funcsynopsis>
+    <simpara>
+     <function>fwrite</function> writes the contents of
+     <parameter>string</parameter> to the file stream pointed to by
+     <parameter>fp</parameter>. If the <parameter>length</parameter>
+     argument is given, writing will stop after
+     <parameter>length</parameter> bytes have been written or the end
+     of <parameter>string</parameter> is reached, whichever comes
+     first. 
+
+    <simpara>
+     Note that if the <parameter>length</parameter> argument is given,
+     then the <link
+     linkend="ini.magic-quotes-runtime">magic_quotes_runtime</link>
+     configuration option will be ignored and no slashes will be
+     stripped from <parameter>string</parameter>. 
+
+    <simpara>
+     See also <function>fread</function>, <function>fopen</function>,
+     <function>fsockopen</function>, <function>popen</function>, and
+     <function>fputs</function>.
+   </refsect1>
+  </refentry>
+
+  <refentry id="function.is-dir">
+   <refnamediv>
+    <refname>is_dir</refname>
+    <refpurpose>tells whether the filename is a directory</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>bool <function>is_dir</function></funcdef>
+     <paramdef>string <parameter>filename</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+     Returns true if the filename exists and is a directory.
+    <para>
+     See also <function>is_file</function> and <function>is_link</function>.
+   </refsect1>
+  </refentry>
+
+  <refentry id="function.is-executable">
+   <refnamediv>
+    <refname>is_executable</refname>
+    <refpurpose>tells whether the filename is executable</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>bool <function>is_executable</function></funcdef>
+     <paramdef>string <parameter>filename</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+     Returns true if the filename exists and is executable.
+    <para>
+     See also <function>is_file</function> and <function>is_link</function>.
+   </refsect1>
+  </refentry>
+
+  <refentry id="function.is-file">
+   <refnamediv>
+    <refname>is_file</refname>
+    <refpurpose>tells whether the filename is a regular file</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>bool <function>is_file</function></funcdef>
+     <paramdef>string <parameter>filename</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+     Returns true if the filename exists and is a regular file.
+    <para>
+     See also <function>is_dir</function> and <function>is_link</function>.
+   </refsect1>
+  </refentry>
+
+  <refentry id="function.is-link">
+   <refnamediv>
+    <refname>is_link</refname>
+    <refpurpose>tells whether the filename is a symbolic link</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>bool <function>is_link</function></funcdef>
+     <paramdef>string <parameter>filename</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+     Returns true if the filename exists and is a symbolic link.
+    <para>
+     See also <function>is_dir</function> and <function>is_file</function>.
+   </refsect1>
+  </refentry>
+
+  <refentry id="function.is-readable">
+   <refnamediv>
+    <refname>is_readable</refname>
+    <refpurpose>tells whether the filename is readable</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>bool <function>is_readable</function></funcdef>
+     <paramdef>string <parameter>filename</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+     Returns true if the filename exists and is readable.
+    <para>
+     Keep in mind that PHP may be accessing the file as the user
+     id that the web server runs as (often 'nobody'). Safe mode
+     limitations are not taken into account.
+    <para>
+     See also <function>is_writeable</function>.
+   </refsect1>
+  </refentry>
+
+  <refentry id="function.is-writeable">
+   <refnamediv>
+    <refname>is_writeable</refname>
+    <refpurpose>tells whether the filename is writeable</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>bool <function>is_readable</function></funcdef>
+     <paramdef>string <parameter>filename</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+     Returns true if the filename exists and is writeable.
+    <para>
+     Keep in mind that PHP may be accessing the file as the user
+     id that the web server runs as (often 'nobody'). Safe mode
+     limitations are not taken into account.
+    <para>
+     See also <function>is_readable</function>.
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.link">
+   <refnamediv>
+    <refname>link</refname>
+    <refpurpose>Create a hard link</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>link</function></funcdef>
+     <paramdef>string <parameter>target</parameter></paramdef>
+     <paramdef>string <parameter>link</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+    <function>Link</function> creates a hard link.
+    <para>
+    See also the <function>symlink</function> to create soft links,
+    and <function>readlink</function> along with <function>linkinfo</function>.
+   </refsect1>
+  </refentry>
+
+  <refentry id="function.linkinfo">
+   <refnamediv>
+    <refname>linkinfo</refname>
+    <refpurpose>Get information about a link</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>linkinfo</function></funcdef>
+     <paramdef>string <parameter>path</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+    <function>Linkinfo</function> returns the st_dev field of the UNIX C
+    stat structure returned by the lstat system call.  This
+    function is used to verify if a link (pointed to by <parameter>path</parameter>)
+    really exists (using the same method as the S_ISLNK macro defined in stat.h).
+    Returns 0 or FALSE in case of error.
+    <para>
+    See also <function>symlink</function>, <function>link</function>,
+    and <function>readlink</function>.
    </refsect1>
   </refentry>
 
@@ -660,14 +1003,14 @@ $fp = fopen( "http://www.php.net/", "r" );
      <paramdef>string <parameter>pathname</parameter></paramdef>
      <paramdef>int <parameter>mode</parameter></paramdef>
     </funcsynopsis>
-    <para>    
+    <para>
      Attempts to create the directory specified by pathname.
 
-    <para>    
+    <para>
      Returns true on success and false on failure.
 
-    <para>    
-     See also <link linkend="function.rmdir">rmdir</link>.
+    <para>
+     See also <function>rmdir</function>.
 
    </refsect1>
   </refentry>
@@ -684,12 +1027,12 @@ $fp = fopen( "http://www.php.net/", "r" );
      <funcdef>int <function>pclose</function></funcdef>
      <paramdef>int <parameter>fp</parameter></paramdef>
     </funcsynopsis>
-<para>    Closes a file pointer to a pipe opened by <link linkend="function.popen">popen</link>.
+<para>    Closes a file pointer to a pipe opened by <function>popen</function>.
   <para>    The file pointer must be valid, and must have been returned by a
-    successful call to <link linkend="function.popen">popen</link>.
-  <para>    Returns true if successful and false otherwise.
-  <para>    
-    See also <link linkend="function.popen">popen</link>.
+    successful call to <function>popen</function>.
+  <para>    Returns the termination status of the process that was run.
+  <para>
+    See also <function>popen</function>.
 
    </refsect1>
   </refentry>
@@ -710,25 +1053,23 @@ $fp = fopen( "http://www.php.net/", "r" );
     <para> Opens a pipe to a process executed by forking the command
     given by command.
 
-    <para> Returns a file pointer identical to that returned by <link
-    linkend="function.fopen">fopen</link>, except
-    that it is unidirectional (may only be used for reading or
-    writing) and must be closed with <link
-    linkend="function.pclose">pclose</link>. This pointer may be used
-    with <link linkend="function.fgets">fgets</link>, <link
-    linkend="function.fgetss">fgetss</link>, and <link
-    linkend="function.fputs">fputs</link>.  
+    <para> Returns a file pointer identical to that returned by
+    <function>fopen</function>, except that it is unidirectional
+    (may only be used for reading or writing) and must be closed with
+    <function>pclose</function>. This pointer may be used
+    with <function>fgets</function>, <function>fgetss</function>, and
+    <function>fputs</function>.
 
     <para>
      If an error occurs, returns false.
 
-    <para>    
+    <para>
      <informalexample>
       <programlisting>
        $fp = popen( "/bin/ls", "r" );
       </programlisting></informalexample>
-    <para>    
-     See also <link linkend="function.pclose">pclose</link>.
+    <para>
+     See also <function>pclose</function>.
 
    </refsect1>
   </refentry>
@@ -750,7 +1091,7 @@ $fp = fopen( "http://www.php.net/", "r" );
      occurs, false is returned and unless the function was called as
      @readfile, an error message is printed.
     <para>    If <parameter>filename</parameter> begins with "http://"
-     (not case sensitive), an HTTP 1.0 connection is opened to the 
+     (not case sensitive), an HTTP 1.0 connection is opened to the
      specified server and the text of the response is written to
      standard output.
     <para>    Does not handle HTTP redirects, so you must include trailing
@@ -762,14 +1103,32 @@ $fp = fopen( "http://www.php.net/", "r" );
     <para>    If <parameter>filename</parameter> begins with neither
      of these strings, the file will be opened from the filesystem and
      its contents written to standard output.
-    <para>    
-     See also <link linkend="function.fpassthru">fpassthru</link>, <link
-      linkend="function.file">file</link>, and <link
-      linkend="function.fopen">fopen</link>.
-     
+    <para>
+     See also <function>fpassthru</function>, <function>file</function>,
+     and <function>fopen</function>.
+
    </refsect1>
   </refentry>
 
+  <refentry id="function.readlink">
+   <refnamediv>
+    <refname>readlink</refname>
+    <refpurpose>Return the target of a symbolic link</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>readlink</function></funcdef>
+     <paramdef>string <parameter>path</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+    <function>Readlink</function> does the same as the readlink C function
+    and returns the contents of the symbolic link path or 0 in case of error.
+    <para>
+    See also <function>symlink</function>,
+    <function>readlink</function> and <function>linkinfo</function>.
+   </refsect1>
+  </refentry>
 
   <refentry id="function.rename">
    <refnamediv>
@@ -805,9 +1164,9 @@ $fp = fopen( "http://www.php.net/", "r" );
     beginning of the file stream.
   <para>    If an error occurs, returns 0.
   <para> The file pointer must be valid, and must point to a file
-  successfully opened by <link linkend="function.fopen">fopen</link>.
-  <para>    
-    See also <link linkend="function.fseek">fseek</link> and <link linkend="function.ftell">ftell</link>.
+  successfully opened by <function>fopen</function>.
+  <para>
+    See also <function>fseek</function> and <function>ftell</function>.
 
    </refsect1>
   </refentry>
@@ -828,8 +1187,8 @@ $fp = fopen( "http://www.php.net/", "r" );
     directory must be empty, and the relevant permissions must permit
     this.
   <para>    If an error occurs, returns 0.
-  <para>    
-    See also <link linkend="function.mkdir">mkdir</link>.
+  <para>
+    See also <function>mkdir</function>.
 
    </refsect1>
   </refentry>
@@ -867,7 +1226,29 @@ $fp = fopen( "http://www.php.net/", "r" );
      </orderedlist>
      * - only valid on systems supporting the st_blksize type--other
      systems (i.e. Windows) return -1
-    
+
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.symlink">
+   <refnamediv>
+    <refname>symlink</refname>
+    <refpurpose>Create a symbolic link</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>symlink</function></funcdef>
+     <paramdef>string <parameter>target</parameter></paramdef>
+     <paramdef>string <parameter>link</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+     <function>Symlink</function> creates a symbolic link.
+    <para>
+     See also <function>link</function> to create hard links,
+     and <function>readlink</function> along with
+     <function>linkinfo</function>.
    </refsect1>
   </refentry>
 
@@ -875,7 +1256,7 @@ $fp = fopen( "http://www.php.net/", "r" );
   <refentry id="function.tempnam">
    <refnamediv>
     <refname>tempnam</refname>
-    <refpurpose></refpurpose>
+    <refpurpose>create unique file name</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
@@ -890,7 +1271,7 @@ $fp = fopen( "http://www.php.net/", "r" );
     <para>
      Returns the new temporary filename, or the null string on
      failure.
-    
+
      <example><title>tempnam() example</title>
       <programlisting>
 $tmpfname = tempnam( "/tmp", "FOO" );
@@ -903,7 +1284,7 @@ $tmpfname = tempnam( "/tmp", "FOO" );
   <refentry id="function.touch">
    <refnamediv>
     <refname>touch</refname>
-    <refpurpose></refpurpose>
+    <refpurpose>set modification time of file</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
@@ -922,96 +1303,50 @@ $tmpfname = tempnam( "/tmp", "FOO" );
 
     <para>
      Returns true on success and false otherwise.
-  
+
    </refsect1>
   </refentry>
 
-
-  <refentry id="function.basename">
+  <refentry id="function.umask">
    <refnamediv>
-    <refname>basename</refname>
-    <refpurpose>return file name part of path</refpurpose>
+    <refname>umask</refname>
+    <refpurpose>changes the current umask</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
     <funcsynopsis>
-     <funcdef>string <function>basename</function></funcdef>
-     <paramdef>string <parameter>path</parameter></paramdef>
+     <funcdef>int <function>umask</function></funcdef>
+     <paramdef>int <parameter>mask</parameter></paramdef>
     </funcsynopsis>
     <para>
-     Returns the file name part of a full path.
-     <example><title><function>basename()</function> example</title>
-      <programlisting>
-$path = "/home/httpd/html/index.php3";
-$file = basename($path); // $file is set to "index.php3"
-</programlisting>
-     </example>
-  
+     <function>Umask</function> sets PHP's umask to mask & 0777 and returns the
+     old umask. When PHP is being used as a server module, the umask is restored
+     when each request is finished.
     <para>
-     See also:
-     <link linkend="function.dirname"><function>dirname()</function></link>
+     <function>Umask</function> without arguments simply returns the current umask.
    </refsect1>
   </refentry>
 
-
-  <refentry id="function.dirname">
+  <refentry id="function.unlink">
    <refnamediv>
-    <refname>dirname</refname>
-    <refpurpose>return file name part of path</refpurpose>
+    <refname>unlink</refname>
+    <refpurpose>Delete a file</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
     <funcsynopsis>
-     <funcdef>string <function>dirname</function></funcdef>
-     <paramdef>string <parameter>path</parameter></paramdef>
+     <funcdef>int <function>unlink</function></funcdef>
+     <paramdef>string <parameter>filename</parameter></paramdef>
     </funcsynopsis>
     <para>
-     Returns the directory name part of a full path.
-     <example><title><function>dirname()</function> example</title>
-      <programlisting>
-$path = "/etc/passwd";
-$file = dirname($path); // $file is set to "/etc"
-</programlisting>
-     </example>
-  
+    Deletes <parameter>filename</parameter>.  Similar to the Unix C unlink() function.
     <para>
-     See also:
-     <link linkend="function.basename"><function>basename()</function></link>
+    Returns 0 or FALSE on an error.
+    <para>
+    See also <function>rmdir</function> for removing directories.
+
    </refsect1>
   </refentry>
-
-
-  <refentry id="function.copy">
-   <refnamediv>
-    <refname>copy</refname>
-    <refpurpose>copy file</refpurpose>
-   </refnamediv>
-   <refsect1>
-    <title>Description</title>
-    <funcsynopsis>
-     <funcdef>int <function>copy</function></funcdef>
-     <paramdef>string <parameter>source</parameter></paramdef>
-     <paramdef>string <parameter>dest</parameter></paramdef>
-    </funcsynopsis>
-    <para>
-     Makes a copy of a file.  Returns true if the copy succeeded,
-     false otherwise.
-     <example><title><function>copy()</function> example</title>
-      <programlisting>
-if (!copy($file, $file.'.bak')) {
-    print("failed to copy $file...&lt;br>\n");
-}
-</programlisting>
-     </example>
-  
-    <para>
-     See also:
-     <link linkend="function.rename"><function>rename()</function></link>
-   </refsect1>
-  </refentry>
-
-
-
 
  </reference>
 

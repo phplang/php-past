@@ -1,52 +1,163 @@
 
  <reference id="ref.array">
   <title>Array Functions</title>
+  <titleabbrev>Arrays</titleabbrev>
 
+  <refentry id="function.array">
+   <refnamediv>
+    <refname>array</refname>
+    <refpurpose>
+     Create an array
+    </refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>array <function>array</function></funcdef>
+     <varargs>
+    </funcsynopsis>
+    <para>
+     Returns an array of the parameters.  The parameters can be given
+     an index with the <literal>=&gt;</literal> operator.
+
+    <para>
+     Note that <function>array</function> really is a language
+     construct used to represent literal arrays, and not a regular
+     function.
+
+    <para>
+     The following example demonstrates how to create a
+     two-dimensional array, how to specify keys for associative
+     arrays, and how to skip-and-continue numeric indices in normal
+     arrays.
+
+     <example>
+      <title><function>array</function> example</title>
+      <programlisting>
+$fruits = array(
+    "fruits"  => array("a"=>"orange","b"=>"banana","c"=>"apple"),
+    "numbers" => array(1, 2, 3, 4, 5, 6)
+    "holes"   => array("first", 5 => "second", "third")
+);
+</programlisting></example>
+
+    <para>
+     See also:
+     <function>list</function>.
+   </refsect1>
+  </refentry>
+
+  <refentry id="function.arsort">
+   <refnamediv>
+    <refname>arsort</refname>
+    <refpurpose>
+     Sort an array in reverse order and maintain index association
+    </refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>void <function>arsort</function></funcdef>
+     <paramdef>array <parameter>array</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+     This function sorts an array such that array indices maintain their 
+     correlation with the array elements they are associated with.  This is
+     used mainly when sorting associative arrays where the actual element
+     order is significant.  
+     <example>
+      <title><function>arsort</function> example</title>
+      <programlisting>
+$fruits = array("d"=>"lemon","a"=>"orange","b"=>"banana","c"=>"apple");
+arsort($fruits);
+for(reset($fruits); $key = key($fruits); next($fruits)) {
+    echo "fruits[$key] = ".$fruits[$key]."\n";
+}
+</programlisting></example>
+     This example would display:
+     <computeroutput>
+fruits[a] = orange
+fruits[d] = lemon
+fruits[b] = banana
+fruits[c] = apple
+</computeroutput>
+     The fruits have been sorted in reverse alphabetical order, and
+     the index associated with each element has been maintained.
+    <para>
+     See also: <function>asort</function>, <function>rsort</function>,
+     <function>ksort</function>, and <function>sort</function>.
+   </refsect1>
+  </refentry>
+
+  <refentry id="function.asort">
+   <refnamediv>
+    <refname>asort</refname>
+    <refpurpose>Sort an array and maintain index association</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>void <function>asort</function></funcdef>
+     <paramdef>array <parameter>array</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+     This function sorts an array such that array indices maintain their 
+     correlation with the array elements they are associated with.  This is
+     used mainly when sorting associative arrays where the actual element
+     order is significant.  
+     <example>
+      <title><function>asort</function> example</title>
+      <programlisting>
+$fruits = array("d"=>"lemon","a"=>"orange","b"=>"banana","c"=>"apple");
+asort($fruits);
+for(reset($fruits); $key = key($fruits); next($fruits)) {
+    echo "fruits[$key] = ".$fruits[$key]."\n";
+}
+</programlisting></example>
+     This example would display:
+     <computeroutput>
+fruits[c] = apple
+fruits[b] = banana
+fruits[d] = lemon
+fruits[a] = orange
+</computeroutput>
+     The fruits have been sorted in alphabetical order, and the index
+     associated with each element has been maintained.
+    <para>
+     See also <function>arsort</function>, <function>rsort</function>,
+     <function>ksort</function>, and <function>sort</function>.
+   </refsect1>
+  </refentry>
 
   <refentry id="function.count">
    <refnamediv>
     <refname>count</refname>
-    <refpurpose>count elements in array</refpurpose>
+    <refpurpose>count elements in a variable</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
     <funcsynopsis>
      <funcdef>int <function>count</function></funcdef>
-     <paramdef>array <parameter>array</parameter></paramdef>
+     <paramdef>mixed <parameter>var</parameter></paramdef>
     </funcsynopsis>
     <para>
-     Returns the number of elements in the array.
+     Returns the number of elements in <parameter>var</parameter>, which is 
+     typically an array (since anything else will have one element).
+    <para>
+     Returns 0 if the variable is not set.
+    <para>
+     Returns 1 if the variable is not an array.
     <para>
      See also:
-     <link linkend="function.sizeof"><function>sizeof()</function></link>
+     <function>sizeof</function>, <function>isset</function>, and
+     <function>is_array</function>.
    </refsect1>
   </refentry>
-
-
-  <refentry id="function.sizeof">
-   <refnamediv>
-    <refname>sizeof</refname>
-    <refpurpose>get size of array</refpurpose>
-   </refnamediv>
-   <refsect1>
-    <title>Description</title>
-    <funcsynopsis>
-     <funcdef>int <function>sizeof</function></funcdef>
-     <paramdef>array <parameter>array</parameter></paramdef>
-    </funcsynopsis>
-    <para>
-     Returns the number of elements in the array.
-    <para>
-     See also:
-     <link linkend="function.count"><function>count()</function></link>
-   </refsect1>
-  </refentry>
-
 
   <refentry id="function.current">
    <refnamediv>
     <refname>current</refname>
-    <refpurpose>give the current element in an array</refpurpose>
+    <refpurpose>return the current element in an array</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
@@ -54,10 +165,6 @@
      <funcdef>mixed <function>current</function></funcdef>
      <paramdef>array <parameter>array</parameter></paramdef>
     </funcsynopsis>
-    <para>
-     Returns the array element that's currently being pointed by the
-     internal array pointer.
-  
     <para>
      Each array variable has an internal pointer that points to one of
      its elements.  In addition, all of the elements in the array are
@@ -67,20 +174,230 @@
      pointer on that array.
 
     <para>
-     The current() function simply returns the array element that's
-     currently being pointed by the internal pointer.  It does not
-     move the pointer in any way.  If the internal pointer points
-     beyond the end of the elements list, current() returns false.
+     The <function>current</function> function simply returns the
+     array element that's currently being pointed by the internal
+     pointer.  It does not move the pointer in any way.  If the
+     internal pointer points beyond the end of the elements list,
+     <function>current</function> returns false.
 
     <para>
      See also:
-     <link linkend="function.end"><function>end()</function></link>
-     <link linkend="function.next"><function>next()</function></link>
-     <link linkend="function.prev"><function>prev()</function></link>
-     <link linkend="function.reset"><function>reset()</function></link>
+     <function>end</function>, <function>next</function>,
+     <function>prev</function> and <function>reset</function>.
    </refsect1>
   </refentry>
 
+
+  <refentry id="function.each">
+   <refnamediv>
+    <refname>each</refname>
+    <refpurpose>return next key/value pair from an array</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>array <function>each</function></funcdef>
+     <paramdef>array <parameter>array</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+     Returns the next key/value pair from the array
+     <parameter>array</parameter>. This pair is returned in a
+     four-element array, with the keys <emphasis>0</emphasis>,
+     <emphasis>1</emphasis>, <emphasis>key</emphasis>, and
+     <emphasis>value</emphasis>. Elements <emphasis>0</emphasis> and
+     <emphasis>key</emphasis> each contain the key name of the array
+     element, and <emphasis>1</emphasis> and
+     <emphasis>value</emphasis> contain the data.
+     
+    <para>
+     <example>
+      <title>each() examples</title>
+      <programlisting>
+$foo = array( "bob", "fred", "jussi", "jouni" );
+$bar = each( $foo );
+      </programlisting>
+
+      <para>
+       <literal>$bar</literal> now contains the following key/value
+       pairs:
+       
+       <itemizedlist spacing="compact">
+        <listitem><simpara>0 => 0
+        <listitem><simpara>1 => 'bob'
+        <listitem><simpara>key => 0
+        <listitem><simpara>value => 'bob'
+       </itemizedlist>
+
+       <programlisting>
+$foo = array( "Robert", => "Bob", "Seppo" => "Sepi" );
+$bar = each( $foo );
+       </programlisting>
+
+      <para>
+       <literal>$bar</literal> now contains the following key/value
+       pairs:
+
+       <itemizedlist spacing="compact">
+        <listitem><simpara>0 => 'Robert'
+        <listitem><simpara>1 => 'Bob'
+        <listitem><simpara>key => 'Robert'
+        <listitem><simpara>value => 'Bob'
+       </itemizedlist>
+
+    </example>
+      
+
+    <para>
+     <function>each</function> is typically used in conjunction with
+     <function>list</function> to traverse an array; for instance,
+     $HTTP_POST_VARS: 
+
+     <example><title>Traversing $HTTP_POST_VARS with each()</title>
+      <programlisting>
+echo "Values submitted via POST method:&lt;br&gt;";
+while ( list( $key, $val ) = each( $HTTP_POST_VARS ) ) {
+   echo "$key => $val&lt;br&gt;";
+}
+      </programlisting>
+     </example>
+
+    <para>
+     See also <function>key</function>, <function>current</function>,
+     <function>reset</function>, <function>next</function>, and
+     <function>prev</function>.
+
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.end">
+   <refnamediv>
+    <refname>end</refname>
+    <refpurpose>set internal pointer of array to last element</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef><function>end</function></funcdef>
+     <paramdef>array <parameter>array</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+     <function>end</function> advances <parameter>array</parameter>'s
+     internal pointer to the last element.
+    <para>
+     See also:
+     <function>current</function>, <function>end</function>
+     <function>next</function> and <function>reset</function>
+   </refsect1>
+  </refentry>
+
+  <refentry id="function.key">
+   <refnamediv>
+    <refname>key</refname>
+    <refpurpose>fetch a key from an associative array</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>mixed <function>prev</function></funcdef>
+     <paramdef>array <parameter>array</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+     <function>key</function> returns the index element of the
+     current array position.
+    <para>
+     See also:
+     <function>current</function>
+     <function>next</function>
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.ksort">
+   <refnamediv>
+    <refname>ksort</refname>
+    <refpurpose>Sort an array by key.</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>ksort</function></funcdef>
+     <paramdef>array <parameter>array</parameter></paramdef>
+    </funcsynopsis>
+    
+    <para>
+     Sorts an array by key, maintaining key to data correlations. This
+     is useful mainly for associative arrays.
+
+    <example>
+      <title><function>ksort</function> example</title>
+      <programlisting>
+$fruits = array("d"=>"lemon","a"=>"orange","b"=>"banana","c"=>"apple");
+ksort($fruits);
+for(reset($fruits); $key = key($fruits); next($fruits)) {
+    echo "fruits[$key] = ".$fruits[$key]."\n";
+}
+</programlisting></example>
+     This example would display:
+     <computeroutput>
+fruits[a] = orange
+fruits[b] = banana
+fruits[c] = apple
+fruits[d] = lemon
+</computeroutput>
+
+    <simpara>
+     See also <function>asort</function>, <function>arsort</function>, 
+     <function>sort</function>, and <function>rsort</function>.
+
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.list">
+   <refnamediv>
+    <refname>list</refname>
+    <refpurpose>
+     assign variables as if they were an array
+    </refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>void <function>list</function></funcdef>
+     <varargs>
+    </funcsynopsis>
+    <para>
+     Like <function>array</function>, this is not really a function,
+     but a language construct.  <function>list</function> is used to
+     assign a list of variables in one operation.
+
+     <example>
+      <title><function>list</function> example</title>
+      <programlisting>
+&lt;table>
+ &lt;tr>
+  &lt;th>Employee name&lt;/th>
+  &lt;th>Salary&lt;/th>
+ &lt;/tr>
+&lt;?php
+
+$result = mysql($conn, "SELECT id, name, salary FROM employees");
+while (list($id, $name, $salary) = mysql_fetch_row($result)) {
+    print(" &lt;tr>\n".
+          "  &lt;td>&lt;a href=\"info.php3?id=$id\">$name&lt;/a>&lt;/td>\n".
+          "  &lt;td>$salary&lt;/td>\n".
+          " &lt;/tr>\n");
+}
+
+?>&lt;/table>
+</programlisting></example>
+
+    <para>
+     See also:
+     <function>array</function>.
+   </refsect1>
+  </refentry>
 
   <refentry id="function.next">
    <refnamediv>
@@ -98,24 +415,40 @@
      internal array pointer, or false if there are no more elements.
   
     <para>
-     <function>next()</function> behaves like <link
-      linkend="function.current"><function>current()</function></link>,
-      with one difference.  It advances the internal array pointer one
-      place forward before returning the element.  That means it
-      returns the next array element and advances the internal array
-      pointer by one.  If advancing the internal array pointer results
-      in going beyond the end of the element list,
-      <function>next()</function> returns false.
+     <function>next</function> behaves like
+      <function>current</function>, with one difference.  It advances
+      the internal array pointer one place forward before returning
+      the element.  That means it returns the next array element and
+      advances the internal array pointer by one.  If advancing the
+      internal array pointer results in going beyond the end of the
+      element list, <function>next</function> returns false.
 
     <para>
      See also:
-     <link linkend="function.current"><function>current()</function></link>
-     <link linkend="function.end"><function>end()</function></link>
-     <link linkend="function.prev"><function>prev()</function></link>
-     <link linkend="function.reset"><function>reset()</function></link>
+     <function>current</function>, <function>end</function>
+     <function>prev</function> and <function>reset</function>
    </refsect1>
   </refentry>
 
+  <refentry id="function.pos">
+   <refnamediv>
+    <refname>pos</refname>
+    <refpurpose>return the current element in an array</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>mixed <function>pos</function></funcdef>
+     <paramdef>array <parameter>array</parameter></paramdef>
+    </funcsynopsis>
+    <simpara>
+	This is an alias for <function>current</function>.
+    <para>
+     See also:
+     <function>end</function>, <function>next</function>,
+     <function>prev</function> and <function>reset</function>.
+   </refsect1>
+  </refentry>
 
   <refentry id="function.prev">
    <refnamediv>
@@ -133,41 +466,15 @@
      the internal array pointer, or false if there are no more
      elements.
     <para>  
-     <function>prev()</function> behaves just like
-     <link linkend="function.next"><function>next()</function></link>,
-     except it rewinds the internal array pointer one place instead of
-     advancing it.
+     <function>prev</function> behaves just like
+     <function>next</function>, except it rewinds the internal array
+     pointer one place instead of advancing it.
     <para>
      See also:
-     <link linkend="function.current"><function>current()</function></link>
-     <link linkend="function.end"><function>end()</function></link>
-     <link linkend="function.next"><function>next()</function></link>
-     <link linkend="function.reset"><function>reset()</function></link>
+     <function>current</function>, <function>end</function>
+     <function>next</function> and <function>reset</function>
    </refsect1>
   </refentry>
-
-
-  <refentry id="function.key">
-   <refnamediv>
-    <refname>key</refname>
-    <refpurpose>fetch a key from an associative array</refpurpose>
-   </refnamediv>
-   <refsect1>
-    <title>Description</title>
-    <funcsynopsis>
-     <funcdef>mixed <function>prev</function></funcdef>
-     <paramdef>array <parameter>array</parameter></paramdef>
-    </funcsynopsis>
-    <para>
-     <function>key()</function> returns the index element of the
-     current array position.
-    <para>
-     See also:
-     <link linkend="function.current"><function>current()</function></link>
-     <link linkend="function.next"><function>next()</function></link>
-   </refsect1>
-  </refentry>
-
 
   <refentry id="function.reset">
    <refnamediv>
@@ -181,43 +488,106 @@
      <paramdef>array <parameter>array</parameter></paramdef>
     </funcsynopsis>
     <para>
-     <function>reset()</function> rewinds
-     <parameter>array</parameter>'s internal pointer to the first
-     element.
+     <function>reset</function> rewinds <parameter>array</parameter>'s
+     internal pointer to the first element.
     <para>
      See also:
-     <link linkend="function.current"><function>current()</function></link>
-     <link linkend="function.next"><function>next()</function></link>
-     <link linkend="function.prev"><function>prev()</function></link>
-     <link linkend="function.reset"><function>reset()</function></link>
+     <function>current</function>, <function>next</function>
+     <function>prev</function> and <function>reset</function>
    </refsect1>
   </refentry>
 
-
-  <refentry id="function.end">
+  <refentry id="function.rsort">
    <refnamediv>
-    <refname>end</refname>
-    <refpurpose>set internal pointer of array to last element</refpurpose>
+    <refname>rsort</refname>
+    <refpurpose>Sort an array in reverse order</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
     <funcsynopsis>
-     <funcdef><function>end</function></funcdef>
+     <funcdef>void <function>rsort</function></funcdef>
      <paramdef>array <parameter>array</parameter></paramdef>
     </funcsynopsis>
     <para>
-     <function>end()</function> advances
-     <parameter>array</parameter>'s internal pointer to the last
-     element.
+	This function sorts an array in reverse order (highest to lowest).
+	<example>
+      <title><function>rsort</function> example</title>
+	<programlisting>
+    $fruits = array("lemon","orange","banana","apple");
+    rsort($fruits);
+    for(reset($fruits); $key = key($fruits); next($fruits)) {
+        echo "fruits[$key] = ".$fruits[$key]."\n";
+    }
+	</programlisting></example>
+	This example would display:
+	<computeroutput>
+	fruits[0] = orange
+	fruits[1] = lemon
+	fruits[2] = banana
+	fruits[3] = apple
+	</computeroutput>
+	The fruits have been sorted in reverse alphabetical order.
     <para>
-     See also:
-     <link linkend="function.current"><function>current()</function></link>
-     <link linkend="function.end"><function>end()</function></link>
-     <link linkend="function.next"><function>next()</function></link>
-     <link linkend="function.reset"><function>reset()</function></link>
+     See also <function>arsort</function>, <function>asort</function>,
+     <function>ksort</function>, and <function>sort</function>.
    </refsect1>
   </refentry>
 
+  <refentry id="function.sizeof">
+   <refnamediv>
+    <refname>sizeof</refname>
+    <refpurpose>get size of array</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>sizeof</function></funcdef>
+     <paramdef>array <parameter>array</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+     Returns the number of elements in the array.
+    <para>
+     See also:
+     <function>count</function>
+   </refsect1>
+  </refentry>
+
+  <refentry id="function.sort">
+   <refnamediv>
+    <refname>sort</refname>
+    <refpurpose>Sort an array</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>void <function>sort</function></funcdef>
+     <paramdef>array <parameter>array</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+     This function sorts an array.  Elements will be arranged from lowest to
+     highest when this function has completed.
+     <example>
+      <title><function>sort</function> example</title>
+	<programlisting>
+$fruits = array("lemon","orange","banana","apple");
+sort($fruits);
+for(reset($fruits); $key = key($fruits); next($fruits)) {
+    echo "fruits[$key] = ".$fruits[$key]."\n";
+}
+</programlisting></example>
+     This example would display:
+     <computeroutput>
+fruits[0] = apple
+fruits[1] = banana
+fruits[2] = lemon
+fruits[3] = orange
+</computeroutput>
+     The fruits have been sorted in alphabetical order.
+    <para>
+     See also <function>arsort</function>, <function>asort</function>,
+     <function>ksort</function>, and <function>rsort</function>.
+   </refsect1>
+  </refentry>
 
  </reference>
 

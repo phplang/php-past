@@ -1,14 +1,39 @@
 %{
 
-#include "parser.h"
+/*
+   +----------------------------------------------------------------------+
+   | PHP HTML Embedded Scripting Language Version 3.0                     |
+   +----------------------------------------------------------------------+
+   | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
+   +----------------------------------------------------------------------+
+   | This program is free software; you can redistribute it and/or modify |
+   | it under the terms of the GNU General Public License as published by |
+   | the Free Software Foundation; either version 2 of the License, or    |
+   | (at your option) any later version.                                  |
+   |                                                                      |
+   | This program is distributed in the hope that it will be useful,      |
+   | but WITHOUT ANY WARRANTY; without even the implied warranty of       |
+   | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the        |
+   | GNU General Public License for more details.                         |
+   |                                                                      |
+   | You should have received a copy of the GNU General Public License    |
+   | along with this program; if not, write to the Free Software          |
+   | Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.            |
+   +----------------------------------------------------------------------+
+   | Authors:  Zeev Suraski <bourbon@netvision.net.il>                    |
+   +----------------------------------------------------------------------+
+*/
+
+
+#include "php.h"
 #include "configuration-parser.tab.h"
 
-#define YY_DECL cfglex(YYSTYPE *cfglval)
+#define YY_DECL cfglex(pval *cfglval)
 
 
 void init_cfg_scanner()
 {
-	cfglineno=0;
+	cfglineno=1;
 }
 
 
@@ -19,19 +44,26 @@ void init_cfg_scanner()
 
 %%
 
-<INITIAL>"true"|"on"|"yes" {
-	cfglval->value.strval = php3_strndup("1",1);
-	cfglval->strlen = 1;
+<INITIAL>"extension" {
+#if 0
+	printf("found extension\n");
+#endif
+	return EXTENSION;
+}
+
+<INITIAL>("true"|"on"|"yes") {
+	cfglval->value.str.val = php3_strndup("1",1);
+	cfglval->value.str.len = 1;
 	cfglval->type = IS_STRING;
-	return TRUE;
+	return CFG_TRUE;
 }
 
 
-<INITIAL>"false"|"off"|"no" {
-	cfglval->value.strval = php3_strndup("",0);
-	cfglval->strlen = 0;
+<INITIAL>("false"|"off"|"no") {
+	cfglval->value.str.val = php3_strndup("",0);
+	cfglval->value.str.len = 0;
 	cfglval->type = IS_STRING;
-	return FALSE;
+	return CFG_FALSE;
 }
 
 
@@ -48,54 +80,31 @@ void init_cfg_scanner()
 	yytext++;
 	yyleng--;
 
-	cfglval->value.strval = php3_strndup(yytext,yyleng);
-	cfglval->strlen = yyleng;
+	cfglval->value.str.val = php3_strndup(yytext,yyleng);
+	cfglval->value.str.len = yyleng;
 	cfglval->type = IS_STRING;
 	return SECTION;
 }
 
 
-<INITIAL>"extension" {
-	return EXTENSION;
-}
-
-
-<INITIAL>[ \t]*["][^\n\r"]*["][ \t]* {
+<INITIAL>["][^\n\r"]*["] {
 	/* ENCAPSULATED STRING */
 	register int i;
 
-	/* eat trailing whitespace */
-	for (i=yyleng-1; i>=0; i--) {
-		if (yytext[i]==' ' || yytext[i]=='\t') {
-			yytext[i]=0;
-			yyleng--;
-		} else {
-			break;
-		}
-	}
-	/* eat leading whitespace */
-	while (yytext[0]) {
-		if (yytext[0]==' ' || yytext[0]=='\t') {
-			yytext++;
-			yyleng--;
-		} else {
-			break;
-		}
-	}
 	/* eat trailing " */
 	yytext[yyleng-1]=0;
 	
 	/* eat leading " */
 	yytext++;
 
-	cfglval->value.strval = php3_strndup(yytext,yyleng);
-	cfglval->strlen = yyleng;
+	cfglval->value.str.val = php3_strndup(yytext,yyleng);
+	cfglval->value.str.len = yyleng;
 	cfglval->type = IS_STRING;
 	return ENCAPSULATED_STRING;
 }
 
 
-<INITIAL>[^=\n\r;"]+ {
+<INITIAL>[^=\n\r\t ;"]+ {
 	/* STRING */
 	register int i;
 
@@ -118,8 +127,8 @@ void init_cfg_scanner()
 		}
 	}
 	if (yyleng!=0) {
-		cfglval->value.strval = php3_strndup(yytext,yyleng);
-		cfglval->strlen = yyleng;
+		cfglval->value.str.val = php3_strndup(yytext,yyleng);
+		cfglval->value.str.len = yyleng;
 		cfglval->type = IS_STRING;
 		return STRING;
 	} else {
@@ -128,33 +137,6 @@ void init_cfg_scanner()
 }
 
 
-<INITIAL>[ \t]*["][^\n\r"]*["][ \t] {
-	/* ENCAPSULATED STRING */
-	register int i;
-
-	/* eat trailing whitespace */
-	for (i=yyleng-1; i>=0; i--) {
-		if (yytext[i]==' ' || yytext[i]=='\t') {
-			yytext[i]=0;
-			yyleng--;
-		} else {
-			break;
-		}
-	}
-	/* eat leading whitespace */
-	while (yytext[0]) {
-		if (yytext[0]==' ' || yytext[i]=='\t') {
-			yytext++;
-			yyleng--;
-		} else {
-			break;
-		}
-	}
-	cfglval->value.strval = php3_strndup(yytext,yyleng);
-	cfglval->strlen = yyleng;
-	cfglval->type = IS_STRING;
-	return ENCAPSULATED_STRING;
-}
 
 <INITIAL>[=\n] {
 	return yytext[0];
@@ -169,8 +151,12 @@ void init_cfg_scanner()
 	return '\n';
 }
 
+<INITIAL>[ \t] {
+	/* eat whitespace */
+}
+
 <INITIAL>. {
 #if DEBUG
-	php3_error(E_NOTICE,"Unexpected character on line %d:  '%s'\n",yylineno,yytext);
+	php3_error(E_NOTICE,"Unexpected character on line %d:  '%s' (ASCII %d)\n",yylineno,yytext,yytext[0]);
 #endif
 }

@@ -5,13 +5,27 @@
 
 <!--
 
-  $Id: print.dsl,v 1.1 1998/02/06 11:46:53 ssb Exp $
+  $Id: print.dsl,v 1.3 1998/03/11 03:13:57 ssb Exp $
 
   This file contains printout-specific stylesheet customization.
 
 -->
 
 <style-specification id="local-docbook" use="docbook">
+
+(element FUNCTION
+  (cond
+   ;; function names should be plain in FUNCDEF
+   ((equal? (gi (parent)) "FUNCDEF")
+    (process-children))
+   
+   ;; else make the function name bold and add "()"
+   ;; we should add some cross-reference here later
+   (else
+    ($bold-seq$
+     (make sequence
+	   (process-children)
+	   (literal "()"))))))
 
 &common.dsl;
 

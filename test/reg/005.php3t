@@ -3,7 +3,7 @@ Test Regular expression register support in ereg              ...
 --POST--
 --GET--
 --FILE--
-<?$a="This is a nice and simple string";
+<?php $a="This is a nice and simple string";
   echo ereg(".*(is).*(is).*",$a,$registers);
   echo "\n";
   echo $registers[0];

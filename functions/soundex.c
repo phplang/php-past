@@ -5,25 +5,30 @@
    | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
-   | it under the terms of the GNU General Public License as published by |
-   | the Free Software Foundation; either version 2 of the License, or    |
-   | (at your option) any later version.                                  |
+   | it under the terms of one of the following licenses:                 |
+   |                                                                      |
+   |  A) the GNU General Public License as published by the Free Software |
+   |     Foundation; either version 2 of the License, or (at your option) |
+   |     any later version.                                               |
+   |                                                                      |
+   |  B) the PHP License as published by the PHP Development Team and     |
+   |     included in the distribution in the file: LICENSE                |
    |                                                                      |
    | This program is distributed in the hope that it will be useful,      |
    | but WITHOUT ANY WARRANTY; without even the implied warranty of       |
    | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the        |
    | GNU General Public License for more details.                         |
    |                                                                      |
-   | You should have received a copy of the GNU General Public License    |
-   | along with this program; if not, write to the Free Software          |
-   | Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.            |
+   | You should have received a copy of both licenses referred to here.   |
+   | If you did not, or have any questions about PHP licensing, please    |
+   | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
    | Author: Bjørn Borud - Guardian Networks AS <borud@guardian.no>    |
    +----------------------------------------------------------------------+
  */
-/* $Id: soundex.c,v 1.20 1997/12/31 15:56:49 rasmus Exp $ */
+/* $Id: soundex.c,v 1.27 1998/05/15 10:57:37 zeev Exp $ */
 
-#include "parser.h"
+#include "php.h"
 #include "internal_functions.h"
 #include <stdlib.h>
 #include <errno.h>
@@ -36,7 +41,7 @@ void soundex(INTERNAL_FUNCTION_PARAMETERS)
 	char l, u;
 	char *somestring;
 	int i, j, n;
-	YYSTYPE *arg;
+	pval *arg;
 
 	/* pad with '0' and terminate with 0 ;-) */
 	char soundex[5] =
@@ -73,10 +78,13 @@ void soundex(INTERNAL_FUNCTION_PARAMETERS)
 		WRONG_PARAM_COUNT;
 	}
 	convert_to_string(arg);
+	if (arg->value.str.len==0) {
+		RETURN_FALSE;
+	}
 
-	somestring = arg->value.strval;
+	somestring = arg->value.str.val;
 
-	n = arg->strlen;
+	n = arg->value.str.len;
 
 	/* convert chars to upper case and strip non-letter chars */
 	j = 0;
@@ -112,9 +120,10 @@ void soundex(INTERNAL_FUNCTION_PARAMETERS)
 			l = u;
 		}
 	}
-	return_value->value.strval = soundex;
-	return_value->strlen = 4;
-	yystype_copy_constructor(return_value);
+
+	return_value->value.str.val = estrndup(soundex, 4);
+	return_value->value.str.len = strlen(soundex);
+	return_value->type = IS_STRING;
 }
 
 /*

@@ -1,6 +1,6 @@
 #include "imap.h"
 #include "modules.h"
-#include "list.h"
+#include "php3_list.h"
 
 #include <stdio.h>
 #include <ctype.h>
@@ -11,15 +11,25 @@
 #include "mail.h"
 #include "rfc822.h"
 MAILSTREAM *mail_close_it (MAILSTREAM *stream);
+#if (WIN32|WINNT)
+#include "winsock.h"
+#define IMAP41
+#endif
 
 #ifdef IMAP41
 #define LSIZE text.size
 #define LTEXT text.data
 #define DTYPE int
+#define CONTENT_PART nested.part
+#define CONTENT_MSG_BODY nested.msg->body
+#define IMAPVER "Imap 4R1"
 #else
 #define LSIZE size
 #define LTEXT text
 #define DTYPE char
+#define CONTENT_PART contents.part
+#define CONTENT_MSG_BODY contents.msg.body
+#define IMAPVER "Imap 4"
 #endif
 /* 
  * this array should be set up as:
@@ -44,6 +54,8 @@ function_entry imap_functions[] =
         {"imap_header", php3_imap_headerinfo, NULL},
         {"imap_headerinfo", php3_imap_headerinfo, NULL},
         {"imap_body", php3_imap_body, NULL},
+        {"imap_fetchstructure", php3_imap_fetchstructure, NULL},
+        {"imap_fetchbody", php3_imap_fetchbody, NULL},
         {"imap_expunge", php3_imap_expunge, NULL},
         {"imap_delete", php3_imap_delete, NULL},
         {"imap_undelete", php3_imap_undelete, NULL},
@@ -59,12 +71,17 @@ function_entry imap_functions[] =
         {"imap_listsubscribed", php3_imap_lsub, NULL},
         {"imap_subscribe", php3_imap_subscribe, NULL},
         {"imap_unsubscribe", php3_imap_unsubscribe, NULL},
+	{"imap_append", php3_imap_append, NULL},
+	{"imap_ping", php3_imap_ping, NULL},
+        {"imap_base64", php3_imap_base64, NULL},
+	{"imap_qprint", php3_imap_qprint, NULL},
+	{"imap_8bit", php3_imap_8bit, NULL},
         {NULL, NULL, NULL}
 };
 
 
 php3_module_entry imap_module_entry = {
-	"Imap", imap_functions, imap_init, NULL, NULL, NULL, NULL, 0, 0, 0, NULL
+	IMAPVER, imap_functions, imap_init, NULL, NULL, NULL, NULL, 0, 0, 0, NULL
 };
 
 
@@ -77,23 +94,18 @@ DLEXPORT php3_module_entry *get_module(void) { return &imap_module_entry; }
    and nothing will link to this module, we can use the simple 
    thread local storage
 */
-#if WIN32|WINNT
-#define THREAD __declspec(thread)
-#else
-#define THREAD
-#endif
-THREAD int le_imap;
-THREAD char imap_user[80]="";
-THREAD char imap_password[80]="";
-THREAD STRINGLIST *imap_folders=NIL;
-THREAD STRINGLIST *imap_sfolders=NIL;
+int le_imap;
+char imap_user[80]="";
+char imap_password[80]="";
+STRINGLIST *imap_folders=NIL;
+STRINGLIST *imap_sfolders=NIL;
 
 MAILSTREAM *mail_close_it (MAILSTREAM *stream)
 {
 	return mail_close_full ( stream,NIL);
 }
 
-int imap_init(INITFUNCARG)
+int imap_init(INIT_FUNC_ARGS)
 {
 #if WIN32|WINNT
 	mail_link (&mbxdriver);      /* link in the mbox driver */
@@ -122,11 +134,11 @@ int imap_init(INITFUNCARG)
 	return SUCCESS;
 }
 
-DLEXPORT void php3_imap_open(INTERNAL_FUNCTION_PARAMETERS)
+void php3_imap_open(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *mailbox;
-	YYSTYPE *user;
-	YYSTYPE *passwd;
+	pval *mailbox;
+	pval *user;
+	pval *passwd;
 	MAILSTREAM *imap_stream;
 	int ind;
 
@@ -134,13 +146,13 @@ DLEXPORT void php3_imap_open(INTERNAL_FUNCTION_PARAMETERS)
 		convert_to_string(mailbox);
 		convert_to_string(user);
 		convert_to_string(passwd);
-		strcpy(imap_user,user->value.strval);
-		strcpy(imap_password,passwd->value.strval);
+		strcpy(imap_user,user->value.str.val);
+		strcpy(imap_password,passwd->value.str.val);
 
 		imap_stream = NIL;
-		imap_stream = mail_open(imap_stream,mailbox->value.strval,NIL);
+		imap_stream = mail_open(imap_stream,mailbox->value.str.val,NIL);
 		if (imap_stream == NIL){
-			php3_error(E_WARNING,"Couldn't open stream\n");
+			php3_error(E_WARNING,"Couldn't open stream %s\n",mailbox->value.str.val);
 			RETURN_FALSE;
 		}
 		ind = php3_list_insert(imap_stream, le_imap);
@@ -153,12 +165,12 @@ DLEXPORT void php3_imap_open(INTERNAL_FUNCTION_PARAMETERS)
 }
 
 
-DLEXPORT void php3_imap_reopen(INTERNAL_FUNCTION_PARAMETERS)
+void php3_imap_reopen(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *streamind;
-	YYSTYPE *mailbox;
-	YYSTYPE *user;
-	YYSTYPE *passwd;
+	pval *streamind;
+	pval *mailbox;
+	pval *user;
+	pval *passwd;
 	MAILSTREAM *imap_stream;
 	int ind, ind_type;
 
@@ -169,7 +181,7 @@ DLEXPORT void php3_imap_reopen(INTERNAL_FUNCTION_PARAMETERS)
 	convert_to_long(streamind);
 	ind = streamind->value.lval;
 	imap_stream = ( MAILSTREAM *)php3_list_find(ind, &ind_type);
-	if(!imap_stream || ind_type != le_imap) {
+	if (!imap_stream || ind_type != le_imap) {
 		php3_error(E_WARNING, "Unable to find stream pointer");
 		RETURN_FALSE;
 	}
@@ -177,10 +189,10 @@ DLEXPORT void php3_imap_reopen(INTERNAL_FUNCTION_PARAMETERS)
 	convert_to_string(mailbox);
 	convert_to_string(user);
 	convert_to_string(passwd);
-	strcpy(imap_user,user->value.strval);
-	strcpy(imap_password,passwd->value.strval);
+	strcpy(imap_user,user->value.str.val);
+	strcpy(imap_password,passwd->value.str.val);
 
-	imap_stream = mail_open(imap_stream,mailbox->value.strval,NIL);
+	imap_stream = mail_open(imap_stream,mailbox->value.str.val,NIL);
 	if (imap_stream == NIL){
 		php3_error(E_WARNING,"Couldn't re-open stream\n");
 		RETURN_FALSE;
@@ -188,9 +200,35 @@ DLEXPORT void php3_imap_reopen(INTERNAL_FUNCTION_PARAMETERS)
 	RETURN_TRUE;
 }
 
-DLEXPORT void php3_imap_num_msg(INTERNAL_FUNCTION_PARAMETERS)
+void php3_imap_append(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *streamind;
+ pval *streamind,*folder, *message;
+ int ind, ind_type;
+ MAILSTREAM *imap_stream;
+
+ if ( ARG_COUNT(ht) != 3 || getParameters( ht, 3, &streamind, &folder, &message) == FAILURE) {
+    WRONG_PARAM_COUNT;
+ }
+
+ convert_to_long(streamind);
+ convert_to_string(folder);
+ convert_to_string(message);
+
+ ind = streamind->value.lval;
+
+ imap_stream = ( MAILSTREAM *)php3_list_find( ind, &ind_type );
+
+ if ( !imap_stream || ind_type != le_imap ) {
+    php3_error(E_WARNING, "Unable to find stream pointer");
+    RETURN_FALSE;
+ }
+ mail_append( imap_stream, folder->value.str.val, (STRING *)message->value.str.val );
+ RETURN_TRUE;
+}
+
+void php3_imap_num_msg(INTERNAL_FUNCTION_PARAMETERS)
+{
+	pval *streamind;
 	int ind, ind_type;
 	MAILSTREAM *imap_stream;
 
@@ -204,7 +242,7 @@ DLEXPORT void php3_imap_num_msg(INTERNAL_FUNCTION_PARAMETERS)
 
 	imap_stream = ( MAILSTREAM *)php3_list_find(ind, &ind_type);
 
-	if(!imap_stream || ind_type != le_imap) {
+	if (!imap_stream || ind_type != le_imap) {
 		php3_error(E_WARNING, "Unable to find stream pointer");
 		RETURN_FALSE;
 	}
@@ -212,9 +250,31 @@ DLEXPORT void php3_imap_num_msg(INTERNAL_FUNCTION_PARAMETERS)
 	RETURN_LONG(imap_stream->nmsgs);
 }
 
-DLEXPORT void php3_imap_num_recent(INTERNAL_FUNCTION_PARAMETERS)
+void php3_imap_ping(INTERNAL_FUNCTION_PARAMETERS)
 {
-        YYSTYPE *streamind;
+ pval *streamind;
+ int ind, ind_type;
+ MAILSTREAM *imap_stream;
+
+ if (ARG_COUNT(ht) != 1 || getParameters(ht, 1, &streamind) == FAILURE) {
+         WRONG_PARAM_COUNT;
+ }
+
+ convert_to_long( streamind );
+ ind = streamind->value.lval;
+
+ imap_stream = ( MAILSTREAM *)php3_list_find( ind, &ind_type );
+ if ( !imap_stream || ind_type != le_imap ) {
+    php3_error( E_WARNING, "Unable to find stream pointer" );
+    RETURN_FALSE;
+ }
+ RETURN_LONG( mail_ping( imap_stream ) );
+}
+
+
+void php3_imap_num_recent(INTERNAL_FUNCTION_PARAMETERS)
+{
+        pval *streamind;
         int ind, ind_type;
         MAILSTREAM *imap_stream;
         if (ARG_COUNT(ht) != 1 || getParameters(ht, 1, &streamind) == FAILURE) {
@@ -223,16 +283,16 @@ DLEXPORT void php3_imap_num_recent(INTERNAL_FUNCTION_PARAMETERS)
         convert_to_long(streamind);
         ind = streamind->value.lval;
         imap_stream = ( MAILSTREAM *)php3_list_find(ind, &ind_type);
-        if(!imap_stream || ind_type != le_imap) {
+        if (!imap_stream || ind_type != le_imap) {
                 php3_error(E_WARNING, "Unable to find stream pointer");
                 RETURN_FALSE;
         }
         RETURN_LONG(imap_stream->recent);
 }
 
-DLEXPORT void php3_imap_expunge(INTERNAL_FUNCTION_PARAMETERS)
+void php3_imap_expunge(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *streamind;
+	pval *streamind;
 	int ind, ind_type;
 	MAILSTREAM *imap_stream;
 
@@ -246,7 +306,7 @@ DLEXPORT void php3_imap_expunge(INTERNAL_FUNCTION_PARAMETERS)
 
 	imap_stream = ( MAILSTREAM *)php3_list_find(ind, &ind_type);
 
-	if(!imap_stream || ind_type != le_imap) {
+	if (!imap_stream || ind_type != le_imap) {
 		php3_error(E_WARNING, "Unable to find stream pointer");
 		RETURN_FALSE;
 	}
@@ -257,9 +317,9 @@ DLEXPORT void php3_imap_expunge(INTERNAL_FUNCTION_PARAMETERS)
 }
 
 
-DLEXPORT void php3_imap_close(INTERNAL_FUNCTION_PARAMETERS)
+void php3_imap_close(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *ind;
+	pval *ind;
 
 	if (ARG_COUNT(ht) != 1 || getParameters(ht, 1, &ind) == FAILURE) {
 		WRONG_PARAM_COUNT;
@@ -270,15 +330,22 @@ DLEXPORT void php3_imap_close(INTERNAL_FUNCTION_PARAMETERS)
 }
 
 
-DLEXPORT void php3_imap_headers(INTERNAL_FUNCTION_PARAMETERS)
+void php3_imap_headers(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *streamind;
+	pval *streamind;
 	int ind, ind_type;
 	unsigned int msgno;
 	MAILSTREAM *imap_stream;
-	unsigned long i;
 	char tmp[MAILTMPLEN];
+        char tmp2[MAILTMPLEN];
+        char tmp3[MAILTMPLEN];
+        char tmp4[MAILTMPLEN];
+        char mysubject[MAILTMPLEN];
+        char myfrom[MAILTMPLEN];
+/*	unused vars, left here just in case needed for some reason
 	char *t;
+	unsigned long i;
+*/
 
 	if (ARG_COUNT(ht) != 1 || getParameters(ht, 1, &streamind) == FAILURE) {
 		WRONG_PARAM_COUNT;
@@ -290,13 +357,13 @@ DLEXPORT void php3_imap_headers(INTERNAL_FUNCTION_PARAMETERS)
 
 	imap_stream = ( MAILSTREAM *)php3_list_find(ind, &ind_type);
 
-	if(!imap_stream || ind_type != le_imap) {
+	if (!imap_stream || ind_type != le_imap) {
 		php3_error(E_WARNING, "Unable to find stream pointer");
 		RETURN_FALSE;
 	}
 
 	/* Initialize return array */
-	if(array_init(return_value) == FAILURE) {
+	if (array_init(return_value) == FAILURE) {
 		RETURN_FALSE;
 	}
 
@@ -312,8 +379,12 @@ DLEXPORT void php3_imap_headers(INTERNAL_FUNCTION_PARAMETERS)
 		mail_date (tmp+11,cache);
 		tmp[17] = ' ';
 		tmp[18] = '\0';
-		mail_fetchfrom (tmp+18,imap_stream,msgno,(long) 20);
-		strcat (tmp," ");
+                mail_fetchfrom (tmp2,imap_stream,msgno,(long) 30);
+                sprintf(myfrom,"%-30s",tmp2);
+                strcat(tmp,myfrom);
+                strcat(tmp," ");
+
+		/* Don't want user flags.
 		if (i = cache->user_flags) {
 			strcat (tmp,"{");
 			while (i) {
@@ -322,20 +393,25 @@ DLEXPORT void php3_imap_headers(INTERNAL_FUNCTION_PARAMETERS)
 			}
 			strcat (tmp,"} ");
 		}
-		mail_fetchsubject(t=tmp+strlen(tmp),imap_stream,msgno,(long)25);
-		sprintf (t+=strlen(t)," (%ld chars)",cache->rfc822_size);
+		*/
+
+                mail_fetchsubject(tmp3,imap_stream,msgno,(long)25);
+                sprintf(mysubject,"%-25s",tmp3);
+                strcat(tmp,mysubject);
+                sprintf (tmp4," %ld",cache->rfc822_size);
+                strcat(tmp,tmp4);
 		add_next_index_string(return_value,tmp,1);
 	}
 
 }
 
-DLEXPORT void php3_imap_body(INTERNAL_FUNCTION_PARAMETERS)
+void php3_imap_body(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *streamind, * msgno;
+	pval *streamind, * msgno;
 	int ind, ind_type;
 	MAILSTREAM *imap_stream;
 
-	if(ARG_COUNT(ht)!=2 || getParameters(ht,2,&streamind,&msgno) == FAILURE) {
+	if (ARG_COUNT(ht)!=2 || getParameters(ht,2,&streamind,&msgno) == FAILURE) {
 		WRONG_PARAM_COUNT;
 	}
 
@@ -345,21 +421,21 @@ DLEXPORT void php3_imap_body(INTERNAL_FUNCTION_PARAMETERS)
 	ind = streamind->value.lval;
 
 	imap_stream = ( MAILSTREAM *)php3_list_find(ind, &ind_type);
-	if(!imap_stream || ind_type != le_imap) {
+	if (!imap_stream || ind_type != le_imap) {
 		php3_error(E_WARNING, "Unable to find stream pointer");
 		RETURN_FALSE;
 	}
-	RETVAL_STRING(mail_fetchtext (imap_stream,msgno->value.lval));
+	RETVAL_STRING(mail_fetchtext (imap_stream,msgno->value.lval),1);
 
 }
 
-DLEXPORT void php3_imap_mail_copy(INTERNAL_FUNCTION_PARAMETERS)
+void php3_imap_mail_copy(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *streamind,*seq, *folder;
+	pval *streamind,*seq, *folder;
 	int ind, ind_type;
 	MAILSTREAM *imap_stream;
 
-	if(ARG_COUNT(ht)!=3 
+	if (ARG_COUNT(ht)!=3 
 		|| getParameters(ht,3,&streamind,&seq,&folder) == FAILURE) {
 		WRONG_PARAM_COUNT;
 	}
@@ -371,24 +447,24 @@ DLEXPORT void php3_imap_mail_copy(INTERNAL_FUNCTION_PARAMETERS)
 	ind = streamind->value.lval;
 
 	imap_stream = ( MAILSTREAM *)php3_list_find(ind, &ind_type);
-	if(!imap_stream || ind_type != le_imap) {
+	if (!imap_stream || ind_type != le_imap) {
 		php3_error(E_WARNING, "Unable to find stream pointer");
 		RETURN_FALSE;
 	}
-	if ( mail_copy(imap_stream,seq->value.strval,folder->value.strval)==T ) {
+	if ( mail_copy(imap_stream,seq->value.str.val,folder->value.str.val)==T ) {
         RETURN_TRUE;
 	} else {
 		RETURN_FALSE;
 	}
 }
 
-DLEXPORT void php3_imap_mail_move(INTERNAL_FUNCTION_PARAMETERS)
+void php3_imap_mail_move(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *streamind,*seq, *folder;
+	pval *streamind,*seq, *folder;
 	int ind, ind_type;
 	MAILSTREAM *imap_stream;
 
-	if(ARG_COUNT(ht)!=3 
+	if (ARG_COUNT(ht)!=3 
 		|| getParameters(ht,3,&streamind,&seq,&folder) == FAILURE) {
 		WRONG_PARAM_COUNT;
 	}
@@ -400,24 +476,24 @@ DLEXPORT void php3_imap_mail_move(INTERNAL_FUNCTION_PARAMETERS)
 	ind = streamind->value.lval;
 
 	imap_stream = ( MAILSTREAM *)php3_list_find(ind, &ind_type);
-	if(!imap_stream || ind_type != le_imap) {
+	if (!imap_stream || ind_type != le_imap) {
 		php3_error(E_WARNING, "Unable to find stream pointer");
 		RETURN_FALSE;
 	}
-	if ( mail_move(imap_stream,seq->value.strval,folder->value.strval)==T ) {
+	if ( mail_move(imap_stream,seq->value.str.val,folder->value.str.val)==T ) {
         RETURN_TRUE;
 	} else {
 		RETURN_FALSE;
 	}
 }
 
-DLEXPORT void php3_imap_createmailbox(INTERNAL_FUNCTION_PARAMETERS)
+void php3_imap_createmailbox(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *streamind, *folder;
+	pval *streamind, *folder;
 	int ind, ind_type;
 	MAILSTREAM *imap_stream;
 
-	if(ARG_COUNT(ht)!=2 || getParameters(ht,2,&streamind,&folder) == FAILURE) {
+	if (ARG_COUNT(ht)!=2 || getParameters(ht,2,&streamind,&folder) == FAILURE) {
 		WRONG_PARAM_COUNT;
 	}
 
@@ -427,24 +503,24 @@ DLEXPORT void php3_imap_createmailbox(INTERNAL_FUNCTION_PARAMETERS)
 	ind = streamind->value.lval;
 
 	imap_stream = ( MAILSTREAM *)php3_list_find(ind, &ind_type);
-	if(!imap_stream || ind_type != le_imap) {
+	if (!imap_stream || ind_type != le_imap) {
 		php3_error(E_WARNING, "Unable to find stream pointer");
 		RETURN_FALSE;
 	}
-	if ( mail_create(imap_stream,folder->value.strval)==T ) {
+	if ( mail_create(imap_stream,folder->value.str.val)==T ) {
         RETURN_TRUE;
 	} else {
 		RETURN_FALSE;
 	}
 }
 
-DLEXPORT void php3_imap_renamemailbox(INTERNAL_FUNCTION_PARAMETERS)
+void php3_imap_renamemailbox(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *streamind, *old, *new;
+	pval *streamind, *old, *new;
 	int ind, ind_type;
 	MAILSTREAM *imap_stream;
 
-	if(ARG_COUNT(ht)!=3 || getParameters(ht,3,&streamind,&old,&new)==FAILURE){
+	if (ARG_COUNT(ht)!=3 || getParameters(ht,3,&streamind,&old,&new)==FAILURE){
 		WRONG_PARAM_COUNT;
 	}
 
@@ -455,24 +531,24 @@ DLEXPORT void php3_imap_renamemailbox(INTERNAL_FUNCTION_PARAMETERS)
 	ind = streamind->value.lval;
 
 	imap_stream = ( MAILSTREAM *)php3_list_find(ind, &ind_type);
-	if(!imap_stream || ind_type != le_imap) {
+	if (!imap_stream || ind_type != le_imap) {
 		php3_error(E_WARNING, "Unable to find stream pointer");
 		RETURN_FALSE;
 	}
-	if ( mail_rename(imap_stream,old->value.strval,new->value.strval)==T ) {
+	if ( mail_rename(imap_stream,old->value.str.val,new->value.str.val)==T ) {
         RETURN_TRUE;
 	} else {
 		RETURN_FALSE;
 	}
 }
 
-DLEXPORT void php3_imap_deletemailbox(INTERNAL_FUNCTION_PARAMETERS)
+void php3_imap_deletemailbox(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *streamind, *folder;
+	pval *streamind, *folder;
 	int ind, ind_type;
 	MAILSTREAM *imap_stream;
 
-	if(ARG_COUNT(ht)!=2 || getParameters(ht,2,&streamind,&folder) == FAILURE) {
+	if (ARG_COUNT(ht)!=2 || getParameters(ht,2,&streamind,&folder) == FAILURE) {
 		WRONG_PARAM_COUNT;
 	}
 
@@ -482,25 +558,26 @@ DLEXPORT void php3_imap_deletemailbox(INTERNAL_FUNCTION_PARAMETERS)
 	ind = streamind->value.lval;
 
 	imap_stream = ( MAILSTREAM *)php3_list_find(ind, &ind_type);
-	if(!imap_stream || ind_type != le_imap) {
+	if (!imap_stream || ind_type != le_imap) {
 		php3_error(E_WARNING, "Unable to find stream pointer");
 		RETURN_FALSE;
 	}
-	if ( mail_delete(imap_stream,folder->value.strval)==T ) {
+	if ( mail_delete(imap_stream,folder->value.str.val)==T ) {
         RETURN_TRUE;
 	} else {
 		RETURN_FALSE;
 	}
 }
 
-DLEXPORT void php3_imap_list(INTERNAL_FUNCTION_PARAMETERS)
+void php3_imap_list(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *streamind, *ref, *pat;
-	int i,ind, ind_type;
+	pval *streamind, *ref, *pat;
+	/* int i; unused */
+	int ind, ind_type;
 	MAILSTREAM *imap_stream;
 	STRINGLIST *cur=NIL;
 
-	if(ARG_COUNT(ht)!=3 
+	if (ARG_COUNT(ht)!=3 
 		|| getParameters(ht,3,&streamind,&ref,&pat) == FAILURE) {
 		WRONG_PARAM_COUNT;
 	}
@@ -512,12 +589,12 @@ DLEXPORT void php3_imap_list(INTERNAL_FUNCTION_PARAMETERS)
 	ind = streamind->value.lval;
 
 	imap_stream = ( MAILSTREAM *)php3_list_find(ind, &ind_type);
-	if(!imap_stream || ind_type != le_imap) {
+	if (!imap_stream || ind_type != le_imap) {
 		php3_error(E_WARNING, "Unable to find stream pointer");
 		RETURN_FALSE;
 	}
     imap_folders = NIL;
-	mail_list(imap_stream,ref->value.strval,pat->value.strval);
+	mail_list(imap_stream,ref->value.str.val,pat->value.str.val);
 	if (imap_folders == NIL) {
 		RETURN_FALSE;
 	}
@@ -529,14 +606,15 @@ DLEXPORT void php3_imap_list(INTERNAL_FUNCTION_PARAMETERS)
     }
 	mail_free_stringlist (&imap_folders);
 }
-DLEXPORT void php3_imap_listscan(INTERNAL_FUNCTION_PARAMETERS)
+void php3_imap_listscan(INTERNAL_FUNCTION_PARAMETERS)
 {
-        YYSTYPE *streamind, *ref, *pat, *content;
-        int i,ind, ind_type;
+        pval *streamind, *ref, *pat, *content;
+		/* int i; unused */
+        int ind, ind_type;
         MAILSTREAM *imap_stream;
         STRINGLIST *cur=NIL;
 
-        if(ARG_COUNT(ht)!=3 
+        if (ARG_COUNT(ht)!=3 
                 || getParameters(ht,4,&streamind,&ref,&pat,&content) == FAILURE) {
                 WRONG_PARAM_COUNT;
         }
@@ -549,12 +627,12 @@ DLEXPORT void php3_imap_listscan(INTERNAL_FUNCTION_PARAMETERS)
         ind = streamind->value.lval;
 
         imap_stream = ( MAILSTREAM *)php3_list_find(ind, &ind_type);
-        if(!imap_stream || ind_type != le_imap) {
+        if (!imap_stream || ind_type != le_imap) {
                 php3_error(E_WARNING, "Unable to find stream pointer");
                 RETURN_FALSE;
         }
     imap_folders = NIL;
-        mail_scan(imap_stream,ref->value.strval,pat->value.strval,content->value.strval);
+        mail_scan(imap_stream,ref->value.str.val,pat->value.str.val,content->value.str.val);
         if (imap_folders == NIL) {
                 RETURN_FALSE;
         }
@@ -567,15 +645,15 @@ DLEXPORT void php3_imap_listscan(INTERNAL_FUNCTION_PARAMETERS)
         mail_free_stringlist (&imap_folders);
 }
 
-DLEXPORT void php3_imap_check(INTERNAL_FUNCTION_PARAMETERS)
+void php3_imap_check(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *streamind;
+	pval *streamind;
 	int ind, ind_type;
 	MAILSTREAM *imap_stream;
 	char date[50];
-	char tmp[150];
+	/*char tmp[150]; unused */
 
-	if(ARG_COUNT(ht)!=1 || getParameters(ht,1,&streamind) == FAILURE) {
+	if (ARG_COUNT(ht)!=1 || getParameters(ht,1,&streamind) == FAILURE) {
 		WRONG_PARAM_COUNT;
 	}
 
@@ -584,7 +662,7 @@ DLEXPORT void php3_imap_check(INTERNAL_FUNCTION_PARAMETERS)
 	ind = streamind->value.lval;
 
 	imap_stream = ( MAILSTREAM *)php3_list_find(ind, &ind_type);
-	if(!imap_stream || ind_type != le_imap) {
+	if (!imap_stream || ind_type != le_imap) {
 		php3_error(E_WARNING, "Unable to find stream pointer");
 		RETURN_FALSE;
 	}
@@ -606,13 +684,13 @@ DLEXPORT void php3_imap_check(INTERNAL_FUNCTION_PARAMETERS)
 
 }
 
-DLEXPORT void php3_imap_delete(INTERNAL_FUNCTION_PARAMETERS)
+void php3_imap_delete(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *streamind, * msgno;
+	pval *streamind, * msgno;
 	int ind, ind_type;
 	MAILSTREAM *imap_stream;
 
-	if(ARG_COUNT(ht)!=2 || getParameters(ht,2,&streamind,&msgno) == FAILURE) {
+	if (ARG_COUNT(ht)!=2 || getParameters(ht,2,&streamind,&msgno) == FAILURE) {
 		WRONG_PARAM_COUNT;
 	}
 
@@ -622,23 +700,23 @@ DLEXPORT void php3_imap_delete(INTERNAL_FUNCTION_PARAMETERS)
 	ind = streamind->value.lval;
 
 	imap_stream = ( MAILSTREAM *)php3_list_find(ind, &ind_type);
-	if(!imap_stream || ind_type != le_imap) {
+	if (!imap_stream || ind_type != le_imap) {
 		php3_error(E_WARNING, "Unable to find stream pointer");
 		RETURN_FALSE;
 	}
 
-	mail_setflag(imap_stream,msgno->value.strval,"\\DELETED");
+	mail_setflag(imap_stream,msgno->value.str.val,"\\DELETED");
 	RETVAL_TRUE;
 
 }
 
-DLEXPORT void php3_imap_undelete(INTERNAL_FUNCTION_PARAMETERS)
+void php3_imap_undelete(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *streamind, * msgno;
+	pval *streamind, * msgno;
 	int ind, ind_type;
 	MAILSTREAM *imap_stream;
 
-	if(ARG_COUNT(ht)!=2 || getParameters(ht,2,&streamind,&msgno) == FAILURE) {
+	if (ARG_COUNT(ht)!=2 || getParameters(ht,2,&streamind,&msgno) == FAILURE) {
 		WRONG_PARAM_COUNT;
 	}
 
@@ -648,26 +726,26 @@ DLEXPORT void php3_imap_undelete(INTERNAL_FUNCTION_PARAMETERS)
 	ind = streamind->value.lval;
 
 	imap_stream = ( MAILSTREAM *)php3_list_find(ind, &ind_type);
-	if(!imap_stream || ind_type != le_imap) {
+	if (!imap_stream || ind_type != le_imap) {
 		php3_error(E_WARNING, "Unable to find stream pointer");
 		RETURN_FALSE;
 	}
 
-	mail_clearflag (imap_stream,msgno->value.strval,"\\DELETED");
+	mail_clearflag (imap_stream,msgno->value.str.val,"\\DELETED");
 	RETVAL_TRUE;
 
 }
 
 
-DLEXPORT void php3_imap_headerinfo(INTERNAL_FUNCTION_PARAMETERS)
+void php3_imap_headerinfo(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *streamind, * msgno;
+	pval *streamind, * msgno;
 	int ind, ind_type;
 	MAILSTREAM *imap_stream;
 	STRINGLIST *lines=NULL;
 	MESSAGECACHE * cache;
 	char dummy[2000];
-	if(ARG_COUNT(ht)!=2 || getParameters(ht,2,&streamind,&msgno)==FAILURE) {
+	if (ARG_COUNT(ht)!=2 || getParameters(ht,2,&streamind,&msgno)==FAILURE) {
 		WRONG_PARAM_COUNT;
 	}
 	convert_to_long(streamind);
@@ -676,7 +754,7 @@ DLEXPORT void php3_imap_headerinfo(INTERNAL_FUNCTION_PARAMETERS)
 	ind = streamind->value.lval;
 
 	imap_stream = ( MAILSTREAM *)php3_list_find(ind, &ind_type);
-	if(!imap_stream || ind_type != le_imap) {
+	if (!imap_stream || ind_type != le_imap) {
 		php3_error(E_WARNING, "Unable to find stream pointer");
 		RETURN_FALSE;
 	}
@@ -736,14 +814,15 @@ DLEXPORT void php3_imap_headerinfo(INTERNAL_FUNCTION_PARAMETERS)
 }
 
 /* KMLANG */
-DLEXPORT void php3_imap_lsub(INTERNAL_FUNCTION_PARAMETERS)
+void php3_imap_lsub(INTERNAL_FUNCTION_PARAMETERS)
 {
-        YYSTYPE *streamind, *ref, *pat;
-        int i,ind, ind_type;
+        pval *streamind, *ref, *pat;
+		/* int i; unused */
+        int ind, ind_type;
         MAILSTREAM *imap_stream;
         STRINGLIST *cur=NIL;
 
-        if(ARG_COUNT(ht)!=3 
+        if (ARG_COUNT(ht)!=3 
                 || getParameters(ht,3,&streamind,&ref,&pat) == FAILURE) {
                 WRONG_PARAM_COUNT;
         }
@@ -755,12 +834,12 @@ DLEXPORT void php3_imap_lsub(INTERNAL_FUNCTION_PARAMETERS)
         ind = streamind->value.lval;
 
         imap_stream = ( MAILSTREAM *)php3_list_find(ind, &ind_type);
-        if(!imap_stream || ind_type != le_imap) {
+        if (!imap_stream || ind_type != le_imap) {
                 php3_error(E_WARNING, "Unable to find stream pointer");
                 RETURN_FALSE;
         }
     imap_sfolders = NIL;
-        mail_lsub(imap_stream,ref->value.strval,pat->value.strval);
+        mail_lsub(imap_stream,ref->value.str.val,pat->value.str.val);
         if (imap_sfolders == NIL) {
                 RETURN_FALSE;
         }
@@ -773,13 +852,13 @@ DLEXPORT void php3_imap_lsub(INTERNAL_FUNCTION_PARAMETERS)
         mail_free_stringlist (&imap_sfolders);
 }
 
-DLEXPORT void php3_imap_subscribe(INTERNAL_FUNCTION_PARAMETERS)
+void php3_imap_subscribe(INTERNAL_FUNCTION_PARAMETERS)
 {
-        YYSTYPE *streamind, *folder;
+        pval *streamind, *folder;
         int ind, ind_type;
         MAILSTREAM *imap_stream;
 
-        if(ARG_COUNT(ht)!=2 || getParameters(ht,2,&streamind,&folder) == FAILURE) {
+        if (ARG_COUNT(ht)!=2 || getParameters(ht,2,&streamind,&folder) == FAILURE) {
                 WRONG_PARAM_COUNT;
         }
 
@@ -789,23 +868,23 @@ DLEXPORT void php3_imap_subscribe(INTERNAL_FUNCTION_PARAMETERS)
         ind = streamind->value.lval;
 
         imap_stream = ( MAILSTREAM *)php3_list_find(ind, &ind_type);
-        if(!imap_stream || ind_type != le_imap) {
+        if (!imap_stream || ind_type != le_imap) {
                 php3_error(E_WARNING, "Unable to find stream pointer");
                 RETURN_FALSE;
         }
-        if ( mail_subscribe(imap_stream,folder->value.strval)==T ) {
+        if ( mail_subscribe(imap_stream,folder->value.str.val)==T ) {
         RETURN_TRUE;
         } else {
                 RETURN_FALSE;
         }
 }
-DLEXPORT void php3_imap_unsubscribe(INTERNAL_FUNCTION_PARAMETERS)
+void php3_imap_unsubscribe(INTERNAL_FUNCTION_PARAMETERS)
 {
-        YYSTYPE *streamind, *folder;
+        pval *streamind, *folder;
         int ind, ind_type;
         MAILSTREAM *imap_stream;
 
-        if(ARG_COUNT(ht)!=2 || getParameters(ht,2,&streamind,&folder) == FAILURE) {
+        if (ARG_COUNT(ht)!=2 || getParameters(ht,2,&streamind,&folder) == FAILURE) {
                 WRONG_PARAM_COUNT;
         }
 
@@ -815,16 +894,247 @@ DLEXPORT void php3_imap_unsubscribe(INTERNAL_FUNCTION_PARAMETERS)
         ind = streamind->value.lval;
 
         imap_stream = ( MAILSTREAM *)php3_list_find(ind, &ind_type);
-        if(!imap_stream || ind_type != le_imap) {
+        if (!imap_stream || ind_type != le_imap) {
                 php3_error(E_WARNING, "Unable to find stream pointer");
                 RETURN_FALSE;
         }
-        if ( mail_unsubscribe(imap_stream,folder->value.strval)==T ) {
+        if ( mail_unsubscribe(imap_stream,folder->value.str.val)==T ) {
         RETURN_TRUE;
         } else {
                 RETURN_FALSE;
         }
 }
+
+inline int add_assoc_object(pval *arg, char *key, pval tmp)
+{
+ return hash_update(arg->value.ht, key, strlen(key)+1, (void *) &tmp, sizeof(pval), NULL);
+}
+
+inline int add_next_index_object(pval *arg, pval tmp)
+{
+ return hash_next_index_insert( arg->value.ht, (void *) &tmp, sizeof(pval), NULL); 
+}
+
+void imap_add_body( pval *arg, BODY *body )
+{
+ pval parametres, param, dparametres, dparam;
+ PARAMETER *par, *dpar;
+ PART *part;
+
+ add_property_long( arg, "type", body->type );
+ add_property_long( arg, "encoding", body->encoding );
+
+ if ( body->subtype ){
+   add_property_long( arg, "ifsubtype", 1 );
+   add_property_string( arg, "subtype",  body->subtype, 1 );
+ } else {
+   add_property_long( arg, "ifsubtype", 0 );
+ }
+
+ if ( body->description ){
+   add_property_long( arg, "ifdescription", 1 );
+   add_property_string( arg, "description",  body->description, 1 );
+ } else {
+   add_property_long( arg, "ifdescription", 0 );
+ }
+ if ( body->id ){
+   add_property_long( arg, "ifid", 1 );
+   add_property_string( arg, "id",  body->description, 1 );
+ } else {
+   add_property_long( arg, "ifid", 0 );
+ }
+
+ add_property_long( arg, "lines", body->size.lines );
+ add_property_long( arg, "bytes", body->size.bytes );
+#ifdef IMAP41
+if ( body->disposition.type ){
+   add_property_long( arg, "ifdisposition", 1);
+   add_property_string( arg, "disposition", body->disposition.type, 1);
+ } else {
+   add_property_long( arg, "ifdisposition", 0);
+}
+
+if ( body->disposition.parameter )
+{
+	dpar = body->disposition.parameter;
+	add_property_long( arg, "ifdparametres", 1);
+	array_init( &dparametres );
+	do {
+		object_init( &dparam );
+		add_property_string( &dparam, "attribute", dpar->attribute, 1);
+		add_property_string( &dparam, "value", dpar->value, 1);
+		add_next_index_object( &dparametres, dparam );
+        } while ( dpar = dpar->next );
+	add_assoc_object( arg, "dparametres", dparametres );
+}
+else
+{
+	add_property_long( arg, "ifdparametres", 0);
+}
+#endif
+ 
+ if ( par = body->parameter ) {
+    add_property_long( arg, "ifparametres", 1 );
+
+    array_init( &parametres );
+    do{
+       object_init( &param );
+       add_property_string( &param, "attribute", par->attribute, 1 );
+       add_property_string( &param, "value", par->value, 1 );
+
+       add_next_index_object( &parametres, param );
+    } while ( par = par->next );
+    add_assoc_object( arg, "parametres", parametres );
+ } else {
+   add_property_long( arg, "ifparametres", 0 );
+ }
+
+ /* multipart message ? */
+
+ if ( body->type == TYPEMULTIPART ){
+    array_init( &parametres );
+    for ( part = body->CONTENT_PART; part; part = part->next ){
+        object_init( &param );
+        imap_add_body( &param, &part->body );
+        add_next_index_object( &parametres, param );
+    }
+    add_assoc_object( arg, "parts", parametres );
+ }
+
+ /* encapsulated message ? */
+
+ if ( ( body->type == TYPEMESSAGE ) && ( body = body->CONTENT_MSG_BODY )){
+    object_init( &param );
+    imap_add_body( &param, body );
+    add_assoc_object( arg, "parts", param );
+ }
+}
+
+void php3_imap_fetchstructure(INTERNAL_FUNCTION_PARAMETERS)
+{
+ pval *streamind, *msgno;
+ int ind, ind_type;
+ MAILSTREAM *imap_stream;
+ BODY *body;
+ /* char dummy[100]; not used */
+
+ if ( ARG_COUNT(ht) != 2 || getParameters( ht, 2, &streamind, &msgno ) == FAILURE ) {
+    WRONG_PARAM_COUNT;
+ }
+
+ convert_to_long( streamind );
+ convert_to_long( msgno );
+ object_init(return_value);
+
+ ind = streamind->value.lval;
+
+ imap_stream = ( MAILSTREAM *)php3_list_find( ind, &ind_type );
+
+ if ( !imap_stream || ind_type != le_imap ) {
+    php3_error( E_WARNING, "Unable to find stream pointer" );
+    RETURN_FALSE;
+ }
+
+ mail_fetchstructure( imap_stream, msgno->value.lval, &body );
+
+ if ( !body ) {
+    php3_error( E_WARNING, "No body information available" );
+    RETURN_FALSE;
+ }
+
+ imap_add_body( return_value, body );
+
+// mail_free_body_data( body );
+}
+
+void php3_imap_fetchbody(INTERNAL_FUNCTION_PARAMETERS)
+{
+ pval *streamind, *msgno, *sec;
+ int ind, ind_type;
+ MAILSTREAM *imap_stream;
+ char *body;
+ unsigned long len;
+
+ if ( ARG_COUNT(ht) != 3 || getParameters( ht, 3, &streamind, &msgno, &sec ) == FAILURE ) {
+    WRONG_PARAM_COUNT;
+ }
+
+ convert_to_long( streamind );
+ convert_to_long( msgno );
+ convert_to_string( sec );
+
+ ind = streamind->value.lval;
+
+ imap_stream = ( MAILSTREAM *)php3_list_find( ind, &ind_type );
+
+ if ( !imap_stream || ind_type != le_imap ) {
+    php3_error( E_WARNING, "Unable to find stream pointer" );
+    RETURN_FALSE;
+ }
+ 
+ body = mail_fetchbody( imap_stream, msgno->value.lval, sec->value.str.val, &len );
+
+ if ( !body ) {
+    php3_error( E_WARNING, "No body information available" );
+    RETURN_FALSE;
+ }
+ RETVAL_STRING( body ,1);
+}
+
+void php3_imap_base64(INTERNAL_FUNCTION_PARAMETERS)
+{
+ pval *text;
+ char *decode;
+ unsigned long newlength;
+ if ( ARG_COUNT(ht) != 1 || getParameters( ht, 1, &text) == FAILURE ) {
+    WRONG_PARAM_COUNT;
+ }
+
+ convert_to_string( text );
+ object_init(return_value);
+
+    decode = (char *) rfc822_base64((unsigned char *) text->value.str.val,
+    text->value.str.len,&newlength);
+RETVAL_STRINGL(decode,newlength,1);
+}
+
+void php3_imap_qprint(INTERNAL_FUNCTION_PARAMETERS)
+{
+ pval *text;
+ char *decode;
+ unsigned long newlength;
+ if ( ARG_COUNT(ht) != 1 || getParameters( ht, 1, &text) == FAILURE ) {
+    WRONG_PARAM_COUNT;
+ }
+
+ convert_to_string( text );
+ object_init(return_value);
+
+    decode = (char *) rfc822_qprint((unsigned char *) text->value.str.val,
+    text->value.str.len,&newlength);
+RETVAL_STRINGL(decode,newlength,1);
+}
+
+void php3_imap_8bit(INTERNAL_FUNCTION_PARAMETERS)
+{
+ pval *text;
+ char *decode;
+ unsigned long newlength;
+ if ( ARG_COUNT(ht) != 1 || getParameters( ht, 1, &text) == FAILURE ) {
+    WRONG_PARAM_COUNT;
+ }
+
+ convert_to_string( text );
+ object_init(return_value);
+
+    decode = (char *) rfc822_8bit((unsigned char *) text->value.str.val,
+    text->value.str.len,&newlength);
+RETVAL_STRINGL(decode,newlength,1);
+}
+
+
+
+
 
 
 
@@ -858,7 +1168,7 @@ void mm_notify (MAILSTREAM *stream,char *string,long errflg)
 void mm_list (MAILSTREAM *stream,DTYPE delimiter,char *mailbox,long attributes)
 {
 	STRINGLIST *cur=NIL;
-	if(imap_folders == NIL) {
+	if (imap_folders == NIL) {
 		imap_folders=mail_newstringlist();
 		imap_folders->LSIZE=strlen(imap_folders->LTEXT=cpystr(mailbox));
 		imap_folders->next=NIL; 
@@ -877,7 +1187,7 @@ void mm_list (MAILSTREAM *stream,DTYPE delimiter,char *mailbox,long attributes)
 void mm_lsub (MAILSTREAM *stream,DTYPE delimiter,char *mailbox,long attributes)
 {
         STRINGLIST *cur=NIL;
-        if(imap_sfolders == NIL) {
+        if (imap_sfolders == NIL) {
                 imap_sfolders=mail_newstringlist();
         imap_sfolders->LSIZE=strlen(imap_sfolders->LTEXT=cpystr(mailbox));
                 imap_sfolders->next=NIL; 

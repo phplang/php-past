@@ -17,8 +17,6 @@ PHP Regression Test Menu
 4) Built-in Function Tests
 5) Array Tests
 6) DBM Tests
-7) mSQL Tests
-8) Postgres95 Tests
 0) Run All Tests
 q) Quit
 EOF
@@ -53,15 +51,7 @@ case $a in
    ./testphp $i
    done
    ;;
-7) for i in msql/*.php3t; do
-   ./testphp $i
-   done
-   ;;
-8) for i in pg95/*.php3t; do
-   ./testphp $i
-   done
-   ;;
-0) for i in basic/*.php3t lang/*.php3t reg/*.php3t func/*.php3t ary/*.php3t dbm/*.php3t msql/*.php3t pg95/*.php3t; do
+0) for i in basic/*.php3t lang/*.php3t reg/*.php3t func/*.php3t ary/*.php3t dbm/*.php3t; do
    ./testphp $i
    done
    ;;

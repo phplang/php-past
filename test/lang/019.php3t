@@ -3,7 +3,7 @@ eval() test                                                   ...
 --POST--
 --GET--
 --FILE--
-<?
+<?php 
 
 error_reporting(0);
 

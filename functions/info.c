@@ -5,18 +5,23 @@
    | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
-   | it under the terms of the GNU General Public License as published by |
-   | the Free Software Foundation; either version 2 of the License, or    |
-   | (at your option) any later version.                                  |
+   | it under the terms of one of the following licenses:                 |
+   |                                                                      |
+   |  A) the GNU General Public License as published by the Free Software |
+   |     Foundation; either version 2 of the License, or (at your option) |
+   |     any later version.                                               |
+   |                                                                      |
+   |  B) the PHP License as published by the PHP Development Team and     |
+   |     included in the distribution in the file: LICENSE                |
    |                                                                      |
    | This program is distributed in the hope that it will be useful,      |
    | but WITHOUT ANY WARRANTY; without even the implied warranty of       |
    | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the        |
    | GNU General Public License for more details.                         |
    |                                                                      |
-   | You should have received a copy of the GNU General Public License    |
-   | along with this program; if not, write to the Free Software          |
-   | Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.            |
+   | You should have received a copy of both licenses referred to here.   |
+   | If you did not, or have any questions about PHP licensing, please    |
+   | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
    | Authors: Rasmus Lerdorf <rasmus@lerdorf.on.ca>                       |
    |          Zeev Suraski <bourbon@netvision.net.il>                     |
@@ -25,7 +30,7 @@
 #ifdef THREAD_SAFE
 #include "tls.h"
 #endif
-#include "parser.h"
+#include "php.h"
 #include "head.h"
 #include "info.h"
 #ifndef MSVC5
@@ -36,10 +41,10 @@
 	PUTS("<tr><td bgcolor=\"" ENTRY_NAME_COLOR "\">"); \
 	PUTS(directive); \
 	PUTS("</td><td bgcolor=\"" CONTENTS_COLOR "\">&nbsp;"); \
-	if(value1) PUTS(value1); \
+	if (value1) PUTS(value1); \
 	else PUTS("<i>none</i>"); \
 	PUTS("</td><td bgcolor=\"" CONTENTS_COLOR "\">&nbsp;"); \
-	if(value2) PUTS(value2); \
+	if (value2) PUTS(value2); \
 	else PUTS("<i>none</i>"); \
 	PUTS("</td></tr>\n");
 
@@ -81,9 +86,31 @@ static int _display_module_info(php3_module_entry *module)
 void _php3_info(void)
 {
 	char **env,*tmp1,*tmp2;
+	char *php3_uname;
+#if WIN32|WINNT
+	char php3_windows_uname[256];
+	DWORD dwBuild=0;
+	DWORD dwVersion = GetVersion();
+	DWORD dwWindowsMajorVersion =  (DWORD)(LOBYTE(LOWORD(dwVersion)));
+	DWORD dwWindowsMinorVersion =  (DWORD)(HIBYTE(LOWORD(dwVersion)));
+#endif
 	TLS_VARS;
 	
-	if(!php3_header(0,NULL)) {  /* Don't send anything on a HEAD request */
+#if WIN32|WINNT
+	// Get build numbers for Windows NT or Win95
+	if (dwVersion < 0x80000000){
+		dwBuild = (DWORD)(HIWORD(dwVersion));
+		snprintf(php3_windows_uname,255,"%s %d.%d build %d","Windows NT",dwWindowsMajorVersion,dwWindowsMinorVersion,dwBuild);
+	} else {
+		snprintf(php3_windows_uname,255,"%s %d.%d","Windows 95/98",dwWindowsMajorVersion,dwWindowsMinorVersion);
+	}
+	php3_uname = php3_windows_uname;
+#else
+	php3_uname=PHP_UNAME;
+#endif
+
+
+	if (!php3_header()) {  /* Don't send anything on a HEAD request */
 		return;
 	}
 	php3_printf("<center><h1>PHP Version %s</h1></center>\n", PHP_VERSION);
@@ -94,28 +121,8 @@ void _php3_info(void)
 	PUTS("<a href=\"mailto:shane@caraveo.com\">Shane Caraveo</a>,\n");
 	PUTS("<a href=\"mailto:jimw@php.net\">Jim Winstead</a>, and countless others.<P>\n");
 
-	PUTS("<hr><p><b>");
-#ifdef MSVC5
-	PUTS("Windows95/NT Version</b> compiled with MS VC++ V5\n");
-#else
-	{
-		FILE *fp;
-		char buf[256];
-
-		buf[255]=0;
-		PUTS("Unix version:</b> ");
-		fp = popen("uname -a","r");
-		if(fp) {
-			while(fgets(buf,255,fp)) {
-				PUTS(buf);
-			}
-			pclose(fp);
-		}
-	}
-#endif
-	PUTS("\n");
-
-
+	PUTS("<hr>");
+	php3_printf("<center>System: %s<br>Build Date: %s</center>\n", php3_uname, __DATE__);
 	PUTS("<center>\n");
 	
 	SECTION("Extensions");
@@ -224,15 +231,21 @@ void _php3_info(void)
 	php3_printf("<tr><td bgcolor=\"" ENTRY_NAME_COLOR "\">highlight_keyword</td><td bgcolor=\"" CONTENTS_COLOR "\"><font color=%s>&nbsp;%s</font></td><td bgcolor=\"" CONTENTS_COLOR "\"><font color=%s>&nbsp;%s</font></td></tr>\n",php3_ini_master.highlight_keyword,php3_ini_master.highlight_keyword,php3_ini.highlight_keyword,php3_ini.highlight_keyword);
 	PUTS("</table>");
 
+#if USE_SAPI /* call a server module specific info function */
+	GLOBAL(sapi_rqst)->info(GLOBAL(sapi_rqst));
+#endif
+
 	SECTION("Environment");
 	PUTS("<table border=5 width=\"600\">\n");
 	PUTS("<tr><th bgcolor=\"" HEADER_COLOR "\">Variable</th><th bgcolor=\"" HEADER_COLOR "\">Value</th></tr>\n");
 	for (env=environ; env!=NULL && *env !=NULL; env++) {
 		tmp1 = estrdup(*env);
-		if ((tmp2 = strchr(tmp1,'='))) {
-			*tmp2 = 0;
-			tmp2++;
+		if (!(tmp2=strchr(tmp1,'='))) { /* malformed entry? */
+			efree(tmp1);
+			continue;
 		}
+		*tmp2 = 0;
+		tmp2++;
 		PUTS("<tr><td bgcolor=\"" ENTRY_NAME_COLOR "\">");
 		PUTS(tmp1);
 		PUTS("</td><td bgcolor=\"" CONTENTS_COLOR "\">");
@@ -306,18 +319,25 @@ void _php3_info(void)
 #endif
 
 	PUTS("</center>");
-	SECTION("GNU Public License");
-    PUTS("<TT>This program is free software; you can redistribute it and/or modify\n");
-    PUTS("it under the terms of the GNU General Public License as published by\n");
-    PUTS("the Free Software Foundation; either version 2 of the License, or\n");
-    PUTS("(at your option) any later version.<p>\n");
-    PUTS("This program is distributed in the hope that it will be useful,\n");
-    PUTS("but WITHOUT ANY WARRANTY; without even the implied warranty of\n");
-    PUTS("MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n");
-    PUTS("GNU General Public License for more details.<p>\n");
-    PUTS("You should have received a copy of the GNU General Public License\n");
-    PUTS("along with this program; if not, write to the <b>Free Software\n");
-    PUTS("Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.</b></TT><p>\n");
+	SECTION("PHP License");
+	PUTS("<TT>This program is free software; you can redistribute it and/or modify\n");
+	PUTS("it under the terms of:\n");
+	PUTS("\n");
+	PUTS("A) the GNU General Public License as published by the Free Software\n");
+    PUTS("Foundation; either version 2 of the License, or (at your option)\n");
+    PUTS("any later version.\n");
+	PUTS("\n");
+	PUTS("B) the PHP License as published by the PHP Development Team and\n");
+    PUTS("included in the distribution in the file: LICENSE\n");
+	PUTS("\n");
+	PUTS("This program is distributed in the hope that it will be useful,\n");
+	PUTS("but WITHOUT ANY WARRANTY; without even the implied warranty of\n");
+	PUTS("MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n");
+	PUTS("GNU General Public License for more details.\n");
+	PUTS("\n");
+	PUTS("You should have received a copy of both licenses referred to here.\n");
+	PUTS("If you did not, or have any questions about PHP licensing, please\n");
+	PUTS("contact core@php.net.</TT>\n");
 	
 }
 
@@ -334,7 +354,7 @@ void php3_version(INTERNAL_FUNCTION_PARAMETERS)
 {
 	TLS_VARS;
 	
-    RETURN_STRING(PHP_VERSION);
+    RETURN_STRING(PHP_VERSION,1);
 }
 
 /*

@@ -3,7 +3,7 @@ Switch test 2                                                 ...
 --POST--
 --GET--
 --FILE--
-<?
+<?php 
 
 for ($i=0; $i<=5; $i++)
 {

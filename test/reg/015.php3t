@@ -3,7 +3,7 @@ replace empty matches                                         ...
 --POST--
 --GET--
 --FILE--
-<?echo ereg_replace("^","z","abc123")?>
+<?php echo ereg_replace("^","z","abc123")?>
 --EXPECT--
 Content-type: text/html
 zabc123

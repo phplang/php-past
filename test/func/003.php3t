@@ -3,7 +3,7 @@ General function test                                         ...
 --POST--
 --GET--
 --FILE--
-<?
+<?php 
 
 old_function a (
   echo "hey\n";

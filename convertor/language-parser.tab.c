@@ -91,18 +91,23 @@
    | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
-   | it under the terms of the GNU General Public License as published by |
-   | the Free Software Foundation; either version 2 of the License, or    |
-   | (at your option) any later version.                                  |
+   | it under the terms of one of the following licenses:                 |
+   |                                                                      |
+   |  A) the GNU General Public License as published by the Free Software |
+   |     Foundation; either version 2 of the License, or (at your option) |
+   |     any later version.                                               |
+   |                                                                      |
+   |  B) the PHP License as published by the PHP Development Team and     |
+   |     included in the distribution in the file: LICENSE                |
    |                                                                      |
    | This program is distributed in the hope that it will be useful,      |
    | but WITHOUT ANY WARRANTY; without even the implied warranty of       |
    | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the        |
    | GNU General Public License for more details.                         |
    |                                                                      |
-   | You should have received a copy of the GNU General Public License    |
-   | along with this program; if not, write to the Free Software          |
-   | Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.            |
+   | You should have received a copy of both licenses referred to here.   |
+   | If you did not, or have any questions about PHP licensing, please    |
+   | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
    | Authors: Andi Gutmans <andi@vipe.technion.ac.il>                     |
    |          Zeev Suraski <bourbon@netvision.net.il>                     |
@@ -110,7 +115,7 @@
 */
 
 
-/* $Id: language-parser.y,v 1.8 1998/01/16 18:04:46 zeev Exp $ */
+/* $Id: language-parser.y,v 1.11 1998/05/15 10:56:55 zeev Exp $ */
 
 #include "token_cache.h"
 #include "main.h"
@@ -120,7 +125,7 @@
 #include <string.h>
 #endif
 extern void phperror(char *str);
-extern int phplex(YYSTYPE *phplval);
+extern int phplex(pval *phplval);
 extern void end_php();
 
 #ifndef YYSTYPE
@@ -260,22 +265,22 @@ static const short yyrhs[] = {   100,
 
 #if YYDEBUG != 0
 static const short yyrline[] = { 0,
-   112,   114,   118,   120,   121,   122,   123,   124,   125,   126,
-   127,   128,   129,   130,   131,   132,   133,   134,   135,   136,
-   137,   138,   139,   140,   141,   142,   146,   148,   149,   152,
-   154,   155,   159,   160,   164,   165,   169,   170,   174,   175,
-   179,   180,   181,   185,   187,   191,   193,   197,   199,   203,
-   205,   206,   207,   208,   209,   212,   214,   218,   220,   221,
-   222,   227,   229,   230,   234,   236,   237,   241,   243,   244,
-   245,   246,   247,   248,   249,   250,   251,   252,   253,   254,
-   255,   256,   257,   258,   259,   260,   261,   262,   263,   264,
-   265,   266,   267,   268,   269,   270,   271,   272,   273,   274,
-   275,   276,   277,   278,   279,   280,   281,   282,   283,   284,
-   285,   286,   287,   290,   292,   293,   295,   297,   301,   303,
-   307,   309,   313,   315,   320,   322,   326,   328,   329,   332,
-   337,   339,   340,   341,   345,   347,   348,   352,   354,   355,
-   356,   357,   358,   359,   360,   361,   362,   366,   368,   372,
-   373
+   117,   119,   123,   125,   126,   127,   128,   129,   130,   131,
+   132,   133,   134,   135,   136,   137,   138,   139,   140,   141,
+   142,   143,   144,   145,   146,   147,   151,   153,   154,   157,
+   159,   160,   164,   165,   169,   170,   174,   175,   179,   180,
+   184,   185,   186,   190,   192,   196,   198,   202,   204,   208,
+   210,   211,   212,   213,   214,   217,   219,   223,   225,   226,
+   227,   232,   234,   235,   239,   241,   242,   246,   248,   249,
+   250,   251,   252,   253,   254,   255,   256,   257,   258,   259,
+   260,   261,   262,   263,   264,   265,   266,   267,   268,   269,
+   270,   271,   272,   273,   274,   275,   276,   277,   278,   279,
+   280,   281,   282,   283,   284,   285,   286,   287,   288,   289,
+   290,   291,   292,   295,   297,   298,   300,   302,   306,   308,
+   312,   314,   318,   320,   325,   327,   331,   333,   334,   337,
+   342,   344,   345,   346,   350,   352,   353,   357,   359,   360,
+   361,   362,   363,   364,   365,   366,   367,   371,   373,   377,
+   378
 };
 #endif
 
@@ -1275,39 +1280,39 @@ yyreduce:
   switch (yyn) {
 
 case 25:
-#line 141 "language-parser.y"
+#line 146 "language-parser.y"
 { end_php(); printf("?>"); ;
     break;}
 case 26:
-#line 142 "language-parser.y"
+#line 147 "language-parser.y"
 { end_php(); ;
     break;}
 case 27:
-#line 147 "language-parser.y"
+#line 152 "language-parser.y"
 { printf(";"); ;
     break;}
 case 28:
-#line 148 "language-parser.y"
+#line 153 "language-parser.y"
 { end_php(); printf("?>"); ;
     break;}
 case 29:
-#line 149 "language-parser.y"
+#line 154 "language-parser.y"
 { end_php(); ;
     break;}
 case 30:
-#line 153 "language-parser.y"
+#line 158 "language-parser.y"
 { printf(":"); ;
     break;}
 case 31:
-#line 154 "language-parser.y"
+#line 159 "language-parser.y"
 { end_php(); printf(": ?>"); ;
     break;}
 case 32:
-#line 155 "language-parser.y"
+#line 160 "language-parser.y"
 { end_php(); ;
     break;}
 case 115:
-#line 292 "language-parser.y"
+#line 297 "language-parser.y"
 { printf(">"); ;
     break;}
 }
@@ -1508,5 +1513,5 @@ yyerrhandle:
   yystate = yyn;
   goto yynewstate;
 }
-#line 376 "language-parser.y"
+#line 381 "language-parser.y"
 

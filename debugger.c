@@ -5,18 +5,23 @@
    | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
-   | it under the terms of the GNU General Public License as published by |
-   | the Free Software Foundation; either version 2 of the License, or    |
-   | (at your option) any later version.                                  |
+   | it under the terms of one of the following licenses:                 |
+   |                                                                      |
+   |  A) the GNU General Public License as published by the Free Software |
+   |     Foundation; either version 2 of the License, or (at your option) |
+   |     any later version.                                               |
+   |                                                                      |
+   |  B) the PHP License as published by the PHP Development Team and     |
+   |     included in the distribution in the file: LICENSE                |
    |                                                                      |
    | This program is distributed in the hope that it will be useful,      |
    | but WITHOUT ANY WARRANTY; without even the implied warranty of       |
    | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the        |
    | GNU General Public License for more details.                         |
    |                                                                      |
-   | You should have received a copy of the GNU General Public License    |
-   | along with this program; if not, write to the Free Software          |
-   | Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.            |
+   | You should have received a copy of both licenses referred to here.   |
+   | If you did not, or have any questions about PHP licensing, please    |
+   | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
    | Authors: Stig Sæther Bakken <ssb@guardian.no>                        |
    +----------------------------------------------------------------------+
@@ -26,7 +31,7 @@
 #include "tls.h"
 #endif
 
-#include "parser.h"
+#include "php.h"
 #include "internal_functions.h"
 #include "modules.h"
 #include "main.h"
@@ -37,7 +42,6 @@
 
 #include <sys/types.h>
 #include <errno.h>
-#include <limits.h>
 
 #if MSVC5
 # include <winsock.h>
@@ -91,8 +95,6 @@ static pid_t mypid = 0;
 
 
 function_entry debugger_functions[] = {
-	{"debug_on", php3_debugger_on, NULL},
-	{"debug_off", php3_debugger_off, NULL},
 	{"debugger_on", php3_debugger_on, NULL},
 	{"debugger_off", php3_debugger_off, NULL},
 	{NULL,NULL,NULL}
@@ -127,7 +129,7 @@ static int create_debugger_socket(const char *hostname, int dport)
 	address.sin_port = htons((unsigned short)dport);
 
 	sockfd = socket(address.sin_family, SOCK_STREAM, 0);
-	if (sockfd SOCK_ERR) {
+	if (sockfd == SOCK_ERR) {
 #ifndef DEBUGGER_FAIL_SILENTLY
 #if WIN32|WINNT
 		php3_printf("create_debugger_socket(\"%s\", %d) socket: %d\n",
@@ -140,7 +142,7 @@ static int create_debugger_socket(const char *hostname, int dport)
 		return -1;
 	}
 	while ((err = connect(sockfd, (struct sockaddr *) &address,
-						  sizeof(address))) SOCK_ERR && errno == EAGAIN);
+						  sizeof(address))) == SOCK_ERR && errno == EAGAIN);
 
 	if (err < 0) {
 #ifndef DEBUGGER_FAIL_SILENTLY
@@ -170,7 +172,7 @@ find_hostname(void)
 	if (err == -1) {
 		return NULL;
 	}
-	return (char *) estrdup(tmpname);
+	return (char *) strdup(tmpname);
 }
 
 
@@ -241,7 +243,7 @@ static void debugger_send_int(char *field, int data)
  * Functions accessible from other object files:
  */
 
-int php3_minit_debugger(INITFUNCARG)
+int php3_minit_debugger(INIT_FUNC_ARGS)
 {
 	TLS_VARS;
 
@@ -266,15 +268,13 @@ int php3_mshutdown_debugger(void)
 {
 	TLS_VARS;
 
-#if 0
 	if (GLOBAL(myhostname)) {
-		efree(GLOBAL(myhostname));
+		free(GLOBAL(myhostname));
 	}
-#endif
 	return SUCCESS;
 }
 
-int php3_rinit_debugger(INITFUNCARG)
+int php3_rinit_debugger(INIT_FUNC_ARGS)
 {
 	TLS_VARS;
 
@@ -396,7 +396,8 @@ void php3_debugger_error(char *message, int type, char *filename, int lineno)
 	}
 
 	depth = GLOBAL(function_state_stack).top;
-	if (strchr(filename, '/') == NULL && getcwd(cwd, PATH_MAX) != NULL) {
+	if (filename && strchr(filename, '/') == NULL &&
+		getcwd(cwd, PATH_MAX) != NULL) {
 		snprintf(location, sizeof(location), "%s/%s:%d", cwd, filename, lineno);
 	} else {
 		snprintf(location, sizeof(location), "%s:%d", filename, lineno);
@@ -421,11 +422,11 @@ void php3_debugger_error(char *message, int type, char *filename, int lineno)
 }
 
 /*FIXME
-  we also need a way to dissable the cgi timmer so we dont
+  we also need a way to dissable the cgi timer so we dont
   time out while debugging.
 */
 void php3_debugger_on(INTERNAL_FUNCTION_PARAMETERS){
-	YYSTYPE *ip;
+	pval *ip;
 	TLS_VARS;
 	
 	if (ARG_COUNT(ht)!=1 || getParameters(ht,1,&ip) == FAILURE) {
@@ -433,9 +434,10 @@ void php3_debugger_on(INTERNAL_FUNCTION_PARAMETERS){
 	}
 	convert_to_string(ip);
 
-	if (php3_start_debugger(ip->value.strval) == FAILURE) {
-		php3_error(E_ERROR, "Debugger connect failed!\n");
+	if (php3_start_debugger(ip->value.str.val) == SUCCESS) {
+		RETURN_TRUE;
 	}
+	RETVAL_FALSE;
 }
 
 void php3_debugger_off(INTERNAL_FUNCTION_PARAMETERS){
@@ -484,7 +486,7 @@ int _php3_send_error(char *message, char *hostaddr){
 	char *hostname,*delim;
 
 	/*hostaddr is expected in this form: name:port*/
-	if(!(delim=strchr(hostaddr,(int)(":")))){
+	if (!(delim=strchr(hostaddr,(int)(":")))){
 		return 0;
 	}
 	
@@ -497,20 +499,20 @@ int _php3_send_error(char *message, char *hostaddr){
 	address.sin_port = htons((unsigned short)dport);
 
 	sockfd = socket(address.sin_family, SOCK_STREAM, 0);
-	if (sockfd SOCK_ERR) {
+	if (sockfd == SOCK_ERR) {
 		php3_error(E_WARNING,"Couln't create socket!");
 		return 0;
 	}
 
 	while ((err = connect(sockfd, (struct sockaddr *) &address,
-						  sizeof(address))) SOCK_ERR && errno == EAGAIN);
+						  sizeof(address))) == SOCK_ERR && errno == EAGAIN);
 	
 	if (err < 0) {
 		SCLOSE(sockfd);
 		return 0;
 	}
 
-	if(! SSEND(sockfd, message, strlen(message))){
+	if (! SSEND(sockfd, message, strlen(message))){
 		return 0;
 	}
 

@@ -5,18 +5,23 @@
    | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
-   | it under the terms of the GNU General Public License as published by |
-   | the Free Software Foundation; either version 2 of the License, or    |
-   | (at your option) any later version.                                  |
+   | it under the terms of one of the following licenses:                 |
+   |                                                                      |
+   |  A) the GNU General Public License as published by the Free Software |
+   |     Foundation; either version 2 of the License, or (at your option) |
+   |     any later version.                                               |
+   |                                                                      |
+   |  B) the PHP License as published by the PHP Development Team and     |
+   |     included in the distribution in the file: LICENSE                |
    |                                                                      |
    | This program is distributed in the hope that it will be useful,      |
    | but WITHOUT ANY WARRANTY; without even the implied warranty of       |
    | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the        |
    | GNU General Public License for more details.                         |
    |                                                                      |
-   | You should have received a copy of the GNU General Public License    |
-   | along with this program; if not, write to the Free Software          |
-   | Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.            |
+   | You should have received a copy of both licenses referred to here.   |
+   | If you did not, or have any questions about PHP licensing, please    |
+   | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
    | Authors: Andi Gutmans <andi@php.net>                                 |
    |          Zeev Suraski <bourbon@netvision.net.il>                     |
@@ -24,7 +29,7 @@
  */
 
 
-/* $Id: main.h,v 1.44 1998/02/01 23:53:06 zeev Exp $ */
+/* $Id: main.h,v 1.51 1998/05/23 13:06:57 zeev Exp $ */
 
 
 #ifndef _MAIN_H
@@ -51,24 +56,28 @@
 #define INIT_LIST_DESTRUCTORS 0x40000
 #define INIT_MODULE_REGISTRY 0x80000
 #define INIT_WINSOCK 0x100000
+#define INIT_CONSTANTS 0x200000
 
 #define NORMAL_SHUTDOWN 1
 #define NO_SHUTDOWN 0
 #define ABNORMAL_SHUTDOWN -1
 
+#define PREPROCESS_NONE 0
+#define PREPROCESS_PREPROCESS 1
+#define PREPROCESS_EXECUTE 2
+
 extern int php3_request_startup(INLINE_TLS_VOID);
 extern void php3_request_shutdown(void *dummy INLINE_TLS);
+extern void php3_request_shutdown_for_exec(void *dummy);
 extern int php3_module_startup(INLINE_TLS_VOID);
 extern void php3_module_shutdown(INLINE_TLS_VOID);
+extern void php3_module_shutdown_for_exec();
 
 extern int php3_get_lineno(int lineno);
 extern char *php3_get_filename(int lineno);
 
 #ifndef THREAD_SAFE
 extern int shutdown_requested;
-#if (!PHP_ISAPI)
-extern char **environ;
-#endif
 extern int initialized;
 #endif
 

@@ -1,6 +1,15 @@
 /* config.w32.h.  Configure file for win32 platforms  */
 /* tested only with MS Visual C++ V5 */
 
+
+/* if you have resolv.lib and lib44bsd95.lib you can compile the extra 
+   dns functions located in dns.c.  Set this to 1.  add resolv.lib and
+   lib33bsd95.lib to the project settings, and add the path to the
+   bind include directory to the preprocessor settings.  These libs
+   are availabe in the ntbind distribution */
+#define HAVE_BINDLIB 1
+
+
 /* should be added to runtime config*/
 #define PHP3_URL_FOPEN 1
 
@@ -17,15 +26,6 @@
 /* Undefine if you want stricter XML/SGML compliance by default */
 /* this disables "<?expression?>" and "<?=expression?>" */
 #define DEFAULT_SHORT_OPEN_TAG 1
-
-/* NOTE Logging may be removed from PHP. Consult the PHP DEV list*/
-/* Define if you want to allow logging to a db file or sql database */
-#define LOGGING 0
-
-/* Define if you want the logging to go to ndbm/gdbm/flatfile */
-#define LOG_DBM 0
-#define LOG_DBM_DIR "."
-#define LOG_SQL 0
 
 #define PHP_TRACK_VARS 1
 
@@ -44,6 +44,8 @@
 /* Define if you have the gdbm library (-lgdbm).  */
 /* #undef GDBM */
 #define HAVE_LDAP 1
+/* Define if you have Netscapes LDAP sdk v1.1 */
+#define HAVE_NSLDAP 1
 #define HAVE_SNMP 1
 #define HAVE_CRYPT 1
 #define HAVE_ORACLE 1
@@ -51,18 +53,20 @@
 #define HAVE_SOLID 1
 #define HAVE_MYSQL 1
 #define HAVE_MSQL 1
+# define HAVE_ERRMSG_H 1 /*needed for mysql 3.21.17 and up*/
 #define HAVE_PGSQL 1
 #define HAVE_SYBASE 1
 #define HAVE_FILEPRO 1
 #define DBASE 1
-
+#define HAVE_ZLIB 1
 /* Define if you have the gd library (-lgd).  */
 #define HAVE_LIBGD 1
+#define HAVE_LIBGD13 1
 
 #else
 #define HAVE_SNMP 0
-#define HAVE_MYSQL 0
-
+#define HAVE_MYSQL 1
+# define HAVE_ERRMSG_H 1 /*needed for mysql 3.21.17 and up*/
 #define HAVE_LDAP 0
 #define DBASE 0
 #define NDBM 0
@@ -77,6 +81,7 @@
 #define HAVE_SYBASE 0
 #define HAVE_LIBGD 0
 #define HAVE_FILEPRO 0
+#define HAVE_ZLIB 0
 #endif
 /* ----------------------------------------------------------------
    The following may or may not be (or need to be) ported to the
@@ -119,6 +124,7 @@
    DONT TOUCH!!!!!  Unless you realy know what your messing with!
    ---------------------------------------------------------------*/
 
+#define DISCARD_PATH 1
 #define HAVE_SETITIMER 0
 #define HAVE_IODBC 0 /*getting rid of old odbc*/
 #define HAVE_UODBC 1
@@ -127,11 +133,9 @@
 #define HAVE_GETTIMEOFDAY 1
 #define HAVE_PUTENV 1
 #define PHP_DEBUGGER 1
+#define HAVE_LIMITS_H 1
 
-
-/* Define if you have Netscapes LDAP sdk v1.1 */
-#define HAVE_NSLDAP 0
-
+#define HAVE_TZSET 1
 /* Define if you have the flock function.  */
 #define HAVE_FLOCK 1
 

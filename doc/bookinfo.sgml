@@ -33,17 +33,13 @@
   </authorgroup>
 
   <pubdate>&php.build-date;</pubdate>
-  <revhistory>
-   <revision>
-    <revnumber>&php.version;</revnumber>
-    <date>&php.build-date;</date>
-   </revision>
-  </revhistory>
-
+ 
   <editor>
-   <authorblurb><simpara> Current Maintainer: <ulink
-     url="mailto:&email.stig;">&email.stig;</ulink>, comments welcome.
-     </simpara></authorblurb>
+   <firstname>Stig Sæther</firstname>
+   <surname>Bakken</surname>
+   <authorblurb><simpara> Email: <ulink
+      url="mailto:&email.stig;"><literal>&email.stig;</literal></ulink>
+    </simpara></authorblurb>
   </editor>
 
   <copyright>

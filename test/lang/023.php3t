@@ -5,7 +5,7 @@ Regression test                                               ...
 --FILE--
 PHP3 Regression Test
 
-<?
+<?php 
 
 include("lang/023-1.inc");
 
@@ -51,8 +51,6 @@ Correct result - 2:  2<br>
 Correct result - -2:  -2<br>
 Correct result - 15:  15<br>
 Correct result - 15:  15<br>
-Correct result - 1:  1<br>
-Correct result - 0:  0<br>
 Correct result - 2:  2<br>
 Correct result - 3:  3<br>
 *********************************<br>
@@ -65,8 +63,6 @@ Correct result - 2:  2<br>
 Correct result - -2:  -2<br>
 Correct result - 15:  15<br>
 Correct result - 15:  15<br>
-Correct result - 1.666667:  1.666667<br>
-Correct result - 0.6:  0.6<br>
 Correct result - 2:  2<br>
 Correct result - 3:  3<br>
 *********************************<br>

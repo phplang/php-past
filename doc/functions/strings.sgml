@@ -1,6 +1,13 @@
 
  <reference id="ref.strings">
   <title>String functions</title>
+  <titleabbrev>Strings</titleabbrev>
+  <partintro>
+  <simpara>
+    These functions all manipulate strings in various ways. Some more
+    specialized sections can be found in the regular expression and URL
+    handling sections.
+  </partintro>
 
   <refentry id="function.addslashes">
    <refnamediv>
@@ -14,15 +21,13 @@
      <paramdef>string <parameter>str</parameter></paramdef>
     </funcsynopsis>
     <para>
-     Returns a string with a backslashes before characters that need
+     Returns a string with backslashes before characters that need
      to be quoted in database queries etc.  These characters are
      single quote (<literal>'</literal>), double quote
-     (<literal>"</literal>) and backslash (<literal>\</literal>).
+     (<literal>"</literal>), and backslash (<literal>\</literal>).
 
     <para>
-     See also <link
-     linkend="function.stripslashes">stripslashes</link> and <link
-     linkend="function.quotemeta">quotemeta</link>.
+     See also <function>stripslashes</function> and <function>quotemeta</function>.
 
    </refsect1>
   </refentry>
@@ -45,6 +50,8 @@
       <programlisting>
 $trimmed = Chop($line);
 </programlisting></example>
+	 <para>
+	 See also <function>trim</function>.
 
    </refsect1>
   </refentry>
@@ -62,16 +69,44 @@ $trimmed = Chop($line);
     </funcsynopsis>
     <para>
      Returns a one-character string containing the character specified
-     by ascii.
+     by <parameter>ascii</parameter>.
      <example>
       <title>chr() example</title>
       <programlisting>
-$str += chr(27); /* add an escape character at the end of $str */
+$str .= chr(27); /* add an escape character at the end of $str */
 </programlisting></example>
 
-     This function complements <link
-     linkend="function.ord">ord</link>.
+     This function complements <function>ord</function>.
 
+   </refsect1>
+  </refentry>
+
+  <refentry id="function.crypt">
+   <refnamediv>
+    <refname>crypt</refname>
+    <refpurpose>DES-encrypt a string</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>string <function>crypt</function></funcdef>
+     <paramdef>string <parameter>str</parameter></paramdef>
+     <paramdef>string <parameter><optional>salt</optional></parameter></paramdef>
+    </funcsynopsis>
+
+    <para>
+     <function>crypt</function> will encrypt a string using the
+     standard Unix <abbrev>DES</abbrev> encryption method.  Arguments
+     are a string to be encrypted and an optional two-character salt
+     string to base the encryption on.  See the Unix man page for your
+     crypt function for more information.  If you do not have a crypt
+     function on your Unix system, you can use Michael Glad's public
+     domain UFC-Crypt package which was developed in Denmark and hence
+     not restricted by US export laws as long as you ftp it from an
+     non-US site.
+    <para>
+     There is no decrypt function, since <function>crypt</function>
+     uses a one-way algorithm.
    </refsect1>
   </refentry>
 
@@ -92,9 +127,9 @@ $str += chr(27); /* add an escape character at the end of $str */
 
     <simpara>
      See also:
-     <link linkend="function.print">print</link>
-     <link linkend="function.printf">printf</link>
-     <link linkend="function.flush">flush</link>
+     <function>print</function>
+     <function>printf</function>
+     <function>flush</function>
 
    </refsect1>
   </refentry>
@@ -115,7 +150,7 @@ $str += chr(27); /* add an escape character at the end of $str */
 
      Returns an array of strings containing the elements separated by
      <replaceable>separator</replaceable>.
-     
+
      <example>
       <title>explode() example</title>
       <programlisting>
@@ -124,8 +159,8 @@ $pieces = explode(" ", $pizza);
 </programlisting></example>
 
     <para>
-     See also <link linkend="function.split">split</link> and
-     <link linkend="function.implode">implode</link>.
+     See also <function>split</function> and
+     <function>implode</function>.
 
    </refsect1>
   </refentry>
@@ -149,6 +184,78 @@ $pieces = explode(" ", $pizza);
    </refsect1>
   </refentry>
 
+  <refentry id="function.htmlspecialchars">
+   <refnamediv>
+    <refname>htmlspecialchars</refname>
+    <refpurpose>Convert special characters to HTML entities.</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>string <function>htmlspecialchars</function></funcdef>
+     <paramdef>string <parameter>string</parameter></paramdef>
+    </funcsynopsis>
+
+    <para>
+     Certain characters have special significance in HTML, and should
+     be represented by HTML entities if they are to preserve their
+     meanings. This function returns a string with these conversions
+     made.
+
+    <para>
+     At present, the translations that are done are:
+     <itemizedlist>
+      <listitem>
+       <simpara>
+        '&amp;' (ampersand) becomes '&amp;amp;'
+      <listitem>
+       <simpara>
+        '&quot;' (double quote) becomes '&amp;quot;'
+      <listitem>
+       <simpara>
+        '&lt;' (less than) becomes '&amp;lt;'
+      <listitem>
+       <simpara>
+        '&gt;' (greater than) becomes '&amp;gt;'
+     </itemizedlist>
+
+    <para>
+     Note that this functions does not translate anything beyond what
+     is listed above. For full entity translation, see <function>htmlentities</function>.
+
+    <para>
+     See also <function>htmlentities</function> and <function>nl2br</function>.
+
+   </refsect1>
+  </refentry>
+
+  <refentry id="function.htmlentities">
+   <refnamediv>
+    <refname>htmlentities</refname>
+    <refpurpose>Convert all applicable characters to HTML entities.</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>string <function>htmlentities</function></funcdef>
+     <paramdef>string <parameter>string</parameter></paramdef>
+    </funcsynopsis>
+
+    <para>
+     This function is identical to <function>htmlspecialchars</function> in
+     all ways, except that all characters which have HTML entity
+     equivalents are translated into these entities.
+
+    <para>
+     At present, the ISO-8859-1 character set is used.
+
+    <para>
+     See also <function>htmlspecialchars</function> and
+     <function>nl2br</function>.
+
+   </refsect1>
+  </refentry>
+
   <refentry id="function.implode">
    <refnamediv>
     <refname>implode</refname>
@@ -168,8 +275,55 @@ $pieces = explode(" ", $pizza);
      <example>
       <title>implode() example</title>
       <programlisting>
-$colon_separated = join($array, ":");
+$colon_separated = implode($array, ":");
 </programlisting></example>
+
+    <simpara>
+     See also <function>explode</function>, <function>join</function>,
+     and <function>split</function>.
+
+   </refsect1>
+  </refentry>
+
+  <refentry id="function.join">
+   <refnamediv>
+    <refname>join</refname>
+    <refpurpose>join array elements with a string</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>string <function>join</function></funcdef>
+     <paramdef>array <parameter>pieces</parameter></paramdef>
+     <paramdef>string <parameter>glue</parameter></paramdef>
+    </funcsynopsis>
+
+    <simpara>
+     <function>join</function> is an alias to
+     <function>implode</function>, and is identical in every way.
+
+   </refsect1>
+  </refentry>
+
+  <refentry id="function.nl2br">
+   <refnamediv>
+    <refname>nl2br</refname>
+    <refpurpose>Converts newlines to HTML line breaks.</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>string <function>nl2br</function></funcdef>
+     <paramdef>string <parameter>string</parameter></paramdef>
+    </funcsynopsis>
+
+    <para>
+     Returns <parameter>string</parameter> with '&lt;BR&gt;' inserted
+     before all newlines.
+
+    <para>
+     See also <function>htmlspecialchars</function> and
+     <function>htmlentities</function>.
 
    </refsect1>
   </refentry>
@@ -186,8 +340,9 @@ $colon_separated = join($array, ":");
      <paramdef>string <parameter>string</parameter></paramdef>
     </funcsynopsis>
     <para>
-     Returns the ASCII value of the first character of string.  This
-     function complements <link linkend="function.chr">chr</link>.
+     Returns the ASCII value of the first character of
+     <parameter>string</parameter>.  This function complements
+     <function>chr</function>.
      <example>
       <title>ord() example</title>
       <programlisting>
@@ -195,6 +350,9 @@ if (ord($str) == 10) {
     echo("The first character of \$str is a line feed.\n");
 }
 </programlisting></example>
+
+    <simpara>
+     See also <function>chr</function>. 
 
    </refsect1>
   </refentry>
@@ -211,13 +369,13 @@ if (ord($str) == 10) {
      <paramdef>string <parameter>arg</parameter></paramdef>
     </funcsynopsis>
     <simpara>
-     Outputs the parameter.
+     Outputs <parameter>arg</parameter>.
 
     <simpara>
      See also:
-     <link linkend="function.echo">echo</link>
-     <link linkend="function.printf">printf</link>
-     <link linkend="function.flush">flush</link>
+     <function>echo</function>
+     <function>printf</function>
+     <function>flush</function>
 
    </refsect1>
   </refentry>
@@ -230,21 +388,20 @@ if (ord($str) == 10) {
    <refsect1>
     <title>Description</title>
     <funcsynopsis>
-     <funcdef <function>print</function></funcdef>
+     <funcdef>int <function>printf</function></funcdef>
      <paramdef>string <parameter>format</parameter></paramdef>
-     <paramdef>mixed <parameter>args</parameter>...</paramdef>
+     <paramdef>mixed <parameter><optional>args</optional></parameter>...</paramdef>
     </funcsynopsis>
 
     <simpara>
      Produces output according to <parameter>format</parameter>, which
-     is described in the documentation for <link
-      linkend="function.sprintf">sprintf</link>.
+     is described in the documentation for <function>sprintf</function>.
 
     <simpara>
      See also:
-     <link linkend="function.printf">print</link>
-     <link linkend="function.printf">sprintf</link>
-     <link linkend="function.flush">flush</link>
+     <function>print</function>,
+     <function>sprintf</function>, and
+     <function>flush</function>.
 
    </refsect1>
   </refentry>
@@ -265,6 +422,12 @@ if (ord($str) == 10) {
      (<literal>\</literal>) before every character that is among
      these: <screen>. \\ + * ? [ ^ ] ( $ )</screen>
 
+    <simpara>
+     See also <function>addslashes</function>,
+     <function>htmlentities</function>, 
+     <function>htmlspecialchars</function>, and 
+     <function>nl2br</function>.
+
    </refsect1>
   </refentry>
 
@@ -284,7 +447,10 @@ if (ord($str) == 10) {
      (<literal>%</literal>) signs followed by two hex digits have been
      replaced with literal characters.  For example, the string
      <screen>foo%20bar%40baz</screen> decodes into
-     <screen>foo bar@baz</screen>.
+     <screen>foo bar@baz</screen>
+
+    <simpara>
+     See also <function>rawurlencode</function>.
 
    </refsect1>
   </refentry>
@@ -308,7 +474,7 @@ if (ord($str) == 10) {
      characters from being interpreted as special URL delimiters, and
      for protecting URL's from being mangled by transmission media
      with character conversions (like some email systems).  For
-     example, if you want to include a password in a ftp url:
+     example, if you want to include a password in an ftp url:
      <example>
       <title>rawurlencode() example 1</title>
       <programlisting>
@@ -324,6 +490,9 @@ echo '&lt;A HREF="ftp://user:', rawurlencode ('foo @+%/'),
 echo '&lt;A HREF="http://x.com/department_list_script/',
      rawurlencode ('sales and marketing/Miami'), '">';
 </programlisting></example>
+
+    <simpara>
+     See also <function>rawurldecode</function>.
 
    </refsect1>
   </refentry>
@@ -341,29 +510,30 @@ echo '&lt;A HREF="http://x.com/department_list_script/',
      <paramdef>string <parameter>locale</parameter></paramdef>
     </funcsynopsis>
     <para>
-     category is a string specifying the category of the functions
-     affected by the locale setting:
+     <parameter>category</parameter> is a string specifying the
+     category of the functions affected by the locale setting:
      <itemizedlist>
       <listitem><simpara>
-	LC_ALL for all of the below
+    LC_ALL for all of the below
        </simpara></listitem><listitem><simpara>
-	LC_COLLATE for string comparison - not currently implemented in PHP
+    LC_COLLATE for string comparison - not currently implemented in PHP
        </simpara></listitem><listitem><simpara>
-	LC_CTYPE for character classification and conversion, for
-	example strtoupper()
+    LC_CTYPE for character classification and conversion, for
+    example strtoupper()
        </simpara></listitem><listitem><simpara>
-	LC_MONETARY for localeconv() - not currently implemented in PHP
+    LC_MONETARY for localeconv() - not currently implemented in PHP
        </simpara></listitem><listitem><simpara>
-	LC_NUMERIC for decimal separator
+    LC_NUMERIC for decimal separator
        </simpara></listitem><listitem><simpara>
-	LC_TIME for time formats - not currently implemented in PHP
+    LC_TIME for time formats - not currently implemented in PHP
        </simpara></listitem>
      </itemizedlist>
 
     <para>
-     If locale is an empty string <literal>""</literal>, the locale
-     names will be set from the values of environment variables with
-     the same names as the above categories, or from "LANG".
+     If <parameter>locale</parameter> is the empty string
+     <literal>""</literal>, the locale names will be set from the
+     values of environment variables with the same names as the above
+     categories, or from "LANG".
 
     <para>
      If locale is zero or <literal>"0"</literal>, the locale setting
@@ -373,7 +543,7 @@ echo '&lt;A HREF="http://x.com/department_list_script/',
      Setlocale returns the new current locale, or false if the locale
      functionality is not implemented in the plattform, the specified
      locale does not exist or the category name is invalid.
-     Invalid category name also causes a warning message.
+     An invalid category name also causes a warning message.
 
    </refsect1>
   </refentry>
@@ -386,9 +556,9 @@ echo '&lt;A HREF="http://x.com/department_list_script/',
    <refsect1>
     <title>Description</title>
     <funcsynopsis>
-     <funcdef <function>sprint</function></funcdef>
+     <funcdef <function>sprintf</function></funcdef>
      <paramdef>string <parameter>format</parameter></paramdef>
-     <paramdef>mixed <parameter>args</parameter>...</paramdef>
+     <paramdef>mixed <parameter><optional>args</optional></parameter>...</paramdef>
     </funcsynopsis>
 
     <simpara>
@@ -400,8 +570,8 @@ echo '&lt;A HREF="http://x.com/department_list_script/',
      ordinary characters (excluding <literal>%</literal>) that are
      copied directly to the result, and <emphasis>conversion
      specifications</emphasis>, each of which results in fetching its
-     own parameter.  This applies to both sprintf and <link
-      linkend="function.printf">printf</link>
+     own parameter.  This applies to both <function>sprintf</function>
+     and <function>printf</function>
 
     <para>
      Each conversion specification consists of these elements, in
@@ -409,95 +579,95 @@ echo '&lt;A HREF="http://x.com/department_list_script/',
      <orderedlist>
       <listitem><simpara>
 
-	An optional <emphasis>padding specifier</emphasis> that says
-	what character will be used for padding the results to the
-	right string size.  This may be a space character or a
-	<literal>0</literal> (zero character).  The default is to pad
-	with spaces.  An alternate padding character can be specified
-	by prefixing it with a single quote (<literal>'</literal>).
-	See the examples below.
+    An optional <emphasis>padding specifier</emphasis> that says
+    what character will be used for padding the results to the
+    right string size.  This may be a space character or a
+    <literal>0</literal> (zero character).  The default is to pad
+    with spaces.  An alternate padding character can be specified
+    by prefixing it with a single quote (<literal>'</literal>).
+    See the examples below.
 
       <listitem><simpara>
 
-	An optional <emphasis>alignment specifier</emphasis> that says
-	if the result should be left-justified or right-justified.
-	The default is right-justified, a <literal>-</literal>
-	character here will make it left-justified.
+    An optional <emphasis>alignment specifier</emphasis> that says
+    if the result should be left-justified or right-justified.
+    The default is right-justified; a <literal>-</literal>
+    character here will make it left-justified.
 
       <listitem><simpara>
 
-	An optional number, a <emphasis>width specifier</emphasis>
-	that says how many characters (minimum) this conversion should
-	result in.
+    An optional number, a <emphasis>width specifier</emphasis>
+    that says how many characters (minimum) this conversion should
+    result in.
 
       <listitem><simpara>
 
-	An optional <emphasis>precision specifier</emphasis> that says
-	how many decimal digits should be displayed for floating-point
-	numbers.  This option has no effect for other types than
-	double.
+    An optional <emphasis>precision specifier</emphasis> that says
+    how many decimal digits should be displayed for floating-point
+    numbers.  This option has no effect for other types than
+    double.
 
       <listitem><para>
 
-	A <emphasis>type specifier</emphasis> that says what type the
-	argument data should be treated as.  Possible types:
-	<simplelist>
+    A <emphasis>type specifier</emphasis> that says what type the
+    argument data should be treated as.  Possible types:
+    <simplelist>
 
-	 <member>
-	  <literal>%</literal> - a literal percent character. No
-	  argument is required.
-	 </member>
+     <member>
+      <literal>%</literal> - a literal percent character. No
+      argument is required.
+     </member>
 
-	 <member>
-	  <literal>b</literal> - the argument is treated as an
-	  integer, and presented as a binary number.
-	 </member>
+     <member>
+      <literal>b</literal> - the argument is treated as an
+      integer, and presented as a binary number.
+     </member>
 
-	 <member>
-	  <literal>c</literal> - the argument is treated as an
-	  integer, and presented as the character with that ASCII
-	  value.
-	 </member>
+     <member>
+      <literal>c</literal> - the argument is treated as an
+      integer, and presented as the character with that ASCII
+      value.
+     </member>
 
-	 <member>
-	  <literal>d</literal> - the argument is treated as an
-	  integer, and presented as a decimal number.
-	 </member>
+     <member>
+      <literal>d</literal> - the argument is treated as an
+      integer, and presented as a decimal number.
+     </member>
 
-	 <member>
-	  <literal>f</literal> - the argument is treated as a double,
-	  and presented as a floating-point number.
-	 </member>
+     <member>
+      <literal>f</literal> - the argument is treated as a double,
+      and presented as a floating-point number.
+     </member>
 
-	 <member>
-	  <literal>o</literal> - the argument is treated as an
-	  integer, and presented as an octal number.
-	 </member>
+     <member>
+      <literal>o</literal> - the argument is treated as an
+      integer, and presented as an octal number.
+     </member>
 
-	 <member>
-	  <literal>s</literal> - the argument is treated as and
-	  presented as a string.
-	 </member>
+     <member>
+      <literal>s</literal> - the argument is treated as and
+      presented as a string.
+     </member>
 
-	 <member>
-	  <literal>x</literal> - the argument is treated as an
-	  integer and presented as a hexadecimal number (with
-	  lowercase letters).
-	 </member>
+     <member>
+      <literal>x</literal> - the argument is treated as an
+      integer and presented as a hexadecimal number (with
+      lowercase letters).
+     </member>
 
-	 <member>
-	  <literal>X</literal> - the argument is treated as an
-	  integer and presented as a hexadecimal number (with
-	  uppercase letters).
-	 </member>
+     <member>
+      <literal>X</literal> - the argument is treated as an
+      integer and presented as a hexadecimal number (with
+      uppercase letters).
+     </member>
 
-	</simplelist>
+    </simplelist>
 
      </orderedlist>
 
     <simpara>
      See also:
-     <link linkend="function.printf">printf</link>
+     <function>printf</function>
 
    </refsect1>
 
@@ -511,6 +681,54 @@ $isodate = sprintf("%04d-%02d-%02d", $year, $month, $day);
 </programlisting></example>
 
     </para>
+   </refsect1>
+  </refentry>
+
+  <refentry id="function.strchr">
+   <refnamediv>
+    <refname>strchr</refname>
+    <refpurpose>Find the first occurrence of a character.</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>string <function>strchr</function></funcdef>
+     <paramdef>string <parameter>haystack</parameter></paramdef>
+     <paramdef>string <parameter>needle</parameter></paramdef>
+    </funcsynopsis>
+
+    <para>
+     This function is an alias for <function>strstr</function>, and is
+     identical in every way.
+
+   </refsect1>
+  </refentry>
+
+  <refentry id="function.strcmp">
+   <refnamediv>
+    <refname>strcmp</refname>
+    <refpurpose>binary safe string comparison</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>strcmp</function></funcdef>
+     <paramdef>string <parameter>str1</parameter></paramdef>
+     <paramdef>string <parameter>str2</parameter></paramdef>
+    </funcsynopsis>
+    <simpara>
+     Returns < 0 if <parameter>str1</parameter> is less than
+     <parameter>str2</parameter>; > 0 if <parameter>str1</parameter>
+     is greater than <parameter>str2</parameter>, and 0 if they are
+     equal.
+
+    <simpara>
+     Note that this comparison is case sensitive.
+
+    <simpara>
+     See also <function>ereg</function>, <function>substr</function>,
+     and <function>strstr</function>.
+ 
    </refsect1>
   </refentry>
 
@@ -529,6 +747,9 @@ $isodate = sprintf("%04d-%02d-%02d", $year, $month, $day);
      Returns a string with backslashes stripped off.
      (<literal>\'</literal> becomes <literal>'</literal> and so on.)
      Double backslashes are made into a single backslash.
+
+    <simpara>
+     See also <function>addslashes</function>.
 
    </refsect1>
   </refentry>
@@ -550,6 +771,72 @@ $isodate = sprintf("%04d-%02d-%02d", $year, $month, $day);
    </refsect1>
   </refentry>
 
+  <refentry id="function.strrpos">
+   <refnamediv>
+    <refname>strrpos</refname>
+    <refpurpose>Find position of last occurrence of a char in a string.</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>string <function>strrpos</function></funcdef>
+     <paramdef>string <parameter>haystack</parameter></paramdef>
+     <paramdef>char <parameter>needle</parameter></paramdef>
+    </funcsynopsis>
+
+    <para>
+     Returns the numeric position of the last occurrence of <parameter>needle</parameter> 
+     in the <parameter>haystack</parameter> string.  Note that the needle in this case can
+	 only be a single character.  If a string is passed as the needle, then only the first
+	 character of that string will be used.
+
+    <para>
+     If <parameter>needle</parameter> is not found, returns false.
+
+    <para>
+     If <parameter>needle</parameter> is not a string, it is converted to
+     an integer and applied as the ordinal value of a character.
+
+    <para>
+     See also <function>strpos</function>, <function>strrchr</function>,
+     <function>substr</function>, and <function>strstr</function>.
+
+    </refsect1>
+   </refentry>
+
+  <refentry id="function.strpos">
+   <refnamediv>
+    <refname>strpos</refname>
+    <refpurpose>Find position of first occurrence of a string.</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>string <function>strpos</function></funcdef>
+     <paramdef>string <parameter>haystack</parameter></paramdef>
+     <paramdef>string <parameter>needle</parameter></paramdef>
+    </funcsynopsis>
+
+    <para>
+     Returns the numeric position of the first occurrence of <parameter>needle</parameter> 
+     in the <parameter>haystack</parameter> string.  Unlike the <function>strrpos</function>,
+	 this function can take a full string as the <parameter>needle</parameter> parameter and
+	 the entire string will be used.
+
+    <para>
+     If <parameter>needle</parameter> is not found, returns false.
+
+    <para>
+     If <parameter>needle</parameter> is not a string, it is converted to
+     an integer and applied as the ordinal value of a character.
+
+    <para>
+     See also <function>strrpos</function>, <function>strrchr</function>,
+     <function>substr</function>, and <function>strstr</function>.
+
+    </refsect1>
+   </refentry>
+
   <refentry id="function.strtok">
    <refnamediv>
     <refname>strtok</refname>
@@ -570,16 +857,13 @@ $isodate = sprintf("%04d-%02d-%02d", $year, $month, $day);
      <example>
       <title>strtok() example</title>
       <programlisting>
-&lt;?php
-
     $string = "This is an example string";
     $tok = strtok($string," ");
     while($tok) {
         echo "Word=$tok&lt;br>";
         $tok = strtok(" ");
     }
-
-?></programlisting></example>
+</programlisting></example>
 
     <para>
      Note that only the first call to strtok uses the string argument.
@@ -592,12 +876,409 @@ $isodate = sprintf("%04d-%02d-%02d", $year, $month, $day);
      found.
 
     <para>
-     See also <link linkend="function.split">split</link> and
-     <link linkend="function.explode">explode</link>.
+     See also <function>split</function> and
+     <function>explode</function>.
 
    </refsect1>
   </refentry>
 
+  <refentry id="function.strrchr">
+   <refnamediv>
+    <refname>strrchr</refname>
+    <refpurpose>Find the last occurrence of a character in a string.</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>string <function>strrchr</function></funcdef>
+     <paramdef>string <parameter>haystack</parameter></paramdef>
+     <paramdef>string <parameter>needle</parameter></paramdef>
+    </funcsynopsis>
+
+    <para>
+     This function returns the portion of
+     <parameter>haystack</parameter> which starts at the last occurrence of
+     <parameter>needle</parameter> and goes until the end of
+     <parameter>haystack</parameter>.
+
+    <para>
+     Returns false if <parameter>needle</parameter> is not found.
+
+    <para>
+     If <parameter>needle</parameter> is not found, false is
+     returned.
+
+    <para>
+     If <parameter>needle</parameter> contains more than one character,
+     the first is used.
+
+    <para>
+     If <parameter>needle</parameter> is not a string, it is converted to
+     an integer and applied as the ordinal value of a character.
+
+     <example>
+      <title>strrchr() example</title>
+      <programlisting>
+// get last directory in $PATH
+$dir = substr( strrchr( $PATH, ":" ), 1 );
+
+// get everything after last newline
+$text = "Line 1\nLine 2\nLine 3";
+$last = substr( strrchr( $text, 10 ), 1 );
+      </programlisting>
+     </example>
+
+    <para>
+     See also <function>substr</function> and <function>strstr</function>.
+
+   </refsect1>
+  </refentry>
+
+  <refentry id="function.strrev">
+   <refnamediv>
+    <refname>strrev</refname>
+    <refpurpose>Reverse a string.</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>string <function>strrev</function></funcdef>
+     <paramdef>string <parameter>string</parameter></paramdef>
+    </funcsynopsis>
+
+    <para>
+     Returns <parameter>string</parameter>, reversed.
+
+   </refsect1>
+  </refentry>
+
+  <refentry id="function.strstr">
+   <refnamediv>
+    <refname>strstr</refname>
+    <refpurpose>Find first occurrence of a string.</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>string <function>strstr</function></funcdef>
+     <paramdef>string <parameter>haystack</parameter></paramdef>
+     <paramdef>string <parameter>needle</parameter></paramdef>
+    </funcsynopsis>
+
+    <para>
+     Returns all of <parameter>haystack</parameter> from the first
+     occurrence of <parameter>needle</parameter> to the end.
+
+    <para>
+     If <parameter>needle</parameter> is not found, returns false.
+
+    <para>
+     If <parameter>needle</parameter> is not a string, it is converted to
+     an integer and applied as the ordinal value of a character.
+
+    <para>
+     See also <function>strrchr</function>,
+     <function>substr</function>, and <function>ereg</function>.
+
+    </refsect1>
+   </refentry>
+
+  <refentry id="function.strtolower">
+   <refnamediv>
+    <refname>strtolower</refname>
+    <refpurpose>Make a string lowercase.</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>string <function>strtolower</function></funcdef>
+     <paramdef>string <parameter>str</parameter></paramdef>
+    </funcsynopsis>
+
+    <para>
+     Returns <parameter>string</parameter> with all alphabetic
+     characters converted to lowercase.
+
+    <para>
+     Note that 'alphabetic' is determined by the current locale. This
+     means that in i.e. the default "C" locale, characters such as
+     umlaut-A (Д) will not be converted.
+
+    <para>
+     See also <function>strtoupper</function>
+     and <function>ucfirst</function>.
+
+   </refsect1>
+  </refentry>
+
+  <refentry id="function.strtoupper">
+   <refnamediv>
+    <refname>strtoupper</refname>
+    <refpurpose>Make a string uppercase.</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>string <function>strtoupper</function></funcdef>
+     <paramdef>string <parameter>string</parameter></paramdef>
+    </funcsynopsis>
+
+    <para>
+     Returns <parameter>string</parameter> with all alphabetic
+     characters converted to uppercase.
+
+    <para>
+     Note that 'alphabetic' is determined by the current locale. For
+     instance, in the default "C" locale characters such as umlaut-a
+     (д) will not be converted.
+
+     <para>
+     See also <function>strtolower</function>
+     and <function>ucfirst</function>.
+
+   </refsect1>
+  </refentry>
+
+  <refentry id="function.strtr">
+   <refnamediv>
+    <refname>strtr</refname>
+    <refpurpose>Translate certain characters.</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>string <function>strtr</function></funcdef>
+     <paramdef>string <parameter>str</parameter></paramdef>
+     <paramdef>string <parameter>from</parameter></paramdef>
+     <paramdef>string <parameter>to</parameter></paramdef>
+    </funcsynopsis>
+
+    <para>
+     This function operates on <parameter>str</parameter>, translating
+     all occurrences of each character in <parameter>from</parameter>
+     to the corresponding character in <parameter>to</parameter> and
+     returning the result.
+
+    <para>
+     If <parameter>from</parameter> and <parameter>to</parameter> are
+     different lengths, the extra characters in the longer of the two
+     are ignored.
+
+     <example>
+      <title>strtr() example</title>
+      <programlisting>
+$addr = strtr($addr, "дец", "aao");
+      </programlisting>
+     </example>
+
+    <para>
+     See also <function>ereg_replace</function>.
+
+   </refsect1>
+  </refentry>
+
+  <refentry id="function.substr">
+   <refnamediv>
+    <refname>substr</refname>
+    <refpurpose>Return part of a string.</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>string <function>substr</function></funcdef>
+     <paramdef>string <parameter>string</parameter></paramdef>
+     <paramdef>int <parameter>start</parameter></paramdef>
+     <paramdef>int <parameter><optional>length</optional></parameter></paramdef>
+    </funcsynopsis>
+
+    <para>
+     Substr returns the portion of <parameter>string</parameter>
+     specified by the <parameter>start</parameter> and
+     <parameter>length</parameter> parameters.
+
+    <para>
+     If <parameter>start</parameter> is positive, the returned string
+     will start at the <parameter>start</parameter>'th character of
+     <parameter>string</parameter>.
+
+    <para>
+     If <parameter>start</parameter> is negative, the returned string
+     will start at the <parameter>start</parameter>'th character
+     from the end of <parameter>string</parameter>.
+
+    <para>
+     If <parameter>length</parameter> is given and is positive,
+     the string returned will end <parameter>length</parameter>
+     characters from <parameter>start</parameter>. If this would
+     result in a string with negative length, then the returned string
+     will contain the single character at <parameter>start</parameter>.
+
+    <para>
+     If <parameter>length</parameter> is given and is negative,
+     the string returned will end <parameter>length</parameter>
+     characters from the end of <parameter>string</parameter>. If this would
+     result in a string with negative length, then the returned string
+     will contain the single character at <parameter>start</parameter>.
+
+    <para>
+     See also <function>strrchr</function> and
+     <function>ereg</function>.
+
+   </refsect1>
+  </refentry>
+
+  <refentry id="function.ltrim">
+   <refnamediv>
+    <refname>ltrim</refname> <refpurpose>Strip whitespace from the beginning of a string.</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>string <function>ltrim</function></funcdef>
+     <paramdef>string <parameter>str</parameter></paramdef>
+    </funcsynopsis>
+
+	<para>
+	This function strips whitespace from the start of a string and returns the stripped string.
+	<para>
+	See also <function>chop</function> and <function>trim</function>.
+
+   </refsect1>
+  </refentry>
+
+  <refentry id="function.trim">
+   <refnamediv>
+    <refname>trim</refname> <refpurpose>Strip whitespace from the beginning and end of a string.</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>string <function>trim</function></funcdef>
+     <paramdef>string <parameter>str</parameter></paramdef>
+    </funcsynopsis>
+
+	<para>
+	This function strips whitespace from the start and the end of a string and returns the stripped string.
+	<para>
+	See also <function>chop</function> and <function>ltrim</function>.
+
+   </refsect1>
+  </refentry>
+
+  <refentry id="function.ucfirst">
+   <refnamediv>
+    <refname>ucfirst</refname> <refpurpose>Make a string's first
+    character uppercase.</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>string <function>ucfirst</function></funcdef>
+     <paramdef>string <parameter>str</parameter></paramdef>
+    </funcsynopsis>
+
+    <para>
+     Capitalizes the first character of <parameter>str</parameter> if
+     that character is alphabetic.
+
+    <para>
+     Note that 'alphabetic' is determined by the current locale. For
+     instance, in the default "C" locale characters such as umlaut-a
+     (д) will not be converted.
+
+    <para>
+     See also <function>strtoupper</function> and
+     <function>strtolower</function>.
+
+   </refsect1>
+  </refentry>
+
+  <refentry id="function.md5">
+   <refnamediv>
+    <refname>md5</refname>
+    <refpurpose>calculate the md5 hash of a string</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>string <function>md5</function></funcdef>
+     <paramdef>string <parameter>str</parameter></paramdef>
+    </funcsynopsis>
+
+    <para>
+     Calculates the MD5 hash of <parameter>str</parameter>.
+
+   </refsect1>
+  </refentry>
+
+  <refentry id="function.soundex">
+   <refnamediv>
+    <refname>soundex</refname>
+    <refpurpose>calculate the soundex key of a string</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>string <function>soundex</function></funcdef>
+     <paramdef>string <parameter>str</parameter></paramdef>
+    </funcsynopsis>
+
+    <para>
+     Calculates the soundex key of <parameter>str</parameter>.
+
+    <para>
+     Soundex keys have the property that words pronounced similarly produce the
+     same soundex key, and can thus be used to simplify searches in databases
+     where you know the pronunciation but not the spelling. This soundex function
+     returns a string 4 characters long, starting with a letter.
+
+    <para>
+     This particular soundex function is one described by Donald Knuth in "The Art Of Computer Programming,
+     vol. 3: Sorting And Searching", Addison-Wesley (1973), pp. 391-392.
+
+    <para>
+     <example>
+      <title>Soundex Examples</title>
+      <programlisting>
+soundex("Euler") == soundex("Ellery") == 'E460';
+soundex("Gauss") == soundex("Ghosh") == 'G200';
+soundex("Knuth") == soundex("Kant") == 'H416';
+soundex("Lloyd") == soundex("Ladd") == 'L300';
+soundex("Lukasiewicz") == soundex("Lissajous") == 'L222';
+      </programlisting>
+     </example>
+   </refsect1>
+  </refentry>
+
+  <refentry id="function.parse-str">
+   <refnamediv>
+    <refname>parse_str</refname>
+    <refpurpose>parses the string into variables</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>void <function>parse_str</function></funcdef>
+     <paramdef>string <parameter>str</parameter></paramdef>
+    </funcsynopsis>
+
+    <para>
+     Parses <parameter>str</parameter> as if it were the query string
+     passed via an URL and sets variables in the current scope.
+
+    <para>
+     <example>
+      <title>Using <function>parse_str</function></title>
+      <programlisting>
+$str = "first=value&amp;second[]=this+works&amp;second[]=another";
+parse_str($str);
+echo $first; /* prints "value" */
+echo $second[0]; /* prints "this works" */
+echo $second[1]; /* prints "another" */
+      </programlisting>
+     </example>
+   </refsect1>
+  </refentry>
 
  </reference>
 

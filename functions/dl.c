@@ -5,18 +5,23 @@
    | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
-   | it under the terms of the GNU General Public License as published by |
-   | the Free Software Foundation; either version 2 of the License, or    |
-   | (at your option) any later version.                                  |
+   | it under the terms of one of the following licenses:                 |
+   |                                                                      |
+   |  A) the GNU General Public License as published by the Free Software |
+   |     Foundation; either version 2 of the License, or (at your option) |
+   |     any later version.                                               |
+   |                                                                      |
+   |  B) the PHP License as published by the PHP Development Team and     |
+   |     included in the distribution in the file: LICENSE                |
    |                                                                      |
    | This program is distributed in the hope that it will be useful,      |
    | but WITHOUT ANY WARRANTY; without even the implied warranty of       |
    | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the        |
    | GNU General Public License for more details.                         |
    |                                                                      |
-   | You should have received a copy of the GNU General Public License    |
-   | along with this program; if not, write to the Free Software          |
-   | Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.            |
+   | You should have received a copy of both licenses referred to here.   |
+   | If you did not, or have any questions about PHP licensing, please    |
+   | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
    | Authors: Brian Schaffner <brian@tool.net>                            |
    |          Shane Caraveo <shane@caraveo.com>                           |
@@ -27,21 +32,13 @@
 #ifdef THREAD_SAFE
 #include "tls.h"
 #endif
-#include "parser.h"
+#include "php.h"
 #include "internal_functions.h"
 #include "dl.h"
 
 #if HAVE_LIBDL
 #include <stdlib.h>
 #include <stdio.h>
-#if MSVC5
-#include <windows.h>
-#define dlclose FreeLibrary
-#define dlopen(a,b) LoadLibrary(a)
-#define dlsym GetProcAddress
-#else
-#include <dlfcn.h>
-#endif
 #ifndef RTLD_LAZY
 # define RTLD_LAZY 1    /* Solaris 1, FreeBSD's (2.1.7.1 and older) */
 #endif
@@ -64,7 +61,7 @@ function_entry dl_functions[] = {
 
 
 php3_module_entry dl_module_entry = {
-	"PHP_DL", dl_functions, NULL, NULL, NULL, NULL, php3_info_dl, 0, 0, 0, NULL
+	"PHP_DL", dl_functions, NULL, NULL, NULL, NULL, php3_info_dl, STANDARD_MODULE_PROPERTIES
 };
 
 #endif
@@ -72,7 +69,7 @@ php3_module_entry dl_module_entry = {
 
 void dl(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *file;
+	pval *file;
 
 	/* obtain arguments */
 	if (ARG_COUNT(ht) != 1 || getParameters(ht, 1, &file) == FAILURE) {
@@ -91,7 +88,7 @@ void dl(INTERNAL_FUNCTION_PARAMETERS)
 
 #if HAVE_LIBDL
 
-void php3_dl(YYSTYPE *file,int type,YYSTYPE *return_value)
+void php3_dl(pval *file,int type,pval *return_value)
 {
 	void *handle;
 	char libpath[MAXPATHLEN + 1];
@@ -103,12 +100,12 @@ void php3_dl(YYSTYPE *file,int type,YYSTYPE *return_value)
 		int extension_dir_len = strlen(php3_ini.extension_dir);
 
 		if (php3_ini.extension_dir[extension_dir_len-1]=='/' || php3_ini.extension_dir[extension_dir_len-1]=='\\') {
-			sprintf(libpath,"%s%s",php3_ini.extension_dir,file->value.strval);  /* SAFE */
+			sprintf(libpath,"%s%s",php3_ini.extension_dir,file->value.str.val);  /* SAFE */
 		} else {
-			sprintf(libpath,"%s/%s",php3_ini.extension_dir,file->value.strval);  /* SAFE */
+			sprintf(libpath,"%s/%s",php3_ini.extension_dir,file->value.str.val);  /* SAFE */
 		}
 	} else {
-		sprintf(libpath,"%s",file->value.strval);  /* SAFE */
+		sprintf(libpath,"%s",file->value.str.val);  /* SAFE */
 	}
 
 	/* load dynamic symbol */
@@ -125,23 +122,24 @@ void php3_dl(YYSTYPE *file,int type,YYSTYPE *return_value)
 	
 	if (!get_module) {
 		dlclose(handle);
-		php3_error(E_CORE_WARNING,"Invalid library (maybe not a PHP3 library) '%s' ",file->value.strval);
+		php3_error(E_CORE_WARNING,"Invalid library (maybe not a PHP3 library) '%s' ",file->value.str.val);
 		RETURN_FALSE;
 	}
 	module_entry = get_module();
+	module_entry->type = type;
+	module_entry->module_number = _php3_next_free_module();
 	if (module_entry->module_startup_func) {
-		if (module_entry->module_startup_func(type)==FAILURE) {
+		if (module_entry->module_startup_func(type, module_entry->module_number)==FAILURE) {
 			php3_error(E_CORE_WARNING,"%s:  Unable to initialize module",module_entry->name);
 			dlclose(handle);
 			RETURN_FALSE;
 		}
 	}
-	module_entry->type = type;
 	register_module(module_entry);
 
 
 	if (module_entry->request_startup_func) {
-		if (module_entry->request_startup_func(type)) {
+		if (module_entry->request_startup_func(type, module_entry->module_number)) {
 			php3_error(E_CORE_WARNING,"%s:  Unable to initialize module",module_entry->name);
 			dlclose(handle);
 			RETURN_FALSE;
@@ -166,9 +164,9 @@ void php3_info_dl(void){
 
 #else
 
-void php3_dl(YYSTYPE *file,int type,YYSTYPE *return_value)
+void php3_dl(pval *file,int type,pval *return_value)
 {
-	php3_error(E_WARNING,"Cannot dynamically load %s - dynamic modules are not supported",file->value.strval);
+	php3_error(E_WARNING,"Cannot dynamically load %s - dynamic modules are not supported",file->value.str.val);
 	RETURN_FALSE;
 }
 

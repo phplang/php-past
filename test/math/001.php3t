@@ -3,7 +3,7 @@ Simple math tests                                             ...
 --POST--
 --GET--
 --FILE--
-<?
+<?php 
   echo abs(-1) . "\n";
   echo abs(-1.5) . "\n";
   echo abs("-1") . "\n";

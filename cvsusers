@@ -1,0 +1,41 @@
+CVS login     Name            Email                      Works on
+andi          Andi Gutmans    andi@php.net               Core + API
+jim           Jim Winstead    jimw@php.net               Everything
+rasmus        Rasmus Lerdorf  rasmus@php.net             Everything
+shane         Shane Caraveo   shane@php.net              WIN32 + API
+ssb           Stig Bakken     stig@php.net               Everything
+zeev          Zeev Suraski    zeev@php.net               Everything
+jaakko                                                   Everything
+veebert                                                  IMAP
+chad          Chad Robinson                              Documentation
+myddryn                                                  PostgreSQL
+wojtek
+mitch         Mitch Golden                               Oracle
+brian
+lr            Lachlan Roche
+damian
+ian
+jah           Jouni Ahto      jah@cultnet.fi
+adam
+amitay        Amitay Isaacs   amitay@cse.iitb.ernet.in   LDAP
+dizzy
+mark
+guy
+jeffhu        Jeffrey Hulten  jeffh@premier1.net         WIN32 + modules(?)
+eschmid       Egon Schmid     eschmid@delos.lf.net       Documentation
+cslawi        Torben Wilson   torben@netmill.com         Documentation
+bwk  
+eric
+tcobb                                                    www
+gareth                                                   www
+willer
+cmv                                                      www
+soderman
+tin
+musone        Mark Musone     musone@afterfive.com       IMAP
+abelits       Alex Belits     abelits@phobos.illtel.denver.co.us fhttpd module
+ars           Ariel Shkedi    ars@ziplink.net            setup
+mag           Nikolay P. Romanyuk  mag@redcom.ru         Raima DB
+rse           Ralf S. Engelschall rse@engelschall.com    Apache configuration
+sr            Stefan Roehrich sr@linux.de                zlib module
+owl           Igor Kovalenko  owl@infomarket.ru          QNX support

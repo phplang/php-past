@@ -5,29 +5,34 @@
    | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
-   | it under the terms of the GNU General Public License as published by |
-   | the Free Software Foundation; either version 2 of the License, or    |
-   | (at your option) any later version.                                  |
+   | it under the terms of one of the following licenses:                 |
+   |                                                                      |
+   |  A) the GNU General Public License as published by the Free Software |
+   |     Foundation; either version 2 of the License, or (at your option) |
+   |     any later version.                                               |
+   |                                                                      |
+   |  B) the PHP License as published by the PHP Development Team and     |
+   |     included in the distribution in the file: LICENSE                |
    |                                                                      |
    | This program is distributed in the hope that it will be useful,      |
    | but WITHOUT ANY WARRANTY; without even the implied warranty of       |
    | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the        |
    | GNU General Public License for more details.                         |
    |                                                                      |
-   | You should have received a copy of the GNU General Public License    |
-   | along with this program; if not, write to the Free Software          |
-   | Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.            |
+   | You should have received a copy of both licenses referred to here.   |
+   | If you did not, or have any questions about PHP licensing, please    |
+   | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
    | Author: Rasmus Lerdorf                                               |
    +----------------------------------------------------------------------+
  */
-/* $Id: exec.c,v 1.57 1998/01/30 17:46:04 zeev Exp $ */
+/* $Id: exec.c,v 1.73 1998/05/30 14:16:01 rasmus Exp $ */
 
 #ifdef THREAD_SAFE
 #include "tls.h"
 #endif
 #include <stdio.h>
-#include "parser.h"
+#include "php.h"
 #include <ctype.h>
 #include "internal_functions.h"
 #include "php3_string.h"
@@ -46,16 +51,20 @@
  * If type==3, output will be printed binary, no lines will be saved or returned (passthru)
  *
  */
-static int _Exec(int type, char *cmd, YYSTYPE *array, YYSTYPE *return_value)
+static int _Exec(int type, char *cmd, pval *array, pval *return_value)
 {
 	FILE *fp;
 	char buf[EXEC_INPUT_BUF], *tmp=NULL;
 	int t, l, ret, output=1;
+	int overflow_limit, lcmd, ldir;
 	char *b, *c, *d=NULL;
 	TLS_VARS;
 
 	if (php3_ini.safe_mode) {
-		l = strlen(cmd) + strlen(php3_ini.safe_mode_exec_dir) + 2;
+		lcmd = strlen(cmd);
+		ldir = strlen(php3_ini.safe_mode_exec_dir);
+		l = lcmd + ldir + 3;
+		overflow_limit = l;
 		c = strchr(cmd, ' ');
 		if (c) *c = '\0';
 		if (strstr(cmd, "..")) {
@@ -65,18 +74,18 @@ static int _Exec(int type, char *cmd, YYSTYPE *array, YYSTYPE *return_value)
 		b = strrchr(cmd, '/');
 		d = emalloc(l);
 		strncpy(d, php3_ini.safe_mode_exec_dir, l - 1);
+		overflow_limit -= ldir;
 		if (b) {
-			strncat(d, b, l - 1);
-			d[l - 1] = '\0';		/* watch out for overflows */
+			strncat(d, b, overflow_limit);
+			overflow_limit -= strlen(b);
 		} else {
 			strcat(d, "/");
-			strncat(d, cmd, l - 1);
-			d[l - 1] = '\0';		/* watch out for overflows */
+			strncat(d, cmd, overflow_limit-1);
+			overflow_limit-=(lcmd+1);
 		}
 		if (c) {
 			*c = ' ';
-			strncat(d, c, l - 1);
-			d[l - 1] = '\0';
+			strncat(d, c, overflow_limit);
 		}
 		tmp = _php3_escapeshellcmd(d);
 		efree(d);
@@ -104,41 +113,47 @@ static int _Exec(int type, char *cmd, YYSTYPE *array, YYSTYPE *return_value)
 	}
 	buf[0] = '\0';
 	if (type == 1 || type == 3) {
-		output=php3_header(0, NULL);
+		output=php3_header();
 	}
 	if (type==2) {
-		array_init(array);
+		if (array->type != IS_ARRAY) {
+			yystype_destructor(array _INLINE_TLS);
+			array_init(array);
+		}
 	}
 	if (type != 3) {
 		while (fgets(buf, EXEC_INPUT_BUF - 1, fp)) {
 			if (type == 1) {
-				if(output) PUTS(buf);
+				if (output) PUTS(buf);
 #if APACHE
 #  if MODULE_MAGIC_NUMBER > 19970110
-				if(output) rflush(GLOBAL(php3_rqst));
+				if (output) rflush(GLOBAL(php3_rqst));
 #  else
-				if(output) bflush(GLOBAL(php3_rqst)->connection->client);
+				if (output) bflush(GLOBAL(php3_rqst)->connection->client);
 #  endif
 #endif
 #if CGI_BINARY
 				fflush(stdout);
+#endif
+#if FHTTPD
+                               /* fhttpd doesn't flush */
 #endif
 #if USE_SAPI
 				GLOBAL(sapi_rqst)->flush(GLOBAL(sapi_rqst)->scid);
 #endif
 			}
 			else if (type == 2) {
-				YYSTYPE tmp;
+				pval tmp;
 			
 				/* strip trailing whitespaces */	
 				l = strlen(buf);
 				t = l;
 				while (l && isspace((int)buf[--l]));
 				if (l < t) buf[l + 1] = '\0';
-				tmp.strlen = strlen(buf);
-				tmp.value.strval = estrndup(buf,tmp.strlen);
+				tmp.value.str.len = strlen(buf);
+				tmp.value.str.val = estrndup(buf,tmp.value.str.len);
 				tmp.type = IS_STRING;
-				hash_next_index_insert(array->value.ht,(void *) &tmp, sizeof(YYSTYPE), NULL);
+				hash_next_index_insert(array->value.ht,(void *) &tmp, sizeof(pval), NULL);
 			}
 		}
 
@@ -153,17 +168,18 @@ static int _Exec(int type, char *cmd, YYSTYPE *array, YYSTYPE *return_value)
 
 		while ((b = fread(buf, 1, sizeof(buf), fp)) > 0) {
 			for (i = 0; i < b; i++)
-				if(output) PUTC(buf[i]);
+				if (output) PUTC(buf[i]);
 		}
 	}
 
 	/* Return last line from the shell command */
-	if(php3_ini.magic_quotes_runtime && type!=3) {
-		tmp = _php3_addslashes(buf, 0);
-		RETVAL_STRING(tmp);
-		efree(tmp);
+	if (php3_ini.magic_quotes_runtime && type!=3) {
+		int len;
+		
+		tmp = _php3_addslashes(buf, 0, &len, 0);
+		RETVAL_STRINGL(tmp,len,0);
 	} else {
-		RETVAL_STRING(buf);
+		RETVAL_STRING(buf,1);
 	}
 	
 	ret = pclose(fp);
@@ -173,13 +189,13 @@ static int _Exec(int type, char *cmd, YYSTYPE *array, YYSTYPE *return_value)
 	}
 #endif
 
-	if(d) efree(d);
+	if (d) efree(d);
 	return ret;
 }
 
 void php3_exec(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *arg1, *arg2, *arg3;
+	pval *arg1, *arg2, *arg3;
 	int arg_count = ARG_COUNT(ht);
 	int ret;
 
@@ -188,13 +204,13 @@ void php3_exec(INTERNAL_FUNCTION_PARAMETERS)
 	}
 	switch (arg_count) {
 		case 1:
-			ret = _Exec(0, arg1->value.strval, NULL, return_value);
+			ret = _Exec(0, arg1->value.str.val, NULL, return_value);
 			break;
 		case 2:
 			if (!ParameterPassedByReference(ht,2)) {
 				php3_error(E_WARNING,"Array argument to exec() not passed by reference");
 			}
-			ret = _Exec(2, arg1->value.strval, arg2, return_value);
+			ret = _Exec(2, arg1->value.str.val, arg2, return_value);
 			break;
 		case 3:
 			if (!ParameterPassedByReference(ht,2)) {
@@ -203,7 +219,7 @@ void php3_exec(INTERNAL_FUNCTION_PARAMETERS)
 			if (!ParameterPassedByReference(ht,3)) {
 				php3_error(E_WARNING,"return_status argument to exec() not passed by reference");
 			}
-			ret = _Exec(2, arg1->value.strval, arg2, return_value);
+			ret = _Exec(2, arg1->value.str.val, arg2, return_value);
 			arg3->type = IS_LONG;
 			arg3->value.lval=ret;
 			break;
@@ -212,7 +228,7 @@ void php3_exec(INTERNAL_FUNCTION_PARAMETERS)
 
 void php3_system(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *arg1, *arg2;
+	pval *arg1, *arg2;
 	int arg_count = ARG_COUNT(ht);
 	int ret;
 
@@ -221,13 +237,13 @@ void php3_system(INTERNAL_FUNCTION_PARAMETERS)
 	}
 	switch (arg_count) {
 		case 1:
-			ret = _Exec(1, arg1->value.strval, NULL, return_value);
+			ret = _Exec(1, arg1->value.str.val, NULL, return_value);
 			break;
 		case 2:
 			if (!ParameterPassedByReference(ht,2)) {
 				php3_error(E_WARNING,"return_status argument to system() not passed by reference");
 			}
-			ret = _Exec(1, arg1->value.strval, NULL, return_value);
+			ret = _Exec(1, arg1->value.str.val, NULL, return_value);
 			arg2->type = IS_LONG;
 			arg2->value.lval=ret;
 			break;
@@ -236,7 +252,7 @@ void php3_system(INTERNAL_FUNCTION_PARAMETERS)
 
 void php3_passthru(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *arg1, *arg2;
+	pval *arg1, *arg2;
 	int arg_count = ARG_COUNT(ht);
 	int ret;
 
@@ -245,13 +261,13 @@ void php3_passthru(INTERNAL_FUNCTION_PARAMETERS)
 	}
 	switch (arg_count) {
 		case 1:
-			ret = _Exec(3, arg1->value.strval, NULL, return_value);
+			ret = _Exec(3, arg1->value.str.val, NULL, return_value);
 			break;
 		case 2:
 			if (!ParameterPassedByReference(ht,2)) {
 				php3_error(E_WARNING,"return_status argument to system() not passed by reference");
 			}
-			ret = _Exec(3, arg1->value.strval, NULL, return_value);
+			ret = _Exec(3, arg1->value.str.val, NULL, return_value);
 			arg2->type = IS_LONG;
 			arg2->value.lval=ret;
 			break;
@@ -298,16 +314,16 @@ char * _php3_escapeshellcmd(char *str) {
 
 void php3_escapeshellcmd(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *arg1;
+	pval *arg1;
 	char *cmd;
 	TLS_VARS;
 
 	if (getParameters(ht, 1, &arg1) == FAILURE) {
 		WRONG_PARAM_COUNT;
 	}
-	cmd = _php3_escapeshellcmd(arg1->value.strval);
+	cmd = _php3_escapeshellcmd(arg1->value.str.val);
 
-	RETVAL_STRING(cmd);
+	RETVAL_STRING(cmd,1);
 	efree(cmd);
 }
 /*

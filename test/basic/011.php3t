@@ -4,7 +4,7 @@ Testing $argc and $argv handling                              ...
 --GET--
 ab+cd+ef+123+test
 --FILE--
-<?
+<?php 
 	for($i=0;$i<$argc;$i++) {
 		echo "$i: ".$argv[$i]."\n";
 	}

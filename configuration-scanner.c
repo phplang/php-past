@@ -310,26 +310,25 @@ static void yy_fatal_error YY_PROTO(( yyconst char msg[] ));
 
 #define YY_NUM_RULES 12
 #define YY_END_OF_BUFFER 13
-static yyconst short int yy_acclist[76] =
+static yyconst short int yy_acclist[72] =
     {   0,
-       13,    6,   11,   12,    6,   11,   12,    8,   12,   11,
-       12,   11,   12,   10,   11,   12,    8,   11,   12,    6,
+       13,    6,   11,   12,   10,   11,   12,    7,   12,   11,
+       12,   11,   12,    9,   11,   12,    7,   11,   12,    6,
        11,   12,    6,   11,   12,    6,   11,   12,    6,   11,
        12,    6,   11,   12,    6,   11,   12,    6,   11,   12,
-        6,    6,    9,    5,   10,   10,    6,    6,    6,    2,
-        6,    6,    1,    6,    6,    6,    5,    7,    3,    6,
-        3,    6,    6,    6,    5,    3,    6,    6,    3,    6,
-        6,    6,    6,    4,    6
+        6,    8,    5,    9,    9,    6,    6,    6,    3,    6,
+        6,    2,    6,    6,    6,    4,    6,    4,    6,    6,
+        6,    4,    6,    6,    4,    6,    6,    6,    6,    1,
+        6
     } ;
 
-static yyconst short int yy_accept[54] =
+static yyconst short int yy_accept[50] =
     {   0,
         1,    1,    1,    2,    5,    8,   10,   12,   14,   17,
        20,   23,   26,   29,   32,   35,   38,   41,   42,   43,
-       43,   44,   44,   45,   46,   47,   48,   48,   49,   50,
-       52,   53,   55,   56,   57,   59,   61,   62,   63,   64,
-       65,   66,   67,   67,   68,   69,   70,   71,   72,   73,
-       74,   76,   76
+       43,   44,   45,   46,   47,   47,   48,   49,   51,   52,
+       54,   55,   56,   58,   59,   60,   61,   62,   63,   63,
+       64,   65,   66,   67,   68,   69,   70,   72,   72
     } ;
 
 static yyconst int yy_ec[256] =
@@ -366,65 +365,63 @@ static yyconst int yy_ec[256] =
 
 static yyconst int yy_meta[23] =
     {   0,
-        1,    1,    2,    2,    3,    3,    3,    4,    1,    1,
+        1,    2,    3,    3,    2,    2,    2,    4,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1
     } ;
 
-static yyconst short int yy_base[58] =
+static yyconst short int yy_base[54] =
     {   0,
-        0,    0,   98,    0,   21,   99,   94,   91,   21,   99,
-       24,   74,   84,   77,   21,   75,   80,    0,   32,   85,
-       99,   84,   86,   35,   99,   37,   78,   67,   71,    0,
-       72,    0,   63,   64,   79,   44,   46,   69,   61,   67,
-       75,   54,   48,   45,   48,   47,   36,   40,   36,   20,
-        0,   99,   57,   61,   65,   69,   73
+        0,    0,   92,    0,   93,   93,   88,   85,   20,   93,
+       23,   68,   78,   71,   20,   69,   74,    0,   93,   79,
+       93,   30,   93,   34,   74,   63,   67,    0,   68,    0,
+       59,   60,   41,   43,   66,   58,   64,   65,   45,   46,
+       46,   47,   35,   38,   34,   34,    0,   93,   54,   58,
+       62,   66,   70
     } ;
 
-static yyconst short int yy_def[58] =
+static yyconst short int yy_def[54] =
     {   0,
-       52,    1,   52,   53,   53,   52,   52,   54,   55,   52,
-       56,   53,   53,   53,   53,   53,   53,   53,   53,   54,
-       52,   54,   52,   55,   52,   56,   57,   53,   53,   53,
-       53,   53,   53,   53,   52,   26,   57,   53,   53,   53,
-       52,   57,   57,   53,   53,   57,   53,   53,   53,   53,
-       53,    0,   52,   52,   52,   52,   52
+       48,    1,   48,   49,   48,   48,   48,   50,   51,   48,
+       52,   49,   49,   49,   49,   49,   49,   49,   48,   50,
+       48,   51,   48,   52,   53,   49,   49,   49,   49,   49,
+       49,   49,   24,   53,   49,   49,   49,   53,   53,   49,
+       49,   53,   49,   49,   49,   49,   49,    0,   48,   48,
+       48,   48,   48
     } ;
 
-static yyconst short int yy_nxt[122] =
+static yyconst short int yy_nxt[116] =
     {   0,
         4,    5,    6,    7,    8,    9,   10,   11,    4,    4,
        12,   13,    4,    4,   14,   15,    4,    4,   16,    4,
-        4,   17,   19,   25,   25,   20,   27,   27,   27,   27,
-       27,   18,   31,   19,   51,   32,   20,   25,   25,   27,
-       27,   27,   27,   27,   18,   36,   42,   43,   42,   43,
-       46,   50,   49,   48,   37,   37,   37,   18,   30,   47,
-       18,   22,   37,   22,   22,   24,   24,   24,   24,   26,
-       26,   26,   26,   27,   27,   27,   41,   32,   45,   44,
-       41,   32,   40,   30,   39,   38,   37,   35,   23,   23,
-       34,   33,   30,   29,   28,   23,   21,   52,    3,   52,
+        4,   17,   23,   23,   25,   25,   25,   25,   25,   25,
+       18,   29,   23,   23,   30,   25,   25,   25,   25,   25,
+       25,   18,   33,   38,   39,   38,   39,   42,   47,   46,
+       45,   34,   44,   34,   18,   34,   28,   18,   20,   20,
+       43,   20,   22,   22,   22,   22,   24,   24,   24,   24,
+       25,   25,   25,   34,   30,   41,   40,   30,   37,   28,
+       36,   35,   34,   21,   32,   31,   28,   27,   26,   21,
+       19,   48,    3,   48,   48,   48,   48,   48,   48,   48,
 
-       52,   52,   52,   52,   52,   52,   52,   52,   52,   52,
-       52,   52,   52,   52,   52,   52,   52,   52,   52,   52,
-       52
+       48,   48,   48,   48,   48,   48,   48,   48,   48,   48,
+       48,   48,   48,   48,   48
     } ;
 
-static yyconst short int yy_chk[122] =
+static yyconst short int yy_chk[116] =
     {   0,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        1,    1,    5,    9,    9,    5,   11,   11,   11,   11,
-       11,   11,   15,   19,   50,   15,   19,   24,   24,   26,
-       26,   26,   26,   26,   26,   26,   36,   36,   37,   37,
-       43,   49,   48,   47,   37,   46,   43,   53,   45,   44,
-       53,   54,   42,   54,   54,   55,   55,   55,   55,   56,
-       56,   56,   56,   57,   57,   57,   41,   40,   39,   38,
-       35,   34,   33,   31,   29,   28,   27,   23,   22,   20,
-       17,   16,   14,   13,   12,    8,    7,    3,   52,   52,
+        1,    1,    9,    9,   11,   11,   11,   11,   11,   11,
+       11,   15,   22,   22,   15,   24,   24,   24,   24,   24,
+       24,   24,   24,   33,   33,   34,   34,   39,   46,   45,
+       44,   34,   43,   39,   49,   42,   41,   49,   50,   50,
+       40,   50,   51,   51,   51,   51,   52,   52,   52,   52,
+       53,   53,   53,   38,   37,   36,   35,   32,   31,   29,
+       27,   26,   25,   20,   17,   16,   14,   13,   12,    8,
+        7,    3,   48,   48,   48,   48,   48,   48,   48,   48,
 
-       52,   52,   52,   52,   52,   52,   52,   52,   52,   52,
-       52,   52,   52,   52,   52,   52,   52,   52,   52,   52,
-       52
+       48,   48,   48,   48,   48,   48,   48,   48,   48,   48,
+       48,   48,   48,   48,   48
     } ;
 
 static yy_state_type yy_state_buf[YY_BUF_SIZE + 2], *yy_state_ptr;
@@ -445,19 +442,44 @@ char *yytext;
 #define INITIAL 0
 #line 2 "configuration-scanner.lex"
 
-#include "parser.h"
+/*
+   +----------------------------------------------------------------------+
+   | PHP HTML Embedded Scripting Language Version 3.0                     |
+   +----------------------------------------------------------------------+
+   | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
+   +----------------------------------------------------------------------+
+   | This program is free software; you can redistribute it and/or modify |
+   | it under the terms of the GNU General Public License as published by |
+   | the Free Software Foundation; either version 2 of the License, or    |
+   | (at your option) any later version.                                  |
+   |                                                                      |
+   | This program is distributed in the hope that it will be useful,      |
+   | but WITHOUT ANY WARRANTY; without even the implied warranty of       |
+   | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the        |
+   | GNU General Public License for more details.                         |
+   |                                                                      |
+   | You should have received a copy of the GNU General Public License    |
+   | along with this program; if not, write to the Free Software          |
+   | Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.            |
+   +----------------------------------------------------------------------+
+   | Authors:  Zeev Suraski <bourbon@netvision.net.il>                    |
+   +----------------------------------------------------------------------+
+*/
+
+
+#include "php.h"
 #include "configuration-parser.tab.h"
 
-#define YY_DECL cfglex(YYSTYPE *cfglval)
+#define YY_DECL cfglex(pval *cfglval)
 
 
 void init_cfg_scanner()
 {
-	cfglineno=0;
+	cfglineno=1;
 }
 
 
-#line 461 "configuration-scanner.c"
+#line 483 "configuration-scanner.c"
 
 /* Macros after this point can all be overridden by user definitions in
  * section 1.
@@ -608,10 +630,10 @@ YY_DECL
 	register char *yy_cp, *yy_bp;
 	register int yy_act;
 
-#line 20 "configuration-scanner.lex"
+#line 45 "configuration-scanner.lex"
 
 
-#line 615 "configuration-scanner.c"
+#line 637 "configuration-scanner.c"
 
 	if ( yy_init )
 		{
@@ -659,14 +681,14 @@ yy_match:
 			while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 				{
 				yy_current_state = (int) yy_def[yy_current_state];
-				if ( yy_current_state >= 53 )
+				if ( yy_current_state >= 49 )
 					yy_c = yy_meta[(unsigned int) yy_c];
 				}
 			yy_current_state = yy_nxt[yy_base[yy_current_state] + (unsigned int) yy_c];
 			*yy_state_ptr++ = yy_current_state;
 			++yy_cp;
 			}
-		while ( yy_base[yy_current_state] != 99 );
+		while ( yy_base[yy_current_state] != 93 );
 
 yy_find_action:
 		yy_current_state = *--yy_state_ptr;
@@ -704,27 +726,37 @@ do_action:	/* This label is used only to access EOF actions. */
 	{ /* beginning of action switch */
 case 1:
 YY_RULE_SETUP
-#line 22 "configuration-scanner.lex"
+#line 47 "configuration-scanner.lex"
 {
-	cfglval->value.strval = php3_strndup("1",1);
-	cfglval->strlen = 1;
-	cfglval->type = IS_STRING;
-	return TRUE;
+#if 0
+	printf("found extension\n");
+#endif
+	return EXTENSION;
 }
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 30 "configuration-scanner.lex"
+#line 54 "configuration-scanner.lex"
 {
-	cfglval->value.strval = php3_strndup("",0);
-	cfglval->strlen = 0;
+	cfglval->value.str.val = php3_strndup("1",1);
+	cfglval->value.str.len = 1;
 	cfglval->type = IS_STRING;
-	return FALSE;
+	return CFG_TRUE;
 }
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 38 "configuration-scanner.lex"
+#line 62 "configuration-scanner.lex"
+{
+	cfglval->value.str.val = php3_strndup("",0);
+	cfglval->value.str.len = 0;
+	cfglval->type = IS_STRING;
+	return CFG_FALSE;
+}
+	YY_BREAK
+case 4:
+YY_RULE_SETUP
+#line 70 "configuration-scanner.lex"
 {
 	/* SECTION */
 
@@ -738,59 +770,34 @@ YY_RULE_SETUP
 	yytext++;
 	yyleng--;
 
-	cfglval->value.strval = php3_strndup(yytext,yyleng);
-	cfglval->strlen = yyleng;
+	cfglval->value.str.val = php3_strndup(yytext,yyleng);
+	cfglval->value.str.len = yyleng;
 	cfglval->type = IS_STRING;
 	return SECTION;
 }
 	YY_BREAK
-case 4:
-YY_RULE_SETUP
-#line 58 "configuration-scanner.lex"
-{
-	return EXTENSION;
-}
-	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 63 "configuration-scanner.lex"
+#line 90 "configuration-scanner.lex"
 {
 	/* ENCAPSULATED STRING */
 	register int i;
 
-	/* eat trailing whitespace */
-	for (i=yyleng-1; i>=0; i--) {
-		if (yytext[i]==' ' || yytext[i]=='\t') {
-			yytext[i]=0;
-			yyleng--;
-		} else {
-			break;
-		}
-	}
-	/* eat leading whitespace */
-	while (yytext[0]) {
-		if (yytext[0]==' ' || yytext[0]=='\t') {
-			yytext++;
-			yyleng--;
-		} else {
-			break;
-		}
-	}
 	/* eat trailing " */
 	yytext[yyleng-1]=0;
 	
 	/* eat leading " */
 	yytext++;
 
-	cfglval->value.strval = php3_strndup(yytext,yyleng);
-	cfglval->strlen = yyleng;
+	cfglval->value.str.val = php3_strndup(yytext,yyleng);
+	cfglval->value.str.len = yyleng;
 	cfglval->type = IS_STRING;
 	return ENCAPSULATED_STRING;
 }
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 98 "configuration-scanner.lex"
+#line 107 "configuration-scanner.lex"
 {
 	/* STRING */
 	register int i;
@@ -814,8 +821,8 @@ YY_RULE_SETUP
 		}
 	}
 	if (yyleng!=0) {
-		cfglval->value.strval = php3_strndup(yytext,yyleng);
-		cfglval->strlen = yyleng;
+		cfglval->value.str.val = php3_strndup(yytext,yyleng);
+		cfglval->value.str.len = yyleng;
 		cfglval->type = IS_STRING;
 		return STRING;
 	} else {
@@ -825,72 +832,48 @@ YY_RULE_SETUP
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 131 "configuration-scanner.lex"
-{
-	/* ENCAPSULATED STRING */
-	register int i;
-
-	/* eat trailing whitespace */
-	for (i=yyleng-1; i>=0; i--) {
-		if (yytext[i]==' ' || yytext[i]=='\t') {
-			yytext[i]=0;
-			yyleng--;
-		} else {
-			break;
-		}
-	}
-	/* eat leading whitespace */
-	while (yytext[0]) {
-		if (yytext[0]==' ' || yytext[i]=='\t') {
-			yytext++;
-			yyleng--;
-		} else {
-			break;
-		}
-	}
-	cfglval->value.strval = php3_strndup(yytext,yyleng);
-	cfglval->strlen = yyleng;
-	cfglval->type = IS_STRING;
-	return ENCAPSULATED_STRING;
-}
-	YY_BREAK
-case 8:
-YY_RULE_SETUP
-#line 159 "configuration-scanner.lex"
+#line 141 "configuration-scanner.lex"
 {
 	return yytext[0];
 }
 	YY_BREAK
-case 9:
+case 8:
 YY_RULE_SETUP
-#line 163 "configuration-scanner.lex"
+#line 145 "configuration-scanner.lex"
 {
 	return '\n';
 }
 	YY_BREAK
-case 10:
+case 9:
 YY_RULE_SETUP
-#line 167 "configuration-scanner.lex"
+#line 149 "configuration-scanner.lex"
 {
 	/* comment */
 	return '\n';
 }
 	YY_BREAK
+case 10:
+YY_RULE_SETUP
+#line 154 "configuration-scanner.lex"
+{
+	/* eat whitespace */
+}
+	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 172 "configuration-scanner.lex"
+#line 158 "configuration-scanner.lex"
 {
 #if DEBUG
-	php3_error(E_NOTICE,"Unexpected character on line %d:  '%s'\n",yylineno,yytext);
+	php3_error(E_NOTICE,"Unexpected character on line %d:  '%s' (ASCII %d)\n",yylineno,yytext,yytext[0]);
 #endif
 }
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 177 "configuration-scanner.lex"
+#line 163 "configuration-scanner.lex"
 ECHO;
 	YY_BREAK
-#line 894 "configuration-scanner.c"
+#line 877 "configuration-scanner.c"
 			case YY_STATE_EOF(INITIAL):
 				yyterminate();
 
@@ -1179,7 +1162,7 @@ static yy_state_type yy_get_previous_state()
 		while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 			{
 			yy_current_state = (int) yy_def[yy_current_state];
-			if ( yy_current_state >= 53 )
+			if ( yy_current_state >= 49 )
 				yy_c = yy_meta[(unsigned int) yy_c];
 			}
 		yy_current_state = yy_nxt[yy_base[yy_current_state] + (unsigned int) yy_c];
@@ -1209,11 +1192,11 @@ yy_state_type yy_current_state;
 	while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 		{
 		yy_current_state = (int) yy_def[yy_current_state];
-		if ( yy_current_state >= 53 )
+		if ( yy_current_state >= 49 )
 			yy_c = yy_meta[(unsigned int) yy_c];
 		}
 	yy_current_state = yy_nxt[yy_base[yy_current_state] + (unsigned int) yy_c];
-	yy_is_jam = (yy_current_state == 52);
+	yy_is_jam = (yy_current_state == 48);
 	if ( ! yy_is_jam )
 		*yy_state_ptr++ = yy_current_state;
 
@@ -1774,4 +1757,4 @@ int main()
 	return 0;
 	}
 #endif
-#line 177 "configuration-scanner.lex"
+#line 163 "configuration-scanner.lex"

@@ -1,4 +1,4 @@
-dnl $Id: aclocal.m4,v 1.9 1998/02/26 09:05:24 jaakko Exp $
+dnl $Id: aclocal.m4,v 1.18 1998/05/14 15:53:54 rasmus Exp $
 dnl
 dnl This file contains local autoconf functions.
 
@@ -6,8 +6,7 @@ AC_DEFUN(AC_ORACLE_VERSION,[
   AC_MSG_CHECKING([Oracle version])
   if test -f "$ORACLEINST_TOP/orainst/unix.rgs"
   then
-    set -- `grep '"ocommon"' $1/orainst/unix.rgs`
-    ORACLE_VERSION="`echo $5 | cut -c 2-4`"
+	ORACLE_VERSION=`grep '"ocommon"' $ORACLEINST_TOP/orainst/unix.rgs | sed 's/[ ][ ]*/:/g' | cut -d: -f 6 | cut -c 2-4`
     test -z "$ORACLE_VERSION" && ORACLE_VERSION=7.3
   else
     ORACLE_VERSION=7.3
@@ -69,6 +68,43 @@ AC_DEFUN(AC_MISSING_FCLOSE_DECL,[
     AC_MSG_RESULT(missing)
   ])
 ])
+
+# Checks for libraries.
+# Prefer gdbm, Berkeley DB and ndbm/dbm, in that order
+AC_DEFUN(AC_PREFERRED_DB_LIB,[
+  AC_CHECK_LIB(gdbm, gdbm_open,[AC_DEFINE(GDBM) DBM_TYPE=gdbm; DBM_LIB=-lgdbm],
+  [AC_CHECK_LIB(db, dbm_open,[AC_DEFINE(NDBM) DBM_TYPE=ndbm; DBM_LIB=-ldb],
+   [AC_CHECK_LIB(c, dbm_open,[AC_DEFINE(NDBM) DBM_TYPE=ndbm; DBM_LIB=],
+    [AC_CHECK_LIB(dbm, dbm_open,[AC_DEFINE(NDBM) DBM_TYPE=ndbm; DBM_LIB=-ldbm],
+     [DBM_TYPE=""])])])])
+  AC_MSG_CHECKING([preferred dbm library])
+  if test "a$DBM_TYPE" = a; then
+    AC_MSG_RESULT(none found)
+    AC_MSG_WARN(No dbm library found - using built-in flatfile support)
+  else
+    AC_MSG_RESULT($DBM_TYPE chosen)
+  fi
+  AC_SUBST(DBM_LIB)
+  AC_SUBST(DBM_TYPE)
+])
+
+dnl
+dnl Check for broken sprintf()
+dnl
+AC_DEFUN(AC_BROKEN_SPRINTF,[
+  AC_MSG_CHECKING([for broken sprintf])
+  AC_TRY_RUN([main() { char buf[20]; exit (sprintf(buf,"testing 123")!=11); }],[
+    AC_DEFINE(BROKEN_SPRINTF,0)
+    AC_MSG_RESULT(ok)
+  ],[
+    AC_DEFINE(BROKEN_SPRINTF,1)
+    AC_MSG_RESULT(broken)
+  ],[
+    AC_DEFINE(BROKEN_SPRINTF,0)
+    AC_MSG_RESULT(cannot check, guessing ok)
+  ])
+])
+
 
 ## libtool.m4 - Configure libtool for the target system. -*-Shell-script-*-
 ## Copyright (C) 1996, 1997 Free Software Foundation, Inc.
@@ -258,4 +294,3 @@ Check your system clock])
 fi
 rm -f conftest*
 AC_MSG_RESULT(yes)])
-

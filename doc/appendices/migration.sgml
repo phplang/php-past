@@ -1,12 +1,8 @@
-<!--
-   $Id: migration.sgml,v 1.11 1998/02/13 19:27:42 ssb Exp $
-   $Source: /repository/php3/doc/appendices/migration.sgml,v $
-  -->
 
 <appendix id="migration">
  <title>Migrating from PHP/FI 2.0 to PHP 3.0</title>
 
- <sect1>
+ <sect1 id="migration-about">
   <title>About the incompatbilities in 3.0</title>
   <simpara>
    PHP 3.0 is rewritten from the ground up.  It has a proper parser
@@ -34,7 +30,7 @@
    distribution.  This program only catches the syntax changes though,
    so you should read this chapter carefully anyway.
 
- <sect1>
+ <sect1 id="migration-startendtags">
   <title>Start/end tags</title>
 
   <para>
@@ -81,7 +77,7 @@
 </programlisting></example>
 
 
- <sect1>
+ <sect1 id="migration-if-endif">
   <title>if..endif syntax</title>
 
   <para>
@@ -115,7 +111,7 @@ endif;
    Notice that the semicolons have been replaced by colons in all
    statements but the one terminating the expression (endif).
 
- <sect1>
+ <sect1 id="migration-while">
   <title>while syntax</title>
   <para>
    Just like with if..endif, the syntax of while..endwhile has changed
@@ -140,7 +136,7 @@ endwhile;
    </simpara>
   </warning>
 
- <sect1>
+ <sect1 id="migration-expr">
   <title>Expression types</title>
   <simpara>
    PHP/FI 2.0 used the left side of expressions to determine what type
@@ -182,7 +178,7 @@ while ((string)$key != "") {
 </programlisting></informalexample>
 
 
- <sect1>
+ <sect1 id="migration-errors">
   <title>Error messages have changed</title>
   <simpara>
    PHP 3.0's error messages are usually more accurate than 2.0's were,
@@ -192,13 +188,13 @@ while ((string)$key != "") {
   </simpara>
 
 
- <sect1>
+ <sect1 id="migration-booleval">
   <title>Short-circuited boolean evaluation</title>
   <simpara>
    In PHP 3.0 boolean evaluation is short-circuited.  This means that
    in an expression like <literal>(1 || test_me())</literal>, the
-   function <function>test_me()</function> would not be executed since
-   the nothing can change the result of the expression after the
+   function <function>test_me</function> would not be executed since
+   nothing can change the result of the expression after the
    <literal>1</literal>.
     
   <simpara>
@@ -206,7 +202,7 @@ while ((string)$key != "") {
    side-effects.
 
 
- <sect1>
+ <sect1 id="migration-truefalse">
   <title>Function true/false return values</title>
   <simpara>
    Most internal functions have been rewritten so they return TRUE
@@ -235,19 +231,17 @@ $fp = @fopen($file, "r") or print("Could not open $file for reading&lt;br&gt;\n"
    </example>
 
    
- <sect1>
+ <sect1 id="migration-other">
   <title>Other incompatibilities</title>
-  <para>
+
    <itemizedlist>
     <listitem><simpara>
       The PHP 3.0 Apache module no longer supports Apache versions
       prior to 1.2.  Apache 1.2 or later is required.
 
-    <listitem><simpara>
-      <link linkend="function.echo"><function>echo()</function></link>
-      no longer supports a format string.  Use the <link
-      linkend="function.printf"><function>printf()</function></link>
-      function instead.
+    <listitem><simpara> <function>echo</function> no longer
+    supports a format string.  Use the
+    <function>printf</function> function instead.
 
     <listitem><simpara>
       In PHP/FI 2.0, an implementation side-effect caused
@@ -260,10 +254,8 @@ $fp = @fopen($file, "r") or print("Could not open $file for reading&lt;br&gt;\n"
 
      <simpara>
       That is, you cannot traverse an array by having a loop that does
-      <literal>$data = $array[]</literal>.  Use <link
-      linkend="function.current"><function>current()</function></link>
-      and <link
-      linkend="function.next"><function>next()</function></link>
+      <literal>$data = $array[]</literal>.  Use
+      <function>current</function> and <function>next</function>
       instead.
      <simpara>
       Also, <literal>$array1[] = $array2</literal> does not append the
@@ -272,9 +264,43 @@ $fp = @fopen($file, "r") or print("Could not open $file for reading&lt;br&gt;\n"
       <literal>$array1</literal>.  See also multidimensional array
       support.
 
+    <listitem>
+     <simpara> <literal>"+"</literal> is no longer overloaded as a
+     concatenation operator for strings, instead it converts it's
+     arguments to numbers and performs numeric addition. Use
+     <literal>"."</literal> instead.
    </itemizedlist>
-  </para>
 
+        <example>
+          <title>Migration from 2.0: concatenation for strings</title>
+          <programlisting>
+echo "1" + "1";
+</programlisting>
+
+         <para> 
+          In PHP 2.0 this would echo 11, in PHP 3.0 it would echo 2. Instead
+          use:
+
+          <programlisting>
+echo "1"."1";
+</programlisting>
+
+          <programlisting>
+$a = 1;
+$b = 1;
+echo $a + $b;
+</programlisting>
+
+         <para>  
+          This would echo 2 in both PHP 2.0 and 3.0.
+
+          <programlisting>
+$a = 1;
+$b = 1;
+echo $a.$b;
+</programlisting>
+          This will echo 11 in PHP 3.0.
+	</example>
 
  </appendix>
 

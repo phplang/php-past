@@ -7,18 +7,23 @@
    | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
-   | it under the terms of the GNU General Public License as published by |
-   | the Free Software Foundation; either version 2 of the License, or    |
-   | (at your option) any later version.                                  |
+   | it under the terms of one of the following licenses:                 |
+   |                                                                      |
+   |  A) the GNU General Public License as published by the Free Software |
+   |     Foundation; either version 2 of the License, or (at your option) |
+   |     any later version.                                               |
+   |                                                                      |
+   |  B) the PHP License as published by the PHP Development Team and     |
+   |     included in the distribution in the file: LICENSE                |
    |                                                                      |
    | This program is distributed in the hope that it will be useful,      |
    | but WITHOUT ANY WARRANTY; without even the implied warranty of       |
    | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the        |
    | GNU General Public License for more details.                         |
    |                                                                      |
-   | You should have received a copy of the GNU General Public License    |
-   | along with this program; if not, write to the Free Software          |
-   | Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.            |
+   | You should have received a copy of both licenses referred to here.   |
+   | If you did not, or have any questions about PHP licensing, please    |
+   | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
    | Authors: Andi Gutmans <andi@vipe.technion.ac.il>                     |
    |          Zeev Suraski <bourbon@netvision.net.il>                     |
@@ -26,7 +31,7 @@
 */
 
 
-/* $Id: language-parser.y,v 1.8 1998/01/16 18:04:46 zeev Exp $ */
+/* $Id: language-parser.y,v 1.11 1998/05/15 10:56:55 zeev Exp $ */
 
 #include "token_cache.h"
 #include "main.h"
@@ -36,7 +41,7 @@
 #include <string.h>
 #endif
 extern void phperror(char *str);
-extern int phplex(YYSTYPE *phplval);
+extern int phplex(pval *phplval);
 extern void end_php();
 
 %}

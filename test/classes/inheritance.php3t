@@ -3,7 +3,7 @@ Classes inheritance test                                      ...
 --POST--
 --GET--
 --FILE--
-<?
+<?php 
 
 /* Inheritance test.  Pretty nifty if I do say so myself! */
 

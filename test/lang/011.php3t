@@ -3,7 +3,7 @@ Testing nested functions                                      ...
 --POST--
 --GET--
 --FILE--
-<?
+<?php 
 function F()
 {
 	$a = "Hello ";

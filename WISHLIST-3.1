@@ -1,3 +1,6 @@
+* Do yystype_ptr and hash pointers the right way - use the hash
+  pointer and the bucket pointer, instead of a pointer to the data.
+  Allows for a real unset() among other things.
 * Improve performance of simple variable lookups
 * Improve string performance by using smarter memory allocation methods
 * Improve preprocessor (handle require() efficiently), possibly handle
@@ -19,7 +22,6 @@
 * Distribute binaries
 * Clean up API and modules to make .so modules portable across CGI and server
   binaries
-* foreach
 * dbm cleanup (don't arbitrarily pick, and support multiple concurrent formats)
 * start system defines so that we can move away from the standard c lib on
   windows to the win32 lib.  (file functions primarily)
@@ -32,7 +34,7 @@
   the stuff currently in dl/ and functions/.
 * a way of letting each module specify its options, so ini file options and
   Apache directives can be set up from the same specification.
-* Make it possible to declare smarter user functions:
+V Make it possible to declare smarter user functions: (done in 3.0)
   - Optional parameters
   - Parameters that are forced/prefered by reference
 * Make object parsing more general, and allow nested arrays/objects with
@@ -40,3 +42,9 @@
 * Make it possible to copy references of variables.
 * data tainting (like perl -T)
 * multi-dimensional array support in GET/POST/COOKIE handling code
+* Persistent functions and classes
+* odbc_fetch_assoc
+* Add env handling to gpc_order
+* Populate track_vars regardless of gpc_order
+* a real exec() function
+* Support passing arguments to functions by name (e.g. foo(arg1 => "bar", arg2 => "foobar"))

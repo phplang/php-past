@@ -3,7 +3,7 @@ Assign a[0], a[1], a[2] elements and print result             ...
 --POST--
 --GET--
 --FILE--
-<?
+<?php 
   $a[0]="a";
   $a[1]="b";
   $a[2]="c";

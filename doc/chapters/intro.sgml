@@ -2,13 +2,12 @@
   <title>An introduction to PHP3</title>
   <simpara></simpara>
 
-  <sect1>
+  <sect1 id="intro-whatis">
    <title>What is PHP3?</title>
    <simpara>
-    Professional Home Pages Version 3.0 is an HTML-embedded scripting
-    language.
+    PHP Version 3.0 is a server-side HTML-embedded scripting language.
 
-  <sect1>
+  <sect1 id="intro-whatcando">
    <title>What can PHP3 do?</title>
    <para>
     Perhaps the strongest and most significant feature in PHP3 is its
@@ -26,20 +25,18 @@
       <member>PostgreSQL</member>
       <member>Adabas D</member>
       <member>FilePro</member>
+      <member>Velocis</member>
+      <member>All database systems with ODBC interface</member>
       <member>dBase</member>
       <member>Unix dbm</member>
      </simplelist>
     </blockquote>
 
-  <sect1>
+  <sect1 id="intro-concepts">
    <title>PHP3 Concepts</title>
    <simpara></simpara>
 
-  <sect1>
-   <title>What can PHP3 not do?</title>
-   <simpara></simpara>
-
-  <sect1>
+  <sect1 id="intro-examples">
    <title>Some examples</title>
    <simpara></simpara>
 

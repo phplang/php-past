@@ -5,32 +5,38 @@
    | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
-   | it under the terms of the GNU General Public License as published by |
-   | the Free Software Foundation; either version 2 of the License, or    |
-   | (at your option) any later version.                                  |
+   | it under the terms of one of the following licenses:                 |
+   |                                                                      |
+   |  A) the GNU General Public License as published by the Free Software |
+   |     Foundation; either version 2 of the License, or (at your option) |
+   |     any later version.                                               |
+   |                                                                      |
+   |  B) the PHP License as published by the PHP Development Team and     |
+   |     included in the distribution in the file: LICENSE                |
    |                                                                      |
    | This program is distributed in the hope that it will be useful,      |
    | but WITHOUT ANY WARRANTY; without even the implied warranty of       |
    | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the        |
    | GNU General Public License for more details.                         |
    |                                                                      |
-   | You should have received a copy of the GNU General Public License    |
-   | along with this program; if not, write to the Free Software          |
-   | Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.            |
+   | You should have received a copy of both licenses referred to here.   |
+   | If you did not, or have any questions about PHP licensing, please    |
+   | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
    | Authors: Andi Gutmans <andi@php.net>                                 |
    |          Zeev Suraski <bourbon@netvision.net.il>                     |
+   |          Rasmus Lerdorf <rasmus@php.net>                             |
    +----------------------------------------------------------------------+
  */
 
 
-/* $Id: datetime.c,v 1.27 1998/01/23 01:29:42 zeev Exp $ */
+/* $Id: datetime.c,v 1.40 1998/06/01 22:54:53 rasmus Exp $ */
 
 
 #ifdef THREAD_SAFE
 #include "tls.h"
 #endif
-#include "parser.h"
+#include "php.h"
 #include "internal_functions.h"
 #include "operators.h"
 #include "datetime.h"
@@ -58,6 +64,12 @@ char *day_short_names[] =
 	"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"
 };
 
+#ifndef HAVE_TM_ZONE
+#ifndef _TIMEZONE
+extern time_t timezone;
+#endif
+#endif
+
 static int phpday_tab[2][12] =
 {
 	{31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31},
@@ -70,13 +82,12 @@ void php3_time(INTERNAL_FUNCTION_PARAMETERS)
 	return_value->type = IS_LONG;
 }
 
-void php3_mktime(INTERNAL_FUNCTION_PARAMETERS)
+void _php3_mktime(INTERNAL_FUNCTION_PARAMETERS, int gm)
 {
-	YYSTYPE *arguments[6];
+	pval *arguments[6];
 	struct tm ta, *tn;
 	time_t t;
-	int i, arg_count = ARG_COUNT(ht);
-
+	int i, gmadjust=0,arg_count = ARG_COUNT(ht);
 
 	if (arg_count > 6 || getParametersArray(ht, arg_count, arguments) == FAILURE) {
 		WRONG_PARAM_COUNT;
@@ -86,8 +97,20 @@ void php3_mktime(INTERNAL_FUNCTION_PARAMETERS)
 		convert_to_long(arguments[i]);
 	}
 	t=time(NULL);
-	tn = localtime(&t);
-	memcpy(&ta,tn,sizeof(struct tm));	
+	if (gm) {
+		tn = gmtime(&t);
+#if HAVE_TZSET
+		tzset();
+#if HAVE_TM_ZONE
+		gmadjust=(tn->tm_gmtoff)/3600;
+#else
+		gmadjust=timezone/3600;
+#endif
+#endif
+	} else {
+		tn = localtime(&t);
+	}
+	memcpy(&ta,tn,sizeof(struct tm));
 	ta.tm_isdst = -1;
 
 	switch(arg_count) {
@@ -107,7 +130,7 @@ void php3_mktime(INTERNAL_FUNCTION_PARAMETERS)
 		ta.tm_min = arguments[1]->value.lval;
 		/* fall-through */
 	case 1:
-		ta.tm_hour = arguments[0]->value.lval;
+		ta.tm_hour = arguments[0]->value.lval - gmadjust;
 	case 0:
 		break;
 	}
@@ -115,10 +138,20 @@ void php3_mktime(INTERNAL_FUNCTION_PARAMETERS)
 	return_value->type = IS_LONG;
 }
 
+void php3_mktime(INTERNAL_FUNCTION_PARAMETERS)
+{
+	_php3_mktime(INTERNAL_FUNCTION_PARAM_PASSTHRU, 0);
+}
+
+void php3_gmmktime(INTERNAL_FUNCTION_PARAMETERS)
+{
+	_php3_mktime(INTERNAL_FUNCTION_PARAM_PASSTHRU, 1);
+}
+
 static void
 _php3_date(INTERNAL_FUNCTION_PARAMETERS, int gm)
 {
-	YYSTYPE *format, *timestamp;
+	pval *format, *timestamp;
 	time_t the_time;
 	struct tm *ta;
 	int i, size = 0, length, h;
@@ -154,8 +187,8 @@ _php3_date(INTERNAL_FUNCTION_PARAMETERS, int gm)
 		php3_error(E_WARNING, "unexpected error in date()");
 		RETURN_FALSE;
 	}
-	for (i = 0; i < format->strlen; i++) {
-		switch (format->value.strval[i]) {
+	for (i = 0; i < format->value.str.len; i++) {
+		switch (format->value.str.val[i]) {
 			case 'U':		/* seconds since the epoch */
 				size += 10;
 				break;
@@ -183,6 +216,10 @@ _php3_date(INTERNAL_FUNCTION_PARAMETERS, int gm)
 			case 'S':		/* standard english suffix for the day of the month (e.g. 3rd, 2nd, etc) */
 				size += 2;
 				break;
+			case '\\':
+				if(i < format->value.str.len-1) {
+					i++;
+				}
 			case 'w':		/* day of the week, numeric */
 			default:
 				size++;
@@ -190,102 +227,111 @@ _php3_date(INTERNAL_FUNCTION_PARAMETERS, int gm)
 		}
 	}
 
-	return_value->value.strval = (char *) emalloc(size + 1);
-	return_value->value.strval[0] = '\0';
+	return_value->value.str.val = (char *) emalloc(size + 1);
+	return_value->value.str.val[0] = '\0';
 
-	for (i = 0; i < format->strlen; i++) {
-		switch (format->value.strval[i]) {
+	for (i = 0; i < format->value.str.len; i++) {
+		switch (format->value.str.val[i]) {
+			case '\\':
+				if(i < format->value.str.len-1) {
+					char ch[2];
+					ch[0]=format->value.str.val[i+1];
+					ch[1]='\0';
+					strcat(return_value->value.str.val, ch);
+					i++;
+				}
+				break;
 			case 'U':		/* seconds since the epoch */
 				sprintf(tmp_buff, "%ld", the_time); /* SAFE */
-				strcat(return_value->value.strval, tmp_buff);
+				strcat(return_value->value.str.val, tmp_buff);
 				break;
 			case 'F':		/* month, textual, full */
-				strcat(return_value->value.strval, mon_full_names[ta->tm_mon]);
+				strcat(return_value->value.str.val, mon_full_names[ta->tm_mon]);
 				break;
 			case 'l':		/* day (of the week), textual, full */
-				strcat(return_value->value.strval, day_full_names[ta->tm_wday]);
+				strcat(return_value->value.str.val, day_full_names[ta->tm_wday]);
 				break;
 			case 'Y':		/* year, numeric, 4 digits */
 				sprintf(tmp_buff, "%d", ta->tm_year + 1900);  /* SAFE */
-				strcat(return_value->value.strval, tmp_buff);
+				strcat(return_value->value.str.val, tmp_buff);
 				break;
 			case 'M':		/* month, textual, 3 letters */
-				strcat(return_value->value.strval, mon_short_names[ta->tm_mon]);
+				strcat(return_value->value.str.val, mon_short_names[ta->tm_mon]);
 				break;
 			case 'D':		/* day (of the week), textual, 3 letters */
-				strcat(return_value->value.strval, day_short_names[ta->tm_wday]);
+				strcat(return_value->value.str.val, day_short_names[ta->tm_wday]);
 				break;
 			case 'z':		/* day (of the year) */
 				sprintf(tmp_buff, "%d", ta->tm_yday);  /* SAFE */
-				strcat(return_value->value.strval, tmp_buff);
+				strcat(return_value->value.str.val, tmp_buff);
 				break;
 			case 'y':		/* year, numeric, 2 digits */
 				sprintf(tmp_buff, "%02d", ((ta->tm_year)%100));  /* SAFE */
-				strcat(return_value->value.strval, tmp_buff);
+				strcat(return_value->value.str.val, tmp_buff);
 				break;
 			case 'm':		/* month, numeric */
 				sprintf(tmp_buff, "%02d", ta->tm_mon + 1);  /* SAFE */
-				strcat(return_value->value.strval, tmp_buff);
+				strcat(return_value->value.str.val, tmp_buff);
 				break;
 			case 'd':		/* day of the month, numeric */
 				sprintf(tmp_buff, "%02d", ta->tm_mday);  /* SAFE */
-				strcat(return_value->value.strval, tmp_buff);
+				strcat(return_value->value.str.val, tmp_buff);
 				break;
 			case 'H':		/* hour, numeric, 24 hour format */
 				sprintf(tmp_buff, "%02d", ta->tm_hour);  /* SAFE */
-				strcat(return_value->value.strval, tmp_buff);
+				strcat(return_value->value.str.val, tmp_buff);
 				break;
 			case 'h':		/* hour, numeric, 12 hour format */
 				h = ta->tm_hour % 12; if (h==0) h = 12;
 				sprintf(tmp_buff, "%02d", h);  /* SAFE */
-				strcat(return_value->value.strval, tmp_buff);
+				strcat(return_value->value.str.val, tmp_buff);
 				break;
 			case 'i':		/* minutes, numeric */
 				sprintf(tmp_buff, "%02d", ta->tm_min);  /* SAFE */
-				strcat(return_value->value.strval, tmp_buff);
+				strcat(return_value->value.str.val, tmp_buff);
 				break;
 			case 's':		/* seconds, numeric */
 				sprintf(tmp_buff, "%02d", ta->tm_sec);  /* SAFE */ 
-				strcat(return_value->value.strval, tmp_buff);
+				strcat(return_value->value.str.val, tmp_buff);
 				break;
 			case 'A':		/* AM/PM */
-				strcat(return_value->value.strval, (ta->tm_hour >= 12 ? "PM" : "AM"));
+				strcat(return_value->value.str.val, (ta->tm_hour >= 12 ? "PM" : "AM"));
 				break;
 			case 'a':		/* am/pm */
-				strcat(return_value->value.strval, (ta->tm_hour >= 12 ? "pm" : "am"));
+				strcat(return_value->value.str.val, (ta->tm_hour >= 12 ? "pm" : "am"));
 				break;
 			case 'S':		/* standard english suffix, e.g. 2nd/3rd for the day of the month */
 				if (ta->tm_mday >= 10 && ta->tm_mday <= 19) {
-					strcat(return_value->value.strval, "th");
+					strcat(return_value->value.str.val, "th");
 				} else {
 					switch (ta->tm_mday % 10) {
 						case 1:
-							strcat(return_value->value.strval, "st");
+							strcat(return_value->value.str.val, "st");
 							break;
 						case 2:
-							strcat(return_value->value.strval, "nd");
+							strcat(return_value->value.str.val, "nd");
 							break;
 						case 3:
-							strcat(return_value->value.strval, "rd");
+							strcat(return_value->value.str.val, "rd");
 							break;
 						default:
-							strcat(return_value->value.strval, "th");
+							strcat(return_value->value.str.val, "th");
 							break;
 					}
 				}
 				break;
 			case 'w':		/* day of the week, numeric EXTENSION */
 				sprintf(tmp_buff, "%01d", ta->tm_wday);  /* SAFE */
-				strcat(return_value->value.strval, tmp_buff);
+				strcat(return_value->value.str.val, tmp_buff);
 				break;
 			default:
-				length = strlen(return_value->value.strval);
-				return_value->value.strval[length] = format->value.strval[i];
-				return_value->value.strval[length + 1] = '\0';
+				length = strlen(return_value->value.str.val);
+				return_value->value.str.val[length] = format->value.str.val[i];
+				return_value->value.str.val[length + 1] = '\0';
 				break;
 		}
 	}
-	return_value->strlen = strlen(return_value->value.strval);
+	return_value->value.str.len = strlen(return_value->value.str.val);
 	return_value->type = IS_STRING;
 }
 
@@ -301,7 +347,7 @@ void php3_gmdate(INTERNAL_FUNCTION_PARAMETERS)
 
 void php3_getdate(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *timestamp;
+	pval *timestamp;
 	struct tm *ta;
 
 	if (ARG_COUNT(ht) != 1 || getParameters(ht, 1, &timestamp) == FAILURE) {
@@ -339,12 +385,22 @@ char *php3_std_date(time_t t)
 
 	tm1 = gmtime(&t);
 	str = emalloc(81);
-	snprintf(str, 80, "%s, %02d-%s-%02d %02d:%02d:%02d GMT",
-			day_full_names[tm1->tm_wday],
-			tm1->tm_mday,
-			mon_short_names[tm1->tm_mon],
-			((tm1->tm_year)%100),
-			tm1->tm_hour, tm1->tm_min, tm1->tm_sec);
+	if (php3_ini.y2k_compliance) {
+		snprintf(str, 80, "%s, %02d-%s-%04d %02d:%02d:%02d GMT",
+				day_full_names[tm1->tm_wday],
+				tm1->tm_mday,
+				mon_short_names[tm1->tm_mon],
+				tm1->tm_year+1900,
+				tm1->tm_hour, tm1->tm_min, tm1->tm_sec);
+	} else {
+		snprintf(str, 80, "%s, %02d-%s-%02d %02d:%02d:%02d GMT",
+				day_full_names[tm1->tm_wday],
+				tm1->tm_mday,
+				mon_short_names[tm1->tm_mon],
+				((tm1->tm_year)%100),
+				tm1->tm_hour, tm1->tm_min, tm1->tm_sec);
+	}
+	
 	str[79]=0;
 	return (str);
 }
@@ -357,7 +413,7 @@ char *php3_std_date(time_t t)
 #define isleap(year) (((year%4) == 0 && (year%100)!=0) || (year%400)==0)
 void php3_checkdate(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *month, *day, *year;
+	pval *month, *day, *year;
 	int m, d, y;
 	TLS_VARS;
 	
@@ -387,6 +443,54 @@ void php3_checkdate(INTERNAL_FUNCTION_PARAMETERS)
 	RETURN_TRUE;				/* True : This month,day,year arguments are valid */
 }
 
+
+#if HAVE_STRFTIME
+
+void php3_strftime(INTERNAL_FUNCTION_PARAMETERS)
+{
+	pval *format_arg, *timestamp_arg;
+	char *format,*buf;
+	time_t timestamp;
+	struct tm *ta;
+	size_t buf_len=64, real_len;
+
+	switch (ARG_COUNT(ht)) {
+		case 1:
+			if (getParameters(ht, 1, &format_arg)==FAILURE) {
+				RETURN_FALSE;
+			}
+			time(&timestamp);
+			break;
+		case 2:
+			if (getParameters(ht, 2, &format_arg, &timestamp_arg)==FAILURE) {
+				RETURN_FALSE;
+			}
+			convert_to_long(timestamp_arg);
+			timestamp = timestamp_arg->value.lval;
+			break;
+		default:
+			WRONG_PARAM_COUNT;
+			break;
+	}
+
+	convert_to_string(format_arg);
+	if (format_arg->value.str.len==0) {
+		RETURN_FALSE;
+	}
+	format = format_arg->value.str.val;
+	ta = localtime(&timestamp);
+
+	buf = (char *) emalloc(buf_len);
+	while ((real_len=strftime(buf,buf_len,format,ta))==buf_len || real_len==0) {
+		buf_len *= 2;
+		buf = (char *) erealloc(buf, buf_len);
+	}
+	
+	return_value->value.str.val = (char *) erealloc(buf,real_len+1);
+	return_value->value.str.len = real_len;
+	return_value->type = IS_STRING;
+}
+#endif
 /*
  * Local variables:
  * tab-width: 4

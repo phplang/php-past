@@ -7,18 +7,23 @@
    | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
-   | it under the terms of the GNU General Public License as published by |
-   | the Free Software Foundation; either version 2 of the License, or    |
-   | (at your option) any later version.                                  |
+   | it under the terms of one of the following licenses:                 |
+   |                                                                      |
+   |  A) the GNU General Public License as published by the Free Software |
+   |     Foundation; either version 2 of the License, or (at your option) |
+   |     any later version.                                               |
+   |                                                                      |
+   |  B) the PHP License as published by the PHP Development Team and     |
+   |     included in the distribution in the file: LICENSE                |
    |                                                                      |
    | This program is distributed in the hope that it will be useful,      |
    | but WITHOUT ANY WARRANTY; without even the implied warranty of       |
    | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the        |
    | GNU General Public License for more details.                         |
    |                                                                      |
-   | You should have received a copy of the GNU General Public License    |
-   | along with this program; if not, write to the Free Software          |
-   | Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.            |
+   | You should have received a copy of both licenses referred to here.   |
+   | If you did not, or have any questions about PHP licensing, please    |
+   | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
    | Authors: Andi Gutmans <andi@vipe.technion.ac.il>                     |
    |          Zeev Suraski <bourbon@netvision.net.il>                     |
@@ -26,7 +31,7 @@
 */
 
 
-/* $Id: language-scanner.lex,v 1.8 1998/01/16 18:04:46 zeev Exp $ */
+/* $Id: language-scanner.lex,v 1.12 1998/05/15 10:56:55 zeev Exp $ */
 
 %}
 
@@ -47,7 +52,7 @@
 #include <string.h>
 #endif
 
-#define YY_DECL int lex_scan(YYSTYPE *phplval)
+#define YY_DECL int lex_scan(pval *phplval)
 
 #ifdef __cplusplus
 #  define MY_INPUT yyinput
@@ -366,33 +371,9 @@ ESCAPED_AND_WHITESPACE [\n\t\r #`'.:;,()|^&+-/*=%!~<>{}?@]+
 
 <IN_PHP>"#"[^\n]*"\n" { /* eat one line comments */ printf("%s",yytext); }
 
-<IN_PHP>"/*" {
-	/* Eat C-style comments */
-	char c;
 
-	printf("/*");
-
-	for (;;) {
-		while (1) {
-			c=MY_INPUT();
-
-			printf("%c",c);
-			if (c=='*' || c==EOF) { 
-				break;
-			}
-		};
-		if (c=='*') {
-			while ((c=MY_INPUT())=='*') printf("%c",c);
-			printf("%c",c);
-			if (c=='/') {
-				break;	/* found the end */
-			}
-		}
-
-		if (c==EOF) {
-			break;
-		} 
-	}
+<IN_PHP>"/*"([^*]|[*]+[^/])*"*/"([ ]*";")? {
+	printf(yytext);
 }
 
 <IN_PHP>["] {

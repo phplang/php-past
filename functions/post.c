@@ -5,18 +5,23 @@
    | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
-   | it under the terms of the GNU General Public License as published by |
-   | the Free Software Foundation; either version 2 of the License, or    |
-   | (at your option) any later version.                                  |
+   | it under the terms of one of the following licenses:                 |
+   |                                                                      |
+   |  A) the GNU General Public License as published by the Free Software |
+   |     Foundation; either version 2 of the License, or (at your option) |
+   |     any later version.                                               |
+   |                                                                      |
+   |  B) the PHP License as published by the PHP Development Team and     |
+   |     included in the distribution in the file: LICENSE                |
    |                                                                      |
    | This program is distributed in the hope that it will be useful,      |
    | but WITHOUT ANY WARRANTY; without even the implied warranty of       |
    | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the        |
    | GNU General Public License for more details.                         |
    |                                                                      |
-   | You should have received a copy of the GNU General Public License    |
-   | along with this program; if not, write to the Free Software          |
-   | Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.            |
+   | You should have received a copy of both licenses referred to here.   |
+   | If you did not, or have any questions about PHP licensing, please    |
+   | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
    | Authors: Rasmus Lerdorf                                              |
    +----------------------------------------------------------------------+
@@ -26,7 +31,7 @@
 #include "tls.h"
 #endif
 #include <stdio.h>
-#include "parser.h"
+#include "php.h"
 #include "internal_functions.h"
 #include "functions/mime.h"
 #include "functions/type.h"
@@ -44,7 +49,7 @@ int php3_track_vars;
  * This reads the post form data into a string.
  * Remember to free this pointer when done with it.
  */
-static char *php3_getpost(void)
+static char *php3_getpost(pval *http_post_vars)
 {
 	char *buf = NULL;
 #if MODULE_MAGIC_NUMBER > 19961007
@@ -61,22 +66,22 @@ static char *php3_getpost(void)
 	buf = GLOBAL(request_info).content_type;
 	if (!buf) {
 		php3_error(E_WARNING, "POST Error: content-type missing");
-		return (NULL);
+		return NULL;
 	}
 	if (strncasecmp(buf, "application/x-www-form-urlencoded", 33) && strncasecmp(buf, "multipart/form-data", 19)) {
 		php3_error(E_WARNING, "Unsupported content-type: %s", buf);
-		return (NULL);
+		return NULL;
 	}
 	if (!strncasecmp(buf, "multipart/form-data", 19)) {
 		file_upload = 1;
 		mb = strchr(buf, '=');
-		if (mb)
+		if (mb) {
 			strncpy(boundary, mb + 1, sizeof(boundary));
-		else {
+		} else {
 			php3_error(E_WARNING, "File Upload Error: No MIME boundary found");
 			php3_error(E_WARNING, "There should have been a \"boundary=something\" in the Content-Type string");
 			php3_error(E_WARNING, "The Content-Type string was: \"%s\"", buf);
-			return (NULL);
+			return NULL;
 		}
 	}
 	length = GLOBAL(request_info).content_length;
@@ -84,8 +89,12 @@ static char *php3_getpost(void)
 	buf = (char *) emalloc((length + 1) * sizeof(char));
 	if (!buf) {
 		php3_error(E_WARNING, "Unable to allocate memory in php3_getpost()");
-		return (NULL);
+		return NULL;
 	}
+#if FHTTPD
+    memcpy(buf,req->databuffer,length);
+    buf[length]=0;
+#else
 #if MODULE_MAGIC_NUMBER > 19961007
 	if (should_client_block(GLOBAL(php3_rqst))) {
 		void (*handler) (int);
@@ -120,25 +129,16 @@ static char *php3_getpost(void)
 		cnt += bytes;
 	} while (bytes && cnt < length);
 #endif
+#endif
 	if (file_upload) {
-		php3_mime_split(buf, cnt, boundary);
+		php3_mime_split(buf, cnt, boundary, http_post_vars);
 		efree(buf);
-		return (NULL);
+		return NULL;
 	}
 	buf[cnt] = '\0';
 	return (buf);
 }
 
-
-static void php3_dot_to_underscore(char *str)
-{
-	char *s = str;
-	while (*s) {
-		if (*s == '.')
-			*s = '_';
-		s++;
-	}
-}
 
 /*
  * parse Get/Post/Cookie string and create appropriate variable
@@ -147,52 +147,62 @@ static void php3_dot_to_underscore(char *str)
  * the old TreatData function.  This is a temporary measure filling 
  * the gap until a more flexible parser can be built to do this.
  */
-void _php3_parse_gpc_data(char *t, char *s, YYSTYPE *track_vars_array)
+void _php3_parse_gpc_data(char *val, char *var, pval *track_vars_array)
 {
-	int itype;
-	char *ind, *tmp = NULL, *ret = NULL, *u = NULL;
+	int var_type;
+	char *ind, *tmp = NULL, *ret = NULL;
+	int var_len;
 	TLS_VARS;
 	
-	php3_dot_to_underscore(s);
-	itype = php3_CheckIdentType(s);
-	if (itype == 2) {	/* indexed array */
-		ind = php3_GetIdentIndex(s);
-		if(php3_ini.magic_quotes_gpc) {
-			ret = _php3_addslashes(ind, 1);
+	var_type = php3_check_ident_type(var);
+	if (var_type == GPC_INDEXED_ARRAY) {
+		ind = php3_get_ident_index(var);
+		if (php3_ini.magic_quotes_gpc) {
+			ret = _php3_addslashes(ind, 0, NULL, 1);
 		} else {
 			ret = ind;
 		}
 	}
-	if (itype) {		/* non-indexed array */
-		u = strchr(s, '[');
-		if (u)
-			*u = '\0';
+	if (var_type & GPC_ARRAY) {		/* array (indexed or not */
+		tmp = strchr(var, '[');
+		if (tmp) {
+			*tmp = '\0';
+		}
 	}
-	if (strlen(s)==0) { /* empty variable name, FIXME? */
+	/* ignore leading spaces in the variable name */
+	while (*var && *var==' ') {
+		var++;
+	}
+	var_len = strlen(var);
+	if (var_len==0) { /* empty variable name, or variable name with a space in it */
 		return;
 	}
-	/*
-	   Here PHP2 had a check to prevent a GET or COOKIE variable
-	   from overwriting a variable set via the POST method.
-	   Not sure how I can do this in PHP3, and I am not sure I
-	   even need to do it.
-	 */
 
-	tmp = estrdup(t);
-	if (itype) {
-		YYSTYPE arr1, arr2, *arr_ptr, entry;
+	/* ensure that we don't have spaces or dots in the variable name (not binary safe) */
+	for (tmp=var; *tmp; tmp++) {
+		switch(*tmp) {
+			case ' ':
+			case '.':
+				*tmp='_';
+				break;
+		}
+	}
+
+	tmp = estrdup(val);
+	if (var_type & GPC_ARRAY) {
+		pval arr1, arr2, *arr_ptr, entry;
 
 		/* If the array doesn't exist, create it */
-		if (hash_find(GLOBAL(active_symbol_table), s, strlen(s)+1, (void **) &arr_ptr) == FAILURE) {
+		if (hash_find(GLOBAL(active_symbol_table), var, var_len+1, (void **) &arr_ptr) == FAILURE) {
 			if (array_init(&arr1)==FAILURE) {
 				return;
 			}
-			hash_update(GLOBAL(active_symbol_table), s, strlen(s)+1, &arr1, sizeof(YYSTYPE), NULL);
+			hash_update(GLOBAL(active_symbol_table), var, var_len+1, &arr1, sizeof(pval), NULL);
 			if (track_vars_array) {
 				if (array_init(&arr2)==FAILURE) {
 					return;
 				}
-				hash_update(track_vars_array->value.ht, s, strlen(s)+1, (void *) &arr2, sizeof(YYSTYPE),NULL);
+				hash_update(track_vars_array->value.ht, var, var_len+1, (void *) &arr2, sizeof(pval),NULL);
 			}
 		} else {
 			if (arr_ptr->type!=IS_ARRAY) {
@@ -200,62 +210,66 @@ void _php3_parse_gpc_data(char *t, char *s, YYSTYPE *track_vars_array)
 				if (array_init(arr_ptr)==FAILURE) {
 					return;
 				}
+				if (track_vars_array) {
+					if (array_init(&arr2)==FAILURE) {
+						return;
+					}
+					hash_update(track_vars_array->value.ht, var, var_len+1, (void *) &arr2, sizeof(pval),NULL);
+				}
 			}
 			arr1 = *arr_ptr;
-			if (track_vars_array && hash_find(track_vars_array->value.ht, s, strlen(s)+1, (void **) &arr_ptr) == FAILURE) {
+			if (track_vars_array && hash_find(track_vars_array->value.ht, var, var_len+1, (void **) &arr_ptr) == FAILURE) {
 				return;
 			}
 			arr2 = *arr_ptr;
 		}
 		/* Now create the element */
 		if (php3_ini.magic_quotes_gpc) {
-			entry.value.strval = _php3_addslashes(tmp, 0);
-			entry.strlen = strlen(entry.value.strval);
+			entry.value.str.val = _php3_addslashes(tmp, 0, &entry.value.str.len, 0);
 		} else {
-			entry.strlen = strlen(tmp);
-			entry.value.strval = estrndup(tmp,entry.strlen);
+			entry.value.str.len = strlen(tmp);
+			entry.value.str.val = estrndup(tmp,entry.value.str.len);
 		}
 		entry.type = IS_STRING;
 
 		/* And then insert it */
 		if (ret) {		/* indexed array */
-			if (php3_CheckType(ret) == IS_LONG) {
-				hash_index_update(arr1.value.ht, atol(ret), &entry, sizeof(YYSTYPE),NULL);	/* s[ret]=tmp */
+			if (php3_check_type(ret) == IS_LONG) {
+				hash_index_update(arr1.value.ht, atol(ret), &entry, sizeof(pval),NULL);	/* s[ret]=tmp */
 				if (track_vars_array) {
 					yystype_copy_constructor(&entry);
-					hash_index_update(arr2.value.ht, atol(ret), &entry, sizeof(YYSTYPE),NULL);
+					hash_index_update(arr2.value.ht, atol(ret), &entry, sizeof(pval),NULL);
 				}
 			} else {
-				hash_update(arr1.value.ht, ret, strlen(ret)+1, &entry, sizeof(YYSTYPE),NULL);	/* s["ret"]=tmp */
+				hash_update(arr1.value.ht, ret, strlen(ret)+1, &entry, sizeof(pval),NULL);	/* s["ret"]=tmp */
 				if (track_vars_array) {
 					yystype_copy_constructor(&entry);
-					hash_update(arr2.value.ht, ret, strlen(ret)+1, &entry, sizeof(YYSTYPE),NULL);
+					hash_update(arr2.value.ht, ret, strlen(ret)+1, &entry, sizeof(pval),NULL);
 				}
 			}
 			efree(ret);
 			ret = NULL;
 		} else {		/* non-indexed array */
-			hash_next_index_insert(arr1.value.ht, &entry, sizeof(YYSTYPE),NULL);
+			hash_next_index_insert(arr1.value.ht, &entry, sizeof(pval),NULL);
 			if (track_vars_array) {
 				yystype_copy_constructor(&entry);
-				hash_next_index_insert(arr2.value.ht, &entry, sizeof(YYSTYPE),NULL);
+				hash_next_index_insert(arr2.value.ht, &entry, sizeof(pval),NULL);
 			}
 		}
 	} else {			/* we have a normal variable */
-		YYSTYPE entry;
+		pval entry;
 		
 		if (php3_ini.magic_quotes_gpc) {
-			entry.value.strval = _php3_addslashes(tmp, 0);
-			entry.strlen = strlen(entry.value.strval);
+			entry.value.str.val = _php3_addslashes(tmp, 0, &entry.value.str.len, 0);
 		} else {
-			entry.strlen = strlen(tmp);
-			entry.value.strval = estrndup(tmp,entry.strlen);
+			entry.value.str.len = strlen(tmp);
+			entry.value.str.val = estrndup(tmp,entry.value.str.len);
 		}
 		entry.type = IS_STRING;
-		hash_update(&GLOBAL(symbol_table), s, strlen(s)+1, (void *) &entry, sizeof(YYSTYPE),NULL);
+		hash_update(GLOBAL(active_symbol_table), var, var_len+1, (void *) &entry, sizeof(pval),NULL);
 		if (track_vars_array) {
 			yystype_copy_constructor(&entry);
-			hash_update(track_vars_array->value.ht, s, strlen(s)+1, (void *) &entry, sizeof(YYSTYPE),NULL);
+			hash_update(track_vars_array->value.ht, var, var_len+1, (void *) &entry, sizeof(pval),NULL);
 		}
 	}
 
@@ -265,10 +279,9 @@ void _php3_parse_gpc_data(char *t, char *s, YYSTYPE *track_vars_array)
 
 void php3_treat_data(int arg, char *str)
 {
-	char *res = NULL, *s, *t, *tt;
-	char o = '\0';
+	char *res = NULL, *var, *val;
 	int inc = 0;
-	YYSTYPE array,*array_ptr;
+	pval array,*array_ptr;
 	TLS_VARS;
 	
 	switch (arg) {
@@ -280,13 +293,13 @@ void php3_treat_data(int arg, char *str)
 				array_ptr = &array;
 				switch (arg) {
 					case PARSE_POST:
-						hash_add(&GLOBAL(symbol_table), "HTTP_POST_VARS", sizeof("HTTP_POST_VARS"), array_ptr, sizeof(YYSTYPE),NULL);
+						hash_add(&GLOBAL(symbol_table), "HTTP_POST_VARS", sizeof("HTTP_POST_VARS"), array_ptr, sizeof(pval),NULL);
 						break;
 					case PARSE_GET:
-						hash_add(&GLOBAL(symbol_table), "HTTP_GET_VARS", sizeof("HTTP_GET_VARS"), array_ptr, sizeof(YYSTYPE),NULL);
+						hash_add(&GLOBAL(symbol_table), "HTTP_GET_VARS", sizeof("HTTP_GET_VARS"), array_ptr, sizeof(pval),NULL);
 						break;
 					case PARSE_COOKIE:
-						hash_add(&GLOBAL(symbol_table), "HTTP_COOKIE_VARS", sizeof("HTTP_COOKIE_VARS"), array_ptr, sizeof(YYSTYPE),NULL);
+						hash_add(&GLOBAL(symbol_table), "HTTP_COOKIE_VARS", sizeof("HTTP_COOKIE_VARS"), array_ptr, sizeof(pval),NULL);
 						break;
 				}
 			} else {
@@ -298,69 +311,51 @@ void php3_treat_data(int arg, char *str)
 			break;
 	}
 
-	if (arg == PARSE_POST)
-		res = php3_getpost();
-
-	else if (arg == PARSE_GET) {		/* Get data */
-		s = GLOBAL(request_info).query_string;
-		res = s;
-		if (s && *s) {
-			res = (char *) estrdup(s);
+	if (arg == PARSE_POST) {
+		res = php3_getpost(array_ptr);
+	} else if (arg == PARSE_GET) {		/* Get data */
+		var = GLOBAL(request_info).query_string;
+		if (var && *var) {
+			res = (char *) estrdup(var);
 		}
 		inc = -1;
 	} else if (arg == PARSE_COOKIE) {		/* Cookie data */
-		s = GLOBAL(request_info).cookies;
-		res = s;
-		if (s && *s) {
-			res = (char *) estrdup(s);
+		var = GLOBAL(request_info).cookies;
+		if (var && *var) {
+			res = (char *) estrdup(var);
 		}
 		inc = -1;
 	} else if (arg == PARSE_STRING) {		/* String data */
 		res = str;
 		inc = -1;
 	}
-	if (!res)
+	if (!res) {
 		return;
-	if (!*res) {
-		return;
-	}
-	if (arg == PARSE_COOKIE) {
-		s = strtok(res, ";");
-	} else if(arg == PARSE_POST) {
-		s = strtok(res, "&");
-	} else {
-		s = strtok(res, php3_ini.arg_separator);
 	}
 	
+	if (arg == PARSE_COOKIE) {
+		var = strtok(res, ";");
+	} else if (arg == PARSE_POST) {
+		var = strtok(res, "&");
+	} else {
+		var = strtok(res, php3_ini.arg_separator);
+	}
 
-	while (s) {
-		t = strchr(s, '=');
-		if (t) {
-			*t = '\0';
-			tt = strchr(s, '+');
-			while (tt) {
-				s = tt + 1;
-				tt = strchr(s, '+');
-			}
-			if (arg == PARSE_COOKIE) {
-				tt = strchr(s, ' ');
-				while (tt) {
-					s = tt + 1;
-					tt = strchr(s, ' ');
-				}
-			}
-			_php3_urldecode(s);
-			_php3_urldecode(t+1);
-			_php3_parse_gpc_data(t+1,s,array_ptr);
-			if (tt)
-				*tt = o;
+	while (var) {
+		val = strchr(var, '=');
+		if (val) { /* have a value */
+			*val++ = '\0';
+			/* FIXME: XXX: not binary safe, discards returned length */
+			_php3_urldecode(var, strlen(var));
+			_php3_urldecode(val, strlen(val));
+			_php3_parse_gpc_data(val,var,array_ptr);
 		}
 		if (arg == PARSE_COOKIE) {
-			s = strtok(NULL, ";");
-		} else if(arg == PARSE_POST) {
-			s = strtok(NULL, "&");
+			var = strtok(NULL, ";");
+		} else if (arg == PARSE_POST) {
+			var = strtok(NULL, "&");
 		} else {
-			s = strtok(NULL, php3_ini.arg_separator);
+			var = strtok(NULL, php3_ini.arg_separator);
 		}
 	}
 	efree(res);
@@ -377,6 +372,8 @@ void php3_TreatHeaders(void)
 #endif
 	char *t;
 	char *user, *type;
+	int len;
+	char *escaped_str;
 	TLS_VARS;
 
 	if (GLOBAL(php3_rqst)->headers_in)
@@ -404,24 +401,56 @@ void php3_TreatHeaders(void)
 	type = "Basic";
 
 	if (user) {
-		if(php3_ini.magic_quotes_gpc) {
-			SET_VAR_STRING("PHP_AUTH_USER", _php3_addslashes(user, 0));
+		if (php3_ini.magic_quotes_gpc) {
+			escaped_str = _php3_addslashes(user, 0, &len, 0);
+			SET_VAR_STRINGL("PHP_AUTH_USER", escaped_str, len);
 		} else {
 			SET_VAR_STRING("PHP_AUTH_USER", estrdup(user));
 		}
 	}
 	if (t) {
-		if(php3_ini.magic_quotes_gpc) {
-			SET_VAR_STRING("PHP_AUTH_PW", _php3_addslashes(t, 0));
+		if (php3_ini.magic_quotes_gpc) {
+			escaped_str = _php3_addslashes(t, 0, &len, 0);
+			SET_VAR_STRINGL("PHP_AUTH_PW", escaped_str, len);
 		} else {
 			SET_VAR_STRING("PHP_AUTH_PW", estrdup(t));
 		}
 	}
 	if (type) {
-		if(php3_ini.magic_quotes_gpc) {
-			SET_VAR_STRING("PHP_AUTH_TYPE", _php3_addslashes(type, 0));
+		if (php3_ini.magic_quotes_gpc) {
+			escaped_str = _php3_addslashes(type, 0, &len, 0);
+			SET_VAR_STRINGL("PHP_AUTH_TYPE", escaped_str, len);
 		} else {
 			SET_VAR_STRING("PHP_AUTH_TYPE", estrdup(type));
+		}
+	}
+#endif
+#if FHTTPD
+	int i,len;
+	struct rline *l;
+	char *type;
+	char *escaped_str;
+
+	if(req && req->remote_user){
+		for(i=0; i < req->nlines; i++){
+			l=req->lines+i;
+			if((l->paramc > 1)&&!strcasecmp(l->params[0], "REMOTE_PW")){
+				type = "Basic";
+				if (php3_ini.magic_quotes_gpc) {
+					escaped_str = _php3_addslashes(type, 0, &len, 0);
+					SET_VAR_STRINGL("PHP_AUTH_TYPE", escaped_str, len);
+					escaped_str = _php3_addslashes(l->params[1], 0, &len, 0);
+					SET_VAR_STRINGL("PHP_AUTH_PW", escaped_str, len);
+					escaped_str = _php3_addslashes(req->remote_user, 0, &len, 0);
+					SET_VAR_STRINGL("PHP_AUTH_USER", escaped_str, len);
+
+				} else {
+					SET_VAR_STRING("PHP_AUTH_TYPE", estrdup(type));
+					SET_VAR_STRING("PHP_AUTH_PW", estrdup(l->params[1]));
+					SET_VAR_STRING("PHP_AUTH_USER", estrdup(req->remote_user));
+				}
+				i=req->nlines;
+			}
 		}
 	}
 #endif
@@ -429,17 +458,17 @@ void php3_TreatHeaders(void)
 
 void php3_parsestr(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *arg;
+	pval *arg;
 	char *res = NULL;
 
 	if (getParameters(ht, 1, &arg) == FAILURE) {
 		WRONG_PARAM_COUNT;
 	}
 	convert_to_string(arg);
-	if (arg->value.strval && *arg->value.strval) {
-		res = estrndup(arg->value.strval,arg->strlen);
+	if (arg->value.str.val && *arg->value.str.val) {
+		res = estrndup(arg->value.str.val,arg->value.str.len);
 	}
-	php3_treat_data(3, res);
+	php3_treat_data(PARSE_STRING, res);
 }
 
 /*

@@ -45,28 +45,45 @@ Installing PHP3 can be done in four simple steps:
    changed the location you can specify it with: --with-mysql=/opt/local
    for example.  Otherwise just use: --with-mysql
 
+   *NOTE*  If you are using Apache 1.3b6 or later, you should run the 
+   Apache Configure script at least once before compiling PHP.  It 
+   doesn't matter how you have Apache configured at this point.
+
 3. Compile and install the files.  Simply type: make install
 
    For the Apache module version this will copy the appropriate files
-   to the src/modules/extra directory in your Apache distribution if
+   to the src/modules/php3 directory in your Apache distribution if
    you are using Apache 1.3.x.  If you are still running Apache 1.2.x
    these files will be copied directly to the main src directory.
 
-   In the Apache src directory, edit the file named Configuration.  If
-   you do not have this file, copy Configuration.tmpl to Configuration.
+   For Apache 1.3b6 and later, you can use the new APACI configuration
+   mechanism.  To automatically build Apache with PHP support, use:
 
-   For Apache 1.3.x add:
+       cd apache-1.3
+       ./configure --prefix=/<path>/apache \
+                   --activate-module=src/modules/php3/libphp3.a
+       make
+       make install
 
-      AddModule modules/extra/mod_php3.o
+   If you do not wish to use this new configuration tool, the old
+   install procedure (src/Configure) will work fine.
+
+   If you are using the old Apache ./Configure script, you will have to 
+   edit the Apache src/Configuration file manually.  If you do not have 
+   this file, copy Configuration.tmpl to Configuration.
+
+   For Apache 1.3b1 - 1.3b5 add:
+
+      AddModule modules/php3/libphp3.a
 
    For Apache 1.2.x add:
 
       Module php3_module mod_php3.o
 
-   For Apache 1.2.x you will also have to look in the mod_php3.module file,
+   For Apache 1.2.x you will also have to look in the libphp3.module file,
    which was copied to the src directory. The EXTRA_LIBS line in the Apache
    Configuration file needs to be set to use the same libs as specified on
-   the LIBS line in mod_php3.module. You also need to make sure to add
+   the LIBS line in libphp3.module. You also need to make sure to add
    "-L." to the beginning of the EXTRA_LIBS line.
 
    So, as an example, your EXTRA_LIBS line might look like:
@@ -74,9 +91,9 @@ Installing PHP3 can be done in four simple steps:
 	EXTRA_LIBS=-L. -lphp3 -gdbm -ldb -L/usr/local/mysql/lib -lmysqlclient
 
    NOTE: You should not enclose the EXTRA_LIBS line in double-quotes, as it
-   is in the mod_php3.module file.
+   is in the libphp3.module file.
 
-   Also, look at the RULE_WANTHSREGEX setting in the mod_php3.module file 
+   Also, look at the RULE_WANTHSREGEX setting in the libphp3.module file 
    and set the WANTHSREGEX directive accordingly in your Configuration file.
    This last step applies to versions of Apache prior to 1.3b3.
 

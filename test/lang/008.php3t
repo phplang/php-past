@@ -3,7 +3,7 @@ Testing recursive function                                    ...
 --POST--
 --GET--
 --FILE--
-<?  Function Test()
+<?php  Function Test()
 	{
 		static $a=1;
 

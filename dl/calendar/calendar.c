@@ -39,7 +39,7 @@ DLEXPORT php3_module_entry *get_module(void) { return &calendar_module_entry; }
 
 DLEXPORT void cal_jdtogreg(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *julday;
+	pval *julday;
 	int year, month, day;
 	char date[10];
 
@@ -48,8 +48,8 @@ DLEXPORT void cal_jdtogreg(INTERNAL_FUNCTION_PARAMETERS)
 		SdnToGregorian(julday->value.lval, &year, &month, &day);
 		sprintf(date, "%i/%i/%i", month, day, year);
 
-		return_value->value.strval = estrdup(date);
-		return_value->strlen = 10;
+		return_value->value.str.val = estrdup(date);
+		return_value->value.str.len = strlen(date);
 		return_value->type = IS_STRING;
 	} else {
 		WRONG_PARAM_COUNT;
@@ -60,7 +60,7 @@ DLEXPORT void cal_jdtogreg(INTERNAL_FUNCTION_PARAMETERS)
 
 DLEXPORT void cal_gregtojd(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *year, *month, *day;
+	pval *year, *month, *day;
 	int jdate;
 
 	if (getParameters(ht, 3, &month, &day, &year) == SUCCESS) {
@@ -80,7 +80,7 @@ DLEXPORT void cal_gregtojd(INTERNAL_FUNCTION_PARAMETERS)
 
 DLEXPORT void cal_jdtojul(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *julday;
+	pval *julday;
 	int year, month, day;
 	char date[10];
 
@@ -89,8 +89,8 @@ DLEXPORT void cal_jdtojul(INTERNAL_FUNCTION_PARAMETERS)
 		SdnToJulian(julday->value.lval, &year, &month, &day);
 		sprintf(date, "%i/%i/%i", month, day, year);
 
-		return_value->value.strval = estrdup(date);
-		return_value->strlen = 10;
+		return_value->value.str.val = estrdup(date);
+		return_value->value.str.len = strlen(date);
 		return_value->type = IS_STRING;
 	} else {
 		WRONG_PARAM_COUNT;
@@ -101,7 +101,7 @@ DLEXPORT void cal_jdtojul(INTERNAL_FUNCTION_PARAMETERS)
 
 DLEXPORT void cal_jultojd(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *year, *month, *day;
+	pval *year, *month, *day;
 	int jdate;
 
 	if (getParameters(ht, 3, &month, &day, &year) == SUCCESS) {
@@ -121,7 +121,7 @@ DLEXPORT void cal_jultojd(INTERNAL_FUNCTION_PARAMETERS)
 
 DLEXPORT void cal_jdtojewish(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *julday;
+	pval *julday;
 	int year, month, day;
 	char date[10];
 
@@ -130,8 +130,8 @@ DLEXPORT void cal_jdtojewish(INTERNAL_FUNCTION_PARAMETERS)
 		SdnToJewish(julday->value.lval, &year, &month, &day);
 		sprintf(date, "%i/%i/%i", month, day, year);
 
-		return_value->value.strval = estrdup(date);
-		return_value->strlen = 10;
+		return_value->value.str.val = estrdup(date);
+		return_value->value.str.len = strlen(date);
 		return_value->type = IS_STRING;
 	} else {
 		WRONG_PARAM_COUNT;
@@ -142,7 +142,7 @@ DLEXPORT void cal_jdtojewish(INTERNAL_FUNCTION_PARAMETERS)
 
 DLEXPORT void cal_jewishtojd(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *year, *month, *day;
+	pval *year, *month, *day;
 	int jdate;
 
 	if (getParameters(ht, 3, &month, &day, &year) == SUCCESS) {
@@ -162,7 +162,7 @@ DLEXPORT void cal_jewishtojd(INTERNAL_FUNCTION_PARAMETERS)
 
 DLEXPORT void cal_jdtofrench(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *julday;
+	pval *julday;
 	int year, month, day;
 	char date[10];
 
@@ -171,8 +171,8 @@ DLEXPORT void cal_jdtofrench(INTERNAL_FUNCTION_PARAMETERS)
 		SdnToFrench(julday->value.lval, &year, &month, &day);
 		sprintf(date, "%i/%i/%i", month, day, year);
 
-		return_value->value.strval = estrdup(date);
-		return_value->strlen = 10;
+		return_value->value.str.val = estrdup(date);
+		return_value->value.str.len = strlen(date);
 		return_value->type = IS_STRING;
 	} else {
 		WRONG_PARAM_COUNT;
@@ -183,7 +183,7 @@ DLEXPORT void cal_jdtofrench(INTERNAL_FUNCTION_PARAMETERS)
 
 DLEXPORT void cal_frenchtojd(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *year, *month, *day;
+	pval *year, *month, *day;
 	int jdate;
 
 	if (getParameters(ht, 3, &month, &day, &year) == SUCCESS) {
@@ -203,7 +203,7 @@ DLEXPORT void cal_frenchtojd(INTERNAL_FUNCTION_PARAMETERS)
 
 DLEXPORT void cal_jddayofweek(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *julday, *mode;
+	pval *julday, *mode;
 	int day;
 	char *daynamel, *daynames;
 
@@ -221,13 +221,13 @@ DLEXPORT void cal_jddayofweek(INTERNAL_FUNCTION_PARAMETERS)
 				return_value->type = IS_LONG;
 				break;
 			case 1L:
-				return_value->value.strval = estrdup(daynamel);
-				return_value->strlen = strlen(daynamel);
+				return_value->value.str.val = estrdup(daynamel);
+				return_value->value.str.len = strlen(daynamel);
 				return_value->type = IS_STRING;
 				break;
 			case 2L:
-				return_value->value.strval = estrdup(daynames);
-				return_value->strlen = strlen(daynames);
+				return_value->value.str.val = estrdup(daynames);
+				return_value->value.str.len = strlen(daynames);
 				return_value->type = IS_STRING;
 				break;
 			default:
@@ -244,7 +244,7 @@ DLEXPORT void cal_jddayofweek(INTERNAL_FUNCTION_PARAMETERS)
 
 DLEXPORT void cal_monthname(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *julday, *mode;
+	pval *julday, *mode;
 	char *monthname = NULL;
 	int month, day, year;
 
@@ -281,8 +281,8 @@ DLEXPORT void cal_monthname(INTERNAL_FUNCTION_PARAMETERS)
 				/* FIXME - need to set monthname to something here ?? */
 				break;
 		}
-		return_value->value.strval = estrdup(monthname);
-		return_value->strlen = strlen(monthname);
+		return_value->value.str.val = estrdup(monthname);
+		return_value->value.str.len = strlen(monthname);
 		return_value->type = IS_STRING;
 		return;
 	} else {

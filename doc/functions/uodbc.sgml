@@ -1,7 +1,7 @@
 
  <reference id="ref.odbc">
   <title>ODBC Functions</title>
-
+  <titleabbrev>ODBC</titleabbrev>
 
   <refentry id="function.odbc-autocommit">
    <refnamediv>
@@ -16,14 +16,116 @@
      <paramdef>int <parameter>OnOff</parameter></paramdef>
     </funcsynopsis>
     <para>
-     Returns TRUE on success, FALSE on failure.
+     Returns <literal>true</literal> on success,
+     <literal>false</literal> on failure.
     <para>
-     By default, autocommit is on for a connection.<simpara>
-     See also <link linkend="function.odbc-commit">odbc_commit</link>,
-     <link linkend="function.odbc-rollback">odbc_rollback</link>.
+     By default, autocommit is on for a connection.
+    <simpara>
+     See also
+     <function>odbc_commit</function> and
+     <function>odbc_rollback</function>.
    </refsect1>
   </refentry>
 
+  <refentry id="function.odbc-binmode">
+   <refnamediv>
+    <refname>odbc_binmode</refname>
+   <refpurpose>handling of binary column data</refpurpose>
+  </refnamediv>
+  <refsect1>
+   <title>Description</title>
+   <funcsynopsis>
+    <funcdef>int <function>odbc_binmode</function></funcdef>
+    <paramdef>int <parameter>result_id</parameter></paramdef>
+     <paramdef>int <parameter>mode</parameter></paramdef>
+    </funcsynopsis>
+    <para>(ODBC SQL types affected: BINARY, VARBINARY, LONGVARBINARY)
+    </para>
+    <itemizedlist>
+      <listitem><simpara>
+      0: Passthru BINARY data
+      </simpara></listitem> 
+      <listitem><simpara>
+      1: Return as is
+      </simpara></listitem>
+      <listitem><simpara>
+      2: Return and convert to char
+      </simpara></listitem>
+    </itemizedlist>
+    <para>
+    When binary SQL data is converted to character C data, each byte
+    (8 bits) of source data is represented as two ASCII characters.
+    These characters are the ASCII character representation of the
+    number in its hexadecimal form. For example, a binary 00000001
+    is converted to "01" and a binary 11111111 is converted to "FF".
+
+     <table>
+      <title>LONGVARBINARY handling</title>
+      <tgroup cols="3">
+       <thead>
+	<row>
+	 <entry>binmode</entry>
+	 <entry>longreadlen</entry>
+	 <entry>result</entry>
+	</row>
+       </thead>
+       <tbody>
+	<row>
+	 <entry>0</entry>
+	 <entry>0</entry>
+	 <entry>passthru</entry>
+	</row>
+	<row>
+	 <entry>1</entry>
+	 <entry>0</entry>
+	 <entry>passthru</entry>
+	</row>
+	<row>
+	 <entry>2</entry>
+	 <entry>0</entry>
+	 <entry>passthru</entry>
+	</row>
+	<row>
+	 <entry>0</entry>
+	 <entry>0</entry>
+	 <entry>passthru</entry>
+	</row>
+	<row>
+	 <entry>0</entry>
+	 <entry>>0</entry>
+	 <entry>passthru</entry>
+	</row>
+	<row>
+	 <entry>1</entry>
+	 <entry>>0</entry>
+	 <entry>return as is</entry>
+	</row>
+	<row>
+	 <entry>2</entry>
+	 <entry>>0</entry>
+	 <entry>return as char</entry>
+	</row>
+       </tbody>
+      </tgroup>
+     </table>
+
+    <para>
+     * if odbc_fetch_into is used, passthru means that an empty string
+     * is returned for these columns.
+
+    <para>
+     If result_id is 0, the settings apply as default for new results.
+
+    <note><simpara>
+      Default for both longreadlen and binmode is 0.
+      This means that columns of type binary and/or LONG get
+      passedthru.
+      Handling of binary Long columns is also affected by 
+      <function>odbc_longreadlen</function>
+    </simpara>
+    </note>
+   </refsect1>
+  </refentry>
 
   <refentry id="function.odbc-close">
    <refnamediv>
@@ -38,8 +140,9 @@
     </funcsynopsis>
 
     <para>
-     odbc_close will close down the connection to the database server
-     associated with the given connection identifier.
+     <function>odbc_close</function> will close down the connection to
+     the database server associated with the given connection
+     identifier.
 
      <note><simpara>
        This function will fail if there are open
@@ -63,7 +166,8 @@
     </funcsynopsis>
 
     <para>
-     odbc_close_all will close down all connections to database server(s).
+     <function>odbc_close_all</function> will close down all
+     connections to database server(s).
 
      <note><simpara>
        This function will fail if there are open
@@ -85,9 +189,10 @@
      <funcdef>int <function>odbc_commit</function></funcdef>
      <paramdef>int <parameter>connection_id</parameter></paramdef>
     </funcsynopsis>
-<para>Returns:   TRUE on success, FALSE on failure.
+<para>Returns:   <literal>true</literal> on success, <literal>false</literal> on failure.
  
- All pending transactions on connection_id are committed.
+     All pending transactions on <parameter>connection_id</parameter>
+     are committed.
    </refsect1>
   </refentry>
 
@@ -105,16 +210,12 @@
      <paramdef>string <parameter>user</parameter></paramdef>
      <paramdef>string <parameter>password</parameter></paramdef>
     </funcsynopsis>
-<para>Returns:   Returns an ODBC connection id or 0 (false) on error.
- 
-
-  The connection id returned by this functions is needed by other
-  ODBC functions. You can have multiple connections open at once.
-  For persistent connections see
-  <!-- XXX FIXME make a link here when odbc_pconnect() gets
-       documented -->
-  <!-- link linkend="function.odbc-pconnect">odbc_pconnect</link -->
-  <function>odbc_pconnect()</function>.
+    <para>
+     Returns an ODBC connection id or 0 (<literal>false</literal>) on error.
+    <para>
+     The connection id returned by this functions is needed by other
+     ODBC functions. You can have multiple connections open at once.
+     For persistent connections see <function>odbc_pconnect</function>.
    </refsect1>
   </refentry>
 
@@ -137,7 +238,7 @@
   <refentry id="function.odbc-do">
    <refnamediv>
     <refname>odbc_do</refname>
-    <refpurpose>synonym for <link linkend="function.odbc-exec">odbc_exec</link></refpurpose>
+    <refpurpose>synonym for <function>odbc_exec</function></refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
@@ -164,21 +265,26 @@
      <paramdef>int <parameter>connection_id</parameter></paramdef>
      <paramdef>string <parameter>query_string</parameter></paramdef>
     </funcsynopsis>
-<para>Returns:   Returns 0 (false) on error. Returns an ODBC result
-  identifier if the SQL command was executed successfully.
- odbc_exec will send an SQL statement to the database server specified by
- the connection_id. The connection_id must be a valid identifier that
- was returned by <link linkend="function.odbc-connect">odbc_connect</link> or
- <link linkend="function.odbc-pconnect">odbc_pconnect</link>.
-<simpara> 
-See also: <link linkend="function.odbc-prepare">odbc_prepare</link> and <link linkend="function.odbc-execute">odbc_execute</link> for multiple execution of SQL statements.
+    <para>
+     Returns <literal>false</literal> on error.  Returns an ODBC
+     result identifier if the SQL command was executed successfully.
+    <para>
+     <function>odbc_exec</function> will send an SQL statement to the
+     database server specified by
+     <parameter>connection_id</parameter>.  This parameter must be a
+     valid identifier returned by <function>odbc_connect</function> or
+     <function>odbc_pconnect</function>.
+    <simpara> 
+     See also: <function>odbc_prepare</function> and
+     <function>odbc_execute</function> for multiple execution of SQL
+     statements.
    </refsect1>
   </refentry>
 
 <refentry id="function.odbc-execute">
  <refnamediv>
   <refname>odbc_execute</refname>
-   <refpurpose></refpurpose>
+   <refpurpose>execute a prepated statement</refpurpose>
   </refnamediv>
   <refsect1>
    <title>Description</title>
@@ -190,8 +296,11 @@ See also: <link linkend="function.odbc-prepare">odbc_prepare</link> and <link li
    </funcsynopsis>
    <para>
      Executes a statement prepared with
-     <link linkend="function.odbc-prepare">odbc_prepare()</link>. Returns
-     TRUE on successful execution, FALSE otherwise.
+     <function>odbc_prepare</function>.  Returns
+     <literal>true</literal> on successful execution,
+     <literal>false</literal> otherwise. The array 
+     <parameter>arameters_array</parameter> only needs to
+     be given if you really have parameters in your statement.
   </refsect1>
 </refentry>
 
@@ -210,10 +319,12 @@ See also: <link linkend="function.odbc-prepare">odbc_prepare</link> and <link li
      <paramdef>array <parameter>result_array</parameter></paramdef>
     </funcsynopsis>
     <para>
-     Returns the number of columns in the result; FALSE on error.
-     result_array must be passed by reference, but it can be of any
-     type since it will be converted to type array. The array will
-     contain the column values starting at array index 0.
+     Returns the number of columns in the result;
+     <literal>false</literal> on error.
+     <parameter>result_array</parameter> must be passed by reference,
+     but it can be of any type since it will be converted to type
+     array. The array will contain the column values starting at array
+     index 0.
    </refsect1>
   </refentry>
 
@@ -230,22 +341,33 @@ See also: <link linkend="function.odbc-prepare">odbc_prepare</link> and <link li
      <paramdef>int <parameter>result_id</parameter></paramdef>
      <paramdef>int <parameter><optional>row_number</optional></parameter></paramdef>
     </funcsynopsis>
-<para>Returns:   If odbc_Fetch_Row was succesful (there was a row), 
-  1 is returned, if there are no more rows, odbc_Fetch_Row will 
-  return 0.
-  The return value of odbc_FetchRow can be used as the
-  condition of a while loop.
+    <para>
+     If <function>odbc_fetch_row</function> was succesful (there was a
+     row), <literal>true</literal> is returned.  If there are no more
+     rows, <literal>false</literal> is returned.
  
-  odbc_Fetch_Row fetches a row of the data that was returned by 
-  <link linkend="function.odbc-exec">odbc_do</link> / <link linkend="function.odbc-exec">odbc_exec</link>.
-  After odbc_Fetch_Row is called, the fields of that row can be accessed
-  with odbc_Result. If no rownumber is given, odbc_Fetch_Row will try to
-  fetch the next row in the result set. Calls to
-  odbc_Fetch_Row() with and without rownumber can be mixed. To step
-  through the result more than once, you can call odbc_Fetch_Row() with
-  rownumber 1 and then continue with odbc_Fetch_Row() without rownumber
-  to review the result. If a driver doesn't support fetching rows by number,
-  the rownumber parameter is ignored.
+    <para>
+     <function>odbc_fetch_row</function> fetches a row of the data
+     that was returned by <function>odbc_do</function> /
+     <function>odbc_exec</function>.  After
+     <function>odbc_fetch_row</function> is called, the fields of that
+     row can be accessed with <function>odbc_result</function>.
+
+    <para>
+     If <parameter>row_number</parameter> is not specified,
+     <function>odbc_fetch_row</function> will try to fetch the next
+     row in the result set. Calls to
+     <function>odbc_fetch_row</function> with and without
+     <parameter>row_number</parameter> can be mixed. 
+
+    <para>
+     To step through the result more than once, you can call
+     <function>odbc_fetch_row</function> with
+     <parameter>row_number</parameter> 1, and then continue doing
+     <function>odbc_fetch_row</function> without
+     <parameter>row_number</parameter> to review the result.  If a
+     driver doesn't support fetching rows by number, the
+     <parameter>row_number</parameter> parameter is ignored.
 
    </refsect1>
   </refentry>
@@ -263,11 +385,12 @@ See also: <link linkend="function.odbc-prepare">odbc_prepare</link> and <link li
      <paramdef>int <parameter>result_id</parameter></paramdef>
      <paramdef>int <parameter>field_number</parameter></paramdef>
     </funcsynopsis>
-<para>Returns: odbc_Field_Name will return the name of the field 
-  occupying the given column number in the given ODBC result identifier.
-  Field numbering starts at 1. 
-  0 (false) is returned on error.
- 
+    <para>
+     <function>odbc_field_name</function> will return the name of the
+     field occupying the given column number in the given ODBC result
+     identifier.  Field numbering starts at 1.
+     <literal>false</literal> is returned on error.
+     
    </refsect1>
   </refentry>
 
@@ -275,7 +398,7 @@ See also: <link linkend="function.odbc-prepare">odbc_prepare</link> and <link li
   <refentry id="function.odbc-field-num">
    <refnamediv>
     <refname>odbc_field_num</refname>
-    <refpurpose></refpurpose>
+    <refpurpose>return column number</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
@@ -284,10 +407,11 @@ See also: <link linkend="function.odbc-prepare">odbc_prepare</link> and <link li
      <paramdef>int <parameter>result_id</parameter></paramdef>
      <paramdef>string <parameter>field_name</parameter></paramdef>
     </funcsynopsis>
-   <para>Returns: Odbc_Field_Num will return the number of the column
-   slot that corresponds to the named field in the given ODBC result
-   identifier.  Field numbering starts at 1. 0 (false) is returned
-    on error.
+   <para>
+     <function>odbc_field_num</function> will return the number of the
+     column slot that corresponds to the named field in the given ODBC
+     result identifier.  Field numbering starts at 1.
+     <literal>false</literal> is returned on error.
  
    </refsect1>
   </refentry>
@@ -305,9 +429,10 @@ See also: <link linkend="function.odbc-prepare">odbc_prepare</link> and <link li
      <paramdef>int <parameter>result_id</parameter></paramdef>
      <paramdef>mixed <parameter>field</parameter></paramdef>
     </funcsynopsis>
-<para>Returns: Odbc_FieldType will return the SQL type of the field 
-  referecend by name or number in the given ODBC result identifier.
-  Note: Field numbering starts from 1.
+    <para>
+     <function>odbc_field_type</function> will return the SQL type of
+     the field referecend by name or number in the given ODBC result
+     identifier.  Field numbering runs from 1.
  
    </refsect1>
   </refentry>
@@ -324,17 +449,51 @@ See also: <link linkend="function.odbc-prepare">odbc_prepare</link> and <link li
      <funcdef>int <function>odbc_free_result</function></funcdef>
      <paramdef>int <parameter>result_id</parameter></paramdef>
     </funcsynopsis>
-<para>Returns:   True (1).
-   odbc_free_result only needs to be called if you are worried about using
-   too much memory while your script is running.  All result memory will
-   automatically be freed when the script is finished.  But, if you are
-   sure you are not going to need the result data anymore in a script,
-   you may call odbc_free_result with the result identifier as an argument
-   and the associated result memory will be freed. Note: If autocommit
-   has been turned off, all pending transactions are rolled back if you
-   call odbc_free_result prior to commiting. 
+    <para>
+     Always returns <literal>true</literal>.
+    <para>
+     <function>odbc_free_result</function> only needs to be called if
+     you are worried about using too much memory while your script is
+     running.  All result memory will automatically be freed when the
+     script is finished.  But, if you are sure you are not going to
+     need the result data anymore in a script, you may call
+     <function>odbc_free_result</function>, and the memory associated
+     with <parameter>result_id</parameter> will be freed.
+    <para>
+     <note><simpara>
+       If auto-commit is disabled (see
+       <function>odbc_autocommit</function>) and you call
+       <function>odbc_free_result</function> before commiting, all
+       pending transactions are rolled back.
+      </simpara></note>
    </refsect1>
   </refentry>
+
+
+  <refentry id="function.odbc-longreadlen">
+   <refnamediv>
+    <refname>odbc_longreadlen</refname>
+   <refpurpose>handling of LONG columns</refpurpose>
+  </refnamediv>
+  <refsect1>
+   <title>Description</title>
+   <funcsynopsis>
+    <funcdef>int <function>odbc_longreadlen</function></funcdef>
+    <paramdef>int <parameter>result_id</parameter></paramdef>
+     <paramdef>int <parameter>length</parameter></paramdef>
+    </funcsynopsis>
+    <para>(ODBC SQL types affected: LONG, LONGVARBINARY)
+    The number of bytes returned to PHP is controled by the
+    parameter length. If it is set to 0, Long column data is passed
+    thru to the client.</para>
+    <note><simpara>
+      Handling of LONGVARBINARY columns is also affected by 
+      <function>odbc_binmode</function>
+    </simpara>
+    </note>
+   </refsect1>
+  </refentry>
+
 
   <refentry id="function.odbc-num-fields">
    <refnamediv>
@@ -347,15 +506,15 @@ See also: <link linkend="function.odbc-prepare">odbc_prepare</link> and <link li
      <funcdef>int <function>odbc_num_fields</function></funcdef>
      <paramdef>int <parameter>result_id</parameter></paramdef>
     </funcsynopsis>
-    <para>Returns: Odbc_Num_Fields will return the number of fields 
-    (columns) in an ODBC result.
-    This function will return -1 on error.
-    The argument is a valid result identifier returned by 
-    <link linkend="function.odbc-exec">odbc_exec</link>().
+    <para>
+     <function>odbc_num_fields</function> will return the number of
+     fields (columns) in an ODBC result.  This function will return -1
+     on error.  The argument is a valid result identifier returned by
+     <function>odbc_exec</function>.
    </refsect1>
   </refentry>
 
-<refentry id="function.odbc-pconnect">
+  <refentry id="function.odbc-pconnect">
    <refnamediv>
     <refname>odbc_pconnect</refname>
     <refpurpose>Open a persistent database connection</refpurpose>
@@ -368,14 +527,25 @@ See also: <link linkend="function.odbc-prepare">odbc_prepare</link> and <link li
      <paramdef>string <parameter>user</parameter></paramdef>
      <paramdef>string <parameter>password</parameter></paramdef>
     </funcsynopsis>
-    <para>Returns: Returns an ODBC connection id or 0 (false) on error.
-    This function is much like odbc_connect except that the connection
-    isn't closed when the script has finished. Future requests for
-    a connection with the same dsn, user, password combination (via
-    odbc_connect() and odbc_pconnect()) can reuse the persistent connection.
-    Note: Persistent connections don't work if PHP is used as a CGI.
-    For more information on persistent connections refer to the PHP3 FAQ.
-  </refsect1>
+    <para>
+     Returns an ODBC connection id or 0 (<literal>false</literal>) on error.  This
+     function is much like <function>odbc_connect</function>, except
+     that the connection is not really closed when the script has
+     finished.  Future requests for a connection with the same
+     <parameter>dsn</parameter>, <parameter>user</parameter>,
+     <parameter>password</parameter> combination (via
+     <function>odbc_connect</function> and
+     <function>odbc_pconnect</function>) can reuse the persistent
+     connection.
+    <para>
+     <note><simpara>
+       Persistent connections have no effect if PHP is used as a CGI
+       program.
+      </simpara></note>
+    <para>
+     For more information on persistent connections, refer to the PHP3
+     FAQ.
+   </refsect1>
 </refentry>
 
 <refentry id="function.odbc-prepare">
@@ -390,10 +560,12 @@ See also: <link linkend="function.odbc-prepare">odbc_prepare</link> and <link li
     <paramdef>int <parameter>connection_id</parameter></paramdef>
      <paramdef>string <parameter>query_string</parameter></paramdef>
     </funcsynopsis>
-   <para>Returns:   Returns 0 (false) on error. Returns an ODBC result
-   identifier if the SQL command was prepared successfully. The result
-   identifier can be used later to execute the statement with 
-   <link linkend="function.odbc-execute">odbc_execute</link>().
+    <para>
+     Returns <literal>false</literal> on error.
+    <para>
+     Returns an ODBC result identifier if the SQL command was prepared
+     successfully.  The result identifier can be used later to execute
+     the statement with <function>odbc_execute</function>.
   </refsect1>
 </refentry>
 
@@ -408,20 +580,24 @@ See also: <link linkend="function.odbc-prepare">odbc_prepare</link> and <link li
      <funcdef>int <function>odbc_num_rows</function></funcdef>
      <paramdef>int <parameter>result_id</parameter></paramdef>
     </funcsynopsis>
-   <para>Returns: odbc_num_rows will return the number of rows 
-    in an ODBC result.
-    This function will return -1 on error. 
-    For INSERT, UPDATE and DELETE statements odbc_num_rows() 
-    returns the number of rows affected. For a SELECT clause this can be 
-    the number of rows available. Note: Using odbc_num_rows() after
-    a SELECT is not supported by most ODBC drivers and thus returns -1. 
+    <para>
+     <function>odbc_num_rows</function> will return the number of rows
+     in an ODBC result.  This function will return -1 on error.  For
+     INSERT, UPDATE and DELETE statements
+     <function>odbc_num_rows</function> returns the number of rows
+     affected.  For a SELECT clause this <literal>can</literal> be 
+     the number of rows available.
+    <para>
+     Note: Using <function>odbc_num_rows</function> to determine the
+     number of rows available after a SELECT will return -1 with many
+     drivers.
    </refsect1>
   </refentry>
 
   <refentry id="function.odbc-result">
    <refnamediv>
     <refname>odbc_result</refname>
-    <refpurpose></refpurpose>
+    <refpurpose>get result data</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
@@ -430,13 +606,22 @@ See also: <link linkend="function.odbc-prepare">odbc_prepare</link> and <link li
      <paramdef>int <parameter>result_id</parameter></paramdef>
      <paramdef>mixed <parameter>field</parameter></paramdef>
     </funcsynopsis>
-   <para>Returns:   Contents of the field.
- 
-  Field indices start from 1. If the requested field contains binary data or
-  is longer than 4096 bytes, the contents is not returned, instead it is sent
-  directly to the client. Hint: If you need to have binary data returned,
-  use the SQL function HEX() to retrieve the field in hexadecimal notation.
-  E.g. "SELECT HEX(binary_col) FROM mytable"
+    <para>
+     Returns the contents of the field.
+    <para>
+     Field indices start from 1. Regarding the way binary or
+     long column data is returned refer to <function>odbc_binmode
+     </function> and <function>odbc_longreadlen</function>.
+<!--
+
+If the requested field contains
+     binary data or is of datatype LONG, 
+longer than 4096 bytes, the contents is not
+     returned, instead it is sent directly to the client. Hint: If you
+     need to have binary data returned, use the SQL function HEX() to
+     retrieve the field in hexadecimal notation.  E.g. "SELECT
+     HEX(binary_col) FROM mytable"
+-->
    </refsect1>
   </refentry>
 
@@ -453,15 +638,14 @@ See also: <link linkend="function.odbc-prepare">odbc_prepare</link> and <link li
      <paramdef>string <parameter><optional>format</optional></parameter></paramdef>
     </funcsynopsis>
     <para>
-     Returns the number of rows in the result or FALSE on error.
+     Returns the number of rows in the result or <literal>false</literal> on error.
 
     <para>
-     odbc_result_all() will print all rows from a result identifier
-     produced by <link
-     linkend="function.odbc-exec">odbc_exec</link>(). The result is
-     printed in HTML table format.  With the optional string argument
-     <parameter>format</parameter> additional overall table additional
-     overall table formatting can be done.
+     <function>odbc_result_all</function> will print all rows from a
+     result identifier produced by <function>odbc_exec</function>. The
+     result is printed in HTML table format.  With the optional string
+     argument <parameter>format</parameter>, additional overall table
+     formatting can be done.
    </refsect1>
   </refentry>
 
@@ -479,9 +663,9 @@ See also: <link linkend="function.odbc-prepare">odbc_prepare</link> and <link li
     </funcsynopsis>
     <para>
      Rolls back all pending statements on
-     <parameter>connection_id</parameter>.  Returns TRUE on success,
-     FALSE
- on failure.
+     <parameter>connection_id</parameter>.  Returns
+     <literal>true</literal> on success, <literal>false</literal> on
+     failure.
    </refsect1>
   </refentry>
 

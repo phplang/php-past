@@ -4,7 +4,7 @@
    PHP's syntax is borrowed primarily from C.  Java and Perl have also
    influenced the syntax.
 
-  <sect1>
+  <sect1 id="syntax-phpmode">
    <title>Escaping from HTML</title>
    <para>
     There are three ways of escaping from HTML and entering "PHP code
@@ -12,13 +12,13 @@
     <example>
      <title>Ways of escaping from HTML</title>
      <programlisting>
-1.  &lt;? echo("this is the simplest, an SGML processing instruction\n"); ?&gt;
+1.  &lt;? echo("this is the simplest, an SGML processing instruction\n"); ?>
 
 
-2.  &lt;?php echo("if you want to serve XML documents, do like this\n"); ?&gt;
+2.  &lt;?php echo("if you want to serve XML documents, do like this\n"); ?>
 
 
-3.  &lt;script language="php"&gt;
+3.  &lt;script language="php">
 
       echo("some editors (like FrontPage) don't like processing instructions");
 
@@ -26,27 +26,211 @@
 </programlisting>
     </example>
 
-  <sect1>
+  <sect1 id="syntax-instrsep">
    <title>Instruction separation</title>
    <simpara></simpara>
 
-  <sect1>
+  <sect1 id="variable-types">
    <title>Variable types</title>
    <simpara></simpara>
 
-  <sect1>
+  <sect1 id="variable-init">
    <title>Variable initialization</title>
-   <simpara></simpara>
+   <simpara>
+    To initialize a variable in PHP, you simply assign a value to
+    it. For most types, this is straightforward; arrays and objects,
+    however, can use slightly different mechanisms.
 
-  <sect1>
+   <sect2 id="variable-init.array">
+    <title>Initializing Arrays</title>
+    <simpara>
+     An array may be initialized in one of two ways: by the sequential
+     assigning of values, and by using the <function>array</function>
+     construct (which is documented in the <link linkend="ref.array">Array
+     functions</link> section).
+     
+    <para>
+     To sequentially add values to an array, you simply assign to the
+     array variable using an empty subscript. The value will be added
+     as the last element of the array.
+     <informalexample>
+      <programlisting>
+$names[] = "Jill";   // $names[0] = "Jill"
+$names[] = "Jack";   // $names[1] = "Jack"
+      </programlisting>
+     </informalexample>
+   </sect2>
+
+   <sect2 id="variable-init.object">
+    <title>Initializing objects</title>
+    <para>
+     To initialize an object, you use the new statement to instantiate
+     the object to a variable.
+     <informalexample>
+      <programlisting>
+class foo {
+   function do_foo() { 
+      echo "Doing foo."; 
+   }
+}
+$bar = new foo;
+$bar-&gt;do_foo();
+      </programlisting>
+     </informalexample>
+   </sect2>
+
+  </sect1>
+
+  <sect1 id="variable-scope">
    <title>Variable Scope</title>
-   <simpara></simpara>
+   <simpara>
+The scope of a variable is the context within which it is defined.  For the
+most part all PHP variables only have a single scope.  However, within
+user-defined functions a local function scope is introduced.  Any variable
+used inside a function is by default limited to the local function scope.
+For example:
+<informalexample><programlisting>
+    $a=1; /* global scope */
+    Function Test() {
+        echo $a; /* reference to local scope variable */
+    }
+    Test();
+</programlisting></informalexample>
 
-  <sect1>
+   <simpara>
+This script will not produce any output because the echo
+statement refers to a local version of the $a variable, and it has
+not been assigned a value within this scope.  You may notice that this is
+a little bit different from the C language in that global variables in C
+are automatically available to functions unless specifically overridden by a local
+definition.  This can cause some problems in that people may inadvertently
+change a global variable.  In PHP global variables must be declared global
+inside a function if they are going to be used in that function.  An example:
+<informalexample><programlisting>
+    $a=1;
+    $b=2;
+    Function Sum() {
+        global $a,$b;
+
+        $b = $a + $b;
+    } 
+    Sum();
+    echo $b;
+</programlisting></informalexample>
+
+   <simpara>
+The above script will output &quot;3&quot;.  By declaring $a and $b global within
+the function, all references to either variable will refer to the global version.
+There is no limit to the number of global variables that can be manipulated by a
+function.  
+<simpara>
+A second way to access variables from the global scope is to use the special PHP-defined
+$GLOBALS array.  The previous example can be rewritten as:
+<informalexample><programlisting>
+    $a=1;
+    $b=2;
+    Function Sum() {
+        $GLOBALS["b"] = $GLOBALS["a"] + $GLOBALS["b"];
+    } 
+    Sum();
+    echo $b;
+</programlisting></informalexample>
+
+   <simpara>
+The $GLOBALS array is an associative array with the name of the global variable being the
+key and the contents of that variable being the value of the array element.
+<simpara>
+Another important feature of variable scoping is the <emphasis>static</emphasis> variable.
+A static variable exists only in a local function scope, but it does not lose
+its value when program execution leaves this scope.  Consider the following
+example:
+<informalexample><programlisting>
+    Function Test() {
+        $a=0;
+        echo $a;
+        $a++;
+    }
+</programlisting></informalexample>
+
+   <simpara>
+This function is quite useless since every time it is called it sets $a to 0 and
+prints &quot;0&quot;.  The $a++ which increments the variable serves no purpose
+since as soon as the function exits the $a variable disappears.  To make a useful
+counting function which will not lose track of the current count, the $a variable
+is declared static:
+<informalexample><programlisting>
+    Function Test() {
+        static $a=0;
+        echo $a;
+        $a++;
+    }
+</programlisting></informalexample>
+
+   <simpara>
+Now, every time the Test() function is called it will print the value of $a and
+increment it.
+<simpara>
+Static variables are also essential when functions are called recursively.
+A recursive function is one which calls itself.  Care must be taken when writing
+a recursive function because it is possible to make it recurse indefinitely.  You
+must make sure you have an adequate way of terminating the recursion.  The
+following simple function recursively counts to 10:
+<informalexample><programlisting>
+    Function Test() {
+        static $count=0;
+
+        $count++;
+        echo $count;
+        if($count <  10) {
+            Test();
+        }
+    }
+</programlisting></informalexample>
+
+  <sect1 id="variable-variable">
    <title>Variable variables</title>
-   <simpara></simpara>
+   <simpara>
+    Sometimes it is convenient to be able to have variable variable names.
+    That is, a variable name which can be set and used dynamically.
+    A normal variable is set with a statement such as:
+   <informalexample><programlisting>
+$a = "hello";
+    </programlisting></informalexample>
 
-  <sect1>
+   <simpara>
+    A variable variable takes the value of a variable and treats that as the
+    name of a variable.  In the above example, <emphasis>hello</emphasis>, can
+    be used as the name of a variable by using two dollar signs. ie.
+   <informalexample><programlisting>
+$$a = "world";
+    </programlisting></informalexample>
+
+   <simpara>
+   At this point two variables have been defined and stored in the PHP
+   symbol tree: $a with contents "hello" and $hello with contents "world".
+   Therefore, this statement:
+   <informalexample><programlisting>
+echo "$a ${$a}";
+    </programlisting></informalexample>
+
+   <simpara>
+    produces the exact same output as:
+
+   <informalexample><programlisting>
+echo "$a $hello";
+   </programlisting></informalexample>
+
+   <simpara>
+    ie. they both produce: <emphasis>hello world</emphasis>.
+
+   <simpara>
+    In order to use variable variables with arrays, you have to resolve an
+    ambiguity problem.  That is, if you write $$a[1] then the parser needs
+    to know if you meant to use $a[1] as a variable, or if you wanted $$a as the 
+    variable and then the [1] index from that variable.  The syntax for resolving
+    this ambiguity is: ${$a[1]} for the first case and ${$a}[1] for the second.
+
+  <sect1 id="variable-external">
    <title>Variables from outside PHP</title>
    <simpara></simpara>
 
@@ -56,32 +240,193 @@
 
    <sect2>
     <title>HTTP Cookies</title>
-    <simpara></simpara>
+    <simpara>
+     PHP transparently supports HTTP cookies as defined by
+     <ulink url="http://www.netscape.com/newsref/std/cookie_spec.html">Netscape's Spec</ulink>.
+     Cookies are a mechanism for storing data in the remote browser and thus tracking
+     or identifying return users.
+     You can set cookies using the <function>SetCookie</function> function.  Cookies are part of the 
+     HTTP header, so the SetCookie function must be called before any output is sent to the browser.  
+     This is the same restriction as for the <function>Header</function> function.
+     Any cookies sent to you from the client will automatically be turned into a PHP
+     variable just like GET and POST method data.
+    </simpara>
+    <simpara>
+     If you wish to assign multiple values to a single cookie, just add <emphasis>[]</emphasis>
+     to the cookie name.  For example:
+    <informalexample><programlisting>
+SetCookie("MyCookie[]","Testing", time()+3600);
+     </programlisting></informalexample>
+
+    <simpara>
+     Note that a cookie will replace a previous cookie by the same name in your browser
+     unless the path or domain is different.  So, for a shopping cart application you may
+     want to keep a counter and pass this along.  i.e.
+
+    <example>
+     <title>SetCookie Example</title>
+     <programlisting>
+$Count++;
+SetCookie("Count",$Count, time()+3600);
+SetCookie("Cart[$Count]",$item, time()+3600);
+     </programlisting>
+    </example>
 
    <sect2>
     <title>Environment variables</title>
-    <simpara></simpara>
+    <para>
+	PHP automatically makes environment variables available as normal PHP variables.
+    <informalexample><programlisting>
+echo $HOME;  /* Shows the HOME environment variable, if set. */
+    </programlisting></informalexample>
+	Since information coming in via GET, POST and Cookie mechanisms also automatically
+	create PHP variables, it is sometimes best to explicitly read a variable from the
+	environment in order to make sure that you are getting the right version.  The 
+	<function>getenv</function> function can be used for this.  You can also set an
+	environment variable with the <function>putenv</function> function. 
+    </para>
 
    <sect2>
     <title>Server configuration directives</title>
-    <simpara></simpara>
+    <simpara>
+    </simpara>
 
-  <sect1>
+  <sect1 id="typejuggling">
    <title>Type juggling</title>
-   <simpara></simpara>
+   <simpara>
+    PHP does not require (or support) explicit type definition in
+    variable declaration; a variable's type is determined by the
+    context in which that variable is used. That is to say, if you
+    assign a string value to variable <parameter>var</parameter>,
+    <parameter>var</parameter> becomes a string. If you then assign an
+    integer value to <parameter>var</parameter>, it becomes an
+    integer.
+
+   <para>
+    An example of PHP's automatic type conversion is the addition
+    operator '+'. If any of the operands is a double, then all
+    operands are evaluated as doubles, and the result will
+    be a double. Otherwise, the operands will be interpreted as
+    integers, and the result will also be an integer. Note that this
+    does NOT change the types of the operands themselves; the
+    only change is in how the operands are evaluated.
+
+    <informalexample><programlisting>
+$foo = "0";  // $foo is a string (ASCII 48)
+$foo++;      // $foo is the string "1" (ASCII 49)
+$foo += 1;   // $foo is now an integer (2)
+$foo = $foo + 1.3;  // $foo is now a double (3.3)
+$foo = 5 + "10 Little Piggies";    // $foo is a double (15)
+$foo = 5 + "10 Small Pigs";   // $foo is an integer (15)
+     </programlisting></informalexample>
+
+   <simpara>
+    If the last two examples above seem odd, see <link
+     linkend="lang-syntax.stringconv">String conversion</link>.
+
+   <simpara>
+    If you wish to force a variable to be evaluated as a certain type,
+    see the section on <link linkend="lang-syntax.typecasting">Type
+     casting</link>. If you wish to change the type of a variable, see
+    <function>settype</function>.
 
    <sect2>
-    <title>Find the variable type</title>
-    <simpara></simpara>
-
-   <sect2>
+    <title>Determining variable types</title>
+    <para>
+     Because PHP determines the types of variables and converts them
+     (generally) as needed, it is not always obvious what type a given
+     variable is at any one time.  PHP includes several functions
+     which find out what type a variable is. They are
+     <function>gettype</function>, <function>is_long</function>,
+     <function>is_double</function>, <function>is_string</function>,
+     <function>is_array</function>, and
+     <function>is_object</function>.
+     
+   <sect2 id="lang-syntax.typecasting">
     <title>Type casting</title>
-    <simpara></simpara>
+    <para>
+     Type casting in PHP works much as it does in C: the name of the
+     desired type is written in parentheses before the variable which
+     is to be cast. 
 
-  <sect1>
+     <informalexample><programlisting>
+$foo = 10;   // $foo is an integer
+$bar = (double) $foo;   // $bar is a double
+      </programlisting></informalexample>
+    
+    <para>
+     The casts allowed are:
+     <itemizedlist>
+      <listitem><simpara>(int), (integer) - cast to integer
+      <listitem><simpara>(real), (double), (float) - cast to double
+      <listitem><simpara>(string) - cast to string
+      <listitem><simpara>(array) - cast to array
+      <listitem><simpara>(object) - cast to object
+     </itemizedlist>
+
+    <para>
+     Note that tabs and spaces are allowed inside the parentheses, so
+     the following are functionally equivalent:
+
+     <informalexample><programlisting>
+$foo = (int) $bar;
+$foo = ( int ) $bar;
+     </programlisting></informalexample>
+
+
+   <sect2 id="lang-syntax.stringconv">
+    <title>String conversion</title>
+    <simpara>
+     When a string is evaluated as a numeric value, the resulting
+     value and type are determined as follows.
+
+    <simpara>
+     The string will evaluate as a double if it contains any of the
+     characters '.', 'e', or 'E'. Otherwise, it will evaluate as an
+     integer.
+     
+    <para>
+     The value is given by the initial portion of the string. If the
+     string starts with valid numeric data, this will be the value
+     used. Otherwise, the value will be 0 (zero). Valid numeric data
+     is an optional sign, followed by one or more digits (optionally
+     containing a decimal point), followed by an optional
+     exponent. The exponent is an 'e' or 'E' followed by one or more
+     digits.
+
+     <informalexample><programlisting>
+$foo = 1 + "10.5";      // $foo is a double (11.5)
+$foo = 1 + "-1.3e3";    // $foo is a double (-1299)
+$foo = 1 + "bob-1.3e3"; // $foo is a double (1)
+$foo = 1 + "bob3";      // $foo is an integer (1)
+$foo = 1 + "10 Small Pigs";     // $foo is an integer (11)
+$foo = 1 + "10 Little Piggies"; // $foo is a double (11); the string contains 'e'
+      </programlisting></informalexample>
+
+    <simpara>
+     For more information on this conversion, see the Unix manual page 
+     for strtod(3).
+
+  <sect1 id="variable-arrays">
    <title>Array manipulation</title>
-   <simpara></simpara>
-
+   <para>
+	PHP supports both scalar and associative arrays.  In fact, there is no
+	difference between the two.  You can create an array using the 
+	<function>array</function> function, or you can explicitly set each
+	array element value.
+     <informalexample><programlisting>
+$a[0] = "abc";
+$a[1] = "def";
+$b["foo"] = 13;
+     </programlisting></informalexample>
+   <para>
+	Arrays may be sorted using the <function>sort</function>, <function>ksort</function>
+	and <function>asort</function> functions depending on the type of sort you want.
+   <para>
+	You can count the number of items in an array using the <function>count</function> function.
+   <para>
+	You can traverse an array using <function>next</function> and <function>prev</function> functions.
+	Another common way to traverse an array is to use the <function>each</function>
  </chapter>
 
 <!-- Keep this comment at the end of the file

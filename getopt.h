@@ -1,5 +1,5 @@
 /* Borrowed from Apache NT Port */
-#include "parser.h"
+#include "php.h"
 
 extern char *optarg;
 extern int optind;

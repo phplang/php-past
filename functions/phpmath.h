@@ -5,18 +5,23 @@
    | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
-   | it under the terms of the GNU General Public License as published by |
-   | the Free Software Foundation; either version 2 of the License, or    |
-   | (at your option) any later version.                                  |
+   | it under the terms of one of the following licenses:                 |
+   |                                                                      |
+   |  A) the GNU General Public License as published by the Free Software |
+   |     Foundation; either version 2 of the License, or (at your option) |
+   |     any later version.                                               |
+   |                                                                      |
+   |  B) the PHP License as published by the PHP Development Team and     |
+   |     included in the distribution in the file: LICENSE                |
    |                                                                      |
    | This program is distributed in the hope that it will be useful,      |
    | but WITHOUT ANY WARRANTY; without even the implied warranty of       |
    | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the        |
    | GNU General Public License for more details.                         |
    |                                                                      |
-   | You should have received a copy of the GNU General Public License    |
-   | along with this program; if not, write to the Free Software          |
-   | Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.            |
+   | You should have received a copy of both licenses referred to here.   |
+   | If you did not, or have any questions about PHP licensing, please    |
+   | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
    | Authors: Jim Winstead (jimw@php.net)                                 |
    |          Stig Sæther Bakken <ssb@guardian.no>                        |
@@ -24,7 +29,7 @@
  */
 
 
-/* $Id: phpmath.h,v 1.7 1998/01/25 17:29:24 ssb Exp $ */
+/* $Id: phpmath.h,v 1.11 1998/04/29 13:24:25 ssb Exp $ */
 
 #ifndef _PHPMATH_H
 #define _PHPMATH_H
@@ -53,5 +58,6 @@ extern void php3_decoct(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_bindec(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_hexdec(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_octdec(INTERNAL_FUNCTION_PARAMETERS);
+extern void php3_number_format(INTERNAL_FUNCTION_PARAMETERS);
 
 #endif /* _PHPMATH_H */

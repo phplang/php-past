@@ -53,7 +53,7 @@
 #ifdef THREAD_SAFE
 #include "tls.h"
 #endif
-#include "parser.h"				/*php specific */
+#include "php.h"				/*php specific */
 #include "syslog.h"
 #include <stdio.h>
 #include <fcntl.h>

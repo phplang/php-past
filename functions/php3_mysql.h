@@ -5,25 +5,30 @@
    | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
-   | it under the terms of the GNU General Public License as published by |
-   | the Free Software Foundation; either version 2 of the License, or    |
-   | (at your option) any later version.                                  |
+   | it under the terms of one of the following licenses:                 |
+   |                                                                      |
+   |  A) the GNU General Public License as published by the Free Software |
+   |     Foundation; either version 2 of the License, or (at your option) |
+   |     any later version.                                               |
+   |                                                                      |
+   |  B) the PHP License as published by the PHP Development Team and     |
+   |     included in the distribution in the file: LICENSE                |
    |                                                                      |
    | This program is distributed in the hope that it will be useful,      |
    | but WITHOUT ANY WARRANTY; without even the implied warranty of       |
    | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the        |
    | GNU General Public License for more details.                         |
    |                                                                      |
-   | You should have received a copy of the GNU General Public License    |
-   | along with this program; if not, write to the Free Software          |
-   | Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.            |
+   | You should have received a copy of both licenses referred to here.   |
+   | If you did not, or have any questions about PHP licensing, please    |
+   | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
    | Authors: Zeev Suraski <bourbon@netvision.net.il>                     |
    +----------------------------------------------------------------------+
  */
 
 
-/* $Id: php3_mysql.h,v 1.16 1998/02/20 22:49:07 shane Exp $ */
+/* $Id: php3_mysql.h,v 1.23 1998/05/22 14:39:52 zeev Exp $ */
 
 #ifndef _PHP3_MYSQL_H
 #define _PHP3_MYSQL_H
@@ -41,8 +46,8 @@
 extern php3_module_entry mysql_module_entry;
 #define mysql_module_ptr &mysql_module_entry
 
-extern int php3_minit_mysql(INITFUNCARG);
-extern int php3_rinit_mysql(INITFUNCARG);
+extern int php3_minit_mysql(INIT_FUNC_ARGS);
+extern int php3_rinit_mysql(INIT_FUNC_ARGS);
 extern int php3_mshutdown_mysql(void);
 extern void php3_info_mysql(void);
 extern void php3_mysql_connect(INTERNAL_FUNCTION_PARAMETERS);
@@ -56,6 +61,8 @@ extern void php3_mysql_db_query(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_mysql_list_dbs(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_mysql_list_tables(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_mysql_list_fields(INTERNAL_FUNCTION_PARAMETERS);
+extern void php3_mysql_error(INTERNAL_FUNCTION_PARAMETERS);
+extern void php3_mysql_errno(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_mysql_affected_rows(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_mysql_insert_id(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_mysql_result(INTERNAL_FUNCTION_PARAMETERS);
@@ -81,7 +88,8 @@ typedef struct {
 	long max_links,max_persistent;
 	long allow_persistent;
 	int le_result,le_link,le_plink;
-	int default_port;
+	long default_port;
+	char *default_host, *default_user, *default_password;
 } mysql_module;
 
 #ifndef THREAD_SAFE

@@ -5,18 +5,23 @@
    | Copyright (c) 1997 PHP Development Team (See Credits file)           |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
-   | it under the terms of the GNU General Public License as published by |
-   | the Free Software Foundation; either version 2 of the License, or    |
-   | (at your option) any later version.                                  |
+   | it under the terms of one of the following licenses:                 |
+   |                                                                      |
+   |  A) the GNU General Public License as published by the Free Software |
+   |     Foundation; either version 2 of the License, or (at your option) |
+   |     any later version.                                               |
+   |                                                                      |
+   |  B) the PHP License as published by the PHP Development Team and     |
+   |     included in the distribution in the file: LICENSE                |
    |                                                                      |
    | This program is distributed in the hope that it will be useful,      |
    | but WITHOUT ANY WARRANTY; without even the implied warranty of       |
    | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the        |
    | GNU General Public License for more details.                         |
    |                                                                      |
-   | You should have received a copy of the GNU General Public License    |
-   | along with this program; if not, write to the Free Software          |
-   | Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.            |
+   | You should have received a copy of both licenses referred to here.   |
+   | If you did not, or have any questions about PHP licensing, please    |
+   | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
    | Authors: Rasmus Lerdorf <rasmus@lerdorf.on.ca>                       |
    |          Stig Bakken <ssb@guardian.no>                               |
@@ -24,7 +29,7 @@
  */
 
 
-/* $Id: php3_gd.h,v 1.11 1998/02/19 20:09:43 rasmus Exp $ */
+/* $Id: php3_gd.h,v 1.19 1998/05/21 23:57:34 zeev Exp $ */
 
 #ifndef _PHP3_GD_H
 #define _PHP3_GD_H
@@ -42,7 +47,7 @@ extern php3_module_entry gd_module_entry;
 #define gd_module_ptr &gd_module_entry
 
 /* gd.c functions */
-extern int php3_minit_gd(INITFUNCARG);
+extern int php3_minit_gd(INIT_FUNC_ARGS);
 extern int php3_mend_gd(void);
 extern void php3_imagearc(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_imagechar(INTERNAL_FUNCTION_PARAMETERS);
@@ -57,7 +62,7 @@ extern void php3_imagecolorsforindex(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_imagecolortransparent(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_imagecopyresized(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_imagecreate(INTERNAL_FUNCTION_PARAMETERS);
-extern void php3_imagecreatefromgif(INTERNAL_FUNCTION_PARAMETERS);
+extern void php3_imagecreatefromgif (INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_imagedestroy(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_imagefill(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_imagefilledpolygon(INTERNAL_FUNCTION_PARAMETERS);
@@ -65,7 +70,7 @@ extern void php3_imagefilledrectangle(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_imagefilltoborder(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_imagefontwidth(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_imagefontheight(INTERNAL_FUNCTION_PARAMETERS);
-extern void php3_imagegif(INTERNAL_FUNCTION_PARAMETERS);
+extern void php3_imagegif (INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_imageinterlace(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_imageline(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_imageloadfont(INTERNAL_FUNCTION_PARAMETERS);
@@ -79,7 +84,9 @@ extern void php3_imagesyfn(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_free_gd_font(gdFontPtr);
 extern void _php3_gdimagecharup(gdImagePtr, gdFontPtr, int, int, int, int);
 extern void php3_imagedashedline(INTERNAL_FUNCTION_PARAMETERS);
-
+#ifdef HAVE_LIBTTF
+extern void php3_imagettftext(INTERNAL_FUNCTION_PARAMETERS);
+#endif
 #else
 
 #define gd_module_ptr NULL

@@ -5,30 +5,35 @@
    | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
-   | it under the terms of the GNU General Public License as published by |
-   | the Free Software Foundation; either version 2 of the License, or    |
-   | (at your option) any later version.                                  |
+   | it under the terms of one of the following licenses:                 |
+   |                                                                      |
+   |  A) the GNU General Public License as published by the Free Software |
+   |     Foundation; either version 2 of the License, or (at your option) |
+   |     any later version.                                               |
+   |                                                                      |
+   |  B) the PHP License as published by the PHP Development Team and     |
+   |     included in the distribution in the file: LICENSE                |
    |                                                                      |
    | This program is distributed in the hope that it will be useful,      |
    | but WITHOUT ANY WARRANTY; without even the implied warranty of       |
    | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the        |
    | GNU General Public License for more details.                         |
    |                                                                      |
-   | You should have received a copy of the GNU General Public License    |
-   | along with this program; if not, write to the Free Software          |
-   | Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.            |
+   | You should have received a copy of both licenses referred to here.   |
+   | If you did not, or have any questions about PHP licensing, please    |
+   | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
    | Author: Jim Winstead (jimw@php.net)                                  |
    +----------------------------------------------------------------------+
  */
-/* $Id: base64.c,v 1.16 1998/02/06 10:22:50 ssb Exp $ */
+/* $Id: base64.c,v 1.22 1998/06/01 07:07:02 rasmus Exp $ */
 
 #ifdef THREAD_SAFE
 #include "tls.h"
 #endif
 #include <string.h>
 
-#include "parser.h"
+#include "php.h"
 #include "internal_functions.h"
 #include "base64.h"
 
@@ -41,9 +46,8 @@ static char base64_table[] =
 	};
 static char base64_pad = '=';
 
-unsigned char *base64_encode(const unsigned char *string) {
+unsigned char *_php3_base64_encode(const unsigned char *string, int length, int *ret_length) {
 	const unsigned char *current = string;
-	int length = strlen(string);
 	int i = 0;
 	unsigned char *result = (unsigned char *)emalloc(((length + 3 - length % 3) * 4 / 3 + 1) * sizeof(char));
 
@@ -71,15 +75,16 @@ unsigned char *base64_encode(const unsigned char *string) {
 			result[i++] = base64_pad;
 		}
 	}
-
+	if(ret_length) {
+		*ret_length = i;
+	}
 	result[i] = '\0';
 	return result;
 }
 
 /* as above, but backwards. :) */
-unsigned char *base64_decode(const unsigned char *string) {
+unsigned char *_php3_base64_decode(const unsigned char *string, int length, int *ret_length) {
 	const unsigned char *current = string;
-	int length = strlen(string);
 	int ch, i = 0, j = 0;
 
 	unsigned char *result = (unsigned char *)emalloc((length / 4 * 3 + 1) * sizeof(char));
@@ -129,24 +134,27 @@ unsigned char *base64_decode(const unsigned char *string) {
 			result[j++] = 0;
 		}
 	}
-
+	if(ret_length) {
+		*ret_length = j;
+	}
 	result[j] = '\0';
 	return result;
 }
 
 void php3_base64_encode(INTERNAL_FUNCTION_PARAMETERS) {
-	YYSTYPE *string;
+	pval *string;
 	unsigned char *result;
+	int ret_length;
 	TLS_VARS;
 
 	if (ARG_COUNT(ht)!=1 || getParameters(ht,1,&string) == FAILURE) {
 		WRONG_PARAM_COUNT;
 	}
 	convert_to_string(string);
-	result = base64_encode(string->value.strval);
+	result = _php3_base64_encode(string->value.str.val, string->value.str.len, &ret_length);
 	if (result != NULL) {
-		return_value->value.strval = result;
-		return_value->strlen = strlen(result);
+		return_value->value.str.val = result;
+		return_value->value.str.len = ret_length;
 		return_value->type = IS_STRING;
 	} else {
 		RETURN_FALSE;
@@ -154,18 +162,19 @@ void php3_base64_encode(INTERNAL_FUNCTION_PARAMETERS) {
 }
 
 void php3_base64_decode(INTERNAL_FUNCTION_PARAMETERS) {
-	YYSTYPE *string;
+	pval *string;
 	unsigned char *result;
+	int ret_length;
 	TLS_VARS;
 
 	if (ARG_COUNT(ht)!=1 || getParameters(ht,1,&string) == FAILURE) {
 		WRONG_PARAM_COUNT;
 	}
 	convert_to_string(string);
-	result = base64_decode(string->value.strval);
+	result = _php3_base64_decode(string->value.str.val, string->value.str.len, &ret_length);
 	if (result != NULL) {
-		return_value->value.strval = result;
-		return_value->strlen = strlen(result);
+		return_value->value.str.val = result;
+		return_value->value.str.len = ret_length;
 		return_value->type = IS_STRING;
 	} else {
 		RETURN_FALSE;

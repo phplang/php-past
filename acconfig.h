@@ -2,14 +2,32 @@
 #define CONFIGURATION_FILE_PATH "php3.ini"
 #define USE_CONFIG_FILE 1
 
+/* Some global constants defined by conigure */
+#undef PHP_BUILD_DATE
+#undef PHP_OS
+#undef PHP_UNAME 
+
+/* define uint by configure if it is missed (QNX and BSD derived) */
+#undef uint
+
+/* Define if you have dirent.h but opendir() resides in libc rather than in libdir */
+/* This will cause HAVE_DIRENT_H defined twice sometimes, but it should be problem */
+#define HAVE_DIRENT_H 0
+
 /* Define if you have the gd library (-lgd). */
 #define HAVE_LIBGD 0
+
+/* Define if you have the zlib library */
+#define HAVE_ZLIB 0
+
+/* Define if you have the gd version 1.3 library (-lgd). */
+#define HAVE_LIBGD13 0
 
 /* Define if you want safe mode enabled by default. */
 #define PHP_SAFE_MODE 0
 
 /* Set to the path to the dir containing safe mode executables */
-#define PHP_SAFE_MODE_EXEC_DIR /usr/local/bin
+#define PHP_SAFE_MODE_EXEC_DIR /usr/local/php/bin
 
 /* Define if you want POST/GET/Cookie track variables by default */
 #define PHP_TRACK_VARS 0
@@ -67,6 +85,9 @@
 /* Define if you want the LDAP directory interface */
 #define HAVE_LDAP 0
 
+/* Define if you want to use a custom ODBC database driver */
+#define HAVE_CODBC 0
+
 /* Define to use the unified ODBC interface */
 #define HAVE_UODBC 0
 
@@ -91,6 +112,15 @@
 /* Define if you are compiling PHP as an Apache module */
 #define APACHE 0
 
+/* Define if you are compiling PHP as an fhttpd module */
+#define FHTTPD 0
+
+/* Define if your Apache creates an ap_config.h header file (only 1.3b6 and later) */
+#define HAVE_AP_CONFIG_H 0
+
+/* Define if your Apache has src/include/compat.h */
+#define HAVE_AP_COMPAT_H 0
+
 #define HAVE_SYBASE 0
 #define HAVE_SYBASE_CT 0
 
@@ -104,6 +134,14 @@
 
 #ifndef HAVE_PGSQL
 #define HAVE_PGSQL 0
+#endif
+
+#ifndef HAVE_VELOCIS
+#define HAVE_VELOCIS 0
+#endif
+
+#ifndef HAVE_PQCMDTUPLES
+#define HAVE_PQCMDTUPLES 0
 #endif
 
 #define MSQL1 0
@@ -126,6 +164,9 @@
 /* Define if you want to prevent the CGI from working unless REDIRECT_STATUS is defined in the environment */
 #define FORCE_CGI_REDIRECT 0
 
+/* Define if you want to prevent the CGI from using path_info and path_translated */
+#define DISCARD_PATH 0
+
 /* Define if you want to enable memory limit support */
 #define MEMORY_LIMIT 0
 
@@ -136,3 +177,6 @@
 
 /* Define if you have broken header files like SunOS 4 */
 #define MISSING_FCLOSE_DECL 0
+
+/* Define if you have broken sprintf function like SunOS 4 */
+#define BROKEN_SPRINTF 0

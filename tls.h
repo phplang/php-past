@@ -5,18 +5,23 @@
    | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
-   | it under the terms of the GNU General Public License as published by |
-   | the Free Software Foundation; either version 2 of the License, or    |
-   | (at your option) any later version.                                  |
+   | it under the terms of one of the following licenses:                 |
+   |                                                                      |
+   |  A) the GNU General Public License as published by the Free Software |
+   |     Foundation; either version 2 of the License, or (at your option) |
+   |     any later version.                                               |
+   |                                                                      |
+   |  B) the PHP License as published by the PHP Development Team and     |
+   |     included in the distribution in the file: LICENSE                |
    |                                                                      |
    | This program is distributed in the hope that it will be useful,      |
    | but WITHOUT ANY WARRANTY; without even the implied warranty of       |
    | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the        |
    | GNU General Public License for more details.                         |
    |                                                                      |
-   | You should have received a copy of the GNU General Public License    |
-   | along with this program; if not, write to the Free Software          |
-   | Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.            |
+   | You should have received a copy of both licenses referred to here.   |
+   | If you did not, or have any questions about PHP licensing, please    |
+   | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
    | Authors:                                                             |
    |                                                                      |
@@ -33,6 +38,7 @@
 #include "alloc.h"
 #include "functions/head.h"
 #include "functions/number.h"
+#include "constants.h"
 #include <sys/stat.h>
 #if USE_SAPI
 #include "serverapi/sapi.h"
@@ -41,10 +47,12 @@
 typedef struct php3_global_struct{
 	/*all globals must be here*/
 	/*alloc.c*/
-
+	void *cache[MAX_CACHED_MEMORY][MAX_CACHED_ENTRIES];
+	unsigned char cache_count[MAX_CACHED_MEMORY];
 	int saved_umask;
-
 	mem_header *head;
+	unsigned int allocated_memory;
+
 	/*debbuger.c*/
 	char *debugger_host;
 	long debugger_port;
@@ -85,18 +93,21 @@ typedef struct php3_global_struct{
 	FunctionState function_state;
 	char *class_name;
 	HashTable *class_symbol_table;
-	YYSTYPE return_value,globals;
+	pval return_value,globals;
 	unsigned int param_index;
-	YYSTYPE *array_ptr;
+	pval *array_ptr;
 	/*list.c*/
 	HashTable list;
 	HashTable plist;
+	int module_count;
+	int current_module_being_cleaned;
 	/*main.c*/
 	unsigned int max_execution_time;
 	int error_reporting;
 	int tmp_error_reporting;
 	int initialized;
 	int module_initialized;
+	char *php3_ini_path;
 	int shutdown_requested;
 	int phplineno;
 	int in_eval;
@@ -117,9 +128,11 @@ typedef struct php3_global_struct{
 	/*request_info.c*/
 	php3_request_info request_info;
 	/*token_cache.c*/
-	YYSTYPE phplval;
+	pval phplval;
 	TokenCache *tc; /*active token cache */
-	
+	/*constants.c*/
+	HashTable php3_constants;
+
 	/*Functions*/
 	/*bc math*/
 	long bc_precision;
@@ -129,7 +142,7 @@ typedef struct php3_global_struct{
 	/*browscap.c*/
 	HashTable browser_hash;
 	char *lookup_browser_name;
-	YYSTYPE *found_browser_entry;
+	pval *found_browser_entry;
 	/*dir.c*/
 	int dirp_id;
 	int le_dirp;
@@ -211,15 +224,15 @@ extern DWORD phpLexTlsIndex;
 #endif
 
 /* needed for control structure */
-extern int include_file(YYSTYPE *file,int display_source);
-extern int conditional_include_file(YYSTYPE *file, YYSTYPE *return_offset INLINE_TLS);
+extern int include_file(pval *file,int display_source);
+extern int conditional_include_file(pval *file, pval *return_offset INLINE_TLS);
 extern void initialize_input_file_buffer(FILE *f);
-extern void eval_string(YYSTYPE *str, YYSTYPE *return_offset, int display_source INLINE_TLS);
+extern void eval_string(pval *str, pval *return_offset, int display_source INLINE_TLS);
 
 /* Other needed defines */
 #if !defined(COMPILE_DL)
-extern int phplex(YYSTYPE *phplval, struct php3_global_struct *php3_globals, flex_globals *php_gbl);
-extern int read_next_token(TokenCacheManager *tcm, Token **token, YYSTYPE *phplval,  struct php3_global_struct *php3_globals, flex_globals *php_gbl);
+extern int phplex(pval *phplval, struct php3_global_struct *php3_globals, flex_globals *php_gbl);
+extern int read_next_token(TokenCacheManager *tcm, Token **token, pval *phplval,  struct php3_global_struct *php3_globals, flex_globals *php_gbl);
 #endif
 #else
 extern php3_globals_struct *php3_globals;

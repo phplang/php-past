@@ -1,12 +1,12 @@
 
  <reference id="ref.url">
   <title>URL functions</title>
-
+  <titleabbrev>URLs</titleabbrev>
 
   <refentry id="function.parse-url">
    <refnamediv>
     <refname>parse_url</refname>
-    <refpurpose></refpurpose>
+    <refpurpose>parse a query string like PHP does with form data</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
@@ -25,7 +25,7 @@
   <refentry id="function.urldecode">
    <refnamediv>
     <refname>urldecode</refname>
-    <refpurpose></refpurpose>
+    <refpurpose>decodes URL-encoded string</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
@@ -50,7 +50,7 @@ while ($i &lt; count ($a)) {
 </programlisting></example>
  
     <para>
-     See also <link linkend="function.urlencode">urlencode</link></para>
+     See also <function>urlencode</function></para>
    </refsect1>
   </refentry>
 
@@ -58,7 +58,7 @@ while ($i &lt; count ($a)) {
   <refentry id="function.urlencode">
    <refnamediv>
     <refname>urlencode</refname>
-    <refpurpose></refpurpose>
+    <refpurpose>URL-encodes string</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
@@ -74,8 +74,7 @@ while ($i &lt; count ($a)) {
      same way that the posted data from a WWW form is encoded, that is
      the same way as in
      <literal>application/x-www-form-urlencoded</literal> media type.
-     This differs from the RFC1738 encoding (see <link
-     linkend="function.rawurlencode">rawurlencode</link> ) in that
+     This differs from the RFC1738 encoding (see <function>rawurlencode</function> ) in that
      for historical reasons, spaces are encoded as plus (+ ) signs.
      This function is convenient when encoding a string to be used in
      a query part of an URL, as a convinient way to pass variables to
@@ -88,7 +87,7 @@ echo '&lt;A HREF="mycgi?foo=', urlencode ($userinput), '">';
 </programlisting></example>
  
     <para>
-     See also <link linkend="function.urldecode">urldecode</link></para>
+     See also <function>urldecode</function></para>
 
    </refsect1>
   </refentry>
@@ -106,7 +105,7 @@ echo '&lt;A HREF="mycgi?foo=', urlencode ($userinput), '">';
      <paramdef>string <parameter>data</parameter></paramdef>
     </funcsynopsis>
     <para>
-     <function>base64_encode()</function> returns
+     <function>base64_encode</function> returns
      <parameter>data</parameter> encoded with base64.  This encoding
      is designed to make binary data survive transport through
      transport layers that are not 8-bit clean, such as mail bodies.
@@ -117,7 +116,7 @@ echo '&lt;A HREF="mycgi?foo=', urlencode ($userinput), '">';
 
     <para>
      See also:
-     <link linkend="function.base64-decode"><function>base64_decode()</function></link>,
+     <function>base64_decode</function>,
      RFC-2045 section 6.8.
 
    </refsect1>
@@ -136,13 +135,13 @@ echo '&lt;A HREF="mycgi?foo=', urlencode ($userinput), '">';
      <paramdef>string <parameter>encoded_data</parameter></paramdef>
     </funcsynopsis>
     <para>
-     <function>base64_decode()</function> decodes
+     <function>base64_decode</function> decodes
      <parameter>encoded_data</parameter> and returns the original
      data.  The returned data may be binary.
 
     <para>
      See also:
-     <link linkend="function.base64-encode"><function>base64_encode()</function></link>,
+     <function>base64_encode</function>,
      RFC-2045 section 6.8.
 
    </refsect1>

@@ -3,7 +3,7 @@ Switch test 3                                                 ...
 --POST--
 --GET--
 --FILE--
-<?
+<?php 
 
 cfunction switchtest ($i, $j)
 {

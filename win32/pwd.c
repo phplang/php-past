@@ -15,7 +15,7 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-   $Header: /repository/php3/win32/pwd.c,v 1.8 1998/01/31 00:22:41 zeev Exp $
+   $Header: /repository/php3/win32/pwd.c,v 1.9 1998/05/11 20:19:25 zeev Exp $
  */
 
 /* This 'implementation' is conjectured from the use of this functions in
@@ -26,7 +26,7 @@
 #ifdef THREAD_SAFE
 #include "tls.h"
 #endif
-#include "parser.h"				/*php specific */
+#include "php.h"				/*php specific */
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <lmaccess.h>

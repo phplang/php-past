@@ -3,31 +3,7 @@ Microsoft Developer Studio Workspace File, Format Version 5.00
 
 ###############################################################################
 
-Project: "apache"=.\apache.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
 Project: "calendar"=.\calendar.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "convertor"=.\convertor\convertor.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -135,6 +111,18 @@ Package=<4>
 
 ###############################################################################
 
+Project: "msql1"=.\msql1.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
 Project: "mysql"=.\mysql.dsp - Package Owner=<4>
 
 Package=<5>
@@ -171,67 +159,19 @@ Package=<4>
 
 ###############################################################################
 
-Project: "phpsapi_cgi"=.\phpsapi_cgi.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "phpsapi_core"=.\phpsapi_core.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "phpsapi_isapi"=.\phpsapi_isapi.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "phpsapi_nsapi"=.\phpsapi_nsapi.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "phpwatch"=.\extra\phpwatch\phpwatch.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
 Project: "snmp"=.\snmp.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "zlib"=.\zlib.dsp - Package Owner=<4>
 
 Package=<5>
 {{{

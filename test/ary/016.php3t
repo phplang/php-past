@@ -3,7 +3,7 @@ asort() function                                              ...
 --POST--
 --GET--
 --FILE--
-<?
+<?php 
 $a[0] = 1;
 $a[r] = 2;
 $a[4] = 3;
@@ -13,7 +13,7 @@ $a[a] = two;
 ?>
 Before being sorted
 -------------------
-<?
+<?php 
 reset($a);
 $b = current($a);
 while ($b != ""):
@@ -24,7 +24,7 @@ asort($a);
 ?>
 After being sorted
 -------------------
-<?
+<?php 
 reset($a);
 $b = current($a);
 while ($b != ""):

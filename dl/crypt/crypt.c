@@ -1,6 +1,10 @@
 #include "../phpdl.h"
 #include "prelude.h"
 #include "sflcryp.h"
+#ifdef HAVE_CRYPT_H
+#include <ufc-crypt.h>
+#include <crypt.h>
+#endif
 
 static int
     crypt_block_size [] = {             /*  Block size for each algorithm    */
@@ -51,7 +55,7 @@ inline int rup(double n)
 
 DLEXPORT void sflcrypt_encrypt(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *data, *type, *key;
+	pval *data, *type, *key;
 	byte *buffer;
 	word buffersize=0, datalen=0, keylen=0, alg=0;
 	double nmb=0;
@@ -66,14 +70,14 @@ DLEXPORT void sflcrypt_encrypt(INTERNAL_FUNCTION_PARAMETERS)
 	convert_to_string(key);
 
 	alg=(int)type->value.lval;
-	keylen=strlen(key->value.strval);
-	if(((alg==0||alg==2||alg==3)&& keylen!=16)||(alg==4 && keylen!=8)){
+	keylen=strlen(key->value.str.val);
+	if (((alg==0||alg==2||alg==3)&& keylen!=16)||(alg==1 && keylen!=8)){
 		php3_error(E_WARNING, "Keylength incorrect!\n");
 		RETURN_FALSE;
 	}
 
-	datalen=strlen(data->value.strval);
-	if(datalen<crypt_block_size [alg])
+	datalen=strlen(data->value.str.val);
+	if (datalen<crypt_block_size [alg])
 	{
 		php3_error(E_WARNING, "Data to short, must be at least %d bytes long!\n",crypt_block_size [alg]);
 		RETURN_FALSE;
@@ -84,26 +88,26 @@ DLEXPORT void sflcrypt_encrypt(INTERNAL_FUNCTION_PARAMETERS)
 	buffersize=buffersize  * crypt_block_size [alg];
 	buffer=emalloc(buffersize);
 	memset(buffer,0,buffersize);
-	memcpy(buffer,data->value.strval,datalen);
+	memcpy(buffer,data->value.str.val,datalen);
 
-	if(!crypt_encode(buffer,buffersize,alg,key->value.strval))
+	if (!crypt_encode(buffer,buffersize,alg,key->value.str.val))
 	{
 		php3_error(E_WARNING, "Crypt_encode failed!\n");
 		efree(buffer);
 		RETURN_FALSE;
 	}
 	
-	return_value->value.strval = buffer;
-	return_value->strlen = buffersize;
+	return_value->value.str.val = buffer;
+	return_value->value.str.len = buffersize;
 	return_value->type = IS_STRING;
 	return;
 }
 
 DLEXPORT void sflcrypt_decrypt(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *data, *type, *key;
+	pval *data, *type, *key;
 	byte *buffer;
-	word buffersize, datalen;
+	word buffersize, datalen, alg, keylen;
 
 	if (ARG_COUNT(ht) != 3 
 		|| getParameters(ht,3,&data,&type,&key)==FAILURE)
@@ -114,35 +118,84 @@ DLEXPORT void sflcrypt_decrypt(INTERNAL_FUNCTION_PARAMETERS)
 	convert_to_long(type);
 	convert_to_string(key);
 
-	datalen=strlen(data->value.strval);
+	alg=(int)type->value.lval;
+	keylen=strlen(key->value.str.val);
+	if (((alg==0||alg==2||alg==3)&& keylen!=16)||(alg==1 && keylen!=8)){
+		php3_error(E_WARNING, "Keylength incorrect!\n");
+		RETURN_FALSE;
+	}
+
+	datalen=strlen(data->value.str.val);
 	buffersize=rup((double)datalen / crypt_block_size [type->value.lval]);
 	buffersize=buffersize  * crypt_block_size [type->value.lval];
 	buffer=emalloc(buffersize);
 	memset(buffer,0,buffersize);
-	memcpy(buffer,data->value.strval,datalen);
-	if(!crypt_decode (buffer,buffersize,type->value.lval,key->value.strval))
+	memcpy(buffer,data->value.str.val,datalen);
+	if (!crypt_decode (buffer,buffersize,alg,key->value.str.val))
 	{
 		php3_error(E_WARNING, "Crypt_decode failed!\n");
 		efree(buffer);
 		RETURN_FALSE;
 	}
 	
-	return_value->value.strval = buffer;
-	return_value->strlen = buffersize;
+	return_value->value.str.val = buffer;
+	return_value->value.str.len = buffersize;
 	return_value->type = IS_STRING;
 	return;
 }
+
+#ifdef HAVE_CRYPT_H
+#if WIN32
+extern int _getpid(void);
+#endif
+
+void php3_crypt(INTERNAL_FUNCTION_PARAMETERS)
+{
+	char salt[4];
+	int arg_count = ARG_COUNT(ht);
+	pval *arg1, *arg2;
+	static char seedchars[] =
+	"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789./";
+
+	if (arg_count < 1 || arg_count > 2 ||
+		getParameters(ht, arg_count, &arg1, &arg2) == FAILURE) {
+		WRONG_PARAM_COUNT;
+	}
+	convert_to_string(arg1);
+
+	salt[0] = '\0';
+	if (arg_count == 2) {
+		convert_to_string(arg2);
+		strncpy(salt, arg2->value.str.val, 2);
+	}
+	if (!salt[0]) {
+		srand(time(0) * getpid());
+		salt[0] = seedchars[rand() % 64];
+		salt[1] = seedchars[rand() % 64];
+	}
+	salt[2] = '\0';
+
+	return_value->value.str.val = (char *) crypt(arg1->value.str.val, salt);
+	return_value->value.str.len = strlen(return_value->value.str.val);	/* can be optimized away to 13? */
+	return_value->type = IS_STRING;
+	yystype_copy_constructor(return_value);
+}
+
+#endif
 
 
 function_entry sflcrypt_functions[] =
 {
 	{"encrypt", sflcrypt_encrypt},
 	{"decrypt", sflcrypt_decrypt},
+#ifdef HAVE_CRYPT_H
+	{"crypt",	php3_crypt,		NULL},
+#endif
 	{NULL,NULL}
 };
 
 php3_module_entry sflcrypt_module_entry = {
-	"Calendar", sflcrypt_functions, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, NULL
+	"sflCrypt", sflcrypt_functions, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, NULL
 };
 
 

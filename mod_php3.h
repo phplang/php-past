@@ -5,24 +5,28 @@
    | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
-   | it under the terms of the GNU General Public License as published by |
-   | the Free Software Foundation; either version 2 of the License, or    |
-   | (at your option) any later version.                                  |
+   | it under the terms of one of the following licenses:                 |
+   |                                                                      |
+   |  A) the GNU General Public License as published by the Free Software |
+   |     Foundation; either version 2 of the License, or (at your option) |
+   |     any later version.                                               |
+   |                                                                      |
+   |  B) the PHP License as published by the PHP Development Team and     |
+   |     included in the distribution in the file: LICENSE                |
    |                                                                      |
    | This program is distributed in the hope that it will be useful,      |
    | but WITHOUT ANY WARRANTY; without even the implied warranty of       |
    | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the        |
    | GNU General Public License for more details.                         |
    |                                                                      |
-   | You should have received a copy of the GNU General Public License    |
-   | along with this program; if not, write to the Free Software          |
-   | Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.            |
+   | You should have received a copy of both licenses referred to here.   |
+   | If you did not, or have any questions about PHP licensing, please    |
+   | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
-   | Authors:                                                             |
-   |                                                                      |
+   | Authors: Rasmus Lerdorf <rasmus@lerdorf.on.ca>                       |
    +----------------------------------------------------------------------+
  */
-/* $Id: mod_php3.h,v 1.30 1998/03/02 04:02:47 ssb Exp $ */
+/* $Id: mod_php3.h,v 1.39 1998/05/09 23:17:37 rasmus Exp $ */
 
 #ifndef _MOD_PHP3_H
 #define _MOD_PHP3_H
@@ -35,15 +39,15 @@
 
 typedef struct {
     char *smtp; /*win 32 only*/
-	char *sendmail_path;
-	char *sendmail_from; /*win 32 only*/
+    char *sendmail_path;
+    char *sendmail_from; /*win 32 only*/
+    long precision;
     long errors;
     long magic_quotes_gpc;
     long magic_quotes_runtime;
     long magic_quotes_sybase;
     long track_errors;
     long display_errors;
-    long ignore_missing_userfunc_args;
     long log_errors;
     long warn_plus_overloading;
     char *doc_root;
@@ -70,13 +74,16 @@ typedef struct {
     char *highlight_bg;
     char *highlight_keyword;
     long sql_safe_mode;
-	long xbithack;
-	long engine;
-	long last_modified;
-	long max_execution_time;
-	long memory_limit;
-	char *browscap;
-	char *arg_separator;
+    long xbithack;
+    long engine;
+    long last_modified;
+    long max_execution_time;
+    long memory_limit;
+    char *browscap;
+    char *arg_separator;
+    char *gpc_order;
+    long y2k_compliance;
+    long define_syslog_variables;
 } php3_ini_structure;
 
 #if MSVC5

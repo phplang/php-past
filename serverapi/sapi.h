@@ -26,6 +26,8 @@ struct sapi_request_info{
 	char *content_type;
 	char *cookies;
 	int cgi, display_source_mode,preprocess,info_only,quiet_mode;
+	char *argv0,*ini_path;
+	void (*info)(void *);
 	void (*puts)(void * , char *);
 	void (*putc)(void * , char);
 	char *(*getenv)(void * , char *);
@@ -84,5 +86,7 @@ extern void sapi_log(void *scid, char *log_message);
  * may be required before calling this function.
  */
 extern PHPAPI int php3_sapi_main(struct sapi_request_info *sapi_info);
+
+extern void sapi_print_info(void *);
 
 #endif

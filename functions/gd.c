@@ -5,18 +5,23 @@
    | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
-   | it under the terms of the GNU General Public License as published by |
-   | the Free Software Foundation; either version 2 of the License, or    |
-   | (at your option) any later version.                                  |
+   | it under the terms of one of the following licenses:                 |
+   |                                                                      |
+   |  A) the GNU General Public License as published by the Free Software |
+   |     Foundation; either version 2 of the License, or (at your option) |
+   |     any later version.                                               |
+   |                                                                      |
+   |  B) the PHP License as published by the PHP Development Team and     |
+   |     included in the distribution in the file: LICENSE                |
    |                                                                      |
    | This program is distributed in the hope that it will be useful,      |
    | but WITHOUT ANY WARRANTY; without even the implied warranty of       |
    | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the        |
    | GNU General Public License for more details.                         |
    |                                                                      |
-   | You should have received a copy of the GNU General Public License    |
-   | along with this program; if not, write to the Free Software          |
-   | Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.            |
+   | You should have received a copy of both licenses referred to here.   |
+   | If you did not, or have any questions about PHP licensing, please    |
+   | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
    | Authors: Rasmus Lerdorf <rasmus@lerdorf.on.ca>                       |
    |          Stig Bakken <ssb@guardian.no>                               |
@@ -24,7 +29,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: gd.c,v 1.56 1998/02/19 20:09:42 rasmus Exp $ */
+/* $Id: gd.c,v 1.73 1998/05/22 12:54:45 zeev Exp $ */
 
 /* gd 1.2 is copyright 1994, 1995, Quest Protein Database Center, 
    Cold Spring Harbor Labs. */
@@ -33,10 +38,11 @@
 #ifdef THREAD_SAFE
 # include "tls.h"
 #endif
-#include "parser.h"
+#include "php.h"
 #include "internal_functions.h"
-#include "list.h"
+#include "php3_list.h"
 #include "head.h"
+#include <math.h>
 #include "php3_gd.h"
 
 #if HAVE_SYS_WAIT_H
@@ -57,6 +63,13 @@
 #include <gdfontmb.h> /* 3 Medium bold font */
 #include <gdfontl.h>  /* 4 Large font */
 #include <gdfontg.h>  /* 5 Giant font */
+#if HAVE_LIBTTF
+#include <functions/gdttf.h>
+#endif
+
+#ifndef M_PI
+#define M_PI 3.14159265358979323846
+#endif
 
 #ifdef THREAD_SAFE
 DWORD GDlibTls;
@@ -114,11 +127,14 @@ function_entry gd_functions[] = {
 	{"imagesx",					php3_imagesxfn,				NULL},
 	{"imagesy",					php3_imagesyfn,				NULL},
 	{"imagedashedline",			php3_imagedashedline,  		NULL},
+#if HAVE_LIBTTF
+	{"imagettftext",			php3_imagettftext,			NULL},
+#endif
 	{NULL, NULL, NULL}
 };
 
 php3_module_entry gd_module_entry = {
-	"gd", gd_functions, php3_minit_gd, php3_mend_gd, NULL, NULL, NULL, 0, 0, 0, NULL
+	"gd", gd_functions, php3_minit_gd, php3_mend_gd, NULL, NULL, NULL, STANDARD_MODULE_PROPERTIES
 };
 
 #if COMPILE_DL
@@ -135,7 +151,7 @@ BOOL WINAPI DllMain(HANDLE hModule,
 {
     switch( ul_reason_for_call ) {
     case DLL_PROCESS_ATTACH:
-		if((GDlibTls=TlsAlloc())==0xFFFFFFFF){
+		if ((GDlibTls=TlsAlloc())==0xFFFFFFFF){
 			return 0;
 		}
 		break;    
@@ -144,7 +160,7 @@ BOOL WINAPI DllMain(HANDLE hModule,
     case DLL_THREAD_DETACH:
 		break;
 	case DLL_PROCESS_DETACH:
-		if(!TlsFree(GDlibTls)){
+		if (!TlsFree(GDlibTls)){
 			return 0;
 		}
 		break;
@@ -158,7 +174,7 @@ BOOL WINAPI DllMain(HANDLE hModule,
 #define PolyMaxPoints 256
 
 
-int php3_minit_gd(INITFUNCARG)
+int php3_minit_gd(INIT_FUNC_ARGS)
 {
 #ifdef THREAD_SAFE
 	gdlib_global_struct *gdlib_globals;
@@ -166,8 +182,8 @@ int php3_minit_gd(INITFUNCARG)
 	CREATE_MUTEX(gdlib_mutex,"GDLIB_TLS");
 	SET_MUTEX(gdlib_mutex);
 	numthreads++;
-	if(numthreads==1){
-	if((GDlibTls=TlsAlloc())==0xFFFFFFFF){
+	if (numthreads==1){
+	if ((GDlibTls=TlsAlloc())==0xFFFFFFFF){
 		FREE_MUTEX(gdlib_mutex);
 		return 0;
 	}}
@@ -192,8 +208,8 @@ int php3_mend_gd(void){
 #if !COMPILE_DL
 	SET_MUTEX(gdlib_mutex);
 	numthreads--;
-	if(!numthreads){
-	if(!TlsFree(GDlibTls)){
+	if (!numthreads){
+	if (!TlsFree(GDlibTls)){
 		FREE_MUTEX(gdlib_mutex);
 		return 0;
 	}}
@@ -212,12 +228,12 @@ void php3_free_gd_font(gdFontPtr fp)
 }
 
 void php3_imageloadfont(INTERNAL_FUNCTION_PARAMETERS) {
-	YYSTYPE *file;
+	pval *file;
 	int hdr_size = sizeof(gdFont) - sizeof(char *);
 	int ind, body_size, n, b;
 	gdFontPtr font;
 	FILE *fp;
-	SOCK_VARS
+	int issock=0, socketd=0;
 	GD_TLS_VARS;
 
 
@@ -227,7 +243,11 @@ void php3_imageloadfont(INTERNAL_FUNCTION_PARAMETERS) {
 
 	convert_to_string(file);
 
-	fp = php3_fopen_wrapper(file->value.strval, "r", IGNORE_PATH|IGNORE_URL_WIN SOCK_PARG);
+#if WIN32|WINNT
+	fp = fopen(file->value.str.val, "rb");
+#else
+	fp = php3_fopen_wrapper(file->value.str.val, "r", IGNORE_PATH|IGNORE_URL_WIN, &issock, &socketd);
+#endif
 	if (fp == NULL) {
 		php3_error(E_WARNING, "ImageFontLoad: unable to open file");
 		RETURN_FALSE;
@@ -287,7 +307,7 @@ void php3_imageloadfont(INTERNAL_FUNCTION_PARAMETERS) {
 }
 
 void php3_imagecreate(INTERNAL_FUNCTION_PARAMETERS) {
-	YYSTYPE *x_size, *y_size;
+	pval *x_size, *y_size;
 	int ind;
 	gdImagePtr im;
 	GD_TLS_VARS;
@@ -305,13 +325,13 @@ void php3_imagecreate(INTERNAL_FUNCTION_PARAMETERS) {
 	RETURN_LONG(ind);
 }
 
-void php3_imagecreatefromgif(INTERNAL_FUNCTION_PARAMETERS) {
-	YYSTYPE *file;
+void php3_imagecreatefromgif (INTERNAL_FUNCTION_PARAMETERS) {
+	pval *file;
 	int ind;
 	gdImagePtr im;
 	char *fn=NULL;
 	FILE *fp;
-	SOCK_VARS
+	int issock=0, socketd=0;
 	GD_TLS_VARS;
 
 	if (ARG_COUNT(ht) != 1 || getParameters(ht, 1, &file) == FAILURE) {
@@ -320,17 +340,21 @@ void php3_imagecreatefromgif(INTERNAL_FUNCTION_PARAMETERS) {
 
 	convert_to_string(file);
 
-	fn = file->value.strval;
+	fn = file->value.str.val;
 
-	fp = php3_fopen_wrapper(file->value.strval, "r", IGNORE_PATH|IGNORE_URL_WIN SOCK_PARG);
-	if(!fp) {
+#if WIN32|WINNT
+	fp = fopen(file->value.str.val, "rb");
+#else
+	fp = php3_fopen_wrapper(file->value.str.val, "r", IGNORE_PATH|IGNORE_URL_WIN, &issock, &socketd);
+#endif
+	if (!fp) {
 		php3_strip_url_passwd(fn);
 		php3_error(E_WARNING,
 					"ImageCreateFromGif: Unable to open %s for reading", fn);
 		RETURN_FALSE;
 	}
 
-	im = gdImageCreateFromGif(fp);
+	im = gdImageCreateFromGif (fp);
 
 	fflush(fp);
 	fclose(fp);
@@ -341,7 +365,7 @@ void php3_imagecreatefromgif(INTERNAL_FUNCTION_PARAMETERS) {
 }
 
 void php3_imagedestroy(INTERNAL_FUNCTION_PARAMETERS) {
-	YYSTYPE *imgind;
+	pval *imgind;
 
 	if (ARG_COUNT(ht) != 1 || getParameters(ht, 1, &imgind) == FAILURE) {
 		WRONG_PARAM_COUNT;
@@ -355,7 +379,7 @@ void php3_imagedestroy(INTERNAL_FUNCTION_PARAMETERS) {
 }
 
 void php3_imagecolorallocate(INTERNAL_FUNCTION_PARAMETERS) {
-	YYSTYPE *imgind, *red, *green, *blue;
+	pval *imgind, *red, *green, *blue;
 	int ind, ind_type;
 	int col;
 	int r, g, b;
@@ -378,7 +402,7 @@ void php3_imagecolorallocate(INTERNAL_FUNCTION_PARAMETERS) {
 	b = blue->value.lval;
 	
 	im = php3_list_find(ind, &ind_type);
-	if(!im || ind_type != GD_GLOBAL(le_gd)) {
+	if (!im || ind_type != GD_GLOBAL(le_gd)) {
 		php3_error(E_WARNING, "ImageColorAllocate: Unable to find image pointer");
 		RETURN_FALSE;
 	}
@@ -388,7 +412,7 @@ void php3_imagecolorallocate(INTERNAL_FUNCTION_PARAMETERS) {
 
 /* im, x, y */
 void php3_imagecolorat(INTERNAL_FUNCTION_PARAMETERS) {
-	YYSTYPE *imgind, *x, *y;
+	pval *imgind, *x, *y;
 	int ind, ind_type;
 	gdImagePtr im;
 	GD_TLS_VARS;
@@ -404,7 +428,7 @@ void php3_imagecolorat(INTERNAL_FUNCTION_PARAMETERS) {
 	ind = imgind->value.lval;
 	
 	im = php3_list_find(ind, &ind_type);
-	if(!im || ind_type != GD_GLOBAL(le_gd)) {
+	if (!im || ind_type != GD_GLOBAL(le_gd)) {
 		php3_error(E_WARNING, "ImageColorAt: Unable to find image pointer");
 		RETURN_FALSE;
 	}
@@ -417,7 +441,7 @@ void php3_imagecolorat(INTERNAL_FUNCTION_PARAMETERS) {
 }
 
 void php3_imagecolorclosest(INTERNAL_FUNCTION_PARAMETERS) {
-	YYSTYPE *imgind, *red, *green, *blue;
+	pval *imgind, *red, *green, *blue;
 	int ind, ind_type;
 	int col;
 	int r, g, b;
@@ -440,7 +464,7 @@ void php3_imagecolorclosest(INTERNAL_FUNCTION_PARAMETERS) {
 	b = blue->value.lval;
 	
 	im = php3_list_find(ind, &ind_type);
-	if(!im || ind_type != GD_GLOBAL(le_gd)) {
+	if (!im || ind_type != GD_GLOBAL(le_gd)) {
 		php3_error(E_WARNING, "ImageColorClosest: Unable to find image pointer");
 		RETURN_FALSE;
 	}
@@ -449,7 +473,7 @@ void php3_imagecolorclosest(INTERNAL_FUNCTION_PARAMETERS) {
 }
 
 void php3_imagecolorexact(INTERNAL_FUNCTION_PARAMETERS) {
-	YYSTYPE *imgind, *red, *green, *blue;
+	pval *imgind, *red, *green, *blue;
 	int ind, ind_type;
 	int col;
 	int r, g, b;
@@ -472,7 +496,7 @@ void php3_imagecolorexact(INTERNAL_FUNCTION_PARAMETERS) {
 	b = blue->value.lval;
 	
 	im = php3_list_find(ind, &ind_type);
-	if(!im || ind_type != GD_GLOBAL(le_gd)) {
+	if (!im || ind_type != GD_GLOBAL(le_gd)) {
 		php3_error(E_WARNING, "ImageColorExact: Unable to find image pointer");
 		RETURN_FALSE;
 	}
@@ -481,7 +505,7 @@ void php3_imagecolorexact(INTERNAL_FUNCTION_PARAMETERS) {
 }
 
 void php3_imagecolorset(INTERNAL_FUNCTION_PARAMETERS) {
-	YYSTYPE *imgind, *color, *red, *green, *blue;
+	pval *imgind, *color, *red, *green, *blue;
 	int ind, ind_type;
 	int col;
 	int r, g, b;
@@ -505,7 +529,7 @@ void php3_imagecolorset(INTERNAL_FUNCTION_PARAMETERS) {
 	b = blue->value.lval;
 	
 	im = php3_list_find(ind, &ind_type);
-	if(!im || ind_type != GD_GLOBAL(le_gd)) {
+	if (!im || ind_type != GD_GLOBAL(le_gd)) {
 		php3_error(E_WARNING, "ImageColorSet: Unable to find image pointer");
 		RETURN_FALSE;
 	}
@@ -520,7 +544,7 @@ void php3_imagecolorset(INTERNAL_FUNCTION_PARAMETERS) {
 }
 
 void php3_imagecolorsforindex(INTERNAL_FUNCTION_PARAMETERS) {
-	YYSTYPE *imgind, *index;
+	pval *imgind, *index;
 	int col, ind, ind_type;
 	gdImagePtr im;
 	GD_TLS_VARS;
@@ -535,7 +559,7 @@ void php3_imagecolorsforindex(INTERNAL_FUNCTION_PARAMETERS) {
 	col = index->value.lval;
 	
 	im = php3_list_find(ind, &ind_type);
-	if(!im || ind_type != GD_GLOBAL(le_gd)) {
+	if (!im || ind_type != GD_GLOBAL(le_gd)) {
 		php3_error(E_WARNING, "ImageColorsForIndex: Unable to find image pointer");
 		RETURN_FALSE;
 	}
@@ -554,8 +578,8 @@ void php3_imagecolorsforindex(INTERNAL_FUNCTION_PARAMETERS) {
 	}
 }
 
-void php3_imagegif(INTERNAL_FUNCTION_PARAMETERS) {
-	YYSTYPE *imgind, *file;
+void php3_imagegif (INTERNAL_FUNCTION_PARAMETERS) {
+	pval *imgind, *file;
 	gdImagePtr im;
 	char *fn=NULL;
 	FILE *fp;
@@ -573,7 +597,7 @@ void php3_imagegif(INTERNAL_FUNCTION_PARAMETERS) {
 
 	if (argc == 2) {
 		convert_to_string(file);
-		fn = file->value.strval;
+		fn = file->value.str.val;
 		if (!fn || fn == empty_string) {
 			php3_error(E_WARNING, "ImageGif: Invalid filename");
 			RETURN_FALSE;
@@ -581,18 +605,18 @@ void php3_imagegif(INTERNAL_FUNCTION_PARAMETERS) {
 	}
 
 	im = php3_list_find(imgind->value.lval, &ind_type);
-	if(!im || ind_type != GD_GLOBAL(le_gd)) {
+	if (!im || ind_type != GD_GLOBAL(le_gd)) {
 		php3_error(E_WARNING, "ImageGif: unable to find image pointer");
 		RETURN_FALSE;
 	}
 
 	if (argc == 2) {
-		fp = fopen(fn, "w");
+		fp = fopen(fn, "wb");
 		if (!fp) {
 			php3_error(E_WARNING, "ImageGif: unable to open %s for writing", fn);
 			RETURN_FALSE;
 		}
-		gdImageGif(im,fp);
+		gdImageGif (im,fp);
 		fflush(fp);
 		fclose(fp);
 	}
@@ -607,10 +631,10 @@ void php3_imagegif(INTERNAL_FUNCTION_PARAMETERS) {
 			RETURN_FALSE;
 		}
 
-		output = php3_header(0, NULL);
+		output = php3_header();
 
 		if (output) {
-			gdImageGif(im, tmp);
+			gdImageGif (im, tmp);
 			fseek(tmp, 0, SEEK_SET);
 			while ((b = fread(buf, 1, sizeof(buf), tmp)) > 0) {
 				php3_write(buf, b);
@@ -625,7 +649,7 @@ void php3_imagegif(INTERNAL_FUNCTION_PARAMETERS) {
 }
 
 void php3_imagesetpixel(INTERNAL_FUNCTION_PARAMETERS) {
-	YYSTYPE *imarg, *xarg, *yarg, *colarg;
+	pval *imarg, *xarg, *yarg, *colarg;
 	gdImagePtr im;
 	int col, y, x;
 	int ind_type;
@@ -644,10 +668,10 @@ void php3_imagesetpixel(INTERNAL_FUNCTION_PARAMETERS) {
 
 	col = colarg->value.lval;
 	y = yarg->value.lval;
-	x = yarg->value.lval;
+	x = xarg->value.lval;
 
 	im = php3_list_find(imarg->value.lval, &ind_type);
-	if(!im || ind_type != GD_GLOBAL(le_gd)) {
+	if (!im || ind_type != GD_GLOBAL(le_gd)) {
 		php3_error(E_WARNING, "Unable to find image pointer");
 		RETURN_FALSE;
 	}
@@ -659,7 +683,7 @@ void php3_imagesetpixel(INTERNAL_FUNCTION_PARAMETERS) {
 
 /* im, x1, y1, x2, y2, col */
 void php3_imageline(INTERNAL_FUNCTION_PARAMETERS) {
-	YYSTYPE *IM, *COL, *X1, *Y1, *X2, *Y2;
+	pval *IM, *COL, *X1, *Y1, *X2, *Y2;
 	gdImagePtr im;
 	int col, y2, x2, y1, x1;
 	int ind_type;
@@ -685,7 +709,7 @@ void php3_imageline(INTERNAL_FUNCTION_PARAMETERS) {
 	col = COL->value.lval;
 
 	im = php3_list_find(IM->value.lval, &ind_type);
-	if(!im || ind_type != GD_GLOBAL(le_gd)) {
+	if (!im || ind_type != GD_GLOBAL(le_gd)) {
 		php3_error(E_WARNING, "Unable to find image pointer");
 		RETURN_FALSE;
 	}
@@ -695,7 +719,7 @@ void php3_imageline(INTERNAL_FUNCTION_PARAMETERS) {
 }	
 
 void php3_imagedashedline(INTERNAL_FUNCTION_PARAMETERS) {
-	YYSTYPE *IM, *COL, *X1, *Y1, *X2, *Y2;
+	pval *IM, *COL, *X1, *Y1, *X2, *Y2;
 	gdImagePtr im;
 	int col, y2, x2, y1, x1;
 	int ind_type;
@@ -720,7 +744,7 @@ void php3_imagedashedline(INTERNAL_FUNCTION_PARAMETERS) {
 	col = COL->value.lval;
 
 	im = php3_list_find(IM->value.lval, &ind_type);
-	if(!im || ind_type != GD_GLOBAL(le_gd)) {
+	if (!im || ind_type != GD_GLOBAL(le_gd)) {
 		php3_error(E_WARNING, "Unable to find image pointer");
 		RETURN_FALSE;
 	}
@@ -731,7 +755,7 @@ void php3_imagedashedline(INTERNAL_FUNCTION_PARAMETERS) {
 
 /* im, x1, y1, x2, y2, col */
 void php3_imagerectangle(INTERNAL_FUNCTION_PARAMETERS) {
-	YYSTYPE *IM, *COL, *X1, *Y1, *X2, *Y2;
+	pval *IM, *COL, *X1, *Y1, *X2, *Y2;
 	gdImagePtr im;
 	int col, y2, x2, y1, x1;
 	int ind_type;
@@ -757,7 +781,7 @@ void php3_imagerectangle(INTERNAL_FUNCTION_PARAMETERS) {
 	col = COL->value.lval;
 
 	im = php3_list_find(IM->value.lval, &ind_type);
-	if(!im || ind_type != GD_GLOBAL(le_gd)) {
+	if (!im || ind_type != GD_GLOBAL(le_gd)) {
 		php3_error(E_WARNING, "Unable to find image pointer");
 		RETURN_FALSE;
 	}
@@ -768,7 +792,7 @@ void php3_imagerectangle(INTERNAL_FUNCTION_PARAMETERS) {
 
 /* im, x1, y1, x2, y2, col */
 void php3_imagefilledrectangle(INTERNAL_FUNCTION_PARAMETERS) {
-	YYSTYPE *IM, *COL, *X1, *Y1, *X2, *Y2;
+	pval *IM, *COL, *X1, *Y1, *X2, *Y2;
 	gdImagePtr im;
 	int col, y2, x2, y1, x1;
 	int ind_type;
@@ -794,7 +818,7 @@ void php3_imagefilledrectangle(INTERNAL_FUNCTION_PARAMETERS) {
 	col = COL->value.lval;
 
 	im = php3_list_find(IM->value.lval, &ind_type);
-	if(!im || ind_type != GD_GLOBAL(le_gd)) {
+	if (!im || ind_type != GD_GLOBAL(le_gd)) {
 		php3_error(E_WARNING, "Unable to find image pointer");
 		RETURN_FALSE;
 	}
@@ -804,7 +828,7 @@ void php3_imagefilledrectangle(INTERNAL_FUNCTION_PARAMETERS) {
 }	
 
 void php3_imagearc(INTERNAL_FUNCTION_PARAMETERS) {
-	YYSTYPE *COL, *E, *ST, *H, *W, *CY, *CX, *IM;
+	pval *COL, *E, *ST, *H, *W, *CY, *CX, *IM;
 	gdImagePtr im;
 	int col, e, st, h, w, cy, cx;
 	int ind_type;
@@ -834,7 +858,7 @@ void php3_imagearc(INTERNAL_FUNCTION_PARAMETERS) {
 	cx = CX->value.lval;
 
 	im = php3_list_find(IM->value.lval, &ind_type);
-	if(!im || ind_type != GD_GLOBAL(le_gd)) {
+	if (!im || ind_type != GD_GLOBAL(le_gd)) {
 		php3_error(E_WARNING, "Unable to find image pointer");
 		RETURN_FALSE;
 	}
@@ -845,7 +869,7 @@ void php3_imagearc(INTERNAL_FUNCTION_PARAMETERS) {
 
 /* im, x, y, border, col */
 void php3_imagefilltoborder(INTERNAL_FUNCTION_PARAMETERS) {
-	YYSTYPE *IM, *X, *Y, *BORDER, *COL;
+	pval *IM, *X, *Y, *BORDER, *COL;
 	gdImagePtr im;
 	int col, border, y, x;
 	int ind_type;
@@ -869,7 +893,7 @@ void php3_imagefilltoborder(INTERNAL_FUNCTION_PARAMETERS) {
 	x = X->value.lval;
 
 	im = php3_list_find(IM->value.lval, &ind_type);
-	if(!im || ind_type != GD_GLOBAL(le_gd)) {
+	if (!im || ind_type != GD_GLOBAL(le_gd)) {
 		php3_error(E_WARNING, "Unable to find image pointer");
 		RETURN_FALSE;
 	}
@@ -880,7 +904,7 @@ void php3_imagefilltoborder(INTERNAL_FUNCTION_PARAMETERS) {
 
 /* im, x, y, col */
 void php3_imagefill(INTERNAL_FUNCTION_PARAMETERS) {
-	YYSTYPE *IM, *X, *Y, *COL;
+	pval *IM, *X, *Y, *COL;
 	gdImagePtr im;
 	int col, y, x;
 	int ind_type;
@@ -902,7 +926,7 @@ void php3_imagefill(INTERNAL_FUNCTION_PARAMETERS) {
 	x = X->value.lval;
 
 	im = php3_list_find(IM->value.lval, &ind_type);
-	if(!im || ind_type != GD_GLOBAL(le_gd)) {
+	if (!im || ind_type != GD_GLOBAL(le_gd)) {
 		php3_error(E_WARNING, "Unable to find image pointer");
 		RETURN_FALSE;
 	}
@@ -912,7 +936,7 @@ void php3_imagefill(INTERNAL_FUNCTION_PARAMETERS) {
 }	
 
 void php3_imagecolorstotal(INTERNAL_FUNCTION_PARAMETERS) {
-	YYSTYPE *IM;
+	pval *IM;
 	gdImagePtr im;
 	int ind_type;
 	GD_TLS_VARS;
@@ -923,7 +947,7 @@ void php3_imagecolorstotal(INTERNAL_FUNCTION_PARAMETERS) {
 	convert_to_long(IM);
 
 	im = php3_list_find(IM->value.lval, &ind_type);
-	if(!im || ind_type != GD_GLOBAL(le_gd)) {
+	if (!im || ind_type != GD_GLOBAL(le_gd)) {
 		php3_error(E_WARNING, "Unable to find image pointer");
 		RETURN_FALSE;
 	}
@@ -933,7 +957,7 @@ void php3_imagecolorstotal(INTERNAL_FUNCTION_PARAMETERS) {
 
 /* im, col */
 void php3_imagecolortransparent(INTERNAL_FUNCTION_PARAMETERS) {
-	YYSTYPE *IM, *COL;
+	pval *IM, *COL;
 	gdImagePtr im;
 	int col;
 	int ind_type;
@@ -950,7 +974,7 @@ void php3_imagecolortransparent(INTERNAL_FUNCTION_PARAMETERS) {
 	col = COL->value.lval;
 
 	im = php3_list_find(IM->value.lval, &ind_type);
-	if(!im || ind_type != GD_GLOBAL(le_gd)) {
+	if (!im || ind_type != GD_GLOBAL(le_gd)) {
 		php3_error(E_WARNING, "Unable to find image pointer");
 		RETURN_FALSE;
 	}
@@ -961,7 +985,7 @@ void php3_imagecolortransparent(INTERNAL_FUNCTION_PARAMETERS) {
 
 /* im, interlace */
 void php3_imageinterlace(INTERNAL_FUNCTION_PARAMETERS) {
-	YYSTYPE *IM, *INT;
+	pval *IM, *INT;
 	gdImagePtr im;
 	int interlace;
 	int ind_type;
@@ -978,7 +1002,7 @@ void php3_imageinterlace(INTERNAL_FUNCTION_PARAMETERS) {
 	interlace = INT->value.lval;
 
 	im = php3_list_find(IM->value.lval, &ind_type);
-	if(!im || ind_type != GD_GLOBAL(le_gd)) {
+	if (!im || ind_type != GD_GLOBAL(le_gd)) {
 		php3_error(E_WARNING, "Unable to find image pointer");
 		RETURN_FALSE;
 	}
@@ -991,7 +1015,7 @@ void php3_imageinterlace(INTERNAL_FUNCTION_PARAMETERS) {
    arg = 1  filled polygon */
 /* im, points, num_points, col */
 static void _php3_imagepolygon(INTERNAL_FUNCTION_PARAMETERS, int filled) {
-	YYSTYPE *IM, *POINTS, *NPOINTS, *COL, *var;
+	pval *IM, *POINTS, *NPOINTS, *COL, *var;
 	gdImagePtr im;
 	gdPoint points[PolyMaxPoints];	
 	int npoints, col, nelem, i;
@@ -1012,7 +1036,7 @@ static void _php3_imagepolygon(INTERNAL_FUNCTION_PARAMETERS, int filled) {
 	col = COL->value.lval;
 
 	im = php3_list_find(IM->value.lval, &ind_type);
-	if(!im || ind_type != GD_GLOBAL(le_gd)) {
+	if (!im || ind_type != GD_GLOBAL(le_gd)) {
 		php3_error(E_WARNING, "Unable to find image pointer");
 		RETURN_FALSE;
 	}
@@ -1108,7 +1132,7 @@ static gdFontPtr _php3_find_gd_font(HashTable *list, int size)
 			 break;
 	    default:
 			font = php3_list_find(size - 5, &ind_type);
-			 if(!font || ind_type != GD_GLOBAL(le_gd_font)) {
+			 if (!font || ind_type != GD_GLOBAL(le_gd_font)) {
 				  if (size < 1) {
 					   font = gdFontTiny;
 				  } else {
@@ -1128,7 +1152,7 @@ static gdFontPtr _php3_find_gd_font(HashTable *list, int size)
  */
 static void _php3_imagefontsize(INTERNAL_FUNCTION_PARAMETERS, int arg)
 {
-	YYSTYPE *SIZE;
+	pval *SIZE;
 	gdFontPtr font;
 
 	if (ARG_COUNT(ht) != 1 || getParameters(ht, 1, &SIZE) == FAILURE) {
@@ -1182,7 +1206,7 @@ void _php3_gdimagecharup(gdImagePtr im, gdFontPtr f, int x, int y, int c,
  * arg = 3  ImageStringUp
  */
 static void _php3_imagechar(INTERNAL_FUNCTION_PARAMETERS, int mode) {
-	YYSTYPE *IM, *SIZE, *X, *Y, *C, *COL;
+	pval *IM, *SIZE, *X, *Y, *C, *COL;
 	gdImagePtr im;
 	int ch = 0, col, x, y, size, i, l = 0;
 	unsigned char *string = NULL;
@@ -1205,9 +1229,9 @@ static void _php3_imagechar(INTERNAL_FUNCTION_PARAMETERS, int mode) {
 	col = COL->value.lval;
 
 	if (mode < 2) {
-		ch = (int)((unsigned char)*(C->value.strval));
+		ch = (int)((unsigned char)*(C->value.str.val));
 	} else {
-		string = (unsigned char *) estrndup(C->value.strval,C->strlen);
+		string = (unsigned char *) estrndup(C->value.str.val,C->value.str.len);
 		l = strlen(string);
 	}
 
@@ -1216,7 +1240,7 @@ static void _php3_imagechar(INTERNAL_FUNCTION_PARAMETERS, int mode) {
 	size = SIZE->value.lval;
 
 	im = php3_list_find(IM->value.lval, &ind_type);
-	if(!im || ind_type != GD_GLOBAL(le_gd)) {
+	if (!im || ind_type != GD_GLOBAL(le_gd)) {
 		php3_error(E_WARNING, "Unable to find image pointer");
 		if (string) {
 			efree(string);
@@ -1242,7 +1266,8 @@ static void _php3_imagechar(INTERNAL_FUNCTION_PARAMETERS, int mode) {
 			break;
     	case 3: {
 			for (i = 0; (i < l); i++) {
-				_php3_gdimagecharup(im, font, x, y, (int)string[i], col);
+				/* _php3_gdimagecharup(im, font, x, y, (int)string[i], col); */
+				gdImageCharUp(im, font, x, y, (int)string[i], col);
 				y -= font->w;
 			}
 			break;
@@ -1277,7 +1302,7 @@ void php3_imagestringup(INTERNAL_FUNCTION_PARAMETERS) {
 
 void php3_imagecopyresized(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *SIM, *DIM, *SX, *SY, *SW, *SH, *DX, *DY, *DW, *DH;
+	pval *SIM, *DIM, *SX, *SY, *SW, *SH, *DX, *DY, *DW, *DH;
 	gdImagePtr im_dst;
 	gdImagePtr im_src;
 	int srcH, srcW, dstH, dstW, srcY, srcX, dstY, dstX;
@@ -1311,13 +1336,13 @@ void php3_imagecopyresized(INTERNAL_FUNCTION_PARAMETERS)
 	dstW = DW->value.lval;
 
 	im_src = php3_list_find(SIM->value.lval, &ind_type);
-	if(!im_src || ind_type != GD_GLOBAL(le_gd)) {
+	if (!im_src || ind_type != GD_GLOBAL(le_gd)) {
 		php3_error(E_WARNING, "Unable to find image pointer");
 		RETURN_FALSE;
 	}
 
 	im_dst = php3_list_find(DIM->value.lval, &ind_type);
-	if(!im_dst || ind_type != GD_GLOBAL(le_gd)) {
+	if (!im_dst || ind_type != GD_GLOBAL(le_gd)) {
 		php3_error(E_WARNING, "Unable to find image pointer");
 		RETURN_FALSE;
 	}
@@ -1329,7 +1354,7 @@ void php3_imagecopyresized(INTERNAL_FUNCTION_PARAMETERS)
 
 void php3_imagesxfn(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *IM;
+	pval *IM;
 	gdImagePtr im;
 	int ind_type;
 	GD_TLS_VARS;
@@ -1339,7 +1364,7 @@ void php3_imagesxfn(INTERNAL_FUNCTION_PARAMETERS)
 	}
 
 	im = php3_list_find(IM->value.lval, &ind_type);
-	if(!im || ind_type != GD_GLOBAL(le_gd)) {
+	if (!im || ind_type != GD_GLOBAL(le_gd)) {
 		php3_error(E_WARNING, "Unable to find image pointer");
 		RETURN_FALSE;
 	}
@@ -1349,7 +1374,7 @@ void php3_imagesxfn(INTERNAL_FUNCTION_PARAMETERS)
 
 void php3_imagesyfn(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *IM;
+	pval *IM;
 	gdImagePtr im;
 	int ind_type;
 	GD_TLS_VARS;
@@ -1359,7 +1384,7 @@ void php3_imagesyfn(INTERNAL_FUNCTION_PARAMETERS)
 	}
 
 	im = php3_list_find(IM->value.lval, &ind_type);
-	if(!im || ind_type != GD_GLOBAL(le_gd)) {
+	if (!im || ind_type != GD_GLOBAL(le_gd)) {
 		php3_error(E_WARNING, "Unable to find image pointer");
 		RETURN_FALSE;
 	}
@@ -1367,6 +1392,76 @@ void php3_imagesyfn(INTERNAL_FUNCTION_PARAMETERS)
 	RETURN_LONG(gdImageSY(im));
 }
 
+#if HAVE_LIBTTF
+void php3_imagettftext(INTERNAL_FUNCTION_PARAMETERS)
+{
+	pval *IM, *PTSIZE, *ANGLE, *X, *Y, *C, *FONTNAME, *COL;
+	gdImagePtr im;
+	int  col, x, y, l=0, i;
+	int brect[8];
+	double ptsize, angle;
+	unsigned char *string = NULL, *fontname = NULL;
+	int ind_type;
+	char				*error;
+	unsigned int        *str;
+
+	GD_TLS_VARS;
+
+	if (ARG_COUNT(ht) != 8 ||
+		getParameters(ht, 8, &IM, &PTSIZE, &ANGLE, &X, &Y, &COL, &FONTNAME, &C) == FAILURE) {
+		WRONG_PARAM_COUNT;
+	}
+
+	convert_to_long(IM);
+	convert_to_double(PTSIZE);
+	convert_to_double(ANGLE);
+	convert_to_long(X);
+	convert_to_long(Y);
+	convert_to_long(COL);
+	convert_to_string(FONTNAME);
+	convert_to_string(C);
+
+	y = Y->value.lval;
+	x = X->value.lval;
+	ptsize = PTSIZE->value.dval;
+	angle = ANGLE->value.dval * (M_PI/180); /* convert to radians */
+
+	col = COL->value.lval;
+	string = (unsigned char *) C->value.str.val;
+	l = strlen(string);
+	fontname = (unsigned char *) FONTNAME->value.str.val;
+
+	im = php3_list_find(IM->value.lval, &ind_type);
+	if (!im || ind_type != GD_GLOBAL(le_gd)) {
+		php3_error(E_WARNING, "Unable to find image pointer");
+		RETURN_FALSE;
+	}
+
+	str = (int *)emalloc(l * sizeof(int));
+	if (!str) {
+		RETURN_FALSE;
+	}
+	
+	for (i = 0; i < l; i++) {
+		str[i] = (unsigned int)(string[i]);
+	}
+
+	error = gdttf(im, brect, col, fontname, ptsize, angle, x, y, str, l);
+
+	if (str) {
+		efree(str);
+	}
+
+
+	if (error) {
+		php3_error(E_WARNING, error);
+		RETURN_FALSE;
+	}
+
+	
+	RETURN_TRUE;
+}
+#endif
 #endif
 
 

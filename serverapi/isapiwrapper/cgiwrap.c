@@ -74,7 +74,7 @@ int _CRTAPI1 main(int argc, char **argv) {
 
 	hDll = LoadLibrary(szModuleFileName); // Load our DLL
 
-	if(!hDll) {
+	if (!hDll) {
 		FormatMessage( 
 		   FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
 		    NULL,
@@ -119,7 +119,7 @@ int _CRTAPI1 main(int argc, char **argv) {
 	//
 	// Fill the ECB with the necessary information
 	//
-	if(!FillExtensionControlBlock(&ECB) ) {
+	if (!FillExtensionControlBlock(&ECB) ) {
 		fprintf(stderr,"Fill Ext Block Failed\n");
 		return -1;
 	}

@@ -3,7 +3,7 @@ Mean recursion test                                           ...
 --POST--
 --GET--
 --FILE--
-<?
+<?php 
 old_function RekTest $nr (
 
 echo " $nr ";

@@ -5,34 +5,39 @@
    | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
-   | it under the terms of the GNU General Public License as published by |
-   | the Free Software Foundation; either version 2 of the License, or    |
-   | (at your option) any later version.                                  |
+   | it under the terms of one of the following licenses:                 |
+   |                                                                      |
+   |  A) the GNU General Public License as published by the Free Software |
+   |     Foundation; either version 2 of the License, or (at your option) |
+   |     any later version.                                               |
+   |                                                                      |
+   |  B) the PHP License as published by the PHP Development Team and     |
+   |     included in the distribution in the file: LICENSE                |
    |                                                                      |
    | This program is distributed in the hope that it will be useful,      |
    | but WITHOUT ANY WARRANTY; without even the implied warranty of       |
    | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the        |
    | GNU General Public License for more details.                         |
    |                                                                      |
-   | You should have received a copy of the GNU General Public License    |
-   | along with this program; if not, write to the Free Software          |
-   | Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.            |
+   | You should have received a copy of both licenses referred to here.   |
+   | If you did not, or have any questions about PHP licensing, please    |
+   | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
    | Authors: Zeev Suraski <bourbon@netvision.net.il>                     |
    +----------------------------------------------------------------------+
-   | php3_sybase_get_column_content() based on code by:                   |
+   | php3_sybase_get_column_content_with_type() based on code by:         |
    |                     Muhammad A Muquit <MA_Muquit@fccc.edu>           |
    |                     Rasmus Lerdorf <rasmus@lerdorf.on.ca>            |
    +----------------------------------------------------------------------+
  */
  
-/* $Id: sybase.c,v 1.85 1998/02/04 11:52:53 zeev Exp $ */
+/* $Id: sybase.c,v 1.101 1998/06/04 20:48:48 zeev Exp $ */
 
 
 #ifndef MSVC5
 #include "config.h"
 #endif
-#include "parser.h"
+#include "php.h"
 #include "internal_functions.h"
 #include "php3_sybase.h"
 #include "php3_string.h"
@@ -42,7 +47,7 @@
 #include <sybfront.h>
 #include <sybdb.h>
 #include <syberror.h>
-#include "list.h"
+#include "php3_list.h"
 
 #if BROKEN_SYBASE_PCONNECTS
 #include "http_log.h"
@@ -89,7 +94,7 @@ function_entry sybase_functions[] = {
 };
 
 php3_module_entry sybase_module_entry = {
-	"Sybase SQL", sybase_functions, php3_minit_sybase, php3_mshutdown_sybase, php3_rinit_sybase, php3_rshutdown_sybase, php3_info_sybase, 0, 0, 0, NULL
+	"Sybase SQL", sybase_functions, php3_minit_sybase, php3_mshutdown_sybase, php3_rinit_sybase, php3_rshutdown_sybase, php3_info_sybase, STANDARD_MODULE_PROPERTIES
 };
 
 #if COMPILE_DL
@@ -102,6 +107,9 @@ THREAD_LS static HashTable *resource_list, *resource_plist;
 
 #define CHECK_LINK(link) { if (link==-1) { php3_error(E_WARNING,"Sybase:  A link to the server could not be established"); RETURN_FALSE; } }
 
+
+static void php3_sybase_get_column_content_with_type(sybase_link *sybase_ptr,int offset,pval *result, int column_type);
+static void php3_sybase_get_column_content_without_type(sybase_link *sybase_ptr,int offset,pval *result, int column_type);
 
 /* error handler */
 static int php3_sybase_error_handler(DBPROCESS *dbproc,int severity,int dberr,
@@ -186,9 +194,10 @@ static void _close_sybase_plink(sybase_link *sybase_ptr)
 }
 
 
-int php3_minit_sybase(INITFUNCARG)
+int php3_minit_sybase(INIT_FUNC_ARGS)
 {
 	char *interface_file;
+	long compatability_mode;
 
 	if (dbinit()==FAIL) {
 		return FAILURE;
@@ -214,6 +223,14 @@ int php3_minit_sybase(INITFUNCARG)
 	if (cfg_get_long("sybase.min_message_severity",&php3_sybase_module.cfg_min_message_severity)==FAILURE) {
 		php3_sybase_module.cfg_min_message_severity=10;
 	}
+	if (cfg_get_long("sybase.compatability_mode",&compatability_mode)==FAILURE) {
+		compatability_mode = 0;
+	}
+	if (compatability_mode) {
+		php3_sybase_module.get_column_content = php3_sybase_get_column_content_with_type;
+	} else {
+		php3_sybase_module.get_column_content = php3_sybase_get_column_content_without_type;	
+	}
 	
 	php3_sybase_module.num_persistent=0;
 	php3_sybase_module.le_link = register_list_destructors(_close_sybase_link,NULL);
@@ -224,7 +241,7 @@ int php3_minit_sybase(INITFUNCARG)
 }
 
 
-int php3_rinit_sybase(INITFUNCARG)
+int php3_rinit_sybase(INIT_FUNC_ARGS)
 {
 	php3_sybase_module.default_link=-1;
 	php3_sybase_module.num_links = php3_sybase_module.num_persistent;
@@ -266,37 +283,37 @@ static void php3_sybase_do_connect(INTERNAL_FUNCTION_PARAMETERS,int persistent)
 			strcpy(hashed_details,"sybase___");
 			break;
 		case 1: {
-				YYSTYPE *yyhost;
+				pval *yyhost;
 				
 				if (getParameters(ht, 1, &yyhost)==FAILURE) {
 					RETURN_FALSE;
 				}
 				convert_to_string(yyhost);
-				host = yyhost->value.strval;
+				host = yyhost->value.str.val;
 				user=passwd=NULL;
-				hashed_details_length = yyhost->strlen+6+3;
+				hashed_details_length = yyhost->value.str.len+6+3;
 				hashed_details = (char *) emalloc(hashed_details_length+1);
-				sprintf(hashed_details,"sybase_%s__",yyhost->value.strval);
+				sprintf(hashed_details,"sybase_%s__",yyhost->value.str.val);
 			}
 			break;
 		case 2: {
-				YYSTYPE *yyhost,*yyuser;
+				pval *yyhost,*yyuser;
 				
 				if (getParameters(ht, 2, &yyhost, &yyuser)==FAILURE) {
 					RETURN_FALSE;
 				}
 				convert_to_string(yyhost);
 				convert_to_string(yyuser);
-				host = yyhost->value.strval;
-				user = yyuser->value.strval;
+				host = yyhost->value.str.val;
+				user = yyuser->value.str.val;
 				passwd=NULL;
-				hashed_details_length = yyhost->strlen+yyuser->strlen+6+3;
+				hashed_details_length = yyhost->value.str.len+yyuser->value.str.len+6+3;
 				hashed_details = (char *) emalloc(hashed_details_length+1);
-				sprintf(hashed_details,"sybase_%s_%s_",yyhost->value.strval,yyuser->value.strval);
+				sprintf(hashed_details,"sybase_%s_%s_",yyhost->value.str.val,yyuser->value.str.val);
 			}
 			break;
 		case 3: {
-				YYSTYPE *yyhost,*yyuser,*yypasswd;
+				pval *yyhost,*yyuser,*yypasswd;
 			
 				if (getParameters(ht, 3, &yyhost, &yyuser, &yypasswd) == FAILURE) {
 					RETURN_FALSE;
@@ -304,12 +321,12 @@ static void php3_sybase_do_connect(INTERNAL_FUNCTION_PARAMETERS,int persistent)
 				convert_to_string(yyhost);
 				convert_to_string(yyuser);
 				convert_to_string(yypasswd);
-				host = yyhost->value.strval;
-				user = yyuser->value.strval;
-				passwd = yypasswd->value.strval;
-				hashed_details_length = yyhost->strlen+yyuser->strlen+yypasswd->strlen+6+3;
+				host = yyhost->value.str.val;
+				user = yyuser->value.str.val;
+				passwd = yypasswd->value.str.val;
+				hashed_details_length = yyhost->value.str.len+yyuser->value.str.len+yypasswd->value.str.len+6+3;
 				hashed_details = (char *) emalloc(hashed_details_length+1);
-				sprintf(hashed_details,"sybase_%s_%s_%s",yyhost->value.strval,yyuser->value.strval,yypasswd->value.strval); /* SAFE */
+				sprintf(hashed_details,"sybase_%s_%s_%s",yyhost->value.str.val,yyuser->value.str.val,yypasswd->value.str.val); /* SAFE */
 			}
 			break;
 		default:
@@ -513,7 +530,7 @@ void php3_sybase_pconnect(INTERNAL_FUNCTION_PARAMETERS)
 
 void php3_sybase_close(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *sybase_link_index;
+	pval *sybase_link_index;
 	int id,type;
 	
 	switch (ARG_COUNT(ht)) {
@@ -545,7 +562,7 @@ void php3_sybase_close(INTERNAL_FUNCTION_PARAMETERS)
 
 void php3_sybase_select_db(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *db,*sybase_link_index;
+	pval *db,*sybase_link_index;
 	int id,type;
 	sybase_link  *sybase_ptr;
 	
@@ -578,7 +595,7 @@ void php3_sybase_select_db(INTERNAL_FUNCTION_PARAMETERS)
 	
 	convert_to_string(db);
 	
-	if (dbuse(sybase_ptr->link,db->value.strval)==FAIL) {
+	if (dbuse(sybase_ptr->link,db->value.str.val)==FAIL) {
 		/*php3_error(E_WARNING,"Sybase:  Unable to select database:  %s",sybase_error(sybase));*/
 		RETURN_FALSE;
 	} else {
@@ -587,14 +604,14 @@ void php3_sybase_select_db(INTERNAL_FUNCTION_PARAMETERS)
 }
 
 
-static void php3_sybase_get_column_content(sybase_link *sybase_ptr,int offset,YYSTYPE *result)
+static void php3_sybase_get_column_content_with_type(sybase_link *sybase_ptr,int offset,pval *result, int column_type)
 {
 	if (dbdatlen(sybase_ptr->link,offset) == 0) {
 		var_reset(result);
 		return;
 	}
 
-	switch (coltype(offset))
+	switch (column_type)
 	{
 		case SYBINT2:
 		case SYBINT4: {	
@@ -611,8 +628,8 @@ static void php3_sybase_get_column_content(sybase_link *sybase_ptr,int offset,YY
 			while (length>0 && charcol(offset)[length-1] == ' ') { /* nuke trailing whitespace */
 				length--;
 			}
-			result->value.strval = estrndup(data,length);
-			result->strlen = length;
+			result->value.str.val = estrndup(data,length);
+			result->value.str.len = length;
 			result->type = IS_STRING;
 			break;
 		}
@@ -624,11 +641,23 @@ static void php3_sybase_get_column_content(sybase_link *sybase_ptr,int offset,YY
 		}
 		default: {
 			if (dbwillconvert(coltype(offset),SYBCHAR)) {
-				char buf[1024];
-				
-				dbconvert(NULL,coltype(offset),dbdata(sybase_ptr->link,offset), dbdatlen(sybase_ptr->link,offset),SYBCHAR,buf,-1);
-				result->strlen = strlen(buf);
-				result->value.strval = estrndup(buf,result->strlen);
+				char *res_buf;
+				int res_length = dbdatlen(sybase_ptr->link,offset);
+				register char *p;
+			
+				res_buf = (char *) emalloc(res_length+1);
+				dbconvert(NULL,coltype(offset),dbdata(sybase_ptr->link,offset), res_length,SYBCHAR,res_buf,-1);
+		
+				/* get rid of trailing spaces */
+				p = res_buf + res_length;
+				while (*p == ' ') {
+					p--;
+					res_length--;
+				}
+				*(++p) = 0; /* put a trailing NULL */
+		
+				result->value.str.len = res_length;
+				result->value.str.val = res_buf;
 				result->type = IS_STRING;
 			} else {
 				php3_error(E_WARNING,"Sybase:  column %d has unknown data type (%d)", offset, coltype(offset));
@@ -639,16 +668,49 @@ static void php3_sybase_get_column_content(sybase_link *sybase_ptr,int offset,YY
 }
 
 
+static void php3_sybase_get_column_content_without_type(sybase_link *sybase_ptr,int offset,pval *result, int column_type)
+{
+	if (dbdatlen(sybase_ptr->link,offset) == 0) {
+		var_reset(result);
+		return;
+	}
+	if (dbwillconvert(coltype(offset),SYBCHAR)) {
+		char *res_buf;
+		int res_length = dbdatlen(sybase_ptr->link,offset);
+		register char *p;
+			
+		res_buf = (char *) emalloc(res_length+1);
+		dbconvert(NULL,coltype(offset),dbdata(sybase_ptr->link,offset), res_length,SYBCHAR,res_buf,-1);
+		
+		/* get rid of trailing spaces */
+		p = res_buf + res_length;
+		while (*p == ' ') {
+			p--;
+			res_length--;
+		}
+		*(++p) = 0; /* put a trailing NULL */
+		
+		result->value.str.len = res_length;
+		result->value.str.val = res_buf;
+		result->type = IS_STRING;
+	} else {
+		php3_error(E_WARNING,"Sybase:  column %d has unknown data type (%d)", offset, coltype(offset));
+		var_reset(result);
+	}
+}
+
+
 void php3_sybase_query(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *query,*sybase_link_index;
+	pval *query,*sybase_link_index;
 	int id,type,retvalue;
 	sybase_link *sybase_ptr;
 	sybase_result *result;
 	int num_fields;
 	int blocks_initialized=1;
 	int i,j;
-	
+	int *column_types;
+
 	switch(ARG_COUNT(ht)) {
 		case 1:
 			if (getParameters(ht, 1, &query)==FAILURE) {
@@ -675,7 +737,7 @@ void php3_sybase_query(INTERNAL_FUNCTION_PARAMETERS)
 	}
 	
 	convert_to_string(query);
-	if (dbcmd(sybase_ptr->link,query->value.strval)==FAIL) {
+	if (dbcmd(sybase_ptr->link,query->value.str.val)==FAIL) {
 		/*php3_error(E_WARNING,"Sybase:  Unable to set query");*/
 		RETURN_FALSE;
 	}
@@ -701,8 +763,13 @@ void php3_sybase_query(INTERNAL_FUNCTION_PARAMETERS)
 		RETURN_TRUE;
 	}
 	
+	column_types = (int *) emalloc(sizeof(int) * num_fields);
+	for (i=0; i<num_fields; i++) {
+		column_types[i] = coltype(i+1);
+	}
+	
 	result = (sybase_result *) emalloc(sizeof(sybase_result));
-	result->data = (YYSTYPE **) emalloc(sizeof(YYSTYPE *)*SYBASE_ROWS_BLOCK);
+	result->data = (pval **) emalloc(sizeof(pval *)*SYBASE_ROWS_BLOCK);
 	result->sybase_ptr = sybase_ptr;
 	result->cur_field=result->cur_row=result->num_rows=0;
 	result->num_fields = num_fields;
@@ -711,11 +778,11 @@ void php3_sybase_query(INTERNAL_FUNCTION_PARAMETERS)
 	while (retvalue!=FAIL && retvalue!=NO_MORE_ROWS) {
 		result->num_rows++;
 		if (result->num_rows > blocks_initialized*SYBASE_ROWS_BLOCK) {
-			result->data = (YYSTYPE **) erealloc(result->data,sizeof(YYSTYPE *)*SYBASE_ROWS_BLOCK*(++blocks_initialized));
+			result->data = (pval **) erealloc(result->data,sizeof(pval *)*SYBASE_ROWS_BLOCK*(++blocks_initialized));
 		}
-		result->data[i] = (YYSTYPE *) emalloc(sizeof(YYSTYPE)*num_fields);
+		result->data[i] = (pval *) emalloc(sizeof(pval)*num_fields);
 		for (j=1; j<=num_fields; j++) {
-			php3_sybase_get_column_content(sybase_ptr, j, &result->data[i][j-1]);
+			php3_sybase_module.get_column_content(sybase_ptr, j, &result->data[i][j-1], column_types[j-1]);
 		}
 		retvalue=dbnextrow(sybase_ptr->link);
 		dbclrbuf(sybase_ptr->link,DBLASTROW(sybase_ptr->link)-1); 
@@ -745,7 +812,23 @@ void php3_sybase_query(INTERNAL_FUNCTION_PARAMETERS)
 		if (!result->fields[i].column_source) {
 			result->fields[i].column_source = empty_string;
 		}
+		result->fields[i].type = column_types[i];
+		/* set numeric flag */
+		switch (column_types[i]) {
+			case SYBINT2:
+			case SYBINT4:
+			case SYBFLT8:
+			case SYBREAL:
+				result->fields[i].numeric = 1;
+				break;
+			case SYBCHAR:
+			case SYBTEXT:
+			default:
+				result->fields[i].numeric = 0;
+				break;
+		}
 	}
+	efree(column_types);
 	return_value->value.lval = php3_list_insert(result,php3_sybase_module.le_result);
 	return_value->type = IS_LONG;
 }
@@ -753,7 +836,7 @@ void php3_sybase_query(INTERNAL_FUNCTION_PARAMETERS)
                         
 void php3_sybase_free_result(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *sybase_result_index;
+	pval *sybase_result_index;
 	sybase_result *result;
 	int type;
 	
@@ -762,6 +845,9 @@ void php3_sybase_free_result(INTERNAL_FUNCTION_PARAMETERS)
 	}
 	
 	convert_to_long(sybase_result_index);
+	if (sybase_result_index->value.lval==0) {
+		RETURN_FALSE;
+	}
 	result = (sybase_result *) php3_list_find(sybase_result_index->value.lval,&type);
 	
 	if (type!=php3_sybase_module.le_result) {
@@ -769,18 +855,19 @@ void php3_sybase_free_result(INTERNAL_FUNCTION_PARAMETERS)
 		RETURN_FALSE;
 	}
 	php3_list_delete(sybase_result_index->value.lval);
+	RETURN_TRUE;
 }
 
 
 void php3_sybase_get_last_message(INTERNAL_FUNCTION_PARAMETERS)
 {
-	RETURN_STRING(php3_sybase_module.server_message);
+	RETURN_STRING(php3_sybase_module.server_message,1);
 }
 
 
 void php3_sybase_num_rows(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *result_index;
+	pval *result_index;
 	int type,id;
 	sybase_result *result;
 	
@@ -804,7 +891,7 @@ void php3_sybase_num_rows(INTERNAL_FUNCTION_PARAMETERS)
 
 void php3_sybase_num_fields(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *result_index;
+	pval *result_index;
 	int type,id;
 	sybase_result *result;
 	
@@ -828,10 +915,10 @@ void php3_sybase_num_fields(INTERNAL_FUNCTION_PARAMETERS)
 
 void php3_sybase_fetch_row(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *sybase_result_index;
+	pval *sybase_result_index;
 	int type,i,id;
 	sybase_result *result;
-	YYSTYPE field_content;
+	pval field_content;
 
 	if (ARG_COUNT(ht)!=1 || getParameters(ht, 1, &sybase_result_index)==FAILURE) {
 		WRONG_PARAM_COUNT;
@@ -854,7 +941,7 @@ void php3_sybase_fetch_row(INTERNAL_FUNCTION_PARAMETERS)
 	for (i=0; i<result->num_fields; i++) {
 		field_content = result->data[result->cur_row][i];
 		yystype_copy_constructor(&field_content);
-		hash_index_update(return_value->value.ht, i, (void *) &field_content, sizeof(YYSTYPE),NULL);
+		hash_index_update(return_value->value.ht, i, (void *) &field_content, sizeof(pval),NULL);
 	}
 	result->cur_row++;
 }
@@ -862,11 +949,11 @@ void php3_sybase_fetch_row(INTERNAL_FUNCTION_PARAMETERS)
 
 static void php3_sybase_fetch_hash(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *sybase_result_index;
+	pval *sybase_result_index;
 	sybase_result *result;
 	int type;
 	int i;
-	YYSTYPE *yystype_ptr,tmp;
+	pval *yystype_ptr,tmp;
 	
 	if (ARG_COUNT(ht)!=1 || getParameters(ht, 1, &sybase_result_index)==FAILURE) {
 		WRONG_PARAM_COUNT;
@@ -892,9 +979,9 @@ static void php3_sybase_fetch_hash(INTERNAL_FUNCTION_PARAMETERS)
 		tmp = result->data[result->cur_row][i];
 		yystype_copy_constructor(&tmp);
 		if (php3_ini.magic_quotes_runtime && tmp.type == IS_STRING) {
-			tmp.value.strval = _php3_addslashes(tmp.value.strval,1);
+			tmp.value.str.val = _php3_addslashes(tmp.value.str.val,tmp.value.str.len,&tmp.value.str.len,1);
 		}
-		hash_index_update(return_value->value.ht, i, (void *) &tmp, sizeof(YYSTYPE), (void **) &yystype_ptr);
+		hash_index_update(return_value->value.ht, i, (void *) &tmp, sizeof(pval), (void **) &yystype_ptr);
 		hash_pointer_update(return_value->value.ht, result->fields[i].name, strlen(result->fields[i].name)+1, yystype_ptr);
 	}
 	result->cur_row++;
@@ -917,7 +1004,7 @@ void php3_sybase_fetch_array(INTERNAL_FUNCTION_PARAMETERS)
 
 void php3_sybase_data_seek(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *sybase_result_index,*offset;
+	pval *sybase_result_index,*offset;
 	int type,id;
 	sybase_result *result;
 
@@ -945,9 +1032,56 @@ void php3_sybase_data_seek(INTERNAL_FUNCTION_PARAMETERS)
 }
 
 
+static char *php3_sybase_get_field_name(int type)
+{
+	switch (type) {
+		case SYBBINARY:
+		case SYBVARBINARY:
+			return "blob";
+			break;
+		case SYBCHAR:
+		case SYBVARCHAR:
+		case SYBTEXT:
+			return "string";
+		case SYBDATETIME:
+		case SYBDATETIME4:
+		case SYBDATETIMN:
+			return "datetime";
+			break;
+		case SYBDECIMAL:
+		case SYBFLT8:
+		case SYBFLTN:
+		case SYBREAL:
+		case SYBNUMERIC:
+			return "real";
+			break;
+		case SYBINT1:
+		case SYBINT2:
+		case SYBINT4:
+		case SYBINTN:
+			return "int";
+			break;
+		case SYBMONEY:
+		case SYBMONEY4:
+		case SYBMONEYN:
+			return "money";
+			break;
+		case SYBBIT:
+			return "bit";
+			break;
+		case SYBIMAGE:
+			return "image";
+			break;
+		default:
+			return "unknown";
+			break;
+	}
+}
+
+
 void php3_sybase_fetch_field(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *sybase_result_index,*offset;
+	pval *sybase_result_index,*offset;
 	int type,id,field_offset;
 	sybase_result *result;
 
@@ -997,11 +1131,13 @@ void php3_sybase_fetch_field(INTERNAL_FUNCTION_PARAMETERS)
 	add_property_string(return_value, "name",result->fields[field_offset].name, 1);
 	add_property_long(return_value, "max_length",result->fields[field_offset].max_length);
 	add_property_string(return_value, "column_source",result->fields[field_offset].column_source, 1);
+	add_property_long(return_value, "numeric", result->fields[field_offset].numeric);
+	add_property_string(return_value, "type", php3_sybase_get_field_name(result->fields[field_offset].type), 1);
 }
 
 void php3_sybase_field_seek(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *sybase_result_index,*offset;
+	pval *sybase_result_index,*offset;
 	int type,id,field_offset;
 	sybase_result *result;
 
@@ -1033,7 +1169,7 @@ void php3_sybase_field_seek(INTERNAL_FUNCTION_PARAMETERS)
 
 void php3_sybase_result(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *row, *field, *sybase_result_index;
+	pval *row, *field, *sybase_result_index;
 	int id,type,field_offset=0;
 	sybase_result *result;
 	
@@ -1062,13 +1198,13 @@ void php3_sybase_result(INTERNAL_FUNCTION_PARAMETERS)
 			int i;
 
 			for (i=0; i<result->num_fields; i++) {
-				if (!strcasecmp(result->fields[i].name,field->value.strval)) {
+				if (!strcasecmp(result->fields[i].name,field->value.str.val)) {
 					field_offset = i;
 					break;
 				}
 			}
 			if (i>=result->num_fields) { /* no match found */
-				php3_error(E_WARNING,"Sybase:  %s field not found in result",field->value.strval);
+				php3_error(E_WARNING,"Sybase:  %s field not found in result",field->value.str.val);
 				RETURN_FALSE;
 			}
 			break;
@@ -1121,7 +1257,7 @@ void php3_info_sybase(void)
 
 void php3_sybase_min_error_severity(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *severity;
+	pval *severity;
 	
 	if (ARG_COUNT(ht)!=1 || getParameters(ht, 1, &severity)==FAILURE) {
 		WRONG_PARAM_COUNT;
@@ -1133,7 +1269,7 @@ void php3_sybase_min_error_severity(INTERNAL_FUNCTION_PARAMETERS)
 
 void php3_sybase_min_message_severity(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *severity;
+	pval *severity;
 	
 	if (ARG_COUNT(ht)!=1 || getParameters(ht, 1, &severity)==FAILURE) {
 		WRONG_PARAM_COUNT;

@@ -1,7 +1,7 @@
 
  <reference id="ref.dir">
   <title>Directory Functions</title>
-
+  <titleabbrev>Directories</titleabbrev>
 
   <refentry id="function.chdir">
    <refnamediv>
@@ -23,6 +23,40 @@
   </refentry>
 
 
+  <refentry id="class.dir">
+   <refnamediv>
+    <refname>dir</refname>
+    <refpurpose>directory class</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>new <function>dir</function></funcdef>
+     <paramdef>string <parameter>directory</parameter></paramdef>
+    </funcsynopsis>
+	<para>
+	A pseudo-object oriented mechanism for reading a directory.  The
+	given <parameter>directory</parameter> is opened.  Two properties 
+	are available once directory has been opened.  The handle property
+	can be used with other directory functions such as <function>readdir</function>,
+	<function>rewinddir</function> and <function>closedir</function>.  The path
+	property is set to path the directory that was opened.  Three methods are
+	available: read, rewind and close.
+
+	<example><title>Dir() Example</title>
+<programlisting role=php>
+$d = dir("/etc");
+echo "Handle: ".$d->handle."&lt;br>\n";
+echo "Path: ".$d->path."&lt;br>\n";
+while($entry=$d->read()) {
+    echo $entry."&lt;br>\n";
+}
+$d->close();
+	</programlisting></example>
+   </refsect1>
+  </refentry>
+
+
   <refentry id="function.closedir">
    <refnamediv>
     <refname>closedir</refname>
@@ -37,7 +71,7 @@
     <para>
      Closes the directory stream indicated by
      <parameter>dir_handle</parameter>. The stream must have previously
-     been opened by <link linkend="function.opendir">opendir</link>.
+     been opened by <function>opendir</function>.
 
    </refsect1>
   </refentry>
@@ -54,7 +88,7 @@
      <funcdef>int <function>opendir</function></funcdef>
      <paramdef>string <parameter>path</parameter></paramdef>
     </funcsynopsis>
-<para>    Returns a directory handle to be used in subsequent <link linkend="function.closedir">closedir</link>, <link linkend="function.readdir">readdir</link>, and <link linkend="function.rewinddir">rewinddir</link> calls.
+<para>    Returns a directory handle to be used in subsequent <function>closedir</function>, <function>readdir</function>, and <function>rewinddir</function> calls.
   </para>
    </refsect1>
   </refentry>

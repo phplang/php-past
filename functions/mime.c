@@ -5,48 +5,56 @@
    | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
-   | it under the terms of the GNU General Public License as published by |
-   | the Free Software Foundation; either version 2 of the License, or    |
-   | (at your option) any later version.                                  |
+   | it under the terms of one of the following licenses:                 |
+   |                                                                      |
+   |  A) the GNU General Public License as published by the Free Software |
+   |     Foundation; either version 2 of the License, or (at your option) |
+   |     any later version.                                               |
+   |                                                                      |
+   |  B) the PHP License as published by the PHP Development Team and     |
+   |     included in the distribution in the file: LICENSE                |
    |                                                                      |
    | This program is distributed in the hope that it will be useful,      |
    | but WITHOUT ANY WARRANTY; without even the implied warranty of       |
    | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the        |
    | GNU General Public License for more details.                         |
    |                                                                      |
-   | You should have received a copy of the GNU General Public License    |
-   | along with this program; if not, write to the Free Software          |
-   | Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.            |
+   | You should have received a copy of both licenses referred to here.   |
+   | If you did not, or have any questions about PHP licensing, please    |
+   | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
    | Authors: Rasmus Lerdorf                                              |
    |                                                                      |
    +----------------------------------------------------------------------+
  */
-/* $Id: mime.c,v 1.44 1998/02/02 08:07:21 shane Exp $ */
+/* $Id: mime.c,v 1.52 1998/05/15 10:57:27 zeev Exp $ */
 #ifdef THREAD_SAFE
 #include "tls.h"
 #endif
 #include <stdio.h>
-#include "parser.h"
+#include "php.h"
 #include "internal_functions.h"
 #include "type.h"
 #include "post.h"
 #include "mime.h"
 
 
+#define NEW_BOUNDARY_CHECK 1
+#define SAFE_RETURN { if (namebuf) efree(namebuf); if (filenamebuf) efree(filenamebuf); if (lbuf) efree(lbuf); return; }
+
 /*
  * Split raw mime stream up into appropriate components
  */
-void php3_mime_split(char *buf, int cnt, char *boundary)
+void php3_mime_split(char *buf, int cnt, char *boundary, pval *http_post_vars)
 {
 	char *ptr, *loc, *loc2, *s, *name, *filename, *u, *fn;
 	int len, state = 0, Done = 0, rem, urem;
 	long bytes, max_file_size = 0;
-	char namebuf[128], filenamebuf[128], lbuf[256];
+	char *namebuf=NULL, *filenamebuf=NULL, *lbuf=NULL;
 	FILE *fp;
 	int itype;
 	TLS_VARS;
-	
+
 	ptr = buf;
 	rem = cnt;
 	len = strlen(boundary);
@@ -56,6 +64,7 @@ void php3_mime_split(char *buf, int cnt, char *boundary)
 				loc = memchr(ptr, *boundary, cnt);
 				if (loc) {
 					if (!strncmp(loc, boundary, len)) {
+
 						state = 1;
 						rem -= (loc - ptr) + len + 2;
 						ptr = loc + len + 2;
@@ -69,10 +78,11 @@ void php3_mime_split(char *buf, int cnt, char *boundary)
 				break;
 			case 1:			/* Check content-disposition */
 				if (strncasecmp(ptr, "Content-Disposition: form-data;", 31)) {
-					if (rem < 31)
-						return;
+					if (rem < 31) {
+						SAFE_RETURN;
+					}
 					php3_error(E_WARNING, "File Upload Mime headers garbled [%c%c%c%c%c]", *ptr, *(ptr + 1), *(ptr + 2), *(ptr + 3), *(ptr + 4));
-					return;
+					SAFE_RETURN;
 				}
 				loc = memchr(ptr, '\n', rem);
 				name = strstr(ptr, " name=\"");
@@ -81,17 +91,17 @@ void php3_mime_split(char *buf, int cnt, char *boundary)
 					s = memchr(name, '\"', loc - name);
 					if (!s) {
 						php3_error(E_WARNING, "File Upload Mime headers garbled [%c%c%c%c%c]", *name, *(name + 1), *(name + 2), *(name + 3), *(name + 4));
-						return;
+						SAFE_RETURN;
 					}
-					strncpy(namebuf, name, s - name);
-					namebuf[s - name] = '\0';
+					namebuf = estrndup(name, s-name);
+					lbuf = emalloc(s-name + MAX(MAX(sizeof("_name"),sizeof("_size")),sizeof("_type")));
 					state = 2;
 					loc2 = memchr(loc + 1, '\n', rem);
 					rem -= (loc2 - ptr) + 1;
 					ptr = loc2 + 1;
 				} else {
 					php3_error(E_WARNING, "File upload error - no name component in content disposition");
-					return;
+					SAFE_RETURN;
 				}
 				filename = strstr(s, " filename=\"");
 				if (filename && filename < loc) {
@@ -99,10 +109,9 @@ void php3_mime_split(char *buf, int cnt, char *boundary)
 					s = memchr(filename, '\"', loc - filename);
 					if (!s) {
 						php3_error(E_WARNING, "File Upload Mime headers garbled [%c%c%c%c%c]", *filename, *(filename + 1), *(filename + 2), *(filename + 3), *(filename + 4));
-						return;
+						SAFE_RETURN;
 					}
-					strncpy(filenamebuf, filename, s - filename);
-					filenamebuf[s - filename] = '\0';
+					filenamebuf = estrndup(filename, s-filename);
 					sprintf(lbuf, "%s_name", namebuf);
 					s = strrchr(filenamebuf, '\\');
 					if (s && s > filenamebuf) {
@@ -136,14 +145,15 @@ void php3_mime_split(char *buf, int cnt, char *boundary)
 				}
 				if (!loc) {
 					php3_error(E_WARNING, "File Upload Field Data garbled");
-					return;
+					SAFE_RETURN;
 				}
 				*(loc - 4) = '\0';
+
 				/* Magic function that figures everything out */
-				_php3_parse_gpc_data(ptr,namebuf,NULL);
+				_php3_parse_gpc_data(ptr,namebuf,http_post_vars);
 
 				/* And a little kludge to pick out special MAX_FILE_SIZE */
-				itype = php3_CheckIdentType(namebuf);
+				itype = php3_check_ident_type(namebuf);
 				if (itype) {
 					u = strchr(namebuf, '[');
 					if (u)
@@ -165,15 +175,21 @@ void php3_mime_split(char *buf, int cnt, char *boundary)
 				loc = memchr(ptr, *boundary, rem);
 				u = ptr;
 				while (loc) {
-					if (!strncmp(loc, boundary, len))
+					if (!strncmp(loc, boundary, len)
+#if NEW_BOUNDARY_CHECK
+						&& (loc-2>buf && *(loc-2)=='-' && *(loc-1)=='-') /* ensure boundary is prefixed with -- */
+						&& (loc-2==buf || *(loc-3)=='\n') /* ensure beginning of line */
+#endif
+						) {
 						break;
+					}
 					u = loc + 1;
 					urem = rem - (loc - ptr) - 1;
 					loc = memchr(u, *boundary, urem);
 				}
 				if (!loc) {
 					php3_error(E_WARNING, "File Upload Error - No Mime boundary found after start of file header");
-					return;
+					SAFE_RETURN;
 				}
 				fn = tempnam(php3_ini.upload_tmp_dir, "php");
 				if (max_file_size && ((loc - ptr - 4) > max_file_size)) {
@@ -187,7 +203,7 @@ void php3_mime_split(char *buf, int cnt, char *boundary)
 					fp = fopen(fn, "w");
 					if (!fp) {
 						php3_error(E_WARNING, "File Upload Error - Unable to open temporary file [%s]", fn);
-						return;
+						SAFE_RETURN;
 					}
 					bytes = fwrite(ptr, 1, loc - ptr - 4, fp);
 					fclose(fp);
@@ -204,6 +220,7 @@ void php3_mime_split(char *buf, int cnt, char *boundary)
 				break;
 		}
 	}
+	SAFE_RETURN;
 }
 
 /*

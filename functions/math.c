@@ -5,18 +5,23 @@
    | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
-   | it under the terms of the GNU General Public License as published by |
-   | the Free Software Foundation; either version 2 of the License, or    |
-   | (at your option) any later version.                                  |
+   | it under the terms of one of the following licenses:                 |
+   |                                                                      |
+   |  A) the GNU General Public License as published by the Free Software |
+   |     Foundation; either version 2 of the License, or (at your option) |
+   |     any later version.                                               |
+   |                                                                      |
+   |  B) the PHP License as published by the PHP Development Team and     |
+   |     included in the distribution in the file: LICENSE                |
    |                                                                      |
    | This program is distributed in the hope that it will be useful,      |
    | but WITHOUT ANY WARRANTY; without even the implied warranty of       |
    | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the        |
    | GNU General Public License for more details.                         |
    |                                                                      |
-   | You should have received a copy of the GNU General Public License    |
-   | along with this program; if not, write to the Free Software          |
-   | Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.            |
+   | You should have received a copy of both licenses referred to here.   |
+   | If you did not, or have any questions about PHP licensing, please    |
+   | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
    | Authors: Jim Winstead (jimw@php.net)                                 |
    |          Stig Sæther Bakken <ssb@guardian.no>                        |
@@ -26,9 +31,10 @@
 #ifdef THREAD_SAFE
 #include "tls.h"
 #endif
-#include "parser.h"
+#include "php.h"
 #include "internal_functions.h"
 #include "phpmath.h"
+#include "snprintf.h"
 
 #include <math.h>
 
@@ -37,7 +43,7 @@
 #endif
 
 void php3_abs(INTERNAL_FUNCTION_PARAMETERS) {
-	YYSTYPE *value;
+	pval *value;
 	TLS_VARS;
 	
 	if (ARG_COUNT(ht)!=1||getParameters(ht,1,&value)==FAILURE) {
@@ -59,7 +65,7 @@ void php3_abs(INTERNAL_FUNCTION_PARAMETERS) {
 }
 
 void php3_ceil(INTERNAL_FUNCTION_PARAMETERS) {
-	YYSTYPE *value;
+	pval *value;
 	TLS_VARS;
 	
 	if (ARG_COUNT(ht)!=1||getParameters(ht,1,&value)==FAILURE) {
@@ -81,7 +87,7 @@ void php3_ceil(INTERNAL_FUNCTION_PARAMETERS) {
 }
 
 void php3_floor(INTERNAL_FUNCTION_PARAMETERS) {
-	YYSTYPE *value;
+	pval *value;
 	TLS_VARS;
 	
 	if (ARG_COUNT(ht)!=1||getParameters(ht,1,&value)==FAILURE) {
@@ -118,7 +124,7 @@ inline double rint(double n)
 
 void php3_round(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *value;
+	pval *value;
 	TLS_VARS;
 
 	if (ARG_COUNT(ht) != 1 || getParameters(ht, 1, &value) == FAILURE) {
@@ -138,7 +144,7 @@ void php3_round(INTERNAL_FUNCTION_PARAMETERS)
 
 void php3_sin(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *num;
+	pval *num;
 
 	if (ARG_COUNT(ht) != 1 || getParameters(ht, 1, &num) == FAILURE) {
 		WRONG_PARAM_COUNT;
@@ -150,7 +156,7 @@ void php3_sin(INTERNAL_FUNCTION_PARAMETERS)
 
 void php3_cos(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *num;
+	pval *num;
 
 	if (ARG_COUNT(ht) != 1 || getParameters(ht, 1, &num) == FAILURE) {
 		WRONG_PARAM_COUNT;
@@ -162,7 +168,7 @@ void php3_cos(INTERNAL_FUNCTION_PARAMETERS)
 
 void php3_tan(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *num;
+	pval *num;
 
 	if (ARG_COUNT(ht) != 1 || getParameters(ht, 1, &num) == FAILURE) {
 		WRONG_PARAM_COUNT;
@@ -174,7 +180,7 @@ void php3_tan(INTERNAL_FUNCTION_PARAMETERS)
 
 void php3_asin(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *num;
+	pval *num;
 
 	if (ARG_COUNT(ht) != 1 || getParameters(ht, 1, &num) == FAILURE) {
 		WRONG_PARAM_COUNT;
@@ -186,7 +192,7 @@ void php3_asin(INTERNAL_FUNCTION_PARAMETERS)
 
 void php3_acos(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *num;
+	pval *num;
 
 	if (ARG_COUNT(ht) != 1 || getParameters(ht, 1, &num) == FAILURE) {
 		WRONG_PARAM_COUNT;
@@ -198,7 +204,7 @@ void php3_acos(INTERNAL_FUNCTION_PARAMETERS)
 
 void php3_atan(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *num;
+	pval *num;
 
 	if (ARG_COUNT(ht) != 1 || getParameters(ht, 1, &num) == FAILURE) {
 		WRONG_PARAM_COUNT;
@@ -216,7 +222,7 @@ void php3_pi(INTERNAL_FUNCTION_PARAMETERS)
 
 void php3_pow(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *num1, *num2;
+	pval *num1, *num2;
 	TLS_VARS;
 	
 	if (ARG_COUNT(ht) != 2 || getParameters(ht,2,&num1,&num2) == FAILURE) {
@@ -229,7 +235,7 @@ void php3_pow(INTERNAL_FUNCTION_PARAMETERS)
 
 void php3_exp(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *num;
+	pval *num;
 
 	if (ARG_COUNT(ht) != 1 || getParameters(ht, 1, &num) == FAILURE) {
 		WRONG_PARAM_COUNT;
@@ -241,7 +247,7 @@ void php3_exp(INTERNAL_FUNCTION_PARAMETERS)
 
 void php3_log(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *num;
+	pval *num;
 
 	if (ARG_COUNT(ht) != 1 || getParameters(ht, 1, &num) == FAILURE) {
 		WRONG_PARAM_COUNT;
@@ -253,7 +259,7 @@ void php3_log(INTERNAL_FUNCTION_PARAMETERS)
 
 void php3_log10(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *num;
+	pval *num;
 
 	if (ARG_COUNT(ht) != 1 || getParameters(ht, 1, &num) == FAILURE) {
 		WRONG_PARAM_COUNT;
@@ -265,7 +271,7 @@ void php3_log10(INTERNAL_FUNCTION_PARAMETERS)
 
 void php3_sqrt(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *num;
+	pval *num;
 
 	if (ARG_COUNT(ht) != 1 || getParameters(ht, 1, &num) == FAILURE) {
 		WRONG_PARAM_COUNT;
@@ -280,7 +286,7 @@ void php3_sqrt(INTERNAL_FUNCTION_PARAMETERS)
  * Convert a string representation of a base(2-36) number to a long.
  */
 static long
-_php3_basetolong(YYSTYPE *arg, int base) {
+_php3_basetolong(pval *arg, int base) {
 	long mult = 1, num = 0, digit;
 	int i;
 	char c, *s;
@@ -289,9 +295,9 @@ _php3_basetolong(YYSTYPE *arg, int base) {
 		return 0;
 	}
 
-	s = arg->value.strval;
+	s = arg->value.str.val;
 
-	for (i = arg->strlen - 1; i >= 0; i--, mult *= base) {
+	for (i = arg->value.str.len - 1; i >= 0; i--, mult *= base) {
 		c = toupper(s[i]);
 		if (c >= '0' && c <= '9') {
 			digit = (c - '0');
@@ -315,7 +321,7 @@ _php3_basetolong(YYSTYPE *arg, int base) {
  * the number.
  */
 static char *
-_php3_longtobase(YYSTYPE *arg, int base)
+_php3_longtobase(pval *arg, int base)
 {
 	static char digits[] = "0123456789abcdefghijklmnopqrstuvwxyz";
 	char *result, *ptr, *ret;
@@ -351,7 +357,7 @@ _php3_longtobase(YYSTYPE *arg, int base)
 
 void php3_bindec(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *arg;
+	pval *arg;
 	long ret;
 	TLS_VARS;
 	
@@ -369,7 +375,7 @@ void php3_bindec(INTERNAL_FUNCTION_PARAMETERS)
 /* Hexadecimal to Decimal */
 void php3_hexdec(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *arg;
+	pval *arg;
 	long ret;
 	TLS_VARS;
 	
@@ -387,7 +393,7 @@ void php3_hexdec(INTERNAL_FUNCTION_PARAMETERS)
 /* Octal to Decimal */
 void php3_octdec(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *arg;
+	pval *arg;
 	long ret;
 	TLS_VARS;
 	
@@ -404,7 +410,7 @@ void php3_octdec(INTERNAL_FUNCTION_PARAMETERS)
 
 void php3_decbin(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *arg;
+	pval *arg;
 	char *result;
 
 	if (ARG_COUNT(ht) != 1 || getParameters(ht, 1, &arg) == FAILURE) {
@@ -415,14 +421,14 @@ void php3_decbin(INTERNAL_FUNCTION_PARAMETERS)
 
 	result = _php3_longtobase(arg, 2);
 	return_value->type = IS_STRING;
-	return_value->strlen = strlen(result);
-	return_value->value.strval = result;
+	return_value->value.str.len = strlen(result);
+	return_value->value.str.val = result;
 }
 
 
 void php3_decoct(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *arg;
+	pval *arg;
 	char *result;
 
 	if (ARG_COUNT(ht) != 1 || getParameters(ht, 1, &arg) == FAILURE) {
@@ -433,14 +439,14 @@ void php3_decoct(INTERNAL_FUNCTION_PARAMETERS)
 
 	result = _php3_longtobase(arg, 8);
 	return_value->type = IS_STRING;
-	return_value->strlen = strlen(result);
-	return_value->value.strval = result;
+	return_value->value.str.len = strlen(result);
+	return_value->value.str.val = result;
 }
 
 
 void php3_dechex(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *arg;
+	pval *arg;
 	char *result;
 
 	if (ARG_COUNT(ht) != 1 || getParameters(ht, 1, &arg) == FAILURE) {
@@ -451,11 +457,110 @@ void php3_dechex(INTERNAL_FUNCTION_PARAMETERS)
 
 	result = _php3_longtobase(arg, 16);
 	return_value->type = IS_STRING;
-	return_value->strlen = strlen(result);
-	return_value->value.strval = result;
+	return_value->value.str.len = strlen(result);
+	return_value->value.str.val = result;
 }
 
 
+char *_php3_number_format(double d,int dec,char dec_point,char thousand_sep)
+{
+	char *tmpbuf,*resbuf;
+	char *s,*t;  /* source, target */
+	int tmplen,reslen=0;
+	int count=0;
+	int is_negative=0;
+	
+	if (d<0) {
+		is_negative=1;
+		d = -d;
+	}
+	dec = MAX(0,dec);
+	tmpbuf = (char *) emalloc(32+dec);
+	
+	tmplen=_php3_sprintf(tmpbuf,"%.*f",dec,d);
+
+	for (t=tmpbuf; *t; t++) {
+		if (*t=='.') {
+			*t = dec_point;
+		}
+	}
+	if (dec) {
+		reslen = dec+1 + (tmplen-dec-1) + (tmplen-1-dec-1)/3;
+	} else {
+		reslen = tmplen+(tmplen-1)/3;
+	}
+	if (is_negative) {
+		reslen++;
+	}
+	resbuf = (char *) emalloc(reslen+1);
+	
+	s = tmpbuf+tmplen-1;
+	t = resbuf+reslen;
+	*t-- = 0;
+	
+	if (dec) {
+		while (*s!=dec_point) {
+			*t-- = *s--;
+		}
+		*t-- = *s--;  /* copy that dot */
+	}
+	
+	while(s>=tmpbuf) {
+		*t-- = *s--;
+		if ((++count%3)==0 && s>=tmpbuf) {
+			*t-- = thousand_sep;
+		}
+	}
+	if (is_negative) {
+		*t-- = '-';
+	}
+	efree(tmpbuf);
+	return resbuf;
+}
+
+
+void php3_number_format(INTERNAL_FUNCTION_PARAMETERS)
+{
+	pval *num,*dec,*t_s,*d_p;
+	char thousand_sep=',', dec_point='.';
+	
+	switch(ARG_COUNT(ht)) {
+		case 1:
+			if (getParameters(ht, 1, &num)==FAILURE) {
+				RETURN_FALSE;
+			}
+			convert_to_double(num);
+			RETURN_STRING(_php3_number_format(num->value.dval,0,dec_point,thousand_sep),0);
+			break;
+		case 2:
+			if (getParameters(ht, 2, &num, &dec)==FAILURE) {
+				RETURN_FALSE;
+			}
+			convert_to_double(num);
+			convert_to_long(dec);
+			RETURN_STRING(_php3_number_format(num->value.dval,dec->value.lval,dec_point,thousand_sep),0);
+			break;
+		case 4:
+			if (getParameters(ht, 4, &num, &dec, &d_p, &t_s)==FAILURE) {
+				RETURN_FALSE;
+			}
+			convert_to_double(num);
+			convert_to_long(dec);
+			convert_to_string(d_p);
+			convert_to_string(t_s);
+			if (d_p->value.str.len==1) {
+				dec_point=d_p->value.str.val[0];
+			}
+			if (t_s->value.str.len==1) {
+				thousand_sep=t_s->value.str.val[0];
+			}
+			RETURN_STRING(_php3_number_format(num->value.dval,dec->value.lval,dec_point,thousand_sep),0);
+			break;
+		default:
+			WRONG_PARAM_COUNT;
+			break;
+	}
+}
 /*
  * Local variables:
  * tab-width: 4

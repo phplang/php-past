@@ -5,46 +5,52 @@
    | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
-   | it under the terms of the GNU General Public License as published by |
-   | the Free Software Foundation; either version 2 of the License, or    |
-   | (at your option) any later version.                                  |
+   | it under the terms of one of the following licenses:                 |
+   |                                                                      |
+   |  A) the GNU General Public License as published by the Free Software |
+   |     Foundation; either version 2 of the License, or (at your option) |
+   |     any later version.                                               |
+   |                                                                      |
+   |  B) the PHP License as published by the PHP Development Team and     |
+   |     included in the distribution in the file: LICENSE                |
    |                                                                      |
    | This program is distributed in the hope that it will be useful,      |
    | but WITHOUT ANY WARRANTY; without even the implied warranty of       |
    | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the        |
    | GNU General Public License for more details.                         |
    |                                                                      |
-   | You should have received a copy of the GNU General Public License    |
-   | along with this program; if not, write to the Free Software          |
-   | Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.            |
+   | You should have received a copy of both licenses referred to here.   |
+   | If you did not, or have any questions about PHP licensing, please    |
+   | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
    | Authors: Rasmus Lerdorf <rasmus@lerdorf.on.ca>                       |
    +----------------------------------------------------------------------+
  */
 
-/* $Id: file.h,v 1.15 1998/02/01 01:37:39 jim Exp $ */
+/* $Id: file.h,v 1.24 1998/05/15 10:57:23 zeev Exp $ */
 
 #ifndef _FILE_H
 #define _FILE_H
 
-#ifndef INITFUNCARG
+#ifndef INIT_FUNC_ARGS
 #include "modules.h"
 #endif
 
 extern php3_module_entry php3_file_module_entry;
 #define php3_file_module_ptr &php3_file_module_entry
 
-extern int php3_minit_file(INITFUNCARG);
+extern int php3_minit_file(INIT_FUNC_ARGS);
 extern void php3_tempnam(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_fopen(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_fclose(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_popen(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_pclose(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_feof(INTERNAL_FUNCTION_PARAMETERS);
+extern void php3_fread(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_fgetc(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_fgets(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_fgetss(INTERNAL_FUNCTION_PARAMETERS);
-extern void php3_fputs(INTERNAL_FUNCTION_PARAMETERS);
+extern void php3_fwrite(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_rewind(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_ftell(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_fseek(INTERNAL_FUNCTION_PARAMETERS);
@@ -56,5 +62,7 @@ extern void php3_fileumask(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_rename(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_file_copy(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_file(INTERNAL_FUNCTION_PARAMETERS);
+extern void php3_set_socket_blocking(INTERNAL_FUNCTION_PARAMETERS);
+extern void php3_set_socket_timeout(INTERNAL_FUNCTION_PARAMETERS);
 
 #endif /* _FILE_H */

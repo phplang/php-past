@@ -184,10 +184,6 @@ SOURCE=.\list.c
 # End Source File
 # Begin Source File
 
-SOURCE=.\list.h
-# End Source File
-# Begin Source File
-
 SOURCE=.\main.c
 # End Source File
 # Begin Source File
@@ -216,11 +212,15 @@ SOURCE=.\operators.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\parser.h
+SOURCE=.\php.h
 # End Source File
 # Begin Source File
 
 SOURCE=.\php3_debugger.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\php3_list.h
 # End Source File
 # Begin Source File
 

@@ -3,7 +3,7 @@ Simple While Loop Test                                        ...
 --POST--
 --GET--
 --FILE--
-<?$a=1; 
+<?php $a=1; 
   while($a<10):
 	echo $a;
 	$a++;

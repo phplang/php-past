@@ -196,7 +196,23 @@ Downwards incompatible language changes
     the new notation: "${$foo}".  The standard $$foo notation will work
     outside of the quoted string.
 
-[11]	Other incompatibilities.
+[11]
+		Some functions have changed names, are missing, or have been deprecated
+		by other functions
+
+	As a whole new rewrite, written by many more people and supporting many
+	more APIs than it's predecessor, there's a good chance some of the functions
+	you're used to from PHP/FI 2 aren't available in release 3, or have changed
+	names.  Many functions that do exist behave a bit differently, mainly
+	because they return different values for errors (false) but also for other
+	reasons.  We can't list all of these functions here, simply because drawing
+	a full comparison between the function sets of the two versions is way too
+	much work.  If a converted PHP/FI 2 script doesn't work for you, nothing
+	can replace the good old human eye going over the code, doublechecking
+	with the online manual that each function still does what you expected it
+	to do.
+
+[12]	Other incompatibilities.
 
 	It's not too unlikely that other documented behavior of PHP2 has changed
 	in this release.  If you think you've found an example, please mail
@@ -295,7 +311,7 @@ New Language Features
 
 		function concat($str1,$str2)
 		{
-			return $str1+$str2;
+			return $str1.$str2;
 		}
 
 	NOTE:	The old style function definition is still supported, to
@@ -409,7 +425,7 @@ New Language Features
 	using a perl-like notation:
 
 		$i="123";
-		${"test"+$i} = 5;
+		${"test".$i} = 5;
 
 	would assign 5 to $test123.
 
@@ -603,6 +619,6 @@ Other Interesting Issues
 [4]	Name change.
 
 	PHP/FI 2.0 was renamed to PHP 3.0, and the meaning has changed from
-	'Personal Home Pages / Forms Interpreter' to 'Professional Home Pages'.
+	'Personal Home Pages / Forms Interpreter' to 'PHP: Hypertext Preprocessor'.
 	'Personal' home pages was an understatement for PHP/FI 2.0, and is
 	definitely an understatement for PHP 3.0.

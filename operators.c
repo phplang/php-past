@@ -5,18 +5,23 @@
    | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
-   | it under the terms of the GNU General Public License as published by |
-   | the Free Software Foundation; either version 2 of the License, or    |
-   | (at your option) any later version.                                  |
+   | it under the terms of one of the following licenses:                 |
+   |                                                                      |
+   |  A) the GNU General Public License as published by the Free Software |
+   |     Foundation; either version 2 of the License, or (at your option) |
+   |     any later version.                                               |
+   |                                                                      |
+   |  B) the PHP License as published by the PHP Development Team and     |
+   |     included in the distribution in the file: LICENSE                |
    |                                                                      |
    | This program is distributed in the hope that it will be useful,      |
    | but WITHOUT ANY WARRANTY; without even the implied warranty of       |
    | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the        |
    | GNU General Public License for more details.                         |
    |                                                                      |
-   | You should have received a copy of the GNU General Public License    |
-   | along with this program; if not, write to the Free Software          |
-   | Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.            |
+   | You should have received a copy of both licenses referred to here.   |
+   | If you did not, or have any questions about PHP licensing, please    |
+   | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
    | Authors: Andi Gutmans <andi@php.net>                                 |
    |          Zeev Suraski <bourbon@netvision.net.il>                     |
@@ -24,20 +29,25 @@
  */
 
 
-/* $Id: operators.c,v 1.61 1998/02/23 18:09:18 zeev Exp $ */
+/* $Id: operators.c,v 1.90 1998/06/05 07:11:00 andi Exp $ */
 
 #ifdef THREAD_SAFE
 #include "tls.h"
 #endif
-#include "parser.h"
+#include "php.h"
+#include "functions/number.h"
 #include <stdio.h>
 #if HAVE_STRING_H
 #include <string.h>
 #else
 #include <strings.h>
 #endif
+#include "snprintf.h"
+#include <errno.h>
 
-void convert_double_to_long(YYSTYPE *op)
+static inline int is_numeric_string(char *str, int length, long *lval, double *dval);
+
+void convert_double_to_long(pval *op)
 {
 	if (op->type == IS_DOUBLE) {
 		op->value.lval = (long) op->value.dval;
@@ -46,31 +56,37 @@ void convert_double_to_long(YYSTYPE *op)
 }
 
 
-void convert_string_to_number(YYSTYPE *op)
+void convert_string_to_number(pval *op)
 {
 	char *strval;
 
 	if (op->type == IS_STRING) {
-		strval = op->value.strval;
-		if (strchr(strval, '.') || strchr(strval, 'e') || strchr(strval, 'E')) {
-			op->type = IS_DOUBLE;
-			op->value.dval = atof(op->value.strval);
-		} else {
-			op->type = IS_LONG;
-			op->value.lval = strtol(op->value.strval, NULL, 10);
+		strval = op->value.str.val;
+		switch ((op->type=is_numeric_string(strval, op->value.str.len, &op->value.lval, &op->value.dval))) {
+			case IS_DOUBLE:
+			case IS_LONG:
+				break;
+			case IS_BC:
+				op->type = IS_DOUBLE; /* may have lost significant digits */
+				break;
+			default:
+				op->value.lval = strtol(op->value.str.val, NULL, 10);
+				op->type = IS_LONG;
+				break;
 		}
 		STR_FREE(strval);
 	}
 }
 
-PHPAPI void convert_to_long(YYSTYPE *op)
+PHPAPI void convert_to_long(pval *op)
 {
 	convert_to_long_base(op, 10);
 }
 
-PHPAPI void convert_to_long_base(YYSTYPE *op, int base)
+PHPAPI void convert_to_long_base(pval *op, int base)
 {
 	char *strval;
+	long tmp;
 	TLS_VARS;
 
 	switch (op->type) {
@@ -81,10 +97,17 @@ PHPAPI void convert_to_long_base(YYSTYPE *op, int base)
 			op->type = IS_LONG;
 			break;
 		case IS_STRING:
-			strval = op->value.strval;
+			strval = op->value.str.val;
 			op->value.lval = strtol(strval, NULL, base);
 			op->type = IS_LONG;
 			STR_FREE(strval);
+			break;
+		case IS_ARRAY:
+		case IS_OBJECT:
+			tmp = (hash_num_elements(op->value.ht)?1:0);
+			yystype_destructor(op _INLINE_TLS);
+			op->value.lval = tmp;
+			op->type = IS_LONG;
 			break;
 		default:
 			php3_error(E_WARNING, "Cannot convert to ordinal value");
@@ -98,9 +121,10 @@ PHPAPI void convert_to_long_base(YYSTYPE *op, int base)
 }
 
 
-PHPAPI void convert_to_double(YYSTYPE *op)
+PHPAPI void convert_to_double(pval *op)
 {
 	char *strval;
+	double tmp;
 	TLS_VARS;
 
 	switch (op->type) {
@@ -111,11 +135,18 @@ PHPAPI void convert_to_double(YYSTYPE *op)
 		case IS_DOUBLE:
 			break;
 		case IS_STRING:
-			strval = op->value.strval;
+			strval = op->value.str.val;
 
-			op->value.dval = atof(strval);
+			op->value.dval = strtod(strval, NULL);
 			op->type = IS_DOUBLE;
 			STR_FREE(strval);
+			break;
+		case IS_ARRAY:
+		case IS_OBJECT:
+			tmp = (hash_num_elements(op->value.ht)?1:0);
+			yystype_destructor(op _INLINE_TLS);
+			op->value.dval = tmp;
+			op->type = IS_DOUBLE;
 			break;
 		default:
 			php3_error(E_WARNING, "Cannot convert to real value");
@@ -127,7 +158,7 @@ PHPAPI void convert_to_double(YYSTYPE *op)
 }
 
 
-PHPAPI void convert_to_boolean_long(YYSTYPE *op)
+PHPAPI void convert_to_boolean_long(pval *op)
 {
 	char *strval;
 	int tmp;
@@ -141,9 +172,10 @@ PHPAPI void convert_to_boolean_long(YYSTYPE *op)
 			op->type = IS_LONG;
 			break;
 		case IS_STRING:
-			strval = op->value.strval;
+			strval = op->value.str.val;
 
-			if (op->strlen == 0) {
+			if (op->value.str.len == 0
+				|| (op->value.str.len==1 && op->value.str.val[0]=='0')) {
 				op->value.lval = 0;
 			} else {
 				op->value.lval = 1;
@@ -167,7 +199,7 @@ PHPAPI void convert_to_boolean_long(YYSTYPE *op)
 }
 
 
-PHPAPI void convert_to_string(YYSTYPE *op)
+PHPAPI void convert_to_string(pval *op)
 {
 	long lval;
 	double dval;
@@ -179,35 +211,36 @@ PHPAPI void convert_to_string(YYSTYPE *op)
 		case IS_LONG:
 			lval = op->value.lval;
 
-			op->value.strval = (char *) emalloc(MAX_LENGTH_OF_LONG + 1);
-			if (!op->value.strval) {
+			op->value.str.val = (char *) emalloc(MAX_LENGTH_OF_LONG + 1);
+			if (!op->value.str.val) {
 				return;
 			}
-			op->strlen = sprintf(op->value.strval, "%ld", lval);  /* SAFE */
+			op->value.str.len = _php3_sprintf(op->value.str.val, "%ld", lval);  /* SAFE */
 			op->type = IS_STRING;
 			break;
 		case IS_DOUBLE: {
-			char *ptr;
-			
 			dval = op->value.dval;
-
-			op->value.strval = (char *) emalloc(MAX_LENGTH_OF_DOUBLE + 1);
-			if (!op->value.strval) {
+			op->value.str.val = (char *) emalloc(MAX_LENGTH_OF_DOUBLE + php3_ini.precision + 1);
+			if (!op->value.str.val) {
 				return;
 			}
-			op->strlen = sprintf(op->value.strval, "%f", dval);  /* SAFE */
-			ptr = op->value.strval + op->strlen-1;
-			while ((*ptr=='0' || *ptr=='.') && ptr!=op->value.strval) {
-				ptr--;
-				op->strlen--;
-				if (*(ptr+1)=='.') {
-					break;
-				}
-			}
-			*(ptr+1) = 0;
+			op->value.str.len = _php3_sprintf(op->value.str.val, "%.*G", (int) php3_ini.precision, dval);  /* SAFE */
+			/* %G already handles removing trailing zeros from the fractional part, yay */
 			op->type = IS_STRING;
 			break;
 		}
+		case IS_ARRAY:
+			yystype_destructor(op _INLINE_TLS);
+			op->value.str.val = estrndup("Array",sizeof("Array")-1);
+			op->value.str.len = sizeof("Array")-1;
+			op->type = IS_STRING;
+			break;
+		case IS_OBJECT:
+			yystype_destructor(op _INLINE_TLS);
+			op->value.str.val = estrndup("Object",sizeof("Object")-1);
+			op->value.str.len = sizeof("Object")-1;
+			op->type = IS_STRING;
+			break;
 		default:
 			yystype_destructor(op _INLINE_TLS);
 			var_reset(op);
@@ -216,65 +249,73 @@ PHPAPI void convert_to_string(YYSTYPE *op)
 }
 
 
-static void convert_scalar_to_array(YYSTYPE *op)
+static void convert_scalar_to_array(pval *op,int type)
 {
-	YYSTYPE tmp = *op;
+	pval tmp = *op;
 	
-	yystype_copy_constructor(&tmp);
 	op->value.ht = (HashTable *) emalloc(sizeof(HashTable));
-	hash_init(op->value.ht, 0, NULL, YYSTYPE_DESTRUCTOR, 0);
-	hash_index_update(op->value.ht, 0, (void *) &tmp, sizeof(YYSTYPE), NULL);
-	op->type = IS_ARRAY;
-}
-
-
-PHPAPI void convert_to_array(YYSTYPE *op)
-{
-	switch(op->type) {
+	hash_init(op->value.ht, 0, NULL, pval_DESTRUCTOR, 0);
+	switch (type) {
 		case IS_ARRAY:
-			return;
+			hash_index_update(op->value.ht, 0, (void *) &tmp, sizeof(pval), NULL);
+			op->type = IS_ARRAY;
 			break;
 		case IS_OBJECT:
-			op->type = IS_ARRAY;
-			return;
-			break;
-		default:
-			convert_scalar_to_array(op);
+			hash_update(op->value.ht, "scalar", sizeof("scalar"), (void *) &tmp, sizeof(pval), NULL);
+			op->type = IS_OBJECT;
 			break;
 	}
 }
 
 
-PHPAPI void convert_to_object(YYSTYPE *op)
+PHPAPI void convert_to_array(pval *op)
 {
 	switch(op->type) {
 		case IS_ARRAY:
+			return;
+			break;
+		case IS_OBJECT:
 			op->type = IS_ARRAY;
+			return;
+			break;
+		default:
+			convert_scalar_to_array(op,IS_ARRAY);
+			break;
+	}
+}
+
+
+PHPAPI void convert_to_object(pval *op)
+{
+	switch(op->type) {
+		case IS_ARRAY:
+			op->type = IS_OBJECT;
 			return;
 			break;
 		case IS_OBJECT:
 			return;
 			break;
 		default:
-			convert_scalar_to_array(op);
+			convert_scalar_to_array(op,IS_OBJECT);
 			op->type = IS_OBJECT;
 			break;
 	}
 }
 
 		
-int add_function(YYSTYPE *result, YYSTYPE *op1, YYSTYPE *op2 INLINE_TLS)
+int add_function(pval *result, pval *op1, pval *op2 INLINE_TLS)
 {
 	if (op1->type == IS_ARRAY && op2->type == IS_ARRAY) {
-		YYSTYPE tmp;
+		pval tmp;
 		
-		hash_merge(op1->value.ht,op2->value.ht,(void (*)(void *pData)) yystype_copy_constructor, (void *) &tmp, sizeof(YYSTYPE));
+		hash_merge(op1->value.ht,op2->value.ht,(void (*)(void *pData)) yystype_copy_constructor, (void *) &tmp, sizeof(pval));
 		*result = *op1;
 		yystype_destructor(op2 _INLINE_TLS);
 		return SUCCESS;
 	}
 	if (php3_ini.warn_plus_overloading) {
-		if (op1->type == IS_STRING || op2->type == IS_STRING) {
+		if ((op1->type == IS_STRING && !is_numeric_string(op1->value.str.val, op1->value.str.len, NULL, NULL))
+			|| (op2->type == IS_STRING && !is_numeric_string(op2->value.str.val, op2->value.str.len, NULL, NULL))) {
 			php3_error(E_NOTICE,"Using plus operator on string operands");
 		}
 	}
@@ -282,8 +323,15 @@ int add_function(YYSTYPE *result, YYSTYPE *op1, YYSTYPE *op2 INLINE_TLS)
 	convert_string_to_number(op2);
 
 	if (op1->type == IS_LONG && op2->type == IS_LONG) {
-		result->type = IS_LONG;
-		result->value.lval = op1->value.lval + op2->value.lval;
+		double dval = (double) op1->value.lval + (double) op2->value.lval;
+
+		if (dval > (double) LONG_MAX) {
+			result->value.dval = dval;
+			result->type = IS_DOUBLE;
+		} else {
+			result->value.lval = op1->value.lval + op2->value.lval;
+			result->type = IS_LONG;
+		}
 		return SUCCESS;
 	}
 	if ((op1->type == IS_DOUBLE && op2->type == IS_LONG)
@@ -306,14 +354,21 @@ int add_function(YYSTYPE *result, YYSTYPE *op1, YYSTYPE *op2 INLINE_TLS)
 }
 
 
-int sub_function(YYSTYPE *result, YYSTYPE *op1, YYSTYPE *op2 INLINE_TLS)
+int sub_function(pval *result, pval *op1, pval *op2 INLINE_TLS)
 {
 	convert_string_to_number(op1);
 	convert_string_to_number(op2);
 
 	if (op1->type == IS_LONG && op2->type == IS_LONG) {
-		result->type = IS_LONG;
-		result->value.lval = op1->value.lval - op2->value.lval;
+		double dval = (double) op1->value.lval - (double) op2->value.lval;
+
+		if (dval < (double) LONG_MIN) {
+			result->value.dval = dval;
+			result->type = IS_DOUBLE;
+		} else {
+			result->value.lval = op1->value.lval - op2->value.lval;
+			result->type = IS_LONG;
+		}
 		return SUCCESS;
 	}
 	if ((op1->type == IS_DOUBLE && op2->type == IS_LONG)
@@ -336,14 +391,21 @@ int sub_function(YYSTYPE *result, YYSTYPE *op1, YYSTYPE *op2 INLINE_TLS)
 }
 
 
-int mul_function(YYSTYPE *result, YYSTYPE *op1, YYSTYPE *op2 INLINE_TLS)
+int mul_function(pval *result, pval *op1, pval *op2 INLINE_TLS)
 {
 	convert_string_to_number(op1);
 	convert_string_to_number(op2);
 
 	if (op1->type == IS_LONG && op2->type == IS_LONG) {
-		result->type = IS_LONG;
-		result->value.lval = op1->value.lval * op2->value.lval;
+		double dval = (double) op1->value.lval * (double) op2->value.lval;
+
+		if (dval > (double) LONG_MAX) {
+			result->value.dval = dval;
+			result->type = IS_DOUBLE;
+		} else {
+			result->value.lval = op1->value.lval * op2->value.lval;
+			result->type = IS_LONG;
+		}
 		return SUCCESS;
 	}
 	if ((op1->type == IS_DOUBLE && op2->type == IS_LONG)
@@ -365,7 +427,7 @@ int mul_function(YYSTYPE *result, YYSTYPE *op1, YYSTYPE *op2 INLINE_TLS)
 	return FAILURE;				/* unknown datatype */
 }
 
-int div_function(YYSTYPE *result, YYSTYPE *op1, YYSTYPE *op2 INLINE_TLS)
+int div_function(pval *result, pval *op1, pval *op2 INLINE_TLS)
 {
 	convert_string_to_number(op1);
 	convert_string_to_number(op2);
@@ -376,8 +438,13 @@ int div_function(YYSTYPE *result, YYSTYPE *op1, YYSTYPE *op2 INLINE_TLS)
 		return FAILURE;			/* division by zero */
 	}
 	if (op1->type == IS_LONG && op2->type == IS_LONG) {
-		result->type = IS_LONG;
-		result->value.lval = op1->value.lval / op2->value.lval;
+		if (op1->value.lval % op2->value.lval == 0) { /* integer */
+			result->type = IS_LONG;
+			result->value.lval = op1->value.lval / op2->value.lval;
+		} else {
+			result->type = IS_DOUBLE;
+			result->value.dval = ((double) op1->value.lval) / op2->value.lval;
+		}
 		return SUCCESS;
 	}
 	if ((op1->type == IS_DOUBLE && op2->type == IS_LONG)
@@ -399,7 +466,7 @@ int div_function(YYSTYPE *result, YYSTYPE *op1, YYSTYPE *op2 INLINE_TLS)
 	return FAILURE;				/* unknown datatype */
 }
 
-int mod_function(YYSTYPE *result, YYSTYPE *op1, YYSTYPE *op2 INLINE_TLS)
+int mod_function(pval *result, pval *op1, pval *op2 INLINE_TLS)
 {
 	convert_to_long(op1);
 	convert_to_long(op2);
@@ -414,7 +481,7 @@ int mod_function(YYSTYPE *result, YYSTYPE *op1, YYSTYPE *op2 INLINE_TLS)
 	return SUCCESS;
 }
 
-int boolean_or_function(YYSTYPE *result, YYSTYPE *op1, YYSTYPE *op2)
+int boolean_or_function(pval *result, pval *op1, pval *op2)
 {
 	result->type = IS_LONG;
 
@@ -438,7 +505,7 @@ int boolean_or_function(YYSTYPE *result, YYSTYPE *op1, YYSTYPE *op2)
 }
 
 
-int boolean_and_function(YYSTYPE *result, YYSTYPE *op1, YYSTYPE *op2)
+int boolean_and_function(pval *result, pval *op1, pval *op2)
 {
 	result->type = IS_LONG;
 
@@ -462,7 +529,7 @@ int boolean_and_function(YYSTYPE *result, YYSTYPE *op1, YYSTYPE *op2)
 }
 
 
-int boolean_xor_function(YYSTYPE *result, YYSTYPE *op1, YYSTYPE *op2)
+int boolean_xor_function(pval *result, pval *op1, pval *op2)
 {
 	result->type = IS_LONG;
 
@@ -473,7 +540,7 @@ int boolean_xor_function(YYSTYPE *result, YYSTYPE *op1, YYSTYPE *op2)
 }
 
 
-int boolean_not_function(YYSTYPE *result, YYSTYPE *op1)
+int boolean_not_function(pval *result, pval *op1)
 {
 	convert_to_boolean_long(op1);
 
@@ -487,7 +554,7 @@ int boolean_not_function(YYSTYPE *result, YYSTYPE *op1)
 }
 
 
-int bitwise_not_function(YYSTYPE *result, YYSTYPE *op1 INLINE_TLS)
+int bitwise_not_function(pval *result, pval *op1 INLINE_TLS)
 {
 	if (op1->type == IS_DOUBLE) {
 		op1->value.lval = (long) op1->value.dval;
@@ -502,10 +569,10 @@ int bitwise_not_function(YYSTYPE *result, YYSTYPE *op1 INLINE_TLS)
 		int i;
 
 		result->type = IS_STRING;
-		result->value.strval = op1->value.strval;
-		result->strlen = op1->strlen;
-		for (i = 0; i < op1->strlen; i++) {
-			result->value.strval[i] = ~op1->value.strval[i];
+		result->value.str.val = op1->value.str.val;
+		result->value.str.len = op1->value.str.len;
+		for (i = 0; i < op1->value.str.len; i++) {
+			result->value.str.val[i] = ~op1->value.str.val[i];
 		}
 		return SUCCESS;
 	}
@@ -515,13 +582,13 @@ int bitwise_not_function(YYSTYPE *result, YYSTYPE *op1 INLINE_TLS)
 }
 
 
-int bitwise_or_function(YYSTYPE *result, YYSTYPE *op1, YYSTYPE *op2 INLINE_TLS)
+int bitwise_or_function(pval *result, pval *op1, pval *op2 INLINE_TLS)
 {
 	if (op1->type == IS_STRING && op2->type == IS_STRING) {
-		YYSTYPE *longer, *shorter;
+		pval *longer, *shorter;
 		int i;
 
-		if (op1->strlen >= op2->strlen) {
+		if (op1->value.str.len >= op2->value.str.len) {
 			longer = op1;
 			shorter = op2;
 		} else {
@@ -529,12 +596,12 @@ int bitwise_or_function(YYSTYPE *result, YYSTYPE *op1, YYSTYPE *op2 INLINE_TLS)
 			shorter = op1;
 		}
 
-		result->strlen = longer->strlen;
-		result->value.strval = longer->value.strval;
-		for (i = 0; i < shorter->strlen; i++) {
-			result->value.strval[i] |= shorter->value.strval[i];
+		result->value.str.len = longer->value.str.len;
+		result->value.str.val = longer->value.str.val;
+		for (i = 0; i < shorter->value.str.len; i++) {
+			result->value.str.val[i] |= shorter->value.str.val[i];
 		}
-		STR_FREE(shorter->value.strval);
+		STR_FREE(shorter->value.str.val);
 		return SUCCESS;
 	}
 	convert_to_long(op1);
@@ -546,13 +613,13 @@ int bitwise_or_function(YYSTYPE *result, YYSTYPE *op1, YYSTYPE *op2 INLINE_TLS)
 }
 
 
-int bitwise_and_function(YYSTYPE *result, YYSTYPE *op1, YYSTYPE *op2 INLINE_TLS)
+int bitwise_and_function(pval *result, pval *op1, pval *op2 INLINE_TLS)
 {
 	if (op1->type == IS_STRING && op2->type == IS_STRING) {
-		YYSTYPE *longer, *shorter;
+		pval *longer, *shorter;
 		int i;
 
-		if (op1->strlen >= op2->strlen) {
+		if (op1->value.str.len >= op2->value.str.len) {
 			longer = op1;
 			shorter = op2;
 		} else {
@@ -560,12 +627,12 @@ int bitwise_and_function(YYSTYPE *result, YYSTYPE *op1, YYSTYPE *op2 INLINE_TLS)
 			shorter = op1;
 		}
 
-		result->strlen = shorter->strlen;
-		result->value.strval = shorter->value.strval;
-		for (i = 0; i < shorter->strlen; i++) {
-			result->value.strval[i] &= longer->value.strval[i];
+		result->value.str.len = shorter->value.str.len;
+		result->value.str.val = shorter->value.str.val;
+		for (i = 0; i < shorter->value.str.len; i++) {
+			result->value.str.val[i] &= longer->value.str.val[i];
 		}
-		STR_FREE(longer->value.strval);
+		STR_FREE(longer->value.str.val);
 		return SUCCESS;
 	}
 	
@@ -579,13 +646,13 @@ int bitwise_and_function(YYSTYPE *result, YYSTYPE *op1, YYSTYPE *op2 INLINE_TLS)
 }
 
 
-int bitwise_xor_function(YYSTYPE *result, YYSTYPE *op1, YYSTYPE *op2 INLINE_TLS)
+int bitwise_xor_function(pval *result, pval *op1, pval *op2 INLINE_TLS)
 {
 	if (op1->type == IS_STRING && op2->type == IS_STRING) {
-		YYSTYPE *longer, *shorter;
+		pval *longer, *shorter;
 		int i;
 
-		if (op1->strlen >= op2->strlen) {
+		if (op1->value.str.len >= op2->value.str.len) {
 			longer = op1;
 			shorter = op2;
 		} else {
@@ -593,12 +660,12 @@ int bitwise_xor_function(YYSTYPE *result, YYSTYPE *op1, YYSTYPE *op2 INLINE_TLS)
 			shorter = op1;
 		}
 
-		result->strlen = shorter->strlen;
-		result->value.strval = shorter->value.strval;
-		for (i = 0; i < shorter->strlen; i++) {
-			result->value.strval[i] ^= longer->value.strval[i];
+		result->value.str.len = shorter->value.str.len;
+		result->value.str.val = shorter->value.str.val;
+		for (i = 0; i < shorter->value.str.len; i++) {
+			result->value.str.val[i] ^= longer->value.str.val[i];
 		}
-		STR_FREE(longer->value.strval);
+		STR_FREE(longer->value.str.val);
 		return SUCCESS;
 	}
 
@@ -610,7 +677,7 @@ int bitwise_xor_function(YYSTYPE *result, YYSTYPE *op1, YYSTYPE *op2 INLINE_TLS)
 	return SUCCESS;
 }
 
-int add_char_to_string(YYSTYPE *result, YYSTYPE *op1, YYSTYPE *op2 INLINE_TLS)
+int add_char_to_string(pval *result, pval *op1, pval *op2 INLINE_TLS)
 {
 	if (op1->type != IS_STRING) {
 		yystype_destructor(op1 _INLINE_TLS);
@@ -618,32 +685,35 @@ int add_char_to_string(YYSTYPE *result, YYSTYPE *op1, YYSTYPE *op2 INLINE_TLS)
 		var_reset(result);
 		return FAILURE;
 	}
-	result->strlen = op1->strlen + 1;
-	result->value.strval = (char *) emalloc(result->strlen + 1);
-	memcpy(result->value.strval, op1->value.strval, op1->strlen);
-	result->value.strval[result->strlen - 1] = op2->value.chval;
-	result->value.strval[result->strlen] = 0;
+	result->value.str.len = op1->value.str.len + 1;
+	result->value.str.val = (char *) emalloc(result->value.str.len + 1);
+	memcpy(result->value.str.val, op1->value.str.val, op1->value.str.len);
+	result->value.str.val[result->value.str.len - 1] = op2->value.chval;
+	result->value.str.val[result->value.str.len] = 0;
 	result->type = IS_STRING;
-	STR_FREE(op1->value.strval);
+	STR_FREE(op1->value.str.val);
 
 	return SUCCESS;
 }
 
-int concat_function(YYSTYPE *result, YYSTYPE *op1, YYSTYPE *op2, int free_op2 INLINE_TLS)
+int concat_function(pval *result, pval *op1, pval *op2, int free_op2 INLINE_TLS)
 {
 	convert_to_string(op1);
 	convert_to_string(op2);
 
 	if (op1->type == IS_STRING && op2->type == IS_STRING) {
-		result->strlen = op1->strlen + op2->strlen;
-		result->value.strval = (char *) emalloc(result->strlen + 1);
-		memcpy(result->value.strval, op1->value.strval,op1->strlen);
-		memcpy(result->value.strval+op1->strlen, op2->value.strval,op2->strlen);
-		result->value.strval[result->strlen] = 0;
+		result->value.str.len = op1->value.str.len + op2->value.str.len;
+		if (op1->value.str.len == 0) { /* Takes care of empty_string etc. cases where we can't erealloc() */
+			result->value.str.val = (char *) emalloc(result->value.str.len + 1);
+			STR_FREE(op1->value.str.val);
+		} else {
+			result->value.str.val = (char *) erealloc(op1->value.str.val, result->value.str.len + 1);
+		}
+		memcpy(result->value.str.val+op1->value.str.len, op2->value.str.val,op2->value.str.len);
+		result->value.str.val[result->value.str.len] = 0;
 		result->type = IS_STRING;
-		STR_FREE(op1->value.strval);
 		if (free_op2) {
-			STR_FREE(op2->value.strval);
+			STR_FREE(op2->value.str.val);
 		}
 		return SUCCESS;
 	}
@@ -655,21 +725,15 @@ int concat_function(YYSTYPE *result, YYSTYPE *op1, YYSTYPE *op2, int free_op2 IN
 	return FAILURE;				/* unknown datatype */
 }
 
-int concat_function_with_free(YYSTYPE *result, YYSTYPE *op1, YYSTYPE *op2 INLINE_TLS)
+int concat_function_with_free(pval *result, pval *op1, pval *op2 INLINE_TLS)
 {
 	return concat_function(result,op1,op2,1 _INLINE_TLS);
 }
 
-int compare_function(YYSTYPE *result, YYSTYPE *op1, YYSTYPE *op2 INLINE_TLS)
+int compare_function(pval *result, pval *op1, pval *op2 INLINE_TLS)
 {
 	if (op1->type == IS_STRING && op2->type == IS_STRING) {
-		result->type = IS_LONG;
-		result->value.lval = op1->strlen-op2->strlen;
-		if (!result->value.lval) {
-			result->value.lval = memcmp(op1->value.strval, op2->value.strval, op1->strlen);
-		}
-		STR_FREE(op1->value.strval);
-		STR_FREE(op2->value.strval);
+		php3_smart_strcmp(result,op1,op2);
 		return SUCCESS;
 	}
 	convert_string_to_number(op1);
@@ -693,7 +757,7 @@ int compare_function(YYSTYPE *result, YYSTYPE *op1, YYSTYPE *op2 INLINE_TLS)
 }
 
 
-int is_equal_function(YYSTYPE *result, YYSTYPE *op1, YYSTYPE *op2 INLINE_TLS)
+int is_equal_function(pval *result, pval *op1, pval *op2 INLINE_TLS)
 {
 	if (compare_function(result, op1, op2 _INLINE_TLS) == FAILURE) {
 		return FAILURE;
@@ -712,7 +776,7 @@ int is_equal_function(YYSTYPE *result, YYSTYPE *op1, YYSTYPE *op2 INLINE_TLS)
 }
 
 
-int is_not_equal_function(YYSTYPE *result, YYSTYPE *op1, YYSTYPE *op2 INLINE_TLS)
+int is_not_equal_function(pval *result, pval *op1, pval *op2 INLINE_TLS)
 {
 	if (compare_function(result, op1, op2 _INLINE_TLS) == FAILURE) {
 		return FAILURE;
@@ -731,7 +795,7 @@ int is_not_equal_function(YYSTYPE *result, YYSTYPE *op1, YYSTYPE *op2 INLINE_TLS
 }
 
 
-int is_smaller_function(YYSTYPE *result, YYSTYPE *op1, YYSTYPE *op2 INLINE_TLS)
+int is_smaller_function(pval *result, pval *op1, pval *op2 INLINE_TLS)
 {
 	if (compare_function(result, op1, op2 _INLINE_TLS) == FAILURE) {
 		return FAILURE;
@@ -758,7 +822,7 @@ int is_smaller_function(YYSTYPE *result, YYSTYPE *op1, YYSTYPE *op2 INLINE_TLS)
 }
 
 
-int is_smaller_or_equal_function(YYSTYPE *result, YYSTYPE *op1, YYSTYPE *op2 INLINE_TLS)
+int is_smaller_or_equal_function(pval *result, pval *op1, pval *op2 INLINE_TLS)
 {
 	if (compare_function(result, op1, op2 _INLINE_TLS) == FAILURE) {
 		return FAILURE;
@@ -784,7 +848,7 @@ int is_smaller_or_equal_function(YYSTYPE *result, YYSTYPE *op1, YYSTYPE *op2 INL
 	return FAILURE;
 }
 
-int is_greater_function(YYSTYPE *result, YYSTYPE *op1, YYSTYPE *op2 INLINE_TLS)
+int is_greater_function(pval *result, pval *op1, pval *op2 INLINE_TLS)
 {
 	if (compare_function(result, op1, op2 _INLINE_TLS) == FAILURE) {
 		return FAILURE;
@@ -811,7 +875,7 @@ int is_greater_function(YYSTYPE *result, YYSTYPE *op1, YYSTYPE *op2 INLINE_TLS)
 }
 
 
-int is_greater_or_equal_function(YYSTYPE *result, YYSTYPE *op1, YYSTYPE *op2 INLINE_TLS)
+int is_greater_or_equal_function(pval *result, pval *op1, pval *op2 INLINE_TLS)
 {
 	if (compare_function(result, op1, op2 _INLINE_TLS) == FAILURE) {
 		return FAILURE;
@@ -841,11 +905,11 @@ int is_greater_or_equal_function(YYSTYPE *result, YYSTYPE *op1, YYSTYPE *op2 INL
 #define UPPER_CASE 2
 #define NUMERIC 3
 
-static void increment_string(YYSTYPE *str)
+static void increment_string(pval *str)
 {
     int carry=0;
-    int pos=str->strlen-1;
-    char *s=str->value.strval;
+    int pos=str->value.str.len-1;
+    char *s=str->value.str.val;
     char *t;
     int last=0; /* Shut up the compiler warning */
     int ch;
@@ -890,10 +954,10 @@ static void increment_string(YYSTYPE *str)
     }
 
     if (carry) {
-        t = (char *) emalloc(str->strlen+1+1);
-        memcpy(t+1,str->value.strval, str->strlen);
-        str->strlen++;
-        t[str->strlen] = '\0';
+        t = (char *) emalloc(str->value.str.len+1+1);
+        memcpy(t+1,str->value.str.val, str->value.str.len);
+        str->value.str.len++;
+        t[str->value.str.len] = '\0';
         switch (last) {
             case NUMERIC:
             	t[0] = '1';
@@ -905,13 +969,13 @@ static void increment_string(YYSTYPE *str)
             	t[0] = 'a';
             	break;
         }
-        STR_FREE(str->value.strval);
-        str->value.strval = t;
+        STR_FREE(str->value.str.val);
+        str->value.str.val = t;
     }
 }
 
 
-int increment_function(YYSTYPE *op1)
+int increment_function(pval *op1)
 {
 	switch (op1->type) {
 		case IS_LONG:
@@ -921,8 +985,8 @@ int increment_function(YYSTYPE *op1)
 			op1->value.dval = op1->value.dval + 1;
 			break;
 		case IS_STRING: /* Perl style string increment */
-			if (op1->strlen==0) { /* consider as 0 */
-				STR_FREE(op1->value.strval);
+			if (op1->value.str.len==0) { /* consider as 0 */
+				STR_FREE(op1->value.str.val);
 				op1->value.lval = 1;
 				op1->type = IS_LONG;
 			} else {
@@ -937,8 +1001,10 @@ int increment_function(YYSTYPE *op1)
 }
 
 
-int decrement_function(YYSTYPE *op1)
+int decrement_function(pval *op1)
 {
+	long lval;
+	
 	switch (op1->type) {
 		case IS_LONG:
 			op1->value.lval--;
@@ -947,12 +1013,17 @@ int decrement_function(YYSTYPE *op1)
 			op1->value.dval = op1->value.dval - 1;
 			break;
 		case IS_STRING:		/* Like perl we only support string increment */
-			if (op1->strlen==0) { /* consider as 0 */
-				STR_FREE(op1->value.strval);
+			if (op1->value.str.len==0) { /* consider as 0 */
+				STR_FREE(op1->value.str.val);
 				op1->value.lval = -1;
 				op1->type = IS_LONG;
 				break;
+			} else if (is_numeric_string(op1->value.str.val, op1->value.str.len, &lval, NULL)==IS_LONG) { /* long */
+				op1->value.lval = lval-1;
+				op1->type = IS_LONG;
+				break;
 			}
+			break;
 		default:
 			return FAILURE;
 	}
@@ -960,7 +1031,7 @@ int decrement_function(YYSTYPE *op1)
 	return SUCCESS;
 }
 
-int yystype_true(YYSTYPE *op)
+int yystype_true(pval *op)
 {
 	convert_to_boolean_long(op);
 	return (op->value.lval ? 1 : 0);
@@ -969,9 +1040,190 @@ int yystype_true(YYSTYPE *op)
 
 void php3_str_tolower(char *str, unsigned int length)
 {
-	register uint i;
-
-	for (i = 0; i < length; i++) {
-		str[i] = tolower(str[i]);
+	register char *p=--str, *end=p+length;
+	
+	while ((p++)<end) {
+		*p = tolower(*p);
 	}
 }
+
+
+inline int php3_binary_strcmp(pval *s1, pval *s2)
+{
+	int retval;
+	
+	retval = memcmp(s1->value.str.val, s2->value.str.val, MIN(s1->value.str.len,s2->value.str.len));
+	if (!retval) {
+		return (s1->value.str.len - s2->value.str.len);
+	} else {
+		return retval;
+	}
+}
+
+inline void php3_smart_strcmp(pval *result, pval *s1, pval *s2)
+{
+	int ret1,ret2;
+	long lval1, lval2;
+	double dval1, dval2;
+	
+	if ((ret1=is_numeric_string(s1->value.str.val, s1->value.str.len, &lval1, &dval1)) &&
+		(ret2=is_numeric_string(s2->value.str.val, s2->value.str.len, &lval2, &dval2))) {
+		if ((ret1==IS_BC) || (ret2==IS_BC)) {
+			bc_num first, second;
+			
+			/* use the BC math library to compare the numbers */
+			init_num(&first);
+			init_num(&second);
+			str2num(&first,s1->value.str.val,100); /* this scale should do */
+			str2num(&second,s2->value.str.val,100); /* ditto */
+			result->value.lval = bc_compare(first,second);
+			result->type = IS_LONG;
+			free_num(&first);
+			free_num(&second);
+		} else if ((ret1==IS_DOUBLE) || (ret2==IS_DOUBLE)) {
+			if (ret1!=IS_DOUBLE) {
+				dval1 = strtod(s1->value.str.val, NULL);
+			} else if (ret2!=IS_DOUBLE) {
+				dval2 = strtod(s2->value.str.val, NULL);
+			}
+			result->value.dval = dval1 - dval2;
+			result->type = IS_DOUBLE;
+		} else { /* they both have to be long's */
+			result->value.lval = lval1 - lval2;
+			result->type = IS_LONG;
+		}
+	} else {
+		result->value.lval = php3_binary_strcmp(s1,s2);
+		result->type = IS_LONG;
+	}
+	STR_FREE(s1->value.str.val);
+	STR_FREE(s2->value.str.val);
+	return;	
+}
+
+
+/* returns 0 for non-numeric string
+ * returns IS_DOUBLE for floating point string, and assigns the value to *dval (if it's not NULL)
+ * returns IS_LONG for integer strings, and assigns the value to *lval (if it's not NULL)
+ * returns IS_BC if the number might lose accuracy when converted to a double
+ */
+ 
+#if 1
+static inline int is_numeric_string(char *str, int length, long *lval, double *dval)
+{
+	long local_lval;
+	double local_dval;
+	char *end_ptr;
+
+	if (!length) {
+		return 0;
+	}
+	
+	errno=0;
+	local_lval = strtol(str, &end_ptr, 10);
+	if (errno!=ERANGE && end_ptr == str+length) { /* integer string */
+		if (lval) {
+			*lval = local_lval;
+		}
+		return IS_LONG;
+	}
+
+	errno=0;
+	local_dval = strtod(str, &end_ptr);
+	if (errno!=ERANGE && end_ptr == str+length) { /* floating point string */
+		if (dval) {
+			*dval = local_dval;
+		}
+		if (length>16) {
+			register char *ptr=str, *end=str+length;
+			
+			while(ptr<end) {
+				switch(*ptr++) {
+					case 'e':
+					case 'E':
+						/* scientific notation, not handled by the BC library */
+						return IS_DOUBLE;
+						break;
+					default:
+						break;
+				}
+			}
+			return IS_BC;
+		} else {
+			return IS_DOUBLE;
+		}
+	}
+	
+	return 0;
+}
+
+#else
+
+static inline int is_numeric_string(char *str, int length, long *lval, double *dval)
+{
+	register char *p=str, *end=str+length;
+	unsigned char had_period=0,had_exponent=0;
+	char *end_ptr;
+	
+	if (!length) {
+		return 0;
+	}
+	switch (*p) {
+		case '-':
+		case '+':
+			while (*++p==' ');  /* ignore spaces after the sign */
+			break;
+		default:
+			break;
+	}
+	while (p<end) {
+		if (isdigit((int)(unsigned char)*p)) {
+			p++;
+		} else if (*p=='.') {
+			if (had_period) {
+				return 0;
+			} else {
+				had_period=1;
+				p++;
+			}
+		} else if (*p=='e' || *p=='E') {
+			p++;
+			if (is_numeric_string(p, length - (int) (p-str), NULL, NULL)==IS_LONG) { /* valid exponent */
+				had_exponent=1;
+				break;
+			} else {
+				return 0;
+			}
+		} else {
+			return 0;
+		}
+	}
+	errno=0;
+	if (had_period || had_exponent) { /* floating point number */
+		double local_dval;
+		
+		local_dval = strtod(str, &end_ptr);
+		if (errno==ERANGE || end_ptr != str+length) { /* overflow or bad string */
+			return 0;
+		} else {
+			if (dval) {
+				*dval = local_dval;
+			}
+			return IS_DOUBLE;
+		}
+	} else {
+		long local_lval;
+		
+		local_lval = strtol(str, &end_ptr, 10);
+		if (errno==ERANGE || end_ptr != str+length) { /* overflow or bad string */
+			return 0;
+		} else {
+			if (lval) {
+				*lval = local_lval;
+			}
+			return IS_LONG;
+		}
+	}
+}
+
+#endif

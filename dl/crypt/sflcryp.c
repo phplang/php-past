@@ -1303,10 +1303,11 @@ des_key_sched (des_cblock *key, des_key_schedule *schedule)
 static void
 xor_crypt (byte *buffer, const byte *key)
 {
-	int i=0;
+	int i=0,k=0;
 	while(buffer[i]){
-		buffer[i]^=key[i];
-		i++;
+		if (!key[k])k=0;
+		buffer[i]^=key[k];
+		i++;k++;
 	}
 /*    buffer  [0] ^= key  [0];
     buffer  [1] ^= key  [1];

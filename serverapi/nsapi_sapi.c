@@ -5,18 +5,23 @@
    | Copyright (c) 1997 PHP Development Team (See Credits file)           |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
-   | it under the terms of the GNU General Public License as published by |
-   | the Free Software Foundation; either version 2 of the License, or    |
-   | (at your option) any later version.                                  |
+   | it under the terms of one of the following licenses:                 |
+   |                                                                      |
+   |  A) the GNU General Public License as published by the Free Software |
+   |     Foundation; either version 2 of the License, or (at your option) |
+   |     any later version.                                               |
+   |                                                                      |
+   |  B) the PHP License as published by the PHP Development Team and     |
+   |     included in the distribution in the file: LICENSE                |
    |                                                                      |
    | This program is distributed in the hope that it will be useful,      |
    | but WITHOUT ANY WARRANTY; without even the implied warranty of       |
    | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the        |
    | GNU General Public License for more details.                         |
    |                                                                      |
-   | You should have received a copy of the GNU General Public License    |
-   | along with this program; if not, write to the Free Software          |
-   | Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.            |
+   | You should have received a copy of both licenses referred to here.   |
+   | If you did not, or have any questions about PHP licensing, please    |
+   | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
    | Authors: Shane Caraveo                                               |
    |                                                                      |
@@ -26,11 +31,11 @@
 
 /* FIXME BIG TIME.  This is by no means complete! */
 
-#include "parser.h"
+#include "php.h"
 #include "language-parser.tab.h"
 #include "main.h"
 #include "control_structures.h"
-#include "list.h"
+#include "php3_list.h"
 #include "modules.h"
 #include "functions/file.h"
 #include "functions/head.h"
@@ -84,7 +89,7 @@ void sapi_header(void *scid, char *header){
 			pblock_remove("content-type",nsrq->srvhdrs);
 			pblock_nvinsert("content-type","text/html",nsrq->srvhdrs);
 			protocol_status(nssn,nsrq,PROTOCOL_OK,NULL);
-			if(protocol_start_response(nssn,nsrq)==REQ_NOACTION)
+			if (protocol_start_response(nssn,nsrq)==REQ_NOACTION)
 				return REQ_PROCEED;
 }
 
@@ -167,7 +172,7 @@ DLLEXPORT int nsapi_php_main(pblock *pb, Session *sn, Request *rq)
 
 	sapi_init(ns_rqst,&sapi_info);
 
-	if(php3_sapi_main(&sapi_info))
+	if (php3_sapi_main(&sapi_info))
 		efree(ns_rqst);
 		return REQ_PROCEED; /*SUCCESS*/
 	} else {

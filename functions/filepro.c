@@ -5,18 +5,23 @@
    | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
-   | it under the terms of the GNU General Public License as published by |
-   | the Free Software Foundation; either version 2 of the License, or    |
-   | (at your option) any later version.                                  |
+   | it under the terms of one of the following licenses:                 |
+   |                                                                      |
+   |  A) the GNU General Public License as published by the Free Software |
+   |     Foundation; either version 2 of the License, or (at your option) |
+   |     any later version.                                               |
+   |                                                                      |
+   |  B) the PHP License as published by the PHP Development Team and     |
+   |     included in the distribution in the file: LICENSE                |
    |                                                                      |
    | This program is distributed in the hope that it will be useful,      |
    | but WITHOUT ANY WARRANTY; without even the implied warranty of       |
    | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the        |
    | GNU General Public License for more details.                         |
    |                                                                      |
-   | You should have received a copy of the GNU General Public License    |
-   | along with this program; if not, write to the Free Software          |
-   | Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.            |
+   | You should have received a copy of both licenses referred to here.   |
+   | If you did not, or have any questions about PHP licensing, please    |
+   | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
    | Authors: Chad Robinson <chadr@brttech.com>                           |
    +----------------------------------------------------------------------+
@@ -31,12 +36,11 @@
 #ifdef THREAD_SAFE
 #include "tls.h"
 #endif
-#include "parser.h"
+#include "php.h"
 #include "internal_functions.h"
 #include <string.h>
 #if MSVC5
 #include <windows.h>
-#define MAXPATHLEN MAX_PATH
 #else
 #include <sys/param.h>
 #endif
@@ -79,7 +83,7 @@ static FP_FIELD *fp_fieldlist = NULL;		/* List of fields */
 #endif
 
 
-int php3_minit_filepro(INITFUNCARG)
+int php3_minit_filepro(INIT_FUNC_ARGS)
 {
 #ifdef THREAD_SAFE
 	fp_global_struct *fp_globals;
@@ -87,8 +91,8 @@ int php3_minit_filepro(INITFUNCARG)
 	CREATE_MUTEX(fp_mutex,"FP_TLS");
 	SET_MUTEX(fp_mutex);
 	numthreads++;
-	if(numthreads==1){
-	if((FPTls=TlsAlloc())==0xFFFFFFFF){
+	if (numthreads==1){
+	if ((FPTls=TlsAlloc())==0xFFFFFFFF){
 		FREE_MUTEX(fp_mutex);
 		return 0;
 	}}
@@ -114,8 +118,8 @@ int php3_mend_filepro(void){
 #if !COMPILE_DL
 	SET_MUTEX(fp_mutex);
 	numthreads--;
-	if(!numthreads){
-	if(!TlsFree(FPTls)){
+	if (!numthreads){
+	if (!TlsFree(FPTls)){
 		FREE_MUTEX(fp_mutex);
 		return 0;
 	}}
@@ -138,7 +142,7 @@ function_entry filepro_functions[] = {
 };
 
 php3_module_entry filepro_module_entry = {
-	"FilePro", filepro_functions, php3_minit_filepro, php3_mend_filepro, NULL, NULL, NULL, 0, 0, 0, NULL
+	"FilePro", filepro_functions, php3_minit_filepro, php3_mend_filepro, NULL, NULL, NULL, STANDARD_MODULE_PROPERTIES
 };
 
 
@@ -155,7 +159,7 @@ BOOL WINAPI DllMain(HANDLE hModule,
 {
     switch( ul_reason_for_call ) {
     case DLL_PROCESS_ATTACH:
-		if((FPTls=TlsAlloc())==0xFFFFFFFF){
+		if ((FPTls=TlsAlloc())==0xFFFFFFFF){
 			return 0;
 		}
 		break;    
@@ -164,7 +168,7 @@ BOOL WINAPI DllMain(HANDLE hModule,
     case DLL_THREAD_DETACH:
 		break;
 	case DLL_PROCESS_DETACH:
-		if(!TlsFree(FPTls)){
+		if (!TlsFree(FPTls)){
 			return 0;
 		}
 		break;
@@ -184,7 +188,7 @@ BOOL WINAPI DllMain(HANDLE hModule,
  */
 void php3_filepro(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *dir;
+	pval *dir;
 	FILE *fp;
 	char workbuf[256]; /* FIX - should really be the max filename length */
 	char readbuf[256];
@@ -204,7 +208,7 @@ void php3_filepro(INTERNAL_FUNCTION_PARAMETERS)
 	FP_GLOBAL(fp_fcount) = -1;
     FP_GLOBAL(fp_keysize) = -1;
 	
-	sprintf(workbuf, "%s/map", dir->value.strval);
+	sprintf(workbuf, "%s/map", dir->value.str.val);
 	if (!(fp = fopen(workbuf, "r"))) {
 		php3_error(E_WARNING, "filePro: cannot open map: [%d] %s",
 					errno, strerror(errno));
@@ -254,7 +258,7 @@ void php3_filepro(INTERNAL_FUNCTION_PARAMETERS)
 	}
 	fclose(fp);
 		
-	FP_GLOBAL(fp_database) = estrndup(dir->value.strval,dir->strlen);
+	FP_GLOBAL(fp_database) = estrndup(dir->value.str.val,dir->value.str.len);
 
 	RETVAL_TRUE;
 }
@@ -316,7 +320,7 @@ void php3_filepro_rowcount(INTERNAL_FUNCTION_PARAMETERS)
  */
 void php3_filepro_fieldname(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *fno;
+	pval *fno;
 	FP_FIELD *lp;
 	int i;
 	FP_TLS_VARS;
@@ -335,7 +339,7 @@ void php3_filepro_fieldname(INTERNAL_FUNCTION_PARAMETERS)
 	
 	for (i = 0, lp = FP_GLOBAL(fp_fieldlist); lp; lp = lp->next, i++) {
 		if (i == fno->value.lval) {
-			RETURN_STRING(lp->name);
+			RETURN_STRING(lp->name,1);
 		}
 	}
 
@@ -354,7 +358,7 @@ void php3_filepro_fieldname(INTERNAL_FUNCTION_PARAMETERS)
  */
 void php3_filepro_fieldtype(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *fno;
+	pval *fno;
 	FP_FIELD *lp;
 	int i;
 	FP_TLS_VARS;
@@ -373,7 +377,7 @@ void php3_filepro_fieldtype(INTERNAL_FUNCTION_PARAMETERS)
 	
 	for (i = 0, lp = FP_GLOBAL(fp_fieldlist); lp; lp = lp->next, i++) {
 		if (i == fno->value.lval) {
-			RETURN_STRING(lp->format);
+			RETURN_STRING(lp->format,1);
 		}
 	}
 	php3_error(E_WARNING,
@@ -390,7 +394,7 @@ void php3_filepro_fieldtype(INTERNAL_FUNCTION_PARAMETERS)
  */
 void php3_filepro_fieldwidth(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *fno;
+	pval *fno;
 	FP_FIELD *lp;
 	int i;
 	FP_TLS_VARS;
@@ -450,7 +454,7 @@ void php3_filepro_fieldcount(INTERNAL_FUNCTION_PARAMETERS)
  */
 void php3_filepro_retrieve(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *rno, *fno;
+	pval *rno, *fno;
     FP_FIELD *lp;
     FILE *fp;
     char workbuf[MAXPATHLEN];
@@ -506,7 +510,7 @@ void php3_filepro_retrieve(INTERNAL_FUNCTION_PARAMETERS)
     }
     readbuf[lp->width] = '\0';
     fclose(fp);
-	RETURN_STRING(readbuf);
+	RETURN_STRING(readbuf,1);
 }
 
 #endif

@@ -5,31 +5,39 @@
    | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
-   | it under the terms of the GNU General Public License as published by |
-   | the Free Software Foundation; either version 2 of the License, or    |
-   | (at your option) any later version.                                  |
+   | it under the terms of one of the following licenses:                 |
+   |                                                                      |
+   |  A) the GNU General Public License as published by the Free Software |
+   |     Foundation; either version 2 of the License, or (at your option) |
+   |     any later version.                                               |
+   |                                                                      |
+   |  B) the PHP License as published by the PHP Development Team and     |
+   |     included in the distribution in the file: LICENSE                |
    |                                                                      |
    | This program is distributed in the hope that it will be useful,      |
    | but WITHOUT ANY WARRANTY; without even the implied warranty of       |
    | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the        |
    | GNU General Public License for more details.                         |
    |                                                                      |
-   | You should have received a copy of the GNU General Public License    |
-   | along with this program; if not, write to the Free Software          |
-   | Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.            |
+   | You should have received a copy of both licenses referred to here.   |
+   | If you did not, or have any questions about PHP licensing, please    |
+   | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
    | Authors: Rasmus Lerdorf <rasmus@lerdorf.on.ca>                       |
    | (with helpful hints from Dean Gaudet <dgaudet@arctic.org>            |
    +----------------------------------------------------------------------+
  */
-/* $Id: mod_php3.c,v 1.61 1998/02/28 21:49:20 zeev Exp $ */
+/* $Id: mod_php3.c,v 1.75 1998/06/02 14:28:42 rasmus Exp $ */
 
 #ifdef THREAD_SAFE
 #include "tls.h"
-#include "parser.h"
+#include "php.h"
 #else
 #include "httpd.h"
 #include "http_config.h"
+#if MODULE_MAGIC_NUMBER > 19980324
+#include "compat.h"
+#endif
 #include "http_core.h"
 #include "http_main.h"
 #include "http_protocol.h"
@@ -39,6 +47,7 @@
 
 #include "util_script.h"
 
+#include "php_version.h"
 #include "mod_php3.h"
 
 
@@ -68,6 +77,7 @@ extern php3_ini_structure php3_ini_master;  /* master copy of config */
 extern int apache_php3_module_main(request_rec * r, int fd, int display_source_mode, int preprocessed);
 extern int php3_module_startup();
 extern void php3_module_shutdown();
+extern void php3_module_shutdown_for_exec();
 
 extern int tls_create(void);
 extern int tls_destroy(void);
@@ -91,21 +101,21 @@ BOOL WINAPI DllMain(HANDLE hModule,
 		   and doing whatever true global inits
 		   need to be done
 		*/
-		if(!tls_startup())
+		if (!tls_startup())
 			return 0;
-		if(!tls_create())
+		if (!tls_create())
 			return 0;
 
 		break;
     case DLL_THREAD_ATTACH:
-		if(!tls_create())
+		if (!tls_create())
 			return 0;
 		/*		if (php3_module_startup()==FAILURE) {
 			return FAILURE;
 		}
 */		break;
     case DLL_THREAD_DETACH:
-		if(!tls_destroy())
+		if (!tls_destroy())
 			return 0;
 /*		if (initialized) {
 			php3_module_shutdown();
@@ -118,9 +128,9 @@ BOOL WINAPI DllMain(HANDLE hModule,
 		/*
 		    close down anything down in process_attach 
 		*/
-		if(!tls_destroy())
+		if (!tls_destroy())
 			return 0;
-		if(!tls_shutdown())
+		if (!tls_shutdown())
 			return 0;
 		break;
     }
@@ -248,6 +258,7 @@ static void *php3_create_dir(pool * p, char *dummy)
 	new = (php3_ini_structure *) palloc(p, sizeof(php3_ini_structure));
 	memcpy(new,&php3_ini_master,sizeof(php3_ini_structure));
 
+
 	return new;
 }
 
@@ -265,43 +276,43 @@ static void *php3_merge_dir(pool *p, void *basev, void *addv)
 	memcpy(new,base,sizeof(php3_ini_structure));
 
 	/* Now, add any fields that have changed in *add compared to the master config */
-	if(add->smtp != orig.smtp) new->smtp = add->smtp;
-	if(add->sendmail_path != orig.sendmail_path) new->sendmail_path = add->sendmail_path;
-	if(add->sendmail_from != orig.sendmail_from) new->sendmail_from = add->sendmail_from;
-	if(add->errors != orig.errors) new->errors = add->errors;
-	if(add->magic_quotes_gpc != orig.magic_quotes_gpc) new->magic_quotes_gpc = add->magic_quotes_gpc;
-	if(add->magic_quotes_runtime != orig.magic_quotes_runtime) new->magic_quotes_runtime = add->magic_quotes_runtime;
-	if(add->magic_quotes_sybase != orig.magic_quotes_sybase) new->magic_quotes_sybase = add->magic_quotes_sybase;
-	if(add->ignore_missing_userfunc_args != orig.ignore_missing_userfunc_args) new->ignore_missing_userfunc_args = add->ignore_missing_userfunc_args;
-	if(add->track_errors != orig.track_errors) new->track_errors = add->track_errors;
-	if(add->display_errors != orig.display_errors) new->display_errors = add->display_errors;
-	if(add->log_errors != orig.log_errors) new->log_errors = add->log_errors;
-	if(add->doc_root != orig.doc_root) new->doc_root = add->doc_root;
-	if(add->user_dir != orig.user_dir) new->user_dir = add->user_dir;
-	if(add->safe_mode != orig.safe_mode) new->safe_mode = add->safe_mode;
-	if(add->track_vars != orig.track_vars) new->track_vars = add->track_vars;
-	if(add->safe_mode_exec_dir != orig.safe_mode_exec_dir) new->safe_mode_exec_dir = add->safe_mode_exec_dir;
-	if(add->cgi_ext != orig.cgi_ext) new->cgi_ext = add->cgi_ext;
-	if(add->isapi_ext != orig.isapi_ext) new->isapi_ext = add->isapi_ext;
-	if(add->nsapi_ext != orig.nsapi_ext) new->nsapi_ext = add->nsapi_ext;
-	if(add->include_path != orig.include_path) new->include_path = add->include_path;
-	if(add->auto_prepend_file != orig.auto_prepend_file) new->auto_prepend_file = add->auto_prepend_file;
-	if(add->auto_append_file != orig.auto_append_file) new->auto_append_file = add->auto_append_file;
-	if(add->upload_tmp_dir != orig.upload_tmp_dir) new->upload_tmp_dir = add->upload_tmp_dir;
-	if(add->extension_dir != orig.extension_dir) new->extension_dir = add->extension_dir;
-	if(add->short_open_tag != orig.short_open_tag) new->short_open_tag = add->short_open_tag;
-	if(add->debugger_host != orig.debugger_host) new->debugger_host = add->debugger_host;
-	if(add->debugger_port != orig.debugger_port) new->debugger_port = add->debugger_port;
-	if(add->error_log != orig.error_log) new->error_log = add->error_log;
+	if (add->smtp != orig.smtp) new->smtp = add->smtp;
+	if (add->sendmail_path != orig.sendmail_path) new->sendmail_path = add->sendmail_path;
+	if (add->sendmail_from != orig.sendmail_from) new->sendmail_from = add->sendmail_from;
+	if (add->errors != orig.errors) new->errors = add->errors;
+	if (add->magic_quotes_gpc != orig.magic_quotes_gpc) new->magic_quotes_gpc = add->magic_quotes_gpc;
+	if (add->magic_quotes_runtime != orig.magic_quotes_runtime) new->magic_quotes_runtime = add->magic_quotes_runtime;
+	if (add->magic_quotes_sybase != orig.magic_quotes_sybase) new->magic_quotes_sybase = add->magic_quotes_sybase;
+	if (add->track_errors != orig.track_errors) new->track_errors = add->track_errors;
+	if (add->display_errors != orig.display_errors) new->display_errors = add->display_errors;
+	if (add->log_errors != orig.log_errors) new->log_errors = add->log_errors;
+	if (add->doc_root != orig.doc_root) new->doc_root = add->doc_root;
+	if (add->user_dir != orig.user_dir) new->user_dir = add->user_dir;
+	if (add->safe_mode != orig.safe_mode) new->safe_mode = add->safe_mode;
+	if (add->track_vars != orig.track_vars) new->track_vars = add->track_vars;
+	if (add->safe_mode_exec_dir != orig.safe_mode_exec_dir) new->safe_mode_exec_dir = add->safe_mode_exec_dir;
+	if (add->cgi_ext != orig.cgi_ext) new->cgi_ext = add->cgi_ext;
+	if (add->isapi_ext != orig.isapi_ext) new->isapi_ext = add->isapi_ext;
+	if (add->nsapi_ext != orig.nsapi_ext) new->nsapi_ext = add->nsapi_ext;
+	if (add->include_path != orig.include_path) new->include_path = add->include_path;
+	if (add->auto_prepend_file != orig.auto_prepend_file) new->auto_prepend_file = add->auto_prepend_file;
+	if (add->auto_append_file != orig.auto_append_file) new->auto_append_file = add->auto_append_file;
+	if (add->upload_tmp_dir != orig.upload_tmp_dir) new->upload_tmp_dir = add->upload_tmp_dir;
+	if (add->extension_dir != orig.extension_dir) new->extension_dir = add->extension_dir;
+	if (add->short_open_tag != orig.short_open_tag) new->short_open_tag = add->short_open_tag;
+	if (add->debugger_host != orig.debugger_host) new->debugger_host = add->debugger_host;
+	if (add->debugger_port != orig.debugger_port) new->debugger_port = add->debugger_port;
+	if (add->error_log != orig.error_log) new->error_log = add->error_log;
 	/* skip the highlight stuff */
-	if(add->sql_safe_mode != orig.sql_safe_mode) new->sql_safe_mode = add->sql_safe_mode;
-	if(add->xbithack != orig.xbithack) new->xbithack = add->xbithack;
-	if(add->engine != orig.engine) new->engine = add->engine;
-	if(add->last_modified != orig.last_modified) new->last_modified = add->last_modified;
-	if(add->max_execution_time != orig.max_execution_time) new->max_execution_time = add->max_execution_time;
-	if(add->memory_limit != orig.memory_limit) new->memory_limit = add->memory_limit;
-	if(add->browscap != orig.browscap) new->browscap = add->browscap;
-	if(add->arg_separator != orig.arg_separator) new->arg_separator = add->arg_separator;
+	if (add->sql_safe_mode != orig.sql_safe_mode) new->sql_safe_mode = add->sql_safe_mode;
+	if (add->xbithack != orig.xbithack) new->xbithack = add->xbithack;
+	if (add->engine != orig.engine) new->engine = add->engine;
+	if (add->last_modified != orig.last_modified) new->last_modified = add->last_modified;
+	if (add->max_execution_time != orig.max_execution_time) new->max_execution_time = add->max_execution_time;
+	if (add->memory_limit != orig.memory_limit) new->memory_limit = add->memory_limit;
+	if (add->browscap != orig.browscap) new->browscap = add->browscap;
+	if (add->arg_separator != orig.arg_separator) new->arg_separator = add->arg_separator;
+	if (add->gpc_order != orig.gpc_order) new->gpc_order = add->gpc_order;
 	
 	return new;
 }
@@ -355,9 +366,6 @@ char *php3flaghandler(cmd_parms * cmd, php3_ini_structure * conf, int val)
 		case 12:
 			conf->magic_quotes_sybase = val;
 			break;
-	    case 13:
-			conf->ignore_missing_userfunc_args = val;
-			break;
 	}
 	return NULL;
 }
@@ -388,10 +396,18 @@ char *php3take1handler(cmd_parms * cmd, php3_ini_structure * conf, char *arg)
 			conf->include_path = pstrdup(cmd->pool, arg);
 			break;
 		case 5:
-			conf->auto_prepend_file = pstrdup(cmd->pool, arg);
+			if (strncasecmp(arg, "none", 4)) {
+				conf->auto_prepend_file = pstrdup(cmd->pool, arg);
+			} else {
+				conf->auto_prepend_file = "";
+			}
 			break;
 		case 6:
-			conf->auto_append_file = pstrdup(cmd->pool, arg);
+			if (strncasecmp(arg, "none", 4)) {
+				conf->auto_append_file = pstrdup(cmd->pool, arg);
+			} else {
+				conf->auto_append_file = "";
+			}
 			break;
 		case 7:
 			conf->upload_tmp_dir = pstrdup(cmd->pool, arg);
@@ -417,6 +433,9 @@ char *php3take1handler(cmd_parms * cmd, php3_ini_structure * conf, char *arg)
 		case 14:
 			conf->browscap = pstrdup(cmd->pool, arg);
 			break;
+		case 15:
+			conf->gpc_order = pstrdup(cmd->pool, arg);
+			break;
 	}
 	return NULL;
 }
@@ -439,7 +458,10 @@ int php3_xbithack_handler(request_rec * r)
 
 void php3_init_handler(server_rec *s, pool *p)
 {
-	register_cleanup(p, NULL, php3_module_shutdown, php3_module_shutdown);
+	register_cleanup(p, NULL, php3_module_shutdown, php3_module_shutdown_for_exec);
+#if MODULE_MAGIC_NUMBER >= 19980527
+	ap_add_version_component("PHP/" PHP_VERSION);
+#endif
 }
 
 handler_rec php3_handlers[] =
@@ -455,35 +477,35 @@ handler_rec php3_handlers[] =
 command_rec php3_commands[] =
 {
 	{"php3_error_reporting", php3take1handler, (void *)0, OR_OPTIONS, TAKE1, "error reporting level"},
-	{"php3_doc_root", php3take1handler, (void *)1, RSRC_CONF, TAKE1, "directory"}, /* not used yet */
-	{"php3_user_dir", php3take1handler, (void *)2, RSRC_CONF, TAKE1, "user directory"}, /* not used yet */
-	{"php3_safe_mode_exec_dir", php3take1handler, (void *)3, RSRC_CONF, TAKE1, "safe mode executable dir"},
+	{"php3_doc_root", php3take1handler, (void *)1, ACCESS_CONF|RSRC_CONF, TAKE1, "directory"}, /* not used yet */
+	{"php3_user_dir", php3take1handler, (void *)2, ACCESS_CONF|RSRC_CONF, TAKE1, "user directory"}, /* not used yet */
+	{"php3_safe_mode_exec_dir", php3take1handler, (void *)3, ACCESS_CONF|RSRC_CONF, TAKE1, "safe mode executable dir"},
 	{"php3_include_path", php3take1handler, (void *)4, OR_OPTIONS, TAKE1, "colon-separated path"},
 	{"php3_auto_prepend_file", php3take1handler, (void *)5, OR_OPTIONS, TAKE1, "file name"},
 	{"php3_auto_append_file", php3take1handler, (void *)6, OR_OPTIONS, TAKE1, "file name"},
-	{"php3_upload_tmp_dir", php3take1handler, (void *)7,  RSRC_CONF, TAKE1, "directory"},
-	{"php3_extension_dir", php3take1handler, (void *)8,  RSRC_CONF, TAKE1, "directory"},
+	{"php3_upload_tmp_dir", php3take1handler, (void *)7,  ACCESS_CONF|RSRC_CONF, TAKE1, "directory"},
+	{"php3_extension_dir", php3take1handler, (void *)8,  ACCESS_CONF|RSRC_CONF, TAKE1, "directory"},
 	{"php3_error_log", php3take1handler, (void *)9, OR_OPTIONS, TAKE1, "error log file"},
 	{"php3_arg_separator", php3take1handler, (void *)10, OR_OPTIONS, TAKE1, "GET method arg separator"},
 	{"php3_max_execution_time", php3take1handler, (void *)11, OR_OPTIONS, TAKE1, "Max script run time in seconds"},
 	{"php3_memory_limit", php3take1handler, (void *)12, OR_OPTIONS, TAKE1, "Max memory in bytes a script may use"},
 	{"php3_sendmail_path", php3take1handler, (void *)13, OR_OPTIONS, TAKE1, "Full path to sendmail binary"},
 	{"php3_browscap", php3take1handler, (void *)14, OR_OPTIONS, TAKE1, "Full path to browscap file"},
+	{"php3_gpc_order", php3take1handler, (void *)15, OR_OPTIONS, TAKE1, "Set GET-COOKIE-POST order [default is GPC]"},
 
 	{"php3_track_errors", php3flaghandler, (void *)0, OR_OPTIONS, FLAG, "on|off"},
 	{"php3_magic_quotes_gpc", php3flaghandler, (void *)1, OR_OPTIONS, FLAG, "on|off"},
 	{"php3_magic_quotes_runtime", php3flaghandler, (void *)2, OR_OPTIONS, FLAG, "on|off"},
 	{"php3_short_open_tag", php3flaghandler, (void *)3, OR_OPTIONS, FLAG, "on|off"},
-	{"php3_safe_mode", php3flaghandler, (void *)4, RSRC_CONF, FLAG, "on|off"},
+	{"php3_safe_mode", php3flaghandler, (void *)4, ACCESS_CONF|RSRC_CONF, FLAG, "on|off"},
 	{"php3_track_vars", php3flaghandler, (void *)5, OR_OPTIONS, FLAG, "on|off"},
-	{"php3_sql_safe_mode", php3flaghandler, (void *)6,  RSRC_CONF, FLAG, "on|off"},
-	{"php3_engine", php3flaghandler, (void *)7, RSRC_CONF, FLAG, "on|off"},
+	{"php3_sql_safe_mode", php3flaghandler, (void *)6,  ACCESS_CONF|RSRC_CONF, FLAG, "on|off"},
+	{"php3_engine", php3flaghandler, (void *)7, RSRC_CONF|ACCESS_CONF, FLAG, "on|off"},
 	{"php3_xbithack", php3flaghandler, (void *)8, OR_OPTIONS, FLAG, "on|off"},
 	{"php3_last_modified", php3flaghandler, (void *)9, OR_OPTIONS, FLAG, "on|off"},
 	{"php3_log_errors", php3flaghandler, (void *)10, OR_OPTIONS, FLAG, "on|off"},
 	{"php3_display_errors", php3flaghandler, (void *)11, OR_OPTIONS, FLAG, "on|off"},
 	{"php3_magic_quotes_sybase", php3flaghandler, (void *)12, OR_OPTIONS, FLAG, "on|off"},
-	{"php3_ignore_missing_userfunc_args", php3flaghandler, (void *)13, OR_OPTIONS, FLAG, "on|off"},
 	{NULL}
 };
 

@@ -1,6 +1,15 @@
 
  <reference id="ref.image">
   <title>Image functions</title>
+  <titleabbrev>Graphics</titleabbrev>
+
+  <partintro>
+   <simpara>
+    You can use the image functions in PHP to get the size of
+    JPEG, GIF, and PNG images, and if you have the GD library
+    (available at http://www.boutell.com/gd/) you will also be
+    able to create and manipulate GIF images.
+  </partintro>
 
   <refentry id="function.getimagesize">
    <refnamediv>
@@ -14,10 +23,12 @@
      <paramdef>string <parameter>filename</parameter></paramdef>
     </funcsynopsis>
     <para>
-     The GetImageSize function will determine the size of any GIF, JPG
-     or PNG image file and return the dimensions along with the file
-     type and a height/width text string to be used inside a normal
-     HTML IMG tag.
+     The <function>GetImageSize</function> function will determine the
+     size of any <acronym>GIF</acronym>, <acronym>JPG</acronym> or
+     <acronym>PNG</acronym> image file and return the dimensions along
+     with the file type and a height/width text string to be used
+     inside a normal <acronym>HTML</acronym> <sgmltag>IMG</sgmltag>
+     tag.
 
     <para>
      Returns an array with 4 elements.  Index 0 contains the width of
@@ -38,7 +49,6 @@
 
    </refsect1>
   </refentry>
-
 
   <refentry id="function.imagearc">
    <refnamediv>
@@ -68,7 +78,6 @@
    </refsect1>
   </refentry>
 
-
   <refentry id="function.imagechar">
    <refnamediv>
     <refname>ImageChar</refname>
@@ -91,12 +100,10 @@
      If font is 1, 2, 3, 4 or 5, a built-in font is used.
 
     <para>
-     See also <link
-     linkend="function.imageloadfont">imageloadfont</link>.
+     See also <function>imageloadfont</function>.
 
    </refsect1>
   </refentry>
-
 
   <refentry id="function.imagecharup">
    <refnamediv>
@@ -118,10 +125,9 @@
     image identified by im at coordinates x,
     y (top left is 0, 0) with the color col.
     If font is 1, 2, 3, 4 or 5, a built-in font is used.
-  <para>    See also <link linkend="function.imageloadfont">imageloadfont</link>.
+  <para>    See also <function>imageloadfont</function>.
    </refsect1>
   </refentry>
-
 
   <refentry id="function.imagecolorallocate">
    <refnamediv>
@@ -139,12 +145,11 @@
     </funcsynopsis>
 <para>    ImageColorAllocate returns a color identifier representing the
     color composed of the given RGB components.  The im
-    argument is the return from the <link linkend="function.imagecreate">imagecreate</link>
+    argument is the return from the <function>imagecreate</function>
     function.  ImageColorAllocate must be called to create each color
     that is to be used in the image represented by im.
    </refsect1>
   </refentry>
-
 
   <refentry id="function.imagecolortransparent">
    <refnamediv>
@@ -159,11 +164,11 @@
      <paramdef>int <parameter>col</parameter></paramdef>
     </funcsynopsis>
 <para>    ImageColorTransparent sets the transparent color in the im image
-    to col.  im is the image identifier returned by <link linkend="function.imagecreate">imagecreate</link> and col is the color identifier returned by
-    <link linkend="function.imagecolorallocate">imagecolorallocate</link>.
+    to col.  im is the image identifier returned by <function>imagecreate</function>
+    and col is the color identifier returned by
+    <function>imagecolorallocate</function>.
    </refsect1>
   </refentry>
-
 
   <refentry id="function.imagecopyresized">
    <refnamediv>
@@ -199,7 +204,6 @@
    </refsect1>
   </refentry>
 
-
   <refentry id="function.imagecreate">
    <refnamediv>
     <refname>ImageCreate</refname>
@@ -216,7 +220,6 @@
     of size x_size by y_size.
    </refsect1>
   </refentry>
-
 
   <refentry id="function.imagecreatefromgif">
    <refnamediv>
@@ -254,7 +257,7 @@
     x2,y2 (top left is
     0,0) in image im of color
     col.
-  <para>    See also <link linkend="function.imageline">imageline</link>.
+  <para>    See also <function>imageline</function>.
    </refsect1>
   </refentry>
 
@@ -270,11 +273,10 @@
      <paramdef>int <parameter>im</parameter></paramdef>
     </funcsynopsis>
 <para>    ImageDestroy frees any memory associated with image im.  im is the
-    image identifier returned by the <link linkend="function.imagecreate">imagecreate</link>
+    image identifier returned by the <function>imagecreate</function>
     function.
    </refsect1>
   </refentry>
-
 
   <refentry id="function.imagefill">
    <refnamediv>
@@ -293,7 +295,6 @@
 <para>    ImageFill performs a flood fill starting at coordinate x, y (top left is 0,0) with color col in the image im.
    </refsect1>
   </refentry>
-
 
   <refentry id="function.imagefilledpolygon">
    <refnamediv>
@@ -316,7 +317,6 @@
     total number of vertices.
    </refsect1>
   </refentry>
-
 
   <refentry id="function.imagefilledrectangle">
    <refnamediv>
@@ -341,7 +341,6 @@
    </refsect1>
   </refentry>
 
-
   <refentry id="function.imagefilltoborder">
    <refnamediv>
     <refname>ImageFillToBorder</refname>
@@ -365,7 +364,6 @@
    </refsect1>
   </refentry>
 
-
   <refentry id="function.imagefontheight">
    <refnamediv>
     <refname>ImageFontHeight</refname>
@@ -378,10 +376,9 @@
      <paramdef>int <parameter>font</parameter></paramdef>
     </funcsynopsis>
 <para>    Returns the pixel width of a character in font.
-  <para>    See also <link linkend="function.imagefontwidth">imagefontwidth</link> and <link linkend="function.imageloadfont">imageloadfont</link>.
+  <para>    See also <function>imagefontwidth</function> and <function>imageloadfont</function>.
    </refsect1>
   </refentry>
-
 
   <refentry id="function.imagefontwidth">
    <refnamediv>
@@ -395,10 +392,9 @@
      <paramdef>int <parameter>font</parameter></paramdef>
     </funcsynopsis>
 <para>    Returns the pixel width of a character in font.
-  <para>    See also <link linkend="function.imagefontheight">imagefontheight</link> and <link linkend="function.imageloadfont">imageloadfont</link>.
+  <para>    See also <function>imagefontheight</function> and <function>imageloadfont</function>.
    </refsect1>
   </refentry>
-
 
   <refentry id="function.imagegif">
    <refnamediv>
@@ -413,13 +409,13 @@
      <paramdef>string <parameter>filename</parameter></paramdef>
     </funcsynopsis>
 <para>    ImageGif creates the GIF file in filename from the image im.  The im argument is the return from the
-    <link linkend="function.imagecreate">imagecreate</link> function.
+    <function>imagecreate</function> function.
   <para>    The image format will be GIF87a unless the image has
-    been made transparent with <link linkend="function.imagecolortransparent">imagecolortransparent</link>, in
+    been made transparent with <function>imagecolortransparent</function>, in
     which case the image format will be GIF89a.
   <para>    The filename argument is optional, and if left off,
     the raw image stream will be output directly.  By sending an
-    image/gif content-type using the 
+    image/gif content-type using the
 
     header
 
@@ -427,7 +423,6 @@
     directly.
    </refsect1>
   </refentry>
-
 
   <refentry id="function.imageinterlace">
    <refnamediv>
@@ -446,7 +441,6 @@
     interlace bit is turned off.
    </refsect1>
   </refentry>
-
 
   <refentry id="function.imageline">
    <refnamediv>
@@ -468,10 +462,9 @@
     x2,y2 (top left is
     0,0) in image im of color
     col.
-  <para>    See also <link linkend="function.imagecreate">imagecreate</link> and <link linkend="function.imagecolorallocate">imagecolorallocate</link>.
+  <para>    See also <function>imagecreate</function> and <function>imagecolorallocate</function>.
    </refsect1>
   </refentry>
-
 
   <refentry id="function.imageloadfont">
    <refnamediv>
@@ -499,57 +492,54 @@
       <title>Font file format</title>
       <tgroup cols="3">
        <thead>
-	<row>
-	 <entry>byte position</entry>
-	 <entry>C data type</entry>
-	 <entry>description</entry>
-	</row>
+    <row>
+     <entry>byte position</entry>
+     <entry>C data type</entry>
+     <entry>description</entry>
+    </row>
        </thead>
        <tbody>
-	<row>
-	 <entry>byte 0-3</entry>
-	 <entry>int</entry>
-	 <entry>number of characters in the font</entry>
-	</row>
-	<row>
-	 <entry>byte 4-7</entry>
-	 <entry>int</entry>
-	 <entry>
-	   value of first character in the font (often 32 for space)
-	  </entry>
-	</row>
-	<row>
-	 <entry>byte 8-11</entry>
-	 <entry>int</entry>
-	 <entry>pixel width of each character</entry>
-	</row>
-	<row>
-	 <entry>byte 12-15</entry>
-	 <entry>int</entry>
-	 <entry>pixel height of each character</entry>
-	</row>
-	<row>
-	 <entry>byte 16-</entry>
-	 <entry>char</entry>
-	 <entry>
-	   array with character data, one byte per pixel in each
-	   character, for a total of (nchars*width*height) bytes.
-	  </entry>
-	</row>
-	
+    <row>
+     <entry>byte 0-3</entry>
+     <entry>int</entry>
+     <entry>number of characters in the font</entry>
+    </row>
+    <row>
+     <entry>byte 4-7</entry>
+     <entry>int</entry>
+     <entry>
+       value of first character in the font (often 32 for space)
+      </entry>
+    </row>
+    <row>
+     <entry>byte 8-11</entry>
+     <entry>int</entry>
+     <entry>pixel width of each character</entry>
+    </row>
+    <row>
+     <entry>byte 12-15</entry>
+     <entry>int</entry>
+     <entry>pixel height of each character</entry>
+    </row>
+    <row>
+     <entry>byte 16-</entry>
+     <entry>char</entry>
+     <entry>
+       array with character data, one byte per pixel in each
+       character, for a total of (nchars*width*height) bytes.
+      </entry>
+    </row>
+
        </tbody>
       </tgroup>
      </table>
 
     <para>
-     See also <link
-     linkend="function.imagefontwidth">ImageFontWidth</link> and
-     <link
-     linkend="function.imagefontheight">ImageFontHeight</link>.
+     See also <function>ImageFontWidth</function> and
+     <function>ImageFontHeight</function>.
 
    </refsect1>
   </refentry>
-
 
   <refentry id="function.imagepolygon">
    <refnamediv>
@@ -568,10 +558,9 @@
 <para>    ImagePolygon creates a polygon in image id.  points is a PHP array containing the polygon's vertices,
     ie. points[0] = x0, points[1] = y0,
     points[2] = x1, points[3] = y1, etc.  num_points is the total number of vertices.
-  <para>    See also <link linkend="function.imagecreate">imagecreate</link>.
+  <para>    See also <function>imagecreate</function>.
    </refsect1>
   </refentry>
-
 
   <refentry id="function.imagerectangle">
    <refnamediv>
@@ -595,7 +584,6 @@
    </refsect1>
   </refentry>
 
-
   <refentry id="function.imagesetpixel">
    <refnamediv>
     <refname>ImageSetPixel</refname>
@@ -613,10 +601,9 @@
 <para>    ImageSetPixel draws a pixel at x,y
     (top left is 0,0) in image im
     of color col.
-  <para>    See also <link linkend="function.imagecreate">imagecreate</link> and <link linkend="function.imagecolorallocate">imagecolorallocate</link>.
+  <para>    See also <function>imagecreate</function> and <function>imagecolorallocate</function>.
    </refsect1>
   </refentry>
-
 
   <refentry id="function.imagestring">
    <refnamediv>
@@ -637,10 +624,9 @@
 <para>    ImageString draws the string s in the image identified by im at coordinates x,y (top
     left is 0,0) in color col.  If
     font is 1, 2, 3, 4 or 5, a built-in font is used.
-  <para>    See also <link linkend="function.imageloadfont">imageloadfont</link>.
+  <para>    See also <function>imageloadfont</function>.
    </refsect1>
   </refentry>
-
 
   <refentry id="function.imagestringup">
    <refnamediv>
@@ -662,10 +648,9 @@
     identified by im at coordinates x,y (top left is 0,0)
     in color col.
     If font is 1, 2, 3, 4 or 5, a built-in font is used.
-  <para>    See also <link linkend="function.imageloadfont">imageloadfont</link>.
+  <para>    See also <function>imageloadfont</function>.
    </refsect1>
   </refentry>
-
 
   <refentry id="function.imagesx">
    <refnamediv>
@@ -680,10 +665,9 @@
     </funcsynopsis>
 <para>    ImageSX returns the width of the image identified by
     im.
-  <para>    See also <link linkend="function.imagecreate">imagecreate</link> and <link linkend="function.imagesy">imagesy</link>.
+  <para>    See also <function>imagecreate</function> and <function>imagesy</function>.
    </refsect1>
   </refentry>
-
 
   <refentry id="function.imagesy">
    <refnamediv>
@@ -696,13 +680,208 @@
      <funcdef>int <function>imagesy</function></funcdef>
      <paramdef>int <parameter>im</parameter></paramdef>
     </funcsynopsis>
-<para>    ImageSY returns the height of the image identified by
-    im.
-
-  <para>    See also <link linkend="function.imagecreate">imagecreate</link> and <link linkend="function.imagesx">imagesx</link>.
+    <para>
+     ImageSY returns the height of the image identified by im.
+    <para>See also <function>imagecreate</function> and
+    <function>imagesx</function>.
    </refsect1>
   </refentry>
 
+  <refentry id="function.imagettftext">
+   <refnamediv>
+    <refname>ImageTTFText</refname>
+    <refpurpose>write text to the image using a TrueType fonts</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>imagettftext</function></funcdef>
+     <paramdef>int <parameter>im</parameter></paramdef>
+     <paramdef>int <parameter>size</parameter></paramdef>
+     <paramdef>int <parameter>angle</parameter></paramdef>
+     <paramdef>int <parameter>x</parameter></paramdef>
+     <paramdef>int <parameter>y</parameter></paramdef>
+     <paramdef>int <parameter>col</parameter></paramdef>
+     <paramdef>string <parameter>fontfile</parameter></paramdef>
+     <paramdef>string <parameter>text</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+     ImageTTFText draws the string <parameter>text</parameter> in the
+     image identified by <parameter>im</parameter>, starting at
+     coordinates <parameter>x,y</parameter> (top left is 0,0), at an
+     angle of <parameter>angle</parameter> in color
+     <parameter>col</parameter>, using the TrueType font file
+     identified by <parameter>fontfile</parameter>.
+    <para>
+     The coordinates given by <parameter>x,y</parameter> will define
+     the basepoint of the first character (roughly the bottom-left
+     corner of the character).  This is different from the
+     <function>ImageString</function>, where x,y define the
+     upper-right corner of the first character.
+    <para>
+     <parameter>angle</parameter> is in degrees, with 0 degrees being
+     left-to-right reading text (3 o'clock direction), and higher
+     values representing a counter-clockwise rotation.  (i.e., a value
+     of 90 would result in bottom-to-top reading text).
+    <para>
+     <parameter>fontfile</parameter> is the path to the TrueType font you wish to use.
+    <para>
+     This example script will produce a black GIF 400x30 pixels, with
+     the words "Testing..."  in white in the font Arial.
+     <example>
+      <title>ImageTTFText</title>
+      <programlisting>
+&lt;?php
+Header("Content-type: image/gif");
+$im = imagecreate(400,30);
+$black = ImageColorAllocate($im, 0,0,0);
+$white = ImageColorAllocate($im, 255,255,255);
+ImageTTFText($im, 20, 0, 10, 20, $white, "/path/arial.ttf", "Testing...");
+ImageGif($im);
+ImageDestroy($im);
+?&gt;
+</programlisting></example>
+
+    <para>
+     This function requires both the GD library and the Freetype library.
+   </refsect1>
+  </refentry>
+
+  <refentry id="function.imagecolorat">
+   <refnamediv>
+    <refname>ImageColorAt</refname>
+    <refpurpose>get the index of the color of a pixel</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>imagecolorat</function></funcdef>
+     <paramdef>int <parameter>im</parameter></paramdef>
+     <paramdef>int <parameter>x</parameter></paramdef>
+     <paramdef>int <parameter>y</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+     Returns the index of the color of the pixel at the
+     specified location in the image.
+    <para>
+     See also <function>imagecolorset</function> and
+     <function>imagecolorsforindex</function>.
+   </refsect1>
+  </refentry>
+
+  <refentry id="function.imagecolorclosest">
+   <refnamediv>
+    <refname>ImageColorClosest</refname>
+    <refpurpose>get the index of the closest color to the specified color</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>imagecolorclosest</function></funcdef>
+     <paramdef>int <parameter>im</parameter></paramdef>
+     <paramdef>int <parameter>red</parameter></paramdef>
+     <paramdef>int <parameter>green</parameter></paramdef>
+     <paramdef>int <parameter>blue</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+     Returns the index of the color in the palette of the image
+     which is "closest" to the specified RGB value.
+    <para>
+     The "distance" between the desired color and each color in the palette is
+     calculated as if the RGB values represented points in three-dimensional
+     space.
+    <para>
+     See also <function>imagecolorexact</function>.
+   </refsect1>
+  </refentry>
+
+  <refentry id="function.imagecolorexact">
+   <refnamediv>
+    <refname>ImageColorExact</refname>
+    <refpurpose>get the index of the specified color</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>imagecolorexact</function></funcdef>
+     <paramdef>int <parameter>im</parameter></paramdef>
+     <paramdef>int <parameter>red</parameter></paramdef>
+     <paramdef>int <parameter>green</parameter></paramdef>
+     <paramdef>int <parameter>blue</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+     Returns the index of the specified color in the palette of the image.
+    <para>
+     If the color does not exist in the image's palette, -1 is returned.
+    <para>
+     See also <function>imagecolorclosest</function>.
+   </refsect1>
+  </refentry>
+
+  <refentry id="function.imagecolorset">
+   <refnamediv>
+    <refname>ImageColorSet</refname>
+    <refpurpose>set the color for the specified palette index</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>bool <function>imagecolorset</function></funcdef>
+     <paramdef>int <parameter>im</parameter></paramdef>
+     <paramdef>int <parameter>index</parameter></paramdef>
+     <paramdef>int <parameter>red</parameter></paramdef>
+     <paramdef>int <parameter>green</parameter></paramdef>
+     <paramdef>int <parameter>blue</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+     This sets the specified index in the palette to the specified
+     color. This is useful for creating flood-fill-like effects in
+     paletted images without the overhead of performing the actual
+     flood-fill.
+    <para>
+     See also <function>imagecolorat</function>.
+   </refsect1>
+  </refentry>
+
+  <refentry id="function.imagecolorsforindex">
+   <refnamediv>
+    <refname>ImageColorsForIndex</refname>
+    <refpurpose>get the colors for an index</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>array <function>imagecolorsforindex</function></funcdef>
+     <paramdef>int <parameter>im</parameter></paramdef>
+     <paramdef>int <parameter>index</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+     This returns an associative array with red, green, and blue keys
+     that contain the appropriate values for the specified color index.
+    <para>
+     See also <function>imagecolorat</function> and
+     <function>imagecolorexact</function>.
+   </refsect1>
+  </refentry>
+
+  <refentry id="function.imagecolorstotal">
+   <refnamediv>
+    <refname>ImageColorsTotal</refname>
+    <refpurpose>find out the number of colors in an image's palette</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>imagecolorstotal</function></funcdef>
+     <paramdef>int <parameter>im</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+     This returns the number of colors in the specified image's palette.
+    <para>
+     See also <function>imagecolorat</function> and
+     <function>imagecolorsforindex</function>.
+   </refsect1>
+  </refentry>
 
  </reference>
 

@@ -6,18 +6,23 @@
    | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
-   | it under the terms of the GNU General Public License as published by |
-   | the Free Software Foundation; either version 2 of the License, or    |
-   | (at your option) any later version.                                  |
+   | it under the terms of one of the following licenses:                 |
+   |                                                                      |
+   |  A) the GNU General Public License as published by the Free Software |
+   |     Foundation; either version 2 of the License, or (at your option) |
+   |     any later version.                                               |
+   |                                                                      |
+   |  B) the PHP License as published by the PHP Development Team and     |
+   |     included in the distribution in the file: LICENSE                |
    |                                                                      |
    | This program is distributed in the hope that it will be useful,      |
    | but WITHOUT ANY WARRANTY; without even the implied warranty of       |
    | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the        |
    | GNU General Public License for more details.                         |
    |                                                                      |
-   | You should have received a copy of the GNU General Public License    |
-   | along with this program; if not, write to the Free Software          |
-   | Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.            |
+   | You should have received a copy of both licenses referred to here.   |
+   | If you did not, or have any questions about PHP licensing, please    |
+   | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
    | Authors: Zeev Suraski <bourbon@netvision.net.il>                     |
    +----------------------------------------------------------------------+
@@ -25,16 +30,17 @@
 
 
 
-/* $Id: configuration-parser.y,v 1.61 1998/02/12 18:30:37 zeev Exp $ */
+/* $Id: configuration-parser.y,v 1.72 1998/06/01 20:34:17 shane Exp $ */
 
 #define DEBUG_CFG_PARSER 1
 #ifdef THREAD_SAFE
 #include "tls.h"
 #endif
-#include "parser.h"
+#include "php.h"
 #include "modules.h"
 #include "functions/dl.h"
 #include "functions/file.h"
+#include "functions/php3_browscap.h"
 #if WIN32
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
@@ -48,23 +54,24 @@
 static HashTable configuration_hash;
 #ifndef THREAD_SAFE
 extern HashTable browser_hash;
+extern char *php3_ini_path;
 #endif
 static HashTable *active_hash_table;
-static YYSTYPE *current_section;
+static pval *current_section;
 static char *currently_parsed_filename;
 
 static int parsing_mode;
 
-YYSTYPE yylval;
+pval yylval;
 
-extern int cfglex(YYSTYPE *cfglval);
+extern int cfglex(pval *cfglval);
 extern FILE *cfgin;
 extern int cfglineno;
 extern void init_cfg_scanner(void);
 
 PHPAPI int cfg_get_long(char *varname,long *result)
 {
-	YYSTYPE *tmp,var;
+	pval *tmp,var;
 	
 	if (hash_find(&configuration_hash,varname,strlen(varname)+1,(void **) &tmp)==FAILURE) {
 		*result=(long)NULL;
@@ -80,7 +87,7 @@ PHPAPI int cfg_get_long(char *varname,long *result)
 
 PHPAPI int cfg_get_double(char *varname,double *result)
 {
-	YYSTYPE *tmp,var;
+	pval *tmp,var;
 	
 	if (hash_find(&configuration_hash,varname,strlen(varname)+1,(void **) &tmp)==FAILURE) {
 		*result=(double)0;
@@ -96,13 +103,13 @@ PHPAPI int cfg_get_double(char *varname,double *result)
 
 PHPAPI int cfg_get_string(char *varname, char **result)
 {
-	YYSTYPE *tmp;
+	pval *tmp;
 
 	if (hash_find(&configuration_hash,varname,strlen(varname)+1,(void **) &tmp)==FAILURE) {
 		*result=NULL;
 		return FAILURE;
 	}
-	*result = tmp->value.strval;
+	*result = tmp->value.str.val;
 	return SUCCESS;
 }
 
@@ -113,15 +120,15 @@ static void yyerror(char *str)
 }
 
 
-static void yystype_config_destructor(YYSTYPE *yystype)
+static void yystype_config_destructor(pval *yystype)
 {
-	if (yystype->type == IS_STRING && yystype->value.strval != empty_string) {
-		free(yystype->value.strval);
+	if (yystype->type == IS_STRING && yystype->value.str.val != empty_string) {
+		free(yystype->value.str.val);
 	}
 }
 
 
-static void yystype_browscap_destructor(YYSTYPE *yystype)
+static void yystype_browscap_destructor(pval *yystype)
 {
 	if (yystype->type == IS_OBJECT || yystype->type == IS_ARRAY) {
 		hash_destroy(yystype->value.ht);
@@ -132,6 +139,8 @@ static void yystype_browscap_destructor(YYSTYPE *yystype)
 
 int php3_init_config(void)
 {
+	TLS_VARS;
+
 	if (hash_init(&configuration_hash, 0, NULL, (void (*)(void *))yystype_config_destructor, 1)==FAILURE) {
 		return FAILURE;
 	}
@@ -148,25 +157,37 @@ int php3_init_config(void)
 		}
 #if WIN32|WINNT
 		{
-			default_location = (char *) malloc(512);
-
-			if (!GetWindowsDirectory(default_location,255)) {
-				default_location[0]=0;
+			if (GLOBAL(php3_ini_path)) {
+				default_location = GLOBAL(php3_ini_path);
+			} else {
+				default_location = (char *) malloc(512);
+			
+				if (!GetWindowsDirectory(default_location,255)) {
+					default_location[0]=0;
+				}
 			}
 		}
 #else
-		default_location = CONFIGURATION_FILE_PATH;
+		if (!GLOBAL(php3_ini_path)) {
+			default_location = CONFIGURATION_FILE_PATH;
+		} else {
+			default_location = GLOBAL(php3_ini_path);
+		}
 #endif
 
 /* build a path */
 		php_ini_path = (char *) malloc(sizeof(".")+strlen(env_location)+strlen(default_location)+2+1);
 
+		if (!GLOBAL(php3_ini_path)) {
 #if WIN32|WINNT
-		sprintf(php_ini_path,".;%s;%s",env_location,default_location);
+			sprintf(php_ini_path,".;%s;%s",env_location,default_location);
 #else
-		sprintf(php_ini_path,".:%s:%s",env_location,default_location);
+			sprintf(php_ini_path,".:%s:%s",env_location,default_location);
 #endif
-
+		} else {
+			/* if path was set via -c flag, only look there */
+			strcpy(php_ini_path,default_location);
+		}
 		php3_ini.safe_mode = 0;
 		cfgin = php3_fopen_with_path("php3.ini","r",php_ini_path,&opened_path);
 		free(php_ini_path);
@@ -181,12 +202,12 @@ int php3_init_config(void)
 		}
 
 		if (opened_path) {
-			YYSTYPE tmp;
+			pval tmp;
 			
-			tmp.value.strval = opened_path;
-			tmp.strlen = strlen(opened_path);
+			tmp.value.str.val = opened_path;
+			tmp.value.str.len = strlen(opened_path);
 			tmp.type = IS_STRING;
-			hash_update(&configuration_hash,"cfg_file_path",sizeof("cfg_file_path"),(void *) &tmp,sizeof(YYSTYPE),NULL);
+			hash_update(&configuration_hash,"cfg_file_path",sizeof("cfg_file_path"),(void *) &tmp,sizeof(pval),NULL);
 #if 0
 			php3_printf("INI file opened at '%s'\n",opened_path);
 #endif
@@ -206,7 +227,7 @@ int php3_init_config(void)
 }
 
 
-int php3_minit_browscap(INITFUNCARGS)
+int php3_minit_browscap(INIT_FUNC_ARGS)
 {
 	TLS_VARS;
 
@@ -250,25 +271,25 @@ int php3_mshutdown_browscap(void)
 }
 
 
-static void convert_browscap_pattern(YYSTYPE *pattern)
+static void convert_browscap_pattern(pval *pattern)
 {
 	register int i,j;
 	char *t;
 
-	for (i=0; i<pattern->strlen; i++) {
-		if (pattern->value.strval[i]=='*' || pattern->value.strval[i]=='?') {
+	for (i=0; i<pattern->value.str.len; i++) {
+		if (pattern->value.str.val[i]=='*' || pattern->value.str.val[i]=='?') {
 			break;
 		}
 	}
 
-	if (i==pattern->strlen) { /* no wildcards */
+	if (i==pattern->value.str.len) { /* no wildcards */
 		return;
 	}
 
-	t = (char *) malloc(pattern->strlen*2);
+	t = (char *) malloc(pattern->value.str.len*2);
 	
-	for (i=0,j=0; i<pattern->strlen; i++,j++) {
-		switch (pattern->value.strval[i]) {
+	for (i=0,j=0; i<pattern->value.str.len; i++,j++) {
+		switch (pattern->value.str.val[i]) {
 			case '?':
 				t[j] = '.';
 				break;
@@ -281,14 +302,14 @@ static void convert_browscap_pattern(YYSTYPE *pattern)
 				t[j] = '.';
 				break;
 			default:
-				t[j] = pattern->value.strval[i];
+				t[j] = pattern->value.str.val[i];
 				break;
 		}
 	}
 	t[j]=0;
-	free(pattern->value.strval);
-	pattern->value.strval = t;
-	pattern->strlen = j;
+	free(pattern->value.str.val);
+	pattern->value.str.val = t;
+	pattern->value.str.len = j;
 	return;
 }
 
@@ -298,8 +319,8 @@ static void convert_browscap_pattern(YYSTYPE *pattern)
 %token STRING
 %token ENCAPSULATED_STRING
 %token SECTION
-%token TRUE
-%token FALSE
+%token CFG_TRUE
+%token CFG_FALSE
 %token EXTENSION
 
 %%
@@ -312,39 +333,42 @@ statement_list:
 statement:
 		string '=' string_or_value {
 #if 0
-			printf("'%s' = '%s'\n",$1.value.strval,$3.value.strval);
+			printf("'%s' = '%s'\n",$1.value.str.val,$3.value.str.val);
 #endif
 			$3.type = IS_STRING;
 			if (parsing_mode==PARSING_MODE_CFG) {
-				hash_update(active_hash_table, $1.value.strval, $1.strlen+1, &$3, sizeof(YYSTYPE), NULL);
+				hash_update(active_hash_table, $1.value.str.val, $1.value.str.len+1, &$3, sizeof(pval), NULL);
 			} else if (parsing_mode==PARSING_MODE_BROWSCAP) {
-				php3_str_tolower($1.value.strval,$1.strlen);
-				hash_update(current_section->value.ht, $1.value.strval, $1.strlen+1, &$3, sizeof(YYSTYPE), NULL);
+				php3_str_tolower($1.value.str.val,$1.value.str.len);
+				hash_update(current_section->value.ht, $1.value.str.val, $1.value.str.len+1, &$3, sizeof(pval), NULL);
 			}
-			free($1.value.strval);
+			free($1.value.str.val);
 		}
-	|	string { free($1.value.strval); }
+	|	string { free($1.value.str.val); }
 	|	EXTENSION '=' string {
-			YYSTYPE dummy;
+			pval dummy;
+#if 0
+			printf("Loading '%s'\n",$3.value.str.val);
+#endif
 			
 			php3_dl(&$3,MODULE_PERSISTENT,&dummy);
 		}
 	|	SECTION { 
 			if (parsing_mode==PARSING_MODE_BROWSCAP) {
-				YYSTYPE tmp;
+				pval tmp;
 
-				/*printf("'%s' (%d)\n",$1.value.strval,$1.strlen+1);*/
+				/*printf("'%s' (%d)\n",$1.value.str.val,$1.value.str.len+1);*/
 				tmp.value.ht = (HashTable *) malloc(sizeof(HashTable));
 				hash_init(tmp.value.ht, 0, NULL, (void (*)(void *))yystype_config_destructor, 1);
 				tmp.type = IS_OBJECT;
-				hash_update(active_hash_table, $1.value.strval, $1.strlen+1, (void *) &tmp, sizeof(YYSTYPE), (void **) &current_section);
-				tmp.value.strval = php3_strndup($1.value.strval,$1.strlen);
-				tmp.strlen = $1.strlen;
+				hash_update(active_hash_table, $1.value.str.val, $1.value.str.len+1, (void *) &tmp, sizeof(pval), (void **) &current_section);
+				tmp.value.str.val = php3_strndup($1.value.str.val,$1.value.str.len);
+				tmp.value.str.len = $1.value.str.len;
 				tmp.type = IS_STRING;
 				convert_browscap_pattern(&tmp);
-				hash_update(current_section->value.ht,"browser_name_pattern",sizeof("browser_name_pattern"),(void *) &tmp, sizeof(YYSTYPE), NULL);
+				hash_update(current_section->value.ht,"browser_name_pattern",sizeof("browser_name_pattern"),(void *) &tmp, sizeof(pval), NULL);
 			}
-			free($1.value.strval);
+			free($1.value.str.val);
 		}
 	|	'\n'
 ;
@@ -357,9 +381,9 @@ string:
 
 string_or_value:
 		string { $$ = $1; }
-	|	TRUE { $$ = $1; }
-	|	FALSE { $$ = $1; }
-	|	'\n' { $$.value.strval = strdup(""); $$.strlen=0; $$.type = IS_STRING; }
+	|	CFG_TRUE { $$ = $1; }
+	|	CFG_FALSE { $$ = $1; }
+	|	'\n' { $$.value.str.val = strdup(""); $$.value.str.len=0; $$.type = IS_STRING; }
 ;
 
 

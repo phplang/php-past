@@ -1,28 +1,22 @@
 <!DOCTYPE style-sheet PUBLIC "-//James Clark//DTD DSSSL Style Sheet//EN" [
 <!ENTITY docbook.dsl SYSTEM "/usr/lib/sgml/docbook/html/docbook.dsl" CDATA DSSSL>
+<!ENTITY html-common.dsl SYSTEM "html-common.dsl">
 <!ENTITY common.dsl SYSTEM "common.dsl">
 ]>
 
 <!--
 
-  $Id: html.dsl,v 1.4 1998/02/06 11:48:31 ssb Exp $
+  $Id: html.dsl,v 1.6 1998/03/11 03:02:59 ssb Exp $
 
-  This file contains HTML-specific stylesheet customization.
+  HTML-specific stylesheet customization.
 
 -->
 
-<style-specification id="local-docbook" use="docbook">
+<style-specification id="docbook-php-html" use="docbook">
 
-(define %html-ext% ".htm")
+(define %html-ext% ".html")
 
-;; Returns the depth of the auto-generated TOC (table of contents) that
-;; should be made at the nd-level
-(define (toc-depth nd)
-  (if (string=? (gi nd) "BOOK")
-      2 ; the depth of the top-level TOC
-      1 ; the depth of all other TOCs
-      ))
-
+&html-common.dsl;
 &common.dsl;
 
 </style-specification>

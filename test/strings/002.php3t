@@ -3,7 +3,7 @@ Formatted print functions                                     ...
 --POST--
 --GET--
 --FILE--
-<?
+<?php 
 
 error_reporting(0);
 

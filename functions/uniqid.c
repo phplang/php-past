@@ -5,28 +5,33 @@
    | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
-   | it under the terms of the GNU General Public License as published by |
-   | the Free Software Foundation; either version 2 of the License, or    |
-   | (at your option) any later version.                                  |
+   | it under the terms of one of the following licenses:                 |
+   |                                                                      |
+   |  A) the GNU General Public License as published by the Free Software |
+   |     Foundation; either version 2 of the License, or (at your option) |
+   |     any later version.                                               |
+   |                                                                      |
+   |  B) the PHP License as published by the PHP Development Team and     |
+   |     included in the distribution in the file: LICENSE                |
    |                                                                      |
    | This program is distributed in the hope that it will be useful,      |
    | but WITHOUT ANY WARRANTY; without even the implied warranty of       |
    | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the        |
    | GNU General Public License for more details.                         |
    |                                                                      |
-   | You should have received a copy of the GNU General Public License    |
-   | along with this program; if not, write to the Free Software          |
-   | Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.            |
+   | You should have received a copy of both licenses referred to here.   |
+   | If you did not, or have any questions about PHP licensing, please    |
+   | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
    | Author: Stig Sæther Bakken <ssb@guardian.no>                        |
    +----------------------------------------------------------------------+
  */
 
-/* $Id: uniqid.c,v 1.23 1998/01/14 17:58:56 shane Exp $ */
+/* $Id: uniqid.c,v 1.29 1998/05/15 10:57:40 zeev Exp $ */
 #ifdef THREAD_SAFE
 #include "tls.h"
 #endif
-#include "parser.h"
+#include "php.h"
 #include "internal_functions.h"
 
 #include <stdlib.h>
@@ -49,7 +54,7 @@
 void php3_uniqid(INTERNAL_FUNCTION_PARAMETERS)
 {
 #ifdef HAVE_GETTIMEOFDAY
-	YYSTYPE *prefix;
+	pval *prefix;
 
 	char uniqid[128];
 	int sec, usec;
@@ -62,7 +67,7 @@ void php3_uniqid(INTERNAL_FUNCTION_PARAMETERS)
 	convert_to_string(prefix);
 
 	/* Do some bounds checking since we are using a char array. */
-	if (strlen(prefix->value.strval) > 114) {
+	if (strlen(prefix->value.str.val) > 114) {
 		php3_error(E_WARNING, "The prefix to uniqid should not be more than 114 characters.");
 		return;
 	}
@@ -77,9 +82,9 @@ void php3_uniqid(INTERNAL_FUNCTION_PARAMETERS)
 	/* The max value usec can have is 0xF423F, so we use only five hex
 	 * digits for usecs:
 	 */
-	sprintf(uniqid, "%s%08x%05x", prefix->value.strval, sec, usec);
+	sprintf(uniqid, "%s%08x%05x", prefix->value.str.val, sec, usec);
 
-	RETURN_STRING(uniqid);
+	RETURN_STRING(uniqid,1);
 #endif
 }
 

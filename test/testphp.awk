@@ -77,13 +77,13 @@ BEGIN		{
 END			{
 				p = "REQUEST_METHOD=POST CONTENT_TYPE=application/x-www-form-urlencoded REDIRECT_STATUS=1 PATH_TRANSLATED=./php.in CONTENT_LENGTH";
 				if(length(Post) && length(Get)) {
-					cmd = sprintf("echo %s | (%s=%d QUERY_STRING=%s ../php) >php.test", Post,p,length(Post),Get);
+					cmd = sprintf("echo %s | (%s=%d QUERY_STRING=%s SCRIPT_FILENAME=./php.in ../php -c.) >php.test", Post,p,length(Post),Get);
 				} else if(length(Post) && !length(Get)) {
-					cmd = sprintf("echo %s | (%s=%d ../php) >php.test",Post,p,length(Post));
+					cmd = sprintf("echo %s | (%s=%d SCRIPT_FILENAME=./php.in ../php -c.) >php.test",Post,p,length(Post));
 				} else if(!length(Post) && length(Get)) {
-					cmd = sprintf("(QUERY_STRING=%s REDIRECT_STATUS=1 PATH_TRANSLATED=./php.in ../php) >php.test",Get);
+					cmd = sprintf("(QUERY_STRING=%s SCRIPT_FILENAME=./php.in REDIRECT_STATUS=1 PATH_TRANSLATED=./php.in ../php -c.) >php.test",Get);
 				} else {
-					cmd = "../php ./php.in >php.test";
+					cmd = "../php -c. ./php.in >php.test";
 				}
 				print "cat php.desc;\n";
 				print cmd;

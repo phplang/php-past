@@ -5,18 +5,23 @@
    | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
-   | it under the terms of the GNU General Public License as published by |
-   | the Free Software Foundation; either version 2 of the License, or    |
-   | (at your option) any later version.                                  |
+   | it under the terms of one of the following licenses:                 |
+   |                                                                      |
+   |  A) the GNU General Public License as published by the Free Software |
+   |     Foundation; either version 2 of the License, or (at your option) |
+   |     any later version.                                               |
+   |                                                                      |
+   |  B) the PHP License as published by the PHP Development Team and     |
+   |     included in the distribution in the file: LICENSE                |
    |                                                                      |
    | This program is distributed in the hope that it will be useful,      |
    | but WITHOUT ANY WARRANTY; without even the implied warranty of       |
    | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the        |
    | GNU General Public License for more details.                         |
    |                                                                      |
-   | You should have received a copy of the GNU General Public License    |
-   | along with this program; if not, write to the Free Software          |
-   | Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.            |
+   | You should have received a copy of both licenses referred to here.   |
+   | If you did not, or have any questions about PHP licensing, please    |
+   | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
    | Authors: Andi Gutmans <andi@php.net>                                 |
    |          Zeev Suraski <bourbon@netvision.net.il>                     |
@@ -24,14 +29,14 @@
  */
 
 
-/* $Id: token_cache.h,v 1.20 1998/02/24 21:25:23 zeev Exp $ */
+/* $Id: token_cache.h,v 1.30 1998/05/15 10:56:25 zeev Exp $ */
 
 
 #ifndef _TOKEN_CACHE
 #define _TOKEN_CACHE
 
 typedef struct {
-	YYSTYPE phplval;
+	pval phplval;
 	int token_type;
 	unsigned int lineno;
 } Token;
@@ -59,16 +64,24 @@ typedef struct {
 extern int tcm_init(TokenCacheManager *tcm);
 extern int tc_init(TokenCache *tc,int block_size);
 #ifndef THREAD_SAFE
-extern int read_next_token(TokenCacheManager *tcm, Token **token, YYSTYPE *phplval);
+extern int read_next_token(TokenCacheManager *tcm, Token **token, pval *phplval);
 #endif
-extern int seek_token(TokenCacheManager *tcm, int offset);
+extern int seek_token(TokenCacheManager *tcm, int offset, int *yychar);
 extern int tc_switch(TokenCacheManager *tcm, int start, int end, int middle);
-extern int tc_set_switched(TokenCacheManager *tcm, int offset);
-extern int tc_set_included(TokenCacheManager *tcm, int offset);
+extern inline int tc_set_token(TokenCacheManager *tcm, int offset, int type);
+extern inline int tc_set_switched(TokenCacheManager *tcm, int offset);
+extern inline int tc_set_included(TokenCacheManager *tcm, int offset);
 extern int tc_destroy(TokenCache *tc);
 extern void tcm_destroy(TokenCacheManager *tcm);
 extern int tcm_new(TokenCacheManager *tcm);
 extern void tcm_save(TokenCacheManager *tcm);
+#if FHTTPD
+extern int tcm_load(TokenCacheManager *tcm, FILE *input);
+#else
 extern int tcm_load(TokenCacheManager *tcm);
+#endif
+extern void clear_lookahead(int *yychar);
+
+extern inline int last_token_suggests_variable_reference();
 
 #endif

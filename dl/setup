@@ -31,6 +31,9 @@ if [ ! ".$CCDLFLAGS" = "." ]; then
 	echo "You can still go ahead and build the extensions now by typing"
 	echo "'make' in this directory.  They just won't work correctly    "
 	echo "until you recompile your PHP.                                "
+        echo "If you are compiling php as a module, you should also add    "
+        echo "$CCDLFLAGS to the start of the EXTRA_LDFLAGS in apaches      "
+        echo "Configuration file.                                          "
 fi
 
 CC="$CC $OPT $CCFLAGS -I. -I.. $LFLAGS"

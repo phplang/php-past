@@ -6,6 +6,7 @@
 ]>
 
  <article id="howto">
+
   <artheader>
    <author>
     <firstname>Stig</firstname>
@@ -16,12 +17,20 @@
      </simpara>
     </authorblurb>
    </author>
-   <title>PHP3 SGML Documentation HOWTO</title>
+   <title>PHP3 Documentation HOWTO</title>
   </artheader>
 
-  <sect1>
-   <title>SGML Tools</title>
+  <sect1 id="aboutdocs">
+   <title>About the PHP3 Documentation</title>
+   <para>
+    PHP3's documentation is written in SGML.  SGML is an
+    ISO-standardized language for defining markup formats.  HTML is
+    defined with SGML.  XXX LEFT HERE
+   </para>
+  </sect1>
 
+  <sect1 id="howto-tools">
+   <title>SGML Tools</title>
    <sect2>
     <title>SGML Editor</title>
     <simpara>
@@ -70,7 +79,6 @@
      </emphasis>
 
    </sect2>
-
    <sect2>
     <title>SGML Conversion Tools</title>
 
@@ -92,9 +100,7 @@
    </sect2>
   </sect1>
 
-
-
-  <sect1>
+  <sect1 id="howto-files">
    <title>File Overview</title>
    <para>
     <variablelist>
@@ -122,12 +128,9 @@
 
     </variablelist>
    </para>
-
   </sect1>
 
-
-
-  <sect1>
+  <sect1 id="howto-writing">
    <title>Writing SGML documents</title>
    <para>
     If you are using PSGML, it can help you a lot finding out what tags
@@ -140,9 +143,43 @@
    </para>
 
    <sect2>
-    <title>DocBook for the HTML-literate</title>
+    <title>DocBook for Native Speakers of HTML</title>
+    <simpara>
+     If you are used to HTML, DocBook will probably seem pretty
+     tag-verbose to you.  DocBook also uses logical tags, it has no
+     (or at least very few) layout-specific tags like HTML is full of.
+     The idea with DocBook is to tell as much as you can about the
+     information while writing it, so that software can do more things
+     with it.
     <para>
-     
+     Although there are few 1:1 mappings between HTML and DocBook
+     tags, here is a little list that should at least make life easier
+     for the HTML proficient:
+     <table>
+      <title>Tags in HTML vs. DocBook</title>
+      <tgroup cols="2">
+       <thead>
+	<row>
+	 <entry>HTML tag</entry>
+	 <entry>DocBook tag</entry>
+	</row>
+       </thead>
+       <tbody>
+	<row>
+	 <entry><markup>DL</markup></entry>
+	 <entry><sgmltag>VariableList</sgmltag></entry>
+	</row>
+	<row>
+	 <entry><markup>OL</markup></entry>
+	 <entry><sgmltag>OrderedList</sgmltag></entry>
+	</row>
+	<row>
+	 <entry><markup>UL</markup></entry>
+	 <entry><sgmltag>ItemizedList</sgmltag></entry>
+	</row>
+       </tbody>
+      </tgroup>
+     </table>
 
    <sect2>
     <title>DocBook reference</title>
@@ -277,13 +314,8 @@
 
    -->
 
-
-
-
-
-   
-
   </sect1>
+
  </article>
 
 <!-- Keep this comment at the end of the file

@@ -1,62 +1,58 @@
 <html>
 <head>
-<? /* the point of this file is to intensively test various aspects of the parser.
+<?php /* the point of this file is to intensively test various aspects of the parser.
     * right now, each test focuses in one aspect only (e.g. variable aliasing, arithemtic operator,
     * various control structures), while trying to combine code from other parts of the parser as well.
     */
 ?>
 
 *** Testing assignments and variable aliasing: ***<br>
-<?
+<?php 
   /* This test tests assignments to variables using other variables as variable-names */
   $a = "b"; 
   $$a = "test"; 
   $$$a = "blah"; 
   ${$$$a}["associative arrays work too"] = "this is nifty";
 ?>
-This should read "blah": <? echo "$test<br>\n"; ?>
-This should read "this is nifty": <? echo $blah[$test="associative arrays work too"]."<br>\n"; ?>
+This should read "blah": <?php echo "$test<br>\n"; ?>
+This should read "this is nifty": <?php echo $blah[$test="associative arrays work too"]."<br>\n"; ?>
 *************************************************<br>
 
 *** Testing integer operators ***<br>
-<?
+<?php 
   /* test just about any operator possible on $i and $j (ints) */
   $i = 5;
   $j = 3;
 ?>
-Correct result - 8:  <? echo $i+$j; ?><br>
-Correct result - 8:  <? echo $i+$j; ?><br>
-Correct result - 2:  <? echo $i-$j; ?><br>
-Correct result - -2:  <? echo $j-$i; ?><br>
-Correct result - 15:  <? echo $i*$j; ?><br>
-Correct result - 15:  <? echo $j*$i; ?><br>
-Correct result - 1:  <? echo $i/$j; ?><br>
-Correct result - 0:  <? echo $j/$i; ?><br>
-Correct result - 2:  <? echo $i%$j; ?><br>
-Correct result - 3:  <? echo $j%$i; ?><br>
+Correct result - 8:  <?php echo $i+$j; ?><br>
+Correct result - 8:  <?php echo $i+$j; ?><br>
+Correct result - 2:  <?php echo $i-$j; ?><br>
+Correct result - -2:  <?php echo $j-$i; ?><br>
+Correct result - 15:  <?php echo $i*$j; ?><br>
+Correct result - 15:  <?php echo $j*$i; ?><br>
+Correct result - 2:  <?php echo $i%$j; ?><br>
+Correct result - 3:  <?php echo $j%$i; ?><br>
 *********************************<br>
 
 *** Testing real operators ***<br>
-<?
+<?php 
   /* test just about any operator possible on $i and $j (floats) */
   $i = 5.0;
   $j = 3.0;
 ?>
-Correct result - 8:  <? echo $i+$j; ?><br>
-Correct result - 8:  <? echo $i+$j; ?><br>
-Correct result - 2:  <? echo $i-$j; ?><br>
-Correct result - -2:  <? echo $j-$i; ?><br>
-Correct result - 15:  <? echo $i*$j; ?><br>
-Correct result - 15:  <? echo $j*$i; ?><br>
-Correct result - 1.666667:  <? echo $i/$j; ?><br>
-Correct result - 0.6:  <? echo $j/$i; ?><br>
-Correct result - 2:  <? echo $i%$j; ?><br>
-Correct result - 3:  <? echo $j%$i; ?><br>
+Correct result - 8:  <?php echo $i+$j; ?><br>
+Correct result - 8:  <?php echo $i+$j; ?><br>
+Correct result - 2:  <?php echo $i-$j; ?><br>
+Correct result - -2:  <?php echo $j-$i; ?><br>
+Correct result - 15:  <?php echo $i*$j; ?><br>
+Correct result - 15:  <?php echo $j*$i; ?><br>
+Correct result - 2:  <?php echo $i%$j; ?><br>
+Correct result - 3:  <?php echo $j%$i; ?><br>
 *********************************<br>
 
 *** Testing if/elseif/else control ***<br>
 
-<?
+<?php 
 /* sick if/elseif/else test by Andi :) */
 $a = 5;
 if ($a == "4") {
@@ -91,7 +87,7 @@ if ($a == "4") {
 
 *** Seriously nested if's test ***<br>
 ** spelling correction by kluzz **
-<?
+<?php 
 /* yet another sick if/elseif/else test by Zeev */
 $i=$j=0;
 echo "Only two lines of text should follow:<br>\n";
@@ -183,7 +179,7 @@ if (0) { /* this code is not supposed to be executed */
 ?>
 
 *** C-style else-if's ***<br>
-<?
+<?php 
   /* looks like without we even tried, C-style else-if structure works fine! */
   if ($a=0) {
     echo "This shouldn't be displayed<br>\n";
@@ -200,7 +196,7 @@ if (0) { /* this code is not supposed to be executed */
 *************************<br>
 
 *** WHILE tests ***<br>
-<?
+<?php 
 $i=0;
 $j=20;
 while ($i<(2*$j)) {
@@ -218,7 +214,7 @@ while ($i<(2*$j)) {
 
 
 *** Nested WHILEs ***<br>
-<?
+<?php 
 $arr_len=3;
 
 $i=0;
@@ -254,7 +250,7 @@ while ($i<$arr_len) {
 *********************<br>
 
 *** hash test... ***<br>
-<?
+<?php 
 /*
 $i=0;
 
@@ -274,7 +270,7 @@ echo "commented out...";
 **************************<br>
 
 *** Hash resizing test ***<br>
-<?
+<?php 
 $i = 10;
 $a = b;
 while ($i > 0) {
@@ -296,7 +292,7 @@ while ($i > 0) {
 
 
 *** break/continue test ***<br>
-<?
+<?php 
 $i=0;
 
 echo "\$i should go from 0 to 2<br>\n";
@@ -347,10 +343,10 @@ while ($i<5) {
 ***********************<br>
 
 *** Nested file include test ***<br>
-<? include("lang/023-2.inc"); ?>
+<?php include("lang/023-2.inc"); ?>
 ********************************<br>
 
-<?
+<?php 
 {
   echo "Tests completed.<br>\n";  # testing some PHP style comment...
 }

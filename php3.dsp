@@ -41,7 +41,7 @@ RSC=rc.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /YX /FD /c
-# ADD CPP /nologo /MT /W3 /GX /O2 /I "." /I "regex\\" /I "\usr\src\mysql\include" /D "NDEBUG" /D "MSVC5" /D "WIN32" /D "_CONSOLE" /D "_MBCS" /YX /FD /c
+# ADD CPP /nologo /MT /W3 /GX /O2 /I "." /I "regex\\" /I "\src\mysql\include" /D "NDEBUG" /D "MSVC5" /D "WIN32" /D "_CONSOLE" /D "_MBCS" /YX /FD /c
 # SUBTRACT CPP /Fr
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
 # ADD RSC /l 0x409 /d "NDEBUG"
@@ -66,7 +66,7 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /Gm /GX /Zi /Od /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /YX /FD /c
-# ADD CPP /nologo /MTd /W3 /Gm /GX /Zi /Od /I "." /I "regex\\" /I "\usr\src\mysql\include" /D "DEBUG" /D "_DEBUG" /D "MSVC5" /D "WIN32" /D "_CONSOLE" /D "_MBCS" /FR /YX /FD /c
+# ADD CPP /nologo /MTd /W3 /Gm /GX /Zi /Od /I "." /I "regex\\" /I "\src\mysql\include" /D "DEBUG" /D "_DEBUG" /D "MSVC5" /D "WIN32" /D "_CONSOLE" /D "_MBCS" /FR /YX /FD /c
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
 # ADD RSC /l 0x409 /d "_DEBUG"
 BSC32=bscmake.exe
@@ -463,6 +463,14 @@ SOURCE=".\configuration-scanner.c"
 # End Source File
 # Begin Source File
 
+SOURCE=.\constants.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\constants.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\control_structures.h
 # End Source File
 # Begin Source File
@@ -535,10 +543,6 @@ SOURCE=.\list.c
 # End Source File
 # Begin Source File
 
-SOURCE=.\list.h
-# End Source File
-# Begin Source File
-
 SOURCE=.\main.c
 # End Source File
 # Begin Source File
@@ -559,11 +563,15 @@ SOURCE=.\operators.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\parser.h
+SOURCE=.\php.h
 # End Source File
 # Begin Source File
 
 SOURCE=.\php3_debugger.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\php3_list.h
 # End Source File
 # Begin Source File
 

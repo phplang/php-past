@@ -210,7 +210,7 @@ DEP_CPP_CALEN=\
 	"..\environment.h"\
 	"..\hash.h"\
 	"..\operators.h"\
-	"..\parser.h"\
+	"..\php.h"\
 	"..\stack.h"\
 	"..\token_cache.h"\
 	"..\variables.h"\
@@ -233,7 +233,7 @@ DEP_CPP_CALEN=\
 	"..\environment.h"\
 	"..\hash.h"\
 	"..\operators.h"\
-	"..\parser.h"\
+	"..\php.h"\
 	"..\stack.h"\
 	"..\token_cache.h"\
 	"..\variables.h"\
@@ -260,7 +260,7 @@ DEP_CPP_DOW_C=\
 	"..\environment.h"\
 	"..\hash.h"\
 	"..\operators.h"\
-	"..\parser.h"\
+	"..\php.h"\
 	"..\stack.h"\
 	"..\token_cache.h"\
 	"..\variables.h"\
@@ -283,7 +283,7 @@ DEP_CPP_DOW_C=\
 	"..\environment.h"\
 	"..\hash.h"\
 	"..\operators.h"\
-	"..\parser.h"\
+	"..\php.h"\
 	"..\stack.h"\
 	"..\token_cache.h"\
 	"..\variables.h"\
@@ -310,7 +310,7 @@ DEP_CPP_FRENC=\
 	"..\environment.h"\
 	"..\hash.h"\
 	"..\operators.h"\
-	"..\parser.h"\
+	"..\php.h"\
 	"..\stack.h"\
 	"..\token_cache.h"\
 	"..\variables.h"\
@@ -333,7 +333,7 @@ DEP_CPP_FRENC=\
 	"..\environment.h"\
 	"..\hash.h"\
 	"..\operators.h"\
-	"..\parser.h"\
+	"..\php.h"\
 	"..\stack.h"\
 	"..\token_cache.h"\
 	"..\variables.h"\
@@ -360,7 +360,7 @@ DEP_CPP_GREGO=\
 	"..\environment.h"\
 	"..\hash.h"\
 	"..\operators.h"\
-	"..\parser.h"\
+	"..\php.h"\
 	"..\stack.h"\
 	"..\token_cache.h"\
 	"..\variables.h"\
@@ -383,7 +383,7 @@ DEP_CPP_GREGO=\
 	"..\environment.h"\
 	"..\hash.h"\
 	"..\operators.h"\
-	"..\parser.h"\
+	"..\php.h"\
 	"..\stack.h"\
 	"..\token_cache.h"\
 	"..\variables.h"\
@@ -410,7 +410,7 @@ DEP_CPP_JEWIS=\
 	"..\environment.h"\
 	"..\hash.h"\
 	"..\operators.h"\
-	"..\parser.h"\
+	"..\php.h"\
 	"..\stack.h"\
 	"..\token_cache.h"\
 	"..\variables.h"\
@@ -433,7 +433,7 @@ DEP_CPP_JEWIS=\
 	"..\environment.h"\
 	"..\hash.h"\
 	"..\operators.h"\
-	"..\parser.h"\
+	"..\php.h"\
 	"..\stack.h"\
 	"..\token_cache.h"\
 	"..\variables.h"\
@@ -460,7 +460,7 @@ DEP_CPP_JULIA=\
 	"..\environment.h"\
 	"..\hash.h"\
 	"..\operators.h"\
-	"..\parser.h"\
+	"..\php.h"\
 	"..\stack.h"\
 	"..\token_cache.h"\
 	"..\variables.h"\
@@ -483,7 +483,7 @@ DEP_CPP_JULIA=\
 	"..\environment.h"\
 	"..\hash.h"\
 	"..\operators.h"\
-	"..\parser.h"\
+	"..\php.h"\
 	"..\stack.h"\
 	"..\token_cache.h"\
 	"..\variables.h"\

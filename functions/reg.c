@@ -5,30 +5,35 @@
    | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
-   | it under the terms of the GNU General Public License as published by |
-   | the Free Software Foundation; either version 2 of the License, or    |
-   | (at your option) any later version.                                  |
+   | it under the terms of one of the following licenses:                 |
+   |                                                                      |
+   |  A) the GNU General Public License as published by the Free Software |
+   |     Foundation; either version 2 of the License, or (at your option) |
+   |     any later version.                                               |
+   |                                                                      |
+   |  B) the PHP License as published by the PHP Development Team and     |
+   |     included in the distribution in the file: LICENSE                |
    |                                                                      |
    | This program is distributed in the hope that it will be useful,      |
    | but WITHOUT ANY WARRANTY; without even the implied warranty of       |
    | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the        |
    | GNU General Public License for more details.                         |
    |                                                                      |
-   | You should have received a copy of the GNU General Public License    |
-   | along with this program; if not, write to the Free Software          |
-   | Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.            |
+   | You should have received a copy of both licenses referred to here.   |
+   | If you did not, or have any questions about PHP licensing, please    |
+   | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
    | Authors: Rasmus Lerdorf <rasmus@lerdorf.on.ca>                       |
    |          Jim Winstead <jimw@php.net>                                 |
    |          Jaakko Hyvätti <jaakko@hyvatti.iki.fi>                      | 
    +----------------------------------------------------------------------+
  */
-/* $Id: reg.c,v 1.71 1998/02/23 03:13:29 ssb Exp $ */
+/* $Id: reg.c,v 1.81 1998/05/30 14:28:26 zeev Exp $ */
 #ifdef THREAD_SAFE
 #include "tls.h"
 #endif
 #include <stdio.h>
-#include "parser.h"
+#include "php.h"
 #include "internal_functions.h"
 #include "php3_string.h"
 #include "reg.h"
@@ -47,7 +52,7 @@ function_entry reg_functions[] = {
 };
 
 php3_module_entry regexp_module_entry = {
-	"Regular Expressions", reg_functions, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, NULL
+	"Regular Expressions", reg_functions, NULL, NULL, NULL, NULL, NULL, STANDARD_MODULE_PROPERTIES
 };
 
 /* This is the maximum number of (..) constructs we'll generate from a
@@ -77,10 +82,11 @@ static void _php3_reg_eprint(int err, regex_t *re) {
 	len = regerror(err, re, NULL, 0);
 	if (len) {
 		message = (char *)emalloc((buf_len + len + 2) * sizeof(char));
-		if (!message) return; /* fail silently */
+		if (!message) {
+			return; /* fail silently */
+		}
 		if (buf_len) {
-			strncat(message, buf, buf_len);
-			strcat(message, ": ");
+			snprintf(message, buf_len, "%s: ", buf);
 			buf_len += 1; /* so pointer math below works */
 		}
 		/* drop the message into place */
@@ -95,10 +101,10 @@ static void _php3_reg_eprint(int err, regex_t *re) {
 
 static void _php3_ereg(INTERNAL_FUNCTION_PARAMETERS, int icase)
 {
-	YYSTYPE *regex,			/* Regular expression */
+	pval *regex,			/* Regular expression */
 		*findin,		/* String to apply expression to */
 		*array = NULL;		/* Optional register array */
-	YYSTYPE entry;
+	pval entry;
 	regex_t re;
 	regmatch_t subs[NS];
 	int err, i, match_len, string_len;
@@ -135,14 +141,14 @@ static void _php3_ereg(INTERNAL_FUNCTION_PARAMETERS, int icase)
 
 	/* compile the regular expression from the supplied regex */
 	if (regex->type == IS_STRING) {
-		err = regcomp(&re, regex->value.strval, REG_EXTENDED | copts);
+		err = regcomp(&re, regex->value.str.val, REG_EXTENDED | copts);
 	} else {
 		/* we convert numbers to integers and treat them as a string */
 		if (regex->type == IS_DOUBLE)
 			convert_to_long(regex);	/* get rid of decimal places */
 		convert_to_string(regex);
 		/* don't bother doing an extended regex with just a number */
-		err = regcomp(&re, regex->value.strval, copts);
+		err = regcomp(&re, regex->value.str.val, copts);
 	}
 
 	if (err) {
@@ -152,7 +158,7 @@ static void _php3_ereg(INTERNAL_FUNCTION_PARAMETERS, int icase)
 
 	/* make a copy of the string we're looking in */
 	convert_to_string(findin);
-	string = estrndup(findin->value.strval, findin->strlen);
+	string = estrndup(findin->value.str.val, findin->value.str.len);
 
 	/* actually execute the regular expression */
 	err = regexec(&re, string, (size_t) NS, subs, 0);
@@ -177,18 +183,17 @@ static void _php3_ereg(INTERNAL_FUNCTION_PARAMETERS, int icase)
 		array_init(array);
 
 		for (i = 0; i < NS; i++) {
-			*buf = '\0';
 			start = subs[i].rm_so;
 			end = subs[i].rm_eo;
 			if (start != -1 && end > 0 && start < string_len && end < string_len && start < end) {
-				strncat(buf, &string[start], end - start);
-				entry.strlen = end - start;
-				entry.value.strval = estrdup(buf);
+				strncpy(buf, &string[start], end - start);
+				entry.value.str.len = end - start;
+				entry.value.str.val = estrdup(buf);
 				entry.type = IS_STRING;
 			} else {
 				var_reset(&entry);
 			}
-			hash_index_update(array->value.ht, i, &entry, sizeof(YYSTYPE),NULL);
+			hash_index_update(array->value.ht, i, &entry, sizeof(pval),NULL);
 		}
 		efree(buf);
 	}
@@ -357,7 +362,7 @@ char *_php3_regreplace(const char *pattern, const char *replace, const char *str
 
 static void _php3_eregreplace(INTERNAL_FUNCTION_PARAMETERS, int icase)
 {
-	YYSTYPE *arg_pattern,
+	pval *arg_pattern,
 		*arg_replace,
 		*arg_string;
 	char *pattern;
@@ -371,29 +376,32 @@ static void _php3_eregreplace(INTERNAL_FUNCTION_PARAMETERS, int icase)
 	}
 
 	if (arg_pattern->type == IS_STRING) {
-		if (arg_pattern->value.strval && arg_pattern->strlen)
-			pattern = estrndup(arg_pattern->value.strval,arg_pattern->strlen);
+		if (arg_pattern->value.str.val && arg_pattern->value.str.len)
+			pattern = estrndup(arg_pattern->value.str.val,arg_pattern->value.str.len);
 		else
 			pattern = empty_string;
 	} else {
-		pattern = emalloc(2 * sizeof(char));
-		sprintf(pattern, "%c", (int) arg_pattern->value.lval);
+		convert_to_long(arg_pattern);
+		pattern = emalloc(2);
+		pattern[0] = (char) arg_pattern->value.lval;
+		pattern[1] = '\0';
 	}
 
 	if (arg_replace->type == IS_STRING) {
-		if (arg_replace->value.strval && arg_replace->strlen)
-			replace = estrndup(arg_replace->value.strval, arg_replace->strlen);
+		if (arg_replace->value.str.val && arg_replace->value.str.len)
+			replace = estrndup(arg_replace->value.str.val, arg_replace->value.str.len);
 		else
 			replace = empty_string;
 	} else {
 		convert_to_long(arg_replace);
-		replace = emalloc(2 * sizeof(char));
-		sprintf(replace, "%c", (int) arg_replace->value.lval);
+		replace = emalloc(2);
+		replace[0] = (char) arg_replace->value.lval;
+		replace[1] = '\0';
 	}
 
 	convert_to_string(arg_string);
-	if (arg_string->value.strval && arg_string->strlen)
-		string = estrndup(arg_string->value.strval, arg_string->strlen);
+	if (arg_string->value.str.val && arg_string->value.str.len)
+		string = estrndup(arg_string->value.str.val, arg_string->value.str.len);
 	else
 		string = empty_string;
 
@@ -402,7 +410,7 @@ static void _php3_eregreplace(INTERNAL_FUNCTION_PARAMETERS, int icase)
 	if (ret == (char *) -1) {
 		RETVAL_FALSE;
 	} else {
-		RETVAL_STRING(ret);
+		RETVAL_STRING(ret,1);
 		STR_FREE(ret);
 	}
 	STR_FREE(string);
@@ -424,7 +432,7 @@ void php3_eregireplace(INTERNAL_FUNCTION_PARAMETERS)
    = split(":", $passwd_file, 5); */
 void php3_split(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *spliton, *str, *arg_count = NULL;
+	pval *spliton, *str, *arg_count = NULL;
 	regex_t re;
 	regmatch_t subs[1];
 	char *strp, *endp;
@@ -450,10 +458,10 @@ void php3_split(INTERNAL_FUNCTION_PARAMETERS)
 	convert_to_string(spliton);                                        
 	convert_to_string(str);                                            
 
-	strp = str->value.strval;
-	endp = str->value.strval + strlen(str->value.strval);
+	strp = str->value.str.val;
+	endp = str->value.str.val + strlen(str->value.str.val);
 
-	err = regcomp(&re, spliton->value.strval, REG_EXTENDED);
+	err = regcomp(&re, spliton->value.str.val, REG_EXTENDED);
 	if (err) {
 		php3_error(E_WARNING, "unexpected regex error (%d)", err);
 		RETURN_FALSE;
@@ -467,9 +475,10 @@ void php3_split(INTERNAL_FUNCTION_PARAMETERS)
 	/* churn through str, generating array entries as we go */
 	while ((count == -1 || count > 1) && !(err = regexec(&re, strp, 1, subs, 0))) {
 		if (subs[0].rm_so == 0 && subs[0].rm_eo) {
-			/* On an empty match, return an empty string and skip ahead one char */
+			/* match is at start of string, return empty string */
 			add_next_index_stringl(return_value, empty_string, 0, 1);
-			strp++;
+			/* skip ahead the length of the regex match */
+			strp+=subs[0].rm_eo;
 		} else if (subs[0].rm_so==0 && subs[0].rm_eo==0) {
 			/* No more matches */
 			regfree(&re);
@@ -517,7 +526,7 @@ void php3_split(INTERNAL_FUNCTION_PARAMETERS)
 
 PHPAPI void php3_sql_regcase(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *string;
+	pval *string;
 	char *tmp;
 	register int i;
 	
@@ -527,18 +536,18 @@ PHPAPI void php3_sql_regcase(INTERNAL_FUNCTION_PARAMETERS)
 	
 	convert_to_string(string);
 	
-	tmp = (char *) emalloc(string->strlen*4+1);
+	tmp = (char *) emalloc(string->value.str.len*4+1);
 	
-	for (i=0; i<string->strlen; i++) {
+	for (i=0; i<string->value.str.len; i++) {
 		tmp[i*4] = '[';
-		tmp[i*4+1]=toupper(string->value.strval[i]);
-		tmp[i*4+2]=tolower(string->value.strval[i]);
+		tmp[i*4+1]=toupper(string->value.str.val[i]);
+		tmp[i*4+2]=tolower(string->value.str.val[i]);
 		tmp[i*4+3]=']';
 	}
-	tmp[string->strlen*4]=0;
+	tmp[string->value.str.len*4]=0;
 	
-	return_value->value.strval = tmp;
-	return_value->strlen = string->strlen*4;
+	return_value->value.str.val = tmp;
+	return_value->value.str.len = string->value.str.len*4;
 	return_value->type = IS_STRING;
 }
 

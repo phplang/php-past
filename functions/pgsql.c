@@ -5,45 +5,50 @@
    | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
-   | it under the terms of the GNU General Public License as published by |
-   | the Free Software Foundation; either version 2 of the License, or    |
-   | (at your option) any later version.                                  |
+   | it under the terms of one of the following licenses:                 |
+   |                                                                      |
+   |  A) the GNU General Public License as published by the Free Software |
+   |     Foundation; either version 2 of the License, or (at your option) |
+   |     any later version.                                               |
+   |                                                                      |
+   |  B) the PHP License as published by the PHP Development Team and     |
+   |     included in the distribution in the file: LICENSE                |
    |                                                                      |
    | This program is distributed in the hope that it will be useful,      |
    | but WITHOUT ANY WARRANTY; without even the implied warranty of       |
    | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the        |
    | GNU General Public License for more details.                         |
    |                                                                      |
-   | You should have received a copy of the GNU General Public License    |
-   | along with this program; if not, write to the Free Software          |
-   | Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.            |
+   | You should have received a copy of both licenses referred to here.   |
+   | If you did not, or have any questions about PHP licensing, please    |
+   | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
    | Authors: Zeev Suraski <bourbon@netvision.net.il>                     |
    |          Jouni Ahto <jah@cultnet.fi> (large object interface)        |
    +----------------------------------------------------------------------+
  */
  
-/* $Id: pgsql.c,v 1.47 1998/02/28 20:50:39 zeev Exp $ */
+/* $Id: pgsql.c,v 1.62 1998/05/21 23:57:34 zeev Exp $ */
 
 #include <stdlib.h>
 
 #ifndef MSVC5
 #include "config.h"
 #endif
-#include "parser.h"
+#include "php.h"
 #include "internal_functions.h"
 #include "php3_pgsql.h"
 
 #if HAVE_PGSQL
 
-#include "list.h"
+#include "php3_list.h"
 
 
 function_entry pgsql_functions[] = {
 	{"pg_connect",		php3_pgsql_connect,			NULL},
 	{"pg_pconnect",		php3_pgsql_pconnect,		NULL},
 	{"pg_close",		php3_pgsql_close,			NULL},
-	{"pg_cmdtuples",	php3_pgsql_cmdtuples,			NULL},
+	{"pg_cmdtuples",	php3_pgsql_cmdtuples,		NULL},
 	{"pg_dbname",		php3_pgsql_dbname,			NULL},
 	{"pg_errormessage",	php3_pgsql_error_message,	NULL},
 	{"pg_options",		php3_pgsql_options,			NULL},
@@ -73,14 +78,14 @@ function_entry pgsql_functions[] = {
 };
 
 php3_module_entry pgsql_module_entry = {
-	"PostgresSQL", pgsql_functions, php3_minit_pgsql, NULL, php3_rinit_pgsql, NULL, NULL, 0, 0, 0, NULL
+	"PostgreSQL", pgsql_functions, php3_minit_pgsql, NULL, php3_rinit_pgsql, NULL, NULL, STANDARD_MODULE_PROPERTIES
 };
 
 #if COMPILE_DL
 php3_module_entry *get_module() { return &pgsql_module_entry; }
 #endif
 
-extern int php3_header(int, char *);
+extern int php3_header(void);
 
 THREAD_LS pgsql_module php3_pgsql_module;
 
@@ -105,7 +110,7 @@ static void _free_ptr(pgLofp *lofp)
 }
 
 
-int php3_minit_pgsql(INITFUNCARG)
+int php3_minit_pgsql(INIT_FUNC_ARGS)
 {
 	if (cfg_get_long("pgsql.allow_persistent",&php3_pgsql_module.allow_persistent)==FAILURE) {
 		php3_pgsql_module.allow_persistent=1;
@@ -126,7 +131,7 @@ int php3_minit_pgsql(INITFUNCARG)
 }
 
 
-int php3_rinit_pgsql(INITFUNCARG)
+int php3_rinit_pgsql(INIT_FUNC_ARGS)
 {
 	php3_pgsql_module.default_link=-1;
 	php3_pgsql_module.num_links = php3_pgsql_module.num_persistent;
@@ -143,19 +148,19 @@ void php3_pgsql_do_connect(INTERNAL_FUNCTION_PARAMETERS,int persistent)
 	
 	switch(ARG_COUNT(ht)) {
 		case 1: { /* new style, using connection string */
-				YYSTYPE *yyconnstring;
+				pval *yyconnstring;
 				if (getParameters(ht, 1, &yyconnstring) == FAILURE) {
 					RETURN_FALSE;
 				}
 				convert_to_string(yyconnstring);
-				connstring = yyconnstring->value.strval;
-				hashed_details_length = yyconnstring->strlen+5+5;
+				connstring = yyconnstring->value.str.val;
+				hashed_details_length = yyconnstring->value.str.len+5+1;
 				hashed_details = (char *) emalloc(hashed_details_length+1);
 				sprintf(hashed_details,"pgsql_%s",connstring); /* SAFE */
 			}
 			break;
 		case 3: { /* host, port, dbname */
-				YYSTYPE *yyhost, *yyport, *yydbname;
+				pval *yyhost, *yyport, *yydbname;
 				
 				if (getParameters(ht, 3, &yyhost, &yyport, &yydbname) == FAILURE) {
 					RETURN_FALSE;
@@ -163,17 +168,17 @@ void php3_pgsql_do_connect(INTERNAL_FUNCTION_PARAMETERS,int persistent)
 				convert_to_string(yyhost);
 				convert_to_string(yyport);
 				convert_to_string(yydbname);
-				host = yyhost->value.strval;
-				port = yyport->value.strval;
-				dbname = yydbname->value.strval;
+				host = yyhost->value.str.val;
+				port = yyport->value.str.val;
+				dbname = yydbname->value.str.val;
 				options=tty=NULL;
-				hashed_details_length = yyhost->strlen+yyport->strlen+yydbname->strlen+5+5;
+				hashed_details_length = yyhost->value.str.len+yyport->value.str.len+yydbname->value.str.len+5+5;
 				hashed_details = (char *) emalloc(hashed_details_length+1);
 				sprintf(hashed_details,"pgsql_%s_%s___%s",host,port,dbname);  /* SAFE */
 			}
 			break;
 		case 4: { /* host, port, options, dbname */
-				YYSTYPE *yyhost, *yyport, *yyoptions, *yydbname;
+				pval *yyhost, *yyport, *yyoptions, *yydbname;
 				
 				if (getParameters(ht, 4, &yyhost, &yyport, &yyoptions, &yydbname) == FAILURE) {
 					RETURN_FALSE;
@@ -182,18 +187,18 @@ void php3_pgsql_do_connect(INTERNAL_FUNCTION_PARAMETERS,int persistent)
 				convert_to_string(yyport);
 				convert_to_string(yyoptions);
 				convert_to_string(yydbname);
-				host = yyhost->value.strval;
-				port = yyport->value.strval;
-				options = yyoptions->value.strval;
-				dbname = yydbname->value.strval;
+				host = yyhost->value.str.val;
+				port = yyport->value.str.val;
+				options = yyoptions->value.str.val;
+				dbname = yydbname->value.str.val;
 				tty=NULL;
-				hashed_details_length = yyhost->strlen+yyport->strlen+yyoptions->strlen+yydbname->strlen+5+5;
+				hashed_details_length = yyhost->value.str.len+yyport->value.str.len+yyoptions->value.str.len+yydbname->value.str.len+5+5;
 				hashed_details = (char *) emalloc(hashed_details_length+1);
 				sprintf(hashed_details,"pgsql_%s_%s_%s__%s",host,port,options,dbname);  /* SAFE */
 			}
 			break;
 		case 5: { /* host, port, options, tty, dbname */
-				YYSTYPE *yyhost, *yyport, *yyoptions, *yytty, *yydbname;
+				pval *yyhost, *yyport, *yyoptions, *yytty, *yydbname;
 				
 				if (getParameters(ht, 5, &yyhost, &yyport, &yyoptions, &yytty, &yydbname) == FAILURE) {
 					RETURN_FALSE;
@@ -203,12 +208,12 @@ void php3_pgsql_do_connect(INTERNAL_FUNCTION_PARAMETERS,int persistent)
 				convert_to_string(yyoptions);
 				convert_to_string(yytty);
 				convert_to_string(yydbname);
-				host = yyhost->value.strval;
-				port = yyport->value.strval;
-				options = yyoptions->value.strval;
-				tty = yytty->value.strval;
-				dbname = yydbname->value.strval;
-				hashed_details_length = yyhost->strlen+yyport->strlen+yyoptions->strlen+yytty->strlen+yydbname->strlen+5+5;
+				host = yyhost->value.str.val;
+				port = yyport->value.str.val;
+				options = yyoptions->value.str.val;
+				tty = yytty->value.str.val;
+				dbname = yydbname->value.str.val;
+				hashed_details_length = yyhost->value.str.len+yyport->value.str.len+yyoptions->value.str.len+yytty->value.str.len+yydbname->value.str.len+5+5;
 				hashed_details = (char *) emalloc(hashed_details_length+1);
 				sprintf(hashed_details,"pgsql_%s_%s_%s_%s_%s",host,port,options,tty,dbname);  /* SAFE */
 			}
@@ -365,7 +370,7 @@ void php3_pgsql_pconnect(INTERNAL_FUNCTION_PARAMETERS)
 
 void php3_pgsql_close(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *pgsql_link;
+	pval *pgsql_link;
 	int id,type;
 	PGconn *pgsql;
 	
@@ -405,7 +410,7 @@ void php3_pgsql_close(INTERNAL_FUNCTION_PARAMETERS)
 
 void php3_pgsql_get_link_info(INTERNAL_FUNCTION_PARAMETERS, int entry_type)
 {
-	YYSTYPE *pgsql_link;
+	pval *pgsql_link;
 	int id,type;
 	PGconn *pgsql;
 	
@@ -433,28 +438,28 @@ void php3_pgsql_get_link_info(INTERNAL_FUNCTION_PARAMETERS, int entry_type)
 	
 	switch(entry_type) {
 		case PHP3_PG_DBNAME:
-			return_value->value.strval = PQdb(pgsql);
+			return_value->value.str.val = PQdb(pgsql);
 			break;
 		case PHP3_PG_ERROR_MESSAGE:
-			return_value->value.strval = PQerrorMessage(pgsql);
+			return_value->value.str.val = PQerrorMessage(pgsql);
 			break;
 		case PHP3_PG_OPTIONS:
-			return_value->value.strval = PQoptions(pgsql);
+			return_value->value.str.val = PQoptions(pgsql);
 			break;
 		case PHP3_PG_PORT:
-			return_value->value.strval = PQport(pgsql);
+			return_value->value.str.val = PQport(pgsql);
 			break;
 		case PHP3_PG_TTY:
-			return_value->value.strval = PQtty(pgsql);
+			return_value->value.str.val = PQtty(pgsql);
 			break;
 		case PHP3_PG_HOST:
-			return_value->value.strval = PQhost(pgsql);
+			return_value->value.str.val = PQhost(pgsql);
 			break;
 		default:
 			RETURN_FALSE;
 	}
-	return_value->strlen = strlen(return_value->value.strval);
-	return_value->value.strval = (char *) estrdup(return_value->value.strval);
+	return_value->value.str.len = strlen(return_value->value.str.val);
+	return_value->value.str.val = (char *) estrdup(return_value->value.str.val);
 	return_value->type = IS_STRING;
 }
 
@@ -491,7 +496,7 @@ void php3_pgsql_host(INTERNAL_FUNCTION_PARAMETERS)
 
 void php3_pgsql_exec(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *query,*pgsql_link;
+	pval *query,*pgsql_link;
 	int id,type;
 	PGconn *pgsql;
 	PGresult *pgsql_result;
@@ -523,7 +528,7 @@ void php3_pgsql_exec(INTERNAL_FUNCTION_PARAMETERS)
 	}
 	
 	convert_to_string(query);
-	pgsql_result=PQexec(pgsql,query->value.strval);
+	pgsql_result=PQexec(pgsql,query->value.str.val);
 	
 	if (pgsql_result) {
 		status = PQresultStatus(pgsql_result);
@@ -559,7 +564,7 @@ void php3_pgsql_exec(INTERNAL_FUNCTION_PARAMETERS)
 
 void php3_pgsql_get_result_info(INTERNAL_FUNCTION_PARAMETERS, int entry_type)
 {
-	YYSTYPE *result;
+	pval *result;
 	PGresult *pgsql_result;
 	int type;
 	
@@ -583,7 +588,12 @@ void php3_pgsql_get_result_info(INTERNAL_FUNCTION_PARAMETERS, int entry_type)
 			return_value->value.lval = PQnfields(pgsql_result);
 			break;
 		case PHP3_PG_CMD_TUPLES:
+#if HAVE_PQCMDTUPLES
 			return_value->value.lval = atoi(PQcmdTuples(pgsql_result));
+#else
+			php3_error(E_WARNING,"This compilation does not support pg_cmdtuples()");
+			return_value->value.lval = 0;
+#endif
 			break;
 		default:
 			RETURN_FALSE;
@@ -659,7 +669,7 @@ char *get_field_name(PGconn *pgsql, Oid oid, HashTable *list)
 
 void php3_pgsql_get_field_info(INTERNAL_FUNCTION_PARAMETERS, int entry_type)
 {
-	YYSTYPE *result,*field;
+	pval *result,*field;
 	PGresult *pgsql_result;
 	int type;
 	
@@ -684,9 +694,9 @@ void php3_pgsql_get_field_info(INTERNAL_FUNCTION_PARAMETERS, int entry_type)
 	
 	switch (entry_type) {
 		case PHP3_PG_FIELD_NAME:
-			return_value->value.strval = PQfname(pgsql_result,field->value.lval);
-			return_value->strlen = strlen(return_value->value.strval);
-			return_value->value.strval = estrndup(return_value->value.strval,return_value->strlen);
+			return_value->value.str.val = PQfname(pgsql_result,field->value.lval);
+			return_value->value.str.len = strlen(return_value->value.str.val);
+			return_value->value.str.val = estrndup(return_value->value.str.val,return_value->value.str.len);
 			return_value->type = IS_STRING;
 			break;
 		case PHP3_PG_FIELD_SIZE:
@@ -694,8 +704,8 @@ void php3_pgsql_get_field_info(INTERNAL_FUNCTION_PARAMETERS, int entry_type)
 			return_value->type = IS_LONG;
 			break;
 		case PHP3_PG_FIELD_TYPE:
-			return_value->value.strval = get_field_name(pgsql_result->conn,PQftype(pgsql_result,field->value.lval),list);
-			return_value->strlen = strlen(return_value->value.strval);
+			return_value->value.str.val = get_field_name(pgsql_result->conn,PQftype(pgsql_result,field->value.lval),list);
+			return_value->value.str.len = strlen(return_value->value.str.val);
 			return_value->type = IS_STRING;
 			break;
 		default:
@@ -722,7 +732,7 @@ void php3_pgsql_field_type(INTERNAL_FUNCTION_PARAMETERS)
 
 void php3_pgsql_field_number(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *result,*field;
+	pval *result,*field;
 	PGresult *pgsql_result;
 	int type;
 	
@@ -739,14 +749,14 @@ void php3_pgsql_field_number(INTERNAL_FUNCTION_PARAMETERS)
 	}
 	
 	convert_to_string(field);
-	return_value->value.lval = PQfnumber(pgsql_result,field->value.strval);
+	return_value->value.lval = PQfnumber(pgsql_result,field->value.str.val);
 	return_value->type = IS_LONG;
 }
 
 
 void php3_pgsql_result(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *result, *row, *field=NULL;
+	pval *result, *row, *field=NULL;
 	PGresult *pgsql_result;
 	int type,field_offset;
 	
@@ -770,7 +780,7 @@ void php3_pgsql_result(INTERNAL_FUNCTION_PARAMETERS)
 	}
 	switch(field->type) {
 		case IS_STRING:
-			field_offset = PQfnumber(pgsql_result,field->value.strval);
+			field_offset = PQfnumber(pgsql_result,field->value.str.val);
 			break;
 		default:
 			convert_to_long(field);
@@ -782,9 +792,9 @@ void php3_pgsql_result(INTERNAL_FUNCTION_PARAMETERS)
 		RETURN_FALSE;
 	}
 	
-	return_value->value.strval = PQgetvalue(pgsql_result,row->value.lval,field_offset);
-	return_value->strlen = (return_value->value.strval ? strlen(return_value->value.strval) : 0);
-	return_value->value.strval = safe_estrndup(return_value->value.strval,return_value->strlen);
+	return_value->value.str.val = PQgetvalue(pgsql_result,row->value.lval,field_offset);
+	return_value->value.str.len = (return_value->value.str.val ? strlen(return_value->value.str.val) : 0);
+	return_value->value.str.val = safe_estrndup(return_value->value.str.val,return_value->value.str.len);
 	return_value->type = IS_STRING;
 }
 
@@ -793,7 +803,7 @@ void php3_pgsql_result(INTERNAL_FUNCTION_PARAMETERS)
 
 void php3_pgsql_data_info(INTERNAL_FUNCTION_PARAMETERS, int entry_type)
 {
-	YYSTYPE *result,*row,*field;
+	pval *result,*row,*field;
 	PGresult *pgsql_result;
 	int type,field_offset;
 	
@@ -816,7 +826,7 @@ void php3_pgsql_data_info(INTERNAL_FUNCTION_PARAMETERS, int entry_type)
 	}
 	switch(field->type) {
 		case IS_STRING:
-			field_offset = PQfnumber(pgsql_result,field->value.strval);
+			field_offset = PQfnumber(pgsql_result,field->value.str.val);
 			break;
 		default:
 			convert_to_long(field);
@@ -851,7 +861,7 @@ void php3_pgsql_data_isnull(INTERNAL_FUNCTION_PARAMETERS)
 
 void php3_pgsql_free_result(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *result;
+	pval *result;
 	PGresult *pgsql_result;
 	int type;
 	
@@ -860,6 +870,9 @@ void php3_pgsql_free_result(INTERNAL_FUNCTION_PARAMETERS)
 	}
 	
 	convert_to_long(result);
+	if (result->value.lval==0) {
+		RETURN_FALSE;
+	}
 	pgsql_result = (PGresult *) php3_list_find(result->value.lval,&type);
 	
 	if (type!=php3_pgsql_module.le_result) {
@@ -867,12 +880,13 @@ void php3_pgsql_free_result(INTERNAL_FUNCTION_PARAMETERS)
 		RETURN_FALSE;
 	}
 	php3_list_delete(result->value.lval);
+	RETURN_TRUE;
 }
 
 
 void php3_pgsql_last_oid(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *result;
+	pval *result;
 	PGresult *pgsql_result;
 	int type;
 	
@@ -887,19 +901,19 @@ void php3_pgsql_last_oid(INTERNAL_FUNCTION_PARAMETERS)
 		php3_error(E_WARNING,"%d is not a PostgresSQL result index",result->value.lval);
 		RETURN_FALSE;
 	}
-	return_value->value.strval = (char *) PQoidStatus(pgsql_result);
-	if (return_value->value.strval) {
-		return_value->strlen = strlen(return_value->value.strval);
-		return_value->value.strval = estrndup(return_value->value.strval, return_value->strlen);
+	return_value->value.str.val = (char *) PQoidStatus(pgsql_result);
+	if (return_value->value.str.val) {
+		return_value->value.str.len = strlen(return_value->value.str.val);
+		return_value->value.str.val = estrndup(return_value->value.str.val, return_value->value.str.len);
 		return_value->type = IS_STRING;
 	} else {
-		return_value->value.strval = empty_string;
+		return_value->value.str.val = empty_string;
 	} 
 }
 
 void php3_pgsql_lo_create(INTERNAL_FUNCTION_PARAMETERS)
 {
-  	YYSTYPE *pgsql_link;
+  	pval *pgsql_link;
 	PGconn *pgsql;
 	Oid pgsql_oid;
 	int id, type;
@@ -945,7 +959,7 @@ void php3_pgsql_lo_create(INTERNAL_FUNCTION_PARAMETERS)
 
 void php3_pgsql_lo_unlink(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *pgsql_link, *oid;
+	pval *pgsql_link, *oid;
 	PGconn *pgsql;
 	Oid pgsql_oid;
 	int id, type;
@@ -988,7 +1002,7 @@ void php3_pgsql_lo_unlink(INTERNAL_FUNCTION_PARAMETERS)
 
 void php3_pgsql_lo_open(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *pgsql_link, *oid, *mode;
+	pval *pgsql_link, *oid, *mode;
 	PGconn *pgsql;
 	Oid pgsql_oid;
 	int id, type, pgsql_mode=0, pgsql_lofd;
@@ -1004,7 +1018,7 @@ void php3_pgsql_lo_open(INTERNAL_FUNCTION_PARAMETERS)
 			convert_to_long(oid);
 			pgsql_oid = oid->value.lval;
 			convert_to_string(mode);
-			mode_string = mode->value.strval;
+			mode_string = mode->value.str.val;
 			id = php3_pgsql_module.default_link;
 			break;
 		case 3:
@@ -1016,7 +1030,7 @@ void php3_pgsql_lo_open(INTERNAL_FUNCTION_PARAMETERS)
 			convert_to_long(oid);
 			pgsql_oid = oid->value.lval;
 			convert_to_string(mode);
-			mode_string = mode->value.strval;
+			mode_string = mode->value.str.val;
 			break;
 		default:
 			WRONG_PARAM_COUNT;
@@ -1088,7 +1102,7 @@ void php3_pgsql_lo_open(INTERNAL_FUNCTION_PARAMETERS)
 
 void php3_pgsql_lo_close(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *pgsql_lofp;
+	pval *pgsql_lofp;
 	int id, type;
 	pgLofp *pgsql;
 
@@ -1123,7 +1137,7 @@ void php3_pgsql_lo_close(INTERNAL_FUNCTION_PARAMETERS)
 
 void php3_pgsql_lo_read(INTERNAL_FUNCTION_PARAMETERS)
 {
-  	YYSTYPE *pgsql_id, *len;
+  	pval *pgsql_id, *len;
 	int id, buf_len, type;
 	char *buf;
 	pgLofp *pgsql;
@@ -1154,14 +1168,14 @@ void php3_pgsql_lo_read(INTERNAL_FUNCTION_PARAMETERS)
 		efree(buf);
 		RETURN_FALSE;
 	}
-	return_value->value.strval = buf;
-	return_value->strlen = strlen(return_value->value.strval);
+	return_value->value.str.val = buf;
+	return_value->value.str.len = strlen(return_value->value.str.val);
 	return_value->type = IS_STRING;
 }
 
 void php3_pgsql_lo_write(INTERNAL_FUNCTION_PARAMETERS)
 {
-  	YYSTYPE *pgsql_id, *str;
+  	pval *pgsql_id, *str;
 	int id, buf_len, nbytes, type;
 	char *buf;
 	pgLofp *pgsql;
@@ -1174,7 +1188,7 @@ void php3_pgsql_lo_write(INTERNAL_FUNCTION_PARAMETERS)
 			convert_to_long(pgsql_id);
 			id = pgsql_id->value.lval;
 			convert_to_string(str);
-			buf = str->value.strval;
+			buf = str->value.str.val;
 			break;
 		default:
 			WRONG_PARAM_COUNT;
@@ -1197,7 +1211,7 @@ void php3_pgsql_lo_write(INTERNAL_FUNCTION_PARAMETERS)
 
 void php3_pgsql_lo_readall(INTERNAL_FUNCTION_PARAMETERS)
 {
-  	YYSTYPE *pgsql_id;
+  	pval *pgsql_id;
 	int i, id, nbytes, tbytes, type;
 	char buf[8192];
 	pgLofp *pgsql;
@@ -1222,12 +1236,12 @@ void php3_pgsql_lo_readall(INTERNAL_FUNCTION_PARAMETERS)
 		RETURN_FALSE;
 	}
 
-	output=php3_header(0, NULL);
+	output=php3_header();
 
 	tbytes = 0;
 	while ((nbytes = lo_read((PGconn *)pgsql->conn, pgsql->lofd, buf, 8192))>0) {
 		for(i=0; i<nbytes; i++) {
-			if(output) PUTC(buf[i]);
+			if (output) PUTC(buf[i]);
 		}
 		tbytes += i;
 	}

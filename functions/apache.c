@@ -5,30 +5,36 @@
    | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
-   | it under the terms of the GNU General Public License as published by |
-   | the Free Software Foundation; either version 2 of the License, or    |
-   | (at your option) any later version.                                  |
+   | it under the terms of one of the following licenses:                 |
+   |                                                                      |
+   |  A) the GNU General Public License as published by the Free Software |
+   |     Foundation; either version 2 of the License, or (at your option) |
+   |     any later version.                                               |
+   |                                                                      |
+   |  B) the PHP License as published by the PHP Development Team and     |
+   |     included in the distribution in the file: LICENSE                |
    |                                                                      |
    | This program is distributed in the hope that it will be useful,      |
    | but WITHOUT ANY WARRANTY; without even the implied warranty of       |
    | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the        |
    | GNU General Public License for more details.                         |
    |                                                                      |
-   | You should have received a copy of the GNU General Public License    |
-   | along with this program; if not, write to the Free Software          |
-   | Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.            |
+   | You should have received a copy of both licenses referred to here.   |
+   | If you did not, or have any questions about PHP licensing, please    |
+   | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
    | Authors: Rasmus Lerdorf <rasmus@lerdorf.on.ca>                       |
    |          Stig Sæther Bakken <ssb@guardian.no>                        |
    +----------------------------------------------------------------------+
  */
 
-/* $Id: apache.c,v 1.25 1998/01/30 04:40:46 jim Exp $ */
+/* $Id: apache.c,v 1.32 1998/05/23 13:07:03 zeev Exp $ */
 #ifdef THREAD_SAFE
 #include "tls.h"
 #endif
-#include "parser.h"
+#include "php.h"
 #include "internal_functions.h"
+#include "functions/head.h"
 
 #include <stdlib.h>
 #if HAVE_UNISTD_H
@@ -52,7 +58,7 @@ function_entry apache_functions[] = {
 };
 
 php3_module_entry apache_module_entry = {
-	"Apache", apache_functions, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, NULL
+	"Apache", apache_functions, NULL, NULL, NULL, NULL, NULL, STANDARD_MODULE_PROPERTIES
 };
 
 /* This function is equivilent to <!--#include virtual...-->
@@ -66,7 +72,7 @@ php3_module_entry apache_module_entry = {
 
 void php3_virtual(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *filename;
+	pval *filename;
 	request_rec *rr = NULL;
 TLS_VARS;
 
@@ -75,14 +81,14 @@ TLS_VARS;
 	}
 	convert_to_string(filename);
 	
-	if (!(rr = sub_req_lookup_uri (filename->value.strval, GLOBAL(php3_rqst)))) {
-		php3_error(E_WARNING, "Unable to include file: %s", filename->value.strval);
+	if (!(rr = sub_req_lookup_uri (filename->value.str.val, GLOBAL(php3_rqst)))) {
+		php3_error(E_WARNING, "Unable to include '%s' - URI lookup failed", filename->value.str.val);
 		if (rr) destroy_sub_req (rr);
 		RETURN_FALSE;
 	}
 
 	if (rr->status != 200) {
-		php3_error(E_WARNING, "Unable to include file: %s", filename->value.strval);
+		php3_error(E_WARNING, "Unable to include '%s' - error finding URI", filename->value.str.val);
 		if (rr) destroy_sub_req (rr);
 		RETURN_FALSE;
 	}
@@ -91,17 +97,19 @@ TLS_VARS;
 	if (rr->content_type &&
 		!strcmp(rr->content_type, PHP3_MIME_TYPE)) {
 		php3_error(E_WARNING, "Cannot include a PHP file "
-			  "(use <code>&lt;?include \"%s\"&gt;</code> instead)", filename->value.strval);
+			  "(use <code>&lt;?include \"%s\"&gt;</code> instead)", filename->value.str.val);
 		if (rr) destroy_sub_req (rr);
 		RETURN_FALSE;
 	}
 
-	if (run_sub_req(rr)) {
-		php3_error(E_WARNING, "Unable to include file: %s", filename->value.strval);
-		if (rr) destroy_sub_req (rr);
+	if (!php3_header()) {
 		RETURN_FALSE;
 	}
-	else {
+	if (run_sub_req(rr)) {
+		php3_error(E_WARNING, "Unable to include '%s' - request execution failed", filename->value.str.val);
+		if (rr) destroy_sub_req (rr);
+		RETURN_FALSE;
+	} else {
 		if (rr) destroy_sub_req (rr);
 		RETURN_TRUE;
 	}

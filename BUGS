@@ -5,4 +5,5 @@ reporting page at:
 Current Known Bugs:
 
 * split() function doesn't return regex errors nicely
-* Preprocessed scripts don't work with require()
+* Preprocessed scripts don't work with require() and define()
+* unset() doesn't actually erase the variables it just marks them as uninitialized

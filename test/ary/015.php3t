@@ -3,7 +3,7 @@ ksort() function                                              ...
 --POST--
 --GET--
 --FILE--
-<?
+<?php 
 $a[1] = 1;
 $a[3] = 2;
 $a[4] = 3;
@@ -13,7 +13,7 @@ $a[grey] = two;
 ?>
 Before being sorted
 -------------------
-<?
+<?php 
 reset($a);
 $b = current($a);
 while ($b != ""):
@@ -24,7 +24,7 @@ ksort($a);
 ?>
 After being sorted
 -------------------
-<?
+<?php 
 reset($a);
 $b = current($a);
 while ($b != ""):

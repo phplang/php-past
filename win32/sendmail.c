@@ -21,7 +21,7 @@
 #ifdef THREAD_SAFE
 #include "tls.h"
 #endif
-#include "parser.h"				/*php specific */
+#include "php.h"				/*php specific */
 #include <stdio.h>
 #include <stdlib.h>
 #include <winsock.h>
@@ -88,7 +88,8 @@ static char *ErrorMessages[] =
 	{"Bad Message destination"},
 	{"Bad Message Return Path"},
 	{"Bad Mail Host"},
-	{"Bad Message File"}
+	{"Bad Message File"},
+	{"PHP Internal error: php3.ini sendmail from variable not set!"}
 };
 
 
@@ -125,18 +126,16 @@ int TSendMail(char *host, int *error,
 		strcpy(GLOBAL(MailHost), host);
 	}
 
-	RPath = get_header("From:", headers);
-	if (!RPath)
+	if (php3_ini.sendmail_from){
 		RPath = estrdup(php3_ini.sendmail_from);
-	GLOBAL(AppName) = get_header("X-Mailer:", headers);
-	if (!GLOBAL(AppName))
-		GLOBAL(AppName) = estrdup(php_mailer);
+		} else {
+			return 19;
+	}
 
 	// attempt to connect with mail host
 	*error = MailConnect();
 	if (*error != 0) {
-		efree(GLOBAL(AppName));
-		efree(RPath);
+		if(RPath)efree(RPath);
 		return *error;
 	} else {
 		ret = SendText(RPath, Subject, mailTo, data, headers);
@@ -144,34 +143,8 @@ int TSendMail(char *host, int *error,
 		if (ret != SUCCESS) {
 			*error = ret;
 		}
-		efree(GLOBAL(AppName));
-		efree(RPath);
+		if(RPath)efree(RPath);
 		return ret;
-	}
-}
-
-char *get_header(char *h, char *xheaders)
-{
-	char *token;
-	char *wanted;
-	char *headers;
-
-	if (xheaders) {
-		headers = estrdup(xheaders);
-
-		if (headers) {
-			token = strtok(headers, seps);
-			while (token != NULL) {
-				if (stricmp(token, h) == 0) {
-					wanted = estrdup(strtok(NULL, seps));
-				}
-				token = strtok(NULL, seps);
-			}
-		}
-		efree(headers);
-		return wanted;
-	} else {
-		return NULL;
 	}
 }
 
@@ -187,7 +160,7 @@ void TSMClose()
 {
 	TLS_VARS;
 
-	Post("QUIT\r\n");
+	Post("QUIT\n");
 	Ack();
 	// to guarantee that the cleanup is not made twice and
 	// compomise the rest of the application if sockets are used
@@ -247,7 +220,7 @@ int SendText(char *RPath, char *Subject, char *mailTo, char *data, char *headers
 	if (strchr(mailTo, '@') == NULL)
 		return (BAD_MSG_DESTINATION);
 
-	sprintf(GLOBAL(Buffer), "HELO %s\r\n", GLOBAL(LocalHost));
+	sprintf(GLOBAL(Buffer), "HELO %s\n", GLOBAL(LocalHost));
 
 	// in the beggining of the dialog
 	// attempt reconnect if the first Post fail
@@ -259,20 +232,20 @@ int SendText(char *RPath, char *Subject, char *mailTo, char *data, char *headers
 	if ((res = Ack()) != SUCCESS)
 		return (res);
 
-	sprintf(GLOBAL(Buffer), "MAIL FROM:<%s>\r\n", RPath);
+	sprintf(GLOBAL(Buffer), "MAIL FROM:<%s>\n", RPath);
 	if ((res = Post(GLOBAL(Buffer))) != SUCCESS)
 		return (res);
 	if ((res = Ack()) != SUCCESS)
 		return (res);
 
 
-	sprintf(GLOBAL(Buffer), "RCPT TO:<%s>\r\n", mailTo);
+	sprintf(GLOBAL(Buffer), "RCPT TO:<%s>\n", mailTo);
 	if ((res = Post(GLOBAL(Buffer))) != SUCCESS)
 		return (res);
 	if ((res = Ack()) != SUCCESS)
 		return (res);
 
-	if ((res = Post("DATA\r\n")) != SUCCESS)
+	if ((res = Post("DATA\n")) != SUCCESS)
 		return (res);
 	if ((res = Ack()) != SUCCESS)
 		return (res);
@@ -313,7 +286,7 @@ int SendText(char *RPath, char *Subject, char *mailTo, char *data, char *headers
 	}
 
 	//send termination dot
-	if ((res = Post("\r\n.\r\n")) != SUCCESS)
+	if ((res = Post("\n.\n")) != SUCCESS)
 		return (res);
 	if ((res = Ack()) != SUCCESS)
 		return (res);
@@ -345,19 +318,13 @@ int PostHeader(char *RPath, char *Subject, char *mailTo, char *xheaders)
 	int zoneh = abs(_timezone);
 	int zonem, res;
 	char *p;
-	char *token;
-	char *headers;
 	TLS_VARS;
 
 	p = GLOBAL(Buffer);
 	zoneh /= (60 * 60);
 	zonem = (abs(_timezone) / 60) - (zoneh * 60);
 
-	p += sprintf(GLOBAL(Buffer), "Return-Path: %s\r\n", RPath);
-	p += sprintf(p, "X-Sender: %s\n", RPath);
-	p += sprintf(p, "X-Mailer: %s\r\nContent-Type: text/plain; charset=us-ascii\r\n",
-				 GLOBAL(AppName));
-	p += sprintf(p, "Date: %s, %02d %s %04d %02d:%02d:%02d %s%02d%02d\r\n",
+	p += sprintf(p, "Date: %s, %02d %s %04d %02d:%02d:%02d %s%02d%02d\n",
 				 days[tm->tm_wday],
 				 tm->tm_mday,
 				 months[tm->tm_mon],
@@ -369,27 +336,19 @@ int PostHeader(char *RPath, char *Subject, char *mailTo, char *xheaders)
 				 zoneh,
 				 zonem);
 
-	p += sprintf(p, "From: %s\r\n", RPath);
-	p += sprintf(p, "Subject: %s\r\n", Subject);
-	p += sprintf(p, "To: %s\r\n", mailTo);
-
-	if (xheaders) {
-		headers = estrdup(xheaders);
-		if (headers) {
-			token = strtok(headers, seps);
-			while (token != NULL) {
-				if ((stricmp(token, "From:") != 0) && (stricmp(token, "X-Mailer:") != 0)) {
-					p += sprintf(p, "%s %s", token, strtok(NULL, seps));
-				}
-				token = strtok(NULL, seps);
-			}
-		}
-		efree(headers);
+	if(xheaders && strnicmp("From:",xheaders,5)){
+		p += sprintf(p, "From: %s\n", RPath);
 	}
+	p += sprintf(p, "To: %s\n", mailTo);
+	p += sprintf(p, "Subject: %s\n", Subject);
+	if(xheaders){
+		p += sprintf(p, "%s\n", xheaders);
+	}
+
 	if ((res = Post(GLOBAL(Buffer))) != SUCCESS)
 		return (res);
 
-	if ((res = Post("\r\n")) != SUCCESS)
+	if ((res = Post("\n")) != SUCCESS)
 		return (res);
 
 	return (SUCCESS);

@@ -5,18 +5,23 @@
    | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
-   | it under the terms of the GNU General Public License as published by |
-   | the Free Software Foundation; either version 2 of the License, or    |
-   | (at your option) any later version.                                  |
+   | it under the terms of one of the following licenses:                 |
+   |                                                                      |
+   |  A) the GNU General Public License as published by the Free Software |
+   |     Foundation; either version 2 of the License, or (at your option) |
+   |     any later version.                                               |
+   |                                                                      |
+   |  B) the PHP License as published by the PHP Development Team and     |
+   |     included in the distribution in the file: LICENSE                |
    |                                                                      |
    | This program is distributed in the hope that it will be useful,      |
    | but WITHOUT ANY WARRANTY; without even the implied warranty of       |
    | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the        |
    | GNU General Public License for more details.                         |
    |                                                                      |
-   | You should have received a copy of the GNU General Public License    |
-   | along with this program; if not, write to the Free Software          |
-   | Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.            |
+   | You should have received a copy of both licenses referred to here.   |
+   | If you did not, or have any questions about PHP licensing, please    |
+   | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
    | Authors: Andi Gutmans <andi@php.net>                                 |
    |          Zeev Suraski <bourbon@netvision.net.il>                     |
@@ -24,16 +29,14 @@
  */
 
 
-/* $Id: basic_functions.c,v 1.135 1998/02/28 13:33:28 zeev Exp $ */
-
 #ifdef THREAD_SAFE
 #include "tls.h"
 #endif
-#include "parser.h"
+#include "php.h"
 #include "modules.h"
 #include "internal_functions.h"
 #include "internal_functions_registry.h"
-#include "list.h"
+#include "php3_list.h"
 #include "basic_functions.h"
 #include "operators.h"
 #include <stdarg.h>
@@ -75,14 +78,19 @@
 #endif
 
 static unsigned char second_and_third_args_force_ref[] = { 3, BYREF_NONE, BYREF_FORCE, BYREF_FORCE };
+static unsigned char third_and_fourth_args_force_ref[] = { 4, BYREF_NONE, BYREF_NONE, BYREF_FORCE, BYREF_FORCE };
 #if PHP_DEBUGGER
 extern int _php3_send_error(char *message, char *address);
 #endif
+
+
 
 function_entry basic_functions[] = {
 	{"intval",		int_value,					NULL},
 	{"doubleval",	double_value,				NULL},
 	{"strval",		string_value,				NULL},
+	{"define",		php3_define,				NULL},
+	{"defined",		php3_defined,				NULL},
 	{"short_tags",	php3_toggle_short_open_tag, NULL},
 	{"sleep",		php3_sleep,					NULL},
 	{"usleep",		php3_usleep,				NULL},
@@ -95,6 +103,10 @@ function_entry basic_functions[] = {
 	{"count",		php3_count,					first_arg_allow_ref},
 	{"time",		php3_time,					NULL},
 	{"mktime",		php3_mktime,				NULL},
+	{"gmmktime",	php3_gmmktime,				NULL},
+#if HAVE_STRFTIME
+	{"strftime",		php3_strftime,				NULL},
+#endif
 	{"date",		php3_date,					NULL},
 	{"gmdate",		php3_gmdate,				NULL},
 	{"getdate",		php3_getdate,				NULL},
@@ -108,6 +120,7 @@ function_entry basic_functions[] = {
 	{"reset",		array_reset,				first_arg_force_ref},
 	{"current",		array_current,				first_arg_force_ref},
 	{"key",			array_current_key,			first_arg_force_ref},
+	{"each",		array_each,					first_arg_force_ref},
 	{"gettype",		php3_gettype,				NULL},
 	{"settype",		php3_settype,				first_arg_force_ref},
 	{"min",			php3_min,					NULL},
@@ -115,9 +128,12 @@ function_entry basic_functions[] = {
 
 	{"addslashes",	php3_addslashes,			NULL},
 	{"chop",		php3_chop,					NULL},
-	{"pos",			array_current,				NULL},
+	{"trim",		php3_trim,					NULL},
+	{"ltrim",		php3_ltrim,					NULL},
+	{"rtrim",		php3_chop,					NULL},
+	{"pos",			array_current,				first_arg_force_ref},
 
-	{"fsockopen",			php3_fsockopen,		NULL},
+	{"fsockopen",			php3_fsockopen,		third_and_fourth_args_force_ref},
 	{"getimagesize",		php3_getimagesize,	NULL},
 	{"htmlspecialchars",	php3_htmlspecialchars,	NULL},
 	{"htmlentities",		php3_htmlentities,	NULL},
@@ -129,10 +145,13 @@ function_entry basic_functions[] = {
 	{"phpinfo",		php3_info,					NULL},
 	{"phpversion",	php3_version,				NULL},
 	{"strlen",		php3_strlen,				NULL},
+	{"strcmp",		php3_strcmp,				NULL},
 	{"strtok",		php3_strtok,				NULL},
 	{"strtoupper",	php3_strtoupper,			NULL},
 	{"strtolower",	php3_strtolower,			NULL},
 	{"strchr",		php3_strstr,				NULL},
+	{"strpos",		php3_strpos,				NULL},
+	{"strrpos",		php3_strrpos,				NULL},
 	{"strrev",		php3_strrev,				NULL},
 	{"hebrev",		php3_hebrev,				NULL},
 	{"hebrevc",		php3_hebrev_with_conversion,NULL},
@@ -166,6 +185,11 @@ function_entry basic_functions[] = {
 	{"getrandmax",	php3_getrandmax,			NULL},
 	{"gethostbyaddr",	php3_gethostbyaddr,		NULL},
 	{"gethostbyname",	php3_gethostbyname,		NULL},
+	{"gethostbynamel",	php3_gethostbynamel,	NULL},
+#if !(WIN32|WINNT)||HAVE_BINDLIB
+	{"checkdnsrr",          php3_checkdnsrr,        NULL},
+	{"getmxrr",             php3_getmxrr,           second_and_third_args_force_ref},
+#endif
 	{"explode",		php3_explode,				NULL},
 	{"implode",		php3_implode,				NULL},
 	{"getenv",		php3_getenv,				NULL},
@@ -176,6 +200,9 @@ function_entry basic_functions[] = {
 
 	{"getmyuid",	php3_getmyuid,				NULL},
 	{"getmypid",	php3_getmypid,				NULL},
+	/*getmyiid is here for forward compatibility with 3.1
+	  See pageinfo.c in 3.1 for more information*/
+	{"getmyiid",	php3_getmypid,				NULL},
 	{"getmyinode",	php3_getmyinode,			NULL},
 	{"getlastmod",	php3_getlastmod,			NULL},
 
@@ -204,8 +231,11 @@ function_entry basic_functions[] = {
 	{"decbin",		php3_decbin,				NULL},
 	{"decoct",		php3_decoct,				NULL},
 	{"dechex",		php3_dechex,				NULL},
+	{"number_format",	php3_number_format,		NULL},
 
+#if HAVE_PUTENV
 	{"putenv",		php3_putenv,				NULL},
+#endif
 	{"microtime",	php3_microtime,				NULL},
 	{"uniqid",		php3_uniqid,				NULL},
 	{"linkinfo",	php3_linkinfo,				NULL},
@@ -218,32 +248,70 @@ function_entry basic_functions[] = {
 	{"get_cfg_var",	php3_get_cfg_var,			NULL},
 	{"magic_quotes_runtime",	php3_set_magic_quotes_runtime,	NULL},
 	
-	{"is_long",		php3_is_long,				first_arg_force_ref},
-	{"is_integer",	php3_is_long,				first_arg_force_ref},
-	{"is_double",	php3_is_double,				first_arg_force_ref},
-	{"is_real",		php3_is_double,				first_arg_force_ref},
-	{"is_string",	php3_is_string,				first_arg_force_ref},
-	{"is_array",	php3_is_array,				first_arg_force_ref},
-	{"is_object",	php3_is_object,				first_arg_force_ref},
+	{"is_long",		php3_is_long,				first_arg_allow_ref},
+	{"is_int",		php3_is_long,				first_arg_allow_ref},
+	{"is_integer",	php3_is_long,				first_arg_allow_ref},
+	{"is_float",	php3_is_double,				first_arg_allow_ref},
+	{"is_double",	php3_is_double,				first_arg_allow_ref},
+	{"is_real",		php3_is_double,				first_arg_allow_ref},
+	{"is_string",	php3_is_string,				first_arg_allow_ref},
+	{"is_array",	php3_is_array,				first_arg_allow_ref},
+	{"is_object",	php3_is_object,				first_arg_allow_ref},
 
 	{"leak",		php3_leak,					NULL},	
-	{"error_log",		php3_error_log,					NULL},	
+	{"error_log",	php3_error_log,				NULL},	
 	{NULL, NULL, NULL}
 };
 
 php3_module_entry basic_functions_module = {
-	"Basic Functions", basic_functions, NULL, NULL, php3_rinit_basic, php3_rshutdown_basic, NULL, 0, 0, 0, NULL
+	"Basic Functions", basic_functions, NULL, NULL, php3_rinit_basic, php3_rshutdown_basic, NULL, STANDARD_MODULE_PROPERTIES
 };
 
-int php3_rinit_basic(INITFUNCARG)
+#if HAVE_PUTENV
+static HashTable putenv_ht;
+
+static void _php3_putenv_destructor(putenv_entry *pe)
 {
+	if (pe->previous_value) {
+		putenv(pe->previous_value);
+	} else {
+# if HAVE_UNSETENV
+		unsetenv(pe->key);
+# else
+		char **env;
+		
+		for (env = environ; env != NULL && *env != NULL; env++) {
+			if (!strncmp(*env,pe->key,pe->key_len) && (*env)[pe->key_len]=='=') {	/* found it */
+				*env = "";
+				break;
+			}
+		}
+# endif
+	}
+	efree(pe->putenv_string);
+	efree(pe->key);
+}
+#endif
+
+int php3_rinit_basic(INIT_FUNC_ARGS)
+{
+	TLS_VARS;
 	GLOBAL(strtok_string) = NULL;
+#if HAVE_PUTENV
+	if (hash_init(&putenv_ht, 1, NULL, (void (*)(void *)) _php3_putenv_destructor, 0) == FAILURE) {
+		return FAILURE;
+	}
+#endif
 	return SUCCESS;
 }
 
 int php3_rshutdown_basic(void)
 {
+	TLS_VARS;
 	STR_FREE(GLOBAL(strtok_string));
+#if HAVE_PUTENV
+	hash_destroy(&putenv_ht);
+#endif
 	return SUCCESS;
 }
 
@@ -253,7 +321,10 @@ int php3_rshutdown_basic(void)
 
 void php3_getenv(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *str;
+#if FHTTPD
+	int i;
+#endif
+	pval *str;
 	char *ptr;
 	TLS_VARS;
 
@@ -261,27 +332,50 @@ void php3_getenv(INTERNAL_FUNCTION_PARAMETERS)
 		WRONG_PARAM_COUNT;
 	}
 	convert_to_string(str);
+
+#if FHTTPD
+	ptr=NULL;
+	if (str->type == IS_STRING && req){
+		for(i=0;i<req->nlines;i++){
+			if (req->lines[i].paramc>1){
+				if (req->lines[i].params[0]){
+					if (!strcmp(req->lines[i].params[0],
+							   str->value.str.val)){
+						ptr=req->lines[i].params[1];
+						i=req->nlines;
+					}
+				}
+			}
+		}
+	}
+	if (!ptr) ptr = getenv(str->value.str.val);
+	if (ptr
+#else
+
 	if (str->type == IS_STRING &&
 #if APACHE
-		((ptr = table_get(GLOBAL(php3_rqst)->subprocess_env, str->value.strval)) || (ptr = getenv(str->value.strval)))
+		((ptr = table_get(GLOBAL(php3_rqst)->subprocess_env, str->value.str.val)) || (ptr = getenv(str->value.str.val)))
 #endif
 #if CGI_BINARY
-		(ptr = getenv(str->value.strval))
+		(ptr = getenv(str->value.str.val))
 #endif
+
 #if USE_SAPI
-		(ptr = GLOBAL(sapi_rqst)->getenv(GLOBAL(sapi_rqst)->scid,str->value.strval))
+		(ptr = GLOBAL(sapi_rqst)->getenv(GLOBAL(sapi_rqst)->scid,str->value.str.val))
+#endif
 #endif
 		) {
-		RETURN_STRING(ptr);
+		RETURN_STRING(ptr,1);
 	}
 	RETURN_FALSE;
 }
 
 
+#if HAVE_PUTENV
 void php3_putenv(INTERNAL_FUNCTION_PARAMETERS)
 {
-#if HAVE_PUTENV
-	YYSTYPE *str;
+
+	pval *str;
 	TLS_VARS;
 
 	if (ARG_COUNT(ht) != 1 || getParameters(ht, 1, &str) == FAILURE) {
@@ -289,66 +383,70 @@ void php3_putenv(INTERNAL_FUNCTION_PARAMETERS)
 	}
 	convert_to_string(str);
 
-	if (str->value.strval && *(str->value.strval)) {
+	if (str->value.str.val && *(str->value.str.val)) {
 		int ret;
-		/* Some versions of putenv() use the string verbatim,
-		   so we can't just pass it in. But since we can never
-		   safely clean this up, we don't want to use estrndup(). */
-		ret = putenv(php3_strndup(str->value.strval,str->strlen));
-		if (!ret) {
-			RETURN_TRUE;
+		char *p,**env;
+		putenv_entry pe;
+		
+		pe.putenv_string = estrndup(str->value.str.val,str->value.str.len);
+		pe.key = str->value.str.val;
+		if ((p=strchr(pe.key,'='))) { /* nullify the '=' if there is one */
+			*p='\0';
 		}
-		php3_error(E_WARNING, "putenv failed");
+		pe.key_len = strlen(pe.key);
+		pe.key = estrndup(pe.key,pe.key_len);
+		
+		hash_del(&putenv_ht,pe.key,pe.key_len+1);
+		
+		/* find previous value */
+		pe.previous_value = NULL;
+		for (env = environ; env != NULL && *env != NULL; env++) {
+			if (!strncmp(*env,pe.key,pe.key_len) && (*env)[pe.key_len]=='=') {	/* found it */
+				pe.previous_value = *env;
+				break;
+			}
+		}
+
+		if ((ret=putenv(pe.putenv_string))==0) { /* success */
+			hash_add(&putenv_ht,pe.key,pe.key_len+1,(void **) &pe,sizeof(putenv_entry),NULL);
+			RETURN_TRUE;
+		} else {
+			efree(pe.putenv_string);
+			efree(pe.key);
+			RETURN_FALSE;
+		}
 	}
-	RETVAL_FALSE;
-#endif
 }
+#endif
 
 
 void php3_error_reporting(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *arg;
+	pval *arg;
 	int old_error_reporting;
 	TLS_VARS;
 
-	if (ARG_COUNT(ht)==0) {
-		RETURN_LONG(GLOBAL(error_reporting));
-	}
-	
-	if (ARG_COUNT(ht) != 1 || getParameters(ht,1,&arg) == FAILURE) {
-		WRONG_PARAM_COUNT;
-	}
-	
-	convert_to_long(arg);
-	
 	old_error_reporting = GLOBAL(error_reporting);
-
-	switch(arg->value.lval) {
+	switch (ARG_COUNT(ht)) {
 		case 0:
-			GLOBAL(error_reporting)=GLOBAL(tmp_error_reporting)=0;
 			break;
 		case 1:
-			GLOBAL(error_reporting)=GLOBAL(tmp_error_reporting)=E_ALL;
-			break;
-		case 2:
-			GLOBAL(error_reporting)=GLOBAL(tmp_error_reporting)=E_ERROR | E_PARSE;
-			break;
-		case 3:
-			GLOBAL(error_reporting)=GLOBAL(tmp_error_reporting)=E_ERROR;
-			break;
-		case 4:
-			GLOBAL(error_reporting)=GLOBAL(tmp_error_reporting)=E_PARSE;
+			if (getParameters(ht,1,&arg) == FAILURE) {
+				RETURN_FALSE;
+			}
+			convert_to_long(arg);
+			GLOBAL(error_reporting)=arg->value.lval;
 			break;
 		default:
-			GLOBAL(error_reporting)=GLOBAL(tmp_error_reporting)=E_ALL;
+			WRONG_PARAM_COUNT;
 			break;
 	}
-
+	
 	RETVAL_LONG(old_error_reporting);
 }
 
 void php3_toggle_short_open_tag(INTERNAL_FUNCTION_PARAMETERS) {
-	YYSTYPE *value;
+	pval *value;
 	int ret;
 	TLS_VARS;
 	
@@ -368,7 +466,7 @@ void php3_toggle_short_open_tag(INTERNAL_FUNCTION_PARAMETERS) {
 
 void int_value(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *num, *arg_base;
+	pval *num, *arg_base;
 	int base;
 	
 	switch(ARG_COUNT(ht)) {
@@ -396,7 +494,7 @@ void int_value(INTERNAL_FUNCTION_PARAMETERS)
 
 void double_value(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *num;
+	pval *num;
 
 	if (ARG_COUNT(ht) != 1 || getParameters(ht, 1, &num) == FAILURE) {
 		WRONG_PARAM_COUNT;
@@ -408,7 +506,7 @@ void double_value(INTERNAL_FUNCTION_PARAMETERS)
 
 void string_value(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *num;
+	pval *num;
 
 	if (ARG_COUNT(ht) != 1 || getParameters(ht, 1, &num) == FAILURE) {
 		WRONG_PARAM_COUNT;
@@ -445,7 +543,7 @@ static int array_key_compare(const void *a, const void *b)
 
 void php3_key_sort(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *array;
+	pval *array;
 	TLS_VARS;
 
 	if (ARG_COUNT(ht) != 1 || getParameters(ht, 1, &array) == FAILURE) {
@@ -466,23 +564,38 @@ void php3_key_sort(INTERNAL_FUNCTION_PARAMETERS)
 }
 
 
+/* the current implementation of count() is a definite example of what
+ * user functions should NOT look like.  It's a hack, until we get
+ * unset() to work right in 3.1
+ */
 void php3_count(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *array;
+	pval *array;
+	Bucket *p;
+	pval *tmp;
+	int num_elements;
 	TLS_VARS;
 
 	if (ARG_COUNT(ht) != 1 || getParameters(ht, 1, &array) == FAILURE) {
 		WRONG_PARAM_COUNT;
 	}
 	if (!(array->type & IS_HASH)) {
-		php3_error(E_WARNING, "Wrong datatype in count() call");
-		return;
+		if (array->type == IS_STRING && array->value.str.val==undefined_variable_string) {
+			RETURN_LONG(0);
+		} else {
+			RETURN_LONG(1);
+		}
 	}
-	if (!ParameterPassedByReference(ht,1)) {
-		php3_error(E_WARNING, "Array not passed by reference in call to ksort()");
-		return;
+	
+	for (p=array->value.ht->pListHead,num_elements=0; p; p=p->pListNext) {
+		tmp = (pval *) p->pData;
+		if (tmp->type == IS_STRING && tmp->value.str.val == undefined_variable_string) {
+			continue;
+		}
+		num_elements++;
 	}
-	RETURN_LONG(hash_num_elements(array->value.ht));
+	
+	RETURN_LONG(num_elements);
 }
 
 
@@ -494,25 +607,27 @@ static int array_data_compare(const void *a, const void *b)
 {
 	Bucket *f;
 	Bucket *s;
-	YYSTYPE *first;
-	YYSTYPE *second;
+	pval *first;
+	pval *second;
 	double dfirst, dsecond;
 
 	f = *((Bucket **) a);
 	s = *((Bucket **) b);
 
-	first = (YYSTYPE *) f->pData;
-	second = (YYSTYPE *) s->pData;
+	first = (pval *) f->pData;
+	second = (pval *) s->pData;
 
 	if ((first->type == IS_LONG || first->type == IS_DOUBLE) &&
 		(second->type == IS_LONG || second->type == IS_DOUBLE)) {
-		dfirst = first->value.dval;
-		dsecond = second->value.dval;
 		if (first->type == IS_LONG) {
 			dfirst = (double) first->value.lval;
+		} else {
+			dfirst = first->value.dval;
 		}
 		if (second->type == IS_LONG) {
 			dsecond = (double) second->value.lval;
+		} else {
+			dsecond = second->value.dval;
 		}
 		if (dfirst < dsecond) {
 			return -1;
@@ -530,7 +645,7 @@ static int array_data_compare(const void *a, const void *b)
 		return 1;
 	}
 	if (first->type == IS_STRING && second->type == IS_STRING) {
-		return strcmp(first->value.strval, second->value.strval);
+		return strcmp(first->value.str.val, second->value.str.val);
 	}
 	return 0;					/* Anything else is equal as it can't be compared */
 }
@@ -542,7 +657,7 @@ static int array_reverse_data_compare(const void *a, const void *b)
 
 void php3_asort(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *array;
+	pval *array;
 	TLS_VARS;
 
 	if (ARG_COUNT(ht) != 1 || getParameters(ht, 1, &array) == FAILURE) {
@@ -564,7 +679,7 @@ void php3_asort(INTERNAL_FUNCTION_PARAMETERS)
 
 void php3_arsort(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *array;
+	pval *array;
 	TLS_VARS;
 
 	if (ARG_COUNT(ht) != 1 || getParameters(ht, 1, &array) == FAILURE) {
@@ -586,7 +701,7 @@ void php3_arsort(INTERNAL_FUNCTION_PARAMETERS)
 
 void php3_sort(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *array;
+	pval *array;
 	TLS_VARS;
 
 	if (ARG_COUNT(ht) != 1 || getParameters(ht, 1, &array) == FAILURE) {
@@ -608,7 +723,7 @@ void php3_sort(INTERNAL_FUNCTION_PARAMETERS)
 
 void php3_rsort(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *array;
+	pval *array;
 	TLS_VARS;
 
 	if (ARG_COUNT(ht) != 1 || getParameters(ht, 1, &array) == FAILURE) {
@@ -631,7 +746,7 @@ void php3_rsort(INTERNAL_FUNCTION_PARAMETERS)
 
 void array_end(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *array, *entry;
+	pval *array, *entry;
 
 	if (ARG_COUNT(ht) != 1 || getParameters(ht, 1, &array) == FAILURE) {
 		WRONG_PARAM_COUNT;
@@ -644,8 +759,15 @@ void array_end(INTERNAL_FUNCTION_PARAMETERS)
         php3_error(E_WARNING, "Array not passed by reference in call to end()");
     }
 	hash_internal_pointer_end(array->value.ht);
-	if (hash_get_current_data(array->value.ht, (void **) &entry) == FAILURE) {
-		return;
+	while (1) {
+		if (hash_get_current_data(array->value.ht, (void **) &entry) == FAILURE) {
+			RETURN_FALSE;
+		}
+		if (entry->type == IS_STRING && entry->value.str.val==undefined_variable_string) {
+			hash_move_backwards(array->value.ht);
+		} else {
+			break;
+		}
 	}
 	*return_value = *entry;
 	yystype_copy_constructor(return_value);
@@ -654,51 +776,94 @@ void array_end(INTERNAL_FUNCTION_PARAMETERS)
 
 void array_prev(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *array, *entry;
+	pval *array, *entry;
 
 	if (ARG_COUNT(ht) != 1 || getParameters(ht, 1, &array) == FAILURE) {
 		WRONG_PARAM_COUNT;
 	}
 	if (!(array->type & IS_HASH)) {
 		php3_error(E_WARNING, "Variable passed to prev() is not an array or object");
-		return;
+		RETURN_FALSE;
 	}
-	if (!ParameterPassedByReference(ht,1)) {
-		php3_error(E_WARNING, "Array not passed by reference in call to prev()");
-	}
-	hash_move_backwards(array->value.ht);
-	if (hash_get_current_data(array->value.ht, (void **) &entry) == FAILURE) {
-		return;
-	}
+	do {
+		hash_move_backwards(array->value.ht);
+		if (hash_get_current_data(array->value.ht, (void **) &entry) == FAILURE) {
+			RETURN_FALSE;
+		}
+	} while (entry->type==IS_STRING && entry->value.str.val==undefined_variable_string);
+	
 	*return_value = *entry;
 	yystype_copy_constructor(return_value);
 }
 
 void array_next(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *array, *entry;
+	pval *array, *entry;
 
 	if (ARG_COUNT(ht) != 1 || getParameters(ht, 1, &array) == FAILURE) {
 		WRONG_PARAM_COUNT;
 	}
 	if (!(array->type & IS_HASH)) {
 		php3_error(E_WARNING, "Variable passed to next() is not an array or object");
-		return;
+		RETURN_FALSE;
 	}
-    if (!ParameterPassedByReference(ht,1)) {
-        php3_error(E_WARNING, "Array not passed by reference in call to next()");
-    }
-	hash_move_forward(array->value.ht);
-	if (hash_get_current_data(array->value.ht, (void **) &entry) == FAILURE) {
-		return;
-	}
+	do {
+		hash_move_forward(array->value.ht);
+		if (hash_get_current_data(array->value.ht, (void **) &entry) == FAILURE) {
+			RETURN_FALSE;
+		}
+	} while (entry->type==IS_STRING && entry->value.str.val==undefined_variable_string);
+	
 	*return_value = *entry;
 	yystype_copy_constructor(return_value);
 }
 
+void array_each(INTERNAL_FUNCTION_PARAMETERS)
+{
+	pval *array,*entry,real_entry;
+	char *string_key;
+	int int_key;
+	int retval;
+	pval *inserted_pointer;
+	
+	if (ARG_COUNT(ht) != 1 || getParameters(ht, 1, &array) == FAILURE) {
+		WRONG_PARAM_COUNT;
+	}
+	if (!(array->type & IS_HASH)) {
+		php3_error(E_WARNING,"Variable passed to each() is not an array or object");
+		return;
+	}
+	while((retval=hash_get_current_data(array->value.ht, (void **) &entry)) == SUCCESS) {
+		if (entry->type == IS_STRING && entry->value.str.val==undefined_variable_string) {
+			hash_move_forward(array->value.ht);
+			continue;
+		} else {
+			break;
+		}
+	}
+	if (retval==FAILURE) {
+		RETURN_FALSE;
+	}
+	array_init(return_value);
+	real_entry = *entry;
+	yystype_copy_constructor(&real_entry);
+	hash_index_update(return_value->value.ht,1,(void *) &real_entry,sizeof(pval),(void **) &inserted_pointer);
+	hash_pointer_update(return_value->value.ht, "value", sizeof("value"), (void *) inserted_pointer);
+	switch (hash_get_current_key(array->value.ht, &string_key, &int_key)) {
+		case HASH_KEY_IS_STRING:
+			add_get_index_string(return_value,0,string_key,(void **) &inserted_pointer,0);
+			break;
+		case HASH_KEY_IS_INT:
+			add_get_index_long(return_value,0,int_key, (void **) &inserted_pointer);
+			break;
+	}
+	hash_pointer_update(return_value->value.ht, "key", sizeof("key"), (void *) inserted_pointer);
+	hash_move_forward(array->value.ht);
+}
+	
 void array_reset(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *array, *entry;
+	pval *array, *entry;
 
 	if (ARG_COUNT(ht) != 1 || getParameters(ht, 1, &array) == FAILURE) {
 		WRONG_PARAM_COUNT;
@@ -707,20 +872,25 @@ void array_reset(INTERNAL_FUNCTION_PARAMETERS)
 		php3_error(E_WARNING, "Variable passed to reset() is not an array or object");
 		return;
 	}
-    if (!ParameterPassedByReference(ht,1)) {
-        php3_error(E_WARNING, "Array not passed by reference in call to reset()");
-    }
 	hash_internal_pointer_reset(array->value.ht);
-	if (hash_get_current_data(array->value.ht, (void **) &entry) == FAILURE) {
-		return;
+	while (1) {
+		if (hash_get_current_data(array->value.ht, (void **) &entry) == FAILURE) {
+			return;
+		}
+		if (entry->type==IS_STRING && entry->value.str.val==undefined_variable_string) {
+			hash_move_forward(array->value.ht);
+		} else {
+			break;
+		}
 	}
+		
 	*return_value = *entry;
 	yystype_copy_constructor(return_value);
 }
 
 void array_current(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *array, *entry;
+	pval *array, *entry;
 
 	if (ARG_COUNT(ht) != 1 || getParameters(ht, 1, &array) == FAILURE) {
 		WRONG_PARAM_COUNT;
@@ -729,9 +899,6 @@ void array_current(INTERNAL_FUNCTION_PARAMETERS)
 		php3_error(E_WARNING, "Variable passed to current() is not an array or object");
 		return;
 	}
-    if (!ParameterPassedByReference(ht,1)) {
-        php3_error(E_WARNING, "Array not passed by reference in call to current()");
-    }
 	if (hash_get_current_data(array->value.ht, (void **) &entry) == FAILURE) {
 		return;
 	}
@@ -742,7 +909,7 @@ void array_current(INTERNAL_FUNCTION_PARAMETERS)
 
 void array_current_key(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *array;
+	pval *array;
 	char *string_key;
 	int int_key;
 
@@ -758,8 +925,8 @@ void array_current_key(INTERNAL_FUNCTION_PARAMETERS)
     }
 	switch (hash_get_current_key(array->value.ht, &string_key, &int_key)) {
 		case HASH_KEY_IS_STRING:
-			return_value->value.strval = string_key;
-			return_value->strlen = strlen(string_key);
+			return_value->value.str.val = string_key;
+			return_value->value.str.len = strlen(string_key);
 			return_value->type = IS_STRING;
 			break;
 		case HASH_KEY_IS_INT:
@@ -785,6 +952,9 @@ void php3_flush(INTERNAL_FUNCTION_PARAMETERS)
 	bflush(GLOBAL(php3_rqst)->connection->client);
 #  endif
 #endif
+#if FHTTPD
+       /*FIXME -- what does it flush really? the whole response?*/
+#endif
 #if CGI_BINARY
 	fflush(stdout);
 #endif
@@ -797,7 +967,7 @@ void php3_flush(INTERNAL_FUNCTION_PARAMETERS)
 
 void php3_sleep(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *num;
+	pval *num;
 
 	if (ARG_COUNT(ht) != 1 || getParameters(ht, 1, &num) == FAILURE) {
 		WRONG_PARAM_COUNT;
@@ -809,7 +979,7 @@ void php3_sleep(INTERNAL_FUNCTION_PARAMETERS)
 void php3_usleep(INTERNAL_FUNCTION_PARAMETERS)
 {
 #if HAVE_USLEEP
-	YYSTYPE *num;
+	pval *num;
 
 	if (ARG_COUNT(ht) != 1 || getParameters(ht, 1, &num) == FAILURE) {
 		WRONG_PARAM_COUNT;
@@ -821,7 +991,7 @@ void php3_usleep(INTERNAL_FUNCTION_PARAMETERS)
 
 void php3_gettype(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *arg;
+	pval *arg;
 	TLS_VARS;
 
 	if (ARG_COUNT(ht) != 1 || getParameters(ht, 1, &arg) == FAILURE) {
@@ -829,32 +999,32 @@ void php3_gettype(INTERNAL_FUNCTION_PARAMETERS)
 	}
 	switch (arg->type) {
 		case IS_LONG:
-			RETVAL_STRING("integer");
+			RETVAL_STRING("integer",1);
 			break;
 		case IS_DOUBLE:
-			RETVAL_STRING("double");
+			RETVAL_STRING("double",1);
 			break;
 		case IS_STRING:
-			RETVAL_STRING("string");
+			RETVAL_STRING("string",1);
 			break;
 		case IS_ARRAY:
-			RETVAL_STRING("array");
+			RETVAL_STRING("array",1);
 			break;
 		case IS_CLASS:
-			RETVAL_STRING("class");
+			RETVAL_STRING("class",1);
 			break;
 		case IS_OBJECT:
-			RETVAL_STRING("object");
+			RETVAL_STRING("object",1);
 			break;
 		default:
-			RETVAL_STRING("unknown type");
+			RETVAL_STRING("unknown type",1);
 	}
 }
 
 
 void php3_settype(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *var, *type;
+	pval *var, *type;
 	char *new_type;
 	TLS_VARS;
 
@@ -863,7 +1033,7 @@ void php3_settype(INTERNAL_FUNCTION_PARAMETERS)
 		WRONG_PARAM_COUNT;
 	}
 	convert_to_string(type);
-	new_type = type->value.strval;
+	new_type = type->value.str.val;
 
 	if (!strcasecmp(new_type, "integer")) {
 		convert_to_long(var);
@@ -885,75 +1055,75 @@ void php3_settype(INTERNAL_FUNCTION_PARAMETERS)
 
 void php3_min(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE **argv;
-	int argc, i;
-	unsigned short min_type = IS_LONG;
+	int argc=ARG_COUNT(ht);
+	pval *result;
 	TLS_VARS;
 
-	argc = ARG_COUNT(ht);
-	/* if there is one parameter and this parameter is an array of
-	 * 2 or more elements, use that array
-	 */
+	if (argc<=0) {
+		php3_error(E_WARNING, "min: must be passed at least 1 value");
+		var_uninit(return_value);
+		return;
+	}
 	if (argc == 1) {
-		argv = (YYSTYPE **)emalloc(sizeof(YYSTYPE *) * argc);
+		pval *arr;
 
-		if (getParametersArray(ht, argc, argv) == FAILURE ||
-			argv[0]->type != IS_ARRAY) {
+		if (getParameters(ht, 1, &arr) == FAILURE ||
+			arr->type != IS_ARRAY) {
 			WRONG_PARAM_COUNT;
 		}
-		if (argv[0]->value.ht->nNumOfElements < 2) {
-			php3_error(E_WARNING,
-					   "min: array must contain at least 2 elements");
-			RETURN_FALSE;
-		}
-		/* replace the function parameters with the array */
-		ht = argv[0]->value.ht;
-		argc = ARG_COUNT(ht);
-		efree(argv);
-	} else if (argc < 2) {
-		WRONG_PARAM_COUNT;
-	}
-	argv = (YYSTYPE **)emalloc(sizeof(YYSTYPE *) * argc);
-	if (getParametersArray(ht, argc, argv) == FAILURE) {
-		WRONG_PARAM_COUNT;
-	}
-	/* figure out what types to compare
-	 * if the arguments contain a double, convert all of them to a double
-	 * else convert all of them to long
-	 */
-	for (i = 0; i < argc; i++) {
-		if (argv[i]->type == IS_DOUBLE) {
-			min_type = IS_DOUBLE;
-			break;
-		}
-	}
-	if (min_type == IS_LONG) {
-		convert_to_long(argv[0]);
-		return_value->value.lval = argv[0]->value.lval;
-		for (i = 1; i < argc; i++) {
-			convert_to_long(argv[i]);
-			if (argv[i]->value.lval < return_value->value.lval) {
-				return_value->value.lval = argv[i]->value.lval;
-			}
+		if (hash_minmax(arr->value.ht, array_data_compare, 0, (void **) &result)==SUCCESS) {
+			*return_value = *result;
+			yystype_copy_constructor(return_value);
+		} else {
+			php3_error(E_WARNING, "min: array must contain at least 1 element");
+			var_uninit(return_value);
 		}
 	} else {
-		convert_to_double(argv[0]);
-		return_value->value.dval = argv[0]->value.dval;
-		for (i = 1; i < argc; i++) {
-			convert_to_double(argv[i]);
-			if (argv[i]->value.dval < return_value->value.dval) {
-				return_value->value.dval = argv[i]->value.dval;
-			}
+		if (hash_minmax(ht, array_data_compare, 0, (void **) &result)==SUCCESS) {
+			*return_value = *result;
+			yystype_copy_constructor(return_value);
 		}
 	}
-	efree(argv);
-	return_value->type = min_type;
 }
 
 
 void php3_max(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE **argv;
+	int argc=ARG_COUNT(ht);
+	pval *result;
+	TLS_VARS;
+
+	if (argc<=0) {
+		php3_error(E_WARNING, "max: must be passed at least 1 value");
+		var_uninit(return_value);
+		return;
+	}
+	if (argc == 1) {
+		pval *arr;
+
+		if (getParameters(ht, 1, &arr) == FAILURE ||
+			arr->type != IS_ARRAY) {
+			WRONG_PARAM_COUNT;
+		}
+		if (hash_minmax(arr->value.ht, array_data_compare, 1, (void **) &result)==SUCCESS) {
+			*return_value = *result;
+			yystype_copy_constructor(return_value);
+		} else {
+			php3_error(E_WARNING, "max: array must contain at least 1 element");
+			var_uninit(return_value);
+		}
+	} else {
+		if (hash_minmax(ht, array_data_compare, 1, (void **) &result)==SUCCESS) {
+			*return_value = *result;
+			yystype_copy_constructor(return_value);
+		}
+	}
+}
+
+#if 0
+void php3_max(INTERNAL_FUNCTION_PARAMETERS)
+{
+	pval **argv;
 	int argc, i;
 	unsigned short max_type = IS_LONG;
 	TLS_VARS;
@@ -963,7 +1133,7 @@ void php3_max(INTERNAL_FUNCTION_PARAMETERS)
 	 * 2 or more elements, use that array
 	 */
 	if (argc == 1) {
-		argv = (YYSTYPE **)emalloc(sizeof(YYSTYPE *) * argc);
+		argv = (pval **)emalloc(sizeof(pval *) * argc);
 		if (getParametersArray(ht, argc, argv) == FAILURE ||
 			argv[0]->type != IS_ARRAY) {
 			WRONG_PARAM_COUNT;
@@ -975,13 +1145,14 @@ void php3_max(INTERNAL_FUNCTION_PARAMETERS)
 		}
 		/* replace the function parameters with the array */
 		ht = argv[0]->value.ht;
-		argc = ARG_COUNT(ht);
+		argc = hash_num_elements(ht);
 		efree(argv);
 	} else if (argc < 2) {
 		WRONG_PARAM_COUNT;
 	}
-	argv = (YYSTYPE **)emalloc(sizeof(YYSTYPE *) * argc);
+	argv = (pval **)emalloc(sizeof(pval *) * argc);
 	if (getParametersArray(ht, argc, argv) == FAILURE) {
+		efree(argv);
 		WRONG_PARAM_COUNT;
 	}
 	/* figure out what types to compare
@@ -1016,19 +1187,19 @@ void php3_max(INTERNAL_FUNCTION_PARAMETERS)
 	efree(argv);
 	return_value->type = max_type;
 }
-
+#endif
 
 void php3_get_current_user(INTERNAL_FUNCTION_PARAMETERS)
 {
 	TLS_VARS;
 
-	RETURN_STRING(_php3_get_current_user());
+	RETURN_STRING(_php3_get_current_user(),1);
 }
 
 
 void php3_get_cfg_var(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *varname;
+	pval *varname;
 	char *value;
 	
 	if (ARG_COUNT(ht)!=1 || getParameters(ht, 1, &varname)==FAILURE) {
@@ -1037,15 +1208,15 @@ void php3_get_cfg_var(INTERNAL_FUNCTION_PARAMETERS)
 	
 	convert_to_string(varname);
 	
-	if (cfg_get_string(varname->value.strval,&value)==FAILURE) {
+	if (cfg_get_string(varname->value.str.val,&value)==FAILURE) {
 		RETURN_FALSE;
 	}
-	RETURN_STRING(value);
+	RETURN_STRING(value,1);
 }
 
 void php3_set_magic_quotes_runtime(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *new_setting;
+	pval *new_setting;
 	
 	if (ARG_COUNT(ht)!=1 || getParameters(ht, 1, &new_setting)==FAILURE) {
 		RETURN_FALSE;
@@ -1059,7 +1230,7 @@ void php3_set_magic_quotes_runtime(INTERNAL_FUNCTION_PARAMETERS)
 
 void php3_is_type(INTERNAL_FUNCTION_PARAMETERS,int type)
 {
-	YYSTYPE *arg;
+	pval *arg;
 	
 	if (ARG_COUNT(ht)!=1 || getParameters(ht, 1, &arg)==FAILURE) {
 		RETURN_FALSE;
@@ -1082,7 +1253,7 @@ void php3_is_object(INTERNAL_FUNCTION_PARAMETERS) { php3_is_type(INTERNAL_FUNCTI
 void php3_leak(INTERNAL_FUNCTION_PARAMETERS)
 {
 	int leakbytes=3;
-	YYSTYPE *leak;
+	pval *leak;
 
 	if (ARG_COUNT(ht)>=1) {
 		if (getParameters(ht, 1, &leak)==SUCCESS) {
@@ -1104,58 +1275,76 @@ void php3_leak(INTERNAL_FUNCTION_PARAMETERS)
     0 = send to php3_error_log (uses syslog or file depending on ini setting)
 	1 = send via email to 3rd parameter 4th option = additional headers
 	2 = send via tcp/ip to 3rd parameter (name or ip:port)
-	4 = save to file in 3rd parameter
+	3 = save to file in 3rd parameter
 */
 
 void php3_error_log(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *string, *erropt, *option, *emailhead;
-	int opt_err=0;
+	pval *string, *erropt = NULL, *option = NULL, *emailhead = NULL;
+	int opt_err = 0;
 	char *message, *opt=NULL, *headers=NULL;
 	TLS_VARS;
 
-	if (ARG_COUNT(ht) != 1 || (ARG_COUNT(ht) > 2 && ARG_COUNT(ht) < 4)) {
+	switch(ARG_COUNT(ht)) {
+	case 1:
+		if (getParameters(ht,1,&string) == FAILURE) {
+			php3_error(E_WARNING,"Invalid argument 1 in error_log");
+			RETURN_FALSE;
+		}
+		break;
+	case 2:
+		if (getParameters(ht,2,&string,&erropt) == FAILURE) {
+			php3_error(E_WARNING,"Invalid arguments in error_log");
+			RETURN_FALSE;
+		}
+		convert_to_long(erropt);
+		opt_err=erropt->value.lval;
+		break;
+	case 3:
+		if (getParameters(ht,3,&string,&erropt,&option) == FAILURE){
+			php3_error(E_WARNING,"Invalid arguments in error_log");
+			RETURN_FALSE;
+		}
+		convert_to_long(erropt);
+		opt_err=erropt->value.lval;
+		convert_to_string(option);
+		opt=option->value.str.val;
+		break;
+	case 4:
+		if (getParameters(ht,4,&string,&erropt,&option,&emailhead) == FAILURE){
+			php3_error(E_WARNING,"Invalid arguments in error_log");
+			RETURN_FALSE;
+		}
+		break;
+	default:
 		WRONG_PARAM_COUNT;
 	}
-	if (getParameters(ht,1,&string) == FAILURE){
-		php3_error(E_WARNING,"Invalid argument 1 in error_log");
-		RETURN_FALSE;
-	} else {
-		convert_to_string(string);
-		message=string->value.strval;
+
+	convert_to_string(string);
+	message=string->value.str.val;
+	if (erropt != NULL) {
+		convert_to_long(erropt);
+		opt_err=erropt->value.lval;
 	}
-	if (ARG_COUNT(ht) > 2){
-		if (getParameters(ht,2,&erropt) == FAILURE){
-			php3_error(E_WARNING,"Invalid argument 2 in error_log");
-			RETURN_FALSE;
-		} else {
-			convert_to_long(erropt);
-			opt_err=erropt->value.lval;
-		}
-		if (getParameters(ht,3,&option) == FAILURE){
-			php3_error(E_WARNING,"Invalid argument 3 in error_log");
-			RETURN_FALSE;
-		} else {
-			convert_to_string(option);
-			opt=option->value.strval;
-		}
-		if (ARG_COUNT(ht) > 3){
-			if (getParameters(ht,4,&emailhead) == FAILURE){
-				php3_error(E_WARNING,"Invalid argument 4 in error_log");
-				RETURN_FALSE;
-			} else {
-				convert_to_string(emailhead);
-				headers=emailhead->value.strval;
-			}
-		}
-	} 
-	if(_php3_error_log(opt_err,message,opt,headers)==FAILURE)
+	if (option != NULL) {
+		convert_to_string(option);
+		opt=option->value.str.val;
+	}
+	if (emailhead != NULL) {
+		convert_to_string(emailhead);
+		headers=emailhead->value.str.val;
+	}
+
+	if (_php3_error_log(opt_err,message,opt,headers)==FAILURE) {
 		RETURN_FALSE;
+	}
+
 	RETURN_TRUE;
 }
 
 PHPAPI int _php3_error_log(int opt_err,char *message,char *opt,char *headers){
 	FILE *logfile;
+	int issock=0, socketd=0;;
 
 	switch(opt_err){
 	case 1: /*send an email*/
@@ -1181,9 +1370,8 @@ PHPAPI int _php3_error_log(int opt_err,char *message,char *opt,char *headers){
 #endif
 		break;
 	case 3: /*save to a file*/
-		/*FIXME does this need safe_mode stuff?*/
-		logfile=fopen(opt,"a");
-		fwrite(message,sizeof(message),1,logfile);
+		logfile=php3_fopen_wrapper(opt,"a", (IGNORE_URL|ENFORCE_SAFE_MODE), &issock, &socketd);
+		fwrite(message,strlen(message),1,logfile);
 		fclose(logfile);
 		break;
 	default:

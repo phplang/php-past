@@ -5,18 +5,23 @@
    | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
-   | it under the terms of the GNU General Public License as published by |
-   | the Free Software Foundation; either version 2 of the License, or    |
-   | (at your option) any later version.                                  |
+   | it under the terms of one of the following licenses:                 |
+   |                                                                      |
+   |  A) the GNU General Public License as published by the Free Software |
+   |     Foundation; either version 2 of the License, or (at your option) |
+   |     any later version.                                               |
+   |                                                                      |
+   |  B) the PHP License as published by the PHP Development Team and     |
+   |     included in the distribution in the file: LICENSE                |
    |                                                                      |
    | This program is distributed in the hope that it will be useful,      |
    | but WITHOUT ANY WARRANTY; without even the implied warranty of       |
    | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the        |
    | GNU General Public License for more details.                         |
    |                                                                      |
-   | You should have received a copy of the GNU General Public License    |
-   | along with this program; if not, write to the Free Software          |
-   | Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.            |
+   | You should have received a copy of both licenses referred to here.   |
+   | If you did not, or have any questions about PHP licensing, please    |
+   | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
    | Authors: Andi Gutmans <andi@php.net>                                 |
    |          Zeev Suraski <bourbon@netvision.net.il>                     |
@@ -24,7 +29,7 @@
  */
 
 
-/* $Id: internal_functions.h,v 1.117 1998/01/23 01:29:39 zeev Exp $ */
+/* $Id: internal_functions.h,v 1.124 1998/05/21 17:28:16 rasmus Exp $ */
 
 
 #ifndef _INTERNAL_FUNCTIONS_H
@@ -38,9 +43,11 @@ extern unsigned char first_arg_allow_ref[];
 extern unsigned char second_arg_force_ref[];
 extern unsigned char second_arg_allow_ref[];
 
+extern int _php3_next_free_module();
+
 extern PHPAPI int getParameters(HashTable *ht, int param_count,...);
-extern PHPAPI int getParametersArray(HashTable *ht, int param_count, YYSTYPE **argument_array);
-extern PHPAPI int getThis(YYSTYPE **this);
+extern PHPAPI int getParametersArray(HashTable *ht, int param_count, pval **argument_array);
+extern PHPAPI int getThis(pval **this);
 extern PHPAPI int ParameterPassedByReference(HashTable *ht, uint n);
 extern PHPAPI int register_functions(function_entry *functions);
 extern PHPAPI void unregister_functions(function_entry *functions, int count);
@@ -60,26 +67,28 @@ extern PHPAPI void wrong_param_count(void);
 #define DLEXPORT
 #endif
 
-extern inline PHPAPI int array_init(YYSTYPE *arg);
-extern inline PHPAPI int object_init(YYSTYPE *arg);
-extern inline PHPAPI int add_assoc_long(YYSTYPE *arg, char *key, long n);
-extern inline PHPAPI int add_assoc_double(YYSTYPE *arg, char *key, double d);
-extern inline PHPAPI int add_assoc_string(YYSTYPE *arg, char *key, char *str, int duplicate);
-extern inline PHPAPI int add_assoc_stringl(YYSTYPE *arg, char *key, char *str, uint length, int duplicate);
-extern inline PHPAPI int add_assoc_function(YYSTYPE *arg, char *key,void (*function_ptr)(INTERNAL_FUNCTION_PARAMETERS));
-extern inline PHPAPI int add_index_long(YYSTYPE *arg, uint idx, long n);
-extern inline PHPAPI int add_index_double(YYSTYPE *arg, uint idx, double d);
-extern inline PHPAPI int add_index_string(YYSTYPE *arg, uint idx, char *str, int duplicate);
-extern inline PHPAPI int add_index_stringl(YYSTYPE *arg, uint idx, char *str, uint length, int duplicate);
-extern inline PHPAPI int add_next_index_long(YYSTYPE *arg, long n);
-extern inline PHPAPI int add_next_index_double(YYSTYPE *arg, double d);
-extern inline PHPAPI int add_next_index_string(YYSTYPE *arg, char *str, int duplicate);
-extern inline PHPAPI int add_next_index_stringl(YYSTYPE *arg, char *str, uint length, int duplicate);
+extern inline PHPAPI int array_init(pval *arg);
+extern inline PHPAPI int object_init(pval *arg);
+extern inline PHPAPI int add_assoc_long(pval *arg, char *key, long n);
+extern inline PHPAPI int add_assoc_double(pval *arg, char *key, double d);
+extern inline PHPAPI int add_assoc_string(pval *arg, char *key, char *str, int duplicate);
+extern inline PHPAPI int add_assoc_stringl(pval *arg, char *key, char *str, uint length, int duplicate);
+extern inline PHPAPI int add_assoc_function(pval *arg, char *key,void (*function_ptr)(INTERNAL_FUNCTION_PARAMETERS));
+extern inline PHPAPI int add_index_long(pval *arg, uint idx, long n);
+extern inline PHPAPI int add_index_double(pval *arg, uint idx, double d);
+extern inline PHPAPI int add_index_string(pval *arg, uint idx, char *str, int duplicate);
+extern inline PHPAPI int add_index_stringl(pval *arg, uint idx, char *str, uint length, int duplicate);
+extern inline PHPAPI int add_next_index_long(pval *arg, long n);
+extern inline PHPAPI int add_next_index_double(pval *arg, double d);
+extern inline PHPAPI int add_next_index_string(pval *arg, char *str, int duplicate);
+extern inline PHPAPI int add_next_index_stringl(pval *arg, char *str, uint length, int duplicate);
 
-extern inline PHPAPI int add_get_assoc_string(YYSTYPE *arg, char *key, char *str, void **dest, int duplicate);
-extern inline PHPAPI int add_get_assoc_stringl(YYSTYPE *arg, char *key, char *str, uint length, void **dest, int duplicate);
-extern inline PHPAPI int add_get_index_string(YYSTYPE *arg, uint idx, char *str, void **dest, int duplicate);
-extern inline PHPAPI int add_get_index_stringl(YYSTYPE *arg, uint idx, char *str, uint length, void **dest, int duplicate);
+extern inline PHPAPI int add_get_assoc_string(pval *arg, char *key, char *str, void **dest, int duplicate);
+extern inline PHPAPI int add_get_assoc_stringl(pval *arg, char *key, char *str, uint length, void **dest, int duplicate);
+extern inline PHPAPI int add_get_index_long(pval *arg, uint idx, long l, void **dest);
+extern inline PHPAPI int add_get_index_double(pval *arg, uint idx, double d, void **dest);
+extern inline PHPAPI int add_get_index_string(pval *arg, uint idx, char *str, void **dest, int duplicate);
+extern inline PHPAPI int add_get_index_stringl(pval *arg, uint idx, char *str, uint length, void **dest, int duplicate);
 
 #define add_property_long(arg,key,n)  add_assoc_long((arg),(key),(n))
 #define add_property_double(arg,key,d)  add_assoc_double((arg),(key),(n))

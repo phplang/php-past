@@ -5,25 +5,30 @@
    | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
-   | it under the terms of the GNU General Public License as published by |
-   | the Free Software Foundation; either version 2 of the License, or    |
-   | (at your option) any later version.                                  |
+   | it under the terms of one of the following licenses:                 |
+   |                                                                      |
+   |  A) the GNU General Public License as published by the Free Software |
+   |     Foundation; either version 2 of the License, or (at your option) |
+   |     any later version.                                               |
+   |                                                                      |
+   |  B) the PHP License as published by the PHP Development Team and     |
+   |     included in the distribution in the file: LICENSE                |
    |                                                                      |
    | This program is distributed in the hope that it will be useful,      |
    | but WITHOUT ANY WARRANTY; without even the implied warranty of       |
    | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the        |
    | GNU General Public License for more details.                         |
    |                                                                      |
-   | You should have received a copy of the GNU General Public License    |
-   | along with this program; if not, write to the Free Software          |
-   | Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.            |
+   | You should have received a copy of both licenses referred to here.   |
+   | If you did not, or have any questions about PHP licensing, please    |
+   | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
    | Authors: Zeev Suraski <bourbon@netvision.net.il>                     |
    +----------------------------------------------------------------------+
  */
 
 
-/* $Id: php3_msql.h,v 1.17 1997/12/31 15:56:42 rasmus Exp $ */
+/* $Id: php3_msql.h,v 1.23 1998/05/15 10:57:33 zeev Exp $ */
 
 #ifndef _PHP3_MSQL_H
 #define _PHP3_MSQL_H
@@ -40,8 +45,8 @@ extern php3_module_entry msql_module_entry;
 #define msql_module_ptr &msql_module_entry
 
 /* mSQL functions */
-extern DLEXPORT int php3_minit_msql(INITFUNCARG);
-extern DLEXPORT int php3_rinit_msql(INITFUNCARG);
+extern DLEXPORT int php3_minit_msql(INIT_FUNC_ARGS);
+extern DLEXPORT int php3_rinit_msql(INIT_FUNC_ARGS);
 extern DLEXPORT int php3_mshutdown_msql(void);
 extern DLEXPORT void php3_info_msql(void);
 extern DLEXPORT void php3_msql_connect(INTERNAL_FUNCTION_PARAMETERS);
@@ -53,6 +58,7 @@ extern DLEXPORT void php3_msql_drop_db(INTERNAL_FUNCTION_PARAMETERS);
 extern DLEXPORT void php3_msql_list_dbs(INTERNAL_FUNCTION_PARAMETERS);
 extern DLEXPORT void php3_msql_list_tables(INTERNAL_FUNCTION_PARAMETERS);
 extern DLEXPORT void php3_msql_list_fields(INTERNAL_FUNCTION_PARAMETERS);
+extern DLEXPORT void php3_msql_error(INTERNAL_FUNCTION_PARAMETERS);
 extern DLEXPORT void php3_msql_query(INTERNAL_FUNCTION_PARAMETERS);
 extern DLEXPORT void php3_msql_db_query(INTERNAL_FUNCTION_PARAMETERS);
 extern DLEXPORT void php3_msql_result(INTERNAL_FUNCTION_PARAMETERS);

@@ -4,7 +4,7 @@
 #define	STRING	258
 #define	ENCAPSULATED_STRING	259
 #define	SECTION	260
-#define	TRUE	261
-#define	FALSE	262
+#define	CFG_TRUE	261
+#define	CFG_FALSE	262
 #define	EXTENSION	263
 

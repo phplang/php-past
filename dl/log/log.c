@@ -5,24 +5,29 @@
    | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
-   | it under the terms of the GNU General Public License as published by |
-   | the Free Software Foundation; either version 2 of the License, or    |
-   | (at your option) any later version.                                  |
+   | it under the terms of one of the following licenses:                 |
+   |                                                                      |
+   |  A) the GNU General Public License as published by the Free Software |
+   |     Foundation; either version 2 of the License, or (at your option) |
+   |     any later version.                                               |
+   |                                                                      |
+   |  B) the PHP License as published by the PHP Development Team and     |
+   |     included in the distribution in the file: LICENSE                |
    |                                                                      |
    | This program is distributed in the hope that it will be useful,      |
    | but WITHOUT ANY WARRANTY; without even the implied warranty of       |
    | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the        |
    | GNU General Public License for more details.                         |
    |                                                                      |
-   | You should have received a copy of the GNU General Public License    |
-   | along with this program; if not, write to the Free Software          |
-   | Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.            |
+   | You should have received a copy of both licenses referred to here.   |
+   | If you did not, or have any questions about PHP licensing, please    |
+   | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
    | Authors: Jim Winstead (jimw@adventure.com)                           |
    +----------------------------------------------------------------------+
  */
 
-/* $Id: log.c,v 1.4 1997/12/31 15:56:03 rasmus Exp $ */
+/* $Id: log.c,v 1.10 1998/05/21 23:57:18 zeev Exp $ */
 
 #include "phpdl.h"
 #include "log.h"
@@ -68,7 +73,7 @@ DLEXPORT int dl_initialize(void *handle)
 	return SUCCESS;
 }
 
-DLEXPORT int php3_init_log(INITFUNCARG) {
+DLEXPORT int php3_init_log(INIT_FUNC_ARGS) {
 	log_stats.filled = 0;
 	log_stats.logfile = NULL;
 
@@ -117,9 +122,9 @@ char *_php3_filename_to_logfn(char *filename) {
 	lfn = estrdup(filename);
 	lp = lfn;
 	while(*lp == '/') lp++;
-	if(*lp=='~') {
+	if (*lp=='~') {
 		while(*lp =='~') lp++;
-		if(strchr(lp,'/')) {
+		if (strchr(lp,'/')) {
 			while(*lp!='/') lp++;
 			lp++;
 		}
@@ -161,15 +166,15 @@ DLEXPORT void php3_getlogfile(INTERNAL_FUNCTION_PARAMETERS) {
 }
 
 DLEXPORT void php3_logas(INTERNAL_FUNCTION_PARAMETERS) {
-	YYSTYPE *as;
+	pval *as;
 	if (ARG_COUNT(ht)!=1 || getParameters(ht, 1, &as) == FAILURE) {
 		WRONG_PARAM_COUNT;
 	}
 	convert_to_string(as);
 	if (log_stats.logfile) efree(log_stats.logfile);
-	log_stats.logfile = estrdup(as->value.strval);
+	log_stats.logfile = estrdup(as->value.str.val);
 	_php3_flushlogstats();
-	RETURN_STRING(as->value.strval);
+	RETURN_STRING(as->value.str.val);
 }
 
 DLEXPORT void _php3_load_log_info(void) {

@@ -5,18 +5,23 @@
    | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
-   | it under the terms of the GNU General Public License as published by |
-   | the Free Software Foundation; either version 2 of the License, or    |
-   | (at your option) any later version.                                  |
+   | it under the terms of one of the following licenses:                 |
+   |                                                                      |
+   |  A) the GNU General Public License as published by the Free Software |
+   |     Foundation; either version 2 of the License, or (at your option) |
+   |     any later version.                                               |
+   |                                                                      |
+   |  B) the PHP License as published by the PHP Development Team and     |
+   |     included in the distribution in the file: LICENSE                |
    |                                                                      |
    | This program is distributed in the hope that it will be useful,      |
    | but WITHOUT ANY WARRANTY; without even the implied warranty of       |
    | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the        |
    | GNU General Public License for more details.                         |
    |                                                                      |
-   | You should have received a copy of the GNU General Public License    |
-   | along with this program; if not, write to the Free Software          |
-   | Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.            |
+   | You should have received a copy of both licenses referred to here.   |
+   | If you did not, or have any questions about PHP licensing, please    |
+   | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
    | Authors: Lachlan Roche                                               |
    |                                                                      |
@@ -31,7 +36,7 @@
 #endif
 
 #include <stdio.h>
-#include "parser.h"
+#include "php.h"
 #include "internal_functions.h"
 
 #if APACHE
@@ -42,7 +47,7 @@
 
 void php3_md5(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *arg;
+	pval *arg;
 	char md5str[33];
 #if (!APACHE)
 	PHP3_MD5_CTX context;
@@ -60,22 +65,22 @@ void php3_md5(INTERNAL_FUNCTION_PARAMETERS)
 
 #if APACHE
 #if MODULE_MAGIC_NUMBER > 19970901
-	strcpy(md5str, ap_md5(GLOBAL(php3_rqst)->pool, arg->value.strval));
+	strcpy(md5str, ap_md5(GLOBAL(php3_rqst)->pool, arg->value.str.val));
 #else
-	strcpy(md5str, md5(GLOBAL(php3_rqst)->pool, arg->value.strval));
+	strcpy(md5str, md5(GLOBAL(php3_rqst)->pool, arg->value.str.val));
 #endif
 #else
-	len = strlen(arg->value.strval);
+	len = strlen(arg->value.str.val);
 	md5str[0] = '\0';
 	PHP3_MD5Init(&context);
-	PHP3_MD5Update(&context, arg->value.strval, len);
+	PHP3_MD5Update(&context, arg->value.str.val, len);
 	PHP3_MD5Final(digest, &context);
 	for (i = 0, r = md5str; i < 16; i++, r += 2) {
 		sprintf(r, "%02x", digest[i]);
 	}
 	*r = '\0';
 #endif
-	RETVAL_STRING(md5str);
+	RETVAL_STRING(md5str,1);
 }
 
 #if (!APACHE)

@@ -55,7 +55,7 @@
 
 #include "config.h"
 
-#if (!APACHE)
+#if !defined(APACHE) || (!APACHE)
 #if !defined(HAVE_SNPRINTF) || !defined(HAVE_VSNPRINTF)
 
 #include <stdio.h>
@@ -66,7 +66,7 @@
 #include <stdlib.h>
 #include <math.h>
 
-#include "parser.h"
+#include "php.h"
 
 #ifdef HAVE_GCVT
 

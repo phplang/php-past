@@ -3,7 +3,7 @@ Nested If/ElseIf/Else Test                                    ...
 --POST--
 --GET--
 --FILE--
-<?$a=1; $b=2;
+<?php $a=1; $b=2;
   if($a==0):
 	echo "bad";
   elseif($a==3):

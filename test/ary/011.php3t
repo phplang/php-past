@@ -4,7 +4,7 @@ Using another array                                           ...
 --GET--
 --FILE--
 <HR> $b= $a;
-<?
+<?php 
   $a[0]="a";
   $a[1]="b";
   $a[2]="c";
@@ -19,11 +19,11 @@ Using another array                                           ...
   endwhile;
 ?>
 <HR> $c= $a[0];
-<?
+<?php 
   $c= $a[0];
 ?>
 <HR> $d[0]= $a[0];
-<?
+<?php 
   $d[0]= $a[0];
 
   $key= key($d);
@@ -38,7 +38,7 @@ Using another array                                           ...
   echo "count(): $cd\n";
 ?>
 <HR> $e[]= $a[0];
-<?
+<?php 
   $e[]= $a[0];
 
   $key= key($e);
@@ -53,7 +53,7 @@ Using another array                                           ...
   echo "count(): $ce\n";
 ?>
 <HR> append to $f[0] $f[1] $f[2], $f += $a;
-<?
+<?php 
   $f[0]="e";
   $f[1]="f";
   $f[2]="g";

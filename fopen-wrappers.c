@@ -5,30 +5,35 @@
    | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
-   | it under the terms of the GNU General Public License as published by |
-   | the Free Software Foundation; either version 2 of the License, or    |
-   | (at your option) any later version.                                  |
+   | it under the terms of one of the following licenses:                 |
+   |                                                                      |
+   |  A) the GNU General Public License as published by the Free Software |
+   |     Foundation; either version 2 of the License, or (at your option) |
+   |     any later version.                                               |
+   |                                                                      |
+   |  B) the PHP License as published by the PHP Development Team and     |
+   |     included in the distribution in the file: LICENSE                |
    |                                                                      |
    | This program is distributed in the hope that it will be useful,      |
    | but WITHOUT ANY WARRANTY; without even the implied warranty of       |
    | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the        |
    | GNU General Public License for more details.                         |
    |                                                                      |
-   | You should have received a copy of the GNU General Public License    |
-   | along with this program; if not, write to the Free Software          |
-   | Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.            |
+   | You should have received a copy of both licenses referred to here.   |
+   | If you did not, or have any questions about PHP licensing, please    |
+   | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
    | Authors: Rasmus Lerdorf <rasmus@lerdorf.on.ca>                       |
    |          Jim Winstead <jimw@php.net>                                 |
    +----------------------------------------------------------------------+
  */
-/* $Id: fopen-wrappers.c,v 1.13 1998/03/02 16:05:14 jaakko Exp $ */
+/* $Id: fopen-wrappers.c,v 1.36 1998/06/01 07:06:59 rasmus Exp $ */
 
 #ifdef THREAD_SAFE
-# include "tls.h"
+#include "tls.h"
 #endif
 
-#include "parser.h"
+#include "php.h"
 #include "modules.h"
 
 #include <stdio.h>
@@ -39,16 +44,16 @@
 #include <fcntl.h>
 
 #if MSVC5
-# include <windows.h>
-# include <winsock.h>
-# define O_RDONLY _O_RDONLY
-# include "win32/param.h"
+#include <windows.h>
+#include <winsock.h>
+#define O_RDONLY _O_RDONLY
+#include "win32/param.h"
 #else
-# include <sys/param.h>
+#include <sys/param.h>
 #endif
 
 #include "safe_mode.h"
-#include "list.h"
+#include "php3_list.h"
 #include "functions/head.h"
 #include "functions/url.h"
 #include "functions/base64.h"
@@ -56,66 +61,65 @@
 #include "functions/php3_string.h"
 
 #if HAVE_PWD_H
-# if MSVC5
-#  include "win32/pwd.h"
-# else
-#  include <pwd.h>
-# endif
+#if MSVC5
+#include "win32/pwd.h"
+#else
+#include <pwd.h>
+#endif
 #endif
 
 #include <sys/types.h>
 #if HAVE_SYS_SOCKET_H
-# include <sys/socket.h>
+#include <sys/socket.h>
+#endif
+
+#ifndef S_ISREG
+#define S_ISREG(mode)	(((mode)&S_IFMT) == S_IFREG)
 #endif
 
 #if MSVC5
-# include <winsock.h>
+#include <winsock.h>
 #else
-# include <netinet/in.h>
-# include <netdb.h>
-# include <arpa/inet.h>
+#include <netinet/in.h>
+#include <netdb.h>
+#include <arpa/inet.h>
 #endif
 
 #if MSVC5
-# undef AF_UNIX
+#undef AF_UNIX
 #endif
 
 #if defined(AF_UNIX)
-# include <sys/un.h>
+#include <sys/un.h>
 #endif
 
-static FILE *php3_fopen_url_wrapper(char *path, char *mode, int options SOCK_ARG_IN);
+static FILE *php3_fopen_url_wrapper(char *path, char *mode, int options, int *issock, int *socketd);
 
-#if WIN32|WINNT
 int _php3_getftpresult(int socketd);
-#else
-static int _php3_getftpresult(FILE *fpc);
-#endif
 
-PHPAPI FILE *php3_fopen_wrapper(char *path, char *mode, int options SOCK_ARG_IN) {
+PHPAPI FILE *php3_fopen_wrapper(char *path, char *mode, int options, int *issock, int *socketd)
+{
 #if PHP3_URL_FOPEN
 	if (!(options & IGNORE_URL)) {
-		return php3_fopen_url_wrapper(path, mode, options SOCK_ARG);
+		return php3_fopen_url_wrapper(path, mode, options, issock, socketd);
 	}
 #endif
 
 	if (options & USE_PATH && php3_ini.include_path != NULL) {
 		return php3_fopen_with_path(path, mode, php3_ini.include_path, NULL);
-	}
-	else {
-		if (options & ENFORCE_SAFE_MODE && php3_ini.safe_mode && (!_php3_checkuid(path,1))) {
-			php3_error(E_WARNING,"SAFE MODE Restriction in effect.  Invalid owner of file to be read.");
+	} else {
+		if (options & ENFORCE_SAFE_MODE && php3_ini.safe_mode && (!_php3_checkuid(path, 1))) {
+			php3_error(E_WARNING, "SAFE MODE Restriction in effect.  Invalid owner of file to be read.");
 			return NULL;
 		}
 		return fopen(path, mode);
 	}
 }
 
-#if CGI_BINARY || USE_SAPI
+#if CGI_BINARY || FHTTPD || USE_SAPI
 
-/* FIXME: What does the comment below mean? jimw */
-/* Lots more stuff needs to go in here.  Trivial case for now */
-FILE *php3_fopen_for_parser(void) {
+FILE *php3_fopen_for_parser(void)
+{
 	FILE *fp;
 	struct stat st;
 	char *temp, *path_info, *fn;
@@ -133,24 +137,24 @@ FILE *php3_fopen_for_parser(void) {
 		struct passwd *pw;
 		char *s = strchr(path_info + 2, '/');
 
-		fn = NULL; /* discard the original filename, it must not be used */
-		if (s) { /* if there is no path name after the file, do not bother
-					to try open the directory */
-			l = s-(path_info+2);
-			if (l > sizeof (user) - 1)
-				l = sizeof (user) - 1;
-			memcpy (user, path_info+2, l);
-			user [l] = '\0';
+		fn = NULL;				/* discard the original filename, it must not be used */
+		if (s) {				/* if there is no path name after the file, do not bother
+								   to try open the directory */
+			l = s - (path_info + 2);
+			if (l > sizeof(user) - 1)
+				l = sizeof(user) - 1;
+			memcpy(user, path_info + 2, l);
+			user[l] = '\0';
 
 			pw = getpwnam(user);
 			if (pw && pw->pw_dir) {
 				fn = emalloc(strlen(php3_ini.user_dir) + strlen(path_info) + strlen(pw->pw_dir) + 4);
 				if (fn) {
-					strcpy(fn, pw->pw_dir); /* safe */
-					strcat(fn, "/"); /* safe */
-					strcat(fn, php3_ini.user_dir); /* safe */
-					strcat(fn, "/"); /* safe */
-					strcat(fn, s+1); /* safe (shorter than path_info) */
+					strcpy(fn, pw->pw_dir);		/* safe */
+					strcat(fn, "/");	/* safe */
+					strcat(fn, php3_ini.user_dir);	/* safe */
+					strcat(fn, "/");	/* safe */
+					strcat(fn, s + 1);	/* safe (shorter than path_info) */
 					STR_FREE(GLOBAL(request_info).filename);
 					GLOBAL(request_info).filename = fn;
 				}
@@ -158,54 +162,54 @@ FILE *php3_fopen_for_parser(void) {
 		}
 	} else
 #endif
-		if (php3_ini.doc_root && '/' == *php3_ini.doc_root && path_info) {
+	if (php3_ini.doc_root && '/' == *php3_ini.doc_root && path_info) {
 
-			l = strlen(php3_ini.doc_root);
-			fn = emalloc(l + strlen(path_info) + 2);
-			if (fn) {
-				memcpy(fn, php3_ini.doc_root, l);
-				if ('/' != fn[l-1]) /* l is never 0 */
-					fn[l++] = '/';
-				if ('/' == path_info[0])
-					l--;
-				strcpy (fn + l, path_info);
-				STR_FREE(GLOBAL(request_info).filename);
-				GLOBAL(request_info).filename = fn;
-			}
-		} /* if doc_root && path_info */
-
+		l = strlen(php3_ini.doc_root);
+		fn = emalloc(l + strlen(path_info) + 2);
+		if (fn) {
+			memcpy(fn, php3_ini.doc_root, l);
+			if ('/' != fn[l - 1])	/* l is never 0 */
+				fn[l++] = '/';
+			if ('/' == path_info[0])
+				l--;
+			strcpy(fn + l, path_info);
+			STR_FREE(GLOBAL(request_info).filename);
+			GLOBAL(request_info).filename = fn;
+		}
+	}							/* if doc_root && path_info */
 	if (!fn) {
 		/* we have to free request_info.filename here because
 		   php3_destroy_request_info assumes that it will get
 		   freed when the include_names hash is emptied, but
 		   we're not adding it in this case */
 		STR_FREE(GLOBAL(request_info).filename);
-		GLOBAL(request_info).filename=NULL;
+		GLOBAL(request_info).filename = NULL;
 		return NULL;
 	}
 	fp = fopen(fn, "r");
 
 	/* refuse to open anything that is not a regular file */
-	if (fp && (0 > fstat (fileno (fp), &st) || !S_ISREG(st.st_mode))) {
-		fclose (fp);
+	if (fp && (0 > fstat(fileno(fp), &st) || !S_ISREG(st.st_mode))) {
+		fclose(fp);
 		fp = NULL;
 	}
 	if (!fp) {
 		php3_error(E_ERROR, "Unable to open %s", fn);
-		STR_FREE(GLOBAL(request_info).filename); /* for same reason as above */
+		STR_FREE(GLOBAL(request_info).filename);	/* for same reason as above */
 		return NULL;
 	}
-	hash_index_update(&GLOBAL(include_names), 0, (void *) &fn, sizeof(char *),NULL);
+	hash_index_update(&GLOBAL(include_names), 0, (void *) &fn, sizeof(char *), NULL);
 
-	temp=strdup(fn);
-	_php3_dirname(temp);
-	if(*temp) chdir(temp);
+	temp = strdup(fn);
+	_php3_dirname(temp, strlen(temp));
+	if (*temp)
+		chdir(temp);
 	free(temp);
 
 	return fp;
 }
 
-#endif /* CGI_BINARY || USE_SAPI */
+#endif							/* CGI_BINARY || USE_SAPI */
 
 /*
  * Tries to open a file with a PATH-style list of directories.
@@ -218,56 +222,54 @@ PHPAPI FILE *php3_fopen_with_path(char *filename, char *mode, char *path, char *
 	struct stat sb;
 	FILE *fp;
 	TLS_VARS;
-	
+
 	if (opened_path) {
 		*opened_path = NULL;
 	}
-	
 	/* Relative path open */
 	if (*filename == '.') {
-		if(php3_ini.safe_mode &&(!_php3_checkuid(filename,2))) {
-			php3_error(E_WARNING,"SAFE MODE Restriction in effect.  Invalid owner.");
-			return(NULL);
+		if (php3_ini.safe_mode && (!_php3_checkuid(filename, 2))) {
+			php3_error(E_WARNING, "SAFE MODE Restriction in effect.  Invalid owner.");
+			return NULL;
 		}
-		if (opened_path) {
-			*opened_path = strdup(filename);
+		fp = fopen(filename, mode);
+		if (fp && opened_path) {
+			*opened_path = expand_filepath(filename);
 		}
-		return fopen(filename, mode);
+		return fp;
 	}
-
 	/* Absolute path open - prepend document_root in safe mode */
 #if WIN32|WINNT
-	if ((*filename == '\\')||(*filename == '/')||(filename[1] == ':')) {
+	if ((*filename == '\\') || (*filename == '/') || (filename[1] == ':')) {
 #else
 	if (*filename == '/') {
 #endif
-		if(php3_ini.safe_mode) {
-			strncpy(trypath,php3_ini.doc_root,MAXPATHLEN);
-			strncat(trypath,filename,MAXPATHLEN);
-			if(!_php3_checkuid(trypath,2)) {
-				php3_error(E_WARNING,"SAFE MODE Restriction in effect.  Invalid owner.");
-				return(NULL);
+		if (php3_ini.safe_mode) {
+			snprintf(trypath, MAXPATHLEN, "%s%s", php3_ini.doc_root, filename);
+			if (!_php3_checkuid(trypath, 2)) {
+				php3_error(E_WARNING, "SAFE MODE Restriction in effect.  Invalid owner.");
+				return NULL;
 			}
-			if (opened_path) {
-				*opened_path = strdup(trypath);
+			fp = fopen(trypath, mode);
+			if (fp && opened_path) {
+				*opened_path = expand_filepath(trypath);
 			}
-			return fopen(trypath, mode);
+			return fp;
 		} else {
 			return fopen(filename, mode);
 		}
 	}
-
-	if(!path || (path && !*path)) {
-		if(php3_ini.safe_mode &&(!_php3_checkuid(filename,2))) {
-			php3_error(E_WARNING,"SAFE MODE Restriction in effect.  Invalid owner.");
-			return(NULL);
+	if (!path || (path && !*path)) {
+		if (php3_ini.safe_mode && (!_php3_checkuid(filename, 2))) {
+			php3_error(E_WARNING, "SAFE MODE Restriction in effect.  Invalid owner.");
+			return NULL;
 		}
-		if (opened_path) {
+		fp = fopen(filename, mode);
+		if (fp && opened_path) {
 			*opened_path = strdup(filename);
 		}
-		return fopen(filename, mode);
+		return fp;
 	}
-
 	pathbuf = estrdup(path);
 
 	ptr = pathbuf;
@@ -283,15 +285,16 @@ PHPAPI FILE *php3_fopen_with_path(char *filename, char *mode, char *path, char *
 			end++;
 		}
 		snprintf(trypath, MAXPATHLEN, "%s/%s", ptr, filename);
-		if(php3_ini.safe_mode) {
-			if(stat(trypath,&sb) == 0 &&(!_php3_checkuid(trypath,2))) {
-				php3_error(E_WARNING,"SAFE MODE Restriction in effect.  Invalid owner.");
-				return(NULL);
+		if (php3_ini.safe_mode) {
+			if (stat(trypath, &sb) == 0 && (!_php3_checkuid(trypath, 2))) {
+				php3_error(E_WARNING, "SAFE MODE Restriction in effect.  Invalid owner.");
+				efree(pathbuf);
+				return NULL;
 			}
 		}
 		if ((fp = fopen(trypath, mode)) != NULL) {
 			if (opened_path) {
-				*opened_path = strdup(trypath);
+				*opened_path = expand_filepath(trypath);
 			}
 			efree(pathbuf);
 			return fp;
@@ -317,563 +320,519 @@ PHPAPI FILE *php3_fopen_with_path(char *filename, char *mode, char *path, char *
  * Otherwise, fopen is called as usual and the file pointer is returned.
  */
 
-static FILE *php3_fopen_url_wrapper(char *path, char *mode, int options SOCK_ARG_IN) {
+static FILE *php3_fopen_url_wrapper(char *path, char *mode, int options, int *issock, int *socketd)
+{
 	url *resource;
 	int result;
 	char *scratch, *tmp;
 
 	char tmp_line[256];
 	char location[256];
-	int chptr=0;
+	int chptr = 0;
 	char *tpath, *ttpath;
 	int body = 0;
 	int reqok = 0;
 	int lineone = 1;
-	int i, ch = 0;
+	int i;
+	char buf[2];
 
 	char oldch1 = 0;
 	char oldch2 = 0;
 	char oldch3 = 0;
 	char oldch4 = 0;
 	char oldch5 = 0;
-	
-	FILE *fp;
-#if !(WIN32|WINNT)
-	FILE *fpc;
-	int socketd;
-#endif
+
+	FILE *fp = NULL;
 	struct sockaddr_in server;
 	unsigned short portno;
-#if WIN32|WINNT
 	char winfeof;
-#endif
 
-	if (!strncasecmp(path,"http://",7)) {
-
+	if (!strncasecmp(path, "http://", 7)) {
 		resource = url_parse(path);
 		if (resource == NULL) {
-			php3_error(E_WARNING, "invalid url specified, %s", path);
-			return(NULL);
+			php3_error(E_WARNING, "Invalid URL specified, %s", path);
+			*issock = BAD_URL;
+			return NULL;
 		}
-
 		/* use port 80 if one wasn't specified */
-		if (resource->port == 0) resource->port = 80;
+		if (resource->port == 0)
+			resource->port = 80;
 
-		SOCKETD = socket(AF_INET, SOCK_STREAM, 0);
-		if (SOCKETD SOCK_ERR) {
-#if WIN32|WINNT
-			SOCK_FCLOSE(SOCKETD);
-			SOCKETD=0;
-#endif
+		*socketd = socket(AF_INET, SOCK_STREAM, 0);
+		if (*socketd == SOCK_ERR) {
+			SOCK_FCLOSE(*socketd);
+			*socketd = 0;
 			free_url(resource);
-			return(NULL);
+			return NULL;
 		}
-
 		server.sin_addr.s_addr = lookup_hostname(resource->host);
 		server.sin_family = AF_INET;
-		
-		if(server.sin_addr.s_addr == -1) {
-#if WIN32|WINNT
-			SOCK_FCLOSE(SOCKETD);
-			SOCKETD=0;
-#endif
-			free_url(resource);
-			return(NULL);
-		}
 
+		if (server.sin_addr.s_addr == -1) {
+			SOCK_FCLOSE(*socketd);
+			*socketd = 0;
+			free_url(resource);
+			return NULL;
+		}
 		server.sin_port = htons(resource->port);
- 
-		if (connect(SOCKETD, (struct sockaddr *)&server, sizeof(server)) SOCK_CONN_ERR) {
-#if WIN32|WINNT
-			SOCK_FCLOSE(SOCKETD);
-			SOCKETD=0;
-#endif
-			free_url(resource);
-			return(NULL);
-		}
 
-#if !(WIN32|WINNT)
-		if ((fp = fdopen (SOCKETD, "r+")) == NULL) {
+		if (connect(*socketd, (struct sockaddr *) &server, sizeof(server)) == SOCK_CONN_ERR) {
+			SOCK_FCLOSE(*socketd);
+			*socketd = 0;
 			free_url(resource);
-			return(NULL);
+			return NULL;
 		}
-
-#ifdef HAVE_SETVBUF  
+#if 0
+		if ((fp = fdopen(*socketd, "r+")) == NULL) {
+			free_url(resource);
+			return NULL;
+		}
+#ifdef HAVE_SETVBUF
 		if ((setvbuf(fp, NULL, _IONBF, 0)) != 0) {
 			free_url(resource);
-			return(NULL);
+			return NULL;
 		}
 #endif
-#endif /*win32*/
+#endif							/*win32 */
 
 		/* tell remote http which file to get */
-		SOCK_WRITE("GET ", SOCK_FP);
+		SOCK_WRITE("GET ", *socketd);
 		if (resource->path != NULL) {
-			SOCK_WRITE(resource->path, SOCK_FP);
-		}
-		else {
-			SOCK_WRITE("/", SOCK_FP);
+			SOCK_WRITE(resource->path, *socketd);
+		} else {
+			SOCK_WRITE("/", *socketd);
 		}
 
 		/* append the query string, if any */
 		if (resource->query != NULL) {
-			SOCK_WRITE("?", SOCK_FP);
-			SOCK_WRITE(resource->query, SOCK_FP);
+			SOCK_WRITE("?", *socketd);
+			SOCK_WRITE(resource->query, *socketd);
 		}
-		SOCK_WRITE(" HTTP/1.0\n", SOCK_FP);
+		SOCK_WRITE(" HTTP/1.0\n", *socketd);
 
 		/* send authorization header if we have user/pass */
 		if (resource->user != NULL && resource->pass != NULL) {
-			scratch = (char *)emalloc(strlen(resource->user) + strlen(resource->pass) + 2);
+			scratch = (char *) emalloc(strlen(resource->user) + strlen(resource->pass) + 2);
 			if (!scratch) {
 				free_url(resource);
-				return (NULL);
+				return NULL;
 			}
-
 			strcpy(scratch, resource->user);
 			strcat(scratch, ":");
 			strcat(scratch, resource->pass);
-			tmp = base64_encode(scratch);
+			tmp = _php3_base64_encode(scratch, strlen(scratch), NULL);
 
-			SOCK_WRITE("Authorization: Basic ", SOCK_FP);
+			SOCK_WRITE("Authorization: Basic ", *socketd);
 			/* output "user:pass" as base64-encoded string */
-			SOCK_WRITE(tmp, SOCK_FP);
-			SOCK_WRITE("\n", SOCK_FP);
+			SOCK_WRITE(tmp, *socketd);
+			SOCK_WRITE("\n", *socketd);
 			efree(scratch);
 			efree(tmp);
 		}
-
 		/* if the user has configured who they are, send a From: line */
 		if (cfg_get_string("from", &scratch) == SUCCESS) {
-			SOCK_WRITE("From: ", SOCK_FP);
-			SOCK_WRITE(scratch, SOCK_FP);
-			SOCK_WRITE("\n", SOCK_FP);
+			SOCK_WRITE("From: ", *socketd);
+			SOCK_WRITE(scratch, *socketd);
+			SOCK_WRITE("\n", *socketd);
 		}
-
 		/* send a Host: header so name-based virtual hosts work */
-		SOCK_WRITE("Host: ", SOCK_FP);
-		SOCK_WRITE(resource->host, SOCK_FP);
-		SOCK_WRITE("\n", SOCK_FP);
+		SOCK_WRITE("Host: ", *socketd);
+		SOCK_WRITE(resource->host, *socketd);
+		SOCK_WRITE("\n", *socketd);
 
 		/* identify ourselves */
-		SOCK_WRITE("User-Agent: PHP/", SOCK_FP);
-		SOCK_WRITE(PHP_VERSION, SOCK_FP);
-		SOCK_WRITE("\n", SOCK_FP);
+		SOCK_WRITE("User-Agent: PHP/", *socketd);
+		SOCK_WRITE(PHP_VERSION, *socketd);
+		SOCK_WRITE("\n", *socketd);
 
 		/* end the headers */
-		SOCK_WRITE("\n", SOCK_FP);
+		SOCK_WRITE("\n", *socketd);
 
 		/* Read past http header */
 		body = 0;
 		location[0] = '\0';
-#if WIN32|WINNT
-		while (!body && recv(SOCK_FP,(char *)&winfeof,1,MSG_PEEK)){
-#else
-		while (!body && !feof(fp)) {
-#endif
-			SOCK_FGETC(ch,SOCK_FP);
-			if (ch == EOF) {
-				SOCK_FCLOSE(SOCK_FP);
-#if WIN32|WINNT
-				SOCKETD=0;
-#endif
+		while (!body && recv(*socketd, (char *) &winfeof, 1, MSG_PEEK)) {
+			if (SOCK_FGETC(buf, *socketd) == SOCK_RECV_ERR) {
+				SOCK_FCLOSE(*socketd);
+				*socketd = 0;
 				free_url(resource);
-				return(NULL);
+				return NULL;
 			}
 			oldch5 = oldch4;
 			oldch4 = oldch3;
 			oldch3 = oldch2;
 			oldch2 = oldch1;
-			oldch1 = ch;
+			oldch1 = *buf;
 
-			tmp_line[chptr++]=ch;
-			if (ch == 10 || ch == 13) {
-				tmp_line[chptr]='\0';
-				chptr=0;
-				if (!strncasecmp(tmp_line,"Location: ",10)) {
-					tpath=tmp_line+10;
-					strcpy(location,tpath);
+			tmp_line[chptr++] = *buf;
+			if (*buf == 10 || *buf == 13) {
+				tmp_line[chptr] = '\0';
+				chptr = 0;
+				if (!strncasecmp(tmp_line, "Location: ", 10)) {
+					tpath = tmp_line + 10;
+					strcpy(location, tpath);
 				}
 			}
-
-			if (lineone && (ch == 10 || ch == 13)) {
-				lineone=0;
+			if (lineone && (*buf == 10 || *buf == 13)) {
+				lineone = 0;
 			}
 			if (lineone && oldch5 == ' ' && oldch4 == '2' && oldch3 == '0' &&
-				oldch2 == '0' && oldch1 == ' ' ) {
-				reqok=1;
+				oldch2 == '0' && oldch1 == ' ') {
+				reqok = 1;
 			}
 			if (oldch4 == 13 && oldch3 == 10 && oldch2 == 13 && oldch1 == 10) {
-				body=1;
+				body = 1;
 			}
 			if (oldch2 == 10 && oldch1 == 10) {
-				body=1;
+				body = 1;
 			}
 			if (oldch2 == 13 && oldch1 == 13) {
-				body=1;
+				body = 1;
 			}
 		}
 		if (!reqok) {
-			SOCK_FCLOSE(SOCK_FP);
-#if WIN32|WINNT
-			SOCKETD=0;
-#endif
+			SOCK_FCLOSE(*socketd);
+			*socketd = 0;
 			free_url(resource);
-			if (location[0]!='\0') {
-				return php3_fopen_url_wrapper(location, mode, options SOCK_ARG);
+			if (location[0] != '\0') {
+				return php3_fopen_url_wrapper(location, mode, options, issock, socketd);
 			} else {
-				return(NULL);
+				return NULL;
 			}
-		}		
+		}
 		free_url(resource);
-#if WIN32|WINNT
-		*issock=1;
-#endif
-		return(fp);
-	}
-	else if (!strncasecmp(path,"ftp://",6)) {
+		*issock = 1;
+		return (fp);
+	} else if (!strncasecmp(path, "ftp://", 6)) {
 		resource = url_parse(path);
 		if (resource == NULL) {
-			php3_error(E_WARNING, "invalid url specified, %s", path);
-			return(NULL);
-		}
-
-		/* use port 21 if one wasn't specified */
-		if (resource->port == 0) resource->port = 21;
-
-		SOCKETD = socket(AF_INET, SOCK_STREAM, 0);
-		if(SOCKETD SOCK_ERR) {
-#if WIN32|WINNT
-			SOCK_FCLOSE(SOCKETD);
-			SOCKETD=0;
-#endif
+			php3_error(E_WARNING, "Invalid URL specified, %s", path);
+			*issock = BAD_URL;
+			return NULL;
+		} else if (resource->path == NULL) {
+			php3_error(E_WARNING, "No file-path specified");
 			free_url(resource);
-			return(NULL);
+			*issock = BAD_URL;
+			return NULL;
 		}
+		/* use port 21 if one wasn't specified */
+		if (resource->port == 0)
+			resource->port = 21;
 
+		*socketd = socket(AF_INET, SOCK_STREAM, 0);
+		if (*socketd == SOCK_ERR) {
+			SOCK_FCLOSE(*socketd);
+			*socketd = 0;
+			free_url(resource);
+			return NULL;
+		}
 		server.sin_addr.s_addr = lookup_hostname(resource->host);
 		server.sin_family = AF_INET;
-		
-		if(server.sin_addr.s_addr == -1) {
-#if WIN32|WINNT
-			SOCK_FCLOSE(SOCKETD);
-			SOCKETD=0;
-#endif
-			free_url(resource);
-			return(NULL);
-		}
 
+		if (server.sin_addr.s_addr == -1) {
+			SOCK_FCLOSE(*socketd);
+			*socketd = 0;
+			free_url(resource);
+			return NULL;
+		}
 		server.sin_port = htons(resource->port);
- 
-		if (connect(SOCKETD, (struct sockaddr *)&server, sizeof(server)) SOCK_CONN_ERR) {
-#if WIN32|WINNT
-			SOCK_FCLOSE(SOCKETD);
-			SOCKETD=0;
-#endif
-			free_url(resource);
-			return(NULL);
-		}
 
-#if !(WIN32|WINNT)
-		if ((fpc = fdopen (SOCKETD, "r+")) == NULL) {
+		if (connect(*socketd, (struct sockaddr *) &server, sizeof(server)) == SOCK_CONN_ERR) {
+			SOCK_FCLOSE(*socketd);
+			*socketd = 0;
 			free_url(resource);
-			return(NULL);
+			return NULL;
 		}
-
-#ifdef HAVE_SETVBUF  
+#if 0
+		if ((fpc = fdopen(*socketd, "r+")) == NULL) {
+			free_url(resource);
+			return NULL;
+		}
+#ifdef HAVE_SETVBUF
 		if ((setvbuf(fpc, NULL, _IONBF, 0)) != 0) {
 			free_url(resource);
 			fclose(fpc);
-			return(NULL);
+			return NULL;
 		}
 #endif
 #endif
 
 		/* Start talking to ftp server */
-		result = _php3_getftpresult(SOCK_FPC);
+		result = _php3_getftpresult(*socketd);
 		if (result > 299 || result < 200) {
 			free_url(resource);
-			SOCK_FCLOSE(SOCK_FPC);
-#if WIN32|WINNT
-			SOCKETD=0;
-#endif
-			return(NULL);
+			SOCK_FCLOSE(*socketd);
+			*socketd = 0;
+			return NULL;
 		}
-
 		/* send the user name */
-		SOCK_WRITE("USER ", SOCK_FPC);
+		SOCK_WRITE("USER ", *socketd);
 		if (resource->user != NULL) {
-			_php3_rawurldecode(resource->user);
-			SOCK_WRITE(resource->user, SOCK_FPC);
+			_php3_rawurldecode(resource->user, strlen(resource->user));
+			SOCK_WRITE(resource->user, *socketd);
 		} else {
-			SOCK_WRITE("anonymous", SOCK_FPC);
+			SOCK_WRITE("anonymous", *socketd);
 		}
-		SOCK_WRITE("\n", SOCK_FPC);
+		SOCK_WRITE("\n", *socketd);
 
 		/* get the response */
-		result = _php3_getftpresult(SOCK_FPC);
+		result = _php3_getftpresult(*socketd);
 
 		/* if a password is required, send it */
 		if (result >= 300 && result <= 399) {
-			SOCK_WRITE("PASS ", SOCK_FPC);
+			SOCK_WRITE("PASS ", *socketd);
 			if (resource->pass != NULL) {
-				_php3_rawurldecode(resource->pass);
-				SOCK_WRITE(resource->pass, SOCK_FPC);
+				_php3_rawurldecode(resource->pass, strlen(resource->pass));
+				SOCK_WRITE(resource->pass, *socketd);
 			} else {
 				/* if the user has configured who they are,
 				   send that as the password */
 				if (cfg_get_string("from", &scratch) == SUCCESS) {
-					SOCK_WRITE(scratch, SOCK_FPC);
+					SOCK_WRITE(scratch, *socketd);
 				} else {
-					SOCK_WRITE("anonymous", SOCK_FPC);
+					SOCK_WRITE("anonymous", *socketd);
 				}
 			}
-			SOCK_WRITE("\n", SOCK_FPC);
+			SOCK_WRITE("\n", *socketd);
 
 			/* read the response */
-			result = _php3_getftpresult(SOCK_FPC);
+			result = _php3_getftpresult(*socketd);
 			if (result > 299 || result < 200) {
 				free_url(resource);
-				SOCK_FCLOSE(SOCK_FPC);
-#if WIN32|WINNT
-				SOCKETD=0;
-#endif
-				return(NULL);
+				SOCK_FCLOSE(*socketd);
+				*socketd = 0;
+				return NULL;
 			}
-		}
-		else if (result > 299 || result < 200) {
+		} else if (result > 299 || result < 200) {
 			free_url(resource);
-			SOCK_FCLOSE(SOCK_FPC);
-#if WIN32|WINNT
-			SOCKETD=0;
-#endif
-			return(NULL);
+			SOCK_FCLOSE(*socketd);
+			*socketd = 0;
+			return NULL;
 		}
-
-
 		/* find out the size of the file (verifying it exists) */
-		SOCK_WRITE("SIZE ", SOCK_FPC);
-		SOCK_WRITE(resource->path, SOCK_FPC);
-		SOCK_WRITE("\n", SOCK_FPC);
+		SOCK_WRITE("SIZE ", *socketd);
+		SOCK_WRITE(resource->path, *socketd);
+		SOCK_WRITE("\n", *socketd);
 
 		/* read the response */
-		result = _php3_getftpresult(SOCK_FPC);
+		result = _php3_getftpresult(*socketd);
 		if (result > 299 || result < 200) {
 			free_url(resource);
-			SOCK_FCLOSE(SOCK_FPC);
-#if WIN32|WINNT
-			SOCKETD=0;
-#endif
-			return(NULL);
+			SOCK_FCLOSE(*socketd);
+			*socketd = 0;
+			return NULL;
 		}
-
 		/* set the connection to be binary */
-		SOCK_WRITE("TYPE I\n", SOCK_FPC);
-		result = _php3_getftpresult(SOCK_FPC);
+		SOCK_WRITE("TYPE I\n", *socketd);
+		result = _php3_getftpresult(*socketd);
 		if (result > 299 || result < 200) {
 			free_url(resource);
-			SOCK_FCLOSE(SOCK_FPC);
-#if WIN32|WINNT
-			SOCKETD=0;
-#endif
-			return(NULL);
+			SOCK_FCLOSE(*socketd);
+			*socketd = 0;
+			return NULL;
 		}
-
 		/* set up the passive connection */
-		SOCK_WRITE("PASV\n", SOCK_FPC);
-		while (SOCK_FGETS(tmp_line, 256, SOCK_FPC) != 0 && 
-			   !(isdigit((int)tmp_line[0]) && isdigit((int)tmp_line[1]) &&
-				 isdigit((int)tmp_line[2]) && tmp_line[3] == ' '));
+		SOCK_WRITE("PASV\n", *socketd);
+		while (SOCK_FGETS(tmp_line, 256, *socketd) &&
+			!(isdigit((int) tmp_line[0]) && isdigit((int) tmp_line[1]) &&
+			  isdigit((int) tmp_line[2]) && tmp_line[3] == ' '));
 
 		/* make sure we got a 227 response */
 		if (strncmp(tmp_line, "227", 3)) {
 			free_url(resource);
-			SOCK_FCLOSE(SOCK_FPC);
-#if WIN32|WINNT
-			SOCKETD=0;
-#endif
-			return(NULL);
+			SOCK_FCLOSE(*socketd);
+			*socketd = 0;
+			return NULL;
 		}
-
 		/* parse pasv command (129,80,95,25,13,221) */
 		tpath = tmp_line;
 
 		/* skip over the "227 Some message " part */
-		for (tpath += 4; *tpath && !isdigit((int)*tpath); tpath++);
+		for (tpath += 4; *tpath && !isdigit((int) *tpath); tpath++);
 		if (!*tpath) {
 			free_url(resource);
-			SOCK_FCLOSE(SOCK_FPC);
-#if WIN32|WINNT
-			SOCKETD=0;
-#endif
-			return(NULL);
+			SOCK_FCLOSE(*socketd);
+			*socketd = 0;
+			return NULL;
 		}
-
 		/* skip over the host ip, we just assume it's the same */
 		for (i = 0; i < 4; i++) {
-			for (; isdigit((int)*tpath); tpath++);
+			for (; isdigit((int) *tpath); tpath++);
 			if (*tpath == ',') {
 				tpath++;
 			} else {
-#if WIN32|WINNT
-				SOCK_FCLOSE(SOCKETD);
-				SOCKETD=0;
-#endif
-				return(NULL);
+				SOCK_FCLOSE(*socketd);
+				*socketd = 0;
+				return NULL;
 			}
 		}
 
 		/* pull out the MSB of the port */
-		portno = (unsigned short)strtol(tpath, &ttpath, 10) * 256;
+		portno = (unsigned short) strtol(tpath, &ttpath, 10) * 256;
 		if (ttpath == NULL) {
 			/* didn't get correct response from PASV */
 			free_url(resource);
-			SOCK_FCLOSE(SOCK_FPC);
-#if WIN32|WINNT
-			SOCKETD=0;
-#endif
-			return(NULL);
+			SOCK_FCLOSE(*socketd);
+			*socketd = 0;
+			return NULL;
 		}
 		tpath = ttpath;
 		if (*tpath == ',') {
 			tpath++;
 		} else {
 			free_url(resource);
-			SOCK_FCLOSE(SOCK_FPC);
-#if WIN32|WINNT
-			SOCKETD=0;
-#endif
-			return(NULL);
+			SOCK_FCLOSE(*socketd);
+			*socketd = 0;
+			return NULL;
 		}
 
 		/* pull out the LSB of the port */
-		portno += (unsigned short)strtol(tpath, &ttpath, 10);
+		portno += (unsigned short) strtol(tpath, &ttpath, 10);
 
 		if (ttpath == NULL) {
 			/* didn't get correct response from PASV */
 			free_url(resource);
-			SOCK_FCLOSE(SOCK_FPC);
-#if WIN32|WINNT
-			SOCKETD=0;
-#endif
-			return(NULL);
+			SOCK_FCLOSE(*socketd);
+			*socketd = 0;
+			return NULL;
 		}
-
 		/* finally, send a message to start retrieving the file, and
 		   close the command connection */
-		SOCK_WRITE("RETR ", SOCK_FPC);
-		SOCK_WRITE(resource->path, SOCK_FPC);
-		SOCK_WRITE("\nQUIT\n", SOCK_FPC);
-		SOCK_FCLOSE(SOCK_FPC);
+		SOCK_WRITE("RETR ", *socketd);
+		if (resource->path != NULL) {
+			SOCK_WRITE(resource->path, *socketd);
+		} else {
+			SOCK_WRITE("/", *socketd);
+		}
+		SOCK_WRITE("\nQUIT\n", *socketd);
+		SOCK_FCLOSE(*socketd);
 
 		/* open the data channel */
-		SOCKETD = socket(AF_INET, SOCK_STREAM, 0);
-		if (SOCKETD SOCK_ERR) {
-#if WIN32|WINNT
-			SOCK_FCLOSE(SOCKETD);
-			SOCKETD=0;
-#endif
+		*socketd = socket(AF_INET, SOCK_STREAM, 0);
+		if (*socketd == SOCK_ERR) {
+			SOCK_FCLOSE(*socketd);
+			*socketd = 0;
 			free_url(resource);
-			return(NULL);
+			return NULL;
 		}
-
 		server.sin_addr.s_addr = lookup_hostname(resource->host);
 		server.sin_family = AF_INET;
-		
-		if(server.sin_addr.s_addr == -1) {
-			free_url(resource);
-			SOCK_FCLOSE(SOCK_FPC);
-#if WIN32|WINNT
-			SOCKETD=0;
-#endif
-			return(NULL);
-		}
 
+		if (server.sin_addr.s_addr == -1) {
+			free_url(resource);
+			SOCK_FCLOSE(*socketd);
+			*socketd = 0;
+			return NULL;
+		}
 		server.sin_port = htons(portno);
- 
-		if(connect(SOCKETD, (struct sockaddr *)&server, sizeof(server)) SOCK_CONN_ERR) {
-			free_url(resource);
-#if WIN32|WINNT
-			SOCK_FCLOSE(SOCKETD);
-			SOCKETD=0;
-#endif
-			return(NULL);
-		}
 
-#if !(WIN32|WINNT)
-		if ((fp = fdopen (SOCKETD, "r+")) == NULL) {
+		if (connect(*socketd, (struct sockaddr *) &server, sizeof(server)) == SOCK_CONN_ERR) {
 			free_url(resource);
-			return(NULL);
+			SOCK_FCLOSE(*socketd);
+			*socketd = 0;
+			return NULL;
 		}
-
-#ifdef HAVE_SETVBUF  
+#if 0
+		if ((fp = fdopen(*socketd, "r+")) == NULL) {
+			free_url(resource);
+			return NULL;
+		}
+#ifdef HAVE_SETVBUF
 		if ((setvbuf(fp, NULL, _IONBF, 0)) != 0) {
 			free_url(resource);
 			fclose(fp);
-			return(NULL);
+			return NULL;
 		}
 #endif
 #endif
 		free_url(resource);
-#if WIN32|WINNT
-		*issock=1;
-#endif
-		return(fp);
+		*issock = 1;
+		return (fp);
 
 	} else {
 		if (options & USE_PATH) {
 			fp = php3_fopen_with_path(path, mode, php3_ini.include_path, NULL);
-		}
-		else {
-			fp = fopen(path, mode);
+		} else {
+			if (options & ENFORCE_SAFE_MODE && php3_ini.safe_mode && (!_php3_checkuid(path, 1))) {
+				php3_error(E_WARNING, "SAFE MODE Restriction in effect.  Invalid owner of file to be read.");
+				fp = NULL;
+			} else {
+				fp = fopen(path, mode);
+			}
 		}
 
-#if WIN32|WINNT
-		*issock=0;
-#endif
+		*issock = 0;
 
-		return(fp); 
+		return (fp);
 	}
 
 	/* Should never get here. */
-#if WIN32|WINNT
-	SOCK_FCLOSE(SOCKETD);
-	SOCKETD=0;
-#endif
-	return(NULL);
+	SOCK_FCLOSE(*socketd);
+	*socketd = 0;
+	return NULL;
 }
 
-#if WIN32|WINNT
-int _php3_getftpresult(int socketd) {
-#else
-static int _php3_getftpresult(FILE *fpc) {
-#endif
+int _php3_getftpresult(int socketd)
+{
 	char tmp_line[256];
 
-	while (SOCK_FGETS(tmp_line, 256, SOCK_FTP) && 
-		   !(isdigit((int)tmp_line[0]) && isdigit((int)tmp_line[1]) &&
-			 isdigit((int)tmp_line[2]) && tmp_line[3] == ' '));
+	while (SOCK_FGETS(tmp_line, 256, socketd) &&
+		   !(isdigit((int) tmp_line[0]) && isdigit((int) tmp_line[1]) &&
+			 isdigit((int) tmp_line[2]) && tmp_line[3] == ' '));
 
 	return strtol(tmp_line, NULL, 10);
 }
 
-PHPAPI int php3_isurl(char *path) 
+PHPAPI int php3_isurl(char *path)
 {
-	return(!strncasecmp(path,"http://",7) || !strncasecmp(path,"ftp://",6));
+	return (!strncasecmp(path, "http://", 7) || !strncasecmp(path, "ftp://", 6));
 }
 
-PHPAPI char *php3_strip_url_passwd(char *path) 
+PHPAPI char *php3_strip_url_passwd(char *path)
 {
-	char *tmppath=NULL;
-	if(!strncasecmp(path,"ftp://",6)) {
-		tmppath=path; 
-		tmppath+=6;
-		for(;*tmppath!=':' && *tmppath!='\0' ; tmppath++ );
-		tmppath++ ;
-		for(;*tmppath!='@' && *tmppath!='\0' ; tmppath++ ) 
-			*tmppath='*';
+	char *tmppath = NULL;
+	if (!strncasecmp(path, "ftp://", 6)) {
+		tmppath = path;
+		tmppath += 6;
+		for (; *tmppath != ':' && *tmppath != '\0'; tmppath++);
+		tmppath++;
+		for (; *tmppath != '@' && *tmppath != '\0'; tmppath++)
+			*tmppath = '*';
 	}
-	return(path);
+	return (path);
+}
+
+
+PHPAPI char *expand_filepath(char *filepath)
+{
+	char *retval = NULL;
+
+	if (filepath[0] == '.') {
+		char *cwd = malloc(MAXPATHLEN + 1);
+
+		if (getcwd(cwd, MAXPATHLEN)) {
+			char *cwd_end = cwd + strlen(cwd);
+
+			if (filepath[1] == '.') {	/* parent directory - .. */
+				/* erase the last directory name from the path */
+				while (*cwd_end != '/') {
+					*cwd_end-- = 0;
+				}
+				filepath++;		/* make filepath appear as a current directory path */
+			}
+			if (cwd_end > cwd && *cwd_end == '/') {		/* remove trailing slashes */
+				*cwd_end-- = 0;
+			}
+			retval = (char *) malloc(strlen(cwd) + strlen(filepath) - 1 + 1);
+			strcpy(retval, cwd);
+			strcat(retval, filepath + 1);
+			free(cwd);
+		}
+	}
+	if (!retval) {
+		retval = strdup(filepath);
+	}
+	return retval;
 }
 
 /*

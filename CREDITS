@@ -7,13 +7,12 @@ Core Developers
 
 Rasmus Lerdorf (rasmus@lerdorf.on.ca)
 
-* Concept
 * Original language definition and implementation
 * CGI loader and many internal functions
 * Apache module support
 * SNMP module
 * Original mSQL, MySQL and Sybase modules
-* Project Coordinator
+* Oracle module work
 
 
 Andi Gutmans (andi@php.net) and Zeev Suraski (zeev@php.net)
@@ -23,7 +22,7 @@ Andi Gutmans (andi@php.net) and Zeev Suraski (zeev@php.net)
 * General hash table implementation for symbol tables, arrays and objects
 * Memory manager
 * Token cache manager
-* Several internal functions and migration from PHP 2.0
+* A lot of internal functions (including hebrev :) and migration from PHP 2.0
 * Syntax highlighting mode
 * Configuration file parser
 * New persistent/multilink MySQL, PosgresSQL, Sybase and mSQL modules
@@ -78,10 +77,16 @@ Major Contributors
   Prototype cop, regular expression code fixes, CGI security issues
 
 * Andreas Karajannis (Andreas.Karajannis@gmd.de) 
-  Adabas D
+  Adabas D, ODBC, Oracle
+
+* Igor Kovalenko (owl@infomarket.ru)
+  QNX support issues
 
 * Muhammad A Muquit (MA_Muquit@fccc.ed)
   Original Sybase module
+
+* Mark Musone (musone@afterfive.com)
+  IMAP
   
 * Jeroen van der Most (jvdmost@digiface.nl)
   Solid
@@ -89,7 +94,7 @@ Major Contributors
 * Chad Robinson (chadr@brttech.com)
   Documentation, FilePro
 
-* John Robinson (john@intelligent.co.uk)
+* John Robinson (johnr@ibsc.co.uk)
   Postgres
 
 * Lachlan Roche (lr@www.wwi.com.au)
@@ -104,12 +109,12 @@ Major Contributors
 * Adam Sussman (asussman@vidya.com)
   Postgres
 
-* Lars Torben Wilson (cslawi@uta.fi)
+* Colin Viebrock (cmv@privateworld.com)
+  Website graphic design and layout, PHP logo
+
+* Lars Torben Wilson (torben@netmill.com)
   Documentation
-
-* Ori Cohen (oki@netvision.net.il)
-  PHP 3 logos
-
+  
 ------------------------------------------------------------------------------
 
 Andi Gutmans and Zeev Suraski would like to thank Professor Michael Rodeh for

@@ -5,18 +5,23 @@
    | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
-   | it under the terms of the GNU General Public License as published by |
-   | the Free Software Foundation; either version 2 of the License, or    |
-   | (at your option) any later version.                                  |
+   | it under the terms of one of the following licenses:                 |
+   |                                                                      |
+   |  A) the GNU General Public License as published by the Free Software |
+   |     Foundation; either version 2 of the License, or (at your option) |
+   |     any later version.                                               |
+   |                                                                      |
+   |  B) the PHP License as published by the PHP Development Team and     |
+   |     included in the distribution in the file: LICENSE                |
    |                                                                      |
    | This program is distributed in the hope that it will be useful,      |
    | but WITHOUT ANY WARRANTY; without even the implied warranty of       |
    | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the        |
    | GNU General Public License for more details.                         |
    |                                                                      |
-   | You should have received a copy of the GNU General Public License    |
-   | along with this program; if not, write to the Free Software          |
-   | Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.            |
+   | You should have received a copy of both licenses referred to here.   |
+   | If you did not, or have any questions about PHP licensing, please    |
+   | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
    | Authors: Andi Gutmans <andi@php.net>                                 |
    |          Zeev Suraski <bourbon@netvision.net.il>                     |
@@ -24,7 +29,7 @@
  */
 
 
-/* $Id: token_cache.c,v 1.66 1998/02/23 21:28:40 zeev Exp $ */
+/* $Id: token_cache.c,v 1.85 1998/05/15 10:56:25 zeev Exp $ */
 
 #ifdef THREAD_SAFE
 #include "tls.h"
@@ -33,7 +38,7 @@ extern char *phptext;
 extern int phpleng;
 #endif
 
-#include "parser.h"
+#include "php.h"
 #include "language-parser.tab.h"
 #include "control_structures.h"
 #include "main.h"
@@ -47,12 +52,13 @@ extern int phpleng;
 #include <stdio.h>
 
 #ifndef THREAD_SAFE
-extern YYSTYPE phplval;
+extern pval phplval;
 
 TokenCache *tc; /* active token cache */
 #endif
 
 static int is_reserved_word(int token_type);
+static int last_token_type;
 
 /* initialize the Token Cache Manager */
 int tcm_init(TokenCacheManager *tcm)
@@ -71,6 +77,7 @@ int tcm_init(TokenCacheManager *tcm)
 	}
 	tcm->initialized = 1;
 	GLOBAL(tc) = &tcm->token_caches[0];
+	last_token_type=-1;
 	return SUCCESS;
 }
 
@@ -115,21 +122,22 @@ int tc_init(TokenCache *tc,int block_size)
 /*seems this is only called from phplex in main.c so doing a
 special call for thread safety should be ok here.*/
 #ifdef THREAD_SAFE
-int read_next_token(TokenCacheManager *tcm, Token **token, YYSTYPE *phplval,struct php3_global_struct *php3_globals, flex_globals *php_gbl)
+int read_next_token(TokenCacheManager *tcm, Token **token, pval *phplval,struct php3_global_struct *php3_globals, flex_globals *php_gbl)
 #else
-int read_next_token(TokenCacheManager *tcm, Token **token, YYSTYPE *phplval)
+int read_next_token(TokenCacheManager *tcm, Token **token, pval *phplval)
 #endif
 {
 /*	YY_TLS_VARS;
 	TLS_VARS; */
 
-	if (GLOBAL(tc)->count == GLOBAL(tc)->pos || GLOBAL(php3_display_source)) {	
+	if (GLOBAL(tc)->count == GLOBAL(tc)->pos || GLOBAL(php3_display_source)) {
 		/* we need to read from the lexical scanner */
 		Token next_token;
 
 		phplval->type = IS_LONG;	/* the lex scanner doesn't always set phplval->type, make sure the type is not 'dirty' */
 		phplval->cs_data.switched = 0;
 		next_token.token_type = lex_scan(phplval);
+		/*printf("Read token:  %c (%d)\n",next_token.token_type,next_token.token_type);*/
 		if (next_token.token_type == DONE_EVAL) {
 			return DONE_EVAL;
 		}
@@ -145,16 +153,15 @@ int read_next_token(TokenCacheManager *tcm, Token **token, YYSTYPE *phplval)
 		next_token.phplval.offset = tcm->active * MAX_TOKENS_PER_CACHE + GLOBAL(tc)->count;
 		
 		/* ugly hack to support $keyword */
-		if (GLOBAL(tc)->count>0 
-			&& (GLOBAL(tc)->tokens[GLOBAL(tc)->count-1].token_type=='$' || (GLOBAL(tc)->tokens[GLOBAL(tc)->count-1].token_type==PHP_CLASS_OPERATOR))
-			&& is_reserved_word(next_token.token_type)) {
-			next_token.phplval.value.strval = estrndup(phptext,phpleng);
-			next_token.phplval.strlen = phpleng;
+		if (last_token_suggests_variable_reference() && is_reserved_word(next_token.token_type)) {
+			next_token.phplval.value.str.val = estrndup(phptext,phpleng);
+			next_token.phplval.value.str.len = phpleng;
 			next_token.phplval.type = IS_STRING;
 			next_token.token_type = STRING;
 		}
 		/* end of ugly hack */
-			
+		last_token_type=next_token.token_type;
+		
 		if (GLOBAL(php3_display_source)) {
 			syntax_highlight(&next_token);
 			*token = &next_token;
@@ -168,10 +175,12 @@ int read_next_token(TokenCacheManager *tcm, Token **token, YYSTYPE *phplval)
 }
 
 
-int seek_token(TokenCacheManager *tcm, int token_number)
+int seek_token(TokenCacheManager *tcm, int token_number, int *yychar)
 {
 	int t_offset, tc_offset;
 	TLS_VARS;
+	
+	clear_lookahead(yychar);
 	
 	tc_offset = token_number / MAX_TOKENS_PER_CACHE;
 	if (tc_offset >= tcm->initialized) {
@@ -234,7 +243,21 @@ int tc_switch(TokenCacheManager *tcm, int start, int end, int middle)
 }
 
 
-int tc_set_switched(TokenCacheManager *tcm, int offset)
+inline int tc_set_token(TokenCacheManager *tcm, int offset, int type)
+{
+	TokenCache *tc = &tcm->token_caches[offset / MAX_TOKENS_PER_CACHE];
+	
+	offset -= tcm->active * MAX_TOKENS_PER_CACHE;
+	if (offset < 0 || offset >= tc->count) {
+		return FAILURE;
+	}
+	tc->tokens[offset].token_type = type;
+
+	return SUCCESS;
+}
+
+
+inline int tc_set_switched(TokenCacheManager *tcm, int offset)
 {
 	TokenCache *tc = &tcm->token_caches[offset / MAX_TOKENS_PER_CACHE];
 	
@@ -248,7 +271,7 @@ int tc_set_switched(TokenCacheManager *tcm, int offset)
 }
 
 
-int tc_set_included(TokenCacheManager *tcm, int offset)
+inline int tc_set_included(TokenCacheManager *tcm, int offset)
 {
 	TokenCache *tc = &tcm->token_caches[offset / MAX_TOKENS_PER_CACHE];
 	
@@ -335,25 +358,32 @@ void tcm_save(TokenCacheManager *tcm)
 			case INLINE_HTML:
 			case ENCAPSED_AND_WHITESPACE:
 			case BAD_CHARACTER:
-				fwrite(tc->tokens[i].phplval.value.strval,sizeof(char),tc->tokens[i].phplval.strlen,output);
+				fwrite(tc->tokens[i].phplval.value.str.val,sizeof(char),tc->tokens[i].phplval.value.str.len,output);
 				break;
 		}
 	}
 	fclose(output);
+#if !FHTTPD
 	php3_printf("Created %s, %d tokens\n",output_name,tc->count);
+#endif
 	efree(output_name);
 }
 
-
+#if FHTTPD
+int tcm_load(TokenCacheManager *tcm, FILE *input)
+{
+#else
 int tcm_load(TokenCacheManager *tcm)
 {
 	FILE *input;
+#endif
 	char buf[32];
 	TokenCache *tc;
 	int i,len;
 	char *str;
 	TLS_VARS;
-	
+
+#if !FHTTPD
 	if (!GLOBAL(request_info).filename) {
 		return FAILURE;
 	}
@@ -361,7 +391,7 @@ int tcm_load(TokenCacheManager *tcm)
 	if ((input=fopen(GLOBAL(request_info).filename,"rb"))==NULL) {
 		return FAILURE;
 	}
-	
+#endif	
 	tc = &tcm->token_caches[0];
 
 	efree(tc->tokens);  /* need to optimize this away, so that it doesn't get allocated in the first place */
@@ -370,12 +400,18 @@ int tcm_load(TokenCacheManager *tcm)
 		|| memcmp(buf,"PHP3",4)
 		|| fread(tc,sizeof(TokenCache),1,input)!=1) {
 			php3_printf("This doesn't look like a precompiled PHP 3.0 script\n");
+#if !FHTTPD
+			fclose(input);
+#endif
 			return FAILURE;
 	}
 
 	tc->tokens = (Token *) emalloc(sizeof(Token)*tc->max_tokens);
 	if ((int)fread(tc->tokens,sizeof(Token),tc->count,input)!=tc->count) {
 		php3_printf("Corrupted preprocessed script.\n");
+#if !FHTTPD
+		fclose(input);
+#endif
 		return FAILURE;
 	}
 	for (i=0; i<tc->count; i++) {
@@ -384,18 +420,24 @@ int tcm_load(TokenCacheManager *tcm)
 			case NUM_STRING:
 			case INLINE_HTML:
 			case ENCAPSED_AND_WHITESPACE:
-				len = tc->tokens[i].phplval.strlen;
+				len = tc->tokens[i].phplval.value.str.len;
 				str = (char *) emalloc(len+1);
 				if ((int)fread(str,sizeof(char),len,input)!=len) {
 					printf("Corrupted strings\n");
+#if !FHTTPD
+					fclose(input);
+#endif
 					return FAILURE;
 				}
 				str[len]=0;
-				tc->tokens[i].phplval.value.strval = str;
+				tc->tokens[i].phplval.value.str.val = str;
 				break;
 		}
 	}
 	tc->pos=0;
+#if !FHTTPD
+	fclose(input);
+#endif
 	return SUCCESS;
 }
 
@@ -425,6 +467,7 @@ static int is_reserved_word(int token_type)
 		case BREAK:
 		case CONTINUE:
 		case OLD_FUNCTION:
+		case PHP_CONST:
 		case FUNCTION:
 		case RETURN:
 		case INCLUDE:
@@ -445,12 +488,20 @@ static int is_reserved_word(int token_type)
 		case EVAL:
 		case PHP_LINE:
 		case PHP_FILE:
-		case PHP_TRUE:
-		case PHP_FALSE:
 			return 1;
 			break;
 		default:
 			return 0;
 			break;
+	}
+}
+
+
+inline int last_token_suggests_variable_reference()
+{
+	if (last_token_type=='$' || last_token_type==PHP_CLASS_OPERATOR) {
+		return 1;
+	} else {
+		return 0;
 	}
 }

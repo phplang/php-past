@@ -3,7 +3,7 @@ test backslash handling in regular expressions                ...
 --POST--
 --GET--
 --FILE--
-<?echo ereg_replace('\?',"abc","?123?")?>
+<?php echo ereg_replace('\?',"abc","?123?")?>
 --EXPECT--
 Content-type: text/html
 abc123abc

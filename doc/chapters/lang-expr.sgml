@@ -2,27 +2,27 @@
   <title>Expressions</title>
   <simpara></simpara>
   
-  <sect1>
+  <sect1 id="math-expr">
    <title>Mathematical expressions</title>
    <simpara></simpara>
 
-  <sect1>
+  <sect1 id="operators">
    <title>Operators</title>
    <simpara></simpara>
 
-   <sect2>
+   <sect2 id="operator.equal">
     <title>=</title>
     <simpara></simpara>
 
-   <sect2>
+   <sect2 id="operator.plusminusequal">
     <title>+=, -=</title>
     <simpara></simpara>
 
-   <sect2>
+   <sect2 id="operator.prepostincdec">
     <title>++, --</title>
     <simpara></simpara>
 
-   <sect2>
+   <sect2 id="operator.overload">
     <title>Overloaded operators</title>
     <simpara></simpara>
 

@@ -5,32 +5,37 @@
    | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
-   | it under the terms of the GNU General Public License as published by |
-   | the Free Software Foundation; either version 2 of the License, or    |
-   | (at your option) any later version.                                  |
+   | it under the terms of one of the following licenses:                 |
+   |                                                                      |
+   |  A) the GNU General Public License as published by the Free Software |
+   |     Foundation; either version 2 of the License, or (at your option) |
+   |     any later version.                                               |
+   |                                                                      |
+   |  B) the PHP License as published by the PHP Development Team and     |
+   |     included in the distribution in the file: LICENSE                |
    |                                                                      |
    | This program is distributed in the hope that it will be useful,      |
    | but WITHOUT ANY WARRANTY; without even the implied warranty of       |
    | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the        |
    | GNU General Public License for more details.                         |
    |                                                                      |
-   | You should have received a copy of the GNU General Public License    |
-   | along with this program; if not, write to the Free Software          |
-   | Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.            |
+   | You should have received a copy of both licenses referred to here.   |
+   | If you did not, or have any questions about PHP licensing, please    |
+   | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
    | Authors: Rasmus Lerdorf <rasmus@lerdorf.on.ca>                       |
    |          Jim Winstead <jimw@php.net>                                 |
    +----------------------------------------------------------------------+
  */
 
-/* $Id: db.c,v 1.54 1998/02/20 22:49:06 shane Exp $ */
+/* $Id: db.c,v 1.70 1998/06/01 04:16:07 shane Exp $ */
 #if COMPILE_DL
 #include "dl/phpdl.h"
 #endif
 
-#include "parser.h"
+#include "php.h"
 #include "internal_functions.h"
-#include "list.h"
+#include "php3_list.h"
 
 #include <stdlib.h>
 #include <string.h>
@@ -101,7 +106,7 @@ static int _php3_dbm_exists(DBM *dbf, datum key_datum) {
 	int ret;
 
 	value_datum = dbm_fetch(dbf, key_datum);
-	if(value_datum.dptr)
+	if (value_datum.dptr)
 		ret = 1;
 	else
 		ret = 0;
@@ -113,7 +118,7 @@ static int _php3_dbm_exists(DBM *dbf, datum key_datum) {
 #define DBM_TYPE FILE *
 
 #define DBM_MODE_TYPE char *
-#define DBM_WRITE_MODE "w+b"
+#define DBM_WRITE_MODE "r+b"
 #define DBM_CREATE_MODE "a+b"
 #define DBM_NEW_MODE "w+b"
 #define DBM_DEFAULT_MODE "r"
@@ -168,7 +173,7 @@ static int le_db;
 /*needed for blocking calls in windows*/
 void *dbm_mutex;
 
-dbm_info *_php3_finddbm(YYSTYPE *id,HashTable *list)
+dbm_info *_php3_finddbm(pval *id,HashTable *list)
 {
 	list_entry *le;
 	dbm_info *info;
@@ -184,7 +189,7 @@ dbm_info *_php3_finddbm(YYSTYPE *id,HashTable *list)
 			}
 			if (le->type == DBM_GLOBAL(le_db)) {
 				info = (dbm_info *)(le->ptr);
-				if (!strcmp(info->filename, id->value.strval)) {
+				if (!strcmp(info->filename, id->value.str.val)) {
 					return (dbm_info *)(le->ptr);
 				}
 			}
@@ -207,6 +212,10 @@ static char *php3_get_info_db(void)
 	temp1[0]='\0';
 	temp[0]='\0';
 
+#ifdef DB_VERSION_STRING /* using sleepycat dbm */
+	strcat(temp,DB_VERSION_STRING);
+#endif
+
 #if GDBM
 	sprintf(temp1,"%s",gdbm_version);
 	strcat(temp,temp1);
@@ -224,7 +233,7 @@ static char *php3_get_info_db(void)
 	strcat(temp,"NFS hack in effect");
 #endif
 
-	if(!*temp)
+	if (!*temp)
 		strcat(temp,"No database support");
 
 	return temp;
@@ -239,12 +248,12 @@ void php3_info_db(void)
 void php3_dblist(INTERNAL_FUNCTION_PARAMETERS)
 {
 	char *str = php3_get_info_db();
-	RETURN_STRING(str);
+	RETURN_STRING(str,1);
 }
 
 
 void php3_dbmopen(INTERNAL_FUNCTION_PARAMETERS) {
-	YYSTYPE *filename, *mode;
+	pval *filename, *mode;
 	dbm_info *info;
 	int ret;
 	DBM_TLS_VARS;
@@ -256,7 +265,7 @@ void php3_dbmopen(INTERNAL_FUNCTION_PARAMETERS) {
 	convert_to_string(filename);
 	convert_to_string(mode);
 	
-	info = _php3_dbmopen(filename->value.strval, mode->value.strval);
+	info = _php3_dbmopen(filename->value.str.val, mode->value.str.val);
 	if (info) {
 		ret = php3_list_insert(info, DBM_GLOBAL(le_db));
 		RETURN_LONG(ret);
@@ -313,9 +322,9 @@ dbm_info *_php3_dbmopen(char *filename, char *mode) {
 		while((last_try = stat(lockfn,&sb))==0) {
 			retries++;
 			sleep(1);
-			if(retries>30) break;
+			if (retries>30) break;
 		}	
-		if(last_try!=0) {
+		if (last_try!=0) {
 			lockfd = open(lockfn,O_RDWR|O_CREAT,0644);
 			close(lockfd);
 		} else {
@@ -326,7 +335,7 @@ dbm_info *_php3_dbmopen(char *filename, char *mode) {
 
 		lockfd = open(lockfn,O_RDWR|O_CREAT,0644);
 
-		if(lockfd) {
+		if (lockfd) {
 #if HAVE_LOCKF 
 			lockf(lockfd,F_LOCK,0);
 #else
@@ -344,12 +353,12 @@ dbm_info *_php3_dbmopen(char *filename, char *mode) {
 	dbf = DBM_OPEN(filename, imode);
 
 #if !NDBM && !GDBM
-	if(dbf) {
+	if (dbf) {
 		setvbuf(dbf, NULL, _IONBF, 0);
 	}	
 #endif
 
-	if(dbf) {
+	if (dbf) {
 		info = (dbm_info *)emalloc(sizeof(dbm_info));
 		if (!info) {
 			php3_error(E_ERROR, "problem allocating memory!");
@@ -365,9 +374,9 @@ dbm_info *_php3_dbmopen(char *filename, char *mode) {
 	} else {
 #if GDBM 
 		php3_error(E_WARNING, "dbmopen_gdbm(%s): %d [%s], %d [%s]",filename,gdbm_errno,gdbm_strerror(gdbm_errno),errno,strerror(errno));
-		if(gdbm_errno)
+		if (gdbm_errno)
 			ret = gdbm_errno;
-		else if(errno)
+		else if (errno)
 			ret = errno;
 		else
 			ret = -1;
@@ -376,19 +385,19 @@ dbm_info *_php3_dbmopen(char *filename, char *mode) {
 #if DEBUG
 		php3_error(E_WARNING, "dbmopen_ndbm(%s): errno = %d [%s]\n",filename,errno,strerror(errno));
 #endif
-		if(errno) ret=errno;
+		if (errno) ret=errno;
 		else ret = -1;
 #else
 #if DEBUG
 		php3_error(E_WARNING, "dbmopen_flatfile(%s): errno = %d [%s]\n",filename,errno,strerror(errno));
 #endif
-		if(errno) ret=errno;
+		if (errno) ret=errno;
 		else ret = -1;
 #endif 
 #endif 	
 
 #if NFS_HACK
-		if(lockfn) {
+		if (lockfn) {
 			unlink(lockfn);
 		}
 #endif
@@ -399,7 +408,7 @@ dbm_info *_php3_dbmopen(char *filename, char *mode) {
 }
 
 void php3_dbmclose(INTERNAL_FUNCTION_PARAMETERS) {
-	YYSTYPE *id;
+	pval *id;
 
 	if (ARG_COUNT(ht) != 1 || getParameters(ht,1,&id)==FAILURE) {
 		WRONG_PARAM_COUNT;
@@ -423,7 +432,7 @@ int _php3_dbmclose(dbm_info *info) {
 #if NFS_HACK
 	unlink(info->lockfn);
 #else
-	if(info->lockfn) {
+	if (info->lockfn) {
 		lockfd = open(info->lockfn,O_RDWR,0644);
 #if HAVE_LOCKF
 		lockf(lockfd,F_ULOCK,0);
@@ -454,7 +463,7 @@ int _php3_dbmclose(dbm_info *info) {
  */
 void php3_dbminsert(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *id, *key, *value;
+	pval *id, *key, *value;
 	dbm_info *info;
 	int ret;
 
@@ -470,7 +479,7 @@ void php3_dbminsert(INTERNAL_FUNCTION_PARAMETERS)
 		RETURN_FALSE;
 	}
 	
-	ret = _php3_dbminsert(info, key->value.strval, value->value.strval);
+	ret = _php3_dbminsert(info, key->value.str.val, value->value.str.val);
 	RETURN_LONG(ret);
 }
 
@@ -479,8 +488,8 @@ int _php3_dbminsert(dbm_info *info, char *key, char *value) {
 	int ret;
 	DBM_TYPE dbf;
 
-	_php3_stripslashes(key);
-	_php3_stripslashes(value);
+	_php3_stripslashes(key,NULL);
+	_php3_stripslashes(value,NULL);
 
 	value_datum.dptr = estrdup(value);
 	value_datum.dsize = strlen(value);
@@ -492,7 +501,7 @@ int _php3_dbminsert(dbm_info *info, char *key, char *value) {
 #endif
 
 	dbf = info->dbf;
-	if(!dbf) {
+	if (!dbf) {
 		php3_error(E_WARNING, "Unable to locate dbm file");
 		return 1;
 	}
@@ -507,7 +516,7 @@ int _php3_dbminsert(dbm_info *info, char *key, char *value) {
 
 void php3_dbmreplace(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *id, *key, *value;
+	pval *id, *key, *value;
 	dbm_info *info;
 	int ret;
 
@@ -523,7 +532,7 @@ void php3_dbmreplace(INTERNAL_FUNCTION_PARAMETERS)
 		RETURN_FALSE;
 	}
 	
-	ret = _php3_dbmreplace(info, key->value.strval, value->value.strval);
+	ret = _php3_dbmreplace(info, key->value.str.val, value->value.str.val);
 	RETURN_LONG(ret);
 }
 
@@ -532,8 +541,10 @@ int _php3_dbmreplace(dbm_info *info, char *key, char *value) {
 	int ret;
 	datum key_datum, value_datum;
 
-	_php3_stripslashes(key);
-	_php3_stripslashes(value);
+	if (php3_ini.magic_quotes_runtime) {
+		_php3_stripslashes(key,NULL);
+		_php3_stripslashes(value,NULL);
+	}
 
 	value_datum.dptr = estrdup(value);
 	value_datum.dsize = strlen(value);
@@ -545,7 +556,7 @@ int _php3_dbmreplace(dbm_info *info, char *key, char *value) {
 #endif
 
 	dbf = info->dbf;
-	if(!dbf) {
+	if (!dbf) {
 		php3_error(E_WARNING, "Unable to locate dbm file");
 		return 1;
 	}
@@ -560,7 +571,7 @@ int _php3_dbmreplace(dbm_info *info, char *key, char *value) {
 
 void php3_dbmfetch(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *id, *key;
+	pval *id, *key;
 	dbm_info *info;
 
 	if (ARG_COUNT(ht)!=2||getParameters(ht,2,&id,&key)==FAILURE) {
@@ -574,9 +585,9 @@ void php3_dbmfetch(INTERNAL_FUNCTION_PARAMETERS)
 		RETURN_FALSE;
 	}
 
-	return_value->value.strval = _php3_dbmfetch(info, key->value.strval);
-	if (return_value->value.strval) {
-		return_value->strlen = strlen(return_value->value.strval);
+	return_value->value.str.val = _php3_dbmfetch(info, key->value.str.val);
+	if (return_value->value.str.val) {
+		return_value->value.str.len = strlen(return_value->value.str.val);
 		return_value->type = IS_STRING;
 	} else {
 		RETURN_FALSE;
@@ -597,7 +608,7 @@ char *_php3_dbmfetch(dbm_info *info, char *key) {
 	value_datum.dsize = 0;
 
 	dbf = info->dbf;
-	if(!dbf) {
+	if (!dbf) {
 		php3_error(E_WARNING, "Unable to locate dbm file");
 		return(NULL);
 	}
@@ -622,7 +633,7 @@ char *_php3_dbmfetch(dbm_info *info, char *key) {
 		ret = NULL;
 
 	if (ret && php3_ini.magic_quotes_runtime) {
-		ret = _php3_addslashes(ret, 1);
+		ret = _php3_addslashes(ret, value_datum.dsize, NULL, 1);
 	}
 	return(ret);
 }
@@ -630,7 +641,7 @@ char *_php3_dbmfetch(dbm_info *info, char *key) {
 
 void php3_dbmexists(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *id, *key;
+	pval *id, *key;
 	dbm_info *info;
 	int ret;
 
@@ -645,7 +656,7 @@ void php3_dbmexists(INTERNAL_FUNCTION_PARAMETERS)
 		RETURN_FALSE;
 	}
 
-	ret = _php3_dbmexists(info, key->value.strval);
+	ret = _php3_dbmexists(info, key->value.str.val);
 	RETURN_LONG(ret);
 }
 
@@ -661,7 +672,7 @@ int _php3_dbmexists(dbm_info *info, char *key) {
 #endif
 
 	dbf = info->dbf;
-	if(!dbf) {
+	if (!dbf) {
 		php3_error(E_WARNING, "Unable to locate dbm file");
 		return(0);
 	}
@@ -673,7 +684,7 @@ int _php3_dbmexists(dbm_info *info, char *key) {
 		
 void php3_dbmdelete(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *id, *key;
+	pval *id, *key;
 	dbm_info *info;
 	int ret;
 
@@ -688,7 +699,7 @@ void php3_dbmdelete(INTERNAL_FUNCTION_PARAMETERS)
 		RETURN_FALSE;
 	}
 
-	ret = _php3_dbmdelete(info, key->value.strval);
+	ret = _php3_dbmdelete(info, key->value.str.val);
 	RETURN_LONG(ret);
 }
 
@@ -704,7 +715,7 @@ int _php3_dbmdelete(dbm_info *info, char *key) {
 #endif
 
 	dbf = info->dbf;
-	if(!dbf) {
+	if (!dbf) {
 		php3_error(E_WARNING, "Unable to locate dbm file");
 		return(0);
 	}
@@ -715,7 +726,7 @@ int _php3_dbmdelete(dbm_info *info, char *key) {
 
 void php3_dbmfirstkey(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *id;
+	pval *id;
 	dbm_info *info;
 	char *ret;
 
@@ -733,8 +744,8 @@ void php3_dbmfirstkey(INTERNAL_FUNCTION_PARAMETERS)
 	if (!ret) {
 		RETURN_FALSE;
 	} else {
-		return_value->value.strval = ret;
-		return_value->strlen = strlen(ret);
+		return_value->value.str.val = ret;
+		return_value->value.str.len = strlen(ret);
 		return_value->type = IS_STRING;
 	}
 }
@@ -745,7 +756,7 @@ char *_php3_dbmfirstkey(dbm_info *info) {
 	DBM_TYPE dbf;
 
 	dbf = info->dbf;
-	if(!dbf) {
+	if (!dbf) {
 		php3_error(E_WARNING, "Unable to locate dbm file");
 		return(NULL);
 	}
@@ -772,7 +783,7 @@ char *_php3_dbmfirstkey(dbm_info *info) {
 
 void php3_dbmnextkey(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *id, *key;
+	pval *id, *key;
 	dbm_info *info;
 	char *ret;
 
@@ -787,12 +798,12 @@ void php3_dbmnextkey(INTERNAL_FUNCTION_PARAMETERS)
 		RETURN_FALSE;
 	}
 
-	ret = _php3_dbmnextkey(info, key->value.strval);
+	ret = _php3_dbmnextkey(info, key->value.str.val);
 	if (!ret) {
 		RETURN_FALSE;
 	} else {
-		return_value->value.strval = ret;
-		return_value->strlen = strlen(ret);
+		return_value->value.str.val = ret;
+		return_value->value.str.len = strlen(ret);
 		return_value->type = IS_STRING;
 	}
 }
@@ -809,7 +820,7 @@ char *_php3_dbmnextkey(dbm_info *info, char *key) {
 #endif
 
 	dbf = info->dbf;
-	if(!dbf) {
+	if (!dbf) {
 		php3_error(E_WARNING, "Unable to locate dbm file");
 		return(NULL);
 	}
@@ -820,7 +831,7 @@ char *_php3_dbmnextkey(dbm_info *info, char *key) {
 
 	ret_datum = DBM_NEXTKEY(dbf, key_datum);
 
-	if(ret_datum.dptr) {
+	if (ret_datum.dptr) {
 		ret = (char *)emalloc(sizeof(char) * ret_datum.dsize + 1);
 		strncpy(ret, ret_datum.dptr, ret_datum.dsize);
 		ret[ret_datum.dsize] = '\0';
@@ -836,7 +847,7 @@ char *_php3_dbmnextkey(dbm_info *info, char *key) {
 	else ret=NULL;
 
 	if (ret && php3_ini.magic_quotes_runtime) {
-		ret = _php3_addslashes(ret, 1);
+		ret = _php3_addslashes(ret, ret_datum.dsize, NULL, 1);
 	}
 	return(ret);
 }
@@ -849,6 +860,9 @@ int flatfile_store(FILE *dbf, datum key_datum, datum value_datum, int mode) {
 	int ret;
 
 	if (mode == DBM_INSERT) {
+		if (flatfile_findkey(dbf, datum)) {
+			return 1;
+		}
 		fseek(dbf,0L,SEEK_END);
 		fprintf(dbf,"%d\n",key_datum.dsize);
 		fflush(dbf);
@@ -877,9 +891,9 @@ datum flatfile_fetch(FILE *dbf, datum key_datum) {
 
 	if (flatfile_findkey(dbf,key_datum)) {
 		buf = emalloc((buf_size+1) * sizeof(char));
-		if(fgets(buf, 15, dbf)) {
+		if (fgets(buf, 15, dbf)) {
 			num = atoi(buf);
-			if(num > buf_size) {
+			if (num > buf_size) {
 				buf_size+=num;
 				buf = emalloc((buf_size+1)*sizeof(char));
 			}
@@ -904,7 +918,7 @@ int flatfile_delete(FILE *dbf, datum key_datum) {
 	buf = emalloc((buf_size + 1)*sizeof(char));
 	while(!feof(dbf)) {
 		/* read in the length of the key name */
-		if(!fgets(buf, 15, dbf))
+		if (!fgets(buf, 15, dbf))
 			break;
 		num = atoi(buf);
 		if (num > buf_size) {
@@ -929,17 +943,17 @@ int flatfile_delete(FILE *dbf, datum key_datum) {
 		}	
 
 		/* read in the length of the value */
-		if(!fgets(buf,15,dbf))
+		if (!fgets(buf,15,dbf))
 			break;
 		num = atoi(buf);
-		if(num > buf_size) {
+		if (num > buf_size) {
 			buf_size+=num;
 			if (buf) efree(buf);
 			buf = emalloc((buf_size+1)*sizeof(char));
 		}
 		/* read in the value */
 		num = fread(buf, sizeof(char), num, dbf);
-		if(num<0)
+		if (num<0)
 			break;
 	}
 	if (buf) efree(buf);
@@ -965,10 +979,10 @@ int flatfile_findkey(FILE *dbf, datum key_datum) {
 			buf = emalloc((buf_size+1)*sizeof(char));
 		}
 		num = fread(buf, sizeof(char), num, dbf);
-		if(num<0) break;
+		if (num<0) break;
 		*(buf+num) = '\0';
-		if(size == num) {
-			if(!memcmp(buf,key,size)) {
+		if (size == num) {
+			if (!memcmp(buf,key,size)) {
 				ret = 1;
 				break;
 			}
@@ -976,13 +990,13 @@ int flatfile_findkey(FILE *dbf, datum key_datum) {
 		if (!fgets(buf,15,dbf))
 			break;
 		num = atoi(buf);
-		if(num > buf_size) {
+		if (num > buf_size) {
 			if (buf) efree(buf);
 			buf_size+=num;
 			buf = emalloc((buf_size+1)*sizeof(char));
 		}
 		num = fread(buf, sizeof(char), num, dbf);
-		if(num<0) break;
+		if (num<0) break;
 		*(buf+num) = '\0';
 	}
 	if (buf) efree(buf);
@@ -997,29 +1011,29 @@ datum flatfile_firstkey(FILE *dbf) {
 	rewind(dbf);
 	buf.dptr = emalloc((buf_size+1)*sizeof(char));
 	while(!feof(dbf)) {
-		if(!fgets(buf.dptr,15,dbf)) break;
+		if (!fgets(buf.dptr,15,dbf)) break;
 		num = atoi(buf.dptr);
-		if(num > buf_size) {
+		if (num > buf_size) {
 			buf_size+=num;
 			if (buf.dptr) efree(buf.dptr);
 			buf.dptr = emalloc((buf_size+1)*sizeof(char));
 		}
 		num=read(fileno(dbf),buf.dptr,num);
-		if(num<0) break;
+		if (num<0) break;
 		buf.dsize = num;
-		if(*(buf.dptr)!=0) {
+		if (*(buf.dptr)!=0) {
 			CurrentFlatFilePos = ftell(dbf);
 			return(buf);
 		}
-		if(!fgets(buf.dptr,15,dbf)) break;
+		if (!fgets(buf.dptr,15,dbf)) break;
 		num = atoi(buf.dptr);
-		if(num > buf_size) {
+		if (num > buf_size) {
 			buf_size+=num;
 			if (buf.dptr) efree(buf.dptr);
 			buf.dptr = emalloc((buf_size+1)*sizeof(char));
 		}
 		num=read(fileno(dbf),buf.dptr,num);
-		if(num<0) break;
+		if (num<0) break;
 	}
 	if (buf.dptr) efree(buf.dptr);
 	buf.dptr = NULL;
@@ -1034,26 +1048,26 @@ datum flatfile_nextkey(FILE *dbf) {
 	fseek(dbf,CurrentFlatFilePos,SEEK_SET);
 	buf.dptr = emalloc((buf_size+1)*sizeof(char));
 	while(!feof(dbf)) {
-		if(!fgets(buf.dptr,15,dbf)) break;
+		if (!fgets(buf.dptr,15,dbf)) break;
 		num = atoi(buf.dptr);
-		if(num > buf_size) {
+		if (num > buf_size) {
 			buf_size+=num;
 			if (buf.dptr) efree(buf.dptr);
 			buf.dptr = emalloc((buf_size+1)*sizeof(char));
 		}
 		num=read(fileno(dbf),buf.dptr,num);
-		if(num<0) break;
-		if(!fgets(buf.dptr,15,dbf)) break;
+		if (num<0) break;
+		if (!fgets(buf.dptr,15,dbf)) break;
 		num = atoi(buf.dptr);
-		if(num > buf_size) {
+		if (num > buf_size) {
 			buf_size+=num;
 			if (buf.dptr) efree(buf.dptr);
 			buf.dptr = emalloc((buf_size+1)*sizeof(char));
 		}
 		num=read(fileno(dbf),buf.dptr,num);
-		if(num<0) break;
+		if (num<0) break;
 		buf.dsize = num;
-		if(*(buf.dptr)!=0) {
+		if (*(buf.dptr)!=0) {
 			CurrentFlatFilePos = ftell(dbf);
 			return(buf);
 		}
@@ -1065,7 +1079,7 @@ datum flatfile_nextkey(FILE *dbf) {
 #endif
 
 
-int php3_minit_db(INITFUNCARG)
+int php3_minit_db(INIT_FUNC_ARGS)
 {
 #ifdef THREAD_SAFE
 	dbm_global_struct *dbm_globals;
@@ -1073,8 +1087,8 @@ int php3_minit_db(INITFUNCARG)
 	CREATE_MUTEX(dbm_mutex,"DBM_TLS");
 	SET_MUTEX(dbm_mutex);
 	numthreads++;
-	if(numthreads==1){
-	if((DbmTls=TlsAlloc())==0xFFFFFFFF){
+	if (numthreads==1){
+	if ((DbmTls=TlsAlloc())==0xFFFFFFFF){
 		FREE_MUTEX(dbm_mutex);
 		return 0;
 	}}
@@ -1097,8 +1111,8 @@ static int php3_mend_db(void){
 #if !COMPILE_DL
 	SET_MUTEX(dbm_mutex);
 	numthreads--;
-	if(!numthreads){
-	if(!TlsFree(DbmTls)){
+	if (!numthreads){
+	if (!TlsFree(DbmTls)){
 		FREE_MUTEX(dbm_mutex);
 		return 0;
 	}}
@@ -1108,7 +1122,7 @@ static int php3_mend_db(void){
 	return SUCCESS;
 }
 
-int php3_rinit_db(INITFUNCARG) {
+int php3_rinit_db(INIT_FUNC_ARGS) {
 #if !GDBM && !NDBM
 	CurrentFlatFilePos = 0L;
 #endif
@@ -1131,7 +1145,7 @@ function_entry dbm_functions[] = {
 };
 
 php3_module_entry dbm_module_entry = {
-	"DBM", dbm_functions, php3_minit_db, php3_mend_db, php3_rinit_db, NULL, php3_info_db, 0, 0, 0, NULL
+	"DBM", dbm_functions, php3_minit_db, php3_mend_db, php3_rinit_db, NULL, php3_info_db, STANDARD_MODULE_PROPERTIES
 };
 
 #if COMPILE_DL
@@ -1147,7 +1161,7 @@ BOOL WINAPI DllMain(HANDLE hModule,
 {
     switch( ul_reason_for_call ) {
     case DLL_PROCESS_ATTACH:
-		if((DbmTls=TlsAlloc())==0xFFFFFFFF){
+		if ((DbmTls=TlsAlloc())==0xFFFFFFFF){
 			return 0;
 		}
 		break;    
@@ -1156,7 +1170,7 @@ BOOL WINAPI DllMain(HANDLE hModule,
     case DLL_THREAD_DETACH:
 		break;
 	case DLL_PROCESS_DETACH:
-		if(!TlsFree(DbmTls)){
+		if (!TlsFree(DbmTls)){
 			return 0;
 		}
 		break;

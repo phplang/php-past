@@ -1,6 +1,6 @@
 <!-- -*- SGML -*-
 
- $Id: global.ent,v 1.5 1998/02/24 13:10:01 ssb Exp $
+ $Id: global.ent,v 1.10 1998/05/30 02:01:27 cslawi Exp $
 
  Contains global "macros" for all the SGML documents.
 
@@ -11,7 +11,7 @@
 <!ENTITY url.docbook-dtdref "http://www.ora.com/homepages/dtdparse/docbook/3.0/">
 <!ENTITY url.docbook-intro "http://nis-www.lanl.gov/~rosalia/mydocs/docbook-intro.html">
 <!ENTITY url.jade "http://www.jclark.com/jade/">
-<!ENTITY url.dbstyle "http://www.berkshire.net/~norm/docbook/dsssl/">
+<!ENTITY url.dbstyle "http://nwalsh.com/docbook/dsssl/">
 <!ENTITY url.emacs-src "ftp://ftp.gnu.org/pub/gnu/emacs-20.2.tar.gz">
 <!ENTITY url.emacs-nt "http://ftp.sunet.se/pub/os/Win32/ntEmacs/docs/ntemacs.html">
 <!ENTITY url.psgml "ftp://ftp.lysator.liu.se/pub/sgml/psgml-1.0.1.tar.gz">
@@ -19,9 +19,12 @@
 <!ENTITY url.phpbugs "http://ca.php.net/bugs.php3">
 <!ENTITY url.dsssl "http://www.jclark.com/dsssl/">
 <!ENTITY url.jclark "http://www.jclark.com/bio.htm">
-<!ENTITY url.nwalsh "http://www.berkshire.net/~norm/">
+<!ENTITY url.nwalsh "http://nwalsh.com/">
+<!ENTITY url.php3.faq "http://www.php.net/FAQ.php3">
+<!ENTITY url.php3.bugs "http://ca.php.net/bugs.php3">
+<!ENTITY url.php3.archive "http://www.tryc.on.ca/php3.html">
 
-<!ENTITY php.homepage '<literal><ulink url="&url.php;">&url.php;</ulink></literal>'>
+<!ENTITY php.homepage '<systemitem class=resource><ulink url="&url.php;">&url.php;</ulink></systemitem>'>
 
 <!ENTITY email.rasmus 'rasmus@lerdorf.on.ca'>
 <!ENTITY email.zeev   'zeev@php.net'>
@@ -32,7 +35,10 @@
 <!ENTITY email.ssilk  'ssilk@ssilkon.franken.de'>
 <!ENTITY email.egon   'eschmid@delos.lf.net'>
 <!ENTITY email.chad   'chadr@brt.com'>
-<!ENTITY email.torben 'cslawi@uta.fi'>
+<!ENTITY email.torben 'torben@netmill.com'>
+
+<!ENTITY email.php3   'php3@lists.php.net'>
+<!ENTITY email.php3.subscribe 'php3-subscribe@lists.php.net'>
 
 <!ENTITY link.rasmus '<ulink url="mailto:&email.rasmus;">Rasmus Lerdorf</ulink>'>
 <!ENTITY link.zeev   '<ulink url="mailto:&email.zeev;">Zeev Suraski</ulink>'>
@@ -44,3 +50,7 @@
 <!ENTITY link.egon   '<ulink url="mailto:&email.egon;">Egon Schmid</ulink>'>
 <!ENTITY link.chad   '<ulink url="mailto:&email.chad;">Chad Robinson</ulink>'>
 <!ENTITY link.torben '<ulink url="mailto:&email.torben;">Lars Torben Wilson</ulink>'>
+
+<!ENTITY spec.http1.0 'http://www.w3.org/hypertext/WWW/Protocols/HTTP1.0/draft-ietf-http-spec.html'>
+<!ENTITY spec.http1.1 'http://www.w3.org/Protocols/rfc2068/rfc2068'>
+<!ENTITY spec.cookies 'http://www.netscape.com/newsref/std/cookie_spec.html'>

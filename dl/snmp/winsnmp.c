@@ -2,7 +2,7 @@
 Created from the snmputil sample in the Microsoft SDK for NT
 */
 
-#include "parser.h"
+#include "php.h"
 #include "internal_functions.h"
 #if COMPILE_DL
 #include "../phpdl.h"
@@ -46,7 +46,7 @@ DLEXPORT php3_module_entry *get_module() { return &snmp_module_entry; }
 
 
 void _php3_snmp(INTERNAL_FUNCTION_PARAMETERS, int st) {
-	YYSTYPE *a1, *a2, *a3;
+	pval *a1, *a2, *a3;
 	INT	operation;
     LPSTR              agent;
     LPSTR              community;
@@ -62,17 +62,17 @@ void _php3_snmp(INTERNAL_FUNCTION_PARAMETERS, int st) {
     AsnObjectIdentifier oid;
    char        *chkPtr = NULL;
 
-	if(getParameters(ht, 3, &a1, &a2, &a3) == FAILURE) {
+	if (getParameters(ht, 3, &a1, &a2, &a3) == FAILURE) {
 		WRONG_PARAM_COUNT;
 	}
 	convert_to_string(a1);
 	convert_to_string(a2);
 	convert_to_string(a3);
 
-	agent=a1->value.strval;
-	community=a2->value.strval;
+	agent=a1->value.str.val;
+	community=a2->value.str.val;
 	operation=st;
-	SnmpMgrStrToOid(a3->value.strval, &oid);
+	SnmpMgrStrToOid(a3->value.str.val, &oid);
 
 /* 
    I've limited this to only one oid, but we can create a
@@ -92,14 +92,14 @@ void _php3_snmp(INTERNAL_FUNCTION_PARAMETERS, int st) {
 	}
 
     /* Determine and perform the requested operation.*/
-    if(operation == GET || operation == GETNEXT){
+    if (operation == GET || operation == GETNEXT){
         /* Get and GetNext are relatively simple operations to perform.
            Simply initiate the request and process the result and/or
            possible error conditions. */
 
         if (operation == GET){
             requestType = ASN_RFC1157_GETREQUEST;
-		}else{
+		} else {
             requestType = ASN_RFC1157_GETNEXTREQUEST;
 		}
 
@@ -108,13 +108,13 @@ void _php3_snmp(INTERNAL_FUNCTION_PARAMETERS, int st) {
                             &errorStatus, &errorIndex)){
             /* The API is indicating an error. */
             php3_error(E_WARNING,"error on SnmpMgrRequest %d\n", GetLastError());
-        }else{
+        } else {
             /* The API succeeded, errors may be indicated from the remote
                agent. */
             if (errorStatus > 0){
                 php3_error(E_WARNING,"Error: errorStatus=%d, errorIndex=%d\n",
                        errorStatus, errorIndex);
-            }else{
+            } else {
                 /* Display the resulting variable bindings.*/
 				UINT i;
                 char *string = NULL;
@@ -189,7 +189,7 @@ void _php3_snmp(INTERNAL_FUNCTION_PARAMETERS, int st) {
 
                     php3_printf("\n");
                     }
-                } /* end if() */
+                } /* end if () */
             /* Prepare for the next iteration.  Make sure returned oid is
                preserved and the returned value is freed.
 			*/
@@ -202,7 +202,7 @@ void _php3_snmp(INTERNAL_FUNCTION_PARAMETERS, int st) {
         /* Free the variable bindings that have been allocated.*/
         SnmpUtilVarBindListFree(&variableBindings);
         SnmpUtilOidFree(&root);
-	} // end if(operation)
+	} // end if (operation)
 
 
 	/* Close SNMP session with the remote agent.*/

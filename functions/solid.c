@@ -5,18 +5,23 @@
    | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
-   | it under the terms of the GNU General Public License as published by |
-   | the Free Software Foundation; either version 2 of the License, or    |
-   | (at your option) any later version.                                  |
+   | it under the terms of one of the following licenses:                 |
+   |                                                                      |
+   |  A) the GNU General Public License as published by the Free Software |
+   |     Foundation; either version 2 of the License, or (at your option) |
+   |     any later version.                                               |
+   |                                                                      |
+   |  B) the PHP License as published by the PHP Development Team and     |
+   |     included in the distribution in the file: LICENSE                |
    |                                                                      |
    | This program is distributed in the hope that it will be useful,      |
    | but WITHOUT ANY WARRANTY; without even the implied warranty of       |
    | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the        |
    | GNU General Public License for more details.                         |
    |                                                                      |
-   | You should have received a copy of the GNU General Public License    |
-   | along with this program; if not, write to the Free Software          |
-   | Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.            |
+   | You should have received a copy of both licenses referred to here.   |
+   | If you did not, or have any questions about PHP licensing, please    |
+   | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
    | Authors: Jeroen van der Most <jvdmost@digiface.nl>                   |
    |          Stig Sæther Bakken <ssb@guardian.no>                        |
@@ -31,9 +36,9 @@
 #include "build-defs.h"
 #endif
 
-#include "parser.h"
+#include "php.h"
 #include "internal_functions.h"
-#include "list.h"
+#include "php3_list.h"
 #include "php3_solid.h"
 
 
@@ -118,7 +123,7 @@ static void _close_solidconn(SQLConn *conn)
 
 
 /* module startup function */
-int php3_minit_solid(INITFUNCARG)
+int php3_minit_solid(INIT_FUNC_ARGS)
 {
     SQLAllocEnv(&henv);
 	php3_solid_module.le_result = register_list_destructors(php3_solid_freeresult,NULL);
@@ -217,7 +222,7 @@ solid_del_conn(INTERNAL_FUNCTION_PARAMETERS, int ind)
 
 void php3_solid_exec(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *CONN, *QUERY;
+	pval *CONN, *QUERY;
 	char        *query;
 	int         i, j;
 	SQLResult  *result = NULL;
@@ -240,7 +245,7 @@ void php3_solid_exec(INTERNAL_FUNCTION_PARAMETERS)
 	convert_to_long(CONN);
 	convert_to_string(QUERY);
 
-	query = QUERY->value.strval;
+	query = QUERY->value.str.val;
 
 	conn = solid_get_conn(INTERNAL_FUNCTION_PARAM_PASSTHRU, CONN->value.lval);
 	if (conn) {
@@ -310,7 +315,7 @@ void php3_solid_exec(INTERNAL_FUNCTION_PARAMETERS)
 
 void php3_solid_fetchrow(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE     *res;
+	pval     *res;
 	int         res_ind;
 	SQLResult *result;
 	RETCODE     rc;
@@ -340,7 +345,7 @@ void php3_solid_fetchrow(INTERNAL_FUNCTION_PARAMETERS)
 
 void php3_solid_result(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE     *res, *col;
+	pval     *res, *col;
 	char        *field;
 	int         res_ind;
 	int         field_ind;
@@ -358,7 +363,7 @@ void php3_solid_result(INTERNAL_FUNCTION_PARAMETERS)
 	convert_to_long(res);
 
 	if (col->type == IS_STRING) {
-		field = col->value.strval;
+		field = col->value.str.val;
 	} else {
 		field_ind = col->value.lval;
 	}
@@ -409,8 +414,8 @@ void php3_solid_result(INTERNAL_FUNCTION_PARAMETERS)
 		char c, *realval = &c;
 		SDWORD fieldsize = 12345;
 
-		if(result->values[field_ind].value != NULL) {
-			RETURN_STRING(result->values[field_ind].value);
+		if (result->values[field_ind].value != NULL) {
+			RETURN_STRING(result->values[field_ind].value,1);
 		}
 		/* All this ugly code here is the fault of
 		 * sopwith@redhat.com :) If there
@@ -453,7 +458,7 @@ void php3_solid_result(INTERNAL_FUNCTION_PARAMETERS)
 						   &fieldsize) == SQL_ERROR) {
 				php3_error(E_WARNING, "Out of memory");
 			} else {
-				RETURN_STRING(realval);
+				RETURN_STRING(realval,1);
 			}
 		}
 	}
@@ -463,7 +468,7 @@ void php3_solid_result(INTERNAL_FUNCTION_PARAMETERS)
 
 void php3_solid_freeresult(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *res;
+	pval *res;
 
 	if (ARG_COUNT(ht) != 1 || getParameters(ht, 1, &res) == FAILURE) {
 		WRONG_PARAM_COUNT;
@@ -476,7 +481,7 @@ void php3_solid_freeresult(INTERNAL_FUNCTION_PARAMETERS)
 
 void php3_solid_connect(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *dsn_arg, *uid_arg, *pwd_arg;
+	pval *dsn_arg, *uid_arg, *pwd_arg;
 	HDBC    new_conn;
 	char    *dsn=NULL;
 	char    *uid=NULL;
@@ -497,9 +502,9 @@ void php3_solid_connect(INTERNAL_FUNCTION_PARAMETERS)
 	convert_to_string(uid_arg);
 	convert_to_string(pwd_arg);
 
-	dsn = dsn_arg->value.strval;
-	uid = uid_arg->value.strval;
-	pwd = pwd_arg->value.strval;
+	dsn = dsn_arg->value.str.val;
+	uid = uid_arg->value.str.val;
+	pwd = pwd_arg->value.str.val;
 
 	SQLAllocConnect(henv, &new_conn);
 	SQLSetConnectOption(new_conn, SQL_TRANSLATE_OPTION,
@@ -528,7 +533,7 @@ void php3_solid_connect(INTERNAL_FUNCTION_PARAMETERS)
 
 void php3_solid_close(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *conn_arg;
+	pval *conn_arg;
 
 	if (ARG_COUNT(ht) != 1 || getParameters(ht, 1, &conn_arg) == FAILURE) {
 		WRONG_PARAM_COUNT;
@@ -541,7 +546,7 @@ void php3_solid_close(INTERNAL_FUNCTION_PARAMETERS)
 
 void php3_solid_numrows(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *res_arg;
+	pval *res_arg;
 	SQLResult *result;
 	SDWORD      rows;
 
@@ -566,7 +571,7 @@ void php3_solid_numrows(INTERNAL_FUNCTION_PARAMETERS)
 
 void php3_solid_numfields(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *res_arg;
+	pval *res_arg;
 	SQLResult *result;
 
 	if (ARG_COUNT(ht) != 1 || getParameters(ht, 1, &res_arg)) {
@@ -586,7 +591,7 @@ void php3_solid_numfields(INTERNAL_FUNCTION_PARAMETERS)
 
 void php3_solid_fieldname(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *res_arg, *field_arg;
+	pval *res_arg, *field_arg;
 	int         res_ind;
 	int         field_ind;
 	SQLResult *result;
@@ -613,12 +618,12 @@ void php3_solid_fieldname(INTERNAL_FUNCTION_PARAMETERS)
 		RETURN_FALSE;
 	}
 
-	RETVAL_STRING(result->values[field_ind].name);
+	RETVAL_STRING(result->values[field_ind].name,1);
 }
 
 void php3_solid_fieldnum(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *res_arg, *field_arg;
+	pval *res_arg, *field_arg;
 	int         field_ind;
 	char        *fname;
 	SQLResult *result;
@@ -632,7 +637,7 @@ void php3_solid_fieldnum(INTERNAL_FUNCTION_PARAMETERS)
 	convert_to_long(res_arg);
 	convert_to_string(field_arg);
 
-	fname = field_arg->value.strval;
+	fname = field_arg->value.str.val;
 	result = solid_get_result(INTERNAL_FUNCTION_PARAM_PASSTHRU, res_arg->value.lval);
 
 	if (result == NULL) {

@@ -3,7 +3,7 @@ Testing user-defined function falling out of an If into another..
 --POST--
 --GET--
 --FILE--
-<?$a = 1;
+<?php $a = 1;
 old_function Test $a (
 	if($a<3):
 		return(3);

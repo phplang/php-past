@@ -3,7 +3,7 @@ Testing function parameter passing                            ...
 --POST--
 --GET--
 --FILE--
-<?  old_function Test $a,$b (
+<?php  old_function Test $a,$b (
 		echo $a+$b;	
 	);
 	Test(1,2)?>

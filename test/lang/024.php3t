@@ -3,89 +3,81 @@ Looped regression test (may take a while)                     ...
 --POST--
 --GET--
 --FILE--
-<?
+<?php 
 for ($jdk=0; $jdk<50; $jdk++) {
 ?>
 
 <html>
 <head>
-<? /* the point of this file is to intensively test various aspects of the parser.
+<?php /* the point of this file is to intensively test various aspects of the parser.
     * right now, each test focuses in one aspect only (e.g. variable aliasing, arithemtic operator,
     * various control structures), while trying to combine code from other parts of the parser as well.
     */
 ?>
 
 *** Testing assignments and variable aliasing: ***
-<?
+<?php 
   /* This test tests assignments to variables using other variables as variable-names */
   $a = "b"; 
   $$a = "test"; 
   $$$a = "blah"; 
   ${$$$a}["associative arrays work too"] = "this is nifty";
 ?>
-This should read "blah": <? echo "$test\n"; ?>
-This should read "this is nifty": <? echo $blah[$test="associative arrays work too"]."\n"; ?>
+This should read "blah": <?php echo "$test\n"; ?>
+This should read "this is nifty": <?php echo $blah[$test="associative arrays work too"]."\n"; ?>
 *************************************************
 
 *** Testing integer operators ***
-<?
+<?php 
   /* test just about any operator possible on $i and $j (ints) */
   $i = 5;
   $j = 3;
 ?>
-Correct result - 8:  <? echo $i+$j; ?>
+Correct result - 8:  <?php echo $i+$j; ?>
 
-Correct result - 8:  <? echo $i+$j; ?>
+Correct result - 8:  <?php echo $i+$j; ?>
 
-Correct result - 2:  <? echo $i-$j; ?>
+Correct result - 2:  <?php echo $i-$j; ?>
 
-Correct result - -2:  <? echo $j-$i; ?>
+Correct result - -2:  <?php echo $j-$i; ?>
 
-Correct result - 15:  <? echo $i*$j; ?>
+Correct result - 15:  <?php echo $i*$j; ?>
 
-Correct result - 15:  <? echo $j*$i; ?>
+Correct result - 15:  <?php echo $j*$i; ?>
 
-Correct result - 1:  <? echo $i/$j; ?>
+Correct result - 2:  <?php echo $i%$j; ?>
 
-Correct result - 0:  <? echo $j/$i; ?>
-
-Correct result - 2:  <? echo $i%$j; ?>
-
-Correct result - 3:  <? echo $j%$i; ?>
+Correct result - 3:  <?php echo $j%$i; ?>
 
 *********************************
 
 *** Testing real operators ***
-<?
+<?php 
   /* test just about any operator possible on $i and $j (floats) */
   $i = 5.0;
   $j = 3.0;
 ?>
-Correct result - 8:  <? echo $i+$j; ?>
+Correct result - 8:  <?php echo $i+$j; ?>
 
-Correct result - 8:  <? echo $i+$j; ?>
+Correct result - 8:  <?php echo $i+$j; ?>
 
-Correct result - 2:  <? echo $i-$j; ?>
+Correct result - 2:  <?php echo $i-$j; ?>
 
-Correct result - -2:  <? echo $j-$i; ?>
+Correct result - -2:  <?php echo $j-$i; ?>
 
-Correct result - 15:  <? echo $i*$j; ?>
+Correct result - 15:  <?php echo $i*$j; ?>
 
-Correct result - 15:  <? echo $j*$i; ?>
+Correct result - 15:  <?php echo $j*$i; ?>
 
-Correct result - 1.666667:  <? echo $i/$j; ?>
+Correct result - 2:  <?php echo $i%$j; ?>
 
-Correct result - 0.6:  <? echo $j/$i; ?>
-
-Correct result - 2:  <? echo $i%$j; ?>
-
-Correct result - 3:  <? echo $j%$i; ?>
+Correct result - 3:  <?php echo $j%$i; ?>
 
 *********************************
 
 *** Testing if/elseif/else control ***
 
-<?
+<?php 
 /* sick if/elseif/else test by Andi :) */
 $a = 5;
 if ($a == "4") {
@@ -120,7 +112,7 @@ if ($a == "4") {
 
 *** Seriously nested if's test ***
 ** spelling correction by kluzz **
-<?
+<?php 
 /* yet another sick if/elseif/else test by Zeev */
 $i=$j=0;
 echo "Only two lines of text should follow:\n";
@@ -210,7 +202,7 @@ if (0) { /* this code is not supposed to be executed */
 ?>
 
 *** C-style else-if's ***
-<?
+<?php 
   /* looks like without we even tried, C-style else-if structure works fine! */
   if ($a=0) {
     echo "This shouldn't be displayed\n";
@@ -227,7 +219,7 @@ if (0) { /* this code is not supposed to be executed */
 *************************
 
 *** WHILE tests ***
-<?
+<?php 
 $i=0;
 $j=20;
 while ($i<(2*$j)) {
@@ -245,7 +237,7 @@ while ($i<(2*$j)) {
 
 
 *** Nested WHILEs ***
-<?
+<?php 
 $arr_len=3;
 
 $i=0;
@@ -281,7 +273,7 @@ while ($i<$arr_len) {
 *********************
 
 *** hash test... ***
-<?
+<?php 
 /*
 $i=0;
 
@@ -301,7 +293,7 @@ echo "commented out...";
 **************************
 
 *** Hash resizing test ***
-<?
+<?php 
 $i = 10;
 $a = b;
 while ($i > 0) {
@@ -323,7 +315,7 @@ while ($i > 0) {
 
 
 *** break/continue test ***
-<?
+<?php 
 $i=0;
 
 echo "\$i should go from 0 to 2\n";
@@ -374,16 +366,16 @@ while ($i<5) {
 ***********************
 
 *** Nested file include test ***
-<? include("lang/023-2.inc"); ?>
+<?php include("lang/023-2.inc"); ?>
 ********************************
 
-<?
+<?php 
 {
   echo "Tests completed.\n";  # testing some PHP style comment...
 }
 ?>
 
-<? } ?>
+<?php } ?>
 --EXPECT--
 Content-type: text/html
 
@@ -407,8 +399,6 @@ Correct result - 2:  2
 Correct result - -2:  -2
 Correct result - 15:  15
 Correct result - 15:  15
-Correct result - 1:  1
-Correct result - 0:  0
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -421,8 +411,6 @@ Correct result - 2:  2
 Correct result - -2:  -2
 Correct result - 15:  15
 Correct result - 15:  15
-Correct result - 1.666667:  1.666667
-Correct result - 0.6:  0.6
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -656,8 +644,6 @@ Correct result - 2:  2
 Correct result - -2:  -2
 Correct result - 15:  15
 Correct result - 15:  15
-Correct result - 1:  1
-Correct result - 0:  0
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -670,8 +656,6 @@ Correct result - 2:  2
 Correct result - -2:  -2
 Correct result - 15:  15
 Correct result - 15:  15
-Correct result - 1.666667:  1.666667
-Correct result - 0.6:  0.6
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -905,8 +889,6 @@ Correct result - 2:  2
 Correct result - -2:  -2
 Correct result - 15:  15
 Correct result - 15:  15
-Correct result - 1:  1
-Correct result - 0:  0
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -919,8 +901,6 @@ Correct result - 2:  2
 Correct result - -2:  -2
 Correct result - 15:  15
 Correct result - 15:  15
-Correct result - 1.666667:  1.666667
-Correct result - 0.6:  0.6
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -1154,8 +1134,6 @@ Correct result - 2:  2
 Correct result - -2:  -2
 Correct result - 15:  15
 Correct result - 15:  15
-Correct result - 1:  1
-Correct result - 0:  0
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -1168,8 +1146,6 @@ Correct result - 2:  2
 Correct result - -2:  -2
 Correct result - 15:  15
 Correct result - 15:  15
-Correct result - 1.666667:  1.666667
-Correct result - 0.6:  0.6
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -1403,8 +1379,6 @@ Correct result - 2:  2
 Correct result - -2:  -2
 Correct result - 15:  15
 Correct result - 15:  15
-Correct result - 1:  1
-Correct result - 0:  0
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -1417,8 +1391,6 @@ Correct result - 2:  2
 Correct result - -2:  -2
 Correct result - 15:  15
 Correct result - 15:  15
-Correct result - 1.666667:  1.666667
-Correct result - 0.6:  0.6
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -1652,8 +1624,6 @@ Correct result - 2:  2
 Correct result - -2:  -2
 Correct result - 15:  15
 Correct result - 15:  15
-Correct result - 1:  1
-Correct result - 0:  0
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -1666,8 +1636,6 @@ Correct result - 2:  2
 Correct result - -2:  -2
 Correct result - 15:  15
 Correct result - 15:  15
-Correct result - 1.666667:  1.666667
-Correct result - 0.6:  0.6
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -1901,8 +1869,6 @@ Correct result - 2:  2
 Correct result - -2:  -2
 Correct result - 15:  15
 Correct result - 15:  15
-Correct result - 1:  1
-Correct result - 0:  0
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -1915,8 +1881,6 @@ Correct result - 2:  2
 Correct result - -2:  -2
 Correct result - 15:  15
 Correct result - 15:  15
-Correct result - 1.666667:  1.666667
-Correct result - 0.6:  0.6
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -2150,8 +2114,6 @@ Correct result - 2:  2
 Correct result - -2:  -2
 Correct result - 15:  15
 Correct result - 15:  15
-Correct result - 1:  1
-Correct result - 0:  0
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -2164,8 +2126,6 @@ Correct result - 2:  2
 Correct result - -2:  -2
 Correct result - 15:  15
 Correct result - 15:  15
-Correct result - 1.666667:  1.666667
-Correct result - 0.6:  0.6
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -2399,8 +2359,6 @@ Correct result - 2:  2
 Correct result - -2:  -2
 Correct result - 15:  15
 Correct result - 15:  15
-Correct result - 1:  1
-Correct result - 0:  0
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -2413,8 +2371,6 @@ Correct result - 2:  2
 Correct result - -2:  -2
 Correct result - 15:  15
 Correct result - 15:  15
-Correct result - 1.666667:  1.666667
-Correct result - 0.6:  0.6
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -2648,8 +2604,6 @@ Correct result - 2:  2
 Correct result - -2:  -2
 Correct result - 15:  15
 Correct result - 15:  15
-Correct result - 1:  1
-Correct result - 0:  0
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -2662,8 +2616,6 @@ Correct result - 2:  2
 Correct result - -2:  -2
 Correct result - 15:  15
 Correct result - 15:  15
-Correct result - 1.666667:  1.666667
-Correct result - 0.6:  0.6
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -2897,8 +2849,6 @@ Correct result - 2:  2
 Correct result - -2:  -2
 Correct result - 15:  15
 Correct result - 15:  15
-Correct result - 1:  1
-Correct result - 0:  0
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -2911,8 +2861,6 @@ Correct result - 2:  2
 Correct result - -2:  -2
 Correct result - 15:  15
 Correct result - 15:  15
-Correct result - 1.666667:  1.666667
-Correct result - 0.6:  0.6
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -3146,8 +3094,6 @@ Correct result - 2:  2
 Correct result - -2:  -2
 Correct result - 15:  15
 Correct result - 15:  15
-Correct result - 1:  1
-Correct result - 0:  0
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -3160,8 +3106,6 @@ Correct result - 2:  2
 Correct result - -2:  -2
 Correct result - 15:  15
 Correct result - 15:  15
-Correct result - 1.666667:  1.666667
-Correct result - 0.6:  0.6
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -3395,8 +3339,6 @@ Correct result - 2:  2
 Correct result - -2:  -2
 Correct result - 15:  15
 Correct result - 15:  15
-Correct result - 1:  1
-Correct result - 0:  0
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -3409,8 +3351,6 @@ Correct result - 2:  2
 Correct result - -2:  -2
 Correct result - 15:  15
 Correct result - 15:  15
-Correct result - 1.666667:  1.666667
-Correct result - 0.6:  0.6
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -3644,8 +3584,6 @@ Correct result - 2:  2
 Correct result - -2:  -2
 Correct result - 15:  15
 Correct result - 15:  15
-Correct result - 1:  1
-Correct result - 0:  0
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -3658,8 +3596,6 @@ Correct result - 2:  2
 Correct result - -2:  -2
 Correct result - 15:  15
 Correct result - 15:  15
-Correct result - 1.666667:  1.666667
-Correct result - 0.6:  0.6
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -3893,8 +3829,6 @@ Correct result - 2:  2
 Correct result - -2:  -2
 Correct result - 15:  15
 Correct result - 15:  15
-Correct result - 1:  1
-Correct result - 0:  0
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -3907,8 +3841,6 @@ Correct result - 2:  2
 Correct result - -2:  -2
 Correct result - 15:  15
 Correct result - 15:  15
-Correct result - 1.666667:  1.666667
-Correct result - 0.6:  0.6
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -4142,8 +4074,6 @@ Correct result - 2:  2
 Correct result - -2:  -2
 Correct result - 15:  15
 Correct result - 15:  15
-Correct result - 1:  1
-Correct result - 0:  0
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -4156,8 +4086,6 @@ Correct result - 2:  2
 Correct result - -2:  -2
 Correct result - 15:  15
 Correct result - 15:  15
-Correct result - 1.666667:  1.666667
-Correct result - 0.6:  0.6
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -4391,8 +4319,6 @@ Correct result - 2:  2
 Correct result - -2:  -2
 Correct result - 15:  15
 Correct result - 15:  15
-Correct result - 1:  1
-Correct result - 0:  0
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -4405,8 +4331,6 @@ Correct result - 2:  2
 Correct result - -2:  -2
 Correct result - 15:  15
 Correct result - 15:  15
-Correct result - 1.666667:  1.666667
-Correct result - 0.6:  0.6
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -4640,8 +4564,6 @@ Correct result - 2:  2
 Correct result - -2:  -2
 Correct result - 15:  15
 Correct result - 15:  15
-Correct result - 1:  1
-Correct result - 0:  0
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -4654,8 +4576,6 @@ Correct result - 2:  2
 Correct result - -2:  -2
 Correct result - 15:  15
 Correct result - 15:  15
-Correct result - 1.666667:  1.666667
-Correct result - 0.6:  0.6
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -4889,8 +4809,6 @@ Correct result - 2:  2
 Correct result - -2:  -2
 Correct result - 15:  15
 Correct result - 15:  15
-Correct result - 1:  1
-Correct result - 0:  0
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -4903,8 +4821,6 @@ Correct result - 2:  2
 Correct result - -2:  -2
 Correct result - 15:  15
 Correct result - 15:  15
-Correct result - 1.666667:  1.666667
-Correct result - 0.6:  0.6
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -5138,8 +5054,6 @@ Correct result - 2:  2
 Correct result - -2:  -2
 Correct result - 15:  15
 Correct result - 15:  15
-Correct result - 1:  1
-Correct result - 0:  0
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -5152,8 +5066,6 @@ Correct result - 2:  2
 Correct result - -2:  -2
 Correct result - 15:  15
 Correct result - 15:  15
-Correct result - 1.666667:  1.666667
-Correct result - 0.6:  0.6
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -5387,8 +5299,6 @@ Correct result - 2:  2
 Correct result - -2:  -2
 Correct result - 15:  15
 Correct result - 15:  15
-Correct result - 1:  1
-Correct result - 0:  0
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -5401,8 +5311,6 @@ Correct result - 2:  2
 Correct result - -2:  -2
 Correct result - 15:  15
 Correct result - 15:  15
-Correct result - 1.666667:  1.666667
-Correct result - 0.6:  0.6
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -5636,8 +5544,6 @@ Correct result - 2:  2
 Correct result - -2:  -2
 Correct result - 15:  15
 Correct result - 15:  15
-Correct result - 1:  1
-Correct result - 0:  0
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -5650,8 +5556,6 @@ Correct result - 2:  2
 Correct result - -2:  -2
 Correct result - 15:  15
 Correct result - 15:  15
-Correct result - 1.666667:  1.666667
-Correct result - 0.6:  0.6
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -5885,8 +5789,6 @@ Correct result - 2:  2
 Correct result - -2:  -2
 Correct result - 15:  15
 Correct result - 15:  15
-Correct result - 1:  1
-Correct result - 0:  0
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -5899,8 +5801,6 @@ Correct result - 2:  2
 Correct result - -2:  -2
 Correct result - 15:  15
 Correct result - 15:  15
-Correct result - 1.666667:  1.666667
-Correct result - 0.6:  0.6
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -6134,8 +6034,6 @@ Correct result - 2:  2
 Correct result - -2:  -2
 Correct result - 15:  15
 Correct result - 15:  15
-Correct result - 1:  1
-Correct result - 0:  0
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -6148,8 +6046,6 @@ Correct result - 2:  2
 Correct result - -2:  -2
 Correct result - 15:  15
 Correct result - 15:  15
-Correct result - 1.666667:  1.666667
-Correct result - 0.6:  0.6
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -6383,8 +6279,6 @@ Correct result - 2:  2
 Correct result - -2:  -2
 Correct result - 15:  15
 Correct result - 15:  15
-Correct result - 1:  1
-Correct result - 0:  0
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -6397,8 +6291,6 @@ Correct result - 2:  2
 Correct result - -2:  -2
 Correct result - 15:  15
 Correct result - 15:  15
-Correct result - 1.666667:  1.666667
-Correct result - 0.6:  0.6
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -6632,8 +6524,6 @@ Correct result - 2:  2
 Correct result - -2:  -2
 Correct result - 15:  15
 Correct result - 15:  15
-Correct result - 1:  1
-Correct result - 0:  0
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -6646,8 +6536,6 @@ Correct result - 2:  2
 Correct result - -2:  -2
 Correct result - 15:  15
 Correct result - 15:  15
-Correct result - 1.666667:  1.666667
-Correct result - 0.6:  0.6
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -6881,8 +6769,6 @@ Correct result - 2:  2
 Correct result - -2:  -2
 Correct result - 15:  15
 Correct result - 15:  15
-Correct result - 1:  1
-Correct result - 0:  0
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -6895,8 +6781,6 @@ Correct result - 2:  2
 Correct result - -2:  -2
 Correct result - 15:  15
 Correct result - 15:  15
-Correct result - 1.666667:  1.666667
-Correct result - 0.6:  0.6
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -7130,8 +7014,6 @@ Correct result - 2:  2
 Correct result - -2:  -2
 Correct result - 15:  15
 Correct result - 15:  15
-Correct result - 1:  1
-Correct result - 0:  0
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -7144,8 +7026,6 @@ Correct result - 2:  2
 Correct result - -2:  -2
 Correct result - 15:  15
 Correct result - 15:  15
-Correct result - 1.666667:  1.666667
-Correct result - 0.6:  0.6
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -7379,8 +7259,6 @@ Correct result - 2:  2
 Correct result - -2:  -2
 Correct result - 15:  15
 Correct result - 15:  15
-Correct result - 1:  1
-Correct result - 0:  0
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -7393,8 +7271,6 @@ Correct result - 2:  2
 Correct result - -2:  -2
 Correct result - 15:  15
 Correct result - 15:  15
-Correct result - 1.666667:  1.666667
-Correct result - 0.6:  0.6
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -7628,8 +7504,6 @@ Correct result - 2:  2
 Correct result - -2:  -2
 Correct result - 15:  15
 Correct result - 15:  15
-Correct result - 1:  1
-Correct result - 0:  0
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -7642,8 +7516,6 @@ Correct result - 2:  2
 Correct result - -2:  -2
 Correct result - 15:  15
 Correct result - 15:  15
-Correct result - 1.666667:  1.666667
-Correct result - 0.6:  0.6
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -7877,8 +7749,6 @@ Correct result - 2:  2
 Correct result - -2:  -2
 Correct result - 15:  15
 Correct result - 15:  15
-Correct result - 1:  1
-Correct result - 0:  0
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -7891,8 +7761,6 @@ Correct result - 2:  2
 Correct result - -2:  -2
 Correct result - 15:  15
 Correct result - 15:  15
-Correct result - 1.666667:  1.666667
-Correct result - 0.6:  0.6
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -8126,8 +7994,6 @@ Correct result - 2:  2
 Correct result - -2:  -2
 Correct result - 15:  15
 Correct result - 15:  15
-Correct result - 1:  1
-Correct result - 0:  0
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -8140,8 +8006,6 @@ Correct result - 2:  2
 Correct result - -2:  -2
 Correct result - 15:  15
 Correct result - 15:  15
-Correct result - 1.666667:  1.666667
-Correct result - 0.6:  0.6
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -8375,8 +8239,6 @@ Correct result - 2:  2
 Correct result - -2:  -2
 Correct result - 15:  15
 Correct result - 15:  15
-Correct result - 1:  1
-Correct result - 0:  0
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -8389,8 +8251,6 @@ Correct result - 2:  2
 Correct result - -2:  -2
 Correct result - 15:  15
 Correct result - 15:  15
-Correct result - 1.666667:  1.666667
-Correct result - 0.6:  0.6
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -8624,8 +8484,6 @@ Correct result - 2:  2
 Correct result - -2:  -2
 Correct result - 15:  15
 Correct result - 15:  15
-Correct result - 1:  1
-Correct result - 0:  0
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -8638,8 +8496,6 @@ Correct result - 2:  2
 Correct result - -2:  -2
 Correct result - 15:  15
 Correct result - 15:  15
-Correct result - 1.666667:  1.666667
-Correct result - 0.6:  0.6
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -8873,8 +8729,6 @@ Correct result - 2:  2
 Correct result - -2:  -2
 Correct result - 15:  15
 Correct result - 15:  15
-Correct result - 1:  1
-Correct result - 0:  0
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -8887,8 +8741,6 @@ Correct result - 2:  2
 Correct result - -2:  -2
 Correct result - 15:  15
 Correct result - 15:  15
-Correct result - 1.666667:  1.666667
-Correct result - 0.6:  0.6
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -9122,8 +8974,6 @@ Correct result - 2:  2
 Correct result - -2:  -2
 Correct result - 15:  15
 Correct result - 15:  15
-Correct result - 1:  1
-Correct result - 0:  0
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -9136,8 +8986,6 @@ Correct result - 2:  2
 Correct result - -2:  -2
 Correct result - 15:  15
 Correct result - 15:  15
-Correct result - 1.666667:  1.666667
-Correct result - 0.6:  0.6
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -9371,8 +9219,6 @@ Correct result - 2:  2
 Correct result - -2:  -2
 Correct result - 15:  15
 Correct result - 15:  15
-Correct result - 1:  1
-Correct result - 0:  0
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -9385,8 +9231,6 @@ Correct result - 2:  2
 Correct result - -2:  -2
 Correct result - 15:  15
 Correct result - 15:  15
-Correct result - 1.666667:  1.666667
-Correct result - 0.6:  0.6
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -9620,8 +9464,6 @@ Correct result - 2:  2
 Correct result - -2:  -2
 Correct result - 15:  15
 Correct result - 15:  15
-Correct result - 1:  1
-Correct result - 0:  0
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -9634,8 +9476,6 @@ Correct result - 2:  2
 Correct result - -2:  -2
 Correct result - 15:  15
 Correct result - 15:  15
-Correct result - 1.666667:  1.666667
-Correct result - 0.6:  0.6
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -9869,8 +9709,6 @@ Correct result - 2:  2
 Correct result - -2:  -2
 Correct result - 15:  15
 Correct result - 15:  15
-Correct result - 1:  1
-Correct result - 0:  0
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -9883,8 +9721,6 @@ Correct result - 2:  2
 Correct result - -2:  -2
 Correct result - 15:  15
 Correct result - 15:  15
-Correct result - 1.666667:  1.666667
-Correct result - 0.6:  0.6
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -10118,8 +9954,6 @@ Correct result - 2:  2
 Correct result - -2:  -2
 Correct result - 15:  15
 Correct result - 15:  15
-Correct result - 1:  1
-Correct result - 0:  0
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -10132,8 +9966,6 @@ Correct result - 2:  2
 Correct result - -2:  -2
 Correct result - 15:  15
 Correct result - 15:  15
-Correct result - 1.666667:  1.666667
-Correct result - 0.6:  0.6
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -10367,8 +10199,6 @@ Correct result - 2:  2
 Correct result - -2:  -2
 Correct result - 15:  15
 Correct result - 15:  15
-Correct result - 1:  1
-Correct result - 0:  0
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -10381,8 +10211,6 @@ Correct result - 2:  2
 Correct result - -2:  -2
 Correct result - 15:  15
 Correct result - 15:  15
-Correct result - 1.666667:  1.666667
-Correct result - 0.6:  0.6
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -10616,8 +10444,6 @@ Correct result - 2:  2
 Correct result - -2:  -2
 Correct result - 15:  15
 Correct result - 15:  15
-Correct result - 1:  1
-Correct result - 0:  0
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -10630,8 +10456,6 @@ Correct result - 2:  2
 Correct result - -2:  -2
 Correct result - 15:  15
 Correct result - 15:  15
-Correct result - 1.666667:  1.666667
-Correct result - 0.6:  0.6
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -10865,8 +10689,6 @@ Correct result - 2:  2
 Correct result - -2:  -2
 Correct result - 15:  15
 Correct result - 15:  15
-Correct result - 1:  1
-Correct result - 0:  0
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -10879,8 +10701,6 @@ Correct result - 2:  2
 Correct result - -2:  -2
 Correct result - 15:  15
 Correct result - 15:  15
-Correct result - 1.666667:  1.666667
-Correct result - 0.6:  0.6
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -11114,8 +10934,6 @@ Correct result - 2:  2
 Correct result - -2:  -2
 Correct result - 15:  15
 Correct result - 15:  15
-Correct result - 1:  1
-Correct result - 0:  0
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -11128,8 +10946,6 @@ Correct result - 2:  2
 Correct result - -2:  -2
 Correct result - 15:  15
 Correct result - 15:  15
-Correct result - 1.666667:  1.666667
-Correct result - 0.6:  0.6
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -11363,8 +11179,6 @@ Correct result - 2:  2
 Correct result - -2:  -2
 Correct result - 15:  15
 Correct result - 15:  15
-Correct result - 1:  1
-Correct result - 0:  0
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -11377,8 +11191,6 @@ Correct result - 2:  2
 Correct result - -2:  -2
 Correct result - 15:  15
 Correct result - 15:  15
-Correct result - 1.666667:  1.666667
-Correct result - 0.6:  0.6
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -11612,8 +11424,6 @@ Correct result - 2:  2
 Correct result - -2:  -2
 Correct result - 15:  15
 Correct result - 15:  15
-Correct result - 1:  1
-Correct result - 0:  0
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -11626,8 +11436,6 @@ Correct result - 2:  2
 Correct result - -2:  -2
 Correct result - 15:  15
 Correct result - 15:  15
-Correct result - 1.666667:  1.666667
-Correct result - 0.6:  0.6
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -11861,8 +11669,6 @@ Correct result - 2:  2
 Correct result - -2:  -2
 Correct result - 15:  15
 Correct result - 15:  15
-Correct result - 1:  1
-Correct result - 0:  0
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -11875,8 +11681,6 @@ Correct result - 2:  2
 Correct result - -2:  -2
 Correct result - 15:  15
 Correct result - 15:  15
-Correct result - 1.666667:  1.666667
-Correct result - 0.6:  0.6
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -12110,8 +11914,6 @@ Correct result - 2:  2
 Correct result - -2:  -2
 Correct result - 15:  15
 Correct result - 15:  15
-Correct result - 1:  1
-Correct result - 0:  0
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -12124,8 +11926,6 @@ Correct result - 2:  2
 Correct result - -2:  -2
 Correct result - 15:  15
 Correct result - 15:  15
-Correct result - 1.666667:  1.666667
-Correct result - 0.6:  0.6
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -12359,8 +12159,6 @@ Correct result - 2:  2
 Correct result - -2:  -2
 Correct result - 15:  15
 Correct result - 15:  15
-Correct result - 1:  1
-Correct result - 0:  0
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -12373,8 +12171,6 @@ Correct result - 2:  2
 Correct result - -2:  -2
 Correct result - 15:  15
 Correct result - 15:  15
-Correct result - 1.666667:  1.666667
-Correct result - 0.6:  0.6
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -12608,8 +12404,6 @@ Correct result - 2:  2
 Correct result - -2:  -2
 Correct result - 15:  15
 Correct result - 15:  15
-Correct result - 1:  1
-Correct result - 0:  0
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -12622,8 +12416,6 @@ Correct result - 2:  2
 Correct result - -2:  -2
 Correct result - 15:  15
 Correct result - 15:  15
-Correct result - 1.666667:  1.666667
-Correct result - 0.6:  0.6
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************

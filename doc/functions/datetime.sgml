@@ -1,7 +1,6 @@
-
  <reference id="ref.datetime">
   <title>Date/Time Functions</title>
-  
+  <titleabbrev>Date/time</titleabbrev>
 
   <refentry id="function.checkdate">
    <refnamediv>
@@ -51,8 +50,8 @@
     </funcsynopsis>
     <para>
      Returns a string formatted according to the given format string
-     using the given <parameter>timestamp</parameter> or the current local time if no
-     timestamp is given.
+     using the given <parameter>timestamp</parameter> or the current
+     local time if no timestamp is given.
 
     <para>
      The following characters are recognized in the format string:
@@ -76,16 +75,16 @@
       <listitem><simpara>a - "am" or "pm"</simpara></listitem>
       <listitem><simpara>S - English ordinal suffix, textual, 2 characters; i.e. "th", "nd"</simpara></listitem>
      </itemizedlist>
-     Unrecognized characters in the format string will be printed as-is. 
-     
+     Unrecognized characters in the format string will be printed as-is.
+
      <example>
-      <title>date() example</title>
+      <title><function>date</function> example</title>
       <programlisting>
 print(date( "l dS of F Y h:i:s A" ));
 print("July 1, 2000 is on a " . date("l", mktime(0,0,0,7,1,2000)));
 </programlisting></example>
-     See also <link linkend="function.gmdate">gmdate()</link> and
-     <link linkend="function.mktime">mktime()</link>.
+     See also <function>gmdate</function> and
+     <function>mktime</function>.
     </para>
    </refsect1>
   </refentry>
@@ -136,20 +135,20 @@ print("July 1, 2000 is on a " . date("l", mktime(0,0,0,7,1,2000)));
      <paramdef>int <parameter>timestamp</parameter></paramdef>
     </funcsynopsis>
     <para>
-     Identical to the <link linkend="function.date">date</link>
+     Identical to the <function>date</function>
      function except that the time returned is Greenwich Mean Time
      (GMT). For example, when run in Finland (GMT +0200), the first
      line below prints "Jan 01 1998 00:00:00", while the second prints
      "Dec 31 1997 22:00:00".
      <example>
-      <title>gmdate() example</title>
+      <title><function>gmdate</function> example</title>
       <programlisting>
 echo date( "M d Y H:i:s",mktime(0,0,0,1,1,1998) );
 echo gmdate( "M d Y H:i:s",mktime(0,0,0,1,1,1998) );
 </programlisting></example>
     </para><para>
-     See also <link linkend="function.date">date()</link> and
-     <link linkend="function.mktime">mktime()</link>.
+     See also <function>date</function>,
+     <function>mktime</function> and <function>gmmktime</function>.
     </para>
    </refsect1>
   </refentry>
@@ -186,19 +185,40 @@ echo gmdate( "M d Y H:i:s",mktime(0,0,0,1,1,1998) );
      input. For example, each of the following lines produces the
      string "Jan-01-1998".
      <example>
-      <title>mktime() example</title>
+      <title><function>mktime</function> example</title>
       <programlisting>
 echo date( "M-d-Y", mktime(0,0,0,12,32,1997) );
 echo date( "M-d-Y", mktime(0,0,0,13,1,1997) );
 echo date( "M-d-Y", mktime(0,0,0,1,1,1998) );
 </programlisting></example>
     </para><para>
-     See also <link linkend="function.date">date()</link> and <link
-     linkend="function.mktime">mktime()</link>.
+     See also <function>date</function> and <function>time</function>.
     </para>
    </refsect1>
   </refentry>
 
+  <refentry id="function.gmmktime">
+   <refnamediv>
+    <refname>gmmktime</refname>
+    <refpurpose>get UNIX timestamp for a GMT date</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>gmmktime</function></funcdef>
+     <paramdef>int <parameter>hour</parameter></paramdef>
+     <paramdef>int <parameter>minute</parameter></paramdef>
+     <paramdef>int <parameter>second</parameter></paramdef>
+     <paramdef>int <parameter>month</parameter></paramdef>
+     <paramdef>int <parameter>day</parameter></paramdef>
+     <paramdef>int <parameter>year</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+     Identical to <function>mktime</function> except the passed parameters
+	 represents a GMT date.
+    </para>
+   </refsect1>
+  </refentry>
 
   <refentry id="function.time">
    <refnamediv>
@@ -215,7 +235,29 @@ echo date( "M-d-Y", mktime(0,0,0,1,1,1998) );
      Returns the current time measured in the number of seconds since
      the Unix Epoch (January 1, 1970).
     </para><para>
-     See also <link linkend="function.date">date()</link>.
+     See also <function>date</function>.
+    </para>
+   </refsect1>
+  </refentry>
+
+  <refentry id="function.microtime">
+   <refnamediv>
+    <refname>microtime</refname>
+    <refpurpose>return current UNIX timestamp with microseconds</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>string <function>microtime</function></funcdef>
+     <void>
+    </funcsynopsis>
+    <para>
+     Returns the string "msec sec" where sec is the current time measured in the
+     number of seconds since the Unix Epoch (0:00:00 January 1, 1970 GMT), and
+     msec is the microseconds part. This function is only available on operating
+     systems that support the gettimeofday() system call.
+    </para><para>
+     See also <function>time</function>.
     </para>
    </refsect1>
   </refentry>
@@ -231,12 +273,19 @@ echo date( "M-d-Y", mktime(0,0,0,1,1,1998) );
      <funcdef>void <function>set_time_limit</function></funcdef>
      <paramdef>int <parameter>seconds</parameter></paramdef>
     </funcsynopsis>
-    <para>
+    <simpara>
      Set the number of seconds a script is allowed to run.  If this is
      reached, the script returns a fatal error.  The default limit is 30
      seconds or, if it exists, the max_execution_time value defined in
      php3.ini.  If seconds is set to zero, no time limit is imposed.
-    </para>
+
+    <simpara>
+     When called, <function>set_time_limit</function> restarts the timeout
+     counter from zero. In other words, if the timeout is the default 30
+     seconds, and 25 seconds into script execution a call such as
+     set_time_limit( 20 ) is made, the script will run for a total of
+     45 seconds before timing out.
+
    </refsect1>
   </refentry>
 

@@ -5,30 +5,35 @@
    | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
-   | it under the terms of the GNU General Public License as published by |
-   | the Free Software Foundation; either version 2 of the License, or    |
-   | (at your option) any later version.                                  |
+   | it under the terms of one of the following licenses:                 |
+   |                                                                      |
+   |  A) the GNU General Public License as published by the Free Software |
+   |     Foundation; either version 2 of the License, or (at your option) |
+   |     any later version.                                               |
+   |                                                                      |
+   |  B) the PHP License as published by the PHP Development Team and     |
+   |     included in the distribution in the file: LICENSE                |
    |                                                                      |
    | This program is distributed in the hope that it will be useful,      |
    | but WITHOUT ANY WARRANTY; without even the implied warranty of       |
    | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the        |
    | GNU General Public License for more details.                         |
    |                                                                      |
-   | You should have received a copy of the GNU General Public License    |
-   | along with this program; if not, write to the Free Software          |
-   | Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.            |
+   | You should have received a copy of both licenses referred to here.   |
+   | If you did not, or have any questions about PHP licensing, please    |
+   | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
    | Authors: Stig Sæther Bakken <ssb@guardian.no>                        |
    +----------------------------------------------------------------------+
  */
 
-/* $Id: formatted_print.c,v 1.31 1998/03/02 20:59:50 ssb Exp $ */
+/* $Id: formatted_print.c,v 1.39 1998/05/21 23:57:29 zeev Exp $ */
 
 #include <math.h>				/* modf() */
 #ifdef THREAD_SAFE
 #include "tls.h"
 #endif
-#include "parser.h"
+#include "php.h"
 #include "internal_functions.h"
 #include "head.h"
 #include "php3_string.h"
@@ -384,7 +389,7 @@ inline static int _php3_sprintf_getnumber(char *buffer, int *pos)
  */
 static char *php3_formatted_print(HashTable *ht)
 {
-	YYSTYPE **args;
+	pval **args;
 	int argc, size = 240, inpos = 0, outpos = 0;
 	int alignment, width, precision, currarg, adjusting;
 	char *format, *result, padding;
@@ -394,14 +399,14 @@ static char *php3_formatted_print(HashTable *ht)
 	if (argc < 1) {
 		WRONG_PARAM_COUNT_WITH_RETVAL(NULL);
 	}
-	args = emalloc(argc * sizeof(YYSTYPE *));
+	args = emalloc(argc * sizeof(pval *));
 
 	if (getParametersArray(ht, argc, args) == FAILURE) {
 		efree(args);
 		WRONG_PARAM_COUNT_WITH_RETVAL(NULL);
 	}
 	convert_to_string(args[0]);
-	format = args[0]->value.strval;
+	format = args[0]->value.str.val;
 	result = emalloc(size);
 
 	currarg = 1;
@@ -508,7 +513,7 @@ static char *php3_formatted_print(HashTable *ht)
 				case 's':
 					convert_to_string(args[currarg]);
 					_php3_sprintf_appendstring(&result, &outpos, &size,
-											 args[currarg]->value.strval,
+											 args[currarg]->value.str.val,
 											   width, precision, padding,
 											   alignment);
 					break;
@@ -598,7 +603,7 @@ void php3_user_sprintf(INTERNAL_FUNCTION_PARAMETERS)
 	if ((result=php3_formatted_print(ht))==NULL) {
 		RETURN_FALSE;
 	}
-	RETVAL_STRING(result);
+	RETVAL_STRING(result,1);
 	efree(result);
 }
 
@@ -611,7 +616,7 @@ void php3_user_printf(INTERNAL_FUNCTION_PARAMETERS)
 	if ((result=php3_formatted_print(ht))==NULL) {
 		RETURN_FALSE;
 	}
-	if(php3_header(0,NULL))
+	if (php3_header())
 		PUTS(result);
 	efree(result);
 }

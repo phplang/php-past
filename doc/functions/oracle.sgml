@@ -1,7 +1,7 @@
 
  <reference id="ref.oracle">
   <title>Oracle functions</title>
-
+  <titleabbrev>Oracle</titleabbrev>
 
   <refentry id="function.ora-close">
    <refnamediv>
@@ -14,16 +14,69 @@
      <funcdef>int <function>ora_close</function></funcdef>
      <paramdef>int <parameter>cursor</parameter></paramdef>
     </funcsynopsis>
-    <para>Returns true if the close succeeds, otherwise false.
-     Details about the error can be retrieved usign the <link
-     linkend="function.ora-error">Ora_Error</link> and <link
-     linkend="function.ora-errorcode">Ora_ErrorCode</link>
-     functions.
+    <para>
+     Returns true if the close succeeds, otherwise false.  Details
+     about the error can be retrieved using the
+     <function>ora_error</function> and
+     <function>ora_errorcode</function> functions.
 
     <para>
-     This function closes a data cursor opened with <link
-     linkend="function.ora-open">Ora_Open</link>.
+     This function closes a data cursor opened with
+     <function>ora_open</function>.
 
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.ora-columnname">
+   <refnamediv>
+    <refname>Ora_ColumnName</refname>
+    <refpurpose>get name of Oracle result column</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>string <function>Ora_ColumnName</function></funcdef>
+     <paramdef>int <parameter>cursor</parameter></paramdef>
+     <paramdef>int <parameter>column</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+     Returns the name of the field/column
+     <parameter>column</parameter> on the cursor
+     <parameter>cursor</parameter>.  The returned name is in all
+     uppercase letters.
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.ora-columntype">
+   <refnamediv>
+    <refname>Ora_ColumnType</refname>
+    <refpurpose>get type of Oracle result column</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>string <function>Ora_ColumnType</function></funcdef>
+     <paramdef>int <parameter>cursor</parameter></paramdef>
+     <paramdef>int <parameter>column</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+     Returns the Oracle data type name of the field/column
+     <parameter>column</parameter> on the cursor
+     <parameter>cursor</parameter>.  The returned type will be one of
+     the following:
+     <simplelist>
+      <member><literal>"VARCHAR2"</literal></member>
+      <member><literal>"VARCHAR"</literal></member>
+      <member><literal>"CHAR"</literal></member>
+      <member><literal>"NUMBER"</literal></member>
+      <member><literal>"LONG"</literal></member>
+      <member><literal>"LONG RAW"</literal></member>
+      <member><literal>"ROWID"</literal></member>
+      <member><literal>"DATE"</literal></member>
+      <member><literal>"CURSOR"</literal></member>
+     </simplelist>
    </refsect1>
   </refentry>
 
@@ -40,13 +93,11 @@
      <paramdef>int <parameter>conn</parameter></paramdef>
     </funcsynopsis>
     <para>Returns true on success, false on error.  Details about the
-     error can be retrieved usign the <link
-     linkend="function.ora-error">Ora_Error</link> and <link
-     linkend="function.ora-errorcode">Ora_ErrorCode</link>
-     functions.  This function commits an Oracle transaction.  A
-     transaction is defined as all the changes on a given connection
-     since the last commit/rollback, autocommit was turned off or when
-     the connection was established.
+    error can be retrieved using the <function>ora_error</function>
+    and <function>ora_errorcode</function> functions.  This function
+    commits an Oracle transaction.  A transaction is defined as all
+    the changes on a given connection since the last commit/rollback,
+    autocommit was turned off or when the connection was established.
 
    </refsect1>
   </refentry>
@@ -65,15 +116,12 @@
     </funcsynopsis>
     <para>
      Returns true on success, false on error.  Details about the error
-     can be retrieved usign the <link
-     linkend="function.ora-error">Ora_Error</link> and <link
-     linkend="function.ora-errorcode">Ora_ErrorCode</link>
-     functions.
+     can be retrieved using the <function>ora_error</function> and
+     <function>ora_errorcode</function> functions.
 
     <para>
-     This function turns off automatic commit after each <link
-     linkend="function.ora-exec">Ora_Exec</link> on the given
-     connection.
+     This function turns off automatic commit after each
+     <function>ora_exec</function>.
 
    </refsect1>
   </refentry>
@@ -91,16 +139,13 @@
      <paramdef>int <parameter>conn</parameter></paramdef>
     </funcsynopsis>
     <para>
-     This function turns on automatic commit after each <link
-     linkend="function.ora-exec">Ora_Exec</link> on the given
-     connection.
+     This function turns on automatic commit after each
+     <function>ora_exec</function> on the given connection.
 
     <para>
      Returns true on success, false on error.  Details about the error
-     can be retrieved usign the <link
-     linkend="function.ora-error">Ora_Error</link> and <link
-     linkend="function.ora-errorcode">Ora_ErrorCode</link>
-     functions.
+     can be retrieved using the <function>ora_error</function> and
+     <function>ora_errorcode</function> functions.
 
    </refsect1>
   </refentry>
@@ -123,6 +168,17 @@
      where <replaceable>XXX</replaceable> is where the error comes
      from and <replaceable>NNNNN</replaceable> identifies the error
      message.
+    <para>
+     On UNIX versions of Oracle, you can find details about an error
+     message like this:
+     <computeroutput>
+<prompt>$</prompt> <userinput>oerr ora 00001</userinput>
+00001, 00000, "unique constraint (%s.%s) violated"
+// *Cause: An update or insert statement attempted to insert a duplicate key
+//         For Trusted ORACLE configured in DBMS MAC mode, you may see
+//         this message if a duplicate entry exists at a different level.
+// *Action: Either remove the unique restriction or do not insert the key
+</computeroutput>
 
    </refsect1>
   </refentry>
@@ -161,10 +217,8 @@
     </funcsynopsis>
     <para>
      Returns true on success, false on error.  Details about the error
-     can be retrieved usign the <link
-     linkend="function.ora-error">Ora_Error</link> and <link
-     linkend="function.ora-errorcode">Ora_ErrorCode</link>
-     functions.
+     can be retrieved using the <function>ora_error</function> and
+     <function>ora_errorcode</function> functions.
 
    </refsect1>
   </refentry>
@@ -184,12 +238,10 @@
     <para>
      Returns true (a row was fetched) or false (no more rows, or an
      error occured).  If an error occured, details can be retrieved
-     using the <link linkend="function.ora-error">Ora_Error</link>
-     and <link
-     linkend="function.ora-errorcode">Ora_ErrorCode</link>
-     functions.  If there was no error, <link
-     linkend="function.ora-errorcode">Ora_ErrorCode</link> will
-     return 0.  Retrieves a row of data from the specified cursor.
+     using the <function>ora_error</function> and
+     <function>ora_errorcode</function> functions.  If there was no
+     error, <function>ora_errorcode</function> will return 0.
+     Retrieves a row of data from the specified cursor.
 
    </refsect1>
   </refentry>
@@ -209,7 +261,7 @@
     </funcsynopsis>
     <para>
      Returns the column data.  If an error occurs, False is returned
-     and <link linkend="function.ora-errorcode">Ora_ErrorCode</link>
+     and <function>ora_errorcode</function>
      will return a non-zero value.  Note, however, that a test for False
      on the results from this function may be true in cases where there is
      not error as well (NULL result, empty string, the number 0, the
@@ -233,9 +285,7 @@
     </funcsynopsis>
     <para>
      Returns true on success, False on error.  Details about the error
-     can be retrieved usign the <link
-     linkend="function.ora-error">Ora_Error</link> and <link
-     linkend="function.ora-errorcode">Ora_ErrorCode</link>
+     can be retrieved using the <function>ora_error</function> and <function>ora_errorcode</function>
      functions.  Logs out the user and disconnects from the
      server.
 
@@ -261,9 +311,7 @@
 
     <para>
      Returns a connection index on success, or False on failure.
-     Details about the error can be retrieved usign the <link
-     linkend="function.ora-error">Ora_Error</link> and <link
-     linkend="function.ora-errorcode">Ora_ErrorCode</link>
+     Details about the error can be retrieved using the <function>ora_error</function> and <function>ora_errorcode</function>
      functions.
 
    </refsect1>
@@ -286,9 +334,7 @@
 
     <para>
      Returns a cursor index or False on failure.  Details about the
-     error can be retrieved usign the <link
-     linkend="function.ora-error">Ora_Error</link> and <link
-     linkend="function.ora-errorcode">Ora_ErrorCode</link>
+     error can be retrieved using the <function>ora_error</function> and <function>ora_errorcode</function>
      functions.
 
    </refsect1>
@@ -329,16 +375,14 @@
      <paramdef>int <parameter>connection</parameter></paramdef>
     </funcsynopsis>
     <para>
-     This function undoes an Oracle transaction.  (See <link
-     linkend="function.ora-commit">Ora_Commit</link> for the
-     definition of a transaction.)
+     This function undoes an Oracle transaction.  (See
+     <function>ora_commit</function> for the definition of a
+     transaction.)
 
     <para>
      Returns true on success, false on error.  Details about the error
-     can be retrieved usign the <link
-     linkend="function.ora-error">Ora_Error</link> and <link
-     linkend="function.ora-errorcode">Ora_ErrorCode</link>
-     functions.
+     can be retrieved using the <function>ora_error</function> and
+     <function>ora_errorcode</function> functions.
 
    </refsect1>
   </refentry>

@@ -5,24 +5,29 @@
    | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
-   | it under the terms of the GNU General Public License as published by |
-   | the Free Software Foundation; either version 2 of the License, or    |
-   | (at your option) any later version.                                  |
+   | it under the terms of one of the following licenses:                 |
+   |                                                                      |
+   |  A) the GNU General Public License as published by the Free Software |
+   |     Foundation; either version 2 of the License, or (at your option) |
+   |     any later version.                                               |
+   |                                                                      |
+   |  B) the PHP License as published by the PHP Development Team and     |
+   |     included in the distribution in the file: LICENSE                |
    |                                                                      |
    | This program is distributed in the hope that it will be useful,      |
    | but WITHOUT ANY WARRANTY; without even the implied warranty of       |
    | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the        |
    | GNU General Public License for more details.                         |
    |                                                                      |
-   | You should have received a copy of the GNU General Public License    |
-   | along with this program; if not, write to the Free Software          |
-   | Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.            |
+   | You should have received a copy of both licenses referred to here.   |
+   | If you did not, or have any questions about PHP licensing, please    |
+   | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
    | Authors: Zeev Suraski <bourbon@netvision.net.il>                     |
    +----------------------------------------------------------------------+
  */
  
-/* $Id: msql.c,v 1.77 1998/01/23 01:29:44 zeev Exp $ */
+/* $Id: msql.c,v 1.93 1998/05/21 23:57:32 zeev Exp $ */
 #ifdef THREAD_SAFE
 #include "tls.h"
 #endif
@@ -30,7 +35,7 @@
 #ifndef MSVC5
 #include "config.h"
 #endif
-#include "parser.h"
+#include "php.h"
 #include "internal_functions.h"
 #if COMPILE_DL
 #include "dl/phpdl.h"
@@ -44,8 +49,12 @@
 
 #if HAVE_MSQL
 
+#if defined(WIN32) && defined(MSQL1)
+#include <msql1.h>
+#else
 #include <msql.h>
-#include "list.h"
+#endif
+#include "php3_list.h"
 
 #ifdef THREAD_SAFE
 DWORD MSQLTls;
@@ -75,10 +84,11 @@ function_entry msql_functions[] = {
 	{"msql_create_db",		php3_msql_create_db,		NULL},
 	{"msql_drop_db",		php3_msql_drop_db,			NULL},
 	{"msql_query",			php3_msql_query,			NULL},
-	{"msql",				php3_msql_db_query,			NULL},
+	{"msql_db_query",		php3_msql_db_query,			NULL},
 	{"msql_list_dbs",		php3_msql_list_dbs,			NULL},
 	{"msql_list_tables",	php3_msql_list_tables,		NULL},
 	{"msql_list_fields",	php3_msql_list_fields,		NULL},
+	{"msql_error",			php3_msql_error,			NULL},
 	{"msql_result",			php3_msql_result,			NULL},
 	{"msql_num_rows",		php3_msql_num_rows,			NULL},
 	{"msql_num_fields",		php3_msql_num_fields,		NULL},
@@ -96,6 +106,7 @@ function_entry msql_functions[] = {
 	{"msql_fieldflags",		php3_msql_field_flags,		NULL},
 	{"msql_regcase",		php3_sql_regcase,			NULL},
 	/* for downwards compatability */
+	{"msql",				php3_msql_db_query,			NULL},
 	{"msql_selectdb",		php3_msql_select_db,		NULL},
 	{"msql_createdb",		php3_msql_create_db,		NULL},
 	{"msql_dropdb",			php3_msql_drop_db,			NULL},
@@ -112,7 +123,7 @@ function_entry msql_functions[] = {
 
 
 php3_module_entry msql_module_entry = {
-	"mSQL", msql_functions, php3_minit_msql, php3_mshutdown_msql, php3_rinit_msql, NULL, php3_info_msql, 0, 0, 0, NULL
+	"mSQL", msql_functions, php3_minit_msql, php3_mshutdown_msql, php3_rinit_msql, NULL, php3_info_msql, STANDARD_MODULE_PROPERTIES
 };
 
 
@@ -128,7 +139,7 @@ BOOL WINAPI DllMain(HANDLE hModule,
 {
     switch( ul_reason_for_call ) {
     case DLL_PROCESS_ATTACH:
-		if((MSQLTls=TlsAlloc())==0xFFFFFFFF){
+		if ((MSQLTls=TlsAlloc())==0xFFFFFFFF){
 			return 0;
 		}
 		break;    
@@ -137,7 +148,7 @@ BOOL WINAPI DllMain(HANDLE hModule,
     case DLL_THREAD_DETACH:
 		break;
 	case DLL_PROCESS_DETACH:
-		if(!TlsFree(MSQLTls)){
+		if (!TlsFree(MSQLTls)){
 			return 0;
 		}
 		break;
@@ -165,7 +176,7 @@ static void _close_msql_plink(int link)
 }
 
 
-DLEXPORT int php3_minit_msql(INITFUNCARG)
+DLEXPORT int php3_minit_msql(INIT_FUNC_ARGS)
 {
 #ifdef THREAD_SAFE
 	msql_global_struct *msql_globals;
@@ -173,8 +184,8 @@ DLEXPORT int php3_minit_msql(INITFUNCARG)
 	CREATE_MUTEX(msql_mutex,"MSQL_TLS");
 	SET_MUTEX(msql_mutex);
 	numthreads++;
-	if(numthreads==1){
-	if((MSQLTls=TlsAlloc())==0xFFFFFFFF){
+	if (numthreads==1){
+	if ((MSQLTls=TlsAlloc())==0xFFFFFFFF){
 		FREE_MUTEX(msql_mutex);
 		return 0;
 	}}
@@ -212,8 +223,8 @@ DLEXPORT int php3_mshutdown_msql(void){
 #if !COMPILE_DL
 	SET_MUTEX(msql_mutex);
 	numthreads--;
-	if(!numthreads){
-	if(!TlsFree(MSQLTls)){
+	if (!numthreads){
+	if (!TlsFree(MSQLTls)){
 		FREE_MUTEX(msql_mutex);
 		return 0;
 	}}
@@ -223,7 +234,7 @@ DLEXPORT int php3_mshutdown_msql(void){
 	return SUCCESS;
 }
 
-DLEXPORT int php3_rinit_msql(INITFUNCARG)
+DLEXPORT int php3_rinit_msql(INIT_FUNC_ARGS)
 {
 	MSQL_TLS_VARS;
 	MSQL_GLOBAL(php3_msql_module).default_link=-1;
@@ -274,16 +285,16 @@ static void php3_msql_do_connect(INTERNAL_FUNCTION_PARAMETERS,int persistent)
 			hashed_details_length=4+1;
 			break;
 		case 1: {
-				YYSTYPE *yyhost;
+				pval *yyhost;
 			
 				if (getParameters(ht, 1, &yyhost) == FAILURE) {
 					RETURN_FALSE;
 				}
 				convert_to_string(yyhost);
-				host = yyhost->value.strval;
-				hashed_details_length = yyhost->strlen+4+1;
+				host = yyhost->value.str.val;
+				hashed_details_length = yyhost->value.str.len+4+1;
 				hashed_details = emalloc(hashed_details_length+1);
-				sprintf(hashed_details,"msql_%s",yyhost->value.strval); /* SAFE */
+				sprintf(hashed_details,"msql_%s",yyhost->value.str.val); /* SAFE */
 			}
 			break;
 		default:
@@ -428,7 +439,7 @@ DLEXPORT void php3_msql_pconnect(INTERNAL_FUNCTION_PARAMETERS)
 
 DLEXPORT void php3_msql_close(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *msql_link;
+	pval *msql_link;
 	int id,type;
 	int msql;
 	MSQL_TLS_VARS;
@@ -462,7 +473,7 @@ DLEXPORT void php3_msql_close(INTERNAL_FUNCTION_PARAMETERS)
 			
 DLEXPORT void php3_msql_select_db(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *db,*msql_link;
+	pval *db,*msql_link;
 	int id,type;
 	int msql;
 	MSQL_TLS_VARS;
@@ -494,7 +505,7 @@ DLEXPORT void php3_msql_select_db(INTERNAL_FUNCTION_PARAMETERS)
 	
 	convert_to_string(db);
 	
-	if (msqlSelectDB(msql,db->value.strval)==-1) {
+	if (msqlSelectDB(msql,db->value.str.val)==-1) {
 		RETURN_FALSE;
 	} else {
 		RETURN_TRUE;
@@ -503,7 +514,7 @@ DLEXPORT void php3_msql_select_db(INTERNAL_FUNCTION_PARAMETERS)
 
 DLEXPORT void php3_msql_create_db(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *db,*msql_link;
+	pval *db,*msql_link;
 	int id,type;
 	int msql;
 	MSQL_TLS_VARS;
@@ -534,13 +545,17 @@ DLEXPORT void php3_msql_create_db(INTERNAL_FUNCTION_PARAMETERS)
 	}
 	
 	convert_to_string(db);
-	msqlCreateDB(msql,db->value.strval);
+	if (msqlCreateDB(msql,db->value.str.val)<0) {
+		RETURN_FALSE;
+	} else {
+		RETURN_TRUE;
+	}
 }
 
 
 DLEXPORT void php3_msql_drop_db(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *db,*msql_link;
+	pval *db,*msql_link;
 	int id,type;
 	int msql;
 	MSQL_TLS_VARS;
@@ -571,13 +586,17 @@ DLEXPORT void php3_msql_drop_db(INTERNAL_FUNCTION_PARAMETERS)
 	}
 	
 	convert_to_string(db);
-	msqlDropDB(msql,db->value.strval);
+	if (msqlDropDB(msql,db->value.str.val)<0) {
+		RETURN_FALSE;
+	} else {
+		RETURN_TRUE;
+	}
 }
 
 
 DLEXPORT void php3_msql_query(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *query,*msql_link;
+	pval *query,*msql_link;
 	int id,type;
 	int msql;
 	m_result *msql_result;
@@ -609,8 +628,7 @@ DLEXPORT void php3_msql_query(INTERNAL_FUNCTION_PARAMETERS)
 	}
 	
 	convert_to_string(query);
-	if (msqlQuery(msql,query->value.strval)==-1) {
-		php3_error(E_WARNING,"mSQL query failed:  %s",msqlErrMsg);
+	if (msqlQuery(msql,query->value.str.val)==-1) {
 		RETURN_FALSE;
 	}
 	if ((msql_result=msqlStoreResult())==NULL) {
@@ -627,7 +645,7 @@ DLEXPORT void php3_msql_query(INTERNAL_FUNCTION_PARAMETERS)
 
 DLEXPORT void php3_msql_db_query(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *db,*query,*msql_link;
+	pval *db,*query,*msql_link;
 	int id,type;
 	int msql;
 	m_result *msql_result;
@@ -659,14 +677,12 @@ DLEXPORT void php3_msql_db_query(INTERNAL_FUNCTION_PARAMETERS)
 	}
 	
 	convert_to_string(db);
-	if (msqlSelectDB(msql,db->value.strval)==-1) {
-		php3_error(E_WARNING,"Unable to select mSQL database:  %s",msqlErrMsg);
+	if (msqlSelectDB(msql,db->value.str.val)==-1) {
 		RETURN_FALSE;
 	}
 	
 	convert_to_string(query);
-	if (msqlQuery(msql,query->value.strval)==-1) {
-		php3_error(E_WARNING,"mSQL query failed:  %s",msqlErrMsg);
+	if (msqlQuery(msql,query->value.str.val)==-1) {
 		RETURN_FALSE;
 	}
 	if ((msql_result=msqlStoreResult())==NULL) {
@@ -683,7 +699,7 @@ DLEXPORT void php3_msql_db_query(INTERNAL_FUNCTION_PARAMETERS)
 
 DLEXPORT void php3_msql_list_dbs(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *msql_link;
+	pval *msql_link;
 	int id,type;
 	int msql;
 	m_result *msql_result;
@@ -721,7 +737,7 @@ DLEXPORT void php3_msql_list_dbs(INTERNAL_FUNCTION_PARAMETERS)
 
 DLEXPORT void php3_msql_list_tables(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *db,*msql_link;
+	pval *db,*msql_link;
 	int id,type;
 	int msql;
 	m_result *msql_result;
@@ -753,8 +769,7 @@ DLEXPORT void php3_msql_list_tables(INTERNAL_FUNCTION_PARAMETERS)
 	}
 	
 	convert_to_string(db);
-	if (msqlSelectDB(msql,db->value.strval)==-1) {
-		php3_error(E_WARNING,"Unable to select mSQL database:  %s",msqlErrMsg);
+	if (msqlSelectDB(msql,db->value.str.val)==-1) {
 		RETURN_FALSE;
 	}
 	if ((msql_result=msqlListTables(msql))==NULL) {
@@ -768,7 +783,7 @@ DLEXPORT void php3_msql_list_tables(INTERNAL_FUNCTION_PARAMETERS)
 
 DLEXPORT void php3_msql_list_fields(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *db,*table,*msql_link;
+	pval *db,*table,*msql_link;
 	int id,type;
 	int msql;
 	m_result *msql_result;
@@ -800,12 +815,11 @@ DLEXPORT void php3_msql_list_fields(INTERNAL_FUNCTION_PARAMETERS)
 	}
 	
 	convert_to_string(db);
-	if (msqlSelectDB(msql,db->value.strval)==-1) {
-		php3_error(E_WARNING,"Unable to select mSQL database:  %s",msqlErrMsg);
+	if (msqlSelectDB(msql,db->value.str.val)==-1) {
 		RETURN_FALSE;
 	}
 	convert_to_string(table);
-	if ((msql_result=msqlListFields(msql,table->value.strval))==NULL) {
+	if ((msql_result=msqlListFields(msql,table->value.str.val))==NULL) {
 		php3_error(E_WARNING,"Unable to save mSQL query result");
 		RETURN_FALSE;
 	}
@@ -813,9 +827,19 @@ DLEXPORT void php3_msql_list_fields(INTERNAL_FUNCTION_PARAMETERS)
 	return_value->type = IS_LONG;
 }
 
+
+void php3_msql_error(INTERNAL_FUNCTION_PARAMETERS)
+{
+	if (ARG_COUNT(ht)) {
+		WRONG_PARAM_COUNT;
+	}
+	RETURN_STRING(msqlErrMsg,1);
+}
+
+
 DLEXPORT void php3_msql_result(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *result, *row, *field=NULL;
+	pval *result, *row, *field=NULL;
 	m_result *msql_result;
 	m_row sql_row;
 	int type,field_offset=0;
@@ -863,13 +887,13 @@ DLEXPORT void php3_msql_result(INTERNAL_FUNCTION_PARAMETERS)
 					m_field *tmp_field;
 					char *table_name,*field_name,*tmp;
 					
-					if ((tmp=strchr(field->value.strval,'.'))) {
+					if ((tmp=strchr(field->value.str.val,'.'))) {
 						*tmp = 0;
-						table_name = estrdup(field->value.strval);
+						table_name = estrdup(field->value.str.val);
 						field_name = estrdup(tmp+1);
 					} else {
 						table_name = NULL;
-						field_name = estrndup(field->value.strval,field->strlen);
+						field_name = estrndup(field->value.str.val,field->value.str.len);
 					}
 					msqlFieldSeek(msql_result,0);
 					while ((tmp_field=msqlFetchField(msql_result))) {
@@ -906,12 +930,11 @@ DLEXPORT void php3_msql_result(INTERNAL_FUNCTION_PARAMETERS)
 	}
 	
 	if (sql_row[field_offset]) {
-		if(php3_ini.magic_quotes_runtime) {
-			return_value->value.strval = _php3_addslashes(sql_row[field_offset],0);
-			return_value->strlen = strlen(return_value->value.strval);
+		if (php3_ini.magic_quotes_runtime) {
+			return_value->value.str.val = _php3_addslashes(sql_row[field_offset],0,&return_value->value.str.len,0);
 		} else {	
-			return_value->strlen = (sql_row[field_offset]?strlen(sql_row[field_offset]):0);
-			return_value->value.strval = (char *) safe_estrndup(sql_row[field_offset],return_value->strlen);
+			return_value->value.str.len = (sql_row[field_offset]?strlen(sql_row[field_offset]):0);
+			return_value->value.str.val = (char *) safe_estrndup(sql_row[field_offset],return_value->value.str.len);
 		}
 	} else {
 		var_reset(return_value);
@@ -923,7 +946,7 @@ DLEXPORT void php3_msql_result(INTERNAL_FUNCTION_PARAMETERS)
 
 DLEXPORT void php3_msql_num_rows(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *result;
+	pval *result;
 	m_result *msql_result;
 	int type;
 	MSQL_TLS_VARS;
@@ -947,7 +970,7 @@ DLEXPORT void php3_msql_num_rows(INTERNAL_FUNCTION_PARAMETERS)
 
 DLEXPORT void php3_msql_num_fields(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *result;
+	pval *result;
 	m_result *msql_result;
 	int type;
 	MSQL_TLS_VARS;
@@ -971,7 +994,7 @@ DLEXPORT void php3_msql_num_fields(INTERNAL_FUNCTION_PARAMETERS)
 
 DLEXPORT void php3_msql_fetch_row(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *result;
+	pval *result;
 	m_result *msql_result;
 	m_row msql_row;
 	int type;
@@ -1010,14 +1033,14 @@ DLEXPORT void php3_msql_fetch_row(INTERNAL_FUNCTION_PARAMETERS)
 
 static void php3_msql_fetch_hash(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *result;
+	pval *result;
 	m_result *msql_result;
 	m_row msql_row;
 	m_field *msql_field;
 	int type;
 	int num_fields;
 	int i;
-	YYSTYPE *yystype_ptr;
+	pval *yystype_ptr;
 	MSQL_TLS_VARS;
 	
 	if (ARG_COUNT(ht)!=1 || getParameters(ht, 1, &result)==FAILURE) {
@@ -1044,8 +1067,8 @@ static void php3_msql_fetch_hash(INTERNAL_FUNCTION_PARAMETERS)
 	msqlFieldSeek(msql_result,0);
 	for (msql_field=msqlFetchField(msql_result),i=0; msql_field; msql_field=msqlFetchField(msql_result),i++) {
 		if (msql_row[i]) {
-			if(php3_ini.magic_quotes_runtime) {
-				add_get_index_string(return_value, i, _php3_addslashes(msql_row[i],0), (void **) &yystype_ptr, 0);
+			if (php3_ini.magic_quotes_runtime) {
+				add_get_index_string(return_value, i, _php3_addslashes(msql_row[i],0,NULL,0), (void **) &yystype_ptr, 0);
 			} else {
 				add_get_index_string(return_value, i, msql_row[i], (void **) &yystype_ptr, 1);
 			}
@@ -1074,7 +1097,7 @@ DLEXPORT void php3_msql_fetch_array(INTERNAL_FUNCTION_PARAMETERS)
 
 DLEXPORT void php3_msql_data_seek(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *result,*offset;
+	pval *result,*offset;
 	m_result *msql_result;
 	int type;
 	MSQL_TLS_VARS;
@@ -1141,7 +1164,7 @@ static char *php3_msql_get_field_name(int field_type)
 
 DLEXPORT void php3_msql_fetch_field(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *result, *field=NULL;
+	pval *result, *field=NULL;
 	m_result *msql_result;
 	m_field *msql_field;
 	int type;
@@ -1188,7 +1211,7 @@ DLEXPORT void php3_msql_fetch_field(INTERNAL_FUNCTION_PARAMETERS)
 	add_property_string(return_value, "table",(msql_field->table?msql_field->table:empty_string), 1);
 	add_property_long(return_value, "not_null",IS_NOT_NULL(msql_field->flags));
 #if MSQL1
-	add_property_long(return_value, "primary key",(msql_field->flags&PRI_KEY_FLAG?1:0));
+	add_property_long(return_value, "primary_key",(msql_field->flags&PRI_KEY_FLAG?1:0));
 #else
 	add_property_long(return_value, "unique",(msql_field->flags&UNIQUE_FLAG?1:0));
 #endif
@@ -1198,7 +1221,7 @@ DLEXPORT void php3_msql_fetch_field(INTERNAL_FUNCTION_PARAMETERS)
 
 DLEXPORT void php3_msql_field_seek(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *result, *offset;
+	pval *result, *offset;
 	m_result *msql_result;
 	int type;
 	MSQL_TLS_VARS;
@@ -1232,7 +1255,7 @@ DLEXPORT void php3_msql_field_seek(INTERNAL_FUNCTION_PARAMETERS)
  
 static void php3_msql_field_info(INTERNAL_FUNCTION_PARAMETERS, int entry_type)
 {
-	YYSTYPE *result, *field;
+	pval *result, *field;
 	m_result *msql_result;
 	m_field *msql_field;
 	int type;
@@ -1262,13 +1285,13 @@ static void php3_msql_field_info(INTERNAL_FUNCTION_PARAMETERS, int entry_type)
 	
 	switch (entry_type) {
 		case PHP3_MSQL_FIELD_NAME:
-			return_value->strlen = strlen(msql_field->name);
-			return_value->value.strval = estrndup(msql_field->name,return_value->strlen);
+			return_value->value.str.len = strlen(msql_field->name);
+			return_value->value.str.val = estrndup(msql_field->name,return_value->value.str.len);
 			return_value->type = IS_STRING;
 			break;
 		case PHP3_MSQL_FIELD_TABLE:
-			return_value->strlen = strlen(msql_field->table);
-			return_value->value.strval = estrndup(msql_field->table,return_value->strlen);
+			return_value->value.str.len = strlen(msql_field->table);
+			return_value->value.str.val = estrndup(msql_field->table,return_value->value.str.len);
 			return_value->type = IS_STRING;
 			break;
 		case PHP3_MSQL_FIELD_LEN:
@@ -1276,39 +1299,39 @@ static void php3_msql_field_info(INTERNAL_FUNCTION_PARAMETERS, int entry_type)
 			return_value->type = IS_LONG;
 			break;
 		case PHP3_MSQL_FIELD_TYPE:
-			return_value->value.strval = estrdup(php3_msql_get_field_name(msql_field->type));
-			return_value->strlen = strlen(return_value->value.strval);
+			return_value->value.str.val = estrdup(php3_msql_get_field_name(msql_field->type));
+			return_value->value.str.len = strlen(return_value->value.str.val);
 			return_value->type = IS_STRING;
 			break;
 		case PHP3_MSQL_FIELD_FLAGS:
 #if MSQL1
 			if ((msql_field->flags&NOT_NULL_FLAG) && (msql_field->flags&PRI_KEY_FLAG)) {
-				return_value->value.strval = estrndup("primary key not null",20);
-				return_value->strlen = 20;
+				return_value->value.str.val = estrndup("primary key not null",20);
+				return_value->value.str.len = 20;
 				return_value->type = IS_STRING;
 			} else if (msql_field->flags&NOT_NULL_FLAG) {
-				return_value->value.strval = estrndup("not null",8);
-				return_value->strlen = 8;
+				return_value->value.str.val = estrndup("not null",8);
+				return_value->value.str.len = 8;
 				return_value->type = IS_STRING;
 			} else if (msql_field->flags&PRI_KEY_FLAG) {
-				return_value->value.strval = estrndup("primary key",11);
-				return_value->strlen = 11;
+				return_value->value.str.val = estrndup("primary key",11);
+				return_value->value.str.len = 11;
 				return_value->type = IS_STRING;
 			} else {
 				var_reset(return_value);
 			}
 #else
 			if ((msql_field->flags&NOT_NULL_FLAG) && (msql_field->flags&UNIQUE_FLAG)) {
-				return_value->value.strval = estrndup("unique not null",15);
-				return_value->strlen = 15;
+				return_value->value.str.val = estrndup("unique not null",15);
+				return_value->value.str.len = 15;
 				return_value->type = IS_STRING;
 			} else if (msql_field->flags&NOT_NULL_FLAG) {
-				return_value->value.strval = estrndup("not null",8);
-				return_value->strlen = 8;
+				return_value->value.str.val = estrndup("not null",8);
+				return_value->value.str.len = 8;
 				return_value->type = IS_STRING;
 			} else if (msql_field->flags&UNIQUE_FLAG) {
-				return_value->value.strval = estrndup("unique",6);
-				return_value->strlen = 6;
+				return_value->value.str.val = estrndup("unique",6);
+				return_value->value.str.len = 6;
 				return_value->type = IS_STRING;
 			} else {
 				var_reset(return_value);
@@ -1349,7 +1372,7 @@ DLEXPORT void php3_msql_field_flags(INTERNAL_FUNCTION_PARAMETERS)
 
 DLEXPORT void php3_msql_free_result(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *result;
+	pval *result;
 	m_result *msql_result;
 	int type;
 	MSQL_TLS_VARS;
@@ -1359,6 +1382,9 @@ DLEXPORT void php3_msql_free_result(INTERNAL_FUNCTION_PARAMETERS)
 	}
 	
 	convert_to_long(result);
+	if (result->value.lval==0) {
+		RETURN_FALSE;
+	}
 	msql_result = (m_result *) php3_list_find(result->value.lval,&type);
 	
 	if (type!=MSQL_GLOBAL(php3_msql_module).le_result) {
@@ -1366,6 +1392,7 @@ DLEXPORT void php3_msql_free_result(INTERNAL_FUNCTION_PARAMETERS)
 		RETURN_FALSE;
 	}
 	php3_list_delete(result->value.lval);
+	RETURN_TRUE;
 }
 
 #endif

@@ -1,12 +1,12 @@
 
  <reference id="ref.regex">
   <title>Regular expression functions</title>
-
+  <titleabbrev>Regexps</titleabbrev>
 
   <refentry id="function.ereg">
    <refnamediv>
     <refname>ereg</refname>
-    <refpurpose></refpurpose>
+    <refpurpose>regular expression match</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
@@ -14,14 +14,14 @@
      <funcdef>int <function>ereg</function></funcdef>
      <paramdef>string <parameter>pattern</parameter></paramdef>
      <paramdef>string <parameter>string</parameter></paramdef>
-     <paramdef>array <parameter>regs</parameter></paramdef>
+     <paramdef>array <parameter><optional>regs</optional></parameter></paramdef>
     </funcsynopsis>
     <para>
-     Searchs string for matches to the regular expression
-     given in pattern. If matches are found for
+     Searchs <parameter>string</parameter> for matches to the regular expression
+     given in <parameter>pattern</parameter>. If matches are found for
      parenthesized substrings of pattern and the function is
-     called with the third argument regs, the matches
-     will be stored in the elements of regs.
+     called with the third argument <parameter>regs</parameter>, the matches
+     will be stored in the elements of <parameter>regs</parameter>.
 
     <para>
      Searching is case sensitive.
@@ -44,9 +44,7 @@ if ( ereg( "([0-9]{4})-([0-9]{1,2})-([0-9]{1,2})", $date, $regs ) ) {
 </programlisting></example>
 
     <para>
-     See also <link linkend="function.eregi">eregi</link>, <link
-      linkend="function.ereg-replace">ereg_replace</link>, and <link
-      linkend="function.eregi-replace">eregi_replace</link>.
+     See also <function>eregi</function>, <function>ereg_replace</function>, and <function>eregi_replace</function>.
 
    </refsect1>
   </refentry>
@@ -55,7 +53,7 @@ if ( ereg( "([0-9]{4})-([0-9]{1,2})-([0-9]{1,2})", $date, $regs ) ) {
   <refentry id="function.ereg-replace">
    <refnamediv>
     <refname>ereg_replace</refname>
-    <refpurpose></refpurpose>
+    <refpurpose>replace regular expression</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
@@ -66,11 +64,12 @@ if ( ereg( "([0-9]{4})-([0-9]{1,2})-([0-9]{1,2})", $date, $regs ) ) {
      <paramdef>string <parameter>string</parameter></paramdef>
     </funcsynopsis>
     <para>
-     This function scans string for matches to pattern, then replaces
-     the matched text with replacement.
+     This function scans <parameter>string</parameter> for matches to
+     <parameter>pattern</parameter>, then replaces the matched text
+     with <parameter>replacement</parameter>.
 
     <para>
-     If pattern contains parenthesized substrings, replacement may
+     If <parameter>pattern</parameter> contains parenthesized substrings, replacement may
      contain substrings of the form
      <literal>\\<replaceable>digit</replaceable></literal>, which will
      be replaced by the text matching the digit'th parenthesized
@@ -88,9 +87,7 @@ echo ereg_replace( "( )is", "\\1was", $string );
 echo ereg_replace( "(( )is)", "\\2was", $string );
 </programlisting></example>
 
-     See also <link linkend="function.ereg">ereg</link>, <link
-    linkend="function.eregi">eregi</link>, and <link
-    linkend="function.eregi-replace">eregi_replace</link>.
+     See also <function>ereg</function>, <function>eregi</function>, and <function>eregi_replace</function>.
 
    </refsect1>
   </refentry>
@@ -99,7 +96,7 @@ echo ereg_replace( "(( )is)", "\\2was", $string );
   <refentry id="function.eregi">
    <refnamediv>
     <refname>eregi</refname>
-    <refpurpose></refpurpose>
+    <refpurpose>case insensitive regular expression match</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
@@ -107,17 +104,14 @@ echo ereg_replace( "(( )is)", "\\2was", $string );
      <funcdef>int <function>eregi</function></funcdef>
      <paramdef>string <parameter>pattern</parameter></paramdef>
      <paramdef>string <parameter>string</parameter></paramdef>
-     <paramdef>array <parameter>regs</parameter></paramdef>
+     <paramdef>array <parameter><optional>regs</optional></parameter></paramdef>
     </funcsynopsis>
     <para>
-     This function is identical to <link
-      linkend="function.ereg">ereg</link> save that this ignores
+     This function is identical to <function>ereg</function> save that this ignores
      case distinction when matching alphabetic characters.
 
     <para>
-     See also <link linkend="function.ereg">ereg</link>, <link
-    linkend="function.ereg-replace">ereg_replace</link>, and <link
-    linkend="function.eregi-replace">eregi_replace</link>.
+     See also <function>ereg</function>, <function>ereg_replace</function>, and <function>eregi_replace</function>.
   
    </refsect1>
   </refentry>
@@ -126,7 +120,7 @@ echo ereg_replace( "(( )is)", "\\2was", $string );
   <refentry id="function.eregi-replace">
    <refnamediv>
     <refname>eregi_replace</refname>
-    <refpurpose></refpurpose>
+    <refpurpose>replace regular expression case insensitive</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
@@ -137,14 +131,11 @@ echo ereg_replace( "(( )is)", "\\2was", $string );
      <paramdef>string <parameter>string</parameter></paramdef>
     </funcsynopsis>
     <para>
-     This function is identical to <link
-      linkend="function.ereg-replace">ereg_replace</link> save that
+     This function is identical to <function>ereg_replace</function> save that
      this ignores case distinction when matching alphabetic characters.
 
     <para>
-     See also <link linkend="function.ereg">ereg</link>, <link
-     linkend="function.eregi">eregi</link>, and <link
-     linkend="function.ereg-replace">ereg_replace</link>.
+     See also <function>ereg</function>, <function>eregi</function>, and <function>ereg_replace</function>.
 
    </refsect1>
   </refentry>
@@ -153,7 +144,7 @@ echo ereg_replace( "(( )is)", "\\2was", $string );
   <refentry id="function.split">
    <refnamediv>
     <refname>split</refname>
-    <refpurpose></refpurpose>
+    <refpurpose>split string into array by regular expression</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
@@ -161,12 +152,12 @@ echo ereg_replace( "(( )is)", "\\2was", $string );
      <funcdef>array <function>split</function></funcdef>
      <paramdef>string <parameter>pattern</parameter></paramdef>
      <paramdef>string <parameter>string</parameter></paramdef>
-     <paramdef>int <parameter>limit</parameter></paramdef>
+     <paramdef>int <parameter><optional>limit</optional></parameter></paramdef>
     </funcsynopsis>
     <para>
      Returns an array of strings, each of which is a substring of
      string formed by splitting it on boundaries formed
-     by pattern. If an error occurs, returns false.
+     by <parameter>pattern</parameter>. If an error occurs, returns false.
 
     <para>
      To get the first five fields from a line from
@@ -184,7 +175,7 @@ $passwd_list = split( ":", $passwd_line, 5 );
   <refentry id="function.sql-regcase">
    <refnamediv>
     <refname>sql_regcase</refname>
-    <refpurpose></refpurpose>
+    <refpurpose>make regular expression for case insensitive match</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
@@ -193,8 +184,8 @@ $passwd_list = split( ":", $passwd_line, 5 );
      <paramdef>string <parameter>string</parameter></paramdef>
     </funcsynopsis>
     <para>
-     Returns a valid regular expression which will match string,
-     ignoring case. This expression is string with each character
+     Returns a valid regular expression which will match <parameter>string</parameter>,
+     ignoring case. This expression is <parameter>string</parameter> with each character
      converted to a bracket expression; this bracket expression
      contains that character's uppercase and lowercase form if
      applicable, otherwise it contains the original character
@@ -205,7 +196,7 @@ $passwd_list = split( ":", $passwd_line, 5 );
 echo sql_regcase( "Foo bar" );
 </programlisting></example>
 
-     prints <screen>[Ff][Oo][Oo][ ][Bb][Aa][Rr]</screen>.
+     prints <screen>[Ff][Oo][Oo][  ][Bb][Aa][Rr]</screen>.
 
     <para>
      This can be used to achieve case insensitive pattern matching in

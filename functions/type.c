@@ -5,25 +5,30 @@
    | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
-   | it under the terms of the GNU General Public License as published by |
-   | the Free Software Foundation; either version 2 of the License, or    |
-   | (at your option) any later version.                                  |
+   | it under the terms of one of the following licenses:                 |
+   |                                                                      |
+   |  A) the GNU General Public License as published by the Free Software |
+   |     Foundation; either version 2 of the License, or (at your option) |
+   |     any later version.                                               |
+   |                                                                      |
+   |  B) the PHP License as published by the PHP Development Team and     |
+   |     included in the distribution in the file: LICENSE                |
    |                                                                      |
    | This program is distributed in the hope that it will be useful,      |
    | but WITHOUT ANY WARRANTY; without even the implied warranty of       |
    | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the        |
    | GNU General Public License for more details.                         |
    |                                                                      |
-   | You should have received a copy of the GNU General Public License    |
-   | along with this program; if not, write to the Free Software          |
-   | Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.            |
+   | You should have received a copy of both licenses referred to here.   |
+   | If you did not, or have any questions about PHP licensing, please    |
+   | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
    | Authors: Rasmus Lerdorf                                              |
    |                                                                      |
    +----------------------------------------------------------------------+
  */
-/* $Id: type.c,v 1.12 1997/12/31 15:56:52 rasmus Exp $ */
-#include "parser.h"
+/* $Id: type.c,v 1.17 1998/05/11 20:18:21 zeev Exp $ */
+#include "php.h"
 #include "type.h"
 
 /*
@@ -31,7 +36,7 @@
  *
  * Note that leading zeroes automatically force a STRING type
  */
-int php3_CheckType(char *str)
+int php3_check_type(char *str)
 {
 	char *s;
 	int type = IS_LONG;
@@ -58,28 +63,30 @@ int php3_CheckType(char *str)
 		return (IS_STRING);
 
 	return (type);
-}								/* php3_CheckType */
+}								/* php3_check_type */
 
 /*
  * 0 - simple variable
  * 1 - non-index array
  * 2 - index array
  */
-int php3_CheckIdentType(char *str)
+int php3_check_ident_type(char *str)
 {
 	char *s;
 
 	if (!(s = (char *) strchr(str, '[')))
-		return (0);
+		return (GPC_REGULAR);
 	s++;
-	while (*s == ' ' || *s == '\t' || *s == '\n')
+	while (*s == ' ' || *s == '\t' || *s == '\n') {
 		s++;
-	if (*s == ']')
-		return (1);
-	return (2);
+	}
+	if (*s == ']') {
+		return (GPC_NON_INDEXED_ARRAY);
+	}
+	return (GPC_INDEXED_ARRAY);
 }
 
-char *php3_GetIdentIndex(char *str)
+char *php3_get_ident_index(char *str)
 {
 	char *temp;
 	char *s, *t;

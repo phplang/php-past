@@ -5,18 +5,23 @@
    | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
-   | it under the terms of the GNU General Public License as published by |
-   | the Free Software Foundation; either version 2 of the License, or    |
-   | (at your option) any later version.                                  |
+   | it under the terms of one of the following licenses:                 |
+   |                                                                      |
+   |  A) the GNU General Public License as published by the Free Software |
+   |     Foundation; either version 2 of the License, or (at your option) |
+   |     any later version.                                               |
+   |                                                                      |
+   |  B) the PHP License as published by the PHP Development Team and     |
+   |     included in the distribution in the file: LICENSE                |
    |                                                                      |
    | This program is distributed in the hope that it will be useful,      |
    | but WITHOUT ANY WARRANTY; without even the implied warranty of       |
    | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the        |
    | GNU General Public License for more details.                         |
    |                                                                      |
-   | You should have received a copy of the GNU General Public License    |
-   | along with this program; if not, write to the Free Software          |
-   | Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.            |
+   | You should have received a copy of both licenses referred to here.   |
+   | If you did not, or have any questions about PHP licensing, please    |
+   | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
    | Authors: Rasmus Lerdorf <rasmus@lerdorf.on.ca>                       |
    |          Jaakko Hyvätti <jaakko.hyvatti@iki.fi>                      |
@@ -26,7 +31,7 @@
 #ifdef THREAD_SAFE
 #include "tls.h"
 #endif
-#include "parser.h"
+#include "php.h"
 #include "internal_functions.h"
 #include "reg.h"
 #include "html.h"
@@ -55,7 +60,7 @@ static char EntTable[][7] =
 
 static void _php3_htmlentities(INTERNAL_FUNCTION_PARAMETERS, int all)
 {
-    YYSTYPE *arg;
+    pval *arg;
     int i, len, maxlen;
     unsigned char *old;
 	char *new;
@@ -67,14 +72,14 @@ static void _php3_htmlentities(INTERNAL_FUNCTION_PARAMETERS, int all)
 
     convert_to_string(arg);
 
-	maxlen = 2 * arg->strlen;
+	maxlen = 2 * arg->value.str.len;
 	if (maxlen < 128)
 		maxlen = 128;
 	new = emalloc (maxlen);
 	len = 0;
 
-	old = arg->value.strval;
-	i = arg->strlen;
+	old = arg->value.str.val;
+	i = arg->value.str.len;
 	while (i--) {
 		if (len + 9 > maxlen)
 			new = erealloc (new, maxlen += 128);
@@ -102,7 +107,7 @@ static void _php3_htmlentities(INTERNAL_FUNCTION_PARAMETERS, int all)
 	}
     new [len] = '\0';
 
-    RETVAL_STRING(new);
+    RETVAL_STRINGL(new,len,1);
     efree(new);
 }
 

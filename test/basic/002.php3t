@@ -4,7 +4,7 @@ Simple POST Method test                                       ...
 a=Hello+World
 --GET--
 --FILE--
-<? error_reporting(0);
+<?php error_reporting(0);
 echo $a?>
 --EXPECT--
 Content-type: text/html

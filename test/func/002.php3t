@@ -3,7 +3,7 @@ Static variables in functions                                 ...
 --POST--
 --GET--
 --FILE--
-<?
+<?php 
 old_function blah (
   static $hey=0,$yo=0;
 

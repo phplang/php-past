@@ -16,6 +16,7 @@
  <part id="langref">
   <title>Language Reference</title>
   &chapter.introduction;
+  &chapter.features;
   &chapter.install;
   &chapter.config;
   &chapter.syntax;
@@ -27,27 +28,45 @@
   <title>Function Reference</title>
   &reference.adabas;
   &reference.array;
+  &reference.bc;
+  &reference.calendar;
   &reference.datetime;
+  &reference.dbase;
+  &reference.dbm;
   &reference.dir;
+  &reference.dl;
+  &reference.exec;
+  &reference.filepro;
   &reference.filesystem;
+  &reference.http;
   &reference.image;
+  &reference.imap;
+  &reference.info;
   &reference.ldap;
+  &reference.mail;
   &reference.math;
+  &reference.misc;
   &reference.msql;
   &reference.mysql;
+  &reference.sybase;
   &reference.network;
   &reference.uodbc;
   &reference.oracle;
   &reference.pgsql;
   &reference.regex;
+  &reference.solid;
+  &reference.snmp;
   &reference.strings;
   &reference.url;
+  &reference.var;
+  &reference.zlib;
  </part>
 
  <part id="appendixes">
   <title>Appendixes</title>
   &appendix.migration;
   &appendix.development;
+  &appendix.debugger;
  </part>
 
 </book>

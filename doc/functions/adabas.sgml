@@ -1,23 +1,21 @@
 
  <reference id="ref.adabas">
   <title>Adabas D Functions</title>
-
+  <titleabbrev>Adabas D</titleabbrev>
+  <partintro>
+   <para>
+    The Adabas D functions are deprecated, you probably want to use the
+    <link linkend="ref.odbc">Unified ODBC functions</link> instead.
+  </partintro>
 
   <refentry id="function.ada-afetch">
    <refnamediv>
     <refname>ada_afetch</refname>
-    <refpurpose></refpurpose>
+    <refpurpose>fetch a result row into an array</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
-    <funcsynopsis>
-     <funcdef>int <function>ada_afetch</function></funcdef>
-     <paramdef>int <parameter>result_id</parameter></paramdef>
-     <paramdef>int <parameter><optional>rownumber</optional></parameter></paramdef>
-     <paramdef>array <parameter>result_array</parameter></paramdef>
-    </funcsynopsis>
-    <para>
-     Returns the number of columns in the result; FALSE on error.
+    <para>See <function>odbc_fetch_into</function>
    </refsect1>
   </refentry>
 
@@ -25,21 +23,11 @@
   <refentry id="function.ada-autocommit">
    <refnamediv>
     <refname>ada_autocommit</refname>
-    <refpurpose></refpurpose>
+    <refpurpose>toggle autocommit behaviour</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
-    <funcsynopsis>
-     <funcdef>int <function>ada_autocommit</function></funcdef>
-     <paramdef>int <parameter>connection_id</parameter></paramdef>
-     <paramdef>int <parameter>OnOff</parameter></paramdef>
-    </funcsynopsis>
-    <para>
-     Returns true on success, FALSE on failure.
-    <para>
-     By default, autocommit is on for a connection.  See also <link
-     linkend="function.ada-commit">ada_commit</link>, <link
-     linkend="function.ada-rollback">ada_rollback</link>.
+    <para>See <function>odbc_autocommit</function>.
    </refsect1>
   </refentry>
 
@@ -47,25 +35,11 @@
   <refentry id="function.ada-close">
    <refnamediv>
     <refname>ada_close</refname>
-    <refpurpose></refpurpose>
+    <refpurpose>close a connection to an Adabas D server</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
-    <funcsynopsis>
-     <funcdef>void <function>ada_close</function></funcdef>
-     <paramdef>int <parameter>connection_id</parameter></paramdef>
-    </funcsynopsis>
-
-    <para>
-     Ada_Close will close down the connection to the Adabas server
-     associated with the given connection identifier.
-
-     <note><simpara>
-       This function will fail if there are open
-       transactions on this connection.  The connection will remain open
-       in this case.
-      </simpara></note>
-
+    <para>See <function>odbc_close</function>.
    </refsect1>
   </refentry>
 
@@ -73,17 +47,11 @@
   <refentry id="function.ada-commit">
    <refnamediv>
     <refname>ada_commit</refname>
-    <refpurpose></refpurpose>
+    <refpurpose>commit a transaction</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
-    <funcsynopsis>
-     <funcdef>int <function>ada_commit</function></funcdef>
-     <paramdef>int <parameter>connection_id</parameter></paramdef>
-    </funcsynopsis>
-<para>Returns:   TRUE on success, FALSE on failure.
- 
- All pending statements on connection_id are committed.
+    <para>See <function>odbc_commit</function>
    </refsect1>
   </refentry>
 
@@ -91,22 +59,11 @@
   <refentry id="function.ada-connect">
    <refnamediv>
     <refname>ada_connect</refname>
-    <refpurpose></refpurpose>
+    <refpurpose>connect to an Adabas D datasource</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
-    <funcsynopsis>
-     <funcdef>int <function>ada_connect</function></funcdef>
-     <paramdef>string <parameter>dsn</parameter></paramdef>
-     <paramdef>string <parameter>user</parameter></paramdef>
-     <paramdef>string <parameter>password</parameter></paramdef>
-    </funcsynopsis>
-<para>Returns:   Returns an Adabas D connection id or 0 (false) on error.
- 
-
-  The connection id returned by this functions is needed by other
-  Adabas functions. You can have multiple connections open at once.
-
+    <para>See <function>odbc_connect</function>.
    </refsect1>
   </refentry>
 
@@ -114,29 +71,11 @@
   <refentry id="function.ada-exec">
    <refnamediv>
     <refname>ada_exec</refname>
-    <refpurpose></refpurpose>
+    <refpurpose>prepare and execute a SQL statement</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
-    <funcsynopsis>
-     <funcdef>int <function>ada_exec</function></funcdef>
-     <paramdef>int <parameter>connection_id</parameter></paramdef>
-     <paramdef>string <parameter>query_string</parameter></paramdef>
-    </funcsynopsis>
-<para>Returns:   Returns 0 (false) on error.  Returns 1 (true) if the SQL command was
-  successful but not expected to return any data (such as INSERT,
-  UPDATE and DELETE statements).  Returns an Adabas D result
-  identifier if the SQL command was successful and returned data.
- 
-
- Ada_Exec will send an SQL statement to the Adabas server specified by
- the connection_id. The connection_id must be a valid identifier that
- was returned by <link linkend="function.ada-connect">ada_connect</link> or the special value 0.  If
- connection_id is 0, ada_exec tries to establish or to use a
- connection with the parameters given with the configuration
- directives , 
- and .
-
+    <para>See <function>odbc_exec</function> or <function>odbc_do</function>.
    </refsect1>
   </refentry>
 
@@ -144,33 +83,11 @@
   <refentry id="function.ada-fetchrow">
    <refnamediv>
     <refname>ada_fetchrow</refname>
-    <refpurpose></refpurpose>
+    <refpurpose>fetch a row from a result</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
-    <funcsynopsis>
-     <funcdef>int <function>ada_fetchrow</function></funcdef>
-     <paramdef>int <parameter>result_id</parameter></paramdef>
-     <paramdef>int <parameter><optional>row_number</optional></parameter></paramdef>
-    </funcsynopsis>
-<para>Returns:   If Ada_FetchRow was succesful (there was a row), 1
- is
-  returned, if there are no more rows, Ada_FetchRow will return
-  0
-. The return value of Ada_FetchRow can be used as the
-  condition of a while loop.
- 
-
- Ada_FetchRow fetches a row of the data that was returned by Ada_Exec.
- After Ada_FetchRow is called, the fields of that row can be access
- with Ada_Result. If no rownumber is given, Ada_FetchRow will try to
- fetch the next row in the result set. Every time Ada_FetchRow is
- called a new row can be accessed by Ada_Result. Calls to
- Ada_FetchRow() with and without rownumber can be mixed. To step
- through the result more than once, you can call Ada_FetchRow() with
- rownumber 1 and then continue with Ada_FetchRow() without rownumber
- to review the result.
-
+    <para>See <function>odbc_fetch_row</function>.
    </refsect1>
   </refentry>
 
@@ -178,20 +95,11 @@
   <refentry id="function.ada-fieldname">
    <refnamediv>
     <refname>ada_fieldname</refname>
-    <refpurpose></refpurpose>
+    <refpurpose>get the columnname</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
-    <funcsynopsis>
-     <funcdef>string <function>ada_fieldname</function></funcdef>
-     <paramdef>int <parameter>result_id</parameter></paramdef>
-     <paramdef>int <parameter>field_number</parameter></paramdef>
-    </funcsynopsis>
-<para>Returns:   Ada_FieldName will return the name of the field occupying the given
-  column number in the given Adabas result identifier. Field numbering
-  starts at 1.  0
- (false) is returned on error.
- 
+    <para> See <function>odbc_field_name</function>.
    </refsect1>
   </refentry>
 
@@ -199,21 +107,11 @@
   <refentry id="function.ada-fieldnum">
    <refnamediv>
     <refname>ada_fieldnum</refname>
-    <refpurpose></refpurpose>
+    <refpurpose>get column number</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
-    <funcsynopsis>
-     <funcdef>int <function>ada_fieldnum</function></funcdef>
-     <paramdef>int <parameter>result_id</parameter></paramdef>
-     <paramdef>string <parameter>field_name</parameter></paramdef>
-    </funcsynopsis>
-<para>Returns:   Ada_FieldNum will return the number of the column slot that
-  corresponds to the named field in the given Adabas result
-  identifier.  Field numbering starts at 1.  0
- (false) is
-  returned on error.
- 
+    <para> See <function>odbc_field_num</function>.
    </refsect1>
   </refentry>
 
@@ -221,19 +119,11 @@
   <refentry id="function.ada-fieldtype">
    <refnamediv>
     <refname>ada_fieldtype</refname>
-    <refpurpose></refpurpose>
+    <refpurpose>get the datatype of a field</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
-    <funcsynopsis>
-     <funcdef>string <function>ada_fieldtype</function></funcdef>
-     <paramdef>int <parameter>result_id</parameter></paramdef>
-     <paramdef>mixed <parameter>field</parameter></paramdef>
-    </funcsynopsis>
-<para>Returns:   Ada_FieldType will return the SQL type of the field referecend by
-  name or number in the given Adabas result identifier.  Note: Field
-  numbering starts from 1.
- 
+    <para>See <function>odbc_field_type</function>.
    </refsect1>
   </refentry>
 
@@ -241,26 +131,11 @@
   <refentry id="function.ada-freeresult">
    <refnamediv>
     <refname>ada_freeresult</refname>
-    <refpurpose></refpurpose>
+    <refpurpose>>free resources associated with a result</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
-    <funcsynopsis>
-     <funcdef>int <function>ada_freeresult</function></funcdef>
-     <paramdef>int <parameter>result_id</parameter></paramdef>
-    </funcsynopsis>
-<para>Returns:   True (1
-).
- 
-
- ada_freeresult only needs to be called if you are worried about using
- too much memory while your script is running.  All result memory will
- automatically be freed when the script is finished.  But, if you are
- sure you are not going to need the result data anymore in a script,
- you may call ada_freeresult with the result identifier as an argument
- and the associated result memory will be freed. Note: If autocommit
- has been turned off, all pending transactions are rolled back if you
- call ada_freeresult.
+    <para>See <function>odbc_free_result</function>.
    </refsect1>
   </refentry>
 
@@ -268,20 +143,11 @@
   <refentry id="function.ada-numfields">
    <refnamediv>
     <refname>ada_numfields</refname>
-    <refpurpose></refpurpose>
+    <refpurpose>get the number of columns in a result</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
-    <funcsynopsis>
-     <funcdef>int <function>ada_numfields</function></funcdef>
-     <paramdef>int <parameter>result_id</parameter></paramdef>
-    </funcsynopsis>
-<para>Returns:   Ada_NumFields will return the number of fields (columns) in an Adabas
-  result.
-  This function will return -1
- on error.
- 
- The argument is a valid result identifier returned by <link linkend="function.ada-exec">ada_exec</link>().
+    <para>See <function>odbc_num_fields</function>.
    </refsect1>
   </refentry>
 
@@ -289,21 +155,11 @@
   <refentry id="function.ada-numrows">
    <refnamediv>
     <refname>ada_numrows</refname>
-    <refpurpose></refpurpose>
+    <refpurpose>number of rows in a result</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
-    <funcsynopsis>
-     <funcdef>int <function>ada_numrows</function></funcdef>
-     <paramdef>int <parameter>result_id</parameter></paramdef>
-    </funcsynopsis>
-<para>Returns:   ada_numrows will return the number of rows in an Adabas result.
-  This function will return -1
- on error.
-  
- For INSERT, UPDATE and DELETE statements ada_numrows() 
- returns the number of rows affected. For a SELECT clause this is 
- the number of rows available.
+    <para>See <function>odbc_num_rows</function>.
    </refsect1>
   </refentry>
 
@@ -311,20 +167,11 @@
   <refentry id="function.ada-result">
    <refnamediv>
     <refname>ada_result</refname>
-    <refpurpose></refpurpose>
+    <refpurpose>get data from results</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
-    <funcsynopsis>
-     <funcdef>string <function>ada_result</function></funcdef>
-     <paramdef>int <parameter>result_id</parameter></paramdef>
-     <paramdef>mixed <parameter>field</parameter></paramdef>
-    </funcsynopsis>
-<para>Returns:   Contents of the field.
- 
- Field indices start from 1. If the requested field is a blob, the contents is not
- returned, instead it is sent directly to the client. Note: Any field with a
- length greater than 255 bytes is treated this way.
+    <para>See <function>odbc_result</function>.
    </refsect1>
   </refentry>
 
@@ -332,25 +179,11 @@
   <refentry id="function.ada-resultall">
    <refnamediv>
     <refname>ada_resultall</refname>
-    <refpurpose></refpurpose>
+    <refpurpose>print result as HTML table</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
-    <funcsynopsis>
-     <funcdef>int <function>ada_resultall</function></funcdef>
-     <paramdef>int <parameter>result_id</parameter></paramdef>
-     <paramdef>string <parameter><optional>format</optional></parameter></paramdef>
-    </funcsynopsis>
-    <para>
-     Returns the number of rows in the result or FALSE on error.
-
-    <para>
-     ada_resultall() will print all rows from a result identifier
-     produced by <link
-     linkend="function.ada-exec">ada_exec</link>(). The result is
-     printed in HTML table format.  With the optional string argument
-     <parameter>format</parameter> additional overall table additional
-     overall table formatting can be done.
+    <para>See <function>odbc_result_all</function>.
    </refsect1>
   </refentry>
 
@@ -358,18 +191,11 @@
   <refentry id="function.ada-rollback">
    <refnamediv>
     <refname>ada_rollback</refname>
-    <refpurpose></refpurpose>
+    <refpurpose>rollback a transaction</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
-    <funcsynopsis>
-     <funcdef>int <function>ada_rollback</function></funcdef>
-     <paramdef>int <parameter>connection_id</parameter></paramdef>
-    </funcsynopsis>
-    <para>
-     Rolls back all pending statements on
-     <parameter>connection_id</parameter>.  Returns TRUE on success,
-     FALSE on failure.
+    <para>See <function>odbc_rollback</function>.
    </refsect1>
   </refentry>
 
@@ -392,3 +218,5 @@ sgml-local-catalogs:nil
 sgml-local-ecat-files:nil
 End:
 -->
+
+

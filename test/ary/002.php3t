@@ -3,7 +3,7 @@ Auto Assign a[] 3 elements and print result                   ...
 --POST--
 --GET--
 --FILE--
-<?
+<?php 
   $a[]="a";
   $a[]="b";
   $a[]="c";

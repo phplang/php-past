@@ -5,18 +5,23 @@
    | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
-   | it under the terms of the GNU General Public License as published by |
-   | the Free Software Foundation; either version 2 of the License, or    |
-   | (at your option) any later version.                                  |
+   | it under the terms of one of the following licenses:                 |
+   |                                                                      |
+   |  A) the GNU General Public License as published by the Free Software |
+   |     Foundation; either version 2 of the License, or (at your option) |
+   |     any later version.                                               |
+   |                                                                      |
+   |  B) the PHP License as published by the PHP Development Team and     |
+   |     included in the distribution in the file: LICENSE                |
    |                                                                      |
    | This program is distributed in the hope that it will be useful,      |
    | but WITHOUT ANY WARRANTY; without even the implied warranty of       |
    | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the        |
    | GNU General Public License for more details.                         |
    |                                                                      |
-   | You should have received a copy of the GNU General Public License    |
-   | along with this program; if not, write to the Free Software          |
-   | Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.            |
+   | You should have received a copy of both licenses referred to here.   |
+   | If you did not, or have any questions about PHP licensing, please    |
+   | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
    | Authors: Andi Gutmans <andi@php.net>                                 |
    |          Zeev Suraski <bourbon@netvision.net.il>                     |
@@ -24,7 +29,7 @@
  */
 
 
-/* $Id: hash.h,v 1.39 1998/01/17 21:23:27 andi Exp $ */
+/* $Id: hash.h,v 1.48 1998/05/16 22:03:39 zeev Exp $ */
 
 
 #ifndef _HASH_
@@ -38,15 +43,12 @@
 
 #define HASH_UPDATE 0
 #define HASH_ADD 1
+#define HASH_NEXT_INSERT 2
 
 #define HASH_DEL_KEY 0
 #define HASH_DEL_INDEX 1
 
-#define HASH_INDEX_POINTER_UPDATE 0
-#define HASH_NEXT_INDEX_POINTER_INSERT 1
-
-#define HASH_INDEX_UPDATE 0
-#define HASH_NEXT_INDEX_INSERT 1
+struct hashtable;
 
 typedef struct bucket {
 	uint h;						/* Used for numeric indexing */
@@ -64,7 +66,7 @@ typedef struct hashtable {
 	uint nHashSizeIndex;
 	uint nNumOfElements;
 	uint nNextFreeElement;
-	 uint(*pHashFunction) (char *arKey, uint nKeyLength);
+	uint(*pHashFunction) (char *arKey, uint nKeyLength);
 	Bucket *pInternalPointer;	/* Used for element traversal */
 	Bucket *pListHead;
 	Bucket *pListTail;
@@ -87,18 +89,20 @@ extern PHPAPI int hash_add_or_update(HashTable *ht, char *arKey, uint nKeyLength
 
 extern PHPAPI int hash_index_update_or_next_insert(HashTable *ht, uint h, void *pData, uint nDataSize, void **pDest, int flag);
 #define hash_index_update(ht,h,pData,nDataSize,pDest) \
-		hash_index_update_or_next_insert(ht,h,pData,nDataSize,pDest,HASH_INDEX_UPDATE)
+		hash_index_update_or_next_insert(ht,h,pData,nDataSize,pDest,HASH_UPDATE)
 #define hash_next_index_insert(ht,pData,nDataSize,pDest) \
-		hash_index_update_or_next_insert(ht,0,pData,nDataSize,pDest,HASH_NEXT_INDEX_INSERT)
+		hash_index_update_or_next_insert(ht,0,pData,nDataSize,pDest,HASH_NEXT_INSERT)
 
 extern PHPAPI int hash_pointer_update(HashTable *ht, char *arKey, uint nKeyLength, void *pData);
 
 extern PHPAPI int hash_pointer_index_update_or_next_insert(HashTable *ht, uint h, void *pData, int flag);
 #define hash_pointer_index_update(ht,h,pData) \
-		hash_pointer_index_update_or_next_insert(ht,h,pData,HASH_INDEX_POINTER_UPDATE)
+		hash_pointer_index_update_or_next_insert(ht,h,pData,HASH_UPDATE)
 #define hash_next_index_pointer_insert(ht,pData) \
-        hash_pointer_index_update_or_next_insert(ht,0,pData,HASH_NEXT_INDEX_POINTER_INSERT)
+        hash_pointer_index_update_or_next_insert(ht,0,pData,HASH_NEXT_INSERT)
 extern PHPAPI void hash_apply(HashTable *ht,int (*destruct) (void *));
+extern PHPAPI void hash_apply_with_argument(HashTable *ht,int (*destruct) (void *, void *), void *);
+
 
 
 /* Deletes */
@@ -115,34 +119,35 @@ extern PHPAPI int hash_index_find(HashTable *ht, uint h, void **pData);
 /* Misc */
 extern PHPAPI int hash_exists(HashTable *ht, char *arKey, uint nKeyLength);
 extern PHPAPI int hash_index_exists(HashTable *ht, uint h);
-extern int hash_is_pointer(HashTable *ht, char *arKey, uint nKeyLength);
-extern int hash_index_is_pointer(HashTable *ht, uint h);
+extern PHPAPI int hash_is_pointer(HashTable *ht, char *arKey, uint nKeyLength);
+extern PHPAPI int hash_index_is_pointer(HashTable *ht, uint h);
 extern PHPAPI uint hash_next_free_element(HashTable *ht);
 
 /* traversing */
-extern void hash_move_forward(HashTable *ht);
-extern void hash_move_backwards(HashTable *ht);
-extern int hash_get_current_key(HashTable *ht, char **str_index, int *int_index);
-extern int hash_get_current_data(HashTable *ht, void **pData);
-extern void hash_internal_pointer_reset(HashTable *ht);
-extern void hash_internal_pointer_end(HashTable *ht);
+extern PHPAPI void hash_move_forward(HashTable *ht);
+extern PHPAPI void hash_move_backwards(HashTable *ht);
+extern PHPAPI int hash_get_current_key(HashTable *ht, char **str_index, int *int_index);
+extern PHPAPI int hash_get_current_data(HashTable *ht, void **pData);
+extern PHPAPI void hash_internal_pointer_reset(HashTable *ht);
+extern PHPAPI void hash_internal_pointer_end(HashTable *ht);
 
 /* internal functions */
 extern int if_full_do_resize(HashTable *ht);
 extern int hash_rehash(HashTable *ht);
 
 /* Copying, merging and sorting */
-extern void hash_copy(HashTable **target, HashTable *source, void (*pCopyConstructor) (void *pData), void *tmp, uint size);
-extern void hash_merge(HashTable *target, HashTable *source, void (*pCopyConstructor) (void *pData), void *tmp, uint size);
-extern int hash_sort(HashTable *ht, int (*compar) (const void *, const void *), int renumber);
+extern PHPAPI void hash_copy(HashTable **target, HashTable *source, void (*pCopyConstructor) (void *pData), void *tmp, uint size);
+extern PHPAPI void hash_merge(HashTable *target, HashTable *source, void (*pCopyConstructor) (void *pData), void *tmp, uint size);
+extern PHPAPI int hash_sort(HashTable *ht, int (*compar) (const void *, const void *), int renumber);
+extern PHPAPI int hash_minmax(HashTable *ht, int (*compar) (const void *, const void *), int flag, void **pData);
 
 extern PHPAPI int hash_num_elements(HashTable *ht);
 
 
 #if DEBUG
 /* debug */
-extern void hash_display_pListTail(HashTable *ht);
-extern void hash_display(HashTable *ht);
+extern PHPAPI void hash_display_pListTail(HashTable *ht);
+extern PHPAPI void hash_display(HashTable *ht);
 #endif
 
 #endif							/* _HASH_ */

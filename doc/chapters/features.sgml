@@ -1,48 +1,219 @@
- <chapter>
+ <chapter id="features">
   <title>PHP3 features</title>
   <simpara></simpara>
 
-  <sect1>
-   <title>Access logging</title>
-   <simpara></simpara>
-
-  <sect1>
+  <sect1 id="feature-httpauth">
    <title>HTTP authentication with PHP</title>
-   <simpara></simpara>
+   <simpara>
+    The HTTP Authentication hooks in PHP are only available when it is
+    running as an Apache module.  In an Apache module PHP script, it
+    is possible to use the <function>Header</function> function to
+    send an "Authentication Required" message to the client browser
+    causing it to pop up a Username/Password input window.  Once the
+    user has filled in a username and a password, the URL containing
+    the PHP script will be called again with the variables,
+    $PHP_AUTH_USER, $PHP_AUTH_PW and $PHP_AUTH_TYPE set to the user
+    name, password and authentication type respectively.  Only "Basic"
+    authentication is supported at this point.
+   <para>
+    An example script fragment which would force client authentication
+    on a page would be the following:
+    <example>
+     <title>HTTP Authentication example</title>
+<programlisting role=php>
+&lt;?php
+  if(!$PHP_AUTH_USER) {
+    Header(&quot;WWW-authenticate: basic realm=\&quot;My Realm\&quot;&quot;);
+    Header(&quot;HTTP/1.0 401 Unauthorized&quot;);
+    echo &quot;Text to send if user hits Cancel button\n&quot;
+    exit;
+  } else {
+    echo &quot;Hello $PHP_AUTH_USER.&lt;P&gt;&quot;;
+    echo &quot;You entered $PHP_AUTH_PW as your password.&lt;P&gt;&quot;;
+  }
+?>
+</programlisting></example>
+   <para>
+    Instead of simply printing out the $PHP_AUTH_USER and
+    $PHP_AUTH_PW, you would probably want to check the username and
+    password for validity.  Perhaps by sending a query to a database,
+    or by looking up the user in a dbm file.
+   <para>
+    Watch out for buggy Internet Explorer browsers out there.  They
+    seem very picky about the order of the headers.  Sending the
+    <emphasis>WWW-authenticate</emphasis> header before the
+    <errorcode>HTTP/1.0 401</errorcode> header seems to do the trick
+    for now.
+   <para>
+    In order to prevent someone from writing a script which reveals
+    the password for a page that was authenticated through a
+    traditional external mechanism, the PHP_AUTH variables will not be
+    set if external authentication is enabled for that particular
+    page.
+   <para>
+    Note, however, that the above does not prevent someone who
+    controls a non-authenticated URL from stealing passwords from
+    authenticated URLs on the same server.
 
-  <sect1>
+  <sect1 id="feature-images">
    <title>GIF creation with PHP</title>
-   <simpara></simpara>
+   <simpara>
+	PHP is not limited to creating just HTML output.  It can also be
+    used to create GIF image files, or even more convenient GIF image streams.
+	You will need to compile PHP with the GD library of image functions for
+	this to work.
+   </simpara>
+   <para>
+<example>
+  <title>GIF creation with PHP</title>
+<programlisting role=php>
+&lt;?php
+    Header("Content-type: image/gif");
+    $string=implode($argv," ");
+    $im = imagecreatefromgif("images/button1.gif");
+    $orange = ImageColorAllocate($im, 220, 210, 60);
+    px = (imagesx($im)-7.5*strlen($string))/2;
+    ImageString($im,3,$px,9,$string,$orange);
+    ImageGif($im);
+    ImageDestroy($im);
+?>
+</programlisting></example>
+	This example would be called from a page with a tag like: 
+    &lt;img src=&quot;button.php?text&quot;&gt;
+	The above button.php3 script then takes this &quot;text&quot;
+	string an overlays it on top of a base image which in this case
+	is &quot;images/button1.gif&quot; and outputs the resulting
+	image.  This is a very convenient way to avoid having to draw
+	new button images every time you want to change the text of a 
+	button.  With this method they are dynamically generated.
+   </para>
 
-  <sect1>
+  <sect1 id="feature-fileupload">
    <title>File upload support</title>
-   <simpara></simpara>
+   <simpara>
+	PHP is capable of receiving file uploads from any RFC-1867 compliant
+	browser.  This feature lets people upload both text and binary
+	files.  With PHP's authetication and logical functions, you have full
+	control over who is allowed to upload and what is to be done with the
+	file once it has been uploaded.
+   </simpara>
+   <para>
+	A file upload screen can be built by creating a special form which looks
+	something like this:
 
-  <sect1>
+<example>
+  <title>File Upload Form</title>
+<programlisting>
+    &lt;FORM ENCTYPE=&quot;multipart/form-data&quot; ACTION=&quot;_URL_&quot; METHOD=POST&gt;
+    &lt;INPUT TYPE=&quot;hidden&quot; name=&quot;MAX_FILE_SIZE&quot; value=&quot;1000&quot;&gt;
+    Send this file: &lt;INPUT NAME=&quot;userfile&quot; TYPE=&quot;file&quot;&gt;
+    &lt;INPUT TYPE=&quot;submit&quot; VALUE=&quot;Send File&quot;&gt;
+    &lt;/FORM&gt;
+</programlisting></example>
+	The _URL_ should point to a php html file.  The MAX_FILE_SIZE hidden
+	field must precede the file input field and its value is the maximum filesize
+	accepted.  The value is in bytes.  In this destination file, the following
+	variables will be defined upon a successful upload:
+    <para>
+	<itemizedlist>
+	<listitem><simpara>$userfile - The temporary filename in which the uploaded file was stored on 
+	the server machine.</simpara></listitem>
+	<listitem><simpara>$userfile_name - The original name of the file on the sender's system.</simpara></listitem>
+	<listitem><simpara>$userfile_size - The size of the uploaded file in bytes.<simpara></listitem>
+	<listitem><simpara>$userfile_type - The mime type of the file if the browser provided this information.  
+	An example would be &quot;image/gif&quot;.</simpara></listitem>
+	</itemizedlist>
+    Note that the &quot;$userfile&quot; part of the above variables is whatever the name of
+	the INPUT field of TYPE=file is in the upload form.  In the above upload form example, 
+	we chose to call it &quot;userfile&quot;.  
+	<simpara>
+	Files will by default be stored in the server's default temporary directory.  This
+	can be changed by setting the environment variable TMPDIR in the environment in which
+	PHP runs.  Setting it using a PutEnv() call from within a PHP script will not
+	work though.
+	<simpara>
+	The PHP script which receives the uploaded file should implement whatever
+	logic is necessary for determining what should be done with the uploaded file.
+	You can for example use the $file_size variable to throw away any files that are
+	either too small or too big.  You could use the $file_type variable to throw away
+	any files that didn't match a certain type criteria.  Whatever the logic, you should
+	either delete the file from the temporary directory or move it elsewhere.
+	<simpara>
+	Please note that the CERN httpd seems to strip off everything starting at
+	the first whitespace in the content-type mime header it gets from the
+	client.  As long as this is the case, CERN httpd will not support the
+	file upload feature.
+
+  <sect1 id="feature-cookies">
    <title>HTTP cookie support</title>
-   <simpara></simpara>
+   <para>
+	PHP transparently supports HTTP cookies.  Cookies are a mechanism for storing data in 
+	the remote browser and thus tracking or identifying return users.
+	You can set cookies using the <function>setcookie</function> function.  Cookies are 
+	part of the HTTP header, so the SetCookie() function must be called before any output 
+	is sent to the browser.  This is the same restriction as for the <function>Header</function> 
+	function.
+	<para>
+	Any cookies sent to you from the client will automatically be turned into a PHP
+	variable just like GET and POST method data.  If you wish to assign multiple values to 
+	a single cookie, just add <emphasis>[]</emphasis> to the cookie name.  
+	For more details see the <function>setcookie</function> function.
+   </para>
 
-  <sect1>
+  <sect1 id="feature-databases">
    <title>Database support</title>
-   <simpara></simpara>
+   <simpara>
+	PHP supports a number of different databases in both native mode and through ODBC.
+   </simpara>
 
-  <sect1>
+  <sect1 id="feature-regexps">
    <title>Regular expressions</title>
-   <simpara></simpara>
+   <para>
+	Regular expressions are used for complex string manipulation in PHP.  The functions
+	that support regular expressions are:
+	<itemizedlist>
+    <listitem><simpara><function>ereg</function></listitem>
+    <listitem><simpara><function>ereg_replace</function></listitem>
+    <listitem><simpara><function>eregi</function></listitem>
+    <listitem><simpara><function>eregi_replace</function></listitem>
+    <listitem><simpara><function>split</function></listitem>
+	</itemizedlist>
+	These functions all take a regular expression string as their first argument.  PHP uses
+	the Posix extended regular expressions as defined by Posix 1003.2.  For a full description
+	of Posix regular expressions see the regex man pages included in the regex directory in
+	the PHP distribution.
+   </para>
+   <para>
+<example>
+  <title>Regular expression examples</title>
+<programlisting>
+ereg(&quot;abc&quot;,$string); /* Returns true if &quot;abc&quot; is found anywhere in $string. */
+ereg(&quot;^abc&quot;,$string); /* Returns true if &quot;abc&quot; is found at the beginning of $string. */
+ereg("abc$",$string); /* Returns true if &quot;abc&quot; is found at the end of $string. */
+eregi("(ozilla.[23]|MSIE.3)",$HTTP_USER_AGENT); /* Returns true if client browser is Netscape 2, 3 or MSIE 3. */
+ereg("([[:alnum:]]+) ([[:alnum:]]+) ([[:alnum:]]+)",$string,$regs); /* Places three space separated words into $regs[1], $regs[2] and $regs[3]. */
+ereg_replace("^","&lt;BR&gt;",$string); /* Put a &lt;BR&gt; tag at the beginning of $string. */
+ereg_replace("$","&lt;BR&gt;",$string); /* Put a &lt;BR&gt; tag at the end of $string. */
+ereg_replace("\n","",$string); /* Get rid of any carriage return characters in $string. */
+</programlisting></example>
+   </para>
 
-  <sect1>
-   <title>Secure variables--defeating GET method hacks</title>
-   <simpara></simpara>
-
-  <sect1>
+  <sect1 id="feature-error-handling">
    <title>Error handling</title>
-   <simpara></simpara>
+   <simpara>
+    All <link linkend="lang-expr">PHP expressions</link> can be called
+    with the "@" prefix, which turns off error reporting for that
+    expression.  If an error occured during such an expression and the
+    <link linkend="ini.track-errors">track_errors</link> feature
+    is enabled, you can find the error message in the global variable
+    $php_errormsg.
+   </simpara>
 
    <sect2>
     <title>Supressing errors</title>
     <simpara></simpara>
     
-  <sect1>
+  <sect1 id="feature-source-viewer">
    <title>PHP source viewer</title>
    <simpara></simpara>
 

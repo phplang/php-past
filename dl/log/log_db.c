@@ -5,24 +5,29 @@
    | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
-   | it under the terms of the GNU General Public License as published by |
-   | the Free Software Foundation; either version 2 of the License, or    |
-   | (at your option) any later version.                                  |
+   | it under the terms of one of the following licenses:                 |
+   |                                                                      |
+   |  A) the GNU General Public License as published by the Free Software |
+   |     Foundation; either version 2 of the License, or (at your option) |
+   |     any later version.                                               |
+   |                                                                      |
+   |  B) the PHP License as published by the PHP Development Team and     |
+   |     included in the distribution in the file: LICENSE                |
    |                                                                      |
    | This program is distributed in the hope that it will be useful,      |
    | but WITHOUT ANY WARRANTY; without even the implied warranty of       |
    | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the        |
    | GNU General Public License for more details.                         |
    |                                                                      |
-   | You should have received a copy of the GNU General Public License    |
-   | along with this program; if not, write to the Free Software          |
-   | Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.            |
+   | You should have received a copy of both licenses referred to here.   |
+   | If you did not, or have any questions about PHP licensing, please    |
+   | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
    | Authors:                                                             |
    +----------------------------------------------------------------------+
  */
 
-/* $Id: log_db.c,v 1.2 1997/12/31 15:56:04 rasmus Exp $ */
+/* $Id: log_db.c,v 1.5 1998/05/21 23:57:18 zeev Exp $ */
 
 #include "phpdl.h"
 #include "log.h"
@@ -70,8 +75,8 @@ void _php3_log_db() {
 
 	/* SAFE_MODE concern: should make sure that the user is
 	   logging somewhere safe */
-	if(stat(log_conf.dbm_log_dir, &sb) == -1) {
-		if(mkdir(log_conf.dbm_log_dir, 0755)==-1) {
+	if (stat(log_conf.dbm_log_dir, &sb) == -1) {
+		if (mkdir(log_conf.dbm_log_dir, 0755)==-1) {
 			php3_error(E_WARNING, "Trying to create main log directory [%s]: %d [%s]",log_conf.dbm_log_dir,errno,strerror(errno));
 			return;
 		}
@@ -79,8 +84,8 @@ void _php3_log_db() {
 
 	/* see if the log directory exists for this page-owner's uid */
 	sprintf(path, "%s/%ld", log_conf.dbm_log_dir, _php3_getuid());
-	if(stat(path, &sb) == -1) {
-		if(mkdir(path, 0755)==-1) {
+	if (stat(path, &sb) == -1) {
+		if (mkdir(path, 0755)==-1) {
 			php3_error(E_WARNING, "Trying to create user log directory [%s]: %d [%s]",path,errno,strerror(errno));
 			return;
 		}
@@ -97,7 +102,7 @@ void _php3_log_db() {
 
 	if (!dbm) {
 		dbm = _php3_dbmopen(path, "n");
-		if(!dbm) {
+		if (!dbm) {
 			php3_error(E_WARNING, "Unable to create %s", path);
 			return;
 		}
@@ -110,7 +115,7 @@ void _php3_log_db() {
 		/* retry a few times for some reason */
 		while(!_php3_dbminsert(dbm, "first", key)) {
 			retries++;
-			if(retries > 20) {
+			if (retries > 20) {
 				retries = 0;
 				break;
 			}
@@ -127,11 +132,11 @@ void _php3_log_db() {
 #endif
 	email = php_env.email;
 	ref = php_env.referrer;
-	if(ref) {
+	if (ref) {
 		lref = estrdup(ref);
 		s = strchr(lref,'&');
-		if(s) *s='\0';
-		if(strlen(lref)>128) lref[127]='\0';	
+		if (s) *s='\0';
+		if (strlen(lref)>128) lref[127]='\0';	
 	}
 	browser = php_env.useragent;	
 
@@ -141,11 +146,11 @@ void _php3_log_db() {
 	ret=1;
 	while(ret) {
 		ret = _php3_dbminsert(dbm, key, buf);
-		if(ret) {
+		if (ret) {
 			sprintf(key,"%ld%c",(long)t,' '+try++);
 		}		
 		retries++;
-		if(retries>20) break;
+		if (retries>20) break;
 	}
 	log_stats.total_count++;
 	log_stats.today_count++;
@@ -204,21 +209,21 @@ void _php3_load_log_info_db() {
 
 	ss = (char *)strchr(s,' ');
 
-	if(ss) {
+	if (ss) {
 		s = ss+1;
 		ss=(char *)strchr(s,' ');
 	}
-	if(ss) {
+	if (ss) {
 		*ss='\0';
 		log_stats.last_access = atol(s);
 		s = ss+1;
 		ss = (char *)strchr(s,' ');
-		if(ss) {
+		if (ss) {
 			*ss='\0';
 			log_stats.total_count = atol(s);
 			s = ss+1;
 			ss = (char *)strchr(s,' ');
-			if(ss) {
+			if (ss) {
 				*ss='\0';
 				log_stats.today_count = atol(s);	
 				t = time(NULL);
@@ -226,22 +231,22 @@ void _php3_load_log_info_db() {
 				day1 = tm1->tm_yday;
 				tm1 = localtime(&t);
 				day2 = tm1->tm_yday;
-				if(day1 != day2) log_stats.today_count = 0;	
+				if (day1 != day2) log_stats.today_count = 0;	
 				s = ss+1;
 				ss = (char *)strchr(s,27);
-				if(ss) {
+				if (ss) {
 					*ss='\0';
 					log_stats.last_host = (char *)estrdup(s);
 					s = ss+1;
 					ss = (char *)strchr(s,27);
-					if(ss) {
+					if (ss) {
 						*ss='\0';
-						if(*s) log_stats.last_email = (char *)estrdup(s);
+						if (*s) log_stats.last_email = (char *)estrdup(s);
 						s = ss+1;
 						ss = (char *)strchr(s,27);
-						if(ss) {
+						if (ss) {
 							*ss='\0';
-							if(*s) log_stats.last_ref = (char *)estrdup(s);
+							if (*s) log_stats.last_ref = (char *)estrdup(s);
 							s = ss+1;
 							log_stats.last_browser = (char *)estrdup(s);
 						}
@@ -253,7 +258,7 @@ void _php3_load_log_info_db() {
 	if (value) efree(value);
 
 	value = s = _php3_dbmfetch(dbm, "first");
-	if(!s) {
+	if (!s) {
 		/* If there is no first entry in the dbm file, add one now.
 		   This obviously won't be the correct first entry date, but
 		   it is better than not having one at all. */
@@ -263,7 +268,7 @@ void _php3_load_log_info_db() {
 		while (ret) {
 			ret = _php3_dbminsert(dbm,"first",key);
 			retries++;
-			if(retries>20) {
+			if (retries>20) {
 				retries = 0;
 				break;
 			}
