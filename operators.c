@@ -24,12 +24,12 @@
    | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
    | Authors: Andi Gutmans <andi@php.net>                                 |
-   |          Zeev Suraski <bourbon@netvision.net.il>                     |
+   |          Zeev Suraski <zeev@zend.com>                                |
    +----------------------------------------------------------------------+
  */
 
 
-/* $Id: operators.c,v 1.104 2000/01/01 04:31:13 sas Exp $ */
+/* $Id: operators.c,v 1.105 2000/02/07 23:54:50 zeev Exp $ */
 
 #include "php.h"
 #include "functions/number.h"

@@ -24,11 +24,11 @@
    | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
    | Authors: Andi Gutmans <andi@php.net>                                 |
-   |          Zeev Suraski <bourbon@netvision.net.il>                     |
+   |          Zeev Suraski <zeev@zend.com>                                |
    |          Rasmus Lerdorf <rasmus@php.net>                             |
    +----------------------------------------------------------------------+
  */
-/* $Id: datetime.c,v 1.80 2000/01/01 04:31:14 sas Exp $ */
+/* $Id: datetime.c,v 1.85 2000/02/25 17:16:41 sas Exp $ */
 #include "php.h"
 #include "internal_functions.h"
 #include "operators.h"
@@ -119,7 +119,11 @@ void _php3_mktime(INTERNAL_FUNCTION_PARAMETERS, int gm)
 		ta->tm_isdst = arguments[6]->value.lval;
 		/* fall-through */
 	case 6:
-		ta->tm_year = arguments[5]->value.lval - ((arguments[5]->value.lval > 1000) ? 1900 : 0);
+		ta->tm_year = arguments[5]->value.lval;
+		if (ta->tm_year < 70)
+			ta->tm_year += 100;
+		else if (ta->tm_year > 1000)
+			ta->tm_year -= 1900;
 		/* fall-through */
 	case 5:
 		ta->tm_mday = arguments[4]->value.lval;
@@ -421,7 +425,7 @@ _php3_date(INTERNAL_FUNCTION_PARAMETERS, int gm)
 	return_value->type = IS_STRING;
 }
 
-/* {{{ proto string date(string format[, int timestamp])
+/* {{{ proto string date(string format [, int timestamp])
    Format a local time/date */
 void php3_date(INTERNAL_FUNCTION_PARAMETERS)
 {
@@ -429,7 +433,7 @@ void php3_date(INTERNAL_FUNCTION_PARAMETERS)
 }
 /* }}} */
 
-/* {{{ proto string gmdate(string format[, int timestamp])
+/* {{{ proto string gmdate(string format [, int timestamp])
    Format a GMT/CUT date/time */
 void php3_gmdate(INTERNAL_FUNCTION_PARAMETERS)
 {
@@ -486,8 +490,8 @@ char *php3_std_date(time_t t)
 	tm1 = gmtime(&t);
 	str = emalloc(81);
 	if (php3_ini.y2k_compliance) {
-		snprintf(str, 80, "%s, %02d-%s-%04d %02d:%02d:%02d GMT",
-				day_full_names[tm1->tm_wday],
+		snprintf(str, 80, "%s, %02d %s %04d %02d:%02d:%02d GMT",
+				day_short_names[tm1->tm_wday],
 				tm1->tm_mday,
 				mon_short_names[tm1->tm_mon],
 				tm1->tm_year+1900,
@@ -603,7 +607,7 @@ void _php3_strftime(INTERNAL_FUNCTION_PARAMETERS, int gm)
 	RETURN_FALSE;
 }
 
-/* {{{ proto string strftime(string format[, int timestamp])
+/* {{{ proto string strftime(string format [, int timestamp])
    Format a local time/date according to locale settings */
 void php3_strftime(INTERNAL_FUNCTION_PARAMETERS)
 {
@@ -611,7 +615,7 @@ void php3_strftime(INTERNAL_FUNCTION_PARAMETERS)
 }
 /* }}} */
 
-/* {{{ proto string gmstrftime(string format[, int timestamp])
+/* {{{ proto string gmstrftime(string format [, int timestamp])
    Format a GMT/CUT time/date according to locale settings */
 void php3_gmstrftime(INTERNAL_FUNCTION_PARAMETERS)
 {
@@ -621,7 +625,7 @@ void php3_gmstrftime(INTERNAL_FUNCTION_PARAMETERS)
 #endif
 
 
-/* {{{ proto int strtotime(string time, int now)
+/* {{{ proto int strtotime(string time [, int now])
    Convert string representation of date to a timestamp 
 */
 

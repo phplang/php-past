@@ -1,4 +1,4 @@
-/* $Id: crypt.c,v 1.14 1999/01/05 07:08:21 jah Exp $ */
+/* $Id: crypt.c,v 1.15 2000/02/20 18:40:32 eschmid Exp $ */
 
 #include "../phpdl.h"
 #include "prelude.h"
@@ -159,7 +159,7 @@ DLEXPORT void sflcrypt_decrypt(INTERNAL_FUNCTION_PARAMETERS)
 extern int _getpid(void);
 #endif
 
-/* {{{ proto string crypt(string data[, string salt])
+/* {{{ proto string crypt(string data [, string salt])
    A one-way crypt that can't be decrypted anymore */
 void php3_crypt(INTERNAL_FUNCTION_PARAMETERS)
 {

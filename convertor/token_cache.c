@@ -24,12 +24,12 @@
    | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
    | Authors: Andi Gutmans <andi@vipe.technion.ac.il>                     |
-   |          Zeev Suraski <bourbon@netvision.net.il>                     |
+   |          Zeev Suraski <zeev@zend.com>                                |
    +----------------------------------------------------------------------+
  */
 
 
-/* $Id: token_cache.c,v 1.9 2000/01/01 04:31:14 sas Exp $ */
+/* $Id: token_cache.c,v 1.10 2000/02/07 23:54:50 zeev Exp $ */
 
 #include "token_cache.h"
 #include "language-parser.tab.h"

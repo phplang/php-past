@@ -30,7 +30,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: ldap.c,v 1.77 2000/01/01 04:31:16 sas Exp $ */
+/* $Id: ldap.c,v 1.78 2000/02/22 15:13:57 eschmid Exp $ */
 #define IS_EXT_MODULE
 
 #if !(WIN32|WINNT)
@@ -178,7 +178,7 @@ void php3_info_ldap(void)
 
 	php3_printf("<table>"
 				"<tr><td>Total links:</td><td>%d/%s</td></tr>\n"
-		        "<tr><td>RCS Version:</td><td>$Id: ldap.c,v 1.77 2000/01/01 04:31:16 sas Exp $</td></tr>\n"
+		        "<tr><td>RCS Version:</td><td>$Id: ldap.c,v 1.78 2000/02/22 15:13:57 eschmid Exp $</td></tr>\n"
 #if HAVE_NSLDAP
 				"<tr><td>SDK Version:</td><td>%f</td></tr>"
 				"<tr><td>Highest LDAP Protocol Supported:</td><td>%f</td></tr>"
@@ -1000,7 +1000,7 @@ int i, num_values;
 /* }}} */
 
 /* {{{ proto array ldap_get_values_len(int link, int result, string attribute)
-    Get all values from a result entry */
+   Get all values from a result entry */
 void php3_ldap_get_values_len(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *link, *result_entry, *attr;
@@ -1288,7 +1288,7 @@ void php3_ldap_mod_replace(INTERNAL_FUNCTION_PARAMETERS)
 /* }}} */
 
 /* {{{ proto int ldap_mod_add(int link, string dn, array entry)
-        Add attribute values to current */
+   Add attribute values to current */
 void php3_ldap_mod_add(INTERNAL_FUNCTION_PARAMETERS)
 {
         php3_ldap_do_modify(INTERNAL_FUNCTION_PARAM_PASSTHRU, LDAP_MOD_ADD);

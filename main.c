@@ -29,7 +29,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: main.c,v 1.511 2000/01/01 04:31:12 sas Exp $ */
+/* $Id: main.c,v 1.512 2000/01/29 19:33:04 rasmus Exp $ */
 
 /* #define CRASH_DETECTION */
 
@@ -1053,6 +1053,13 @@ static int php3_config_ini_startup(INLINE_TLS_VOID)
 				php3_ini.include_path = temp;
 			} else {
 				php3_ini.include_path = NULL;
+			}
+		}
+		if (cfg_get_string("charset", &php3_ini.charset) == FAILURE) {
+			if ((temp = getenv("PHP_CHARSET"))) {
+				php3_ini.charset = temp;
+			} else {
+				php3_ini.charset = NULL;
 			}
 		}
 		if (cfg_get_string("auto_prepend_file", &php3_ini.auto_prepend_file) == FAILURE) {

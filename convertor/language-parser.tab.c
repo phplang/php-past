@@ -109,12 +109,12 @@
    | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
    | Authors: Andi Gutmans <andi@vipe.technion.ac.il>                     |
-   |          Zeev Suraski <bourbon@netvision.net.il>                     |
+   |          Zeev Suraski <zeev@zend.com>                                |
    +----------------------------------------------------------------------+
 */
 
 
-/* $Id: language-parser.y,v 1.11 1998/05/15 10:56:55 zeev Exp $ */
+/* $Id: language-parser.y,v 1.12 2000/02/07 23:54:50 zeev Exp $ */
 
 #include "token_cache.h"
 #include "main.h"

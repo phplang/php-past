@@ -23,11 +23,11 @@
    | If you did not, or have any questions about PHP licensing, please    |
    | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
-   | Authors: Zeev Suraski <bourbon@netvision.net.il>                     |
+   | Authors: Zeev Suraski <zeev@zend.com>                                |
    +----------------------------------------------------------------------+
  */
  
-/* $Id: msql.c,v 1.106 2000/01/01 04:31:16 sas Exp $ */
+/* $Id: msql.c,v 1.107 2000/02/07 23:54:51 zeev Exp $ */
 #if !(WIN32|WINNT)
 #include "config.h"
 #endif

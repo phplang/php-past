@@ -27,7 +27,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: xml.c,v 1.32 2000/01/01 04:31:17 sas Exp $ */
+/* $Id: xml.c,v 1.34 2000/02/10 15:33:49 thies Exp $ */
 #define IS_EXT_MODULE
 #if COMPILE_DL
 #  include "dl/phpdl.h"
@@ -336,7 +336,7 @@ xml_call_handler(xml_parser *parser, char *funcName, int argc, pval **argv)
 		   Instead, we create a callback function. */
 		function_table=php3i_get_function_table();
 		if (call_user_function(function_table, NULL, func, retval, argc, argv) == FAILURE) {
-			php3tls_pval_destructor(retval);
+			/*php3tls_pval_destructor(retval);*/
 			efree(retval);
 			return NULL;
 		}
@@ -857,7 +857,7 @@ void php3i_xml_unparsedEntityDeclHandler(void *userData,
 	XML_TLS_VARS;
 
 	if (parser && parser->unparsedEntityDeclHandler) {
-		pval *retval, *args[5];
+		pval *retval, *args[6];
 
 		args[0] = php3i_long_pval(parser->index);
 		args[1] = php3i_xmlcharpval(entityName, 0, parser->target_encoding);

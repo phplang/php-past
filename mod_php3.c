@@ -27,7 +27,7 @@
    | (with helpful hints from Dean Gaudet <dgaudet@arctic.org>            |
    +----------------------------------------------------------------------+
  */
-/* $Id: mod_php3.c,v 1.97 2000/01/01 04:31:13 sas Exp $ */
+/* $Id: mod_php3.c,v 1.100 2000/01/30 21:25:21 rasmus Exp $ */
 
 #include "httpd.h"
 #include "http_config.h"
@@ -220,7 +220,13 @@ int send_php3(request_rec *r, int display_source_mode, int preprocessed, char *f
 	}
 	/* Assume output will be HTML.  Individual scripts may change this 
 	   further down the line */
-	r->content_type = "text/html";
+	if(conf->charset) {
+		r->content_type = (char *)malloc(strlen(conf->charset)+19);
+		strcpy((char *)r->content_type,"text/html;charset=");
+		strcpy((char *)r->content_type+18,conf->charset);
+	} else {
+		r->content_type = "text/html";
+	}
 
 	/* Init timeout */
 	hard_timeout("send", r);
@@ -238,6 +244,7 @@ int send_php3(request_rec *r, int display_source_mode, int preprocessed, char *f
 	php3_restore_umask();
 	kill_timeout(r);
 	pclosef(r->pool, fd);
+	if(conf->charset) free((char *)r->content_type);
 	return OK;
 }
 
@@ -308,6 +315,7 @@ static void *php3_merge_dir(pool *p, void *basev, void *addv)
 	if (add->isapi_ext != base->isapi_ext) new->isapi_ext = add->isapi_ext;
 	if (add->nsapi_ext != base->nsapi_ext) new->nsapi_ext = add->nsapi_ext;
 	if (add->include_path != base->include_path) new->include_path = add->include_path;
+	if (add->charset != base->charset) new->charset = add->charset;
 	if (add->auto_prepend_file != base->auto_prepend_file) new->auto_prepend_file = add->auto_prepend_file;
 	if (add->auto_append_file != base->auto_append_file) new->auto_append_file = add->auto_append_file;
 	if (add->upload_tmp_dir != base->upload_tmp_dir) new->upload_tmp_dir = add->upload_tmp_dir;
@@ -503,6 +511,9 @@ char *php3take1handler(cmd_parms * cmd, php3_ini_structure * conf, char *arg)
 		case 20:
 			conf->dav_script = pstrdup(cmd->pool, arg);
 			break;
+		case 21:
+			conf->charset = pstrdup(cmd->pool, arg);
+			break;
 	}
 	return NULL;
 }
@@ -598,7 +609,7 @@ command_rec php3_commands[] =
 	{"php3_arg_separator", php3take1handler, (void *)10, OR_OPTIONS, TAKE1, "GET method arg separator"},
 	{"php3_max_execution_time", php3take1handler, (void *)11, OR_OPTIONS, TAKE1, "Max script run time in seconds"},
 	{"php3_memory_limit", php3take1handler, (void *)12, OR_OPTIONS, TAKE1, "Max memory in bytes a script may use"},
-	{"php3_sendmail_path", php3take1handler, (void *)13, OR_OPTIONS, TAKE1, "Full path to sendmail binary"},
+	{"php3_sendmail_path", php3take1handler, (void *)13, ACCESS_CONF|RSRC_CONF, TAKE1, "Full path to sendmail binary"},
 	{"php3_browscap", php3take1handler, (void *)14, OR_OPTIONS, TAKE1, "Full path to browscap file"},
 	{"php3_gpc_order", php3take1handler, (void *)15, OR_OPTIONS, TAKE1, "Set GET-COOKIE-POST order [default is GPC]"},
 	{"php3_error_prepend_string", php3take1handler, (void *)16, OR_OPTIONS, TAKE1, "String to add before an error message from PHP"},
@@ -609,6 +620,7 @@ command_rec php3_commands[] =
 	{"php3_dav_script", php3take1handler, (void *)20, OR_OPTIONS|RSRC_CONF, TAKE1,
 	 "Lets PHP handle DAV requests by parsing this script."},
 #endif
+	{"php3_charset", php3take1handler, (void *)21, OR_OPTIONS, TAKE1, "charset"},
 	{"php3_track_errors", php3flaghandler, (void *)0, OR_OPTIONS, FLAG, "on|off"},
 	{"php3_magic_quotes_gpc", php3flaghandler, (void *)1, OR_OPTIONS, FLAG, "on|off"},
 	{"php3_magic_quotes_runtime", php3flaghandler, (void *)2, OR_OPTIONS, FLAG, "on|off"},

@@ -23,10 +23,10 @@
    | If you did not, or have any questions about PHP licensing, please    |
    | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
-   | Authors: Rasmus Lerdorf <rasmus@lerdorf.on.ca>                       |
+   | Authors: Rasmus Lerdorf <rasmus@php.net>                             |
    +----------------------------------------------------------------------+
  */
-/* $Id: mod_php3.h,v 1.53 2000/01/01 04:44:07 sas Exp $ */
+/* $Id: mod_php3.h,v 1.54 2000/01/29 19:33:04 rasmus Exp $ */
 
 #ifndef _MOD_PHP3_H
 #define _MOD_PHP3_H
@@ -93,6 +93,7 @@ typedef struct {
 	long ignore_user_abort;
 	char *dav_script;
 	long expose_php;
+	char *charset;
 } php3_ini_structure;
 
 #if MSVC5

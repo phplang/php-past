@@ -24,12 +24,12 @@
    | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
    | Authors: Andi Gutmans <andi@php.net>                                 |
-   |          Zeev Suraski <bourbon@netvision.net.il>                     |
+   |          Zeev Suraski <zeev@zend.com>                                |
    +----------------------------------------------------------------------+
  */
 
 
-/* $Id: list.c,v 1.89 2000/01/01 04:31:12 sas Exp $ */
+/* $Id: list.c,v 1.90 2000/02/07 23:54:50 zeev Exp $ */
 
 #include "php.h"
 #include "php3_list.h"

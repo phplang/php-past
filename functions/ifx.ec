@@ -30,7 +30,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: ifx.ec,v 1.46 1999/12/26 18:44:45 rasmus Exp $ */
+/* $Id: ifx.ec,v 1.48 2000/02/21 07:57:00 eschmid Exp $ */
 
 /* -------------------------------------------------------------------
  * if you want a function reference : "grep '^\*\*' ifx.ec" will give
@@ -127,6 +127,9 @@ Changes 09/03/1999 (danny.heijl@cevi.be)
 #if defined(COMPILE_DL)
 #include "dl/phpdl.h"
 #endif
+
+/* prevent mod_ssl.h's header file from being included. */
+#define AP_HOOK_H
 
 #if WIN32|WINNT
 #include <winsock.h>
@@ -815,16 +818,16 @@ static void php3_ifx_do_connect(INTERNAL_FUNCTION_PARAMETERS,int persistent)
 }
 
 
-/* {{{ proto int ifx_connect([string database[, string userid[, string password]]])
-   connects to database using userid/password, returns connection id */
+/* {{{ proto int ifx_connect([string database [, string userid [, string password]]])
+   Connects to database using userid/password, returns connection id */
 void php3_ifx_connect(INTERNAL_FUNCTION_PARAMETERS)
 {
     php3_ifx_do_connect(INTERNAL_FUNCTION_PARAM_PASSTHRU,0);
 }
 /* }}} */
 
-/* {{{ proto int ifx_pconnect([string database[, string userid[, string password]]])
-   connects to database using userid/password, returns connection id */
+/* {{{ proto int ifx_pconnect([string database [, string userid [, string password]]])
+   Connects to database using userid/password, returns connection id */
 void php3_ifx_pconnect(INTERNAL_FUNCTION_PARAMETERS)
 {
     php3_ifx_do_connect(INTERNAL_FUNCTION_PARAM_PASSTHRU,1);
@@ -854,7 +857,7 @@ static int php3_ifx_get_default_link(INTERNAL_FUNCTION_PARAMETERS)
 */
 
 /* {{{ proto int ifx_close(int connid)
-   close informix connection */
+   Close informix connection */
 void php3_ifx_close(INTERNAL_FUNCTION_PARAMETERS)
 {
     pval *ifx_link;
@@ -928,8 +931,8 @@ EXEC SQL END DECLARE SECTION;
 ** ----------------------------------------------------------------------
 */
 
-/* {{{ proto int ifx_query(string query, int connid, [int cursortype], [array idarray])
-   perform a query on a given connection */
+/* {{{ proto int ifx_query(string query, int connid [, int cursortype] [, array idarray])
+   Perform a query on a given connection */
 void php3_ifx_query(INTERNAL_FUNCTION_PARAMETERS)
 {
     pval *query,*ifx_link, *cursortype, *dummy;
@@ -1311,8 +1314,8 @@ $endif;
 ** ----------------------------------------------------------------------
 */
 
-/* {{{ proto int ifx_prepare(string query, int connid, [int cursortype], [array idarray])
-   prepare a query on a given connection */
+/* {{{ proto int ifx_prepare(string query, int connid [, int cursortype] [, array idarray])
+   Prepare a query on a given connection */
 void php3_ifx_prepare(INTERNAL_FUNCTION_PARAMETERS)
 {
    
@@ -1593,7 +1596,7 @@ EXEC SQL END DECLARE SECTION;
 */
 
 /* {{{ proto int ifx_do(int resultid)
-   executes a previously prepared query or opens a cursor for it */
+   Executes a previously prepared query or opens a cursor for it */
 void php3_ifx_do(INTERNAL_FUNCTION_PARAMETERS)
 {
     pval *result;
@@ -1769,8 +1772,8 @@ $endif;
 ** ----------------------------------------------------------------------
 */
 
-/* {{{ proto string ifx_error();
-   returns the Informix error codes (SQLSTATE & SQLCODE) */
+/* {{{ proto string ifx_error(void);
+   Returns the Informix error codes (SQLSTATE & SQLCODE) */
 void php3_ifx_error(INTERNAL_FUNCTION_PARAMETERS)
 {
     pval *ifx_link;
@@ -1809,7 +1812,7 @@ void php3_ifx_error(INTERNAL_FUNCTION_PARAMETERS)
 */
 
 /* {{{ proto string ifx_errormsg([int errorcode])
-   returns the Informix errormessage associated with  */
+   Returns the Informix errormessage associated with  */
 void php3_ifx_errormsg(INTERNAL_FUNCTION_PARAMETERS)
 {
     pval *errcode;
@@ -1873,7 +1876,7 @@ void php3_ifx_errormsg(INTERNAL_FUNCTION_PARAMETERS)
 */
 
 /* {{{ proto int ifx_affected_rows(int resultid)
-   returns the number of rows affected by query identified by resultid */
+   Returns the number of rows affected by query identified by resultid */
 void php3_ifx_affected_rows(INTERNAL_FUNCTION_PARAMETERS)
 {
     pval *result;
@@ -1925,8 +1928,8 @@ void php3_ifx_affected_rows(INTERNAL_FUNCTION_PARAMETERS)
 ** ----------------------------------------------------------------------
 */
 
-/* {{{ proto array ifx_fetch_row(int resultid, [mixed position])
-   fetches the next row or <position> row if using a scroll cursor */
+/* {{{ proto array ifx_fetch_row(int resultid [, mixed position])
+   Fetches the next row or <position> row if using a scroll cursor */
 void php3_ifx_fetch_row(INTERNAL_FUNCTION_PARAMETERS)
 {
     pval *result, *position;
@@ -2317,8 +2320,8 @@ $endif;
 ** ----------------------------------------------------------------------
 */
 
-/* {{{ proto int ifx_htmltbl_result(int resultid, [string htmltableoptions])
-   formats all rows of the $resultid query into a html table */
+/* {{{ proto int ifx_htmltbl_result(int resultid [, string htmltableoptions])
+   Formats all rows of the resultid_query() into a html table */
 void php3_ifx_htmltbl_result(INTERNAL_FUNCTION_PARAMETERS)
 {
     pval *result, *arg2;
@@ -2678,7 +2681,7 @@ $endif;
 
 
 /* {{{ proto array ifx_fieldtypes(int resultid)
-   returns an associative array with fieldnames as key for query <resultid> */
+   Returns an associative array with fieldnames as key for query <resultid> */
 void php3_ifx_fieldtypes(INTERNAL_FUNCTION_PARAMETERS)
 {
     pval *result, *arg2;
@@ -2870,7 +2873,7 @@ $endif;
 */
 
 /* {{{ proto array ifx_fieldproperties(int resultid)
-   returns an associative for query <resultid> array with fieldnames as key */
+   Returns an associative array for a query */
 void php3_ifx_fieldproperties(INTERNAL_FUNCTION_PARAMETERS)
 {
     pval *result, *arg2;
@@ -3071,7 +3074,7 @@ $endif;
 */
 
 /* {{{ proto int ifx_num_rows(int resultid)
-   returns the number of rows already fetched for query identified by resultid */
+   Returns the number of rows already fetched for query identified by resultid */
 void php3_ifx_num_rows(INTERNAL_FUNCTION_PARAMETERS)
 {
     pval *result;
@@ -3109,8 +3112,8 @@ void php3_ifx_num_rows(INTERNAL_FUNCTION_PARAMETERS)
 ** ---------------------------------------------------------------
 */
 
-/* {{{ proto int ifx_getsqlca(int $resultid)
-   returns the sqlerrd[] fields of the sqlca struct for query $resultid */
+/* {{{ proto int ifx_getsqlca(int resultid)
+   Returns the sqlerrd[} fields of the sqlca struct for query a given resultid */
 void php3_ifx_getsqlca(INTERNAL_FUNCTION_PARAMETERS)
 {
     pval *result;
@@ -3162,7 +3165,7 @@ void php3_ifx_getsqlca(INTERNAL_FUNCTION_PARAMETERS)
 */
 
 /* {{{ proto int ifx_num_fields(int resultid)
-   returns the number of columns in query resultid */
+   Returns the number of columns in query resultid */
 void php3_ifx_num_fields(INTERNAL_FUNCTION_PARAMETERS)
 {
     pval *result;
@@ -3203,7 +3206,7 @@ void php3_ifx_num_fields(INTERNAL_FUNCTION_PARAMETERS)
 */
 
 /* {{{ proto int ifx_free_result(int resultid)
-   releases resources for query associated with resultid */
+   Releases resources for a query associated with resultid */
 void php3_ifx_free_result(INTERNAL_FUNCTION_PARAMETERS)
 {
     pval *result;
@@ -3325,7 +3328,7 @@ static long php3_intifx_getType(long id, HashTable *list) {
 */
 
 /* {{{ proto int ifx_create_blob(int type, int mode, string param)
-   creates a blob-object */
+   Creates a blob-object */
 void php3_ifx_create_blob(INTERNAL_FUNCTION_PARAMETERS) {
  pval *pmode, *pparam,*ptype;
  long id;
@@ -3657,7 +3660,7 @@ static long php3_intifx2_free_blob(long bid, HashTable *list) {
 */
 
 /* {{{ proto string ifx_get_blob(int bid)
-   returns the content of the blob-object */
+   Returns the content of the blob-object */
 void php3_ifx_get_blob(INTERNAL_FUNCTION_PARAMETERS) {
  pval *pbid;
  char *content;
@@ -3747,7 +3750,7 @@ static loc_t *php3_intifx_get_blobloc(long bid, HashTable *list) {
 */
 
 /* {{{ proto int ifx_update_blob(int bid, string content)
-   updates the content of the blob-object */
+   Updates the content of the blob-object */
 void php3_ifx_update_blob(INTERNAL_FUNCTION_PARAMETERS) {
  pval *pbid,*pparam;
  long ret;
@@ -3877,7 +3880,7 @@ static char* php3_intifx_create_tmpfile(long bid) {
 */
 
 /* {{{ proto void ifx_blobinfile_mode(int mode)
-   sets the default blob-mode for all select-queries  */
+   Sets the default blob-mode for all select-queries  */
 void php3_ifx_blobinfile_mode(INTERNAL_FUNCTION_PARAMETERS) {
  pval *pmode;
 
@@ -3905,7 +3908,7 @@ void php3_ifx_blobinfile_mode(INTERNAL_FUNCTION_PARAMETERS) {
 */
 
 /* {{{ proto void ifx_textasvarchar(int mode)
-   sets the default text-mode for all select-queries */
+   Sets the default text-mode for all select-queries */
 void php3_ifx_textasvarchar(INTERNAL_FUNCTION_PARAMETERS) {
  pval *pmode;
 
@@ -3933,7 +3936,7 @@ void php3_ifx_textasvarchar(INTERNAL_FUNCTION_PARAMETERS) {
 */
 
 /* {{{ proto void ifx_byteasvarchar(int mode)
-   sets the default byte-mode for all select-queries  */
+   Sets the default byte-mode for all select-queries */
 void php3_ifx_byteasvarchar(INTERNAL_FUNCTION_PARAMETERS) {
  pval *pmode;
   
@@ -3959,7 +3962,7 @@ void php3_ifx_byteasvarchar(INTERNAL_FUNCTION_PARAMETERS) {
 */
 
 /* {{{ proto void ifx_nullformat(int mode)
-   sets the default return value of a NULL-value un a fetch-row  */
+   Sets the default return value of a NULL-value un a fetch-row */
 void php3_ifx_nullformat(INTERNAL_FUNCTION_PARAMETERS) {
  pval *pmode;
 
@@ -3993,19 +3996,6 @@ static char* php3_intifx_null() {
   return tmp;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 /* ----------------------------------------------------------------------
 ** int ifx_create_char(string param)
 **
@@ -4016,7 +4006,7 @@ static char* php3_intifx_null() {
 */
 
 /* {{{ proto int ifx_create_char(string param)
-   creates a char-object */
+   Creates a char-object */
 void php3_ifx_create_char(INTERNAL_FUNCTION_PARAMETERS) {
  pval *pparam;
  long id;
@@ -4084,7 +4074,7 @@ static long php3_intifx_create_char(char* param, long len, HashTable *list) {
 */
 
 /* {{{ proto string ifx_get_char(int bid)
-   returns the content of the char-object */
+   Returns the content of the char-object */
 void php3_ifx_get_char(INTERNAL_FUNCTION_PARAMETERS) {
  pval *pbid;
  char *content;
@@ -4142,7 +4132,7 @@ static long php3_intifx_get_char(long bid, HashTable *list, char** content) {
 */
 
 /* {{{ proto int ifx_free_char(int bid)
-   deletes the char-object */
+   Deletes the char-object */
 void php3_ifx_free_char(INTERNAL_FUNCTION_PARAMETERS) {
  pval *pid;
  long ret;
@@ -4202,7 +4192,7 @@ static long php3_intifx_free_char(long bid, HashTable *list) {
 */
 
 /* {{{ proto int ifx_update_char(int bid, string content)
-   updates the content of the char-object */
+   Updates the content of the char-object */
 void php3_ifx_update_char(INTERNAL_FUNCTION_PARAMETERS) {
  pval *pbid,*pparam;
  long ret;
@@ -4272,41 +4262,7 @@ static long php3_intifx_update_char(long bid, char* param, long len, HashTable *
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 $ifdef HAVE_IFX_IUS;
-
-
-
 
 /* ----------------------------------------------------------------------
 ** int ifxus_create_slob( int mode)
@@ -4318,7 +4274,7 @@ $ifdef HAVE_IFX_IUS;
 */
 
 /* {{{ proto int ifxus_create_slob(int mode)
-   creates a slob-object and opens it */
+   Creates a slob-object and opens it */
 void php3_ifxus_create_slob(INTERNAL_FUNCTION_PARAMETERS) {
  pval *pmode;
  long id;
@@ -4403,7 +4359,7 @@ static long php3_intifxus_create_slob(long create_mode, HashTable *list) {
 */
 
 /* {{{ proto int ifxus_free_slob(int bid)
-   deletes the slob-object */
+   Deletes the slob-object */
 void php3_ifxus_free_slob(INTERNAL_FUNCTION_PARAMETERS) {
  pval *pid;
  long ret;
@@ -4469,7 +4425,7 @@ static long php3_intifxus_free_slob(long bid, HashTable *list) {
 */
 
 /* {{{ proto int ifxus_close_slob(int bid)
-   deletes the slob-object */
+   Deletes the slob-object */
 void php3_ifxus_close_slob(INTERNAL_FUNCTION_PARAMETERS) {
  pval *pid;
  long ret;
@@ -4524,10 +4480,6 @@ static long php3_intifxus_close_slob(long bid, HashTable *list) {
  return 0;
 }
 
-
-
-
-
 /* ----------------------------------------------------------------------
 ** int ifxus_open_slob(long bid, int mode)
 **
@@ -4539,7 +4491,7 @@ static long php3_intifxus_close_slob(long bid, HashTable *list) {
 */
 
 /* {{{ proto int ifxus_open_slob(long bid, int mode)
-   opens an slob-object */
+   Opens an slob-object */
 void php3_ifxus_open_slob(INTERNAL_FUNCTION_PARAMETERS) {
  pval *pbid,*pmode;
  long id;
@@ -4608,12 +4560,6 @@ static long php3_intifxus_open_slob(long bid, long create_mode, HashTable *list)
  return 0;
 }
 
-
-
-
-
-
-
 /* ----------------------------------------------------------------------
  * internal function
  * long php3_intifxus_new_slob(HashTable *list)
@@ -4665,12 +4611,6 @@ static ifx_lo_t *php3_intifxus_get_slobloc(long bid, HashTable *list) {
  return &(Ifx_slob->SLOB.slob_data);
 }
 
-
-
-
-
-
-
 /* ----------------------------------------------------------------------
 ** int ifxus_tell_slob(long bid)
 **
@@ -4681,7 +4621,7 @@ static ifx_lo_t *php3_intifxus_get_slobloc(long bid, HashTable *list) {
 */
 
 /* {{{ proto int ifxus_tell_slob(long bid)
-   returns the current file or seek position of an open slob-object */
+   Returns the current file or seek position of an open slob-object */
 void php3_ifxus_tell_slob(INTERNAL_FUNCTION_PARAMETERS) {
  pval *pbid;
  long bid;
@@ -4715,8 +4655,6 @@ void php3_ifxus_tell_slob(INTERNAL_FUNCTION_PARAMETERS) {
 }
 /* }}} */
 
-
-
 /* ----------------------------------------------------------------------
 ** int ifxus_seek_slob(long bid, int mode, long offset)
 **
@@ -4729,7 +4667,7 @@ void php3_ifxus_tell_slob(INTERNAL_FUNCTION_PARAMETERS) {
 */
 
 /* {{{ proto int ifxus_seek_slob(long bid, int mode, long offset)
-   sets the current file or seek position of an open slob-object */
+   Sets the current file or seek position of an open slob-object */
 void php3_ifxus_seek_slob(INTERNAL_FUNCTION_PARAMETERS) {
  pval *pbid, *pmode, *poffset;
  long bid,lakt_seek_pos;
@@ -4774,9 +4712,6 @@ void php3_ifxus_seek_slob(INTERNAL_FUNCTION_PARAMETERS) {
 }
 /* }}} */
 
-
-
-
 /* ----------------------------------------------------------------------
 ** int ifxus_read_slob(long bid, long nbytes)
 **
@@ -4788,7 +4723,7 @@ void php3_ifxus_seek_slob(INTERNAL_FUNCTION_PARAMETERS) {
 */
 
 /* {{{ proto int ifxus_read_slob(long bid, long nbytes)
-   reads nbytes of the slob-object */
+   Reads nbytes of the slob-object */
 void php3_ifxus_read_slob(INTERNAL_FUNCTION_PARAMETERS) {
  pval *pbid, *pnbytes;
  long bid, nbytes;
@@ -4796,7 +4731,6 @@ void php3_ifxus_read_slob(INTERNAL_FUNCTION_PARAMETERS) {
  int errcode,type;
  char *buffer;
  
-
  if (ARG_COUNT(ht)!=2 || getParameters(ht, 2, &pbid, &pnbytes)==FAILURE) {
    WRONG_PARAM_COUNT;
  }
@@ -4839,7 +4773,7 @@ void php3_ifxus_read_slob(INTERNAL_FUNCTION_PARAMETERS) {
 */
 
 /* {{{ proto int ifxus_write_slob(long bid, string content)
-   writes a string into the slob-object */
+   Writes a string into the slob-object */
 void php3_ifxus_write_slob(INTERNAL_FUNCTION_PARAMETERS) {
  pval *pbid, *pcontent;
  long bid, nbytes;
@@ -4847,7 +4781,6 @@ void php3_ifxus_write_slob(INTERNAL_FUNCTION_PARAMETERS) {
  int errcode,type;
  char *buffer;
  
-
  if (ARG_COUNT(ht)!=2 || getParameters(ht, 2, &pbid, &pcontent)==FAILURE) {
    WRONG_PARAM_COUNT;
  }

@@ -33,7 +33,7 @@
    |          Andrew Skalski      <askalski@chek.com>                  |
    +----------------------------------------------------------------------+
  */
-/* $Id: imap.c,v 1.76 2000/01/12 09:57:07 eschmid Exp $ */
+/* $Id: imap.c,v 1.82 2000/02/14 13:11:46 hholzgra Exp $ */
 
 #define IMAP41
 
@@ -199,6 +199,8 @@ function_entry imap_functions[] = {
 	{"imap_mail", php3_imap_mail, NULL},
 	{"imap_search", php3_imap_search, NULL},
 	{"imap_utf8", php3_imap_utf8, NULL},
+	{"imap_utf7_decode", php3_imap_utf7_decode, NULL},
+	{"imap_utf7_encode", php3_imap_utf7_encode, NULL},
 	{NULL, NULL, NULL}
 };
 
@@ -1218,18 +1220,19 @@ void php3_imap_mail_copy(INTERNAL_FUNCTION_PARAMETERS)
 }
 /* }}} */
 
-/* {{{ proto bool imap_mail_move(int stream_id, int msg_no, string mailbox)
+/* {{{ proto bool imap_mail_move(int stream_id, int msg_no, string mailbox [, int options])
    Move specified message to a mailbox */
 void php3_imap_mail_move(INTERNAL_FUNCTION_PARAMETERS)
 {
-	pval *streamind,*seq, *folder;
+	pval *streamind,*seq, *folder , *options;
 	int ind, ind_type;
 	pils *imap_le_struct; 
+        int myargcount = ARG_COUNT(ht);
 
-	if (ARG_COUNT(ht)!=3 
-		|| getParameters(ht,3,&streamind,&seq,&folder) == FAILURE) {
-		WRONG_PARAM_COUNT;
-	}
+	if (myargcount > 4 || myargcount < 3
+	    || getParameters(ht,myargcount,&streamind,&seq,&folder,&options) == FAILURE) {
+	   WRONG_PARAM_COUNT;
+        }
 
 	convert_to_long(streamind);
 	convert_to_string(seq);
@@ -1242,7 +1245,7 @@ void php3_imap_mail_move(INTERNAL_FUNCTION_PARAMETERS)
 		php3_error(E_WARNING, "Unable to find stream pointer");
 		RETURN_FALSE;
 	}
-	if ( mail_move(imap_le_struct->imap_stream,seq->value.str.val,folder->value.str.val)==T ) {
+	if ( mail_copy_full(imap_le_struct->imap_stream,seq->value.str.val,folder->value.str.val,myargcount == 4 ? ( options->value.lval | CP_MOVE ) : CP_MOVE )==T ) {
         RETURN_TRUE;
 	} else {
 		RETURN_FALSE;
@@ -1546,16 +1549,17 @@ void php3_imap_check(INTERNAL_FUNCTION_PARAMETERS)
    Mark a message for deletion */
 void php3_imap_delete(INTERNAL_FUNCTION_PARAMETERS)
 {
-	pval *streamind, * msgno;
+	pval *streamind, *sequence, *flags;
 	int ind, ind_type;
 	pils *imap_le_struct;
+	int myargc=ARG_COUNT(ht);
 
-	if (ARG_COUNT(ht)!=2 || getParameters(ht,2,&streamind,&msgno) == FAILURE) {
+	if ( myargc < 3 || myargc > 4 || getParameters(ht,myargc,&streamind,&sequence,&flags) == FAILURE) {
 		WRONG_PARAM_COUNT;
 	}
 
 	convert_to_long(streamind);
-	convert_to_string(msgno);
+	convert_to_string(sequence);
 
 	ind = streamind->value.lval;
 
@@ -1565,7 +1569,7 @@ void php3_imap_delete(INTERNAL_FUNCTION_PARAMETERS)
 		RETURN_FALSE;
 	}
 
-	mail_setflag(imap_le_struct->imap_stream,msgno->value.str.val,"\\DELETED");
+	mail_setflag_full(imap_le_struct->imap_stream,sequence->value.str.val,"\\DELETED",myargc == 4 ? flags->value.lval : NIL);
 	RETVAL_TRUE;
 }
 /* }}} */
@@ -1574,16 +1578,16 @@ void php3_imap_delete(INTERNAL_FUNCTION_PARAMETERS)
    Remove the delete flag from a message */
 void php3_imap_undelete(INTERNAL_FUNCTION_PARAMETERS)
 {
-	pval *streamind, * msgno;
+	pval *streamind, * sequence, *flags;
 	int ind, ind_type;
 	pils *imap_le_struct;
+	int myargc=ARG_COUNT(ht);
 
-	if (ARG_COUNT(ht)!=2 || getParameters(ht,2,&streamind,&msgno) == FAILURE) {
+	if ( myargc < 3 || myargc > 4 || getParameters(ht,myargc,&streamind,&sequence,&flags) == FAILURE) {
 		WRONG_PARAM_COUNT;
 	}
-
 	convert_to_long(streamind);
-	convert_to_string(msgno);
+	convert_to_string(sequence);
 
 	ind = streamind->value.lval;
 
@@ -1593,7 +1597,7 @@ void php3_imap_undelete(INTERNAL_FUNCTION_PARAMETERS)
 		RETURN_FALSE;
 	}
 
-	mail_clearflag (imap_le_struct->imap_stream,msgno->value.str.val,"\\DELETED");
+	mail_clearflag_full(imap_le_struct->imap_stream,sequence->value.str.val,"\\DELETED",myargc == 4 ? flags->value.lval : NIL);
 	RETVAL_TRUE;
 }
 /* }}} */
@@ -2140,8 +2144,8 @@ void imap_add_body( pval *arg, BODY *body )
 	PARAMETER *par, *dpar;
 	PART *part;
 
-	add_property_long( arg, "type", body->type );
-	add_property_long( arg, "encoding", body->encoding );
+	if(body->type) add_property_long( arg, "type", body->type );
+	if(body->encoding) add_property_long( arg, "encoding", body->encoding );
 
 	if ( body->subtype ){
 		add_property_long( arg, "ifsubtype", 1 );
@@ -2492,9 +2496,8 @@ void php3_imap_rfc822_parse_adrlist(INTERNAL_FUNCTION_PARAMETERS)
 /* }}} */
 
 
-
 /* {{{ proto string imap_utf8(string string)
-   Convert a string to UTF8 */
+   Convert a string to UTF-8 */
 void php3_imap_utf8(INTERNAL_FUNCTION_PARAMETERS)
 {
        pval *string;
@@ -2515,6 +2518,308 @@ void php3_imap_utf8(INTERNAL_FUNCTION_PARAMETERS)
 	RETURN_STRINGL(dest.data,strlen(dest.data),1);
 }
 /* }}} */
+
+/* macros for the modified utf7 conversion functions */
+/* author: Andrew Skalski <askalski@chek.com> */
+
+/* tests `c' and returns true if it is a special character */
+#define SPECIAL(c) ((c) <= 0x1f || (c) >= 0x7f)
+/* validate a modified-base64 character */
+#define B64CHAR(c) (isalnum(c) || (c) == '+' || (c) == ',')
+/* map the low 64 bits of `n' to the modified-base64 characters */
+#define B64(n)  ("ABCDEFGHIJKLMNOPQRSTUVWXYZ" \
+                "abcdefghijklmnopqrstuvwxyz0123456789+,"[(n) & 0x3f])
+/* map the modified-base64 character `c' to its 64 bit value */
+#define UNB64(c)        ((c) == '+' ? 62 : (c) == ',' ? 63 : (c) >= 'a' ? \
+                        (c) - 71 : (c) >= 'A' ? (c) - 65 : (c) + 4)
+
+/* {{{ proto string imap_utf7_decode(string buf)
+   Decode a modified UTF-7 string */
+void php3_imap_utf7_decode(INTERNAL_FUNCTION_PARAMETERS)
+{
+	/* author: Andrew Skalski <askalski@chek.com> */
+	int			argc;
+	pval			*arg;
+	const unsigned char	*in, *inp, *endp;
+	unsigned char		*out, *outp;
+	int			inlen, outlen;
+	enum {	ST_NORMAL,	/* printable text */
+		ST_DECODE0,	/* encoded text rotation... */
+		ST_DECODE1,
+		ST_DECODE2,
+		ST_DECODE3
+	}			state;
+
+	/* collect arguments */
+	argc = ARG_COUNT(ht);
+	if (argc != 1 || getParameters(ht, argc, &arg) == FAILURE) {
+		WRONG_PARAM_COUNT;
+	}
+	convert_to_string(arg);
+	in = (const unsigned char*) arg->value.str.val;
+	inlen = arg->value.str.len;
+
+	/* validate and compute length of output string */
+	outlen = 0;
+	state = ST_NORMAL;
+	for (endp = (inp = in) + inlen; inp < endp; inp++) {
+		if (state == ST_NORMAL) {
+			/* process printable character */
+			if (SPECIAL(*inp)) {
+				php3_error(E_WARNING, "imap_utf7_decode: "
+					"Invalid modified UTF-7 character: "
+					"`%c'", *inp);
+				RETURN_FALSE;
+			}
+			else if (*inp != '&') {
+				outlen++;
+			}
+			else if (inp + 1 == endp) {
+				php3_error(E_WARNING, "imap_utf7_decode: "
+					"Unexpected end of string");
+				RETURN_FALSE;
+			}
+			else if (inp[1] != '-') {
+				state = ST_DECODE0;
+			}
+			else {
+				outlen++;
+				inp++;
+			}
+		}
+		else if (*inp == '-') {
+			/* return to NORMAL mode */
+			if (state == ST_DECODE1) {
+				php3_error(E_WARNING, "imap_utf7_decode: "
+					"Stray modified base64 character: "
+					"`%c'", *--inp);
+				RETURN_FALSE;
+			}
+			state = ST_NORMAL;
+		}
+		else if (!B64CHAR(*inp)) {
+			php3_error(E_WARNING, "imap_utf7_decode: "
+				"Invalid modified base64 character: "
+				"`%c'", *inp);
+			RETURN_FALSE;
+		}
+		else {
+			switch (state) {
+			case ST_DECODE3:
+				outlen++;
+				state = ST_DECODE0;
+				break;
+			case ST_DECODE2:
+			case ST_DECODE1:
+				outlen++;
+			case ST_DECODE0:
+				state++;
+			case ST_NORMAL:
+			}
+		}
+	}
+
+	/* enforce end state */
+	if (state != ST_NORMAL) {
+		php3_error(E_WARNING, "imap_utf7_decode: "
+			"Unexpected end of string");
+		RETURN_FALSE;
+	}
+
+	/* allocate output buffer */
+	if ((out = emalloc(outlen + 1)) == NULL) {
+		php3_error(E_WARNING, "imap_utf7_decode: "
+			"Unable to allocate result string");
+		RETURN_FALSE;
+	}
+
+	/* decode input string */
+	outp = out;
+	state = ST_NORMAL;
+	for (endp = (inp = in) + inlen; inp < endp; inp++) {
+		if (state == ST_NORMAL) {
+			if (*inp == '&' && inp[1] != '-') {
+				state = ST_DECODE0;
+			}
+			else if ((*outp++ = *inp) == '&') {
+				inp++;
+			}
+		}
+		else if (*inp == '-') {
+			state = ST_NORMAL;
+		}
+		else {
+			/* decode input character */
+			switch (state) {
+			case ST_DECODE0:
+				*outp = UNB64(*inp) << 2;
+				state = ST_DECODE1;
+				break;
+			case ST_DECODE1:
+				outp[1] = UNB64(*inp);
+				*outp++ |= outp[1] >> 4;
+				*outp <<= 4;
+				state = ST_DECODE2;
+				break;
+			case ST_DECODE2:
+				outp[1] = UNB64(*inp);
+				*outp++ |= outp[1] >> 2;
+				*outp <<= 6;
+				state = ST_DECODE3;
+				break;
+			case ST_DECODE3:
+				*outp++ |= UNB64(*inp);
+				state = ST_DECODE0;
+			case ST_NORMAL:
+			}
+		}
+	}
+
+	*outp = 0;
+
+#if DEBUG
+	/* warn if we computed outlen incorrectly */
+	if (outp - out != outlen) {
+		php3_error(E_WARNING,
+			"imap_utf7_decode: outp - out [%d] != outlen [%d]",
+			outp - out, outlen);
+	}
+#endif
+
+	RETURN_STRINGL(out, outlen, 0);
+}
+/* }}} */
+
+/* {{{ proto string imap_utf7_encode(string buf)
+   Encode a string in modified UTF-7 */
+void php3_imap_utf7_encode(INTERNAL_FUNCTION_PARAMETERS)
+{
+	/* author: Andrew Skalski <askalski@chek.com> */
+	int			argc;
+	pval			*arg;
+	const unsigned char	*in, *inp, *endp;
+	unsigned char		*out, *outp;
+	int			inlen, outlen;
+	enum {	ST_NORMAL,	/* printable text */
+		ST_ENCODE0,	/* encoded text rotation... */
+		ST_ENCODE1,
+		ST_ENCODE2
+	}			state;
+
+	/* collect arguments */
+	argc = ARG_COUNT(ht);
+	if (argc != 1 || getParameters(ht, argc, &arg) == FAILURE) {
+		WRONG_PARAM_COUNT;
+	}
+	convert_to_string(arg);
+	in = (const unsigned char*) arg->value.str.val;
+	inlen = arg->value.str.len;
+
+	/* compute the length of the result string */
+	outlen = 0;
+	state = ST_NORMAL;
+	endp = (inp = in) + inlen;
+	while (inp < endp) {
+		if (state == ST_NORMAL) {
+			if (SPECIAL(*inp)) {
+				state = ST_ENCODE0;
+				outlen++;
+			}
+			else if (*inp++ == '&') {
+				outlen++;
+			}
+			outlen++;
+		}
+		else if (!SPECIAL(*inp)) {
+			state = ST_NORMAL;
+		}
+		else {
+			/* ST_ENCODE0 -> ST_ENCODE1	- two chars
+			 * ST_ENCODE1 -> ST_ENCODE2	- one char
+			 * ST_ENCODE2 -> ST_ENCODE0	- one char
+			 */
+			if (state == ST_ENCODE2) {
+				state = ST_ENCODE0;
+			}
+			else if (state++ == ST_ENCODE0) {
+				outlen++;
+			}
+			outlen++;
+			inp++;
+		}
+	}
+
+	/* allocate output buffer */
+	if ((out = emalloc(outlen + 1)) == NULL) {
+		php3_error(E_WARNING, "imap_utf7_encode: "
+			"Unable to allocate result string");
+		RETURN_FALSE;
+	}
+
+	/* encode input string */
+	outp = out;
+	state = ST_NORMAL;
+	endp = (inp = in) + inlen;
+	while (inp < endp || state != ST_NORMAL) {
+		if (state == ST_NORMAL) {
+			if (SPECIAL(*inp)) {
+				/* begin encoding */
+				*outp++ = '&';
+				state = ST_ENCODE0;
+			}
+			else if ((*outp++ = *inp++) == '&') {
+				*outp++ = '-';
+			}
+		}
+		else if (inp == endp || !SPECIAL(*inp)) {
+			/* flush overflow and terminate region */
+			if (state != ST_ENCODE0) {
+				*outp++ = B64(*outp);
+			}
+			*outp++ = '-';
+			state = ST_NORMAL;
+		}
+		else {
+			/* encode input character */
+			switch (state) {
+			case ST_ENCODE0:
+				*outp++ = B64(*inp >> 2);
+				*outp = *inp++ << 4;
+				state = ST_ENCODE1;
+				break;
+			case ST_ENCODE1:
+				*outp++ = B64(*outp | *inp >> 4);
+				*outp = *inp++ << 2;
+				state = ST_ENCODE2;
+				break;
+			case ST_ENCODE2:
+				*outp++ = B64(*outp | *inp >> 6);
+				*outp++ = B64(*inp++);
+				state = ST_ENCODE0;
+			case ST_NORMAL:
+			}
+		}
+	}
+
+	*outp = 0;
+
+#if DEBUG
+	/* warn if we computed outlen incorrectly */
+	if (outp - out != outlen) {
+		php3_error(E_WARNING,
+			"imap_utf7_encode: outp - out [%d] != outlen [%d]",
+			outp - out, outlen);
+	}
+#endif
+
+	RETURN_STRINGL(out, outlen, 0);
+}
+/* }}} */
+
+#undef SPECIAL
+#undef B64CHAR
+#undef B64
+#undef UNB64
 
 /* {{{ proto int imap_setflag_full(int stream_id, string sequence, string flag [, int options])
    Sets flags on messages */

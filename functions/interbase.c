@@ -28,7 +28,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: interbase.c,v 1.23 2000/01/01 04:31:15 sas Exp $ */
+/* $Id: interbase.c,v 1.24 2000/02/22 15:13:57 eschmid Exp $ */
 
 /* TODO: Arrays, roles?
 A lot... */
@@ -514,7 +514,7 @@ void php3_info_ibase(void)
 
     php3_printf(
                 "<table>"
-                "<tr><td>Revision:</td><td>$Revision: 1.23 $</td></tr>\n"
+                "<tr><td>Revision:</td><td>$Revision: 1.24 $</td></tr>\n"
 #ifdef COMPILE_DL
                 "<tr><td>Dynamic module:</td><td>Yes</td></tr>\n"
 #endif
@@ -1239,7 +1239,7 @@ _php3_ibase_exec_error:		 /* I'm a bad boy... */
 
 
 /* {{{ proto int ibase_trans([int trans_args [, int link_identifier]])
-	Start transaction */
+   Start transaction */
 PHP_FUNCTION(ibase_trans)
 {
 	pval **args;

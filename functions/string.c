@@ -29,7 +29,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: string.c,v 1.208 2000/01/01 04:31:17 sas Exp $ */
+/* $Id: string.c,v 1.209 2000/02/14 10:07:24 thies Exp $ */
 #include <stdio.h>
 #include "php.h"
 #include "internal_functions.h"
@@ -1861,7 +1861,7 @@ void php3_setlocale(INTERNAL_FUNCTION_PARAMETERS)
 int php_tag_find(char *tag, int len, char *set) {
 	char c, *n, *t;
 	int i=0, state=0, done=0;
-	char *norm = emalloc(len);
+	char *norm = emalloc(len+1);
 
 	n = norm;
 	t = tag;

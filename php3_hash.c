@@ -24,10 +24,10 @@
    | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
    | Authors: Andi Gutmans <andi@php.net>                                 |
-   |          Zeev Suraski <bourbon@netvision.net.il>                     |
+   |          Zeev Suraski <zeev@zend.com>                                |
    +----------------------------------------------------------------------+
  */
-/* $Id: php3_hash.c,v 1.12 2000/01/01 04:31:13 sas Exp $ */
+/* $Id: php3_hash.c,v 1.13 2000/02/07 23:54:50 zeev Exp $ */
 #include "php.h"
 
 #include <stdio.h>

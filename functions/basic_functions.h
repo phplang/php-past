@@ -24,12 +24,12 @@
    | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
    | Authors: Andi Gutmans <andi@php.net>                                 |
-   |          Zeev Suraski <bourbon@netvision.net.il>                     |
+   |          Zeev Suraski <zeev@zend.com>                                |
    +----------------------------------------------------------------------+
  */
 
 
-/* $Id: basic_functions.h,v 1.45 2000/01/01 04:44:09 sas Exp $ */
+/* $Id: basic_functions.h,v 1.47 2000/02/23 22:57:21 zeev Exp $ */
 
 #ifndef _BASIC_FUNCTIONS_H
 #define _BASIC_FUNCTIONS_H
@@ -38,6 +38,7 @@ extern php3_module_entry basic_functions_module;
 #define basic_functions_module_ptr &basic_functions_module
 
 extern int php3_minit_basic(INIT_FUNC_ARGS);
+extern int php3_mshutdown_basic(void);
 extern int php3_rinit_basic(INIT_FUNC_ARGS);
 extern int php3_rshutdown_basic(void);
 extern void int_value(INTERNAL_FUNCTION_PARAMETERS);

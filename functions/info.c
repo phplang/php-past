@@ -24,11 +24,11 @@
    | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
    | Authors: Rasmus Lerdorf <rasmus@lerdorf.on.ca>                       |
-   |          Zeev Suraski <bourbon@netvision.net.il>                     |
+   |          Zeev Suraski <zeev@zend.com>                                |
    +----------------------------------------------------------------------+
  */
 
-/* $Id: info.c,v 1.83 2000/01/01 04:31:15 sas Exp $ */
+/* $Id: info.c,v 1.84 2000/02/07 23:54:51 zeev Exp $ */
 #include "php.h"
 #include "internal_functions.h"
 #include "head.h"

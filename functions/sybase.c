@@ -23,7 +23,7 @@
    | If you did not, or have any questions about PHP licensing, please    |
    | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
-   | Authors: Zeev Suraski <bourbon@netvision.net.il>                     |
+   | Authors: Zeev Suraski <zeev@zend.com>                                |
    +----------------------------------------------------------------------+
    | php3_sybase_get_column_content_with_type() based on code by:         |
    |                     Muhammad A Muquit <MA_Muquit@fccc.edu>           |
@@ -31,7 +31,7 @@
    +----------------------------------------------------------------------+
  */
  
-/* $Id: sybase.c,v 1.112 2000/01/01 04:31:17 sas Exp $ */
+/* $Id: sybase.c,v 1.113 2000/02/07 23:54:51 zeev Exp $ */
 
 
 #ifndef MSVC5

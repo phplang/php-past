@@ -126,12 +126,12 @@
    | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
    | Authors: Andi Gutmans <andi@php.net>                                 |
-   |          Zeev Suraski <bourbon@netvision.net.il>                     |
+   |          Zeev Suraski <zeev@zend.com>                                |
    +----------------------------------------------------------------------+
 */
 
 
-/* $Id: language-parser.y,v 1.182 2000/01/01 04:48:04 sas Exp $ */
+/* $Id: language-parser.y,v 1.184 2000/02/07 23:54:50 zeev Exp $ */
 
 
 /* 
@@ -3340,6 +3340,11 @@ PHPAPI int call_user_function(HashTable *function_table, pval *object, pval *fun
 	int original_shutdown_requested=GLOBAL(shutdown_requested);
 	int original_execute_flag = GLOBAL(ExecuteFlag);
 	FunctionState original_function_state = GLOBAL(function_state);
+	pval p_function_name;
+
+	if (GLOBAL(shutdown_requested)==ABNORMAL_SHUTDOWN) {
+		return FAILURE;
+	}
 
 	/* save the location to go back to */
 	return_offset.offset = tc_get_current_offset(&GLOBAL(token_cache_manager))-1;	
@@ -3347,8 +3352,14 @@ PHPAPI int call_user_function(HashTable *function_table, pval *object, pval *fun
 	if (object) {
 		function_table = object->value.ht;
 	}
-	php3_str_tolower(function_name->value.str.val, function_name->value.str.len);
-	if (_php3_hash_find(function_table, function_name->value.str.val, function_name->value.str.len+1, (void **) &func)==FAILURE
+
+	/* if phpparse() triggers shutdown, function_name would get erased, so it'd end up
+	 * being freed twice.  Avoid this.
+	 */
+	p_function_name = *function_name;
+	pval_copy_constructor(&p_function_name);
+	php3_str_tolower(p_function_name.value.str.val, p_function_name.value.str.len);
+	if (_php3_hash_find(function_table, p_function_name.value.str.val, p_function_name.value.str.len+1, (void **) &func)==FAILURE
 		|| func->type != IS_USER_FUNCTION) {
 		return FAILURE;
 	}
@@ -3357,25 +3368,27 @@ PHPAPI int call_user_function(HashTable *function_table, pval *object, pval *fun
 	GLOBAL(shutdown_requested) = 0;
 	GLOBAL(function_state).loop_nest_level = GLOBAL(function_state).loop_change_level = GLOBAL(function_state).loop_change_type = 0;
 	GLOBAL(function_state).returned = 0;
+	GLOBAL(function_state).function_name = p_function_name.value.str.val;
 	GLOBAL(ExecuteFlag) = EXECUTE;
 	GLOBAL(Execute) = SHOULD_EXECUTE;
 
 	tc_set_token(&token_cache_manager, func->offset, IC_FUNCTION);
 	if (object) {
 		class_ptr.value.varptr.pvalue = object;
-		cs_functioncall_pre_variable_passing(function_name, &class_ptr, 0 _INLINE_TLS);
+		cs_functioncall_pre_variable_passing(&p_function_name, &class_ptr, 0 _INLINE_TLS);
 	} else {
-		cs_functioncall_pre_variable_passing(function_name,NULL, 0 _INLINE_TLS);
+		cs_functioncall_pre_variable_passing(&p_function_name,NULL, 0 _INLINE_TLS);
 	}
 	for (i=0; i<param_count; i++) {
 		_php3_hash_next_index_pointer_insert(GLOBAL(function_state).function_symbol_table, params[i]);
 	}
-	cs_functioncall_post_variable_passing(function_name, NULL);
+	cs_functioncall_post_variable_passing(&p_function_name, NULL);
 	phpparse();
 	if (GLOBAL(shutdown_requested)) { /* we died during this function call */
 		return FAILURE;
 	}
-	cs_functioncall_end(retval,function_name,&return_offset,NULL,0);
+	cs_functioncall_end(retval,&p_function_name,&return_offset,NULL,0);
+	pval_destructor(&p_function_name);
 	GLOBAL(function_state) = original_function_state;
 	GLOBAL(ExecuteFlag) = original_execute_flag;
 	GLOBAL(shutdown_requested) = original_shutdown_requested;

@@ -3,7 +3,7 @@
  * code by Shane Caraveo shane@caraveo.com
  * copy freely!
  *
- * $Id: calendar.c,v 1.17 1999/06/20 17:14:05 jim Exp $
+ * $Id: calendar.c,v 1.18 2000/02/20 17:44:00 eschmid Exp $
  */
 
 
@@ -42,7 +42,7 @@ DLEXPORT php3_module_entry *get_module(void) { return &calendar_module_entry; }
 #endif
 
 /* {{{ proto string jdtogregorian(int juliandaycount)
-   convert a julian day count to a gregorian calendar date.  returns string. */
+   Convert a julian day count to a gregorian calendar date */
 DLEXPORT void cal_jdtogreg(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *julday;
@@ -65,7 +65,7 @@ DLEXPORT void cal_jdtogreg(INTERNAL_FUNCTION_PARAMETERS)
 
 
 /* {{{ proto int gregoriantojd(int month, int day, int year)
-   convert a gregorian calendar date to julian day count.  */
+   Convert a gregorian calendar date to julian day count */
 DLEXPORT void cal_gregtojd(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *year, *month, *day;
@@ -87,7 +87,7 @@ DLEXPORT void cal_gregtojd(INTERNAL_FUNCTION_PARAMETERS)
 
 
 /* {{{ proto string jdtojulian(int juliandaycount)
-   convert a julian day count to a julian calendar date.  returns string. */
+   Convert a julian day count to a julian calendar date */
 DLEXPORT void cal_jdtojul(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *julday;
@@ -110,7 +110,7 @@ DLEXPORT void cal_jdtojul(INTERNAL_FUNCTION_PARAMETERS)
 
 
 /* {{{ proto int juliantojd(int month, int day, int year)
-   convert a julian calendar date to julian day count.*/
+   Convert a julian calendar date to julian day count */
 DLEXPORT void cal_jultojd(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *year, *month, *day;
@@ -132,7 +132,7 @@ DLEXPORT void cal_jultojd(INTERNAL_FUNCTION_PARAMETERS)
 
 
 /* {{{ proto string jdtojewish(int juliandaycount)
-   convert a julian day count to a jewish calendar date.  returns string. */
+   Convert a julian day count to a jewish calendar date */
 DLEXPORT void cal_jdtojewish(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *julday;
@@ -155,7 +155,7 @@ DLEXPORT void cal_jdtojewish(INTERNAL_FUNCTION_PARAMETERS)
 
 
 /* {{{ proto int jewishtojd(int month, int day, int year)
-   convert a jewish calendar date to a julian day count*/
+   Convert a jewish calendar date to a julian day count */
 DLEXPORT void cal_jewishtojd(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *year, *month, *day;
@@ -177,7 +177,7 @@ DLEXPORT void cal_jewishtojd(INTERNAL_FUNCTION_PARAMETERS)
 
 
 /* {{{ proto string jdtofrench(int juliandaycount)
-   convert a julian day count to a french republic calendar date.  returns string. */
+   Convert a julian day count to a french republic calendar date */
 DLEXPORT void cal_jdtofrench(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *julday;
@@ -200,7 +200,7 @@ DLEXPORT void cal_jdtofrench(INTERNAL_FUNCTION_PARAMETERS)
 
 
 /* {{{ proto int frenchtojd(int month, int day, int year)
-   convert a french republic calendar date to julian day count */
+   Convert a french republic calendar date to julian day count */
 DLEXPORT void cal_frenchtojd(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *year, *month, *day;
@@ -222,7 +222,7 @@ DLEXPORT void cal_frenchtojd(INTERNAL_FUNCTION_PARAMETERS)
 
 
 /* {{{ proto mixed jddayofweek(int juliandaycount, int mode)
-   returns name or number of day of week from julian day count. */
+   Returns name or number of day of week from julian day count */
 DLEXPORT void cal_jddayofweek(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *julday, *mode;
@@ -265,7 +265,7 @@ DLEXPORT void cal_jddayofweek(INTERNAL_FUNCTION_PARAMETERS)
 
 
 /* {{{ proto string jdmonthname(int juliandaycount, int mode)
-   returns name of month for julian day count. */
+   Returns name of month for julian day count */
 DLEXPORT void cal_monthname(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *julday, *mode;

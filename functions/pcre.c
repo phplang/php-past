@@ -27,7 +27,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: pcre.c,v 1.21 2000/01/09 10:35:13 fmk Exp $ */
+/* $Id: pcre.c,v 1.24 2000/02/24 14:36:49 andrei Exp $ */
 
 #include "php.h"
 
@@ -302,7 +302,7 @@ void _pcre_match(INTERNAL_FUNCTION_PARAMETERS, int global)
 	/* Get function parameters and do error-checking. */
 	switch(ARG_COUNT(ht)) {
 		case 2:
-			if (getParameters(ht, 2, &regex, &subject) == FAILURE) {
+			if (global || getParameters(ht, 2, &regex, &subject) == FAILURE) {
 				WRONG_PARAM_COUNT;
 			}
 			break;
@@ -455,7 +455,7 @@ void _pcre_match(INTERNAL_FUNCTION_PARAMETERS, int global)
 /* }}} */
 
 
-/* {{{ proto int preg_match(string pattern, string subject [, array subpatterns ])
+/* {{{ proto int preg_match(string pattern, string subject [, array subpattern])
    Perform a Perl-style regular expression match */
 PHP_FUNCTION(preg_match)
 {
@@ -464,7 +464,7 @@ PHP_FUNCTION(preg_match)
 /* }}} */
 
 
-/* {{{ proto int preg_match_all(string pattern, string subject, array subpatterns [, int order ])
+/* {{{ proto int preg_match_all(string pattern, string subject, array subpatterns [, int order])
    Perform a Perl-style global regular expression match */
 PHP_FUNCTION(preg_match_all)
 {
@@ -691,8 +691,8 @@ static char *_php_replace_in_subject(pval *regex, pval *replace, pval *subject)
 }
 
 
-/* {{{ proto string preg_replace(string|array regex, string|array replace, string|array subject)
-    Perform Perl-style regular expression replacement */
+/* {{{ proto string preg_replace(mixed regex, mixed replace, mixed subject)
+   Perform Perl-style regular expression replacement */
 PHP_FUNCTION(preg_replace)
 {
 	pval			*regex,
@@ -731,7 +731,7 @@ PHP_FUNCTION(preg_replace)
 
 
 /* {{{ proto array preg_split(string pattern, string subject [, int limit ])
-	split string into an array using a perl-style regular expression as a delimiter */
+   Split string into an array using a perl-style regular expression as a delimiter */
 PHP_FUNCTION(preg_split)
 {
 	pval			*regex,				/* Regular expression to split by */

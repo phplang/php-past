@@ -27,7 +27,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: dir.c,v 1.61 2000/01/01 04:31:14 sas Exp $ */
+/* $Id: dir.c,v 1.62 2000/02/20 20:16:31 eschmid Exp $ */
 #include "php.h"
 #include "internal_functions.h"
 #include "fopen-wrappers.h"
@@ -111,7 +111,7 @@ void php3_opendir(INTERNAL_FUNCTION_PARAMETERS)
 /* }}} */
 
 /* {{{ proto void closedir([int dir_handle])
-Close directory connection identified by the dir_handle */
+   Close directory connection identified by the dir_handle */
 void php3_closedir(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *id, *tmp;
@@ -147,7 +147,7 @@ void php3_closedir(INTERNAL_FUNCTION_PARAMETERS)
 /* }}} */
 
 /* {{{ proto int chdir(string directory)
-Change the current directory */
+   Change the current directory */
 void php3_chdir(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *arg;
@@ -205,7 +205,7 @@ void php3_rewinddir(INTERNAL_FUNCTION_PARAMETERS)
 /* }}} */
 
 /* {{{ proto string readdir([int dir_handle])
-Read directory entry from dir_handle */
+   Read directory entry from dir_handle */
 void php3_readdir(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *id, *tmp;
@@ -246,7 +246,7 @@ void php3_readdir(INTERNAL_FUNCTION_PARAMETERS)
 /* }}} */
 
 /* {{{ proto class dir(string directory)
-Directory class with properties, handle and class and methods read, rewind and close */
+   Directory class with properties, handle and class and methods read, rewind and close */
 void php3_getdir(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *arg;
 	DIR *dirp;

@@ -28,7 +28,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: math.c,v 1.49 2000/01/01 04:31:16 sas Exp $ */
+/* $Id: math.c,v 1.50 2000/02/22 15:13:57 eschmid Exp $ */
 #include "php.h"
 #include "internal_functions.h"
 #include "phpmath.h"
@@ -658,7 +658,7 @@ char *_php3_number_format(double d,int dec,char dec_point,char thousand_sep)
 	return resbuf;
 }
 
-/* {{{ proto string number_format(double number, [,int num_decimal_places [, string  dec_seperator, string thousands_seperator)]])
+/* {{{ proto string number_format(double number [,int num_decimal_places [, string  dec_separator, string thousands_separator)]])
    Formats a number with grouped thousands */
 void php3_number_format(INTERNAL_FUNCTION_PARAMETERS)
 {

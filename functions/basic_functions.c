@@ -24,11 +24,11 @@
    | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
    | Authors: Andi Gutmans <andi@php.net>                                 |
-   |          Zeev Suraski <bourbon@netvision.net.il>                     |
+   |          Zeev Suraski <zeev@zend.com>                                |
    +----------------------------------------------------------------------+
  */
 
-/* $Id: basic_functions.c,v 1.283 2000/01/01 04:31:14 sas Exp $ */
+/* $Id: basic_functions.c,v 1.285 2000/02/23 22:57:21 zeev Exp $ */
 #include "php.h"
 #include "modules.h"
 #include "internal_functions.h"
@@ -99,6 +99,12 @@ extern int _php3_send_error(char *message, char *address);
 #endif
 static pval *user_compare_func_name;
 static HashTable *user_shutdown_function_names;
+
+#if HAVE_PUTENV
+static HashTable sm_protected_env_vars;
+static char *sm_allowed_env_vars;
+#endif
+
 
 /* some prototypes for local functions */
 void user_shutdown_function_dtor(pval *user_shutdown_function_name);
@@ -345,7 +351,7 @@ php3_module_entry basic_functions_module = {
 	"Basic Functions",			/* extension name */
 	basic_functions,			/* function list */
 	php3_minit_basic,			/* process startup */
-	NULL,						/* process shutdown */
+	php3_mshutdown_basic,		/* process shutdown */
 	php3_rinit_basic,			/* request startup */
 	php3_rshutdown_basic,		/* request shutdown */
 	NULL,						/* extension info */
@@ -389,6 +395,7 @@ static void _php3_putenv_destructor(putenv_entry *pe)
 
 int php3_minit_basic(INIT_FUNC_ARGS)
 {
+	char *protected_vars, *protected_var;
 	TLS_VARS;
 
 	REGISTER_DOUBLE_CONSTANT("M_PI", M_PI, CONST_CS | CONST_PERSISTENT);
@@ -397,8 +404,38 @@ int php3_minit_basic(INIT_FUNC_ARGS)
 	REGISTER_LONG_CONSTANT("EXTR_SKIP", EXTR_SKIP, CONST_CS | CONST_PERSISTENT);
 	REGISTER_LONG_CONSTANT("EXTR_PREFIX_SAME", EXTR_PREFIX_SAME, CONST_CS | CONST_PERSISTENT);
 	REGISTER_LONG_CONSTANT("EXTR_PREFIX_ALL", EXTR_PREFIX_ALL, CONST_CS | CONST_PERSISTENT);
+
+	_php3_hash_init(&sm_protected_env_vars, 5, NULL, NULL, 1);
+
+	if (cfg_get_string("safe_mode_protected_env_vars", &protected_vars) == FAILURE) {
+		protected_vars = NULL;
+	}
+
+	if (protected_vars) {
+		int dummy=1;
+
+		protected_vars = estrdup(protected_vars);
+		protected_var=strtok(protected_vars, ", ");
+		while (protected_var) {
+			_php3_hash_update(&sm_protected_env_vars, protected_var, strlen(protected_var), &dummy, sizeof(int), NULL);
+			protected_var=strtok(NULL, ", ");
+		}
+		efree(protected_vars);
+	}
+
+	if (cfg_get_string("safe_mode_allowed_env_vars", &sm_allowed_env_vars) == FAILURE) {
+		sm_allowed_env_vars = NULL;
+	}
+
 	return SUCCESS;
 }
+
+
+int php3_mshutdown_basic(void)
+{
+	_php3_hash_destroy(&sm_protected_env_vars);
+}
+
 
 int php3_rinit_basic(INIT_FUNC_ARGS)
 {
@@ -516,6 +553,38 @@ void php3_putenv(INTERNAL_FUNCTION_PARAMETERS)
 		pe.key_len = strlen(pe.key);
 		pe.key = estrndup(pe.key,pe.key_len);
 		
+		if (php3_ini.safe_mode) {
+			/* Check the protected list */
+			if (_php3_hash_exists(&sm_protected_env_vars, pe.key, pe.key_len)) {
+				php3_error(E_WARNING, "Safe Mode:  Cannot override protected environment variable '%s'", pe.key);
+				efree(pe.putenv_string);
+				efree(pe.key);
+				RETURN_FALSE;
+			}
+
+			/* Check the allowed list */
+			if (sm_allowed_env_vars && *sm_allowed_env_vars) {
+				char *allowed_env_vars = estrdup(sm_allowed_env_vars);
+				char *allowed_prefix = strtok(allowed_env_vars, ", ");
+				unsigned char allowed=0;
+
+				while (allowed_prefix) {
+					if (!strncmp(allowed_prefix, pe.key, strlen(allowed_prefix))) {
+						allowed=1;
+						break;
+					}
+					allowed_prefix = strtok(NULL, ", ");
+				}
+				efree(allowed_env_vars);
+				if (!allowed) {
+					php3_error(E_WARNING, "Safe Mode:  Cannot set environment variable '%s' - it's not in the allowed list", pe.key);
+					efree(pe.putenv_string);
+					efree(pe.key);
+					RETURN_FALSE;
+				}
+			}
+		}
+
 		_php3_hash_del(&putenv_ht,pe.key,pe.key_len+1);
 		
 		/* find previous value */

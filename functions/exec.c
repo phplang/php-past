@@ -26,7 +26,7 @@
    | Author: Rasmus Lerdorf   <rasmus@lerdorf.on.ca>                      |
    +----------------------------------------------------------------------+
  */
-/* $Id: exec.c,v 1.87 2000/01/01 04:31:14 sas Exp $ */
+/* $Id: exec.c,v 1.90 2000/02/20 20:42:14 eschmid Exp $ */
 #include <stdio.h>
 #include "php.h"
 #include <ctype.h>
@@ -202,7 +202,7 @@ static int _Exec(int type, char *cmd, pval *array, pval *return_value)
 	} else {
 		int b, i;
 
-		while ((b = fread(buf, 1, sizeof(buf), fp)) > 0) {
+		while ((b = fread(buf, 1, buflen, fp)) > 0) {
 			for (i = 0; i < b; i++)
 				if (output) PUTC(buf[i]);
 		}
@@ -214,8 +214,6 @@ static int _Exec(int type, char *cmd, pval *array, pval *return_value)
 		
 		tmp = _php3_addslashes(buf, 0, &len, 0);
 		RETVAL_STRINGL(tmp,len,0);
-	} else {
-		RETVAL_STRING(buf,1);
 	}
 	
 	ret = pclose(fp);
@@ -293,7 +291,7 @@ void php3_system(INTERNAL_FUNCTION_PARAMETERS)
 }
 /* }}} */
 
-/* {{{ proto int passthru(string command [, int return_value])
+/* {{{ proto void passthru(string command [, int return_value])
    Execute an external program and display raw output */
 void php3_passthru(INTERNAL_FUNCTION_PARAMETERS)
 {
@@ -359,7 +357,7 @@ char * _php3_escapeshellcmd(char *str) {
 }
 
 /* {{{ proto string escapeshellcmd(string command)
-   escape shell metacharacters */
+   Escape shell metacharacters */
 void php3_escapeshellcmd(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *arg1;

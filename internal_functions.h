@@ -24,12 +24,12 @@
    | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
    | Authors: Andi Gutmans <andi@php.net>                                 |
-   |          Zeev Suraski <bourbon@netvision.net.il>                     |
+   |          Zeev Suraski <zeev@zend.com>                                |
    +----------------------------------------------------------------------+
  */
 
 
-/* $Id: internal_functions.h,v 1.131 2000/01/01 04:44:07 sas Exp $ */
+/* $Id: internal_functions.h,v 1.132 2000/02/07 23:54:50 zeev Exp $ */
 
 
 #ifndef _INTERNAL_FUNCTIONS_H

@@ -26,7 +26,7 @@
    | Authors: Uwe Steinmann                                               |
    +----------------------------------------------------------------------+
  */
-/* $Id: php3_cpdf.h,v 1.10 2000/01/01 04:44:09 sas Exp $ */
+/* $Id: php3_cpdf.h,v 1.11 2000/02/14 10:09:20 kk Exp $ */
 
 #ifndef _PHP3_CPDF_H
 #define _PHP3_CPDF_H
@@ -111,7 +111,7 @@ extern void php3_cpdf_output_buffer(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_cpdf_save_to_file(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_cpdf_add_annotation(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_cpdf_import_jpeg(INTERNAL_FUNCTION_PARAMETERS);
-#if HAVE_LIBGD13
+#if HAVE_LIBGD
 extern void php3_cpdf_place_inline_image(INTERNAL_FUNCTION_PARAMETERS);
 #endif
 extern void php3_cpdf_set_action_url(INTERNAL_FUNCTION_PARAMETERS);

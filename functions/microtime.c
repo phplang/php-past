@@ -27,18 +27,21 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: microtime.c,v 1.35 2000/01/01 04:31:16 sas Exp $ */
+/* $Id: microtime.c,v 1.37 2000/02/23 17:42:01 sas Exp $ */
 
 #include "php.h"
 #include <stdlib.h>
 #ifdef HAVE_UNISTD_H
-# include <unistd.h>
+#include <unistd.h>
+#endif
+#ifdef HAVE_SYS_TYPES_H
+#include <sys/types.h>
 #endif
 #ifdef HAVE_SYS_TIME_H
-# include <sys/time.h>
+#include <sys/time.h>
 #endif
 #ifdef HAVE_SYS_RESOURCE_H
-# include <sys/resource.h>
+#include <sys/resource.h>
 #endif
 #include <string.h>
 #include <errno.h>
@@ -113,8 +116,8 @@ void _php3_gettimeofday(pval *return_value) {
 }
 /* }}} */
 
-/* {{{ proto array getrusage([ int who ])
-   returns an array of usage statistics */
+/* {{{ proto array getrusage([int who])
+   Returns an array of usage statistics */
 void php3_getrusage(INTERNAL_FUNCTION_PARAMETERS)
 {
 #if HAVE_GETRUSAGE

@@ -1,4 +1,4 @@
-/* $Id: php3_mcal.h,v 1.14 1999/12/26 18:44:47 rasmus Exp $ */
+/* $Id: php3_mcal.h,v 1.16 2000/01/28 15:04:18 chagenbu Exp $ */
 
 #ifndef _INCLUDED_MCAL_H
 #define _INCLUDED_MCAL_H
@@ -60,6 +60,7 @@ void php3_mcal_day_of_year(INTERNAL_FUNCTION_PARAMETERS);
 void php3_mcal_date_compare(INTERNAL_FUNCTION_PARAMETERS);
 void php3_mcal_event_init(INTERNAL_FUNCTION_PARAMETERS);
 void php3_mcal_next_recurrence(INTERNAL_FUNCTION_PARAMETERS);
+void php3_mcal_event_set_recur_none(INTERNAL_FUNCTION_PARAMETERS);
 void php3_mcal_event_set_recur_daily(INTERNAL_FUNCTION_PARAMETERS);
 void php3_mcal_event_set_recur_weekly(INTERNAL_FUNCTION_PARAMETERS);
 void php3_mcal_event_set_recur_monthly_mday(INTERNAL_FUNCTION_PARAMETERS);
@@ -68,6 +69,7 @@ void php3_mcal_event_set_recur_yearly(INTERNAL_FUNCTION_PARAMETERS);
 void php3_mcal_event_set_start_now(INTERNAL_FUNCTION_PARAMETERS);
 void php3_mcal_event_set_end_now(INTERNAL_FUNCTION_PARAMETERS);
 void php3_mcal_fetch_current_stream_event(INTERNAL_FUNCTION_PARAMETERS);
+void php3_mcal_event_add_attribute(INTERNAL_FUNCTION_PARAMETERS);
 
 
 #else

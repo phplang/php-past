@@ -23,12 +23,12 @@
    | If you did not, or have any questions about PHP licensing, please    |
    | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
-   | Authors: Zeev Suraski <bourbon@netvision.net.il>                     |
+   | Authors: Zeev Suraski <zeev@zend.com>                                |
    +----------------------------------------------------------------------+
  */
 
 
-/* $Id: php3_mssql.h,v 1.4 1999/12/26 18:44:43 rasmus Exp $ */
+/* $Id: php3_mssql.h,v 1.5 2000/02/07 23:54:50 zeev Exp $ */
 
 #ifndef _PHP3_MSSQL_H
 #define _PHP3_MSSQL_H

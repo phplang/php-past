@@ -25,11 +25,11 @@
    +----------------------------------------------------------------------+
    | Authors: Brian Schaffner <brian@tool.net>                            |
    |          Shane Caraveo <shane@caraveo.com>                           |
-   |          Zeev Suraski <bourbon@netvision.net.il>                     |
+   |          Zeev Suraski <zeev@zend.com>                                |
    +----------------------------------------------------------------------+
  */
 
-/* $Id: dl.c,v 1.103 2000/01/01 04:31:14 sas Exp $ */
+/* $Id: dl.c,v 1.104 2000/02/07 23:54:51 zeev Exp $ */
 #include "php.h"
 #include "internal_functions.h"
 #include "dl.h"

@@ -27,7 +27,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: uniqid.c,v 1.40 2000/01/01 04:31:17 sas Exp $ */
+/* $Id: uniqid.c,v 1.41 2000/02/22 15:13:57 eschmid Exp $ */
 #include "php.h"
 #include "internal_functions.h"
 
@@ -51,7 +51,7 @@
 
 #define MORE_ENTROPY (argc == 2 && flags->value.lval)
 
-/* {{{ proto string uniqid(string prefix, [bool more_entropy])
+/* {{{ proto string uniqid(string prefix [, bool more_entropy])
    Generate a unique id */
 PHP_FUNCTION(uniqid)
 {

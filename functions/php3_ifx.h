@@ -26,11 +26,11 @@
    | Authors: Danny Heijl <Danny.Heijl@cevi.be>, initial cut (ODS 7)      |
    |          Christian Cartus <chc@idgruppe.de>, blobs, and IUS 9        |
    |          Jouni Ahto <jah@mork.net>   : configuration stuff           |
-   | based on mysql code by: Zeev Suraski <bourbon@netvision.net.il>      |
+   | based on mysql code by: Zeev Suraski <zeev@zend.com>                 |
    +----------------------------------------------------------------------+
  */
 
-/* $Id: php3_ifx.h,v 1.22 2000/01/01 04:44:09 sas Exp $ */
+/* $Id: php3_ifx.h,v 1.23 2000/02/07 23:54:51 zeev Exp $ */
 
 #ifndef _PHP3_IFX_H
 #define _PHP3_IFX_H

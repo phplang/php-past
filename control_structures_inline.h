@@ -24,12 +24,12 @@
    | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
    | Authors: Andi Gutmans <andi@php.net>                                 |
-   |          Zeev Suraski <bourbon@netvision.net.il>                     |
+   |          Zeev Suraski <zeev@zend.com>                                |
    +----------------------------------------------------------------------+
  */
 
 
-/* $Id: control_structures_inline.h,v 1.203 2000/01/01 04:44:06 sas Exp $ */
+/* $Id: control_structures_inline.h,v 1.204 2000/02/07 23:54:49 zeev Exp $ */
 
 #include "php.h"
 #include "internal_functions.h"

@@ -23,12 +23,12 @@
    | If you did not, or have any questions about PHP licensing, please    |
    | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
-   | Authors: Zeev Suraski <bourbon@netvision.net.il>                     |
+   | Authors: Zeev Suraski <zeev@zend.com>                                |
    |          Jouni Ahto <jah@mork.net> (large object interface)          |
    +----------------------------------------------------------------------+
  */
  
-/* $Id: pgsql.c,v 1.90 2000/01/01 04:31:16 sas Exp $ */
+/* $Id: pgsql.c,v 1.92 2000/02/22 15:13:57 eschmid Exp $ */
 
 #include <stdlib.h>
 
@@ -1174,7 +1174,7 @@ void php3_pgsql_lo_create(INTERNAL_FUNCTION_PARAMETERS)
 }
 /* }}} */
 
-/* {{{ proto void pg_lounlink([int connection, ] int large_obj_id)
+/* {{{ proto void pg_lounlink([int connection,] int large_obj_id)
    Delete a large object */
 void php3_pgsql_lo_unlink(INTERNAL_FUNCTION_PARAMETERS)
 {
@@ -1221,7 +1221,7 @@ void php3_pgsql_lo_unlink(INTERNAL_FUNCTION_PARAMETERS)
 /* }}} */
 
 /* {{{ proto int pg_loopen([int connection,] int objoid, string mode)
-   Open a large object and return fd */
+   Open a large object and return a fd */
 void php3_pgsql_lo_open(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *pgsql_link, *oid, *mode;

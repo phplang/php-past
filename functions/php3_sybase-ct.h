@@ -23,12 +23,12 @@
    | If you did not, or have any questions about PHP licensing, please    |
    | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
-   | Authors: Zeev Suraski <bourbon@netvision.net.il>                     |
+   | Authors: Zeev Suraski <zeev@zend.com>                                |
    +----------------------------------------------------------------------+
  */
 
 
-/* $Id: php3_sybase-ct.h,v 1.21 2000/01/01 04:44:09 sas Exp $ */
+/* $Id: php3_sybase-ct.h,v 1.22 2000/02/07 23:54:51 zeev Exp $ */
 
 #ifndef _PHP3_SYBASE_CT_H
 #define _PHP3_SYBASE_CT_H

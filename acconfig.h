@@ -1,12 +1,7 @@
-#undef HAVE_GD_GIF
 #undef HAVE_RECODE
 #undef USE_BCOPY
 #undef HAVE_FTP
-#undef HAVE_LIBGD14
-#undef HAVE_LIBGD15
-#undef HAVE_LIBGD16
-#undef HAVE_GDIMAGECOLORRESOLVE
-#undef HAVE_LIBGD_LZW
+
 #undef ushort
 
 #undef UCD_SNMP_HACK
@@ -94,15 +89,16 @@
 #define HAVE_LIBGD 0
 
 #undef HAVE_GD_PNG 
+#undef HAVE_GD_GIF
+#undef HAVE_GD_LZW
+#undef HAVE_GD_COLORRESOLVE
+#undef HAVE_GD_ANCIENT
 
 /* Define if you have the GNU gettext library (-lintl). */
 #define HAVE_LIBINTL 0
 
 /* Define if you have the zlib library */
 #define HAVE_ZLIB 0
-
-/* Define if you have the gd version 1.3 library (-lgd). */
-#define HAVE_LIBGD13 0
 
 /* Define if you want safe mode enabled by default. */
 #define PHP_SAFE_MODE 0
@@ -370,6 +366,5 @@
 
 #define HAVE_LIBTTF 0
 #define HAVE_LIBFREETYPE 0
-#define FREETYPE_4BIT_ANTIALIAS_HACK 0
 
 #define HAVE_POSIX 0

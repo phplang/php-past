@@ -26,7 +26,7 @@
    | Authors: Rasmus Lerdorf <rasmus@lerdorf.on.ca>                       |
    +----------------------------------------------------------------------+
  */
-/* $Id: head.c,v 1.123 2000/01/01 04:31:15 sas Exp $ */
+/* $Id: head.c,v 1.125 2000/02/20 22:21:04 eschmid Exp $ */
 #include <stdio.h>
 #include "php.h"
 #include "internal_functions.h"
@@ -450,7 +450,7 @@ void _php3_SetCookie(char * name, char * value, time_t expires, char * path, cha
 #endif
 	int len=0;
 	time_t t;
-	char *r, *dt;
+	char *dt,*encoded_value=NULL;
 #endif
 #if APACHE
 	if (name) name = estrdup(name);
@@ -460,7 +460,10 @@ void _php3_SetCookie(char * name, char * value, time_t expires, char * path, cha
 	php3_PushCookieList(name, value, expires, path, domain, secure);
 #else
 	if (name) len += strlen(name);
-	if (value) len += strlen(value);
+	if (value) {
+		encoded_value = _php3_urlencode(value, strlen (value));
+		len += strlen(encoded_value);
+	}
 	if (path) len += strlen(path);
 	if (domain) len += strlen(domain);
 	tempstr = emalloc(len + 100);
@@ -478,9 +481,7 @@ void _php3_SetCookie(char * name, char * value, time_t expires, char * path, cha
 		efree(dt);
 	} else {
 		/* FIXME: XXX: this is not binary data safe */
-		r = _php3_urlencode(value, strlen (value));
-		sprintf(tempstr, "%s=%s", name, value ? r : "");
-		if (r) efree(r);
+		sprintf(tempstr, "%s=%s", name, value ? encoded_value : "");
 		if (expires > 0) {
 			strcat(tempstr, "; expires=");
 			dt = php3_std_date(expires);
@@ -488,6 +489,9 @@ void _php3_SetCookie(char * name, char * value, time_t expires, char * path, cha
 			efree(dt);
 		}
 	}
+
+	if (encoded_value) efree(encoded_value);
+
 	if (path && strlen(path)) {
 		strcat(tempstr, "; path=");
 		strcat(tempstr, path);
@@ -528,7 +532,7 @@ void _php3_SetCookie(char * name, char * value, time_t expires, char * path, cha
 }
 
 /* php3_SetCookie(name,value,expires,path,domain,secure) */
-/* {{{ proto void setcookie(string name[, string value[, int expires[, string path[, string domain[, string secure]]]]])
+/* {{{ proto void setcookie(string name [, string value [, int expires [, string path [, string domain [, string secure]]]]])
    Send a cookie */
 void php3_SetCookie(INTERNAL_FUNCTION_PARAMETERS)
 {

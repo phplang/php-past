@@ -24,12 +24,12 @@
    | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
    | Authors: Andi Gutmans <andi@php.net>                                 |
-   |          Zeev Suraski <bourbon@netvision.net.il>                     |
+   |          Zeev Suraski <zeev@zend.com>                                |
    +----------------------------------------------------------------------+
  */
 
 
-/* $Id: main.h,v 1.59 2000/01/01 04:44:07 sas Exp $ */
+/* $Id: main.h,v 1.60 2000/02/07 23:54:50 zeev Exp $ */
 
 
 #ifndef _MAIN_H

@@ -27,7 +27,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: bcmath.c,v 1.31 2000/01/01 04:31:14 sas Exp $ */
+/* $Id: bcmath.c,v 1.32 2000/02/22 15:13:57 eschmid Exp $ */
 #ifndef MSVC5
 #include "config.h"
 #include "build-defs.h"
@@ -126,7 +126,7 @@ void php3_bcmath_add(INTERNAL_FUNCTION_PARAMETERS)
 /* }}} */
 
 /* {{{ proto string bcsub(string left_operand, string right_operand [, int scale])
-   Returns the difference between two arbitrary precision numbers (subtration) */
+   Returns the difference between two arbitrary precision numbers */
 void php3_bcmath_sub(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *left, *right,*scale_param;

@@ -24,12 +24,12 @@
    | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
    | Authors: Andi Gutmans   <andi@vipe.technion.ac.il>                   |
-   |          Zeev Suraski   <bourbon@netvision.net.il>                   |
+   |          Zeev Suraski   <zeev@zend.com>                              |
    |          Rasmus Lerdorf <rasmus@lerdorf.on.ca>                       |
    +----------------------------------------------------------------------+
  */
 
-/* $Id: php_alloc.h,v 1.1 2000/01/12 15:37:36 sas Exp $ */
+/* $Id: php_alloc.h,v 1.2 2000/02/07 23:54:50 zeev Exp $ */
 
 #ifndef _ALLOC_H
 #define _ALLOC_H

@@ -25,12 +25,12 @@
    +----------------------------------------------------------------------+
    | Authors: Brian Schaffner <brian@tool.net>                            |
    |          Shane Caraveo <shane@caraveo.com>                           |
-   |          Zeev Suraski <bourbon@netvision.net.il>                     |
+   |          Zeev Suraski <zeev@zend.com>                                |
    +----------------------------------------------------------------------+
  */
 
 
-/* $Id: dl.h,v 1.22 2000/01/01 04:44:09 sas Exp $ */
+/* $Id: dl.h,v 1.23 2000/02/07 23:54:51 zeev Exp $ */
 
 #ifndef _DL_H
 #define _DL_H

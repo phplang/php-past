@@ -23,11 +23,11 @@
    | If you did not, or have any questions about PHP licensing, please    |
    | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
-   | Authors: Zeev Suraski <bourbon@netvision.net.il>                     |
+   | Authors: Zeev Suraski <zeev@zend.com>                                |
    +----------------------------------------------------------------------+
  */
 
-/* $Id: constants.c,v 1.27 2000/01/01 04:31:12 sas Exp $ */
+/* $Id: constants.c,v 1.29 2000/02/20 18:40:32 eschmid Exp $ */
 #include "php.h"
 #include "internal_functions.h"
 #include "constants.h"
@@ -220,7 +220,7 @@ void register_constant(php3_constant *c)
 	free(lowercase_name);
 }
 
-/* {{{ proto bool define(string var_name, mixed value[, int case_sensitive])
+/* {{{ proto bool define(string var_name, mixed value [, int case_sensitive])
    Defines a constant value */
 void php3_define(INTERNAL_FUNCTION_PARAMETERS)
 {

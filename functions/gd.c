@@ -29,7 +29,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: gd.c,v 1.140 2000/01/13 13:16:05 rasmus Exp $ */
+/* $Id: gd.c,v 1.145 2000/02/20 20:42:14 eschmid Exp $ */
 
 /* gd 1.2 is copyright 1994, 1995, Quest Protein Database Center, 
    Cold Spring Harbor Labs. */
@@ -105,6 +105,7 @@ function_entry gd_functions[] = {
       {"imagecreatefrompng",          php3_imagecreatefrompng,        NULL},
       {"imagepng",                            php3_imagepng,                          NULL},
 #endif
+	{"imagewbmp",				php3_imagewbmp,				NULL},
 	{"imagedestroy",			php3_imagedestroy,			NULL},
 	{"imagefill",				php3_imagefill,				NULL},
 	{"imagefilledpolygon",		php3_imagefilledpolygon,	NULL},
@@ -180,31 +181,20 @@ int php3_minit_gd(INIT_FUNC_ARGS)
 
 void php3_info_gd(void) {
 	/* need to use a PHPAPI function here because it is external module in Windows */
-#if HAVE_LIBGD16
-	php3_printf("Version 1.6+");
-#elif HAVE_LIBGD15
-	php3_printf("Version 1.5");
-#elif HAVE_LIBGD14
-	php3_printf("Version 1.4");
-#elif HAVE_LIBGD13
-	php3_printf("Version 1.3");
-#else
-	php3_printf("Version 1.2");
-#endif
-#if HAVE_LIBTTF
-	php3_printf(" with FreeType support");
-#endif
-#if HAVE_LIBFREETYPE
-	php3_printf(" with FreeType 2 support");
-#endif
-#if HAVE_LIBT1
-	php3_printf(" with Type1 font support");
-#endif
 #if HAVE_GD_PNG
-	php3_printf(" with PNG support");
+        php3_printf("Version 1.6 (PNG) or later");
 #endif
 #if HAVE_GD_GIF
-	php3_printf(" with GIF support");
+        php3_printf("Version 1.5 (GIF) or earlier");
+#endif
+#if HAVE_LIBTTF
+	php3_printf(", FreeType support");
+#endif
+#if HAVE_LIBFREETYPE
+	php3_printf(", FreeType 2 support");
+#endif
+#if HAVE_LIBT1
+	php3_printf(", t1lib support");
 #endif
 }
 
@@ -231,7 +221,7 @@ PHPAPI_EXPORT int php3i_get_le_gd(void){
 /*                                                                  */
 /* in a single function                                             */
 
-#ifndef HAVE_GDIMAGECOLORRESOLVE
+#ifndef HAVE_GD_COLORRESOLVE
 int
 gdImageColorResolve(gdImagePtr im, int r, int g, int b)
 {
@@ -283,7 +273,7 @@ void php3_free_gd_font(gdFontPtr fp)
 }
 
 /* {{{ proto int imageloadfont(string filename)
-Load a new font */
+   Load a new font */
 void php3_imageloadfont(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *file;
 	int hdr_size = sizeof(gdFont) - sizeof(char *);
@@ -365,7 +355,7 @@ void php3_imageloadfont(INTERNAL_FUNCTION_PARAMETERS) {
 /* }}} */
 
 /* {{{ proto int imagecreate(int x_size, int y_size)
-Create a new image */
+   Create a new image */
 void php3_imagecreate(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *x_size, *y_size;
 	int ind;
@@ -388,7 +378,7 @@ void php3_imagecreate(INTERNAL_FUNCTION_PARAMETERS) {
 
 #if HAVE_GD_GIF
 /* {{{ proto int imagecreatefromgif(string filename)
-Create a new image from file or URL */
+   Create a new image from file or URL */
 void php3_imagecreatefromgif (INTERNAL_FUNCTION_PARAMETERS) {
 	pval *file;
 	int ind;
@@ -432,7 +422,7 @@ void php3_imagecreatefromgif (INTERNAL_FUNCTION_PARAMETERS) {
 
 #if HAVE_GD_PNG
 /* {{{ proto int imagecreatefrompng(string filename)
-Create a new image from file or URL */
+   Create a new image from file or URL */
 void php3_imagecreatefrompng (INTERNAL_FUNCTION_PARAMETERS) {
       pval *file;
       int ind;
@@ -475,7 +465,7 @@ void php3_imagecreatefrompng (INTERNAL_FUNCTION_PARAMETERS) {
 #endif /* HAVE_GD_PNG */
 
 /* {{{ proto int imagedestroy(int im)
-Destroy an image */
+   Destroy an image */
 void php3_imagedestroy(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *imgind;
 
@@ -492,7 +482,7 @@ void php3_imagedestroy(INTERNAL_FUNCTION_PARAMETERS) {
 /* }}} */
 
 /* {{{ proto int imagecolorallocate(int im, int red, int green, int blue)
-Allocate a color for an image */
+   Allocate a color for an image */
 void php3_imagecolorallocate(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *imgind, *red, *green, *blue;
 	int ind, ind_type;
@@ -528,7 +518,7 @@ void php3_imagecolorallocate(INTERNAL_FUNCTION_PARAMETERS) {
 
 /* im, x, y */
 /* {{{ proto int imagecolorat(int im, int x, int y)
-Get the index of the color of a pixel */
+   Get the index of the color of a pixel */
 void php3_imagecolorat(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *imgind, *x, *y;
 	int ind, ind_type;
@@ -551,10 +541,10 @@ void php3_imagecolorat(INTERNAL_FUNCTION_PARAMETERS) {
 		RETURN_FALSE;
 	}
 	if (gdImageBoundsSafe(im, x->value.lval, y->value.lval)) {
-#if HAVE_LIBGD13
-		RETURN_LONG(im->pixels[y->value.lval][x->value.lval]);
-#else
+#if HAVE_GD_ANCIENT
 		RETURN_LONG(im->pixels[x->value.lval][y->value.lval]);
+#else
+		RETURN_LONG(im->pixels[y->value.lval][x->value.lval]);
 #endif
 	}
 	else {
@@ -564,7 +554,7 @@ void php3_imagecolorat(INTERNAL_FUNCTION_PARAMETERS) {
 /* }}} */
 
 /* {{{ proto int imagecolorclosest(int im, int red, int green, int blue)
-Get the index of the closest color to the specified color */
+   Get the index of the closest color to the specified color */
 void php3_imagecolorclosest(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *imgind, *red, *green, *blue;
 	int ind, ind_type;
@@ -599,7 +589,7 @@ void php3_imagecolorclosest(INTERNAL_FUNCTION_PARAMETERS) {
 /* }}} */
 
 /* {{{ proto int imagecolordeallocate(int im, int index)
-De-allocate a color for an image */
+   De-allocate a color for an image */
 void php3_imagecolordeallocate(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *imgind, *index;
 	int ind, ind_type, col;
@@ -633,7 +623,7 @@ void php3_imagecolordeallocate(INTERNAL_FUNCTION_PARAMETERS) {
 /* }}} */
 
 /* {{{ proto int imagecolorresolve(int im, int red, int green, int blue)
-Get the index of the specified color or its closest possible alternative */
+   Get the index of the specified color or its closest possible alternative */
 void php3_imagecolorresolve(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *imgind, *red, *green, *blue;
 	int ind, ind_type;
@@ -668,7 +658,7 @@ void php3_imagecolorresolve(INTERNAL_FUNCTION_PARAMETERS) {
 /* }}} */
 
 /* {{{ proto int imagecolorexact(int im, int red, int green, int blue)
-Get the index of the specified color */
+   Get the index of the specified color */
 void php3_imagecolorexact(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *imgind, *red, *green, *blue;
 	int ind, ind_type;
@@ -703,7 +693,7 @@ void php3_imagecolorexact(INTERNAL_FUNCTION_PARAMETERS) {
 /* }}} */
 
 /* {{{ proto int imagecolorset(int im, int col, int red, int green, int blue)
-Set the color for the specified palette index */
+   Set the color for the specified palette index */
 void php3_imagecolorset(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *imgind, *color, *red, *green, *blue;
 	int ind, ind_type;
@@ -745,7 +735,7 @@ void php3_imagecolorset(INTERNAL_FUNCTION_PARAMETERS) {
 /* }}} */
 
 /* {{{ proto array imagecolorsforindex(int im, int col)
-Get the colors for an index */
+   Get the colors for an index */
 void php3_imagecolorsforindex(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *imgind, *index;
 	int col, ind, ind_type;
@@ -784,7 +774,7 @@ void php3_imagecolorsforindex(INTERNAL_FUNCTION_PARAMETERS) {
 
 #if HAVE_GD_GIF
 /* {{{ proto int imagegif(int im [, string filename])
-Output image to browser or file */
+   Output image to browser or file */
 void php3_imagegif (INTERNAL_FUNCTION_PARAMETERS) {
 	pval *imgind, *file;
 	gdImagePtr im;
@@ -823,7 +813,11 @@ void php3_imagegif (INTERNAL_FUNCTION_PARAMETERS) {
 			php3_error(E_WARNING, "ImageGif: unable to open %s for writing", fn);
 			RETURN_FALSE;
 		}
+#if HAVE_GD_LZW && defined(LZW_LICENCED)
+		gdImageLzw (im,fp);
+#else
 		gdImageGif (im,fp);
+#endif
 		fflush(fp);
 		fclose(fp);
 	}
@@ -841,7 +835,11 @@ void php3_imagegif (INTERNAL_FUNCTION_PARAMETERS) {
 		output = php3_header();
 
 		if (output) {
+#if HAVE_GD_LZW && defined(LZW_LICENCED) 
+			gdImageLzw (im, tmp);
+#else
 			gdImageGif (im, tmp);
+#endif
                       fseek(tmp, 0, SEEK_SET);
 #if APACHE && defined(CHARSET_EBCDIC)
                       /* This is a binary file already: avoid EBCDIC->ASCII conversion */
@@ -863,7 +861,7 @@ void php3_imagegif (INTERNAL_FUNCTION_PARAMETERS) {
 
 #if HAVE_GD_PNG
 /* {{{ proto int imagepng(int im [, string filename])
-Output image to browser or file */
+   Output image to browser or file */
 void php3_imagepng (INTERNAL_FUNCTION_PARAMETERS) {
       pval *imgind, *file;
       gdImagePtr im;
@@ -940,8 +938,129 @@ void php3_imagepng (INTERNAL_FUNCTION_PARAMETERS) {
 /* }}} */
 #endif /* HAVE_GD_PNG */
 
+/* {{{ proto int imagewbmp(int im [, string filename])
+   Output wbmp image to browser or file */
+void php3_imagewbmp (INTERNAL_FUNCTION_PARAMETERS) {
+      pval *imgind, *file;
+      gdImagePtr im;
+      char *fn=NULL;
+      FILE *fp;
+      int argc;
+      int ind_type;
+      int output=1;
+      int x, y;
+      int c, p, width, height;
+      
+      GD_TLS_VARS;
+
+      argc = ARG_COUNT(ht);
+      if (argc < 1 || argc > 2 || getParameters(ht, argc, &imgind, &file) == FAILURE) {
+              WRONG_PARAM_COUNT;
+      }
+
+      convert_to_long(imgind);
+
+      if (argc == 2) {
+              convert_to_string(file);
+              fn = file->value.str.val;
+              if (!fn || fn == empty_string || _php3_check_open_basedir(fn)) {
+                      php3_error(E_WARNING, "ImageWbmp: Invalid filename");
+                      RETURN_FALSE;
+              }
+      }
+
+      im = php3_list_find(imgind->value.lval, &ind_type);
+      if (!im || ind_type != GD_GLOBAL(le_gd)) {
+              php3_error(E_WARNING, "ImageWbmp: unable to find image pointer");
+              RETURN_FALSE;
+      }       
+      
+      if (argc == 2) {
+              fp = fopen(fn, "wb");
+              if (!fp) {
+                      php3_error(E_WARNING, "ImagePng: unable to open %s for writing", fn);
+                      RETURN_FALSE;
+              }
+              
+              /* WBMP header, black and white, no compression */
+              fputc(0,fp); fputc(0,fp);
+                      
+              /* Width and height of image */
+              c = 1; width = im->sx;
+              while(width & 0x7f << 7*c) c++;
+              while(c > 1) fputc(0x80 | (width >> 7*--c) & 0xff, fp);
+              fputc(width & 0x7f,fp);
+              c = 1; height = im->sy;
+              while(height & 0x7f << 7*c) c++;
+              while(c > 1) fputc(0x80 | (height >> 7*--c) & 0xff, fp);
+              fputc(height & 0x7f,fp);
+                      
+              /* Actual image data */
+              for(y = 0; y < im->sy; y++) {
+                      p = c = 0;
+                      for(x = 0; x < im->sx; x++) {
+#if HAVE_GD_ANCIENT
+                              if(im->pixels[x][y] == 0) c = c | (1 << (7-p));
+#else
+                              if(im->pixels[y][x] == 0) c = c | (1 << (7-p));
+#endif
+                              if(++p == 8) {
+                                      fputc(c,fp);
+                                      p = c = 0;
+                              }
+                      }
+                      if(p) fputc(c,fp);
+              }
+              
+              fflush(fp);
+              fclose(fp);
+      } else {
+              output = php3_header();
+
+              if (output) {
+#if APACHE && defined(CHARSET_EBCDIC)
+                      /* This is a binary file already: avoid EBCDIC->ASCII conversion */
+                      ap_bsetflag(php3_rqst->connection->client, B_EBCDIC2ASCII, 0);
+#endif
+
+                      /* WBMP header, black and white, no compression */
+                      php3_putc(0); php3_putc(0);
+                      
+                      /* Width and height of image */
+                      c = 1; width = im->sx;
+                      while(width & 0x7f << 7*c) c++;
+                      while(c > 1) php3_putc(0x80 | (width >> 7*--c) & 0xff);
+                      php3_putc(width & 0x7f);
+                      
+                      c = 1; height = im->sy;
+                      while(height & 0x7f << 7*c) c++;
+                      while(c > 1) php3_putc(0x80 | (height >> 7*--c) & 0xff);
+                      php3_putc(height & 0x7f);
+                      
+                      /* Actual image data */
+                      for(y = 0; y < im->sy; y++) {
+                              p = c = 0;
+                              for(x = 0; x < im->sx; x++) {
+#if HAVE_GD_ANCIENT
+                                      if(im->pixels[x][y] == 0) c = c | (1 << (7-p));
+#else
+                                      if(im->pixels[y][x] == 0) c = c | (1 << (7-p));
+#endif
+                                      if(++p == 8) {
+                                              php3_putc(c);
+                                              p = c = 0;
+                                      }
+                              }
+                              if(p) php3_putc(c);
+                      }
+              }
+      }
+	RETURN_TRUE;
+}
+/* }}} */
+
 /* {{{ proto int imagesetpixel(int im, int x, int y, int col)
-Set a single pixel */
+   Set a single pixel */
 void php3_imagesetpixel(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *imarg, *xarg, *yarg, *colarg;
 	gdImagePtr im;
@@ -977,8 +1096,9 @@ void php3_imagesetpixel(INTERNAL_FUNCTION_PARAMETERS) {
 /* }}} */	
 
 /* im, x1, y1, x2, y2, col */
+
 /* {{{ proto int imageline(int im, int x1, int y1, int x2, int y2, int col)
-Draw a line */
+   Draw a line */
 void php3_imageline(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *IM, *COL, *X1, *Y1, *X2, *Y2;
 	gdImagePtr im;
@@ -1017,7 +1137,7 @@ void php3_imageline(INTERNAL_FUNCTION_PARAMETERS) {
 /* }}} */	
 
 /* {{{ proto int imagedashedline(int im, int x1, int y1, int x2, int y2, int col)
-Draw a dashed line */
+   Draw a dashed line */
 void php3_imagedashedline(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *IM, *COL, *X1, *Y1, *X2, *Y2;
 	gdImagePtr im;
@@ -1088,7 +1208,7 @@ void php3_imagegammacorrect(INTERNAL_FUNCTION_PARAMETERS) {
 
 /* im, x1, y1, x2, y2, col */
 /* {{{ proto int imagerectangle(int im, int x1, int y1, int x2, int y2, int col)
-Draw a rectangle */
+   Draw a rectangle */
 void php3_imagerectangle(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *IM, *COL, *X1, *Y1, *X2, *Y2;
 	gdImagePtr im;
@@ -1127,8 +1247,9 @@ void php3_imagerectangle(INTERNAL_FUNCTION_PARAMETERS) {
 /* }}} */	
 
 /* im, x1, y1, x2, y2, col */
+
 /* {{{ proto int imagefilledrectangle(int im, int x1, int y1, int x2, int y2, int col)
-Draw a filled rectangle */
+   Draw a filled rectangle */
 void php3_imagefilledrectangle(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *IM, *COL, *X1, *Y1, *X2, *Y2;
 	gdImagePtr im;
@@ -1167,7 +1288,7 @@ void php3_imagefilledrectangle(INTERNAL_FUNCTION_PARAMETERS) {
 /* }}} */	
 
 /* {{{ proto int imagearc(int im, int cx, int cy, int w, int h, int s, int e, int col)
-Draw a partial ellipse */
+   Draw a partial ellipse */
 void php3_imagearc(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *COL, *E, *ST, *H, *W, *CY, *CX, *IM;
 	gdImagePtr im;
@@ -1217,8 +1338,9 @@ void php3_imagearc(INTERNAL_FUNCTION_PARAMETERS) {
 /* }}} */	
 
 /* im, x, y, border, col */
+
 /* {{{ proto int imagefilltoborder(int im, int x, int y, int border, int col)
-Flood fill to specific color */
+   Flood fill to specific color */
 void php3_imagefilltoborder(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *IM, *X, *Y, *BORDER, *COL;
 	gdImagePtr im;
@@ -1255,8 +1377,9 @@ void php3_imagefilltoborder(INTERNAL_FUNCTION_PARAMETERS) {
 /* }}} */	
 
 /* im, x, y, col */
+
 /* {{{ proto int imagefill(int im, int x, int y, int col)
-Flood fill */
+   Flood fill */
 void php3_imagefill(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *IM, *X, *Y, *COL;
 	gdImagePtr im;
@@ -1291,7 +1414,7 @@ void php3_imagefill(INTERNAL_FUNCTION_PARAMETERS) {
 /* }}} */	
 
 /* {{{ proto int imagecolorstotal(int im)
-Find out the number of colors in an image's palette */
+   Find out the number of colors in an image's palette */
 void php3_imagecolorstotal(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *IM;
 	gdImagePtr im;
@@ -1314,8 +1437,9 @@ void php3_imagecolorstotal(INTERNAL_FUNCTION_PARAMETERS) {
 /* }}} */	
 
 /* im, col */
+
 /* {{{ proto int imagecolortransparent(int im [, int col])
-Define a color as transparent */
+   Define a color as transparent */
 void php3_imagecolortransparent(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *IM, *COL = NULL;
 	gdImagePtr im;
@@ -1356,8 +1480,9 @@ void php3_imagecolortransparent(INTERNAL_FUNCTION_PARAMETERS) {
 /* }}} */	
 
 /* im, interlace */
+
 /* {{{ proto int imageinterlace(int im [, int interlace])
-Enable or disable interlace */
+   Enable or disable interlace */
 void php3_imageinterlace(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *IM, *INT = NULL;
 	gdImagePtr im;
@@ -1483,7 +1608,7 @@ static void _php3_imagepolygon(INTERNAL_FUNCTION_PARAMETERS, int filled) {
 
 
 /* {{{ proto int imagepolygon(int im, array point, int num_points, int col)
-Draw a polygon */
+   Draw a polygon */
 void php3_imagepolygon(INTERNAL_FUNCTION_PARAMETERS)
 {
 	_php3_imagepolygon(INTERNAL_FUNCTION_PARAM_PASSTHRU, 0);
@@ -1491,7 +1616,7 @@ void php3_imagepolygon(INTERNAL_FUNCTION_PARAMETERS)
 /* }}} */
 
 /* {{{ proto int imagefilledpolygon(int im, array point, int num_points, int col)
-Draw a filled polygon */
+   Draw a filled polygon */
 void php3_imagefilledpolygon(INTERNAL_FUNCTION_PARAMETERS)
 {
 	_php3_imagepolygon(INTERNAL_FUNCTION_PARAM_PASSTHRU, 1);
@@ -1554,9 +1679,8 @@ static void _php3_imagefontsize(INTERNAL_FUNCTION_PARAMETERS, int arg)
 	RETURN_LONG(arg ? font->h : font->w);
 }
 
-
 /* {{{ proto int imagefontwidth(int font)
-Get font width */
+   Get font width */
 void php3_imagefontwidth(INTERNAL_FUNCTION_PARAMETERS)
 {
 	_php3_imagefontsize(INTERNAL_FUNCTION_PARAM_PASSTHRU, 0);
@@ -1564,7 +1688,7 @@ void php3_imagefontwidth(INTERNAL_FUNCTION_PARAMETERS)
 /* }}} */
 
 /* {{{ proto int imagefontheight(int font)
-Get font height */
+   Get font height */
 void php3_imagefontheight(INTERNAL_FUNCTION_PARAMETERS)
 {
 	_php3_imagefontsize(INTERNAL_FUNCTION_PARAM_PASSTHRU, 1);
@@ -1676,35 +1800,35 @@ static void _php3_imagechar(INTERNAL_FUNCTION_PARAMETERS, int mode) {
 }	
 
 /* {{{ proto int imagechar(int im, int font, int x, int y, string c, int col)
-Draw a character */ 
+   Draw a character */ 
 void php3_imagechar(INTERNAL_FUNCTION_PARAMETERS) {
 	_php3_imagechar(INTERNAL_FUNCTION_PARAM_PASSTHRU, 0);
 }
 /* }}} */
 
 /* {{{ proto int imagecharup(int im, int font, int x, int y, string c, int col)
-Draw a character rotated 90 degrees counter-clockwise */
+   Draw a character rotated 90 degrees counter-clockwise */
 void php3_imagecharup(INTERNAL_FUNCTION_PARAMETERS) {
 	_php3_imagechar(INTERNAL_FUNCTION_PARAM_PASSTHRU, 1);
 }
 /* }}} */
 
 /* {{{ proto int imagestring(int im, int font, int x, int y, string str, int col)
-Draw a string horizontally */
+   Draw a string horizontally */
 void php3_imagestring(INTERNAL_FUNCTION_PARAMETERS) {
 	_php3_imagechar(INTERNAL_FUNCTION_PARAM_PASSTHRU, 2);
 }
 /* }}} */
 
 /* {{{ proto int imagestringup(int im, int font, int x, int y, string str, int col)
-Draw a string vertically - rotated 90 degrees counter-clockwise */
+   Draw a string vertically - rotated 90 degrees counter-clockwise */
 void php3_imagestringup(INTERNAL_FUNCTION_PARAMETERS) {
 	_php3_imagechar(INTERNAL_FUNCTION_PARAM_PASSTHRU, 3);
 }
 /* }}} */
 
 /* {{{ proto int imagecopy(int dst_im, int src_im, int dstX, int dstY, int srcX, int srcY, int srcW, int srcH)
-Copy part of an image */ 
+   Copy part of an image */ 
 void php3_imagecopy(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *SIM, *DIM, *SX, *SY, *SW, *SH, *DX, *DY;
@@ -1754,7 +1878,7 @@ void php3_imagecopy(INTERNAL_FUNCTION_PARAMETERS)
 /* }}} */
 
 /* {{{ proto int imagecopyresized(int dst_im, int src_im, int dstX, int dstY, int srcX, int srcY, int dstW, int dstH, int srcW, int srcH);
-Copy and resize part of an image */
+   Copy and resize part of an image */
 void php3_imagecopyresized(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *SIM, *DIM, *SX, *SY, *SW, *SH, *DX, *DY, *DW, *DH;
@@ -1809,7 +1933,7 @@ void php3_imagecopyresized(INTERNAL_FUNCTION_PARAMETERS)
 /* }}} */	
 
 /* {{{ proto int imagesx(int im)
-Get image width */
+   Get image width */
 void php3_imagesxfn(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *IM;
@@ -1832,7 +1956,7 @@ void php3_imagesxfn(INTERNAL_FUNCTION_PARAMETERS)
 /* }}} */
 
 /* {{{ proto int imagesy(int im)
-Get image height */
+   Get image height */
 void php3_imagesyfn(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *IM;
@@ -1860,7 +1984,7 @@ void php3_imagesyfn(INTERNAL_FUNCTION_PARAMETERS)
 #define TTFTEXT_BBOX 1
 
 /* {{{ proto array imagettfbbox(int size, int angle, string font_file, string text)
-Give the bounding box of a text using TrueType fonts */
+   Give the bounding box of a text using TrueType fonts */
 void php3_imagettfbbox(INTERNAL_FUNCTION_PARAMETERS)
 {
 	php3_imagettftext_common(INTERNAL_FUNCTION_PARAM_PASSTHRU, TTFTEXT_BBOX);
@@ -1868,7 +1992,7 @@ void php3_imagettfbbox(INTERNAL_FUNCTION_PARAMETERS)
 /* }}} */
 
 /* {{{ proto array imagettftext(int im, int size, int angle, int x, int y, int col, string font_file, string text)
-Write text to the image using a TrueType font */
+   Write text to the image using a TrueType font */
 void php3_imagettftext(INTERNAL_FUNCTION_PARAMETERS)
 {
 	php3_imagettftext_common(INTERNAL_FUNCTION_PARAM_PASSTHRU, TTFTEXT_DRAW);
@@ -1961,7 +2085,7 @@ void _php3_free_ps_enc(char **enc)
 }
 
 /* {{{ proto int imagepsloadfont(string pathname)
-Load a new font from specified file */
+   Load a new font from specified file */
 void php3_imagepsloadfont(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *file;
 	int l_ind;
@@ -2005,7 +2129,7 @@ void php3_imagepsloadfont(INTERNAL_FUNCTION_PARAMETERS) {
 
 /* {{{ The function in t1lib which this function uses seem to be buggy...
 proto int imagepscopyfont(int font_index)
-Make a copy of a font for purposes like extending or reenconding */
+   Make a copy of a font for purposes like extending or reenconding */
 /*
 void php3_imagepscopyfont(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *fnt;
@@ -2059,7 +2183,7 @@ void php3_imagepscopyfont(INTERNAL_FUNCTION_PARAMETERS) {
 /* }}} */
 
 /* {{{ proto bool imagepsfreefont(int font_index)
-Free memory used by a font */
+   Free memory used by a font */
 void php3_imagepsfreefont(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *fnt;
 	int type;
@@ -2083,7 +2207,7 @@ void php3_imagepsfreefont(INTERNAL_FUNCTION_PARAMETERS) {
 /* }}} */
 
 /* {{{ proto bool imagepsencodefont(int font_index, string filename)
-To change a fonts character encoding vector */
+   To change a fonts character encoding vector */
 void php3_imagepsencodefont(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *fnt, *enc;
 	char **enc_vector;
@@ -2121,7 +2245,7 @@ void php3_imagepsencodefont(INTERNAL_FUNCTION_PARAMETERS) {
 /* }}} */
 
 /* {{{ proto bool imagepsextendfont(int font_index, double extend)
-Extend or or condense (if extend < 1) a font */
+   Extend or or condense (if extend < 1) a font */
 void php3_imagepsextendfont(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *fnt, *ext;
 	int type;
@@ -2148,7 +2272,7 @@ void php3_imagepsextendfont(INTERNAL_FUNCTION_PARAMETERS) {
 /* }}} */
 
 /* {{{ proto bool imagepsslantfont(int font_index, double slant)
-Slant a font */
+   Slant a font */
 void php3_imagepsslantfont(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *fnt, *slt;
 	int type;
@@ -2174,7 +2298,7 @@ void php3_imagepsslantfont(INTERNAL_FUNCTION_PARAMETERS) {
 /* }}} */
 
 /* {{{ proto array imagepstext(int image, string text, int font, int size, int xcoord, int ycoord [, int space, int tightness, double angle, int antialias])
-Rasterize a string over an image */
+   Rasterize a string over an image */
 void php3_imagepstext(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *img, *str, *fnt, *sz, *fg, *bg, *sp, *px, *py, *aas, *wd, *ang;
 	int i, j, x, y;
@@ -2341,8 +2465,8 @@ void php3_imagepstext(INTERNAL_FUNCTION_PARAMETERS) {
 }
 /* }}} */
 
-/* {{{ proto array imagepsbbox(string text, int font, int size[, int space, int tightness, int angle])
-Return the bounding box needed by a string if rasterized */
+/* {{{ proto array imagepsbbox(string text, int font, int size [, int space, int tightness, int angle])
+   Return the bounding box needed by a string if rasterized */
 void php3_imagepsbbox(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *str, *fnt, *sz, *sp, *wd, *ang;
 	int i, space, add_width, char_width, amount_kern, type;

@@ -28,7 +28,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: php_ftp.c,v 1.8 2000/01/09 11:06:00 fmk Exp $ */
+/* $Id: php_ftp.c,v 1.9 2000/02/22 20:51:05 askalski Exp $ */
 
 #include "php.h"
 
@@ -66,6 +66,7 @@ function_entry php3_ftp_functions[] = {
 	PHP_FE(ftp_mdtm,			NULL)
 	PHP_FE(ftp_rename,			NULL)
 	PHP_FE(ftp_delete,			NULL)
+	PHP_FE(ftp_site,			NULL)
 	PHP_FE(ftp_quit,			NULL)
 	{NULL, NULL, NULL}
 };
@@ -773,6 +774,35 @@ PHP_FUNCTION(ftp_delete)
 	/* delete the file */
 	if (!ftp_delete(ftp, arg2->value.str.val)) {
 		php_error(E_WARNING, "ftp_delete: %s", ftp->inbuf);
+		RETURN_FALSE;
+	}
+
+	RETURN_TRUE;
+}
+/* }}} */
+
+/* {{{ proto int ftp_site(int stream, string cmd)
+   Sends a SITE command to the server */
+PHP_FUNCTION(ftp_site)
+{
+	pval		*arg1, *arg2;
+	ftpbuf_t	*ftp;
+
+	/* arg1 - ftp
+	 * arg2 - cmd
+	 */
+	if (	ARG_COUNT(ht) != 2 ||
+		getParameters(ht, 2, &arg1, &arg2) == FAILURE)
+	{
+		WRONG_PARAM_COUNT;
+	}
+
+	FTPBUF(ftp, arg1);
+	convert_to_string(arg2);
+
+	/* send the site command */
+	if (!ftp_site(ftp, arg2->value.str.val)) {
+		php_error(E_WARNING, "ftp_site: %s", ftp->inbuf);
 		RETURN_FALSE;
 	}
 

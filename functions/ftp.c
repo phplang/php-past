@@ -28,7 +28,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: ftp.c,v 1.14 2000/01/09 11:06:00 fmk Exp $ */
+/* $Id: ftp.c,v 1.16 2000/02/22 20:51:05 askalski Exp $ */
 
 #include "php.h"
 
@@ -171,7 +171,7 @@ ftp_close(ftpbuf_t *ftp)
 {
 	if (ftp == NULL)
 		return NULL;
-	if (ftp->fd)
+	if (ftp->fd != -1)
 		close(ftp->fd);
 	ftp_gc(ftp);
 	free(ftp);
@@ -488,7 +488,7 @@ ftp_get(ftpbuf_t *ftp, FILE *outfp, const char *path, ftptype_t type)
 
 	if (!ftp_putcmd(ftp, "RETR", path))
 		goto bail;
-	if (!ftp_getresp(ftp) || ftp->resp != 150)
+	if (!ftp_getresp(ftp) || (ftp->resp != 150 && ftp->resp != 125))
 		goto bail;
 
 	if ((data = data_accept(data)) == NULL)
@@ -550,7 +550,7 @@ ftp_put(ftpbuf_t *ftp, const char *path, FILE *infp, ftptype_t type)
 
 	if (!ftp_putcmd(ftp, "STOR", path))
 		goto bail;
-	if (!ftp_getresp(ftp) || ftp->resp != 150)
+	if (!ftp_getresp(ftp) || (ftp->resp != 150 && ftp->resp != 125))
 		goto bail;
 
 	if ((data = data_accept(data)) == NULL)
@@ -681,6 +681,21 @@ ftp_rename(ftpbuf_t *ftp, const char *src, const char *dest)
 	if (!ftp_putcmd(ftp, "RNTO", dest))
 		return 0;
 	if (!ftp_getresp(ftp) || ftp->resp != 250)
+		return 0;
+
+	return 1;
+}
+
+
+int
+ftp_site(ftpbuf_t *ftp, const char *cmd)
+{
+	if (ftp == NULL)
+		return 0;
+
+	if (!ftp_putcmd(ftp, "SITE", cmd))
+		return 0;
+	if (!ftp_getresp(ftp) || ftp->resp < 200 || ftp->resp >= 300)
 		return 0;
 
 	return 1;
@@ -1103,7 +1118,7 @@ ftp_genlist(ftpbuf_t *ftp, const char *cmd, const char *path)
 
 	if (!ftp_putcmd(ftp, cmd, path))
 		goto bail;
-	if (!ftp_getresp(ftp) || ftp->resp != 150)
+	if (!ftp_getresp(ftp) || (ftp->resp != 150 && ftp->resp != 125))
 		goto bail;
 
 	/* pull data buffer into tmpfile */

@@ -28,7 +28,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: html.c,v 1.34 2000/01/01 04:31:15 sas Exp $ */
+/* $Id: html.c,v 1.35 2000/02/01 00:18:44 martin Exp $ */
 
 #include "php.h"
 #include "internal_functions.h"
@@ -59,6 +59,12 @@ static char EntTable[][7] =
 	"uuml","yacute","thorn","yuml"
 };
 
+#ifndef CHARSET_EBCDIC
+#define ASC(ch) ch
+#else
+#define ASC(ch) os_toascii[(unsigned char)ch]
+#endif /* CHARSET_EBCDIC */
+
 PHPAPI char * _php3_htmlentities(char *s, int i, int all)
 {
 	int len, maxlen;
@@ -76,22 +82,22 @@ PHPAPI char * _php3_htmlentities(char *s, int i, int all)
 	while (i--) {
 		if (len + 9 > maxlen)
 			new = erealloc (new, maxlen += 128);
-		if (38 == *old) {
+		if ('&' == *old) {
 			memcpy (new + len, "&amp;", 5);
 			len += 5;
-		} else if (34 == *old) {
+		} else if ('"' == *old) {
 			memcpy (new + len, "&quot;", 6);
 			len += 6;
-		} else if (60 == *old) {
+		} else if ('<' == *old) {
 			memcpy (new + len, "&lt;", 4);
 			len += 4;
-		} else if (62 == *old) {
+		} else if ('>' == *old) {
 			memcpy (new + len, "&gt;", 4);
 			len += 4;
-		} else if (all && 160 <= *old) {
+		} else if (all && 160 <= ASC(*old)) {
 			new [len++] = '&';
-			strcpy (new + len, EntTable [*old - 160]);
-			len += strlen (EntTable [*old - 160]);
+			strcpy (new + len, EntTable [ASC(*old) - 160]);
+			len += strlen (EntTable [ASC(*old) - 160]);
 			new [len++] = ';';
 		} else {
 			new [len++] = *old;

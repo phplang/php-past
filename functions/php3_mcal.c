@@ -113,6 +113,7 @@ PHP_FE(mcal_day_of_year,NULL)
 PHP_FE(mcal_date_compare,NULL)
 PHP_FE(mcal_event_init,NULL)
 PHP_FE(mcal_next_recurrence,NULL)
+PHP_FE(mcal_event_set_recur_none,NULL)
 PHP_FE(mcal_event_set_recur_daily,NULL)
 PHP_FE(mcal_event_set_recur_weekly,NULL)
 PHP_FE(mcal_event_set_recur_monthly_mday,NULL)
@@ -121,6 +122,7 @@ PHP_FE(mcal_event_set_recur_yearly,NULL)
 PHP_FE(mcal_event_set_end_now,NULL)
 PHP_FE(mcal_event_set_start_now,NULL)
 PHP_FE(mcal_fetch_current_stream_event,NULL)
+PHP_FE(mcal_event_add_attribute,NULL)
 	{NULL, NULL, NULL}
 };
 
@@ -163,6 +165,9 @@ PHP_MINFO_FUNCTION(mcal)
 	php3_printf("<table>");
 	php3_printf("<tr><td>Mcal Version:</td>");
 	php3_printf("<td>%s</td>",CALVER);
+#ifdef MCALVER
+	php3_printf("<td>%d</td>",MCALVER);
+#endif
 	php3_printf("</tr></table>");
 }
 
@@ -238,7 +243,7 @@ void php3_mcal_do_open(INTERNAL_FUNCTION_PARAMETERS, int persistent)
 	pval *user;
 	pval *passwd;
 	pval *options;
-	CALSTREAM *mcal_stream;
+	CALSTREAM *mcal_stream=NULL;
 	pils *mcal_le_struct;
 	long flags=0;
 	int ind;
@@ -388,10 +393,10 @@ void php3_mcal_fetch_event(INTERNAL_FUNCTION_PARAMETERS)
 	pval *streamind,*eventid,*options=NULL;
 	int ind, ind_type;
 	pils *mcal_le_struct=NULL; 
-	CALEVENT *myevent;
+	CALEVENT *myevent=NULL;
 	int myargcount=ARG_COUNT(ht);
 	
-	if (myargcount < 1 || myargcount > 3 || getParameters(ht, myargcount, &streamind, &eventid,&options) == FAILURE) {
+	if (myargcount < 2 || myargcount > 3 || getParameters(ht, myargcount, &streamind, &eventid,&options) == FAILURE) {
 		WRONG_PARAM_COUNT;
 	}
 	convert_to_long(streamind);
@@ -443,7 +448,8 @@ void php3_mcal_fetch_current_stream_event(INTERNAL_FUNCTION_PARAMETERS)
 
 void make_event_object(pval *mypvalue,CALEVENT *event)
 {
-  pval start,end,recurend;
+  pval start,end,recurend,attrlist;
+  CALATTR *attr;
   object_init(mypvalue);
   add_property_long(mypvalue,"id",event->id);
   add_property_long(mypvalue,"public",event->public);
@@ -497,6 +503,14 @@ void make_event_object(pval *mypvalue,CALEVENT *event)
     }
   add_assoc_object(mypvalue, "recur_enddate",recurend);
   add_property_long(mypvalue,"recur_data",event->recur_data.weekly_wday);	
+  if(event->attrlist)
+    {
+      array_init(&attrlist);
+      for (attr = event->attrlist; attr; attr = attr->next) {
+	add_assoc_string(&attrlist,attr->name,attr->value,1);
+      }
+    add_assoc_object(mypvalue,"attrlist",attrlist);
+    }
 }
 
 /* {{{ proto array mcal_list_events(int stream_id, int startyear, int startmonth, int startday, int endyear, int endmonth, int endday)
@@ -758,7 +772,7 @@ void php3_mcal_store_event(INTERNAL_FUNCTION_PARAMETERS)
 	pils *mcal_le_struct; 
 	int myargc;
 	unsigned long uid;
-	CALEVENT *myevent;
+	CALEVENT *myevent=NULL;
 	myargc=ARG_COUNT(ht);
 	if (myargc !=1 || getParameters(ht,myargc,&streamind) == FAILURE) {
 		WRONG_PARAM_COUNT;
@@ -850,6 +864,45 @@ void php3_mcal_event_set_category(INTERNAL_FUNCTION_PARAMETERS)
 	mcal_le_struct->event->category=strdup(category->value.str.val);
 }
 /* }}} */
+
+/* {{{ proto string mcal_event_add_attribute(int stream_id, string attribute,string value)
+   Add an attribute and value to an event */
+void php3_mcal_event_add_attribute(INTERNAL_FUNCTION_PARAMETERS)
+{
+	pval *streamind,*attribute,*val;
+	int ind, ind_type;
+	pils *mcal_le_struct; 
+	int myargc;
+	myargc=ARG_COUNT(ht);
+	if (myargc !=3 || getParameters(ht,myargc,&streamind,&attribute,&val) == FAILURE) {
+		WRONG_PARAM_COUNT;
+	}
+
+	convert_to_long(streamind);
+	convert_to_string(attribute);
+	convert_to_string(val);
+
+	ind = streamind->value.lval;
+
+	mcal_le_struct = (pils *)php3_list_find(ind, &ind_type);
+
+	if (!mcal_le_struct ) {
+		php3_error(E_WARNING, "Unable to find stream pointer");
+		RETURN_FALSE;
+	}
+#if MCALVER >= 20000121
+	if(calevent_setattr(mcal_le_struct->event,attribute->value.str.val,val->value.str.val))
+	  {
+	  RETURN_TRUE;
+	  }
+	else
+#endif
+	  {
+	  RETURN_FALSE;
+	  }
+}
+/* }}} */
+
 
 /* {{{ proto string mcal_event_set_title(int stream_id, string title)
    Attach a title to an event */
@@ -1375,6 +1428,34 @@ void php3_mcal_next_recurrence(INTERNAL_FUNCTION_PARAMETERS)
 	    add_property_long(return_value,"min",mydate.min);
 	    add_property_long(return_value,"sec",mydate.sec);
 	  }	
+}
+/* }}} */
+
+/* {{{ proto string mcal_event_set_recur_none(int stream_id)
+   Create a daily recurrence */
+void php3_mcal_event_set_recur_none(INTERNAL_FUNCTION_PARAMETERS)
+{
+	pval *streamind;
+	int ind, ind_type;
+	pils *mcal_le_struct; 
+	int myargc;
+	myargc = ARG_COUNT(ht);
+	if (myargc != 1 || getParameters(ht, myargc, &streamind) == FAILURE) {
+		WRONG_PARAM_COUNT;
+	}
+
+	convert_to_long(streamind);
+	
+	ind = streamind->value.lval;
+	
+	mcal_le_struct = (pils *)php3_list_find(ind, &ind_type);
+	
+	if (!mcal_le_struct ) {
+		php3_error(E_WARNING, "Unable to find stream pointer");
+		RETURN_FALSE;
+	}
+	
+	calevent_recur_none(mcal_le_struct->event);
 }
 /* }}} */
 

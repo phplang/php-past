@@ -23,12 +23,12 @@
    | If you did not, or have any questions about PHP licensing, please    |
    | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
-   | Authors: Zeev Suraski <bourbon@netvision.net.il>                     |
+   | Authors: Zeev Suraski <zeev@zend.com>                                |
    |          Tom May <tom@go2net.com>                                    |
    +----------------------------------------------------------------------+
  */
  
-/* $Id: sybase-ct.c,v 1.64 2000/01/01 04:31:17 sas Exp $ */
+/* $Id: sybase-ct.c,v 1.65 2000/02/07 23:54:51 zeev Exp $ */
 
 
 #ifndef MSVC5

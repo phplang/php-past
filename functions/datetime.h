@@ -24,12 +24,12 @@
    | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
    | Authors: Andi Gutmans <andi@php.net>                                 |
-   |          Zeev Suraski <bourbon@netvision.net.il>                     |
+   |          Zeev Suraski <zeev@zend.com>                                |
    +----------------------------------------------------------------------+
  */
 
 
-/* $Id: datetime.h,v 1.17 2000/01/01 04:44:09 sas Exp $ */
+/* $Id: datetime.h,v 1.18 2000/02/07 23:54:51 zeev Exp $ */
 
 #ifndef _DATETIME_H
 #define _DATETIME_H

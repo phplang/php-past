@@ -29,7 +29,7 @@
  */
 
 
-/* $Id: php3_gd.h,v 1.40 2000/01/13 13:16:05 rasmus Exp $ */
+/* $Id: php3_gd.h,v 1.42 2000/01/30 20:48:36 markonen Exp $ */
 
 #ifndef _PHP3_GD_H
 #define _PHP3_GD_H
@@ -54,7 +54,7 @@ extern php3_module_entry gd_module_entry;
 extern void php3_info_gd(void);
 extern int php3_minit_gd(INIT_FUNC_ARGS);
 extern int php3_mend_gd(void);
-#ifndef HAVE_GDIMAGECOLORRESOLVE
+#ifndef HAVE_GD_COLORRESOLVE
 extern int gdImageColorResolve(gdImagePtr, int, int, int);
 #endif
 extern void php3_imagearc(INTERNAL_FUNCTION_PARAMETERS);
@@ -67,14 +67,21 @@ extern void php3_imagecolordeallocate(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_imagecolorresolve(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_imagecolorexact(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_imagecolorset(INTERNAL_FUNCTION_PARAMETERS);
+extern void php3_imagecolortransparent(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_imagecolorstotal(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_imagecolorsforindex(INTERNAL_FUNCTION_PARAMETERS);
-extern void php3_imagecolortransparent(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_imagecopy(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_imagecopyresized(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_imagecreate(INTERNAL_FUNCTION_PARAMETERS);
+#if HAVE_GD_GIF
 extern void php3_imagecreatefromgif (INTERNAL_FUNCTION_PARAMETERS);
+extern void php3_imagegif(INTERNAL_FUNCTION_PARAMETERS);
+#endif
+#if HAVE_GD_PNG
 extern void php3_imagecreatefrompng (INTERNAL_FUNCTION_PARAMETERS);
+extern void php3_imagepng(INTERNAL_FUNCTION_PARAMETERS);
+#endif
+extern void php3_imagewbmp(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_imagedestroy(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_imagefill(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_imagefilledpolygon(INTERNAL_FUNCTION_PARAMETERS);
@@ -82,9 +89,6 @@ extern void php3_imagefilledrectangle(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_imagefilltoborder(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_imagefontwidth(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_imagefontheight(INTERNAL_FUNCTION_PARAMETERS);
-extern void php3_imagegammacorrect(INTERNAL_FUNCTION_PARAMETERS);
-extern void php3_imagegif (INTERNAL_FUNCTION_PARAMETERS);
-extern void php3_imagepng (INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_imageinterlace(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_imageline(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_imageloadfont(INTERNAL_FUNCTION_PARAMETERS);
@@ -95,9 +99,10 @@ extern void php3_imagestring(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_imagestringup(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_imagesxfn(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_imagesyfn(INTERNAL_FUNCTION_PARAMETERS);
+extern void php3_imagedashedline(INTERNAL_FUNCTION_PARAMETERS);
+extern void php3_imagegammacorrect(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_free_gd_font(gdFontPtr);
 extern void _php3_gdimagecharup(gdImagePtr, gdFontPtr, int, int, int, int);
-extern void php3_imagedashedline(INTERNAL_FUNCTION_PARAMETERS);
 #if HAVE_LIBTTF|HAVE_LIBFREETYPE
 extern void php3_imagettfbbox(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_imagettftext(INTERNAL_FUNCTION_PARAMETERS);

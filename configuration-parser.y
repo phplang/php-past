@@ -24,13 +24,13 @@
    | If you did not, or have any questions about PHP licensing, please    |
    | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
-   | Authors: Zeev Suraski <bourbon@netvision.net.il>                     |
+   | Authors: Zeev Suraski <zeev@zend.com>                                |
    +----------------------------------------------------------------------+
  */
 
 
 
-/* $Id: configuration-parser.y,v 1.80 2000/01/01 04:48:04 sas Exp $ */
+/* $Id: configuration-parser.y,v 1.81 2000/02/07 23:54:49 zeev Exp $ */
 
 #define DEBUG_CFG_PARSER 1
 #include "php.h"

@@ -26,7 +26,7 @@
    | Author: Jim Winstead (jimw@php.net)                                  |
    +----------------------------------------------------------------------+
  */
-/* $Id: base64.c,v 1.32 2000/01/01 04:31:14 sas Exp $ */
+/* $Id: base64.c,v 1.34 2000/02/10 09:41:52 thies Exp $ */
 
 #include <string.h>
 
@@ -85,7 +85,8 @@ unsigned char *_php3_base64_decode(const unsigned char *string, int length, int 
 	int ch, i = 0, j = 0, k;
 	char *chp;
 
-	unsigned char *result = (unsigned char *)emalloc((length / 4 * 3 + 1) * sizeof(char));
+	unsigned char *result = (unsigned char *)emalloc(length + 1);
+
 	if (result == NULL) {
 		return NULL;
 	}
@@ -93,6 +94,16 @@ unsigned char *_php3_base64_decode(const unsigned char *string, int length, int 
 	/* run through the whole string, converting as we go */
 	while ((ch = *current++) != '\0') {
 		if (ch == base64_pad) break;
+
+	    /* When Base64 gets POSTed, all pluses are interpreted as spaces.
+		   This line changes them back.  It's not exactly the Base64 spec,
+		   but it is completely compatible with it (the spec says that
+		   spaces are invalid).  This will also save many people considerable
+		   headache.  - Turadg Aleahmad <turadg@wise.berkeley.edu>
+	    */
+
+		if (ch == ' ') ch = '+'; 
+
 		chp = strchr(base64_table, ch);
 		if (chp == NULL) continue;
 		ch = chp - base64_table;

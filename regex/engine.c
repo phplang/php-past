@@ -5,7 +5,7 @@
  * of code.
  */
 
-/* $Id: engine.c,v 1.7 1999/11/12 20:57:49 sas Exp $ */
+/* $Id: engine.c,v 1.8 2000/02/02 19:00:53 fmk Exp $ */
 
 #ifdef SNAMES
 #define	matcher	smatcher
@@ -73,7 +73,7 @@ regmatch_t pmatch[];
 int eflags;
 {
 	register char *endp;
-	register int i;
+	register size_t i;
 	struct match mv;
 	register struct match *m = &mv;
 	register char *dp;
@@ -678,10 +678,12 @@ sopno stopst;
 					(c != OUT && ISWORD(c)) ) {
 			flagch = BOW;
 		}
+
 		if ( (lastc != OUT && ISWORD(lastc)) &&
 				(flagch == EOL || (c != OUT && !ISWORD(c))) ) {
 			flagch = EOW;
 		}
+
 		if (flagch == BOW || flagch == EOW) {
 			st = step(m->g, startst, stopst, st, flagch, st);
 			SP("boweow", st, c);

@@ -23,11 +23,11 @@
    | If you did not, or have any questions about PHP licensing, please    |
    | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
-   | Authors: Zeev Suraski <bourbon@netvision.net.il>                     |
+   | Authors: Zeev Suraski <zeev@zend.com>                                |
    +----------------------------------------------------------------------+
  */
  
-/* $Id: mysql.c,v 1.194 2000/01/01 04:31:16 sas Exp $ */
+/* $Id: mysql.c,v 1.195 2000/02/07 23:54:51 zeev Exp $ */
 
 
 /* TODO:

@@ -1,5 +1,5 @@
 /*
- * $Id: regex2.h,v 1.6 1999/11/12 20:57:49 sas Exp $
+ * $Id: regex2.h,v 1.7 2000/02/02 19:00:53 fmk Exp $
  *
  * First, the stuff that ends up in the outside-world include file
  = #ifdef WIN32
@@ -139,4 +139,4 @@ struct re_guts {
 
 /* misc utilities */
 #define	OUT	(CHAR_MAX+1)	/* a non-character value */
-#define	ISWORD(c)	(isalnum(c) || (c) == '_')
+#define	ISWORD(c)	((c) > 0 && (isalnum(c) || (c) == '_')) /* isalnum may crash for c<0 with MSVC/WIN32 */

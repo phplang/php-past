@@ -26,7 +26,7 @@
    | Authors: Stephanie Wehner <_@r4k.net>                                |
    +----------------------------------------------------------------------+
  */
-/* $Id: yp.c,v 1.3 2000/01/01 04:31:17 sas Exp $ */
+/* $Id: yp.c,v 1.4 2000/02/21 19:13:59 eschmid Exp $ */
 
 #include "php.h"
 #include "internal_functions.h"
@@ -63,7 +63,7 @@ int php3_minit_yp(INIT_FUNC_ARGS) {
 }
 
 /* {{{ proto string yp_get_default_domain(void)
-	Returns the domain or false */
+   Returns the domain or false */
 void php3_yp_get_default_domain(INTERNAL_FUNCTION_PARAMETERS) {
 	char *outdomain;
 
@@ -75,7 +75,7 @@ void php3_yp_get_default_domain(INTERNAL_FUNCTION_PARAMETERS) {
 /* }}} */
 
 /* {{{ proto int yp_order(string domain, string map)            
-	Returns the order number or false */
+   Returns the order number or false */
 void php3_yp_order(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *domain, *map;
 
@@ -101,7 +101,7 @@ void php3_yp_order(INTERNAL_FUNCTION_PARAMETERS) {
 /* }}} */
 
 /* {{{ proto string yp_master(string domain, string map)
-	Returns the machine name of the master */
+   Returns the machine name of the master */
 void php3_yp_master(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *domain, *map;
 	char *outname;
@@ -122,7 +122,7 @@ void php3_yp_master(INTERNAL_FUNCTION_PARAMETERS) {
 /* }}} */
 
 /* {{{ proto string yp_match(string domain, string map, string key)
-	Returns the matched line or false */
+   Returns the matched line or false */
 void php3_yp_match(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *domain, *map, *key;
 	char *outval;
@@ -145,7 +145,7 @@ void php3_yp_match(INTERNAL_FUNCTION_PARAMETERS) {
 /* }}} */
 
 /* {{{ proto array yp_first(string domain, string map)
-	Returns the first key as $var["key"] and the first line as $var["value"] */
+   Returns the first key as $var["key"] and the first line as $var["value"] */
 void php3_yp_first(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *domain, *map;
 	char *outval, *outkey;
@@ -168,7 +168,7 @@ void php3_yp_first(INTERNAL_FUNCTION_PARAMETERS) {
 /* }}} */
 
 /* {{{ proto array yp_next(string domain, string map, string key)
-      Returns an array with $var[$key] and the the line as the value */
+   Returns an array with $var[$key] and the the line as the value */
 void php3_yp_next(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *domain, *map, *key;
 	char *outval, *outkey;

@@ -27,7 +27,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: cpdf.c,v 1.22 2000/01/01 04:31:14 sas Exp $ */
+/* $Id: cpdf.c,v 1.23 2000/02/14 10:09:20 kk Exp $ */
 /* cpdflib.h -- C language API definitions for ClibPDF library
  * Copyright (C) 1998 FastIO Systems, All Rights Reserved.
 */
@@ -40,7 +40,7 @@
 #include "head.h"
 #include <math.h>
 #include "php3_cpdf.h"
-#if HAVE_LIBGD13
+#if HAVE_LIBGD
 #include <gd.h>
 #endif
 
@@ -125,7 +125,7 @@ function_entry cpdf_functions[] = {
 	{"cpdf_output_buffer",		php3_cpdf_output_buffer,	NULL},
 	{"cpdf_save_to_file",		php3_cpdf_save_to_file,		NULL},
 	{"cpdf_import_jpeg",		php3_cpdf_import_jpeg,		NULL},
-#if HAVE_LIBGD13
+#if HAVE_LIBGD
 	{"cpdf_place_inline_image",	php3_cpdf_place_inline_image,	NULL},
 #endif
 	{"cpdf_add_annotation",		php3_cpdf_add_annotation,	NULL},
@@ -2294,7 +2294,7 @@ void php3_cpdf_import_jpeg(INTERNAL_FUNCTION_PARAMETERS) {
 }
 /* }}} */
 
-#if HAVE_LIBGD13
+#if HAVE_LIBGD
 /* {{{ proto void cpdf_place_inline_image(int pdfdoc, int gdimage, double x, double y, double angle, fload width, float height, int gsave [, int mode])
    Includes image */
 void php3_cpdf_place_inline_image(INTERNAL_FUNCTION_PARAMETERS) {

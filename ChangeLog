@@ -1,11 +1,33 @@
 PHP 3.0 CHANGE LOG                                                    ChangeLog
 |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 
+February 25, Version 3.0.15
+- Fixed crash in preg_match_all(). (Andrei)
+- Backported safe_mode_protected_env_vars and safe_mode_allowed_env_vars INI
+  directives from PHP 4.0 (Zeev)
+- Added Matthew Herman's FTP module patch for compatibility with Microsoft
+  FTP service. (Andrew Skalski)
+- Fixed crash in strip_tags() and related functions.
+- Fixed passthru() to no longer return any value. (Andrei)
+- base64_decode() will decode POST data correct. (Thies)
+  Patch submitted by: Turadg Aleahmad <turadg@wise.berkeley.edu>
+- Fixed a bug in the XML module that could cause crashes (Zeev)
+- Fixed a long historical bug in the API function call_user_function(),
+  that could cause crashes in functions that made use of it (e.g.,
+  XML module functions) (Zeev)
+- Fixed possible buffer-overflow in base64_decode(). (Thies)
+- Fixed possible buffer-overflow in setcookie(). (Thies)
+- Added ImageWbmp() for outputting WAP's Wireless Bitmaps (markonen)
+- Support for LZW-compressed GIFs with gd 1.5, gd/freetype cleanups (markonen)
+- Added IMAP modified UTF-7 encode/decode routines (Andrew Skalski)
+- Add .ini option to set the default charset for the default text/html mime
+  type that php serves up (Rasmus)
+
 January 11, 2000, Version 3.0.14
 - Fixed broken GD autoconf check - GIF support was not detected unless libpng
   and libz were both installed on the system (Rasmus)
-- Fix safe-mode problem in popen() (Kristian)
-- Fix safe-mode problem when resource had multiple consecutive /'s (Rasmus)
+- Fixed safe-mode problem in popen() (Kristian)
+- Fixed safe-mode problem when resource had multiple consecutive /'s (Rasmus)
 - Remove written permission clause from license
 
 January 1, 2000, Version 3.0.13
@@ -16,10 +38,10 @@ January 1, 2000, Version 3.0.13
 - Check for broken apxs (Rasmus)
 - explode() is now binary-safe. (Thies)
 - strpos() is now binary-safe. (Thies)
-- Add configure command to phpinfo() output (Stig)
-- added sketchy support for GNU recode 3.5 (Kristian)
+- Added configure command to phpinfo() output (Stig)
+- Added sketchy support for GNU recode 3.5 (Kristian)
 - Added tmpfile() function (Stig)
-- fixed trim(), chop(), ltrim(), etc. to remove NULL characters as 
+- Fixed trim(), chop(), ltrim(), etc. to remove NULL characters as 
   well. (Colin Viebrock)
 - krsort() added, although someone forgot to mention it ... (Thies)
 - Upgraded regex library to alpha3.8 (Sascha)
@@ -30,7 +52,7 @@ January 1, 2000, Version 3.0.13
 - tempnam() now uses mkstemp() if available (Stig)
 - serialize()/var_dump() now honor the precision set in php3.ini for
   double-values. (Thies)
-- Add mysql_change_user() function (Rasmus)
+- Added mysql_change_user() function (Rasmus)
 - Fixed garbage returned at the end of certain Sybase-Columns (Thies)
   Patch submitted by: neal@wanlink.com
 - XML_Parse_Into_Struct() no longer eats data. (Thies)
@@ -56,7 +78,7 @@ January 1, 2000, Version 3.0.13
 - Added optional allowable_tags arguments to strip_tags(),
   gzgetss() and fgetss() to allow you to specify a string of tags
   that are not to be stripped (Rasmus)
-- Fix longstanding Apache .conf nested directive problem (Rasmus)
+- Fixed longstanding Apache .conf nested directive problem (Rasmus)
 - OCI8 fix for fetching empty LOBs (Thies)
 - OCI8 supports appending and positioning when saving LOBs (Thies)
 - Added Mcal support (Mark Musone)
@@ -66,8 +88,8 @@ January 1, 2000, Version 3.0.13
 - Added more functions to posix module (Kristian).
 - Close loophole that allowed virtual() to be used on a PHP file
   without an error (Ken Coar)
-- Add versioning support for shared library (Sascha)
-- Fix bug with '%' in error_log() strings when run as Apache module (Ken Coar)
+- Added versioning support for shared library (Sascha)
+- Fixed bug with '%' in error_log() strings when run as Apache module (Ken Coar)
 - Return false from mysql_query() and mysql_db_query() in case saving the
   result set data fails (Zeev)
 - Make --with-apache --with-xml pick up Apache-bundled expat lib (Rasmus)
@@ -84,11 +106,11 @@ January 1, 2000, Version 3.0.13
 - Fixed flushing of cached information to disk in DBA's DB2 module (Sascha)
 - DiskFreeSpace() fix (Thies)
 - pdflib 2.01 support (Uwe Steinmann)
-- fixed mem-leak in sysv-shm (Thies)
-- Add IMSP module (Chuck Hagenbuch)
-- Add gd-1.6.x PNG functions (Rasmus from drew@elysium.ltd.uk)
-- Fix [s]printf 0-padding issues (Rasmus)
-- Fix a crash bug in number_format(), in case of very large numbers (Zeev)
+- Fixed mem-leak in sysv-shm (Thies)
+- Added IMSP module (Chuck Hagenbuch)
+- Added gd-1.6.x PNG functions (Rasmus from drew@elysium.ltd.uk)
+- Fixed [s]printf 0-padding issues (Rasmus)
+- Fixed a crash bug in number_format(), in case of very large numbers (Zeev)
 
 July 28, 1999, Version 3.0.12
 - gmktime/mktime DST fix (RL and Jim)

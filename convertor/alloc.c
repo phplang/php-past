@@ -24,12 +24,12 @@
    | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
    | Authors: Andi Gutmans   <andi@vipe.technion.ac.il>                   |
-   |          Zeev Suraski   <bourbon@netvision.net.il>                   |
+   |          Zeev Suraski   <zeev@zend.com>                              |
    |          Rasmus Lerdorf <rasmus@lerdorf.on.ca>                       |
    +----------------------------------------------------------------------+
  */
 
-/* $Id: alloc.c,v 1.8 2000/01/01 04:31:13 sas Exp $ */
+/* $Id: alloc.c,v 1.9 2000/02/07 23:54:50 zeev Exp $ */
 
 #include "token_cache.h"
 #if WIN32|WINNT

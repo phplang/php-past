@@ -23,11 +23,11 @@
    | If you did not, or have any questions about PHP licensing, please    |
    | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
-   | Authors: Zeev Suraski <bourbon@netvision.net.il>                     |
+   | Authors: Zeev Suraski <zeev@zend.com>                                |
    +----------------------------------------------------------------------+
  */
 
-/* $Id: browscap.c,v 1.24 2000/01/01 04:31:14 sas Exp $ */
+/* $Id: browscap.c,v 1.25 2000/02/07 23:54:51 zeev Exp $ */
 #include "php.h"
 #include "internal_functions.h"
 #include "php3_browscap.h"

@@ -715,7 +715,6 @@ void php3_Ora_Rollback(INTERNAL_FUNCTION_PARAMETERS)
 /* }}} */
 
 /* {{{ proto int ora_parse(int cursor, string sql_statement [, int defer])
-
    Parse an Oracle SQL statement */
 void php3_Ora_Parse(INTERNAL_FUNCTION_PARAMETERS)
 {	
@@ -959,7 +958,7 @@ void php3_Ora_NumRows(INTERNAL_FUNCTION_PARAMETERS)
 }
 /* }}} */
 
-/* prepares/executes/fetches 1st row if avail*/
+/* prepares/executes/fetches 1st row if avail */
 /* {{{ proto int ora_do(int connection, int cursor)
    Parse and execute a statement and fetch first result row */ 
 void php3_Ora_Do(INTERNAL_FUNCTION_PARAMETERS)
@@ -1078,7 +1077,7 @@ void php3_Ora_Fetch(INTERNAL_FUNCTION_PARAMETERS)
 }
 /* }}} */
 
-/* {{{ proto int ora_fetch_into(int cursor, array result [ , int flags ])
+/* {{{ proto int ora_fetch_into(int cursor, array result [, int flags])
    Fetch a row into the specified result array */
 void php3_Ora_FetchInto(INTERNAL_FUNCTION_PARAMETERS)
 {

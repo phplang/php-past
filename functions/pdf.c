@@ -27,7 +27,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: pdf.c,v 1.57 2000/01/01 04:31:16 sas Exp $ */
+/* $Id: pdf.c,v 1.60 2000/02/23 15:05:08 steinm Exp $ */
 
 /* pdflib 0.6 is subject to the ALADDIN FREE PUBLIC LICENSE.
    Copyright (C) 1997 Thomas Merz. */
@@ -40,7 +40,7 @@
 #include "head.h"
 #include <math.h>
 #include "php3_pdf.h"
-#if HAVE_LIBGD13
+#if HAVE_LIBGD
 #include <gd.h>
 #endif
 
@@ -126,7 +126,7 @@ function_entry pdf_functions[] = {
 	PHP_FE(pdf_set_transition, NULL)
 	PHP_FE(pdf_set_duration, NULL)
 	PHP_FE(pdf_open_jpeg, NULL)
-#if HAVE_LIBGD13 && HAVE_PDFLIB2
+#if HAVE_LIBGD && HAVE_PDFLIB2
 	PHP_FE(pdf_open_memory_image, NULL)
 #endif
 	PHP_FE(pdf_open_gif, NULL)
@@ -2200,7 +2200,7 @@ PHP_FUNCTION(pdf_open_jpeg) {
 }
 /* }}} */
 
-#if HAVE_LIBGD13
+#if HAVE_LIBGD
 #if HAVE_PDFLIB2
 /* {{{ proto int pdf_open_memory_image(int pdf, int image)
    Takes an gd image and returns an image for placement in a pdf document */
@@ -2266,7 +2266,7 @@ PHP_FUNCTION(pdf_open_memory_image) {
 }
 /* }}} */
 #endif /* HAVE_PDFLIB2 */
-#endif /* HAVE_LIBGD13 */
+#endif /* HAVE_LIBGD */
 
 /* {{{ proto void pdf_close_image(int pdfimage)
    Closes the pdf image */

@@ -23,7 +23,7 @@
    | If you did not, or have any questions about PHP licensing, please    |
    | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
-   | Authors: Zeev Suraski <bourbon@netvision.net.il> Original sybase.c   |
+   | Authors: Zeev Suraski <zeev@zend.com>            Original sybase.c   |
    |          Frank M. Kromann <fmk@businesnet.dk>                        |
    +----------------------------------------------------------------------+
    | php3_mssql_get_column_content_with_type() based on code by:          |
@@ -32,7 +32,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: mssql.c,v 1.16 1999/12/26 18:44:42 rasmus Exp $ */
+/* $Id: mssql.c,v 1.18 2000/02/20 18:40:33 eschmid Exp $ */
 #define IS_EXT_MODULE
 
 #if !(WIN32|WINNT)
@@ -575,7 +575,7 @@ static int php3_mssql_get_default_link(INTERNAL_FUNCTION_PARAMETERS)
 }
 
 
-/* {{{ proto int mssql_connect([string host[, string user[, string password]]])
+/* {{{ proto int mssql_connect([string host [, string user [, string password]]])
    Open MS-SQL server connection */
 void php3_mssql_connect(INTERNAL_FUNCTION_PARAMETERS)
 {
@@ -583,7 +583,7 @@ void php3_mssql_connect(INTERNAL_FUNCTION_PARAMETERS)
 }
 /* }}} */
 
-/* {{{ proto int mssql_pconnect([string host[, string user[, string password]]])
+/* {{{ proto int mssql_pconnect([string host [, string user [, string password]]])
    Open permanent MS-SQL server connection */
 void php3_mssql_pconnect(INTERNAL_FUNCTION_PARAMETERS)
 {
@@ -627,7 +627,7 @@ void php3_mssql_close(INTERNAL_FUNCTION_PARAMETERS)
 }
 /* }}} */
 
-/* {{{ proto bool mssql_select_db(string database[, int link_id])
+/* {{{ proto bool mssql_select_db(string database [, int link_id])
    Select MS-SQL database */
 void php3_mssql_select_db(INTERNAL_FUNCTION_PARAMETERS)
 {
@@ -757,7 +757,7 @@ static void php3_mssql_get_column_content_without_type(mssql_link *mssql_ptr,int
 }
 
 
-/* {{{ proto int mssql_query(string query[, int link_id])
+/* {{{ proto int mssql_query(string query [, int link_id])
    Send MS-SQL query */
 void php3_mssql_query(INTERNAL_FUNCTION_PARAMETERS)
 {
@@ -1177,7 +1177,7 @@ static char *php3_mssql_get_field_name(int type)
 }
 
 
-/* {{{ proto object mssql_fetch_field(int result[, int offset])
+/* {{{ proto object mssql_fetch_field(int result [, int offset])
    Get field information */
 void php3_mssql_fetch_field(INTERNAL_FUNCTION_PARAMETERS)
 {
@@ -1238,8 +1238,8 @@ void php3_mssql_fetch_field(INTERNAL_FUNCTION_PARAMETERS)
 }
 /* }}} */
 
-/* {{{ proto int mssql_field_length(int result[, int offset])
-   Get the maximum length of  field? */
+/* {{{ proto int mssql_field_length(int result [, int offset])
+   Get the length of a field */
 void php3_mssql_field_length(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *mssql_result_index,*offset;
@@ -1293,7 +1293,7 @@ void php3_mssql_field_length(INTERNAL_FUNCTION_PARAMETERS)
 }
 /* }}} */
 
-/* {{{ proto string mssql_field_name(int result[, int offset])
+/* {{{ proto string mssql_field_name(int result [, int offset])
    Get the name of a field */
 void php3_mssql_field_name(INTERNAL_FUNCTION_PARAMETERS)
 {
@@ -1349,7 +1349,7 @@ void php3_mssql_field_name(INTERNAL_FUNCTION_PARAMETERS)
 }
 /* }}} */
 
-/* {{{ proto string mssql_field_type(int result[, int offset])
+/* {{{ proto string mssql_field_type(int result [, int offset])
    Get the type of a field */
 void php3_mssql_field_type(INTERNAL_FUNCTION_PARAMETERS)
 {
@@ -1535,7 +1535,7 @@ void php3_info_mssql(void)
 
 
 /* {{{ proto void mssql_min_error_severity(int severity)
-   ??? */
+   Sets the lower error severity */
 void php3_mssql_min_error_severity(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *severity;
@@ -1551,7 +1551,7 @@ void php3_mssql_min_error_severity(INTERNAL_FUNCTION_PARAMETERS)
 /* }}} */
 
 /* {{{ proto void mssql_min_message_severity(int severity)
-   ??? */
+   Sets the lower message severity */
 void php3_mssql_min_message_severity(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *severity;

@@ -2,7 +2,7 @@
 /*                                          */
 /* John Ellson   ellson@lucent.com          */
 
-/* $Id: gdttf.c,v 1.25 2000/01/13 13:16:05 rasmus Exp $ */
+/* $Id: gdttf.c,v 1.26 2000/01/13 13:31:11 rasmus Exp $ */
 
 #if WIN32|WINNT
 #include "config.w32.h"
@@ -149,7 +149,7 @@ static void bitmapRelease( void *element );
 /* local prototype */
 char *gdttfchar(gdImage *im, int fg, font_t *font, int x, int y, TT_F26Dot6 x1,  TT_F26Dot6 y1, TT_F26Dot6 *advance, TT_BBox **bbox, char **next);
 
-#ifndef HAVE_GDIMAGECOLORRESOLVE
+#ifndef HAVE_GD_COLORRESOLVE
 int gdImageColorResolve(gdImagePtr im, int r, int g, int b);
 
 /********************************************************************/
@@ -748,10 +748,10 @@ gdttfchar(gdImage *im, int fg, font_t *font,
 			if (tweencolorkey.pixel > 0) {
 				x3 = x2 + col;
 				if (x3 >= im->sx || x3 < 0) continue;
-#if HAVE_LIBGD13
-				pixel = &im->pixels[y3][x3];
-#else
+#if HAVE_GD_ANCIENT
 				pixel = &im->pixels[x3][y3];
+#else
+				pixel = &im->pixels[y3][x3];
 #endif
 				tweencolorkey.bgcolor = *pixel;
 				tweencolor = (tweencolor_t *)gdCacheGet(

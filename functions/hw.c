@@ -23,7 +23,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: hw.c,v 1.53 2000/01/01 04:31:15 sas Exp $ */
+/* $Id: hw.c,v 1.55 2000/02/23 15:05:08 steinm Exp $ */
 
 #if COMPILE_DL
 #include "dl/phpdl.h"
@@ -752,7 +752,7 @@ PHP_FUNCTION(hw_connect)
 }
 /* }}} */
 
-/* {{{ proto int hw_pconnect(string host, int port [string username [, string password]])
+/* {{{ proto int hw_pconnect(string host, int port [, string username [, string password]])
    Connect to the Hyperwave server persistent */
 PHP_FUNCTION(hw_pconnect)
 {
@@ -1110,7 +1110,7 @@ php3_printf("%s\n", ptr);
 /* }}} */
 
 /* {{{ proto string hw_dummy(int link, int id, int msgid)
-   ??? */
+   Hyperwave dummy function */
 PHP_FUNCTION(hw_dummy) {
 	pval *arg1, *arg2, *arg3;
 	int link, id, type, msgid;
@@ -1176,7 +1176,7 @@ PHP_FUNCTION(hw_getobject) {
 	link=argv[0]->value.lval;
 	ptr = php3_list_find(link,&type);
 	if(!ptr || (type!=php3_hw_module.le_socketp && type!=php3_hw_module.le_psocketp)) {
-		php3_error(E_WARNING,"Unable to find file identifier %d",id);
+		php3_error(E_WARNING,"Unable to find file identifier %d", link);
 		RETURN_FALSE;
 	}
 
@@ -1446,7 +1446,7 @@ PHP_FUNCTION(hw_changeobject) {
 #undef BUFFERLEN
 /* }}} */
 
-/* {{{ proto void hw_modifyobject(int link, int objid, array remattributes, array addattributes, [int mode])
+/* {{{ proto void hw_modifyobject(int link, int objid, array remattributes, array addattributes [, int mode])
    Modifies attributes of an object */
 #define BUFFERLEN 200
 PHP_FUNCTION(hw_modifyobject) {
@@ -1788,8 +1788,8 @@ PHP_FUNCTION(hw_cp) {
 }
 /* }}} */
 
-/* {{{ proto hwdoc hw_gettext(int link, int objid[, int rootid])
-   Returns text document. Links are relative to rootid if given */
+/* {{{ proto hwdoc hw_gettext(int link, int objid [, int rootid])
+   Returns text document. Links are relative to rootid if given. */
 PHP_FUNCTION(hw_gettext) {
 	pval *argv[3];
 	int argc, link, id, type, mode;
@@ -2198,7 +2198,7 @@ PHP_FUNCTION(hw_pipedocument) {
 /* }}} */
 
 /* {{{ proto hwdoc hw_pipecgi(int link, int objid)
-   Returns output of cgi script */
+   Returns output of a CGI script */
 #define BUFFERLEN 1000
 /* FIX ME: The buffer cgi_env_str should be allocated dynamically */
 PHP_FUNCTION(hw_pipecgi) {
@@ -2315,7 +2315,7 @@ PHP_FUNCTION(hw_insertdocument) {
 /* }}} */
 
 /* {{{ proto hwdoc hw_new_document(string objrec, string data, int size)
-   Create a new document */
+   Create a new Hyperwave document */
 PHP_FUNCTION(hw_new_document) {
 	pval *arg1, *arg2, *arg3;
 	char *ptr;
@@ -2376,7 +2376,7 @@ PHP_FUNCTION(hw_free_document) {
 /* }}} */
 
 /* {{{ proto void hw_output_document(hwdoc doc)
-   Prints document */
+   Prints a Hyperwave document */
 PHP_FUNCTION(hw_output_document) {
 	pval *arg1;
 	int id, type;
@@ -2402,7 +2402,7 @@ PHP_FUNCTION(hw_output_document) {
 /* }}} */
 
 /* {{{ proto string hw_documentbodytag(hwdoc doc [, string prefix])
-   An alias for hw_document_bodytag */
+   An alias for hw_document_bodytag() */
 /* }}} */
 
 /* {{{ proto string hw_document_bodytag(hwdoc doc [, string prefix])
@@ -2511,7 +2511,7 @@ PHP_FUNCTION(hw_document_setcontent) {
 /* }}} */
 
 /* {{{ proto int hw_documentsize(hwdoc doc)
-   An alias for hw_document_size */
+   An alias for hw_document_size() */
 /* }}} */
 
 /* {{{ proto int hw_document_size(hwdoc doc)
@@ -2538,7 +2538,7 @@ PHP_FUNCTION(hw_document_size) {
 /* }}} */
 
 /* {{{ proto string hw_documentattributes(hwdoc doc)
-   An alias for hw_document_attributes */
+   An alias for hw_document_attributes() */
 /* }}} */
 
 /* {{{ proto string hw_document_attributes(hwdoc doc)
@@ -2648,7 +2648,7 @@ PHP_FUNCTION(hw_getparents) {
 /* }}} */
 
 /* {{{ proto array hw_children(int link, int objid)
-   Returns array of children object ids */
+   Returns an array of children object ids */
 PHP_FUNCTION(hw_children) {
 	pval *arg1, *arg2;
 	int link, id, type;
@@ -2694,7 +2694,7 @@ PHP_FUNCTION(hw_children) {
 /* }}} */
 
 /* {{{ proto array hw_childrenobj(int link, int objid)
-   Returns array of children object records */
+   Returns an array of children object records */
 PHP_FUNCTION(hw_childrenobj) {
 	pval *arg1, *arg2;
 	int link, id, type;
@@ -2730,7 +2730,7 @@ PHP_FUNCTION(hw_childrenobj) {
 /* }}} */
 
 /* {{{ proto array hw_getchildcoll(int link, int objid)
-   Returns array of child collection object ids */
+   Returns an array of child collection object ids */
 PHP_FUNCTION(hw_getchildcoll) {
 	pval *arg1, *arg2;
 	int link, id, type;
@@ -2776,7 +2776,7 @@ PHP_FUNCTION(hw_getchildcoll) {
 /* }}} */
 
 /* {{{ proto array hw_getchildcollobj(int link, int objid)
-   Returns array of child collection object records */
+   Returns an array of child collection object records */
 PHP_FUNCTION(hw_getchildcollobj) {
 	pval *arg1, *arg2;
 	int link, id, type;
@@ -2812,7 +2812,7 @@ PHP_FUNCTION(hw_getchildcollobj) {
 /* }}} */
 
 /* {{{ proto int hw_docbyanchor(int link, int anchorid)
-   Returns objid of document belonging to anchorid */
+   Returns an objid of document belonging to anchorid */
 PHP_FUNCTION(hw_docbyanchor) {
 	pval *arg1, *arg2;
 	int link, id, type;
@@ -2844,7 +2844,7 @@ PHP_FUNCTION(hw_docbyanchor) {
 /* }}} */
 
 /* {{{ proto array hw_docbyanchorobj(int link, int anchorid)
-   Returns object record of document belonging to anchorid */
+   Returns oan bject record of document belonging to anchorid */
 PHP_FUNCTION(hw_docbyanchorobj) {
 	pval *arg1, *arg2;
 	int link, id, type;
@@ -3290,7 +3290,7 @@ PHP_FUNCTION(hw_objrec2array) {
 /* }}} */
 
 /* {{{ proto string hw_array2objrec(array objarr)
-   Returns object record of object array */
+   Returns an object record of object array */
 PHP_FUNCTION(hw_array2objrec) {
 	pval *arg1;
 	char *objrec, *retobj;
@@ -3373,7 +3373,7 @@ PHP_FUNCTION(hw_incollections) {
 /* }}} */
 
 /* {{{ proto void hw_inscoll(int link, int parentid, array objarr)
-   Inserts collection */
+   Inserts a collection */
 PHP_FUNCTION(hw_inscoll) {
 	pval *arg1, *arg2, *arg3;
 	char *objrec;
@@ -3455,7 +3455,7 @@ PHP_FUNCTION(hw_insdoc) {
 /* }}} */
 
 /* {{{ proto int hw_getsrcbydestobj(int link, int destid)
-   Returns object id of source docuent by destination anchor */
+   Returns a object id of source docment by destination anchor */
 PHP_FUNCTION(hw_getsrcbydestobj) {
 	pval *arg1, *arg2;
 	int link, type, id;
@@ -3490,7 +3490,7 @@ PHP_FUNCTION(hw_getsrcbydestobj) {
 /* }}} */
 
 /* {{{ proto int hw_mapid(int link, int serverid, int destid)
-   Returns virtual object id of document on remote hw server */
+   Returns a virtual object id of document on remote Hyperwave server */
 PHP_FUNCTION(hw_mapid) {
 	pval *arg1, *arg2, *arg3;
 	int link, type, servid, id, virtid;
@@ -3522,7 +3522,7 @@ PHP_FUNCTION(hw_mapid) {
 /* }}} */
 
 /* {{{ proto string hw_getrellink(int link, int rootid, int sourceid, int destid)
-   Get link form source to dest relative to rootid */
+   Get a link form a source to destination relative to rootid */
 PHP_FUNCTION(hw_getrellink) {
 	pval *arg1, *arg2, *arg3, *arg4;
 	int link, type;
@@ -3565,7 +3565,7 @@ void php3_info_hw()
 }
 
 /* {{{ proto void hw_connection_info(int link)
-   Prints information about the connection to Hyperwave server */
+   Prints information about the connection to a Hyperwave server */
 PHP_FUNCTION(hw_connection_info)
 {
 	pval *arg1;

@@ -23,13 +23,13 @@
    | If you did not, or have any questions about PHP licensing, please    |
    | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
-   | Author: Zeev Suraski <bourbon@netvision.net.il>                      |
+   | Author: Zeev Suraski <zeev@zend.com>                                 |
    +----------------------------------------------------------------------+
  */
 
 
 /* !!!! experimental, use at your own risk! !!!! 
-   $Id: COM.c,v 1.9 2000/01/01 04:31:14 sas Exp $ */
+   $Id: COM.c,v 1.11 2000/02/20 18:40:33 eschmid Exp $ */
 
 #if WIN32|WINNT
 
@@ -140,7 +140,7 @@ int php3_mshutdown_COM(void)
 
 
 /* {{{ proto int com_load(string module_name)
-   ??? */
+   Loads a COM module */
 void php3_COM_load(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *module_name;
@@ -274,8 +274,8 @@ static void _php3_pval_to_variant(pval *pval_arg, VARIANTARG *var_arg)
 }
 
 
-/* {{{ proto mixed com_invoke(int module, string handler_name[, mixed arg[, ...]])
-   ??? */
+/* {{{ proto mixed com_invoke(int module, string handler_name [, mixed arg [, ...]])
+   Invokes a COM module */
 void php3_COM_invoke(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval **arguments;
@@ -366,7 +366,7 @@ void php3_COM_invoke(INTERNAL_FUNCTION_PARAMETERS)
 /* }}} */
 
 /* {{{ proto mixed com_propget(int module, string property_name)
-   ??? */
+   Gets properties from a COM module */
 void php3_COM_propget(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *arg_idispatch, *arg_property;
@@ -436,7 +436,7 @@ void php3_COM_propget(INTERNAL_FUNCTION_PARAMETERS)
 /* }}} */
 
 /* {{{ proto bool com_propput(int module, string property_name, mixed value)
-   ??? */
+   Puts the properties for a module */
 void php3_COM_propput(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *arg_idispatch, *arg_property, *arg_new_value;

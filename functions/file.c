@@ -26,7 +26,7 @@
    | Authors: Rasmus Lerdorf <rasmus@lerdorf.on.ca>                       |
    +----------------------------------------------------------------------+
  */
-/* $Id: file.c,v 1.230 2000/01/03 21:31:31 kk Exp $ */
+/* $Id: file.c,v 1.232 2000/02/20 20:42:14 eschmid Exp $ */
 #include "php.h"
 
 #include <stdio.h>
@@ -222,7 +222,7 @@ php3_module_entry php3_file_module_entry = {
 };
 
 /* {{{ proto array get_meta_tags(string filename [, int use_include_path])
-	Extracts all meta tag content attributes from a file and returns an array */
+   Extracts all meta tag content attributes from a file and returns an array */
 void php3_get_meta_tags(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *filename, *arg2;
 	FILE *fp;
@@ -344,7 +344,7 @@ void php3_get_meta_tags(INTERNAL_FUNCTION_PARAMETERS) {
 /* }}} */
 
 /* {{{ proto array file(string filename [, int use_include_path])
-Read entire file into an array */
+   Read entire file into an array */
 void php3_file(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *filename, *arg2;
 	FILE *fp;
@@ -444,7 +444,7 @@ int php3_minit_file(INIT_FUNC_ARGS)
 }
 
 /* {{{ proto string tempnam(string dir, string prefix)
-Create a unique filename in a directory */
+   Create a unique filename in a directory */
 void php3_tempnam(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *arg1, *arg2;
 	char *d;
@@ -469,8 +469,8 @@ void php3_tempnam(INTERNAL_FUNCTION_PARAMETERS) {
 }
 /* }}} */
 
-/* {{{ proto int tmpfile()
-   Create a temporary file that will be deleted automatically after use. */
+/* {{{ proto int tmpfile(void)
+   Create a temporary file that will be deleted automatically after use */
 PHP_FUNCTION(tmpfile)
 {
 	FILE *fp;
@@ -489,7 +489,7 @@ PHP_FUNCTION(tmpfile)
 /* }}} */
 
 /* {{{ proto int fopen(string filename, string mode [, int use_include_path])
-Open a file or a URL and return a file pointer */
+   Open a file or a URL and return a file pointer */
 void php3_fopen(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *arg1, *arg2, *arg3;
 	FILE *fp;
@@ -548,7 +548,7 @@ void php3_fopen(INTERNAL_FUNCTION_PARAMETERS) {
 /* }}} */	
 
 /* {{{ proto int fclose(int fp)
-Close an open file pointer */
+   Close an open file pointer */
 void php3_fclose(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *arg1;
 	int id, type;
@@ -571,7 +571,7 @@ void php3_fclose(INTERNAL_FUNCTION_PARAMETERS) {
 /* }}} */
 
 /* {{{ proto int popen(string command, string mode)
-Execute a command and open either a read or a write pipe to it */
+   Execute a command and open either a read or a write pipe to it */
 PHP_FUNCTION(popen) {
 	pval *arg1, *arg2;
 	FILE *fp;
@@ -625,7 +625,7 @@ PHP_FUNCTION(popen) {
 /* }}} */
 
 /* {{{ proto int pclose(int fp)
-Close a file pointer opened by popen() */
+   Close a file pointer opened by popen() */
 void php3_pclose(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *arg1;
 	int id,type;
@@ -649,7 +649,7 @@ void php3_pclose(INTERNAL_FUNCTION_PARAMETERS) {
 /* }}} */
 
 /* {{{ proto int feof(int fp)
-Test for end-of-file on a file pointer */
+   Test for end-of-file on a file pointer */
 void php3_feof(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *arg1;
 	FILE *fp;
@@ -713,7 +713,7 @@ PHPAPI int _php3_set_sock_blocking(int socketd, int block)
 }
 
 /* {{{ proto int set_socket_blocking(int socket descriptor, int mode)
-Set blocking/non-blocking mode on a socket */
+   Set blocking/non-blocking mode on a socket */
 void php3_set_socket_blocking(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *arg1, *arg2;
@@ -771,7 +771,7 @@ void php3_set_socket_timeout(INTERNAL_FUNCTION_PARAMETERS)
 #endif
 
 /* {{{ proto string fgets(int fp, int length)
-Get a line from file pointer */
+   Get a line from file pointer */
 void php3_fgets(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *arg1, *arg2;
@@ -820,7 +820,7 @@ void php3_fgets(INTERNAL_FUNCTION_PARAMETERS)
 /* }}} */
 
 /* {{{ proto string fgetc(int fp)
-Get a character from file pointer */
+   Get a character from file pointer */
 void php3_fgetc(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *arg1;
 	FILE *fp;
@@ -860,8 +860,8 @@ void php3_fgetc(INTERNAL_FUNCTION_PARAMETERS) {
 /* }}} */
 
 /* Strip any HTML tags while reading */
-/* {{{ proto string fgetss(int fp, int length [,string allowable_tags])
-Get a line from file pointer and strip HTML tags */
+/* {{{ proto string fgetss(int fp, int length [, string allowable_tags])
+   Get a line from file pointer and strip HTML tags */
 void php3_fgetss(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *fd, *bytes, *allow=NULL;
@@ -926,7 +926,7 @@ void php3_fgetss(INTERNAL_FUNCTION_PARAMETERS)
 /* }}} */
 
 /* {{{ proto int fwrite(int fp, string str [, int length])
-Binary-safe file write */
+   Binary-safe file write */
 void php3_fwrite(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *arg1, *arg2, *arg3=NULL;
@@ -987,7 +987,7 @@ void php3_fwrite(INTERNAL_FUNCTION_PARAMETERS)
 /* }}} */	
 
 /* {{{ proto int set_file_buffer(int fp, int buffer)
-Set file write buffer */
+   Set file write buffer */
 /*
    wrapper for setvbuf()
 */
@@ -1040,7 +1040,7 @@ void php3_set_file_buffer(INTERNAL_FUNCTION_PARAMETERS)
 /* }}} */	
 
 /* {{{ proto int rewind(int fp)
-Rewind the position of a file pointer */
+   Rewind the position of a file pointer */
 void php3_rewind(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *arg1;
 	int id,type;
@@ -1063,7 +1063,7 @@ void php3_rewind(INTERNAL_FUNCTION_PARAMETERS) {
 /* }}} */
 
 /* {{{ proto int ftell(int fp)
-Get file pointer's read/write position */
+   Get file pointer's read/write position */
 void php3_ftell(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *arg1;
 	int id, type;
@@ -1087,7 +1087,7 @@ void php3_ftell(INTERNAL_FUNCTION_PARAMETERS) {
 /* }}} */
 
 /* {{{ proto int fseek(int fp, int offset)
-Seek on a file pointer */
+   Seek on a file pointer */
 void php3_fseek(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *arg1, *arg2;
 	int ret,id,type;
@@ -1123,7 +1123,7 @@ void php3_fseek(INTERNAL_FUNCTION_PARAMETERS) {
 /* }}} */
 
 /* {{{ proto int mkdir(string pathname, int mode)
-Create a directory */
+   Create a directory */
 void php3_mkdir(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *arg1, *arg2;
 	int ret,mode;
@@ -1148,7 +1148,7 @@ void php3_mkdir(INTERNAL_FUNCTION_PARAMETERS) {
 /* }}} */	
 
 /* {{{ proto int rmdir(string dirname)
-Remove a directory */
+   Remove a directory */
 void php3_rmdir(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *arg1;
 	int ret;
@@ -1171,7 +1171,7 @@ void php3_rmdir(INTERNAL_FUNCTION_PARAMETERS) {
 /* }}} */	
 
 /* {{{ proto int readfile(string filename [, int use_include_path])
-Output a file or a URL */
+   Output a file or a URL */
 void php3_readfile(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *arg1, *arg2;
 	char buf[8192];
@@ -1230,7 +1230,7 @@ void php3_readfile(INTERNAL_FUNCTION_PARAMETERS) {
 /* }}} */
 
 /* {{{ proto int umask([int mask])
-Return or change the umask */
+   Return or change the umask */
 void php3_fileumask(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *arg1;
 	int oldumask;
@@ -1257,7 +1257,7 @@ void php3_fileumask(INTERNAL_FUNCTION_PARAMETERS) {
  * Read to EOF on a file descriptor and write the output to stdout.
  */
 /* {{{ proto int fpassthru(int fp)
-Output all remaining data from a file pointer */
+   Output all remaining data from a file pointer */
 void php3_fpassthru(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *arg1;
 	FILE *fp;
@@ -1295,7 +1295,7 @@ void php3_fpassthru(INTERNAL_FUNCTION_PARAMETERS) {
 /* }}} */
 
 /* {{{ proto int rename(string old_name, string new_name)
-Rename a file */
+   Rename a file */
 void php3_rename(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *OLD, *NEW;
 	char *old, *new;
@@ -1328,7 +1328,7 @@ void php3_rename(INTERNAL_FUNCTION_PARAMETERS) {
 /* }}} */
 
 /* {{{ proto int copy(string source_file, string destination_file)
-Copy a file */
+   Copy a file */
 void php3_file_copy(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *source, *target;
@@ -1382,7 +1382,7 @@ void php3_file_copy(INTERNAL_FUNCTION_PARAMETERS)
 /* }}} */
 
 /* {{{ proto int fread(int fp, int length)
-Binary-safe file read */
+   Binary-safe file read */
 void php3_fread(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *arg1, *arg2;
@@ -1435,7 +1435,7 @@ PHPAPI int php3i_get_le_fp(void){
 static int flock_values[] = { LOCK_SH, LOCK_EX, LOCK_UN };
 
 /* {{{ proto bool flock(int fp, int operation)
-   portable file locking */
+   Portable file locking */
 PHP_FUNCTION(flock)
 {
 	pval *arg1, *arg2;
@@ -1487,7 +1487,7 @@ PHP_FUNCTION(flock)
 
 
 /* {{{ proto array fgetcsv(int fp, int length)
-   get line from file pointer and parse for CSV fields */
+   Get line from file pointer and parse for CSV fields */
 void php3_fgetcsv(INTERNAL_FUNCTION_PARAMETERS) {
 	char *temp, *tptr, *bptr;
 	char delimiter = ',';	/* allow this to be set as parameter */
