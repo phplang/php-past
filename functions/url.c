@@ -26,7 +26,7 @@
    | Author: Jim Winstead (jimw@php.net)                                  |
    +----------------------------------------------------------------------+
  */
-/* $Id: url.c,v 1.36 1998/05/22 12:54:46 zeev Exp $ */
+/* $Id: url.c,v 1.37 1998/09/14 15:55:08 martin Exp $ */
 
 #include <stdlib.h>
 #include <string.h>
@@ -41,6 +41,10 @@
 #include "internal_functions.h"
 
 #include "url.h"
+#ifdef CHARSET_EBCDIC
+#include "ebcdic.h"
+#endif /*CHARSET_EBCDIC*/
+
 
 void free_url(url * theurl)
 {
@@ -222,6 +226,7 @@ char *_php3_urlencode(char *s, int len)
 		str[y] = (unsigned char) s[x];
 		if (str[y] == ' ') {
 			str[y] = '+';
+#ifndef CHARSET_EBCDIC
 		} else if ((str[y] < '0' && str[y] != '-' && str[y] != '.') ||
 				   (str[y] < 'A' && str[y] > '9') ||
 				   (str[y] > 'Z' && str[y] < 'a' && str[y] != '_') ||
@@ -230,6 +235,13 @@ char *_php3_urlencode(char *s, int len)
 			str[y++] = hexchars[(unsigned char) s[x] >> 4];
 			str[y] = hexchars[(unsigned char) s[x] & 15];
 		}
+#else /*CHARSET_EBCDIC*/
+		} else if (!isalnum(str[y]) && strchr("_-.", str[y]) != NULL) {
+			str[y++] = '%';
+			str[y++] = hexchars[os_toascii[(unsigned char) s[x]] >> 4];
+			str[y] = hexchars[os_toascii[(unsigned char) s[x]] & 0x0F];
+		}
+#endif /*CHARSET_EBCDIC*/
 	}
 	str[y] = '\0';
 	return ((char *) str);
@@ -282,7 +294,11 @@ int _php3_urldecode(char *str, int len)
 		if (*data == '+')
 			*dest = ' ';
 		else if (*data == '%' && len >= 2 && isxdigit((int) *(data + 1)) && isxdigit((int) *(data + 2))) {
+#ifndef CHARSET_EBCDIC
 			*dest = (char) php3_htoi(data + 1);
+#else
+			*dest = os_toebcdic[(char) php3_htoi(data + 1)];
+#endif
 			data += 2;
 			len -= 2;
 		} else
@@ -302,6 +318,7 @@ char *_php3_rawurlencode(char *s, int len)
 	str = (unsigned char *) emalloc(3 * len + 1);
 	for (x = 0, y = 0; len--; x++, y++) {
 		str[y] = (unsigned char) s[x];
+#ifndef CHARSET_EBCDIC
 		if ((str[y] < '0' && str[y] != '-' && str[y] != '.') ||
 			(str[y] < 'A' && str[y] > '9') ||
 			(str[y] > 'Z' && str[y] < 'a' && str[y] != '_') ||
@@ -309,6 +326,12 @@ char *_php3_rawurlencode(char *s, int len)
 			str[y++] = '%';
 			str[y++] = hexchars[(unsigned char) s[x] >> 4];
 			str[y] = hexchars[(unsigned char) s[x] & 15];
+#else /*CHARSET_EBCDIC*/
+		if (!isalnum(str[y]) && strchr("_-.", str[y]) != NULL) {
+			str[y++] = '%';
+			str[y++] = hexchars[os_toascii[(unsigned char) s[x]] >> 4];
+			str[y] = hexchars[os_toascii[(unsigned char) s[x]] & 15];
+#endif /*CHARSET_EBCDIC*/
 		}
 	}
 	str[y] = '\0';
@@ -360,7 +383,11 @@ int _php3_rawurldecode(char *str, int len)
 
 	while (len--) {
 		if (*data == '%' && len >= 2 && isxdigit((int) *(data + 1)) && isxdigit((int) *(data + 2))) {
+#ifndef CHARSET_EBCDIC
 			*dest = (char) php3_htoi(data + 1);
+#else
+			*dest = os_toebcdic[(char) php3_htoi(data + 1)];
+#endif
 			data += 2;
 			len -= 2;
 		} else

@@ -24,12 +24,29 @@
      <acronym>HTML</acronym> file to send raw <acronym>HTTP</acronym>
      header strings.  See the <ulink url="&spec.http1.1;">HTTP 1.1
      Specification</ulink> for more information on raw http headers.
-     Remember that the <function>Header</function> function must be
-     called before any actual output is sent either by normal HTML
-     tags or from PHP.
+     <emphasis>Note:</emphasis> Remember that the
+     <function>Header</function> function must be called before any actual
+     output is sent either by normal HTML tags or from PHP. It is a very
+     common error to read code with <function>include</function> or with 
+     auto_prepend and have spaces or empty lines in this code that force
+     output before <function>header</function> is called.
+
     <para>
      <informalexample><programlisting role=php>
 Header("Location: http://www.php.net");  /* Redirect browser to PHP web site */
+exit;  /* Make sure that code below does not get executed when we redirect. */
+</programlisting></informalexample>
+
+    <para>
+     PHP scripts often generate dynamic HTML that must not be cached
+     by the client browser or any proxy caches between the server and the
+     client browser. Many proxies and clients can be forced to disable
+     caching with
+     <informalexample><programlisting role=php>
+  header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");             // Date in the past
+  header("Last-Modified: " . gmdate("D, d M Y H:i:s") . "GMT"); // always modified
+  header("Cache-Control: no-cache, must-revalidate");           // HTTP/1.1
+  header("Pragma: no-cache");                                   // HTTP/1.0
 </programlisting></informalexample>
    </refsect1>
   </refentry>

@@ -1,0 +1,9 @@
+--$Id: 003.php3t,v 1.2 1998/08/23 02:21:28 rocky Exp $
+--TITLE--
+GET and POST Method combined                                  ...
+--POST--
+a=Hello+World
+--URL--
+basic/003.phtml?b=Hello+Again+World&c=Hi+Mom
+--EXPECT--
+Hello World Hello Again World Hi Mom

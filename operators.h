@@ -30,7 +30,7 @@
  */
 
 
-/* $Id: operators.h,v 1.34 1998/07/03 06:21:26 zeev Exp $ */
+/* $Id: operators.h,v 1.35 1998/09/10 23:56:56 zeev Exp $ */
 
 
 #ifndef _OPERATORS_H
@@ -80,7 +80,7 @@ extern PHPAPI void convert_to_object(pval *op);
 extern int add_char_to_string(pval *result, pval *op1, pval *op2 INLINE_TLS);
 extern PHPAPI void convert_to_double(pval *op);
 
-extern int yystype_true(pval *op);
+extern int pval_is_true(pval *op);
 extern int compare_function(pval *result, pval *op1, pval *op2 INLINE_TLS);
 
 extern void php3_str_tolower(char *str, unsigned int length);

@@ -55,7 +55,7 @@
      available.
     </para>
 
-   <sect1>
+   <sect1 id="ldap-example">
     <title>Complete code example</title>
      <para>
       Retrieve information for all entries where the surname starts

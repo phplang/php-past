@@ -29,7 +29,7 @@
  */
 
 
-/* $Id: main.h,v 1.54 1998/07/28 22:00:04 rasmus Exp $ */
+/* $Id: main.h,v 1.56 1998/08/23 14:18:57 rasmus Exp $ */
 
 
 #ifndef _MAIN_H
@@ -82,5 +82,7 @@ extern int shutdown_requested;
 extern unsigned char header_is_being_sent;
 extern int initialized;
 #endif
+
+extern void php3_call_shutdown_functions(void);
 
 #endif

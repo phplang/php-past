@@ -29,7 +29,7 @@
  */
 
 
-/* $Id: control_structures_inline.h,v 1.184 1998/08/14 13:49:19 zeev Exp $ */
+/* $Id: control_structures_inline.h,v 1.188 1998/09/19 20:31:45 zeev Exp $ */
 
 #ifdef THREAD_SAFE
 #include "tls.h"
@@ -43,7 +43,7 @@
 #ifndef THREAD_SAFE
 extern pval *array_ptr;
 static pval return_value;
-static HashTable list, plist;
+HashTable list, plist;
 #endif
 
 extern inline int cs_global_variable(pval *varname INLINE_TLS);
@@ -115,7 +115,7 @@ inline int cs_global_variable(pval *varname INLINE_TLS)
 			return FAILURE;
 		}
 		if ((varname->type != IS_STRING)) {
-			yystype_destructor(varname _INLINE_TLS);
+			pval_destructor(varname _INLINE_TLS);
 			php3_error(E_WARNING, "Incorrect variable type or name in global in function %s()", GLOBAL(function_state).function_name);
 			return FAILURE;
 		}
@@ -156,26 +156,26 @@ inline int cs_static_variable(pval *varname, pval *value INLINE_TLS)
 			php3_error(E_WARNING, "STATIC variable decleration meaningless in main() scope");
 			STR_FREE(varname->value.str.val);
 			if (value) {
-				yystype_destructor(value _INLINE_TLS);
+				pval_destructor(value _INLINE_TLS);
 			}
 			return FAILURE;
 		}
 		if ((varname->type != IS_STRING)) {
-			yystype_destructor(varname _INLINE_TLS);
-			yystype_destructor(value _INLINE_TLS);
+			pval_destructor(varname _INLINE_TLS);
+			pval_destructor(value _INLINE_TLS);
 			php3_error(E_WARNING, "Incorrect variable type or name in static in function %s()", GLOBAL(function_state).function_name);
 			return FAILURE;
 		}
 		if (_php3_hash_find(GLOBAL(function_state).hosting_function_table, GLOBAL(function_state).function_name, strlen(GLOBAL(function_state).function_name)+1, (void **) &func_ent) == FAILURE) {
 			STR_FREE(varname->value.str.val);
 			if (value) {
-				yystype_destructor(value _INLINE_TLS);
+				pval_destructor(value _INLINE_TLS);
 			}
 			return FAILURE;
 		}
 		if (!func_ent->value.func.addr.statics) {
  			func_ent->value.func.addr.statics = (HashTable *) emalloc(sizeof(HashTable));
-			_php3_hash_init(func_ent->value.func.addr.statics, 0, NULL, pval_DESTRUCTOR, 0);
+			_php3_hash_init(func_ent->value.func.addr.statics, 0, NULL, PVAL_DESTRUCTOR, 0);
 		}
 		if (_php3_hash_find(func_ent->value.func.addr.statics, varname->value.str.val, varname->value.str.len+1, (void **) &variable_entry) == FAILURE) {
 			if (value) {
@@ -189,7 +189,7 @@ inline int cs_static_variable(pval *varname, pval *value INLINE_TLS)
 				php3_error(E_ERROR, "Inserted static variable got lost");
 				STR_FREE(varname->value.str.val);
 				if (value) {
-					yystype_destructor(value);
+					pval_destructor(value);
 				}
 				return FAILURE;
 			}
@@ -199,7 +199,7 @@ inline int cs_static_variable(pval *varname, pval *value INLINE_TLS)
 			php3_error(E_ERROR, "Unable to initialize static variable");
 			STR_FREE(varname->value.str.val);
 			if (value) {
-				yystype_destructor(value _INLINE_TLS);
+				pval_destructor(value _INLINE_TLS);
 			}
 			return FAILURE;
 		} else {
@@ -217,14 +217,14 @@ inline void cs_start_while(pval *while_token, pval *expr INLINE_TLS)
 
 	if (GLOBAL(Execute)) {
 		tc_set_token(&GLOBAL(token_cache_manager), while_token->offset, WHILE);
-		if (yystype_true(expr)) {
+		if (pval_is_true(expr)) {
 			GLOBAL(ExecuteFlag) = EXECUTE;
 			GLOBAL(Execute) = SHOULD_EXECUTE;
 		} else {
 			GLOBAL(ExecuteFlag) = DONT_EXECUTE;
 			GLOBAL(Execute) = SHOULD_EXECUTE;
 		}
-		yystype_destructor(expr _INLINE_TLS);
+		pval_destructor(expr _INLINE_TLS);
 	}
 }
 
@@ -283,13 +283,13 @@ inline void cs_end_do_while(pval *do_token, pval *expr, int *yychar INLINE_TLS)
 	fprintf(stderr, "end of while, execute=%d, changecount=%d, changetype=%d\n", Execute, GLOBAL(function_state).loop_change_level, GLOBAL(function_state).loop_change_level);
 #endif
 
-	if (GLOBAL(Execute) && yystype_true(expr)) {
-		yystype_destructor(expr _INLINE_TLS);
+	if (GLOBAL(Execute) && pval_is_true(expr)) {
+		pval_destructor(expr _INLINE_TLS);
 		tc_set_token(&GLOBAL(token_cache_manager), do_token->offset, CONTINUED_DOWHILE);
 		seek_token(&GLOBAL(token_cache_manager), do_token->offset, yychar);
 	} else {
 		if (GLOBAL(Execute)) {
-			yystype_destructor(expr _INLINE_TLS);
+			pval_destructor(expr _INLINE_TLS);
 		}
 		if ((GLOBAL(function_state).loop_change_type != DO_NOTHING) && (GLOBAL(function_state).loop_change_level == GLOBAL(function_state).loop_nest_level)) {
 			GLOBAL(function_state).loop_change_type = DO_NOTHING;
@@ -308,14 +308,14 @@ inline void cs_start_if (pval *expr INLINE_TLS)
 	stack_push(&GLOBAL(css), &GLOBAL(ExecuteFlag), sizeof(int));	/* push current state to stack */
 
 	if (GLOBAL(Execute)) {				/* we're in a code block that needs to be evaluated */
-		if (yystype_true(expr)) {	/* the IF expression is yystype_true, execute IF code */
+		if (pval_is_true(expr)) {	/* the IF expression is pval_is_true, execute IF code */
 			GLOBAL(ExecuteFlag) = EXECUTE;
 			GLOBAL(Execute) = SHOULD_EXECUTE;
 		} else {				/* the IF expression is false, don't execute IF code */
 			GLOBAL(ExecuteFlag) = BEFORE_EXECUTE;
 			GLOBAL(Execute) = SHOULD_EXECUTE;
 		}
-		yystype_destructor(expr _INLINE_TLS);
+		pval_destructor(expr _INLINE_TLS);
 	} else {
 		GLOBAL(ExecuteFlag) = DONT_EXECUTE;
 	}
@@ -344,20 +344,20 @@ inline int cs_break_continue(pval *expr, int op_type INLINE_TLS)
 			php3_error(E_ERROR, "Cannot %s from %d loop(s) from nesting level %d",
 						(op_type == DO_BREAK ? "break" : "continue"), (expr ? expr->value.lval : 1), GLOBAL(function_state).loop_nest_level);
 			if (expr) {	
-				yystype_destructor(expr _INLINE_TLS);			
+				pval_destructor(expr _INLINE_TLS);			
 			}
 			return FAILURE;
 		} else if (GLOBAL(function_state).loop_change_level > GLOBAL(function_state).loop_nest_level) {
 			php3_error(E_ERROR, "Cannot continue from %d loops", (expr ? expr->value.lval : -1));
 			if (expr) {
-				yystype_destructor(expr _INLINE_TLS);
+				pval_destructor(expr _INLINE_TLS);
 			}
 			return FAILURE;
 		}
 		GLOBAL(function_state).loop_change_type = op_type;
 		GLOBAL(Execute) = 0;
 		if (expr) {
-			yystype_destructor(expr _INLINE_TLS);
+			pval_destructor(expr _INLINE_TLS);
 		}
 	}
 	return SUCCESS;
@@ -396,11 +396,11 @@ inline void cs_start_elseif (pval *expr INLINE_TLS)
 		GLOBAL(Execute) = SHOULD_EXECUTE;
 	}
 	if (GLOBAL(ExecuteFlag) == BEFORE_EXECUTE) {
-		if (yystype_true(expr)) {
+		if (pval_is_true(expr)) {
 			GLOBAL(ExecuteFlag) = EXECUTE;
 			GLOBAL(Execute) = SHOULD_EXECUTE;
 		}
-		yystype_destructor(expr _INLINE_TLS);
+		pval_destructor(expr _INLINE_TLS);
 	}
 }
 
@@ -433,16 +433,16 @@ inline void get_function_parameter(pval *varname, unsigned char type, pval *defa
 			_php3_hash_update(GLOBAL(active_symbol_table), varname->value.str.val, varname->value.str.len+1, &tmp, sizeof(pval), NULL);
 		} else if (!_php3_hash_index_is_pointer(GLOBAL(active_symbol_table), GLOBAL(param_index))) { /* passed by value */
 			tmp = *data;
-			yystype_copy_constructor(&tmp);
+			pval_copy_constructor(&tmp);
 			_php3_hash_update(GLOBAL(active_symbol_table), varname->value.str.val, varname->value.str.len+1, &tmp, sizeof(pval), NULL);
 			if (default_value) {
-				yystype_destructor(default_value _INLINE_TLS);
+				pval_destructor(default_value _INLINE_TLS);
 			}
 		} else { /* passed by reference */
 			_php3_hash_pointer_update(GLOBAL(active_symbol_table), varname->value.str.val, varname->value.str.len+1, data);
 			_php3_hash_index_del(GLOBAL(active_symbol_table), GLOBAL(param_index));
 			if (default_value) {
-				yystype_destructor(default_value _INLINE_TLS);
+				pval_destructor(default_value _INLINE_TLS);
 			}
 		}
 	} else if (!GLOBAL(php3_display_source)) {
@@ -475,7 +475,7 @@ inline void pass_parameter_by_value(pval *expr INLINE_TLS)
 {
 	if (GLOBAL(Execute)) {
 		if (GLOBAL(function_state).func_arg_types) {
-			unsigned char argument_offset=_php3_hash_next_free_element(GLOBAL(function_state).function_symbol_table)+1;
+			unsigned char argument_offset=(unsigned char) _php3_hash_next_free_element(GLOBAL(function_state).function_symbol_table)+1;
 			
 			if (argument_offset<=GLOBAL(function_state).func_arg_types[0]
 				&& GLOBAL(function_state).func_arg_types[argument_offset]==BYREF_FORCE) {
@@ -486,7 +486,7 @@ inline void pass_parameter_by_value(pval *expr INLINE_TLS)
 		
 		if (_php3_hash_next_index_insert(GLOBAL(function_state).function_symbol_table, expr, sizeof(pval),NULL) == FAILURE) {
 			php3_error(E_WARNING, "Error updating symbol table");
-			yystype_destructor(expr _INLINE_TLS);
+			pval_destructor(expr _INLINE_TLS);
 			GLOBAL(function_state).function_type = 0;	/* don't execute the function call */
 		}
 	}
@@ -586,23 +586,23 @@ inline void for_pre_statement(pval *for_token, pval *expr2, pval *expr3 INLINE_T
 		var_reset(expr3);
 	}
 	if (GLOBAL(Execute) && for_token->cs_data.switched) {
-		if (yystype_true(expr3)) {
+		if (pval_is_true(expr3)) {
 			GLOBAL(ExecuteFlag) = EXECUTE;
 		} else {
 			GLOBAL(ExecuteFlag) = DONT_EXECUTE;
 		}
 		GLOBAL(Execute) = SHOULD_EXECUTE;
-		yystype_destructor(expr2 _INLINE_TLS);
-		yystype_destructor(expr3 _INLINE_TLS);
+		pval_destructor(expr2 _INLINE_TLS);
+		pval_destructor(expr3 _INLINE_TLS);
 	} else if (GLOBAL(Execute) && !for_token->cs_data.switched) {
-		if (yystype_true(expr2)) {
+		if (pval_is_true(expr2)) {
 			GLOBAL(ExecuteFlag) = EXECUTE;
 		} else {
 			GLOBAL(ExecuteFlag) = DONT_EXECUTE;
 		}
 		GLOBAL(Execute) = SHOULD_EXECUTE;
-		yystype_destructor(expr2 _INLINE_TLS);
-		yystype_destructor(expr3 _INLINE_TLS);
+		pval_destructor(expr2 _INLINE_TLS);
+		pval_destructor(expr3 _INLINE_TLS);
 	}
 }
 
@@ -671,8 +671,8 @@ inline void cs_return(pval *expr INLINE_TLS)
 				GLOBAL(shutdown_requested) = ABNORMAL_SHUTDOWN;
 			}
 			if (expr) {
-				print_variable(expr);
-				yystype_destructor(expr);
+				php3i_print_variable(expr);
+				pval_destructor(expr);
 			}
 		}
 	}
@@ -710,7 +710,7 @@ inline void cs_end_include(pval *include_token, pval *expr INLINE_TLS)
 			include_file(expr,0);
 		}
 		tc_set_included(&GLOBAL(token_cache_manager), include_token->offset);
-		yystype_destructor(expr _INLINE_TLS);
+		pval_destructor(expr _INLINE_TLS);
 	}
 }
 
@@ -732,14 +732,14 @@ inline void cs_show_source(pval *expr INLINE_TLS)
 	if (include_file(expr,1)==SUCCESS) {
 		start_display_source(0 _INLINE_TLS);
 	}
-	yystype_destructor(expr _INLINE_TLS);
+	pval_destructor(expr _INLINE_TLS);
 }
 
 
 inline void cs_pre_boolean_or(pval *left_expr INLINE_TLS)
 {
 	stack_push(&GLOBAL(css), &GLOBAL(ExecuteFlag), sizeof(int));
-	if (GLOBAL(Execute) && yystype_true(left_expr)) {
+	if (GLOBAL(Execute) && pval_is_true(left_expr)) {
 		GLOBAL(ExecuteFlag) = DONT_EXECUTE;
 		GLOBAL(Execute) = SHOULD_EXECUTE;;
 	}
@@ -760,7 +760,7 @@ inline void cs_post_boolean_or(pval *result, pval *left_expr, pval *right_expr I
 inline void cs_pre_boolean_and(pval *left_expr INLINE_TLS)
 {
 	stack_push(&GLOBAL(css), &GLOBAL(ExecuteFlag), sizeof(int));
-	if (GLOBAL(Execute) && !yystype_true(left_expr)) {
+	if (GLOBAL(Execute) && !pval_is_true(left_expr)) {
 		GLOBAL(ExecuteFlag) = DONT_EXECUTE;
 		GLOBAL(Execute) = SHOULD_EXECUTE;
 	}
@@ -781,7 +781,7 @@ inline void cs_post_boolean_and(pval *result, pval *left_expr, pval *right_expr 
 inline void cs_questionmark_op_pre_expr1(pval *truth_value INLINE_TLS)
 {
 	stack_push(&GLOBAL(css), &GLOBAL(ExecuteFlag), sizeof(int));
-	if (GLOBAL(Execute) && !yystype_true(truth_value)) {
+	if (GLOBAL(Execute) && !pval_is_true(truth_value)) {
 		GLOBAL(ExecuteFlag) = DONT_EXECUTE;
 		GLOBAL(Execute) = SHOULD_EXECUTE;
 	}
@@ -792,7 +792,7 @@ inline void cs_questionmark_op_pre_expr2(pval *truth_value INLINE_TLS)
 {
 	GLOBAL(ExecuteFlag) = stack_int_top(&GLOBAL(css));
 	GLOBAL(Execute) = SHOULD_EXECUTE;
-	if (GLOBAL(Execute) && yystype_true(truth_value)) {
+	if (GLOBAL(Execute) && pval_is_true(truth_value)) {
 		GLOBAL(ExecuteFlag) = DONT_EXECUTE;
 		GLOBAL(Execute) = SHOULD_EXECUTE;
 	}
@@ -805,12 +805,12 @@ inline void cs_questionmark_op_post_expr2(pval *result, pval *truth_value, pval 
 	stack_del_top(&GLOBAL(css));
 	GLOBAL(Execute) = SHOULD_EXECUTE;
 	if (GLOBAL(Execute)) {
-		if (yystype_true(truth_value)) {
+		if (pval_is_true(truth_value)) {
 			*result = *expr1;
 		} else {
 			*result = *expr2;
 		}
-		yystype_destructor(truth_value _INLINE_TLS);
+		pval_destructor(truth_value _INLINE_TLS);
 	}
 }
 
@@ -826,11 +826,11 @@ inline void cs_functioncall_pre_variable_passing(pval *function_name, pval *clas
 		pval *data;
 		
 		if (class_ptr) {	/* use member function rather than global function */
-			object = (pval *) class_ptr->value.varptr.yystype;
+			object = (pval *) class_ptr->value.varptr.pvalue;
 			
 			if (!object) {
 				if (free_function_name) {
-					yystype_destructor(function_name _INLINE_TLS);
+					pval_destructor(function_name _INLINE_TLS);
 				}
 				php3_error(E_ERROR, "Member function used on a non-object");
 				return;
@@ -840,7 +840,7 @@ inline void cs_functioncall_pre_variable_passing(pval *function_name, pval *clas
 		if (function_name->type != IS_STRING) {
 			php3_error(E_ERROR, "Function names must be strings");
 			if (free_function_name) {
-				yystype_destructor(function_name _INLINE_TLS);
+				pval_destructor(function_name _INLINE_TLS);
 			}
 			return;
 		}
@@ -870,7 +870,7 @@ inline void cs_functioncall_pre_variable_passing(pval *function_name, pval *clas
 				GLOBAL(function_state).symbol_table = NULL;
 				return;
 			}
-			if (_php3_hash_init(GLOBAL(function_state).function_symbol_table, 0, NULL, pval_DESTRUCTOR, 0) == FAILURE) {
+			if (_php3_hash_init(GLOBAL(function_state).function_symbol_table, 0, NULL, PVAL_DESTRUCTOR, 0) == FAILURE) {
 				php3_error(E_ERROR, "Unable to initialize new symbol table in function call");
 				function_name->cs_data.function_call_type=0;
 				GLOBAL(function_state).symbol_table = NULL;
@@ -948,7 +948,7 @@ inline void cs_functioncall_end(pval *result, pval *function_name, pval *close_p
 			efree(GLOBAL(function_state).object_pointer);
 		}
 		if (free_function_name) {
-			yystype_destructor(function_name _INLINE_TLS);
+			pval_destructor(function_name _INLINE_TLS);
 		}
 		
 		while (stack_int_top(&GLOBAL(for_stack)) != -1) {  /* pop FOR stack */
@@ -1004,9 +1004,9 @@ inline void cs_switch_case_pre(pval *case_expr INLINE_TLS)
 			/* if case_expr is NULL, we're in the special 'default' case */
 			if (case_expr) {
 				expr = se->expr;
-				yystype_copy_constructor(&expr);
+				pval_copy_constructor(&expr);
 				is_equal_function(&result, &expr, case_expr _INLINE_TLS);
-				is_equal = yystype_true(&result);
+				is_equal = pval_is_true(&result);
 			}
 			if (!case_expr || is_equal) {
 				se->offset=-1;
@@ -1018,7 +1018,7 @@ inline void cs_switch_case_pre(pval *case_expr INLINE_TLS)
 			}
 		} else {
 			if (case_expr) {
-				yystype_destructor(case_expr _INLINE_TLS);
+				pval_destructor(case_expr _INLINE_TLS);
 			}
 		}
 	}
@@ -1046,7 +1046,7 @@ inline void cs_switch_end(pval *expr INLINE_TLS)
 	
 	stack_top(&GLOBAL(switch_stack), (void **) &se);
 	if (se->Execute) {
-		yystype_destructor(expr _INLINE_TLS);
+		pval_destructor(expr _INLINE_TLS);
 	}
 	stack_del_top(&GLOBAL(switch_stack));
 	GLOBAL(function_state).loop_nest_level--;
@@ -1067,11 +1067,11 @@ inline void cs_start_class_decleration(pval *classname, pval *parent INLINE_TLS)
 				return;
 			}
 			new_class = *parent_ptr;
-			yystype_copy_constructor(&new_class);
+			pval_copy_constructor(&new_class);
 		} else {
 			new_class.type = IS_CLASS;
 			new_class.value.ht = (HashTable *) emalloc(sizeof(HashTable));
-			_php3_hash_init(new_class.value.ht, 0, NULL, pval_DESTRUCTOR, 0);
+			_php3_hash_init(new_class.value.ht, 0, NULL, PVAL_DESTRUCTOR, 0);
 		}
 		if (_php3_hash_update(&GLOBAL(function_table), classname->value.str.val, classname->value.str.len+1, &new_class, sizeof(pval),NULL) == FAILURE) {
 			php3_error(E_ERROR, "Unable to initialize new class");
@@ -1101,11 +1101,11 @@ inline void start_array_parsing(pval *array_name,pval *class_ptr INLINE_TLS)
 			GLOBAL(array_ptr) = NULL;
 		} else {
 			if (class_ptr) {
-				pval *object=(pval *) class_ptr->value.varptr.yystype;
+				pval *object=(pval *) class_ptr->value.varptr.pvalue;
 				
 				if (!object) {
 					GLOBAL(array_ptr)=NULL;
-					yystype_destructor(array_name _INLINE_TLS);
+					pval_destructor(array_name _INLINE_TLS);
 					return;
 				}
 				target_symbol_table = object->value.ht;
@@ -1131,14 +1131,14 @@ inline void start_array_parsing(pval *array_name,pval *class_ptr INLINE_TLS)
 				GLOBAL(array_ptr) = NULL;
 			}
 		}
-		yystype_destructor(array_name _INLINE_TLS);
+		pval_destructor(array_name _INLINE_TLS);
 	}
 }
 
 inline void start_dimensions_parsing(pval *result INLINE_TLS)
 {
 	if (GLOBAL(Execute)) {
-		result->value.varptr.yystype = GLOBAL(array_ptr);
+		result->value.varptr.pvalue = GLOBAL(array_ptr);
 		if (GLOBAL(array_ptr)) {
 			result->cs_data.array_write=GLOBAL(array_ptr)->cs_data.array_write;
 		}
@@ -1153,28 +1153,28 @@ inline void fetch_array_index(pval *result, pval *expr, pval *dimension INLINE_T
 		
 		result->cs_data.array_write = dimension->cs_data.array_write;
 			
-		if (dimension->value.varptr.yystype) {
-			pval *localdata,tmp,*arr_ptr=dimension->value.varptr.yystype;
+		if (dimension->value.varptr.pvalue) {
+			pval *localdata,tmp,*arr_ptr=dimension->value.varptr.pvalue;
 			int new_array=0; /* whether we created the array just now */
 	
 			if (arr_ptr->type==IS_STRING && arr_ptr->value.str.val!=empty_string && arr_ptr->value.str.val!=undefined_variable_string) {
 				if (dimension->value.varptr.string_offset == -1) { /* ok */
 					if (!expr) {
 						php3_error(E_WARNING,"No string index specified");
-						result->value.varptr.yystype=NULL;
+						result->value.varptr.pvalue=NULL;
 						return;
 					}
 					convert_to_long(expr);
 					if (expr->value.lval<0 || expr->value.lval>=arr_ptr->value.str.len) {
 						php3_error(E_WARNING,"Illegal string index");
-						result->value.varptr.yystype=NULL;
+						result->value.varptr.pvalue=NULL;
 						return;
 					}
 					result->value.varptr.string_offset = expr->value.lval;
 					return;
 				} else {
 					php3_error(E_WARNING,"Cannot index a string index");
-					result->value.varptr.yystype=NULL;
+					result->value.varptr.pvalue=NULL;
 					return;
 				}
 			}
@@ -1184,8 +1184,8 @@ inline void fetch_array_index(pval *result, pval *expr, pval *dimension INLINE_T
 				new_array=1;
 			} else if (arr_ptr->type!=IS_ARRAY) {
 				php3_error(E_WARNING,"Index referencing a non-array");
-				result->value.varptr.yystype=NULL;
-				yystype_destructor(expr _INLINE_TLS);
+				result->value.varptr.pvalue=NULL;
+				pval_destructor(expr _INLINE_TLS);
 				return;
 			}
 			if (expr) {
@@ -1196,7 +1196,7 @@ inline void fetch_array_index(pval *result, pval *expr, pval *dimension INLINE_T
 						if (new_array || _php3_hash_index_find(arr_ptr->value.ht, expr->value.lval, (void **) &localdata) == FAILURE) {
 							tmp.type = IS_NULL;
 							_php3_hash_index_update(arr_ptr->value.ht, expr->value.lval, (void *)&tmp, sizeof(pval),(void **) &localdata);
-							result->value.varptr.yystype = localdata;
+							result->value.varptr.pvalue = localdata;
 							result->cs_data.array_write = 1;
 							if (!original_array_write) { /* we raised the write flag just now, record this variable */
 								variable_tracker vt;
@@ -1207,18 +1207,18 @@ inline void fetch_array_index(pval *result, pval *expr, pval *dimension INLINE_T
 								stack_push(&GLOBAL(variable_unassign_stack),(void *) &vt, sizeof(variable_tracker));
 							}
 						} else {
-							result->value.varptr.yystype = localdata;
+							result->value.varptr.pvalue = localdata;
 						}
 						break;
 					case IS_STRING:
 						if (new_array || _php3_hash_find(arr_ptr->value.ht, expr->value.str.val, expr->value.str.len+1, (void **) &localdata)==FAILURE) {
 							tmp.type = IS_NULL;
 							if (_php3_hash_update(arr_ptr->value.ht, expr->value.str.val, expr->value.str.len+1, (void *) &tmp, sizeof(pval),(void **) &localdata)==FAILURE) {
-								result->value.varptr.yystype=NULL;
+								result->value.varptr.pvalue=NULL;
 								STR_FREE(expr->value.str.val);
 								return;
 							}
-							result->value.varptr.yystype = localdata;
+							result->value.varptr.pvalue = localdata;
 							result->cs_data.array_write = 1;
 							if (!original_array_write) { /* we raised the write flag just now, record this variable */
 								variable_tracker vt;
@@ -1230,11 +1230,11 @@ inline void fetch_array_index(pval *result, pval *expr, pval *dimension INLINE_T
 								stack_push(&GLOBAL(variable_unassign_stack),(void *) &vt, sizeof(variable_tracker));
 							}
 						} else {
-							result->value.varptr.yystype = localdata;
+							result->value.varptr.pvalue = localdata;
 						}
 						break;
 					default:
-						result->value.varptr.yystype = NULL;
+						result->value.varptr.pvalue = NULL;
 						php3_error(E_WARNING, "Illegal index type");
 						break;
 				}
@@ -1243,7 +1243,7 @@ inline void fetch_array_index(pval *result, pval *expr, pval *dimension INLINE_T
 				
 				tmp.type = IS_NULL;
 				_php3_hash_next_index_insert(arr_ptr->value.ht, (void *) &tmp, sizeof(pval), (void **) &localdata);
-				result->value.varptr.yystype = localdata;
+				result->value.varptr.pvalue = localdata;
 				result->cs_data.array_write=1;
 				if (!original_array_write) { /* we raised the write flag just now, record this variable */
 					variable_tracker vt;
@@ -1255,10 +1255,10 @@ inline void fetch_array_index(pval *result, pval *expr, pval *dimension INLINE_T
 				}
 			}
 		} else {
-			result->value.varptr.yystype=NULL;
+			result->value.varptr.pvalue=NULL;
 		}
 		if (expr) {
-			yystype_destructor(expr _INLINE_TLS);
+			pval_destructor(expr _INLINE_TLS);
 		}
 	}
 }	
@@ -1267,7 +1267,7 @@ inline void fetch_array_index(pval *result, pval *expr, pval *dimension INLINE_T
 inline void end_array_parsing(pval *result, pval *dimensions INLINE_TLS)
 {
 	if (GLOBAL(Execute)) {
-		pval *ptr=(pval *) dimensions->value.varptr.yystype;
+		pval *ptr=(pval *) dimensions->value.varptr.pvalue;
 
 		*result = *dimensions;
 		if (ptr && ptr->type==IS_NULL) {
@@ -1303,17 +1303,17 @@ inline void clean_unassigned_variable_top(int delete_var INLINE_TLS)
 inline void get_class_variable_pointer(pval *result, pval *class_ptr, pval *varname INLINE_TLS)
 {
 	if (GLOBAL(Execute)) {
-		pval *object = (pval *) class_ptr->value.varptr.yystype;
+		pval *object = (pval *) class_ptr->value.varptr.pvalue;
 		
 		if (!object) {
-			result->value.varptr.yystype = NULL;
-			yystype_destructor(varname _INLINE_TLS);
+			result->value.varptr.pvalue = NULL;
+			pval_destructor(varname _INLINE_TLS);
 			return;
 		}
 		if ((varname->type != IS_STRING)) {
 			php3_error(E_WARNING,"Illegal property name");
-			result->value.varptr.yystype = NULL;
-			yystype_destructor(varname _INLINE_TLS);
+			result->value.varptr.pvalue = NULL;
+			pval_destructor(varname _INLINE_TLS);
 			return;
 		} else {
 			pval *data;
@@ -1334,9 +1334,9 @@ inline void get_class_variable_pointer(pval *result, pval *class_ptr, pval *varn
 			} else {
 				result->cs_data.array_write = 0;
 			}
-			result->value.varptr.yystype = data;
+			result->value.varptr.pvalue = data;
 			result->value.str.len = -1; /* Not indexed string */
-			yystype_destructor(varname _INLINE_TLS);
+			pval_destructor(varname _INLINE_TLS);
 		}
 	}
 }
@@ -1349,7 +1349,7 @@ inline void pass_parameter(pval *var, int by_reference INLINE_TLS)
 		/* ... check if we need to force by reference (set by_reference=1) */
 
 		if (GLOBAL(function_state).func_arg_types) {
-			unsigned char argument_offset=_php3_hash_next_free_element(GLOBAL(function_state).function_symbol_table)+1;
+			unsigned char argument_offset=(unsigned char) _php3_hash_next_free_element(GLOBAL(function_state).function_symbol_table)+1;
 			
 			if (argument_offset<=GLOBAL(function_state).func_arg_types[0]
 				&& GLOBAL(function_state).func_arg_types[argument_offset]!=BYREF_NONE) {
@@ -1361,7 +1361,7 @@ inline void pass_parameter(pval *var, int by_reference INLINE_TLS)
 			read_pointer_value(&tmp,var _INLINE_TLS);
 			if (_php3_hash_next_index_insert(GLOBAL(function_state).function_symbol_table, &tmp, sizeof(pval),NULL) == FAILURE) {
 				php3_error(E_WARNING, "Error updating symbol table");
-				yystype_destructor(&tmp _INLINE_TLS);
+				pval_destructor(&tmp _INLINE_TLS);
 				GLOBAL(function_state).function_type = 0;	/* don't execute the function call */
 				return;
 			}
@@ -1369,11 +1369,11 @@ inline void pass_parameter(pval *var, int by_reference INLINE_TLS)
 			if (var->cs_data.array_write) {
 				clean_unassigned_variable_top(0 _INLINE_TLS);
 			}
-			if (var->value.varptr.yystype==NULL) {
+			if (var->value.varptr.pvalue==NULL) {
 				GLOBAL(function_state).function_type = 0;
 				return;
 			}
-			if (_php3_hash_next_index_pointer_insert(GLOBAL(function_state).function_symbol_table, (void *) var->value.varptr.yystype) == FAILURE) {
+			if (_php3_hash_next_index_pointer_insert(GLOBAL(function_state).function_symbol_table, (void *) var->value.varptr.pvalue) == FAILURE) {
 				php3_error(E_WARNING, "Error updating symbol table");
 				GLOBAL(function_state).function_type = 0;	/* don't execute the function call */
 				return;
@@ -1391,7 +1391,7 @@ inline void cs_system(pval *result,pval *expr INLINE_TLS)
 		
 		if (php3_ini.safe_mode) {
 			php3_error(E_WARNING,"Cannot execute using backqutoes in safe mode");
-			yystype_destructor(expr _INLINE_TLS);
+			pval_destructor(expr _INLINE_TLS);
 			var_reset(result);
 			return;
 		}
@@ -1468,7 +1468,7 @@ inline void add_variable_array_encapsed_variable(pval *result, pval *encaps, pva
 		get_regular_variable_contents(&index,var_index,0 _INLINE_TLS);
 		get_array_variable(&tmp,varname,&index _INLINE_TLS);
 		concat_function(result,encaps,&tmp,1 _INLINE_TLS);
-		yystype_destructor(&index _INLINE_TLS);
+		pval_destructor(&index _INLINE_TLS);
 	}
 }
 

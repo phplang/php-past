@@ -29,7 +29,7 @@
  */
 
 
-/* $Id: php3_hash.c,v 1.4 1998/07/26 13:59:49 rasmus Exp $ */
+/* $Id: php3_hash.c,v 1.7 1998/09/21 11:11:12 zeev Exp $ */
 #ifdef THREAD_SAFE
 #include "tls.h"
 #endif
@@ -50,7 +50,7 @@
 \
 	if ((*tmp>='0' && *tmp<='9')) do { /* possibly a numeric index */ \
 		char *end=tmp+length-1; \
-		long idx; \
+		ulong idx; \
 		\
 		if (*tmp++=='0' && length>2) { /* don't accept numbers with leading zeros */ \
 			break; \
@@ -74,11 +74,11 @@
 uint PrimeNumbers[] =
 {5, 11, 19, 53, 107, 223, 463, 983, 1979, 3907, 7963, 16229, 32531, 65407, 130987, 262237, 524521, 1048793, 2097397, 4194103, 8388857, 16777447, 33554201, 67108961, 134217487, 268435697, 536870683, 1073741621, 2147483399};
 
-uint nNumPrimeNumbers = sizeof(PrimeNumbers) / sizeof(uint);
+uint nNumPrimeNumbers = sizeof(PrimeNumbers) / sizeof(ulong);
 
-static uint hashpjw(char *arKey, uint nKeyLength)
+static ulong hashpjw(char *arKey, uint nKeyLength)
 {
-	uint h = 0, g;
+	ulong h = 0, g;
 	char *arEnd=arKey+nKeyLength;
 
 	while (arKey < arEnd) {
@@ -91,7 +91,7 @@ static uint hashpjw(char *arKey, uint nKeyLength)
 	return h;
 }
 
-PHPAPI int _php3_hash_init(HashTable *ht, uint nSize, uint(*pHashFunction) (char *arKey, uint nKeyLength), void (*pDestructor) (void *pData),int persistent)
+PHPAPI int _php3_hash_init(HashTable *ht, uint nSize, ulong(*pHashFunction) (char *arKey, uint nKeyLength), void (*pDestructor) (void *pData),int persistent)
 {
 	uint i;
 
@@ -131,7 +131,8 @@ PHPAPI int _php3_hash_init(HashTable *ht, uint nSize, uint(*pHashFunction) (char
 
 PHPAPI int _php3_hash_add_or_update(HashTable *ht, char *arKey, uint nKeyLength, void *pData, uint nDataSize, void **pDest, int flag)
 {
-	uint h, nIndex;
+	ulong h;
+	uint nIndex;
 	Bucket *p;
 #if DEBUG
 	TLS_VARS;
@@ -227,7 +228,7 @@ PHPAPI int _php3_hash_add_or_update(HashTable *ht, char *arKey, uint nKeyLength,
 }
 
 
-PHPAPI int _php3_hash_index_update_or_next_insert(HashTable *ht, uint h, void *pData, uint nDataSize, void **pDest, int flag)
+PHPAPI int _php3_hash_index_update_or_next_insert(HashTable *ht, ulong h, void *pData, uint nDataSize, void **pDest, int flag)
 {
 	uint nIndex;
 	Bucket *p;
@@ -315,7 +316,8 @@ PHPAPI int _php3_hash_index_update_or_next_insert(HashTable *ht, uint h, void *p
 
 PHPAPI int _php3_hash_pointer_update(HashTable *ht, char *arKey, uint nKeyLength, void *pData)
 {
-	uint h, nIndex;
+	ulong h;
+	uint nIndex;
 	Bucket *p;
 #if DEBUG
 	TLS_VARS;
@@ -399,7 +401,7 @@ PHPAPI int _php3_hash_pointer_update(HashTable *ht, char *arKey, uint nKeyLength
 }
 
 
-PHPAPI int _php3_hash_pointer_index_update_or_next_insert(HashTable *ht, uint h, void *pData, int flag)
+PHPAPI int _php3_hash_pointer_index_update_or_next_insert(HashTable *ht, ulong h, void *pData, int flag)
 {
 	uint nIndex;
 	Bucket *p;
@@ -480,7 +482,8 @@ PHPAPI int _php3_hash_pointer_index_update_or_next_insert(HashTable *ht, uint h,
 
 PHPAPI int _php3_hash_is_pointer(HashTable *ht, char *arKey, uint nKeyLength)
 {
-	uint h, nIndex;
+	ulong h;
+	uint nIndex;
 	Bucket *p;
 #if DEBUG
 	TLS_VARS;
@@ -510,9 +513,8 @@ PHPAPI int _php3_hash_is_pointer(HashTable *ht, char *arKey, uint nKeyLength)
 	return 0;
 }
 
-PHPAPI int _php3_hash_index_is_pointer(HashTable *ht, uint h)
+PHPAPI int _php3_hash_index_is_pointer(HashTable *ht, ulong h)
 {
-
 	uint nIndex;
 	Bucket *p;
 
@@ -566,7 +568,7 @@ int _php3_hash_rehash(HashTable *ht)
 	return SUCCESS;
 }
 
-PHPAPI int _php3_hash_del_key_or_index(HashTable *ht, char *arKey, uint nKeyLength, uint h, int flag)
+PHPAPI int _php3_hash_del_key_or_index(HashTable *ht, char *arKey, uint nKeyLength, ulong h, int flag)
 {
 	uint nIndex;
 	Bucket *p, *t = NULL;		/* initialize just to shut gcc up with -Wall */
@@ -825,7 +827,8 @@ PHPAPI void _php3_hash_copy(HashTable **target, HashTable *source, void (*pCopyC
  */
 PHPAPI int _php3_hash_find(HashTable *ht, char *arKey, uint nKeyLength, void **pData)
 {
-	uint h, nIndex;
+	ulong h;
+	uint nIndex;
 	Bucket *p;
 
 	HANDLE_NUMERIC(arKey, nKeyLength, _php3_hash_index_find(ht,idx,pData));
@@ -848,7 +851,8 @@ PHPAPI int _php3_hash_find(HashTable *ht, char *arKey, uint nKeyLength, void **p
 
 PHPAPI int _php3_hash_exists(HashTable *ht, char *arKey, uint nKeyLength)
 {
-	uint h, nIndex;
+	ulong h;
+	uint nIndex;
 	Bucket *p;
 
 	HANDLE_NUMERIC(arKey, nKeyLength, _php3_hash_index_exists(ht,idx));
@@ -869,7 +873,7 @@ PHPAPI int _php3_hash_exists(HashTable *ht, char *arKey, uint nKeyLength)
 }
 
 
-PHPAPI int _php3_hash_index_find(HashTable *ht, uint h, void **pData)
+PHPAPI int _php3_hash_index_find(HashTable *ht, ulong h, void **pData)
 {
 	uint nIndex;
 	Bucket *p;
@@ -888,7 +892,7 @@ PHPAPI int _php3_hash_index_find(HashTable *ht, uint h, void **pData)
 }
 
 
-PHPAPI int _php3_hash_index_exists(HashTable *ht, uint h)
+PHPAPI int _php3_hash_index_exists(HashTable *ht, ulong h)
 {
 	uint nIndex;
 	Bucket *p;
@@ -942,7 +946,7 @@ PHPAPI void _php3_hash_move_backwards(HashTable *ht)
 }
 
 
-PHPAPI int _php3_hash_get_current_key(HashTable *ht, char **str_index, int *int_index)
+PHPAPI int _php3_hash_get_current_key(HashTable *ht, char **str_index, ulong *num_index)
 {
 	Bucket *p = ht->pInternalPointer;
 
@@ -952,8 +956,8 @@ PHPAPI int _php3_hash_get_current_key(HashTable *ht, char **str_index, int *int_
 			memcpy(*str_index, p->arKey, p->nKeyLength);
 			return HASH_KEY_IS_STRING;
 		} else {
-			*int_index = p->h;
-			return HASH_KEY_IS_INT;
+			*num_index = p->h;
+			return HASH_KEY_IS_LONG;
 		}
 	}
 	return HASH_KEY_NON_EXISTANT;
@@ -1056,7 +1060,7 @@ PHPAPI int _php3_hash_minmax(HashTable *ht, int (*compar) (const void *, const v
 	return SUCCESS;
 }
 
-PHPAPI uint _php3_hash_next_free_element(HashTable *ht)
+PHPAPI ulong _php3_hash_next_free_element(HashTable *ht)
 {
 	return ht->nNextFreeElement;
 
@@ -1085,7 +1089,6 @@ PHPAPI void _php3_hash_display(HashTable *ht)
 			php3_printf("%s <==> 0x%X\n", p->arKey, p->h);
 			p = p->pNext;
 		}
-
 	}
 
 	p = ht->pListTail;

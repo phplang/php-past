@@ -30,7 +30,7 @@
  */
 
 
-/* $Id: datetime.c,v 1.41 1998/07/11 21:10:40 ssb Exp $ */
+/* $Id: datetime.c,v 1.43 1998/09/22 14:34:07 zeev Exp $ */
 
 
 #ifdef THREAD_SAFE
@@ -207,6 +207,7 @@ _php3_date(INTERNAL_FUNCTION_PARAMETERS, int gm)
 			case 'y':		/* year, numeric, 2 digits */
 			case 'm':		/* month, numeric */
 			case 'd':		/* day of the month, numeric */
+			case 'j':		/* day of the month, numeric, no leading zeros */
 			case 'H':		/* hour, numeric, 24 hour format */
 			case 'h':		/* hour, numeric, 12 hour format */
 			case 'i':		/* minutes, numeric */
@@ -242,7 +243,7 @@ _php3_date(INTERNAL_FUNCTION_PARAMETERS, int gm)
 				}
 				break;
 			case 'U':		/* seconds since the epoch */
-				sprintf(tmp_buff, "%ld", the_time); /* SAFE */
+				sprintf(tmp_buff, "%ld", (long)the_time); /* SAFE */
 				strcat(return_value->value.str.val, tmp_buff);
 				break;
 			case 'F':		/* month, textual, full */
@@ -275,6 +276,10 @@ _php3_date(INTERNAL_FUNCTION_PARAMETERS, int gm)
 				break;
 			case 'd':		/* day of the month, numeric */
 				sprintf(tmp_buff, "%02d", ta->tm_mday);  /* SAFE */
+				strcat(return_value->value.str.val, tmp_buff);
+				break;
+			case 'j':
+				sprintf(tmp_buff, "%d", ta->tm_mday); /* SAFE */
 				strcat(return_value->value.str.val, tmp_buff);
 				break;
 			case 'H':		/* hour, numeric, 24 hour format */

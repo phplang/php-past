@@ -44,6 +44,7 @@
   &reference.image;
   &reference.imap;
   &reference.info;
+  &reference.ifx;
   &reference.ldap;
   &reference.mail;
   &reference.math;

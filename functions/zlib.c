@@ -22,7 +22,11 @@
    |          Stefan Röhrich <sr@linux.de>                                |
    +----------------------------------------------------------------------+
  */
-/* $Id: zlib.c,v 1.7 1998/08/14 23:47:16 steffann Exp $ */
+/* $Id: zlib.c,v 1.9 1998/09/19 20:17:19 rasmus Exp $ */
+#if !PHP_31 && defined(THREAD_SAFE)
+#undef THREAD_SAFE
+#endif
+#define IS_EXT_MODULE
 
 #ifdef THREAD_SAFE
 #include "tls.h"
@@ -35,11 +39,15 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
-#if MSVC5
+#if (WIN32|WINNT)
 #include <windows.h>
 #include <winsock.h>
 #define O_RDONLY _O_RDONLY
+#if PHP_31
+#include "os/nt/param.h"
+#else
 #include "win32/param.h"
+#endif
 #else
 #include <sys/param.h>
 /* #include <sys/uio.h> */
@@ -48,14 +56,15 @@
 #include "internal_functions.h"
 #include "safe_mode.h"
 #include "php3_list.h"
+#if PHP_31
+#include "ext/standard/php3_string.h"
+#else
 #include "php3_string.h"
+#endif
 #include "php3_zlib.h"
 #include "fopen-wrappers.h"
 #if HAVE_PWD_H
 #if WIN32|WINNT
-#ifdef HAVE_UNISTD_H
-#undef HAVE_UNISTD_H
-#endif
 #include "win32/pwd.h"
 #else
 #include <pwd.h>
@@ -63,10 +72,18 @@
 #endif
 #include "snprintf.h"
 #if HAVE_ZLIB
+#if defined(HAVE_UNISTD_H) && (WIN32|WINNT)
+#undef HAVE_UNISTD_H
+#endif
+
 #include <zlib.h>
 
 #if COMPILE_DL
+#if PHP_31
+#include "ext/phpdl.h"
+#else
 #include "dl/phpdl.h"
+#endif
 #ifndef PUTS
 #define PUTS(a) php3_printf("%s",a)
 #endif
@@ -78,27 +95,41 @@
 #endif
 #endif
 
+
+
+#if defined(THREAD_SAFE)
+typedef struct zlib_global_struct{
+#endif
+	int gzgetss_state;
+	int le_zp;
+#if PHP_31
+	int magic_quotes_runtime;
+	int	safe_mode;
+	char *include_path;
+	char *doc_root;
+#endif
+#if defined(THREAD_SAFE)
+}zlib_global_struct;
+#endif
+
 #if defined(THREAD_SAFE)
 DWORD ZLIBtls;
 static int numthreads=0;
 void *zlib_mutex;
 
-typedef struct zlib_global_struct{
-	int gzgetss_state;
-	int le_zp;
-}zlib_global_struct;
-
 #define ZLIB_GLOBAL(a) zlib_globals->a
 
-#define ZLIB_TLS_VARS \
-	zlib_global_struct *zlib_globals; \
-	zlib_globals=TlsGetValue(ZLIBtls); 
+#define ZLIB_TLS_VARS zlib_global_struct *PHP3_TLS_GET(ZLIBtls,zlib_globals); 
 
 #else
-static int gzgetss_state = 0;
-int le_zp;
 #define ZLIB_GLOBAL(a) a
 #define ZLIB_TLS_VARS
+#endif
+
+#if PHP_31
+# define ZLIB_INI(a) ZLIB_GLOBAL(a)
+#else
+# define ZLIB_INI(a) php3_ini.a
 #endif
 
 function_entry php3_zlib_functions[] = {
@@ -126,59 +157,51 @@ php3_module_entry php3_zlib_module_entry = {
 
 #if defined(COMPILE_DL)
 DLEXPORT php3_module_entry *get_module(void) { return &php3_zlib_module_entry; }
-
-#if (WIN32|WINNT) && defined(THREAD_SAFE)
-
-/*NOTE: You should have an odbc.def file where you
-export DllMain*/
-BOOL WINAPI DllMain(HANDLE hModule, 
-                      DWORD  ul_reason_for_call, 
-                      LPVOID lpReserved)
-{
-    return 1;
-}
-#endif
 #endif
 
 int php3_minit_zlib(INIT_FUNC_ARGS)
 {
-#if defined(THREAD_SAFE)
+#ifdef THREAD_SAFE
 	zlib_global_struct *zlib_globals;
-#if !defined(COMPILE_DL)
-	CREATE_MUTEX(zlib_mutex,"ZLib_TLS");
-	SET_MUTEX(zlib_mutex);
+	PHP3_MUTEX_ALLOC(zlib_mutex);
+	PHP3_MUTEX_LOCK(zlib_mutex);
 	numthreads++;
 	if (numthreads==1){
-	if ((ZLIBtls=TlsAlloc())==0xFFFFFFFF){
-		FREE_MUTEX(zlib_mutex);
-		return 0;
-	}}
-	FREE_MUTEX(zlib_mutex);
+		if (!PHP3_TLS_PROC_STARTUP(ZLIBtls)){
+			PHP3_MUTEX_UNLOCK(zlib_mutex);
+			PHP3_MUTEX_FREE(zlib_mutex);
+			return FAILURE;
+		}
+	}
+	PHP3_MUTEX_UNLOCK(zlib_mutex);
+	if(!PHP3_TLS_THREAD_INIT(ZLIBtls,zlib_globals,zlib_global_struct)){
+		PHP3_MUTEX_FREE(zlib_mutex);
+		return FAILURE;
+	}
 #endif
-	zlib_globals = (zlib_global_struct *) LocalAlloc(LPTR, sizeof(zlib_global_struct)); 
-	TlsSetValue(ZLIBtls, (void *) zlib_globals);
-#endif
-	
+	/* get our ini variables here */
+	cfg_get_long("safe_mode",&ZLIB_INI(safe_mode));
+	cfg_get_long("magic_quotes_runtime",&ZLIB_INI(magic_quotes_runtime));
+	cfg_get_string("doc_root",&ZLIB_INI(doc_root));
+	cfg_get_string("include_path",&ZLIB_INI(include_path));
+
 	ZLIB_GLOBAL(le_zp) = register_list_destructors(gzclose,NULL);
 	return SUCCESS;
 }
 
 int php3_mshutdown_zlib(void){
 #if defined(THREAD_SAFE)
-	zlib_global_struct *zlib_globals;
-	zlib_globals = TlsGetValue(ZLIBtls); 
-	if (zlib_globals != 0) 
-		LocalFree((HLOCAL) zlib_globals); 
-#if !defined(COMPILE_DL)
-	SET_MUTEX(zlib_mutex);
+	ZLIB_TLS_VARS;
+	PHP3_TLS_THREAD_FREE(zlib_globals);
+	PHP3_MUTEX_LOCK(zlib_mutex);
 	numthreads--;
-	if (!numthreads){
-	if (!TlsFree(ZLIBtls)){
-		FREE_MUTEX(zlib_mutex);
-		return 0;
-	}}
-	FREE_MUTEX(zlib_mutex);
-#endif
+	if (numthreads<1){
+		PHP3_TLS_PROC_SHUTDOWN(ZLIBtls);
+		PHP3_MUTEX_UNLOCK(zlib_mutex);
+		PHP3_MUTEX_FREE(zlib_mutex);
+		return SUCCESS;
+	}
+	PHP3_MUTEX_UNLOCK(zlib_mutex);
 #endif
 	return SUCCESS;
 }
@@ -188,7 +211,7 @@ void php3_info_zlib(void)
 		PUTS("Zlib support active (compiled with ");
 		PUTS(ZLIB_VERSION);
 		PUTS(", linked with ");
-		PUTS(zlibVersion());
+		PUTS((char *)zlibVersion());
 		PUTS(").");
 }
 
@@ -196,12 +219,12 @@ static gzFile *php3_gzopen_with_path(char *filename, char *mode, char *path, cha
 
 static gzFile php3_gzopen_wrapper(char *path, char *mode, int options)
 {
-	if (options & USE_PATH && php3_ini.include_path != NULL) {
-		return php3_gzopen_with_path(path, mode, php3_ini.include_path, NULL);
+	ZLIB_TLS_VARS;
+	if (options & USE_PATH && ZLIB_INI(include_path) != NULL) {
+		return php3_gzopen_with_path(path, mode, ZLIB_INI(include_path), NULL);
 	}
 	else {
-		if (options & ENFORCE_SAFE_MODE && php3_ini.safe_mode && (!_php3_checkuid(path,1))) {
-			php3_error(E_WARNING,"SAFE MODE Restriction in effect.  Invalid owner of file to be read.");
+		if (options & ENFORCE_SAFE_MODE && ZLIB_INI(safe_mode) && (!_php3_checkuid(path,1))) {
 			return NULL;
 		}
 		if (_php3_check_open_basedir(path)) return NULL;
@@ -219,6 +242,7 @@ static gzFile *php3_gzopen_with_path(char *filename, char *mode, char *path, cha
 	char trypath[MAXPATHLEN + 1];
 	struct stat sb;
 	gzFile *zp;
+	ZLIB_TLS_VARS;
 	
 	if (opened_path) {
 		*opened_path = NULL;
@@ -226,8 +250,7 @@ static gzFile *php3_gzopen_with_path(char *filename, char *mode, char *path, cha
 	
 	/* Relative path open */
 	if (*filename == '.') {
-		if (php3_ini.safe_mode &&(!_php3_checkuid(filename,2))) {
-			php3_error(E_WARNING,"SAFE MODE Restriction in effect.  Invalid owner.");
+		if (ZLIB_INI(safe_mode) &&(!_php3_checkuid(filename,2))) {
 			return(NULL);
 		}
 		if (_php3_check_open_basedir(filename)) return NULL;
@@ -244,10 +267,9 @@ static gzFile *php3_gzopen_with_path(char *filename, char *mode, char *path, cha
 #else
 	if (*filename == '/') {
 #endif
-		if (php3_ini.safe_mode) {
-			snprintf(trypath,MAXPATHLEN,"%s%s",php3_ini.doc_root,filename);
+		if (ZLIB_INI(safe_mode)) {
+			snprintf(trypath,MAXPATHLEN,"%s%s",ZLIB_INI(doc_root),filename);
 			if (!_php3_checkuid(trypath,2)) {
-				php3_error(E_WARNING,"SAFE MODE Restriction in effect.  Invalid owner.");
 				return(NULL);
 			}
 			if (_php3_check_open_basedir(trypath)) return NULL;
@@ -263,8 +285,7 @@ static gzFile *php3_gzopen_with_path(char *filename, char *mode, char *path, cha
 	}
 
 	if (!path || (path && !*path)) {
-		if (php3_ini.safe_mode &&(!_php3_checkuid(filename,2))) {
-			php3_error(E_WARNING,"SAFE MODE Restriction in effect.  Invalid owner.");
+		if (ZLIB_INI(safe_mode) &&(!_php3_checkuid(filename,2))) {
 			return(NULL);
 		}
 		if (_php3_check_open_basedir(filename)) return NULL;
@@ -290,9 +311,8 @@ static gzFile *php3_gzopen_with_path(char *filename, char *mode, char *path, cha
 			end++;
 		}
 		snprintf(trypath, MAXPATHLEN, "%s/%s", ptr, filename);
-		if (php3_ini.safe_mode) {
+		if (ZLIB_INI(safe_mode)) {
 			if (stat(trypath,&sb) == 0 &&(!_php3_checkuid(trypath,2))) {
-				php3_error(E_WARNING,"SAFE MODE Restriction in effect.  Invalid owner.");
 				efree(pathbuf);
 				return(NULL);
 			}
@@ -300,8 +320,8 @@ static gzFile *php3_gzopen_with_path(char *filename, char *mode, char *path, cha
 		if ((zp = gzopen(trypath, mode)) != NULL) {
 			if (_php3_check_open_basedir(trypath)) {
 				gzclose(zp);
-			   	efree(pathbuf);
-			   	return NULL;
+				efree(pathbuf);
+				return NULL;
 			}
 			if (opened_path) {
 				*opened_path = expand_filepath(trypath);
@@ -321,6 +341,7 @@ void php3_gzfile(INTERNAL_FUNCTION_PARAMETERS) {
 	char *slashed, buf[8192];
 	register int i=0;
 	int use_include_path = 0;
+	ZLIB_TLS_VARS;
 
 	/* check args */
 	switch (ARG_COUNT(ht)) {
@@ -355,7 +376,7 @@ void php3_gzfile(INTERNAL_FUNCTION_PARAMETERS) {
 	/* Now loop through the file and do the magic quotes thing if needed */
 	memset(buf,0,8191);
 	while((int)gzgets(zp, buf, 8191)) {
-		if (php3_ini.magic_quotes_runtime) {
+		if (ZLIB_INI(magic_quotes_runtime)) {
 			int len;
 			
 			slashed = _php3_addslashes(buf,0,&len,0); /* 0 = don't free source string */
@@ -487,7 +508,7 @@ void php3_gzgets(INTERNAL_FUNCTION_PARAMETERS) {
 		efree(buf);
 		RETVAL_FALSE;
 	} else {
-		if (php3_ini.magic_quotes_runtime) {
+		if (ZLIB_INI(magic_quotes_runtime)) {
 			return_value->value.str.val = _php3_addslashes(buf,0,&return_value->value.str.len,1);
 		} else {
 			return_value->value.str.val = buf;
@@ -682,7 +703,7 @@ void php3_gzwrite(INTERNAL_FUNCTION_PARAMETERS) {
 	}
 
 	/* strip slashes only if the length wasn't specified explicitly */
-	if (!arg3 && php3_ini.magic_quotes_runtime) {
+	if (!arg3 && ZLIB_INI(magic_quotes_runtime)) {
 		_php3_stripslashes(arg2->value.str.val,&num_bytes);
 	}
 
@@ -862,7 +883,7 @@ void php3_gzread(INTERNAL_FUNCTION_PARAMETERS)
 	return_value->value.str.len = gzread(zp, return_value->value.str.val, len);
 	return_value->value.str.val[return_value->value.str.len] = 0;
 
-	if (php3_ini.magic_quotes_runtime) {
+	if (ZLIB_INI(magic_quotes_runtime)) {
 		return_value->value.str.val = _php3_addslashes(return_value->value.str.val,return_value->value.str.len,&return_value->value.str.len,1);
 	}
 	return_value->type = IS_STRING;

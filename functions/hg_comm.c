@@ -23,9 +23,9 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: hg_comm.c,v 1.2 1998/08/14 15:51:12 shane Exp $ */
+/* $Id: hg_comm.c,v 1.7 1998/09/22 15:57:28 steinm Exp $ */
 
-//#define HW_DEBUG
+/* #define HW_DEBUG */
 
 #include <stdlib.h>
 
@@ -41,7 +41,11 @@
 #include <string.h> 
 #include <sys/types.h>
 #if WIN32|WINNT
-# include <winsock.h>
+# include <winsock2.h>
+# define EWOULDBLOCK WSAEWOULDBLOCK
+# define ETIMEDOUT WSAETIMEDOUT
+# define bcopy memcpy
+# define bzero(a,b) memset(a,0,b)
 #else
 # include <sys/socket.h>
 # include <netinet/in.h>
@@ -104,7 +108,7 @@ char *fnInsStr(char *str, int pos, char *insstr)
 
 	if((str == NULL) || (insstr == NULL))
 		return NULL;
-	if(pos > strlen(str))
+	if(pos > (int)strlen(str))
 		return NULL;
 
 	if(insstr[0] == '\0')
@@ -488,8 +492,8 @@ char *fnInsAnchorsIntoText(char *text, DLIST *pAnchorList, char **bodytag) {
 						break;
 					case HW_INTAG_LINK:
 						sprintf(istr, " %s='%s' start=%d", cur_ptr->tagattr, cur_ptr->link, cur_ptr->start);
-						offset -= 4; // because there is no closing tag </A>
-//						laststart = cur_ptr->start;
+						offset -= 4; /* because there is no closing tag </A> */
+/*						laststart = cur_ptr->start; */
 						break;
 					case HW_APPLET_LINK:
 						if(cur_ptr->codebase)
@@ -511,16 +515,16 @@ char *fnInsAnchorsIntoText(char *text, DLIST *pAnchorList, char **bodytag) {
 						break;
 					case HW_INTAG_LINK:
 						if(cur_ptr->fragment)
-//							sprintf(istr, " %s='%s/%s#%s'", cur_ptr->tagattr, scriptname == NULL ? "schade" : scriptname, cur_ptr->destdocname, cur_ptr->fragment);
+/*							sprintf(istr, " %s='%s/%s#%s'", cur_ptr->tagattr, scriptname == NULL ? "." : scriptname, cur_ptr->destdocname, cur_ptr->fragment);*/
 							sprintf(istr, " %s='#%s'", cur_ptr->tagattr, cur_ptr->fragment);
 						else
-							sprintf(istr, " %s='%s/%s'", cur_ptr->tagattr, scriptname == NULL ? "schade" : scriptname, cur_ptr->destdocname);
-						offset -= 4; // because there is no closing tag </A>
-//						laststart = cur_ptr->start;
+							sprintf(istr, " %s='%s/%s'", cur_ptr->tagattr, scriptname == NULL ? "." : scriptname, cur_ptr->destdocname);
+						offset -= 4; /* because there is no closing tag </A> */
+/*						laststart = cur_ptr->start; */
 						break;
 					case HW_APPLET_LINK:
 						if(cur_ptr->codebase)
-						  //sprintf(istr, " CODEBASE='%s%s' CODE='%s'", scriptname == NULL ? "" : scriptname, cur_ptr->codebase, cur_ptr->code);
+/*						  sprintf(istr, " CODEBASE='%s%s' CODE='%s'", scriptname == NULL ? "" : scriptname, cur_ptr->codebase, cur_ptr->code); */
 						  sprintf(istr, " CODEBASE='%s' CODE='%s'", cur_ptr->codebase, cur_ptr->code);
 						else
 						  sprintf(istr, " CODEBASE='/' CODE='%s'", cur_ptr->code);
@@ -624,8 +628,8 @@ int fnAttributeCompare(char *object, char *attrname, char *value)
 	   (str[-1] != '\n')) {
 		return(-2);
 	}
-	str += strlen(attrname); // skip the attribute name
-	str++; // skip the equal sign
+	str += strlen(attrname); /* skip the attribute name */
+	str++; /* skip the equal sign */
 
 	/* Search for end of attribute value */
 	str1 = str;
@@ -670,7 +674,7 @@ static int fnCOpenDataCon(int sockfd, int *port)
   /*
   ** Make sure that address may be reused
   */
-#ifdef SUN
+#if defined(SUN) || (WIN32|WINNT)
   setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, (char *)&option, sizeof(option));
 #else
   setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, &option, sizeof(option));
@@ -727,10 +731,17 @@ static int fnCOpenDataCon(int sockfd, int *port)
 #include <errno.h>
 #include <signal.h>
 
+#if !(WIN32|WINNT)
 static sigset_t newmask, oldmask, zeromask;
+#endif
 
 static int set_noblock(int fd)
 {
+#if WIN32|WINNT
+	u_long argp=1;
+
+	return ioctlsocket (fd, FIONBIO , &argp); 
+#else
 
 	sigemptyset(&zeromask);
 	sigemptyset(&newmask);
@@ -740,6 +751,7 @@ static int set_noblock(int fd)
 	if (sigprocmask(SIG_BLOCK, &newmask, &oldmask) < 0) return -1;
 
 	return fcntl(fd, F_SETFL, O_NONBLOCK | O_NDELAY /* | FNBIO*/);
+#endif
 }
 
 int write_to(int fd, void *buffer, int n, int timeout)
@@ -747,7 +759,7 @@ int write_to(int fd, void *buffer, int n, int timeout)
 	int nrem, nw;
 	char *bptr;
 	int  error;
-#ifdef SYSV
+#if defined(SYSV) || (WIN32|WINNT)
 	int    width = 20;
 #else
 	int    width = getdtablesize();
@@ -756,7 +768,11 @@ int write_to(int fd, void *buffer, int n, int timeout)
 	struct timeval select_timeout;
 
 	select_timeout.tv_sec = timeout;
+#if WIN32|WINNT
+	select_timeout.tv_usec = 0;
+#else /* is this just a typo? */
 	select_timeout.tv_usec = 0.;
+#endif
 
 	/*  Set fd to non-blocking  */
 
@@ -766,7 +782,7 @@ int write_to(int fd, void *buffer, int n, int timeout)
 
 	FD_ZERO(&writefds);
 
-	FD_SET(fd, &writefds);
+	FD_SET((unsigned int)fd, &writefds);
  
 	for( nrem = n, bptr = buffer; nrem;)
 		{
@@ -795,7 +811,9 @@ int write_to(int fd, void *buffer, int n, int timeout)
 			bptr += nw;
 		}
 	}
+#if !(WIN32|WINNT)
 	if (sigprocmask(SIG_SETMASK, &oldmask, NULL) < 0) return -1;
+#endif
 	if( ! error ) {
 		errno = ETIMEDOUT;
 		return(-2);
@@ -812,16 +830,20 @@ int read_to(int fd, char *buffer, int n, int timeout)
   char *bptr;
   int  error;
 
-#ifdef SYSV
+#if defined(SYSV) || (WIN32|WINNT)
   int    width = 20;
 #else
   int    width = getdtablesize();
-#endif SYSV
+#endif
   fd_set readfds;
   struct timeval select_timeout;
 
   select_timeout.tv_sec = timeout;
+#if WIN32|WINNT
+  select_timeout.tv_usec = 0;
+#else
   select_timeout.tv_usec = 0.;
+#endif
   
   /*  Set fd to non-blocking  */
 
@@ -829,7 +851,7 @@ int read_to(int fd, char *buffer, int n, int timeout)
 
   FD_ZERO(&readfds);
 
-  FD_SET(fd, &readfds);
+  FD_SET((unsigned int)fd, &readfds);
   
   for( nrem = n, bptr = buffer, nread = 0; nrem;)
     {
@@ -867,7 +889,9 @@ int read_to(int fd, char *buffer, int n, int timeout)
       }
     }
 
+#if !(WIN32|WINNT)
   if (sigprocmask(SIG_SETMASK, &oldmask, NULL) < 0) return -1;
+#endif
   if( ! error )
     {
     errno = ETIMEDOUT;
@@ -899,7 +923,7 @@ int open_hg_connection(char *server_name, int port)
 	struct sockaddr_in server_addr;
 	struct hostent *hp;
 	if ( (hp = gethostbyname(server_name)) == NULL )  {
-//		php3_error(E_WARNING, "gethostbyname failed for %s", server_name);
+/*		php3_error(E_WARNING, "gethostbyname failed for %s", server_name); */
 		return(-1);
 	}
 
@@ -912,24 +936,26 @@ int open_hg_connection(char *server_name, int port)
 	bcopy(hp->h_addr, (char *) &server_addr.sin_addr, hp->h_length);
 
 	if ( (sockfd = socket(AF_INET, SOCK_STREAM, 0)) < 0 )  {
-//		php3_error(E_WARNING, "socket");
+/*		php3_error(E_WARNING, "socket"); */
 		return(-1);
 	}
 
-#ifdef SUN
+#if defined(SUN) || (WIN32|WINNT)
 	setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, (char *)&option, sizeof(option));
 #else
 	setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, &option, sizeof(option));
 #endif SUN
 
 	if (connect(sockfd, (struct sockaddr *) &server_addr, sizeof(server_addr)) < 0) {
-//		php3_error(E_WARNING, "connect");
+/*		php3_error(E_WARNING, "connect"); */
 		close(sockfd);
 		return(-1);
 	} 
 
+#if !(WIN32|WINNT)
 	if ( (sock_flags = fcntl(sockfd, F_GETFL, 0)) == -1 )
-//		php3_error(E_WARNING, "open_hg_connection: F_GETFL");
+/*		php3_error(E_WARNING, "open_hg_connection: F_GETFL"); */
+#endif
 
 	if ( set_nonblocking(sockfd) == -1 )  {
 		return(-1);
@@ -954,30 +980,30 @@ int initialize_hg_connection(int sockfd, int *do_swap, int *version, char **user
 	*do_swap = 0;
 	buf = 'T';
 	if ( hg_write(sockfd, &buf, 1) == -1 )  {
-//		php3_error(E_WARNING, "initialize_hg_connection: hg_write (1) returned -1\n");
+/*		php3_error(E_WARNING, "initialize_hg_connection: hg_write (1) returned -1\n"); */
 		return(-1);
 	}
 
 	if ( hg_read_exact(sockfd, &buf, 1) == -1 )  {
-//		php3_error(E_WARNING, "initialize_hg_connection: hg_read (1) returned -1\n");
+/*		php3_error(E_WARNING, "initialize_hg_connection: hg_read (1) returned -1\n"); */
 		return(-1);
 	}
 	if ( buf == 'F' )  {
-//		php3_error(E_WARNING, "initialize_hg_connection: got >>F<< from server\n");
+/*		php3_error(E_WARNING, "initialize_hg_connection: got >>F<< from server\n"); */
 		return(-1);
 	}
 	if ( buf != 'T' )  {
-//		php3_error(E_WARNING, "initialize_hg_connection: neither >>F<< nor >>T<< from server\n");
+/*		php3_error(E_WARNING, "initialize_hg_connection: neither >>F<< nor >>T<< from server\n"); */
 		return(-1);
 	}
 
 	buf = c = ( *(char *)&i )  ? 'l' : 'B';
 	if ( hg_write(sockfd, &buf, 1) == -1 )  {
-//		php3_error(E_WARNING, "initialize_hg_connection: hg_write (2) returned -1\n");
+/*		php3_error(E_WARNING, "initialize_hg_connection: hg_write (2) returned -1\n"); */
 		return(-1);
 	}
 	if ( hg_read_exact(sockfd, &buf, 1) == -1 )  {
-//		php3_error(E_WARNING, "initialize_hg_connection: hg_read (2) returned -1\n");
+/*		php3_error(E_WARNING, "initialize_hg_connection: hg_read (2) returned -1\n"); */
 		return(-1);
 	}
 	if ( c != buf )  {
@@ -989,13 +1015,13 @@ int initialize_hg_connection(int sockfd, int *do_swap, int *version, char **user
 	}
 
 	if ( send_ready(sockfd) == -1) {
-//		php3_error(E_WARNING, "send ready msg returned -1");
+/*		php3_error(E_WARNING, "send ready msg returned -1"); */
 		return(-1);
 		}
 
 	/* Receive return from Ready message */
 	if ( (ready_msg = recv_ready(sockfd)) == NULL )  {
-//		php3_error(E_WARNING, "initialize_hg_connection: recv_ready returned NULL\n");
+/*		php3_error(E_WARNING, "initialize_hg_connection: recv_ready returned NULL\n"); */
 		return(-1);
 	}   
 
@@ -1044,10 +1070,19 @@ int initialize_hg_connection(int sockfd, int *do_swap, int *version, char **user
 
 static int set_nonblocking(int fd)
 {
+#if WIN32|WINNT
+	unsigned int argp=0;
+
+/*	if ( sock_flags == -1 )
+		getsockopt (fd, SOL_SOCKET, optname, optval, optlen); 
+*/	if(ioctlsocket (fd, FIONBIO , &argp) == -1)
+		return(-1);
+#else
 	if ( sock_flags == -1 )
 		sock_flags = fcntl(fd, F_GETFL, 0);
 	if ( fcntl(fd, F_SETFL, O_NONBLOCK) == -1 )
 		return(-1);
+#endif
 	non_blocking = 1;
 	return(0);
 }
@@ -1055,8 +1090,15 @@ static int set_nonblocking(int fd)
 
 static int set_blocking(int fd)
 {
+#if WIN32|WINNT
+	unsigned int argp=1;
+
+	if(ioctlsocket (fd, FIONBIO , &argp) == -1)
+		return(-1);
+#else
 	if ( fcntl(fd, F_SETFL, sock_flags) == -1 )
 		return(-1);
+#endif
 	return(0);
 }
 
@@ -1126,38 +1168,38 @@ hg_msg *recv_hg_msg(int sockfd)
 	hg_msg *msg;
 
 	if ( (msg = (hg_msg *)emalloc(sizeof(hg_msg))) == NULL )  {
-//		php3_printf("recv_hg_msg");
+/*		php3_printf("recv_hg_msg"); */
 		lowerror = LE_MALLOC;
 		return(NULL);
 	}
 
 	if ( hg_read_exact(sockfd, (char *)&(msg->length), 4) == -1 )  {
-//		php3_printf("recv_hg_msg: hg_read (1) returned -1\n");
+/*		php3_printf("recv_hg_msg: hg_read (1) returned -1\n"); */
 		efree(msg);
 		return(NULL);
 	}
 
 	if ( hg_read_exact(sockfd, (char *)&(msg->version_msgid), 4) == -1 )  {
-//		php3_printf("recv_hg_msg: hg_read (2) returned -1\n");
+/*		php3_printf("recv_hg_msg: hg_read (2) returned -1\n"); */
 		efree(msg);
 		return(NULL);
 	}
 
 	if ( hg_read_exact(sockfd, (char *)&(msg->msg_type), 4) == -1 )  {
-//		php3_printf("recv_hg_msg: hg_read (3) returned -1\n");
+/*		php3_printf("recv_hg_msg: hg_read (3) returned -1\n"); */
 		efree(msg);
 		return(NULL);
 	}
 
 	if ( msg->length > HEADER_LENGTH )  {
 		if ( (msg->buf = (char *) emalloc(msg->length-HEADER_LENGTH)) == NULL )  {
-//			php3_printf("recv_hg_msg");
+/*			php3_printf("recv_hg_msg"); */
 			lowerror = LE_MALLOC;
 			efree(msg);
 			return(NULL);
 		}
 		if ( hg_read_exact(sockfd, msg->buf, msg->length-HEADER_LENGTH) == -1 )  {
-//			php3_printf("recv_hg_msg: hg_read (4) returned -1\n");
+/*			php3_printf("recv_hg_msg: hg_read (4) returned -1\n"); */
 			efree(msg->buf);
 			efree(msg);
 			return(NULL);
@@ -1178,11 +1220,11 @@ hg_msg *recv_ready(int sockfd)
 	hg_msg *ready_msg;
 
 	if ( (ready_msg = recv_hg_msg(sockfd)) == NULL )  {
-//		php3_printf("recv_ready: recv_hg_msg returned NULL\n");
+/*		php3_printf("recv_ready: recv_hg_msg returned NULL\n"); */
 		return(NULL);
 	}    
 	if ( ready_msg->msg_type != READY_MESSAGE )  {
-//		php3_printf("recv_ready: recv_hg_msg returned wrong message: %d, %d  \n", ready_msg->length, ready_msg->msg_type);
+/*		php3_printf("recv_ready: recv_hg_msg returned wrong message: %d, %d  \n", ready_msg->length, ready_msg->msg_type); */
 		efree(ready_msg);
 		return(NULL);
 	}
@@ -1196,11 +1238,11 @@ hg_msg *recv_command(int sockfd)
 	hg_msg *comm_msg;
 
 	if ( (comm_msg = recv_hg_msg(sockfd)) == NULL )  {
-//		fprintf(stderr, "recv_command: recv_hg_msg returned NULL\n");
+/*		fprintf(stderr, "recv_command: recv_hg_msg returned NULL\n"); */
 		return(NULL);
 	}
 	if ( comm_msg->msg_type != COMMAND_MESSAGE )  {
-//		fprintf(stderr, "recv_command: recv_hg_msg returned wrong message\n");
+/*		fprintf(stderr, "recv_command: recv_hg_msg returned wrong message\n"); */
 		return(NULL);
 	}
 
@@ -1218,7 +1260,7 @@ int send_dummy(int sockfd, hw_objectID objectID, int msgid, char **attributes)
 	build_msg_header(&msg, length, msgid++, msgid);
 
 	if ( (msg.buf = (char *)emalloc(length-HEADER_LENGTH)) == NULL )  {
-//		perror("send_command");
+/*		perror("send_command"); */
 		lowerror = LE_MALLOC;
 		return(-1);
 	}
@@ -1262,7 +1304,7 @@ static int bh_send_deleteobject(int sockfd, hw_objectID objectID) {
 	build_msg_header(&msg, length, msgid++, DELETEOBJECT_MESSAGE);
 
 	if ( (msg.buf = (char *)emalloc(length-HEADER_LENGTH)) == NULL )  {
-//		perror("send_command");
+/*		perror("send_command"); */
 		lowerror = LE_MALLOC;
 		return(-1);
 	}
@@ -1314,7 +1356,7 @@ static int bh_send_changeobject(int sockfd, hw_objectID objectID, char *mod) {
 	build_msg_header(&msg, length, msgid++, CHANGEOBJECT_MESSAGE);
 
 	if ( (msg.buf = (char *)emalloc(length-HEADER_LENGTH)) == NULL )  {
-//		perror("send_command");
+/*		perror("send_command"); */
 		lowerror = LE_MALLOC;
 		return(-1);
 	}
@@ -1361,7 +1403,7 @@ static int bh_send_getobject(int sockfd, hw_objectID objectID) {
 	build_msg_header(&msg, length, msgid++, GETOBJECT_MESSAGE);
 
 	if ( (msg.buf = (char *)emalloc(length-HEADER_LENGTH)) == NULL )  {
-//		perror("send_command");
+/*		perror("send_command"); */
 		lowerror = LE_MALLOC;
 		return(-1);
 	}
@@ -1420,7 +1462,7 @@ int send_getandlock(int sockfd, hw_objectID objectID, char **attributes)
 	build_msg_header(&msg, length, msgid++, GETANDLOCK_MESSAGE);
 
 	if ( (msg.buf = (char *)emalloc(length-HEADER_LENGTH)) == NULL )  {
-//		perror("send_command");
+/*		perror("send_command"); */
 		lowerror = LE_MALLOC;
 		return(-1);
 	}
@@ -1462,14 +1504,14 @@ int send_insertobject(int sockfd, char *objrec, char *parms, hw_objectID *object
 	build_msg_header(&msg, length, msgid++, INSERTOBJECT_MESSAGE);
 
 	if ( (msg.buf = (char *)emalloc(length-HEADER_LENGTH)) == NULL )  {
-//		perror("send_command");
+/*		perror("send_command"); */
 		lowerror = LE_MALLOC;
 		return(-1);
 	}
 
 	tmp = build_msg_str(msg.buf, objrec);
 	tmp = build_msg_str(tmp, parms);
-//fprintf(stderr,"objrec = %s, parms = %s\n", objrec, parms);
+/*fprintf(stderr,"objrec = %s, parms = %s\n", objrec, parms); */
 
 	if ( send_hg_msg(sockfd, &msg, length) == -1 )  {
 		efree(msg.buf);
@@ -1506,7 +1548,7 @@ int send_unlock(int sockfd, hw_objectID objectID)
 	build_msg_header(&msg, length, msgid++, UNLOCK_MESSAGE);
 
 	if ( (msg.buf = (char *)emalloc(length-HEADER_LENGTH)) == NULL )  {
-//		perror("send_command");
+/*		perror("send_command"); */
 		lowerror = LE_MALLOC;
 		return(-1);
 	}
@@ -1688,6 +1730,9 @@ int send_insdoc(int sockfd, hw_objectID objectID, char *objrec, char *text, hw_o
 	return 0;
 }
 
+int send_getdestforanchorsobj(int sockfd, char **anchorrec, char ***destrec, int count);
+int send_getreldestforanchorsobj(int sockfd, char **anchorrec, char ***reldestrec, int count, int rootID, int thisID);
+
 int send_gettext(int sockfd, hw_objectID objectID, int mode, int rootid, char **objattr, char **bodytag, char **text, int *count)
 {
 	hg_msg msg, *retmsg;
@@ -1700,7 +1745,7 @@ int send_gettext(int sockfd, hw_objectID objectID, int mode, int rootid, char **
 	build_msg_header(&msg, length, msgid++, GETOBJECT_MESSAGE);
 
 	if ( (msg.buf = (char *)emalloc(length-HEADER_LENGTH)) == NULL )  {
-//		perror("send_command");
+/*		perror("send_command"); */
 		lowerror = LE_MALLOC;
 		return(-1);
 	}
@@ -1736,7 +1781,7 @@ int send_gettext(int sockfd, hw_objectID objectID, int mode, int rootid, char **
 	build_msg_header(&msg, length, msgid++, GETTEXT_MESSAGE);
 
 	if ( (msg.buf = (char *)emalloc(length-HEADER_LENGTH)) == NULL )  {
-//		perror("send_command");
+/*		perror("send_command"); */
 		lowerror = LE_MALLOC;
 		return(-1);
 	}
@@ -1765,7 +1810,7 @@ int send_gettext(int sockfd, hw_objectID objectID, int mode, int rootid, char **
 		*count = retmsg->length-HEADER_LENGTH-sizeof(int);
 		if(NULL != (*text = malloc(*count + 1))) {
 			memcpy(*text, retmsg->buf+sizeof(int), *count);
-//			*text[*count] = 0;
+/*			*text[*count] = 0; */
 		} else {
 			efree(retmsg);
 			efree(retmsg->buf);
@@ -1841,7 +1886,7 @@ int send_edittext(int sockfd, char *objattr, char *text)
 	tmp = build_msg_int(msg.buf, objectID);
 	tmp = build_msg_str(tmp, path);
 	tmp = build_msg_str(tmp, "");
-	tmp = build_msg_str(tmp, *text);
+	tmp = build_msg_str(tmp, text);
 
 	if(path) efree(path);
 	if(objid) efree(objid);
@@ -1854,7 +1899,7 @@ int send_edittext(int sockfd, char *objattr, char *text)
 	efree(msg.buf);
 	retmsg = recv_hg_msg(sockfd);
 	if (retmsg == NULL) {
-		*text = NULL;
+		*text = '\0';
 		return(-1);
 	}
 
@@ -1865,18 +1910,18 @@ int send_edittext(int sockfd, char *objattr, char *text)
 	return(error);
 }
 
-int send_getcgi(int sockfd, hw_objectID objectID, char **objattr, char **text, int *count)
+int send_getcgi(int sockfd, hw_objectID objectID, char *cgi_env_str, char **objattr, char **text, int *count)
 {
 	hg_msg msg, *retmsg;
-	int  length, *ptr, error;
-	char *tmp, *attributes;
+	int  length, *ptr, error, new_attr_len;
+	char *tmp, *attributes, *new_attr;
 
 	length = HEADER_LENGTH + sizeof(hw_objectID);
 
 	build_msg_header(&msg, length, msgid++, GETOBJECT_MESSAGE);
 
 	if ( (msg.buf = (char *)emalloc(length-HEADER_LENGTH)) == NULL )  {
-//		perror("send_command");
+/*		perror("send_command"); */
 		lowerror = LE_MALLOC;
 		return(-1);
 	}
@@ -1908,20 +1953,25 @@ int send_getcgi(int sockfd, hw_objectID objectID, char **objattr, char **text, i
 		return error;
 	}
 
-	length = HEADER_LENGTH + strlen(attributes) + 1 + sizeof(int);
+        new_attr_len = strlen(attributes) + strlen(cgi_env_str) + 2;
+        new_attr = malloc(new_attr_len);
+        strcpy(new_attr, attributes);
+        strcat(new_attr, cgi_env_str);
+	length = HEADER_LENGTH + strlen(new_attr) + 1 + sizeof(int);
 	build_msg_header(&msg, length, msgid++, GETCGI_MESSAGE);
 
 	if ( (msg.buf = (char *)emalloc(length-HEADER_LENGTH)) == NULL )  {
-//		perror("send_command");
+/*		perror("send_command"); */
 		lowerror = LE_MALLOC;
 		return(-1);
 	}
 
-	tmp = build_msg_str(msg.buf, attributes);
+	tmp = build_msg_str(msg.buf, new_attr);
 	tmp = build_msg_int(tmp, 0);
 
 	*objattr = strdup(attributes);
 	efree(attributes);
+        free(new_attr);
 
 	if ( send_hg_msg(sockfd, &msg, length) == -1 )  {
 		efree(msg.buf);
@@ -1953,7 +2003,7 @@ int send_getcgi(int sockfd, hw_objectID objectID, char **objattr, char **text, i
 			return(-1);
 		}
  	} else {
-		error = *ptr + 1024;  // move errors to >2024
+		error = *ptr + 1024;  /* move errors to >2024 */
 		efree(retmsg);
 		efree(retmsg->buf);
  		*text = NULL;
@@ -1976,7 +2026,7 @@ int send_getremote(int sockfd, hw_objectID objectID, char **objattr, char **text
 	build_msg_header(&msg, length, msgid++, GETOBJECT_MESSAGE);
 
 	if ( (msg.buf = (char *)emalloc(length-HEADER_LENGTH)) == NULL )  {
-//		perror("send_command");
+/*		perror("send_command"); */
 		lowerror = LE_MALLOC;
 		return(-1);
 	}
@@ -2012,7 +2062,7 @@ int send_getremote(int sockfd, hw_objectID objectID, char **objattr, char **text
 	build_msg_header(&msg, length, msgid++, GETREMOTE_MESSAGE);
 
 	if ( (msg.buf = (char *)emalloc(length-HEADER_LENGTH)) == NULL )  {
-//		perror("send_command");
+/*		perror("send_command"); */
 		lowerror = LE_MALLOC;
 		return(-1);
 	}
@@ -2040,7 +2090,7 @@ int send_getremote(int sockfd, hw_objectID objectID, char **objattr, char **text
 		*count = retmsg->length-HEADER_LENGTH-sizeof(int)-sizeof(int);
 		if(NULL != (*text = malloc(*count + 1))) {
 			memcpy(*text, ptr+2, *count);
-//			*text[*count] = 0;
+/*			*text[*count] = 0; */
 		} else {
 			efree(retmsg);
 			efree(retmsg->buf);
@@ -2048,7 +2098,7 @@ int send_getremote(int sockfd, hw_objectID objectID, char **objattr, char **text
 			return(-1);
 		}
  	} else {
-		error = *ptr + 1024;  // move errors to >2024
+		error = *ptr + 1024;  /* move errors to >2024 */
 		efree(retmsg);
 		efree(retmsg->buf);
  		*text = NULL;
@@ -2071,7 +2121,6 @@ int send_getremotechildren(int sockfd, char *attributes, char **text, int **chil
 	build_msg_header(&msg, length, msgid++, GETOBJECT_MESSAGE);
 
 	if ( (msg.buf = (char *)emalloc(length-HEADER_LENGTH)) == NULL )  {
-//		perror("send_command");
 		lowerror = LE_MALLOC;
 		return(-1);
 	}
@@ -2107,7 +2156,7 @@ int send_getremotechildren(int sockfd, char *attributes, char **text, int **chil
 	build_msg_header(&msg, length, msgid++, GETREMOTECHILDREN_MESSAGE);
 
 	if ( (msg.buf = (char *)emalloc(length-HEADER_LENGTH)) == NULL )  {
-//		perror("send_command");
+/*		perror("send_command"); */
 		lowerror = LE_MALLOC;
 		return(-1);
 	}
@@ -2115,7 +2164,7 @@ int send_getremotechildren(int sockfd, char *attributes, char **text, int **chil
 	tmp = build_msg_str(msg.buf, attributes);
 	tmp = build_msg_int(tmp, 0);
 
-//	efree(attributes);
+/*	efree(attributes); */ 
 
 	if ( send_hg_msg(sockfd, &msg, length) == -1 )  {
 		efree(msg.buf);
@@ -2148,9 +2197,9 @@ int send_getremotechildren(int sockfd, char *attributes, char **text, int **chil
 		}
 
 		remlen = retmsg->length - HEADER_LENGTH - *count * sizeof(int) - 2 * sizeof(int);
-//ptr1[i-1] = remlen;
-//ptr1[i-2] = sum;
-//ptr1[i-3] = *count;
+/*ptr1[i-1] = remlen; */
+/*ptr1[i-2] = sum; */
+/*ptr1[i-3] = *count; */
 		if(NULL != (*text = emalloc(remlen + 1))) {
 			memcpy(*text, ptr, remlen);
 		} else {
@@ -2195,7 +2244,7 @@ int send_mvcpdocscollscoll(int sockfd, hw_objectID *objectIDs, int count, int fr
 	}
 
 	if ( (msg.buf = (char *)emalloc(length-HEADER_LENGTH)) == NULL )  {
-//		perror("send_command");
+/*		perror("send_command"); */
 		lowerror = LE_MALLOC;
 		return(-1);
 	}
@@ -2236,7 +2285,7 @@ int send_docbyanchor(int sockfd, hw_objectID objectID, hw_objectID *anchorID)
 	build_msg_header(&msg, length, msgid++, GETDOCBYANCHOR_MESSAGE);
 
 	if ( (msg.buf = (char *)emalloc(length-HEADER_LENGTH)) == NULL )  {
-//		perror("send_command");
+/*		perror("send_command"); */
 		lowerror = LE_MALLOC;
 		return(-1);
 	}
@@ -2278,7 +2327,7 @@ int send_docbyanchorobj(int sockfd, hw_objectID objectID, char **objrec)
 	build_msg_header(&msg, length, msgid++, GETDOCBYANCHOR_MESSAGE);
 
 	if ( (msg.buf = (char *)emalloc(length-HEADER_LENGTH)) == NULL )  {
-//		perror("send_command");
+/*		perror("send_command"); */
 		lowerror = LE_MALLOC;
 		return(-1);
 	}
@@ -2323,7 +2372,7 @@ int send_children(int sockfd, hw_objectID objectID, hw_objectID **childIDs, int 
 	build_msg_header(&msg, length, msgid++, CHILDREN_MESSAGE);
 
 	if ( (msg.buf = (char *)emalloc(length-HEADER_LENGTH)) == NULL )  {
-//		perror("send_command");
+/*		perror("send_command"); */
 		lowerror = LE_MALLOC;
 		return(-1);
 	}
@@ -2383,7 +2432,7 @@ int send_childrenobj(int sockfd, hw_objectID objectID, char ***childrec, int *co
 	build_msg_header(&msg, length, msgid++, CHILDREN_MESSAGE);
 
 	if ( (msg.buf = (char *)emalloc(length-HEADER_LENGTH)) == NULL )  {
-//		perror("send_command");
+/*		perror("send_command"); */
 		lowerror = LE_MALLOC;
 		return(-1);
 	}
@@ -2425,7 +2474,7 @@ int send_childrenobj(int sockfd, hw_objectID objectID, char ***childrec, int *co
 		return error;
 	}
 
-	// Now get for each child collection the object record
+	/* Now get for each child collection the object record */
 	for(i=0; i<*count; i++) {
 		
 		length = HEADER_LENGTH + sizeof(hw_objectID);
@@ -2450,7 +2499,7 @@ int send_childrenobj(int sockfd, hw_objectID objectID, char ***childrec, int *co
 	efree(childIDs);
 
 	if(NULL == (objptr = (char **) emalloc(*count * sizeof(hw_objrec *)))) {
-		// if emalloc fails, get at least all remaining  messages from server
+		/* if emalloc fails, get at least all remaining  messages from server */
 		for(i=0; i<*count; i++) {
 			retmsg = recv_hg_msg(sockfd);
 			efree(retmsg->buf);
@@ -2495,7 +2544,7 @@ int send_getchildcoll(int sockfd, hw_objectID objectID, hw_objectID **childIDs, 
 	build_msg_header(&msg, length, msgid++, GETCHILDCOLL_MESSAGE);
 
 	if ( (msg.buf = (char *)emalloc(length-HEADER_LENGTH)) == NULL )  {
-//		perror("send_command");
+/*		perror("send_command"); */
 		lowerror = LE_MALLOC;
 		return(-1);
 	}
@@ -2555,7 +2604,7 @@ int send_getchildcollobj(int sockfd, hw_objectID objectID, char ***childrec, int
 	build_msg_header(&msg, length, msgid++, GETCHILDCOLL_MESSAGE);
 
 	if ( (msg.buf = (char *)emalloc(length-HEADER_LENGTH)) == NULL )  {
-//		perror("send_command");
+/*		perror("send_command"); */
 		lowerror = LE_MALLOC;
 		return(-1);
 	}
@@ -2597,7 +2646,7 @@ int send_getchildcollobj(int sockfd, hw_objectID objectID, char ***childrec, int
 		return error;
 	}
 
-	// Now get for each child collection the object record
+	/* Now get for each child collection the object record */
 	for(i=0; i<*count; i++) {
 		
 		length = HEADER_LENGTH + sizeof(hw_objectID);
@@ -2622,7 +2671,7 @@ int send_getchildcollobj(int sockfd, hw_objectID objectID, char ***childrec, int
 	efree(childIDs);
 
 	if(NULL == (objptr = (char **) emalloc(*count * sizeof(hw_objrec *)))) {
-		// if emalloc fails, get at least all remaining  messages from server
+		/* if emalloc fails, get at least all remaining  messages from server */
 		for(i=0; i<*count; i++) {
 			retmsg = recv_hg_msg(sockfd);
 			efree(retmsg->buf);
@@ -2666,7 +2715,7 @@ int send_getchilddoccoll(int sockfd, hw_objectID objectID, hw_objectID **childID
 	build_msg_header(&msg, length, msgid++, GETCHILDDOCCOLL_MESSAGE);
 
 	if ( (msg.buf = (char *)emalloc(length-HEADER_LENGTH)) == NULL )  {
-//		perror("send_command");
+/*		perror("send_command"); */
 		lowerror = LE_MALLOC;
 		return(-1);
 	}
@@ -2726,7 +2775,7 @@ int send_getchilddoccollobj(int sockfd, hw_objectID objectID, hw_objrec ***child
 	build_msg_header(&msg, length, msgid++, GETCHILDDOCCOLL_MESSAGE);
 
 	if ( (msg.buf = (char *)emalloc(length-HEADER_LENGTH)) == NULL )  {
-//		perror("send_command");
+/*		perror("send_command"); */
 		lowerror = LE_MALLOC;
 		return(-1);
 	}
@@ -2768,13 +2817,13 @@ int send_getchilddoccollobj(int sockfd, hw_objectID objectID, hw_objrec ***child
 		}
 	}
 
-	// Now get for each child collection the object record
+	/* Now get for each child collection the object record */
 	for(i=0; i<*count; i++) {
 		length = HEADER_LENGTH + sizeof(hw_objectID);
 		build_msg_header(&msg, length, childIDs[i], GETOBJECT_MESSAGE);
 
 		if ( (msg.buf = (char *)emalloc(length-HEADER_LENGTH)) == NULL )  {
-//			perror("send_command");
+/*			perror("send_command"); */
 			lowerror = LE_MALLOC;
 			return(-1);
 		}
@@ -2790,7 +2839,7 @@ int send_getchilddoccollobj(int sockfd, hw_objectID objectID, hw_objrec ***child
 	}
 
 	if(NULL == (objptr = (char **) emalloc(*count * sizeof(hw_objrec *)))) {
-		// if emalloc fails, get at least all remaining  messages from server
+		/* if emalloc fails, get at least all remaining  messages from server */
 		for(i=0; i<*count; i++) {
 			retmsg = recv_hg_msg(sockfd);
 			efree(retmsg->buf);
@@ -2835,7 +2884,7 @@ int send_getanchors(int sockfd, hw_objectID objectID, int **anchorIDs, int *coun
 	build_msg_header(&msg, length, msgid++, GETANCHORS_MESSAGE);
 
 	if ( (msg.buf = (char *)emalloc(length-HEADER_LENGTH)) == NULL )  {
-//		perror("send_command");
+/*		perror("send_command"); */
 		lowerror = LE_MALLOC;
 		return(-1);
 	}
@@ -2893,7 +2942,7 @@ int send_getanchorsobj(int sockfd, hw_objectID objectID, char ***childrec, int *
 	build_msg_header(&msg, length, 50, GETANCHORS_MESSAGE);
 
 	if ( (msg.buf = (char *)emalloc(length-HEADER_LENGTH)) == NULL )  {
-//		perror("send_command");
+/*		perror("send_command"); */
 		lowerror = LE_MALLOC;
 		return(-1);
 	}
@@ -2934,14 +2983,14 @@ int send_getanchorsobj(int sockfd, hw_objectID objectID, char ***childrec, int *
 		return error;
 	}
 
-	// Now get for each anchor the object record
+	/* Now get for each anchor the object record */
 	for(i=0; i<*count; i++) {
 		
 		length = HEADER_LENGTH + sizeof(hw_objectID);
 		build_msg_header(&msg, length, anchorIDs[i], GETOBJECT_MESSAGE);
 
 		if ( (msg.buf = (char *)emalloc(length-HEADER_LENGTH)) == NULL )  {
-//			perror("send_command");
+/*			perror("send_command"); */
 			lowerror = LE_MALLOC;
 			return(-1);
 		}
@@ -2958,7 +3007,7 @@ int send_getanchorsobj(int sockfd, hw_objectID objectID, char ***childrec, int *
 	if(anchorIDs) efree(anchorIDs);
 
 	if(NULL == (objptr = (char **) emalloc(*count * sizeof(hw_objrec *)))) {
-		// if emalloc fails, get at least all remaining  messages from server
+		/* if emalloc fails, get at least all remaining  messages from server */
 		for(i=0; i<*count; i++) {
 			retmsg = recv_hg_msg(sockfd);
 			efree(retmsg->buf);
@@ -3003,7 +3052,7 @@ int send_getdestforanchorsobj(int sockfd, char **anchorrec, char ***destrec, int
 		return -1;
 		}
 
-	// Now get for each anchor the object record of its destination
+	/* Now get for each anchor the object record of its destination */
 	for(i=0; i<count; i++) {
 		/* if you retrieve the anchors you sometimes get more than actually accessible.
 		   This happens for the object 0x29a9c. */
@@ -3044,10 +3093,10 @@ int send_getreldestforanchorsobj(int sockfd, char **anchorrec, char ***reldestre
 		return -1;
 		}
 
-	// Now get for each anchor the object record of its destination
+	/* Now get for each anchor the object record of its destination */
 	for(i=0; i<count; i++) {
 		/* if you retrieve the anchors you sometimes get more than actually accessible.
-		   This happens for the object 0x29a9c. */
+		*/
 		if((NULL != anchorrec[i]) && (NULL != (str = fnAttributeValue(anchorrec[i], "Dest")))) {
 			sscanf(str, "0x%x", &destobjectID);
 			efree(str);
@@ -3082,7 +3131,7 @@ int send_getreldestforanchorsobj(int sockfd, char **anchorrec, char ***reldestre
 				send_incollections(sockfd, 1, 1, &thisID, 1, &rootID, &countthis, &retthisIDs);
 				send_incollections(sockfd, 1, 1, &destdocid, 1, &rootID, &countdest, &retdestIDs);
 
-printf("%d: ", thisID);
+fprintf(stderr, "%d: ", thisID);
 for(k=0; k<countthis; k++)
 	fprintf(stderr,"%d, ", retthisIDs[k]);
 fprintf(stderr,"\n");
@@ -3165,7 +3214,7 @@ int fn_findpath(int sockfd, int *retIDs, int count, int id) {
 	pid = id;
 	pcount = 1;
 	while((u >= 0) && (pcount != 0) && (parentIDs != NULL) && (pid != 0)) {
-//fprintf(stderr, "Get parents for %d\n", pid);
+/*fprintf(stderr, "Get parents for %d\n", pid); */
 		if(0 != send_getparents(sockfd, pid, &parentIDs, &pcount)) {
 			efree(pathIDs);
 			return -1;
@@ -3183,12 +3232,12 @@ int fn_findpath(int sockfd, int *retIDs, int count, int id) {
 			fprintf(stderr, "parent not found in list\n");
 		if(parentIDs) efree(parentIDs);
 	}
-//fprintf(stderr, "sorted path: ");
+/*fprintf(stderr, "sorted path: "); */
 	for(i=0; i<count; i++) {
 		retIDs[i] = pathIDs[i];
-//fprintf(stderr, "%d, ", retIDs[i]);
+/*fprintf(stderr, "%d, ", retIDs[i]); */
 	}
-//fprintf(stderr, "\n");
+/*fprintf(stderr, "\n"); */
 	efree(pathIDs);
 	return 0;
 }
@@ -3310,9 +3359,9 @@ fprintf(stderr, "Is now '%s'\n", anchorstr);
 		strcat(anchorstr, destdocname);
 		efree(str);
 	} else {
-//		strcat(anchorstr, "index.html");
+/*		strcat(anchorstr, "index.html"); */
 	}
-//fprintf(stderr, "%s\n", anchorstr);
+/*fprintf(stderr, "%s\n", anchorstr); */
 	efree(retthisIDs);
 	efree(retdestIDs);
 	*reldeststr = estrdup(anchorstr);
@@ -3329,7 +3378,7 @@ int send_identify(int sockfd, char *name, char *passwd, char **userdata) {
 	build_msg_header(&msg, length, msgid++, IDENTIFY_MESSAGE);
 
 	if ( (msg.buf = (char *)emalloc(length-HEADER_LENGTH)) == NULL )  {
-//		perror("send_command");
+/*		perror("send_command"); */
 		lowerror = LE_MALLOC;
 		return(-1);
 	}
@@ -3366,7 +3415,7 @@ int send_getobjbyquery(int sockfd, char *query, int maxhits, hw_objectID **child
 	build_msg_header(&msg, length, msgid++, GETOBJBYQUERY_MESSAGE);
 
 	if ( (msg.buf = (char *)emalloc(length-HEADER_LENGTH)) == NULL )  {
-//		perror("send_command");
+/*		perror("send_command"); */
 		lowerror = LE_MALLOC;
 		return(-1);
 	}
@@ -3425,7 +3474,7 @@ int send_getobjbyqueryobj(int sockfd, char *query, int maxhits, char ***childrec
 	build_msg_header(&msg, length, msgid++, GETOBJBYQUERY_MESSAGE);
 
 	if ( (msg.buf = (char *)emalloc(length-HEADER_LENGTH)) == NULL )  {
-//		perror("send_command");
+/*		perror("send_command"); */
 		lowerror = LE_MALLOC;
 		return(-1);
 	}
@@ -3469,13 +3518,13 @@ int send_getobjbyqueryobj(int sockfd, char *query, int maxhits, char ***childrec
 		return error;
 	}
 
-	// Now get for each child collection the object record
+	/* Now get for each child collection the object record */
 	for(i=0; i<*count; i++) {
 		length = HEADER_LENGTH + sizeof(hw_objectID);
 		build_msg_header(&msg, length, childIDs[i], GETOBJECT_MESSAGE);
 
 		if ( (msg.buf = (char *)emalloc(length-HEADER_LENGTH)) == NULL )  {
-//			perror("send_command");
+/*			perror("send_command"); */
 			efree(childIDs);
 			lowerror = LE_MALLOC;
 			return(-1);
@@ -3494,7 +3543,7 @@ int send_getobjbyqueryobj(int sockfd, char *query, int maxhits, char ***childrec
 	efree(childIDs);
 
 	if(NULL == (objptr = (char **) emalloc(*count * sizeof(hw_objrec *)))) {
-		// if emalloc fails, get at least all remaining  messages from server
+		/* if emalloc fails, get at least all remaining  messages from server */
 		for(i=0; i<*count; i++) {
 			retmsg = recv_hg_msg(sockfd);
 			efree(retmsg->buf);
@@ -3539,7 +3588,7 @@ int send_getobjbyquerycoll(int sockfd, hw_objectID collID, char *query, int maxh
 	build_msg_header(&msg, length, msgid++, GETOBJBYQUERYCOLL_MESSAGE);
 
 	if ( (msg.buf = (char *)emalloc(length-HEADER_LENGTH)) == NULL )  {
-//		perror("send_command");
+/*		perror("send_command"); */
 		lowerror = LE_MALLOC;
 		return(-1);
 	}
@@ -3601,7 +3650,7 @@ int send_getobjbyquerycollobj(int sockfd, hw_objectID collID, char *query, int m
 	build_msg_header(&msg, length, msgid++, GETOBJBYQUERYCOLL_MESSAGE);
 
 	if ( (msg.buf = (char *)emalloc(length-HEADER_LENGTH)) == NULL )  {
-//		perror("send_command");
+/*		perror("send_command"); */
 		lowerror = LE_MALLOC;
 		return(-1);
 	}
@@ -3647,13 +3696,13 @@ int send_getobjbyquerycollobj(int sockfd, hw_objectID collID, char *query, int m
 		return error;
 	}
 
-	// Now get for each child collection the object record
+	/* Now get for each child collection the object record */
 	for(i=0; i<*count; i++) {
 		length = HEADER_LENGTH + sizeof(hw_objectID);
 		build_msg_header(&msg, length, childIDs[i], GETOBJECT_MESSAGE);
 
 		if ( (msg.buf = (char *)emalloc(length-HEADER_LENGTH)) == NULL )  {
-//			perror("send_command");
+/*			perror("send_command"); */
 			efree(childIDs);
 			lowerror = LE_MALLOC;
 			return(-1);
@@ -3672,7 +3721,7 @@ int send_getobjbyquerycollobj(int sockfd, hw_objectID collID, char *query, int m
 	efree(childIDs);
 
 	if(NULL == (objptr = (char **) emalloc(*count * sizeof(hw_objrec *)))) {
-		// if emalloc fails, get at least all remaining  messages from server
+		/* if emalloc fails, get at least all remaining  messages from server */
 		for(i=0; i<*count; i++) {
 			retmsg = recv_hg_msg(sockfd);
 			efree(retmsg->buf);
@@ -3717,7 +3766,7 @@ int send_getparents(int sockfd, hw_objectID objectID, hw_objectID **childIDs, in
 	build_msg_header(&msg, length, msgid++, GETPARENT_MESSAGE);
 
 	if ( (msg.buf = (char *)emalloc(length-HEADER_LENGTH)) == NULL )  {
-//		perror("send_command");
+/*		perror("send_command"); */
 		lowerror = LE_MALLOC;
 		return(-1);
 	}
@@ -3778,7 +3827,7 @@ int send_getparentsobj(int sockfd, hw_objectID objectID, char ***childrec, int *
 	build_msg_header(&msg, length, msgid++, GETPARENT_MESSAGE);
 
 	if ( (msg.buf = (char *)emalloc(length-HEADER_LENGTH)) == NULL )  {
-//		perror("send_command");
+/*		perror("send_command"); */
 		lowerror = LE_MALLOC;
 		return(-1);
 	}
@@ -3821,13 +3870,13 @@ int send_getparentsobj(int sockfd, hw_objectID objectID, char ***childrec, int *
 		return error;
 	}
 
-	// Now get for each parent the object record
+	/* Now get for each parent the object record */
 	for(i=0; i<*count; i++) {
 		length = HEADER_LENGTH + sizeof(hw_objectID);
 		build_msg_header(&msg, length, childIDs[i], GETOBJECT_MESSAGE);
 
 		if ( (msg.buf = (char *)emalloc(length-HEADER_LENGTH)) == NULL )  {
-//			perror("send_command");
+/*			perror("send_command"); */
 			lowerror = LE_MALLOC;
 			return(-1);
 		}
@@ -3844,7 +3893,7 @@ int send_getparentsobj(int sockfd, hw_objectID objectID, char ***childrec, int *
 	efree(childIDs);
 
 	if(NULL == (objptr = (char **) emalloc(*count * sizeof(hw_objrec *)))) {
-		// if emalloc fails, get at least all remaining  messages from server
+		/* if emalloc fails, get at least all remaining  messages from server */
 		for(i=0; i<*count; i++) {
 			retmsg = recv_hg_msg(sockfd);
 			efree(retmsg->buf);
@@ -3982,7 +4031,7 @@ int send_pipedocument(int sockfd, char *host, hw_objectID objectID, int mode, in
         */
 	len = sizeof(serv_addr);
 	if((newfd = accept(fd, (struct sockaddr *) &serv_addr, &len)) < 0) {
-//		php3_printf("client: can't open data connection to server\n");
+/*		php3_printf("client: can't open data connection to server\n"); */
 		if(attributes) efree(attributes);
 		close(fd);
 		return(-1);
@@ -4025,7 +4074,6 @@ int send_pipedocument(int sockfd, char *host, hw_objectID objectID, int mode, in
 		if(send_getanchorsobj(sockfd, objectID, &anchors, &ancount) == 0) {
 			char **destrec, **reldestrec;
 			DLIST *pAnchorList = NULL;
-			int i;
 
 			send_getdestforanchorsobj(sockfd, anchors, &destrec, ancount);
 			send_getreldestforanchorsobj(sockfd, anchors, &reldestrec, ancount, rootid, objectID);
@@ -4055,16 +4103,16 @@ int send_pipedocument(int sockfd, char *host, hw_objectID objectID, int mode, in
 	return(0);
 }
 
-int send_pipecgi(int sockfd, char *host, hw_objectID objectID, char **objattr, char **text, int *count)
+int send_pipecgi(int sockfd, char *host, hw_objectID objectID, char *cgi_env_str, char **objattr, char **text, int *count)
 {
 	hg_msg msg, *retmsg;
-	int	length, len;
+	int	length, len, new_attr_len;
 	char *tmp, header[80], *head_ptr, *sizestr;
 	struct sockaddr_in	serv_addr;
 	struct hostent	    *hostptr;
 	char *hostip = NULL;
 	char *attributes = NULL;
-	char *documenttype;
+	char *documenttype, *new_attr;
 	int newfd, fd, port, size, error;
 	int *ptr;
 
@@ -4096,7 +4144,7 @@ int send_pipecgi(int sockfd, char *host, hw_objectID objectID, char **objattr, c
 			hostip = inet_ntoa(*ptr1);
 			break;
 		default:
-//			php3_printf(stderr, "unknown address type\n");
+/*			php3_printf(stderr, "unknown address type\n"); */
 			break;
 	}
 	 
@@ -4112,7 +4160,11 @@ int send_pipecgi(int sockfd, char *host, hw_objectID objectID, char **objattr, c
 		return error;
 	}
 
-	length = HEADER_LENGTH + strlen(attributes) + 1 + sizeof(int) + strlen(hostip) + 1 + sizeof(int) + sizeof(int);
+        new_attr_len = strlen(attributes) + strlen(cgi_env_str) + 2;
+        new_attr = malloc(new_attr_len);
+        strcpy(new_attr, attributes);
+        strcat(new_attr, cgi_env_str);
+	length = HEADER_LENGTH + strlen(new_attr) + 1 + sizeof(int) + strlen(hostip) + 1 + sizeof(int) + sizeof(int);
 	build_msg_header(&msg, length, msgid++, PIPECGI_MESSAGE);
 
 	if ( (msg.buf = (char *)emalloc(length-HEADER_LENGTH)) == NULL ) {
@@ -4123,9 +4175,10 @@ int send_pipecgi(int sockfd, char *host, hw_objectID objectID, char **objattr, c
 
 	tmp = build_msg_str(msg.buf, hostip);
 	tmp = build_msg_int(tmp, port);
-	tmp = build_msg_str(tmp, attributes);
+	tmp = build_msg_str(tmp, new_attr);
 	tmp = build_msg_int(tmp, 1);
 	tmp = build_msg_int(tmp, 0x12345678);
+	free(new_attr);
 
 	if ( send_hg_msg(sockfd, &msg, length) == -1 )	{
 		if(attributes) efree(attributes);
@@ -4219,7 +4272,7 @@ int send_putdocument(int sockfd, char *host, hw_objectID parentID, char *objectR
 	build_msg_header(&msg, length, msgid++, INSERTOBJECT_MESSAGE);
 
 	if ( (msg.buf = (char *)emalloc(length-HEADER_LENGTH)) == NULL )  {
-//		perror("send_command");
+/*		perror("send_command"); */
 		lowerror = LE_MALLOC;
 		return(-1);
 	}
@@ -4257,11 +4310,11 @@ int send_putdocument(int sockfd, char *host, hw_objectID parentID, char *objectR
 	if(host) {
 		if((hostptr = gethostbyname(host)) == NULL) {
 			php3_error(E_WARNING, "gethostbyname failed for %s", host);
-			close(fd);
+			/* close(fd); fd is not set yet */
 			return(-1);
 		}
 	} else {
-		close(fd);
+		/* close(fd); fd is not set yet */
 		return(-1);
 	}
 	 
@@ -4274,7 +4327,7 @@ int send_putdocument(int sockfd, char *host, hw_objectID parentID, char *objectR
 			hostip = inet_ntoa(*ptr1);
 			break;
 		default:
-//			fprintf(stderr, "unknown address type\n");
+/*			fprintf(stderr, "unknown address type\n"); */
 			break;
 	}
 	 
@@ -4419,13 +4472,13 @@ int send_getsrcbydest(int sockfd, hw_objectID objectID, char ***childrec, int *c
 		return error;
 	}
 
-	// Now get for each source the object record
+	/* Now get for each source the object record */
 	for(i=0; i<*count; i++) {
 		length = HEADER_LENGTH + sizeof(hw_objectID);
 		build_msg_header(&msg, length, childIDs[i], GETOBJECT_MESSAGE);
 
 		if ( (msg.buf = (char *)emalloc(length-HEADER_LENGTH)) == NULL )  {
-//			perror("send_command");
+/*			perror("send_command"); */
 			lowerror = LE_MALLOC;
 			return(-1);
 		}
@@ -4441,7 +4494,7 @@ int send_getsrcbydest(int sockfd, hw_objectID objectID, char ***childrec, int *c
 	}
 
 	if(NULL == (objptr = (char **) emalloc(*count * sizeof(hw_objrec *)))) {
-		// if emalloc fails, get at least all remaining  messages from server
+		/* if emalloc fails, get at least all remaining  messages from server */
 		for(i=0; i<*count; i++) {
 			retmsg = recv_hg_msg(sockfd);
 			efree(retmsg->buf);
@@ -4498,12 +4551,12 @@ static int send_hg_msg(int sockfd, hg_msg *msg, int length)
 	php3_printf("<B>Sending msg: </B>type = %d -- id = %d<BR>\n", msg->msg_type, msg->version_msgid);
 #endif
      if ( length < HEADER_LENGTH )  {
-//          fprintf(stderr, "send_hg_msg: bad msg\n");
+/*          fprintf(stderr, "send_hg_msg: bad msg\n"); */
           return(-1);
      }
 
      if ( (tmp = buf = (char *)emalloc(length)) == NULL )  {
-//		perror("send_hg_msg");
+/*		perror("send_hg_msg"); */
 		lowerror = LE_MALLOC;
 		return(-1);
      }
@@ -4559,7 +4612,7 @@ int send_command(int sockfd, int command, char **answer)
 	build_msg_header(&comm_msg, length, msgid++, COMMAND_MESSAGE);
 
 	if ( (comm_msg.buf = (char *)emalloc(length-HEADER_LENGTH)) == NULL )  {
-//		perror("send_command");
+/*		perror("send_command"); */
 		lowerror = LE_MALLOC;
 		return(-1);
 	}

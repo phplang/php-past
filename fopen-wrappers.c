@@ -27,7 +27,7 @@
    |          Jim Winstead <jimw@php.net>                                 |
    +----------------------------------------------------------------------+
  */
-/* $Id: fopen-wrappers.c,v 1.44 1998/08/14 23:47:11 steffann Exp $ */
+/* $Id: fopen-wrappers.c,v 1.50 1998/09/22 14:59:53 rasmus Exp $ */
 
 #ifdef THREAD_SAFE
 #include "tls.h"
@@ -107,16 +107,58 @@ int _php3_getftpresult(int socketd);
 PHPAPI int _php3_check_open_basedir(char *path)
 {
 	char resolved_name[MAXPATHLEN];
+	char local_open_basedir[MAXPATHLEN];
+	int local_open_basedir_pos;
 	
 	/* Only check when open_basedir is available */
 	if (php3_ini.open_basedir && *php3_ini.open_basedir) {
+	
+		/* Special case basedir==".": Use script-directory */
+		if ((strcmp(php3_ini.open_basedir, ".") == 0) && 
+			GLOBAL(request_info).filename &&
+			*GLOBAL(request_info).filename
+		) {
+			strcpy(local_open_basedir, GLOBAL(request_info).filename);
+			local_open_basedir_pos = strlen(local_open_basedir) - 1;
+
+			/* Strip filename */
+			while ((
+#if WIN32|WINNT
+				(local_open_basedir[local_open_basedir_pos] != '\\') ||
+#endif
+				(local_open_basedir[local_open_basedir_pos] != '/')
+				) &&
+				(local_open_basedir_pos >= 0)
+			) {
+				local_open_basedir[local_open_basedir_pos--] = 0;
+			}
+			
+			/* Strip double (back)slashes */
+			if (local_open_basedir_pos > 0) {
+				while ((
+#if WIN32|WINNT
+					(local_open_basedir[local_open_basedir_pos-1] == '\\') ||
+#endif
+					(local_open_basedir[local_open_basedir_pos-1] == '/')
+					) &&
+					(local_open_basedir_pos > 0)
+				) {
+					local_open_basedir[local_open_basedir_pos--] = 0;
+				}
+			}
+			
+		} else {
+			/* Else use the unmodified path */
+			strcpy(local_open_basedir, php3_ini.open_basedir);
+		}
+	
 		/* Resolve the real path into resolved_name */
 		if (_php3_realpath(path, resolved_name) != NULL) {
 			/* Check the path */
 #if WIN32|WINNT
-			if (strncmp(php3_ini.open_basedir, resolved_name, strlen(php3_ini.open_basedir)) == 0) {
+			if (strncasecmp(local_open_basedir, resolved_name, strlen(local_open_basedir)) == 0) {
 #else
-			if (strncasecmp(php3_ini.open_basedir, resolved_name, strlen(php3_ini.open_basedir)) == 0) {
+			if (strncmp(local_open_basedir, resolved_name, strlen(local_open_basedir)) == 0) {
 #endif
 				/* File is in the right directory */
 				return 0;
@@ -137,6 +179,7 @@ PHPAPI int _php3_check_open_basedir(char *path)
 
 PHPAPI FILE *php3_fopen_wrapper(char *path, char *mode, int options, int *issock, int *socketd)
 {
+	int cm=2;  /* checkuid mode: 2 = if file does not exist, check directory */
 #if PHP3_URL_FOPEN
 	if (!(options & IGNORE_URL)) {
 		return php3_fopen_url_wrapper(path, mode, options, issock, socketd);
@@ -146,8 +189,8 @@ PHPAPI FILE *php3_fopen_wrapper(char *path, char *mode, int options, int *issock
 	if (options & USE_PATH && php3_ini.include_path != NULL) {
 		return php3_fopen_with_path(path, mode, php3_ini.include_path, NULL);
 	} else {
-		if (options & ENFORCE_SAFE_MODE && php3_ini.safe_mode && (!_php3_checkuid(path, 1))) {
-			php3_error(E_WARNING, "SAFE MODE Restriction in effect.  Invalid owner of file to be read.");
+		if(!strcmp(mode,"r") || !strcmp(mode,"r+")) cm=0;
+		if (options & ENFORCE_SAFE_MODE && php3_ini.safe_mode && (!_php3_checkuid(path, cm))) {
 			return NULL;
 		}
 		if (_php3_check_open_basedir(path)) return NULL;
@@ -260,15 +303,16 @@ PHPAPI FILE *php3_fopen_with_path(char *filename, char *mode, char *path, char *
 	char trypath[MAXPATHLEN + 1];
 	struct stat sb;
 	FILE *fp;
+	int cm=2;
 	TLS_VARS;
 
+	if(!strcmp(mode,"r") || !strcmp(mode,"r+")) cm=0;
 	if (opened_path) {
 		*opened_path = NULL;
 	}
 	/* Relative path open */
 	if (*filename == '.') {
-		if (php3_ini.safe_mode && (!_php3_checkuid(filename, 2))) {
-			php3_error(E_WARNING, "SAFE MODE Restriction in effect.  Invalid owner.");
+		if (php3_ini.safe_mode && (!_php3_checkuid(filename, cm))) {
 			return NULL;
 		}
 		if (_php3_check_open_basedir(filename)) return NULL;
@@ -285,9 +329,12 @@ PHPAPI FILE *php3_fopen_with_path(char *filename, char *mode, char *path, char *
 	if (*filename == '/') {
 #endif
 		if (php3_ini.safe_mode) {
-			snprintf(trypath, MAXPATHLEN, "%s%s", php3_ini.doc_root, filename);
-			if (!_php3_checkuid(trypath, 2)) {
-				php3_error(E_WARNING, "SAFE MODE Restriction in effect.  Invalid owner.");
+			if(php3_ini.doc_root) {
+				snprintf(trypath, MAXPATHLEN, "%s%s", php3_ini.doc_root, filename);
+			} else {
+				strncpy(trypath,filename,MAXPATHLEN);
+			}
+			if (!_php3_checkuid(trypath, cm)) {
 				return NULL;
 			}
 			if (_php3_check_open_basedir(trypath)) return NULL;
@@ -302,8 +349,7 @@ PHPAPI FILE *php3_fopen_with_path(char *filename, char *mode, char *path, char *
 		}
 	}
 	if (!path || (path && !*path)) {
-		if (php3_ini.safe_mode && (!_php3_checkuid(filename, 2))) {
-			php3_error(E_WARNING, "SAFE MODE Restriction in effect.  Invalid owner.");
+		if (php3_ini.safe_mode && (!_php3_checkuid(filename, cm))) {
 			return NULL;
 		}
 		if (_php3_check_open_basedir(filename)) return NULL;
@@ -329,8 +375,7 @@ PHPAPI FILE *php3_fopen_with_path(char *filename, char *mode, char *path, char *
 		}
 		snprintf(trypath, MAXPATHLEN, "%s/%s", ptr, filename);
 		if (php3_ini.safe_mode) {
-			if (stat(trypath, &sb) == 0 && (!_php3_checkuid(trypath, 2))) {
-				php3_error(E_WARNING, "SAFE MODE Restriction in effect.  Invalid owner.");
+			if (stat(trypath, &sb) == 0 && (!_php3_checkuid(trypath, cm))) {
 				efree(pathbuf);
 				return NULL;
 			}
@@ -487,6 +532,11 @@ static FILE *php3_fopen_url_wrapper(char *path, char *mode, int options, int *is
 		/* send a Host: header so name-based virtual hosts work */
 		SOCK_WRITE("Host: ", *socketd);
 		SOCK_WRITE(resource->host, *socketd);
+		if(resource->port!=80) {
+			sprintf(tmp_line,"%i",resource->port);
+			SOCK_WRITE(":", *socketd);
+			SOCK_WRITE(tmp_line, *socketd);
+		}
 		SOCK_WRITE("\n", *socketd);
 
 		/* identify ourselves */
@@ -833,8 +883,9 @@ static FILE *php3_fopen_url_wrapper(char *path, char *mode, int options, int *is
 		if (options & USE_PATH) {
 			fp = php3_fopen_with_path(path, mode, php3_ini.include_path, NULL);
 		} else {
-			if (options & ENFORCE_SAFE_MODE && php3_ini.safe_mode && (!_php3_checkuid(path, 1))) {
-				php3_error(E_WARNING, "SAFE MODE Restriction in effect.  Invalid owner of file to be read.");
+			int cm=2;
+			if(!strcmp(mode,"r") || !strcmp(mode,"r+")) cm=0;
+			if (options & ENFORCE_SAFE_MODE && php3_ini.safe_mode && (!_php3_checkuid(path, cm))) {
 				fp = NULL;
 			} else {
 				if (_php3_check_open_basedir(path)) {
@@ -872,18 +923,36 @@ PHPAPI int php3_isurl(char *path)
 	return (!strncasecmp(path, "http://", 7) || !strncasecmp(path, "ftp://", 6));
 }
 
-PHPAPI char *php3_strip_url_passwd(char *path)
+
+PHPAPI char *php3_strip_url_passwd(char *url)
 {
-	char *tmppath = NULL;
-	if (!strncasecmp(path, "ftp://", 6)) {
-		tmppath = path;
-		tmppath += 6;
-		for (; *tmppath != ':' && *tmppath != '\0'; tmppath++);
-		tmppath++;
-		for (; *tmppath != '@' && *tmppath != '\0'; tmppath++)
-			*tmppath = '*';
+	register char *p = url, *url_start;
+	
+	while (*p) {
+		if (*p==':' && *(p+1)=='/' && *(p+2)=='/') {
+			/* found protocol */
+			url_start = p = p+3;
+			
+			while (*p) {
+				if (*p=='@') {
+					int i;
+					
+					for (i=0; i<3 && url_start<p; i++, url_start++) {
+						*url_start = '.';
+					}
+					for (; *p; p++) {
+						*url_start++ = *p;
+					}
+					*url_start=0;
+					break;
+				}
+				p++;
+			}
+			return url;
+		}
+		p++;
 	}
-	return (path);
+	return url;
 }
 
 

@@ -29,7 +29,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: gd.c,v 1.90 1998/08/14 23:47:15 steffann Exp $ */
+/* $Id: gd.c,v 1.93 1998/09/14 15:59:23 martin Exp $ */
 
 /* gd 1.2 is copyright 1994, 1995, Quest Protein Database Center, 
    Cold Spring Harbor Labs. */
@@ -297,7 +297,7 @@ void php3_free_gd_font(gdFontPtr fp)
 void php3_imageloadfont(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *file;
 	int hdr_size = sizeof(gdFont) - sizeof(char *);
-	int ind, body_size, n, b;
+	int ind, body_size, n=0, b;
 	gdFontPtr font;
 	FILE *fp;
 	int issock=0, socketd=0;
@@ -739,6 +739,10 @@ void php3_imagegif (INTERNAL_FUNCTION_PARAMETERS) {
 		if (output) {
 			gdImageGif (im, tmp);
 			fseek(tmp, 0, SEEK_SET);
+#ifdef CHARSET_EBCDIC
+			/* This is a binary file already: avoid EBCDIC->ASCII conversion */
+			ap_bsetflag(php3_rqst->connection->client, B_EBCDIC2ASCII, 0);
+#endif
 			while ((b = fread(buf, 1, sizeof(buf), tmp)) > 0) {
 				php3_write(buf, b);
 			}
@@ -953,8 +957,8 @@ void php3_imagearc(INTERNAL_FUNCTION_PARAMETERS) {
 	convert_to_long(COL);
 
 	col = COL->value.lval;
-	e = E->value.lval;
-	st = ST->value.lval;
+	e = E->value.lval % 360;
+	st = ST->value.lval % 360;
 	h = H->value.lval;
 	w = W->value.lval;
 	cy = CY->value.lval;

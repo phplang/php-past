@@ -4,7 +4,7 @@
 
   <partintro>
 
-   <sect1>
+   <sect1 id="hw-intro">
     <title>Introduction</title>
     <para>
      <productname>Hyperwave</productname> has been developed at <ulink
@@ -152,7 +152,7 @@
      </variablelist>
    </sect1>
 
-   <sect1>
+   <sect1 id="hw-apache">
     <title>Integration with Apache</title>
     <para>
      The Hyperwave module is best used when PHP3 is compiled as an
@@ -227,7 +227,7 @@ RewriteEngine on
      </itemizedlist>
    </sect1>
 
-   <sect1>
+   <sect1 id="hw-todo">
     <title>Todo</title>
     <para>
      There are still some things todo:
@@ -1079,11 +1079,14 @@ RewriteEngine on
      <funcdef>hw_document <function>hw_new_document</function></funcdef>
      <paramdef>string <parameter>document_data</parameter></paramdef>
      <paramdef>string <parameter>object_record</parameter></paramdef>
+     <paramdef>int <parameter>document_size</parameter></paramdef>
     </funcsynopsis>
     <para>
      Returns a new document with document data set to
      <parameter>document_data</parameter> and object record set to
-     <parameter>object_record</parameter>. This function does not
+     <parameter>object_record</parameter>. The length of the 
+     <parameter>document_data</parameter> has to passed in
+     <parameter>document_size</parameter>This function does not
      insert the document into the Hyperwave server.
     <para>
      See also <function>hw_FreeDocument</function>,

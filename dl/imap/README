@@ -29,7 +29,7 @@ Returns: True if sucessful False otherwise.
 --  imap_check
 Description: Checks current mailbox.
 array imap_check(IMAP_stream mbox);
-Returns: This function returns an associative array.  The elements are 
+Returns: This function returns an object.  The propertys are 
 "Date", "Driver", "Mailbox", "Nmsgs", and "Recent".
 
 --  imap_num_msg

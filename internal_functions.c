@@ -29,7 +29,7 @@
  */
 
 
-/* $Id: internal_functions.c,v 1.324 1998/08/12 09:21:40 steinm Exp $ */
+/* $Id: internal_functions.c,v 1.326 1998/09/10 23:56:54 zeev Exp $ */
 
 #ifdef THREAD_SAFE
 #include "tls.h"
@@ -54,6 +54,7 @@
 #include "functions/basic_functions.h"
 #include "functions/phpmath.h"
 #include "functions/php3_string.h"
+#include "functions/php3_oci8.h"
 #include "functions/oracle.h"
 #include "functions/base64.h"
 #include "functions/php3_dir.h"
@@ -131,6 +132,7 @@ php3_builtin_module php3_builtin_modules[] =
 	{"Solid",						solid_module_ptr},
 	{"Adabas",						adabas_module_ptr},
 	{"Image",						gd_module_ptr},
+	{"OCI8",						oci8_module_ptr},
 	{"Oracle",						oracle_module_ptr},
 	{"Apache",						apache_module_ptr},
 	{"Crypt",						crypt_module_ptr},
@@ -210,7 +212,7 @@ PHPAPI void wrong_param_count()
 inline PHPAPI int array_init(pval *arg)
 {
 	arg->value.ht = (HashTable *) emalloc(sizeof(HashTable));
-	if (!arg->value.ht || _php3_hash_init(arg->value.ht, 0, NULL, pval_DESTRUCTOR, 0)) {
+	if (!arg->value.ht || _php3_hash_init(arg->value.ht, 0, NULL, PVAL_DESTRUCTOR, 0)) {
 		php3_error(E_CORE_ERROR, "Cannot allocate memory for array");
 		return FAILURE;
 	}
@@ -221,7 +223,7 @@ inline PHPAPI int array_init(pval *arg)
 inline PHPAPI int object_init(pval *arg)
 {
 	arg->value.ht = (HashTable *) emalloc(sizeof(HashTable));
-	if (!arg->value.ht || _php3_hash_init(arg->value.ht, 0, NULL, pval_DESTRUCTOR, 0)) {
+	if (!arg->value.ht || _php3_hash_init(arg->value.ht, 0, NULL, PVAL_DESTRUCTOR, 0)) {
 		php3_error(E_CORE_ERROR, "Cannot allocate memory for array");
 		return FAILURE;
 	}

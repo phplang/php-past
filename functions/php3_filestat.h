@@ -27,7 +27,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: php3_filestat.h,v 1.10 1998/05/15 10:57:33 zeev Exp $ */
+/* $Id: php3_filestat.h,v 1.11 1998/09/06 06:50:22 jaakko Exp $ */
 
 #ifndef _FILESTAT_H
 #define _FILESTAT_H
@@ -52,6 +52,7 @@ extern void php3_isdir(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_islink(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_fileexists(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_stat(INTERNAL_FUNCTION_PARAMETERS);
+extern void php3_lstat(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_chown(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_chgrp(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_chmod(INTERNAL_FUNCTION_PARAMETERS);

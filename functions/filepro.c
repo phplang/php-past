@@ -213,7 +213,6 @@ void php3_filepro(INTERNAL_FUNCTION_PARAMETERS)
 	sprintf(workbuf, "%s/map", dir->value.str.val);
 
 	if (php3_ini.safe_mode && (!_php3_checkuid(workbuf, 2))) {
-		php3_error(E_WARNING, "SAFE MODE Restriction in effect.  Invalid owner.");
 		RETURN_FALSE;
 	}
 	
@@ -309,7 +308,6 @@ void php3_filepro_rowcount(INTERNAL_FUNCTION_PARAMETERS)
 	sprintf(workbuf, "%s/key", FP_GLOBAL(fp_database));
 
 	if (php3_ini.safe_mode && (!_php3_checkuid(workbuf, 2))) {
-		php3_error(E_WARNING, "SAFE MODE Restriction in effect.  Invalid owner.");
 		RETURN_FALSE;
 	}
 	
@@ -519,7 +517,6 @@ void php3_filepro_retrieve(INTERNAL_FUNCTION_PARAMETERS)
 	sprintf(workbuf, "%s/key", FP_GLOBAL(fp_database));
 
 	if (php3_ini.safe_mode && (!_php3_checkuid(workbuf, 2))) {
-		php3_error(E_WARNING, "SAFE MODE Restriction in effect.  Invalid owner.");
 		RETURN_FALSE;
 	}
 	

@@ -7,3 +7,5 @@ Current Known Bugs:
 * split() function doesn't return regex errors nicely
 * Preprocessed scripts don't work with require() and define()
 * unset() doesn't actually erase the variables it just marks them as uninitialized
+* Some parts in the language core prevent more than 256 arguments in function
+  calls from being possible

@@ -1,0 +1,9 @@
+--$Id: 002.php3t,v 1.1 1998/08/23 11:10:15 rocky Exp $
+--TITLE--
+Static variables in functions                                 ...
+--URL--
+func/002.phtml
+--EXPECT--
+hey=0, 0
+hey=1, -1
+hey=2, -2

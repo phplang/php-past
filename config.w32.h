@@ -65,6 +65,7 @@
 #define HAVE_LIBGD 1
 #define HAVE_LIBGD13 1
 #define HAVE_LIBTTF 1
+#define HAVE_IMAP 1
 
 #else
 #define HAVE_SNMP 0
@@ -320,3 +321,5 @@
 
 /* Define if you have the rint function.  */
 #undef HAVE_RINT
+
+#define HAVE_STRFTIME 1

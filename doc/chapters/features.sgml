@@ -23,7 +23,7 @@
 <programlisting role=php>
 &lt;?php
   if(!isset($PHP_AUTH_USER)) {
-    Header(&quot;WWW-authenticate: basic realm=\&quot;My Realm\&quot;&quot;);
+    Header(&quot;WWW-Authenticate: Basic realm=\&quot;My Realm\&quot;&quot;);
     Header(&quot;HTTP/1.0 401 Unauthorized&quot;);
     echo &quot;Text to send if user hits Cancel button\n&quot;;
     exit;
@@ -41,7 +41,7 @@
    <para>
     Watch out for buggy Internet Explorer browsers out there.  They
     seem very picky about the order of the headers.  Sending the
-    <emphasis>WWW-authenticate</emphasis> header before the
+    <emphasis>WWW-Authenticate</emphasis> header before the
     <errorcode>HTTP/1.0 401</errorcode> header seems to do the trick
     for now.
    <para>

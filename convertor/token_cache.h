@@ -29,7 +29,7 @@
  */
 
 
-/* $Id: token_cache.h,v 1.6 1998/05/16 11:53:42 zeev Exp $ */
+/* $Id: token_cache.h,v 1.7 1998/09/10 23:57:12 zeev Exp $ */
 
 
 #ifndef _TOKEN_CACHE
@@ -69,8 +69,8 @@ typedef union {
 } control_structure_data;		/* control-structure data */
 
 
-typedef struct _yystype_struct _yystype;
-#define pval _yystype
+typedef struct _pvalue_struct _pvalue;
+#define pval _pvalue
 #define YYSTYPE pval
 
 typedef union {
@@ -78,10 +78,10 @@ typedef union {
 	double dval;				/* double value */
 	char *strval;				/* string value */
 	char chval;					/* char value */
-	void *yystype_ptr;  /* used for implementation of multi-dimensional arrays */
-} yystype_value;
+	void *pvalue_ptr;  /* used for implementation of multi-dimensional arrays */
+} pvalue_value;
 
-struct _yystype_struct {
+struct _pvalue_struct {
 	/* Variable information */
 	unsigned short type;		/* active type */
 
@@ -91,7 +91,7 @@ struct _yystype_struct {
 
 	unsigned char *func_arg_types;  /* optionally used to force passing by reference */
 
-	yystype_value value;		/* value */
+	pvalue_value value;		/* value */
 	int strlen;		/* string length */
 };
 

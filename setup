@@ -29,11 +29,23 @@
 # |             Ariel Shkedi <ars@ziplink.net> or <as@altavista.net>     |
 # +----------------------------------------------------------------------+
 # 
-# $Id: setup,v 1.42 1998/08/10 18:07:38 jah Exp $
+# $Id: setup,v 1.44 1998/09/22 15:57:22 steinm Exp $
 
 if [ "$1" = "-q" ]; then
     quiet_mode=on
     shift
+fi
+
+if [ `echo -e "\n" | wc -l` = 2 ]; then
+# bash supports echo -e for handling escape sequences
+	ECHO_CMD="echo -e"
+elif test -f /bin/echo; then
+	ECHO_CMD="/bin/echo"
+elif test -f /usr/bin/echo; then
+	ECHO_CMD="/usr/bin/echo"
+else
+# fall back to the default echo - \n would most probably be displayed as-is
+	ECHO_CMD="echo"
 fi
 
 if echo '\c' | grep -s c >/dev/null 2>&1
@@ -170,7 +182,7 @@ define_option()
 show_help()
 {
     echo ''
-    ( eval "echo \$option_docstring_$1" ;
+    ( eval "$ECHO_CMD \$option_docstring_$1" ;
       if test "$2" = "yesnodir"; then
 	  set $3
           echo "If you answer \`yes', the default directory is \`$2'."
@@ -289,6 +301,10 @@ define_option with-informix 'Informix support?' yesnodir \
     Informix environment, enter what $INFORMIXDIR is usually set to here.\n
     You MUST set $INFORMIXDIR before trying to compile!\n
     More info about Informix can be found at http://www.informix.com/.'
+
+define_option with-hyperwave 'Hyperwave support?' yesno no \
+'     Whether to build with Hyperwave support. More\n
+     information about Hyperwave can be found at http://www.hyperwave.com.'
 
 define_option with-ldap 'LDAP support?' yesnodir \
     'no /usr/local/ldap LDAP base install' \

@@ -29,9 +29,19 @@
  */
  
 
-/* $Id: ldap.c,v 1.53 1998/08/11 07:23:20 amitay Exp $ */
+/* $Id: ldap.c,v 1.57 1998/09/22 18:17:40 rasmus Exp $ */
+#define IS_EXT_MODULE
+#if !PHP_31 && defined(THREAD_SAFE)
+#undef THREAD_SAFE
+#endif
+#ifdef THREAD_SAFE
+#include "tls.h"
+DWORD ldapTLS;
+static int numthreads=0;
+void *ldap_mutex;
+#endif
 
-#ifndef MSVC5
+#if !(WIN32|WINNT)
 #include "config.h"
 #endif
 #include "php.h"
@@ -40,8 +50,13 @@
 #if HAVE_LDAP
 
 #if COMPILE_DL
+#if PHP_31
+#include "ext/phpdl.h"
+#include "ext/standard/dl.h"
+#else
 #include "dl/phpdl.h"
 #include "functions/dl.h"
+#endif
 #endif
 #include "php3_list.h"
 #include "php3_ldap.h"
@@ -59,25 +74,24 @@
 #define __STDC__ 1
 #endif
 
+#if PHP_31
+#include "ext/standard/php3_string.h"
+#else
 #include "functions/php3_string.h"
+#endif
 
-#include <lber.h>
-#include <ldap.h>
 
 #if THREAD_SAFE & HAVE_NSLDAP
 #include "php3_threads.h"
-struct ldap_thread_fns tfns;
 /* Structure for LDAP error values */
-struct ldap_error {
-   int le_errno; /* Corresponds to the LDAP error code */
-   char *le_matched; /* Matching components of the DN, 
-                  if an NO_SUCH_OBJECT error occurred */
-   char *le_errmsg; /* Error message */
-};
-void *ldapkey;
+#define LDAP_TLS_VARS ldap_module *PHP3_TLS_GET(ldapTLS,php3_ldap_module)
+#define LDAP_GLOBAL(a) php3_ldap_module->a
+#else
+#define LDAP_TLS_VARS
+#define LDAP_GLOBAL(a) php3_ldap_module.a
+ldap_module php3_ldap_module;
 #endif
 
-ldap_module php3_ldap_module;
 
 
 /*
@@ -113,7 +127,7 @@ function_entry ldap_functions[] = {
 
 
 php3_module_entry ldap_module_entry = {
-	"LDAP", ldap_functions, php3_minit_ldap, NULL, NULL, NULL, php3_info_ldap, STANDARD_MODULE_PROPERTIES
+	"LDAP", ldap_functions, php3_minit_ldap, php3_mshutdown_ldap, NULL, NULL, php3_info_ldap, STANDARD_MODULE_PROPERTIES
 };
 
 
@@ -123,42 +137,39 @@ DLEXPORT php3_module_entry *get_module(void ) { return &ldap_module_entry; }
 #endif
 
 
-#if THREAD_SAFE && HAVE_NSLDAP
+#if 0 /* see my note in php3_ldap.h.  smc */
 /* Function for setting thread-specific LDAP error values */
 static void php3_ldap_set_ld_error( int err, char *matched, char *errmsg, void *dummy )
 {
-   struct ldap_error *le;
-   /* Get the data structure specific to the calling thread */
-   le = GET_TLS_DATA( ldapkey );
+	LDAP_TLS_VARS;
+
    /* Set the error code returned by the LDAP operation */
-   le->le_errno = err;
+   LDAP_GLOBAL(le_errno) = err;
    /* Specify the components of the DN that matched (if 
       an "NO_SUCH_OBJECT" error occurred */
-   if ( le->le_matched != NULL ) {
-      ldap_memfree( le->le_matched );
+   if ( LDAP_GLOBAL(le_matched) != NULL ) {
+      ldap_memfree( LDAP_GLOBAL(le_matched) );
    }
-   le->le_matched = matched;
+   LDAP_GLOBAL(le_matched) = matched;
    /* Specify the error message corresponding to the error code */
-   if ( le->le_errmsg != NULL ) {
-      ldap_memfree( le->le_errmsg );
+   if ( LDAP_GLOBAL(le_errmsg) != NULL ) {
+      ldap_memfree( LDAP_GLOBAL(le_errmsg) );
    }
-   le->le_errmsg = errmsg;
+   LDAP_GLOBAL(le_errmsg) = errmsg;
 }
 
 /* Function for getting the thread-specific LDAP error values */
 static int php3_ldap_get_ld_error( char **matched, char **errmsg, void *dummy )
 {
-   struct ldap_error *le;
-   /* Get the data values specific to the calling thread */
-   le = GET_TLS_DATA( ldapkey );
+	LDAP_TLS_VARS;
    /* Retrieve the error values */
    if ( matched != NULL ) {
-      *matched = le->le_matched;
+      *matched = LDAP_GLOBAL(le_matched);
    }
    if ( errmsg != NULL ) {
-      *errmsg = le->le_errmsg;
+      *errmsg = LDAP_GLOBAL(le_errmsg);
    }
-   return( le->le_errno );
+   return( LDAP_GLOBAL(le_errno) );
 }
 
 /* Function for setting the value of the errno variable */
@@ -172,13 +183,14 @@ static int php3_ldap_get_errno( void )
 {
    return( errno );
 }
-#endif
+#endif /* THREAD_SAFE && NSLDAP */
 
 static void _close_ldap_link(LDAP *ld)
 {
+	LDAP_TLS_VARS;
   	ldap_unbind_s(ld);
 	/* php3_printf("Freeing ldap connection");*/
-	php3_ldap_module.num_links--;
+	LDAP_GLOBAL(num_links)--;
 }
 
 
@@ -187,68 +199,90 @@ static void _free_ldap_result(LDAPMessage *result)
         ldap_msgfree(result);
 }
 
-#if 0
-static void _free_ber_entry(BerElement *ber)
-{
-  /*if (ber!=NULL) ber_free(ber,0);*/
-}
-#endif
-
 int php3_minit_ldap(INIT_FUNC_ARGS)
 {
-#if THREAD_SAFE && HAVE_NSLDAP
+#if defined(THREAD_SAFE)
+	ldap_module	*php3_ldap_module;
+	PHP3_MUTEX_ALLOC(ldap_mutex);
+	PHP3_MUTEX_LOCK(ldap_mutex);
+	numthreads++;
+	if (numthreads==1){
+		if (!PHP3_TLS_PROC_STARTUP(ldapTLS)){
+			PHP3_MUTEX_UNLOCK(ldap_mutex);
+			PHP3_MUTEX_FREE(ldap_mutex);
+			return 0;
+		}
+	}
+	PHP3_MUTEX_UNLOCK(ldap_mutex);
+	if(!PHP3_TLS_THREAD_INIT(ldapTLS,php3_ldap_module,ldap_module))
+		return 0;
+#if 0 /*HAVE_NSLDAP*/
    /* Set up the ldap_thread_fns structure with pointers 
       to the functions that you want called */
-   memset( &tfns, '\0', sizeof(struct ldap_thread_fns) );
+   memset( &LDAP_GLOBAL(tfns), '\0', sizeof(struct ldap_thread_fns) );
    /* Specify the functions that you want called */
    /* Call the my_mutex_alloc() function whenever mutexes 
       need to be allocated */
-   tfns.ltf_mutex_alloc = (void *(*)(void)) php3_mutex_alloc;
+   LDAP_GLOBAL(tfns).ltf_mutex_alloc = (void *(*)(void)) php3_mutex_alloc;
    /* Call the my_mutex_free() function whenever mutexes 
       need to be destroyed */
-   tfns.ltf_mutex_free = (void (*)(void *)) php3_mutex_free;
+   LDAP_GLOBAL(tfns).ltf_mutex_free = (void (*)(void *)) php3_mutex_free;
    /* Call the pthread_mutex_lock() function whenever a 
       thread needs to lock a mutex. */
-   tfns.ltf_mutex_lock = (int (*)(void *)) php3_mutex_lock;
+   LDAP_GLOBAL(tfns).ltf_mutex_lock = (int (*)(void *)) php3_mutex_lock;
    /* Call the pthread_mutex_unlock() function whenever a 
       thread needs to unlock a mutex. */
-   tfns.ltf_mutex_unlock = (int (*)(void *)) php3_mutex_unlock;
+   LDAP_GLOBAL(tfns).ltf_mutex_unlock = (int (*)(void *)) php3_mutex_unlock;
    /* Call the get_errno() function to get the value of errno */
-   tfns.ltf_get_errno = php3_ldap_get_errno;
+   LDAP_GLOBAL(tfns).ltf_get_errno = php3_ldap_get_errno;
    /* Call the set_errno() function to set the value of errno */
-   tfns.ltf_set_errno = php3_ldap_set_errno;
+   LDAP_GLOBAL(tfns).ltf_set_errno = php3_ldap_set_errno;
    /* Call the get_ld_error() function to get error values from 
       calls to functions in the libldap library */
-   tfns.ltf_get_lderrno = php3_ldap_get_ld_error;
+   LDAP_GLOBAL(tfns).ltf_get_lderrno = php3_ldap_get_ld_error;
    /* Call the set_ld_error() function to set error values for 
       calls to functions in the libldap library */
-   tfns.ltf_set_lderrno = php3_ldap_set_ld_error;
+   LDAP_GLOBAL(tfns).ltf_set_lderrno = php3_ldap_set_ld_error;
    /* Don't pass any extra parameter to the functions for 
      getting and setting libldap function call errors */
-   tfns.ltf_lderrno_arg = NULL;
+   LDAP_GLOBAL(tfns).ltf_lderrno_arg = NULL;
 /* Set the session option that specifies the functions to call for multi-threaded clients */
-	if (ldap_set_option( ld, LDAP_OPT_THREAD_FN_PTRS, (void *) &tfns)!= 0) {
+	if (ldap_set_option( ld, LDAP_OPT_THREAD_FN_PTRS, (void *) &LDAP_GLOBAL(tfns))!= 0) {
 		ldap_perror( ld, "ldap_set_option: thread pointers" );
 	}
 #endif
-	if (cfg_get_long("ldap.max_links", &php3_ldap_module.max_links) == FAILURE) {
-		php3_ldap_module.max_links = -1;
+#endif
+	if (cfg_get_long("ldap.max_links", &LDAP_GLOBAL(max_links)) == FAILURE) {
+		LDAP_GLOBAL(max_links) = -1;
 	}
 
-	if (cfg_get_string("ldap.base_dn", &php3_ldap_module.base_dn) == FAILURE) {
-		php3_ldap_module.base_dn = NULL;
+	if (cfg_get_string("ldap.base_dn", &LDAP_GLOBAL(base_dn)) == FAILURE) {
+		LDAP_GLOBAL(base_dn) = NULL;
 	}
 
-	php3_ldap_module.le_result = register_list_destructors(_free_ldap_result, NULL);
-	php3_ldap_module.le_result_entry = register_list_destructors(NULL, NULL);
-	php3_ldap_module.le_ber_entry = register_list_destructors(NULL, NULL);
-	php3_ldap_module.le_link = register_list_destructors(_close_ldap_link, NULL);
+	LDAP_GLOBAL(le_result) = register_list_destructors(_free_ldap_result, NULL);
+	LDAP_GLOBAL(le_link) = register_list_destructors(_close_ldap_link, NULL);
 
+	/*FIXME is this safe in threaded environment? if so, please comment*/
 	ldap_module_entry.type = type;
 
 	return SUCCESS;
 }
 
+int php3_mshutdown_ldap(void){
+#ifdef THREAD_SAFE
+	LDAP_TLS_VARS;
+	PHP3_TLS_THREAD_FREE(php3_ldap_module);
+	PHP3_MUTEX_LOCK(ldap_mutex);
+	numthreads--;
+	if (!numthreads) {
+		PHP3_TLS_PROC_SHUTDOWN(ldapTLS);
+	}
+	PHP3_MUTEX_UNLOCK(ldap_mutex);
+	PHP3_MUTEX_FREE(ldap_mutex);
+#endif
+	return SUCCESS;
+}
 
 void php3_info_ldap(void)
 {
@@ -259,23 +293,24 @@ void php3_info_ldap(void)
 	/* Print version information */
 	SDKVersion = ldap_version( &ver );
 #endif
+	LDAP_TLS_VARS;
 
-	if (php3_ldap_module.max_links == -1) {
+	if (LDAP_GLOBAL(max_links) == -1) {
 		strcpy(maxl, "Unlimited");
 	} else {
-		snprintf(maxl, 15, "%ld", php3_ldap_module.max_links);
+		snprintf(maxl, 15, "%ld", LDAP_GLOBAL(max_links));
 		maxl[15] = 0;
 	}
 
 	php3_printf("<table>"
 				"<tr><td>Total links:</td><td>%d/%s</td></tr>\n"
-		        "<tr><td>RCS Version:</td><td>$Id: ldap.c,v 1.53 1998/08/11 07:23:20 amitay Exp $</td></tr>\n"
+		        "<tr><td>RCS Version:</td><td>$Id: ldap.c,v 1.57 1998/09/22 18:17:40 rasmus Exp $</td></tr>\n"
 #if HAVE_NSLDAP
 				"<tr><td>SDK Version:</td><td>%f</td></tr>"
 				"<tr><td>Highest LDAP Protocol Supported:</td><td>%f</td></tr>"
 				"<tr><td>SSL Level Supported:</td><td>%f</td></tr>"
 #endif
-				,php3_ldap_module.num_links,maxl
+				,LDAP_GLOBAL(num_links),maxl
 #if HAVE_NSLDAP
 				,SDKVersion/100.0,ver.protocol_version/100.0,ver.SSL_version/100.0
 #endif
@@ -299,6 +334,7 @@ void php3_ldap_connect(INTERNAL_FUNCTION_PARAMETERS)
 	/*	char *hashed_details;
 	int hashed_details_length;*/
 	LDAP *ldap;
+	LDAP_TLS_VARS;
 
 	switch(ARG_COUNT(ht)) {
 		case 0: 
@@ -349,8 +385,8 @@ void php3_ldap_connect(INTERNAL_FUNCTION_PARAMETERS)
 			break;
 	}
 
-	if (php3_ldap_module.max_links!=-1 && php3_ldap_module.num_links>=php3_ldap_module.max_links) {
-	  php3_error(E_WARNING, "LDAP: Too many open links (%d)", php3_ldap_module.num_links);
+	if (LDAP_GLOBAL(max_links)!=-1 && LDAP_GLOBAL(num_links)>=LDAP_GLOBAL(max_links)) {
+	  php3_error(E_WARNING, "LDAP: Too many open links (%d)", LDAP_GLOBAL(num_links));
 	  RETURN_FALSE;
 	}
 
@@ -358,7 +394,7 @@ void php3_ldap_connect(INTERNAL_FUNCTION_PARAMETERS)
 	if ( ldap == NULL ) {
 	  RETURN_FALSE;
 	} else {
-	  RETURN_LONG(php3_list_insert((void*)ldap,php3_ldap_module.le_link));
+	  RETURN_LONG(php3_list_insert((void*)ldap,LDAP_GLOBAL(le_link)));
 	}
 
 }
@@ -366,13 +402,14 @@ void php3_ldap_connect(INTERNAL_FUNCTION_PARAMETERS)
 
 static LDAP * _get_ldap_link(pval *link, HashTable *list)
 {
-LDAP *ldap;
-int type;
+	LDAP *ldap;
+	int type;
+	LDAP_TLS_VARS;
 
 	convert_to_long(link);
 	ldap = (LDAP *) php3_list_find(link->value.lval, &type);
 	
-	if (!ldap || !(type == php3_ldap_module.le_link)) {
+	if (!ldap || !(type == LDAP_GLOBAL(le_link))) {
 	  php3_error(E_WARNING, "%d is not a LDAP link index", link->value.lval);
 	  return NULL;
 	}
@@ -382,13 +419,14 @@ int type;
 
 static LDAPMessage * _get_ldap_result(pval *result, HashTable *list)
 {
-LDAPMessage *ldap_result;
-int type;
+	LDAPMessage *ldap_result;
+	int type;
+	LDAP_TLS_VARS;
 
 	convert_to_long(result);
 	ldap_result = (LDAPMessage *) php3_list_find(result->value.lval, &type);
 
-	if (!ldap_result || type != php3_ldap_module.le_result) {
+	if (!ldap_result || type != LDAP_GLOBAL(le_result)) {
 		php3_error(E_WARNING, "%d is not a LDAP result index", result->value.lval);
 		return NULL;
 	}
@@ -399,13 +437,14 @@ int type;
 
 static LDAPMessage * _get_ldap_result_entry(pval *result, HashTable *list)
 {
-LDAPMessage *ldap_result_entry;
-int type;
+	LDAPMessage *ldap_result_entry;
+	int type;
+	LDAP_TLS_VARS;
 
 	convert_to_long(result);
 	ldap_result_entry = (LDAPMessage *) php3_list_find(result->value.lval, &type);
 
-	if (!ldap_result_entry || type != php3_ldap_module.le_result_entry) {
+	if (!ldap_result_entry || type != LDAP_GLOBAL(le_result_entry)) {
 		php3_error(E_WARNING, "%d is not a LDAP result entry index", result->value.lval);
 		return NULL;
 	}
@@ -416,13 +455,14 @@ int type;
 
 static BerElement * _get_ber_entry(pval *berp, HashTable *list)
 {
-BerElement *ber;
-int type;
+	BerElement *ber;
+	int type;
+	LDAP_TLS_VARS;
 
 	convert_to_long(berp);
 	ber = (BerElement *) php3_list_find(berp->value.lval, &type);
 
-	if ( type != php3_ldap_module.le_ber_entry) {
+	if ( type != LDAP_GLOBAL(le_ber_entry)) {
 		php3_error(E_WARNING, "%d is not a BerElement index", berp->value.lval);
 		return NULL;
 	}
@@ -514,13 +554,14 @@ LDAP *ldap;
 
 static void php3_ldap_do_search(INTERNAL_FUNCTION_PARAMETERS, int scope)
 {
-pval *link, *base_dn, *filter, *attrs, *attr;
-char *ldap_base_dn, *ldap_filter;
-LDAP *ldap;
-char **ldap_attrs = NULL; 
-int attrsonly;
-LDAPMessage *ldap_result;
-int num_attribs=0, i;
+	pval *link, *base_dn, *filter, *attrs, *attr;
+	char *ldap_base_dn, *ldap_filter;
+	LDAP *ldap;
+	char **ldap_attrs = NULL; 
+	int attrsonly;
+	LDAPMessage *ldap_result;
+	int num_attribs=0, i;
+	LDAP_TLS_VARS;
 
 	switch(ARG_COUNT(ht)) {
 		case 3 :
@@ -596,7 +637,7 @@ int num_attribs=0, i;
 #endif
 		RETVAL_FALSE;
 	} else  {
-		RETVAL_LONG(php3_list_insert(ldap_result, php3_ldap_module.le_result));
+		RETVAL_LONG(php3_list_insert(ldap_result, LDAP_GLOBAL(le_result)));
 	}
 
 	if (ldap_attrs != NULL) {
@@ -668,10 +709,11 @@ LDAPMessage *ldap_result;
 
 void php3_ldap_first_entry(INTERNAL_FUNCTION_PARAMETERS)
 {
-pval *result, *link;
-LDAP *ldap;
-LDAPMessage *ldap_result;
-LDAPMessage *ldap_result_entry;
+	pval *result, *link;
+	LDAP *ldap;
+	LDAPMessage *ldap_result;
+	LDAPMessage *ldap_result_entry;
+	LDAP_TLS_VARS;
 
 	if (ARG_COUNT(ht) != 2 || getParameters(ht, 2, &link, &result) == FAILURE) {
 		WRONG_PARAM_COUNT;
@@ -687,16 +729,17 @@ LDAPMessage *ldap_result_entry;
 	        /* php3_error(E_WARNING, "LDAP: Unable to read the entries from result : %s", ldap_err2string(ldap->ld_errno));*/
 		RETURN_FALSE;
 	} else {
-		RETURN_LONG(php3_list_insert(ldap_result_entry, php3_ldap_module.le_result_entry));
+		RETURN_LONG(php3_list_insert(ldap_result_entry, LDAP_GLOBAL(le_result_entry)));
 	}
 }
 
 
 void php3_ldap_next_entry(INTERNAL_FUNCTION_PARAMETERS)
 {
-pval *result_entry, *link;
-LDAP *ldap;
-LDAPMessage *ldap_result_entry, *ldap_result_entry_next;
+	pval *result_entry, *link;
+	LDAP *ldap;
+	LDAPMessage *ldap_result_entry, *ldap_result_entry_next;
+	LDAP_TLS_VARS;
 
 	if (ARG_COUNT(ht) != 2 || getParameters(ht, 2, &link, &result_entry) == FAILURE) {
 		WRONG_PARAM_COUNT;
@@ -713,7 +756,7 @@ LDAPMessage *ldap_result_entry, *ldap_result_entry_next;
 		RETURN_FALSE;
 	} else {
 	/* php3_list_delete(result->value.lval); */
-		RETURN_LONG(php3_list_insert(ldap_result_entry_next, php3_ldap_module.le_result_entry));
+		RETURN_LONG(php3_list_insert(ldap_result_entry_next, LDAP_GLOBAL(le_result_entry)));
 	}
 }
 
@@ -776,7 +819,7 @@ char *dn;
 			for(i=0; i<num_values; i++) {
 				add_index_string(&tmp2, i, ldap_value[i], 1);
 			}	
-			free(ldap_value);
+			ldap_value_free(ldap_value);
 
 			_php3_hash_update(tmp1.value.ht, _php3_strtolower(attribute), strlen(attribute)+1, (void *) &tmp2, sizeof(pval), NULL);
 			add_index_string(&tmp1, attr_count, attribute, 1);
@@ -801,11 +844,12 @@ char *dn;
 
 void php3_ldap_first_attribute(INTERNAL_FUNCTION_PARAMETERS)
 {
-pval *result,*link,*berp;
-LDAP *ldap;
-LDAPMessage *ldap_result_entry;
-BerElement *ber;
-char *attribute;
+	pval *result,*link,*berp;
+	LDAP *ldap;
+	LDAPMessage *ldap_result_entry;
+	BerElement *ber;
+	char *attribute;
+	LDAP_TLS_VARS;
 
 	if (ARG_COUNT(ht) != 3 || getParameters(ht, 3, &link, &result,&berp) == FAILURE || ParameterPassedByReference(ht,3)==0 ) {
 		WRONG_PARAM_COUNT;
@@ -823,7 +867,7 @@ char *attribute;
 	} else {
 		/* brep is passed by ref so we do not have to account for memory */
 		berp->type=IS_LONG;
-		berp->value.lval=php3_list_insert(ber, php3_ldap_module.le_ber_entry);
+		berp->value.lval=php3_list_insert(ber, LDAP_GLOBAL(le_ber_entry));
 
 		RETVAL_STRING(attribute,1);
 #ifdef WINDOWS
@@ -907,7 +951,7 @@ BerElement *ber;
 		for(i=0; i<num_values; i++) {
 			add_index_string(&tmp, i, ldap_value[i], 1);
 		}
-		free(ldap_value);
+		ldap_value_free(ldap_value);
 
 		_php3_hash_update(return_value->value.ht, attribute, strlen(attribute)+1, (void *) &tmp, sizeof(pval), NULL);
 		add_index_string(return_value, count, attribute, 1);
@@ -1058,7 +1102,7 @@ char *ldap_dn;
 LDAPMod **ldap_mods;
 int i, j, num_attribs, num_values;
 char *attribute;
-int index;
+ulong index;
 
 	if (ARG_COUNT(ht) != 3 || getParameters(ht, 3, &link, &dn, &entry) == FAILURE) {
 		WRONG_PARAM_COUNT;

@@ -24,7 +24,7 @@
 #
 # Written by Stig Bakken <ssb@guardian.no> 1997-05-28.
 #
-# $Id: makedist,v 1.21 1998/08/15 13:56:12 rasmus Exp $
+# $Id: makedist,v 1.22 1998/08/15 14:29:14 rasmus Exp $
 #
 
 CVSROOT=:pserver:cvsread@cvs.php.net:/repository
@@ -119,6 +119,7 @@ tar czf $ARCHIVE $PKG-$VER || exit 8
 echo ""
 
 $ECHO_N "makedist: cleaning up...$ECHO_C"
+cd $OLDPWD
 rm -rf $TMPDIR || exit 9
 echo ""
 

@@ -24,9 +24,10 @@
    | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
    | Authors: Rasmus Lerdorf <rasmus@lerdorf.on.ca>                       |
+   |          Zeev Suraski <bourbon@netvision.net.il                      |
    +----------------------------------------------------------------------+
  */
-/* $Id: rand.c,v 1.25 1998/05/15 10:57:36 zeev Exp $ */
+/* $Id: rand.c,v 1.26 1998/08/26 19:44:42 zeev Exp $ */
 
 #include <stdlib.h>
 
@@ -59,6 +60,26 @@ void php3_srand(INTERNAL_FUNCTION_PARAMETERS)
 
 void php3_rand(INTERNAL_FUNCTION_PARAMETERS)
 {
+	pval *p_min=NULL, *p_max=NULL;
+	
+	switch (ARG_COUNT(ht)) {
+		case 0:
+			break;
+		case 2:
+			if (getParameters(ht, 2, &p_min, &p_max)==FAILURE) {
+				RETURN_FALSE;
+			}
+			convert_to_long(p_min);
+			convert_to_long(p_max);
+			if (p_max->value.lval-p_min->value.lval <= 0) {
+				php3_error(E_WARNING,"rand():  Invalid range:  %ld..%ld", p_min->value.lval, p_max->value.lval);
+			}
+			break;
+		default:
+			WRONG_PARAM_COUNT;
+			break;
+	}
+			
 	return_value->type = IS_LONG;
 #ifdef HAVE_LRAND48
 	return_value->value.lval = lrand48();
@@ -69,6 +90,10 @@ void php3_rand(INTERNAL_FUNCTION_PARAMETERS)
 	return_value->value.lval = rand();
 #endif
 #endif
+
+	if (p_min && p_max) { /* implement range */
+		return_value->value.lval = (return_value->value.lval%(p_max->value.lval-p_min->value.lval+1))+p_min->value.lval;
+	}
 }
 
 void php3_getrandmax(INTERNAL_FUNCTION_PARAMETERS)

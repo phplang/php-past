@@ -1,0 +1,16 @@
+--$Id: inheritance.php3t,v 1.1 1998/08/31 00:20:59 rocky Exp $
+--TITLE--
+Classes inheritance test                                      ...
+--URL--
+classes/inheritance.phtml
+--EXPECT--
+This is class foo
+a = 2
+b = 5
+10
+-----
+This is class bar
+a = 4
+b = 3
+c = 12
+12

@@ -26,7 +26,7 @@
    | Authors: Rasmus Lerdorf <rasmus@lerdorf.on.ca>                       |
    +----------------------------------------------------------------------+
  */
-/* $Id: head.c,v 1.106 1998/08/07 21:37:32 rasmus Exp $ */
+/* $Id: head.c,v 1.107 1998/08/18 12:49:29 rasmus Exp $ */
 #ifdef THREAD_SAFE
 #include "tls.h"
 #endif
@@ -233,7 +233,7 @@ PHPAPI int php3_header(void)
 	CookieList *cookie;
 	int len = 0;
 	time_t t;
-	char *r, *dt;
+      char *dt, *cookievalue = NULL;
 #endif
 #if APACHE || defined(USE_SAPI) || FHTTPD
 	char *tempstr;
@@ -259,8 +259,10 @@ TLS_VARS;
 		while (cookie) {
 			if (cookie->name)
 				len += strlen(cookie->name);
-			if (cookie->value)
-				len += strlen(cookie->value);
+                      if (cookie->value) {
+                              cookievalue = _php3_urlencode(cookie->value, strlen (cookie->value));
+                              len += strlen(cookievalue);
+                      }
 			if (cookie->path)
 				len += strlen(cookie->path);
 			if (cookie->domain)
@@ -280,13 +282,13 @@ TLS_VARS;
 				efree(dt);
 			} else {
 				/* FIXME: XXX: this is not binary data safe */
-				r = _php3_urlencode(cookie->value, strlen (cookie->value));
-				sprintf(tempstr, "%s=%s", cookie->name, cookie->value ? r : "");
-				if (r) efree(r);
+                              sprintf(tempstr, "%s=%s", cookie->name, cookie->value ? cookievalue : "");
 				if (cookie->name) efree(cookie->name);
 				if (cookie->value) efree(cookie->value);
+                              if (cookievalue) efree(cookievalue);
 				cookie->name=NULL;
 				cookie->value=NULL;
+                              cookievalue=NULL;
 				if (cookie->expires > 0) {
 					strcat(tempstr, "; expires=");
 					dt = php3_std_date(cookie->expires);
@@ -314,6 +316,7 @@ TLS_VARS;
 			if (cookie->path) efree(cookie->path);
 			if (cookie->name) efree(cookie->name);
 			if (cookie->value) efree(cookie->value);
+                      if (cookievalue) efree(cookievalue);
 			efree(cookie);
 			cookie = php3_PopCookieList();
 			efree(tempstr);

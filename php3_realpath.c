@@ -54,9 +54,11 @@ char *_php3_realpath(char *path, char resolved_path []) {
 
 	char path_copy[MAXPATHLEN];				/* A work-copy of the path */
 	char *workpos;							/* working position in *path */
-	
+
+#if !(WIN32|WINNT)
 	char buf[MAXPATHLEN];					/* Buffer for readlink */
 	int linklength;							/* The result from readlink */
+#endif
 	int linkcount = 0;						/* Count symlinks to avoid loops */
 	
 	struct stat filestat;					/* result from stat */
@@ -172,6 +174,9 @@ char *_php3_realpath(char *path, char resolved_path []) {
 			while((*workpos != '\\') && (*workpos != 0)) {
 				*workpos++;
 			}
+			
+			/* Avoid double \ in the result */
+			writepos--;
 		}
 		
 		/* If it was a directory, append a slash */
@@ -182,7 +187,7 @@ char *_php3_realpath(char *path, char resolved_path []) {
 #else /* WIN32|WINNT */
 		/* Look for .. */
 		if ((workpos[0] == '.') && (workpos[1] != 0)) {
-			if ((workpos[1] == '.') && (workpos[2] == '/')) {
+			if ((workpos[1] == '.') && ((workpos[2] == '/') || (workpos[2] == 0))) {
 				/* One directory back */
 				/* Set pointers to right position */
 				workpos++;						/* move to second '.' */
@@ -194,10 +199,18 @@ char *_php3_realpath(char *path, char resolved_path []) {
 					while(*--writepos != '/') ;		/* skip until previous '/' */
 				}
 			} else {
-				/* No special case, the name just started with a . */
-				/* Append */
-				while((*workpos != '/') && (*workpos != 0)) {
-					*writepos++ = *workpos++;
+				if (workpos[1] == '/') {
+					/* Found a /./ skip it */
+					workpos++;					/* move to '/' */
+
+					/* Avoid double / in the result */
+					writepos--;
+				} else {
+					/* No special case, the name just started with a . */
+					/* Append */
+					while((*workpos != '/') && (*workpos != 0)) {
+						*writepos++ = *workpos++;
+					}
 				}
 			}
 		} else {

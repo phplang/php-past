@@ -31,7 +31,7 @@
 */
 
 
-/* $Id: language-parser.y,v 1.170 1998/08/08 14:13:28 zeev Exp $ */
+/* $Id: language-parser.y,v 1.174 1998/09/18 16:55:00 rasmus Exp $ */
 
 
 /* 
@@ -165,7 +165,9 @@ void destroy_resource_plist(void)
 int clean_module_resource(list_entry *le, int *resource_id)
 {
 	if (le->type == *resource_id) {
+#if DEBUG
 		printf("Cleaning resource %d\n",*resource_id);
+#endif
 		return 1;
 	} else {
 		return 0;
@@ -279,7 +281,7 @@ statement:
 	|	WHILE '(' expr ')' { cs_start_while(&$1, &$3 _INLINE_TLS); } while_statement { cs_end_while(&$1,&yychar _INLINE_TLS); } while_iterations
 	|	DO { cs_start_do_while(&$1 _INLINE_TLS); } statement WHILE { cs_force_eval_do_while( _INLINE_TLS_VOID); } '(' expr ')' ';'{ cs_end_do_while(&$1,&$7,&yychar _INLINE_TLS); } do_while_iterations 
 	|	FOR { for_pre_expr1(&$1 _INLINE_TLS); }
-			'(' for_expr { if (GLOBAL(Execute)) yystype_destructor(&$4 _INLINE_TLS); for_pre_expr2(&$1 _INLINE_TLS); }
+			'(' for_expr { if (GLOBAL(Execute)) pval_destructor(&$4 _INLINE_TLS); for_pre_expr2(&$1 _INLINE_TLS); }
 			';' for_expr { for_pre_expr3(&$1,&$7 _INLINE_TLS); }
 			';' for_expr { for_pre_statement(&$1,&$7,&$10 _INLINE_TLS); }
 			')' for_statement { for_post_statement(&$1,&$6,&$9,&$12,&yychar _INLINE_TLS); } for_iterations
@@ -301,7 +303,7 @@ statement:
 	|	CLASS STRING EXTENDS STRING { cs_start_class_decleration(&$2,&$4 _INLINE_TLS); } '{' class_statement_list '}' { cs_end_class_decleration( _INLINE_TLS_VOID); }
 	|	PHP_ECHO echo_expr_list ';'
 	|	INLINE_HTML { if (GLOBAL(Execute)) { if (php3_header()) PUTS($1.value.str.val); } }
-	|	expr ';'  { if (GLOBAL(Execute)) yystype_destructor(&$1 _INLINE_TLS); }
+	|	expr ';'  { if (GLOBAL(Execute)) pval_destructor(&$1 _INLINE_TLS); }
 	|	REQUIRE { cs_start_include(&$1 _INLINE_TLS); } expr ';' { cs_end_include(&$1,&$3 _INLINE_TLS); }
 	|	HIGHLIGHT_FILE expr ';' { if (GLOBAL(Execute)) cs_show_source(&$2 _INLINE_TLS); }
 	|	HIGHLIGHT_STRING '(' expr ')' ';'  { if (GLOBAL(Execute)) eval_string(&$3,NULL,1 _INLINE_TLS); }
@@ -344,7 +346,7 @@ do_while_iterations:
 for_iterations:
 		/* empty */
 	|	for_iterations CONTINUED_FOR { for_pre_expr1(&$2 _INLINE_TLS); }
-			'(' for_expr { if (GLOBAL(Execute)) yystype_destructor(&$5 _INLINE_TLS); for_pre_expr2(&$2 _INLINE_TLS); }
+			'(' for_expr { if (GLOBAL(Execute)) pval_destructor(&$5 _INLINE_TLS); for_pre_expr2(&$2 _INLINE_TLS); }
 			';' for_expr { for_pre_expr3(&$2,&$8 _INLINE_TLS); }
 			';' for_expr { for_pre_statement(&$2,&$8,&$11 _INLINE_TLS); }
 			')' for_statement { for_post_statement(&$2,&$7,&$10,&$13,&yychar _INLINE_TLS); }
@@ -466,14 +468,14 @@ class_variable_decleration:
 	
 echo_expr_list:	
 		/* empty */
-	|	echo_expr_list ',' expr { if (GLOBAL(Execute)) { print_variable(&$3 _INLINE_TLS); yystype_destructor(&$3 _INLINE_TLS); } }
-	|	expr { if (GLOBAL(Execute)) { print_variable(&$1 _INLINE_TLS); yystype_destructor(&$1 _INLINE_TLS); } }
+	|	echo_expr_list ',' expr { if (GLOBAL(Execute)) { php3i_print_variable(&$3 _INLINE_TLS); pval_destructor(&$3 _INLINE_TLS); } }
+	|	expr { if (GLOBAL(Execute)) { php3i_print_variable(&$1 _INLINE_TLS); pval_destructor(&$1 _INLINE_TLS); } }
 ;
 
 
 for_expr:
 		/* empty */ { $$.value.lval=1;  $$.type=IS_LONG; }  /* ensure empty truth values are considered TRUE */
-	|	for_expr ',' expr { if (GLOBAL(Execute)) { $$ = $3; yystype_destructor(&$1 _INLINE_TLS); } }
+	|	for_expr ',' expr { if (GLOBAL(Execute)) { $$ = $3; pval_destructor(&$1 _INLINE_TLS); } }
 	|	expr { if (GLOBAL(Execute)) $$ = $1; }
 ;
 
@@ -536,7 +538,7 @@ expr_without_variable:
 			possible_function_call { cs_functioncall_end(&$$,&$4,&$8,&yychar,1 _INLINE_TLS); }
 	|	NEW var { assign_new_object(&$$,&$2,1 _INLINE_TLS); }
 	|	NEW var	{ assign_new_object(&$$,&$2,0 _INLINE_TLS); }
-		'(' { if (!GLOBAL(shutdown_requested) && Execute) { pval object_pointer; object_pointer.value.varptr.yystype = &$3; cs_functioncall_pre_variable_passing(&$2, &object_pointer, 1 _INLINE_TLS); } }
+		'(' { if (!GLOBAL(shutdown_requested)) { pval object_pointer; object_pointer.value.varptr.pvalue = &$3; cs_functioncall_pre_variable_passing(&$2, &object_pointer, 1 _INLINE_TLS); } }
 		function_call_parameter_list ')' { cs_functioncall_post_variable_passing(&$2, &yychar _INLINE_TLS); }
 		possible_function_call { cs_functioncall_end(&$$, &$2, &$7, &yychar, 1 _INLINE_TLS);  $$ = $3; }
 	|	INT_CAST expr { if (GLOBAL(Execute)) { convert_to_long(&$2); $$ = $2; } }
@@ -546,13 +548,13 @@ expr_without_variable:
 	|	OBJECT_CAST expr { if (GLOBAL(Execute)) { convert_to_object(&$2); $$ = $2; } }
 	|	EXIT { if (GLOBAL(Execute)) { php3_header(); GLOBAL(shutdown_requested)=ABNORMAL_SHUTDOWN; $$.type=IS_LONG; $$.value.lval=1; } }
 	|	EXIT '(' ')'  { if (GLOBAL(Execute)) { php3_header(); GLOBAL(shutdown_requested)=ABNORMAL_SHUTDOWN; $$.type=IS_LONG; $$.value.lval=1; } }
-	|	EXIT '(' expr ')'  { if (GLOBAL(Execute)) { if (php3_header()) { convert_to_string(&$3);  PUTS($3.value.str.val);  yystype_destructor(&$3 _INLINE_TLS); } GLOBAL(shutdown_requested)=ABNORMAL_SHUTDOWN; $$.type=IS_LONG; $$.value.lval=1; } }
+	|	EXIT '(' expr ')'  { if (GLOBAL(Execute)) { if (php3_header()) { convert_to_string(&$3);  PUTS($3.value.str.val);  pval_destructor(&$3 _INLINE_TLS); } GLOBAL(shutdown_requested)=ABNORMAL_SHUTDOWN; $$.type=IS_LONG; $$.value.lval=1; } }
 	|	'@' { $1.cs_data.error_reporting=GLOBAL(error_reporting); GLOBAL(error_reporting)=0; } expr { GLOBAL(error_reporting)=$1.cs_data.error_reporting; $$ = $3; }
 	|	'@' error { php3_error(E_ERROR,"@ operator may only be used on expressions"); }
 	|   scalar { if (GLOBAL(Execute)) $$ = $1; }
 	|	PHP_ARRAY '(' array_pair_list ')' { if (GLOBAL(Execute)) $$ = $3; }
 	|	'`' encaps_list '`'  { cs_system(&$$,&$2 _INLINE_TLS); }
-	|	PHP_PRINT expr { if (GLOBAL(Execute)) { print_variable(&$2 _INLINE_TLS);  yystype_destructor(&$2 _INLINE_TLS);  $$.value.lval=1; $$.type=IS_LONG; } }
+	|	PHP_PRINT expr { if (GLOBAL(Execute)) { php3i_print_variable(&$2 _INLINE_TLS);  pval_destructor(&$2 _INLINE_TLS);  $$.value.lval=1; $$.type=IS_LONG; } }
 ;
 
 scalar:
@@ -599,7 +601,7 @@ unambiguous_array_name:
 
 unambiguous_class_name:
 		unambiguous_class_name PHP_CLASS_OPERATOR varname_scalar { get_object_symtable(&$$,&$1,&$3 _INLINE_TLS); }
-	|	multi_dimensional_array { if (GLOBAL(Execute)) { if ($1.value.varptr.yystype && ((pval *)$1.value.varptr.yystype)->type == IS_OBJECT) { $$=$1; } else { $$.value.varptr.yystype=NULL; } } }
+	|	multi_dimensional_array { if (GLOBAL(Execute)) { if ($1.value.varptr.pvalue && ((pval *)$1.value.varptr.pvalue)->type == IS_OBJECT) { $$=$1; } else { $$.value.varptr.pvalue=NULL; } } }
 	|	varname_scalar { get_object_symtable(&$$,NULL,&$1 _INLINE_TLS); }
 ;
 
@@ -623,7 +625,7 @@ assignment_list:
 	|	assignment_list ',' {
 	if (GLOBAL(Execute)) {
 		$$=$1;
-		$2.value.varptr.yystype = NULL; /* $2 is just used as temporary space */
+		$2.value.varptr.pvalue = NULL; /* $2 is just used as temporary space */
 		_php3_hash_next_index_insert($$.value.ht,&$2,sizeof(pval),NULL);
 	}
 }
@@ -634,7 +636,7 @@ assignment_list:
 		$$.value.ht = (HashTable *) emalloc(sizeof(HashTable));
 		_php3_hash_init($$.value.ht,0,NULL,NULL,0);
 		$$.type = IS_ARRAY;
-		tmp.value.varptr.yystype = NULL;
+		tmp.value.varptr.pvalue = NULL;
 		_php3_hash_next_index_insert($$.value.ht,&tmp,sizeof(pval),NULL);
 	}
 }
@@ -669,7 +671,7 @@ dimensions:
 
 
 array_pair_list:
-		/* empty */ { if (GLOBAL(Execute)) { $$.value.ht = (HashTable *) emalloc(sizeof(HashTable));  _php3_hash_init($$.value.ht,0,NULL,pval_DESTRUCTOR,0); $$.type = IS_ARRAY; } }
+		/* empty */ { if (GLOBAL(Execute)) { $$.value.ht = (HashTable *) emalloc(sizeof(HashTable));  _php3_hash_init($$.value.ht,0,NULL,PVAL_DESTRUCTOR,0); $$.type = IS_ARRAY; } }
 	|	non_empty_array_pair_list { $$ = $1; }
 ;
 
@@ -760,7 +762,7 @@ int call_user_function(HashTable *function_table, pval *object, pval *function_n
 
 	tc_set_token(&token_cache_manager, func->offset, IC_FUNCTION);
 	if (object) {
-		class_ptr.value.varptr.yystype = object;
+		class_ptr.value.varptr.pvalue = object;
 		cs_functioncall_pre_variable_passing(function_name, &class_ptr, 0 _INLINE_TLS);
 	} else {
 		cs_functioncall_pre_variable_passing(function_name,NULL, 0 _INLINE_TLS);

@@ -1,0 +1,8 @@
+--$Id: 007.php3t,v 1.2 1998/08/23 02:23:05 rocky Exp $
+--TITLE--
+Multiply 3 variables and print result, null POST data         ...
+--URL--
+basic/007.phtml
+--POST--
+--EXPECT--
+77

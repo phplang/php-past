@@ -29,7 +29,7 @@
  */
 
 
-/* $Id: operators.c,v 1.96 1998/08/13 20:22:53 zeev Exp $ */
+/* $Id: operators.c,v 1.97 1998/09/10 23:56:56 zeev Exp $ */
 
 #ifdef THREAD_SAFE
 #include "tls.h"
@@ -107,13 +107,13 @@ PHPAPI void convert_to_long_base(pval *op, int base)
 		case IS_ARRAY:
 		case IS_OBJECT:
 			tmp = (_php3_hash_num_elements(op->value.ht)?1:0);
-			yystype_destructor(op _INLINE_TLS);
+			pval_destructor(op _INLINE_TLS);
 			op->value.lval = tmp;
 			op->type = IS_LONG;
 			break;
 		default:
 			php3_error(E_WARNING, "Cannot convert to ordinal value");
-			yystype_destructor(op _INLINE_TLS);
+			pval_destructor(op _INLINE_TLS);
 			op->value.lval = 0;
 			op->type = IS_LONG;
 			break;
@@ -146,13 +146,13 @@ PHPAPI void convert_to_double(pval *op)
 		case IS_ARRAY:
 		case IS_OBJECT:
 			tmp = (_php3_hash_num_elements(op->value.ht)?1:0);
-			yystype_destructor(op _INLINE_TLS);
+			pval_destructor(op _INLINE_TLS);
 			op->value.dval = tmp;
 			op->type = IS_DOUBLE;
 			break;
 		default:
 			php3_error(E_WARNING, "Cannot convert to real value");
-			yystype_destructor(op _INLINE_TLS);
+			pval_destructor(op _INLINE_TLS);
 			op->value.dval = 0;
 			op->type = IS_DOUBLE;
 			break;
@@ -188,12 +188,12 @@ PHPAPI void convert_to_boolean_long(pval *op)
 		case IS_ARRAY:
 		case IS_OBJECT:
 			tmp = (_php3_hash_num_elements(op->value.ht)?1:0);
-			yystype_destructor(op _INLINE_TLS);
+			pval_destructor(op _INLINE_TLS);
 			op->value.lval = tmp;
 			op->type = IS_LONG;
 			break;
 		default:
-			yystype_destructor(op _INLINE_TLS);
+			pval_destructor(op _INLINE_TLS);
 			op->value.lval = 0;
 			op->type = IS_LONG;
 			break;
@@ -232,19 +232,19 @@ PHPAPI void convert_to_string(pval *op)
 			break;
 		}
 		case IS_ARRAY:
-			yystype_destructor(op _INLINE_TLS);
+			pval_destructor(op _INLINE_TLS);
 			op->value.str.val = estrndup("Array",sizeof("Array")-1);
 			op->value.str.len = sizeof("Array")-1;
 			op->type = IS_STRING;
 			break;
 		case IS_OBJECT:
-			yystype_destructor(op _INLINE_TLS);
+			pval_destructor(op _INLINE_TLS);
 			op->value.str.val = estrndup("Object",sizeof("Object")-1);
 			op->value.str.len = sizeof("Object")-1;
 			op->type = IS_STRING;
 			break;
 		default:
-			yystype_destructor(op _INLINE_TLS);
+			pval_destructor(op _INLINE_TLS);
 			var_reset(op);
 			break;
 	}
@@ -256,7 +256,7 @@ static void convert_scalar_to_array(pval *op,int type)
 	pval tmp = *op;
 	
 	op->value.ht = (HashTable *) emalloc(sizeof(HashTable));
-	_php3_hash_init(op->value.ht, 0, NULL, pval_DESTRUCTOR, 0);
+	_php3_hash_init(op->value.ht, 0, NULL, PVAL_DESTRUCTOR, 0);
 	switch (type) {
 		case IS_ARRAY:
 			_php3_hash_index_update(op->value.ht, 0, (void *) &tmp, sizeof(pval), NULL);
@@ -310,9 +310,9 @@ int add_function(pval *result, pval *op1, pval *op2 INLINE_TLS)
 	if (op1->type == IS_ARRAY && op2->type == IS_ARRAY) {
 		pval tmp;
 		
-		_php3_hash_merge(op1->value.ht,op2->value.ht,(void (*)(void *pData)) yystype_copy_constructor, (void *) &tmp, sizeof(pval));
+		_php3_hash_merge(op1->value.ht,op2->value.ht,(void (*)(void *pData)) pval_copy_constructor, (void *) &tmp, sizeof(pval));
 		*result = *op1;
-		yystype_destructor(op2 _INLINE_TLS);
+		pval_destructor(op2 _INLINE_TLS);
 		return SUCCESS;
 	}
 	if (php3_ini.warn_plus_overloading) {
@@ -349,8 +349,8 @@ int add_function(pval *result, pval *op1, pval *op2 INLINE_TLS)
 		result->value.dval = op1->value.dval + op2->value.dval;
 		return SUCCESS;
 	}
-	yystype_destructor(op1 _INLINE_TLS);
-	yystype_destructor(op2 _INLINE_TLS);
+	pval_destructor(op1 _INLINE_TLS);
+	pval_destructor(op2 _INLINE_TLS);
 	var_reset(result);
 	return FAILURE;				/* unknown datatype */
 }
@@ -386,8 +386,8 @@ int sub_function(pval *result, pval *op1, pval *op2 INLINE_TLS)
 		result->value.dval = op1->value.dval - op2->value.dval;
 		return SUCCESS;
 	}
-	yystype_destructor(op1 _INLINE_TLS);
-	yystype_destructor(op2 _INLINE_TLS);
+	pval_destructor(op1 _INLINE_TLS);
+	pval_destructor(op2 _INLINE_TLS);
 	var_reset(result);
 	return FAILURE;				/* unknown datatype */
 }
@@ -423,8 +423,8 @@ int mul_function(pval *result, pval *op1, pval *op2 INLINE_TLS)
 		result->value.dval = op1->value.dval * op2->value.dval;
 		return SUCCESS;
 	}
-	yystype_destructor(op1 _INLINE_TLS);
-	yystype_destructor(op2 _INLINE_TLS);
+	pval_destructor(op1 _INLINE_TLS);
+	pval_destructor(op2 _INLINE_TLS);
 	var_reset(result);
 	return FAILURE;				/* unknown datatype */
 }
@@ -462,8 +462,8 @@ int div_function(pval *result, pval *op1, pval *op2 INLINE_TLS)
 		result->value.dval = op1->value.dval / op2->value.dval;
 		return SUCCESS;
 	}
-	yystype_destructor(op1 _INLINE_TLS);
-	yystype_destructor(op2 _INLINE_TLS);
+	pval_destructor(op1 _INLINE_TLS);
+	pval_destructor(op2 _INLINE_TLS);
 	var_reset(result);
 	return FAILURE;				/* unknown datatype */
 }
@@ -578,7 +578,7 @@ int bitwise_not_function(pval *result, pval *op1 INLINE_TLS)
 		}
 		return SUCCESS;
 	}
-	yystype_destructor(op1 _INLINE_TLS);
+	pval_destructor(op1 _INLINE_TLS);
 	var_reset(result);
 	return FAILURE;				/* unknown datatype */
 }
@@ -703,8 +703,8 @@ int shift_right_function(pval *result, pval *op1, pval *op2 INLINE_TLS)
 int add_char_to_string(pval *result, pval *op1, pval *op2 INLINE_TLS)
 {
 	if (op1->type != IS_STRING) {
-		yystype_destructor(op1 _INLINE_TLS);
-		yystype_destructor(op2 _INLINE_TLS);
+		pval_destructor(op1 _INLINE_TLS);
+		pval_destructor(op2 _INLINE_TLS);
 		var_reset(result);
 		return FAILURE;
 	}
@@ -740,9 +740,9 @@ int concat_function(pval *result, pval *op1, pval *op2, int free_op2 INLINE_TLS)
 		}
 		return SUCCESS;
 	}
-	yystype_destructor(op1 _INLINE_TLS);
+	pval_destructor(op1 _INLINE_TLS);
 	if (free_op2) {
-		yystype_destructor(op2 _INLINE_TLS);
+		pval_destructor(op2 _INLINE_TLS);
 	}
 	var_reset(result);
 	return FAILURE;				/* unknown datatype */
@@ -776,8 +776,8 @@ int compare_function(pval *result, pval *op1, pval *op2 INLINE_TLS)
 	if ((op1->type & IS_HASH) && (op2->type & IS_HASH)) {
 		php3_error(E_WARNING,"Cannot compare arrays or objects");
 	}
-	yystype_destructor(op1 _INLINE_TLS);
-	yystype_destructor(op2 _INLINE_TLS);
+	pval_destructor(op1 _INLINE_TLS);
+	pval_destructor(op2 _INLINE_TLS);
 	var_reset(result);
 	return FAILURE;
 }
@@ -1057,7 +1057,7 @@ int decrement_function(pval *op1)
 	return SUCCESS;
 }
 
-int yystype_true(pval *op)
+int pval_is_true(pval *op)
 {
 	convert_to_boolean_long(op);
 	return (op->value.lval ? 1 : 0);

@@ -27,7 +27,7 @@
    +----------------------------------------------------------------------+
  */
  
-/* $Id: mysql.c,v 1.164 1998/07/27 22:07:09 shane Exp $ */
+/* $Id: mysql.c,v 1.165 1998/09/10 23:57:19 zeev Exp $ */
 
 
 /* TODO:
@@ -1363,7 +1363,7 @@ static void php3_mysql_fetch_hash(INTERNAL_FUNCTION_PARAMETERS)
 	int type;
 	int num_fields;
 	int i;
-	pval *yystype_ptr;
+	pval *pval_ptr;
 	MySQL_TLS_VARS;
 
 	
@@ -1396,14 +1396,14 @@ static void php3_mysql_fetch_hash(INTERNAL_FUNCTION_PARAMETERS)
 				int len;
 				char *tmp=_php3_addslashes(mysql_row[i],mysql_row_lengths[i],&len,0);
 				
-				add_get_index_stringl(return_value, i, tmp, len, (void **) &yystype_ptr, 0);
+				add_get_index_stringl(return_value, i, tmp, len, (void **) &pval_ptr, 0);
 			} else {
-				add_get_index_stringl(return_value, i, mysql_row[i], mysql_row_lengths[i], (void **) &yystype_ptr, 1);
+				add_get_index_stringl(return_value, i, mysql_row[i], mysql_row_lengths[i], (void **) &pval_ptr, 1);
 			}
-			_php3_hash_pointer_update(return_value->value.ht, mysql_field->name, strlen(mysql_field->name)+1, yystype_ptr);
+			_php3_hash_pointer_update(return_value->value.ht, mysql_field->name, strlen(mysql_field->name)+1, pval_ptr);
 		} else {
 			/* NULL field, don't set it */
-			/* add_get_index_stringl(return_value, i, empty_string, 0, (void **) &yystype_ptr); */
+			/* add_get_index_stringl(return_value, i, empty_string, 0, (void **) &pval_ptr); */
 		}
 	}
 }

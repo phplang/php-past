@@ -1,0 +1,14 @@
+<?php 
+  $a[0]="a";
+  $a[1]="b";
+  $a[2]="c";
+
+  reset($a);
+  $key= key($a);
+  $data = current($a);
+  while ((string) $key != ""):
+    echo "KEY: $key, VAL: $data\n";
+    $data = next($a);
+    $key= key($a);
+  endwhile;
+?>

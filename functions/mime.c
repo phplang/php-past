@@ -23,11 +23,10 @@
    | If you did not, or have any questions about PHP licensing, please    |
    | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
-   | Authors: Rasmus Lerdorf                                              |
-   |                                                                      |
+   | Authors: Rasmus Lerdorf <rasmus@lerdorf.on.ca>                       |
    +----------------------------------------------------------------------+
  */
-/* $Id: mime.c,v 1.52 1998/05/15 10:57:27 zeev Exp $ */
+/* $Id: mime.c,v 1.54 1998/08/25 19:56:38 rasmus Exp $ */
 #ifdef THREAD_SAFE
 #include "tls.h"
 #endif
@@ -37,7 +36,12 @@
 #include "type.h"
 #include "post.h"
 #include "mime.h"
+#include "php3_list.h"
 
+#ifndef THREAD_SAFE
+int le_uploads;
+extern HashTable list;
+#endif
 
 #define NEW_BOUNDARY_CHECK 1
 #define SAFE_RETURN { if (namebuf) efree(namebuf); if (filenamebuf) efree(filenamebuf); if (lbuf) efree(lbuf); return; }
@@ -192,7 +196,11 @@ void php3_mime_split(char *buf, int cnt, char *boundary, pval *http_post_vars)
 					SAFE_RETURN;
 				}
 				fn = tempnam(php3_ini.upload_tmp_dir, "php");
-				if (max_file_size && ((loc - ptr - 4) > max_file_size)) {
+				if ((loc - ptr - 4) > php3_ini.upload_max_filesize) {
+					php3_error(E_WARNING, "Max file size of %ld bytes exceeded - file [%s] not saved", php3_ini.upload_max_filesize,namebuf);
+					bytes=0;	
+					SET_VAR_STRING(namebuf, estrdup("none"));
+				} else if (max_file_size && ((loc - ptr - 4) > max_file_size)) {
 					php3_error(E_WARNING, "Max file size exceeded - file [%s] not saved", namebuf);
 					bytes = 0;
 					SET_VAR_STRING(namebuf, estrdup("none"));
@@ -207,6 +215,7 @@ void php3_mime_split(char *buf, int cnt, char *boundary, pval *http_post_vars)
 					}
 					bytes = fwrite(ptr, 1, loc - ptr - 4, fp);
 					fclose(fp);
+					php3_list_do_insert(&GLOBAL(list),fn,GLOBAL(le_uploads));  /* Tell PHP about the file so the destructor can unlink it later */
 					if (bytes < (loc - ptr - 4)) {
 						php3_error(E_WARNING, "Only %d bytes were written, expected to write %ld", bytes, loc - ptr - 4);
 					}

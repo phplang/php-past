@@ -23,10 +23,13 @@
    | If you did not, or have any questions about PHP licensing, please    |
    | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
-   | Authors: Stig Bakken                                                 |
+   | Authors: Stig Bakken <ssb@gaurdian.no>                               |
+   |          Zeev Suraski <zeev@php.net>                                 |
+   |          Rasmus Lerdorf <rasmus@lerdorf.on.ca>                       |
    +----------------------------------------------------------------------+
  */
-/* $Id: crypt.c,v 1.34 1998/05/15 10:57:19 zeev Exp $ */
+/* $Id: crypt.c,v 1.39 1998/09/22 18:17:40 rasmus Exp $ */
+#include <stdlib.h>
 
 #include "php.h"
 #include "internal_functions.h"
@@ -66,36 +69,103 @@ php3_module_entry crypt_module_entry = {
 	"Crypt", crypt_functions, NULL, NULL, NULL, NULL, NULL, STANDARD_MODULE_PROPERTIES
 };
 
+
+/* 
+   The capabilities of the crypt() function is determined by the test programs
+   run by configure from aclocal.m4.  They will set PHP3_STD_DES_CRYPT,
+   PHP3_EXT_DES_CRYPT, PHP3_MD5_CRYPT and PHP3_BLOWFISH_CRYPT as appropriate 
+   for the target platform
+*/
+#ifdef PHP3_STD_DES_CRYPT
+#define PHP3_MAX_SALT_LEN 2
+#endif
+#ifdef PHP3_EXT_DES_CRYPT
+#undef PHP3_MAX_SALT_LEN
+#define PHP3_MAX_SALT_LEN 9
+#endif
+#ifdef PHP3_MD5_CRYPT
+#undef PHP3_MAX_SALT_LEN
+#define PHP3_MAX_SALT_LEN 12
+#endif
+#ifdef PHP3_BLOWFISH_CRYPT
+#undef PHP3_MAX_SALT_LEN
+#define PHP3_MAX_SALT_LEN 17
+#endif
+
+#ifdef HAVE_LRAND48
+#define PHP3_CRYPT_RAND lrand48()
+#else
+#ifdef HAVE_RANDOM
+#define PHP3_CRYPT_RAND random()
+#else
+#define PHP3_CRYPT_RAND rand()
+#endif
+#endif
+
+static unsigned char itoa64[] = "./0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+
+static void php3i_to64(char *s, long v, int n)	{
+	while (--n >= 0) {
+		*s++ = itoa64[v&0x3f]; 		
+		v >>= 6;
+	} 
+} 
+
 void php3_crypt(INTERNAL_FUNCTION_PARAMETERS)
 {
-	char salt[4];
-	int arg_count = ARG_COUNT(ht);
+	char salt[PHP3_MAX_SALT_LEN];
 	pval *arg1, *arg2;
-	static char seedchars[] =
-	"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789./";
 
-	if (arg_count < 1 || arg_count > 2 ||
-		getParameters(ht, arg_count, &arg1, &arg2) == FAILURE) {
-		WRONG_PARAM_COUNT;
+	salt[0]='\0';
+
+	switch (ARG_COUNT(ht)) {
+		case 1:
+			if (getParameters(ht, 1, &arg1)==FAILURE) {
+				RETURN_FALSE;
+			}
+			break;
+		case 2:
+			if (getParameters(ht, 2, &arg1, &arg2)==FAILURE) {
+				RETURN_FALSE;
+			}
+			convert_to_string(arg2);
+			memcpy(salt, arg2->value.str.val, MIN(PHP3_MAX_SALT_LEN,arg2->value.str.len));
+			break;
+		default:
+			WRONG_PARAM_COUNT;
+			break;
 	}
 	convert_to_string(arg1);
 
-	salt[0] = '\0';
-	if (arg_count == 2) {
-		convert_to_string(arg2);
-		strncpy(salt, arg2->value.str.val, 2);
+	/* The automatic salt generation only covers standard DES and md5-crypt */
+	if(!*salt) {
+#ifdef HAVE_SRAND48
+		srand48((unsigned int) time(0) * getpid());
+#else
+#ifdef HAVE_SRANDOM
+		srandom((unsigned int) time(0) * getpid());
+#else
+		srand((unsigned int) time(0) * getpid());
+#endif
+#endif
+
+#ifdef PHP3_STD_DES_CRYPT
+		php3i_to64(&salt[0], PHP3_CRYPT_RAND, 2);
+		salt[2] = '\0';
+#else
+#if PHP3_MD5_CRYPT
+		strcpy(salt, "$1$");
+		to64(&salt[3], PHP3_CRYPT_RAND, 4);
+		to64(&salt[7], PHP3_CRYPT_RAND, 4);
+		strcpy(&salt[11], "$");
+#endif
+#endif
 	}
-	if (!salt[0]) {
-		srand(time(0) * getpid());
-		salt[0] = seedchars[rand() % 64];
-		salt[1] = seedchars[rand() % 64];
-	}
-	salt[2] = '\0';
 
 	return_value->value.str.val = (char *) crypt(arg1->value.str.val, salt);
-	return_value->value.str.len = strlen(return_value->value.str.val);	/* can be optimized away to 13? */
+	return_value->value.str.len = strlen(return_value->value.str.val);
 	return_value->type = IS_STRING;
-	yystype_copy_constructor(return_value);
+	pval_copy_constructor(return_value);
 }
 
 #endif

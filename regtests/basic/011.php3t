@@ -1,0 +1,11 @@
+--$Id: 011.php3t,v 1.2 1998/08/23 02:24:14 rocky Exp $
+--TITLE--
+Testing $argc and $argv handling                              ...
+--URL--
+basic/011.phtml?ab+cd+ef+123+test
+--EXPECT--
+0: ab
+1: cd
+2: ef
+3: 123
+4: test

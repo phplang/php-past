@@ -479,14 +479,14 @@ echo $row[1] . " <- row\n";
   <refentry id="function.pg-fieldnum">
    <refnamediv>
     <refname>pg_FieldNum</refname>
-    <refpurpose>Returns the number of a columns</refpurpose>
+    <refpurpose>Returns the number of a column</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
     <funcsynopsis>
-     <funcdef>string <function>pg_fieldnum</function></funcdef>
+     <funcdef>int <function>pg_fieldnum</function></funcdef>
      <paramdef>int <parameter>result_id</parameter></paramdef>
-     <paramdef>int <parameter>field_name</parameter></paramdef>
+     <paramdef>string <parameter>field_name</parameter></paramdef>
     </funcsynopsis>
     <para>
      pg_FieldNum() will return the number of the column slot that
@@ -531,8 +531,8 @@ echo $row[1] . " <- row\n";
     <para>
      pg_FieldSize() will return the internal storage size (in bytes)
      of the named field in the given PostgreSQL result. A field size
-     of 0 indicates a variable length field. This function will return
-     -1 on error.
+     of -1 indicates a variable length field. This function will return
+     false on error.
    </refsect1>
   </refentry>
 
@@ -568,13 +568,13 @@ echo $row[1] . " <- row\n";
      <paramdef>int <parameter>result_id</parameter></paramdef>
     </funcsynopsis>
     <para>
-     pg_FreeResult() only needs to be called if you are worried about
-     using too much memory while your script is running.  All result
-     memory will automatically be freed when the script is
-     finished.  But, if you are sure you are not going to need the
-     result data anymore in a script, you may call pg_FreeResult()
-     with the result identifier as an argument and the associated
-     result memory will be freed.
+     <function>pg_FreeResult</function> only needs to be called if you
+     are worried about using too much memory while your script is
+     running.  All result memory will automatically be freed when the
+     script is finished.  But, if you are sure you are not going to
+     need the result data anymore in a script, you may call
+     <function>pg_FreeResult</function> with the result identifier as
+     an argument and the associated result memory will be freed.
    </refsect1>
   </refentry>
 
@@ -587,15 +587,16 @@ echo $row[1] . " <- row\n";
     <title>Description</title>
     <funcsynopsis>
      <funcdef>int <function>pg_getlastoid</function></funcdef>
-     <void>
+     <paramdef>int <parameter>result_id</parameter></paramdef>
     </funcsynopsis>
     <para>
-     pg_GetLastOid() can be used to retrieve the Oid assigned to an
-     inserted tuple if the last command sent via
-     <function>pg_Exec</function> was an SQL INSERT.  This function
-     will return a positive integer if there was a valid Oid.  It will
-     return -1 if an error occured or the last command sent via
-     <function>pg_Exec</function> was not an INSERT.
+     <function>pg_GetLastOid</function> can be used to retrieve the
+     Oid assigned to an inserted tuple if the result identifier is
+     used from the last command sent via <function>pg_Exec</function>
+     and was an SQL INSERT.  This function will return a positive
+     integer if there was a valid Oid.  It will return -1 if an error
+     occured or the last command sent via <function>pg_Exec</function>
+     was not an INSERT.
    </refsect1>
   </refentry>
 

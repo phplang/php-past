@@ -28,7 +28,7 @@
    +----------------------------------------------------------------------+
  */
  
-/* $Id: pgsql.c,v 1.69 1998/07/30 23:04:46 jah Exp $ */
+/* $Id: pgsql.c,v 1.71 1998/09/19 21:46:10 jah Exp $ */
 
 #include <stdlib.h>
 
@@ -114,6 +114,13 @@ static void _free_ptr(pgLofp *lofp)
 }
 
 
+static void _free_result(pgsql_result_handle *pg_result)
+{
+	PQclear(pg_result->result);
+	efree(pg_result);
+}
+
+
 int php3_minit_pgsql(INIT_FUNC_ARGS)
 {
 	if (cfg_get_long("pgsql.allow_persistent",&php3_pgsql_module.allow_persistent)==FAILURE) {
@@ -128,7 +135,8 @@ int php3_minit_pgsql(INIT_FUNC_ARGS)
 	php3_pgsql_module.num_persistent=0;
 	php3_pgsql_module.le_link = register_list_destructors(_close_pgsql_link,NULL);
 	php3_pgsql_module.le_plink = register_list_destructors(NULL,_close_pgsql_plink);
-	php3_pgsql_module.le_result = register_list_destructors(PQclear,NULL);
+	/*	php3_pgsql_module.le_result = register_list_destructors(PQclear,NULL); */
+	php3_pgsql_module.le_result = register_list_destructors(_free_result,NULL);
 	php3_pgsql_module.le_lofp = register_list_destructors(_free_ptr,NULL);
 	php3_pgsql_module.le_string = register_list_destructors(_free_ptr,NULL);
 	return SUCCESS;
@@ -505,6 +513,7 @@ void php3_pgsql_exec(INTERNAL_FUNCTION_PARAMETERS)
 	PGconn *pgsql;
 	PGresult *pgsql_result;
 	ExecStatusType  status;
+	pgsql_result_handle *pg_result;
 	
 	switch(ARG_COUNT(ht)) {
 		case 1:
@@ -552,7 +561,10 @@ void php3_pgsql_exec(INTERNAL_FUNCTION_PARAMETERS)
 		case PGRES_COMMAND_OK: /* successful command that did not return rows */
 		default:
 			if (pgsql_result) {
-				return_value->value.lval = php3_list_insert(pgsql_result,php3_pgsql_module.le_result);
+				pg_result = (pgsql_result_handle *) emalloc(sizeof(pgsql_result_handle));
+				pg_result->conn = pgsql;
+				pg_result->result = pgsql_result;
+				return_value->value.lval = php3_list_insert(pg_result,php3_pgsql_module.le_result);
 				return_value->type = IS_LONG;
 			} else {
 				RETURN_FALSE;
@@ -570,6 +582,7 @@ void php3_pgsql_get_result_info(INTERNAL_FUNCTION_PARAMETERS, int entry_type)
 {
 	pval *result;
 	PGresult *pgsql_result;
+	pgsql_result_handle *pg_result;
 	int type;
 	
 	if (ARG_COUNT(ht)!=1 || getParameters(ht, 1, &result)==FAILURE) {
@@ -577,7 +590,8 @@ void php3_pgsql_get_result_info(INTERNAL_FUNCTION_PARAMETERS, int entry_type)
 	}
 	
 	convert_to_long(result);
-	pgsql_result = (PGresult *) php3_list_find(result->value.lval,&type);
+	pg_result = (pgsql_result_handle *) php3_list_find(result->value.lval,&type);
+	pgsql_result = pg_result->result;
 	
 	if (type!=php3_pgsql_module.le_result) {
 		php3_error(E_WARNING,"%d is not a PostgresSQL result index",result->value.lval);
@@ -675,6 +689,7 @@ void php3_pgsql_get_field_info(INTERNAL_FUNCTION_PARAMETERS, int entry_type)
 {
 	pval *result,*field;
 	PGresult *pgsql_result;
+	pgsql_result_handle *pg_result;
 	int type;
 	
 	if (ARG_COUNT(ht)!=2 || getParameters(ht, 2, &result, &field)==FAILURE) {
@@ -682,7 +697,8 @@ void php3_pgsql_get_field_info(INTERNAL_FUNCTION_PARAMETERS, int entry_type)
 	}
 	
 	convert_to_long(result);
-	pgsql_result = (PGresult *) php3_list_find(result->value.lval,&type);
+	pg_result = (pgsql_result_handle *) php3_list_find(result->value.lval,&type);
+	pgsql_result = pg_result->result;
 	
 	if (type!=php3_pgsql_module.le_result) {
 		php3_error(E_WARNING,"%d is not a PostgresSQL result index",result->value.lval);
@@ -708,7 +724,7 @@ void php3_pgsql_get_field_info(INTERNAL_FUNCTION_PARAMETERS, int entry_type)
 			return_value->type = IS_LONG;
 			break;
 		case PHP3_PG_FIELD_TYPE:
-			return_value->value.str.val = get_field_name(pgsql_result->conn,PQftype(pgsql_result,field->value.lval),list);
+			return_value->value.str.val = get_field_name(pg_result->conn,PQftype(pgsql_result,field->value.lval),list);
 			return_value->value.str.len = strlen(return_value->value.str.val);
 			return_value->type = IS_STRING;
 			break;
@@ -738,6 +754,7 @@ void php3_pgsql_field_number(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *result,*field;
 	PGresult *pgsql_result;
+	pgsql_result_handle *pg_result;
 	int type;
 	
 	if (ARG_COUNT(ht)!=2 || getParameters(ht, 2, &result, &field)==FAILURE) {
@@ -745,7 +762,8 @@ void php3_pgsql_field_number(INTERNAL_FUNCTION_PARAMETERS)
 	}
 	
 	convert_to_long(result);
-	pgsql_result = (PGresult *) php3_list_find(result->value.lval,&type);
+	pg_result = (pgsql_result_handle *) php3_list_find(result->value.lval,&type);
+	pgsql_result = pg_result->result;
 	
 	if (type!=php3_pgsql_module.le_result) {
 		php3_error(E_WARNING,"%d is not a PostgresSQL result index",result->value.lval);
@@ -762,6 +780,7 @@ void php3_pgsql_result(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *result, *row, *field=NULL;
 	PGresult *pgsql_result;
+	pgsql_result_handle *pg_result;
 	int type,field_offset;
 	
 	
@@ -770,7 +789,8 @@ void php3_pgsql_result(INTERNAL_FUNCTION_PARAMETERS)
 	}
 	
 	convert_to_long(result);
-	pgsql_result = (PGresult *) php3_list_find(result->value.lval,&type);
+	pg_result = (pgsql_result_handle *) php3_list_find(result->value.lval,&type);
+	pgsql_result = pg_result->result;
 	
 	if (type!=php3_pgsql_module.le_result) {
 		php3_error(E_WARNING,"%d is not a PostgresSQL result index",result->value.lval);
@@ -808,6 +828,7 @@ void php3_pgsql_fetch_row(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *result, *row;
 	PGresult *pgsql_result;
+	pgsql_result_handle *pg_result;
 	int type;
 	int i,num_fields;
 	char *element;
@@ -819,7 +840,8 @@ void php3_pgsql_fetch_row(INTERNAL_FUNCTION_PARAMETERS)
 	}
 	
 	convert_to_long(result);
-	pgsql_result = (PGresult *) php3_list_find(result->value.lval,&type);
+	pg_result = (pgsql_result_handle *) php3_list_find(result->value.lval,&type);
+	pgsql_result = pg_result->result;
 	
 	if (type!=php3_pgsql_module.le_result) {
 		php3_error(E_WARNING,"%d is not a PostgresSQL result index",result->value.lval);
@@ -854,8 +876,9 @@ void php3_pgsql_fetch_row(INTERNAL_FUNCTION_PARAMETERS)
 
 void php3_pgsql_fetch_hash(INTERNAL_FUNCTION_PARAMETERS)
 {
-	pval *result, *row, *yystype_ptr;
+	pval *result, *row, *pval_ptr;
 	PGresult *pgsql_result;
+	pgsql_result_handle *pg_result;
 	int type;
 	int i,num_fields;
 	char *element,*field_name;
@@ -867,7 +890,8 @@ void php3_pgsql_fetch_hash(INTERNAL_FUNCTION_PARAMETERS)
 	}
 	
 	convert_to_long(result);
-	pgsql_result = (PGresult *) php3_list_find(result->value.lval,&type);
+	pg_result = (pgsql_result_handle *) php3_list_find(result->value.lval,&type);
+	pgsql_result = pg_result->result;
 	
 	if (type!=php3_pgsql_module.le_result) {
 		php3_error(E_WARNING,"%d is not a PostgresSQL result index",result->value.lval);
@@ -888,15 +912,15 @@ void php3_pgsql_fetch_hash(INTERNAL_FUNCTION_PARAMETERS)
             if (php3_ini.magic_quotes_runtime) {
                 char *tmp=_php3_addslashes(element,element_len,&element_len,0);
 
-                add_get_index_stringl(return_value, i, tmp, element_len, (void **) &yystype_ptr, 0);
+                add_get_index_stringl(return_value, i, tmp, element_len, (void **) &pval_ptr, 0);
             } else {
-                add_get_index_stringl(return_value, i, element, element_len, (void **) &yystype_ptr, 1);
+                add_get_index_stringl(return_value, i, element, element_len, (void **) &pval_ptr, 1);
             }
 			field_name = PQfname(pgsql_result,i);
-            _php3_hash_pointer_update(return_value->value.ht, field_name, strlen(field_name)+1, yystype_ptr);
+            _php3_hash_pointer_update(return_value->value.ht, field_name, strlen(field_name)+1, pval_ptr);
         } else {
             /* NULL field, don't set it */
-            /* add_get_index_stringl(return_value, i, empty_string, 0, (void **) &yystype_ptr); */
+            /* add_get_index_stringl(return_value, i, empty_string, 0, (void **) &pval_ptr); */
         }
 	}
 }
@@ -924,6 +948,7 @@ void php3_pgsql_data_info(INTERNAL_FUNCTION_PARAMETERS, int entry_type)
 {
 	pval *result,*row,*field;
 	PGresult *pgsql_result;
+	pgsql_result_handle *pg_result;
 	int type,field_offset;
 	
 	if (ARG_COUNT(ht)!=3 || getParameters(ht, 3, &result, &row, &field)==FAILURE) {
@@ -931,7 +956,8 @@ void php3_pgsql_data_info(INTERNAL_FUNCTION_PARAMETERS, int entry_type)
 	}
 	
 	convert_to_long(result);
-	pgsql_result = (PGresult *) php3_list_find(result->value.lval,&type);
+	pg_result = (pgsql_result_handle *) php3_list_find(result->value.lval,&type);
+	pgsql_result = pg_result->result;
 	
 	if (type!=php3_pgsql_module.le_result) {
 		php3_error(E_WARNING,"%d is not a PostgresSQL result index",result->value.lval);
@@ -982,6 +1008,7 @@ void php3_pgsql_free_result(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *result;
 	PGresult *pgsql_result;
+	pgsql_result_handle *pg_result;
 	int type;
 	
 	if (ARG_COUNT(ht)!=1 || getParameters(ht, 1, &result)==FAILURE) {
@@ -992,7 +1019,8 @@ void php3_pgsql_free_result(INTERNAL_FUNCTION_PARAMETERS)
 	if (result->value.lval==0) {
 		RETURN_FALSE;
 	}
-	pgsql_result = (PGresult *) php3_list_find(result->value.lval,&type);
+	pg_result = (pgsql_result_handle *) php3_list_find(result->value.lval,&type);
+	pgsql_result = pg_result->result;
 	
 	if (type!=php3_pgsql_module.le_result) {
 		php3_error(E_WARNING,"%d is not a PostgresSQL result index",result->value.lval);
@@ -1007,6 +1035,7 @@ void php3_pgsql_last_oid(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *result;
 	PGresult *pgsql_result;
+	pgsql_result_handle *pg_result;
 	int type;
 	
 	if (ARG_COUNT(ht)!=1 || getParameters(ht, 1, &result)==FAILURE) {
@@ -1014,7 +1043,8 @@ void php3_pgsql_last_oid(INTERNAL_FUNCTION_PARAMETERS)
 	}
 	
 	convert_to_long(result);
-	pgsql_result = (PGresult *) php3_list_find(result->value.lval,&type);
+	pg_result = (pgsql_result_handle *) php3_list_find(result->value.lval,&type);
+	pgsql_result = pg_result->result;
 	
 	if (type!=php3_pgsql_module.le_result) {
 		php3_error(E_WARNING,"%d is not a PostgresSQL result index",result->value.lval);
@@ -1208,6 +1238,7 @@ void php3_pgsql_lo_open(INTERNAL_FUNCTION_PARAMETERS)
 				}
 			}
 		} else {
+			efree(pgsql_lofp);
 			php3_error(E_WARNING,"Unable to open PostgresSQL large object");
 			RETURN_FALSE;
 		}

@@ -79,3 +79,37 @@ Naming Conventions
 [4] Variable names should be in lowercase;  Use underscores to seperate
     between words.
 
+
+
+Syntax and indentation
+----------------------
+
+[1] Never use C++ style comments (i.e. // comment).  Always use C-style
+    comments instead.  PHP is written in C, and is aimed at compiling
+    under any ANSI-C compliant compiler.  Even though many compilers
+    accept C++-style comments in C code, you have to ensure that your
+    code would compile with other compilers as well.
+    The only exception to this rule is code that is Win32-specific,
+    because the Win32 port is MS-Visual C++ specific, and this compiler
+    is known to accept C++-style comments in C code.
+
+[2] Use K&R-style.  Of course, we can't and don't want to
+    force anybody to use a style she's not used to, but
+    at the very least, when you write code that goes into the core
+    of PHP or one of its standard modules, please maintain the K&R
+    style.  This applies to just about everything, starting with
+    indentation and comment styles and up to function decleration
+    syntax.
+    
+[3] Be generous with whitespace and braces.  Always prefer
+    if (foo) {
+		bar;
+	}
+	to
+	if(foo)bar;
+	
+    Keep one empty line between the variable decleration section and
+    the statements in a block, as well as between logical statement
+    groups in a block.  Maintain at least one empty line between
+    two functions, preferably two.
+

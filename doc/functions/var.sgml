@@ -24,7 +24,6 @@
       <listitem><simpara>"double"
       <listitem><simpara>"string"
       <listitem><simpara>"array"
-      <listitem><simpara>"class"
       <listitem><simpara>"object"
       <listitem><simpara>"unknown type"
      </itemizedlist>
@@ -426,8 +425,8 @@
     </funcsynopsis>
     
     <simpara>
-     Returns true if <parameter>var</parameter> exists and has a
-     value; false otherwise.
+     Returns true if <parameter>var</parameter> exists;
+     false otherwise.
     
     <simpara>
      See also <function>empty</function>.

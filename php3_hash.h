@@ -29,7 +29,7 @@
  */
 
 
-/* $Id: php3_hash.h,v 1.4 1998/07/26 13:59:49 rasmus Exp $ */
+/* $Id: php3_hash.h,v 1.6 1998/09/20 22:43:45 zeev Exp $ */
 
 
 #ifndef _HASH_
@@ -38,7 +38,7 @@
 #include <sys/types.h>
 
 #define HASH_KEY_IS_STRING 1
-#define HASH_KEY_IS_INT 2
+#define HASH_KEY_IS_LONG 2
 #define HASH_KEY_NON_EXISTANT 3
 
 #define HASH_UPDATE 0
@@ -51,7 +51,7 @@
 struct hashtable;
 
 typedef struct bucket {
-	uint h;						/* Used for numeric indexing */
+	ulong h;						/* Used for numeric indexing */
 	char *arKey;
 	uint nKeyLength;
 	void *pData;
@@ -65,8 +65,8 @@ typedef struct hashtable {
 	uint nTableSize;
 	uint nHashSizeIndex;
 	uint nNumOfElements;
-	uint nNextFreeElement;
-	uint(*pHashFunction) (char *arKey, uint nKeyLength);
+	ulong nNextFreeElement;
+	ulong(*pHashFunction) (char *arKey, uint nKeyLength);
 	Bucket *pInternalPointer;	/* Used for element traversal */
 	Bucket *pListHead;
 	Bucket *pListTail;
@@ -77,7 +77,7 @@ typedef struct hashtable {
 
 
 /* startup/shutdown */
-extern PHPAPI int _php3_hash_init(HashTable *ht, uint nSize, uint(*pHashFunction) (char *arKey, uint nKeyLength), void (*pDestructor) (void *pData), int persistent);
+extern PHPAPI int _php3_hash_init(HashTable *ht, uint nSize, ulong(*pHashFunction) (char *arKey, uint nKeyLength), void (*pDestructor) (void *pData), int persistent);
 extern PHPAPI void _php3_hash_destroy(HashTable *ht);
 
 /* additions/updates/changes */
@@ -87,7 +87,7 @@ extern PHPAPI int _php3_hash_add_or_update(HashTable *ht, char *arKey, uint nKey
 #define _php3_hash_add(ht,arKey,nKeyLength,pData,nDataSize,pDest) \
 		_php3_hash_add_or_update(ht,arKey,nKeyLength,pData,nDataSize,pDest,HASH_ADD)
 
-extern PHPAPI int _php3_hash_index_update_or_next_insert(HashTable *ht, uint h, void *pData, uint nDataSize, void **pDest, int flag);
+extern PHPAPI int _php3_hash_index_update_or_next_insert(HashTable *ht, ulong h, void *pData, uint nDataSize, void **pDest, int flag);
 #define _php3_hash_index_update(ht,h,pData,nDataSize,pDest) \
 		_php3_hash_index_update_or_next_insert(ht,h,pData,nDataSize,pDest,HASH_UPDATE)
 #define _php3_hash_next_index_insert(ht,pData,nDataSize,pDest) \
@@ -95,7 +95,7 @@ extern PHPAPI int _php3_hash_index_update_or_next_insert(HashTable *ht, uint h, 
 
 extern PHPAPI int _php3_hash_pointer_update(HashTable *ht, char *arKey, uint nKeyLength, void *pData);
 
-extern PHPAPI int _php3_hash_pointer_index_update_or_next_insert(HashTable *ht, uint h, void *pData, int flag);
+extern PHPAPI int _php3_hash_pointer_index_update_or_next_insert(HashTable *ht, ulong h, void *pData, int flag);
 #define _php3_hash_pointer_index_update(ht,h,pData) \
 		_php3_hash_pointer_index_update_or_next_insert(ht,h,pData,HASH_UPDATE)
 #define _php3_hash_next_index_pointer_insert(ht,pData) \
@@ -106,7 +106,7 @@ extern PHPAPI void _php3_hash_apply_with_argument(HashTable *ht,int (*destruct) 
 
 
 /* Deletes */
-extern PHPAPI int _php3_hash_del_key_or_index(HashTable *ht, char *arKey, uint nKeyLength, uint h, int flag);
+extern PHPAPI int _php3_hash_del_key_or_index(HashTable *ht, char *arKey, uint nKeyLength, ulong h, int flag);
 #define _php3_hash_del(ht,arKey,nKeyLength) \
 		_php3_hash_del_key_or_index(ht,arKey,nKeyLength,0,HASH_DEL_KEY)
 #define _php3_hash_index_del(ht,h) \
@@ -114,19 +114,19 @@ extern PHPAPI int _php3_hash_del_key_or_index(HashTable *ht, char *arKey, uint n
 
 /* Data retreival */
 extern PHPAPI int _php3_hash_find(HashTable *ht, char *arKey, uint nKeyLength, void **pData);
-extern PHPAPI int _php3_hash_index_find(HashTable *ht, uint h, void **pData);
+extern PHPAPI int _php3_hash_index_find(HashTable *ht, ulong h, void **pData);
 
 /* Misc */
 extern PHPAPI int _php3_hash_exists(HashTable *ht, char *arKey, uint nKeyLength);
-extern PHPAPI int _php3_hash_index_exists(HashTable *ht, uint h);
+extern PHPAPI int _php3_hash_index_exists(HashTable *ht, ulong h);
 extern PHPAPI int _php3_hash_is_pointer(HashTable *ht, char *arKey, uint nKeyLength);
-extern PHPAPI int _php3_hash_index_is_pointer(HashTable *ht, uint h);
-extern PHPAPI uint _php3_hash_next_free_element(HashTable *ht);
+extern PHPAPI int _php3_hash_index_is_pointer(HashTable *ht, ulong h);
+extern PHPAPI ulong _php3_hash_next_free_element(HashTable *ht);
 
 /* traversing */
 extern PHPAPI void _php3_hash_move_forward(HashTable *ht);
 extern PHPAPI void _php3_hash_move_backwards(HashTable *ht);
-extern PHPAPI int _php3_hash_get_current_key(HashTable *ht, char **str_index, int *int_index);
+extern PHPAPI int _php3_hash_get_current_key(HashTable *ht, char **str_index, ulong *num_index);
 extern PHPAPI int _php3_hash_get_current_data(HashTable *ht, void **pData);
 extern PHPAPI void _php3_hash_internal_pointer_reset(HashTable *ht);
 extern PHPAPI void _php3_hash_internal_pointer_end(HashTable *ht);

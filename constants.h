@@ -32,12 +32,10 @@ extern PHPAPI void php3_register_long_constant(char *name, uint name_len, long l
 extern PHPAPI void php3_register_double_constant(char *name, uint name_len, double dval, int flags, int module_number);
 extern PHPAPI void php3_register_string_constant(char *name, uint name_len, char *strval, int flags, int module_number);
 extern PHPAPI void php3_register_stringl_constant(char *name, uint name_len, char *strval, uint strlen, int flags, int module_number);
-extern int php3_get_constants(char *name, uint name_len, pval *result);
+extern int php3_get_constant(char *name, uint name_len, pval *result);
 
 extern void php3_define(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_defined(INTERNAL_FUNCTION_PARAMETERS);
-
-
 
 #endif
 

@@ -25,6 +25,7 @@
 <!ENTITY reference.filesystem        SYSTEM "functions/filesystem.sgml">
 <!ENTITY reference.http              SYSTEM "functions/http.sgml">
 <!ENTITY reference.hw                SYSTEM "functions/hw.sgml">
+<!ENTITY reference.ifx               SYSTEM "functions/ifx.sgml">
 <!ENTITY reference.image             SYSTEM "functions/image.sgml">
 <!ENTITY reference.imap              SYSTEM "functions/imap.sgml">
 <!ENTITY reference.ldap              SYSTEM "functions/ldap.sgml">

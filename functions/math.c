@@ -284,6 +284,32 @@ void php3_sqrt(INTERNAL_FUNCTION_PARAMETERS)
 }
 
 
+void php3_deg2rad(INTERNAL_FUNCTION_PARAMETERS)
+{
+	pval *deg;
+	TLS_VARS;
+
+	if (ARG_COUNT(ht) != 1 || getParameters(ht, 1, &deg) == FAILURE) {
+		WRONG_PARAM_COUNT;
+	}
+	convert_to_double(deg);
+	RETVAL_DOUBLE((deg->value.dval / 180.0) * M_PI);
+}
+
+
+void php3_rad2deg(INTERNAL_FUNCTION_PARAMETERS)
+{
+	pval *rad;
+	TLS_VARS;
+
+	if (ARG_COUNT(ht) != 1 || getParameters(ht, 1, &rad) == FAILURE) {
+		WRONG_PARAM_COUNT;
+	}
+	convert_to_double(rad);
+	RETVAL_DOUBLE((rad->value.dval / M_PI) * 180);
+}
+
+
 /*
  * Convert a string representation of a base(2-36) number to a long.
  */

@@ -1,0 +1,7 @@
+--$Id: 008.php3t,v 1.2 1998/08/23 02:23:19 rocky Exp $
+--TITLE--
+Divide 3 variables and print result                           ...
+--URL--
+basic/008.phtml
+--EXPECT--
+3

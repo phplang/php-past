@@ -59,10 +59,6 @@
 #include "functions/post.h"
 #include "constants.h"
 
-#if WIN32|WINNT
-extern int php3_get_constant(char *name, uint name_len, pval *result);
-#endif
-
 #define YY_DECL int lex_scan(pval *phplval)
 #define ECHO { PHPWRITE( yytext, yyleng ); }
 
@@ -231,7 +227,7 @@ void eval_string(pval *str,pval *return_offset, int display_source INLINE_TLS)
 	if (!display_source) {
 		tcm_new(&GLOBAL(token_cache_manager));
 	} else {
-		if (display_source==2 && !yystype_true(return_offset)) {
+		if (display_source==2 && !pval_is_true(return_offset)) {
 			display_source=1;
 		}
 		if (display_source==1) {
@@ -275,7 +271,7 @@ int conditional_include_file(pval *file,pval *return_offset INLINE_TLS)
 		php3_error(E_WARNING,"Failed opening '%s' for inclusion",
 			    php3_strip_url_passwd(file->value.str.val));
 		stack_del_top(&GLOBAL(input_source_stack));
-		yystype_destructor(file _INLINE_TLS);
+		pval_destructor(file _INLINE_TLS);
 		return FAILURE;
 	}
 	yyin = tmp;
@@ -787,7 +783,7 @@ TLS_VARS;
 }
 
 
-<INITIAL>(([^<]|"<"[^?s<]){1,400})|"<s"|"<" {
+<INITIAL>(([^<]|"<"[^?%s<]){1,400})|"<s"|"<" {
 	phplval->value.str.val = (char *) estrndup(yytext, yyleng);
 	phplval->value.str.len = yyleng;
 	phplval->type = IS_STRING;
@@ -814,6 +810,29 @@ TLS_VARS;
 		return INLINE_HTML;
 	}
 }
+
+<INITIAL>"<%"("=")? {
+	if (php3_ini.asp_tags) {
+		if (!(GLOBAL(initialized) & INIT_ENVIRONMENT)) {
+			_php3_hash_environment();
+		}
+		BEGIN(IN_PHP);
+		if (GLOBAL(php3_display_source)) {
+			BEGIN_COLOR(php3_ini.highlight_default);
+			html_puts(yytext,yyleng);
+		}
+		if (yyleng==3) { /* this tag is <%=, implicit echo */
+			return PHP_ECHO;
+		}
+	} else {
+		phplval->value.str.val = (char *) estrndup(yytext, yyleng);
+		phplval->value.str.len = yyleng;
+		phplval->type = IS_STRING;
+		HANDLE_NEWLINES(yytext,yyleng);
+		return INLINE_HTML;
+	}
+}
+
 
 <INITIAL>"<?php"[ \n\r\t] {
 	HANDLE_NEWLINE(yytext[yyleng-1]);
@@ -954,6 +973,26 @@ TLS_VARS;
 	}
 	return ';';  /* implicit ';' at php-end tag */
 }
+
+
+<IN_PHP>"%>"([\n]|"\r\n")? {
+	HANDLE_NEWLINE(yytext[yyleng-1]);
+	if (php3_ini.asp_tags) {
+		BEGIN(INITIAL);
+		if (GLOBAL(php3_display_source)) {
+			html_puts(yytext,yyleng);
+			END_COLOR();
+		}
+		return ';';  /* implicit ';' at php-end tag */
+	} else {
+		phplval->value.str.val = (char *) estrndup(yytext, yyleng);
+		phplval->value.str.len = yyleng;
+		phplval->type = IS_STRING;
+		HANDLE_NEWLINES(yytext,yyleng);
+		return INLINE_HTML;
+	}
+}
+
 
 <IN_PHP>["] {
 	BEGIN(DOUBLE_QUOTES);

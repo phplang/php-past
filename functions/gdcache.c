@@ -36,8 +36,12 @@
  * sizes of a few tens of elements.
  */
 
+/* This just seems unessacary */
+#if (WIN32|WINNT)
+#define HAVE_LIBTTF 1
+#else
 #include "config.h"
-
+#endif
 #if HAVE_LIBTTF
 
 #include "gdcache.h"

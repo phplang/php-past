@@ -1,0 +1,7 @@
+--$Id: 001.php3t,v 1.1 1998/08/23 11:10:14 rocky Exp $
+--TITLE--
+Strlen() function test                                        ...
+--URL--
+func/001.phtml
+--EXPECT--
+6

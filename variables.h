@@ -29,7 +29,7 @@
  */
 
 
-/* $Id: variables.h,v 1.47 1998/08/10 19:19:41 fmk Exp $ */
+/* $Id: variables.h,v 1.51 1998/09/18 16:55:03 rasmus Exp $ */
 
 
 #ifndef _VARIABLES_H
@@ -44,8 +44,8 @@ extern void get_array_variable(pval *result, pval *varname, pval *idx INLINE_TLS
 extern void get_next_array_variable(pval *result, pval *varname);
 extern int incdec_variable(pval *result, pval *varname, int (*func) (pval *), int post INLINE_TLS);
 /*not used ?? extern void incdec_class_variable(pval *result, pval *classname, pval *varname, int (*func) (pval *), int post);*/
-extern void print_variable(pval *var INLINE_TLS);
-extern int is_not_internal_function(pval *yystype);
+extern void php3i_print_variable(pval *var INLINE_TLS);
+extern int is_not_internal_function(pval *pvalue);
 extern void array_assign_next(pval *result, pval *varname, pval *expr);
 extern void add_array_pair_list(pval *result, pval *idx, pval *value, int initialize INLINE_TLS);
 extern void declare_class_variable(pval *varname, pval *expr INLINE_TLS);
@@ -53,10 +53,11 @@ extern void get_object_property(pval *result, pval *classname, pval *varname INL
 extern void get_object_symtable(pval *result, pval *parent, pval *child INLINE_TLS);
 extern void assign_new_object(pval *result, pval *classname, unsigned char implicit_ctor INLINE_TLS);
 
-extern PHPAPI void yystype_destructor(pval *yystype INLINE_TLS);
-extern PHPAPI int yystype_copy_constructor(pval *yystype);
-#define pval_DESTRUCTOR (void (*)(void *)) yystype_destructor
-#define pval_COPY_CTOR (void (*)(void *)) yystype_copy_constructor
+extern PHPAPI void php3tls_pval_destructor(pval *pvalue);
+extern void pval_destructor(pval *pvalue INLINE_TLS);
+extern PHPAPI int pval_copy_constructor(pval *pvalue);
+#define PVAL_DESTRUCTOR (void (*)(void *)) pval_destructor
+#define PVAL_COPY_CTOR (void (*)(void *)) pval_copy_constructor
 
 /* Internal functions which have a YACC rule */
 extern void php3_unset(pval *result, pval *var_ptr);

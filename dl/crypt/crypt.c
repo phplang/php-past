@@ -180,7 +180,7 @@ void php3_crypt(INTERNAL_FUNCTION_PARAMETERS)
 	return_value->value.str.val = (char *) crypt(arg1->value.str.val, salt);
 	return_value->value.str.len = strlen(return_value->value.str.val);	/* can be optimized away to 13? */
 	return_value->type = IS_STRING;
-	yystype_copy_constructor(return_value);
+	pval_copy_constructor(return_value);
 }
 
 #endif

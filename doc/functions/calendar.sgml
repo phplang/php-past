@@ -5,6 +5,11 @@
 
   <partintro>
    <para>
+    The calendar functions are only available if you have compiled the
+    calendar extension in dl/calendar. Read dl/README for instructions on
+    using it.
+   </para>
+   <para>
     The Calendar extension in PHP presents a series of functions to
     simplify converting between different calendar formats.  The
     intermediary or standard it is based on is the Julian Day Count.

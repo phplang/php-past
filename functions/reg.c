@@ -28,7 +28,7 @@
    |          Jaakko Hyvätti <jaakko@hyvatti.iki.fi>                      | 
    +----------------------------------------------------------------------+
  */
-/* $Id: reg.c,v 1.83 1998/06/22 20:28:35 zeev Exp $ */
+/* $Id: reg.c,v 1.86 1998/09/10 23:57:21 zeev Exp $ */
 #ifdef THREAD_SAFE
 #include "tls.h"
 #endif
@@ -179,7 +179,7 @@ static void _php3_ereg(INTERNAL_FUNCTION_PARAMETERS, int icase)
 			RETURN_FALSE;
 		}
 
-		yystype_destructor(array _INLINE_TLS);	/* start with clean array */
+		pval_destructor(array _INLINE_TLS);	/* start with clean array */
 		array_init(array);
 
 		for (i = 0; i < NS; i++) {
@@ -188,7 +188,7 @@ static void _php3_ereg(INTERNAL_FUNCTION_PARAMETERS, int icase)
 			if (start != -1 && end > 0 && start < string_len && end < string_len && start < end) {
 				strncpy(buf, &string[start], end - start);
 				entry.value.str.len = end - start;
-				entry.value.str.val = estrdup(buf);
+				entry.value.str.val = estrndup(buf, entry.value.str.len);
 				entry.type = IS_STRING;
 			} else {
 				var_reset(&entry);
@@ -540,8 +540,8 @@ PHPAPI void php3_sql_regcase(INTERNAL_FUNCTION_PARAMETERS)
 	
 	for (i=0; i<string->value.str.len; i++) {
 		tmp[i*4] = '[';
-		tmp[i*4+1]=toupper(string->value.str.val[i]);
-		tmp[i*4+2]=tolower(string->value.str.val[i]);
+		tmp[i*4+1]=toupper((unsigned char)string->value.str.val[i]);
+		tmp[i*4+2]=tolower((unsigned char)string->value.str.val[i]);
 		tmp[i*4+3]=']';
 	}
 	tmp[string->value.str.len*4]=0;

@@ -1,1 +1,1 @@
-#define PHP_VERSION "3.0.3"
+#define PHP_VERSION "3.0.4"

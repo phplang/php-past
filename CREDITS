@@ -68,6 +68,9 @@ Major Contributors
 * Bjørn Borud (borud@guardian.no) 
   soundex code and lots of enthusiasm
 
+* Christian Cartus (chc@idgruppe.de)
+Informix Universal Server support
+
 * John Ellson (ellson@lucent.com)
   Freetype support
 
@@ -86,7 +89,7 @@ Major Contributors
 * Jaakko Hyvätti (jaakko@hyvatti.iki.fi)
   Prototype cop, regular expression code fixes, CGI security issues
 
-* Amitay Isaacs (amitay@pspl.co.in)                           |
+* Amitay Isaacs (amitay@w-o-i.com)
   LDAP
 
 * Andreas Karajannis (Andreas.Karajannis@gmd.de) 
@@ -101,7 +104,7 @@ Major Contributors
 * Muhammad A Muquit (MA_Muquit@fccc.ed)
   Original Sybase module
 
-* Mark Musone (musone@afterfive.com)
+* Mark Musone (musone@edgeglobal.com)
   IMAP
   
 * Jeroen van der Most (jvdmost@digiface.nl)

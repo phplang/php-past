@@ -160,7 +160,7 @@
     <para> 
      <function>mysql_data_seek</function> moves the internal row
      pointer of the MySQL result associated with the specified result
-     identifier to pointer to the specifyed row number.  The next call
+     identifier to point to the specified row number.  The next call
      to <function>mysql_fetch_row</function> would return that row.
     <para> 
      See also: <function>mysql_data_seek</function>.
@@ -430,7 +430,7 @@ mysql_free_result($result);
      <function>mysql_fetch_field</function> can be used in order to
      obtain information about fields in a certain query result.  If
      the field offset isn't specified, the next field that wasn't yet
-     retreived by <function>mysql_fetch_field</function> is retreived.
+     retrieved by <function>mysql_fetch_field</function> is retrieved.
     <para>
      The properties of the object are:
 

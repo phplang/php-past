@@ -31,10 +31,14 @@
 /* This file is based on the Adabas D extension.
  * Adabas D will no longer be supported as separate module.
  */
+#define IS_EXT_MODULE
+#if !PHP_31
+#undef THREAD_SAFE
+#endif
 #ifdef THREAD_SAFE
 #include "tls.h"
 #endif
-#ifndef MSVC5
+#if !(WIN32|WINNT)
 #include "config.h"
 #include "build-defs.h"
 #endif
@@ -42,7 +46,11 @@
 
 #include "php.h"
 #include "internal_functions.h"
-#include "php3_string.h"
+#if PHP_31
+# include "ext/standard/php3_string.h"
+#else
+# include "php3_string.h"
+#endif
 #include "php3_unified_odbc.h"
 #include "head.h"
 #include "snprintf.h"
@@ -119,18 +127,8 @@ php3_module_entry UODBC_MODULE_ENTRY = {
 
 
 #if COMPILE_DL
-php3_module_entry *get_module() { return &UODBC_MODULE_ENTRY; };
-#if (WIN32|WINNT) && defined(THREAD_SAFE)
-
-/*NOTE: You should have an odbc.def file where you
-export DllMain*/
-BOOL WINAPI DllMain(HANDLE hModule, 
-                      DWORD  ul_reason_for_call, 
-                      LPVOID lpReserved)
-{
-    return TRUE;
-}
-#endif
+#include "ext/phpdl.h"
+DLEXPORT php3_module_entry *get_module() { return &UODBC_MODULE_ENTRY; };
 #endif
 
 #include "php3_list.h"
@@ -149,6 +147,10 @@ static void _FREE_UODBC_RESULT(UODBC_RESULT *res)
 			res->values = NULL;
 		}
 		if (res->stmt){
+#if HAVE_SOLID
+			SQLTransact(UODBC_GLOBAL(PHP3_UODBC_MODULE).henv, res->conn_ptr->hdbc,
+						(UWORD)SQL_COMMIT);
+#endif
 			SQLFreeStmt(res->stmt,SQL_DROP);
 			res->stmt = NULL;
 		}
@@ -212,29 +214,30 @@ int PHP3_MINIT_UODBC(INIT_FUNC_ARGS)
 	HDBC    foobar;
 	RETCODE rc;
 #endif
-#ifdef THREAD_SAFE
+
+#if defined(THREAD_SAFE)
 	UODBC_GLOBAL_STRUCT *UODBC_GLOBALS;
-#if !COMPILE_DL
-#if WIN32|WINNT
-	CREATE_MUTEX(UODBC_MUTEX,"UODBC_TLS");
-#endif
-#endif
-#if !COMPILE_DL
-	SET_MUTEX(UODBC_MUTEX);
+
+	PHP3_MUTEX_ALLOC(UODBC_MUTEX);
+	PHP3_MUTEX_LOCK(UODBC_MUTEX);
 	numthreads++;
 	if (numthreads==1){
-	if ((UODBC_TLS=TlsAlloc())==0xFFFFFFFF){
-		FREE_MUTEX(UODBC_MUTEX);
-		return 0;
-	}}
-	FREE_MUTEX(UODBC_MUTEX);
+		if (!PHP3_TLS_PROC_STARTUP(UODBC_TLS)){
+			PHP3_MUTEX_UNLOCK(UODBC_MUTEX);
+			PHP3_MUTEX_FREE(UODBC_MUTEX);
+			return FAILURE;
+		}
+	}
+	PHP3_MUTEX_UNLOCK(UODBC_MUTEX);
+	if(!PHP3_TLS_THREAD_INIT(UODBC_TLS,UODBC_GLOBALS,UODBC_GLOBAL_STRUCT)){
+		PHP3_MUTEX_FREE(UODBC_MUTEX);
+		return FAILURE;
+	}
 #endif
-	UODBC_GLOBALS =
-		(UODBC_GLOBAL_STRUCT *) LocalAlloc(LPTR, sizeof(UODBC_GLOBAL_STRUCT)); 
-	TlsSetValue(UODBC_TLS, (void *) UODBC_GLOBALS);
-#endif
+
 	SQLAllocEnv(&UODBC_GLOBAL(PHP3_UODBC_MODULE).henv);
 	
+#if !PHP_31
 	cfg_get_string(ODBC_INI_DEFAULTDB,
 				   &UODBC_GLOBAL(PHP3_UODBC_MODULE).defDB);
 	cfg_get_string(ODBC_INI_DEFAULTUSER,
@@ -256,6 +259,11 @@ int PHP3_MINIT_UODBC(INIT_FUNC_ARGS)
 		== FAILURE) {
 		UODBC_GLOBAL(PHP3_UODBC_MODULE).max_links = -1;
 	}
+#else
+		UODBC_GLOBAL(PHP3_UODBC_MODULE).allow_persistent = -1;
+		UODBC_GLOBAL(PHP3_UODBC_MODULE).max_persistent = -1;
+		UODBC_GLOBAL(PHP3_UODBC_MODULE).max_links = -1;
+#endif
 
 	UODBC_GLOBAL(PHP3_UODBC_MODULE).num_persistent = 0;
 
@@ -295,6 +303,10 @@ int PHP3_RINIT_UODBC(INIT_FUNC_ARGS)
 	UODBC_GLOBAL(PHP3_UODBC_MODULE).defConn = -1;
 	UODBC_GLOBAL(PHP3_UODBC_MODULE).num_links = 
 			UODBC_GLOBAL(PHP3_UODBC_MODULE).num_persistent;
+#if PHP_31
+		UODBC_GLOBAL(PHP3_UODBC_MODULE).defaultlrl = 4096;
+		UODBC_GLOBAL(PHP3_UODBC_MODULE).defaultbinmode = 1;
+#else
 	if (cfg_get_long(ODBC_INI_DEFAULTLRL, &UODBC_GLOBAL(PHP3_UODBC_MODULE).defaultlrl)
 		== FAILURE){
 		UODBC_GLOBAL(PHP3_UODBC_MODULE).defaultlrl = 4096;
@@ -302,31 +314,26 @@ int PHP3_RINIT_UODBC(INIT_FUNC_ARGS)
 	if (cfg_get_long(ODBC_INI_DEFAULTBINMODE, &UODBC_GLOBAL(PHP3_UODBC_MODULE).defaultbinmode) == FAILURE){
 		UODBC_GLOBAL(PHP3_UODBC_MODULE).defaultbinmode = 1;
 	}
+#endif
 	return SUCCESS;
 }
 
 int PHP3_MSHUTDOWN_UODBC(void)
 {
-#ifdef THREAD_SAFE
-	UODBC_GLOBAL_STRUCT *UODBC_GLOBALS;
-	UODBC_GLOBALS = TlsGetValue(UODBC_TLS); 
-#endif
+	UODBC_TLS_VARS;
+
 	SQLFreeEnv(UODBC_GLOBAL(PHP3_UODBC_MODULE).henv);
 #ifdef THREAD_SAFE
-	if (UODBC_GLOBALS != 0) {
-		LocalFree((HLOCAL) UODBC_GLOBALS);
-	}
-#if !COMPILE_DL
-	SET_MUTEX(UODBC_MUTEX);
+	PHP3_TLS_THREAD_FREE(UODBC_GLOBALS);
+	PHP3_MUTEX_LOCK(UODBC_MUTEX);
 	numthreads--;
 	if (!numthreads) {
-		if (!TlsFree(UODBC_TLS)) {
-			FREE_MUTEX(UODBC_MUTEX);
-			return 0;
-		}
+		PHP3_TLS_PROC_SHUTDOWN(UODBC_TLS);
+		PHP3_MUTEX_UNLOCK(UODBC_MUTEX);
+		PHP3_MUTEX_FREE(UODBC_MUTEX);
+		return SUCCESS;
 	}
-	FREE_MUTEX(UODBC_MUTEX);
-#endif
+	PHP3_MUTEX_UNLOCK(UODBC_MUTEX);
 #endif
 	return SUCCESS;
 }
@@ -700,7 +707,7 @@ void PHP3_UODBC_EXECUTE(INTERNAL_FUNCTION_PARAMETERS)
 			RETURN_FALSE;
 		}
 
-        yystype_copy_constructor(arg2);
+        pval_copy_constructor(arg2);
         _php3_hash_internal_pointer_reset(arr.value.ht);
         params = (params_t *)emalloc(sizeof(params_t) * result->numparams);
 		
@@ -1553,6 +1560,12 @@ void PHP3_UODBC_PCONNECT(INTERNAL_FUNCTION_PARAMETERS)
  * connections get hashed up. Normal connections use existing pconnections.
  * Maybe this has to change with regard to transactions on pconnections?
  * Possibly set autocommit to on on request shutdown.
+ *
+ * We do have to hash non-persistent connections, and reuse connections.
+ * In the case where two connects were being made, without closing the first
+ * connect, access violations were occuring.  This is because some of the
+ * "globals" in this module should actualy be per-connection variables.  I
+ * simply fixed things to get them working for now.  Shane
  */
 void PHP3_UODBC_DO_CONNECT(INTERNAL_FUNCTION_PARAMETERS, int persistent)
 {
@@ -1614,19 +1627,25 @@ void PHP3_UODBC_DO_CONNECT(INTERNAL_FUNCTION_PARAMETERS, int persistent)
 
 	hashed_len = _php3_sprintf(hashed_details, "uodbc_%s_%s_%s", db, uid, pwd);
 
+	/* FIXME the idea of checking to see if our connection is already persistent
+		is good, but it adds a lot of overhead to non-persistent connections.  We
+		should look and see if we can fix that somehow */
 	/* try to find if we already have this link in our persistent list,
 	 * no matter if it is to be persistent or not
 	 */
 
-	if (_php3_hash_find(plist, hashed_details, hashed_len + 1,
+	if ((persistent || _php3_hash_find(list, hashed_details, hashed_len + 1,
+		  (void **) &index_ptr) == FAILURE) &&
+		  _php3_hash_find(plist, hashed_details, hashed_len + 1,
 		  (void **) &index_ptr) == FAILURE) {
 		/* the link is not in the persistent list */
 		list_entry new_le, new_index_ptr;
 
-		if (persistent)
+		if (persistent) {
 			db_conn = (UODBC_CONNECTION *)malloc(sizeof(UODBC_CONNECTION));
-		else
+		} else {
 			db_conn = (UODBC_CONNECTION *)emalloc(sizeof(UODBC_CONNECTION));
+		}
 
 		SQLAllocConnect(UODBC_GLOBAL(PHP3_UODBC_MODULE).henv, &db_conn->hdbc);
 #if HAVE_SOLID
@@ -1651,7 +1670,11 @@ void PHP3_UODBC_DO_CONNECT(INTERNAL_FUNCTION_PARAMETERS, int persistent)
 			return_value->value.lval = 
 				php3_plist_insert(db_conn, UODBC_GLOBAL(PHP3_UODBC_MODULE).le_pconn);
 			new_index_ptr.ptr = (void *) return_value->value.lval;
+#ifdef THREAD_SAFE
+			new_index_ptr.type = _php3_le_index_ptr();
+#else
 			new_index_ptr.type = le_index_ptr;
+#endif
 			if (_php3_hash_update(plist,hashed_details,hashed_len + 1,(void *) &new_index_ptr,
 					sizeof(list_entry),NULL)==FAILURE) {
 				SQLDisconnect(db_conn->hdbc);
@@ -1662,8 +1685,24 @@ void PHP3_UODBC_DO_CONNECT(INTERNAL_FUNCTION_PARAMETERS, int persistent)
 			}
 			UODBC_GLOBAL(PHP3_UODBC_MODULE).num_persistent++;
 		} else {
-			/* non persistent, simply add to list */
-			return_value->value.lval = php3_list_insert(db_conn, UODBC_GLOBAL(PHP3_UODBC_MODULE).le_conn);
+			new_le.type = UODBC_GLOBAL(PHP3_UODBC_MODULE).le_conn;
+			new_le.ptr = db_conn;
+			return_value->value.lval = 
+				php3_list_insert(db_conn, UODBC_GLOBAL(PHP3_UODBC_MODULE).le_conn);
+			new_index_ptr.ptr = (void *) return_value->value.lval;
+#ifdef THREAD_SAFE
+			new_index_ptr.type = _php3_le_index_ptr();
+#else
+			new_index_ptr.type = le_index_ptr;
+#endif
+			if (_php3_hash_update(list,hashed_details,hashed_len + 1,(void *) &new_index_ptr,
+					sizeof(list_entry),NULL)==FAILURE) {
+				SQLDisconnect(db_conn->hdbc);
+				SQLFreeConnect(db_conn->hdbc);
+				free(db_conn);
+				efree(hashed_details);
+				RETURN_FALSE;
+			}
 		}
 
 		UODBC_GLOBAL(PHP3_UODBC_MODULE).num_links++;
@@ -1671,13 +1710,24 @@ void PHP3_UODBC_DO_CONNECT(INTERNAL_FUNCTION_PARAMETERS, int persistent)
 	} else {
 		int type;
 
-		/* the link is already in the persistent list */
-		if (index_ptr->type != le_index_ptr) {
+		/* we are already connected */
+#ifdef THREAD_SAFE
+			if (index_ptr->type != _php3_le_index_ptr()) {
+#else
+			if (index_ptr->type != le_index_ptr) {
+#endif
 			efree(hashed_details);
 			RETURN_FALSE;
 		}
 		id = (int) index_ptr->ptr;
+
+		/* first see if there is a persistent connection and use it,
+			else, if we are making a non-persistent connect, check our
+			non-persistent list */
 		db_conn = (UODBC_CONNECTION *)php3_plist_find(id, &type);
+		if(!db_conn && !persistent)
+			db_conn = (UODBC_CONNECTION *)php3_list_find(id, &type);
+
 
 		/* FIXME test if the connection is dead */
 		/* For Adabas D and local db connections, a reconnect is performed

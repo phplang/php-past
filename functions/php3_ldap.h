@@ -29,7 +29,7 @@
  */
 
 
-/* $Id: php3_ldap.h,v 1.21 1998/08/10 05:27:56 rasmus Exp $ */
+/* $Id: php3_ldap.h,v 1.22 1998/08/30 19:06:45 shane Exp $ */
 
 #ifndef _PHP3_LDAP_H
 #define _PHP3_LDAP_H
@@ -40,12 +40,15 @@
 #endif
 
 #if HAVE_LDAP
+#include <lber.h>
+#include <ldap.h>
 
 extern php3_module_entry ldap_module_entry;
 #define ldap_module_ptr &ldap_module_entry
 
 /* LDAP functions */
 extern int php3_minit_ldap(INIT_FUNC_ARGS);
+extern int php3_mshutdown_ldap(void);
 
 extern void php3_info_ldap(void);
 
@@ -88,9 +91,26 @@ typedef struct {
 	char *base_dn;
 	int le_result, le_result_entry, le_ber_entry;
 	int le_link;
+
+	/* I just found out that the thread safe features
+		of the netscape ldap library are only required if
+		multiple threads are accessing the same LDAP
+		structure.  Since we are not doing that, we do
+		not need to use this feature.  I am leaving the
+		code here anyway just in case.  smc
+		*/
+#if 0
+	struct ldap_thread_fns tfns;
+	int le_errno; /* Corresponds to the LDAP error code */
+	char *le_matched; /* Matching components of the DN, 
+                  if an NO_SUCH_OBJECT error occurred */
+	char *le_errmsg; /* Error message */
+#endif
 } ldap_module;
 
+#ifndef THREAD_SAFE
 extern ldap_module php3_ldap_module;
+#endif
 
 #else
 

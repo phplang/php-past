@@ -29,7 +29,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: apache.c,v 1.35 1998/07/14 14:37:16 ssb Exp $ */
+/* $Id: apache.c,v 1.41 1998/09/04 13:31:45 rasmus Exp $ */
 #ifdef THREAD_SAFE
 #include "tls.h"
 #endif
@@ -56,11 +56,13 @@ void php3_getallheaders(INTERNAL_FUNCTION_PARAMETERS);
 void php3_apachelog(INTERNAL_FUNCTION_PARAMETERS);
 void php3_info_apache(void);
 void php3_apache_note(INTERNAL_FUNCTION_PARAMETERS);
+void php3_apache_lookup_uri(INTERNAL_FUNCTION_PARAMETERS);
 
 function_entry apache_functions[] = {
 	{"virtual",			php3_virtual,		NULL},
 	{"getallheaders",		php3_getallheaders,	NULL},
 	{"apache_note", php3_apache_note,NULL},
+	{"apache_lookup_uri", php3_apache_lookup_uri,NULL},
 	{NULL, NULL, NULL}
 };
 
@@ -90,7 +92,7 @@ TLS_VARS;
 	}
 
 	if (note_val) {
-		RETURN_STRING(note_val,0);
+		RETURN_STRING(note_val,1);
 	} else {
 		RETURN_FALSE;
 	}
@@ -220,6 +222,96 @@ void php3_getallheaders(INTERNAL_FUNCTION_PARAMETERS)
 		}
     }
 }
+
+void php3_apache_lookup_uri(INTERNAL_FUNCTION_PARAMETERS)
+{
+	pval *filename;
+	request_rec *rr=NULL;
+
+	if (ARG_COUNT(ht) != 1 || getParameters(ht,1,&filename) == FAILURE) {
+		WRONG_PARAM_COUNT;
+	}
+	convert_to_string(filename);
+
+	if(!(rr = sub_req_lookup_uri(filename->value.str.val, GLOBAL(php3_rqst)))) {
+		php3_error(E_WARNING, "URI lookup failed", filename->value.str.val);
+		RETURN_FALSE;
+	}
+	object_init(return_value);
+	add_property_long(return_value,"status",rr->status);
+	if (rr->the_request) {
+		add_property_string(return_value,"the_request",rr->the_request,1);
+	}
+	if (rr->status_line) {
+		add_property_string(return_value,"status_line",rr->status_line,1);		
+	}
+	if (rr->method) {
+		add_property_string(return_value,"method",rr->method,1);		
+	}
+	if (rr->content_type) {
+		add_property_string(return_value,"content_type",(char *)rr->content_type,1);
+	}
+	if (rr->handler) {
+		add_property_string(return_value,"handler",(char *)rr->handler,1);		
+	}
+	if (rr->uri) {
+		add_property_string(return_value,"uri",rr->uri,1);
+	}
+	if (rr->filename) {
+		add_property_string(return_value,"filename",rr->filename,1);
+	}
+	if (rr->path_info) {
+		add_property_string(return_value,"path_info",rr->path_info,1);
+	}
+	if (rr->args) {
+		add_property_string(return_value,"args",rr->args,1);
+	}
+	if (rr->boundary) {
+		add_property_string(return_value,"boundary",rr->boundary,1);
+	}
+	add_property_long(return_value,"no_cache",rr->no_cache);
+	add_property_long(return_value,"no_local_copy",rr->no_local_copy);
+	add_property_long(return_value,"allowed",rr->allowed);
+	add_property_long(return_value,"sent_bodyct",rr->sent_bodyct);
+	add_property_long(return_value,"bytes_sent",rr->bytes_sent);
+	add_property_long(return_value,"byterange",rr->byterange);
+	add_property_long(return_value,"clength",rr->clength);
+
+#if MODULE_MAGIC_NUMBER >= 19980324
+	if (rr->unparsed_uri) {
+		add_property_string(return_value,"unparsed_uri",rr->unparsed_uri,1);
+	}
+	if(rr->mtime) {
+		add_property_long(return_value,"mtime",rr->mtime);
+	}
+#endif
+	if(rr->request_time) {
+		add_property_long(return_value,"request_time",rr->request_time);
+	}
+
+	destroy_sub_req(rr);
+}
+
+#if 0
+This function is most likely a bad idea.  Just playing with it for now.
+
+void php3_apache_exec_uri(INTERNAL_FUNCTION_PARAMETERS) {
+	pval *filename;
+	request_rec *rr=NULL;
+
+	if (ARG_COUNT(ht) != 1 || getParameters(ht,1,&filename) == FAILURE) {
+		WRONG_PARAM_COUNT;
+	}
+	convert_to_string(filename);
+
+	if(!(rr = ap_sub_req_lookup_uri(filename->value.str.val, GLOBAL(php3_rqst)))) {
+		php3_error(E_WARNING, "URI lookup failed", filename->value.str.val);
+		RETURN_FALSE;
+	}
+	RETVAL_LONG(ap_run_sub_req(rr));
+	ap_destroy_sub_req(rr);
+}
+#endif
 
 #endif
 

@@ -16,12 +16,19 @@
      <paramdef>string <parameter>string</parameter></paramdef>
      <paramdef>array <parameter><optional>regs</optional></parameter></paramdef>
     </funcsynopsis>
-    <para>
+    <simpara>
      Searchs <parameter>string</parameter> for matches to the regular expression
-     given in <parameter>pattern</parameter>. If matches are found for
-     parenthesized substrings of pattern and the function is
-     called with the third argument <parameter>regs</parameter>, the matches
-     will be stored in the elements of <parameter>regs</parameter>.
+     given in <parameter>pattern</parameter>. 
+
+    <simpara>
+     If matches are found for parenthesized substrings of
+     <parameter>pattern</parameter> and the function is called with
+     the third argument <parameter>regs</parameter>, the matches will
+     be stored in the elements of
+     <parameter>regs</parameter>. $regs[1] will contain the substring
+     which starts at the first left parenthesis; $regs[2] will contain the
+     substring starting at the second, and so on. $regs[0] will
+     contain a copy of <parameter>string</parameter>.
 
     <para>
      Searching is case sensitive.
@@ -69,15 +76,16 @@ if ( ereg( "([0-9]{4})-([0-9]{1,2})-([0-9]{1,2})", $date, $regs ) ) {
      with <parameter>replacement</parameter>.
 
     <para>
-     If <parameter>pattern</parameter> contains parenthesized substrings, replacement may
-     contain substrings of the form
+     If <parameter>pattern</parameter> contains parenthesized
+     substrings, <parameter>replacement</parameter> may contain
+     substrings of the form
      <literal>\\<replaceable>digit</replaceable></literal>, which will
      be replaced by the text matching the digit'th parenthesized
      substring; <literal>\\0</literal> will produce the entire
-     contents of string.  Up to nine substrings may be
-     used.  Parentheses may be nested, in which case they are counted
-     by the opening parenthesis.  For example, the following code
-     snippet prints "This was a test" three times:
+     contents of string.  Up to nine substrings may be used.
+     Parentheses may be nested, in which case they are counted by the
+     opening parenthesis.  For example, the following code snippet
+     prints "This was a test" three times:
      <example>
       <title>ereg_replace() example</title>
       <programlisting>

@@ -27,7 +27,7 @@
    |          Jim Winstead (jimw@php.net)                                 |
    +----------------------------------------------------------------------+
 */
-/* $Id: fsock.c,v 1.73 1998/05/30 22:59:24 rasmus Exp $ */
+/* $Id: fsock.c,v 1.74 1998/09/10 23:57:18 zeev Exp $ */
 #ifdef THREAD_SAFE
 #include "tls.h"
 #endif
@@ -119,7 +119,7 @@ void php3_fsockopen(INTERNAL_FUNCTION_PARAMETERS) {
 			if(!ParameterPassedByReference(ht,4)) {
 				php3_error(E_WARNING,"error string argument to fsockopen not passed by reference");
 			}
-			yystype_copy_constructor(args[3]);
+			pval_copy_constructor(args[3]);
 			args[3]->value.str.val = empty_string;
 			args[3]->value.str.len = 0;
 			args[3]->type = IS_STRING;

@@ -1,0 +1,9 @@
+--$Id: 010.php3t,v 1.1 1998/08/23 03:10:16 rocky Exp $
+--TITLE--
+Assigning from a function                                     ...
+--URL--
+ary/010.phtml
+--EXPECT--
+KEY: 0, VAL: a
+KEY: 1, VAL: b
+KEY: 2, VAL: c

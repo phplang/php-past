@@ -115,14 +115,14 @@ void php3_get_browser(INTERNAL_FUNCTION_PARAMETERS)
 	
 	*return_value = *agent;
 	return_value->type = IS_OBJECT;
-	yystype_copy_constructor(return_value);
-	return_value->value.ht->pDestructor = pval_DESTRUCTOR;
+	pval_copy_constructor(return_value);
+	return_value->value.ht->pDestructor = PVAL_DESTRUCTOR;
 
 	while (_php3_hash_find(agent->value.ht, "parent", sizeof("parent"), (void **) &agent_name)==SUCCESS) {
 		if (_php3_hash_find(&GLOBAL(browser_hash), agent_name->value.str.val, agent_name->value.str.len+1, (void **) &agent)==FAILURE) {
 			break;
 		}
-		_php3_hash_merge(return_value->value.ht,agent->value.ht,(void (*)(void *pData)) yystype_copy_constructor, (void *) &tmp, sizeof(pval));
+		_php3_hash_merge(return_value->value.ht,agent->value.ht,(void (*)(void *pData)) pval_copy_constructor, (void *) &tmp, sizeof(pval));
 	}
 }
 

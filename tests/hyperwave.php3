@@ -63,7 +63,7 @@
   echo "\n";
 
   echo "Test 2: Object Record of Hyperroot.\n";
-  $rootid = hw_root($connet);
+  $rootid = hw_root($connect);
   $rootobjrec = hw_getobject($connect, $rootid);
   $rootobjarr = hw_objrec2array($rootobjrec);
   list_attr($rootobjarr);

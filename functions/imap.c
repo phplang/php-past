@@ -1,3 +1,38 @@
+/*
+   +----------------------------------------------------------------------+
+   | PHP HTML Embedded Scripting Language Version 3.0                     |
+   +----------------------------------------------------------------------+
+   | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
+   +----------------------------------------------------------------------+
+   | This program is free software; you can redistribute it and/or modify |
+   | it under the terms of one of the following licenses:                 |
+   |                                                                      |
+   |  A) the GNU General Public License as published by the Free Software |
+   |     Foundation; either version 2 of the License, or (at your option) |
+   |     any later version.                                               |
+   |                                                                      |
+   |  B) the PHP License as published by the PHP Development Team and     |
+   |     included in the distribution in the file: LICENSE                |
+   |                                                                      |
+   | This program is distributed in the hope that it will be useful,      |
+   | but WITHOUT ANY WARRANTY; without even the implied warranty of       |
+   | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the        |
+   | GNU General Public License for more details.                         |
+   |                                                                      |
+   | You should have received a copy of both licenses referred to here.   |
+   | If you did not, or have any questions about PHP licensing, please    |
+   | contact core@php.net.                                                |
+   +----------------------------------------------------------------------+
+   | Authors: Rex Logan           <veebert@dimensional.com>               |
+   |          Mark Musone         <musone@afterfive.com>                  |
+   |          Brian Wang          <brian@vividnet.com>                    |
+   |          Kaj-Michael Lang    <milang@tal.org>                        |
+   |          Antoni Pamies Olive <toni@readysoft.net>                    |
+   |          Rasmus Lerdorf      <rasmus@lerdorf.on.ca>                  |
+   +----------------------------------------------------------------------+
+ */
+/* $Id: imap.c,v 1.41 1998/09/18 16:55:09 rasmus Exp $ */
+
 #define IMAP41
 
 #ifdef ERROR
@@ -25,7 +60,6 @@
 #include "mail.h"
 #include "rfc822.h"
 #include "modules.h"
-MAILSTREAM *mail_close_it (MAILSTREAM *stream);
 #if (WIN32|WINNT)
 #include "winsock.h"
 #endif
@@ -45,6 +79,9 @@ MAILSTREAM *mail_close_it (MAILSTREAM *stream);
 #define CONTENT_MSG_BODY contents.msg.body
 #define IMAPVER "Imap 4"
 #endif
+
+#define PHP_EXPUNGE 32768
+
 /* 
  * this array should be set up as:
  * {"PHPScriptFunctionName",dllFunctionName,1} 
@@ -60,6 +97,13 @@ extern void fs_give (void **block);
 int add_assoc_object(pval *arg, char *key, pval tmp);
 int add_next_index_object(pval *arg, pval tmp);
 void imap_add_body( pval *arg, BODY *body );
+
+typedef struct php3_imap_le_struct {
+	MAILSTREAM *imap_stream;
+	long flags;
+} pils;
+
+MAILSTREAM *mail_close_it (pils *imap_le_struct);
 
 function_entry imap_functions[] =
 {
@@ -104,6 +148,14 @@ function_entry imap_functions[] =
 	{"imap_fetchtext", php3_imap_body, NULL},
 	{"imap_uid", php3_imap_uid, NULL},
 	{"imap_msgno",php3_imap_msgno, NULL},
+	{"imap_list", php3_imap_list, NULL},
+	{"imap_scan", php3_imap_listscan, NULL},
+	{"imap_lsub", php3_imap_lsub, NULL},
+	{"imap_create", php3_imap_createmailbox, NULL},
+	{"imap_rename", php3_imap_renamemailbox, NULL},
+	{"imap_status", php3_imap_status, NULL},
+	{"imap_bodystruct", php3_imap_bodystruct, NULL},
+	{"imap_fetch_overview", php3_imap_fetch_overview, NULL},
 	{NULL, NULL, NULL}
 };
 
@@ -127,10 +179,19 @@ char imap_user[80]="";
 char imap_password[80]="";
 STRINGLIST *imap_folders=NIL;
 STRINGLIST *imap_sfolders=NIL;
+long status_flags;
+unsigned long status_messages;
+unsigned long status_recent;
+unsigned long status_unseen;
+unsigned long status_uidnext;
+unsigned long status_uidvalidity;
 
-MAILSTREAM *mail_close_it (MAILSTREAM *stream)
+MAILSTREAM *mail_close_it (pils *imap_le_struct)
 {
-	return mail_close_full ( stream,NIL);
+	MAILSTREAM *ret;
+	ret = mail_close_full (imap_le_struct->imap_stream,imap_le_struct->flags);
+	efree(imap_le_struct);
+	return ret;
 }
 
 inline int add_assoc_object(pval *arg, char *key, pval tmp)
@@ -162,6 +223,7 @@ int imap_init(INIT_FUNC_ARGS)
 #if WIN32|WINNT
 	mail_link (&mbxdriver);      /* link in the mbox driver */
 #else
+	mail_link(&unixdriver);   /* link in the unix driver */
 	mail_link (&mboxdriver);      /* link in the mbox driver */
 #endif
 	mail_link (&imapdriver);      /* link in the imap driver */
@@ -181,9 +243,48 @@ int imap_init(INIT_FUNC_ARGS)
 #endif
 	mail_link (&dummydriver);     /* link in the dummy driver */
 	auth_link (&auth_log);        /* link in the log authenticator */
-	/* Close options */
+	/* lets allow NIL */
 
-        REGISTER_MAIN_LONG_CONSTANT("CL_EXPUNGE", CL_EXPUNGE, CONST_PERSISTENT | CONST_CS);
+        REGISTER_MAIN_LONG_CONSTANT("NIL", NIL, CONST_PERSISTENT | CONST_CS);
+
+
+	/* Open Options */
+
+        REGISTER_MAIN_LONG_CONSTANT("OP_DEBUG", OP_DEBUG, CONST_PERSISTENT | CONST_CS);
+/* debug protocol negotiations */
+
+        REGISTER_MAIN_LONG_CONSTANT("OP_READONLY", OP_READONLY, CONST_PERSISTENT | CONST_CS);
+/* read-only open */
+
+        REGISTER_MAIN_LONG_CONSTANT("OP_ANONYMOUS", OP_ANONYMOUS, CONST_PERSISTENT | CONST_CS);
+	/* anonymous open of newsgroup */
+
+        REGISTER_MAIN_LONG_CONSTANT("OP_SHORTCACHE", OP_SHORTCACHE, CONST_PERSISTENT | CONST_CS);
+
+/* short (elt-only) caching */
+
+        REGISTER_MAIN_LONG_CONSTANT("OP_SILENT", OP_SILENT, CONST_PERSISTENT | CONST_CS);
+/* don't pass up events (internal use) */
+        REGISTER_MAIN_LONG_CONSTANT("OP_PROTOTYPE", OP_PROTOTYPE, CONST_PERSISTENT | CONST_CS);
+/* return driver prototype */
+        REGISTER_MAIN_LONG_CONSTANT("OP_HALFOPEN", OP_HALFOPEN, CONST_PERSISTENT | CONST_CS);
+/* half-open (IMAP connect but no select) */
+
+        REGISTER_MAIN_LONG_CONSTANT("OP_EXPUNGE", OP_EXPUNGE, CONST_PERSISTENT | CONST_CS);
+ /* silently expunge recycle stream */
+
+       REGISTER_MAIN_LONG_CONSTANT("OP_SECURE", OP_SECURE, CONST_PERSISTENT | CONST_CS);
+/* don't do non-secure authentication */
+
+/* 
+   PHP re-assigns CL_EXPUNGE a custom value that can be used as part of the imap_open() bitfield
+   because it seems like a good idea to be able to indicate that the mailbox should be 
+   automatically expunged during imap_open in case the script get interrupted and it doesn't get
+   to the imap_close() where this option is normally placed.  If the c-client library adds other
+   options and the value for this one conflicts, simply make PHP_EXPUNGE higher at the top of 
+   this file 
+*/
+        REGISTER_MAIN_LONG_CONSTANT("CL_EXPUNGE", PHP_EXPUNGE, CONST_PERSISTENT | CONST_CS);
         /* expunge silently */
 
 
@@ -282,6 +383,10 @@ void php3_imap_open(INTERNAL_FUNCTION_PARAMETERS)
 	pval *passwd;
 	pval *options;
 	MAILSTREAM *imap_stream;
+	pils *imap_le_struct;
+	long flags=NIL;
+	long cl_flags=NIL;
+	
 	int ind;
         int myargc=ARG_COUNT(ht);
 	
@@ -291,17 +396,29 @@ void php3_imap_open(INTERNAL_FUNCTION_PARAMETERS)
 		convert_to_string(mailbox);
 		convert_to_string(user);
 		convert_to_string(passwd);
-		if(myargc ==4) convert_to_long(options);
+		if(myargc ==4) {
+			convert_to_long(options);
+			flags = options->value.lval;
+			if(flags & PHP_EXPUNGE) {
+				cl_flags = CL_EXPUNGE;
+				flags ^= PHP_EXPUNGE;
+			}
+		}
 		strcpy(imap_user,user->value.str.val);
 		strcpy(imap_password,passwd->value.str.val);
 		imap_stream = NIL;
-		imap_stream = mail_open(imap_stream,mailbox->value.str.val,myargc == 4 ? options->value.lval : NIL);
+		imap_stream = mail_open(imap_stream,mailbox->value.str.val,flags);
 
 		if (imap_stream == NIL){
 			php3_error(E_WARNING,"Couldn't open stream %s\n",mailbox->value.str.val);
 			RETURN_FALSE;
 		}
-		ind = php3_list_insert(imap_stream, le_imap);
+		/* Note that if we ever come up with a persistent imap stream, the persistent version of this
+		   struct needs to be malloc'ed and not emalloc'ed */
+		imap_le_struct = emalloc(sizeof(pils));
+		imap_le_struct->imap_stream = imap_stream;
+		imap_le_struct->flags = cl_flags;	
+		ind = php3_list_insert(imap_le_struct, le_imap);
 
 		RETURN_LONG(ind);
 	}
@@ -313,33 +430,38 @@ void php3_imap_reopen(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *streamind;
 	pval *mailbox;
-	pval *user;
-	pval *passwd;
 	pval *options;
 	MAILSTREAM *imap_stream;
+	pils *imap_le_struct; 
 	int ind, ind_type;
+	long flags=NIL;
+	long cl_flags=NIL;
 	int myargc=ARG_COUNT(ht);
-	if (getParameters(ht,myargc,&streamind, &mailbox,&user,&passwd,&options) == FAILURE) {
+
+	if (myargc<2 || myargc>3 || getParameters(ht,myargc,&streamind, &mailbox, &options) == FAILURE) {
         WRONG_PARAM_COUNT;
     }
 
 	convert_to_long(streamind);
 	ind = streamind->value.lval;
-	imap_stream = ( MAILSTREAM *)php3_list_find(ind, &ind_type);
-	if (!imap_stream || ind_type != le_imap) {
+	imap_le_struct = (pils *)php3_list_find(ind, &ind_type);
+	if (!imap_le_struct || ind_type != le_imap) {
 		php3_error(E_WARNING, "Unable to find stream pointer");
 		RETURN_FALSE;
 	}
 
 	convert_to_string(mailbox);
-	convert_to_string(user);
-	convert_to_string(passwd);
-	if(myargc == 4) convert_to_long(options);
-	strcpy(imap_user,user->value.str.val);
-	strcpy(imap_password,passwd->value.str.val);
-
-	imap_stream = mail_open(imap_stream,mailbox->value.str.val,myargc == 4 ? options->value.lval : NIL );
-	if (imap_stream == NIL){
+	if(myargc == 3) {
+		convert_to_long(options);
+		flags = options->value.lval;
+		if(flags & PHP_EXPUNGE) {
+			cl_flags = CL_EXPUNGE;
+			flags ^= PHP_EXPUNGE;
+		}
+		imap_le_struct->flags = cl_flags;	
+	}
+	imap_stream = mail_open(imap_le_struct->imap_stream, mailbox->value.str.val, flags);
+	if (imap_stream == NIL) {
 		php3_error(E_WARNING,"Couldn't re-open stream\n");
 		RETURN_FALSE;
 	}
@@ -348,38 +470,44 @@ void php3_imap_reopen(INTERNAL_FUNCTION_PARAMETERS)
 
 void php3_imap_append(INTERNAL_FUNCTION_PARAMETERS)
 {
-	pval *streamind,*folder, *message,*flags;
-	int ind, ind_type;
-	MAILSTREAM *imap_stream;
-	STRING st;
-	int myargc=ARG_COUNT(ht);
-
-	if ( myargc < 3 || myargc > 4 || getParameters( ht, myargc, &streamind, &folder, &message,&flags) == FAILURE) {
-		WRONG_PARAM_COUNT;
-	}
-
-	convert_to_long(streamind);
-	convert_to_string(folder);
-	convert_to_string(message);
-	if (myargc == 4) convert_to_long(flags);
-	ind = streamind->value.lval;
-
-	imap_stream = ( MAILSTREAM *)php3_list_find( ind, &ind_type );
-
-	if ( !imap_stream || ind_type != le_imap ) {
-		php3_error(E_WARNING, "Unable to find stream pointer");
-		RETURN_FALSE;
+  pval *streamind,*folder, *message,*flags;
+  int ind, ind_type;
+  pils *imap_le_struct; 
+  STRING st;
+  int myargc=ARG_COUNT(ht);
+  
+  if ( myargc < 3 || myargc > 4 || getParameters( ht, myargc, &streamind, &folder, &message,&flags) == FAILURE) {
+    WRONG_PARAM_COUNT;
+  }
+  
+  convert_to_long(streamind);
+  convert_to_string(folder);
+  convert_to_string(message);
+  if (myargc == 4) convert_to_string(flags);
+  ind = streamind->value.lval;
+  
+	imap_le_struct = (pils *)php3_list_find( ind, &ind_type );
+	
+	if ( !imap_le_struct || ind_type != le_imap ) {
+	  php3_error(E_WARNING, "Unable to find stream pointer");
+	  RETURN_FALSE;
 	}
 	INIT (&st,mail_string,(void *) message->value.str.val,message->value.str.len);
-	mail_append_full( imap_stream, folder->value.str.val,flags->value.str.val,NIL,&st);
-	RETURN_TRUE;
+	if(mail_append_full(imap_le_struct->imap_stream, folder->value.str.val,myargc==4?flags->value.str.val:NIL,NIL,&st))
+	  {
+	  RETURN_TRUE;
+	  }
+	else
+	  {
+	  RETURN_FALSE;
+	  }
 }
 
 void php3_imap_num_msg(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *streamind;
 	int ind, ind_type;
-	MAILSTREAM *imap_stream;
+	pils *imap_le_struct; 
 
 	if (ARG_COUNT(ht) != 1 || getParameters(ht, 1, &streamind) == FAILURE) {
 		WRONG_PARAM_COUNT;
@@ -389,21 +517,21 @@ void php3_imap_num_msg(INTERNAL_FUNCTION_PARAMETERS)
 
 	ind = streamind->value.lval;
 
-	imap_stream = ( MAILSTREAM *)php3_list_find(ind, &ind_type);
+	imap_le_struct = (pils *)php3_list_find(ind, &ind_type);
 
-	if (!imap_stream || ind_type != le_imap) {
+	if (!imap_le_struct || ind_type != le_imap) {
 		php3_error(E_WARNING, "Unable to find stream pointer");
 		RETURN_FALSE;
 	}
 
-	RETURN_LONG(imap_stream->nmsgs);
+	RETURN_LONG(imap_le_struct->imap_stream->nmsgs);
 }
 
 void php3_imap_ping(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *streamind;
 	int ind, ind_type;
-	MAILSTREAM *imap_stream;
+	pils *imap_le_struct; 
 
 	if (ARG_COUNT(ht) != 1 || getParameters(ht, 1, &streamind) == FAILURE) {
 		WRONG_PARAM_COUNT;
@@ -412,12 +540,12 @@ void php3_imap_ping(INTERNAL_FUNCTION_PARAMETERS)
 	convert_to_long( streamind );
 	ind = streamind->value.lval;
 
-	imap_stream = ( MAILSTREAM *)php3_list_find( ind, &ind_type );
-	if ( !imap_stream || ind_type != le_imap ) {
+	imap_le_struct = (pils *)php3_list_find( ind, &ind_type );
+	if ( !imap_le_struct || ind_type != le_imap ) {
 		php3_error( E_WARNING, "Unable to find stream pointer" );
 		RETURN_FALSE;
 	}
-	RETURN_LONG( mail_ping( imap_stream ) );
+	RETURN_LONG( mail_ping( imap_le_struct->imap_stream ) );
 }
 
 
@@ -425,25 +553,25 @@ void php3_imap_num_recent(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *streamind;
 	int ind, ind_type;
-	MAILSTREAM *imap_stream;
+	pils *imap_le_struct; 
 	if (ARG_COUNT(ht) != 1 || getParameters(ht, 1, &streamind) == FAILURE) {
 		WRONG_PARAM_COUNT;
 	}
 	convert_to_long(streamind);
 	ind = streamind->value.lval;
-	imap_stream = ( MAILSTREAM *)php3_list_find(ind, &ind_type);
-	if (!imap_stream || ind_type != le_imap) {
+	imap_le_struct = (pils *)php3_list_find(ind, &ind_type);
+	if (!imap_le_struct || ind_type != le_imap) {
 		php3_error(E_WARNING, "Unable to find stream pointer");
 		RETURN_FALSE;
 	}
-	RETURN_LONG(imap_stream->recent);
+	RETURN_LONG(imap_le_struct->imap_stream->recent);
 }
 
 void php3_imap_expunge(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *streamind;
 	int ind, ind_type;
-	MAILSTREAM *imap_stream;
+	pils *imap_le_struct; 
 
 	if (ARG_COUNT(ht) != 1 || getParameters(ht, 1, &streamind) == FAILURE) {
 		WRONG_PARAM_COUNT;
@@ -453,14 +581,14 @@ void php3_imap_expunge(INTERNAL_FUNCTION_PARAMETERS)
 
 	ind = streamind->value.lval;
 
-	imap_stream = ( MAILSTREAM *)php3_list_find(ind, &ind_type);
+	imap_le_struct = (pils *)php3_list_find(ind, &ind_type);
 
-	if (!imap_stream || ind_type != le_imap) {
+	if (!imap_le_struct || ind_type != le_imap) {
 		php3_error(E_WARNING, "Unable to find stream pointer");
 		RETURN_FALSE;
 	}
 
-	mail_expunge (imap_stream);
+	mail_expunge (imap_le_struct->imap_stream);
 
 	RETURN_TRUE;
 }
@@ -468,14 +596,33 @@ void php3_imap_expunge(INTERNAL_FUNCTION_PARAMETERS)
 
 void php3_imap_close(INTERNAL_FUNCTION_PARAMETERS)
 {
-	pval *ind;
+	pval *options, *streamind;
+	int ind, ind_type;
+	pils *imap_le_struct=NULL; 
 	int myargcount=ARG_COUNT(ht);
+	long flags = NIL;
 
-	if (myargcount != 1 || getParameters(ht, myargcount, &ind) == FAILURE) {
+	if (myargcount < 1 || myargcount > 2 || getParameters(ht, myargcount, &streamind, &options) == FAILURE) {
 		WRONG_PARAM_COUNT;
 	}
-	convert_to_long(ind);
-	php3_list_delete(ind->value.lval);
+	convert_to_long(streamind);
+	ind = streamind->value.lval;
+	imap_le_struct = (pils *)php3_list_find(ind, &ind_type);
+	if (!imap_le_struct || ind_type != le_imap) {
+		php3_error(E_WARNING, "Unable to find stream pointer");
+		RETURN_FALSE;
+    }
+	if(myargcount==2) {
+		convert_to_long(options);
+		flags = options->value.lval;
+		/* Do the translation from PHP's internal PHP_EXPUNGE define to c-client's CL_EXPUNGE */
+		if(flags & PHP_EXPUNGE) {
+			flags ^= PHP_EXPUNGE;
+			flags |= CL_EXPUNGE;
+		}	
+		imap_le_struct->flags = flags;
+	}
+	php3_list_delete(ind);
 	RETURN_TRUE;
 }
 
@@ -487,7 +634,7 @@ void php3_imap_headers(INTERNAL_FUNCTION_PARAMETERS)
 	unsigned long i;
 	char *t;
 	unsigned int msgno;
-	MAILSTREAM *imap_stream;
+	pils *imap_le_struct; 
 	char tmp[MAILTMPLEN];
 
 	if (ARG_COUNT(ht) != 1 || getParameters(ht, 1, &streamind) == FAILURE) {
@@ -498,9 +645,9 @@ void php3_imap_headers(INTERNAL_FUNCTION_PARAMETERS)
 
 	ind = streamind->value.lval;
 
-	imap_stream = ( MAILSTREAM *)php3_list_find(ind, &ind_type);
+	imap_le_struct = (pils *)php3_list_find(ind, &ind_type);
 
-	if (!imap_stream || ind_type != le_imap) {
+	if (!imap_le_struct || ind_type != le_imap) {
 		php3_error(E_WARNING, "Unable to find stream pointer");
 		RETURN_FALSE;
 	}
@@ -510,9 +657,9 @@ void php3_imap_headers(INTERNAL_FUNCTION_PARAMETERS)
 		RETURN_FALSE;
 	}
 
-	for (msgno = 1; msgno <= imap_stream->nmsgs; msgno++) {
-		MESSAGECACHE * cache = mail_elt (imap_stream,msgno);
-		mail_fetchstructure (imap_stream,msgno,NIL);
+	for (msgno = 1; msgno <= imap_le_struct->imap_stream->nmsgs; msgno++) {
+		MESSAGECACHE * cache = mail_elt (imap_le_struct->imap_stream,msgno);
+		mail_fetchstructure (imap_le_struct->imap_stream,msgno,NIL);
 		tmp[0] = cache->recent ? (cache->seen ? 'R': 'N') : ' ';
 		tmp[1] = (cache->recent | cache->seen) ? ' ' : 'U';
 		tmp[2] = cache->flagged ? 'F' : ' ';
@@ -522,17 +669,17 @@ void php3_imap_headers(INTERNAL_FUNCTION_PARAMETERS)
 		mail_date (tmp+11,cache);
 		tmp[17] = ' ';
 		tmp[18] = '\0';
-		mail_fetchfrom (tmp+18,imap_stream,msgno,(long) 20);
+		mail_fetchfrom (tmp+18,imap_le_struct->imap_stream,msgno,(long) 20);
 		strcat (tmp," ");
 		if ((i = cache->user_flags)) {
 			strcat (tmp,"{");
 			while (i) {
-				strcat (tmp,imap_stream->user_flags[find_rightmost_bit (&i)]);
+				strcat (tmp,imap_le_struct->imap_stream->user_flags[find_rightmost_bit (&i)]);
 				if (i) strcat (tmp," ");
 			}
 			strcat (tmp,"} ");
 		}
-		mail_fetchsubject(t=tmp+strlen(tmp),imap_stream,msgno,(long)25);
+		mail_fetchsubject(t=tmp+strlen(tmp),imap_le_struct->imap_stream,msgno,(long)25);
 		sprintf (t+=strlen(t)," (%ld chars)",cache->rfc822_size);
 		add_next_index_string(return_value,tmp,1);
 	}
@@ -543,7 +690,7 @@ void php3_imap_body(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *streamind, * msgno, *flags;
 	int ind, ind_type;
-	MAILSTREAM *imap_stream;
+	pils *imap_le_struct; 
 	int myargc=ARG_COUNT(ht);
 	if (myargc <2 || myargc > 3 || getParameters(ht,myargc,&streamind,&msgno,&flags) == FAILURE) {
 		WRONG_PARAM_COUNT;
@@ -554,12 +701,12 @@ void php3_imap_body(INTERNAL_FUNCTION_PARAMETERS)
 	if(myargc == 3) convert_to_long(flags);
 	ind = streamind->value.lval;
 
-	imap_stream = ( MAILSTREAM *)php3_list_find(ind, &ind_type);
-	if (!imap_stream || ind_type != le_imap) {
+	imap_le_struct = (pils *)php3_list_find(ind, &ind_type);
+	if (!imap_le_struct || ind_type != le_imap) {
 		php3_error(E_WARNING, "Unable to find stream pointer");
 		RETURN_FALSE;
 	}
-	RETVAL_STRING(mail_fetchtext_full (imap_stream,msgno->value.lval,NIL,myargc == 3 ? flags->value.lval : NIL),1);
+	RETVAL_STRING(mail_fetchtext_full (imap_le_struct->imap_stream,msgno->value.lval,NIL,myargc == 3 ? flags->value.lval : NIL),1);
 
 }
 
@@ -567,7 +714,7 @@ void php3_imap_fetchtext_full(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *streamind, * msgno, *flags;
 	int ind, ind_type;
-	MAILSTREAM *imap_stream;
+	pils *imap_le_struct; 
 	int myargcount = ARG_COUNT(ht);
 	if (myargcount >3 || myargcount <2 || getParameters(ht,myargcount,&streamind,&msgno,&flags) == FAILURE) {
 		WRONG_PARAM_COUNT;
@@ -578,20 +725,19 @@ void php3_imap_fetchtext_full(INTERNAL_FUNCTION_PARAMETERS)
 	if (myargcount == 3) convert_to_long(flags);
 	ind = streamind->value.lval;
 
-	imap_stream = ( MAILSTREAM *)php3_list_find(ind, &ind_type);
-	if (!imap_stream || ind_type != le_imap) {
+	imap_le_struct = (pils *)php3_list_find(ind, &ind_type);
+	if (!imap_le_struct || ind_type != le_imap) {
 		php3_error(E_WARNING, "Unable to find stream pointer");
 		RETURN_FALSE;
 	}
-	RETVAL_STRING(mail_fetchtext_full (imap_stream,msgno->value.lval,NIL,flags->value.lval),1);
-
+	RETVAL_STRING(mail_fetchtext_full (imap_le_struct->imap_stream,msgno->value.lval,NIL,myargcount==3?flags->value.lval:NIL),1);
 }
 
 void php3_imap_mail_copy(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *streamind,*seq, *folder, *options;
 	int ind, ind_type;
-	MAILSTREAM *imap_stream;
+	pils *imap_le_struct; 
 	int myargcount = ARG_COUNT(ht);
 	if (myargcount > 4 || myargcount < 3 
 		|| getParameters(ht,myargcount,&streamind,&seq,&folder,&options) == FAILURE) {
@@ -604,12 +750,12 @@ void php3_imap_mail_copy(INTERNAL_FUNCTION_PARAMETERS)
 	if(myargcount == 4) convert_to_long(options);
 	ind = streamind->value.lval;
 
-	imap_stream = ( MAILSTREAM *)php3_list_find(ind, &ind_type);
-	if (!imap_stream || ind_type != le_imap) {
+	imap_le_struct = (pils *)php3_list_find(ind, &ind_type);
+	if (!imap_le_struct || ind_type != le_imap) {
 		php3_error(E_WARNING, "Unable to find stream pointer");
 		RETURN_FALSE;
 	}
-	if ( mail_copy_full(imap_stream,seq->value.str.val,folder->value.str.val,myargcount == 4 ? options->value.lval : NIL)==T ) {
+	if ( mail_copy_full(imap_le_struct->imap_stream,seq->value.str.val,folder->value.str.val,myargcount == 4 ? options->value.lval : NIL)==T ) {
         RETURN_TRUE;
 	} else {
 		RETURN_FALSE;
@@ -620,7 +766,7 @@ void php3_imap_mail_move(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *streamind,*seq, *folder;
 	int ind, ind_type;
-	MAILSTREAM *imap_stream;
+	pils *imap_le_struct; 
 
 	if (ARG_COUNT(ht)!=3 
 		|| getParameters(ht,3,&streamind,&seq,&folder) == FAILURE) {
@@ -633,12 +779,12 @@ void php3_imap_mail_move(INTERNAL_FUNCTION_PARAMETERS)
 
 	ind = streamind->value.lval;
 
-	imap_stream = ( MAILSTREAM *)php3_list_find(ind, &ind_type);
-	if (!imap_stream || ind_type != le_imap) {
+	imap_le_struct = (pils *)php3_list_find(ind, &ind_type);
+	if (!imap_le_struct || ind_type != le_imap) {
 		php3_error(E_WARNING, "Unable to find stream pointer");
 		RETURN_FALSE;
 	}
-	if ( mail_move(imap_stream,seq->value.str.val,folder->value.str.val)==T ) {
+	if ( mail_move(imap_le_struct->imap_stream,seq->value.str.val,folder->value.str.val)==T ) {
         RETURN_TRUE;
 	} else {
 		RETURN_FALSE;
@@ -649,7 +795,7 @@ void php3_imap_createmailbox(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *streamind, *folder;
 	int ind, ind_type;
-	MAILSTREAM *imap_stream;
+	pils *imap_le_struct; 
 
 	if (ARG_COUNT(ht)!=2 || getParameters(ht,2,&streamind,&folder) == FAILURE) {
 		WRONG_PARAM_COUNT;
@@ -660,12 +806,12 @@ void php3_imap_createmailbox(INTERNAL_FUNCTION_PARAMETERS)
 
 	ind = streamind->value.lval;
 
-	imap_stream = ( MAILSTREAM *)php3_list_find(ind, &ind_type);
-	if (!imap_stream || ind_type != le_imap) {
+	imap_le_struct = (pils *)php3_list_find(ind, &ind_type);
+	if (!imap_le_struct || ind_type != le_imap) {
 		php3_error(E_WARNING, "Unable to find stream pointer");
 		RETURN_FALSE;
 	}
-	if ( mail_create(imap_stream,folder->value.str.val)==T ) {
+	if ( mail_create(imap_le_struct->imap_stream,folder->value.str.val)==T ) {
         RETURN_TRUE;
 	} else {
 		RETURN_FALSE;
@@ -676,7 +822,7 @@ void php3_imap_renamemailbox(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *streamind, *old, *new;
 	int ind, ind_type;
-	MAILSTREAM *imap_stream;
+	pils *imap_le_struct; 
 
 	if (ARG_COUNT(ht)!=3 || getParameters(ht,3,&streamind,&old,&new)==FAILURE){
 		WRONG_PARAM_COUNT;
@@ -688,12 +834,12 @@ void php3_imap_renamemailbox(INTERNAL_FUNCTION_PARAMETERS)
 
 	ind = streamind->value.lval;
 
-	imap_stream = ( MAILSTREAM *)php3_list_find(ind, &ind_type);
-	if (!imap_stream || ind_type != le_imap) {
+	imap_le_struct = (pils *)php3_list_find(ind, &ind_type);
+	if (!imap_le_struct || ind_type != le_imap) {
 		php3_error(E_WARNING, "Unable to find stream pointer");
 		RETURN_FALSE;
 	}
-	if ( mail_rename(imap_stream,old->value.str.val,new->value.str.val)==T ) {
+	if ( mail_rename(imap_le_struct->imap_stream,old->value.str.val,new->value.str.val)==T ) {
         RETURN_TRUE;
 	} else {
 		RETURN_FALSE;
@@ -704,7 +850,7 @@ void php3_imap_deletemailbox(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *streamind, *folder;
 	int ind, ind_type;
-	MAILSTREAM *imap_stream;
+	pils *imap_le_struct; 
 
 	if (ARG_COUNT(ht)!=2 || getParameters(ht,2,&streamind,&folder) == FAILURE) {
 		WRONG_PARAM_COUNT;
@@ -715,12 +861,12 @@ void php3_imap_deletemailbox(INTERNAL_FUNCTION_PARAMETERS)
 
 	ind = streamind->value.lval;
 
-	imap_stream = ( MAILSTREAM *)php3_list_find(ind, &ind_type);
-	if (!imap_stream || ind_type != le_imap) {
+	imap_le_struct = (pils *)php3_list_find(ind, &ind_type);
+	if (!imap_le_struct || ind_type != le_imap) {
 		php3_error(E_WARNING, "Unable to find stream pointer");
 		RETURN_FALSE;
 	}
-	if ( mail_delete(imap_stream,folder->value.str.val)==T ) {
+	if ( mail_delete(imap_le_struct->imap_stream,folder->value.str.val)==T ) {
         RETURN_TRUE;
 	} else {
 		RETURN_FALSE;
@@ -731,7 +877,7 @@ void php3_imap_list(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *streamind, *ref, *pat;
 	int ind, ind_type;
-	MAILSTREAM *imap_stream;
+	pils *imap_le_struct; 
 	STRINGLIST *cur=NIL;
 
 	if (ARG_COUNT(ht)!=3 
@@ -745,13 +891,13 @@ void php3_imap_list(INTERNAL_FUNCTION_PARAMETERS)
 
 	ind = streamind->value.lval;
 
-	imap_stream = ( MAILSTREAM *)php3_list_find(ind, &ind_type);
-	if (!imap_stream || ind_type != le_imap) {
+	imap_le_struct = (pils *)php3_list_find(ind, &ind_type);
+	if (!imap_le_struct || ind_type != le_imap) {
 		php3_error(E_WARNING, "Unable to find stream pointer");
 		RETURN_FALSE;
 	}
     imap_folders = NIL;
-	mail_list(imap_stream,ref->value.str.val,pat->value.str.val);
+	mail_list(imap_le_struct->imap_stream,ref->value.str.val,pat->value.str.val);
 	if (imap_folders == NIL) {
 		RETURN_FALSE;
 	}
@@ -763,49 +909,49 @@ void php3_imap_list(INTERNAL_FUNCTION_PARAMETERS)
     }
 	mail_free_stringlist (&imap_folders);
 }
+
 void php3_imap_listscan(INTERNAL_FUNCTION_PARAMETERS)
 {
-        pval *streamind, *ref, *pat, *content;
-        int ind, ind_type;
-        MAILSTREAM *imap_stream;
-        STRINGLIST *cur=NIL;
+	pval *streamind, *ref, *pat, *content;
+	int ind, ind_type;
+	pils *imap_le_struct;
+	STRINGLIST *cur=NIL;
 
-        if (ARG_COUNT(ht)!=3 
-                || getParameters(ht,4,&streamind,&ref,&pat,&content) == FAILURE) {
-                WRONG_PARAM_COUNT;
-        }
+	if (ARG_COUNT(ht)!=4 || getParameters(ht,4,&streamind,&ref,&pat,&content) == FAILURE) {
+		WRONG_PARAM_COUNT;
+	}
 
-        convert_to_long(streamind);
-        convert_to_string(ref);
-        convert_to_string(pat);
-        convert_to_string(content);
+	convert_to_long(streamind);
+	convert_to_string(ref);
+	convert_to_string(pat);
+	convert_to_string(content);
 
-        ind = streamind->value.lval;
+	ind = streamind->value.lval;
 
-        imap_stream = ( MAILSTREAM *)php3_list_find(ind, &ind_type);
-        if (!imap_stream || ind_type != le_imap) {
-                php3_error(E_WARNING, "Unable to find stream pointer");
-                RETURN_FALSE;
-        }
-    imap_folders = NIL;
-        mail_scan(imap_stream,ref->value.str.val,pat->value.str.val,content->value.str.val);
-        if (imap_folders == NIL) {
-                RETURN_FALSE;
-        }
-        array_init(return_value);
-    cur=imap_folders;
-    while (cur != NIL ) {
-                add_next_index_string(return_value,cur->LTEXT,1);
-        cur=cur->next;
-    }
-        mail_free_stringlist (&imap_folders);
+	imap_le_struct = (pils *)php3_list_find(ind, &ind_type);
+	if (!imap_le_struct || ind_type != le_imap) {
+		php3_error(E_WARNING, "Unable to find stream pointer");
+		RETURN_FALSE;
+	}
+	imap_folders = NIL;
+	mail_scan(imap_le_struct->imap_stream,ref->value.str.val,pat->value.str.val,content->value.str.val);
+	if (imap_folders == NIL) {
+		RETURN_FALSE;
+	}
+	array_init(return_value);
+	cur=imap_folders;
+	while (cur != NIL ) {
+		add_next_index_string(return_value,cur->LTEXT,1);
+		cur=cur->next;
+	}
+	mail_free_stringlist (&imap_folders);
 }
 
 void php3_imap_check(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *streamind;
 	int ind, ind_type;
-	MAILSTREAM *imap_stream;
+	pils *imap_le_struct;
 	char date[50];
 
 	if (ARG_COUNT(ht)!=1 || getParameters(ht,1,&streamind) == FAILURE) {
@@ -816,23 +962,23 @@ void php3_imap_check(INTERNAL_FUNCTION_PARAMETERS)
 
 	ind = streamind->value.lval;
 
-	imap_stream = ( MAILSTREAM *)php3_list_find(ind, &ind_type);
-	if (!imap_stream || ind_type != le_imap) {
+	imap_le_struct = (pils *)php3_list_find(ind, &ind_type);
+	if (!imap_le_struct || ind_type != le_imap) {
 		php3_error(E_WARNING, "Unable to find stream pointer");
 		RETURN_FALSE;
 	}
 
-	if (mail_ping (imap_stream) == NIL ) {
+	if (mail_ping (imap_le_struct->imap_stream) == NIL ) {
 		RETURN_FALSE;
     }
-	if (imap_stream && imap_stream->mailbox) {
+	if (imap_le_struct->imap_stream && imap_le_struct->imap_stream->mailbox) {
 		rfc822_date (date);
 		object_init(return_value);
 		add_property_string(return_value,"Date",date,1);
-		add_property_string(return_value,"Driver",imap_stream->dtb->name,1);
-		add_property_string(return_value,"Mailbox",imap_stream->mailbox,1);
-		add_property_long(return_value,"Nmsgs",imap_stream->nmsgs);
-		add_property_long(return_value,"Recent",imap_stream->recent);
+		add_property_string(return_value,"Driver",imap_le_struct->imap_stream->dtb->name,1);
+		add_property_string(return_value,"Mailbox",imap_le_struct->imap_stream->mailbox,1);
+		add_property_long(return_value,"Nmsgs",imap_le_struct->imap_stream->nmsgs);
+		add_property_long(return_value,"Recent",imap_le_struct->imap_stream->recent);
 	} else {
 		RETURN_FALSE;
 	}
@@ -843,7 +989,7 @@ void php3_imap_delete(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *streamind, * msgno;
 	int ind, ind_type;
-	MAILSTREAM *imap_stream;
+	pils *imap_le_struct;
 
 	if (ARG_COUNT(ht)!=2 || getParameters(ht,2,&streamind,&msgno) == FAILURE) {
 		WRONG_PARAM_COUNT;
@@ -854,22 +1000,21 @@ void php3_imap_delete(INTERNAL_FUNCTION_PARAMETERS)
 
 	ind = streamind->value.lval;
 
-	imap_stream = ( MAILSTREAM *)php3_list_find(ind, &ind_type);
-	if (!imap_stream || ind_type != le_imap) {
+	imap_le_struct = (pils *)php3_list_find(ind, &ind_type);
+	if (!imap_le_struct || ind_type != le_imap) {
 		php3_error(E_WARNING, "Unable to find stream pointer");
 		RETURN_FALSE;
 	}
 
-	mail_setflag(imap_stream,msgno->value.str.val,"\\DELETED");
+	mail_setflag(imap_le_struct->imap_stream,msgno->value.str.val,"\\DELETED");
 	RETVAL_TRUE;
-
 }
 
 void php3_imap_undelete(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *streamind, * msgno;
 	int ind, ind_type;
-	MAILSTREAM *imap_stream;
+	pils *imap_le_struct;
 
 	if (ARG_COUNT(ht)!=2 || getParameters(ht,2,&streamind,&msgno) == FAILURE) {
 		WRONG_PARAM_COUNT;
@@ -880,74 +1025,60 @@ void php3_imap_undelete(INTERNAL_FUNCTION_PARAMETERS)
 
 	ind = streamind->value.lval;
 
-	imap_stream = ( MAILSTREAM *)php3_list_find(ind, &ind_type);
-	if (!imap_stream || ind_type != le_imap) {
+	imap_le_struct = (pils *)php3_list_find(ind, &ind_type);
+	if (!imap_le_struct || ind_type != le_imap) {
 		php3_error(E_WARNING, "Unable to find stream pointer");
 		RETURN_FALSE;
 	}
 
-	mail_clearflag (imap_stream,msgno->value.str.val,"\\DELETED");
+	mail_clearflag (imap_le_struct->imap_stream,msgno->value.str.val,"\\DELETED");
 	RETVAL_TRUE;
-
 }
 
 
 void php3_imap_headerinfo(INTERNAL_FUNCTION_PARAMETERS)
 {
-  pval *streamind, * msgno,to,tovals,from,fromvals,reply_to,reply_tovals,sender;
-  pval *fromlength;
-  pval *subjectlength;
-  pval sendervals,return_path,return_pathvals;
-  pval cc,ccvals,bcc,bccvals;
-  pval *defaulthost;
-  int ind, ind_type;
-  unsigned long length;
-  MAILSTREAM *imap_stream;
+	pval *streamind, * msgno,to,tovals,from,fromvals,reply_to,reply_tovals,sender;
+	pval *fromlength;
+	pval *subjectlength;
+	pval sendervals,return_path,return_pathvals;
+	pval cc,ccvals,bcc,bccvals;
+	pval *defaulthost;
+	int ind, ind_type;
+	unsigned long length;
+	pils *imap_le_struct;
 	MESSAGECACHE * cache;
 	char *mystring;
 	char dummy[2000];
-	char fulladdress[MAILTMPLEN];
+	char fulladdress[MAILTMPLEN],tempaddress[MAILTMPLEN];
 	ENVELOPE *en;
-/*	BODY *body; */
-	ADDRESS *addresstmp;
+	ADDRESS *addresstmp,*addresstmp2;
 	int myargc;
-	STRINGLIST *lines=mail_newstringlist ();
-	STRINGLIST *cur=lines;
 	myargc=ARG_COUNT(ht);
 	if (myargc<2 || myargc>5 || getParameters(ht,myargc,&streamind,&msgno,&fromlength,&subjectlength,&defaulthost)==FAILURE) {
 		WRONG_PARAM_COUNT;
 	}
 	convert_to_long(streamind);
 	convert_to_long(msgno);
-       if(myargc >= 3) convert_to_long(fromlength); else fromlength=0x00;;
-       if(myargc >= 4) convert_to_long(subjectlength); else subjectlength=0x00;
-       if(myargc == 5) convert_to_string(defaulthost);
+	if(myargc >= 3) convert_to_long(fromlength); else fromlength=0x00;;
+	if(myargc >= 4) convert_to_long(subjectlength); else subjectlength=0x00;
+	if(myargc == 5) convert_to_string(defaulthost);
 	ind = streamind->value.lval;
 
-	imap_stream = ( MAILSTREAM *)php3_list_find(ind, &ind_type);
-	if (!imap_stream || ind_type != le_imap) {
+	imap_le_struct = (pils *)php3_list_find(ind, &ind_type);
+	if (!imap_le_struct || ind_type != le_imap) {
 		php3_error(E_WARNING, "Unable to find stream pointer");
 		RETURN_FALSE;
 	}
 
-	mail_fetchstructure (imap_stream,msgno->value.lval,NIL);
-	cache = mail_elt (imap_stream,msgno->value.lval);
-	
+	if(msgno->value.lval && msgno->value.lval <= imap_le_struct->imap_stream->nmsgs && mail_fetchstructure (imap_le_struct->imap_stream,msgno->value.lval,NIL))
+		cache = mail_elt (imap_le_struct->imap_stream,msgno->value.lval);
+	else
+		RETURN_FALSE;
 	object_init(return_value);
 
- 	cur->LSIZE = strlen (cur->LTEXT = (char *)cpystr ("From"));
-        cur = cur->next = mail_newstringlist ();
- 	cur->LSIZE = strlen (cur->LTEXT = (char *)cpystr ("Date"));
-        cur = cur->next = mail_newstringlist ();
- 	cur->LSIZE = strlen (cur->LTEXT = (char *)cpystr ("Subject"));
-        cur = cur->next = mail_newstringlist ();
- 	cur->LSIZE = strlen (cur->LTEXT = (char *)cpystr ("To"));
-        cur = cur->next = mail_newstringlist ();
- 	cur->LSIZE = strlen (cur->LTEXT = (char *)cpystr ("cc"));
-        cur = cur->next = mail_newstringlist ();
- 	cur->LSIZE = strlen (cur->LTEXT = (char *)cpystr ("Reply-To"));
-    mystring=mail_fetchheader_full(imap_stream,msgno->value.lval,lines,&length,NIL);
-mail_free_stringlist (&lines);
+
+    mystring=mail_fetchheader_full(imap_le_struct->imap_stream,msgno->value.lval,NIL,&length,NIL);
 if(myargc ==5)
 rfc822_parse_msg (&en,NULL,mystring,length,NULL,defaulthost->value.str.val,NIL);
 else
@@ -966,10 +1097,31 @@ rfc822_parse_msg (&en,NULL,mystring,length,NULL,"UNKNOWN",NIL);
 
 if(en->to)
 {
-    addresstmp=en->to;
-    fulladdress[0]=0x00;
-    rfc822_write_address(fulladdress,addresstmp);
-      if(fulladdress) add_property_string( return_value, "toaddress", fulladdress, 1);
+  int ok=1;
+  addresstmp=en->to;
+  fulladdress[0]=0x00;
+
+  while(ok && addresstmp) /* while length < 1000 and we are not at the end of the list */
+    {
+      addresstmp2=addresstmp->next; /* save the pointer to the next address */
+      addresstmp->next=NULL; /* make this address the only one now. */
+      tempaddress[0]=0x00; /* reset tempaddress buffer */
+      rfc822_write_address(tempaddress,addresstmp); /* ok, write the address into tempaddress string */
+      if((strlen(tempaddress) + strlen(fulladdress)) < 1000) /* is the new address + total address < 1000 */
+	{                /* yes */
+	  if(strlen(fulladdress)) strcat(fulladdress,","); /* put in a comma */ 
+	  strcat(fulladdress,tempaddress); /* put in the new address */
+	}
+      else        /* no */
+	{
+	ok=0;  /* stop looping */
+	strcat(fulladdress,", ...");
+	}
+      addresstmp=addresstmp2; /* reset the pointer to the next address first! */
+    }
+
+  if(fulladdress) add_property_string( return_value, "toaddress", fulladdress, 1);
+  addresstmp=en->to;
     array_init( &to );
     do {
       object_init( &tovals);
@@ -984,10 +1136,31 @@ if(en->to)
 
 if(en->from)
 {
-    addresstmp=en->from;
-    fulladdress[0]=0x00;
-    rfc822_write_address(fulladdress,addresstmp);
+  int ok=1;
+  addresstmp=en->from;
+  fulladdress[0]=0x00;
+  
+  while(ok && addresstmp) /* while length < 1000 and we are not at the end of the list */
+    {
+      addresstmp2=addresstmp->next; /* save the pointer to the next address */
+      addresstmp->next=NULL; /* make this address the only one now. */
+      tempaddress[0]=0x00; /* reset tempaddress buffer */
+      rfc822_write_address(tempaddress,addresstmp); /* ok, write the address into tempaddress string */
+      if((strlen(tempaddress) + strlen(fulladdress)) < 1000) /* is the new address + total address < 1000 */
+	{                /* yes */
+	  if(strlen(fulladdress)) strcat(fulladdress,","); /* put in a comma */ 
+	  strcat(fulladdress,tempaddress); /* put in the new address */
+	}
+      else        /* no */
+	{
+	ok=0;  /* stop looping */
+	strcat(fulladdress,", ...");
+	}
+      addresstmp=addresstmp2; /* reset the pointer to the next address first! */
+    }
+
       if(fulladdress) add_property_string( return_value, "fromaddress", fulladdress, 1);
+  addresstmp=en->from;
     array_init( &from );
     do {
       object_init( &fromvals);
@@ -1002,10 +1175,31 @@ if(en->from)
 
 if(en->cc)
 {
-    addresstmp=en->cc;
-      fulladdress[0]=0x00;
-      rfc822_write_address(fulladdress,addresstmp);
+  int ok=1;
+  addresstmp=en->cc;
+  fulladdress[0]=0x00;
+  
+  while(ok && addresstmp) /* while length < 1000 and we are not at the end of the list */
+    {
+      addresstmp2=addresstmp->next; /* save the pointer to the next address */
+      addresstmp->next=NULL; /* make this address the only one now. */
+      tempaddress[0]=0x00; /* reset tempaddress buffer */
+      rfc822_write_address(tempaddress,addresstmp); /* ok, write the address into tempaddress string */
+      if((strlen(tempaddress) + strlen(fulladdress)) < 1000) /* is the new address + total address < 1000 */
+	{                /* yes */
+	  if(strlen(fulladdress)) strcat(fulladdress,","); /* put in a comma */ 
+	  strcat(fulladdress,tempaddress); /* put in the new address */
+	}
+      else        /* no */
+	{
+	ok=0;  /* stop looping */
+        strcat(fulladdress,", ..."); 
+	}
+      addresstmp=addresstmp2; /* reset the pointer to the next address first! */
+    }
+
       if(fulladdress) add_property_string( return_value, "ccaddress", fulladdress, 1);
+  addresstmp=en->cc;
     array_init( &cc );
     do {
       object_init( &ccvals);
@@ -1020,10 +1214,30 @@ if(en->cc)
 
 if(en->bcc)
 {
-    addresstmp=en->bcc;
-      fulladdress[0]=0x00;
-      rfc822_write_address(fulladdress,addresstmp);
+  int ok=1;
+  addresstmp=en->bcc;
+  fulladdress[0]=0x00;
+  while(ok && addresstmp) /* while length < 1000 and we are not at the end of the list */
+    {
+      addresstmp2=addresstmp->next; /* save the pointer to the next address */
+      addresstmp->next=NULL; /* make this address the only one now. */
+      tempaddress[0]=0x00; /* reset tempaddress buffer */
+      rfc822_write_address(tempaddress,addresstmp); /* ok, write the address into tempaddress string */
+      if((strlen(tempaddress) + strlen(fulladdress)) < 1000) /* is the new address + total address < 1000 */
+	{                /* yes */
+	  if(strlen(fulladdress)) strcat(fulladdress,","); /* put in a comma */ 
+	  strcat(fulladdress,tempaddress); /* put in the new address */
+	}
+      else        /* no */
+	{
+	ok=0;  /* stop looping */
+        strcat(fulladdress,", ..."); 
+	}
+      addresstmp=addresstmp2; /* reset the pointer to the next address first! */
+    }
+
       if(fulladdress) add_property_string( return_value, "bccaddress", fulladdress, 1);
+  addresstmp=en->bcc;
     array_init( &bcc );
     do {
       object_init( &bccvals);
@@ -1038,10 +1252,30 @@ if(en->bcc)
 
 if(en->reply_to)
 {
-    addresstmp=en->reply_to;
-      fulladdress[0]=0x00;
-      rfc822_write_address(fulladdress,addresstmp);
+  int ok=1;
+  addresstmp=en->reply_to;
+  fulladdress[0]=0x00;
+  while(ok && addresstmp) /* while length < 1000 and we are not at the end of the list */
+    {
+      addresstmp2=addresstmp->next; /* save the pointer to the next address */
+      addresstmp->next=NULL; /* make this address the only one now. */
+      tempaddress[0]=0x00; /* reset tempaddress buffer */
+      rfc822_write_address(tempaddress,addresstmp); /* ok, write the address into tempaddress string */
+      if((strlen(tempaddress) + strlen(fulladdress)) < 1000) /* is the new address + total address < 1000 */
+	{                /* yes */
+	  if(strlen(fulladdress)) strcat(fulladdress,","); /* put in a comma */ 
+	  strcat(fulladdress,tempaddress); /* put in the new address */
+	}
+      else        /* no */
+	{
+	ok=0;  /* stop looping */
+        strcat(fulladdress,", ..."); 
+	}
+      addresstmp=addresstmp2; /* reset the pointer to the next address first! */
+    }
+
       if(fulladdress) add_property_string( return_value, "reply_toaddress", fulladdress, 1);
+  addresstmp=en->reply_to;
     array_init( &reply_to );
     do {
       object_init( &reply_tovals);
@@ -1056,10 +1290,30 @@ if(en->reply_to)
 
 if(en->sender)
 {
-    addresstmp=en->sender;
-      fulladdress[0]=0x00;
-      rfc822_write_address(fulladdress,addresstmp);
+  int ok=1;
+  addresstmp=en->sender;
+  fulladdress[0]=0x00;
+  while(ok && addresstmp) /* while length < 1000 and we are not at the end of the list */
+    {
+      addresstmp2=addresstmp->next; /* save the pointer to the next address */
+      addresstmp->next=NULL; /* make this address the only one now. */
+      tempaddress[0]=0x00; /* reset tempaddress buffer */
+      rfc822_write_address(tempaddress,addresstmp); /* ok, write the address into tempaddress string */
+      if((strlen(tempaddress) + strlen(fulladdress)) < 1000) /* is the new address + total address < 1000 */
+	{                /* yes */
+	  if(strlen(fulladdress)) strcat(fulladdress,","); /* put in a comma */ 
+	  strcat(fulladdress,tempaddress); /* put in the new address */
+	}
+      else        /* no */
+	{
+	  ok=0;  /* stop looping */
+	  strcat(fulladdress,", ..."); 
+	}
+      addresstmp=addresstmp2; /* reset the pointer to the next address first! */
+    }
+
       if(fulladdress) add_property_string( return_value, "senderaddress", fulladdress, 1);
+  addresstmp=en->sender;
     array_init( &sender );
     do {
       object_init( &sendervals);
@@ -1074,10 +1328,30 @@ if(en->sender)
 
 if(en->return_path)
 {
-    addresstmp=en->return_path;
-      fulladdress[0]=0x00;
-      rfc822_write_address(fulladdress,addresstmp);
-      if(fulladdress) add_property_string( return_value, "return_pathaddress", fulladdress, 1);
+  int ok=1;
+  addresstmp=en->return_path;
+  fulladdress[0]=0x00;
+  while(ok && addresstmp) /* while length < 1000 and we are not at the end of the list */
+    {
+      addresstmp2=addresstmp->next; /* save the pointer to the next address */
+      addresstmp->next=NULL; /* make this address the only one now. */
+      tempaddress[0]=0x00; /* reset tempaddress buffer */
+      rfc822_write_address(tempaddress,addresstmp); /* ok, write the address into tempaddress string */
+      if((strlen(tempaddress) + strlen(fulladdress)) < 1000) /* is the new address + total address < 1000 */
+	{                /* yes */
+	  if(strlen(fulladdress)) strcat(fulladdress,","); /* put in a comma */ 
+	  strcat(fulladdress,tempaddress); /* put in the new address */
+	}
+      else        /* no */
+	{
+	  ok=0;  /* stop looping */
+	  strcat(fulladdress,", ..."); 
+	}
+      addresstmp=addresstmp2; /* reset the pointer to the next address first! */
+    }
+  
+  if(fulladdress) add_property_string( return_value, "return_pathaddress", fulladdress, 1);
+  addresstmp=en->return_path;
     array_init( &return_path );
     do {
       object_init( &return_pathvals);
@@ -1100,18 +1374,18 @@ if(en->return_path)
 	add_property_string(return_value,"MailDate",dummy,1);
 	sprintf (dummy,"%ld",cache->rfc822_size); 
     add_property_string(return_value,"Size",dummy,1);
-    add_property_long(return_value,"udate",mail_longdate(cache)-(60*60*4));
+    add_property_long(return_value,"udate",mail_longdate(cache));
  
 if(en->from && fromlength)
 {
 fulladdress[0]=0x00;
-mail_fetchfrom(fulladdress,imap_stream,msgno->value.lval,fromlength->value.lval);
+mail_fetchfrom(fulladdress,imap_le_struct->imap_stream,msgno->value.lval,fromlength->value.lval);
 add_property_string(return_value,"fetchfrom",fulladdress,1);
 }
 if(en->subject && subjectlength)
 {
 fulladdress[0]=0x00;
-mail_fetchsubject(fulladdress,imap_stream,msgno->value.lval,subjectlength->value.lval);
+mail_fetchsubject(fulladdress,imap_le_struct->imap_stream,msgno->value.lval,subjectlength->value.lval);
 add_property_string(return_value,"fetchsubject",fulladdress,1);
 }
 }
@@ -1119,412 +1393,398 @@ add_property_string(return_value,"fetchsubject",fulladdress,1);
 /* KMLANG */
 void php3_imap_lsub(INTERNAL_FUNCTION_PARAMETERS)
 {
-        pval *streamind, *ref, *pat;
-        int ind, ind_type;
-        MAILSTREAM *imap_stream;
-        STRINGLIST *cur=NIL;
+	pval *streamind, *ref, *pat;
+	int ind, ind_type;
+	pils *imap_le_struct;
+	STRINGLIST *cur=NIL;
 
-        if (ARG_COUNT(ht)!=3 
-                || getParameters(ht,3,&streamind,&ref,&pat) == FAILURE) {
-                WRONG_PARAM_COUNT;
-        }
+	if (ARG_COUNT(ht)!=3 || getParameters(ht,3,&streamind,&ref,&pat) == FAILURE) {
+		WRONG_PARAM_COUNT;
+	}
 
-        convert_to_long(streamind);
-        convert_to_string(ref);
-        convert_to_string(pat);
+	convert_to_long(streamind);
+	convert_to_string(ref);
+	convert_to_string(pat);
 
-        ind = streamind->value.lval;
+	ind = streamind->value.lval;
 
-        imap_stream = ( MAILSTREAM *)php3_list_find(ind, &ind_type);
-        if (!imap_stream || ind_type != le_imap) {
-                php3_error(E_WARNING, "Unable to find stream pointer");
-                RETURN_FALSE;
-        }
-    imap_sfolders = NIL;
-        mail_lsub(imap_stream,ref->value.str.val,pat->value.str.val);
-        if (imap_sfolders == NIL) {
-                RETURN_FALSE;
-        }
-        array_init(return_value);
-    cur=imap_sfolders;
-    while (cur != NIL ) {
-                add_next_index_string(return_value,cur->LTEXT,1);
-        cur=cur->next;
-    }
-        mail_free_stringlist (&imap_sfolders);
+	imap_le_struct = (pils *)php3_list_find(ind, &ind_type);
+	if (!imap_le_struct || ind_type != le_imap) {
+		php3_error(E_WARNING, "Unable to find stream pointer");
+		RETURN_FALSE;
+	}
+	imap_sfolders = NIL;
+	mail_lsub(imap_le_struct->imap_stream,ref->value.str.val,pat->value.str.val);
+	if (imap_sfolders == NIL) {
+		RETURN_FALSE;
+	}
+	array_init(return_value);
+	cur=imap_sfolders;
+	while (cur != NIL ) {
+		add_next_index_string(return_value,cur->LTEXT,1);
+		cur=cur->next;
+	}
+	mail_free_stringlist (&imap_sfolders);
 }
 
 void php3_imap_subscribe(INTERNAL_FUNCTION_PARAMETERS)
 {
-        pval *streamind, *folder;
-        int ind, ind_type;
-        MAILSTREAM *imap_stream;
+	pval *streamind, *folder;
+	int ind, ind_type;
+	pils *imap_le_struct;
 
-        if (ARG_COUNT(ht)!=2 || getParameters(ht,2,&streamind,&folder) == FAILURE) {
-                WRONG_PARAM_COUNT;
-        }
+	if (ARG_COUNT(ht)!=2 || getParameters(ht,2,&streamind,&folder) == FAILURE) {
+		WRONG_PARAM_COUNT;
+	}
 
-        convert_to_long(streamind);
-        convert_to_string(folder);
+	convert_to_long(streamind);
+	convert_to_string(folder);
 
-        ind = streamind->value.lval;
+	ind = streamind->value.lval;
 
-        imap_stream = ( MAILSTREAM *)php3_list_find(ind, &ind_type);
-        if (!imap_stream || ind_type != le_imap) {
-                php3_error(E_WARNING, "Unable to find stream pointer");
-                RETURN_FALSE;
-        }
-        if ( mail_subscribe(imap_stream,folder->value.str.val)==T ) {
-        RETURN_TRUE;
-        } else {
-                RETURN_FALSE;
-        }
+	imap_le_struct = (pils *)php3_list_find(ind, &ind_type);
+	if (!imap_le_struct || ind_type != le_imap) {
+		php3_error(E_WARNING, "Unable to find stream pointer");
+		RETURN_FALSE;
+	}
+	if ( mail_subscribe(imap_le_struct->imap_stream,folder->value.str.val)==T ) {
+		RETURN_TRUE;
+	} else {
+		RETURN_FALSE;
+	}
 }
+
 void php3_imap_unsubscribe(INTERNAL_FUNCTION_PARAMETERS)
 {
-        pval *streamind, *folder;
-        int ind, ind_type;
-        MAILSTREAM *imap_stream;
+	pval *streamind, *folder;
+	int ind, ind_type;
+	pils *imap_le_struct;
+	int myargc=ARG_COUNT(ht);
+	if (myargc !=2 || getParameters(ht,myargc,&streamind,&folder) == FAILURE) {
+		WRONG_PARAM_COUNT;
+	}
 
-        if (ARG_COUNT(ht)!=2 || getParameters(ht,2,&streamind,&folder) == FAILURE) {
-                WRONG_PARAM_COUNT;
-        }
+	convert_to_long(streamind);
+	convert_to_string(folder);
+	ind = streamind->value.lval;
 
-        convert_to_long(streamind);
-        convert_to_string(folder);
-
-        ind = streamind->value.lval;
-
-        imap_stream = ( MAILSTREAM *)php3_list_find(ind, &ind_type);
-        if (!imap_stream || ind_type != le_imap) {
-                php3_error(E_WARNING, "Unable to find stream pointer");
-                RETURN_FALSE;
-        }
-        if ( mail_unsubscribe(imap_stream,folder->value.str.val)==T ) {
-        RETURN_TRUE;
-        } else {
-                RETURN_FALSE;
-        }
+	imap_le_struct = (pils *)php3_list_find(ind, &ind_type);
+	if (!imap_le_struct || ind_type != le_imap) {
+		php3_error(E_WARNING, "Unable to find stream pointer");
+		RETURN_FALSE;
+	}
+	if ( mail_unsubscribe(imap_le_struct->imap_stream,folder->value.str.val)==T ) {
+		RETURN_TRUE;
+	} else {
+		RETURN_FALSE;
+	}
 }
-
 
 void imap_add_body( pval *arg, BODY *body )
 {
- pval parametres, param, dparametres, dparam;
- PARAMETER *par, *dpar;
- PART *part;
+	pval parametres, param, dparametres, dparam;
+	PARAMETER *par, *dpar;
+	PART *part;
 
-if(body->type) add_property_long( arg, "type", body->type );
-if(body->encoding) add_property_long( arg, "encoding", body->encoding );
+	if(body->type) add_property_long( arg, "type", body->type );
+	if(body->encoding) add_property_long( arg, "encoding", body->encoding );
 
- if ( body->subtype ){
-   add_property_long( arg, "ifsubtype", 1 );
-   add_property_string( arg, "subtype",  body->subtype, 1 );
- } else {
-   add_property_long( arg, "ifsubtype", 0 );
- }
+	if ( body->subtype ){
+		add_property_long( arg, "ifsubtype", 1 );
+		add_property_string( arg, "subtype",  body->subtype, 1 );
+	} else {
+		add_property_long( arg, "ifsubtype", 0 );
+	}
 
- if ( body->description ){
-   add_property_long( arg, "ifdescription", 1 );
-   add_property_string( arg, "description",  body->description, 1 );
- } else {
-   add_property_long( arg, "ifdescription", 0 );
- }
- if ( body->id ){
-   add_property_long( arg, "ifid", 1 );
-   if(body->description) add_property_string( arg, "id",  body->description, 1 );
- } else {
-   add_property_long( arg, "ifid", 0 );
- }
+	if ( body->description ){
+		add_property_long( arg, "ifdescription", 1 );
+		add_property_string( arg, "description",  body->description, 1 );
+	} else {
+		add_property_long( arg, "ifdescription", 0 );
+	}
+	if ( body->id ){
+		add_property_long( arg, "ifid", 1 );
+		if(body->description) add_property_string( arg, "id",  body->description, 1 );
+	} else {
+		add_property_long( arg, "ifid", 0 );
+	}
 
-if(body->size.lines) add_property_long( arg, "lines", body->size.lines );
-if(body->size.bytes) add_property_long( arg, "bytes", body->size.bytes );
+	if(body->size.lines) add_property_long( arg, "lines", body->size.lines );
+	if(body->size.bytes) add_property_long( arg, "bytes", body->size.bytes );
 #ifdef IMAP41
-if ( body->disposition.type ){
-   add_property_long( arg, "ifdisposition", 1);
-   add_property_string( arg, "disposition", body->disposition.type, 1);
- } else {
-   add_property_long( arg, "ifdisposition", 0);
-}
+	if ( body->disposition.type ){
+		add_property_long( arg, "ifdisposition", 1);
+		add_property_string( arg, "disposition", body->disposition.type, 1);
+	} else {
+		add_property_long( arg, "ifdisposition", 0);
+	}
 
-if ( body->disposition.parameter )
-{
-	dpar = body->disposition.parameter;
-	add_property_long( arg, "ifdparametres", 1);
-	array_init( &dparametres );
-	do {
-		object_init( &dparam );
-		add_property_string( &dparam, "attribute", dpar->attribute, 1);
-		add_property_string( &dparam, "value", dpar->value, 1);
-		add_next_index_object( &dparametres, dparam );
+	if ( body->disposition.parameter ) {
+		dpar = body->disposition.parameter;
+		add_property_long( arg, "ifdparameters", 1);
+		array_init( &dparametres );
+		do {
+			object_init( &dparam );
+			add_property_string( &dparam, "attribute", dpar->attribute, 1);
+			add_property_string( &dparam, "value", dpar->value, 1);
+			add_next_index_object( &dparametres, dparam );
         } while ( (dpar = dpar->next) );
-	add_assoc_object( arg, "dparametres", dparametres );
-}
-else
-{
-	add_property_long( arg, "ifdparametres", 0);
-}
+		add_assoc_object( arg, "dparameters", dparametres );
+	} else {
+		add_property_long( arg, "ifdparameters", 0);
+	}
 #endif
  
- if ( (par = body->parameter) ) {
-    add_property_long( arg, "ifparametres", 1 );
+	if ( (par = body->parameter) ) {
+		add_property_long( arg, "ifparameters", 1 );
 
-    array_init( &parametres );
-    do{
-       object_init( &param );
-       if(par->attribute) add_property_string( &param, "attribute", par->attribute, 1 );
-       if(par->value) add_property_string( &param, "value", par->value, 1 );
+		array_init( &parametres );
+		do {
+			object_init( &param );
+			if(par->attribute) add_property_string( &param, "attribute", par->attribute, 1 );
+			if(par->value) add_property_string( &param, "value", par->value, 1 );
 
-       add_next_index_object( &parametres, param );
-    } while ( (par = par->next) );
- } else {
-   object_init(&parametres);
-   add_property_long( arg, "ifparametres", 0 );
- }
-    add_assoc_object( arg, "parametres", parametres );
+			add_next_index_object( &parametres, param );
+		} while ( (par = par->next) );
+	} else {
+		object_init(&parametres);
+		add_property_long( arg, "ifparameters", 0 );
+	}
+	add_assoc_object( arg, "parameters", parametres );
 
- /* multipart message ? */
+	/* multipart message ? */
 
- if ( body->type == TYPEMULTIPART ){
-    array_init( &parametres );
-    for ( part = body->CONTENT_PART; part; part = part->next ){
-        object_init( &param );
-        imap_add_body( &param, &part->body );
-        add_next_index_object( &parametres, param );
-    }
-    add_assoc_object( arg, "parts", parametres );
- }
+	if ( body->type == TYPEMULTIPART ) {
+		array_init( &parametres );
+		for ( part = body->CONTENT_PART; part; part = part->next ) {
+			object_init( &param );
+			imap_add_body( &param, &part->body );
+			add_next_index_object( &parametres, param );
+		}
+		add_assoc_object( arg, "parts", parametres );
+	}
 
- /* encapsulated message ? */
+	/* encapsulated message ? */
 
- if ( ( body->type == TYPEMESSAGE ) && (!strncasecmp(body->subtype, "rfc822", 6))){
-   body=body->CONTENT_MSG_BODY;
-   array_init(&parametres);
-    object_init( &param );
-    imap_add_body( &param, body );
-    add_next_index_object(&parametres, param );
-    add_assoc_object( arg, "parts", parametres );
- }
+	if ( ( body->type == TYPEMESSAGE ) && (!strncasecmp(body->subtype, "rfc822", 6))) {
+		body=body->CONTENT_MSG_BODY;
+		array_init(&parametres);
+		object_init( &param );
+		imap_add_body( &param, body );
+		add_next_index_object(&parametres, param );
+		add_assoc_object( arg, "parts", parametres );
+	}
 }
 
 void php3_imap_fetchstructure(INTERNAL_FUNCTION_PARAMETERS)
 {
- pval *streamind, *msgno;
- int ind, ind_type;
- MAILSTREAM *imap_stream;
- BODY *body;
+	pval *streamind, *msgno,*flags;
+	int ind, ind_type;
+	pils *imap_le_struct;
+	BODY *body;
+	int myargc=ARG_COUNT(ht);
+	if ( myargc < 2  || myargc > 3 || getParameters( ht, myargc, &streamind, &msgno ,&flags) == FAILURE ) {
+		WRONG_PARAM_COUNT;
+	}
 
- if ( ARG_COUNT(ht) != 2 || getParameters( ht, 2, &streamind, &msgno ) == FAILURE ) {
-    WRONG_PARAM_COUNT;
- }
+	convert_to_long( streamind );
+	convert_to_long( msgno );
+	if(myargc == 3) convert_to_long(flags);
+	object_init(return_value);
 
- convert_to_long( streamind );
- convert_to_long( msgno );
- object_init(return_value);
+	ind = streamind->value.lval;
 
- ind = streamind->value.lval;
+	imap_le_struct = (pils *)php3_list_find( ind, &ind_type );
 
- imap_stream = ( MAILSTREAM *)php3_list_find( ind, &ind_type );
+	if ( !imap_le_struct || ind_type != le_imap ) {
+		php3_error( E_WARNING, "Unable to find stream pointer" );
+		RETURN_FALSE;
+	}
 
- if ( !imap_stream || ind_type != le_imap ) {
-    php3_error( E_WARNING, "Unable to find stream pointer" );
-    RETURN_FALSE;
- }
+	mail_fetchstructure_full( imap_le_struct->imap_stream, msgno->value.lval, &body ,myargc == 3 ? flags->value.lval : NIL);
 
- mail_fetchstructure( imap_stream, msgno->value.lval, &body );
+	if ( !body ) {
+		php3_error( E_WARNING, "No body information available" );
+		RETURN_FALSE;
+	}
 
- if ( !body ) {
-    php3_error( E_WARNING, "No body information available" );
-    RETURN_FALSE;
- }
-
- imap_add_body( return_value, body );
-
+	imap_add_body( return_value, body );
 }
 
 void php3_imap_fetchbody(INTERNAL_FUNCTION_PARAMETERS)
 {
- pval *streamind, *msgno, *sec,*flags;
- int ind, ind_type;
- MAILSTREAM *imap_stream;
- char *body;
- unsigned long len;
- int myargc=ARG_COUNT(ht);
- if(myargc < 3 || myargc >4 || getParameters( ht, myargc, &streamind, &msgno, &sec,&flags ) == FAILURE ) {
-    WRONG_PARAM_COUNT;
- }
+	pval *streamind, *msgno, *sec,*flags;
+	int ind, ind_type;
+	pils *imap_le_struct;
+	char *body;
+	unsigned long len;
+	int myargc=ARG_COUNT(ht);
+	if(myargc < 3 || myargc >4 || getParameters( ht, myargc, &streamind, &msgno, &sec,&flags ) == FAILURE ) {
+		WRONG_PARAM_COUNT;
+	}
 
- convert_to_long( streamind );
- convert_to_long( msgno );
- convert_to_string( sec );
- if(myargc == 4) convert_to_long(flags);
- ind = streamind->value.lval;
+	convert_to_long( streamind );
+	convert_to_long( msgno );
+	convert_to_string( sec );
+	if(myargc == 4) convert_to_long(flags);
+	ind = streamind->value.lval;
 
- imap_stream = ( MAILSTREAM *)php3_list_find( ind, &ind_type );
+	imap_le_struct = (pils *)php3_list_find( ind, &ind_type );
 
- if ( !imap_stream || ind_type != le_imap ) {
-    php3_error( E_WARNING, "Unable to find stream pointer" );
-    RETURN_FALSE;
- }
+	if ( !imap_le_struct || ind_type != le_imap ) {
+		php3_error( E_WARNING, "Unable to find stream pointer" );
+		RETURN_FALSE;
+	}
  
- body = mail_fetchbody_full( imap_stream, msgno->value.lval, sec->value.str.val, &len,myargc == 4 ? flags->value.lval : NIL );
+	body = mail_fetchbody_full( imap_le_struct->imap_stream, msgno->value.lval, sec->value.str.val, &len,myargc == 4 ? flags->value.lval : NIL );
 
- if ( !body ) {
-    php3_error( E_WARNING, "No body information available" );
-    RETURN_FALSE;
- }
- RETVAL_STRING( body ,1);
+	if ( !body ) {
+		php3_error( E_WARNING, "No body information available" );
+		RETURN_FALSE;
+	}
+	RETVAL_STRINGL( body ,len,1);
 }
 
 void php3_imap_base64(INTERNAL_FUNCTION_PARAMETERS)
 {
- pval *text;
- char *decode;
- unsigned long newlength;
- if ( ARG_COUNT(ht) != 1 || getParameters( ht, 1, &text) == FAILURE ) {
-    WRONG_PARAM_COUNT;
- }
+	pval *text;
+	char *decode;
+	unsigned long newlength;
+	if ( ARG_COUNT(ht) != 1 || getParameters( ht, 1, &text) == FAILURE ) {
+		WRONG_PARAM_COUNT;
+	}
 
- convert_to_string( text );
- object_init(return_value);
+	convert_to_string( text );
+	object_init(return_value);
 
-    decode = (char *) rfc822_base64((unsigned char *) text->value.str.val,
-    text->value.str.len,&newlength);
-RETVAL_STRINGL(decode,newlength,1);
+	decode = (char *) rfc822_base64((unsigned char *) text->value.str.val, text->value.str.len,&newlength);
+	RETVAL_STRINGL(decode,newlength,1);
 }
 
 void php3_imap_qprint(INTERNAL_FUNCTION_PARAMETERS)
 {
- pval *text;
- char *decode;
- unsigned long newlength;
- if ( ARG_COUNT(ht) != 1 || getParameters( ht, 1, &text) == FAILURE ) {
-    WRONG_PARAM_COUNT;
- }
+	pval *text;
+	char *decode;
+	unsigned long newlength;
+	if ( ARG_COUNT(ht) != 1 || getParameters( ht, 1, &text) == FAILURE ) {
+		WRONG_PARAM_COUNT;
+	}
 
- convert_to_string( text );
- object_init(return_value);
+	convert_to_string( text );
+	object_init(return_value);
 
-    decode = (char *) rfc822_qprint((unsigned char *) text->value.str.val,
-    text->value.str.len,&newlength);
-RETVAL_STRINGL(decode,newlength,1);
+	decode = (char *) rfc822_qprint((unsigned char *) text->value.str.val, text->value.str.len,&newlength);
+	RETVAL_STRINGL(decode,newlength,1);
 }
 
 void php3_imap_8bit(INTERNAL_FUNCTION_PARAMETERS)
 {
- pval *text;
- char *decode;
- unsigned long newlength;
- if ( ARG_COUNT(ht) != 1 || getParameters( ht, 1, &text) == FAILURE ) {
-    WRONG_PARAM_COUNT;
- }
+	pval *text;
+	char *decode;
+	unsigned long newlength;
+	if ( ARG_COUNT(ht) != 1 || getParameters( ht, 1, &text) == FAILURE ) {
+		WRONG_PARAM_COUNT;
+	}
 
- convert_to_string( text );
- object_init(return_value);
+	convert_to_string( text );
+	object_init(return_value);
 
-    decode = (char *) rfc822_8bit((unsigned char *) text->value.str.val,
-    text->value.str.len,&newlength);
-RETVAL_STRINGL(decode,newlength,1);
+	decode = (char *) rfc822_8bit((unsigned char *) text->value.str.val, text->value.str.len,&newlength);
+	RETVAL_STRINGL(decode,newlength,1);
 }
 
 void php3_imap_binary(INTERNAL_FUNCTION_PARAMETERS)
 {
- pval *text,*length;
-#if 0
- char *decode;
- FILE *fp;
- int x;
- char *dest;
- unsigned long newlength;
-#endif
+	pval *text;
+	unsigned long len;
+	if ( ARG_COUNT(ht) != 1 || getParameters( ht, 1, &text) == FAILURE ) {
+		WRONG_PARAM_COUNT;
+	}
+	convert_to_string(text);
+RETVAL_STRINGL(rfc822_binary(text->value.str.val,text->value.str.len,&len),len,1);
 
- if ( ARG_COUNT(ht) != 2 || getParameters( ht, 2, &text,&length) == FAILURE ) {
-    WRONG_PARAM_COUNT;
- }
 }
 
 
 void php3_imap_mailboxmsginfo(INTERNAL_FUNCTION_PARAMETERS)
 {
-        pval *streamind;
+	pval *streamind;
 	char date[50];
-        int ind, ind_type;
-        unsigned int msgno;
-        MAILSTREAM *imap_stream;
-        unsigned unreadmsg,msize;
+	int ind, ind_type;
+	unsigned int msgno;
+	pils *imap_le_struct;
+	unsigned unreadmsg,msize;
 
-        if (ARG_COUNT(ht) != 1 || getParameters(ht, 1, &streamind) ==
-FAILURE) {
-                WRONG_PARAM_COUNT;
-        }
+	if (ARG_COUNT(ht) != 1 || getParameters(ht, 1, &streamind) == FAILURE) {
+		WRONG_PARAM_COUNT;
+	}
 
-        convert_to_long(streamind);
+	convert_to_long(streamind);
 
-        ind = streamind->value.lval;
+	ind = streamind->value.lval;
 
-        imap_stream = ( MAILSTREAM *)php3_list_find(ind, &ind_type);
+	imap_le_struct = (pils *)php3_list_find(ind, &ind_type);
 
-        if(!imap_stream || ind_type != le_imap) {
-                php3_error(E_WARNING, "Unable to find stream pointer");
-                RETURN_FALSE;
-        }
+	if(!imap_le_struct || ind_type != le_imap) {
+		php3_error(E_WARNING, "Unable to find stream pointer");
+		RETURN_FALSE;
+	}
 
-        /* Initialize return array */
-        if(object_init(return_value) == FAILURE) {
-                RETURN_FALSE;
-        }
+	/* Initialize return array */
+	if(object_init(return_value) == FAILURE) {
+		RETURN_FALSE;
+	}
 
-        unreadmsg = 0;
-        msize = 0;
-        for (msgno = 1; msgno <= imap_stream->nmsgs; msgno++) {
-                MESSAGECACHE * cache = mail_elt (imap_stream,msgno);
-                mail_fetchstructure (imap_stream,msgno,NIL);
-                unreadmsg = cache->recent ? (cache->seen ? unreadmsg :
-unreadmsg++) : unreadmsg;
-                unreadmsg = (cache->recent | cache->seen) ? unreadmsg :
-unreadmsg++;
-                msize = msize + cache->rfc822_size;
-        }
-        add_property_long(return_value,"Unread",unreadmsg);
-        add_property_long(return_value,"Nmsgs",imap_stream->nmsgs);
-        add_property_long(return_value,"Size",msize);
+	unreadmsg = 0;
+	msize = 0;
+	for (msgno = 1; msgno <= imap_le_struct->imap_stream->nmsgs; msgno++) {
+		MESSAGECACHE * cache = mail_elt (imap_le_struct->imap_stream,msgno);
+		mail_fetchstructure (imap_le_struct->imap_stream,msgno,NIL);
+		unreadmsg = cache->recent ? (cache->seen ? unreadmsg : unreadmsg++) : unreadmsg;
+		unreadmsg = (cache->recent | cache->seen) ? unreadmsg : unreadmsg++;
+		msize = msize + cache->rfc822_size;
+	}
+	add_property_long(return_value,"Unread",unreadmsg);
+	add_property_long(return_value,"Nmsgs",imap_le_struct->imap_stream->nmsgs);
+	add_property_long(return_value,"Size",msize);
 	rfc822_date (date);
 	add_property_string(return_value,"Date",date,1);
-	add_property_string(return_value,"Driver",imap_stream->dtb->name,1);
-	add_property_string(return_value,"Mailbox",imap_stream->mailbox,1);
-	add_property_long(return_value,"Recent",imap_stream->recent);
+	add_property_string(return_value,"Driver",imap_le_struct->imap_stream->dtb->name,1);
+	add_property_string(return_value,"Mailbox",imap_le_struct->imap_stream->mailbox,1);
+	add_property_long(return_value,"Recent",imap_le_struct->imap_stream->recent);
 }
 
 void php3_imap_rfc822_write_address(INTERNAL_FUNCTION_PARAMETERS)
 {
-  pval *mailbox,*host,*personal;
-  ADDRESS *addr;
-  char string[MAILTMPLEN];
-  int argc;
-  argc=ARG_COUNT(ht);
-  if ( argc <2 || argc>3 || getParameters( ht, argc, &mailbox,&host,&personal) == FAILURE ) {
-    WRONG_PARAM_COUNT;
-  }
-  convert_to_string(mailbox);
-  convert_to_string(host);
-  convert_to_string(personal);
-  addr=mail_newaddr();
-  if(mailbox) addr->mailbox=cpystr(mailbox->value.str.val);
-  if(host) addr->host=cpystr(host->value.str.val);
-  if(personal) addr->personal=cpystr(personal->value.str.val);
-  addr->next=NIL;
-  addr->error=NIL;
-  addr->adl=NIL;
-  string[0]=0x00;
+	pval *mailbox,*host,*personal;
+	ADDRESS *addr;
+	char string[MAILTMPLEN];
+	int argc;
+	argc=ARG_COUNT(ht);
+	if ( argc <2 || argc>3 || getParameters( ht, argc, &mailbox,&host,&personal) == FAILURE ) {
+		WRONG_PARAM_COUNT;
+	}
+	convert_to_string(mailbox);
+	convert_to_string(host);
+	convert_to_string(personal);
+	addr=mail_newaddr();
+	if(mailbox) addr->mailbox = cpystr(mailbox->value.str.val);
+	if(host) addr->host = cpystr(host->value.str.val);
+	if(personal) addr->personal = cpystr(personal->value.str.val);
+	addr->next=NIL;
+	addr->error=NIL;
+	addr->adl=NIL;
+	string[0]=0x00;
   
-  rfc822_write_address(string,addr);
-  RETVAL_STRING(string,1);
+	rfc822_write_address(string,addr);
+	RETVAL_STRING(string,1);
 }
 
 void php3_imap_rfc822_parse_adrlist(INTERNAL_FUNCTION_PARAMETERS)
 {
-	pval *string,*defaulthost;
-	ENVELOPE *env;
+       pval *string,*defaulthost,tovals;
+       ADDRESS *addresstmp;
+       ENVELOPE *env;
 	int argc;
 
 	env=mail_newenvelope();
@@ -1535,107 +1795,121 @@ void php3_imap_rfc822_parse_adrlist(INTERNAL_FUNCTION_PARAMETERS)
 	convert_to_string(string);
 	convert_to_string(defaulthost);
 	rfc822_parse_adrlist(&env->to,string->value.str.val,defaulthost->value.str.val);
-	if(object_init(return_value) == FAILURE) {
-		RETURN_FALSE;
+	if(array_init(return_value) == FAILURE) {
+	  RETURN_FALSE;
 	}
-	if(env->to->mailbox) add_property_string(return_value,"mailbox",env->to->mailbox,1);
-	if(env->to->host) add_property_string(return_value,"host",env->to->host,1);
-	if(env->to->personal) add_property_string(return_value,"personal",env->to->personal,1);
+	addresstmp=env->to;
+	if(addresstmp) do {
+	  object_init(&tovals);
+	  if(addresstmp->mailbox) add_property_string(&tovals,"mailbox",addresstmp->mailbox,1);
+	  if(addresstmp->host) add_property_string(&tovals,"host",addresstmp->host,1);
+	  if(addresstmp->personal) add_property_string(&tovals,"personal",addresstmp->personal,1);
+	  if(addresstmp->adl) add_property_string(&tovals,"adl",addresstmp->adl,1);
+	  add_next_index_object(return_value, tovals);
+	} while ((addresstmp = addresstmp->next));
 }
+
+
+
 
 
 void php3_imap_setflag_full(INTERNAL_FUNCTION_PARAMETERS)
 {
-        pval *streamind;
+	pval *streamind;
 	pval *sequence;
 	pval *flag;
 	pval *flags;
 	int ind,ind_type;
-        MAILSTREAM *imap_stream;
+	pils *imap_le_struct;
 	int myargc=ARG_COUNT(ht);
-        if (myargc < 3 || myargc > 4 || getParameters(ht, myargc, &streamind,&sequence,&flag,&flags) ==FAILURE) {
-                WRONG_PARAM_COUNT;
-        }
-        convert_to_long(streamind);
+
+	if (myargc < 3 || myargc > 4 || getParameters(ht, myargc, &streamind,&sequence,&flag,&flags) ==FAILURE) {
+		WRONG_PARAM_COUNT;
+	}
+	convert_to_long(streamind);
 	convert_to_string(sequence);
 	convert_to_string(flag);
 	if(myargc==4) convert_to_long(flags);
 
-        ind = streamind->value.lval;
-        imap_stream = ( MAILSTREAM *)php3_list_find(ind, &ind_type);
-        if(!imap_stream || ind_type != le_imap) {
-                php3_error(E_WARNING, "Unable to find stream pointer");
-                RETURN_FALSE;
-        }
-	  mail_setflag_full(imap_stream,sequence->value.str.val,flag->value.str.val,myargc == 4 ? flags->value.lval : NIL);
-
+	ind = streamind->value.lval;
+	imap_le_struct = (pils *)php3_list_find(ind, &ind_type);
+	if(!imap_le_struct || ind_type != le_imap) {
+		php3_error(E_WARNING, "Unable to find stream pointer");
+		RETURN_FALSE;
+	}
+	mail_setflag_full(imap_le_struct->imap_stream,sequence->value.str.val,flag->value.str.val,myargc == 4 ? flags->value.lval : NIL);
 }
 
 void php3_imap_clearflag_full(INTERNAL_FUNCTION_PARAMETERS)
 {
-        pval *streamind;
+	pval *streamind;
 	pval *sequence;
 	pval *flag;
 	pval *flags;
 	int ind,ind_type;
-        MAILSTREAM *imap_stream;
+	pils *imap_le_struct;
 	int myargc=ARG_COUNT(ht);
-        if (myargc < 3 || myargc > 4 || getParameters(ht, myargc, &streamind,&sequence,&flag,&flags) ==FAILURE) {
-                WRONG_PARAM_COUNT;
-        }
-        convert_to_long(streamind);
+	if (myargc < 3 || myargc > 4 || getParameters(ht, myargc, &streamind,&sequence,&flag,&flags) ==FAILURE) {
+		WRONG_PARAM_COUNT;
+	}
+	convert_to_long(streamind);
 	convert_to_string(sequence);
 	convert_to_string(flag);
 	if(myargc==4) convert_to_long(flags);
-
-        ind = streamind->value.lval;
-        imap_stream = ( MAILSTREAM *)php3_list_find(ind, &ind_type);
-        if(!imap_stream || ind_type != le_imap) {
-                php3_error(E_WARNING, "Unable to find stream pointer");
-                RETURN_FALSE;
-        }
-	mail_clearflag_full(imap_stream,sequence->value.str.val,flag->value.str.val,myargc == 4 ? flags->value.lval : NIL);
+	ind = streamind->value.lval;
+	imap_le_struct = (pils *)php3_list_find(ind, &ind_type);
+	if(!imap_le_struct || ind_type != le_imap) {
+		php3_error(E_WARNING, "Unable to find stream pointer");
+		RETURN_FALSE;
+	}
+	mail_clearflag_full(imap_le_struct->imap_stream,sequence->value.str.val,flag->value.str.val,myargc == 4 ? flags->value.lval : NIL);
 }
 
 void php3_imap_sort(INTERNAL_FUNCTION_PARAMETERS)
 {
-        pval *streamind;
+	pval *streamind;
 	pval *pgm;
 	pval *rev;
 	pval *flags;
 	int ind,ind_type;
 	unsigned long *slst,*sl;
-	char mystring[100];
-	SORTPGM *mypgm;
-        MAILSTREAM *imap_stream;
+	SORTPGM *mypgm=NIL;
+	SEARCHPGM *spg=NIL;
+	pils *imap_le_struct;
 	int myargc=ARG_COUNT(ht);
-        if (myargc < 3 || myargc > 4 || getParameters(ht, myargc, &streamind,&pgm,&rev,&flags) ==FAILURE) {
-                WRONG_PARAM_COUNT;
-        }
-        convert_to_long(streamind);
-        convert_to_long(rev);
+	if (myargc < 3 || myargc > 4 || getParameters(ht, myargc, &streamind,&pgm,&rev,&flags) ==FAILURE) {
+		WRONG_PARAM_COUNT;
+	}
+	convert_to_long(streamind);
+	convert_to_long(rev);
 	convert_to_long(pgm);
+	if(pgm->value.lval>SORTSIZE) {
+		php3_error(E_WARNING, "Unrecognized sort criteria");
+		RETURN_FALSE;
+	}
 	if(myargc==4) convert_to_long(flags);
 
-        ind = streamind->value.lval;
-        imap_stream = ( MAILSTREAM *)php3_list_find(ind, &ind_type);
-        if(!imap_stream || ind_type != le_imap) {
-                php3_error(E_WARNING, "Unable to find stream pointer");
-                RETURN_FALSE;
-        }
+	ind = streamind->value.lval;
+	imap_le_struct = (pils *)php3_list_find(ind, &ind_type);
+	if(!imap_le_struct || ind_type != le_imap) {
+		php3_error(E_WARNING, "Unable to find stream pointer");
+		RETURN_FALSE;
+	}
+	spg = mail_newsearchpgm();
 	mypgm=mail_newsortpgm();
 	mypgm->reverse=rev->value.lval;
 	mypgm->function=pgm->value.lval;
 	mypgm->next=NIL;
 
-        array_init(return_value);
-	slst=mail_sort(imap_stream,NIL,NIL,mypgm,myargc == 4 ? flags->value.lval:NIL);
-	for (sl = slst; *sl; sl++) 
-	  { 
-	    sprintf (mystring,"%lu",*sl);
-	    add_next_index_string(return_value,mystring,1);
-	  }
-	fs_give ((void **) &slst);
+	array_init(return_value);
+	slst=mail_sort(imap_le_struct->imap_stream,NIL,spg,mypgm,myargc == 4 ? flags->value.lval:NIL);
+
+
+	for (sl = slst; *sl; sl++) { 
+		add_next_index_long(return_value,*sl);
+	}
+		fs_give ((void **) &slst); 
+
 }
 
 
@@ -1643,7 +1917,7 @@ void php3_imap_fetchheader(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *streamind, * msgno, * flags;
 	int ind, ind_type;
-	MAILSTREAM *imap_stream;
+	pils *imap_le_struct;
 	int myargc = ARG_COUNT(ht);
 	if (myargc < 2 || myargc > 3 || getParameters(ht,myargc,&streamind,&msgno,&flags) == FAILURE) {
 		WRONG_PARAM_COUNT;
@@ -1654,20 +1928,20 @@ void php3_imap_fetchheader(INTERNAL_FUNCTION_PARAMETERS)
 	if(myargc == 3) convert_to_long(flags);
 	ind = streamind->value.lval;
 
-	imap_stream = ( MAILSTREAM *)php3_list_find(ind, &ind_type);
-	if (!imap_stream || ind_type != le_imap) {
+	imap_le_struct = (pils *)php3_list_find(ind, &ind_type);
+	if (!imap_le_struct || ind_type != le_imap) {
 		php3_error(E_WARNING, "Unable to find stream pointer");
 		RETURN_FALSE;
 	}
-	RETVAL_STRING(mail_fetchheader_full (imap_stream,msgno->value.lval,NIL,NIL,myargc == 3 ? flags->value.lval : NIL),1);
+	RETVAL_STRING(mail_fetchheader_full (imap_le_struct->imap_stream,msgno->value.lval,NIL,NIL,myargc == 3 ? flags->value.lval : NIL),1);
 
 }
 
- void php3_imap_uid(INTERNAL_FUNCTION_PARAMETERS)
- {
+void php3_imap_uid(INTERNAL_FUNCTION_PARAMETERS)
+{
  	pval *streamind, *msgno;
  	int ind, ind_type;
- 	MAILSTREAM *imap_stream;
+	pils *imap_le_struct;
  
  	if (ARG_COUNT(ht) != 2 || getParameters(ht,2,&streamind,&msgno) == FAILURE) {
  		WRONG_PARAM_COUNT;
@@ -1678,23 +1952,21 @@ void php3_imap_fetchheader(INTERNAL_FUNCTION_PARAMETERS)
  
  	ind = streamind->value.lval;
  
-         imap_stream = ( MAILSTREAM *)php3_list_find(ind, &ind_type);
+	imap_le_struct = (pils *)php3_list_find(ind, &ind_type);
  
-         if (!imap_stream || ind_type != le_imap) {
- 		php3_error(E_WARNING, "Unable to find stream pointer");
- 	        RETURN_FALSE;
- 	}
+	if (!imap_le_struct || ind_type != le_imap) {
+	php3_error(E_WARNING, "Unable to find stream pointer");
+		RETURN_FALSE;
+	}
  
- 	RETURN_LONG(mail_uid(imap_stream, msgno->value.lval));
- }
+	RETURN_LONG(mail_uid(imap_le_struct->imap_stream, msgno->value.lval));
+}
   
-  
- 
- void php3_imap_msgno(INTERNAL_FUNCTION_PARAMETERS)
- {
+void php3_imap_msgno(INTERNAL_FUNCTION_PARAMETERS)
+{
  	pval *streamind, *msgno;
  	int ind, ind_type;
- 	MAILSTREAM *imap_stream;
+	pils *imap_le_struct;
  
  	if (ARG_COUNT(ht) != 2 || getParameters(ht,2,&streamind,&msgno) == FAILURE) {
  		WRONG_PARAM_COUNT;
@@ -1705,16 +1977,207 @@ void php3_imap_fetchheader(INTERNAL_FUNCTION_PARAMETERS)
  
  	ind = streamind->value.lval;
  
-         imap_stream = ( MAILSTREAM *)php3_list_find(ind, &ind_type);
+	imap_le_struct = (pils *)php3_list_find(ind, &ind_type);
  
-         if (!imap_stream || ind_type != le_imap) {
- 		php3_error(E_WARNING, "Unable to find stream pointer");
- 	        RETURN_FALSE;
+	if (!imap_le_struct || ind_type != le_imap) {
+		php3_error(E_WARNING, "Unable to find stream pointer");
+		RETURN_FALSE;
+	}
+ 
+ 	RETURN_LONG(mail_msgno(imap_le_struct->imap_stream, msgno->value.lval));
+}
+
+void php3_imap_status(INTERNAL_FUNCTION_PARAMETERS)
+{
+ 	pval *streamind, *mbx, *flags;
+ 	int ind, ind_type;
+	pils *imap_le_struct;
+	int myargc=ARG_COUNT(ht);
+ 	if (myargc != 3 || getParameters(ht,myargc,&streamind,&mbx,&flags) == FAILURE) {
+ 		WRONG_PARAM_COUNT;
  	}
+ 	
+ 	convert_to_long(streamind);
+ 	convert_to_string(mbx);
+	convert_to_long(flags);
+ 	ind = streamind->value.lval;
  
- 	RETURN_LONG(mail_msgno(imap_stream, msgno->value.lval));
- }
+	imap_le_struct = (pils *)php3_list_find(ind, &ind_type);
  
+	if (!imap_le_struct || ind_type != le_imap) {
+		php3_error(E_WARNING, "Unable to find stream pointer");
+		RETURN_FALSE;
+	}
+ 
+	if(object_init(return_value) == FAILURE){
+	  RETURN_FALSE;
+	}
+ 	if(mail_status(imap_le_struct->imap_stream, mbx->value.str.val, flags->value.lval))
+	  {
+	    add_property_long(return_value,"flags",status_flags);
+	    if(status_flags & SA_MESSAGES) add_property_long(return_value,"messages",status_messages);
+	    if(status_flags & SA_RECENT) add_property_long(return_value,"recent",status_recent);
+	    if(status_flags & SA_UNSEEN) add_property_long(return_value,"unseen",status_unseen);
+	    if(status_flags & SA_UIDNEXT) add_property_long(return_value,"uidnext",status_uidnext);
+	    if(status_flags & SA_UIDVALIDITY) add_property_long(return_value,"uidvalidity",status_uidvalidity);
+	  }
+	else
+	  {
+	  RETURN_FALSE;
+	  }
+} 
+ 
+
+void php3_imap_bodystruct(INTERNAL_FUNCTION_PARAMETERS)
+{
+ 	pval *streamind, *msg, *section;
+ 	int ind, ind_type;
+	pils *imap_le_struct;
+	pval parametres, param, dparametres, dparam;
+	PARAMETER *par, *dpar;
+	BODY *body;
+	int myargc=ARG_COUNT(ht);
+ 	if (myargc != 3 || getParameters(ht,myargc,&streamind,&msg,&section) == FAILURE) {
+ 		WRONG_PARAM_COUNT;
+ 	}
+ 	
+ 	convert_to_long(streamind);
+ 	convert_to_long(msg);
+	convert_to_string(section);
+ 	ind = streamind->value.lval;
+ 
+	imap_le_struct = (pils *)php3_list_find(ind, &ind_type);
+	
+	if (!imap_le_struct || ind_type != le_imap) {
+	  php3_error(E_WARNING, "Unable to find stream pointer");
+	  RETURN_FALSE;
+	}
+	
+	if(object_init(return_value) == FAILURE){
+	  RETURN_FALSE;
+	}
+
+	body=mail_body(imap_le_struct->imap_stream, msg->value.lval, section->value.str.val);
+	if(body->type) add_property_long( return_value, "type", body->type );
+	if(body->encoding) add_property_long( return_value, "encoding", body->encoding );
+	
+	if ( body->subtype ){
+	  add_property_long( return_value, "ifsubtype", 1 );
+	  add_property_string( return_value, "subtype",  body->subtype, 1 );
+	} else {
+	  add_property_long( return_value, "ifsubtype", 0 );
+	}
+	
+	if ( body->description ){
+	  add_property_long( return_value, "ifdescription", 1 );
+	  add_property_string( return_value, "description",  body->description, 1 );
+	} else {
+	  add_property_long( return_value, "ifdescription", 0 );
+	}
+	if ( body->id ){
+	  add_property_long( return_value, "ifid", 1 );
+	  if(body->description) add_property_string( return_value, "id",  body->description, 1 );
+	} else {
+	  add_property_long( return_value, "ifid", 0 );
+	}
+	
+	if(body->size.lines) add_property_long( return_value, "lines", body->size.lines );
+	if(body->size.bytes) add_property_long( return_value, "bytes", body->size.bytes );
+#ifdef IMAP41
+	if ( body->disposition.type ){
+	  add_property_long( return_value, "ifdisposition", 1);
+	  add_property_string( return_value, "disposition", body->disposition.type, 1);
+	} else {
+	  add_property_long( return_value, "ifdisposition", 0);
+	}
+	
+	if ( body->disposition.parameter ) {
+	  dpar = body->disposition.parameter;
+	  add_property_long( return_value, "ifdparameters", 1);
+	  array_init( &dparametres );
+	  do {
+	    object_init( &dparam );
+	    add_property_string( &dparam, "attribute", dpar->attribute, 1);
+	    add_property_string( &dparam, "value", dpar->value, 1);
+	    add_next_index_object( &dparametres, dparam );
+	  } while ( (dpar = dpar->next) );
+	  add_assoc_object( return_value, "dparameters", dparametres );
+	} else {
+	  add_property_long( return_value, "ifdparameters", 0);
+	}
+#endif
+	
+	if ( (par = body->parameter) ) {
+	  add_property_long( return_value, "ifparameters", 1 );
+	  
+	  array_init( &parametres );
+	  do {
+	    object_init( &param );
+	    if(par->attribute) add_property_string( &param, "attribute", par->attribute, 1 );
+	    if(par->value) add_property_string( &param, "value", par->value, 1 );
+	    
+	    add_next_index_object( &parametres, param );
+	  } while ( (par = par->next) );
+	} else {
+	  object_init(&parametres);
+	  add_property_long( return_value, "ifparameters", 0 );
+	}
+	add_assoc_object( return_value, "parameters", parametres );
+}
+
+
+void php3_imap_fetch_overview(INTERNAL_FUNCTION_PARAMETERS)
+{
+ 	pval *streamind, *sequence;
+ 	int ind, ind_type;
+	pils *imap_le_struct;
+	pval myoverview;
+	char address[MAILTMPLEN];
+	int myargc=ARG_COUNT(ht);
+ 	if (myargc != 2 || getParameters(ht,myargc,&streamind,&sequence) == FAILURE) {
+ 		WRONG_PARAM_COUNT;
+ 	}
+ 	
+ 	convert_to_long(streamind);
+ 	convert_to_string(sequence);
+
+ 	ind = streamind->value.lval;
+ 	imap_le_struct = (pils *)php3_list_find(ind, &ind_type);
+	
+	if (!imap_le_struct || ind_type != le_imap) {
+	  php3_error(E_WARNING, "Unable to find stream pointer");
+	  RETURN_FALSE;
+	}
+	array_init(return_value);
+	if (mail_uid_sequence (imap_le_struct->imap_stream,(char *)sequence)) {
+	  MESSAGECACHE *elt;
+	  ENVELOPE *env;
+	  unsigned long i;
+	  for (i = 1; i <= imap_le_struct->imap_stream->nmsgs; i++)
+	    if (((elt = mail_elt (imap_le_struct->imap_stream,i))->sequence) &&
+		(env = mail_fetch_structure (imap_le_struct->imap_stream,i,NIL,NIL))) {
+	      object_init(&myoverview);
+	      add_property_string(&myoverview,"subject",env->subject,1);
+	      env->from->next=NULL;
+	      rfc822_write_address(address,env->from);
+	      add_property_string(&myoverview,"from",address,1);
+	      add_property_string(&myoverview,"date",env->date,1);
+	      add_property_string(&myoverview,"message_id",env->message_id,1);
+	      add_property_string(&myoverview,"references",env->references,1);
+	      add_property_long(&myoverview,"size",elt->rfc822_size);
+	      add_property_long(&myoverview,"uid",mail_uid(imap_le_struct->imap_stream,i));
+	      add_property_long(&myoverview,"msgno",i);
+	      add_property_long(&myoverview,"recent",elt->recent);
+	      add_property_long(&myoverview,"flagged",elt->flagged);
+	      add_property_long(&myoverview,"answered",elt->answered);
+	      add_property_long(&myoverview,"deleted",elt->deleted);
+	      add_property_long(&myoverview,"seen",elt->seen);
+	      add_next_index_object(return_value,myoverview);
+	    }
+}
+}
+
+
 
 /* Interfaces to C-client */
 
@@ -1746,14 +2209,33 @@ void mm_notify (MAILSTREAM *stream,char *string,long errflg)
 void mm_list (MAILSTREAM *stream,DTYPE delimiter,char *mailbox,long attributes)
 {
 	STRINGLIST *cur=NIL;
-if(!(attributes & LATT_NOSELECT))
+	if(!(attributes & LATT_NOSELECT)) {
+		if (imap_folders == NIL) {
+			imap_folders=mail_newstringlist();
+			imap_folders->LSIZE=strlen(imap_folders->LTEXT=cpystr(mailbox));
+			imap_folders->next=NIL; 
+		} else {
+			cur=imap_folders;
+			while (cur->next != NIL ) {
+				cur=cur->next;
+			}
+			cur->next=mail_newstringlist ();
+			cur=cur->next;
+			cur->LSIZE = strlen (cur->LTEXT = cpystr (mailbox));
+			cur->next = NIL;
+		}
+	}
+}
+
+void mm_lsub (MAILSTREAM *stream,DTYPE delimiter,char *mailbox,long attributes)
 {
-	if (imap_folders == NIL) {
-		imap_folders=mail_newstringlist();
-		imap_folders->LSIZE=strlen(imap_folders->LTEXT=cpystr(mailbox));
-		imap_folders->next=NIL; 
+	STRINGLIST *cur=NIL;
+	if (imap_sfolders == NIL) {
+		imap_sfolders=mail_newstringlist();
+		imap_sfolders->LSIZE=strlen(imap_sfolders->LTEXT=cpystr(mailbox));
+		imap_sfolders->next=NIL; 
 	} else {
-		cur=imap_folders;
+		cur=imap_sfolders;
 		while (cur->next != NIL ) {
 			cur=cur->next;
 		}
@@ -1763,53 +2245,37 @@ if(!(attributes & LATT_NOSELECT))
 		cur->next = NIL;
 	}
 }
-}
-
-void mm_lsub (MAILSTREAM *stream,DTYPE delimiter,char *mailbox,long attributes)
-{
-        STRINGLIST *cur=NIL;
-        if (imap_sfolders == NIL) {
-                imap_sfolders=mail_newstringlist();
-        imap_sfolders->LSIZE=strlen(imap_sfolders->LTEXT=cpystr(mailbox));
-                imap_sfolders->next=NIL; 
-        } else {
-                cur=imap_sfolders;
-                while (cur->next != NIL ) {
-                        cur=cur->next;
-                }
-                cur->next=mail_newstringlist ();
-                cur=cur->next;
-                cur->LSIZE = strlen (cur->LTEXT = cpystr (mailbox));
-                cur->next = NIL;
-        }
-}
-
 
 void mm_status (MAILSTREAM *stream,char *mailbox,MAILSTATUS *status)
 {
-}
+status_flags=status->flags;
+  if(status_flags & SA_MESSAGES) status_messages=status->messages;
+  if(status_flags & SA_RECENT) status_recent=status->recent;
+  if(status_flags & SA_UNSEEN) status_unseen=status->unseen;
+  if(status_flags & SA_UIDNEXT) status_uidnext=status->uidnext;
+  if(status_flags & SA_UIDVALIDITY) status_uidvalidity=status->uidvalidity;
 
+}
 
 void mm_log (char *string,long errflg)
 {
-   switch ((short) errflg) {
-   case NIL:
-     php3_error(E_NOTICE,string); /* messages */
-     break;
-   case PARSE:
-   case WARN:
-     php3_error(E_WARNING,string); /* warnings */
-     break;
-   case ERROR:
-     php3_error(E_NOTICE,string);   /* errors */
-     break;
-   }
+	switch ((short) errflg) {
+	case NIL:
+		/* php3_error(E_NOTICE,string); messages */
+		break;
+	case PARSE:
+	case WARN:
+		php3_error(E_WARNING,string); /* warnings */
+		break;
+	case ERROR:
+		php3_error(E_NOTICE,string);   /* errors */
+		break;
+	}
 }
-
 
 void mm_dlog (char *string)
 {
-   php3_error(E_NOTICE,string);
+	php3_error(E_NOTICE,string);
 }
 
 void mm_login (NETMBX *mb,char *user,char *pwd,long trial)

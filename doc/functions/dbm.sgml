@@ -26,7 +26,7 @@
     <para>
      The first argument is the full-path filename of the dbm file to be opened
      and the second is the file open mode which is one of "r", "n" or "w" for
-     read, new (implies write) and write respectively.
+     read-only, new (implies read-write) and read-write respectively.
     <para>
      Returns an identifer to be passed to the other dbm functions on success,
      or false on failure.

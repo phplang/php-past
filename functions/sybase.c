@@ -31,7 +31,7 @@
    +----------------------------------------------------------------------+
  */
  
-/* $Id: sybase.c,v 1.105 1998/08/13 20:31:20 zeev Exp $ */
+/* $Id: sybase.c,v 1.106 1998/09/10 23:57:23 zeev Exp $ */
 
 
 #ifndef MSVC5
@@ -154,7 +154,7 @@ static void _free_sybase_result(sybase_result *result)
 	if (result->data) {
 		for (i=0; i<result->num_rows; i++) {
 			for (j=0; j<result->num_fields; j++) {
-				yystype_destructor(&result->data[i][j]);
+				pval_destructor(&result->data[i][j]);
 			}
 			efree(result->data[i]);
 		}
@@ -918,7 +918,7 @@ void php3_sybase_fetch_row(INTERNAL_FUNCTION_PARAMETERS)
 	array_init(return_value);
 	for (i=0; i<result->num_fields; i++) {
 		field_content = result->data[result->cur_row][i];
-		yystype_copy_constructor(&field_content);
+		pval_copy_constructor(&field_content);
 		_php3_hash_index_update(return_value->value.ht, i, (void *) &field_content, sizeof(pval),NULL);
 	}
 	result->cur_row++;
@@ -931,7 +931,7 @@ static void php3_sybase_fetch_hash(INTERNAL_FUNCTION_PARAMETERS)
 	sybase_result *result;
 	int type;
 	int i;
-	pval *yystype_ptr,tmp;
+	pval *pval_ptr,tmp;
 	
 	if (ARG_COUNT(ht)!=1 || getParameters(ht, 1, &sybase_result_index)==FAILURE) {
 		WRONG_PARAM_COUNT;
@@ -955,12 +955,12 @@ static void php3_sybase_fetch_hash(INTERNAL_FUNCTION_PARAMETERS)
 	
 	for (i=0; i<result->num_fields; i++) {
 		tmp = result->data[result->cur_row][i];
-		yystype_copy_constructor(&tmp);
+		pval_copy_constructor(&tmp);
 		if (php3_ini.magic_quotes_runtime && tmp.type == IS_STRING) {
 			tmp.value.str.val = _php3_addslashes(tmp.value.str.val,tmp.value.str.len,&tmp.value.str.len,1);
 		}
-		_php3_hash_index_update(return_value->value.ht, i, (void *) &tmp, sizeof(pval), (void **) &yystype_ptr);
-		_php3_hash_pointer_update(return_value->value.ht, result->fields[i].name, strlen(result->fields[i].name)+1, yystype_ptr);
+		_php3_hash_index_update(return_value->value.ht, i, (void *) &tmp, sizeof(pval), (void **) &pval_ptr);
+		_php3_hash_pointer_update(return_value->value.ht, result->fields[i].name, strlen(result->fields[i].name)+1, pval_ptr);
 	}
 	result->cur_row++;
 }
@@ -1198,7 +1198,7 @@ void php3_sybase_result(INTERNAL_FUNCTION_PARAMETERS)
 	}
 
 	*return_value = result->data[row->value.lval][field_offset];
-	yystype_copy_constructor(return_value);
+	pval_copy_constructor(return_value);
 }
 
 

@@ -207,7 +207,7 @@ void _php3_parse_gpc_data(char *val, char *var, pval *track_vars_array)
 			}
 		} else {
 			if (arr_ptr->type!=IS_ARRAY) {
-				yystype_destructor(arr_ptr _INLINE_TLS);
+				pval_destructor(arr_ptr _INLINE_TLS);
 				if (array_init(arr_ptr)==FAILURE) {
 					return;
 				}
@@ -238,13 +238,13 @@ void _php3_parse_gpc_data(char *val, char *var, pval *track_vars_array)
 			if (php3_check_type(ret) == IS_LONG) {
 				_php3_hash_index_update(arr1.value.ht, atol(ret), &entry, sizeof(pval),NULL);	/* s[ret]=tmp */
 				if (track_vars_array) {
-					yystype_copy_constructor(&entry);
+					pval_copy_constructor(&entry);
 					_php3_hash_index_update(arr2.value.ht, atol(ret), &entry, sizeof(pval),NULL);
 				}
 			} else {
 				_php3_hash_update(arr1.value.ht, ret, strlen(ret)+1, &entry, sizeof(pval),NULL);	/* s["ret"]=tmp */
 				if (track_vars_array) {
-					yystype_copy_constructor(&entry);
+					pval_copy_constructor(&entry);
 					_php3_hash_update(arr2.value.ht, ret, strlen(ret)+1, &entry, sizeof(pval),NULL);
 				}
 			}
@@ -253,7 +253,7 @@ void _php3_parse_gpc_data(char *val, char *var, pval *track_vars_array)
 		} else {		/* non-indexed array */
 			_php3_hash_next_index_insert(arr1.value.ht, &entry, sizeof(pval),NULL);
 			if (track_vars_array) {
-				yystype_copy_constructor(&entry);
+				pval_copy_constructor(&entry);
 				_php3_hash_next_index_insert(arr2.value.ht, &entry, sizeof(pval),NULL);
 			}
 		}
@@ -269,7 +269,7 @@ void _php3_parse_gpc_data(char *val, char *var, pval *track_vars_array)
 		entry.type = IS_STRING;
 		_php3_hash_update(GLOBAL(active_symbol_table), var, var_len+1, (void *) &entry, sizeof(pval),NULL);
 		if (track_vars_array) {
-			yystype_copy_constructor(&entry);
+			pval_copy_constructor(&entry);
 			_php3_hash_update(track_vars_array->value.ht, var, var_len+1, (void *) &entry, sizeof(pval),NULL);
 		}
 	}
@@ -384,9 +384,9 @@ void php3_TreatHeaders(void)
 		/*php3_error(E_WARNING, "Authentication done by server module\n");*/
 		return;
 	}
-	if (strcmp(getword(GLOBAL(php3_rqst)->pool, &s, ' '), "Basic")) {
+	if (strcmp(t=getword(GLOBAL(php3_rqst)->pool, &s, ' '), "Basic")) {
 		/* Client tried to authenticate using wrong auth scheme */
-		php3_error(E_WARNING, "client used wrong authentication scheme", GLOBAL(php3_rqst)->uri, GLOBAL(php3_rqst));
+		php3_error(E_WARNING, "client used wrong authentication scheme (%s)", t);
 		return;
 	}
 	t = uudecode(GLOBAL(php3_rqst)->pool, s);

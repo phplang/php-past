@@ -26,7 +26,7 @@
    | Authors: Rasmus Lerdorf <rasmus@lerdorf.on.ca>                       |
    +----------------------------------------------------------------------+
  */
-/* $Id: mod_php3.h,v 1.43 1998/08/14 23:47:12 steffann Exp $ */
+/* $Id: mod_php3.h,v 1.45 1998/09/21 16:41:50 zeev Exp $ */
 
 #ifndef _MOD_PHP3_H
 #define _MOD_PHP3_H
@@ -62,8 +62,10 @@ typedef struct {
     char *auto_prepend_file;
     char *auto_append_file;
     char *upload_tmp_dir;
+	long upload_max_filesize;
     char *extension_dir;
     long  short_open_tag;
+    long asp_tags;
     char *debugger_host;
     long  debugger_port;
     char *error_log;

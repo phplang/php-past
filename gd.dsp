@@ -92,6 +92,14 @@ SOURCE=.\functions\gd.c
 # End Source File
 # Begin Source File
 
+SOURCE=.\functions\gdcache.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\functions\gdcache.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\functions\gdttf.c
 # End Source File
 # Begin Source File

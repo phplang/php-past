@@ -159,6 +159,9 @@ typedef struct php3_global_struct{
 	int CurrentStatLength;
 #endif
 	struct stat sb;
+#if HAVE_SYMLINK
+	struct stat lsb;
+#endif
 	/*formated_print.c*/
 	char cvt_buf[80]; /*STATIC VAR*/
 	/*head.c*/
@@ -177,6 +180,7 @@ typedef struct php3_global_struct{
 	long page_mtime;
 	/*post.c*/
 	int php3_track_vars;
+	int le_uploads;
 	/*strings.h*/
 	char *strtok_string;
 	char *strtok_pos1; /*STATIC VAR*/

@@ -28,7 +28,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: db.c,v 1.76 1998/08/14 23:47:14 steffann Exp $ */
+/* $Id: db.c,v 1.77 1998/09/19 20:17:15 rasmus Exp $ */
 #if COMPILE_DL
 #include "dl/phpdl.h"
 #endif
@@ -297,7 +297,6 @@ dbm_info *_php3_dbmopen(char *filename, char *mode) {
 	}
 
 	if (php3_ini.safe_mode && (!_php3_checkuid(filename, 2))) {
-		php3_error(E_WARNING, "SAFE MODE Restriction in effect.  Invalid owner.");
 		return NULL;
 	}
 

@@ -24,7 +24,7 @@
 # +----------------------------------------------------------------------+
 
 #
-# $Id: Makefile.in,v 1.253 1998/08/15 13:56:12 rasmus Exp $
+# $Id: Makefile.in,v 1.261 1998/09/21 16:41:44 zeev Exp $
 #
 
 prefix = @prefix@
@@ -37,7 +37,7 @@ CC = @CC@
 AR = ar rc
 BINNAME = @BINNAME@
 INSTALL_IT = @INSTALL_IT@
-INCLUDE = -I$(srcdir) -I. @GDBM_INCLUDE@ @ORACLE_INCLUDE@ @APACHE_INCLUDE@ @FHTTPD_INCLUDE@ @ADA_INCLUDE@ @IODBC_INCLUDE@ @SYBASE_INCLUDE@ @SYBASE_CT_INCLUDE@ @MYSQL_INCLUDE@ @MSQL_INCLUDE@ @SOLID_INCLUDE@ @OPENLINK_INCLUDE@ @PGSQL_INCLUDE@ @LDAP_INCLUDE@ @VELOCIS_INCLUDE@ @CODBC_INCLUDE@ @GD_INCLUDE@ @IMAP_INCLUDE@ @ZLIB_INCLUDE@ @IFX_INCLUDE@
+INCLUDE = -I$(srcdir) -I. @GDBM_INCLUDE@ @ORACLE_INCLUDE@ @APACHE_INCLUDE@ @FHTTPD_INCLUDE@ @ADA_INCLUDE@ @IODBC_INCLUDE@ @SYBASE_INCLUDE@ @SYBASE_CT_INCLUDE@ @MYSQL_INCLUDE@ @MSQL_INCLUDE@ @SOLID_INCLUDE@ @OPENLINK_INCLUDE@ @PGSQL_INCLUDE@ @LDAP_INCLUDE@ @VELOCIS_INCLUDE@ @CODBC_INCLUDE@ @GD_INCLUDE@ @IMAP_INCLUDE@ @ZLIB_INCLUDE@ @IFX_INCLUDE@ @SNMP_INCLUDE@
 PROF_CFLAGS =
 CFLAGS_SHLIB = @CFLAGS_SHLIB@
 LDFLAGS_SHLIB = @LDFLAGS_SHLIB@
@@ -58,13 +58,13 @@ SOURCE = language-parser.tab.c language-scanner.c main.c php3_hash.c operators.c
        snprintf.c php3_sprintf.c alloc.c list.c highlight.c debugger.c \
        configuration-parser.tab.c configuration-scanner.c \
        request_info.c safe_mode.c fopen-wrappers.c constants.c \
-       php3_realpath.c
+       php3_realpath.c alloca.c
 OBJS = language-parser.tab.o language-scanner.o main.o php3_hash.o operators.o \
        variables.o token_cache.o stack.o internal_functions.o \
        snprintf.o php3_sprintf.o alloc.o list.o highlight.o debugger.o \
        configuration-parser.tab.o configuration-scanner.o \
        request_info.o safe_mode.o fopen-wrappers.o constants.o \
-       php3_realpath.o @LIBOBJS@
+       php3_realpath.o alloca.o @LIBOBJS@
 
 FUNCTIONS_SOURCE = functions/adabasd.c functions/apache.c functions/fhttpd.c \
        functions/basic_functions.c \
@@ -77,7 +77,7 @@ FUNCTIONS_SOURCE = functions/adabasd.c functions/apache.c functions/fhttpd.c \
        functions/link.c functions/mail.c functions/math.c \
        functions/md5.c functions/microtime.c functions/mime.c \
        functions/msql.c functions/mysql.c \
-       functions/oracle.c functions/pack.c \
+       functions/oracle.c functions/oci8.c functions/pack.c \
 	   functions/pageinfo.c functions/pgsql.c \
        functions/post.c functions/rand.c functions/reg.c \
        functions/solid.c functions/soundex.c \
@@ -88,11 +88,12 @@ FUNCTIONS_SOURCE = functions/adabasd.c functions/apache.c functions/fhttpd.c \
        functions/unified_odbc.c functions/ldap.c functions/browscap.c \
        functions/velocis.c functions/gdttf.c functions/gdcache.c \
        functions/zlib.c functions/COM.c functions/ifx.c \
-       functions/hw.c functions/hg_comm.c functions/dlist.c
+       functions/hw.c functions/hg_comm.c functions/dlist.c \
+       functions/snmp.c
 
 FUNCTIONS = $(FUNCTIONS_SOURCE:.c=.o)
 
-LIBS = $(PHPLIBS) @FHTTPD_LIB@ @DBASE_LIB@ @REGEX_LIB@ @DBM_LIB@ @ORACLE_LFLAGS@ @ORACLE_LIBS@ @IODBC_LFLAGS@ @IODBC_LIBS@ @SYBASE_LFLAGS@ @SYBASE_LIBS@ @SYBASE_CT_LFLAGS@ @SYBASE_CT_LIBS@ @MYSQL_LFLAGS@ @MYSQL_LIBS@ @MSQL_LFLAGS@ @MSQL_LIBS@ @ADA_LFLAGS@ @ADA_LIBS@ @SOLID_LIBS@ @OPENLINK_LFLAGS@ @OPENLINK_LIBS@ @PGSQL_LFLAGS@ @PGSQL_LIBS@ @LDAP_LFLAGS@ @LDAP_LIBS@ @VELOCIS_LIBS@ @CODBC_LFLAGS@ @CODBC_LIBS@ @IMAP_LIBS@ @GD_LIBS@ @ZLIB_LIBS@ @IFX_LFLAGS@ @IFX_LIBS@ @LIBS@
+LIBS = $(PHPLIBS) @FHTTPD_LIB@ @DBASE_LIB@ @REGEX_LIB@ @DBM_LIB@ @ORACLE_LFLAGS@ @ORACLE_LIBS@ @IODBC_LFLAGS@ @IODBC_LIBS@ @SYBASE_LFLAGS@ @SYBASE_LIBS@ @SYBASE_CT_LFLAGS@ @SYBASE_CT_LIBS@ @MYSQL_LFLAGS@ @MYSQL_LIBS@ @MSQL_LFLAGS@ @MSQL_LIBS@ @ADA_LFLAGS@ @ADA_LIBS@ @SOLID_LIBS@ @OPENLINK_LFLAGS@ @OPENLINK_LIBS@ @PGSQL_LFLAGS@ @PGSQL_LIBS@ @LDAP_LFLAGS@ @LDAP_LIBS@ @VELOCIS_LIBS@ @CODBC_LFLAGS@ @CODBC_LIBS@ @IMAP_LIBS@ @GD_LIBS@ @ZLIB_LIBS@ @IFX_LFLAGS@ @IFX_LIBS@ @SNMP_LFLAGS@ @SNMP_LIBS@ @LIBS@
 
 all: $(BINNAME)
 
@@ -124,7 +125,7 @@ dbase/libdbf.a:
 	(cd dbase; $(MAKE))
 
 functions/ifx.c: functions/ifx.ec
-	(if test $(INFORMIXDIR); then esql -e functions/ifx.ec; mv ifx.c functions; else touch functions/ifx.c; fi)
+	(if test $(INFORMIXDIR); then esql -e @IFX_ESQL_FLAGS@ functions/ifx.ec; mv ifx.c functions; else touch functions/ifx.c; fi)
 
 language-parser.tab.h language-parser.tab.c: $(srcdir)/language-parser.y
 	bison -p php -v -d $(srcdir)/language-parser.y -o language-parser.tab.c
@@ -146,7 +147,7 @@ configuration-scanner.c:	$(srcdir)/configuration-scanner.lex
 
 clean:  
 	-rm libphp3.a libmodphp3.a php *.o
-	-rm -f $(FUNCTIONS) functions/informix.c
+	-rm -f $(FUNCTIONS) functions/ifx.c
 	-rm -f test/php.desc test/php.in test/php.out test/php.test
 	-rm -f test/a.tmp test/b.tmp test/test.dbm*
 	(cd dbase; $(MAKE) clean)
@@ -199,7 +200,7 @@ indent:	clean
 	-T pval -T HashTable -T Bucket -T Token -T TokenCache -T TokenCacheManager \
 	-T switch_expr -T internal_function -T control_structure_data \
 	-T MemoryHashTable -T MemoryBucket \
-	-T yystype_value -T Stack *.c *.h functions/*.c functions/*.h
+	-T pvalue_value -T Stack *.c *.h functions/*.c functions/*.h
 	rm -f *~ functions/*~
 
 .c.o:
@@ -263,21 +264,20 @@ internal_functions.o: internal_functions.c php.h php_version.h \
  internal_functions_registry.h php3_list.h functions/php3_ifx.h \
  functions/php3_ldap.h functions/php3_mysql.h functions/php3_bcmath.h \
  functions/php3_msql.h functions/basic_functions.h functions/phpmath.h \
- functions/php3_string.h functions/oracle.h functions/base64.h \
- functions/php3_dir.h functions/dns.h functions/php3_pgsql.h \
- functions/php3_velocis.h functions/php3_sybase.h \
- functions/php3_sybase-ct.h functions/reg.h functions/php3_mail.h \
- functions/imap.h functions/md5.h functions/global.h \
- functions/php3_gd.h functions/html.h functions/dl.h functions/head.h \
- functions/post.h functions/exec.h functions/php3_solid.h \
- functions/adabasd.h functions/file.h functions/dbase.h functions/hw.h \
- functions/filepro.h functions/db.h functions/php3_syslog.h \
- functions/php3_filestat.h functions/php3_browscap.h functions/pack.h \
- php3_debugger.h functions/php3_unified_odbc.h dl/snmp/php3_snmp.h \
+ functions/php3_string.h functions/php3_oci8.h functions/oracle.h \
+ functions/base64.h functions/php3_dir.h functions/dns.h \
+ functions/php3_pgsql.h functions/php3_velocis.h \
+ functions/php3_sybase.h functions/php3_sybase-ct.h functions/reg.h \
+ functions/php3_mail.h functions/imap.h functions/md5.h \
+ functions/global.h functions/php3_gd.h functions/html.h \
+ functions/dl.h functions/head.h functions/post.h functions/exec.h \
+ functions/php3_solid.h functions/adabasd.h functions/file.h \
+ functions/dbase.h functions/hw.h functions/filepro.h functions/db.h \
+ functions/php3_syslog.h functions/php3_filestat.h \
+ functions/php3_browscap.h functions/pack.h php3_debugger.h \
+ functions/php3_unified_odbc.h dl/snmp/php3_snmp.h \
  functions/php3_zlib.h functions/php3_COM.h
-snprintf.o: snprintf.c config.h php.h php_version.h request_info.h \
- php3_hash.h alloc.h  safe_mode.h fopen-wrappers.h \
- mod_php3.h stack.h operators.h token_cache.h variables.h constants.h
+snprintf.o: snprintf.c config.h
 php3_sprintf.o: php3_sprintf.c config.h
 alloc.o: alloc.c alloc.h php.h php_version.h config.h request_info.h \
  php3_hash.h  safe_mode.h fopen-wrappers.h mod_php3.h \
@@ -325,6 +325,7 @@ php3_realpath.o: php3_realpath.c php.h php_version.h config.h \
  request_info.h php3_hash.h alloc.h  safe_mode.h \
  fopen-wrappers.h mod_php3.h stack.h operators.h token_cache.h \
  variables.h constants.h
+alloca.o: alloca.c
 functions/adabasd.o: functions/adabasd.c config.h build-defs.h php.h \
  php_version.h request_info.h php3_hash.h alloc.h  \
  safe_mode.h fopen-wrappers.h mod_php3.h stack.h operators.h \
@@ -461,7 +462,7 @@ functions/mime.o: functions/mime.c php.h php_version.h config.h request_info.h \
  php3_hash.h alloc.h  safe_mode.h fopen-wrappers.h \
  mod_php3.h stack.h operators.h token_cache.h variables.h constants.h \
  internal_functions.h modules.h functions/type.h functions/post.h \
- functions/mime.h
+ functions/mime.h php3_list.h
 functions/msql.o: functions/msql.c config.h php.h php_version.h request_info.h \
  php3_hash.h alloc.h  safe_mode.h fopen-wrappers.h \
  mod_php3.h stack.h operators.h token_cache.h variables.h constants.h \
@@ -477,6 +478,10 @@ functions/oracle.o: functions/oracle.c php.h php_version.h config.h \
  fopen-wrappers.h mod_php3.h stack.h operators.h token_cache.h \
  variables.h constants.h internal_functions.h modules.h \
  functions/oracle.h
+functions/oci8.o: functions/oci8.c php.h php_version.h config.h request_info.h \
+ php3_hash.h alloc.h  safe_mode.h fopen-wrappers.h \
+ mod_php3.h stack.h operators.h token_cache.h variables.h constants.h \
+ internal_functions.h modules.h functions/php3_oci8.h
 functions/pack.o: functions/pack.c php.h php_version.h config.h request_info.h \
  php3_hash.h alloc.h  safe_mode.h fopen-wrappers.h \
  mod_php3.h stack.h operators.h token_cache.h variables.h constants.h \
@@ -586,22 +591,25 @@ functions/velocis.o: functions/velocis.c php.h php_version.h config.h \
  fopen-wrappers.h mod_php3.h stack.h operators.h token_cache.h \
  variables.h constants.h internal_functions.h modules.h \
  functions/php3_velocis.h
-functions/gdttf.o: functions/gdttf.c config.h functions/gdttf.h \
- functions/gdcache.h
-functions/gdcache.o: functions/gdcache.c config.h functions/gdcache.h
+functions/gdttf.o: functions/gdttf.c config.h
+functions/gdcache.o: functions/gdcache.c config.h
 functions/zlib.o: functions/zlib.c php.h php_version.h config.h request_info.h \
  php3_hash.h alloc.h  safe_mode.h fopen-wrappers.h \
  mod_php3.h stack.h operators.h token_cache.h variables.h constants.h \
  functions/head.h modules.h internal_functions.h php3_list.h \
  functions/php3_string.h functions/php3_zlib.h snprintf.h
 functions/COM.o: functions/COM.c
-functions/ifx.o: functions/ifx.c
 functions/hw.o: functions/hw.c config.h php.h php_version.h request_info.h \
  php3_hash.h alloc.h  safe_mode.h fopen-wrappers.h \
  mod_php3.h stack.h operators.h token_cache.h variables.h constants.h \
  internal_functions.h modules.h functions/head.h
 functions/hg_comm.o: functions/hg_comm.c config.h
 functions/dlist.o: functions/dlist.c config.h
+functions/snmp.o: functions/snmp.c php.h php_version.h config.h request_info.h \
+ php3_hash.h alloc.h  safe_mode.h fopen-wrappers.h \
+ mod_php3.h stack.h operators.h token_cache.h variables.h constants.h \
+ internal_functions.h modules.h functions/php3_snmp.h
+
 
 # Local Variables:
 # tab-width: 4

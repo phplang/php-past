@@ -24,7 +24,8 @@
      Returns a string with backslashes before characters that need
      to be quoted in database queries etc.  These characters are
      single quote (<literal>'</literal>), double quote
-     (<literal>"</literal>), and backslash (<literal>\</literal>).
+     (<literal>"</literal>), backslash (<literal>\</literal>)
+     and NUL (the null byte).
 
     <para>
      See also <function>stripslashes</function> and <function>quotemeta</function>.
@@ -74,9 +75,14 @@ $trimmed = Chop($line);
       <title>chr() example</title>
       <programlisting>
 $str .= chr(27); /* add an escape character at the end of $str */
+
+/* Often this is more useful */
+$str = sprintf("The string ends in escape: %c", 27);
 </programlisting></example>
 
-     This function complements <function>ord</function>.
+     This function complements <function>ord</function>. See also
+     <function>sprintf</function> with a format string of
+     <literal>%c</literal>.
 
    </refsect1>
   </refentry>
@@ -99,12 +105,21 @@ $str .= chr(27); /* add an escape character at the end of $str */
      standard Unix <abbrev>DES</abbrev> encryption method.  Arguments
      are a string to be encrypted and an optional two-character salt
      string to base the encryption on.  See the Unix man page for your
-     crypt function for more information.  If you do not have a crypt
-     function on your Unix system, you can use Michael Glad's public
-     domain UFC-Crypt package which was developed in Denmark and hence
-     not restricted by US export laws as long as you ftp it from an
-     non-US site.
-    <para>
+     crypt function for more information.  
+	<simpara>
+	 If the salt argument is not provided, it will be randomly generated
+	 by PHP.
+	<simpara>
+	 Some operating systems support more than one type of encryption.  
+	 In fact, sometimes the standard DES encryption is replaced by an
+	 MD5 based encryption algorithm.  The encryption type is triggered by
+	 the salt argument.  At install time, PHP determines the capabilities
+	 of the crypt function and will accept salts for other encryption
+	 types.  If no salt is provided, PHP will auto-generate a standard
+	 2-character DES salt by default unless the default encryption type
+	 on the system is MD5 in which case a random MD5-compatible salt
+	 is generated.
+    <simpara>
      There is no decrypt function, since <function>crypt</function>
      uses a one-way algorithm.
    </refsect1>
@@ -337,7 +352,8 @@ $colon_separated = implode($array, ":");
     </funcsynopsis>
 
     <para>
-     Calculates the MD5 hash of <parameter>str</parameter>.
+     Calculates the MD5 hash of <parameter>str</parameter> using the
+     RSA Data Security, Inc. MD5 Message-Digest Algorithm.
 
    </refsect1>
   </refentry>
@@ -851,7 +867,7 @@ $isodate = sprintf("%04d-%02d-%02d", $year, $month, $day);
      <paramdef>string <parameter>str2</parameter></paramdef>
     </funcsynopsis>
     <simpara>
-	 Returns the lengthq of the initial segment of <parameter>str1</parameter> which does 
+	 Returns the length of the initial segment of <parameter>str1</parameter> which does 
 	 <emphasis>not</emphasis> contain any of the characters in <parameter>str2</parameter>.
 
     <simpara>

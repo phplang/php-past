@@ -28,7 +28,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: php.h,v 1.32 1998/08/08 14:13:30 zeev Exp $ */
+/* $Id: php.h,v 1.35 1998/09/10 23:56:56 zeev Exp $ */
 
 #ifndef _PHP_H
 #define _PHP_H
@@ -376,11 +376,11 @@ typedef struct _pval_struct pval;
 #define INTERNAL_FUNCTION_PARAMETERS HashTable *ht, pval *return_value, HashTable *list, HashTable *plist
 #define INTERNAL_FUNCTION_PARAM_PASSTHRU ht, return_value, list, plist
 
-#define PHP_FUNCTION(name) void name(INTERNAL_FUNCTION_PARAMETERS)
-#define PHP3_FUNCTION(name) PHP_FUNCTION(php3_##name)
+#define PHP_NAMED_FUNCTION(name) void name(INTERNAL_FUNCTION_PARAMETERS)
+#define PHP_FUNCTION(name) PHP_NAMED_FUNCTION(php3_##name)
 
-#define PHP_FE(php_name, name, arg_types) { #php_name, name, arg_types },
-#define PHP3_FE(name, arg_types) { #name, php3_##name, arg_types },
+#define PHP_NAMED_FE(php_name, name, arg_types) { #php_name, name, arg_types },
+#define PHP_FE(name, arg_types) PHP_NAMED_FE(name, php3_##name, arg_types)
 
 typedef union {
 	long lval;					/* long value */
@@ -400,10 +400,10 @@ typedef union {
 	} func;
 		
 	struct {
-		pval *yystype;  /* used for implementation of multi-dimensional arrays */
+		pval *pvalue;  /* used for implementation of multi-dimensional arrays */
 		int string_offset;
 	} varptr;
-} yystype_value;
+} pvalue_value;
 
 
 struct _pval_struct {
@@ -414,7 +414,7 @@ struct _pval_struct {
 	control_structure_data cs_data;
 	unsigned int offset;
 
-	yystype_value value;		/* value */
+	pvalue_value value;		/* value */
 };
 
 typedef struct {

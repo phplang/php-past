@@ -1,0 +1,9 @@
+--$Id
+--TITLE--
+Auto index loop                                               ...
+--URL--
+ary/004.phtml
+--EXPECT--
+KEY: 0, VAL: a
+KEY: 1, VAL: b
+KEY: 2, VAL: c

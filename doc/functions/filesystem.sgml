@@ -144,7 +144,7 @@ chmod( "/somedir/somefile", 0755 );  // octal; correct value of mode
      <void>
     </funcsynopsis>
     <para>
-     Invoking the stat() system call on most systems is quite
+     Invoking the stat() or lstat() system call on most systems is quite
      expensive. Therefore, the result of the last call to any of the
      status functions (listed below) is stored for use on the next
      such call using the same filename. If you wish to force a new
@@ -154,9 +154,17 @@ chmod( "/somedir/somefile", 0755 );  // octal; correct value of mode
 
     <para>
      Affected functions include <function>stat</function>,
+     <function>lstat</function>,
      <function>file_exists</function>,
+     <function>is_writeable</function>,
+     <function>is_readable</function>,
+     <function>is_executable</function>,
+     <function>is_file</function>,
+     <function>is_dir</function>,
+     <function>is_link</function>,
      <function>filectime</function>,
      <function>fileatime</function>,
+     <function>filemtime</function>,
      <function>fileinode</function>,
      <function>filegroup</function>,
      <function>fileowner</function>,
@@ -587,37 +595,74 @@ $file = dirname($path); // $file is set to "/etc"
      <paramdef>string <parameter>filename</parameter></paramdef>
      <paramdef>string <parameter>mode</parameter></paramdef>
     </funcsynopsis>
-    <para>
+    <simpara>
      If <parameter>filename</parameter> begins with "http://" (not case sensitive), an HTTP
      1.0 connection is opened to the specified server and a file
      pointer is returned to the beginning of the text of the response.
 
-    <para>
+    <simpara>
      Does not handle HTTP redirects, so you must include trailing
      slashes on directories.
 
-    <para>
+    <simpara>
      If <parameter>filename</parameter> begins with "ftp://" (not case sensitive), an ftp
      connection to the specified server is opened and a pointer to the
      requested file is returned. If the server does not support
      passive mode ftp, this will fail.
 
-    <para>
+    <simpara>
      If <parameter>filename</parameter> begins with anything else, the
      file will be opened from the filesystem, and a file pointer to
      the file opened is returned.
 
-    <para>
+    <simpara>
      If the open fails, the function returns false.
 
-    <para><example>
+    <para>
+     <parameter>mode</parameter> may be any of the following:
+     <itemizedlist>
+      <listitem><simpara>'r' - Open for reading only; place the file
+      pointer at the beginning of the file.
+      <listitem><simpara>
+       'r+' - Open for reading and writing; place the file pointer at
+       the beginning of the file.
+      <listitem><simpara>
+       'w' - Open for writing only; place the file pointer at the
+       beginning of the file and truncate the file to zero length.
+       If the file does not exist, attempt to create it.
+      <listitem><simpara>
+       'w+' - Open for reading and writing; place the file pointer at
+       the beginning of the file and truncate the file to zero length.
+       If the file does not exist, attempt to create it.
+      <listitem><simpara>
+       'a' - Open for writing only; place the file pointer at the end
+       of the file. If the file does not exist, attempt to create it.
+      <listitem><simpara>
+       'a+' - Open for reading and writing; place the file pointer at
+       the end of the file. If the file does not exist, attempt to
+       create it.
+     </itemizedlist>
+
+     As well, <parameter>mode</parameter> may contain the letter
+     'b'. This is useful only on systems which differentiate between
+     binary and text files (i.e., it's useless on Unix). If not
+     needed, this will be ignored.
+
+    <para>
+     <example>
       <title>fopen() example</title>
       <programlisting>
 $fp = fopen( "/home/rasmus/file.txt", "r" );
 $fp = fopen( "http://www.php.net/", "r" );
 </programlisting></example>
 
-    <para>
+    <simpara>
+     If you are experiencing problems with reading and writing to
+     files and you're using the server module version of PHP, remember 
+     to make sure that the files and directories you're using are
+     accessible to the server process.
+
+    <simpara>
      See also <function>fclose</function>,
      <function>fsockopen</function>, and <function>popen</function>.
 
@@ -636,23 +681,29 @@ $fp = fopen( "http://www.php.net/", "r" );
      <funcdef>int <function>fpassthru</function></funcdef>
      <paramdef>int <parameter>fp</parameter></paramdef>
     </funcsynopsis>
-    <para>
+    <simpara>
      Reads to EOF on the given file pointer and writes the results to
      standard output.
 
-    <para>
+    <simpara>
      If an error occurs, <function>fpassthru</function> returns false.
 
-    <para>
-     The file pointer must be valid, and must point to a file
-     successfully opened by <function>fopen</function>,
-     <function>popen</function>, or <function>fsockopen</function>.
-
-    <para>
-     The file is closed when
+    <simpara>
+     The file pointer must be valid, and must point to a file successfully
+     opened by <function>fopen</function>, <function>popen</function>, or
+     <function>fsockopen</function>.  The file is closed when
      <function>fpassthru</function> is done reading it (leaving
      <parameter>fp</parameter> useless).
 
+    <simpara>
+     If you just want to dump the contents of a file to stdout
+     you may want to use the <function>readfile</function>, which
+     saves you the <function>fopen</function> call.
+
+    <simpara>
+     See also <function>readfile</function>, <function>fopen</function>,
+     <function>popen</function>, and <function>fsockopen</function>
+     
    </refsect1>
   </refentry>
 
@@ -1195,6 +1246,47 @@ fclose( $fd );
     </funcsynopsis>
     <para>
      Gathers the statistics of the file named by filename.
+    <para>
+     Returns an array with the statistics of the file with the
+     following elements:
+     <orderedlist>
+      <listitem><simpara>device</simpara></listitem>
+      <listitem><simpara>inode</simpara></listitem>
+      <listitem><simpara>number of links</simpara></listitem>
+      <listitem><simpara>user id of owner</simpara></listitem>
+      <listitem><simpara>group id owner</simpara></listitem>
+      <listitem><simpara>device type if inode device *</simpara></listitem>
+      <listitem><simpara>size in bytes</simpara></listitem>
+      <listitem><simpara>time of last access</simpara></listitem>
+      <listitem><simpara>time of last modification</simpara></listitem>
+      <listitem><simpara>time of last change</simpara></listitem>
+      <listitem><simpara>blocksize for filesystem I/O *</simpara></listitem>
+      <listitem><simpara>number of blocks allocated</simpara></listitem>
+     </orderedlist>
+     * - only valid on systems supporting the st_blksize type--other
+     systems (i.e. Windows) return -1
+
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.lstat">
+   <refnamediv>
+    <refname>lstat</refname>
+    <refpurpose>give information about a file or symbolic link</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>array <function>lstat</function></funcdef>
+     <paramdef>string <parameter>filename</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+     Gathers the statistics of the file or symbolic link named by filename.
+     This function is identical to the <function>stat</function> function
+     except that if the <parameter>filename</parameter> parameter is a
+     symbolic link, the status of the symbolic link is returned, not
+     the status of the file pointed to by the symbolic link.
     <para>
      Returns an array with the statistics of the file with the
      following elements:

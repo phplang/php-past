@@ -29,7 +29,7 @@
  */
 
 
-/* $Id: list.c,v 1.82 1998/06/22 20:28:06 zeev Exp $ */
+/* $Id: list.c,v 1.83 1998/08/25 18:48:56 rasmus Exp $ */
 
 #ifdef THREAD_SAFE
 #include "tls.h"
@@ -50,7 +50,7 @@
 #endif
 #include "win32/readdir.h"
 #endif
-HashTable list,plist;
+/* HashTable list,plist; */
 PHPAPI int le_index_ptr;
 
 PHPAPI int php3_list_do_insert(HashTable *list,void *ptr, int type)

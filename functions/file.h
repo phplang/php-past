@@ -27,7 +27,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: file.h,v 1.24 1998/05/15 10:57:23 zeev Exp $ */
+/* $Id: file.h,v 1.25 1998/09/01 19:40:50 shane Exp $ */
 
 #ifndef _FILE_H
 #define _FILE_H
@@ -64,5 +64,6 @@ extern void php3_file_copy(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_file(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_set_socket_blocking(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_set_socket_timeout(INTERNAL_FUNCTION_PARAMETERS);
+extern void php3_get_meta_tags(INTERNAL_FUNCTION_PARAMETERS);
 
 #endif /* _FILE_H */

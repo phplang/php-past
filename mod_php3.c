@@ -27,7 +27,7 @@
    | (with helpful hints from Dean Gaudet <dgaudet@arctic.org>            |
    +----------------------------------------------------------------------+
  */
-/* $Id: mod_php3.c,v 1.80 1998/08/14 23:47:12 steffann Exp $ */
+/* $Id: mod_php3.c,v 1.81 1998/08/25 19:56:27 rasmus Exp $ */
 
 #ifdef THREAD_SAFE
 #include "tls.h"
@@ -302,6 +302,7 @@ static void *php3_merge_dir(pool *p, void *basev, void *addv)
 	if (add->auto_prepend_file != orig.auto_prepend_file) new->auto_prepend_file = add->auto_prepend_file;
 	if (add->auto_append_file != orig.auto_append_file) new->auto_append_file = add->auto_append_file;
 	if (add->upload_tmp_dir != orig.upload_tmp_dir) new->upload_tmp_dir = add->upload_tmp_dir;
+	if (add->upload_max_filesize != orig.upload_max_filesize) new->upload_max_filesize = add->upload_max_filesize;
 	if (add->extension_dir != orig.extension_dir) new->extension_dir = add->extension_dir;
 	if (add->short_open_tag != orig.short_open_tag) new->short_open_tag = add->short_open_tag;
 	if (add->debugger_host != orig.debugger_host) new->debugger_host = add->debugger_host;
@@ -456,6 +457,9 @@ char *php3take1handler(cmd_parms * cmd, php3_ini_structure * conf, char *arg)
 		case 18:
 			conf->open_basedir = pstrdup(cmd->pool, arg);
 			break;
+		case 19:
+			conf->upload_max_filesize = atol(arg);
+			break;
 	}
 	return NULL;
 }
@@ -515,6 +519,7 @@ command_rec php3_commands[] =
 	{"php3_error_prepend_string", php3take1handler, (void *)16, OR_OPTIONS, TAKE1, "String to add before an error message from PHP"},
 	{"php3_error_append_string", php3take1handler, (void *)17, OR_OPTIONS, TAKE1, "String to add after an error message from PHP"},
 	{"php3_open_basedir", php3take1handler, (void *)18, OR_OPTIONS|RSRC_CONF, TAKE1, "Limit opening of files to this directory"},
+	{"php3_upload_max_filesize", php3take1handler, (void *)19, OR_OPTIONS|RSRC_CONF, TAKE1, "Limit uploaded files to this many bytes"},
 
 	{"php3_track_errors", php3flaghandler, (void *)0, OR_OPTIONS, FLAG, "on|off"},
 	{"php3_magic_quotes_gpc", php3flaghandler, (void *)1, OR_OPTIONS, FLAG, "on|off"},

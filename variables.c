@@ -29,7 +29,7 @@
  */
 
 
-/* $Id: variables.c,v 1.150 1998/08/10 19:19:40 fmk Exp $ */
+/* $Id: variables.c,v 1.155 1998/09/18 16:55:01 rasmus Exp $ */
 
 #ifdef THREAD_SAFE
 #include "tls.h"
@@ -70,30 +70,40 @@ inline PHPAPI void var_uninit(pval *var)
 	var->value.str.len = 0;
 }
 		
-PHPAPI inline void yystype_destructor(pval *yystype INLINE_TLS)
+
+inline void pval_destructor(pval *pvalue INLINE_TLS)
 {
-	if (yystype->type == IS_STRING) {
-		STR_FREE(yystype->value.str.val);
-	} else if (yystype->type & (IS_ARRAY | IS_CLASS | IS_OBJECT)) {
-		if (yystype->value.ht && (yystype->value.ht != &GLOBAL(symbol_table))) {
-			_php3_hash_destroy(yystype->value.ht);
-			efree(yystype->value.ht);
+	if (pvalue->type == IS_STRING) {
+		STR_FREE(pvalue->value.str.val);
+	} else if (pvalue->type & (IS_ARRAY | IS_CLASS | IS_OBJECT)) {
+		if (pvalue->value.ht && (pvalue->value.ht != &GLOBAL(symbol_table))) {
+			_php3_hash_destroy(pvalue->value.ht);
+			efree(pvalue->value.ht);
 		}
-	} else if (yystype->type==IS_USER_FUNCTION) {
-		if (yystype->value.func.addr.statics) {
-			_php3_hash_destroy(yystype->value.func.addr.statics);
-			efree(yystype->value.func.addr.statics);
+	} else if (pvalue->type==IS_USER_FUNCTION) {
+		if (pvalue->value.func.addr.statics) {
+			_php3_hash_destroy(pvalue->value.func.addr.statics);
+			efree(pvalue->value.func.addr.statics);
 		}
-		if (yystype->value.func.arg_types) {
-			efree(yystype->value.func.arg_types);
+		if (pvalue->value.func.arg_types) {
+			efree(pvalue->value.func.arg_types);
 		}
 	}
 }
 
-/* returns 1 if the type of yystype is NOT IS_INTERNAL_FUNCTION */
-inline int is_not_internal_function(pval *yystype)
+
+void php3tls_pval_destructor(pval *pvalue)
 {
-	if (yystype->type == IS_INTERNAL_FUNCTION) {
+	TLS_VARS;
+
+	pval_destructor(pvalue _INLINE_TLS);
+}
+
+
+/* returns 1 if the type of pvalue is NOT IS_INTERNAL_FUNCTION */
+inline int is_not_internal_function(pval *pvalue)
+{
+	if (pvalue->type == IS_INTERNAL_FUNCTION) {
 		return 0;
 	} else {
 		return 1;
@@ -101,43 +111,50 @@ inline int is_not_internal_function(pval *yystype)
 }
 
 
-PHPAPI int yystype_copy_constructor(pval *yystype)
+PHPAPI int pval_copy_constructor(pval *pvalue)
 {
 	TLS_VARS;
 
-	if (yystype->type == IS_STRING && yystype->value.str.val) {
-		if (yystype->value.str.len==0) {
-			if (yystype->value.str.val==undefined_variable_string) {
-				yystype->value.str.val = undefined_variable_string;
+	if (pvalue->type == IS_STRING && pvalue->value.str.val) {
+		if (pvalue->value.str.len==0) {
+			if (pvalue->value.str.val==undefined_variable_string) {
+				pvalue->value.str.val = undefined_variable_string;
 			} else {
-				yystype->value.str.val = empty_string;
+				pvalue->value.str.val = empty_string;
 			}
 			return SUCCESS;
 		}
-		yystype->value.str.val = (char *) estrndup(yystype->value.str.val, yystype->value.str.len);
-		if (!yystype->value.str.val) {
-			var_reset(yystype);
+		pvalue->value.str.val = (char *) estrndup(pvalue->value.str.val, pvalue->value.str.len);
+		if (!pvalue->value.str.val) {
+			var_reset(pvalue);
 			return FAILURE;
 		}
-	} else if (yystype->type & (IS_ARRAY | IS_CLASS | IS_OBJECT)) {
+	} else if (pvalue->type & (IS_ARRAY | IS_CLASS | IS_OBJECT)) {
 		pval tmp;
 
-		if (!yystype->value.ht || (yystype->value.ht == &GLOBAL(symbol_table))) {
-			var_reset(yystype);
+		if (!pvalue->value.ht || (pvalue->value.ht == &GLOBAL(symbol_table))) {
+			var_reset(pvalue);
 			return FAILURE;
 		}
-		_php3_hash_copy(&(yystype->value.ht), yystype->value.ht, (void (*)(void *pData)) yystype_copy_constructor, (void *) &tmp, sizeof(pval));
-		if (!yystype->value.ht) {
-			var_reset(yystype);
+		_php3_hash_copy(&(pvalue->value.ht), pvalue->value.ht, (void (*)(void *pData)) pval_copy_constructor, (void *) &tmp, sizeof(pval));
+		if (!pvalue->value.ht) {
+			var_reset(pvalue);
 			return FAILURE;
 		}
-	} else if (yystype->type & VALID_FUNCTION) {
-		if (yystype->value.func.arg_types) {
-			unsigned char *arg_types = yystype->value.func.arg_types;
+	} else if (pvalue->type & VALID_FUNCTION) {
+		if (pvalue->value.func.arg_types) {
+			unsigned char *arg_types = pvalue->value.func.arg_types;
 			
-			yystype->value.func.arg_types = emalloc(sizeof(unsigned char)*(arg_types[0]+1));
-			memcpy(yystype->value.func.arg_types, arg_types, sizeof(unsigned char)*(arg_types[0]+1));
+			pvalue->value.func.arg_types = emalloc(sizeof(unsigned char)*(arg_types[0]+1));
+			memcpy(pvalue->value.func.arg_types, arg_types, sizeof(unsigned char)*(arg_types[0]+1));
 		}
+		if (pvalue->type == IS_USER_FUNCTION && pvalue->value.func.addr.statics) {
+			HashTable *statics = pvalue->value.func.addr.statics;
+			pval tmp;
+
+			_php3_hash_copy(&pvalue->value.func.addr.statics, statics, (void (*)(void *)) pval_copy_constructor, &tmp, sizeof(pval));
+		}
+			
 	}
 	return SUCCESS;
 }
@@ -154,42 +171,42 @@ void assign_to_list(pval *result, pval *list, pval *expr INLINE_TLS)
 			if (_php3_hash_index_find(list->value.ht, i, (void **)&varp) == FAILURE) {
 				continue;
 			}
-			if (!varp->value.varptr.yystype) {
+			if (!varp->value.varptr.pvalue) {
 				continue; /* Bad variable name */
 			}
 			if (varp->cs_data.array_write) {
 				clean_unassigned_variable_top(0 _INLINE_TLS);
 			}
-			vardata = (pval *)varp->value.varptr.yystype;
-			yystype_destructor(vardata _INLINE_TLS);	
+			vardata = (pval *)varp->value.varptr.pvalue;
+			pval_destructor(vardata _INLINE_TLS);	
 			if (expr->type != IS_ARRAY) {
 				if (i != 0) {
 					var_uninit(vardata);
 				} else {
 					*vardata = *expr;
-					yystype_copy_constructor(vardata);
+					pval_copy_constructor(vardata);
 				}
 			} else {
 				if (_php3_hash_index_find(expr->value.ht, i, (void **)&exprdata) == FAILURE) {
 					var_uninit(vardata);
 				} else {
 					*vardata = *exprdata;
-					yystype_copy_constructor(vardata);
+					pval_copy_constructor(vardata);
 				}
 			}
 		}
 		*result = *expr;
-		yystype_destructor(list _INLINE_TLS);
+		pval_destructor(list _INLINE_TLS);
 	}
 }
 
 
 int assign_to_variable(pval *result, pval *var_ptr, pval *expr, int (*func) (pval *, pval *, pval *  INLINE_TLS) INLINE_TLS)
 {
-	pval *var = var_ptr->value.varptr.yystype;
+	pval *var = var_ptr->value.varptr.pvalue;
 
 	if (!var) { /* didn't parse the variable successfully */
-		yystype_destructor(expr _INLINE_TLS);
+		pval_destructor(expr _INLINE_TLS);
 		var_uninit(result);
 		if (var_ptr->cs_data.array_write) { /* I'm not sure it can happen - should check it  -- Zeev */
 			clean_unassigned_variable_top(1 _INLINE_TLS);
@@ -220,11 +237,11 @@ int assign_to_variable(pval *result, pval *var_ptr, pval *expr, int (*func) (pva
 			func(result, var, expr _INLINE_TLS);
 			*((pval *)var) = *result;
 		} else {
-			yystype_destructor((pval *)var _INLINE_TLS);
+			pval_destructor((pval *)var _INLINE_TLS);
 			*((pval *)var) = *expr;
 			*result = *expr;
 		}
-		return yystype_copy_constructor(result);
+		return pval_copy_constructor(result);
 	} else { /* indexed string */
 		if (func) {
 			php3_error(E_WARNING,"Only simple assignment supported with string indices");
@@ -252,7 +269,7 @@ int get_regular_variable_contents(pval *result, pval *varname, int free_varname 
 		php3_error(E_WARNING, "Illegal variable name");
 		var_reset(result);
 		if (free_varname) {
-			yystype_destructor(varname _INLINE_TLS);
+			pval_destructor(varname _INLINE_TLS);
 		}
 		return FAILURE;
 	} else {
@@ -268,7 +285,7 @@ int get_regular_variable_contents(pval *result, pval *varname, int free_varname 
 			if (free_varname) {
 				STR_FREE(varname->value.str.val);
 			}
-			return yystype_copy_constructor(result);
+			return pval_copy_constructor(result);
 		}
 	}
 }
@@ -312,7 +329,7 @@ void get_array_variable(pval *result, pval *varname, pval *index INLINE_TLS)
 				return;
 			} else {
 				*result = *data;
-				if (yystype_copy_constructor(result) == FAILURE) {
+				if (pval_copy_constructor(result) == FAILURE) {
 					var_reset(result);
 					return;
 				}
@@ -324,7 +341,7 @@ void get_array_variable(pval *result, pval *varname, pval *index INLINE_TLS)
 				return;
 			} else {
 				*result = *data;
-				if (yystype_copy_constructor(result) == FAILURE) {
+				if (pval_copy_constructor(result) == FAILURE) {
 					var_reset(result);
 					return;
 				}
@@ -339,9 +356,9 @@ void get_array_variable(pval *result, pval *varname, pval *index INLINE_TLS)
 int incdec_variable(pval *result, pval *var_ptr, int (*func) (pval *), int post INLINE_TLS)
 {
 	int ret=0;
-	pval *var = var_ptr->value.varptr.yystype;
+	pval *var = var_ptr->value.varptr.pvalue;
 	
-	if (!var_ptr->value.varptr.yystype) { /* didn't successfully parse the array */
+	if (!var_ptr->value.varptr.pvalue) { /* didn't successfully parse the array */
 		var_reset(result);
 		if (var_ptr->cs_data.array_write) {  /* can probably not happen - should check  -- Zeev */
 			clean_unassigned_variable_top(1 _INLINE_TLS);
@@ -369,20 +386,20 @@ int incdec_variable(pval *result, pval *var_ptr, int (*func) (pval *), int post 
 	}
 	
 	if (post) {				/* post increment, use the original value */
-		*result = *((pval *)var_ptr->value.varptr.yystype);
-		ret=yystype_copy_constructor(result);
+		*result = *((pval *)var_ptr->value.varptr.pvalue);
+		ret=pval_copy_constructor(result);
 	}
-	func(var_ptr->value.varptr.yystype);
+	func(var_ptr->value.varptr.pvalue);
 	if (!post) {
-		*result = *((pval *)var_ptr->value.varptr.yystype);
-		ret=yystype_copy_constructor(result);
+		*result = *((pval *)var_ptr->value.varptr.pvalue);
+		ret=pval_copy_constructor(result);
 	}
 
 	return ret;
 }
 
 
-void print_variable(pval *var INLINE_TLS) 
+void php3i_print_variable(pval *var INLINE_TLS) 
 {
 	convert_to_string(var);
 	if (var->value.str.len==0) { /* optimize away empty strings */
@@ -400,13 +417,13 @@ void add_array_pair_list(pval *result, pval *index, pval *value, int initialize 
 {
 	if (initialize) {
 		result->value.ht = (HashTable *) emalloc(sizeof(HashTable));
-		_php3_hash_init(result->value.ht, 0, NULL, pval_DESTRUCTOR, 0);
+		_php3_hash_init(result->value.ht, 0, NULL, PVAL_DESTRUCTOR, 0);
 		result->type = IS_ARRAY;
 	}
 	if (index) {
 		if (index->type == IS_STRING) {
 			_php3_hash_update(result->value.ht, index->value.str.val, index->value.str.len+1, value, sizeof(pval),NULL);
-			yystype_destructor(index _INLINE_TLS);
+			pval_destructor(index _INLINE_TLS);
 			return;
 		} else if (index->type == IS_LONG || index->type == IS_DOUBLE) {
 			if (index->type == IS_DOUBLE) {
@@ -414,8 +431,8 @@ void add_array_pair_list(pval *result, pval *index, pval *value, int initialize 
 			}
 			_php3_hash_index_update(result->value.ht, index->value.lval, value, sizeof(pval),NULL);
 		} else {
-			yystype_destructor(index _INLINE_TLS);
-			yystype_destructor(value _INLINE_TLS);
+			pval_destructor(index _INLINE_TLS);
+			pval_destructor(value _INLINE_TLS);
 			var_reset(result);
 		}
 	} else {
@@ -439,8 +456,8 @@ void php3_unset(pval *result, pval *var_ptr)
 		if (!var_ptr || var_ptr->cs_data.array_write) { /* variable didn't exist before unset(), remove it completely */
 			clean_unassigned_variable_top(1 _INLINE_TLS);
 		} else {
-			var = var_ptr->value.varptr.yystype;
-			yystype_destructor(var _INLINE_TLS);
+			var = var_ptr->value.varptr.pvalue;
+			pval_destructor(var _INLINE_TLS);
 			var->value.str.val = undefined_variable_string;
 			var->value.str.len=0;
 			var->type = IS_STRING;
@@ -459,7 +476,7 @@ void php3_isset(pval *result, pval *var_ptr)
 		pval *var;
 		
 		result->type = IS_LONG;
-		if (!var_ptr || var_ptr->cs_data.array_write  || !(var=var_ptr->value.varptr.yystype)
+		if (!var_ptr || var_ptr->cs_data.array_write  || !(var=var_ptr->value.varptr.pvalue)
 			|| (var->type == IS_STRING && var->value.str.val==undefined_variable_string)) {
 			result->value.lval=0;
 			if (var_ptr && var_ptr->cs_data.array_write) {
@@ -481,14 +498,14 @@ void php3_empty(pval *result, pval *var_ptr)
 		
 		php3_isset(result,var_ptr);
 		if (result->value.lval) { /* variable is set */
-			pval var = *((pval *) var_ptr->value.varptr.yystype);
+			pval var = *((pval *) var_ptr->value.varptr.pvalue);
 			
 			if ((var.type == IS_STRING) && (var.value.str.len == 1) && (var.value.str.val[0] == '0')) {
 				/* don't consider "0" as empty */
 				result->value.lval=0;
 			} else {
-				yystype_copy_constructor(&var);
-				if (yystype_true(&var)) {
+				pval_copy_constructor(&var);
+				if (pval_is_true(&var)) {
 					result->value.lval=0;
 				}
 			}
@@ -518,17 +535,17 @@ void declare_class_variable(pval *varname, pval *expr INLINE_TLS)
 
 void get_object_property(pval *result, pval *class_ptr, pval *varname INLINE_TLS)
 {
-	pval *data,*object=(pval *) class_ptr->value.varptr.yystype;
+	pval *data,*object=(pval *) class_ptr->value.varptr.pvalue;
 
 	var_reset(result);
 
 	if (!object) {
-		yystype_destructor(varname _INLINE_TLS);
+		pval_destructor(varname _INLINE_TLS);
 		return;
 	}
 	if (varname->type != IS_STRING) {
 		php3_error(E_WARNING, "Cannot use a numeric value as a variable name");
-		yystype_destructor(varname _INLINE_TLS);
+		pval_destructor(varname _INLINE_TLS);
 		return;
 	}
 	if (_php3_hash_find(object->value.ht, varname->value.str.val, varname->value.str.len+1, (void **) &data) == FAILURE) {
@@ -538,13 +555,13 @@ void get_object_property(pval *result, pval *class_ptr, pval *varname INLINE_TLS
 		return;
 	} else {
 		*result = *data;
-		yystype_copy_constructor(result);
+		pval_copy_constructor(result);
 		STR_FREE(varname->value.str.val);
 	}
 }
 
 
-/* Use varptr.yystype to maintain a pointer to the right symbol table.
+/* Use varptr.pvalue to maintain a pointer to the right symbol table.
  * At the end of the parsing, we should be pointing to the right symbol table.
  * 'parent' doesn't have to be cleaned since its just a pointer and doesn't
  * contain any actual data.
@@ -556,10 +573,10 @@ void get_object_symtable(pval *result, pval *parent, pval *child INLINE_TLS)
 		pval *data;
 
 		if (parent) {
-			pval *object=(pval *) parent->value.varptr.yystype;
+			pval *object=(pval *) parent->value.varptr.pvalue;
 			
 			if (!object) {
-				result->value.varptr.yystype=NULL;
+				result->value.varptr.pvalue=NULL;
 				return;
 			}
 			target_symbol_table = object->value.ht;
@@ -573,15 +590,15 @@ void get_object_symtable(pval *result, pval *parent, pval *child INLINE_TLS)
 		
 		if (_php3_hash_find(target_symbol_table, child->value.str.val, child->value.str.len+1, (void **) &data) == FAILURE) {
 			php3_error(E_WARNING, "Object %s not found", child->value.str.val);
-			result->value.varptr.yystype=NULL;
+			result->value.varptr.pvalue=NULL;
 			return;
 		}
 		if (data->type != IS_OBJECT) {
 			php3_error(E_WARNING, "$%s is not an object", child->value.str.val);
-			result->value.varptr.yystype=NULL;
+			result->value.varptr.pvalue=NULL;
 			return;
 		}
-		result->value.varptr.yystype = data;		/* not running copy constructor intentionally */
+		result->value.varptr.pvalue = data;		/* not running copy constructor intentionally */
 	}
 }
 
@@ -599,13 +616,13 @@ void assign_new_object(pval *result, pval *classname INLINE_TLS, unsigned char i
 		}
 		*result = *data;
 		result->type = IS_OBJECT;
-		yystype_copy_constructor(result);
+		pval_copy_constructor(result);
 		
 		if (implicit_ctor) {
 			if (call_user_function(NULL, result, classname, &ctor_retval, 0, NULL)==SUCCESS) {
-				yystype_destructor(&ctor_retval);			
+				pval_destructor(&ctor_retval);			
 		  	}
-		  	yystype_destructor(classname); 
+		  	pval_destructor(classname); 
 		}
 	}
 }
@@ -613,7 +630,7 @@ void assign_new_object(pval *result, pval *classname INLINE_TLS, unsigned char i
 
 void read_pointer_value(pval *result,pval *var_ptr INLINE_TLS)
 {
-	pval *var=var_ptr->value.varptr.yystype;
+	pval *var=var_ptr->value.varptr.pvalue;
 	
 	if (var) {
 		if (var_ptr->cs_data.array_write || (var->type==IS_STRING && var->value.str.val==undefined_variable_string)) {
@@ -638,7 +655,7 @@ void read_pointer_value(pval *result,pval *var_ptr INLINE_TLS)
 		} else {
 			if (var_ptr->value.str.len == -1) {  /* not indexed string */
 				*result = *((pval *)var);
-				yystype_copy_constructor(result);
+				pval_copy_constructor(result);
 			} else {  /* indexed string */
 				result->value.str.val = (char *) emalloc(2);
 				result->value.str.val[0]=var->value.str.val[var_ptr->value.str.len];
@@ -658,7 +675,7 @@ void get_regular_variable_pointer(pval *result, pval *varname INLINE_TLS)
 	if (GLOBAL(Execute)) {
 		if ((varname->type != IS_STRING)) {
 			php3_error(E_WARNING,"Illegal variable name");
-			result->value.varptr.yystype = NULL;
+			result->value.varptr.pvalue = NULL;
 			return;
 		} else {
 			pval *data;
@@ -679,10 +696,10 @@ void get_regular_variable_pointer(pval *result, pval *varname INLINE_TLS)
 			} else {
 				result->cs_data.array_write = 0;
 			}
-			result->value.varptr.yystype = data;
+			result->value.varptr.pvalue = data;
 			result->value.str.len = -1; /* Not indexed string */
 		}
-		yystype_destructor(varname _INLINE_TLS);
+		pval_destructor(varname _INLINE_TLS);
 	}
 }
 

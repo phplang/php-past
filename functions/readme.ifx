@@ -1,0 +1,824 @@
+
+Introduction.
+-------------
+
+-------------------------------------------------------------------------------
+This is the preliminary documentation for the PHP 3.0 Informix driver.
+Until the documentation in the "doc" directory gets completed and the manual
+updated it's all you get.
+-------------------------------------------------------------------------------
+
+The Informix driver for Online ( ODS) 7.x, SE 7.x and Universal Server 
+(IUS) 9.x is implemented in "functions/ifx.ec" and "functions/ifx.h". 
+At the moment of writing ODS 7.2 support is fairly complete, with full BLOB
+support. IUS 9.1 support is partly finished : the new data types are there, but
+SLOBS support is still under construction.
+
+Configuration notes.
+--------------------
+Before you run the "configure" script, make sure that the "INFORMIXDIR"
+variable has been set.
+
+The configure script will autodetect the libraries and include directories, 
+if you run "configure --with_informix=yes".
+You can overide this detection by specifying "IFX_LIBDIR", "IFX_LIBS" and
+"IFX_INCDIR" in the environment, this allows you to enforce static linking 
+if you prefer or need to.
+The configure script will also try to detect your Informix server version.
+It will set the "HAVE_IFX_IUS" conditional compilation variable if your
+Informix version >= 9.00.
+
+Some notes on the use of BLOBs.
+-------------------------------
+
+The current version (September 18, 1998) has complete select/insert/update
+support for BLOB columns.
+
+BLOBs are normally addressed by integer BLOB identifiers.
+Select queries return a "blob id" for every BYTE and TEXT column.
+You can get at the contents with "string_var = ifx_get_blob($blob_id);" if
+you choose to get the BLOBs in memory (with : "ifx_blobinfile(0);"). 
+If you prefer to receive the content of BLOB columns in a file, use
+"ifx_blobinfile(1);", and "ifx_get_blob($blob_id);" will get you the filename.
+Use normal file I/O to get at the blob contents.
+
+For insert/update queries you must create these "blob id's" yourself
+with "ifx_create_blob(..);". You then plug the blob id's into an array,
+and replace the blob columns with a question mark (?) in the query string.
+For updates/inserts, you are responsible for setting the blob contents with
+ifx_update_blob(...).
+
+The behaviour of BLOB columns can be altered by configuration variables that
+also can be set at runtime :
+
+configuration variable : ifx.textasvarchar
+configuration variable : ifx.byteasvarchar
+runtime functions :
+ifx_textasvarchar(0) : use blob id's for select queries with TEXT columns
+ifx_byteasvarchar(0) : use blob id's for select queries with BYTE columns
+ifx_textasvarchar(1) : return TEXT columns as if they were VARCHAR columns,
+                       without the use of blob id's for select queries.
+ifx_byteasvarchar(1) : return BYTE columns as if they were VARCHAR columns,
+                       without the use of blob id's for select queries.
+
+configuration variable : ifx.blobinfile
+runtime function :
+ifx_blobinfile_mode(0) : return BYTE columns in memory, the blob id lets you
+                         get at the contents.
+ifx_blobinfile_mode(1) : return BYTE columns in a file, the blob id lets you
+                         get at the file name.
+ 
+If you set ifx_text/byteasvarchar to 1, you can use TEXT and BYTE columns
+in select queries just like normal (but rather long) VARCHAR fields.
+Since all strings are "counted" in PHP3, this remains "binary safe".
+It is up to you to handle this correctly. The returned data can contain
+anything, you are responsible for the contents.
+
+If you set ifx_blobinfile to 1, use the file name returned by ifx_get_blob(..)
+to get at the blob contents. Note that in this case YOU ARE RESPONSIBLE FOR 
+DELETING THE TEMPORARY FILES CREATED BY INFORMIX when fetching the row.
+Every new row fetched will create new temporary files for every BYTE column.
+
+The location of the temporary files can be influenced by the environment
+variable "blobdir", default is "." (the current directory).
+Something like : putenv(blobdir=tmpblob"); will ease the cleaning up of temp 
+files accidentally left behind (their names all start with "blb").
+
+
+Automatically trimming "char" (SQLCHAR and SQLNCHAR) data
+---------------------------------------------------------
+
+This can be set with a configuration variable :
+
+ifx.charasvarchar : if set to 1 trailing spaces will be automatically trimmed
+
+
+Function reference.
+-------------------
+
+Function : 
+   ifx_connect
+
+Syntax :
+  int ifx_connect(string $database, string $userid, string $password)
+  int ifx_pconnect(string $database, string $userid, string $password)
+
+Parameters :
+  $database : string, "database@server" syntax
+  $userid   : string, user name
+  $password : string, users password for the database
+
+Returns : 
+  returns an integer connection identifier on success or FALSE on error  
+
+Description :
+  Connects to $database using $userid and $password
+
+  ifx_pconnect() will make the connection "persisent" if you use the PHP 
+  Apache module.
+
+  If using persistent connections you should not use "ifx_close" unless
+  you really mean to.
+
+  You can omit the $database/$user/$password parameters if the configuration
+  variables "ifx.default_host", "ifx.default_user" and "ifx.default_password"
+  are set in your php3.ini.
+
+Example : 
+  $conn_id = ifx_pconnect(mydb@ol_srv1,"imyself", "4alltosee");
+
+ ----------------------------------------------------------------------
+Function:
+  ifx_close
+
+Syntax:
+  int ifx_close(int $conn_id)
+
+Parameters :
+  $conn_id : string, a valid connection identifier
+
+Returns :
+  Always "TRUE".
+
+Description :
+  Closes connection $conn_id. 
+
+  $conn_id is the connection id previously returned by a successful 
+  "ifx_connect" or "ifx_pconnect" call.
+
+  Should not be used for persistent connections as this would defeat 
+  the purpose of persistent connections.
+
+Example : 
+  $conn_id = ifx_connect(mydb@ol_srv,"itsme", "mypassword");
+  ... some queries and stuff ...
+  ifx_close($conn_id); 
+
+ ----------------------------------------------------------------------
+Function:
+  ifx_query
+
+Syntax:
+  int ifx_query(string $query, int $conn_id, 
+                "HOLD", "SCROLL", $blobidarray)
+
+Parameters :
+  $query   : string, contains the query string
+  $conn_id : int, a valid connection identifier
+  "HOLD"   : optional, for "select" queries only, specifies a "hold" cursor
+  "SCROLL" : optional, for "select" queries only, specifies a "scroll" cursor
+  $blobidarray : optional, an array of blob ids for TEXT and BYTE columns,
+                 only allowed for insert/update queries
+
+Returns :
+  an integer "result_id" used by other functions to retrieve the query results.
+  sets "affected_rows" for retrieval by the ifx_affected_rows() function.
+ 
+Description:
+  Executes query $query on connection $conn_id.
+  For "select-type" queries a cursor is declared and opened.
+  The optional "HOLD" and "SCROLL" parameters allow you to make
+  this a "scroll" and/or "hold" cursor for select queries.
+  Non-select queries are "execute immediate".
+
+  For either query type the number of (estimated or real) affected
+  rows is saved for retrieval by "ifx_affected_rows()".
+
+  If you have BLOB (BYTE or TEXT) columns in an update query, you should add a 
+  "blobid array" parameter containing the corresponding "blob ids", and you 
+  should replace those columns with a "?" in the query text.
+
+  If the contents of the TEXT (or BYTE) column allow it, you can also use 
+  "ifx_textasvarchar(1)"  and "ifx_byteasvarchar(1)". 
+  This allows you to treat TEXT (or BYTE) columns just as if they were 
+  ordinary (but long) VARCHAR columns for select queries, and you don't need to
+  bother with blob id's.
+
+  With ifx_textasvarchar(0) or ifx_byteasvarchar(0)  (the default situation),
+  select queries will return BLOB columns as blob id's (integer value).
+  You can get the value of the blob as a string or file with the blob functions
+  (see below).
+
+
+Examples: 
+
+  -- Example  1 : show all rows of the "orders" table as a html table --
+
+  ifx_textasvarchar(1); // use "text mode" for blobs
+  $res_id = ifx_query("select * from orders", $conn_id);
+  if (! $res_id) {
+    printf("Can't select orders : %s\n<br>%s<br>\n",
+           ifx_error();
+           ifx_errormsg();
+    die;
+  }
+  ifx_htmltbl_result($res_id, "border=\"1\");
+  ifx_free_result($res_id);
+
+ 
+  -- Example 2 : insert some values into the "catalog" table --
+
+                        // create blob id's for a byte and a text column
+  $textid = ifx_create_blob(0, 0, "Text column in memory");
+  $byteid = ifx_create_blob(1, 0, "Byte column in memory");
+                        // store blob id's in a blobid array
+  $blobidarray[] = $textid;
+  $blobidarray[] = $byteid;
+                        // launch query
+  $query = "insert into catalog (stock_num, manu_code, " .
+           "cat_descr,cat_picture) values(1,'HRO',?,?)";
+  $res_id = ifx_query($query, $conn_id, $blobidarray);
+  if (! $res_id) {
+    ... error ...
+  }
+                       // free result id
+  ifx_free_result($res_id);
+ 
+ ----------------------------------------------------------------------
+Function:
+  ifx_prepare
+
+Syntax:
+  int ifx_prepare(string $query, int $conn_id, 
+                "HOLD", "SCROLL", $blobidarray)
+
+Parameters :
+  $query   : string, contains the query string
+  $conn_id : int, a valid connection identifier
+  "HOLD"   : optional, for "select" queries only, specifies a "hold" cursor
+  "SCROLL" : optional, for "select" queries only, specifies a "scroll" cursor
+  $blobidarray : optional, an array of blob ids for TEXT and BYTE columns
+                 for insert/update queries only
+
+Returns :
+  an integer "result_id" for use by "ifx_do()".
+  sets "affected_rows" for retrieval by the ifx_affected_rows() function.
+ 
+Description:
+  Prepares query $query on connection $conn_id.
+  For "select-type" queries a cursor is declared and opened.
+  The optional "HOLD" and "SCROLL" parameters allow you to make
+  this a "scroll" and/or "hold" cursor.
+
+  For either query type the estimated number of affected
+  rows is saved for retrieval by "ifx_affected_rows()".
+
+  If you have BLOB (BYTE or TEXT) columns in the query, you can add a 
+  "blobid array" parameter containing the corresponding "blob ids", and you 
+  should replace those columns with a "?" in the query text.
+
+  If the contents of the TEXT (or BYTE) column allow it, you can also use 
+  "ifx_textasvarchar(1)"  and "ifx_byteasvarchar(1)". 
+  This allows you to treat TEXT (or BYTE) columns just as if they were 
+  ordinary (but long) VARCHAR columns for select queries, and you don't need to
+  bother with blob id's.
+
+  With ifx_textasvarchar(0) or ifx_byteasvarchar(0)  (the default situation),
+  select queries will return BLOB columns as blob id's (integer value).
+  You can get the value of the blob as a string or file with the blob functions
+  (see below).
+
+Examples: 
+
+  -- Example  1 : show all rows of the "orders" table as a html table --
+
+  ifx_textasvarchar(1); // use "text mode"
+  ifx_byteasvarchar(1);
+                         // prepare query
+  $res_id = ifx_prepare("select * from orders", $conn_id);
+  if (! $res_id) {
+    printf("can't select orders : %s %s<br>\n",
+           ifx_error();
+           ifx_errormsg();
+    die;
+  }
+                         // execute the query
+  if (! ifx_do($res_id) {
+    printf("can't select orders : %s %s<br>\n",
+           ifx_error();
+           ifx_errormsg();
+    ifx_free_result($res_id);
+    die;
+  }
+                         // show all rows in html table
+  ifx_htmltbl_result($res_id, "border=\"1\");
+                         // free result identifier
+  ifx_free_result($res_id);
+
+ 
+  -- Example 2 : insert some values into the "catalog" table --
+
+                        // create blob id's for a byte and text column
+  $textid = ifx_create_blob(0, 0, "Text column in memory");
+  $byteid = ifx_create_blob(1, 0, "Byte column in memory");
+                        // store blob id's in a blobid array
+  $blobidarray[] = $textid;
+  $blobidarray[] = $byteid;
+                        // prepare query
+  $query = "insert into catalog (stock_num, manu_code, " .
+           "cat_descr,cat_picture) values(1,'HRO',?,?)";
+  $res_id = ifx_prepare($query, $conn_id, $blobidarray);
+  if (! $res_id) {
+    ... error ...
+  }
+                        // launch query
+  if (! ifx_do($res_id) {
+    printf("can't insert catalog table : %s %s<br>\n",
+           ifx_error();
+           ifx_errormsg();
+    ifx_free_result($res_id);
+    die;
+  }
+                       // free result id
+  ifx_free_result($res_id);
+ 
+
+ ----------------------------------------------------------------------
+Function:
+  ifx_do
+
+Syntax:
+  int ifx_do(int $resultid)
+
+Parmeters:
+  $resultid : string, a valid resultid returned by ifx_prepare()
+ 
+Returns:
+  returns TRUE on success, false on error
+
+Description:
+  Executes a previously prepared query or opens a cursor for it.
+
+  Does NOT free $resultid on error !!!
+ 
+  Also sets the real number of affected_rows  for non-select statements
+  for retrieval by ifx_affected_rows
+
+Example:
+  See under ifx_prepare().
+ 
+ ----------------------------------------------------------------------
+Function:
+  ifx_error
+
+Syntax:
+ string ifx_error();
+
+Parameters:
+  none
+
+Returns:
+  the Informix error codes (SQLSTATE & SQLCODE) formatted as follows :
+
+  x [SQLSTATE = aa bbb SQLCODE=cccc]
+
+  where x = space : no error
+            E     : error
+            N     : no more data
+            W     : warning
+            ?     : undefined
+
+  If the "x" character is anything other than space, SQLSTATE and SQLCODE
+  describe the error in more detail.
+
+  See the Informix manual for the description of SQLSTATE and SQLCODE
+
+ ----------------------------------------------------------------------
+Function:
+  ifx_errormsg
+
+Syntax:
+  string ifx_errormsg(int errorcode)
+
+Parameters:
+  errorcode : int, optional
+
+Returns:
+  the Informix errormessage associated with 
+  the most recent Informix error if any, or, when the optional "errocode" param 
+  is present, the Informix errormessage corresponding to "errorcode".
+
+Example:
+  printf("%s\n<br>", ifx_errormsg(-201));
+
+ ----------------------------------------------------------------------
+Function:
+  ifx_affected_rows
+
+Syntax:
+  int ifx_affected_rows(int $result_id)
+
+Parameters:
+  $result_id: a valid result id returned by ifx_query() or ifx_prepare()
+
+Returns:
+  the number of rows affected by the query identified by $resultid
+
+  for selects : estimated number of rows (sqlerrd[0])
+  for insert/update/delete : real number (sqlerrd[2])
+
+Description:
+  Useful after ifx_prepare() to limit queries to reasonable result sets.
+
+Example:
+  
+  $rid = ifx_prepare("select * from emp where name like " . $name, $connid);
+  if (! $rid) {
+     ... error ...
+  }
+  $rowcount = ifx_affected_rows($rid);
+  if ($rowcount > 1000) {
+     printf("Too many rows in result set (%d)\n<br>", $rowcount);
+     die("Please restrict your query<br>\n");
+  }
+  ......
+
+ ---------------------------------------------------------------
+Function:
+  ifx_fetch_row
+
+Syntax:
+  array ifx_fetch_row(int $resultid, [mixed $position])
+
+Parameters:
+  $resultid: a valid resultid returned by ifx_query() or ifx_prepare()
+             (select type queries only !)
+  $position: positional parameter for a "fetch" operation on "scroll" cursors :
+             "NEXT", "PREVIOUS", "CURRENT", "FIRST", "LAST" or a number.
+             If you specify a number, an "absolute" row fetch is executed.
+             This parameter is optional, and only valid for scrollcursors.
+
+Returns:
+  an associative array of column_name/column_value pairs.
+  Blob columns are returned as integer blob id values for use in ifx_get_blob()
+  unless you have used ifx_textasvarchar(1) or ifx_byteasvarchar(1), in which
+  case blobs are returned as string values.
+  Returns FALSE on error
+
+Description:
+  fetches the next row, or if using a scroll cursor, and $position
+  is present, the row as given in $position, into an associative
+  array with the fieldnames as key
+
+Example:
+
+  $rid = ifx_prepare("select * from emp where name like " . $name, 
+                     $connid, "SCROLL");
+  if (! $rid) {
+     ... error ...
+  }
+  $rowcount = ifx_affected_rows($rid);
+  if ($rowcount > 1000) {
+     printf("Too many rows in result set (%d)\n<br>", $rowcount);
+     die("Please restrict your query<br>\n");
+  }
+  if (! ifx_do($rid) {
+    ... error ...
+  }
+  $row = ifx_fetch_row($rid, "NEXT");
+  while (is_array($row)) {
+    for(reset($row); $fieldname=key($row); next($row)) {
+       $fieldvalue = $row[$fieldname];
+       printf("%s = %s,", $fieldname, $fieldvalue);
+    }
+    printf("\n<br>");
+    $row = ifx_fetch_row($rid, "NEXT");
+  }
+  ifx_free_result($rid);
+   
+ ----------------------------------------------------------------------
+Function:
+  ifx_htmltbl_result
+
+Syntax:
+  int ifx_htmltbl_result(int $resultid, [string $htmltableoptions])
+
+Parameters:
+  $resultid: a valid result id returned by ifx_prepare/ifx_do or
+             ifx_query
+  $htmltableoptions: HTML table tag options string, optional
+
+Returns:
+  The number of rows read on success, FALSE on error
+
+Description:
+ formats all rows of the $resultid query into a html table
+ the optional second argument is a string of <table> tag options
+
+Example:
+
+  $rid = ifx_prepare("select * from emp where name like " . $name, 
+                     $connid, "SCROLL");
+  if (! $rid) {
+     ... error ...
+  }
+  $rowcount = ifx_affected_rows($rid);
+  if ($rowcount > 1000) {
+     printf("Too many rows in result set (%d)\n<br>", $rowcount);
+     die("Please restrict your query<br>\n");
+  }
+  if (! ifx_do($rid) {
+    ... error ...
+  }
+
+  $rowcount = ifx_htmltbl_result($rid, "border=\"2\"");
+
+  printf("\n<br>There are %d rows in this table\n<br>", $rowcount);
+
+  ifx_free_result($rid);
+   
+ ----------------------------------------------------------------------
+Function:
+  ifx_fieldtypes
+
+Syntax:
+  array ifx_fieldtypes(int $resultid)
+
+Parameters:
+  $resultid: a valid query result id
+
+Returns:
+  an associative array with fieldnames as key
+  and the SQL fieldtypes as data for query $resultid
+  returns FALSE on error
+
+Description:
+  returns the Informix SQL field type of every field in the query
+  as an associative array.
+  The types are the Informix SQL data types : SQLCHAR, SQLVARCHAR, etc...
+
+Example:
+
+
+  $types = ifx_fieldtypes($resultid);
+  if (! isset($types) {
+    ... error ...
+  }
+  for ($i = 0; $i < count($types); $i++) {
+    $fname = key($types);
+    printf("%s :\t type =  %s\n", $fname, $types[$fname]);
+    next($types);
+  }
+
+ ----------------------------------------------------------------------
+Function:
+  ifx_fieldproperties
+
+Syntax:
+  array ifx_fieldproperties(int $resultid)
+
+Returns:
+  an associative array with fieldnames as key
+  and the SQL fieldproperties as data for query $resultid
+  returns FALSE on error
+
+Description:
+  returns the Informix SQL field properies of every field in the query
+  as an associative array.
+  properties are encoded as : "SQLTYPE;length;precision;scale;ISNULLABLE"
+  where SQLTYPE = the Informix type like "SQLVCHAR"  etc...
+        ISNULLABLE = "Y" or "N"
+
+Example:
+
+
+  $properties = ifx_fieldtypes($resultid);
+  if (! isset($properties) {
+    ... error ...
+  }
+  for ($i = 0; $i < count($properties); $i++) {
+    $fname = key($properties);
+    printf("%s :\t type =  %s\n", $fname, $properties[$fname]);
+    next($properties);
+  }
+
+
+ ----------------------------------------------------------------------
+Function:
+  ifx_num_fields
+
+Syntax:
+  int ifx_num_fields(int $resultid)
+
+Parameters:
+  $resultid: valid query result identifier
+
+Returns:
+  returns the number of columns in query $resultid
+  or FALSE on error
+
+Description:
+  After preparing or executing a query, this call gives you the number of 
+  columns in the query.
+
+ ----------------------------------------------------------------------
+Function:
+  ifx_free_result
+
+Syntax:
+  int ifx_free_result(int $resultid)
+
+Parameters:
+  $resultid: a valid query result identifier
+
+Returns:
+  FALSE on error
+
+Description:
+  releases resources for the query associated with $resultid
+
+ ----------------------------------------------------------------------
+Function:
+  int ifx_create_blob(int $type, int $mode, string $param)
+
+
+Parameters:
+  $type: 1=TEXT, 0=BYTE
+  $mode: 0 = blob content is in memory, 
+         1 = blob content in file
+  $param: mode=0: contains pointer to the content
+          mode=1: contains pointer to the filename containing the blob.
+
+Returns:
+  return false on error otherwise the new Blob-Object-id
+
+Description:
+  creates an blob-object
+ ----------------------------------------------------------------------
+Function:
+  int ifx_copy_blob(int $bid)
+
+Params:
+  $bid: Id of Blobobject (returned by select, or created with ifx_create_blob.
+
+Returns:
+  return false on error otherwise the new Blob-Object-id
+
+Description:
+  duplicates the given blob-object
+ 
+ ----------------------------------------------------------------------
+Function:
+  int ifx_free_blob(int $bid)
+
+Params:
+  $bid: Id of Blobobject
+
+Returns:
+  return false on error otherwise true
+
+Description:
+  deletes the blob-object
+ ----------------------------------------------------------------------
+Function:
+  string ifx_get_blob(int $bid)
+
+Params:
+  $bid: Id of Blobobject
+
+Returns:
+  the content of the blob-object (or the name of the file containing
+  the blob).
+ ----------------------------------------------------------------------
+Function:
+  int ifx_update_blob(int $bid, string $content)
+
+returns:
+  false on error otherwise true
+
+Params:
+  $bid: Id of Blobobject
+  $content: string of new data (or the name of the file etc...)
+
+description:
+ updates the content of the blob-object
+ ----------------------------------------------------------------------
+Function:
+  void ifx_blobinfile_mode(int $mode)
+
+Params:
+  $mode=0: save Byte-Blobs in momory
+       =1: save Byte-Blobs in a file
+
+Returns:
+  nothing
+
+Description:
+  sets the default blob-mode for all queries with BYTE columns
+ ----------------------------------------------------------------------
+Function:
+  void ifx_textasvarchar(int $mode)
+
+Params:
+  $mode=0: select returns a blob-id
+       =1: select returns a varchar with text-content
+
+Returns:
+  nothing
+
+Description:
+  sets the default text-mode for all select-queries 
+ ----------------------------------------------------------------------
+Function:
+  void ifx_byteasvarchar(int $mode)
+
+Params:
+  $mode=0: select returns a blob-id
+       =1: select returns a varchar with byte-content
+
+Returns:
+  nothing
+
+Description:
+  sets the default byte-mode for all select-queries 
+ ----------------------------------------------------------------------
+Function:
+  void ifx_nullformat(int $mode)
+
+Params:
+  $mode=0: return ""
+       =1: return "NULL"
+
+Returns:
+  nothing
+
+Description:
+  sets the default return value of a NULL-value un a fetch-row 
+ ----------------------------------------------------------------------
+ ----------------------------------------------------------------------
+ ----------------------------------------------------------------------
+ ----------------------------------------------------------------------
+
+
+*-*-*-*- the following is not yet finalized *-*-*-*-*-*-*-
+
+
+ ----------------------------------------------------------------------
+ ----------------------------------------------------------------------
+ ----------------------------------------------------------------------
+ ----------------------------------------------------------------------
+
+
+ void php3_intifx_null()
+
+ return the NULL-string depending on .nullformat
+ return "" or "NULL"
+ ----------------------------------------------------------------------
+ int ifxus_create_slob( int mode)
+
+ creates an slob-object and opens it
+  mode: 1=LO_RDONLY, 2=LO_WRONLY, 4=LO_APPEND, 8=LO_RDWR, 16=LO_BUFFER, 32=LO_NOBUFFER -> or-mask
+ return false on error otherwise the new Slob-Object-id
+ ----------------------------------------------------------------------
+ int ifxus_free_slob(int bid)
+
+ deletes the slob-object
+  bid: Id of Slobobject
+ return false on error otherwise true
+ ----------------------------------------------------------------------
+ int ifxus_close_slob(int bid)
+
+ deletes the slob-object
+  bid: Id of Slobobject
+ return false on error otherwise true
+ ----------------------------------------------------------------------
+ int ifxus_open_slob(long bid, int mode)
+
+ opens an slob-object
+  bid: existing slob-id
+  mode: 1=LO_RDONLY, 2=LO_WRONLY, 4=LO_APPEND, 8=LO_RDWR, 16=LO_BUFFER, 32=LO_NOBUFFER -> or-mask
+ return false on error otherwise the new Slob-Object-id
+ ----------------------------------------------------------------------
+ int ifxus_tell_slob(long bid)
+
+ retuens the current file or seek position of an open slob-object
+  bid: existing slob-id
+ return false on error otherwise the seek-position
+ ----------------------------------------------------------------------
+ int ifxus_seek_slob(long bid, int mode, long offset)
+
+ sets the current file or seek position of an open slob-object
+  bid: existing slob-id
+  mode: 0=LO_SEEK_SET, 1=LO_SEEK_CUR, 2=LO_SEEK_END
+  offset: byte-offset
+ return false on error otherwise the seek-position
+ ----------------------------------------------------------------------
+ int ifxus_read_slob(long bid, long nbytes)
+
+ reads nbytes of the slob-object
+  bid: existing slob-id
+  nbytes: bytes zu read
+ return false on error otherwise the string
+ ----------------------------------------------------------------------
+ int ifxus_write_slob(long bid, string content)
+
+ writes a string into the slob-object
+  bid: existing slob-id
+  content: content to write
+ return false on error otherwise bytes written
+ ----------------------------------------------------------------------
+
+
+						September 18, 1998
+						Danny Heijl
+						Danny.Heijl@cevi.be

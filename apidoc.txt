@@ -48,14 +48,14 @@ Table of Contents
 
    When you change any of the passed parameters, whether they are sent by
    reference or by value, you can either start over with the parameter by
-   calling yystype_destructor on it, or if it's an ARRAY you want to add to,
+   calling pval_destructor on it, or if it's an ARRAY you want to add to,
    you can use functions similar to the ones in internal_functions.h which
    manipulate return_value as an ARRAY.
 
    Also if you change a parameter to IS_STRING make sure you first assign
    the new estrdup'ed string and the string length, and only later change the
    type to IS_STRING. If you change the string of a parameter which already
-   IS_STRING or IS_ARRAY you should run yystype_destructor on it first.
+   IS_STRING or IS_ARRAY you should run pval_destructor on it first.
    
 -----------------
 
@@ -175,8 +175,8 @@ Table of Contents
     else { doesn't exist }
   
   * If you also need to get the type of the variable, you can use:
-    hash_find(active_symbol_table,"foo",sizeof("foo"),&yystype);
-    check(yystype.type);
+    hash_find(active_symbol_table,"foo",sizeof("foo"),&pvalue);
+    check(pvalue.type);
   
   Arrays in PHP 3.0 are implemented using the same hashtables as symbol tables.
   This means the two above functions can also be used to check variables

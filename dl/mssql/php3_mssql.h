@@ -28,7 +28,7 @@
  */
 
 
-/* $Id: php3_mssql.h,v 1.1 1998/08/10 18:54:12 fmk Exp $ */
+/* $Id: php3_mssql.h,v 1.2 1998/09/07 16:47:25 shane Exp $ */
 
 #ifndef _PHP3_MSSQL_H
 #define _PHP3_MSSQL_H
@@ -40,40 +40,37 @@
 
 #if HAVE_MSSQL
 
-//extern php3_module_entry mssql_module_entry;
-//#define mssql_module_ptr &mssql_module_entry
-#ifdef THREAD_SAFE
-php3_globals_struct *php3_globals;
-#endif
+extern php3_module_entry mssql_module_entry;
+#define mssql_module_ptr &mssql_module_entry
 
-#include <phpdl.h>
+#include "phpdl.h"
 
 int php3_minit_mssql(INIT_FUNC_ARGS);
 int php3_rinit_mssql(INIT_FUNC_ARGS);
 int php3_mshutdown_mssql(void);
 int php3_rshutdown_mssql(void);
-DLEXPORT void php3_info_mssql(void);
-DLEXPORT void php3_mssql_connect(INTERNAL_FUNCTION_PARAMETERS);
-DLEXPORT void php3_mssql_pconnect(INTERNAL_FUNCTION_PARAMETERS);
-DLEXPORT void php3_mssql_close(INTERNAL_FUNCTION_PARAMETERS);
-DLEXPORT void php3_mssql_select_db(INTERNAL_FUNCTION_PARAMETERS);
-DLEXPORT void php3_mssql_query(INTERNAL_FUNCTION_PARAMETERS);
-DLEXPORT void php3_mssql_free_result(INTERNAL_FUNCTION_PARAMETERS);
-DLEXPORT void php3_mssql_get_last_message(INTERNAL_FUNCTION_PARAMETERS);
-DLEXPORT void php3_mssql_num_rows(INTERNAL_FUNCTION_PARAMETERS);
-DLEXPORT void php3_mssql_num_fields(INTERNAL_FUNCTION_PARAMETERS);
-DLEXPORT void php3_mssql_fetch_field(INTERNAL_FUNCTION_PARAMETERS);
-DLEXPORT void php3_mssql_fetch_row(INTERNAL_FUNCTION_PARAMETERS);
-DLEXPORT void php3_mssql_fetch_array(INTERNAL_FUNCTION_PARAMETERS);
-DLEXPORT void php3_mssql_fetch_object(INTERNAL_FUNCTION_PARAMETERS);
-DLEXPORT void php3_mssql_field_length(INTERNAL_FUNCTION_PARAMETERS);
-DLEXPORT void php3_mssql_field_name(INTERNAL_FUNCTION_PARAMETERS);
-DLEXPORT void php3_mssql_field_type(INTERNAL_FUNCTION_PARAMETERS);
-DLEXPORT void php3_mssql_data_seek(INTERNAL_FUNCTION_PARAMETERS);
-DLEXPORT void php3_mssql_field_seek(INTERNAL_FUNCTION_PARAMETERS);
-DLEXPORT void php3_mssql_result(INTERNAL_FUNCTION_PARAMETERS);
-DLEXPORT void php3_mssql_min_error_severity(INTERNAL_FUNCTION_PARAMETERS);
-DLEXPORT void php3_mssql_min_message_severity(INTERNAL_FUNCTION_PARAMETERS);
+void php3_info_mssql(void);
+void php3_mssql_connect(INTERNAL_FUNCTION_PARAMETERS);
+void php3_mssql_pconnect(INTERNAL_FUNCTION_PARAMETERS);
+void php3_mssql_close(INTERNAL_FUNCTION_PARAMETERS);
+void php3_mssql_select_db(INTERNAL_FUNCTION_PARAMETERS);
+void php3_mssql_query(INTERNAL_FUNCTION_PARAMETERS);
+void php3_mssql_free_result(INTERNAL_FUNCTION_PARAMETERS);
+void php3_mssql_get_last_message(INTERNAL_FUNCTION_PARAMETERS);
+void php3_mssql_num_rows(INTERNAL_FUNCTION_PARAMETERS);
+void php3_mssql_num_fields(INTERNAL_FUNCTION_PARAMETERS);
+void php3_mssql_fetch_field(INTERNAL_FUNCTION_PARAMETERS);
+void php3_mssql_fetch_row(INTERNAL_FUNCTION_PARAMETERS);
+void php3_mssql_fetch_array(INTERNAL_FUNCTION_PARAMETERS);
+void php3_mssql_fetch_object(INTERNAL_FUNCTION_PARAMETERS);
+void php3_mssql_field_length(INTERNAL_FUNCTION_PARAMETERS);
+void php3_mssql_field_name(INTERNAL_FUNCTION_PARAMETERS);
+void php3_mssql_field_type(INTERNAL_FUNCTION_PARAMETERS);
+void php3_mssql_data_seek(INTERNAL_FUNCTION_PARAMETERS);
+void php3_mssql_field_seek(INTERNAL_FUNCTION_PARAMETERS);
+void php3_mssql_result(INTERNAL_FUNCTION_PARAMETERS);
+void php3_mssql_min_error_severity(INTERNAL_FUNCTION_PARAMETERS);
+void php3_mssql_min_message_severity(INTERNAL_FUNCTION_PARAMETERS);
 
 /*
 void php3_mssql_db_query(INTERNAL_FUNCTION_PARAMETERS);
@@ -96,7 +93,12 @@ void php3_mssql_field_flags(INTERNAL_FUNCTION_PARAMETERS);
 #define charcol(i) ((DBCHAR *) dbdata(mssql_ptr->link,i))
 #define floatcol(i) ((float) *(DBFLT8 *) dbdata(mssql_ptr->link,i))
 
-typedef struct mssql_link_struct mssql_link;
+
+typedef struct mssql_link_struct {
+	LOGINREC *login;
+	DBPROCESS *link;
+	int valid;
+}mssql_link;
 
 typedef struct {
 	long default_link;
@@ -106,16 +108,12 @@ typedef struct {
 	char *appname;
 	char *server_message;
 	int le_link,le_plink,le_result;
+	int magic_quotes_runtime;
 	long min_error_severity,min_message_severity;
 	long cfg_min_error_severity,cfg_min_message_severity;
 	void (*get_column_content)(mssql_link *mssql_ptr,int offset,pval *result,int column_type);
+	HashTable *resource_list, *resource_plist;
 } mssql_module;
-
-struct mssql_link_struct {
-	LOGINREC *login;
-	DBPROCESS *link;
-	int valid;
-};
 
 #define MSSQL_ROWS_BLOCK 128
 
@@ -133,8 +131,9 @@ typedef struct {
 	int num_rows,num_fields;
 } mssql_result;
 
-
+#ifndef THREAD_SAFE
 extern mssql_module php3_mssql_module;
+#endif
 
 #else
 

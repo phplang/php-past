@@ -29,7 +29,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: main.c,v 1.462 1998/08/14 23:47:12 steffann Exp $ */
+/* $Id: main.c,v 1.470 1998/09/21 16:41:47 zeev Exp $ */
 
 /* #define CRASH_DETECTION */
 
@@ -599,7 +599,7 @@ int php3_request_startup(INLINE_TLS_VOID)
 	GLOBAL(initialized) |= INIT_REQUEST_INFO;
 
 	/* prepare general symbol table hash */
-	if (_php3_hash_init(&GLOBAL(symbol_table), 50, NULL, pval_DESTRUCTOR, 0) == FAILURE) {
+	if (_php3_hash_init(&GLOBAL(symbol_table), 50, NULL, PVAL_DESTRUCTOR, 0) == FAILURE) {
 		php3_printf("Unable to initialize symbol table.\n");
 		return FAILURE;
 	}
@@ -701,8 +701,14 @@ void php3_request_shutdown(void *dummy INLINE_TLS)
 	}
 #endif
 
+	if (GLOBAL(initialized) & INIT_LIST) {
+		SHUTDOWN_DEBUG("Resource list");
+		destroy_resource_list();
+		GLOBAL(initialized) &= ~INIT_LIST;
+	}
+
 	/* clean temporary dl's, run request shutdown's for modules */
-	SHUTDOWN_DEBUG("Dynamic modules");
+	SHUTDOWN_DEBUG("Modules");
 	_php3_hash_apply(&GLOBAL(module_registry), (int (*)(void *)) module_registry_cleanup);
 
 	if (GLOBAL(initialized) & INIT_SYMBOL_TABLE) {
@@ -737,7 +743,7 @@ void php3_request_shutdown(void *dummy INLINE_TLS)
 
 		SHUTDOWN_DEBUG("Switch stack");
 		while (stack_top(&GLOBAL(switch_stack), (void **) &se) != FAILURE) {
-			yystype_destructor(&se->expr _INLINE_TLS);
+			pval_destructor(&se->expr _INLINE_TLS);
 			stack_del_top(&GLOBAL(switch_stack));
 		}
 		stack_destroy(&GLOBAL(switch_stack));
@@ -750,21 +756,29 @@ void php3_request_shutdown(void *dummy INLINE_TLS)
 	}
 	if (GLOBAL(initialized) & INIT_FUNCTION_STATE_STACK) {
 		FunctionState *tmp;
+		HashTable *last_symbol_table=NULL; /* to protect against freeing the same symtable twice,
+											* if we 'crashed' in a nested function call
+											*/
 
 		SHUTDOWN_DEBUG("Function state stack");
 		while (stack_top(&GLOBAL(function_state_stack), (void **) &tmp) != FAILURE) {
 			if (tmp->function_name) {
 				efree(tmp->function_name);
-				if (tmp->symbol_table && tmp->symbol_table != &GLOBAL(symbol_table)) {
+				if (tmp->symbol_table 
+					&& (tmp->symbol_table != &GLOBAL(symbol_table))
+					&& (tmp->symbol_table != last_symbol_table)) {
 					_php3_hash_destroy(tmp->symbol_table);
 					efree(tmp->symbol_table);
+					last_symbol_table = tmp->symbol_table;
 				}
 			}
 			stack_del_top(&GLOBAL(function_state_stack));
 		}
 		if (GLOBAL(function_state).function_name) {
 			efree(GLOBAL(function_state).function_name);
-			if (GLOBAL(function_state).symbol_table && GLOBAL(function_state).symbol_table != &GLOBAL(symbol_table)) {
+			if (GLOBAL(function_state).symbol_table
+				&& (GLOBAL(function_state).symbol_table != &GLOBAL(symbol_table))
+				&& (GLOBAL(function_state).symbol_table != last_symbol_table)) {
 				_php3_hash_destroy(GLOBAL(function_state).symbol_table);
 				efree(GLOBAL(function_state).symbol_table);
 			}
@@ -786,14 +800,6 @@ void php3_request_shutdown(void *dummy INLINE_TLS)
 		stack_destroy(&GLOBAL(variable_unassign_stack));
 		GLOBAL(initialized) &= ~INIT_VARIABLE_UNASSIGN_STACK;
 	}
-
-	if (GLOBAL(initialized) & INIT_LIST) {
-		SHUTDOWN_DEBUG("Resource list");
-		destroy_resource_list();
-		GLOBAL(initialized) &= ~INIT_LIST;
-	}
-	
-
 
 	if (GLOBAL(module_initialized) & INIT_CONSTANTS) {
 		/* clean temporary defined constants */
@@ -958,6 +964,9 @@ static int php3_config_ini_startup(INLINE_TLS_VOID)
 		if (cfg_get_long("short_open_tag", &php3_ini.short_open_tag) == FAILURE) {
 			php3_ini.short_open_tag = DEFAULT_SHORT_OPEN_TAG;
 		}
+		if (cfg_get_long("asp_tags", &php3_ini.asp_tags) == FAILURE) {
+			php3_ini.asp_tags = 0;
+		}
 		if (cfg_get_string("user_dir", &php3_ini.user_dir) == FAILURE) {
 			if ((temp = getenv("PHP_USER_DIR"))) {
 				php3_ini.user_dir = temp;
@@ -1002,6 +1011,9 @@ static int php3_config_ini_startup(INLINE_TLS_VOID)
 		if (cfg_get_string("upload_tmp_dir", &php3_ini.upload_tmp_dir) == FAILURE) {
 			/* php3_ini.upload_tmp_dir = UPLOAD_TMPDIR; */
 			php3_ini.upload_tmp_dir = NULL;
+		}
+		if (cfg_get_long("upload_max_filesize", &php3_ini.upload_max_filesize) == FAILURE) {
+			php3_ini.upload_max_filesize = 2097152; /* 2 Meg default */
 		}
 		if (cfg_get_string("extension_dir", &php3_ini.extension_dir) == FAILURE) {
 			php3_ini.extension_dir = NULL;
@@ -1111,7 +1123,7 @@ int php3_module_startup(INLINE_TLS_VOID)
 #endif
 
 	/* prepare function table hash */
-	if (_php3_hash_init(&GLOBAL(function_table), 100, NULL, pval_DESTRUCTOR, 1) == FAILURE) {
+	if (_php3_hash_init(&GLOBAL(function_table), 100, NULL, PVAL_DESTRUCTOR, 1) == FAILURE) {
 		php3_printf("Unable to initialize function table.\n");
 		return FAILURE;
 	}
@@ -1291,7 +1303,7 @@ int _php3_hash_environment(void)
 		/* insert special variables */
 		if (_php3_hash_find(&GLOBAL(symbol_table), "SCRIPT_FILENAME", sizeof("SCRIPT_FILENAME"), (void **) & tmp_ptr) == SUCCESS) {
 			tmp2 = *tmp_ptr;
-			yystype_copy_constructor(&tmp2);
+			pval_copy_constructor(&tmp2);
 			_php3_hash_update(&GLOBAL(symbol_table), "PATH_TRANSLATED", sizeof("PATH_TRANSLATED"), (void *) & tmp2, sizeof(pval), NULL);
 		}
 		tmp.value.str.len = strlen(GLOBAL(php3_rqst)->uri);
@@ -1347,9 +1359,15 @@ int _php3_hash_environment(void)
 #endif
 	{
 		/* Build the special-case PHP_SELF variable for the CGI version */
-		char *sn, *pi;
+		char *pi;
+#if FORCE_CGI_REDIRECT
+		pi = GLOBAL(request_info).path_info;
+		tmp.value.str.val = emalloc(((pi)?strlen(pi):0) + 1);
+		tmp.value.str.len = _php3_sprintf(tmp.value.str.val, "%s", (pi ? pi : ""));	/* SAFE */
+		tmp.type = IS_STRING;
+#else
 		int l = 0;
-
+		char *sn;
 		sn = GLOBAL(request_info).script_name;
 		pi = GLOBAL(request_info).path_info;
 		if (sn)
@@ -1363,6 +1381,7 @@ int _php3_hash_environment(void)
 		tmp.value.str.val = emalloc(l + 1);
 		tmp.value.str.len = _php3_sprintf(tmp.value.str.val, "%s%s", (sn ? sn : ""), (pi ? pi : ""));	/* SAFE */
 		tmp.type = IS_STRING;
+#endif
 		_php3_hash_update(&GLOBAL(symbol_table), "PHP_SELF", sizeof("PHP_SELF"), (void *) & tmp, sizeof(pval), NULL);
 	}
 #endif
@@ -1384,7 +1403,7 @@ void _php3_build_argv(char *s)
 	TLS_VARS;
 
 	arr.value.ht = (HashTable *) emalloc(sizeof(HashTable));
-	if (!arr.value.ht || _php3_hash_init(arr.value.ht, 0, NULL, pval_DESTRUCTOR, 0) == FAILURE) {
+	if (!arr.value.ht || _php3_hash_init(arr.value.ht, 0, NULL, PVAL_DESTRUCTOR, 0) == FAILURE) {
 		php3_error(E_WARNING, "Unable to create argv array");
 	} else {
 		arr.type = IS_ARRAY;
@@ -1820,12 +1839,13 @@ PHPAPI int apache_php3_module_main(request_rec * r, int fd, int display_source_m
 		}
 	}
 	(void) php3_parse(GLOBAL(phpin));
-
+	
 	if (GLOBAL(php3_display_source)) {
 		php3_printf("\n</html>\n");
 	}
 	if (GLOBAL(initialized)) {
 		php3_header();			/* Make sure headers have been sent */
+		php3_call_shutdown_functions();
 	}
 	return (OK);
 }

@@ -52,7 +52,7 @@
 
 
 
-/* $Id: configuration-parser.y,v 1.74 1998/06/22 20:28:02 zeev Exp $ */
+/* $Id: configuration-parser.y,v 1.75 1998/09/10 23:56:53 zeev Exp $ */
 
 #define DEBUG_CFG_PARSER 1
 #ifdef THREAD_SAFE
@@ -100,7 +100,7 @@ PHPAPI int cfg_get_long(char *varname,long *result)
 		return FAILURE;
 	}
 	var = *tmp;
-	yystype_copy_constructor(&var);
+	pval_copy_constructor(&var);
 	convert_to_long(&var);
 	*result = var.value.lval;
 	return SUCCESS;
@@ -116,7 +116,7 @@ PHPAPI int cfg_get_double(char *varname,double *result)
 		return FAILURE;
 	}
 	var = *tmp;
-	yystype_copy_constructor(&var);
+	pval_copy_constructor(&var);
 	convert_to_double(&var);
 	*result = var.value.dval;
 	return SUCCESS;
@@ -142,19 +142,19 @@ static void yyerror(char *str)
 }
 
 
-static void yystype_config_destructor(pval *yystype)
+static void pvalue_config_destructor(pval *pvalue)
 {
-	if (yystype->type == IS_STRING && yystype->value.str.val != empty_string) {
-		free(yystype->value.str.val);
+	if (pvalue->type == IS_STRING && pvalue->value.str.val != empty_string) {
+		free(pvalue->value.str.val);
 	}
 }
 
 
-static void yystype_browscap_destructor(pval *yystype)
+static void pvalue_browscap_destructor(pval *pvalue)
 {
-	if (yystype->type == IS_OBJECT || yystype->type == IS_ARRAY) {
-		_php3_hash_destroy(yystype->value.ht);
-		free(yystype->value.ht);
+	if (pvalue->type == IS_OBJECT || pvalue->type == IS_ARRAY) {
+		_php3_hash_destroy(pvalue->value.ht);
+		free(pvalue->value.ht);
 	}
 }
 
@@ -163,7 +163,7 @@ int php3_init_config(void)
 {
 	TLS_VARS;
 
-	if (_php3_hash_init(&configuration_hash, 0, NULL, (void (*)(void *))yystype_config_destructor, 1)==FAILURE) {
+	if (_php3_hash_init(&configuration_hash, 0, NULL, (void (*)(void *))pvalue_config_destructor, 1)==FAILURE) {
 		return FAILURE;
 	}
 
@@ -254,7 +254,7 @@ int php3_minit_browscap(INIT_FUNC_ARGS)
 	TLS_VARS;
 
 	if (php3_ini.browscap) {
-		if (_php3_hash_init(&GLOBAL(browser_hash), 0, NULL, (void (*)(void *))yystype_browscap_destructor, 1)==FAILURE) {
+		if (_php3_hash_init(&GLOBAL(browser_hash), 0, NULL, (void (*)(void *))pvalue_browscap_destructor, 1)==FAILURE) {
 			return FAILURE;
 		}
 
@@ -994,7 +994,7 @@ case 6:
 
 				/*printf("'%s' (%d)\n",$1.value.str.val,$1.value.str.len+1);*/
 				tmp.value.ht = (HashTable *) malloc(sizeof(HashTable));
-				_php3_hash_init(tmp.value.ht, 0, NULL, (void (*)(void *))yystype_config_destructor, 1);
+				_php3_hash_init(tmp.value.ht, 0, NULL, (void (*)(void *))pvalue_config_destructor, 1);
 				tmp.type = IS_OBJECT;
 				_php3_hash_update(active__php3_hash_table, yyvsp[0].value.str.val, yyvsp[0].value.str.len+1, (void *) &tmp, sizeof(pval), (void **) &current_section);
 				tmp.value.str.val = php3_strndup(yyvsp[0].value.str.val,yyvsp[0].value.str.len);

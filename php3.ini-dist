@@ -35,6 +35,7 @@
 
 engine			=	On	; enable PHP 3.0 parser
 short_open_tag	=	On	; allow the <? tag.  otherwise, only <?php and <script> tags are recognized.
+asp_tags		=	Off ; allow ASP-style <% %> tags
 precision		=	14	; number of significant digits displayed in floating point numbers
 y2k_compliance	=	Off	; whether to be year 2000 compliant (will cause problems with non y2k compliant browsers)
 ; Safe Mode
@@ -94,7 +95,8 @@ auto_append_file	=
 include_path	=                   ; UNIX: "/path1:/path2"  Windows: "\path1;\path2"
 doc_root		=					; the root of the php pages, used only if nonempty
 user_dir		=					; the directory under which php opens the script using /~username, used only if nonempty
-upload_tmp_dir	=	\windows\temp	; temporary directory for HTTP uploaded files
+;upload_tmp_dir	=	                ; temporary directory for HTTP uploaded files (will use system default if not specified)
+upload_max_filesize = 2097152       ; 2 Meg default limit on file uploads
 extension_dir	=	./				; directory in which the loadable extensions (modules) reside
 
 
@@ -221,3 +223,19 @@ bcmath.scale	=	0	; number of decimal digits for all bcmath functions
 
 [browscap]
 ;browscap	=	extra/browscap.ini
+
+[Informix]
+ifx.default_host		=		; default host for ifx_connect() (doesn't apply in safe mode)
+ifx.default_user		=		; default user for ifx_connect() (doesn't apply in safe mode)
+ifx.default_password		=		; default password for ifx_connect() (doesn't apply in safe mode)
+ifx.allow_persistent		=	On	; allow or prevent persistent link
+ifx.max_persistent		=	-1	; maximum number of persistent links. -1 means no limit
+ifx.max_links			=	-1	; maximum number of links (persistent+non persistent).  -1 means no limit
+ifx.textasvarchar		=	0	; if set on, select statements return the contents of a text blob instead of it's id
+ifx.byteasvarchar		=	0	; if set on, select statements return the contents of a byte blob instead of it's id
+ifx.charasvarchar		=	0	; trailing blanks are stripped from fixed-length char columns. May help the life
+						; of Informix SE users. 
+ifx.blobinfile			=	0	; if set on, the contents of text&byte blobs are dumped to a file instead of
+						; keeping them in memory
+ifx.nullformat			=	0	; NULL's are returned as empty strings, unless this is set to 1. In that case,
+						; NULL's are returned as string 'NULL'.

@@ -1,0 +1,70 @@
+--$Id: 012.php3t,v 1.1 1998/08/23 03:10:16 rocky Exp $
+--TITLE--
+Assign Indexed, then and Auto assign                          ...
+--URL--
+ary/012.phtml
+--EXPECT--
+<HR> Assign Index from 0, then Auto assign
+KEY: 0, VAL: a
+KEY: 1, VAL: b
+KEY: 2, VAL: c
+KEY: 3, VAL: d
+KEY: 4, VAL: e
+KEY: 5, VAL: f
+count(): 6
+<HR> Assign Index from 1, then Auto assign
+KEY: 1, VAL: a
+KEY: 2, VAL: b
+KEY: 3, VAL: c
+KEY: 4, VAL: d
+KEY: 5, VAL: e
+KEY: 6, VAL: f
+count(): 6
+<HR> Assign Index from 2, then Auto assign
+KEY: 2, VAL: a
+KEY: 3, VAL: b
+KEY: 4, VAL: c
+KEY: 5, VAL: d
+KEY: 6, VAL: e
+KEY: 7, VAL: f
+count(): 6
+<HR> Assign Index from 3, then Auto assign
+KEY: 3, VAL: a
+KEY: 4, VAL: b
+KEY: 5, VAL: c
+KEY: 6, VAL: d
+KEY: 7, VAL: e
+KEY: 8, VAL: f
+count(): 6
+<HR> Assign Index from 4, then Auto assign
+KEY: 4, VAL: a
+KEY: 5, VAL: b
+KEY: 6, VAL: c
+KEY: 7, VAL: d
+KEY: 8, VAL: e
+KEY: 9, VAL: f
+count(): 6
+<HR> Assign Index from 5, then Auto assign
+KEY: 5, VAL: a
+KEY: 6, VAL: b
+KEY: 7, VAL: c
+KEY: 8, VAL: d
+KEY: 9, VAL: e
+KEY: 10, VAL: f
+count(): 6
+<HR> Assign Index from 6, then Auto assign
+KEY: 6, VAL: a
+KEY: 7, VAL: b
+KEY: 8, VAL: c
+KEY: 9, VAL: d
+KEY: 10, VAL: e
+KEY: 11, VAL: f
+count(): 6
+<HR> Assign Index from 7, then Auto assign
+KEY: 7, VAL: a
+KEY: 8, VAL: b
+KEY: 9, VAL: c
+KEY: 10, VAL: d
+KEY: 11, VAL: e
+KEY: 12, VAL: f
+count(): 6

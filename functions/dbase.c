@@ -130,7 +130,6 @@ void php3_dbase_open(INTERNAL_FUNCTION_PARAMETERS) {
 	convert_to_long(options);
 
 	if (php3_ini.safe_mode && (!_php3_checkuid(dbf_name->value.str.val, 2))) {
-		php3_error(E_WARNING, "SAFE MODE Restriction in effect.  Invalid owner.");
 		RETURN_FALSE;
 	}
 	
@@ -397,6 +396,79 @@ void php3_dbase_get_record(INTERNAL_FUNCTION_PARAMETERS) {
 	free(data);
 }
 
+/* From Martin Kuba <makub@aida.inet.cz> */
+void php3_dbase_get_record_with_names(INTERNAL_FUNCTION_PARAMETERS) {
+	pval *dbh_id, *record;
+	dbhead_t *dbh;
+	int dbh_type;
+	dbfield_t *dbf, *cur_f;
+	char *data, *fnp, *str_value;
+	DBase_TLS_VARS;
+
+	if (ARG_COUNT(ht) != 2 || getParameters(ht,2,&dbh_id,&record)==FAILURE) {
+		WRONG_PARAM_COUNT;
+	}
+	convert_to_long(dbh_id);
+	convert_to_long(record);
+
+	dbh = php3_list_find(dbh_id->value.lval, &dbh_type);
+	if (!dbh || dbh_type != DBase_GLOBAL(le_dbhead)) {
+		php3_error(E_WARNING, "Unable to find database for identifier %d", dbh_id->value.lval);
+		RETURN_FALSE;
+	}
+
+	if ((data = get_dbf_record(dbh, record->value.lval)) == NULL) {
+		php3_error(E_WARNING, "Tried to read bad record %d", record->value.lval);
+		RETURN_FALSE;
+	}
+
+	dbf = dbh->db_fields;
+
+	if (array_init(return_value) == FAILURE) {
+		RETURN_FALSE;
+	}
+
+	fnp = (char *)emalloc(dbh->db_rlen);
+	for (cur_f = dbf; cur_f < &dbf[dbh->db_nfields]; cur_f++) {
+		/* get the value */
+		str_value = (char *)emalloc(cur_f->db_flen + 1);
+		sprintf(str_value, cur_f->db_format, get_field_val(data, cur_f, fnp));
+
+		/* now convert it to the right php internal type */
+		switch (cur_f->db_type) {
+			case 'C':
+			case 'D':
+				add_assoc_string(return_value,cur_f->db_fname,str_value,1);
+				break;
+			case 'N':       /* FALLS THROUGH */
+			case 'L':       /* FALLS THROUGH */
+				if (cur_f->db_fdc == 0) {
+					add_assoc_long(return_value,cur_f->db_fname,strtol(str_value, NULL, 10));
+				} else {
+					add_assoc_double(return_value,cur_f->db_fname,atof(str_value));
+				}
+				break;
+			case 'M':
+				/* this is a memo field. don't know how to deal with this yet */
+				break;
+			default:
+				/* should deal with this in some way */
+				break;
+		}
+		efree(str_value);
+	}
+	efree(fnp);
+
+	/* mark whether this record was deleted */
+	if (data[0] == '*') {
+		add_assoc_long(return_value,"deleted",1);
+	} else {
+		add_assoc_long(return_value,"deleted",0);
+	}
+
+	free(data);
+}
+
 void php3_dbase_create(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *filename, *fields, *field, *value;
 	int fd;
@@ -418,7 +490,6 @@ void php3_dbase_create(INTERNAL_FUNCTION_PARAMETERS) {
 	}
 
 	if (php3_ini.safe_mode && (!_php3_checkuid(filename->value.str.val, 2))) {
-		php3_error(E_WARNING, "SAFE MODE Restriction in effect.  Invalid owner.");
 		RETURN_FALSE;
 	}
 	
@@ -549,6 +620,7 @@ function_entry dbase_functions[] = {
 	{"dbase_numfields",		php3_dbase_numfields,		NULL},
 	{"dbase_add_record",	php3_dbase_add_record,		NULL},
 	{"dbase_get_record",	php3_dbase_get_record,		NULL},
+       {"dbase_get_record_with_names", php3_dbase_get_record_with_names,               NULL},
 	{"dbase_delete_record",	php3_dbase_delete_record,	NULL},
 	{"dbase_pack",			php3_dbase_pack,			NULL},
 	{NULL, NULL, NULL}

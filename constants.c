@@ -48,7 +48,7 @@ void free_php3_constant(php3_constant *c)
 {
 	TLS_VARS;
 	if (!(c->flags & CONST_PERSISTENT)) {
-		yystype_destructor(&c->value _INLINE_TLS);
+		pval_destructor(&c->value _INLINE_TLS);
 	}
 	free(c->name);
 }
@@ -198,7 +198,7 @@ int php3_get_constant(char *name, uint name_len, pval *result)
 		} else {
 			retval=1;
 			*result = c->value;
-			yystype_copy_constructor(result);
+			pval_copy_constructor(result);
 		}
 	} else {
 		retval=0;
@@ -265,7 +265,7 @@ void php3_define(INTERNAL_FUNCTION_PARAMETERS)
 	convert_to_string(var);
 	
 	c.value = *val;
-	yystype_copy_constructor(&c.value);
+	pval_copy_constructor(&c.value);
 	c.flags = case_sensitive | ~CONST_PERSISTENT; /* non persistent */
 	c.name = php3_strndup(var->value.str.val, var->value.str.len);
 	c.name_len = var->value.str.len+1;

@@ -1,0 +1,22 @@
+--TEST--
+String functions                                              ...
+--GET--
+--FILE--
+strings/001.phtml
+--EXPECT--
+Testing strtok: passed
+Testing strstr: passed
+Testing strrchr: passed
+Testing strtoupper: passed
+Testing strtolower: passed
+Testing substr: passed
+Testing rawurlencode: passed
+Testing rawurldecode: passed
+Testing urlencode: passed
+Testing urldecode: passed
+Testing quotemeta: passed
+Testing ufirst: passed
+Testing strtr: passed
+Testing addslashes: passed
+Testing stripslashes: passed
+Testing uniqid: passed

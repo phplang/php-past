@@ -208,7 +208,7 @@ void _php3_info(void)
 	{
 		pval *data, *tmp;
 		char *string_key;
-		int int_key;
+		ulong num_key;
 
 		SECTION("PHP Variables");
 
@@ -247,12 +247,12 @@ void _php3_info(void)
 			while (_php3_hash_get_current_data(data->value.ht, (void **) &tmp) == SUCCESS) {
 				convert_to_string(tmp);
 				PUTS("<tr><td bgcolor=\"" ENTRY_NAME_COLOR "\">HTTP_GET_VARS[\"");
-				switch (_php3_hash_get_current_key(data->value.ht, &string_key, &int_key)) {
+				switch (_php3_hash_get_current_key(data->value.ht, &string_key, &num_key)) {
 					case HASH_KEY_IS_STRING:
 						PUTS(string_key);
 						break;
-					case HASH_KEY_IS_INT:
-						php3_printf("%d",int_key);
+					case HASH_KEY_IS_LONG:
+						php3_printf("%ld",num_key);
 						break;
 				}
 				PUTS("\"]</td><td bgcolor=\"" CONTENTS_COLOR "\">");
@@ -266,12 +266,12 @@ void _php3_info(void)
 			while (_php3_hash_get_current_data(data->value.ht, (void **) &tmp) == SUCCESS) {
 				convert_to_string(tmp);
 				PUTS("<tr><td bgcolor=\"" ENTRY_NAME_COLOR "\">HTTP_POST_VARS[\"");
-				switch (_php3_hash_get_current_key(data->value.ht, &string_key, &int_key)) {
+				switch (_php3_hash_get_current_key(data->value.ht, &string_key, &num_key)) {
 					case HASH_KEY_IS_STRING:
 						PUTS(string_key);
 						break;
-					case HASH_KEY_IS_INT:
-						php3_printf("%d",int_key);
+					case HASH_KEY_IS_LONG:
+						php3_printf("%ld",num_key);
 						break;
 				}
 				PUTS("\"]</td><td bgcolor=\"" CONTENTS_COLOR "\">");
@@ -285,12 +285,12 @@ void _php3_info(void)
 			while (_php3_hash_get_current_data(data->value.ht, (void **) &tmp) == SUCCESS) {
 				convert_to_string(tmp);
 				PUTS("<tr><td bgcolor=\"" ENTRY_NAME_COLOR "\">HTTP_COOKIE_VARS[\"");
-				switch (_php3_hash_get_current_key(data->value.ht, &string_key, &int_key)) {
+				switch (_php3_hash_get_current_key(data->value.ht, &string_key, &num_key)) {
 					case HASH_KEY_IS_STRING:
 						PUTS(string_key);
 						break;
-					case HASH_KEY_IS_INT:
-						php3_printf("%d",int_key);
+					case HASH_KEY_IS_LONG:
+						php3_printf("%ld",num_key);
 						break;
 				}
 				PUTS("\"]</td><td bgcolor=\"" CONTENTS_COLOR "\">");

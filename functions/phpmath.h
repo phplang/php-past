@@ -29,7 +29,7 @@
  */
 
 
-/* $Id: phpmath.h,v 1.11 1998/04/29 13:24:25 ssb Exp $ */
+/* $Id: phpmath.h,v 1.12 1998/08/25 12:26:53 ssb Exp $ */
 
 #ifndef _PHPMATH_H
 #define _PHPMATH_H
@@ -59,5 +59,7 @@ extern void php3_bindec(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_hexdec(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_octdec(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_number_format(INTERNAL_FUNCTION_PARAMETERS);
+extern void php3_deg2rad(INTERNAL_FUNCTION_PARAMETERS);
+extern void php3_rad2deg(INTERNAL_FUNCTION_PARAMETERS);
 
 #endif /* _PHPMATH_H */

@@ -27,7 +27,7 @@
    +----------------------------------------------------------------------+
  */
  
-/* $Id: msql.c,v 1.95 1998/06/22 20:28:33 zeev Exp $ */
+/* $Id: msql.c,v 1.96 1998/09/10 23:57:19 zeev Exp $ */
 #ifdef THREAD_SAFE
 #include "tls.h"
 #endif
@@ -1040,7 +1040,7 @@ static void php3_msql_fetch_hash(INTERNAL_FUNCTION_PARAMETERS)
 	int type;
 	int num_fields;
 	int i;
-	pval *yystype_ptr;
+	pval *pval_ptr;
 	MSQL_TLS_VARS;
 	
 	if (ARG_COUNT(ht)!=1 || getParameters(ht, 1, &result)==FAILURE) {
@@ -1068,14 +1068,14 @@ static void php3_msql_fetch_hash(INTERNAL_FUNCTION_PARAMETERS)
 	for (msql_field=msqlFetchField(msql_result),i=0; msql_field; msql_field=msqlFetchField(msql_result),i++) {
 		if (msql_row[i]) {
 			if (php3_ini.magic_quotes_runtime) {
-				add_get_index_string(return_value, i, _php3_addslashes(msql_row[i],0,NULL,0), (void **) &yystype_ptr, 0);
+				add_get_index_string(return_value, i, _php3_addslashes(msql_row[i],0,NULL,0), (void **) &pval_ptr, 0);
 			} else {
-				add_get_index_string(return_value, i, msql_row[i], (void **) &yystype_ptr, 1);
+				add_get_index_string(return_value, i, msql_row[i], (void **) &pval_ptr, 1);
 			}
 		} else {
-			add_get_index_stringl(return_value, i, empty_string, 0, (void **) &yystype_ptr, 1);
+			add_get_index_stringl(return_value, i, empty_string, 0, (void **) &pval_ptr, 1);
 		}
-		_php3_hash_pointer_update(return_value->value.ht, msql_field->name, strlen(msql_field->name)+1, yystype_ptr);
+		_php3_hash_pointer_update(return_value->value.ht, msql_field->name, strlen(msql_field->name)+1, pval_ptr);
 	}
 }
 

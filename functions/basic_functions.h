@@ -29,7 +29,7 @@
  */
 
 
-/* $Id: basic_functions.h,v 1.28 1998/08/08 11:18:13 zeev Exp $ */
+/* $Id: basic_functions.h,v 1.34 1998/09/22 19:39:33 zeev Exp $ */
 
 #ifndef _BASIC_FUNCTIONS_H
 #define _BASIC_FUNCTIONS_H
@@ -37,6 +37,7 @@
 extern php3_module_entry basic_functions_module;
 #define basic_functions_module_ptr &basic_functions_module
 
+extern int php3_minit_basic(INIT_FUNC_ARGS);
 extern int php3_rinit_basic(INIT_FUNC_ARGS);
 extern int php3_rshutdown_basic(void);
 extern void int_value(INTERNAL_FUNCTION_PARAMETERS);
@@ -51,6 +52,8 @@ extern void php3_arsort(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_sort(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_rsort(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_user_sort(INTERNAL_FUNCTION_PARAMETERS);
+extern void php3_auser_sort(INTERNAL_FUNCTION_PARAMETERS);
+extern void php3_user_key_sort(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_array_walk(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_count(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_flush(INTERNAL_FUNCTION_PARAMETERS);
@@ -91,7 +94,7 @@ extern void php3_error_log(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_call_user_func(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_call_user_method(INTERNAL_FUNCTION_PARAMETERS);
 
-PHP3_FUNCTION(register_shutdown_function);
+PHP_FUNCTION(register_shutdown_function);
 
 #if HAVE_PUTENV
 typedef struct {

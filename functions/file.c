@@ -26,7 +26,7 @@
    | Authors: Rasmus Lerdorf <rasmus@lerdorf.on.ca>                       |
    +----------------------------------------------------------------------+
  */
-/* $Id: file.c,v 1.175 1998/08/12 15:05:15 rasmus Exp $ */
+/* $Id: file.c,v 1.182 1998/09/19 20:17:16 rasmus Exp $ */
 #ifdef THREAD_SAFE
 #include "tls.h"
 #endif
@@ -80,6 +80,7 @@ static int fgetss_state = 0;
 int le_fp,le_pp;
 int wsa_fp; /*to handle reading and writing to windows sockets*/
 static int pclose_ret;
+extern int le_uploads;
 #endif
 
 #ifndef HAVE_TEMPNAM
@@ -196,6 +197,7 @@ function_entry php3_file_functions[] = {
 	{"copy",		php3_file_copy,	NULL},
 	{"tempnam",		php3_tempnam,	NULL},
 	{"file",		php3_file,		NULL},
+	{"get_meta_tags",	php3_get_meta_tags,	NULL},
 	{"set_socket_blocking",	php3_set_socket_blocking,	NULL},
 #if (0 && HAVE_SYS_TIME_H && HAVE_SETSOCKOPT && defined(SO_SNDTIMEO) && defined(SO_RCVTIMEO))
 	{"set_socket_timeout",	php3_set_socket_timeout,	NULL},
@@ -206,6 +208,141 @@ function_entry php3_file_functions[] = {
 php3_module_entry php3_file_module_entry = {
 	"PHP_file", php3_file_functions, php3_minit_file, NULL, NULL, NULL, NULL, STANDARD_MODULE_PROPERTIES
 };
+
+/* get_meta_tags(string filename);
+	extracts all meta tags from a file and returns an array
+	The meta tag must have a name and content attribute, otherwise it will be skipped. 
+	The function stops parsing at the closing head tag.
+*/
+void php3_get_meta_tags(INTERNAL_FUNCTION_PARAMETERS) {
+	pval *filename, *arg2;
+	FILE *fp;
+	char buf[8192];
+	int use_include_path = 0;
+	int issock=0, socketd=0;
+	int len,var_namelen, i=0;
+	char var_name[50],*val=NULL,*tmp,*end,*slashed;
+	TLS_VARS;
+	
+	/* check args */
+	switch (ARG_COUNT(ht)) {
+	case 1:
+		if (getParameters(ht,1,&filename) == FAILURE) {
+			WRONG_PARAM_COUNT;
+		}
+		break;
+	case 2:
+		if (getParameters(ht,2,&filename,&arg2) == FAILURE) {
+			WRONG_PARAM_COUNT;
+		}
+		convert_to_long(arg2);
+		use_include_path = arg2->value.lval;
+		break;
+	default:
+		WRONG_PARAM_COUNT;
+	}
+	convert_to_string(filename);
+
+	fp = php3_fopen_wrapper(filename->value.str.val,"r", use_include_path|ENFORCE_SAFE_MODE, &issock, &socketd);
+	if (!fp && !socketd) {
+		if (issock != BAD_URL) {
+			php3_strip_url_passwd(filename->value.str.val);
+			php3_error(E_WARNING,"File(\"%s\") - %s",filename->value.str.val,strerror(errno));
+		}
+		RETURN_FALSE;
+	}
+
+	if (array_init(return_value)==FAILURE) {
+		if (issock) {
+#if WIN32|WINNT
+			closesocket(socketd);
+#else
+			close(socketd);
+#endif
+		} else {
+			fclose(fp);
+		}
+		RETURN_FALSE;
+	}
+	/* Now loop through the file and do the magic quotes thing if needed */
+	memset(buf,0,8191);
+	while((issock?SOCK_FGETS(buf,8191,socketd):(int)fgets(buf,8191,fp))
+		&& !strstr(buf,"</head>") && !strstr(buf,"</HEAD>")) {
+		if(strstr(buf,"<meta")||strstr(buf,"<META")) {
+
+			memset(var_name,0,50);
+			/* get the variable name from the name attribute of the meta tag */
+			tmp=strstr(buf,"name=\"");
+			if(tmp) {
+				tmp+=6;
+				end=strstr(tmp,"\"");
+				if(end) {
+					unsigned char *c;
+					*end='\0';
+					snprintf(var_name,50,"%s",tmp);
+					*end='"';
+
+					c = var_name;
+					while (*c) {
+						switch(*c) {
+							case '.':
+							case '\\':
+							case '+':
+							case '*':
+							case '?':
+							case '[':
+							case '^':
+							case ']':
+							case '$':
+							case '(':
+							case ')':
+							case ' ':
+								*c++ ='_';
+								break;
+							default:
+								*c++ = tolower((unsigned char)*c);
+						}
+					}
+					var_namelen=strlen(var_name);
+				}
+
+				/* get the variable value from the content attribute of the meta tag */
+				tmp=strstr(buf,"content=\"");
+				if(tmp) {
+					tmp+=9;
+					end=strstr(tmp,"\"");
+					if(end) {
+						*end='\0';
+						val=estrdup(tmp);
+						*end='"';
+					}
+				}
+			}
+			if(*var_name && val) {
+				pval *pval_ptr;
+				if (php3_ini.magic_quotes_runtime) {
+					slashed = _php3_addslashes(val,0,&len,0);
+				} else {
+					slashed = estrndup(val,strlen(val));
+				}
+				add_get_index_string(return_value, i, slashed, (void **)&pval_ptr, 0);
+				_php3_hash_pointer_update(return_value->value.ht, var_name, strlen(var_name)+1, pval_ptr);
+				/*	SET_VAR_STRING(var_name,slashed); */
+				efree(val);
+				i++;
+			}
+		}
+	}
+	if (issock) {
+#if WIN32|WINNT
+		closesocket(socketd);
+#else
+		close(socketd);
+#endif
+	} else {
+		fclose(fp);
+	}
+}
 
 void php3_file(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *filename, *arg2;
@@ -292,6 +429,11 @@ static void _php3_closesocket(int *sock) {
 	}
 }
 
+static void _php3_unlink_uploaded_file(char *file) {
+	if(file) {
+		unlink(file);
+	}
+}
 
 int php3_minit_file(INIT_FUNC_ARGS)
 {
@@ -300,6 +442,7 @@ int php3_minit_file(INIT_FUNC_ARGS)
 	GLOBAL(le_fp) = register_list_destructors(fclose,NULL);
 	GLOBAL(le_pp) = register_list_destructors(__pclose,NULL);
 	GLOBAL(wsa_fp) = register_list_destructors(_php3_closesocket,NULL);
+	GLOBAL(le_uploads) = register_list_destructors(_php3_unlink_uploaded_file,NULL);
 	return SUCCESS;
 }
 
@@ -940,7 +1083,6 @@ void php3_mkdir(INTERNAL_FUNCTION_PARAMETERS) {
 	convert_to_long(arg2);
 	mode = arg2->value.lval;
 	if (php3_ini.safe_mode &&(!_php3_checkuid(arg1->value.str.val,3))) {
-		php3_error(E_WARNING,"SAFE MODE Restriction in effect.  Invalid owner of parent directory.");
 		RETURN_FALSE;
 	}
 	ret = mkdir(arg1->value.str.val,mode);
@@ -961,7 +1103,6 @@ void php3_rmdir(INTERNAL_FUNCTION_PARAMETERS) {
 	}
 	convert_to_string(arg1);
 	if (php3_ini.safe_mode &&(!_php3_checkuid(arg1->value.str.val,1))) {
-		php3_error(E_WARNING,"SAFE MODE Restriction in effect.  Invalid owner of directory to be removed.");
 		RETURN_FALSE;
 	}
 	ret = rmdir(arg1->value.str.val);
@@ -1126,9 +1267,6 @@ void php3_rename(INTERNAL_FUNCTION_PARAMETERS) {
 	new = NEW->value.str.val;
 
 	if (php3_ini.safe_mode &&(!_php3_checkuid(old,2))) {
-		php3_error(E_WARNING,
-					"SAFE MODE Restriction in effect.  "
-					"Invalid owner of file to be renamed.");
 		RETURN_FALSE;
 	}
 	ret = rename(old, new);
@@ -1158,9 +1296,6 @@ void php3_file_copy(INTERNAL_FUNCTION_PARAMETERS)
 	convert_to_string(target);
 
 	if (php3_ini.safe_mode &&(!_php3_checkuid(source->value.str.val,2))) {
-		php3_error(E_WARNING,
-					"SAFE MODE Restriction in effect.  "
-					"Invalid owner of file to be renamed.");
 		RETURN_FALSE;
 	}
 	

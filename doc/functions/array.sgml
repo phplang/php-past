@@ -47,6 +47,66 @@ $fruits = array(
    </refsect1>
   </refentry>
 
+
+  <refentry id="function.array-walk">
+   <refnamediv>
+    <refname>array_walk</refname>
+    <refpurpose>
+     Apply a function to every member of an array.
+    </refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>array_walk</function></funcdef>
+     <paramdef>array <parameter>arr</parameter></paramdef>
+     <paramdef>string <parameter>func</parameter></paramdef>
+    </funcsynopsis>
+
+    <simpara>
+     Applies the function named by <parameter>func</parameter> to each
+     element of <parameter>arr</parameter>. The elements are passed as
+     the first argument of <parameter>func</parameter>; if
+     <parameter>func</parameter> requires more than one argument, a
+     warning will be generated each time
+     <function>array_walk</function> calls
+     <parameter>func</parameter>. These warnings may be suppressed by
+     prepending the '@' sign to the <function>array_walk</function>
+     call, or by using <function>error_reporting</function>.
+
+    <para>
+     Note that <parameter>func</parameter> will actually be working
+     with the elements of <parameter>arr</parameter>, so any changes
+     made to those elements will actually be made in the array itself.
+
+    <para>
+     <example>
+      <title><function>array_walk</function> example</title>
+      <programlisting>
+$fruits = array("d"=>"lemon","a"=>"orange","b"=>"banana","c"=>"apple");
+
+function test_alter( $item1 ) {
+   $item1 = 'bogus';
+}
+
+function test_print( $item2 ) {
+   echo "$item2&lt;br&gt;\n";
+}
+
+array_walk( $fruits, 'test_print' );
+array_walk( $fruits, 'test_alter' );
+array_walk( $fruits, 'test_print' );
+      </programlisting>
+     </example>
+
+    <simpara>
+     See also <function>each</function> and <function>list</function>.
+
+   </refsect1>
+  </refentry>
+
+
+
   <refentry id="function.arsort">
    <refnamediv>
     <refname>arsort</refname>
@@ -180,6 +240,15 @@ fruits[a] = orange
      internal pointer points beyond the end of the elements list,
      <function>current</function> returns false.
 
+    <para> 
+     <emphasis>Warning:</emphasis> if the array contains empty
+     elements (0 or "", the empty string) then this function
+     will return false for these elements as well. It is
+     undecideable if the current element is just a zero-value or
+     you have traversed beyond the end of the array. To properly
+     traverse an array, use the <function>each</function>
+     function.
+
     <para>
      See also:
      <function>end</function>, <function>next</function>,
@@ -230,7 +299,7 @@ $bar = each( $foo );
        </itemizedlist>
 
        <programlisting>
-$foo = array( "Robert", => "Bob", "Seppo" => "Sepi" );
+$foo = array( "Robert" => "Bob", "Seppo" => "Sepi" );
 $bar = each( $foo );
        </programlisting>
 

@@ -99,31 +99,6 @@
        </listitem>
       </varlistentry>
 
-      <varlistentry id="ini.enable-dl">
-       <term>
-	<parameter>enable_dl</parameter>
-	<type>boolean</type>
-       </term>
-       <listitem>
-	<para>
-	 This directive is really only useful in the Apache module
-	 version of PHP. You can turn dynamic loading of PHP
-	 extensions with <function>dl</function> on and off per
-	 virtual server or per directory.
-	</para>
-	<para>
-	 The main reason for turning dynamic loading off is security. With
-	 dynamic loading, it's possible to ignore all the safe_mode and
-	 open_basedir restrictions.
-	</para>
-	<para>
-	 The default is to allow dynamic loading, except when using
-	 safe-mode.  In safe-mode, it's always imposible to use
-	 <function>dl</function>.
-	</para>
-       </listitem>
-      </varlistentry>
-      
       <varlistentry id="ini.engine">
        <term>
 	<parameter>engine</parameter>
@@ -216,7 +191,12 @@
 	 for example, fopen or gzopen, the location of the file is
 	 checked. When the file is outside the specified directory-tree,
 	 PHP will refuse to open it. All symbolic links are resolved,
-	 so it's not possible to avoid this restriction with a link.
+	 so it's not possible to avoid this restriction with a symlink.
+	</para>
+	<para>
+	 The special value <systemitem class="constant">.</systemitem>
+	 indicates that the directory in which the script is stored will
+	 be used as base-directory.
 	</para>
 	<para>
 	 The default is to allow all files to be opened.
@@ -316,6 +296,11 @@ include_path=.;c:\www\phplib
        </term>
        <listitem>
 	<para>
+	 If magic_quotes_runtime is enabled, most functions that return data
+	 from any sort of external source including databases and text files
+	 will have quotes escaped with a backslash.
+	 If magic_quotes_sybase is also on, a single-quote is escaped with a
+     single-quote instead of a backslash.
 	</para>
        </listitem>
       </varlistentry>
@@ -327,6 +312,9 @@ include_path=.;c:\www\phplib
        </term>
        <listitem>
 	<para>
+     If magic_quotes_sybase is also on, a single-quote is escaped with a
+     single-quote instead of a backslash if magic_quotes_gpc or magic_quotes_runtime
+	 is enabled.
 	</para>
        </listitem>
       </varlistentry>
@@ -590,6 +578,31 @@ include_path=.;c:\www\phplib
     <title>Extension Loading Directives</title>
     <variablelist>
      
+     <varlistentry id="ini.enable-dl">
+      <term>
+	<parameter>enable_dl</parameter>
+	<type>boolean</type>
+      </term>
+      <listitem>
+	<para>
+	 This directive is really only useful in the Apache module
+	 version of PHP. You can turn dynamic loading of PHP
+	 extensions with <function>dl</function> on and off per
+	 virtual server or per directory.
+	</para>
+	<para>
+	 The main reason for turning dynamic loading off is security. With
+	 dynamic loading, it's possible to ignore all the safe_mode and
+	 open_basedir restrictions.
+	</para>
+	<para>
+	 The default is to allow dynamic loading, except when using
+	 safe-mode.  In safe-mode, it's always imposible to use
+	 <function>dl</function>.
+	</para>
+      </listitem>
+     </varlistentry>
+      
      <varlistentry id="ini.extension-dir">
       <term>
        <parameter>extension_dir</parameter>

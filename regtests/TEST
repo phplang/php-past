@@ -1,0 +1,110 @@
+#!/bin/perl
+$vcid='$Id: TEST,v 1.1 1998/08/31 02:05:08 rocky Exp $';
+# To do: mechanism for excluding tests.  
+#        configuration file for platform and build module-dependent options
+sub usage {
+  my($terse)=@_;
+  print "
+  usage: $program [OPTIONS] [directory...]
+
+  PHP regression Test harness program shamelessly copied from the Perl 
+  program TEST of the same ilk.
+
+  If directories are specified only tests in those directories will
+  be run otherwise all directories will be used. 
+
+  OPTIONS:
+    --help              display detailed help
+    --version           print version string and exit
+    --port *n*          specify port number to connect to in HTTP server
+                        default is that of used by $testphp
+    --prefix *str*      Specify URL prefix. default is: $prefix
+    --server *str*      Server to connect to. Default is $serverhost 
+";
+  exit 100;
+}
+
+init();
+process_options();
+
+$dirs=join('/*.php3t ', @DIRS);
+@FILES = split(/[ \n]/, `echo $dirs`);
+
+open(LOG, ">$logfile") 
+  || die "Can't open log file $logfile for writing: $!";
+
+$total = @FILES;
+foreach $test  (@FILES) {
+  $cmd="$testphp $options --quiet $serverhost $test";
+  @output = `$cmd 2>&1`;
+  print @output;
+  print LOG @output; 
+  $rc = $? >> 8;
+  if ($rc == 0) {
+    $good++;
+  } else {
+    $bad++;
+  }
+}
+
+if ($bad == 0) {
+  print "All tests successful.\n";
+} else {
+  $pct = sprintf("%.2f", $good / $total * 100);
+  if ($bad == 1) {
+    warn "Failed 1 test script out of $total, $pct% okay.\n";
+  } else {
+    warn "Failed $bad test scripts out of $total, $pct% okay.\n";
+  }
+  warn <<'SHRDLU';
+   ### Since not all tests were successful, you may want to run some
+   ### of them individually and examine any diagnostic messages they
+   ### produce.
+SHRDLU
+}
+($user,$sys,$cuser,$csys) = times;
+print sprintf("u=%g  s=%g  cu=%g  cs=%g  scripts=%d  tests=%d\n",
+	      $user,$sys,$cuser,$csys,$files,$totmax);
+exit ($bad != 0);
+
+sub init {
+  ($program = $0) =~ s,.*/,,;   # Who am I today, anyway? 
+  $| = 1; # no buffered output, please
+  $bad = 0;
+  $good = 0;
+  $files  = 0;
+  $totmax = 0;
+  $serverhost='127.0.0.1';
+  $logfile='./test.log'; 
+  $testphp='./testphp.pl';
+  @DIRS=('ary', 'basic', 'classes', 'func', 'math', 'strings', 
+	 ''); # need to end with null string;
+  $options = '';
+}
+
+sub process_options {
+    use Getopt::Long;
+    $Getopt::Long::autoabbrev = 1;
+    $result = &GetOptions
+	(
+	 'help'           => \$help,
+	 'version'        => \$show_version,
+#	 'verbose'        => \$verbose, 
+	 'testphp'        => \$testphp, 
+	 'port=i'         => \$serverport, 
+	 'server=s'       => \$serverhost, 
+	 'prefix=s'       => \$prefix, 
+	 );
+    show_version() if $show_version;
+    usage(0) if $help || !$result;
+    $options .= "--prefix $prefix"     if $prefix; 
+    $options .= "--port   $serverport" if $serverport; 
+    @DIRS=(@ARGV, '') if @ARGV;
+}
+
+# Print version and exit. 
+sub show_version {
+    print "$program: $vcid\n";
+    exit 10;
+}
+

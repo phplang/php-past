@@ -27,7 +27,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: filestat.c,v 1.75 1998/08/14 23:47:15 steffann Exp $ */
+/* $Id: filestat.c,v 1.78 1998/09/19 20:17:17 rasmus Exp $ */
 #ifdef THREAD_SAFE
 #include "tls.h"
 #endif
@@ -81,6 +81,9 @@ static unsigned int CurrentStatLength=0;
 static int CurrentStatLength=0;
 # endif
 static struct stat sb;
+#if HAVE_SYMLINK
+static struct stat lsb;
+#endif
 #endif
 
 #ifndef S_ISDIR
@@ -143,8 +146,6 @@ void php3_chgrp(INTERNAL_FUNCTION_PARAMETERS)
 
 /* #if PHP_SAFE_MODE */
 	if (php3_ini.safe_mode &&(!_php3_checkuid(filename->value.str.val, 1))) {
-		php3_error(E_WARNING, "SAFE MODE restriction in effect.  "
-				   "Invalid owner of file to be changed.");
 		RETURN_FALSE;
 	}
 /* #endif */
@@ -188,8 +189,6 @@ void php3_chown(INTERNAL_FUNCTION_PARAMETERS)
 	}
 
 	if (php3_ini.safe_mode &&(!_php3_checkuid(filename->value.str.val, 1))) {
-		php3_error(E_WARNING, "SAFE MODE restriction in effect.  "
-				   "Invalid owner of file to be changed.");
 		RETURN_FALSE;
 	}
 
@@ -219,8 +218,6 @@ void php3_chmod(INTERNAL_FUNCTION_PARAMETERS) {
 	convert_to_long(mode);
 
 	if (php3_ini.safe_mode &&(!_php3_checkuid(filename->value.str.val, 1))) {
-		php3_error(E_WARNING, "SAFE MODE restriction in effect.  "
-				   "Invalid owner of file to be changed.");
 		RETURN_FALSE;
 	}
 
@@ -270,7 +267,6 @@ void php3_touch(INTERNAL_FUNCTION_PARAMETERS) {
 	convert_to_string(filename);
 
 	if (php3_ini.safe_mode &&(!_php3_checkuid(filename->value.str.val, 1))) {
-		php3_error(E_WARNING, "SAFE MODE restriction in effect. Invalid owner of file to be changed.");
 		if (newtime) efree(newtime);
 		RETURN_FALSE;
 	}
@@ -310,193 +306,137 @@ void php3_clearstatcache(INTERNAL_FUNCTION_PARAMETERS) {
 	}
 }
 
-void php3_stat(INTERNAL_FUNCTION_PARAMETERS) {
-	pval *filename;
-	TLS_VARS;
-	
-	if (ARG_COUNT(ht)!=1 || getParameters(ht,1,&filename) == FAILURE) {
-		WRONG_PARAM_COUNT;
-	}
-	convert_to_string(filename);
-
-#if APACHE
-	if (!GLOBAL(CurrentStatFile)) {
-		GLOBAL(CurrentStatLength) = strlen(GLOBAL(php3_rqst)->filename);
-		GLOBAL(CurrentStatFile) = estrndup(GLOBAL(php3_rqst)->filename,GLOBAL(CurrentStatLength));
-			if (stat(GLOBAL(CurrentStatFile),&GLOBAL(sb))==-1) {
-				GLOBAL(CurrentStatFile)=NULL;
-				return;
-			}
-    	}
-#endif
-
-	if (!GLOBAL(CurrentStatFile) || strcmp(filename->value.str.val,GLOBAL(CurrentStatFile))) {
-		if (strlen(filename->value.str.val) >GLOBAL(CurrentStatLength)) {
-			if (GLOBAL(CurrentStatFile)) efree(GLOBAL(CurrentStatFile));
-			GLOBAL(CurrentStatFile) = estrndup(filename->value.str.val,filename->value.str.len);
-			GLOBAL(CurrentStatLength) = strlen(filename->value.str.val);
-		} else {
-			strcpy(GLOBAL(CurrentStatFile),filename->value.str.val);
-		}
-		if (stat(GLOBAL(CurrentStatFile),&GLOBAL(sb))==-1) {
-			efree(GLOBAL(CurrentStatFile));
-			GLOBAL(CurrentStatFile)=NULL;
-			GLOBAL(CurrentStatLength)=0;
-			RETURN_FALSE;
-		}
-	}
-
-	if (array_init(return_value) == FAILURE) {
-		RETURN_FALSE;
-	}
-	add_next_index_long(return_value, GLOBAL(sb).st_dev);
-	add_next_index_long(return_value, GLOBAL(sb).st_ino);
-	add_next_index_long(return_value, GLOBAL(sb).st_mode);
-	add_next_index_long(return_value, GLOBAL(sb).st_nlink);
-	add_next_index_long(return_value, GLOBAL(sb).st_uid);
-	add_next_index_long(return_value, GLOBAL(sb).st_gid);
-#ifdef HAVE_ST_BLKSIZE
-	add_next_index_long(return_value, GLOBAL(sb).st_rdev);
-#else
-	add_next_index_long(return_value, -1);
-#endif
-	add_next_index_long(return_value, GLOBAL(sb).st_size);
-	add_next_index_long(return_value, GLOBAL(sb).st_atime);
-	add_next_index_long(return_value, GLOBAL(sb).st_mtime);
-	add_next_index_long(return_value, GLOBAL(sb).st_ctime);
-#if HAVE_ST_BLKSIZE
-	add_next_index_long(return_value, GLOBAL(sb).st_blksize);
-#else
-	add_next_index_long(return_value, -1);
-#endif
-#if HAVE_ST_BLOCKS
-	add_next_index_long(return_value, GLOBAL(sb).st_blocks);
-#else
-	add_next_index_long(return_value, -1);
-#endif
-	return;
-}
-
 static void _php3_stat(const char *filename, int type, pval *return_value)
 {
+	struct stat *stat_sb = &GLOBAL(sb);
 	TLS_VARS;
-#if APACHE
-	if (!GLOBAL(CurrentStatFile)) {
-		GLOBAL(CurrentStatLength) = strlen(GLOBAL(php3_rqst)->filename);
-		GLOBAL(CurrentStatFile) = estrndup(GLOBAL(php3_rqst)->filename,GLOBAL(CurrentStatLength));
-		if (stat(GLOBAL(CurrentStatFile),&GLOBAL(sb))==-1) {
-			efree(GLOBAL(CurrentStatFile));
-			GLOBAL(CurrentStatFile)=NULL;
-			RETURN_FALSE;
-		}
-    }
-#endif
 
 	if (!GLOBAL(CurrentStatFile) || strcmp(filename,GLOBAL(CurrentStatFile))) {
-		if (strlen(filename) > GLOBAL(CurrentStatLength)) {
+		if (!GLOBAL(CurrentStatFile)
+			|| strlen(filename) > GLOBAL(CurrentStatLength)) {
 			if (GLOBAL(CurrentStatFile)) efree(GLOBAL(CurrentStatFile));
-			GLOBAL(CurrentStatLength) = strlen(filename);
-			GLOBAL(CurrentStatFile) = estrndup(filename,GLOBAL(CurrentStatLength));
-		} else if (!GLOBAL(CurrentStatFile)){
 			GLOBAL(CurrentStatLength) = strlen(filename);
 			GLOBAL(CurrentStatFile) = estrndup(filename,GLOBAL(CurrentStatLength));
 		} else {
 			strcpy(GLOBAL(CurrentStatFile),filename);
 		}
+#if HAVE_SYMLINK
+		GLOBAL(lsb).st_mode = 0; /* mark lstat buf invalid */
+#endif
 		if (stat(GLOBAL(CurrentStatFile),&GLOBAL(sb))==-1) {
-			if (type == 15 && errno == ENOENT) {
-				memset(&GLOBAL(sb),0,sizeof(GLOBAL(sb)));
-			} else {
+			if (type != 15 || errno != ENOENT) { /* fileexists() test must print no error */
 				php3_error(E_NOTICE,"stat failed for %s (errno=%d - %s)",GLOBAL(CurrentStatFile),errno,strerror(errno));
-				efree(GLOBAL(CurrentStatFile));
-				GLOBAL(CurrentStatFile)=NULL;
-				GLOBAL(CurrentStatLength)=0;
+			}
+			efree(GLOBAL(CurrentStatFile));
+			GLOBAL(CurrentStatFile)=NULL;
+			RETURN_FALSE;
+		}
+	}
+
+#if HAVE_SYMLINK
+	if (8 == type /* filetype */
+		|| 14 == type /* is link */
+		|| 16 == type) { /* lstat */
+
+		/* do lstat if the buffer is empty */
+
+		if (!GLOBAL(lsb).st_mode) {
+			if (lstat(GLOBAL(CurrentStatFile),&GLOBAL(lsb)) == -1) {
+				php3_error(E_NOTICE,"lstat failed for %s (errno=%d - %s)",GLOBAL(CurrentStatFile),errno,strerror(errno));
 				RETURN_FALSE;
 			}
 		}
 	}
+#endif
 
 	switch(type) {
 	case 0: /* fileperms */
 		RETURN_LONG((long)GLOBAL(sb).st_mode);
-		break;
 	case 1: /* fileinode */
 		RETURN_LONG((long)GLOBAL(sb).st_ino);
-		break;
 	case 2: /* filesize  */
 		RETURN_LONG((long)GLOBAL(sb).st_size);
-		break;
 	case 3: /* fileowner */
 		RETURN_LONG((long)GLOBAL(sb).st_uid);
-		break;
 	case 4: /* filegroup */
 		RETURN_LONG((long)GLOBAL(sb).st_gid);
-		break;
 	case 5: /* fileatime */
 		RETURN_LONG((long)GLOBAL(sb).st_atime);
-		break;
 	case 6: /* filemtime */
 		RETURN_LONG((long)GLOBAL(sb).st_mtime);
-		break;
 	case 7: /* filectime */
 		RETURN_LONG((long)GLOBAL(sb).st_ctime);
-		break;
 	case 8: /* filetype */
-               {
-                       struct stat lsb;
-                       lstat(GLOBAL(CurrentStatFile),&lsb);
-                       if ((lsb.st_mode&S_IFMT) == S_IFLNK) {
-                               RETURN_STRING("link",1);
-                       }
-		switch(GLOBAL(sb).st_mode&S_IFMT) {
-		case S_IFIFO:
-			RETURN_STRING("fifo",1);
-			break;
-		case S_IFCHR:
-			RETURN_STRING("char",1);
-			break;
-		case S_IFDIR:
-			RETURN_STRING("dir",1);
-			break;
-		case S_IFBLK:
-			RETURN_STRING("block",1);
-			break;
-		case S_IFREG:
-				RETURN_STRING("file",1);
-			break;	
-		default:
-			php3_error(E_WARNING,"Unknown file type (%d)",GLOBAL(sb).st_mode&S_IFMT);
-			RETURN_STRING("unknown",1);
-			break;
-                       }
+#if HAVE_SYMLINK
+		if (S_ISLNK(GLOBAL(lsb).st_mode)) {
+			RETURN_STRING("link",1);
 		}
-		break;
+#endif
+		switch(GLOBAL(sb).st_mode&S_IFMT) {
+		case S_IFIFO: RETURN_STRING("fifo",1);
+		case S_IFCHR: RETURN_STRING("char",1);
+		case S_IFDIR: RETURN_STRING("dir",1);
+		case S_IFBLK: RETURN_STRING("block",1);
+		case S_IFREG: RETURN_STRING("file",1);
+		}
+		php3_error(E_WARNING,"Unknown file type (%d)",GLOBAL(sb).st_mode&S_IFMT);
+		RETURN_STRING("unknown",1);
 	case 9: /*is writable*/
 		RETURN_LONG((GLOBAL(sb).st_mode&S_IWRITE)!=0);
-		break;
 	case 10: /*is readable*/
 		RETURN_LONG((GLOBAL(sb).st_mode&S_IREAD)!=0);
-		break;
 	case 11: /*is executable*/
 		RETURN_LONG((GLOBAL(sb).st_mode&S_IEXEC)!=0 && !S_ISDIR(GLOBAL(sb).st_mode));
-		break;
 	case 12: /*is file*/
 		RETURN_LONG(S_ISREG(GLOBAL(sb).st_mode));
-		break;
 	case 13: /*is dir*/
 		RETURN_LONG(S_ISDIR(GLOBAL(sb).st_mode));
-		break;
 	case 14: /*is link*/
-		RETURN_LONG(S_ISLNK(GLOBAL(sb).st_mode));
-		break;
-	case 15: /*file exists*/
-		RETURN_LONG(GLOBAL(sb).st_mode >0);
-		break;
-	default:
-		php3_error(E_WARNING, "didn't understand stat call");
+#if HAVE_SYMLINK
+		RETURN_LONG(S_ISLNK(GLOBAL(lsb).st_mode));
+#else
 		RETURN_FALSE;
-		break;
+#endif
+	case 15: /*file exists*/
+		RETURN_TRUE; /* the false case was done earlier */
+	case 16: /* lstat */
+#if HAVE_SYMLINK
+		stat_sb = &GLOBAL(lsb);
+#endif
+		/* FALLTHROUGH */
+	case 17: /* stat */
+		if (array_init(return_value) == FAILURE) {
+			RETURN_FALSE;
+		}
+		add_next_index_long(return_value, stat_sb->st_dev);
+		add_next_index_long(return_value, stat_sb->st_ino);
+		add_next_index_long(return_value, stat_sb->st_mode);
+		add_next_index_long(return_value, stat_sb->st_nlink);
+		add_next_index_long(return_value, stat_sb->st_uid);
+		add_next_index_long(return_value, stat_sb->st_gid);
+#ifdef HAVE_ST_BLKSIZE
+		add_next_index_long(return_value, stat_sb->st_rdev);
+#else
+		add_next_index_long(return_value, -1);
+#endif
+		add_next_index_long(return_value, stat_sb->st_size);
+		add_next_index_long(return_value, stat_sb->st_atime);
+		add_next_index_long(return_value, stat_sb->st_mtime);
+		add_next_index_long(return_value, stat_sb->st_ctime);
+#if HAVE_ST_BLKSIZE
+		add_next_index_long(return_value, stat_sb->st_blksize);
+#else
+		add_next_index_long(return_value, -1);
+#endif
+#if HAVE_ST_BLOCKS
+		add_next_index_long(return_value, stat_sb->st_blocks);
+#else
+		add_next_index_long(return_value, -1);
+#endif
+		return;
 	}
+	php3_error(E_WARNING, "didn't understand stat call");
+	RETURN_FALSE;
 }
 
 /* another quickie macro to make defining similar functions easier */
@@ -526,6 +466,8 @@ FileFunction(php3_isfile,12)
 FileFunction(php3_isdir,13)
 FileFunction(php3_islink,14)
 FileFunction(php3_fileexists,15)
+FileFunction(php3_lstat,16)
+FileFunction(php3_stat,17)
 
 function_entry php3_filestat_functions[] = {
 	{"fileatime",	php3_fileatime,		NULL},
@@ -545,6 +487,7 @@ function_entry php3_filestat_functions[] = {
 	{"is_dir",		php3_isdir,			NULL},
 	{"is_link",		php3_islink,		NULL},
 	{"stat",		php3_stat,			NULL},
+	{"lstat",		php3_lstat,			NULL},
 	{"chown",		php3_chown,			NULL},
 	{"chgrp",		php3_chgrp,			NULL},
 	{"chmod",		php3_chmod,			NULL},

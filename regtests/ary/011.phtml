@@ -1,0 +1,66 @@
+<?php 
+  $a[0]="a";
+  $a[1]="b";
+  $a[2]="c";
+
+  $b= $a;
+  $key= key($b);
+  $data=current($b);
+  while ("" != (string)$key):
+    echo "KEY: $key, VAL: $data\n";
+    $data=next($b);
+    $key= key($b);
+  endwhile;
+?>
+<HR> $c= $a[0];
+<?php 
+  $c= $a[0];
+?>
+<HR> $d[0]= $a[0];
+<?php 
+  $d[0]= $a[0];
+
+  $key= key($d);
+  $data=current($d);
+  while ("" != (string)$key):
+    echo "KEY: $key, VAL: $data\n";
+    $data=next($d);
+    $key= key($d);
+  endwhile;
+
+  $cd= count($d);
+  echo "count(): $cd\n";
+?>
+<HR> $e[]= $a[0];
+<?php 
+  $e[]= $a[0];
+
+  $key= key($e);
+  $data=current($e);
+  while ("" != (string)$key):
+    echo "KEY: $key, VAL: $data\n";
+    $data=next($e);
+    $key= key($e);
+  endwhile;
+
+  $ce= count($e);
+  echo "count(): $ce\n";
+?>
+<HR> append to $f[0] $f[1] $f[2], $f += $a;
+<?php 
+  $f[0]="e";
+  $f[1]="f";
+  $f[2]="g";
+
+#  $f += $a;
+  $key= key($f);
+  $data = current($f);
+  while ("" != (string)$key):
+    echo "KEY: $key, VAL: $data\n";
+    $data=next($f);
+    $key= key($f);
+  endwhile;
+
+  $cf= count($f);
+  echo "count(): $cf\n";
+?>

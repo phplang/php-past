@@ -10,6 +10,18 @@
 /* define uint by configure if it is missed (QNX and BSD derived) */
 #undef uint
 
+/* define ulong by configure if it is missed (most probably is) */
+#undef ulong
+
+/* type check for in_addr_t */
+#undef in_addr_t
+
+/* crypt capability checks */
+#undef PHP3_STD_DES_CRYPT
+#undef PHP3_EXT_DES_CRYPT
+#undef PHP3_MD5_CRYPT
+#undef PHP3_BLOWFISH_CRYPT
+
 /* Define if you have dirent.h but opendir() resides in libc rather than in libdir */
 /* This will cause HAVE_DIRENT_H defined twice sometimes, but it should be problem */
 #define HAVE_DIRENT_H 0
@@ -82,6 +94,9 @@
 /* Define if you have the Oracle database client libraries */
 #define HAVE_ORACLE 0
 
+/* Define if you have the Oracle version 8 database client libraries */
+#define HAVE_OCI8 0
+
 /* Define if you want to use the iODBC database driver */
 #define HAVE_IODBC 0
 
@@ -93,6 +108,9 @@
 
 /* Define if you want the LDAP directory interface */
 #define HAVE_LDAP 0
+
+/* Define if you want the SNMP interface */
+#define HAVE_SNMP 0
 
 /* Define if you want the IMAP directory interface */
 #define HAVE_IMAP 0
@@ -160,6 +178,12 @@
 
 #ifndef HAVE_IFX
 #define HAVE_IFX 0
+#endif
+#ifndef HAVE_IFX_IUS
+#define HAVE_IFX_IUS 0
+#endif
+#ifndef IFX_VERSION
+#define IFX_VERSION 0
 #endif
 
 #ifndef HAVE_PQCMDTUPLES

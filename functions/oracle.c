@@ -111,8 +111,14 @@ function_entry oracle_functions[] = {
 };
 
 php3_module_entry oracle_module_entry = {
-	"Oracle", oracle_functions, php3_minit_oracle, php3_mshutdown_oracle,
-	php3_rinit_oracle, NULL, php3_info_oracle, 0, 0, 0, NULL
+	"Oracle",
+	oracle_functions,
+	php3_minit_oracle,
+	php3_mshutdown_oracle,
+	php3_rinit_oracle,
+	NULL,
+	php3_info_oracle,
+    STANDARD_MODULE_PROPERTIES
 };
 
 static const text *ora_func_tab[] =
@@ -775,7 +781,7 @@ void php3_Ora_Bind(INTERNAL_FUNCTION_PARAMETERS)
 		if (!cursor->params ||
 			_php3_hash_init(cursor->params, 19, NULL,
 			NULL, 0) ==
-		/*	(void (*)(void *))yystype_ora_param_destructor, 0) == */
+		/*	(void (*)(void *))pval_ora_param_destructor, 0) == */
 			FAILURE){
 			php3_error(E_ERROR, "Unable to initialize parameter list");
 			RETURN_FALSE;

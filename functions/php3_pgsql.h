@@ -27,7 +27,7 @@
    +----------------------------------------------------------------------+
  */
  
-/* $Id: php3_pgsql.h,v 1.16 1998/06/19 17:58:09 zeev Exp $ */
+/* $Id: php3_pgsql.h,v 1.17 1998/09/19 21:46:11 jah Exp $ */
 
 #ifndef _PHP3_PGSQL_H
 #define _PHP3_PGSQL_H
@@ -84,6 +84,11 @@ typedef struct pgLofp {
         PGconn *conn;
 	int lofd;
 } pgLofp;
+
+typedef struct _php3_pgsql_result_handle {
+	PGconn *conn;
+	PGresult *result;
+} pgsql_result_handle;
 
 typedef struct {
 	long default_link;

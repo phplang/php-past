@@ -23,7 +23,7 @@
  */
 
 
-/* $Id: hg_comm.h,v 1.1 1998/08/12 09:29:17 steinm Exp $ */
+/* $Id: hg_comm.h,v 1.2 1998/08/28 11:15:12 steinm Exp $ */
 
 #ifndef _HG_COMM_H
 #define _HG_COMM_H
@@ -155,7 +155,7 @@ extern int send_getandlock(int sockfd, hw_objectID objectID, char **attributes);
 extern int send_unlock(int sockfd, hw_objectID objectID);
 extern int send_gettext(int sockfd, hw_objectID objectID, int mode, int rootid, char **objattr, char **bodytag, char **text, int *count);
 extern int send_edittext(int sockfd, char *objattr, char *text);
-extern int send_getcgi(int sockfd, hw_objectID objectID, char **objattr, char **text, int *count);
+extern int send_getcgi(int sockfd, hw_objectID objectID, char *cgi_env_str, char **objattr, char **text, int *count);
 extern int send_getremote(int sockfd, hw_objectID objectID, char **objattr, char **text, int *count);
 extern int send_getremotechildren(int sockfd, char *attributes, char **text, int **childIDs, int *count);
 extern int send_docbyanchor(int sockfd, hw_objectID objectID, hw_objectID *anchorID);
@@ -177,7 +177,7 @@ extern int send_getparents(int sockfd, hw_objectID objectID, hw_objectID **child
 extern int send_children(int sockfd, hw_objectID objectID, hw_objectID **childIDs, int *count);
 extern int send_getparentsobj(int sockfd, hw_objectID objectID, char ***childrec, int *count);
 extern int send_pipedocument(int sockfd, char *hostname, hw_objectID objectID, int mode, int rootid, char** objattr, char **bodytag, char **text, int *count);
-extern int send_pipecgi(int sockfd, char *host, hw_objectID objectID, char **objattr, char **text, int *count);
+extern int send_pipecgi(int sockfd, char *host, hw_objectID objectID, char *cgi_env_str, char **objattr, char **text, int *count);
 extern int send_putdocument(int sockfd, char *hostname, hw_objectID objectID, char *objectRec, char *text, int count);
 extern int send_inscoll(int sockfd, hw_objectID objectID, char *objrec, hw_objectID *new_objectID);
 extern int send_insertobject(int sockfd, char *objrec, char *parms, hw_objectID *objectID);

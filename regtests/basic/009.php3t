@@ -1,0 +1,7 @@
+--$Id: 009.php3t,v 1.2 1998/08/23 02:23:38 rocky Exp $
+--TITLE--
+Subtract 3 variables and print result                         ...
+--URL--
+basic/009.phtml
+--EXPECT--
+9

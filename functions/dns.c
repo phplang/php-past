@@ -28,7 +28,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: dns.c,v 1.46 1998/06/25 21:41:21 rasmus Exp $ */
+/* $Id: dns.c,v 1.47 1998/09/10 23:57:17 zeev Exp $ */
 
 #ifdef THREAD_SAFE
 #include "tls.h"
@@ -260,7 +260,7 @@ void php3_getmxrr(INTERNAL_FUNCTION_PARAMETERS)
 			RETURN_FALSE;
 		}
         need_weight = 1;
-		yystype_destructor(weight_list _INLINE_TLS); /* start with clean array */
+		pval_destructor(weight_list _INLINE_TLS); /* start with clean array */
 		if ( array_init(weight_list) == FAILURE ) {
 			RETURN_FALSE;
 		}
@@ -270,7 +270,7 @@ void php3_getmxrr(INTERNAL_FUNCTION_PARAMETERS)
     }
 
     convert_to_string( host );
-    yystype_destructor(mx_list _INLINE_TLS); /* start with clean array */
+    pval_destructor(mx_list _INLINE_TLS); /* start with clean array */
     if ( array_init(mx_list) == FAILURE ) {
         RETURN_FALSE;
     }

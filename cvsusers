@@ -6,7 +6,7 @@ shane         Shane Caraveo   shane@php.net              WIN32 + API
 ssb           Stig Bakken     stig@php.net               Everything
 zeev          Zeev Suraski    zeev@php.net               Everything
 jaakko        Jaakko Hyvatti  jaakko@hyvatti.iki.fi      Everything
-veebert                                                  IMAP
+veebert       Rex Logan       veebert@dimensional.com    IMAP
 chad          Chad Robinson   chadr@brttech.com          Documentation
 myddryn                                                  PostgreSQL
 wojtek
@@ -17,7 +17,7 @@ damian
 ian
 jah           Jouni Ahto      jah@cultnet.fi             Postgres, Informix
 adam
-amitay        Amitay Isaacs   amitay@pspl.co.in          LDAP
+amitay        Amitay Isaacs   amitay@w-o-i.com           LDAP
 dizzy
 mark
 guy
@@ -48,3 +48,9 @@ steinm        Uwe Steinmann   Uwe.Steinmann@fernuni-hagen.de  Hyperwave Module
 danny         Danny Heijl     Danny.Heijl@cevi.be        Informix
 kara          Andreas Karajannis Andreas.Karajannis@gmd.de ODBC, Oracle
 nyenyon       Christian Cartus chc@idgruppe.de           Informix
+kk            Kristian Köhntopp kk@shonline.de        Documentation
+ted           Ted Rolle       ted.rolle@usa.net          Documentation
+holger        Holger Zimmermann  zimpel@t-online.de      Pi3Web support
+sgk           Shigeru Kanemoto  sgk@happysize.co.jp      Japanese language support
+jimjag        Jim Jagielski   jim@jaguNET.com            Misc scraps
+martin        Martin Kraemer  Martin.Kraemer@Mch.SNI.De  EBCDIC (BS2000 mainframe port)

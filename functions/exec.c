@@ -26,7 +26,7 @@
    | Author: Rasmus Lerdorf                                               |
    +----------------------------------------------------------------------+
  */
-/* $Id: exec.c,v 1.77 1998/07/27 22:07:08 shane Exp $ */
+/* $Id: exec.c,v 1.78 1998/09/10 23:57:18 zeev Exp $ */
 
 #ifdef THREAD_SAFE
 #include "tls.h"
@@ -117,7 +117,7 @@ static int _Exec(int type, char *cmd, pval *array, pval *return_value)
 	}
 	if (type==2) {
 		if (array->type != IS_ARRAY) {
-			yystype_destructor(array _INLINE_TLS);
+			pval_destructor(array _INLINE_TLS);
 			array_init(array);
 		}
 	}

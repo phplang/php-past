@@ -1,4 +1,4 @@
-dnl $Id: configure.in,v 1.237 1998/08/12 09:21:39 steinm Exp $
+dnl $Id: configure.in,v 1.255 1998/09/22 12:51:09 rasmus Exp $
 dnl Process this file with autoconf to produce a configure script.
 
 AC_INIT(main.c)
@@ -30,10 +30,16 @@ AC_PROG_RANLIB
 AC_PROG_CC_C_O
 AC_PATH_PROG(PERL_PATH, perl)
 
+dnl Ugly hack to get around a problem with gcc on AIX.
+if test "$CC" = "gcc" -a "$ac_cv_prog_cc_g" = "yes" -a \
+   "`uname -sv`" = "AIX 4"; then
+	CFLAGS=`echo $CFLAGS | sed -e 's/-g//'`
+fi
+
 dnl Haven't quite figured out how to make libtool go yet
 dnl AM_PROG_LIBTOOL
 dnl AC_PROG_INSTALL
-AC_PATH_PROG(PROG_SENDMAIL, sendmail, /usr/lib/sendmail, $PATH:/usr/bin:/usr/sbin:/usr/etc:etc)
+AC_PATH_PROG(PROG_SENDMAIL, sendmail, /usr/lib/sendmail, $PATH /usr/bin /usr/sbin /usr/etc /etc)
 if test -n "$PROG_SENDMAIL"; then
   AC_DEFINE(HAVE_SENDMAIL)
 fi
@@ -91,6 +97,26 @@ AC_CHECK_LIB(socket, res_search, [
  ]) 
 ])
 
+dnl AIX keeps in_addr_t in /usr/include/netinet/in.h
+dnl AC_MSG_CHECKING(for in_addr_t)
+AC_CACHE_VAL(ac_cv_type_$1,
+[AC_EGREP_CPP(dnl
+changequote(<<,>>)dnl
+<<in_addr_t[^a-zA-Z_0-9]>>dnl
+changequote([,]), [#include <sys/types.h>
+#if STDC_HEADERS
+#include <stdlib.h>
+#include <stddef.h>
+#endif
+#ifdef HAVE_NETINET_IN_H
+#include <netinet/in.h>
+#endif], ac_cv_type_in_addr_t=yes, ac_cv_type_in_addr_t=no)])dnl
+
+dnl AC_MSG_RESULT($ac_cv_type_in_addr_t)
+if test $ac_cv_type_in_addr_t = no; then
+  AC_DEFINE(in_addr_t, u_int)
+fi
+
 dnl Checks for header files.
 AC_HEADER_STDC
 
@@ -143,6 +169,7 @@ AC_TYPE_SIZE_T
 AC_TYPE_UID_T
 dnl This is required for QNX and may be some BSD derived systems
 AC_CHECK_TYPE( uint, unsigned int )
+AC_CHECK_TYPE( ulong, unsigned long )
 
 dnl Checks for library functions.
 AC_FUNC_VPRINTF
@@ -151,6 +178,8 @@ AC_FUNC_UTIME_NULL
 AC_FUNC_ALLOCA
 AC_BROKEN_SPRINTF
 AC_REPLACE_FUNCS(getopt)
+
+AC_CRYPT_CAP
 
 AC_MSG_CHECKING(whether to use bundled regex library)
 AC_ARG_WITH(system-regex,
@@ -440,7 +469,7 @@ AC_SUBST(FHTTPD_INCLUDE)
 AC_SUBST(FHTTPD_LIB)
 AC_SUBST(FHTTPD_TARGET)
 
-AC_MSG_CHECKING(imap support)
+AC_MSG_CHECKING(for IMAP support)
 AC_ARG_WITH(imap,
 [  --with-imap[=DIR]   Include IMAP support (DIR is IMAP's include dir and c-client.a dir).],
 [
@@ -486,18 +515,32 @@ AC_ARG_WITH(gd,
     yes)
       GD_LIBS="-lgd"
       AC_DEFINE(HAVE_LIBGD)
+      AC_MSG_RESULT(yes)
       AC_CHECK_LIB(gd, gdImageString16, [ AC_DEFINE(HAVE_LIBGD13) ])
       ac_cv_lib_gd_gdImageLine=yes
-      AC_MSG_RESULT(yes) ;;
+      ;;
     *)
+dnl A whole whack of possible places where this might be
+      test -f $withval/include/gd1.3/gd.h && GD_INCLUDE="-I$withval/include/gd1.3"
       test -f $withval/include/gd/gd.h && GD_INCLUDE="-I$withval/include/gd"
       test -f $withval/include/gd.h && GD_INCLUDE="-I$withval/include"
-      if test -n "$GD_INCLUDE" ; then
-        GD_LIBS="-L$withval/lib -lgd"
+      test -f $withval/gd1.3/gd.h && GD_INCLUDE="-I$withval/gd1.3"
+      test -f $withval/gd/gd.h && GD_INCLUDE="-I$withval/gd"
+      test -f $withval/gd.h && GD_INCLUDE="-I$withval"
+
+      test -f $withval/lib/libgd.a && GD_LIB="$withval/lib"
+      test -f $withval/lib/gd/libgd.a && GD_LIB="$withval/lib/gd"
+      test -f $withval/lib/gd1.3/libgd.a && GD_LIB="$withval/lib/gd1.3"
+      test -f $withval/libgd.a && GD_LIB="$withval"
+      test -f $withval/gd/libgd.a && GD_LIB="$withval/gd"
+      test -f $withval/gd1.3/libgd.a && GD_LIB="$withval/gd1.3"
+
+      if test -n "$GD_INCLUDE" && test -n "$GD_LIB" ; then
+        GD_LIBS="-L$GD_LIB -lgd"
         AC_DEFINE(HAVE_LIBGD)
-        AC_CHECK_LIB(gd, gdImageString16, [ AC_DEFINE(HAVE_LIBGD13) ])
-		ac_cv_lib_gd_gdImageLine=yes
         AC_MSG_RESULT(yes)
+        AC_CHECK_LIB(gd, gdImageString16, [ AC_DEFINE(HAVE_LIBGD13) ])
+	ac_cv_lib_gd_gdImageLine=yes
       else
         AC_MSG_RESULT(no)
       fi ;;
@@ -544,8 +587,19 @@ AC_ARG_WITH(oracle,
     if test -d "$ORACLEINST_TOP/rdbms/demo"
     then
       # V7.[0123]
-      ORACLE_INCDIR=rdbms/demo
-      ORACLE_INCLUDE=-I$ORACLEINST_TOP/$ORACLE_INCDIR
+      ORACLE_INCLUDE=-I$ORACLEINST_TOP/rdbms/demo
+    fi
+
+    if test -d "$ORACLEINST_TOP/network/public"
+    then
+      # V8
+      ORACLE_INCLUDE="$ORACLE_INCLUDE -I$ORACLEINST_TOP/network/public"
+    fi
+
+    if test -d "$ORACLEINST_TOP/plsql/public"
+    then
+      # V8
+      ORACLE_INCLUDE="$ORACLE_INCLUDE -I$ORACLEINST_TOP/plsql/public"
     fi
 
     # Need to know the version, otherwhise we will mixup nlsrtl
@@ -609,21 +663,27 @@ AC_ARG_WITH(oracle,
   	fi
   	;;
       7.2|7.3)
-  	if test -f $ORACLEINST_TOP/$ORACLE_LIBDIR/libclntsh.s?
-  	then
-  	  ORACLE_SHLIBS="-lclntsh $ORA_SYSLIB"
-  	else
-  	  ORACLE_SHLIBS="$ORACLE_STLIBS"
-  	fi
-  	;;
-	  8.0)
-  	if test -f $ORACLEINST_TOP/$ORACLE_LIBDIR/libclntsh.s?
-  	then
-  	  ORACLE_SHLIBS="-lclntsh -lpsa -lcore4 -lnlsrtl3 -lclntsh $ORA_SYSLIB"
-  	else
-  	  ORACLE_SHLIBS="$ORACLE_STLIBS"
-  	fi
-  	;;
+    	if test -f $ORACLEINST_TOP/$ORACLE_LIBDIR/libclntsh.s?
+    	then
+    	  ORACLE_SHLIBS="-lclntsh $ORA_SYSLIB"
+    	else
+    	  ORACLE_SHLIBS="$ORACLE_STLIBS"
+    	fi
+    	;;
+      8.0)
+	if test -f $ORACLEINST_TOP/$ORACLE_LIBDIR/libclntsh.s? -o \
+	        -f $ORACLEINST_TOP/$ORACLE_LIBDIR/libclntsh.a # AIX
+    	then
+	  if test "$CC" = "gcc" -a "`uname -sv`" = "AIX 4"; then
+	    # for Oracle 8 on AIX 4
+	    ORA_SYSLIB="$ORA_SYSLIB -nostdlib /lib/crt0_r.o /usr/lib/libpthreads.a /usr/lib/libc_r.a -lgcc"
+	  fi
+    	  ORACLE_SHLIBS="-lclntsh -lpsa -lcore4 -lnlsrtl3 -lclntsh $ORA_SYSLIB"
+    	else
+    	  ORACLE_SHLIBS="$ORACLE_STLIBS"
+    	fi
+        AC_DEFINE(HAVE_OCI8)
+    	;;
       *)
   	ORACLE_SHLIBS=
   	;;
@@ -830,6 +890,9 @@ AC_ARG_WITH(mysql,
     CPPFLAGS="$CPPFLAGS $MYSQL_INCLUDE"
     AC_CHECK_HEADERS(errmsg.h)
     CPPFLAGS="$old_CPPFLAGS"
+
+	dnl the MySQL client library is multithreaded on some systems
+	AC_CHECK_LIB(pthread, pthread_self, [ LIBS="-lpthread $LIBS" ])
   else
   	AC_MSG_RESULT(no)
 dnl Why are we defining HAVE_MYSQL here??
@@ -884,7 +947,9 @@ AC_ARG_WITH(pgsql,
    		PGSQL_LIBDIR=/usr/local/pgsql/lib
    	else
    		PGSQL_INCDIR=$withval/include
+   		test -d $withval/include/pgsql && PGSQL_INCDIR=$withval/include/pgsql
    		PGSQL_LIBDIR=$withval/lib
+   		test -d $withval/lib/pgsql && PGSQL_LIBDIR=$withval/lib/pgsql
    	fi
     PGSQL_INCLUDE=-I$PGSQL_INCDIR
     PGSQL_LFLAGS=-L$PGSQL_LIBDIR
@@ -971,6 +1036,37 @@ AC_SUBST(LDAP_LIBS)
 AC_SUBST(LDAP_LFLAGS)
 AC_SUBST(LDAP_INCLUDE)
 
+AC_MSG_CHECKING(for SNMP support)
+AC_ARG_WITH(snmp,
+[  --with-snmp[=DIR]       Include SNMP support.  DIR is the SNMP base
+                          install directory, defaults to /usr/local],
+[
+  if test "$withval" != "no"; then
+  	if test "$withval" = "yes"; then
+	   	SNMP_INCDIR=/usr/local/include
+   		test -d /usr/local/include/ucd-snmp && SNMP_INCDIR=/usr/local/include/ucd-snmp
+   		SNMP_LIBDIR=/usr/local/lib
+   	else
+   		SNMP_INCDIR=$withval/include
+   		test -d $withval/include/ucd-snmp && SNMP_INCDIR=$withval/include/ucd-snmp
+   		SNMP_LIBDIR=$withval/lib
+   	fi
+    SNMP_INCLUDE=-I$SNMP_INCDIR
+    SNMP_LFLAGS=-L$SNMP_LIBDIR
+    SNMP_LIBS="-lsnmp"
+
+    AC_DEFINE(HAVE_SNMP)
+
+    AC_MSG_RESULT(yes)
+  else
+  	AC_MSG_RESULT(no)
+  fi
+],[
+  AC_MSG_RESULT(no)
+])
+AC_SUBST(SNMP_LIBS)
+AC_SUBST(SNMP_LFLAGS)
+AC_SUBST(SNMP_INCLUDE)
 
 AC_MSG_CHECKING(for Velocis support)
 AC_ARG_WITH(velocis,
@@ -1017,47 +1113,58 @@ AC_ARG_WITH(informix,
 [  --with-informix[=DIR]   Include Informix support.  DIR is the Informix base
                           install directory, defaults to ${INFORMIXDIR:-nothing}.],
 [
-  if test "$withval" != "no"; then
-    if test "$withval" = "yes"; then
-           IFX_INCDIR=$INFORMIXDIR/incl/esql
-           IFX_LIBDIR="-L$INFORMIXDIR/lib -L$INFORMIXDIR/lib/esql"
-		   if test "$INFORMIXDIR" = ""; then
-				INFORMIX_WARNING="
-WARNING: You asked for Informix support, but didn't specify Informix base install
-	 directory and don't have \\\$INFORMIXDIR environment value set up. Trying
-	 to compile will probably fail."
-		   fi
-    else
-           IFX_INCDIR=$withval/incl/esql
-           IFX_LIBDIR="-L$withval/lib -L$withval/lib/esql"
-		   if test "$withval" != "$INFORMIXDIR"; then
-				if test "$INFORMIXDIR" = ""; then
-					INFORMIX_WARNING="
-WARNING: You specified Informix base install directory, but your environment
-	 is not yet ready for compiling. Please set \\\$INFORMIXDIR to $withval
-	 before trying to compile."
-				else
+	if test "$withval" != "no"; then
+		if test "$INFORMIXDIR" = ""; then
+			INFORMIX_WARNING="
+WARNING: You asked for Informix support, but don't have \\\$INFORMIXDIR
+	 environment value set up. Configuring and compiling Informix
+	 support to PHP3 is impossible and has been turned off. Please
+	 try again after setting up your environment."
+			AC_MSG_RESULT(no)
+		else
+			if test "$withval" = "yes"; then
+				IFX_INCDIR=$INFORMIXDIR/incl/esql
+				IFX_LIBDIR="-L$INFORMIXDIR/lib -L$INFORMIXDIR/lib/esql"
+			else
+				IFX_INCDIR=$withval/incl/esql
+				IFX_LIBDIR="-L$withval/lib -L$withval/lib/esql"
+				if test "$withval" != "$INFORMIXDIR"; then
 					INFORMIX_WARNING="
 WARNING: You specified Informix base install directory that is different
 	 than your \\\$INFORMIXDIR environment variable. You'd better know
 	 exactly what you are doing."
 				fi
-		   fi
-    fi
-    IFX_INCLUDE=-I$IFX_INCDIR
-    IFX_LFLAGS=$IFX_LIBDIR
-    IFX_LIBS="-lixsql -lixasf -lixos -lixgen -lixgls -lnetstub $INFORMIXDIR/lib/esql/checkapi.o -lixglx"
-
-    old_CFLAGS=$CFLAGS; old_LDFLAGS=$LDFLAGS; old_LIBS=$LIBS
-    CFLAGS="$CFLAGS $IFX_INCLUDE"
-    LDFLAGS="$LDFLAGS $IFX_LFLAGS"
-    LIBS="$LIBS $IFX_LIBS"
-    AC_DEFINE(HAVE_IFX)
-    AC_MSG_RESULT(yes)
-    CFLAGS=$old_CFLAGS; LDFLAGS=$old_LDFLAGS; LIBS=$old_LIBS
-  else
-    AC_MSG_RESULT(no)
-  fi
+    		fi
+			IFX_INCLUDE=-I$IFX_INCDIR
+			IFX_LFLAGS=$IFX_LIBDIR
+			if test -z "$IFX_LIBS"; then
+				IFX_LIBS=`esql -libs | sed -e 's/-lm//'`
+				dnl  -lm twice otherwise?
+				IFX_LIBS=`echo $IFX_LIBS | sed -e 's/Libraries to be used://g' -e 's/esql: error -55923: No source or object file\.//g'`
+				dnl Seems to get rid of newlines.
+				dnl According to Perl's DBD-Informix, might contain these strings.
+			else
+				dnl Allow override to use static and/or threaded libs
+				IFX_LIBS="$IFX_LIBS"
+			fi
+			CFLAGS="$CFLAGS $IFX_INCLUDE"
+			LDFLAGS="$LDFLAGS $IFX_LFLAGS"
+			AC_DEFINE(HAVE_IFX)
+			AC_MSG_CHECKING([Informix version])
+			IFX_VERSION=[`esql -V | sed -ne '1 s/^[^0-9]*\([0-9]\)\.\([0-9]*\).*/\1\2/p'`]
+			if test $IFX_VERSION -ge "900"; then
+				AC_DEFINE(HAVE_IFX_IUS)
+				IFX_ESQL_FLAGS="-EDHAVE_IFX_IUS"
+			else
+				IFX_ESQL_FLAGS="-EUHAVE_IFX_IUS"
+			fi
+			AC_SUBST(IFX_ESQL_FLAGS)
+			AC_DEFINE_UNQUOTED(IFX_VERSION, $IFX_VERSION)
+			AC_MSG_RESULT(yes)
+		fi
+	else
+		AC_MSG_RESULT(no)
+	fi
 ],[
   AC_MSG_RESULT(no)
 ])
@@ -1145,6 +1252,8 @@ AC_ARG_WITH(zlib,
         AC_MSG_RESULT(no)
       fi ;;
   esac
+],[
+  AC_MSG_RESULT(no)
 ])
 AC_SUBST(ZLIB_LIBS)
 AC_SUBST(ZLIB_INCLUDE)

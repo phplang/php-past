@@ -30,7 +30,7 @@
  */
 
 
-/* $Id: string.c,v 1.134 1998/08/04 13:32:10 rasmus Exp $ */
+/* $Id: string.c,v 1.140 1998/09/18 16:55:10 rasmus Exp $ */
 #ifdef THREAD_SAFE
 #include "tls.h"
 #endif
@@ -215,24 +215,27 @@ void php3_explode(INTERNAL_FUNCTION_PARAMETERS)
 	convert_to_string(str);
 	convert_to_string(delim);
 
-	if (str->type == IS_STRING && delim->type == IS_STRING) {
-		if (array_init(return_value) == FAILURE) {
-			return;
-		}
-		work_str = p1 = estrndup(str->value.str.val,str->value.str.len);
-		p2 = strstr(p1, delim->value.str.val);
-		if (p2 == NULL) {
-			add_index_string(return_value, i++, p1, 1);
-		} else do {
-			p2[0] = 0;
-			add_index_string(return_value, i++, p1, 1);
-			p1 = p2 + delim->value.str.len;
-		} while ((p2 = strstr(p1, delim->value.str.val)) && p2 != work_str);
-		if (p1 != work_str) {
-			add_index_string(return_value, i++, p1, 1);
-		}
-		efree(work_str);
+	if (strlen(delim->value.str.val)==0) {
+		/* the delimiter must be a valid C string that's at least 1 character long */
+		php3_error(E_WARNING,"Empty delimiter");
+		RETURN_FALSE;
 	}
+	if (array_init(return_value) == FAILURE) {
+		return;
+	}
+	work_str = p1 = estrndup(str->value.str.val,str->value.str.len);
+	p2 = strstr(p1, delim->value.str.val);
+	if (p2 == NULL) {
+		add_index_string(return_value, i++, p1, 1);
+	} else do {
+		p2[0] = 0;
+		add_index_string(return_value, i++, p1, 1);
+		p1 = p2 + delim->value.str.len;
+	} while ((p2 = strstr(p1, delim->value.str.val)) && p2 != work_str);
+	if (p1 != work_str) {
+		add_index_string(return_value, i++, p1, 1);
+	}
+	efree(work_str);
 }
 
 
@@ -485,6 +488,10 @@ void php3_strstr(INTERNAL_FUNCTION_PARAMETERS)
 	convert_to_string(haystack);
 
 	if (needle->type == IS_STRING) {
+		if (strlen(needle->value.str.val)==0) {
+			php3_error(E_WARNING,"Empty delimiter");
+			RETURN_FALSE;
+		}
 		found = strstr(haystack->value.str.val, needle->value.str.val);
 	} else {
 		convert_to_long(needle);
@@ -511,6 +518,10 @@ void php3_strpos(INTERNAL_FUNCTION_PARAMETERS)
 	convert_to_string(haystack);
 
 	if (needle->type == IS_STRING) {
+		if (needle->value.str.len==0) {
+			php3_error(E_WARNING,"Empty delimiter");
+			RETURN_FALSE;
+		}
 		found = strstr(haystack->value.str.val, needle->value.str.val);
 	} else {
 		convert_to_long(needle);
@@ -717,7 +728,7 @@ void php3_ucfirst(INTERNAL_FUNCTION_PARAMETERS)
 	if (!*arg->value.str.val) {
 		RETURN_FALSE;
 	}
-	*arg->value.str.val = toupper(*arg->value.str.val);
+	*arg->value.str.val = toupper((unsigned char)*arg->value.str.val);
 	RETVAL_STRING(arg->value.str.val,1);
 }
 
@@ -734,12 +745,12 @@ void php3_ucwords(INTERNAL_FUNCTION_PARAMETERS)
 	if (!*arg->value.str.val) {
 		RETURN_FALSE;
 	}
-	*arg->value.str.val = toupper(*arg->value.str.val);
+	*arg->value.str.val = toupper((unsigned char)*arg->value.str.val);
 	r=arg->value.str.val;
 	while((r=strstr(r," "))){
 		if(*(r+1)){
 			r++;
-			*r=toupper(*r);
+			*r=toupper((unsigned char)*r);
 		}
 	}
 	RETVAL_STRING(arg->value.str.val,1);
@@ -808,7 +819,7 @@ void php3_strrev(INTERNAL_FUNCTION_PARAMETERS)
 	}
 
 	*return_value = *str;
-	yystype_copy_constructor(return_value);
+	pval_copy_constructor(return_value);
 }
 
 
@@ -889,8 +900,9 @@ void php3_stripslashes(INTERNAL_FUNCTION_PARAMETERS)
 }
 
 #ifndef HAVE_STRERROR
-#ifndef APACHE
-char *strerror(int errnum) {
+#if !APACHE
+char *strerror(int errnum) 
+{
 	extern int sys_nerr;
 	extern char *sys_errlist[];
 #ifndef THREAD_SAFE

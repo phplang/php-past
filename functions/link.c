@@ -28,7 +28,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: link.c,v 1.29 1998/06/18 21:13:16 jim Exp $ */
+/* $Id: link.c,v 1.30 1998/09/19 20:17:18 rasmus Exp $ */
 #ifdef THREAD_SAFE
 #include "tls.h"
 #endif
@@ -118,7 +118,6 @@ void php3_symlink(INTERNAL_FUNCTION_PARAMETERS)
 	convert_to_string(frompath);
 
 	if (php3_ini.safe_mode && !_php3_checkuid(topath->value.str.val, 2)) {
-		php3_error(E_WARNING, "SAFE MODE Restriction in effect.  Invalid owner of file to be linked.");
 		RETURN_FALSE;
 	}
 
@@ -144,7 +143,6 @@ void php3_link(INTERNAL_FUNCTION_PARAMETERS)
 	convert_to_string(frompath);
 
 	if (php3_ini.safe_mode && !_php3_checkuid(topath->value.str.val, 2)) {
-		php3_error(E_WARNING, "SAFE MODE Restriction in effect.  Invalid owner of file to be linked.");
 		RETURN_FALSE;
 	}
 
@@ -169,7 +167,6 @@ void php3_unlink(INTERNAL_FUNCTION_PARAMETERS)
 	convert_to_string(filename);
 
 	if (php3_ini.safe_mode && !_php3_checkuid(filename->value.str.val, 2)) {
-		php3_error(E_WARNING, "SAFE MODE Restriction in effect.  Invalid owner of file to be unlinked.");
 		RETURN_FALSE;
 	}
 

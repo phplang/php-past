@@ -24,7 +24,6 @@
    | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
    | Authors: Lachlan Roche                                               |
-   |                                                                      |
    +----------------------------------------------------------------------+
  */
 
@@ -39,23 +38,16 @@
 #include "php.h"
 #include "internal_functions.h"
 
-#if APACHE
-#include <util_md5.h>
-#else
 #include "md5.h"
-#endif
 
 void php3_md5(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *arg;
 	char md5str[33];
-#if (!APACHE)
 	PHP3_MD5_CTX context;
-	unsigned int len;
 	unsigned char digest[16];
 	int i;
 	char *r;
-#endif
 	TLS_VARS;
 	
 	if (ARG_COUNT(ht) != 1 || getParameters(ht, 1, &arg) == FAILURE) {
@@ -63,27 +55,17 @@ void php3_md5(INTERNAL_FUNCTION_PARAMETERS)
 	}
 	convert_to_string(arg);
 
-#if APACHE
-#if MODULE_MAGIC_NUMBER > 19970901
-	strcpy(md5str, ap_md5(GLOBAL(php3_rqst)->pool, arg->value.str.val));
-#else
-	strcpy(md5str, md5(GLOBAL(php3_rqst)->pool, arg->value.str.val));
-#endif
-#else
-	len = strlen(arg->value.str.val);
 	md5str[0] = '\0';
 	PHP3_MD5Init(&context);
-	PHP3_MD5Update(&context, arg->value.str.val, len);
+	PHP3_MD5Update(&context, arg->value.str.val, arg->value.str.len);
 	PHP3_MD5Final(digest, &context);
 	for (i = 0, r = md5str; i < 16; i++, r += 2) {
 		sprintf(r, "%02x", digest[i]);
 	}
 	*r = '\0';
-#endif
 	RETVAL_STRING(md5str,1);
 }
 
-#if (!APACHE)
 /*
  * The remaining code is the reference MD5 code (md5c.c) from rfc1321
  */
@@ -414,8 +396,6 @@ unsigned int len;
 	for (i = 0; i < len; i++)
 		((char *) output)[i] = (char) value;
 }
-
-#endif
 
 /*
  * Local variables:

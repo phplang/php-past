@@ -85,6 +85,10 @@ extern int _php3_send_error(char *message, char *address);
 static pval *user_compare_func_name;
 static HashTable *user_shutdown_function_names;
 
+/* some prototypes for local functions */
+void user_shutdown_function_dtor(pval *user_shutdown_function_name);
+int user_shutdown_function_executor(pval *user_shutdown_function_name);
+void php3_call_shutdown_functions(void);
 
 function_entry basic_functions[] = {
 	{"intval",		int_value,					NULL},
@@ -101,6 +105,8 @@ function_entry basic_functions[] = {
 	{"sort",		php3_sort,					first_arg_force_ref},
 	{"rsort",		php3_rsort,					first_arg_force_ref},
 	{"usort",		php3_user_sort,				first_arg_force_ref},
+	{"uksort",		php3_user_key_sort,			first_arg_force_ref},
+	{"uasort",		php3_auser_sort,			first_arg_force_ref},
 	{"array_walk",  php3_array_walk,			first_arg_force_ref},
 	{"sizeof",		php3_count,					first_arg_allow_ref},
 	{"count",		php3_count,					first_arg_allow_ref},
@@ -232,6 +238,8 @@ function_entry basic_functions[] = {
 	{"log",			php3_log,					NULL},
 	{"log10",		php3_log10,					NULL},
 	{"sqrt",		php3_sqrt,					NULL},
+	{"deg2rad",		php3_deg2rad,				NULL},
+	{"rad2deg",		php3_rad2deg,				NULL},
 	{"bindec",		php3_bindec,				NULL},
 	{"hexdec",		php3_hexdec,				NULL},
 	{"octdec",		php3_octdec,				NULL},
@@ -268,15 +276,22 @@ function_entry basic_functions[] = {
 	{"leak",		php3_leak,					NULL},	
 	{"error_log",	php3_error_log,				NULL},	
 	{"call_user_func",	php3_call_user_func,	NULL},
-	{"call_user_method",	php3_call_user_method,	NULL},
+	{"call_user_method", php3_call_user_method,	NULL},
 	
-	PHP3_FE(register_shutdown_function, NULL)
+	PHP_FE(register_shutdown_function, NULL)
 	
 	{NULL, NULL, NULL}
 };
 
 php3_module_entry basic_functions_module = {
-	"Basic Functions", basic_functions, NULL, NULL, php3_rinit_basic, php3_rshutdown_basic, NULL, STANDARD_MODULE_PROPERTIES
+	"Basic Functions",			/* extension name */
+	basic_functions,			/* function list */
+	php3_minit_basic,			/* process startup */
+	NULL,						/* process shutdown */
+	php3_rinit_basic,			/* request startup */
+	php3_rshutdown_basic,		/* request shutdown */
+	NULL,						/* extension info */
+	STANDARD_MODULE_PROPERTIES
 };
 
 #if HAVE_PUTENV
@@ -304,6 +319,18 @@ static void _php3_putenv_destructor(putenv_entry *pe)
 	efree(pe->key);
 }
 #endif
+
+#ifndef M_PI
+#define M_PI 3.14159265358979323846
+#endif
+
+int php3_minit_basic(INIT_FUNC_ARGS)
+{
+	TLS_VARS;
+
+	REGISTER_DOUBLE_CONSTANT("M_PI", M_PI, CONST_CS | CONST_PERSISTENT);
+	return SUCCESS;
+}
 
 int php3_rinit_basic(INIT_FUNC_ARGS)
 {
@@ -532,7 +559,7 @@ void string_value(INTERNAL_FUNCTION_PARAMETERS)
 	}
 	convert_to_string(num);
 	*return_value = *num;
-	yystype_copy_constructor(return_value);
+	pval_copy_constructor(return_value);
 }
 
 static int array_key_compare(const void *a, const void *b)
@@ -762,7 +789,6 @@ void php3_rsort(INTERNAL_FUNCTION_PARAMETERS)
 	RETURN_TRUE;
 }
 
-static pval *user_compare_func_name;
 
 static int array_user_compare(const void *a, const void *b)
 {
@@ -811,6 +837,100 @@ void php3_user_sort(INTERNAL_FUNCTION_PARAMETERS)
 	RETURN_TRUE;
 }
 
+void php3_auser_sort(INTERNAL_FUNCTION_PARAMETERS)
+{
+	pval *array;
+	pval *old_compare_func;
+	TLS_VARS;
+
+	old_compare_func = user_compare_func_name;
+	if (ARG_COUNT(ht) != 2 || getParameters(ht, 2, &array, &user_compare_func_name) == FAILURE) {
+		user_compare_func_name = old_compare_func;
+		WRONG_PARAM_COUNT;
+	}
+	if (!(array->type & IS_HASH)) {
+		php3_error(E_WARNING, "Wrong datatype in uasort() call");
+		user_compare_func_name = old_compare_func;
+		return;
+	}
+	convert_to_string(user_compare_func_name);
+	if (_php3_hash_sort(array->value.ht, array_user_compare, 0) == FAILURE) {
+		user_compare_func_name = old_compare_func;
+		return;
+	}
+	user_compare_func_name = old_compare_func;
+	RETURN_TRUE;
+}
+
+
+static int array_user_key_compare(const void *a, const void *b)
+{
+	Bucket *f;
+	Bucket *s;
+	pval key1, key2;
+	pval *args[2] = {&key1, &key2};
+	pval retval;
+	int status;
+
+	f = *((Bucket **) a);
+	s = *((Bucket **) b);
+
+	if (f->arKey) {
+		key1.value.str.val = estrndup(f->arKey, f->nKeyLength);
+		key1.value.str.len = f->nKeyLength;
+		key1.type = IS_STRING;
+	} else {
+		key1.value.lval = f->h;
+		key1.type = IS_LONG;
+	}
+	if (s->arKey) {
+		key2.value.str.val = estrndup(s->arKey, s->nKeyLength);
+		key2.value.str.len = s->nKeyLength;
+		key2.type = IS_STRING;
+	} else {
+		key2.value.lval = s->h;
+		key2.type = IS_LONG;
+	}
+
+	status = call_user_function(&GLOBAL(function_table), NULL, user_compare_func_name, &retval, 2, args);
+	
+	pval_destructor(&key1);
+	pval_destructor(&key2);
+	
+	if (status==SUCCESS) {
+		convert_to_long(&retval);
+		return retval.value.lval;
+	} else {
+		return 0;
+	}
+}
+
+
+void php3_user_key_sort(INTERNAL_FUNCTION_PARAMETERS)
+{
+	pval *array;
+	pval *old_compare_func;
+	TLS_VARS;
+
+	old_compare_func = user_compare_func_name;
+	if (ARG_COUNT(ht) != 2 || getParameters(ht, 2, &array, &user_compare_func_name) == FAILURE) {
+		user_compare_func_name = old_compare_func;
+		WRONG_PARAM_COUNT;
+	}
+	if (!(array->type & IS_HASH)) {
+		php3_error(E_WARNING, "Wrong datatype in uasort() call");
+		user_compare_func_name = old_compare_func;
+		return;
+	}
+	convert_to_string(user_compare_func_name);
+	if (_php3_hash_sort(array->value.ht, array_user_key_compare, 0) == FAILURE) {
+		user_compare_func_name = old_compare_func;
+		return;
+	}
+	user_compare_func_name = old_compare_func;
+	RETURN_TRUE;
+}
+
 
 void array_end(INTERNAL_FUNCTION_PARAMETERS)
 {
@@ -838,7 +958,7 @@ void array_end(INTERNAL_FUNCTION_PARAMETERS)
 		}
 	}
 	*return_value = *entry;
-	yystype_copy_constructor(return_value);
+	pval_copy_constructor(return_value);
 }
 
 
@@ -861,7 +981,7 @@ void array_prev(INTERNAL_FUNCTION_PARAMETERS)
 	} while (entry->type==IS_STRING && entry->value.str.val==undefined_variable_string);
 	
 	*return_value = *entry;
-	yystype_copy_constructor(return_value);
+	pval_copy_constructor(return_value);
 }
 
 void array_next(INTERNAL_FUNCTION_PARAMETERS)
@@ -883,14 +1003,14 @@ void array_next(INTERNAL_FUNCTION_PARAMETERS)
 	} while (entry->type==IS_STRING && entry->value.str.val==undefined_variable_string);
 	
 	*return_value = *entry;
-	yystype_copy_constructor(return_value);
+	pval_copy_constructor(return_value);
 }
 
 void array_each(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *array,*entry,real_entry;
 	char *string_key;
-	int int_key;
+	ulong num_key;
 	int retval;
 	pval *inserted_pointer;
 	
@@ -914,15 +1034,15 @@ void array_each(INTERNAL_FUNCTION_PARAMETERS)
 	}
 	array_init(return_value);
 	real_entry = *entry;
-	yystype_copy_constructor(&real_entry);
+	pval_copy_constructor(&real_entry);
 	_php3_hash_index_update(return_value->value.ht,1,(void *) &real_entry,sizeof(pval),(void **) &inserted_pointer);
 	_php3_hash_pointer_update(return_value->value.ht, "value", sizeof("value"), (void *) inserted_pointer);
-	switch (_php3_hash_get_current_key(array->value.ht, &string_key, &int_key)) {
+	switch (_php3_hash_get_current_key(array->value.ht, &string_key, &num_key)) {
 		case HASH_KEY_IS_STRING:
 			add_get_index_string(return_value,0,string_key,(void **) &inserted_pointer,0);
 			break;
-		case HASH_KEY_IS_INT:
-			add_get_index_long(return_value,0,int_key, (void **) &inserted_pointer);
+		case HASH_KEY_IS_LONG:
+			add_get_index_long(return_value,0,num_key, (void **) &inserted_pointer);
 			break;
 	}
 	_php3_hash_pointer_update(return_value->value.ht, "key", sizeof("key"), (void *) inserted_pointer);
@@ -953,7 +1073,7 @@ void array_reset(INTERNAL_FUNCTION_PARAMETERS)
 	}
 		
 	*return_value = *entry;
-	yystype_copy_constructor(return_value);
+	pval_copy_constructor(return_value);
 }
 
 void array_current(INTERNAL_FUNCTION_PARAMETERS)
@@ -971,7 +1091,7 @@ void array_current(INTERNAL_FUNCTION_PARAMETERS)
 		return;
 	}
 	*return_value = *entry;
-	yystype_copy_constructor(return_value);
+	pval_copy_constructor(return_value);
 }
 
 
@@ -979,7 +1099,7 @@ void array_current_key(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *array;
 	char *string_key;
-	int int_key;
+	ulong num_key;
 
 	if (ARG_COUNT(ht) != 1 || getParameters(ht, 1, &array) == FAILURE) {
 		WRONG_PARAM_COUNT;
@@ -991,15 +1111,15 @@ void array_current_key(INTERNAL_FUNCTION_PARAMETERS)
     if (!ParameterPassedByReference(ht,1)) {
         php3_error(E_WARNING, "Array not passed by reference in call to key()");
     }
-	switch (_php3_hash_get_current_key(array->value.ht, &string_key, &int_key)) {
+	switch (_php3_hash_get_current_key(array->value.ht, &string_key, &num_key)) {
 		case HASH_KEY_IS_STRING:
 			return_value->value.str.val = string_key;
 			return_value->value.str.len = strlen(string_key);
 			return_value->type = IS_STRING;
 			break;
-		case HASH_KEY_IS_INT:
+		case HASH_KEY_IS_LONG:
 			return_value->type = IS_LONG;
-			return_value->value.lval = int_key;
+			return_value->value.lval = num_key;
 			break;
 		case HASH_KEY_NON_EXISTANT:
 			return;
@@ -1084,9 +1204,6 @@ void php3_gettype(INTERNAL_FUNCTION_PARAMETERS)
 		case IS_INTERNAL_FUNCTION:
 			RETVAL_STRING("internal function",1);
 			break;
-		case IS_CLASS:
-			RETVAL_STRING("class",1);
-			break;
 		case IS_OBJECT:
 			RETVAL_STRING("object",1);
 			break;
@@ -1147,7 +1264,7 @@ void php3_min(INTERNAL_FUNCTION_PARAMETERS)
 		}
 		if (_php3_hash_minmax(arr->value.ht, array_data_compare, 0, (void **) &result)==SUCCESS) {
 			*return_value = *result;
-			yystype_copy_constructor(return_value);
+			pval_copy_constructor(return_value);
 		} else {
 			php3_error(E_WARNING, "min: array must contain at least 1 element");
 			var_uninit(return_value);
@@ -1155,7 +1272,7 @@ void php3_min(INTERNAL_FUNCTION_PARAMETERS)
 	} else {
 		if (_php3_hash_minmax(ht, array_data_compare, 0, (void **) &result)==SUCCESS) {
 			*return_value = *result;
-			yystype_copy_constructor(return_value);
+			pval_copy_constructor(return_value);
 		}
 	}
 }
@@ -1181,7 +1298,7 @@ void php3_max(INTERNAL_FUNCTION_PARAMETERS)
 		}
 		if (_php3_hash_minmax(arr->value.ht, array_data_compare, 1, (void **) &result)==SUCCESS) {
 			*return_value = *result;
-			yystype_copy_constructor(return_value);
+			pval_copy_constructor(return_value);
 		} else {
 			php3_error(E_WARNING, "max: array must contain at least 1 element");
 			var_uninit(return_value);
@@ -1189,7 +1306,7 @@ void php3_max(INTERNAL_FUNCTION_PARAMETERS)
 	} else {
 		if (_php3_hash_minmax(ht, array_data_compare, 1, (void **) &result)==SUCCESS) {
 			*return_value = *result;
-			yystype_copy_constructor(return_value);
+			pval_copy_constructor(return_value);
 		}
 	}
 }
@@ -1549,17 +1666,31 @@ void user_shutdown_function_dtor(pval *user_shutdown_function_name)
 	pval retval;
 
 	if (call_user_function(&GLOBAL(function_table), NULL, user_shutdown_function_name, &retval, 0, NULL)==SUCCESS) {
-		yystype_destructor(&retval);
+		pval_destructor(&retval);
 	}
-	yystype_destructor(user_shutdown_function_name);
+	pval_destructor(user_shutdown_function_name);
 }
 
 
-PHP3_FUNCTION(register_shutdown_function)
+int user_shutdown_function_executor(pval *user_shutdown_function_name)
+{
+	return 1;
+}
+
+
+void php3_call_shutdown_functions(void)
+{
+	if (user_shutdown_function_names) {
+		_php3_hash_apply(user_shutdown_function_names, (int(*)(void *)) user_shutdown_function_executor);
+	}
+}
+
+
+PHP_FUNCTION(register_shutdown_function)
 {
 	pval *arg, shutdown_function_name;
 	
-	if (ARG_COUNT(ht)!=1 || getParameters(ht, 1, &arg)) {
+	if (ARG_COUNT(ht)!=1 || getParameters(ht, 1, &arg)==FAILURE) {
 		WRONG_PARAM_COUNT;
 	}
 	
@@ -1570,7 +1701,7 @@ PHP3_FUNCTION(register_shutdown_function)
 	}
 	
 	shutdown_function_name = *arg;
-	yystype_copy_constructor(&shutdown_function_name);
+	pval_copy_constructor(&shutdown_function_name);
 	
 	_php3_hash_next_index_insert(user_shutdown_function_names, &shutdown_function_name, sizeof(pval), NULL);
 }

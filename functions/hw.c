@@ -23,7 +23,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: hw.c,v 1.3 1998/08/14 15:51:12 shane Exp $ */
+/* $Id: hw.c,v 1.11 1998/09/20 22:43:47 zeev Exp $ */
 #if COMPILE_DL
 #include "dl/phpdl.h"
 #endif
@@ -106,6 +106,7 @@ function_entry hw_functions[] = {
 	{"hw_documentbodytag",		php3_hw_document_bodytag,	NULL},
 	{"hw_document_content",		php3_hw_document_content,	NULL},
 	{"hw_objrec2array",		php3_hw_objrec2array,		NULL},
+	{"hw_array2objrec",		php3_hw_array2objrec,		NULL},
 	{"hw_incollections",		php3_hw_incollections,		NULL},
 	{"hw_inscoll",			php3_hw_inscoll,		NULL},
 	{"hw_insertobject",		php3_hw_insertobject,		NULL},
@@ -162,18 +163,19 @@ void _free_hw_document(hw_document *doc)
 	free(doc);
 }
 
-// creates an array in return value and frees all memory
-// Also adds as an assoc. array at the end of the return array with
-// statistics.
-int make_return_objrec(YYSTYPE **return_value, char **objrecs, int count)
+/* creates an array in return value and frees all memory
+ * Also adds as an assoc. array at the end of the return array with
+ * statistics.
+ */
+int make_return_objrec(pval **return_value, char **objrecs, int count)
 {
-	YYSTYPE stat_arr;
+	pval stat_arr;
 	int i;
 	int hidden, collhead, fullcollhead, total;
         int collheadnr, fullcollheadnr;
 
 	if (array_init(*return_value) == FAILURE) {
-		// Ups, failed! Let's at least free the memory
+		/* Ups, failed! Let's at least free the memory */
 		for(i=0; i<count; i++)
 			efree(objrecs[i]);
 		efree(objrecs);
@@ -183,8 +185,9 @@ int make_return_objrec(YYSTYPE **return_value, char **objrecs, int count)
 	hidden = collhead = fullcollhead = total = 0;
         collheadnr = fullcollheadnr = -1;
 	for(i=0; i<count; i++) {
-		// Fill the array with entries. No need to free objrecs[i], since
-		// it is not duplicated in add_next_index_string().
+		/* Fill the array with entries. No need to free objrecs[i], since
+		 * it is not duplicated in add_next_index_string().
+		 */
 		if(NULL != objrecs[i]) {
 			if(0 == fnAttributeCompare(objrecs[i], "PresentationHints", "Hidden"))
 				hidden++;
@@ -215,16 +218,18 @@ int make_return_objrec(YYSTYPE **return_value, char **objrecs, int count)
 	add_assoc_long(&stat_arr, "FullCollectionHeadNr", fullcollheadnr);
 
 	/* Add the stat array */
-	_php3_hash_next_index_insert((*return_value)->value.ht, &stat_arr, sizeof(YYSTYPE), NULL);
+	_php3_hash_next_index_insert((*return_value)->value.ht, &stat_arr, sizeof(pval), NULL);
 
 	/* The title array can now be freed, but I don't know how */
 	return 0;
 }
 
-// creates an array return value from object record
-int make_return_array_from_objrec(YYSTYPE **return_value, char *objrec) {
-	YYSTYPE title_arr, desc_arr;
-	char *attrname, *str, *temp, *language, *title;
+/*
+** creates an array return value from object record
+*/
+int make_return_array_from_objrec(pval **return_value, char *objrec) {
+	pval title_arr, desc_arr;
+	char *attrname, *str, *temp, language[3], *title;
 	int iTitle, iDesc;
 	int hasTitle = 0;
 	int hasDescription = 0;
@@ -237,20 +242,20 @@ int make_return_array_from_objrec(YYSTYPE **return_value, char *objrec) {
 	}
 
 	/* Array for titles. Only if we have at least one title */
-//	if(0 == strncmp(objrec, "Title=", 6)) {
+/*	if(0 == strncmp(objrec, "Title=", 6)) { */
 		if (array_init(&title_arr) == FAILURE) {
 			return -1;
 		}
 		hasTitle = 1;
-//	}
+/*	} */
 
 	/* Array for Descriptions. Only if we have at least one description */
-//	if(0 == strncmp(objrec, "Description=", 12)) {
+/*	if(0 == strncmp(objrec, "Description=", 12)) { */
 		if (array_init(&desc_arr) == FAILURE) {
 			return -1;
 		}
 		hasDescription = 1;
-//	}
+/*	} */
 
 	/* Fill Array of titles and descriptions */
 	temp = estrdup(objrec);
@@ -267,17 +272,18 @@ int make_return_array_from_objrec(YYSTYPE **return_value, char *objrec) {
 			iDesc = 1;
 		}
 		if(iTitle || iDesc) {			/* Poor error check if end of string */
-			language = str;
-			while((*str != ':') && (*str != '\0'))
-				str++;
-			*str = '\0';
-			str++;
+			if(str[2] == ':') {
+				str[2] = '\0';
+				strcpy(language, str);
+				str += 3;
+			} else
+				strcpy(language, "xx");
 
 			title = str;
-			while((*str != '=') && (*str != '\0'))
+/*			while((*str != '=') && (*str != '\0'))
 				str++;
 			*str = '\0';
-			if(iTitle)
+*/			if(iTitle)
 				add_assoc_string(&title_arr, language, title, 1);
 			else
 				add_assoc_string(&desc_arr, language, title, 1);
@@ -288,14 +294,14 @@ int make_return_array_from_objrec(YYSTYPE **return_value, char *objrec) {
 
 	/* Add the title array, if we have one */
 	if(hasTitle) {
-		_php3_hash_update((*return_value)->value.ht, "Title", 6, &title_arr, sizeof(YYSTYPE), NULL);
+		_php3_hash_update((*return_value)->value.ht, "Title", 6, &title_arr, sizeof(pval), NULL);
 
 		/* The title array can now be freed, but I don't know how */
 	}
 
 	if(hasDescription) {
 	/* Add the description array, if we have one */
-		_php3_hash_update((*return_value)->value.ht, "Description", 12, &desc_arr, sizeof(YYSTYPE), NULL);
+		_php3_hash_update((*return_value)->value.ht, "Description", 12, &desc_arr, sizeof(pval), NULL);
 
 		/* The description array can now be freed, but I don't know how */
 	}
@@ -322,9 +328,10 @@ int make_return_array_from_objrec(YYSTYPE **return_value, char *objrec) {
 }
 
 static char * make_objrec_from_array(HashTable *lht) {
-	int i, count, keytype, length;
+	int i, count, keytype;
+	ulong length;
 	char *key, str[1024], *objrec = NULL;
-	YYSTYPE *keydata;
+	pval *keydata;
 
 	if(NULL == lht)
 		return NULL;
@@ -359,7 +366,7 @@ static char * make_objrec_from_array(HashTable *lht) {
 static int * make_ints_from_array(HashTable *lht) {
 	int i, count;
 	int *objrec = NULL;
-	YYSTYPE *keydata;
+	pval *keydata;
 
 	if(NULL == lht)
 		return NULL;
@@ -405,7 +412,7 @@ int php3_minit_hw(INIT_FUNC_ARGS) {
 
 static void php3_hw_do_connect(INTERNAL_FUNCTION_PARAMETERS, int persistent)
 {
-	YYSTYPE *argv[4];
+	pval *argv[4];
 	int argc;
 	int sockfd;
 	int port = 0;
@@ -507,7 +514,7 @@ static void php3_hw_do_connect(INTERNAL_FUNCTION_PARAMETERS, int persistent)
 				RETURN_FALSE;
 			}
 			if (php3_hw_module.max_persistent!=-1 && php3_hw_module.num_persistent>=php3_hw_module.max_persistent) {
-//				php3_error(E_WARNING,"Hyperwave:  Too many open persistent links (%d)",php3_hw_module.num_persistent);
+/*				php3_error(E_WARNING,"Hyperwave:  Too many open persistent links (%d)",php3_hw_module.num_persistent); */
 				if(host) efree(host);
 				if(username) efree(username);
 				if(password) efree(password);
@@ -516,7 +523,7 @@ static void php3_hw_do_connect(INTERNAL_FUNCTION_PARAMETERS, int persistent)
 			}
 
 			if ( (sockfd = open_hg_connection(host, port)) < 0 )  {
-//				php3_error(E_WARNING, "open_hg_connection to %s (%d)returned -1", host, port);
+/*				php3_error(E_WARNING, "open_hg_connection to %s (%d)returned -1", host, port); */
 				if(host) efree(host);
 				if(username) efree(username);
 				if(password) efree(password);
@@ -533,7 +540,7 @@ static void php3_hw_do_connect(INTERNAL_FUNCTION_PARAMETERS, int persistent)
 			}
 	
 			if(0 != (ptr->lasterror = initialize_hg_connection(sockfd, &do_swap, &version, &userdata, &server_string, username, password))) {
-//				php3_error(E_WARNING, "initalize hg connection returned -1");
+/*				php3_error(E_WARNING, "initalize hg connection returned -1"); */
 				if(host) efree(host);
 				if(username) efree(username);
 				if(password) efree(password);
@@ -569,7 +576,7 @@ static void php3_hw_do_connect(INTERNAL_FUNCTION_PARAMETERS, int persistent)
 			php3_hw_module.num_links++;
 			php3_hw_module.num_persistent++;
 		} else {
-			//php3_printf("Found already open connection\n");
+			/*php3_printf("Found already open connection\n"); */
 			if (le->type != php3_hw_module.le_psocketp) {
 				RETURN_FALSE;
 			}
@@ -610,7 +617,7 @@ static void php3_hw_do_connect(INTERNAL_FUNCTION_PARAMETERS, int persistent)
 		}
 	
 		if ( (sockfd = open_hg_connection(host, port)) < 0 )  {
-//			php3_error(E_WARNING, "open_hg_connection returned -1");
+/*			php3_error(E_WARNING, "open_hg_connection returned -1");*/
 		  	if(host) efree(host);
 			if(username) efree(username);
 			if(password) efree(password);
@@ -627,7 +634,7 @@ static void php3_hw_do_connect(INTERNAL_FUNCTION_PARAMETERS, int persistent)
 		}
 	
 		if(0 != (ptr->lasterror = initialize_hg_connection(sockfd, &do_swap, &version, &userdata, &server_string, username, password))) {
-//			php3_error(E_WARNING, "initalize hg connection returned -1");
+/*			php3_error(E_WARNING, "initalize hg connection returned -1"); */
 			if(host) efree(host);
 			if(username) efree(username);
 			if(password) efree(password);
@@ -692,7 +699,7 @@ void php3_hw_pconnect(INTERNAL_FUNCTION_PARAMETERS)
 }
 
 void php3_hw_close(INTERNAL_FUNCTION_PARAMETERS) {
-	YYSTYPE *arg1;
+	pval *arg1;
 	int id, type;
 	hw_connection *ptr;
 	TLS_VARS;
@@ -713,7 +720,7 @@ void php3_hw_close(INTERNAL_FUNCTION_PARAMETERS) {
 
 void php3_hw_info(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *arg1;
+	pval *arg1;
 	int id, type;
 	hw_connection *ptr;
 	char *str;
@@ -730,8 +737,10 @@ void php3_hw_info(INTERNAL_FUNCTION_PARAMETERS)
 		RETURN_FALSE;
 	}
 	if(NULL != (str = get_hw_info(ptr))) {
-//		php3_printf("%s\n", str);
-//		efree(str);
+		/*
+		php3_printf("%s\n", str);
+		efree(str);
+		*/
 		return_value->value.str.len = strlen(str);
 		return_value->value.str.val = str;
 		return_value->type = IS_STRING;
@@ -742,7 +751,7 @@ void php3_hw_info(INTERNAL_FUNCTION_PARAMETERS)
 
 void php3_hw_error(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *arg1;
+	pval *arg1;
 	int id, type;
 	hw_connection *ptr;
 	TLS_VARS;
@@ -762,7 +771,7 @@ void php3_hw_error(INTERNAL_FUNCTION_PARAMETERS)
 
 void php3_hw_errormsg(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *arg1;
+	pval *arg1;
 	int id, type;
 	hw_connection *ptr;
 	char errstr[100];
@@ -854,7 +863,7 @@ void php3_hw_root(INTERNAL_FUNCTION_PARAMETERS)
 }
 
 char *php3_hw_command(INTERNAL_FUNCTION_PARAMETERS, int comm) {
-	YYSTYPE *arg1;
+	pval *arg1;
 	int link, type;
 	hw_connection *ptr;
 	TLS_VARS;
@@ -893,7 +902,7 @@ void php3_hw_stat(INTERNAL_FUNCTION_PARAMETERS) {
 }
 
 void php3_hw_who(INTERNAL_FUNCTION_PARAMETERS) {
-	YYSTYPE user_arr;
+	pval user_arr;
         char *object, *ptr, *temp, *attrname;
 	int i;
 
@@ -989,7 +998,7 @@ void php3_hw_who(INTERNAL_FUNCTION_PARAMETERS) {
 		add_assoc_string(&user_arr, "TotalTime", name, 1);
 
 		/* Add the user array */
-		_php3_hash_index_update(return_value->value.ht, i++, &user_arr, sizeof(YYSTYPE), NULL);
+		_php3_hash_index_update(return_value->value.ht, i++, &user_arr, sizeof(pval), NULL);
 
 		/* The user array can now be freed, but I don't know how */
 
@@ -1001,7 +1010,7 @@ void php3_hw_who(INTERNAL_FUNCTION_PARAMETERS) {
 }
 
 void php3_hw_dummy(INTERNAL_FUNCTION_PARAMETERS) {
-	YYSTYPE *arg1, *arg2, *arg3;
+	pval *arg1, *arg2, *arg3;
 	int link, id, type, msgid;
 	hw_connection *ptr;
 	TLS_VARS;
@@ -1035,7 +1044,7 @@ php3_printf("%s", object);
 }
 
 void php3_hw_getobject(INTERNAL_FUNCTION_PARAMETERS) {
-	YYSTYPE *arg1, *arg2;
+	pval *arg1, *arg2;
 	int link, id, type;
 	hw_connection *ptr;
 	TLS_VARS;
@@ -1060,13 +1069,15 @@ void php3_hw_getobject(INTERNAL_FUNCTION_PARAMETERS) {
 		RETURN_FALSE;
 
 	RETURN_STRING(object, 0);
-//	make_return_array_from_objrec(&return_value, object);
-//	efree(object);
+	/*
+	make_return_array_from_objrec(&return_value, object);
+	efree(object);
+	*/
 	}
 }
 
 void php3_hw_insertobject(INTERNAL_FUNCTION_PARAMETERS) {
-	YYSTYPE *arg1, *arg2, *arg3;
+	pval *arg1, *arg2, *arg3;
 	int link, type;
 	char *objrec, *parms;
 	hw_connection *ptr;
@@ -1098,7 +1109,7 @@ void php3_hw_insertobject(INTERNAL_FUNCTION_PARAMETERS) {
 }
 
 void php3_hw_getandlock(INTERNAL_FUNCTION_PARAMETERS) {
-	YYSTYPE *arg1, *arg2;
+	pval *arg1, *arg2;
 	int link, id, type;
 	hw_connection *ptr;
 	TLS_VARS;
@@ -1143,7 +1154,7 @@ void php3_hw_getandlock(INTERNAL_FUNCTION_PARAMETERS) {
 }
 
 void php3_hw_unlock(INTERNAL_FUNCTION_PARAMETERS) {
-	YYSTYPE *arg1, *arg2;
+	pval *arg1, *arg2;
 	int link, id, type;
 	hw_connection *ptr;
 	TLS_VARS;
@@ -1169,7 +1180,7 @@ void php3_hw_unlock(INTERNAL_FUNCTION_PARAMETERS) {
 }
 
 void php3_hw_deleteobject(INTERNAL_FUNCTION_PARAMETERS) {
-	YYSTYPE *arg1, *arg2;
+	pval *arg1, *arg2;
 	int link, id, type;
 	hw_connection *ptr;
 	TLS_VARS;
@@ -1194,7 +1205,7 @@ void php3_hw_deleteobject(INTERNAL_FUNCTION_PARAMETERS) {
 }
 
 void php3_hw_changeobject(INTERNAL_FUNCTION_PARAMETERS) {
-	YYSTYPE *arg1, *arg2, *arg3;
+	pval *arg1, *arg2, *arg3;
 	int link, id, type, i;
 	hw_connection *ptr;
 	char *modification, *oldobjrec, buf[200];
@@ -1224,36 +1235,41 @@ void php3_hw_changeobject(INTERNAL_FUNCTION_PARAMETERS) {
 	modification = strdup("");
 	for(i=0; i<_php3_hash_num_elements(newobjarr); i++) {
 		char *key, *str, *str1, newattribute[200];
-		YYSTYPE *data;
-		int j, ind;
+		pval *data;
+		int j, noinsert=1;
+		ulong ind;
 
 		_php3_hash_get_current_key(newobjarr, &key, &ind);
 		_php3_hash_get_current_data(newobjarr, (void *) &data);
 		switch(data->type) {
 			case IS_STRING:
-				sprintf(newattribute, "%s=%s", key, data->value.str.val);
+				if(strlen(data->value.str.val) == 0)
+					noinsert = 0;
+				else
+					sprintf(newattribute, "%s=%s", key, data->value.str.val);
 				break;
 			default:
 				sprintf(newattribute, "%s", "");
 		}
 
-		modification = fnInsStr(modification, 0, "\\");
-		modification = fnInsStr(modification, 0, newattribute);
-		modification = fnInsStr(modification, 0, "add ");
-
-		/* Retrieve the old attribute from object record */
-		if(NULL != (str = strstr(oldobjrec, key))) {
-			str1 = str;
-			j = 0;
-			while((str1 != NULL) && (*str1 != '\n')) {
-				buf[j++] = *str1++;
-			}
-			buf[j] = '\0';
+		if(!noinsert) {
 			modification = fnInsStr(modification, 0, "\\");
-			modification = fnInsStr(modification, 0, buf);
-			modification = fnInsStr(modification, 0, "rem ");
-		} 
-		
+			modification = fnInsStr(modification, 0, newattribute);
+			modification = fnInsStr(modification, 0, "add ");
+
+			/* Retrieve the old attribute from object record */
+			if(NULL != (str = strstr(oldobjrec, key))) {
+				str1 = str;
+				j = 0;
+				while((str1 != NULL) && (*str1 != '\n')) {
+					buf[j++] = *str1++;
+				}
+				buf[j] = '\0';
+				modification = fnInsStr(modification, 0, "\\");
+				modification = fnInsStr(modification, 0, buf);
+				modification = fnInsStr(modification, 0, "rem ");
+			} 
+		}
 		efree(key);
 		_php3_hash_move_forward(newobjarr);
 	}
@@ -1261,7 +1277,7 @@ void php3_hw_changeobject(INTERNAL_FUNCTION_PARAMETERS) {
 
 	set_swap(ptr->swap_on);
 	modification[strlen(modification)-1] = '\0';
-//	php3_printf("%0x%X, %s", id, modification);
+/*	php3_printf("0x%X, %s", id, modification); */
 	if (0 != (ptr->lasterror = send_changeobject(ptr->socket, id, modification)))
 		RETURN_FALSE;
 	free(modification);
@@ -1269,7 +1285,7 @@ void php3_hw_changeobject(INTERNAL_FUNCTION_PARAMETERS) {
 }
 
 void php3_hw_mvcp(INTERNAL_FUNCTION_PARAMETERS, int mvcp) {
-	YYSTYPE *arg1, *arg2, *arg3, *arg4, **objvIDs;
+	pval *arg1, *arg2, *arg3, *arg4, **objvIDs;
 	int link, type, dest=0, from=0;
 	HashTable *src_arr;
 	hw_connection *ptr;
@@ -1310,7 +1326,7 @@ void php3_hw_mvcp(INTERNAL_FUNCTION_PARAMETERS, int mvcp) {
 
 	set_swap(ptr->swap_on);
 
-	if(NULL == (objvIDs = emalloc(_php3_hash_num_elements(src_arr) * sizeof(YYSTYPE *)))) {
+	if(NULL == (objvIDs = emalloc(_php3_hash_num_elements(src_arr) * sizeof(pval *)))) {
 		RETURN_FALSE;
 		}
 
@@ -1375,7 +1391,7 @@ void php3_hw_cp(INTERNAL_FUNCTION_PARAMETERS) {
 }
 
 void php3_hw_gettext(INTERNAL_FUNCTION_PARAMETERS) {
-	YYSTYPE *argv[3];
+	pval *argv[3];
 	int argc, link, id, type, mode;
 	int rootid = 0;
 	hw_document *doc;
@@ -1425,7 +1441,7 @@ void php3_hw_gettext(INTERNAL_FUNCTION_PARAMETERS) {
 }
 
 void php3_hw_edittext(INTERNAL_FUNCTION_PARAMETERS) {
-	YYSTYPE *arg1, *arg2;
+	pval *arg1, *arg2;
 	int link, id, doc, type;
 	hw_connection *ptr;
 	hw_document *docptr;
@@ -1460,10 +1476,11 @@ void php3_hw_edittext(INTERNAL_FUNCTION_PARAMETERS) {
 }
 
 void php3_hw_getcgi(INTERNAL_FUNCTION_PARAMETERS) {
-	YYSTYPE *arg1, *arg2;
+	pval *arg1, *arg2;
 	int link, id, type;
 	hw_document *doc;
 	hw_connection *ptr;
+	char cgi_env_str[1000];
 	TLS_VARS;
 
 	if (ARG_COUNT(ht) != 2 || getParameters(ht, 2, &arg1, &arg2) == FAILURE) {
@@ -1484,8 +1501,28 @@ void php3_hw_getcgi(INTERNAL_FUNCTION_PARAMETERS) {
 	char *object = NULL;
 	char *attributes = NULL;
 	int count;
+
+	/* Here is another undocument function of Hyperwave.
+	   If you call a cgi script with getcgi-message, you will
+	   have to provide the complete cgi enviroment, since it is
+	   only known to the webserver (or wavemaster). This is done
+	   by extending the object record with the following incomplete
+	   string. It should contain any enviroment variable a cgi script
+	   requires.
+	*/
+#if (WIN32|WINNT)
+	sprintf(cgi_env_str, "CGI_REQUEST_METHOD=%s\nCGI_PATH_INFO=%s\nCGI_QUERY_STRING=%s",
+	                     getenv("REQUEST_METHOD"),
+	                     getenv("PATH_INFO"),
+	                     getenv("QUERY_STRING"));
+#else
+	sprintf(cgi_env_str, "CGI_REQUEST_METHOD=%s\nCGI_PATH_INFO=%s\nCGI_QUERY_STRING=%s",
+	                     GLOBAL(request_info).request_method,
+	                     GLOBAL(request_info).path_info,
+	                     GLOBAL(request_info).query_string);
+#endif
 	/* !!!! memory for object and attributes is allocated with malloc !!!! */
-	if (0 != (ptr->lasterror = send_getcgi(ptr->socket, id, &attributes, &object, &count)))
+	if (0 != (ptr->lasterror = send_getcgi(ptr->socket, id, cgi_env_str, &attributes, &object, &count)))
 		RETURN_FALSE;
 	doc = malloc(sizeof(hw_document));
 	doc->data = object;
@@ -1498,7 +1535,7 @@ void php3_hw_getcgi(INTERNAL_FUNCTION_PARAMETERS) {
 }
 
 void php3_hw_getremote(INTERNAL_FUNCTION_PARAMETERS) {
-	YYSTYPE *arg1, *arg2;
+	pval *arg1, *arg2;
 	int link, id, type;
 	hw_document *doc;
 	hw_connection *ptr;
@@ -1536,7 +1573,7 @@ void php3_hw_getremote(INTERNAL_FUNCTION_PARAMETERS) {
 }
 
 void php3_hw_getremotechildren(INTERNAL_FUNCTION_PARAMETERS) {
-	YYSTYPE *arg1, *arg2;
+	pval *arg1, *arg2;
 	int link, type, i;
 	hw_connection *ptr;
 	char *objrec;
@@ -1564,7 +1601,7 @@ void php3_hw_getremotechildren(INTERNAL_FUNCTION_PARAMETERS) {
 	if(strncmp(remainder, "ObjectID=0 ", 10)) {
 		hw_document *doc;
 		remainder[offsets[0]-18] = '\0';
-//php3_printf("offset = %d, remainder = %s---", offsets[0], remainder);
+/*php3_printf("offset = %d, remainder = %s---", offsets[0], remainder);*/
 		doc = malloc(sizeof(hw_document));
 		doc->data = strdup(remainder);
 		doc->attributes = strdup(objrec);
@@ -1592,7 +1629,7 @@ void php3_hw_getremotechildren(INTERNAL_FUNCTION_PARAMETERS) {
 }
 
 void php3_hw_setlinkroot(INTERNAL_FUNCTION_PARAMETERS) {
-	YYSTYPE *arg1, *arg2;
+	pval *arg1, *arg2;
 	int link, type, rootid;
 	hw_connection *ptr;
 	TLS_VARS;
@@ -1615,11 +1652,14 @@ void php3_hw_setlinkroot(INTERNAL_FUNCTION_PARAMETERS) {
 	}
 
 void php3_hw_pipedocument(INTERNAL_FUNCTION_PARAMETERS) {
-	YYSTYPE *argv[3];
+	pval *argv[3];
 	int link, id, type, argc, mode;
 	int rootid = 0;
 	hw_connection *ptr;
 	hw_document *doc;
+#if APACHE
+	server_rec *serv = GLOBAL(php3_rqst)->server;
+#endif
 	TLS_VARS;
 
 	argc = ARG_COUNT(ht);
@@ -1657,7 +1697,13 @@ void php3_hw_pipedocument(INTERNAL_FUNCTION_PARAMETERS) {
 	char *bodytag = NULL;
 	int count;
 	/* !!!! memory for object, bodytag and attributes is allocated with malloc !!!! */
-	if (0 != (ptr->lasterror =  send_pipedocument(ptr->socket, "gehtnix.fernuni-hagen.de", id, mode, rootid, &attributes, &bodytag, &object, &count)))
+	if (0 != (ptr->lasterror =  send_pipedocument(ptr->socket,
+#if APACHE
+  serv->server_hostname,
+#else
+  "localhost",
+#endif
+   id, mode, rootid, &attributes, &bodytag, &object, &count)))
 		RETURN_FALSE;
 
 	doc = malloc(sizeof(hw_document));
@@ -1672,10 +1718,14 @@ fprintf(stderr, "size = %d\n", count);
 }
 
 void php3_hw_pipecgi(INTERNAL_FUNCTION_PARAMETERS) {
-	YYSTYPE *arg1, *arg2;
+	pval *arg1, *arg2;
 	int link, id, type;
 	hw_connection *ptr;
 	hw_document *doc;
+	char cgi_env_str[1000];
+#if APACHE
+	server_rec *serv = GLOBAL(php3_rqst)->server;
+#endif
 	TLS_VARS;
 
 	if (ARG_COUNT(ht) != 2 || getParameters(ht, 2, &arg1, &arg2) == FAILURE) {
@@ -1696,8 +1746,26 @@ void php3_hw_pipecgi(INTERNAL_FUNCTION_PARAMETERS) {
 	char *object = NULL;
 	char *attributes = NULL;
 	int count;
+
+#if (WIN32|WINNT)
+	sprintf(cgi_env_str, "CGI_REQUEST_METHOD=%s\nCGI_PATH_INFO=%s\nCGI_QUERY_STRING=%s",
+	                     getenv("REQUEST_METHOD"),
+	                     getenv("PATH_INFO"),
+	                     getenv("QUERY_STRING"));
+#else
+	sprintf(cgi_env_str, "CGI_REQUEST_METHOD=%s\nCGI_PATH_INFO=%s\nCGI_QUERY_STRING=%s",
+	                     GLOBAL(request_info).request_method,
+	                     GLOBAL(request_info).path_info,
+	                     GLOBAL(request_info).query_string);
+#endif
 	/* !!!! memory for object, bodytag and attributes is allocated with malloc !!!! */
-	if (0 != (ptr->lasterror =  send_pipecgi(ptr->socket, "gehtnix.fernuni-hagen.de", id, &attributes, &object, &count)))
+	if (0 != (ptr->lasterror =  send_pipecgi(ptr->socket,
+#if APACHE
+  serv->server_hostname,
+#else
+  "localhost",
+#endif
+  id, cgi_env_str, &attributes, &object, &count)))
 		RETURN_FALSE;
 
 	doc = malloc(sizeof(hw_document));
@@ -1711,7 +1779,7 @@ void php3_hw_pipecgi(INTERNAL_FUNCTION_PARAMETERS) {
 }
 
 void php3_hw_insertdocument(INTERNAL_FUNCTION_PARAMETERS) {
-	YYSTYPE *arg1, *arg2, *arg3;
+	pval *arg1, *arg2, *arg3;
 	int link, id, doc, type;
 	hw_connection *ptr;
 	hw_document *docptr;
@@ -1727,20 +1795,20 @@ void php3_hw_insertdocument(INTERNAL_FUNCTION_PARAMETERS) {
 	id=arg2->value.lval;
 	ptr = php3_list_find(link,&type);
 	if(!ptr || (type!=php3_hw_module.le_socketp && type!=php3_hw_module.le_psocketp)) {
-		php3_error(E_WARNING,"Unable to find file identifier %d",id);
+		php3_error(E_WARNING,"Unable to find connection identifier %d",link);
 		RETURN_FALSE;
 	}
 
 	doc=arg3->value.lval;
 	docptr = php3_list_find(doc,&type);
 	if(!docptr || (type!=php3_hw_module.le_document)) {
-		php3_error(E_WARNING,"Unable to find file identifier %d",id);
+		php3_error(E_WARNING,"Unable to find document identifier %d",doc);
 		RETURN_FALSE;
 	}
 
 	set_swap(ptr->swap_on);
 	{
-	if (0 != (ptr->lasterror =  send_putdocument(ptr->socket, "gehtnix.fernuni-hagen.de", id, docptr->attributes, docptr->data, docptr->size))) {
+	if (0 != (ptr->lasterror =  send_putdocument(ptr->socket, "localhost", id, docptr->attributes, docptr->data, docptr->size))) {
 		RETURN_FALSE;
 		}
 	}
@@ -1748,27 +1816,29 @@ void php3_hw_insertdocument(INTERNAL_FUNCTION_PARAMETERS) {
 }
 
 void php3_hw_new_document(INTERNAL_FUNCTION_PARAMETERS) {
-	YYSTYPE *arg1, *arg2;
+	pval *arg1, *arg2, *arg3;
 	hw_document *doc;
 
-	if (ARG_COUNT(ht) != 2 || getParameters(ht, 2, &arg1, &arg2) == FAILURE) {
+	if (ARG_COUNT(ht) != 3 || getParameters(ht, 3, &arg1, &arg2, &arg3) == FAILURE) {
 		WRONG_PARAM_COUNT;
 	}
 
 	convert_to_string(arg1);
 	convert_to_string(arg2);
+	convert_to_long(arg3);
 
 	doc = malloc(sizeof(hw_document));
-	doc->data = strdup(arg2->value.str.val);
+	doc->data = malloc(arg3->value.lval);
+        memcpy(doc->data, arg2->value.str.val, arg3->value.lval);
 	doc->attributes = strdup(arg1->value.str.val);
 	doc->bodytag = NULL;
-	doc->size = strlen(doc->data);
+	doc->size = arg3->value.lval;
 	return_value->value.lval = php3_list_insert(doc,php3_hw_module.le_document);
 	return_value->type = IS_LONG;
 }
 
 void php3_hw_free_document(INTERNAL_FUNCTION_PARAMETERS) {
-	YYSTYPE *arg1;
+	pval *arg1;
 	int id, type;
 	hw_document *ptr;
 	TLS_VARS;
@@ -1788,7 +1858,7 @@ void php3_hw_free_document(INTERNAL_FUNCTION_PARAMETERS) {
 }
 
 void php3_hw_output_document(INTERNAL_FUNCTION_PARAMETERS) {
-	YYSTYPE *arg1;
+	pval *arg1;
 	int id, type, count;
 	hw_document *ptr;
 	char *ptr1;
@@ -1818,7 +1888,7 @@ void php3_hw_output_document(INTERNAL_FUNCTION_PARAMETERS) {
 }
 
 void php3_hw_document_bodytag(INTERNAL_FUNCTION_PARAMETERS) {
-	YYSTYPE *argv[2];
+	pval *argv[2];
 	int id, type, argc;
 	hw_document *ptr;
 	char *temp, *str = NULL;
@@ -1856,7 +1926,7 @@ void php3_hw_document_bodytag(INTERNAL_FUNCTION_PARAMETERS) {
 }
 
 void php3_hw_document_content(INTERNAL_FUNCTION_PARAMETERS) {
-	YYSTYPE *argv[1];
+	pval *argv[1];
 	int id, type, argc;
 	hw_document *ptr;
 	TLS_VARS;
@@ -1880,7 +1950,7 @@ void php3_hw_document_content(INTERNAL_FUNCTION_PARAMETERS) {
 }
 
 void php3_hw_document_size(INTERNAL_FUNCTION_PARAMETERS) {
-	YYSTYPE *arg1;
+	pval *arg1;
 	int id, type;
 	hw_document *ptr;
 	TLS_VARS;
@@ -1900,7 +1970,7 @@ void php3_hw_document_size(INTERNAL_FUNCTION_PARAMETERS) {
 }
 
 void php3_hw_document_attributes(INTERNAL_FUNCTION_PARAMETERS) {
-	YYSTYPE *arg1;
+	pval *arg1;
 	int id, type;
 	hw_document *ptr;
 	TLS_VARS;
@@ -1917,11 +1987,11 @@ void php3_hw_document_attributes(INTERNAL_FUNCTION_PARAMETERS) {
 	}
 
 	RETURN_STRING(ptr->attributes, 1);
-//	make_return_array_from_objrec(&return_value, ptr->attributes);
+/*	make_return_array_from_objrec(&return_value, ptr->attributes); */
 }
 
 void php3_hw_getparentsobj(INTERNAL_FUNCTION_PARAMETERS) {
-	YYSTYPE *arg1, *arg2;
+	pval *arg1, *arg2;
 	int link, id, type;
 	int count;
 	char  **childObjRecs = NULL;
@@ -1948,13 +2018,13 @@ void php3_hw_getparentsobj(INTERNAL_FUNCTION_PARAMETERS) {
 		RETURN_FALSE;
 	}
 
-	// create return value and free all memory
+	/* create return value and free all memory */
 	if( 0 > make_return_objrec(&return_value, childObjRecs, count))
 		RETURN_FALSE;
 }
 
 void php3_hw_getparents(INTERNAL_FUNCTION_PARAMETERS) {
-	YYSTYPE *arg1, *arg2;
+	pval *arg1, *arg2;
 	int link, id, type;
 	int count;
 	hw_connection *ptr;
@@ -1997,7 +2067,7 @@ void php3_hw_getparents(INTERNAL_FUNCTION_PARAMETERS) {
 }
 
 void php3_hw_children(INTERNAL_FUNCTION_PARAMETERS) {
-	YYSTYPE *arg1, *arg2;
+	pval *arg1, *arg2;
 	int link, id, type;
 	int count;
 	hw_connection *ptr;
@@ -2040,7 +2110,7 @@ void php3_hw_children(INTERNAL_FUNCTION_PARAMETERS) {
 }
 
 void php3_hw_childrenobj(INTERNAL_FUNCTION_PARAMETERS) {
-	YYSTYPE *arg1, *arg2;
+	pval *arg1, *arg2;
 	int link, id, type;
 	int count;
 	char  **childObjRecs = NULL;
@@ -2067,13 +2137,13 @@ void php3_hw_childrenobj(INTERNAL_FUNCTION_PARAMETERS) {
 		RETURN_FALSE;
 	}
 
-	// create return value and free all memory
+	/* create return value and free all memory */
 	if( 0 > make_return_objrec(&return_value, childObjRecs, count))
 		RETURN_FALSE;
 }
 
 void php3_hw_getchildcoll(INTERNAL_FUNCTION_PARAMETERS) {
-	YYSTYPE *arg1, *arg2;
+	pval *arg1, *arg2;
 	int link, id, type;
 	int count;
 	hw_connection *ptr;
@@ -2116,7 +2186,7 @@ void php3_hw_getchildcoll(INTERNAL_FUNCTION_PARAMETERS) {
 }
 
 void php3_hw_getchildcollobj(INTERNAL_FUNCTION_PARAMETERS) {
-	YYSTYPE *arg1, *arg2;
+	pval *arg1, *arg2;
 	int link, id, type;
 	int count;
 	char  **childObjRecs = NULL;
@@ -2143,13 +2213,13 @@ void php3_hw_getchildcollobj(INTERNAL_FUNCTION_PARAMETERS) {
 		RETURN_FALSE;
 	}
 
-	// create return value and free all memory
+	/* create return value and free all memory */
 	if( 0 > make_return_objrec(&return_value, childObjRecs, count))
 		RETURN_FALSE;
 }
 
 void php3_hw_docbyanchor(INTERNAL_FUNCTION_PARAMETERS) {
-	YYSTYPE *arg1, *arg2;
+	pval *arg1, *arg2;
 	int link, id, type;
 	hw_connection *ptr;
 	TLS_VARS;
@@ -2178,7 +2248,7 @@ void php3_hw_docbyanchor(INTERNAL_FUNCTION_PARAMETERS) {
 }
 
 void php3_hw_docbyanchorobj(INTERNAL_FUNCTION_PARAMETERS) {
-	YYSTYPE *arg1, *arg2;
+	pval *arg1, *arg2;
 	int link, id, type;
 	hw_connection *ptr;
 	TLS_VARS;
@@ -2208,7 +2278,7 @@ void php3_hw_docbyanchorobj(INTERNAL_FUNCTION_PARAMETERS) {
 }
 
 void php3_hw_getobjectbyquery(INTERNAL_FUNCTION_PARAMETERS) {
-	YYSTYPE *arg1, *arg2, *arg3;
+	pval *arg1, *arg2, *arg3;
 	int link, type, maxhits;
 	char *query;
 	int count, i;
@@ -2249,7 +2319,7 @@ void php3_hw_getobjectbyquery(INTERNAL_FUNCTION_PARAMETERS) {
 }
 
 void php3_hw_getobjectbyqueryobj(INTERNAL_FUNCTION_PARAMETERS) {
-	YYSTYPE *arg1, *arg2, *arg3;
+	pval *arg1, *arg2, *arg3;
 	int link, type, maxhits;
 	char *query;
 	int count;
@@ -2279,13 +2349,13 @@ void php3_hw_getobjectbyqueryobj(INTERNAL_FUNCTION_PARAMETERS) {
 		RETURN_FALSE;
 	}
 
-	// create return value and free all memory
+	/* create return value and free all memory */
 	if( 0 > make_return_objrec(&return_value, childObjRecs, count))
 		RETURN_FALSE;
 }
 
 void php3_hw_getobjectbyquerycoll(INTERNAL_FUNCTION_PARAMETERS) {
-	YYSTYPE *arg1, *arg2, *arg3, *arg4;
+	pval *arg1, *arg2, *arg3, *arg4;
 	int link, id, type, maxhits;
 	char *query;
 	int count, i;
@@ -2328,7 +2398,7 @@ void php3_hw_getobjectbyquerycoll(INTERNAL_FUNCTION_PARAMETERS) {
 }
 
 void php3_hw_getobjectbyquerycollobj(INTERNAL_FUNCTION_PARAMETERS) {
-	YYSTYPE *arg1, *arg2, *arg3, *arg4;
+	pval *arg1, *arg2, *arg3, *arg4;
 	int link, id, type, maxhits;
 	char *query;
 	int count;
@@ -2360,13 +2430,13 @@ void php3_hw_getobjectbyquerycollobj(INTERNAL_FUNCTION_PARAMETERS) {
 		RETURN_FALSE;
 	}
 
-	// create return value and free all memory
+	/* create return value and free all memory */
 	if( 0 > make_return_objrec(&return_value, childObjRecs, count))
 		RETURN_FALSE;
 }
 
 void php3_hw_getchilddoccoll(INTERNAL_FUNCTION_PARAMETERS) {
-	YYSTYPE *arg1, *arg2;
+	pval *arg1, *arg2;
 	int link, id, type;
 	int count, i;
 	int  *childIDs = NULL;
@@ -2403,7 +2473,7 @@ void php3_hw_getchilddoccoll(INTERNAL_FUNCTION_PARAMETERS) {
 }
 
 void php3_hw_getchilddoccollobj(INTERNAL_FUNCTION_PARAMETERS) {
-	YYSTYPE *arg1, *arg2;
+	pval *arg1, *arg2;
 	int link, id, type;
 	int count;
 	char  **childObjRecs = NULL;
@@ -2429,14 +2499,14 @@ void php3_hw_getchilddoccollobj(INTERNAL_FUNCTION_PARAMETERS) {
 		RETURN_FALSE;
 	}
 
-	// create return value and free all memory
+	/* create return value and free all memory */
 	if( 0 > make_return_objrec(&return_value, childObjRecs, count))
 		RETURN_FALSE;
 
 }
 
 void php3_hw_getanchors(INTERNAL_FUNCTION_PARAMETERS) {
-	YYSTYPE *arg1, *arg2;
+	pval *arg1, *arg2;
 	int link, id, type;
 	int count, i;
 	int  *anchorIDs = NULL;
@@ -2473,7 +2543,7 @@ void php3_hw_getanchors(INTERNAL_FUNCTION_PARAMETERS) {
 }
 
 void php3_hw_getanchorsobj(INTERNAL_FUNCTION_PARAMETERS) {
-	YYSTYPE *arg1, *arg2;
+	pval *arg1, *arg2;
 	int link, id, type;
 	int count;
 	char  **anchorObjRecs = NULL;
@@ -2499,13 +2569,13 @@ void php3_hw_getanchorsobj(INTERNAL_FUNCTION_PARAMETERS) {
 		RETURN_FALSE;
 	}
 
-	// create return value and free all memory
+	/* create return value and free all memory */
 	if( 0 > make_return_objrec(&return_value, anchorObjRecs, count))
 		RETURN_FALSE;
 }
 
 void php3_hw_getusername(INTERNAL_FUNCTION_PARAMETERS) {
-	YYSTYPE *arg1;
+	pval *arg1;
 	int link, type;
 	hw_connection *ptr;
 	TLS_VARS;
@@ -2528,7 +2598,7 @@ void php3_hw_getusername(INTERNAL_FUNCTION_PARAMETERS) {
 
 
 void php3_hw_identify(INTERNAL_FUNCTION_PARAMETERS) {
-	YYSTYPE *arg1, *arg2, *arg3;
+	pval *arg1, *arg2, *arg3;
 	int link, type;
 	char *name, *passwd, *userdata;
 	hw_connection *ptr;
@@ -2575,7 +2645,7 @@ void php3_hw_identify(INTERNAL_FUNCTION_PARAMETERS) {
 }
 
 void php3_hw_objrec2array(INTERNAL_FUNCTION_PARAMETERS) {
-	YYSTYPE *arg1;
+	pval *arg1;
 	TLS_VARS;
 
 	if (ARG_COUNT(ht) != 1 || getParameters(ht, 1, &arg1) == FAILURE) {
@@ -2585,8 +2655,26 @@ void php3_hw_objrec2array(INTERNAL_FUNCTION_PARAMETERS) {
 	make_return_array_from_objrec(&return_value, arg1->value.str.val);
 }
 
+void php3_hw_array2objrec(INTERNAL_FUNCTION_PARAMETERS) {
+	pval *arg1;
+	char *objrec, *retobj;
+	TLS_VARS;
+
+	if (ARG_COUNT(ht) != 1 || getParameters(ht, 1, &arg1) == FAILURE) {
+		WRONG_PARAM_COUNT;
+	}
+	convert_to_string(arg1);
+	objrec = make_objrec_from_array(arg1->value.ht);
+	if(objrec) {
+		retobj = estrdup(objrec);
+		free(objrec);
+		RETURN_STRING(retobj, 0);
+	} else
+		RETURN_FALSE;
+}
+
 void php3_hw_incollections(INTERNAL_FUNCTION_PARAMETERS) {
-	YYSTYPE *arg1, *arg2, *arg3, *arg4;
+	pval *arg1, *arg2, *arg3, *arg4;
 	int type, link, i;
 	hw_connection *ptr;
 	int cobjids, ccollids, *objectIDs, *collIDs, cretids, *retIDs, retcoll;
@@ -2645,7 +2733,7 @@ void php3_hw_incollections(INTERNAL_FUNCTION_PARAMETERS) {
 }
 
 void php3_hw_inscoll(INTERNAL_FUNCTION_PARAMETERS) {
-	YYSTYPE *arg1, *arg2, *arg3;
+	pval *arg1, *arg2, *arg3;
 	char *objrec;
 	int id, newid, type, link;
 	hw_connection *ptr;
@@ -2677,11 +2765,11 @@ void php3_hw_inscoll(INTERNAL_FUNCTION_PARAMETERS) {
 	}
 
 	if(objrec) free(objrec);
-	RETURN_TRUE;
+	RETURN_LONG(newid);
 }
 
 void php3_hw_insdoc(INTERNAL_FUNCTION_PARAMETERS) {
-	YYSTYPE *argv[4];
+	pval *argv[4];
 	char *objrec, *text;
 	int id, newid, type, link, argc;
 	hw_connection *ptr;
@@ -2721,7 +2809,7 @@ void php3_hw_insdoc(INTERNAL_FUNCTION_PARAMETERS) {
 }
 
 void php3_hw_getsrcbydestobj(INTERNAL_FUNCTION_PARAMETERS) {
-	YYSTYPE *arg1, *arg2;
+	pval *arg1, *arg2;
 	int link, type, id;
 	int count;
 	char  **childObjRecs = NULL;
@@ -2747,13 +2835,13 @@ void php3_hw_getsrcbydestobj(INTERNAL_FUNCTION_PARAMETERS) {
 		RETURN_FALSE;
 	}
 
-	// create return value and free all memory
+	/* create return value and free all memory */
 	if( 0 > make_return_objrec(&return_value, childObjRecs, count))
 		RETURN_FALSE;
 }
 
 void php3_hw_getrellink(INTERNAL_FUNCTION_PARAMETERS) {
-	YYSTYPE *arg1, *arg2, *arg3, *arg4;
+	pval *arg1, *arg2, *arg3, *arg4;
 	int link, type;
 	int rootid, destid, sourceid;
 	char *anchorstr;
@@ -2794,7 +2882,7 @@ void php3_info_hw()
 
 void php3_hw_connection_info(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *arg1;
+	pval *arg1;
 	hw_connection *ptr;
 	int link, type;
 
