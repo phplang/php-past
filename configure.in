@@ -1,4 +1,4 @@
-dnl $Id: configure.in,v 1.484 2000/01/01 02:30:52 sas Exp $
+dnl $Id: configure.in,v 1.489 2000/01/13 13:16:04 rasmus Exp $
 dnl Process this file with autoconf to produce a configure script.
 
 AC_INIT(main.c)
@@ -779,7 +779,8 @@ AC_ARG_WITH(gd,
       AC_MSG_RESULT(yes)
       AC_CHECK_LIB(gd, gdImageLzw,       [ AC_DEFINE(HAVE_LIBGD_LZW) ])
 	  old_LIBS=$LIBS
-	  LIBS="$LIBS -lpng -lz"
+	  AC_CHECK_LIB(z,compress, LIBS="$LIBS -lz",,)
+	  AC_CHECK_LIB(png,png_info_init, LIBS="$LIBS -lpng",,)
 	  AC_CHECK_LIB(gd, gdImageCreateFromPng, [AC_DEFINE(HAVE_GD_PNG)])
 	  AC_CHECK_LIB(gd, gdImageCreateFromGif, [AC_DEFINE(HAVE_GD_GIF)])
       AC_CHECK_LIB(gd, gdImageColorResolve, [ AC_DEFINE(HAVE_GDIMAGECOLORRESOLVE) ])
@@ -834,7 +835,8 @@ dnl A whole whack of possible places where this might be
 	LDFLAGS="$LDFLAGS -L$GD_LIB"
         AC_CHECK_LIB(gd, gdImageLzw,     [ AC_DEFINE(HAVE_LIBGD_LZW) ])
 	  old_LIBS=$LIBS
-	  LIBS="$LIBS -lpng -lz"
+	  AC_CHECK_LIB(z,compress, LIBS="$LIBS -lz",,)
+	  AC_CHECK_LIB(png,png_info_init, LIBS="$LIBS -lpng",,)
 		AC_CHECK_LIB(gd, gdImageCreateFromPng, [AC_DEFINE(HAVE_GD_PNG)])
 		AC_CHECK_LIB(gd, gdImageCreateFromGif, [AC_DEFINE(HAVE_GD_GIF)])
         AC_CHECK_LIB(gd, gdImageColorResolve, [ AC_DEFINE(HAVE_GDIMAGECOLORRESOLVE) ])
@@ -860,7 +862,8 @@ dnl A whole whack of possible places where this might be
   ])
   AC_CHECK_LIB(gd, gdImageLzw,       [ AC_DEFINE(HAVE_LIBGD_LZW) ])
   old_LIBS=$LIBS
-  LIBS="$LIBS -lpng -lz"
+  AC_CHECK_LIB(z,compress, LIBS="$LIBS -lz",,)
+  AC_CHECK_LIB(png,png_info_init, LIBS="$LIBS -lpng",,)
   AC_CHECK_LIB(gd, gdImageCreateFromPng, [AC_DEFINE(HAVE_GD_PNG)])
   AC_CHECK_LIB(gd, gdImageCreateFromGif, [AC_DEFINE(HAVE_GD_GIF)])
   AC_CHECK_LIB(gd, gdImageColorResolve, [ AC_DEFINE(HAVE_GDIMAGECOLORRESOLVE) ])
@@ -1371,7 +1374,6 @@ AC_SUBST(SYBASE_CT_LIBS)
 AC_SUBST(SYBASE_CT_LFLAGS)
 AC_SUBST(SYBASE_CT_INCLUDE)
 
-
 AC_MSG_CHECKING(for MySQL support)
 AC_ARG_WITH(mysql,
 [  --with-mysql[=DIR]      Include MySQL support.  DIR is the MySQL base
@@ -1379,38 +1381,71 @@ AC_ARG_WITH(mysql,
                           a number of common places for the MySQL files.],
 [
   if test "$withval" != "no"; then
-  	if test "$withval" = "yes"; then
-		if test -f /usr/include/mysql/mysql.h; then
-			MYSQL_INCDIR=/usr/include/mysql
-			MYSQL_LIBDIR=/usr/lib/mysql
-		elif test -f /usr/include/mysql.h; then
-			MYSQL_INCDIR=/usr/include
-			MYSQL_LIBDIR=/usr/lib
-		elif test -f /usr/local/include/mysql/mysql.h; then
-			MYSQL_INCDIR=/usr/local/include/mysql
-			MYSQL_LIBDIR=/usr/local/lib/mysql
-		elif test -f /usr/local/include/mysql.h; then
-			MYSQL_INCDIR=/usr/local/include
-			MYSQL_LIBDIR=/usr/local/lib
-        elif test -f /usr/local/mysql/include/mysql/mysql.h; then
-            MYSQL_INCDIR=/usr/local/mysql/include/mysql
-            MYSQL_LIBDIR=/usr/local/mysql/lib/mysql
-		else
-    		AC_MSG_RESULT(no)
-    		AC_MSG_ERROR(Invalid MySQL directory - unable to find mysql.h)
-		fi
-   	else
-		if test -f $withval/include/mysql/mysql.h; then
-   			MYSQL_INCDIR=$withval/include/mysql
-   			MYSQL_LIBDIR=$withval/lib/mysql
-		elif test -f $withval/include/mysql.h; then
-   			MYSQL_INCDIR=$withval/include
-   			MYSQL_LIBDIR=$withval/lib
-		else
-    		AC_MSG_RESULT(no)
-    		AC_MSG_ERROR(Invalid MySQL directory - unable to find mysql.h under $withval)
-		fi
-   	fi
+    if test "$withval" = "yes"; then
+      # Autodetect
+      for w in /usr/include /usr/local/include /usr/mysql /usr/local/mysql /opt /opt/mysql; do
+        # check for plain setups
+        if test -f $w/mysql.h; then
+          MYSQL_INCDIR=$w
+          break
+        fi
+        # check for "/usr/include/<packagename>" type setups
+        if test -f $w/mysql/mysql.h; then
+          MYSQL_INCDIR=$w/mysql
+          break
+        fi
+        # check for "/usr/<packagename>/include" type setups
+        if test -f $w/mysql/include/mysql.h; then
+          MYSQL_INCDIR=$w/mysql/include
+          break
+        fi
+      done
+
+      for w in /usr/lib /usr/local/lib /usr/mysql /usr/local/mysql /opt /opt/mysql; do
+        # check for plain setups
+        if test -f $w/libmysqlclient.a -o -f $w/libmysqlclient.so; then
+          MYSQL_LIBDIR=$w
+          break
+        fi
+        # check for "/usr/lib/<packagename>" type setups
+        if test -f $w/mysql/libmysqlclient.a -o -f $w/mysql/libmysqlclient.so; then
+          MYSQL_LIBDIR=$w/mysql
+          break
+        fi
+        # check for "/usr/<packagename>/lib" type setups
+        if test -f $w/mysql/lib/libmysqlclient.a -o -f $w/mysql/lib/libmysqlclient.so; then
+          MYSQL_LIBDIR=$w/mysql/lib
+          break
+        fi
+      done
+    else
+      # Manual detection for <withval>/include/<packagename>
+      # and <withval>/include.
+      if test -f $withval/include/mysql/mysql.h; then
+        MYSQL_INCDIR=$withval/include/mysql
+      elif test -f $withval/include/mysql.h; then
+        MYSQL_INCDIR=$withval/include
+      fi
+      
+      # Manual detection for <withval>/lib/<packagename>
+      # and <withval>/lib.
+      if test -f $withval/lib/mysql/libmysqlclient.a -o -f $withval/lib/mysql/libmysqlclient.so; then
+        MYSQL_LIBDIR=$withval/lib/mysql
+      elif test -f $withval/lib/libmysqlclient.a -o -f $withval/lib/libmysqlclient.so; then
+        MYSQL_LIBDIR=$withval/lib
+      fi
+    fi
+    
+    ## Did we find anything?
+    if test -z "$MYSQL_LIBDIR" ; then
+      AC_MSG_RESULT(no)
+      AC_MSG_ERROR(Invalid MySQL directory - unable to find libmysqlclient.a or libmysqlclient.so.)
+    fi
+    if test -z "$MYSQL_INCDIR" ; then
+      AC_MSG_RESULT(no)
+      AC_MSG_ERROR(Invalid MySQL directory - unable to find mysql.h.)
+    fi
+
     AC_ADD_LIBRARY_WITH_PATH(mysqlclient, $MYSQL_LIBDIR)
     AC_ADD_INCLUDE($MYSQL_INCDIR)
 
@@ -2910,7 +2945,7 @@ AC_ARG_WITH(posix,
 RESULT=no
 AC_MSG_CHECKING(whether to include GNU recode support)
 AC_ARG_WITH(recode,
-[  --with-recode[=DIR]       Include GNU recode support.],
+[  --with-recode[=DIR]     Include GNU recode support.],
 [
     if test "$withval" != "no"; then
         for i in /usr/local /usr /opt/recode $withval; do

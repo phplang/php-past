@@ -1,40 +1,32 @@
   -------------------------------------------------------------------- 
-   Copyright (c) 1998 The PHP Development Team.  All rights reserved.
+   Copyright (c) 2000 The PHP Development Team.  All rights reserved.
   -------------------------------------------------------------------- 
  
   Redistribution and use in source and binary forms, with or without
   modification, are permitted provided that the following conditions
   are met:
 
-  1. Commercial redistribution of larger works derived from, or 
-     works which bundle PHP, requires written permission from the
-     PHP Development Team.  You may charge a fee for the physical
-     act of transferring a copy, and must make it clear that the
-     fee being charged is for the distribution, and not for the
-     software itself.  You may, at your option, offer warranty
-     protection in exchange for a fee.
-
-  2. Redistributions of source code must retain the above copyright
+  1. Redistributions of source code must retain the above copyright
      notice, this list of conditions and the following disclaimer. 
  
-  3. Redistributions in binary form must reproduce the above 
+  2. Redistributions in binary form must reproduce the above 
      copyright notice, this list of conditions and the following 
      disclaimer in the documentation and/or other materials provided
      with the distribution.
  
-  4. All advertising materials mentioning features or use of this
+  3. All advertising materials mentioning features or use of this
      software must display the following acknowledgment:
      "This product includes software written by the PHP Development
       Team"
  
-  5. The name "PHP" must not be used to endorse or promote products 
+  4. The name "PHP" must not be used to endorse or promote products 
      derived from this software without prior written permission
      from the PHP Development Team.  This does not apply to add-on
      libraries or tools that work in conjunction with PHP.  In such
      a case the PHP name may be used to indicate that the product
      supports PHP.
  
-  6. Redistributions of any form whatsoever must retain the following
+  5. Redistributions of any form whatsoever must retain the following
      acknowledgment:
      "This product includes software written by the PHP Development
       Team". 

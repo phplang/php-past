@@ -27,7 +27,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: pcre.c,v 1.20 2000/01/01 04:31:16 sas Exp $ */
+/* $Id: pcre.c,v 1.21 2000/01/09 10:35:13 fmk Exp $ */
 
 #include "php.h"
 
@@ -58,6 +58,10 @@ php3_module_entry pcre_module_entry = {
 		   php_rinit_pcre, NULL,
 		   php_info_pcre, STANDARD_MODULE_PROPERTIES
 };
+
+#if COMPILE_DL
+DLEXPORT php3_module_entry *get_module(void) { return &pcre_module_entry; }
+#endif
 
 /* }}} */
 
@@ -343,7 +347,7 @@ void _pcre_match(INTERNAL_FUNCTION_PARAMETERS, int global)
 
 	/* Make sure to clean up the passed array and initialize it. */
 	if (subpats != NULL) {
-		pval_destructor(subpats _INLINE_TLS);
+		php3tls_pval_destructor(subpats _INLINE_TLS);
 		array_init(subpats);
 	}
 
@@ -427,7 +431,7 @@ void _pcre_match(INTERNAL_FUNCTION_PARAMETERS, int global)
 					}
 				}
 
-				php_pcre_free(stringlist);
+				php_pcre_free((void *)stringlist);
 				
 				/* Advance to the position right after the last full match */
 				piece += offsets[1];

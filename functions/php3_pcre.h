@@ -27,12 +27,15 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: php3_pcre.h,v 1.7 2000/01/01 04:44:09 sas Exp $ */
+/* $Id: php3_pcre.h,v 1.8 2000/01/09 10:35:13 fmk Exp $ */
 
 #ifndef _PHP_PCRE_H
 #define _PHP_PCRE_H
 
 #if HAVE_PCRE
+#if COMPILE_DL
+#include "dl/phpdl.h"
+#endif
 
 #include "modules.h"
 #include "internal_functions.h"

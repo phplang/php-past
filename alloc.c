@@ -7,7 +7,7 @@
  */
 
 
-#include "alloc.h"
+#include "php_alloc.h"
 #include "php.h"
 
 #include "main.h"

@@ -1,7 +1,7 @@
-/* $Id: php3_threads.c,v 1.3 1998/12/28 09:34:42 sas Exp $ */
+/* $Id: php3_threads.c,v 1.4 2000/01/07 10:36:29 sas Exp $ */
 
 #include <stdio.h>
-#include "alloc.h"
+#include "php_alloc.h"
 #include <errno.h>
 #if (WIN32|WINNT)
 #include <windows.h>

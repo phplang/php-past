@@ -29,7 +29,7 @@
  */
 
 
-/* $Id: php3_gd.h,v 1.38 1999/11/21 02:52:16 rasmus Exp $ */
+/* $Id: php3_gd.h,v 1.40 2000/01/13 13:16:05 rasmus Exp $ */
 
 #ifndef _PHP3_GD_H
 #define _PHP3_GD_H

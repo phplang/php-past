@@ -1,6 +1,13 @@
 PHP 3.0 CHANGE LOG                                                    ChangeLog
 |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 
+January 11, 2000, Version 3.0.14
+- Fixed broken GD autoconf check - GIF support was not detected unless libpng
+  and libz were both installed on the system (Rasmus)
+- Fix safe-mode problem in popen() (Kristian)
+- Fix safe-mode problem when resource had multiple consecutive /'s (Rasmus)
+- Remove written permission clause from license
+
 January 1, 2000, Version 3.0.13
 - Fixed timezone conflict on AIX (Sascha)
 - Fixed mysql_errno() problem when compiled against MySQL 3.23.x (Rasmus)

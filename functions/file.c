@@ -26,7 +26,7 @@
    | Authors: Rasmus Lerdorf <rasmus@lerdorf.on.ca>                       |
    +----------------------------------------------------------------------+
  */
-/* $Id: file.c,v 1.229 2000/01/01 04:31:15 sas Exp $ */
+/* $Id: file.c,v 1.230 2000/01/03 21:31:31 kk Exp $ */
 #include "php.h"
 
 #include <stdio.h>
@@ -51,6 +51,7 @@
 #include "safe_mode.h"
 #include "php3_list.h"
 #include "php3_string.h"
+#include "exec.h"
 #include "file.h"
 #if HAVE_PWD_H
 #if MSVC5
@@ -575,7 +576,7 @@ PHP_FUNCTION(popen) {
 	pval *arg1, *arg2;
 	FILE *fp;
 	int id;
-	char *p;
+	char *p, *tmp = NULL;
 	char *b, buf[1024];
 	TLS_VARS;
 	
@@ -600,7 +601,11 @@ PHP_FUNCTION(popen) {
 		} else {
 			snprintf(buf,sizeof(buf),"%s/%s",php3_ini.safe_mode_exec_dir,arg1->value.str.val);
 		}
-		fp = popen(buf,p);
+		
+		tmp = _php3_escapeshellcmd(buf);
+		fp = popen(tmp,p);
+		efree(tmp); /* temporary copy, no longer necessary */
+
 		if (!fp) {
 			php3_error(E_WARNING,"popen(\"%s\",\"%s\") - %s",buf,p,strerror(errno));
 			RETURN_FALSE;

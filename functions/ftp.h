@@ -28,13 +28,19 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: ftp.h,v 1.8 2000/01/01 04:44:09 sas Exp $ */
+/* $Id: ftp.h,v 1.9 2000/01/09 11:06:00 fmk Exp $ */
 
 #ifndef	_FTP_H
 #define	_FTP_H
 
 #include <stdio.h>
+#ifdef WIN32
+#include <winsock.h>
+#include "win32/include/portability.h"
+#else
 #include <netinet/in.h>
+#include <netdb.h>
+#endif
 
 
 /* XXX these should be configurable at runtime XXX */

@@ -28,12 +28,13 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: php_ftp.h,v 1.6 2000/01/01 04:44:10 sas Exp $ */
+/* $Id: php_ftp.h,v 1.7 2000/01/09 11:06:00 fmk Exp $ */
 
 #ifndef	_INCLUDED_FTP_H
 #define	_INCLUDED_FTP_H
 
 #if COMPILE_DL
+#include "dl/phpdl.h"
 #undef HAVE_FTP
 #define HAVE_FTP 1
 #endif

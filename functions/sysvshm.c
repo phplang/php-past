@@ -27,7 +27,7 @@
    +----------------------------------------------------------------------+
  */
  
-/* $Id: sysvshm.c,v 1.10 2000/01/01 04:31:17 sas Exp $ */
+/* $Id: sysvshm.c,v 1.11 2000/01/12 18:20:00 sas Exp $ */
 
 /* This has been built and tested on Solaris 2.6.
  * It may not compile or execute correctly on other systems.
@@ -71,10 +71,10 @@ php3_module_entry *get_module() { return &sysvshm_module_entry; }
 
 THREAD_LS sysvshm_module php3_sysvshm_module;
 
+#undef shm_ptr			/* undefine AIX-specific macro */
 
-
-static void php3i_release_sysvshm(sysvshm_shm *shm_ptr) {
-
+static void php3i_release_sysvshm(sysvshm_shm *shm_ptr) 
+{
 	shmdt((void*)shm_ptr->ptr);
 	efree(shm_ptr);
 }

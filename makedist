@@ -24,7 +24,7 @@
 #
 # Written by Stig Bakken <ssb@fast.no>     1997-05-28.
 #
-# $Id: makedist,v 1.30 1999/12/27 20:28:24 rasmus Exp $
+# $Id: makedist,v 1.31 2000/01/06 15:37:01 rasmus Exp $
 #
 
 CVSROOT=:pserver:cvsread@cvs.php.net:/repository
@@ -121,7 +121,7 @@ configure config.h.in"
 
 mkdir $PKG-$VER || exit 6
 mv $INC $PKG-$VER || exit 7
- 
+
 $ECHO_N "makedist: making gzipped tar archive...$ECHO_C"
 tar czf $ARCHIVE $PKG-$VER || exit 8
 echo ""

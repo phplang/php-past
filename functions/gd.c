@@ -29,7 +29,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: gd.c,v 1.138 2000/01/01 04:31:15 sas Exp $ */
+/* $Id: gd.c,v 1.140 2000/01/13 13:16:05 rasmus Exp $ */
 
 /* gd 1.2 is copyright 1994, 1995, Quest Protein Database Center, 
    Cold Spring Harbor Labs. */

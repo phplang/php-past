@@ -28,7 +28,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: ftp.c,v 1.13 2000/01/01 04:31:15 sas Exp $ */
+/* $Id: ftp.c,v 1.14 2000/01/09 11:06:00 fmk Exp $ */
 
 #include "php.h"
 
@@ -37,13 +37,17 @@
 #include <stdio.h>
 #include <ctype.h>
 #include <stdlib.h>
+#ifdef WIN32
+#include "win32/unistd.h"
+#else
 #include <unistd.h>
+#endif
 #include <fcntl.h>
 #include <string.h>
 #include <time.h>
+#ifdef HAVE_SYS_SOCKET_H
 #include <sys/socket.h>
-#include <netinet/in.h>
-#include <netdb.h>
+#endif
 #include <errno.h>
 
 #ifdef HAVE_SYS_TIME_H
@@ -106,7 +110,6 @@ ftp_open(const char *host, short port)
 	struct sockaddr_in	addr;
 	struct hostent		*he;
 	int			size;
-
 
 	/* set up the address */
 	if ((he = gethostbyname(host)) == NULL) {
@@ -817,7 +820,9 @@ my_send(int s, void *buf, size_t len)
 		n = select(s + 1, NULL, &write_set, NULL, &tv);
 		if (n < 1) {
 			if (n == 0)
+#if !(WIN32|WINNT)
 				errno = ETIMEDOUT;
+#endif
 			return -1;
 		}
 
@@ -848,7 +853,9 @@ my_recv(int s, void *buf, size_t len)
 	n = select(s + 1, &read_set, NULL, NULL, &tv);
 	if (n < 1) {
 		if (n == 0)
+#if !(WIN32|WINNT)
 			errno = ETIMEDOUT;
+#endif
 		return -1;
 	}
 
@@ -858,6 +865,7 @@ my_recv(int s, void *buf, size_t len)
 
 int
 my_connect(int s, const struct sockaddr *addr, int addrlen)
+#if !defined(WIN32)
 {
 	fd_set		conn_set;
 	int		flags;
@@ -901,6 +909,11 @@ my_connect(int s, const struct sockaddr *addr, int addrlen)
 
 	return 0;
 }
+#else
+{
+	return connect(s, addr, addrlen);
+}
+#endif
 
 
 int
@@ -918,7 +931,9 @@ my_accept(int s, struct sockaddr *addr, int *addrlen)
 	n = select(s + 1, &accept_set, NULL, NULL, &tv);
 	if (n < 1) {
 		if (n == 0)
+#if !(WIN32|WINNT)
 			errno = ETIMEDOUT;
+#endif
 		return -1;
 	}
 

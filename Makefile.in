@@ -24,7 +24,7 @@
 # +----------------------------------------------------------------------+
 
 #
-# $Id: Makefile.in,v 1.358 1999/12/27 20:28:24 rasmus Exp $
+# $Id: Makefile.in,v 1.359 2000/01/07 10:36:28 sas Exp $
 #
 
 prefix = @prefix@
@@ -249,46 +249,46 @@ depend:	parser-scanner
 
 # do not edit below -- makedepend
 language-parser.tab.o: language-parser.tab.c php.h php_version.h \
- config.h request_info.h php3_hash.h alloc.h  safe_mode.h \
+ config.h request_info.h php3_hash.h php_alloc.h  safe_mode.h \
  fopen-wrappers.h mod_php3.h stack.h operators.h token_cache.h \
  variables.h constants.h php3_list.h control_structures.h main.h \
  functions/head.h modules.h control_structures_inline.h \
  internal_functions.h
 language-scanner.o: language-scanner.c php.h php_version.h config.h \
- request_info.h php3_hash.h alloc.h  safe_mode.h \
+ request_info.h php3_hash.h php_alloc.h  safe_mode.h \
  fopen-wrappers.h mod_php3.h stack.h operators.h token_cache.h \
  variables.h constants.h language-parser.tab.h language-scanner.h \
  main.h modules.h control_structures.h php3_list.h highlight.h \
  functions/post.h functions/fsock.h
 main.o: main.c php.h php_version.h config.h request_info.h php3_hash.h \
- alloc.h  safe_mode.h fopen-wrappers.h mod_php3.h stack.h \
+ php_alloc.h  safe_mode.h fopen-wrappers.h mod_php3.h stack.h \
  operators.h token_cache.h variables.h constants.h build-defs.h \
  language-parser.tab.h main.h control_structures.h php3_list.h \
  modules.h internal_functions.h functions/basic_functions.h \
  functions/info.h functions/head.h functions/post.h functions/type.h \
  highlight.h snprintf.h
 php3_hash.o: php3_hash.c php.h php_version.h config.h request_info.h \
- php3_hash.h alloc.h  safe_mode.h fopen-wrappers.h \
+ php3_hash.h php_alloc.h  safe_mode.h fopen-wrappers.h \
  mod_php3.h stack.h operators.h token_cache.h variables.h constants.h
 operators.o: operators.c php.h php_version.h config.h request_info.h \
- php3_hash.h alloc.h  safe_mode.h fopen-wrappers.h \
+ php3_hash.h php_alloc.h  safe_mode.h fopen-wrappers.h \
  mod_php3.h stack.h operators.h token_cache.h variables.h constants.h \
  functions/number.h snprintf.h
 variables.o: variables.c php.h php_version.h config.h request_info.h \
- php3_hash.h alloc.h  safe_mode.h fopen-wrappers.h \
+ php3_hash.h php_alloc.h  safe_mode.h fopen-wrappers.h \
  mod_php3.h stack.h operators.h token_cache.h variables.h constants.h \
  control_structures.h php3_list.h internal_functions.h modules.h \
  functions/head.h
 token_cache.o: token_cache.c php.h php_version.h config.h \
- request_info.h php3_hash.h alloc.h  safe_mode.h \
+ request_info.h php3_hash.h php_alloc.h  safe_mode.h \
  fopen-wrappers.h mod_php3.h stack.h operators.h token_cache.h \
  variables.h constants.h language-parser.tab.h control_structures.h \
  php3_list.h main.h highlight.h
 stack.o: stack.c php.h php_version.h config.h request_info.h \
- php3_hash.h alloc.h  safe_mode.h fopen-wrappers.h \
+ php3_hash.h php_alloc.h  safe_mode.h fopen-wrappers.h \
  mod_php3.h stack.h operators.h token_cache.h variables.h constants.h
 internal_functions.o: internal_functions.c php.h php_version.h \
- config.h request_info.h php3_hash.h alloc.h  safe_mode.h \
+ config.h request_info.h php3_hash.h php_alloc.h  safe_mode.h \
  fopen-wrappers.h mod_php3.h stack.h operators.h token_cache.h \
  variables.h constants.h internal_functions.h modules.h \
  internal_functions_registry.h php3_list.h functions/php3_ifx.h \
@@ -318,78 +318,78 @@ internal_functions.o: internal_functions.c php.h php_version.h \
  functions/php_lcg.h functions/fsock.h functions/php3_mckcrypt.h
 snprintf.o: snprintf.c config.h
 php3_sprintf.o: php3_sprintf.c config.h
-alloc.o: alloc.c alloc.h php.h php_version.h config.h request_info.h \
+alloc.o: alloc.c php_alloc.h php.h php_version.h config.h request_info.h \
  php3_hash.h  safe_mode.h fopen-wrappers.h mod_php3.h \
  stack.h operators.h token_cache.h variables.h constants.h main.h
 list.o: list.c php.h php_version.h config.h request_info.h php3_hash.h \
- alloc.h  safe_mode.h fopen-wrappers.h mod_php3.h stack.h \
+ php_alloc.h  safe_mode.h fopen-wrappers.h mod_php3.h stack.h \
  operators.h token_cache.h variables.h constants.h php3_list.h \
  modules.h functions/db.h
 highlight.o: highlight.c php.h php_version.h config.h request_info.h \
- php3_hash.h alloc.h  safe_mode.h fopen-wrappers.h \
+ php3_hash.h php_alloc.h  safe_mode.h fopen-wrappers.h \
  mod_php3.h stack.h operators.h token_cache.h variables.h constants.h \
  language-parser.tab.h main.h highlight.h
 debugger.o: debugger.c php.h php_version.h config.h request_info.h \
- php3_hash.h alloc.h  safe_mode.h fopen-wrappers.h \
+ php3_hash.h php_alloc.h  safe_mode.h fopen-wrappers.h \
  mod_php3.h stack.h operators.h token_cache.h variables.h constants.h \
  internal_functions.h modules.h main.h
 configuration-parser.tab.o: configuration-parser.tab.c php.h \
- php_version.h config.h request_info.h php3_hash.h alloc.h \
+ php_version.h config.h request_info.h php3_hash.h php_alloc.h \
   safe_mode.h fopen-wrappers.h mod_php3.h stack.h \
  operators.h token_cache.h variables.h constants.h modules.h \
  functions/dl.h functions/file.h functions/php3_browscap.h
 configuration-scanner.o: configuration-scanner.c php.h php_version.h \
- config.h request_info.h php3_hash.h alloc.h  safe_mode.h \
+ config.h request_info.h php3_hash.h php_alloc.h  safe_mode.h \
  fopen-wrappers.h mod_php3.h stack.h operators.h token_cache.h \
  variables.h constants.h configuration-parser.tab.h
 request_info.o: request_info.c php.h php_version.h config.h \
- request_info.h php3_hash.h alloc.h  safe_mode.h \
+ request_info.h php3_hash.h php_alloc.h  safe_mode.h \
  fopen-wrappers.h mod_php3.h stack.h operators.h token_cache.h \
  variables.h constants.h
 safe_mode.o: safe_mode.c php.h php_version.h config.h request_info.h \
- php3_hash.h alloc.h  safe_mode.h fopen-wrappers.h \
+ php3_hash.h php_alloc.h  safe_mode.h fopen-wrappers.h \
  mod_php3.h stack.h operators.h token_cache.h variables.h constants.h \
  functions/pageinfo.h
 fopen-wrappers.o: fopen-wrappers.c php.h php_version.h config.h \
- request_info.h php3_hash.h alloc.h  safe_mode.h \
+ request_info.h php3_hash.h php_alloc.h  safe_mode.h \
  fopen-wrappers.h mod_php3.h stack.h operators.h token_cache.h \
  variables.h constants.h modules.h php3_list.h php3_realpath.h \
  functions/head.h functions/url.h functions/base64.h \
  functions/php3_string.h functions/fsock.h
 constants.o: constants.c php.h php_version.h config.h request_info.h \
- php3_hash.h alloc.h  safe_mode.h fopen-wrappers.h \
+ php3_hash.h php_alloc.h  safe_mode.h fopen-wrappers.h \
  mod_php3.h stack.h operators.h token_cache.h variables.h constants.h \
  internal_functions.h modules.h
 php3_realpath.o: php3_realpath.c php.h php_version.h config.h \
- request_info.h php3_hash.h alloc.h  safe_mode.h \
+ request_info.h php3_hash.h php_alloc.h  safe_mode.h \
  fopen-wrappers.h mod_php3.h stack.h operators.h token_cache.h \
  variables.h constants.h
 alloca.o: alloca.c
 php_compat.o: php_compat.c php_compat.h php.h php_version.h config.h \
- request_info.h php3_hash.h alloc.h  safe_mode.h \
+ request_info.h php3_hash.h php_alloc.h  safe_mode.h \
  fopen-wrappers.h mod_php3.h stack.h operators.h token_cache.h \
  variables.h constants.h
 functions/adabasd.o: functions/adabasd.c config.h build-defs.h php.h \
- php_version.h request_info.h php3_hash.h alloc.h  \
+ php_version.h request_info.h php3_hash.h php_alloc.h  \
  safe_mode.h fopen-wrappers.h mod_php3.h stack.h operators.h \
  token_cache.h variables.h constants.h internal_functions.h modules.h \
  functions/php3_string.h functions/head.h functions/adabasd.h
 functions/aspell.o: functions/aspell.c php.h php_version.h config.h \
- request_info.h php3_hash.h alloc.h  safe_mode.h \
+ request_info.h php3_hash.h php_alloc.h  safe_mode.h \
  fopen-wrappers.h mod_php3.h stack.h operators.h token_cache.h \
  variables.h constants.h build-defs.h internal_functions.h modules.h \
  php3_list.h
 functions/apache.o: functions/apache.c php.h php_version.h config.h \
- request_info.h php3_hash.h alloc.h  safe_mode.h \
+ request_info.h php3_hash.h php_alloc.h  safe_mode.h \
  fopen-wrappers.h mod_php3.h stack.h operators.h token_cache.h \
  variables.h constants.h internal_functions.h modules.h \
  functions/head.h
 functions/fhttpd.o: functions/fhttpd.c php.h php_version.h config.h \
- request_info.h php3_hash.h alloc.h  safe_mode.h \
+ request_info.h php3_hash.h php_alloc.h  safe_mode.h \
  fopen-wrappers.h mod_php3.h stack.h operators.h token_cache.h \
  variables.h constants.h internal_functions.h modules.h
 functions/basic_functions.o: functions/basic_functions.c php.h php_version.h \
- config.h request_info.h php3_hash.h alloc.h  safe_mode.h \
+ config.h request_info.h php3_hash.h php_alloc.h  safe_mode.h \
  fopen-wrappers.h mod_php3.h stack.h operators.h token_cache.h \
  variables.h constants.h modules.h internal_functions.h \
  internal_functions_registry.h php3_list.h functions/basic_functions.h \
@@ -402,407 +402,407 @@ functions/basic_functions.o: functions/basic_functions.c php.h php_version.h \
  functions/php3_mail.h functions/php3_var.h functions/php3_iptc.h \
  functions/quot_print.h functions/cyr_convert.h
 functions/crypt.o: functions/crypt.c php.h php_version.h config.h request_info.h \
- php3_hash.h alloc.h  safe_mode.h fopen-wrappers.h \
+ php3_hash.h php_alloc.h  safe_mode.h fopen-wrappers.h \
  mod_php3.h stack.h operators.h token_cache.h variables.h constants.h \
  internal_functions.h modules.h functions/php3_string.h
 functions/datetime.o: functions/datetime.c php.h php_version.h config.h \
- request_info.h php3_hash.h alloc.h  safe_mode.h \
+ request_info.h php3_hash.h php_alloc.h  safe_mode.h \
  fopen-wrappers.h mod_php3.h stack.h operators.h token_cache.h \
  variables.h constants.h internal_functions.h modules.h \
  functions/datetime.h snprintf.h
 functions/db.o: functions/db.c php.h php_version.h config.h request_info.h \
- php3_hash.h alloc.h  safe_mode.h fopen-wrappers.h \
+ php3_hash.h php_alloc.h  safe_mode.h fopen-wrappers.h \
  mod_php3.h stack.h operators.h token_cache.h variables.h constants.h \
  php_compat.h internal_functions.h modules.h php3_list.h \
  functions/db.h functions/php3_string.h
 functions/dbase.o: functions/dbase.c php.h php_version.h config.h request_info.h \
- php3_hash.h alloc.h  safe_mode.h fopen-wrappers.h \
+ php3_hash.h php_alloc.h  safe_mode.h fopen-wrappers.h \
  mod_php3.h stack.h operators.h token_cache.h variables.h constants.h \
  internal_functions.h modules.h php3_list.h
 functions/dir.o: functions/dir.c php.h php_version.h config.h request_info.h \
- php3_hash.h alloc.h  safe_mode.h fopen-wrappers.h \
+ php3_hash.h php_alloc.h  safe_mode.h fopen-wrappers.h \
  mod_php3.h stack.h operators.h token_cache.h variables.h constants.h \
  internal_functions.h modules.h php3_list.h functions/php3_dir.h
 functions/dl.o: functions/dl.c php.h php_version.h config.h request_info.h \
- php3_hash.h alloc.h  safe_mode.h fopen-wrappers.h \
+ php3_hash.h php_alloc.h  safe_mode.h fopen-wrappers.h \
  mod_php3.h stack.h operators.h token_cache.h variables.h constants.h \
  internal_functions.h modules.h functions/dl.h
 functions/dns.o: functions/dns.c php.h php_version.h config.h request_info.h \
- php3_hash.h alloc.h  safe_mode.h fopen-wrappers.h \
+ php3_hash.h php_alloc.h  safe_mode.h fopen-wrappers.h \
  mod_php3.h stack.h operators.h token_cache.h variables.h constants.h \
  internal_functions.h modules.h functions/dns.h
 functions/exec.o: functions/exec.c php.h php_version.h config.h request_info.h \
- php3_hash.h alloc.h  safe_mode.h fopen-wrappers.h \
+ php3_hash.h php_alloc.h  safe_mode.h fopen-wrappers.h \
  mod_php3.h stack.h operators.h token_cache.h variables.h constants.h \
  internal_functions.h modules.h functions/php3_string.h \
  functions/head.h functions/exec.h
 functions/file.o: functions/file.c php.h php_version.h config.h request_info.h \
- php3_hash.h alloc.h  safe_mode.h fopen-wrappers.h \
+ php3_hash.h php_alloc.h  safe_mode.h fopen-wrappers.h \
  mod_php3.h stack.h operators.h token_cache.h variables.h constants.h \
  functions/head.h modules.h internal_functions.h php3_list.h \
  functions/php3_string.h functions/file.h snprintf.h functions/fsock.h \
  php_compat.h
 functions/filepro.o: functions/filepro.c php.h php_version.h config.h \
- request_info.h php3_hash.h alloc.h  safe_mode.h \
+ request_info.h php3_hash.h php_alloc.h  safe_mode.h \
  fopen-wrappers.h mod_php3.h stack.h operators.h token_cache.h \
  variables.h constants.h internal_functions.h modules.h \
  functions/filepro.h
 functions/filestat.o: functions/filestat.c php.h php_version.h config.h \
- request_info.h php3_hash.h alloc.h  safe_mode.h \
+ request_info.h php3_hash.h php_alloc.h  safe_mode.h \
  fopen-wrappers.h mod_php3.h stack.h operators.h token_cache.h \
  variables.h constants.h internal_functions.h modules.h \
  functions/php3_filestat.h
 functions/formatted_print.o: functions/formatted_print.c php.h php_version.h \
- config.h request_info.h php3_hash.h alloc.h  safe_mode.h \
+ config.h request_info.h php3_hash.h php_alloc.h  safe_mode.h \
  fopen-wrappers.h mod_php3.h stack.h operators.h token_cache.h \
  variables.h constants.h internal_functions.h modules.h \
  functions/head.h functions/php3_string.h
 functions/fsock.o: functions/fsock.c php.h php_version.h config.h request_info.h \
- php3_hash.h alloc.h  safe_mode.h fopen-wrappers.h \
+ php3_hash.h php_alloc.h  safe_mode.h fopen-wrappers.h \
  mod_php3.h stack.h operators.h token_cache.h variables.h constants.h \
  php3_list.h internal_functions.h modules.h functions/base64.h \
  functions/file.h functions/post.h functions/url.h functions/fsock.h \
  build-defs.h
 functions/gd.o: functions/gd.c php.h php_version.h config.h request_info.h \
- php3_hash.h alloc.h  safe_mode.h fopen-wrappers.h \
+ php3_hash.h php_alloc.h  safe_mode.h fopen-wrappers.h \
  mod_php3.h stack.h operators.h token_cache.h variables.h constants.h \
  internal_functions.h modules.h php3_list.h functions/head.h \
  functions/php3_gd.h
 functions/head.o: functions/head.c php.h php_version.h config.h request_info.h \
- php3_hash.h alloc.h  safe_mode.h fopen-wrappers.h \
+ php3_hash.h php_alloc.h  safe_mode.h fopen-wrappers.h \
  mod_php3.h stack.h operators.h token_cache.h variables.h constants.h \
  internal_functions.h modules.h functions/reg.h \
  functions/php3_string.h functions/pageinfo.h main.h \
  functions/datetime.h functions/head.h functions/post.h \
  functions/url.h
 functions/html.o: functions/html.c php.h php_version.h config.h request_info.h \
- php3_hash.h alloc.h  safe_mode.h fopen-wrappers.h \
+ php3_hash.h php_alloc.h  safe_mode.h fopen-wrappers.h \
  mod_php3.h stack.h operators.h token_cache.h variables.h constants.h \
  internal_functions.h modules.h functions/reg.h functions/html.h
 functions/image.o: functions/image.c php.h php_version.h config.h request_info.h \
- php3_hash.h alloc.h  safe_mode.h fopen-wrappers.h \
+ php3_hash.h php_alloc.h  safe_mode.h fopen-wrappers.h \
  mod_php3.h stack.h operators.h token_cache.h variables.h constants.h \
  internal_functions.h modules.h functions/image.h
 functions/imap.o: functions/imap.c config.h php.h php_version.h request_info.h \
- php3_hash.h alloc.h  safe_mode.h fopen-wrappers.h \
+ php3_hash.h php_alloc.h  safe_mode.h fopen-wrappers.h \
  mod_php3.h stack.h operators.h token_cache.h variables.h constants.h \
  internal_functions.h modules.h
 functions/php3_mcal.o: functions/php3_mcal.c php.h php_version.h config.h \
- request_info.h php3_hash.h alloc.h  safe_mode.h \
+ request_info.h php3_hash.h php_alloc.h  safe_mode.h \
  fopen-wrappers.h mod_php3.h stack.h operators.h token_cache.h \
  variables.h constants.h internal_functions.h modules.h
 functions/php_ftp.o: functions/php_ftp.c php.h php_version.h config.h \
- request_info.h php3_hash.h alloc.h  safe_mode.h \
+ request_info.h php3_hash.h php_alloc.h  safe_mode.h \
  fopen-wrappers.h mod_php3.h stack.h operators.h token_cache.h \
  variables.h constants.h
 functions/ftp.o: functions/ftp.c php.h php_version.h config.h request_info.h \
- php3_hash.h alloc.h  safe_mode.h fopen-wrappers.h \
+ php3_hash.h php_alloc.h  safe_mode.h fopen-wrappers.h \
  mod_php3.h stack.h operators.h token_cache.h variables.h constants.h
 functions/imsp.o: functions/imsp.c config.h php.h php_version.h request_info.h \
- php3_hash.h alloc.h  safe_mode.h fopen-wrappers.h \
+ php3_hash.h php_alloc.h  safe_mode.h fopen-wrappers.h \
  mod_php3.h stack.h operators.h token_cache.h variables.h constants.h \
  internal_functions.h modules.h
 functions/link.o: functions/link.c php.h php_version.h config.h request_info.h \
- php3_hash.h alloc.h  safe_mode.h fopen-wrappers.h \
+ php3_hash.h php_alloc.h  safe_mode.h fopen-wrappers.h \
  mod_php3.h stack.h operators.h token_cache.h variables.h constants.h \
  internal_functions.h modules.h functions/php3_filestat.h \
  functions/php3_link.h
 functions/mail.o: functions/mail.c php.h php_version.h config.h request_info.h \
- php3_hash.h alloc.h  safe_mode.h fopen-wrappers.h \
+ php3_hash.h php_alloc.h  safe_mode.h fopen-wrappers.h \
  mod_php3.h stack.h operators.h token_cache.h variables.h constants.h \
  build-defs.h internal_functions.h modules.h functions/php3_mail.h
 functions/math.o: functions/math.c php.h php_version.h config.h request_info.h \
- php3_hash.h alloc.h  safe_mode.h fopen-wrappers.h \
+ php3_hash.h php_alloc.h  safe_mode.h fopen-wrappers.h \
  mod_php3.h stack.h operators.h token_cache.h variables.h constants.h \
  internal_functions.h modules.h functions/phpmath.h snprintf.h
 functions/iptc.o: functions/iptc.c php.h php_version.h config.h request_info.h \
- php3_hash.h alloc.h  safe_mode.h fopen-wrappers.h \
+ php3_hash.h php_alloc.h  safe_mode.h fopen-wrappers.h \
  mod_php3.h stack.h operators.h token_cache.h variables.h constants.h \
  internal_functions.h modules.h functions/head.h functions/php3_iptc.h
 functions/md5.o: functions/md5.c php.h php_version.h config.h request_info.h \
- php3_hash.h alloc.h  safe_mode.h fopen-wrappers.h \
+ php3_hash.h php_alloc.h  safe_mode.h fopen-wrappers.h \
  mod_php3.h stack.h operators.h token_cache.h variables.h constants.h \
  internal_functions.h modules.h functions/md5.h \
  functions/php3_global.h
 functions/microtime.o: functions/microtime.c php.h php_version.h config.h \
- request_info.h php3_hash.h alloc.h  safe_mode.h \
+ request_info.h php3_hash.h php_alloc.h  safe_mode.h \
  fopen-wrappers.h mod_php3.h stack.h operators.h token_cache.h \
  variables.h constants.h tls.h functions/head.h modules.h \
  functions/number.h internal_functions.h functions/microtime.h \
  snprintf.h
 functions/mime.o: functions/mime.c php.h php_version.h config.h request_info.h \
- php3_hash.h alloc.h  safe_mode.h fopen-wrappers.h \
+ php3_hash.h php_alloc.h  safe_mode.h fopen-wrappers.h \
  mod_php3.h stack.h operators.h token_cache.h variables.h constants.h \
  internal_functions.h modules.h functions/type.h functions/post.h \
  functions/mime.h php3_list.h
 functions/msql.o: functions/msql.c config.h php.h php_version.h request_info.h \
- php3_hash.h alloc.h  safe_mode.h fopen-wrappers.h \
+ php3_hash.h php_alloc.h  safe_mode.h fopen-wrappers.h \
  mod_php3.h stack.h operators.h token_cache.h variables.h constants.h \
  internal_functions.h modules.h functions/php3_msql.h functions/reg.h \
  functions/php3_string.h
 functions/mysql.o: functions/mysql.c config.h build-defs.h php.h php_version.h \
- request_info.h php3_hash.h alloc.h  safe_mode.h \
+ request_info.h php3_hash.h php_alloc.h  safe_mode.h \
  fopen-wrappers.h mod_php3.h stack.h operators.h token_cache.h \
  variables.h constants.h internal_functions.h modules.h \
  functions/php3_string.h functions/php3_mysql.h
 functions/oracle.o: functions/oracle.c php.h php_version.h config.h \
- request_info.h php3_hash.h alloc.h  safe_mode.h \
+ request_info.h php3_hash.h php_alloc.h  safe_mode.h \
  fopen-wrappers.h mod_php3.h stack.h operators.h token_cache.h \
  variables.h constants.h internal_functions.h modules.h php3_list.h \
  functions/head.h
 functions/oci8.o: functions/oci8.c php.h php_version.h config.h request_info.h \
- php3_hash.h alloc.h  safe_mode.h fopen-wrappers.h \
+ php3_hash.h php_alloc.h  safe_mode.h fopen-wrappers.h \
  mod_php3.h stack.h operators.h token_cache.h variables.h constants.h \
  internal_functions.h modules.h php3_list.h functions/head.h \
  functions/php3_oci8.h
 functions/pack.o: functions/pack.c php.h php_version.h config.h request_info.h \
- php3_hash.h alloc.h  safe_mode.h fopen-wrappers.h \
+ php3_hash.h php_alloc.h  safe_mode.h fopen-wrappers.h \
  mod_php3.h stack.h operators.h token_cache.h variables.h constants.h \
  functions/head.h modules.h internal_functions.h php3_list.h \
  functions/php3_string.h functions/pack.h snprintf.h functions/fsock.h
 functions/pageinfo.o: functions/pageinfo.c php.h php_version.h config.h \
- request_info.h php3_hash.h alloc.h  safe_mode.h \
+ request_info.h php3_hash.h php_alloc.h  safe_mode.h \
  fopen-wrappers.h mod_php3.h stack.h operators.h token_cache.h \
  variables.h constants.h functions/pageinfo.h
 functions/pgsql.o: functions/pgsql.c config.h php.h php_version.h request_info.h \
- php3_hash.h alloc.h  safe_mode.h fopen-wrappers.h \
+ php3_hash.h php_alloc.h  safe_mode.h fopen-wrappers.h \
  mod_php3.h stack.h operators.h token_cache.h variables.h constants.h \
  internal_functions.h modules.h functions/php3_pgsql.h \
  functions/php3_string.h build-defs.h
 functions/magick.o: functions/magick.c php.h php_version.h config.h \
- request_info.h php3_hash.h alloc.h  safe_mode.h \
+ request_info.h php3_hash.h php_alloc.h  safe_mode.h \
  fopen-wrappers.h mod_php3.h stack.h operators.h token_cache.h \
  variables.h constants.h internal_functions.h modules.h
 functions/post.o: functions/post.c php.h php_version.h config.h request_info.h \
- php3_hash.h alloc.h  safe_mode.h fopen-wrappers.h \
+ php3_hash.h php_alloc.h  safe_mode.h fopen-wrappers.h \
  mod_php3.h stack.h operators.h token_cache.h variables.h constants.h \
  internal_functions.h modules.h php3_list.h functions/mime.h \
  functions/type.h functions/php3_string.h functions/post.h \
  functions/url.h
 functions/rand.o: functions/rand.c php.h php_version.h config.h request_info.h \
- php3_hash.h alloc.h  safe_mode.h fopen-wrappers.h \
+ php3_hash.h php_alloc.h  safe_mode.h fopen-wrappers.h \
  mod_php3.h stack.h operators.h token_cache.h variables.h constants.h \
  internal_functions.h modules.h functions/phpmath.h
 functions/reg.o: functions/reg.c php.h php_version.h config.h request_info.h \
- php3_hash.h alloc.h  safe_mode.h fopen-wrappers.h \
+ php3_hash.h php_alloc.h  safe_mode.h fopen-wrappers.h \
  mod_php3.h stack.h operators.h token_cache.h variables.h constants.h \
  internal_functions.h modules.h functions/php3_string.h php3_list.h \
  functions/reg.h
 functions/solid.o: functions/solid.c config.h build-defs.h php.h php_version.h \
- request_info.h php3_hash.h alloc.h  safe_mode.h \
+ request_info.h php3_hash.h php_alloc.h  safe_mode.h \
  fopen-wrappers.h mod_php3.h stack.h operators.h token_cache.h \
  variables.h constants.h internal_functions.h modules.h php3_list.h \
  functions/php3_solid.h
 functions/soundex.o: functions/soundex.c php.h php_version.h config.h \
- request_info.h php3_hash.h alloc.h  safe_mode.h \
+ request_info.h php3_hash.h php_alloc.h  safe_mode.h \
  fopen-wrappers.h mod_php3.h stack.h operators.h token_cache.h \
  variables.h constants.h internal_functions.h modules.h \
  functions/php3_string.h
 functions/string.o: functions/string.c php.h php_version.h config.h \
- request_info.h php3_hash.h alloc.h  safe_mode.h \
+ request_info.h php3_hash.h php_alloc.h  safe_mode.h \
  fopen-wrappers.h mod_php3.h stack.h operators.h token_cache.h \
  variables.h constants.h internal_functions.h modules.h \
  functions/reg.h functions/post.h functions/php3_string.h
 functions/syslog.o: functions/syslog.c php.h php_version.h config.h \
- request_info.h php3_hash.h alloc.h  safe_mode.h \
+ request_info.h php3_hash.h php_alloc.h  safe_mode.h \
  fopen-wrappers.h mod_php3.h stack.h operators.h token_cache.h \
  variables.h constants.h internal_functions.h modules.h \
  functions/php3_syslog.h
 functions/type.o: functions/type.c php.h php_version.h config.h request_info.h \
- php3_hash.h alloc.h  safe_mode.h fopen-wrappers.h \
+ php3_hash.h php_alloc.h  safe_mode.h fopen-wrappers.h \
  mod_php3.h stack.h operators.h token_cache.h variables.h constants.h \
  functions/type.h
 functions/uniqid.o: functions/uniqid.c php.h php_version.h config.h \
- request_info.h php3_hash.h alloc.h  safe_mode.h \
+ request_info.h php3_hash.h php_alloc.h  safe_mode.h \
  fopen-wrappers.h mod_php3.h stack.h operators.h token_cache.h \
  variables.h constants.h internal_functions.h modules.h \
  functions/php_lcg.h functions/uniqid.h
 functions/sybase.o: functions/sybase.c config.h php.h php_version.h \
- request_info.h php3_hash.h alloc.h  safe_mode.h \
+ request_info.h php3_hash.h php_alloc.h  safe_mode.h \
  fopen-wrappers.h mod_php3.h stack.h operators.h token_cache.h \
  variables.h constants.h internal_functions.h modules.h \
  functions/php3_sybase.h functions/php3_string.h
 functions/sybase-ct.o: functions/sybase-ct.c config.h php.h php_version.h \
- request_info.h php3_hash.h alloc.h  safe_mode.h \
+ request_info.h php3_hash.h php_alloc.h  safe_mode.h \
  fopen-wrappers.h mod_php3.h stack.h operators.h token_cache.h \
  variables.h constants.h internal_functions.h modules.h \
  functions/php3_sybase-ct.h functions/php3_string.h
 functions/url.o: functions/url.c php.h php_version.h config.h request_info.h \
- php3_hash.h alloc.h  safe_mode.h fopen-wrappers.h \
+ php3_hash.h php_alloc.h  safe_mode.h fopen-wrappers.h \
  mod_php3.h stack.h operators.h token_cache.h variables.h constants.h \
  internal_functions.h modules.h functions/url.h
 functions/base64.o: functions/base64.c php.h php_version.h config.h \
- request_info.h php3_hash.h alloc.h  safe_mode.h \
+ request_info.h php3_hash.h php_alloc.h  safe_mode.h \
  fopen-wrappers.h mod_php3.h stack.h operators.h token_cache.h \
  variables.h constants.h internal_functions.h modules.h \
  functions/base64.h
 functions/info.o: functions/info.c php.h php_version.h config.h request_info.h \
- php3_hash.h alloc.h  safe_mode.h fopen-wrappers.h \
+ php3_hash.h php_alloc.h  safe_mode.h fopen-wrappers.h \
  mod_php3.h stack.h operators.h token_cache.h variables.h constants.h \
  internal_functions.h modules.h functions/head.h functions/info.h \
  build-defs.h
 functions/bcmath.o: functions/bcmath.c config.h build-defs.h php.h php_version.h \
- request_info.h php3_hash.h alloc.h  safe_mode.h \
+ request_info.h php3_hash.h php_alloc.h  safe_mode.h \
  fopen-wrappers.h mod_php3.h stack.h operators.h token_cache.h \
  variables.h constants.h internal_functions.h modules.h \
  functions/number.h functions/php3_bcmath.h
 functions/number.o: functions/number.c functions/number.h php.h php_version.h \
- config.h request_info.h php3_hash.h alloc.h  safe_mode.h \
+ config.h request_info.h php3_hash.h php_alloc.h  safe_mode.h \
  fopen-wrappers.h mod_php3.h stack.h operators.h token_cache.h \
  variables.h constants.h
 functions/xml.o: functions/xml.c php.h php_version.h config.h request_info.h \
- php3_hash.h alloc.h  safe_mode.h fopen-wrappers.h \
+ php3_hash.h php_alloc.h  safe_mode.h fopen-wrappers.h \
  mod_php3.h stack.h operators.h token_cache.h variables.h constants.h \
  internal_functions.h modules.h functions/php3_xml.h
 functions/unified_odbc.o: functions/unified_odbc.c config.h build-defs.h php.h \
- php_version.h request_info.h php3_hash.h alloc.h  \
+ php_version.h request_info.h php3_hash.h php_alloc.h  \
  safe_mode.h fopen-wrappers.h mod_php3.h stack.h operators.h \
  token_cache.h variables.h constants.h internal_functions.h modules.h \
  dl/phpdl.h functions/php3_string.h functions/php3_unified_odbc.h \
  functions/head.h snprintf.h
 functions/ldap.o: functions/ldap.c config.h php.h php_version.h request_info.h \
- php3_hash.h alloc.h  safe_mode.h fopen-wrappers.h \
+ php3_hash.h php_alloc.h  safe_mode.h fopen-wrappers.h \
  mod_php3.h stack.h operators.h token_cache.h variables.h constants.h \
  internal_functions.h modules.h
 functions/browscap.o: functions/browscap.c php.h php_version.h config.h \
- request_info.h php3_hash.h alloc.h  safe_mode.h \
+ request_info.h php3_hash.h php_alloc.h  safe_mode.h \
  fopen-wrappers.h mod_php3.h stack.h operators.h token_cache.h \
  variables.h constants.h internal_functions.h modules.h \
  functions/php3_browscap.h
 functions/velocis.o: functions/velocis.c php.h php_version.h config.h \
- request_info.h php3_hash.h alloc.h  safe_mode.h \
+ request_info.h php3_hash.h php_alloc.h  safe_mode.h \
  fopen-wrappers.h mod_php3.h stack.h operators.h token_cache.h \
  variables.h constants.h internal_functions.h modules.h \
  functions/php3_velocis.h
 functions/gdttf.o: functions/gdttf.c config.h
 functions/gdcache.o: functions/gdcache.c config.h
 functions/zlib.o: functions/zlib.c php.h php_version.h config.h request_info.h \
- php3_hash.h alloc.h  safe_mode.h fopen-wrappers.h \
+ php3_hash.h php_alloc.h  safe_mode.h fopen-wrappers.h \
  mod_php3.h stack.h operators.h token_cache.h variables.h constants.h \
  functions/head.h modules.h internal_functions.h php3_list.h \
  functions/php3_string.h functions/php3_zlib.h snprintf.h
 functions/COM.o: functions/COM.c
 functions/ifx.o: functions/ifx.c
 functions/pdf.o: functions/pdf.c php.h php_version.h config.h request_info.h \
- php3_hash.h alloc.h  safe_mode.h fopen-wrappers.h \
+ php3_hash.h php_alloc.h  safe_mode.h fopen-wrappers.h \
  mod_php3.h stack.h operators.h token_cache.h variables.h constants.h \
  internal_functions.h modules.h php3_list.h functions/head.h \
  functions/php3_pdf.h
 functions/cpdf.o: functions/cpdf.c php.h php_version.h config.h request_info.h \
- php3_hash.h alloc.h  safe_mode.h fopen-wrappers.h \
+ php3_hash.h php_alloc.h  safe_mode.h fopen-wrappers.h \
  mod_php3.h stack.h operators.h token_cache.h variables.h constants.h \
  internal_functions.h modules.h php3_list.h functions/head.h \
  functions/php3_cpdf.h
 functions/hw.o: functions/hw.c php.h php_version.h config.h request_info.h \
- php3_hash.h alloc.h  safe_mode.h fopen-wrappers.h \
+ php3_hash.h php_alloc.h  safe_mode.h fopen-wrappers.h \
  mod_php3.h stack.h operators.h token_cache.h variables.h constants.h \
  internal_functions.h modules.h php3_list.h
 functions/hg_comm.o: functions/hg_comm.c config.h
 functions/dlist.o: functions/dlist.c config.h
 functions/fdf.o: functions/fdf.c php.h php_version.h config.h request_info.h \
- php3_hash.h alloc.h  safe_mode.h fopen-wrappers.h \
+ php3_hash.h php_alloc.h  safe_mode.h fopen-wrappers.h \
  mod_php3.h stack.h operators.h token_cache.h variables.h constants.h \
  internal_functions.h modules.h php3_list.h functions/php3_fdf.h
 functions/wddx.o: functions/wddx.c php.h php_version.h config.h request_info.h \
- php3_hash.h alloc.h  safe_mode.h fopen-wrappers.h \
+ php3_hash.h php_alloc.h  safe_mode.h fopen-wrappers.h \
  mod_php3.h stack.h operators.h token_cache.h variables.h constants.h \
  internal_functions.h modules.h functions/php3_string.h php3_list.h \
  functions/php3_wddx.h
 functions/wddx_a.o: functions/wddx_a.c php.h php_version.h config.h \
- request_info.h php3_hash.h alloc.h  safe_mode.h \
+ request_info.h php3_hash.h php_alloc.h  safe_mode.h \
  fopen-wrappers.h mod_php3.h stack.h operators.h token_cache.h \
  variables.h constants.h internal_functions.h modules.h \
  functions/php3_string.h php3_list.h functions/php3_wddx_a.h
 functions/snmp.o: functions/snmp.c php.h php_version.h config.h request_info.h \
- php3_hash.h alloc.h  safe_mode.h fopen-wrappers.h \
+ php3_hash.h php_alloc.h  safe_mode.h fopen-wrappers.h \
  mod_php3.h stack.h operators.h token_cache.h variables.h constants.h \
  internal_functions.h modules.h functions/php3_snmp.h
 functions/var.o: functions/var.c php.h php_version.h config.h request_info.h \
- php3_hash.h alloc.h  safe_mode.h fopen-wrappers.h \
+ php3_hash.h php_alloc.h  safe_mode.h fopen-wrappers.h \
  mod_php3.h stack.h operators.h token_cache.h variables.h constants.h \
  functions/head.h modules.h internal_functions.h functions/reg.h \
  functions/post.h functions/php3_string.h functions/php3_var.h
 functions/interbase.o: functions/interbase.c config.h php.h php_version.h \
- request_info.h php3_hash.h alloc.h  safe_mode.h \
+ request_info.h php3_hash.h php_alloc.h  safe_mode.h \
  fopen-wrappers.h mod_php3.h stack.h operators.h token_cache.h \
  variables.h constants.h internal_functions.h modules.h \
  functions/php3_interbase.h
 functions/quot_print.o: functions/quot_print.c php.h php_version.h config.h \
- request_info.h php3_hash.h alloc.h  safe_mode.h \
+ request_info.h php3_hash.h php_alloc.h  safe_mode.h \
  fopen-wrappers.h mod_php3.h stack.h operators.h token_cache.h \
  variables.h constants.h internal_functions.h modules.h \
  functions/quot_print.h
 functions/cyr_convert.o: functions/cyr_convert.c php.h php_version.h config.h \
- request_info.h php3_hash.h alloc.h  safe_mode.h \
+ request_info.h php3_hash.h php_alloc.h  safe_mode.h \
  fopen-wrappers.h mod_php3.h stack.h operators.h token_cache.h \
  variables.h constants.h internal_functions.h modules.h \
  functions/cyr_convert.h
 functions/sysvsem.o: functions/sysvsem.c config.h
 functions/dav.o: functions/dav.c php.h php_version.h config.h request_info.h \
- php3_hash.h alloc.h  safe_mode.h fopen-wrappers.h \
+ php3_hash.h php_alloc.h  safe_mode.h fopen-wrappers.h \
  mod_php3.h stack.h operators.h token_cache.h variables.h constants.h \
  internal_functions.h modules.h functions/php3_dav.h
 functions/sysvshm.o: functions/sysvshm.c config.h
 functions/gettext.o: functions/gettext.c php.h php_version.h config.h \
- request_info.h php3_hash.h alloc.h  safe_mode.h \
+ request_info.h php3_hash.h php_alloc.h  safe_mode.h \
  fopen-wrappers.h mod_php3.h stack.h operators.h token_cache.h \
  variables.h constants.h internal_functions.h modules.h \
  functions/php3_gettext.h
 functions/php3_mckcrypt.o: functions/php3_mckcrypt.c php.h php_version.h \
- config.h request_info.h php3_hash.h alloc.h  safe_mode.h \
+ config.h request_info.h php3_hash.h php_alloc.h  safe_mode.h \
  fopen-wrappers.h mod_php3.h stack.h operators.h token_cache.h \
  variables.h constants.h internal_functions.h modules.h \
  functions/php3_mckcrypt.h
 functions/yp.o: functions/yp.c php.h php_version.h config.h request_info.h \
- php3_hash.h alloc.h  safe_mode.h fopen-wrappers.h \
+ php3_hash.h php_alloc.h  safe_mode.h fopen-wrappers.h \
  mod_php3.h stack.h operators.h token_cache.h variables.h constants.h \
  internal_functions.h modules.h functions/php3_yp.h
 functions/dba.o: functions/dba.c php.h php_version.h config.h request_info.h \
- php3_hash.h alloc.h  safe_mode.h fopen-wrappers.h \
+ php3_hash.h php_alloc.h  safe_mode.h fopen-wrappers.h \
  mod_php3.h stack.h operators.h token_cache.h variables.h constants.h
 functions/dba_gdbm.o: functions/dba_gdbm.c php.h php_version.h config.h \
- request_info.h php3_hash.h alloc.h  safe_mode.h \
+ request_info.h php3_hash.h php_alloc.h  safe_mode.h \
  fopen-wrappers.h mod_php3.h stack.h operators.h token_cache.h \
  variables.h constants.h
 functions/dba_dbm.o: functions/dba_dbm.c php.h php_version.h config.h \
- request_info.h php3_hash.h alloc.h  safe_mode.h \
+ request_info.h php3_hash.h php_alloc.h  safe_mode.h \
  fopen-wrappers.h mod_php3.h stack.h operators.h token_cache.h \
  variables.h constants.h
 functions/dba_ndbm.o: functions/dba_ndbm.c php.h php_version.h config.h \
- request_info.h php3_hash.h alloc.h  safe_mode.h \
+ request_info.h php3_hash.h php_alloc.h  safe_mode.h \
  fopen-wrappers.h mod_php3.h stack.h operators.h token_cache.h \
  variables.h constants.h
 functions/dba_cdb.o: functions/dba_cdb.c php.h php_version.h config.h \
- request_info.h php3_hash.h alloc.h  safe_mode.h \
+ request_info.h php3_hash.h php_alloc.h  safe_mode.h \
  fopen-wrappers.h mod_php3.h stack.h operators.h token_cache.h \
  variables.h constants.h
 functions/mcrypt.o: functions/mcrypt.c php.h php_version.h config.h \
- request_info.h php3_hash.h alloc.h  safe_mode.h \
+ request_info.h php3_hash.h php_alloc.h  safe_mode.h \
  fopen-wrappers.h mod_php3.h stack.h operators.h token_cache.h \
  variables.h constants.h
 functions/dba_db2.o: functions/dba_db2.c php.h php_version.h config.h \
- request_info.h php3_hash.h alloc.h  safe_mode.h \
+ request_info.h php3_hash.h php_alloc.h  safe_mode.h \
  fopen-wrappers.h mod_php3.h stack.h operators.h token_cache.h \
  variables.h constants.h
 functions/mhash.o: functions/mhash.c php.h php_version.h config.h request_info.h \
- php3_hash.h alloc.h  safe_mode.h fopen-wrappers.h \
+ php3_hash.h php_alloc.h  safe_mode.h fopen-wrappers.h \
  mod_php3.h stack.h operators.h token_cache.h variables.h constants.h
 functions/pcre.o: functions/pcre.c php.h php_version.h config.h request_info.h \
- php3_hash.h alloc.h  safe_mode.h fopen-wrappers.h \
+ php3_hash.h php_alloc.h  safe_mode.h fopen-wrappers.h \
  mod_php3.h stack.h operators.h token_cache.h variables.h constants.h \
  functions/php3_pcre.h modules.h internal_functions.h pcrelib/pcre.h
 functions/posix.o: functions/posix.c php.h php_version.h config.h request_info.h \
- php3_hash.h alloc.h  safe_mode.h fopen-wrappers.h \
+ php3_hash.h php_alloc.h  safe_mode.h fopen-wrappers.h \
  mod_php3.h stack.h operators.h token_cache.h variables.h constants.h \
  internal_functions.h modules.h functions/php3_string.h \
  functions/php3_posix.h php3_list.h
 functions/parsedate.o: functions/parsedate.c config.h
 functions/lcg.o: functions/lcg.c php.h php_version.h config.h request_info.h \
- php3_hash.h alloc.h  safe_mode.h fopen-wrappers.h \
+ php3_hash.h php_alloc.h  safe_mode.h fopen-wrappers.h \
  mod_php3.h stack.h operators.h token_cache.h variables.h constants.h \
  functions/php_lcg.h modules.h internal_functions.h
 functions/recode.o: functions/recode.c php.h php_version.h config.h \
- request_info.h php3_hash.h alloc.h  safe_mode.h \
+ request_info.h php3_hash.h php_alloc.h  safe_mode.h \
  fopen-wrappers.h mod_php3.h stack.h operators.h token_cache.h \
  variables.h constants.h internal_functions.h modules.h \
  functions/php3_string.h

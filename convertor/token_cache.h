@@ -29,13 +29,13 @@
  */
 
 
-/* $Id: token_cache.h,v 1.9 2000/01/01 04:44:08 sas Exp $ */
+/* $Id: token_cache.h,v 1.10 2000/01/07 10:36:30 sas Exp $ */
 
 
 #ifndef _TOKEN_CACHE
 #define _TOKEN_CACHE
 
-#include "alloc.h"
+#include "php_alloc.h"
 
 #define uint unsigned int
 

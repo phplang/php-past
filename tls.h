@@ -28,7 +28,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: tls.h,v 1.65 2000/01/01 04:44:07 sas Exp $ */
+/* $Id: tls.h,v 1.66 2000/01/07 10:36:29 sas Exp $ */
 
 #ifndef _TLS_H_
 #define _TLS_H_
@@ -38,7 +38,7 @@
 #include <winsock.h>
 #endif
 
-#include "alloc.h"
+#include "php_alloc.h"
 #include "functions/head.h"
 #include "functions/number.h"
 #include "constants.h"

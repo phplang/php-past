@@ -28,7 +28,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: php.h,v 1.66 2000/01/01 04:44:07 sas Exp $ */
+/* $Id: php.h,v 1.67 2000/01/07 10:36:29 sas Exp $ */
 
 #ifndef _PHP_H
 #define _PHP_H
@@ -147,7 +147,7 @@
 #endif
 	
 #include "php3_hash.h"
-#include "alloc.h"
+#include "php_alloc.h"
 
 #if REGEX
 #include "regex/regex.h"

@@ -2,7 +2,7 @@
 /*                                          */
 /* John Ellson   ellson@lucent.com          */
 
-/* $Id: gdttf.c,v 1.23 1999/11/21 02:52:16 rasmus Exp $ */
+/* $Id: gdttf.c,v 1.25 2000/01/13 13:16:05 rasmus Exp $ */
 
 #if WIN32|WINNT
 #include "config.w32.h"

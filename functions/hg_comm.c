@@ -23,7 +23,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: hg_comm.c,v 1.33 2000/01/01 04:31:15 sas Exp $ */
+/* $Id: hg_comm.c,v 1.34 2000/01/07 10:36:31 sas Exp $ */
 
 /* #define HW_DEBUG */
 
@@ -55,7 +55,7 @@
 #endif
 #include <fcntl.h>
 #include <errno.h>
-#include <alloc.h>
+#include "php_alloc.h"
 #include "hg_comm.h"
 #include "DList.h"
 #include "php.h"

@@ -28,7 +28,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: php_ftp.c,v 1.7 2000/01/01 04:31:16 sas Exp $ */
+/* $Id: php_ftp.c,v 1.8 2000/01/09 11:06:00 fmk Exp $ */
 
 #include "php.h"
 
@@ -84,6 +84,10 @@ php3_module_entry php3_ftp_module_entry = {
 	NULL,
 	STANDARD_MODULE_PROPERTIES
 };
+
+#if COMPILE_DL
+DLEXPORT php3_module_entry *get_module(void) { return &php3_ftp_module_entry; }
+#endif
 
 static void ftp_destructor_ftpbuf(ftpbuf_t *ftp)
 {
