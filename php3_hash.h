@@ -29,7 +29,7 @@
  */
 
 
-/* $Id: php3_hash.h,v 1.2 1998/06/22 20:28:09 zeev Exp $ */
+/* $Id: php3_hash.h,v 1.4 1998/07/26 13:59:49 rasmus Exp $ */
 
 
 #ifndef _HASH_

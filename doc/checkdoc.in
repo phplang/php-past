@@ -3,7 +3,7 @@
 #
 # Script that checks which functions are documented in the manual.
 #
-# $Id: checkdoc.in,v 1.6 1998/03/29 21:38:11 ssb Exp $
+# $Id: checkdoc.in,v 1.7 1998/07/16 15:55:21 ssb Exp $
 #
 # Author: Stig Bakken <ssb@guardian.no>
 #
@@ -39,7 +39,8 @@ foreach $func (@functions) {
 }
 foreach $func (sort keys %func_in_file) {
     next if $in_funclist{$func};
-    print STDERR "possibly missing in $funclist: $func\n";
+    print STDERR "possibly missing in $funclist: $func (documented in ".
+	$func_in_file{$func} . ")\n";
 }
 
 ### Subroutines:

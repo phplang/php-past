@@ -28,7 +28,7 @@
  */
 
 
-/* $Id: php3_sybase.h,v 1.36 1998/05/16 11:53:44 zeev Exp $ */
+/* $Id: php3_sybase.h,v 1.37 1998/07/12 21:40:18 zeev Exp $ */
 
 #ifndef _PHP3_SYBASE_H
 #define _PHP3_SYBASE_H
@@ -104,7 +104,7 @@ typedef struct {
 	int le_link,le_plink,le_result;
 	long min_error_severity,min_message_severity;
 	long cfg_min_error_severity,cfg_min_message_severity;
-	void (*get_column_content)(sybase_link *sybase_ptr,int offset,pval *result,int column_type);
+	long compatability_mode;
 } sybase_module;
 
 struct sybase_link_struct {

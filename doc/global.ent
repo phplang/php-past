@@ -1,6 +1,6 @@
 <!-- -*- SGML -*-
 
- $Id: global.ent,v 1.10 1998/05/30 02:01:27 cslawi Exp $
+ $Id: global.ent,v 1.12 1998/09/09 18:58:23 eschmid Exp $
 
  Contains global "macros" for all the SGML documents.
 
@@ -23,6 +23,9 @@
 <!ENTITY url.php3.faq "http://www.php.net/FAQ.php3">
 <!ENTITY url.php3.bugs "http://ca.php.net/bugs.php3">
 <!ENTITY url.php3.archive "http://www.tryc.on.ca/php3.html">
+<!ENTITY url.ldap.netscape "http://developer.netscape.com/tech/directory/">
+<!ENTITY url.ldap.michigan "http://www.umich.edu/~dirsvcs/ldap/index.html">
+<!ENTITY url.ldap.ldapworld "http://elvira.innosoft.com/ldapworld">
 
 <!ENTITY php.homepage '<systemitem class=resource><ulink url="&url.php;">&url.php;</ulink></systemitem>'>
 

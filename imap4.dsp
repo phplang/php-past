@@ -52,7 +52,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /dll /machine:I386
-# ADD LINK32 cclient.lib php.lib wsock32.lib winmm.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /dll /machine:I386 /out:"module_release/imap4r1.dll" /libpath:"\src\lib" /libpath:"\src\phpcvs\php3\cgi_release"
+# ADD LINK32 cclient.lib php.lib wsock32.lib winmm.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /dll /machine:I386 /out:"module_release/php3_imap4r2.dll" /libpath:"\src\lib" /libpath:"\src\phpcvs\php3\cgi_release"
 
 !ELSEIF  "$(CFG)" == "imap4 - Win32 Debug"
 
@@ -78,7 +78,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /dll /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 cclientd.lib php.lib wsock32.lib winmm.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /dll /debug /machine:I386 /out:"module_Debug/imap4r1.dll" /pdbtype:sept /libpath:"\src\lib" /libpath:"\src\phpcvs\php3\cgi_debug"
+# ADD LINK32 cclientd.lib php.lib wsock32.lib winmm.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /dll /debug /machine:I386 /out:"module_Debug/php3_imap4r1.dll" /pdbtype:sept /libpath:"\src\lib" /libpath:"\src\phpcvs\php3\cgi_debug"
 
 !ENDIF 
 
@@ -88,11 +88,11 @@ LINK32=link.exe
 # Name "imap4 - Win32 Debug"
 # Begin Source File
 
-SOURCE=.\dl\imap\imap.c
+SOURCE=.\functions\imap.c
 # End Source File
 # Begin Source File
 
-SOURCE=.\dl\imap\imap.h
+SOURCE=.\functions\imap.h
 # End Source File
 # End Target
 # End Project

@@ -29,7 +29,7 @@
  */
 
 
-/* $Id: php3_string.h,v 1.19 1998/05/31 21:46:29 rasmus Exp $ */
+/* $Id: php3_string.h,v 1.22 1998/08/04 13:32:10 rasmus Exp $ */
 
 #ifndef _PHPSTRING_H
 #define _PHPSTRING_H
@@ -40,6 +40,9 @@ extern char *strtok_string;
 
 extern void php3_strlen(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_strcmp(INTERNAL_FUNCTION_PARAMETERS);
+extern void php3_strspn(INTERNAL_FUNCTION_PARAMETERS);
+extern void php3_strcspn(INTERNAL_FUNCTION_PARAMETERS);
+extern void php3_strcasecmp(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_chop(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_trim(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_ltrim(INTERNAL_FUNCTION_PARAMETERS);
@@ -59,6 +62,7 @@ extern void php3_strrchr(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_substr(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_quotemeta(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_ucfirst(INTERNAL_FUNCTION_PARAMETERS);
+extern void php3_ucwords(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_strtr(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_strrev(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_hebrev(INTERNAL_FUNCTION_PARAMETERS);

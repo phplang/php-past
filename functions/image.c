@@ -26,7 +26,7 @@
    | Authors: Rasmus Lerdorf                                              |
    +----------------------------------------------------------------------+
  */
-/* $Id: image.c,v 1.33 1998/05/21 23:57:30 zeev Exp $ */
+/* $Id: image.c,v 1.35 1998/08/14 23:47:16 steffann Exp $ */
 /* 
  * Based on Daniel Schmitt's imageinfo.c which carried the following
  * Copyright notice.
@@ -53,6 +53,7 @@
 #include <fcntl.h>
 #endif
 #include "internal_functions.h"
+#include "fopen-wrappers.h"
 #if HAVE_UNISTD_H
 #include <unistd.h>
 #endif
@@ -236,6 +237,9 @@ void php3_getimagesize(INTERNAL_FUNCTION_PARAMETERS)
 	}
 	convert_to_string(arg1);
 
+	/* Check open_basedir */
+	if (_php3_check_open_basedir(arg1->value.str.val)) return;
+	
 	if ((filehandle = open(arg1->value.str.val, O_RDONLY)) < 0) {
 		php3_error(E_WARNING, "Unable to open %s", arg1->value.str.val);
 		return;

@@ -1,4 +1,4 @@
-To build this extension, grab ftp://ftp.cac.washington.edu/imap/old/imap-4.tar.Z
+To build this extension, grab ftp://ftp.cac.washington.edu/imap/imap-4.2.tar.Z
 and build the library.  Then copy c-client/c-client.a to /usr/local/lib 
 or some other directory on your link path and copy c-client/rfc822.h, mail.h 
 and linkage.h to /usr/local/include.  Then type: make imap.so from the 
@@ -10,7 +10,9 @@ Function list:
 
 --  imap_open
 Description: opens a IMAP_stream to a mailbox
-int imap_open(string mailbox, string username, string password);
+int imap_open(string mailbox, string username, string password,int options);
+The last parameter, options, is optional.
+if you put in a "1" for the last parameter, it opens up the mailbox read-only.
 Returns: IMAP_stream
 
 --  imap_reopen
@@ -45,10 +47,68 @@ Returns: This function returns an associative array. The elements are
 "Unseen", "Flagged", "Answered", "Deleted", "Msgno", "MailDate", and "Size".
 
 --  imap_headerinfo - alias for imap_header
-array imap_headerinfo(IMAP_stream mbox,long msgno);
-Returns: This function returns an associative array. The elements are
-"Date", "From", "From2", "Subject", "To", "cc", "ReplyTo", "Recent",
-"Unseen", "Flagged", "Answered", "Deleted", "Msgno", "MailDate", and "Size".
+array imap_headerinfo(IMAP_stream mbox,long msgno,int fromlength,int subjectlength,string defaulthost);
+defaulthost is the hostname to put at the end of an address if it does not contain a hostname.
+NEW: returns the following objects:
+
+remail,date,Date,subject,Subject,in_reply_to,message_id,newsgroups,
+followup_to,references,
+
+toaddress (full email address)
+
+to[] (returns an array of objects from the To line, containing:)
+   personal
+   adl
+   mailbox
+   host
+
+fromaddress 
+
+from[] (returns an array of objects from the From line, containing:)
+   personal
+   adl
+   mailbox
+   host
+
+ccaddress
+cc[] (returns an array of objects from the Cc line, containing:)
+   personal
+   adl
+   mailbox
+   host
+
+bccaddress
+bcc[] (returns an array of objects from the Bcc line, containing:)
+   personal
+   adl
+   mailbox
+   host
+
+reply_toaddress
+reply_to[] (returns an array of objects from the Reply_to line, containing:)
+   personal
+   adl
+   mailbox
+   host
+
+senderaddress
+sender[] (returns an array of objects from the sender line, containing:)
+   personal
+   adl
+   mailbox
+   host
+
+return_path
+return_path[] (returns an array of objects from the return_path line, containing:)
+   personal
+   adl
+   mailbox
+   host
+
+udate ( mail message date in unix time)
+
+fetchfrom (from line formatted to fit FROMLENGTH characters)
+fetchsubject (subject line formatted to fit SUBJECTLENGTH characters)
 
 --  imap_body
 string imap_body(IMAP_stream mbox,long msgno);
@@ -97,7 +157,7 @@ int imap_deletemailbox(IMAP_stream mbox, string oldbox);
 Returns: True if sucessful False otherwise.
 
 --  imap_listmailbox
-array imap_listmailbox(IMAP_stream mbox);
+array imap_listmailbox(int imap_stream, string mailbox, string pattern);
 Returns: Array of strings that have the mailbox names.
 Here is a sample program
 
@@ -168,6 +228,16 @@ added by
       library to use this.
 
 
+--imap_rfc822_write_address(string mailbox,string host, string personal)
+Returns a properly formatted email address given the mailbox, host, and personal info.
+
+--imap_rfc822_parse_adrlist(string email_address,string default_host)
+
+Returns 3 objects given the input strings:
+mailbox - the mailbox name (username)
+host   - the host name
+personal - the personal name
+
 -----Contributions by Brian Wang brian@vividnet.com
 
 -- imap_8bit(string TEXT)
@@ -177,4 +247,17 @@ source string.
 --imap_qprint(string TEXT)
 This function returns a string given a quoted-printable source string.
 The decoded body part as an 8-bit character string is returned.
+
+
+
+
+
+
+
+
+
+
+
+
+
 

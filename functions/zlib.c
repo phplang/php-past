@@ -22,7 +22,7 @@
    |          Stefan Röhrich <sr@linux.de>                                |
    +----------------------------------------------------------------------+
  */
-/* $Id: zlib.c,v 1.5 1998/05/26 20:28:01 zeev Exp $ */
+/* $Id: zlib.c,v 1.7 1998/08/14 23:47:16 steffann Exp $ */
 
 #ifdef THREAD_SAFE
 #include "tls.h"
@@ -204,6 +204,7 @@ static gzFile php3_gzopen_wrapper(char *path, char *mode, int options)
 			php3_error(E_WARNING,"SAFE MODE Restriction in effect.  Invalid owner of file to be read.");
 			return NULL;
 		}
+		if (_php3_check_open_basedir(path)) return NULL;
 		return gzopen(path, mode);
 	}
 }
@@ -229,6 +230,7 @@ static gzFile *php3_gzopen_with_path(char *filename, char *mode, char *path, cha
 			php3_error(E_WARNING,"SAFE MODE Restriction in effect.  Invalid owner.");
 			return(NULL);
 		}
+		if (_php3_check_open_basedir(filename)) return NULL;
 		zp = gzopen(filename, mode);
 		if (zp && opened_path) {
 			*opened_path = expand_filepath(filename);
@@ -248,12 +250,14 @@ static gzFile *php3_gzopen_with_path(char *filename, char *mode, char *path, cha
 				php3_error(E_WARNING,"SAFE MODE Restriction in effect.  Invalid owner.");
 				return(NULL);
 			}
+			if (_php3_check_open_basedir(trypath)) return NULL;
 			zp = gzopen(trypath, mode);
 			if (zp && opened_path) {
 				*opened_path = expand_filepath(trypath);
 			}
 			return zp;
 		} else {
+			if (_php3_check_open_basedir(filename)) return NULL;
 			return gzopen(filename, mode);
 		}
 	}
@@ -263,6 +267,7 @@ static gzFile *php3_gzopen_with_path(char *filename, char *mode, char *path, cha
 			php3_error(E_WARNING,"SAFE MODE Restriction in effect.  Invalid owner.");
 			return(NULL);
 		}
+		if (_php3_check_open_basedir(filename)) return NULL;
 		zp = gzopen(filename, mode);
 		if (zp && opened_path) {
 			*opened_path = strdup(filename);
@@ -293,6 +298,11 @@ static gzFile *php3_gzopen_with_path(char *filename, char *mode, char *path, cha
 			}
 		}
 		if ((zp = gzopen(trypath, mode)) != NULL) {
+			if (_php3_check_open_basedir(trypath)) {
+				gzclose(zp);
+			   	efree(pathbuf);
+			   	return NULL;
+			}
 			if (opened_path) {
 				*opened_path = expand_filepath(trypath);
 			}

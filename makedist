@@ -16,16 +16,19 @@
 # directories from the CVS module except the one called "nodist", but only
 # the files INSTALL, README and config* are included.
 #
+# Since you can no longer set the CVS password via an env variable, you
+# need to have previously done a cvs login for the server and user id
+# this script uses so it will have an entry in your ~/.cvspasswd file.
+#
 # Usage: makedist <package> <version>
 #
 # Written by Stig Bakken <ssb@guardian.no> 1997-05-28.
 #
-# $Id: makedist,v 1.20 1998/03/22 14:02:15 zeev Exp $
+# $Id: makedist,v 1.21 1998/08/15 13:56:12 rasmus Exp $
 #
 
-CVSROOT=:pserver:cvsread@www.lerdorf.on.ca:/repository
-CVS_PASSWORD=phpfi
-export CVSROOT CVS_PASSWORD
+CVSROOT=:pserver:cvsread@cvs.php.net:/repository
+export CVSROOT
 
 if echo '\c' | grep -s c >/dev/null 2>&1
 then

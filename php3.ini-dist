@@ -69,6 +69,8 @@ error_reporting	=	7
 display_errors	=	On	; Print out errors (as a part of the HTML script)
 log_errors		=	Off	; Log errors into a log file (server-specific log, stderr, or error_log (below))
 track_errors	=	Off	; Store the last error/warning message in $php_errormsg (boolean)
+;error_prepend_string = "<font color=ff0000>"   ; string to output before an error message
+;error_append_string = "</font>"                ; string to output after an error message
 ;error_log	=	filename	; log errors to specified file
 ;error_log	=	syslog		; log errors to syslog (Event Log on NT, not valid in Windows 95)
 warn_plus_overloading	=	Off		; warn if the + operator is used with strings
@@ -89,19 +91,11 @@ auto_append_file	=
 ;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Paths and Directories ;
 ;;;;;;;;;;;;;;;;;;;;;;;;;
-include_path	=
+include_path	=                   ; UNIX: "/path1:/path2"  Windows: "\path1;\path2"
 doc_root		=					; the root of the php pages, used only if nonempty
 user_dir		=					; the directory under which php opens the script using /~username, used only if nonempty
 upload_tmp_dir	=	\windows\temp	; temporary directory for HTTP uploaded files
 extension_dir	=	./				; directory in which the loadable extensions (modules) reside
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-; File Extensions (meaningless in UNIX) ;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-cgi_ext		=	php3
-isapi_ext	=	php3
-nsapi_ext	=	php3
 
 
 ;;;;;;;;;;;;;;;;;;;;;;
@@ -114,6 +108,23 @@ nsapi_ext	=	php3
 ; or under UNIX,
 ; extension=msql.so
 
+
+;Windows Extensions
+;extension=php3_mysql.dll
+;extension=php3_nsmail.dll
+;extension=php3_calendar.dll
+;extension=php3_dbase.dll
+;extension=php3_filepro.dll
+;extension=php3_gd.dll
+;extension=php3_dbm.dll
+;extension=php3_mssql.dll
+;extension=php3_zlib.dll
+;extension=php3_filepro.dll
+;extension=php3_imap4r2.dll
+;extension=php3_ldap.dll
+;extension=php3_crypt.dll
+;extension=php3_msql2.dll
+;extension=php3_odbc.dll
 
 ;;;;;;;;;;;;;;;;;;;
 ; Module Settings ;

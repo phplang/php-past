@@ -29,7 +29,7 @@
  */
 
 
-/* $Id: token_cache.h,v 1.30 1998/05/15 10:56:25 zeev Exp $ */
+/* $Id: token_cache.h,v 1.32 1998/07/28 22:00:05 rasmus Exp $ */
 
 
 #ifndef _TOKEN_CACHE
@@ -69,8 +69,10 @@ extern int read_next_token(TokenCacheManager *tcm, Token **token, pval *phplval)
 extern int seek_token(TokenCacheManager *tcm, int offset, int *yychar);
 extern int tc_switch(TokenCacheManager *tcm, int start, int end, int middle);
 extern inline int tc_set_token(TokenCacheManager *tcm, int offset, int type);
+extern inline int tc_get_token(TokenCacheManager *tcm, int offset);
 extern inline int tc_set_switched(TokenCacheManager *tcm, int offset);
 extern inline int tc_set_included(TokenCacheManager *tcm, int offset);
+extern int tc_get_current_offset(TokenCacheManager *tcm);
 extern int tc_destroy(TokenCache *tc);
 extern void tcm_destroy(TokenCacheManager *tcm);
 extern int tcm_new(TokenCacheManager *tcm);
@@ -82,6 +84,6 @@ extern int tcm_load(TokenCacheManager *tcm);
 #endif
 extern void clear_lookahead(int *yychar);
 
-extern inline int last_token_suggests_variable_reference();
+extern inline int last_token_suggests_variable_reference(void);
 
 #endif

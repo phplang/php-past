@@ -23,13 +23,13 @@
    | If you did not, or have any questions about PHP licensing, please    |
    | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
-   | Authors: Amitay Isaacs <amitay@cse.iitb.ernet.in>                    |
+   | Authors: Amitay Isaacs <amitay@pspl.co.in>                           |
    |          Eric Warnke   <ericw@albany.edu>                            |
    +----------------------------------------------------------------------+
  */
  
 
-/* $Id: ldap.c,v 1.49 1998/06/22 20:28:32 zeev Exp $ */
+/* $Id: ldap.c,v 1.53 1998/08/11 07:23:20 amitay Exp $ */
 
 #ifndef MSVC5
 #include "config.h"
@@ -98,7 +98,6 @@ function_entry ldap_functions[] = {
 	{"ldap_first_entry",			php3_ldap_first_entry,			NULL},
 	{"ldap_next_entry",				php3_ldap_next_entry,			NULL},
 	{"ldap_get_entries",			php3_ldap_get_entries,			NULL},
-	{"ldap_free_entry", 			php3_ldap_free_entry,			NULL},
 	{"ldap_first_attribute",		php3_ldap_first_attribute,		NULL},
 	{"ldap_next_attribute",			php3_ldap_next_attribute,		NULL},
 	{"ldap_get_attributes",			php3_ldap_get_attributes,		NULL},
@@ -270,7 +269,7 @@ void php3_info_ldap(void)
 
 	php3_printf("<table>"
 				"<tr><td>Total links:</td><td>%d/%s</td></tr>\n"
-		        "<tr><td>RCS Version:</td><td>$Id: ldap.c,v 1.49 1998/06/22 20:28:32 zeev Exp $</td></tr>\n"
+		        "<tr><td>RCS Version:</td><td>$Id: ldap.c,v 1.53 1998/08/11 07:23:20 amitay Exp $</td></tr>\n"
 #if HAVE_NSLDAP
 				"<tr><td>SDK Version:</td><td>%f</td></tr>"
 				"<tr><td>Highest LDAP Protocol Supported:</td><td>%f</td></tr>"
@@ -797,24 +796,6 @@ char *dn;
 	}
 
 	add_assoc_long(return_value, "count", num_entries);
-}
-
-
-void php3_ldap_free_entry(INTERNAL_FUNCTION_PARAMETERS)
-{
-pval *result_entry;
-LDAPMessage *ldap_result_entry;
-
-	if (ARG_COUNT(ht) != 1 || getParameters(ht, 1, &result_entry) == FAILURE) {
-		WRONG_PARAM_COUNT;
-	}
-
-	ldap_result_entry = _get_ldap_result_entry(result_entry, list);
-	if (ldap_result_entry == NULL) RETURN_FALSE;
-
-	_free_ldap_result(ldap_result_entry);
-	php3_list_delete(result_entry->value.lval);
-	RETURN_TRUE;
 }
 
 

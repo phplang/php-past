@@ -31,7 +31,7 @@
    +----------------------------------------------------------------------+
  */
  
-/* $Id: sybase.c,v 1.103 1998/06/22 20:28:37 zeev Exp $ */
+/* $Id: sybase.c,v 1.105 1998/08/13 20:31:20 zeev Exp $ */
 
 
 #ifndef MSVC5
@@ -108,8 +108,7 @@ THREAD_LS static HashTable *resource_list, *resource_plist;
 #define CHECK_LINK(link) { if (link==-1) { php3_error(E_WARNING,"Sybase:  A link to the server could not be established"); RETURN_FALSE; } }
 
 
-static void php3_sybase_get_column_content_with_type(sybase_link *sybase_ptr,int offset,pval *result, int column_type);
-static void php3_sybase_get_column_content_without_type(sybase_link *sybase_ptr,int offset,pval *result, int column_type);
+static void php3_sybase_get_column_content(sybase_link *sybase_ptr,int offset,pval *result, int column_type);
 
 /* error handler */
 static int php3_sybase_error_handler(DBPROCESS *dbproc,int severity,int dberr,
@@ -197,7 +196,6 @@ static void _close_sybase_plink(sybase_link *sybase_ptr)
 int php3_minit_sybase(INIT_FUNC_ARGS)
 {
 	char *interface_file;
-	long compatability_mode;
 
 	if (dbinit()==FAIL) {
 		return FAILURE;
@@ -223,13 +221,8 @@ int php3_minit_sybase(INIT_FUNC_ARGS)
 	if (cfg_get_long("sybase.min_message_severity",&php3_sybase_module.cfg_min_message_severity)==FAILURE) {
 		php3_sybase_module.cfg_min_message_severity=10;
 	}
-	if (cfg_get_long("sybase.compatability_mode",&compatability_mode)==FAILURE) {
-		compatability_mode = 0;
-	}
-	if (compatability_mode) {
-		php3_sybase_module.get_column_content = php3_sybase_get_column_content_with_type;
-	} else {
-		php3_sybase_module.get_column_content = php3_sybase_get_column_content_without_type;	
+	if (cfg_get_long("sybase.compatability_mode",&php3_sybase_module.compatability_mode)==FAILURE) {
+		php3_sybase_module.compatability_mode = 0;
 	}
 	
 	php3_sybase_module.num_persistent=0;
@@ -604,7 +597,7 @@ void php3_sybase_select_db(INTERNAL_FUNCTION_PARAMETERS)
 }
 
 
-static void php3_sybase_get_column_content_with_type(sybase_link *sybase_ptr,int offset,pval *result, int column_type)
+static void php3_sybase_get_column_content(sybase_link *sybase_ptr,int offset,pval *result, int column_type)
 {
 	if (dbdatlen(sybase_ptr->link,offset) == 0) {
 		var_reset(result);
@@ -645,6 +638,20 @@ static void php3_sybase_get_column_content_with_type(sybase_link *sybase_ptr,int
 				int res_length = dbdatlen(sybase_ptr->link,offset);
 				register char *p;
 			
+				switch (coltype(offset)) {
+					case SYBBINARY:
+					case SYBVARBINARY:
+					case SYBCHAR:
+					case SYBVARCHAR:
+					case SYBTEXT:
+					case SYBIMAGE:
+						break;
+					default:
+						/* take no chances, no telling how big the result would really be */
+						res_length += 20;
+						break;
+				}
+
 				res_buf = (char *) emalloc(res_length+1);
 				dbconvert(NULL,coltype(offset),dbdata(sybase_ptr->link,offset), res_length,SYBCHAR,res_buf,-1);
 		
@@ -664,38 +671,6 @@ static void php3_sybase_get_column_content_with_type(sybase_link *sybase_ptr,int
 				var_reset(result);
 			}
 		}
-	}
-}
-
-
-static void php3_sybase_get_column_content_without_type(sybase_link *sybase_ptr,int offset,pval *result, int column_type)
-{
-	if (dbdatlen(sybase_ptr->link,offset) == 0) {
-		var_reset(result);
-		return;
-	}
-	if (dbwillconvert(coltype(offset),SYBCHAR)) {
-		char *res_buf;
-		int res_length = dbdatlen(sybase_ptr->link,offset);
-		register char *p;
-			
-		res_buf = (char *) emalloc(res_length+1);
-		dbconvert(NULL,coltype(offset),dbdata(sybase_ptr->link,offset), res_length,SYBCHAR,res_buf,-1);
-		
-		/* get rid of trailing spaces */
-		p = res_buf + res_length;
-		while (*p == ' ') {
-			p--;
-			res_length--;
-		}
-		*(++p) = 0; /* put a trailing NULL */
-		
-		result->value.str.len = res_length;
-		result->value.str.val = res_buf;
-		result->type = IS_STRING;
-	} else {
-		php3_error(E_WARNING,"Sybase:  column %d has unknown data type (%d)", offset, coltype(offset));
-		var_reset(result);
 	}
 }
 
@@ -782,7 +757,10 @@ void php3_sybase_query(INTERNAL_FUNCTION_PARAMETERS)
 		}
 		result->data[i] = (pval *) emalloc(sizeof(pval)*num_fields);
 		for (j=1; j<=num_fields; j++) {
-			php3_sybase_module.get_column_content(sybase_ptr, j, &result->data[i][j-1], column_types[j-1]);
+			php3_sybase_get_column_content(sybase_ptr, j, &result->data[i][j-1], column_types[j-1]);
+			if (!php3_sybase_module.compatability_mode) {
+				convert_to_string(&result->data[i][j-1]);
+			}
 		}
 		retvalue=dbnextrow(sybase_ptr->link);
 		dbclrbuf(sybase_ptr->link,DBLASTROW(sybase_ptr->link)-1); 

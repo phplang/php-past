@@ -29,7 +29,7 @@
  */
 
 
-/* $Id: internal_functions.h,v 1.124 1998/05/21 17:28:16 rasmus Exp $ */
+/* $Id: internal_functions.h,v 1.126 1998/07/28 22:00:00 rasmus Exp $ */
 
 
 #ifndef _INTERNAL_FUNCTIONS_H
@@ -43,7 +43,7 @@ extern unsigned char first_arg_allow_ref[];
 extern unsigned char second_arg_force_ref[];
 extern unsigned char second_arg_allow_ref[];
 
-extern int _php3_next_free_module();
+extern int _php3_next_free_module(void);
 
 extern PHPAPI int getParameters(HashTable *ht, int param_count,...);
 extern PHPAPI int getParametersArray(HashTable *ht, int param_count, pval **argument_array);
@@ -89,6 +89,8 @@ extern inline PHPAPI int add_get_index_long(pval *arg, uint idx, long l, void **
 extern inline PHPAPI int add_get_index_double(pval *arg, uint idx, double d, void **dest);
 extern inline PHPAPI int add_get_index_string(pval *arg, uint idx, char *str, void **dest, int duplicate);
 extern inline PHPAPI int add_get_index_stringl(pval *arg, uint idx, char *str, uint length, void **dest, int duplicate);
+
+extern int call_user_function(HashTable *function_table, pval *object, pval *function_name, pval *retval, int param_count, pval *params[]);
 
 #define add_property_long(arg,key,n)  add_assoc_long((arg),(key),(n))
 #define add_property_double(arg,key,d)  add_assoc_double((arg),(key),(n))

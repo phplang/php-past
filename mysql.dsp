@@ -39,6 +39,7 @@ RSC=rc.exe
 # PROP Use_Debug_Libraries 0
 # PROP Output_Dir "module_Release"
 # PROP Intermediate_Dir "module_Release"
+# PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MT /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /YX /FD /c
 # ADD CPP /nologo /MT /W3 /GX /O2 /I "c:\mysql\include" /I "\src\phpcvs\php3" /D "MSVC5" /D "COMPILE_DL" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /YX /FD /I /usr/src/phpcvs/php3" /I /usr/src/mysql/include" " " /c
@@ -51,7 +52,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /dll /machine:I386
-# ADD LINK32 php.lib mysqlclient.lib wsock32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /dll /machine:I386 /libpath:"\src\phpcvs\php3\cgi_release" /libpath:"c:\mysql\lib"
+# ADD LINK32 php.lib mysqlclient.lib wsock32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /dll /machine:I386 /out:"module_Release/php3_mysql.dll" /libpath:"\src\phpcvs\php3\cgi_release" /libpath:"c:\mysql\lib"
 
 !ELSEIF  "$(CFG)" == "mysql - Win32 Debug"
 
@@ -67,7 +68,7 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MTd /W3 /Gm /GX /Zi /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /YX /FD /c
-# ADD CPP /nologo /MTd /W3 /Gm /GX /Zi /Od /D "THREAD_SAFE" /D "DEBUG" /D "MSVC5" /D "COMPILE_DL" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /YX /FD /I /usr/src/phpcvs/php3" /I /usr/src/mysql/include" " " /c
+# ADD CPP /nologo /MTd /W3 /Gm /GX /Zi /Od /I "c:\mysql\include" /I "\src\phpcvs\php3" /D "DEBUG" /D "MSVC5" /D "COMPILE_DL" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /YX /FD /I /usr/src/phpcvs/php3" /I /usr/src/mysql/include" " " /c
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /o NUL /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /o NUL /win32
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
@@ -77,7 +78,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /dll /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 php.lib mysqlclient.lib wsock32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /dll /debug /machine:I386 /pdbtype:sept /libpath:"\usr\src\phpcvs\php3\cgi_debug" /libpath:"\usr\src\mysql\lib_debug"
+# ADD LINK32 php.lib mysqlclient.lib wsock32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /dll /debug /machine:I386 /out:"module_debug/php3_mysql.dll" /pdbtype:sept /libpath:"\src\phpcvs\php3\cgi_debug" /libpath:"c:\mysql\lib"
 
 !ENDIF 
 

@@ -109,6 +109,7 @@ typedef struct php3_global_struct{
 	int module_initialized;
 	char *php3_ini_path;
 	int shutdown_requested;
+	unsigned char header_is_being_sent;
 	int phplineno;
 	int in_eval;
 	int php3_display_source;

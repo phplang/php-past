@@ -22,10 +22,10 @@
      <title>HTTP Authentication example</title>
 <programlisting role=php>
 &lt;?php
-  if(!$PHP_AUTH_USER) {
+  if(!isset($PHP_AUTH_USER)) {
     Header(&quot;WWW-authenticate: basic realm=\&quot;My Realm\&quot;&quot;);
     Header(&quot;HTTP/1.0 401 Unauthorized&quot;);
-    echo &quot;Text to send if user hits Cancel button\n&quot;
+    echo &quot;Text to send if user hits Cancel button\n&quot;;
     exit;
   } else {
     echo &quot;Hello $PHP_AUTH_USER.&lt;P&gt;&quot;;
@@ -209,10 +209,6 @@ ereg_replace("\n","",$string); /* Get rid of any carriage return characters in $
     $php_errormsg.
    </simpara>
 
-   <sect2>
-    <title>Supressing errors</title>
-    <simpara></simpara>
-    
   <sect1 id="feature-source-viewer">
    <title>PHP source viewer</title>
    <simpara></simpara>

@@ -544,12 +544,37 @@
     </funcsynopsis>
 
     <simpara>
-     Returns a pseudo-random value between 0 and RAND_MAX.
+     Returns a pseudo-random value between 0 and RAND_MAX.  If you want a
+	 random number between 5 and 15, for example, use rand()%10 + 5.
 
     <simpara>
      Remember to seed the random number generator before use with
      <function>srand</function>.
 
+	<para>
+ 	Here are two handy functions that use <function>rand</function>. One returns a random integer less 
+	than a specified maximum value, the other does the same but returns a real value.  
+	<example><title>rand example functions</title>
+	<programlisting>
+function randomint($max = 100) { 
+    static $startseed = 0; 
+    if (!$startseed) {
+        $startseed = (double)microtime()*getrandmax(); 
+        srand($startseed);
+    } 
+    return (rand()%$max); 
+} 
+
+function random($max = 1) { 
+    static $startseed = 0; 
+    if (!$startseed) { 
+        $startseed = (double)microtime()*getrandmax();
+        srand($startseed); 
+    }
+    return ((rand()/getrandmax())*$max); 
+}
+	</programlisting></example>
+	</para>
     <simpara>
      See also <function>srand</function> and
      <function>getrandmax</function>.

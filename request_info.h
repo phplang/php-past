@@ -33,16 +33,16 @@
 typedef struct {
 	char *filename;
 	char *path_info;
-	char *path_translated;
+	const char *path_translated;
 	char *query_string;
-	char *request_method;
+	const char *request_method;
 	char *script_name;
 	char *current_user;
 	int current_user_length;
 	unsigned int content_length;
-	char *content_type;
-	char *cookies;
-	char *script_filename;
+	const char *content_type;
+	const char *cookies;
+	const char *script_filename;
 	char *php_argv0;
 } php3_request_info;
 

@@ -291,6 +291,87 @@ int conditional_include_file(pval *file,pval *return_offset INLINE_TLS)
 }
 
 
+int end_current_file_execution(int *retval)
+{
+	if (stack_is_empty(&GLOBAL(input_source_stack))) {
+		*retval = 0;
+		return 1;
+	} else {
+		PHPLexState *lex_state;
+
+		yy_delete_buffer(YY_CURRENT_BUFFER);
+		stack_top(&GLOBAL(input_source_stack),(void **) &lex_state);
+
+		GLOBAL(phplineno) = lex_state->lineno;
+		GLOBAL(in_eval) = lex_state->in_eval;
+		
+		switch(lex_state->type) {
+			case LEX_STATE_CONDITIONAL_INCLUDE: /* switching out of include() */
+				seek_token(&GLOBAL(token_cache_manager),lex_state->return_offset, NULL);
+#if WIN32|WINNT
+				if(yyin->_tmpfname=="url"){
+					closesocket(yyin->_file);
+					efree(yyin);
+				} else {
+					fclose(yyin);
+				}
+#else
+				fclose(yyin);
+#endif
+				BEGIN(lex_state->state);
+				yy_switch_to_buffer(lex_state->buffer_state);
+				stack_del_top(&GLOBAL(input_source_stack));
+				*retval = DONE_EVAL;
+				return 1;
+				break;
+			case LEX_STATE_EVAL: /* switching out of eval() */
+				seek_token(&GLOBAL(token_cache_manager),lex_state->return_offset, NULL);
+				BEGIN(lex_state->state);
+				yy_switch_to_buffer(lex_state->buffer_state);
+				STR_FREE(lex_state->eval_string);
+				stack_del_top(&GLOBAL(input_source_stack));
+				*retval = DONE_EVAL;
+				return 1;
+				break;
+			case LEX_STATE_HIGHLIGHT_STRING:
+				GLOBAL(php3_display_source)=0;
+				GLOBAL(ExecuteFlag) = stack_int_top(&GLOBAL(css));
+				stack_del_top(&GLOBAL(css));
+				GLOBAL(Execute) = SHOULD_EXECUTE;
+				END_COLOR();
+				BEGIN(lex_state->state);
+				yy_switch_to_buffer(lex_state->buffer_state);
+				STR_FREE(lex_state->eval_string);
+				stack_del_top(&GLOBAL(input_source_stack));
+				break;
+			case LEX_STATE_HIGHLIGHT_FILE:
+				GLOBAL(php3_display_source)=0;
+				GLOBAL(ExecuteFlag) = stack_int_top(&GLOBAL(css));
+				stack_del_top(&GLOBAL(css));
+				GLOBAL(Execute) = SHOULD_EXECUTE;
+				END_COLOR();
+				/* break missing intentionally */
+			case LEX_STATE_INCLUDE:
+#if WIN32|WINNT
+				if (yyin->_tmpfname=="url") {
+					closesocket(yyin->_file);
+					efree(yyin);
+				} else {
+					fclose(yyin);
+				}
+#else
+				fclose(yyin);
+#endif
+				BEGIN(lex_state->state);
+				yy_switch_to_buffer(lex_state->buffer_state);
+				stack_del_top(&GLOBAL(input_source_stack));
+				break;
+		}
+	}
+	return 0;
+}
+
+
 void clean_input_source_stack(void)
 {
 	PHPLexState *lex_state;
@@ -706,7 +787,7 @@ TLS_VARS;
 }
 
 
-<INITIAL>(([^<]|"<"[^?s]){1,400})|"<s" {
+<INITIAL>(([^<]|"<"[^?s<]){1,400})|"<s"|"<" {
 	phplval->value.str.val = (char *) estrndup(yytext, yyleng);
 	phplval->value.str.len = yyleng;
 	phplval->type = IS_STRING;
@@ -947,6 +1028,8 @@ TLS_VARS;
 	phplval->value.chval = yytext[0];
 	if (yyleng == 2) {
 		unput(yytext[1]);
+		yytext[1] = 0;
+		yyleng--;
 	}
 	return CHARACTER;	
 }
@@ -1044,79 +1127,14 @@ TLS_VARS;
 
 
 <DOUBLE_QUOTES,BACKQUOTE,INITIAL,IN_PHP><<EOF>> {
-	if (stack_is_empty(&GLOBAL(input_source_stack))) {
-		yyterminate();
-	} else {
-		PHPLexState *lex_state;
+	int retval;
 
-		yy_delete_buffer(YY_CURRENT_BUFFER);
-		stack_top(&GLOBAL(input_source_stack),(void **) &lex_state);
-
-		GLOBAL(phplineno) = lex_state->lineno;
-		GLOBAL(in_eval) = lex_state->in_eval;
-		
-		switch(lex_state->type) {
-			case LEX_STATE_CONDITIONAL_INCLUDE: /* switching out of include() */
-				seek_token(&GLOBAL(token_cache_manager),lex_state->return_offset, NULL);
-#if WIN32|WINNT
-				if(yyin->_tmpfname=="url"){
-					closesocket(yyin->_file);
-					efree(yyin);
-				} else {
-					fclose(yyin);
-				}
-#else
-				fclose(yyin);
-#endif
-				BEGIN(lex_state->state);
-				yy_switch_to_buffer(lex_state->buffer_state);
-				stack_del_top(&GLOBAL(input_source_stack));
-				return DONE_EVAL;
-				break;
-			case LEX_STATE_EVAL: /* switching out of eval() */
-				seek_token(&GLOBAL(token_cache_manager),lex_state->return_offset, NULL);
-				BEGIN(lex_state->state);
-				yy_switch_to_buffer(lex_state->buffer_state);
-				STR_FREE(lex_state->eval_string);
-				stack_del_top(&GLOBAL(input_source_stack));
-				return DONE_EVAL;
-				break;
-			case LEX_STATE_HIGHLIGHT_STRING:
-				GLOBAL(php3_display_source)=0;
-				GLOBAL(ExecuteFlag) = stack_int_top(&GLOBAL(css));
-				stack_del_top(&GLOBAL(css));
-				GLOBAL(Execute) = SHOULD_EXECUTE;
-				END_COLOR();
-				BEGIN(lex_state->state);
-				yy_switch_to_buffer(lex_state->buffer_state);
-				STR_FREE(lex_state->eval_string);
-				stack_del_top(&GLOBAL(input_source_stack));
-				break;
-			case LEX_STATE_HIGHLIGHT_FILE:
-				GLOBAL(php3_display_source)=0;
-				GLOBAL(ExecuteFlag) = stack_int_top(&GLOBAL(css));
-				stack_del_top(&GLOBAL(css));
-				GLOBAL(Execute) = SHOULD_EXECUTE;
-				END_COLOR();
-				/* break missing intentionally */
-			case LEX_STATE_INCLUDE:
-#if WIN32|WINNT
-				if (yyin->_tmpfname=="url") {
-					closesocket(yyin->_file);
-					efree(yyin);
-				} else {
-					fclose(yyin);
-				}
-#else
-				fclose(yyin);
-#endif
-				BEGIN(lex_state->state);
-				yy_switch_to_buffer(lex_state->buffer_state);
-				stack_del_top(&GLOBAL(input_source_stack));
-				break;
-		}
+	if (end_current_file_execution(&retval)) {
+		return retval;
 	}
 }
+
+
 
 
 <IN_PHP,INITIAL,DOUBLE_QUOTES,BACKQUOTE,SINGLE_QUOTE>. {

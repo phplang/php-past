@@ -112,44 +112,25 @@ system(EscapeShellCmd($cmd))
      <paramdef>int <parameter><optional>return_var</optional></parameter></paramdef>
     </funcsynopsis>
     <para>
-     The PassThru() function is similar to the <function>Exec</function> function
-     in that it executes a <parameter>command</parameter>.  If the
-     <parameter>return_var</parameter> argument is present, the return status of
-     the Unix command will be placed here.  This function should be used in place
-     of <function>Exec</function> or <function>System</function> when the output
-     from the Unix command is binary data which needs to be passed directly back
-     to the browser.  A common use for this is to execute something like the
-     pbmplus utilities that can output an image stream directly.  By setting the
-     content-type to <emphasis>image/gif</emphasis> and then calling a pbmplus
-     program to output a gif, you can create PHP scripts that output images
-     directly.
+     The <function>passthru</function> function is similar to the
+     <function>Exec</function> function in that it executes a
+     <parameter>command</parameter>.  If the
+     <parameter>return_var</parameter> argument is present, the return
+     status of the Unix command will be placed here.  This function
+     should be used in place of <function>Exec</function> or
+     <function>System</function> when the output from the Unix command
+     is binary data which needs to be passed directly back to the
+     browser.  A common use for this is to execute something like the
+     pbmplus utilities that can output an image stream directly.  By
+     setting the content-type to <emphasis>image/gif</emphasis> and
+     then calling a pbmplus program to output a gif, you can create
+     PHP scripts that output images directly.
     <para>
      See also <function>exec</function> and <function>fpassthru</function>.
    </refsect1>
   </refentry>
 
-  <refentry id="function.virtual">
-   <refnamediv>
-    <refname>virtual</refname>
-    <refpurpose>Perform an Apache sub-request</refpurpose>
-   </refnamediv>
-   <refsect1>
-    <title>Description</title>
-    <funcsynopsis>
-     <funcdef>int <function>virtual</function></funcdef>
-     <paramdef>string <parameter>filename</parameter></paramdef>
-    </funcsynopsis>
-    <para>
-	<Function>virtual</function> is an Apache-specific function which is equivalent
-    to &lt;!--#include virtual...--&gt; in mod_include.  It performs an
-    Apache sub-request.  It is useful for including CGI scripts or .shtml
-    files, or anything else that you would parse through Apache.  Note that for
-	a CGI script, the script must generate valid CGI headers.  At the minimum that
-	means it must generate a Content-type header.
-    For PHP files, you should use <function>include</function> or 
-    <function>require</function>.
-   </refsect1>
-  </refentry>
+ </reference>
 
 <!-- Keep this comment at the end of the file
 Local variables:

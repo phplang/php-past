@@ -305,6 +305,43 @@ $colon_separated = implode($array, ":");
    </refsect1>
   </refentry>
 
+  <refentry id="function.ltrim">
+   <refnamediv>
+    <refname>ltrim</refname> <refpurpose>Strip whitespace from the beginning of a string.</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>string <function>ltrim</function></funcdef>
+     <paramdef>string <parameter>str</parameter></paramdef>
+    </funcsynopsis>
+
+	<para>
+	This function strips whitespace from the start of a string and returns the stripped string.
+	<para>
+	See also <function>chop</function> and <function>trim</function>.
+
+   </refsect1>
+  </refentry>
+
+  <refentry id="function.md5">
+   <refnamediv>
+    <refname>md5</refname>
+    <refpurpose>calculate the md5 hash of a string</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>string <function>md5</function></funcdef>
+     <paramdef>string <parameter>str</parameter></paramdef>
+    </funcsynopsis>
+
+    <para>
+     Calculates the MD5 hash of <parameter>str</parameter>.
+
+   </refsect1>
+  </refentry>
+
   <refentry id="function.nl2br">
    <refnamediv>
     <refname>nl2br</refname>
@@ -354,6 +391,36 @@ if (ord($str) == 10) {
     <simpara>
      See also <function>chr</function>. 
 
+   </refsect1>
+  </refentry>
+
+  <refentry id="function.parse-str">
+   <refnamediv>
+    <refname>parse_str</refname>
+    <refpurpose>parses the string into variables</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>void <function>parse_str</function></funcdef>
+     <paramdef>string <parameter>str</parameter></paramdef>
+    </funcsynopsis>
+
+    <para>
+     Parses <parameter>str</parameter> as if it were the query string
+     passed via an URL and sets variables in the current scope.
+
+    <para>
+     <example>
+      <title>Using <function>parse_str</function></title>
+      <programlisting>
+$str = "first=value&amp;second[]=this+works&amp;second[]=another";
+parse_str($str);
+echo $first; /* prints "value" */
+echo $second[0]; /* prints "this works" */
+echo $second[1]; /* prints "another" */
+      </programlisting>
+     </example>
    </refsect1>
   </refentry>
 
@@ -519,13 +586,13 @@ echo '&lt;A HREF="http://x.com/department_list_script/',
     LC_COLLATE for string comparison - not currently implemented in PHP
        </simpara></listitem><listitem><simpara>
     LC_CTYPE for character classification and conversion, for
-    example strtoupper()
+    example <function>strtoupper</function>
        </simpara></listitem><listitem><simpara>
     LC_MONETARY for localeconv() - not currently implemented in PHP
        </simpara></listitem><listitem><simpara>
     LC_NUMERIC for decimal separator
        </simpara></listitem><listitem><simpara>
-    LC_TIME for time formats - not currently implemented in PHP
+    LC_TIME for date and time formatting with <function>strftime</function>
        </simpara></listitem>
      </itemizedlist>
 
@@ -545,6 +612,45 @@ echo '&lt;A HREF="http://x.com/department_list_script/',
      locale does not exist or the category name is invalid.
      An invalid category name also causes a warning message.
 
+   </refsect1>
+  </refentry>
+
+  <refentry id="function.soundex">
+   <refnamediv>
+    <refname>soundex</refname>
+    <refpurpose>calculate the soundex key of a string</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>string <function>soundex</function></funcdef>
+     <paramdef>string <parameter>str</parameter></paramdef>
+    </funcsynopsis>
+
+    <para>
+     Calculates the soundex key of <parameter>str</parameter>.
+
+    <para>
+     Soundex keys have the property that words pronounced similarly produce the
+     same soundex key, and can thus be used to simplify searches in databases
+     where you know the pronunciation but not the spelling. This soundex function
+     returns a string 4 characters long, starting with a letter.
+
+    <para>
+     This particular soundex function is one described by Donald Knuth in "The Art Of Computer Programming,
+     vol. 3: Sorting And Searching", Addison-Wesley (1973), pp. 391-392.
+
+    <para>
+     <example>
+      <title>Soundex Examples</title>
+      <programlisting>
+soundex("Euler") == soundex("Ellery") == 'E460';
+soundex("Gauss") == soundex("Ghosh") == 'G200';
+soundex("Knuth") == soundex("Kant") == 'H416';
+soundex("Lloyd") == soundex("Ladd") == 'L300';
+soundex("Lukasiewicz") == soundex("Lissajous") == 'L222';
+      </programlisting>
+     </example>
    </refsect1>
   </refentry>
 
@@ -732,6 +838,28 @@ $isodate = sprintf("%04d-%02d-%02d", $year, $month, $day);
    </refsect1>
   </refentry>
 
+  <refentry id="function.strcspn">
+   <refnamediv>
+    <refname>strcspn</refname>
+    <refpurpose>find length of initial segment not matching mask</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>strcspn</function></funcdef>
+     <paramdef>string <parameter>str1</parameter></paramdef>
+     <paramdef>string <parameter>str2</parameter></paramdef>
+    </funcsynopsis>
+    <simpara>
+	 Returns the lengthq of the initial segment of <parameter>str1</parameter> which does 
+	 <emphasis>not</emphasis> contain any of the characters in <parameter>str2</parameter>.
+
+    <simpara>
+     See also <function>strspn</function>.
+ 
+   </refsect1>
+  </refentry>
+
   <refentry id="function.stripslashes">
    <refnamediv>
     <refname>StripSlashes</refname>
@@ -837,51 +965,6 @@ $isodate = sprintf("%04d-%02d-%02d", $year, $month, $day);
     </refsect1>
    </refentry>
 
-  <refentry id="function.strtok">
-   <refnamediv>
-    <refname>strtok</refname>
-    <refpurpose>tokenize string</refpurpose>
-   </refnamediv>
-   <refsect1>
-    <title>Description</title>
-    <funcsynopsis>
-     <funcdef>string <function>strtok</function></funcdef>
-     <paramdef>string <parameter>arg1</parameter></paramdef>
-     <paramdef>string <parameter>arg2</parameter></paramdef>
-    </funcsynopsis>
-    <para>
-     strtok() is used to tokenize a string.  That is, if you have a
-     string like "This is an example string" you could tokenize this
-     string into its individual words by using the space character as
-     the token.
-     <example>
-      <title>strtok() example</title>
-      <programlisting>
-    $string = "This is an example string";
-    $tok = strtok($string," ");
-    while($tok) {
-        echo "Word=$tok&lt;br>";
-        $tok = strtok(" ");
-    }
-</programlisting></example>
-
-    <para>
-     Note that only the first call to strtok uses the string argument.
-     Every subsequent call to strtok only needs the token to use, as
-     it keeps track of where it is in the current string.  To start
-     over, or to tokenize a new string you simply call strtok with the
-     string argument again to initialize it.  Note that you may put
-     multiple tokens in the token parameter.  The string will be
-     tokenized when any one of the characters in the argument are
-     found.
-
-    <para>
-     See also <function>split</function> and
-     <function>explode</function>.
-
-   </refsect1>
-  </refentry>
-
   <refentry id="function.strrchr">
    <refnamediv>
     <refname>strrchr</refname>
@@ -952,6 +1035,29 @@ $last = substr( strrchr( $text, 10 ), 1 );
    </refsect1>
   </refentry>
 
+  <refentry id="function.strspn">
+   <refnamediv>
+    <refname>strcspn</refname>
+    <refpurpose>find length of initial segment matching mask</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>strspn</function></funcdef>
+     <paramdef>string <parameter>str1</parameter></paramdef>
+     <paramdef>string <parameter>str2</parameter></paramdef>
+    </funcsynopsis>
+    <simpara>
+	 Returns the length of the initial segment of
+	 <parameter>str1</parameter> which consists entirely of
+	 characters in <parameter>str2</parameter>.
+
+    <simpara>
+     See also <function>strcspn</function>.
+ 
+   </refsect1>
+  </refentry>
+
   <refentry id="function.strstr">
    <refnamediv>
     <refname>strstr</refname>
@@ -982,6 +1088,51 @@ $last = substr( strrchr( $text, 10 ), 1 );
 
     </refsect1>
    </refentry>
+
+  <refentry id="function.strtok">
+   <refnamediv>
+    <refname>strtok</refname>
+    <refpurpose>tokenize string</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>string <function>strtok</function></funcdef>
+     <paramdef>string <parameter>arg1</parameter></paramdef>
+     <paramdef>string <parameter>arg2</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+     strtok() is used to tokenize a string.  That is, if you have a
+     string like "This is an example string" you could tokenize this
+     string into its individual words by using the space character as
+     the token.
+     <example>
+      <title>strtok() example</title>
+      <programlisting>
+    $string = "This is an example string";
+    $tok = strtok($string," ");
+    while($tok) {
+        echo "Word=$tok&lt;br>";
+        $tok = strtok(" ");
+    }
+</programlisting></example>
+
+    <para>
+     Note that only the first call to strtok uses the string argument.
+     Every subsequent call to strtok only needs the token to use, as
+     it keeps track of where it is in the current string.  To start
+     over, or to tokenize a new string you simply call strtok with the
+     string argument again to initialize it.  Note that you may put
+     multiple tokens in the token parameter.  The string will be
+     tokenized when any one of the characters in the argument are
+     found.
+
+    <para>
+     See also <function>split</function> and
+     <function>explode</function>.
+
+   </refsect1>
+  </refentry>
 
   <refentry id="function.strtolower">
    <refnamediv>
@@ -1127,25 +1278,6 @@ $addr = strtr($addr, "дец", "aao");
    </refsect1>
   </refentry>
 
-  <refentry id="function.ltrim">
-   <refnamediv>
-    <refname>ltrim</refname> <refpurpose>Strip whitespace from the beginning of a string.</refpurpose>
-   </refnamediv>
-   <refsect1>
-    <title>Description</title>
-    <funcsynopsis>
-     <funcdef>string <function>ltrim</function></funcdef>
-     <paramdef>string <parameter>str</parameter></paramdef>
-    </funcsynopsis>
-
-	<para>
-	This function strips whitespace from the start of a string and returns the stripped string.
-	<para>
-	See also <function>chop</function> and <function>trim</function>.
-
-   </refsect1>
-  </refentry>
-
   <refentry id="function.trim">
    <refnamediv>
     <refname>trim</refname> <refpurpose>Strip whitespace from the beginning and end of a string.</refpurpose>
@@ -1190,93 +1322,6 @@ $addr = strtr($addr, "дец", "aao");
      See also <function>strtoupper</function> and
      <function>strtolower</function>.
 
-   </refsect1>
-  </refentry>
-
-  <refentry id="function.md5">
-   <refnamediv>
-    <refname>md5</refname>
-    <refpurpose>calculate the md5 hash of a string</refpurpose>
-   </refnamediv>
-   <refsect1>
-    <title>Description</title>
-    <funcsynopsis>
-     <funcdef>string <function>md5</function></funcdef>
-     <paramdef>string <parameter>str</parameter></paramdef>
-    </funcsynopsis>
-
-    <para>
-     Calculates the MD5 hash of <parameter>str</parameter>.
-
-   </refsect1>
-  </refentry>
-
-  <refentry id="function.soundex">
-   <refnamediv>
-    <refname>soundex</refname>
-    <refpurpose>calculate the soundex key of a string</refpurpose>
-   </refnamediv>
-   <refsect1>
-    <title>Description</title>
-    <funcsynopsis>
-     <funcdef>string <function>soundex</function></funcdef>
-     <paramdef>string <parameter>str</parameter></paramdef>
-    </funcsynopsis>
-
-    <para>
-     Calculates the soundex key of <parameter>str</parameter>.
-
-    <para>
-     Soundex keys have the property that words pronounced similarly produce the
-     same soundex key, and can thus be used to simplify searches in databases
-     where you know the pronunciation but not the spelling. This soundex function
-     returns a string 4 characters long, starting with a letter.
-
-    <para>
-     This particular soundex function is one described by Donald Knuth in "The Art Of Computer Programming,
-     vol. 3: Sorting And Searching", Addison-Wesley (1973), pp. 391-392.
-
-    <para>
-     <example>
-      <title>Soundex Examples</title>
-      <programlisting>
-soundex("Euler") == soundex("Ellery") == 'E460';
-soundex("Gauss") == soundex("Ghosh") == 'G200';
-soundex("Knuth") == soundex("Kant") == 'H416';
-soundex("Lloyd") == soundex("Ladd") == 'L300';
-soundex("Lukasiewicz") == soundex("Lissajous") == 'L222';
-      </programlisting>
-     </example>
-   </refsect1>
-  </refentry>
-
-  <refentry id="function.parse-str">
-   <refnamediv>
-    <refname>parse_str</refname>
-    <refpurpose>parses the string into variables</refpurpose>
-   </refnamediv>
-   <refsect1>
-    <title>Description</title>
-    <funcsynopsis>
-     <funcdef>void <function>parse_str</function></funcdef>
-     <paramdef>string <parameter>str</parameter></paramdef>
-    </funcsynopsis>
-
-    <para>
-     Parses <parameter>str</parameter> as if it were the query string
-     passed via an URL and sets variables in the current scope.
-
-    <para>
-     <example>
-      <title>Using <function>parse_str</function></title>
-      <programlisting>
-$str = "first=value&amp;second[]=this+works&amp;second[]=another";
-parse_str($str);
-echo $first; /* prints "value" */
-echo $second[0]; /* prints "this works" */
-echo $second[1]; /* prints "another" */
-      </programlisting>
-     </example>
    </refsect1>
   </refentry>
 

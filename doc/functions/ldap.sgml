@@ -2,6 +2,194 @@
   <title>LDAP Functions</title>
   <titleabbrev>LDAP</titleabbrev>
 
+  <partintro>
+   <title>Introduction to LDAP</title>
+    <para>
+     LDAP is the Lightweight Directory Access Protocol, and is a
+     protocol used to access "Directory Servers".  The Directory is a
+     special kind of database that holds information in a tree
+     structure.  
+    </para><para> 
+     The concept is similar to your hard disk directory structure,
+     except that in this context, the root directory is "The world"
+     and the first level subdirectories are "countries".  Lower levels
+     of the directory structure contain entries for companies,
+     organisations or places, while yet lower still we find directory
+     entries for people, and perhaps equipment or documents.
+    </para><para>
+     To refer to a file in a subdirectory on your hard disk, you might
+     use something like
+    </para>
+<literallayout>
+    /usr/local/myapp/docs
+</literallayout>
+    <para>
+     The forwards slash marks each division in the reference, and the
+     sequence is read from left to right.
+    </para><para> 
+     The equivalent to the fully qualified file reference in LDAP is
+     the "distinguished name", referred to simply as "dn".  An example
+     dn might be.
+    </para>
+<literallayout>
+    cn=John Smith,ou=Accounts,o=My Company,c=US
+</literallayout>
+    <para>
+     The comma marks each division in the reference, and the sequence
+     is read from right to left.  You would read this dn as ..
+    </para>
+<literallayout>
+    country = US
+    organization = My Company
+    organizationalUnit = Accounts
+    commonName = John Smith
+</literallayout>
+    <para>
+     In the same way as there are no hard rules about how you organise
+     the directory structure of a hard disk, a directory server
+     manager can set up any structure that is meaningful for the
+     purpose.  However, there are some conventions that are used.  The
+     message is that you can not write code to access a directory
+     server unless you know something about its structure, any more
+     than you can use a database without some knowledge of what is
+     available.
+    </para>
+
+   <sect1>
+    <title>Complete code example</title>
+     <para>
+      Retrieve information for all entries where the surname starts
+      with "S" from a directory server, displaying an extract with
+      name and email address.
+     </para>
+
+    <example>
+     <title>LDAP search example</title>
+<programlisting role=php>
+&lt;?php
+// basic sequence with LDAP is connect, bind, search, interpret search
+// result, close connection
+
+echo "&lt;h3>LDAP query test&lt;/h3>";
+echo "Connecting ...";
+$ds=ldap_connect("localhost");  // must be a valid LDAP server!
+echo "connect result is ".$ds."&lt;p>";
+
+if ($ds) { 
+    echo "Binding ..."; 
+    $r=ldap_bind($ds);     // this is an "anonymous" bind, typically
+                           // read-only access echo "Bind result is
+    echo "Bind result is ".$r."&lt;p>";
+
+    echo "Searching for (sn=S*) ...";
+    // Search surname entry
+    $sr=ldap_search($ds,"o=My Company, c=US", "sn=S*");  
+    echo "Search result is ".$sr."&lt;p>";
+
+    echo "Number of entires returned is ".ldap_count_entries($ds,$sr)."&lt;p>";
+
+    echo "Getting entries ...&lt;p>";
+    $info = ldap_get_entries($ds, $sr);
+    echo "Data for ".$info["count"]." items returned:&lt;p>";
+
+    for ($i=0; $i<$info["count"]; $i++) {
+        echo "dn is: ". $info[$i]["dn"] ."&lt;br>";
+        echo "first cn entry is: ". $info[$i]["cn"][0] ."&lt;br>";
+        echo "first email entry is: ". $info[$i]["mail"][0] ."&lt;p>";
+    }
+
+    echo "Closing connection";
+    ldap_close($ds);
+
+} else {
+    echo "&lt;h4>Unable to connect to LDAP server&lt;/h4>";
+}
+?>
+</programlisting>
+    </example>
+
+   <sect2>
+    <title>Using the PHP LDAP calls</title>
+     <para>
+      You will need to get and compile LDAP client libraries from
+      either the University of Michigan ldap-3.3 package or the
+      Netscape Directory SDK.  You will also need to recompile PHP
+      with LDAP support enabled before PHP's LDAP calls will work.
+     </para><para>
+      Before you can use the LDAP calls you will need to know ..
+
+    <itemizedlist>
+     <listitem>
+      <para>
+       The name or address of the directory server you will use
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       The "base dn" of the server (the part of the world directory
+       that is held on this server, which could be "o=My
+       Company,c=US")
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       Whether you need a password to access the server (many servers
+       will provide read access for an "anonymous bind" but require a
+       password for anything else)
+      </para>
+     </listitem>
+    </itemizedlist>
+
+     <para>
+      The typical sequence of LDAP calls you will make in an
+      application will follow this pattern:
+<literallayout>
+  ldap_connect()    // establish connection to server
+     |
+  ldap_bind()       // anonymous or authenticated "login"
+     |
+  do something like search or update the directory
+  and display the results
+     |
+  ldap_close()      // "logout"
+</literallayout>
+   </sect2>
+
+
+   <sect2>
+    <title>More Information</title>
+     <para>
+      Lots of information about LDAP can be found at
+     </para>
+
+    <itemizedlist>
+     <listitem>
+      <para>
+       <ulink url="&url.ldap.netscape;">Netscape</ulink>
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <ulink url="&url.ldap.michigan;">University of Michigan</ulink>
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <ulink url="&url.ldap.ldapworld;">LDAP World</ulink>
+      </para>
+     </listitem>
+    </itemizedlist>
+
+     <para>    
+      The Netscape SDK contains a helpful Programmer's Guide in .html
+      format.
+     </para>
+   </sect2>
+  </sect1>
+
+  </partintro>
+
+
   <refentry id="function.ldap-add">
    <refnamediv>
     <refname>ldap_add</refname>
@@ -16,14 +204,15 @@
      <paramdef>array <parameter>entry</parameter></paramdef>
     </funcsynopsis>
     <para>
-    returns true on success and false on error.
-    <para>  
-    The ldap_add() function is used to add entries in the LDAP directory. The DN 
-    of the entry to be added is specified by dn. Array entry specifies the
-    information about the entry. The values in the entries are indexed by
-    individual attributes. In case of multiple values for an attribute, they
-    are indexed using integers starting with 0.
-	<para>
+     returns true on success and false on error.
+    </para><para>  
+     The ldap_add() function is used to add entries in the LDAP
+     directory. The DN of the entry to be added is specified by
+     dn. Array entry specifies the information about the entry. The
+     values in the entries are indexed by individual attributes. In
+     case of multiple values for an attribute, they are indexed using
+     integers starting with 0.
+    </para>
 	<informalexample>
 <literallayout>
     entry["attribute1"] = value
@@ -31,6 +220,32 @@
     entry["attribute2"][1] = value2
 </literallayout>
      </informalexample>
+     <example>
+      <title>Complete example with authenticated bind</title>
+<programlisting role=php>
+&lt;?php
+$ds=ldap_connect("localhost");  // assuming the LDAP server is on this host
+
+if ($ds) {
+    // bind with appropriate dn to give update access
+    $r=ldap_bind($ds,"cn=root, o=My Company, c=US", "secret");
+
+    // prepare data
+    $info["cn"]="John Jones";
+    $info["sn"]="Jones";
+    $info["mail"]="jonj@here.and.now";
+    $info["objectclass"]="person";
+
+    // add data to directory
+    $r=ldap_add($ds, "cn=John Jones, o=My Company, c=US", $info);
+
+    ldap_close($ds);
+} else {
+    echo "Unable to connect to LDAP server"; 
+}
+?>
+</programlisting>
+     </example>
    </refsect1>
   </refentry>
 
@@ -247,27 +462,6 @@
   </refentry>
 
 
-  <refentry id="function.ldap-free-entry">
-   <refnamediv>
-    <refname>ldap_free_entry</refname>
-    <refpurpose>Free entry result memory</refpurpose>
-   </refnamediv>
-   <refsect1>
-    <title>Description</title>
-    <funcsynopsis>
-     <funcdef>int <function>ldap_free_entry</function></funcdef>
-     <paramdef>int <parameter>result_entry_identifier</parameter></paramdef>
-    </funcsynopsis>
-    <para>
-    Returns true on success and false on error.
-    <para>  
-    ldap_free_entry() deallocates memory used to store the entries in LDAP
-    result. All memory allocated for entries is automatically freed when
-    the script terminates.
-   </refsect1>
-  </refentry>
-
-
   <refentry id="function.ldap-free-result">
    <refnamediv>
     <refname>ldap_free_result</refname>
@@ -285,6 +479,11 @@
     ldap_free_result() frees up the memory allocated internally to store
     the result and pointed by the result_identifier. All result memory 
     will be automatically freed when the script terminates. 
+	<para>
+	Typically all the memory allocated for the ldap result gets freed at 
+	the end of the script. In case the script is making successive searches
+	which return large result sets, ldap_free_result() could be called 
+	to keep the runtime memory usage by the script low.
    </refsect1>
   </refentry>
 

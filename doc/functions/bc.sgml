@@ -96,13 +96,10 @@
      <funcdef>string <function>bcmod</function></funcdef>
      <paramdef>string <parameter>left operand</parameter></paramdef>
      <paramdef>string <parameter>modulus</parameter></paramdef>
-     <paramdef>int <parameter><optional>scale</optional></parameter></paramdef>
     </funcsynopsis>
     <para>
     Get the modulus of the <parameter>left operand</parameter> using
-    <parameter>modulus</parameter>.  The <parameter>scale</parameter>
-    parameter sets the number of digits after the decimal place in the
-    result.
+    <parameter>modulus</parameter>.  
     <para>
     See also <function>bcdiv</function>.
    </refsect1>

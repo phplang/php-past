@@ -23,7 +23,7 @@
    | If you did not, or have any questions about PHP licensing, please    |
    | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
-   | Authors: Rasmus Lerdorf                                              |
+   | Authors: Rasmus Lerdorf <rasmus@lerdorf.on.ca>                       |
    +----------------------------------------------------------------------+
  */
 /* $Id: */
@@ -52,6 +52,7 @@ int php3_track_vars;
 static char *php3_getpost(pval *http_post_vars)
 {
 	char *buf = NULL;
+	const char *ctype;
 #if MODULE_MAGIC_NUMBER > 19961007
 	char argsbuffer[HUGE_STRING_LEN];
 #else
@@ -63,24 +64,24 @@ static char *php3_getpost(pval *http_post_vars)
 	char boundary[100];
 	TLS_VARS;
 	
-	buf = GLOBAL(request_info).content_type;
-	if (!buf) {
+	ctype = GLOBAL(request_info).content_type;
+	if (!ctype) {
 		php3_error(E_WARNING, "POST Error: content-type missing");
 		return NULL;
 	}
-	if (strncasecmp(buf, "application/x-www-form-urlencoded", 33) && strncasecmp(buf, "multipart/form-data", 19)) {
-		php3_error(E_WARNING, "Unsupported content-type: %s", buf);
+	if (strncasecmp(ctype, "application/x-www-form-urlencoded", 33) && strncasecmp(ctype, "multipart/form-data", 19)) {
+		php3_error(E_WARNING, "Unsupported content-type: %s", ctype);
 		return NULL;
 	}
-	if (!strncasecmp(buf, "multipart/form-data", 19)) {
+	if (!strncasecmp(ctype, "multipart/form-data", 19)) {
 		file_upload = 1;
-		mb = strchr(buf, '=');
+		mb = strchr(ctype, '=');
 		if (mb) {
 			strncpy(boundary, mb + 1, sizeof(boundary));
 		} else {
 			php3_error(E_WARNING, "File Upload Error: No MIME boundary found");
 			php3_error(E_WARNING, "There should have been a \"boundary=something\" in the Content-Type string");
-			php3_error(E_WARNING, "The Content-Type string was: \"%s\"", buf);
+			php3_error(E_WARNING, "The Content-Type string was: \"%s\"", ctype);
 			return NULL;
 		}
 	}
@@ -280,7 +281,6 @@ void _php3_parse_gpc_data(char *val, char *var, pval *track_vars_array)
 void php3_treat_data(int arg, char *str)
 {
 	char *res = NULL, *var, *val;
-	int inc = 0;
 	pval array,*array_ptr;
 	TLS_VARS;
 	
@@ -318,16 +318,13 @@ void php3_treat_data(int arg, char *str)
 		if (var && *var) {
 			res = (char *) estrdup(var);
 		}
-		inc = -1;
 	} else if (arg == PARSE_COOKIE) {		/* Cookie data */
-		var = GLOBAL(request_info).cookies;
+		var = (char *)GLOBAL(request_info).cookies;
 		if (var && *var) {
 			res = (char *) estrdup(var);
 		}
-		inc = -1;
 	} else if (arg == PARSE_STRING) {		/* String data */
 		res = str;
-		inc = -1;
 	}
 	if (!res) {
 		return;

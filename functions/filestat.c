@@ -27,13 +27,14 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: filestat.c,v 1.72 1998/05/21 23:57:29 zeev Exp $ */
+/* $Id: filestat.c,v 1.75 1998/08/14 23:47:15 steffann Exp $ */
 #ifdef THREAD_SAFE
 #include "tls.h"
 #endif
 #include "php.h"
 #include "internal_functions.h"
 #include "safe_mode.h"
+#include "fopen-wrappers.h"
 
 #include <stdlib.h>
 #include <sys/stat.h>
@@ -148,6 +149,9 @@ void php3_chgrp(INTERNAL_FUNCTION_PARAMETERS)
 	}
 /* #endif */
 
+	/* Check the basedir */
+	if (_php3_check_open_basedir(filename->value.str.val)) RETURN_FALSE;
+
 	ret = chown(filename->value.str.val, -1, gid);
 	if (ret == -1) {
 		php3_error(E_WARNING, "chgrp failed: %s", strerror(errno));
@@ -189,6 +193,9 @@ void php3_chown(INTERNAL_FUNCTION_PARAMETERS)
 		RETURN_FALSE;
 	}
 
+	/* Check the basedir */
+	if (_php3_check_open_basedir(filename->value.str.val)) RETURN_FALSE;
+
 	ret = chown(filename->value.str.val, uid, -1);
 	if (ret == -1) {
 		php3_error(E_WARNING, "chown failed: %s", strerror(errno));
@@ -216,6 +223,9 @@ void php3_chmod(INTERNAL_FUNCTION_PARAMETERS) {
 				   "Invalid owner of file to be changed.");
 		RETURN_FALSE;
 	}
+
+	/* Check the basedir */
+	if (_php3_check_open_basedir(filename->value.str.val)) RETURN_FALSE;
 
 	ret = chmod(filename->value.str.val, mode->value.lval);
 	if (ret == -1) {
@@ -264,6 +274,9 @@ void php3_touch(INTERNAL_FUNCTION_PARAMETERS) {
 		if (newtime) efree(newtime);
 		RETURN_FALSE;
 	}
+
+	/* Check the basedir */
+	if (_php3_check_open_basedir(filename->value.str.val)) RETURN_FALSE;
 
 	/* create the file if it doesn't exist already */
 	ret = stat(filename->value.str.val, &sb);
@@ -429,6 +442,12 @@ static void _php3_stat(const char *filename, int type, pval *return_value)
 		RETURN_LONG((long)GLOBAL(sb).st_ctime);
 		break;
 	case 8: /* filetype */
+               {
+                       struct stat lsb;
+                       lstat(GLOBAL(CurrentStatFile),&lsb);
+                       if ((lsb.st_mode&S_IFMT) == S_IFLNK) {
+                               RETURN_STRING("link",1);
+                       }
 		switch(GLOBAL(sb).st_mode&S_IFMT) {
 		case S_IFIFO:
 			RETURN_STRING("fifo",1);
@@ -443,17 +462,13 @@ static void _php3_stat(const char *filename, int type, pval *return_value)
 			RETURN_STRING("block",1);
 			break;
 		case S_IFREG:
-			lstat(GLOBAL(CurrentStatFile),&GLOBAL(sb));
-			if ((GLOBAL(sb).st_mode&S_IFMT) == S_IFLNK) {
-				RETURN_STRING("link",1);
-			} else {
 				RETURN_STRING("file",1);
-			}
 			break;	
 		default:
 			php3_error(E_WARNING,"Unknown file type (%d)",GLOBAL(sb).st_mode&S_IFMT);
 			RETURN_STRING("unknown",1);
 			break;
+                       }
 		}
 		break;
 	case 9: /*is writable*/

@@ -27,7 +27,7 @@
    | (with helpful hints from Dean Gaudet <dgaudet@arctic.org>            |
    +----------------------------------------------------------------------+
  */
-/* $Id: mod_php3.c,v 1.75 1998/06/02 14:28:42 rasmus Exp $ */
+/* $Id: mod_php3.c,v 1.80 1998/08/14 23:47:12 steffann Exp $ */
 
 #ifdef THREAD_SAFE
 #include "tls.h"
@@ -35,8 +35,12 @@
 #else
 #include "httpd.h"
 #include "http_config.h"
+#if MODULE_MAGIC_NUMBER > 19980712
+#include "ap_compat.h"
+#else
 #if MODULE_MAGIC_NUMBER > 19980324
 #include "compat.h"
+#endif
 #endif
 #include "http_core.h"
 #include "http_main.h"
@@ -313,6 +317,10 @@ static void *php3_merge_dir(pool *p, void *basev, void *addv)
 	if (add->browscap != orig.browscap) new->browscap = add->browscap;
 	if (add->arg_separator != orig.arg_separator) new->arg_separator = add->arg_separator;
 	if (add->gpc_order != orig.gpc_order) new->gpc_order = add->gpc_order;
+	if (add->error_prepend_string != orig.error_prepend_string) new->error_prepend_string = add->error_prepend_string;
+	if (add->error_append_string != orig.error_append_string) new->error_append_string = add->error_append_string;
+	if (add->open_basedir != orig.open_basedir) new->open_basedir = add->open_basedir;
+	if (add->enable_dl != orig.enable_dl) new->enable_dl = add->enable_dl;
 	
 	return new;
 }
@@ -365,6 +373,9 @@ char *php3flaghandler(cmd_parms * cmd, php3_ini_structure * conf, int val)
 			break;
 		case 12:
 			conf->magic_quotes_sybase = val;
+			break;
+		case 13:
+			conf->enable_dl = val;
 			break;
 	}
 	return NULL;
@@ -436,6 +447,15 @@ char *php3take1handler(cmd_parms * cmd, php3_ini_structure * conf, char *arg)
 		case 15:
 			conf->gpc_order = pstrdup(cmd->pool, arg);
 			break;
+		case 16:
+			conf->error_prepend_string = pstrdup(cmd->pool, arg);
+			break;
+		case 17:
+			conf->error_append_string = pstrdup(cmd->pool, arg);
+			break;
+		case 18:
+			conf->open_basedir = pstrdup(cmd->pool, arg);
+			break;
 	}
 	return NULL;
 }
@@ -492,6 +512,9 @@ command_rec php3_commands[] =
 	{"php3_sendmail_path", php3take1handler, (void *)13, OR_OPTIONS, TAKE1, "Full path to sendmail binary"},
 	{"php3_browscap", php3take1handler, (void *)14, OR_OPTIONS, TAKE1, "Full path to browscap file"},
 	{"php3_gpc_order", php3take1handler, (void *)15, OR_OPTIONS, TAKE1, "Set GET-COOKIE-POST order [default is GPC]"},
+	{"php3_error_prepend_string", php3take1handler, (void *)16, OR_OPTIONS, TAKE1, "String to add before an error message from PHP"},
+	{"php3_error_append_string", php3take1handler, (void *)17, OR_OPTIONS, TAKE1, "String to add after an error message from PHP"},
+	{"php3_open_basedir", php3take1handler, (void *)18, OR_OPTIONS|RSRC_CONF, TAKE1, "Limit opening of files to this directory"},
 
 	{"php3_track_errors", php3flaghandler, (void *)0, OR_OPTIONS, FLAG, "on|off"},
 	{"php3_magic_quotes_gpc", php3flaghandler, (void *)1, OR_OPTIONS, FLAG, "on|off"},
@@ -506,6 +529,7 @@ command_rec php3_commands[] =
 	{"php3_log_errors", php3flaghandler, (void *)10, OR_OPTIONS, FLAG, "on|off"},
 	{"php3_display_errors", php3flaghandler, (void *)11, OR_OPTIONS, FLAG, "on|off"},
 	{"php3_magic_quotes_sybase", php3flaghandler, (void *)12, OR_OPTIONS, FLAG, "on|off"},
+	{"php3_enable_dl", php3flaghandler, (void *)13, RSRC_CONF|ACCESS_CONF, FLAG, "on|off"},
 	{NULL}
 };
 

@@ -38,6 +38,8 @@
 #include "php.h"
 #include "internal_functions.h"
 #include "php3_list.h"
+#include "safe_mode.h"
+#include "fopen-wrappers.h"
 
 #if DBASE
 #include "../dbase/dbf.h"
@@ -126,6 +128,15 @@ void php3_dbase_open(INTERNAL_FUNCTION_PARAMETERS) {
 	}
 	convert_to_string(dbf_name);
 	convert_to_long(options);
+
+	if (php3_ini.safe_mode && (!_php3_checkuid(dbf_name->value.str.val, 2))) {
+		php3_error(E_WARNING, "SAFE MODE Restriction in effect.  Invalid owner.");
+		RETURN_FALSE;
+	}
+	
+	if (_php3_check_open_basedir(dbf_name->value.str.val)) {
+		RETURN_FALSE;
+	}
 
 	dbh = dbf_open(dbf_name->value.str.val, options->value.lval);
 	if (dbh == NULL) {
@@ -403,6 +414,15 @@ void php3_dbase_create(INTERNAL_FUNCTION_PARAMETERS) {
 
 	if (fields->type != IS_ARRAY) {
 		php3_error(E_WARNING, "Expected array as second parameter");
+		RETURN_FALSE;
+	}
+
+	if (php3_ini.safe_mode && (!_php3_checkuid(filename->value.str.val, 2))) {
+		php3_error(E_WARNING, "SAFE MODE Restriction in effect.  Invalid owner.");
+		RETURN_FALSE;
+	}
+	
+	if (_php3_check_open_basedir(filename->value.str.val)) {
 		RETURN_FALSE;
 	}
 

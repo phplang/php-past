@@ -42,7 +42,7 @@ RSC=rc.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /YX /FD /c
-# ADD CPP /nologo /MT /W3 /GX /O2 /I "." /I "regex\\" /I "c:\mysql\include" /D "NDEBUG" /D "MSVC5" /D "WIN32" /D "_CONSOLE" /D "_MBCS" /YX /FD /c
+# ADD CPP /nologo /MT /W3 /GX /O2 /I "." /I "regex\\" /I "c:\mysql\include" /I "d:\src\bind\include" /D "NDEBUG" /D "MSVC5" /D "WIN32" /D "_CONSOLE" /D "_MBCS" /YX /FD /c
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
 # ADD RSC /l 0x409 /d "NDEBUG"
 BSC32=bscmake.exe
@@ -50,7 +50,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386
-# ADD LINK32 mysqlclient.lib winmm.lib snmpapi.lib wsock32.lib netapi32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386 /out:"cgi_release/php.exe" /libpath:"c:\mysql\lib" /libpath:"\src\lib"
+# ADD LINK32 lib44bsd95.lib resolv.lib mysqlclient.lib winmm.lib snmpapi.lib wsock32.lib netapi32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386 /out:"cgi_release/php.exe" /libpath:"c:\mysql\lib" /libpath:"\src\lib" /libpath:"d:\src\bind\lib"
 
 !ELSEIF  "$(CFG)" == "phpmysql - Win32 Debug"
 
@@ -66,7 +66,7 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /Gm /GX /Zi /Od /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /YX /FD /c
-# ADD CPP /nologo /MTd /W3 /Gm /GX /Zi /Od /I "." /I "regex\\" /I "c:\mysql\include" /D "DEBUG" /D "_DEBUG" /D "MSVC5" /D "WIN32" /D "_CONSOLE" /D "_MBCS" /YX /FD /c
+# ADD CPP /nologo /MTd /W3 /Gm /GX /Zi /Od /I "." /I "regex\\" /I "c:\mysql\include" /I "d:\src\bind\include" /D "DEBUG" /D "_DEBUG" /D "MSVC5" /D "WIN32" /D "_CONSOLE" /D "_MBCS" /YX /FD /c
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
 # ADD RSC /l 0x409 /d "_DEBUG"
 BSC32=bscmake.exe
@@ -74,7 +74,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 mysqlclient.lib winmm.lib snmpapi.lib wsock32.lib netapi32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /version:3 /subsystem:console /debug /machine:I386 /out:"cgi_debug/php.exe" /pdbtype:sept /libpath:"c:\mysql\lib"
+# ADD LINK32 lib44bsd95.lib resolv.lib mysqlclient.lib winmm.lib snmpapi.lib wsock32.lib netapi32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /version:3 /subsystem:console /debug /machine:I386 /out:"cgi_debug/php.exe" /pdbtype:sept /libpath:"c:\mysql\lib" /libpath:"\src\lib" /libpath:"d:\src\bind\lib"
 
 !ENDIF 
 
@@ -87,11 +87,19 @@ LINK32=link.exe
 # PROP Default_Filter ""
 # Begin Source File
 
+SOURCE=.\functions\COM.c
+# End Source File
+# Begin Source File
+
 SOURCE=.\win32\grp.h
 # End Source File
 # Begin Source File
 
 SOURCE=.\win32\param.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\functions\php3_COM.h
 # End Source File
 # Begin Source File
 
@@ -495,14 +503,6 @@ SOURCE=.\getopt.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\php3_hash.c
-# End Source File
-# Begin Source File
-
-SOURCE=.\php3_hash.h
-# End Source File
-# Begin Source File
-
 SOURCE=.\highlight.c
 # End Source File
 # Begin Source File
@@ -571,7 +571,23 @@ SOURCE=.\php3_debugger.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\php3_hash.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\php3_hash.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\php3_list.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\php3_realpath.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\php3_realpath.h
 # End Source File
 # Begin Source File
 

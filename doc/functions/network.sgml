@@ -47,6 +47,7 @@ $fp = fsockopen("www.php.net", 80, &$errno, &$errstr);
 if(!$fp) {
 	echo "$errstr ($errno)&lt;br&gt;\n";
 } else {
+	fputs($fp,"GET / HTTP/1.0\n\n");
 	while(!feof($fp)) {
 		echo fgets($fp,128);
 	}

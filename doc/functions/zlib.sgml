@@ -228,6 +228,10 @@ $fp = gzopen("/tmp/file.gz", "r");
      The file pointer must be valid, and must point to a file
      successfully opened by <function>gzopen</function>.
 
+    <para>
+     The gz-file is closed when <function>gzpassthru</function> is
+     done reading it (leaving <parameter>zp</parameter> useless).
+
    </refsect1>
   </refentry>
 

@@ -26,7 +26,7 @@
    | Authors: Rasmus Lerdorf <rasmus@lerdorf.on.ca>                       |
    +----------------------------------------------------------------------+
  */
-/* $Id: file.c,v 1.174 1998/07/02 17:04:18 ssb Exp $ */
+/* $Id: file.c,v 1.175 1998/08/12 15:05:15 rasmus Exp $ */
 #ifdef THREAD_SAFE
 #include "tls.h"
 #endif
@@ -83,7 +83,7 @@ static int pclose_ret;
 #endif
 
 #ifndef HAVE_TEMPNAM
-*
+/*
  * Copyright (c) 1988, 1993
  *      The Regents of the University of California.  All rights reserved.
  *

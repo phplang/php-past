@@ -28,7 +28,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: php3_unified_odbc.h,v 1.31 1998/06/24 07:02:16 ssb Exp $ */
+/* $Id: php3_unified_odbc.h,v 1.32 1998/07/18 13:10:32 ssb Exp $ */
 
 #ifndef _UNIFIED_ODBC_H
 #define _UNIFIED_ODBC_H
@@ -368,6 +368,14 @@ extern void php3_solid_fetch_prev(INTERNAL_FUNCTION_PARAMETERS);
 #  define SQL_SO_DYNAMIC          0x00000004L
 #  define SQL_LEN_DATA_AT_EXEC_OFFSET  (-100)
 #  define SQL_LEN_DATA_AT_EXEC(length) (-(length)+SQL_LEN_DATA_AT_EXEC_OFFSET)
+
+#elif HAVE_OPENLINK
+
+#  include <iodbc.h>
+#  include <isql.h>
+#  include <isqlext.h>
+#  include <udbcext.h>
+#  define HAVE_SQL_EXTENDED_FETCH 1
 
 #elif HAVE_VELOCIS
 /* Nothing ??? */

@@ -1,4 +1,4 @@
-/* 
+/*
    +----------------------------------------------------------------------+
    | PHP HTML Embedded Scripting Language Version 3.0                     |
    +----------------------------------------------------------------------+
@@ -23,24 +23,19 @@
    | If you did not, or have any questions about PHP licensing, please    |
    | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
-   | Authors: Rasmus Lerdorf <rasmus@lerdorf.on.ca>                       |
+   | Author: Sander Steffann (sander@steffann.nl)                         |
    +----------------------------------------------------------------------+
  */
 
+#ifndef _PHP3_REALPATH_H_
+#define _PHP3_REALPATH_H_
 
-/* $Id: mail.h,v 1.8 1998/04/29 13:24:16 ssb Exp $ */
+extern char *_php3_realpath(const char *path, char resolved_path []);
 
-#ifndef _MAIL_H
-#define _MAIL_H
-#if HAVE_SENDMAIL
-extern php3_module_entry mail_module_entry;
-#define mail_module_ptr &mail_module_entry
-
-extern void php3_mail(INTERNAL_FUNCTION_PARAMETERS);
-extern void php3_info_mail(void);
-extern int _php3_mail(char *to, char *subject, char *message, char *headers);
-
-#else
-#define mail_module_ptr NULL
 #endif
-#endif /* _MAIL_H */
+/*
+ * Local variables:
+ * tab-width: 4
+ * c-basic-offset: 4
+ * End:
+ */

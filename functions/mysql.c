@@ -27,7 +27,7 @@
    +----------------------------------------------------------------------+
  */
  
-/* $Id: mysql.c,v 1.162 1998/06/22 20:28:33 zeev Exp $ */
+/* $Id: mysql.c,v 1.164 1998/07/27 22:07:09 shane Exp $ */
 
 
 /* TODO:
@@ -135,7 +135,7 @@ php3_module_entry mysql_module_entry = {
 
 #if COMPILE_DL
 DLEXPORT php3_module_entry *get_module(void) { return &mysql_module_entry; }
-#if 0
+#if WIN32|WINNT
 BOOL WINAPI DllMain(HANDLE hModule, 
                       DWORD  ul_reason_for_call, 
                       LPVOID lpReserved)
@@ -1492,11 +1492,13 @@ void php3_mysql_fetch_lengths(INTERNAL_FUNCTION_PARAMETERS)
 static char *php3_mysql_get_field_name(int field_type)
 {
 	switch(field_type) {
-		case FIELD_TYPE_CHAR:
 		case FIELD_TYPE_STRING:
 		case FIELD_TYPE_VAR_STRING:
 			return "string";
 			break;
+#ifdef FIELD_TYPE_TINY
+		case FIELD_TYPE_TINY:
+#endif
 		case FIELD_TYPE_SHORT:
 		case FIELD_TYPE_LONG:
 		case FIELD_TYPE_LONGLONG:

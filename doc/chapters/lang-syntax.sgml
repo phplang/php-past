@@ -238,6 +238,21 @@ echo "$a $hello";
     <title>HTML Forms (GET and POST)</title>
     <simpara></simpara>
 
+    <sect3>
+     <title>IMAGE SUBMIT variable names</TITLE>
+     <simpara>
+      When submitting a form, it is possible to use an image instead
+      of the standard submit button with a tag like:
+    <para><informalexample><programlisting>&lt;input type=image src="image.gif" name="sub"&gt;</programlisting></informalexample>
+    <simpara>
+     When the user clicks somewhere on the image, the accompanying form
+     will be transmitted to the server with two additional variables,
+     sub_x and sub_y. These contain the coordinates of the user click
+     within the image.  The experienced may note that the actual
+     variable names sent by the browser contains a period rather
+     than an underscore, but PHP converts the period to an underscore
+     automatically.
+
    <sect2>
     <title>HTTP Cookies</title>
     <simpara>

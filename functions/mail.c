@@ -28,7 +28,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: mail.c,v 1.55 1998/05/22 00:09:20 zeev Exp $ */
+/* $Id: mail.c,v 1.56 1998/07/27 15:55:52 musone Exp $ */
 
 #include <stdlib.h>
 #include <ctype.h>
@@ -41,7 +41,7 @@
 #include "build-defs.h"
 #endif
 #include "internal_functions.h"
-#include "mail.h"
+#include "php3_mail.h"
 
 #if APACHE
 #  ifndef DEBUG

@@ -23,13 +23,13 @@
    | If you did not, or have any questions about PHP licensing, please    |
    | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
-   | Authors: Amitay Isaacs <amitay@cse.iitb.ernet.in>                    |
+   | Authors: Amitay Isaacs <amitay@pspl.co.in>                           |
    |          Eric Warnke   <ericw@albany.edu>                            |
    +----------------------------------------------------------------------+
  */
 
 
-/* $Id: php3_ldap.h,v 1.18 1998/05/15 10:57:33 zeev Exp $ */
+/* $Id: php3_ldap.h,v 1.21 1998/08/10 05:27:56 rasmus Exp $ */
 
 #ifndef _PHP3_LDAP_H
 #define _PHP3_LDAP_H
@@ -64,15 +64,16 @@ extern void php3_ldap_count_entries(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_ldap_first_entry(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_ldap_next_entry(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_ldap_get_entries(INTERNAL_FUNCTION_PARAMETERS);
+#if 0
 extern void php3_ldap_free_entry(INTERNAL_FUNCTION_PARAMETERS);
-
+#endif
 extern void php3_ldap_first_attribute(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_ldap_next_attribute(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_ldap_get_attributes(INTERNAL_FUNCTION_PARAMETERS);
 
 extern void php3_ldap_get_values(INTERNAL_FUNCTION_PARAMETERS);
 
-/*extern void php3_ber_free(INTERNAL_FUNCTION_PARAMETERS);*/
+extern void php3_ber_free(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_ldap_get_dn(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_ldap_explode_dn(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_ldap_dn2ufn(INTERNAL_FUNCTION_PARAMETERS);

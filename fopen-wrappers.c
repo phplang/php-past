@@ -27,7 +27,7 @@
    |          Jim Winstead <jimw@php.net>                                 |
    +----------------------------------------------------------------------+
  */
-/* $Id: fopen-wrappers.c,v 1.39 1998/06/26 14:58:18 rasmus Exp $ */
+/* $Id: fopen-wrappers.c,v 1.44 1998/08/14 23:47:11 steffann Exp $ */
 
 #ifdef THREAD_SAFE
 #include "tls.h"
@@ -54,6 +54,7 @@
 
 #include "safe_mode.h"
 #include "php3_list.h"
+#include "php3_realpath.h"
 #include "functions/head.h"
 #include "functions/url.h"
 #include "functions/base64.h"
@@ -97,6 +98,43 @@ static FILE *php3_fopen_url_wrapper(char *path, char *mode, int options, int *is
 
 int _php3_getftpresult(int socketd);
 
+/*
+	When open_basedir is not NULL, check if the given filename is located in
+	open_basedir. Returns -1 if error or not in the open_basedir, else 0
+	
+	When open_basedir is NULL, always return 0
+*/
+PHPAPI int _php3_check_open_basedir(char *path)
+{
+	char resolved_name[MAXPATHLEN];
+	
+	/* Only check when open_basedir is available */
+	if (php3_ini.open_basedir && *php3_ini.open_basedir) {
+		/* Resolve the real path into resolved_name */
+		if (_php3_realpath(path, resolved_name) != NULL) {
+			/* Check the path */
+#if WIN32|WINNT
+			if (strncmp(php3_ini.open_basedir, resolved_name, strlen(php3_ini.open_basedir)) == 0) {
+#else
+			if (strncasecmp(php3_ini.open_basedir, resolved_name, strlen(php3_ini.open_basedir)) == 0) {
+#endif
+				/* File is in the right directory */
+				return 0;
+			} else {
+				php3_error(E_WARNING, "open_basedir restriction in effect. File is in wrong directory.");
+				return -1;
+			}
+		} else {
+			/* Unable to resolve the real path, return -1 */
+			php3_error(E_WARNING, "open_basedir restriction in effect. Unable to verify location of file.");
+			return -1;
+		}
+	} else {
+		/* open_basedir is not available, return 0 */
+		return 0;
+	}
+}
+
 PHPAPI FILE *php3_fopen_wrapper(char *path, char *mode, int options, int *issock, int *socketd)
 {
 #if PHP3_URL_FOPEN
@@ -112,6 +150,7 @@ PHPAPI FILE *php3_fopen_wrapper(char *path, char *mode, int options, int *issock
 			php3_error(E_WARNING, "SAFE MODE Restriction in effect.  Invalid owner of file to be read.");
 			return NULL;
 		}
+		if (_php3_check_open_basedir(path)) return NULL;
 		return fopen(path, mode);
 	}
 }
@@ -232,6 +271,7 @@ PHPAPI FILE *php3_fopen_with_path(char *filename, char *mode, char *path, char *
 			php3_error(E_WARNING, "SAFE MODE Restriction in effect.  Invalid owner.");
 			return NULL;
 		}
+		if (_php3_check_open_basedir(filename)) return NULL;
 		fp = fopen(filename, mode);
 		if (fp && opened_path) {
 			*opened_path = expand_filepath(filename);
@@ -250,12 +290,14 @@ PHPAPI FILE *php3_fopen_with_path(char *filename, char *mode, char *path, char *
 				php3_error(E_WARNING, "SAFE MODE Restriction in effect.  Invalid owner.");
 				return NULL;
 			}
+			if (_php3_check_open_basedir(trypath)) return NULL;
 			fp = fopen(trypath, mode);
 			if (fp && opened_path) {
 				*opened_path = expand_filepath(trypath);
 			}
 			return fp;
 		} else {
+			if (_php3_check_open_basedir(filename)) return NULL;
 			return fopen(filename, mode);
 		}
 	}
@@ -264,6 +306,7 @@ PHPAPI FILE *php3_fopen_with_path(char *filename, char *mode, char *path, char *
 			php3_error(E_WARNING, "SAFE MODE Restriction in effect.  Invalid owner.");
 			return NULL;
 		}
+		if (_php3_check_open_basedir(filename)) return NULL;
 		fp = fopen(filename, mode);
 		if (fp && opened_path) {
 			*opened_path = strdup(filename);
@@ -293,6 +336,11 @@ PHPAPI FILE *php3_fopen_with_path(char *filename, char *mode, char *path, char *
 			}
 		}
 		if ((fp = fopen(trypath, mode)) != NULL) {
+			if (_php3_check_open_basedir(trypath)) {
+				fclose(fp);
+				efree(pathbuf);
+				return NULL;
+			}
 			if (opened_path) {
 				*opened_path = expand_filepath(trypath);
 			}
@@ -610,6 +658,7 @@ static FILE *php3_fopen_url_wrapper(char *path, char *mode, int options, int *is
 			*socketd = 0;
 			return NULL;
 		}
+
 		/* find out the size of the file (verifying it exists) */
 		SOCK_WRITE("SIZE ", *socketd);
 		SOCK_WRITE(resource->path, *socketd);
@@ -617,12 +666,28 @@ static FILE *php3_fopen_url_wrapper(char *path, char *mode, int options, int *is
 
 		/* read the response */
 		result = _php3_getftpresult(*socketd);
-		if (result > 299 || result < 200) {
-			free_url(resource);
-			SOCK_FCLOSE(*socketd);
-			*socketd = 0;
-			return NULL;
+		if (mode[0] == 'r') {
+			/* when reading file, it must exist */
+			if (result > 299 || result < 200) {
+				php3_error(E_WARNING, "File not found");
+				free_url(resource);
+				SOCK_FCLOSE(*socketd);
+				*socketd = 0;
+				errno = ENOENT;
+				return NULL;
+			}
+		} else {
+			/* when writing file, it must NOT exist */
+			if (result <= 299 && result >= 200) {
+				php3_error(E_WARNING, "File already exists");
+				free_url(resource);
+				SOCK_FCLOSE(*socketd);
+				*socketd = 0;
+				errno = EEXIST;
+				return NULL;
+			}
 		}
+
 		/* set the connection to be binary */
 		SOCK_WRITE("TYPE I\n", *socketd);
 		result = _php3_getftpresult(*socketd);
@@ -697,14 +762,21 @@ static FILE *php3_fopen_url_wrapper(char *path, char *mode, int options, int *is
 			*socketd = 0;
 			return NULL;
 		}
-		/* finally, send a message to start retrieving the file, and
-		   close the command connection */
-		SOCK_WRITE("RETR ", *socketd);
+
+		if (mode[0] == 'r') {
+			/* retrieve file */
+			SOCK_WRITE("RETR ", *socketd);
+		} else {
+			/* store file */
+			SOCK_WRITE("STOR ", *socketd);
+		} 
 		if (resource->path != NULL) {
 			SOCK_WRITE(resource->path, *socketd);
 		} else {
 			SOCK_WRITE("/", *socketd);
 		}
+
+		/* close control connection */
 		SOCK_WRITE("\nQUIT\n", *socketd);
 		SOCK_FCLOSE(*socketd);
 
@@ -734,9 +806,16 @@ static FILE *php3_fopen_url_wrapper(char *path, char *mode, int options, int *is
 			return NULL;
 		}
 #if 0
-		if ((fp = fdopen(*socketd, "r+")) == NULL) {
-			free_url(resource);
-			return NULL;
+		if (mode[0] == 'r') {
+			if ((fp = fdopen(*socketd, "r+")) == NULL) {
+				free_url(resource);
+				return NULL;
+			}
+		} else {
+			if ((fp = fdopen(*socketd, "w+")) == NULL) {
+				free_url(resource);
+				return NULL;
+			}
 		}
 #ifdef HAVE_SETVBUF
 		if ((setvbuf(fp, NULL, _IONBF, 0)) != 0) {
@@ -758,7 +837,11 @@ static FILE *php3_fopen_url_wrapper(char *path, char *mode, int options, int *is
 				php3_error(E_WARNING, "SAFE MODE Restriction in effect.  Invalid owner of file to be read.");
 				fp = NULL;
 			} else {
-				fp = fopen(path, mode);
+				if (_php3_check_open_basedir(path)) {
+					fp = NULL;
+				} else {
+					fp = fopen(path, mode);
+				}
 			}
 		}
 

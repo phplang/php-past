@@ -26,7 +26,7 @@
    | Author: Rasmus Lerdorf                                               |
    +----------------------------------------------------------------------+
  */
-/* $Id: exec.c,v 1.76 1998/06/22 20:28:31 zeev Exp $ */
+/* $Id: exec.c,v 1.77 1998/07/27 22:07:08 shane Exp $ */
 
 #ifdef THREAD_SAFE
 #include "tls.h"
@@ -91,7 +91,7 @@ static int _Exec(int type, char *cmd, pval *array, pval *return_value)
 		efree(d);
 		d = tmp;
 #if WIN32|WINNT
-		fp = popen(d, "rt");
+		fp = popen(d, "rb");
 #else
 		fp = popen(d, "r");
 #endif
@@ -102,7 +102,7 @@ static int _Exec(int type, char *cmd, pval *array, pval *return_value)
 		}
 	} else { /* not safe_mode */
 #if WIN32|WINNT
-		fp = popen(cmd, "rt");
+		fp = popen(cmd, "rb");
 #else
 		fp = popen(cmd, "r");
 #endif

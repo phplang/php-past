@@ -29,7 +29,7 @@
  */
 
 
-/* $Id: operators.c,v 1.93 1998/07/03 06:21:26 zeev Exp $ */
+/* $Id: operators.c,v 1.96 1998/08/13 20:22:53 zeev Exp $ */
 
 #ifdef THREAD_SAFE
 #include "tls.h"
@@ -66,9 +66,11 @@ void convert_string_to_number(pval *op)
 			case IS_DOUBLE:
 			case IS_LONG:
 				break;
+#if WITH_BCMATH
 			case IS_BC:
 				op->type = IS_DOUBLE; /* may have lost significant digits */
 				break;
+#endif
 			default:
 				op->value.lval = strtol(op->value.str.val, NULL, 10);
 				op->type = IS_LONG;
@@ -771,6 +773,9 @@ int compare_function(pval *result, pval *op1, pval *op2 INLINE_TLS)
 		result->value.dval = (op1->type == IS_LONG ? (double) op1->value.lval : op1->value.dval) - (op2->type == IS_LONG ? (double) op2->value.lval : op2->value.dval);
 		return SUCCESS;
 	}
+	if ((op1->type & IS_HASH) && (op2->type & IS_HASH)) {
+		php3_error(E_WARNING,"Cannot compare arrays or objects");
+	}
 	yystype_destructor(op1 _INLINE_TLS);
 	yystype_destructor(op2 _INLINE_TLS);
 	var_reset(result);
@@ -1089,6 +1094,7 @@ inline void php3_smart_strcmp(pval *result, pval *s1, pval *s2)
 	
 	if ((ret1=is_numeric_string(s1->value.str.val, s1->value.str.len, &lval1, &dval1)) &&
 		(ret2=is_numeric_string(s2->value.str.val, s2->value.str.len, &lval2, &dval2))) {
+#if WITH_BCMATH
 		if ((ret1==IS_BC) || (ret2==IS_BC)) {
 			bc_num first, second;
 			
@@ -1101,7 +1107,9 @@ inline void php3_smart_strcmp(pval *result, pval *s1, pval *s2)
 			result->type = IS_LONG;
 			free_num(&first);
 			free_num(&second);
-		} else if ((ret1==IS_DOUBLE) || (ret2==IS_DOUBLE)) {
+		} else
+#endif
+		if ((ret1==IS_DOUBLE) || (ret2==IS_DOUBLE)) {
 			if (ret1!=IS_DOUBLE) {
 				dval1 = strtod(s1->value.str.val, NULL);
 			} else if (ret2!=IS_DOUBLE) {
@@ -1155,6 +1163,7 @@ static inline int is_numeric_string(char *str, int length, long *lval, double *d
 		if (dval) {
 			*dval = local_dval;
 		}
+#if WITH_BCMATH
 		if (length>16) {
 			register char *ptr=str, *end=str+length;
 			
@@ -1173,6 +1182,9 @@ static inline int is_numeric_string(char *str, int length, long *lval, double *d
 		} else {
 			return IS_DOUBLE;
 		}
+#else
+		return IS_DOUBLE;
+#endif
 	}
 	
 	return 0;

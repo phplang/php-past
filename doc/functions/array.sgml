@@ -300,7 +300,7 @@ while ( list( $key, $val ) = each( $HTTP_POST_VARS ) ) {
    <refsect1>
     <title>Description</title>
     <funcsynopsis>
-     <funcdef>mixed <function>prev</function></funcdef>
+     <funcdef>mixed <function>key</function></funcdef>
      <paramdef>array <parameter>array</parameter></paramdef>
     </funcsynopsis>
     <para>
@@ -414,7 +414,10 @@ while (list($id, $name, $salary) = mysql_fetch_row($result)) {
     <para>
      Returns the array element in the next place that's pointed by the
      internal array pointer, or false if there are no more elements.
-  
+     <emphasis>Warning:</emphasis> if the array contains empty
+     elements then this function will return false for these elements as
+     well.  To properly traverse an array which may contain empty elements
+     see the <function>each</function> function. 
     <para>
      <function>next</function> behaves like
       <function>current</function>, with one difference.  It advances
@@ -465,7 +468,10 @@ while (list($id, $name, $salary) = mysql_fetch_row($result)) {
     <para>
      Returns the array element in the previous place that's pointed by
      the internal array pointer, or false if there are no more
-     elements.
+     elements. <emphasis>Warning:</emphasis> if the array contains empty
+	 elements then this function will return false for these elements as
+	 well.  To properly traverse an array which may contain empty elements
+	 see the <function>each</function> function.
     <para>  
      <function>prev</function> behaves just like
      <function>next</function>, except it rewinds the internal array
@@ -530,7 +536,7 @@ while (list($id, $name, $salary) = mysql_fetch_row($result)) {
 	The fruits have been sorted in reverse alphabetical order.
     <para>
      See also <function>arsort</function>, <function>asort</function>,
-     <function>ksort</function>, and <function>sort</function>.
+     <function>ksort</function>, <function>sort</function> and <function>usort</function>.
    </refsect1>
   </refentry>
 
@@ -586,7 +592,52 @@ fruits[3] = orange
      The fruits have been sorted in alphabetical order.
     <para>
      See also <function>arsort</function>, <function>asort</function>,
-     <function>ksort</function>, and <function>rsort</function>.
+     <function>ksort</function>, <function>rsort</function>, and <function>usort</function>.
+   </refsect1>
+  </refentry>
+
+  <refentry id="function.usort">
+   <refnamediv>
+    <refname>usort</refname>
+    <refpurpose>Sort an array using a user-define comparison function</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>void <function>usort</function></funcdef>
+     <paramdef>array <parameter>array</parameter></paramdef>
+     <paramdef>function <parameter>cmp_function</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+     This function will sort an array using a user-supplied comparison function.
+	 If the array you wish to sort needs to be sorted by some non-trivial
+	 criteria, you should use this function.
+     <example>
+      <title><function>usort</function> example</title>
+	<programlisting>
+function cmp($a,$b) {   
+    if($a==$b) return 0;
+    return ($a>$b) ? -1:1;
+}
+$a = array(3,2,5,6,1);
+usort($a,cmp);
+while(list($key,$value) = each($a)) {
+    echo "$key: $value\n";
+}
+</programlisting></example>
+     This example would display:
+     <computeroutput>
+0: 6
+1: 5
+2: 3
+3: 2
+4: 1
+</computeroutput>
+     Obviously in this trivial case the <function>rsort</function> function
+	 would be more appropriate.
+    <para>
+     See also <function>arsort</function>, <function>asort</function>,
+     <function>ksort</function>, <function>rsort</function> and <function>sort</function>.
    </refsect1>
   </refentry>
 

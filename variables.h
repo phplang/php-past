@@ -29,7 +29,7 @@
  */
 
 
-/* $Id: variables.h,v 1.43 1998/05/15 10:56:26 zeev Exp $ */
+/* $Id: variables.h,v 1.47 1998/08/10 19:19:41 fmk Exp $ */
 
 
 #ifndef _VARIABLES_H
@@ -51,10 +51,10 @@ extern void add_array_pair_list(pval *result, pval *idx, pval *value, int initia
 extern void declare_class_variable(pval *varname, pval *expr INLINE_TLS);
 extern void get_object_property(pval *result, pval *classname, pval *varname INLINE_TLS);
 extern void get_object_symtable(pval *result, pval *parent, pval *child INLINE_TLS);
-extern void assign_new_object(pval *result, pval *classname INLINE_TLS);
+extern void assign_new_object(pval *result, pval *classname, unsigned char implicit_ctor INLINE_TLS);
 
-extern void yystype_destructor(pval *yystype INLINE_TLS);
-extern int yystype_copy_constructor(pval *yystype);
+extern PHPAPI void yystype_destructor(pval *yystype INLINE_TLS);
+extern PHPAPI int yystype_copy_constructor(pval *yystype);
 #define pval_DESTRUCTOR (void (*)(void *)) yystype_destructor
 #define pval_COPY_CTOR (void (*)(void *)) yystype_copy_constructor
 

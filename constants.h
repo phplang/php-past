@@ -23,9 +23,11 @@ typedef struct {
 #define REGISTER_MAIN_STRINGL_CONSTANT(name,str,len,flags)  php3_register_stringl_constant((name),sizeof(name),(str),(len),(flags),0)
 
 extern void clean_module_constants(int module_number);
-extern int php3_startup_constants();
-extern int php3_shutdown_constants();
-extern void clean_non_persistent_constants();
+extern void free_php3_constant(php3_constant *c);
+extern int php3_startup_constants(void);
+extern int php3_shutdown_constants(void);
+extern void clean_non_persistent_constants(void);
+extern int php3_get_constant(char *name, uint name_len, pval *result);
 extern PHPAPI void php3_register_long_constant(char *name, uint name_len, long lval, int flags, int module_number);
 extern PHPAPI void php3_register_double_constant(char *name, uint name_len, double dval, int flags, int module_number);
 extern PHPAPI void php3_register_string_constant(char *name, uint name_len, char *strval, int flags, int module_number);

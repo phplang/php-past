@@ -62,7 +62,7 @@
 #include "snprintf.h"
 #include "fsock.h"
 #if HAVE_NETINET_IN_H
-#include "netinet/in.h"
+#include <netinet/in.h>
 #endif
 
 function_entry pack_functions[] = {

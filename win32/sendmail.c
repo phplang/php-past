@@ -286,7 +286,7 @@ int SendText(char *RPath, char *Subject, char *mailTo, char *data, char *headers
 	}
 
 	//send termination dot
-	if ((res = Post("\n.\n")) != SUCCESS)
+	if ((res = Post("\r\n.\r\n")) != SUCCESS)
 		return (res);
 	if ((res = Ack()) != SUCCESS)
 		return (res);
@@ -324,7 +324,7 @@ int PostHeader(char *RPath, char *Subject, char *mailTo, char *xheaders)
 	zoneh /= (60 * 60);
 	zonem = (abs(_timezone) / 60) - (zoneh * 60);
 
-	p += sprintf(p, "Date: %s, %02d %s %04d %02d:%02d:%02d %s%02d%02d\n",
+	p += sprintf(p, "Date: %s, %02d %s %04d %02d:%02d:%02d %s%02d%02d\r\n",
 				 days[tm->tm_wday],
 				 tm->tm_mday,
 				 months[tm->tm_mon],
@@ -337,18 +337,18 @@ int PostHeader(char *RPath, char *Subject, char *mailTo, char *xheaders)
 				 zonem);
 
 	if(xheaders && strnicmp("From:",xheaders,5)){
-		p += sprintf(p, "From: %s\n", RPath);
+		p += sprintf(p, "From: %s\r\n", RPath);
 	}
-	p += sprintf(p, "To: %s\n", mailTo);
-	p += sprintf(p, "Subject: %s\n", Subject);
+	p += sprintf(p, "Subject: %s\r\n", Subject);
+	p += sprintf(p, "To: %s\r\n", mailTo);
 	if(xheaders){
-		p += sprintf(p, "%s\n", xheaders);
+		p += sprintf(p, "%s\r\n", xheaders);
 	}
 
 	if ((res = Post(GLOBAL(Buffer))) != SUCCESS)
 		return (res);
 
-	if ((res = Post("\n")) != SUCCESS)
+	if ((res = Post("\r\n")) != SUCCESS)
 		return (res);
 
 	return (SUCCESS);
@@ -467,7 +467,7 @@ int Ack()
 		goto again;				// Incomplete data. Line must be terminated by CRLF
 
 	if (buf[0] > '3')
-		return (SNMP_SERVER_ERROR);
+		return (SMTP_SERVER_ERROR);
 
 	return (SUCCESS);
 }

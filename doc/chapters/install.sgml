@@ -25,7 +25,48 @@
        url="http://www.php.net">http://www.php.net</ulink></literal>.
     </simpara>
    </sect2>
-   
+  
+   <sect2>
+	<title>Quick Installation Instructions (Apache Module Version)</title>
+	<para>
+	<informalexample>
+	<programlisting>
+
+1.  gunzip apache_1.3.x.tar.gz
+2.  tar xvf apache_1.3.x.tar
+3.  gunzip php-3.0.x.tar.gz
+4.  tar xvf php-3.0.x.tar
+5.  cd apache_1.3.x
+6.  ./configure --prefix=/www
+7.  cd ../php-3.0.x
+8.  ./configure --with-mysql --with-apache=../apache_1.3.x --enable-track-vars
+9.  make
+10. make install
+11. cd ../apache_1.3.x
+12. ./configure --prefix=/www --activate-module=src/modules/php3/libphp3.a
+13. make
+14. make install
+  Instead of this step you may prefer to simply copy the httpd binary overtop
+  of your existing binary.  Make sure you shut down your server first though.
+
+15. cd ../php-3.0.x
+16. cp php3.ini-dist /usr/local/lib/php3.ini
+You can edit /usr/local/lib/php3.ini file to set PHP options.
+If you prefer this file in another location, use --with-config-file=/path in step 8.
+
+17. Edit your httpd.conf or srm.conf file and add: 
+      
+            AddType application/x-httpd-php3 .php3
+ 
+  You can choose any extension you wish here.  .php3 is simply the one we suggest.   
+
+18. Use your normal procedure for starting the Apache server.  
+
+	</programlisting>
+	</informalexample>
+	</para>
+   </sect2>
+ 
    <sect2>
     <title>Configuration</title>
     <para>
@@ -91,7 +132,9 @@
      running a web server PHP3 has module support for, you should
      generally go for that solution for performance reasons.  However,
      the CGI version enables Apache users to run different
-     PHP3-enabled pages under different user-ids.
+     PHP3-enabled pages under different user-ids.  Please make sure
+	 you read through the <link linkend="config-security">Security chapter</link>
+	 if you are going to run PHP as a CGI.
 
    <sect2>
     <title>Database Support Options</title>
@@ -186,6 +229,20 @@
      <simpara>
       <ulink url="http://users.ids.net/~bjepson/freeODBC/">FreeODBC home 
       page</ulink>
+    </sect3>
+
+    <sect3 id="with-openlink">
+     <title>OpenLink ODBC</title>
+     <synopsis>
+      <option>--with-openlink<replaceable>=DIR</replaceable></option>
+     </synopsis>
+     <simpara>
+      Includes OpenLink ODBC support. The parameter to this option is
+      the OpenLink ODBC installation directory and defaults to
+      <filename class=directory>/usr/local/openlink</filename>.
+     <simpara>
+      <ulink url="http://www.openlinksw.com/">OpenLink Software's home
+       page</ulink>
     </sect3>
 
     <sect3 id="with-oracle">

@@ -38,6 +38,8 @@
 #endif
 #include "php.h"
 #include "internal_functions.h"
+#include "safe_mode.h"
+#include "fopen-wrappers.h"
 #include <string.h>
 #if MSVC5
 #include <windows.h>
@@ -209,6 +211,16 @@ void php3_filepro(INTERNAL_FUNCTION_PARAMETERS)
     FP_GLOBAL(fp_keysize) = -1;
 	
 	sprintf(workbuf, "%s/map", dir->value.str.val);
+
+	if (php3_ini.safe_mode && (!_php3_checkuid(workbuf, 2))) {
+		php3_error(E_WARNING, "SAFE MODE Restriction in effect.  Invalid owner.");
+		RETURN_FALSE;
+	}
+	
+	if (_php3_check_open_basedir(workbuf)) {
+		RETURN_FALSE;
+	}
+
 	if (!(fp = fopen(workbuf, "r"))) {
 		php3_error(E_WARNING, "filePro: cannot open map: [%d] %s",
 					errno, strerror(errno));
@@ -295,6 +307,16 @@ void php3_filepro_rowcount(INTERNAL_FUNCTION_PARAMETERS)
 	
 	/* Now read the records in, moving forward recsize-1 bytes each time */
 	sprintf(workbuf, "%s/key", FP_GLOBAL(fp_database));
+
+	if (php3_ini.safe_mode && (!_php3_checkuid(workbuf, 2))) {
+		php3_error(E_WARNING, "SAFE MODE Restriction in effect.  Invalid owner.");
+		RETURN_FALSE;
+	}
+	
+	if (_php3_check_open_basedir(workbuf)) {
+		RETURN_FALSE;
+	}
+
 	if (!(fp = fopen(workbuf, "r"))) {
 		php3_error(E_WARNING, "filePro: cannot open key: [%d] %s",
 					errno, strerror(errno));
@@ -495,6 +517,16 @@ void php3_filepro_retrieve(INTERNAL_FUNCTION_PARAMETERS)
     
 	/* Now read the record in */
 	sprintf(workbuf, "%s/key", FP_GLOBAL(fp_database));
+
+	if (php3_ini.safe_mode && (!_php3_checkuid(workbuf, 2))) {
+		php3_error(E_WARNING, "SAFE MODE Restriction in effect.  Invalid owner.");
+		RETURN_FALSE;
+	}
+	
+	if (_php3_check_open_basedir(workbuf)) {
+		RETURN_FALSE;
+	}
+
 	if (!(fp = fopen(workbuf, "r"))) {
 		php3_error(E_WARNING, "filePro: cannot open key: [%d] %s",
 					errno, strerror(errno));

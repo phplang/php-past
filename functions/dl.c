@@ -78,7 +78,9 @@ void dl(INTERNAL_FUNCTION_PARAMETERS)
 
 	convert_to_string(file);
 
-	if (php3_ini.safe_mode) {
+	if (!php3_ini.enable_dl) {
+		php3_error(E_ERROR, "Dynamically loaded extentions aren't enabled.");
+	} else if (php3_ini.safe_mode) {
 		php3_error(E_ERROR, "Dynamically loaded extensions aren't allowed when running in SAFE MODE.");
 	} else {
 		php3_dl(file,MODULE_TEMPORARY,return_value);

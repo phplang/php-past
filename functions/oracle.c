@@ -179,13 +179,6 @@ BOOL WINAPI DllMain(HANDLE hModule, DWORD  ul_reason_for_call,
 #endif
 #endif
 
-static void yystype_ora_param_destructor(oraParam *param)
-{
-	if(param && param->progv){
-		efree(param->progv);
-	}
-}
-
 static int _cursors_cleanup(list_entry *le)
 {
   ORACLE_TLS_VARS;
@@ -781,7 +774,8 @@ void php3_Ora_Bind(INTERNAL_FUNCTION_PARAMETERS)
 		cursor->params = (HashTable *)emalloc(sizeof(HashTable));
 		if (!cursor->params ||
 			_php3_hash_init(cursor->params, 19, NULL,
-			(void (*)(void *))yystype_ora_param_destructor, 0) ==
+			NULL, 0) ==
+		/*	(void (*)(void *))yystype_ora_param_destructor, 0) == */
 			FAILURE){
 			php3_error(E_ERROR, "Unable to initialize parameter list");
 			RETURN_FALSE;
@@ -1075,7 +1069,10 @@ void php3_Ora_FetchInto(INTERNAL_FUNCTION_PARAMETERS)
 		tmp.type = IS_STRING;
 		tmp.value.str.len = 0;
        
-		if (cursor->columns[i].col_retcode != 0 && cursor->columns[i].col_retcode != 1406) {
+		if (cursor->columns[i].col_retcode == 1405) {
+			continue; /* don't add anything for NULL columns */
+		} else if (cursor->columns[i].col_retcode != 0 &&
+				   cursor->columns[i].col_retcode != 1406) {
 			/* So error fetching column.  The most common is 1405, a NULL */
 			/* was retreived.  1406 is ASCII or string buffer data was */
 			/* truncated. The converted data from the database did not fit */
@@ -1084,20 +1081,21 @@ void php3_Ora_FetchInto(INTERNAL_FUNCTION_PARAMETERS)
 			/* return what we did get, in that case */
 			RETURN_FALSE;
 		} else {
-			switch(cursor->columns[i].dbtype)
-				{
+			switch(cursor->columns[i].dbtype) {
 				case SQLT_LNG:
 				case SQLT_LBI:
-						/* XXX 64k max for LONG and LONG RAW */
-						oflng(&cursor->cda, (sword)(i + 1), cursor->columns[i].buf, DB_SIZE, 1,
-							  &ret_len, 0);
-						tmp.value.str.len = ret_len;
-						break;
-				default:
-					tmp.value.str.len = min(cursor->columns[i].col_retlen, cursor->columns[i].dsize);
+					/* XXX 64k max for LONG and LONG RAW */
+					oflng(&cursor->cda, (sword)(i + 1), cursor->columns[i].buf, DB_SIZE, 1,
+						  &ret_len, 0);
+					tmp.value.str.len = ret_len;
 					break;
-				}
-			tmp.value.str.val = estrndup(cursor->columns[i].buf, tmp.value.str.len);
+				default:
+					tmp.value.str.len = min(cursor->columns[i].col_retlen,
+											cursor->columns[i].dsize);
+					break;
+			}
+			tmp.value.str.val = estrndup(cursor->columns[i].buf,
+										 tmp.value.str.len);
 		}
 		_php3_hash_index_update(arr->value.ht, i, (void *) &tmp, sizeof(pval), NULL);
 	}
@@ -1405,13 +1403,11 @@ ora_get_conn(HashTable *list, int ind)
 	plist = ORACLE_GLOBAL(php3_oracle_module).resource_plist;
 
 	conn = (oraConnection *)php3_list_find(ind, &type);
-	if (conn && (type != ORACLE_GLOBAL(php3_oracle_module).le_conn || 
-				 type != ORACLE_GLOBAL(php3_oracle_module).le_pconn)) 
+	if (conn && type == ORACLE_GLOBAL(php3_oracle_module).le_conn)
 		return conn;
 
 	conn = (oraConnection *)php3_plist_find(ind, &type);
-	if (conn && (type != ORACLE_GLOBAL(php3_oracle_module).le_conn || 
-				 type != ORACLE_GLOBAL(php3_oracle_module).le_pconn)) 
+	if (conn && type == ORACLE_GLOBAL(php3_oracle_module).le_pconn)
 		return conn;
 
 	php3_error(E_WARNING,"Bad Oracle connection number (%d)", ind);
@@ -1585,26 +1581,26 @@ int ora_set_param_values(oraCursor *cursor, int isout)
 			return 0;
 		}
 		if(_php3_hash_get_current_data(cursor->params, (void **)&param) == FAILURE){
-            php3_error(E_WARNING, "Can't get parameter data");
-			/* XXX efree paramname */
-            return 0;
-        }
+			php3_error(E_WARNING, "Can't get parameter data");
+			efree(paramname);
+			return 0;
+		}
 
 		if(isout){
 			/* XXX param->alen + 1 ?? */
 			if(param->type != 1 && param->alen > 0){
 				SET_VAR_STRINGL(paramname, param->progv, param->alen);
 			}
-			/* XXX efree paramname */
+			efree(paramname);
 			continue;
 		}else if(param->type == 2){
-			/* XXX efree paramname */
+			efree(paramname);
 			continue;
 		}
 
 		if(_php3_hash_find(&GLOBAL(symbol_table), paramname, strlen(paramname) + 1, (void **)&pdata) == FAILURE){
 			php3_error(E_WARNING, "Can't find variable for parameter");
-			/* XXX efree paramname */
+			efree(paramname);
 			return 0;
 		}
 		convert_to_string(pdata);
@@ -1616,7 +1612,7 @@ int ora_set_param_values(oraCursor *cursor, int isout)
 		strncpy(param->progv, pdata->value.str.val, len);
 
 		param->progv[len] = '\0';
-		/* XXX efree paramname */
+		efree(paramname);
 	}
 	return 1;
 	
@@ -1630,8 +1626,3 @@ int ora_set_param_values(oraCursor *cursor, int isout)
  * c-basic-offset: 4
  * End:
  */
-
-
-
-
-

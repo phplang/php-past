@@ -164,6 +164,12 @@ echo $cmdtuples . " <- cmdtuples affected.";
      index that is needed by other PostgreSQL functions. You can have
      multiple connections open at once.
     <para>
+     A connection can also established with the following command:
+     <command>$conn = pg_connect("dbname=marliese port=5432");</command>
+     Other parameters besides <parameter>dbname</parameter> and
+     <parameter>port</parameter> are <parameter>host</parameter>, 
+     <parameter>tty</parameter> and <parameter>options</parameter>.
+    <para>
      See also <function>pg_pConnect</function>.
    </refsect1>
   </refentry>
@@ -240,7 +246,7 @@ echo $cmdtuples . " <- cmdtuples affected.";
 
   <refentry id="function.pg-fetch-array">
    <refnamediv>
-    <refname>pg_fetch_array</refname>
+    <refname>pg_Fetch_Array</refname>
     <refpurpose>fetch row as array</refpurpose>
    </refnamediv>
    <refsect1>
@@ -248,7 +254,7 @@ echo $cmdtuples . " <- cmdtuples affected.";
     <funcsynopsis>
      <funcdef>array <function>pg_fetch_array</function></funcdef>
      <paramdef>int <parameter>result</parameter></paramdef>
-     <paramdef>mixed <parameter>field</parameter></paramdef>
+     <paramdef>int <parameter>row</parameter></paramdef>
     </funcsynopsis>
     <para> 
      Returns: An array that corresponds to the fetched row, or false
@@ -273,14 +279,14 @@ echo $cmdtuples . " <- cmdtuples affected.";
 &lt;?php 
 $conn = pg_pconnect("","","","","publisher");
 if (!$conn) {
-  echo "An error occured.\n";
-  exit;
+    echo "An error occured.\n";
+    exit;
 }
 
 $result = pg_Exec ($conn, "SELECT * FROM authors");
 if (!$result) {
-  echo "An error occured.\n";
-  exit;
+    echo "An error occured.\n";
+    exit;
 }
 
 $arr = pg_fetch_array ($result, 0);
@@ -297,7 +303,7 @@ echo $arr["author"] . " <- array\n";
 
   <refentry id="function.pg-fetch-object">
    <refnamediv>
-    <refname>pg_fetch_object</refname>
+    <refname>pg_Fetch_Object</refname>
     <refpurpose>fetch row as object</refpurpose>
    </refnamediv>
    <refsect1>
@@ -305,7 +311,7 @@ echo $arr["author"] . " <- array\n";
     <funcsynopsis>
      <funcdef>object <function>pg_fetch_object</function></funcdef>
      <paramdef>int <parameter>result</parameter></paramdef>
-     <paramdef>mixed <parameter>field</parameter></paramdef>
+     <paramdef>int <parameter>row</parameter></paramdef>
     </funcsynopsis>
     <para> 
      Returns: An object with properties that correspond to the fetched
@@ -323,12 +329,56 @@ echo $arr["author"] . " <- array\n";
      insignificant).
     <para> See also: <function>pg_fetch_array</function> and
                      <function>pg_fetch_row</function>.
+
+    <example>
+     <title>Postgres fetch object</title>
+     <programlisting role=php>
+&lt;?php 
+$database = "verlag";
+$db_conn = pg_connect ("localhost", "5432", "", "", $database);
+if (!$db_conn): ?>
+    &lt;H1>Failed connecting to postgres database &lt;? echo $database ?>&lt;/H1> &lt;?
+    exit;
+endif;
+
+$qu = pg_exec ($db_conn, "SELECT * FROM verlag ORDER BY autor");
+$row = 0; // postgres needs a row counter other dbs might not 
+
+while ($data = pg_fetch_object ($qu, $row)):
+    echo $data->autor." (";
+    echo $data->jahr ."): ";
+    echo $data->titel."&lt;BR>";
+    $row++;
+endwhile; ?>
+
+&lt;PRE>&lt;?
+$fields[] = Array ("autor", "Author");
+$fields[] = Array ("jahr",  "  Year");
+$fields[] = Array ("titel", " Title");
+
+$row= 0; // postgres needs a row counter other dbs might not
+while ($data = pg_fetch_object ($qu, $row)):
+    echo "----------\n";
+    reset ($fields);
+    while (list (,$item) = each ($fields)):
+        echo $item[1].": ".$data->$item[0]."\n";
+    endwhile;
+    $row++;
+endwhile;
+echo "----------\n"; ?>
+&lt;/PRE> <?
+pg_freeResult ($qu);
+pg_close ($db_conn);
+?>
+</programlisting>
+    </example>
+
    </refsect1>
   </refentry>
 
   <refentry id="function.pg-fetch-row">
    <refnamediv>
-    <refname>pg_fetch_row</refname>
+    <refname>pg_Fetch_Row</refname>
     <refpurpose>get row as enumerated array</refpurpose>
    </refnamediv>
    <refsect1>
@@ -336,7 +386,7 @@ echo $arr["author"] . " <- array\n";
     <funcsynopsis>
      <funcdef>array <function>pg_fetch_row</function></funcdef>
      <paramdef>int <parameter>result</parameter></paramdef>
-     <paramdef>int <parameter>field</parameter></paramdef>
+     <paramdef>int <parameter>row</parameter></paramdef>
     </funcsynopsis>
     <para> 
      Returns: An array that corresponds to the fetched row, or false
@@ -359,26 +409,26 @@ echo $arr["author"] . " <- array\n";
      <title>Postgres fetch row</title>
      <programlisting role=php>
 &lt;?php 
-      $conn = pg_pconnect("","","","","publisher");
-      if (!$conn) {
-        echo "An error occured.\n";
-        exit;
-      }
+$conn = pg_pconnect("","","","","publisher");
+if (!$conn) {
+    echo "An error occured.\n";
+    exit;
+}
 
-      $result = pg_Exec ($conn, "SELECT * FROM authors");
-      if (!$result) {
-        echo "An error occured.\n";
-        exit;
-      }
+$result = pg_Exec ($conn, "SELECT * FROM authors");
+if (!$result) {
+    echo "An error occured.\n";
+    exit;
+}
 
-      $row = pg_fetch_row ($result, 0);
-      echo $row[0] . " <- row\n";
+$row = pg_fetch_row ($result, 0);
+echo $row[0] . " <- row\n";
 
-      $row = pg_fetch_row ($result, 1);
-      echo $row[0] . " <- row\n";
+$row = pg_fetch_row ($result, 1);
+echo $row[0] . " <- row\n";
 
-      $row = pg_fetch_row ($result, 2);
-      echo $row[1] . " <- row\n";
+$row = pg_fetch_row ($result, 2);
+echo $row[1] . " <- row\n";
 ?>
 </programlisting>
     </example>
@@ -735,11 +785,11 @@ echo $arr["author"] . " <- array\n";
    <refsect1>
     <title>Description</title>
     <funcsynopsis>
-     <funcdef>int <function>pg_numfields</function></funcdef>
+     <funcdef>int <function>pg_numrows</function></funcdef>
      <paramdef>int <parameter>result_id</parameter></paramdef>
     </funcsynopsis>
     <para>
-     pg_NumFields() will return the number of rows in a
+     <function>pg_NumRows</function> will return the number of rows in a
      PostgreSQL result.  The argument is a valid result identifier
      returned by <function>pg_Exec</function>. This function will
      return -1 on error.
@@ -787,6 +837,13 @@ echo $arr["author"] . " <- array\n";
      index that is needed by other PostgreSQL functions. You can have
      multiple persistent connections open at once. See also
      <function>pg_Connect</function>.
+    <para>
+     A connection can also established with the following command:
+     <command>$conn = pg_pconnect("dbname=marliese port=5432");</command>
+     Other parameters besides <parameter>dbname</parameter> and
+     <parameter>port</parameter> are <parameter>host</parameter>, 
+     <parameter>tty</parameter> and <parameter>options</parameter>.
+
    </refsect1>
   </refentry>
 

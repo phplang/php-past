@@ -29,7 +29,7 @@
  */
 
 
-/* $Id: php3_gd.h,v 1.21 1998/07/02 12:28:54 rasmus Exp $ */
+/* $Id: php3_gd.h,v 1.23 1998/07/11 21:57:25 rasmus Exp $ */
 
 #ifndef _PHP3_GD_H
 #define _PHP3_GD_H
@@ -50,12 +50,14 @@ extern php3_module_entry gd_module_entry;
 extern void php3_info_gd(void);
 extern int php3_minit_gd(INIT_FUNC_ARGS);
 extern int php3_mend_gd(void);
+extern int gdImageColorResolve(gdImagePtr, int, int, int);
 extern void php3_imagearc(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_imagechar(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_imagecharup(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_imagecolorallocate(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_imagecolorat(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_imagecolorclosest(INTERNAL_FUNCTION_PARAMETERS);
+extern void php3_imagecolorresolve(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_imagecolorexact(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_imagecolorset(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_imagecolorstotal(INTERNAL_FUNCTION_PARAMETERS);

@@ -1,6 +1,9 @@
 QNX4 Installation Notes
 -----------------------
 
+NOTE: General installation instructions are in the INSTALL file 
+
+
 1. To compile and test PHP3 you have to grab, compile and install:
 	- GNU dbm library or another db library;
 	- GNU bison (1.25 or later; 1.25 tested);

@@ -580,7 +580,7 @@
    <refsect1>
     <title>Description</title>
     <funcsynopsis>
-     <funcdef>int <function>imap_unsubscribe</function></funcdef>
+     <funcdef>string <function>imap_qprint</function></funcdef>
      <paramdef>string <parameter>string</parameter></paramdef>
     </funcsynopsis>
     <para>
@@ -598,7 +598,7 @@
    <refsect1>
     <title>Description</title>
     <funcsynopsis>
-     <funcdef>int <function>imap_8bit</function></funcdef>
+     <funcdef>string <function>imap_8bit</function></funcdef>
      <paramdef>string <parameter>string</parameter></paramdef>
     </funcsynopsis>
     <para>

@@ -51,7 +51,7 @@ void init_cfg_scanner()
 	return EXTENSION;
 }
 
-<INITIAL>("true"|"on"|"yes") {
+<INITIAL>[ ]*("true"|"on"|"yes")[ ]* {
 	cfglval->value.str.val = php3_strndup("1",1);
 	cfglval->value.str.len = 1;
 	cfglval->type = IS_STRING;
@@ -59,7 +59,7 @@ void init_cfg_scanner()
 }
 
 
-<INITIAL>("false"|"off"|"no") {
+<INITIAL>[ ]*("false"|"off"|"no")[ ]* {
 	cfglval->value.str.val = php3_strndup("",0);
 	cfglval->value.str.len = 0;
 	cfglval->type = IS_STRING;
@@ -104,7 +104,7 @@ void init_cfg_scanner()
 }
 
 
-<INITIAL>[^=\n\r\t ;"]+ {
+<INITIAL>[^=\n\r\t;"]+ {
 	/* STRING */
 	register int i;
 

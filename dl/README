@@ -1,13 +1,19 @@
 PHP3 Dynamically Loadable Libraries
 
+The build procedure for dynamic modules is not very clean yet.
+It will be improved in PHP-3.1.
+
 Try:
 
 ./setup
-make
 
-Note, you may not want to compile all the libraries here.
+This will generate a Makefile.  You should edit this Makefile
+and on the CC line add your Apache include directories.  
+Something similar to: 
 
-To build an individual library instead of all of them, use:
+   -I/path/apache/src/include -I/path/apache/src/os/unix
+
+To build an individual library type, for example:
 
    make calendar.so
 

@@ -14,6 +14,9 @@
 /* This will cause HAVE_DIRENT_H defined twice sometimes, but it should be problem */
 #define HAVE_DIRENT_H 0
 
+/* Define if you have the resolv library (-lresolv). */
+#define HAVE_LIBRESOLV 0
+
 /* Define if you have the gd library (-lgd). */
 #define HAVE_LIBGD 0
 
@@ -70,6 +73,9 @@
 /* Define if you want to use the supplied dbase library */
 #define DBASE 0
 
+/* Define if you want Hyperwave support */
+#define HYPERWAVE 0
+
 /* Define if you have the crypt() function */
 #define HAVE_CRYPT 1
 
@@ -79,11 +85,17 @@
 /* Define if you want to use the iODBC database driver */
 #define HAVE_IODBC 0
 
+/* Define if you want to use the OpenLink ODBC database driver */
+#define HAVE_OPENLINK 0
+
 /* Define if you have the AdabasD client libraries */
 #define HAVE_ADABAS 0
 
 /* Define if you want the LDAP directory interface */
 #define HAVE_LDAP 0
+
+/* Define if you want the IMAP directory interface */
+#define HAVE_IMAP 0
 
 /* Define if you want to use a custom ODBC database driver */
 #define HAVE_CODBC 0
@@ -112,6 +124,9 @@
 /* Define if you are compiling PHP as an Apache module */
 #define APACHE 0
 
+/* Define if you are compiling PHP as an Apache module with mod_charset patch applied (aka Russian Apache)*/
+#define USE_TRANSFER_TABLES 0
+
 /* Define if you are compiling PHP as an fhttpd module */
 #define FHTTPD 0
 
@@ -119,6 +134,9 @@
 #define HAVE_AP_CONFIG_H 0
 
 /* Define if your Apache has src/include/compat.h */
+#define HAVE_OLD_COMPAT_H 0
+
+/* Define if your Apache has src/include/ap_compat.h */
 #define HAVE_AP_COMPAT_H 0
 
 #define HAVE_SYBASE 0
@@ -138,6 +156,10 @@
 
 #ifndef HAVE_VELOCIS
 #define HAVE_VELOCIS 0
+#endif
+
+#ifndef HAVE_IFX
+#define HAVE_IFX 0
 #endif
 
 #ifndef HAVE_PQCMDTUPLES

@@ -29,7 +29,7 @@
  */
 
 
-/* $Id: variables.c,v 1.144 1998/07/04 16:08:55 zeev Exp $ */
+/* $Id: variables.c,v 1.150 1998/08/10 19:19:40 fmk Exp $ */
 
 #ifdef THREAD_SAFE
 #include "tls.h"
@@ -43,6 +43,7 @@
 #endif
 #include <stdio.h>
 #include "control_structures.h"
+#include "internal_functions.h"
 #include "functions/head.h"
 
 PHPAPI char *empty_string = "";	/* in order to save emalloc() and efree() time for
@@ -69,7 +70,7 @@ inline PHPAPI void var_uninit(pval *var)
 	var->value.str.len = 0;
 }
 		
-inline void yystype_destructor(pval *yystype INLINE_TLS)
+PHPAPI inline void yystype_destructor(pval *yystype INLINE_TLS)
 {
 	if (yystype->type == IS_STRING) {
 		STR_FREE(yystype->value.str.val);
@@ -100,7 +101,7 @@ inline int is_not_internal_function(pval *yystype)
 }
 
 
-int yystype_copy_constructor(pval *yystype)
+PHPAPI int yystype_copy_constructor(pval *yystype)
 {
 	TLS_VARS;
 
@@ -129,6 +130,13 @@ int yystype_copy_constructor(pval *yystype)
 		if (!yystype->value.ht) {
 			var_reset(yystype);
 			return FAILURE;
+		}
+	} else if (yystype->type & VALID_FUNCTION) {
+		if (yystype->value.func.arg_types) {
+			unsigned char *arg_types = yystype->value.func.arg_types;
+			
+			yystype->value.func.arg_types = emalloc(sizeof(unsigned char)*(arg_types[0]+1));
+			memcpy(yystype->value.func.arg_types, arg_types, sizeof(unsigned char)*(arg_types[0]+1));
 		}
 	}
 	return SUCCESS;
@@ -578,10 +586,10 @@ void get_object_symtable(pval *result, pval *parent, pval *child INLINE_TLS)
 }
 
 
-void assign_new_object(pval *result, pval *classname INLINE_TLS)
+void assign_new_object(pval *result, pval *classname INLINE_TLS, unsigned char implicit_ctor)
 {
 	if (GLOBAL(Execute)) {
-		pval *data;
+		pval *data, ctor_retval;
 
 		convert_to_string(classname);
 		if (_php3_hash_find(&GLOBAL(function_table), classname->value.str.val, classname->value.str.len+1, (void **) &data) == FAILURE
@@ -592,7 +600,13 @@ void assign_new_object(pval *result, pval *classname INLINE_TLS)
 		*result = *data;
 		result->type = IS_OBJECT;
 		yystype_copy_constructor(result);
-		yystype_destructor(classname _INLINE_TLS);
+		
+		if (implicit_ctor) {
+			if (call_user_function(NULL, result, classname, &ctor_retval, 0, NULL)==SUCCESS) {
+				yystype_destructor(&ctor_retval);			
+		  	}
+		  	yystype_destructor(classname); 
+		}
 	}
 }
 

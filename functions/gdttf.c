@@ -13,9 +13,9 @@
 #include <string.h>
 #include <math.h>
 #include <gd.h>
+#include "gdttf.h"
 #include "gdcache.h"
 #include <freetype.h>
-
 
 /* number of fonts cached before least recently used is replaced */
 #define FONTCACHESIZE 6
@@ -34,14 +34,15 @@
 /* ptsize below which anti-aliasing is ineffective */
 #define MINANTIALIASPTSIZE 0
 
-/* display resolution - (Not really.  This has to be 72 or hinting is wrong */ 
+/* display resolution - (Not really.  This has to be 72 or hinting is wrong) */ 
 #define RESOLUTION 72
 
 /* Number of colors used for anti-aliasing */
 #define NUMCOLORS 4
 
 /* Line separation as a factor of font height.  
-	No space between if LINESPACE = 1.00 */
+      No space between if LINESPACE = 1.00 
+      Line separation will be rounded up to next pixel row*/
 #define LINESPACE 1.05
 
 #ifndef TRUE
@@ -53,9 +54,9 @@
 #define MIN(a,b) ((a)<(b)?(a):(b))
 
 typedef struct {
-	char				*fontname;
-	double				ptsize;
-	double				angle;
+	char				*fontname;	/* key */
+	double				ptsize;		/* key */
+	double				angle;		/* key */
 	double				sin_a, cos_a;
 	TT_Engine           *engine;
 	TT_Face				face;
@@ -75,7 +76,8 @@ typedef struct {
 } fontkey_t;
 
 typedef struct {
-	int					character;
+	int					character;	/* key */
+	int					hinting;	/* key */
 	TT_Glyph			glyph;
 	TT_Glyph_Metrics	metrics;
 	TT_Outline			outline;
@@ -88,31 +90,35 @@ typedef struct {
 
 typedef struct {
 	int					character;	/* key */
+	int					hinting;	/* key */
 	font_t				*font;
 } glyphkey_t;
 
 typedef struct {
-	int					xoffset, yoffset;
+	int					xoffset;	/* key */
+	int					yoffset;	/* key */
 	char				*bitmap;
 } bitmap_t;
 
 typedef struct {
-	int					xoffset, yoffset;	/* key */
+	int					xoffset;	/* key */
+	int					yoffset;	/* key */
 	glyph_t				*glyph;
 } bitmapkey_t;
 
 typedef struct { 
-    unsigned char       pixel;
-    unsigned char       bgcolor;
-    unsigned char       fgcolor;
+    unsigned char       pixel;		/* key */
+    unsigned char       bgcolor;	/* key */
+    int					fgcolor;	/* key */ /* -ve means no antialias */
+    gdImagePtr          im;			/* key */
     unsigned char       tweencolor;
 } tweencolor_t;
 
 typedef struct {
     unsigned char       pixel;      /* key */
     unsigned char       bgcolor;    /* key */
-    unsigned char       fgcolor;    /* key */
-    gdImagePtr          im;
+    int					fgcolor;    /* key */ /* -ve means no antialias */
+    gdImagePtr          im;			/* key */
 } tweencolorkey_t;  
 
 /* forward declarations so that glyphCache can be initialized by font code */
@@ -125,54 +131,153 @@ static int bitmapTest ( void *element, void *key );
 static void *bitmapFetch ( char **error, void *key );
 static void bitmapRelease( void *element );
 
-/********************************************************************/
-/* gdImageColorResolve is a replacement for the old fragment:       */
-/*                                                                  */
-/*      if ((color=gdImageColorExact(im,R,G,B)) < 0)                */
-/*        if ((color=gdImageColorAllocate(im,R,G,B)) < 0)           */
-/*          color=gdImageColorClosest(im,R,G,B);                    */
-/*                                                                  */
-/* in a single function                                             */
+/********************************************************************
+ * gdTcl_UtfToUniChar is borrowed from ...
+ */
+/*
+ * tclUtf.c --
+ *
+ *	Routines for manipulating UTF-8 strings.
+ *
+ * Copyright (c) 1997-1998 Sun Microsystems, Inc.
+ *
+ * See the file "license.terms" for information on usage and redistribution
+ * of this file, and for a DISCLAIMER OF ALL WARRANTIES.
+ *
+ * SCCS: @(#) tclUtf.c 1.25 98/01/28 18:02:43
+ */
 
+/*
+ *---------------------------------------------------------------------------
+ *
+ * gdTcl_UtfToUniChar --
+ *
+ *	Extract the Tcl_UniChar represented by the UTF-8 string.  Bad
+ *	UTF-8 sequences are converted to valid Tcl_UniChars and processing
+ *	continues.  Equivalent to Plan 9 chartorune().
+ *
+ *	The caller must ensure that the source buffer is long enough that
+ *	this routine does not run off the end and dereference non-existent
+ *	memory looking for trail bytes.  If the source buffer is known to
+ *	be '\0' terminated, this cannot happen.  Otherwise, the caller
+ *	should call Tcl_UtfCharComplete() before calling this routine to
+ *	ensure that enough bytes remain in the string.
+ *
+ * Results:
+ *	*chPtr is filled with the Tcl_UniChar, and the return value is the
+ *	number of bytes from the UTF-8 string that were consumed.
+ *
+ * Side effects:
+ *	None.
+ *
+ *---------------------------------------------------------------------------
+ */
+ 
+#define Tcl_UniChar int
+#define TCL_UTF_MAX 3
 static int
-gdImageColorResolve(gdImagePtr im, int r, int g, int b)
+gdTcl_UtfToUniChar(char *str, Tcl_UniChar *chPtr)
+/* str is the UTF8 next character pointer */
+/* chPtr is the int for the result */
 {
-	int c; 
-	int ct = -1;
-	int op = -1;
-	long rd, gd, bd, dist;
-	long mindist = 3*255*255;  /* init to max poss dist */
+    int byte;
+    
+	/* HTML4.0 entities in decimal form, e.g. &#197; */
+    byte = *((unsigned char *) str);
+	if (byte == '&') {
+		int i, n=0;
 
-	for (c = 0; c < im->colorsTotal; c++) {
-		if (im->open[c]) {
-			op = c;				/* Save open slot */
-			continue;			/* Color not in use */
-		}
-		rd = (long)(im->red  [c] - r);
-		gd = (long)(im->green[c] - g);
-		bd = (long)(im->blue [c] - b);
-		dist = rd * rd + gd * gd + bd * bd;
-		if (dist < mindist) {
-			if (dist == 0) {
-				return c;		/* Return exact match color */
+		byte = *((unsigned char *) (str+1));
+		if (byte == '#') {
+			for (i = 2; i < 8; i++) {
+				byte = *((unsigned char *) (str+i));
+				if (byte >= '0' && byte <= '9') {
+					n = (n * 10) + (byte - '0');
+				} 
+				else
+					break;
 			}
-			mindist = dist;
-			ct = c;
+			if (byte == ';') {
+				*chPtr = (Tcl_UniChar) n;
+				return ++i;
+			}
 		}
-	}       
-	/* no exact match.  We now know closest, but first try to allocate exact */
-	if (op == -1) {
-		op = im->colorsTotal;
-		if (op == gdMaxColors) {    /* No room for more colors */
-			return ct;  		/* Return closest available color */
-		}
-		im->colorsTotal++;
 	}
-	im->red  [op] = r;
-	im->green[op] = g;
-	im->blue [op] = b;
-	im->open [op] = 0;
-	return op;					/* Return newly allocated color */
+	 
+    /*
+     * Unroll 1 to 3 byte UTF-8 sequences, use loop to handle longer ones.
+     */
+
+    byte = *((unsigned char *) str);
+    if (byte < 0xC0) {
+	/*
+	 * Handles properly formed UTF-8 characters between 0x01 and 0x7F.
+	 * Also treats \0 and naked trail bytes 0x80 to 0xBF as valid
+	 * characters representing themselves.
+	 */
+
+	*chPtr = (Tcl_UniChar) byte;
+	return 1;
+    } else if (byte < 0xE0) {
+	if ((str[1] & 0xC0) == 0x80) {
+	    /*
+	     * Two-byte-character lead-byte followed by a trail-byte.
+	     */
+	     
+	    *chPtr = (Tcl_UniChar) (((byte & 0x1F) << 6) | (str[1] & 0x3F));
+	    return 2;
+	}
+	/*
+	 * A two-byte-character lead-byte not followed by trail-byte
+	 * represents itself.
+	 */
+	 
+	*chPtr = (Tcl_UniChar) byte;
+	return 1;
+    } else if (byte < 0xF0) {
+	if (((str[1] & 0xC0) == 0x80) && ((str[2] & 0xC0) == 0x80)) {
+	    /*
+	     * Three-byte-character lead byte followed by two trail bytes.
+	     */
+
+	    *chPtr = (Tcl_UniChar) (((byte & 0x0F) << 12) 
+		    | ((str[1] & 0x3F) << 6) | (str[2] & 0x3F));
+	    return 3;
+	}
+	/*
+	 * A three-byte-character lead-byte not followed by two trail-bytes
+	 * represents itself.
+	 */
+
+	*chPtr = (Tcl_UniChar) byte;
+	return 1;
+    }
+#if TCL_UTF_MAX > 3
+    else {
+	int ch, total, trail;
+
+	total = totalBytes[byte];
+	trail = total - 1;
+	if (trail > 0) {
+	    ch = byte & (0x3F >> trail);
+	    do {
+		str++;
+		if ((*str & 0xC0) != 0x80) {
+		    *chPtr = byte;
+		    return 1;
+		}
+		ch <<= 6;
+		ch |= (*str & 0x3F);
+		trail--;
+	    } while (trail > 0);
+	    *chPtr = ch;
+	    return total;
+	}
+    }
+#endif
+
+    *chPtr = (Tcl_UniChar) byte;
+    return 1;
 }
 
 /********************************************************************/
@@ -229,17 +334,9 @@ fontFetch ( char **error, void *key )
 		return NULL;
 	}
 
-	if (TT_Set_Instance_CharSize(a->instance, (long)(a->ptsize*64))) {
+	if (TT_Set_Instance_CharSize(a->instance, (TT_F26Dot6)(a->ptsize*64))) {
 		*error = "Could not set character size";
 		return NULL;
-	}
-
-	/* Set flag if font is rotated */
-	if (a->angle == 0) {
-		TT_Set_Instance_Transform_Flags(a->instance, FALSE, FALSE);
-	}
-	else {
-		TT_Set_Instance_Transform_Flags(a->instance, TRUE, FALSE);
 	}
 
 	TT_Get_Instance_Metrics(a->instance, &a->imetrics);
@@ -293,7 +390,8 @@ glyphTest ( void *element, void *key )
 	glyph_t *a=(glyph_t *)element;
 	glyphkey_t *b=(glyphkey_t *)key;
 
-	return (a->character == b->character);
+	return (a->character == b->character
+		&& a->hinting == b->hinting);
 }
 
 static void *
@@ -302,12 +400,13 @@ glyphFetch ( char **error, void *key )
 	glyph_t				*a;
 	glyphkey_t			*b=(glyphkey_t *)key;
 	short				glyph_code;
-	int					flags;
+	int					flags, err;
 	int					crect[8], xmin, xmax, ymin, ymax;
 	double				cos_a, sin_a;
 
 	a = (glyph_t *)malloc(sizeof(glyph_t));
 	a->character = b->character;
+	a->hinting = b->hinting;
 	a->gray_render = (b->font->ptsize < MINANTIALIASPTSIZE)?FALSE:TRUE;
 	a->oldx = a->oldy = 0;
 
@@ -318,11 +417,11 @@ glyphFetch ( char **error, void *key )
 	}
 
 	flags = TTLOAD_SCALE_GLYPH;
-	if (b->font->angle == 0.0) {
+	if (a->hinting && b->font->angle == 0.0) {
 		flags |= TTLOAD_HINT_GLYPH;
 	}
-	glyph_code = TT_Char_Index(b->font->char_map, (unsigned short)a->character);
-	if ((TT_Load_Glyph(b->font->instance, a->glyph, glyph_code, flags))) {
+	glyph_code = TT_Char_Index(b->font->char_map, a->character);
+	if ((err=TT_Load_Glyph(b->font->instance, a->glyph, glyph_code, flags))) {
 		*error = "TT_Load_Glyph problem";
 		return NULL;
 	}
@@ -444,7 +543,8 @@ tweenColorTest (void *element, void *key)
     
     return (a->pixel == b->pixel    
          && a->bgcolor == b->bgcolor
-         && a->fgcolor == b->fgcolor);
+         && a->fgcolor == b->fgcolor
+         && a->im == b->im);
 } 
 
 static void *
@@ -461,21 +561,16 @@ tweenColorFetch (char **error, void *key)
 	fg = a->fgcolor = b->fgcolor;
 	im = b->im;
 
-#if 0
-	if (bg == im->transparent) {
-		/* anti-aliasing looks weird on transparent backgrounds */
-		a->tweencolor = fg;
+	/* if fg is specified by a negative color idx, then don't antialias */
+	if (fg <0) {
+		a->tweencolor = -fg;
 	} else {
-#endif
 		npixel = NUMCOLORS - pixel;
-   
 		a->tweencolor = gdImageColorResolve(im,
 			(pixel * im->red  [fg] + npixel * im->red  [bg]) / NUMCOLORS,
 			(pixel * im->green[fg] + npixel * im->green[bg]) / NUMCOLORS,
 			(pixel * im->blue [fg] + npixel * im->blue [bg]) / NUMCOLORS);
-#if 0
 	}
-#endif
     *error = NULL;
     return (void *)a;
 }   
@@ -489,15 +584,18 @@ tweenColorRelease(void *element)
 /********************************************************************/
 /* gdttfchar -  render one character onto a gd image                */
 
+static int OneTime=0;
+static gdCache_head_t   *tweenColorCache;
+
 char *
 gdttfchar(gdImage *im, int fg, font_t *font,
 	int x, int y,					/* string start pos in pixels */
 	TT_F26Dot6 x1,	TT_F26Dot6 y1,	/* char start offset (*64) from x,y */
 	TT_F26Dot6 *advance,
 	TT_BBox **bbox, 
-	int ch)
+	char **next)
 {
-    int pc;
+    int pc, ch, len;
 	int row, col;
 	int x2, y2;     /* char start pos in pixels */ 
 	int x3, y3;     /* current pixel pos */
@@ -510,18 +608,18 @@ gdttfchar(gdImage *im, int fg, font_t *font,
 	tweencolorkey_t tweencolorkey;
 
 	/****** set up tweenColorCache on first call ************/
-	static gdCache_head_t   *tweenColorCache;
-
-/* Disabling this caching stuff, it does not seem to work.
-   We could perhaps try solving it with persistent fonts instead?
-    - Stig
-*/
-/*	if (! tweenColorCache)*/
+	if (! OneTime) {
 		tweenColorCache = gdCacheCreate(TWEENCOLORCACHESIZE,
 			tweenColorTest, tweenColorFetch, tweenColorRelease);
+		OneTime++;
+	}
 	/**************/
 
+	len = gdTcl_UtfToUniChar(*next, &ch);
+	*next += len;
+
 	glyphkey.character = ch;
+	glyphkey.hinting = 1;
     glyphkey.font = font;
     glyph = (glyph_t *)gdCacheGet(font->glyphCache, &glyphkey);
     if (! glyph)
@@ -530,19 +628,19 @@ gdttfchar(gdImage *im, int fg, font_t *font,
 	*bbox = &glyph->metrics.bbox;
 	*advance = glyph->metrics.advance;
 
-	/* if invalid color requested then assume user just wants brect */
-	if (fg < 0 || fg > 255 || !im)
+	/* if null *im, or invalid color,  then assume user just wants brect */
+	if (!im || fg > 255 || fg < -255)
 		return (char *)NULL;
 
 	/* render (via cache) a bitmap for the current fractional offset */
-	bitmapkey.xoffset = ((x1+32) & 63) - 32 - (glyph->xmin & -64);
-	bitmapkey.yoffset = ((y1+32) & 63) - 32 - (glyph->ymin & -64);
+	bitmapkey.xoffset = ((x1+32) & 63) - 32 - ((glyph->xmin+32) & -64);
+	bitmapkey.yoffset = ((y1+32) & 63) - 32 - ((glyph->ymin+32) & -64);
 	bitmapkey.glyph = glyph;
 	gdCacheGet(glyph->bitmapCache, &bitmapkey);
 
 	/* copy to gif, mapping colors */
-	x2 = x + (glyph->xmin + ((x1+32) & -64)) / 64;
-	y2 = y - (glyph->ymin + ((y1+32) & -64)) / 64;
+      x2 = x + (((glyph->xmin+32) & -64) + ((x1+32) & -64)) / 64;
+      y2 = y - (((glyph->ymin+32) & -64) + ((y1+32) & -64)) / 64;
 	tweencolorkey.fgcolor = fg;
 	tweencolorkey.im = im;
 	for (row = 0; row < glyph->Bit.rows; row++) {
@@ -581,20 +679,20 @@ gdttfchar(gdImage *im, int fg, font_t *font,
 }
 
 /********************************************************************/
-/* gdttf -  render a string onto a gd image							*/
+/* gdttf -  render a utf8 string onto a gd image					*/
 
 char *
 gdttf(gdImage *im, int *brect, int fg, char *fontname,
-	double ptsize, double angle, int x, int y, int *string, int len)
+	double ptsize, double angle, int x, int y, char *string)
 {
 	TT_F26Dot6 ur_x=0, ur_y=0, ll_x=0, ll_y=0;
 	TT_F26Dot6 advance_x, advance_y, advance, x1, y1;
 	TT_BBox *bbox;
 	double sin_a, cos_a;
-    int i, ch;
+    int i=0, ch;
 	font_t *font;
 	fontkey_t fontkey;
-	char *error;
+	char *error, *next;
 
 	/****** initialize font engine on first call ************/
     static gdCache_head_t	*fontCache;
@@ -622,27 +720,32 @@ gdttf(gdImage *im, int *brect, int fg, char *fontname,
 	cos_a = font->cos_a;
 
 	advance_x = advance_y = 0;
-	for (i=0; i < len; i++) {	  
-		ch = string[i];
 
-		/* cariage returns */
+	next=string;
+	while (*next) {	  
+		ch = *next;
+
+		/* carriage returns */
 		if (ch == '\r') {
 			advance_x = 0;
+			next++;
 			continue;
 		}
 		/* newlines */
 		if (ch == '\n') {
-			advance_y -= (long)((font->imetrics.y_ppem * LINESPACE) * 64);
+                      advance_y -= (TT_F26Dot6)(font->imetrics.y_ppem * LINESPACE * 64);
+                      advance_y = (advance_y-32) & -64; /* round to next pixel row */
+			next++;
 			continue;
 		}
 
-		x1 = (long)(advance_x * cos_a - advance_y * sin_a);
-		y1 = (long)(advance_x * sin_a + advance_y * cos_a);
+		x1 = (TT_F26Dot6)(advance_x * cos_a - advance_y * sin_a);
+		y1 = (TT_F26Dot6)(advance_x * sin_a + advance_y * cos_a);
 
-		if ((error=gdttfchar(im, fg, font, x, y, x1, y1, &advance, &bbox, ch)))
+		if ((error=gdttfchar(im, fg, font, x, y, x1, y1, &advance, &bbox, &next)))
 			return error;
 
-		if (! i) { /* if first character, init BB corner values */
+		if (! i++) { /* if first character, init BB corner values */
 			ll_x = bbox->xMin;
 			ll_y = bbox->yMin;
 			ur_x = bbox->xMax;

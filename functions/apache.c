@@ -25,10 +25,11 @@
    +----------------------------------------------------------------------+
    | Authors: Rasmus Lerdorf <rasmus@lerdorf.on.ca>                       |
    |          Stig Sæther Bakken <ssb@guardian.no>                        |
+   |          David Sklar <sklar@student.net>                             |
    +----------------------------------------------------------------------+
  */
 
-/* $Id: apache.c,v 1.34 1998/07/02 13:05:25 rasmus Exp $ */
+/* $Id: apache.c,v 1.35 1998/07/14 14:37:16 ssb Exp $ */
 #ifdef THREAD_SAFE
 #include "tls.h"
 #endif
@@ -54,16 +55,46 @@ void php3_virtual(INTERNAL_FUNCTION_PARAMETERS);
 void php3_getallheaders(INTERNAL_FUNCTION_PARAMETERS);
 void php3_apachelog(INTERNAL_FUNCTION_PARAMETERS);
 void php3_info_apache(void);
+void php3_apache_note(INTERNAL_FUNCTION_PARAMETERS);
 
 function_entry apache_functions[] = {
 	{"virtual",			php3_virtual,		NULL},
 	{"getallheaders",		php3_getallheaders,	NULL},
+	{"apache_note", php3_apache_note,NULL},
 	{NULL, NULL, NULL}
 };
 
 php3_module_entry apache_module_entry = {
 	"Apache", apache_functions, NULL, NULL, NULL, NULL, php3_info_apache, STANDARD_MODULE_PROPERTIES
 };
+
+
+void php3_apache_note(INTERNAL_FUNCTION_PARAMETERS)
+{
+	pval *arg_name,*arg_val;
+	char *note_val;
+	int arg_count = ARG_COUNT(ht);
+TLS_VARS;
+
+	if (arg_count<1 || arg_count>2 ||
+		getParameters(ht,arg_count,&arg_name,&arg_val) == FAILURE ) {
+		WRONG_PARAM_COUNT;
+	}
+	
+	convert_to_string(arg_name);
+	note_val = (char *) table_get(GLOBAL(php3_rqst)->notes,arg_name->value.str.val);
+	
+	if (arg_count == 2) {
+		convert_to_string(arg_val);
+		table_set(GLOBAL(php3_rqst)->notes,arg_name->value.str.val,arg_val->value.str.val);
+	}
+
+	if (note_val) {
+		RETURN_STRING(note_val,0);
+	} else {
+		RETURN_FALSE;
+	}
+}
 
 void php3_info_apache(void) {
 	module *modp = NULL;

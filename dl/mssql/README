@@ -1,0 +1,40 @@
+PHP3 Microsoft SQL Server 6.5 extention
+
+What is it?
+
+This is an extension library which enables support for
+Microsoft SQL Server 6.5 in PHP3 under Windows NT.
+Actually it is a copy of the Sybase library, patched to work with
+Microsofts drivers.
+At the moment the library might be a bit unstable when
+working with simultan connections. Please feel free to add or modify
+the code, or drop me an email (fmk@businessnet.dk)
+
+Installation
+
+First, you need to fetch the library files from 
+
+ http://www.php.net/extra/mssql_lib.zip
+
+Then you need to install MS SQL Client (or the complete SQL server)
+Open and compile the project mssql.dsp with MS VC++ 5.0
+Copy mssql.dll to c:\php3
+
+How to call it from PHP3
+
+Sample:
+<?
+
+dl("mssql.dll");
+
+$Conn = mssql_connect("MySQL", "User", "Password");
+$RS = mssql_query("SELECT * FROM UserTable", $Conn);
+
+while ($Record = mssql_fetch_row($RS)) {
+	while (list($key, $value) = each($Record)
+		print("\$key = $key, \$value = $value\n");
+}
+mssql_free_result($RS);
+mssql_close($Conn);
+
+?>

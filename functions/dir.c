@@ -27,13 +27,14 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: dir.c,v 1.51 1998/06/22 20:28:30 zeev Exp $ */
+/* $Id: dir.c,v 1.53 1998/08/14 23:47:15 steffann Exp $ */
 
 #ifdef THREAD_SAFE
 #include "tls.h"
 #endif
 #include "php.h"
 #include "internal_functions.h"
+#include "fopen-wrappers.h"
 #include "php3_list.h"
 
 #include "php3_dir.h"
@@ -95,6 +96,9 @@ void php3_opendir(INTERNAL_FUNCTION_PARAMETERS)
 	}
 	convert_to_string(arg);
 
+	/* Check open_basedir */
+	if (_php3_check_open_basedir(arg->value.str.val)) RETURN_FALSE;
+	
 	dirp = opendir(arg->value.str.val);
 	if (!dirp) {
 		php3_error(E_WARNING, "OpenDir: %s (errno %d)", strerror(errno),errno);
@@ -239,6 +243,9 @@ void php3_getdir(INTERNAL_FUNCTION_PARAMETERS) {
 	}
 	convert_to_string(arg);
 
+	/* Check open_basedir */
+	if (_php3_check_open_basedir(arg->value.str.val)) RETURN_FALSE;
+	
 	dirp = opendir(arg->value.str.val);
 	if (!dirp) {
 		php3_error(E_WARNING, "OpenDir: %s (errno %d)", strerror(errno), errno);

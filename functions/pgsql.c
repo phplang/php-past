@@ -28,7 +28,7 @@
    +----------------------------------------------------------------------+
  */
  
-/* $Id: pgsql.c,v 1.66 1998/06/29 12:36:54 jah Exp $ */
+/* $Id: pgsql.c,v 1.69 1998/07/30 23:04:46 jah Exp $ */
 
 #include <stdlib.h>
 
@@ -806,9 +806,9 @@ void php3_pgsql_result(INTERNAL_FUNCTION_PARAMETERS)
 
 void php3_pgsql_fetch_row(INTERNAL_FUNCTION_PARAMETERS)
 {
-	pval *result, *row, *field=NULL;
+	pval *result, *row;
 	PGresult *pgsql_result;
-	int type,field_offset;
+	int type;
 	int i,num_fields;
 	char *element;
 	uint element_len;
@@ -838,7 +838,6 @@ void php3_pgsql_fetch_row(INTERNAL_FUNCTION_PARAMETERS)
 		element = safe_estrndup(element,element_len);
         if (element) {
             if (php3_ini.magic_quotes_runtime) {
-                int len;
                 char *tmp=_php3_addslashes(element,element_len,&element_len,0);
 
                 add_index_stringl(return_value, i, tmp, element_len, 0);
@@ -855,9 +854,9 @@ void php3_pgsql_fetch_row(INTERNAL_FUNCTION_PARAMETERS)
 
 void php3_pgsql_fetch_hash(INTERNAL_FUNCTION_PARAMETERS)
 {
-	pval *result, *row, *field=NULL, *yystype_ptr;
+	pval *result, *row, *yystype_ptr;
 	PGresult *pgsql_result;
-	int type,field_offset;
+	int type;
 	int i,num_fields;
 	char *element,*field_name;
 	uint element_len;
@@ -887,7 +886,6 @@ void php3_pgsql_fetch_hash(INTERNAL_FUNCTION_PARAMETERS)
 		element = safe_estrndup(element,element_len);
 		if (element) {
             if (php3_ini.magic_quotes_runtime) {
-                int len;
                 char *tmp=_php3_addslashes(element,element_len,&element_len,0);
 
                 add_get_index_stringl(return_value, i, tmp, element_len, (void **) &yystype_ptr, 0);
@@ -1323,7 +1321,7 @@ void php3_pgsql_lo_write(INTERNAL_FUNCTION_PARAMETERS)
 		RETURN_FALSE;
 	}
 	
-	buf_len = strlen(buf);
+	buf_len = str->value.str.len;
 	if ((nbytes = lo_write((PGconn *)pgsql->conn, pgsql->lofd, buf, buf_len))==-1) {
 		RETURN_FALSE;
 	}
@@ -1334,7 +1332,8 @@ void php3_pgsql_lo_write(INTERNAL_FUNCTION_PARAMETERS)
 void php3_pgsql_lo_readall(INTERNAL_FUNCTION_PARAMETERS)
 {
   	pval *pgsql_id;
-	int i, id, nbytes, tbytes, type;
+	int i, id, tbytes, type;
+	volatile int nbytes;
 	char buf[8192];
 	pgLofp *pgsql;
 	int output=1;
@@ -1358,17 +1357,26 @@ void php3_pgsql_lo_readall(INTERNAL_FUNCTION_PARAMETERS)
 		RETURN_FALSE;
 	}
 
-	output=php3_header();
-
-	tbytes = 0;
-	while ((nbytes = lo_read((PGconn *)pgsql->conn, pgsql->lofd, buf, 8192))>0) {
-		for(i=0; i<nbytes; i++) {
-			if (output) PUTC(buf[i]);
+	if (php3_header()) {
+		tbytes = 0;
+		while ((nbytes = lo_read((PGconn *)pgsql->conn, pgsql->lofd, buf, 8192))>0) {
+			for(i=0; i<nbytes; i++) {
+				if (output) PUTC(buf[i]);
+			}
+			tbytes += i;
 		}
-		tbytes += i;
+		return_value->value.lval = tbytes;
+		return_value->type = IS_LONG;
+	} else {
+		RETURN_FALSE;
 	}
-	return_value->value.lval = tbytes;
-	return_value->type = IS_LONG;
 }
 	
 #endif
+
+/*
+ * Local variables:
+ * tab-width: 4
+ * c-basic-offset: 4
+ * End:
+ */

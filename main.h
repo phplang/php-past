@@ -29,7 +29,7 @@
  */
 
 
-/* $Id: main.h,v 1.51 1998/05/23 13:06:57 zeev Exp $ */
+/* $Id: main.h,v 1.54 1998/07/28 22:00:04 rasmus Exp $ */
 
 
 #ifndef _MAIN_H
@@ -61,6 +61,7 @@
 #define NORMAL_SHUTDOWN 1
 #define NO_SHUTDOWN 0
 #define ABNORMAL_SHUTDOWN -1
+#define TERMINATE_CURRENT_PHPPARSE 2
 
 #define PREPROCESS_NONE 0
 #define PREPROCESS_PREPROCESS 1
@@ -71,13 +72,14 @@ extern void php3_request_shutdown(void *dummy INLINE_TLS);
 extern void php3_request_shutdown_for_exec(void *dummy);
 extern int php3_module_startup(INLINE_TLS_VOID);
 extern void php3_module_shutdown(INLINE_TLS_VOID);
-extern void php3_module_shutdown_for_exec();
+extern void php3_module_shutdown_for_exec(void);
 
 extern int php3_get_lineno(int lineno);
 extern char *php3_get_filename(int lineno);
 
 #ifndef THREAD_SAFE
 extern int shutdown_requested;
+extern unsigned char header_is_being_sent;
 extern int initialized;
 #endif
 

@@ -9,7 +9,8 @@
    are availabe in the ntbind distribution */
 #define HAVE_BINDLIB 1
 
-
+/* set to enable bcmath */
+#define WITH_BCMATH 1
 /* should be added to runtime config*/
 #define PHP3_URL_FOPEN 1
 
@@ -53,6 +54,7 @@
 #define HAVE_SOLID 1
 #define HAVE_MYSQL 1
 #define HAVE_MSQL 1
+#define HAVE_MSSQL 1
 # define HAVE_ERRMSG_H 1 /*needed for mysql 3.21.17 and up*/
 #define HAVE_PGSQL 1
 #define HAVE_SYBASE 1
@@ -62,6 +64,7 @@
 /* Define if you have the gd library (-lgd).  */
 #define HAVE_LIBGD 1
 #define HAVE_LIBGD13 1
+#define HAVE_LIBTTF 1
 
 #else
 #define HAVE_SNMP 0

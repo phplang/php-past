@@ -29,7 +29,7 @@
  */
 
 
-/* $Id: control_structures_inline.h,v 1.172 1998/06/22 20:28:03 zeev Exp $ */
+/* $Id: control_structures_inline.h,v 1.184 1998/08/14 13:49:19 zeev Exp $ */
 
 #ifdef THREAD_SAFE
 #include "tls.h"
@@ -80,9 +80,9 @@ extern inline void cs_post_boolean_and(pval *result, pval *left_expr, pval *righ
 extern inline void cs_questionmark_op_pre_expr1(pval *truth_value INLINE_TLS);
 extern inline void cs_questionmark_op_pre_expr2(pval *truth_value INLINE_TLS);
 extern inline void cs_questionmark_op_post_expr2(pval *result, pval *truth_value, pval *expr1, pval *expr2 INLINE_TLS);
-extern inline void cs_functioncall_pre_variable_passing(pval *function_name, pval *class_ptr INLINE_TLS);
+extern inline void cs_functioncall_pre_variable_passing(pval *function_name, pval *class_ptr, unsigned char free_function_name INLINE_TLS);
 extern inline void cs_functioncall_post_variable_passing(pval *function_name, int *yychar INLINE_TLS);
-extern inline void cs_functioncall_end(pval *result, pval *function_name, pval *close_parentheses, int *yychar INLINE_TLS);
+extern inline void cs_functioncall_end(pval *result, pval *function_name, pval *close_parentheses, int *yychar, unsigned char free_function_name INLINE_TLS);
 extern inline void cs_switch_start(pval *switch_token, pval *expr INLINE_TLS);
 extern inline void cs_switch_case_pre(pval *case_expr INLINE_TLS);
 extern inline void cs_switch_case_post( INLINE_TLS_VOID);
@@ -445,7 +445,7 @@ inline void get_function_parameter(pval *varname, unsigned char type, pval *defa
 				yystype_destructor(default_value _INLINE_TLS);
 			}
 		}
-	} else {
+	} else if (!GLOBAL(php3_display_source)) {
 		switch(type) {
 			case BYREF_NONE:  /* passed by value */
 				break;
@@ -493,11 +493,8 @@ inline void pass_parameter_by_value(pval *expr INLINE_TLS)
 }
 
 
-inline void start_function_decleration( INLINE_TLS_VOID)
+inline void start_function_decleration(INLINE_TLS_VOID)
 {
-	if (GLOBAL(Execute)) {
-		GLOBAL(function_state).func_arg_types = NULL;
-	}	
 	stack_push(&GLOBAL(css), &GLOBAL(ExecuteFlag), sizeof(int));
 	GLOBAL(ExecuteFlag) = DONT_EXECUTE;
 	GLOBAL(Execute) = SHOULD_EXECUTE;
@@ -527,6 +524,7 @@ inline void end_function_decleration(pval *function_token, pval *function_name I
 		function_token->type = IS_USER_FUNCTION;
 		function_token->value.func.addr.statics = NULL;
 		function_token->value.func.arg_types = GLOBAL(function_state).func_arg_types;
+		GLOBAL(function_state).func_arg_types = NULL;
 		_php3_hash_update(target_symbol_table, function_name->value.str.val, function_name->value.str.len+1, function_token, sizeof(pval), NULL);
 	}
 }
@@ -655,14 +653,28 @@ inline void for_post_statement(pval *for_token, pval *first_semicolon, pval *sec
 inline void cs_return(pval *expr INLINE_TLS)
 {
 	if (GLOBAL(Execute)) {
-		if (expr) {
-			GLOBAL(return_value) = *expr;
+		if (GLOBAL(function_state).function_name) {
+			if (expr) {
+				GLOBAL(return_value) = *expr;
+			} else {
+				var_reset(&GLOBAL(return_value));
+			}
+			GLOBAL(function_state).returned = 1;
+			GLOBAL(ExecuteFlag) = DONT_EXECUTE;
+			GLOBAL(Execute) = SHOULD_EXECUTE;
 		} else {
-			var_reset(&GLOBAL(return_value));
+			int retval;
+			
+			if (end_current_file_execution(&retval) && retval==0) {
+				/* the scanner return 0, terminate execution completely (behave like exit()) */
+				php3_header();
+				GLOBAL(shutdown_requested) = ABNORMAL_SHUTDOWN;
+			}
+			if (expr) {
+				print_variable(expr);
+				yystype_destructor(expr);
+			}
 		}
-		GLOBAL(function_state).returned = 1;
-		GLOBAL(ExecuteFlag) = DONT_EXECUTE;
-		GLOBAL(Execute) = SHOULD_EXECUTE;
 	}
 }
 
@@ -803,7 +815,7 @@ inline void cs_questionmark_op_post_expr2(pval *result, pval *truth_value, pval 
 }
 
 
-inline void cs_functioncall_pre_variable_passing(pval *function_name, pval *class_ptr INLINE_TLS)
+inline void cs_functioncall_pre_variable_passing(pval *function_name, pval *class_ptr, unsigned char free_function_name INLINE_TLS)
 {
 	int minus_one = -1;
 	HashTable *target_symbol_table;	/* the symbol table in which the function would be searched */
@@ -813,11 +825,13 @@ inline void cs_functioncall_pre_variable_passing(pval *function_name, pval *clas
 	if (GLOBAL(Execute)) {
 		pval *data;
 		
-		if (class_ptr) {		/* use member function rather than global function */
+		if (class_ptr) {	/* use member function rather than global function */
 			object = (pval *) class_ptr->value.varptr.yystype;
 			
 			if (!object) {
-				yystype_destructor(function_name _INLINE_TLS);
+				if (free_function_name) {
+					yystype_destructor(function_name _INLINE_TLS);
+				}
 				php3_error(E_ERROR, "Member function used on a non-object");
 				return;
 			}
@@ -825,17 +839,15 @@ inline void cs_functioncall_pre_variable_passing(pval *function_name, pval *clas
 		}
 		if (function_name->type != IS_STRING) {
 			php3_error(E_ERROR, "Function names must be strings");
-			yystype_destructor(function_name _INLINE_TLS);
+			if (free_function_name) {
+				yystype_destructor(function_name _INLINE_TLS);
+			}
 			return;
 		}
 		php3_str_tolower(function_name->value.str.val, function_name->value.str.len);
 		if (_php3_hash_find(target_symbol_table, function_name->value.str.val, function_name->value.str.len+1, (void **) &data) == SUCCESS) {
 			if (!(data->type & VALID_FUNCTION)) {
-				if (data->type == IS_UNSUPPORTED_FUNCTION) {
-					php3_error(E_ERROR, "Function %s() is not supported in this compilation", function_name->value.str.val);
-				} else {
-					php3_error(E_ERROR, "Function call to a non-function (%s)", function_name->value.str.val);
-				}
+				php3_error(E_ERROR, "Function call to a non-function (%s)", function_name->value.str.val);
 				function_name->cs_data.function_call_type=0;
 				GLOBAL(function_state).symbol_table = NULL;
 				return;
@@ -871,7 +883,11 @@ inline void cs_functioncall_pre_variable_passing(pval *function_name, pval *clas
 				_php3_hash_pointer_update(GLOBAL(function_state).function_symbol_table, "GLOBALS", sizeof("GLOBALS"), (void *) &GLOBAL(globals));
 			}
 			if (object) {	/* push $this */
-				_php3_hash_pointer_update(GLOBAL(function_state).function_symbol_table, "this", sizeof("this"), (void *) object);
+				GLOBAL(function_state).object_pointer = (pval *) emalloc(sizeof(pval));
+				*(GLOBAL(function_state).object_pointer) = *object;
+				_php3_hash_pointer_update(GLOBAL(function_state).function_symbol_table, "this", sizeof("this"), (void *) GLOBAL(function_state).object_pointer);
+			} else {
+				GLOBAL(function_state).object_pointer = NULL;
 			}
 		} else {
 			php3_error(E_ERROR, "Call to unsupported or undefined function %s()", function_name->value.str.val);
@@ -889,6 +905,7 @@ inline void cs_functioncall_post_variable_passing(pval *function_name, int *yych
 {
 	if (function_name->cs_data.function_call_type) {
 		stack_push(&GLOBAL(css), &GLOBAL(ExecuteFlag), sizeof(int));
+
 
 		/* prepare a new function state */
 		GLOBAL(function_state).symbol_table = GLOBAL(function_state).function_symbol_table;
@@ -911,7 +928,7 @@ inline void cs_functioncall_post_variable_passing(pval *function_name, int *yych
 }
 
 
-inline void cs_functioncall_end(pval *result, pval *function_name, pval *close_parentheses, int *yychar INLINE_TLS)
+inline void cs_functioncall_end(pval *result, pval *function_name, pval *close_parentheses, int *yychar, unsigned char free_function_name INLINE_TLS)
 {
 	if (function_name->cs_data.function_call_type) {
 		FunctionState *fs_ptr;
@@ -923,28 +940,32 @@ inline void cs_functioncall_end(pval *result, pval *function_name, pval *close_p
 		}
 		
 		/* clean up */
-		_php3_hash_destroy(GLOBAL(function_state).symbol_table);
-		efree(GLOBAL(function_state).symbol_table);
-		yystype_destructor(function_name _INLINE_TLS);
+		if (GLOBAL(function_state).symbol_table) {
+			_php3_hash_destroy(GLOBAL(function_state).symbol_table);
+			efree(GLOBAL(function_state).symbol_table);
+		}
+		if (GLOBAL(function_state).object_pointer) {
+			efree(GLOBAL(function_state).object_pointer);
+		}
+		if (free_function_name) {
+			yystype_destructor(function_name _INLINE_TLS);
+		}
 		
 		while (stack_int_top(&GLOBAL(for_stack)) != -1) {  /* pop FOR stack */
 			stack_del_top(&GLOBAL(for_stack));
 		}
 		stack_del_top(&GLOBAL(for_stack));
 		
-	
 		/* jump back */
 		if (GLOBAL(function_state).function_type == IS_USER_FUNCTION) {
 			seek_token(&GLOBAL(token_cache_manager), close_parentheses->offset + 1, yychar);
 		}
-		
 		
 		/* get previous function state */
 		stack_top(&GLOBAL(function_state_stack), (void **) &fs_ptr);
 		GLOBAL(function_state) = *fs_ptr;
 		stack_del_top(&GLOBAL(function_state_stack));
 		GLOBAL(active_symbol_table) = GLOBAL(function_state).symbol_table;
-
 
 		/* restore execution state */
 		GLOBAL(ExecuteFlag) = stack_int_top(&GLOBAL(css));
@@ -1040,7 +1061,7 @@ inline void cs_start_class_decleration(pval *classname, pval *parent INLINE_TLS)
 		if (_php3_hash_exists(&GLOBAL(function_table), classname->value.str.val, classname->value.str.len+1)) {
 			php3_error(E_ERROR,"%s is already a function or class",classname->value.str.val);
 		}
-		if (parent) {
+		if (parent) { /* inheritance */
 			if (_php3_hash_find(&GLOBAL(function_table), parent->value.str.val, parent->value.str.len+1, (void **) &parent_ptr) == FAILURE) {
 				php3_error(E_ERROR, "Cannot extend non existant class %s", parent->value.str.val);
 				return;

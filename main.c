@@ -29,9 +29,13 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: main.c,v 1.449 1998/07/02 02:25:50 zeev Exp $ */
+/* $Id: main.c,v 1.462 1998/08/14 23:47:12 steffann Exp $ */
 
 /* #define CRASH_DETECTION */
+
+#define SHUTDOWN_DEBUG(resource) fprintf(stderr, "*** Shutting down " resource "\n" )
+#undef SHUTDOWN_DEBUG
+#define SHUTDOWN_DEBUG(resource)
 
 #ifdef THREAD_SAFE
 #include "tls.h"
@@ -100,6 +104,7 @@ int initialized;				/* keep track of which resources were successfully initializ
 static int module_initialized = 0;
 char *php3_ini_path = NULL;
 int shutdown_requested;
+unsigned char header_is_being_sent;
 unsigned int max_execution_time = 0;
 #if APACHE
 request_rec *php3_rqst = NULL;	/* request record pointer for apache module version */
@@ -130,6 +135,7 @@ php3_ini_structure php3_ini_master;
 void _php3_build_argv(char *);
 static void php3_timeout(int dummy);
 static void php3_set_timeout(long seconds INLINE_TLS);
+
 
 /* string destructor for hash */
 static void str_free(void **ptr)
@@ -262,7 +268,11 @@ PHPAPI int php3_printf(const char *format,...)
 	va_start(args, format);
 #if APACHE
 	if (GLOBAL(php3_rqst)) {
+#if USE_TRANSFER_TABLES
+		ret = charset_vbprintf(GLOBAL(php3_rqst)->connection->client, GLOBAL(php3_rqst), format, args);
+#else
 		ret = vbprintf(GLOBAL(php3_rqst)->connection->client, format, args);
+#endif
 	} else {
 		ret = vfprintf(stdout, format, args);
 	}
@@ -343,7 +353,13 @@ PHPAPI void php3_error(int type, const char *format,...)
 				if (!php3_header()) {
 					return;
 				}
+				if(php3_ini.error_prepend_string) {
+					PUTS(php3_ini.error_prepend_string);
+				}		
 				php3_printf("<br>\n<b>%s</b>:  %s in <b>%s</b> on line <b>%d</b><br>\n", error_type_str, buffer, filename, GLOBAL(current_lineno) % MAX_TOKENS_PER_CACHE);
+				if(php3_ini.error_append_string) {
+					PUTS(php3_ini.error_append_string);
+				}		
 			}
 		}
 	}
@@ -401,6 +417,9 @@ int phplex(pval *phplval)
 #endif
 
 	if (!GLOBAL(initialized) || GLOBAL(shutdown_requested)) {
+		if (GLOBAL(shutdown_requested)==TERMINATE_CURRENT_PHPPARSE) {
+			GLOBAL(shutdown_requested)=0;
+		}
 		return 0;
 	}
 #if APACHE
@@ -565,9 +584,11 @@ int php3_request_startup(INLINE_TLS_VOID)
 		GLOBAL(function_state.function_symbol_table) = NULL;
 		GLOBAL(function_state.function_name) = NULL;
 		GLOBAL(function_state.handler) = NULL;
+		GLOBAL(function_state.func_arg_types) = NULL;
 		GLOBAL(phplineno) = 1;
 		GLOBAL(error_reporting) = php3_ini.errors;
 		GLOBAL(shutdown_requested) = 0;
+		GLOBAL(header_is_being_sent) = 0;
 		GLOBAL(php3_track_vars) = php3_ini.track_vars;
 	}
 
@@ -679,7 +700,13 @@ void php3_request_shutdown(void *dummy INLINE_TLS)
 		log_error(log_message, php3_rqst->server);
 	}
 #endif
+
+	/* clean temporary dl's, run request shutdown's for modules */
+	SHUTDOWN_DEBUG("Dynamic modules");
+	_php3_hash_apply(&GLOBAL(module_registry), (int (*)(void *)) module_registry_cleanup);
+
 	if (GLOBAL(initialized) & INIT_SYMBOL_TABLE) {
+		SHUTDOWN_DEBUG("Symbol table");
 		_php3_hash_destroy(&GLOBAL(symbol_table));
 		GLOBAL(initialized) &= ~INIT_SYMBOL_TABLE;
 	}
@@ -687,23 +714,28 @@ void php3_request_shutdown(void *dummy INLINE_TLS)
 
 	/* remove classes and user-functions */
 	if (GLOBAL(module_initialized) & INIT_FUNCTION_TABLE) {
+		SHUTDOWN_DEBUG("Function table");
 		_php3_hash_apply(&GLOBAL(function_table), (int (*)(void *)) is_not_internal_function);
 	}
 	if (GLOBAL(initialized) & INIT_TOKEN_CACHE) {
+		SHUTDOWN_DEBUG("Token cache");
 		tcm_destroy(&GLOBAL(token_cache_manager));
 		GLOBAL(initialized) &= ~INIT_TOKEN_CACHE;
 	}
 	if (GLOBAL(initialized) & INIT_CSS) {
+		SHUTDOWN_DEBUG("Control Structures Stack");
 		stack_destroy(&GLOBAL(css));
 		GLOBAL(initialized) &= ~INIT_CSS;
 	}
 	if (GLOBAL(initialized) & INIT_FOR_STACK) {
+		SHUTDOWN_DEBUG("For stack");
 		stack_destroy(&GLOBAL(for_stack));
 		GLOBAL(initialized) &= ~INIT_FOR_STACK;
 	}
 	if (GLOBAL(initialized) & INIT_SWITCH_STACK) {
 		switch_expr *se;
 
+		SHUTDOWN_DEBUG("Switch stack");
 		while (stack_top(&GLOBAL(switch_stack), (void **) &se) != FAILURE) {
 			yystype_destructor(&se->expr _INLINE_TLS);
 			stack_del_top(&GLOBAL(switch_stack));
@@ -711,12 +743,15 @@ void php3_request_shutdown(void *dummy INLINE_TLS)
 		stack_destroy(&GLOBAL(switch_stack));
 		GLOBAL(initialized) &= ~INIT_SWITCH_STACK;
 	}
+
 	if (GLOBAL(initialized) & INIT_INCLUDE_STACK) {
+		SHUTDOWN_DEBUG("Input source stack");
 		clean_input_source_stack();
 	}
 	if (GLOBAL(initialized) & INIT_FUNCTION_STATE_STACK) {
 		FunctionState *tmp;
 
+		SHUTDOWN_DEBUG("Function state stack");
 		while (stack_top(&GLOBAL(function_state_stack), (void **) &tmp) != FAILURE) {
 			if (tmp->function_name) {
 				efree(tmp->function_name);
@@ -737,9 +772,11 @@ void php3_request_shutdown(void *dummy INLINE_TLS)
 		stack_destroy(&GLOBAL(function_state_stack));
 		GLOBAL(initialized) &= ~INIT_FUNCTION_STATE_STACK;
 	}
+	
 	if (GLOBAL(initialized) & INIT_VARIABLE_UNASSIGN_STACK) {
 		variable_tracker *tmp;
 
+		SHUTDOWN_DEBUG("Variable unassign stack");
 		while (stack_top(&GLOBAL(variable_unassign_stack), (void **) &tmp) != FAILURE) {
 			if (tmp->type == IS_STRING) {
 				STR_FREE(tmp->strval);
@@ -751,34 +788,36 @@ void php3_request_shutdown(void *dummy INLINE_TLS)
 	}
 
 	if (GLOBAL(initialized) & INIT_LIST) {
+		SHUTDOWN_DEBUG("Resource list");
 		destroy_resource_list();
 		GLOBAL(initialized) &= ~INIT_LIST;
 	}
 	
-	/* clean temporary dl's, run request shutdown's for modules */
-	_php3_hash_apply(&GLOBAL(module_registry), (int (*)(void *)) module_registry_cleanup);
 
 
 	if (GLOBAL(module_initialized) & INIT_CONSTANTS) {
 		/* clean temporary defined constants */
+		SHUTDOWN_DEBUG("Non persistent constants");
 		clean_non_persistent_constants();
 	}
 
-	/* do this after the above in case the modules need to access any
-	   of the request_info members */
 	if (GLOBAL(initialized) & INIT_REQUEST_INFO) {
+		SHUTDOWN_DEBUG("Request info");
 		php3_destroy_request_info((void *) &php3_ini);
 		GLOBAL(initialized) &= ~INIT_REQUEST_INFO;
 	}
 	if (GLOBAL(initialized) & INIT_INCLUDE_NAMES_HASH) {
+		SHUTDOWN_DEBUG("Include names hash");
 		_php3_hash_destroy(&GLOBAL(include_names));
 		GLOBAL(initialized) &= ~INIT_INCLUDE_NAMES_HASH;
 	}
 	if (GLOBAL(initialized) & INIT_SCANNER) {
+		SHUTDOWN_DEBUG("Scanner");
 		reset_scanner();
 		GLOBAL(initialized) &= ~INIT_SCANNER;
 	}
 	if (GLOBAL(initialized) & INIT_MEMORY_MANAGER) {
+		SHUTDOWN_DEBUG("Memory manager");
 		shutdown_memory_manager();
 	}
 	if (GLOBAL(initialized)) {
@@ -1007,6 +1046,18 @@ static int php3_config_ini_startup(INLINE_TLS_VOID)
 		if (cfg_get_string("gpc_order", &php3_ini.gpc_order) == FAILURE) {
 			php3_ini.gpc_order = "GPC";
 		}
+		if (cfg_get_string("error_prepend_string", &php3_ini.error_prepend_string) == FAILURE) {
+			php3_ini.error_prepend_string = NULL;
+		}
+		if (cfg_get_string("error_append_string", &php3_ini.error_append_string) == FAILURE) {
+			php3_ini.error_append_string = NULL;
+		}
+		if (cfg_get_string("open_basedir", &php3_ini.open_basedir) == FAILURE) {
+			php3_ini.open_basedir = NULL;
+		}
+		if (cfg_get_long("enable_dl", &php3_ini.enable_dl) == FAILURE) {
+			php3_ini.enable_dl = 1;
+		}
 		/* THREADX  Will have to look into this on windows
 		 * Make a master copy to use as a basis for every per-dir config.
 		 * Without two copies we would have a previous requst's per-dir
@@ -1110,7 +1161,7 @@ int php3_module_startup(INLINE_TLS_VOID)
 }
 
 
-void php3_module_shutdown_for_exec()
+void php3_module_shutdown_for_exec(void)
 {
 	/* used to close fd's in the range 3.255 here, but it's problematic */
 }
@@ -1374,22 +1425,8 @@ static void php3_parse(FILE * yyin INLINE_TLS)
 	int issock=0, socketd=0;;
 #endif
 
+	initialize_input_file_buffer(yyin);
 	if (php3_ini.auto_prepend_file && php3_ini.auto_prepend_file[0]) {
-#if 0
-		char *prepend = php3_ini.auto_prepend_file;
-		FILE *fp;
-		
-		fp = php3_fopen_wrapper(prepend, "r", USE_PATH | IGNORE_URL_WIN, &issock, &socketd);
-		if (fp) {
-			initialize_input_file_buffer(fp);
-			reset_scanner();
-			(void) phpparse();
-			fclose(fp);
-		} else {
-			if (php3_header())
-				php3_printf("Unable to open prepend file.\n");
-		}
-#else
 		pval tmp;
 		
 		tmp.value.str.val = php3_ini.auto_prepend_file;
@@ -1398,32 +1435,13 @@ static void php3_parse(FILE * yyin INLINE_TLS)
 		
 		include_file(&tmp,0);
 		(void) phpparse();
-#endif
 	}
 	/* Call Parser on the main input file */
-	initialize_input_file_buffer(yyin);
 	reset_scanner();
 	GLOBAL(phplineno) = original_lineno;
 	(void) phpparse();
 
 	if (php3_ini.auto_append_file && php3_ini.auto_append_file[0]) {
-#if 0
-		char *append = php3_ini.auto_append_file;
-		FILE *fa;
-
-		fa = php3_fopen_wrapper(append, "r", USE_PATH | IGNORE_URL_WIN, &issock, &socketd);
-		if (fa) {
-			fclose(phpin);		/* the auto-appended file will be phpin */
-			initialize_input_file_buffer(fa);
-			reset_scanner();
-			(void) phpparse();
-			/* fa is now phpin, and will be closed by clean_input_source_stack() */
-			/*fclose(fa); */
-		} else {
-			if (php3_header())
-				php3_printf("Unable to open append file.\n");
-		}
-#else
 		pval tmp;
 		
 		tmp.value.str.val = php3_ini.auto_append_file;
@@ -1432,7 +1450,6 @@ static void php3_parse(FILE * yyin INLINE_TLS)
 		
 		include_file(&tmp,0);
 		(void) phpparse();
-#endif
 	}
 }
 
@@ -1442,7 +1459,7 @@ void html_putc(char c)
 	TLS_VARS;
 	switch (c) {
 		case '\n':
-			PUTS("<br>\n");
+			PUTS("<br>");
 			break;
 		case '<':
 			PUTS("&lt;");
@@ -1454,11 +1471,11 @@ void html_putc(char c)
 			PUTS("&amp;");
 			break;
 		case ' ':
-			PUTS("&nbsp; ");
+			PUTS("&nbsp;");
 			break;
 		case '\t':
-			PUTS("&nbsp; &nbsp; &nbsp; &nbsp; ");
-			/* break missing intentionally */
+			PUTS("&nbsp;&nbsp;&nbsp;&nbsp;");
+			break;
 		default:
 			PUTC(c);
 			break;
@@ -1708,7 +1725,11 @@ any .htaccess restrictions anywhere on your site you can leave doc_root undefine
 		if (!php3_header())
 			exit(0);
 		PUTS("<html><head><title>Source for ");
-		PUTS(GLOBAL(request_info).filename);
+		if(GLOBAL(request_info).filename) {
+			PUTS(GLOBAL(request_info).filename);
+		} else {
+			PUTS("unknown");
+		}
 		PUTS("</title></head><body bgcolor=\"");
 		PUTS(php3_ini.highlight_bg);
 		PUTS("\" text=\"");

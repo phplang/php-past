@@ -27,7 +27,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: syslog.c,v 1.39 1998/05/15 10:57:39 zeev Exp $ */
+/* $Id: syslog.c,v 1.40 1998/07/28 22:00:16 rasmus Exp $ */
 #ifdef THREAD_SAFE
 #include "tls.h"
 #endif
@@ -52,7 +52,7 @@
 
 static int syslog_started;
 static char *syslog_device;
-static void start_syslog();
+static void start_syslog(void);
 
 int php3_minit_syslog(INIT_FUNC_ARGS)
 {

@@ -29,7 +29,7 @@
  */
 
 
-/* $Id: token_cache.c,v 1.85 1998/05/15 10:56:25 zeev Exp $ */
+/* $Id: token_cache.c,v 1.87 1998/07/28 22:00:05 rasmus Exp $ */
 
 #ifdef THREAD_SAFE
 #include "tls.h"
@@ -254,6 +254,24 @@ inline int tc_set_token(TokenCacheManager *tcm, int offset, int type)
 	tc->tokens[offset].token_type = type;
 
 	return SUCCESS;
+}
+
+
+inline int tc_get_token(TokenCacheManager *tcm, int offset)
+{
+	TokenCache *tc = &tcm->token_caches[offset / MAX_TOKENS_PER_CACHE];
+	
+	offset -= tcm->active * MAX_TOKENS_PER_CACHE;
+	if (offset < 0 || offset >= tc->count) {
+		return FAILURE;
+	}
+	return tc->tokens[offset].token_type;
+}
+
+
+int tc_get_current_offset(TokenCacheManager *tcm)
+{
+	return tcm->active * MAX_TOKENS_PER_CACHE + GLOBAL(tc)->pos;
 }
 
 
@@ -497,7 +515,7 @@ static int is_reserved_word(int token_type)
 }
 
 
-inline int last_token_suggests_variable_reference()
+inline int last_token_suggests_variable_reference(void)
 {
 	if (last_token_type=='$' || last_token_type==PHP_CLASS_OPERATOR) {
 		return 1;
@@ -505,3 +523,4 @@ inline int last_token_suggests_variable_reference()
 		return 0;
 	}
 }
+

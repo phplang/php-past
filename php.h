@@ -28,7 +28,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: php.h,v 1.26 1998/06/22 20:28:08 zeev Exp $ */
+/* $Id: php.h,v 1.32 1998/08/08 14:13:30 zeev Exp $ */
 
 #ifndef _PHP_H
 #define _PHP_H
@@ -182,8 +182,11 @@ extern char *strerror(int);
 # if HAVE_AP_CONFIG_H
 #include "ap_config.h"
 # endif
-# if HAVE_AP_COMPAT_H
+# if HAVE_OLD_COMPAT_H
 #include "compat.h"
+# endif
+# if HAVE_AP_COMPAT_H
+#include "ap_compat.h"
 # endif
 #include "httpd.h"
 #include "http_main.h"
@@ -320,11 +323,11 @@ extern PHPAPI int php3_fhttpd_write(char *a,int n);
 #define IS_ARRAY 0x8
 #define IS_USER_FUNCTION 0x10
 #define IS_INTERNAL_FUNCTION 0x20
-#define IS_UNSUPPORTED_FUNCTION 0x40
-#define IS_CLASS 0x80
-#define IS_OBJECT 0x100
-#define IS_NULL 0x200
-#define IS_BC 0x400
+#define IS_CLASS 0x40
+#define IS_OBJECT 0x80
+/* the following two are for the parser's internal use ONLY */
+#define IS_NULL 0x100
+#define IS_BC 0x200
 
 #define VALID_FUNCTION (IS_USER_FUNCTION|IS_INTERNAL_FUNCTION)
 #define IS_HASH (IS_ARRAY | IS_OBJECT)
@@ -372,6 +375,12 @@ typedef struct _pval_struct pval;
 
 #define INTERNAL_FUNCTION_PARAMETERS HashTable *ht, pval *return_value, HashTable *list, HashTable *plist
 #define INTERNAL_FUNCTION_PARAM_PASSTHRU ht, return_value, list, plist
+
+#define PHP_FUNCTION(name) void name(INTERNAL_FUNCTION_PARAMETERS)
+#define PHP3_FUNCTION(name) PHP_FUNCTION(php3_##name)
+
+#define PHP_FE(php_name, name, arg_types) { #php_name, name, arg_types },
+#define PHP3_FE(name, arg_types) { #name, php3_##name, arg_types },
 
 typedef union {
 	long lval;					/* long value */
@@ -428,6 +437,7 @@ typedef struct {
 	char *function_name;
 	unsigned short function_type;
 	void (*handler)(INTERNAL_FUNCTION_PARAMETERS);
+	pval *object_pointer;
 } FunctionState;
 
 
@@ -468,6 +478,7 @@ extern int include_file(pval *file,int display_source);
 extern int conditional_include_file(pval *file, pval *return_offset);
 extern void initialize_input_file_buffer(FILE *f);
 extern void eval_string(pval *str, pval *return_offset, int display_source);
+extern int end_current_file_execution(int *retval);
 #endif
 extern void clean_input_source_stack(void);
 extern int _php3_hash_environment(void);

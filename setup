@@ -29,7 +29,7 @@
 # |             Ariel Shkedi <ars@ziplink.net> or <as@altavista.net>     |
 # +----------------------------------------------------------------------+
 # 
-# $Id: setup,v 1.35 1998/07/02 16:43:24 ssb Exp $
+# $Id: setup,v 1.42 1998/08/10 18:07:38 jah Exp $
 
 if [ "$1" = "-q" ]; then
     quiet_mode=on
@@ -207,6 +207,11 @@ define_option with-apache 'Build as an Apache module?' yesnodir \
     The CGI version also enables Apache users to run different PHP3-enabled\n
     pages under different user-ids.'
 
+define_option with-mod_charset 'Enable transfer tables used by mod_charset?' yesno no \
+'    Whether to respect transfer tables used by mod_charset when PHP compiled\n
+    as Apache module. It is required to allow mod_charset (aka Russian Apache)\n
+    to work properly.'
+
 define_option with-fhttpd 'Build as an fhttpd module?' yesnodir \
     'no /usr/local/src/fhttpd fhttpd sources' \
 '    Whether to build PHP as fhttpd module.  If you are running\n
@@ -235,6 +240,11 @@ define_option with-iodbc 'iODBC support?' yesnodir \
     driver manager which runs under many flavors of UNIX.\n
     More info about iODBC can be found on the FreeODBC Pages at \n
     http://users.ids.net/~bjepson/freeODBC/.'
+
+define_option with-openlink 'OpenLink ODBC support?' yesnodir \
+    'no /usr/local/openlink OpenLink install' \
+'    Whether to build PHP with OpenLink ODBC support.  See
+     http://www.openlinksw.com/ for more information.'
 
 define_option with-adabas 'Adabas D support?' yesnodir \
     'no /usr/local Adabas D install root' \
@@ -273,9 +283,22 @@ define_option with-solid 'Solid support?' yesnodir \
 '     Whether to build PHP with Solid support.\n
      More information about Solid can be found at http://www.solidtech.com/.'
 
+define_option with-informix 'Informix support?' yesnodir \
+    "no $INFORMIXDIR Informix home" \
+'    Whether to build PHP with Informix support. If you have not set up your\n
+    Informix environment, enter what $INFORMIXDIR is usually set to here.\n
+    You MUST set $INFORMIXDIR before trying to compile!\n
+    More info about Informix can be found at http://www.informix.com/.'
+
 define_option with-ldap 'LDAP support?' yesnodir \
     'no /usr/local/ldap LDAP base install' \
 '     Whether to build with LDAP (Lightweight Directory Access Protocol)\n
+     support.\n
+     More information about LDAP can be found in RFC1777 and RFC1778.'
+
+define_option with-imap 'IMAP support?' yesnodir \
+    'no /usr/local/imap IMAP base install' \
+'     Whether to build with IMAP (Internet Message Access Protocol)\n
      support.\n
      More information about LDAP can be found in RFC1777 and RFC1778.'
 
@@ -309,6 +332,11 @@ define_option with-dbase 'dBase support? ' yesno no \
 
 define_option with-filepro 'filePro support? ' yesno no \
 '    Whether to use the bundled filePro library.  Read-access only.'
+
+define_option with-zlib 'zlib (>= 1.0.9) support? ' yesnodir \
+    'no /usr zlib install' \
+'    Whether to use the zlib support to read/write .gz-files.\n
+    Requires zlib version >= 1.0.9!'
 
 define_option with-config-file-path 'Default config directory?' yesnodir \
     'no /usr/local/lib Configuration file' \

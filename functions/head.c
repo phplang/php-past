@@ -26,7 +26,7 @@
    | Authors: Rasmus Lerdorf <rasmus@lerdorf.on.ca>                       |
    +----------------------------------------------------------------------+
  */
-/* $Id: head.c,v 1.104 1998/05/25 13:29:43 abelits Exp $ */
+/* $Id: head.c,v 1.106 1998/08/07 21:37:32 rasmus Exp $ */
 #ifdef THREAD_SAFE
 #include "tls.h"
 #endif
@@ -82,6 +82,8 @@ void php3_noheader(void)
 	GLOBAL(header_called) = 1;
 }
 
+
+/* Implementation of the language Header() function */
 void php3_Header(INTERNAL_FUNCTION_PARAMETERS)
 {
 	char *r;
@@ -93,6 +95,8 @@ void php3_Header(INTERNAL_FUNCTION_PARAMETERS)
 #endif
 	pval *arg1;
 TLS_VARS;
+
+
 
 	if (getParameters(ht, 1, &arg1) == FAILURE) {
 		WRONG_PARAM_COUNT;
@@ -119,7 +123,7 @@ TLS_VARS;
 				GLOBAL(php3_rqst)->content_type = pstrdup(GLOBAL(php3_rqst)->pool,r + 2);
 			else
 				GLOBAL(php3_rqst)->content_type = pstrdup(GLOBAL(php3_rqst)->pool,r + 1);
-			GLOBAL(cont_type) = GLOBAL(php3_rqst)->content_type;
+			GLOBAL(cont_type) = (char *)GLOBAL(php3_rqst)->content_type;
 		} else {
 			if (*(r + 1) == ' ')
 				rr = r + 2;
@@ -236,8 +240,15 @@ PHPAPI int php3_header(void)
 #endif
 TLS_VARS;
 
+	if (GLOBAL(header_is_being_sent)) {
+		return 0;
+	} else {
+		GLOBAL(header_is_being_sent) = 1;
+	}
+
 #if APACHE
 	if (!GLOBAL(php3_rqst)) {  /* we're not in a request, allow output */
+		GLOBAL(header_is_being_sent) = 0;
 		return 1;
 	}
 	if ((GLOBAL(php3_PrintHeader) && !GLOBAL(php3_HeaderPrinted)) || (GLOBAL(php3_PrintHeader) && GLOBAL(php3_HeaderPrinted) == 2)) {
@@ -312,6 +323,7 @@ TLS_VARS;
 		send_http_header(GLOBAL(php3_rqst));
 		if (GLOBAL(php3_rqst)->header_only) {
 			GLOBAL(shutdown_requested) = NORMAL_SHUTDOWN;
+			GLOBAL(header_is_being_sent) = 0;
 			return(0);
 		}
 	}
@@ -373,6 +385,7 @@ TLS_VARS;
 		GLOBAL(header_called) = 1;
 	}
 #endif
+	GLOBAL(header_is_being_sent) = 0;
 	return(1);
 }
 

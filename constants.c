@@ -78,7 +78,7 @@ void clean_module_constants(int module_number)
 	_php3_hash_apply_with_argument(&GLOBAL(php3_constants), (int (*)(void *,void *)) clean_module_constant, (void *) &module_number);
 }
 
-int php3_startup_constants()
+int php3_startup_constants(void)
 {
 	char *php3_os;
 #if WIN32|WINNT
@@ -109,12 +109,17 @@ int php3_startup_constants()
 	REGISTER_MAIN_LONG_CONSTANT("TRUE", 1L, CONST_PERSISTENT);
 	REGISTER_MAIN_STRINGL_CONSTANT("FALSE", "", 0, CONST_PERSISTENT);
 	REGISTER_MAIN_STRINGL_CONSTANT("PHP_OS", php3_os, strlen(php3_os), CONST_PERSISTENT | CONST_CS);
+	REGISTER_MAIN_LONG_CONSTANT("E_ERROR", E_ERROR, CONST_PERSISTENT | CONST_CS);
+	REGISTER_MAIN_LONG_CONSTANT("E_WARNING", E_WARNING, CONST_PERSISTENT | CONST_CS);
+	REGISTER_MAIN_LONG_CONSTANT("E_NOTICE", E_NOTICE, CONST_PERSISTENT | CONST_CS);
+	REGISTER_MAIN_LONG_CONSTANT("E_PARSE", E_PARSE, CONST_PERSISTENT | CONST_CS);
+	REGISTER_MAIN_LONG_CONSTANT("E_ALL", E_ALL, CONST_PERSISTENT | CONST_CS);
 		
 	return SUCCESS;
 }
 
 
-int php3_shutdown_constants()
+int php3_shutdown_constants(void)
 {
 	TLS_VARS;
 	_php3_hash_destroy(&GLOBAL(php3_constants));
@@ -122,7 +127,7 @@ int php3_shutdown_constants()
 }
 
 
-void clean_non_persistent_constants()
+void clean_non_persistent_constants(void)
 {
 	TLS_VARS;
 	_php3_hash_apply(&GLOBAL(php3_constants), (int (*)(void *)) clean_non_persistent_constant);

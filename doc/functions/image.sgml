@@ -734,35 +734,35 @@
        <tbody>
 	<row>
 	 <entry>0</entry>
-	 <entry>upper left corner, X position</entry>
-	</row>
-	<row>
-	 <entry>1</entry>
-	 <entry>upper left corner, Y position</entry>
-	</row>
-	<row>
-	 <entry>2</entry>
-	 <entry>upper right corner, X position</entry>
-	</row>
-	<row>
-	 <entry>3</entry>
-	 <entry>upper right corner, Y position</entry>
-	</row>
-	<row>
-	 <entry>4</entry>
-	 <entry>lower right corner, X position</entry>
-	</row>
-	<row>
-	 <entry>5</entry>
-	 <entry>lower right corner, Y position</entry>
-	</row>
-	<row>
-	 <entry>6</entry>
 	 <entry>lower left corner, X position</entry>
 	</row>
 	<row>
-	 <entry>7</entry>
+	 <entry>1</entry>
 	 <entry>lower left corner, Y position</entry>
+	</row>
+	<row>
+	 <entry>2</entry>
+	 <entry>lower right corner, X position</entry>
+	</row>
+	<row>
+	 <entry>3</entry>
+	 <entry>lower right corner, Y position</entry>
+	</row>
+	<row>
+	 <entry>4</entry>
+	 <entry>upper right corner, X position</entry>
+	</row>
+	<row>
+	 <entry>5</entry>
+	 <entry>upper right corner, Y position</entry>
+	</row>
+	<row>
+	 <entry>6</entry>
+	 <entry>upper left corner, X position</entry>
+	</row>
+	<row>
+	 <entry>7</entry>
+	 <entry>upper left corner, Y position</entry>
 	</row>
        </tbody>
       </tgroup>
@@ -818,6 +818,13 @@
      <parameter>fontfile</parameter> is the path to the TrueType font
      you wish to use.
     <para>
+     <parameter>text</parameter> is the text string which may include 
+	 UTF-8 character sequences (of the form:  &amp;#123; ) to access 
+	 characters in a font beyond the first 255.
+    <para>
+     <parameter>col</parameter> is the color index.  Using the negative
+	 of a color index has the effect of turning off antialiasing.
+    <para>
      <function>ImageTTFText</function> returns an array with 8
      elements representing four points making the bounding box of the
      text.  The order of the points is upper left, upper right, lower
@@ -835,7 +842,7 @@ Header("Content-type: image/gif");
 $im = imagecreate(400,30);
 $black = ImageColorAllocate($im, 0,0,0);
 $white = ImageColorAllocate($im, 255,255,255);
-ImageTTFText($im, 20, 0, 10, 20, $white, "/path/arial.ttf", "Testing...");
+ImageTTFText($im, 20, 0, 10, 20, $white, "/path/arial.ttf", "Testing... Omega: &amp;#937;");
 ImageGif($im);
 ImageDestroy($im);
 ?&gt;
@@ -914,6 +921,28 @@ ImageDestroy($im);
      Returns the index of the specified color in the palette of the image.
     <para>
      If the color does not exist in the image's palette, -1 is returned.
+    <para>
+     See also <function>imagecolorclosest</function>.
+   </refsect1>
+  </refentry>
+
+  <refentry id="function.imagecolorresolve">
+   <refnamediv>
+    <refname>ImageColorResolve</refname>
+    <refpurpose>get the index of the specified color or its closest possible alternative</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>imagecolorresolve</function></funcdef>
+     <paramdef>int <parameter>im</parameter></paramdef>
+     <paramdef>int <parameter>red</parameter></paramdef>
+     <paramdef>int <parameter>green</parameter></paramdef>
+     <paramdef>int <parameter>blue</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+     This function is guaranteed to return a color index for a requested color, either the exact color
+	 or the closest possible alternative.  
     <para>
      See also <function>imagecolorclosest</function>.
    </refsect1>

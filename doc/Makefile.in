@@ -26,7 +26,7 @@
 # +----------------------------------------------------------------------+
 
 #
-# $Id: Makefile.in,v 1.79 1998/05/17 22:03:19 sr Exp $
+# $Id: Makefile.in,v 1.80 1998/08/12 09:21:48 steinm Exp $
 #
 
 VPATH=@srcdir@
@@ -73,6 +73,7 @@ FUNCREF= \
 	functions/filepro.sgml \
 	functions/filesystem.sgml \
 	functions/http.sgml \
+	functions/hw.sgml \
 	functions/image.sgml \
 	functions/imap.sgml \
 	functions/ldap.sgml \

@@ -40,6 +40,44 @@
    <title>Some examples</title>
    <simpara></simpara>
 
+  <sect1 id="intro-history">
+   <title>A Brief History of PHP</title>
+   <simpara>
+    PHP was conceived sometime in the fall of 1994 by Rasmus Lerdorf.
+    Early non-released versions were used on his home page to keep track
+    of who was looking at his online resume.  The first version used
+    by others was available sometime in early 1995 and was known as
+    the Personal Home Page Tools.  It consisted of a very simplistic
+    parser engine that only understood a few special macros and a
+    number of utilities that were in common use on home pages back then.
+    A guestbook, a counter and some other stuff.  The parser was rewritten
+    in mid-1995 and named PHP/FI Version 2.  The FI came from another package
+    Rasmus had written which interpreted html form data.  He combined
+    the Personal Home Page tools scripts with the Form Interpreter and
+    added mSQL support and PHP/FI was born.  PHP/FI grew at an amazing
+    pace and people started contributing code to it.
+   </simpara>
+   <simpara>
+    It is hard to give any hard statistics, but it is estimated that
+    by late 1996 PHP/FI was in use on at least 15,000 web sites around
+    the world.  By mid-1997 this number had grown to over 50,000.
+    Mid-1997 also saw a change in the development of PHP.  It changed
+    from being Rasmus' own pet project that a handful of people had
+    contributed to, to being a much more organized team effort. The
+    parser was rewritten from scratch by Zeev Suraski and Andi Gutmans
+    and this new parser formed the basis for PHP Version 3.  A lot of
+    the utility code from PHP/FI was ported over to PHP3 and a lot of
+    it was completely rewritten.
+   </simpara>
+   <simpara>
+    Today (mid-1998) either PHP/FI or PHP3 ships with a number of
+    commercial products such as C2's StrongHold web server and RedHat
+    Linux and a conservative estimate based on an extrapolation from
+    numbers provided by NetCraft would be that PHP is in use on 150,000
+    sites around the world.  To put that in perspective, that is more
+    sites than run Netscape's flagship Enterprise server on the Internet.
+   </simpara>
+
  </chapter>
 
 <!-- Keep this comment at the end of the file

@@ -26,7 +26,7 @@
    | Authors: Rasmus Lerdorf <rasmus@lerdorf.on.ca>                       |
    +----------------------------------------------------------------------+
  */
-/* $Id: mod_php3.h,v 1.39 1998/05/09 23:17:37 rasmus Exp $ */
+/* $Id: mod_php3.h,v 1.43 1998/08/14 23:47:12 steffann Exp $ */
 
 #ifndef _MOD_PHP3_H
 #define _MOD_PHP3_H
@@ -84,6 +84,10 @@ typedef struct {
     char *gpc_order;
     long y2k_compliance;
     long define_syslog_variables;
+	char *error_prepend_string;
+	char *error_append_string;
+	char *open_basedir;
+	long enable_dl;
 } php3_ini_structure;
 
 #if MSVC5

@@ -11,6 +11,7 @@
 <!ENTITY chapter.expressions         SYSTEM "chapters/lang-expr.sgml">
 
 <!ENTITY reference.adabas            SYSTEM "functions/adabas.sgml">
+<!ENTITY reference.apache            SYSTEM "functions/apache.sgml">
 <!ENTITY reference.array             SYSTEM "functions/array.sgml">
 <!ENTITY reference.bc                SYSTEM "functions/bc.sgml">
 <!ENTITY reference.datetime          SYSTEM "functions/datetime.sgml">
@@ -23,6 +24,7 @@
 <!ENTITY reference.filepro           SYSTEM "functions/filepro.sgml">
 <!ENTITY reference.filesystem        SYSTEM "functions/filesystem.sgml">
 <!ENTITY reference.http              SYSTEM "functions/http.sgml">
+<!ENTITY reference.hw                SYSTEM "functions/hw.sgml">
 <!ENTITY reference.image             SYSTEM "functions/image.sgml">
 <!ENTITY reference.imap              SYSTEM "functions/imap.sgml">
 <!ENTITY reference.ldap              SYSTEM "functions/ldap.sgml">

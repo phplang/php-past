@@ -29,7 +29,7 @@
  */
 
 
-/* $Id: internal_functions.c,v 1.318 1998/06/22 20:28:04 zeev Exp $ */
+/* $Id: internal_functions.c,v 1.324 1998/08/12 09:21:40 steinm Exp $ */
 
 #ifdef THREAD_SAFE
 #include "tls.h"
@@ -46,6 +46,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#include "functions/php3_ifx.h"
 #include "functions/php3_ldap.h"
 #include "functions/php3_mysql.h"
 #include "functions/php3_bcmath.h"
@@ -62,7 +63,8 @@
 #include "functions/php3_sybase.h"
 #include "functions/php3_sybase-ct.h"
 #include "functions/reg.h"
-#include "functions/mail.h"
+#include "functions/php3_mail.h"
+#include "functions/imap.h"
 #include "functions/md5.h"
 #include "functions/php3_gd.h"
 #include "functions/html.h"
@@ -74,6 +76,7 @@
 #include "functions/adabasd.h"
 #include "functions/file.h"
 #include "functions/dbase.h"
+#include "functions/hw.h"
 #include "functions/filepro.h"
 #include "functions/db.h"
 #include "functions/php3_syslog.h"
@@ -84,6 +87,8 @@
 #include "functions/php3_unified_odbc.h"
 #include "dl/snmp/php3_snmp.h"
 #include "functions/php3_zlib.h"
+#include "functions/php3_COM.h"
+
 
 extern php3_ini_structure php3_ini;
 extern php3_ini_structure php3_ini_master;
@@ -113,13 +118,15 @@ php3_builtin_module php3_builtin_modules[] =
 	{"MySQL",						mysql_module_ptr},
 	{"mSQL",						msql_module_ptr},
 	{"PostgresSQL",					pgsql_module_ptr},
+	{"Informix",					ifx_module_ptr},
 	{"LDAP",						ldap_module_ptr},
-	{"Velocis",                                     velocis_module_ptr},
+	{"Velocis",						velocis_module_ptr},
 	{"FilePro",						filepro_module_ptr},
 	{"Sybase SQL",					sybase_module_ptr},
 	{"Sybase SQL - CT",				sybct_module_ptr},
 	{"Unified ODBC",				uodbc_module_ptr},
 	{"DBase",						dbase_module_ptr},
+	{"Hyperwave",					hw_module_ptr},
 	{"Regular Expressions",			regexp_module_ptr},
 	{"Solid",						solid_module_ptr},
 	{"Adabas",						adabas_module_ptr},
@@ -133,6 +140,8 @@ php3_builtin_module php3_builtin_modules[] =
 	{"SNMP",						snmp_module_ptr},
 	{"Pack/Unpack",					pack_module_ptr},
 	{"Zlib",						php3_zlib_module_ptr},
+	{"Win32 COM",					COM_module_ptr},
+	{"IMAP",						php3_imap_module_ptr},
 	{NULL,							NULL}
 };
 
@@ -277,6 +286,7 @@ inline PHPAPI int add_assoc_function(pval *arg, char *key,void (*function_ptr)(I
 	
 	tmp.type = IS_INTERNAL_FUNCTION;
 	tmp.value.func.addr.internal = function_ptr;
+	tmp.value.func.arg_types = NULL;
 	return _php3_hash_update(arg->value.ht, key, strlen(key)+1, (void *) &tmp, sizeof(pval), NULL);
 }
 
@@ -650,7 +660,7 @@ int module_registry_cleanup(php3_module_entry *module)
 
 
 /* return the next free module number */
-int _php3_next_free_module()
+int _php3_next_free_module(void)
 {
 	TLS_VARS;
 	return ++GLOBAL(module_count);

@@ -29,7 +29,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: gd.c,v 1.82 1998/07/02 17:52:48 ssb Exp $ */
+/* $Id: gd.c,v 1.90 1998/08/14 23:47:15 steffann Exp $ */
 
 /* gd 1.2 is copyright 1994, 1995, Quest Protein Database Center, 
    Cold Spring Harbor Labs. */
@@ -71,7 +71,9 @@
 #define M_PI 3.14159265358979323846
 #endif
 
+#if HAVE_LIBTTF
 static void php3_imagettftext_common(INTERNAL_FUNCTION_PARAMETERS, int);
+#endif
 
 #ifdef THREAD_SAFE
 DWORD GDlibTls;
@@ -102,6 +104,7 @@ function_entry gd_functions[] = {
 	{"imagecolorallocate",		php3_imagecolorallocate,	NULL},
 	{"imagecolorat",		php3_imagecolorat,		NULL},
 	{"imagecolorclosest",		php3_imagecolorclosest,		NULL},
+	{"imagecolorresolve",		php3_imagecolorresolve,		NULL},
 	{"imagecolorexact",			php3_imagecolorexact,		NULL},
 	{"imagecolorset",		php3_imagecolorset,		NULL},
 	{"imagecolortransparent",	php3_imagecolortransparent,	NULL},
@@ -202,13 +205,14 @@ int php3_minit_gd(INIT_FUNC_ARGS)
 }
 
 void php3_info_gd(void) {
+	/* need to use a PHPAPI function here because it is external module in windows */
 #if HAVE_LIBGD13
-	PUTS("Version 1.3");
+	php3_printf("Version 1.3");
 #else
-	PUTS("Version 1.2");
+	php3_printf("Version 1.2");
 #endif
 #if HAVE_LIBTTF
-	PUTS(" with FreeType support");
+	php3_printf(" with FreeType support");
 #endif
 }
 
@@ -230,6 +234,56 @@ int php3_mend_gd(void){
 #endif
 #endif
 	return SUCCESS;
+}
+
+/********************************************************************/
+/* gdImageColorResolve is a replacement for the old fragment:       */
+/*                                                                  */
+/*      if ((color=gdImageColorExact(im,R,G,B)) < 0)                */
+/*        if ((color=gdImageColorAllocate(im,R,G,B)) < 0)           */
+/*          color=gdImageColorClosest(im,R,G,B);                    */
+/*                                                                  */
+/* in a single function                                             */
+
+int
+gdImageColorResolve(gdImagePtr im, int r, int g, int b)
+{
+	int c;
+	int ct = -1;
+	int op = -1;
+	long rd, gd, bd, dist;
+	long mindist = 3*255*255;  /* init to max poss dist */
+
+	for (c = 0; c < im->colorsTotal; c++) {
+		if (im->open[c]) {
+			op = c;             /* Save open slot */
+			continue;           /* Color not in use */
+		}
+		rd = (long)(im->red  [c] - r);
+		gd = (long)(im->green[c] - g);
+		bd = (long)(im->blue [c] - b);
+		dist = rd * rd + gd * gd + bd * bd;
+		if (dist < mindist) {
+			if (dist == 0) {
+				return c;       /* Return exact match color */
+			}
+			mindist = dist;
+			ct = c;
+		}
+	}
+	/* no exact match.  We now know closest, but first try to allocate exact */
+	if (op == -1) {
+		op = im->colorsTotal;
+		if (op == gdMaxColors) {    /* No room for more colors */
+			return ct;          /* Return closest available color */
+		}
+		im->colorsTotal++;
+	}
+	im->red  [op] = r;
+	im->green[op] = g;
+	im->blue [op] = b;
+	im->open [op] = 0;
+	return op;                  /* Return newly allocated color */
 }
 
 void php3_free_gd_font(gdFontPtr fp)
@@ -489,6 +543,38 @@ void php3_imagecolorclosest(INTERNAL_FUNCTION_PARAMETERS) {
 	RETURN_LONG(col);
 }
 
+void php3_imagecolorresolve(INTERNAL_FUNCTION_PARAMETERS) {
+	pval *imgind, *red, *green, *blue;
+	int ind, ind_type;
+	int col;
+	int r, g, b;
+	gdImagePtr im;
+	GD_TLS_VARS;
+
+	if (ARG_COUNT(ht) != 4 || getParameters(ht, 4, &imgind, &red,
+											&green, &blue) == FAILURE) {
+		WRONG_PARAM_COUNT;
+	}
+	
+	convert_to_long(imgind);
+	convert_to_long(red);
+	convert_to_long(green);
+	convert_to_long(blue);
+	
+	ind = imgind->value.lval;
+	r = red->value.lval;
+	g = green->value.lval;
+	b = blue->value.lval;
+	
+	im = php3_list_find(ind, &ind_type);
+	if (!im || ind_type != GD_GLOBAL(le_gd)) {
+		php3_error(E_WARNING, "ImageColorResolve: Unable to find image pointer");
+		RETURN_FALSE;
+	}
+	col = gdImageColorResolve(im, r, g, b);
+	RETURN_LONG(col);
+}
+
 void php3_imagecolorexact(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *imgind, *red, *green, *blue;
 	int ind, ind_type;
@@ -615,7 +701,7 @@ void php3_imagegif (INTERNAL_FUNCTION_PARAMETERS) {
 	if (argc == 2) {
 		convert_to_string(file);
 		fn = file->value.str.val;
-		if (!fn || fn == empty_string) {
+		if (!fn || fn == empty_string || _php3_check_open_basedir(fn)) {
 			php3_error(E_WARNING, "ImageGif: Invalid filename");
 			RETURN_FALSE;
 		}
@@ -1435,7 +1521,6 @@ void php3_imagettftext_common(INTERNAL_FUNCTION_PARAMETERS, int mode)
 	unsigned char *string = NULL, *fontname = NULL;
 	int ind_type;
 	char				*error;
-	unsigned int        *str;
 
 	GD_TLS_VARS;
 
@@ -1454,8 +1539,7 @@ void php3_imagettftext_common(INTERNAL_FUNCTION_PARAMETERS, int mode)
 	convert_to_string(FONTNAME);
 	convert_to_string(C);
 	if (mode == TTFTEXT_BBOX) {
-		IM->type = IS_LONG;
-		IM->value.lval = -1;
+              im = NULL;
 		col = x = y = -1;
 	} else {
 		convert_to_long(X);
@@ -1465,6 +1549,11 @@ void php3_imagettftext_common(INTERNAL_FUNCTION_PARAMETERS, int mode)
 		col = COL->value.lval;
 		y = Y->value.lval;
 		x = X->value.lval;
+              im = php3_list_find(IM->value.lval, &ind_type);
+              if (!im || ind_type != GD_GLOBAL(le_gd)) {
+                      php3_error(E_WARNING, "Unable to find image pointer");
+                      RETURN_FALSE;
+              }
 	}
 
 	ptsize = PTSIZE->value.dval;
@@ -1474,30 +1563,7 @@ void php3_imagettftext_common(INTERNAL_FUNCTION_PARAMETERS, int mode)
 	l = strlen(string);
 	fontname = (unsigned char *) FONTNAME->value.str.val;
 
-	if (mode == TTFTEXT_BBOX) {
-		im = NULL;
-	} else {
-		im = php3_list_find(IM->value.lval, &ind_type);
-		if (!im || ind_type != GD_GLOBAL(le_gd)) {
-			php3_error(E_WARNING, "Unable to find image pointer");
-			RETURN_FALSE;
-		}
-	}
-
-	str = (int *)emalloc(l * sizeof(int));
-	if (!str) {
-		RETURN_FALSE;
-	}
-	
-	for (i = 0; i < l; i++) {
-		str[i] = (unsigned int)(string[i]);
-	}
-
-	error = gdttf(im, brect, col, fontname, ptsize, angle, x, y, str, l);
-
-	if (str) {
-		efree(str);
-	}
+	error = gdttf(im, brect, col, fontname, ptsize, angle, x, y, string);
 
 	if (error) {
 		php3_error(E_WARNING, error);

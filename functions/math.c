@@ -42,6 +42,8 @@
 #define M_PI 3.14159265358979323846
 #endif
 
+char *_php3_number_format(double, int, char ,char);
+
 void php3_abs(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *value;
 	TLS_VARS;

@@ -72,7 +72,7 @@ static int _display_module_info(php3_module_entry *module)
 	if (module->info_func) {
 		module->info_func();
 	} else {
-		PUTS("&nbsp;");
+		PUTS("No additional information.");
 	}
 	PUTS("</td></tr>\n");
 	return 0;
@@ -147,6 +147,7 @@ void _php3_info(void)
 	PHP3_CONF_STR("doc_root", php3_ini_master.doc_root, php3_ini.doc_root);
 	PHP3_CONF_STR("user_dir", php3_ini_master.user_dir, php3_ini.user_dir);
 	PHP3_CONF_LONG("safe_mode", php3_ini_master.safe_mode, php3_ini.safe_mode);
+	PHP3_CONF_STR("open_basedir", php3_ini_master.open_basedir, php3_ini.open_basedir);
 	PHP3_CONF_LONG("track_vars", php3_ini_master.track_vars, php3_ini.track_vars);
 	PHP3_CONF_STR("safe_mode_exec_dir", php3_ini_master.safe_mode_exec_dir, php3_ini.safe_mode_exec_dir);
 	PHP3_CONF_STR("cgi_ext", php3_ini_master.cgi_ext, php3_ini.cgi_ext);
@@ -156,6 +157,7 @@ void _php3_info(void)
 	PHP3_CONF_STR("auto_prepend_file", php3_ini_master.auto_prepend_file, php3_ini.auto_prepend_file);
 	PHP3_CONF_STR("auto_append_file", php3_ini_master.auto_append_file, php3_ini.auto_append_file);
 	PHP3_CONF_STR("upload_tmp_dir", php3_ini_master.upload_tmp_dir, php3_ini.upload_tmp_dir);
+	PHP3_CONF_LONG("enable_dl", php3_ini_master.enable_dl, php3_ini.enable_dl);
 	PHP3_CONF_STR("extension_dir", php3_ini_master.extension_dir, php3_ini.extension_dir);
 	PHP3_CONF_STR("arg_separator", php3_ini_master.arg_separator, php3_ini.arg_separator);
 	PHP3_CONF_LONG("short_open_tag", php3_ini_master.short_open_tag, php3_ini.short_open_tag);
@@ -202,6 +204,103 @@ void _php3_info(void)
 		efree(tmp1);
 	}
 	PUTS("</table>\n");
+
+	{
+		pval *data, *tmp;
+		char *string_key;
+		int int_key;
+
+		SECTION("PHP Variables");
+
+		PUTS("<table border=5 width=\"600\">\n");
+		PUTS("<tr><th bgcolor=\"" HEADER_COLOR "\">Variable</th><th bgcolor=\"" HEADER_COLOR "\">Value</th></tr>\n");
+		if (_php3_hash_find(GLOBAL(active_symbol_table), "PHP_SELF", sizeof("PHP_SELF"), (void **) &data) != FAILURE) {
+			PUTS("<tr><td bgcolor=\"" ENTRY_NAME_COLOR "\">");
+			PUTS("PHP_SELF");
+			PUTS("</td><td bgcolor=\"" CONTENTS_COLOR "\">");
+			PUTS(data->value.str.val);
+			PUTS("</td></tr>\n");
+		}
+		if (_php3_hash_find(GLOBAL(active_symbol_table), "PHP_AUTH_TYPE", sizeof("PHP_AUTH_TYPE"), (void **) &data) != FAILURE) {
+			PUTS("<tr><td bgcolor=\"" ENTRY_NAME_COLOR "\">");
+			PUTS("PHP_AUTH_TYPE");
+			PUTS("</td><td bgcolor=\"" CONTENTS_COLOR "\">");
+			PUTS(data->value.str.val);
+			PUTS("</td></tr>\n");
+		}
+		if (_php3_hash_find(GLOBAL(active_symbol_table), "PHP_AUTH_USER", sizeof("PHP_AUTH_USER"), (void **) &data) != FAILURE) {
+			PUTS("<tr><td bgcolor=\"" ENTRY_NAME_COLOR "\">");
+			PUTS("PHP_AUTH_USER");
+			PUTS("</td><td bgcolor=\"" CONTENTS_COLOR "\">");
+			PUTS(data->value.str.val);
+			PUTS("</td></tr>\n");
+		}
+		if (_php3_hash_find(GLOBAL(active_symbol_table), "PHP_AUTH_PW", sizeof("PHP_AUTH_PW"), (void **) &data) != FAILURE) {
+			PUTS("<tr><td bgcolor=\"" ENTRY_NAME_COLOR "\">");
+			PUTS("PHP_AUTH_PW");
+			PUTS("</td><td bgcolor=\"" CONTENTS_COLOR "\">");
+			PUTS(data->value.str.val);
+			PUTS("</td></tr>\n");
+		}
+		if (_php3_hash_find(GLOBAL(active_symbol_table), "HTTP_GET_VARS", sizeof("HTTP_GET_VARS"), (void **) &data) != FAILURE) {
+			_php3_hash_internal_pointer_reset(data->value.ht);
+			while (_php3_hash_get_current_data(data->value.ht, (void **) &tmp) == SUCCESS) {
+				convert_to_string(tmp);
+				PUTS("<tr><td bgcolor=\"" ENTRY_NAME_COLOR "\">HTTP_GET_VARS[\"");
+				switch (_php3_hash_get_current_key(data->value.ht, &string_key, &int_key)) {
+					case HASH_KEY_IS_STRING:
+						PUTS(string_key);
+						break;
+					case HASH_KEY_IS_INT:
+						php3_printf("%d",int_key);
+						break;
+				}
+				PUTS("\"]</td><td bgcolor=\"" CONTENTS_COLOR "\">");
+				PUTS(tmp->value.str.val); /* This could be "Array" - too ugly to expand that for now */
+				PUTS("</td></tr>\n");
+				_php3_hash_move_forward(data->value.ht);
+			}
+		}
+		if (_php3_hash_find(GLOBAL(active_symbol_table), "HTTP_POST_VARS", sizeof("HTTP_POST_VARS"), (void **) &data) != FAILURE) {
+			_php3_hash_internal_pointer_reset(data->value.ht);
+			while (_php3_hash_get_current_data(data->value.ht, (void **) &tmp) == SUCCESS) {
+				convert_to_string(tmp);
+				PUTS("<tr><td bgcolor=\"" ENTRY_NAME_COLOR "\">HTTP_POST_VARS[\"");
+				switch (_php3_hash_get_current_key(data->value.ht, &string_key, &int_key)) {
+					case HASH_KEY_IS_STRING:
+						PUTS(string_key);
+						break;
+					case HASH_KEY_IS_INT:
+						php3_printf("%d",int_key);
+						break;
+				}
+				PUTS("\"]</td><td bgcolor=\"" CONTENTS_COLOR "\">");
+				PUTS(tmp->value.str.val);
+				PUTS("</td></tr>\n");
+				_php3_hash_move_forward(data->value.ht);
+			}
+		}
+		if (_php3_hash_find(GLOBAL(active_symbol_table), "HTTP_COOKIE_VARS", sizeof("HTTP_COOKIE_VARS"), (void **) &data) != FAILURE) {
+			_php3_hash_internal_pointer_reset(data->value.ht);
+			while (_php3_hash_get_current_data(data->value.ht, (void **) &tmp) == SUCCESS) {
+				convert_to_string(tmp);
+				PUTS("<tr><td bgcolor=\"" ENTRY_NAME_COLOR "\">HTTP_COOKIE_VARS[\"");
+				switch (_php3_hash_get_current_key(data->value.ht, &string_key, &int_key)) {
+					case HASH_KEY_IS_STRING:
+						PUTS(string_key);
+						break;
+					case HASH_KEY_IS_INT:
+						php3_printf("%d",int_key);
+						break;
+				}
+				PUTS("\"]</td><td bgcolor=\"" CONTENTS_COLOR "\">");
+				PUTS(tmp->value.str.val);
+				PUTS("</td></tr>\n");
+				_php3_hash_move_forward(data->value.ht);
+			}
+		}
+		PUTS("</table>\n");
+	}
 
 #if APACHE
 	{

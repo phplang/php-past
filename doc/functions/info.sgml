@@ -406,6 +406,34 @@ putenv("UNIQID=$uniqid");
    </refsect1>
   </refentry>
 
+  <refentry id="function.set-time-limit">
+   <refnamediv>
+    <refname>set_time_limit</refname>
+    <refpurpose>limit the maximum execution time</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>void <function>set_time_limit</function></funcdef>
+     <paramdef>int <parameter>seconds</parameter></paramdef>
+    </funcsynopsis>
+    <simpara>
+     Set the number of seconds a script is allowed to run.  If this is
+     reached, the script returns a fatal error.  The default limit is 30
+     seconds or, if it exists, the max_execution_time value defined in
+     php3.ini.  If seconds is set to zero, no time limit is imposed.
+
+    <simpara>
+     When called, <function>set_time_limit</function> restarts the timeout
+     counter from zero. In other words, if the timeout is the default 30
+     seconds, and 25 seconds into script execution a call such as
+     set_time_limit( 20 ) is made, the script will run for a total of
+     45 seconds before timing out.
+
+   </refsect1>
+  </refentry>
+
+
 </reference>
 
 <!-- Keep this comment at the end of the file

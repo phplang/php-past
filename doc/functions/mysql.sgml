@@ -19,9 +19,13 @@
      Returns: The number of affected rows by the last query.
     <para> 
      <function>mysql_affected_rows</function> returns the number of
-     rows affected by the last insert, update or delete query on the
+     rows affected by the last INSERT, UPDATE or DELETE query on the
      server associated with the specified link identifier.  If the
      link identifier isn't specified, the last opened link is assumed.
+    <para>
+     This command is not effective for SELECT statements, only on
+     statements which modify records. To retrieve the number of rows
+     returned from a SELECT, use <function>mysql_num_rows</function>.
    </refsect1>
   </refentry>
 

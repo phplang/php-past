@@ -72,7 +72,7 @@
 #include "functions/pageinfo.h"
 #include "functions/uniqid.h"
 #include "functions/base64.h"
-#include "functions/mail.h"
+#include "functions/php3_mail.h"
 #if WIN32|WINNT
 #include "win32/unistd.h"
 #endif
@@ -82,7 +82,8 @@ static unsigned char third_and_fourth_args_force_ref[] = { 4, BYREF_NONE, BYREF_
 #if PHP_DEBUGGER
 extern int _php3_send_error(char *message, char *address);
 #endif
-
+static pval *user_compare_func_name;
+static HashTable *user_shutdown_function_names;
 
 
 function_entry basic_functions[] = {
@@ -99,6 +100,8 @@ function_entry basic_functions[] = {
 	{"arsort",		php3_arsort,				first_arg_force_ref},
 	{"sort",		php3_sort,					first_arg_force_ref},
 	{"rsort",		php3_rsort,					first_arg_force_ref},
+	{"usort",		php3_user_sort,				first_arg_force_ref},
+	{"array_walk",  php3_array_walk,			first_arg_force_ref},
 	{"sizeof",		php3_count,					first_arg_allow_ref},
 	{"count",		php3_count,					first_arg_allow_ref},
 	{"time",		php3_time,					NULL},
@@ -146,6 +149,9 @@ function_entry basic_functions[] = {
 	{"phpversion",	php3_version,				NULL},
 	{"strlen",		php3_strlen,				NULL},
 	{"strcmp",		php3_strcmp,				NULL},
+	{"strspn",		php3_strspn,				NULL},
+	{"strcspn",		php3_strcspn,				NULL},
+	{"strcasecmp",	php3_strcasecmp,			NULL},
 	{"strtok",		php3_strtok,				NULL},
 	{"strtoupper",	php3_strtoupper,			NULL},
 	{"strtolower",	php3_strtolower,			NULL},
@@ -168,6 +174,7 @@ function_entry basic_functions[] = {
 	{"rawurlencode",	php3_rawurlencode,		NULL},
 	{"rawurldecode",	php3_rawurldecode,		NULL},
 	{"ucfirst",		php3_ucfirst,				NULL},
+	{"ucwords",		php3_ucwords,				NULL},
 	{"strtr",		php3_strtr,					NULL},
 	{"sprintf",		php3_user_sprintf,			NULL},
 	{"printf",		php3_user_printf,			NULL},
@@ -260,6 +267,11 @@ function_entry basic_functions[] = {
 
 	{"leak",		php3_leak,					NULL},	
 	{"error_log",	php3_error_log,				NULL},	
+	{"call_user_func",	php3_call_user_func,	NULL},
+	{"call_user_method",	php3_call_user_method,	NULL},
+	
+	PHP3_FE(register_shutdown_function, NULL)
+	
 	{NULL, NULL, NULL}
 };
 
@@ -302,8 +314,11 @@ int php3_rinit_basic(INIT_FUNC_ARGS)
 		return FAILURE;
 	}
 #endif
+	user_compare_func_name=NULL;
+	user_shutdown_function_names=NULL;
 	return SUCCESS;
 }
+
 
 int php3_rshutdown_basic(void)
 {
@@ -312,6 +327,10 @@ int php3_rshutdown_basic(void)
 #if HAVE_PUTENV
 	_php3_hash_destroy(&putenv_ht);
 #endif
+	if (user_shutdown_function_names) {
+		_php3_hash_destroy(user_shutdown_function_names);
+		efree(user_shutdown_function_names);
+	}
 	return SUCCESS;
 }
 
@@ -354,7 +373,7 @@ void php3_getenv(INTERNAL_FUNCTION_PARAMETERS)
 
 	if (str->type == IS_STRING &&
 #if APACHE
-		((ptr = table_get(GLOBAL(php3_rqst)->subprocess_env, str->value.str.val)) || (ptr = getenv(str->value.str.val)))
+		((ptr = (char *)table_get(GLOBAL(php3_rqst)->subprocess_env, str->value.str.val)) || (ptr = getenv(str->value.str.val)))
 #endif
 #if CGI_BINARY
 		(ptr = getenv(str->value.str.val))
@@ -743,6 +762,55 @@ void php3_rsort(INTERNAL_FUNCTION_PARAMETERS)
 	RETURN_TRUE;
 }
 
+static pval *user_compare_func_name;
+
+static int array_user_compare(const void *a, const void *b)
+{
+	Bucket *f;
+	Bucket *s;
+	pval *args[2];
+	pval retval;
+
+	f = *((Bucket **) a);
+	s = *((Bucket **) b);
+
+	args[0] = (pval *) f->pData;
+	args[1] = (pval *) s->pData;
+
+	if (call_user_function(&GLOBAL(function_table), NULL, user_compare_func_name, &retval, 2, args)==SUCCESS) {
+		convert_to_long(&retval);
+		return retval.value.lval;
+	} else {
+		return 0;
+	}
+}
+
+
+void php3_user_sort(INTERNAL_FUNCTION_PARAMETERS)
+{
+	pval *array;
+	pval *old_compare_func;
+	TLS_VARS;
+
+	old_compare_func = user_compare_func_name;
+	if (ARG_COUNT(ht) != 2 || getParameters(ht, 2, &array, &user_compare_func_name) == FAILURE) {
+		user_compare_func_name = old_compare_func;
+		WRONG_PARAM_COUNT;
+	}
+	if (!(array->type & IS_HASH)) {
+		php3_error(E_WARNING, "Wrong datatype in usort() call");
+		user_compare_func_name = old_compare_func;
+		return;
+	}
+	convert_to_string(user_compare_func_name);
+	if (_php3_hash_sort(array->value.ht, array_user_compare, 1) == FAILURE) {
+		user_compare_func_name = old_compare_func;
+		return;
+	}
+	user_compare_func_name = old_compare_func;
+	RETURN_TRUE;
+}
+
 
 void array_end(INTERNAL_FUNCTION_PARAMETERS)
 {
@@ -1010,6 +1078,12 @@ void php3_gettype(INTERNAL_FUNCTION_PARAMETERS)
 		case IS_ARRAY:
 			RETVAL_STRING("array",1);
 			break;
+		case IS_USER_FUNCTION:
+			RETVAL_STRING("user function",1);
+			break;
+		case IS_INTERNAL_FUNCTION:
+			RETVAL_STRING("internal function",1);
+			break;
 		case IS_CLASS:
 			RETVAL_STRING("class",1);
 			break;
@@ -1118,6 +1192,39 @@ void php3_max(INTERNAL_FUNCTION_PARAMETERS)
 			yystype_copy_constructor(return_value);
 		}
 	}
+}
+
+static pval *php3_array_walk_func_name;
+
+static int _php3_array_walk(const void *a)
+{
+	pval *args[1];
+	pval retval;
+
+	args[0] = (pval *)a;
+	
+	call_user_function(&GLOBAL(function_table), NULL, php3_array_walk_func_name, &retval, 1, args);
+	return 0;
+}
+
+void php3_array_walk(INTERNAL_FUNCTION_PARAMETERS) {
+	pval *array, *old_walk_func_name;
+	TLS_VARS;
+
+	old_walk_func_name = php3_array_walk_func_name;
+	if (ARG_COUNT(ht) != 2 || getParameters(ht, 2, &array, &php3_array_walk_func_name) == FAILURE) {
+		php3_array_walk_func_name = old_walk_func_name;
+		WRONG_PARAM_COUNT;
+	}
+	if (!(array->type & IS_HASH)) {
+		php3_error(E_WARNING, "Wrong datatype in array_walk() call");
+		php3_array_walk_func_name = old_walk_func_name;
+		return;
+	}
+	convert_to_string(php3_array_walk_func_name);
+	_php3_hash_apply(array->value.ht, (int (*)(void *))_php3_array_walk);
+	php3_array_walk_func_name = old_walk_func_name;
+	RETURN_TRUE;
 }
 
 #if 0
@@ -1381,6 +1488,92 @@ PHPAPI int _php3_error_log(int opt_err,char *message,char *opt,char *headers){
 	return SUCCESS;
 }
 
+
+void php3_call_user_func(INTERNAL_FUNCTION_PARAMETERS)
+{
+	pval **params;
+	pval retval;
+	int arg_count=ARG_COUNT(ht);
+	
+	if (arg_count<1) {
+		WRONG_PARAM_COUNT;
+	}
+	params = (pval **) emalloc(sizeof(pval)*arg_count);
+	
+	if (getParametersArray(ht, arg_count, params)==FAILURE) {
+		efree(params);
+		RETURN_FALSE;
+	}
+	convert_to_string(params[0]);
+	if (call_user_function(&GLOBAL(function_table), NULL, params[0], &retval, arg_count-1, params+1)==SUCCESS) {
+		*return_value = retval;
+	} else {
+		php3_error(E_WARNING,"Unable to call %s() - function does not exist", params[0]->value.str.val);
+	}
+	efree(params);
+}
+
+
+void php3_call_user_method(INTERNAL_FUNCTION_PARAMETERS)
+{
+	pval **params;
+	pval retval;
+	int arg_count=ARG_COUNT(ht);
+	
+	if (arg_count<2) {
+		WRONG_PARAM_COUNT;
+	}
+	params = (pval **) emalloc(sizeof(pval)*arg_count);
+	
+	if (getParametersArray(ht, arg_count, params)==FAILURE) {
+		efree(params);
+		RETURN_FALSE;
+	}
+	if (params[1]->type != IS_OBJECT) {
+		php3_error(E_WARNING,"2nd argument is not an object\n");
+		efree(params);
+		RETURN_FALSE;
+	}
+	convert_to_string(params[0]);
+	if (call_user_function(&GLOBAL(function_table), params[1], params[0], &retval, arg_count-2, params+2)==SUCCESS) {
+		*return_value = retval;
+	} else {
+		php3_error(E_WARNING,"Unable to call %s() - function does not exist", params[0]->value.str.val);
+	}
+	efree(params);
+}
+
+
+void user_shutdown_function_dtor(pval *user_shutdown_function_name)
+{
+	pval retval;
+
+	if (call_user_function(&GLOBAL(function_table), NULL, user_shutdown_function_name, &retval, 0, NULL)==SUCCESS) {
+		yystype_destructor(&retval);
+	}
+	yystype_destructor(user_shutdown_function_name);
+}
+
+
+PHP3_FUNCTION(register_shutdown_function)
+{
+	pval *arg, shutdown_function_name;
+	
+	if (ARG_COUNT(ht)!=1 || getParameters(ht, 1, &arg)) {
+		WRONG_PARAM_COUNT;
+	}
+	
+	convert_to_string(arg);
+	if (!user_shutdown_function_names) {
+		user_shutdown_function_names = (HashTable *) emalloc(sizeof(HashTable));
+		_php3_hash_init(user_shutdown_function_names, 0, NULL, (void (*)(void *))user_shutdown_function_dtor, 0);
+	}
+	
+	shutdown_function_name = *arg;
+	yystype_copy_constructor(&shutdown_function_name);
+	
+	_php3_hash_next_index_insert(user_shutdown_function_names, &shutdown_function_name, sizeof(pval), NULL);
+}
 
 /*
  * Local variables:

@@ -199,7 +199,7 @@ int php3_init_request_info(void *conf)
 #if APACHE
 int php3_init_request_info(void *conf)
 {
-	char *buf;
+	const char *buf;
 	TLS_VARS;
 
 	GLOBAL(request_info).current_user = NULL;

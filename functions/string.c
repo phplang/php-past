@@ -30,7 +30,7 @@
  */
 
 
-/* $Id: string.c,v 1.129 1998/07/02 02:25:55 zeev Exp $ */
+/* $Id: string.c,v 1.134 1998/08/04 13:32:10 rasmus Exp $ */
 #ifdef THREAD_SAFE
 #include "tls.h"
 #endif
@@ -68,6 +68,44 @@ void php3_strcmp(INTERNAL_FUNCTION_PARAMETERS)
 	convert_to_string(s2);
 	RETURN_LONG(php3_binary_strcmp(s1,s2));
 }
+
+
+void php3_strcasecmp(INTERNAL_FUNCTION_PARAMETERS)
+{
+	pval *s1,*s2;
+	
+	if (ARG_COUNT(ht)!=2 || getParameters(ht, 2, &s1, &s2) == FAILURE) {
+		WRONG_PARAM_COUNT;
+	}
+	convert_to_string(s1);
+	convert_to_string(s2);
+	RETURN_LONG(strcasecmp(s1->value.str.val,s2->value.str.val));
+}
+
+void php3_strspn(INTERNAL_FUNCTION_PARAMETERS)
+{
+	pval *s1,*s2;
+	
+	if (ARG_COUNT(ht)!=2 || getParameters(ht, 2, &s1, &s2) == FAILURE) {
+		WRONG_PARAM_COUNT;
+	}
+	convert_to_string(s1);
+	convert_to_string(s2);
+	RETURN_LONG(strspn(s1->value.str.val,s2->value.str.val));
+}
+
+void php3_strcspn(INTERNAL_FUNCTION_PARAMETERS)
+{
+	pval *s1,*s2;
+	
+	if (ARG_COUNT(ht)!=2 || getParameters(ht, 2, &s1, &s2) == FAILURE) {
+		WRONG_PARAM_COUNT;
+	}
+	convert_to_string(s1);
+	convert_to_string(s2);
+	RETURN_LONG(strcspn(s1->value.str.val,s2->value.str.val));
+}
+
 
 void php3_chop(INTERNAL_FUNCTION_PARAMETERS)
 {
@@ -670,7 +708,6 @@ void php3_chr(INTERNAL_FUNCTION_PARAMETERS)
 void php3_ucfirst(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *arg;
-	TLS_VARS;
 	
 	if (ARG_COUNT(ht) != 1 || getParameters(ht, 1, &arg) == FAILURE) {
 		WRONG_PARAM_COUNT;
@@ -684,6 +721,29 @@ void php3_ucfirst(INTERNAL_FUNCTION_PARAMETERS)
 	RETVAL_STRING(arg->value.str.val,1);
 }
 
+void php3_ucwords(INTERNAL_FUNCTION_PARAMETERS)
+{
+	pval *arg;
+	char *r;
+	
+	if (ARG_COUNT(ht) != 1 || getParameters(ht, 1, &arg) == FAILURE) {
+		WRONG_PARAM_COUNT;
+	}
+	convert_to_string(arg);
+
+	if (!*arg->value.str.val) {
+		RETURN_FALSE;
+	}
+	*arg->value.str.val = toupper(*arg->value.str.val);
+	r=arg->value.str.val;
+	while((r=strstr(r," "))){
+		if(*(r+1)){
+			r++;
+			*r=toupper(*r);
+		}
+	}
+	RETVAL_STRING(arg->value.str.val,1);
+}
 
 void php3_strtr(INTERNAL_FUNCTION_PARAMETERS)
 {								/* strtr(STRING,FROM,TO) */
@@ -770,14 +830,19 @@ PHPAPI void _php3_stripslashes(char *string, int *len)
 	}
 	s = string;
 	t = string;
-	while (l > 0 && *t != '\0') {
+	while (l > 0) {
 		if (*t == escape_char) {
 			t++;				/* skip the slash */
 			if (len != NULL)
 				(*len)--;
 			l--;
-			if (l > 0 && *t != '\0') {
-				*s++ = *t++;	/* preserve the next character */
+			if (l > 0) {
+				if(*t=='0') {
+					*s++='\0';
+					t++;
+				} else {
+					*s++ = *t++;	/* preserve the next character */
+				}
 				l--;
 			}
 		} else {
@@ -824,6 +889,7 @@ void php3_stripslashes(INTERNAL_FUNCTION_PARAMETERS)
 }
 
 #ifndef HAVE_STRERROR
+#ifndef APACHE
 char *strerror(int errnum) {
 	extern int sys_nerr;
 	extern char *sys_errlist[];
@@ -835,6 +901,7 @@ char *strerror(int errnum) {
 	(void)sprintf(STATIC(str_ebuf), "Unknown error: %d", errnum);
 	return(STATIC(str_ebuf));
 }
+#endif
 #endif
 
 

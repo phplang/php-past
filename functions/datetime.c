@@ -30,7 +30,7 @@
  */
 
 
-/* $Id: datetime.c,v 1.40 1998/06/01 22:54:53 rasmus Exp $ */
+/* $Id: datetime.c,v 1.41 1998/07/11 21:10:40 ssb Exp $ */
 
 
 #ifdef THREAD_SAFE
@@ -347,15 +347,20 @@ void php3_gmdate(INTERNAL_FUNCTION_PARAMETERS)
 
 void php3_getdate(INTERNAL_FUNCTION_PARAMETERS)
 {
-	pval *timestamp;
+	pval *timestamp_arg;
 	struct tm *ta;
+	time_t timestamp;
 
-	if (ARG_COUNT(ht) != 1 || getParameters(ht, 1, &timestamp) == FAILURE) {
+	if (ARG_COUNT(ht) == 0) {
+		timestamp = time(NULL);
+	} else if (ARG_COUNT(ht) != 1 || getParameters(ht, 1, &timestamp_arg) == FAILURE) {
 		WRONG_PARAM_COUNT;
+	} else {
+		convert_to_long(timestamp_arg);
+		timestamp = timestamp_arg->value.lval;
 	}
-	convert_to_long(timestamp);
 
-	ta = localtime((time_t *) & timestamp->value.lval);
+	ta = localtime(&timestamp);
 	if (!ta) {
 		php3_error(E_WARNING, "Cannot perform date calculation");
 		return;
@@ -374,7 +379,7 @@ void php3_getdate(INTERNAL_FUNCTION_PARAMETERS)
 	add_assoc_long(return_value, "yday", ta->tm_yday);
 	add_assoc_string(return_value, "weekday", day_full_names[ta->tm_wday], 1);
 	add_assoc_string(return_value, "month", mon_full_names[ta->tm_mon], 1);
-	add_index_long(return_value, 0, timestamp->value.lval);
+	add_index_long(return_value, 0, timestamp);
 }
 
 /* Return date string in standard format for http headers */

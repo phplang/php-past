@@ -31,7 +31,7 @@
 */
 
 
-/* $Id: language-parser.y,v 1.159 1998/07/03 06:21:25 zeev Exp $ */
+/* $Id: language-parser.y,v 1.170 1998/08/08 14:13:28 zeev Exp $ */
 
 
 /* 
@@ -56,7 +56,7 @@ extern int phpleng;
 #include "php.h"
 #include "php3_list.h"
 #include "control_structures.h"
-#include "control_structures_inline.h"
+
 
 #include "main.h"
 #include "functions/head.h"
@@ -130,6 +130,9 @@ pval *array_ptr;
 
 extern int shutdown_requested;
 #endif /* THREAD SAFE*/
+
+#include "control_structures_inline.h"
+
 
 int init_resource_list(void)
 {
@@ -234,9 +237,9 @@ int clean_module_resource_destructors(list_destructors_entry *ld, int *module_nu
 %token CONTINUED_WHILE
 %token CONTINUED_DOWHILE
 %token CONTINUED_FOR
-
 %token OLD_FUNCTION
 %token FUNCTION
+%token IC_FUNCTION
 %token PHP_CONST
 %token RETURN
 %token INCLUDE
@@ -289,6 +292,7 @@ statement:
 			parameter_list '(' statement_list ')' ';' { end_function_decleration(&$1,&$2 _INLINE_TLS); }
 	|	FUNCTION STRING '(' { start_function_decleration(_INLINE_TLS_VOID); }
 			parameter_list ')' '{' statement_list '}' { end_function_decleration(&$1,&$2 _INLINE_TLS); }
+	|	IC_FUNCTION STRING { tc_set_token(&GLOBAL(token_cache_manager), $1.offset, FUNCTION); } '(' parameter_list ')' '{' statement_list '}' { if (!GLOBAL(shutdown_requested)) GLOBAL(shutdown_requested) = TERMINATE_CURRENT_PHPPARSE; }
 	|	RETURN ';'   { cs_return(NULL _INLINE_TLS); }
 	|	RETURN expr ';'   { cs_return(&$2 _INLINE_TLS); }
 	|	PHP_GLOBAL global_var_list
@@ -523,14 +527,18 @@ expr_without_variable:
 	|	expr '?' { cs_questionmark_op_pre_expr1(&$1 _INLINE_TLS); }
 			expr ':' { cs_questionmark_op_pre_expr2(&$1 _INLINE_TLS); }
 			expr { cs_questionmark_op_post_expr2(&$$,&$1,&$4,&$7 _INLINE_TLS); }
-	|	var { cs_functioncall_pre_variable_passing(&$1,NULL _INLINE_TLS); }
+	|	var { cs_functioncall_pre_variable_passing(&$1,NULL,1 _INLINE_TLS); }
 			'(' function_call_parameter_list ')' { cs_functioncall_post_variable_passing(&$1,&yychar _INLINE_TLS); }
-			possible_function_call { cs_functioncall_end(&$$,&$1,&$5,&yychar _INLINE_TLS);}
+			possible_function_call { cs_functioncall_end(&$$,&$1,&$5,&yychar,1 _INLINE_TLS);}
 	|	internal_functions_in_yacc
-	|	'$' unambiguous_class_name PHP_CLASS_OPERATOR var { cs_functioncall_pre_variable_passing(&$4,&$2 _INLINE_TLS); }
+	|	'$' unambiguous_class_name PHP_CLASS_OPERATOR var { cs_functioncall_pre_variable_passing(&$4,&$2,1 _INLINE_TLS); }
 			'(' function_call_parameter_list ')' { cs_functioncall_post_variable_passing(&$4,&yychar _INLINE_TLS); }
-			possible_function_call { cs_functioncall_end(&$$,&$4,&$8,&yychar _INLINE_TLS); }
-	|	NEW var		{ assign_new_object(&$$,&$2 _INLINE_TLS); }
+			possible_function_call { cs_functioncall_end(&$$,&$4,&$8,&yychar,1 _INLINE_TLS); }
+	|	NEW var { assign_new_object(&$$,&$2,1 _INLINE_TLS); }
+	|	NEW var	{ assign_new_object(&$$,&$2,0 _INLINE_TLS); }
+		'(' { if (!GLOBAL(shutdown_requested) && Execute) { pval object_pointer; object_pointer.value.varptr.yystype = &$3; cs_functioncall_pre_variable_passing(&$2, &object_pointer, 1 _INLINE_TLS); } }
+		function_call_parameter_list ')' { cs_functioncall_post_variable_passing(&$2, &yychar _INLINE_TLS); }
+		possible_function_call { cs_functioncall_end(&$$, &$2, &$7, &yychar, 1 _INLINE_TLS);  $$ = $3; }
 	|	INT_CAST expr { if (GLOBAL(Execute)) { convert_to_long(&$2); $$ = $2; } }
 	|	DOUBLE_CAST expr { if (GLOBAL(Execute)) { convert_to_double(&$2); $$ = $2; } }
 	|	STRING_CAST expr { if (GLOBAL(Execute)) { convert_to_string(&$2); $$ = $2; } }
@@ -546,7 +554,6 @@ expr_without_variable:
 	|	'`' encaps_list '`'  { cs_system(&$$,&$2 _INLINE_TLS); }
 	|	PHP_PRINT expr { if (GLOBAL(Execute)) { print_variable(&$2 _INLINE_TLS);  yystype_destructor(&$2 _INLINE_TLS);  $$.value.lval=1; $$.type=IS_LONG; } }
 ;
-
 
 scalar:
 		LNUMBER { if (GLOBAL(Execute)) $$ = $1; }
@@ -721,4 +728,52 @@ inline void clear_lookahead(int *yychar)
 		*yychar=YYEMPTY;
 	}
 }
+
+
+/*** Manhattan project ***/
+/* Be able to call user-levle functions from C */
+/* "A beer and serious lack of sleep do wonders" -- Zeev */
+int call_user_function(HashTable *function_table, pval *object, pval *function_name, pval *retval, int param_count, pval *params[])
+{
+	pval *func;
+	pval return_offset;
+	int i;
+	pval class_ptr;
+	int original_shutdown_requested=GLOBAL(shutdown_requested);
+
+	/* save the location to go back to */
+	return_offset.offset = tc_get_current_offset(&GLOBAL(token_cache_manager))-1;	
+		
+	if (object) {
+		function_table = object->value.ht;
+	}
+	php3_str_tolower(function_name->value.str.val, function_name->value.str.len);
+	if (_php3_hash_find(function_table, function_name->value.str.val, function_name->value.str.len+1, (void **) &func)==FAILURE
+		|| func->type != IS_USER_FUNCTION) {
+		return FAILURE;
+	}
 	
+	/* Do some magic... */
+	GLOBAL(ExecuteFlag) = EXECUTE;
+	GLOBAL(Execute) = SHOULD_EXECUTE;
+	GLOBAL(shutdown_requested) = 0;
+
+	tc_set_token(&token_cache_manager, func->offset, IC_FUNCTION);
+	if (object) {
+		class_ptr.value.varptr.yystype = object;
+		cs_functioncall_pre_variable_passing(function_name, &class_ptr, 0 _INLINE_TLS);
+	} else {
+		cs_functioncall_pre_variable_passing(function_name,NULL, 0 _INLINE_TLS);
+	}
+	for (i=0; i<param_count; i++) {
+		_php3_hash_next_index_pointer_insert(GLOBAL(function_state).function_symbol_table, params[i]);
+	}
+	cs_functioncall_post_variable_passing(function_name, NULL);
+	phpparse();
+	if (GLOBAL(shutdown_requested)) { /* we died during this function call */
+		return FAILURE;
+	}
+	GLOBAL(shutdown_requested) = original_shutdown_requested;
+	cs_functioncall_end(retval,function_name,&return_offset,NULL,0);
+	return SUCCESS;
+}

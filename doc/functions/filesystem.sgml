@@ -575,25 +575,6 @@ $file = dirname($path); // $file is set to "/etc"
    </refsect1>
   </refentry>
 
-
-  <refentry id="function.fileumask">
-   <refnamediv>
-    <refname>fileumask</refname>
-    <refpurpose>get file umask</refpurpose>
-   </refnamediv>
-   <refsect1>
-    <title>Description</title>
-    <funcsynopsis>
-     <funcdef>int <function>fileumask</function></funcdef>
-     <paramdef>int <parameter><optional>umask</optional></parameter></paramdef>
-    </funcsynopsis>
-<para>    Sets the umask to umask & 0777.
-  <para>    Returns the old umask.
-
-   </refsect1>
-  </refentry>
-
-
   <refentry id="function.fopen">
    <refnamediv>
     <refname>fopen</refname>
@@ -691,7 +672,9 @@ $fp = fopen( "http://www.php.net/", "r" );
     </funcsynopsis>
     <para>
      <function>fputs</function> is an alias to
-     <function>fwrite</function>, and is identical in every way.
+     <function>fwrite</function>, and is identical in every way.  Note that the 
+	 <parameter>length</parameter> parameter is optional and if not specified the
+	 entire string will be written.
 
    </refsect1>
   </refentry>

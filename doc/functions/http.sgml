@@ -8,39 +8,6 @@
 	remote browser right down to the HTTP protocol level.
   </partintro>
 
-  <refentry id="function.getallheaders">
-   <refnamediv>
-    <refname>getallheaders</refname>
-    <refpurpose>Fetch all HTTP request headers</refpurpose>
-   </refnamediv>
-   <refsect1>
-    <title>Description</title>
-    <funcsynopsis>
-     <funcdef>array <function>getallheaders</function></funcdef>
-     <void>
-    </funcsynopsis>
-    <para>
-     This function returns an associative array of all the HTTP headers in the 
-     current request.
-     <example>
-      <title>GetAllHeaders() Example</title>
-      <programlisting>
-$headers = getallheaders();
-while (list($header, $value) = each($headers)) {
-    echo "$header: $value&lt;br&gt;\n";
-}
-</programlisting></example>
-     This example will display all the request headers for the
-     current request.
-     <note>
-      <simpara>
-       <function>GetAllHeaders</function> is currently only supported
-       when PHP runs as an <productname>Apache</productname> module.
-      </simpara>
-     </note>
-   </refsect1>
-  </refentry>
-
   <refentry id="function.header">
    <refnamediv>
     <refname>header</refname>

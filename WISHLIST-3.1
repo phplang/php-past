@@ -1,4 +1,4 @@
-* Do yystype_ptr and hash pointers the right way - use the hash
+
   pointer and the bucket pointer, instead of a pointer to the data.
   Allows for a real unset() among other things.
 * Improve performance of simple variable lookups
@@ -50,3 +50,6 @@ V Make it possible to declare smarter user functions: (done in 3.0)
 * Support passing arguments to functions by name (e.g. foo(arg1 => "bar", arg2 => "foobar"))
 * Add an optional setting to destroy persistent resources if a PHP script terminates
   abnormally
+* COM automation support for Win32
+? Add a setting for making function names case sensitive
+* stat() files before feeding them to flex - it doesn't handle special files very well
