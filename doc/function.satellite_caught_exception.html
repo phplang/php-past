@@ -1,0 +1,268 @@
+<HTML
+><HEAD
+><TITLE
+>satellite_caught_exception</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Satellite CORBA client extension"
+HREF="ref.satellite.html"><LINK
+REL="PREVIOUS"
+TITLE="OrbitStruct"
+HREF="class.orbitstruct.html"><LINK
+REL="NEXT"
+TITLE="satellite_exception_id"
+HREF="function.satellite_exception_id.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="class.orbitstruct.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.satellite_exception_id.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.satellite_caught_exception"
+>satellite_caught_exception</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN33518"
+></A
+><P
+>    (PHP4 CVS only)</P
+>satellite_caught_exception&nbsp;--&nbsp;
+     See if an exception was caught from the previous function
+    </DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN33521"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN33523"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>bool 
+       <B
+CLASS="function"
+>satellite_caught_exception</B
+>
+      </CODE
+> ()</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     This function returns true if an exception has been caught.
+    </P
+><P
+>&#13;     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN33530"
+></A
+><P
+><B
+>Example 1. Sample IDL file</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;/* ++?????++ Out of Cheese Error. Redo From Start. */
+exception OutOfCheeseError {
+    int parameter;
+}
+
+interface AnotherInterface {
+    void AskWhy() raises (OutOfCheeseError);
+}
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+    </P
+><P
+>&#13;     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN33534"
+></A
+><P
+><B
+>Example 2. PHP code for handling CORBA exceptions</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;&#60;?php
+$obj = new OrbitObject ($ior);
+
+$obj-&#62;AskWhy();
+
+if (satellite_caught_exception()) {
+    if ("IDL:OutOfCheeseError:1.0" == satellite_exception_id()) {
+        $exception = satellite_exception_value();
+        echo $exception-&#62;parameter;
+    }
+}
+?&#62;
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="class.orbitstruct.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.satellite_exception_id.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>OrbitStruct</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.satellite.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>satellite_exception_id</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

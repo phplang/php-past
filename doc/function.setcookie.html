@@ -4,7 +4,7 @@
 >setcookie</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -12,7 +12,7 @@ REL="UP"
 TITLE="HTTP functions"
 HREF="ref.http.html"><LINK
 REL="PREVIOUS"
-TITLE="header_sent"
+TITLE="headers_sent"
 HREF="function.headers-sent.html"><LINK
 REL="NEXT"
 TITLE="Hyperwave functions"
@@ -74,7 +74,7 @@ NAME="function.setcookie"
 ><DIV
 CLASS="refnamediv"
 ><A
-NAME="AEN11833"
+NAME="AEN13201"
 ></A
 ><P
 >    (PHP3 , PHP4 )</P
@@ -82,12 +82,15 @@ NAME="AEN11833"
 ><DIV
 CLASS="refsect1"
 ><A
-NAME="AEN11836"
+NAME="AEN13204"
 ></A
 ><H2
 >Description</H2
 ><DIV
 CLASS="funcsynopsis"
+><A
+NAME="AEN13206"
+></A
 ><P
 ></P
 ><P
@@ -207,13 +210,13 @@ CLASS="parameter"
 >
     </P
 ><P
->&#13;     In PHP3, multiple calls to <B
+>&#13;     In PHP 3, multiple calls to <B
 CLASS="function"
 >setcookie()</B
 > in the same
      script will be performed in reverse order. If you are trying to
      delete one cookie before inserting another you should put the
-     insert before the delete. In PHP4, multiple calls to
+     insert before the delete. In PHP 4, multiple calls to
      <B
 CLASS="function"
 >setcookie()</B
@@ -231,6 +234,9 @@ CLASS="EXAMPLE"
 ><TD
 ><DIV
 CLASS="example"
+><A
+NAME="AEN13252"
+></A
 ><P
 ><B
 >Example 1. <B
@@ -271,6 +277,9 @@ CLASS="EXAMPLE"
 ><TD
 ><DIV
 CLASS="example"
+><A
+NAME="AEN13257"
+></A
 ><P
 ><B
 >Example 2. <B
@@ -287,8 +296,9 @@ WIDTH="100%"
 ><PRE
 CLASS="programlisting"
 >&#13;setcookie ("TestCookie");
-setcookie ("TestCookie", "", time());
-setcookie ("TestCookie", "", time(), "/~rasmus/", ".utoronto.ca", 1);
+// set the expiration date to one hour ago
+setcookie ("TestCookie", "", time() - 3600);
+setcookie ("TestCookie", "", time() - 3600, "/~rasmus/", ".utoronto.ca", 1);
       </PRE
 ></TD
 ></TR
@@ -298,7 +308,9 @@ setcookie ("TestCookie", "", time(), "/~rasmus/", ".utoronto.ca", 1);
 ></TR
 ></TABLE
 >
-    </P
+	 When deleting a cookie you should assure that the expiration date
+	 is in the past, to trigger the removal mechanism in your browser.
+	</P
 ><P
 >&#13;     Note that the value portion of the cookie will automatically be
      urlencoded when you send the cookie, and when it is received, it
@@ -307,6 +319,9 @@ setcookie ("TestCookie", "", time(), "/~rasmus/", ".utoronto.ca", 1);
      cookie in a script, simply use one of the following examples:
      <DIV
 CLASS="informalexample"
+><A
+NAME="AEN13262"
+></A
 ><P
 ></P
 ><TABLE
@@ -336,6 +351,9 @@ echo $HTTP_COOKIE_VARS["TestCookie"];
      name:
      <DIV
 CLASS="informalexample"
+><A
+NAME="AEN13265"
+></A
 ><P
 ></P
 ><TABLE
@@ -422,7 +440,7 @@ HREF="ref.hyperwave.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->header_sent</TD
+>headers_sent</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"

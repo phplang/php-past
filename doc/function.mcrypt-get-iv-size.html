@@ -4,7 +4,7 @@
 >mcrypt_get_iv_size</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -74,20 +74,23 @@ NAME="function.mcrypt-get-iv-size"
 ><DIV
 CLASS="refnamediv"
 ><A
-NAME="AEN20180"
+NAME="AEN21705"
 ></A
 ><P
->    (PHP4 CVS only)</P
+>    (PHP4 &#62;= 4.0.2)</P
 >mcrypt_get_iv_size&nbsp;--&nbsp;Returns the size of the IV belonging to a specific cipher/mode combination</DIV
 ><DIV
 CLASS="refsect1"
 ><A
-NAME="AEN20183"
+NAME="AEN21708"
 ></A
 ><H2
 >Description</H2
 ><DIV
 CLASS="funcsynopsis"
+><A
+NAME="AEN21710"
+></A
 ><P
 ></P
 ><P
@@ -101,15 +104,29 @@ CLASS="function"
 > (string cipher, string mode)</CODE
 ></P
 ><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int <B
+CLASS="function"
+>mcrypt_get_iv_size</B
+></CODE
+> (resource td)</CODE
+></P
+><P
 ></P
 ></DIV
+><P
+>&#13;     The first prototype is when linked against libmcrypt 2.2.x, the
+     second when linked against libmcrypt 2.4.x.
+    </P
 ><P
 >&#13;     <B
 CLASS="function"
 >Mcrypt_get_iv_size()</B
 > returns the size of
-     the Initialisation Vector (IV). On error the function returns
-     FALSE. If the IV is ignored in the specified cipher/mode
+     the Initialisation Vector (IV) in bytes. On error the function
+     returns FALSE. If the IV is ignored in the specified cipher/mode
      combination zero is returned.
     </P
 ><P
@@ -130,6 +147,14 @@ CLASS="parameter"
 > is one of the MCRYPT_MODE_modename
      constants of one of "ecb", "cbc", "cfb", "ofb", "nofb" or 
      "stream".
+    </P
+><P
+>&#13;     <TT
+CLASS="parameter"
+><I
+>Td</I
+></TT
+> is the algorithm specified.
     </P
 ></DIV
 ><DIV

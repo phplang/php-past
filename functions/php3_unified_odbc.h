@@ -29,7 +29,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: php3_unified_odbc.h,v 1.56 2000/01/01 04:44:10 sas Exp $ */
+/* $Id: php3_unified_odbc.h,v 1.57 2000/09/28 16:26:10 fmk Exp $ */
 
 #ifndef _UNIFIED_ODBC_H
 #define _UNIFIED_ODBC_H
@@ -377,6 +377,7 @@ extern UODBC_FUNCTION(rollback);
 extern void PHP3_UODBC_TRANSACT(INTERNAL_FUNCTION_PARAMETERS, int);
 extern UODBC_FUNCTION(binmode);
 extern UODBC_FUNCTION(longreadlen);
+extern UODBC_FUNCTION(tables);
 
 typedef struct UODBC_CONNECTION {
 #if HAVE_IBMDB2

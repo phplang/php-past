@@ -4,7 +4,7 @@
 >cpdf_curveto</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -74,7 +74,7 @@ NAME="function.cpdf-curveto"
 ><DIV
 CLASS="refnamediv"
 ><A
-NAME="AEN6916"
+NAME="AEN7805"
 ></A
 ><P
 >    (PHP3 &#62;= 3.0.8, PHP4 &#62;= 4.0b4)</P
@@ -82,12 +82,15 @@ NAME="AEN6916"
 ><DIV
 CLASS="refsect1"
 ><A
-NAME="AEN6919"
+NAME="AEN7808"
 ></A
 ><H2
 >Description</H2
 ><DIV
 CLASS="funcsynopsis"
+><A
+NAME="AEN7810"
+></A
 ><P
 ></P
 ><P
@@ -98,7 +101,7 @@ CLASS="FUNCDEF"
 CLASS="function"
 >cpdf_curveto</B
 ></CODE
-> (int pdf document, double x1, double y1, double x2, double y2, double x3, double y3, int mode)</CODE
+> (int pdf document, double x1, double y1, double x2, double y2, double x3, double y3 [, int mode])</CODE
 ></P
 ><P
 ></P
@@ -142,11 +145,19 @@ CLASS="parameter"
 >y2</I
 ></TT
 >) as control
-     points.</P
+     points.
+    </P
 ><P
->&#13;     The last optional parameter determines the unit length. If is 0 or omitted
-     the default unit as specified for the page is used. Otherwise the koodinates
-     are measured in postscript points disregarding the current unit.</P
+>&#13;     The optional parameter <TT
+CLASS="parameter"
+><I
+>mode</I
+></TT
+> determines the unit
+     length. If it's 0 or omitted the default unit as specified for the page is
+     used. Otherwise the coordinates are measured in postscript points
+     disregarding the current unit.
+    </P
 ><P
 >&#13;     See also <A
 HREF="function.cpdf-moveto.html"
@@ -175,7 +186,8 @@ HREF="function.cpdf-lineto.html"
 CLASS="function"
 >cpdf_lineto()</B
 ></A
->.</P
+>.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

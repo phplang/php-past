@@ -28,7 +28,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: html.c,v 1.36 2000/07/25 10:18:27 hholzgra Exp $ */
+/* $Id: html.c,v 1.37 2000/09/12 17:23:30 rasmus Exp $ */
 
 #include "php.h"
 #include "internal_functions.h"
@@ -65,7 +65,7 @@ static char EntTable[][7] =
 #define ASC(ch) os_toascii[(unsigned char)ch]
 #endif /* CHARSET_EBCDIC */
 
-PHPAPI char * _php3_htmlentities(char *s, int i, int all)
+PHPAPI char * _php3_htmlentities(char *s, int i, int all, int quote_style)
 {
 	int len, maxlen;
     unsigned char *old;
@@ -85,10 +85,10 @@ PHPAPI char * _php3_htmlentities(char *s, int i, int all)
 		if ('&' == *old) {
 			memcpy (new + len, "&amp;", 5);
 			len += 5;
-		} else if ('"' == *old) {
+		} else if ('"' == *old && !(quote_style&ENT_NOQUOTES)) {
 			memcpy (new + len, "&quot;", 6);
 			len += 6;
-		} else if (39 == *old) {
+		} else if (39 == *old && (quote_style&ENT_QUOTES)) {
 			/* single quote (') */
 			memcpy (new + len, "&#039;",6);
 			len += 6;		
@@ -114,22 +114,31 @@ PHPAPI char * _php3_htmlentities(char *s, int i, int all)
 
 static void _htmlentities(INTERNAL_FUNCTION_PARAMETERS, int all)
 {
-    pval *arg;
+    pval *arg, *quotes;
 	char *new;
+	int argc, quote_style;
 	TLS_VARS;
 
-    if (ARG_COUNT(ht) != 1 || getParameters(ht, 1, &arg) == FAILURE) {
+	argc = ARG_COUNT(ht);
+
+    if ((argc == 1 && getParameters(ht, 1, &arg) == FAILURE) ||
+		(argc == 2 && getParameters(ht, 2, &arg, &quotes) == FAILURE) ||
+		argc < 1 || argc > 2) {
 		WRONG_PARAM_COUNT;
     }
 
     convert_to_string(arg);
- 
-	new = _php3_htmlentities(arg->value.str.val, arg->value.str.len, all);
+	if(argc==2) {
+		convert_to_long(quotes);
+		quote_style = quotes->value.lval;	
+	} else quote_style = ENT_COMPAT;
+
+	new = _php3_htmlentities(arg->value.str.val, arg->value.str.len, all, quote_style);
 
 	RETVAL_STRINGL(new,strlen(new),0);
 }
 
-/* {{{ proto string htmlspecialchars(string string)
+/* {{{ proto string htmlspecialchars(string string [, int quote_style])
    Convert special characters to HTML entities */
 void php3_htmlspecialchars(INTERNAL_FUNCTION_PARAMETERS)
 {
@@ -138,7 +147,7 @@ void php3_htmlspecialchars(INTERNAL_FUNCTION_PARAMETERS)
 }
 /* }}} */
 
-/* {{{ proto string htmlentities(string string)
+/* {{{ proto string htmlentities(string string [, int quote_style])
    Convert all applicable characters to HTML entities */
 void php3_htmlentities(INTERNAL_FUNCTION_PARAMETERS)
 {

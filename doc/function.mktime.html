@@ -4,7 +4,7 @@
 >mktime</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -74,7 +74,7 @@ NAME="function.mktime"
 ><DIV
 CLASS="refnamediv"
 ><A
-NAME="AEN8511"
+NAME="AEN9417"
 ></A
 ><P
 >    (PHP3 , PHP4 )</P
@@ -82,12 +82,15 @@ NAME="AEN8511"
 ><DIV
 CLASS="refsect1"
 ><A
-NAME="AEN8514"
+NAME="AEN9420"
 ></A
 ><H2
 >Description</H2
 ><DIV
 CLASS="funcsynopsis"
+><A
+NAME="AEN9422"
+></A
 ><P
 ></P
 ><P
@@ -171,6 +174,9 @@ CLASS="EXAMPLE"
 ><TD
 ><DIV
 CLASS="example"
+><A
+NAME="AEN9452"
+></A
 ><P
 ><B
 >Example 1. <B
@@ -229,6 +235,9 @@ CLASS="EXAMPLE"
 ><TD
 ><DIV
 CLASS="example"
+><A
+NAME="AEN9459"
+></A
 ><P
 ><B
 >Example 2. Last day of next month</B
@@ -255,6 +264,11 @@ echo strftime ("Last day in Feb 2000 is: %d", $lastday);
 ></TR
 ></TABLE
 >
+    </P
+><P
+>&#13;    Date with year, month and day equal to zero is considered illegal 
+    (otherwise it what be regarded as 30.11.1999, which would be strange
+     behaviour).
     </P
 ><P
 >&#13;     See also <A

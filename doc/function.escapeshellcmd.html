@@ -4,7 +4,7 @@
 >escapeshellcmd</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -12,8 +12,8 @@ REL="UP"
 TITLE="Program Execution functions"
 HREF="ref.exec.html"><LINK
 REL="PREVIOUS"
-TITLE="Program Execution functions"
-HREF="ref.exec.html"><LINK
+TITLE="escapeshellarg"
+HREF="function.escapeshellarg.html"><LINK
 REL="NEXT"
 TITLE="exec"
 HREF="function.exec.html"><META
@@ -45,7 +45,7 @@ WIDTH="10%"
 ALIGN="left"
 VALIGN="bottom"
 ><A
-HREF="ref.exec.html"
+HREF="function.escapeshellarg.html"
 >Prev</A
 ></TD
 ><TD
@@ -74,7 +74,7 @@ NAME="function.escapeshellcmd"
 ><DIV
 CLASS="refnamediv"
 ><A
-NAME="AEN29928"
+NAME="AEN32012"
 ></A
 ><P
 >    (PHP3 , PHP4 )</P
@@ -82,12 +82,15 @@ NAME="AEN29928"
 ><DIV
 CLASS="refsect1"
 ><A
-NAME="AEN29931"
+NAME="AEN32015"
 ></A
 ><H2
 >Description</H2
 ><DIV
 CLASS="funcsynopsis"
+><A
+NAME="AEN32017"
+></A
 ><P
 ></P
 ><P
@@ -132,6 +135,9 @@ HREF="language.operators.execution.html"
 ><P
 >&#13;     <DIV
 CLASS="informalexample"
+><A
+NAME="AEN32029"
+></A
 ><P
 ></P
 ><TABLE
@@ -142,7 +148,10 @@ WIDTH="100%"
 ><TD
 ><PRE
 CLASS="programlisting"
->&#13;system(EscapeShellCmd($cmd))
+>&#13;$e = EscapeShellCmd($userinput);
+system("echo $e"); // here we don't care if $e has spaces
+$f = EscapeShellCmd($filename);
+system("touch \"/tmp/$f\"; ls -l \"/tmp/$f\""); // and here we do, so we use quotes
       </PRE
 ></TD
 ></TR
@@ -154,19 +163,25 @@ CLASS="programlisting"
     </P
 ><P
 >&#13;     See also <A
+HREF="function.escapeshellarg.html"
+><B
+CLASS="function"
+>escapeshellarg()</B
+></A
+>, <A
 HREF="function.exec.html"
 ><B
 CLASS="function"
 >exec()</B
 ></A
->, <A
+>, 
+	 <A
 HREF="function.popen.html"
 ><B
 CLASS="function"
 >popen()</B
 ></A
->,
-     <A
+>, <A
 HREF="function.system.html"
 ><B
 CLASS="function"
@@ -193,7 +208,7 @@ WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
 ><A
-HREF="ref.exec.html"
+HREF="function.escapeshellarg.html"
 >Prev</A
 ></TD
 ><TD
@@ -218,7 +233,7 @@ HREF="function.exec.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->Program Execution functions</TD
+>escapeshellarg</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"

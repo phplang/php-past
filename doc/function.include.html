@@ -4,7 +4,7 @@
 >include</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -155,6 +155,9 @@ CLASS="function"
     different files.
     <DIV
 CLASS="informalexample"
+><A
+NAME="AEN3649"
+></A
 ><P
 ></P
 ><TABLE
@@ -221,6 +224,9 @@ CLASS="function"
     inside a conditional block.
     <DIV
 CLASS="informalexample"
+><A
+NAME="AEN3658"
+></A
 ><P
 ></P
 ><TABLE
@@ -255,7 +261,7 @@ if ($condition) {
 >
    </P
 ><P
->&#13;    In both PHP3 and PHP4, it is possible to execute a
+>&#13;    In both PHP 3 and PHP 4, it is possible to execute a
     <TT
 CLASS="literal"
 >return</TT
@@ -269,7 +275,7 @@ CLASS="function"
 >ed file, in order to terminate
     processing in that file and return to the script which called
     it. Some differences in the way this works exist, however. The
-    first is that in PHP3, the <TT
+    first is that in PHP 3, the <TT
 CLASS="literal"
 >return</TT
 > may not
@@ -278,8 +284,8 @@ CLASS="literal"
 CLASS="literal"
 >return</TT
 > applies to that function and not the
-    whole file. In PHP4, however, this restriction does not
-    exist. Also, PHP4 allows you to return values from
+    whole file. In PHP 4, however, this restriction does not
+    exist. Also, PHP 4 allows you to return values from
     <A
 HREF="function.include.html"
 ><B
@@ -294,7 +300,7 @@ CLASS="function"
 >include()</B
 ></A
 > call as you would a normal
-    function. This generates a parse error in PHP3.
+    function. This generates a parse error in PHP 3.
    </P
 ><TABLE
 WIDTH="100%"
@@ -306,6 +312,9 @@ CLASS="EXAMPLE"
 ><TD
 ><DIV
 CLASS="example"
+><A
+NAME="AEN3667"
+></A
 ><P
 ><B
 >Example 11-1. <A
@@ -314,7 +323,7 @@ HREF="function.include.html"
 CLASS="function"
 >include()</B
 ></A
-> in PHP3 and PHP4</B
+> in PHP 3 and PHP 4</B
 ></P
 ><P
 >&#13;     Assume the existence of the following file (named
@@ -372,7 +381,7 @@ echo "File returned: '$retval'&#60;br&#62;\n";
 >&#13;     When <TT
 CLASS="filename"
 >main.html</TT
-> is called in PHP3, it will
+> is called in PHP 3, it will
      generate a parse error on line 2; you can't take the value of an
      <A
 HREF="function.include.html"
@@ -380,7 +389,7 @@ HREF="function.include.html"
 CLASS="function"
 >include()</B
 ></A
-> in PHP3. In PHP4, however, the
+> in PHP 3. In PHP 4, however, the
      result will be:
      <TABLE
 BORDER="0"
@@ -423,7 +432,7 @@ echo "Back in main.html&#60;br&#62;\n";
 >
     </P
 ><P
->&#13;     In PHP4, the output will be:
+>&#13;     In PHP 4, the output will be:
      <TABLE
 BORDER="0"
 BGCOLOR="#E0E0E0"
@@ -439,7 +448,7 @@ Back in main.html
 ></TR
 ></TABLE
 >
-     However, PHP3 will give the following output:
+     However, PHP 3 will give the following output:
      <TABLE
 BORDER="0"
 BGCOLOR="#E0E0E0"
@@ -486,7 +495,7 @@ CLASS="screen"
 >
     </P
 ><P
->&#13;     The spurious '27' is due to the fact that PHP3 does not support
+>&#13;     The spurious '27' is due to the fact that PHP 3 does not support
      <TT
 CLASS="literal"
 >return</TT
@@ -554,6 +563,9 @@ CLASS="function"
     the local script.
     <DIV
 CLASS="informalexample"
+><A
+NAME="AEN3700"
+></A
 ><P
 ></P
 ><TABLE

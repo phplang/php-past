@@ -4,7 +4,7 @@
 >is_subclass_of</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -12,11 +12,11 @@ REL="UP"
 TITLE="Class/Object Functions"
 HREF="ref.classobj.html"><LINK
 REL="PREVIOUS"
-TITLE="get_object_vars"
-HREF="function.get-object-vars.html"><LINK
+TITLE="get_parent_class"
+HREF="function.get-parent-class.html"><LINK
 REL="NEXT"
-TITLE="class_exists"
-HREF="function.class-exists.html"><META
+TITLE="method_exists"
+HREF="function.method-exists.html"><META
 NAME="HTTP_EQUIV"
 CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
@@ -45,7 +45,7 @@ WIDTH="10%"
 ALIGN="left"
 VALIGN="bottom"
 ><A
-HREF="function.get-object-vars.html"
+HREF="function.get-parent-class.html"
 >Prev</A
 ></TD
 ><TD
@@ -58,7 +58,7 @@ WIDTH="10%"
 ALIGN="right"
 VALIGN="bottom"
 ><A
-HREF="function.class-exists.html"
+HREF="function.method-exists.html"
 >Next</A
 ></TD
 ></TR
@@ -74,23 +74,26 @@ NAME="function.is-subclass-of"
 ><DIV
 CLASS="refnamediv"
 ><A
-NAME="AEN5934"
+NAME="AEN6860"
 ></A
 ><P
 >    (PHP4 &#62;= 4.0b4)</P
 >is_subclass_of&nbsp;--&nbsp;
-	 Determines if an object belongs to a subclass
-	 of the specified class
-	</DIV
+     Determines if an object belongs to a subclass
+     of the specified class
+    </DIV
 ><DIV
 CLASS="refsect1"
 ><A
-NAME="AEN5937"
+NAME="AEN6863"
 ></A
 ><H2
 >Description</H2
 ><DIV
 CLASS="funcsynopsis"
+><A
+NAME="AEN6865"
+></A
 ><P
 ></P
 ><P
@@ -113,8 +116,8 @@ CLASS="parameter"
 >obj</I
 ></TT
 >,
-	 belongs to a class which is a subclass of
-	 <TT
+     belongs to a class which is a subclass of
+     <TT
 CLASS="parameter"
 ><I
 >superclass</I
@@ -122,21 +125,21 @@ CLASS="parameter"
 >, false otherwise.
     </P
 ><P
->&#13;	 See also <A
+>&#13;     See also <A
 HREF="function.get-class.html"
 ><B
 CLASS="function"
 >get_class()</B
 ></A
 >,
-	 <A
+     <A
 HREF="function.get-parent-class.html"
 ><B
 CLASS="function"
 >get_parent_class()</B
 ></A
 >
-	</P
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -153,7 +156,7 @@ WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
 ><A
-HREF="function.get-object-vars.html"
+HREF="function.get-parent-class.html"
 >Prev</A
 ></TD
 ><TD
@@ -169,7 +172,7 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><A
-HREF="function.class-exists.html"
+HREF="function.method-exists.html"
 >Next</A
 ></TD
 ></TR
@@ -178,7 +181,7 @@ HREF="function.class-exists.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->get_object_vars</TD
+>get_parent_class</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"
@@ -191,7 +194,7 @@ HREF="ref.classobj.html"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->class_exists</TD
+>method_exists</TD
 ></TR
 ></TABLE
 ></DIV

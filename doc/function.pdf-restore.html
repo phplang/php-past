@@ -1,10 +1,10 @@
 <HTML
 ><HEAD
 ><TITLE
->PDF_restore</TITLE
+>pdf_restore</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -12,10 +12,10 @@ REL="UP"
 TITLE="PDF functions"
 HREF="ref.pdf.html"><LINK
 REL="PREVIOUS"
-TITLE="PDF_save"
+TITLE="pdf_save"
 HREF="function.pdf-save.html"><LINK
 REL="NEXT"
-TITLE="PDF_translate"
+TITLE="pdf_translate"
 HREF="function.pdf-translate.html"><META
 NAME="HTTP_EQUIV"
 CONTENT="text/html; charset=ISO-8859-1"></HEAD
@@ -69,25 +69,28 @@ WIDTH="100%"></DIV
 ><H1
 ><A
 NAME="function.pdf-restore"
->PDF_restore</A
+>pdf_restore</A
 ></H1
 ><DIV
 CLASS="refnamediv"
 ><A
-NAME="AEN26875"
+NAME="AEN28783"
 ></A
 ><P
 >    (PHP3 &#62;= 3.0.6, PHP4 )</P
->PDF_restore&nbsp;--&nbsp;Restores formerly saved environment</DIV
+>pdf_restore&nbsp;--&nbsp;Restores formerly saved environment</DIV
 ><DIV
 CLASS="refsect1"
 ><A
-NAME="AEN26878"
+NAME="AEN28786"
 ></A
 ><H2
 >Description</H2
 ><DIV
 CLASS="funcsynopsis"
+><A
+NAME="AEN28788"
+></A
 ><P
 ></P
 ><P
@@ -106,11 +109,14 @@ CLASS="function"
 ><P
 >&#13;     The <B
 CLASS="function"
->PDF_restore()</B
+>pdf_restore()</B
 > function restores the
-     environment saved with <B
+     environment saved with <A
+HREF="function.pdf-save.html"
+><B
 CLASS="function"
->PDF_save()</B
+>pdf_save()</B
+></A
 >. It works
      like the postscript command grestore.
 
@@ -124,6 +130,9 @@ CLASS="EXAMPLE"
 ><TD
 ><DIV
 CLASS="example"
+><A
+NAME="AEN28797"
+></A
 ><P
 ><B
 >Example 1. Save and Restore</B
@@ -136,9 +145,9 @@ WIDTH="100%"
 ><TD
 ><PRE
 CLASS="programlisting"
->&#13;&#60;?php PDF_save($pdf);
+>&#13;&#60;?php pdf_save($pdf);
 // do all kinds of rotations, transformations, ...
-PDF_restore($pdf) ?&#62;
+pdf_restore($pdf) ?&#62;
 </PRE
 ></TD
 ></TR
@@ -149,9 +158,12 @@ PDF_restore($pdf) ?&#62;
 ></TABLE
 ></P
 ><P
->&#13;     See also <B
+>&#13;     See also <A
+HREF="function.pdf-save.html"
+><B
 CLASS="function"
->PDF_save()</B
+>pdf_save()</B
+></A
 >.</P
 ></DIV
 ><DIV
@@ -194,7 +206,7 @@ HREF="function.pdf-translate.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->PDF_save</TD
+>pdf_save</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"
@@ -207,7 +219,7 @@ HREF="ref.pdf.html"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->PDF_translate</TD
+>pdf_translate</TD
 ></TR
 ></TABLE
 ></DIV

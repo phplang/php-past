@@ -4,7 +4,7 @@
 >Oracle 8 functions</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -12,8 +12,8 @@ REL="UP"
 TITLE="Function Reference"
 HREF="funcref.html"><LINK
 REL="PREVIOUS"
-TITLE="Ora_Rollback"
-HREF="function.ora-rollback.html"><LINK
+TITLE="odbc_statistics"
+HREF="function.odbc-statistics.html"><LINK
 REL="NEXT"
 TITLE="OCIDefineByName"
 HREF="function.ocidefinebyname.html"><META
@@ -45,7 +45,7 @@ WIDTH="10%"
 ALIGN="left"
 VALIGN="bottom"
 ><A
-HREF="function.ora-rollback.html"
+HREF="function.odbc-statistics.html"
 >Prev</A
 ></TD
 ><TD
@@ -79,18 +79,175 @@ CLASS="title"
 ><DIV
 CLASS="PARTINTRO"
 ><A
-NAME="AEN25628"
+NAME="AEN26734"
 ></A
 ><P
->&#13;    These functions allow you to access Oracle8 and Oracle7 databases. It
-    uses the Oracle8 Call-Interface (OCI8). You will need the Oracle8 client
-    libraries to use this extension.
+>&#13;    These functions allow you to access Oracle8 and Oracle7 databases.
+    It uses the Oracle8 Call-Interface (OCI8). You will need the Oracle8
+    client libraries to use this extension.
    </P
 ><P
 >&#13;    This extension is more flexible than the standard Oracle
     extension. It supports binding of global and local PHP variables
     to Oracle placeholders, has full LOB, FILE and ROWID support
     and allows you to use user-supplied define variables.
+   </P
+><P
+>&#13;    Before using this extension, make sure that you have set up your
+    oracle environment variables properly for the Oracle user, as well
+    as your web daemon user. The variables you might need to set are as
+    follows:
+    <P
+></P
+><UL
+><LI
+><P
+>&#13;       ORACLE_HOME
+      </P
+></LI
+><LI
+><P
+>&#13;       ORACLE_SID
+      </P
+></LI
+><LI
+><P
+>&#13;       LD_PRELOAD
+      </P
+></LI
+><LI
+><P
+>&#13;       LD_LIBRARY_PATH
+      </P
+></LI
+><LI
+><P
+>&#13;       NLS_LANG
+      </P
+></LI
+><LI
+><P
+>&#13;       ORA_NLS33
+      </P
+></LI
+></UL
+>
+   </P
+><P
+>&#13;    After setting up the environment variables for your webserver user,
+    be sure to also add the webserver user (nobody, www) to the oracle
+    group.
+   </P
+><P
+>&#13;    <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN26753"
+></A
+><P
+><B
+>Example 1. OCI Hints</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;&#60;?php
+// by sergo@bacup.ru
+
+// Use option: OCI_DEFAULT for execute command to delay execution
+OCIExecute($stmt, OCI_DEFAULT);
+
+// for retrieve data use (after fetch):
+
+$result = OCIResult($stmt, $n);
+if (is_object ($result)) $result = $result-&#62;load();
+
+// For INSERT or UPDATE statetment use:
+
+$sql = "insert into table (field1, field2) values (field1 = 'value',
+ field2 = empty_clob()) returning field2 into :field2";
+OCIParse($conn, $sql);
+$clob = OCINewDescriptor($conn, OCI_D_LOB);
+OCIBindByName ($stmt, ":field2", &#38;$clob, -1, OCI_B_CLOB);
+OCIExecute($stmt, OCI_DEFAULT);
+$clob-&#62;save ("some text");
+
+?&#62;
+     </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+   </P
+><P
+>&#13;    You can easily access stored procedures in the same way as you
+    would from the commands line.
+    <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN26757"
+></A
+><P
+><B
+>Example 2. Using Stored Procedures</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;&#60;?php
+// by webmaster@remoterealty.com
+$sth = OCIParse ( $dbh, "begin sp_newaddress( :address_id, '$firstname',
+ '$lastname', '$company', '$address1', '$address2', '$city', '$state',
+ '$postalcode', '$country', :error_code );end;" );
+
+// This calls stored procedure sp_newaddress, with :address_id being an
+// in/out variable and :error_code being an out variable. 
+// Then you do the binding:
+
+   OCIBindByName ( $sth, ":address_id", $addr_id, 10 );
+   OCIBindByName ( $sth, ":error_code", $errorcode, 10 );
+   OCIExecute ( $sth );
+
+?&#62;
+     </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
    </P
 ></DIV
 ><DIV
@@ -221,6 +378,11 @@ HREF="function.ocifreecursor.html"
 > &#8212; Free all resources associated with a cursor.</DT
 ><DT
 ><A
+HREF="function.ocifreedesc.html"
+>OCIFreeDesc</A
+> &#8212; Deletes a large object descriptor.</DT
+><DT
+><A
 HREF="function.ocicolumnname.html"
 >OCIColumnName</A
 > &#8212; Returns the name of a column.</DT
@@ -268,7 +430,7 @@ WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
 ><A
-HREF="function.ora-rollback.html"
+HREF="function.odbc-statistics.html"
 >Prev</A
 ></TD
 ><TD
@@ -293,7 +455,7 @@ HREF="function.ocidefinebyname.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->Ora_Rollback</TD
+>odbc_statistics</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"

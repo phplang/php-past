@@ -27,7 +27,7 @@
    +----------------------------------------------------------------------+
  */
  
-/* $Id: mysql.c,v 1.197 2000/07/04 16:52:19 rasmus Exp $ */
+/* $Id: mysql.c,v 1.198 2000/09/30 17:32:44 sas Exp $ */
 
 
 /* TODO:
@@ -481,7 +481,7 @@ static void php3_mysql_do_connect(INTERNAL_FUNCTION_PARAMETERS,int persistent)
 #else
 		if (mysql_connect(mysql,host,user,passwd)==NULL) {
 #endif
-				php3_error(E_WARNING,mysql_error(mysql));
+				php3_error(E_WARNING,"%s",mysql_error(mysql));
 				free(mysql);
 				efree(hashed_details);
 				RETURN_FALSE;
@@ -528,7 +528,7 @@ static void php3_mysql_do_connect(INTERNAL_FUNCTION_PARAMETERS,int persistent)
 #if MYSQL_VERSION_ID > 32302
 			else {
 				if(mysql_change_user((MYSQL *)le->ptr, user, passwd, NULL)!=0) {
-					php3_error(E_WARNING,mysql_error((MYSQL *)le->ptr));
+					php3_error(E_WARNING,"%s",mysql_error((MYSQL *)le->ptr));
 					efree(hashed_details);
 					RETURN_FALSE;
 				}

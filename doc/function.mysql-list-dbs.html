@@ -4,7 +4,7 @@
 >mysql_list_dbs</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -74,7 +74,7 @@ NAME="function.mysql-list-dbs"
 ><DIV
 CLASS="refnamediv"
 ><A
-NAME="AEN23216"
+NAME="AEN24584"
 ></A
 ><P
 >    (PHP3 , PHP4 )</P
@@ -84,12 +84,15 @@ NAME="AEN23216"
 ><DIV
 CLASS="refsect1"
 ><A
-NAME="AEN23219"
+NAME="AEN24587"
 ></A
 ><H2
 >Description</H2
 ><DIV
 CLASS="funcsynopsis"
+><A
+NAME="AEN24589"
+></A
 ><P
 ></P
 ><P
@@ -121,6 +124,100 @@ CLASS="function"
 > function to
      traverse this result pointer.
     </P
+><P
+>&#13;     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN24600"
+></A
+><P
+><B
+>Example 1. <B
+CLASS="function"
+>mysql_list_dbs()</B
+> example</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;$link = mysql_connect('localhost', 'myname', 'secret');
+$db_list = mysql_list_dbs($link);
+
+while ($row = mysql_fetch_object($db_list)) {
+  echo $row-&#62;Database . "\n";
+}
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+    </P
+><P
+>&#13;     The above example would produce the following output:
+     <DIV
+CLASS="informalexample"
+><A
+NAME="AEN24605"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;database1
+database2
+database3
+...
+      </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+>
+    </P
+><DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
+><P
+><B
+>Note: </B
+>
+      The above code would just as easily work with
+      <A
+HREF="function.mysql-fetch-row.html"
+><B
+CLASS="function"
+>mysql_fetch_row()</B
+></A
+> or other similar functions.
+     </P
+></BLOCKQUOTE
+></DIV
 ><P
 >&#13;     For downward compatibility <B
 CLASS="function"

@@ -4,7 +4,7 @@
 >ip2long</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -12,8 +12,8 @@ REL="UP"
 TITLE="Network Functions"
 HREF="ref.network.html"><LINK
 REL="PREVIOUS"
-TITLE="syslog"
-HREF="function.syslog.html"><LINK
+TITLE="getservbyport"
+HREF="function.getservbyport.html"><LINK
 REL="NEXT"
 TITLE="long2ip"
 HREF="function.long2ip.html"><META
@@ -45,7 +45,7 @@ WIDTH="10%"
 ALIGN="left"
 VALIGN="bottom"
 ><A
-HREF="function.syslog.html"
+HREF="function.getservbyport.html"
 >Prev</A
 ></TD
 ><TD
@@ -74,23 +74,26 @@ NAME="function.ip2long"
 ><DIV
 CLASS="refnamediv"
 ><A
-NAME="AEN23906"
+NAME="AEN25196"
 ></A
 ><P
 >    (PHP4 &#62;= 4.0RC1)</P
 >ip2long&nbsp;--&nbsp;
-	  Converts a string containing an (IPv4) Internet Protocol dotted address
-	  into a proper address.
-	</DIV
+      Converts a string containing an (IPv4) Internet Protocol dotted address
+      into a proper address.
+    </DIV
 ><DIV
 CLASS="refsect1"
 ><A
-NAME="AEN23909"
+NAME="AEN25199"
 ></A
 ><H2
 >Description</H2
 ><DIV
 CLASS="funcsynopsis"
+><A
+NAME="AEN25201"
+></A
 ><P
 ></P
 ><P
@@ -107,13 +110,13 @@ CLASS="function"
 ></P
 ></DIV
 ><P
->&#13;	 The function <B
+>&#13;     The function <B
 CLASS="function"
 >ip2long()</B
 > generates an IPv4 Internet
-	 network address from its Internet standard format (dotted string)
-	 representation.
-	 <TABLE
+     network address from its Internet standard format (dotted string)
+     representation.
+     <TABLE
 WIDTH="100%"
 BORDER="0"
 CELLPADDING="0"
@@ -123,6 +126,9 @@ CLASS="EXAMPLE"
 ><TD
 ><DIV
 CLASS="example"
+><A
+NAME="AEN25209"
+></A
 ><P
 ><B
 >Example 1. <B
@@ -144,7 +150,7 @@ $out = "The following URLs are equivalent:&#60;br&#62;\n";
 $out .= "http://www.php.net/, http://".$ip."/, and http://".ip2long($ip)."/&#60;br&#62;\n";
 echo $out;
 ?&#62;
-	 </PRE
+     </PRE
 ></TD
 ></TR
 ></TABLE
@@ -155,7 +161,7 @@ echo $out;
 >
     </P
 ><P
->&#13;	 See also: <A
+>&#13;     See also: <A
 HREF="function.long2ip.html"
 ><B
 CLASS="function"
@@ -179,7 +185,7 @@ WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
 ><A
-HREF="function.syslog.html"
+HREF="function.getservbyport.html"
 >Prev</A
 ></TD
 ><TD
@@ -204,7 +210,7 @@ HREF="function.long2ip.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->syslog</TD
+>getservbyport</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"

@@ -1,10 +1,10 @@
 <HTML
 ><HEAD
 ><TITLE
->PDF_get_parameter</TITLE
+>pdf_get_parameter</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -12,10 +12,10 @@ REL="UP"
 TITLE="PDF functions"
 HREF="ref.pdf.html"><LINK
 REL="PREVIOUS"
-TITLE="PDF_set_parameter"
+TITLE="pdf_set_parameter"
 HREF="function.pdf-set-parameter.html"><LINK
 REL="NEXT"
-TITLE="PDF_set_value"
+TITLE="pdf_set_value"
 HREF="function.pdf-set-value.html"><META
 NAME="HTTP_EQUIV"
 CONTENT="text/html; charset=ISO-8859-1"></HEAD
@@ -69,25 +69,28 @@ WIDTH="100%"></DIV
 ><H1
 ><A
 NAME="function.pdf-get-parameter"
->PDF_get_parameter</A
+>pdf_get_parameter</A
 ></H1
 ><DIV
 CLASS="refnamediv"
 ><A
-NAME="AEN26597"
+NAME="AEN28461"
 ></A
 ><P
 >    (PHP4 &#62;= 4.0.1)</P
->PDF_get_parameter&nbsp;--&nbsp;Gets certain parameters</DIV
+>pdf_get_parameter&nbsp;--&nbsp;Gets certain parameters</DIV
 ><DIV
 CLASS="refsect1"
 ><A
-NAME="AEN26600"
+NAME="AEN28464"
 ></A
 ><H2
 >Description</H2
 ><DIV
 CLASS="funcsynopsis"
+><A
+NAME="AEN28466"
+></A
 ><P
 ></P
 ><P
@@ -98,7 +101,7 @@ CLASS="FUNCDEF"
 CLASS="function"
 >pdf_get_parameter</B
 ></CODE
-> (int pdf document, string name, double modifier)</CODE
+> (int pdf document, string name [, double modifier])</CODE
 ></P
 ><P
 ></P
@@ -106,7 +109,7 @@ CLASS="function"
 ><P
 >&#13;     The <B
 CLASS="function"
->PDF_get_parameter()</B
+>pdf_get_parameter()</B
 > function gets several
      parameters of pdflib which are of the type string. The function parameter
      <TT
@@ -115,19 +118,28 @@ CLASS="parameter"
 >modifier</I
 ></TT
 > characterizes the parameter to get.
-     If the modifier is not needed it has to be 0.</P
+     If the modifier is not needed it has to be 0 or not passed at all.</P
 ><P
->&#13;     See also <B
+>&#13;     See also <A
+HREF="function.pdf-get-value.html"
+><B
 CLASS="function"
->PDF_get_value()</B
+>pdf_get_value()</B
+></A
 >,
-              <B
+              <A
+HREF="function.pdf-set-value.html"
+><B
 CLASS="function"
->PDF_set_value()</B
+>pdf_set_value()</B
+></A
 >,
-              <B
+              <A
+HREF="function.pdf-set-parameter.html"
+><B
 CLASS="function"
->PDF_set_parameter()</B
+>pdf_set_parameter()</B
+></A
 >.</P
 ></DIV
 ><DIV
@@ -170,7 +182,7 @@ HREF="function.pdf-set-value.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->PDF_set_parameter</TD
+>pdf_set_parameter</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"
@@ -183,7 +195,7 @@ HREF="ref.pdf.html"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->PDF_set_value</TD
+>pdf_set_value</TD
 ></TR
 ></TABLE
 ></DIV

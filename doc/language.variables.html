@@ -4,7 +4,7 @@
 >Variables</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -142,6 +142,9 @@ CLASS="note"
 ><P
 >&#13;    <DIV
 CLASS="informalexample"
+><A
+NAME="AEN2559"
+></A
 ><P
 ></P
 ><TABLE
@@ -170,7 +173,7 @@ $täyte = 'mansikka';    // valid; 'ä' is ASCII 228.
 >
    </P
 ><P
->&#13;    In PHP3, variables are always assigned by value. That is to say,
+>&#13;    In PHP 3, variables are always assigned by value. That is to say,
     when you assign an expression to a variable, the entire value of
     the original expression is copied into the destination
     variable. This means, for instance, that after assigning one
@@ -182,7 +185,7 @@ HREF="language.expressions.html"
 >.
    </P
 ><P
->&#13;    PHP4 offers another way to assign values to variables:
+>&#13;    PHP 4 offers another way to assign values to variables:
     <I
 CLASS="emphasis"
 >assign by reference</I
@@ -202,6 +205,9 @@ CLASS="emphasis"
 
     <DIV
 CLASS="informalexample"
+><A
+NAME="AEN2566"
+></A
 ><P
 ></P
 ><TABLE
@@ -214,7 +220,7 @@ WIDTH="100%"
 CLASS="programlisting"
 >&#13;&#60;?php
 $foo = 'Bob';              // Assign the value 'Bob' to $foo
-$bar = &#38;$foo;              // Reference $foo via $bar.
+$bar = &#38;$foo;          // Reference $foo via $bar.
 $bar = "My name is $bar";  // Alter $bar...
 echo $foo;                 // $foo is altered too.
 echo $bar;
@@ -233,6 +239,9 @@ echo $bar;
     assigned by reference.
     <DIV
 CLASS="informalexample"
+><A
+NAME="AEN2569"
+></A
 ><P
 ></P
 ><TABLE

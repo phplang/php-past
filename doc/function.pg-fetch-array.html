@@ -4,7 +4,7 @@
 >pg_fetch_array</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -74,7 +74,7 @@ NAME="function.pg-fetch-array"
 ><DIV
 CLASS="refnamediv"
 ><A
-NAME="AEN29350"
+NAME="AEN31347"
 ></A
 ><P
 >    (PHP3 &#62;= 3.0.1, PHP4 )</P
@@ -82,12 +82,15 @@ NAME="AEN29350"
 ><DIV
 CLASS="refsect1"
 ><A
-NAME="AEN29353"
+NAME="AEN31350"
 ></A
 ><H2
 >Description</H2
 ><DIV
 CLASS="funcsynopsis"
+><A
+NAME="AEN31352"
+></A
 ><P
 ></P
 ><P
@@ -190,6 +193,9 @@ CLASS="EXAMPLE"
 ><TD
 ><DIV
 CLASS="example"
+><A
+NAME="AEN31378"
+></A
 ><P
 ><B
 >Example 1. PostgreSQL fetch array</B
@@ -203,7 +209,7 @@ WIDTH="100%"
 ><PRE
 CLASS="programlisting"
 >&#13;&#60;?php 
-$conn = pg_pconnect ("", "", "", "", "publisher");
+$conn = pg_pconnect ("dbname=publisher");
 if (!$conn) {
     echo "An error occured.\n";
     exit;

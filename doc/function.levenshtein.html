@@ -4,7 +4,7 @@
 >levenshtein</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -74,7 +74,7 @@ NAME="function.levenshtein"
 ><DIV
 CLASS="refnamediv"
 ><A
-NAME="AEN33565"
+NAME="AEN36685"
 ></A
 ><P
 >    (PHP3 CVS only, PHP4 &#62;= 4.0.1)</P
@@ -84,12 +84,15 @@ NAME="AEN33565"
 ><DIV
 CLASS="refsect1"
 ><A
-NAME="AEN33568"
+NAME="AEN36688"
 ></A
 ><H2
 >Description</H2
 ><DIV
 CLASS="funcsynopsis"
+><A
+NAME="AEN36690"
+></A
 ><P
 ></P
 ><P
@@ -103,12 +106,34 @@ CLASS="function"
 > (string str1, string str2)</CODE
 ></P
 ><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int <B
+CLASS="function"
+>levenshtein</B
+></CODE
+> (string str1, string str2, int cost_ins, int cost_rep, int cost_del)</CODE
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int <B
+CLASS="function"
+>levenshtein</B
+></CODE
+> (string str1, string str2, function cost)</CODE
+></P
+><P
 ></P
 ></DIV
 ><P
->&#13;     This function return the Levenshtein-Distance between the two
-     argument strings or -1, if one of the argument strings is longer
-     than the limit of 255 characters.
+>&#13;		 This function returns the Levenshtein-Distance between the
+     two argument strings or -1, if one of the argument strings
+     is longer than the limit of 255 characters (255 should be
+		 more than enough for name or dictionary comparison, and 
+     nobody serious would be doing genetic analysis with PHP).
     </P
 ><P
 >&#13;     The Levenshtein distance is defined as the minimal number of
@@ -153,9 +178,96 @@ HREF="function.similar-text.html"
 CLASS="function"
 >similar_text()</B
 ></A
->, which is O(max(n,m)**3), but
-     still expensive).
+>, which is O(max(n,m)**3),
+     but still expensive).  
     </P
+><P
+>&#13;		 In its simpelest form the function will take only the two
+     strings as parameter and will calculate just the number of
+     insert, replace and delete operations needed to transform
+     <TT
+CLASS="parameter"
+><I
+>str1</I
+></TT
+> into <TT
+CLASS="parameter"
+><I
+>str2</I
+></TT
+>.
+    </P
+><P
+> 
+		 A second variant will take three additional parameters that
+		 define the cost of insert, replace and delete operations.
+     This is more general and adaptive than variant one, but not
+     as efficient.
+		</P
+><P
+>  
+		 The third variant (which is not implemented yet) will be
+		 the  most general and adaptive, but also the slowest alternative.
+		 It will call a user-supplied function that will determine the
+		 cost for every possible operation.
+		</P
+><P
+>&#13;		 The user-supplied function will be called with the following 
+     arguments:
+     <P
+></P
+><UL
+><LI
+><P
+>&#13;		 	  operation to apply: 'I', 'R' or 'D'
+       </P
+></LI
+><LI
+><P
+>&#13;		 	  actual character in string 1
+       </P
+></LI
+><LI
+><P
+>&#13;			  actual character in string 2
+       </P
+></LI
+><LI
+><P
+>&#13;			  position in string 1
+       </P
+></LI
+><LI
+><P
+>&#13;		 	  position in string 2
+       </P
+></LI
+><LI
+><P
+>&#13;			  remaining characters in string 1
+       </P
+></LI
+><LI
+><P
+>&#13;			  remaining characters in string 2
+       </P
+></LI
+></UL
+>
+		 The user-supplied function has to return a positive integer
+		 describing the cost for this particular operation, but it
+		 may decide to use only some of the supplied arguments.
+		</P
+><P
+> 
+		 The user-supplied function approach offers the possibility to
+		 take into account the relevance of and/or difference between 
+     certain symbols (characters) or even the context those symbols
+     appear in to determine the cost of insert, replace and delete 
+     operations, but at the cost of loosing all optimizations done
+     regarding cpu register utilization and cache misses that have
+     been worked into the other two variants. 
+		</P
 ><P
 >&#13;     See also <A
 HREF="function.soundex.html"
@@ -163,15 +275,15 @@ HREF="function.soundex.html"
 CLASS="function"
 >soundex()</B
 ></A
->,
+>, 
      <A
 HREF="function.similar-text.html"
 ><B
 CLASS="function"
 >similar_text()</B
 ></A
-> and
-     <A
+>
+		 and <A
 HREF="function.metaphone.html"
 ><B
 CLASS="function"

@@ -4,7 +4,7 @@
 >cpdf_place_inline_image</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -74,7 +74,7 @@ NAME="function.cpdf-place-inline-image"
 ><DIV
 CLASS="refnamediv"
 ><A
-NAME="AEN7445"
+NAME="AEN8347"
 ></A
 ><P
 >    (PHP3 &#62;= 3.0.9, PHP4 &#62;= 4.0b4)</P
@@ -82,12 +82,15 @@ NAME="AEN7445"
 ><DIV
 CLASS="refsect1"
 ><A
-NAME="AEN7448"
+NAME="AEN8350"
 ></A
 ><H2
 >Description</H2
 ><DIV
 CLASS="funcsynopsis"
+><A
+NAME="AEN8352"
+></A
 ><P
 ></P
 ><P
@@ -98,7 +101,8 @@ CLASS="FUNCDEF"
 CLASS="function"
 >cpdf_place_inline_image</B
 ></CODE
-> (int pdf document, int image, double x-koor, double y-koor, double angle, double width, double height, int mode)</CODE
+> (int pdf document, int image, double x-coor, double y-coor, double angle, double width, double height [, int 
+       mode])</CODE
 ></P
 ><P
 ></P
@@ -107,25 +111,33 @@ CLASS="function"
 >&#13;     The <B
 CLASS="function"
 >cpdf_place_inline_image()</B
-> function places an image
-     created with the php image functions on the page at postion
-     (<TT
+> function places
+     an image created with the php image functions on the page at
+     postion (<TT
 CLASS="parameter"
 ><I
->x-koor</I
+>x-coor</I
 ></TT
 >,
      <TT
 CLASS="parameter"
 ><I
->y-koor</I
+>y-coor</I
 ></TT
->). The image can be scaled at the same
-     time.</P
+>). The image can be scaled at the
+     same time.
+    </P
 ><P
->&#13;     The last optional parameter determines the unit length. If is 0 or omitted
-     the default unit as specified for the page is used. Otherwise the koodinates
-     are measured in postscript points disregarding the current unit.</P
+>&#13;     The optional parameter <TT
+CLASS="parameter"
+><I
+>mode</I
+></TT
+> determines the
+     unit length. If it's 0 or omitted the default unit as specified
+     for the page is used. Otherwise the coordinates are measured in
+     postscript points disregarding the current unit.
+    </P
 ><P
 >&#13;     See also <A
 HREF="function.cpdf-import-jpeg.html"
@@ -133,7 +145,8 @@ HREF="function.cpdf-import-jpeg.html"
 CLASS="function"
 >cpdf_import_jpeg()</B
 ></A
->,</P
+>.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

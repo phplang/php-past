@@ -4,7 +4,7 @@
 >Variables from outside PHP</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -85,7 +85,32 @@ NAME="language.variables.external.form"
 ><P
 >&#13;     When a form is submitted to a PHP script, any variables from that
      form will be automatically made available to the script by
-     PHP. For instance, consider the following form:
+     PHP. If the <A
+HREF="configuration.html#ini.track-vars"
+>track_vars</A
+>
+     configuration option is turned on, then these variables will be
+     located in the associative arrays
+     <TT
+CLASS="varname"
+>$HTTP_POST_VARS</TT
+>,
+     <TT
+CLASS="varname"
+>$HTTP_GET_VARS</TT
+>, and/or
+     <TT
+CLASS="varname"
+>$HTTP_POST_FILES</TT
+>, according to the
+     source of the variable in question.
+    </P
+><P
+>&#13;     For more information on these variables, please read <A
+HREF="language.variables.predefined.html"
+>Predefined
+     variables</A
+>.
     </P
 ><P
 >&#13;     <TABLE
@@ -98,6 +123,9 @@ CLASS="EXAMPLE"
 ><TD
 ><DIV
 CLASS="example"
+><A
+NAME="AEN2830"
+></A
 ><P
 ><B
 >Example 7-1. Simple form variable</B
@@ -110,8 +138,8 @@ WIDTH="100%"
 ><TD
 ><PRE
 CLASS="programlisting"
->&#13;&#60;form action="foo.php3" method="post"&#62;
-    Name: &#60;input type="text" name="name"&#62;&#60;br&#62;
+>&#13;&#60;form action="foo.php" method="post"&#62;
+    Name: &#60;input type="text" name="username"&#62;&#60;br&#62;
     &#60;input type="submit"&#62;
 &#60;/form&#62;
       </PRE
@@ -125,22 +153,27 @@ CLASS="programlisting"
 >
     </P
 ><P
->&#13;     When submitted, PHP will create the variable
+>&#13;     When the above form is submitted, the value from the text input
+     will be available in
      <TT
-CLASS="computeroutput"
->$name</TT
->, which will will contain
-     whatever what entered into the <I
-CLASS="emphasis"
->Name:</I
-> field
-     on the form.
+CLASS="varname"
+>$HTTP_POST_VARS['username']</TT
+>. If the <A
+HREF="configuration.html#ini.register-globals"
+>register_globals</A
+>
+     configuration directive is turned on, then the variable will also
+     be available as <TT
+CLASS="varname"
+>$username</TT
+> in the global scope.
     </P
 ><P
->&#13;     PHP also understands arrays in the context of form variables, but
-     only in one dimension. You may, for example, group related
-     variables together, or use this feature to retrieve values from a
-     multiple select input:</P
+>&#13;     PHP also understands arrays in the context of form variables. You
+     may, for example, group related variables together, or use this
+     feature to retrieve values from a multiple select
+     input:
+    </P
 ><P
 >&#13;     <TABLE
 WIDTH="100%"
@@ -152,6 +185,9 @@ CLASS="EXAMPLE"
 ><TD
 ><DIV
 CLASS="example"
+><A
+NAME="AEN2839"
+></A
 ><P
 ><B
 >Example 7-2. More complex form variables</B
@@ -186,24 +222,15 @@ CLASS="programlisting"
 >
     </P
 ><P
->&#13;     If PHP's track_vars feature is turned on, either by the <A
-HREF="configuration.html#ini.track-vars"
->track_vars</A
-> configuration setting
-     or the <TT
-CLASS="computeroutput"
->&#60;?php_track_vars?&#62;</TT
->
-     directive, then variables submitted via the POST or GET methods
-     will also be found in the global associative arrays
-     $HTTP_POST_VARS and $HTTP_GET_VARS as appropriate.
+>&#13;     In PHP 3, the array form variable usage is limited to
+     single-dimensional arrays. In PHP 4, no such restriction applies.
     </P
 ><DIV
 CLASS="sect3"
 ><H3
 CLASS="sect3"
 ><A
-NAME="AEN2079"
+NAME="AEN2843"
 >IMAGE SUBMIT variable names</A
 ></H3
 ><P
@@ -211,6 +238,9 @@ NAME="AEN2079"
       of the standard submit button with a tag like:</P
 ><DIV
 CLASS="informalexample"
+><A
+NAME="AEN2846"
+></A
 ><P
 ></P
 ><TABLE
@@ -278,6 +308,9 @@ CLASS="emphasis"
     </P
 ><DIV
 CLASS="informalexample"
+><A
+NAME="AEN2857"
+></A
 ><P
 ></P
 ><TABLE
@@ -312,6 +345,9 @@ CLASS="EXAMPLE"
 ><TD
 ><DIV
 CLASS="example"
+><A
+NAME="AEN2860"
+></A
 ><P
 ><B
 >Example 7-3. SetCookie Example</B
@@ -350,6 +386,9 @@ NAME="language.variables.external.environment"
      
      <DIV
 CLASS="informalexample"
+><A
+NAME="AEN2866"
+></A
 ><P
 ></P
 ><TABLE
@@ -397,7 +436,7 @@ CLASS="sect2"
 ><H2
 CLASS="sect2"
 ><A
-NAME="AEN2107"
+NAME="AEN2871"
 >Dots in incoming variable names</A
 ></H2
 ><P
@@ -419,11 +458,14 @@ CLASS="programlisting"
 ></TR
 ></TABLE
 >
-     Now, what the parser sees is a variable named $varname, followed
-     by the string concatenation operator, followed by the barestring
-     (i.e. unquoted string which doesn't match any known key or
-     reserved words) 'ext'. Obviously, this doesn't have the intended
-     result.
+     Now, what the parser sees is a variable named
+     <TT
+CLASS="varname"
+>$varname</TT
+>, followed by the string concatenation
+     operator, followed by the barestring (i.e. unquoted string which
+     doesn't match any known key or reserved words) 'ext'. Obviously,
+     this doesn't have the intended result.
     </P
 ><P
 >&#13;     For this reason, it is important to note that PHP will
@@ -436,7 +478,7 @@ CLASS="sect2"
 ><H2
 CLASS="sect2"
 ><A
-NAME="AEN2112"
+NAME="AEN2877"
 >Determining variable types</A
 ></H2
 ><P

@@ -30,7 +30,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: string.c,v 1.214 2000/07/30 05:09:46 rasmus Exp $ */
+/* $Id: string.c,v 1.215 2000/09/29 09:06:28 rasmus Exp $ */
 #include <stdio.h>
 #include "php.h"
 #include "internal_functions.h"
@@ -45,7 +45,7 @@ static inline char *_php3_memnstr(char *haystack, char *needle, int needle_len, 
 
 static char hexconvtab[] = "0123456789abcdef";
 
-static char *php_bin2hex(const unsigned char *old, const size_t oldlen, size_t *newlen)
+static unsigned char *php_bin2hex(const unsigned char *old, const size_t oldlen, size_t *newlen)
 {
 	unsigned char *new = NULL;
 	size_t i, j;
@@ -70,7 +70,7 @@ static char *php_bin2hex(const unsigned char *old, const size_t oldlen, size_t *
 PHP_FUNCTION(bin2hex)
 {
 	pval *data;
-	char *new;
+	unsigned char *new;
 	size_t newlen;
 
 	if(ARG_COUNT(ht) != 1 || getParameters(ht, 1, &data) == FAILURE) {

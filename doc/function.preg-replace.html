@@ -4,7 +4,7 @@
 >preg_replace</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -74,7 +74,7 @@ NAME="function.preg-replace"
 ><DIV
 CLASS="refnamediv"
 ><A
-NAME="AEN30464"
+NAME="AEN32933"
 ></A
 ><P
 >    (PHP3 &#62;= 3.0.9, PHP4 )</P
@@ -82,12 +82,15 @@ NAME="AEN30464"
 ><DIV
 CLASS="refsect1"
 ><A
-NAME="AEN30467"
+NAME="AEN32936"
 ></A
 ><H2
 >Description</H2
 ><DIV
 CLASS="funcsynopsis"
+><A
+NAME="AEN32938"
+></A
 ><P
 ></P
 ><P
@@ -308,6 +311,9 @@ CLASS="EXAMPLE"
 ><TD
 ><DIV
 CLASS="example"
+><A
+NAME="AEN32989"
+></A
 ><P
 ><B
 >Example 1. Replacing several values</B
@@ -320,9 +326,9 @@ WIDTH="100%"
 ><TD
 ><PRE
 CLASS="programlisting"
->&#13;$patterns = array ("/(19|20\d{2})-(\d{1,2})-(\d{1,2})/", 
+>&#13;$patterns = array ("/(19|20)(\d{2})-(\d{1,2})-(\d{1,2})/",
                    "/^\s*{(\w+)}\s*=/");
-$replace = array ("\\3/\\4/\\1", "$\\1 =");
+$replace = array ("\\3/\\4/\\1\\2", "$\\1 =");
 print preg_replace ($patterns, $replace, "{startDate} = 1999-5-27");
       </PRE
 ></TD
@@ -358,6 +364,9 @@ CLASS="EXAMPLE"
 ><TD
 ><DIV
 CLASS="example"
+><A
+NAME="AEN32993"
+></A
 ><P
 ><B
 >Example 2. Using /e modifier</B
@@ -395,6 +404,9 @@ CLASS="EXAMPLE"
 ><TD
 ><DIV
 CLASS="example"
+><A
+NAME="AEN32997"
+></A
 ><P
 ><B
 >Example 3. Convert HTML to text</B
@@ -415,7 +427,7 @@ CLASS="programlisting"
 $search = array ("'&#60;script[^&#62;]*?&#62;.*?&#60;/script&#62;'si",  // Strip out javascript
                  "'&#60;[\/\!]*?[^&#60;&#62;]*?&#62;'si",  // Strip out html tags
                  "'([\r\n])[\s]+'",  // Strip out white space
-                 "'&#38;(quote|#34);'i",  // Replace html entities
+                 "'&#38;(quot|#34);'i",  // Replace html entities
                  "'&#38;(amp|#38);'i",
                  "'&#38;(lt|#60);'i",
                  "'&#38;(gt|#62);'i",

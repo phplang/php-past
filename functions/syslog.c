@@ -27,7 +27,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: syslog.c,v 1.48 2000/01/01 04:31:17 sas Exp $ */
+/* $Id: syslog.c,v 1.49 2000/09/30 17:32:45 sas Exp $ */
 #include "php.h"
 #include "internal_functions.h"
 
@@ -256,12 +256,7 @@ void php3_syslog(INTERNAL_FUNCTION_PARAMETERS)
 	convert_to_long(priority);
 	convert_to_string(message);
 
-	/*
-	 * CAVEAT: if the message contains patterns such as "%s",
-	 * this will cause problems.
-	 */
-
-	syslog(priority->value.lval, message->value.str.val);
+	syslog(priority->value.lval, "%s", message->value.str.val);
 	RETURN_TRUE;
 }
 /* }}} */

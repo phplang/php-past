@@ -4,7 +4,7 @@
 >phpcredits</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -12,8 +12,8 @@ REL="UP"
 TITLE="PHP options & information"
 HREF="ref.info.html"><LINK
 REL="PREVIOUS"
-TITLE="getrusage"
-HREF="function.getrusage.html"><LINK
+TITLE="ini_set"
+HREF="function.ini-set.html"><LINK
 REL="NEXT"
 TITLE="phpinfo"
 HREF="function.phpinfo.html"><META
@@ -45,7 +45,7 @@ WIDTH="10%"
 ALIGN="left"
 VALIGN="bottom"
 ><A
-HREF="function.getrusage.html"
+HREF="function.ini-set.html"
 >Prev</A
 ></TD
 ><TD
@@ -74,7 +74,7 @@ NAME="function.phpcredits"
 ><DIV
 CLASS="refnamediv"
 ><A
-NAME="AEN28421"
+NAME="AEN30385"
 ></A
 ><P
 >    (PHP4 )</P
@@ -82,12 +82,15 @@ NAME="AEN28421"
 ><DIV
 CLASS="refsect1"
 ><A
-NAME="AEN28424"
+NAME="AEN30388"
 ></A
 ><H2
 >Description</H2
 ><DIV
 CLASS="funcsynopsis"
+><A
+NAME="AEN30390"
+></A
 ><P
 ></P
 ><P
@@ -104,14 +107,17 @@ CLASS="function"
 ></P
 ></DIV
 ><P
->&#13;	 This function prints out the credits listing the PHP developers,
-	 modules, etc. It generates the appropriate HTML codes to insert
-	 the information in a page. A parameter indicating what will be
-	 printed (a pre-defined constant flag, see table below) needs
-	 to be passed. For example to print the general credits, you will
-	 use somewhere in your code:
-	 <DIV
+>&#13;     This function prints out the credits listing the PHP developers,
+     modules, etc. It generates the appropriate HTML codes to insert
+     the information in a page. A parameter indicating what will be
+     printed (a pre-defined constant flag, see table below) needs
+     to be passed. For example to print the general credits, you will
+     use somewhere in your code:
+     <DIV
 CLASS="informalexample"
+><A
+NAME="AEN30397"
+></A
 ><P
 ></P
 ><TABLE
@@ -125,7 +131,7 @@ CLASS="programlisting"
 >&#13;...
 phpcredits(CREDITS_GENERAL);
 ...
-	  </PRE
+      </PRE
 ></TD
 ></TR
 ></TABLE
@@ -133,10 +139,13 @@ phpcredits(CREDITS_GENERAL);
 ></P
 ></DIV
 >
-	 And if you want to print the core developers and the documentation
-	 group, in a page of its own, you will use:
-	 <DIV
+     And if you want to print the core developers and the documentation
+     group, in a page of its own, you will use:
+     <DIV
 CLASS="informalexample"
+><A
+NAME="AEN30399"
+></A
 ><P
 ></P
 ><TABLE
@@ -150,7 +159,7 @@ CLASS="programlisting"
 >&#13;&#60;?php
   phpcredits(CREDITS_GROUP + CREDITS_DOCS + CREDITS_FULLPAGE);
 ?&#62;  
-	  </PRE
+      </PRE
 ></TD
 ></TR
 ></TABLE
@@ -158,10 +167,13 @@ CLASS="programlisting"
 ></P
 ></DIV
 >
-	 And if you feel like embedding all the credits in your page, then
-	 code like the one below will do it:
-	 <DIV
+     And if you feel like embedding all the credits in your page, then
+     code like the one below will do it:
+     <DIV
 CLASS="informalexample"
+><A
+NAME="AEN30401"
+></A
 ><P
 ></P
 ><TABLE
@@ -184,7 +196,7 @@ CLASS="programlisting"
   ?&#62;
   &#60;/body&#62;
 &#60;/html&#62;
-	  </PRE
+      </PRE
 ></TD
 ></TR
 ></TABLE
@@ -194,10 +206,13 @@ CLASS="programlisting"
 >
     </P
 ><P
->&#13;	</P
+>&#13;    </P
 ><P
->&#13;	<DIV
+>&#13;    <DIV
 CLASS="table"
+><A
+NAME="AEN30405"
+></A
 ><P
 ><B
 >Table 1. Pre-defined <B
@@ -229,10 +244,10 @@ VALIGN="MIDDLE"
 ><TD
 ALIGN="LEFT"
 VALIGN="MIDDLE"
->&#13;	  All the credits, equivalent to using: CREDITS_DOCS + CREDITS_GENERAL + 
-	  CREDITS_GROUP + CREDITS_MODULES + CREDITS_FULLPAGE. It generates a
-	  complete stand-alone HTML page with the appropriate tags.
-	 </TD
+>&#13;      All the credits, equivalent to using: CREDITS_DOCS + CREDITS_GENERAL + 
+      CREDITS_GROUP + CREDITS_MODULES + CREDITS_FULLPAGE. It generates a
+      complete stand-alone HTML page with the appropriate tags.
+     </TD
 ></TR
 ><TR
 ><TD
@@ -252,11 +267,11 @@ VALIGN="MIDDLE"
 ><TD
 ALIGN="LEFT"
 VALIGN="MIDDLE"
->&#13;	  Usually used in combination with the other flags.
-	  Indicates that the a complete stand-alone HTML page
-	  needs to be printed including the information indicated
-	  by the other flags.
-	 </TD
+>&#13;      Usually used in combination with the other flags.
+      Indicates that the a complete stand-alone HTML page
+      needs to be printed including the information indicated
+      by the other flags.
+     </TD
 ></TR
 ><TR
 ><TD
@@ -266,9 +281,9 @@ VALIGN="MIDDLE"
 ><TD
 ALIGN="LEFT"
 VALIGN="MIDDLE"
->&#13;	  General credits: Language design and concept, PHP 4.0 authors
-	  and SAPI module.
-	 </TD
+>&#13;      General credits: Language design and concept, PHP 4.0 authors
+      and SAPI module.
+     </TD
 ></TR
 ><TR
 ><TD
@@ -304,7 +319,7 @@ VALIGN="MIDDLE"
 ></TABLE
 ></DIV
 >
-	</P
+    </P
 ><P
 >&#13;     See also <A
 HREF="function.phpinfo.html"
@@ -344,7 +359,7 @@ WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
 ><A
-HREF="function.getrusage.html"
+HREF="function.ini-set.html"
 >Prev</A
 ></TD
 ><TD
@@ -369,7 +384,7 @@ HREF="function.phpinfo.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->getrusage</TD
+>ini_set</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"

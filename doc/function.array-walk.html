@@ -4,7 +4,7 @@
 >array_walk</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -74,7 +74,7 @@ NAME="function.array-walk"
 ><DIV
 CLASS="refnamediv"
 ><A
-NAME="AEN4220"
+NAME="AEN5057"
 ></A
 ><P
 >    (PHP3 &#62;= 3.0.3, PHP4 )</P
@@ -84,12 +84,15 @@ NAME="AEN4220"
 ><DIV
 CLASS="refsect1"
 ><A
-NAME="AEN4223"
+NAME="AEN5060"
 ></A
 ><H2
 >Description</H2
 ><DIV
 CLASS="funcsynopsis"
+><A
+NAME="AEN5062"
+></A
 ><P
 ></P
 ><P
@@ -238,6 +241,9 @@ CLASS="EXAMPLE"
 ><TD
 ><DIV
 CLASS="example"
+><A
+NAME="AEN5095"
+></A
 ><P
 ><B
 >Example 1. <B
@@ -256,11 +262,11 @@ CLASS="programlisting"
 >&#13;$fruits = array ("d"=&#62;"lemon", "a"=&#62;"orange", "b"=&#62;"banana", "c"=&#62;"apple");
 
 function test_alter (&#38;$item1, $key, $prefix) {
-   $item1 = "$prefix: $item1";
+    $item1 = "$prefix: $item1";
 }
 
 function test_print ($item2, $key) {
-   echo "$key. $item2&#60;br&#62;\n";
+    echo "$key. $item2&#60;br&#62;\n";
 }
 
 array_walk ($fruits, 'test_print');

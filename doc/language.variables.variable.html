@@ -4,7 +4,7 @@
 >Variable variables</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -81,6 +81,9 @@ NAME="language.variables.variable"
    </P
 ><DIV
 CLASS="informalexample"
+><A
+NAME="AEN2796"
+></A
 ><P
 ></P
 ><TABLE
@@ -110,6 +113,9 @@ CLASS="emphasis"
    </P
 ><DIV
 CLASS="informalexample"
+><A
+NAME="AEN2800"
+></A
 ><P
 ></P
 ><TABLE
@@ -130,11 +136,21 @@ CLASS="programlisting"
 ></DIV
 ><P
 >&#13;    At this point two variables have been defined and stored in the
-    PHP symbol tree: $a with contents "hello" and $hello with contents
-    "world".  Therefore, this statement:
+    PHP symbol tree: <TT
+CLASS="varname"
+>$a</TT
+> with contents "hello" and
+    <TT
+CLASS="varname"
+>$hello</TT
+> with contents "world".  Therefore, this
+    statement:
    </P
 ><DIV
 CLASS="informalexample"
+><A
+NAME="AEN2805"
+></A
 ><P
 ></P
 ><TABLE
@@ -158,6 +174,9 @@ CLASS="programlisting"
    </P
 ><DIV
 CLASS="informalexample"
+><A
+NAME="AEN2808"
+></A
 ><P
 ></P
 ><TABLE
@@ -177,19 +196,35 @@ CLASS="programlisting"
 ></P
 ></DIV
 ><P
->&#13;     i.e. they both produce: <I
-CLASS="emphasis"
->hello world</I
+>&#13;    i.e. they both produce: <TT
+CLASS="computeroutput"
+>hello world</TT
 >.
    </P
 ><P
 >&#13;    In order to use variable variables with arrays, you have to
-    resolve an ambiguity problem.  That is, if you write $$a[1] then
-    the parser needs to know if you meant to use $a[1] as a variable,
-    or if you wanted $$a as the variable and then the [1] index from
-    that variable.  The syntax for resolving this ambiguity is:
-    ${$a[1]} for the first case and ${$a}[1] for the
-    second.
+    resolve an ambiguity problem.  That is, if you write
+    <TT
+CLASS="varname"
+>$$a[1]</TT
+> then the parser needs to know if you
+    meant to use <TT
+CLASS="varname"
+>$a[1]</TT
+> as a variable, or if you
+    wanted <TT
+CLASS="varname"
+>$$a</TT
+> as the variable and then the [1]
+    index from that variable.  The syntax for resolving this ambiguity
+    is: <TT
+CLASS="varname"
+>${$a[1]}</TT
+> for the first case and
+    <TT
+CLASS="varname"
+>${$a}[1]</TT
+> for the second.
    </P
 ></DIV
 ><DIV

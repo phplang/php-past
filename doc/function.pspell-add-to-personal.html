@@ -1,0 +1,243 @@
+<HTML
+><HEAD
+><TITLE
+>pspell_add_to_personal</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Pspell Functions"
+HREF="ref.pspell.html"><LINK
+REL="PREVIOUS"
+TITLE="Pspell Functions"
+HREF="ref.pspell.html"><LINK
+REL="NEXT"
+TITLE="pspell_add_to_session"
+HREF="function.pspell-add-to-session.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="ref.pspell.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.pspell-add-to-session.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.pspell-add-to-personal"
+>pspell_add_to_personal</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN32148"
+></A
+><P
+>    (PHP4 &#62;= 4.0.2)</P
+>pspell_add_to_personal&nbsp;--&nbsp;Add the word to a personal wordlist.</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN32151"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN32153"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int <B
+CLASS="function"
+>pspell_add_to_personal</B
+></CODE
+> (int dictionary_link, string word)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     <B
+CLASS="function"
+>Pspell_add_to_personal()</B
+> adds a word to the personal 
+	 wordlist. If you used <A
+HREF="function.pspell-new-config.html"
+><B
+CLASS="function"
+>pspell_new_config()</B
+></A
+> with
+	 <A
+HREF="function.pspell-config-personal.html"
+><B
+CLASS="function"
+>pspell_config_personal()</B
+></A
+> to open the dictionary,
+	 you can save the wordlist later with
+	 <A
+HREF="function.pspell-save-wordlist.html"
+><B
+CLASS="function"
+>pspell_save_wordlist()</B
+></A
+>. Please, note that this function
+	 will not work unless you have pspell .11.2 and aspell .32.5 or later.
+    </P
+><P
+>&#13;     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN32167"
+></A
+><P
+><B
+>Example 1. <B
+CLASS="function"
+>Pspell_add_to_personal()</B
+></B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;$pspell_config = pspell_config_create ("en");
+pspell_config_personal ($pspell_config, "/var/dictionaries/custom.pws");
+$pspell_link = pspell_new_config ($pspell_config);
+
+pspell_add_to_personal ($pspell_link, "Vlad");
+pspell_save_wordlist ($pspell_link);
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="ref.pspell.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.pspell-add-to-session.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Pspell Functions</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.pspell.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>pspell_add_to_session</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -4,7 +4,7 @@
 >PostgreSQL functions</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -75,11 +75,11 @@ NAME="ref.pgsql"
 CLASS="TITLEPAGE"
 ><H1
 CLASS="title"
->XLIX. PostgreSQL functions</H1
+>LI. PostgreSQL functions</H1
 ><DIV
 CLASS="PARTINTRO"
 ><A
-NAME="AEN29192"
+NAME="AEN31174"
 ></A
 ><P
 >&#13;    Postgres, developed originally in the UC Berkeley Computer Science 
@@ -112,6 +112,9 @@ CLASS="command"
     Unix domain sockets".
     <DIV
 CLASS="table"
+><A
+NAME="AEN31181"
+></A
 ><P
 ><B
 >Table 1. Postmaster and PHP</B
@@ -144,7 +147,7 @@ VALIGN="MIDDLE"
 ><TD
 ALIGN="LEFT"
 VALIGN="MIDDLE"
->pg_connect("", "", "", "", "dbname");</TD
+>pg_connect("dbname=MyDbName");</TD
 ><TD
 ALIGN="LEFT"
 VALIGN="MIDDLE"
@@ -158,7 +161,7 @@ VALIGN="MIDDLE"
 ><TD
 ALIGN="LEFT"
 VALIGN="MIDDLE"
->pg_connect("", "", "", "", "dbname");</TD
+>pg_connect("dbname=MyDbName");</TD
 ><TD
 ALIGN="LEFT"
 VALIGN="MIDDLE"
@@ -172,7 +175,7 @@ VALIGN="MIDDLE"
 ><TD
 ALIGN="LEFT"
 VALIGN="MIDDLE"
->pg_connect("localhost", "", "", "", "dbname");</TD
+>pg_connect("host=localhost dbname=MyDbName");</TD
 ><TD
 ALIGN="LEFT"
 VALIGN="MIDDLE"
@@ -190,7 +193,7 @@ VALIGN="MIDDLE"
 ><TD
 ALIGN="LEFT"
 VALIGN="MIDDLE"
->pg_connect("localhost", "", "", "", "dbname");</TD
+>pg_connect("host=localhost dbname=MyDbName");</TD
 ><TD
 ALIGN="LEFT"
 VALIGN="MIDDLE"
@@ -202,12 +205,24 @@ VALIGN="MIDDLE"
 >
    </P
 ><P
->&#13;    One can also establish a connection with the following command:
+>&#13;    One can establish a connection with the following value pairs
+    set in the command string:
     <B
 CLASS="command"
->$conn = pg_Connect("host=localhost port=5432
-    dbname=chris");</B
+>$conn = pg_Connect("host=myHost port=myPort tty=myTTY
+    options=myOptions user=myUser password=myPassword dbname=myDB");
+    </B
 >
+   </P
+><P
+>&#13;    The previous syntax of:
+    <B
+CLASS="command"
+>$conn = pg_connect ("host", "port", "options", "tty",
+    "dbname")
+    </B
+>
+    has been deprecated.
    </P
 ><P
 >&#13;    To use the large object (lo) interface, it is necessary to enclose
@@ -241,6 +256,9 @@ CLASS="EXAMPLE"
 ><TD
 ><DIV
 CLASS="example"
+><A
+NAME="AEN31216"
+></A
 ><P
 ><B
 >Example 1. Using Large Objects</B
@@ -254,7 +272,7 @@ WIDTH="100%"
 ><PRE
 CLASS="programlisting"
 >&#13;&#60;?php
-    $database = pg_Connect ("", "", "", "", "jacarta");
+    $database = pg_Connect ("dbname=jacarta");
     pg_exec ($database, "begin");
     $oid = pg_locreate ($database);
     echo ("$oid\n");
@@ -302,6 +320,11 @@ HREF="function.pg-connect.html"
 HREF="function.pg-dbname.html"
 >pg_dbname</A
 > &#8212; Get the database name</DT
+><DT
+><A
+HREF="function.pg-end-copy.html"
+>pg_end_copy</A
+> &#8212; Sync with PostgreSQL backend</DT
 ><DT
 ><A
 HREF="function.pg-errormessage.html"
@@ -444,9 +467,7 @@ HREF="function.pg-options.html"
 ><A
 HREF="function.pg-pconnect.html"
 >pg_pconnect</A
-> &#8212; 
-     Open a persistent PostgreSQL connection
-    </DT
+> &#8212; Open a persistant PostgreSQL connection</DT
 ><DT
 ><A
 HREF="function.pg-port.html"
@@ -456,9 +477,28 @@ HREF="function.pg-port.html"
     </DT
 ><DT
 ><A
+HREF="function.pg-put-line.html"
+>pg_put_line</A
+> &#8212; Send a NULL-terminated string to PostgreSQL backend</DT
+><DT
+><A
 HREF="function.pg-result.html"
 >pg_result</A
 > &#8212; Returns values from a result identifier</DT
+><DT
+><A
+HREF="function.pg-set-client-encoding.html"
+>pg_set_client_encoding</A
+> &#8212; 
+     Set the client encoding
+    </DT
+><DT
+><A
+HREF="function.pg-client-encoding.html"
+>pg_client_encoding</A
+> &#8212; 
+     Get the client encoding
+    </DT
 ><DT
 ><A
 HREF="function.pg-trace.html"

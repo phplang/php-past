@@ -2,7 +2,7 @@
 /*                                          */
 /* John Ellson   ellson@lucent.com          */
 
-/* $Id: gdttf.c,v 1.26 2000/01/13 13:31:11 rasmus Exp $ */
+/* $Id: gdttf.c,v 1.27 2000/09/29 09:13:35 rasmus Exp $ */
 
 #if WIN32|WINNT
 #include "config.w32.h"
@@ -378,7 +378,7 @@ fontFetch ( char **error, void *key )
 	font_t			*a;
 	fontkey_t		*b=(fontkey_t *)key;
 	int				i, n;
-	short			platform, encoding;
+	unsigned short	platform, encoding;
 
 	a = (font_t *)malloc(sizeof(font_t));
 	a->fontname = (char *)malloc(strlen(b->fontname) + 1);

@@ -4,7 +4,7 @@
 >IMAP, POP3 and NNTP functions</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -75,11 +75,11 @@ NAME="ref.imap"
 CLASS="TITLEPAGE"
 ><H1
 CLASS="title"
->XXVIII. IMAP, POP3 and NNTP functions</H1
+>XXIX. IMAP, POP3 and NNTP functions</H1
 ><DIV
 CLASS="PARTINTRO"
 ><A
-NAME="AEN14804"
+NAME="AEN16177"
 ></A
 ><P
 >&#13;    To get these functions to work, you have to compile PHP with
@@ -135,14 +135,14 @@ CLASS="acronym"
 > and local mailbox access methods. 
    </P
 ><P
->&#13;    This document can't go into detail on all the topics touched by the
-    provided functions. Further information is provided by the 
-    documentation of the c-client library source 
-    (<TT
+>&#13;    This document can't go into detail on all the topics touched by
+		the provided functions. Further information is provided by the
+		documentation of the c-client library source
+		(<TT
 CLASS="filename"
 >docs/internal.txt</TT
->).
-    and the following RFC documents:
+>). and the following RFC
+		documents:
     <P
 ></P
 ><UL
@@ -152,8 +152,8 @@ CLASS="filename"
 HREF="http://www.faqs.org/rfcs/rfc821.html"
 TARGET="_top"
 >RFC821</A
->:
-       Simple Mail Transfer Protocol (SMTP).
+>: Simple Mail
+			 Transfer Protocol (SMTP).
       </P
 ></LI
 ><LI
@@ -162,8 +162,8 @@ TARGET="_top"
 HREF="http://www.faqs.org/rfcs/rfc822.html"
 TARGET="_top"
 >RFC822</A
->:
-       Standard for ARPA internet text messages.
+>: Standard for
+			 ARPA internet text messages.
       </P
 ></LI
 ><LI
@@ -172,8 +172,8 @@ TARGET="_top"
 HREF="http://www.faqs.org/rfcs/rfc2060.html"
 TARGET="_top"
 >RFC2060</A
->:
-       Internet Message Access Protocol (IMAP) Version 4rev1. 
+>: Internet
+			 Message Access Protocol (IMAP) Version 4rev1. 
       </P
 ></LI
 ><LI
@@ -182,8 +182,8 @@ TARGET="_top"
 HREF="http://www.faqs.org/rfcs/rfc1939.html"
 TARGET="_top"
 >RFC1939</A
->: 
-       Post Office Protocol Version 3 (POP3).
+>:  Post
+			 Office Protocol Version 3 (POP3).
       </P
 ></LI
 ><LI
@@ -192,8 +192,8 @@ TARGET="_top"
 HREF="http://www.faqs.org/rfcs/rfc977.html"
 TARGET="_top"
 >RFC977</A
->:
-       Network News Transfer Protocol (NNTP).
+>: Network News
+			 Transfer Protocol (NNTP).
       </P
 ></LI
 ><LI
@@ -202,8 +202,8 @@ TARGET="_top"
 HREF="http://www.faqs.org/rfcs/rfc2076.html"
 TARGET="_top"
 >RFC2076</A
->:
-       Common Internet Message Headers.
+>: Common
+			 Internet Message Headers.
       </P
 ></LI
 ><LI
@@ -212,39 +212,40 @@ TARGET="_top"
 HREF="http://www.faqs.org/rfcs/rfc2045.html"
 TARGET="_top"
 >RFC2045</A
-> ,
-       <A
+> , <A
 HREF="http://www.faqs.org/rfcs/rfc2046.html"
 TARGET="_top"
 >RFC2046</A
-> ,
-       <A
+> , <A
 HREF="http://www.faqs.org/rfcs/rfc2047.html"
 TARGET="_top"
 >RFC2047</A
-> ,
-       <A
+> , <A
 HREF="http://www.faqs.org/rfcs/rfc2048.html"
 TARGET="_top"
 >RFC2048</A
-> &#38;
-       <A
+> &#38; <A
 HREF="http://www.faqs.org/rfcs/rfc2049.html"
 TARGET="_top"
 >RFC2049</A
->:
-       Multipurpose Internet Mail Extensions (MIME).
+>: Multipurpose
+			 Internet Mail Extensions (MIME).
       </P
 ></LI
 ></UL
->
-    A detailed overview is also available in the book
-    <A
+> 
+		A detailed overview is also available in the books
+		<A
 HREF="http://www.oreilly.com/catalog/progintemail/noframes.html"
 TARGET="_top"
 >Programming Internet Email</A
-> 
-    by David Wood.
+>
+		by David Wood and  <A
+HREF="http://www.oreilly.com/catalog/mimap/noframes.html"
+TARGET="_top"
+>Managing
+		 IMAP</A
+> by Dianna Mullet &#38; Kevin Mullet.
    </P
 ></DIV
 ><DIV
@@ -317,6 +318,11 @@ HREF="function.imap-fetchstructure.html"
 > &#8212; 
      Read the structure of a particular message
     </DT
+><DT
+><A
+HREF="function.imap-headerinfo.html"
+>imap_headerinfo</A
+> &#8212; Read the header of the message</DT
 ><DT
 ><A
 HREF="function.imap-header.html"

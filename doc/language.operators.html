@@ -4,7 +4,7 @@
 >Operators</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -148,6 +148,9 @@ NAME="language.operators.arithmetic"
    </P
 ><DIV
 CLASS="table"
+><A
+NAME="AEN2985"
+></A
 ><P
 ><B
 >Table 10-1. Arithmetic Operators</B
@@ -248,8 +251,10 @@ VALIGN="MIDDLE"
 ><P
 >&#13;    The division operator ("/") returns an integer value (the result
     of an integer division) if the two operands are integers (or
-    strings that get converted to integers). If either operand is a
-    floating-point value, floating-point division is performed.
+    strings that get converted to integers) and the quotient is an
+    integer. If either operand is a floating-point value, or the
+    operation results in a non-integer value, a floating-point value
+    is returned.
    </P
 ></DIV
 ></DIV

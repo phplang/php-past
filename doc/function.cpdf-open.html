@@ -4,7 +4,7 @@
 >cpdf_open</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -74,7 +74,7 @@ NAME="function.cpdf-open"
 ><DIV
 CLASS="refnamediv"
 ><A
-NAME="AEN6153"
+NAME="AEN7019"
 ></A
 ><P
 >    (PHP3 &#62;= 3.0.8, PHP4 &#62;= 4.0b4)</P
@@ -82,12 +82,15 @@ NAME="AEN6153"
 ><DIV
 CLASS="refsect1"
 ><A
-NAME="AEN6156"
+NAME="AEN7022"
 ></A
 ><H2
 >Description</H2
 ><DIV
 CLASS="funcsynopsis"
+><A
+NAME="AEN7024"
+></A
 ><P
 ></P
 ><P
@@ -98,7 +101,7 @@ CLASS="FUNCDEF"
 CLASS="function"
 >cpdf_open</B
 ></CODE
-> (int compression, string filename)</CODE
+> (int compression [, string filename])</CODE
 ></P
 ><P
 ></P
@@ -126,7 +129,6 @@ CLASS="function"
 >cpdf_output_buffer()</B
 ></A
 >.
-
      <DIV
 CLASS="note"
 ><BLOCKQUOTE
@@ -135,26 +137,28 @@ CLASS="note"
 ><B
 >Note: </B
 >
-       The return value will be needed in futher versions of ClibPDF as the 
-       first parameter in all other functions which are writing to the pdf
-       document.
+       The return value will be needed in further versions of ClibPDF
+       as the first parameter in all other functions which are writing
+       to the pdf document.
       </P
 ><P
->&#13;       The ClibPDF library takes the filename "-" as a synonym for stdout.
-       If PHP is compiled as an apache module this will not work because the
-       way ClibPDF outputs to stdout does not work with apache. You can solve
-       this problem by skipping the filename and using
-       <A
+>&#13;       The ClibPDF library takes the filename "-" as a synonym for
+       stdout. If PHP is compiled as an apache module this will not
+       work because the way ClibPDF outputs to stdout does not work
+       with apache. You can solve this problem by skipping the
+       filename and using <A
 HREF="function.cpdf-output-buffer.html"
 ><B
 CLASS="function"
 >cpdf_output_buffer()</B
 ></A
-> to output the pdf document.
+> to
+       output the pdf document.
       </P
 ></BLOCKQUOTE
 ></DIV
-></P
+>
+    </P
 ><P
 >&#13;     See also <A
 HREF="function.cpdf-close.html"
@@ -169,7 +173,8 @@ HREF="function.cpdf-output-buffer.html"
 CLASS="function"
 >cpdf_output_buffer()</B
 ></A
->.</P
+>.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

@@ -29,7 +29,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: unified_odbc.c,v 1.112 2000/01/01 04:31:17 sas Exp $ */
+/* $Id: unified_odbc.c,v 1.113 2000/09/28 16:26:10 fmk Exp $ */
 
 /* This file is based on the Adabas D extension.
  * Adabas D will no longer be supported as separate module.
@@ -82,6 +82,7 @@ function_entry UODBC_FUNCTIONS[] = {
 	UODBC_FE(rollback, NULL),
 	UODBC_FE(binmode, NULL),
 	UODBC_FE(longreadlen, NULL),
+	UODBC_FE(tables, NULL),
 #if defined(USE_ODBC_ALIAS) && defined(UODBC_UNIQUE_NAMES)
 	UODBC_ALIAS(setoption, NULL),
 	UODBC_ALIAS(autocommit, NULL),
@@ -109,6 +110,7 @@ function_entry UODBC_FUNCTIONS[] = {
 	UODBC_ALIAS(rollback, NULL),
 	UODBC_ALIAS(binmode, NULL),
 	UODBC_ALIAS(longreadlen, NULL),
+	UODBC_ALIAS(tables, NULL),
 #endif
 #if HAVE_SOLID
 	{"solid_fetch_prev",php3_solid_fetch_prev,	NULL},
@@ -539,6 +541,92 @@ UODBC_FUNCTION(binmode)
 UODBC_FUNCTION(longreadlen)
 {
 	php3_uodbc_fetch_attribs(INTERNAL_FUNCTION_PARAM_PASSTHRU,1);
+}
+/* }}} */
+
+/* {{{ proto int odbc_tables(int connection_id [, string qualifier, string owner, string name, string table_types])
+   Call the SQLTables function */
+UODBC_FUNCTION(tables)
+{
+	pval *pv_conn, *pv_cat, *pv_schema, *pv_table, *pv_type;
+	UODBC_RESULT	*result = NULL;
+	UODBC_CONNECTION *conn;
+	char *cat = NULL, *schema = NULL, *table = NULL, *type = NULL;
+	RETCODE rc;
+	int argc;
+	UODBC_TLS_VARS;
+
+	argc = ARG_COUNT(ht);
+	if (argc < 1 || argc > 5 || getParameters(ht, argc, &pv_conn, &pv_cat, &pv_schema, &pv_table, &pv_type) == FAILURE) {
+			WRONG_PARAM_COUNT;
+	}
+	switch (argc) {
+		case 5:
+			convert_to_string(pv_type);
+			type = pv_type->value.str.val;
+		case 4:
+			convert_to_string(pv_table);
+			table = pv_table->value.str.val;
+		case 3:
+			convert_to_string(pv_schema);
+			schema = pv_schema->value.str.val;
+		case 2:
+			convert_to_string(pv_cat);
+			cat = pv_cat->value.str.val;
+		case 1:
+			convert_to_long(pv_conn);
+	}
+
+	if ((conn = UODBC_GET_CONN(list, pv_conn->value.lval)) == NULL){
+		RETURN_FALSE;
+	}
+
+	result = (UODBC_RESULT *)emalloc(sizeof(UODBC_RESULT));
+	if (result == NULL) {
+		php3_error(E_WARNING, "Out of memory");
+		RETURN_FALSE;
+	}
+	
+	rc = SQLAllocStmt(conn->hdbc, &(result->stmt));
+	if (rc == SQL_INVALID_HANDLE) {
+		efree(result);
+		php3_error(E_WARNING, "SQLAllocStmt error 'Invalid Handle' in odbc_tables");
+		RETURN_FALSE;
+	}
+
+	if (rc == SQL_ERROR) {
+		UODBC_SQL_ERROR(conn->hdbc, SQL_NULL_HSTMT, "SQLAllocStmt");
+		efree(result);
+		RETURN_FALSE;
+	}
+
+	rc = SQLTables(result->stmt, 
+            cat, strlen(cat), 
+            schema, strlen(schema),
+            table, strlen(table),
+            type, strlen(type));
+
+	if (rc == SQL_ERROR) {
+		UODBC_SQL_ERROR(conn->hdbc, SQL_NULL_HSTMT, "SQLTables");
+		efree(result);
+		RETURN_FALSE;
+	}
+
+	result->numparams = 0;
+	SQLNumResultCols(result->stmt, &(result->numcols));
+
+	if (result->numcols > 0) {
+        if (!UODBC_BINDCOLS(result)) {
+			efree(result);
+            RETURN_FALSE;
+		}
+	} else {
+		result->values = NULL;
+	}
+	result->conn_ptr = conn;
+	result->fetched = 0;
+	RETURN_LONG(UODBC_ADD_RESULT(list, result));
+
 }
 /* }}} */
 

@@ -4,7 +4,7 @@
 >pg_pconnect</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -74,22 +74,23 @@ NAME="function.pg-pconnect"
 ><DIV
 CLASS="refnamediv"
 ><A
-NAME="AEN29793"
+NAME="AEN31790"
 ></A
 ><P
 >    (PHP3 , PHP4 )</P
->pg_pconnect&nbsp;--&nbsp;
-     Open a persistent PostgreSQL connection
-    </DIV
+>pg_pconnect&nbsp;--&nbsp;Open a persistant PostgreSQL connection</DIV
 ><DIV
 CLASS="refsect1"
 ><A
-NAME="AEN29796"
+NAME="AEN31793"
 ></A
 ><H2
 >Description</H2
 ><DIV
 CLASS="funcsynopsis"
+><A
+NAME="AEN31795"
+></A
 ><P
 ></P
 ><P
@@ -100,45 +101,27 @@ CLASS="FUNCDEF"
 CLASS="function"
 >pg_pconnect</B
 ></CODE
-> (string host, string port, string options, string tty, string dbname)</CODE
+> (string conn_string)</CODE
 ></P
 ><P
 ></P
 ></DIV
 ><P
 >&#13;     Returns a connection index on success, or false if the connection
-     could not be made.  Opens a persistent connection to a PostgreSQL
-     database. Each of the arguments should be a quoted string,
-     including the port number. The options and tty arguments are
-     optional and can be left out. This function returns a connection
-     index that is needed by other PostgreSQL functions. You can have
-     multiple persistent connections open at once. See also
-     <A
-HREF="function.pg-connect.html"
-><B
-CLASS="function"
->pg_connect()</B
-></A
->.
-    </P
-><P
->&#13;     A connection can also established with the following command:
-     <B
-CLASS="command"
->$conn = pg_pconnect("dbname=marliese port=5432");</B
->
-     Other parameters besides <TT
+     could not be made.  Opens a connection to a PostgreSQL database.
+     The arguments should be within a quoted string.
+     The arguments available include <TT
 CLASS="parameter"
 ><I
 >dbname</I
 ></TT
-> and
+> 
      <TT
 CLASS="parameter"
 ><I
 >port</I
 ></TT
-> are <TT
+>, <TT
 CLASS="parameter"
 ><I
 >host</I
@@ -160,11 +143,35 @@ CLASS="parameter"
 ><I
 >user</I
 ></TT
-> and <TT
+>, and <TT
 CLASS="parameter"
 ><I
 >password</I
 ></TT
+>
+    </P
+><P
+>&#13;     This function returns a connection index that is needed by other
+     PostgreSQL functions. You can have multiple connections open at
+     once.
+    </P
+><P
+>&#13;     The previous syntax of:
+     <B
+CLASS="command"
+>$conn = pg_pconnect ("host", "port", "options", "tty",
+    "dbname")
+     </B
+>
+     has been deprecated.
+    </P
+><P
+>&#13;     See also <A
+HREF="function.pg-connect.html"
+><B
+CLASS="function"
+>pg_connect()</B
+></A
 >.
     </P
 ></DIV

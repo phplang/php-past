@@ -1,10 +1,10 @@
 <HTML
 ><HEAD
 ><TITLE
->YAZ</TITLE
+>YAZ functions</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -75,45 +75,72 @@ NAME="ref.yaz"
 CLASS="TITLEPAGE"
 ><H1
 CLASS="title"
->LXVII. YAZ</H1
+>LXXII. YAZ functions</H1
 ><DIV
 CLASS="PARTINTRO"
 ><A
-NAME="AEN37345"
+NAME="AEN40494"
 ></A
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="yaz.intro"
+>Introduction</A
+></H1
 ><P
->&#13;    The <B
-CLASS="function"
->yaz()</B
-> functions wrap the YAZ API.  The home
-    page of the project is <A
+>&#13;    This extension offers a PHP interface to the
+    <SPAN
+CLASS="productname"
+>YAZ</SPAN
+> toolkit that implements the Z39.50
+    protocol for information retrieval. With this extension you can easily
+    implement a Z39.50 origin (client) that searches Z39.50 targets
+    (servers) in parallel.
+   </P
+><P
+>&#13;    <SPAN
+CLASS="productname"
+>YAZ</SPAN
+> is available at <A
 HREF="http://www.indexdata.dk/yaz/"
 TARGET="_top"
 >http://www.indexdata.dk/yaz/</A
->.
-    Information about the phpyaz module can be found at <A
+>. You can find news information,
+    example scripts, etc. for this extension at <A
 HREF="http://www.indexdata.dk/phpyaz/"
 TARGET="_top"
 >http://www.indexdata.dk/phpyaz/</A
 >.
    </P
 ><P
->&#13;    PHP/YAZ is much simpler to use than the C API for YAZ but less
-    flexible. The intent is to make it easy to build basic client
-    functions. It supports persistent stateless connections very
-    similar to those offered by the various SQL APIs that are
-    available for PHP. This means that sessions are stateless but
-    shared amongst users, thus saving the connect and INIT steps in
-    many cases.
+>&#13;    The module hides most of the complexity of Z39.50 so it should be
+    fairly easy to use. It supports persistent stateless connections very
+    similar to those offered by the various SQL APIs that are available
+    for PHP. This means that sessions are stateless but shared amongst
+    users, thus saving the connect and initialize phase steps in most cases.
    </P
+></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="yaz.install"
+>Installation</A
+></H1
 ><P
->&#13;    Before compiling PHP with the PHP/YAZ module you'll need the YAZ
-    toolkit.  Build YAZ and install it. Build PHP with your favourite
+>&#13;    Compile YAZ and install it. Build PHP with your favourite
     modules and add option --with-yaz. Your task is roughly the
     following:
    </P
-><DIV
+><P
+>&#13;   <DIV
 CLASS="informalexample"
+><A
+NAME="AEN40508"
+></A
 ><P
 ></P
 ><TABLE
@@ -141,6 +168,17 @@ make install
 ><P
 ></P
 ></DIV
+>
+   </P
+></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="yaz.example"
+>Example</A
+></H1
 ><P
 >&#13;    PHP/YAZ keeps track of connections with targets
     (Z-Associations). A positive integer represents the ID of a
@@ -148,11 +186,12 @@ make install
    </P
 ><P
 >&#13;    The script below demonstrates the parallel searching feature of
-    the API.  When invoked it either prints a query form (if no
-    arguments are supplied) or if there are arguments (term and one or
-    more hosts) it searches the targets in array host.
+    the API. When invoked with no arguments it prints a query form; else
+    (arguments are supplied) it searches the targets as given in in array
+    host.
    </P
-><TABLE
+><P
+>&#13;   <TABLE
 WIDTH="100%"
 BORDER="0"
 CELLPADDING="0"
@@ -162,6 +201,9 @@ CLASS="EXAMPLE"
 ><TD
 ><DIV
 CLASS="example"
+><A
+NAME="AEN40515"
+></A
 ><P
 ><B
 >Example 1. <B
@@ -196,7 +238,7 @@ if (empty($term) || count($host) == 0) {
     ';        
 } else {
     echo 'You searced for ' . htmlspecialchars($term) . '&#60;br&#62;';
-    for ($i = 0; $i &#62; $num_hosts; $i++) {
+    for ($i = 0; $i &#60; $num_hosts; $i++) {
         $id[] = yaz_connect($host[$i]);
         yaz_syntax($id[$i],"sutrs");
         yaz_search($id[$i],"rpn",$term);
@@ -230,6 +272,9 @@ if (empty($term) || count($host) == 0) {
 ></TD
 ></TR
 ></TABLE
+>
+   </P
+></DIV
 ></DIV
 ><DIV
 CLASS="TOC"
@@ -292,7 +337,8 @@ HREF="function.yaz-search.html"
 HREF="function.yaz-syntax.html"
 >yaz_syntax</A
 > &#8212; 
-     Specifies the preferred record syntax for retrieval
+     Specifies the object identifier (OID) for the preferred record syntax
+     for retrieval.
     </DT
 ><DT
 ><A

@@ -1,10 +1,10 @@
 <HTML
 ><HEAD
 ><TITLE
->PDF_put_image</TITLE
+>pdf_put_image</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -12,10 +12,10 @@ REL="UP"
 TITLE="PDF functions"
 HREF="ref.pdf.html"><LINK
 REL="PREVIOUS"
-TITLE="PDF_place_image"
+TITLE="pdf_place_image"
 HREF="function.pdf-place-image.html"><LINK
 REL="NEXT"
-TITLE="PDF_execute_image"
+TITLE="pdf_execute_image"
 HREF="function.pdf-execute-image.html"><META
 NAME="HTTP_EQUIV"
 CONTENT="text/html; charset=ISO-8859-1"></HEAD
@@ -69,25 +69,28 @@ WIDTH="100%"></DIV
 ><H1
 ><A
 NAME="function.pdf-put-image"
->PDF_put_image</A
+>pdf_put_image</A
 ></H1
 ><DIV
 CLASS="refnamediv"
 ><A
-NAME="AEN27718"
+NAME="AEN29696"
 ></A
 ><P
 >    (PHP3 &#62;= 3.0.7, 4.0b2 - 4.0b4 only)</P
->PDF_put_image&nbsp;--&nbsp;Stores an image in the PDF for later use</DIV
+>pdf_put_image&nbsp;--&nbsp;Stores an image in the PDF for later use</DIV
 ><DIV
 CLASS="refsect1"
 ><A
-NAME="AEN27721"
+NAME="AEN29699"
 ></A
 ><H2
 >Description</H2
 ><DIV
 CLASS="funcsynopsis"
+><A
+NAME="AEN29701"
+></A
 ><P
 ></P
 ><P
@@ -106,22 +109,28 @@ CLASS="function"
 ><P
 >&#13;     The <B
 CLASS="function"
->PDF_put_image()</B
+>pdf_put_image()</B
 > function places an image
      in the PDF file without showing it. The stored image can be
-     displayed with the <B
+     displayed with the <A
+HREF="function.pdf-execute-image.html"
+><B
 CLASS="function"
->PDF_execute_image()</B
+>pdf_execute_image()</B
+></A
 >
      function as many times as needed. This is useful when using the same
      image multiple times in order to keep the file size small. Using
      <B
 CLASS="function"
->PDF_put_image()</B
+>pdf_put_image()</B
 > and
-     <B
+     <A
+HREF="function.pdf-execute-image.html"
+><B
 CLASS="function"
->PDF_execute_image()</B
+>pdf_execute_image()</B
+></A
 > is highly recommended for
      larger images (several kb) if they show up more than once in the
      document.
@@ -140,15 +149,21 @@ CLASS="note"
 ><P
 >&#13;     See also <B
 CLASS="function"
->PDF_put_image()</B
+>pdf_put_image()</B
 >,
-              <B
+              <A
+HREF="function.pdf-place-image.html"
+><B
 CLASS="function"
->PDF_place_image()</B
+>pdf_place_image()</B
+></A
 >,
-              <B
+              <A
+HREF="function.pdf-execute-image.html"
+><B
 CLASS="function"
->PDF_execute_image()</B
+>pdf_execute_image()</B
+></A
 >.</P
 ></DIV
 ><DIV
@@ -191,7 +206,7 @@ HREF="function.pdf-execute-image.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->PDF_place_image</TD
+>pdf_place_image</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"
@@ -204,7 +219,7 @@ HREF="ref.pdf.html"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->PDF_execute_image</TD
+>pdf_execute_image</TD
 ></TR
 ></TABLE
 ></DIV

@@ -4,7 +4,7 @@
 >mcrypt_get_key_size</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -74,7 +74,7 @@ NAME="function.mcrypt-get-key-size"
 ><DIV
 CLASS="refnamediv"
 ><A
-NAME="AEN19865"
+NAME="AEN21381"
 ></A
 ><P
 >    (PHP3 &#62;= 3.0.8, PHP4 )</P
@@ -82,12 +82,15 @@ NAME="AEN19865"
 ><DIV
 CLASS="refsect1"
 ><A
-NAME="AEN19868"
+NAME="AEN21384"
 ></A
 ><H2
 >Description</H2
 ><DIV
 CLASS="funcsynopsis"
+><A
+NAME="AEN21386"
+></A
 ><P
 ></P
 ><P
@@ -101,8 +104,22 @@ CLASS="function"
 > (int cipher)</CODE
 ></P
 ><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int <B
+CLASS="function"
+>mcrypt_get_key_size</B
+></CODE
+> (string cipher, string module)</CODE
+></P
+><P
 ></P
 ></DIV
+><P
+>&#13;     The first prototype is when linked against libmcrypt 2.2.x, the
+     second when linked against libmcrypt 2.4.x.
+    </P
 ><P
 >&#13;     <B
 CLASS="function"
@@ -118,14 +135,20 @@ CLASS="parameter"
 ><P
 >&#13;     <B
 CLASS="function"
->mcrypt_get_key_size()</B
-> takes one argument, the
-     <TT
+>Mcrypt_get_key_size()</B
+> takes one or two
+     arguments, the <TT
 CLASS="parameter"
 ><I
 >cipher</I
 ></TT
-> and returns the size in bytes.
+> and
+     <TT
+CLASS="parameter"
+><I
+>module</I
+></TT
+>, and returns the size in bytes.
     </P
 ><P
 >&#13;     See also: <A

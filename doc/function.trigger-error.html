@@ -4,19 +4,19 @@
 >trigger_error</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
-TITLE="Miscellaneous functions"
-HREF="ref.misc.html"><LINK
+TITLE="Error Handling and Logging Functions"
+HREF="ref.errorfunc.html"><LINK
 REL="PREVIOUS"
-TITLE="sleep"
-HREF="function.sleep.html"><LINK
+TITLE="set_error_handler"
+HREF="function.set-error-handler.html"><LINK
 REL="NEXT"
-TITLE="uniqid"
-HREF="function.uniqid.html"><META
+TITLE="user_error"
+HREF="function.user-error.html"><META
 NAME="HTTP_EQUIV"
 CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
@@ -45,7 +45,7 @@ WIDTH="10%"
 ALIGN="left"
 VALIGN="bottom"
 ><A
-HREF="function.sleep.html"
+HREF="function.set-error-handler.html"
 >Prev</A
 ></TD
 ><TD
@@ -58,7 +58,7 @@ WIDTH="10%"
 ALIGN="right"
 VALIGN="bottom"
 ><A
-HREF="function.uniqid.html"
+HREF="function.user-error.html"
 >Next</A
 ></TD
 ></TR
@@ -74,7 +74,7 @@ NAME="function.trigger-error"
 ><DIV
 CLASS="refnamediv"
 ><A
-NAME="AEN21791"
+NAME="AEN10401"
 ></A
 ><P
 >    (PHP4 &#62;= 4.0.1)</P
@@ -84,12 +84,15 @@ NAME="AEN21791"
 ><DIV
 CLASS="refsect1"
 ><A
-NAME="AEN21794"
+NAME="AEN10404"
 ></A
 ><H2
 >Description</H2
 ><DIV
 CLASS="funcsynopsis"
+><A
+NAME="AEN10406"
+></A
 ><P
 ></P
 ><P
@@ -121,6 +124,9 @@ CLASS="function"
      For example:
      <DIV
 CLASS="informalexample"
+><A
+NAME="AEN10417"
+></A
 ><P
 ></P
 ><TABLE
@@ -131,8 +137,8 @@ WIDTH="100%"
 ><TD
 ><PRE
 CLASS="programlisting"
->&#13;if (assert($divisor == 0))
-   trigger_error("Cannot divide by zero", E_USER_ERROR);
+>&#13;if (assert ($divisor == 0))
+   trigger_error ("Cannot divide by zero", E_USER_ERROR);
       </PRE
 ></TD
 ></TR
@@ -207,7 +213,7 @@ WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
 ><A
-HREF="function.sleep.html"
+HREF="function.set-error-handler.html"
 >Prev</A
 ></TD
 ><TD
@@ -223,7 +229,7 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><A
-HREF="function.uniqid.html"
+HREF="function.user-error.html"
 >Next</A
 ></TD
 ></TR
@@ -232,20 +238,20 @@ HREF="function.uniqid.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->sleep</TD
+>set_error_handler</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"
 VALIGN="top"
 ><A
-HREF="ref.misc.html"
+HREF="ref.errorfunc.html"
 >Up</A
 ></TD
 ><TD
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->uniqid</TD
+>user_error</TD
 ></TR
 ></TABLE
 ></DIV

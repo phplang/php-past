@@ -155,7 +155,8 @@ CLASS="programlisting"
      For PHP 4:   AddType application/x-httpd-php .php
  
   You can choose any extension you wish here.  .php is simply the one
-  we suggest.
+  we suggest. You can even include .html .
+
 
 18. Use your normal procedure for starting the Apache server. (You must
     stop and restart the server, not just cause the server to reload by
@@ -367,6 +368,19 @@ HREF="function.dl.html"
 CLASS="function"
 >dl()</B
 ></A
+>.
+    </P
+><P
+>&#13;     When choosing to build PHP in different ways, you should consider
+     the advantages and drawbacks of each method. Building as a shared
+     object will mean that you can compile apache separately, and don't
+     have to recompile everything as you add to, or change, PHP.
+     Building PHP into apache (static method) means that PHP will
+     load and run faster. For more information, see the Apache
+     <A
+HREF="http://www.apache.org/docs/dso.html"
+TARGET="_top"
+>webpage on DSO support</A
 >.
     </P
 ></DIV
@@ -1265,7 +1279,7 @@ CLASS="sect2"
 ><H2
 CLASS="sect2"
 ><A
-NAME="AEN362"
+NAME="AEN364"
 >Other configure options</A
 ></H2
 ><DIV
@@ -2012,7 +2026,7 @@ CLASS="sect3"
 ><H3
 CLASS="sect3"
 ><A
-NAME="AEN502"
+NAME="AEN504"
 >CPPFLAGS and LDFLAGS</A
 ></H3
 ><P
@@ -2039,7 +2053,7 @@ CLASS="sect2"
 ><H2
 CLASS="sect2"
 ><A
-NAME="AEN508"
+NAME="AEN510"
 >Building</A
 ></H2
 ><P
@@ -2060,7 +2074,7 @@ CLASS="sect2"
 ><H2
 CLASS="sect2"
 ><A
-NAME="AEN513"
+NAME="AEN515"
 >Testing</A
 ></H2
 ><P
@@ -2078,7 +2092,7 @@ CLASS="sect2"
 ><H2
 CLASS="sect2"
 ><A
-NAME="AEN517"
+NAME="AEN519"
 >Benchmarking</A
 ></H2
 ><P

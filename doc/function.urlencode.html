@@ -4,7 +4,7 @@
 >urlencode</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -74,7 +74,7 @@ NAME="function.urlencode"
 ><DIV
 CLASS="refnamediv"
 ><A
-NAME="AEN35451"
+NAME="AEN38525"
 ></A
 ><P
 >    (PHP3 , PHP4 )</P
@@ -82,12 +82,15 @@ NAME="AEN35451"
 ><DIV
 CLASS="refsect1"
 ><A
-NAME="AEN35454"
+NAME="AEN38528"
 ></A
 ><H2
 >Description</H2
 ><DIV
 CLASS="funcsynopsis"
+><A
+NAME="AEN38530"
+></A
 ><P
 ></P
 ><P
@@ -144,6 +147,9 @@ CLASS="EXAMPLE"
 ><TD
 ><DIV
 CLASS="example"
+><A
+NAME="AEN38542"
+></A
 ><P
 ><B
 >Example 1. <B
@@ -171,11 +177,79 @@ CLASS="programlisting"
 >
     </P
 ><P
+>Note: Be careful about variables that may match HTML entities.  
+	Things like &#38;amp, &#38;copy and &#38;pound are parsed by the browser
+	and the actual entity is used instead of the desired variable name.  This 
+	is an obvious hassle that the W3C has been telling people about for years.
+	The reference is here: <A
+HREF="http://www.w3.org/TR/html4/appendix/notes.html#h-B.2.2"
+TARGET="_top"
+>http://www.w3.org/TR/html4/appendix/notes.html#h-B.2.2</A
+>
+	PHP supports changing the argument separator to the W3C-suggested
+	semi-colon through the arg_separator .ini directive.  Unfortunately most
+	user agents do not send form data in this semi-colon separated format.
+	A more portable way around this is to use &#38;amp; instead of &#38; as the
+    separator.  You don't need to change PHP's arg_separator for this.  Leave
+	it as &#38;, but simply encode your URLs using <A
+HREF="function.htmlentities.html"
+><B
+CLASS="function"
+>htmlentities()</B
+></A
+>(urlencode($data)).
+     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN38549"
+></A
+><P
+><B
+>Example 2. <B
+CLASS="function"
+>Urlencode/htmlentities()</B
+> example</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;echo '&#60;A HREF="mycgi?foo=', htmlentities (urlencode ($userinput) ), '"&#62;';
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+	</P
+><P
 >&#13;     See also <A
 HREF="function.urldecode.html"
 ><B
 CLASS="function"
 >urldecode()</B
+></A
+>,
+		          <A
+HREF="function.htmlentities.html"
+><B
+CLASS="function"
+>htmlentities()</B
 ></A
 >,
 		          <A

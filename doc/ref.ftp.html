@@ -4,7 +4,7 @@
 >FTP functions</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -79,15 +79,88 @@ CLASS="title"
 ><DIV
 CLASS="PARTINTRO"
 ><A
-NAME="AEN11309"
+NAME="AEN12492"
 ></A
 ><P
 >&#13;    FTP stands for File Transfer Protocol.</P
 ><P
 >&#13;    The following constants are defined when using the FTP module:
+    <TT
+CLASS="constant"
+>FTP_ASCII</TT
+> and <TT
+CLASS="constant"
+>FTP_BINARY</TT
+>.
+   </P
+><P
+>&#13;    <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN12498"
+></A
+><P
+><B
+>Example 1. <B
+CLASS="function"
+>ftp()</B
+> example</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;&#60;?php
+// set up basic connection
+$conn_id = ftp_connect("$ftp_server"); 
 
-    FTP_ASCII, and
-    FTP_BINARY.</P
+// login with username and password
+$login_result = ftp_login($conn_id, "$ftp_user_name", "$ftp_user_pass"); 
+
+// check connection
+if ((!$conn_id) || (!$login_result)) { 
+        echo "Ftp connection has failed!";
+        echo "Attempted to connect to $ftp_server for user $user"; 
+        die; 
+    } else {
+        echo "Connected to $ftp_server, for user $user";
+    }
+
+// upload the file
+$upload = ftp_put($conn_id, "$destination_file", "$source_file", FTP_BINARY); 
+
+// check upload status
+if (!$upload) { 
+        echo "Ftp upload has failed!";
+    } else {
+        echo "Uploaded $source_file to $ftp_server as $destination_file";
+    }
+
+// close the FTP stream 
+ftp_quit($conn_id); 
+?&#62;
+     </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+   </P
 ></DIV
 ><DIV
 CLASS="TOC"

@@ -28,7 +28,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: math.c,v 1.54 2000/08/01 15:09:48 hholzgra Exp $ */
+/* $Id: math.c,v 1.55 2000/09/19 18:50:52 fmk Exp $ */
 #include "php.h"
 #include "internal_functions.h"
 #include "phpmath.h"
@@ -40,7 +40,7 @@
 #define M_PI 3.14159265358979323846
 #endif
 
-char *_php3_number_format(double, int, char ,char);
+PHPAPI char *_php3_number_format(double, int, char ,char);
 
 /* {{{ proto int abs(int number)
    Return the absolute value of the number */
@@ -601,7 +601,7 @@ void php3_base_convert(INTERNAL_FUNCTION_PARAMETERS)
 } /* }}} */
 
 
-char *_php3_number_format(double d,int dec,char dec_point,char thousand_sep)
+PHPAPI char *_php3_number_format(double d,int dec,char dec_point,char thousand_sep)
 {
 	char *tmpbuf,*resbuf;
 	char *s,*t;  /* source, target */

@@ -4,7 +4,7 @@
 >com_invoke</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -74,20 +74,25 @@ NAME="function.com-invoke"
 ><DIV
 CLASS="refnamediv"
 ><A
-NAME="AEN5720"
+NAME="AEN6565"
 ></A
 ><P
 >    (PHP3 &#62;= 3.0.3, PHP4 )</P
->com_invoke&nbsp;--&nbsp;???</DIV
+>com_invoke&nbsp;--&nbsp;
+     Calls a COM component's method.
+    </DIV
 ><DIV
 CLASS="refsect1"
 ><A
-NAME="AEN5723"
+NAME="AEN6568"
 ></A
 ><H2
 >Description</H2
 ><DIV
 CLASS="funcsynopsis"
+><A
+NAME="AEN6570"
+></A
 ><P
 ></P
 ><P
@@ -98,14 +103,35 @@ CLASS="FUNCDEF"
 CLASS="function"
 >com_invoke</B
 ></CODE
-> (resource object, string function_name [, mixed 
+> (resource com_object, string function_name [, mixed 
        function parameters, ...])</CODE
 ></P
 ><P
 ></P
 ></DIV
 ><P
->&#13;    </P
+>&#13;     <B
+CLASS="function"
+>Com_invoke()</B
+> invokes a method of the COM
+     component referenced by
+     <TT
+CLASS="parameter"
+><I
+>com_object</I
+></TT
+>. Returns
+     <TT
+CLASS="literal"
+>false</TT
+> on error, returns the
+     <TT
+CLASS="parameter"
+><I
+>function_name</I
+></TT
+>'s return value on success.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

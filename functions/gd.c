@@ -29,7 +29,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: gd.c,v 1.154 2000/07/04 16:52:19 rasmus Exp $ */
+/* $Id: gd.c,v 1.155 2000/09/30 17:32:44 sas Exp $ */
 
 /* gd 1.2 is copyright 1994, 1995, Quest Protein Database Center, 
    Cold Spring Harbor Labs. */
@@ -2217,7 +2217,7 @@ void php3_imagettftext_common(INTERNAL_FUNCTION_PARAMETERS, int mode)
 	error = gdttf(im, brect, col, fontname, ptsize, angle, x, y, string);
 
 	if (error) {
-		php3_error(E_WARNING, error);
+		php3_error(E_WARNING, "%s", error);
 		RETURN_FALSE;
 	}
 

@@ -1,0 +1,266 @@
+<HTML
+><HEAD
+><TITLE
+>shm_open</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Shared Memory Functions"
+HREF="ref.shmop.html"><LINK
+REL="PREVIOUS"
+TITLE="Shared Memory Functions"
+HREF="ref.shmop.html"><LINK
+REL="NEXT"
+TITLE="shm_read"
+HREF="function.shm_read.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="ref.shmop.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.shm_read.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.shm_open"
+>shm_open</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN34236"
+></A
+><P
+>    (unknown)</P
+>shm_open&nbsp;--&nbsp;Create or open shared memory block</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN34239"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN34241"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int <B
+CLASS="function"
+>shm_open</B
+></CODE
+> (int key, string flags, int mode, int size)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     <B
+CLASS="function"
+>shm_open()</B
+> can create or open a shared memory block.
+    </P
+><P
+>&#13;     <B
+CLASS="function"
+>shm_open()</B
+> takes 4 parameters: key, which is the
+     system's id for the shared memory block, this parameter can be passed
+     as a decimal or hex. The second parameter are the flags that you can use:
+     <P
+></P
+><UL
+><LI
+><P
+>&#13;        "a" for access (sets IPC_EXCL)
+        use this flag when you need to open an existing shared memory segment
+       </P
+></LI
+><LI
+><P
+>&#13;        "c" for create (sets IPC_CREATE)
+        use this flag when you need to create a new shared memory segment.
+       </P
+></LI
+></UL
+>
+     The third parameter is the mode, which are the permissions that you
+     wish to assign to your memory segment, those are the same as permission
+     for a file. Permissions need to be passed in octal form ex. 0644.
+     The last parameter is size of the shared memory block you wish to create
+     in bytes.
+     <DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
+><P
+><B
+>Note: </B
+>
+      Note: the 3rd and 4th should be entered as 0 if you are opening an
+      existing memory segment. On success <B
+CLASS="function"
+>shm_open()</B
+> will
+      return an id that you can use to access the shared memory segment 
+      you've created.
+     </P
+></BLOCKQUOTE
+></DIV
+>
+    </P
+><P
+>&#13;     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN34266"
+></A
+><P
+><B
+>Example 1. Create a new shared memory block</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;&#60;?php
+$shm_id = shm_open(0x0fff, "c", 0644, 100);
+?&#62;
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+    </P
+><P
+>&#13;     This example opened a shared memory block with a system id of 0x0fff.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="ref.shmop.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.shm_read.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Shared Memory Functions</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.shmop.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>shm_read</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

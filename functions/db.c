@@ -28,7 +28,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: db.c,v 1.94 2000/01/01 04:31:14 sas Exp $ */
+/* $Id: db.c,v 1.95 2000/09/30 17:32:44 sas Exp $ */
 #define IS_EXT_MODULE
 #if COMPILE_DL
 # include "dl/phpdl.h"
@@ -229,7 +229,7 @@ static char *php3_get_info_db(void)
 
 void php3_info_db(void)
 {
-	php3_printf(php3_get_info_db());
+	php3_printf("%s", php3_get_info_db());
 }
 
 /* {{{ proto string dblist(void)

@@ -26,7 +26,7 @@
    | Authors: Rasmus Lerdorf <rasmus@lerdorf.on.ca>                       |
    +----------------------------------------------------------------------+
  */
-/* $Id: file.c,v 1.232 2000/02/20 20:42:14 eschmid Exp $ */
+/* $Id: file.c,v 1.233 2000/09/27 16:15:07 sas Exp $ */
 #include "php.h"
 
 #include <stdio.h>
@@ -828,6 +828,7 @@ void php3_fgetc(INTERNAL_FUNCTION_PARAMETERS) {
 	char *buf;
 	int issock=0;
 	int *sock, socketd=0;
+	int result;
 	TLS_VARS;
 	
 	if (ARG_COUNT(ht) != 1 || getParameters(ht, 1, &arg1) == FAILURE) {
@@ -847,10 +848,12 @@ void php3_fgetc(INTERNAL_FUNCTION_PARAMETERS) {
 		RETURN_FALSE;
 	}
 	buf = emalloc(sizeof(char) * 2);
-	if (!(issock?(*buf=SOCK_FGETC(socketd)):(*buf=fgetc(fp)))) {
+#define FP_FGETC(a, b, c) (a?SOCK_FGETC(b):fgetc(c))
+	if ((result = FP_FGETC(issock, socketd, fp)) == EOF) {
 		efree(buf);
 		RETVAL_FALSE;
 	} else {
+		buf[0]=result;
 		buf[1]='\0';
 		return_value->value.str.val = buf; 
 		return_value->value.str.len = 1; 

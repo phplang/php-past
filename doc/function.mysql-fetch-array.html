@@ -4,7 +4,7 @@
 >mysql_fetch_array</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -15,8 +15,8 @@ REL="PREVIOUS"
 TITLE="mysql_error"
 HREF="function.mysql-error.html"><LINK
 REL="NEXT"
-TITLE="mysql_fetch_field"
-HREF="function.mysql-fetch-field.html"><META
+TITLE="mysql_fetch_assoc"
+HREF="function.mysql-fetch-assoc.html"><META
 NAME="HTTP_EQUIV"
 CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
@@ -58,7 +58,7 @@ WIDTH="10%"
 ALIGN="right"
 VALIGN="bottom"
 ><A
-HREF="function.mysql-fetch-field.html"
+HREF="function.mysql-fetch-assoc.html"
 >Next</A
 ></TD
 ></TR
@@ -74,22 +74,25 @@ NAME="function.mysql-fetch-array"
 ><DIV
 CLASS="refnamediv"
 ><A
-NAME="AEN22911"
+NAME="AEN24216"
 ></A
 ><P
 >    (PHP3 , PHP4 )</P
 >mysql_fetch_array&nbsp;--&nbsp;
-     Fetch a result row as an associative array
+     Fetch a result row as an associative array, a numeric array, or both.
     </DIV
 ><DIV
 CLASS="refsect1"
 ><A
-NAME="AEN22914"
+NAME="AEN24219"
 ></A
 ><H2
 >Description</H2
 ><DIV
 CLASS="funcsynopsis"
+><A
+NAME="AEN24221"
+></A
 ><P
 ></P
 ><P
@@ -132,6 +135,9 @@ CLASS="function"
      make an alias for the column.
      <DIV
 CLASS="informalexample"
+><A
+NAME="AEN24235"
+></A
 ><P
 ></P
 ><TABLE
@@ -189,6 +195,12 @@ HREF="function.mysql-fetch-row.html"
 CLASS="function"
 >mysql_fetch_row()</B
 ></A
+> and <A
+HREF="function.mysql-fetch-assoc.html"
+><B
+CLASS="function"
+>mysql_fetch_assoc()</B
+></A
 >.
     </P
 ><TABLE
@@ -201,6 +213,9 @@ CLASS="EXAMPLE"
 ><TD
 ><DIV
 CLASS="example"
+><A
+NAME="AEN24246"
+></A
 ><P
 ><B
 >Example 1. <B
@@ -218,10 +233,12 @@ WIDTH="100%"
 CLASS="programlisting"
 >&#13;&#60;?php 
 mysql_connect ($host, $user, $password);
-$result = mysql_db_query ("database","select * from table");
+$result = mysql_db_query ("database","select user_id, fullname from table");
 while ($row = mysql_fetch_array ($result)) {
-    echo $row["user_id"];
-    echo $row["fullname"];
+    echo "user_id: ".$row["user_id"]."&#60;br&#62;\n";
+    echo "user_id: ".$row[0]."&#60;br&#62;\n";
+    echo "fullname: ".$row["fullname"]."&#60;br&#62;\n";
+    echo "fullname: ".$row[1]."&#60;br&#62;\n";
 }
 mysql_free_result ($result);
 ?&#62;
@@ -265,7 +282,7 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><A
-HREF="function.mysql-fetch-field.html"
+HREF="function.mysql-fetch-assoc.html"
 >Next</A
 ></TD
 ></TR
@@ -287,7 +304,7 @@ HREF="ref.mysql.html"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->mysql_fetch_field</TD
+>mysql_fetch_assoc</TD
 ></TR
 ></TABLE
 ></DIV

@@ -4,7 +4,7 @@
 >swf_closefile</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -74,7 +74,7 @@ NAME="function.swf-closefile"
 ><DIV
 CLASS="refnamediv"
 ><A
-NAME="AEN31620"
+NAME="AEN34445"
 ></A
 ><P
 >    (PHP4 &#62;= 4.0RC2)</P
@@ -82,12 +82,15 @@ NAME="AEN31620"
 ><DIV
 CLASS="refsect1"
 ><A
-NAME="AEN31623"
+NAME="AEN34448"
 ></A
 ><H2
 >Description</H2
 ><DIV
 CLASS="funcsynopsis"
+><A
+NAME="AEN34450"
+></A
 ><P
 ></P
 ><P
@@ -100,7 +103,8 @@ CLASS="function"
 >swf_closefile</B
 >
       </CODE
->(void);</CODE
+> ([int
+       return_file])</CODE
 ></P
 ><P
 ></P
@@ -113,7 +117,118 @@ HREF="function.swf-openfile.html"
 CLASS="function"
 >swf_openfile()</B
 ></A
-> function.
+> function.  If the 
+     <TT
+CLASS="parameter"
+><I
+>return_file</I
+></TT
+> parameter is set then the contents
+     of the SWF file are returned from the function.
+    </P
+><P
+>&#13;     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN34461"
+></A
+><P
+><B
+>Example 1. 
+       Creating a simple flash file based on user input and outputting it
+       and saving it in a database
+      </B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;&#60;?php
+
+// The $text variable is submitted by the
+// user
+
+// Global variables for database
+// access (used in the swf_savedata() function)
+$DBHOST = "localhost";
+$DBUSER = "sterling";
+$DBPASS = "secret";
+
+swf_openfile ("php://stdout", 256, 256, 30, 1, 1, 1);
+
+    swf_definefont (10, "Ligon-Bold");
+        swf_fontsize (12);
+        swf_fontslant (10);
+    
+    swf_definetext (11, $text, 1);
+    
+    swf_pushmatrix ();
+        swf_translate (-50, 80, 0);
+        swf_placeobject (11, 60);
+    swf_popmatrix ();
+
+    swf_showframe ();
+  
+    swf_startdoaction ();
+        swf_actionstop ();
+    swf_enddoaction ();
+
+$data = swf_closefile (1);
+
+$data ?
+  swf_savedata ($data) :
+  die ("Error could not save SWF file");
+
+// void swf_savedata (string data)
+// Save the generated file a database
+// for later retrieval
+function swf_savedata ($data)
+{
+    global $DBHOST, 
+           $DBUSER,
+           $DBPASS;
+    
+    $dbh = @mysql_connect ($DBHOST, $DBUSER, $DBPASS);
+
+    if (!$dbh) {
+        die (sprintf ("Error [%d]: %s",
+                      mysql_errno (), mysql_error ()));
+    }
+
+    $stmt = "INSERT INTO swf_files (file) VALUES ('$data')";
+
+    $sth = @mysql_query ($stmt, $dbh);
+
+    if (!$sth) {
+        die (sprintf ("Error [%d]: %s",
+                      mysql_errno (), mysql_error ()));
+    }
+
+    @mysql_free_result ($sth);
+    @mysql_close ($dbh);
+}
+?&#62;
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
     </P
 ></DIV
 ><DIV

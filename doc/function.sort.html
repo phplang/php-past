@@ -4,7 +4,7 @@
 >sort</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -74,7 +74,7 @@ NAME="function.sort"
 ><DIV
 CLASS="refnamediv"
 ><A
-NAME="AEN4931"
+NAME="AEN5768"
 ></A
 ><P
 >    (PHP3 , PHP4 )</P
@@ -82,12 +82,15 @@ NAME="AEN4931"
 ><DIV
 CLASS="refsect1"
 ><A
-NAME="AEN4934"
+NAME="AEN5771"
 ></A
 ><H2
 >Description</H2
 ><DIV
 CLASS="funcsynopsis"
+><A
+NAME="AEN5773"
+></A
 ><P
 ></P
 ><P
@@ -116,6 +119,9 @@ CLASS="EXAMPLE"
 ><TD
 ><DIV
 CLASS="example"
+><A
+NAME="AEN5783"
+></A
 ><P
 ><B
 >Example 1. <B
@@ -131,12 +137,16 @@ WIDTH="100%"
 ><TD
 ><PRE
 CLASS="programlisting"
->&#13;$fruits = array ("lemon", "orange", "banana", "apple");
+>&#13;&#60;?php
+
+$fruits = array ("lemon", "orange", "banana", "apple");
 sort ($fruits);
 reset ($fruits);
 while (list ($key, $val) = each ($fruits)) {
-    echo "$key -&#62; $val\n";
+    echo "fruits[".$key."] = ".$val; 
 }
+ 
+?&#62;
       </PRE
 ></TD
 ></TR
@@ -153,6 +163,9 @@ while (list ($key, $val) = each ($fruits)) {
 ><P
 >&#13;     <DIV
 CLASS="informalexample"
+><A
+NAME="AEN5789"
+></A
 ><P
 ></P
 ><TABLE
@@ -235,18 +248,31 @@ HREF="function.natsort.html"
 CLASS="function"
 >natsort()</B
 ></A
->,<A
+>, <A
+HREF="function.natcasesort.html"
+><B
+CLASS="function"
+>natcasesort()</B
+></A
+>,
+     <A
 HREF="function.rsort.html"
 ><B
 CLASS="function"
 >rsort()</B
 ></A
->,
-     and <A
+>, <A
 HREF="function.usort.html"
 ><B
 CLASS="function"
 >usort()</B
+></A
+>
+     and <A
+HREF="function.uksort.html"
+><B
+CLASS="function"
+>uksort()</B
 ></A
 >.
     </P

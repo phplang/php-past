@@ -4,7 +4,7 @@
 >msql_connect</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -74,7 +74,7 @@ NAME="function.msql-connect"
 ><DIV
 CLASS="refnamediv"
 ><A
-NAME="AEN22009"
+NAME="AEN23255"
 ></A
 ><P
 >    (PHP3 , PHP4 )</P
@@ -82,12 +82,15 @@ NAME="AEN22009"
 ><DIV
 CLASS="refsect1"
 ><A
-NAME="AEN22012"
+NAME="AEN23258"
 ></A
 ><H2
 >Description</H2
 ><DIV
 CLASS="funcsynopsis"
+><A
+NAME="AEN23260"
+></A
 ><P
 ></P
 ><P
@@ -98,7 +101,11 @@ CLASS="FUNCDEF"
 CLASS="function"
 >msql_connect</B
 ></CODE
-> (string hostname)</CODE
+> ([string
+       hostname [, string
+       hostname[:port] [, string
+       username [, string
+       password]]]])</CODE
 ></P
 ><P
 ></P
@@ -110,7 +117,7 @@ CLASS="function"
 ><P
 >&#13;     <B
 CLASS="function"
->Msql_connect()</B
+>msql_connect()</B
 > establishes a connection to a
      mSQL server.  The hostname argument is optional, and if it's
      missing, localhost is assumed.

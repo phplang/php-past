@@ -1,0 +1,274 @@
+<HTML
+><HEAD
+><TITLE
+>listen</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Socket functions"
+HREF="ref.sockets.html"><LINK
+REL="PREVIOUS"
+TITLE="connect"
+HREF="function.connect.html"><LINK
+REL="NEXT"
+TITLE="socket"
+HREF="function.socket.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.connect.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.socket.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.listen"
+>listen</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN36037"
+></A
+><P
+>    (PHP4 &#62;= 4.0.2)</P
+>listen&nbsp;--&nbsp;Listens for a connection on a socket</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN36040"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN36042"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int <B
+CLASS="function"
+>listen</B
+></CODE
+> (int socket, int backlog)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     After the socket <TT
+CLASS="parameter"
+><I
+>socket</I
+></TT
+> has been created
+     using <A
+HREF="function.socket.html"
+><B
+CLASS="function"
+>socket()</B
+></A
+> and bound to a name with
+     <A
+HREF="function.bind.html"
+><B
+CLASS="function"
+>bind()</B
+></A
+>, it may be told to listen for incoming
+     connections on <TT
+CLASS="parameter"
+><I
+>socket</I
+></TT
+>. A maximum of
+     <TT
+CLASS="parameter"
+><I
+>backlog</I
+></TT
+> incoming connections will be
+     queued for processing.
+    </P
+><P
+>&#13;     <B
+CLASS="function"
+>listen()</B
+> is applicable only to sockets with
+     type <TT
+CLASS="literal"
+>SOCK_STREAM</TT
+> or
+     <TT
+CLASS="literal"
+>SOCK_SEQPACKET</TT
+>.
+    </P
+><P
+>&#13;     Returns zero on success, or a negative error code on
+     failure. This code may be passed to <A
+HREF="function.strerror.html"
+><B
+CLASS="function"
+>strerror()</B
+></A
+>
+     to get a textual explanation of the error.
+    </P
+><P
+>&#13;     See also 
+     <A
+HREF="function.accept-connect.html"
+><B
+CLASS="function"
+>accept_connect()</B
+></A
+>,
+     <A
+HREF="function.bind.html"
+><B
+CLASS="function"
+>bind()</B
+></A
+>,
+     <A
+HREF="function.connect.html"
+><B
+CLASS="function"
+>connect()</B
+></A
+>,
+     <A
+HREF="function.socket.html"
+><B
+CLASS="function"
+>socket()</B
+></A
+>,
+     <A
+HREF="function.socket-get-status.html"
+><B
+CLASS="function"
+>socket_get_status()</B
+></A
+>, and
+     <A
+HREF="function.strerror.html"
+><B
+CLASS="function"
+>strerror()</B
+></A
+>.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.connect.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.socket.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>connect</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.sockets.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>socket</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

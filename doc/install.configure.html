@@ -1,0 +1,3362 @@
+<HTML
+><HEAD
+><TITLE
+>Complete list of configure options</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Installation"
+HREF="installation.html"><LINK
+REL="PREVIOUS"
+TITLE="Installation on UNIX systems"
+HREF="install.unix.html"><LINK
+REL="NEXT"
+TITLE="Installation on Windows 95/98/NT systems"
+HREF="install-windows95-nt.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="install.unix.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 2. Installation</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="install-windows95-nt.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="install.configure"
+>Complete list of configure options</A
+></H1
+><DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
+><P
+><B
+>Note: </B
+>
+     These are only used at compile time. If you want to alter PHP's
+     runtime configuration, please go to <A
+HREF="configuration.html"
+>Configuration</A
+>.
+    </P
+></BLOCKQUOTE
+></DIV
+><P
+>&#13;    The following is a complete list of options supported by the PHP 3
+    and PHP 4 <TT
+CLASS="filename"
+>configure</TT
+> scripts, used when
+    compiling in Unix-like environments. Some are available in PHP 3,
+    some in PHP 4, and some in both, as noted. There are many options
+    the names of which have changed between PHP 3 and PHP 4, but which
+    accomplish the same things. These entries are cross-referenced to
+    each other, so if you have a problem getting your PHP 3-era
+    configuration options to work, check here to see whether the names
+    have changed.
+   </P
+><P
+></P
+><UL
+><LI
+><P
+>&#13;      <A
+HREF="install.configure.html#install.configure.databases"
+>Database</A
+>
+     </P
+></LI
+><LI
+><P
+>&#13;      <A
+HREF="install.configure.html#install.configure.ecommerce"
+>Ecommerce</A
+>
+     </P
+></LI
+><LI
+><P
+>&#13;      <A
+HREF="install.configure.html#install.configure.graphics"
+>Graphics</A
+>
+     </P
+></LI
+><LI
+><P
+>&#13;      <A
+HREF="install.configure.html#install.configure.misc"
+>Miscellaneous</A
+>
+     </P
+></LI
+><LI
+><P
+>&#13;      <A
+HREF="install.configure.html#install.configure.networking"
+>Networking</A
+>
+     </P
+></LI
+><LI
+><P
+>&#13;      <A
+HREF="install.configure.html#install.configure.php"
+>PHP Behaviour</A
+>
+     </P
+></LI
+><LI
+><P
+>&#13;      <A
+HREF="install.configure.html#install.configure.servers"
+>Server</A
+>
+     </P
+></LI
+><LI
+><P
+>&#13;      <A
+HREF="install.configure.html#install.configure.text"
+>Text and language</A
+>
+     </P
+></LI
+><LI
+><P
+>&#13;      <A
+HREF="install.configure.html#install.configure.xml"
+>XML</A
+>
+     </P
+></LI
+></UL
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="install.configure.databases"
+>Database</A
+></H2
+><P
+></P
+><DIV
+CLASS="variablelist"
+><DL
+><DT
+><A
+NAME="install.configure.with-adabas"
+><TT
+CLASS="parameter"
+><I
+>--with-adabas[=DIR]</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3, PHP 4: Include Adabas D support. DIR is the Adabas base
+        install directory, defaults to /usr/local.
+       </P
+><P
+>&#13;        <A
+HREF="http://www.adabas.com/"
+TARGET="_top"
+>Adabas home page</A
+>
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.enable-dba"
+><TT
+CLASS="parameter"
+><I
+>--enable-dba=shared</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3: Option not available in PHP 3
+       </P
+><P
+>&#13;        PHP 4: Build DBA as a shared module
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.enable-dbase"
+><TT
+CLASS="parameter"
+><I
+>--enable-dbase</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3: Option not available; use <A
+HREF="install.configure.html#install.configure.with-dbase"
+>--with-dbase</A
+>
+        instead.
+       </P
+><P
+>&#13;        PHP 4: Enable the bundled dbase library. No external libraries
+        are required.
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.with-dbase"
+><TT
+CLASS="parameter"
+><I
+>--with-dbase</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3: Include the bundled dbase library. No external
+        libraries are required.
+       </P
+><P
+>&#13;        PHP 4: Option not available; use <A
+HREF="install.configure.html#install.configure.enable-dbase"
+>--enable-dbase</A
+>
+        instead.
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.with-db2"
+><TT
+CLASS="parameter"
+><I
+>--with-db2[=DIR]</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3, PHP 4: Include Berkeley DB2 support
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.with-db3"
+><TT
+CLASS="parameter"
+><I
+>--with-db3[=DIR]</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3: Option not available in PHP 3
+       </P
+><P
+>&#13;        PHP 4: Include Berkeley DB3 support
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.with-dbm"
+><TT
+CLASS="parameter"
+><I
+>--with-dbm[=DIR]</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3, PHP 4: Include DBM support
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.with-dbmaker"
+><TT
+CLASS="parameter"
+><I
+>--with-dbmaker[=DIR]</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3: Option not available in PHP 3
+       </P
+><P
+>&#13;        PHP 4: Include DBMaker support. DIR is the DBMaker base install
+        directory, defaults to where the latest version of DBMaker is installed
+        (such as /home/dbmaker/3.6).
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.with-empress"
+><TT
+CLASS="parameter"
+><I
+>--with-empress[=DIR]</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3, PHP 4: Include Empress support. DIR is the Empress base install
+        directory, defaults to $EMPRESSPATH
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.enable-filepro"
+><TT
+CLASS="parameter"
+><I
+>--enable-filepro</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3: Option not available; use <A
+HREF="install.configure.html#install.configure.with-filepro"
+>--with-filepro</A
+>
+        instead.
+       </P
+><P
+>&#13;        PHP 4: Enable the bundled read-only filePro support. No
+        external libraries are required.
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.with-filepro"
+><TT
+CLASS="parameter"
+><I
+>--with-filepro</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3: Include the bundled read-only filePro support. No
+        external libraries are required.
+       </P
+><P
+>&#13;        PHP 4: Option not available; use <A
+HREF="install.configure.html#install.configure.enable-filepro"
+>--enable-filepro</A
+>
+        instead.
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.with-gdbm"
+><TT
+CLASS="parameter"
+><I
+>--with-gdbm[=DIR]</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3, PHP 4: Include GDBM support
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.with-hyperwave"
+><TT
+CLASS="parameter"
+><I
+>--with-hyperwave</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3, PHP 4: Include Hyperwave support
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.with-ibm-db2"
+><TT
+CLASS="parameter"
+><I
+>--with-ibm-db2[=DIR]</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3, PHP 4: Include IBM DB2 support. DIR is the DB2 base
+        install directory, defaults to
+        <TT
+CLASS="filename"
+>/home/db2inst1/sqllib</TT
+>.
+       </P
+><P
+>&#13;        <A
+HREF="http://www.ibm.com/db2/"
+TARGET="_top"
+>IBM DB2 home page</A
+>
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.with-informix"
+><TT
+CLASS="parameter"
+><I
+>--with-informix[=DIR]</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3, PHP 4: Include Informix support. DIR is the Informix base install
+        directory, defaults to nothing.
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.with-ingres"
+><TT
+CLASS="parameter"
+><I
+>--with-ingres[=DIR]</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3: Option not available in PHP 3
+       </P
+><P
+>&#13;        PHP 4: Include Ingres II support. DIR is the Ingres base directory
+        (default /II/ingres)
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.with-interbase"
+><TT
+CLASS="parameter"
+><I
+>--with-interbase[=DIR]</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3, PHP 4: Include InterBase support. DIR is the InterBase base
+        install directory, which defaults to <TT
+CLASS="filename"
+>/usr/interbase</TT
+>.
+       </P
+><P
+>&#13;        <A
+HREF="ref.ibase.html"
+>Interbase functions</A
+>
+       </P
+><P
+>&#13;        <A
+HREF="http://www.interbase.com/"
+TARGET="_top"
+>Interbase home page</A
+>
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.with-ldap"
+><TT
+CLASS="parameter"
+><I
+>--with-ldap[=DIR]</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3: Include LDAP support. DIR is the LDAP base install
+        directory.  Defaults to <TT
+CLASS="filename"
+>/usr</TT
+> and
+        <TT
+CLASS="filename"
+>/usr/local</TT
+>
+       </P
+><P
+>&#13;        PHP 4: Include LDAP support. DIR is the LDAP base install directory.
+       </P
+><P
+>&#13;        This provides <SPAN
+CLASS="acronym"
+>LDAP</SPAN
+> (Lightweight Directory Access
+        Protocol support).  The parameter is the LDAP base install
+        directory, defaults to <TT
+CLASS="filename"
+>/usr/local/ldap</TT
+>.
+       </P
+><P
+>&#13;        More information about LDAP can be found in <A
+HREF="http://www.faqs.org/rfcs/rfc1777.html"
+TARGET="_top"
+>RFC1777</A
+> and
+        <A
+HREF="http://www.faqs.org/rfcs/rfc1778.html"
+TARGET="_top"
+>RFC1778</A
+>.
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.with-msql"
+><TT
+CLASS="parameter"
+><I
+>--with-msql[=DIR]</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3, PHP 4: Enables mSQL support.  The parameter to this
+        option is the mSQL install directory and defaults to <TT
+CLASS="filename"
+>/usr/local/Hughes</TT
+>.  This is the
+        default directory of the mSQL 2.0 distribution.
+        <B
+CLASS="command"
+>configure</B
+> automatically detects which mSQL
+        version you are running and PHP supports both 1.0 and 2.0, but
+        if you compile PHP with mSQL 1.0, you can only access mSQL 1.0
+        databases, and vice-versa.
+       </P
+><P
+>&#13;        See also <A
+HREF="configuration.html#ini.sect.msql"
+>mSQL
+        Configuration</A
+> Directives in the <A
+HREF="configuration.html#configuration.file"
+>configuration file</A
+>.
+       </P
+><P
+>&#13;        <A
+HREF="http://www.hughes.com.au/"
+TARGET="_top"
+>mSQL home page</A
+>
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.with-mysql"
+><TT
+CLASS="parameter"
+><I
+>--with-mysql[=DIR]</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3: Include MySQL support. DIR is the MySQL base install directory,
+        defaults to searching through a number of common places for the MySQL
+        files.
+       </P
+><P
+>&#13;        PHP 4: Include MySQL support. DIR is the MySQL base directory. If
+        unspecified, the bundled MySQL library will be used. This
+        option is turned on by default.
+       </P
+><P
+>&#13;        See also <A
+HREF="configuration.html#ini.sect.mysql"
+>MySQL
+        Configuration</A
+> Directives in the <A
+HREF="configuration.html#configuration.file"
+>configuration file</A
+>.
+       </P
+><P
+>&#13;        <A
+HREF="http://www.mysql.com/"
+TARGET="_top"
+>MySQL home page</A
+>
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.with-ndbm"
+><TT
+CLASS="parameter"
+><I
+>--with-ndbm[=DIR]</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3, PHP 4: Include NDBM support
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.with-oci8"
+><TT
+CLASS="parameter"
+><I
+>--with-oci8[=DIR]</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3: Option not available in PHP 3
+       </P
+><P
+>&#13;        PHP 4: Include Oracle-oci8 support. Default DIR is ORACLE_HOME.
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.with-oracle"
+><TT
+CLASS="parameter"
+><I
+>--with-oracle[=DIR]</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3: Include Oracle database support. DIR is Oracle's home directory,
+        defaults to $ORACLE_HOME.
+       </P
+><P
+>&#13;        PHP 4: Include Oracle-oci7 support. Default DIR is ORACLE_HOME.
+       </P
+><P
+>&#13;        Includes Oracle support.  Has been tested and should be
+        working at least with Oracle versions 7.0 through 7.3.  The
+        parameter is the <TT
+CLASS="envar"
+>ORACLE_HOME</TT
+> directory.  You do
+        not have to specify this parameter if your Oracle environment
+        has been set up.
+       </P
+><P
+>&#13;        <A
+HREF="http://www.oracle.com/"
+TARGET="_top"
+>Oracle home page</A
+>
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.with-pgsql"
+><TT
+CLASS="parameter"
+><I
+>--with-pgsql[=DIR]</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3: Include PostgresSQL support. DIR is the PostgresSQL base
+        install directory, which defaults to
+        <TT
+CLASS="filename"
+>/usr/local/pgsql</TT
+>.
+       </P
+><P
+>&#13;        PHP 4: Include PostgreSQL support. DIR is the PostgreSQL base
+        install directory, which defaults to
+        <TT
+CLASS="filename"
+>/usr/local/pgsql</TT
+>. Set DIR to shared to
+        build as a dl, or shared,DIR to build as a dl and still specify
+        DIR.
+       </P
+><P
+>&#13;        See also <A
+HREF="configuration.html#ini.sect.pgsql"
+>Postgres
+        Configuration</A
+> Directives in the <A
+HREF="configuration.html#configuration.file"
+>configuration file</A
+>.
+       </P
+><P
+>&#13;        <A
+HREF="http://www.postgresql.org/"
+TARGET="_top"
+>PostgreSQL home page</A
+>
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.with-solid"
+><TT
+CLASS="parameter"
+><I
+>--with-solid[=DIR]</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3, PHP 4: Include Solid support. DIR is the Solid base install
+        directory, defaults to /usr/local/solid
+       </P
+><P
+>&#13;        <A
+HREF="http://www.solidtech.com/"
+TARGET="_top"
+>Solid home page</A
+>
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.with-sybase-ct"
+><TT
+CLASS="parameter"
+><I
+>--with-sybase-ct[=DIR]</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3, PHP 4: Include Sybase-CT support. DIR is the Sybase home
+        directory, defaults to /home/sybase.
+       </P
+><P
+>&#13;        See also <A
+HREF="configuration.html#ini.sect.sybct"
+>Sybase-CT
+         Configuration</A
+> Directives in the <A
+HREF="configuration.html#configuration.file"
+>configuration
+         file</A
+>.
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.with-sybase"
+><TT
+CLASS="parameter"
+><I
+>--with-sybase[=DIR]</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3, PHP 4: Include Sybase-DB support. DIR is the Sybase home
+        directory, which defaults to <TT
+CLASS="filename"
+>/home/sybase</TT
+>.
+       </P
+><P
+>&#13;        See also <A
+HREF="configuration.html#ini.sect.sybase"
+>Sybase
+         Configuration</A
+> Directives in the <A
+HREF="configuration.html#configuration.file"
+>configuration file</A
+>.
+       </P
+><P
+>&#13;        <A
+HREF="http://www.sybase.com/"
+TARGET="_top"
+>Sybase home page</A
+>
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.with-openlink"
+><TT
+CLASS="parameter"
+><I
+>--with-openlink[=DIR]</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3, PHP 4: Include OpenLink ODBC support. DIR is the OpenLink base
+        install directory, defaults to /usr/local/openlink.
+       </P
+><P
+>&#13;        <A
+HREF="http://www.openlinksw.com/"
+TARGET="_top"
+>OpenLink Software's home page</A
+>
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.with-iodbc"
+><TT
+CLASS="parameter"
+><I
+>--with-iodbc[=DIR]</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3, PHP 4: Include iODBC support. DIR is the iODBC base install
+        directory, defaults to <TT
+CLASS="filename"
+>/usr/local</TT
+>.
+       </P
+><P
+>&#13;        This feature was first developed for iODBC Driver Manager, a
+        freely redistributable ODBC driver manager which runs under
+        many flavors of UNIX.
+       </P
+><P
+>&#13;        <A
+HREF="http://users.ids.net/~bjepson/freeODBC/"
+TARGET="_top"
+>FreeODBC home page</A
+> 
+        or <A
+HREF="http://www.iodbc.org/"
+TARGET="_top"
+>iODBC home page</A
+>
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.with-custom-odbc"
+><TT
+CLASS="parameter"
+><I
+>--with-custom-odbc[=DIR]</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3, PHP 4: Includes support for an arbitrary custom ODBC
+        library.  The parameter is the base directory and defaults to
+        <TT
+CLASS="filename"
+>/usr/local</TT
+>.
+       </P
+><P
+>&#13;        This option implies that you have defined CUSTOM_ODBC_LIBS
+        when you run the configure script. You also must have a valid
+        odbc.h header somewhere in your include path. If you don't
+        have one, create it and include your specific header from
+        there. Your header may also require some extra definitions,
+        particularly when it is multiplatform. Define them in
+        CFLAGS.
+       </P
+><P
+>&#13;        For example, you can use Sybase SQL Anywhere on QNX as
+        following:
+        <TT
+CLASS="literal"
+>&#13;         CFLAGS=-DODBC_QNX LDFLAGS=-lunix CUSTOM_ODBC_LIBS="-ldblib
+         -lodbc" ./configure --with-custom-odbc=/usr/lib/sqlany50
+        </TT
+>
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.disable-unified-odbc"
+><TT
+CLASS="parameter"
+><I
+>--disable-unified-odbc</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3: Disable unified ODBC support. Only applicable if iODBC, Adabas,
+        Solid, Velocis or a custom ODBC interface is enabled.
+       </P
+><P
+>&#13;        PHP 4: Option not available in PHP 4
+       </P
+><P
+>&#13;        The Unified ODBC module, which is a common interface to all
+        the databases with ODBC-based interfaces, such as Solid, IBM
+        DB2 and Adabas D.  It also works for normal ODBC libraries.
+        Has been tested with iODBC, Solid, Adabas D, IBM DB2 and
+        Sybase SQL Anywhere. Requires that one (and only one) of these
+        modules or the Velocis module is enabled, or a custom ODBC
+        library specified. This option is only applicable if one of
+        the following options is used: <A
+HREF="install.configure.html#install.configure.with-iodbc"
+>--with-iodbc</A
+>,
+        <A
+HREF="install.configure.html#install.configure.with-solid"
+>--with-solid</A
+>,
+        <A
+HREF="install.configure.html#install.configure.with-ibm-db2"
+>--with-ibm-db2</A
+>,
+        <A
+HREF="install.configure.html#install.configure.with-adabas"
+>--with-adabas</A
+>,
+        <A
+HREF="install.configure.html#install.configure.with-velocis"
+>--with-velocis</A
+>,
+        or <A
+HREF="install.configure.html#install.configure.with-custom-odbc"
+>--with-custom-odbc</A
+>.
+       </P
+><P
+>&#13;        See also <A
+HREF="configuration.html#ini.sect.uodbc"
+>Unified ODBC
+         Configuration</A
+> Directives in the <A
+HREF="configuration.html#configuration.file"
+>configuration
+         file</A
+>.
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.with-unixODBC"
+><TT
+CLASS="parameter"
+><I
+>--with-unixODBC[=DIR]</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3: Option not available in PHP 3
+       </P
+><P
+>&#13;        PHP 4: Include unixODBC support. DIR is the unixODBC base install
+        directory, defaults to /usr/local.
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.with-velocis"
+><TT
+CLASS="parameter"
+><I
+>--with-velocis[=DIR]</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3, PHP 4: Include Velocis support. DIR is the Velocis base install
+        directory, defaults to /usr/local/velocis.
+       </P
+><P
+>&#13;        <A
+HREF="http://www.raima.com/"
+TARGET="_top"
+>Velocis home page</A
+>
+       </P
+></DD
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="install.configure.ecommerce"
+>Ecommerce</A
+></H2
+><P
+></P
+><DIV
+CLASS="variablelist"
+><DL
+><DT
+><A
+NAME="install.configure.with-ccvs"
+><TT
+CLASS="parameter"
+><I
+>--with-ccvs[=DIR]</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3: Option not available in PHP 3
+       </P
+><P
+>&#13;        PHP 4: Compile CCVS support into PHP4. Please specify your CCVS base
+        install directory as DIR.
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.with-mck"
+><TT
+CLASS="parameter"
+><I
+>--with-mck[=DIR]</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3: Include Cybercash MCK support. DIR is the cybercash mck
+        build directory, which defaults to
+        <TT
+CLASS="filename"
+>/usr/src/mck-3.2.0.3-linux</TT
+>. For help, look
+        in <TT
+CLASS="filename"
+>extra/cyberlib</TT
+>.
+       </P
+><P
+>&#13;        PHP 4: Option not available; use <A
+HREF="install.configure.html#install.configure.with-cybercash"
+>--with-cybercash</A
+>
+        instead.
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.with-cybercash"
+><TT
+CLASS="parameter"
+><I
+>--with-cybercash[=DIR]</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3: Option not available; use <A
+HREF="install.configure.html#install.configure.with-mck"
+>--with-mck</A
+>
+        instead.
+       </P
+><P
+>&#13;        PHP 4: Include CyberCash support. DIR is the CyberCash MCK install
+        directory.
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.with-pfpro"
+><TT
+CLASS="parameter"
+><I
+>--with-pfpro[=DIR]</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3: Option not available in PHP 3
+       </P
+><P
+>&#13;        PHP 4: Include Verisign Payflow Pro support
+       </P
+></DD
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="install.configure.graphics"
+>Graphics</A
+></H2
+><P
+></P
+><DIV
+CLASS="variablelist"
+><DL
+><DT
+><A
+NAME="install.configure.enable-freetype-4bit-antialias-hack"
+><TT
+CLASS="parameter"
+><I
+>--enable-freetype-4bit-antialias-hack</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3: Option not available in PHP 3
+       </P
+><P
+>&#13;        PHP 4: Include support for FreeType2 (experimental).
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.with-gd"
+><TT
+CLASS="parameter"
+><I
+>--with-gd[=DIR]</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3: Include GD support (DIR is GD's install dir).
+       </P
+><P
+>&#13;        PHP 4: Include GD support (DIR is GD's install dir). Set DIR to shared
+        to build as a dl, or shared,DIR to build as a dl and still specify DIR.
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.without-gd"
+><TT
+CLASS="parameter"
+><I
+>--without-gd</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3, PHP 4: Disable GD support.
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.with-imagick"
+><TT
+CLASS="parameter"
+><I
+>--with-imagick[=DIR]</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3: Include ImageMagick support. DIR is the install
+        directory, and if left out, PHP will try to find it on its
+        own. [experimental]
+       </P
+><P
+>&#13;        PHP 4: Option not available in PHP 4
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.with-jpeg-dir"
+><TT
+CLASS="parameter"
+><I
+>--with-jpeg-dir[=DIR]</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3: jpeg dir for pdflib 2.0
+       </P
+><P
+>&#13;        PHP 4: jpeg dir for pdflib 3.x
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.with-png-dir"
+><TT
+CLASS="parameter"
+><I
+>--with-png-dir[=DIR]</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3: Option not available in PHP 3
+       </P
+><P
+>&#13;        PHP 4: png dir for pdflib 3.x
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.enable-t1lib"
+><TT
+CLASS="parameter"
+><I
+>--enable-t1lib</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3: Enable t1lib support.
+       </P
+><P
+>&#13;        PHP 4: Option not available; use <A
+HREF="install.configure.html#install.configure.with-t1lib"
+>--with-t1lib</A
+>
+        instead.
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.with-t1lib"
+><TT
+CLASS="parameter"
+><I
+>--with-t1lib[=DIR]</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3: Option not available; use <A
+HREF="install.configure.html#install.configure.enable-t1lib"
+>--enable-t1lib</A
+>
+        instead.
+       </P
+><P
+>&#13;        PHP 4: Include T1lib support.
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.with-tiff-dir"
+><TT
+CLASS="parameter"
+><I
+>--with-tiff-dir[=DIR]</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3: tiff dir for pdflib 2.0
+       </P
+><P
+>&#13;        PHP 4: tiff dir for pdflib 3.x
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.with-ttf"
+><TT
+CLASS="parameter"
+><I
+>--with-ttf[=DIR]</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3, PHP 4: Include FreeType support
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.with-xpm-dir"
+><TT
+CLASS="parameter"
+><I
+>--with-xpm-dir[=DIR]</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3: Option not available in PHP 3
+       </P
+><P
+>&#13;        PHP 4: xpm dir for gd-1.8+
+       </P
+></DD
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="install.configure.misc"
+>Miscellaneous</A
+></H2
+><P
+>&#13;     These are being classified over time, where appropriate.
+    </P
+><P
+></P
+><DIV
+CLASS="variablelist"
+><DL
+><DT
+><A
+NAME="install.configure.disable-bcmath"
+><TT
+CLASS="parameter"
+><I
+>--disable-bcmath</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3: Compile without BC arbitrary precision math
+        functions. These functions allow you to operate with numbers
+        outside of the ranges allowed by regular integers and floats;
+        see <A
+HREF="ref.bc.html"
+>BCMath Arbitrary Precision
+         Mathematics Functions</A
+> for more information.
+       </P
+><P
+>&#13;        PHP 4: Option not available; bcmath is not compiled in by
+        default. Use <A
+HREF="install.configure.html#install.configure.enable-bcmath"
+>--enable-bcmath</A
+>
+        to compile it in.
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.disable-display-source"
+><TT
+CLASS="parameter"
+><I
+>--disable-display-source</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3: Compile without displaying source support
+       </P
+><P
+>&#13;        PHP 4: Option not available in PHP 4
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.disable-libtool-lock"
+><TT
+CLASS="parameter"
+><I
+>--disable-libtool-lock</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3: Option not available in PHP 3
+       </P
+><P
+>&#13;        PHP 4: avoid locking (might break parallel builds)
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.disable-pear"
+><TT
+CLASS="parameter"
+><I
+>--disable-pear</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3: Option not available in PHP 3
+       </P
+><P
+>&#13;        PHP 4: Do not install PEAR
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.disable-pic"
+><TT
+CLASS="parameter"
+><I
+>--disable-pic</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3: Option not available in PHP 3
+       </P
+><P
+>&#13;        PHP 4: Disable PIC for shared objects
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.disable-posix"
+><TT
+CLASS="parameter"
+><I
+>--disable-posix</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3: Option not available in PHP 3; use <A
+HREF="install.configure.html#install.configure.without-posix"
+>--without-posix</A
+>
+        instead.
+       </P
+><P
+>&#13;        PHP 4: Disable POSIX-like functions
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.disable-rpath"
+><TT
+CLASS="parameter"
+><I
+>--disable-rpath</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3: Option not available in PHP 3
+       </P
+><P
+>&#13;        PHP 4: Disable passing additional runtime library search paths
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.disable-session"
+><TT
+CLASS="parameter"
+><I
+>--disable-session</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3: Option not available in PHP 3
+       </P
+><P
+>&#13;        PHP 4: Disable session support
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.enable-bcmath"
+><TT
+CLASS="parameter"
+><I
+>--enable-bcmath</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3: Option not available in PHP 3; bcmath is compiled in
+        by default. Use <A
+HREF="install.configure.html#install.configure.disable-bcmath"
+>--disable-bcmath</A
+>
+        to disable it.
+       </P
+><P
+>&#13;        PHP 4: Compile with bc style precision math functions. Read
+        README-BCMATH for instructions on how to get this module
+        installed. These functions allow you to operate with numbers
+        outside of the ranges allowed by regular integers and floats;
+        see <A
+HREF="ref.bc.html"
+>BCMath Arbitrary Precision
+         Mathematics Functions</A
+> for more information.
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.enable-c9x-inline"
+><TT
+CLASS="parameter"
+><I
+>--enable-c9x-inline</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3: Option not available in PHP 3
+       </P
+><P
+>&#13;        PHP 4: Enable C9x-inline semantics
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.enable-calendar"
+><TT
+CLASS="parameter"
+><I
+>--enable-calendar</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3: Option not available in PHP 3
+       </P
+><P
+>&#13;        PHP 4: Enable support for calendar conversion
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.enable-debug"
+><TT
+CLASS="parameter"
+><I
+>--enable-debug</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3, PHP 4: Compile with debugging symbols.
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.enable-debugger"
+><TT
+CLASS="parameter"
+><I
+>--enable-debugger</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3: Compile with remote debugging functions
+       </P
+><P
+>&#13;        PHP 4: Option not available in PHP 4
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.enable-discard-path"
+><TT
+CLASS="parameter"
+><I
+>--enable-discard-path</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3, PHP 4: If this is enabled, the PHP CGI binary can safely be
+        placed outside of the web tree and people will not be able to circumvent
+        .htaccess security.
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.enable-dmalloc"
+><TT
+CLASS="parameter"
+><I
+>--enable-dmalloc</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3, PHP 4: Enable dmalloc
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.enable-exif"
+><TT
+CLASS="parameter"
+><I
+>--enable-exif</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3: Option not available in PHP 3
+       </P
+><P
+>&#13;        PHP 4: Enable exif support
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.enable-experimental-zts"
+><TT
+CLASS="parameter"
+><I
+>--enable-experimental-zts</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3: Option not available in PHP 3
+       </P
+><P
+>&#13;        PHP 4: This will most likely break your build
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.enable-fast-install"
+><TT
+CLASS="parameter"
+><I
+>--enable-fast-install[=PKGS]</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3: Option not available in PHP 3
+       </P
+><P
+>&#13;        PHP 4: optimize for fast installation [default=yes]
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.enable-force-cgi-redirect"
+><TT
+CLASS="parameter"
+><I
+>--enable-force-cgi-redirect</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3, PHP 4: Enable the security check for internal server redirects.
+        You should use this if you are running the CGI version with Apache.
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.enable-inline-optimization"
+><TT
+CLASS="parameter"
+><I
+>--enable-inline-optimization</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3: Option not available in PHP 3
+       </P
+><P
+>&#13;        PHP 4: If you have much memory and are using gcc, you might try this.
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.enable-libgcc"
+><TT
+CLASS="parameter"
+><I
+>--enable-libgcc</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3: Option not available in PHP 3
+       </P
+><P
+>&#13;        PHP 4: Enable explicitly linking against libgcc
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.enable-maintainer-mode"
+><TT
+CLASS="parameter"
+><I
+>--enable-maintainer-mode</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3, PHP 4: enable make rules and dependencies not useful (and
+        sometimes confusing) to the casual installer
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.enable-memory-limit"
+><TT
+CLASS="parameter"
+><I
+>--enable-memory-limit</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3, PHP 4: Compile with memory limit support.
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.enable-safe-mode"
+><TT
+CLASS="parameter"
+><I
+>--enable-safe-mode</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3, PHP 4: Enable safe mode by default.
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.enable-satellite"
+><TT
+CLASS="parameter"
+><I
+>--enable-satellite</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3: Option not available in PHP 3
+       </P
+><P
+>&#13;        PHP 4: Enable CORBA support via Satellite (Requires ORBit)
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.enable-shared"
+><TT
+CLASS="parameter"
+><I
+>--enable-shared[=PKGS]</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3: Option not available in PHP 3
+       </P
+><P
+>&#13;        PHP 4: build shared libraries [default=yes]
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.enable-sigchild"
+><TT
+CLASS="parameter"
+><I
+>--enable-sigchild</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3, PHP 4: Enable PHP's own SIGCHLD handler.
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.enable-static"
+><TT
+CLASS="parameter"
+><I
+>--enable-static[=PKGS]</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3: Option not available in PHP 3
+       </P
+><P
+>&#13;        PHP 4: build static libraries [default=yes]
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.enable-sysvsem"
+><TT
+CLASS="parameter"
+><I
+>--enable-sysvsem</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3, PHP 4: Enable System V semaphore support.
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.enable-sysvshm"
+><TT
+CLASS="parameter"
+><I
+>--enable-sysvshm</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3, PHP 4: Enable the System V shared memory support
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.enable-trans-sid"
+><TT
+CLASS="parameter"
+><I
+>--enable-trans-sid</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3: Option not available in PHP 3
+       </P
+><P
+>&#13;        PHP 4: Enable transparent session id propagation
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.with-cdb"
+><TT
+CLASS="parameter"
+><I
+>--with-cdb[=DIR]</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3, PHP 4: Include CDB support
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.with-config-file-path"
+><TT
+CLASS="parameter"
+><I
+>--with-config-file-path=PATH</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3: Sets the path in which to look for php3.ini. Defaults to
+        <TT
+CLASS="filename"
+>/usr/local/lib</TT
+>
+       </P
+><P
+>&#13;        PHP 4: Sets the path in which to look for php.ini. Defaults to
+        <TT
+CLASS="filename"
+>/usr/local/lib</TT
+>
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.with-cpdflib"
+><TT
+CLASS="parameter"
+><I
+>--with-cpdflib[=DIR]</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3: Include ClibPDF support. DIR is the ClibPDF install directory,
+        defaults to /usr/local.
+       </P
+><P
+>&#13;        PHP 4: Include cpdflib support (requires cpdflib &#62;= 2). DIR is the
+        cpdfllib install directory, defaults to /usr.
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.with-esoob"
+><TT
+CLASS="parameter"
+><I
+>--with-esoob[=DIR]</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3: Option not available in PHP 3
+       </P
+><P
+>&#13;        PHP 4: Include Easysoft OOB support. DIR is the OOB base install
+        directory, defaults to /usr/local/easysoft/oob/client.
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.with-exec-dir"
+><TT
+CLASS="parameter"
+><I
+>--with-exec-dir[=DIR]</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3, PHP 4: Only allow executables in DIR when in safe mode defaults
+        to /usr/local/php/bin
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.with-fdftk"
+><TT
+CLASS="parameter"
+><I
+>--with-fdftk[=DIR]</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3, PHP 4: Include fdftk support. DIR is the fdftk install directory,
+        defaults to /usr/local.
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.with-gnu-ld"
+><TT
+CLASS="parameter"
+><I
+>--with-gnu-ld</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3: Option not available in PHP 3
+       </P
+><P
+>&#13;        PHP 4: assume the C compiler uses GNU ld [default=no]
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.with-icap"
+><TT
+CLASS="parameter"
+><I
+>--with-icap[=DIR]</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3: Option not available in PHP 3
+       </P
+><P
+>&#13;        PHP 4: Include ICAP support.
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.with-imap"
+><TT
+CLASS="parameter"
+><I
+>--with-imap[=DIR]</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3, PHP 4: Include IMAP support. DIR is the IMAP include and
+        c-client.a directory.
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.with-imsp"
+><TT
+CLASS="parameter"
+><I
+>--with-imsp[=DIR]</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3: Include IMSP support (DIR is IMSP's include dir and libimsp.a
+        dir).
+       </P
+><P
+>&#13;        PHP 4: Option not available in PHP 4
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.with-java"
+><TT
+CLASS="parameter"
+><I
+>--with-java[=DIR]</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3: Option not available in PHP 3
+       </P
+><P
+>&#13;        PHP 4: Include Java support. DIR is the base install directory for the
+        JDK. This extension can only be built as a shared dl.
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.with-kerberos"
+><TT
+CLASS="parameter"
+><I
+>--with-kerberos[=DIR]</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3: Option not available in PHP 3
+       </P
+><P
+>&#13;        PHP 4: Include Kerberos support in IMAP.
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.with-mcal"
+><TT
+CLASS="parameter"
+><I
+>--with-mcal[=DIR]</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3, PHP 4: Include MCAL support.
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.with-mcrypt"
+><TT
+CLASS="parameter"
+><I
+>--with-mcrypt[=DIR]</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3, PHP 4: Include mcrypt support. DIR is the mcrypt install
+        directory.
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.with-mhash"
+><TT
+CLASS="parameter"
+><I
+>--with-mhash[=DIR]</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3, PHP 4: Include mhash support. DIR is the mhash install directory.
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.with-mm"
+><TT
+CLASS="parameter"
+><I
+>--with-mm[=DIR]</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3: Option not available in PHP 3
+       </P
+><P
+>&#13;        PHP 4: Include mm support for session storage
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.with-mod_charset"
+><TT
+CLASS="parameter"
+><I
+>--with-mod_charset</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3, PHP 4: Enable transfer tables for mod_charset (Rus Apache).
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.with-pdflib"
+><TT
+CLASS="parameter"
+><I
+>--with-pdflib[=DIR]</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3: Include pdflib support (tested with 0.6 and 2.0). DIR is
+        the pdflib install directory, which defaults to
+        <TT
+CLASS="filename"
+>/usr/local</TT
+>.
+       </P
+><P
+>&#13;        PHP 4: Include pdflib 3.x support. DIR is the pdflib install
+        directory, which defaults to <TT
+CLASS="filename"
+>/usr/local</TT
+>.
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.with-readline"
+><TT
+CLASS="parameter"
+><I
+>--with-readline[=DIR]</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3: Option not available in PHP 3
+       </P
+><P
+>&#13;        PHP 4: Include readline support. DIR is the readline install directory.
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.with-regex"
+><TT
+CLASS="parameter"
+><I
+>--with-regex=TYPE</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3: Option not available in PHP 3
+       </P
+><P
+>&#13;        PHP 4: regex library type: system, apache, php
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.with-servlet"
+><TT
+CLASS="parameter"
+><I
+>--with-servlet[=DIR]</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3: Option not available in PHP 3
+       </P
+><P
+>&#13;        PHP 4: Include servlet support. DIR is the base install
+        directory for the JSDK. This SAPI requires that the Java
+        extension be built as a shared dl.
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.with-swf"
+><TT
+CLASS="parameter"
+><I
+>--with-swf[=DIR]</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3: Option not available in PHP 3
+       </P
+><P
+>&#13;        PHP 4: Include swf support
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.with-system-regex"
+><TT
+CLASS="parameter"
+><I
+>--with-system-regex</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3: Do not use the bundled regex library
+       </P
+><P
+>&#13;        PHP 4: (deprecated) Use system regex library
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.with-tsrm-pth"
+><TT
+CLASS="parameter"
+><I
+>--with-tsrm-pth[=pth-config]</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3: Option not available in PHP 3
+       </P
+><P
+>&#13;        PHP 4: Use GNU Pth.
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.with-tsrm-pthreads"
+><TT
+CLASS="parameter"
+><I
+>--with-tsrm-pthreads</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3: Option not available in PHP 3
+       </P
+><P
+>&#13;        PHP 4: Use POSIX threads (default)
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.with-x"
+><TT
+CLASS="parameter"
+><I
+>--with-x</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3: use the X Window System
+       </P
+><P
+>&#13;        PHP 4: Option not available in PHP 4
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.with-zlib-dir"
+><TT
+CLASS="parameter"
+><I
+>--with-zlib-dir[=DIR]</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3: zlib dir for pdflib 2.0 or include zlib support
+       </P
+><P
+>&#13;        PHP 4: zlib dir for pdflib 3.x or include zlib support
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.with-zlib"
+><TT
+CLASS="parameter"
+><I
+>--with-zlib[=DIR]</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3, PHP 4: Include zlib support (requires zlib &#62;= 1.0.9). DIR is
+        the zlib install directory, defaults to /usr.
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.without-pcre-regex"
+><TT
+CLASS="parameter"
+><I
+>--without-pcre-regex</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3: Don't include Perl Compatible Regular Expressions support
+       </P
+><P
+>&#13;        PHP 4: Do not include Perl Compatible Regular Expressions support. Use
+        --with-pcre-regex=DIR to specify DIR where PCRE's include and library
+        files are located, if not using bundled library.
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.without-posix"
+><TT
+CLASS="parameter"
+><I
+>--without-posix</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3: Don't include POSIX functions
+       </P
+><P
+>&#13;        PHP 4: Option not available in PHP 4; use <A
+HREF="install.configure.html#install.configure.disable-posix"
+>--disable-posix</A
+>
+        instead.
+       </P
+></DD
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="install.configure.networking"
+>Networking</A
+></H2
+><P
+></P
+><DIV
+CLASS="variablelist"
+><DL
+><DT
+><A
+NAME="install.configure.with-curl"
+><TT
+CLASS="parameter"
+><I
+>--with-curl[=DIR]</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3: Option not available in PHP 3
+       </P
+><P
+>&#13;        PHP 4: Include CURL support
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.enable-ftp"
+><TT
+CLASS="parameter"
+><I
+>--enable-ftp</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3: Option not available; use <A
+HREF="install.configure.html#install.configure.with-ftp"
+>--with-ftp</A
+>
+        instead.
+       </P
+><P
+>&#13;        PHP 4: Enable FTP support
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.with-ftp"
+><TT
+CLASS="parameter"
+><I
+>--with-ftp</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3: Include FTP support.
+       </P
+><P
+>&#13;        PHP 4: Option not available; use <A
+HREF="install.configure.html#install.configure.enable-ftp"
+>--enable-ftp</A
+>
+        instead
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.disable-url-fopen-wrapper"
+><TT
+CLASS="parameter"
+><I
+>--disable-url-fopen-wrapper</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3, PHP 4: Disable the URL-aware fopen wrapper that allows accessing
+        files via http or ftp.
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.with-mod-dav"
+><TT
+CLASS="parameter"
+><I
+>--with-mod-dav=DIR</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3, PHP 4: Include DAV support through Apache's mod_dav, DIR is
+        mod_dav's installation directory (Apache module version only!)
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.with-openssl"
+><TT
+CLASS="parameter"
+><I
+>--with-openssl[=DIR]</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3, PHP 4: Include OpenSSL support in SNMP.
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.with-snmp"
+><TT
+CLASS="parameter"
+><I
+>--with-snmp[=DIR]</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3, PHP 4: Include SNMP support. DIR is the SNMP base install
+        directory, defaults to searching through a number of common locations
+        for the snmp install. Set DIR to shared to build as a dl, or shared,DIR
+        to build as a dl and still specify DIR.
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.enable-ucd-snmp-hack"
+><TT
+CLASS="parameter"
+><I
+>--enable-ucd-snmp-hack</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3, PHP 4: Enable UCD SNMP hack
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.enable-sockets"
+><TT
+CLASS="parameter"
+><I
+>--enable-sockets</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3: Option not available in PHP 3
+       </P
+><P
+>&#13;        PHP 4: Enable sockets support
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.with-yaz"
+><TT
+CLASS="parameter"
+><I
+>--with-yaz[=DIR]</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3: Option not available in PHP 3
+       </P
+><P
+>&#13;        PHP 4: Include YAZ support (ANSI/NISO Z39.50). DIR is the YAZ bin
+        install directory
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.enable-yp"
+><TT
+CLASS="parameter"
+><I
+>--enable-yp</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3: Option not available; use <A
+HREF="install.configure.html#install.configure.with-yp"
+>--with-yp</A
+>
+        instead.
+       </P
+><P
+>&#13;        PHP 4: Include YP support
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.with-yp"
+><TT
+CLASS="parameter"
+><I
+>--with-yp</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3: Include YP support
+       </P
+><P
+>&#13;        PHP 4: Option not available; use <A
+HREF="install.configure.html#install.configure.enable-yp"
+>--enable-yp</A
+>
+        instead.
+       </P
+></DD
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="install.configure.php"
+>PHP Behaviour</A
+></H2
+><P
+></P
+><DIV
+CLASS="variablelist"
+><DL
+><DT
+><A
+NAME="install.configure.enable-magic-quotes"
+><TT
+CLASS="parameter"
+><I
+>--enable-magic-quotes</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3, PHP 4: Enable magic quotes by default.
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.disable-short-tags"
+><TT
+CLASS="parameter"
+><I
+>--disable-short-tags</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3, PHP 4: Disable the short-form &#60;? start tag by default.
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.enable-track-vars"
+><TT
+CLASS="parameter"
+><I
+>--enable-track-vars</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3: Enable GET/POST/Cookie track variables by default.
+       </P
+><P
+>&#13;        PHP 4: Option not available in PHP 4; as of PHP 4.0.2,
+        track_vars is always on.
+       </P
+></DD
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="install.configure.servers"
+>Server</A
+></H2
+><P
+></P
+><DIV
+CLASS="variablelist"
+><DL
+><DT
+><A
+NAME="install.configure.with-aolserver-src"
+><TT
+CLASS="parameter"
+><I
+>--with-aolserver-src=DIR</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3: Option not available in PHP 3
+       </P
+><P
+>&#13;        PHP 4: Specify path to the source distribution of AOLserver
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.with-aolserver"
+><TT
+CLASS="parameter"
+><I
+>--with-aolserver=DIR</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3: Option not available in PHP 3
+       </P
+><P
+>&#13;        PHP 4: Specify path to the installed AOLserver
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.with-apache"
+><TT
+CLASS="parameter"
+><I
+>--with-apache[=DIR]</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3, PHP 4: Build Apache module. DIR is the top-level Apache build
+        directory, defaults to /usr/local/etc/httpd.
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.with-apxs"
+><TT
+CLASS="parameter"
+><I
+>--with-apxs[=FILE]</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3, PHP 4: Build shared Apache module. FILE is the optional pathname
+        to the Apache apxs tool; defaults to apxs.
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.enable-versioning"
+><TT
+CLASS="parameter"
+><I
+>--enable-versioning</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3: Take advantage of versioning and scoping Provided by Solaris 2.x
+        and Linux
+       </P
+><P
+>&#13;        PHP 4: Export only required symbols. See INSTALL for more information
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.with-fhttpd"
+><TT
+CLASS="parameter"
+><I
+>--with-fhttpd[=DIR]</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3, PHP 4: Build fhttpd module. DIR is the fhttpd sources directory,
+        defaults to /usr/local/src/fhttpd.
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.with-nsapi"
+><TT
+CLASS="parameter"
+><I
+>--with-nsapi=DIR</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3: Option not available in PHP 3
+       </P
+><P
+>&#13;        PHP 4: Specify path to the installed Netscape
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.with-phttpd"
+><TT
+CLASS="parameter"
+><I
+>--with-phttpd=DIR</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3: Option not available in PHP 3
+       </P
+><P
+>&#13;        PHP 4: 
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.with-pi3web"
+><TT
+CLASS="parameter"
+><I
+>--with-pi3web=DIR</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3: Option not available in PHP 3
+       </P
+><P
+>&#13;        PHP 4: Build PHP as a module for use with Pi3Web.
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.with-roxen"
+><TT
+CLASS="parameter"
+><I
+>--with-roxen=DIR</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3: Option not available in PHP 3
+       </P
+><P
+>&#13;        PHP 4: Build PHP as a Pike module. DIR is the base Roxen directory,
+        normally /usr/local/roxen/server.
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.enable-roxen-zts"
+><TT
+CLASS="parameter"
+><I
+>--enable-roxen-zts</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3: Option not available in PHP 3
+       </P
+><P
+>&#13;        PHP 4: Build the Roxen module using Zend Thread Safety.
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.with-thttpd"
+><TT
+CLASS="parameter"
+><I
+>--with-thttpd=SRCDIR</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3: Option not available in PHP 3
+       </P
+><P
+>&#13;        PHP 4: 
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.with-zeus"
+><TT
+CLASS="parameter"
+><I
+>--with-zeus=DIR</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3: Option not available in PHP 3
+       </P
+><P
+>&#13;        PHP 4: Build PHP as an ISAPI module for use with Zeus.
+       </P
+></DD
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="install.configure.text"
+>Text and language</A
+></H2
+><P
+></P
+><DIV
+CLASS="variablelist"
+><DL
+><DT
+><A
+NAME="install.configure.with-aspell"
+><TT
+CLASS="parameter"
+><I
+>--with-aspell[=DIR]</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3, PHP 4: Include ASPELL support.
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.with-gettext"
+><TT
+CLASS="parameter"
+><I
+>--with-gettext[=DIR]</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3, PHP 4: Include GNU gettext support. DIR is the gettext install
+        directory, defaults to /usr/local
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.with-pspell"
+><TT
+CLASS="parameter"
+><I
+>--with-pspell[=DIR]</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3: Option not available in PHP 3
+       </P
+><P
+>&#13;        PHP 4: Include PSPELL support.
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.with-recode"
+><TT
+CLASS="parameter"
+><I
+>--with-recode[=DIR]</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3: Include GNU recode support.
+       </P
+><P
+>&#13;        PHP 4: Include recode support. DIR is the recode install directory.
+       </P
+></DD
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="install.configure.xml"
+>XML</A
+></H2
+><P
+></P
+><DIV
+CLASS="variablelist"
+><DL
+><DT
+><A
+NAME="install.configure.with-dom"
+><TT
+CLASS="parameter"
+><I
+>--with-dom[=DIR]</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3: Option not available in PHP 3
+       </P
+><P
+>&#13;        PHP 4: Include DOM support (requires libxml &#62;= 2.0). DIR is the
+        libxml install directory, defaults to <TT
+CLASS="filename"
+>/usr</TT
+>
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.enable-sablot-errors-descriptive"
+><TT
+CLASS="parameter"
+><I
+>--enable-sablot-errors-descriptive</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3: Option not available in PHP 3
+       </P
+><P
+>&#13;        PHP 4: Enable Descriptive errors
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.with-sablot"
+><TT
+CLASS="parameter"
+><I
+>--with-sablot[=DIR]</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3: Option not available in PHP 3
+       </P
+><P
+>&#13;        PHP 4: Include Sablotron support
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.enable-wddx"
+><TT
+CLASS="parameter"
+><I
+>--enable-wddx</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3: Option not available in PHP 3
+       </P
+><P
+>&#13;        PHP 4: Enable WDDX support
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.disable-xml"
+><TT
+CLASS="parameter"
+><I
+>--disable-xml</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3: Option not available in PHP 3; XML functionality is
+        not built in by default. Use <A
+HREF="install.configure.html#install.configure.with-xml"
+>--with-xml</A
+>
+        to turn it on.
+       </P
+><P
+>&#13;        PHP 4: Disable XML support using bundled expat lib
+       </P
+></DD
+><DT
+><A
+NAME="install.configure.with-xml"
+><TT
+CLASS="parameter"
+><I
+>--with-xml</I
+></TT
+></A
+></DT
+><DD
+><P
+>&#13;        PHP 3: Include XML support
+       </P
+><P
+>&#13;        PHP 4: Option not available; XML support is built in by
+        default.  Use <A
+HREF="install.configure.html#install.configure.disable-xml"
+>--disable-xml</A
+> to
+        turn it off.
+       </P
+></DD
+></DL
+></DIV
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="install.unix.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="install-windows95-nt.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Installation on UNIX systems</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="installation.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Installation on Windows 95/98/NT systems</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

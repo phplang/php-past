@@ -4,7 +4,7 @@
 >ftp_put</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -74,7 +74,7 @@ NAME="function.ftp-put"
 ><DIV
 CLASS="refnamediv"
 ><A
-NAME="AEN11541"
+NAME="AEN12733"
 ></A
 ><P
 >    (PHP3 &#62;= 3.0.13, PHP4 &#62;= 4.0b4)</P
@@ -82,12 +82,15 @@ NAME="AEN11541"
 ><DIV
 CLASS="refsect1"
 ><A
-NAME="AEN11544"
+NAME="AEN12736"
 ></A
 ><H2
 >Description</H2
 ><DIV
 CLASS="funcsynopsis"
+><A
+NAME="AEN12738"
+></A
 ><P
 ></P
 ><P
@@ -126,8 +129,55 @@ CLASS="parameter"
 ><I
 >mode</I
 ></TT
-> specified must be either FTP_ASCII or
-     FTP_BINARY.</P
+> specified must be either
+     <TT
+CLASS="constant"
+>FTP_ASCII</TT
+> or <TT
+CLASS="constant"
+>FTP_BINARY</TT
+>.
+    </P
+><P
+>&#13;     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN12759"
+></A
+><P
+><B
+>Example 1. <B
+CLASS="function"
+>Ftp_put()</B
+> example</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;$upload = ftp_put ($conn_id, "$destination_file", "$source_file", FTP_ASCII); 
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

@@ -1,0 +1,244 @@
+<HTML
+><HEAD
+><TITLE
+>pspell_config_personal</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Pspell Functions"
+HREF="ref.pspell.html"><LINK
+REL="PREVIOUS"
+TITLE="pspell_config_mode"
+HREF="function.pspell-config-mode.html"><LINK
+REL="NEXT"
+TITLE="pspell_config_repl"
+HREF="function.pspell-config-repl.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.pspell-config-mode.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.pspell-config-repl.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.pspell-config-personal"
+>pspell_config_personal</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN32330"
+></A
+><P
+>    (PHP4 &#62;= 4.0.2)</P
+>pspell_config_personal&nbsp;--&nbsp;Set a file that contains personal wordlist.</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN32333"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN32335"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int <B
+CLASS="function"
+>pspell_config_personal</B
+></CODE
+> (int dictionary_link, string file)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     <B
+CLASS="function"
+>Pspell_config_personal()</B
+> should be used on a config
+	 before calling <A
+HREF="function.pspell-new-config.html"
+><B
+CLASS="function"
+>pspell_new_config()</B
+></A
+>. The personal
+	 wordlist will be loaded and used in addition to the standard one after
+	 you call <A
+HREF="function.pspell-new-config.html"
+><B
+CLASS="function"
+>pspell_new_config()</B
+></A
+>. If the file does not
+	 exist, it will be created. The file is also the file where
+	 <A
+HREF="function.pspell-save-wordlist.html"
+><B
+CLASS="function"
+>pspell_save_wordlist()</B
+></A
+> will save personal wordlist to.
+	 The file should be writable by whoever php runs as (e.g. nobody). Please,
+	 note that this function will not work unless you have pspell .11.2 and
+	 aspell .32.5 or later.
+    </P
+><P
+>&#13;     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN32349"
+></A
+><P
+><B
+>Example 1. <B
+CLASS="function"
+>Pspell_config_personal()</B
+></B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;$pspell_config = pspell_config_create ("en");
+pspell_config_personal ($pspell_config, "/var/dictionaries/custom.pws");
+$pspell_link = pspell_new_config ($pspell_config);
+pspell_check ($pspell_link, "thecat");
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.pspell-config-mode.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.pspell-config-repl.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>pspell_config_mode</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.pspell.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>pspell_config_repl</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -4,7 +4,7 @@
 >mysql_insert_id</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -74,7 +74,7 @@ NAME="function.mysql-insert-id"
 ><DIV
 CLASS="refnamediv"
 ><A
-NAME="AEN23199"
+NAME="AEN24555"
 ></A
 ><P
 >    (PHP3 , PHP4 )</P
@@ -84,12 +84,15 @@ NAME="AEN23199"
 ><DIV
 CLASS="refsect1"
 ><A
-NAME="AEN23202"
+NAME="AEN24558"
 ></A
 ><H2
 >Description</H2
 ><DIV
 CLASS="funcsynopsis"
+><A
+NAME="AEN24560"
+></A
 ><P
 ></P
 ><P
@@ -107,14 +110,12 @@ CLASS="function"
 ></P
 ></DIV
 ><P
-> 
-     <B
+>&#13;     <B
 CLASS="function"
 >mysql_insert_id()</B
 > returns the ID generated for
-     an AUTO_INCREMENTED field.  It will return the auto-generated ID
-     returned by the last INSERT query performed using the given
-     <TT
+     an AUTO_INCREMENT column by the previous INSERT query using the
+     given <TT
 CLASS="parameter"
 ><I
 >link_identifier</I
@@ -128,6 +129,80 @@ CLASS="parameter"
 > isn't specified, the last
      opened link is assumed.
     </P
+><P
+>&#13;     <B
+CLASS="function"
+>mysql_insert_id()</B
+> returns 0 if the previous
+     query does not generate an AUTO_INCREMENT value. If you need to
+     save the value for later, be sure to call mysql_insert_id()
+     immediately after the query that generates the value.
+    </P
+><DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
+><P
+><B
+>Note: </B
+>
+      The value of the MySQL SQL function
+      <TT
+CLASS="literal"
+>LAST_INSERT_ID()</TT
+> always contains the most
+      recently generated AUTO_INCREMENT value, and is not reset
+      between queries.
+    </P
+></BLOCKQUOTE
+></DIV
+><DIV
+CLASS="warning"
+><P
+></P
+><TABLE
+CLASS="warning"
+BORDER="1"
+WIDTH="100%"
+><TR
+><TD
+ALIGN="CENTER"
+><B
+>Warning</B
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+><P
+>&#13;      <B
+CLASS="function"
+>mysql_insert_id()</B
+> converts the return type of
+      the native MySQL C API function
+      <TT
+CLASS="literal"
+>mysql_insert_id()</TT
+> to a type of
+      <TT
+CLASS="literal"
+>long</TT
+>.  If your AUTO_INCREMENT column has
+      a column type of BIGINT, the value returned by
+      <B
+CLASS="function"
+>mysql_insert_id()</B
+> will be incorrect.
+      Instead, use the internal MySQL SQL function
+      <TT
+CLASS="literal"
+>LAST_INSERT_ID()</TT
+>.
+     </P
+></TD
+></TR
+></TABLE
+></DIV
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

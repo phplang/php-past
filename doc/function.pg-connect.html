@@ -4,7 +4,7 @@
 >pg_connect</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -74,7 +74,7 @@ NAME="function.pg-connect"
 ><DIV
 CLASS="refnamediv"
 ><A
-NAME="AEN29272"
+NAME="AEN31256"
 ></A
 ><P
 >    (PHP3 , PHP4 )</P
@@ -82,12 +82,15 @@ NAME="AEN29272"
 ><DIV
 CLASS="refsect1"
 ><A
-NAME="AEN29275"
+NAME="AEN31259"
 ></A
 ><H2
 >Description</H2
 ><DIV
 CLASS="funcsynopsis"
+><A
+NAME="AEN31261"
+></A
 ><P
 ></P
 ><P
@@ -98,38 +101,69 @@ CLASS="FUNCDEF"
 CLASS="function"
 >pg_connect</B
 ></CODE
-> (string host, string port, string options, string tty, string dbname)</CODE
+> (string conn_string)</CODE
 ></P
 ><P
 ></P
 ></DIV
 ><P
 >&#13;     Returns a connection index on success, or false if the connection
-     could not be made.  Opens a connection to a PostgreSQL
-     database. Each of the arguments should be a quoted string,
-     including the port number. The options and tty arguments are
-     optional and can be left out. This function returns a connection
-     index that is needed by other PostgreSQL functions. You can have
-     multiple connections open at once.
-    </P
+     could not be made.  Opens a connection to a PostgreSQL database.
+     The arguments should be within a quoted string.
+     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN31268"
+></A
 ><P
->&#13;     A connection can also established with the following command:
-     <B
-CLASS="command"
->$conn = pg_connect("dbname=marliese port=5432");</B
+><B
+>Example 1. Using pg_connect arguments</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;&#60;?php
+$dbconn = pg_Connect ("dbname=mary");
+//connect to a database named "mary"
+$dbconn2 = pg_Connect ("host=localhost port=5432 dbname=mary");
+//connect to a database named "mary" on "localhost" at port "5432"
+$dbconn3 = pg_Connect ("user=lamb passwd=baaaa dbname=mary ");
+//connect to a database named "mary" with a username and password
+?&#62;
+     </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
 >
-     Other parameters besides <TT
+     The arguments available include <TT
 CLASS="parameter"
 ><I
 >dbname</I
 ></TT
-> and
+> 
      <TT
 CLASS="parameter"
 ><I
 >port</I
 ></TT
-> are <TT
+>, <TT
 CLASS="parameter"
 ><I
 >host</I
@@ -156,7 +190,22 @@ CLASS="parameter"
 ><I
 >password</I
 ></TT
->.
+>
+    </P
+><P
+>&#13;     This function returns a connection index that is needed by other
+     PostgreSQL functions. You can have multiple connections open at
+     once.
+    </P
+><P
+>&#13;     The previous syntax of:
+     <B
+CLASS="command"
+>$conn = pg_connect ("host", "port", "options", "tty",
+    "dbname")
+     </B
+>
+     has been deprecated.
     </P
 ><P
 >&#13;     See also <A

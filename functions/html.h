@@ -27,14 +27,18 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: html.h,v 1.11 2000/01/01 04:44:09 sas Exp $ */
+/* $Id: html.h,v 1.12 2000/09/12 17:23:30 rasmus Exp $ */
 
 #ifndef _HTML_H
 #define _HTML_H
 
+#define ENT_COMPAT      1
+#define ENT_QUOTES      2
+#define ENT_NOQUOTES    4
+
 extern void php3_htmlspecialchars(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_htmlentities(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_gamma_correct_tag(INTERNAL_FUNCTION_PARAMETERS);
-PHPAPI char * _php3_htmlentities(char *s, int i, int all);
+PHPAPI char * _php3_htmlentities(char *s, int i, int all, int quote_style);
 
 #endif /* _HTML_H */

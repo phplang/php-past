@@ -4,7 +4,7 @@
 >get_declared_classes</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -12,11 +12,11 @@ REL="UP"
 TITLE="Class/Object Functions"
 HREF="ref.classobj.html"><LINK
 REL="PREVIOUS"
-TITLE="method_exists"
-HREF="function.method-exists.html"><LINK
+TITLE="get_class_vars"
+HREF="function.get-class-vars.html"><LINK
 REL="NEXT"
-TITLE="call_user_method"
-HREF="function.call-user-method.html"><META
+TITLE="get_object_vars"
+HREF="function.get-object-vars.html"><META
 NAME="HTTP_EQUIV"
 CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
@@ -45,7 +45,7 @@ WIDTH="10%"
 ALIGN="left"
 VALIGN="bottom"
 ><A
-HREF="function.method-exists.html"
+HREF="function.get-class-vars.html"
 >Prev</A
 ></TD
 ><TD
@@ -58,7 +58,7 @@ WIDTH="10%"
 ALIGN="right"
 VALIGN="bottom"
 ><A
-HREF="function.call-user-method.html"
+HREF="function.get-object-vars.html"
 >Next</A
 ></TD
 ></TR
@@ -74,7 +74,7 @@ NAME="function.get-declared-classes"
 ><DIV
 CLASS="refnamediv"
 ><A
-NAME="AEN5985"
+NAME="AEN6801"
 ></A
 ><P
 >    (PHP4 &#62;= 4.0RC2)</P
@@ -82,12 +82,15 @@ NAME="AEN5985"
 ><DIV
 CLASS="refsect1"
 ><A
-NAME="AEN5988"
+NAME="AEN6804"
 ></A
 ><H2
 >Description</H2
 ><DIV
 CLASS="funcsynopsis"
+><A
+NAME="AEN6806"
+></A
 ><P
 ></P
 ><P
@@ -105,7 +108,7 @@ CLASS="function"
 ></DIV
 ><P
 >&#13;     This function returns an array of the names of the declared classes
-	 in the current script.
+     in the current script.
     </P
 ><DIV
 CLASS="note"
@@ -115,32 +118,32 @@ CLASS="note"
 ><B
 >Note: </B
 >
-	  In PHP 4.0.1pl2, three extra classes are returned at the beginning of
-	  the array: <TT
+      In PHP 4.0.1pl2, three extra classes are returned at the beginning of
+      the array: <TT
 CLASS="classname"
 >stdClass</TT
 > (defined in 
-	  <TT
+      <TT
 CLASS="filename"
 >Zend/zend.c</TT
 >),
-	  <TT
+      <TT
 CLASS="classname"
 >OverloadedTestClass</TT
 > (defined in
-	  <TT
+      <TT
 CLASS="filename"
 >ext/standard/basic_functions.c</TT
 >) 
-	  and <TT
+      and <TT
 CLASS="classname"
 >Directory</TT
 >
-	  (defined in <TT
+      (defined in <TT
 CLASS="filename"
 >ext/standard/dir.c</TT
 >).
-	 </P
+     </P
 ></BLOCKQUOTE
 ></DIV
 ></DIV
@@ -159,7 +162,7 @@ WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
 ><A
-HREF="function.method-exists.html"
+HREF="function.get-class-vars.html"
 >Prev</A
 ></TD
 ><TD
@@ -175,7 +178,7 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><A
-HREF="function.call-user-method.html"
+HREF="function.get-object-vars.html"
 >Next</A
 ></TD
 ></TR
@@ -184,7 +187,7 @@ HREF="function.call-user-method.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->method_exists</TD
+>get_class_vars</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"
@@ -197,7 +200,7 @@ HREF="ref.classobj.html"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->call_user_method</TD
+>get_object_vars</TD
 ></TR
 ></TABLE
 ></DIV

@@ -4,7 +4,7 @@
 >Pspell Functions</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -15,8 +15,8 @@ REL="PREVIOUS"
 TITLE="system"
 HREF="function.system.html"><LINK
 REL="NEXT"
-TITLE="pspell_new"
-HREF="function.pspell-new.html"><META
+TITLE="pspell_add_to_personal"
+HREF="function.pspell-add-to-personal.html"><META
 NAME="HTTP_EQUIV"
 CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
@@ -58,7 +58,7 @@ WIDTH="10%"
 ALIGN="right"
 VALIGN="bottom"
 ><A
-HREF="function.pspell-new.html"
+HREF="function.pspell-add-to-personal.html"
 >Next</A
 ></TD
 ></TR
@@ -75,18 +75,15 @@ NAME="ref.pspell"
 CLASS="TITLEPAGE"
 ><H1
 CLASS="title"
->LI. Pspell Functions</H1
+>LIII. Pspell Functions</H1
 ><DIV
 CLASS="PARTINTRO"
 ><A
-NAME="AEN30056"
+NAME="AEN32141"
 ></A
 ><P
->&#13;    The <B
-CLASS="function"
->pspell()</B
-> functions allow you to check the
-    spelling of a word and offer suggestions.
+>&#13;    These functions allow you to check the spelling of a word and offer
+	suggestions.
    </P
 ><P
 >&#13;    You need the aspell and pspell libraries, available from <A
@@ -115,14 +112,87 @@ CLASS="TOC"
 ></DT
 ><DT
 ><A
-HREF="function.pspell-new.html"
->pspell_new</A
-> &#8212; Load a new dictionary</DT
+HREF="function.pspell-add-to-personal.html"
+>pspell_add_to_personal</A
+> &#8212; Add the word to a personal wordlist.</DT
+><DT
+><A
+HREF="function.pspell-add-to-session.html"
+>pspell_add_to_session</A
+> &#8212; Add the word to the wordlist in the current session.
+	</DT
 ><DT
 ><A
 HREF="function.pspell-check.html"
 >pspell_check</A
 > &#8212; Check a word</DT
+><DT
+><A
+HREF="function.pspell-clear-session.html"
+>pspell_clear_session</A
+> &#8212; Clear the current session.</DT
+><DT
+><A
+HREF="function.pspell-config-create.html"
+>pspell_config_create</A
+> &#8212; Create a config used to open a dictionary.</DT
+><DT
+><A
+HREF="function.pspell-config-ignore.html"
+>pspell_config_ignore</A
+> &#8212; Ignore words less than N characters long.</DT
+><DT
+><A
+HREF="function.pspell-config-mode.html"
+>pspell_config_mode</A
+> &#8212; Change the mode number of suggestions returned.</DT
+><DT
+><A
+HREF="function.pspell-config-personal.html"
+>pspell_config_personal</A
+> &#8212; Set a file that contains personal wordlist.</DT
+><DT
+><A
+HREF="function.pspell-config-repl.html"
+>pspell_config_repl</A
+> &#8212; Set a file that contains replacement pairs.</DT
+><DT
+><A
+HREF="function.pspell-config-runtogether.html"
+>pspell_config_runtogether</A
+> &#8212; Consider run-together words as valid compounds.</DT
+><DT
+><A
+HREF="function.pspell-config-save-repl.html"
+>pspell_config_save_repl</A
+> &#8212; Determine whether to save a replacement pairs list
+	along with the wordlist.</DT
+><DT
+><A
+HREF="function.pspell-new.html"
+>pspell_new</A
+> &#8212; Load a new dictionary</DT
+><DT
+><A
+HREF="function.pspell-new-config.html"
+>pspell_new_config</A
+> &#8212; Load a new dictionary with settings based on a given config
+	</DT
+><DT
+><A
+HREF="function.pspell-new-personal.html"
+>pspell_new_personal</A
+> &#8212; Load a new dictionary with personal wordlist</DT
+><DT
+><A
+HREF="function.pspell-save-wordlist.html"
+>pspell_save_wordlist</A
+> &#8212; Save the personal wordlist to a file.</DT
+><DT
+><A
+HREF="function.pspell-store-replacement.html"
+>pspell_store_replacement</A
+> &#8212; Store a replacement pair for a word</DT
 ><DT
 ><A
 HREF="function.pspell-suggest.html"
@@ -163,7 +233,7 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><A
-HREF="function.pspell-new.html"
+HREF="function.pspell-add-to-personal.html"
 >Next</A
 ></TD
 ></TR
@@ -185,7 +255,7 @@ HREF="funcref.html"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->pspell_new</TD
+>pspell_add_to_personal</TD
 ></TR
 ></TABLE
 ></DIV

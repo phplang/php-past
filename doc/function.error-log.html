@@ -4,16 +4,16 @@
 >error_log</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
-TITLE="PHP options & information"
-HREF="ref.info.html"><LINK
+TITLE="Error Handling and Logging Functions"
+HREF="ref.errorfunc.html"><LINK
 REL="PREVIOUS"
-TITLE="assert-options"
-HREF="function.assert_options.html"><LINK
+TITLE="Error Handling and Logging Functions"
+HREF="ref.errorfunc.html"><LINK
 REL="NEXT"
 TITLE="error_reporting"
 HREF="function.error-reporting.html"><META
@@ -45,7 +45,7 @@ WIDTH="10%"
 ALIGN="left"
 VALIGN="bottom"
 ><A
-HREF="function.assert_options.html"
+HREF="ref.errorfunc.html"
 >Prev</A
 ></TD
 ><TD
@@ -74,7 +74,7 @@ NAME="function.error-log"
 ><DIV
 CLASS="refnamediv"
 ><A
-NAME="AEN28113"
+NAME="AEN10223"
 ></A
 ><P
 >    (PHP3 , PHP4 )</P
@@ -82,12 +82,15 @@ NAME="AEN28113"
 ><DIV
 CLASS="refsect1"
 ><A
-NAME="AEN28116"
+NAME="AEN10226"
 ></A
 ><H2
 >Description</H2
 ><DIV
 CLASS="funcsynopsis"
+><A
+NAME="AEN10228"
+></A
 ><P
 ></P
 ><P
@@ -127,6 +130,9 @@ CLASS="parameter"
      go:
      <DIV
 CLASS="table"
+><A
+NAME="AEN10246"
+></A
 ><P
 ><B
 >Table 1. <B
@@ -146,19 +152,19 @@ VALIGN="MIDDLE"
 ><TD
 ALIGN="LEFT"
 VALIGN="MIDDLE"
->&#13;	  <TT
+>&#13;      <TT
 CLASS="parameter"
 ><I
 >message</I
 ></TT
 > is sent to PHP's system
-	  logger, using the Operating System's system logging
-	  mechanism or a file, depending on what the <A
+      logger, using the Operating System's system logging
+      mechanism or a file, depending on what the <A
 HREF="configuration.html#ini.error-log"
 >error_log</A
 > configuration
-	  directive is set to.
-	 </TD
+      directive is set to.
+     </TD
 ></TR
 ><TR
 ><TD
@@ -168,31 +174,31 @@ VALIGN="MIDDLE"
 ><TD
 ALIGN="LEFT"
 VALIGN="MIDDLE"
->&#13;	  <TT
+>&#13;      <TT
 CLASS="parameter"
 ><I
 >message</I
 ></TT
 > is sent by email to the
-	  address in the <TT
+      address in the <TT
 CLASS="parameter"
 ><I
 >destination</I
 ></TT
 > parameter.
-	  This is the only message type where the fourth parameter,
-	  <TT
+      This is the only message type where the fourth parameter,
+      <TT
 CLASS="parameter"
 ><I
 >extra_headers</I
 ></TT
 > is used.  This message
-	  type uses the same internal function as
-	  <B
+      type uses the same internal function as
+      <B
 CLASS="function"
 >Mail()</B
 > does.
-	 </TD
+     </TD
 ></TR
 ><TR
 ><TD
@@ -202,27 +208,26 @@ VALIGN="MIDDLE"
 ><TD
 ALIGN="LEFT"
 VALIGN="MIDDLE"
->&#13;	  <TT
+>&#13;      <TT
 CLASS="parameter"
 ><I
 >message</I
 ></TT
-> is sent through the PHP
-	  debugging connection.  This option is only available if
-	  <A
-HREF="install-unix.html#enable-debugger"
->remote debugging has been
-	  enabled</A
+> is sent through the PHP debugging
+      connection.  This option is only available if <A
+HREF="install.configure.html#install.configure.enable-debugger"
+>remote debugging has
+      been enabled</A
 >.  In this case, the
-	  <TT
+      <TT
 CLASS="parameter"
 ><I
 >destination</I
 ></TT
-> parameter specifies the
-	  host name or IP address and optionally, port number, of the
-	  socket receiving the debug information.
-	 </TD
+> parameter specifies the host
+      name or IP address and optionally, port number, of the socket
+      receiving the debug information.
+     </TD
 ></TR
 ><TR
 ><TD
@@ -232,19 +237,19 @@ VALIGN="MIDDLE"
 ><TD
 ALIGN="LEFT"
 VALIGN="MIDDLE"
->&#13;	  <TT
+>&#13;      <TT
 CLASS="parameter"
 ><I
 >message</I
 ></TT
 > is appended to the file
-	  <TT
+      <TT
 CLASS="parameter"
 ><I
 >destination</I
 ></TT
 >.
-	 </TD
+     </TD
 ></TR
 ></TBODY
 ></TABLE
@@ -262,6 +267,9 @@ CLASS="EXAMPLE"
 ><TD
 ><DIV
 CLASS="example"
+><A
+NAME="AEN10275"
+></A
 ><P
 ><B
 >Example 1. <B
@@ -279,8 +287,8 @@ WIDTH="100%"
 CLASS="programlisting"
 >&#13;// Send notification through the server log if we can not
 // connect to the database.
-if (!Ora_Logon($username, $password)) {
-    error_log("Oracle database not available!", 0);
+if (!Ora_Logon ($username, $password)) {
+    error_log ("Oracle database not available!", 0);
 }
 
 // Notify administrator by email if we run out of FOO
@@ -319,7 +327,7 @@ WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
 ><A
-HREF="function.assert_options.html"
+HREF="ref.errorfunc.html"
 >Prev</A
 ></TD
 ><TD
@@ -344,13 +352,13 @@ HREF="function.error-reporting.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->assert-options</TD
+>Error Handling and Logging Functions</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"
 VALIGN="top"
 ><A
-HREF="ref.info.html"
+HREF="ref.errorfunc.html"
 >Up</A
 ></TD
 ><TD

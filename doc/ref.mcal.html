@@ -4,7 +4,7 @@
 >MCAL functions</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -75,42 +75,49 @@ NAME="ref.mcal"
 CLASS="TITLEPAGE"
 ><H1
 CLASS="title"
->XXXIV. MCAL functions</H1
+>XXXV. MCAL functions</H1
 ><DIV
 CLASS="PARTINTRO"
 ><A
-NAME="AEN18942"
+NAME="AEN20362"
 ></A
 ><P
->&#13;    MCAL stands for Modular Calendar Access Library.</P
+>&#13;    MCAL stands for Modular Calendar Access Library.
+   </P
 ><P
 >&#13;    Libmcal is a C library for accessing calendars. It's written to be
     very modular, with plugable drivers. MCAL is the calendar
-    equivalent of the IMAP module for mailboxes.</P
+    equivalent of the IMAP module for mailboxes.
+   </P
 ><P
 >&#13;    With mcal support, a calendar stream can be opened much like the
     mailbox stream with the IMAP support. Calendars can be local file
     stores, remote ICAP servers, or other formats that are supported
-    by the mcal library.</P
+    by the mcal library.
+   </P
 ><P
 >&#13;    Calendar events can be pulled up, queried, and stored. There is
-    also support for calendar triggers (alarms) and reoccuring events.</P
+    also support for calendar triggers (alarms) and reoccuring events.
+   </P
 ><P
 >&#13;    With libmcal, central calendar servers can be accessed and used,
     removing the need for any specific database or local file
-    programming.</P
+    programming.
+   </P
 ><P
 >&#13;    To get these functions to work, you have to compile PHP with
     <TT
 CLASS="option"
 >--with-mcal</TT
 >. That requires the
-    mcal library to be installed. Grab the latest version from <A
+    mcal library to be installed. Grab the latest version from
+    <A
 HREF="http://mcal.chek.com/"
 TARGET="_top"
 >http://mcal.chek.com/</A
-> and
-    compile and install it.</P
+> and compile and install
+    it.
+   </P
 ><P
 >&#13;    The following constants are defined when using the MCAL module:
 
@@ -146,7 +153,8 @@ TARGET="_top"
     unique for each stream.  This alleviates the need to pass around
     large objects between functions. There are convenience functions
     for setting, initializing, and retrieving the event structure
-    values.</P
+    values.
+   </P
 ></DIV
 ><DIV
 CLASS="TOC"
@@ -162,9 +170,34 @@ HREF="function.mcal-open.html"
 > &#8212; Opens up an MCAL connection</DT
 ><DT
 ><A
+HREF="function.mcal-popen.html"
+>mcal_popen</A
+> &#8212; Opens up a persistant MCAL connection</DT
+><DT
+><A
+HREF="function.mcal-reopen.html"
+>mcal_reopen</A
+> &#8212; Reopens an MCAL connection</DT
+><DT
+><A
 HREF="function.mcal-close.html"
 >mcal_close</A
 > &#8212; Close an MCAL stream</DT
+><DT
+><A
+HREF="function.mcal-create-calendar.html"
+>mcal_create_calendar</A
+> &#8212; Create a new MCAL calendar </DT
+><DT
+><A
+HREF="function.mcal-rename-calendar.html"
+>mcal_rename_calendar</A
+> &#8212; Rename an MCAL calendar </DT
+><DT
+><A
+HREF="function.mcal-delete-calendar.html"
+>mcal_delete_calendar</A
+> &#8212; Delete an MCAL calendar </DT
 ><DT
 ><A
 HREF="function.mcal-fetch-event.html"
@@ -177,7 +210,7 @@ HREF="function.mcal-fetch-event.html"
 HREF="function.mcal-list-events.html"
 >mcal_list_events</A
 > &#8212; 
-     Return a list of events between two given datetimes
+     Return a list of IDs for a date or a range of dates.
     </DT
 ><DT
 ><A
@@ -371,6 +404,13 @@ HREF="function.mcal-event-add-attribute.html"
 >mcal_event_add_attribute</A
 > &#8212; 
      Adds an attribute and a value to the streams global event structure
+    </DT
+><DT
+><A
+HREF="function.mcal-expunge.html"
+>mcal_expunge</A
+> &#8212; 
+     Deletes all events marked for being expunged.
     </DT
 ></DL
 ></DIV

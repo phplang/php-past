@@ -1,10 +1,10 @@
 <HTML
 ><HEAD
 ><TITLE
->PDF_close</TITLE
+>pdf_close</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -12,10 +12,10 @@ REL="UP"
 TITLE="PDF functions"
 HREF="ref.pdf.html"><LINK
 REL="PREVIOUS"
-TITLE="PDF_open"
+TITLE="pdf_open"
 HREF="function.pdf-open.html"><LINK
 REL="NEXT"
-TITLE="PDF_begin_page"
+TITLE="pdf_begin_page"
 HREF="function.pdf-begin-page.html"><META
 NAME="HTTP_EQUIV"
 CONTENT="text/html; charset=ISO-8859-1"></HEAD
@@ -69,25 +69,28 @@ WIDTH="100%"></DIV
 ><H1
 ><A
 NAME="function.pdf-close"
->PDF_close</A
+>pdf_close</A
 ></H1
 ><DIV
 CLASS="refnamediv"
 ><A
-NAME="AEN26378"
+NAME="AEN28245"
 ></A
 ><P
 >    (PHP3 &#62;= 3.0.6, PHP4 )</P
->PDF_close&nbsp;--&nbsp;Closes a pdf document</DIV
+>pdf_close&nbsp;--&nbsp;Closes a pdf document</DIV
 ><DIV
 CLASS="refsect1"
 ><A
-NAME="AEN26381"
+NAME="AEN28248"
 ></A
 ><H2
 >Description</H2
 ><DIV
 CLASS="funcsynopsis"
+><A
+NAME="AEN28250"
+></A
 ><P
 ></P
 ><P
@@ -106,50 +109,16 @@ CLASS="function"
 ><P
 >&#13;     The <B
 CLASS="function"
->PDF_close()</B
+>pdf_close()</B
 > function closes the pdf document.
-
-    <DIV
-CLASS="note"
-><BLOCKQUOTE
-CLASS="note"
-><P
-><B
->Note: </B
->Due to an unclean implementation of the pdflib 0.6 the
-     internal closing of the document also closes the file. This should
-     not be done because pdflib did not open the file, but expects an
-     already open file when <B
-CLASS="function"
->PDF_open()</B
-> is called.
-     Consequently it shouldn't close the file. In order to fix this
-     just take out line 190 of the file p_basic.c in the pdflib 0.6
-     source distribution until the next release of pdflib will fix
-     this.
     </P
-></BLOCKQUOTE
-></DIV
->
-
-    <DIV
-CLASS="note"
-><BLOCKQUOTE
-CLASS="note"
 ><P
+>&#13;     See also <A
+HREF="function.pdf-open.html"
 ><B
->Note: </B
->
-     This function works properly without any patches to pdflib if 
-     pdflib 2.0 support is activated.
-    </P
-></BLOCKQUOTE
-></DIV
-></P
-><P
->&#13;     See also <B
 CLASS="function"
->PDF_open()</B
+>pdf_open()</B
+></A
 >,
               <A
 HREF="function.fclose.html"
@@ -199,7 +168,7 @@ HREF="function.pdf-begin-page.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->PDF_open</TD
+>pdf_open</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"
@@ -212,7 +181,7 @@ HREF="ref.pdf.html"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->PDF_begin_page</TD
+>pdf_begin_page</TD
 ></TR
 ></TABLE
 ></DIV

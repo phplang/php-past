@@ -4,7 +4,7 @@
 >highlight_file</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -74,7 +74,7 @@ NAME="function.highlight-file"
 ><DIV
 CLASS="refnamediv"
 ><A
-NAME="AEN21495"
+NAME="AEN22907"
 ></A
 ><P
 >    (PHP4 )</P
@@ -82,12 +82,15 @@ NAME="AEN21495"
 ><DIV
 CLASS="refsect1"
 ><A
-NAME="AEN21498"
+NAME="AEN22910"
 ></A
 ><H2
 >Description</H2
 ><DIV
 CLASS="funcsynopsis"
+><A
+NAME="AEN22912"
+></A
 ><P
 ></P
 ><P
@@ -127,6 +130,9 @@ CLASS="EXAMPLE"
 ><TD
 ><DIV
 CLASS="example"
+><A
+NAME="AEN22922"
+></A
 ><P
 ><B
 >Example 1. Creating a source highlighting URL</B
@@ -147,6 +153,9 @@ CLASS="function"
 ><P
 >&#13;       <DIV
 CLASS="informalexample"
+><A
+NAME="AEN22928"
+></A
 ><P
 ></P
 ><TABLE
@@ -193,10 +202,10 @@ CLASS="programlisting"
     echo "&#60;BR&#62;&#60;B&#62;ERROR: Script Name needed&#60;/B&#62;&#60;BR&#62;";
     } else {
     if (ereg("(\.php|\.inc)$",$script)) {
-	echo "&#60;H1&#62;Source of: $PATH_INFO&#60;/H1&#62;\n&#60;HR&#62;\n";
-	highlight_file($script);
+    echo "&#60;H1&#62;Source of: $PATH_INFO&#60;/H1&#62;\n&#60;HR&#62;\n";
+    highlight_file($script);
     } else {
-	echo "&#60;H1&#62;ERROR: Only PHP or include script names are allowed&#60;/H1&#62;"; 
+    echo "&#60;H1&#62;ERROR: Only PHP or include script names are allowed&#60;/H1&#62;"; 
     }
     }
     echo "&#60;HR&#62;Processed: ".date("Y/M/d H:i:s",time());
@@ -217,6 +226,9 @@ CLASS="programlisting"
 ><P
 >&#13;       <DIV
 CLASS="informalexample"
+><A
+NAME="AEN22935"
+></A
 ><P
 ></P
 ><TABLE

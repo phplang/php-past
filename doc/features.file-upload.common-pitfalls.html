@@ -4,7 +4,7 @@
 >Common Pitfalls</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -76,9 +76,13 @@ NAME="features.file-upload.common-pitfalls"
 ></H1
 ><P
 >&#13;    The MAX_FILE_SIZE item cannot specify a file size greater than the file 
-    size that has been set in the upload_max_filesize in the PHP3.ini file
+    size that has been set in the upload_max_filesize in the PHP 3.ini file
     or the corresponding php3_upload_max_filesize Apache .conf directive. 
     The default is 2 Megabytes.
+   </P
+><P
+>&#13;    Not validating which file you operate on may mean that users can access
+    sensitive information in other directories.
    </P
 ><P
 >&#13;    Please note that the CERN httpd seems to strip off everything

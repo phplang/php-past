@@ -4,12 +4,12 @@
 >yaz_search</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
-TITLE="YAZ"
+TITLE="YAZ functions"
 HREF="ref.yaz.html"><LINK
 REL="PREVIOUS"
 TITLE="yaz_record"
@@ -74,7 +74,7 @@ NAME="function.yaz-search"
 ><DIV
 CLASS="refnamediv"
 ><A
-NAME="AEN37487"
+NAME="AEN40646"
 ></A
 ><P
 >    (PHP4 &#62;= 4.0.1)</P
@@ -82,12 +82,15 @@ NAME="AEN37487"
 ><DIV
 CLASS="refsect1"
 ><A
-NAME="AEN37490"
+NAME="AEN40649"
 ></A
 ><H2
 >Description</H2
 ><DIV
 CLASS="funcsynopsis"
+><A
+NAME="AEN40651"
+></A
 ><P
 ></P
 ><P
@@ -106,26 +109,264 @@ CLASS="function"
 ><P
 >&#13;     <B
 CLASS="function"
->Yaz_search()</B
+>yaz_search()</B
 > prepares for a search on the
      target with given id. The type represents the query type - only
-     "rpn" is supported now in which case the third argument is a
-     prefix notation query as used by YAZ. Like
-     <A
+     "rpn" is supported now in which case the third argument specifies
+     a Type-1 query (RPN). Like <A
 HREF="function.yaz-connect.html"
 ><B
 CLASS="function"
 >yaz_connect()</B
 ></A
-> this function is non-blocking
-     and only prepares for a search to be executed later when
-     <A
+> this
+     function is non-blocking and only prepares for a search to be
+     executed later when <A
 HREF="function.yaz-wait.html"
 ><B
 CLASS="function"
 >yaz_wait()</B
 ></A
 > is called.
+    </P
+></DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN40665"
+></A
+><H2
+>The RPN query</H2
+><P
+>&#13;     The RPN query is a textual represenation of the Type-1 query as
+     defined by the Z39.50 standard. However, in the text representation
+     as used by YAZ a prefix notation is used, that is the operater
+     precedes the operands. The query string is a sequence of tokens where
+     white space is ignored is ignored unless surrounded by double
+     quotes. Tokens beginning with an at-character (<TT
+CLASS="literal"
+>@</TT
+>)
+     are considered operators, otherwise they are treated as search terms.
+    </P
+><DIV
+CLASS="table"
+><A
+NAME="AEN40669"
+></A
+><P
+><B
+>Table 1. RPN Operators</B
+></P
+><TABLE
+BORDER="1"
+CLASS="CALSTABLE"
+><THEAD
+><TR
+><TH
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Syntax</TH
+><TH
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Description</TH
+></TR
+></THEAD
+><TBODY
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+><TT
+CLASS="literal"
+>@and query1 query2</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>intersection of query1 and query2</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+><TT
+CLASS="literal"
+>@or query1 query2</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>union of query1 and query2</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+><TT
+CLASS="literal"
+>@not query1 query2</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>query1 and not query2</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+><TT
+CLASS="literal"
+>@set name</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>result set reference</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+><TT
+CLASS="literal"
+>@attrset set query</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>specifies attribute-set for query. This construction is only
+                allowed once - in the beginning of the whole query</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+><TT
+CLASS="literal"
+>@attr set type=value query</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>applies attribute to query. The type and value are
+                 integers specifying the attribute-type and attribute-value
+                 respectively. The set, if given, specifies the
+                 attribute-set.</TD
+></TR
+></TBODY
+></TABLE
+></DIV
+><P
+>&#13;     The following illustrates valid query constructions:
+     <DIV
+CLASS="informalexample"
+><A
+NAME="AEN40702"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="screen"
+>computer</PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+>
+      Matches documents where "computer" occur. No attributes are specified.
+    </P
+><P
+>&#13;     <DIV
+CLASS="informalexample"
+><A
+NAME="AEN40705"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="screen"
+>"donald knuth"</PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+>
+     Matches documents where "donald knuth" occur.
+    </P
+><P
+>&#13;     <DIV
+CLASS="informalexample"
+><A
+NAME="AEN40708"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="screen"
+>@attr 1=4 art</PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+>
+     Attribute type is 1 (Bib-1 use), attribute value is 4
+     Title), so this should match documents where "art" occur
+     in the title.
+    </P
+><P
+>&#13;     <DIV
+CLASS="informalexample"
+><A
+NAME="AEN40711"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="screen"
+>@attrset gils @and @attr 1=4 art @attr 1=1003 "donald knuth"</PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+>
+     The query as a whole uses the GILS attributeset. The query matches
+     documents where "art" occur in the title and in which "donald knuth"
+     occur in the author.
     </P
 ></DIV
 ><DIV

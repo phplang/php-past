@@ -4,7 +4,7 @@
 >cpdf_text</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -74,7 +74,7 @@ NAME="function.cpdf-text"
 ><DIV
 CLASS="refnamediv"
 ><A
-NAME="AEN6413"
+NAME="AEN7286"
 ></A
 ><P
 >    (PHP3 &#62;= 3.0.8, PHP4 &#62;= 4.0b4)</P
@@ -82,12 +82,15 @@ NAME="AEN6413"
 ><DIV
 CLASS="refsect1"
 ><A
-NAME="AEN6416"
+NAME="AEN7289"
 ></A
 ><H2
 >Description</H2
 ><DIV
 CLASS="funcsynopsis"
+><A
+NAME="AEN7291"
+></A
 ><P
 ></P
 ><P
@@ -98,7 +101,7 @@ CLASS="FUNCDEF"
 CLASS="function"
 >cpdf_text</B
 ></CODE
-> (int pdf document, string text, double x-koor, double y-koor, int mode, double orientation, int alignmode)</CODE
+> (int pdf document, string text, double x-coor, double y-coor [, int mode [, double orientation [, int alignmode]]])</CODE
 ></P
 ><P
 ></P
@@ -107,42 +110,53 @@ CLASS="function"
 >&#13;     The <B
 CLASS="function"
 >cpdf_text()</B
-> function outputs the
-     string <TT
+> function outputs the string
+     <TT
 CLASS="parameter"
 ><I
 >text</I
 ></TT
-> at position with
-     coordinates (<TT
+> at position with coordinates
+     (<TT
 CLASS="parameter"
 ><I
->x-koor</I
+>x-coor</I
 ></TT
 >, <TT
 CLASS="parameter"
 ><I
->y-koor</I
+>y-coor</I
 ></TT
 >).
-     The optional parameter determines the unit length. If is 0 or omitted
-     the default unit as specified for the page is used.
-     Otherwise the koodinates
-     are measured in postscript points disregarding the current unit.
-     The optional parameter <TT
+    </P
+><P
+>&#13;     The optional parameter <TT
+CLASS="parameter"
+><I
+>mode</I
+></TT
+> determines the
+     unit length. If it's 0 or omitted the default unit as specified
+     for the page is used. Otherwise the coordinates are measured in
+     postscript points disregarding the current unit. The optional
+     parameter <TT
 CLASS="parameter"
 ><I
 >orientation</I
 ></TT
-> is the rotation
-     of the text in degree. The optional parameter
+> is the rotation of
+     the text in degree. The optional parameter
      <TT
 CLASS="parameter"
 ><I
 >alignmode</I
 ></TT
-> determines how the text is align.
-     See the ClibPDF documentation for possible values.</P
+> determines how the text is
+     aligned.
+    </P
+><P
+>&#13;     See the ClibPDF documentation for possible values.
+    </P
 ><P
 >&#13;     See also <A
 HREF="function.cpdf-show-xy.html"
@@ -150,7 +164,8 @@ HREF="function.cpdf-show-xy.html"
 CLASS="function"
 >cpdf_show_xy()</B
 ></A
->.</P
+>.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

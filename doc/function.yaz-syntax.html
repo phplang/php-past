@@ -4,12 +4,12 @@
 >yaz_syntax</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
-TITLE="YAZ"
+TITLE="YAZ functions"
 HREF="ref.yaz.html"><LINK
 REL="PREVIOUS"
 TITLE="yaz_search"
@@ -74,22 +74,26 @@ NAME="function.yaz-syntax"
 ><DIV
 CLASS="refnamediv"
 ><A
-NAME="AEN37507"
+NAME="AEN40714"
 ></A
 ><P
 >    (PHP4 &#62;= 4.0.1)</P
 >yaz_syntax&nbsp;--&nbsp;
-     Specifies the preferred record syntax for retrieval
+     Specifies the object identifier (OID) for the preferred record syntax
+     for retrieval.
     </DIV
 ><DIV
 CLASS="refsect1"
 ><A
-NAME="AEN37510"
+NAME="AEN40717"
 ></A
 ><H2
 >Description</H2
 ><DIV
 CLASS="funcsynopsis"
+><A
+NAME="AEN40719"
+></A
 ><P
 ></P
 ><P
@@ -106,7 +110,13 @@ CLASS="function"
 ></P
 ></DIV
 ><P
->&#13;     This function is used in conjunction with
+>&#13;     The syntax may be specified in a raw dot-notation (like
+     <TT
+CLASS="literal"
+>1.2.840.10003.5.10</TT
+>) or as one of the known
+     record syntaxes (sutrs, usmarc, grs1, xml, etc.).
+     This function is used in conjunction with
      <A
 HREF="function.yaz-search.html"
 ><B

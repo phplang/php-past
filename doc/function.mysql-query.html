@@ -4,7 +4,7 @@
 >mysql_query</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -74,7 +74,7 @@ NAME="function.mysql-query"
 ><DIV
 CLASS="refnamediv"
 ><A
-NAME="AEN23361"
+NAME="AEN24751"
 ></A
 ><P
 >    (PHP3 , PHP4 )</P
@@ -82,12 +82,15 @@ NAME="AEN23361"
 ><DIV
 CLASS="refsect1"
 ><A
-NAME="AEN23364"
+NAME="AEN24754"
 ></A
 ><H2
 >Description</H2
 ><DIV
 CLASS="funcsynopsis"
+><A
+NAME="AEN24756"
+></A
 ><P
 ></P
 ><P
@@ -128,9 +131,18 @@ CLASS="function"
 > was
      called with no arguments, and use it.
     </P
+><DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
 ><P
->&#13;     The query string should not end with a semicolon.
-    </P
+><B
+>Note: </B
+>
+      The query string should not end with a semicolon.
+     </P
+></BLOCKQUOTE
+></DIV
 ><P
 >&#13;     <B
 CLASS="function"
@@ -158,6 +170,9 @@ CLASS="EXAMPLE"
 ><TD
 ><DIV
 CLASS="example"
+><A
+NAME="AEN24775"
+></A
 ><P
 ><B
 >Example 1. <B
@@ -211,6 +226,9 @@ CLASS="EXAMPLE"
 ><TD
 ><DIV
 CLASS="example"
+><A
+NAME="AEN24783"
+></A
 ><P
 ><B
 >Example 2. <B
@@ -251,34 +269,46 @@ CLASS="function"
 ><P
 >&#13;     Assuming the query succeeds, you can call
      <A
+HREF="function.mysql-num-rows.html"
+><B
+CLASS="function"
+>mysql_num_rows()</B
+></A
+> to find out how many rows
+     were returned for a SELECT statment or
+     <A
 HREF="function.mysql-affected-rows.html"
 ><B
 CLASS="function"
 >mysql_affected_rows()</B
 ></A
 > to find out how many
-     rows were affected (for DELETE, INSERT, REPLACE, or UPDATE
-     statements).  For SELECT statements,
-     <B
+     rows were affected by a DELETE, INSERT, REPLACE, or UPDATE
+     statement.
+    </P
+><P
+>&#13;     For SELECT statements, <B
 CLASS="function"
 >mysql_query()</B
-> returns a new result identifier
-     that you can pass to <A
+> returns a
+     new result identifier that you can pass to
+     <A
 HREF="function.mysql-result.html"
 ><B
 CLASS="function"
 >mysql_result()</B
 ></A
->.  When you
-     are done with the result set, you can free the resources
-     associated with it by calling
-     <A
+>.  When you are done with the
+     result set, you can free the resources associated with it by
+     calling <A
 HREF="function.mysql-free-result.html"
 ><B
 CLASS="function"
 >mysql_free_result()</B
 ></A
->.
+>.  Although, the
+     memory will automatically be freed at the end of the script's
+     execution.
     </P
 ><P
 >&#13;     See also: <A

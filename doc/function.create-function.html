@@ -4,19 +4,19 @@
 >create_function</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
-TITLE="Miscellaneous functions"
-HREF="ref.misc.html"><LINK
+TITLE="Function Handling functions"
+HREF="ref.funchand.html"><LINK
 REL="PREVIOUS"
-TITLE="Miscellaneous functions"
-HREF="ref.misc.html"><LINK
+TITLE="call_user_func"
+HREF="function.call-user-func.html"><LINK
 REL="NEXT"
-TITLE="connection_aborted"
-HREF="function.connection-aborted.html"><META
+TITLE="func_get_arg"
+HREF="function.func-get-arg.html"><META
 NAME="HTTP_EQUIV"
 CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
@@ -45,7 +45,7 @@ WIDTH="10%"
 ALIGN="left"
 VALIGN="bottom"
 ><A
-HREF="ref.misc.html"
+HREF="function.call-user-func.html"
 >Prev</A
 ></TD
 ><TD
@@ -58,7 +58,7 @@ WIDTH="10%"
 ALIGN="right"
 VALIGN="bottom"
 ><A
-HREF="function.connection-aborted.html"
+HREF="function.func-get-arg.html"
 >Next</A
 ></TD
 ></TR
@@ -74,7 +74,7 @@ NAME="function.create-function"
 ><DIV
 CLASS="refnamediv"
 ><A
-NAME="AEN21169"
+NAME="AEN12926"
 ></A
 ><P
 >    (PHP4 &#62;= 4.0.1)</P
@@ -82,12 +82,15 @@ NAME="AEN21169"
 ><DIV
 CLASS="refsect1"
 ><A
-NAME="AEN21172"
+NAME="AEN12929"
 ></A
 ><H2
 >Description</H2
 ><DIV
 CLASS="funcsynopsis"
+><A
+NAME="AEN12931"
+></A
 ><P
 ></P
 ><P
@@ -140,6 +143,9 @@ CLASS="EXAMPLE"
 ><TD
 ><DIV
 CLASS="example"
+><A
+NAME="AEN12944"
+></A
 ><P
 ><B
 >Example 1. 
@@ -184,6 +190,9 @@ CLASS="EXAMPLE"
 ><TD
 ><DIV
 CLASS="example"
+><A
+NAME="AEN12948"
+></A
 ><P
 ><B
 >Example 2. 
@@ -244,6 +253,9 @@ process("Twas brilling and the slithy toves", "Twas the night", $garr);
      and when you run the code above, the output will be:
      <DIV
 CLASS="informalexample"
+><A
+NAME="AEN12952"
+></A
 ><P
 ></P
 ><TABLE
@@ -300,6 +312,9 @@ CLASS="EXAMPLE"
 ><TD
 ><DIV
 CLASS="example"
+><A
+NAME="AEN12956"
+></A
 ><P
 ><B
 >Example 3. Using anonymous functions as callback functions</B
@@ -314,7 +329,7 @@ WIDTH="100%"
 CLASS="programlisting"
 >&#13;$av = array("the ","a ","that ","this ");
 array_walk($av, create_function('&#38;$v,$k','$v = $v."mango";'));
-print_r($av);  // for PHP3 use var_dump()
+print_r($av);  // for PHP 3 use var_dump()
 // outputs:
 // Array
 // (
@@ -373,7 +388,7 @@ WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
 ><A
-HREF="ref.misc.html"
+HREF="function.call-user-func.html"
 >Prev</A
 ></TD
 ><TD
@@ -389,7 +404,7 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><A
-HREF="function.connection-aborted.html"
+HREF="function.func-get-arg.html"
 >Next</A
 ></TD
 ></TR
@@ -398,20 +413,20 @@ HREF="function.connection-aborted.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->Miscellaneous functions</TD
+>call_user_func</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"
 VALIGN="top"
 ><A
-HREF="ref.misc.html"
+HREF="ref.funchand.html"
 >Up</A
 ></TD
 ><TD
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->connection_aborted</TD
+>func_get_arg</TD
 ></TR
 ></TABLE
 ></DIV

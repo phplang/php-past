@@ -4,7 +4,7 @@
 >pg_fetch_object</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -74,7 +74,7 @@ NAME="function.pg-fetch-object"
 ><DIV
 CLASS="refnamediv"
 ><A
-NAME="AEN29385"
+NAME="AEN31382"
 ></A
 ><P
 >    (PHP3 &#62;= 3.0.1, PHP4 )</P
@@ -82,12 +82,15 @@ NAME="AEN29385"
 ><DIV
 CLASS="refsect1"
 ><A
-NAME="AEN29388"
+NAME="AEN31385"
 ></A
 ><H2
 >Description</H2
 ><DIV
 CLASS="funcsynopsis"
+><A
+NAME="AEN31387"
+></A
 ><P
 ></P
 ><P
@@ -201,6 +204,9 @@ CLASS="EXAMPLE"
 ><TD
 ><DIV
 CLASS="example"
+><A
+NAME="AEN31414"
+></A
 ><P
 ><B
 >Example 1. Postgres fetch object</B
@@ -215,7 +221,7 @@ WIDTH="100%"
 CLASS="programlisting"
 >&#13;&#60;?php 
 $database = "verlag";
-$db_conn = pg_connect ("localhost", "5432", "", "", $database);
+$db_conn = pg_connect ("host=localhost port=5432 dbname=$database");
 if (!$db_conn): ?&#62;
     &#60;H1&#62;Failed connecting to postgres database &#60;? echo $database ?&#62;&#60;/H1&#62; &#60;?
     exit;

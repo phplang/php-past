@@ -4,7 +4,7 @@
 >cpdf_arc</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -74,7 +74,7 @@ NAME="function.cpdf-arc"
 ><DIV
 CLASS="refnamediv"
 ><A
-NAME="AEN7038"
+NAME="AEN7935"
 ></A
 ><P
 >    (PHP3 &#62;= 3.0.8, PHP4 &#62;= 4.0b4)</P
@@ -82,12 +82,15 @@ NAME="AEN7038"
 ><DIV
 CLASS="refsect1"
 ><A
-NAME="AEN7041"
+NAME="AEN7938"
 ></A
 ><H2
 >Description</H2
 ><DIV
 CLASS="funcsynopsis"
+><A
+NAME="AEN7940"
+></A
 ><P
 ></P
 ><P
@@ -98,7 +101,7 @@ CLASS="FUNCDEF"
 CLASS="function"
 >cpdf_arc</B
 ></CODE
-> (int pdf document, double x-koor, double y-koor, double radius, double start, double end, int mode)</CODE
+> (int pdf document, double x-coor, double y-coor, double radius, double start, double end [, int mode])</CODE
 ></P
 ><P
 ></P
@@ -112,12 +115,12 @@ CLASS="function"
      (<TT
 CLASS="parameter"
 ><I
->x-koor</I
+>x-coor</I
 ></TT
 >, <TT
 CLASS="parameter"
 ><I
->y-koor</I
+>y-coor</I
 ></TT
 >)
      and radius <TT
@@ -137,11 +140,19 @@ CLASS="parameter"
 ><I
 >end</I
 ></TT
->.</P
+>.
+    </P
 ><P
->&#13;     The last optional parameter determines the unit length. If is 0 or omitted
-     the default unit as specified for the page is used. Otherwise the koodinates
-     are measured in postscript points disregarding the current unit.</P
+>&#13;     The optional parameter <TT
+CLASS="parameter"
+><I
+>mode</I
+></TT
+> determines the unit
+     length. If it's 0 or omitted the default unit as specified for the page
+     is used. Otherwise the coordinates are measured in postscript points
+     disregarding the current unit.
+    </P
 ><P
 >&#13;     See also <A
 HREF="function.cpdf-circle.html"
@@ -149,7 +160,8 @@ HREF="function.cpdf-circle.html"
 CLASS="function"
 >cpdf_circle()</B
 ></A
->.</P
+>.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

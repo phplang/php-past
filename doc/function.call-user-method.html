@@ -4,7 +4,7 @@
 >call_user_method</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -12,11 +12,11 @@ REL="UP"
 TITLE="Class/Object Functions"
 HREF="ref.classobj.html"><LINK
 REL="PREVIOUS"
-TITLE="get_declared_classes"
-HREF="function.get-declared-classes.html"><LINK
+TITLE="Class/Object Functions"
+HREF="ref.classobj.html"><LINK
 REL="NEXT"
-TITLE="ClibPDF functions"
-HREF="ref.cpdf.html"><META
+TITLE="class_exists"
+HREF="function.class-exists.html"><META
 NAME="HTTP_EQUIV"
 CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
@@ -45,7 +45,7 @@ WIDTH="10%"
 ALIGN="left"
 VALIGN="bottom"
 ><A
-HREF="function.get-declared-classes.html"
+HREF="ref.classobj.html"
 >Prev</A
 ></TD
 ><TD
@@ -58,7 +58,7 @@ WIDTH="10%"
 ALIGN="right"
 VALIGN="bottom"
 ><A
-HREF="ref.cpdf.html"
+HREF="function.class-exists.html"
 >Next</A
 ></TD
 ></TR
@@ -74,7 +74,7 @@ NAME="function.call-user-method"
 ><DIV
 CLASS="refnamediv"
 ><A
-NAME="AEN6005"
+NAME="AEN6708"
 ></A
 ><P
 >    (PHP3 &#62;= 3.0.3, PHP4 )</P
@@ -84,12 +84,15 @@ NAME="AEN6005"
 ><DIV
 CLASS="refsect1"
 ><A
-NAME="AEN6008"
+NAME="AEN6711"
 ></A
 ><H2
 >Description</H2
 ><DIV
 CLASS="funcsynopsis"
+><A
+NAME="AEN6713"
+></A
 ><P
 ></P
 ><P
@@ -112,29 +115,32 @@ CLASS="function"
 ></P
 ></DIV
 ><P
->&#13;	 Calls a the method referred by <TT
+>&#13;     Calls a the method referred by <TT
 CLASS="parameter"
 ><I
 >method_name</I
 ></TT
 > from
-	 the user defined <TT
+     the user defined <TT
 CLASS="parameter"
 ><I
 >obj</I
 ></TT
 > object. An example of usage
-	 is below, where we define a class, instantiate an object and use
-	 <B
+     is below, where we define a class, instantiate an object and use
+     <B
 CLASS="function"
 >call_user_method()</B
 > to call indirectly its
-	 <TT
+     <TT
 CLASS="varname"
 >print_info</TT
 > method.
      <DIV
 CLASS="informalexample"
+><A
+NAME="AEN6732"
+></A
 ><P
 ></P
 ><TABLE
@@ -147,18 +153,18 @@ WIDTH="100%"
 CLASS="programlisting"
 >&#13;&#60;?php
 class Country {
-	var $NAME;
-	var $TLD;
-	
-	function Country($name, $tld) {
-  		$this-&#62;NAME = $name;
-		$this-&#62;TLD = $tld;
-	}
+    var $NAME;
+    var $TLD;
+    
+    function Country($name, $tld) {
+        $this-&#62;NAME = $name;
+        $this-&#62;TLD = $tld;
+    }
 
-	function print_info($prestr="") {
-		echo $prestr."Country: ".$this-&#62;NAME."\n";
-		echo $prestr."Top Level Domain: ".$this-&#62;TLD."\n";
-	}
+    function print_info($prestr="") {
+        echo $prestr."Country: ".$this-&#62;NAME."\n";
+        echo $prestr."Top Level Domain: ".$this-&#62;TLD."\n";
+    }
 }
 
 $cntry = new Country("Peru","pe");
@@ -179,14 +185,14 @@ call_user_method ("print_info", $cntry, "\t");
 >
     </P
 ><P
->&#13;	 See also <A
+>&#13;     See also <A
 HREF="function.call-user-func.html"
 ><B
 CLASS="function"
 >call_user_func()</B
 ></A
 >.
-	</P
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -203,7 +209,7 @@ WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
 ><A
-HREF="function.get-declared-classes.html"
+HREF="ref.classobj.html"
 >Prev</A
 ></TD
 ><TD
@@ -219,7 +225,7 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><A
-HREF="ref.cpdf.html"
+HREF="function.class-exists.html"
 >Next</A
 ></TD
 ></TR
@@ -228,7 +234,7 @@ HREF="ref.cpdf.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->get_declared_classes</TD
+>Class/Object Functions</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"
@@ -241,7 +247,7 @@ HREF="ref.classobj.html"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->ClibPDF functions</TD
+>class_exists</TD
 ></TR
 ></TABLE
 ></DIV

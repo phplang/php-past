@@ -1,0 +1,281 @@
+<HTML
+><HEAD
+><TITLE
+>OrbitStruct</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Satellite CORBA client extension"
+HREF="ref.satellite.html"><LINK
+REL="PREVIOUS"
+TITLE="OrbitEnum"
+HREF="class.orbitenum.html"><LINK
+REL="NEXT"
+TITLE="satellite_caught_exception"
+HREF="function.satellite_caught_exception.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="class.orbitenum.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.satellite_caught_exception.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="class.orbitstruct"
+>OrbitStruct</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN33495"
+></A
+><P
+>    (unknown)</P
+>OrbitStruct&nbsp;--&nbsp;Use CORBA structs</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN33498"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN33500"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>new <B
+CLASS="function"
+>OrbitStruct</B
+></CODE
+> (string id)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     This class represents the structure identified with the
+     <TT
+CLASS="parameter"
+><I
+>id</I
+></TT
+> parameter.  The
+     <TT
+CLASS="parameter"
+><I
+>id</I
+></TT
+> can be either the name of the struct
+     (e.g "MyStruct"), or the full repository id
+     (e.g. "IDL:MyStruct:1.0").
+    </P
+><P
+>&#13;     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN33510"
+></A
+><P
+><B
+>Example 1. Sample IDL file</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;struct MyStruct {
+    short shortvalue;
+    string stringvalue;
+};
+
+interface SomeInterface {
+  void SetValues (MyStruct values);
+  MyStruct GetValues();
+}
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+    </P
+><P
+>&#13;     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN33514"
+></A
+><P
+><B
+>Example 2. PHP code for accessing MyStruct</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;&#60;?php
+$obj = new OrbitObject ($ior);
+
+$initial_values = new OrbitStruct ("IDL:MyStruct:1.0");
+$initial_values-&#62;shortvalue = 42;
+$initial_values-&#62;stringvalue = "HGTTG";
+
+$obj-&#62;SetValues ($initial_values);
+
+$values = $obj-&#62;GetValues();
+
+echo $values-&#62;shortvalue;
+echo $values-&#62;stringvalue;
+?&#62;
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="class.orbitenum.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.satellite_caught_exception.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>OrbitEnum</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.satellite.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>satellite_caught_exception</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -27,7 +27,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: number.c,v 1.24 2000/04/10 19:29:37 andi Exp $
+/* $Id: number.c,v 1.25 2000/09/30 17:32:44 sas Exp $
    Implements arbitrary precision numbers. */
 
 /*  This file is part of GNU bc.
@@ -67,8 +67,8 @@ bc_num _zero_;
 bc_num _one_;
 bc_num _two_;
 
-#define rt_warn(msg) php3_error(E_WARNING,msg)
-#define rt_error(msg) php3_error(E_WARNING,msg)
+#define rt_warn(msg) php3_error(E_WARNING,"%s",msg)
+#define rt_error(msg) php3_error(E_WARNING,"%s",msg)
 
 void out_of_memory()
 {

@@ -1,22 +1,22 @@
 <HTML
 ><HEAD
 ><TITLE
->set_error_handlers</TITLE
+>set_error_handler</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
-TITLE="Miscellaneous functions"
-HREF="ref.misc.html"><LINK
+TITLE="Error Handling and Logging Functions"
+HREF="ref.errorfunc.html"><LINK
 REL="PREVIOUS"
-TITLE="serialize"
-HREF="function.serialize.html"><LINK
+TITLE="restore_error_handler"
+HREF="function.restore-error-handler.html"><LINK
 REL="NEXT"
-TITLE="show_source"
-HREF="function.show-source.html"><META
+TITLE="trigger_error"
+HREF="function.trigger-error.html"><META
 NAME="HTTP_EQUIV"
 CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
@@ -45,7 +45,7 @@ WIDTH="10%"
 ALIGN="left"
 VALIGN="bottom"
 ><A
-HREF="function.serialize.html"
+HREF="function.restore-error-handler.html"
 >Prev</A
 ></TD
 ><TD
@@ -58,7 +58,7 @@ WIDTH="10%"
 ALIGN="right"
 VALIGN="bottom"
 ><A
-HREF="function.show-source.html"
+HREF="function.trigger-error.html"
 >Next</A
 ></TD
 ></TR
@@ -69,27 +69,30 @@ WIDTH="100%"></DIV
 ><H1
 ><A
 NAME="function.set-error-handler"
->set_error_handlers</A
+>set_error_handler</A
 ></H1
 ><DIV
 CLASS="refnamediv"
 ><A
-NAME="AEN21726"
+NAME="AEN10373"
 ></A
 ><P
->    (unknown)</P
->set_error_handlers&nbsp;--&nbsp;
+>    (PHP4 &#62;= 4.0.1)</P
+>set_error_handler&nbsp;--&nbsp;
      Sets a user-defined error handler function.  
     </DIV
 ><DIV
 CLASS="refsect1"
 ><A
-NAME="AEN21729"
+NAME="AEN10376"
 ></A
 ><H2
 >Description</H2
 ><DIV
 CLASS="funcsynopsis"
+><A
+NAME="AEN10378"
+></A
 ><P
 ></P
 ><P
@@ -140,15 +143,15 @@ CLASS="EXAMPLE"
 ><TD
 ><DIV
 CLASS="example"
+><A
+NAME="AEN10388"
+></A
 ><P
 ><B
 >Example 1. 
-       Error handling with <A
-HREF="function.set-error-handler.html"
-><B
+       Error handling with <B
 CLASS="function"
 >set_error_handler()</B
-></A
 > and
        <A
 HREF="function.trigger-error.html"
@@ -169,33 +172,33 @@ WIDTH="100%"
 CLASS="programlisting"
 >&#13;&#60;?php
 
-// redefine the user error constants - PHP4 only
-define(FATAL,E_USER_ERROR);
-define(ERROR,E_USER_WARNING);
-define(WARNING,E_USER_NOTICE);
+// redefine the user error constants - PHP 4 only
+define (FATAL,E_USER_ERROR);
+define (ERROR,E_USER_WARNING);
+define (WARNING,E_USER_NOTICE);
 
 // set the error reporting level for this script
-error_reporting(FATAL + ERROR + WARNING);
+error_reporting  (FATAL + ERROR + WARNING);
 
 // error handler function
 function myErrorHandler ($errno, $errstr) {
     switch ($errno) {
     case FATAL:
-	echo "&#60;b&#62;FATAL&#60;/b&#62; [$errno] $errstr&#60;br&#62;\n";
-	echo "  Fatal error in line ".__LINE__." of file ".__FILE__;
-	echo ", PHP ".PHP_VERSION." (".PHP_OS.")&#60;br&#62;\n";
-	echo "Aborting...&#60;br&#62;\n";
-	exit -1;
-	break;
+    echo "&#60;b&#62;FATAL&#60;/b&#62; [$errno] $errstr&#60;br&#62;\n";
+    echo "  Fatal error in line ".__LINE__." of file ".__FILE__;
+    echo ", PHP ".PHP_VERSION." (".PHP_OS.")&#60;br&#62;\n";
+    echo "Aborting...&#60;br&#62;\n";
+    exit -1;
+    break;
     case ERROR:
-	echo "&#60;b&#62;ERROR&#60;/b&#62; [$errno] $errstr&#60;br&#62;\n";
-	break;
+    echo "&#60;b&#62;ERROR&#60;/b&#62; [$errno] $errstr&#60;br&#62;\n";
+    break;
     case WARNING:
-	echo "&#60;b&#62;WARNING&#60;/b&#62; [$errno] $errstr&#60;br&#62;\n";
-	break;
+    echo "&#60;b&#62;WARNING&#60;/b&#62; [$errno] $errstr&#60;br&#62;\n";
+    break;
     default:
-	echo "Unkown error type: [$errno] $errstr&#60;br&#62;\n";
-	break;
+    echo "Unkown error type: [$errno] $errstr&#60;br&#62;\n";
+    break;
     }
 }
 
@@ -203,21 +206,21 @@ function myErrorHandler ($errno, $errstr) {
 function scale_by_log ($vect, $scale) {
     if ( !is_numeric($scale) || $scale &#60;= 0 )
     trigger_error("log(x) for x &#60;= 0 is undefined, you used: scale = $scale", 
-	      FATAL);
+      FATAL);
     if (!is_array($vect)) {
     trigger_error("Incorrect input vector, array of values expected", ERROR);
     return null;
     }
     for ($i=0; $i&#60;count($vect); $i++) {
     if (!is_numeric($vect[$i]))
-	trigger_error("Value at position $i is not a number, using 0 (zero)", 
-	      WARNING);
+    trigger_error("Value at position $i is not a number, using 0 (zero)", 
+      WARNING);
     $temp[$i] = log($scale) * $vect[$i];
     }
     return $temp;
 }
 
-// set to the use defined error handler
+// set to the user defined error handler
 $old_error_handler = set_error_handler("myErrorHandler");
 
 // trigger some errors, first define a mixed array with a non-numeric item
@@ -252,6 +255,9 @@ $d = scale_by_log($a, -2.5);
      And when you run this sample script, the output will be
      <DIV
 CLASS="informalexample"
+><A
+NAME="AEN10393"
+></A
 ><P
 ></P
 ><TABLE
@@ -347,7 +353,7 @@ WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
 ><A
-HREF="function.serialize.html"
+HREF="function.restore-error-handler.html"
 >Prev</A
 ></TD
 ><TD
@@ -363,7 +369,7 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><A
-HREF="function.show-source.html"
+HREF="function.trigger-error.html"
 >Next</A
 ></TD
 ></TR
@@ -372,20 +378,20 @@ HREF="function.show-source.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->serialize</TD
+>restore_error_handler</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"
 VALIGN="top"
 ><A
-HREF="ref.misc.html"
+HREF="ref.errorfunc.html"
 >Up</A
 ></TD
 ><TD
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->show_source</TD
+>trigger_error</TD
 ></TR
 ></TABLE
 ></DIV

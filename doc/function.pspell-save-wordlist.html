@@ -1,0 +1,244 @@
+<HTML
+><HEAD
+><TITLE
+>pspell_save_wordlist</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Pspell Functions"
+HREF="ref.pspell.html"><LINK
+REL="PREVIOUS"
+TITLE="pspell_new_personal"
+HREF="function.pspell-new-personal.html"><LINK
+REL="NEXT"
+TITLE="pspell_store_replacement"
+HREF="function.pspell-store-replacement.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.pspell-new-personal.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.pspell-store-replacement.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.pspell-save-wordlist"
+>pspell_save_wordlist</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN32553"
+></A
+><P
+>    (PHP4 &#62;= 4.0.2)</P
+>pspell_save_wordlist&nbsp;--&nbsp;Save the personal wordlist to a file.</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN32556"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN32558"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int <B
+CLASS="function"
+>pspell_save_wordlist</B
+></CODE
+> (int dictionary_link)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     <B
+CLASS="function"
+>Pspell_save_wordlist()</B
+> saves the personal wordlist
+	 from the current session. The dictionary has to be open with
+	 <A
+HREF="function.pspell-new-personal.html"
+><B
+CLASS="function"
+>pspell_new_personal()</B
+></A
+>, and the location of files to be
+	 saved specified with <A
+HREF="function.pspell-config-personal.html"
+><B
+CLASS="function"
+>pspell_config_personal()</B
+></A
+> and 
+	 (optionally) <A
+HREF="function.pspell-config-repl.html"
+><B
+CLASS="function"
+>pspell_config_repl()</B
+></A
+>. Please, note that
+	 this function will not work unless you have pspell .11.2 and aspell .32.5
+	 or later.
+    </P
+><P
+>&#13;     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN32570"
+></A
+><P
+><B
+>Example 1. <B
+CLASS="function"
+>Pspell_add_to_personal()</B
+></B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;$pspell_config = pspell_config_create ("en");
+pspell_config_personal ($pspell_config, "/tmp/dicts/newdict");
+$pspell_link = pspell_new_config ($pspell_config);
+
+pspell_add_to_personal ($pspell_link, "Vlad");
+pspell_save_wordlist ($pspell_link);
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.pspell-new-personal.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.pspell-store-replacement.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>pspell_new_personal</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.pspell.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>pspell_store_replacement</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

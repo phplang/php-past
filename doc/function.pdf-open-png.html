@@ -1,10 +1,10 @@
 <HTML
 ><HEAD
 ><TITLE
->PDF_open_png</TITLE
+>pdf_open_png</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -12,11 +12,11 @@ REL="UP"
 TITLE="PDF functions"
 HREF="ref.pdf.html"><LINK
 REL="PREVIOUS"
-TITLE="PDF_open_gif"
+TITLE="pdf_open_gif"
 HREF="function.pdf-open-gif.html"><LINK
 REL="NEXT"
-TITLE="PDF_open_memory_image"
-HREF="function.pdf-open-memory-image.html"><META
+TITLE="pdf_open_image_file"
+HREF="function.pdf-open-image-file.html"><META
 NAME="HTTP_EQUIV"
 CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
@@ -58,7 +58,7 @@ WIDTH="10%"
 ALIGN="right"
 VALIGN="bottom"
 ><A
-HREF="function.pdf-open-memory-image.html"
+HREF="function.pdf-open-image-file.html"
 >Next</A
 ></TD
 ></TR
@@ -69,27 +69,30 @@ WIDTH="100%"></DIV
 ><H1
 ><A
 NAME="function.pdf-open-png"
->PDF_open_png</A
+>pdf_open_png</A
 ></H1
 ><DIV
 CLASS="refnamediv"
 ><A
-NAME="AEN27593"
+NAME="AEN29504"
 ></A
 ><P
 >    (PHP4 &#62;= 4.0RC2)</P
->PDF_open_png&nbsp;--&nbsp;
+>pdf_open_png&nbsp;--&nbsp;
         Opens a PNG image
       </DIV
 ><DIV
 CLASS="refsect1"
 ><A
-NAME="AEN27596"
+NAME="AEN29507"
 ></A
 ><H2
 >Description</H2
 ><DIV
 CLASS="funcsynopsis"
+><A
+NAME="AEN29509"
+></A
 ><P
 ></P
 ><P
@@ -113,7 +116,7 @@ CLASS="function"
 >    
         The <B
 CLASS="function"
->PDF_open_png()</B
+>pdf_open_png()</B
 > function opens an image stored
         in the file with the name <TT
 CLASS="parameter"
@@ -123,6 +126,25 @@ CLASS="parameter"
 >.
         The format of the image has to be png. The function returns a pdf
         image identifier.
+     <DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
+><P
+><B
+>Note: </B
+>This function shouldn't be used anymore. Please use
+     the function <A
+HREF="function.pdf-open-image-file.html"
+><B
+CLASS="function"
+>pdf_open_image_file()</B
+></A
+> instead.
+     </P
+></BLOCKQUOTE
+></DIV
+>
         <TABLE
 WIDTH="100%"
 BORDER="0"
@@ -133,6 +155,9 @@ CLASS="EXAMPLE"
 ><TD
 ><DIV
 CLASS="example"
+><A
+NAME="AEN29523"
+></A
 ><P
 ><B
 >Example 1. Including a PNG image</B
@@ -146,7 +171,7 @@ WIDTH="100%"
 ><PRE
 CLASS="programlisting"
 >&#13;&#60;?php
-$im = PDF_open_png ($pdf, "test.png");
+$im = pdf_open_png ($pdf, "test.png");
 pdf_place_image ($pdf, $im, 100, 100, 1);
 pdf_close_image ($pdf, $im);
 ?&#62;
@@ -161,33 +186,54 @@ pdf_close_image ($pdf, $im);
 >
       </P
 ><P
->&#13;        See also <B
+>&#13;        See also <A
+HREF="function.pdf-close-image.html"
+><B
 CLASS="function"
->PDF_close_image()</B
+>pdf_close_image()</B
+></A
 >,
-                 <B
+                 <A
+HREF="function.pdf-open-jpeg.html"
+><B
 CLASS="function"
->PDF_open_jpeg()</B
+>pdf_open_jpeg()</B
+></A
 >,
-                 <B
+                 <A
+HREF="function.pdf-open-gif.html"
+><B
 CLASS="function"
->PDF_open_gif()</B
+>pdf_open_gif()</B
+></A
 >,
-                 <B
+                 <A
+HREF="function.pdf-open-memory-image.html"
+><B
 CLASS="function"
->PDF_open_memory_image()</B
+>pdf_open_memory_image()</B
+></A
 >,
-                 <B
+                 <A
+HREF="function.pdf-execute-image.html"
+><B
 CLASS="function"
->PDF_execute_image()</B
+>pdf_execute_image()</B
+></A
 >,
-                 <B
+                 <A
+HREF="function.pdf-place-image.html"
+><B
 CLASS="function"
->PDF_place_image()</B
+>pdf_place_image()</B
+></A
 >,
-                 <B
+                 <A
+HREF="function.pdf-put-image.html"
+><B
 CLASS="function"
->PDF_put_image()</B
+>pdf_put_image()</B
+></A
 >.
       </P
 ></DIV
@@ -222,7 +268,7 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><A
-HREF="function.pdf-open-memory-image.html"
+HREF="function.pdf-open-image-file.html"
 >Next</A
 ></TD
 ></TR
@@ -231,7 +277,7 @@ HREF="function.pdf-open-memory-image.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->PDF_open_gif</TD
+>pdf_open_gif</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"
@@ -244,7 +290,7 @@ HREF="ref.pdf.html"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->PDF_open_memory_image</TD
+>pdf_open_image_file</TD
 ></TR
 ></TABLE
 ></DIV

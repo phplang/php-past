@@ -1,0 +1,227 @@
+<HTML
+><HEAD
+><TITLE
+>pspell_config_ignore</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Pspell Functions"
+HREF="ref.pspell.html"><LINK
+REL="PREVIOUS"
+TITLE="pspell_config_create"
+HREF="function.pspell-config-create.html"><LINK
+REL="NEXT"
+TITLE="pspell_config_mode"
+HREF="function.pspell-config-mode.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.pspell-config-create.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.pspell-config-mode.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.pspell-config-ignore"
+>pspell_config_ignore</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN32277"
+></A
+><P
+>    (PHP4 &#62;= 4.0.2)</P
+>pspell_config_ignore&nbsp;--&nbsp;Ignore words less than N characters long.</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN32280"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN32282"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int <B
+CLASS="function"
+>pspell_config_ignore</B
+></CODE
+> (int dictionary_link, int n)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     <B
+CLASS="function"
+>Pspell_config_ignore()</B
+> should be used on a config
+	 before calling <A
+HREF="function.pspell-new-config.html"
+><B
+CLASS="function"
+>pspell_new_config()</B
+></A
+>. This function
+	 allows short words to be skipped by the spellchecker. Words less then
+	 n characters will be skipped.
+    </P
+><P
+>&#13;     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN32294"
+></A
+><P
+><B
+>Example 1. <B
+CLASS="function"
+>Pspell_config_ignore()</B
+></B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;$pspell_config = pspell_config_create ("en");
+pspell_config_ignore($pspell_config, 5);
+$pspell_link = pspell_new_config($pspell_config);
+pspell_check($pspell_link, "abcd");	//will not result in an error
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.pspell-config-create.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.pspell-config-mode.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>pspell_config_create</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.pspell.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>pspell_config_mode</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -4,7 +4,7 @@
 >ifx_getsqlca</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -74,7 +74,7 @@ NAME="function.ifx-getsqlca"
 ><DIV
 CLASS="refnamediv"
 ><A
-NAME="AEN16594"
+NAME="AEN17997"
 ></A
 ><P
 >    (PHP3 &#62;= 3.0.8, PHP4 )</P
@@ -84,12 +84,15 @@ NAME="AEN16594"
 ><DIV
 CLASS="refsect1"
 ><A
-NAME="AEN16597"
+NAME="AEN18000"
 ></A
 ><H2
 >Description</H2
 ><DIV
 CLASS="funcsynopsis"
+><A
+NAME="AEN18002"
+></A
 ><P
 ></P
 ><P
@@ -160,6 +163,9 @@ CLASS="EXAMPLE"
 ><TD
 ><DIV
 CLASS="example"
+><A
+NAME="AEN18015"
+></A
 ><P
 ><B
 >Example 1. Retrieve Informix sqlca.sqlerrd[x] values</B
@@ -174,7 +180,7 @@ WIDTH="100%"
 CLASS="programlisting"
 >&#13;/* assume the first column of 'sometable' is a serial */
 $qid = ifx_query("insert into sometable 
-                  values (0, '2nd column', 'another column' ", $connid));
+                  values (0, '2nd column', 'another column') ", $connid);
 if (! $qid) {
     ... error ...
 }

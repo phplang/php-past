@@ -4,7 +4,7 @@
 >Variable scope</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -82,6 +82,9 @@ NAME="language.variables.scope"
    </P
 ><DIV
 CLASS="informalexample"
+><A
+NAME="AEN2755"
+></A
 ><P
 ></P
 ><TABLE
@@ -102,14 +105,23 @@ include "b.inc";
 ></P
 ></DIV
 ><P
->&#13;    Here the $a variable will be available within the included b.inc
-    script.  However, within user-defined functions a local function
-    scope is introduced.  Any variable used inside a function is by
-    default limited to the local function scope.  For
-    example:
+>&#13;    Here the <TT
+CLASS="varname"
+>$a</TT
+> variable will be available within
+    the included <TT
+CLASS="filename"
+>b.inc</TT
+> script.  However, within
+    user-defined functions a local function scope is introduced.  Any
+    variable used inside a function is by default limited to the local
+    function scope.  For example:
    </P
 ><DIV
 CLASS="informalexample"
+><A
+NAME="AEN2760"
+></A
 ><P
 ></P
 ><TABLE
@@ -137,16 +149,24 @@ Test ();
 ></DIV
 ><P
 >&#13;    This script will not produce any output because the echo statement
-    refers to a local version of the $a variable, and it has not been
-    assigned a value within this scope.  You may notice that this is a
-    little bit different from the C language in that global variables
-    in C are automatically available to functions unless specifically
-    overridden by a local definition.  This can cause some problems in
-    that people may inadvertently change a global variable.  In PHP
-    global variables must be declared global inside a function if they
-    are going to be used in that function.  An example:</P
+    refers to a local version of the <TT
+CLASS="varname"
+>$a</TT
+> variable,
+    and it has not been assigned a value within this scope.  You may
+    notice that this is a little bit different from the C language in
+    that global variables in C are automatically available to
+    functions unless specifically overridden by a local definition.
+    This can cause some problems in that people may inadvertently
+    change a global variable.  In PHP global variables must be
+    declared global inside a function if they are going to be used in
+    that function.  An example:
+   </P
 ><DIV
 CLASS="informalexample"
+><A
+NAME="AEN2764"
+></A
 ><P
 ></P
 ><TABLE
@@ -176,19 +196,31 @@ echo $b;
 ></P
 ></DIV
 ><P
->&#13;    The above script will output "3".  By declaring $a and
-    $b global within the function, all references to either variable
-    will refer to the global version.  There is no limit to the number
-    of global variables that can be manipulated by a
-    function.
+>&#13;    The above script will output "3".  By declaring
+    <TT
+CLASS="varname"
+>$a</TT
+> and <TT
+CLASS="varname"
+>$b</TT
+> global within the
+    function, all references to either variable will refer to the
+    global version.  There is no limit to the number of global
+    variables that can be manipulated by a function.
    </P
 ><P
 >&#13;    A second way to access variables from the global scope is to use
-    the special PHP-defined $GLOBALS array.  The previous example can
-    be rewritten as:
+    the special PHP-defined <TT
+CLASS="varname"
+>$GLOBALS</TT
+> array.  The
+    previous example can be rewritten as:
    </P
 ><DIV
 CLASS="informalexample"
+><A
+NAME="AEN2771"
+></A
 ><P
 ></P
 ><TABLE
@@ -216,9 +248,12 @@ echo $b;
 ></P
 ></DIV
 ><P
->&#13;    The $GLOBALS array is an associative array with the name of the
-    global variable being the key and the contents of that variable
-    being the value of the array element.
+>&#13;    The <TT
+CLASS="varname"
+>$GLOBALS</TT
+> array is an associative array with
+    the name of the global variable being the key and the contents of
+    that variable being the value of the array element.
    </P
 ><P
 >&#13;    Another important feature of variable scoping is the
@@ -232,6 +267,9 @@ CLASS="emphasis"
    </P
 ><DIV
 CLASS="informalexample"
+><A
+NAME="AEN2777"
+></A
 ><P
 ></P
 ><TABLE
@@ -256,13 +294,33 @@ CLASS="programlisting"
 ></DIV
 ><P
 >&#13;    This function is quite useless since every time it is called it
-    sets $a to 0 and prints "0".  The $a++ which increments
-    the variable serves no purpose since as soon as the function exits
-    the $a variable disappears.  To make a useful counting function
-    which will not lose track of the current count, the $a variable is
-    declared static:</P
+    sets <TT
+CLASS="varname"
+>$a</TT
+> to <TT
+CLASS="literal"
+>0</TT
+> and prints
+    "0".  The <TT
+CLASS="varname"
+>$a</TT
+>++ which increments the
+    variable serves no purpose since as soon as the function exits the
+    <TT
+CLASS="varname"
+>$a</TT
+> variable disappears.  To make a useful
+    counting function which will not lose track of the current count,
+    the <TT
+CLASS="varname"
+>$a</TT
+> variable is declared static:
+   </P
 ><DIV
 CLASS="informalexample"
+><A
+NAME="AEN2785"
+></A
 ><P
 ></P
 ><TABLE
@@ -287,7 +345,10 @@ CLASS="programlisting"
 ></DIV
 ><P
 >&#13;    Now, every time the Test() function is called it will print the
-    value of $a and increment it.
+    value of <TT
+CLASS="varname"
+>$a</TT
+> and increment it.
    </P
 ><P
 >&#13;    Static variables also provide one way to deal with recursive
@@ -296,10 +357,16 @@ CLASS="programlisting"
     possible to make it recurse indefinitely.  You must make sure you
     have an adequate way of terminating the recursion.  The following
     simple function recursively counts to 10, using the static
-    variable $count to know when to stop:
+    variable <TT
+CLASS="varname"
+>$count</TT
+> to know when to stop:
    </P
 ><DIV
 CLASS="informalexample"
+><A
+NAME="AEN2791"
+></A
 ><P
 ></P
 ><TABLE

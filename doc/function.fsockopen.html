@@ -4,7 +4,7 @@
 >fsockopen</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -12,8 +12,8 @@ REL="UP"
 TITLE="Network Functions"
 HREF="ref.network.html"><LINK
 REL="PREVIOUS"
-TITLE="debugger_on"
-HREF="function.debugger-on.html"><LINK
+TITLE="define_syslog_variables"
+HREF="function.define-syslog-variables.html"><LINK
 REL="NEXT"
 TITLE="gethostbyaddr"
 HREF="function.gethostbyaddr.html"><META
@@ -45,7 +45,7 @@ WIDTH="10%"
 ALIGN="left"
 VALIGN="bottom"
 ><A
-HREF="function.debugger-on.html"
+HREF="function.define-syslog-variables.html"
 >Prev</A
 ></TD
 ><TD
@@ -74,7 +74,7 @@ NAME="function.fsockopen"
 ><DIV
 CLASS="refnamediv"
 ><A
-NAME="AEN23557"
+NAME="AEN24970"
 ></A
 ><P
 >    (PHP3 , PHP4 )</P
@@ -84,12 +84,15 @@ NAME="AEN23557"
 ><DIV
 CLASS="refsect1"
 ><A
-NAME="AEN23560"
+NAME="AEN24973"
 ></A
 ><H2
 >Description</H2
 ><DIV
 CLASS="funcsynopsis"
+><A
+NAME="AEN24975"
+></A
 ><P
 ></P
 ><P
@@ -109,16 +112,16 @@ CLASS="function"
 ></P
 ></DIV
 ><P
->&#13;	 Initiates a stream connection in the Internet (AF_INET, using TCP
-	 or UDP) or Unix (AF_UNIX) domain. For the Internet domain, it
-	 will open a TCP socket connection to
-	 <TT
+>&#13;     Initiates a stream connection in the Internet (AF_INET, using TCP
+     or UDP) or Unix (AF_UNIX) domain. For the Internet domain, it
+     will open a TCP socket connection to
+     <TT
 CLASS="parameter"
 ><I
 >hostname</I
 ></TT
 > on port
-	 <TT
+     <TT
 CLASS="parameter"
 ><I
 >port</I
@@ -129,33 +132,33 @@ CLASS="parameter"
 >hostname</I
 ></TT
 > may
-	 in this case be either a fully qualified domain name or an IP
-	 address. For UDP connections, you need to explicitely specify the
-	 the protocol: <TT
+     in this case be either a fully qualified domain name or an IP
+     address. For UDP connections, you need to explicitly specify the
+     protocol: <TT
 CLASS="parameter"
 ><I
 >udp://hostname</I
 ></TT
->.  For the
-	 Unix domain, <TT
+>.  For the Unix
+     domain, <TT
 CLASS="parameter"
 ><I
 >hostname</I
 ></TT
-> will be used as the
-	 path to the socket, <TT
+> will be used as the path
+     to the socket, <TT
 CLASS="parameter"
 ><I
 >port</I
 ></TT
-> must be set to 0
-	 in this case.  The optional <TT
+> must be set to 0 in
+     this case.  The optional <TT
 CLASS="parameter"
 ><I
 >timeout</I
 ></TT
 > can be
-	 used to set a timeout in seconds for the connect system call.
+     used to set a timeout in seconds for the connect system call.
     </P
 ><P
 >&#13;     <B
@@ -257,6 +260,9 @@ CLASS="EXAMPLE"
 ><TD
 ><DIV
 CLASS="example"
+><A
+NAME="AEN25018"
+></A
 ><P
 ><B
 >Example 1. <B
@@ -291,9 +297,9 @@ if (!$fp) {
 ></TR
 ></TABLE
 >
-	 The example below shows how to retrieve the day and time
-	 from the UDP service "daytime" (port 13) in your own machine.
-	 <TABLE
+     The example below shows how to retrieve the day and time
+     from the UDP service "daytime" (port 13) in your own machine.
+     <TABLE
 WIDTH="100%"
 BORDER="0"
 CELLPADDING="0"
@@ -303,6 +309,9 @@ CLASS="EXAMPLE"
 ><TD
 ><DIV
 CLASS="example"
+><A
+NAME="AEN25022"
+></A
 ><P
 ><B
 >Example 2. Using UDP connection</B
@@ -325,7 +334,7 @@ if (!$fp) {
     fclose($fp);
 }
 ?&#62;
-	 </PRE
+     </PRE
 ></TD
 ></TR
 ></TABLE
@@ -401,7 +410,7 @@ WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
 ><A
-HREF="function.debugger-on.html"
+HREF="function.define-syslog-variables.html"
 >Prev</A
 ></TD
 ><TD
@@ -426,7 +435,7 @@ HREF="function.gethostbyaddr.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->debugger_on</TD
+>define_syslog_variables</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"

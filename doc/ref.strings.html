@@ -4,7 +4,7 @@
 >String functions</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -12,8 +12,8 @@ REL="UP"
 TITLE="Function Reference"
 HREF="funcref.html"><LINK
 REL="PREVIOUS"
-TITLE="snmp_set_quick_print"
-HREF="function.snmp-set-quick-print.html"><LINK
+TITLE="strerror"
+HREF="function.strerror.html"><LINK
 REL="NEXT"
 TITLE="AddCSlashes"
 HREF="function.addcslashes.html"><META
@@ -45,7 +45,7 @@ WIDTH="10%"
 ALIGN="left"
 VALIGN="bottom"
 ><A
-HREF="function.snmp-set-quick-print.html"
+HREF="function.strerror.html"
 >Prev</A
 ></TD
 ><TD
@@ -75,16 +75,29 @@ NAME="ref.strings"
 CLASS="TITLEPAGE"
 ><H1
 CLASS="title"
->LX. String functions</H1
+>LXV. String functions</H1
 ><DIV
 CLASS="PARTINTRO"
 ><A
-NAME="AEN33042"
+NAME="AEN36144"
 ></A
 ><P
 >&#13;    These functions all manipulate strings in various ways. Some more
     specialized sections can be found in the regular expression and
     URL handling sections.
+   </P
+><P
+>&#13;    For information on how strings behave, especially with regard to
+    usage of single quotes, double quotes, and escape sequences, see
+    the <A
+HREF="language.types.string.html"
+>Strings</A
+> entry in
+    the <A
+HREF="language.types.html"
+>Types</A
+> section of the
+    manual. 
    </P
 ></DIV
 ><DIV
@@ -160,11 +173,6 @@ HREF="function.echo.html"
 HREF="function.explode.html"
 >explode</A
 > &#8212; Split a string by string</DT
-><DT
-><A
-HREF="function.flush.html"
->flush</A
-> &#8212; Flush the output buffer</DT
 ><DT
 ><A
 HREF="function.get-html-translation-table.html"
@@ -261,46 +269,6 @@ HREF="function.metaphone.html"
 HREF="function.nl2br.html"
 >nl2br</A
 > &#8212; Converts newlines to HTML line breaks</DT
-><DT
-><A
-HREF="function.ob-start.html"
->ob_start</A
-> &#8212; Turn on output buffering</DT
-><DT
-><A
-HREF="function.ob-get-contents.html"
->ob_get_contents</A
-> &#8212; 
-     Return the contents of the output buffer
-    </DT
-><DT
-><A
-HREF="function.ob-get-length.html"
->ob_get_length</A
-> &#8212; 
-     Return the length of the output buffer
-    </DT
-><DT
-><A
-HREF="function.ob-end-flush.html"
->ob_end_flush</A
-> &#8212; 
-     Flush (send) the output buffer and turn off output buffering    
-    </DT
-><DT
-><A
-HREF="function.ob-end-clean.html"
->ob_end_clean</A
-> &#8212; 
-     Clean (erase) the output buffer and turn off output buffering
-    </DT
-><DT
-><A
-HREF="function.ob-implicit-flush.html"
->ob_implicit_flush</A
-> &#8212; 
-     Turn implicit flush on/off 
-    </DT
 ><DT
 ><A
 HREF="function.ord.html"
@@ -597,7 +565,7 @@ WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
 ><A
-HREF="function.snmp-set-quick-print.html"
+HREF="function.strerror.html"
 >Prev</A
 ></TD
 ><TD
@@ -622,7 +590,7 @@ HREF="function.addcslashes.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->snmp_set_quick_print</TD
+>strerror</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"

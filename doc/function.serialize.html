@@ -4,19 +4,19 @@
 >serialize</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
-TITLE="Miscellaneous functions"
-HREF="ref.misc.html"><LINK
+TITLE="Variable Functions"
+HREF="ref.var.html"><LINK
 REL="PREVIOUS"
-TITLE="restore_error_handler"
-HREF="function.restore-error-handler.html"><LINK
+TITLE="print_r"
+HREF="function.print-r.html"><LINK
 REL="NEXT"
-TITLE="set_error_handlers"
-HREF="function.set-error-handler.html"><META
+TITLE="settype"
+HREF="function.settype.html"><META
 NAME="HTTP_EQUIV"
 CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
@@ -45,7 +45,7 @@ WIDTH="10%"
 ALIGN="left"
 VALIGN="bottom"
 ><A
-HREF="function.restore-error-handler.html"
+HREF="function.print-r.html"
 >Prev</A
 ></TD
 ><TD
@@ -58,7 +58,7 @@ WIDTH="10%"
 ALIGN="right"
 VALIGN="bottom"
 ><A
-HREF="function.set-error-handler.html"
+HREF="function.settype.html"
 >Next</A
 ></TD
 ></TR
@@ -74,7 +74,7 @@ NAME="function.serialize"
 ><DIV
 CLASS="refnamediv"
 ><A
-NAME="AEN21697"
+NAME="AEN38992"
 ></A
 ><P
 >    (PHP3 &#62;= 3.0.5, PHP4 )</P
@@ -84,12 +84,15 @@ NAME="AEN21697"
 ><DIV
 CLASS="refsect1"
 ><A
-NAME="AEN21700"
+NAME="AEN38995"
 ></A
 ><H2
 >Description</H2
 ><DIV
 CLASS="funcsynopsis"
+><A
+NAME="AEN38997"
+></A
 ><P
 ></P
 ><P
@@ -130,7 +133,7 @@ HREF="function.unserialize.html"
 CLASS="function"
 >unserialize()</B
 ></A
->.	  <B
+>.    <B
 CLASS="function"
 >Serialize()</B
 >
@@ -165,6 +168,9 @@ CLASS="EXAMPLE"
 ><TD
 ><DIV
 CLASS="example"
+><A
+NAME="AEN39016"
+></A
 ><P
 ><B
 >Example 1. <B
@@ -186,11 +192,11 @@ CLASS="programlisting"
 
 $conn = odbc_connect ("webdb", "php", "chicken");
 $stmt = odbc_prepare ($conn,
-	      "UPDATE sessions SET data = ? WHERE id = ?");
+      "UPDATE sessions SET data = ? WHERE id = ?");
 $sqldata = array (serialize($session_data), $PHP_AUTH_USER);
 if (!odbc_execute ($stmt, &#38;$sqldata)) {
     $stmt = odbc_prepare($conn,
-	     "INSERT INTO sessions (id, data) VALUES(?, ?)");
+     "INSERT INTO sessions (id, data) VALUES(?, ?)");
     if (!odbc_execute($stmt, &#38;$sqldata)) {
     /* Something went wrong.  Bitch, whine and moan. */
     }
@@ -221,7 +227,7 @@ WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
 ><A
-HREF="function.restore-error-handler.html"
+HREF="function.print-r.html"
 >Prev</A
 ></TD
 ><TD
@@ -237,7 +243,7 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><A
-HREF="function.set-error-handler.html"
+HREF="function.settype.html"
 >Next</A
 ></TD
 ></TR
@@ -246,20 +252,20 @@ HREF="function.set-error-handler.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->restore_error_handler</TD
+>print_r</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"
 VALIGN="top"
 ><A
-HREF="ref.misc.html"
+HREF="ref.var.html"
 >Up</A
 ></TD
 ><TD
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->set_error_handlers</TD
+>settype</TD
 ></TR
 ></TABLE
 ></DIV

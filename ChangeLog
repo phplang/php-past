@@ -1,7 +1,12 @@
 PHP 3.0 CHANGE LOG                                                    ChangeLog
 |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 
-?, 200x, Version 3.0.17
+October 09, 2000, Version 3.0.17
+- Fixed output functions (Sascha)
+- Added odbc_tables() (Frank)
+- Fixed htmlspecialchars/htmlentities inconsistencies (Rasmus)
+- Added is_uploaded_file() (Zeev)
+- Clean up htmlspecialchars/htmlentities inconsistencies (Rasmus)
 - Add optional charset parameter to sybase_[p]connect (alf@alpha.ulatina.ac.cr)
 - Fixed incorrect handling of 0-precision strings (e.g., %4.0s)
   in printf (Ken Coar)
@@ -9,7 +14,7 @@ PHP 3.0 CHANGE LOG                                                    ChangeLog
   for a failed connection attempt. (Kirill Maximov)
 - Fixed crash in OCIFetchStatement() when trying to read after
   all data has already been read. (Thies)
-- added --enable-sigchild. Use this option if you encounter
+- Added --enable-sigchild. Use this option if you encounter
   <defunc> processes when using Oracle 8i. (Thies)
 - Uncommitted outstanding OCI8 transactions are now rolled back
   before the connection is closed. (Thies)

@@ -1,0 +1,270 @@
+<HTML
+><HEAD
+><TITLE
+>close</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Socket functions"
+HREF="ref.sockets.html"><LINK
+REL="PREVIOUS"
+TITLE="bind"
+HREF="function.bind.html"><LINK
+REL="NEXT"
+TITLE="connect"
+HREF="function.connect.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.bind.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.connect.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.close"
+>close</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN35970"
+></A
+><P
+>    (PHP4 )</P
+>close&nbsp;--&nbsp;Closes a file descriptor</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN35973"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN35975"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>bool <B
+CLASS="function"
+>close</B
+></CODE
+> (int socket)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     <B
+CLASS="function"
+>close()</B
+> closes the file (or socket) descriptor
+     given by <TT
+CLASS="parameter"
+><I
+>socket</I
+></TT
+>.
+    </P
+><P
+>&#13;     Note that <B
+CLASS="function"
+>close()</B
+> should not be used on PHP
+     file descriptors created with <A
+HREF="function.fopen.html"
+><B
+CLASS="function"
+>fopen()</B
+></A
+>,
+     <A
+HREF="function.popen.html"
+><B
+CLASS="function"
+>popen()</B
+></A
+>, <A
+HREF="function.fsockopen.html"
+><B
+CLASS="function"
+>fsockopen()</B
+></A
+>, or
+     <B
+CLASS="function"
+>psockopen()</B
+>; it is meant for sockets created
+     with <A
+HREF="function.socket.html"
+><B
+CLASS="function"
+>socket()</B
+></A
+> or
+     <A
+HREF="function.accept-connect.html"
+><B
+CLASS="function"
+>accept_connect()</B
+></A
+>.
+    </P
+><P
+>&#13;     Returns true on success, or false if an error occurs (i.e.,
+     <TT
+CLASS="parameter"
+><I
+>socket</I
+></TT
+> is invalid).
+    </P
+><P
+>&#13;     See also <A
+HREF="function.bind.html"
+><B
+CLASS="function"
+>bind()</B
+></A
+>, <A
+HREF="function.listen.html"
+><B
+CLASS="function"
+>listen()</B
+></A
+>,
+     <A
+HREF="function.socket.html"
+><B
+CLASS="function"
+>socket()</B
+></A
+>,
+     <A
+HREF="function.socket-get-status.html"
+><B
+CLASS="function"
+>socket_get_status()</B
+></A
+>, and
+     <A
+HREF="function.strerror.html"
+><B
+CLASS="function"
+>strerror()</B
+></A
+>.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.bind.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.connect.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>bind</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.sockets.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>connect</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

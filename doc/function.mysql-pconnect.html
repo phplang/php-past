@@ -4,7 +4,7 @@
 >mysql_pconnect</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -74,7 +74,7 @@ NAME="function.mysql-pconnect"
 ><DIV
 CLASS="refnamediv"
 ><A
-NAME="AEN23325"
+NAME="AEN24712"
 ></A
 ><P
 >    (PHP3 , PHP4 )</P
@@ -84,12 +84,15 @@ NAME="AEN23325"
 ><DIV
 CLASS="refsect1"
 ><A
-NAME="AEN23328"
+NAME="AEN24715"
 ></A
 ><H2
 >Description</H2
 ><DIV
 CLASS="funcsynopsis"
+><A
+NAME="AEN24717"
+></A
 ><P
 ></P
 ><P
@@ -119,10 +122,27 @@ CLASS="function"
 >&#13;     <B
 CLASS="function"
 >mysql_pconnect()</B
-> establishes a connection to a
-     MySQL server.  All of the arguments are optional, and if they're
-     missing, defaults are assumed ('localhost', user name of the user
-     that owns the server process, empty password).
+> establishes a connection
+     to a MySQL server.  The following defaults are assumed for
+     missing optional parameters: <TT
+CLASS="parameter"
+><I
+>host:port</I
+></TT
+> =
+     'localhost:3306', <TT
+CLASS="parameter"
+><I
+>username</I
+></TT
+> = name of the
+     user that owns the server process and
+     <TT
+CLASS="parameter"
+><I
+>password</I
+></TT
+> = empty password.
     </P
 ><P
 >&#13;     The hostname string can also include a port

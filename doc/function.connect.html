@@ -1,0 +1,271 @@
+<HTML
+><HEAD
+><TITLE
+>connect</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Socket functions"
+HREF="ref.sockets.html"><LINK
+REL="PREVIOUS"
+TITLE="close"
+HREF="function.close.html"><LINK
+REL="NEXT"
+TITLE="listen"
+HREF="function.listen.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.close.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.listen.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.connect"
+>connect</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN36001"
+></A
+><P
+>    (PHP4 &#62;= 4.0.2)</P
+>connect&nbsp;--&nbsp;Initiates a connection on a socket</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN36004"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN36006"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int <B
+CLASS="function"
+>connect</B
+></CODE
+> (int socket, string address [, int 
+       port])</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     Initiates a connection using the socket descriptor
+     <TT
+CLASS="parameter"
+><I
+>socket</I
+></TT
+>, which must be a valid socket
+     descriptor created with <A
+HREF="function.socket.html"
+><B
+CLASS="function"
+>socket()</B
+></A
+>.
+    </P
+><P
+>&#13;     The <TT
+CLASS="parameter"
+><I
+>address</I
+></TT
+> parameter is either an IP
+     address in dotted-quad notation
+     (e.g. <TT
+CLASS="literal"
+>127.0.0.1</TT
+>), if the socket is of the
+     <TT
+CLASS="constant"
+>AF_INET</TT
+> family; or the pathname of a
+     Unix-domain socket, if the socket family is
+     <TT
+CLASS="constant"
+>AF_UNIX</TT
+>.
+    </P
+><P
+>&#13;     The <TT
+CLASS="parameter"
+><I
+>port</I
+></TT
+> parameter is only used when
+     connecting to an <TT
+CLASS="constant"
+>AF_INET</TT
+> socket, and
+     designates the port on the remote host to which a connection
+     should be made.
+    </P
+><P
+>&#13;     Returns zero on success, or a negative error code on
+     failure. This code may be passed to <A
+HREF="function.strerror.html"
+><B
+CLASS="function"
+>strerror()</B
+></A
+>
+     to get a textual explanation of the error.
+    </P
+><P
+>&#13;     See also 
+     <A
+HREF="function.bind.html"
+><B
+CLASS="function"
+>bind()</B
+></A
+>,
+     <A
+HREF="function.listen.html"
+><B
+CLASS="function"
+>listen()</B
+></A
+>,
+     <A
+HREF="function.socket.html"
+><B
+CLASS="function"
+>socket()</B
+></A
+>,
+     <A
+HREF="function.socket-get-status.html"
+><B
+CLASS="function"
+>socket_get_status()</B
+></A
+>, and
+     <A
+HREF="function.strerror.html"
+><B
+CLASS="function"
+>strerror()</B
+></A
+>.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.close.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.listen.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>close</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.sockets.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>listen</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -33,7 +33,7 @@
    |          Andrew Skalski      <askalski@chek.com>                  |
    +----------------------------------------------------------------------+
  */
-/* $Id: imap.c,v 1.89 2000/04/19 20:01:14 askalski Exp $ */
+/* $Id: imap.c,v 1.90 2000/09/30 17:32:44 sas Exp $ */
 
 #define IMAP41
 
@@ -396,7 +396,7 @@ int imap_end_request () {
     /* output any remaining errors at their original error level */
     ecur = imap_errorstack;
     while (ecur != NIL) {
-      php3_error(ecur->errflg, ecur->LTEXT);
+      php3_error(E_WARNING, "errflg=%d, text=%s", ecur->errflg, ecur->LTEXT);
       ecur = ecur->next;
     }
     mail_free_errorlist(&imap_errorstack);
@@ -406,7 +406,7 @@ int imap_end_request () {
     /* output any remaining alerts at E_NOTICE level */
     acur = imap_alertstack;
     while (acur != NIL) {
-      php3_error(E_NOTICE, acur->LTEXT);
+      php3_error(E_NOTICE, "%s", acur->LTEXT);
       acur = acur->next;
     }
     mail_free_stringlist(&imap_alertstack);
@@ -3738,7 +3738,7 @@ int _php3_imap_mail(char *to, char *subject, char *message, char *headers, char 
 
 #if MSVC5
 	if (imap_TSendMail(php3_ini.smtp,&tsm_err,headers,subject,to,message,cc,bcc,rpath) != SUCCESS){
-		php3_error(E_WARNING, GetSMErrorText(tsm_err));
+		php3_error(E_WARNING, "%s", GetSMErrorText(tsm_err));
 		return 0;
 	}
 #else

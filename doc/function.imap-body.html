@@ -4,7 +4,7 @@
 >imap_body</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -74,7 +74,7 @@ NAME="function.imap-body"
 ><DIV
 CLASS="refnamediv"
 ><A
-NAME="AEN14896"
+NAME="AEN16270"
 ></A
 ><P
 >    (PHP3 , PHP4 )</P
@@ -82,12 +82,15 @@ NAME="AEN14896"
 ><DIV
 CLASS="refsect1"
 ><A
-NAME="AEN14899"
+NAME="AEN16273"
 ></A
 ><H2
 >Description</H2
 ><DIV
 CLASS="funcsynopsis"
+><A
+NAME="AEN16275"
+></A
 ><P
 ></P
 ><P
@@ -147,6 +150,22 @@ CLASS="parameter"
 ></LI
 ></UL
 >
+    </P
+><P
+>&#13;     <B
+CLASS="function"
+>imap_body()</B
+> will only return a verbatim copy of the 
+     message body. To extract single parts of a multipart MIME-encoded 
+     message you have to use <B
+CLASS="function"
+>imap_fetch_structure()</B
+> to
+     analyze its structure and <B
+CLASS="function"
+>imap_fetch_body()</B
+> to
+	 	 extract a copy of a single body component.     
     </P
 ></DIV
 ><DIV

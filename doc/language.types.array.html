@@ -4,7 +4,7 @@
 >Arrays</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -105,6 +105,9 @@ CLASS="function"
      functions, or you can explicitly set each array element value.
      <DIV
 CLASS="informalexample"
+><A
+NAME="AEN2445"
+></A
 ><P
 ></P
 ><TABLE
@@ -134,6 +137,9 @@ $b["foo"] = 13;
      brackets, the value will be added onto the end of the array.
      <DIV
 CLASS="informalexample"
+><A
+NAME="AEN2448"
+></A
 ><P
 ></P
 ><TABLE
@@ -260,6 +266,9 @@ NAME="language.types.array.multi-dim"
      dimension of the array, you add another [key] value to the end:
      <DIV
 CLASS="informalexample"
+><A
+NAME="AEN2468"
+></A
 ><P
 ></P
 ><TABLE
@@ -289,11 +298,14 @@ $a["foo"][4]["bar"][0] = $f;   # four dimensional!
 >
     </P
 ><P
->&#13;     In PHP3 it is not possible to reference multidimensional arrays
+>&#13;     In PHP 3 it is not possible to reference multidimensional arrays
      directly within strings. For instance, the following will not
      have the desired result:
      <DIV
 CLASS="informalexample"
+><A
+NAME="AEN2471"
+></A
 ><P
 ></P
 ><TABLE
@@ -315,7 +327,7 @@ echo "This won't work: $a[3][bar]";
 ></P
 ></DIV
 >
-     In PHP3, the above will output <TT
+     In PHP 3, the above will output <TT
 CLASS="computeroutput"
 >This won't work:
      Array[bar]</TT
@@ -323,6 +335,9 @@ CLASS="computeroutput"
      however, can be used to overcome this:
      <DIV
 CLASS="informalexample"
+><A
+NAME="AEN2474"
+></A
 ><P
 ></P
 ><TABLE
@@ -345,11 +360,14 @@ echo "This will work: " . $a[3][bar];
 >
     </P
 ><P
->&#13;     In PHP4, however, the whole problem may be circumvented by
+>&#13;     In PHP 4, however, the whole problem may be circumvented by
      enclosing the array reference (inside the string) in curly
      braces:
      <DIV
 CLASS="informalexample"
+><A
+NAME="AEN2477"
+></A
 ><P
 ></P
 ><TABLE
@@ -385,6 +403,9 @@ CLASS="function"
      same way:
      <DIV
 CLASS="informalexample"
+><A
+NAME="AEN2481"
+></A
 ><P
 ></P
 ><TABLE
@@ -432,6 +453,9 @@ CLASS="function"
      multi-dimensional arrays:
      <DIV
 CLASS="informalexample"
+><A
+NAME="AEN2485"
+></A
 ><P
 ></P
 ><TABLE

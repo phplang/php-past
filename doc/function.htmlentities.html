@@ -4,7 +4,7 @@
 >htmlentities</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -74,7 +74,7 @@ NAME="function.htmlentities"
 ><DIV
 CLASS="refnamediv"
 ><A
-NAME="AEN33474"
+NAME="AEN36577"
 ></A
 ><P
 >    (PHP3 , PHP4 )</P
@@ -84,12 +84,15 @@ NAME="AEN33474"
 ><DIV
 CLASS="refsect1"
 ><A
-NAME="AEN33477"
+NAME="AEN36580"
 ></A
 ><H2
 >Description</H2
 ><DIV
 CLASS="funcsynopsis"
+><A
+NAME="AEN36582"
+></A
 ><P
 ></P
 ><P
@@ -100,22 +103,48 @@ CLASS="FUNCDEF"
 CLASS="function"
 >htmlentities</B
 ></CODE
-> (string string)</CODE
+> (string string [, int quote_style])</CODE
 ></P
 ><P
 ></P
 ></DIV
 ><P
 >&#13;     This function is identical to
-     <B
+     <A
+HREF="function.htmlspecialchars.html"
+><B
 CLASS="function"
->Htmlspecialchars()</B
+>htmlspecialchars()</B
+></A
 > in all ways, except that
-     all characters which have HTML entity equivalents are translated
-     into these entities.
+     all characters which have HTML character entity equivalents are
+     translated into these entities.  Like
+     <A
+HREF="function.htmlspecialchars.html"
+><B
+CLASS="function"
+>htmlspecialchars()</B
+></A
+>, it takes an optional
+     second argument which indicates what should be done with single
+     and double quotes.  <TT
+CLASS="constant"
+>ENT_COMPAT</TT
+> (the default)
+     will only convert double-quotes and leave single-quotes alone.
+     <TT
+CLASS="constant"
+>ENT_QUOTES</TT
+> will convert both double and
+     single quotes, and <TT
+CLASS="constant"
+>ENT_NOQUOTES</TT
+> will leave
+     both double and single quotes unconverted.
     </P
 ><P
->&#13;     At present, the ISO-8859-1 character set is used.
+>&#13;     At present, the ISO-8859-1 character set is used.  Note that the optional
+	 second argument was added in PHP 3.0.17 and PHP 4.0.3.
     </P
 ><P
 >&#13;     See also <A

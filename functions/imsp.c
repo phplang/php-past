@@ -26,7 +26,7 @@
    | Authors: Charles Hagenbuch   <chuck@horde.org>                       |
    +----------------------------------------------------------------------+
  */
-/* $Id: imsp.c,v 1.4 2000/01/01 04:31:15 sas Exp $ */
+/* $Id: imsp.c,v 1.5 2000/09/30 17:32:44 sas Exp $ */
 
 #ifdef ERROR
 #undef ERROR
@@ -1159,14 +1159,14 @@ void mm_log (char *string, long errflg)
 {
 	switch ((short) errflg) {
 	case NIL:
-		/* php3_error(E_NOTICE, string); */
+		/* php3_error(E_NOTICE, "%s", string); */
 		break;
 	case PARSE:
 	case WARN:
-		php3_error(E_WARN, string);
+		php3_error(E_WARN, "%s", string);
 		break;
 	case ERROR:
-		php3_error(E_ERROR, string);
+		php3_error(E_ERROR, "%s", string);
 		break;
 	}
 }

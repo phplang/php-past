@@ -4,7 +4,7 @@
 >mcal_open</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -15,8 +15,8 @@ REL="PREVIOUS"
 TITLE="MCAL functions"
 HREF="ref.mcal.html"><LINK
 REL="NEXT"
-TITLE="mcal_close"
-HREF="function.mcal-close.html"><META
+TITLE="mcal_popen"
+HREF="function.mcal-popen.html"><META
 NAME="HTTP_EQUIV"
 CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
@@ -58,7 +58,7 @@ WIDTH="10%"
 ALIGN="right"
 VALIGN="bottom"
 ><A
-HREF="function.mcal-close.html"
+HREF="function.mcal-popen.html"
 >Next</A
 ></TD
 ></TR
@@ -74,7 +74,7 @@ NAME="function.mcal-open"
 ><DIV
 CLASS="refnamediv"
 ><A
-NAME="AEN18953"
+NAME="AEN20373"
 ></A
 ><P
 >    (PHP3 &#62;= 3.0.13, PHP4 &#62;= 4.0b4)</P
@@ -82,12 +82,15 @@ NAME="AEN18953"
 ><DIV
 CLASS="refsect1"
 ><A
-NAME="AEN18956"
+NAME="AEN20376"
 ></A
 ><H2
 >Description</H2
 ><DIV
 CLASS="funcsynopsis"
+><A
+NAME="AEN20378"
+></A
 ><P
 ></P
 ><P
@@ -98,13 +101,14 @@ CLASS="FUNCDEF"
 CLASS="function"
 >mcal_open</B
 ></CODE
-> (string calendar, string username, string password, string options)</CODE
+> (string calendar, string username, string password, int options)</CODE
 ></P
 ><P
 ></P
 ></DIV
 ><P
->&#13;     Returns an MCAL stream on success, false on error.</P
+>&#13;     Returns an MCAL stream on success, false on error.
+    </P
 ><P
 >&#13;     <B
 CLASS="function"
@@ -128,9 +132,8 @@ CLASS="parameter"
 >options</I
 ></TT
 > to that mailbox also. The streams
-     internal event structure is also initialized upon connection.</P
-><P
-></P
+     internal event structure is also initialized upon connection.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -163,7 +166,7 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><A
-HREF="function.mcal-close.html"
+HREF="function.mcal-popen.html"
 >Next</A
 ></TD
 ></TR
@@ -185,7 +188,7 @@ HREF="ref.mcal.html"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->mcal_close</TD
+>mcal_popen</TD
 ></TR
 ></TABLE
 ></DIV

@@ -1,0 +1,208 @@
+<HTML
+><HEAD
+><TITLE
+>pspell_config_save_repl</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Pspell Functions"
+HREF="ref.pspell.html"><LINK
+REL="PREVIOUS"
+TITLE="pspell_config_runtogether"
+HREF="function.pspell-config-runtogether.html"><LINK
+REL="NEXT"
+TITLE="pspell_new"
+HREF="function.pspell-new.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.pspell-config-runtogether.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.pspell-new.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.pspell-config-save-repl"
+>pspell_config_save_repl</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN32402"
+></A
+><P
+>    (PHP4 &#62;= 4.0.2)</P
+>pspell_config_save_repl&nbsp;--&nbsp;Determine whether to save a replacement pairs list
+	along with the wordlist.</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN32405"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN32407"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int <B
+CLASS="function"
+>pspell_config_save_repl</B
+></CODE
+> (int dictionary_link, boolean flag)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     <B
+CLASS="function"
+>Pspell_config_save_repl()</B
+> should be used on a config
+	 before calling <A
+HREF="function.pspell-new-config.html"
+><B
+CLASS="function"
+>pspell_new_config()</B
+></A
+>. It determines
+	 whether <A
+HREF="function.pspell-save-wordlist.html"
+><B
+CLASS="function"
+>pspell_save_wordlist()</B
+></A
+> will save the
+	 replacement pairs along with the wordlist. Usually there is no need to use
+	 this function because if <A
+HREF="function.pspell-config-repl.html"
+><B
+CLASS="function"
+>pspell_config_repl()</B
+></A
+> is used,
+	 the replacement pairs will be saved by 
+	 <A
+HREF="function.pspell-save-wordlist.html"
+><B
+CLASS="function"
+>pspell_save_wordlist()</B
+></A
+> anyway, and if it is not,
+	 the replacement pairs will not be saved. Please, note that this function
+	 will not work unless you have pspell .11.2 and aspell .32.5 or later.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.pspell-config-runtogether.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.pspell-new.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>pspell_config_runtogether</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.pspell.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>pspell_new</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -4,7 +4,7 @@
 >Security</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -128,7 +128,7 @@ CLASS="sect2"
 ><H2
 CLASS="sect2"
 ><A
-NAME="AEN1477"
+NAME="AEN2195"
 >Possible attacks</A
 ></H2
 ><P
@@ -221,7 +221,7 @@ CLASS="filename"
       </P
 ><P
 >&#13;       In PHP, compile-time configuration option <A
-HREF="install-unix.html#enable-force-cgi-redirect"
+HREF="install.configure.html#install.configure.enable-force-cgi-redirect"
 >--enable-force-cgi-redirect</A
 >
        and runtime configuration directives <A
@@ -253,8 +253,8 @@ NAME="security.cgi.default"
      you to do redirects, or the server does not have a way to
      communicate to the PHP binary that the request is a safely
      redirected request, you can specify the option <A
-HREF="install-unix.html#enable-force-cgi-redirect"
->--disable-force-cgi-redirect</A
+HREF="install.configure.html#install.configure.enable-force-cgi-redirect"
+>--enable-force-cgi-redirect</A
 >
      to the configure script.  You still have to make sure your PHP
      scripts do not rely on one or another way of calling the script,
@@ -462,6 +462,9 @@ CLASS="filename"
      similar to:
      <DIV
 CLASS="informalexample"
+><A
+NAME="AEN2267"
+></A
 ><P
 ></P
 ><TABLE
@@ -501,7 +504,7 @@ CLASS="envar"
 >PATH_TRANSLATED</TT
 > information correctly with this
      setup, the php parser should be compiled with the <A
-HREF="install-unix.html#enable-discard-path"
+HREF="install.configure.html#install.configure.enable-discard-path"
 >--enable-discard-path</A
 >
      configure option.

@@ -4,7 +4,7 @@
 >cpdf_page_init</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -74,7 +74,7 @@ NAME="function.cpdf-page-init"
 ><DIV
 CLASS="refnamediv"
 ><A
-NAME="AEN6197"
+NAME="AEN7064"
 ></A
 ><P
 >    (PHP3 &#62;= 3.0.8, PHP4 &#62;= 4.0b4)</P
@@ -82,12 +82,15 @@ NAME="AEN6197"
 ><DIV
 CLASS="refsect1"
 ><A
-NAME="AEN6200"
+NAME="AEN7067"
 ></A
 ><H2
 >Description</H2
 ><DIV
 CLASS="funcsynopsis"
+><A
+NAME="AEN7069"
+></A
 ><P
 ></P
 ><P
@@ -98,7 +101,7 @@ CLASS="FUNCDEF"
 CLASS="function"
 >cpdf_page_init</B
 ></CODE
-> (int pdf document, int page number, int orientation, double height, double width, double unit)</CODE
+> (int pdf document, int page number, int orientation, double height, double width [, double unit])</CODE
 ></P
 ><P
 ></P
@@ -143,10 +146,11 @@ CLASS="parameter"
 ><I
 >unit</I
 ></TT
-> sets the unit for the koordinate system.
+> sets the unit for the coordinate system.
      The value should be the number of postscript points per unit. Since
      one inch is equal to 72 points, a value of 72 would set the unit
-     to one inch. The default is also 72.</P
+     to one inch. The default is also 72.
+    </P
 ><P
 >&#13;     See also <A
 HREF="function.cpdf-set-current-page.html"
@@ -154,7 +158,8 @@ HREF="function.cpdf-set-current-page.html"
 CLASS="function"
 >cpdf_set_current_page()</B
 ></A
->.</P
+>.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

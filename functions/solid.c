@@ -28,7 +28,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: solid.c,v 1.40 2000/01/01 04:31:17 sas Exp $ */
+/* $Id: solid.c,v 1.41 2000/09/30 17:32:44 sas Exp $ */
 
 #include <stdlib.h>
 #include <ctype.h>
@@ -449,7 +449,7 @@ void php3_solid_result(INTERNAL_FUNCTION_PARAMETERS)
 					 &pfNativeError, msgbuf, sizeof(msgbuf)-1,
 					 &foo);
 			php3_error(E_WARNING, "Initial SQLGetData failed");
-			php3_error(E_WARNING, msgbuf);
+			php3_error(E_WARNING, "%s", msgbuf);
 		} else if (fieldsize > 0) {
 			realval = emalloc(fieldsize + 2);
 			realval[0] = '\0';

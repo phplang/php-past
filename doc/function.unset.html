@@ -4,7 +4,7 @@
 >unset</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -12,8 +12,8 @@ REL="UP"
 TITLE="Variable Functions"
 HREF="ref.var.html"><LINK
 REL="PREVIOUS"
-TITLE="strval"
-HREF="function.strval.html"><LINK
+TITLE="unserialize"
+HREF="function.unserialize.html"><LINK
 REL="NEXT"
 TITLE="var_dump"
 HREF="function.var-dump.html"><META
@@ -45,7 +45,7 @@ WIDTH="10%"
 ALIGN="left"
 VALIGN="bottom"
 ><A
-HREF="function.strval.html"
+HREF="function.unserialize.html"
 >Prev</A
 ></TD
 ><TD
@@ -74,7 +74,7 @@ NAME="function.unset"
 ><DIV
 CLASS="refnamediv"
 ><A
-NAME="AEN35987"
+NAME="AEN39102"
 ></A
 ><P
 >    (unknown)</P
@@ -82,12 +82,15 @@ NAME="AEN35987"
 ><DIV
 CLASS="refsect1"
 ><A
-NAME="AEN35990"
+NAME="AEN39105"
 ></A
 ><H2
 >Description</H2
 ><DIV
 CLASS="funcsynopsis"
+><A
+NAME="AEN39107"
+></A
 ><P
 ></P
 ><P
@@ -98,7 +101,7 @@ CLASS="FUNCDEF"
 CLASS="function"
 >unset</B
 ></CODE
-> (mixed var)</CODE
+> (mixed var [, mixed var [, ...]])</CODE
 ></P
 ><P
 ></P
@@ -107,7 +110,7 @@ CLASS="function"
 >&#13;     <B
 CLASS="function"
 >unset()</B
-> destroys the specified variable and
+> destroys the specified variables and
      returns true.
     </P
 ><P
@@ -121,6 +124,9 @@ CLASS="EXAMPLE"
 ><TD
 ><DIV
 CLASS="example"
+><A
+NAME="AEN39122"
+></A
 ><P
 ><B
 >Example 1. <B
@@ -136,8 +142,14 @@ WIDTH="100%"
 ><TD
 ><PRE
 CLASS="programlisting"
->&#13;unset ($foo);
+>&#13;// destroy a single variable
+unset ($foo);
+
+// destroy a single element of an array
 unset ($bar['quux']);
+
+// destroy more than one variable
+unset ($foo1, $foo2, $foo3);
       </PRE
 ></TD
 ></TR
@@ -146,6 +158,266 @@ unset ($bar['quux']);
 ></TD
 ></TR
 ></TABLE
+>
+    </P
+><P
+>&#13;     The behavior of <B
+CLASS="function"
+>unset()</B
+> inside of a function
+     can vary depending on what type of variable you are attempting to
+     destroy.
+    </P
+><P
+>&#13;     If a globalized variable is <B
+CLASS="function"
+>unset()</B
+> inside of
+     a function, only the local variable is destroyed.  The variable
+     in the calling environment will retain the same value as before
+     <B
+CLASS="function"
+>unset()</B
+> was called.
+     <DIV
+CLASS="informalexample"
+><A
+NAME="AEN39131"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;function destroy_foo() {
+    global $foo;
+    unset($foo);
+}
+
+$foo = 'bar';
+destroy_foo();
+echo $foo;
+      </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+>
+     The above example would output:
+     <DIV
+CLASS="informalexample"
+><A
+NAME="AEN39133"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;bar
+      </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+>
+    </P
+><P
+>&#13;     If a variable that is PASSED BY REFERENCE is
+     <B
+CLASS="function"
+>unset()</B
+> inside of a function, only the local
+     variable is destroyed.  The variable in the calling environment
+     will retain the same value as before <B
+CLASS="function"
+>unset()</B
+>
+     was called.
+     <DIV
+CLASS="informalexample"
+><A
+NAME="AEN39138"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;function foo(&#38;$bar) { 
+    unset($bar); 
+    $bar = "blah"; 
+}
+
+$bar = 'something';
+echo "$bar\n";
+
+foo($bar);
+echo "$bar\n";
+      </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+>
+     The above example would output:
+     <DIV
+CLASS="informalexample"
+><A
+NAME="AEN39140"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;something
+something
+      </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+>
+    </P
+><P
+>&#13;     If a static variable is <B
+CLASS="function"
+>unset()</B
+> inside of a
+     function, <B
+CLASS="function"
+>unset()</B
+> unsets the reference to the
+     static variable, rather than the static variable itself.
+     <DIV
+CLASS="informalexample"
+><A
+NAME="AEN39145"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;function foo() { 
+    static $a;
+    $a++;
+       echo "$a\n";
+
+    unset($a);
+}
+
+foo();
+foo();
+foo();
+      </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+>
+     The above example would output:
+     <DIV
+CLASS="informalexample"
+><A
+NAME="AEN39147"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;1
+2
+3
+      </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+>
+    </P
+><P
+>&#13;     If you would like to <B
+CLASS="function"
+>unset()</B
+> a global variable inside of a function, you can use the <TT
+CLASS="parameter"
+><I
+>$GLOBALS</I
+></TT
+> array to do so:
+     <DIV
+CLASS="informalexample"
+><A
+NAME="AEN39152"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;function foo() {
+    unset($GLOBALS['bar']);       
+}
+
+$bar = "something";
+foo();
+      </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
 >
     </P
 ><P
@@ -180,7 +452,7 @@ WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
 ><A
-HREF="function.strval.html"
+HREF="function.unserialize.html"
 >Prev</A
 ></TD
 ><TD
@@ -205,7 +477,7 @@ HREF="function.var-dump.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->strval</TD
+>unserialize</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"

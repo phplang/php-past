@@ -1,0 +1,237 @@
+<HTML
+><HEAD
+><TITLE
+>shm_size</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Shared Memory Functions"
+HREF="ref.shmop.html"><LINK
+REL="PREVIOUS"
+TITLE="shm_write"
+HREF="function.shm_write.html"><LINK
+REL="NEXT"
+TITLE="shm_delete"
+HREF="function.shm_delete.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.shm_write.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.shm_delete.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.size"
+>shm_size</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN34326"
+></A
+><P
+>    (unknown)</P
+>shm_size&nbsp;--&nbsp;Get size of shared memory block</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN34329"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN34331"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int <B
+CLASS="function"
+>shm_size</B
+></CODE
+> (int shmid)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     <B
+CLASS="function"
+>shm_size()</B
+> is used to get the size, in bytes of the
+     shared memory block.
+    </P
+><P
+>&#13;     <B
+CLASS="function"
+>shm_size()</B
+> takes the shmid, which is the shared memory
+     block identifier created by <B
+CLASS="function"
+>shm_open()</B
+>, the function
+     will return and int, which represents the number of bytes the shared memory
+     block occupies.
+    </P
+><P
+>&#13;     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN34343"
+></A
+><P
+><B
+>Example 1. Getting the size of the shared memory block</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;&#60;?php
+$shm_size = shm_size($shm_id);
+?&#62;
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+    </P
+><P
+>&#13;     This example will put the size of shared memory block identified by
+     <TT
+CLASS="literal"
+>$shm_id</TT
+> into <TT
+CLASS="literal"
+>$shm_size</TT
+>.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.shm_write.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.shm_delete.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>shm_write</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.shmop.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>shm_delete</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

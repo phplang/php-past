@@ -4,7 +4,7 @@
 >parse_str</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -74,7 +74,7 @@ NAME="function.parse-str"
 ><DIV
 CLASS="refnamediv"
 ><A
-NAME="AEN33798"
+NAME="AEN36850"
 ></A
 ><P
 >    (PHP3 , PHP4 )</P
@@ -82,12 +82,15 @@ NAME="AEN33798"
 ><DIV
 CLASS="refsect1"
 ><A
-NAME="AEN33801"
+NAME="AEN36853"
 ></A
 ><H2
 >Description</H2
 ><DIV
 CLASS="funcsynopsis"
+><A
+NAME="AEN36855"
+></A
 ><P
 ></P
 ><P
@@ -98,7 +101,7 @@ CLASS="FUNCDEF"
 CLASS="function"
 >parse_str</B
 ></CODE
-> (string str)</CODE
+> (string str [, array arr])</CODE
 ></P
 ><P
 ></P
@@ -110,7 +113,14 @@ CLASS="parameter"
 >str</I
 ></TT
 > as if it were the query string
-     passed via an URL and sets variables in the current scope.
+     passed via an URL and sets variables in the current scope. If 
+     the second parameter <TT
+CLASS="parameter"
+><I
+>arr</I
+></TT
+> is present, 
+     variables are stored in this variable as an array elements instead. 
     </P
 ><P
 >&#13;     <TABLE
@@ -123,6 +133,9 @@ CLASS="EXAMPLE"
 ><TD
 ><DIV
 CLASS="example"
+><A
+NAME="AEN36868"
+></A
 ><P
 ><B
 >Example 1. Using <B
@@ -153,28 +166,6 @@ echo $second[1]; /* prints "another" */
 ></TABLE
 >
     </P
-><DIV
-CLASS="note"
-><BLOCKQUOTE
-CLASS="note"
-><P
-><B
->Note: </B
->
-       This currently requires 
-       <A
-HREF="configuration.html#ini.register-globals"
->register_globals</A
->=on 
-       to be set in <TT
-CLASS="filename"
->php.ini</TT
->, this behaviour may 
-       change in the future (After 4.0.2) and this function might well 
-       also return an array of values.
-      </P
-></BLOCKQUOTE
-></DIV
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

@@ -1,10 +1,10 @@
 <HTML
 ><HEAD
 ><TITLE
->PDF_open_memory_image</TITLE
+>pdf_open_memory_image</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -12,10 +12,10 @@ REL="UP"
 TITLE="PDF functions"
 HREF="ref.pdf.html"><LINK
 REL="PREVIOUS"
-TITLE="PDF_open_png"
-HREF="function.pdf-open-png.html"><LINK
+TITLE="pdf_open_image_file"
+HREF="function.pdf-open-image-file.html"><LINK
 REL="NEXT"
-TITLE="PDF_open_jpeg"
+TITLE="pdf_open_jpeg"
 HREF="function.pdf-open-jpeg.html"><META
 NAME="HTTP_EQUIV"
 CONTENT="text/html; charset=ISO-8859-1"></HEAD
@@ -45,7 +45,7 @@ WIDTH="10%"
 ALIGN="left"
 VALIGN="bottom"
 ><A
-HREF="function.pdf-open-png.html"
+HREF="function.pdf-open-image-file.html"
 >Prev</A
 ></TD
 ><TD
@@ -69,25 +69,28 @@ WIDTH="100%"></DIV
 ><H1
 ><A
 NAME="function.pdf-open-memory-image"
->PDF_open_memory_image</A
+>pdf_open_memory_image</A
 ></H1
 ><DIV
 CLASS="refnamediv"
 ><A
-NAME="AEN27621"
+NAME="AEN29567"
 ></A
 ><P
 >    (PHP3 &#62;= 3.0.10, PHP4 &#62;= 4.0b2)</P
->PDF_open_memory_image&nbsp;--&nbsp;Opens an image created with PHP's image functions</DIV
+>pdf_open_memory_image&nbsp;--&nbsp;Opens an image created with PHP's image functions</DIV
 ><DIV
 CLASS="refsect1"
 ><A
-NAME="AEN27624"
+NAME="AEN29570"
 ></A
 ><H2
 >Description</H2
 ><DIV
 CLASS="funcsynopsis"
+><A
+NAME="AEN29572"
+></A
 ><P
 ></P
 ><P
@@ -106,7 +109,7 @@ CLASS="function"
 ><P
 >&#13;     The <B
 CLASS="function"
->PDF_open_memory_image()</B
+>pdf_open_memory_image()</B
 > function takes
      an image created with the PHP's image functions and makes it available
      for the pdf document. The function returns a pdf
@@ -122,6 +125,9 @@ CLASS="EXAMPLE"
 ><TD
 ><DIV
 CLASS="example"
+><A
+NAME="AEN29582"
+></A
 ><P
 ><B
 >Example 1. Including a memory image</B
@@ -138,7 +144,7 @@ CLASS="programlisting"
 $im = ImageCreate(100, 100);
 $col = ImageColorAllocate($im, 80, 45, 190);
 ImageFill($im, 10, 10, $col);
-$pim = PDF_open_memory_image($pdf, $im);
+$pim = pdf_open_memory_image($pdf, $im);
 ImageDestroy($im);
 pdf_place_image($pdf, $pim, 100, 100, 1);
 pdf_close_image($pdf, $pim);
@@ -153,33 +159,54 @@ pdf_close_image($pdf, $pim);
 ></TABLE
 ></P
 ><P
->&#13;     See also <B
+>&#13;     See also <A
+HREF="function.pdf-close-image.html"
+><B
 CLASS="function"
->PDF_close_image()</B
+>pdf_close_image()</B
+></A
 >,
-              <B
+              <A
+HREF="function.pdf-open-jpeg.html"
+><B
 CLASS="function"
->PDF_open_jpeg()</B
+>pdf_open_jpeg()</B
+></A
 >,
-              <B
+              <A
+HREF="function.pdf-open-gif.html"
+><B
 CLASS="function"
->PDF_open_gif()</B
+>pdf_open_gif()</B
+></A
 >,
-              <B
+              <A
+HREF="function.pdf-open-png.html"
+><B
 CLASS="function"
->PDF_open_png()</B
+>pdf_open_png()</B
+></A
 >
-              <B
+              <A
+HREF="function.pdf-execute-image.html"
+><B
 CLASS="function"
->PDF_execute_image()</B
+>pdf_execute_image()</B
+></A
 >,
-              <B
+              <A
+HREF="function.pdf-place-image.html"
+><B
 CLASS="function"
->PDF_place_image()</B
+>pdf_place_image()</B
+></A
 >,
-              <B
+              <A
+HREF="function.pdf-put-image.html"
+><B
 CLASS="function"
->PDF_put_image()</B
+>pdf_put_image()</B
+></A
 >.</P
 ></DIV
 ><DIV
@@ -197,7 +224,7 @@ WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
 ><A
-HREF="function.pdf-open-png.html"
+HREF="function.pdf-open-image-file.html"
 >Prev</A
 ></TD
 ><TD
@@ -222,7 +249,7 @@ HREF="function.pdf-open-jpeg.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->PDF_open_png</TD
+>pdf_open_image_file</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"
@@ -235,7 +262,7 @@ HREF="ref.pdf.html"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->PDF_open_jpeg</TD
+>pdf_open_jpeg</TD
 ></TR
 ></TABLE
 ></DIV

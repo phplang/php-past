@@ -4,7 +4,7 @@
 >mysql_field_type</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -74,7 +74,7 @@ NAME="function.mysql-field-type"
 ><DIV
 CLASS="refnamediv"
 ><A
-NAME="AEN23161"
+NAME="AEN24513"
 ></A
 ><P
 >    (PHP3 , PHP4 )</P
@@ -84,12 +84,15 @@ NAME="AEN23161"
 ><DIV
 CLASS="refsect1"
 ><A
-NAME="AEN23164"
+NAME="AEN24516"
 ></A
 ><H2
 >Description</H2
 ><DIV
 CLASS="funcsynopsis"
+><A
+NAME="AEN24518"
+></A
 ><P
 ></P
 ><P
@@ -117,9 +120,14 @@ CLASS="function"
 >mysql_field_name()</B
 ></A
 > function. The arguments are
-     identical, but the field type is returned. This will be one of
-     "int", "real", "string", "blob", or others as detailed in the
-     MySQL documentation.
+     identical, but the field type is returned instead. The field type
+     will be one of "int", "real", "string", "blob", and others as
+     detailed in the <A
+HREF="http://www.mysql.com/documentation/"
+TARGET="_top"
+>MySQL
+     documentation</A
+>.
      <TABLE
 WIDTH="100%"
 BORDER="0"
@@ -130,6 +138,9 @@ CLASS="EXAMPLE"
 ><TD
 ><DIV
 CLASS="example"
+><A
+NAME="AEN24530"
+></A
 ><P
 ><B
 >Example 1. mysql field types</B
@@ -143,6 +154,7 @@ WIDTH="100%"
 ><PRE
 CLASS="programlisting"
 >&#13;&#60;?php 
+
 mysql_connect ("localhost:3306");
 mysql_select_db ("wisconsin");
 $result = mysql_query ("SELECT * FROM onek");
@@ -161,6 +173,7 @@ while ($i &#60; $fields) {
     $i++;
 }
 mysql_close();
+
 ?&#62;
       </PRE
 ></TD

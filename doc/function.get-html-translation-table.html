@@ -4,7 +4,7 @@
 >get_html_translation_table</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -12,8 +12,8 @@ REL="UP"
 TITLE="String functions"
 HREF="ref.strings.html"><LINK
 REL="PREVIOUS"
-TITLE="flush"
-HREF="function.flush.html"><LINK
+TITLE="explode"
+HREF="function.explode.html"><LINK
 REL="NEXT"
 TITLE="get_meta_tags"
 HREF="function.get-meta-tags.html"><META
@@ -45,7 +45,7 @@ WIDTH="10%"
 ALIGN="left"
 VALIGN="bottom"
 ><A
-HREF="function.flush.html"
+HREF="function.explode.html"
 >Prev</A
 ></TD
 ><TD
@@ -74,7 +74,7 @@ NAME="function.get-html-translation-table"
 ><DIV
 CLASS="refnamediv"
 ><A
-NAME="AEN33371"
+NAME="AEN36468"
 ></A
 ><P
 >    (PHP4 &#62;= 4.0b4)</P
@@ -98,12 +98,15 @@ CLASS="function"
 ><DIV
 CLASS="refsect1"
 ><A
-NAME="AEN33376"
+NAME="AEN36473"
 ></A
 ><H2
 >Description</H2
 ><DIV
 CLASS="funcsynopsis"
+><A
+NAME="AEN36475"
+></A
 ><P
 ></P
 ><P
@@ -116,7 +119,7 @@ CLASS="function"
 >get_html_translation_table</B
 >
       </CODE
-> (int table)</CODE
+> (int table [, int quote_style])</CODE
 ></P
 ><P
 ></P
@@ -140,7 +143,7 @@ HREF="function.htmlentities.html"
 CLASS="function"
 >htmlentities()</B
 ></A
->. Ther are two new defines
+>. There are two new defines
      (<TT
 CLASS="parameter"
 ><I
@@ -153,7 +156,29 @@ CLASS="parameter"
 >HTML_SPECIALCHARS</I
 ></TT
 >) that allow you to
-     specify the table you want.
+     specify the table you want.  And as in the
+	 <A
+HREF="function.htmlspecialchars.html"
+><B
+CLASS="function"
+>htmlspecialchars()</B
+></A
+> and
+	 <A
+HREF="function.htmlentities.html"
+><B
+CLASS="function"
+>htmlentities()</B
+></A
+> functions you can optionally specify the 
+	 quote_style you are working with.  The default is ENT_COMPAT mode.  See
+	 the description of these modes in <A
+HREF="function.htmlspecialchars.html"
+><B
+CLASS="function"
+>htmlspecialchars()</B
+></A
+>.
      <TABLE
 WIDTH="100%"
 BORDER="0"
@@ -164,6 +189,9 @@ CLASS="EXAMPLE"
 ><TD
 ><DIV
 CLASS="example"
+><A
+NAME="AEN36493"
+></A
 ><P
 ><B
 >Example 1. Translation Table Example</B
@@ -222,6 +250,9 @@ CLASS="function"
      the direction of the translation.
      <DIV
 CLASS="informalexample"
+><A
+NAME="AEN36504"
+></A
 ><P
 ></P
 ><TABLE
@@ -306,7 +337,7 @@ WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
 ><A
-HREF="function.flush.html"
+HREF="function.explode.html"
 >Prev</A
 ></TD
 ><TD
@@ -331,7 +362,7 @@ HREF="function.get-meta-tags.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->flush</TD
+>explode</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"

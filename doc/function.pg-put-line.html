@@ -1,0 +1,247 @@
+<HTML
+><HEAD
+><TITLE
+>pg_put_line</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="PostgreSQL functions"
+HREF="ref.pgsql.html"><LINK
+REL="PREVIOUS"
+TITLE="pg_port"
+HREF="function.pg-port.html"><LINK
+REL="NEXT"
+TITLE="pg_result"
+HREF="function.pg-result.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.pg-port.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.pg-result.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.pg-put-line"
+>pg_put_line</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN31829"
+></A
+><P
+>    (PHP4 CVS only)</P
+>pg_put_line&nbsp;--&nbsp;Send a NULL-terminated string to PostgreSQL backend</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN31832"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN31834"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>bool <B
+CLASS="function"
+>pg_put_line</B
+></CODE
+> ([resource
+       connection_id, string data])</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     <B
+CLASS="function"
+>pg_put_line()</B
+> sends a NULL-terminated string
+     to the PostgreSQL backend server. This is useful for example for
+     very high-speed inserting of data into a table, initiated by
+     starting a PostgreSQL copy-operation. That final NULL-character
+     is added automatically. Returns TRUE if successfull, FALSE
+     otherwise.
+    </P
+><DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
+><P
+><B
+>Note: </B
+> 
+      Note the application must explicitly send the two characters "\."
+      on a final line to indicate to the backend that it has finished
+      sending its data.
+     </P
+></BLOCKQUOTE
+></DIV
+><P
+>&#13;     See also <A
+HREF="function.pg-end-copy.html"
+><B
+CLASS="function"
+>pg_end_copy()</B
+></A
+>.
+     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN31849"
+></A
+><P
+><B
+>Example 1. High-speed insertion of data into a table</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;&#60;?php 
+    $conn = pg_pconnect ("dbname=foo");
+    pg_exec($conn, "create table bar (a int4, b char(16), d float8)");
+    pg_exec($conn, "copy bar from stdin");
+    pg_put_line($conn, "3\thello world\t4.5\n");
+    pg_put_line($conn, "4\tgoodbye world\t7.11\n");
+    pg_put_line($conn, "\\.\n");
+    pg_end_copy($conn);
+?&#62;
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.pg-port.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.pg-result.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>pg_port</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.pgsql.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>pg_result</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

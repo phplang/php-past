@@ -4,7 +4,7 @@
 >Session handling functions</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -75,11 +75,11 @@ NAME="ref.session"
 CLASS="TITLEPAGE"
 ><H1
 CLASS="title"
->LVII. Session handling functions</H1
+>LX. Session handling functions</H1
 ><DIV
 CLASS="PARTINTRO"
 ><A
-NAME="AEN31164"
+NAME="AEN33776"
 ></A
 ><P
 >&#13;    Session support in PHP consists of a way to preserve certain data
@@ -125,28 +125,61 @@ CLASS="function"
     by the session module unless the user defines them later.
    </P
 ><P
->&#13;    <TT
+>&#13;    The <A
+HREF="configuration.html#ini.track-vars"
+><TT
 CLASS="literal"
 >track_vars</TT
-> and <TT
+></A
+> and
+    <A
+HREF="configuration.html#ini.register-globals"
+><TT
 CLASS="literal"
 >register_globals</TT
+></A
 >
-    configuration settings influence how the session variables get stored
-    and restored.
+    configuration settings influence how the session variables get
+    stored and restored.
    </P
+><DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
 ><P
->&#13;    If <TT
+><B
+>Note: </B
+>
+     As of PHP 4.0.3, <A
+HREF="configuration.html#ini.track-vars"
+><TT
 CLASS="literal"
 >track_vars</TT
-> is enabled and 
-    <TT
+></A
+> is
+     always turned on.
+    </P
+></BLOCKQUOTE
+></DIV
+><P
+>&#13;    If <A
+HREF="configuration.html#ini.track-vars"
+><TT
+CLASS="literal"
+>track_vars</TT
+></A
+> is
+    enabled and <A
+HREF="configuration.html#ini.register-globals"
+><TT
 CLASS="literal"
 >register_globals</TT
-> is disabled, only members of the
-    global associative array $HTTP_SESSION_VARS can be registered as 
-    session variables. The restored session variables will only be 
-    available in the array $HTTP_SESSION_VARS.
+></A
+>
+    is disabled, only members of the global associative array
+    $HTTP_SESSION_VARS can be registered as session variables. The
+    restored session variables will only be available in the array
+    $HTTP_SESSION_VARS.
   <TABLE
 WIDTH="100%"
 BORDER="0"
@@ -157,13 +190,20 @@ CLASS="EXAMPLE"
 ><TD
 ><DIV
 CLASS="example"
+><A
+NAME="AEN33798"
+></A
 ><P
 ><B
 >Example 1. 
-      Registering a variable with <TT
+      Registering a variable with <A
+HREF="configuration.html#ini.track-vars"
+><TT
 CLASS="literal"
 >track_vars</TT
-> enabled
+></A
+>
+      enabled
      </B
 ></P
 ><TABLE
@@ -189,12 +229,16 @@ $HTTP_SESSION_VARS["count"]++;
 >
    </P
 ><P
->&#13;    If <TT
+>&#13;    If <A
+HREF="configuration.html#ini.register-globals"
+><TT
 CLASS="literal"
 >register_globals</TT
-> is enabled, then all global
-    variables can be registered as session variables and the session
-    variables will be restored to corresponding global variables. 
+></A
+>
+    is enabled, then all global variables can be registered as session
+    variables and the session variables will be restored to
+    corresponding global variables.
   <TABLE
 WIDTH="100%"
 BORDER="0"
@@ -205,13 +249,20 @@ CLASS="EXAMPLE"
 ><TD
 ><DIV
 CLASS="example"
+><A
+NAME="AEN33806"
+></A
 ><P
 ><B
 >Example 2. 
-      Registering a variable with <TT
+      Registering a variable with <A
+HREF="configuration.html#ini.register-globals"
+><TT
 CLASS="literal"
 >register_globals</TT
-> enabled
+></A
+>
+      enabled
      </B
 ></P
 ><TABLE
@@ -237,16 +288,22 @@ $count++;
 >
    </P
 ><P
->&#13;    If both <TT
+>&#13;    If both <A
+HREF="configuration.html#ini.track-vars"
+><TT
 CLASS="literal"
 >track_vars</TT
-> and 
-    <TT
+></A
+> and
+    <A
+HREF="configuration.html#ini.register-globals"
+><TT
 CLASS="literal"
 >register_globals</TT
-> are enabled, then the globals 
-    variables and the $HTTP_SESSION_VARS entries will reference the same 
-    value.
+></A
+>
+    are enabled, then the globals variables and the $HTTP_SESSION_VARS
+    entries will reference the same value.
    </P
 ><P
 >&#13;    There are two methods to propagate a session id:
@@ -307,6 +364,9 @@ CLASS="EXAMPLE"
 ><TD
 ><DIV
 CLASS="example"
+><A
+NAME="AEN33829"
+></A
 ><P
 ><B
 >Example 3. Counting the number of hits of a single user</B
@@ -706,6 +766,11 @@ HREF="function.session-set-save-handler.html"
 > &#8212; 
      Sets user-level session storage functions
     </DT
+><DT
+><A
+HREF="function.session-cache-limiter.html"
+>session_cache_limiter</A
+> &#8212; Get and/or set the current cache limiter</DT
 ></DL
 ></DIV
 ></DIV

@@ -4,7 +4,7 @@
 >Configuration</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -518,6 +518,9 @@ CLASS="type"
 	 reporting levels you want.
 	 <DIV
 CLASS="table"
+><A
+NAME="AEN1614"
+></A
 ><P
 ><B
 >Table 3-1. Error Reporting Levels</B
@@ -741,6 +744,9 @@ CLASS="EXAMPLE"
 ><TD
 ><DIV
 CLASS="example"
+><A
+NAME="AEN1670"
+></A
 ><P
 ><B
 >Example 3-1. UNIX include_path</B
@@ -773,6 +779,9 @@ CLASS="EXAMPLE"
 ><TD
 ><DIV
 CLASS="example"
+><A
+NAME="AEN1673"
+></A
 ><P
 ><B
 >Example 3-2. Windows include_path</B
@@ -1007,33 +1016,44 @@ CLASS="parameter"
 >register_globals</I
 ></TT
 >
-	<SPAN
+        <SPAN
 CLASS="type"
 >boolean</SPAN
 ></A
 ></DT
 ><DD
 ><P
->&#13;	 Tells whether or not to register the EGPCS variables as global
-    variables. You may want to turn this off if you don't want	  
-	 to clutter your scripts' global scope with user data.  This makes
-    most sense when coupled with <A
+>&#13;         Tells whether or not to register the EGPCS (Environment, GET,
+         POST, Cookie, Server) variables as global variables. You may
+         want to turn this off if you don't want to clutter your
+         scripts' global scope with user data.  This makes the most
+         sense when coupled with <A
 HREF="configuration.html#ini.track-vars"
 >track_vars</A
+> - in which case
+         you can access all of the EGPCS variables through the
+         <TT
+CLASS="varname"
+>$HTTP_ENV_VARS</TT
+>,
+         <TT
+CLASS="varname"
+>$HTTP_GET_VARS</TT
+>,
+         <TT
+CLASS="varname"
+>$HTTP_POST_VARS</TT
+>,
+         <TT
+CLASS="varname"
+>$HTTP_COOKIE_VARS</TT
+>, and
+         <TT
+CLASS="varname"
+>$HTTP_SERVER_VARS</TT
 >
-    - in which case you can access all of the GPC variables through the 
-    <SPAN
-CLASS="symbol"
->$HTTP_GET_VARS</SPAN
->, <SPAN
-CLASS="symbol"
->$HTTP_POST_VARS</SPAN
-> and
-    <SPAN
-CLASS="symbol"
->$HTTP_COOKIE_VARS</SPAN
-> variables.	  
-	</P
+         arrays in the global scope.
+        </P
 ></DD
 ><DT
 ><A
@@ -1116,26 +1136,42 @@ CLASS="parameter"
 >track_vars</I
 ></TT
 >
-	<SPAN
+        <SPAN
 CLASS="type"
 >boolean</SPAN
 ></A
 ></DT
 ><DD
 ><P
->&#13;	 If enabled, GET, POST and cookie input can be found in the
-	 global associative arrays <SPAN
-CLASS="symbol"
->$HTTP_GET_VARS</SPAN
+>&#13;         If enabled, then Environment, GET, POST, Cookie, and Server
+         variables can be found in the global associative arrays
+         <TT
+CLASS="varname"
+>$HTTP_ENV_VARS</TT
 >,
-	 <SPAN
-CLASS="symbol"
->$HTTP_POST_VARS</SPAN
-> and
-	 <SPAN
-CLASS="symbol"
->$HTTP_COOKIE_VARS</SPAN
->, respectively.</P
+         <TT
+CLASS="varname"
+>$HTTP_GET_VARS</TT
+>,
+         <TT
+CLASS="varname"
+>$HTTP_POST_VARS</TT
+>,
+         <TT
+CLASS="varname"
+>$HTTP_COOKIE_VARS</TT
+>, and
+         <TT
+CLASS="varname"
+>$HTTP_SERVER_VARS</TT
+>.
+        </P
+><P
+>&#13;         Note that as of PHP 4.0.3, <SPAN
+CLASS="systemitem"
+>track_vars</SPAN
+> is always turned on.
+        </P
 ></DD
 ><DT
 ><A

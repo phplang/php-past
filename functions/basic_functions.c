@@ -28,7 +28,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: basic_functions.c,v 1.290 2000/09/09 21:05:45 zeev Exp $ */
+/* $Id: basic_functions.c,v 1.291 2000/09/12 17:23:30 rasmus Exp $ */
 #include "php.h"
 #include "modules.h"
 #include "internal_functions.h"
@@ -406,6 +406,10 @@ int php3_minit_basic(INIT_FUNC_ARGS)
 	REGISTER_LONG_CONSTANT("EXTR_SKIP", EXTR_SKIP, CONST_CS | CONST_PERSISTENT);
 	REGISTER_LONG_CONSTANT("EXTR_PREFIX_SAME", EXTR_PREFIX_SAME, CONST_CS | CONST_PERSISTENT);
 	REGISTER_LONG_CONSTANT("EXTR_PREFIX_ALL", EXTR_PREFIX_ALL, CONST_CS | CONST_PERSISTENT);
+
+	REGISTER_LONG_CONSTANT("ENT_COMPAT", ENT_COMPAT, CONST_CS | CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("ENT_QUOTES", ENT_QUOTES, CONST_CS | CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("ENT_NOQUOTES", ENT_NOQUOTES, CONST_CS | CONST_PERSISTENT);
 
 	_php3_hash_init(&sm_protected_env_vars, 5, NULL, NULL, 1);
 

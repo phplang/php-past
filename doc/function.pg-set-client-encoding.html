@@ -1,0 +1,217 @@
+<HTML
+><HEAD
+><TITLE
+>pg_set_client_encoding</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="PostgreSQL functions"
+HREF="ref.pgsql.html"><LINK
+REL="PREVIOUS"
+TITLE="pg_result"
+HREF="function.pg-result.html"><LINK
+REL="NEXT"
+TITLE="pg_client_encoding"
+HREF="function.pg-client-encoding.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.pg-result.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.pg-client-encoding.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="function.pg-set-client-encoding"
+>pg_set_client_encoding</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN31876"
+></A
+><P
+>    (PHP4 CVS only)</P
+>pg_set_client_encoding&nbsp;--&nbsp;
+     Set the client encoding
+    </DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN31879"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN31881"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int <B
+CLASS="function"
+>pg_set_client_encoding</B
+></CODE
+> ([int 
+       connection, string encoding])</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     The function set the client encoding and return 0 if success or
+     -1 if error.
+    </P
+><P
+>&#13;     <TT
+CLASS="parameter"
+><I
+>encoding</I
+></TT
+> is the client
+     encoding and can be either :
+     SQL_ASCII, EUC_JP, EUC_CN, EUC_KR, EUC_TW, UNICODE,
+     MULE_INTERNAL, LATINX (X=1...9), KOI8, WIN, ALT,
+     SJIS, BIG5, WIN1250.
+    </P
+><DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
+><P
+><B
+>Note: </B
+>
+      This function requires PHP-4.0.2 or higher and PostgreSQL-7.0 or
+      higher.
+     </P
+><P
+>&#13;      The function used to be called
+      <B
+CLASS="function"
+>pg_setclientencoding()</B
+>.
+     </P
+></BLOCKQUOTE
+></DIV
+><P
+>&#13;     See also <A
+HREF="function.pg-client-encoding.html"
+><B
+CLASS="function"
+>pg_client_encoding()</B
+></A
+>.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.pg-result.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.pg-client-encoding.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>pg_result</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.pgsql.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>pg_client_encoding</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

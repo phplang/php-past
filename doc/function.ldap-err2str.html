@@ -4,7 +4,7 @@
 >ldap_err2str</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -74,7 +74,7 @@ NAME="function.ldap-err2str"
 ><DIV
 CLASS="refnamediv"
 ><A
-NAME="AEN17566"
+NAME="AEN18973"
 ></A
 ><P
 >    (PHP3 &#62;= 3.0.13, PHP4 &#62;= 4.0RC2)</P
@@ -84,12 +84,15 @@ NAME="AEN17566"
 ><DIV
 CLASS="refsect1"
 ><A
-NAME="AEN17569"
+NAME="AEN18976"
 ></A
 ><H2
 >Description</H2
 ><DIV
 CLASS="funcsynopsis"
+><A
+NAME="AEN18978"
+></A
 ><P
 ></P
 ><P
@@ -139,6 +142,9 @@ CLASS="EXAMPLE"
 ><TD
 ><DIV
 CLASS="example"
+><A
+NAME="AEN18989"
+></A
 ><P
 ><B
 >Example 1. Enumerating all LDAP error messages</B
@@ -153,7 +159,7 @@ WIDTH="100%"
 CLASS="programlisting"
 >&#13;&#60;?php
   for($i=0; $i&#60;100; $i++) {
-    printf("Error $i: %s&#60;br&#62;\n", ldap_str2err($i));
+    printf("Error $i: %s&#60;br&#62;\n", ldap_err2str($i));
   }
 ?&#62;
 </PRE

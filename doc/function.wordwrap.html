@@ -4,7 +4,7 @@
 >wordwrap</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -74,10 +74,10 @@ NAME="function.wordwrap"
 ><DIV
 CLASS="refnamediv"
 ><A
-NAME="AEN34959"
+NAME="AEN38019"
 ></A
 ><P
->    (PHP4 CVS only)</P
+>    (PHP4 &#62;= 4.0.2)</P
 >wordwrap&nbsp;--&nbsp;
      Wraps a string to a given number of characters using a string
      break character.
@@ -85,12 +85,15 @@ NAME="AEN34959"
 ><DIV
 CLASS="refsect1"
 ><A
-NAME="AEN34962"
+NAME="AEN38022"
 ></A
 ><H2
 >Description</H2
 ><DIV
 CLASS="funcsynopsis"
+><A
+NAME="AEN38024"
+></A
 ><P
 ></P
 ><P
@@ -103,7 +106,8 @@ CLASS="function"
 ></CODE
 > (string str [, int
        width [, string
-       break]])</CODE
+       break [, int
+       cut]]])</CODE
 ></P
 ><P
 ></P
@@ -148,6 +152,17 @@ CLASS="parameter"
 > are not given.
     </P
 ><P
+>&#13;     If the <TT
+CLASS="parameter"
+><I
+>cut</I
+></TT
+> is set to 1, the string is
+	 always wrapped at the specified width. So if you have a word
+	 that is larger than the given width, it is broken appart.
+	 (See second example).
+    </P
+><P
 >&#13;     <TABLE
 WIDTH="100%"
 BORDER="0"
@@ -158,6 +173,9 @@ CLASS="EXAMPLE"
 ><TD
 ><DIV
 CLASS="example"
+><A
+NAME="AEN38050"
+></A
 ><P
 ><B
 >Example 1. <B
@@ -193,6 +211,9 @@ echo "$newtext\n";
 ><P
 >&#13;     <DIV
 CLASS="informalexample"
+><A
+NAME="AEN38056"
+></A
 ><P
 ></P
 ><TABLE
@@ -204,7 +225,82 @@ WIDTH="100%"
 ><PRE
 CLASS="programlisting"
 >&#13;The quick brown fox
- jumped over the lazy dog.
+jumped over the lazy dog.
+      </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+>
+    </P
+><P
+>&#13;     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN38059"
+></A
+><P
+><B
+>Example 2. <B
+CLASS="function"
+>wordwrap()</B
+> example</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;$text = "A very long woooooooooooord.";
+$newtext = wordwrap( $text, 8, "\n", 1);
+
+echo "$newtext\n";
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+    </P
+><P
+>&#13;     This example would display:
+    </P
+><P
+>&#13;     <DIV
+CLASS="informalexample"
+><A
+NAME="AEN38065"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;A very
+long
+wooooooo
+ooooord.
       </PRE
 ></TD
 ></TR

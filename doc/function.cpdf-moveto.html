@@ -4,7 +4,7 @@
 >cpdf_moveto</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -74,7 +74,7 @@ NAME="function.cpdf-moveto"
 ><DIV
 CLASS="refnamediv"
 ><A
-NAME="AEN6868"
+NAME="AEN7753"
 ></A
 ><P
 >    (PHP3 &#62;= 3.0.8, PHP4 &#62;= 4.0b4)</P
@@ -82,12 +82,15 @@ NAME="AEN6868"
 ><DIV
 CLASS="refsect1"
 ><A
-NAME="AEN6871"
+NAME="AEN7756"
 ></A
 ><H2
 >Description</H2
 ><DIV
 CLASS="funcsynopsis"
+><A
+NAME="AEN7758"
+></A
 ><P
 ></P
 ><P
@@ -98,7 +101,8 @@ CLASS="FUNCDEF"
 CLASS="function"
 >cpdf_moveto</B
 ></CODE
-> (int pdf document, double x-koor, double y-koor, int mode)</CODE
+> (int pdf document, double x-coor, double y-coor [, int
+       mode])</CODE
 ></P
 ><P
 ></P
@@ -107,23 +111,31 @@ CLASS="function"
 >&#13;     The <B
 CLASS="function"
 >cpdf_moveto()</B
-> function set the current point
-     to the coordinates <TT
+> function set the current
+     point to the coordinates <TT
 CLASS="parameter"
 ><I
->x-koor</I
+>x-coor</I
 ></TT
 > and
      <TT
 CLASS="parameter"
 ><I
->y-koor</I
+>y-coor</I
 ></TT
->.</P
+>.
+    </P
 ><P
->&#13;     The last optional parameter determines the unit length. If is 0 or omitted
-     the default unit as specified for the page is used. Otherwise the koodinates
-     are measured in postscript points disregarding the current unit.</P
+>&#13;     The optional parameter <TT
+CLASS="parameter"
+><I
+>mode</I
+></TT
+> determines the
+     unit length. If it's 0 or omitted the default unit as specified
+     for the page is used. Otherwise the coordinates are measured in
+     postscript points disregarding the current unit.
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

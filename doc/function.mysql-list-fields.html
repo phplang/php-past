@@ -4,7 +4,7 @@
 >mysql_list_fields</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.56"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -74,7 +74,7 @@ NAME="function.mysql-list-fields"
 ><DIV
 CLASS="refnamediv"
 ><A
-NAME="AEN23234"
+NAME="AEN24613"
 ></A
 ><P
 >    (PHP3 , PHP4 )</P
@@ -82,12 +82,15 @@ NAME="AEN23234"
 ><DIV
 CLASS="refsect1"
 ><A
-NAME="AEN23237"
+NAME="AEN24616"
 ></A
 ><H2
 >Description</H2
 ><DIV
 CLASS="funcsynopsis"
+><A
+NAME="AEN24618"
+></A
 ><P
 ></P
 ><P
@@ -152,6 +155,83 @@ CLASS="literal"
 >@mysql()</TT
 > then this error string
      will also be printed out.
+    </P
+><P
+>&#13;     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN24639"
+></A
+><P
+><B
+>Example 1. <B
+CLASS="function"
+>mysql_list_fields()</B
+> example</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;$link = mysql_connect('localhost', 'myname', 'secret');
+
+$fields = mysql_list_fields("database1", "table1", $link);
+$columns = mysql_num_fields($fields);
+
+for ($i = 0; $i &#60; $columns; $i++) {
+  echo mysql_field_name($fields, $i) . "\n";;
+}
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+    </P
+><P
+>&#13;     The above example would produce the following output:
+     <DIV
+CLASS="informalexample"
+><A
+NAME="AEN24644"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;field1
+field2
+field3
+...
+      </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+>
     </P
 ><P
 >&#13;     For downward compatibility <B

@@ -29,7 +29,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: main.c,v 1.514 2000/05/31 14:24:48 thies Exp $ */
+/* $Id: main.c,v 1.515 2000/09/30 17:32:44 sas Exp $ */
 
 /* #define CRASH_DETECTION */
 
@@ -247,13 +247,13 @@ void php3_log_err(char *log_message)
 	if (php3_ini.error_log != NULL) {
 #if HAVE_SYSLOG_H
 		if (!strcmp(php3_ini.error_log, "syslog")) {
-			syslog(LOG_NOTICE, log_message);
+			syslog(LOG_NOTICE, "%s", log_message);
 			return;
 		} else {
 #endif
 			log_file = fopen(php3_ini.error_log, "a");
 			if (log_file != NULL) {
-				fprintf(log_file, log_message);
+				fprintf(log_file, "%s", log_message);
 				fprintf(log_file, "\n");
 				fclose(log_file);
 				return;
@@ -272,14 +272,14 @@ void php3_log_err(char *log_message)
 		log_error(log_message, php3_rqst->server);
 #endif
 	} else {
-		fprintf(stderr, log_message);
+		fprintf(stderr, "%s", log_message);
 		fprintf(stderr, "\n");
 	}
 #endif							/*APACHE */
 
 #if CGI_BINARY
 	if (php3_header()) {
-		fprintf(stderr, log_message);
+		fprintf(stderr, "%s", log_message);
 		fprintf(stderr, "\n");
 	}
 #endif

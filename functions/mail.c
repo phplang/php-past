@@ -28,7 +28,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: mail.c,v 1.62 2000/06/29 12:07:47 kk Exp $ */
+/* $Id: mail.c,v 1.63 2000/09/30 17:32:44 sas Exp $ */
 
 #include <stdlib.h>
 #include <ctype.h>
@@ -132,7 +132,7 @@ int _php3_mail(char *to, char *subject, char *message, char *headers)
 
 #if MSVC5
 	if (TSendMail(php3_ini.smtp,&tsm_err,headers,subject,to,message) != SUCCESS){
-		php3_error(E_WARNING, GetSMErrorText(tsm_err));
+		php3_error(E_WARNING, "%s", GetSMErrorText(tsm_err));
 		return 0;
 	}
 #else

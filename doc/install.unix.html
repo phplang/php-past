@@ -1,0 +1,714 @@
+<HTML
+><HEAD
+><TITLE
+>Installation on UNIX systems</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.57"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Installation"
+HREF="installation.html"><LINK
+REL="PREVIOUS"
+TITLE="Installation"
+HREF="installation.html"><LINK
+REL="NEXT"
+TITLE="Complete list of configure options"
+HREF="install.configure.html"><META
+NAME="HTTP_EQUIV"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="installation.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 2. Installation</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="install.configure.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="install.unix"
+>Installation on UNIX systems</A
+></H1
+><P
+>&#13;    This section will guide you through the configuration and
+    installation of PHP. 
+   </P
+><P
+>&#13;    Prerequisite knowledge and software:
+    
+    <P
+></P
+><UL
+><LI
+><P
+>&#13;       Basic UNIX skills (being able to operate "make" and a C
+       compiler)
+      </P
+></LI
+><LI
+><P
+>&#13;       An ANSI C compiler
+      </P
+></LI
+><LI
+><P
+>&#13;       A web server
+      </P
+></LI
+></UL
+>
+   </P
+><P
+>&#13;    There are several ways to compile and configure PHP for the Unix
+    platform. The entire configuration process is controlled by the
+    use of commandline options to the <TT
+CLASS="filename"
+>configure</TT
+>
+    script. This page outlines the usage of the most common options,
+    but there are many others to play with. Check out the <A
+HREF="install.configure.html"
+>Complete list of configure
+     options</A
+> for an exhaustive rundown.
+    <P
+></P
+><UL
+><LI
+><P
+>&#13;       As an <A
+HREF="install.unix.html#install.unix.apache-module"
+>Apache module</A
+>
+      </P
+></LI
+><LI
+><P
+>&#13;       As an <A
+HREF="install.unix.html#install.unix.fhttpd"
+>fhttpd module</A
+>
+      </P
+></LI
+><LI
+><P
+>&#13;       For use with <A
+HREF="install.unix.html#install.unix.otherhttpd"
+>AOLServer, NSAPI,
+       phttpd, Pi3Web, Roxen, thttpd, or Zeus.</A
+>
+      </P
+></LI
+><LI
+><P
+>&#13;       As a <A
+HREF="install.unix.html#install.unix.commandline"
+>CGI executable</A
+>
+      </P
+></LI
+></UL
+>
+   </P
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="install.unix.apache-module"
+>Apache Module</A
+></H2
+><P
+>&#13;     PHP can be compiled in a number of different ways as an Apache
+     module. First we show the quick instructions. Following this is
+     a list of various examples with explanations, to provide an
+     overview of how to accomplish certain things.
+    </P
+><P
+>&#13;     You can select arguments to add to the
+     <B
+CLASS="command"
+>configure</B
+> on line 8 below from the <A
+HREF="install.configure.html"
+>Complete list of configure
+     options</A
+>.
+    </P
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="install.unix.apache-module.quick"
+></A
+><P
+><B
+>Example 2-1. 
+      Quick Installation Instructions (Apache Module Version)
+     </B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;1.  gunzip apache_1.3.x.tar.gz
+2.  tar xvf apache_1.3.x.tar
+3.  gunzip php-x.x.x.tar.gz
+4.  tar xvf php-x.x.x.tar
+5.  cd apache_1.3.x
+6.  ./configure --prefix=/www
+7.  cd ../php-x.x.x
+8.  ./configure --with-mysql --with-apache=../apache_1.3.x --enable-track-vars
+9.  make
+10. make install
+11. cd ../apache_1.3.x
+12. for PHP 3: ./configure --activate-module=src/modules/php3/libphp3.a
+    for PHP 4: ./configure --activate-module=src/modules/php4/libphp4.a
+13. make
+14. make install
+
+  Instead of this step you may prefer to simply copy the httpd binary
+  overtop of your existing binary.  Make sure you shut down your
+  server first though.
+
+15. cd ../php-x.x.x
+16. for PHP 3: cp php3.ini-dist /usr/local/lib/php3.ini
+    for PHP 4: cp php.ini-dist /usr/local/lib/php.ini
+
+  You can edit your .ini file to set PHP options.  If
+  you prefer this file in another location, use
+  --with-config-file-path=/path in step 8.
+
+17. Edit your httpd.conf or srm.conf file and add: 
+      
+     For PHP 3:   AddType application/x-httpd-php3 .php3
+     For PHP 4:   AddType application/x-httpd-php .php
+ 
+  You can choose any extension you wish here.  .php is simply the one
+  we suggest. You can even include .html .
+
+
+18. Use your normal procedure for starting the Apache server. (You must
+    stop and restart the server, not just cause the server to reload by
+    use a HUP or USR1 signal.)
+      </PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+><P
+>&#13;      <DIV
+CLASS="informalexample"
+><A
+NAME="AEN165"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;./configure --with-apxs --with-pgsql
+       </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+>
+     </P
+><P
+>&#13;      This will create a <TT
+CLASS="filename"
+>libphp4.so</TT
+> shared
+      library that is loaded into Apache using a LoadModule line in
+      Apache's <TT
+CLASS="filename"
+>httpd.conf</TT
+> file. The PostgreSQL
+      support is embedded into this <TT
+CLASS="filename"
+>libphp4.so</TT
+>
+      library.
+     </P
+><P
+>&#13;      <DIV
+CLASS="informalexample"
+><A
+NAME="AEN172"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;./configure --with-apxs --with-pgsql=shared
+       </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+>
+     </P
+><P
+>&#13;      This will again create a <TT
+CLASS="filename"
+>libphp4.so</TT
+> shared
+      library for Apache, but it will also create a
+      <TT
+CLASS="filename"
+>pgsql.so</TT
+> shared library that is loaded into
+      PHP either by using the extension directive in
+      <TT
+CLASS="filename"
+>php.ini</TT
+> file or by loading it explicitly in
+      a script using the <A
+HREF="function.dl.html"
+><B
+CLASS="function"
+>dl()</B
+></A
+> function.
+     </P
+><P
+>&#13;      <DIV
+CLASS="informalexample"
+><A
+NAME="AEN180"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;./configure --with-apache=/path/to/apache_source --with-pgsql
+       </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+>
+     </P
+><P
+>&#13;      This will create a <TT
+CLASS="filename"
+>libmodphp4.a</TT
+> library, a
+      <TT
+CLASS="filename"
+>mod_php4.c</TT
+> and some accompanying files and
+      copy this into the <TT
+CLASS="literal"
+>src/modules/php4</TT
+> directory
+      in the Apache source tree. Then you compile Apache using
+      <TT
+CLASS="literal"
+>--activate-module=src/modules/php4/libphp4.a</TT
+>
+      and the Apache build system will create
+      <TT
+CLASS="filename"
+>libphp4.a</TT
+> and link it statically into the
+      <TT
+CLASS="filename"
+>httpd</TT
+> binary. The PostgreSQL support is
+      included directly into this <TT
+CLASS="filename"
+>httpd</TT
+> binary,
+      so the final result here is a single <TT
+CLASS="filename"
+>httpd</TT
+>
+      binary that includes all of Apache and all of PHP.
+     </P
+><P
+>&#13;      <DIV
+CLASS="informalexample"
+><A
+NAME="AEN192"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;./configure --with-apache=/path/to/apache_source --with-pgsql=shared
+       </PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+>
+     </P
+><P
+>&#13;      Same as before, except instead of including PostgreSQL support
+      directly into the final <TT
+CLASS="filename"
+>httpd</TT
+> you will get
+      a <TT
+CLASS="filename"
+>pgsql.so</TT
+> shared library that you can load
+      into PHP from either the <TT
+CLASS="filename"
+>php.ini</TT
+> file or
+      directly using <A
+HREF="function.dl.html"
+><B
+CLASS="function"
+>dl()</B
+></A
+>.
+     </P
+><P
+>&#13;      When choosing to build PHP in different ways, you should consider
+      the advantages and drawbacks of each method. Building as a shared
+      object will mean that you can compile apache separately, and don't
+      have to recompile everything as you add to, or change, PHP.
+      Building PHP into apache (static method) means that PHP will
+      load and run faster. For more information, see the Apache
+      <A
+HREF="http://www.apache.org/docs/dso.html"
+TARGET="_top"
+>webpage on DSO support</A
+>.
+     </P
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="install.unix.fhttpd"
+>fhttpd Module</A
+></H2
+><P
+>&#13;     To build PHP as an fhttpd module, answer "yes" to "Build as an
+     fhttpd module?" (the <TT
+CLASS="option"
+><A
+HREF="install.configure.html#install.configure.with-fhttpd"
+>&#13;     --with-fhttpd</A
+>=<TT
+CLASS="replaceable"
+><I
+>DIR</I
+></TT
+></TT
+>
+     option to configure) and specify the fhttpd source base
+     directory.  The default directory is <TT
+CLASS="filename"
+>/usr/local/src/fhttpd</TT
+>. If you are
+     running fhttpd, building PHP as a module will give better
+     performance, more control and remote execution capability.
+    </P
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="install.unix.otherhttpd"
+>Other web servers</A
+></H2
+><P
+>&#13;     PHP can be built to support a large number of web servers. Please
+     see <A
+HREF="install.configure.html#install.configure.servers"
+>Server-related
+      options</A
+> for a full list of server-related configure
+     options.
+    </P
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="install.unix.commandline"
+>CGI/Commandline version</A
+></H2
+><P
+>&#13;     The default is to build PHP as a CGI program.  This creates a
+     commandline interpreter, which can be used for CGI processing, or
+     for non-web-related PHP scripting.  If you are running a web
+     server PHP has module support for, you should generally go for
+     that solution for performance reasons.  However, the CGI version
+     enables Apache users to run different PHP-enabled pages under
+     different user-ids.  Please make sure you read through the <A
+HREF="security.html"
+>Security chapter</A
+> if you are going to
+     run PHP as a CGI.
+    </P
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="database-support-options"
+>Database Support Options</A
+></H2
+><P
+>&#13;     PHP has native support for a number of databases (as well as
+     ODBC). To enable support for the various databases, options are
+     given to the <TT
+CLASS="filename"
+>configure</TT
+> script at compile
+     time. Read the <A
+HREF="install.configure.html#install.configure.databases"
+>list
+     of all database-related options</A
+> for more information.
+    </P
+><P
+>&#13;     For a list of all possible options to
+     <TT
+CLASS="filename"
+>configure</TT
+>, please see the <A
+HREF="install.configure.html"
+>Complete list of configure
+      options</A
+>.
+    </P
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="AEN224"
+>Building</A
+></H2
+><P
+>&#13;     When PHP is configured, you are ready to build the CGI executable
+     or the PHP library.  The command <B
+CLASS="command"
+>make</B
+> should
+     take care of this.  If it fails and you can't figure out why, see
+     the <A
+HREF="install-problems.html"
+>Problems section</A
+>.
+    </P
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="AEN229"
+>Testing</A
+></H2
+><P
+>&#13;     If you have built PHP as a CGI program, you may test your build
+     by typing <B
+CLASS="command"
+>make test</B
+>.  It is always a good idea
+     to test your build.  This way you may catch a problem with PHP on
+     your platform early instead of having to struggle with it later.
+    </P
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="AEN233"
+>Benchmarking</A
+></H2
+><P
+>&#13;     If you have built PHP as a CGI program, you may benchmark your
+     build by typing <B
+CLASS="command"
+>make bench</B
+>. Note that if safe
+     mode is on by default, the benchmark may not be able to finish if
+     it takes longer then the 30 seconds allowed. This is because the
+     <A
+HREF="function.set-time-limit.html"
+><B
+CLASS="function"
+>set_time_limit()</B
+></A
+> can not be used in safe
+     mode. Use the <A
+HREF="configuration.html#ini.max-execution-time"
+>max_execution_time</A
+>
+     configuration setting to control this time for your own
+     scripts. <B
+CLASS="command"
+>make bench</B
+> ignores the <A
+HREF="configuration.html#configuration.file"
+>configuration file</A
+>.
+    </P
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="installation.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="install.configure.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Installation</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="installation.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Complete list of configure options</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>
