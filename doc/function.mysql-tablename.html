@@ -4,7 +4,7 @@
 >mysql_tablename</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -15,8 +15,8 @@ REL="PREVIOUS"
 TITLE="mysql_select_db"
 HREF="function.mysql-select-db.html"><LINK
 REL="NEXT"
-TITLE="Sybase functions"
-HREF="ref.sybase.html"></HEAD
+TITLE="Network functions"
+HREF="ref.network.html"></HEAD
 ><BODY
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
@@ -55,7 +55,7 @@ WIDTH="10%"
 ALIGN="right"
 VALIGN="bottom"
 ><A
-HREF="ref.sybase.html"
+HREF="ref.network.html"
 >Next</A
 ></TD
 ></TR
@@ -71,13 +71,13 @@ NAME="FUNCTION.MYSQL-TABLENAME"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN16441"
+NAME="AEN18542"
 ></A
->mysql_tablename -- get table name of field</DIV
+>mysql_tablename -- Get table name of field</DIV
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN16444"
+NAME="AEN18545"
 ></A
 ><H2
 >Description</H2
@@ -126,13 +126,16 @@ CLASS="EXAMPLE"
 CLASS="EXAMPLE"
 ><P
 ><B
->Example 1. mysql_tablename() example</B
+>Example 1. <B
+CLASS="FUNCTION"
+>mysql_tablename()</B
+> example</B
 ></P
 ><PRE
 CLASS="PROGRAMLISTING"
 >&lt;?php 
 mysql_connect ("localhost:3306");
-$result = mysql_listtables ("wisconsin");
+$result = mysql_list_tables ("wisconsin");
 $i = 0;
 while ($i &lt; mysql_num_rows ($result)) {
     $tb_names[$i] = mysql_tablename ($result, $i);
@@ -144,9 +147,7 @@ while ($i &lt; mysql_num_rows ($result)) {
 ></TD
 ></TR
 ></TABLE
->
-
-   </P
+></P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -179,7 +180,7 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><A
-HREF="ref.sybase.html"
+HREF="ref.network.html"
 >Next</A
 ></TD
 ></TR
@@ -201,7 +202,7 @@ HREF="ref.mysql.html"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->Sybase functions</TD
+>Network functions</TD
 ></TR
 ></TABLE
 ></DIV

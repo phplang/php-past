@@ -1,0 +1,249 @@
+<HTML
+><HEAD
+><TITLE
+>uksort</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Array functions"
+HREF="ref.array.html"><LINK
+REL="PREVIOUS"
+TITLE="uasort"
+HREF="function.uasort.html"><LINK
+REL="NEXT"
+TITLE="usort"
+HREF="function.usort.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.uasort.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.usort.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="FUNCTION.UKSORT"
+>uksort</A
+></H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN4533"
+></A
+>uksort --      Sort an array by keys using a user-defined comparison function
+    </DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN4536"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><CODE
+CLASS="FUNCDEF"
+>void uksort</CODE
+>(array array, function cmp_function);<P
+></P
+></DIV
+><P
+>     This function will sort the keys of an array using a
+     user-supplied comparison function.  If the array you wish to sort
+     needs to be sorted by some non-trivial criteria, you should use
+     this function.
+
+     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="EXAMPLE"
+><P
+><B
+>Example 1. <B
+CLASS="FUNCTION"
+>uksort()</B
+> example</B
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>function mycompare($a, $b) {   
+    if ($a == $b) return 0;
+    return ($a &#62; $b) ? -1 : 1;
+}
+$a = array(4 =&#62; "four", 3 =&#62; "three", 20 =&#62; "twenty", 10 =&#62; "ten");
+uksort($a, mycompare);
+while(list($key, $value) = each($a)) {
+    echo "$key: $value\n";
+}</PRE
+></DIV
+></TD
+></TR
+></TABLE
+>
+
+     This example would display:
+
+     <TT
+CLASS="COMPUTEROUTPUT"
+>20: twenty
+10: ten
+4: four
+3: three
+     </TT
+></P
+><P
+>     See also: 
+     <A
+HREF="function.arsort.html"
+><B
+CLASS="FUNCTION"
+>arsort()</B
+></A
+>, 
+     <A
+HREF="function.asort.html"
+><B
+CLASS="FUNCTION"
+>asort()</B
+></A
+>,
+     <A
+HREF="function.uasort.html"
+><B
+CLASS="FUNCTION"
+>uasort()</B
+></A
+>, 
+     <A
+HREF="function.ksort.html"
+><B
+CLASS="FUNCTION"
+>ksort()</B
+></A
+>,
+     <A
+HREF="function.rsort.html"
+><B
+CLASS="FUNCTION"
+>rsort()</B
+></A
+>, and 
+     <A
+HREF="function.sort.html"
+><B
+CLASS="FUNCTION"
+>sort()</B
+></A
+>.</P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.uasort.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.usort.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>uasort</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.array.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>usort</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

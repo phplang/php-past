@@ -4,7 +4,7 @@
 >Functions</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -15,8 +15,8 @@ REL="PREVIOUS"
 TITLE="include"
 HREF="function.include.html"><LINK
 REL="NEXT"
-TITLE="Returning values"
-HREF="functions.returning-values.html"></HEAD
+TITLE="Function arguments"
+HREF="functions.arguments.html"></HEAD
 ><BODY
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
@@ -55,7 +55,7 @@ WIDTH="10%"
 ALIGN="right"
 VALIGN="bottom"
 ><A
-HREF="functions.returning-values.html"
+HREF="functions.arguments.html"
 >Next</A
 ></TD
 ></TR
@@ -84,13 +84,13 @@ HREF="functions.html#FUNCTIONS.USER-DEFINED"
 ></DT
 ><DT
 ><A
-HREF="functions.returning-values.html"
->Returning values</A
+HREF="functions.arguments.html"
+>Function arguments</A
 ></DT
 ><DT
 ><A
-HREF="functions.arguments.html"
->Function arguments</A
+HREF="functions.returning-values.html"
+>Returning values</A
 ></DT
 ><DT
 ><A
@@ -99,6 +99,11 @@ HREF="functions.old-syntax.html"
 CLASS="LITERAL"
 >old_function</TT
 ></A
+></DT
+><DT
+><A
+HREF="functions.variable-functions.html"
+>Variable functions</A
 ></DT
 ></DL
 ></DIV
@@ -127,21 +132,54 @@ CLASS="PROGRAMLISTING"
 ><P
 ></P
 ></DIV
->
-     
-    </P
+></P
 ><P
 >     Any valid PHP code may appear inside a function, even other
      functions and <A
 HREF="oop.html#KEYWORD.CLASS"
 >class</A
 >
-     definitions.
-     
-    </P
+     definitions.</P
 ><P
->     Functions must be defined before they are referenced.
- 
+>	In PHP3, functions must be defined before they are referenced. No
+	such requirement exists in PHP4.
+   </P
+><P
+>	PHP does not support function overloading, nor is it possible to
+	undefine or redefine previously-declared functions.
+   </P
+><P
+>	PHP3 does not support variable numbers of arguments to functions,
+	although default arguments are supported (see <A
+HREF="functions.arguments.html#FUNCTIONS.ARGUMENTS.DEFAULT"
+>Default argument
+	values</A
+> for more information). PHP4 supports both: see <A
+HREF="functions.arguments.html#FUNCTIONS.VARIABLE-ARG-LIST"
+>Variable-length argument
+	lists</A
+> and the function references for
+	<A
+HREF="function.func-num-args.html"
+><B
+CLASS="FUNCTION"
+>func_num_args()</B
+></A
+>,
+	<A
+HREF="function.func-get-arg.html"
+><B
+CLASS="FUNCTION"
+>func_get_arg()</B
+></A
+>, and
+	<A
+HREF="function.func-get-args.html"
+><B
+CLASS="FUNCTION"
+>func_get_args()</B
+></A
+> for more information.
    </P
 ></DIV
 ></DIV
@@ -176,7 +214,7 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><A
-HREF="functions.returning-values.html"
+HREF="functions.arguments.html"
 >Next</A
 ></TD
 ></TR
@@ -185,9 +223,12 @@ HREF="functions.returning-values.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
-><TT
-CLASS="LITERAL"
->include</TT
+><A
+HREF="function.include.html"
+><B
+CLASS="FUNCTION"
+>include()</B
+></A
 ></TD
 ><TD
 WIDTH="34%"
@@ -201,7 +242,7 @@ HREF="langref.html"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->Returning values</TD
+>Function arguments</TD
 ></TR
 ></TABLE
 ></DIV

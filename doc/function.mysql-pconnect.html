@@ -4,7 +4,7 @@
 >mysql_pconnect</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -71,14 +71,14 @@ NAME="FUNCTION.MYSQL-PCONNECT"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN16305"
+NAME="AEN18406"
 ></A
 >mysql_pconnect --      Open a persistent connection to a MySQL Server
     </DIV
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN16308"
+NAME="AEN18409"
 ></A
 ><H2
 >Description</H2
@@ -120,8 +120,7 @@ CLASS="OPTIONAL"
 ><P
 > 
      Returns: A positive MySQL persistent link identifier on success,
-     or false on error
-    </P
+     or false on error</P
 ><P
 >     <B
 CLASS="FUNCTION"
@@ -129,8 +128,7 @@ CLASS="FUNCTION"
 > establishes a connection to a
      MySQL server.  All of the arguments are optional, and if they're
      missing, defaults are assumed ('localhost', user name of the user
-     that owns the server process, empty password).  
-    </P
+     that owns the server process, empty password).</P
 ><P
 >     The hostname string can also include a port
      number. eg. &quot;hostname:port&quot; or a path to a socket
@@ -142,16 +140,13 @@ CLASS="NOTE"
 ><P
 ><B
 >Note: </B
->       Support for &quot;:port&quot; wass added in 3.0B4.
-      </P
+>       Support for &quot;:port&quot; wass added in 3.0B4.</P
 ><P
 >       Support for the &quot;:/path/to/socket&quot; was added in
-       3.0.10.
-     </P
+       3.0.10.</P
 ></BLOCKQUOTE
 ></DIV
->     
-    </P
+></P
 ><P
 >     <B
 CLASS="FUNCTION"
@@ -163,15 +158,13 @@ HREF="function.mysql-connect.html"
 CLASS="FUNCTION"
 >mysql_connect()</B
 ></A
-> with two major differences.
-    </P
+> with two major differences.</P
 ><P
 > 
      First, when connecting, the function would first try to find a
      (persistent) link that's already open with the same host,
      username and password.  If one is found, an identifier for it
-     will be returned instead of opening a new connection.
-    </P
+     will be returned instead of opening a new connection.</P
 ><P
 > 
      Second, the connection to the SQL server will not be closed when
@@ -186,12 +179,10 @@ CLASS="FUNCTION"
      close links established by <B
 CLASS="FUNCTION"
 >mysql_pconnect()</B
->).
-    </P
+>).</P
 ><P
 > 
-     This type of links is therefore called 'persistent'.
-   </P
+     This type of links is therefore called 'persistent'.</P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

@@ -4,7 +4,7 @@
 >date</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -15,8 +15,8 @@ REL="PREVIOUS"
 TITLE="checkdate"
 HREF="function.checkdate.html"><LINK
 REL="NEXT"
-TITLE="strftime"
-HREF="function.strftime.html"></HEAD
+TITLE="getdate"
+HREF="function.getdate.html"></HEAD
 ><BODY
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
@@ -55,7 +55,7 @@ WIDTH="10%"
 ALIGN="right"
 VALIGN="bottom"
 ><A
-HREF="function.strftime.html"
+HREF="function.getdate.html"
 >Next</A
 ></TD
 ></TR
@@ -71,13 +71,13 @@ NAME="FUNCTION.DATE"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN5800"
+NAME="AEN7030"
 ></A
 >date -- format a local time/date</DIV
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN5803"
+NAME="AEN7033"
 ></A
 ><H2
 >Description</H2
@@ -105,9 +105,7 @@ CLASS="PARAMETER"
 >timestamp</I
 ></TT
 > or the current
-     local time if no timestamp is given.
-
-    </P
+     local time if no timestamp is given.</P
 ><P
 >     The following characters are recognized in the format string:
      <P
@@ -247,8 +245,7 @@ print ("July 1, 2000 is on a " . date("l", mktime(0,0,0,7,1,2000)));
 ></TD
 ></TR
 ></TABLE
->
-    </P
+></P
 ><P
 >     It is possible to use <B
 CLASS="FUNCTION"
@@ -291,7 +288,7 @@ CLASS="FUNCTION"
 CLASS="PROGRAMLISTING"
 >$tomorrow  = mktime(0,0,0,date("m")  ,date("d")+1,date("Y"));
 $lastmonth = mktime(0,0,0,date("m")-1,date("d"),  date("Y"));
-$nextyear  = mktime(0,0,0,date("m"),  date("d",   date("Y")+1);
+$nextyear  = mktime(0,0,0,date("m"),  date("d"),  date("Y")+1);
       </PRE
 ></DIV
 ></TD
@@ -364,7 +361,7 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><A
-HREF="function.strftime.html"
+HREF="function.getdate.html"
 >Next</A
 ></TD
 ></TR
@@ -386,7 +383,7 @@ HREF="ref.datetime.html"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->strftime</TD
+>getdate</TD
 ></TR
 ></TABLE
 ></DIV

@@ -1,0 +1,3 @@
+#! /bin/sh
+# $Id: buildconf,v 1.1 1999/12/01 22:20:07 sas Exp $
+${MAKE:-make} -f build.mk

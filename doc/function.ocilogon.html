@@ -4,7 +4,7 @@
 >OCILogon</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -71,13 +71,13 @@ NAME="FUNCTION.OCILOGON"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN17876"
+NAME="AEN20048"
 ></A
 >OCILogon -- Establishes a connection to Oracle</DIV
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN17879"
+NAME="AEN20051"
 ></A
 ><H2
 >Description</H2
@@ -90,7 +90,7 @@ CLASS="FUNCDEF"
 >int OCILogon</CODE
 >(string username, string password, string [<SPAN
 CLASS="OPTIONAL"
->ORACLE_SID</SPAN
+>db</SPAN
 >]);<P
 ></P
 ></DIV
@@ -101,18 +101,25 @@ HREF="function.ocilogon.html"
 CLASS="FUNCTION"
 >OCILogon()</B
 ></A
-> returns an connection identified
-	 needed for most other OCI calls.  If the optional third parameter is not specified,
-	 PHP uses the environment variable ORACLE_SID to determine which database to connect 
-	 to.  Connections are shared at the page level when using <A
+> returns an connection identifier
+     needed for most other OCI calls.  The optional third parameter
+     can either contain the name of the local Oracle instance or the
+     name of the entry in tnsnames.ora to which you want to connect.
+     If the optional third parameter is not specified, PHP uses the
+     environment variables ORACLE_SID (Oracle instance) or TWO_TASK
+     (tnsnames.ora) to determine which database to connect to.
+    </P
+><P
+>Connections are shared at the page level when using
+     <A
 HREF="function.ocilogon.html"
 ><B
 CLASS="FUNCTION"
 >OCILogon()</B
 ></A
->.  
-     This means that commits and rollbacks apply to all open transactions in the page, 
-     even if you have created multiple  connections.
+>.  This means that commits and
+     rollbacks apply to all open transactions in the page, even if you
+     have created multiple connections.
     </P
 ><P
 >     This example demonstrates how the connections are shared.
@@ -141,7 +148,7 @@ $c2 = ocilogon("scott","tiger",$db);
 
 function create_table($conn)
 { $stmt = ociparse($conn,"create table scott.hallo (test
-varchar2(32))");
+varchar2(64))");
   ociexecute($stmt);
   echo $conn." created table\n\n";
 }
@@ -153,7 +160,7 @@ function drop_table($conn)
 }
 
 function insert_data($conn)
-{ $stmt = ociparse($conn,"insert into scott.hallo values($conn || ' ' || to_char(sysdate,'DD-MON-YY HH24:MI:SS'))");
+{ $stmt = ociparse($conn,"insert into scott.hallo values('$conn' || ' ' || to_char(sysdate,'DD-MON-YY HH24:MI:SS'))");
   ociexecute($stmt,OCI_DEFAULT);
   echo $conn." inserted hallo\n\n";
 }
@@ -216,8 +223,7 @@ print "&lt;/PRE&#62;&lt;/HTML&#62;";
 ></TD
 ></TR
 ></TABLE
->
-    </P
+></P
 ><P
 >     See also <A
 HREF="function.ociplogon.html"
@@ -232,8 +238,7 @@ HREF="function.ocinlogon.html"
 CLASS="FUNCTION"
 >OCINLogon()</B
 ></A
->.
-   </P
+>.</P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

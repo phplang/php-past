@@ -1,0 +1,32 @@
+--TEST--
+Mix index (start 0) and auto assigning                         ...
+--POST--
+--GET--
+--FILE--
+<?php 
+  $a[0]="a";
+  $a[1]="b";
+  $a[2]="c";
+
+  $a[]="d";
+  $a[]="e";
+  $a[]="f";
+
+  reset($a);
+  $key= key($a);
+  $data=current($a);
+  while ("" != (string) $key):
+    echo "KEY: $key, VAL: $data\n";
+    $data=next($a);
+    $key= key($a);
+  endwhile;
+
+?>
+--EXPECT--
+KEY: 0, VAL: a
+KEY: 1, VAL: b
+KEY: 2, VAL: c
+KEY: 3, VAL: d
+KEY: 4, VAL: e
+KEY: 5, VAL: f
+

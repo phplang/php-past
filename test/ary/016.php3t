@@ -1,0 +1,52 @@
+--TEST--
+asort() function                                               ...
+--POST--
+--GET--
+--FILE--
+<?php 
+$a[0] = 1;
+$a[r] = 2;
+$a[4] = 3;
+$a[c] = three;
+$a[d] = one;
+$a[a] = two;
+?>
+Before being sorted
+-------------------
+<?php 
+reset($a);
+$b = current($a);
+while ($b != ""):
+    echo "$b\n";
+    $b = next($a);
+endwhile;
+asort($a);
+?>
+After being sorted
+-------------------
+<?php 
+reset($a);
+$b = current($a);
+while ($b != ""):
+    echo "$b\n";
+    $b = next($a);
+endwhile;
+?>
+--EXPECT--
+Before being sorted
+-------------------
+1
+2
+3
+three
+one
+two
+
+After being sorted
+-------------------
+1
+2
+3
+one
+three
+two

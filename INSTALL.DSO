@@ -1,25 +1,15 @@
 Compiling PHP as an Apache Dynamic Shared Object (DSO)
 ------------------------------------------------------
 
-A caveat before you continue.  There have been reports of instability
-of the DSO version of Apache/PHP on some platforms.  If you experience
-odd behaviour, try the static compile described in the INSTALL file.  
-Also if you are not using at least Apache version 1.3.4, give up and 
-go back to the static compile, or upgrade your Apache before continuing.
+Before you begin, check that your installed Apache version
+is at least version 1.3.6.  Version 1.3.9 or later is even
+better and you should seriously consider upgrading your Apache
+to 1.3.9 or later.  This is especially true for glibc-2.1.1 
+users.  There was a nasty bug related to how DSO's were
+linked that wasn't fixed until Apache-1.3.9.
 
-Contents of this file:
-
-  METHOD 1: The APXS Approach
-  METHOD 2: The --with-shared-apache approach
-  Troubleshooting
-
-
-METHOD 1: The APXS Approach
----------------------------
-
-This is probably the slickest way to add PHP to an already 
-compiled/running Apache server.  Your server must have been
-built to include mod_so (you can check by typing httpd -l)
+In order for this build method to work, your server must have 
+been built to include mod_so (you can check by typing httpd -l)
 and it needs to have the 'apxs' Perl script installed and
 configured for your setup.  You can build such a server setup
 using Step 1 below.  
@@ -46,7 +36,10 @@ Step 2: Build PHP
   make install
 
 You will of course most likely want more options here.  Run 
-./configure --help for a full list.
+./configure --help for a full list.  If you are running Apache-1.3.9
+or later, you should add the --with-xml switch since an xml parser
+was included in Apache as of version 1.3.9 and you might as well
+let PHP use it if it is there anyway.
 
 Step 3: Edit /some/path/conf/httpd.conf and make sure you have a 
 line similar to:
@@ -57,10 +50,14 @@ If this is a brand new setup, you should of course also set the
 other Apache site-specific things in your httpd.conf.  
 
 Additionally you need to tell Apache to load and activate the 
-PHP module. Add the following lines to /some/path/conf/httpd.conf
+PHP module. Add the following line to /some/path/conf/httpd.conf
 
     LoadModule php3_module libexec/libphp3.so
-    AddModule mod_php3.c
+
+If you have a ClearModuleList in your httpd.conf file, you need
+to add this line to:
+
+    AddModule mod_php3.c 
 
 You should also copy php3.ini-dist to /some/path/php3.ini and have a 
 look at it.
@@ -75,51 +72,6 @@ or
 
 or
    /some/path/bin/apachectl graceful
-
-
-METHOD 2: The --with-shared-apache approach
-
-This method is not quite as slick as method 1, but it is useful if 
-for some reason you can't use the apxs approach.  You need a full
-Apache source tree in order to compile PHP using this approach whereas
-in method 1 you only need the files produced by a 'make install' 
-from an Apache setup.
-
-Step 1: Make sure Apache's ./configure program has been run at least
-once.  You don't need to do a full compile, but the Apache ./configure
-program generates some header files that PHP needs.  The options you pass
-to this Apache ./configure step are irrelevant.
-
-Step 2: Now you need to configure PHP and tell it where your Apache source
-tree lives.  Use something like this:
-
-./configure --with-shared-apache=/some/path/to/src/of/apache-1.3.X \
-            --with-config-file-path=/some/path
-make
-make install
-
-If you need specific extra PHP options, add other flags to the above configure
-line.  Run ./configure --help to see a full list.
-
-Step 3: Building Apache
-
-Go to your Apache src tree directory and run something like:
-
-./configure --prefix=/some/path \
-            --activate-module=src/modules/php3/libphp3.a \
-            --enable-shared=php3
-make 
-make install
-
-If you already have a full Apache installation that predates the 
-'make install' feature in Apache, I'd suggest doing a 'make install'
-anyway, but set your --prefix directory to some temporary spot and
-then go have a look at the files it generates.  Especially the
-httpd.conf entries to load the PHP module.  The only extra thing you
-need to do is uncomment (remove the initial #) from the php3 AddType
-line.  eg. it should look like this:
-
-  AddType application/x-httpd-php3 .php3
 
 
 Troubleshooting

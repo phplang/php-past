@@ -1,0 +1,21 @@
+--$Id: 011.php3t,v 1.1 1998/08/23 03:10:16 rocky Exp $
+--TITLE--
+Using another array                                           ...
+--URL--
+ary/011.phtml
+--EXPECT--
+KEY: 0, VAL: a
+KEY: 1, VAL: b
+KEY: 2, VAL: c
+<HR> $c= $a[0];
+<HR> $d[0]= $a[0];
+KEY: 0, VAL: a
+count(): 1
+<HR> $e[]= $a[0];
+KEY: 0, VAL: a
+count(): 1
+<HR> append to $f[0] $f[1] $f[2], $f += $a;
+KEY: 0, VAL: e
+KEY: 1, VAL: f
+KEY: 2, VAL: g
+count(): 3

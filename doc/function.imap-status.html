@@ -1,0 +1,188 @@
+<HTML
+><HEAD
+><TITLE
+>imap_status</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="IMAP functions"
+HREF="ref.imap.html"><LINK
+REL="PREVIOUS"
+TITLE="imap_alerts"
+HREF="function.imap-alerts.html"><LINK
+REL="NEXT"
+TITLE="Informix functions"
+HREF="ref.ifx.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.imap-alerts.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="ref.ifx.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="FUNCTION.IMAP-STATUS"
+>imap_status</A
+></H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN13441"
+></A
+>imap_status -- This function returns status information on a mailbox other than the current one.</DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN13444"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><CODE
+CLASS="FUNCDEF"
+>object imap_status</CODE
+>(int imap_stream, string mailbox, int options);<P
+></P
+></DIV
+><P
+>     This function returns an object containing status information. Valid flags are:
+    <P
+></P
+><UL
+><LI
+><P
+>      SA_MESSAGES - set status-&#62;messages to the number of messages in the mailbox</P
+></LI
+><LI
+><P
+>      SA_RECENT - set status-&#62;recent to the number of recent messages in the mailbox</P
+></LI
+><LI
+><P
+>      SA_UNSEEN - set status-&#62;unseen to the number of unseen (new) messages in the mailbox</P
+></LI
+><LI
+><P
+>      SA_UIDNEXT - set status-&#62;uidnext to the next uid to be used in the mailbox</P
+></LI
+><LI
+><P
+>      SA_UIDVALIDITY - set status-&#62;uidvalidity to a constant that changes when uids for the mailbox may no longer be valid</P
+></LI
+><LI
+><P
+>      SA_ALL - set all of the above</P
+></LI
+></UL
+></P
+><P
+>     status-&#62;flags is also set, which contains a bitmask which can be
+     checked against any of the above constants.</P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.imap-alerts.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="ref.ifx.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>imap_alerts</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.imap.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Informix functions</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

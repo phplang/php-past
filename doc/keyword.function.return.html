@@ -1,0 +1,403 @@
+<HTML
+><HEAD
+><TITLE
+>Returning values</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+REL="HOME"
+TITLE="PHP3 Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Control Structures"
+HREF="control-structures.html"><LINK
+REL="PREVIOUS"
+TITLE="function"
+HREF="keyword.function.html"><LINK
+REL="NEXT"
+TITLE="old_function"
+HREF="keyword.old-function.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP3 Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="keyword.function.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 10. Control Structures</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="keyword.old-function.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="KEYWORD.FUNCTION.RETURN"
+>Returning values</A
+></H1
+><P
+>      Values are returned by using the optional return statement. Any
+      type may be returned, including lists and objects.
+ 
+      <DIV
+CLASS="INFORMALEXAMPLE"
+><P
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+> function my_sqrt ($num) {
+     return $num * $num;
+ }
+ echo my_sqrt (4);   // outputs '16'.
+       </PRE
+><P
+></P
+></DIV
+>
+      
+     </P
+><P
+>      Multiple values may not be returned, but the same effect can be
+      achieved by returning a list:
+ 
+      <DIV
+CLASS="INFORMALEXAMPLE"
+><P
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+> function foo() {
+    return array (0, 1, 2);
+ }
+ list ($zero, $one, $two) = foo();
+       </PRE
+><P
+></P
+></DIV
+>
+ 
+    </P
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="KEYWORD.FUNCTION.ARGUMENTS"
+>Arguments</A
+></H2
+><P
+>      Information may be passed to functions via the argument list,
+      which is a comma-delimited list of variables and/or constants.
+ 
+     </P
+><P
+>      PHP supports passing arguments by value (the default), <A
+HREF="keyword.function.return.html#KEYWORD.FUNCTION.ARGUMENTS.REFERENCE"
+>passing by
+      reference</A
+>, and <A
+HREF="keyword.function.return.html#KEYWORD.FUNCTION.ARGUMENTS.DEFAULT"
+>default argument
+      values</A
+>. Variable-length argument lists are not supported,
+      but a similar effect may be achieved by passing arrays.
+ 
+      <DIV
+CLASS="INFORMALEXAMPLE"
+><P
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+> function takes_array($input) {
+     echo "$input[0] + $input[1] = ", $input[0]+$input[1];
+ }
+       </PRE
+><P
+></P
+></DIV
+>
+ 
+     </P
+><DIV
+CLASS="SECT3"
+><H3
+CLASS="SECT3"
+><A
+NAME="KEYWORD.FUNCTION.ARGUMENTS.REFERENCE"
+>Passing by reference</A
+></H3
+><P
+>       By default, function arguments are passed by value. If you wish
+       to allow a function to modify its arguments, you may pass them
+       by reference.
+       
+      </P
+><P
+>       If you wish a function's argument to always be passed by
+       reference, you can prepend an ampersand (&amp;) to the argument
+       name in the function definition:
+ 
+       <DIV
+CLASS="INFORMALEXAMPLE"
+><P
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+> function foo( &amp;$bar ) {
+     $bar .= 'and something extra.';
+ }
+ $str = 'This is a string, ';
+ foo ($str);
+ echo $str;    // outputs 'This is a string, and something extra.'
+        </PRE
+><P
+></P
+></DIV
+>
+ 
+      </P
+><P
+>       If you wish to pass a variable by reference to a function which
+       does not do this by default, you may prepend an ampersand to the 
+       argument name in the function call:
+ 
+       <DIV
+CLASS="INFORMALEXAMPLE"
+><P
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+> function foo ($bar) {
+     $bar .= ' and something extra.';
+ }
+ $str = 'This is a string, ';
+ foo ($str);
+ echo $str;    // outputs 'This is a string, '
+ foo (&amp;$str);
+ echo $str;    // outputs 'This is a string, and something extra.'
+        </PRE
+><P
+></P
+></DIV
+>
+ 
+     </P
+></DIV
+><DIV
+CLASS="SECT3"
+><H3
+CLASS="SECT3"
+><A
+NAME="KEYWORD.FUNCTION.ARGUMENTS.DEFAULT"
+>Default values</A
+></H3
+><P
+>       A function may define C++-style default values for scalar
+       arguments as follows:
+ 
+       <DIV
+CLASS="INFORMALEXAMPLE"
+><P
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+> function makecoffee ($type = "cappucino") {
+     echo "Making a cup of $type.\n";
+ }
+ echo makecoffee ();
+ echo makecoffee ("espresso");
+        </PRE
+><P
+></P
+></DIV
+>
+ 
+      </P
+><P
+>       The output from the above snippet is:
+ 
+       <PRE
+CLASS="SCREEN"
+> Making a cup of cappucino.
+ Making a cup of espresso.
+       </PRE
+>
+ 
+      </P
+><P
+>       The default value must be a constant expression, not (for
+       example) a variable or class member.
+ 
+      </P
+><P
+>       Note that when using default arguments, any defaults should be
+       on the right side of any non-default arguments; otherwise,
+       things will not work as expected. Consider the following code
+       snippet:
+ 
+       <DIV
+CLASS="INFORMALEXAMPLE"
+><P
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+> function makeyogurt ($type = "acidophilus", $flavour) {
+     return "Making a bowl of $type $flavour.\n";
+ }
+ 
+ echo makeyogurt ("raspberry");   // won't work as expected
+        </PRE
+><P
+></P
+></DIV
+>
+ 
+      </P
+><P
+>       The output of the above example is:
+ 
+       <PRE
+CLASS="SCREEN"
+> Warning: Missing argument 2 in call to makeyogurt() in 
+ /usr/local/etc/httpd/htdocs/php3test/functest.html on line 41
+ Making a bowl of raspberry .
+       </PRE
+>
+ 
+      </P
+><P
+>       Now, compare the above with this:
+ 
+       <DIV
+CLASS="INFORMALEXAMPLE"
+><P
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+> function makeyogurt ($flavour, $type = "acidophilus") {
+     return "Making a bowl of $type $flavour.\n";
+ }
+ 
+ echo makeyogurt ("raspberry");   // works as expected
+        </PRE
+><P
+></P
+></DIV
+>
+ 
+      </P
+><P
+>       The output of this example is:
+ 
+       <PRE
+CLASS="SCREEN"
+> Making a bowl of acidophilus raspberry.
+      </PRE
+>
+ 
+   </P
+></DIV
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="keyword.function.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="keyword.old-function.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><TT
+CLASS="LITERAL"
+>function</TT
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="control-structures.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><TT
+CLASS="LITERAL"
+>old_function</TT
+></TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

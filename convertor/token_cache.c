@@ -2,7 +2,7 @@
    +----------------------------------------------------------------------+
    | PHP HTML Embedded Scripting Language Version 3.0                     |
    +----------------------------------------------------------------------+
-   | Copyright (c) 1997-1999 PHP Development Team (See Credits file)      |
+   | Copyright (c) 1997-2000 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
    | it under the terms of one of the following licenses:                 |
@@ -29,7 +29,7 @@
  */
 
 
-/* $Id: token_cache.c,v 1.8 1999/01/01 17:59:03 zeev Exp $ */
+/* $Id: token_cache.c,v 1.9 2000/01/01 04:31:14 sas Exp $ */
 
 #include "token_cache.h"
 #include "language-parser.tab.h"

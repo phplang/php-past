@@ -1,0 +1,260 @@
+<HTML
+><HEAD
+><TITLE
+>mcal_fetch_event</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="MCAL functions"
+HREF="ref.mcal.html"><LINK
+REL="PREVIOUS"
+TITLE="mcal_close"
+HREF="function.mcal-close.html"><LINK
+REL="NEXT"
+TITLE="mcal_list_events"
+HREF="function.mcal-list-events.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.mcal-close.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.mcal-list-events.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="FUNCTION.MCAL-FETCH-EVENT"
+>mcal_fetch_event</A
+></H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN15671"
+></A
+>mcal_fetch_event --      Fetches an event from the calendar stream
+    </DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN15674"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><CODE
+CLASS="FUNCDEF"
+>object mcal_fetch_event</CODE
+>(int mcal_stream, int event_id, int options);<P
+></P
+></DIV
+><P
+>  
+     <B
+CLASS="FUNCTION"
+>mcal_fetch_event()</B
+> fetches an event from the 
+     calendar stream specified by <TT
+CLASS="PARAMETER"
+><I
+>id</I
+></TT
+>.</P
+><P
+>     Returns an event object consisting of:
+     <P
+></P
+><UL
+><LI
+><P
+>	int id - ID of that event.</P
+></LI
+><LI
+><P
+>	int public - TRUE if the event if public, FALSE if it is
+	private.</P
+></LI
+><LI
+><P
+>	string category - Category string of the event.</P
+></LI
+><LI
+><P
+>	string title - Title string of the event.</P
+></LI
+><LI
+><P
+>	string description - Description string of the event.</P
+></LI
+><LI
+><P
+>	int alarm - number of minutes before the event to send an
+	alarm/reminder.</P
+></LI
+><LI
+><P
+>	object start - Object containing a datetime entry.</P
+></LI
+><LI
+><P
+>	object end - Object containing a datetime entry.</P
+></LI
+><LI
+><P
+>	int recur_type   - recurrence type</P
+></LI
+><LI
+><P
+>	int recur_interval   - recurrence interval</P
+></LI
+><LI
+><P
+>	datetime recur_endate   - recurrence end date</P
+></LI
+><LI
+><P
+>	int recur_data   - recurrence data</P
+></LI
+></UL
+>
+
+     All datetime entries consist of an object that contains:
+
+     <P
+></P
+><UL
+><LI
+><P
+>	int year - year</P
+></LI
+><LI
+><P
+>	int month - month</P
+></LI
+><LI
+><P
+>	int mday  - day of month</P
+></LI
+><LI
+><P
+>	int hour  - hour</P
+></LI
+><LI
+><P
+>	int min   - minutes</P
+></LI
+><LI
+><P
+>	int sec   - seconds</P
+></LI
+><LI
+><P
+>	int alarm   - minutes before event to send an alarm</P
+></LI
+></UL
+></P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.mcal-close.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.mcal-list-events.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>mcal_close</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.mcal.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>mcal_list_events</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

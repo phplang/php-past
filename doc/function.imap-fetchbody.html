@@ -4,7 +4,7 @@
 >imap_fetchbody</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -71,14 +71,14 @@ NAME="FUNCTION.IMAP-FETCHBODY"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN11054"
+NAME="AEN12664"
 ></A
 >imap_fetchbody -- Fetch a particular section of the body of the
     message</DIV
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN11057"
+NAME="AEN12667"
 ></A
 ><H2
 >Description</H2
@@ -97,8 +97,7 @@ CLASS="FUNCDEF"
      of the specified messages as a text string and returns that text
      string. The section specification is a string of integers
      delimited by period which index into a body part list as per the
-     IMAP4 specification. Body parts are not decoded by this function.
-    </P
+     IMAP4 specification. Body parts are not decoded by this function.</P
 ><P
 >     The options for <B
 CLASS="FUNCTION"
@@ -110,23 +109,19 @@ CLASS="FUNCTION"
 ><UL
 ><LI
 ><P
->	FT_UID - The msgono is a UID
-      </P
+>	FT_UID - The msgono is a UID</P
 ></LI
 ><LI
 ><P
->	FT_PEEK - Do not set the \Seen flag if not already set
-      </P
+>	FT_PEEK - Do not set the \Seen flag if not already set</P
 ></LI
 ><LI
 ><P
 >	FT_UID - The return string is in "internal" format, without
-	any attempt to canonicalize CRLF
-     </P
+	any attempt to canonicalize CRLF</P
 ></LI
 ></UL
->
-   </P
+></P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

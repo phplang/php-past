@@ -4,7 +4,7 @@
 >OCIPLogon</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -71,14 +71,14 @@ NAME="FUNCTION.OCIPLOGON"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN17902"
+NAME="AEN20075"
 ></A
 >OCIPLogon -- Connect to an Oracle database and log on using a persistant connection. 
     Returns a new session.</DIV
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN17905"
+NAME="AEN20078"
 ></A
 ><H2
 >Description</H2
@@ -89,16 +89,26 @@ CLASS="FUNCSYNOPSIS"
 ><CODE
 CLASS="FUNCDEF"
 >int OCIPLogon</CODE
->(int conn);<P
+>(string username, string password, string [<SPAN
+CLASS="OPTIONAL"
+>db</SPAN
+>]);<P
 ></P
 ></DIV
 ><P
->     <B
+>     <A
+HREF="function.ociplogon.html"
+><B
 CLASS="FUNCTION"
->OCIPLogin()</B
-> Creates a persistent connection to an Oracle 8 database 
-     and logs on.  If the optional third parameter is not specified, PHP uses the environment
-     variable ORACLE_SID to determine which database to connect to.
+>OCIPLogon()</B
+></A
+> creates a persistent connection to
+     an Oracle 8 database and logs on.  The optional third parameter
+     can either contain the name of the local Oracle instance or the
+     name of the entry in tnsnames.ora to which you want to connect.
+     If the optional third parameter is not specified, PHP uses the
+     environment variables ORACLE_SID (Oracle instance) or TWO_TASK
+     (tnsnames.ora) to determine which database to connect to.
     </P
 ><P
 >     See also <A
@@ -114,8 +124,7 @@ HREF="function.ocinlogon.html"
 CLASS="FUNCTION"
 >OCINLogon()</B
 ></A
->.
-   </P
+>.</P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

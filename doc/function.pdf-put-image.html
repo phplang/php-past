@@ -4,7 +4,7 @@
 >PDF_put_image</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -71,13 +71,13 @@ NAME="FUNCTION.PDF-PUT-IMAGE"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN20348"
+NAME="AEN21900"
 ></A
 >PDF_put_image -- Stores an image in the PDF for later use</DIV
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN20351"
+NAME="AEN21903"
 ></A
 ><H2
 >Description</H2
@@ -119,7 +119,18 @@ CLASS="FUNCTION"
 > is highly recommended for
      larger images (several kb) if they show up more than once in the
      document.
-    </P
+    <DIV
+CLASS="NOTE"
+><BLOCKQUOTE
+CLASS="NOTE"
+><P
+><B
+>Note: </B
+>This function has become meaningless with version
+     2.01 of pdflib. It will just output a warning.</P
+></BLOCKQUOTE
+></DIV
+></P
 ><P
 >     See also <A
 HREF="function.pdf-put-image.html"
@@ -141,8 +152,7 @@ HREF="function.pdf-execute-image.html"
 CLASS="FUNCTION"
 >PDF_execute_image()</B
 ></A
->.
-   </P
+>.</P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

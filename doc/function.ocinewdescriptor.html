@@ -4,7 +4,7 @@
 >OCINewDescriptor</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -71,13 +71,13 @@ NAME="FUNCTION.OCINEWDESCRIPTOR"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN18001"
+NAME="AEN20185"
 ></A
 >OCINewDescriptor -- Initialize a new empty descriptor LOB/FILE (LOB is default)</DIV
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN18004"
+NAME="AEN20188"
 ></A
 ><H2
 >Description</H2
@@ -108,6 +108,8 @@ CLASS="PARAMETER"
 >type</I
 ></TT
 > are OCI_D_FILE, OCI_D_LOB, OCI_D_ROWID.
+      For LOB desriptors, the methods load, save, and savefile are associated with the descriptor,
+      for BFILE only the load method exists. See the second example usage hints.
 
     </P
 ><TABLE
@@ -153,6 +155,41 @@ CLASS="PROGRAMLISTING"
     OCIFreeStatement($stmt);  
     OCILogoff($conn);
 ?&#62;  
+   </PRE
+><PRE
+CLASS="PROGRAMLISTING"
+>&lt;?php
+    /* This script demonstrates file upload to LOB columns
+     * The formfield used for this example looks like this
+     * &lt;form action="upload.php3" method="post" enctype="multipart/form-data"&#62;
+     * &lt;input type="file" name="lob_upload"&#62;
+     * ...
+     */
+  if(!isset($lob_upload) || $lob_upload == 'none'){
+?&#62;
+&lt;form action="upload.php3" method="post" enctype="multipart/form-data"&#62;
+Upload file: &lt;input type="file" name="lob_upload"&#62;&lt;br&#62;
+&lt;input type="submit" value="Upload"&#62; - &lt;input type="reset"&#62;
+&lt;/form&#62;
+&lt;?php
+  } else {
+     // $lob_upload contains the temporary filename of the uploaded file
+     $conn = OCILogon($user, $password);
+     $lob = OCINewDescriptor($conn, OCI_D_LOB);
+     $stmt = OCIParse($conn,"insert into $table (id, the_blob) values(my_seq.NEXTVAL, EMPTY_BLOB()) returning the_blob into :the_blob");
+     OCIBindByName($stmt, ':the_blob', &#38;$lob, -1, OCI_B_BLOB);
+     OCIExecute($stmt);
+     if($lob-&#62;savefile($lob_upload)){
+        OCICommit($conn);
+        echo "Blob successfully uploaded\n";
+     }else{
+        echo "Couldn't upload Blob\n";
+     }
+     OCIFreeDescriptor($lob);
+     OCIFreeStatement($stmt);
+     OCILogoff($conn);
+  }
+?&#62;
    </PRE
 ></DIV
 ></TD

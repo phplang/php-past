@@ -1,0 +1,41 @@
+PHP3 Library Test
+
+<?
+dl("calendar.dll");
+
+$date = Date("m/d/Y",Time());
+echo("Today is: $date\n\n");
+$month = Date("m",Time());
+$day = Date("d",Time());
+$year = Date("Y",Time());
+
+$jul  = GregorianToJD($month,$day,$year);
+echo("\nJulian Day Count: $jul\n");
+$date = JDToGregorian($jul);
+echo("\nGregorian Calendar: $date\n"); 
+$monthname = JDMonthName($jul,0);
+echo("\nGregorian Month: $monthname\n");
+$monthname = JDMonthName($jul,1);
+echo("\nGregorian Month: $monthname\n");
+$date = JDToJulian($jul);
+echo("\nJulian Calendar: $date\n"); 
+$monthname = JDMonthName($jul,2);
+echo("\nJulian Month: $monthname\n");
+$monthname = JDMonthName($jul,3);
+echo("\nJulian Month: $monthname\n");
+$date = JDToJewish($jul);
+echo("\nJewish Calendar: $date\n"); 
+$monthname = JDMonthName($jul,4);
+echo("\nJewish Month: $monthname\n");
+$date = JDToFrench($jul);
+echo("\nFrench Calendar: $date\n"); 
+$monthname = JDMonthName($jul,5);
+echo("\nFrench Month: $monthname\n");
+$dayofweek = JDDayOfWeek($jul,0);
+echo("\nDay of Week: $dayofweek (0=Sun 6=Sat)\n");
+$dayofweeklong = JDDayOfWeek($jul,1);
+echo("\nDay of Week: $dayofweeklong\n");
+$dayofweekshort = JDDayOfWeek($jul,2);
+echo("\nDay of Week: $dayofweekshort\n");
+echo("Julian Day: $jul\n");
+?>

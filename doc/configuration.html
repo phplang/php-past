@@ -4,7 +4,7 @@
 >Configuration</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -15,8 +15,8 @@ REL="PREVIOUS"
 TITLE="Problems?"
 HREF="install-problems.html"><LINK
 REL="NEXT"
-TITLE="Apache Module"
-HREF="config-apache.html"></HEAD
+TITLE="Security"
+HREF="security.html"></HEAD
 ><BODY
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
@@ -55,7 +55,7 @@ WIDTH="10%"
 ALIGN="right"
 VALIGN="bottom"
 ><A
-HREF="config-apache.html"
+HREF="security.html"
 >Next</A
 ></TD
 ></TR
@@ -79,28 +79,8 @@ CLASS="TOC"
 ></DT
 ><DT
 ><A
-HREF="configuration.html#PHP3.INI"
->The php3.ini file</A
-></DT
-><DT
-><A
-HREF="config-apache.html"
->Apache Module</A
-></DT
-><DT
-><A
-HREF="config-cgi.html"
->CGI</A
-></DT
-><DT
-><A
-HREF="config-virtualhost.html"
->Virtual hosts</A
-></DT
-><DT
-><A
-HREF="config-security.html"
->Security</A
+HREF="configuration.html#CONFIGURATION.FILE"
+>The configuration file</A
 ></DT
 ></DL
 ></DIV
@@ -109,47 +89,147 @@ CLASS="SECT1"
 ><H1
 CLASS="SECT1"
 ><A
-NAME="PHP3.INI"
->The php3.ini file</A
+NAME="CONFIGURATION.FILE"
+>The configuration file</A
 ></H1
 ><P
->    The <TT
+>    The configuration file (called <TT
 CLASS="FILENAME"
 >php3.ini</TT
-> file is read when PHP's parser
-    starts up.  For the server module versions of PHP, this happens
-    only once when the web server is started.  For the
+> in
+    PHP 3.0, and simply <TT
+CLASS="FILENAME"
+>php.ini</TT
+> as of PHP 4.0)
+    is read when PHP starts up. For the server module versions of PHP,
+    this happens only once when the web server is started.  For the
     <SPAN
 CLASS="ACRONYM"
 >CGI</SPAN
-> version, it happens on every invocation.
-
-   </P
+> version, it happens on every invocation.</P
 ><P
->    Just about every directive listed here has a corresponding Apache
-    <TT
+>    When using PHP as an Apache module, you can also change the
+    configuration settings using directives in Apache configuration
+    files and .htaccess files.</P
+><P
+>    With PHP 3.0, there are Apache directives that correspond to each
+    configuration setting in the <TT
 CLASS="FILENAME"
->httpd.conf</TT
-> directive.  Simply prepend
-    <I
-CLASS="EMPHASIS"
->php3_</I
-> to the start of the directive names
-    listed here.
-
-   </P
+>php3.ini</TT
+> name,
+    except the name is prefixed by "php3_".</P
 ><P
->    You can view the settings of most of the configuration values in
+>    With PHP 4.0, there are just a few Apache directives that allow you
+    to change the PHP configuration settings.
+    <P
+></P
+><DL
+><DT
+><SPAN
+CLASS="SYSTEMITEM"
+>php_value</SPAN
+>
+       <TT
+CLASS="PARAMETER"
+><I
+>name</I
+></TT
+>
+       <TT
+CLASS="PARAMETER"
+><I
+>value</I
+></TT
+></DT
+><DD
+><P
+>        This sets the value of the specified variable.</P
+></DD
+><DT
+><SPAN
+CLASS="SYSTEMITEM"
+>php_flag</SPAN
+>
+       <TT
+CLASS="PARAMETER"
+><I
+>name</I
+></TT
+>
+       <TT
+CLASS="PARAMETER"
+><I
+>on|off</I
+></TT
+></DT
+><DD
+><P
+>        This is used to set a Boolean configuration option.</P
+></DD
+><DT
+><SPAN
+CLASS="SYSTEMITEM"
+>php_admin_value</SPAN
+>
+       <TT
+CLASS="PARAMETER"
+><I
+>name</I
+></TT
+>
+       <TT
+CLASS="PARAMETER"
+><I
+>value</I
+></TT
+></DT
+><DD
+><P
+>        This sets the value of the specified variable. "Admin"
+        configuration settings can only be set from within the
+        main Apache configuration files, and not from .htaccess
+        files.</P
+></DD
+><DT
+><SPAN
+CLASS="SYSTEMITEM"
+>php_admin_flag</SPAN
+>
+       <TT
+CLASS="PARAMETER"
+><I
+>name</I
+></TT
+>
+       <TT
+CLASS="PARAMETER"
+><I
+>on|off</I
+></TT
+></DT
+><DD
+><P
+>        This is used to set a Boolean configuration option.</P
+></DD
+></DL
+></P
+><P
+>    You can view the settings of the configuration values in
     the output of <A
 HREF="function.phpinfo.html"
 ><B
 CLASS="FUNCTION"
 >phpinfo()</B
 ></A
->.
-
-   
-   </P
+>. You can also
+    access the values of individial configuration settings using
+    <A
+HREF="function.get-cfg-var.html"
+><B
+CLASS="FUNCTION"
+>get_cfg_var()</B
+></A
+>.</P
 ><DIV
 CLASS="SECT2"
 ><H2
@@ -162,6 +242,41 @@ NAME="INI.SECT.GENERAL"
 >     <P
 ></P
 ><DL
+><DT
+><A
+NAME="INI.ASP-TAGS"
+><TT
+CLASS="PARAMETER"
+><I
+>asp_tags</I
+></TT
+>
+		<SPAN
+CLASS="TYPE"
+>boolean</SPAN
+></A
+></DT
+><DD
+><P
+>		 Enables the use of ASP-like &lt;% %&gt; tags in addition to
+		 the usual &lt;?php ?&gt; tags. This includes the
+		 variable-value printing shorthand of &lt;%= $value %&gt;. For 
+		 more information, see <A
+HREF="language.basic-syntax.html#LANGUAGE.BASIC-SYNTAX.PHPMODE"
+>Escaping from HTML</A
+>.
+		</P
+><DIV
+CLASS="NOTE"
+><BLOCKQUOTE
+CLASS="NOTE"
+><P
+><B
+>Note: </B
+>Support for ASP-style tags was added in 3.0.4.</P
+></BLOCKQUOTE
+></DIV
+></DD
 ><DT
 ><A
 NAME="INI.AUTO-APPEND-FILE"
@@ -190,8 +305,7 @@ CLASS="FUNCTION"
 	 <A
 HREF="configuration.html#INI.INCLUDE-PATH"
 >include_path</A
-> is used.
-	</P
+> is used.</P
 ><P
 >	 The special value <SPAN
 CLASS="SYSTEMITEM"
@@ -214,12 +328,10 @@ CLASS="FUNCTION"
 	   auto-append will <I
 CLASS="EMPHASIS"
 >not</I
-> occur.
-	 </P
+> occur.</P
 ></BLOCKQUOTE
 ></DIV
->
-       </P
+></P
 ></DD
 ><DT
 ><A
@@ -249,14 +361,12 @@ CLASS="FUNCTION"
 	 <A
 HREF="configuration.html#INI.INCLUDE-PATH"
 >include_path</A
-> is used.
-	</P
+> is used.</P
 ><P
 >	 The special value <SPAN
 CLASS="SYSTEMITEM"
 >none</SPAN
-> disables auto-prepending.
-       </P
+> disables auto-prepending.</P
 ></DD
 ><DT
 ><A
@@ -376,8 +486,7 @@ CLASS="LITERAL"
 > is used, the errors
 	 are sent to the system logger instead.  On UNIX, this means
 	 syslog(3) and on Windows NT it means the event log.  The
-	 system logger is not supported on Windows 95.
-       </P
+	 system logger is not supported on Windows 95.</P
 ></DD
 ><DT
 ><A
@@ -557,8 +666,9 @@ CLASS="TYPE"
 ></DT
 ><DD
 ><P
->	 Off by default.  If changed to On scripts will run to completion even
-	 if the remote client disconnects in the middle.  See also 
+>	 On by default.  If changed to Off scripts will be terminated as
+     soon as they try to output something after a client has aborted
+     their connection.
 	 <A
 HREF="function.ignore-user-abort.html"
 ><B
@@ -656,8 +766,7 @@ CLASS="PROGRAMLISTING"
 CLASS="LITERAL"
 >.</TT
 >
-	 (only the current directory).
-       </P
+	 (only the current directory).</P
 ></DD
 ><DT
 ><A
@@ -694,8 +803,7 @@ CLASS="TYPE"
 ><DD
 ><P
 >	 Tells whether script error messages should be logged to the
-	 server's error log.  This option is thus server-specific.
-       </P
+	 server's error log.  This option is thus server-specific.</P
 ></DD
 ><DT
 ><A
@@ -883,8 +991,7 @@ CLASS="USERINPUT"
 ><B
 >&lt;?php ?&#62;</B
 ></TT
->).
-       </P
+>).</P
 ></DD
 ><DT
 ><A
@@ -924,8 +1031,7 @@ CLASS="TYPE"
 	 global variable <SPAN
 CLASS="SYMBOL"
 >$php_errormsg</SPAN
->.
-       </P
+>.</P
 ></DD
 ><DT
 ><A
@@ -955,8 +1061,7 @@ CLASS="SYMBOL"
 	 <SPAN
 CLASS="SYMBOL"
 >$HTTP_COOKIE_VARS</SPAN
->, respectively.
-       </P
+>, respectively.</P
 ></DD
 ><DT
 ><A
@@ -976,8 +1081,7 @@ CLASS="TYPE"
 ><P
 >	 The temporary directory used for storing files when doing
 	 file upload.  Must be writable by whatever user PHP is
-	 running as.
-       </P
+	 running as.</P
 ></DD
 ><DT
 ><A
@@ -1000,8 +1104,7 @@ CLASS="TYPE"
 	 <TT
 CLASS="LITERAL"
 >public_html</TT
->.
-       </P
+>.</P
 ></DD
 ><DT
 ><A
@@ -1029,8 +1132,7 @@ CLASS="LITERAL"
 	 (<TT
 CLASS="LITERAL"
 >.</TT
->).
-       </P
+>).</P
 ></DD
 ></DL
 >
@@ -1071,8 +1173,7 @@ CLASS="FUNCTION"
 >mail()</B
 ></A
 >
-	function.
-      </P
+	function.</P
 ></DD
 ><DT
 ><A
@@ -1091,8 +1192,7 @@ CLASS="TYPE"
 ><DD
 ><P
 >	Which "From:" mail address should be used in mail sent from
-	PHP under Windows.
-      </P
+	PHP under Windows.</P
 ></DD
 ><DT
 ><A
@@ -1127,8 +1227,7 @@ CLASS="COMMAND"
 >configure</B
 > does an honest attempt of
 	locating this one for you and set a default, but if it fails,
-	you can set it here.
-       </P
+	you can set it here.</P
 ><P
 >	Systems not using sendmail should set this directive to the
 	sendmail wrapper/replacement their mail system offers, if any.
@@ -1141,8 +1240,7 @@ TARGET="_top"
 	<TT
 CLASS="FILENAME"
 >/var/qmail/bin/sendmail</TT
->.
-      </P
+>.</P
 ></DD
 ></DL
 ></DIV
@@ -1174,11 +1272,10 @@ CLASS="TYPE"
 ><DD
 ><P
 >	Whether to enable PHP's safe mode. Read the <A
-HREF="config-security.html"
+HREF="security.html"
 >Security chapter</A
 > for more
-	more information.
-      </P
+	more information.</P
 ></DD
 ><DT
 ><A
@@ -1204,8 +1301,7 @@ CLASS="FUNCTION"
 ></A
 > and
 	the other functions executing system programs refuse to start
-	programs that are not in this directory.
-      </P
+	programs that are not in this directory.</P
 ></DD
 ></DL
 ></DIV
@@ -1236,8 +1332,7 @@ CLASS="TYPE"
 ></DT
 ><DD
 ><P
->	DNS name or IP address of host used by the debugger.
-      </P
+>	DNS name or IP address of host used by the debugger.</P
 ></DD
 ><DT
 ><A
@@ -1255,8 +1350,7 @@ CLASS="TYPE"
 ></DT
 ><DD
 ><P
->	Port number used by the debugger.
-      </P
+>	Port number used by the debugger.</P
 ></DD
 ><DT
 ><A
@@ -1274,8 +1368,7 @@ CLASS="TYPE"
 ></DT
 ><DD
 ><P
->	Whether the debugger is enabled.
-      </P
+>	Whether the debugger is enabled.</P
 ></DD
 ></DL
 ></DIV
@@ -1351,8 +1444,7 @@ CLASS="TYPE"
 ><DD
 ><P
 >	In what directory PHP should look for dynamically loadable
-	extensions.
-      </P
+	extensions.</P
 ></DD
 ><DT
 ><A
@@ -1371,8 +1463,7 @@ CLASS="TYPE"
 ><DD
 ><P
 >	Which dynamically loadable extensions to load when PHP starts
-	up.
-      </P
+	up.</P
 ></DD
 ></DL
 ></DIV
@@ -1403,8 +1494,67 @@ CLASS="TYPE"
 ></DT
 ><DD
 ><P
->	Whether to allow persistent MySQL connections.
-      </P
+>		Whether to allow persistent MySQL connections.</P
+></DD
+><DT
+><A
+NAME="INI.MYSQL.DEFAULT-HOST"
+><TT
+CLASS="PARAMETER"
+><I
+>mysql.default_host</I
+></TT
+>
+       <SPAN
+CLASS="TYPE"
+>string</SPAN
+></A
+></DT
+><DD
+><P
+>		The default server host to use when connecting to the database
+		server if no other host is specified.
+       </P
+></DD
+><DT
+><A
+NAME="INI.MYSQL.DEFAULT-USER"
+><TT
+CLASS="PARAMETER"
+><I
+>mysql.default_user</I
+></TT
+>
+       <SPAN
+CLASS="TYPE"
+>string</SPAN
+></A
+></DT
+><DD
+><P
+>		The default user name to use when connecting to the database
+		server if no other name is specified.
+       </P
+></DD
+><DT
+><A
+NAME="INI.MYSQL.DEFAULT-PASSWORD"
+><TT
+CLASS="PARAMETER"
+><I
+>mysql.default_password</I
+></TT
+>
+       <SPAN
+CLASS="TYPE"
+>string</SPAN
+></A
+></DT
+><DD
+><P
+>		The default password to use when connecting to the database
+		server if no other password is specified.
+       </P
 ></DD
 ><DT
 ><A
@@ -1422,8 +1572,8 @@ CLASS="TYPE"
 ></DT
 ><DD
 ><P
->	The maximum number of persistent MySQL connections per
-	process.
+>		The maximum number of persistent MySQL connections per
+		process.
        </P
 ></DD
 ><DT
@@ -1442,8 +1592,8 @@ CLASS="TYPE"
 ></DT
 ><DD
 ><P
->	The maximum number of MySQL connections per process, including
-	persistent connections.
+>		The maximum number of MySQL connections per process, including
+		persistent connections.
        </P
 ></DD
 ></DL
@@ -2220,7 +2370,14 @@ CLASS="TYPE"
 ></DT
 ><DD
 ><P
->	Name of browser capabilities file.
+>		Name of browser capabilities file. See also
+		<A
+HREF="function.get-browser.html"
+><B
+CLASS="FUNCTION"
+>get_browser()</B
+></A
+>.
        </P
 ></DD
 ></DL
@@ -2428,7 +2585,7 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><A
-HREF="config-apache.html"
+HREF="security.html"
 >Next</A
 ></TD
 ></TR
@@ -2450,7 +2607,7 @@ HREF="getting-started.html"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->Apache Module</TD
+>Security</TD
 ></TR
 ></TABLE
 ></DIV

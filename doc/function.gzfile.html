@@ -4,7 +4,7 @@
 >gzfile</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -71,14 +71,14 @@ NAME="FUNCTION.GZFILE"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN23509"
+NAME="AEN6335"
 ></A
 >gzfile -- read entire gz-file into an
     array</DIV
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN23512"
+NAME="AEN6338"
 ></A
 ><H2
 >Description</H2
@@ -89,7 +89,10 @@ CLASS="FUNCSYNOPSIS"
 ><CODE
 CLASS="FUNCDEF"
 >array gzfile</CODE
->(string filename);<P
+>(string filename, int [<SPAN
+CLASS="OPTIONAL"
+>use_include_path</SPAN
+>]);<P
 ></P
 ></DIV
 ><P
@@ -100,9 +103,13 @@ CLASS="FUNCTION"
 >readgzfile()</B
 ></A
 >, except that gzfile()
-     returns the file in an array.
-
-    </P
+     returns the file in an array.</P
+><P
+>     You can use the optional second parameter and set it to "1", if
+     you want to search for the file in the <A
+HREF="configuration.html#INI.INCLUDE-PATH"
+>include_path</A
+>, too.</P
 ><P
 > See also <A
 HREF="function.readgzfile.html"
@@ -117,8 +124,7 @@ HREF="function.gzopen.html"
 CLASS="FUNCTION"
 >gzopen()</B
 ></A
->.
-   </P
+>.</P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

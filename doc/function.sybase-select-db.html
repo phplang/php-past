@@ -1,0 +1,204 @@
+<HTML
+><HEAD
+><TITLE
+>sybase_select_db</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Sybase functions"
+HREF="ref.sybase.html"><LINK
+REL="PREVIOUS"
+TITLE="sybase_result"
+HREF="function.sybase-result.html"><LINK
+REL="NEXT"
+TITLE="URL functions"
+HREF="ref.url.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.sybase-result.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="ref.url.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="FUNCTION.SYBASE-SELECT-DB"
+>sybase_select_db</A
+></H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN26465"
+></A
+>sybase_select_db -- select Sybase database</DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN26468"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><CODE
+CLASS="FUNCDEF"
+>int sybase_select_db</CODE
+>(string database_name, int link_identifier);<P
+></P
+></DIV
+><P
+> Returns: true on success, false on error
+    </P
+><P
+> sybase_select_db() sets the current active database on the
+    server that's associated with the specified link identifier.  If
+    no link identifier is specified, the last opened link is assumed.
+    If no link is open, the function will try to establish a link as
+    if <A
+HREF="function.sybase-connect.html"
+><B
+CLASS="FUNCTION"
+>sybase_connect()</B
+></A
+> was called, and use it.
+    </P
+><P
+>     Every subsequent call to <A
+HREF="function.sybase-query.html"
+><B
+CLASS="FUNCTION"
+>sybase_query()</B
+></A
+> will be
+     made on the active database.
+    </P
+><P
+> See also:
+     <A
+HREF="function.sybase-connect.html"
+><B
+CLASS="FUNCTION"
+>sybase_connect()</B
+></A
+>, 
+     <A
+HREF="function.sybase-pconnect.html"
+><B
+CLASS="FUNCTION"
+>sybase_pconnect()</B
+></A
+>, and
+     <A
+HREF="function.sybase-query.html"
+><B
+CLASS="FUNCTION"
+>sybase_query()</B
+></A
+>
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.sybase-result.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="ref.url.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>sybase_result</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.sybase.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>URL functions</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

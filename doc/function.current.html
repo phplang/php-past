@@ -4,7 +4,7 @@
 >current</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -71,13 +71,13 @@ NAME="FUNCTION.CURRENT"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN3377"
+NAME="AEN4057"
 ></A
 >current -- Return the current element in an array</DIV
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN3380"
+NAME="AEN4060"
 ></A
 ><H2
 >Description</H2
@@ -94,9 +94,7 @@ CLASS="FUNCDEF"
 ><P
 >     Every array has an internal pointer to its "current" element,
      which is initialized to the first element inserted into the
-     array.
-
-    </P
+     array.</P
 ><P
 >     The <B
 CLASS="FUNCTION"
@@ -129,30 +127,27 @@ ALIGN="CENTER"
 ><TD
 ALIGN="LEFT"
 ><P
-> 
-      If the array contains empty elements (0 or "", the empty string)
-      then this function will return false for these elements as well.
-      This makes it impossible to determine if you are really at the
-      end of the list in such an array using <B
+> If the array contains empty elements (0 or "", the empty
+     string) then this function will return false for these elements
+     as well.  This makes it impossible to determine if you are really
+     at the end of the list in such an array using
+     <B
 CLASS="FUNCTION"
 >current()</B
->.
-      To properly traverse an array that may contain empty elements,
-      use the <A
+>.  To properly traverse an array that
+     may contain empty elements, use the <A
 HREF="function.each.html"
 ><B
 CLASS="FUNCTION"
 >each()</B
 ></A
-> function.
-    </P
+>
+     function.</P
 ></TD
 ></TR
 ></TABLE
 ></DIV
->
-
-    </P
+></P
 ><P
 >     See also:
      <A
@@ -180,8 +175,7 @@ HREF="function.reset.html"
 CLASS="FUNCTION"
 >reset()</B
 ></A
->.
-   </P
+>.</P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

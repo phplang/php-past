@@ -1,0 +1,223 @@
+<HTML
+><HEAD
+><TITLE
+>func_get_args</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Miscellaneous functions"
+HREF="ref.misc.html"><LINK
+REL="PREVIOUS"
+TITLE="func_get_arg"
+HREF="function.func-get-arg.html"><LINK
+REL="NEXT"
+TITLE="func_num_args"
+HREF="function.func-num-args.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.func-get-arg.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.func-num-args.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="FUNCTION.FUNC-GET-ARGS"
+>func_get_args</A
+></H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN16801"
+></A
+>func_get_args -- Returns an array comprising a function's argument list.</DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN16804"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><CODE
+CLASS="FUNCDEF"
+>int func_get_args</CODE
+>(void );<P
+></P
+></DIV
+><P
+>	 Returns an array in which each element is the corresponding
+	 member of the current user-defined function's argument
+	 list. <B
+CLASS="FUNCTION"
+>func_get_args()</B
+> will generate a warning
+	 if called from outside of a function definition.
+    </P
+><P
+>     <DIV
+CLASS="INFORMALEXAMPLE"
+><P
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>&lt;?php
+function foo() {
+   $numargs = func_num_args();
+   echo "Number of arguments: $numargs&lt;br&gt;\n";
+   if ( $numargs &gt;= 2 ) {
+      echo "Second argument is: " . func_get_arg( 1 ) . "&lt;br&gt;\n";
+   }
+   $arg_list = func_get_args();
+   for ( $i = 0; $i &lt; $numargs; $i++ ) {
+      echo "Argument $i is: " . $arg_list[$i] . "&lt;br&gt;\n";
+   }
+} 
+
+foo( 1, 2, 3 );
+?&gt;
+	  </PRE
+><P
+></P
+></DIV
+>
+	</P
+><P
+>	 <B
+CLASS="FUNCTION"
+>func_get_args()</B
+> may be used in conjunction
+	 with <A
+HREF="function.func-num-args.html"
+><B
+CLASS="FUNCTION"
+>func_num_args()</B
+></A
+> and
+	 <A
+HREF="function.func-get-arg.html"
+><B
+CLASS="FUNCTION"
+>func_get_arg()</B
+></A
+> to allow user-defined functions
+	 to accept variable-length argument lists.
+	</P
+><DIV
+CLASS="NOTE"
+><BLOCKQUOTE
+CLASS="NOTE"
+><P
+><B
+>Note: </B
+>	  This function was added in PHP 4.
+	 </P
+></BLOCKQUOTE
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.func-get-arg.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.func-num-args.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>func_get_arg</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.misc.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>func_num_args</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

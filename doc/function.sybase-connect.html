@@ -1,0 +1,195 @@
+<HTML
+><HEAD
+><TITLE
+>sybase_connect</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Sybase functions"
+HREF="ref.sybase.html"><LINK
+REL="PREVIOUS"
+TITLE="sybase_close"
+HREF="function.sybase-close.html"><LINK
+REL="NEXT"
+TITLE="sybase_data_seek"
+HREF="function.sybase-data-seek.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.sybase-close.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.sybase-data-seek.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="FUNCTION.SYBASE-CONNECT"
+>sybase_connect</A
+></H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN26210"
+></A
+>sybase_connect -- open Sybase server connection</DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN26213"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><CODE
+CLASS="FUNCDEF"
+>int sybase_connect</CODE
+>(string servername, string username, string password);<P
+></P
+></DIV
+><P
+> Returns: A positive Sybase link identifier on success, or
+    false on error.
+    </P
+><P
+> sybase_connect() establishes a connection to a Sybase server.
+    The servername argument has to be a valid servername that is defined
+    in the 'interfaces' file.
+    </P
+><P
+> In case a second call is made to sybase_connect() with the
+    same arguments, no new link will be established, but instead, the
+    link identifier of the already opened link will be returned.
+    </P
+><P
+> The link to the server will be closed as soon as the
+    execution of the script ends, unless it's closed earlier by
+    explicitly calling <A
+HREF="function.sybase-close.html"
+><B
+CLASS="FUNCTION"
+>sybase_close()</B
+></A
+>.
+    </P
+><P
+>See also <A
+HREF="function.sybase-pconnect.html"
+><B
+CLASS="FUNCTION"
+>sybase_pconnect()</B
+></A
+>, 
+                   <A
+HREF="function.sybase-close.html"
+><B
+CLASS="FUNCTION"
+>sybase_close()</B
+></A
+>.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.sybase-close.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.sybase-data-seek.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>sybase_close</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.sybase.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>sybase_data_seek</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

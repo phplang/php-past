@@ -4,7 +4,7 @@
 >mysql_fetch_array</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -71,13 +71,13 @@ NAME="FUNCTION.MYSQL-FETCH-ARRAY"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN15919"
+NAME="AEN18016"
 ></A
 >mysql_fetch_array -- Fetch a result row as an associative array</DIV
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN15922"
+NAME="AEN18019"
 ></A
 ><H2
 >Description</H2
@@ -99,8 +99,7 @@ CLASS="OPTIONAL"
 ><P
 > 
      Returns an array that corresponds to the fetched row, or false
-     if there are no more rows.
-    </P
+     if there are no more rows.</P
 ><P
 >     <B
 CLASS="FUNCTION"
@@ -114,8 +113,7 @@ CLASS="FUNCTION"
 ></A
 >.  In addition to storing the
      data in the numeric indices of the result array, it also stores
-     the data in associative indices, using the field names as keys.
-    </P
+     the data in associative indices, using the field names as keys.</P
 ><P
 >     If two or more columns of the result have the same field names,
      the last column will take precedence. To access the other column(s)
@@ -131,8 +129,7 @@ CLASS="PROGRAMLISTING"
 ><P
 ></P
 ></DIV
->
-    </P
+></P
 ><P
 >     An important thing to note is that using
      <B
@@ -146,8 +143,7 @@ CLASS="FUNCTION"
 >mysql_fetch_row()</B
 ></A
 >, while it
-     provides a significant added value.
-    </P
+     provides a significant added value.</P
 ><P
 >     The optional second argument <TT
 CLASS="PARAMETER"
@@ -159,8 +155,8 @@ CLASS="PARAMETER"
 CLASS="FUNCTION"
 >mysql_fetch_array()</B
 > is a constant and can take
-     the following values: MYSQL_ASSOC, MYSQL_NUM, and MYSQL_BOTH.
-    </P
+     the following values: MYSQL_ASSOC, MYSQL_NUM, and MYSQL_BOTH. (This
+	 feature was added in PHP 3.0.7)</P
 ><P
 >     For further details, also see
      <A

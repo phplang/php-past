@@ -1,0 +1,24 @@
+--$Id: 008.php3t,v 1.1 1998/08/23 03:10:14 rocky Exp $
+--TITLE--
+Unset() index loop                                            ...
+--URL--
+ary/008.phtml
+--EXPECT--
+KEY: 0, VAL: a
+KEY: 1, VAL: b
+KEY: 2, VAL: c
+<HR>
+<HR>
+KEY: 0, VAL: d
+KEY: 1, VAL: e
+KEY: 2, VAL: f
+<HR>
+<HR>
+KEY: 0, VAL: g
+KEY: 1, VAL: h
+KEY: 2, VAL: i
+<HR>
+<HR>
+KEY: 0, VAL: j
+KEY: 1, VAL: k
+KEY: 2, VAL: l

@@ -1,0 +1,32 @@
+#!/bin/sh
+
+php=${PHP:-../php}
+
+count=0
+fail=0
+
+for d in *; do
+  if [ -d $d ]; then
+    okay=1
+    if [ -f $d/extension ]; then
+      e=`cat $d/extension`
+      okay=`echo "<?echo extension_loaded('$e');" | $php -q`
+    fi
+
+    if [ "x$okay" = "x1" ]; then
+      for i in `find $d -name "*.php3t" -print | sort`; do
+        ./testphp $i
+        if [ $? -gt 0 ]; then
+          echo $i >> test.log
+          diff -w -c a.tmp b.tmp >> test.log
+          fail=`expr $fail + 1`
+        fi
+        count=`expr $count + 1`
+      done
+    fi
+  fi
+done
+
+rm -f php* *.tmp
+echo failed $fail out of $count
+exit $fail

@@ -4,7 +4,7 @@
 >passthru</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -12,11 +12,11 @@ REL="UP"
 TITLE="Program Execution functions"
 HREF="ref.exec.html"><LINK
 REL="PREVIOUS"
-TITLE="system"
-HREF="function.system.html"><LINK
+TITLE="exec"
+HREF="function.exec.html"><LINK
 REL="NEXT"
-TITLE="Forms Data Format functions"
-HREF="ref.fdf.html"></HEAD
+TITLE="system"
+HREF="function.system.html"></HEAD
 ><BODY
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
@@ -42,7 +42,7 @@ WIDTH="10%"
 ALIGN="left"
 VALIGN="bottom"
 ><A
-HREF="function.system.html"
+HREF="function.exec.html"
 >Prev</A
 ></TD
 ><TD
@@ -55,7 +55,7 @@ WIDTH="10%"
 ALIGN="right"
 VALIGN="bottom"
 ><A
-HREF="ref.fdf.html"
+HREF="function.system.html"
 >Next</A
 ></TD
 ></TR
@@ -71,13 +71,13 @@ NAME="FUNCTION.PASSTHRU"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN7062"
+NAME="AEN23741"
 ></A
 >passthru -- Execute an external program and display raw output</DIV
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN7065"
+NAME="AEN23744"
 ></A
 ><H2
 >Description</H2
@@ -141,23 +141,39 @@ CLASS="EMPHASIS"
 >image/gif</I
 > and
      then calling a pbmplus program to output a gif, you can create
-     PHP scripts that output images directly.
-    </P
+     PHP scripts that output images directly.</P
 ><P
->     See also <A
+>	 See also <A
 HREF="function.exec.html"
 ><B
 CLASS="FUNCTION"
 >exec()</B
 ></A
-> and <A
-HREF="function.fpassthru.html"
+>,
+	 <A
+HREF="function.system.html"
 ><B
 CLASS="FUNCTION"
->fpassthru()</B
+>system()</B
 ></A
+>, <A
+HREF="function.popen.html"
+><B
+CLASS="FUNCTION"
+>popen()</B
+></A
+>,
+	 <A
+HREF="function.escapeshellcmd.html"
+><B
+CLASS="FUNCTION"
+>EscapeShellCmd()</B
+></A
+>, and the <A
+HREF="language.operators.execution.html"
+>backtick operator</A
 >.
-   </P
+	</P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -174,7 +190,7 @@ WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
 ><A
-HREF="function.system.html"
+HREF="function.exec.html"
 >Prev</A
 ></TD
 ><TD
@@ -190,7 +206,7 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><A
-HREF="ref.fdf.html"
+HREF="function.system.html"
 >Next</A
 ></TD
 ></TR
@@ -199,7 +215,7 @@ HREF="ref.fdf.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->system</TD
+>exec</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"
@@ -212,7 +228,7 @@ HREF="ref.exec.html"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->Forms Data Format functions</TD
+>system</TD
 ></TR
 ></TABLE
 ></DIV

@@ -1,0 +1,19 @@
+The files log-header.php3, log-footer.php3, log-db.php3, and log-test.php3
+are an example of a logging system that emulates the logging functions in
+PHP/FI2.
+
+To use it, define 'logging.method=METHOD' in your php3.ini file, and
+include (or auto-append and auto-prepend) the log-header.php3 and
+log-footer.php3 files at the head or foot of your pages. The file
+'log-METHOD.php3' will be included to figure out what lower-level
+functions to use for storing the data.
+
+For log-db.php3, you can also set the logging.directory variable to
+specify the root directory to store the logging databases in.
+
+Note that these scripts are provided as an example only, and are not
+thoroughly tested. You use them at your own risk. Questions about them
+should be directed to the general PHP3 mailing list (php3@lists.php.net).
+Nobody has submitted support files for other logging methods (such
+as mysql). Mail asking for such support will likely be ignored.
+

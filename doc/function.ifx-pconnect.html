@@ -4,7 +4,7 @@
 >ifx_pconnect</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -71,13 +71,13 @@ NAME="FUNCTION.IFX-PCONNECT"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN12023"
+NAME="AEN13548"
 ></A
 >ifx_pconnect -- Open persistent Informix connection</DIV
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN12026"
+NAME="AEN13551"
 ></A
 ><H2
 >Description</H2
@@ -106,8 +106,7 @@ CLASS="OPTIONAL"
 ><P
 > 
      Returns: A positive Informix persistent link identifier on success,
-     or false on error
-    </P
+     or false on error</P
 ><P
 >     <B
 CLASS="FUNCTION"
@@ -119,8 +118,7 @@ HREF="function.ifx-connect.html"
 CLASS="FUNCTION"
 >ifx_connect()</B
 ></A
-> with two major differences.
-    </P
+> with two major differences.</P
 ><P
 > 
      This function behaves exactly like <A
@@ -134,8 +132,7 @@ CLASS="FUNCTION"
      First, when connecting, the function would first try to find a
      (persistent) link that's already open with the same host,
      username and password.  If one is found, an identifier for it
-     will be returned instead of opening a new connection.
-    </P
+     will be returned instead of opening a new connection.</P
 ><P
 > 
      Second, the connection to the SQL server will not be closed when
@@ -150,12 +147,10 @@ CLASS="FUNCTION"
      close links established by <B
 CLASS="FUNCTION"
 >ifx_pconnect()</B
->).
-    </P
+>).</P
 ><P
 > 
-     This type of links is therefore called 'persistent'.
-    </P
+     This type of links is therefore called 'persistent'.</P
 ><P
 >     See also:  
      <A
@@ -164,8 +159,7 @@ HREF="function.ifx-connect.html"
 CLASS="FUNCTION"
 >ifx_connect()</B
 ></A
->.
-   </P
+>.</P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

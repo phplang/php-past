@@ -1,0 +1,180 @@
+<HTML
+><HEAD
+><TITLE
+>hw_mapid</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Hyperwave functions"
+HREF="ref.hyperwave.html"><LINK
+REL="PREVIOUS"
+TITLE="hw_InsertObject"
+HREF="function.hw-insertobject.html"><LINK
+REL="NEXT"
+TITLE="hw_Modifyobject"
+HREF="function.hw-modifyobject.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.hw-insertobject.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.hw-modifyobject.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="FUNCTION.HW-MAPID"
+>hw_mapid</A
+></H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN11203"
+></A
+>hw_mapid -- Maps global id on virtual local id</DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN11206"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><CODE
+CLASS="FUNCDEF"
+>int hw_mapid</CODE
+>(int connection, int server id, int object id);<P
+></P
+></DIV
+><P
+>      Maps a global object id on any hyperwave server, even those
+      you did not connect to with <A
+HREF="function.hw-connect.html"
+><B
+CLASS="FUNCTION"
+>hw_connect()</B
+></A
+>,
+      onto a virtual object id. This virtual object id can then be
+      used as any other object id, e.g. to obtain the object record
+      with <A
+HREF="function.hw-getobject.html"
+><B
+CLASS="FUNCTION"
+>hw_getobject()</B
+></A
+>. The server id is the
+      first part of the global object id (GOid) of the object which
+      is actually the IP number as an integer.</P
+><P
+>      Note: In order to use this function you will have to set
+      the F_DISTRIBUTED flag, which can currently only be set at
+      compile time in hg_comm.c. It is not set by default. Read
+      the comment at the beginning of hg_comm.c
+      </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.hw-insertobject.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.hw-modifyobject.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>hw_InsertObject</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.hyperwave.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>hw_Modifyobject</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

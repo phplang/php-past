@@ -1,0 +1,11 @@
+--$Id: 005.php3t,v 1.1 1998/08/23 03:32:52 rocky Exp $
+--TITLE--
+sprintf() function                                            ...
+--URL--
+func/005.phtml
+--EXPECT--
+sprintf string truncate test:   passed
+sprintf padding and align test: passed
+sprintf octal and hex test:     passed
+sprintf octal binary test:      passed
+sprintf float test:             passed

@@ -1,0 +1,22 @@
+--$Id: 015.php3t,v 1.1 1998/08/23 03:10:18 rocky Exp $
+--TITLE--
+ksort() function                                              ...
+--URL--
+ary/015.phtml
+--EXPECT--
+Before being sorted
+====================
+1
+2
+3
+three
+one
+two
+After being sorted
+====================
+1
+2
+3
+one
+two
+three

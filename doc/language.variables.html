@@ -1,0 +1,271 @@
+<HTML
+><HEAD
+><TITLE
+>Variables</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Language Reference"
+HREF="langref.html"><LINK
+REL="PREVIOUS"
+TITLE="Type juggling"
+HREF="language.types.type-juggling.html"><LINK
+REL="NEXT"
+TITLE="Predefined variables"
+HREF="language.variables.predefined.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="language.types.type-juggling.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="language.variables.predefined.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="CHAPTER"
+><H1
+><A
+NAME="LANGUAGE.VARIABLES"
+>Chapter 7. Variables</A
+></H1
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Table of Contents</B
+></DT
+><DT
+><A
+HREF="language.variables.html#LANGUAGE.VARIABLES.BASICS"
+>Basics</A
+></DT
+><DT
+><A
+HREF="language.variables.predefined.html"
+>Predefined variables</A
+></DT
+><DT
+><A
+HREF="language.variables.scope.html"
+>Variable scope</A
+></DT
+><DT
+><A
+HREF="language.variables.variable.html"
+>Variable variables</A
+></DT
+><DT
+><A
+HREF="language.variables.external.html"
+>Variables from outside PHP</A
+></DT
+></DL
+></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="LANGUAGE.VARIABLES.BASICS"
+>Basics</A
+></H1
+><P
+>    Variables in PHP are represented by a dollar sign followed by the
+    name of the variable. The variable name is case-sensitive.
+    <DIV
+CLASS="INFORMALEXAMPLE"
+><P
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+> 
+$var = "Bob";
+$Var = "Joe";
+echo "$var, $Var"; // outputs "Bob, Joe"
+     </PRE
+><P
+></P
+></DIV
+>
+   </P
+><P
+>    In PHP3, variables are always assigned by value. That is to say,
+    when you assign an expression to a variable, the entire value of
+    the original expression is copied into the destination
+    variable. This means, for instance, that after assigning one
+    variable's value to another, changing one of those variables will
+    have no effect on the other. For more information on this kind of
+    assignment, see <A
+HREF="language.expressions.html"
+>Expressions</A
+>.
+   </P
+><P
+>    PHP4 offers another way to assign values to variables:
+    <I
+CLASS="EMPHASIS"
+>assign by reference</I
+>. This means that the new
+    variable simply references (in other words, "becomes an alias for"
+    or "points to") the original variable. Changes to the new variable
+    affect the original, and vice versa. This also means that no
+    copying is performed; thus, the assignment happens more
+    quickly. However, any speedup will likely be noticed only in tight
+    loops or when assigning large arrays or objects.
+   </P
+><P
+>    To assign by reference, simply prepend an ampersand (&amp;) to the
+    beginning of the variable which is being assigned (the source
+    variable). For instance, the following code snippet outputs 'My
+    name is Bob' twice:
+
+    <DIV
+CLASS="INFORMALEXAMPLE"
+><P
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>&lt;?php
+$foo = 'Bob';              // Assign the value 'Bob' to $foo
+$bar = &amp;$foo;              // Reference $foo via $bar.
+$bar = "My name is $bar";  // Alter $bar...
+echo $foo;                 // $foo is altered too.
+echo $bar;
+?&gt;
+     </PRE
+><P
+></P
+></DIV
+>
+   </P
+><P
+>    One important thing to note is that only named variables may be
+    assigned by reference.
+    <DIV
+CLASS="INFORMALEXAMPLE"
+><P
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>&lt;?php
+$foo = 25;
+$bar = &amp;$foo;      // This is a valid assignment.
+$bar = &amp;(24 * 7);  // Invalid; references an unnamed expression.
+
+function test() {
+   return 25;
+}
+
+$bar = &amp;test();    // Invalid.
+?&gt;
+     </PRE
+><P
+></P
+></DIV
+>
+   </P
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="language.types.type-juggling.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="language.variables.predefined.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Type juggling</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="langref.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Predefined variables</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

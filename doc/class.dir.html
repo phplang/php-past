@@ -4,7 +4,7 @@
 >dir</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -71,13 +71,13 @@ NAME="CLASS.DIR"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN6887"
+NAME="AEN7759"
 ></A
 >dir -- directory class</DIV
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN6890"
+NAME="AEN7762"
 ></A
 ><H2
 >Description</H2
@@ -92,38 +92,38 @@ CLASS="FUNCDEF"
 ></P
 ></DIV
 ><P
->	A pseudo-object oriented mechanism for reading a directory.  The
-	given <TT
+>     A pseudo-object oriented mechanism for reading a directory.  The
+     given <TT
 CLASS="PARAMETER"
 ><I
 >directory</I
 ></TT
-> is opened.  Two properties 
-	are available once directory has been opened.  The handle property
-	can be used with other directory functions such as <A
+> is opened.  Two properties
+     are available once directory has been opened.  The handle
+     property can be used with other directory functions such as
+     <A
 HREF="function.readdir.html"
 ><B
 CLASS="FUNCTION"
 >readdir()</B
 ></A
->,
-	<A
+>, <A
 HREF="function.rewinddir.html"
 ><B
 CLASS="FUNCTION"
 >rewinddir()</B
 ></A
-> and <A
+> and
+     <A
 HREF="function.closedir.html"
 ><B
 CLASS="FUNCTION"
 >closedir()</B
 ></A
->.  The path
-	property is set to path the directory that was opened.  Three methods are
-	available: read, rewind and close.
-
-	<TABLE
+>.  The path property is set to path
+     the directory that was opened.  Three methods are available:
+     read, rewind and close.
+     <TABLE
 WIDTH="100%"
 BORDER="0"
 CELLPADDING="0"
@@ -135,7 +135,10 @@ CLASS="EXAMPLE"
 CLASS="EXAMPLE"
 ><P
 ><B
->Example 1. Dir() Example</B
+>Example 1. <B
+CLASS="FUNCTION"
+>Dir()</B
+> Example</B
 ></P
 ><PRE
 CLASS="PROGRAMLISTING"
@@ -146,13 +149,13 @@ while($entry=$d-&#62;read()) {
     echo $entry."&lt;br&#62;\n";
 }
 $d-&#62;close();
-	</PRE
+      </PRE
 ></DIV
 ></TD
 ></TR
 ></TABLE
 >
-   </P
+    </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

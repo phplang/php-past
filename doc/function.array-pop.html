@@ -4,7 +4,7 @@
 >array_pop</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -12,11 +12,11 @@ REL="UP"
 TITLE="Array functions"
 HREF="ref.array.html"><LINK
 REL="PREVIOUS"
-TITLE="array_push"
-HREF="function.array-push.html"><LINK
+TITLE="array_pad"
+HREF="function.array-pad.html"><LINK
 REL="NEXT"
-TITLE="array_unshift"
-HREF="function.array-unshift.html"></HEAD
+TITLE="array_push"
+HREF="function.array-push.html"></HEAD
 ><BODY
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
@@ -42,7 +42,7 @@ WIDTH="10%"
 ALIGN="left"
 VALIGN="bottom"
 ><A
-HREF="function.array-push.html"
+HREF="function.array-pad.html"
 >Prev</A
 ></TD
 ><TD
@@ -55,7 +55,7 @@ WIDTH="10%"
 ALIGN="right"
 VALIGN="bottom"
 ><A
-HREF="function.array-unshift.html"
+HREF="function.array-push.html"
 >Next</A
 ></TD
 ></TR
@@ -71,13 +71,13 @@ NAME="FUNCTION.ARRAY-POP"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN2991"
+NAME="AEN3658"
 ></A
 >array_pop -- Pop the element off the end of array</DIV
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN2994"
+NAME="AEN3661"
 ></A
 ><H2
 >Description</H2
@@ -107,9 +107,7 @@ CLASS="PARAMETER"
 ><I
 >array</I
 ></TT
-> by one element.
-
-    </P
+> by one element.</P
 ><P
 >     <TABLE
 WIDTH="100%"
@@ -135,15 +133,12 @@ $fruit = array_pop($stack);
       </PRE
 ><P
 >       After this, $stack has only 2 elements: "orange" and "apple",
-       and $fruit has "raspberry".
-     </P
+       and $fruit has "raspberry".</P
 ></DIV
 ></TD
 ></TR
 ></TABLE
->
-
-    </P
+></P
 ><P
 >     See also <A
 HREF="function.array-push.html"
@@ -174,12 +169,10 @@ CLASS="NOTE"
 ><P
 ><B
 >Note: </B
->      This function was added in PHP 4.0. 
-    </P
+>      This function was added in PHP 4.0.</P
 ></BLOCKQUOTE
 ></DIV
->
-   </P
+></P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -196,7 +189,7 @@ WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
 ><A
-HREF="function.array-push.html"
+HREF="function.array-pad.html"
 >Prev</A
 ></TD
 ><TD
@@ -212,7 +205,7 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><A
-HREF="function.array-unshift.html"
+HREF="function.array-push.html"
 >Next</A
 ></TD
 ></TR
@@ -221,7 +214,7 @@ HREF="function.array-unshift.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->array_push</TD
+>array_pad</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"
@@ -234,7 +227,7 @@ HREF="ref.array.html"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->array_unshift</TD
+>array_push</TD
 ></TR
 ></TABLE
 ></DIV

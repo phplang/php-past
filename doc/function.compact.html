@@ -4,7 +4,7 @@
 >compact</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -71,13 +71,14 @@ NAME="FUNCTION.COMPACT"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN3324"
+NAME="AEN4004"
 ></A
->compact -- Create array containing variables and their values</DIV
+>compact --      Create array containing variables and their values
+    </DIV
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN3327"
+NAME="AEN4007"
 ></A
 ><H2
 >Description</H2
@@ -106,9 +107,7 @@ CLASS="FUNCTION"
      <B
 CLASS="FUNCTION"
 >compact()</B
-> handles it recursively.
-
-    </P
+> handles it recursively.</P
 ><P
 >     For each of these, <B
 CLASS="FUNCTION"
@@ -124,9 +123,7 @@ CLASS="FUNCTION"
 >extract()</B
 ></A
 >.
-     It returns the output array with all the variables added to it.
-
-    </P
+     It returns the output array with all the variables added to it.</P
 ><P
 >     <TABLE
 WIDTH="100%"
@@ -156,15 +153,13 @@ $location_vars = array("city", "state");
 $result = compact("event", $location_vars);
       </PRE
 ><P
->       After this, $result will be array("event" =&#62; "SIGGRAPH", "city" =&#62; "San Francisco", "state" =&#62; "CA").
-     </P
+>       After this, $result will be array("event" =&#62; "SIGGRAPH", "city"
+       =&#62; "San Francisco", "state" =&#62; "CA").</P
 ></DIV
 ></TD
 ></TR
 ></TABLE
->
-
-    </P
+></P
 ><P
 >     See also <A
 HREF="function.extract.html"
@@ -181,12 +176,10 @@ CLASS="NOTE"
 ><P
 ><B
 >Note: </B
->      This function was added in PHP 4.0.
-    </P
+>      This function was added in PHP 4.0.</P
 ></BLOCKQUOTE
 ></DIV
->
-   </P
+></P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

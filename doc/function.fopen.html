@@ -4,7 +4,7 @@
 >fopen</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -71,13 +71,13 @@ NAME="FUNCTION.FOPEN"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN7954"
+NAME="AEN8804"
 ></A
 >fopen -- open file or URL</DIV
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN7957"
+NAME="AEN8807"
 ></A
 ><H2
 >Description</H2
@@ -88,7 +88,10 @@ CLASS="FUNCSYNOPSIS"
 ><CODE
 CLASS="FUNCDEF"
 >int fopen</CODE
->(string filename, string mode);<P
+>(string filename, string mode, int [<SPAN
+CLASS="OPTIONAL"
+>use_include_path</SPAN
+>]);<P
 ></P
 ></DIV
 ><P
@@ -99,14 +102,10 @@ CLASS="PARAMETER"
 ></TT
 > begins with "http://" (not case sensitive), an HTTP
      1.0 connection is opened to the specified server and a file
-     pointer is returned to the beginning of the text of the response.
-
-    </P
+     pointer is returned to the beginning of the text of the response.</P
 ><P
 >     Does not handle HTTP redirects, so you must include trailing
-     slashes on directories.
-
-    </P
+     slashes on directories.</P
 ><P
 >     If <TT
 CLASS="PARAMETER"
@@ -117,9 +116,7 @@ CLASS="PARAMETER"
      connection to the specified server is opened and a pointer to the
      requested file is returned. If the server does not support
      passive mode ftp, this will fail. You can open files for either
-	 reading and writing via ftp (but not both simultaneously).
-
-    </P
+	 reading and writing via ftp (but not both simultaneously).</P
 ><P
 >     If <TT
 CLASS="PARAMETER"
@@ -128,13 +125,9 @@ CLASS="PARAMETER"
 ></TT
 > begins with anything else, the
      file will be opened from the filesystem, and a file pointer to
-     the file opened is returned.
-
-    </P
+     the file opened is returned.</P
 ><P
->     If the open fails, the function returns false.
-
-    </P
+>     If the open fails, the function returns false.</P
 ><P
 >     <TT
 CLASS="PARAMETER"
@@ -148,41 +141,35 @@ CLASS="PARAMETER"
 ><LI
 ><P
 >'r' - Open for reading only; place the file
-      pointer at the beginning of the file.
-      </P
+      pointer at the beginning of the file.</P
 ></LI
 ><LI
 ><P
 >       'r+' - Open for reading and writing; place the file pointer at
-       the beginning of the file.
-      </P
+       the beginning of the file.</P
 ></LI
 ><LI
 ><P
 >       'w' - Open for writing only; place the file pointer at the
        beginning of the file and truncate the file to zero length.
-       If the file does not exist, attempt to create it.
-      </P
+       If the file does not exist, attempt to create it.</P
 ></LI
 ><LI
 ><P
 >       'w+' - Open for reading and writing; place the file pointer at
        the beginning of the file and truncate the file to zero length.
-       If the file does not exist, attempt to create it.
-      </P
+       If the file does not exist, attempt to create it.</P
 ></LI
 ><LI
 ><P
 >       'a' - Open for writing only; place the file pointer at the end
-       of the file. If the file does not exist, attempt to create it.
-      </P
+       of the file. If the file does not exist, attempt to create it.</P
 ></LI
 ><LI
 ><P
 >       'a+' - Open for reading and writing; place the file pointer at
        the end of the file. If the file does not exist, attempt to
-       create it.
-     </P
+       create it.</P
 ></LI
 ></UL
 >
@@ -195,9 +182,13 @@ CLASS="PARAMETER"
 > may contain the letter
      'b'. This is useful only on systems which differentiate between
      binary and text files (i.e., it's useless on Unix). If not
-     needed, this will be ignored.
-
-    </P
+     needed, this will be ignored.</P
+><P
+>     You can use the optional third parameter and set it to "1", if
+     you want to search for the file in the <A
+HREF="configuration.html#INI.INCLUDE-PATH"
+>include_path</A
+>, too.</P
 ><P
 >     <TABLE
 WIDTH="100%"
@@ -222,16 +213,12 @@ $fp = fopen("ftp://user:password@example.com/", "w");</PRE
 ></TD
 ></TR
 ></TABLE
->
-
-    </P
+></P
 ><P
 >     If you are experiencing problems with reading and writing to
      files and you're using the server module version of PHP, remember 
      to make sure that the files and directories you're using are
-     accessible to the server process.
-
-	</P
+     accessible to the server process.</P
 ><P
 >	 On the Windows platform, be careful to escape any backslashes
 	 used in the path to the file, or use forward slashes.
@@ -245,9 +232,7 @@ CLASS="PROGRAMLISTING"
 ><P
 ></P
 ></DIV
->
-
-    </P
+></P
 ><P
 >     See also <A
 HREF="function.fclose.html"
@@ -268,9 +253,7 @@ HREF="function.popen.html"
 CLASS="FUNCTION"
 >popen()</B
 ></A
->.
-
-   </P
+>.</P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

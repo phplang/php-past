@@ -1,0 +1,9 @@
+--$Id: 005.php3t,v 1.2 1998/08/23 02:22:00 rocky Exp $
+--TITLE--
+Three variables in POST data                                  ...
+--URL--
+basic/005.phtml
+--POST--
+a=Hello+World&b=Hello+Again+World&c=1
+--EXPECT--
+Hello World Hello Again World 1

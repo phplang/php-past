@@ -4,7 +4,7 @@
 >hw_Objrec2Array</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -71,13 +71,13 @@ NAME="FUNCTION.HW-OBJREC2ARRAY"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN9708"
+NAME="AEN11309"
 ></A
 >hw_Objrec2Array -- convert attributes from object record to object array</DIV
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN9711"
+NAME="AEN11312"
 ></A
 ><H2
 >Description</H2
@@ -102,8 +102,17 @@ CLASS="PARAMETER"
      Multiple attributes like 'Title' in different languages form its own
      array. The keys of this array are the left part to the colon of the
      attribute value. Currently only the attributes 'Title', 'Description'
-     and 'Keyword' are treated properly.
-   </P
+     and 'Keyword' are treated properly. Other multiple attributes form
+     an index array. Currently only the attribute 'Group' is handled
+     properly.</P
+><P
+>     See also <A
+HREF="function.hw-array2objrec.html"
+><B
+CLASS="FUNCTION"
+>hw_array2objrec()</B
+></A
+>.</P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

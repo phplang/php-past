@@ -4,7 +4,7 @@
 >Connection handling</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -12,8 +12,8 @@ REL="UP"
 TITLE="Features"
 HREF="features.html"><LINK
 REL="PREVIOUS"
-TITLE="PUT method support"
-HREF="features.file-upload.put-method.html"><LINK
+TITLE="Using remote files"
+HREF="features.remote-files.html"><LINK
 REL="NEXT"
 TITLE="Persistent database connections"
 HREF="features.persistent-connections.html"></HEAD
@@ -42,7 +42,7 @@ WIDTH="10%"
 ALIGN="left"
 VALIGN="bottom"
 ><A
-HREF="features.file-upload.put-method.html"
+HREF="features.remote-files.html"
 >Prev</A
 ></TD
 ><TD
@@ -68,7 +68,7 @@ CLASS="CHAPTER"
 ><H1
 ><A
 NAME="FEATURES.CONNECTION-HANDLING"
->Chapter 19. Connection handling</A
+>Chapter 20. Connection handling</A
 ></H1
 ><DIV
 CLASS="NOTE"
@@ -88,18 +88,15 @@ CLASS="NOTE"
 ><UL
 ><LI
 ><P
->0 - NORMAL
-    </P
+>0 - NORMAL</P
 ></LI
 ><LI
 ><P
->1 - ABORTED
-    </P
+>1 - ABORTED</P
 ></LI
 ><LI
 ><P
->2 - TIMEOUT
-   </P
+>2 - TIMEOUT</P
 ></LI
 ></UL
 >
@@ -116,9 +113,7 @@ CLASS="FUNCTION"
 >set_time_limit()</B
 ></A
 >) is hit, the TIMEOUT state flag
-   is turned on.
-
-  </P
+   is turned on.</P
 ><P
 >   You can decide whether or not you want a client disconnect to cause
    your script to be aborted.  Sometimes it is handy to always have your
@@ -156,9 +151,7 @@ CLASS="FUNCTION"
 ></A
 >
    function.  This function will return true if the connection was
-   aborted.
-
-  </P
+   aborted.</P
 ><P
 >   Your script can also be terminated by the built-in script timer.
    The default timeout is 30 seconds.  It can be changed using
@@ -182,9 +175,7 @@ CLASS="FUNCTION"
 >connection_timeout()</B
 ></A
 > function.  This function will
-   return true if a timeout caused the shutdown function to be called.
-
-  </P
+   return true if a timeout caused the shutdown function to be called.</P
 ><P
 >   One thing to note is that both the ABORTED and the TIMEOUT states
    can be active at the same time.  This is possible if you tell
@@ -215,9 +206,7 @@ CLASS="FUNCTION"
 ></A
 >.  This function returns a
    bitfield of the active states.  So, if both states are active it
-   would return 3, for example.
-
- </P
+   would return 3, for example.</P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -234,7 +223,7 @@ WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
 ><A
-HREF="features.file-upload.put-method.html"
+HREF="features.remote-files.html"
 >Prev</A
 ></TD
 ><TD
@@ -259,7 +248,7 @@ HREF="features.persistent-connections.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->PUT method support</TD
+>Using remote files</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"

@@ -1,0 +1,330 @@
+<HTML
+><HEAD
+><TITLE
+>substr</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="String functions"
+HREF="ref.strings.html"><LINK
+REL="PREVIOUS"
+TITLE="strtr"
+HREF="function.strtr.html"><LINK
+REL="NEXT"
+TITLE="substr_replace"
+HREF="function.substr-replace.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.strtr.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.substr-replace.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="FUNCTION.SUBSTR"
+>substr</A
+></H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN26022"
+></A
+>substr -- Return part of a string</DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN26025"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><CODE
+CLASS="FUNCDEF"
+>string substr</CODE
+>(string string, int start, int 
+      [<SPAN
+CLASS="OPTIONAL"
+>length</SPAN
+>]
+     );<P
+></P
+></DIV
+><P
+>     Substr returns the portion of <TT
+CLASS="PARAMETER"
+><I
+>string</I
+></TT
+>
+     specified by the <TT
+CLASS="PARAMETER"
+><I
+>start</I
+></TT
+> and
+     <TT
+CLASS="PARAMETER"
+><I
+>length</I
+></TT
+> parameters.</P
+><P
+>     If <TT
+CLASS="PARAMETER"
+><I
+>start</I
+></TT
+> is positive, the returned string
+     will start at the <TT
+CLASS="PARAMETER"
+><I
+>start</I
+></TT
+>'th character of
+     <TT
+CLASS="PARAMETER"
+><I
+>string</I
+></TT
+>.</P
+><P
+>     Examples:
+     <DIV
+CLASS="INFORMALEXAMPLE"
+><P
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>$rest = substr("abcdef", 1); // returns "bcdef"
+$rest = substr("abcdef", 1, 3); // returns "bcd"
+      </PRE
+><P
+></P
+></DIV
+></P
+><P
+>     If <TT
+CLASS="PARAMETER"
+><I
+>start</I
+></TT
+> is negative, the returned string
+     will start at the <TT
+CLASS="PARAMETER"
+><I
+>start</I
+></TT
+>'th character
+     from the end of <TT
+CLASS="PARAMETER"
+><I
+>string</I
+></TT
+>.</P
+><P
+>     Examples:
+     <DIV
+CLASS="INFORMALEXAMPLE"
+><P
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>$rest = substr("abcdef", -1); // returns "f"
+$rest = substr("abcdef", -2); // returns "ef"
+$rest = substr("abcdef", -3, 1); // returns "d"
+      </PRE
+><P
+></P
+></DIV
+></P
+><P
+>     If <TT
+CLASS="PARAMETER"
+><I
+>length</I
+></TT
+> is given and is positive, the
+     string returned will end <TT
+CLASS="PARAMETER"
+><I
+>length</I
+></TT
+> characters
+     from <TT
+CLASS="PARAMETER"
+><I
+>start</I
+></TT
+>. If this would result in a
+     string with negative length (because the start is past the end of
+     the string), then the returned string will contain the single
+     character at <TT
+CLASS="PARAMETER"
+><I
+>start</I
+></TT
+>.</P
+><P
+>     If <TT
+CLASS="PARAMETER"
+><I
+>length</I
+></TT
+> is given and is negative, the
+     string returned will end <TT
+CLASS="PARAMETER"
+><I
+>length</I
+></TT
+> characters
+     from the end of <TT
+CLASS="PARAMETER"
+><I
+>string</I
+></TT
+>. If this would
+     result in a string with negative length, then the returned string
+     will contain the single character at
+     <TT
+CLASS="PARAMETER"
+><I
+>start</I
+></TT
+>.</P
+><P
+>     Examples:
+     <DIV
+CLASS="INFORMALEXAMPLE"
+><P
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>$rest = substr("abcdef", 1, -1); // returns "bcde"
+      </PRE
+><P
+></P
+></DIV
+></P
+><P
+>     See also <A
+HREF="function.strrchr.html"
+><B
+CLASS="FUNCTION"
+>strrchr()</B
+></A
+> and
+     <A
+HREF="function.ereg.html"
+><B
+CLASS="FUNCTION"
+>ereg()</B
+></A
+>.</P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.strtr.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.substr-replace.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>strtr</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.strings.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>substr_replace</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

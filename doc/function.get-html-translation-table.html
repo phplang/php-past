@@ -1,0 +1,323 @@
+<HTML
+><HEAD
+><TITLE
+>get_html_translation_table</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="String functions"
+HREF="ref.strings.html"><LINK
+REL="PREVIOUS"
+TITLE="flush"
+HREF="function.flush.html"><LINK
+REL="NEXT"
+TITLE="get_meta_tags"
+HREF="function.get-meta-tags.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.flush.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.get-meta-tags.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="FUNCTION.GET-HTML-TRANSLATION-TABLE"
+>get_html_translation_table</A
+></H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN25039"
+></A
+>get_html_translation_table --      Returns the translation table used by
+     <A
+HREF="function.htmlspecialchars.html"
+><B
+CLASS="FUNCTION"
+>htmlspecialchars()</B
+></A
+> and
+     <A
+HREF="function.htmlentities.html"
+><B
+CLASS="FUNCTION"
+>htmlentities()</B
+></A
+>
+    </DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN25044"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><CODE
+CLASS="FUNCDEF"
+>string 
+      get_html_translation_table
+     </CODE
+>(int table);<P
+></P
+></DIV
+><P
+>     <B
+CLASS="FUNCTION"
+>get_html_translation_table()</B
+> will return the
+     translation table that is used internally for
+     <A
+HREF="function.htmlspecialchars.html"
+><B
+CLASS="FUNCTION"
+>htmlspecialchars()</B
+></A
+> and
+     <A
+HREF="function.htmlentities.html"
+><B
+CLASS="FUNCTION"
+>htmlentities()</B
+></A
+>. Ther are two new defines
+     (<TT
+CLASS="PARAMETER"
+><I
+>HTML_ENTITIES</I
+></TT
+>,
+     <TT
+CLASS="PARAMETER"
+><I
+>HTML_SPECIALCHARS</I
+></TT
+>) that allow you to
+     specify the table you want.
+
+     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="EXAMPLE"
+><P
+><B
+>Example 1. Translation Table Example</B
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>$trans = get_html_translation_table (HTML_ENTITIES);
+$str = "Hallo &#38; &lt;Frau&#62; &#38; Krämer";
+$encoded = strtr ($str, $trans);
+      </PRE
+></DIV
+></TD
+></TR
+></TABLE
+>
+
+     The <TT
+CLASS="LITERAL"
+>$encoded</TT
+> variable will now contain: "Hallo
+     &#38;<TT
+CLASS="SGMLTAG"
+>amp</TT
+>;
+     &#38;<TT
+CLASS="SGMLTAG"
+>lt</TT
+>;Frau&#38;<TT
+CLASS="SGMLTAG"
+>gt</TT
+>;
+     &#38;<TT
+CLASS="SGMLTAG"
+>amp</TT
+>; Kr&#38;<TT
+CLASS="SGMLTAG"
+>auml</TT
+>;mer".
+    </P
+><P
+>     The cool thing is using <A
+HREF="function.array-flip.html"
+><B
+CLASS="FUNCTION"
+>array_flip()</B
+></A
+> to change
+     the direction of the translation.
+     <DIV
+CLASS="INFORMALEXAMPLE"
+><P
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>$trans = array_flip ($trans);
+$original = strtr ($str, $trans);
+      </PRE
+><P
+></P
+></DIV
+>
+      The content of <TT
+CLASS="LITERAL"
+>$original</TT
+> would be: "Hallo &#38;
+      &lt;Frau&#62; &#38; Krämer".
+     <DIV
+CLASS="NOTE"
+><BLOCKQUOTE
+CLASS="NOTE"
+><P
+><B
+>Note: </B
+>       This function was added in PHP 4.0.
+      </P
+></BLOCKQUOTE
+></DIV
+>
+    </P
+><P
+>     See also: <A
+HREF="function.htmlspecialchars.html"
+><B
+CLASS="FUNCTION"
+>htmlspecialchars()</B
+></A
+>,
+     <A
+HREF="function.htmlentities.html"
+><B
+CLASS="FUNCTION"
+>htmlentities()</B
+></A
+>, <A
+HREF="function.strtr.html"
+><B
+CLASS="FUNCTION"
+>strtr()</B
+></A
+>,
+     and <A
+HREF="function.array-flip.html"
+><B
+CLASS="FUNCTION"
+>array_flip()</B
+></A
+>.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.flush.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.get-meta-tags.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>flush</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.strings.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>get_meta_tags</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

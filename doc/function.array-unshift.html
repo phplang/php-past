@@ -4,7 +4,7 @@
 >array_unshift</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -12,11 +12,11 @@ REL="UP"
 TITLE="Array functions"
 HREF="ref.array.html"><LINK
 REL="PREVIOUS"
-TITLE="array_pop"
-HREF="function.array-pop.html"><LINK
+TITLE="array_splice"
+HREF="function.array-splice.html"><LINK
 REL="NEXT"
-TITLE="array_shift"
-HREF="function.array-shift.html"></HEAD
+TITLE="array_values"
+HREF="function.array-values.html"></HEAD
 ><BODY
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
@@ -42,7 +42,7 @@ WIDTH="10%"
 ALIGN="left"
 VALIGN="bottom"
 ><A
-HREF="function.array-pop.html"
+HREF="function.array-splice.html"
 >Prev</A
 ></TD
 ><TD
@@ -55,7 +55,7 @@ WIDTH="10%"
 ALIGN="right"
 VALIGN="bottom"
 ><A
-HREF="function.array-shift.html"
+HREF="function.array-values.html"
 >Next</A
 ></TD
 ></TR
@@ -71,14 +71,14 @@ NAME="FUNCTION.ARRAY-UNSHIFT"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN3018"
+NAME="AEN3865"
 ></A
 >array_unshift -- Push one or more elements
      onto the beginning of array</DIV
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN3021"
+NAME="AEN3868"
 ></A
 ><H2
 >Description</H2
@@ -111,9 +111,7 @@ CLASS="PARAMETER"
 ></TT
 >. Note that the list
      of elements is prepended as a whole, so that the prepended
-     elements stay in the same order.
-
-    </P
+     elements stay in the same order.</P
 ><P
 >     Returns the new number of elements in the
      <TT
@@ -121,9 +119,7 @@ CLASS="PARAMETER"
 ><I
 >array</I
 ></TT
->.
-
-    </P
+>.</P
 ><P
 >     <TABLE
 WIDTH="100%"
@@ -153,9 +149,7 @@ array_unshift($queue, "p4", "p5", "p6");
 ></TABLE
 >
      This would result in $queue having 5 elements: "p4", "p5", "p6",
-     "p1", and "p3".
-
-    </P
+     "p1", and "p3".</P
 ><P
 >     See also <A
 HREF="function.array-shift.html"
@@ -186,12 +180,10 @@ CLASS="NOTE"
 ><P
 ><B
 >Note: </B
->      This function was added in PHP 4.0. 
-    </P
+>      This function was added in PHP 4.0.</P
 ></BLOCKQUOTE
 ></DIV
->
-   </P
+></P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -208,7 +200,7 @@ WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
 ><A
-HREF="function.array-pop.html"
+HREF="function.array-splice.html"
 >Prev</A
 ></TD
 ><TD
@@ -224,7 +216,7 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><A
-HREF="function.array-shift.html"
+HREF="function.array-values.html"
 >Next</A
 ></TD
 ></TR
@@ -233,7 +225,7 @@ HREF="function.array-shift.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->array_pop</TD
+>array_splice</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"
@@ -246,7 +238,7 @@ HREF="ref.array.html"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->array_shift</TD
+>array_values</TD
 ></TR
 ></TABLE
 ></DIV

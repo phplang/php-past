@@ -32,18 +32,8 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: mssql.c,v 1.15 1999/03/15 21:43:14 fmk Exp $ */
+/* $Id: mssql.c,v 1.16 1999/12/26 18:44:42 rasmus Exp $ */
 #define IS_EXT_MODULE
-#ifdef THREAD_SAFE
-# ifndef PHP_31
-#  undef THREAD_SAFE /*no need in 3.0*/
-# else
-#  include "tls.h"
-	DWORD mssqltls;
-	static int numthreads=0;
-	void *mssql_mutex;
-# endif
-#endif
 
 #if !(WIN32|WINNT)
 #include "config.h"
@@ -57,11 +47,7 @@
 #if HAVE_MSSQL
 #define SAFE_STRING(s) ((s)?(s):"")
 
-#if PHP_31
-#include "ext/standard/php3_string.h"
-#else
 #include "functions/php3_string.h"
-#endif
 #include "php3_list.h"
 
 #if BROKEN_MSSQL_PCONNECTS
@@ -102,18 +88,9 @@ DLEXPORT php3_module_entry *get_module(void) { return &mssql_module_entry; }
 #endif
 
 
-#if defined(THREAD_SAFE)
-
-#define msSQL_GLOBAL(a) php3_mssql_module->a
-
-#define msSQL_TLS_VARS \
-	mssql_module *php3_mssql_module=TlsGetValue(mssqltls)
-
-#else
 #define msSQL_GLOBAL(a) php3_mssql_module.a
 #define msSQL_TLS_VARS
 mssql_module php3_mssql_module;
-#endif
 
 
 
@@ -218,26 +195,8 @@ static void _close_mssql_plink(mssql_link *mssql_ptr)
 
 int php3_minit_mssql(INIT_FUNC_ARGS)
 {
-//	char *interface_file;
+/*	char *interface_file; */
 	long compatability_mode,connecttimeout;
-#if defined(THREAD_SAFE)
-	mssql_module *php3_mssql_module;
-	PHP3_MUTEX_ALLOC(mssql_mutex);
-	PHP3_MUTEX_LOCK(mssql_mutex);
-	numthreads++;
-	if (numthreads==1){
-		if (!PHP3_TLS_PROC_STARTUP(mssqltls)){
-			PHP3_MUTEX_UNLOCK(mssql_mutex);
-			PHP3_MUTEX_FREE(mssql_mutex);
-			return FAILURE;
-		}
-	}
-	PHP3_MUTEX_UNLOCK(mssql_mutex);
-	if(!PHP3_TLS_THREAD_INIT(mssqltls,php3_mssql_module,mssql_module)){
-		PHP3_MUTEX_FREE(mssql_mutex);
-		return FAILURE;
-	}
-#endif
 
 	if (dbinit()==FAIL) {
 		return FAILURE;
@@ -312,18 +271,6 @@ int php3_rinit_mssql(INIT_FUNC_ARGS)
 int php3_mshutdown_mssql(void)
 {
 	msSQL_TLS_VARS;
-#ifdef THREAD_SAFE
-	PHP3_TLS_THREAD_FREE(php3_mssql_module);
-	PHP3_MUTEX_LOCK(mssql_mutex);
-	numthreads--;
-	if (numthreads<1) {
-		PHP3_TLS_PROC_SHUTDOWN(mssqltls);
-		PHP3_MUTEX_UNLOCK(mssql_mutex);
-		PHP3_MUTEX_FREE(mssql_mutex);
-		return SUCCESS;
-	}
-	PHP3_MUTEX_UNLOCK(mssql_mutex);
-#endif
 	dbexit();
 	return SUCCESS;
 }
@@ -539,11 +486,7 @@ static void php3_mssql_do_connect(INTERNAL_FUNCTION_PARAMETERS,int persistent)
 			int type,link;
 			void *ptr;
 
-#ifdef THREAD_SAFE
-			if (index_ptr->type != _php3_le_index_ptr()) {
-#else
 			if (index_ptr->type != le_index_ptr) {
-#endif
 				RETURN_FALSE;
 			}
 			link = (int) index_ptr->ptr;
@@ -605,11 +548,7 @@ static void php3_mssql_do_connect(INTERNAL_FUNCTION_PARAMETERS,int persistent)
 		
 		/* add it to the hash */
 		new_index_ptr.ptr = (void *) return_value->value.lval;
-#ifdef THREAD_SAFE
-		new_index_ptr.type = _php3_le_index_ptr();
-#else
 		new_index_ptr.type = le_index_ptr;
-#endif
 		if (_php3_hash_update(list,hashed_details,hashed_details_length+1,(void *) &new_index_ptr, sizeof(list_entry),NULL)==FAILURE) {
 			efree(hashed_details);
 			RETURN_FALSE;

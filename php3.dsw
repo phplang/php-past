@@ -1,0 +1,386 @@
+Microsoft Developer Studio Workspace File, Format Version 6.00
+# WARNING: DO NOT EDIT OR DELETE THIS WORKSPACE FILE!
+
+###############################################################################
+
+Project: "calendar"=.\win32\calendar.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name php3
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "crypt"=.\win32\crypt.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name php3
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "db2"=.\win32\db2.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name php3
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "dbase"=.\win32\dbase.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name php3
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "dbm"=.\win32\dbm.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name php3
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "filepro"=.\win32\filepro.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name php3
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "gd"=.\win32\gd.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name php3
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "hyperwave"=.\win32\hyperwave.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name php3
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "imap4"=.\win32\imap4.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name php3
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "ldap"=.\win32\ldap.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name php3
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "msql"=.\win32\msql.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name php3
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "msql1"=.\win32\msql1.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name php3
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "mssql"=.\win32\mssql.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "mysql"=.\win32\mysql.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name php3
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "oci73"=.\win32\oci73.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name php3
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "oci80"=.\win32\oci80.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name php3
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "pcre"=.\win32\pcre.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name php3
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name pcrelib
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "pcrelib"=.\pcrelib\pcrelib.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "pdflib"=.\win32\pdflib.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name php3
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "php3"=.\win32\php3.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name php_custom_build
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "php_custom_build"=.\win32\php_custom_build.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "snmp"=.\win32\snmp.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name php3
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "solid23"=.\win32\solid23.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name php3
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "xml"=.\win32\xml.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name php3
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "zlib"=.\win32\zlib.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name php3
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Global:
+
+Package=<5>
+{{{
+}}}
+
+Package=<3>
+{{{
+}}}
+
+###############################################################################
+

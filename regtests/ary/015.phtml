@@ -1,0 +1,29 @@
+<?php 
+$a[1] = 1;
+$a[3] = 2;
+$a[4] = 3;
+$a[zebra] = three;
+$a[blah] = one;
+$a[grey] = two;
+?>
+Before being sorted
+====================
+<?php 
+reset($a);
+$b = current($a);
+while ($b != ""):
+        echo "$b\n";
+    $b = next($a);
+endwhile;
+ksort($a);
+?>
+After being sorted
+====================
+<?php 
+reset($a);
+$b = current($a);
+while ($b != ""):
+        echo "$b\n";
+    $b = next($a);
+endwhile;
+?>

@@ -4,7 +4,7 @@
 >ldap_search</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -71,13 +71,13 @@ NAME="FUNCTION.LDAP-SEARCH"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN13339"
+NAME="AEN14885"
 ></A
 >ldap_search -- Search LDAP tree</DIV
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN13342"
+NAME="AEN14888"
 ></A
 ><H2
 >Description</H2
@@ -96,8 +96,7 @@ CLASS="OPTIONAL"
 ></P
 ></DIV
 ><P
->     Returns a search result identifier or false on error.
-    </P
+>     Returns a search result identifier or false on error.</P
 ><P
 >  
      <B
@@ -112,28 +111,24 @@ CLASS="PARAMETER"
 >base_dn</I
 ></TT
 > specifies the base DN
-     for the directory.
-    </P
+     for the directory.</P
 ><P
 >     There is a optional fourth parameter, that can be added to
      restrict the attributes and values returned by the server to just
      those required. This is much more efficient than the default
      action (which is to return all attributes and their associated
      values). The use of the fourth parameter should therefore be
-     considered good practice.
-    </P
+     considered good practice.</P
 ><P
 >     The fourth parameter is a standard PHP string array of the
      required attributes, eg array("mail","sn","cn") Note that the
      "dn" is always returned irrespective of which attributes types
-     are requested.
-    </P
+     are requested.</P
 ><P
 >     Note too that some directory server hosts will be configured to
      return no more than a preset number of entries. If this occurs,
      the server will indicate that it has only returned a partial
-     results set. 
-    </P
+     results set.</P
 ><P
 >     The search filter can be simple or advanced, using boolean
      operators in the format described in the LDAP doumentation (see
@@ -142,8 +137,7 @@ HREF="http://developer.netscape.com/tech/directory/"
 TARGET="_top"
 >Netscape Directory SDK</A
 >
-     for full information on filters).
-    </P
+     for full information on filters).</P
 ><P
 >     The example below retrieves the organizational unit, surname,
      given name and email address for all people in "My Company" where
@@ -184,9 +178,7 @@ print $info["count"]." entries returned&lt;p&#62;";</PRE
 ></TD
 ></TR
 ></TABLE
->
-
-   </P
+></P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

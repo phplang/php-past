@@ -2,7 +2,7 @@
    +----------------------------------------------------------------------+
    | PHP HTML Embedded Scripting Language Version 3.0                     |
    +----------------------------------------------------------------------+
-   | Copyright (c) 1997-1999 PHP Development Team (See Credits file)      |
+   | Copyright (c) 1997-2000 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
    | it under the terms of one of the following licenses:                 |
@@ -27,10 +27,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: constants.c,v 1.25 1999/05/19 02:06:06 rasmus Exp $ */
-#ifdef THREAD_SAFE
-#include "tls.h"
-#endif
+/* $Id: constants.c,v 1.27 2000/01/01 04:31:12 sas Exp $ */
 #include "php.h"
 #include "internal_functions.h"
 #include "constants.h"
@@ -39,9 +36,7 @@
 
 
 
-#ifndef THREAD_SAFE
 static HashTable php3_constants;
-#endif
 static void register_constant(php3_constant *c);
 
 void free_php3_constant(php3_constant *c)

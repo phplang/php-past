@@ -1,0 +1,228 @@
+<HTML
+><HEAD
+><TITLE
+>krsort</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Array functions"
+HREF="ref.array.html"><LINK
+REL="PREVIOUS"
+TITLE="key"
+HREF="function.key.html"><LINK
+REL="NEXT"
+TITLE="ksort"
+HREF="function.ksort.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.key.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.ksort.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="FUNCTION.KRSORT"
+>krsort</A
+></H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN4265"
+></A
+>krsort -- Sort an array by key in reverse order</DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN4268"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><CODE
+CLASS="FUNCDEF"
+>int krsort</CODE
+>(array array);<P
+></P
+></DIV
+><P
+>     Sorts an array by key in reverse order, maintaining key to data correlations. This
+     is useful mainly for associative arrays.
+
+    <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="EXAMPLE"
+><P
+><B
+>Example 1. <B
+CLASS="FUNCTION"
+>krsort()</B
+> example</B
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>$fruits = array("d"=&#62;"lemon","a"=&#62;"orange","b"=&#62;"banana","c"=&#62;"apple");
+krsort($fruits);
+for(reset($fruits); $key = key($fruits); next($fruits)) {
+    echo "fruits[$key] = ".$fruits[$key]."\n";
+}</PRE
+></DIV
+></TD
+></TR
+></TABLE
+>
+     This example would display:
+     <TT
+CLASS="COMPUTEROUTPUT"
+>fruits[d] = lemon
+fruits[c] = apple
+fruits[b] = banana
+fruits[a] = orange</TT
+></P
+><P
+>     See also <A
+HREF="function.asort.html"
+><B
+CLASS="FUNCTION"
+>asort()</B
+></A
+>, <A
+HREF="function.arsort.html"
+><B
+CLASS="FUNCTION"
+>arsort()</B
+></A
+>, <A
+HREF="function.ksort.html"
+><B
+CLASS="FUNCTION"
+>ksort()</B
+></A
+>
+     <A
+HREF="function.sort.html"
+><B
+CLASS="FUNCTION"
+>sort()</B
+></A
+>, and <A
+HREF="function.rsort.html"
+><B
+CLASS="FUNCTION"
+>rsort()</B
+></A
+>.</P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.key.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.ksort.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>key</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.array.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>ksort</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,235 @@
+<HTML
+><HEAD
+><TITLE
+>array_pad</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Array functions"
+HREF="ref.array.html"><LINK
+REL="PREVIOUS"
+TITLE="array_merge"
+HREF="function.array-merge.html"><LINK
+REL="NEXT"
+TITLE="array_pop"
+HREF="function.array-pop.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.array-merge.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.array-pop.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="FUNCTION.ARRAY-PAD"
+>array_pad</A
+></H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN3630"
+></A
+>array_pad -- Pad array to the specified length with a value</DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN3633"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><CODE
+CLASS="FUNCDEF"
+>array array_pad</CODE
+>(array input, int pad_size, mixed pad_value);<P
+></P
+></DIV
+><P
+>     <B
+CLASS="FUNCTION"
+>array_pad()</B
+> returns a copy of the
+     <TT
+CLASS="PARAMETER"
+><I
+>input</I
+></TT
+> padded to size specified by
+     <TT
+CLASS="PARAMETER"
+><I
+>pad_size</I
+></TT
+> with value
+     <TT
+CLASS="PARAMETER"
+><I
+>pad_value</I
+></TT
+>. If
+     <TT
+CLASS="PARAMETER"
+><I
+>pad_size</I
+></TT
+> is positive then the array is
+     padded on the right, if it's negative then on the left. If the
+     absolute value of <TT
+CLASS="PARAMETER"
+><I
+>pad_size</I
+></TT
+> is less than or
+     equal to the length of the <TT
+CLASS="PARAMETER"
+><I
+>input</I
+></TT
+> then no
+     padding takes place.
+    </P
+><P
+>     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="EXAMPLE"
+><P
+><B
+>Example 1. <B
+CLASS="FUNCTION"
+>array_pad()</B
+> example</B
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>$input = array(12, 10, 9);
+
+$result = array_pad($input, 5, 0);
+// result is array(12, 10, 9, 0, 0)
+
+$result = array_pad($input, -7, -1);
+// result is array(-1, -1, -1, -1, 12, 10, 9)
+
+$result = array_pad($input, 2, "noop");
+// not padded
+      </PRE
+></DIV
+></TD
+></TR
+></TABLE
+>
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.array-merge.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.array-pop.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>array_merge</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.array.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>array_pop</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

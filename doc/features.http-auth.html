@@ -4,7 +4,7 @@
 >HTTP authentication with PHP</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -93,9 +93,7 @@ CLASS="FUNCTION"
 >Header()</B
 ></A
 >
-   function for more information.
-   
-  </P
+   function for more information.</P
 ><P
 >   An example script fragment which would force client authentication
    on a page would be the following:
@@ -132,16 +130,12 @@ CLASS="PROGRAMLISTING"
 ></TD
 ></TR
 ></TABLE
->
-
-  </P
+></P
 ><P
 >   Instead of simply printing out the $PHP_AUTH_USER and
    $PHP_AUTH_PW, you would probably want to check the username and
    password for validity.  Perhaps by sending a query to a database,
-   or by looking up the user in a dbm file.
-
-  </P
+   or by looking up the user in a dbm file.</P
 ><P
 >   Watch out for buggy Internet Explorer browsers out there.  They
    seem very picky about the order of the headers.  Sending the
@@ -153,32 +147,26 @@ CLASS="EMPHASIS"
 CLASS="ERRORCODE"
 >HTTP/1.0 401</SPAN
 > header seems to do the trick
-   for now.
-
-  </P
+   for now.</P
 ><P
 >   In order to prevent someone from writing a script which reveals
    the password for a page that was authenticated through a
    traditional external mechanism, the PHP_AUTH variables will not be
    set if external authentication is enabled for that particular
    page. In this case, the $REMOTE_USER variable can be used to
-   identify the externally-authenticated user.
-
-  </P
+   identify the externally-authenticated user.</P
 ><P
 >   Note, however, that the above does not prevent someone who
    controls a non-authenticated URL from stealing passwords from
-   authenticated URLs on the same server.
-  </P
+   authenticated URLs on the same server.</P
 ><P
 >   Both Netscape and Internet Explorer will clear the local browser
    window's authentication cache for the realm upon receiving a
    server response of 401. This can effectively "log out" a user,
    forcing them to re-enter their username and password. Some people
-   use this to "time out" logins, or provide a "log-out" button.
-  </P
+   use this to "time out" logins, or provide a "log-out" button.</P
 ><P
->   </P
+></P
 ><TABLE
 WIDTH="100%"
 BORDER="0"
@@ -228,13 +216,10 @@ CLASS="PROGRAMLISTING"
    has shown that Lynx does not clear the authentication credentials
    with a 401 server response, so pressing back and then forward
    again will open the resource (as long as the credential
-   requirements haven't changed).
-  </P
+   requirements haven't changed).</P
 ><P
 >   Also note that this does not work using Microsoft's IIS server and
-   the CGI version of PHP due to a limitation of IIS.
-
- </P
+   the CGI version of PHP due to a limitation of IIS.</P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

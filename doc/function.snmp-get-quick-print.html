@@ -1,0 +1,198 @@
+<HTML
+><HEAD
+><TITLE
+>snmp_get_quick_print</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="SNMP functions"
+HREF="ref.snmp.html"><LINK
+REL="PREVIOUS"
+TITLE="snmpwalkoid"
+HREF="function.snmpwalkoid.html"><LINK
+REL="NEXT"
+TITLE="snmp_set_quick_print"
+HREF="function.snmp-set-quick-print.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.snmpwalkoid.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.snmp-set-quick-print.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="FUNCTION.SNMP-GET-QUICK-PRINT"
+>snmp_get_quick_print</A
+></H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN24658"
+></A
+>snmp_get_quick_print -- Fetch the current value of the UCD library's quick_print setting
+    </DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN24661"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><CODE
+CLASS="FUNCDEF"
+>boolean snmp_get_quick_print</CODE
+>(void );<P
+></P
+></DIV
+><P
+>     Returns the current value stored in the UCD Library for quick_print.  
+     quick_print is off by default.
+
+     <DIV
+CLASS="INFORMALEXAMPLE"
+><P
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+> 
+$quickprint = snmp_get_quick_print();
+      </PRE
+><P
+></P
+></DIV
+></P
+><P
+>     Above function call would return <SPAN
+CLASS="SYSTEMITEM"
+>false</SPAN
+> if
+     quick_print is on, and <SPAN
+CLASS="SYSTEMITEM"
+>true</SPAN
+> if quick_print
+     is on.</P
+><P
+>     <B
+CLASS="FUNCTION"
+>snmp_get_quick_print()</B
+> is only available when using
+     the UCD SNMP library.  This function is not available when using the
+     Windows SNMP library.</P
+><P
+>     See: <A
+HREF="function.snmp-set-quick-print.html"
+><B
+CLASS="FUNCTION"
+>snmp_set_quick_print()</B
+></A
+> for a full description
+     of what quick_print does.</P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.snmpwalkoid.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.snmp-set-quick-print.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>snmpwalkoid</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.snmp.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>snmp_set_quick_print</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -4,7 +4,7 @@
 >switch</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -86,9 +86,7 @@ CLASS="LITERAL"
      <TT
 CLASS="LITERAL"
 >switch</TT
-> statement is for.
- 
-    </P
+> statement is for.</P
 ><P
 >     The following two examples are two different ways to write the
      same thing, one using a series of <TT
@@ -106,9 +104,7 @@ CLASS="INFORMALEXAMPLE"
 ></P
 ><PRE
 CLASS="PROGRAMLISTING"
-> /* example 1 */
- 
- if ($i == 0) {
+> if ($i == 0) {
      print "i equals 0";
  }
  if ($i == 1) {
@@ -118,8 +114,6 @@ CLASS="PROGRAMLISTING"
      print "i equals 2";
  }
  
- /* example 2 */
- 
  switch ($i) {
      case 0:
          print "i equals 0";
@@ -135,15 +129,13 @@ CLASS="PROGRAMLISTING"
 ><P
 ></P
 ></DIV
->
- 
-    </P
+></P
 ><P
 >     It is important to understand how the <TT
 CLASS="LITERAL"
 >switch</TT
 >
-     statement is executed in order to avoid messups.  The
+     statement is executed in order to avoid mistakes.  The
      <TT
 CLASS="LITERAL"
 >switch</TT
@@ -152,26 +144,26 @@ CLASS="LITERAL"
      Only when a <TT
 CLASS="LITERAL"
 >case</TT
-> statement is found with a value that matches the
-     value of the <TT
+> statement is found with a value
+     that matches the value of the <TT
 CLASS="LITERAL"
 >switch</TT
-> expression, PHP begins to
-     execute the statements.  PHP continues to execute the statements
-     until the end of the <TT
+> expression
+     does PHP begin to execute the statements.  PHP continues to execute the
+     statements until the end of the <TT
 CLASS="LITERAL"
 >switch</TT
-> block, or the first
-     time it sees a <TT
+> block,
+     or the first time it sees a <TT
 CLASS="LITERAL"
 >break</TT
-> statement.  If you don't
-     write a <TT
+> statement.
+     If you don't write a <TT
 CLASS="LITERAL"
 >break</TT
-> statement at the end of a case's
-     statement list, PHP will go on executing the statements of the
-     following case.  For example:
+> statement at the end
+     of a case's statement list, PHP will go on executing the statements
+     of the following case.  For example:
  
      <DIV
 CLASS="INFORMALEXAMPLE"
@@ -179,9 +171,7 @@ CLASS="INFORMALEXAMPLE"
 ></P
 ><PRE
 CLASS="PROGRAMLISTING"
-> /* example 3 */
- 
- switch ($i) {
+> switch ($i) {
      case 0:
          print "i equals 0";
      case 1:
@@ -193,9 +183,7 @@ CLASS="PROGRAMLISTING"
 ><P
 ></P
 ></DIV
->
- 
-    </P
+></P
 ><P
 >     Here, if $i equals to 0, PHP would execute all of the print
      statements!  If $i equals to 1, PHP would execute the last
@@ -207,8 +195,50 @@ CLASS="LITERAL"
 > statements
      (even though you may want to avoid supplying them on purpose under
      certain circumstances).
- 
-    </P
+   </P
+><P
+>	In a <TT
+CLASS="LITERAL"
+>switch</TT
+> statement, the condition is
+	evaluated only once and the result is compared to each
+	<TT
+CLASS="LITERAL"
+>case</TT
+> statement. In an <TT
+CLASS="LITERAL"
+>elseif</TT
+>
+	statement, the condition is evaluated again. If your condition is
+	more complicated than a simple compare and/or is in a tight loop,
+	a <TT
+CLASS="LITERAL"
+>switch</TT
+> may be faster.
+   </P
+><P
+>     The statement list for a case can also be empty, which simply
+     passes control into the statement list for the next case.
+     <DIV
+CLASS="INFORMALEXAMPLE"
+><P
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+> switch ($i) {
+     case 0:
+     case 1:
+     case 2:
+         print "i is less than 3 but not negative";
+         break;
+     case 3:
+         print "i is 3";
+ }
+      </PRE
+><P
+></P
+></DIV
+></P
 ><P
 >     A special case is the default case.  This case matches anything
      that wasn't matched by the other cases.  For example:
@@ -219,9 +249,7 @@ CLASS="INFORMALEXAMPLE"
 ></P
 ><PRE
 CLASS="PROGRAMLISTING"
-> /* example 4 */
- 
- switch ($i) {
+> switch ($i) {
      case 0:
          print "i equals 0";
          break;
@@ -239,18 +267,48 @@ CLASS="PROGRAMLISTING"
 ></P
 ></DIV
 >
- 
-    </P
+   </P
 ><P
->     Another fact worth mentioning is that the <TT
+>     The <TT
 CLASS="LITERAL"
 >case</TT
->
-     expression may be any expression that evaluates to a scalar type,
-     that is, integer or floating-point numbers and strings.  Arrays or
-     objects are meaningless in that context.
- 
+> expression may be any expression that
+     evaluates to a simple type, that is, integer or floating-point
+     numbers and strings.  Arrays or objects cannot be used here unless
+     they are dereferenced to a simple type.
    </P
+><P
+>	The alternative syntax for control structures is supported with
+	switches. For more information, see <A
+HREF="control-structures.alternative-syntax.html"
+>Alternative
+	 syntax for control structures</A
+> .
+ 
+     <DIV
+CLASS="INFORMALEXAMPLE"
+><P
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>switch ($i):
+     case 0:
+         print "i equals 0";
+         break;
+     case 1:
+         print "i equals 1";
+         break;
+     case 2:
+         print "i equals 2";
+         break;
+     default:
+         print "i is not equal to 0, 1 or 2";
+ endswitch;
+      </PRE
+><P
+></P
+></DIV
+></P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -308,9 +366,12 @@ HREF="control-structures.html"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
-><TT
-CLASS="LITERAL"
->require</TT
+><A
+HREF="function.require.html"
+><B
+CLASS="FUNCTION"
+>require()</B
+></A
 ></TD
 ></TR
 ></TABLE

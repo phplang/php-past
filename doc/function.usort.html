@@ -1,0 +1,292 @@
+<HTML
+><HEAD
+><TITLE
+>usort</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Array functions"
+HREF="ref.array.html"><LINK
+REL="PREVIOUS"
+TITLE="uksort"
+HREF="function.uksort.html"><LINK
+REL="NEXT"
+TITLE="Aspell functions"
+HREF="ref.aspell.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.uksort.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="ref.aspell.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="FUNCTION.USORT"
+>usort</A
+></H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN4559"
+></A
+>usort --      Sort an array by values using a user-defined comparison function
+    </DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN4562"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><CODE
+CLASS="FUNCDEF"
+>void usort</CODE
+>(array array, function cmp_function);<P
+></P
+></DIV
+><P
+>     This function will sort an array by its values using a
+     user-supplied comparison function.  If the array you wish to sort
+     needs to be sorted by some non-trivial criteria, you should use
+     this function.</P
+><P
+>     The comparison function must return an integer less than, equal
+     to, or greater than zero if the first argument is considered to
+     be respectively less than, equal to, or greater than the
+     second. If two members compare as equal, their order in the
+     sorted array is undefined.
+     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="EXAMPLE"
+><P
+><B
+>Example 1. <B
+CLASS="FUNCTION"
+>usort()</B
+> example</B
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>function cmp($a,$b) {   
+    if ($a == $b) return 0;
+    return ($a &#62; $b) ? -1 : 1;
+}
+$a = array(3,2,5,6,1);
+usort($a, cmp);
+while(list($key,$value) = each($a)) {
+    echo "$key: $value\n";
+}</PRE
+></DIV
+></TD
+></TR
+></TABLE
+>
+     This example would display:
+     <TT
+CLASS="COMPUTEROUTPUT"
+>0: 6
+1: 5
+2: 3
+3: 2
+4: 1</TT
+>
+
+    <DIV
+CLASS="NOTE"
+><BLOCKQUOTE
+CLASS="NOTE"
+><P
+><B
+>Note: </B
+>      Obviously in this trivial case the <A
+HREF="function.rsort.html"
+><B
+CLASS="FUNCTION"
+>rsort()</B
+></A
+>
+      function would be more appropriate.
+     </P
+></BLOCKQUOTE
+></DIV
+>
+
+    <DIV
+CLASS="WARNING"
+><P
+></P
+><TABLE
+CLASS="WARNING"
+BORDER="1"
+WIDTH="100%"
+><TR
+><TD
+ALIGN="CENTER"
+><B
+>Warning</B
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+><P
+>      The underlying quicksort function in some C libraries (such as on
+      Solaris systems) may cause PHP to crash if the comparison function
+      does not return consistent values.
+     </P
+></TD
+></TR
+></TABLE
+></DIV
+></P
+><P
+>     See also:
+      <A
+HREF="function.arsort.html"
+><B
+CLASS="FUNCTION"
+>arsort()</B
+></A
+>, <A
+HREF="function.asort.html"
+><B
+CLASS="FUNCTION"
+>asort()</B
+></A
+>,
+      <A
+HREF="function.ksort.html"
+><B
+CLASS="FUNCTION"
+>ksort()</B
+></A
+>, <A
+HREF="function.rsort.html"
+><B
+CLASS="FUNCTION"
+>rsort()</B
+></A
+> and
+      <A
+HREF="function.sort.html"
+><B
+CLASS="FUNCTION"
+>sort()</B
+></A
+>.</P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.uksort.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="ref.aspell.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>uksort</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.array.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Aspell functions</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

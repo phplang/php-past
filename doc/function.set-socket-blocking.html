@@ -1,0 +1,173 @@
+<HTML
+><HEAD
+><TITLE
+>set_socket_blocking</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Network functions"
+HREF="ref.network.html"><LINK
+REL="PREVIOUS"
+TITLE="pfsockopen"
+HREF="function.pfsockopen.html"><LINK
+REL="NEXT"
+TITLE="syslog"
+HREF="function.syslog.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.pfsockopen.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.syslog.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="FUNCTION.SET-SOCKET-BLOCKING"
+>set_socket_blocking</A
+></H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN18870"
+></A
+>set_socket_blocking -- Set blocking/non-blocking mode on a socket</DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN18873"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><CODE
+CLASS="FUNCDEF"
+>int set_socket_blocking</CODE
+>(int socket descriptor, int mode);<P
+></P
+></DIV
+><P
+>     If <TT
+CLASS="PARAMETER"
+><I
+>mode</I
+></TT
+> is false, the given socket
+     descriptor will be switched to non-blocking mode, and if true, it
+     will be switched to blocking mode.  This affects calls like
+     <A
+HREF="function.fgets.html"
+><B
+CLASS="FUNCTION"
+>fgets()</B
+></A
+> that read from the socket.  In
+     non-blocking mode an fgets() call will always return right away
+     while in blocking mode it will wait for data to become available
+     on the socket.</P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.pfsockopen.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.syslog.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>pfsockopen</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.network.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>syslog</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,6 +1,88 @@
 PHP 3.0 CHANGE LOG                                                    ChangeLog
 |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 
+January 1, 2000, Version 3.0.13
+- Fixed timezone conflict on AIX (Sascha)
+- Fixed mysql_errno() problem when compiled against MySQL 3.23.x (Rasmus)
+- Fixed buffer overruns in iptcembed(). (Thies)
+- OCI8 now returns NULL values in LONG columns correct. (Thies) 
+- Check for broken apxs (Rasmus)
+- explode() is now binary-safe. (Thies)
+- strpos() is now binary-safe. (Thies)
+- Add configure command to phpinfo() output (Stig)
+- added sketchy support for GNU recode 3.5 (Kristian)
+- Added tmpfile() function (Stig)
+- fixed trim(), chop(), ltrim(), etc. to remove NULL characters as 
+  well. (Colin Viebrock)
+- krsort() added, although someone forgot to mention it ... (Thies)
+- Upgraded regex library to alpha3.8 (Sascha)
+- RFC-854 fix for internal FTP-Code. Commands have to end in "\r\n" (Thies) 
+- GD-1.7.x detection (Rasmus)
+- added patch to functions/mime.c so that form submit with lynx and old IE
+  works properly (closes bug #2362, code by ash@ash.de)
+- tempnam() now uses mkstemp() if available (Stig)
+- serialize()/var_dump() now honor the precision set in php3.ini for
+  double-values. (Thies)
+- Add mysql_change_user() function (Rasmus)
+- Fixed garbage returned at the end of certain Sybase-Columns (Thies)
+  Patch submitted by: neal@wanlink.com
+- XML_Parse_Into_Struct() no longer eats data. (Thies)
+- Added portable access to stdio streams by using the 
+  "php://stream-name" syntax (Sascha)
+- Fixed zombie problem when using backquotes. eg: $x = `ls /`; (Thies)
+- Locale settings are restored correctly at request end if they
+  were changed in the script (Jouni)
+- Fixed wrong values returned by gmmktime() and its inconsistent behaviour.
+  Now gmmktime([args]) == mktime([args]) + date('Z', mktime([args])) should
+  always be true (Jouni)
+- Proper handling of the slightly different behavior of Fdf Toolkit 4.0 (U. Steinmann)
+- Fixed LOB/Persistent-Connection related OCI8-Crash (Thies)
+- Added a function for applying a gamma correction to a GD image
+  Example: imagegammacorrect($im,1.8,2.2); (markonen)
+- Added a function for applying a gamma correction to a HTML color value
+  Example: $maccolor = gamma_correct_tag("#cccccc",2.2,1.8); (markonen)
+- Ora_Fetch_Into now resets the returned array in all cases (Thies)
+- Fixed SEGV in mcal make_event_object() and
+  typo in mcal_list_alarms() (Andrew Skalski)
+- Fixed memory leak in pdf_open_memory_image() (Uwe Steinmann)
+- Added FTP support (Andrew Skalski)
+- Added optional allowable_tags arguments to strip_tags(),
+  gzgetss() and fgetss() to allow you to specify a string of tags
+  that are not to be stripped (Rasmus)
+- Fix longstanding Apache .conf nested directive problem (Rasmus)
+- OCI8 fix for fetching empty LOBs (Thies)
+- OCI8 supports appending and positioning when saving LOBs (Thies)
+- Added Mcal support (Mark Musone)
+- OCI8 doesn't use define callbacks any longer. (Thies)
+- Safe-Mode fix for oci8 savefile() function. (Thies)
+- Added ldap_get_values_len function (Stig Venaas)
+- Added more functions to posix module (Kristian).
+- Close loophole that allowed virtual() to be used on a PHP file
+  without an error (Ken Coar)
+- Add versioning support for shared library (Sascha)
+- Fix bug with '%' in error_log() strings when run as Apache module (Ken Coar)
+- Return false from mysql_query() and mysql_db_query() in case saving the
+  result set data fails (Zeev)
+- Make --with-apache --with-xml pick up Apache-bundled expat lib (Rasmus)
+- Carry special Apache CFLAGS into PHP build for apxs build
+  This should fix any PHP/mod_ssl compile issues (Rasmus)
+- Fixed a crash that would occur if wddx_deserialize did not receive
+  a valid packet (Andrey)
+- Fixed sem_get() on AIX (Sascha)
+- Removed --with-shared-apache to avoid problems with Apache 1.3.9 (Sascha)
+- Improved speed of uniqid() by using the combined LCG and removing
+  the extra usleep() (Sascha)
+- Introduced general combined linear congruential generator (Sascha)
+- OciFetchInto now resets the returned array in all cases (Thies)
+- Fixed flushing of cached information to disk in DBA's DB2 module (Sascha)
+- DiskFreeSpace() fix (Thies)
+- pdflib 2.01 support (Uwe Steinmann)
+- fixed mem-leak in sysv-shm (Thies)
+- Add IMSP module (Chuck Hagenbuch)
+- Add gd-1.6.x PNG functions (Rasmus from drew@elysium.ltd.uk)
+- Fix [s]printf 0-padding issues (Rasmus)
+- Fix a crash bug in number_format(), in case of very large numbers (Zeev)
+
 July 28, 1999, Version 3.0.12
 - gmktime/mktime DST fix (RL and Jim)
 - Add imap_search (Chuck Hagenbuch)

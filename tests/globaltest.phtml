@@ -1,0 +1,48 @@
+<?
+
+$a="andi";
+function b
+(
+	global $a;
+	echo "\$a == $a during function call\n";
+	$a ="ifat";
+);
+
+echo "\$a == $a before function call\n";
+b();
+echo "\$a == $a after function call\n";
+
+cfunction factorial ()
+{
+	global $n, $a;
+
+	
+	echo "\$a == $a in fatorial function\n";	
+	if ($n == 0 || $n == 1) {
+		return 1;
+	}
+	$i = $n--;
+
+	return $i * factorial();
+
+}
+
+cfunction print_global()
+{
+	global $a;
+
+	echo "\$a == $a in print_global\n";
+	unset($a);
+	echo "\$a == $a in print_global\n";
+}
+print_global();
+echo $a;
+/*echo "\$a == $a after print_global\n";*/
+/*
+$n = 6;
+unset ($n);
+echo $n;
+*/
+/*
+echo factorial() . "\n";*/
+global $a;

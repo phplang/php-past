@@ -1,4 +1,4 @@
-dnl $Id: configure.in,v 1.448 1999/07/27 14:30:53 rasmus Exp $
+dnl $Id: configure.in,v 1.484 2000/01/01 02:30:52 sas Exp $
 dnl Process this file with autoconf to produce a configure script.
 
 AC_INIT(main.c)
@@ -9,6 +9,12 @@ AC_SUBST(PHP_VERSION)
 AC_CONFIG_HEADER(config.h)
 AM_SANITY_CHECK
 AM_MAINTAINER_MODE
+
+CONFIGURE_COMMAND=$0
+for arg in "$@"; do
+    CONFIGURE_COMMAND="$CONFIGURE_COMMAND '$arg'"
+done
+AC_SUBST(CONFIGURE_COMMAND)
 
 dnl We want this one before the checks, so the checks can modify CFLAGS.
 test -z "$CFLAGS" && auto_cflags=1
@@ -26,6 +32,7 @@ else
     AC_MSG_RESULT($1.$2 (ok))
 fi
 AC_PROG_CC
+AM_PROG_CC_STDC
 AC_PROG_RANLIB
 AC_PROG_CC_C_O
 AC_PROG_LN_S
@@ -69,7 +76,6 @@ AC_MSG_RESULT($php_cv_cc_dashr)
 if test $php_cv_cc_dashr = "yes"; then
 	ld_runpath_switch="-R"
 	apxs_runpath_switch="-Wl,-R'"
-    raw_runpath_switch="-R"
 else
 	AC_MSG_CHECKING([if compiler supports -Wl,-rpath,])
 	AC_CACHE_VAL(php_cv_cc_rpath,[
@@ -81,14 +87,20 @@ else
 	if test $php_cv_cc_rpath = "yes"; then
 		ld_runpath_switch="-Wl,-rpath,"
 		apxs_runpath_switch="-Wl,'-rpath "
-        raw_runpath_switch="-rpath "
 	else
 		dnl something innocuous
 		ld_runpath_switch="-L"
 		apxs_runpath_switch="-L'"
-        raw_runpath_switch="-L"
 	fi
 fi
+
+AC_MSG_CHECKING([if compiler supports -Wl,--version-script])
+AC_CACHE_VAL(php_cv_cc_vscript,[
+        SLIBS=$LIBS
+        LIBS="-Wl,--version-script=$srcdir/php.map $LIBS"
+        AC_TRY_LINK([],[],php_cv_cc_vscript=yes,php_cv_cc_vscript=no)
+        LIBS=$SLIBS ])
+AC_MSG_RESULT($php_cv_cc_vscript)
 
 AC_CHECK_SIZEOF(long, 8)
 AC_CHECK_SIZEOF(int, 4)
@@ -108,9 +120,10 @@ if test -d /usr/pkg/include -a -d /usr/pkg/lib ; then
        LDFLAGS="$LDFLAGS -L/usr/pkg/lib"
 fi
 
-AC_CHECK_LIB(nsl, gethostname, [
-  LIBS="-lnsl $LIBS"
-  AC_DEFINE(HAVE_LIBNSL) ], [])
+AC_CHECK_FUNC(gethostent, [], [
+  AC_CHECK_LIB(nsl, gethostent, [
+    LIBS="-lnsl $LIBS"
+    AC_DEFINE(HAVE_LIBNSL) ], [])])
 
 AC_CHECK_LIB(c, socket, [:], [
  AC_CHECK_LIB(socket, socket, [
@@ -245,11 +258,13 @@ AC_CHECK_TYPE(ptrdiff_t, unsigned long)
 	
 dnl Checks for library functions.
 AC_FUNC_VPRINTF
-AC_CHECK_FUNCS(memcpy memmove strdup strerror strcasecmp strstr flock lockf putenv tempnam usleep setlocale gettimeofday setvbuf srand48 lrand48 srandom random link symlink regcomp getlogin cuserid vsnprintf gcvt utime crypt setitimer rint unsetenv strftime setsockopt tzset statvfs statfs inet_aton shutdown truncate getpgid getsid getrlimit snprintf)
+AC_CHECK_FUNCS(memcpy memmove strdup strerror strcasecmp strstr flock lockf putenv tempnam usleep setlocale gettimeofday setvbuf srand48 lrand48 srandom random link symlink regcomp getlogin cuserid vsnprintf gcvt utime crypt setitimer rint unsetenv strftime setsockopt tzset statvfs statfs inet_aton shutdown truncate getpgid getsid getrlimit snprintf ctermid setsid mkfifo)
 AC_FUNC_UTIME_NULL
 AC_FUNC_ALLOCA
 AC_BROKEN_SPRINTF
 AC_REPLACE_FUNCS(getopt)
+
+PHP_DECLARED_TIMEZONE
 
 dnl AIX keeps in_addr_t in /usr/include/netinet/in.h
 dnl AC_MSG_CHECKING(for in_addr_t)
@@ -276,8 +291,7 @@ AC_CRYPT_CAP
 AC_MSG_CHECKING(for Apache module support via DSO through APXS)
 AC_ARG_WITH(apxs,
 [  --with-apxs[=FILE]      Build shared Apache module.  FILE is the optional
-                          pathname to the Apache apxs tool; defaults to "apxs".
-                          (This option needs Perl installed)],
+                          pathname to the Apache apxs tool; defaults to "apxs".],
 [
     if test "$withval" = "yes"; then
         withval=apxs
@@ -288,9 +302,12 @@ AC_ARG_WITH(apxs,
     APACHE_INCLUDE="-I`$APXS -q INCLUDEDIR`"
     BINNAME=libphp3.so
     INSTALL_IT="\$(APXS) -i -a -n php3 $BINNAME"
-    CFLAGS_SHLIB=`perl -V:cccdlflags | cut -d\' -f2`
-    LDFLAGS_SHLIB=`perl -V:lddlflags | cut -d\' -f2`
-    LDFLAGS_SHLIB_EXPORT=`perl -V:ccdlflags | cut -d\' -f2`
+    CFLAGS_SHLIB="`$APXS -q CFLAGS_SHLIB`"
+    LDFLAGS_SHLIB="`$APXS -q LDFLAGS_SHLIB`"
+    CFLAGS="$CFLAGS `$APXS -q CFLAGS`"
+	if test "a`$APXS -q LD_SHLIB`" = "a" || test "`$APXS -q LIBEXECDIR`" = "modules"; then
+		PHP_APXS_BROKEN=yes
+	fi
     PHP_LIBS=-L/usr/local/lib
     STRONGHOLD=
     AC_DEFINE(APACHE)
@@ -300,7 +317,7 @@ AC_ARG_WITH(apxs,
     AC_SUBST(INSTALL_IT)
     AC_SUBST(PHP_LIBS)
     AC_DEFINE(HAVE_AP_CONFIG_H)
-	AC_DEFINE(HAVE_AP_COMPAT_H)
+    AC_DEFINE(HAVE_AP_COMPAT_H)
     AC_MSG_RESULT(yes)
 ],[
     AC_MSG_RESULT(no)
@@ -310,59 +327,32 @@ if test -n "$APXS" ; then
   APXS_CC="`$APXS -q CC`"
 fi
 
-AC_MSG_CHECKING(for Apache module support via DSO through APACI)
-AC_ARG_WITH(shared-apache,
-[  --with-shared-apache[=DIR] Build shared Apache module.  DIR is the top-level 
-                          Apache build directory, defaults to /usr/local/etc/httpd.
-                          (This option needs Perl installed)],
+
+abs_srcdir="`(cd $srcdir && pwd)`"
+versioning="no"
+AC_MSG_CHECKING(whether to enable versioning)
+AC_ARG_ENABLE(versioning,
+[  --enable-versioning     Take advantage of versioning and scoping
+                          Provided by Solaris 2.x and Linux],
 [
-	if test "$withval" = "yes"; then
-	  # Apache's default directory
-	  withval=/usr/local/etc/httpd
-	fi
-	if test "$withval" != "no"; then
-      rpath_raw=yes
-# figure out extra library nonsense
-	  if test -f $withval/src/include/httpd.h; then
-	    APACHE_INCLUDE="-I$withval/src/include -I$withval/src/os/unix"
-	    APACHE_TARGET=$withval/src/modules/php3
-		if test ! -d $APACHE_TARGET; then
-			mkdir $APACHE_TARGET
-		fi
-		CFLAGS_SHLIB=`perl -V:cccdlflags | cut -d\' -f2`
-		LDFLAGS_SHLIB=`perl -V:lddlflags | cut -d\' -f2`
-		LDFLAGS_SHLIB_EXPORT=`perl -V:ccdlflags | cut -d\' -f2`
-	    BINNAME=libmodphp3-so.a
-	    INSTALL_IT="mkdir -p $APACHE_TARGET; cp $BINNAME $srcdir/mod_php3.* $srcdir/php_version.h libphp3.module $extra_copy $APACHE_TARGET; cp $srcdir/apMakefile.tmpl $APACHE_TARGET/Makefile.tmpl; cp $srcdir/apMakefile.libdir $APACHE_TARGET/Makefile.libdir"
-	    AC_DEFINE(APACHE)
-	    AC_MSG_RESULT(yes - Shared Apache 1.3.x)
-		STRONGHOLD=
-		if test -f $withval/src/include/ap_config.h; then
-		AC_DEFINE(HAVE_AP_CONFIG_H)
-		fi
-		if test -f $withval/src/include/ap_compat.h; then
-		AC_DEFINE(HAVE_AP_COMPAT_H)
-		if test ! -f $withval/src/include/ap_config_auto.h; then
-    	AC_MSG_ERROR(Please run Apache's configure or src/Configure program once and try again)
-		fi
-		else
-		if test -f $withval/src/include/compat.h; then
-		AC_DEFINE(HAVE_OLD_COMPAT_H)
-		fi
-		fi
-      else
-	    AC_MSG_RESULT(no)
-	    AC_MSG_ERROR(Invalid Apache directory - unable to find httpd.h under $withval/src/include)
-	  fi
-	fi
-	AC_SUBST(APACHE_INCLUDE)
-	AC_SUBST(APACHE_TARGET)
-	AC_SUBST(INSTALL_IT)
-	AC_SUBST(BINNAME)
-	AC_SUBST(PHP_LIBS)
-],[
-	AC_MSG_RESULT(no)
+  if test "$enableval" = "yes" ; then
+    case "`uname -sr`" in
+    "SunOS 5"*)
+        VERSION_SCRIPT="-Wl,'-M $abs_srcdir/php.map'"
+    ;;
+    *)
+        if test "$php_cv_cc_vscript" = "yes" ; then
+          VERSION_SCRIPT="-Wl,--version-script=$abs_srcdir/php.map"
+        else
+          AC_MSG_ERROR(versioning is not supported on your OS)
+        fi
+    ;;
+    esac
+    versioning="yes"
+  fi
 ])
+AC_MSG_RESULT($versioning)
+AC_SUBST(VERSION_SCRIPT)
 
 if test "$BINNAME" != "libmodphp3-so.a"; then
 if test "$BINNAME" != "libphp3.so"; then
@@ -376,7 +366,7 @@ AC_ARG_WITH(apache,
 	  withval=/usr/local/etc/httpd
 	fi
 	if test "$withval" != "no"; then
-      rpath_raw=yes
+	    APACHE_WITHVAL=$withval
 # figure out extra library nonsense
 # For Apache 1.2.x
 	  if test -f $withval/src/httpd.h; then 
@@ -642,6 +632,7 @@ AC_ARG_WITH(imap,
 			AC_MSG_ERROR(could not find linkage.h in $IMAP_INC_DIR !)
 		fi
 
+		AC_EXPAND_PATH($IMAP_DIR, IMAP_DIR)
 		if test -f "$IMAP_DIR/lib/libimap.a" ; then
 		  AC_ADD_LIBRARY_WITH_PATH(imap, $IMAP_DIR/lib)
 		elif test -f "$IMAP_DIR/lib/libc-client4.a" || test -f "$IMAP_DIR/lib/libc-client4.so"; then
@@ -655,6 +646,54 @@ AC_ARG_WITH(imap,
         fi
 		AC_ADD_INCLUDE($IMAP_INC_DIR)
         AC_DEFINE(HAVE_IMAP)
+	    AC_MSG_RESULT(yes)
+	else
+	    AC_MSG_RESULT(no)
+	fi
+],[
+    AC_MSG_RESULT(no)
+])
+
+AC_MSG_CHECKING(for IMSP support)
+AC_ARG_WITH(imsp,
+[  --with-imsp[=DIR]       Include IMSp support (DIR is IMSP's include dir and libimsp.a dir).],
+[
+    if test "$withval" = "yes"; then
+		if test -f /usr/local/include/imsp.h; then
+			withval=/usr/local
+		elif test -f /usr/include/imsp.h; then
+			withval=/usr
+		elif test -f /usr/include/imsp/imsp.h; then
+			withval=/usr
+		fi
+    fi
+	if test "$withval" != "no"; then
+		IMSP_DIR=$withval
+		if test -f $IMSP_DIR/include/imsp/mail.h; then
+			IMSP_INC_DIR=$IMSP_DIR/include/imsp
+		else
+			IMSP_INC_DIR=$withval/include
+		fi
+		
+        if test ! -f $IMSP_INC_DIR/imsp.h; then
+			AC_MSG_ERROR(could not find imsp.h in $IMSP_INC_DIR !)
+		fi
+		if test ! -f  $IMSP_INC_DIR/support.h; then
+			AC_MSG_ERROR(could not find support.h in $IMSP_INC_DIR !)
+		fi
+		if test ! -f $IMSP_INC_DIR/imutil.h; then
+			AC_MSG_ERROR(could not find imutil.h in $IMSP_INC_DIR !)
+		fi
+
+		if test -f "$IMSP_DIR/lib/libimsp.a" ; then
+		  AC_ADD_LIBRARY_WITH_PATH(imsp, $IMSP_DIR/lib)
+        elif test -f "$IMSP_DIR/lib/imsp.a" ; then
+          EXTRA_LIBS="$EXTRA_LIBS $IMSP_DIR/lib/imsp.a"
+		else
+		  AC_MSG_ERROR(Please copy or link $IMSP_DIR/lib/imsp.a to $IMSP_DIR/lib/libimsp.a)
+        fi
+		AC_ADD_INCLUDE($IMSP_INC_DIR)
+        AC_DEFINE(HAVE_IMSP)
 	    AC_MSG_RESULT(yes)
 	else
 	    AC_MSG_RESULT(no)
@@ -690,6 +729,42 @@ AC_ARG_WITH(aspell,
   AC_MSG_RESULT(no)
 ])
 
+AC_MSG_CHECKING(for MCAL support)
+AC_ARG_WITH(mcal,
+[  --with-mcal[=DIR]     Include MCAL support.],
+[
+  if test "$withval" != "no"; then
+    if test "$withval" = "yes"; then
+      MCAL_DIR=/usr/local
+    else
+      MCAL_DIR=$withval
+    fi
+    
+    AC_ADD_INCLUDE($MCAL_DIR/)
+    AC_ADD_LIBRARY_WITH_PATH(mcal, $MCAL_DIR/)
+    AC_DEFINE(HAVE_MCAL)
+    AC_MSG_RESULT(yes)
+  else
+    AC_MSG_ERROR(no)
+  fi
+],[
+  AC_MSG_RESULT(no)
+])
+
+AC_MSG_CHECKING(for ftp support)
+AC_ARG_WITH(ftp,
+[  --with-ftp     Include FTP support.],
+[
+  if test "$withval" != "no"; then
+    AC_DEFINE(HAVE_FTP)
+    AC_MSG_RESULT(yes)
+  else
+    AC_MSG_ERROR(no)
+  fi
+],[
+  AC_MSG_RESULT(no)
+])
+
 AC_MSG_CHECKING(whether to include GD support)
 AC_ARG_WITH(gd,
 [  --without-gd            Disable GD support.
@@ -703,7 +778,17 @@ AC_ARG_WITH(gd,
       AC_DEFINE(HAVE_LIBGD)
       AC_MSG_RESULT(yes)
       AC_CHECK_LIB(gd, gdImageLzw,       [ AC_DEFINE(HAVE_LIBGD_LZW) ])
-      AC_CHECK_LIB(gd, gdImageGif,  [],  [ AC_DEFINE(HAVE_LIBGD16) ])
+	  old_LIBS=$LIBS
+	  LIBS="$LIBS -lpng -lz"
+	  AC_CHECK_LIB(gd, gdImageCreateFromPng, [AC_DEFINE(HAVE_GD_PNG)])
+	  AC_CHECK_LIB(gd, gdImageCreateFromGif, [AC_DEFINE(HAVE_GD_GIF)])
+      AC_CHECK_LIB(gd, gdImageColorResolve, [ AC_DEFINE(HAVE_GDIMAGECOLORRESOLVE) ])
+	  LIBS=$old_LIBS
+	  if test "$ac_cv_lib_gd_gdImageCreateFromPng" = "yes"; then
+		AC_ADD_LIBRARY(png)
+		AC_ADD_LIBRARY(z)
+	  fi
+      AC_CHECK_LIB(gd, gdImageGif,  [ ],  [ AC_DEFINE(HAVE_LIBGD16) ])
       AC_CHECK_LIB(gd, gdImageCopyMerge, [ AC_DEFINE(HAVE_LIBGD15) ])
       AC_CHECK_LIB(gd, gdImageGifToSink, [ AC_DEFINE(HAVE_LIBGD14) ])
       AC_CHECK_LIB(gd, gdImageString16,  [ AC_DEFINE(HAVE_LIBGD13) ])
@@ -711,6 +796,8 @@ AC_ARG_WITH(gd,
       ;;
     *)
 dnl A whole whack of possible places where this might be
+      test -f $withval/include/gd1.7/gd.h && GD_INCLUDE="$withval/include/gd1.7"
+      test -f $withval/include/gd1.6/gd.h && GD_INCLUDE="$withval/include/gd1.6"
       test -f $withval/include/gd1.5/gd.h && GD_INCLUDE="$withval/include/gd1.5"
       test -f $withval/include/gd1.4/gd.h && GD_INCLUDE="$withval/include/gd1.4"
       test -f $withval/include/gd1.3/gd.h && GD_INCLUDE="$withval/include/gd1.3"
@@ -725,12 +812,14 @@ dnl A whole whack of possible places where this might be
 
       test -f $withval/lib/libgd.a && GD_LIB="$withval/lib"
       test -f $withval/lib/gd/libgd.a && GD_LIB="$withval/lib/gd"
+      test -f $withval/lib/gd1.7/libgd.a && GD_LIB="$withval/lib/gd1.7"
       test -f $withval/lib/gd1.6/libgd.a && GD_LIB="$withval/lib/gd1.6"
       test -f $withval/lib/gd1.5/libgd.a && GD_LIB="$withval/lib/gd1.5"
       test -f $withval/lib/gd1.4/libgd.a && GD_LIB="$withval/lib/gd1.4"
       test -f $withval/lib/gd1.3/libgd.a && GD_LIB="$withval/lib/gd1.3"
       test -f $withval/libgd.a && GD_LIB="$withval"
       test -f $withval/gd/libgd.a && GD_LIB="$withval/gd"
+      test -f $withval/gd1.7/libgd.a && GD_LIB="$withval/gd1.7"
       test -f $withval/gd1.6/libgd.a && GD_LIB="$withval/gd1.6"
       test -f $withval/gd1.5/libgd.a && GD_LIB="$withval/gd1.5"
       test -f $withval/gd1.4/libgd.a && GD_LIB="$withval/gd1.4"
@@ -744,7 +833,17 @@ dnl A whole whack of possible places where this might be
 	old_LDFLAGS=$LDFLAGS
 	LDFLAGS="$LDFLAGS -L$GD_LIB"
         AC_CHECK_LIB(gd, gdImageLzw,     [ AC_DEFINE(HAVE_LIBGD_LZW) ])
-        AC_CHECK_LIB(gd, gdImageGif,  [],  [ AC_DEFINE(HAVE_LIBGD16) ])
+	  old_LIBS=$LIBS
+	  LIBS="$LIBS -lpng -lz"
+		AC_CHECK_LIB(gd, gdImageCreateFromPng, [AC_DEFINE(HAVE_GD_PNG)])
+		AC_CHECK_LIB(gd, gdImageCreateFromGif, [AC_DEFINE(HAVE_GD_GIF)])
+        AC_CHECK_LIB(gd, gdImageColorResolve, [ AC_DEFINE(HAVE_GDIMAGECOLORRESOLVE) ])
+	  LIBS=$old_LIBS
+		if test "$ac_cv_lib_gd_gdImageCreateFromPng" = "yes"; then
+		  AC_ADD_LIBRARY(png)
+		  AC_ADD_LIBRARY(z)
+		fi
+        AC_CHECK_LIB(gd, gdImageGif,  [ ],  [ AC_DEFINE(HAVE_LIBGD16) ])
         AC_CHECK_LIB(gd, gdImageCopyMerge, [ AC_DEFINE(HAVE_LIBGD15) ])
         AC_CHECK_LIB(gd, gdImageGifToSink, [ AC_DEFINE(HAVE_LIBGD14) ])
         AC_CHECK_LIB(gd, gdImageString16,  [ AC_DEFINE(HAVE_LIBGD13) ])
@@ -760,7 +859,17 @@ dnl A whole whack of possible places where this might be
     AC_ADD_LIBRARY(gd)
   ])
   AC_CHECK_LIB(gd, gdImageLzw,       [ AC_DEFINE(HAVE_LIBGD_LZW) ])
-  AC_CHECK_LIB(gd, gdImageGif,  [],  [ AC_DEFINE(HAVE_LIBGD16) ])
+  old_LIBS=$LIBS
+  LIBS="$LIBS -lpng -lz"
+  AC_CHECK_LIB(gd, gdImageCreateFromPng, [AC_DEFINE(HAVE_GD_PNG)])
+  AC_CHECK_LIB(gd, gdImageCreateFromGif, [AC_DEFINE(HAVE_GD_GIF)])
+  AC_CHECK_LIB(gd, gdImageColorResolve, [ AC_DEFINE(HAVE_GDIMAGECOLORRESOLVE) ])
+  LIBS=$old_LIBS
+  if test "$ac_cv_lib_gd_gdImageCreateFromPng" = "yes"; then
+	AC_ADD_LIBRARY(png)
+	AC_ADD_LIBRARY(z)
+  fi
+  AC_CHECK_LIB(gd, gdImageGif,  [ ],  [ AC_DEFINE(HAVE_LIBGD16) ])
   AC_CHECK_LIB(gd, gdImageCopyMerge, [ AC_DEFINE(HAVE_LIBGD15) ])
   AC_CHECK_LIB(gd, gdImageGifToSink, [ AC_DEFINE(HAVE_LIBGD14) ])
   AC_CHECK_LIB(gd, gdImageString16,  [ AC_DEFINE(HAVE_LIBGD13) ])
@@ -1389,7 +1498,7 @@ AC_ARG_WITH(pgsql,
 
 AC_MSG_CHECKING(for IBM DB2 support)
 AC_ARG_WITH(ibm-db2,
-[  --with-solid[=DIR]      Include IBM DB2 support.  DIR is the DB2 base
+[  --with-ibm-db2[=DIR]    Include IBM DB2 support.  DIR is the DB2 base
                           install directory, defaults to /home/db2inst1/sqllib],
 [
   if test "$withval" != "no"; then
@@ -1594,6 +1703,7 @@ AC_ARG_WITH(snmp,
 		test -f /usr/lib/libsnmp.a && SNMP_LIBDIR=/usr/lib
    	else
    		SNMP_INCDIR=$withval/include
+   		test -d $withval/include/snmp     && SNMP_INCDIR=$withval/include/snmp
    		test -d $withval/include/ucd-snmp && SNMP_INCDIR=$withval/include/ucd-snmp
    		SNMP_LIBDIR=$withval/lib
    	fi
@@ -1815,13 +1925,22 @@ AC_MSG_CHECKING(for XML support)
 AC_ARG_WITH(xml,
 [  --with-xml              Include XML support],[
   if test "$withval" != "no" ; then
-    for i in /usr /usr/local $withval ; do
+    for i in $withval /usr /usr/local; do
       if test -f "$i/include/xml/xmltok.h" ; then
         XML_DIR=$i
-        XML_INCLUDE="$i/include/xml"
+        XML_INCLUDE="$i/include"
         XML_LIB="$i/lib"
       fi
     done
+    if test "$XML_DIR" = "" ; then
+      if test -n "$APACHE_WITHVAL"; then
+        if test -f "$APACHE_WITHVAL/src/lib/expat-lite/xmltok.h"; then
+          XML_DIR=$APACHE_WITHVAL
+          XML_INCLUDE="$APACHE_WITHVAL/src/lib/expat-lite"
+          AC_DEFINE(RAW_XML_INCLUDEPATH)
+        fi
+      fi
+    fi
     if test -n "$APXS"; then
         i="`$APXS -q INCLUDEDIR`"
         if test -f "$i/xml/xmltok.h"; then
@@ -1914,16 +2033,18 @@ AC_ARG_WITH(pdflib,
     no)
       AC_MSG_RESULT(no) ;;
     yes)
+      LIBS="$LIBS -L/usr/local/lib $ZLIB_LIBS -ltiff -lz"
       AC_MSG_RESULT(yes)
       AC_MSG_WARN(!!!!! Note for pdflib 0.6 !!!!!)
       AC_MSG_WARN(In order to ensure the pdf module works correctly, you must)
       AC_MSG_WARN(modify the pdflib distribution. Take out line 190 in)
       AC_MSG_WARN(file p_basic.c which closes the pdf file. Read the php3)
       AC_MSG_WARN(documentation for more information.)
-      AC_CHECK_LIB(pdf, PDF_close, [AC_DEFINE(HAVE_PDFLIB) PDFLIB_LIBS="-lpdf"],
+      AC_CHECK_LIB(pdf, PDF_close, [AC_DEFINE(HAVE_PDFLIB) PDFLIB_LIBS="-L/usr/local/lib -lpdf" PDFLIB_INCLUDE="-I/usr/local/include"],
         [AC_MSG_ERROR(pdflib module requires at least pdflib 0.6)])
-      AC_CHECK_LIB(pdf, PDF_new, [AC_DEFINE(HAVE_PDFLIB2) PDFLIB_LIBS="-lpdf -lz"],
-        [AC_MSG_WARN(No pdflib 2.0 support. Consider an update.)]) ;;
+      AC_CHECK_LIB(pdf, PDF_new, [AC_DEFINE(HAVE_PDFLIB2) PDFLIB_LIBS="-L/usr/local/lib $ZLIB_LIBS -lpdf -ltiff -lz" PDFLIB_INCLUDE="-I/usr/local/include"],
+        [AC_MSG_WARN(No pdflib 2.0 support. Consider an update.)])
+      LIBS=$old_LIBS;;
     *)
       test -d $withval/include && PDFLIB_INCLUDE="-I$withval/include"
       if test -f $withval/include/pdf.h ; then
@@ -2046,7 +2167,7 @@ AC_SUBST(CPDFLIB_INCLUDE)
 AC_MSG_CHECKING(whether to include fdftk support)
 AC_ARG_WITH(fdftk,
 [  --with-fdftk[=DIR]      Include fdftk support.
-                          DIR is the fdftk lib install directory,
+                          DIR is the fdftk install directory,
                           defaults to /usr/local.],
 [
   case "$withval" in
@@ -2579,7 +2700,7 @@ AC_MSG_CHECKING(for NDBM support)
 AC_DBA_STD_RESULT
 
 AC_ARG_WITH(db2,
-[  --with-db2[=DIR]        Include DB2 support],[
+[  --with-db2[=DIR]        Include Berkeley DB2 support],[
   if test "$withval" != "no"; then
     for i in /usr/local /usr /usr/BerkeleyDB $withval; do
       if test -f "$i/db2/db.h"; then
@@ -2620,7 +2741,7 @@ AC_ARG_WITH(db2,
     AC_DBA_STD_ATTACH
   fi
 ])
-AC_MSG_CHECKING(for DB2 support)
+AC_MSG_CHECKING(for Berkeley DB2 support)
 AC_DBA_STD_RESULT
 
 AC_ARG_WITH(dbm,
@@ -2770,6 +2891,8 @@ AC_SUBST(PCRE_LIB)
 AC_SUBST(PCRE_LIBS)
 AC_SUBST(PCRE_OBJS)
 
+AC_CHECK_FUNC(memmove, [], [AC_DEFINE(USE_BCOPY, 1)])
+
 AC_MSG_CHECKING(whether to include POSIX support)
 AC_ARG_WITH(posix,
 [  --without-posix         Don't include POSIX functions],[
@@ -2783,6 +2906,48 @@ AC_ARG_WITH(posix,
   AC_DEFINE(HAVE_POSIX, 1)
   AC_MSG_RESULT(yes)
 ])
+
+RESULT=no
+AC_MSG_CHECKING(whether to include GNU recode support)
+AC_ARG_WITH(recode,
+[  --with-recode[=DIR]       Include GNU recode support.],
+[
+    if test "$withval" != "no"; then
+        for i in /usr/local /usr /opt/recode $withval; do
+            if test -f $i/include/recode.h; then
+                RECODE_DIR=$i
+                RECODE_INC=
+            elif test -f $i/include/recode/recode.h; then
+                RECODE_DIR=$i
+                RECODE_INC=/recode
+            fi
+        done
+
+        if test -z "$RECODE_DIR"; then
+            AC_MSG_ERROR(Cannot find recode.h. Please install recode-3.5 or higher)
+        fi
+
+        AC_ADD_INCLUDE($RECODE_DIR$RECODE_INC)
+		
+        old_LDFLAGS="$LDFLAGS"
+        old_LIBS="$LIBS"
+        LDFLAGS="$LDFLAGS -L$RECODE_DIR/lib"
+        LIBS="$LIBS -lrecode"
+        AC_TRY_LINK([
+char *program_name;
+],[
+recode_format_table();
+],[],[
+            AC_MSG_ERROR(Cannot find librecode. Please install recode-3.5 or higher)])
+        LIBS="$old_LIBS"
+        LDFLAGS="$old_LDFLAGS"
+
+        AC_ADD_LIBRARY_WITH_PATH(recode, $RECODE_DIR/lib)
+        AC_DEFINE(HAVE_RECODE)
+        RESULT=yes
+	fi
+])
+AC_MSG_RESULT($RESULT)
 
 AC_MSG_CHECKING(whether to enable dmalloc support)
 AC_ARG_ENABLE(dmalloc,
@@ -2809,11 +2974,6 @@ dnl fi
 dnl If we're using gcc and the user hasn't specified CFLAGS, add -O2.
 test -n "$auto_cflags" && test -n "$GCC" && CFLAGS="$CFLAGS -O2"
 
-dnl If we're using cc on HP-UX, add the -Ae to CFLAGS
-if test -n "$auto_cflags" && test "`uname -s 2>/dev/null`" = "HP-UX"; then
-   test -n "$GCC" || CFLAGS="-Ae $CFLAGS -D_HPUX_SOURCE"
-fi
-
 dnl *** Commented out - generates slow code and consumes a lot of 
 dnl *** resources during compilation - we need to figure out how
 dnl *** to supply it only when absolutely necessary
@@ -2824,11 +2984,9 @@ AC_SUBST(CFLAGS)
 AC_SUBST(PROG_SENDMAIL)
 AC_SUBST(CFLAGS_SHLIB)
 AC_SUBST(LDFLAGS_SHLIB)
-AC_SUBST(LDFLAGS_SHLIB_EXPORT)
 AC_SUBST(INCLUDES)
 AC_SUBST(EXTRA_LIBS)
 AC_SUBST(RPATHS)
-AC_SUBST(RAW_RPATHS)
 	
 dnl Create the necessary directories if building using VPATH
 if test ! -d functions; then
@@ -2853,6 +3011,15 @@ AC_OUTPUT(Makefile build-defs.h stamp-h libphp3.module
 	  extra/gd/bdf2gdfont regex/Makefile pcrelib/Makefile dbase/Makefile, [
   chmod +x extra/gd/bdf2gdfont
 ], [
+
+if test -n "$PHP_APXS_BROKEN" ; then
+	echo "=================================================================="
+	echo "WARNING: Your $APXS script is most likely broken."
+	echo ""
+	echo "Please go read http://www.php.net/FAQ.php3#4.11 and make the"
+	echo "changes described there and try again."
+	echo "=================================================================="
+fi
 
 if test -n "$APXS_CC" && test "$APXS_CC" != "$CC" ; then
   echo "=================================================================="

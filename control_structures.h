@@ -2,7 +2,7 @@
    +----------------------------------------------------------------------+
    | PHP HTML Embedded Scripting Language Version 3.0                     |
    +----------------------------------------------------------------------+
-   | Copyright (c) 1997-1999 PHP Development Team (See Credits file)      |
+   | Copyright (c) 1997-2000 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
    | it under the terms of one of the following licenses:                 |
@@ -29,7 +29,7 @@
  */
 
 
-/* $Id: control_structures.h,v 1.42 1999/01/01 17:58:48 zeev Exp $ */
+/* $Id: control_structures.h,v 1.44 2000/01/01 04:44:06 sas Exp $ */
 
 
 #ifndef _CONTROL_STRUCTURES_H
@@ -59,7 +59,6 @@ typedef struct {
 	HashTable *ht;
 } variable_tracker;
 
-#ifndef THREAD_SAFE
 extern TokenCacheManager token_cache_manager;
 extern Stack css, input_source_stack, for_stack, function_state_stack, switch_stack,variable_unassign_stack;
 extern int ExecuteFlag, Execute;
@@ -69,7 +68,6 @@ extern FunctionState function_state;
 extern unsigned int param_index;
 extern char *class_name;
 extern HashTable *class_symbol_table;
-#endif
 
 extern int init_resource_list(void);
 extern int init_resource_plist(void);

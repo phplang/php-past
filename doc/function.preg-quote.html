@@ -1,0 +1,186 @@
+<HTML
+><HEAD
+><TITLE
+>preg_quote</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Perl-compatible Regular Expression functions"
+HREF="ref.pcre.html"><LINK
+REL="PREVIOUS"
+TITLE="preg_split"
+HREF="function.preg-split.html"><LINK
+REL="NEXT"
+TITLE="preg_grep"
+HREF="function.preg-grep.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.preg-split.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.preg-grep.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="FUNCTION.PREG-QUOTE"
+>preg_quote</A
+></H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN22190"
+></A
+>preg_quote -- Quote regular expression characters</DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN22193"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><CODE
+CLASS="FUNCDEF"
+>string preg_quote</CODE
+>(string str);<P
+></P
+></DIV
+><P
+>     <B
+CLASS="FUNCTION"
+>preg_quote()</B
+> takes <TT
+CLASS="PARAMETER"
+><I
+>str</I
+></TT
+>
+     and puts a backslash in front of every character that is part of
+     the regular expression syntax.  This is useful if you have a
+     run-time string that you need to match in some text and the
+     string may contain special regex characters.</P
+><P
+>     The special regular expression characters are:
+     <PRE
+CLASS="SCREEN"
+>. \\ + * ? [ ^ ] $ ( ) { } = ! &#60; &#62; | :</PRE
+>
+
+    <DIV
+CLASS="NOTE"
+><BLOCKQUOTE
+CLASS="NOTE"
+><P
+><B
+>Note: </B
+>      This function was added in PHP 3.0.9.</P
+></BLOCKQUOTE
+></DIV
+></P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.preg-split.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.preg-grep.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>preg_split</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.pcre.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>preg_grep</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

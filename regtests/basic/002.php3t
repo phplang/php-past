@@ -1,0 +1,9 @@
+--$Id: 002.php3t,v 1.2 1998/08/23 02:21:06 rocky Exp $
+--TITLE--
+Simple POST Method test                                       ...
+--URL--
+basic/002.phtml
+--POST--
+a=Hello+World
+--EXPECT--
+Hello World

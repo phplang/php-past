@@ -1,0 +1,32 @@
+--TEST--
+Passing to a function                                          ...
+--POST--
+--GET--
+--FILE--
+<?php 
+
+function ary ($b)
+{
+  reset($b);
+  $key=key($b);
+  $data=current($b);
+  while ("" != (string) $key):
+    echo "KEY: $key, VAL: $data\n";
+    $data=next($b);
+    $key=key($b);
+  endwhile;
+}
+
+
+  $a[0]="a";
+  $a[1]="b";
+  $a[2]="c";
+
+  ary ($a);
+
+?>
+--EXPECT--
+KEY: 0, VAL: a
+KEY: 1, VAL: b
+KEY: 2, VAL: c
+

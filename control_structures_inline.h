@@ -2,7 +2,7 @@
    +----------------------------------------------------------------------+
    | PHP HTML Embedded Scripting Language Version 3.0                     |
    +----------------------------------------------------------------------+
-   | Copyright (c) 1997-1999 PHP Development Team (See Credits file)      |
+   | Copyright (c) 1997-2000 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
    | it under the terms of one of the following licenses:                 |
@@ -29,22 +29,17 @@
  */
 
 
-/* $Id: control_structures_inline.h,v 1.200 1999/07/16 18:04:59 jim Exp $ */
+/* $Id: control_structures_inline.h,v 1.203 2000/01/01 04:44:06 sas Exp $ */
 
-#ifdef THREAD_SAFE
-#include "tls.h"
-#endif
 #include "php.h"
 #include "internal_functions.h"
 #include "functions/head.h"
 #include <stdio.h>
 #include <string.h>
 
-#ifndef THREAD_SAFE
 extern pval *array_ptr;
 static pval return_value;
 HashTable list, plist;
-#endif
 
 extern inline int cs_global_variable(pval *varname INLINE_TLS);
 extern inline int cs_static_variable(pval *varname, pval *value INLINE_TLS);
@@ -1439,7 +1434,7 @@ inline void cs_system(pval *result,pval *expr INLINE_TLS)
 			allocated_space = total_readbytes+EXEC_INPUT_BUF;
 			result->value.str.val = (char *) erealloc(result->value.str.val,allocated_space);
 		}
-		fclose(in);
+		pclose(in);
 		
 		result->value.str.val = erealloc(result->value.str.val,total_readbytes+1);
 		result->value.str.val[total_readbytes]=0;

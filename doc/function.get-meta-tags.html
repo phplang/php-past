@@ -4,7 +4,7 @@
 >get_meta_tags</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -12,11 +12,11 @@ REL="UP"
 TITLE="String functions"
 HREF="ref.strings.html"><LINK
 REL="PREVIOUS"
-TITLE="flush"
-HREF="function.flush.html"><LINK
+TITLE="get_html_translation_table"
+HREF="function.get-html-translation-table.html"><LINK
 REL="NEXT"
-TITLE="htmlspecialchars"
-HREF="function.htmlspecialchars.html"></HEAD
+TITLE="htmlentities"
+HREF="function.htmlentities.html"></HEAD
 ><BODY
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
@@ -42,7 +42,7 @@ WIDTH="10%"
 ALIGN="left"
 VALIGN="bottom"
 ><A
-HREF="function.flush.html"
+HREF="function.get-html-translation-table.html"
 >Prev</A
 ></TD
 ><TD
@@ -55,7 +55,7 @@ WIDTH="10%"
 ALIGN="right"
 VALIGN="bottom"
 ><A
-HREF="function.htmlspecialchars.html"
+HREF="function.htmlentities.html"
 >Next</A
 ></TD
 ></TR
@@ -71,14 +71,15 @@ NAME="FUNCTION.GET-META-TAGS"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN21875"
+NAME="AEN25079"
 ></A
->get_meta_tags -- Extracts all meta tag content attributes from a file
-     and returns an array</DIV
+>get_meta_tags --      Extracts all meta tag content attributes from a file and returns
+     an array
+    </DIV
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN21878"
+NAME="AEN25082"
 ></A
 ><H2
 >Description</H2
@@ -90,10 +91,11 @@ CLASS="FUNCSYNOPSIS"
 CLASS="FUNCDEF"
 >array get_meta_tags</CODE
 >(string filename, int
-     [<SPAN
+      [<SPAN
 CLASS="OPTIONAL"
 >use_include_path</SPAN
->]);<P
+>]
+     );<P
 ></P
 ></DIV
 ><P
@@ -130,21 +132,16 @@ CLASS="PROGRAMLISTING"
 ></TABLE
 >
 
-     (pay attention to line endings - PHP uses a native function to parse
-     the input, so a Mac file won't work on Unix).
-
-    </P
+     (pay attention to line endings - PHP uses a native function to
+     parse the input, so a Mac file won't work on Unix).</P
 ><P
 > 
-
      The value of the name property becomes the key, the value of the
      content property becomes the value of the returned array, so you
      can easily use standard array functions to traverse it or access
      single values. Special characters in the value of the name
      property are substituted with '_', the rest is converted to lower
-     case.
-     
-    </P
+     case.</P
 ><P
 >     Setting <TT
 CLASS="PARAMETER"
@@ -152,8 +149,7 @@ CLASS="PARAMETER"
 >use_include_path</I
 ></TT
 > to 1 will result
-     in PHP trying to open the file along the standard include path.
-   </P
+     in PHP trying to open the file along the standard include path.</P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -170,7 +166,7 @@ WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
 ><A
-HREF="function.flush.html"
+HREF="function.get-html-translation-table.html"
 >Prev</A
 ></TD
 ><TD
@@ -186,7 +182,7 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><A
-HREF="function.htmlspecialchars.html"
+HREF="function.htmlentities.html"
 >Next</A
 ></TD
 ></TR
@@ -195,7 +191,7 @@ HREF="function.htmlspecialchars.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->flush</TD
+>get_html_translation_table</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"
@@ -208,7 +204,7 @@ HREF="ref.strings.html"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->htmlspecialchars</TD
+>htmlentities</TD
 ></TR
 ></TABLE
 ></DIV

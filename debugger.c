@@ -2,7 +2,7 @@
    +----------------------------------------------------------------------+
    | PHP HTML Embedded Scripting Language Version 3.0                     |
    +----------------------------------------------------------------------+
-   | Copyright (c) 1997-1999 PHP Development Team (See Credits file)      |
+   | Copyright (c) 1997-2000 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
    | it under the terms of one of the following licenses:                 |
@@ -27,11 +27,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: debugger.c,v 1.70 1999/06/16 11:34:12 ssb Exp $ */
-#if THREAD_SAFE
-#include "tls.h"
-#endif
-
+/* $Id: debugger.c,v 1.72 2000/01/01 04:31:12 sas Exp $ */
 #include "php.h"
 #include "internal_functions.h"
 #include "modules.h"
@@ -71,7 +67,6 @@
 extern int lookup_hostname(const char *addr, struct in_addr *in);
 int _php3_send_error(char *message, char *address);
 
-#ifndef THREAD_SAFE
 static int debug_socket = 0;
 static char *myhostname = NULL;
 static char *currenttime = NULL;
@@ -80,11 +75,10 @@ char *debugger_host = NULL;
 long debugger_port = 0;
 long debugger_default = 0;
 long debugger_on = 0;
-# if WIN32|WINNT
+#if WIN32|WINNT
 static int mypid=0;
-# else
+#else
 static pid_t mypid = 0;
-# endif
 #endif
 
 #if WIN32|WINNT
@@ -181,10 +175,7 @@ find_hostname(void)
 static char *
 get_current_time(void)
 {
-	/*THREADX*/
-#ifndef THREAD_SAFE
 	static char debug_timebuf[50];
-#endif
 	char microbuf[10];
 #if HAVE_GETTIMEOFDAY
 	struct timeval tv;

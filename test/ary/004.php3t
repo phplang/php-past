@@ -1,0 +1,24 @@
+--TEST--
+Auto index loop                                                ...
+--POST--
+--GET--
+--FILE--
+<?php 
+  $a[0]="a";
+  $a[1]="b";
+  $a[2]="c";
+
+  reset($a);
+  $key= key($a);
+  $data = current($a);
+  while ((string) $key != ""):
+    echo "KEY: $key, VAL: $data\n";
+    $data = next($a);
+    $key= key($a);
+  endwhile;
+?>
+--EXPECT--
+KEY: 0, VAL: a
+KEY: 1, VAL: b
+KEY: 2, VAL: c
+

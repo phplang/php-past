@@ -4,7 +4,7 @@
 >getenv</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -12,8 +12,8 @@ REL="UP"
 TITLE="PHP options & information"
 HREF="ref.info.html"><LINK
 REL="PREVIOUS"
-TITLE="error_reporting"
-HREF="function.error-reporting.html"><LINK
+TITLE="extension_loaded"
+HREF="function.extension-loaded.html"><LINK
 REL="NEXT"
 TITLE="get_cfg_var"
 HREF="function.get-cfg-var.html"></HEAD
@@ -42,7 +42,7 @@ WIDTH="10%"
 ALIGN="left"
 VALIGN="bottom"
 ><A
-HREF="function.error-reporting.html"
+HREF="function.extension-loaded.html"
 >Prev</A
 ></TD
 ><TD
@@ -71,13 +71,13 @@ NAME="FUNCTION.GETENV"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN11692"
+NAME="AEN22442"
 ></A
->getenv -- Get the value of an environment variable.</DIV
+>getenv -- Get the value of an environment variable</DIV
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN11695"
+NAME="AEN22445"
 ></A
 ><H2
 >Description</H2
@@ -99,19 +99,40 @@ CLASS="PARAMETER"
 >varname</I
 ></TT
 >, or false on an error.
-	 <DIV
+
+     <DIV
 CLASS="INFORMALEXAMPLE"
 ><P
 ></P
 ><PRE
 CLASS="PROGRAMLISTING"
->$ip = getenv("REMOTE_ADDR"); // get the ip number from the user </PRE
+>$ip = getenv("REMOTE_ADDR"); // get the ip number of the user 
+     </PRE
 ><P
 ></P
 ></DIV
->
-
-   </P
+></P
+><P
+>     You can see a list of all the environmental variables
+     by using <A
+HREF="function.phpinfo.html"
+><B
+CLASS="FUNCTION"
+>phpinfo()</B
+></A
+>. You can find
+     out what many of them mean by taking a look at the
+     <A
+HREF="http://hoohoo.ncsa.uiuc.edu/cgi/"
+TARGET="_top"
+>CGI
+     specification</A
+>, specifically the <A
+HREF="http://hoohoo.ncsa.uiuc.edu/cgi/env.html"
+TARGET="_top"
+>page on environmental
+     variables</A
+>.</P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -128,7 +149,7 @@ WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
 ><A
-HREF="function.error-reporting.html"
+HREF="function.extension-loaded.html"
 >Prev</A
 ></TD
 ><TD
@@ -153,7 +174,7 @@ HREF="function.get-cfg-var.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->error_reporting</TD
+>extension_loaded</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"

@@ -1,0 +1,8 @@
+--TEST--
+HTML entities                                                 ...
+--GET--
+--FILE--
+strings/003.phtml
+--EXPECT--
+&lt;&gt;&quot;&amp;åÄ
+&lt;&gt;&quot;&amp;&aring;&Auml;

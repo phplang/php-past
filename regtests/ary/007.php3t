@@ -1,0 +1,11 @@
+--TITLE--
+Mix index (start 0) and auto assigning                        ...
+--URL--
+ary/007.phtml
+--EXPECT--
+KEY: 0, VAL: a
+KEY: 1, VAL: b
+KEY: 2, VAL: c
+KEY: 3, VAL: d
+KEY: 4, VAL: e
+KEY: 5, VAL: f

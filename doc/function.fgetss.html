@@ -4,7 +4,7 @@
 >fgetss</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -71,13 +71,13 @@ NAME="FUNCTION.FGETSS"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN7736"
+NAME="AEN8574"
 ></A
 >fgetss -- get line from file pointer and strip HTML tags</DIV
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN7739"
+NAME="AEN8577"
 ></A
 ><H2
 >Description</H2
@@ -88,7 +88,10 @@ CLASS="FUNCSYNOPSIS"
 ><CODE
 CLASS="FUNCDEF"
 >string fgetss</CODE
->(int fp, int length);<P
+>(int fp, int length, string [<SPAN
+CLASS="OPTIONAL"
+>allowable_tags</SPAN
+>]);<P
 ></P
 ></DIV
 ><P
@@ -100,9 +103,27 @@ CLASS="FUNCTION"
 ></A
 >,
      except that fgetss attempts to strip any HTML and PHP tags from
-     the text it reads.
+     the text it reads.</P
+><P
+>     You can use the optional third parameter to specify tags which
+     should not be stripped.
 
-    </P
+    <DIV
+CLASS="NOTE"
+><BLOCKQUOTE
+CLASS="NOTE"
+><P
+><B
+>Note: </B
+>      <TT
+CLASS="PARAMETER"
+><I
+>allowable_tags</I
+></TT
+> was added in PHP 3.0.13, PHP4B3.</P
+></BLOCKQUOTE
+></DIV
+></P
 ><P
 >     See also <A
 HREF="function.fgets.html"
@@ -136,9 +157,7 @@ HREF="function.strip-tags.html"
 CLASS="FUNCTION"
 >strip_tags()</B
 ></A
->.
-
-   </P
+>.</P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

@@ -1,0 +1,254 @@
+<HTML
+><HEAD
+><TITLE
+>Incrementing/Decrementing Operators</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Operators"
+HREF="language.operators.html"><LINK
+REL="PREVIOUS"
+TITLE="Execution Operators"
+HREF="language.operators.execution.html"><LINK
+REL="NEXT"
+TITLE="Logical Operators"
+HREF="language.operators.logical.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="language.operators.execution.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 10. Operators</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="language.operators.logical.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="LANGUAGE.OPERATORS.INCREMENT"
+>Incrementing/Decrementing Operators</A
+></H1
+><P
+>	PHP supports C-style pre- and post-increment and decrement
+	operators.
+   </P
+><DIV
+CLASS="TABLE"
+><P
+><B
+>Table 10-4. Increment/decrement Operators</B
+></P
+><TABLE
+BORDER="1"
+CLASS="CALSTABLE"
+><TR
+><TH
+ALIGN="LEFT"
+VALIGN="TOP"
+>example</TH
+><TH
+ALIGN="LEFT"
+VALIGN="TOP"
+>name</TH
+><TH
+ALIGN="LEFT"
+VALIGN="TOP"
+>effect</TH
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>++$a</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Pre-increment</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Increments $a by one, then returns $a.</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>$a++</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Post-increment</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Returns $a, then increments $a by one.</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>--$a</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Pre-decrement</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Decrements $a by one, then returns $a.</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>$a--</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Post-decrement</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Returns $a, then decrements $a by one.</TD
+></TR
+></TABLE
+></DIV
+><P
+>	Here's a simple example script:
+	<DIV
+CLASS="INFORMALEXAMPLE"
+><P
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>&lt;?php
+echo "&lt;h3&gt;Postincrement&lt;/h3&gt;";
+$a = 5;
+echo "Should be 5: " . $a++ . "&lt;br&gt;\n";
+echo "Should be 6: " . $a . "&lt;br&gt;\n";
+
+echo "&lt;h3&gt;Preincrement&lt;/h3&gt;";
+$a = 5;
+echo "Should be 6: " . ++$a . "&lt;br&gt;\n";
+echo "Should be 6: " . $a . "&lt;br&gt;\n";
+
+echo "&lt;h3&gt;Postdecrement&lt;/h3&gt;";
+$a = 5;
+echo "Should be 5: " . $a-- . "&lt;br&gt;\n";
+echo "Should be 4: " . $a . "&lt;br&gt;\n";
+
+echo "&lt;h3&gt;Predecrement&lt;/h3&gt;";
+$a = 5;
+echo "Should be 4: " . --$a . "&lt;br&gt;\n";
+echo "Should be 4: " . $a . "&lt;br&gt;\n";
+?&gt;	  
+	 </PRE
+><P
+></P
+></DIV
+>
+   </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="language.operators.execution.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="language.operators.logical.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Execution Operators</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="language.operators.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Logical Operators</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

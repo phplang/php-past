@@ -4,7 +4,7 @@
 >imap_fetchstructure</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -71,13 +71,13 @@ NAME="FUNCTION.IMAP-FETCHSTRUCTURE"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN11081"
+NAME="AEN12691"
 ></A
 >imap_fetchstructure -- Read the structure of a particular message</DIV
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN11084"
+NAME="AEN12694"
 ></A
 ><H2
 >Description</H2
@@ -87,56 +87,278 @@ CLASS="FUNCSYNOPSIS"
 ></P
 ><CODE
 CLASS="FUNCDEF"
->array imap_fetchstructure</CODE
->(int imap_stream, int msg_number);<P
+>object imap_fetchstructure</CODE
+>(int imap_stream, int msg_number, int 
+      [<SPAN
+CLASS="OPTIONAL"
+>flags</SPAN
+>]
+     );<P
 ></P
 ></DIV
 ><P
->     This function causes a fetch of all the structured information
-     for the given <TT
+>     This function fetches all the structured information for a given
+     message. The optional <TT
+CLASS="PARAMETER"
+><I
+>flags</I
+></TT
+> parameter only
+     has a single option, <TT
+CLASS="PARAMETER"
+><I
+>FT_UID</I
+></TT
+>, which tells
+     the function to treat the <TT
 CLASS="PARAMETER"
 ><I
 >msg_number</I
 ></TT
->. The returned
-     value is an object with following elements.
+>
+     argument as a <TT
+CLASS="PARAMETER"
+><I
+>UID</I
+></TT
+>. The returned object
+     includes the envelope, internal date, size, flags and body
+     structure along with a similar object for each mime
+     attachement. The structure of the returned objects is as follows:
     </P
 ><P
->  
-
-     <DIV
-CLASS="INFORMALEXAMPLE"
+>     <DIV
+CLASS="TABLE"
 ><P
+><B
+>Table 1.        Returned Objects for <B
+CLASS="FUNCTION"
+>imap_fetchstructure()</B
+>
+      </B
 ></P
-><P
-CLASS="LITERALLAYOUT"
->	&nbsp;type,&nbsp;encoding,&nbsp;ifsubtype,&nbsp;subtype,&nbsp;ifdescription,&nbsp;description,&nbsp;ifid,<br>
-	&nbsp;id,&nbsp;lines,&nbsp;bytes,&nbsp;ifparameters<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</P
-><P
-></P
+><TABLE
+BORDER="1"
+CLASS="CALSTABLE"
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>type</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Primary body type</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>encoding</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Body transfer encoding</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>ifsubtype</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>True if there is a subtype string</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>subtype</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><SPAN
+CLASS="ACRONYM"
+>MIME</SPAN
+> subtype</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>ifdescription</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>True if there is a description string</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>description</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Content description string</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>ifid</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>True if there is an identification string</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>id</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Identification string</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>lines</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Number of lines</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>bytes</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Number of bytes</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>ifdisposition</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>True if there is a disposition string</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>disposition</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Disposition string</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>ifdparameters</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>True if the dparameters array exists</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>dparameters
+	  <A
+NAME="AEN12759"
+HREF="#FTN.AEN12759"
+>[a]</A
+>
+	 </TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Disposition parameter array</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>ifparameters</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>True if the parameters array exists</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>parameters
+	  <A
+NAME="AEN12767"
+HREF="#FTN.AEN12767"
+>[b]</A
+>
+	 </TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><SPAN
+CLASS="ACRONYM"
+>MIME</SPAN
+> parameters array</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>parts
+	  <A
+NAME="AEN12773"
+HREF="#FTN.AEN12773"
+>[c]</A
+>
+	 </TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Array of objects describing each message part</TD
+></TR
+><TR
+><TD
+COLSPAN="2"
+>Notes:<BR><A
+NAME="FTN.AEN12759"
+>a. </A
+>	    dparameters is an array of objects where each object has
+	    an "attribute" and a "value" property.
+	   <BR><A
+NAME="FTN.AEN12767"
+>b. </A
+>	    parameter is an array of objects where each object has an
+	    "attributte" and a "value" property.
+	   <BR><A
+NAME="FTN.AEN12773"
+>c. </A
+>	    parts is an array of objects identical in structure to the
+	    top-level object, with the limitation that it cannot
+	    contain further 'parts' objects.
+	   <BR></TD
+></TR
+></TABLE
 ></DIV
 >
     </P
-><P
->     It also returns an array of objects called parameters[]. This
-     object has following properties.
-
-     <DIV
-CLASS="INFORMALEXAMPLE"
-><P
-></P
-><P
-CLASS="LITERALLAYOUT"
->	attribute,&nbsp;value<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</P
-><P
-></P
-></DIV
->
-     In case of multipart, it also returns an array of objects of all
-     the properties, called parts[].
-   </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

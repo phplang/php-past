@@ -1,0 +1,7 @@
+--$Id: 010.php3t,v 1.2 1998/08/23 02:23:58 rocky Exp $
+--TITLE--
+Testing | and & operators                                     ...
+--URL--
+basic/010.phtml
+--EXPECT--
+8

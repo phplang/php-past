@@ -1,0 +1,9 @@
+--$Id: 002.php3t,v 1.1 1998/08/23 03:10:11 rocky Exp $
+--TITLE--
+Auto Assign a[] 3 elements and print result                   ...
+--URL--
+ary/002.phtml
+--EXPECT--
+a[0]: a
+a[1]: b
+a[2]: c

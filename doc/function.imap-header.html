@@ -4,7 +4,7 @@
 >imap_header</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -71,13 +71,13 @@ NAME="FUNCTION.IMAP-HEADER"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN11102"
+NAME="AEN12777"
 ></A
 >imap_header -- Read the header of the message</DIV
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN11105"
+NAME="AEN12780"
 ></A
 ><H2
 >Description</H2
@@ -88,12 +88,26 @@ CLASS="FUNCSYNOPSIS"
 ><CODE
 CLASS="FUNCDEF"
 >object imap_header</CODE
->(int imap_stream, int msg_number, int fromlength, int subjectlength, int defaulthost);<P
+>(int imap_stream, int msg_number, int 
+      [<SPAN
+CLASS="OPTIONAL"
+>fromlength</SPAN
+>]
+     , int 
+      [<SPAN
+CLASS="OPTIONAL"
+>subjectlength</SPAN
+>]
+     , string 
+      [<SPAN
+CLASS="OPTIONAL"
+>defaulthost</SPAN
+>]
+     );<P
 ></P
 ></DIV
 ><P
->     This function returns an object of various header elements
-    </P
+>     This function returns an object of various header elements</P
 ><P
 >  
      <DIV
@@ -104,6 +118,17 @@ CLASS="INFORMALEXAMPLE"
 CLASS="LITERALLAYOUT"
 >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;remail,date,Date,subject,Subject,in_reply_to,message_id,newsgroups,<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;followup_to,references<br>
+<br>
+message&nbsp;flags:<br>
+&nbsp;&nbsp;&nbsp;Recent&nbsp;-&nbsp;'R'&nbsp;if&nbsp;recent&nbsp;and&nbsp;seen,&nbsp;'N'&nbsp;if&nbsp;recent&nbsp;and&nbsp;not&nbsp;seen,&nbsp;'&nbsp;'&nbsp;if&nbsp;not&nbsp;recent<br>
+&nbsp;&nbsp;&nbsp;Unseen&nbsp;-&nbsp;'U'&nbsp;if&nbsp;not&nbsp;seen&nbsp;AND&nbsp;not&nbsp;recent,&nbsp;'&nbsp;'&nbsp;if&nbsp;seen&nbsp;OR&nbsp;not&nbsp;seen&nbsp;and&nbsp;recent<br>
+&nbsp;&nbsp;&nbsp;Answered&nbsp;-&nbsp;'A'&nbsp;if&nbsp;answered,&nbsp;'&nbsp;'&nbsp;if&nbsp;unanswered<br>
+&nbsp;&nbsp;&nbsp;Deleted&nbsp;-&nbsp;'D'&nbsp;if&nbsp;deleted,&nbsp;'&nbsp;'&nbsp;if&nbsp;not&nbsp;deleted<br>
+&nbsp;&nbsp;&nbsp;Draft&nbsp;-&nbsp;'X'&nbsp;if&nbsp;draft,&nbsp;'&nbsp;'&nbsp;if&nbsp;not&nbsp;draft<br>
+&nbsp;&nbsp;&nbsp;Flagged&nbsp;-&nbsp;'F'&nbsp;if&nbsp;flagged,&nbsp;'&nbsp;'&nbsp;if&nbsp;not&nbsp;flagged<br>
+NOTE&nbsp;that&nbsp;the&nbsp;Recent/Unseen&nbsp;behavior&nbsp;is&nbsp;a&nbsp;little&nbsp;odd.&nbsp;If&nbsp;you&nbsp;want&nbsp;to&nbsp;know&nbsp;if&nbsp;a&nbsp;message&nbsp;is&nbsp;Unseen,&nbsp;you&nbsp;must&nbsp;check&nbsp;for<br>
+Unseen&nbsp;==&nbsp;'U'&nbsp;||&nbsp;Recent&nbsp;==&nbsp;'N'<br>
+<br>
 toaddress&nbsp;(full&nbsp;to:&nbsp;line,&nbsp;up&nbsp;to&nbsp;1024&nbsp;characters)<br>
 <br>
 to[]&nbsp;(returns&nbsp;an&nbsp;array&nbsp;of&nbsp;objects&nbsp;from&nbsp;the&nbsp;To&nbsp;line,&nbsp;containing:)<br>
@@ -173,8 +198,7 @@ CLASS="PARAMETER"
 ><P
 ></P
 ></DIV
->
-   </P
+></P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

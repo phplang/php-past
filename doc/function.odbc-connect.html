@@ -4,7 +4,7 @@
 >odbc_connect</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -71,13 +71,13 @@ NAME="FUNCTION.ODBC-CONNECT"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN17394"
+NAME="AEN19251"
 ></A
 >odbc_connect -- Connect to a datasource</DIV
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN17397"
+NAME="AEN19254"
 ></A
 ><H2
 >Description</H2
@@ -98,15 +98,13 @@ CLASS="OPTIONAL"
 >     Returns an ODBC connection id or 0 (<TT
 CLASS="LITERAL"
 >false</TT
->) on error.
-    </P
+>) on error.</P
 ><P
 >     The connection id returned by this functions is needed by other
      ODBC functions. You can have multiple connections open at once.
      The optional fourth parameter sets the type of cursor to be used
      for this connection. This parameter is not normally needed, but
-     can be useful for working around problems with some ODBC drivers.
-    </P
+     can be useful for working around problems with some ODBC drivers.</P
 ><P
 >     With some ODBC drivers, executing a complex stored procedure may
      fail with an error similar to: "Cannot open a cursor on a stored
@@ -120,11 +118,9 @@ CLASS="FUNCTION"
 >odbc_fetch_row()</B
 ></A
 >. SQL_CUR_USE_ODBC might help
-     in that case, too.
-    </P
+     in that case, too.</P
 ><P
->     The following constants are defined for cursortype:
-    </P
+>     The following constants are defined for cursortype:</P
 ><P
 >     <P
 ></P
@@ -150,8 +146,7 @@ CLASS="FUNCTION"
       </P
 ></LI
 ></UL
->
-	</P
+></P
 ><P
 >     For persistent connections see <A
 HREF="function.odbc-pconnect.html"
@@ -159,8 +154,7 @@ HREF="function.odbc-pconnect.html"
 CLASS="FUNCTION"
 >odbc_pconnect()</B
 ></A
->.
-   </P
+>.</P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

@@ -4,7 +4,7 @@
 >next</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -71,13 +71,14 @@ NAME="FUNCTION.NEXT"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN3627"
+NAME="AEN4330"
 ></A
->next -- Advance the internal array pointer of an array</DIV
+>next --      Advance the internal array pointer of an array
+    </DIV
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN3630"
+NAME="AEN4333"
 ></A
 ><H2
 >Description</H2
@@ -93,28 +94,28 @@ CLASS="FUNCDEF"
 ></DIV
 ><P
 >     Returns the array element in the next place that's pointed by the
-     internal array pointer, or false if there are no more elements.
-    </P
+     internal array pointer, or false if there are no more elements.</P
 ><P
 >     <B
 CLASS="FUNCTION"
 >next()</B
-> behaves like <A
+> behaves like
+     <A
 HREF="function.current.html"
 ><B
 CLASS="FUNCTION"
 >current()</B
 ></A
->,
-     with one difference.  It advances the internal array pointer one
-     place forward before returning the element.  That means it returns
-     the next array element and advances the internal array pointer by
-     one.  If advancing the internal array pointer results in going beyond
-     the end of the element list, <B
+>, with one difference.  It advances
+     the internal array pointer one place forward before returning the
+     element.  That means it returns the next array element and
+     advances the internal array pointer by one.  If advancing the
+     internal array pointer results in going beyond the end of the
+     element list, <B
 CLASS="FUNCTION"
 >next()</B
 > returns false.
-    <DIV
+     <DIV
 CLASS="WARNING"
 ><P
 ></P
@@ -133,24 +134,22 @@ ALIGN="CENTER"
 ><TD
 ALIGN="LEFT"
 ><P
->      If the array contains empty elements then this function will return
-      false for these elements as well.  To properly traverse an array
-      which may contain empty elements see the <A
+>       If the array contains empty elements then this function will
+       return false for these elements as well.  To properly traverse
+       an array which may contain empty elements see the
+       <A
 HREF="function.each.html"
 ><B
 CLASS="FUNCTION"
 >each()</B
 ></A
->
-      function.
-     </P
+> function.
+      </P
 ></TD
 ></TR
 ></TABLE
 ></DIV
->
-
-    </P
+></P
 ><P
 >     See also:
      <A
@@ -178,8 +177,7 @@ HREF="function.reset.html"
 CLASS="FUNCTION"
 >reset()</B
 ></A
->
-   </P
+></P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

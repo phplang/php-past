@@ -1,6 +1,11 @@
+#undef HAVE_GD_GIF
+#undef HAVE_RECODE
+#undef USE_BCOPY
+#undef HAVE_FTP
 #undef HAVE_LIBGD14
 #undef HAVE_LIBGD15
 #undef HAVE_LIBGD16
+#undef HAVE_GDIMAGECOLORRESOLVE
 #undef HAVE_LIBGD_LZW
 #undef ushort
 
@@ -87,6 +92,8 @@
 
 /* Define if you have the gd library (-lgd). */
 #define HAVE_LIBGD 0
+
+#undef HAVE_GD_PNG 
 
 /* Define if you have the GNU gettext library (-lintl). */
 #define HAVE_LIBINTL 0
@@ -183,6 +190,12 @@
 
 /* Define if you want the IMAP directory interface */
 #define HAVE_IMAP 0
+
+/* Define if you want MCAL */
+#define HAVE_MCAL 0 
+
+/* Define if you want the IMSP options/addressbook interface */
+#define HAVE_IMSP 0
 
 /* Define if you want the ASPELL interface */
 #define HAVE_ASPELL 0
@@ -332,6 +345,9 @@
 
 /* Define if you have the expat (XML Parser Toolkit) library */
 #define HAVE_LIBEXPAT 0
+
+/* Define if your xml include files are not in an dir named xml */
+#define RAW_XML_INCLUDEPATH 0
 
 /* Define if you have the pdflib library */
 #define HAVE_PDFLIB 0

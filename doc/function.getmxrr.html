@@ -4,7 +4,7 @@
 >getmxrr</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -12,11 +12,11 @@ REL="UP"
 TITLE="Network functions"
 HREF="ref.network.html"><LINK
 REL="PREVIOUS"
-TITLE="checkdnsrr"
-HREF="function.checkdnsrr.html"><LINK
+TITLE="gethostbynamel"
+HREF="function.gethostbynamel.html"><LINK
 REL="NEXT"
-TITLE="openlog"
-HREF="function.openlog.html"></HEAD
+TITLE="getprotobyname"
+HREF="function.getprotobyname.html"></HEAD
 ><BODY
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
@@ -42,7 +42,7 @@ WIDTH="10%"
 ALIGN="left"
 VALIGN="bottom"
 ><A
-HREF="function.checkdnsrr.html"
+HREF="function.gethostbynamel.html"
 >Prev</A
 ></TD
 ><TD
@@ -55,7 +55,7 @@ WIDTH="10%"
 ALIGN="right"
 VALIGN="bottom"
 ><A
-HREF="function.openlog.html"
+HREF="function.getprotobyname.html"
 >Next</A
 ></TD
 ></TR
@@ -71,14 +71,14 @@ NAME="FUNCTION.GETMXRR"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN16942"
+NAME="AEN18723"
 ></A
 >getmxrr -- Get MX records corresponding to a given
     Internet host name.</DIV
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN16945"
+NAME="AEN18726"
 ></A
 ><H2
 >Description</H2
@@ -103,9 +103,7 @@ CLASS="PARAMETER"
 >hostname</I
 ></TT
 >. Returns true if any records are
-     found; returns false if no records were found or if an error occurred.
-
-    </P
+     found; returns false if no records were found or if an error occurred.</P
 ><P
 >     A list of the MX records found is placed into the array
      <TT
@@ -120,9 +118,7 @@ CLASS="PARAMETER"
 >weight</I
 ></TT
 > array is given, it will be filled
-     with the weight information gathered.
-
-    </P
+     with the weight information gathered.</P
 ><P
 >     See also
      <A
@@ -153,9 +149,7 @@ CLASS="FUNCTION"
 >gethostbyaddr()</B
 ></A
 >, and
-     the named(8) manual page.
-
-   </P
+     the named(8) manual page.</P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -172,7 +166,7 @@ WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
 ><A
-HREF="function.checkdnsrr.html"
+HREF="function.gethostbynamel.html"
 >Prev</A
 ></TD
 ><TD
@@ -188,7 +182,7 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><A
-HREF="function.openlog.html"
+HREF="function.getprotobyname.html"
 >Next</A
 ></TD
 ></TR
@@ -197,7 +191,7 @@ HREF="function.openlog.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->checkdnsrr</TD
+>gethostbynamel</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"
@@ -210,7 +204,7 @@ HREF="ref.network.html"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->openlog</TD
+>getprotobyname</TD
 ></TR
 ></TABLE
 ></DIV

@@ -1,0 +1,7 @@
+--$Id: 006.php3t,v 1.2 1998/08/23 02:22:46 rocky Exp $
+--TITLE--
+Add 3 variables together and print result                     ...
+--URL--
+basic/006.phtml
+--EXPECT--
+6

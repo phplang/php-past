@@ -1,0 +1,7 @@
+--$Id: 001.php3t,v 1.2 1998/08/23 02:20:38 rocky Exp $
+--TITLE--
+Trivial "Hello World" test                                    ...
+--URL--
+basic/001.phtml
+--EXPECT--
+Hello World

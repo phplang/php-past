@@ -1,0 +1,255 @@
+<HTML
+><HEAD
+><TITLE
+>icap_fetch_event</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="ICAP functions"
+HREF="ref.icap.html"><LINK
+REL="PREVIOUS"
+TITLE="icap_close"
+HREF="function.icap-close.html"><LINK
+REL="NEXT"
+TITLE="icap_list_events"
+HREF="function.icap-list-events.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.icap-close.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.icap-list-events.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="FUNCTION.ICAP-FETCH-EVENT"
+>icap_fetch_event</A
+></H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN9847"
+></A
+>icap_fetch_event -- Fetches an event from the calendar stream/</DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN9850"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><CODE
+CLASS="FUNCDEF"
+>objecticap_fetch_event</CODE
+>(streamicap_stream, idevent id, optionsoptions);<P
+></P
+></DIV
+><P
+>  
+     <B
+CLASS="FUNCTION"
+>icap_fetch_event()</B
+> fetches an event from the 
+     calendar stream specified by <TT
+CLASS="PARAMETER"
+><I
+>id</I
+></TT
+>.
+    </P
+><P
+>     Returns an event object consisting of:
+
+     <P
+></P
+><UL
+><LI
+><P
+>	int id - ID of that event.
+      </P
+></LI
+><LI
+><P
+>	int public - TRUE if the event if public, FALSE if it is private.
+      </P
+></LI
+><LI
+><P
+>	string category - Category string of the event. 
+      </P
+></LI
+><LI
+><P
+>	string title - Title string of the event.
+      </P
+></LI
+><LI
+><P
+>	string description - Description string of the event.
+      </P
+></LI
+><LI
+><P
+>	int alarm - number of minutes before the event to send an
+	alarm/reminder.
+      </P
+></LI
+><LI
+><P
+>	object start - Object containing a datetime entry.
+      </P
+></LI
+><LI
+><P
+>	object end - Object containing a datetime entry.
+     </P
+></LI
+></UL
+>
+
+     All datetime entries consist of an object that contains:
+     <P
+></P
+><UL
+><LI
+><P
+>	int year - year
+      </P
+></LI
+><LI
+><P
+>	int month - month
+      </P
+></LI
+><LI
+><P
+>	int mday  - day of month
+      </P
+></LI
+><LI
+><P
+>	int hour  - hour
+      </P
+></LI
+><LI
+><P
+>	int min   - minutes
+      </P
+></LI
+><LI
+><P
+>	int sec   - seconds         
+     </P
+></LI
+></UL
+>
+     
+   </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.icap-close.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.icap-list-events.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>icap_close</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.icap.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>icap_list_events</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

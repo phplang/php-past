@@ -4,7 +4,7 @@
 >base64_encode</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -12,11 +12,11 @@ REL="UP"
 TITLE="URL functions"
 HREF="ref.url.html"><LINK
 REL="PREVIOUS"
-TITLE="urlencode"
-HREF="function.urlencode.html"><LINK
-REL="NEXT"
 TITLE="base64_decode"
-HREF="function.base64-decode.html"></HEAD
+HREF="function.base64-decode.html"><LINK
+REL="NEXT"
+TITLE="parse_url"
+HREF="function.parse-url.html"></HEAD
 ><BODY
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
@@ -42,7 +42,7 @@ WIDTH="10%"
 ALIGN="left"
 VALIGN="bottom"
 ><A
-HREF="function.urlencode.html"
+HREF="function.base64-decode.html"
 >Prev</A
 ></TD
 ><TD
@@ -55,7 +55,7 @@ WIDTH="10%"
 ALIGN="right"
 VALIGN="bottom"
 ><A
-HREF="function.base64-decode.html"
+HREF="function.parse-url.html"
 >Next</A
 ></TD
 ></TR
@@ -71,13 +71,13 @@ NAME="FUNCTION.BASE64-ENCODE"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN22823"
+NAME="AEN26506"
 ></A
 >base64_encode -- encodes data with MIME base64</DIV
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN22826"
+NAME="AEN26509"
 ></A
 ><H2
 >Description</H2
@@ -103,14 +103,10 @@ CLASS="PARAMETER"
 ></TT
 > encoded with base64.  This encoding
      is designed to make binary data survive transport through
-     transport layers that are not 8-bit clean, such as mail bodies.
-
-    </P
+     transport layers that are not 8-bit clean, such as mail bodies.</P
 ><P
 >     Base64-encoded data takes about 33% more space than the original
-     data.
-
-    </P
+     data.</P
 ><P
 >     See also:
      <A
@@ -127,9 +123,7 @@ CLASS="FUNCTION"
 >chunk_split()</B
 ></A
 >,
-     RFC-2045 section 6.8.
-
-   </P
+     RFC-2045 section 6.8.</P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -146,7 +140,7 @@ WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
 ><A
-HREF="function.urlencode.html"
+HREF="function.base64-decode.html"
 >Prev</A
 ></TD
 ><TD
@@ -162,7 +156,7 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><A
-HREF="function.base64-decode.html"
+HREF="function.parse-url.html"
 >Next</A
 ></TD
 ></TR
@@ -171,7 +165,7 @@ HREF="function.base64-decode.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->urlencode</TD
+>base64_decode</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"
@@ -184,7 +178,7 @@ HREF="ref.url.html"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->base64_decode</TD
+>parse_url</TD
 ></TR
 ></TABLE
 ></DIV

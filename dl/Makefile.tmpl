@@ -85,6 +85,17 @@ log.so: $(LOG_OBJS)
 log/%.o: log/%.c
 	$(CC) $(CFLAGS) -DCOMPILE_DL=1 -c -o $@ $<
 
+IBASE_LIBS = -L$(IBASE_LIBDIR)/lib \
+	-lgds \
+	-lm \
+	-ldl
+        
+interbase.so: interbase/interbase.o
+	$(LD) -o $@ interbase/interbase.o $(IBASE_LIBS)
+
+interbase/interbase.o: ../functions/interbase.c ../functions/php3_interbase.h
+	$(CC) $(CFLAGS) -DCOMPILE_DL=1 -c -o $@ $<
+
 clean:
 	-rm -f *.so */*.o perl.out
 

@@ -4,7 +4,7 @@
 >Handling file uploads</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -118,13 +118,11 @@ NAME="FEATURES.FILE-UPLOAD.POST-METHOD"
    </P
 ><P
 >    Note that PHP also supports PUT-method file uploads as used by 
-    Netscape Composer and W3C's Amaya clients.  See the
-    <A
+    Netscape Composer and W3C's Amaya clients.  See the <A
 HREF="features.file-upload.put-method.html"
 >PUT Method Support</A
-> for more 
-    details.
-   </P
+>
+    for more details.</P
 ><P
 >    A file upload screen can be built by creating a special form which
     looks something like this:
@@ -157,13 +155,10 @@ Send this file: &lt;INPUT NAME=&quot;userfile&quot; TYPE=&quot;file&quot;&gt;
 ></TABLE
 >
     
-    The _URL_ should point to a php html file.  The MAX_FILE_SIZE
-    hidden field must precede the file input field and its value is
-    the maximum filesize accepted.  The value is in bytes.  In this
-    destination file, the following variables will be defined upon a
-    successful upload:
-
-   </P
+    The _URL_ should point to a PHP file.  The MAX_FILE_SIZE hidden
+    field must precede the file input field and its value is the maximum
+    filesize accepted.  The value is in bytes.  In this destination file,
+    the following variables will be defined upon a successful upload:</P
 ><P
 >    <P
 ></P
@@ -198,23 +193,22 @@ Send this file: &lt;INPUT NAME=&quot;userfile&quot; TYPE=&quot;file&quot;&gt;
     Note that the &quot;$userfile&quot; part of the above variables is
     whatever the name of the INPUT field of TYPE=file is in the upload
     form.  In the above upload form example, we chose to call it
-    &quot;userfile&quot;.
-
-   </P
+    &quot;userfile&quot;.</P
 ><P
 >    Files will by default be stored in the server's default temporary
     directory.  This can be changed by setting the environment variable
-    TMPDIR in the environment in which PHP runs.  Setting it using
-    <A
+    <TT
+CLASS="ENVAR"
+>TMPDIR</TT
+> in the environment in which PHP runs.  Setting
+    it using <A
 HREF="function.putenv.html"
 ><B
 CLASS="FUNCTION"
 >putenv()</B
 ></A
 > from within a PHP script will
-    not work.
-
-   </P
+    not work.</P
 ><P
 >    The PHP script which receives the uploaded file should implement
     whatever logic is necessary for determining what should be done
@@ -223,14 +217,10 @@ CLASS="FUNCTION"
     big.  You could use the $file_type variable to throw away any
     files that didn't match a certain type criteria.  Whatever the
     logic, you should either delete the file from the temporary
-    directory or move it elsewhere.
-
-   </P
+    directory or move it elsewhere.</P
 ><P
 >    The file will be deleted from the temporary directory at the end
-    of the request if it has not been moved away or renamed.
- 
-  </P
+    of the request if it has not been moved away or renamed.</P
 ></DIV
 ></DIV
 ><DIV

@@ -4,7 +4,7 @@
 >array_keys</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -12,11 +12,11 @@ REL="UP"
 TITLE="Array functions"
 HREF="ref.array.html"><LINK
 REL="PREVIOUS"
-TITLE="array_merge"
-HREF="function.array-merge.html"><LINK
+TITLE="array_flip"
+HREF="function.array-flip.html"><LINK
 REL="NEXT"
-TITLE="array_values"
-HREF="function.array-values.html"></HEAD
+TITLE="array_merge"
+HREF="function.array-merge.html"></HEAD
 ><BODY
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
@@ -42,7 +42,7 @@ WIDTH="10%"
 ALIGN="left"
 VALIGN="bottom"
 ><A
-HREF="function.array-merge.html"
+HREF="function.array-flip.html"
 >Prev</A
 ></TD
 ><TD
@@ -55,7 +55,7 @@ WIDTH="10%"
 ALIGN="right"
 VALIGN="bottom"
 ><A
-HREF="function.array-values.html"
+HREF="function.array-merge.html"
 >Next</A
 ></TD
 ></TR
@@ -71,13 +71,13 @@ NAME="FUNCTION.ARRAY-KEYS"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN3202"
+NAME="AEN3574"
 ></A
 >array_keys -- Return all the keys of an array</DIV
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN3205"
+NAME="AEN3577"
 ></A
 ><H2
 >Description</H2
@@ -88,21 +88,38 @@ CLASS="FUNCSYNOPSIS"
 ><CODE
 CLASS="FUNCDEF"
 >array array_keys</CODE
->(array input);<P
+>(array input, mixed
+     [<SPAN
+CLASS="OPTIONAL"
+>search_value</SPAN
+>]);<P
 ></P
 ></DIV
 ><P
 >     <B
 CLASS="FUNCTION"
 >array_keys()</B
-> returns all the keys, numeric and string, from the <TT
+> returns the keys, numeric and
+     string, from the <TT
 CLASS="PARAMETER"
 ><I
 >input</I
 ></TT
-> array.
-
-    </P
+> array.</P
+><P
+>     If the optional <TT
+CLASS="PARAMETER"
+><I
+>search_value</I
+></TT
+> is specified,
+     then only the keys for that value are returned. Otherwise, all
+     the keys from the <TT
+CLASS="PARAMETER"
+><I
+>input</I
+></TT
+> are returned.</P
 ><P
 >     <TABLE
 WIDTH="100%"
@@ -124,15 +141,16 @@ CLASS="FUNCTION"
 ><PRE
 CLASS="PROGRAMLISTING"
 >$array = array(0 =&#62; 100, "color" =&#62; "red");
-array_keys($array);    // returns array(0, "color")
+array_keys($array);       // returns array(0, "color")
+
+$array = array(1, 100, 2, 100);
+array_keys($array, 100); //  returns array(0, 2) 
       </PRE
 ></DIV
 ></TD
 ></TR
 ></TABLE
->
-
-    </P
+></P
 ><P
 >     See also <A
 HREF="function.array-values.html"
@@ -149,12 +167,10 @@ CLASS="NOTE"
 ><P
 ><B
 >Note: </B
->      This function was added in PHP 4.0. 
-    </P
+>      This function was added in PHP 4.0.</P
 ></BLOCKQUOTE
 ></DIV
->
-   </P
+></P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -171,7 +187,7 @@ WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
 ><A
-HREF="function.array-merge.html"
+HREF="function.array-flip.html"
 >Prev</A
 ></TD
 ><TD
@@ -187,7 +203,7 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><A
-HREF="function.array-values.html"
+HREF="function.array-merge.html"
 >Next</A
 ></TD
 ></TR
@@ -196,7 +212,7 @@ HREF="function.array-values.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->array_merge</TD
+>array_flip</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"
@@ -209,7 +225,7 @@ HREF="ref.array.html"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->array_values</TD
+>array_merge</TD
 ></TR
 ></TABLE
 ></DIV

@@ -1,0 +1,297 @@
+<HTML
+><HEAD
+><TITLE
+>get_browser</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Miscellaneous functions"
+HREF="ref.misc.html"><LINK
+REL="PREVIOUS"
+TITLE="function_exists"
+HREF="function.function-exists.html"><LINK
+REL="NEXT"
+TITLE="ignore_user_abort"
+HREF="function.ignore-user-abort.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.function-exists.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.ignore-user-abort.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="FUNCTION.GET-BROWSER"
+>get_browser</A
+></H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN16858"
+></A
+>get_browser -- Tells what the user's browser is capable of.</DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN16861"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><CODE
+CLASS="FUNCDEF"
+>object get_browser</CODE
+>(string [<SPAN
+CLASS="OPTIONAL"
+>user_agent</SPAN
+>]);<P
+></P
+></DIV
+><P
+>	 <B
+CLASS="FUNCTION"
+>get_browser()</B
+> attempts to determine the
+	 capabilities of the user's browser. This is done by looking up
+	 the browser's information in the
+	 <TT
+CLASS="FILENAME"
+>browscap.ini</TT
+> file. By default, the value of
+	 $HTTP_USER_AGENT is used; however, you can alter this (i.e., look
+	 up another browser's info) by passing the optional
+	 <TT
+CLASS="PARAMETER"
+><I
+>user_agent</I
+></TT
+> parameter to
+	 <B
+CLASS="FUNCTION"
+>get_browser()</B
+>.
+	</P
+><P
+>	 The information is returned in an object, which will contain
+	 various data elements representing, for instance, the browser's
+	 major and minor version numbers and ID string;
+	 true/false values for features such as frames, JavaScript, and
+	 cookies; and so forth.
+	</P
+><P
+>	 While <TT
+CLASS="FILENAME"
+>browscap.ini</TT
+> contains information on
+	 many browsers, it relies on user updates to keep the database
+	 current. The format of the file is fairly self-explanatory.
+	</P
+><P
+>	 The following example shows how one might list all available
+	 information retrieved about the user's browser.
+
+	 <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="EXAMPLE"
+><P
+><B
+>Example 1. <B
+CLASS="FUNCTION"
+>get_browser()</B
+> example</B
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>&lt;?php
+function list_array( $array ) {
+   while ( list( $key, $value ) = each( $array ) ) {
+	  $str .= "&lt;b&gt;$key:&lt;/b&gt; $value&lt;br&gt;\n";
+   }
+   return $str;
+}
+echo "$HTTP_USER_AGENT&lt;hr&gt;\n";
+$browser = get_browser();
+echo list_array( (array) $browser );
+?&gt;
+	  </PRE
+></DIV
+></TD
+></TR
+></TABLE
+>
+	</P
+><P
+>	 The output of the above script would look something like this:
+	</P
+><PRE
+CLASS="PROGRAMLISTING"
+>Mozilla/4.5 [en] (X11; U; Linux 2.2.9 i586)&lt;hr&gt;
+&lt;b&gt;browser_name_pattern:&lt;/b&gt; Mozilla/4\.5.*&lt;br&gt;
+&lt;b&gt;parent:&lt;/b&gt; Netscape 4.0&lt;br&gt;
+&lt;b&gt;platform:&lt;/b&gt; Unknown&lt;br&gt;
+&lt;b&gt;majorver:&lt;/b&gt; 4&lt;br&gt;
+&lt;b&gt;minorver:&lt;/b&gt; 5&lt;br&gt;
+&lt;b&gt;browser:&lt;/b&gt; Netscape&lt;br&gt;
+&lt;b&gt;version:&lt;/b&gt; 4&lt;br&gt;
+&lt;b&gt;frames:&lt;/b&gt; 1&lt;br&gt;
+&lt;b&gt;tables:&lt;/b&gt; 1&lt;br&gt;
+&lt;b&gt;cookies:&lt;/b&gt; 1&lt;br&gt;
+&lt;b&gt;backgroundsounds:&lt;/b&gt; &lt;br&gt;
+&lt;b&gt;vbscript:&lt;/b&gt; &lt;br&gt;
+&lt;b&gt;javascript:&lt;/b&gt; 1&lt;br&gt;
+&lt;b&gt;javaapplets:&lt;/b&gt; 1&lt;br&gt;
+&lt;b&gt;activexcontrols:&lt;/b&gt; &lt;br&gt;
+&lt;b&gt;beta:&lt;/b&gt; &lt;br&gt;
+&lt;b&gt;crawler:&lt;/b&gt; &lt;br&gt;
+&lt;b&gt;authenticodeupdate:&lt;/b&gt; &lt;br&gt;
+&lt;b&gt;msn:&lt;/b&gt; &lt;br&gt;
+	</PRE
+><P
+>	 In order for this to work, your <A
+HREF="configuration.html#INI.SECT.BROWSCAP"
+>browscap</A
+> configuration file
+	 setting must point to the correct location of the 
+	 <TT
+CLASS="FILENAME"
+>browscap.ini</TT
+> file.
+	</P
+><P
+>	 For more information (including locations from which you may
+	 obtain a <TT
+CLASS="FILENAME"
+>browscap.ini</TT
+> file), check the PHP
+	 FAQ at <A
+HREF="http://www.php.net/FAQ.php3"
+TARGET="_top"
+>http://www.php.net/FAQ.html</A
+>. 
+	</P
+><DIV
+CLASS="NOTE"
+><BLOCKQUOTE
+CLASS="NOTE"
+><P
+><B
+>Note: </B
+>	  browscap support was added to PHP in version 3.0b2.
+	 </P
+></BLOCKQUOTE
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.function-exists.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.ignore-user-abort.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>function_exists</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.misc.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>ignore_user_abort</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

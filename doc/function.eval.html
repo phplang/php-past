@@ -4,7 +4,7 @@
 >eval</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -12,11 +12,11 @@ REL="UP"
 TITLE="Miscellaneous functions"
 HREF="ref.misc.html"><LINK
 REL="PREVIOUS"
-TITLE="connection_timeout"
-HREF="function.connection-timeout.html"><LINK
-REL="NEXT"
 TITLE="die"
-HREF="function.die.html"></HEAD
+HREF="function.die.html"><LINK
+REL="NEXT"
+TITLE="exit"
+HREF="function.exit.html"></HEAD
 ><BODY
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
@@ -42,7 +42,7 @@ WIDTH="10%"
 ALIGN="left"
 VALIGN="bottom"
 ><A
-HREF="function.connection-timeout.html"
+HREF="function.die.html"
 >Prev</A
 ></TD
 ><TD
@@ -55,7 +55,7 @@ WIDTH="10%"
 ALIGN="right"
 VALIGN="bottom"
 ><A
-HREF="function.die.html"
+HREF="function.exit.html"
 >Next</A
 ></TD
 ></TR
@@ -71,13 +71,13 @@ NAME="FUNCTION.EVAL"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN14470"
+NAME="AEN16738"
 ></A
 >eval -- Evaluate a string as PHP code</DIV
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN14473"
+NAME="AEN16741"
 ></A
 ><H2
 >Description</H2
@@ -103,9 +103,7 @@ CLASS="PARAMETER"
 ></TT
 > as PHP code. Among other things,
      this can be useful for storing code in a database text field for
-     later execution.
-
-    </P
+     later execution.</P
 ><P
 >     There are some factors to keep in mind when using
      <B
@@ -123,18 +121,14 @@ CLASS="PARAMETER"
 ><I
 >code_str</I
 ></TT
->. 
-
-    </P
+>.</P
 ><P
 >     Also remember that variables given values under
      <B
 CLASS="FUNCTION"
 >eval()</B
 > will retain these values in the main
-     script afterwards.
-
-    </P
+     script afterwards.</P
 ><P
 >     <TABLE
 WIDTH="100%"
@@ -165,9 +159,7 @@ echo $str;
 ></TD
 ></TR
 ></TABLE
->
-
-    </P
+></P
 ><P
 >     The above example will show:
       <PRE
@@ -175,9 +167,7 @@ CLASS="PROGRAMLISTING"
 >This is a $string with my $name in it.
 This is a cup with my coffee in it.
       </PRE
->
-
-   </P
+></P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -194,7 +184,7 @@ WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
 ><A
-HREF="function.connection-timeout.html"
+HREF="function.die.html"
 >Prev</A
 ></TD
 ><TD
@@ -210,7 +200,7 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><A
-HREF="function.die.html"
+HREF="function.exit.html"
 >Next</A
 ></TD
 ></TR
@@ -219,7 +209,7 @@ HREF="function.die.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->connection_timeout</TD
+>die</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"
@@ -232,7 +222,7 @@ HREF="ref.misc.html"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->die</TD
+>exit</TD
 ></TR
 ></TABLE
 ></DIV

@@ -1,0 +1,75 @@
+#
+# $Date: 1999/04/22 13:19:49 $
+# README for bdf2gdfont
+# Tin Le <tin@netimages.com>
+
+This perl script is for converting X11 bdf font files into GD font format
+file for PHP3.  The original script was written by Stig S. Bakken
+<ssb@fast.no>.  I have fixed a minor bug in it and added more options,
+plus this README file.
+
+Note that since PHP now has support for TTF fonts through the FreeType
+library, you will get much nicer results with that.
+
+This script has several limitations.
+
+	. it may not work with all bdf files as it assumed certain things
+	that is not BDF compliant.
+
+	. the GD font format is limited to 256 character encoding, but BDF
+	can handle two bytes (up to 65535 encodings).  currently this script
+	silently ignores encoding higher than 255.
+
+Options:
+
+-d n	Turn debugging on, where n is how verbose, higher number is more
+	verbose.
+
+-b	The default is to convert fonts align along a common baseline from
+	the top.  This flag make the common baseline from the bottom.
+
+Example usage.
+
+$ bdf2gdfont helvO10.bdf >helvO10.gd
+
+file gif.php3
+-------------
+<?
+        Header("Content-type: image/gif");
+        $im = imagecreatefromgif("/tmp/out.gif");
+        ImageGif($im);
+        ImageDestroy($im);
+?>
+----------------------------------------------
+
+file demo.php3
+--------------
+<?
+	$fnt = ImageLoadFont("/tmp/helvO10.gd");
+	$im = ImageCreate(500, 90);
+	$black = ImageColorAllocate($im, 255, 255, 255);
+	$y = 0;
+	$str = "";
+	for ($i=32; $i<128; $i++) {
+		$str .= chr($i) . " ";
+		if (($i % 24) == 0) {
+			ImageString($im, $fnt, 0, $y, $str, $black);
+			$y += 15;
+			$str = "";
+		}
+	}
+	ImageString($im, $fnt, 0, $y, $str, $black);
+	ImageGif($im, "/tmp/out.gif");
+	ImageDestroy($im);
+?>
+<html>
+<body>
+Demo of <strong>ImageLoadFont()</strong> function in PHP3.
+<p>
+
+<img src="gif.php3">
+<p>
+</body>
+</html>
+----------------------------------------------
+

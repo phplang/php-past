@@ -1,0 +1,41 @@
+<?
+#  $fn = tempnam(".", "dbase") . ".dbf";
+  $fn = "dbase.dbf";
+
+  $db_struct = array( array("text", "c", 10), /* 10 character field */
+		  array("number", "n", 20, 0), /* 20-digit number */
+		  array("double", "n", 10, 2), /* 10-digit number with 2 decimal places */
+#		  array("memo", "m"), /* memo field (not really supported) */
+		  array("logical", "l"), /* logical field */
+		  array("date", "d") /* date field */
+		);
+
+  echo "creating $fn\n";
+  $id = dbase_create($fn, &$db_struct);
+  echo "dbase has " . dbase_numfields($id) . " fields\n";
+
+  dbase_add_record($id, array("test", 10, 200.02, 1, "19970404"));
+  dbase_add_record($id, array("test", 10, 200.02, 1, "19970404"));
+  dbase_add_record($id, array("test", 10, 200.02, 1, "19970404"));
+  dbase_add_record($id, array("test", 10, 200.02, 1, "19970404"));
+  dbase_add_record($id, array("test", 10, 200.02, 1, "19970404"));
+
+  echo "done adding records\n";
+
+  dbase_delete_record($id, 5);
+  echo "deleted record\n";
+
+  $array = dbase_get_record($id, 3);
+
+  echo "got fields: " . count($array) . "\n";
+  for ($a = 0; $a < count($array); $a++) {
+    echo "$a: " . $array[$a] . "\n";
+  }
+
+  dbase_pack($id);
+
+  echo "closing database...\n";
+  dbase_close($id);
+
+  echo "done.\n";
+?>

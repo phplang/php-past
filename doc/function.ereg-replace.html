@@ -4,7 +4,7 @@
 >ereg_replace</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -71,13 +71,13 @@ NAME="FUNCTION.EREG-REPLACE"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN21074"
+NAME="AEN23900"
 ></A
 >ereg_replace -- replace regular expression</DIV
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN21077"
+NAME="AEN23903"
 ></A
 ><H2
 >Description</H2
@@ -109,15 +109,11 @@ CLASS="PARAMETER"
 ><I
 >replacement</I
 ></TT
->.
-
-    </P
+>.</P
 ><P
 >     The modified string is returned. (Which may mean that the
      original string is returned if there are no matches to be
-     replaced.)
-
-    </P
+     replaced.)</P
 ><P
 >     If <TT
 CLASS="PARAMETER"
@@ -148,9 +144,7 @@ CLASS="LITERAL"
 > will produce the entire
      contents of string.  Up to nine substrings may be used.
      Parentheses may be nested, in which case they are counted by the
-     opening parenthesis.  
-
-    </P
+     opening parenthesis.</P
 ><P
 >     If no matches are found in <TT
 CLASS="PARAMETER"
@@ -163,9 +157,7 @@ CLASS="PARAMETER"
 ><I
 >string</I
 ></TT
-> will be returned unchanged.
-
-    </P
+> will be returned unchanged.</P
 ><P
 >     For example, the following code snippet
      prints "This was a test" three times:
@@ -194,9 +186,7 @@ echo ereg_replace( "(( )is)", "\\2was", $string );
 ></TD
 ></TR
 ></TABLE
->
-
-    </P
+></P
 ><P
 >     See also <A
 HREF="function.ereg.html"
@@ -217,8 +207,7 @@ HREF="function.eregi-replace.html"
 CLASS="FUNCTION"
 >eregi_replace()</B
 ></A
->.
-   </P
+>.</P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

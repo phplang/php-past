@@ -4,15 +4,15 @@
 >header</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
-TITLE="Functions related to HTTP"
+TITLE="HTTP functions"
 HREF="ref.http.html"><LINK
 REL="PREVIOUS"
-TITLE="Functions related to HTTP"
+TITLE="HTTP functions"
 HREF="ref.http.html"><LINK
 REL="NEXT"
 TITLE="setcookie"
@@ -71,13 +71,13 @@ NAME="FUNCTION.HEADER"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN8655"
+NAME="AEN10214"
 ></A
 >header -- Send a raw HTTP header</DIV
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN8658"
+NAME="AEN10217"
 ></A
 ><H2
 >Description</H2
@@ -135,11 +135,14 @@ CLASS="FUNCTION"
      output before <B
 CLASS="FUNCTION"
 >header()</B
-> is called.
-
-    </P
+> is called.</P
 ><P
->     <DIV
+>	 There are two special-case header calls.  The first is the &quot;Location&quot;
+	 header.  Not only does it send this header back to the browser, it also returns
+	 a REDIRECT status code to Apache.  From a script writer's point of view this
+	 should not be important, but for people who understand Apache internals it is
+	 important to understand.
+     <DIV
 CLASS="INFORMALEXAMPLE"
 ><P
 ></P
@@ -150,9 +153,26 @@ exit;  /* Make sure that code below does not get executed when we redirect. */</
 ><P
 ></P
 ></DIV
+></P
+><P
+>	 The second special-case is any header that starts with the string, &quot;HTTP/&quot;
+	 (case is not significant).  For example, if you have your ErrorDocument 404 Apache
+	 directive pointed to a PHP script, it would be a good idea to make sure that your
+	 PHP script is actually generating a 404.  The first thing you do in your script should
+	 then be:
+     <DIV
+CLASS="INFORMALEXAMPLE"
+><P
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>header("http/1.0 404 Not Found");
+	 </PRE
+><P
+></P
+></DIV
 >
-
-    </P
+	</P
 ><P
 >     PHP scripts often generate dynamic HTML that must not be cached
      by the client browser or any proxy caches between the server and the
@@ -171,8 +191,7 @@ CLASS="PROGRAMLISTING"
 ><P
 ></P
 ></DIV
->
-   </P
+></P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -214,7 +233,7 @@ HREF="function.setcookie.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->Functions related to HTTP</TD
+>HTTP functions</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"

@@ -4,7 +4,7 @@
 >PDF_execute_image</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -71,13 +71,13 @@ NAME="FUNCTION.PDF-EXECUTE-IMAGE"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN20369"
+NAME="AEN21923"
 ></A
 >PDF_execute_image -- Places a stored image on the page</DIV
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN20372"
+NAME="AEN21926"
 ></A
 ><H2
 >Description</H2
@@ -100,11 +100,22 @@ CLASS="FUNCTION"
 >PDF_put_image()</B
 ></A
 >
-     function on the current page at the given coordinates.
-    </P
+     function on the current page at the given coordinates.</P
 ><P
 >     The image can be scaled while displaying it. A scale of 1.0
      will show the image in the original size.
+    <DIV
+CLASS="NOTE"
+><BLOCKQUOTE
+CLASS="NOTE"
+><P
+><B
+>Note: </B
+>This function has become meaningless with version
+     2.01 of pdflib. It will just output a warning.</P
+></BLOCKQUOTE
+></DIV
+>
 
      <TABLE
 WIDTH="100%"
@@ -137,9 +148,7 @@ pdf_close_image($pdf, $pim);
 ></TD
 ></TR
 ></TABLE
->
-
-   </P
+></P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

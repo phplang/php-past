@@ -1,0 +1,32 @@
+--TEST--
+InterBase: create test database                                ...
+--POST--
+--GET--
+--FILE--
+<?
+/* $Id: 001.php3t,v 1.3 1999/12/26 00:54:28 rasmus Exp $ */
+
+	$test_base = "ibase_test.tmp";
+	$name = tempnam("","CREATEDB");
+	$ftmp = fopen($name,"w");
+	if (is_file($test_base))
+		fwrite($ftmp,
+        	"connect \"$test_base\";
+            drop database;\n"
+        );
+   	fwrite($ftmp,
+    	"create database \"$test_base\";
+        create table test1 (
+   		i integer,
+   		c varchar(100)
+   	);
+   	commit;
+   	insert into test1(i, c) values(1,  'test table created with isql');
+   	exit;\n"
+    );
+   	fclose($ftmp);
+	exec("isql -i $name 2>&1");
+	unlink($name);
+?>
+--EXPECT--
+

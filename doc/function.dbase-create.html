@@ -4,7 +4,7 @@
 >dbase_create</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -71,13 +71,13 @@ NAME="FUNCTION.DBASE-CREATE"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN6531"
+NAME="AEN7386"
 ></A
 >dbase_create -- creates a dBase database</DIV
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN6534"
+NAME="AEN7389"
 ></A
 ><H2
 >Description</H2
@@ -100,8 +100,7 @@ CLASS="PARAMETER"
 > parameter is an array of
 	arrays, each array describing the format of one field in the
 	database. Each field consists of a name, a character
-	indicating the field type, a length, and a precision.
-	</P
+	indicating the field type, a length, and a precision.</P
 ><P
 >	The types of fields available are:
 	<P
@@ -111,43 +110,37 @@ CLASS="PARAMETER"
 >L</DT
 ><DD
 ><P
->	   Boolean. These do not have a length or precision.
-	 </P
+>	   Boolean. These do not have a length or precision.</P
 ></DD
 ><DT
 >M</DT
 ><DD
 ><P
 >	   Memo. (Note that these aren't supported by PHP.)
-	   These do not have a length or precision.
-	 </P
+	   These do not have a length or precision.</P
 ></DD
 ><DT
 >D</DT
 ><DD
 ><P
 >	   Date (stored as YYYYMMDD).  These do not have a length
-	   or precision.
-	 </P
+	   or precision.</P
 ></DD
 ><DT
 >N</DT
 ><DD
 ><P
 >	   Number. These have both a length and a precision (the
-	   number of digits after the decimal point).
-	 </P
+	   number of digits after the decimal point).</P
 ></DD
 ><DT
 >C</DT
 ><DD
 ><P
->	   String.
-	 </P
+>	   String.</P
 ></DD
 ></DL
->
-	</P
+></P
 ><P
 >	If the database is successfully created, a dbase_identifier
 	is returned, otherwise false is returned.
@@ -188,8 +181,7 @@ if (!dbase_create($dbname, $def))
 ></TD
 ></TR
 ></TABLE
->
-   </P
+></P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

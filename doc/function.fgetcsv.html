@@ -4,7 +4,7 @@
 >fgetcsv</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -71,13 +71,13 @@ NAME="FUNCTION.FGETCSV"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN7678"
+NAME="AEN8516"
 ></A
 >fgetcsv -- get line from file pointer and parse for CSV fields</DIV
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN7681"
+NAME="AEN8519"
 ></A
 ><H2
 >Description</H2
@@ -98,8 +98,7 @@ CLASS="OPTIONAL"
 >	 Similar to fgets() except that fgetcsv() parses the line it reads for
 	 fields in CSV format and returns an array containing the fields read.
          The field delimiter is a comma, unless you specifiy another
-         delimiter with the optional third parameter.
-    </P
+         delimiter with the optional third parameter.</P
 ><P
 >	 fp must be a valid file pointer to a file successfully opened by
 	 <A
@@ -120,20 +119,15 @@ HREF="function.fsockopen.html"
 CLASS="FUNCTION"
 >fsockopen()</B
 ></A
->
-	</P
+></P
 ><P
 >	 length must be greater than the longest line to be found in the CSV
-	 file (allowing for trailing line-end characters).
-	</P
+	 file (allowing for trailing line-end characters).</P
 ><P
->	 fgetcsv() returns false on error, including end of file.
-	</P
+>	 fgetcsv() returns false on error, including end of file.</P
 ><P
 >	 NB A blank line in a CSV file will be returned as an array comprising
-	 just one single null field, and will not be treated as an error.
-
-	</P
+	 just one single null field, and will not be treated as an error.</P
 ><TABLE
 WIDTH="100%"
 BORDER="0"

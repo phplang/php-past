@@ -4,7 +4,7 @@
 >imap_uid</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -15,8 +15,8 @@ REL="PREVIOUS"
 TITLE="imap_fetchheader"
 HREF="function.imap-fetchheader.html"><LINK
 REL="NEXT"
-TITLE="PHP options & information"
-HREF="ref.info.html"></HEAD
+TITLE="imap_msgno"
+HREF="function.imap-msgno.html"></HEAD
 ><BODY
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
@@ -55,7 +55,7 @@ WIDTH="10%"
 ALIGN="right"
 VALIGN="bottom"
 ><A
-HREF="ref.info.html"
+HREF="function.imap-msgno.html"
 >Next</A
 ></TD
 ></TR
@@ -71,14 +71,14 @@ NAME="FUNCTION.IMAP-UID"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN11573"
+NAME="AEN13305"
 ></A
 >imap_uid -- This function returns the UID for the given message
     sequence number.</DIV
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN11576"
+NAME="AEN13308"
 ></A
 ><H2
 >Description</H2
@@ -88,14 +88,19 @@ CLASS="FUNCSYNOPSIS"
 ></P
 ><CODE
 CLASS="FUNCDEF"
->string imap_uid</CODE
->(string mailbox, int msgno);<P
+>int imap_uid</CODE
+>(int imap_stream, int msgno);<P
 ></P
 ></DIV
 ><P
 >     This function returns the UID for the given message sequence
-     number.
-   </P
+     number. It is the inverse of <A
+HREF="function.imap-msgno.html"
+><B
+CLASS="FUNCTION"
+>imap_msgno()</B
+></A
+>.</P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -128,7 +133,7 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><A
-HREF="ref.info.html"
+HREF="function.imap-msgno.html"
 >Next</A
 ></TD
 ></TR
@@ -150,7 +155,7 @@ HREF="ref.imap.html"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->PHP options &#38; information</TD
+>imap_msgno</TD
 ></TR
 ></TABLE
 ></DIV

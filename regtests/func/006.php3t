@@ -1,0 +1,8 @@
+--$Id: 006.php3t,v 1.1 1998/08/23 03:32:52 rocky Exp $
+--TITLE--
+SetCookie function                                            ...
+--HEAD--
+Set-Cookie: MyFirstCookie
+--URL--
+func/006.phtml
+--EXPECT--

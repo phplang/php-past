@@ -4,7 +4,7 @@
 >ImageTTFText</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -15,8 +15,8 @@ REL="PREVIOUS"
 TITLE="ImageTTFBBox"
 HREF="function.imagettfbbox.html"><LINK
 REL="NEXT"
-TITLE="ImageColorAt"
-HREF="function.imagecolorat.html"></HEAD
+TITLE="IMAP functions"
+HREF="ref.imap.html"></HEAD
 ><BODY
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
@@ -55,7 +55,7 @@ WIDTH="10%"
 ALIGN="right"
 VALIGN="bottom"
 ><A
-HREF="function.imagecolorat.html"
+HREF="ref.imap.html"
 >Next</A
 ></TD
 ></TR
@@ -71,13 +71,13 @@ NAME="FUNCTION.IMAGETTFTEXT"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN10525"
+NAME="AEN12440"
 ></A
->ImageTTFText -- write text to the image using a TrueType fonts</DIV
+>ImageTTFText -- write text to the image using TrueType fonts</DIV
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN10528"
+NAME="AEN12443"
 ></A
 ><H2
 >Description</H2
@@ -127,8 +127,7 @@ CLASS="PARAMETER"
 ><I
 >fontfile</I
 ></TT
->.
-    </P
+>.</P
 ><P
 >     The coordinates given by
      <TT
@@ -151,8 +150,7 @@ CLASS="FUNCTION"
 >ImageString()</B
 ></A
 >, where x,y define the
-     upper-right corner of the first character.
-    </P
+     upper-right corner of the first character.</P
 ><P
 >     <TT
 CLASS="PARAMETER"
@@ -162,8 +160,7 @@ CLASS="PARAMETER"
 > is in degrees, with 0 degrees being
      left-to-right reading text (3 o'clock direction), and higher
      values representing a counter-clockwise rotation.  (i.e., a value
-     of 90 would result in bottom-to-top reading text).
-    </P
+     of 90 would result in bottom-to-top reading text).</P
 ><P
 >     <TT
 CLASS="PARAMETER"
@@ -171,27 +168,25 @@ CLASS="PARAMETER"
 >fontfile</I
 ></TT
 > is the path to the TrueType font
-     you wish to use.
-    </P
+     you wish to use.</P
 ><P
 >     <TT
 CLASS="PARAMETER"
 ><I
 >text</I
 ></TT
-> is the text string which may include 
-	 UTF-8 character sequences (of the form:  &amp;#123; ) to access 
-	 characters in a font beyond the first 255.
-    </P
+> is the text string which may include
+     UTF-8 character sequences (of the form: &amp;#123; ) to access
+     characters in a font beyond the first 255.</P
 ><P
 >     <TT
 CLASS="PARAMETER"
 ><I
 >col</I
 ></TT
-> is the color index.  Using the negative
-	 of a color index has the effect of turning off antialiasing.
-    </P
+> is the color index.  Using the
+     negative of a color index has the effect of turning off
+     antialiasing.</P
 ><P
 >     <A
 HREF="function.imagettftext.html"
@@ -204,8 +199,7 @@ CLASS="FUNCTION"
      text.  The order of the points is upper left, upper right, lower
      right, lower left.  The points are relative to the text
      regardless of the angle, so "upper left" means in the top
-     left-hand corner when you see the text horizontallty.
-    </P
+     left-hand corner when you see the text horizontallty.</P
 ><P
 >     This example script will produce a black GIF 400x30 pixels, with
      the words "Testing..."  in white in the font Arial.
@@ -238,16 +232,13 @@ ImageDestroy($im);
 ></TD
 ></TR
 ></TABLE
->
-
-    </P
+></P
 ><P
 >     This function requires both the GD library and the <A
 HREF="http://www.freetype.org/"
 TARGET="_top"
 >FreeType</A
-> library.
-    </P
+> library.</P
 ><P
 >     See also <A
 HREF="function.imagettfbbox.html"
@@ -255,8 +246,7 @@ HREF="function.imagettfbbox.html"
 CLASS="FUNCTION"
 >ImageTTFBBox()</B
 ></A
->.
-   </P
+>.</P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -289,7 +279,7 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><A
-HREF="function.imagecolorat.html"
+HREF="ref.imap.html"
 >Next</A
 ></TD
 ></TR
@@ -311,7 +301,7 @@ HREF="ref.image.html"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->ImageColorAt</TD
+>IMAP functions</TD
 ></TR
 ></TABLE
 ></DIV

@@ -4,7 +4,7 @@
 >fgets</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -71,13 +71,13 @@ NAME="FUNCTION.FGETS"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN7705"
+NAME="AEN8543"
 ></A
 >fgets -- get line from file pointer</DIV
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN7708"
+NAME="AEN8546"
 ></A
 ><H2
 >Description</H2
@@ -95,19 +95,14 @@ CLASS="FUNCDEF"
 >     Returns a string of up to length - 1 bytes read from the file
      pointed to by fp. Reading ends when length - 1 bytes have been
      read, on a newline (which is included in the return value), or
-	 on EOF (whichever comes first).
-
-    </P
+	 on EOF (whichever comes first).</P
 ><P
->	 If an error occurs, returns false.
-    </P
+>	 If an error occurs, returns false.</P
 ><P
->    Common Pitfalls:
-    </P
+>    Common Pitfalls:</P
 ><P
 >         People used to the 'C' semantics of fgets should note the difference
-         in how EOF is returned.
-    </P
+         in how EOF is returned.</P
 ><P
 >	 The file pointer must be valid, and must point to a file
      successfully opened by <A
@@ -129,9 +124,7 @@ HREF="function.fsockopen.html"
 CLASS="FUNCTION"
 >fsockopen()</B
 ></A
->.
-
-    </P
+>.</P
 ><P
 >    A simple example follows:
     <TABLE
@@ -151,7 +144,8 @@ CLASS="EXAMPLE"
 ><PRE
 CLASS="PROGRAMLISTING"
 >$fd = fopen("/tmp/inputfile.txt", "r");
-while ($buffer = fgets($fd, 4096)) {
+while (!feof($fd)) {
+  $buffer = fgets($fd, 4096);
   echo $buffer;
 }
 fclose($fd);</PRE
@@ -159,9 +153,7 @@ fclose($fd);</PRE
 ></TD
 ></TR
 ></TABLE
->
-    
-    </P
+></P
 ><P
 > See also <A
 HREF="function.fread.html"
@@ -195,9 +187,7 @@ HREF="function.fsockopen.html"
 CLASS="FUNCTION"
 >fsockopen()</B
 ></A
->.
-
-   </P
+>.</P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

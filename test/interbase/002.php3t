@@ -1,0 +1,33 @@
+--TEST--
+InterBase: connect, close and pconnect                      ...
+--POST--
+--GET--
+--FILE--
+<?
+/* $Id: 002.php3t,v 1.3 1999/12/26 00:54:28 rasmus Exp $ */
+
+    require("interbase/interbase.inc");
+    
+	$test_base = "ibase_test.tmp";
+
+	ibase_connect($test_base);
+	out_table("test1");
+	ibase_close();
+
+	$con = ibase_connect($test_base);
+	$pcon1 = ibase_pconnect($test_base);
+	$pcon2 = ibase_pconnect($test_base);
+	ibase_close($con);
+	ibase_close($pcon1);
+
+	out_table("test1");
+
+	ibase_close($pcon2);
+?>
+--EXPECT--
+--- test1 ---
+1	test table created with isql	
+---
+--- test1 ---
+1	test table created with isql	
+---

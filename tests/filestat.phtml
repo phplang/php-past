@@ -1,0 +1,31 @@
+
+<?
+  echo "does bogus exist? " . fileAtime("bogus") . "\n";
+  echo "how about Makefile? " . fileAtime("/autoexec.bat") . "\n";
+  echo "atime: " . fileAtime("/autoexec.bat") . "\n";
+  echo "ctime: " . fileCtime("/autoexec.bat") . "\n";
+  echo "group: " . fileGroup("/autoexec.bat") . "\n";
+  echo "inode: " . fileInode("/autoexec.bat") . "\n";
+  echo "mtime: " . fileMtime("/autoexec.bat") . "\n";
+  echo "owner: " . fileOwner("/autoexec.bat") . "\n";
+  echo "perms: " . filePerms("/autoexec.bat") . "\n";
+  echo " size: " .  fileSize("/autoexec.bat") . "\n";
+  echo " type: " .  fileType("/autoexec.bat") . "\n";
+
+  $statdata = stat("config.h.in");
+  echo "  dev: " . $statdata[0] . "\n";
+  echo "inode: " . $statdata[1] . "\n";
+  echo " mode: " . $statdata[2] . "\n";
+  echo "nlink: " . $statdata[3] . "\n";
+  echo "  uid: " . $statdata[4] . "\n";
+  echo "  gid: " . $statdata[5] . "\n";
+  echo " rdev: " . $statdata[6] . "\n";
+  echo " size: " . $statdata[7] . "\n";
+  echo "atime: " . $statdata[8] . "\n";
+  echo "mtime: " . $statdata[9] . "\n";
+  echo "ctime: " . $statdata[10] . "\n";
+  echo "blksize: " . $statdata[11] . "\n";
+  echo "blocks: " . $statdata[12] . "\n";
+
+  echo "type of functions: " . fileType("functions") . "\n";
+?>

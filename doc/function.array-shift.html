@@ -4,7 +4,7 @@
 >array_shift</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -12,8 +12,8 @@ REL="UP"
 TITLE="Array functions"
 HREF="ref.array.html"><LINK
 REL="PREVIOUS"
-TITLE="array_unshift"
-HREF="function.array-unshift.html"><LINK
+TITLE="array_reverse"
+HREF="function.array-reverse.html"><LINK
 REL="NEXT"
 TITLE="array_slice"
 HREF="function.array-slice.html"></HEAD
@@ -42,7 +42,7 @@ WIDTH="10%"
 ALIGN="left"
 VALIGN="bottom"
 ><A
-HREF="function.array-unshift.html"
+HREF="function.array-reverse.html"
 >Prev</A
 ></TD
 ><TD
@@ -71,13 +71,13 @@ NAME="FUNCTION.ARRAY-SHIFT"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN3051"
+NAME="AEN3741"
 ></A
->array_shift -- Pop an element of the beginning of array</DIV
+>array_shift -- Pop an element off the beginning of array</DIV
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN3054"
+NAME="AEN3744"
 ></A
 ><H2
 >Description</H2
@@ -108,9 +108,7 @@ CLASS="PARAMETER"
 >array</I
 ></TT
 > by one element and moving everything
-     down.
-
-    </P
+     down.</P
 ><P
 >     <TABLE
 WIDTH="100%"
@@ -140,9 +138,7 @@ $opt = array_shift($args);
 ></TABLE
 >
      This would result in $args having one element "-f" left, and $opt
-     being "-v".
-
-    </P
+     being "-v".</P
 ><P
 >     See also <A
 HREF="function.array-unshift.html"
@@ -173,12 +169,10 @@ CLASS="NOTE"
 ><P
 ><B
 >Note: </B
->      This function was added in PHP 4.0. 
-    </P
+>      This function was added in PHP 4.0.</P
 ></BLOCKQUOTE
 ></DIV
->
-   </P
+></P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -195,7 +189,7 @@ WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
 ><A
-HREF="function.array-unshift.html"
+HREF="function.array-reverse.html"
 >Prev</A
 ></TD
 ><TD
@@ -220,7 +214,7 @@ HREF="function.array-slice.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->array_unshift</TD
+>array_reverse</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"

@@ -7,10 +7,35 @@ PHP tarballs and working completely from sources.  Simply follow the
 instructions in the INSTALL file.  But if you like having most things
 under rpm control, read on.
 
+*Warning* these instructions will not work with the stock Apache rpm 
+that comes with RedHat-6.1 due to a bug introduced by RedHat.  If you 
+are using RH-6.1, make the following change before continuing:
+
+On or around line 81 of your /usr/sbin/apxs file, you will see a
+line like this:
+
+my $CFG_LIBEXECDIR    = 'modules';           # substituted via APACI install
+
+Change this to be:
+
+my $CFG_LIBEXECDIR    = '/usr/lib/apache';   # substituted via APACI install
+
+While you are looking at this file, make sure the $CFG_LD_SHLIB and
+$CFG_LDFLAGS_SHLIB are set to something close to this:
+
+my $CFG_LD_SHLIB      = 'gcc';          # substituted via Makefile.tmpl
+my $CFG_LDFLAGS_SHLIB = q(-shared);     # substituted via Makefile.tmpl 
+
+If your /usr/sbin/apxs script has these lines along with the change to
+the $CFG_LIBEXECDIR line, you are ready to proceed.
+
 The first thing you need to do is upgrade your Apache to at least 
-version 1.3.4.  You need the apache-1.3.4 rpm along with the apache-devel
+version 1.3.6.  You need the apache-1.3.6 rpm along with the apache-devel
 RPM.  RedHat-6.0 comes with apache-1.3.6, but by default it does not seem
 to install the apache-devel rpm.  Grab that one and install it as well.
+While you are at it, upgrade to Apache-1.3.9 or later.  There are a 
+number of fixes, and if you are running glibc-2.1.1 you will definitely
+need it.
 
 RedHat also has an annoying habit of not installing other -devel packages.
 The one that gets the most people is freetype-devel.  Save yourself some
@@ -50,6 +75,7 @@ A typical configure line would look like this:
      ./configure --with-apxs=/usr/sbin/apxs --with-mysql --with-ldap
 
      (note that you may need /usr/bin/apxs here - check where your apxs is)
+     (Add --with-xml if you are using Apache-1.3.9 or later)
 
 Then type:
 

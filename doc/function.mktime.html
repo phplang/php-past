@@ -4,7 +4,7 @@
 >mktime</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -12,11 +12,11 @@ REL="UP"
 TITLE="Date and Time functions"
 HREF="ref.datetime.html"><LINK
 REL="PREVIOUS"
-TITLE="gmdate"
-HREF="function.gmdate.html"><LINK
+TITLE="microtime"
+HREF="function.microtime.html"><LINK
 REL="NEXT"
-TITLE="gmmktime"
-HREF="function.gmmktime.html"></HEAD
+TITLE="strftime"
+HREF="function.strftime.html"></HEAD
 ><BODY
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
@@ -42,7 +42,7 @@ WIDTH="10%"
 ALIGN="left"
 VALIGN="bottom"
 ><A
-HREF="function.gmdate.html"
+HREF="function.microtime.html"
 >Prev</A
 ></TD
 ><TD
@@ -55,7 +55,7 @@ WIDTH="10%"
 ALIGN="right"
 VALIGN="bottom"
 ><A
-HREF="function.gmmktime.html"
+HREF="function.strftime.html"
 >Next</A
 ></TD
 ></TR
@@ -71,13 +71,13 @@ NAME="FUNCTION.MKTIME"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN6053"
+NAME="AEN7253"
 ></A
 >mktime -- get UNIX timestamp for a date</DIV
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN6056"
+NAME="AEN7256"
 ></A
 ><H2
 >Description</H2
@@ -103,8 +103,7 @@ CLASS="EMPHASIS"
      a regular UNIX mktime() call and which does not lend
      itself well to leaving out parameters from right to left
      (see below). It is a common error to mix these values up
-     in a script.
-    </P
+     in a script.</P
 ><P
 >     Returns the Unix timestamp corresponding to the arguments
      given. This timestamp is a long integer containing the number of
@@ -210,7 +209,7 @@ WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
 ><A
-HREF="function.gmdate.html"
+HREF="function.microtime.html"
 >Prev</A
 ></TD
 ><TD
@@ -226,7 +225,7 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><A
-HREF="function.gmmktime.html"
+HREF="function.strftime.html"
 >Next</A
 ></TD
 ></TR
@@ -235,7 +234,7 @@ HREF="function.gmmktime.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->gmdate</TD
+>microtime</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"
@@ -248,7 +247,7 @@ HREF="ref.datetime.html"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->gmmktime</TD
+>strftime</TD
 ></TR
 ></TABLE
 ></DIV

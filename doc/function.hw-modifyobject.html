@@ -4,7 +4,7 @@
 >hw_Modifyobject</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -12,8 +12,8 @@ REL="UP"
 TITLE="Hyperwave functions"
 HREF="ref.hyperwave.html"><LINK
 REL="PREVIOUS"
-TITLE="hw_InsertObject"
-HREF="function.hw-insertobject.html"><LINK
+TITLE="hw_mapid"
+HREF="function.hw-mapid.html"><LINK
 REL="NEXT"
 TITLE="hw_New_Document"
 HREF="function.hw-new-document.html"></HEAD
@@ -42,7 +42,7 @@ WIDTH="10%"
 ALIGN="left"
 VALIGN="bottom"
 ><A
-HREF="function.hw-insertobject.html"
+HREF="function.hw-mapid.html"
 >Prev</A
 ></TD
 ><TD
@@ -71,13 +71,13 @@ NAME="FUNCTION.HW-MODIFYOBJECT"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN9621"
+NAME="AEN11222"
 ></A
 >hw_Modifyobject -- modifies object record</DIV
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN9624"
+NAME="AEN11225"
 ></A
 ><H2
 >Description</H2
@@ -118,9 +118,7 @@ CLASS="FUNCTION"
 >hw_modifyobject()</B
 >
      will always remove the attributes before it adds attributes unless
-     the value of the attribute to remove is not a string or array.
-
-    </P
+     the value of the attribute to remove is not a string or array.</P
 ><P
 >     The last parameter determines if the modification is performed
      recursively. 1 means recurive modification. If some of the objects
@@ -132,9 +130,7 @@ CLASS="FUNCTION"
 >hw_error()</B
 ></A
 > may not indicate an error though
-     some of the objects could not be modified.
-
-    </P
+     some of the objects could not be modified.</P
 ><P
 >     The keys of both arrays are the attributes name. The value of each
      array element can either be an array, a string or anything else.
@@ -151,9 +147,7 @@ CLASS="FUNCTION"
      removed which would fail since it doesn't exist. The following addition of
      a new value for that attribute would also fail. Setting the value
      for that attribute to e.g. 0 would not even try to remove it and
-     the addition will work.
-
-    </P
+     the addition will work.</P
 ><P
 >     If you would like to change the attribute 'Name' with the current
      value 'books' into 'articles' you will have to create two arrays
@@ -218,8 +212,7 @@ CLASS="PROGRAMLISTING"
 ></TD
 ></TR
 ></TABLE
->
-    </P
+></P
 ><P
 >     <DIV
 CLASS="NOTE"
@@ -232,8 +225,7 @@ CLASS="NOTE"
        ways. Either by providing the attributes value in its native
        form 'language':'title' or by providing an array with elements
        for each language as described above. The above example would
-       than be:
-     </P
+       than be:</P
 ></BLOCKQUOTE
 ></DIV
 >
@@ -338,8 +330,7 @@ CLASS="NOTE"
 ><B
 >Note: </B
 >       If you need to delete all attributes with a certain name you
-       will have to pass an empty string as the attribute value.
-     </P
+       will have to pass an empty string as the attribute value.</P
 ></BLOCKQUOTE
 ></DIV
 >
@@ -400,11 +391,9 @@ CLASS="FUNCTION"
     </P
 ></BLOCKQUOTE
 ></DIV
->
-    </P
+></P
 ><P
->     Returns TRUE if no error occurs otherwise FALSE.
-   </P
+>     Returns TRUE if no error occurs otherwise FALSE.</P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -421,7 +410,7 @@ WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
 ><A
-HREF="function.hw-insertobject.html"
+HREF="function.hw-mapid.html"
 >Prev</A
 ></TD
 ><TD
@@ -446,7 +435,7 @@ HREF="function.hw-new-document.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->hw_InsertObject</TD
+>hw_mapid</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"

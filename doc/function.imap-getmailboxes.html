@@ -1,0 +1,249 @@
+<HTML
+><HEAD
+><TITLE
+>imap_getmailboxes</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="IMAP functions"
+HREF="ref.imap.html"><LINK
+REL="PREVIOUS"
+TITLE="imap_listmailbox"
+HREF="function.imap-listmailbox.html"><LINK
+REL="NEXT"
+TITLE="imap_listsubscribed"
+HREF="function.imap-listsubscribed.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.imap-listmailbox.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.imap-listsubscribed.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="FUNCTION.IMAP-GETMAILBOXES"
+>imap_getmailboxes</A
+></H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN12833"
+></A
+>imap_getmailboxes -- Read the list of mailboxes, returning detailed information on each one</DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN12836"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><CODE
+CLASS="FUNCDEF"
+>array imap_getmailboxes</CODE
+>(int imap_stream, string ref, string pat);<P
+></P
+></DIV
+><P
+>     Returns an array of objects containing mailbox information. Each
+     object has the attributes <TT
+CLASS="PARAMETER"
+><I
+>name</I
+></TT
+>, specifying
+     the full name of the mailbox; <TT
+CLASS="PARAMETER"
+><I
+>delimiter</I
+></TT
+>,
+     which is the hierarchy delimiter for the part of the hierarchy
+     this mailbox is in; and
+     <TT
+CLASS="PARAMETER"
+><I
+>attributes</I
+></TT
+>. <TT
+CLASS="PARAMETER"
+><I
+>Attributes</I
+></TT
+>
+     is a bitmask that can be tested against:
+    <P
+></P
+><UL
+><LI
+><P
+>	LATT_NOINFERIORS - This mailbox has no "children" (there are no mailboxes below this one)</P
+></LI
+><LI
+><P
+>	LATT_NOSELECT - This is only a container, not a mailbox - you cannot open it.</P
+></LI
+><LI
+><P
+>	LATT_MARKED - This mailbox is marked. Only used by UW-IMAPD.</P
+></LI
+><LI
+><P
+>	LATT_UNMARKED - This mailbox is not marked. Only used by UW-IMAPD.</P
+></LI
+></UL
+></P
+><P
+>     <TT
+CLASS="PARAMETER"
+><I
+>ref</I
+></TT
+> should normally be just the IMAP
+     server, in the form: {imap_server:imap_port}, and
+     <TT
+CLASS="PARAMETER"
+><I
+>pattern</I
+></TT
+> specifies where in the mailbox
+     hierarchy to start searching. If you want all mailboxes, pass
+     <TT
+CLASS="PARAMETER"
+><I
+>pattern</I
+></TT
+> as an empty string.</P
+><P
+>     There are two special characters you can pass as part of the
+     <TT
+CLASS="PARAMETER"
+><I
+>pattern</I
+></TT
+>: '*' and '%'. '*' means to return
+     all mailboxes. If you pass <TT
+CLASS="PARAMETER"
+><I
+>pattern</I
+></TT
+> as '*',
+     you will get a list of the entire mailbox hierarchy. '%' means to
+     return the current level only. '%' as the
+     <TT
+CLASS="PARAMETER"
+><I
+>pattern</I
+></TT
+> parameter will return only the top
+     level mailboxes; '~/mail/%' on UW_IMAPD will return every mailbox
+     in the ~/mail directory, but none in subfolders of that
+     directory.</P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.imap-listmailbox.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.imap-listsubscribed.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>imap_listmailbox</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.imap.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>imap_listsubscribed</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -4,7 +4,7 @@
 >include</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -69,89 +69,124 @@ CLASS="SECT1"
 CLASS="SECT1"
 ><A
 NAME="FUNCTION.INCLUDE"
-><TT
-CLASS="LITERAL"
->include</TT
+><A
+HREF="function.include.html"
+><B
+CLASS="FUNCTION"
+>include()</B
+></A
 ></A
 ></H1
 ><P
->     The <TT
-CLASS="LITERAL"
->include</TT
+>	The <A
+HREF="function.include.html"
+><B
+CLASS="FUNCTION"
+>include()</B
+></A
 > statement includes and evaluates
-     the specified file.
- 
-    </P
+	the specified file.
+   </P
 ><P
->     This happens each time the <TT
-CLASS="LITERAL"
->include</TT
+>	An important note about how this works is that when a file is
+	<A
+HREF="function.include.html"
+><B
+CLASS="FUNCTION"
+>include()</B
+></A
+>ed or <A
+HREF="function.require.html"
+><B
+CLASS="FUNCTION"
+>require()</B
+></A
+>ed,
+	parsing drops out of PHP mode and into HTML mode at the beginning
+	of the target file, and resumes again at the end. For this reason,
+	any code inside the target file which should be executed as PHP
+	code must be enclosed within <A
+HREF="language.basic-syntax.html#LANGUAGE.BASIC-SYNTAX.PHPMODE"
+>valid PHP start and end
+	tags</A
+>.
+   </P
+><P
+>     This happens each time the <A
+HREF="function.include.html"
+><B
+CLASS="FUNCTION"
+>include()</B
+></A
 > statement is
-     encountered, so you can use an <TT
-CLASS="LITERAL"
->include</TT
+     encountered, so you can use an <A
+HREF="function.include.html"
+><B
+CLASS="FUNCTION"
+>include()</B
+></A
 > statement
-     within a looping structure to include a number of different file.
+     within a looping structure to include a number of different files.
  
-     <DIV
+	<DIV
 CLASS="INFORMALEXAMPLE"
 ><P
 ></P
 ><PRE
 CLASS="PROGRAMLISTING"
-> $files = array ('first.inc', 'second.inc', 'third.inc');
- for ($i = 0; $i &#60; count($files); $i++) {
-     include $files[$i];
- }
-      </PRE
+>$files = array ('first.inc', 'second.inc', 'third.inc');
+for ($i = 0; $i &#60; count($files); $i++) {
+    include $files[$i];
+}
+	 </PRE
 ><P
 ></P
 ></DIV
 >
-
-    </P
+   </P
 ><P
->     <A
+>	<A
 HREF="function.include.html"
-><TT
-CLASS="LITERAL"
->include</TT
+><B
+CLASS="FUNCTION"
+>include()</B
 ></A
->
-     differs from <A
+> differs from
+	<A
 HREF="function.require.html"
-><TT
-CLASS="LITERAL"
->require</TT
+><B
+CLASS="FUNCTION"
+>require()</B
 ></A
->
-     in that the include statement is re-evaluated each time it is
-     encountered (and only when it is being executed), whereas the
-     <A
+> in that the include statement is
+	re-evaluated each time it is encountered (and only when it is
+	being executed), whereas the <A
 HREF="function.require.html"
-><TT
-CLASS="LITERAL"
->require</TT
+><B
+CLASS="FUNCTION"
+>require()</B
 ></A
 >
-     statement is replaced by the required file when it is first
-     encountered, whether the contents of the file will be evaluated or
-     not (for example, if it is inside an if statement whose condition
-     evaluated to false).
- 
-    </P
+	statement is replaced by the required file when it is first
+	encountered, whether the contents of the file will be evaluated or
+	not (for example, if it is inside an <A
+HREF="control-structures.html#CONTROL-STRUCTURES.IF"
+>if</A
+> statement whose
+	condition evaluated to false).
+   </P
 ><P
->     Because <A
+>	Because <A
 HREF="function.include.html"
-><TT
-CLASS="LITERAL"
->include</TT
+><B
+CLASS="FUNCTION"
+>include()</B
 ></A
-> is a
-     special language construct, you must enclose it within a statement
-     block if it is inside a conditional block.
+> is a special language
+	construct, you must enclose it within a statement block if it is
+	inside a conditional block.
  
-     <DIV
+	<DIV
 CLASS="INFORMALEXAMPLE"
 ><P
 ></P
@@ -171,42 +206,260 @@ CLASS="PROGRAMLISTING"
  } else {
      include($other);
  }
-      </PRE
+	 </PRE
 ><P
 ></P
 ></DIV
 >
- 
-    </P
+   </P
 ><P
->     When the file is evaluated, the parser begins in "HTML-mode" which
-     will output the contents of the file until the first PHP start tag
-     (&lt;?)  is encountered.
-
-    </P
-><P
->     See also <A
-HREF="function.readfile.html"
+>	In both PHP3 and PHP4, it is possible to execute a
+	<TT
+CLASS="LITERAL"
+>return</TT
+> statement inside an
+	<A
+HREF="function.include.html"
 ><B
 CLASS="FUNCTION"
->readfile()</B
+>include()</B
 ></A
->, <A
+>ed file, in order to terminate
+	processing in that file and return to the script which called
+	it. Some differences in the way this works exist, however. The
+	first is that in PHP3, the <TT
+CLASS="LITERAL"
+>return</TT
+> may not
+	appear inside a block unless it's a function block, in which case 
+	the <TT
+CLASS="LITERAL"
+>return</TT
+> applies to that function and not the 
+	whole file. In PHP4, however, this restriction does not
+	exist. Also, PHP4 allows you to return values from
+	<A
+HREF="function.include.html"
+><B
+CLASS="FUNCTION"
+>include()</B
+></A
+>ed files. You can take the value of the 
+	<A
+HREF="function.include.html"
+><B
+CLASS="FUNCTION"
+>include()</B
+></A
+> call as you would a normal
+	function. This generates a parse error in PHP3.
+   </P
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="EXAMPLE"
+><P
+><B
+>Example 11-1. <A
+HREF="function.include.html"
+><B
+CLASS="FUNCTION"
+>include()</B
+></A
+> in PHP3 and PHP4</B
+></P
+><P
+>	 Assume the existence of the following file (named
+	 <TT
+CLASS="FILENAME"
+>test.inc</TT
+>) in the same directory as the main
+	 file:
+	 <PRE
+CLASS="PROGRAMLISTING"
+>&lt;?php
+echo "Before the return &lt;br&gt;\n";
+if ( 1 ) {
+   return 27;
+}
+echo "After the return &lt;br&gt;\n";
+?&gt;
+	 </PRE
+>
+	</P
+><P
+>	 Assume that the main file (<TT
+CLASS="FILENAME"
+>main.html</TT
+>)
+	 contains the following:
+	 <PRE
+CLASS="PROGRAMLISTING"
+>&lt;?php
+$retval = include( 'test.inc' );
+echo "File returned: '$retval'&lt;br&gt;\n";
+?&gt;
+	 </PRE
+>
+	</P
+><P
+>	 When <TT
+CLASS="FILENAME"
+>main.html</TT
+> is called in PHP3, it will
+	 generate a parse error on line 2; you can't take the value of an
+	 <A
+HREF="function.include.html"
+><B
+CLASS="FUNCTION"
+>include()</B
+></A
+> in PHP3. In PHP4, however, the
+	 result will be:
+	 <PRE
+CLASS="SCREEN"
+>Before the return
+File returned: '27'
+	 </PRE
+>
+	</P
+><P
+>	 Now, assume that <TT
+CLASS="FILENAME"
+>main.html</TT
+> has been altered
+	 to contain the following:
+	 <PRE
+CLASS="PROGRAMLISTING"
+>&lt;?php
+include( 'test.inc' );
+echo "Back in main.html&lt;br&gt;\n";
+?&gt;
+	 </PRE
+>
+	</P
+><P
+>	 In PHP4, the output will be:
+	 <PRE
+CLASS="SCREEN"
+>Before the return
+Back in main.html
+	 </PRE
+>
+	 However, PHP3 will give the following output:
+	 <PRE
+CLASS="SCREEN"
+>Before the return 
+27Back in main.html
+
+Parse error: parse error in /home/torben/public_html/phptest/main.html on line 5
+	 </PRE
+>
+	</P
+><P
+>	 The above parse error is a result of the fact that the
+	 <TT
+CLASS="LITERAL"
+>return</TT
+> statement is enclosed in a non-function 
+	 block within <TT
+CLASS="FILENAME"
+>test.inc</TT
+>. When the return is
+	 moved outside of the block, the output is:
+	 <PRE
+CLASS="SCREEN"
+>Before the return
+27Back in main.html
+	 </PRE
+>
+	</P
+><P
+>	 The spurious '27' is due to the fact that PHP3 does not support
+	 <TT
+CLASS="LITERAL"
+>return</TT
+>ing values from files like that. 
+	</P
+></DIV
+></TD
+></TR
+></TABLE
+><P
+>	Please note that both <A
+HREF="function.include.html"
+><B
+CLASS="FUNCTION"
+>include()</B
+></A
+> and
+	<A
 HREF="function.require.html"
 ><B
 CLASS="FUNCTION"
 >require()</B
 ></A
+> actually pull the contents of the
+	target file into the calling script file itself; they do not call
+	the target via HTTP or anything like that. So any variable set in
+	the scope in which the inclusion happens will be available within
+	the included file automatically, since it has effectively become a 
+	part of the calling file. 
+	<DIV
+CLASS="INFORMALEXAMPLE"
+><P
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>include( "file.inc?varone=1&amp;vartwo=2" ); /* Won't work. */
+
+$varone = 1;
+$vartwo = 2;
+include( "file.inc" );  /* $varone and $vartwo will be available in file.inc */
+
+	 </PRE
+><P
+></P
+></DIV
+>
+
+   </P
+><P
+>	Don't be misled by the fact that you can require or include files
+	via HTTP using the <A
+HREF="features.remote-files.html"
+>Remote
+	 files</A
+> feature; the above holds true regardless.
+   </P
+><P
+>	See also <A
+HREF="function.readfile.html"
+><B
+CLASS="FUNCTION"
+>readfile()</B
+></A
 >,
-     <A
+	<A
+HREF="function.require.html"
+><B
+CLASS="FUNCTION"
+>require()</B
+></A
+>, and <A
 HREF="function.virtual.html"
 ><B
 CLASS="FUNCTION"
 >virtual()</B
 ></A
 >.
- 
-  </P
+   </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -248,9 +501,12 @@ HREF="functions.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
-><TT
-CLASS="LITERAL"
->require</TT
+><A
+HREF="function.require.html"
+><B
+CLASS="FUNCTION"
+>require()</B
+></A
 ></TD
 ><TD
 WIDTH="34%"

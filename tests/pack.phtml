@@ -1,0 +1,22 @@
+<?
+  Function echotest($thing) {
+    echo "Trying " . $thing . ": '";
+	$totry = "echo " . $thing . ";";
+	eval($totry);
+	echo "' (hex ";
+	$totry = '$a = unpack("H*", ' . $thing . '); echo($a[""]);';
+	eval($totry);
+	echo ")\n";
+  }
+  echo "Perl examples\n";
+  echotest('pack("cccc",65,66,67,68)');
+  echotest('pack("c4",65,66,67,68)');
+  echotest('pack("s2",1,2)');
+  echotest('pack("N2",1,2)');
+  echotest('pack("a4", "abcd")');
+  echotest('pack("aaaa", "abcd", "x", "y", "z")');
+  echotest('pack("a14", "abcdefg")');
+  echotest('pack("a4@8", "hi")');
+  echotest('pack("a6X2c", "hi", 255)');
+
+?>

@@ -4,7 +4,7 @@
 >gzseek</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -71,13 +71,13 @@ NAME="FUNCTION.GZSEEK"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN23689"
+NAME="AEN6534"
 ></A
 >gzseek -- seek on a gz-file pointer</DIV
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN23692"
+NAME="AEN6537"
 ></A
 ><H2
 >Description</H2
@@ -97,21 +97,15 @@ CLASS="FUNCDEF"
      <TT
 CLASS="LITERAL"
 >gzseek( zp, offset, SEEK_SET )</TT
->.
-
-    </P
+>.</P
 ><P
 >     If the file is opened for reading, this function is emulated but
      can be extremely slow. If the file is opened for writing, only
      forward seeks are supported; gzseek then compresses a sequence of
-     zeroes up to the new starting position.
-
-    </P
+     zeroes up to the new starting position.</P
 ><P
 >     Upon success, returns 0; otherwise, returns -1. Note that seeking
-     past EOF is not considered an error.
-
-    </P
+     past EOF is not considered an error.</P
 ><P
 >     See also <A
 HREF="function.gztell.html"
@@ -126,9 +120,7 @@ HREF="function.gzrewind.html"
 CLASS="FUNCTION"
 >gzrewind()</B
 ></A
->.
-
-   </P
+>.</P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

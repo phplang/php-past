@@ -4,7 +4,7 @@
 >ImageGif</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -71,13 +71,13 @@ NAME="FUNCTION.IMAGEGIF"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN10200"
+NAME="AEN11938"
 ></A
 >ImageGif -- output image to browser or file</DIV
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN10203"
+NAME="AEN11941"
 ></A
 ><H2
 >Description</H2
@@ -95,27 +95,26 @@ CLASS="FUNCDEF"
 >     <B
 CLASS="FUNCTION"
 >imagegif()</B
-> creates the GIF file in filename from
-     the image <TT
+> creates the GIF file in filename
+     from the image <TT
 CLASS="PARAMETER"
 ><I
 >im</I
 ></TT
->. The <TT
+>. The
+     <TT
 CLASS="PARAMETER"
 ><I
 >im</I
 ></TT
->
-     argument is the return from the <A
+> argument is the return from the
+     <A
 HREF="function.imagecreate.html"
 ><B
 CLASS="FUNCTION"
 >imagecreate()</B
 ></A
->
-     function.
-    </P
+> function.</P
 ><P
 >     The image format will be GIF87a unless the image has been made
      transparent with <A
@@ -125,19 +124,18 @@ CLASS="FUNCTION"
 >imagecolortransparent()</B
 ></A
 >, in
-     which case the image format will be GIF89a.
-    </P
+     which case the image format will be GIF89a.</P
 ><P
 >     The filename argument is optional, and if left off, the raw image
-     stream will be output directly.  By sending an image/gif content-type
-     using <A
+     stream will be output directly.  By sending an image/gif
+     content-type using <A
 HREF="function.header.html"
 ><B
 CLASS="FUNCTION"
 >header()</B
 ></A
->, you can create a PHP script that
-     outputs GIF images directly.
+>, you can create a
+     PHP script that outputs GIF images directly.
     <DIV
 CLASS="NOTE"
 ><BLOCKQUOTE
@@ -145,15 +143,12 @@ CLASS="NOTE"
 ><P
 ><B
 >Note: </B
->      Since all GIF support was removed from the GD library in version 1.6,
-      this function is not available if you are using that version of the
-      GD library.
-    </P
+>      Since all GIF support was removed from the GD library in version
+      1.6, this function is not available if you are using that
+      version of the GD library.</P
 ></BLOCKQUOTE
 ></DIV
->
-
-   </P
+></P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

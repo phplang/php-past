@@ -1,0 +1,187 @@
+<HTML
+><HEAD
+><TITLE
+>Assignment Operators</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Operators"
+HREF="language.operators.html"><LINK
+REL="PREVIOUS"
+TITLE="Operators"
+HREF="language.operators.html"><LINK
+REL="NEXT"
+TITLE="Bitwise Operators"
+HREF="language.operators.bitwise.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="language.operators.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 10. Operators</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="language.operators.bitwise.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="LANGUAGE.OPERATORS.ASSIGNMENT"
+>Assignment Operators</A
+></H1
+><P
+>     The basic assignment operator is "=". Your first inclination might
+     be to think of this as "equal to". Don't. It really means that
+     the the left operand gets set to the value of the expression on the
+     rights (that is, "gets set to").
+    </P
+><P
+>     The value of an assignment expression is the value assigned. That
+     is, the value of "$a = 3" is 3. This allows you to do some tricky
+     things: <DIV
+CLASS="INFORMALEXAMPLE"
+><P
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>$a = ($b = 4) + 5; // $a is equal to 9 now, and $b has been set to 4.</PRE
+><P
+></P
+></DIV
+>
+    </P
+><P
+>     In addition to the basic assignment operator, there are "combined
+     operators" for all of the binary arithmetic and string operators
+     that allow you to use a value in an expression and then set its
+     value to the result of that expression. For example: <DIV
+CLASS="INFORMALEXAMPLE"
+><P
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>$a = 3;
+$a += 5; // sets $a to 8, as if we had said: $a = $a + 5;
+$b = "Hello ";
+$b .= "There!"; // sets $b to "Hello There!", just like $b = $b . "There!";</PRE
+><P
+></P
+></DIV
+>
+    </P
+><P
+>	Note that the assignment copies the original variable to the new
+	one (assignment by value), so changes to one will not affect the
+	other. This may also have relevance if you need to copy something
+	like a large array inside a tight loop. PHP4 supports assignment
+	by reference, using the <TT
+CLASS="COMPUTEROUTPUT"
+>$var =
+	&amp;$othervar;</TT
+> syntax, but this is not possible
+	in PHP3. 'Assignment by reference' means that both variables end
+	up pointing at the same data, and nothing is copied anywhere.
+   </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="language.operators.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="language.operators.bitwise.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Operators</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="language.operators.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Bitwise Operators</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -4,7 +4,7 @@
 >mysql_connect</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -71,13 +71,13 @@ NAME="FUNCTION.MYSQL-CONNECT"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN15772"
+NAME="AEN17867"
 ></A
 >mysql_connect -- Open a connection to a MySQL Server</DIV
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN15775"
+NAME="AEN17870"
 ></A
 ><H2
 >Description</H2
@@ -117,8 +117,7 @@ CLASS="OPTIONAL"
 ><P
 > 
      Returns: A positive MySQL link identifier on success, or false on
-     error.
-    </P
+     error.</P
 ><P
 > 
      <B
@@ -127,8 +126,7 @@ CLASS="FUNCTION"
 > establishes a connection to a
      MySQL server.  All of the arguments are optional, and if they're
      missing, defaults are assumed ('localhost', user name of the user
-     that owns the server process, empty password).  
-    </P
+     that owns the server process, empty password).</P
 ><P
 >     The hostname string can also include a port
      number. eg. &quot;hostname:port&quot; or a path to a socket
@@ -140,16 +138,13 @@ CLASS="NOTE"
 ><P
 ><B
 >Note: </B
->       Support for &quot;:port&quot; wass added in 3.0B4.
-      </P
+>       Support for &quot;:port&quot; wass added in 3.0B4.</P
 ><P
 >       Support for the &quot;:/path/to/socket&quot; was added in
-       3.0.10.
-     </P
+       3.0.10.</P
 ></BLOCKQUOTE
 ></DIV
->
-    </P
+></P
 ><P
 > 
      In case a second call is made to
@@ -158,8 +153,7 @@ CLASS="FUNCTION"
 >mysql_connect()</B
 > with the same arguments, no
      new link will be established, but instead, the link identifier of
-     the already opened link will be returned.
-    </P
+     the already opened link will be returned.</P
 ><P
 >     The link to the server will be closed as soon as the execution of
      the script ends, unless it's closed earlier by explicitly calling
@@ -169,8 +163,7 @@ HREF="function.mysql-close.html"
 CLASS="FUNCTION"
 >mysql_close()</B
 ></A
->.  
-    </P
+>.</P
 ><P
 > See also
      <A
@@ -186,8 +179,7 @@ HREF="function.mysql-close.html"
 CLASS="FUNCTION"
 >mysql_close()</B
 ></A
->.
-   </P
+>.</P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

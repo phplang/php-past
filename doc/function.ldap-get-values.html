@@ -4,7 +4,7 @@
 >ldap_get_values</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -15,8 +15,8 @@ REL="PREVIOUS"
 TITLE="ldap_get_entries"
 HREF="function.ldap-get-entries.html"><LINK
 REL="NEXT"
-TITLE="ldap_list"
-HREF="function.ldap-list.html"></HEAD
+TITLE="ldap_get_values_len"
+HREF="function.ldap-get-values-len.html"></HEAD
 ><BODY
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
@@ -55,7 +55,7 @@ WIDTH="10%"
 ALIGN="right"
 VALIGN="bottom"
 ><A
-HREF="function.ldap-list.html"
+HREF="function.ldap-get-values-len.html"
 >Next</A
 ></TD
 ></TR
@@ -71,13 +71,13 @@ NAME="FUNCTION.LDAP-GET-VALUES"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN13193"
+NAME="AEN14718"
 ></A
 >ldap_get_values -- Get all values from a result entry</DIV
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN13196"
+NAME="AEN14721"
 ></A
 ><H2
 >Description</H2
@@ -93,8 +93,7 @@ CLASS="FUNCDEF"
 ></DIV
 ><P
 >     Returns an array of values for the attribute on success and false
-     on error.
-    </P
+     on error.</P
 ><P
 >  
      <B
@@ -111,8 +110,7 @@ CLASS="PARAMETER"
 >. The number of
      values can be found by indexing "count" in the resultant
      array. Individual values are accessed by integer index in the
-     array.  The first index is 0.  
-    </P
+     array.  The first index is 0.</P
 ><P
 >     This call needs a <TT
 CLASS="PARAMETER"
@@ -121,8 +119,7 @@ CLASS="PARAMETER"
 ></TT
 >,
      so needs to be preceded by one of the ldap search calls and one
-     of the calls to get an individual entry.
-    </P
+     of the calls to get an individual entry.</P
 ><P
 >     You application will either be hard coded to look for certain
      attributes (such as "surname" or "mail") or you will have to use
@@ -133,8 +130,7 @@ CLASS="FUNCTION"
 >ldap_get_attributes()</B
 ></A
 > call to work out
-     what attributes exist for a given entry.
-    </P
+     what attributes exist for a given entry.</P
 ><P
 >     LDAP allows more than one entry for an attribute, so it can, for
      example, store a number of email addresses for one person's
@@ -189,9 +185,7 @@ for ($i=0; $i &lt; $values["count"]; $i++)
 ></TD
 ></TR
 ></TABLE
->
-
-   </P
+></P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -224,7 +218,7 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><A
-HREF="function.ldap-list.html"
+HREF="function.ldap-get-values-len.html"
 >Next</A
 ></TD
 ></TR
@@ -246,7 +240,7 @@ HREF="ref.ldap.html"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->ldap_list</TD
+>ldap_get_values_len</TD
 ></TR
 ></TABLE
 ></DIV

@@ -4,7 +4,7 @@
 >array_splice</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -15,8 +15,8 @@ REL="PREVIOUS"
 TITLE="array_slice"
 HREF="function.array-slice.html"><LINK
 REL="NEXT"
-TITLE="array_merge"
-HREF="function.array-merge.html"></HEAD
+TITLE="array_unshift"
+HREF="function.array-unshift.html"></HEAD
 ><BODY
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
@@ -55,7 +55,7 @@ WIDTH="10%"
 ALIGN="right"
 VALIGN="bottom"
 ><A
-HREF="function.array-merge.html"
+HREF="function.array-unshift.html"
 >Next</A
 ></TD
 ></TR
@@ -71,13 +71,15 @@ NAME="FUNCTION.ARRAY-SPLICE"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN3117"
+NAME="AEN3807"
 ></A
->array_splice -- Remove a portion of the array and replace it with something else</DIV
+>array_splice --      Remove a portion of the array and replace it with something
+     else
+    </DIV
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN3120"
+NAME="AEN3810"
 ></A
 ><H2
 >Description</H2
@@ -94,11 +96,10 @@ CLASS="OPTIONAL"
 >length</SPAN
 >]
      , array
-      [<SPAN
+     [<SPAN
 CLASS="OPTIONAL"
 >replacement</SPAN
->]
-     );<P
+>]);<P
 ></P
 ></DIV
 ><P
@@ -129,9 +130,8 @@ CLASS="PARAMETER"
 ><I
 >replacement</I
 ></TT
-> array, if supplied.
-
-    </P
+> array, if
+     supplied.</P
 ><P
 >     If <TT
 CLASS="PARAMETER"
@@ -157,9 +157,7 @@ CLASS="PARAMETER"
 ><I
 >input</I
 ></TT
-> array.
-
-    </P
+> array.</P
 ><P
 >     If <TT
 CLASS="PARAMETER"
@@ -209,9 +207,7 @@ CLASS="PARAMETER"
 ><I
 >length</I
 ></TT
->.
-
-    </P
+>.</P
 ><P
 >     If <TT
 CLASS="PARAMETER"
@@ -219,32 +215,37 @@ CLASS="PARAMETER"
 >replacement</I
 ></TT
 > array is specified, then
-     the removed elements are replaced with elements from this array.  If <TT
+     the removed elements are replaced with elements from this array.
+     If <TT
 CLASS="PARAMETER"
 ><I
 >offset</I
 ></TT
-> and <TT
+> and
+     <TT
 CLASS="PARAMETER"
 ><I
 >length</I
 ></TT
-> are such that nothing is removed, then the elements from the <TT
+> are such that nothing is removed,
+     then the elements from the <TT
 CLASS="PARAMETER"
 ><I
 >replacement</I
 ></TT
-> array are inserted in the place specified by the <TT
+>
+     array are inserted in the place specified by the
+     <TT
 CLASS="PARAMETER"
 ><I
 >offset</I
 ></TT
->. Tip: if the replacement is just one element it is not necessary to put <TT
+>. Tip: if the replacement is just
+     one element it is not necessary to put <TT
 CLASS="LITERAL"
 >array()</TT
-> around it, unless the element is an array itself.
-
-    </P
+>
+     around it, unless the element is an array itself.</P
 ><P
 >     The following equivalences hold:
      <PRE
@@ -255,13 +256,9 @@ array_shift($input)            array_splice($input, 0, 1)
 array_unshift($input, $x, $y)  array_splice($input, 0, 0, array($x, $y))
 $a[$x] = $y                    array_splice($input, $x, 1, $y)
      </PRE
->
-
-    </P
+></P
 ><P
->     Returns the array consisting of removed elements.
-
-    </P
+>     Returns the array consisting of removed elements.</P
 ><P
 >     <TABLE
 WIDTH="100%"
@@ -286,16 +283,17 @@ CLASS="PROGRAMLISTING"
 
 array_splice($input, 2);      // $input is now array("red", "green")
 array_splice($input, 1, -1);  // $input is now array("red", "yellow")
-array_splice($input, 1, count($input), "orange");  // $input is now array("red", "orange")
-array_splice($input, -1, 1, array("black", "maroon")); // $input is now array("red", "green", "blue", "black", "maroon")
+array_splice($input, 1, count($input), "orange");  
+                              // $input is now array("red", "orange")
+array_splice($input, -1, 1, array("black", "maroon")); 
+                              // $input is now array("red", "green", 
+                              //          "blue", "black", "maroon")
       </PRE
 ></DIV
 ></TD
 ></TR
 ></TABLE
->
-
-    </P
+></P
 ><P
 >     See also <A
 HREF="function.array-slice.html"
@@ -312,12 +310,10 @@ CLASS="NOTE"
 ><P
 ><B
 >Note: </B
->      This function was added in PHP 4.0. 
-    </P
+>      This function was added in PHP 4.0.</P
 ></BLOCKQUOTE
 ></DIV
->
-   </P
+></P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -350,7 +346,7 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><A
-HREF="function.array-merge.html"
+HREF="function.array-unshift.html"
 >Next</A
 ></TD
 ></TR
@@ -372,7 +368,7 @@ HREF="ref.array.html"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->array_merge</TD
+>array_unshift</TD
 ></TR
 ></TABLE
 ></DIV

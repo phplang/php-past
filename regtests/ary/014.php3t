@@ -1,0 +1,8 @@
+--$Id: 014.php3t,v 1.1 1998/08/23 03:10:17 rocky Exp $
+--TITLE--
+Unset a single element array                                  ...
+--URL--
+ary/014.phtml
+--EXPECT--
+$a[0] -> def
+$a[1] -> ghi

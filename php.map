@@ -1,0 +1,4 @@
+PHP3 { 
+	global: php3_module;
+	local: *; 
+};

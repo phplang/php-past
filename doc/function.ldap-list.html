@@ -4,7 +4,7 @@
 >ldap_list</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -12,8 +12,8 @@ REL="UP"
 TITLE="LDAP functions"
 HREF="ref.ldap.html"><LINK
 REL="PREVIOUS"
-TITLE="ldap_get_values"
-HREF="function.ldap-get-values.html"><LINK
+TITLE="ldap_get_values_len"
+HREF="function.ldap-get-values-len.html"><LINK
 REL="NEXT"
 TITLE="ldap_modify"
 HREF="function.ldap-modify.html"></HEAD
@@ -42,7 +42,7 @@ WIDTH="10%"
 ALIGN="left"
 VALIGN="bottom"
 ><A
-HREF="function.ldap-get-values.html"
+HREF="function.ldap-get-values-len.html"
 >Prev</A
 ></TD
 ><TD
@@ -71,13 +71,13 @@ NAME="FUNCTION.LDAP-LIST"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN13222"
+NAME="AEN14768"
 ></A
 >ldap_list -- Single-level search</DIV
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN13225"
+NAME="AEN14771"
 ></A
 ><H2
 >Description</H2
@@ -96,21 +96,18 @@ CLASS="OPTIONAL"
 ></P
 ></DIV
 ><P
->     Returns a search result identifier or false on error.  
-    </P
+>     Returns a search result identifier or false on error.</P
 ><P
 >     <B
 CLASS="FUNCTION"
 >ldap_list()</B
 > performs the search for a specified
-     filter on the directory with the scope LDAP_SCOPE_ONELEVEL.
-    </P
+     filter on the directory with the scope LDAP_SCOPE_ONELEVEL.</P
 ><P
 >     LDAP_SCOPE_ONELEVEL means that the search should only return
      information that is at the level immediately below the base dn
      given in the call. (Equivalent to typing "ls" and getting a list
-     of files and folders in the current working directory.)
-    </P
+     of files and folders in the current working directory.)</P
 ><P
 >     This call takes an optional fourth parameter which is an array of
      the attributes required. See <A
@@ -154,8 +151,7 @@ for ($i=0; $i&#60;$info["count"]; $i++)
 ></TD
 ></TR
 ></TABLE
->
-  </P
+></P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -172,7 +168,7 @@ WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
 ><A
-HREF="function.ldap-get-values.html"
+HREF="function.ldap-get-values-len.html"
 >Prev</A
 ></TD
 ><TD
@@ -197,7 +193,7 @@ HREF="function.ldap-modify.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->ldap_get_values</TD
+>ldap_get_values_len</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"

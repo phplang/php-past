@@ -4,7 +4,7 @@
 >mssql_pconnect</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -71,13 +71,13 @@ NAME="FUNCTION.MSSQL-PCONNECT"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN15640"
+NAME="AEN16531"
 ></A
 >mssql_pconnect -- open persistent MS SQL connection</DIV
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN15643"
+NAME="AEN16534"
 ></A
 ><H2
 >Description</H2
@@ -94,8 +94,7 @@ CLASS="FUNCDEF"
 ><P
 > 
      Returns: A positive MS SQL persistent link identifier on success,
-     or false on error
-    </P
+     or false on error</P
 ><P
 >     mssql_pconnect() acts very much like
      <A
@@ -104,15 +103,13 @@ HREF="function.mssql-connect.html"
 CLASS="FUNCTION"
 >mssql_connect()</B
 ></A
-> with two major differences.
-    </P
+> with two major differences.</P
 ><P
 > 
      First, when connecting, the function would first try to find a
      (persistent) link that's already open with the same host,
      username and password.  If one is found, an identifier for it
-     will be returned instead of opening a new connection.
-    </P
+     will be returned instead of opening a new connection.</P
 ><P
 > 
      Second, the connection to the SQL server will not be closed when
@@ -127,13 +124,10 @@ CLASS="FUNCTION"
      close links established by <TT
 CLASS="LITERAL"
 >mssql_pconnect()</TT
->).
-    </P
+>).</P
 ><P
 > 
-     This type of links is therefore called 'persistent'.
-
-   </P
+     This type of links is therefore called 'persistent'.</P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

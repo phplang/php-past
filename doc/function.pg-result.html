@@ -1,0 +1,189 @@
+<HTML
+><HEAD
+><TITLE
+>pg_Result</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="PostgreSQL functions"
+HREF="ref.pgsql.html"><LINK
+REL="PREVIOUS"
+TITLE="pg_Port"
+HREF="function.pg-port.html"><LINK
+REL="NEXT"
+TITLE="pg_tty"
+HREF="function.pg-tty.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.pg-port.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.pg-tty.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="FUNCTION.PG-RESULT"
+>pg_Result</A
+></H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN23644"
+></A
+>pg_Result -- Returns values from a result identifier</DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN23647"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><CODE
+CLASS="FUNCDEF"
+>mixed pg_result</CODE
+>(int result_id, int row_number, mixed fieldname);<P
+></P
+></DIV
+><P
+>     pg_Result() will return values from a result identifier produced
+     by <A
+HREF="function.pg-exec.html"
+><B
+CLASS="FUNCTION"
+>pg_Exec()</B
+></A
+>.  The
+     <TT
+CLASS="PARAMETER"
+><I
+>row_number</I
+></TT
+> and
+     <TT
+CLASS="PARAMETER"
+><I
+>fieldname</I
+></TT
+> sepcify what cell in the table
+     of results to return.  Row numbering starts from 0.  Instead of
+     naming the field, you may use the field index as an unquoted
+     number.  Field indices start from 0.</P
+><P
+>     PostgreSQL has many built in types and only the basic ones are
+     directly supported here.  All forms of integer, boolean and oid
+     types are returned as integer values.  All forms of float, and
+     real types are returned as double values.  All other types,
+     including arrays are returned as strings formatted in the same
+     default PostgreSQL manner that you would see in the
+     <B
+CLASS="COMMAND"
+>psql</B
+> program.</P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.pg-port.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.pg-tty.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>pg_Port</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.pgsql.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>pg_tty</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

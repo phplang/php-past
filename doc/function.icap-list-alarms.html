@@ -1,0 +1,207 @@
+<HTML
+><HEAD
+><TITLE
+>icap_list_alarms</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="ICAP functions"
+HREF="ref.icap.html"><LINK
+REL="PREVIOUS"
+TITLE="icap_snooze"
+HREF="function.icap-snooze.html"><LINK
+REL="NEXT"
+TITLE="Image functions"
+HREF="ref.image.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.icap-snooze.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="ref.image.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="FUNCTION.ICAP-LIST-ALARMS"
+>icap_list_alarms</A
+></H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN10002"
+></A
+>icap_list_alarms --      Return a list of events that has an alarm triggered at the given
+     datetime
+    </DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN10005"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><CODE
+CLASS="FUNCDEF"
+>array icap_list_alarms</CODE
+>(stream icap_stream, datetime alarm_date);<P
+></P
+></DIV
+><P
+>     Returns an array of event ID's that has an alarm going off at the
+     given datetime.  
+    </P
+><P
+> 
+     <B
+CLASS="FUNCTION"
+>icap_list_alarms()</B
+> function takes in a
+     datetime for a calendar stream. An array of event id's that has
+     an alarm should be going off at the datetime are returned.
+    </P
+><P
+>     All datetime entries consist of an object that contains:
+     <P
+></P
+><UL
+><LI
+><P
+>	int year - year
+      </P
+></LI
+><LI
+><P
+>	int month - month
+      </P
+></LI
+><LI
+><P
+>	int mday - day of month
+      </P
+></LI
+><LI
+><P
+>	int hour - hour
+      </P
+></LI
+><LI
+><P
+>	int min - minutes
+     </P
+></LI
+><LI
+><P
+>	int sec - seconds
+     </P
+></LI
+></UL
+>
+   </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.icap-snooze.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="ref.image.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>icap_snooze</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.icap.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Image functions</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

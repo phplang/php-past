@@ -3,7 +3,7 @@
    +----------------------------------------------------------------------+
    | PHP HTML Embedded Scripting Language Version 3.0                     |
    +----------------------------------------------------------------------+
-   | Copyright (c) 1997-1999 PHP Development Team (See Credits file)      |
+   | Copyright (c) 1997-2000 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
    | it under the terms of one of the following licenses:                 |
@@ -30,12 +30,9 @@
 
 
 
-/* $Id: configuration-parser.y,v 1.76 1999/01/01 17:58:48 zeev Exp $ */
+/* $Id: configuration-parser.y,v 1.80 2000/01/01 04:48:04 sas Exp $ */
 
 #define DEBUG_CFG_PARSER 1
-#ifdef THREAD_SAFE
-#include "tls.h"
-#endif
 #include "php.h"
 #include "modules.h"
 #include "functions/dl.h"
@@ -52,10 +49,8 @@
 #define PARSING_MODE_BROWSCAP 1
 
 static HashTable configuration_hash;
-#ifndef THREAD_SAFE
 extern HashTable browser_hash;
 extern char *php3_ini_path;
-#endif
 static HashTable *active__php3_hash_table;
 static pval *current_section;
 static char *currently_parsed_filename;
@@ -167,6 +162,16 @@ int php3_init_config(void)
 				}
 			}
 		}
+#elif OS2
+        if (GLOBAL(php3_ini_path)) {
+            default_location = GLOBAL(php3_ini_path);
+        } else {
+            default_location = getenv("ETC");
+
+            if (!default_location) {
+                default_location = CONFIGURATION_FILE_PATH;
+            }
+        }
 #else
 		if (!GLOBAL(php3_ini_path)) {
 			default_location = CONFIGURATION_FILE_PATH;
@@ -179,7 +184,7 @@ int php3_init_config(void)
 		php_ini_path = (char *) malloc(sizeof(".")+strlen(env_location)+strlen(default_location)+2+1);
 
 		if (!GLOBAL(php3_ini_path)) {
-#if WIN32|WINNT
+#if WIN32|WINNT|OS2
 			sprintf(php_ini_path,".;%s;%s",env_location,default_location);
 #else
 			sprintf(php_ini_path,".:%s:%s",env_location,default_location);

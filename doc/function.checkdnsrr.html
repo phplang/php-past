@@ -4,7 +4,7 @@
 >checkdnsrr</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -12,11 +12,11 @@ REL="UP"
 TITLE="Network functions"
 HREF="ref.network.html"><LINK
 REL="PREVIOUS"
-TITLE="gethostbynamel"
-HREF="function.gethostbynamel.html"><LINK
+TITLE="Network functions"
+HREF="ref.network.html"><LINK
 REL="NEXT"
-TITLE="getmxrr"
-HREF="function.getmxrr.html"></HEAD
+TITLE="closelog"
+HREF="function.closelog.html"></HEAD
 ><BODY
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
@@ -42,7 +42,7 @@ WIDTH="10%"
 ALIGN="left"
 VALIGN="bottom"
 ><A
-HREF="function.gethostbynamel.html"
+HREF="ref.network.html"
 >Prev</A
 ></TD
 ><TD
@@ -55,7 +55,7 @@ WIDTH="10%"
 ALIGN="right"
 VALIGN="bottom"
 ><A
-HREF="function.getmxrr.html"
+HREF="function.closelog.html"
 >Next</A
 ></TD
 ></TR
@@ -71,14 +71,14 @@ NAME="FUNCTION.CHECKDNSRR"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN16916"
+NAME="AEN18566"
 ></A
 >checkdnsrr -- Check DNS records corresponding to a given
     Internet host name or IP address.</DIV
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN16919"
+NAME="AEN18569"
 ></A
 ><H2
 >Description</H2
@@ -109,9 +109,7 @@ CLASS="PARAMETER"
 ></TT
 >. Returns true if any
      records are found; returns false if no records were found or if
-     an error occurred.
-
-    </P
+     an error occurred.</P
 ><P
 >     <TT
 CLASS="PARAMETER"
@@ -119,9 +117,7 @@ CLASS="PARAMETER"
 >type</I
 ></TT
 > may be any one of: A, MX, NS, SOA,
-     PTR, CNAME, or ANY.  The default is MX.
-
-    </P
+     PTR, CNAME, or ANY.  The default is MX.</P
 ><P
 >     <TT
 CLASS="PARAMETER"
@@ -129,9 +125,7 @@ CLASS="PARAMETER"
 >host</I
 ></TT
 > may either be the IP address in
-     dotted-quad notation or the host name.
-
-    </P
+     dotted-quad notation or the host name.</P
 ><P
 >     See also
      <A
@@ -162,9 +156,7 @@ CLASS="FUNCTION"
 >gethostbynamel()</B
 ></A
 >, and
-     the named(8) manual page.
-
-   </P
+     the named(8) manual page.</P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -181,7 +173,7 @@ WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
 ><A
-HREF="function.gethostbynamel.html"
+HREF="ref.network.html"
 >Prev</A
 ></TD
 ><TD
@@ -197,7 +189,7 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><A
-HREF="function.getmxrr.html"
+HREF="function.closelog.html"
 >Next</A
 ></TD
 ></TR
@@ -206,7 +198,7 @@ HREF="function.getmxrr.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->gethostbynamel</TD
+>Network functions</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"
@@ -219,7 +211,7 @@ HREF="ref.network.html"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->getmxrr</TD
+>closelog</TD
 ></TR
 ></TABLE
 ></DIV

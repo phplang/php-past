@@ -1,0 +1,214 @@
+<HTML
+><HEAD
+><TITLE
+>pg_pConnect</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="PostgreSQL functions"
+HREF="ref.pgsql.html"><LINK
+REL="PREVIOUS"
+TITLE="pg_Options"
+HREF="function.pg-options.html"><LINK
+REL="NEXT"
+TITLE="pg_Port"
+HREF="function.pg-port.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.pg-options.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.pg-port.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="FUNCTION.PG-PCONNECT"
+>pg_pConnect</A
+></H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN23602"
+></A
+>pg_pConnect -- make a persistent database connection</DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN23605"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><CODE
+CLASS="FUNCDEF"
+>int pg_pconnect</CODE
+>(string host, string port, string options, string tty, string dbname);<P
+></P
+></DIV
+><P
+>     Returns a connection index on success, or false if the connection
+     could not be made.  Opens a persistent connection to a PostgreSQL
+     database. Each of the arguments should be a quoted string,
+     including the port number. The options and tty arguments are
+     optional and can be left out. This function returns a connection
+     index that is needed by other PostgreSQL functions. You can have
+     multiple persistent connections open at once. See also
+     <A
+HREF="function.pg-connect.html"
+><B
+CLASS="FUNCTION"
+>pg_Connect()</B
+></A
+>.</P
+><P
+>     A connection can also established with the following command:
+     <B
+CLASS="COMMAND"
+>$conn = pg_pconnect("dbname=marliese port=5432");</B
+>
+     Other parameters besides <TT
+CLASS="PARAMETER"
+><I
+>dbname</I
+></TT
+> and
+     <TT
+CLASS="PARAMETER"
+><I
+>port</I
+></TT
+> are <TT
+CLASS="PARAMETER"
+><I
+>host</I
+></TT
+>, 
+     <TT
+CLASS="PARAMETER"
+><I
+>tty</I
+></TT
+>, <TT
+CLASS="PARAMETER"
+><I
+>options</I
+></TT
+>,
+     <TT
+CLASS="PARAMETER"
+><I
+>user</I
+></TT
+> and <TT
+CLASS="PARAMETER"
+><I
+>password</I
+></TT
+>.</P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.pg-options.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.pg-port.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>pg_Options</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.pgsql.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>pg_Port</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

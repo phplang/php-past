@@ -1,0 +1,203 @@
+<HTML
+><HEAD
+><TITLE
+>readgzfile</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Compression functions"
+HREF="ref.zlib.html"><LINK
+REL="PREVIOUS"
+TITLE="gzwrite"
+HREF="function.gzwrite.html"><LINK
+REL="NEXT"
+TITLE="Database (dbm-style) abstraction layer functions"
+HREF="r6628.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.gzwrite.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="r6628.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="FUNCTION.READGZFILE"
+>readgzfile</A
+></H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN6604"
+></A
+>readgzfile -- output a gz-file</DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN6607"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><CODE
+CLASS="FUNCDEF"
+>int readgzfile</CODE
+>(string filename, int [<SPAN
+CLASS="OPTIONAL"
+>use_include_path</SPAN
+>]);<P
+></P
+></DIV
+><P
+> Reads a file, decompresses it and writes it to standard
+    output.</P
+><P
+>     Readgzfile() can be used to read a file which is not in gzip
+     format; in this case readgzfile() will directly read from the
+     file without decompression.</P
+><P
+> Returns the number of (uncompressed) bytes read from the
+     file. If an error occurs, false is returned and unless the
+     function was called as @readgzfile, an error message is printed.</P
+><P
+> The file <TT
+CLASS="PARAMETER"
+><I
+>filename</I
+></TT
+> will be opened
+     from the filesystem and its contents written to standard output.</P
+><P
+>     You can use the optional second parameter and set it to "1", if
+     you want to search for the file in the <A
+HREF="configuration.html#INI.INCLUDE-PATH"
+>include_path</A
+>, too.</P
+><P
+>     See also <A
+HREF="function.gzpassthru.html"
+><B
+CLASS="FUNCTION"
+>gzpassthru()</B
+></A
+>,
+     <A
+HREF="function.gzfile.html"
+><B
+CLASS="FUNCTION"
+>gzfile()</B
+></A
+>, and <A
+HREF="function.gzopen.html"
+><B
+CLASS="FUNCTION"
+>gzopen()</B
+></A
+>.</P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.gzwrite.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="r6628.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>gzwrite</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.zlib.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Database (dbm-style) abstraction layer functions</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

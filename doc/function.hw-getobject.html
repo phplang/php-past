@@ -4,7 +4,7 @@
 >hw_GetObject</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -71,13 +71,13 @@ NAME="FUNCTION.HW-GETOBJECT"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN9223"
+NAME="AEN10805"
 ></A
 >hw_GetObject -- object record</DIV
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN9226"
+NAME="AEN10808"
 ></A
 ><H2
 >Description</H2
@@ -101,13 +101,11 @@ CLASS="PARAMETER"
 > if the second parameter is an integer.
      If the second parameter is an array of integer the function will
      return an array of object records. In such a case the last
-     parameter is also evaluated which is a query string.
-    </P
+     parameter is also evaluated which is a query string.</P
 ><P
->     The query string has the following syntax:
-    </P
+>     The query string has the following syntax:</P
 ><P
->     &lt;expr&#62; ::= "(" &lt;expr&#62; ")" |  </P
+>     &lt;expr&#62; ::= "(" &lt;expr&#62; ")" |</P
 ><P
 >             "!" &lt;expr&#62; |          /* NOT */</P
 ><P
@@ -127,14 +125,13 @@ CLASS="PARAMETER"
 ><P
 >                 "~"      /* regular expression matching */</P
 ><P
->    </P
+></P
 ><P
 >     The query allows to further select certain objects from the list
      of given objects. Unlike the other
      query functions, this query may use not indexed attributes. How many
      object records are returned depends on the query and if access to
-     the object is allowed.
-    </P
+     the object is allowed.</P
 ><P
 >     See also <A
 HREF="function.hw-getandlock.html"
@@ -149,8 +146,7 @@ HREF="function.hw-getobjectbyquery.html"
 CLASS="FUNCTION"
 >hw_GetObjectByQuery()</B
 ></A
->.
-   </P
+>.</P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

@@ -4,7 +4,7 @@
 >array_walk</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -71,14 +71,14 @@ NAME="FUNCTION.ARRAY-WALK"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN3246"
+NAME="AEN3919"
 ></A
 >array_walk --      Apply a user function to every member of an array.
     </DIV
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN3249"
+NAME="AEN3922"
 ></A
 ><H2
 >Description</H2
@@ -89,7 +89,7 @@ CLASS="FUNCSYNOPSIS"
 ><CODE
 CLASS="FUNCDEF"
 >int array_walk</CODE
->(array arr, string func);<P
+>(array arr, string func, mixed userdata);<P
 ></P
 ></DIV
 ><P
@@ -99,24 +99,40 @@ CLASS="PARAMETER"
 >func</I
 ></TT
 > to each
-     element of <TT
+     element of
+     <TT
 CLASS="PARAMETER"
 ><I
 >arr</I
 ></TT
->. The elements are passed as
-     the first argument of <TT
+>. <TT
 CLASS="PARAMETER"
 ><I
 >func</I
 ></TT
->; if
-     <TT
+> will be
+     passed array value as the first parameter and array key as the
+     second parameter.  If <TT
+CLASS="PARAMETER"
+><I
+>userdata</I
+></TT
+> is
+     supplied, it will be passed as the third parameter to the user
+     function.
+
+     If <TT
 CLASS="PARAMETER"
 ><I
 >func</I
 ></TT
-> requires more than one argument, a
+> requires more than two or three
+     arguments, depending on <TT
+CLASS="PARAMETER"
+><I
+>userdata</I
+></TT
+>, a
      warning will be generated each time
      <B
 CLASS="FUNCTION"
@@ -138,9 +154,7 @@ HREF="function.error-reporting.html"
 CLASS="FUNCTION"
 >error_reporting()</B
 ></A
->.
-
-    </P
+>.</P
 ><DIV
 CLASS="NOTE"
 ><BLOCKQUOTE
@@ -148,20 +162,37 @@ CLASS="NOTE"
 ><P
 ><B
 >Note: </B
->      <TT
+>      If <TT
 CLASS="PARAMETER"
 ><I
 >func</I
 ></TT
-> will actually be working with the
-      elements of <TT
+> needs to be working with the
+      actual values of the array, specify that the first parameter of
+      <TT
 CLASS="PARAMETER"
 ><I
->arr</I
+>func</I
 ></TT
->, so any changes made to
-      those elements will be made in the array itself.
+> should be passed by reference. Then
+      any changes made to those elements will be made in the array
+      itself.
      </P
+></BLOCKQUOTE
+></DIV
+><DIV
+CLASS="NOTE"
+><BLOCKQUOTE
+CLASS="NOTE"
+><P
+><B
+>Note: </B
+>      Passing the key and userdata to <TT
+CLASS="PARAMETER"
+><I
+>func</I
+></TT
+> was added in 4.0.</P
 ></BLOCKQUOTE
 ></DIV
 ><P
@@ -186,25 +217,23 @@ CLASS="FUNCTION"
 CLASS="PROGRAMLISTING"
 >$fruits = array("d"=&#62;"lemon","a"=&#62;"orange","b"=&#62;"banana","c"=&#62;"apple");
 
-function test_alter( $item1 ) {
-   $item1 = 'bogus';
+function test_alter( &#38;$item1, $key, $prefix ) {
+   $item1 = "$prefix: $item1";
 }
 
-function test_print( $item2 ) {
-   echo "$item2&lt;br&gt;\n";
+function test_print( $item2, $key ) {
+   echo "$key. $item2&lt;br&gt;\n";
 }
 
 array_walk( $fruits, 'test_print' );
-array_walk( $fruits, 'test_alter' );
+array_walk( $fruits, 'test_alter', 'fruit' );
 array_walk( $fruits, 'test_print' );
       </PRE
 ></DIV
 ></TD
 ></TR
 ></TABLE
->
-
-    </P
+></P
 ><P
 >     See also <A
 HREF="function.each.html"
@@ -218,9 +247,7 @@ HREF="function.list.html"
 CLASS="FUNCTION"
 >list()</B
 ></A
->.
-
-   </P
+>.</P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

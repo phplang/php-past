@@ -1,0 +1,11 @@
+--$Id: 013.php3t,v 1.1 1998/08/23 03:10:17 rocky Exp $
+--TITLE--
+Increment Array Elements                                      ...
+--URL--
+ary/013.phtml
+--EXPECT--
+5
+5
+5
+5
+5

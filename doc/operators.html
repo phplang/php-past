@@ -1,0 +1,954 @@
+<HTML
+><HEAD
+><TITLE
+>Operators</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+REL="HOME"
+TITLE="PHP3 Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Syntax and grammar"
+HREF="lang-syntax.html"><LINK
+REL="PREVIOUS"
+TITLE="Expressions"
+HREF="expressions.html"><LINK
+REL="NEXT"
+TITLE="Control Structures"
+HREF="control-structures.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP3 Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="expressions.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 5. Syntax and grammar</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="control-structures.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="OPERATORS"
+>Operators</A
+></H1
+><P
+>   </P
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="ARITHMETIC-OPERATORS"
+>Arithmetic Operators</A
+></H2
+><P
+>     Remember basic arithmetic from school? These work just
+     like those.
+    </P
+><DIV
+CLASS="TABLE"
+><P
+><B
+>Table 5-2. Arithmetic Operators</B
+></P
+><TABLE
+BORDER="1"
+CLASS="CALSTABLE"
+><TR
+><TH
+ALIGN="LEFT"
+VALIGN="TOP"
+>example</TH
+><TH
+ALIGN="LEFT"
+VALIGN="TOP"
+>name</TH
+><TH
+ALIGN="LEFT"
+VALIGN="TOP"
+>result</TH
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>$a + $b</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Addition</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Sum of $a and $b.</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>$a - $b</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Subtraction</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Remainder of $b subtracted from $a.</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>$a * $b</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Multiplication</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Product of $a and $b.</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>$a / $b</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Division</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Dividend of $a and $b.</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>$a % $b</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Modulus</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Remainder of $a divided by $b.</TD
+></TR
+></TABLE
+></DIV
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="STRING-OPERATORS"
+>String Operators</A
+></H2
+><P
+>     There is only really one string operator -- the concatenation
+     operator (".").
+    </P
+><P
+>     <DIV
+CLASS="INFORMALEXAMPLE"
+><P
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>$a = "Hello ";
+$b = $a . "World!"; // now $b = "Hello World!"
+     </PRE
+><P
+></P
+></DIV
+>
+    </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="ASSIGNMENT-OPERATORS"
+>Assignment Operators</A
+></H2
+><P
+>     The basic assignment operator is "=". Your first inclination might
+     be to think of this as "equal to". Don't. It really means that
+     the the left operand gets set to the value of the expression on the
+     rights (that is, "gets set to").
+    </P
+><P
+>     The value of an assignment expression is the value assigned. That
+     is, the value of "$a = 3" is 3. This allows you to do some tricky
+     things: <DIV
+CLASS="INFORMALEXAMPLE"
+><P
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>$a = ($b = 4) + 5; // $a is equal to 9 now, and $b has been set to 4.</PRE
+><P
+></P
+></DIV
+>
+    </P
+><P
+>     In addition to the basic assignment operator, there are "combined
+     operators" for all of the binary arithmetic and string operators
+     that allow you to use a value in an expression and then set its
+     value to the result of that expression. For example: <DIV
+CLASS="INFORMALEXAMPLE"
+><P
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>$a = 3;
+$a += 5; // sets $a to 8, as if we had said: $a = $a + 5;
+$b = "Hello ";
+$b .= "There!"; // sets $b to "Hello There!", just like $b = $b . "There!";</PRE
+><P
+></P
+></DIV
+>
+    </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="BITWISE-OPERATORS"
+>Bitwise Operators</A
+></H2
+><P
+>     Bitwise operators allow you to turn specific bits within an integer
+     on or off.
+    </P
+><DIV
+CLASS="TABLE"
+><P
+><B
+>Table 5-3. Bitwise Operators</B
+></P
+><TABLE
+BORDER="1"
+CLASS="CALSTABLE"
+><TR
+><TH
+ALIGN="LEFT"
+VALIGN="TOP"
+>example</TH
+><TH
+ALIGN="LEFT"
+VALIGN="TOP"
+>name</TH
+><TH
+ALIGN="LEFT"
+VALIGN="TOP"
+>result</TH
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>$a &#38; $b</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>And</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Bits that are set in both $a and $b are set.</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>$a | $b</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Or</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Bits that are set in either $a or $b are set.</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>~ $a</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Not</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Bits that are set in $a are not set, and vice versa.</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>$a &lt;&lt; $b</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Shift left</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Shift the bits of $a $b steps to the left (each step means "multiply by two")</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>$a &gt;&gt; $b</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Shift right</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Shift the bits of $a $b steps to the right (each step means "divide by two")</TD
+></TR
+></TABLE
+></DIV
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="LOGICAL-OPERATORS"
+>Logical Operators</A
+></H2
+><DIV
+CLASS="TABLE"
+><P
+><B
+>Table 5-4. Logical Operators</B
+></P
+><TABLE
+BORDER="1"
+CLASS="CALSTABLE"
+><TR
+><TH
+ALIGN="LEFT"
+VALIGN="TOP"
+>example</TH
+><TH
+ALIGN="LEFT"
+VALIGN="TOP"
+>name</TH
+><TH
+ALIGN="LEFT"
+VALIGN="TOP"
+>result</TH
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>$a and $b</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>And</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>True of both $a and $b are true.</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>$a or $b</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Or</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>True if either $a or $b is true.</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>$a xor $b</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Or</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>True if either $a or $b is true, but not both.</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>! $a</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Not</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>True if $a is not true.</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>$a &amp;&amp; $b</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>And</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>True of both $a and $b are true.</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>$a || $b</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Or</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>True if either $a or $b is true.</TD
+></TR
+></TABLE
+></DIV
+><P
+>     The reason for the two different variations of "and" and "or"
+     operators is that they operate at different precedences. (See below.)
+    </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="COMPARISON-OPERATORS"
+>Comparison Operators</A
+></H2
+><P
+>     Comparison operators, as their name imply, allow you to compare two
+     values.
+    </P
+><DIV
+CLASS="TABLE"
+><P
+><B
+>Table 5-5. Comparson Operators</B
+></P
+><TABLE
+BORDER="1"
+CLASS="CALSTABLE"
+><TR
+><TH
+ALIGN="LEFT"
+VALIGN="TOP"
+>example</TH
+><TH
+ALIGN="LEFT"
+VALIGN="TOP"
+>name</TH
+><TH
+ALIGN="LEFT"
+VALIGN="TOP"
+>result</TH
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>$a == $b</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Equal</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>True if $a is equal to $b.</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>$a != $b</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Not equal</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>True if $a is not equal to $b.</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>$a &lt; $b</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Less than</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>True if $a is strictly less than $b.</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>$a &gt; $b</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Greater than</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>True if $a is strictly greater than $b.</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>$a &lt;= $b</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Less than or equal to </TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>True if $a is less than or equal to $b.</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>$a &gt;= $b</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>Greater than or equal to </TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>True if $a is greater than or equal to $b.</TD
+></TR
+></TABLE
+></DIV
+><P
+>     Another conditional operator is the "?:" (or trinary) operator, which
+     operates as in C and many other languages. 
+    <DIV
+CLASS="INFORMALEXAMPLE"
+><P
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>(expr1) ? (expr2) : (expr3);</PRE
+><P
+></P
+></DIV
+>
+     This expression returns to <TT
+CLASS="REPLACEABLE"
+><I
+>expr2</I
+></TT
+> if
+     <TT
+CLASS="REPLACEABLE"
+><I
+>expr1</I
+></TT
+> evalutes to true, and expr3 if
+     <TT
+CLASS="REPLACEABLE"
+><I
+>expr1</I
+></TT
+> evaluates to false.
+
+   </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="PRECEDENCE"
+>Operator Precedence</A
+></H2
+><P
+>     The precedence of an operator specifies how "tightly" it binds
+     two expressions together. For example, in the expression
+     <TT
+CLASS="LITERAL"
+>1 + 5 * 3</TT
+>, the answer is 16 and not
+     18 because the multiplication ("*") operator has a higher precedence
+     than the addition ("+") operator.
+    </P
+><P
+>     The following table lists the precedence of operators with the
+     lowest-precedence operators listed first.
+
+    <DIV
+CLASS="TABLE"
+><P
+><B
+>Table 5-6. Operator Precedence</B
+></P
+><TABLE
+BORDER="1"
+CLASS="CALSTABLE"
+><TR
+><TH
+ALIGN="LEFT"
+VALIGN="TOP"
+>Associativity</TH
+><TH
+ALIGN="LEFT"
+VALIGN="TOP"
+>Operators</TH
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>left</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>,</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>left</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>or</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>left</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>xor</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>left</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>and</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>right</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>print</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>left</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>= += -= *= /= .= %= &#38;= != ~= &lt;&lt;= &gt;&gt;=</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>left</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>? :</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>left</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>||</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>left</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>&amp;&amp;</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>left</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>|</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>left</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>^</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>left</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>&amp;</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>non-associative</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>== !=</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>non-associative</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>&lt; &lt;= &gt; &gt;=</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>left</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>&lt;&lt; &gt;&gt;</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>left</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>+ - .</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>left</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>* / %</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>right</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>! ~ ++ -- (int) (double) (string) (array) (object) @</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>right</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>[</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>non-associative</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>new</TD
+></TR
+></TABLE
+></DIV
+>
+
+  </P
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="expressions.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="control-structures.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Expressions</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="lang-syntax.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Control Structures</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

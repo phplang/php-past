@@ -4,7 +4,7 @@
 >ImageColorAllocate</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -15,8 +15,8 @@ REL="PREVIOUS"
 TITLE="ImageCharUp"
 HREF="function.imagecharup.html"><LINK
 REL="NEXT"
-TITLE="ImageColorTransparent"
-HREF="function.imagecolortransparent.html"></HEAD
+TITLE="ImageColorAt"
+HREF="function.imagecolorat.html"></HEAD
 ><BODY
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
@@ -55,7 +55,7 @@ WIDTH="10%"
 ALIGN="right"
 VALIGN="bottom"
 ><A
-HREF="function.imagecolortransparent.html"
+HREF="function.imagecolorat.html"
 >Next</A
 ></TD
 ></TR
@@ -71,13 +71,13 @@ NAME="FUNCTION.IMAGECOLORALLOCATE"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN9948"
+NAME="AEN11551"
 ></A
 >ImageColorAllocate -- allocate a color for an image</DIV
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN9951"
+NAME="AEN11554"
 ></A
 ><H2
 >Description</H2
@@ -92,16 +92,17 @@ CLASS="FUNCDEF"
 ></P
 ></DIV
 ><P
->     ImageColorAllocate returns a color identifier representing the color composed of
-     the given RGB components.  The im argument is the return from the
-     <A
+>     ImageColorAllocate returns a color identifier representing the
+     color composed of the given RGB components.  The im argument is
+     the return from the <A
 HREF="function.imagecreate.html"
 ><B
 CLASS="FUNCTION"
 >imagecreate()</B
 ></A
-> function.  ImageColorAllocate must be called to
-     create each color that is to be used in the image represented by im.
+> function.
+     ImageColorAllocate must be called to create each color that is to
+     be used in the image represented by im.
      <DIV
 CLASS="INFORMALEXAMPLE"
 ><P
@@ -113,8 +114,7 @@ $black = ImageColorAllocate($im, 0,0,0);</PRE
 ><P
 ></P
 ></DIV
->
-   </P
+></P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -147,7 +147,7 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><A
-HREF="function.imagecolortransparent.html"
+HREF="function.imagecolorat.html"
 >Next</A
 ></TD
 ></TR
@@ -169,7 +169,7 @@ HREF="ref.image.html"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->ImageColorTransparent</TD
+>ImageColorAt</TD
 ></TR
 ></TABLE
 ></DIV

@@ -4,7 +4,7 @@
 >ImagePSBBox</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -12,11 +12,11 @@ REL="UP"
 TITLE="Image functions"
 HREF="ref.image.html"><LINK
 REL="PREVIOUS"
-TITLE="ImagePSText"
-HREF="function.imagepstext.html"><LINK
+TITLE="ImagePolygon"
+HREF="function.imagepolygon.html"><LINK
 REL="NEXT"
-TITLE="IMAP functions"
-HREF="ref.imap.html"></HEAD
+TITLE="ImagePSEncodeFont"
+HREF="function.imagepsencodefont.html"></HEAD
 ><BODY
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
@@ -42,7 +42,7 @@ WIDTH="10%"
 ALIGN="left"
 VALIGN="bottom"
 ><A
-HREF="function.imagepstext.html"
+HREF="function.imagepolygon.html"
 >Prev</A
 ></TD
 ><TD
@@ -55,7 +55,7 @@ WIDTH="10%"
 ALIGN="right"
 VALIGN="bottom"
 ><A
-HREF="ref.imap.html"
+HREF="function.imagepsencodefont.html"
 >Next</A
 ></TD
 ></TR
@@ -71,13 +71,13 @@ NAME="FUNCTION.IMAGEPSBBOX"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN10831"
+NAME="AEN12070"
 ></A
 >ImagePSBBox -- give the bounding box of a text rectangle using PostScript Type1 fonts</DIV
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN10834"
+NAME="AEN12073"
 ></A
 ><H2
 >Description</H2
@@ -97,73 +97,71 @@ CLASS="PARAMETER"
 ><I
 >size</I
 ></TT
-> is expressed in pixels.
-    </P
+> is expressed in pixels.</P
 ><P
 >     <TT
 CLASS="PARAMETER"
 ><I
 >space</I
 ></TT
-> allows you to change the default value of a space in a font.
-     This amount is added to the normal value and can also be negative.
-    </P
+> allows you to change the default
+     value of a space in a font.  This amount is added to the normal
+     value and can also be negative.</P
 ><P
 >     <TT
 CLASS="PARAMETER"
 ><I
 >tightness</I
 ></TT
-> allows you to control the amount of white space
-     between characters. This amount is added to the normal character width and can also be negative.
-    </P
+> allows you to control the amount
+     of white space between characters. This amount is added to the
+     normal character width and can also be negative.</P
 ><P
 >     <TT
 CLASS="PARAMETER"
 ><I
 >angle</I
 ></TT
-> is in degrees.
-    </P
+> is in degrees.</P
 ><P
 >     Parameters <TT
 CLASS="PARAMETER"
 ><I
 >space</I
-></TT
-> and <TT
-CLASS="PARAMETER"
-><I
->tightness</I
-></TT
->
-     are expressed in character space units, where 1 unit is 1/1000th of an em-square.
-    </P
-><P
->     Parameters <TT
-CLASS="PARAMETER"
-><I
->space</I
-></TT
->, <TT
-CLASS="PARAMETER"
-><I
->tightness</I
 ></TT
 > and
      <TT
 CLASS="PARAMETER"
 ><I
+>tightness</I
+></TT
+> are expressed in character space
+     units, where 1 unit is 1/1000th of an em-square.</P
+><P
+>     Parameters <TT
+CLASS="PARAMETER"
+><I
+>space</I
+></TT
+>,
+     <TT
+CLASS="PARAMETER"
+><I
+>tightness</I
+></TT
+> and <TT
+CLASS="PARAMETER"
+><I
 >angle</I
 ></TT
-> are optional.
-    </P
+>
+     are optional.</P
 ><P
->     The bounding box is calculated using information available from character metrics,
-     and unfortunately tends to differ slightly from the results achieved by actually
-     rasterizing the text. If the angle is 0 degrees, you can expect the text to need
-     1 pixel more to every direction. 
-    </P
+>     The bounding box is calculated using information available from
+     character metrics, and unfortunately tends to differ slightly
+     from the results achieved by actually rasterizing the text. If
+     the angle is 0 degrees, you can expect the text to need 1 pixel
+     more to every direction.</P
 ><P
 >     This function returns an array containing the following elements:
      <DIV
@@ -217,8 +215,7 @@ VALIGN="TOP"
 ><P
 ></P
 ></DIV
->
-    </P
+></P
 ><P
 >     See also <A
 HREF="function.imagepstext.html"
@@ -226,8 +223,7 @@ HREF="function.imagepstext.html"
 CLASS="FUNCTION"
 >imagepstext()</B
 ></A
->.
-   </P
+>.</P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -244,7 +240,7 @@ WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
 ><A
-HREF="function.imagepstext.html"
+HREF="function.imagepolygon.html"
 >Prev</A
 ></TD
 ><TD
@@ -260,7 +256,7 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><A
-HREF="ref.imap.html"
+HREF="function.imagepsencodefont.html"
 >Next</A
 ></TD
 ></TR
@@ -269,7 +265,7 @@ HREF="ref.imap.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->ImagePSText</TD
+>ImagePolygon</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"
@@ -282,7 +278,7 @@ HREF="ref.image.html"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->IMAP functions</TD
+>ImagePSEncodeFont</TD
 ></TR
 ></TABLE
 ></DIV

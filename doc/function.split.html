@@ -1,0 +1,290 @@
+<HTML
+><HEAD
+><TITLE
+>split</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Regular expression functions"
+HREF="ref.regex.html"><LINK
+REL="PREVIOUS"
+TITLE="eregi_replace"
+HREF="function.eregi-replace.html"><LINK
+REL="NEXT"
+TITLE="sql_regcase"
+HREF="function.sql-regcase.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.eregi-replace.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.sql-regcase.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="FUNCTION.SPLIT"
+>split</A
+></H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN23980"
+></A
+>split -- split string into array by regular expression</DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN23983"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><CODE
+CLASS="FUNCDEF"
+>array split</CODE
+>(string pattern, string string, int [<SPAN
+CLASS="OPTIONAL"
+>limit</SPAN
+>]);<P
+></P
+></DIV
+><P
+>     Returns an array of strings, each of which is a substring of
+     string formed by splitting it on boundaries formed by the regular
+     expression <TT
+CLASS="PARAMETER"
+><I
+>pattern</I
+></TT
+>. If an error occurs,
+     returns false.
+	</P
+><P
+>     To get the first five fields from a line from
+     <TT
+CLASS="FILENAME"
+>/etc/passwd</TT
+>:
+	 <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="EXAMPLE"
+><P
+><B
+>Example 1. split() example</B
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>$passwd_list = split( ":", $passwd_line, 5 );
+	  </PRE
+></DIV
+></TD
+></TR
+></TABLE
+>
+	</P
+><P
+>	 To parse a date which may be delimited with slashes, dots, or
+	 hyphens:
+	 <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="EXAMPLE"
+><P
+><B
+>Example 2. split() example</B
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>$date = "04/30/1973";  // Delimiters may be slash, dot, or hyphen
+list( $month, $day, $year ) = split( '[/.-]', $date );
+echo "Month: $month; Day: $day; Year: $year&lt;br&gt;\n";
+	  </PRE
+></DIV
+></TD
+></TR
+></TABLE
+>
+	</P
+><P
+>     Note that <TT
+CLASS="PARAMETER"
+><I
+>pattern</I
+></TT
+> is case-sensitive.
+	</P
+><P
+>	 Note that if you don't require the power of regular expressions,
+	 it is faster to use <A
+HREF="function.explode.html"
+><B
+CLASS="FUNCTION"
+>explode()</B
+></A
+>, which doesn't
+	 incur the overhead of the regular expression engine.
+	</P
+><P
+>	 Please note that <TT
+CLASS="PARAMETER"
+><I
+>pattern</I
+></TT
+> is a regular
+	 expression.  If you want to split on any of the characters which
+	 are considered special by regular expressions, you'll need to
+	 escape them first. If you think <B
+CLASS="FUNCTION"
+>split()</B
+> (or
+	 any other regex function, for that matter) is doing something
+	 weird, please read the file <TT
+CLASS="FILENAME"
+>regex.7</TT
+>,
+	 included in the <TT
+CLASS="FILENAME"
+>regex/</TT
+> subdirectory of the
+	 PHP distribution. It's in manpage format, so you'll want to do
+	 something along the lines of <B
+CLASS="COMMAND"
+>man
+	 /usr/local/src/regex/regex.7</B
+> in order to read it.
+	</P
+><P
+>     See also: <A
+HREF="function.explode.html"
+><B
+CLASS="FUNCTION"
+>explode()</B
+></A
+> and <A
+HREF="function.implode.html"
+><B
+CLASS="FUNCTION"
+>implode()</B
+></A
+>.
+	</P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.eregi-replace.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.sql-regcase.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>eregi_replace</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.regex.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>sql_regcase</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

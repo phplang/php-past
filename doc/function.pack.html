@@ -4,7 +4,7 @@
 >pack</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -71,13 +71,13 @@ NAME="FUNCTION.PACK"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN14577"
+NAME="AEN16934"
 ></A
 >pack -- pack data into binary string</DIV
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN14580"
+NAME="AEN16937"
 ></A
 ><H2
 >Description</H2
@@ -101,9 +101,7 @@ CLASS="PARAMETER"
 ><I
 >format</I
 ></TT
->. Returns binary string containing data.
-
-    </P
+>. Returns binary string containing data.</P
 ><P
 >     The idea to this function was taken from Perl and all formatting
      codes work the same as there. The format string consists of
@@ -230,15 +228,12 @@ CLASS="PROGRAMLISTING"
 >$binarydata = pack("nvc*", 0x1234, 0x5678, 65, 66);</PRE
 ><P
 >       The resulting binary string will be 6 bytes long and contain
-       the byte sequence 0x12, 0x34, 0x78, 0x56, 0x41, 0x42.
-     </P
+       the byte sequence 0x12, 0x34, 0x78, 0x56, 0x41, 0x42.</P
 ></DIV
 ></TD
 ></TR
 ></TABLE
->
-
-    </P
+></P
 ><P
 >     Note that the distinction between signed and unsigned values only 
      affects the function <A
@@ -252,16 +247,12 @@ CLASS="FUNCTION"
 CLASS="FUNCTION"
 >pack()</B
 > gives the same result for
-     signed and unsigned format codes.
-
-    </P
+     signed and unsigned format codes.</P
 ><P
 >     Also note that PHP internally stores integral values as signed
      values of a machine dependant size. If you give it an unsigned
      integral value too large to be stored that way it is converted to 
-     a double which often yields an undesired result.
-
-   </P
+     a double which often yields an undesired result.</P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

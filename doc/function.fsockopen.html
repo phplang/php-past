@@ -4,7 +4,7 @@
 >fsockopen</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -12,11 +12,11 @@ REL="UP"
 TITLE="Network functions"
 HREF="ref.network.html"><LINK
 REL="PREVIOUS"
-TITLE="Network functions"
-HREF="ref.network.html"><LINK
+TITLE="debugger_on"
+HREF="function.debugger-on.html"><LINK
 REL="NEXT"
-TITLE="pfsockopen"
-HREF="function.pfsockopen.html"></HEAD
+TITLE="gethostbyaddr"
+HREF="function.gethostbyaddr.html"></HEAD
 ><BODY
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
@@ -42,7 +42,7 @@ WIDTH="10%"
 ALIGN="left"
 VALIGN="bottom"
 ><A
-HREF="ref.network.html"
+HREF="function.debugger-on.html"
 >Prev</A
 ></TD
 ><TD
@@ -55,7 +55,7 @@ WIDTH="10%"
 ALIGN="right"
 VALIGN="bottom"
 ><A
-HREF="function.pfsockopen.html"
+HREF="function.gethostbyaddr.html"
 >Next</A
 ></TD
 ></TR
@@ -71,13 +71,13 @@ NAME="FUNCTION.FSOCKOPEN"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN16781"
+NAME="AEN18629"
 ></A
 >fsockopen -- Open Internet or Unix domain socket connection.</DIV
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN16784"
+NAME="AEN18632"
 ></A
 ><H2
 >Description</H2
@@ -133,9 +133,7 @@ CLASS="PARAMETER"
 >timeout</I
 ></TT
 > can be used to set a timeout
-     in seconds for the connect system call.
-
-    </P
+     in seconds for the connect system call.</P
 ><P
 >     <B
 CLASS="FUNCTION"
@@ -174,9 +172,7 @@ HREF="function.feof.html"
 CLASS="FUNCTION"
 >feof()</B
 ></A
->).  
-     
-    </P
+>).</P
 ><P
 >     If the call fails, it will return false and if the optional
      <TT
@@ -195,14 +191,10 @@ CLASS="PARAMETER"
      0 and the function returned false, it is an indication that the error
      occurred before the connect() call. This is most likely due to a problem
      initializing the socket. Note that the errno and errstr arguments must be
-     passed by reference.
-
-    </P
+     passed by reference.</P
 ><P
 >     Depending on the environment, the Unix domain or the optional connect
-     timeout may not be available. 
-     
-	</P
+     timeout may not be available.</P
 ><P
 >     The socket will by default be opened in blocking mode.  You can switch it
      to non-blocking mode by using <A
@@ -251,9 +243,7 @@ HREF="function.pfsockopen.html"
 CLASS="FUNCTION"
 >pfsockopen()</B
 ></A
->
-     
-   </P
+></P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -270,7 +260,7 @@ WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
 ><A
-HREF="ref.network.html"
+HREF="function.debugger-on.html"
 >Prev</A
 ></TD
 ><TD
@@ -286,7 +276,7 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><A
-HREF="function.pfsockopen.html"
+HREF="function.gethostbyaddr.html"
 >Next</A
 ></TD
 ></TR
@@ -295,7 +285,7 @@ HREF="function.pfsockopen.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->Network functions</TD
+>debugger_on</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"
@@ -308,7 +298,7 @@ HREF="ref.network.html"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->pfsockopen</TD
+>gethostbyaddr</TD
 ></TR
 ></TABLE
 ></DIV

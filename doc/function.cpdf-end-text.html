@@ -4,7 +4,7 @@
 >cpdf_end_text</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -71,13 +71,13 @@ NAME="FUNCTION.CPDF-END-TEXT"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN4671"
+NAME="AEN5189"
 ></A
 >cpdf_end_text -- Starts text section</DIV
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN4674"
+NAME="AEN5192"
 ></A
 ><H2
 >Description</H2
@@ -121,16 +121,14 @@ CLASS="EXAMPLE"
 ><PRE
 CLASS="PROGRAMLISTING"
 >&lt;?php cpdf_begin_text($pdf);
-cpdf_set_font($pdf, 16, "Helvetica", 4);
+cpdf_set_font($pdf, 16, "Helvetica", "WinAnsiEncoding");
 cpdf_text($pdf, 100, 100, "Some text");
 cpdf_end_text($pdf) ?&#62;</PRE
 ></DIV
 ></TD
 ></TR
 ></TABLE
->
-
-    </P
+></P
 ><P
 >     See also <A
 HREF="function.cpdf-begin-text.html"
@@ -138,9 +136,7 @@ HREF="function.cpdf-begin-text.html"
 CLASS="FUNCTION"
 >cpdf_begin_text()</B
 ></A
->.
-
-   </P
+>.</P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

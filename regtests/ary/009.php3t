@@ -1,0 +1,9 @@
+--$Id: 009.php3t,v 1.1 1998/08/23 03:10:15 rocky Exp $
+--TITLE--
+Passing to a function                                         ...
+--URL--
+ary/009.phtml
+--EXPECT--
+KEY: 0, VAL: a
+KEY: 1, VAL: b
+KEY: 2, VAL: c

@@ -1,0 +1,234 @@
+<HTML
+><HEAD
+><TITLE
+>xml_set_object</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="XML parser functions"
+HREF="ref.xml.html"><LINK
+REL="PREVIOUS"
+TITLE="xml_parser_create"
+HREF="function.xml-parser-create.html"><LINK
+REL="NEXT"
+TITLE="xml_set_element_handler"
+HREF="function.xml-set-element-handler.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.xml-parser-create.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.xml-set-element-handler.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="FUNCTION.XML-SET-OBJECT"
+>xml_set_object</A
+></H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN27395"
+></A
+>xml_set_object -- Use XML Parser withing an object</DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN27398"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><CODE
+CLASS="FUNCDEF"
+>void xml_set_object</CODE
+>(int parser, object &amp;object);<P
+></P
+></DIV
+><P
+>     This function makes <TT
+CLASS="PARAMETER"
+><I
+>parser</I
+></TT
+> useable from
+     within <TT
+CLASS="PARAMETER"
+><I
+>object</I
+></TT
+>. All callback functions
+     settet via <A
+HREF="function.xml-set-element-handler.html"
+><B
+CLASS="FUNCTION"
+>xml_set_element_handler()</B
+></A
+> etc are
+     assumed to be methods of <TT
+CLASS="PARAMETER"
+><I
+>object</I
+></TT
+>.
+    </P
+><PRE
+CLASS="PROGRAMLISTING"
+>&lt;?php
+class xml  {
+var $parser;
+
+function xml() {
+    $this-&#62;parser = xml_parser_create();
+    xml_set_object($this-&#62;parser,&#38;$this);
+    xml_set_element_handler($this-&#62;parser,"tag_open","tag_close");
+    xml_set_character_data_handler($this-&#62;parser,"cdata");
+}
+
+function parse($data) { 
+    xml_parse($this-&#62;parser,$data);
+}
+
+function tag_open($parser,$tag,$attributes) { 
+    var_dump($parser,$tag,$attributes); 
+}
+
+function cdata($parser,$cdata) { 
+    var_dump($parser,$cdata);
+}
+
+function tag_close($parser,$tag) { 
+    var_dump($parser,$tag); 
+}
+
+} // end of class xml
+
+$xml_parser = new xml();
+$xml_parser-&#62;parse("&lt;A ID=\"hallo\"&#62;PHP&lt;/A&#62;");
+?&#62;
+   </PRE
+><P
+>     <DIV
+CLASS="NOTE"
+><BLOCKQUOTE
+CLASS="NOTE"
+><P
+><B
+>Note: </B
+>       <B
+CLASS="FUNCTION"
+>xml_set_object()</B
+> handling was added in PHP
+       4.0.
+      </P
+></BLOCKQUOTE
+></DIV
+>
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.xml-parser-create.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.xml-set-element-handler.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>xml_parser_create</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.xml.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>xml_set_element_handler</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -4,7 +4,7 @@
 >htmlspecialchars</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -12,11 +12,11 @@ REL="UP"
 TITLE="String functions"
 HREF="ref.strings.html"><LINK
 REL="PREVIOUS"
-TITLE="get_meta_tags"
-HREF="function.get-meta-tags.html"><LINK
-REL="NEXT"
 TITLE="htmlentities"
-HREF="function.htmlentities.html"></HEAD
+HREF="function.htmlentities.html"><LINK
+REL="NEXT"
+TITLE="implode"
+HREF="function.implode.html"></HEAD
 ><BODY
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
@@ -42,7 +42,7 @@ WIDTH="10%"
 ALIGN="left"
 VALIGN="bottom"
 ><A
-HREF="function.get-meta-tags.html"
+HREF="function.htmlentities.html"
 >Prev</A
 ></TD
 ><TD
@@ -55,7 +55,7 @@ WIDTH="10%"
 ALIGN="right"
 VALIGN="bottom"
 ><A
-HREF="function.htmlentities.html"
+HREF="function.implode.html"
 >Next</A
 ></TD
 ></TR
@@ -71,13 +71,14 @@ NAME="FUNCTION.HTMLSPECIALCHARS"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN21897"
+NAME="AEN25118"
 ></A
->htmlspecialchars -- Convert special characters to HTML entities.</DIV
+>htmlspecialchars --      Convert special characters to HTML entities
+    </DIV
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN21900"
+NAME="AEN25121"
 ></A
 ><H2
 >Description</H2
@@ -95,15 +96,11 @@ CLASS="FUNCDEF"
 >     Certain characters have special significance in HTML, and should
      be represented by HTML entities if they are to preserve their
      meanings. This function returns a string with these conversions
-     made.
-
-    </P
+     made.</P
 ><P
->	 This function is useful in preventing user-supplied text from
-	 containing HTML markup, such as in a message board or
-	 guest book application.
-
-    </P
+>     This function is useful in preventing user-supplied text from
+     containing HTML markup, such as in a message board or guest book
+     application.</P
 ><P
 >     At present, the translations that are done are:
      <P
@@ -111,39 +108,32 @@ CLASS="FUNCDEF"
 ><UL
 ><LI
 ><P
->        '&amp;' (ampersand) becomes '&amp;amp;'
-      </P
+>        '&amp;' (ampersand) becomes '&amp;amp;'</P
 ></LI
 ><LI
 ><P
->        '&quot;' (double quote) becomes '&amp;quot;'
-      </P
+>        '&quot;' (double quote) becomes '&amp;quot;'</P
 ></LI
 ><LI
 ><P
->        '&lt;' (less than) becomes '&amp;lt;'
-      </P
+>        '&lt;' (less than) becomes '&amp;lt;'</P
 ></LI
 ><LI
 ><P
->        '&gt;' (greater than) becomes '&amp;gt;'
-     </P
+>        '&gt;' (greater than) becomes '&amp;gt;'</P
 ></LI
 ></UL
->
-
-    </P
+></P
 ><P
 >     Note that this functions does not translate anything beyond what
-     is listed above. For full entity translation, see <A
+     is listed above. For full entity translation, see
+     <A
 HREF="function.htmlentities.html"
 ><B
 CLASS="FUNCTION"
 >htmlentities()</B
 ></A
->.
-	
-    </P
+>.</P
 ><P
 >     See also <A
 HREF="function.htmlentities.html"
@@ -151,15 +141,14 @@ HREF="function.htmlentities.html"
 CLASS="FUNCTION"
 >htmlentities()</B
 ></A
-> and <A
+> and
+     <A
 HREF="function.nl2br.html"
 ><B
 CLASS="FUNCTION"
 >nl2br()</B
 ></A
->.
-
-   </P
+>.</P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -176,7 +165,7 @@ WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
 ><A
-HREF="function.get-meta-tags.html"
+HREF="function.htmlentities.html"
 >Prev</A
 ></TD
 ><TD
@@ -192,7 +181,7 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><A
-HREF="function.htmlentities.html"
+HREF="function.implode.html"
 >Next</A
 ></TD
 ></TR
@@ -201,7 +190,7 @@ HREF="function.htmlentities.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->get_meta_tags</TD
+>htmlentities</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"
@@ -214,7 +203,7 @@ HREF="ref.strings.html"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->htmlentities</TD
+>implode</TD
 ></TR
 ></TABLE
 ></DIV

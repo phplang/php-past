@@ -1,0 +1,275 @@
+<HTML
+><HEAD
+><TITLE
+>imap_search</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="IMAP functions"
+HREF="ref.imap.html"><LINK
+REL="PREVIOUS"
+TITLE="imap_msgno"
+HREF="function.imap-msgno.html"><LINK
+REL="NEXT"
+TITLE="imap_last_error"
+HREF="function.imap-last-error.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.imap-msgno.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.imap-last-error.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="FUNCTION.IMAP-SEARCH"
+>imap_search</A
+></H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN13335"
+></A
+>imap_search -- This function returns an array of messages matching the given search criteria.</DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN13338"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><CODE
+CLASS="FUNCDEF"
+>array imap_search</CODE
+>(int imap_stream, string criteria, int flags);<P
+></P
+></DIV
+><P
+>     This function performs a search on the mailbox currently opened
+     in the given imap stream. <TT
+CLASS="PARAMETER"
+><I
+>criteria</I
+></TT
+> is a
+     string, delimited by spaces, in which the following keywords are
+     allowed. Any multi-word arguments (eg FROM "joe smith") must be
+     quoted.
+    <P
+></P
+><UL
+><LI
+><P
+>      ALL - return all messages matching the rest of the criteria</P
+></LI
+><LI
+><P
+>      ANSWERED - match messages with the \\ANSWERED flag set</P
+></LI
+><LI
+><P
+>      BCC "string" - match messages with "string" in the Bcc: field</P
+></LI
+><LI
+><P
+>      BEFORE "date" - match messages with Date: before "date"</P
+></LI
+><LI
+><P
+>      BODY "string" - match messages with "string" in the body of the message</P
+></LI
+><LI
+><P
+>      CC "string" - match messages with "string" in the Cc: field</P
+></LI
+><LI
+><P
+>      DELETED - match deleted messages</P
+></LI
+><LI
+><P
+>      FLAGGED - match messages with the \\FLAGGED (sometimes referred to as Important or Urgent) flag set</P
+></LI
+><LI
+><P
+>      FROM "string" - match messages with "string" in the From: field</P
+></LI
+><LI
+><P
+>      KEYWORD "string" - match messages with "string" as a keyword</P
+></LI
+><LI
+><P
+>      NEW - match new messages</P
+></LI
+><LI
+><P
+>      OLD - match old messages</P
+></LI
+><LI
+><P
+>      ON "date" - match messages with Date: matching "date"</P
+></LI
+><LI
+><P
+>      RECENT - match messages with the \\RECENT flag set</P
+></LI
+><LI
+><P
+>      SEEN - match messages that have been read (the \\SEEN flag is set)</P
+></LI
+><LI
+><P
+>      SINCE "date" - match messages with Date: after "date"</P
+></LI
+><LI
+><P
+>      SUBJECT "string" - match messages with "string" in the Subject:</P
+></LI
+><LI
+><P
+>      TEXT "string" - match messages with text "string"</P
+></LI
+><LI
+><P
+>      TO "string" - match messages with "string" in the To:</P
+></LI
+><LI
+><P
+>      UNANSWERED - match messages that have not been answered</P
+></LI
+><LI
+><P
+>      UNDELETED - match messages that are not deleted</P
+></LI
+><LI
+><P
+>      UNFLAGGED - match messages that are not flagged</P
+></LI
+><LI
+><P
+>      UNKEYWORD "string" - match messages that do not have the keyword "string"</P
+></LI
+><LI
+><P
+>      UNSEEN - match messages which have not been read yet</P
+></LI
+></UL
+></P
+><P
+>     For example, to match all unanswered messages sent by Mom, you'd
+     use: "UNANSWERED FROM mom". Searches appear to be case
+     insensitive. This list of criteria is from a reading of the UW
+     c-client source code and may be uncomplete or
+     inaccurate. Searcher beware.</P
+><P
+>     Valid values for flags are SE_UID, which causes the returned
+     array to contain UIDs instead of messages sequence numbers.</P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.imap-msgno.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.imap-last-error.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>imap_msgno</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.imap.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>imap_last_error</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

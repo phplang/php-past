@@ -1,0 +1,24 @@
+--TEST--
+NEXT loop                                                      ...
+--POST--
+--GET--
+--FILE--
+<?php 
+  $a[0]="a";
+  $a[1]="b";
+  $a[2]="c";
+
+  reset($a);
+  $key= key($a);
+  while ("" != (string) $key):
+    $b= current($a);
+    next($a);
+    echo "KEY: $key, VAL: $b\n";
+    $key= key($a);
+  endwhile;
+?>
+--EXPECT--
+KEY: 0, VAL: a
+KEY: 1, VAL: b
+KEY: 2, VAL: c
+

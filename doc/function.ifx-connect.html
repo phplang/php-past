@@ -4,7 +4,7 @@
 >ifx_connect</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -71,13 +71,13 @@ NAME="FUNCTION.IFX-CONNECT"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN11992"
+NAME="AEN13515"
 ></A
 >ifx_connect -- Open Informix server connection</DIV
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN11995"
+NAME="AEN13518"
 ></A
 ><H2
 >Description</H2
@@ -115,9 +115,15 @@ CLASS="FUNCTION"
 >ifx_connect()</B
 > establishes a connection to an
      Informix server.  All of the arguments are optional, and if they're
-     missing, defaults are taken from values supplied in php3.ini
+     missing, defaults are taken from values supplied in <A
+HREF="configuration.html#CONFIGURATION.FILE"
+>configuration file</A
+>
      (ifx.default_host for the host (Informix libraries will use
-     $INFORMIXSERVER environment value if not defined), ifx.default_user
+     <TT
+CLASS="ENVAR"
+>INFORMIXSERVER</TT
+> environment value if not defined), ifx.default_user
      for user, ifx.default_password for the password (none if not defined).
     </P
 ><P
@@ -180,8 +186,7 @@ CLASS="PROGRAMLISTING"
 ></TD
 ></TR
 ></TABLE
->
-   </P
+></P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

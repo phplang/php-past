@@ -1,0 +1,58 @@
+#!/bin/sh
+if echo '\c' | grep -s c >/dev/null 2>&1
+then
+	ECHO_N="echo -n"
+	ECHO_C=""
+else
+	ECHO_N="echo"
+	ECHO_C='\c'
+fi
+
+cat <<EOF
+PHP Regression Test Menu
+
+1) Basic Tests
+2) Language Construct Tests
+3) Regular Expression Tests
+4) Built-in Function Tests
+5) Array Tests
+6) DBM Tests
+0) Run All Tests
+q) Quit
+EOF
+$ECHO_N "? $ECHO_C"
+read a
+if [ "$a" = "q" ] || [ "$a" = "Q" ]
+then
+	exit
+fi
+case $a in
+1) for i in basic/*.php3t; do
+   ./testphp $i
+   done
+   ;;
+2) for i in lang/*.php3t; do
+   ./testphp $i
+   done
+   ;;
+3) for i in reg/*.php3t; do
+   ./testphp $i
+   done
+   ;;
+4) for i in func/*.php3t; do
+   ./testphp $i
+   done
+   ;;
+5) for i in ary/*.php3t; do
+   ./testphp $i
+   done
+   ;;
+6) for i in dbm/*.php3t; do
+   ./testphp $i
+   done
+   ;;
+0) for i in basic/*.php3t lang/*.php3t reg/*.php3t func/*.php3t ary/*.php3t dbm/*.php3t; do
+   ./testphp $i
+   done
+   ;;
+esac

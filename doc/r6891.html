@@ -1,0 +1,231 @@
+<HTML
+><HEAD
+><TITLE
+>dba_open</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Database (dbm-style) abstraction layer functions"
+HREF="r6628.html"><LINK
+REL="PREVIOUS"
+TITLE="dba_popen"
+HREF="r6855.html"><LINK
+REL="NEXT"
+TITLE="dba_optimize"
+HREF="r6927.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="r6855.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="r6927.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="AEN6891"
+>dba_open</A
+></H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN6892"
+></A
+>dba_open -- Open database</DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN6895"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><CODE
+CLASS="FUNCDEF"
+>int dba_open</CODE
+>(string path, string mode, string handler, [<SPAN
+CLASS="OPTIONAL"
+>...</SPAN
+>]);<P
+></P
+></DIV
+><P
+>     <B
+CLASS="FUNCTION"
+>dba_open()</B
+> establishes a database instance for
+     <TT
+CLASS="PARAMETER"
+><I
+>path</I
+></TT
+> with <TT
+CLASS="PARAMETER"
+><I
+>mode</I
+></TT
+> using
+     <TT
+CLASS="PARAMETER"
+><I
+>handler</I
+></TT
+>.</P
+><P
+>     <TT
+CLASS="PARAMETER"
+><I
+>path</I
+></TT
+> is commonly a regular path in your filesystem.</P
+><P
+>     <TT
+CLASS="PARAMETER"
+><I
+>mode</I
+></TT
+> is "r" for read access, "w" for read/write
+     access to an already existing database, "c" for read/write access
+     and database creation if it doesn't currently exist, and "n" for
+     create, truncate and read/write access.</P
+><P
+>     <TT
+CLASS="PARAMETER"
+><I
+>handler</I
+></TT
+> is the name of the handler which shall be
+     used for accessing <TT
+CLASS="PARAMETER"
+><I
+>path</I
+></TT
+>. It is passed all optional
+     parameters given to <B
+CLASS="FUNCTION"
+>dba_open()</B
+> and can act on behalf of
+     them.</P
+><P
+>     <B
+CLASS="FUNCTION"
+>dba_open()</B
+> returns a positive handler id or false, in
+     the case the open is successful or fails, respectively.</P
+><P
+>     See also:
+     <B
+CLASS="FUNCTION"
+>dba_popen()</B
+>
+     <B
+CLASS="FUNCTION"
+>dba_close()</B
+>
+	</P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="r6855.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="r6927.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>dba_popen</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="r6628.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>dba_optimize</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

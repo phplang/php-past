@@ -1,10 +1,10 @@
 <HTML
 ><HEAD
 ><TITLE
->Alternative syntax for if structures: if(): ... endif;</TITLE
+>Alternative syntax for control structures</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -69,40 +69,42 @@ CLASS="SECT1"
 CLASS="SECT1"
 ><A
 NAME="CONTROL-STRUCTURES.ALTERNATIVE-SYNTAX"
->Alternative syntax for <TT
-CLASS="LITERAL"
->if</TT
-> structures: <TT
-CLASS="LITERAL"
->if(): ... endif;</TT
-></A
+>Alternative syntax for control structures</A
 ></H1
 ><P
->      PHP offers a different way to group statements within an
-      <TT
+>	PHP offers an alternative syntax for some of its control
+	structures; namely, <TT
 CLASS="LITERAL"
 >if</TT
-> statement.  This is most commonly used when
-      you nest HTML blocks inside <TT
+>,
+	<TT
 CLASS="LITERAL"
->if</TT
-> statements, but
-      can be used anywhere.  Instead of using curly braces, <TT
+>while</TT
+>, <TT
 CLASS="LITERAL"
->if
-      (<TT
-CLASS="REPLACEABLE"
-><I
->expr</I
-></TT
->)</TT
-> should be followed
-      by a colon, the list of one or more statements, and end with
-      <TT
+>for</TT
+>, and
+	<TT
+CLASS="LITERAL"
+>switch</TT
+>.  In each case, the basic form of the
+	alternate syntax is to change the opening brace to a colon (:) and
+	the closing brace to <TT
 CLASS="LITERAL"
 >endif;</TT
->.  Consider the following example:
- 
+>,
+	<TT
+CLASS="LITERAL"
+>endwhile;</TT
+>, <TT
+CLASS="LITERAL"
+>endfor;</TT
+>, or
+	<TT
+CLASS="LITERAL"
+>endswitch;</TT
+>, respectively.
+    
       <DIV
 CLASS="INFORMALEXAMPLE"
 ><P
@@ -110,14 +112,13 @@ CLASS="INFORMALEXAMPLE"
 ><PRE
 CLASS="PROGRAMLISTING"
 > &lt;?php if ($a==5): ?&gt;
- A = 5
+ A is equal to 5
  &lt;?php endif; ?&gt;
        </PRE
 ><P
 ></P
 ></DIV
 >
- 
      </P
 ><P
 >      In the above example, the HTML block "A = 5" is nested within an
@@ -125,9 +126,7 @@ CLASS="PROGRAMLISTING"
 CLASS="LITERAL"
 >if</TT
 > statement written in the alternative syntax.
-      The HTML block would be displayed only if $a is equal to 5.
- 
-     </P
+      The HTML block would be displayed only if $a is equal to 5.</P
 ><P
 >      The alternative syntax applies to <TT
 CLASS="LITERAL"
@@ -169,7 +168,19 @@ CLASS="PROGRAMLISTING"
 ></P
 ></DIV
 >
- 
+   </P
+><P
+>	See also <A
+HREF="control-structures.while.html"
+>while</A
+>,
+	<A
+HREF="control-structures.for.html"
+>for</A
+>, and <A
+HREF="control-structures.html#CONTROL-STRUCTURES.IF"
+>if</A
+> for further examples.
    </P
 ></DIV
 ><DIV

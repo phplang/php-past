@@ -4,7 +4,7 @@
 >each</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -71,13 +71,14 @@ NAME="FUNCTION.EACH"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN3401"
+NAME="AEN4081"
 ></A
->each -- Return the next key and value pair from an array</DIV
+>each --      Return the next key and value pair from an array
+    </DIV
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN3404"
+NAME="AEN4084"
 ></A
 ><H2
 >Description</H2
@@ -98,9 +99,9 @@ CLASS="PARAMETER"
 ><I
 >array</I
 ></TT
-> and advances the array
-     cursor. This pair is returned in a four-element array,
-     with the keys <I
+> and advances the array cursor. This
+     pair is returned in a four-element array, with the keys
+     <I
 CLASS="EMPHASIS"
 >0</I
 >, <I
@@ -110,35 +111,32 @@ CLASS="EMPHASIS"
      <I
 CLASS="EMPHASIS"
 >key</I
->, and <I
-CLASS="EMPHASIS"
->value</I
->. Elements
+>, and
      <I
 CLASS="EMPHASIS"
+>value</I
+>. Elements <I
+CLASS="EMPHASIS"
 >0</I
-> and <I
+> and
+     <I
 CLASS="EMPHASIS"
 >key</I
-> contain
-     the key name of the array element, and <I
+> contain the key name of the array
+     element, and <I
 CLASS="EMPHASIS"
 >1</I
->
-     and <I
+> and
+     <I
 CLASS="EMPHASIS"
 >value</I
-> contain the data.
-
-    </P
+> contain the data.</P
 ><P
 >     If the internal pointer for the array points past the end of the
      array contents, <B
 CLASS="FUNCTION"
 >each()</B
-> returns false.
-     
-    </P
+> returns false.</P
 ><P
 >     <TABLE
 WIDTH="100%"
@@ -159,7 +157,7 @@ CLASS="FUNCTION"
 ></P
 ><PRE
 CLASS="PROGRAMLISTING"
->$foo = array( "bob", "fred", "jussi", "jouni" );
+>$foo = array ("bob", "fred", "jussi", "jouni", "egon", "marliese");
 $bar = each( $foo );
       </PRE
 ><P
@@ -175,23 +173,19 @@ CLASS="LITERAL"
 COMPACT="COMPACT"
 ><LI
 ><SPAN
->0 =&#62; 0
-        </SPAN
+>0 =&#62; 0</SPAN
 ></LI
 ><LI
 ><SPAN
->1 =&#62; 'bob'
-        </SPAN
+>1 =&#62; 'bob'</SPAN
 ></LI
 ><LI
 ><SPAN
->key =&#62; 0
-        </SPAN
+>key =&#62; 0</SPAN
 ></LI
 ><LI
 ><SPAN
->value =&#62; 'bob'
-       </SPAN
+>value =&#62; 'bob'</SPAN
 ></LI
 ></UL
 >
@@ -201,9 +195,7 @@ CLASS="PROGRAMLISTING"
 >$foo = array( "Robert" =&#62; "Bob", "Seppo" =&#62; "Sepi" );
 $bar = each( $foo );
        </PRE
->
-
-      </P
+></P
 ><P
 >       <TT
 CLASS="LITERAL"
@@ -217,35 +209,27 @@ CLASS="LITERAL"
 COMPACT="COMPACT"
 ><LI
 ><SPAN
->0 =&#62; 'Robert'
-        </SPAN
+>0 =&#62; 'Robert'</SPAN
 ></LI
 ><LI
 ><SPAN
->1 =&#62; 'Bob'
-        </SPAN
+>1 =&#62; 'Bob'</SPAN
 ></LI
 ><LI
 ><SPAN
->key =&#62; 'Robert'
-        </SPAN
+>key =&#62; 'Robert'</SPAN
 ></LI
 ><LI
 ><SPAN
->value =&#62; 'Bob'
-       </SPAN
+>value =&#62; 'Bob'</SPAN
 ></LI
 ></UL
->
-
-    </P
+></P
 ></DIV
 ></TD
 ></TR
 ></TABLE
->
-      
-    </P
+></P
 ><P
 >     <B
 CLASS="FUNCTION"
@@ -272,14 +256,16 @@ CLASS="EXAMPLE"
 CLASS="EXAMPLE"
 ><P
 ><B
->Example 2. Traversing $HTTP_POST_VARS with <B
+>Example 2.        Traversing $HTTP_POST_VARS with <B
 CLASS="FUNCTION"
 >each()</B
-></B
+>
+      </B
 ></P
 ><PRE
 CLASS="PROGRAMLISTING"
 >echo "Values submitted via POST method:&lt;br&gt;";
+reset($HTTP_POST_VARS);
 while (list($key, $val) = each($HTTP_POST_VARS)) {
    echo "$key =&#62; $val&lt;br&gt;";
 }
@@ -288,18 +274,14 @@ while (list($key, $val) = each($HTTP_POST_VARS)) {
 ></TD
 ></TR
 ></TABLE
->
-
-     </P
+></P
 ><P
 >      After <B
 CLASS="FUNCTION"
 >each()</B
 > has executed, the array cursor
       will be left on the next element of the array, or on the last
-      element if it hits the end of the array.
-
-    </P
+      element if it hits the end of the array.</P
 ><P
 >     See also <A
 HREF="function.key.html"
@@ -339,9 +321,7 @@ HREF="function.prev.html"
 CLASS="FUNCTION"
 >prev()</B
 ></A
->.
-
-   </P
+>.</P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

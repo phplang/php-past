@@ -4,7 +4,7 @@
 >OCINLogon</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -71,14 +71,14 @@ NAME="FUNCTION.OCINLOGON"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN17918"
+NAME="AEN20096"
 ></A
 >OCINLogon -- Connect to an Oracle database and log on using a new connection. 
     Returns a new session.</DIV
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN17921"
+NAME="AEN20099"
 ></A
 ><H2
 >Description</H2
@@ -89,45 +89,59 @@ CLASS="FUNCSYNOPSIS"
 ><CODE
 CLASS="FUNCDEF"
 >int OCINLogon</CODE
->(int conn);<P
+>(string username, string password, string [<SPAN
+CLASS="OPTIONAL"
+>db</SPAN
+>]);<P
 ></P
 ></DIV
 ><P
->     <B
-CLASS="FUNCTION"
->OCINLogin()</B
-> Creates a new connection to an Oracle 8 database 
-     and logs on.  If the optional third parameter is not specified, PHP uses the environment
-     variable ORACLE_SID to determine which database to connect to.  <A
+>     <A
 HREF="function.ocinlogon.html"
 ><B
 CLASS="FUNCTION"
 >OCINLogon()</B
 ></A
-> 
-     forces a new connection.  This is should be used if you need to isolate a set of transactions.
-     By default, connections are shared at the page level if using <A
+> creates a new connection to an
+     Oracle 8 database and logs on.  The optional third parameter can
+     either contain the name of the local Oracle instance or the name
+     of the entry in tnsnames.ora to which you want to connect.  If
+     the optional third parameter is not specified, PHP uses the
+     environment variables ORACLE_SID (Oracle instance) or TWO_TASK
+     (tnsnames.ora) to determine which database to connect to.
+    </P
+><P
+>     <A
+HREF="function.ocinlogon.html"
+><B
+CLASS="FUNCTION"
+>OCINLogon()</B
+></A
+> forces a new connection.  This
+     should be used if you need to isolate a set of transactions.  By
+     default, connections are shared at the page level if using
+     <A
 HREF="function.ocilogon.html"
 ><B
 CLASS="FUNCTION"
 >OCILogon()</B
 ></A
-> 
-     or at the web server process level if using <A
+> or at the web server process level
+     if using <A
 HREF="function.ociplogon.html"
 ><B
 CLASS="FUNCTION"
 >OCIPLogon()</B
 ></A
->.  If you have 
-     multiple connections open using <A
+>.  If you have multiple
+     connections open using <A
 HREF="function.ocinlogon.html"
 ><B
 CLASS="FUNCTION"
 >OCINLogon()</B
 ></A
->, all commits and 
-     rollbacks apply to the specified connection only..
+>, all
+     commits and rollbacks apply to the specified connection only.
     </P
 ><P
 >     This example demonstrates how the connections are separated.
@@ -156,7 +170,7 @@ $c2 = ocinlogon("scott","tiger",$db);
 
 function create_table($conn)
 { $stmt = ociparse($conn,"create table scott.hallo (test
-varchar2(32))");
+varchar2(64))");
   ociexecute($stmt);
   echo $conn." created table\n\n";
 }
@@ -168,7 +182,7 @@ function drop_table($conn)
 }
 
 function insert_data($conn)
-{ $stmt = ociparse($conn,"insert into scott.hallo values($conn || ' ' || to_char(sysdate,'DD-MON-YY HH24:MI:SS'))");
+{ $stmt = ociparse($conn,"insert into scott.hallo values('$conn' || ' ' || to_char(sysdate,'DD-MON-YY HH24:MI:SS'))");
   ociexecute($stmt,OCI_DEFAULT);
   echo $conn." inserted hallo\n\n";
 }
@@ -230,8 +244,7 @@ print "&lt;/PRE&#62;&lt;/HTML&#62;";
 ></TD
 ></TR
 ></TABLE
->
-    </P
+></P
 ><P
 >     See also <A
 HREF="function.ocilogon.html"
@@ -246,8 +259,7 @@ HREF="function.ociplogon.html"
 CLASS="FUNCTION"
 >OCIPLogon()</B
 ></A
->.
-   </P
+>.</P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

@@ -1,0 +1,184 @@
+<HTML
+><HEAD
+><TITLE
+>ldap_get_values_len</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="LDAP functions"
+HREF="ref.ldap.html"><LINK
+REL="PREVIOUS"
+TITLE="ldap_get_values"
+HREF="function.ldap-get-values.html"><LINK
+REL="NEXT"
+TITLE="ldap_list"
+HREF="function.ldap-list.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.ldap-get-values.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.ldap-list.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="FUNCTION.LDAP-GET-VALUES-LEN"
+>ldap_get_values_len</A
+></H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN14747"
+></A
+>ldap_get_values_len -- Get all binary values from a result entry</DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN14750"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><CODE
+CLASS="FUNCDEF"
+>array ldap_get_values_len</CODE
+>(int link_identifier, int result_entry_identifier, string attribute);<P
+></P
+></DIV
+><P
+>     Returns an array of values for the attribute on success and false
+     on error.</P
+><P
+>  
+     <B
+CLASS="FUNCTION"
+>ldap_get_values_len()</B
+> function is used to read all
+     the values of the attribute in the entry in the result. entry is
+     specified by the
+     <TT
+CLASS="PARAMETER"
+><I
+>result_entry_identifier</I
+></TT
+>. The number of
+     values can be found by indexing "count" in the resultant
+     array. Individual values are accessed by integer index in the
+     array.  The first index is 0.</P
+><P
+>     This function is used exactly like
+     <A
+HREF="function.ldap-get-values.html"
+><B
+CLASS="FUNCTION"
+>ldap_get_values()</B
+></A
+> except that it handles
+     binary data and not string data.</P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.ldap-get-values.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.ldap-list.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>ldap_get_values</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.ldap.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>ldap_list</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,35 @@
+Testing the encrypt() and decrypt functions...
+
+Using IDEA
+<?
+dl("crypt.dll");
+
+$key16 = "abcdefghijklmnop"; //16 bytes long
+$key8 = "abcdefgh"; //8 bytes long
+$key48 = $key16.$key16.$key16;
+$string = "Jack and Jill went up the hill!!! Jack";
+$crypted = encrypt($string,0,$key16);
+$decrypted = decrypt($crypted,0,$key16);
+
+echo ("String: $string\n");
+echo ("IDEA encrypted string: $crypted \n");
+echo ("IDEA decrypted string: $decrypted \n");
+
+$crypted = encrypt($string,1,$key8);
+$decrypted = decrypt($crypted,1,$key8);
+
+echo ("\nMDC encrypted string: $crypted \n");
+echo ("\nMDC decrypted string: $decrypted \n");
+
+$crypted = encrypt($string,2,$key16);
+$decrypted = decrypt($crypted,2,$key16);
+
+echo ("\nDES encrypted string: $crypted \n");
+echo ("\nDES decrypted string: $decrypted \n");
+
+$crypted = encrypt($string,3,$key16);
+$decrypted = decrypt($crypted,3,$key16);
+
+echo ("\nXOR encrypted string: $crypted \n");
+echo ("\nXOR decrypted string: $decrypted \n");
+?>

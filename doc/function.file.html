@@ -4,7 +4,7 @@
 >file</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -71,13 +71,13 @@ NAME="FUNCTION.FILE"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN7757"
+NAME="AEN8602"
 ></A
 >file -- read entire file into an array</DIV
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN7760"
+NAME="AEN8605"
 ></A
 ><H2
 >Description</H2
@@ -88,7 +88,10 @@ CLASS="FUNCSYNOPSIS"
 ><CODE
 CLASS="FUNCDEF"
 >array file</CODE
->(string filename);<P
+>(string filename, int [<SPAN
+CLASS="OPTIONAL"
+>use_include_path</SPAN
+>]);<P
 ></P
 ></DIV
 ><P
@@ -104,9 +107,13 @@ CLASS="FUNCTION"
 >file()</B
 >
      returns the file in an array. Each element of the array corresponds
-	 to a line in the file, with the newline still attached.
-     
-    </P
+	 to a line in the file, with the newline still attached.</P
+><P
+>     You can use the optional second parameter and set it to "1", if
+     you want to search for the file in the <A
+HREF="configuration.html#INI.INCLUDE-PATH"
+>include_path</A
+>, too.</P
 ><P
 > 
      See also <A
@@ -128,9 +135,7 @@ HREF="function.popen.html"
 CLASS="FUNCTION"
 >popen()</B
 ></A
->.
-
-   </P
+>.</P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

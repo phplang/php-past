@@ -4,7 +4,7 @@
 >odbc_setoption</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -15,8 +15,8 @@ REL="PREVIOUS"
 TITLE="odbc_rollback"
 HREF="function.odbc-rollback.html"><LINK
 REL="NEXT"
-TITLE="Oracle 8 functions"
-HREF="ref.oci8.html"></HEAD
+TITLE="Oracle functions"
+HREF="ref.oracle.html"></HEAD
 ><BODY
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
@@ -55,7 +55,7 @@ WIDTH="10%"
 ALIGN="right"
 VALIGN="bottom"
 ><A
-HREF="ref.oci8.html"
+HREF="ref.oracle.html"
 >Next</A
 ></TD
 ></TR
@@ -71,7 +71,7 @@ NAME="FUNCTION.ODBC-SETOPTION"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN17776"
+NAME="AEN19633"
 ></A
 >odbc_setoption --      Adjust ODBC settings. Returns false if an error occurs, otherwise
      true.
@@ -79,7 +79,7 @@ NAME="AEN17776"
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN17779"
+NAME="AEN19636"
 ></A
 ><H2
 >Description</H2
@@ -101,8 +101,7 @@ CLASS="FUNCDEF"
       programmer and understand the effects the various options will
       have.  You will certainly need a good ODBC reference to explain
       all the different options and values that can be used.
-      Different driver versions support different options.
-     </P
+      Different driver versions support different options.</P
 ><P
 >      Because the effects may vary depending on the ODBC driver, use
       of this function in scripts to be made publicly available is
@@ -110,8 +109,7 @@ CLASS="FUNCDEF"
       to this function because they must be set before the connection
       is established or the query is prepared.  However, if on a
       particular job it can make PHP work so your boss doesn't tell
-      you to use a commercial product, that's all that really matters.
-     </P
+      you to use a commercial product, that's all that really matters.</P
 ><P
 >      <TT
 CLASS="PARAMETER"
@@ -120,8 +118,7 @@ CLASS="PARAMETER"
 ></TT
 > is a connection id or result id on
       which to change the settings.For SQLSetConnectOption(), this is 
-      a connection id. For SQLSetStmtOption(), this is a result id.
-     </P
+      a connection id. For SQLSetStmtOption(), this is a result id.</P
 ><P
 >      <TT
 CLASS="PARAMETER"
@@ -130,16 +127,14 @@ CLASS="PARAMETER"
 ></TT
 > is the ODBC function to use. The
       value should be 1 for SQLSetConnectOption() and 2 for
-      SQLSetStmtOption().
-     </P
+      SQLSetStmtOption().</P
 ><P
 >      Parmeter <TT
 CLASS="PARAMETER"
 ><I
 >option</I
 ></TT
-> is the option to set.
-     </P
+> is the option to set.</P
 ><P
 >      Parameter <TT
 CLASS="PARAMETER"
@@ -188,8 +183,7 @@ odbc_execute ($result);
 ></TD
 ></TR
 ></TABLE
->
-    </P
+></P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -222,7 +216,7 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><A
-HREF="ref.oci8.html"
+HREF="ref.oracle.html"
 >Next</A
 ></TD
 ></TR
@@ -244,7 +238,7 @@ HREF="ref.odbc.html"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->Oracle 8 functions</TD
+>Oracle functions</TD
 ></TR
 ></TABLE
 ></DIV

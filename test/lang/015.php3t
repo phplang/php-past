@@ -1,0 +1,10 @@
+--TEST--
+Testing include                                               ...
+--POST--
+--GET--
+--FILE--
+<?php 
+	include "lang/015.inc";
+?>
+--EXPECT--
+Hello

@@ -4,7 +4,7 @@
 >gzopen</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -71,13 +71,13 @@ NAME="FUNCTION.GZOPEN"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN23581"
+NAME="AEN6421"
 ></A
 >gzopen -- open gz-file</DIV
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN23584"
+NAME="AEN6424"
 ></A
 ><H2
 >Description</H2
@@ -88,7 +88,10 @@ CLASS="FUNCSYNOPSIS"
 ><CODE
 CLASS="FUNCDEF"
 >int gzopen</CODE
->(string filename, string mode);<P
+>(string filename, string mode, int [<SPAN
+CLASS="OPTIONAL"
+>use_include_path</SPAN
+>]);<P
 ></P
 ></DIV
 ><P
@@ -103,9 +106,7 @@ CLASS="FUNCTION"
      can also include a compression level ("wb9") or a strategy: 'f'
      for filtered data as in "wb6f", 'h' for Huffman only compression
      as in "wb1h". (See the description of deflateInit2 in zlib.h for
-     more information about the strategy parameter.)
-
-    </P
+     more information about the strategy parameter.)</P
 ><P
 >     Gzopen can be used to read a file which is not in gzip format; in
      this case <A
@@ -115,19 +116,19 @@ CLASS="FUNCTION"
 >gzread()</B
 ></A
 > will directly read from the
-     file without decompression.
-
-    </P
+     file without decompression.</P
 ><P
 >     Gzopen returns a file pointer to the file opened, after that,
      everything you read from this file descriptor will be
-     transparently decompressed and what you write gets compressed.
-
-    </P
+     transparently decompressed and what you write gets compressed.</P
 ><P
->     If the open fails, the function returns false.
-
-    </P
+>     If the open fails, the function returns false.</P
+><P
+>     You can use the optional third parameter and set it to "1", if
+     you want to search for the file in the <A
+HREF="configuration.html#INI.INCLUDE-PATH"
+>include_path</A
+>, too.</P
 ><P
 ><TABLE
 WIDTH="100%"
@@ -150,9 +151,7 @@ CLASS="PROGRAMLISTING"
 ></TD
 ></TR
 ></TABLE
->
-
-    </P
+></P
 ><P
 >     See also <A
 HREF="function.gzclose.html"
@@ -160,9 +159,7 @@ HREF="function.gzclose.html"
 CLASS="FUNCTION"
 >gzclose()</B
 ></A
->.
-
-   </P
+>.</P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

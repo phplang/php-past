@@ -4,7 +4,7 @@
 >mysql_result</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -71,13 +71,13 @@ NAME="FUNCTION.MYSQL-RESULT"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN16389"
+NAME="AEN18490"
 ></A
 >mysql_result -- Get result data</DIV
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN16392"
+NAME="AEN18493"
 ></A
 ><H2
 >Description</H2
@@ -106,8 +106,7 @@ CLASS="FUNCTION"
      field's offset, or the field's name, or the field's table dot
      field's name (fieldname.tablename).  If the column name has been
      aliased ('select foo as bar from...'), use the alias instead of
-     the column name.
-    </P
+     the column name.</P
 ><P
 >     When working on large result sets, you should consider using one
      of the functions that fetch an entire row (specified below).  As
@@ -118,15 +117,13 @@ CLASS="FUNCTION"
 >mysql_result()</B
 >.  Also, note that specifying a
      numeric offset for the field argument is much quicker than
-     specifying a fieldname or tablename.fieldname argument.
-    </P
+     specifying a fieldname or tablename.fieldname argument.</P
 ><P
 >     Calls <B
 CLASS="FUNCTION"
 >mysql_result()</B
 > should not be mixed
-     with calls to other functions that deal with the result set.
-    </P
+     with calls to other functions that deal with the result set.</P
 ><P
 >     Recommended high-performance alternatives:
      <A
@@ -149,8 +146,7 @@ HREF="function.mysql-fetch-object.html"
 CLASS="FUNCTION"
 >mysql_fetch_object()</B
 ></A
->.
-   </P
+>.</P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

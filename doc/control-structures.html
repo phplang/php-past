@@ -4,7 +4,7 @@
 >Control Structures</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -12,8 +12,8 @@ REL="UP"
 TITLE="Language Reference"
 HREF="langref.html"><LINK
 REL="PREVIOUS"
-TITLE="Operator Precedence"
-HREF="language.operators.precedence.html"><LINK
+TITLE="String Operators"
+HREF="language.operators.string.html"><LINK
 REL="NEXT"
 TITLE="else"
 HREF="control-structures.else.html"></HEAD
@@ -42,7 +42,7 @@ WIDTH="10%"
 ALIGN="left"
 VALIGN="bottom"
 ><A
-HREF="language.operators.precedence.html"
+HREF="language.operators.string.html"
 >Prev</A
 ></TD
 ><TD
@@ -104,13 +104,7 @@ CLASS="LITERAL"
 ><DT
 ><A
 HREF="control-structures.alternative-syntax.html"
->Alternative syntax for <TT
-CLASS="LITERAL"
->if</TT
-> structures: <TT
-CLASS="LITERAL"
->if(): ... endif;</TT
-></A
+>Alternative syntax for control structures</A
 ></DT
 ><DT
 ><A
@@ -163,17 +157,23 @@ CLASS="LITERAL"
 ><DT
 ><A
 HREF="function.require.html"
-><TT
-CLASS="LITERAL"
->require</TT
+><A
+HREF="function.require.html"
+><B
+CLASS="FUNCTION"
+>require()</B
+></A
 ></A
 ></DT
 ><DT
 ><A
 HREF="function.include.html"
-><TT
-CLASS="LITERAL"
->include</TT
+><A
+HREF="function.include.html"
+><B
+CLASS="FUNCTION"
+>include()</B
+></A
 ></A
 ></DT
 ></DL
@@ -185,9 +185,7 @@ CLASS="LITERAL"
     usually end with a semicolon. In addition, statements can be grouped
     into a statement-group by encapsulating a group of statements with
     curly braces. A statement-group is a statement by itself as well. The
-    various statement types are described in this chapter.
-
-   </P
+    various statement types are described in this chapter.</P
 ><DIV
 CLASS="SECT1"
 ><H1
@@ -223,9 +221,7 @@ CLASS="PROGRAMLISTING"
 ><P
 ></P
 ></DIV
->
- 
-    </P
+></P
 ><P
 >     As described in the section about expressions, expr is evaluated
      to its truth value.  If <TT
@@ -241,9 +237,7 @@ CLASS="LITERAL"
      evaluates to <TT
 CLASS="LITERAL"
 >FALSE</TT
-> - it'll ignore it.
- 
-    </P
+> - it'll ignore it.</P
 ><P
 >     The following example would display <TT
 CLASS="COMPUTEROUTPUT"
@@ -274,9 +268,7 @@ CLASS="PROGRAMLISTING"
 ><P
 ></P
 ></DIV
->
-
-    </P
+></P
 ><P
 >     Often you'd want to have more than one statement to be executed
      conditionally.  Of course, there's no need to wrap each statement
@@ -327,9 +319,7 @@ CLASS="PROGRAMLISTING"
 ><P
 ></P
 ></DIV
->
- 
-    </P
+></P
 ><P
 >     If statements can be nested indefinitely within other
      <TT
@@ -337,9 +327,7 @@ CLASS="LITERAL"
 >if</TT
 > statements, which provides you with complete
      flexibility for conditional execution of the various parts of
-     your program.
- 
-  </P
+     your program.</P
 ></DIV
 ></DIV
 ><DIV
@@ -357,7 +345,7 @@ WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
 ><A
-HREF="language.operators.precedence.html"
+HREF="language.operators.string.html"
 >Prev</A
 ></TD
 ><TD
@@ -382,7 +370,7 @@ HREF="control-structures.else.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->Operator Precedence</TD
+>String Operators</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"

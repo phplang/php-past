@@ -1,0 +1,192 @@
+<HTML
+><HEAD
+><TITLE
+>Execution Operators</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Operators"
+HREF="language.operators.html"><LINK
+REL="PREVIOUS"
+TITLE="Comparison Operators"
+HREF="language.operators.comparison.html"><LINK
+REL="NEXT"
+TITLE="Incrementing/Decrementing Operators"
+HREF="language.operators.increment.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="language.operators.comparison.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 10. Operators</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="language.operators.increment.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="LANGUAGE.OPERATORS.EXECUTION"
+>Execution Operators</A
+></H1
+><P
+>	PHP supports one execution operator: backticks (``). Note that
+	these are not single-quotes! PHP will attempt to execute the
+	contents of the backticks as a shell command; the output will be
+	returned (i.e., it won't simply be dumped to output; it can be
+	assigned to a variable).
+
+	<DIV
+CLASS="INFORMALEXAMPLE"
+><P
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>$output = `ls -al`;
+echo "&lt;pre&gt;$output&lt;/pre&gt;";
+	 </PRE
+><P
+></P
+></DIV
+>
+
+   </P
+><P
+>	See also <A
+HREF="function.system.html"
+><B
+CLASS="FUNCTION"
+>system()</B
+></A
+>,
+	<A
+HREF="function.passthru.html"
+><B
+CLASS="FUNCTION"
+>passthru()</B
+></A
+>, <A
+HREF="function.exec.html"
+><B
+CLASS="FUNCTION"
+>exec()</B
+></A
+>,
+	<A
+HREF="function.popen.html"
+><B
+CLASS="FUNCTION"
+>popen()</B
+></A
+>, and
+	<A
+HREF="function.escapeshellcmd.html"
+><B
+CLASS="FUNCTION"
+>escapeshellcmd()</B
+></A
+>.
+   </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="language.operators.comparison.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="language.operators.increment.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Comparison Operators</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="language.operators.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Incrementing/Decrementing Operators</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

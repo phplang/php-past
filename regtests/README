@@ -1,0 +1,72 @@
+$Id: README,v 1.1 1998/08/23 12:20:38 rocky Exp $
+PHP Regression Tests -- Revised programs and format
+=======================
+
+These regression tests assume that the phtml files found in the 
+subdirectories below are available to the php3-aware HTTP server
+that is to be tested. It helps also to preserve the directory
+structure of the test files as is given in this directory too.
+
+Someday you may be able to simply type something like "testmenu" or
+"testall" to run the tests. For now, you'd have to copy and modify
+these programs from the "test" directory to suit your needs.
+
+The testphp.pl program runs individual tests. For a list of options
+run "testphp.pl --help"
+
+=======================
+How to write your own regression tests and to test your scripts.
+
+First create your phtml file that does the operation and testing
+you want to do. The phtml can even have syntax errors or have runtime
+errors. But you need to verify that the output it gives is the correct
+output as this will be checked against a test-control file.
+  
+The format of a test-control (.php3t) file is fairly simple.  There
+are a number of sections.  TITLE, POST, URL, HEAD and EXPECT.
+Each section indicated between by putting --'s around the section name, 
+e.g. --HEAD--.
+
+  The TITLE section can contain a number of lines and merely describes the 
+  name of the test. It is not used in validation, but is manditory.
+  It is printed before the test is run. It can be
+  several lines long.
+
+  The URL section gives the name of the test to run, and is manditory
+  unless the command-line option --url is specified. If there are any
+  GET parameters to pass along, it would be done here. 
+
+  The servername, port and an optional prefix are all prepended 
+  to the URL. Only the first line after --URL-- is used. Subsequent
+  lines are tacitly ignored. 
+
+  The POST section is optional, but if given, a POST method will be used.
+  It is followed by a number of lines, possibly empty which contain
+  the POST data to send along to the HTTP server.
+
+  If there is no POST section, only a GET method will be used.
+
+  Note that both the POST section and the parameter part of the URL section
+  need to have their data in url-encoded format.  
+
+  The HEAD section is optional, but if given the header from the
+  HTTP server will be checked againt the perl pattern that is in 
+  this section.
+
+  The EXPECT section contains the desired output to check against. The
+  section is manditory, although there my be no lines (no output).
+
+A simple example which takes one argument through the POST method
+and one through the GET and displays these would be:
+
+Here is a complete test file which uses the GET method but sends 
+no data.
+
+  --TITLE--
+  Trivial 'Hello World' test                                    ...
+  --URL--
+  basic/001.phtml
+  --EXPECT--
+  Hello World
+
+Many more examples can be found in the directories below this.

@@ -4,7 +4,7 @@
 >mysql_query</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -71,13 +71,13 @@ NAME="FUNCTION.MYSQL-QUERY"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN16340"
+NAME="AEN18441"
 ></A
 >mysql_query -- Send an SQL query to MySQL</DIV
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN16343"
+NAME="AEN18444"
 ></A
 ><H2
 >Description</H2
@@ -88,11 +88,12 @@ CLASS="FUNCSYNOPSIS"
 ><CODE
 CLASS="FUNCDEF"
 >int mysql_query</CODE
->(string query, int [<SPAN
+>(string query, int 
+      [<SPAN
 CLASS="OPTIONAL"
 >link_identifier</SPAN
 >]
-                   );<P
+     );<P
 ></P
 ></DIV
 ><P
@@ -117,11 +118,9 @@ CLASS="FUNCTION"
 >mysql_connect()</B
 ></A
 > was
-     called with no arguments, and use it.
-    </P
+     called with no arguments, and use it.</P
 ><P
->     The query string should not end with a semicolon.
-    </P
+>     The query string should not end with a semicolon.</P
 ><P
 >     <B
 CLASS="FUNCTION"
@@ -131,8 +130,7 @@ CLASS="FUNCTION"
      of TRUE means that the query was legal and could be executed by
      the server.  It does not indicate anything about the number of
      rows affected or returned. It is perfectly possible for a query
-     to succeed but affect no rows or return no rows.
-    </P
+     to succeed but affect no rows or return no rows.</P
 ><P
 >     The following query is syntactically invalid, so
      <B
@@ -168,9 +166,7 @@ $result = mysql_query ("SELECT * WHERE 1=1")
 ></TD
 ></TR
 ></TABLE
->
-
-    </P
+></P
 ><P
 >     The following query is semantically invalid if
      <TT
@@ -214,17 +210,14 @@ $result = mysql_query ("SELECT my_col FROM my_tbl")
 ></TD
 ></TR
 ></TABLE
->
-
-    </P
+></P
 ><P
 >     <B
 CLASS="FUNCTION"
 >mysql_query()</B
 > will also fail and return FALSE
      if you don't have permission to access the table(s) referenced by
-     the query.
-    </P
+     the query.</P
 ><P
 >     Assuming the query succeeds, you can call
      <A
@@ -255,8 +248,7 @@ HREF="function.mysql-free-result.html"
 CLASS="FUNCTION"
 >mysql_free_result()</B
 ></A
->.
-    </P
+>.</P
 ><P
 >     See also: <A
 HREF="function.mysql-affected-rows.html"
@@ -299,8 +291,7 @@ HREF="function.mysql-connect.html"
 CLASS="FUNCTION"
 >mysql_connect()</B
 ></A
->.
-   </P
+>.</P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

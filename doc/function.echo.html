@@ -4,7 +4,7 @@
 >echo</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -71,13 +71,13 @@ NAME="FUNCTION.ECHO"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN21817"
+NAME="AEN24980"
 ></A
->echo -- output one or more strings</DIV
+>echo -- Output one or more strings</DIV
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN21820"
+NAME="AEN24983"
 ></A
 ><H2
 >Description</H2
@@ -88,16 +88,16 @@ CLASS="FUNCSYNOPSIS"
 ><CODE
 CLASS="FUNCDEF"
 >echo</CODE
->(string arg1, string [<SPAN
+>(string arg1, string 
+      [<SPAN
 CLASS="OPTIONAL"
 >argn</SPAN
->]...);<P
+>]...
+     );<P
 ></P
 ></DIV
 ><P
->     Outputs all parameters.
-
-    </P
+>     Outputs all parameters.</P
 ><P
 >     <B
 CLASS="FUNCTION"
@@ -122,7 +122,14 @@ CLASS="EXAMPLE"
 ></P
 ><PRE
 CLASS="PROGRAMLISTING"
->echo "Hello World";</PRE
+>echo "Hello World";
+
+echo "This spans
+multiple lines. The newlines will be 
+output as well";
+
+echo "This spans\nmultiple lines. The newlines will be\noutput as well.";
+	  </PRE
 ></DIV
 ></TD
 ></TR
@@ -136,8 +143,8 @@ CLASS="NOTE"
 ><P
 ><B
 >Note: </B
->      In fact, if you want to pass more than one parameter to
-      echo, you must not enclose the parameters within parentheses.
+>      In fact, if you want to pass more than one parameter to echo,
+      you must not enclose the parameters within parentheses.
      </P
 ></BLOCKQUOTE
 ></DIV
@@ -149,23 +156,21 @@ HREF="function.print.html"
 CLASS="FUNCTION"
 >print()</B
 ></A
->
+>,
      <A
 HREF="function.printf.html"
 ><B
 CLASS="FUNCTION"
 >printf()</B
 ></A
->
+>, and
      <A
 HREF="function.flush.html"
 ><B
 CLASS="FUNCTION"
 >flush()</B
 ></A
->
-
-   </P
+>.</P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

@@ -1,0 +1,191 @@
+<HTML
+><HEAD
+><TITLE
+>set_file_buffer</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Filesystem functions"
+HREF="ref.filesystem.html"><LINK
+REL="PREVIOUS"
+TITLE="fwrite"
+HREF="function.fwrite.html"><LINK
+REL="NEXT"
+TITLE="is_dir"
+HREF="function.is-dir.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.fwrite.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.is-dir.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="FUNCTION.SET-FILE-BUFFER"
+>set_file_buffer</A
+></H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN9011"
+></A
+>set_file_buffer -- Sets file buffering on the given file pointer</DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN9014"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><CODE
+CLASS="FUNCDEF"
+>int fwrite</CODE
+>(int fp, int buffer);<P
+></P
+></DIV
+><P
+>     <B
+CLASS="FUNCTION"
+>set_file_buffer()</B
+> sets the buffering for write
+     operations on the given filepointer <TT
+CLASS="PARAMETER"
+><I
+>fp</I
+></TT
+> to
+     <TT
+CLASS="PARAMETER"
+><I
+>buffer</I
+></TT
+> bytes.  If <TT
+CLASS="PARAMETER"
+><I
+>buffer</I
+></TT
+>
+     is 0 then write operations are unbuffered.</P
+><P
+>     The function returns 0 on success, or EOF if the request cannot
+     be honored.</P
+><P
+>     Note that the default for any fopen with calling set_file_buffer
+     is 8K.</P
+><P
+>     See also <A
+HREF="function.fopen.html"
+><B
+CLASS="FUNCTION"
+>fopen()</B
+></A
+>.</P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.fwrite.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.is-dir.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>fwrite</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.filesystem.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>is_dir</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,175 @@
+<HTML
+><HEAD
+><TITLE
+>mysql_change_user</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="MySQL functions"
+HREF="ref.mysql.html"><LINK
+REL="PREVIOUS"
+TITLE="mysql_affected_rows"
+HREF="function.mysql-affected-rows.html"><LINK
+REL="NEXT"
+TITLE="mysql_close"
+HREF="function.mysql-close.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.mysql-affected-rows.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.mysql-close.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="FUNCTION.MYSQL-CHANGE-USER"
+>mysql_change_user</A
+></H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN17823"
+></A
+>mysql_change_user -- Change logged in user on active connection</DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN17826"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><CODE
+CLASS="FUNCDEF"
+>int mysql_change_user</CODE
+>(string user, string password, string [<SPAN
+CLASS="OPTIONAL"
+>database</SPAN
+>]
+		, int [<SPAN
+CLASS="OPTIONAL"
+>link_identifier</SPAN
+>]
+		);<P
+></P
+></DIV
+><P
+> 
+	<B
+CLASS="FUNCTION"
+>mysql_change_user()</B
+> changes the logged in user on the current
+	active connection, or, if specified on the connection given by the link identifier.
+	If a database is specified, this will default or current database after the
+	user has been changed.  If the new user/password combination fails to be authorized
+	the current connected user stays active.</P
+><P
+>Note that this function was introduced in PHP 3.0.13 and requires MySQL
+	3.23.3 or higher.</P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.mysql-affected-rows.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.mysql-close.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>mysql_affected_rows</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.mysql.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>mysql_close</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

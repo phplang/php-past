@@ -4,7 +4,7 @@
 >imap_mail_copy</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -12,8 +12,8 @@ REL="UP"
 TITLE="IMAP functions"
 HREF="ref.imap.html"><LINK
 REL="PREVIOUS"
-TITLE="imap_listsubscribed"
-HREF="function.imap-listsubscribed.html"><LINK
+TITLE="imap_getsubscribed"
+HREF="function.imap-getsubscribed.html"><LINK
 REL="NEXT"
 TITLE="imap_mail_move"
 HREF="function.imap-mail-move.html"></HEAD
@@ -42,7 +42,7 @@ WIDTH="10%"
 ALIGN="left"
 VALIGN="bottom"
 ><A
-HREF="function.imap-listsubscribed.html"
+HREF="function.imap-getsubscribed.html"
 >Prev</A
 ></TD
 ><TD
@@ -71,13 +71,13 @@ NAME="FUNCTION.IMAP-MAIL-COPY"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN11173"
+NAME="AEN12905"
 ></A
 >imap_mail_copy -- Copy specified messages to a mailbox</DIV
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN11176"
+NAME="AEN12908"
 ></A
 ><H2
 >Description</H2
@@ -92,8 +92,7 @@ CLASS="FUNCDEF"
 ></P
 ></DIV
 ><P
->     Returns true on success and false on error.  
-    </P
+>     Returns true on success and false on error.</P
 ><P
 > 
      Copies mail messages specified by <TT
@@ -108,8 +107,7 @@ CLASS="PARAMETER"
 >msglist</I
 ></TT
 > is a range
-     not just message numbers.
-    </P
+     not just message numbers.</P
 ><P
 >     flags is a bitmask of one or more of
      <P
@@ -117,18 +115,15 @@ CLASS="PARAMETER"
 ><UL
 ><LI
 ><P
->	CP_UID - the sequence numbers contain UIDS
-      </P
+>	CP_UID - the sequence numbers contain UIDS</P
 ></LI
 ><LI
 ><P
 >	CP_MOVE - Delete the messages from the current mailbox after
-	copying
-     </P
+	copying</P
 ></LI
 ></UL
->
-   </P
+></P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -145,7 +140,7 @@ WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
 ><A
-HREF="function.imap-listsubscribed.html"
+HREF="function.imap-getsubscribed.html"
 >Prev</A
 ></TD
 ><TD
@@ -170,7 +165,7 @@ HREF="function.imap-mail-move.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->imap_listsubscribed</TD
+>imap_getsubscribed</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"

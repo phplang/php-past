@@ -1,0 +1,14 @@
+--$Id: 001.php3t,v 1.2 1998/08/31 00:18:03 rocky Exp $
+--TITLE--
+Simple math tests                                             ...
+--URL--
+math/001.phtml
+--EXPECT--
+1
+1.5
+1
+1.5
+-1
+2
+-2
+1

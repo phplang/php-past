@@ -4,7 +4,7 @@
 >mysql_insert_id</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -71,14 +71,14 @@ NAME="FUNCTION.MYSQL-INSERT-ID"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN16188"
+NAME="AEN18287"
 ></A
 >mysql_insert_id -- Get the id generated from the previous INSERT
      operation</DIV
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN16191"
+NAME="AEN18290"
 ></A
 ><H2
 >Description</H2
@@ -102,10 +102,21 @@ CLASS="OPTIONAL"
 CLASS="FUNCTION"
 >mysql_insert_id()</B
 > returns the ID generated for
-     an AUTO_INCREMENTED field. This function takes no arguments. It
-     will return the auto-generated ID returned by the last INSERT
-     query performed.
-   </P
+     an AUTO_INCREMENTED field.  It will return the auto-generated ID
+     returned by the last INSERT query performed using the given 
+     <TT
+CLASS="PARAMETER"
+><I
+>link_identifier</I
+></TT
+>.  If
+     <TT
+CLASS="PARAMETER"
+><I
+>link_identifier</I
+></TT
+> isn't specified, the last 
+     opened link is assumed.</P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

@@ -4,7 +4,7 @@
 >exec</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -15,8 +15,8 @@ REL="PREVIOUS"
 TITLE="escapeshellcmd"
 HREF="function.escapeshellcmd.html"><LINK
 REL="NEXT"
-TITLE="system"
-HREF="function.system.html"></HEAD
+TITLE="passthru"
+HREF="function.passthru.html"></HEAD
 ><BODY
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
@@ -55,7 +55,7 @@ WIDTH="10%"
 ALIGN="right"
 VALIGN="bottom"
 ><A
-HREF="function.system.html"
+HREF="function.passthru.html"
 >Next</A
 ></TD
 ></TR
@@ -71,13 +71,13 @@ NAME="FUNCTION.EXEC"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN7001"
+NAME="AEN23704"
 ></A
 >exec -- Execute an external program</DIV
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN7004"
+NAME="AEN23707"
 ></A
 ><H2
 >Description</H2
@@ -116,8 +116,7 @@ CLASS="FUNCTION"
 >PassThru()</B
 ></A
 >
-    function.
-    </P
+    function.</P
 ><P
 >    If the <TT
 CLASS="PARAMETER"
@@ -140,8 +139,7 @@ CLASS="FUNCTION"
     passing it to <B
 CLASS="FUNCTION"
 >exec()</B
->.
-    </P
+>.</P
 ><P
 >    If the <TT
 CLASS="PARAMETER"
@@ -155,8 +153,7 @@ CLASS="PARAMETER"
 ></TT
 >
     argument, then the return status of the executed command will be written to this
-    variable.
-    </P
+    variable.</P
 ><P
 >    Note that if you are going to allow data coming from user input to be
     passed to this function, then you should be using <A
@@ -166,36 +163,39 @@ CLASS="FUNCTION"
 >EscapeShellCmd()</B
 ></A
 >
-    to make sure that users cannot trick the system into executing arbitrary commands.
-    </P
+    to make sure that users cannot trick the system into executing arbitrary commands.</P
 ><P
->    See also <A
+>	 See also <A
 HREF="function.system.html"
 ><B
 CLASS="FUNCTION"
 >system()</B
 ></A
->, <A
+>,
+	 <A
 HREF="function.passthru.html"
 ><B
 CLASS="FUNCTION"
 >PassThru()</B
 ></A
->,
-    <A
+>, <A
 HREF="function.popen.html"
 ><B
 CLASS="FUNCTION"
 >popen()</B
 ></A
-> and <A
+>,
+	 <A
 HREF="function.escapeshellcmd.html"
 ><B
 CLASS="FUNCTION"
 >EscapeShellCmd()</B
 ></A
+>, and the <A
+HREF="language.operators.execution.html"
+>backtick operator</A
 >.
-   </P
+	</P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -228,7 +228,7 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><A
-HREF="function.system.html"
+HREF="function.passthru.html"
 >Next</A
 ></TD
 ></TR
@@ -250,7 +250,7 @@ HREF="ref.exec.html"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->system</TD
+>passthru</TD
 ></TR
 ></TABLE
 ></DIV

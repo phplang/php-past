@@ -1,0 +1,12 @@
+--$Id: 006.php3t,v 1.1 1998/08/23 03:10:13 rocky Exp $
+--TITLE--
+Next() loop, Reset(), Next() loop                             ...
+--URL--
+ary/006.phtml
+--EXPECT--
+KEY: 0, VAL: a
+KEY: 1, VAL: b
+KEY: 2, VAL: c
+KEY: 0, VAL: a
+KEY: 1, VAL: b
+KEY: 2, VAL: c

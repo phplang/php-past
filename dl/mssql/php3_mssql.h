@@ -28,7 +28,7 @@
  */
 
 
-/* $Id: php3_mssql.h,v 1.3 1999/01/06 07:27:12 fmk Exp $ */
+/* $Id: php3_mssql.h,v 1.4 1999/12/26 18:44:43 rasmus Exp $ */
 
 #ifndef _PHP3_MSSQL_H
 #define _PHP3_MSSQL_H
@@ -137,9 +137,7 @@ typedef struct {
 	int num_rows,num_fields;
 } mssql_result;
 
-#ifndef THREAD_SAFE
 extern mssql_module php3_mssql_module;
-#endif
 
 #else
 

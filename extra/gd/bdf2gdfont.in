@@ -1,0 +1,163 @@
+#!@PERL_PATH@
+# Original by Stig S. Bakken <ssb@fast.no>
+# Modified by Tin Le <tin@netimages.com>
+# $Date: 1999/04/22 13:19:49 $
+
+use Getopt::Std;
+
+$opt_debug = 1;
+
+getopts('bd:');
+
+if (!@ARGV || $opt_err) {
+	print "\nUsage: $0 [-b] [-d n] bdf_file [>gd_file]\n";
+	print "-d n   Debugging level n\n";
+	print "-b	 Put fonts on a common baseline instead of common topline\n\n";
+	print "bdf2gdfont converts X11 bdf files to GD font format files\n";
+	exit 1;
+}
+
+if (($file = shift) && open(BDF, $file)) {
+	bdf_to_gdfont(BDF, STDOUT) || exit 1;
+}
+close(BDF);
+
+sub bdf_to_gdfont
+{
+	my $bdf_file = shift;
+	my $gd_file = shift;
+	my($width, $height, $nchars, $glyphname, $charline, $code);
+	my($lines_left, @lines, $rasterline, $rec, $ind, $char, $data);
+	my($rline, $last, $first, $nbytes);
+
+	$format = <$bdf_file>;
+	if ($format !~ /^STARTFONT 2\.1/) {
+		chop;
+		print STDERR "Unknown font format ($_)\n";
+		return undef;
+	}
+
+	$nbytes = $width = $height = 0;
+	while (<$bdf_file>) {
+		chop;
+		next if /^\s*COMMENT/;
+		if (/^FONTBOUNDINGBOX (\d+) (\d+)/) {
+			($width, $height) = ($1, $2);
+		} elsif (/^\s*CHARS (\d+)/) {
+			$nchars = $1;
+		} elsif (/^\s*STARTCHAR (.*)/) {
+			$glyphname = $1;
+		print STDERR "reading $1...\n" if ($opt_debug > 8);
+			while ($charline = <$bdf_file>) {
+				chop $charline;
+				print STDERR "got line \"$charline\"...\n" if ($opt_debug > 8);
+				if ($charline =~ /^\s*ENCODING (\d+)/) {
+					$nbytes++; # keep track of bytes in font
+					$code = $1;
+					$last = $code if ($code > $last);
+				} elsif ($charline =~ /^\s*BITMAP/) {
+					$lines_left = $height;
+					@lines = ();
+					while ($lines_left > 0) {
+						chop($rasterline = <$bdf_file>);
+						if ($rasterline =~ /^\s*ENDCHAR/) {
+							$charline = $rasterline;
+							last;
+						}
+						# remove leading & ending white spaces
+						$rasterline =~ s/\s+$//;
+						$rasterline =~ s/^\s+//;
+						foreach $rec (split(/\s+/, $rasterline)) {
+							$lines_left--;
+							push(@lines, $rec);
+						}
+					}
+
+					# align font to common baseline
+					@temp = ();
+					while ($lines_left > 0) {
+						push(@temp, '00');
+						$lines_left--;
+					}
+					# baseline from bottom
+					if ($opt_b) {
+						@lines = (@temp, @lines);
+					} else { # or from top
+						@lines = (@lines, @temp);
+					}
+				}
+				last if ($charline =~ /^\s*ENDCHAR/);
+			}
+			$ind = int($code);
+			$character_data{$ind} = join(' ', @lines);
+		}
+	}
+
+	# find the first char
+	$first = $last;
+	while (($k, $v) = each %character_data) {
+		$first = $k if ($k < $first);
+	}
+
+	# GD fonts are limited to 255 char encoding
+	if ($last > 255) {
+		$last = 255;
+	}
+
+	binmode STDOUT;
+
+	$tmp = $width / 8;
+	$tmp++ if (int($tmp) < $tmp);
+	$bytes = int($tmp); # simulates ceil()
+	$addnulls = '0' x $bytes;
+	$bytes_written = 0;
+	$numchars = ($last - $first) + 1;
+	@empty_data = ();
+	for ($i = 0; $i < $height; $i++) {
+		push(@empty_data, $addnulls);
+	}
+
+	print STDERR "bytes=$bytes, tmp=$tmp\n" if ($opt_debug > 5);
+
+	print STDERR "nchars=$numchars($nbytes) offset=$first width=$width height=$height\n";
+	print STDERR "should become ", (16+($numchars*$width*$height)), " bytes\n";
+$nbytes = 16+($numchars*$width*$height);
+
+	print pack("i4", $numchars, $first, $width, $height);
+	$bytes_written += 16;
+
+	for ($char = $first; $char <= $last; $char++) {
+		print STDERR "char $char:\n" if ($opt_debug>9);
+		if ($character_data{$char}) {
+			@data = split(' ', $character_data{$char});
+		} else {
+			print STDERR "[empty] " if ($opt_debug>9);
+			@data = @empty_data;
+		}
+
+		foreach $rline (@data) {
+			$rline .= $addnulls;
+
+		for ($bitsleft = $width, $i = 0; $i < $bytes && $bitsleft > 0;
+			$i++)
+			{
+				$byte = hex(substr($rline, ($i*2), 2));
+				printf STDERR "%-2x ", $byte if ($opt_debug>5);
+				for ($mask = 128; $mask > 0 && $bitsleft > 0;
+			 		$mask >>= 1, $bitsleft--)
+				{
+					if ($byte & $mask) {
+						print pack("C", 1);
+					} else {
+						print pack("C", 0);
+					}
+					$bytes_written += 1;
+				}
+				print STDERR "\n" if ($opt_debug>5);
+			}
+		}
+	}
+
+	1;
+}
+ 

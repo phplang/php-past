@@ -4,7 +4,7 @@
 >get_cfg_var</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -71,13 +71,13 @@ NAME="FUNCTION.GET-CFG-VAR"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN11707"
+NAME="AEN22461"
 ></A
 >get_cfg_var -- Get the value of a PHP configuration option.</DIV
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN11710"
+NAME="AEN22464"
 ></A
 ><H2
 >Description</H2
@@ -99,20 +99,18 @@ CLASS="PARAMETER"
 >varname</I
 ></TT
 >, or false if an error
-     occurs.
-
-    </P
+     occurs.</P
 ><P
 >	 It will not return configuration information set when the PHP was
 	 compiled, or read from an Apache configuration file (using the
-	 php3_configuration_option directives).
-
-	</P
+	 php3_configuration_option directives).</P
 ><P
->	 To check whether the system is using a php3.ini file, try retrieving
-	 the value of the cfg_file_path configuration setting. If this is
-	 available, a php3.ini file is being used.
-   </P
+>	 To check whether the system is using a <A
+HREF="configuration.html#CONFIGURATION.FILE"
+>configuration file</A
+>,
+	 try retrieving the value of the cfg_file_path configuration
+	 setting. If this is available, a configuration file is being used.</P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

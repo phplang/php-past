@@ -4,7 +4,7 @@
 >OCIColumnSize</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -71,13 +71,13 @@ NAME="FUNCTION.OCICOLUMNSIZE"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN18156"
+NAME="AEN20341"
 ></A
 >OCIColumnSize -- return result column size</DIV
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN18159"
+NAME="AEN20344"
 ></A
 ><H2
 >Description</H2
@@ -147,6 +147,7 @@ CLASS="PROGRAMLISTING"
         print "&lt;TD&#62;$column_size&lt;/TD&#62;";
         print "&lt;/TR&#62;";
     }
+    print "&lt;/TABLE&#62;";
     OCIFreeStatement($stmt);  
     OCILogoff($conn);   
     print "&lt;/PRE&#62;";
@@ -156,8 +157,7 @@ CLASS="PROGRAMLISTING"
 ></TD
 ></TR
 ></TABLE
->
-    </P
+></P
 ><P
 >     See also <A
 HREF="function.ocinumcols.html"
@@ -178,8 +178,7 @@ HREF="function.ocicolumnsize.html"
 CLASS="FUNCTION"
 >OCIColumnSize()</B
 ></A
->.
-   </P
+>.</P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

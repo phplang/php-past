@@ -1,0 +1,23 @@
+<?php 
+
+  function rtn($rtn)
+  {
+    return ($rtn);
+  }
+
+
+  $a[0]="a";
+  $a[1]="b";
+  $a[2]="c";
+
+  $b=rtn($a);
+
+  asort($b);
+  $key=key($b);
+  $data=current($b);
+  while ("" != (string) $key) {
+    echo "KEY: $key, VAL: $data\n";
+    $data=next($b);
+    $key=key($b);
+  }
+?>

@@ -4,7 +4,7 @@
 >Classes and Objects</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -12,8 +12,8 @@ REL="UP"
 TITLE="Language Reference"
 HREF="langref.html"><LINK
 REL="PREVIOUS"
-TITLE="old_function"
-HREF="functions.old-syntax.html"><LINK
+TITLE="Variable functions"
+HREF="functions.variable-functions.html"><LINK
 REL="NEXT"
 TITLE="Features"
 HREF="features.html"></HEAD
@@ -42,7 +42,7 @@ WIDTH="10%"
 ALIGN="left"
 VALIGN="bottom"
 ><A
-HREF="functions.old-syntax.html"
+HREF="functions.variable-functions.html"
 >Prev</A
 ></TD
 ><TD
@@ -134,9 +134,7 @@ CLASS="PROGRAMLISTING"
 ><P
 ></P
 ></DIV
->
- 
-    </P
+></P
 ><P
 >     This defines a class named Cart that consists of an associative
      array of articles in the cart and two functions to add and remove
@@ -145,7 +143,7 @@ CLASS="PROGRAMLISTING"
     </P
 ><P
 >     Classes are types, that is, they are blueprints for actual
-     variables. You have to create a variables of the desired type with
+     variables. You have to create a variable of the desired type with
      the new operator.
     </P
 ><DIV
@@ -169,7 +167,7 @@ CLASS="PROGRAMLISTING"
 >     Classes can be extensions of other classes. The extended or
      derived class has all variables and functions of the base class
      and what you add in the extended definition.  This is done using
-     the extends keyword.
+     the extends keyword. Multiple inheritance is not supported.
     </P
 ><DIV
 CLASS="INFORMALEXAMPLE"
@@ -247,7 +245,7 @@ CLASS="INFORMALEXAMPLE"
 ></P
 ><PRE
 CLASS="PROGRAMLISTING"
-> class Constructor_Cart {
+> class Constructor_Cart extends Cart {
      function Constructor_Cart ($item = "10", $num = 1) {
          $this-&#62;add_item ($item, $num);
      }
@@ -284,8 +282,7 @@ ALIGN="CENTER"
 ALIGN="LEFT"
 ><P
 >      For derived classes, the constructor of the parent class is not
-      automatically called when the derived class's constructor is called.
-    </P
+      automatically called when the derived class's constructor is called.</P
 ></TD
 ></TR
 ></TABLE
@@ -307,7 +304,7 @@ WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
 ><A
-HREF="functions.old-syntax.html"
+HREF="functions.variable-functions.html"
 >Prev</A
 ></TD
 ><TD
@@ -332,10 +329,7 @@ HREF="features.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
-><TT
-CLASS="LITERAL"
->old_function</TT
-></TD
+>Variable functions</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"

@@ -4,7 +4,7 @@
 >Persistent database connections</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -68,7 +68,7 @@ CLASS="CHAPTER"
 ><H1
 ><A
 NAME="FEATURES.PERSISTENT-CONNECTIONS"
->Chapter 20. Persistent database connections</A
+>Chapter 21. Persistent database connections</A
 ></H1
 ><P
 >   Persistent connections are SQL links that do not close when the
@@ -77,9 +77,7 @@ NAME="FEATURES.PERSISTENT-CONNECTIONS"
    connection (that remained open from earlier) - and if it exists, it
    uses it. If it does not exist, it creates the link. An 'identical'
    connection is a connection that was opened to the same host, with
-   the same username and the same password (where applicable).
-
-  </P
+   the same username and the same password (where applicable).</P
 ><P
 >   People who aren't thoroughly familiar with the way web servers work
    and distribute the load may mistake persistent connects for what
@@ -98,18 +96,12 @@ CLASS="EMPHASIS"
 CLASS="EMPHASIS"
 >any</I
 > functionality
-   that wasn't possible with their non-persistent brothers.
-
-  </P
+   that wasn't possible with their non-persistent brothers.</P
 ><P
->   Why? 
-
-  </P
+>   Why?</P
 ><P
 >   This has to do with the way web servers work. There are three ways
-   in which your web server can utilize PHP to generate web pages.
-
-  </P
+   in which your web server can utilize PHP to generate web pages.</P
 ><P
 >   The first method is to use PHP as a CGI "wrapper". When run this
    way, an instance of the PHP interpreter is created and destroyed for
@@ -117,9 +109,7 @@ CLASS="EMPHASIS"
    is destroyed after every request, any resources that it acquires
    (such as a link to an SQL database server) are closed when it is
    destroyed. In this case, you do not gain anything from trying to use
-   persistent connections -- they simply don't persist.
-
-  </P
+   persistent connections -- they simply don't persist.</P
 ><P
 >   The second, and most popular, method is to run PHP as a module in
    a multiprocess web server, which currently only includes Apache. A
@@ -133,9 +123,7 @@ CLASS="EMPHASIS"
    this case it make it so each child process only needs to connect to
    your SQL server the first time that it serves a page that makes us of
    such a connection. When another page then requires a connection to the
-   SQL server, it can reuse the connection that child established earlier.
-
-  </P
+   SQL server, it can reuse the connection that child established earlier.</P
 ><P
 >   The last method is to use PHP as a plug-in for a multithreaded web
    server. Currently this is only theoretical -- PHP does not yet work
@@ -144,14 +132,10 @@ CLASS="EMPHASIS"
    all allow PHP to be used as a plug-in on multithreaded servers like
    Netscape FastTrack, Microsoft's Internet Information Server (IIS),
    and O'Reilly's WebSite Pro. When this happens, the behavior will be
-   essentially the same as for the multiprocess model described before.
-
-  </P
+   essentially the same as for the multiprocess model described before.</P
 ><P
 >   If persistent connections don't have any added functionality, what
-   are they good for?
-
-  </P
+   are they good for?</P
 ><P
 >   The answer here is extremely simple -- efficiency. Persistent
    connections are good if the overhead to create a link to your SQL
@@ -167,9 +151,7 @@ CLASS="EMPHASIS"
    open persistent connection to the server. For example, if you had 20
    different child processes that ran a script that made a persistent
    connection to your SQL server, you'd have 20 different connections
-   to the SQL server, one from each child.
-
-  </P
+   to the SQL server, one from each child.</P
 ><P
 >   An important summary. Persistent connections were designed to have
    one-to-one mapping to regular connections. That means that you should
@@ -182,9 +164,7 @@ CLASS="EMPHASIS"
 CLASS="EMPHASIS"
 >may</I
 > (and probably will)
-   change the efficiency of the script, but not its behavior!
-
- </P
+   change the efficiency of the script, but not its behavior!</P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

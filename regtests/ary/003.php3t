@@ -1,0 +1,7 @@
+--$Id: 003.php3t,v 1.1 1998/08/23 03:10:12 rocky Exp $
+--TITLE--
+Count() items                                                 ...
+--URL--
+ary/003.phtml
+--EXPECT--
+There are 3 items, count() shows: 3

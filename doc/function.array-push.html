@@ -4,7 +4,7 @@
 >array_push</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
 REL="HOME"
 TITLE="PHP Manual"
 HREF="manual.html"><LINK
@@ -12,11 +12,11 @@ REL="UP"
 TITLE="Array functions"
 HREF="ref.array.html"><LINK
 REL="PREVIOUS"
-TITLE="array"
-HREF="function.array.html"><LINK
-REL="NEXT"
 TITLE="array_pop"
-HREF="function.array-pop.html"></HEAD
+HREF="function.array-pop.html"><LINK
+REL="NEXT"
+TITLE="array_reverse"
+HREF="function.array-reverse.html"></HEAD
 ><BODY
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
@@ -42,7 +42,7 @@ WIDTH="10%"
 ALIGN="left"
 VALIGN="bottom"
 ><A
-HREF="function.array.html"
+HREF="function.array-pop.html"
 >Prev</A
 ></TD
 ><TD
@@ -55,7 +55,7 @@ WIDTH="10%"
 ALIGN="right"
 VALIGN="bottom"
 ><A
-HREF="function.array-pop.html"
+HREF="function.array-reverse.html"
 >Next</A
 ></TD
 ></TR
@@ -71,13 +71,14 @@ NAME="FUNCTION.ARRAY-PUSH"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN2956"
+NAME="AEN3685"
 ></A
->array_push -- Push one or more elements onto the end of array</DIV
+>array_push --      Push one or more elements onto the end of array
+    </DIV
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN2959"
+NAME="AEN3688"
 ></A
 ><H2
 >Description</H2
@@ -128,13 +129,9 @@ CLASS="PARAMETER"
 ><I
 >var</I
 ></TT
->.
-
-    </P
+>.</P
 ><P
->     Returns the new number of elements in the array.
-
-    </P
+>     Returns the new number of elements in the array.</P
 ><P
 >     <TABLE
 WIDTH="100%"
@@ -163,11 +160,11 @@ array_push($stack, "+", 3);
 ></TR
 ></TABLE
 >
-     This example would result in $stack having 4 elements: 1, 2, "+", and 3.
-
-    </P
+     This example would result in $stack having 4 elements: 1, 2, "+",
+     and 3.</P
 ><P
->     See also <A
+>     See also: 
+     <A
 HREF="function.array-pop.html"
 ><B
 CLASS="FUNCTION"
@@ -196,12 +193,10 @@ CLASS="NOTE"
 ><P
 ><B
 >Note: </B
->      This function was added in PHP 4.0. 
-    </P
+>      This function was added in PHP 4.0.</P
 ></BLOCKQUOTE
 ></DIV
->
-   </P
+></P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -218,7 +213,7 @@ WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
 ><A
-HREF="function.array.html"
+HREF="function.array-pop.html"
 >Prev</A
 ></TD
 ><TD
@@ -234,7 +229,7 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><A
-HREF="function.array-pop.html"
+HREF="function.array-reverse.html"
 >Next</A
 ></TD
 ></TR
@@ -243,7 +238,7 @@ HREF="function.array-pop.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->array</TD
+>array_pop</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"
@@ -256,7 +251,7 @@ HREF="ref.array.html"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->array_pop</TD
+>array_reverse</TD
 ></TR
 ></TABLE
 ></DIV

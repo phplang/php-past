@@ -7,9 +7,6 @@
  */
 
 
-#ifdef THREAD_SAFE
-#include "tls.h"
-#endif
 #include "alloc.h"
 #include "php.h"
 
@@ -24,7 +21,6 @@
 #endif
 
 
-#ifndef THREAD_SAFE
 static mem_header *head;
 void *cache[MAX_CACHED_MEMORY][MAX_CACHED_ENTRIES];
 unsigned char cache_count[MAX_CACHED_MEMORY];
@@ -32,7 +28,6 @@ unsigned char cache_count[MAX_CACHED_MEMORY];
 # if MEMORY_LIMIT
 static unsigned int allocated_memory;
 static unsigned char memory_exhausted;
-#endif
 #endif
 
 # if MEMORY_LIMIT
