@@ -95,12 +95,14 @@ Solaris 2.5
 SunOS 1.4.2
 SunOS 1.4.3
 SunOS 1.4.4
-Linux 1.3.89
+Linux 1.3.x
+Linux 2.0.x
 BSDi 2.0
 OSF1 (disable MMAP in config.h after running install)
 FreeBSD
 Irix
 Ultrix
+HP-UX
 
 Step 1.
 
@@ -142,8 +144,8 @@ Step 4. (if you are installing the Apache module version)
 
     Module php_module mod_php.o
 
-  to the very end of the file. Then type: ./Configure and then make to rebuild
-  your Apache httpd binary. Install this binary.
+  to the very end of the file. Then type: ./Configure and then 'make' to 
+  rebuild your Apache httpd binary. Install this binary.
 
   Next you need to edit your Apache conf/srm.conf file and add a line like:
 
@@ -196,31 +198,53 @@ Using the software
   Documentation, such that it is, can be found in the doc directory.
 
 
-Troubleshooting
----------------
+Troubleshooting and Mailing Lists
+---------------------------------
 
   There is a PHP mailing-list available for general discussion about
   PHP/FI.  If you are having difficulties, this is probably
   the best place to ask.  To sign up, send a message to:
 
-  majordomo@holli.com
+  php-list-request@holli.com
 
-  and in the body of your message put:
+  and in the subject of your message, put:
 
-  subscribe php-list <your email address (without the brackets)>
+  subscribe
 
   Please make sure you have read through doc/doc.html before asking
   questions on the mailing list. 
 
   Online documentation, plus the latest version of the software can
-  be found at http://www.vex.net/php
+  be found at http://www.vex.net/php/
 
+  There is a low-traffic mailing list which only contains announcements.
+  To subscribe to it, send a message to:
+
+  php-announce-request@vex.net
+
+  and in the subject of your message, put:
+
+  subscribe
+
+  All announcements will also be sent to the php-list@holli.com mailing
+  list, so you need not sign up to both.
+
+  If you are interested in helping out with the development of PHP/FI,
+  you can sign up to the php-dev@vex.net list by sending a message to:
+
+  php-dev-request@vex.net
+
+  This list is quite technical and concentrates on code development.
+  You will not be popular if you post general beginner questions here.
+  There are also quite a few CVS commit log messages posted here.
+  Especially during heavy hacking periods.
+ 
 
 Getting Updates
 ---------------
 
   Entire new distributions of the package are made available frequently
-  in the file archive at http://www.vex.net/php/files
+  in the file archive at http://www.vex.net/php/files/
 
   If you don't like re-installing every time you want to update your
   package, or if you are a programmer and want to make sure you always
@@ -238,7 +262,7 @@ Getting Updates
 
   Then type:
 
-    cvs checkout phpfi
+    cvs -d :pserver:cvsread@vex.net:/u/local/src/repository checkout phpfi
 
   This will create a phpfi directory in your current directory.  It will
   take a bit of time, especially if your network connection is slow.  
@@ -262,6 +286,8 @@ Getting Updates
   Keep in mind that the CVS version may not always compile, or if it does
   compile, it may not be stable.  The CVS version is a development version
   and should be treated as such.
-  
+ 
+  If you plan on making significant contributions to the PHP/FI code, 
+  CVS write access is available.  E-mail rasmus@vex.net for more information. 
 
 |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||

@@ -19,16 +19,16 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: echo.c,v 1.21 1996/05/27 12:36:25 rasmus Exp $ */
+/* $Id: echo.c,v 1.27 1996/07/26 05:08:17 rasmus Exp $ */
 #include <stdlib.h>
-#include <php.h>
-#include <parse.h>
+#include "php.h"
+#include "parse.h"
 #if APACHE
 #include "http_protocol.h"
 #endif
 #include <stdarg.h>
 
-void Echo(unsigned char *format, int args) {
+void Echo(char *format, int args) {
 	Stack *s=NULL;
 	Stack sarg[5]; /* Max 5 args to keep things simple in the parser */
 #if APACHE
@@ -194,7 +194,7 @@ int FormatCheck(char **format, char **beg, char **fmt) {
 				Error ("Unsupported flag or modifier in %%c in echo format string");
 				done=-1;
 			} else {
-				done=STRING;
+				done=LNUMBER;
 			}
 			break;
 
@@ -295,6 +295,34 @@ void StripSlashes(char *string) {
 	if(s!=t) *s='\0';
 }
 
+void StripDollarSlashes(char *string) {
+	char *s,*t;
+	int l;
+
+	l = strlen(string); 
+	s = string;
+	t = string;
+	while(*t && l>0) {
+		if(*t=='\\' && *(t+1)=='$') {
+			t++;
+			*s++=*t++;
+			l-=2;
+		} else if(*t=='\\' && *(t+1)=='\\') {
+			if(s!=t) *s++=*t++;
+			else { s++; t++; }
+			l--;
+			if(s!=t) *s++=*t++;
+			else { s++; t++; }
+			l--;
+		} else {
+			if(s!=t) *s++=*t++;
+			else { s++; t++; }
+			l--;
+		}
+	}
+	if(s!=t) *s='\0';
+}
+
 /* 
  * If freeit is non-zero, then this function is allowed to free the
  * argument string.  If zero, it cannot free it
@@ -331,37 +359,6 @@ char *AddSlashes(char *string, int freeit) {
 	return(string);
 }
 
-#if 0
-void ParseEscapes(char *string) {
-	char *s,*t;
-	int l;
-
-	l = strlen(string); 
-	s = string;
-	t = string;
-	while(*t && l>0) {
-		if(*t=='\\' && *(t+1)=='n' && (t==string || ((t-1)>=string && *(t-1)!='\\'))) {
-			t+=2;
-			*s++='\n';
-			l-=2;
-		} else if(*t=='\\' && *(t+1)=='t' && (t==string || ((t-1)>=string && *(t-1)!='\\'))) {
-			t+=2;
-			*s++='\t';
-			l-=2;
-		} else if(*t=='\\' && *(t+1)=='r' && (t==string || ((t-1)>=string && *(t-1)!='\\'))) {
-			t+=2;
-			*s++='\r';
-			l-=2;
-		} else {
-			if(s!=t) *s++=*t++;
-			else { s++; t++; }
-			l--;
-		}
-	}
-	if(s!=t) *s='\0';
-}
-#endif
-
 void ParseEscapes(char *string) {
 	char *s,*t;
 	int l;
@@ -386,6 +383,10 @@ void ParseEscapes(char *string) {
 		} else if(*t=='\\' && *(t+1)=='r') {
 			t+=2;
 			*s++='\r';
+			l-=2;
+		} else if(*t=='\\') {
+			*s++=*(t+1);
+			t+=2;
 			l-=2;
 		} else {
 			if(s!=t) *s++=*t++;

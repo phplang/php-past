@@ -19,14 +19,20 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: gd.c,v 1.6 1996/05/16 15:29:21 rasmus Exp $ */
+/* $Id: gd.c,v 1.10 1996/08/18 12:30:55 rasmus Exp $ */
 /* gd 1.2 is copyright 1994, 1995, Quest Protein Database Center, 
    Cold Spring Harbor Labs. */
 
 /* Note that there is no code from the gd package in this file */
 
-#include <php.h>
-#include <parse.h>
+#include "php.h"
+#include "parse.h"
+#if HAVE_UNISTD_H
+#include <unistd.h>
+#endif
+#if APACHE
+#include "http_protocol.h"
+#endif
 #if HAVE_LIBGD
 #include <gd.h>
 #include <gdfontt.h>  /* 1 Tiny font */
@@ -294,8 +300,52 @@ void ImageGif(int args) {
 		fflush(fp);
 		fclose(fp);
 	} else {
-		gdImageGif(im,stdout);
-		fflush(stdout);
+		int		fds [2], i, b;
+		FILE	*pi, *po;
+		char	buf [4096];
+
+
+		php_header(0, NULL);
+
+		if(pipe(fds) < 0) {
+			Error("Unable to create pipe");
+			return;
+		}
+
+		if((pi = fdopen(fds [0], "r")) == NULL) {
+			Error("Unable to fdopen readable end of pipe");
+			return;
+		}
+
+		if((po = fdopen(fds [1], "w")) == NULL) {
+			Error("Unable to fdopen writeable end of pipe");
+			return;
+		}
+
+		switch(fork()) {
+		case -1:
+			Error("Unable to fork");
+			return;
+			break;
+
+		case 0:
+			fclose(pi);
+			gdImageGif(im, po);
+			fflush(po);
+			fclose(po);
+			exit(0);
+			break;
+
+		default:
+			fclose(po);
+			while((b = fread(buf, 1, sizeof(buf), pi)) > 0) {
+				for(i = 0; i < b; i++)
+					PUTC(buf [i]);
+			}
+			fclose(pi);
+			break;
+
+		}
 	}
 #else
 	Pop();
@@ -1130,3 +1180,54 @@ void ImageCopyResized(void) {
 	Error("No GD support available");
 #endif
 }	
+
+void ImageSXFN(void) {
+#if HAVE_LIBGD
+	Stack *s;
+	int ind;
+	gdImagePtr im;
+	char temp[8];
+
+	s = Pop();
+	if(!s) {
+		Error("Stack error in imagesxfn");
+		return;
+	}
+	ind = s->intval;
+
+	im = get_image(ind);	
+
+	sprintf(temp,"%d",gdImageSX(im));
+	Push(temp,LNUMBER);
+#else
+	Pop();
+	Error("No GD support available");
+	Push("-1",LNUMBER);
+#endif
+}
+
+void ImageSYFN(void) {
+#if HAVE_LIBGD
+	Stack *s;
+	int ind;
+	gdImagePtr im;
+	char temp[8];
+
+	s = Pop();
+	if(!s) {
+		Error("Stack error in imagesyfn");
+		return;
+	}
+	ind = s->intval;
+
+	im = get_image(ind);	
+
+	sprintf(temp,"%d",gdImageSY(im));
+	Push(temp,LNUMBER);
+#else
+	Pop();
+	Error("No GD support available");
+	Push("-1",LNUMBER);
+#endif
+}
+

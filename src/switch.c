@@ -19,11 +19,11 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: switch.c,v 1.8 1996/05/16 15:29:31 rasmus Exp $ */
+/* $Id: switch.c,v 1.9 1996/07/11 14:12:52 rasmus Exp $ */
 #include <stdlib.h>
 #include <string.h>
-#include <php.h>
-#include <parse.h>
+#include "php.h"
+#include "parse.h"
 
 static SwitchStack *top=NULL;
 static SwitchMark *mark=NULL;

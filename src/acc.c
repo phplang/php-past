@@ -19,8 +19,8 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: acc.c,v 1.19 1996/05/16 15:29:16 rasmus Exp $ */
-#include <php.h>
+/* $Id: acc.c,v 1.21 1996/07/15 14:59:28 rasmus Exp $ */
+#include "php.h"
 #include <stdio.h>
 #include <stdlib.h>
 #if HAVE_UNISTD_H
@@ -32,8 +32,8 @@
 #endif
 #include <ctype.h>
 #include <errno.h>
-#include <parse.h>
-#include <regexpr.h>
+#include "parse.h"
+#include "regexpr.h"
 #if APACHE
 #include "http_protocol.h"
 #endif
@@ -371,7 +371,7 @@ int CheckAccess(char *filename, long uid) {
 	struct stat sb;
 	int ret, allow=0;
 	static char *email_URL=NULL, *passwd_URL=NULL, *ban_URL=NULL;
-	int es;
+	int es, retu=0;
 
 	exp.allocated = 0;
 	exp.buffer = 0;
@@ -452,7 +452,10 @@ int CheckAccess(char *filename, long uid) {
 		}
 		switch(ac->mode) {
 		case 1: /* E-Mail */
-			if(!getemailaddr()) ShowEmailPage(email_URL);
+			if(!getemailaddr()) {
+				ShowEmailPage(email_URL);
+				retu = -1;
+			}
 			break;
 		case 2: /* Allow */
 			allow++;
@@ -462,7 +465,10 @@ int CheckAccess(char *filename, long uid) {
 			break;
 		case 8: /* Password */
 			var = GetVar("PASSWORD",NULL,0);
-			if(!var || (var && strcmp(var->strval,ac->password))) ShowPasswordPage(passwd_URL);
+			if(!var || (var && strcmp(var->strval,ac->password))) {
+				ShowPasswordPage(passwd_URL);
+				retu = -1;
+			}
 			break;	
 		case 16: /* NoLogging */
 #if defined(LOGGING) || defined(MSQLLOGGING)
@@ -486,7 +492,7 @@ int CheckAccess(char *filename, long uid) {
 	}	
 	if(actop->def==0) allow--;	
 	if(allow<0) { ShowBanPage(ban_URL); return(-1); }
-	return(0);
+	return(retu);
 }
 
 void ShowBanPage(char *url) {

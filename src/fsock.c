@@ -23,8 +23,8 @@
  * Contributed by Paul Panotzki - Bunyip Information Systems
  *                                                         
  */
-/* $Id: fsock.c,v 1.3 1996/05/17 18:57:43 rasmus Exp $ */
-#include <php.h>
+/* $Id: fsock.c,v 1.6 1996/07/11 14:34:06 rasmus Exp $ */
+#include "php.h"
 #include <stdlib.h>
 #if HAVE_UNISTD_H
 #include <unistd.h>
@@ -40,7 +40,7 @@
 
 #include <string.h>
 #include <errno.h>
-#include <parse.h>
+#include "parse.h"
 
 void FSockOpen(void) {
 	Stack *s;
@@ -129,7 +129,7 @@ void FSockOpen(void) {
 	}
 #endif
  
-	id = FpPush(fp,s->strval);
+	id = FpPush(fp,s->strval,1);
 	sprintf(temp,"%d",id);	
 	Push(temp,LNUMBER);
 }	

@@ -1,0 +1,120 @@
+<? /* Example written by "C.A. Lademann" <cal@zls.com> */
+SetLogging(0);
+SetShowInfo(0);
+Function Hand $ang, $len, $style, $col (
+	global $radius, $basesize, $PI;
+
+	$point[0] = (sin($ang) * $len) + $radius;
+	$point[1] = (cos($ang) * -1 * $len) + $radius;
+
+	if($style == 1);
+		$base = $radius / 15;
+		$angbase = $ang + ($PI / 2);
+
+		$point[2] = (sin($angbase) * $basesize) + $radius;
+		$point[3] = (cos($angbase) * -1 * $basesize) + $radius;
+		$point[4] = (sin($angbase) * -1 * $basesize) + $radius;
+		$point[5] = (cos($angbase) * $basesize) + $radius;
+
+		ImageFilledPolygon($im, $point[], 3, $col);
+	else;
+		ImageLine($im, $radius, $radius, $point[0], $point[1], $col);
+	endif;
+);
+
+
+if($argv[0] == "gif");
+	Header "Content-type: image/gif";
+
+	$PI = 3.14159265358979323846;
+
+	if(intval($argv[1]) > 0);
+		$size = intval($argv[1]);
+	else;
+		$size = 500;
+	endif;
+
+	$radius = $size / 2;
+	$basesize = $radius / 15;
+
+	/* Create Image */
+	$im = ImageCreate($size, $size);
+	$transp = ImageColorAllocate($im, 254, 254, 254);
+	$white = ImageColorAllocate($im, 255, 255, 255);
+	$black = ImageColorAllocate($im, 0, 0, 0);
+	$green = ImageColorAllocate($im, 0, 255, 0);
+	$red = ImageColorAllocate($im, 255, 0, 0);
+	$blue = ImageColorAllocate($im, 0, 0, 255);
+	ImageColorTransparent($im, $transp);
+
+	/* Draw Clock */
+	ImageArc($im, $radius, $radius, $size, $size, 0, 360, $black);
+	ImageFill($im, $radius, $radius, $white);
+
+	$min = 0;
+	while($min < 60);
+		$min = $min + 5;
+
+		if($min % 15 == 0);
+			$len = doubleval($radius / 5);
+		else;
+			$len = doubleval($radius / 10);
+		endif;
+
+		$ang = ($PI * $min * 2) / 60;
+		$sin = sin($ang);
+		$cos = cos($ang);
+		$sx = $sin * ($radius - $len) + $radius;
+		$sy = $cos * ($radius - $len) + $radius;
+		$ex = $sin * $radius + $radius;
+		$ey = $cos * $radius + $radius;
+
+		ImageLine($im, $sx, $sy, $ex, $ey, $black);
+	endwhile;
+
+	$hour = intval(Date("h", Time()));
+	if($hour >= 12);
+		$hour -= 12;
+	endif;
+
+	$min = intval(Date("i", Time()));
+	$sec = intval(Date("s", Time()));
+
+	$ang = ($PI * 2 / 12) * (1.0 * $min / 60 + $hour);
+	$len = 0.5 * $radius;
+	Hand($ang, $len, 1, $blue);
+
+	$ang = ($PI * 2 / 60) * (1.0 * $sec / 60 + $min);
+	$len = 0.65 * $radius;
+	Hand($ang, $len, 1, $green);
+
+	$ang = ($PI * 2 / 60) * $sec;
+	$len = 0.75 * $radius;
+	Hand($ang, $len, 0, $black);
+
+	ImageArc($im, $radius, $radius, 2 * $basesize, 2 * $basesize, 0, 360, $red);
+	ImageFillToBorder($im, $radius, $radius, $red, $red);
+
+	ImageGif($im);
+else;
+	$sizestr_gif = "";
+	$sizestr_html = "";
+
+	if(intval($argv[0]) > 0);
+		$sizestr_gif = sprintf("+%d", intval($argv[0]));
+		$sizestr_html = sprintf("?%d", intval($argv[0]));
+	endif;
+>
+	<HTML>
+	<HEAD>
+		<META HTTP-EQUIV="Refresh" CONTENT=5 URL=<?echo $PHP_SELF><?echo $sizestr_html>>
+	</HEAD>
+	<BODY>
+		<CENTER>
+			<IMG SRC=<?echo $PHP_SELF>?gif<?echo $sizestr_gif>>
+		</CENTER>
+	</BODY>
+	</HTML>
+<?
+endif;
+>

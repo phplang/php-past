@@ -51,11 +51,16 @@ PG95 Inserts, selections and results, oh my                   ...
 		echo "FAIL select1";
 		exit;
 	endif;
-	echo pg_result($res,0,"name");
+	echo pg_result($res,0, "name");
 	echo "|%d" pg_result($res,0,"age");
 	echo "|%.2f" pg_result($res,0,"l");
 	echo "\n";
 
+	/* test integer field indexing */
+	echo pg_result($res,0, "name");
+	echo "|%d" pg_result($res,0,"age");
+	echo "|%.2f" pg_result($res,0,"l");
+	echo "\n";
 	pg_freeResult($res);
 
 	/**/
@@ -96,6 +101,7 @@ PG95 Inserts, selections and results, oh my                   ...
 >
 --EXPECT--
 Content-type: text/html
+fofo|0|1.20
 fofo|0|1.20
 gogo|1|2.30
 1

@@ -19,14 +19,14 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: var.c,v 1.38 1996/05/26 03:23:36 rasmus Exp $ */
+/* $Id: var.c,v 1.44 1996/07/18 18:20:31 rasmus Exp $ */
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-#include <php.h>
-#include <parse.h>
-#include <regexpr.h>
+#include "php.h"
+#include "parse.h"
+#include "regexpr.h"
 
 static VarTree *var_main=NULL;
 static VarTree *var_top=NULL;
@@ -63,11 +63,11 @@ void php_init_symbol_tree(void) {
  *        4 = | with value on expression stack
  *
  */
-void SetVar(unsigned char *name, int mode, int inc) {
+void SetVar(char *name, int mode, int inc) {
 	VarTree *t, *ot=NULL, *tt, *ptt, *var;
 	VarTree a, b;
 	Stack *st;
-	unsigned char *s, *buf=NULL;
+	char *s, *buf=NULL;
 	int done=0;
 	int i=0, oi=0;
 	int count=0;
@@ -76,6 +76,9 @@ void SetVar(unsigned char *name, int mode, int inc) {
 	int data_len=0;
 	VarTree *new_name=NULL;
 
+#if DEBUG
+	Debug("SetVar %s\n",name);
+#endif
    	a.strval = NULL;
 	a.allocated = 0;
     b.strval = NULL;
@@ -773,13 +776,17 @@ void SetVar(unsigned char *name, int mode, int inc) {
 		t->strval = estrdup(0,b.strval);
 		t->allocated = strlen(b.strval) + 1;
 		t->name = estrdup(0,s);
+		t->iname=NULL;
 		t->type = b.type;
 		t->flag = inc;
 		t->scope = mode&12;
 		t->deleted = 0;
 		if(var && whole_array && var->next) copyarray(t,var->next);
-		if(mode==0 || mode==1) t->iname=estrdup(0,"0");
-		else if(mode&2) {
+		if(!t->iname && var && whole_array && (mode==0 || mode==1)) {
+			if(var->iname) t->iname=estrdup(0,var->iname);
+		} 
+		if(!t->iname && (mode==0 || mode==1)) t->iname=estrdup(0,"0");
+		else if(!t->iname && mode&2) {
 			t->iname=estrdup(0,a.strval);
 		}
 		if(mode&8 && fs_top) { /* Creating static var in function frame */
@@ -799,11 +806,11 @@ void SetVar(unsigned char *name, int mode, int inc) {
  * located variable is a static variable placeholder, then the current
  * function's static variable frame is checked.
  */
-VarTree *GetVar(unsigned char *name, unsigned char *index, int mode) {
+VarTree *GetVar(char *name, char *index, int mode) {
 	VarTree *t, *tt;
 	VarTree *env=NULL;
 	static char temp[128];
-	unsigned char *s=NULL, *ss, *sss, *ma=NULL;
+	char *s=NULL, *ss, *sss, *ma=NULL;
 	int i=0, ind=0;
 	char o='\0';
 	VarTree *new_name;
@@ -876,6 +883,7 @@ VarTree *GetVar(unsigned char *name, unsigned char *index, int mode) {
 			env->strval = NULL;
 			env->allocated = 0;
 			env->name = NULL;
+			env->iname = NULL;
 			env->intval = atol(s);
 			env->douval = atof(s);
 			env->strval = estrdup(2,s);
@@ -921,6 +929,7 @@ VarTree *GetVar(unsigned char *name, unsigned char *index, int mode) {
 		env->strval = NULL;
 		env->allocated = 0;
 		env->name = NULL;
+		env->iname = NULL;
 		env->next = NULL;
 		env->prev = NULL;
 		env->left = NULL;
@@ -954,6 +963,7 @@ VarTree *GetVar(unsigned char *name, unsigned char *index, int mode) {
 		env->strval = NULL;
 		env->allocated = 0;
 		env->name = NULL;
+		env->iname = NULL;
 		env->next = NULL;
 		env->prev = NULL;
 		env->left = NULL;
@@ -995,6 +1005,7 @@ VarTree *GetVar(unsigned char *name, unsigned char *index, int mode) {
 		env->strval = NULL;
 		env->allocated = 0;
 		env->name = NULL;
+		env->iname = NULL;
 		env->next = NULL;
 		env->prev = NULL;
 		env->left = NULL;
@@ -1023,7 +1034,7 @@ VarTree *GetVar(unsigned char *name, unsigned char *index, int mode) {
 }
 
 /* Returns true (1) if variable is defined */
-void IsSet(unsigned char *name) {
+void IsSet(char *name) {
 	VarTree *t;
 
 	t = GetVar(name,NULL,0);
@@ -1035,7 +1046,7 @@ void IsSet(unsigned char *name) {
 }
 
 /* Move array pointer to the beginning of array */
-void Reset(unsigned char *name) {
+void Reset(char *name) {
 	VarTree *t;
 
 	t = GetVar(name,NULL,0);
@@ -1045,7 +1056,7 @@ void Reset(unsigned char *name) {
 	} else Push("",STRING);
 }
 
-void End(unsigned char *name) {
+void End(char *name) {
 	VarTree *t;
 
 	t = GetVar(name,NULL,0);
@@ -1057,7 +1068,7 @@ void End(unsigned char *name) {
 }
 
 /* Return index of current array node */
-void Key(unsigned char *name) {
+void Key(char *name) {
 	VarTree *t, *tt;
 
 	t = GetVar(name,NULL,0);
@@ -1070,7 +1081,7 @@ void Key(unsigned char *name) {
 }
 
 /* Move array pointer forward one step and return the value */
-void Next(unsigned char *name) {
+void Next(char *name) {
 	VarTree *t, *tt;
 
 	t = GetVar(name,NULL,0);
@@ -1085,7 +1096,7 @@ void Next(unsigned char *name) {
 }
 
 /* Move array pointer back one step and return the value */
-void Prev(unsigned char *name) {
+void Prev(char *name) {
 	VarTree *t, *tt;
 
 	t = GetVar(name,NULL,0);
@@ -1510,6 +1521,9 @@ void copyarray(VarTree *dvar, VarTree *svar) {
 	VarTree *new=NULL,*s,*d;
 	int count;
 
+#if DEBUG
+	Debug("copyarray %s to %s\n",svar->name,dvar->name);
+#endif
 	s = svar;
 	d = dvar;
 	count = dvar->count;
@@ -1553,7 +1567,7 @@ void deletearray(VarTree *old) {
 	if(old->strval) { old->strval=NULL; old->allocated=0; }
 }
 
-void UnSet(unsigned char *name) {
+void UnSet(char *name) {
 	VarTree *var;
 
 	var = GetVar(name,NULL,0);

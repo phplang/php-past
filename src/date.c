@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: date.c,v 1.6 1996/05/16 15:29:18 rasmus Exp $ */
+/* $Id: date.c,v 1.12 1996/07/19 13:16:50 rasmus Exp $ */
 #include <stdlib.h>
 #if TM_IN_SYS_TIME
 #include <sys/time.h>
@@ -27,17 +27,27 @@
 #include <time.h>
 #endif
 #include <string.h>
-#include <php.h>
-#include <parse.h>
+#include "php.h"
+#include "parse.h"
 
 static char *Months[] = {
-	"Jan","Feb","Mar","Apr","May","June","July",
-	"Aug","Sept","Oct","Nov","Dec"
+	"Jan","Feb","Mar","Apr","May","Jun","Jul",
+	"Aug","Sep","Oct","Nov","Dec"
+};
+
+static char *FullMonths[] = {
+	"January", "February", "March", "April", "May", "June", "July",
+	"August", "September", "October", "November", "December"
 };
 
 static char *Days[] = {
 	"Sun","Mon","Tue","Wed","Thu","Fri","Sat"
 };
+
+static char *FullDays[] = {
+	"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"
+};
+
 
 /*
  * Date
@@ -79,7 +89,7 @@ void Date(int arg, int type) {
 		Error("Stack error in %s expression",type?"gmdate":"date");
 		return;
 	}
-	if(st->strval) format = st->strval;
+	if(st->strval) format = (char *)st->strval;
 	else {
 		Error("No format string specified");
 		return;
@@ -114,12 +124,18 @@ void Date(int arg, int type) {
 			case 'M':
 				strcat(out,Months[tm1->tm_mon]);
 				break;	
+			case 'F':
+				strcat(out,FullMonths[tm1->tm_mon]);
+				break;	
 			case 'm':
 				sprintf(temp,"%02d",tm1->tm_mon+1);
 				strcat(out,temp);
 				break;
 			case 'D':
 				strcat(out,Days[tm1->tm_wday]);
+				break;
+			case 'l':
+				strcat(out,FullDays[tm1->tm_wday]);
 				break;
 			case 'd':
 				sprintf(temp,"%02d",tm1->tm_mday);
@@ -141,6 +157,14 @@ void Date(int arg, int type) {
 				sprintf(temp,"%02d",tm1->tm_sec);
 				strcat(out,temp);
 				break;
+			case 'a':
+				if(tm1->tm_hour > 11) strcat(out, "pm");
+				else strcat(out,"am");
+				break;
+			case 'A':
+				if(tm1->tm_hour > 11) strcat(out, "PM");
+				else strcat(out,"AM");
+				break;
 			default:
 				sprintf(temp,"%c",*s);
 				strcat(out,temp);
@@ -148,14 +172,14 @@ void Date(int arg, int type) {
 		}
 		s++;
 	}
-	Push(out,STRING);
+	Push((char *)out,STRING);
 }
 
 void UnixTime(void) {
 	char temp[32];
 
 	sprintf(temp,"%ld",(long)time(NULL));
-	Push(temp,LNUMBER);
+	Push((char *)temp,LNUMBER);
 }
 
 /* arguments: hour minute second month day year */
@@ -237,5 +261,19 @@ void MkTime(int args) {
 	}
 	t = mktime(&tm1);
 	sprintf(temp,"%ld\n",t);
-	Push(temp,LNUMBER);
+	Push((char *)temp,LNUMBER);
+}
+
+char *std_date(time_t t) {
+	struct tm *tm1;
+	static char str[80];
+	
+	tm1 = gmtime(&t);
+	sprintf(str,"%s, %02d-%s-%d %02d:%02d:%02d GMT",
+		FullDays[tm1->tm_wday],
+		tm1->tm_mday,
+		Months[tm1->tm_mon],
+		tm1->tm_year,
+		tm1->tm_hour, tm1->tm_min, tm1->tm_sec);
+	return(str);
 }

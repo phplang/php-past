@@ -19,19 +19,26 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: head.c,v 1.11 1996/05/22 18:47:56 rasmus Exp $ */
-#include <php.h>
-#include <parse.h>
+/* $Id: head.c,v 1.21 1996/08/23 13:06:13 rasmus Exp $ */
+#include "php.h"
+#include "parse.h"
+#if TM_IN_SYS_TIME
+#include <sys/time.h>
+#else
+#include <time.h>
+#endif
 #if APACHE
 #include "http_protocol.h"
 #endif
 
 static int HeaderPrinted=0;
 static int PrintHeader=1;
+static CookieList *top = NULL;
 
 void php_init_head(void) {
 	HeaderPrinted=0;
 	PrintHeader=1;
+	top = NULL;
 }
 
 void Header(void) {
@@ -63,7 +70,10 @@ void Header(void) {
 	r = strchr(s->strval,':');
 	if(r) {
 		*r='\0';
-		table_set(php_rqst->headers_out,s->strval,r+1);
+		if(!strcasecmp(s->strval,"content-type")) {
+			php_rqst->content_type = estrdup(0,r+1);
+		} else
+			table_set(php_rqst->headers_out,s->strval,r+1);
 		if(!strcasecmp(s->strval,"location")) php_rqst->status = REDIRECT;
 #if DEBUG
 		Debug("Redirecting to: %s\n",s->strval);
@@ -71,6 +81,12 @@ void Header(void) {
 		*r=':';
 		HeaderPrinted = 2;
 	}		
+	if(!strncasecmp(s->strval,"http/",5)) {
+		if(strlen(s->strval) > 9) {
+			php_rqst->status = atoi(&((s->strval)[9]));
+		}
+		php_rqst->status_line = estrdup(0,&((s->strval)[9]));
+	}	
 #else
 	ParseEscapes(s->strval);
 	PUTS(s->strval);
@@ -79,13 +95,63 @@ void Header(void) {
 }
 
 void php_header(int type,char *str) {
+	CookieList *cookie;
+	char *tempstr;
+	time_t t;
+	int len=0;
+
 #if APACHE
     if((PrintHeader && !HeaderPrinted) || (PrintHeader && HeaderPrinted==2)) { 
-        if(HeaderPrinted!=2) php_rqst->content_type = "text/html";
 		if(type==1) {
 			table_set(php_rqst->headers_out,"Location",str);
 			php_rqst->status = REDIRECT;
 		}
+#if APACHE_NEWAPI
+		cookie = PopCookieList();
+		while(cookie) {
+			if(cookie->name) len+=strlen(cookie->name);	
+			if(cookie->value) len+=strlen(cookie->value);	
+			if(cookie->path) len+=strlen(cookie->path);	
+			if(cookie->domain) len+=strlen(cookie->domain);	
+			if(cookie->domain) len+=strlen(cookie->domain);	
+			tempstr = emalloc(0,len+100);
+			if(!cookie->value || (cookie->value && !*cookie->value)) {
+				/* 
+				 * MSIE doesn't delete a cookie when you set it to a null value
+				 * so in order to force cookies to be deleted, even on MSIE, we
+				 * pick an expiry date 1 year and 1 second in the past
+				 */
+				sprintf(tempstr,"%s=deleted",cookie->name);
+				t = time(NULL)-31536001;
+				strcat(tempstr,"; expires=");
+				strcat(tempstr,std_date(t));	
+			} else {
+				sprintf(tempstr,"%s=%s",cookie->name,cookie->value?php_urlencode(cookie->value):"");
+				if(cookie->expires>0) {
+					strcat(tempstr,"; expires=");
+					strcat(tempstr,std_date(cookie->expires));	
+				}
+			}
+			if(cookie->path && strlen(cookie->path)) {
+				strcat(tempstr,"; path=");
+				strcat(tempstr,cookie->path);
+			}
+			if(cookie->domain && strlen(cookie->domain)) {
+				strcat(tempstr,"; domain=");
+				strcat(tempstr,cookie->domain);
+			}
+			if(cookie->secure) {
+				strcat(tempstr,"; secure");
+			}	
+#if APACHE_NEWAPI
+			table_add(php_rqst->headers_out,"Set-Cookie",tempstr);
+#else
+			/* Without the table_add function, you cannot set multiple cookies */
+			table_set(php_rqst->headers_out,"Set-Cookie",tempstr);
+#endif
+			cookie = PopCookieList();
+		}
+#endif
         HeaderPrinted = 1;
 #if DEBUG
 		Debug("Sending header\n");
@@ -94,6 +160,47 @@ void php_header(int type,char *str) {
     }
 #else
     if(PrintHeader && !HeaderPrinted) { 
+		cookie = PopCookieList();
+		while(cookie) {
+			if(cookie->name) len+=strlen(cookie->name);	
+			if(cookie->value) len+=strlen(cookie->value);	
+			if(cookie->path) len+=strlen(cookie->path);	
+			if(cookie->domain) len+=strlen(cookie->domain);	
+			if(cookie->domain) len+=strlen(cookie->domain);	
+			tempstr = emalloc(0,len+100);
+			if(!cookie->value || (cookie->value && !*cookie->value)) {
+				/* 
+				 * MSIE doesn't delete a cookie when you set it to a null value
+				 * so in order to force cookies to be deleted, even on MSIE, we
+				 * pick an expiry date 1 year and 1 second in the past
+				 */
+				sprintf(tempstr,"%s=deleted",cookie->name);
+				strcat(tempstr,"; expires=");
+				t = time(NULL)-31536001;
+				strcat(tempstr,std_date(t));	
+			} else {
+				sprintf(tempstr,"%s=%s",cookie->name,cookie->value?php_urlencode(cookie->value):"");
+				if(cookie->expires>0) {
+					strcat(tempstr,"; expires=");
+					strcat(tempstr,std_date(cookie->expires));	
+				}
+			}
+			if(cookie->path && strlen(cookie->path)) {
+				strcat(tempstr,"; path=");
+				strcat(tempstr,cookie->path);
+			}
+			if(cookie->domain && strlen(cookie->domain)) {
+				strcat(tempstr,"; domain=");
+				strcat(tempstr,cookie->domain);
+			}
+			if(cookie->secure) {
+				strcat(tempstr,"; secure");
+			}	
+			fputs("Set-Cookie: ",stdout);
+			fputs(tempstr,stdout);
+			fputs("\015\012",stdout);
+			cookie = PopCookieList();
+		}
 		if(type==1) {
 			fputs("Location: ",stdout);
 			fputs(str,stdout);
@@ -104,4 +211,85 @@ void php_header(int type,char *str) {
         HeaderPrinted = 1;
     }
 #endif
+}
+
+void PushCookieList(char *name, char *value, time_t expires, char *path, char *domain, int secure) {
+    CookieList *new;
+
+    new = emalloc(0,sizeof(CookieList));
+    new->next=top;
+	new->name = name;
+	new->value = value;
+	new->expires = expires;
+	new->path = path;
+	new->domain = domain;
+	new->secure = secure;	
+    top = new;
+}
+
+CookieList *PopCookieList(void) {
+	CookieList *ret;
+
+	ret = top;
+	if(top) top = top->next;
+	return(ret);
+}
+
+/* SetCookie(name,value,expires,path,domain,secure) */
+void SetCookie(int args) {
+	Stack *s;
+	char *name=NULL, *value=NULL, *path=NULL, *domain=NULL;
+	time_t expires=0;
+	int secure=0;
+
+	if(HeaderPrinted==1) {
+		Error("Oops, SetCookie called after header has been sent\n");
+		return;
+	}
+
+	switch(args) {
+		case 6:
+			s = Pop();
+			if(!s) {
+				Error("Stack error in SetCookie");
+				return;
+			}
+			secure = s->intval;
+		case 5:
+			s = Pop();
+			if(!s) {
+				Error("Stack error in SetCookie");
+				return;
+			}
+			domain = estrdup(0,s->strval);
+		case 4:	
+			s = Pop();
+			if(!s) {
+				Error("Stack error in SetCookie");
+				return;
+			}
+			path = estrdup(0,s->strval);
+		case 3:	
+			s = Pop();
+			if(!s) {
+				Error("Stack error in SetCookie");
+				return;
+			}
+			expires = s->intval;
+		case 2:	
+			s = Pop();
+			if(!s) {
+				Error("Stack error in SetCookie");
+				return;
+			}
+			value = estrdup(0,s->strval);
+		case 1:
+			s = Pop();
+			if(!s) {
+				Error("Stack error in SetCookie");
+				return;
+			}
+			name = estrdup(0,s->strval);
+	}
+	PushCookieList(name,value,expires,path,domain,secure);
 }

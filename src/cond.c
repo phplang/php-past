@@ -19,11 +19,11 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: cond.c,v 1.12 1996/05/16 15:29:17 rasmus Exp $ */
+/* $Id: cond.c,v 1.13 1996/07/11 14:12:35 rasmus Exp $ */
 #include <stdlib.h>
 #include <string.h>
-#include <php.h>
-#include <parse.h>
+#include "php.h"
+#include "parse.h"
 
 int iflevel=0;
 int ifstate=1;

@@ -1,4 +1,4 @@
-dnl $Id: configure.in,v 1.6 1996/05/02 18:25:38 rasmus Exp $
+dnl $Id: configure.in,v 1.7 1996/07/09 15:05:31 rasmus Exp $
 dnl Process this file with autoconf to produce a configure script.
 
 AC_INIT(src/main.c)
@@ -37,6 +37,6 @@ AC_STRUCT_TM
 
 dnl Checks for library functions.
 AC_FUNC_VPRINTF
-AC_CHECK_FUNCS(crypt memcpy strdup strerror strcasecmp strstr flock lockf mmap putenv tempnam usleep setlocale gettimeofday setvbuf srand48 lrand48)
+AC_CHECK_FUNCS(crypt memcpy strdup strerror strcasecmp strstr flock lockf mmap putenv tempnam usleep setlocale gettimeofday setvbuf srand48 lrand48 link symlink)
 
 AC_OUTPUT(src/Makefile)

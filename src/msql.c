@@ -19,17 +19,17 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: msql.c,v 1.13 1996/05/23 12:11:28 rasmus Exp $ */
+/* $Id: msql.c,v 1.16 1996/08/18 18:54:49 rasmus Exp $ */
 /* mSQL is Copyright (c) 1993-1995 David J. Hughes */
 
 /* Note that there is no mSQL code in this file */
 
-#include <php.h>
+#include "php.h"
 #include <stdlib.h>
 #if HAVE_LIBMSQL
 #include <msql.h>
 #endif
-#include <parse.h>
+#include "parse.h"
 #include <ctype.h>
 
 #if HAVE_LIBMSQL
@@ -621,6 +621,10 @@ void MsqlTableName(void){
 	res_index=s->intval;
 
 	res=get_result(res_index);
+	if(!res) {
+		Error("Unable to find result index %d",res_index);
+		return;
+	}
 	msqlDataSeek(res, tb_index);
 	row=msqlFetchRow(res);
 	if (row) {
@@ -987,6 +991,10 @@ void MsqlDBName(void){
 		Error("Invalid table index expression in msqlTablename");
 		return;
 	}
+	if(s->intval == -1) {
+		Error("Your table index is -1 : An error must have occurred");
+		return;
+	}
 	db_index=s->intval;
 
 	s = Pop();
@@ -1001,6 +1009,10 @@ void MsqlDBName(void){
 	res_index=s->intval;
 
 	res=get_result(res_index);
+	if(!res) {
+		Error("Unable to find result index %d",res_index);
+		return;
+	}
 	msqlDataSeek(res, db_index);
 	row=msqlFetchRow(res);
 	if (row) {
@@ -1015,3 +1027,126 @@ void MsqlDBName(void){
 	Error("No mSQL support");
 #endif
 }
+
+void MsqlListFields(void) {
+#if HAVE_LIBMSQL
+	Stack *s;
+	char *tablename=NULL;
+#ifndef APACHE
+	static int First=1;
+	char junk[1];
+#endif
+	int j;
+	char temp[16];
+	m_result *result=NULL;
+	char *tcpPort, *unixPort;
+
+#ifndef APACHE
+	if(First) {
+		CurrentDB[0] = '\0';
+		junk[0]='\0';
+		CurrentTcpPort=&junk[0];
+		CurrentUnixPort=&junk[0];
+		First=0;
+	}
+#endif
+
+	s = Pop();
+	if(!s) {
+		Error("Stack error in msql expression");
+		Push("-1",LNUMBER);
+		return;
+	}
+	if(s->strval) tablename = (char *)estrdup(1,s->strval);
+	else {
+		Error("No tablename in msql_listfields expression");
+		Push("-1",LNUMBER);
+		return;
+	}
+	s = Pop();
+	if(!s) {
+		Error("Stack error in msql expression");
+		Push("-1",LNUMBER);
+		return;
+	}
+	if(!s->strval) {
+		Error("No database argument in msql_listfields expression");
+		Push("-1",LNUMBER);
+		return;
+	}
+	if(dbsock==-1) {
+		dbsock = msqlConnect(CurrentHost);
+		if(dbsock<0) {
+			Error("Unable to connect to mSQL socket (%s)",msqlErrMsg);
+			Push("-1",LNUMBER);
+			return;
+		}
+		CurrentTcpPort = getenv("MSQL_TCP_PORT");
+		CurrentUnixPort = getenv("MSQL_UNIX_PORT");
+	} else {
+#if DEBUG
+		Debug("Open socket found, checking to see if still valid\n");
+#endif
+		tcpPort = getenv("MSQL_TCP_PORT");
+		unixPort = getenv("MSQL_UNIX_PORT");
+		if((tcpPort && strcmp(tcpPort,CurrentTcpPort)) || (unixPort && strcmp(unixPort,CurrentUnixPort))) {
+#if DEBUG
+			Debug("Not valid, need to reopen\n");
+#endif
+			MsqlClose();
+#if DEBUG
+			Debug("About to connect\n");
+#endif
+			dbsock = msqlConnect(CurrentHost);
+#if DEBUG
+			Debug("After connect\n");
+#endif
+			if(dbsock<0) {
+				Error("Unable to connect to mSQL socket (%s)",msqlErrMsg);
+				Push("-1",LNUMBER);
+				return;
+			}
+			CurrentTcpPort = tcpPort;
+			CurrentUnixPort = unixPort;
+		}
+	}
+	if(strcmp(CurrentDB,s->strval)) {
+		if(msqlSelectDB(dbsock,s->strval)<0) {
+			Error("Unable to select mSQL database (%s)",msqlErrMsg);
+			Push("-1",LNUMBER);
+			return;
+		}
+		strcpy(CurrentDB,s->strval);
+	}
+
+#if DEBUG
+	Debug("Listing fields for table: %s\n",tablename);
+#endif
+#if APACHE
+	block_alarms();
+#endif
+	result=msqlListFields(dbsock,tablename);
+	if(msqlNumFields(result)<1) {
+#if APACHE
+		unblock_alarms();
+#endif
+		Error("Unable to perform msqlListFields for table: %s",tablename);
+		Push("-1",LNUMBER);
+		return;
+	}
+#if APACHE
+	unblock_alarms();
+#endif
+	if(result) j = add_result(result);
+	else {
+	        j=-1;
+	}
+	sprintf(temp,"%d",j);
+	Push(temp,LNUMBER);
+#else
+	Pop();
+	Pop();
+	Push("0",LNUMBER);
+	Error("No mSQL support");
+#endif
+}  /* MsqlListFields */

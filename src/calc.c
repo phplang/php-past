@@ -19,11 +19,11 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: calc.c,v 1.8 1996/05/16 15:29:16 rasmus Exp $ */
+/* $Id: calc.c,v 1.10 1996/08/04 04:10:18 rasmus Exp $ */
 #include <stdlib.h>
 #include <string.h>
-#include <php.h>
-#include <parse.h>
+#include "php.h"
+#include "parse.h"
 #include <math.h>
 #include <ctype.h>
 
@@ -372,6 +372,10 @@ void DecHex(void) {
 		return;
 	}
 	num = s->intval;
+	if(num==0) {
+		Push("0",STRING);
+		return;
+	}
 	exp = log(num)/log(16);
 	while(exp>-1) {
 		val = num/pow(16,exp);

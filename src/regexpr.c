@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: regexpr.c,v 1.1.1.1 1996/03/13 15:16:03 rasmus Exp $ */
+/* $Id: regexpr.c,v 1.3 1996/07/18 18:20:29 rasmus Exp $ */
 /*
 
 regexpr.c
@@ -47,14 +47,14 @@ Free Software Foundation.
 Emacs-specific code and syntax table code is almost directly borrowed
 from GNU regexp.
 
-$Header: /u/local/src/repository/phpfi/src/regexpr.c,v 1.1.1.1 1996/03/13 15:16:03 rasmus Exp $
+$Header: /u/local/src/repository/phpfi/src/regexpr.c,v 1.3 1996/07/18 18:20:29 rasmus Exp $
 
 */
 
 #include <stdio.h>
 #include <assert.h>
 #include <string.h>
-#include <regexpr.h>
+#include "regexpr.h"
 
 char *malloc();
 void free();
@@ -129,9 +129,9 @@ enum regexp_syntax_op	/* syntax codes for plain and quoted characters */
 
 static int re_compile_initialized = 0;
 static int regexp_syntax = 0;
-static unsigned char regexp_plain_ops[256];
-static unsigned char regexp_quoted_ops[256];
-static unsigned char regexp_precedences[Rnum_ops];
+static char regexp_plain_ops[256];
+static char regexp_quoted_ops[256];
+static char regexp_precedences[Rnum_ops];
 static int regexp_context_indep_ops;
 static int regexp_ansi_sequences;
 
@@ -293,7 +293,7 @@ regexp_t bufp;
   int pattern_offset=0, alloc;
   int starts[NUM_LEVELS * MAX_NESTING], starts_base;
   int future_jumps[MAX_NESTING], num_jumps;
-  unsigned char ch=0;
+  char ch=0;
   char *pattern, *translate;
   int next_register, paren_depth, num_open_registers, open_registers[RE_NREGS];
   int beginning_context;
@@ -1284,7 +1284,7 @@ continue_matching:
 
 #ifdef emacs
 	case Cemacs_at_dot:
-		if (PTR_CHAR_POS((unsigned char *)text) + 1 != point) goto fail;
+		if (PTR_CHAR_POS((char *)text) + 1 != point) goto fail;
 		break;
 #endif /* emacs */
 

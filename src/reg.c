@@ -19,11 +19,11 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: reg.c,v 1.9 1996/05/27 13:01:53 rasmus Exp $ */
+/* $Id: reg.c,v 1.11 1996/07/18 18:20:28 rasmus Exp $ */
 #include <stdlib.h>
-#include <regexpr.h>
-#include <php.h>
-#include <parse.h>
+#include "regexpr.h"
+#include "php.h"
+#include "parse.h"
 
 /*
  * reg_match(regular_expression, argument_string)
@@ -33,7 +33,7 @@
  * This only matches the regular epxression against the start of the 
  * argument string.
  */
-void RegMatch(unsigned char *reg_name) {
+void RegMatch(char *reg_name) {
 	Stack *s;	
 	struct re_pattern_buffer exp;
 	regexp_registers_t regs;
@@ -116,7 +116,7 @@ void RegMatch(unsigned char *reg_name) {
  * Pushes the part of the argument string that first matches the expression
  * If no match, a zero-length string is pushed
  */
-void RegSearch(unsigned char *reg_name) {
+void RegSearch(char *reg_name) {
 	Stack *s;	
 	struct re_pattern_buffer exp;
 	regexp_registers_t regs;

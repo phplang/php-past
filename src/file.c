@@ -19,8 +19,8 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: file.c,v 1.16 1996/05/21 23:41:05 rasmus Exp $ */
-#include <php.h>
+/* $Id: file.c,v 1.28 1996/07/26 05:21:57 rasmus Exp $ */
+#include "php.h"
 #include <stdlib.h>
 #if HAVE_UNISTD_H
 #include <unistd.h>
@@ -29,9 +29,13 @@
 #include <pwd.h>
 #include <grp.h>
 #include <errno.h>
-#include <regexpr.h>
-#include <parse.h>
+#include "regexpr.h"
+#include "parse.h"
 #include <ctype.h>
+#if APACHE
+#include "http_protocol.h"
+#include "http_request.h"
+#endif
 
 static char *CurrentFilename=NULL;
 static char *CurrentStatFile=NULL;
@@ -376,7 +380,8 @@ void SetCurrentFilename(char *filename) {
 #if DEBUG
 	Debug("Setting CurrentFilename to [%s]\n",filename);
 #endif
-	CurrentFilename = estrdup(0,filename);
+	if(filename) CurrentFilename = estrdup(0,filename);
+	else CurrentFilename=NULL;
 }
 
 long GetCurrentFileSize(void) {
@@ -446,6 +451,7 @@ void FileFunc(int type) {
 	if(!CurrentStatFile || (CurrentStatFile && strcmp(s->strval,CurrentStatFile))) {
 		CurrentStatFile = estrdup(0,s->strval);
 		if(stat(CurrentStatFile,&sb)==-1) {
+			*CurrentStatFile=0;
 			Push("-1",LNUMBER);
 			return;
 		}
@@ -525,6 +531,135 @@ void Unlink(void) {
 	unlink(s->strval);
 }
 
+void ReadLink(void) {
+	Stack *s;
+	int ret;
+	char buf[256];
+
+	s = Pop();
+	if(!s) {
+		Error("Stack error in ReadLink");
+		return;
+	}
+	if(!s->strval || (s->strval && !*(s->strval))) {
+		Error("Invalid path in ReadLink");
+		return;
+	}
+	ret = readlink(s->strval, buf , 256);
+	if(ret==-1) 
+		Push("-1",LNUMBER);
+	else {
+		/*
+		 * Append NULL to the end of the string
+		 */
+		buf[ret] = '\0';
+		Push(buf,STRING);
+	}
+}
+
+void LinkInfo(void) {
+	Stack *s;
+	struct stat sb;	
+	int ret;
+	char temp[64];
+
+	s = Pop();
+	if(!s) {
+		Error("Stack error in LinkInfo");
+		return;
+	}
+	if(!s->strval || (s->strval && !*(s->strval))) {
+		Error("Invalid path in LinkInfo");
+		return;
+	}
+	ret = lstat(s->strval,&sb);
+	if(ret==-1) 
+		Push("-1",LNUMBER);
+	else
+	{
+		sprintf(temp,"%ld",(long)sb.st_dev);
+		Push(temp,LNUMBER);
+	}
+}
+ 
+void SymLink(void) {
+#if HAVE_SYMLINK
+	Stack *s;
+	char *new;
+	int ret;
+	char temp[4];
+
+	s = Pop();
+	if(!s) {
+		Error("Stack error in symlink");
+		return;
+	}
+	if(!s->strval || (s->strval && !*(s->strval))) {
+		Error("Invalid filename in symlink");
+		return;
+	}
+	new = (char *) estrdup(1,s->strval);
+	s = Pop();
+	if(!s) {
+		Error("Stack error in symlink");
+		return;
+	}
+	if(!s->strval || (s->strval && !*(s->strval))) {
+		Error("Invalid filename in symlink");
+		return;
+	}
+	ret = symlink(s->strval, new);	
+	if(ret==-1) {
+		Error("%d [%s]",errno, strerror(errno));
+	}
+	sprintf(temp,"%d",ret);
+	Push(temp,LNUMBER);
+#else
+	Pop();
+	Pop();
+	Error("SymLink not available on this system");
+#endif
+}
+
+void Link(void) {
+#if HAVE_LINK
+	Stack *s;
+	char *new;
+	int ret;
+	char temp[4];
+
+	s = Pop();
+	if(!s) {
+		Error("Stack error in link");
+		return;
+	}
+	if(!s->strval || (s->strval && !*(s->strval))) {
+		Error("Invalid filename in link");
+		return;
+	}
+	new = (char *) estrdup(1,s->strval);
+	s = Pop();
+	if(!s) {
+		Error("Stack error in link");
+		return;
+	}
+	if(!s->strval || (s->strval && !*(s->strval))) {
+		Error("Invalid filename in link");
+		return;
+	}
+	ret = link(s->strval, new);	
+	if(ret==-1) {
+		Error("%d [%s]",errno, strerror(errno));
+	}
+	sprintf(temp,"%d",ret);
+	Push(temp,LNUMBER);
+#else
+	Pop();
+	Pop();
+	Error("Link not available on this system");
+#endif
+}
+
 void Rename(void) {
 	Stack *s;
 	char *new;
@@ -537,7 +672,7 @@ void Rename(void) {
 		return;
 	}
 	if(!s->strval || (s->strval && !*(s->strval))) {
-		Error("Invalid filename in unlink");
+		Error("Invalid filename in rename");
 		return;
 	}
 	new = (char *) estrdup(1,s->strval);
@@ -547,7 +682,7 @@ void Rename(void) {
 		return;
 	}
 	if(!s->strval || (s->strval && !*(s->strval))) {
-		Error("Invalid filename in unlink");
+		Error("Invalid filename in rename");
 		return;
 	}
 	ret = rename(s->strval, new);	
@@ -579,15 +714,31 @@ void USleep(void) {
 		return;
 	}
 	usleep(s->intval);
+#else
+	Pop();
+	Error("USleep not available on this system");
 #endif
 }
 
-int FpPush(FILE *fp, char *fn) {
+/*
+ * Push a file pointer onto internal file identifier stack
+ *
+ * Arguments:
+ *
+ * FILE *fp - file pointer
+ * char *fn - filename or host
+ * int type - type of file pointer (needed for FpCloseAll)
+ *            0 = regular file
+ *            1 = socket
+ *            2 = pipe
+ */
+int FpPush(FILE *fp, char *fn, int type) {
 	FpStack *new = emalloc(0,sizeof(FpStack));
 
 	new->fp = fp;
 	new->filename = (char *)estrdup(0,fn);
 	new->id = fileno(fp);
+	new->type = type;
 	new->next = fp_top;
 	fp_top = new;
 	return(new->id);
@@ -622,6 +773,25 @@ void FpDel(int id) {
 		e = f;
 		f = f->next;
 	}
+}
+
+void FpCloseAll(void) {
+	FpStack *f;
+
+	f = fp_top;
+	while(f) {
+		switch(f->type) {
+		case 0:
+		case 1:
+			fclose(f->fp);
+			break;
+		case 2:
+			pclose(f->fp);
+			break;
+		}	
+		f = f->next;
+	}
+	fp_top = NULL;
 }
 
 void Fopen(void) {
@@ -661,7 +831,7 @@ void Fopen(void) {
 		return;
 	}
 	fgetss_state=0;
-	id = FpPush(fp,s->strval);
+	id = FpPush(fp,s->strval,0);
 	sprintf(temp,"%d",id);	
 	Push(temp,LNUMBER);
 }	
@@ -723,7 +893,7 @@ void Popen(void) {
 		Push("-1",LNUMBER);
 		return;
 	}
-	id = FpPush(fp,s->strval);
+	id = FpPush(fp,s->strval,2);
 	sprintf(temp,"%d",id);	
 	Push(temp,LNUMBER);
 }
@@ -1013,8 +1183,21 @@ char *GetCurrentPI(void) {
 }
 
 void SetCurrentPI(char *pi) {
-	CurrentPI = estrdup(0,pi);
+	if(pi)
+		CurrentPI = estrdup(0,pi);
+	else 
+		CurrentPI = NULL;
 }
+
+#if APACHE
+void SetCurrentPD(char *pd) {
+#if DEBUG
+	Debug("Setting PATH_DIR to %s\n",pd);
+#endif
+	if(pd)
+		table_set(php_rqst->subprocess_env,"PATH_DIR",pd);
+}
+#endif
 
 void ChMod(void) {
 	Stack *s;
@@ -1112,6 +1295,21 @@ void MkDir(void) {
 	Push(temp,LNUMBER);
 }	
 
+void RmDir(void) {
+	Stack *s;
+	int ret;
+	char temp[8];
+
+	s = Pop();
+	if(!s) {
+		Error("Stack error in rmdir()");
+		return;
+	}
+	ret = rmdir(s->strval);
+	sprintf(temp,"%d",ret);
+	Push(temp,LNUMBER);
+}	
+
 void File(void) {
 	Stack *s;
 	FILE *fp;
@@ -1150,22 +1348,88 @@ void File(void) {
 
 void set_path_dir(char *pi) {
 #ifndef APACHE
-	char *buf = emalloc(1,sizeof(char) * (strlen(pi)+12));
+	char *buf = emalloc(0,sizeof(char) * (strlen(pi)+12));
 #endif
-	char *env = emalloc(1,sizeof(char) * (strlen(pi)+2));
+#ifdef PHP_ROOT_DIR
+	char *env = emalloc(0,sizeof(char) * (strlen(pi) + strlen(PHP_ROOT_DIR) + 2));
+#else
+	char *env = emalloc(0,sizeof(char) * (strlen(pi)+2));
+#endif
 	char *s;
 
 	s = strrchr(pi,'/');
+#ifdef PHP_ROOT_DIR
+	if(!s) strcpy(env,PHP_ROOT_DIR);
+#else
 	if(!s) strcpy(env,"/");
+#endif
 	else {
 		*s='\0';
+#ifdef PHP_ROOT_DIR
+		sprintf(env,"%s%s",PHP_ROOT_DIR,pi);
+#else
 		strcpy(env,pi);
+#endif
 		*s='/';
 	}
 #if APACHE
+#if DEBUG
+	Debug("Setting PATH_DIR to %s\n",env);
+#endif
 	table_set(php_rqst->subprocess_env,"PATH_DIR",env);
 #else
 	sprintf(buf,"PATH_DIR=%s",env);
 	putenv(buf);
 #endif
 }
+
+/* This function is equivilent to <!--#include virtual...-->
+ * in mod_include. It does an Apache sub-request. It is useful
+ * for including CGI scripts or .shtml files, or anything else
+ * that you'd parse through Apache (for .phtml files, you'd probably
+ * want to use <?Include>. This only works when PHP is compiled
+ * as an Apache module, since it uses the Apache API for doing
+ * sub requests.
+ */
+
+#if APACHE
+void Virtual(void) {
+	Stack *s;
+	char *file;
+	request_rec *rr = NULL;
+
+	s = Pop();
+	if (!s) {
+		Error("Stack error in Virtual");
+		return;
+	}
+
+	file = s->strval;
+
+	if (!(rr = sub_req_lookup_uri (file, php_rqst))) {
+		Error("Unable to include file: %s", file);
+		if (rr) destroy_sub_req (rr);
+		return;
+	}
+
+	if (rr->status != 200) {
+		Error("Unable to include file: %s", file);
+		if (rr) destroy_sub_req (rr);
+		return;
+	}
+
+	/* Cannot include another PHP file because of global conflicts */
+	if (rr->content_type &&
+		!strcmp(rr->content_type, "application/x-httpd-php")) {
+		Error("Cannot include a PHP/FI file "
+			"(use <code>&lt;?include \"%s\"&gt;</code> instead)", file);
+		if (rr) destroy_sub_req (rr);
+		return;
+	}
+
+	if (run_sub_req(rr))
+		Error("Unable to include file: %s", file);
+
+	if (rr) destroy_sub_req (rr);
+}
+#endif

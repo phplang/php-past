@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: pool.c,v 1.12 1996/05/26 03:23:35 rasmus Exp $ */
+/* $Id: pool.c,v 1.13 1996/07/11 14:12:48 rasmus Exp $ */
 /*
  * Memory Pool Management with hooks for Apache sub-pool handling
  * for Apache module
@@ -29,8 +29,8 @@
 #define MAXSUBPOOLS 3
 
 #include <stdlib.h>
-#include <php.h>
-#include <parse.h>
+#include "php.h"
+#include "parse.h"
 
 #ifndef APACHE
 #define PHP_BLOCK_MINFREE 8192     

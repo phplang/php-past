@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: php.h,v 1.73 1996/06/01 02:21:43 rasmus Exp $ */
+/* $Id: php.h,v 1.95 1996/08/18 12:30:58 rasmus Exp $ */
 #include <stdio.h>
 #include <time.h>
 #include <sys/types.h>
@@ -158,20 +158,46 @@ extern request_rec *php_rqst;
  */
 #define DEFAULT_MAX_DATA_SPACE 8192
 
+/*
+ * PHP_TRACK_VARS
+ *
+ * If you define this, 3 arrays will be created in your scripts.  They are:
+ * 
+ *  $PHP_GETVARS
+ *  $PHP_POSTVARS
+ *  $PHP_COOKIEVARS
+ *
+ * These arrays will contain the GET/POST/Cookie variables respectively.
+ */
+/* #define PHP_TRACK_VARS 1 */
+
+/*
+ * PHP_AUTH_VARS
+ *
+ * If this is defined, the the Apache module version will be allowed to
+ * set the PHP_AUTH_USER, PHP_AUTH_PW and PHP_AUTH_TYPE variables.  
+ * This is a potential security concern.  See the HTTP Authentication
+ * section in the documentation for more details.
+ */
+#define PHP_AUTH_VARS 1
+
 /*-- Do not touch anything after this point unless you are very brave --*/
 
-#define PHP_VERSION "1.99s"
+#define PHP_VERSION "2.0b5"
 
 #define VAR_INIT_CHAR	'$'
 
 #if APACHE
 #if APACHE_NEWAPI
 #define PUTS(a) rputs((a),php_rqst)
+#define PUTC(a) rputc((a),php_rqst)
 #else
 #define PUTS(a) rprintf(php_rqst,"%s",(a))
+#define PUTC(a) rprintf(php_rqst,"%c",(a))
 #endif
 #else
 #define PUTS(a) fputs((a),stdout)
+#define PUTC(a) fputc((a),stdout)
 #endif
 
 #if HAVE_FLOCK
@@ -227,9 +253,9 @@ typedef struct {
 typedef struct VarTree {
 	short type;
 	int count;
-	unsigned char *name;
-	unsigned char *strval;
-	unsigned char *iname;
+	char *name;
+	char *strval;
+	char *iname;
 	long intval;
 	double douval;
 	int flag;
@@ -247,7 +273,7 @@ typedef struct VarTree {
 /* Expression Stack */
 typedef struct Stack {
 	short type;
-	unsigned char *strval;
+	char *strval;
 	long intval;
 	double douval;
 	VarTree *var;	
@@ -366,10 +392,17 @@ typedef struct FuncStack {
 	struct FuncStack *next;
 } FuncStack;
 
+typedef struct CounterStack {
+	int inif;
+	int inwhile;
+	struct CounterStack *next;
+} CounterStack;
+
 typedef struct FpStack {
 	FILE *fp;
 	char *filename;
 	int id;
+	int type;
 	struct FpStack *next;
 } FpStack;
 
@@ -386,6 +419,16 @@ typedef struct PtrStack {
 	void *ptr;
 	struct PtrStack *next;
 } PtrStack;
+
+typedef struct CookieList {
+	char *name;
+	char *value;
+	time_t expires;
+	char *path;
+	char *domain;
+	int secure;		
+	struct CookieList *next;
+} CookieList;
 
 #ifndef APACHE
 typedef struct pool {
@@ -419,24 +462,27 @@ void Include(void);
 void Exit(int);
 char *GetCurrentLexLine(int *, int *);
 void InitFunc(void);
-void DefineFunc(unsigned char *);
+void DefineFunc(char *);
 FuncStack *FindFunc(char *, long *, VarTree **);
-void RunFunc(unsigned char *);
+void RunFunc(char *);
 VarTree *GetFuncFrame(void);
-void AddToArgList(unsigned char *);
+void AddToArgList(char *);
 FuncArgList *GetFuncArgList(void);
 void ClearFuncArgList(void);
 void Return(void);
 void php_init_lex(void);
-void IntFunc(unsigned char *);
+void IntFunc(char *);
 int NewWhileIteration(void);
 void Eval(void);
 void set_text_magic(int);
+void PushCounters(void);
+void PopCounters(void);
 
 /* date.c */
 void Date(int, int);
 void UnixTime(void);
 void MkTime(int);
+char *std_date(time_t);
 
 /* parse.c */
 int yyparse(void);
@@ -462,16 +508,16 @@ void mathLog10(void);
 void Abs(void);
 
 /* stack.c */
-void Push(unsigned char *, int);
+void Push(char *, int);
 Stack *Pop(void);
 void ClearStack(void);
 void php_init_stack(void);
 
 /* var.c */
 void php_init_symbol_tree(void);
-void SetVar(unsigned char *, int, int);
-VarTree *GetVar(unsigned char *, unsigned char *, int);
-void IsSet(unsigned char *);
+void SetVar(char *, int, int);
+VarTree *GetVar(char *, char *, int);
+void IsSet(char *);
 char *SubVar(char *);
 void Count(void);
 void ArrayMax(void);
@@ -481,21 +527,22 @@ void GetEnv(void);
 void PtrPush(void *);
 void *PtrPop(void);
 void SecureVar(void);
-void Reset(unsigned char *);
-void Key(unsigned char *);
-void Next(unsigned char *);
-void Prev(unsigned char *);
-void End(unsigned char *);
+void Reset(char *);
+void Key(char *);
+void Next(char *);
+void Prev(char *);
+void End(char *);
 void PushStackFrame(void);
 void PopStackFrame(void);
 void Global(void);
 void copyarray(VarTree *, VarTree *);
 void deletearray(VarTree *);
-void UnSet(unsigned char *);
+void UnSet(char *);
 
 /* echo.c */
-void Echo(unsigned char *, int);
+void Echo(char *, int);
 void StripSlashes(char *);
+void StripDollarSlashes(char *);
 char *AddSlashes(char *, int);
 void ParseEscapes(char *);
 void HtmlSpecialChars(void);
@@ -570,6 +617,7 @@ void EndWhile(void);
 void PushWhileMark(void);
 void PopWhileMark(void);
 void php_init_while(void);
+void WhileFinish(void);
 
 /* string.c */
 void StrLen(void);
@@ -587,6 +635,8 @@ void SetType(void);
 void GetType(void);
 void SubStr(void);
 void UrlEncode(void);
+void UrlDecode(void);
+char *php_urlencode(char *);
 void Ord(void);
 void QuoteMeta(void);
 void UcFirst(void);
@@ -606,6 +656,7 @@ void MsqlRegCase(void);
 int  msqlGetDbSock(void);
 void msqlSetCurrent(int, char *);
 void MsqlListTables(void);
+void MsqlListFields(void);
 void MsqlTableName(void);
 void MsqlListDBs(void);
 void MsqlDBName(void);
@@ -635,16 +686,17 @@ void PGfieldNum(void);
 void PGfieldPrtLen(void);
 void PGfieldSize(void);
 void PGgetlastoid(void);
+void PGerrorMessage(void);
 void php_init_pg95(void);
 
 /* reg.c */
-void RegMatch(unsigned char *);
-void RegSearch(unsigned char *);
+void RegMatch(char *);
+void RegSearch(char *);
 void RegReplace(void);
 char *_RegReplace(char *, char *, char *);
 
 /* exec.c */
-void Exec(unsigned char *, unsigned char *, int);
+void Exec(char *, char *, int);
 void EscapeShellCmd(void);
 
 /* file.c */
@@ -657,6 +709,10 @@ char *FixFilename(char *, int, int *);
 char *getfilename(char *, int);
 void FileFunc(int);
 void TempNam(void);
+void Link(void);
+void SymLink(void);
+void ReadLink(void);
+void LinkInfo(void);
 void Unlink(void);
 void Rename(void);
 void Sleep(void);
@@ -671,17 +727,23 @@ void Fseek(void);
 void Ftell(void);
 char *GetCurrentPI(void);
 void SetCurrentPI(char *);
+void SetCurrentPD(char *);
 void ChMod(void);
 void ChOwn(void);
 void ChGrp(void);
 void MkDir(void);
-int  FpPush(FILE *, char *);
+void RmDir(void);
+int  FpPush(FILE *, char *, int);
 void File(void);
 void php_init_file(void);
 void set_path_dir(char *);
 void Popen(void);
 void Pclose(void);
 void Feof(void);
+void FpCloseAll(void);
+#if APACHE
+void Virtual(void);
+#endif
 
 /* crypt.c */
 void Crypt(int);
@@ -690,6 +752,9 @@ void Crypt(int);
 void Header(void);
 void php_header(int, char *);
 void php_init_head(void);
+void SetCookie(int);
+void PushCookieList(char *, char *, time_t, char *, char *, int);
+CookieList *PopCookieList(void);
 
 /* info.c */
 void Info(void);
@@ -699,6 +764,7 @@ void PHPVersion(void);
 /* post.c */
 void TreatData(int);
 void parse_url(char *);
+void TreatHeaders(void);
 
 /* type.c */
 int CheckType(char *);
@@ -819,6 +885,8 @@ void ImagePolygon(int);
 void ImageChar(int);
 void ImageCopyResized(void);
 void php_init_gd(void);
+void ImageSXFN(void);
+void ImageSYFN(void);
 
 /* mime.c */
 void mime_split(char *, int, char *);

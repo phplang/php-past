@@ -19,8 +19,8 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: crypt.c,v 1.1.1.1 1996/03/13 15:16:02 rasmus Exp $ */
-#include <php.h>
+/* $Id: crypt.c,v 1.3 1996/08/13 17:59:01 rasmus Exp $ */
+#include "php.h"
 #if HAVE_UNISTD_H
 #include <unistd.h>
 #endif
@@ -32,7 +32,7 @@
 #else
 #include <time.h>
 #endif
-#include <parse.h>
+#include "parse.h"
 
 /*
  * If mode is non-zero, a salt is expected.
@@ -63,6 +63,7 @@ void Crypt(int mode) {
 		salt[1] = 'a' + (time(NULL) % 26);
 		salt[2] = '\0';
 	}
+	StripSlashes(s->strval);
 	enc = (char *)crypt(s->strval,salt);
 #if DEBUG
 	Debug("Crypt returned [%s]\n",enc);

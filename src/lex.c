@@ -19,19 +19,19 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: lex.c,v 1.64 1996/05/29 12:00:34 rasmus Exp $ */
+/* $Id: lex.c,v 1.83 1996/08/21 02:25:54 rasmus Exp $ */
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
 #include <errno.h>
-#include <php.h>
+#include "php.h"
 #if PHP_HAVE_MMAP
 #include <sys/mman.h>
 #endif
 #if HAVE_UNISTD_H
 #include <unistd.h>
 #endif
-#include <parse.h>
+#include "parse.h"
 #if APACHE
 #include "http_protocol.h"
 #endif
@@ -49,8 +49,8 @@ static int state = 0;
 static int lstate = 0;
 static int inIf=-1;
 static int inWhile=-1;
-static unsigned char inbuf[LINEBUFSIZE];	/* input line buffer  */
-static unsigned char obuf[LINEBUFSIZE];     /* output line buffer */
+static char inbuf[LINEBUFSIZE];	/* input line buffer  */
+static char obuf[LINEBUFSIZE];     /* output line buffer */
 static int inpos=0; /* current position in inbuf */
 static int outpos=0; /* current position in inbuf */
 static int inlength=0; /* current length of inbuf */
@@ -61,14 +61,16 @@ static int tokenmarker; /* marked position in inbuf      */
 static long SeekPos=0L;
 static int ExitCalled=0;
 static int ClearIt=0;
-static long iterwhile=0L;
+static long iterwhile=-1L;
 static int LastToken=0;
 #if TEXT_MAGIC
 static int TextMagic=0;
 #endif
+static int header_called=0;
 
 static FileStack *top = NULL;
 static FuncStack *functop = NULL;
+static CounterStack *counter_top = NULL;
 static FuncStack *cur_func=NULL;
 static int no_httpd = 0;
 static int eval_mode = 0;
@@ -127,6 +129,7 @@ static cmd_table_t cmd_table[22][35] = {
 	  { "rand",INTFUNC0,Rand },
 	  { "sqrt",INTFUNC1,Sqrt },
 	  { "file",INTFUNC1,File },
+	  { "link",INTFUNC2,Link },
 	  { NULL,0,NULL } }, 
 
 	{ { "endif",ENDIF,NULL },   /* 5 */
@@ -149,6 +152,7 @@ static cmd_table_t cmd_table[22][35] = {
 	  { "chown",INTFUNC2,ChOwn },
 	  { "chgrp",INTFUNC2,ChGrp },
 	  { "mkdir",INTFUNC2,MkDir },
+	  { "rmdir",INTFUNC1,RmDir },
 	  { "log10",INTFUNC1,mathLog10 },
 	  { "unset",UNSET,NULL },
 	  { NULL,0,NULL } }, 
@@ -189,6 +193,8 @@ static cmd_table_t cmd_table[22][35] = {
 	  { NULL,0,NULL } }, 
 
 	{ { "default", DEFAULT,NULL }, /* 7 */
+	  { "imagesx", INTFUNC1,ImageSXFN },
+	  { "imagesy", INTFUNC1,ImageSYFN },
 	  { "include", INCLUDE,NULL },
 	  { "dbmopen", INTFUNC2,dbmOpen },
 	  { "strrchr", INTFUNC2,StrrChr },
@@ -203,6 +209,10 @@ static cmd_table_t cmd_table[22][35] = {
 	  { "pg_host", INTFUNC1,PGhost },
 	  { "pg_port", INTFUNC1,PGport },
 	  { "phpinfo", INTFUNC0,Info },
+#if APACHE
+	  { "virtual", INTFUNC1,Virtual },
+#endif
+	  { "symlink", INTFUNC2,SymLink },
 	  { NULL,0,NULL } },
 
 	{ { "endwhile",ENDWHILE,NULL }, /* 8 */
@@ -218,6 +228,9 @@ static cmd_table_t cmd_table[22][35] = {
 	  { "imagegif",IMAGEGIF,NULL },
 	  { "imagearc",IMAGEARC,NULL },
 	  { "pg_close",INTFUNC1,PGclose },
+	  { "passthru",PASSTHRU,NULL },
+	  { "readlink",INTFUNC1,ReadLink },
+	  { "linkinfo",INTFUNC1,LinkInfo },
 	  { NULL,0,NULL } },
 
 	{ { "endswitch", ENDSWITCH,NULL }, /* 9 */
@@ -243,9 +256,11 @@ static cmd_table_t cmd_table[22][35] = {
 	  { "fsockopen", INTFUNC2,FSockOpen },
 	  { "microtime", INTFUNC0,MicroTime },
 	  { "urlencode", INTFUNC1,UrlEncode },
+	  { "urldecode", INTFUNC1,UrlDecode },
 	  { "quotemeta", INTFUNC1,QuoteMeta },
 	  { "pg_result", INTFUNC3,PG_result },
 	  { "pg_dbname", INTFUNC1,PGdbName },
+	  { "setcookie", SETCOOKIE,NULL },
 	  { NULL,0,NULL } },        
 
 	{ { "strtoupper", INTFUNC1,StrToUpper }, /* 10 */
@@ -316,7 +331,9 @@ static cmd_table_t cmd_table[22][35] = {
 	{ { "msql_freeresult", INTFUNC1,MsqlFreeResult }, /* 15 */
 	  { "msql_fieldflags", MSQL_FIELDFLAGS,NULL },
 	  { "msql_listtables", INTFUNC1,MsqlListTables },
+	  { "msql_listfields", INTFUNC2,MsqlListFields },
 	  { "getstartlogging", INTFUNC0,GetStartLogging },
+	  { "pg_errormessage", INTFUNC1,PGerrorMessage },
 	  { NULL,0,NULL } },
 
 	{ { "htmlspecialchars", INTFUNC1,HtmlSpecialChars }, /* 16 */
@@ -342,10 +359,10 @@ static cmd_table_t cmd_table[22][35] = {
 
 };
 
-void IntFunc(unsigned char *fnc_name) {
+void IntFunc(char *fnc_name) {
 	int i=0;
 	int cmdlen = strlen(fnc_name);
-	
+
 	while(cmd_table[cmdlen][i].cmd) {
 		if(!strncasecmp(fnc_name,cmd_table[cmdlen][i].cmd,cmdlen)) {
 			cmd_table[cmdlen][i].fnc();
@@ -409,6 +426,7 @@ char *FilePop(void) {
 		if(cur_func) {
 			PopStackFrame();
 			PopCondMatchMarks();
+			PopCounters();
 #if DEBUG
 			Debug("Calling PopStackFrame() from FilePop\n");
 #endif
@@ -430,6 +448,7 @@ char *FilePop(void) {
 		} else {
 			eval_mode=0;
 			PopCondMatchMarks();
+			PopCounters();
 		}
 		pa_pos = top->pos;
 		s = top;
@@ -458,7 +477,7 @@ void Include(void) {
 #endif
 		ofn = estrdup(0,GetCurrentFilename());
 		ofile_size = GetCurrentFileSize();
-		fd = OpenFile(s->strval,0,&file_size);
+		fd = OpenFile((char *)s->strval,0,&file_size);
 		if(fd>-1) {
 			FilePush(ofn,ofile_size,gfd);
 			gfd = fd;
@@ -485,15 +504,15 @@ void Eval(void) {
 #endif
 		eval_mode=1;
 		FilePush(GetCurrentFilename(),GetCurrentFileSize(),gfd);
-		StripSlashes(s->strval);
-		ParserInit(-1,strlen(s->strval),no_httpd,s->strval);
+		StripSlashes((char *)s->strval);
+		ParserInit(-1,strlen((char *)s->strval),no_httpd,s->strval);
 		PushCondMatchMarks();
 		yyparse();
 		if(ExitCalled) state=99;
 	}
 }
 
-int outputchar(unsigned char ch) {
+int outputchar(char ch) {
 	if(GetCurrentState(NULL)) {
 #if DEBUG
 		Debug("Calling php_header from outputchar()\n");
@@ -514,27 +533,30 @@ int outputchar(unsigned char ch) {
 	return(0);
 }
 
-int outputline(unsigned char *line) {
+int outputline(char *line) {
 	line[outpos]='\0';
 	outpos=0;
 	if(GetCurrentState(NULL)) {
 #if DEBUG
 		Debug("Calling php_header from outputline()\n");
 #endif
-		php_header(0,NULL);
+		if(!header_called && line[0]!=10 && line[0]!=13) {
+			php_header(0,NULL);
+			header_called=1;
+		} else if(!header_called && (line[0]==10 || line[0]==13)) return(0);
 #if APACHE
-		if(PUTS(line)==EOF) {
+		if(PUTS((char *)line)==EOF) {
 			/* browser has probably gone away */
 			return(-1);
 		}
 #else
 #if DEBUG
-		Debug("sending line [%s]\n",line);
+		Debug("sending line [%s]\n",(char *)line);
 #endif
 #if TEXT_MAGIC
-		if(TextMagic) text_magic(line);
+		if(TextMagic) text_magic((char *)line);
 #endif
-		if(fputs(line,stdout)==EOF) {
+		if(fputs((char *)line,stdout)==EOF) {
 			/* browser has probably gone away */
 			return(-1);
 		}
@@ -547,8 +569,8 @@ int outputline(unsigned char *line) {
  * This reads a line into the input buffer if inpos is -1 and returns the 
  * first char.  If inpos is not -1, it returns the char at inpos
  */
-unsigned char getnextchar(void) {
-	unsigned char ch;
+char getnextchar(void) {
+	char ch;
 	int i=0;
 	int cont=1;
 
@@ -615,7 +637,7 @@ char *lookaheadword(void) {
 /* Push a character back into the input buffer.  This character will be
  * the next character processed when yyparse() calls yylex() again.
  */
-void putback(unsigned char ch) {
+void putback(char ch) {
 	if(inpos>0) {
 		inpos--;
 		inbuf[inpos]=ch;
@@ -632,10 +654,10 @@ int output_from_marker(void) {
 	return(0);
 }
 
-unsigned char *MakeToken(char *string, int len) {
-	unsigned char *s;
+char *MakeToken(char *string, int len) {
+	char *s;
 
-	s = (unsigned char *)emalloc(2,sizeof(unsigned char)*(len+1));
+	s = (char *)emalloc(2,sizeof(char)*(len+1));
 	memcpy(s,string,len);	
 	*(s+len) = '\0';	
 	return(s);
@@ -661,9 +683,9 @@ int CommandLookup(int cmdlen, YYSTYPE *lvalp) {
 
 /* Hand-crafted Lexical analyzer using Bison's Pure_Parser calling convention */
 int yylex(YYSTYPE *lvalp) {
-	register unsigned char c;
+	register char c;
 	int tokenlen=0;
-	unsigned char *s, d;
+	char *s, d;
 	char temp[8];
 	int bs=0, cst, active, ret;
 	char *look = NULL;
@@ -677,7 +699,10 @@ int yylex(YYSTYPE *lvalp) {
 #endif
 		return(0);
 	}
-	if(ClearIt && LastToken!=RETURN && !cur_func && !eval_mode && cst) { ClearStack(); ClearIt=0; }
+	if(ClearIt && LastToken!=RETURN && !cur_func && !eval_mode && cst) { 
+		ClearStack(); 
+		ClearIt=0; 
+	} else ClearIt=0;
 
 	while(1) switch(state) {
 		case 0:  /* start of token '<' gets us to state 1 */
@@ -840,7 +865,7 @@ int yylex(YYSTYPE *lvalp) {
 
 		case 3: /* continue command - non [a-z][A-Z] gets us to state 4 */
 			lstate=3;
-			while(isalpha((c=getnextchar())) || c=='_') tokenlen++;
+			while(isalpha((c=getnextchar())) || c=='_' || isdigit(c)) tokenlen++;
 			if(!c) { state=99; break; }
 			putback(c);
 			
@@ -848,7 +873,7 @@ int yylex(YYSTYPE *lvalp) {
 			if(active==-5) {
 				CondPop(&active);
 				CondPush(0,-6);	
-				s = (unsigned char *) MakeToken(&inbuf[tokenmarker],tokenlen);
+				s = (char *) MakeToken(&inbuf[tokenmarker],tokenlen);
 				if(s && *s) {
 					*lvalp = (YYSTYPE) s;
 					lstate=4;
@@ -911,11 +936,11 @@ int yylex(YYSTYPE *lvalp) {
 				tokenlen++;
 			}
 			if(!c) { state=99; break; }
-			s = (unsigned char *) MakeToken(&inbuf[tokenmarker],tokenlen);
+			s = (char *) MakeToken(&inbuf[tokenmarker],tokenlen);
 			if(s && *s) {
-				sprintf(temp,"%d",(int)*s);
-			} else strcpy(temp,"0");
-			*lvalp = (YYSTYPE) MakeToken(temp,strlen(temp));
+				sprintf((char *)temp,"%d",(int)*s);
+			} else strcpy((char *)temp,"0");
+			*lvalp = (YYSTYPE) MakeToken(temp,strlen((char *)temp));
 			state = 2;
 			return(LNUMBER);
 			
@@ -1122,7 +1147,6 @@ int yylex(YYSTYPE *lvalp) {
 			pa = FilePop();
 			return(END_OF_FILE);		
 	}
-	return(0);
 } /* yylex */
 
 /* Yacc Error Function */
@@ -1154,10 +1178,11 @@ void php_init_lex(void) {
 	NewExpr=1;
 	ClearIt=0;
 	LastToken=0;
-	iterwhile=0L;
+	iterwhile=-1L;
 	SeekPos=0L;
 	top = NULL;
 	functop = NULL;
+	counter_top = NULL;
 	cur_func=NULL;
 	no_httpd = 0;
 	cfstart = 0;
@@ -1165,6 +1190,7 @@ void php_init_lex(void) {
 	funcarg_bot = NULL;
 	ExitCalled=0;
 	eval_mode=0;
+	header_called=0;
 #if TEXT_MAGIC
 	TextMagic=0;
 #endif
@@ -1222,7 +1248,12 @@ void WhileAgain(long seekpos, int offset, int lineno) {
 	yylex_linenumber = lineno;
 	tokenmarker = 0;
 	state=2;
+	inpos=-1;
 	iterwhile=pa_pos;
+}
+
+void WhileFinish(void) {
+	iterwhile=-1L;
 }
 
 int NewWhileIteration(void) {
@@ -1275,6 +1306,7 @@ void Exit(int footer) {
 	MsqlClose();
 	PGcloseAll();
 	dbmCloseAll();
+	FpCloseAll();
 #if DEBUG
 	php_pool_show();
 	CloseDebug();
@@ -1290,17 +1322,17 @@ char *GetCurrentLexLine(int *pos, int *length) {
 }
 
 /* Save a function in memory and create a frame for static variables */
-void DefineFunc(unsigned char *fnc) {
+void DefineFunc(char *fnc) {
 	int len, i=0,active;
-	unsigned char *buf;
+	char *buf;
 	long bufsize;
 	FuncStack *new;
 
 	/* Check to see if we have an internal function by this name */
-	len = strlen(fnc);
+	len = strlen((char *)fnc);
 	while(cmd_table[len][i].cmd) {
 		if(!strncasecmp(fnc,cmd_table[len][i].cmd,len)) {
-			Error("\"%s\" is the name of an internal function",fnc);
+			Error("\"%s\" is the name of an internal function",(char *)fnc);
 			return;
 		}	
 		i++;
@@ -1320,14 +1352,14 @@ void DefineFunc(unsigned char *fnc) {
 	new = emalloc(0,sizeof(FuncStack));
 	new->next = functop;
 	functop = new;
-	new->name = estrdup(0,fnc);
-	new->buf = buf;
+	new->name = estrdup(0,(char *)fnc);
+	new->buf = (char *)buf;
 	new->size = bufsize-1;
 	new->frame = emalloc(0,sizeof(VarTree));
 	new->frame->type = STRING;
 	new->frame->count=1;
-	new->frame->name = estrdup(0,fnc);
-	new->frame->strval = estrdup(0,fnc);
+	new->frame->name = estrdup(0,(char *)fnc);
+	new->frame->strval = estrdup(0,(char *)fnc);
 	new->frame->iname=NULL;
 	new->frame->intval = 0;
 	new->frame->douval = 0.0;
@@ -1374,7 +1406,7 @@ VarTree *GetFuncFrame(void) {
 }
 
 /* Execute the specified function */
-void RunFunc(unsigned char *name) {
+void RunFunc(char *name) {
 	char *ofn=NULL;
 	long func_size=0L;
 	long ofile_size=0L;
@@ -1384,9 +1416,9 @@ void RunFunc(unsigned char *name) {
 #if DEBUG
 	Debug("Running function [%s]\n",name);
 #endif
-	f = FindFunc(name, &func_size, NULL);
+	f = FindFunc((char *)name, &func_size, NULL);
 	if(!f) {
-		Error("No function named %s",name);
+		Error("No function named %s",(char *)name);
 		return;
 	}
 	if(cur_func) { /* Nested function call */
@@ -1399,10 +1431,11 @@ void RunFunc(unsigned char *name) {
 	cur_func = f;
 	ParserInit(-1,func_size,no_httpd,f->buf);
 	PushStackFrame();
+	PushCounters();
 	PushCondMatchMarks();
 	arg = f->params;
 	while(arg) {
-		SetVar(arg->arg,0,0);
+		SetVar((char *)arg->arg,0,0);
 		arg = arg->prev;
 	}	
 	yyparse();
@@ -1410,7 +1443,7 @@ void RunFunc(unsigned char *name) {
 }
 
 /* Doubly-linked argument list */
-void AddToArgList(unsigned char *arg) {
+void AddToArgList(char *arg) {
 	FuncArgList *new;
 
 	new = emalloc(0,sizeof(FuncArgList));
@@ -1418,7 +1451,7 @@ void AddToArgList(unsigned char *arg) {
 	if(new->next) new->next->prev = new;
 	else funcarg_bot = new;
 	new->prev = NULL;
-	new->arg = estrdup(0,arg);
+	new->arg = estrdup(0,(char *)arg);
 	funcarg_top = new;
 }
 
@@ -1427,14 +1460,14 @@ FuncArgList *GetFuncArgList(void) {
 }
 
 void ClearFuncArgList(void) {
-	FuncArgList *top, *next;
+	FuncArgList *ftop, *next;
 
 	if(!funcarg_top) return;
-	top = funcarg_top;
-	next = top->next;
+	ftop = funcarg_top;
+	next = ftop->next;
 	while(next) {
-		top = next;
-		next = top->next;
+		ftop = next;
+		next = ftop->next;
 	}
 	funcarg_top=NULL;
 	funcarg_bot=NULL;
@@ -1442,4 +1475,28 @@ void ClearFuncArgList(void) {
 
 void Return(void) {
 	putback(0);
+}
+
+void PushCounters(void) {
+	CounterStack *new;
+
+	new = emalloc(0,sizeof(CounterStack));
+	if(!new) {
+		Error("Out of memory");
+		return;
+	}
+	new->next = counter_top;
+	counter_top = new;
+	new->inif = inIf;
+	new->inwhile = inWhile;
+}
+
+void PopCounters(void) {
+	CounterStack *cs;
+
+	if(!counter_top) return;
+	cs = counter_top;
+	counter_top = cs->next;
+	inIf = cs->inif;
+	inWhile = cs->inwhile;
 }

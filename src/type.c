@@ -19,10 +19,10 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: type.c,v 1.1.1.1 1996/03/13 15:16:04 rasmus Exp $ */
+/* $Id: type.c,v 1.2 1996/07/11 14:12:53 rasmus Exp $ */
 #include <stdio.h>
-#include <php.h>
-#include <parse.h>
+#include "php.h"
+#include "parse.h"
 
 /*
  * Determines if 'str' is an integer, real number or a string

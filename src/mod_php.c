@@ -19,19 +19,22 @@ int send_parsed_php(request_rec *r) {
 	if (r->finfo.st_mode == 0) return NOT_FOUND;
 
 	/* Open the file */	
-	if(!(fd=popenf(r->pool, r->filename, O_RDONLY, 0))) {
+	if((fd=popenf(r->pool, r->filename, O_RDONLY, 0))==-1) {
 		log_reason("file permissions deny server access", r->filename, r);
 		return FORBIDDEN;
 	}
 
 	/* grab configuration settings */
 	conf = (php_module_conf *)get_module_config(r->per_dir_config,&php_module);
-	
+
+	/* Assume output will be HTML.  Individual scripts may change this 
+	   further down the line */
+	r->content_type = "text/html";		
+
 	/* Init timeout */
 	hard_timeout ("send", r);
 
 	if(r->header_only) {
-		r->content_type = "text/html";		
 		send_http_header(r);
 		kill_timeout (r);
 		pclosef(r->pool, fd);

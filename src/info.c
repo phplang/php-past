@@ -19,9 +19,9 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: info.c,v 1.17 1996/05/13 20:30:18 rasmus Exp $ */
-#include <php.h>
-#include <parse.h>
+/* $Id: info.c,v 1.20 1996/08/05 16:39:16 rasmus Exp $ */
+#include "php.h"
+#include "parse.h"
 #include <stdlib.h>
 #if HAVE_UNISTD_H
 #include <unistd.h>
@@ -43,6 +43,7 @@ void Info(void) {
 	array_header *env_arr;
 	table_entry *env;
 	int i;
+	VarTree *var;
 #endif	
 	FILE *fp;
 
@@ -106,6 +107,23 @@ void Info(void) {
 	PUTS(buf);
 	sprintf(buf,"PHP_SELF = %s<br>\n",php_rqst->uri);  /* Faked by GetVar */
 	PUTS(buf);
+#if APACHE
+	var = GetVar("PHP_AUTH_USER",0,0);
+	if(var) {
+		sprintf(buf,"PHP_AUTH_USER = %s<br>\n",var->strval);
+		PUTS(buf);
+	}
+	var = GetVar("PHP_AUTH_PW",0,0);
+	if(var) {
+		sprintf(buf,"PHP_AUTH_PW = %s<br>\n",var->strval);
+		PUTS(buf);
+	}
+	var = GetVar("PHP_AUTH_TYPE",0,0);
+	if(var) {
+		sprintf(buf,"PHP_AUTH_TYPE = %s<br>\n",var->strval);
+		PUTS(buf);
+	}
+#endif
 	PUTS("<hr><b><i>Request HTTP Headers:</i></b><p>\n");
 	env_arr = table_elts(php_rqst->headers_in);
 	env = (table_entry *)env_arr->elts;

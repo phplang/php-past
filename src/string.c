@@ -19,12 +19,12 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: string.c,v 1.9 1996/05/16 15:29:30 rasmus Exp $ */
+/* $Id: string.c,v 1.14 1996/07/19 13:16:52 rasmus Exp $ */
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-#include <php.h>
-#include <parse.h>
+#include "php.h"
+#include "parse.h"
 
 static char nullstr[1] = {'\0'};
 
@@ -309,8 +309,26 @@ void SubStr(void) {
 	Push(&str[m],STRING);
 }
 
-void UrlEncode(void) {
+char *php_urlencode(char *s) {
 	register int x,y;
+	char *str;
+
+	str = emalloc(1,3 * strlen(s) + 1); 
+    for(x=0,y=0; s[x]; x++,y++) {
+		str[y] = s[x];
+		if((str[y] < '0' && str[y]!='-' && str[y]!='.') ||
+		   (str[y] < 'A' && str[y] >'9') ||
+		   (str[y] > 'Z' && str[y] <'a' && str[y]!='_') ||
+		   (str[y] > 'z')) {
+            sprintf(&str[y],"%%%02x",(unsigned char)s[x]);
+            y+=2;
+        }
+    }
+    str[y] = '\0';
+	return(str);
+}
+
+void UrlEncode(void) {
 	char *str;
    	Stack *s;        
 	
@@ -323,19 +341,24 @@ void UrlEncode(void) {
 		Push("",STRING);
 		return;
 	}
-	str = emalloc(1,3 * strlen(s->strval) + 1); 
-    for(x=0,y=0; s->strval[x]; x++,y++) {
-		str[y] = s->strval[x];
-		if((str[y] < '0' && str[y]!='-' && str[y]!='.') ||
-		   (str[y] < 'A' && str[y] >'9') ||
-		   (str[y] > 'Z' && str[y] <'a' && str[y]!='_') ||
-		   (str[y] > 'z')) {
-            sprintf(&str[y],"%%%02x",s->strval[x]);
-            y+=2;
-        }
-    }
-    str[y] = '\0';
+	str = php_urlencode(s->strval);
 	Push(str,STRING);
+}
+
+void UrlDecode(void) {
+	Stack *s;
+
+	s = Pop();
+	if(!s) {
+		Error("Stack Error in urldecode function");
+		return;
+	}
+	if(!*s->strval) {
+		Push("",STRING);
+		return;
+	}
+	parse_url(s->strval);
+	Push(s->strval, STRING);	
 }
 
 void QuoteMeta(void) {
@@ -459,5 +482,5 @@ void Chr(void) {
 		return;
 	}
 	sprintf(temp,"%c",(char)s->intval);
-	Push(temp,LNUMBER);
+	Push(temp,STRING);
 }

@@ -19,12 +19,12 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: stack.c,v 1.18 1996/05/29 12:38:45 rasmus Exp $ */
+/* $Id: stack.c,v 1.21 1996/07/18 18:20:30 rasmus Exp $ */
 /* Expression Stack */
 #include <stdlib.h>
 #include <string.h>
-#include <php.h>
-#include <parse.h>
+#include "php.h"
+#include "parse.h"
 
 static Stack *top=NULL;
 
@@ -39,7 +39,7 @@ void ShowStack(void) {
 	Debug("ShowStack()\n");
 	s=top;
 	while(s) {
-		Debug("(%s)%d",s->strval?s->strval:(unsigned char *)"NULL",s->type);
+		Debug("(%s)%d",s->strval?s->strval:(char *)"NULL",s->type);
 		s=s->next;
 	}
 	if(top) Debug("\n");
@@ -51,7 +51,7 @@ void ClearStack(void) {
 	top=NULL;
 }
 	
-void Push(unsigned char *value, int type) {
+void Push(char *value, int type) {
 	Stack *new, *s=NULL;
 	VarTree *t;
 	int next=0;
@@ -64,7 +64,6 @@ void Push(unsigned char *value, int type) {
 			return;
 		}
 	} else if(type== -ARRAY) { type=ARRAY; next=1; }
-
 	new = emalloc(2,sizeof(Stack));
 	new->type   = type;
 	new->next   = NULL;

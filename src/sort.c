@@ -19,10 +19,10 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: sort.c,v 1.2 1996/05/08 21:32:40 rasmus Exp $ */
-#include <php.h>
+/* $Id: sort.c,v 1.3 1996/07/11 14:12:51 rasmus Exp $ */
+#include "php.h"
 #include <stdlib.h>
-#include <parse.h>
+#include "parse.h"
 
 int comp_string(char **a, char **b) {
 	return(strcmp(*a,*b));

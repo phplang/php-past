@@ -19,9 +19,9 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: main.c,v 1.26 1996/05/23 14:18:29 rasmus Exp $ */
+/* $Id: main.c,v 1.31 1996/07/25 05:29:27 rasmus Exp $ */
 #include <stdlib.h>
-#include <php.h>
+#include "php.h"
 #if HAVE_UNISTD_H
 #include <unistd.h>
 #endif
@@ -97,6 +97,7 @@ int main(int argc, char **argv) {
 	}
 	s = getenv("REQUEST_METHOD");
 	if(s && !strcasecmp(s,"post")) TreatData(0);  /* POST Data */
+	TreatData(2); /* Cookie Data */
 	TreatData(1); /* GET Data */
 
 	if(no_httpd && argv[1]) fd=OpenFile(argv[1],1,&file_size);
@@ -155,6 +156,8 @@ int apache_php_module_main(request_rec *r, php_module_conf *conf, int fd) {
 #endif
 	php_init_cond();
 
+	TreatHeaders();  /* Check to see if there are any special HTTP headers */
+
 	if(r->args) {
 		last_arg = strrchr(r->args,'&');
 		if(!last_arg) last_arg = r->args;	
@@ -173,10 +176,12 @@ int apache_php_module_main(request_rec *r, php_module_conf *conf, int fd) {
 	SetCurrentFilename(r->filename);
 	SetCurrentFileSize(r->finfo.st_size);
 	SetCurrentPI(r->uri);
+	SetCurrentPD(r->uri);
 	SetStatInfo(&(r->finfo));
 
 	s = r->method;
 	if(s && !strcasecmp(s,"post")) TreatData(0);  /* POST Data */
+	TreatData(2); /* Cookie Data */
 	TreatData(1); /* GET Data */
 #if ACCESS_CONTROL
 	ParserInit(fd,r->finfo.st_size,0,NULL);	

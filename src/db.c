@@ -19,11 +19,11 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: db.c,v 1.9 1996/05/16 15:29:18 rasmus Exp $ */
+/* $Id: db.c,v 1.11 1996/07/11 14:12:37 rasmus Exp $ */
 #include <stdlib.h>
 #include <string.h>
 #include <errno.h>
-#include <php.h>
+#include "php.h"
 #if HAVE_UNISTD_H
 #include <unistd.h>
 #endif
@@ -41,7 +41,7 @@
 #include <ndbm.h>
 #endif
 #endif
-#include <parse.h>
+#include "parse.h"
 
 static dbmStack *top = NULL;
 
@@ -79,7 +79,7 @@ void dbmPush(char *filename,char *lockfn,int lockfd, void *dbf) {
 	dbmStack *new;
 
 	new = emalloc(0,sizeof(dbmStack));
-	new->next=NULL;
+	new->next=top;
 	new->filename = estrdup(0,filename);
 	if(lockfn) new->lockfn = estrdup(0,lockfn);
 	else new->lockfn=NULL;

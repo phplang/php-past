@@ -19,21 +19,22 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: post.c,v 1.6 1996/05/16 15:29:28 rasmus Exp $ */
+/* $Id: post.c,v 1.15 1996/08/18 12:30:58 rasmus Exp $ */
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-#include <php.h>
-#include <parse.h>
+#include "php.h"
+#include "parse.h"
 #if APACHE
 #include "http_protocol.h"
+#include "http_core.h"
 #endif
 
 #define ishex(x) (((x) >= '0' && (x) <= '9') || ((x) >= 'a' && (x) <= 'f') || \
                   ((x) >= 'A' && (x) <= 'F'))
 
-int htoi(unsigned char *s) {
+int htoi(char *s) {
         int     value;
         char    c;
 
@@ -54,7 +55,7 @@ void parse_url(char *data) {
     while(*data) {
         if(*data=='+') *dest=' ';
         else if(*data== '%' && ishex(*(data+1)) && ishex(*(data+2))) {
-            *dest = (unsigned char) htoi(data + 1);
+            *dest = (char) htoi(data + 1);
             data+=2;
         } else *dest = *data;
         data++;
@@ -174,12 +175,21 @@ int CheckResult(char *res) {
 	return(0); /* never reached */
 }
 
+void dot_to_underscore(char *str) {
+	char *s = str;
+	while(*s) {
+		if(*s=='.') *s='_';
+		s++;
+	}
+}
+
 /*
  * arg = 0  Post Data
  * arg = 1  Get Data
+ * arg = 2  Cookie Data
  */
 void TreatData(int arg) {
-	char *res, *s, *t, *tt, *u=NULL;
+	char *res=NULL, *s, *t, *tt, *u=NULL;
 	char *ind, *tmp, *ret;
 	char o='\0';
 	int itype;
@@ -187,11 +197,22 @@ void TreatData(int arg) {
 	VarTree *v;
 
 	if(arg==0) res = getpost();
-	else {
+	else if(arg==1) { /* Get data */
 #if APACHE
 		s = php_rqst->args;
 #else
 		s = getenv("QUERY_STRING");
+#endif
+		res=s;
+		if(s && *s) {
+			res = (char *)estrdup(1,s);
+		}
+		inc = -1;
+	} else if(arg==2) { /* Cookie data */
+#if APACHE
+		s = table_get(php_rqst->subprocess_env,"HTTP_COOKIE");
+#else
+		s = getenv("HTTP_COOKIE");
 #endif
 		res=s;
 		if(s && *s) {
@@ -203,7 +224,8 @@ void TreatData(int arg) {
 #if DEBUG
 	Debug("TreatData: [%s]\n",res);
 #endif
-	s = strtok(res,"&");
+	if(arg==2) s = strtok(res,";");
+	else s = strtok(res,"&");
 	while(s) {
 		t = strchr(s,'=');
 		if(t) {
@@ -213,7 +235,15 @@ void TreatData(int arg) {
 				s = tt+1;
 				tt=strchr(s,'+');
 			}	
+			if(arg==2) {
+				tt = strchr(s,' ');
+				while(tt) {
+					s = tt+1;
+					tt=strchr(s,' ');
+				}	
+			}
 			parse_url(s);
+			dot_to_underscore(s);
 			itype = CheckIdentType(s);
 			if(itype==2) {
 				ind=GetIdentIndex(s);
@@ -227,10 +257,9 @@ void TreatData(int arg) {
 			/* 
 			 * This check makes sure that a variable which has been
 			 * defined through the POST method is not redefined with a
-			 * GET method variable.  Allowing this would make it
-			 * impossible to write secure PHP Scripts.
+			 * GET/Cookie method variable.  
 			 */
-			if(arg==1) {
+			if(arg==1 || arg==2) {
 				v = GetVar(s,NULL,0);
 				if(v && v->flag != -1) {
 					if(itype==2) Pop();
@@ -242,8 +271,63 @@ void TreatData(int arg) {
 			tmp = estrdup(1,t+1);
 			Push((ret=AddSlashes(tmp,1)),CheckType(t+1));
 			SetVar(s,itype,inc);
+
+#if PHP_TRACK_VARS
+			Push((ret=AddSlashes(s,1)),STRING);
+			if (arg==0) SetVar("PHP_POSTVARS",1,0);
+			else if (arg==1) SetVar("PHP_GETVARS",1,0);
+			else if (arg==2) SetVar("PHP_COOKIEVARS",1,0);
+			else Pop();
+#endif
+
 			if(tt) *tt=o;
 		}
-		s = strtok(NULL,"&");
+		if(arg==2) s = strtok(NULL,";");
+		else s = strtok(NULL,"&");
 	}
+}	
+
+void TreatHeaders(void) {
+#if APACHE	
+#if PHP_AUTH_VARS
+	char *s, *t, *user, *type;
+
+	s = table_get(php_rqst->headers_in,"Authorization");
+	if(!s) return;
+
+	/* Check to make sure that this URL isn't authenticated
+	   using a traditional auth module mechanism */
+	if(auth_type(php_rqst)) {
+#if DEBUG
+		Debug("Authentication done by server module\n");
+#endif
+		return;
+	}
+
+	if(strcmp(getword (php_rqst->pool, &s, ' '), "Basic")) {
+		/* Client tried to authenticate using wrong auth scheme */
+#if DEBUG
+		Debug("client used wrong authentication scheme", php_rqst->uri, php_rqst);
+#endif
+		return;
+	}
+
+	t = uudecode(php_rqst->pool, s);
+    user = getword(php_rqst->pool, &t, ':');
+    type = "Basic";
+
+	if(user) {
+		Push(user,STRING);
+		SetVar("PHP_AUTH_USER",0,0);
+	}
+	if(t) {
+		Push(t,STRING);
+		SetVar("PHP_AUTH_PW",0,0);
+	}
+	if(type) {
+		Push(type,STRING);
+		SetVar("PHP_AUTH_TYPE",0,0);
+	}
+#endif
+#endif
 }	

@@ -37,14 +37,14 @@
 *                                                                            *
 \****************************************************************************/
 
-/* $Id: pg95.c,v 1.10 1996/05/16 15:29:26 rasmus Exp $ */
+/* $Id: pg95.c,v 1.14 1996/08/07 05:47:03 myddryn Exp $ */
 
-#include <php.h>
+#include "php.h"
 #include <stdlib.h>
 #if HAVE_LIBPQ
 #include <libpq-fe.h>
 #endif
-#include <parse.h>
+#include "parse.h"
 #include <ctype.h>
 
 #if APACHE
@@ -370,7 +370,10 @@ void PGexec(void) {
 			return;
 		}
 	}
-
+	StripDollarSlashes(query);  /* Postgres95 doesn't recognize \$ */
+#if DEBUG
+	Debug("Sending query: %s\n",query);
+#endif
 	result = PQexec(curr_conn, query);
 	if (result == NULL) 
 		stat = PQstatus(curr_conn);
@@ -430,13 +433,21 @@ void PG_result(void) {
 	char*		tmp;
 	char*		ret;
 
+	field_ind = -1;
+	field = NULL;
+
 	s = Pop();
 	if (!s) {
 		Error("Stack error in pg_result");
 		Push("", STRING);
 		return;
 	}
-	if (s->strval) field = estrdup(1,s->strval);
+	if (s->strval)
+		if (s->type == STRING)
+			field = estrdup(1,s->strval);
+		else
+			field_ind = s->intval;
+		
 	else {
 		Error("No field argument in pg_result");
 		Push("", STRING);
@@ -483,14 +494,18 @@ void PG_result(void) {
 		return;
 	}
 
-	/* get field type */
-	field_ind = PQfnumber(result, field);
-	if (field_ind < 0) {
-		Error("Field %s not found", field);
-		Push("", STRING);
-		return;
+	/* get field index if the field parameter was a string */
+	if (field != NULL)
+	{
+		field_ind = PQfnumber(result, field);
+		if (field_ind < 0) {
+			Error("Field %s not found", field);
+			Push("", STRING);
+			return;
+		}
 	}
 
+	/* get field type */
 	type_oid = PQftype(result, field_ind);
 	ftype = pg_type(curr_conn, type_oid);
 
@@ -1325,6 +1340,45 @@ void PGgetlastoid(void) {
 	Push(tmp, LNUMBER);
 
 #else
+	Error("No postgres95 support");
+#endif
+}
+
+
+void PGerrorMessage(void) {
+#if HAVE_LIBPQ
+	Stack		*s;
+	int		conn_ind;
+	PGconn		*conn;
+	char		*tmp;
+
+	s = Pop();
+	if (!s) {
+		Error("Stack error in pg_errorMessage");
+		Push("", STRING);
+		return;
+	}
+	if (s->strval) conn_ind = s->intval;
+	else conn_ind = 0;
+
+	conn = pg_get_conn(conn_ind);
+	if (conn == NULL) {
+		Error("Bad connection index in pg_errorMessge");
+		Push("", STRING);
+		return;
+	}
+
+	tmp = estrdup(1,PQerrorMessage(conn));
+	if (tmp == NULL) {
+		Error("Out of memory");
+		Push("", STRING);
+		return;
+	}
+
+	Push(tmp, STRING);
+
+#else
+	Pop();
 	Error("No postgres95 support");
 #endif
 }

@@ -19,12 +19,12 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: while.c,v 1.12 1996/05/16 15:29:32 rasmus Exp $ */
+/* $Id: while.c,v 1.15 1996/07/11 14:12:54 rasmus Exp $ */
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <php.h>
-#include <parse.h>
+#include "php.h"
+#include "parse.h"
 
 static WhileStack *top=NULL;
 static WhileMark *mark=NULL;
@@ -137,11 +137,11 @@ void EndWhile(void) {
 		Error("endwhile misplaced");
 		return;
 	}	
-/*	BracePush(ENDWHILE); */
 	if(state && (t=WhilePeek())) {
 		WhileAgain(t->seekpos,t->offset,t->lineno);
 	} else {
 		CondPop(&active);
 		BracePop();
+		WhileFinish();
 	}
 }

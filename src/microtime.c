@@ -22,8 +22,8 @@
 /*
  * Contributed by Paul Panotzki - Bunyip Information Systems
  */
-/* $Id: microtime.c,v 1.5 1996/05/17 18:57:43 rasmus Exp $ */
-#include <php.h>
+/* $Id: microtime.c,v 1.6 1996/07/11 14:12:45 rasmus Exp $ */
+#include "php.h"
 #include <stdlib.h>
 #if HAVE_UNISTD_H
 #include <unistd.h>
@@ -31,7 +31,7 @@
 
 #include <string.h>
 #include <errno.h>
-#include <parse.h>
+#include "parse.h"
 
 #include <stdio.h>
 #include <sys/time.h>

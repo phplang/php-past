@@ -19,9 +19,9 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: exec.c,v 1.7 1996/05/30 14:47:36 rasmus Exp $ */
-#include <php.h>
-#include <parse.h>
+/* $Id: exec.c,v 1.10 1996/08/18 12:30:55 rasmus Exp $ */
+#include "php.h"
+#include "parse.h"
 #include <ctype.h>
 #if APACHE
 #include "http_protocol.h"
@@ -31,6 +31,7 @@
  * If type==0, only last line of output is returned
  * If type==1, all lines will be printed and last lined returned
  * If type==2, all lines will be saved to array var on stack
+ * If type==3, output will be printed binary, no lines will be saved or returned
  *
  * name is the name of an array variable in which to store each line
  * of output
@@ -38,7 +39,7 @@
  * retname is the name of a variable in which to store the return status
  * of the exec'ed command
  */
-void Exec(unsigned char *name, unsigned char *retname, int type) {
+void Exec(char *name, char *retname, int type) {
 	FILE *fp;
 	Stack *s;
 	char buf[4096];
@@ -55,25 +56,35 @@ void Exec(unsigned char *name, unsigned char *retname, int type) {
 		return;
 	}
 	buf[0]='\0';	
-	if(type==1) {
+	if(type==1 || type==3) {
 		php_header(0,NULL);
 	}		
-	while(fgets(buf,4095,fp)) {
-		if(type==1) PUTS(buf);
-		else if(type==2) {
-			l = strlen(buf);
-			t = l;
-			while(isspace(buf[--l])); 
-			if(l<t) buf[l+1]='\0';	
-			Push(AddSlashes(buf,0),STRING);
-			SetVar(name,1,0);	
+	if(type != 3) {
+		while(fgets(buf,4095,fp)) {
+			if(type==1) PUTS(buf);
+			else if(type==2) {
+				l = strlen(buf);
+				t = l;
+				while(isspace(buf[--l])); 
+				if(l<t) buf[l+1]='\0';	
+				Push(AddSlashes(buf,0),STRING);
+				SetVar(name,1,0);	
+			}
+		}
+
+		l = strlen(buf);
+		t = l;
+		while(l && isspace(buf[--l])); 
+		if(l<t) buf[l+1]='\0';	
+		Push(AddSlashes(buf,0),STRING);
+	} else {
+		int	b, i;
+
+		while((b = fread(buf, 1, sizeof(buf), fp)) > 0) {
+			for(i = 0; i < b; i++)
+				PUTC(buf [i]);
 		}
 	}
-	l = strlen(buf);
-	t = l;
-	while(l && isspace(buf[--l])); 
-	if(l<t) buf[l+1]='\0';	
-	Push(AddSlashes(buf,0),STRING);
 	ret = pclose(fp);
 	if(retname) {
 		sprintf(buf,"%d",ret);

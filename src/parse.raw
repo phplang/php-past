@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: parse.raw,v 1.35 1996/05/29 12:38:21 rasmus Exp $ */
+/* $Id: parse.raw,v 1.40 1996/08/18 12:30:57 rasmus Exp $ */
 %{
 #include <stdio.h>
 #include <stdlib.h>
@@ -97,6 +97,7 @@ void php_init_yacc(void) {
 %token REG_SEARCH
 %token EXEC
 %token SYSTEM
+%token PASSTHRU
 %token CRYPT
 %token FILEPERMS
 %token FILEINODE
@@ -135,6 +136,7 @@ void php_init_yacc(void) {
 %token INTFUNC4
 %token INTFUNC5
 %token INTFUNC6
+%token SETCOOKIE
 
 /* Precedence */
 %left '+' '-'
@@ -183,23 +185,23 @@ primitive:
 		}
 	| PHPECHO STRING expr eoc
 		{
-			if(GetCurrentState(NULL)) Echo((unsigned char *)$2,1);
+			if(GetCurrentState(NULL)) Echo((char *)$2,1);
 		}
 	| PHPECHO STRING expr ',' expr eoc
 		{
-			if(GetCurrentState(NULL)) Echo((unsigned char *)$2,2);
+			if(GetCurrentState(NULL)) Echo((char *)$2,2);
 		}
 	| PHPECHO STRING expr ',' expr ',' expr eoc
 		{
-			if(GetCurrentState(NULL)) Echo((unsigned char *)$2,3);
+			if(GetCurrentState(NULL)) Echo((char *)$2,3);
 		}
 	| PHPECHO STRING expr ',' expr ',' expr ',' expr eoc
 		{
-			if(GetCurrentState(NULL)) Echo((unsigned char *)$2,4);
+			if(GetCurrentState(NULL)) Echo((char *)$2,4);
 		}
 	| PHPECHO STRING expr ',' expr ',' expr ',' expr ',' expr eoc
 		{
-			if(GetCurrentState(NULL)) Echo((unsigned char *)$2,5);
+			if(GetCurrentState(NULL)) Echo((char *)$2,5);
 		}
 		
 	| IF '(' cond ')' eocb
@@ -248,6 +250,7 @@ primitive:
 			|| GetCurrentActive() == -2 
 			|| GetCurrentActive() == -3
 			|| inElseIf) EndSwitch();
+			else BracePop();
 		}	
 	| DEFAULT eoc
 		{
@@ -261,6 +264,7 @@ primitive:
 	| ENDWHILE eoc
 		{
 			if(GetCurrentState(NULL) || GetCurrentActive()==-4) EndWhile();
+			else BracePop();
 		}
 	| implied_prefix
 	| INCLUDE expr eoc
@@ -280,19 +284,19 @@ primitive:
 		}
 	  FUNCTION FUNCNAME funcparams '(' tags ')' eoc
 		{
-			if(GetCurrentActive()==-6) DefineFunc((unsigned char *)$3);
+			if(GetCurrentActive()==-6) DefineFunc((char *)$3);
 		}
 	| STATIC VAR '=' expr eoc
 		{
-			if(GetCurrentState(NULL)) SetVar((unsigned char *)$2,8,0);
+			if(GetCurrentState(NULL)) SetVar((char *)$2,8,0);
 		}
 	| STATIC ARRAY ']' '=' expr eoc
 		{
-			if(GetCurrentState(NULL)) SetVar((unsigned char *)$2,9,0);
+			if(GetCurrentState(NULL)) SetVar((char *)$2,9,0);
 		}	
 	| STATIC ARRAY expr ']' '=' expr eoc
 		{
-			if(GetCurrentState(NULL)) SetVar((unsigned char *)$2,10,0);
+			if(GetCurrentState(NULL)) SetVar((char *)$2,10,0);
 		}	
 	| GLOBAL params eoc
 		{
@@ -306,26 +310,26 @@ primitive:
 params: /* nothing */
 	| ',' VAR params
 		{
-			if(GetCurrentState(NULL)) AddToArgList((unsigned char *)$2);
+			if(GetCurrentState(NULL)) AddToArgList((char *)$2);
 		}
 	| VAR params
 		{
-			if(GetCurrentState(NULL)) AddToArgList((unsigned char *)$1);
+			if(GetCurrentState(NULL)) AddToArgList((char *)$1);
 		}
 
 funcparams: /* nothing */
 	| ',' VAR funcparams
 		{
-			if(GetCurrentActive()==-6) AddToArgList((unsigned char *)$2);
+			if(GetCurrentActive()==-6) AddToArgList((char *)$2);
 		}
 	| VAR funcparams
 		{
-			if(GetCurrentActive()==-6) AddToArgList((unsigned char *)$1);
+			if(GetCurrentActive()==-6) AddToArgList((char *)$1);
 		}
 
 funcargs: /* nothing */
-	| ',' expr funcargs
-	| expr funcargs
+	| funcargs expr ',' 
+	| funcargs expr
 	
 cond: expr cop_expr
 	| '(' cond ')'
@@ -367,63 +371,63 @@ cop_expr: /* nothing */
 implied_prefix:
 	  VAR '=' expr eoc
 		{
-			if(GetCurrentState(NULL)) SetVar((unsigned char *)$1,0,0);
+			if(GetCurrentState(NULL)) SetVar((char *)$1,0,0);
 		}
 	| VAR PEQ expr eoc
 		{
-			if(GetCurrentState(NULL)) SetVar((unsigned char *)$1,0,1);
+			if(GetCurrentState(NULL)) SetVar((char *)$1,0,1);
 		}
 	| VAR MEQ expr eoc
 		{
-			if(GetCurrentState(NULL)) SetVar((unsigned char *)$1,0,2);
+			if(GetCurrentState(NULL)) SetVar((char *)$1,0,2);
 		}
 	| VAR ANDEQ expr eoc
 		{
-			if(GetCurrentState(NULL)) SetVar((unsigned char *)$1,0,3);
+			if(GetCurrentState(NULL)) SetVar((char *)$1,0,3);
 		}
 	| VAR OREQ expr eoc
 		{
-			if(GetCurrentState(NULL)) SetVar((unsigned char *)$1,0,4);
+			if(GetCurrentState(NULL)) SetVar((char *)$1,0,4);
 		}
 	| ARRAY ']' '=' expr eoc
 		{
-			if(GetCurrentState(NULL)) SetVar((unsigned char *)$1,1,0);
+			if(GetCurrentState(NULL)) SetVar((char *)$1,1,0);
 		}	
 	| ARRAY ']' PEQ expr eoc
 		{
-			if(GetCurrentState(NULL)) SetVar((unsigned char *)$1,1,1);
+			if(GetCurrentState(NULL)) SetVar((char *)$1,1,1);
 		}
 	| ARRAY ']' MEQ expr eoc
 		{
-			if(GetCurrentState(NULL)) SetVar((unsigned char *)$1,1,2);
+			if(GetCurrentState(NULL)) SetVar((char *)$1,1,2);
 		}
 	| ARRAY ']' ANDEQ expr eoc
 		{
-			if(GetCurrentState(NULL)) SetVar((unsigned char *)$1,1,3);
+			if(GetCurrentState(NULL)) SetVar((char *)$1,1,3);
 		}
 	| ARRAY ']' OREQ expr eoc
 		{
-			if(GetCurrentState(NULL)) SetVar((unsigned char *)$1,1,4);
+			if(GetCurrentState(NULL)) SetVar((char *)$1,1,4);
 		}
 	| ARRAY expr ']' '=' expr eoc
 		{
-			if(GetCurrentState(NULL)) SetVar((unsigned char *)$1,2,0);
+			if(GetCurrentState(NULL)) SetVar((char *)$1,2,0);
 		}	
 	| ARRAY expr ']' PEQ expr eoc
 		{
-			if(GetCurrentState(NULL)) SetVar((unsigned char *)$1,2,1);
+			if(GetCurrentState(NULL)) SetVar((char *)$1,2,1);
 		}	
 	| ARRAY expr ']' MEQ expr eoc
 		{
-			if(GetCurrentState(NULL)) SetVar((unsigned char *)$1,2,2);
+			if(GetCurrentState(NULL)) SetVar((char *)$1,2,2);
 		}	
 	| ARRAY expr ']' ANDEQ expr eoc
 		{
-			if(GetCurrentState(NULL)) SetVar((unsigned char *)$1,2,3);
+			if(GetCurrentState(NULL)) SetVar((char *)$1,2,3);
 		}	
 	| ARRAY expr ']' OREQ expr eoc
 		{
-			if(GetCurrentState(NULL)) SetVar((unsigned char *)$1,2,4);
+			if(GetCurrentState(NULL)) SetVar((char *)$1,2,4);
 		}	
 	| expr
 
@@ -487,69 +491,69 @@ expr:
 func: 
 	  INTFUNC0 '(' ')'
 		{
-			if(GetCurrentState(NULL) || inCase || inElseIf) IntFunc((unsigned char *)$1);
+			if(GetCurrentState(NULL) || inCase || inElseIf) IntFunc((char *)$1);
 		}
 	| INTFUNC1 '(' expr ')'
 		{
-			if(GetCurrentState(NULL) || inCase || inElseIf) IntFunc((unsigned char *)$1);
+			if(GetCurrentState(NULL) || inCase || inElseIf) IntFunc((char *)$1);
 		}
 	| INTFUNC2 '(' expr ',' expr ')'
 		{
-			if(GetCurrentState(NULL) || inCase || inElseIf) IntFunc((unsigned char *)$1);
+			if(GetCurrentState(NULL) || inCase || inElseIf) IntFunc((char *)$1);
 		}
 	| '@' INTFUNC2 '(' expr ',' expr ')'
 		{
 			if(GetCurrentState(NULL) || inCase || inElseIf) {
 				errPrintState = ErrorPrintState(0);
-				IntFunc((unsigned char *)$2);
+				IntFunc((char *)$2);
 				ErrorPrintState(errPrintState);
 			}
 		}
 	| INTFUNC3 '(' expr ',' expr ',' expr ')'
 		{
-			if(GetCurrentState(NULL) || inCase || inElseIf) IntFunc((unsigned char *)$1);
+			if(GetCurrentState(NULL) || inCase || inElseIf) IntFunc((char *)$1);
 		}
 	| '@' INTFUNC3 '(' expr ',' expr ',' expr ')'
 		{
 			if(GetCurrentState(NULL) || inCase || inElseIf) {
 				errPrintState = ErrorPrintState(0);
-				IntFunc((unsigned char *)$2);
+				IntFunc((char *)$2);
 				ErrorPrintState(errPrintState);
 			}
 		}
 	| INTFUNC4 '(' expr ',' expr ',' expr ',' expr ')'
 		{
-			if(GetCurrentState(NULL) || inCase || inElseIf) IntFunc((unsigned char *)$1);
+			if(GetCurrentState(NULL) || inCase || inElseIf) IntFunc((char *)$1);
 		}
 	| '@' INTFUNC4 '(' expr ',' expr ',' expr  ',' expr ')'
 		{
 			if(GetCurrentState(NULL) || inCase || inElseIf) {
 				errPrintState = ErrorPrintState(0);
-				IntFunc((unsigned char *)$2);
+				IntFunc((char *)$2);
 				ErrorPrintState(errPrintState);
 			}
 		}
 	| INTFUNC5 '(' expr ',' expr ',' expr ',' expr ',' expr ')'
 		{
-			if(GetCurrentState(NULL) || inCase || inElseIf) IntFunc((unsigned char *)$1);
+			if(GetCurrentState(NULL) || inCase || inElseIf) IntFunc((char *)$1);
 		}
 	| '@' INTFUNC5 '(' expr ',' expr ',' expr  ',' expr  ',' expr ')'
 		{
 			if(GetCurrentState(NULL) || inCase || inElseIf) {
 				errPrintState = ErrorPrintState(0);
-				IntFunc((unsigned char *)$2);
+				IntFunc((char *)$2);
 				ErrorPrintState(errPrintState);
 			}
 		}
 	| INTFUNC6 '(' expr ',' expr ',' expr ',' expr ',' expr ',' expr ')'
 		{
-			if(GetCurrentState(NULL) || inCase || inElseIf) IntFunc((unsigned char *)$1);
+			if(GetCurrentState(NULL) || inCase || inElseIf) IntFunc((char *)$1);
 		}
 	| '@' INTFUNC6 '(' expr ',' expr ',' expr  ',' expr  ',' expr  ',' expr ')'
 		{
 			if(GetCurrentState(NULL) || inCase || inElseIf) {
 				errPrintState = ErrorPrintState(0);
-				IntFunc((unsigned char *)$2);
+				IntFunc((char *)$2);
 				ErrorPrintState(errPrintState);
 			}
 		}
@@ -571,7 +575,7 @@ func:
 		}
 	| ISSET '(' VAR ')'
 		{
-			if(GetCurrentState(NULL) || inCase || inElseIf) IsSet((unsigned char *)$3);
+			if(GetCurrentState(NULL) || inCase || inElseIf) IsSet((char *)$3);
 		}
 	| STRTOK '(' expr ')' 
 		{
@@ -603,7 +607,7 @@ func:
 		}
 	| REG_MATCH '(' expr ',' expr ',' VAR ')'
 		{		
-			if(GetCurrentState(NULL) || inCase || inElseIf) RegMatch((unsigned char *)$7);
+			if(GetCurrentState(NULL) || inCase || inElseIf) RegMatch((char *)$7);
 		}
 	| REG_SEARCH '(' expr ',' expr ')'
 		{		
@@ -611,7 +615,7 @@ func:
 		}
 	| REG_SEARCH '(' expr ',' expr ',' VAR ')'
 		{		
-			if(GetCurrentState(NULL) || inCase || inElseIf) RegSearch((unsigned char *)$7);
+			if(GetCurrentState(NULL) || inCase || inElseIf) RegSearch((char *)$7);
 		}
 	| EXEC '(' expr ')'
 		{		
@@ -620,12 +624,12 @@ func:
 	| EXEC '(' expr ',' VAR ')'
 		{		
 			if(GetCurrentState(NULL) || inCase || inElseIf) 
-				Exec((unsigned char *)$5,NULL,2);
+				Exec((char *)$5,NULL,2);
 		}
 	| EXEC '(' expr ',' VAR ',' VAR ')'
 		{		
 			if(GetCurrentState(NULL) || inCase || inElseIf) 
-				Exec((unsigned char *)$5,(unsigned char *)$7 ,2);
+				Exec((char *)$5,(char *)$7 ,2);
 		}
 	| SYSTEM '(' expr ')'
 		{		
@@ -633,7 +637,15 @@ func:
 		}
 	| SYSTEM '(' expr ',' VAR ')'
 		{		
-			if(GetCurrentState(NULL) || inCase || inElseIf) Exec(NULL,(unsigned char *)$5,1);
+			if(GetCurrentState(NULL) || inCase || inElseIf) Exec(NULL,(char *)$5,1);
+		}
+	| PASSTHRU '(' expr ')'
+		{
+			if(GetCurrentState(NULL) || inCase || inElseIf) Exec(NULL,NULL,3);
+		}
+	| PASSTHRU '(' expr ',' VAR ')'
+		{
+			if(GetCurrentState(NULL) || inCase || inElseIf) Exec(NULL,(char *)$5,3);
 		}
 	| CRYPT '(' expr ',' expr ')'
 		{		
@@ -742,63 +754,88 @@ func:
 		}
 	| RESET '(' VAR ')'
 		{
-			if(GetCurrentState(NULL) || inCase || inElseIf) Reset((unsigned char *)$3);
+			if(GetCurrentState(NULL) || inCase || inElseIf) Reset((char *)$3);
 		}
 	| KEY '(' VAR ')'
 		{
-			if(GetCurrentState(NULL) || inCase || inElseIf) Key((unsigned char *)$3);
+			if(GetCurrentState(NULL) || inCase || inElseIf) Key((char *)$3);
 		}
 	| PHPNEXT '(' VAR ')'
 		{
-			if(GetCurrentState(NULL) || inCase || inElseIf) Next((unsigned char *)$3);
+			if(GetCurrentState(NULL) || inCase || inElseIf) Next((char *)$3);
 		}
 	| PREV '(' VAR ')'
 		{
-			if(GetCurrentState(NULL) || inCase || inElseIf) Prev((unsigned char *)$3);
+			if(GetCurrentState(NULL) || inCase || inElseIf) Prev((char *)$3);
 		}
 	| END '(' VAR ')'
 		{
-			if(GetCurrentState(NULL) || inCase || inElseIf) End((unsigned char *)$3);
+			if(GetCurrentState(NULL) || inCase || inElseIf) End((char *)$3);
 		}
 	| CUSTOMFUNC '(' funcargs ')'
 		{
-			if(GetCurrentState(NULL) || inCase || inElseIf) RunFunc((unsigned char *)$1);
+			if(GetCurrentState(NULL) || inCase || inElseIf) RunFunc((char *)$1);
 		}
 	| UNSET '(' VAR ')'
 		{
-			if(GetCurrentState(NULL) || inCase || inElseIf) UnSet((unsigned char *)$3);
+			if(GetCurrentState(NULL) || inCase || inElseIf) UnSet((char *)$3);
+		}
+	| SETCOOKIE '(' expr ',' expr ',' expr ',' expr ',' expr ',' expr ')'
+		{
+			if(GetCurrentState(NULL) || inCase || inElseIf) SetCookie(6);
+		}
+
+	| SETCOOKIE '(' expr ',' expr ',' expr ',' expr ',' expr ')'
+		{
+			if(GetCurrentState(NULL) || inCase || inElseIf) SetCookie(5);
+		}
+	| SETCOOKIE '(' expr ',' expr ',' expr ',' expr ')'
+		{
+			if(GetCurrentState(NULL) || inCase || inElseIf) SetCookie(4);
+		}
+	| SETCOOKIE '(' expr ',' expr ',' expr ')'
+		{
+			if(GetCurrentState(NULL) || inCase || inElseIf) SetCookie(3);
+		}
+	| SETCOOKIE '(' expr ',' expr ')'
+		{
+			if(GetCurrentState(NULL) || inCase || inElseIf) SetCookie(2);
+		}
+	| SETCOOKIE '(' expr ')'
+		{
+			if(GetCurrentState(NULL) || inCase || inElseIf) SetCookie(1);
 		}
 
 val:
 	  LNUMBER
 		{
 			if(GetCurrentState(NULL) || inCase || inElseIf) 
-				Push((unsigned char *)$1,LNUMBER);
+				Push((char *)$1,LNUMBER);
 		}
 	| DNUMBER
 		{
 			if(GetCurrentState(NULL) || inCase || inElseIf) 
-				Push((unsigned char *)$1,DNUMBER);
+				Push((char *)$1,DNUMBER);
 		}
 	| VAR
 		{
 			if(GetCurrentState(NULL) || inCase || inElseIf) 
-				Push((unsigned char *)$1,VAR);
+				Push((char *)$1,VAR);
 		}
 	| STRING
 		{
 			if(GetCurrentState(NULL) || inCase || inElseIf) 
-				Push((unsigned char *)$1,STRING);
+				Push((char *)$1,STRING);
 		}
 	| ARRAY ']'
 		{
 			if(GetCurrentState(NULL) || inCase || inElseIf) 
-				Push((unsigned char *)$1,-ARRAY);
+				Push((char *)$1,-ARRAY);
 		}
 	| ARRAY expr ']'
 		{
 			if(GetCurrentState(NULL) || inCase || inElseIf) 
-				Push((unsigned char *)$1,ARRAY);
+				Push((char *)$1,ARRAY);
 		}
 
 %%

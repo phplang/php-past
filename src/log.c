@@ -19,8 +19,8 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: log.c,v 1.17 1996/05/16 15:29:23 rasmus Exp $ */
-#include <php.h>
+/* $Id: log.c,v 1.20 1996/08/19 13:14:38 rasmus Exp $ */
+#include "php.h"
 #include <stdlib.h>
 #if HAVE_UNISTD_H
 #include <unistd.h>
@@ -37,7 +37,7 @@
 #if HAVE_LIBMSQL
 #include <msql.h>
 #endif
-#include <parse.h>
+#include "parse.h"
 
 static long total_count=-1;
 static long today_count=-1;
@@ -675,6 +675,7 @@ void MsqlLog(char *filename) {
 	char lockfn[64];
 	m_result *result;
 	m_row record;
+	char hs=0,es=0,ls=0,bs=0;
 
 #if DEBUG
 	Debug("MsqlLog called for file: [%s]\n",filename?filename:"null");
@@ -715,6 +716,25 @@ void MsqlLog(char *filename) {
 	if(!filename || (filename && strlen(filename)<1)) fn = GetCurrentFilename();
 	else fn = filename;
 
+	if(fn && strlen(fn)>63) {
+		fn += strlen(fn)-63;
+	}
+	if(host && strlen(host)>63) {
+		hs = host[63];
+		host[63]='\0';	
+	}	
+	if(email && strlen(email)>63) {
+		es = email[63];
+		email[63] = '\0';
+	}
+	if(lref && strlen(lref)>63) {
+		ls = lref[63];
+		lref[63]='\0';
+	}
+	if(browser && strlen(browser)>63) {
+		bs = browser[63];
+		browser[63]='\0';
+	}
 	sprintf(query,"insert into log%ld values (%ld,'%s','%s','%s','%s','%s')",
 		uid,t,fn,host?host:"",email?email:"",lref?lref:"",browser?browser:"");
 #if DEBUG
@@ -813,6 +833,10 @@ void MsqlLog(char *filename) {
 #endif
 #endif
 	unlink(lockfn);
+	if(hs) host[63]=hs;
+	if(es) email[63]=es;
+	if(ls) lref[63]=ls;
+	if(bs) browser[63]=bs;
 #endif
 }
 

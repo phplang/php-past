@@ -19,18 +19,18 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: tmagic.c,v 1.1 1996/05/20 15:20:28 rasmus Exp $ */
-#include <php.h>
-#include <parse.h>
+/* $Id: tmagic.c,v 1.3 1996/07/18 18:20:30 rasmus Exp $ */
+#include "php.h"
+#include "parse.h"
 #if APACHE
 #include "http_protocol.h"
 #endif
 
 #if TEXT_MAGIC
-void text_magic(unsigned char *str) {
+void text_magic(char *str) {
 	VarTree *var;
 	int cnt;
-	unsigned char *new;
+	char *new;
 
 	var = GetVar("tm",NULL,0);
 	if(!var) {

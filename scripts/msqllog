@@ -1,8 +1,30 @@
 #!/bin/sh
-UID=`id $1 | cut -d= -f2 | cut -d\( -f1`
-echo "Creating tables for user id $UID..."
-msql phpfi <<EOF
-CREATE TABLE log$UID (
+UUID=`id $1 | cut -d= -f2 | cut -d\( -f1`
+if [ "$UUID" = "0" ]
+  then
+	echo -n "Username: "
+	read UUID
+	if grep "^$UUID\:.*\:.*\:.*\:.*\:.*\:.*" /etc/passwd > /dev/null
+	  then
+		echo "Username: $UUID, getting UID..."
+		USERNAME=$UUID
+		UUID="`grep \"^$UUID\:.*\:.*\:.*\:.*\:.*\:.*\" /etc/passwd \
+                        | gawk -F : '{print $3}'`"
+		echo "Done. $USERNAME = $UUID ."
+	fi
+	echo ''
+	echo -n Want to continue '(y/n)'?
+	read want
+	if [ "$want" = "n" ]
+	  then
+		exit 10
+	fi
+fi
+
+
+echo "Creating tables for user id $UUID..."
+/usr/local/mSQL/bin/msql phpfi <<EOF
+CREATE TABLE log$UUID (
 	timestamp	INT,
 	filename	CHAR(64),
 	host		CHAR(64),
@@ -10,7 +32,7 @@ CREATE TABLE log$UID (
 	lref		CHAR(64),
 	browser		CHAR(64)
 )\g
-CREATE TABLE last$UID (
+CREATE TABLE last$UUID (
 	filename	CHAR(64) NOT NULL PRIMARY KEY,
 	timestamp	INT,
 	total		INT,
@@ -21,4 +43,3 @@ CREATE TABLE last$UID (
 	lref		CHAR(64),
 	browser		CHAR(64)
 )\g
-EOF

@@ -19,10 +19,10 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: mime.c,v 1.8 1996/05/16 15:29:24 rasmus Exp $ */
+/* $Id: mime.c,v 1.10 1996/07/11 14:12:46 rasmus Exp $ */
 #include <stdlib.h>
-#include <php.h>
-#include <parse.h>
+#include "php.h"
+#include "parse.h"
 
 #if APACHE
 static char *UploadTmpDir=NULL;
@@ -191,7 +191,7 @@ void mime_split(char *buf, int cnt, char *boundary) {
 					bytes=fwrite(ptr,1,loc-ptr-4,fp);
 					fclose(fp);		
 					if(bytes<(loc-ptr-4)) {
-						Error("Only %d bytes were written, expected to write %ld",loc-ptr-4);
+						Error("Only %d bytes were written, expected to write %ld",bytes,loc-ptr-4);
 					}
 					Push(fn,STRING);
 					SetVar(namebuf,0,0);

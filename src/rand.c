@@ -19,10 +19,10 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: rand.c,v 1.3 1996/03/19 15:33:40 rasmus Exp $ */
+/* $Id: rand.c,v 1.4 1996/07/11 14:12:49 rasmus Exp $ */
 #include <stdlib.h>
-#include <php.h>
-#include <parse.h>
+#include "php.h"
+#include "parse.h"
 
 #ifndef RAND_MAX 
 #define RAND_MAX	32767

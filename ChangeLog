@@ -1,5 +1,80 @@
 PHP/FI CHANGE LOG                                                    ChangeLog
 |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Aug. 23 Version 2.0b5
+- Add StripSlashes() call to crypt() function
+- Check for fields longer than 63 chars in mSQL logging code since latest
+  versions of mSQL no longer auto-truncate
+- Added PassThru() function <cal@zls.com>
+- Fix ImageGif to make it able to return a GIF directly <cal@zls.com>
+- Lots of changes to documentation <libs@cityshop.com>
+- Fix potential core dumps in msql result functions
+- Added clock.html example program <cal@zls.com>
+- Made parser ignore CR/LF's if they come before any content
+  (this should make Header() function a bit easier to work with)
+- Set content-type early on in mod_php.c
+
+Aug. 7 Version 2.0b4
+- Added 'F','A' and 'a' paramters to Date() function to do full month names,
+  AM/PM and am/pm respectively
+- Added UrlDecode() function
+- Fix $PATH_DIR bug (again)
+- Add snippet of code to allow people to change HTTP/1.0 # string
+  header line using the Header function
+- Fix ParseEscapes function such that escaping chars that do not need to be
+  escaped gets ignored and only the char is used
+- PATH_DIR wasn't getting set correctly if PHP_ROOT_DIR was defined - fixed
+- Added optional variable tracking mechanism - see php.h 
+  <hekc@phoenix.cis.mcmaster.ca>
+- Added code to set $PHP_AUTH_USER, $PHP_AUTH_PW and $PHP_AUTH_TYPE
+  if client sends an authorization header
+- Make auth vars visible on info screen
+- Fix $ problem in pg95 driver
+- Added ReadLink() and LinkInfo() functions <adelino@infologia.pt>
+- Fix DecHex() bug
+- Altered pg_result to take field names -and- indices <asussman@vidya.com>
+- Fix counter-related problem which caused user-defined functions which
+  returned within an if() back into another if() to print an
+  "Expecting Elseif" parse error.  (Added test case to check for this)
+
+July 18 Version 2.0b3
+- Fix typo in file upload code
+- Add msqlListFields() function
+- Fix brace bug <zeller@stud.fh-heilbronn.de>
+- Add pg_ErrorMessage() function <asussman@vidya.com>
+- Added code to close all open files at the end of a script
+- Changed return type of Chr() function from integer to string
+- Fix broken Log10() function
+- Add Link(), Symlink() and RmDir() functions <fegli@goldnet.ch>
+- Fix EndWhile semi-colon bug
+- Fix local include references
+- Update README file to reflect mailing list software change
+- Added Virtual() function <akosut@organic.com>
+- Added ImageSX() and ImageSY() functions <geek+@cmu.edu>
+- msqllog enhancement <juhas@bassie.info.tampere.fi>
+- Fix email/password request screens to not fall through to URL
+- Fix $PATH_DIR bug
+- Convert a '.' in a GET/POST/Cookie variable to an underscore
+- Fix file descriptor check in mod_php.c
+- Fix UrlEncode bug
+- Fix inconsistency in return value of file* functions
+- Clean up (unsigned char *) warnings
+
+June 13 Version 2.0b2
+- Fix core dump problem related to the PATH_TRANSLATED variable
+- Make cookie code compatible with Apache 1.0.x servers
+
+June. 12 Version 2.0b1
+- Fix bug in multiply-called while loops in included files 
+  (Thanks to Jeff Allen <jeff@Bunyip.Com>)
+- Fix %c handling bug in FormatCheck() function
+- Fix obscure associative array bug when returning from a function
+- Fix over-zealous pool clearing which caused problems with nested function
+  calls in some cases
+- Fix bug related to having multiple dbm file handles open concurrently
+- Add 'l' option to date() function to print full name of a day
+- Added SetCookie function
+- Added automatic cookie handling similar to GET/POST data handling
+
 May. 31 Version 1.99s
 - Fix Header problem caused by the buffered output code change (patch r1)
 - Change direct rputs() call to PUTS macro in lex.c (patch r2)

@@ -1,4 +1,4 @@
-# $Id: Makefile.in,v 1.26 1996/05/27 13:01:51 rasmus Exp $
+# $Id: Makefile.in,v 1.28 1996/08/21 17:03:17 rasmus Exp $
 #
 # Makefile for PHP/FI
 # Copyright 1995,1996 Rasmus Lerdorf
@@ -54,9 +54,9 @@ DISTFILES = ChangeLog README COPYING \
 	src/string.c src/msql.c src/pg95.c src/regexpr.c src/regexpr.h src/reg.c src/exec.c \
 	src/file.c src/crypt.c src/head.c src/info.c src/post.c src/type.c \
 	src/conf.c src/acc.c src/local.c src/dns.c src/log.c src/sort.c src/dir.c \
-	src/rand.c src/gd.c examples/log.html examples/log.readme src/parse.c \
-	src/mime.c src/fsock.c src/microtime.c src/mod_php.c src/mod_php.h src/pool.c \
-	src/tmagic.c \
+	src/rand.c src/gd.c examples/log.html examples/log.readme examples/clock.html \
+	src/parse.c src/mime.c src/fsock.c src/microtime.c src/mod_php.c src/mod_php.h \
+	src/pool.c src/tmagic.c \
 	scripts/msqllog \
 	examples/url.readme examples/url_add.html examples/url_cat.html \
 	examples/url_main.html examples/demo_main.html examples/demo_dir.html \
@@ -83,7 +83,7 @@ DISTFILES = ChangeLog README COPYING \
 	test/lang/005.tst test/lang/006.tst test/lang/007.tst test/lang/008.tst \
 	test/lang/009.tst test/lang/010.tst test/lang/011.tst test/lang/012.tst \
 	test/lang/013.tst test/lang/014.tst test/lang/015.tst test/lang/015.inc \
-	test/lang/016.tst test/lang/016.inc \
+	test/lang/016.tst test/lang/016.inc test/lang/017.tst \
 	test/pg95/001.tst test/pg95/002.tst test/pg95/003.tst test/pg95/004.tst \
 	test/pg95/005.tst test/pg95/README
 

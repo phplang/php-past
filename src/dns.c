@@ -19,9 +19,9 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: dns.c,v 1.2 1996/05/30 14:47:36 rasmus Exp $ */
-#include <php.h>
-#include <parse.h>
+/* $Id: dns.c,v 1.3 1996/07/11 14:12:38 rasmus Exp $ */
+#include "php.h"
+#include "parse.h"
 #ifndef NT 
 #include <sys/socket.h>
 #include <netinet/in.h>
