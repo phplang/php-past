@@ -19,37 +19,46 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: reg.c,v 1.11 1996/07/18 18:20:28 rasmus Exp $ */
+/* $Id: reg.c,v 1.14 1996/09/22 23:30:05 rasmus Exp $ */
 #include <stdlib.h>
-#include "regexpr.h"
 #include "php.h"
 #include "parse.h"
 
+#define  NS  10
+
 /*
- * reg_match(regular_expression, argument_string)
- *
- * Pushes non-zero if regular expression was met and zero otherwise
- *
- * This only matches the regular epxression against the start of the 
- * argument string.
+ * reg_eprint - convert error number to name
  */
-void RegMatch(char *reg_name) {
+char *reg_eprint(int err) {
+	static char epbuf[150];
+	size_t len;
+
+#ifdef REG_ITOA
+	len = regerror(REG_ITOA|err, (regex_t *)NULL, epbuf, sizeof(epbuf));
+#else
+	len = regerror(err, (regex_t *)NULL, epbuf, sizeof(epbuf));
+#endif
+	if(len > sizeof(epbuf)) {
+		epbuf[sizeof(epbuf)]='\0';
+	}
+	return(epbuf);
+}
+
+void RegMatch(char *reg_name, int search) {
 	Stack *s;	
-	struct re_pattern_buffer exp;
-	regexp_registers_t regs;
+	regex_t re;
+	regmatch_t subs[NS];
+	int err, len, i, l;
+	char erbuf[150];
 	char *string;
 	char temp[1] = { '\0' };
 	char temp2[16];
 	char *temp3=NULL;
-	char fastmap[256];
-	char *cp, *buf=NULL;
-	int ret, start, end, i, l;
- 
-	exp.allocated = 0;
-	exp.buffer = 0;
-	exp.translate = NULL;
-	exp.fastmap = fastmap;
-
+	int copts = 0;
+	off_t start, end;
+	char *buf=NULL;
+	char *pattern=NULL;
+	
 	s = Pop();
 	if(!s) {
 		Error("Stack error in reg_match");
@@ -63,35 +72,48 @@ void RegMatch(char *reg_name) {
 		Error("Stack error in reg_match");
 		return;
 	}
-	if(s->type==STRING)
-		cp = php_re_compile_pattern(s->strval,strlen(s->strval),&exp);
-	else {
+	if(!search) {
+		if(*(s->strval) != '^') {
+			pattern = emalloc(1,strlen(s->strval)+2);
+			sprintf(pattern,"^%s",s->strval);
+		}
+	}
+	if(s->type == STRING) {
+		err = regcomp(&re, (pattern)?pattern:s->strval, copts);
+	} else {
 		temp3 = emalloc(1,sizeof(char)*2);
 		sprintf(temp3,"%c",(int)s->intval);
-		cp = php_re_compile_pattern(temp3,strlen(temp3),&exp);
+		err = regcomp(&re, temp3, copts);
 	}
-		
-	if(cp) {
-		Error("reg_match error: %s",cp);
-		Push("0",LNUMBER);
-		return;	
+	if(err) {
+		len = regerror(err, &re, erbuf, sizeof(erbuf));
+		Error("Regex error %s, %d/%d `%s'\n", reg_eprint(err), len, sizeof(erbuf), erbuf);
+		regfree(&re);
+		return;
 	}	
-	php_re_compile_fastmap(&exp);
-	regs = emalloc(1,sizeof(struct re_registers));
+	err = regexec(&re, string, (size_t)NS, subs, 0);
+	if(err && err!=REG_NOMATCH) {
+		len = regerror(err, &re, erbuf, sizeof(erbuf));
+		Error("Regex error %s, %d/%d `%s'\n", reg_eprint(err), len, sizeof(erbuf), erbuf);
+		regfree(&re);
+		return;
+	}
 
-	ret = php_re_match(&exp,string,strlen(string),0,regs);
-	if(reg_name) {
-		l = strlen(string)+1;
-		buf = emalloc(1,l);
-		for(i=0;i<10;i++) {
+	l = strlen(string)+1;
+	len = (int)(subs[0].rm_eo - subs[0].rm_so);
+	if(len<0 || len>=l) len=0;
+	if(reg_name && err != REG_NOMATCH) {
+		if(l>150) {
+			buf = emalloc(1,l);
+		} else {
+			buf = erbuf;
+		}
+		for(i=0; i < NS; i++) {
 			sprintf(temp2,"%d",i);
 			Push(temp2,STRING);
 			*buf='\0';
-			start = regs->start[i];
-			end = regs->end[i];
-#if DEBUG
-			Debug("string=[%s], i=%d, start=%d, end=%d\n",string,i,start,end);
-#endif
+			start = subs[i].rm_so;
+			end = subs[i].rm_eo;
 			if(start!=-1 && end>0 && start<l && end<l && start<end) {
 				strncat(buf,&string[start],end-start);
 				Push(buf,STRING);
@@ -101,85 +123,22 @@ void RegMatch(char *reg_name) {
 			SetVar(reg_name,2,0); 
 		}
 	}
-	if(ret<0) {
-		Push("0",LNUMBER);
-	} else {
-		sprintf(temp2,"%d",ret);
-		Push(temp2,LNUMBER);
-	}
-}
-
-/*
- * reg_search(regular_expression, argument_string)
- * 
- * Searches the argument string for any matches to the regular expression
- * Pushes the part of the argument string that first matches the expression
- * If no match, a zero-length string is pushed
- */
-void RegSearch(char *reg_name) {
-	Stack *s;	
-	struct re_pattern_buffer exp;
-	regexp_registers_t regs;
-	char *string;
-	char temp[1] = { '\0' };
-	char temp2[16];
-	char fastmap[256];
-	char *cp, *buf;
-	int ret, start, end, i;
- 
-	exp.allocated = 0;
-	exp.buffer = 0;
-	exp.translate = NULL;
-	exp.fastmap = fastmap;
-
-	s = Pop();
-	if(!s) {
-		Error("Stack error in reg_match");
-		return;
-	}
-	if(s->strval) string = (char *)estrdup(1,s->strval);
-	else string = temp;
-
-	s = Pop();
-	if(!s) {
-		Error("Stack error in reg_match");
-		return;
-	}
-	cp = php_re_compile_pattern(s->strval,strlen(s->strval),&exp);
-	if(cp) {
-		Error("reg_match error: %s",cp);
-		Push("0",LNUMBER);
-		return;	
-	}	
-	php_re_compile_fastmap(&exp);
-	regs = emalloc(1,sizeof(struct re_registers));
-	ret = php_re_search(&exp,string,strlen(string),0,strlen(string),regs);
-	if(ret<0) {
-		Push("",STRING);
-	} else {
-		buf = emalloc(1,strlen(string)+1);
-		if(reg_name) {
-			for(i=0;i<10;i++) {
-				sprintf(temp2,"%d",i);
-				Push(temp2,STRING);
-				*buf='\0';
-				start = regs->start[i];
-				end = regs->end[i];
-#if DEBUG
-				Debug("string=[%s], i=%d, start=%d, end=%d\n",string,i,start,end);
-#endif
-				if(start!=-1) {
-					strncat(buf,&string[start],end-start);
-					Push(buf,STRING);
-				} else {
-					Push("",STRING);
-				}
-				SetVar(reg_name,2,0); 
-			}
+	
+	if(!search) {	
+		if(err==REG_NOMATCH) {
+			Push("0",LNUMBER);
+		} else {
+			sprintf(temp2,"%d",len);
+			Push(temp2,LNUMBER);
 		}
-		strcpy(buf,&string[ret]);
-		Push(buf,STRING);
+	} else {
+		if(err==REG_NOMATCH) {
+			Push("",STRING);
+		} else {
+			Push(&string[subs[0].rm_so],STRING);
+		}
 	}
+	regfree(&re);
 }
 
 /*
@@ -202,14 +161,14 @@ void RegReplace(void) {
 
 	s = Pop();
 	if(!s) {
-		Error("Stack error in reg_match");
+		Error("Stack error in reg_replace");
 		return;
 	}
 	if(s->strval) string = (char *)estrdup(1,s->strval);
 	else string = temp;
 	s = Pop();
 	if(!s) {
-		Error("Stack error in reg_match");
+		Error("Stack error in reg_replace");
 		return;
 	}
 	if(s->type==STRING)
@@ -224,7 +183,7 @@ void RegReplace(void) {
 	
 	s = Pop();
 	if(!s) {
-		Error("Stack error in reg_match");
+		Error("Stack error in reg_replace");
 		return;
 	}
 	if(s->type==STRING) {
@@ -243,42 +202,61 @@ void RegReplace(void) {
 }
 
 char *_RegReplace(char *pattern, char *replace, char *string) {
-	struct re_pattern_buffer exp;
-	struct re_registers regs;
 	char *buf, *nbuf;
-	char fastmap[256];
-	char *cp;
 	char o;
-	int i,l,ll,new_l,allo,ret;
-
-	exp.allocated = 0;
-	exp.buffer = 0;
-	exp.translate = NULL;
-	exp.fastmap = fastmap;
+	int i,l,ll,new_l,allo;
+	regex_t re;
+	regmatch_t subs[NS];
+	char erbuf[150];
+	int err, len;
+#ifndef REG_STARTEND
+	char oo;
+#endif
 
 	l = strlen(string);
 	if(!l) return(string);
-	cp = php_re_compile_pattern(pattern,strlen(pattern),&exp);
-	if(cp) {
-		Error("reg_match error: %s",cp);
+
+	err = regcomp(&re, pattern, 0);
+	if(err) {
+		len = regerror(err, &re, erbuf, sizeof(erbuf));
+		Error("Regex error %s, %d/%d `%s'\n", reg_eprint(err), len, sizeof(erbuf), erbuf);
+		regfree(&re);
 		return((char *)-1);
 	}	
-	php_re_compile_fastmap(&exp);
+
 	buf = emalloc(1,l*2*sizeof(char)+1);
 	if(!buf) {
 		Error("Unable to allocate memory in _RegReplace");
+		regfree(&re);
 		return((char *)-1);
 	}
-	ret = 0;
+	err = 0;
 	i = 0;
 	allo = 2*l+1;
 	buf[0] = '\0';	
 	ll = strlen(replace);
-	while(ret>=0) {
-		ret = php_re_search(&exp,string,l,i,l-i,&regs);
-		if(ret>=0) {
-			o = string[regs.start[0]];
-			string[regs.start[0]]='\0';
+	while(!err) {
+#ifdef REG_STARTEND
+		subs[0].rm_so = i;
+		subs[0].rm_eo = l;
+		err = regexec(&re, string, (size_t)NS, subs, REG_STARTEND);
+#else
+		oo = string[l];
+		string[l] = '\0';
+		err = regexec(&re, &string[i], (size_t)NS, subs, 0);
+		string[l] = oo;				
+		subs[0].rm_so += i;
+		subs[0].rm_eo += i;
+#endif
+		if(err && err!=REG_NOMATCH) {
+			len = regerror(err, &re, erbuf, sizeof(erbuf));
+			Error("Regex error %s, %d/%d `%s'\n", reg_eprint(err), len, sizeof(erbuf), erbuf);
+			regfree(&re);
+			return((char *)-1);
+		}
+		if(!err) {
+			o = string[subs[0].rm_so];
+			string[subs[0].rm_so]='\0';
 			new_l = strlen(buf)+strlen(replace)+strlen(&string[i]);
 			if(new_l > allo) {
 				nbuf = emalloc(1,1+allo+2*new_l);
@@ -289,11 +267,8 @@ char *_RegReplace(char *pattern, char *replace, char *string) {
 			strcat(buf,&string[i]);
 			strcat(buf,replace);
 
-			string[regs.start[0]] = o;
-			i = regs.end[0];
-#if DEBUG
-			Debug("Match buf=[%s]\n",buf);
-#endif
+			string[subs[0].rm_so] = o;
+			i = subs[0].rm_eo;
 		} else {
 			new_l = strlen(buf)+strlen(&string[i]);
 			if(new_l > allo) {
@@ -304,7 +279,301 @@ char *_RegReplace(char *pattern, char *replace, char *string) {
 			}	
 			strcat(buf,&string[i]);
 		}	
-		if(regs.start[0]==0 && regs.end[0]==0) break;
+		if(subs[0].rm_so==0 && subs[0].rm_eo==0) break;
 	}
+	regfree(&re);
+	return(buf);
+}
+
+void EReg(char *reg_name, int icase) {
+	Stack *s;	
+	regex_t re;
+	regmatch_t subs[NS];
+	int err, len, i, l;
+	char erbuf[150];
+	char *string;
+	char temp[1] = { '\0' };
+	char temp2[16];
+	char *temp3=NULL;
+	int copts = 0;
+	off_t start, end;
+	char *buf=NULL;
+	
+	s = Pop();
+	if(!s) {
+		Error("Stack error in ereg");
+		return;
+	}
+	if(s->strval) string = (char *)estrdup(1,s->strval);
+	else string = temp;
+
+	s = Pop();
+	if(!s) {
+		Error("Stack error in ereg");
+		return;
+	}
+	if(!reg_name) copts |= REG_NOSUB;
+	if(icase) copts |= REG_ICASE;
+	if(s->type == STRING) {
+		err = regcomp(&re, s->strval, REG_EXTENDED | copts);
+	} else {
+		temp3 = emalloc(1,sizeof(char)*2);
+		sprintf(temp3,"%c",(int)s->intval);
+		err = regcomp(&re, temp3, copts);
+	}
+	if(err) {
+		len = regerror(err, &re, erbuf, sizeof(erbuf));
+		Error("Regex error %s, %d/%d `%s'\n", reg_eprint(err), len, sizeof(erbuf), erbuf);
+		regfree(&re);
+		return;
+	}	
+	err = regexec(&re, string, (size_t)NS, subs, 0);
+	if(err && err!=REG_NOMATCH) {
+		len = regerror(err, &re, erbuf, sizeof(erbuf));
+		Error("Regex error %s, %d/%d `%s'\n", reg_eprint(err), len, sizeof(erbuf), erbuf);
+		regfree(&re);
+		return;
+	}
+
+	len = 1;
+	if(reg_name && err != REG_NOMATCH) {
+		len = (int)(subs[0].rm_eo - subs[0].rm_so);
+		l = strlen(string)+1;
+		if(l>150) {
+			buf = emalloc(1,l);
+		} else {
+			buf = erbuf;
+		}
+		for(i=0; i < NS; i++) {
+			sprintf(temp2,"%d",i);
+			Push(temp2,STRING);
+			*buf='\0';
+			start = subs[i].rm_so;
+			end = subs[i].rm_eo;
+			if(start!=-1 && end>0 && start<l && end<l && start<end) {
+				strncat(buf,&string[start],end-start);
+				Push(buf,STRING);
+			} else {
+				Push("",STRING);
+			}
+			SetVar(reg_name,2,0); 
+		}
+	}
+	
+	if(err==REG_NOMATCH) {
+		Push("0",LNUMBER);
+	} else {
+		if(len==0) len=1;
+		sprintf(temp2,"%d",len);
+		Push(temp2,LNUMBER);
+	}
+	regfree(&re);
+}
+
+void ERegReplace(void) {
+	Stack *s;	
+	char *pattern;
+	char *string;
+	char *replace;
+	char temp[1] = { '\0' };
+	char *ret;
+
+	s = Pop();
+	if(!s) {
+		Error("Stack error in ereg_replace");
+		return;
+	}
+	if(s->strval) string = (char *)estrdup(1,s->strval);
+	else string = temp;
+	s = Pop();
+	if(!s) {
+		Error("Stack error in ereg_replace");
+		return;
+	}
+	if(s->type==STRING)
+		if(s->strval) replace = (char *)estrdup(1,s->strval);
+		else replace = temp;
+	else {
+		if(s->strval) {
+			replace = emalloc(1,2*sizeof(char));
+			sprintf(replace,"%c",(int)s->intval);
+		} else replace = temp;
+	}
+	
+	s = Pop();
+	if(!s) {
+		Error("Stack error in ereg_replace");
+		return;
+	}
+	if(s->type==STRING) {
+		if(s->strval) pattern = (char *)estrdup(1,s->strval);
+		else pattern = temp;
+	} else {
+		pattern = emalloc(1,2*sizeof(char));
+		sprintf(pattern,"%c",(int)s->intval);
+	}
+	ret = _ERegReplace(pattern, replace, string, 0);
+	if(ret==(char *)-1) {	
+		Push("0",LNUMBER);
+		return;	
+	}
+	Push(ret,STRING);
+}
+
+void ERegiReplace(void) {
+	Stack *s;	
+	char *pattern;
+	char *string;
+	char *replace;
+	char temp[1] = { '\0' };
+	char *ret;
+
+	s = Pop();
+	if(!s) {
+		Error("Stack error in eregi_replace");
+		return;
+	}
+	if(s->strval) string = (char *)estrdup(1,s->strval);
+	else string = temp;
+	s = Pop();
+	if(!s) {
+		Error("Stack error in eregi_replace");
+		return;
+	}
+	if(s->type==STRING)
+		if(s->strval) replace = (char *)estrdup(1,s->strval);
+		else replace = temp;
+	else {
+		if(s->strval) {
+			replace = emalloc(1,2*sizeof(char));
+			sprintf(replace,"%c",(int)s->intval);
+		} else replace = temp;
+	}
+	
+	s = Pop();
+	if(!s) {
+		Error("Stack error in eregi_replace");
+		return;
+	}
+	if(s->type==STRING) {
+		if(s->strval) pattern = (char *)estrdup(1,s->strval);
+		else pattern = temp;
+	} else {
+		pattern = emalloc(1,2*sizeof(char));
+		sprintf(pattern,"%c",(int)s->intval);
+	}
+	ret = _ERegReplace(pattern, replace, string,1);
+	if(ret==(char *)-1) {	
+		Push("0",LNUMBER);
+		return;	
+	}
+	Push(ret,STRING);
+}
+
+char *_ERegReplace(char *pattern, char *replace, char *string, int icase) {
+	char *buf, *nbuf;
+	char o;
+	int i,ni,l,ll,new_l,allo;
+	regex_t re;
+	regmatch_t subs[NS];
+	char erbuf[150];
+	int err, len, copts=0;
+#ifndef REG_STARTEND
+	char oo;
+#endif
+
+	l = strlen(string);
+	if(!l) return(string);
+
+	if(icase) copts = REG_ICASE;
+#if DEBUG
+	Debug("ereg_replace pattern = [%s]\n",pattern);
+#endif
+	err = regcomp(&re, pattern, REG_EXTENDED | copts);
+	if(err) {
+		len = regerror(err, &re, erbuf, sizeof(erbuf));
+		Error("Regex error %s, %d/%d `%s'\n", reg_eprint(err), len, sizeof(erbuf), erbuf);
+		regfree(&re);
+		return((char *)-1);
+	}	
+
+	buf = emalloc(1,l*2*sizeof(char)+1);
+	if(!buf) {
+		Error("Unable to allocate memory in _RegReplace");
+		regfree(&re);
+		return((char *)-1);
+	}
+	err = 0;
+	i = 0;
+	ni = 0;
+	allo = 2*l+1;
+	buf[0] = '\0';	
+	ll = strlen(replace);
+	while(!err) {
+#ifdef REG_STARTEND
+		subs[0].rm_so = i;
+		subs[0].rm_eo = l;
+		err = regexec(&re, string, (size_t)NS, subs, REG_STARTEND);
+#else
+		oo = string[l];
+		string[l] = '\0';
+		err = regexec(&re, &string[i], (size_t)NS, subs, 0);
+		string[l] = oo;				
+		subs[0].rm_so += i;
+		subs[0].rm_eo += i;
+#endif
+		if(err && err!=REG_NOMATCH) {
+			len = regerror(err, &re, erbuf, sizeof(erbuf));
+			Error("Regex error %s, %d/%d `%s'\n", reg_eprint(err), len, sizeof(erbuf), erbuf);
+			regfree(&re);
+			return((char *)-1);
+		}
+		if(!err) {
+			o = string[subs[0].rm_so];
+			string[subs[0].rm_so]='\0';
+			new_l = strlen(buf)+strlen(replace)+strlen(&string[i]);
+			if(new_l > allo) {
+				nbuf = emalloc(1,1+allo+2*new_l);
+				allo = 1+allo + 2*new_l;
+				strcpy(nbuf,buf);
+				buf=nbuf;
+			}	
+			strcat(buf,&string[i]);
+			strcat(buf,replace);
+			if(subs[0].rm_so == subs[0].rm_eo) {
+				if(subs[0].rm_so >= l) break;
+				ni = subs[0].rm_eo + 1;	
+			} else {
+				ni = subs[0].rm_eo;
+			}
+			string[subs[0].rm_so] = o;
+			
+		} else {
+			new_l = strlen(buf)+strlen(&string[i]);
+			if(new_l > allo) {
+				nbuf = emalloc(1,1+allo+2*new_l);
+				allo = 1+allo + 2*new_l;
+				strcpy(nbuf,buf);
+				buf=nbuf;
+			}	
+			strcat(buf,&string[i]);
+		}	
+#if DEBUG
+		Debug("so=%d eo=%d\n",subs[0].rm_so,subs[0].rm_eo);
+#endif
+		if(*pattern=='^') {
+			new_l = strlen(buf)+strlen(&string[subs[0].rm_eo]);
+			if(new_l > allo) {
+				nbuf = emalloc(1,1+allo+2*new_l);
+				allo = 1+allo + 2*new_l;
+				strcpy(nbuf,buf);
+				buf=nbuf;
+			}	
+			strcat(buf,&string[subs[0].rm_eo]);
+			break;
+		}
+		i = ni;
+	}
+	regfree(&re);
 	return(buf);
 }

@@ -19,13 +19,13 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: main.c,v 1.32 1996/08/27 03:18:46 rasmus Exp $ */
+/* $Id: main.c,v 1.33 1996/09/19 04:50:00 rasmus Exp $ */
 #include <stdlib.h>
 #include "php.h"
-#if HAVE_UNISTD_H
+#ifdef HAVE_UNISTD_H
 #include <unistd.h>
 #endif
-#if HAVE_SETLOCALE
+#ifdef HAVE_SETLOCALE
 #include <locale.h>
 #endif
 #if APACHE
@@ -52,7 +52,7 @@ int main(int argc, char **argv) {
 	s = getenv("PATH_TRANSLATED");
 	if(!s) no_httpd=1;
 
-#if HAVE_SETLOCALE
+#ifdef HAVE_SETLOCALE
 	setlocale(LC_ALL,"");
 #endif
 
@@ -73,7 +73,7 @@ int main(int argc, char **argv) {
 	php_init_file();
 	php_init_head();
 	php_init_dir();
-#if HAVE_LIBGD
+#ifdef HAVE_LIBGD
 	php_init_gd();
 #endif
 	php_init_cond();
@@ -135,7 +135,7 @@ int main(int argc, char **argv) {
 int apache_php_module_main(request_rec *r, php_module_conf *conf, int fd) {
 	char *last_arg,*s;
 
-#if HAVE_SETLOCALE
+#ifdef HAVE_SETLOCALE
 	setlocale(LC_ALL,"");
 #endif
 	php_rqst = r;
@@ -156,17 +156,17 @@ int apache_php_module_main(request_rec *r, php_module_conf *conf, int fd) {
 	php_init_switch();
 	php_init_db();
 	php_init_while();
-#if HAVE_LIBMSQL
+#ifdef HAVE_LIBMSQL
 	php_init_msql();
 #endif
-#if HAVE_LIBPQ
+#ifdef HAVE_LIBPQ
 	php_init_pg95();
 #endif
 	php_init_file();
 	php_init_head();
 	php_init_dir();
 	php_init_mime(conf);
-#if HAVE_LIBGD
+#ifdef HAVE_LIBGD
 	php_init_gd();
 #endif
 	php_init_cond();

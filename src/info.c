@@ -19,11 +19,11 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: info.c,v 1.20 1996/08/05 16:39:16 rasmus Exp $ */
+/* $Id: info.c,v 1.21 1996/09/19 04:49:57 rasmus Exp $ */
 #include "php.h"
 #include "parse.h"
 #include <stdlib.h>
-#if HAVE_UNISTD_H
+#ifdef HAVE_UNISTD_H
 #include <unistd.h>
 #endif
 #include <pwd.h>
@@ -254,16 +254,16 @@ void Info(void) {
 	sprintf(buf,"<b>Access Logging enabled using mSQL in db:</b> <i>%s</i><br>\n",getlogdir());
 	PUTS(buf);
 #endif
-#if HAVE_LIBMSQL
+#ifdef HAVE_LIBMSQL
 	PUTS("<b>mSQL support enabled</b><br>\n");
 #endif
-#if HAVE_LIBPQ
+#ifdef HAVE_LIBPQ
 	PUTS("<B>Postgres95 support enabled</b><br>\n");
 #endif
-#if GDBM
+#ifdef GDBM
 	PUTS("<b>GDBM support enabled</b><br>\n");
 #else
-#if NDBM
+#ifdef NDBM
 	PUTS("<b>NDBM support enabled</b><br>\n");
 #else
 	PUTS("<b>FlatFile support enabled</b><br>\n");
@@ -272,7 +272,7 @@ void Info(void) {
 #if APACHE
 	PUTS("<b>Apache module support enabled</b><br>\n");
 #endif
-#if HAVE_LIBGD
+#ifdef HAVE_LIBGD
 	PUTS("<b>GD support enabled</b><br>\n");
 #endif
 #if PHPFASTCGI

@@ -19,9 +19,9 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: date.c,v 1.13 1996/08/27 01:25:12 rasmus Exp $ */
+/* $Id: date.c,v 1.14 1996/09/19 04:49:52 rasmus Exp $ */
 #include <stdlib.h>
-#if TM_IN_SYS_TIME
+#ifdef TM_IN_SYS_TIME
 #include <sys/time.h>
 #else
 #include <time.h>

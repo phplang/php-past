@@ -19,22 +19,22 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: log.c,v 1.20 1996/08/19 13:14:38 rasmus Exp $ */
+/* $Id: log.c,v 1.21 1996/09/19 04:49:59 rasmus Exp $ */
 #include "php.h"
 #include <stdlib.h>
-#if HAVE_UNISTD_H
+#ifdef HAVE_UNISTD_H
 #include <unistd.h>
 #endif
-#if HAVE_SYS_FILE_H
+#ifdef HAVE_SYS_FILE_H
 #ifndef HAVE_LOCKF
-#if HAVE_FLOCK
+#ifdef HAVE_FLOCK
 #include <sys/file.h>
 #endif
 #endif
 #endif
 #include <time.h>
 #include <errno.h>
-#if HAVE_LIBMSQL
+#ifdef HAVE_LIBMSQL
 #include <msql.h>
 #endif
 #include "parse.h"
@@ -753,10 +753,10 @@ void MsqlLog(char *filename) {
 	/* Lock database */
 	lockfd = open(lockfn,O_RDWR|O_CREAT,0644);
 	if(lockfd) {
-#if HAVE_LOCKF
+#ifdef HAVE_LOCKF
 		lockf(lockfd,F_LOCK,0);
 #else
-#if HAVE_FLOCK
+#ifdef HAVE_FLOCK
 		flock(lockfd,LOCK_EX);
 #endif
 #endif
@@ -823,11 +823,11 @@ void MsqlLog(char *filename) {
 		Debug("Query failed! (%s)\n",msqlErrMsg);
 #endif
 	}
-#if HAVE_LOCKF
+#ifdef HAVE_LOCKF
 	lockf(lockfd,F_ULOCK,0);
 	close(lockfd);
 #else
-#if HAVE_FLOCK
+#ifdef HAVE_FLOCK
 	flock(lockfd,LOCK_UN);
 	close(lockfd);
 #endif

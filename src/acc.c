@@ -19,21 +19,20 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: acc.c,v 1.21 1996/07/15 14:59:28 rasmus Exp $ */
+/* $Id: acc.c,v 1.23 1996/09/22 22:07:50 rasmus Exp $ */
 #include "php.h"
 #include <stdio.h>
 #include <stdlib.h>
-#if HAVE_UNISTD_H
+#ifdef HAVE_UNISTD_H
 #include <unistd.h>
 #endif
 #include <string.h>
-#if HAVE_CRYPT_H
+#ifdef HAVE_CRYPT_H
 #include <crypt.h>
 #endif
 #include <ctype.h>
 #include <errno.h>
 #include "parse.h"
-#include "regexpr.h"
 #if APACHE
 #include "http_protocol.h"
 #endif
@@ -271,7 +270,7 @@ void ChkPostVars(char *db) {
 			if(ret) return;
 			op = 1;
 		}
-#if HAVE_CRYPT
+#ifdef HAVE_CRYPT
 		_dbmReplace(db,"cfg-passwd",(char *)crypt(var->strval,"xy"));
 #else
 		_dbmReplace(db,"cfg-passwd",var->strval);
@@ -362,21 +361,17 @@ void PostToAccessStr(char *db) {
 
 int CheckAccess(char *filename, long uid) {
 	VarTree *var;
-	char *s, *ss, *cp;
+	char *s, *ss;
 	char db[512], temp[512];
 	AccessInfo *actop, *ac;
-	struct re_pattern_buffer exp;
-	struct re_registers regs;
-	char fastmap[256];
 	struct stat sb;
 	int ret, allow=0;
 	static char *email_URL=NULL, *passwd_URL=NULL, *ban_URL=NULL;
 	int es, retu=0;
-
-	exp.allocated = 0;
-	exp.buffer = 0;
-	exp.translate = NULL;
-	exp.fastmap = fastmap;
+	regex_t re;
+	regmatch_t subs[1];
+	char erbuf[150];
+	int err, len;
 
 	if(stat(AccessDir,&sb)==-1) {
 		if(mkdir(AccessDir,0755)==-1) {
@@ -416,12 +411,13 @@ int CheckAccess(char *filename, long uid) {
 	_dbmClose(db);
 
 	while(ac) {
-		cp = php_re_compile_pattern(ac->patt,strlen(ac->patt),&exp);
-		if(cp) {
-			Error("Regular Expression error in rule: %s",cp);
+		err = regcomp(&re, ac->patt, REG_EXTENDED | REG_NOSUB);
+		if(err) {
+			len = regerror(err, &re, erbuf, sizeof(erbuf));
+			Error("Regex error %s, %d/%d `%s'\n", reg_eprint(err), len, sizeof(erbuf), erbuf);
+			regfree(&re);
 			continue;	
 		}
-		php_re_compile_fastmap(&exp);
 		switch(ac->type) {
 		case 0: /* domain */
 			ss = getremotehostname();
@@ -444,10 +440,18 @@ int CheckAccess(char *filename, long uid) {
 			break;
 		}
 		if(!s) { ac=ac->next; continue; }
-		ret = php_re_match(&exp,s,strlen(s),0,&regs);
-		if(ret<1) { 
+		err = regexec(&re, s, 1, subs, 0);
+		if(err && err!=REG_NOMATCH) {
+			len = regerror(err, &re, erbuf, sizeof(erbuf));
+			Error("Regex error %s, %d/%d `%s'\n", reg_eprint(err), len, sizeof(erbuf), erbuf);
+			regfree(&re);
+			return(0);
+		}
+
+		if(err==REG_NOMATCH) { 
 			ac=ac->next; 
 			s=NULL;
+			regfree(&re);
 			continue; 
 		}
 		switch(ac->mode) {
@@ -489,6 +493,7 @@ int CheckAccess(char *filename, long uid) {
 		}
 		ac = ac->next;
 		s=NULL;
+		regfree(&re);
 	}	
 	if(actop->def==0) allow--;	
 	if(allow<0) { ShowBanPage(ban_URL); return(-1); }

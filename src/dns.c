@@ -19,15 +19,13 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: dns.c,v 1.3 1996/07/11 14:12:38 rasmus Exp $ */
+/* $Id: dns.c,v 1.4 1996/09/19 04:49:54 rasmus Exp $ */
 #include "php.h"
 #include "parse.h"
-#ifndef NT 
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <netdb.h>
-#endif
 
 void GetHostByAddr(void) {
 	Stack *s;
@@ -42,7 +40,6 @@ void GetHostByAddr(void) {
 
 
 const char *_GetHostByAddr(char *ip) {
-#ifndef NT
 	unsigned long addr;
 	static struct hostent *hp;
 
@@ -66,9 +63,6 @@ const char *_GetHostByAddr(char *ip) {
 	Debug("_GetHostByAddr returning [%s]\n",hp->h_name);
 #endif
 	return(hp->h_name);
-#else
-	return(ip);
-#endif
 }
 
 void GetHostByName(void) {
@@ -83,7 +77,6 @@ void GetHostByName(void) {
 }
 
 char *_GetHostByName(char *name) {
-#ifndef NT
 	static struct hostent *hp;
 	static struct in_addr in;
 
@@ -94,7 +87,4 @@ char *_GetHostByName(char *name) {
 	}
 	memcpy(&in.s_addr, *(hp->h_addr_list), sizeof (in.s_addr));
 	return(inet_ntoa(in));
-#else
-	return(name);
-#endif
 }

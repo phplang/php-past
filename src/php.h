@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: php.h,v 1.100 1996/09/10 13:18:57 rasmus Exp $ */
+/* $Id: php.h,v 1.105 1996/09/22 23:30:05 rasmus Exp $ */
 #include <stdio.h>
 #include <time.h>
 #include <sys/types.h>
@@ -30,6 +30,11 @@
 #endif
 #if HAVE_MEMORY_H
 #include <memory.h>
+#endif
+#if HAVE_REGCOMP
+#include <regex.h>
+#else
+#include "regex.h"
 #endif
 #if APACHE
 #include "httpd.h"
@@ -43,6 +48,12 @@ extern request_rec *php_rqst;
  * srm.conf on your system for proper ~username expansion 
  */
 #define PHP_PUB_DIRNAME	"public_html"
+/*
+ * You can override this setting with the PHP_USERDIR env. var if you
+ * change your config.
+ *
+ */
+#define PHP_PUB_DIRNAME_ENV	"PHP_USERDIR"
 
 /* 
  * Only define the following if you wish the ROOT_DIR for PHP loaded
@@ -183,7 +194,7 @@ extern request_rec *php_rqst;
 
 /*-- Do not touch anything after this point unless you are very brave --*/
 
-#define PHP_VERSION "2.0b6"
+#define PHP_VERSION "2.0b7"
 
 #define VAR_INIT_CHAR	'$'
 
@@ -510,6 +521,7 @@ void Exp(void);
 void mathLog(void);
 void mathLog10(void);
 void Abs(void);
+void Pow(void);
 
 /* stack.c */
 void Push(char *, int);
@@ -696,10 +708,14 @@ void PGerrorMessage(void);
 void php_init_pg95(void);
 
 /* reg.c */
-void RegMatch(char *);
-void RegSearch(char *);
+void RegMatch(char *, int);
 void RegReplace(void);
 char *_RegReplace(char *, char *, char *);
+void EReg(char *, int);
+void ERegReplace(void);
+void ERegiReplace(void);
+char *_ERegReplace(char *, char *, char *, int);
+char *reg_eprint(int);
 
 /* exec.c */
 void Exec(char *, char *, int);

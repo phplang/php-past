@@ -69,6 +69,9 @@
 /* Define if you have the symlink function.  */
 #undef HAVE_SYMLINK
 
+/* Define if you have the regcomp function.  */
+#undef HAVE_REGCOMP
+
 /* Define if you have the <dirent.h> header file.  */
 #undef HAVE_DIRENT_H
 
@@ -110,4 +113,3 @@
 
 /* Define if you have the gd library (-lgd).  */
 #undef HAVE_LIBGD
-

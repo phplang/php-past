@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: calc.c,v 1.11 1996/09/10 13:18:56 rasmus Exp $ */
+/* $Id: calc.c,v 1.12 1996/09/16 12:50:03 rasmus Exp $ */
 #include <stdlib.h>
 #include <string.h>
 #include "php.h"
@@ -492,6 +492,26 @@ void Exp(void) {
 		return;
 	}
 	sprintf(temp,"%f",exp(s->douval));	
+	Push(temp,DNUMBER);
+}
+
+void Pow(void) {
+	Stack *s;
+	char temp[64];
+	double power;
+
+	s = Pop();
+	if(!s) {
+		Error("Stack error in pow");
+		return;
+	}
+	power = s->douval;
+	s = Pop();
+	if(!s) {
+		Error("Stack error in pow");
+		return;
+	}
+	sprintf(temp,"%f",pow(s->douval,power));	
 	Push(temp,DNUMBER);
 }
 

@@ -19,20 +19,20 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: msql.c,v 1.16 1996/08/18 18:54:49 rasmus Exp $ */
+/* $Id: msql.c,v 1.17 1996/09/19 04:50:00 rasmus Exp $ */
 /* mSQL is Copyright (c) 1993-1995 David J. Hughes */
 
 /* Note that there is no mSQL code in this file */
 
 #include "php.h"
 #include <stdlib.h>
-#if HAVE_LIBMSQL
+#ifdef HAVE_LIBMSQL
 #include <msql.h>
 #endif
 #include "parse.h"
 #include <ctype.h>
 
-#if HAVE_LIBMSQL
+#ifdef HAVE_LIBMSQL
 typedef struct ResultList {
 	m_result *result;
 	int ind;
@@ -48,7 +48,7 @@ static int msql_ind=1;
 #endif
 
 void php_init_msql(void) {
-#if HAVE_LIBMSQL
+#ifdef HAVE_LIBMSQL
 	static char junk[1];
 	CurrentTcpPort=&junk[0];
 	CurrentUnixPort=&junk[0];
@@ -61,7 +61,7 @@ void php_init_msql(void) {
 #endif
 }
 
-#if HAVE_LIBMSQL
+#ifdef HAVE_LIBMSQL
 int add_result(m_result *result) {
 	ResultList *new;
 
@@ -93,7 +93,7 @@ m_result *get_result(int count) {
 #endif
 
 void del_result(int count) {
-#if HAVE_LIBMSQL
+#ifdef HAVE_LIBMSQL
 	ResultList *new, *prev, *next;
 
 	prev=NULL;
@@ -113,7 +113,7 @@ void del_result(int count) {
 }
 
 void MsqlClose(void) {
-#if HAVE_LIBMSQL
+#ifdef HAVE_LIBMSQL
 	ResultList *new,*next;
 
 	new = result_top;	
@@ -130,7 +130,7 @@ void MsqlClose(void) {
 }
 	
 void Msql(void) {
-#if HAVE_LIBMSQL
+#ifdef HAVE_LIBMSQL
 	Stack *s;
 	char *query=NULL;
 #ifndef APACHE
@@ -256,7 +256,7 @@ void Msql(void) {
 } 
 
 void MsqlConnect(void) {
-#if HAVE_LIBMSQL
+#ifdef HAVE_LIBMSQL
 	Stack *s;
 
 	s = Pop();
@@ -278,7 +278,7 @@ void MsqlConnect(void) {
 }
 
 void MsqlResult(void) {
-#if HAVE_LIBMSQL
+#ifdef HAVE_LIBMSQL
 	Stack *s;
 	int i,j;
 	char fieldname[128];
@@ -387,7 +387,7 @@ void MsqlResult(void) {
 }
 
 void MsqlFreeResult(void) {
-#if HAVE_LIBMSQL 
+#ifdef HAVE_LIBMSQL 
 	Stack *s;
 
 	s = Pop();
@@ -408,7 +408,7 @@ void MsqlFreeResult(void) {
 }
 
 void MsqlNumRows(void) {
-#if HAVE_LIBMSQL
+#ifdef HAVE_LIBMSQL
 	Stack *s;
 	char temp[16];
 	m_result *result;
@@ -437,7 +437,7 @@ void MsqlNumRows(void) {
 }
 
 void MsqlNumFields(void) {
-#if HAVE_LIBMSQL
+#ifdef HAVE_LIBMSQL
 	Stack *s;
 	char temp[16];
 	m_result *result;
@@ -473,7 +473,7 @@ void MsqlNumFields(void) {
  * type = 4   pushes fieldflags
  */
 void MsqlField(int type) {
-#if HAVE_LIBMSQL
+#ifdef HAVE_LIBMSQL
 	Stack *s;
 	m_result *result=NULL;
 	int field_ind=0;
@@ -591,7 +591,7 @@ void MsqlRegCase(void) {
 
 
 void MsqlTableName(void){
-#if HAVE_LIBMSQL
+#ifdef HAVE_LIBMSQL
 	Stack *s;
 	int res_index=0;
 	int tb_index=0;
@@ -641,7 +641,7 @@ void MsqlTableName(void){
 }
 
 void MsqlListTables(void) {
-#if HAVE_LIBMSQL
+#ifdef HAVE_LIBMSQL
 	char* dbname;
 	Stack *s;
 	m_result *res=NULL;
@@ -732,7 +732,7 @@ void MsqlListTables(void) {
 }
 
 int msqlGetDbSock() {
-#if HAVE_LIBMSQL
+#ifdef HAVE_LIBMSQL
 	return(dbsock);
 #else
 	return(0);
@@ -740,7 +740,7 @@ int msqlGetDbSock() {
 }
 
 void msqlSetCurrent(int sock, char *newdb) {
-#if HAVE_LIBMSQL
+#ifdef HAVE_LIBMSQL
 	CurrentTcpPort = getenv("MSQL_TCP_PORT");
 	CurrentUnixPort = getenv("MSQL_UNIX_PORT");
 	dbsock = sock;
@@ -749,7 +749,7 @@ void msqlSetCurrent(int sock, char *newdb) {
 }
 
 void MsqlCreateDB(void) {
-#if HAVE_LIBMSQL
+#ifdef HAVE_LIBMSQL
 	char* dbname;
 	Stack *s;
 #ifndef APACHE
@@ -826,7 +826,7 @@ void MsqlCreateDB(void) {
 }
 
 void MsqlDropDB(void) {
-#if HAVE_LIBMSQL
+#ifdef HAVE_LIBMSQL
 	char *dbname;
 	Stack *s;
 #ifndef APACHE
@@ -902,7 +902,7 @@ void MsqlDropDB(void) {
 }
 
 void MsqlListDBs(void) {
-#if HAVE_LIBMSQL
+#ifdef HAVE_LIBMSQL
 	char *hostname;
 	m_result *res=NULL;
 	int db_res; 
@@ -975,7 +975,7 @@ void MsqlListDBs(void) {
 }
 
 void MsqlDBName(void){
-#if HAVE_LIBMSQL
+#ifdef HAVE_LIBMSQL
 	Stack *s;
 	int res_index=0;
 	int db_index=0;
@@ -1029,7 +1029,7 @@ void MsqlDBName(void){
 }
 
 void MsqlListFields(void) {
-#if HAVE_LIBMSQL
+#ifdef HAVE_LIBMSQL
 	Stack *s;
 	char *tablename=NULL;
 #ifndef APACHE

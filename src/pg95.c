@@ -37,11 +37,11 @@
 *                                                                            *
 \****************************************************************************/
 
-/* $Id: pg95.c,v 1.14 1996/08/07 05:47:03 myddryn Exp $ */
+/* $Id: pg95.c,v 1.15 1996/09/19 04:50:01 rasmus Exp $ */
 
 #include "php.h"
 #include <stdlib.h>
-#if HAVE_LIBPQ
+#ifdef HAVE_LIBPQ
 #include <libpq-fe.h>
 #endif
 #include "parse.h"
@@ -53,7 +53,7 @@
 #endif
 #endif
 
-#if HAVE_LIBPQ
+#ifdef HAVE_LIBPQ
 typedef struct pgResultList {
 	PGresult	*result;
 	int		index;
@@ -75,7 +75,7 @@ static int	pg95_conn_ind=1;
 #endif
 
 void php_init_pg95(void) {
-#if HAVE_LIBPQ
+#ifdef HAVE_LIBPQ
 	pg_result_top=NULL;
 	pg_conn_top=NULL;
 	pgTypeRes=0;
@@ -93,7 +93,7 @@ void php_init_pg95(void) {
 
 /* pgResultList */
 
-#if HAVE_LIBPQ
+#ifdef HAVE_LIBPQ
 int pg_add_result(PGresult *result)
 {
 	/* result index 1 (pg95_ind) is reserved to indicate successfull
@@ -288,7 +288,7 @@ char* pg_type(PGconn* conn, int toid)
 /* PHP house keeping function */
 
 void PGcloseAll(void) {
-#if HAVE_LIBPQ
+#ifdef HAVE_LIBPQ
 	pgResultList	*lnew, *lnext;
 	pgConnList	*cnew, *cnext;
 
@@ -313,7 +313,7 @@ void PGcloseAll(void) {
 /* Main User Functions */
 
 void PGexec(void) {
-#if HAVE_LIBPQ
+#ifdef HAVE_LIBPQ
 	Stack	*s;
 	int	conn;
 	ExecStatusType	stat;
@@ -420,7 +420,7 @@ void PGexec(void) {
 }
 
 void PG_result(void) {
-#if HAVE_LIBPQ
+#ifdef HAVE_LIBPQ
 	Stack		*s;
 	char		*field;
 	char		*ftype;
@@ -711,7 +711,7 @@ void PGconnect(void) {
 }
 
 void PGclose(void) {
-#if HAVE_LIBPQ
+#ifdef HAVE_LIBPQ
 	Stack		*s;
 	int		conn_ind;
 	PGconn		*conn;
@@ -734,7 +734,7 @@ void PGclose(void) {
 }
 
 void PGnumRows(void) {
-#if HAVE_LIBPQ
+#ifdef HAVE_LIBPQ
 	Stack		*s;
 	int		res_ind;
 	PGresult	*result;
@@ -772,7 +772,7 @@ void PGnumRows(void) {
 
 
 void PGnumFields(void) {
-#if HAVE_LIBPQ
+#ifdef HAVE_LIBPQ
 	Stack		*s;
 	int		res_ind;
 	PGresult	*result;
@@ -809,7 +809,7 @@ void PGnumFields(void) {
 }
 
 void PGfieldName(void) {
-#if HAVE_LIBPQ
+#ifdef HAVE_LIBPQ
 	Stack		*s;
 	int		res_ind;
 	int		field_ind;
@@ -874,7 +874,7 @@ void PGfieldName(void) {
 }
 
 void PGfieldType(void) {
-#if HAVE_LIBPQ
+#ifdef HAVE_LIBPQ
 	Stack		*s;
 	int		res_ind;
 	int		field_ind;
@@ -948,7 +948,7 @@ void PGfieldType(void) {
 }
 
 void PGfieldNum(void) {
-#if HAVE_LIBPQ
+#ifdef HAVE_LIBPQ
 	Stack		*s;
 	int		res_ind;
 	char		*fname;
@@ -1002,7 +1002,7 @@ void PGfieldNum(void) {
 
 
 void PGfieldPrtLen(void) {
-#if HAVE_LIBPQ
+#ifdef HAVE_LIBPQ
 	Stack		*s;
 	int		res_ind;
 	int		tuple_ind;
@@ -1077,7 +1077,7 @@ void PGfieldPrtLen(void) {
 }
 
 void PGfieldSize(void) {
-#if HAVE_LIBPQ
+#ifdef HAVE_LIBPQ
 	Stack		*s;
 	int		res_ind;
 	PGresult	*result;
@@ -1141,7 +1141,7 @@ void PGfieldSize(void) {
 
 
 void PGhost(void) {
-#if HAVE_LIBPQ
+#ifdef HAVE_LIBPQ
 	Stack		*s;
 	int		conn_ind;
 	PGconn		*conn;
@@ -1180,7 +1180,7 @@ void PGhost(void) {
 
 
 void PGdbName(void) {
-#if HAVE_LIBPQ
+#ifdef HAVE_LIBPQ
 	Stack		*s;
 	int		conn_ind;
 	PGconn		*conn;
@@ -1218,7 +1218,7 @@ void PGdbName(void) {
 }
 
 void PGoptions(void) {
-#if HAVE_LIBPQ
+#ifdef HAVE_LIBPQ
 	Stack		*s;
 	int		conn_ind;
 	PGconn		*conn;
@@ -1256,7 +1256,7 @@ void PGoptions(void) {
 }
 
 void PGport(void) {
-#if HAVE_LIBPQ
+#ifdef HAVE_LIBPQ
 	Stack		*s;
 	int		conn_ind;
 	PGconn		*conn;
@@ -1294,7 +1294,7 @@ void PGport(void) {
 }
 
 void PGtty(void) {
-#if HAVE_LIBPQ
+#ifdef HAVE_LIBPQ
 	Stack		*s;
 	int		conn_ind;
 	PGconn		*conn;
@@ -1333,7 +1333,7 @@ void PGtty(void) {
 
 
 void PGgetlastoid(void) {
-#if HAVE_LIBPQ
+#ifdef HAVE_LIBPQ
 	char		tmp[16];
 
 	sprintf(tmp, "%d", pgLastOid);
@@ -1346,7 +1346,7 @@ void PGgetlastoid(void) {
 
 
 void PGerrorMessage(void) {
-#if HAVE_LIBPQ
+#ifdef HAVE_LIBPQ
 	Stack		*s;
 	int		conn_ind;
 	PGconn		*conn;

@@ -1,4 +1,4 @@
-# $Id: Makefile.in,v 1.28 1996/08/21 17:03:17 rasmus Exp $
+# $Id: Makefile.in,v 1.30 1996/09/22 22:07:50 rasmus Exp $
 #
 # Makefile for PHP/FI
 # Copyright 1995,1996 Rasmus Lerdorf
@@ -35,13 +35,18 @@ AR = ar rc
 RANLIB = @RANLIB@
 CC = @CC@
 YACC = @YACC@ -d -l
-LIBS = -L. @HLNK@ @LIBS@ @best_dbm@ @LIBMSQL@ @LIBPQ@ @LIBFCGI@
-CFLAGS = @CFLAGS@ 
-LDFLAGS = @LDFLAGS@ @MSQL_LIB@ @PQ_LIB@ @FCGI_LIB@
+LIBS = -L. @HLNK@ @LIBS@ @best_dbm@ @LIBMSQL@ @LIBPQ@ @LIBFCGI@ @LIBREGEX@
+STATICLIBS = @best_dbm@ @LIBS@ @STATICLIBMSQL@ @STATICLIBPQ@ @STATICLIBFCGI@ @STATICLIBREGEX@
+USEDLIBS = @USEDLIBS@
+OPT_CFLAGS = @OPT_CFLAGS@
+INC_CFLAGS = @INC_CFLAGS@
+SYS_CFLAGS = @SYS_CFLAGS@
+CFLAGS = $(OPT_CFLAGS) $(INC_CFLAGS) $(SYS_CFLAGS)
+LDFLAGS = @LDFLAGS@ @MSQL_LIB@ @PQ_LIB@ @FCGI_LIB@ @LIBREGEXDIR@
 #DEBUG=-g -Wall -DDEBUG
-CPPFLAGS = -I. @CPPFLAGS@ @MSQL_INCLUDE@ @MSQL_DEF@ @PQ_INCLUDE@ @PQ_DEF@ @FCGI_INCLUDE@ @FCGI_DEF@ @APACHE_INCLUDE@ @ACCESS_CONTROL@ @ACCESS_DIR@ @LOGGING@ @LOG_DIR@ @HGD@ @FILE_UPLOAD@ @APACHE@ @APACHE_API@ $(DEBUG) 
+CPPFLAGS = -I. @CPPFLAGS@ @MSQL_INCLUDE@ @MSQL_DEF@ @PQ_INCLUDE@ @PQ_DEF@ @FCGI_INCLUDE@ @FCGI_DEF@ @REGEX_INCLUDE@ @APACHE_INCLUDE@ @ACCESS_CONTROL@ @ACCESS_DIR@ @LOGGING@ @LOG_DIR@ @HGD@ @FILE_UPLOAD@ @APACHE@ @APACHE_API@ $(DEBUG) 
 
-PHP_PROGS: @PRG@
+PHP_PROGS: @OURREGEX@ @PRG@ @MODULE_TARGET@
 
 # Files that can be generated, but should be up to date for a distribution.
 DISTDEP = Makefile
@@ -51,12 +56,18 @@ DISTFILES = ChangeLog README COPYING \
 	install-sh install src/parse.raw src/lex.c src/main.c src/error.c \
 	src/date.c src/stack.c src/calc.c src/var.c src/echo.c src/php.h \
 	src/cond.c src/switch.c src/db.c src/while.c src/parse.h \
-	src/string.c src/msql.c src/pg95.c src/regexpr.c src/regexpr.h src/reg.c src/exec.c \
+	src/string.c src/msql.c src/pg95.c src/reg.c src/exec.c \
 	src/file.c src/crypt.c src/head.c src/info.c src/post.c src/type.c \
 	src/conf.c src/acc.c src/local.c src/dns.c src/log.c src/sort.c src/dir.c \
 	src/rand.c src/gd.c examples/log.html examples/log.readme examples/clock.html \
 	src/parse.c src/mime.c src/fsock.c src/microtime.c src/mod_php.c src/mod_php.h \
-	src/pool.c src/tmagic.c \
+	src/pool.c src/tmagic.c src/regex/COPYRIGHT src/regex/Makefile \
+	src/regex/README src/regex/WHATSNEW src/regex/cclass.h \
+	src/regex/cname.h src/regex/debug.c src/regex/engine.c \
+	src/regex/main.c src/regex/mkh src/regex/regcomp.c src/regex/regerror.c \
+	src/regex/regex.3 src/regex/regex.7 src/regex/regex.h \
+	src/regex/regex2.h src/regex/regexec.c src/regex/regfree.c \
+	src/regex/split.c src/regex/tests src/regex/utils.h \
 	scripts/msqllog \
 	examples/url.readme examples/url_add.html examples/url_cat.html \
 	examples/url_main.html examples/demo_main.html examples/demo_dir.html \
@@ -92,26 +103,56 @@ install: all
 
 OBJS= parse.o lex.o main.o error.o date.o stack.o calc.o var.o \
 	  echo.o cond.o switch.o db.o while.o string.o msql.o \
-	  regexpr.o reg.o exec.o file.o crypt.o head.o info.o post.o \
+	  reg.o exec.o file.o crypt.o head.o info.o post.o \
 	  type.o conf.o acc.o local.o dns.o log.o sort.o dir.o rand.o \
 	  gd.o mime.o fsock.o microtime.o pg95.o pool.o tmagic.o
 
-all: $(PHP_PROGS)
+all: $(PHP_PROGS) @MODULE_TARGET@
+
+regex/libregex.a:
+	cd regex; make lib CC=$(CC) AUX_CFLAGS="$(CFLAGS)" RANLIB=$(RANLIB)
 
 .c.o:
 	$(CC) $(CFLAGS) $(SYSTEM) $(NSAPI_DEFS) $(NSAPI_INCLUDE) $(CPPFLAGS) -c $<
 
-php.cgi: $(OBJS)
-	$(CC) $(CFLAGS) -o php.cgi $(OBJS) $(LDFLAGS) $(LIBS)
+
+php.cgi: @PHPLIB_TARGET@
+	$(CC) $(CFLAGS) -o php.cgi $(LDFLAGS) -L. -lphp $(USEDLIBS)
 	@echo ""
 	@echo "If you wish to test your php.cgi binary, type: make test"
 	@echo "If not, you may install it by copying it to your cgi-bin"
 	@echo "directory at this point."
 	@echo ""
 
+sharedlib: libphp.so
+libphp.so: libphp.so.1
+	ln -s $< $@
+libphp.so.1: libphp.so.1.0
+	ln -s $< $@
+libphp.so.1.0: $(OBJS)
+	$(CC) -shared -Wl,-soname,libphp.1 -o $@ $(OBJS)
+
+staticlib: libphp.a
 libphp.a: $(OBJS)
 	$(AR) libphp.a $(OBJS)
 	$(RANLIB) libphp.a
+
+mod_php.o: mod_php.h mod_php.c
+	$(CC) -fPIC $(CFLAGS) $(SYSTEM) $(NSAPI_DEFS) $(NSAPI_INCLUDE) $(CPPFLAGS) @DEBIAN@ -c mod_php.c
+
+mod_php-dynamic.so: mod_php.o
+	$(CC) -shared $< $(LDFLAGS) -L. -lphp $(LIBS) -lm -o $@
+mod_php-static.so: mod_php.o
+	$(CC) -shared $< $(LDFLAGS) -L. -lphp $(STATICLIBS) -lm -o $@
+
+module_auto_build: @MODULE_PHP@
+	@echo "The PHP module has been built for ELF synamic linking."
+	@echo "Please install it where it belongs (usually in the"
+	@echo "/usr/local/lib/apache/modules or /usr/lib/apache/modules"
+	@echo "directories) and add a LoadModule line to your httpd.conf"
+	@echo "file."
+
+module_user_build: $(OBJS)
 	-cp mod_php.[ch] libphp.a @APACHE_DIR@
 	@echo ""
 	@echo "You now need to recompile your Apache server."
@@ -139,7 +180,7 @@ parser:
 	mv parse.y parse.raw
 
 clean:
-	rm -f Makefile ../config.status ../config.cache ../config.log php.cgi *.o core
+	rm -f Makefile ../config.status ../config.cache ../config.log php.cgi *.o core *.so.*
 
 tags:
 	etags ${srcdir}/*.c ${srcdir}/*.h ${srcdir}/[a-z]*.in
@@ -155,6 +196,7 @@ dist: $(DISTDEP)
 	mkdir ../$$distname; \
 	mkdir ../$$distname/examples; \
 	mkdir ../$$distname/src; \
+	mkdir ../$$distname/src/regex; \
 	mkdir ../$$distname/doc; \
 	mkdir ../$$distname/scripts; \
 	mkdir ../$$distname/test; \

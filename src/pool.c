@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: pool.c,v 1.13 1996/07/11 14:12:48 rasmus Exp $ */
+/* $Id: pool.c,v 1.14 1996/09/19 04:50:02 rasmus Exp $ */
 /*
  * Memory Pool Management with hooks for Apache sub-pool handling
  * for Apache module
@@ -89,9 +89,6 @@ int num, int bytes) {
 #else
 	ptr = php_palloc(php_pool[num],bytes);	
 #endif
-#if 0
-	Debug("alloc: %0x %d bytes allocated in pool %d (%ld) from %s:%d (%x)\n",ptr,bytes,num,php_pool_size[num],file,line,ptr);
-#endif
 	return(ptr);
 }
 
@@ -121,17 +118,11 @@ int num, char *str) {
 #else
 	ret = php_pstrdup(php_pool[num],str);
 #endif
-#if 0
-	Debug("strdup: %0x %d bytes allocated in pool %d (%ld) from %s:%d (%s)\n",str, strlen(str)+1,num,php_pool_size[num],file,line,ret);
-#endif
 	return(ret);
 }
 
 void php_pool_clear(int num) {
 	if(!num || !php_pool_size[num]) return;
-#if 1
-	Debug("Clearing pool %d containing %ld bytes\n",num,php_pool_size[num]);
-#endif
 	php_pool_size[num] = 0L;
 	if(php_pool[num]) {
 #if APACHE

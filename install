@@ -2,7 +2,7 @@
 #
 # PHP/FI Install Script
 #
-# $Id: install,v 1.14 1996/05/17 16:20:20 rasmus Exp $
+# $Id: install,v 1.17 1996/09/22 23:30:04 rasmus Exp $
 #
 DEF_LOG_DIR=/usr/local/etc/httpd/cgi-data
 DEF_ACC_DIR=/usr/local/etc/httpd/cgi-data
@@ -65,13 +65,45 @@ then
 else
 	APACHE_API=
 fi
-$ECHO_N "Apache source directory (which has httpd.h)? [/usr/local/etc/httpd/src] $ECHO_C"
+
+$ECHO_N "Does your Apache server support ELF dynamic loading? [yN] $ECHO_C"
+read APACHE_ELF_DLOPEN
+if [ "$APACHE_ELF_DLOPEN." = "." ] || [ "$APACHE_ELF_DLOPEN" = "n" ] || [ "$APACHE_ELF_DLOPEN" = "N" ]
+then
+    MODULE_TARGET=module_user_build
+else
+    MODULE_TARGET=module_auto_build
+    if [ "$INST_TOP" != "" -o "$PGINST_TOP" != "" ]
+    then
+        $ECHO_N "Do you want to build the dynamic, static, or both modules? [dsB] $ECHO_C"
+        read answer
+	case .$answer in
+	    .|.b|.B)
+		MODULE_PHP="mod_php-dynamic.so mod_php-static.so"
+		;;
+	    .|.s|.S)
+		MODULE_PHP="mod_php-static.so"
+		;;
+	    *)
+		MODULE_PHP="mod_php-dynamic.so"
+		;;
+	esac
+    fi
+fi
+if [ $MODULE_TARGET = module_auto_build ]
+then
+    apache_dir=/usr/local/include/apache
+    $ECHO_N "Apache include directory (which has httpd.h)? [$apache_dir] $ECHO_C"
+else
+    apache_dir=/usr/local/etc/httpd/src
+    $ECHO_N "Apache source directory (which has httpd.h)? [$apache_dir] $ECHO_C"
+fi
 APACHE=-DAPACHE=1
 PRG=libphp.a
 read APACHE_DIR
 if [ "$APACHE_DIR." = "." ]
 then
-	APACHE_DIR=/usr/local/etc/httpd/src
+	APACHE_DIR=$apache_dir
 fi
 else
 	APACHE=
@@ -80,6 +112,15 @@ fi
 
 if [ "$APACHE." = "." ]
 then
+$ECHO_N "Do you want to dynamically link utility libraries? [Yn] $ECHO_C"
+read a
+if [ "$a" = "" -o "$a" = y -o "$a" = Y ]
+then
+    USEDLIBS='$(LIBS)'
+else
+    USEDLIBS='$(STATICLIBS)'
+fi
+
 $ECHO_N "Would you like to compile PHP/FI with FastCGI support? [yN] $ECHO_C"
 read a
 if [ "$a" = "y" ] || [ "$a" = "Y" ]
@@ -98,10 +139,13 @@ else
 fi
 fi
 
-$ECHO_N "Would you like to include access control support? [Yn] $ECHO_C"
+$ECHO_N "Would you like to include access control support? [Ny] $ECHO_C"
 read a
-if [ "$a." = "." ] || [ "$a" = "y" ] || [ "$a" = "Y" ]
+if [ "$a." = "." ] || [ "$a" = "n" ] || [ "$a" = "N" ]
 then
+	ACCESS_CONTROL=
+	ACCESS_DIR=
+else
 	ACCESS_CONTROL=-DACCESS_CONTROL
 	echo 
 	echo "You need to choose an access control directory."
@@ -115,9 +159,6 @@ then
 		b=$DEF_ACC_DIR
 	fi
 	ACCESS_DIR=-DACCESS_DIR=\\\\\"$b\\\\\"
-else
-	ACCESS_CONTROL=
-	ACCESS_DIR=
 fi
 
 $ECHO_N "Would you like to include page logging support? [Yn] $ECHO_C"
@@ -181,16 +222,28 @@ else
 	FILE_UPLOAD=
 fi
 
+OPT_CFLAGS=-O
+
+$ECHO_N "Would you like to build an ELF shared library? [yN] $ECHO_C"
+read a
+if [ "$a" = "" -o "$a" = n -o "$a" = N ]
+then
+    :
+    PHPLIB_TARGET=staticlib
+else
+    SYS_CFLAGS=-fPIC
+    SHLIB_TARGET=sharedlib
+    PHPLIB_TARGET=sharedlib
+fi
+
 $ECHO_N "Additional directories to search for .h files []: $ECHO_C"
 read a
 if [ "$a." = "." ]
 then
 	ADD_INC_DIRS=
-	CFLAGS=-O
 else
 	ADD_INC_DIRS=`echo "$a" | sed 's@  *@ @g; s@^\([^ ]\)@-I\1@; s@ \([^ ]\)@ -I\1@g'`
-	CFLAGS="$ADD_INC_DIRS -O"
-	export CFLAGS
+	INC_CFLAGS="$ADD_INC_DIRS"
 fi
 
 $ECHO_N "Additional directories to search for library files []: $ECHO_C"
@@ -214,13 +267,23 @@ if [ "$INST_TOP." = "." ]
 then
 SED_MSQL="      s,@MSQL_INCLUDE@,,
                 s,@LIBMSQL@,,
+		s,@STATICLIBMSQL@,,
                 s,@MSQL_DEF@,,
                 s,@MSQL_LIB@,,"
 else
-SED_MSQL="      s,@MSQL_INCLUDE@,-I$INST_TOP/include,
+if [ -d "$INST_TOP/include/msql" ]
+then
+    MSQL_INCDIR=/msql
+fi
+if [ -d "$INST_TOP/lib/msql" ]
+then
+    MSQL_LIBDIR=/msql
+fi
+SED_MSQL="      s,@MSQL_INCLUDE@,-I$INST_TOP/include$MSQL_INCDIR,
                 s,@LIBMSQL@,-lmsql,
+		s,@STATICLIBMSQL@,$INST_TOP/lib$MSQL_LIBDIR/libmsql.a,
                 s,@MSQL_DEF@,$HLM,
-                s,@MSQL_LIB@,-L$INST_TOP/lib,"
+                s,@MSQL_LIB@,-L$INST_TOP/lib$MSQL_LIBDIR,"
 fi
 
 # Postgres95 part of sed command
@@ -229,13 +292,23 @@ if [ "$PGINST_TOP." = "." ]
 then
 SED_PG95="      s,@PQ_INCLUDE@,,
                 s,@LIBPQ@,,
+                s,@STATICLIBPQ@,,
                 s,@PQ_DEF@,,
                 s,@PQ_LIB@,,"
 else
-SED_PG95="      s,@PQ_INCLUDE@,-I$PGINST_TOP/include,
+if [ -d "$PGINST_TOP/include/postgres95" ]
+then
+    PG95_INCDIR=/postgres95
+fi
+if [ -d "$PGINST_TOP/lib/postgres95" ]
+then
+    PG95_LIBDIR=/postgres95
+fi
+SED_PG95="      s,@PQ_INCLUDE@,-I$PGINST_TOP/include$PG95_INCDIR,
                 s,@LIBPQ@,-lpq,
+		s,@STATICLIBPQ@,$PGINST_TOP/lib$PG95_LIBDIR/libpq.a,
                 s,@PQ_DEF@,$HLP,
-                s,@PQ_LIB@,-L$PGINST_TOP/lib,"
+                s,@PQ_LIB@,-L$PGINST_TOP/lib$PG95_LIBDIR,"
 fi
 
 # FastCGI substitutions
@@ -243,12 +316,14 @@ if [ "$PHPFASTCGI." = "." ]
 then
 SED_FCGI="      s,@FCGI_INCLUDE@,,
                 s,@LIBFCGI@,,
+                s,@STATICLIBFCGI@,,
                 s,@FCGI_LIB@,,
                 s,@FCGI_DEF@,,"
 else
 SED_FCGI="      s,@FCGI_INCLUDE@,-I$FCGI_DIR/include,
-				s,@FCGI_DEF@,$PHPFASTCGI,
+		s,@FCGI_DEF@,$PHPFASTCGI,
                 s,@LIBFCGI@,-lfcgi,
+                s,@STATICLIBFCGI@,$FCGI_DIR/lib/libfcgi.a,
                 s,@FCGI_LIB@,-L$FCGI_DIR/libfcgi,"
 fi
 
@@ -261,11 +336,41 @@ else
 SED_APACHE="      s,@APACHE_INCLUDE@,-I$APACHE_DIR,"
 fi
 
+if [ -f /etc/debian_version ]
+then
+    DEBIAN=-DDEBIAN
+else
+    DEBIAN=
+fi
+
+if grep "#define HAVE_REGCOMP 1" config.h >/dev/null 2>&1
+then
+	echo "Using your system's Posix regular expression library"
+	echo ""
+	LIBREGEX=
+	STATICLIBREGEX=
+	LIBREGEXDIR=
+	REGEX_INCLUDE=
+	OURREGEX=
+else
+	echo "Using the included Posix regular expression library"
+	echo ""
+	LIBREGEX=-lregex	
+	LIBREGEXDIR=-L./regex
+	REGEX_INCLUDE=-I./regex
+	OURREGEX=regex/libregex.a
+	STATICLIBREGEX=regex/libregex.a
+fi
+
 # sed commmand
 sed "		$SED_MSQL
 		$SED_PG95
 		$SED_APACHE
 		$SED_FCGI
+		s,@USEDLIBS@,$USEDLIBS,
+		s,@OPT_CFLAGS@,$OPT_CFLAGS,
+		s,@INC_CFLAGS@,$INC_CFLAGS,
+		s,@SYS_CFLAGS@,$SYS_CFLAGS,
 		s,@HGD@,$HGD,
 		s,@HLNK@,$HLNK,
 		s,@ACCESS_CONTROL@,$ACCESS_CONTROL,
@@ -273,10 +378,20 @@ sed "		$SED_MSQL
 		s,@LOGGING@,$LOGGING,
 		s,@LOG_DIR@,$LOG_DIR,
 		s,@FILE_UPLOAD@,$FILE_UPLOAD,
+		s,@MODULE_PHP@,$MODULE_PHP,
 		s,@APACHE@,$APACHE,
 		s,@APACHE_DIR@,$APACHE_DIR,
 		s,@APACHE_API@,$APACHE_API,
 		s,@PRG@,$PRG,
+		s,@DEBIAN@,$DEBIAN,
+		s,@MODULE_TARGET@,$MODULE_TARGET,
+		s,@SHLIB_TARGET@,$SHLIB_TARGET,
+		s,@PHPLIB_TARGET@,$PHPLIB_TARGET,
+		s,@LIBREGEX@,$LIBREGEX,
+		s,@LIBREGEXDIR@,$LIBREGEXDIR,
+		s,@REGEX_INCLUDE@,$REGEX_INCLUDE,
+		s,@OURREGEX@,$OURREGEX,
+		s,@STATICLIBREGEX@,$STATICLIBREGEX,
 " < src/Makefile.$$ > src/Makefile
 rm src/Makefile.$$
 
@@ -285,17 +400,17 @@ mv config.$$ config.h
 
 if [ -f src/main.o ]
 then
-rm src/*.o 
+rm -f src/*.o 
 fi
 
 if [ -f src/php.cgi ]
 then
-rm src/php.cgi
+rm -f src/php.cgi
 fi
 
 if [ -f src/libphp.a ]
 then
-rm src/libphp.a
+rm -f src/libphp.a
 fi
 
 echo "If none of -ldbm, -ldb nor -lgdbm were found, you should"

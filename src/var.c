@@ -19,14 +19,13 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: var.c,v 1.44 1996/07/18 18:20:31 rasmus Exp $ */
+/* $Id: var.c,v 1.45 1996/09/22 22:07:57 rasmus Exp $ */
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
 #include "php.h"
 #include "parse.h"
-#include "regexpr.h"
 
 static VarTree *var_main=NULL;
 static VarTree *var_top=NULL;
@@ -1394,29 +1393,25 @@ void *PtrPop(void) {
 void SecureVar(void) {
 	Stack *s;
 	VarTree *v;
-	struct re_pattern_buffer exp;
-	struct re_registers regs;
-	char fastmap[256];
-	char *cp;
-	int ret=0;
+    regex_t re;
+    regmatch_t subs[1];
+    char erbuf[150];
+    int err, len;
  
-	exp.allocated = 0;
-	exp.buffer = 0;
-	exp.translate = NULL;
-	exp.fastmap = fastmap;
-
 	s = Pop();
 	if(!s) {
 		Error("Stack error in securevar");
 		return;
 	}
 	if(!*(s->strval)) return;
-	cp = php_re_compile_pattern(s->strval,strlen(s->strval),&exp);
-	if(cp) {
-		Error("Regular Expression error in rule: %s",cp);
+
+	err = regcomp(&re, s->strval, REG_EXTENDED | REG_NOSUB);
+	if(err) {
+		len = regerror(err, &re, erbuf, sizeof(erbuf));
+		Error("Regex error %s, %d/%d `%s'\n", reg_eprint(err), len, sizeof(erbuf), erbuf);
+		regfree(&re);
 		return;
 	}
-	php_re_compile_fastmap(&exp);
 	
 	/* inorder traversal of binary symbol tree */
 	v = var_top;
@@ -1426,8 +1421,14 @@ void SecureVar(void) {
 			v = v->left;
 			continue;
 		} else {
-			ret = php_re_match(&exp,v->name,strlen(v->name),0,&regs);
-			if(ret>-1) {
+			err = regexec(&re, v->name, (size_t)1, subs, 0);
+			if(err && err!=REG_NOMATCH) {
+				len = regerror(err, &re, erbuf, sizeof(erbuf));
+				Error("Regex error %s, %d/%d `%s'\n", reg_eprint(err), len, sizeof(erbuf), erbuf);
+				regfree(&re);
+				return;
+			}
+			if(err==0) {
 				if(v->flag == -1) {
 					v->flag = -2;
 #if DEBUG
@@ -1442,8 +1443,14 @@ right:
 			}
 			v = PtrPop();
 			if(!v) break;
-			ret = php_re_match(&exp,v->name,strlen(v->name),0,&regs);
-			if(ret>-1) {
+			err = regexec(&re, v->name, (size_t)1, subs, 0);
+			if(err && err!=REG_NOMATCH) {
+				len = regerror(err, &re, erbuf, sizeof(erbuf));
+				Error("Regex error %s, %d/%d `%s'\n", reg_eprint(err), len, sizeof(erbuf), erbuf);
+				regfree(&re);
+				return;
+			}
+			if(err==0) {
 				if(v->flag == -1) {
 					v->flag = -2;
 #if DEBUG
@@ -1454,8 +1461,14 @@ right:
 			while(!v->right) {
 				v=PtrPop();	
 				if(!v) goto end;	
-				ret = php_re_match(&exp,v->name,strlen(v->name),0,&regs);
-				if(ret>-1) {
+				err = regexec(&re, v->name, (size_t)1, subs, 0);
+				if(err && err!=REG_NOMATCH) {
+					len = regerror(err, &re, erbuf, sizeof(erbuf));
+					Error("Regex error %s, %d/%d `%s'\n", reg_eprint(err), len, sizeof(erbuf), erbuf);
+					regfree(&re);
+					return;
+				}
+				if(err==0) {
 					if(v->flag == -1) {
 						v->flag = -2;
 #if DEBUG
@@ -1468,6 +1481,7 @@ right:
 		}	
 	}
 end: ;
+	regfree(&re);
 }
 
 /* Create a new stack frame and make it the current one */

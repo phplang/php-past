@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: switch.c,v 1.9 1996/07/11 14:12:52 rasmus Exp $ */
+/* $Id: switch.c,v 1.10 1996/09/18 02:36:18 rasmus Exp $ */
 #include <stdlib.h>
 #include <string.h>
 #include "php.h"
@@ -122,6 +122,10 @@ void EndSwitch(void) {
 	int active, state;
 
 	state = GetCurrentState(&active);
+	if(active==-2) {
+		CondPop(NULL);
+		state = GetCurrentState(&active);
+	}
 	if(active==-3) {
 		CondPop(NULL);
 		BracePop();
@@ -150,6 +154,8 @@ void Case(void) {
 	state = GetCurrentState(&active);
 	if(state && active==-2) {
 		return;
+	} else if(!state && active==-2) {
+		CondPop(NULL);
 	}
 
 	switch(s->type) {
@@ -169,6 +175,12 @@ void Case(void) {
 }	
 
 void Default(void) {
+	int state,active;
+
+	state = GetCurrentState(&active);
+	if(state && active==-2) {
+		return;
+	}
 	if(!top->matched) CondPush(1,-2);
 	else CondPush(0,-2);
 }

@@ -91,4 +91,6 @@
 #define	INTFUNC5	345
 #define	INTFUNC6	346
 #define	SETCOOKIE	347
+#define	EREG	348
+#define	EREGI	349
 

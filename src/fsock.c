@@ -23,10 +23,10 @@
  * Contributed by Paul Panotzki - Bunyip Information Systems
  *                                                         
  */
-/* $Id: fsock.c,v 1.6 1996/07/11 14:34:06 rasmus Exp $ */
+/* $Id: fsock.c,v 1.7 1996/09/19 04:49:55 rasmus Exp $ */
 #include "php.h"
 #include <stdlib.h>
-#if HAVE_UNISTD_H
+#ifdef HAVE_UNISTD_H
 #include <unistd.h>
 #endif
 
@@ -122,7 +122,7 @@ void FSockOpen(void) {
 		return;
 	}
 
-#if HAVE_SETVBUF  
+#ifdef HAVE_SETVBUF  
 	if ((setvbuf(fp, NULL, _IONBF, 0)) != 0){
 		Push("-7",LNUMBER);
 		return;

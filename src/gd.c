@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: gd.c,v 1.10 1996/08/18 12:30:55 rasmus Exp $ */
+/* $Id: gd.c,v 1.11 1996/09/19 04:49:56 rasmus Exp $ */
 /* gd 1.2 is copyright 1994, 1995, Quest Protein Database Center, 
    Cold Spring Harbor Labs. */
 
@@ -27,13 +27,13 @@
 
 #include "php.h"
 #include "parse.h"
-#if HAVE_UNISTD_H
+#ifdef HAVE_UNISTD_H
 #include <unistd.h>
 #endif
 #if APACHE
 #include "http_protocol.h"
 #endif
-#if HAVE_LIBGD
+#ifdef HAVE_LIBGD
 #include <gd.h>
 #include <gdfontt.h>  /* 1 Tiny font */
 #include <gdfonts.h>  /* 2 Small font */
@@ -109,7 +109,7 @@ void del_image(int count) {
 #endif
 
 void ImageCreate(void) {
-#if HAVE_LIBGD
+#ifdef HAVE_LIBGD
 	Stack *s;
 	int dx, dy, ind;
 	gdImagePtr im;
@@ -143,7 +143,7 @@ void ImageCreate(void) {
 }
 
 void ImageCreateFromGif(void) {
-#if HAVE_LIBGD
+#ifdef HAVE_LIBGD
 	Stack *s;
 	int ind;
 	gdImagePtr im;
@@ -187,7 +187,7 @@ void ImageCreateFromGif(void) {
 }
 
 void ImageDestroy(void) {
-#if HAVE_LIBGD
+#ifdef HAVE_LIBGD
 	Stack *s;
 	int ind;
 
@@ -205,7 +205,7 @@ void ImageDestroy(void) {
 }
 
 void ImageColorAllocate(void) {
-#if HAVE_LIBGD
+#ifdef HAVE_LIBGD
 	Stack *s;
 	int ind;
 	int col;
@@ -260,7 +260,7 @@ void ImageColorAllocate(void) {
 }
 
 void ImageGif(int args) {
-#if HAVE_LIBGD
+#ifdef HAVE_LIBGD
 	Stack *s;
 	gdImagePtr im;
 	char *fn=NULL;
@@ -354,7 +354,7 @@ void ImageGif(int args) {
 }
 
 void ImageSetPixel(void) {
-#if HAVE_LIBGD
+#ifdef HAVE_LIBGD
 	Stack *s;
 	gdImagePtr im;
 	int col, y, x;
@@ -402,7 +402,7 @@ void ImageSetPixel(void) {
 }	
 
 void ImageLine(void) {
-#if HAVE_LIBGD
+#ifdef HAVE_LIBGD
 	Stack *s;
 	gdImagePtr im;
 	int col, y2, x2, y1, x1;
@@ -466,7 +466,7 @@ void ImageLine(void) {
 }	
 
 void ImageRectangle(void) {
-#if HAVE_LIBGD
+#ifdef HAVE_LIBGD
 	Stack *s;
 	gdImagePtr im;
 	int col, y2, x2, y1, x1;
@@ -530,7 +530,7 @@ void ImageRectangle(void) {
 }	
 
 void ImageFilledRectangle(void) {
-#if HAVE_LIBGD
+#ifdef HAVE_LIBGD
 	Stack *s;
 	gdImagePtr im;
 	int col, y2, x2, y1, x1;
@@ -594,7 +594,7 @@ void ImageFilledRectangle(void) {
 }	
 
 void ImageArc(void) {
-#if HAVE_LIBGD
+#ifdef HAVE_LIBGD
 	Stack *s;
 	gdImagePtr im;
 	int col, e, st, h, w, cy, cx;
@@ -674,7 +674,7 @@ void ImageArc(void) {
 }	
 
 void ImageFillToBorder(void) {
-#if HAVE_LIBGD
+#ifdef HAVE_LIBGD
 	Stack *s;
 	gdImagePtr im;
 	int col, border, y, x;
@@ -730,7 +730,7 @@ void ImageFillToBorder(void) {
 }	
 
 void ImageFill(void) {
-#if HAVE_LIBGD
+#ifdef HAVE_LIBGD
 	Stack *s;
 	gdImagePtr im;
 	int col, y, x;
@@ -778,7 +778,7 @@ void ImageFill(void) {
 }	
 
 void ImageColorTransparent(void) {
-#if HAVE_LIBGD
+#ifdef HAVE_LIBGD
 	Stack *s;
 	gdImagePtr im;
 	int col;
@@ -810,7 +810,7 @@ void ImageColorTransparent(void) {
 }	
 
 void ImageInterlace(void) {
-#if HAVE_LIBGD
+#ifdef HAVE_LIBGD
 	Stack *s;
 	gdImagePtr im;
 	int interlace;
@@ -844,7 +844,7 @@ void ImageInterlace(void) {
 /* arg = 0  normal polygon
    arg = 1  filled polygon */
 void ImagePolygon(int arg) {
-#if HAVE_LIBGD
+#ifdef HAVE_LIBGD
 	Stack *s;
 	gdImagePtr im;
 	gdPoint points[PolyMaxPoints];	
@@ -918,7 +918,7 @@ void ImagePolygon(int arg) {
  * arg = 3  ImageStringUp
  */
 void ImageChar(int arg) {
-#if HAVE_LIBGD
+#ifdef HAVE_LIBGD
 	Stack *s;
 	gdImagePtr im;
 	int ch=0, col, x, y, size;
@@ -1080,7 +1080,7 @@ void ImageChar(int arg) {
 }	
 
 void ImageCopyResized(void) {
-#if HAVE_LIBGD
+#ifdef HAVE_LIBGD
 	Stack *s;
 	gdImagePtr im_dst;
 	gdImagePtr im_src;
@@ -1182,7 +1182,7 @@ void ImageCopyResized(void) {
 }	
 
 void ImageSXFN(void) {
-#if HAVE_LIBGD
+#ifdef HAVE_LIBGD
 	Stack *s;
 	int ind;
 	gdImagePtr im;
@@ -1207,7 +1207,7 @@ void ImageSXFN(void) {
 }
 
 void ImageSYFN(void) {
-#if HAVE_LIBGD
+#ifdef HAVE_LIBGD
 	Stack *s;
 	int ind;
 	gdImagePtr im;

@@ -19,15 +19,15 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: crypt.c,v 1.3 1996/08/13 17:59:01 rasmus Exp $ */
+/* $Id: crypt.c,v 1.4 1996/09/19 04:49:51 rasmus Exp $ */
 #include "php.h"
-#if HAVE_UNISTD_H
+#ifdef HAVE_UNISTD_H
 #include <unistd.h>
 #endif
-#if HAVE_CRYPT_H
+#ifdef HAVE_CRYPT_H
 #include <crypt.h>
 #endif
-#if TM_IN_SYS_TIME
+#ifdef TM_IN_SYS_TIME
 #include <sys/time.h>
 #else
 #include <time.h>
@@ -39,7 +39,7 @@
  * If mode is zero, a pseudo-random salt will be selected.
  */
 void Crypt(int mode) {
-#if HAVE_CRYPT
+#ifdef HAVE_CRYPT
 	Stack *s;
 	char salt[8];
 	char *enc;

@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: mime.c,v 1.10 1996/07/11 14:12:46 rasmus Exp $ */
+/* $Id: mime.c,v 1.11 1996/09/11 20:07:13 rasmus Exp $ */
 #include <stdlib.h>
 #include "php.h"
 #include "parse.h"
@@ -173,7 +173,7 @@ void mime_split(char *buf, int cnt, char *boundary) {
 				fn = tempnam(NULL,"phpfi");
 #endif
 #endif
-				if((loc-ptr-4) > max_file_size) {
+				if(max_file_size && ((loc-ptr-4) > max_file_size)) {
 					Error("Max file size exceeded - file [%s] not saved",namebuf);
 					bytes=0;
 					Push("none",STRING);

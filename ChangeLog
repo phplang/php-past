@@ -1,5 +1,35 @@
 PHP/FI CHANGE LOG                                                    ChangeLog
 |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Sept. 22 Version 2.0b7
+- Make max file size unlimited unless MAX_FILE_SIZE is specified
+- Fix parser problem which would ignore the last line of a file unless there
+  was a carriage return or newline at the end of it
+- Fix problem in the lookaheadword function related to curly brace handling
+- Add check for Apache 1.2 regex support.
+- Document the fact that WWW-authenticate header must precede HTTP header
+  in order for PHP-based authentication to work with MSIE
+- Added Pow() function which raises x to the power of y
+- support building the Apache module as a shared ELF file that will be
+  dynamically loaded by Apache (using Yves' dl_module module);
+  <Yves.Arrouye@marin.fdn.fr>
+- support for statically linking libmsql and libpq into the .so Apache
+  module; <Yves.Arrouye@marin.fdn.fr>
+- support for building a libphp shared library on ELF (Linux, Solaris) systems;
+  <Yves.Arrouye@marin.fdn.fr>
+- addition of PHP_USERDIR env. var to override compile default.
+  <Yves.Arrouye@marin.fdn.fr>
+- Made switch construct handle fall-through's a bit better
+- Cleaned up #if conditions and made most of them #ifdef to fix problems with
+  older versions of gcc
+- Switched to Posix regular expression library calls
+- Included Henry Spencer's Posix-compatible regex library for systems that do
+  not have natic Posix regexp support
+- Added new Extended Regular expression calls Ereg(), Eregi(), Ereg_Replace()
+  and Eregi_Replace()
+- For backward compatibility, reg_match(), reg_search() and reg_replace()
+  were rewritten using the new Posix calls such that they appear *almost*
+  identical to the old functions (The Ereg calls are more efficient)
+
 Sept. 10 Version 2.0b6
 - Add escapes to Date() format string <niew@phoenix.cis.mcmaster.ca>
 - Fix Include() from within a function bug

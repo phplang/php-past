@@ -19,14 +19,14 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: conf.c,v 1.13 1996/07/11 14:12:35 rasmus Exp $ */
+/* $Id: conf.c,v 1.14 1996/09/19 04:49:51 rasmus Exp $ */
 #include "php.h"
 #include <stdlib.h>
-#if HAVE_UNISTD_H
+#ifdef HAVE_UNISTD_H
 #include <unistd.h>
 #endif
 #include <pwd.h>
-#if HAVE_CRYPT_H
+#ifdef HAVE_CRYPT_H
 #include <crypt.h>
 #endif
 #if APACHE
@@ -94,7 +94,7 @@ void Configuration(int argc, char **argv) {
 		if(ret) return;
 		_dbmInsert(temp,"cfg-file",temp);
 		pw = getpwuid(sb.st_uid);
-#if HAVE_CRYPT
+#ifdef HAVE_CRYPT
 #if BROKEN_CONFIG_PW
 		_dbmInsert(temp,"cfg-passwd",(char *)crypt("php","xy"));
 #else
@@ -125,7 +125,7 @@ void Configuration(int argc, char **argv) {
 
 	php_header(0,NULL);
 	var = GetVar("cfg-passwd",NULL,0);
-#if HAVE_CRYPT
+#ifdef HAVE_CRYPT
 	if(!var || (var && strcmp((char *)crypt(var->strval,"xy"),_dbmFetch(temp,"cfg-passwd")))) {
 #else
 	if(!var || (var && strcmp(var->strval,_dbmFetch(temp,"cfg-passwd")))) {

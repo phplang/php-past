@@ -19,7 +19,8 @@
 	fputs($fd, "From: $EMAIL_ADDR\n");
 	fputs($fd, "Subject: Form Results\n");
 	fputs($fd, "Reply-to: $EMAIL_ADDR\n");
-	fputs($fd, "X-Mailer: PHP-1.99\n\n");
+	$ver = phpversion();
+	fputs($fd, "X-Mailer: PHP/FI $ver\n\n");
 	fputs($fd, $body);
 	pclose($fd)>
 	Message Sent!<p>

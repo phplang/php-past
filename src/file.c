@@ -19,17 +19,16 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: file.c,v 1.29 1996/09/04 02:16:51 rasmus Exp $ */
+/* $Id: file.c,v 1.32 1996/09/22 22:07:51 rasmus Exp $ */
 #include "php.h"
 #include <stdlib.h>
-#if HAVE_UNISTD_H
+#ifdef HAVE_UNISTD_H
 #include <unistd.h>
 #endif
 #include <string.h>
 #include <pwd.h>
 #include <grp.h>
 #include <errno.h>
-#include "regexpr.h"
 #include "parse.h"
 #include <ctype.h>
 #if APACHE
@@ -294,7 +293,14 @@ char *FixFilename(char *filename, int cd, int *ret) {
 			} else temp[0]='\0';
 			if(*user) {
 				pw = getpwnam(user);	
-				if(pw) sprintf(path,"%s/%s%s",pw->pw_dir,PHP_PUB_DIRNAME,temp);
+				if(pw) {
+				  const char* pd = 0;
+#ifdef PHP_PUB_DIRNAME_ENV
+				  pd = getenv(PHP_PUB_DIRNAME_ENV);
+#endif
+				  if (pd == 0) pd = PHP_PUB_DIRNAME;
+				  sprintf(path,"%s/%s%s",pw->pw_dir,pd,temp);
+				}
 			}
 		} else if(*path=='/' && *(path+1)=='~') {
 			s = strchr(path+1,'/');
@@ -309,7 +315,13 @@ char *FixFilename(char *filename, int cd, int *ret) {
 			} else temp[0]='\0';
 			if(*user) {
 				pw = getpwnam(user);	
-				if(pw) sprintf(path,"%s/%s%s",pw->pw_dir,PHP_PUB_DIRNAME,temp);
+				if(pw) {
+				  const char* pd = 0;
+#ifdef PHP_PUB_DIRNAME_ENV
+				  pd = getenv(PHP_PUB_DIRNAME_ENV);
+#endif
+				  if (pd == 0) pd = PHP_PUB_DIRNAME;
+				  sprintf(path,"%s/%s%s",pw->pw_dir,pd,temp);			}
 			}
 		}
 		temp[0]='\0';
@@ -583,7 +595,7 @@ void LinkInfo(void) {
 }
  
 void SymLink(void) {
-#if HAVE_SYMLINK
+#ifdef HAVE_SYMLINK
 	Stack *s;
 	char *new;
 	int ret;
@@ -622,7 +634,7 @@ void SymLink(void) {
 }
 
 void Link(void) {
-#if HAVE_LINK
+#ifdef HAVE_LINK
 	Stack *s;
 	char *new;
 	int ret;
@@ -705,7 +717,7 @@ void Sleep(void) {
 }
 
 void USleep(void) {
-#if HAVE_USLEEP
+#ifdef HAVE_USLEEP
 	Stack *s;
 
 	s = Pop();

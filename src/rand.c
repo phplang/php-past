@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: rand.c,v 1.4 1996/07/11 14:12:49 rasmus Exp $ */
+/* $Id: rand.c,v 1.5 1996/09/19 04:50:03 rasmus Exp $ */
 #include <stdlib.h>
 #include "php.h"
 #include "parse.h"
@@ -36,7 +36,7 @@ void Srand(void) {
 		Error("Stack error in srand");
 		return;
 	}
-#if HAVE_SRAND48
+#ifdef HAVE_SRAND48
 	srand48((unsigned int)s->intval);	
 #else
 	srand((unsigned int)s->intval);	
@@ -46,7 +46,7 @@ void Srand(void) {
 void Rand(void) {
 	char temp[32];
 
-#if HAVE_LRAND48
+#ifdef HAVE_LRAND48
 	sprintf(temp,"%ld",lrand48());
 #else
 	sprintf(temp,"%d",rand());
@@ -57,7 +57,7 @@ void Rand(void) {
 void GetRandMax(void) {
 	char temp[32];
 
-#if HAVE_LRAND48
+#ifdef HAVE_LRAND48
 	strcpy(temp,"2147483648");
 #else
 	sprintf(temp,"%d",RAND_MAX);

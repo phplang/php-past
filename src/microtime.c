@@ -22,10 +22,10 @@
 /*
  * Contributed by Paul Panotzki - Bunyip Information Systems
  */
-/* $Id: microtime.c,v 1.6 1996/07/11 14:12:45 rasmus Exp $ */
+/* $Id: microtime.c,v 1.7 1996/09/19 04:50:00 rasmus Exp $ */
 #include "php.h"
 #include <stdlib.h>
-#if HAVE_UNISTD_H
+#ifdef HAVE_UNISTD_H
 #include <unistd.h>
 #endif
 
@@ -40,7 +40,7 @@
 #define MICRO_IN_SEC 1000000.00
 
 void MicroTime(void) {
-#if HAVE_GETTIMEOFDAY
+#ifdef HAVE_GETTIMEOFDAY
 	struct timeval tp;
 	long sec=0L;
 	double msec = 0.0;

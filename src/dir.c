@@ -19,10 +19,10 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: dir.c,v 1.4 1996/07/11 14:12:38 rasmus Exp $ */
+/* $Id: dir.c,v 1.5 1996/09/19 04:49:53 rasmus Exp $ */
 #include "php.h"
 #include <dirent.h>
-#if HAVE_UNISTD_H
+#ifdef HAVE_UNISTD_H
 #include <unistd.h>
 #endif
 #include <errno.h>

@@ -19,10 +19,10 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: head.c,v 1.24 1996/08/27 03:18:44 rasmus Exp $ */
+/* $Id: head.c,v 1.25 1996/09/19 04:49:57 rasmus Exp $ */
 #include "php.h"
 #include "parse.h"
-#if TM_IN_SYS_TIME
+#ifdef TM_IN_SYS_TIME
 #include <sys/time.h>
 #else
 #include <time.h>

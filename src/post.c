@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: post.c,v 1.16 1996/09/09 13:51:22 rasmus Exp $ */
+/* $Id: post.c,v 1.17 1996/09/22 22:07:54 rasmus Exp $ */
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -29,6 +29,7 @@
 #if APACHE
 #include "http_protocol.h"
 #include "http_core.h"
+#include "http_config.h"
 #endif
 
 #define ishex(x) (((x) >= '0' && (x) <= '9') || ((x) >= 'a' && (x) <= 'f') || \
@@ -122,6 +123,11 @@ char *getpost(void) {
 	}
 	
 	length = atoi(buf);
+#if APACHE
+#if (MODULE_MAGIC_NUMBER >= 19960725)
+	length+=1;  /* Apache 1.2 */
+#endif
+#endif
 	buf = (char *)emalloc(1,(length+1)*sizeof(char));
 	if(!buf) {
 		Error("Unable to allocate memory in getpost()");
@@ -132,7 +138,13 @@ char *getpost(void) {
 #endif
 	do {
 #if APACHE
+#if (MODULE_MAGIC_NUMBER >= 19960725)
+		php_rqst->remaining = length - cnt; /* Apache 1.2 bug? */
+#endif
 		bytes = read_client_block(php_rqst, buf + cnt, length - cnt);
+#if DEBUG
+		Debug("%d bytes read\n",bytes);
+#endif
 #else
 		bytes = fread(buf + cnt, 1, length - cnt, stdin);
 #endif
@@ -146,6 +158,9 @@ char *getpost(void) {
 #endif
 
 	buf[cnt]='\0';
+#if DEBUG
+	Debug("buf is [%s]\n",buf);
+#endif
 	return(buf);
 }
 

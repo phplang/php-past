@@ -19,16 +19,16 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: lex.c,v 1.89 1996/09/09 13:51:20 rasmus Exp $ */
+/* $Id: lex.c,v 1.93 1996/09/22 22:07:52 rasmus Exp $ */
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
 #include <errno.h>
 #include "php.h"
-#if PHP_HAVE_MMAP
+#ifdef PHP_HAVE_MMAP
 #include <sys/mman.h>
 #endif
-#if HAVE_UNISTD_H
+#ifdef HAVE_UNISTD_H
 #include <unistd.h>
 #endif
 #include "parse.h"
@@ -36,7 +36,7 @@
 #include "http_protocol.h"
 #endif
 
-#if PHP_HAVE_MMAP
+#ifdef PHP_HAVE_MMAP
 static caddr_t pa=NULL;
 static long pa_pos=0L;
 #else
@@ -111,11 +111,13 @@ static cmd_table_t cmd_table[22][35] = {
 	  { "abs", INTFUNC1,Abs },
 	  { "ord", INTFUNC1,Ord },
 	  { "chr", INTFUNC1,Chr },
+	  { "pow", INTFUNC2,Pow },
 	  { NULL,0,NULL } }, 
 
 	{ { "echo",PHPECHO,NULL },     /* 4 */
 	  { "else",ELSE,NULL },
 	  { "case",CASE,NULL },
+	  { "ereg",EREG,NULL },
 	  { "feof",INTFUNC1,Feof },
 	  { "msql",INTFUNC2,Msql },
 	  { "exit",EXIT,NULL },
@@ -137,6 +139,7 @@ static cmd_table_t cmd_table[22][35] = {
 	  { "break",BREAK,NULL },
 	  { "isset",ISSET,NULL },
 	  { "count",INTFUNC1,Count },
+	  { "eregi",EREGI,NULL },
 	  { "crypt",CRYPT,NULL },
 	  { "srand",INTFUNC1,Srand },
 	  { "sleep",INTFUNC1,Sleep },
@@ -295,6 +298,7 @@ static cmd_table_t cmd_table[22][35] = {
 	  { NULL,0,NULL } },
 
 	{ { "getlastemail", INTFUNC0,GetLastEmail }, /* 12 */
+	  { "ereg_replace", INTFUNC3,ERegReplace },
 	  { "msql_connect", INTFUNC1,MsqlConnect },
 	  { "msql_numrows", INTFUNC1,MsqlNumRows },
 	  { "msql_regcase", INTFUNC1,MsqlRegCase },
@@ -311,6 +315,7 @@ static cmd_table_t cmd_table[22][35] = {
 	{ { "gethostbyaddr", INTFUNC1,GetHostByAddr }, /* 13 */
 	  { "gethostbyname", INTFUNC1,GetHostByName },
 	  { "getlastaccess", INTFUNC0,GetLastAccess },
+	  { "eregi_replace", INTFUNC3,ERegiReplace },
 	  { "msql_fieldlen", MSQL_FIELDLEN,NULL },
 	  { "imagesetpixel", INTFUNC4,ImageSetPixel },
 	  { "imagestringup", IMAGESTRINGUP,NULL },
@@ -394,7 +399,7 @@ void FilePush(char *fn, long file_size, int fd) {
 }
 
 /* Pop a file or a function from the file stack */
-#if PHP_HAVE_MMAP
+#ifdef PHP_HAVE_MMAP
 caddr_t FilePop(void) {
 #else
 char *FilePop(void) {
@@ -402,7 +407,7 @@ char *FilePop(void) {
 	FileStack *s;
 
 	if((top && top->fd != -1) || !top) {
-#if PHP_HAVE_MMAP
+#ifdef PHP_HAVE_MMAP
 		if(pa && !cur_func && !eval_mode) {
 #if DEBUG
 			Debug("munmap'ing %ld bytes\n",gsize);
@@ -585,14 +590,6 @@ char getnextchar(void) {
 			while(cont) {
 				ch = *(pa+pa_pos+i);
 				if(ch==10 || ch==13 || ch==0 || i==LINEBUFSIZE-1) cont=0;
-				if(SeekPos+i >= gsize) {
-					if(!eval_mode) {
-#if DEBUG
-						Debug("End of File/Function\n");
-#endif
-						return(0);
-					} else cont=0;
-				}
 				inbuf[i++] = ch;
 			}
 			g_length=i;
@@ -624,6 +621,7 @@ char *lookaheadword(void) {
 	if(!st) return NULL;
 	if(l>31) l=31;
 	strncpy(temp,st,l);	
+	temp[l]='\0';
 #if DEBUG
 	Debug("lookahead: %s\n",temp);
 #endif
@@ -1155,7 +1153,7 @@ void yyerror(char *string) {
 }
 
 void php_init_lex(void) {
-#if PHP_HAVE_MMAP
+#ifdef PHP_HAVE_MMAP
 	pa=NULL;
 #else
 	pa=NULL;
@@ -1205,7 +1203,7 @@ void ParserInit(int fd, long file_size, int nh, char *fbuf) {
 	no_httpd = nh;
 
 	if(fd!=-1) {
-#if PHP_HAVE_MMAP
+#ifdef PHP_HAVE_MMAP
 #if DEBUG
 		Debug("mmap'ing %ld bytes\n",file_size);
 #endif
@@ -1269,7 +1267,7 @@ void Exit(int footer) {
 	if(!ExitCalled) ExitCalled=1;
 	else return;
 	php_header(0,NULL); /* just in case it hasn't been sent yet. */
-#if PHP_HAVE_MMAP
+#ifdef PHP_HAVE_MMAP
 	if(pa) {
 #if DEBUG
 		Debug("munmap'ing %ld bytes\n",gsize);

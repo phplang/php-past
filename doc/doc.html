@@ -31,7 +31,7 @@ when it is bad, it is better than nothing.
 	<LI><A HREF="#imagecoord"><TT>IMAGE SUBMIT</TT> and PHP</A>
 </UL>
 	<LI><A HREF="#gd_support">GD (a graphics library for GIF creation) Support in PHP</A>
-	<LI><A HREF="#virtual">PHP/FI and Virtual Hosts</A>
+	<LI><A HREF="#virtual_hosts">PHP/FI and Virtual Hosts</A>
 	<LI><A HREF="#upload">File Upload Support</A>
 	<LI><A HREF="#cookies">Cookie Support</A>
 	<LI><A HREF="#msql_support">mSQL Support</A>
@@ -481,7 +481,7 @@ changed accordingly.<P>
 <HR>
 <H2><A NAME="http_auth">HTTP Authentication</A></H2>
 <P>
-The HTTP Authentication hooks in PHP/FI is only available when it is running
+The HTTP Authentication hooks in PHP/FI are only available when it is running
 as an Apache module.  In an Apache module PHP/FI script, it is possible to
 use the Header() command to send an &quot;Authentication Required&quot; message
 to the client browser causing it to pop up a Username/Password input window.
@@ -494,8 +494,8 @@ supported at this point.<P>
 page would be the following:<P>
 <PRE>    &lt;?
         if(!$PHP_AUTH_USER) {
+			Header(&quot;WWW-authenticate: basic realm=\&quot;My Realm\&quot;&quot;);
             Header(&quot;HTTP/1.0 401 Unauthorized&quot;);
-			Header(&quot;WWW-authenticate: basic realm=&quot;My Realm&quot;&quot;);
             exit;
         } else {
             echo &quot;Hello $PHP_AUTH_USER.&lt;P&gt;&quot;;
@@ -506,6 +506,10 @@ page would be the following:<P>
 Instead of simply printing out the $PHP_AUTH_USER and $PHP_AUTH_PW, you would
 probably want to check the username and password for validity.  Perhaps by
 sending a query to a database, or by looking up the user in a dbm file.<P>
+<P>
+Watch out for buggy Internet Explorer browsers out there.  They seem very
+picky about the order of the headers.  Sending the <b>WWW-authenticate</b> 
+header before the <b>HTTP/1.0 401</b> header seems to do the trick for now.<P>
 <P>
 In order to prevent someone from writing a script which reveals the password for
 a page that was authenticated through a traditional external mechanism, the
@@ -872,7 +876,7 @@ start with the word, <EM>Image</EM>.<P>  More information on the GD package is a
 <EM>GD 1.2 is copyright 1994, 1995 Quest Protein Database Center, Cold Springs Harbor Labs.</EM><P>
 <HR>
 <P>
-<H2><A NAME="virtual">PHP/FI and Virtual Hosts</A></H2>
+<H2><A NAME="virtual_hosts">PHP/FI and Virtual Hosts</A></H2>
 PHP works fine on virtual host setups supported by some http daemons.  The one
 problem that may occur on such a setup is related to an inconsistency in the
 way httpd sets the SCRIPT_NAME environment variable.  Normally it is set to the
@@ -1086,223 +1090,44 @@ called 'mydb' and retrieves the names and ages of people in a table:<P>
 <P>
 Regular expressions are used for complex string manipulation in PHP/FI.
 The script interface to the regular expression support is through the following
-functions: <A HREF="#reg_match">Reg_Match()</A>, <A HREF="#reg_replace">
-Reg_Replace()</A>, and <A HREF="#reg_search">Reg_Search()</A>.  The first
-argument to all three functions is a regular expression string.  This string
-is made up of regular characters and special characters.  Regular characters
-are matched exactly, while special characters have a special meaning.  The following
-is the complete list of special characters and their meanings as understood by
-the PHP/FI parser:<P>
+functions: 
+<A HREF="#ereg">EReg()</A>,
+<A HREF="#eregi">ERegi()</A>,
+<A HREF="#ereg_replace">EReg_Replace()</A>,
+<A HREF="#eregi_replace">ERegi_Replace()</A>,
+<A HREF="#reg_match">Reg_Match()</A>, 
+<A HREF="#reg_replace">Reg_Replace()</A>, and 
+<A HREF="#reg_search">Reg_Search()</A>.  
+The first argument to all three functions is a regular expression string.  
+The EReg functions use the Posix Extended regular expressions as defined
+by POSIX 1003.2, while the Reg functions implement Basic regular
+expressions.  For a complete description of regular expressions see your 
+regex(7) man page.  If you do not have this page, the regex(7) man page
+written by Henry Spencer can be found in the src/regex directory in the
+PHP/FI distribution.  Ask your system administrator to install this
+man page for you.<P>
+Some examples of regular expressions and what they do:<p>
 <blockquote>
-<DL>
-<DT><STRONG>`.'</STRONG>
-<DD> <P>is a special character that matches anything except a newline.
-     Using concatenation, we can make regular expressions like `a.b'
-     which matches any three-character string which begins with `a'
-     and ends with `b'.<P>
-
-<DT><STRONG>`*'</STRONG>
-<DD> <P>is not a construct by itself; it is a suffix, which means the
-     preceding regular expression is to be repeated as many times as
-     possible.  In `fo*', the `*' applies to the `o', so `fo*'
-     matches `f' followed by any number of `o''s.<P>
-<P>
-     The case of zero `o''s is allowed: `fo*' does match `f'.<P>
-<P>
-     `*' always applies to the *smallest* possible preceding
-     expression.  Thus, `fo*' has a repeating `o', not a repeating
-     `fo'.<P>
-<P>
-     The matcher processes a `*' construct by matching, immediately,
-     as many repetitions as can be found.  Then it continues with the
-     rest of the pattern.  If that fails, backtracking occurs,
-     discarding some of the matches of the `*''d construct in case
-     that makes it possible to match the rest of the pattern.  For
-     example, matching `c[ad]*ar' against the string `caddaar', the
-     `[ad]*' first matches `addaa', but this does not allow the next
-     `a' in the pattern to match.  So the last of the matches of
-     `[ad]' is undone and the following `a' is tried again.  Now it
-     succeeds.<P>
-
-<DT><STRONG>`+'</STRONG>
-<DD>
-<P>`+' is like `*' except that at least one match for the preceding
-     pattern is required for `+'.  Thus, `c[ad]+r' does not match
-     `cr' but does match anything else that `c[ad]*r' would match.<P>
-
-<DT><STRONG>`?'</STRONG>
-<DD>
-<P>`?' is like `*' except that it allows either zero or one match
-     for the preceding pattern.  Thus, `c[ad]?r' matches `cr' or
-     `car' or `cdr', and nothing else.<P>
-
-<DT><STRONG>`[ ... ]'</STRONG>
-<DD>
-<P>`[' begins a "character set", which is terminated by a `]'.  In
-     the simplest case, the characters between the two form the set.
-     Thus, `[ad]' matches either `a' or `d', and `[ad]*' matches any
-     string of `a''s and `d''s (including the empty string), from
-     which it follows that `c[ad]*r' matches `car', etc.<P>
-<P>
-     Character ranges can also be included in a character set, by
-     writing two characters with a `-' between them.  Thus, `[a-z]'
-     matches any lower-case letter.  Ranges may be intermixed freely
-     with individual characters, as in `[a-z$%.]', which matches any
-     lower case letter or `$', `%' or period.<P>
-<P>
-     Note that the usual special characters are not special any more
-     inside a character set.  A completely different set of special
-     characters exists inside character sets: `]', `-' and `^'.<P>
-<P>
-     To include a `]' in a character set, you must make it the first
-     character.  For example, `[]a]' matches `]' or `a'.  To include
-     a `-', you must use it in a context where it cannot possibly
-     indicate a range: that is, as the first character, or
-     immediately after a range.<P>
-
-<DT><STRONG>`[^ ... ]'</STRONG>
-<DD>
-<P>`[^' begins a "complement character set", which matches any
-     character except the ones specified.  Thus, `[^a-z0-9A-Z]'
-     matches all characters *except* letters and digits.<P>
-<P>
-     `^' is not special in a character set unless it is the first
-     character.  The character following the `^' is treated as if it
-     were first (it may be a `-' or a `]').<P>
-
-<DT><STRONG>`^'</STRONG>
-<DD>
-<P>is a special character that matches the empty string -- but only
-    if at the beginning of a line in the text being matched.
-    Otherwise it fails to match anything.  Thus, `^foo' matches a
-    `foo' which occurs at the beginning of a line.<P>
-
-<DT><STRONG>`$'</STRONG>
-<DD>
-<P>is similar to `^' but matches only at the end of a line.  Thus,
-    `xx*$' matches a string of one or more `x''s at the end of a line.<P>
-
-<DT><STRONG>`\'</STRONG>
-<DD>
-<P>has two functions: it quotes the above special characters
-    (including `\'), and it introduces additional special constructs.<P>
-<P>
-    Because `\' quotes special characters, `\$' is a regular
-    expression which matches only `$', and `\[' is a regular
-    expression which matches only `[', and so on.<P>
-<P>
-    For the most part, `\' followed by any character matches only
-    that character.  However, there are several exceptions:
-    characters which, when preceded by `\', are special constructs.
-    Such characters are always ordinary when encountered on their own.<P>
-<P>
-    No new special characters will ever be defined.  All extensions
-    to the regular expression syntax are made by defining new
-    two-character constructs that begin with `\'.<P>
-
-<DT><STRONG>`\|'</STRONG>
-<DD> <P>specifies an alternative.  Two regular expressions A and B with
-     `\|' in between form an expression that matches anything that
-     either A or B will match.<P>
-<P>
-     Thus, `foo\|bar' matches either `foo' or `bar' but no other
-     string.<P>
-<P>
-     `\|' applies to the largest possible surrounding expressions.
-     Only a surrounding `\( ... \)' grouping can limit the grouping
-     power of `\|'.<P>
-<P>
-     Full backtracking capability exists when multiple `\|''s are used.<P>
-
-<DT><STRONG>`\( ... \)'</STRONG>
-<DD> <P>is a grouping construct that serves three purposes:<P>
-<P>
-       1. To enclose a set of `\|' alternatives for other operations.
-          Thus, `\(foo\|bar\)x' matches either `foox' or `barx'.<P>
-<P>
-       2. To enclose a complicated expression for the postfix `*' to
-          operate on.  Thus, `ba\(na\)*' matches `bananana', etc.,
-          with any (zero or more) number of `na''s.<P>
-<P>
-       3. To mark a matched substring for future reference.<P>
-<P>
-     This last application is not a consequence of the idea of a
-     parenthetical grouping; it is a separate feature which happens
-     to be assigned as a second meaning to the same `\( ... \)'
-     construct because there is no conflict in practice between the
-     two meanings.  Here is an explanation of this feature:<P>
-
-<DT><STRONG>`\DIGIT'</STRONG>
-<DD> <P>After the end of a `\( ... \)' construct, the matcher remembers
-     the beginning and end of the text matched by that construct.
-     Then, later on in the regular expression, you can use `\'
-     followed by DIGIT to mean "match the same text matched the
-     DIGIT'th time by the `\( ... \)' construct."  The `\( ... \)'
-     constructs are numbered in order of commencement in the regexp.<P>
-<P>
-     The strings matching the first nine `\( ... \)' constructs
-     appearing in a regular expression are assigned numbers 1 through
-     9 in order of their beginnings.  `\1' through `\9' may be used
-     to refer to the text matched by the corresponding `\( ... \)'
-     construct.  These 9 saved constructs are known as registers.<P>
-<P>
-     For example, `\(.*\)\1' matches any string that is composed of
-     two identical halves.  The `\(.*\)' matches the first half,
-     which may be anything, but the `\1' that follows must match the
-     same exact text.<P>
-<P>
-     The saved constructs or registers may be used within a single
-     expressions, or they may be extracted and used for something else.
-     Adding a third argument to either reg_match() or reg_search() will
-     define an array into which the 9 registers will be written.  An
-     additional register is written at the beginning (position 0) which
-     is the entire matched expression.  For example:<P>
-     <P>
-<PRE>    &lt;?$string = "This is a test";
-      $cnt = reg_match("\(\w*\).*\(\<\w*\)$",$string,$regs);
-      echo $cnt;
-      echo $regs[0];
-      echo $regs[1];
-      echo $regs[2];
-    &gt;</PRE><P>
-    <P>
-     The above will first print the number of characters matched (14 in this case)
-     and then the entire matched string, followed by the first word of the string
-     and then the last word.<P>
-
-<DT><STRONG>`\b'</STRONG>
-<DD> <P>matches the empty string, but only if it is at the beginning or
-     end of a word.  Thus, `\bfoo\b' matches any occurrence of `foo'
-     as a separate word.  `\bball\(s\|\)\b' matches `ball' or `balls'
-     as a separate word.<P>
-
-<DT><STRONG>`\B'</STRONG>
-<DD> <P>matches the empty string, provided it is <STRONG>not</STRONG> at
-     the beginning or end of a word.<P>
-
-<DT><STRONG>`\&lt;'</STRONG>
-<DD> <P>matches the empty string, but only if it is at the beginning of
-     a word.<P>
-
-<DT><STRONG>`\&gt;'</STRONG>
-<DD> <P>matches the empty string, but only if it is at the end of a word.<P>
-
-<DT><STRONG>`\w'</STRONG>
-<DD> <P>matches any word-constituent character.<P>
-
-<DT><STRONG>`\W'</STRONG>
-<DD> <P>matches any character that is not a word-constituent.<P>
-
-<!--
-<DT><STRONG>`\`'</STRONG>
-<DD> <P>matches beginning of buffer<P>
-
-<DT><STRONG>`\''</STRONG>
-<DD> <P>matches end of buffer<P>
--->
-</DL>
-</blockquote>
-
+<dl>
+<dt><tt>ereg("abc",$string);</tt>
+<dd>Returns true if &quot;abc&quot; is found anywhere in $string.<P>
+<dt><tt>ereg("^abc",$string);</tt>
+<dd>Returns true if &quot;abc&quot; is found at the beginning of $string.<P>
+<dt><tt>ereg("abc$",$string);</tt>
+<dd>Returns true if &quot;abc&quot; is found at the end of $string.<P>
+<dt><tt>eregi("(ozilla.[23]|MSIE.3)",$HTTP_USER_AGENT);</tt>
+<dd>Returns true if client browser is Netscape 2, 3 or MSIE 3.<P>
+<dt><tt>ereg("([[:alnum:]]+) ([[:alnum:]]+) ([[:alnum:]]+)",$string,$regs);</tt><br>
+<dd>Places three space separated words into $regs[1], $regs[2] and $regs[3].<P>
+<dt><tt>ereg_replace("^","&lt;BR&gt;",$string)</tt>
+<dd>Put a &lt;BR&gt; tag at the beginning of $string.<P>
+<dt><tt>ereg_replace("$","&lt;BR&gt;",$string)</tt>
+<dd>Put a &lt;BR&gt; tag at the end of $string.<P>
+<dt><tt>ereg_replace(10,"",$string);</tt>
+<dd>Get rid of any linefeed characters in $string.<P>
+<dt><tt>ereg_replace(13,"&lt;BR&gt;",$string);</tt>
+<dd>Replace all carriage returns with a &lt;BR&gt; tag in $string.<P>
+</dl>
 <HR>
 <H2><A NAME="escapes">Escape Characters</A></H2>
 <P>
@@ -2196,6 +2021,40 @@ associative array in reverse order:<P>
       echo $array[$k];
     &gt;</PRE><P>
 
+<DT><A NAME="ereg"><FONT SIZE="+1">ereg(expr,arg[,regs])</FONT></A>
+<DD>
+<P>ereg returns non-zero if the regular expression is matched
+in the argument string.  For example, the condition, <TT>&lt;?if (ereg(&quot;^This.*&quot;,
+&quot;This is an example string&quot;)&gt;</TT> would be true since the &quot;^This.*&quot;
+expression says to match the word <STRONG>This</STRONG> at the beginning of the string and then
+match any characters afterwards.  If the <EM>regs</EM> argument is present, then match
+registers are filled into positions 0-10 in the array named by the <EM>regs</EM>
+argument.  Register 0 will always contain the full matched string.  
+For more information on regular expressions, see
+the <A HREF="#regexp">regular expression section</A> of this document.<P>
+
+<DT><A NAME="eregi"><FONT SIZE="+1">eregi(expr,arg[,regs])</FONT></A>
+<DD>
+<P>eregi is identical to the <a href="#ereg">ereg()</a> function except
+for the fact that the regular expression is applied such that upper/lower
+case is ignored.<P>
+
+<DT><A NAME="ereg_replace"><FONT SIZE="+1">ereg_replace(expr,replace,arg)</FONT></A>
+<DD>
+<P>ereg_Replace scans the entire argument string and replaces any portions
+of the string matched by the given expression with the replacement string.  For
+example, in the string, <TT>&quot;This is an example string&quot;</TT> we could
+very easily replace every space with a dash with the command:
+<STRONG>ereg_replace(" ","-","This is an example string")</STRONG>.For more information on regular
+expressions, see the <A HREF="#regexp">regular expression section</A>
+of this document.<P>
+
+<DT><A NAME="eregi_replace"><FONT SIZE="+1">eregi_replace(expr,replace,arg)</FONT></A>
+<DD>
+<P>eregi_replace is identical to the <a href="#ereg_replace">ereg_replace()</a>
+function except for the fact that the regular expression is applied such that 
+upper/lower case is ignored.<P>
+
 <DT><A NAME="escapeshellcmd"><FONT SIZE="+1">EscapeShellCmd(string)</FONT></A>
 <DD><P>EscapeShellCmd escapes any characters in a string that might be used to
 trick a shell command into executing arbitrary commands.  This function should
@@ -2229,11 +2088,14 @@ If you need to execute a command and have all the data from the command passed
 directly back without any interference, use the <a href="#passthru">PassThru()</a>
 function.
 If the array argument is present, then the specified array will be filled
-with every line of output from the unix command starting at array[0].  If the
-return_var argument is present along with the array argument, then the return
-status of the executed unix command will be written to this variable.  Note that if
-you are going to allow data coming from user input to be passed to this Exec function,
-then you should be using the <A HREF="#escpapeshellcmd">EscapeShellCmd()</A> function
+with every line of output from the unix command starting at the end of the
+array.  Make sure you <a href="#unset">UnSet</a> the array before the call if
+your array already contains elements and you want to start filling it at
+array element 0.  If the return_var argument is present along with the array 
+argument, then the return status of the executed unix command will be written to this 
+variable.  Note that if you are going to allow data coming from user input to be 
+passed to this Exec function, then you should be using the 
+<A HREF="#escpapeshellcmd">EscapeShellCmd()</A> function
 to make sure that users cannot trick the system into executing arbitrary commands.
 See also the <A HREF="#system">system()</A> function.<P>
 
@@ -2244,7 +2106,7 @@ as this tag is parsed.<P>
 
 <DT><A NAME="exp"><FONT SIZE="+1">Exp(arg)</FONT></A>
 <DD>
-<P>Exp returns e raised to the power of arg.<P>
+<P>Exp returns e raised to the power of arg.  See also <a href="#pow">pow()</a><P>
 
 <DT><A NAME="fclose"><FONT SIZE="+1">fclose($fd)</FONT></A>
 <DD>
@@ -3206,6 +3068,10 @@ for write.  See the UNIX C library popen man page for more details.
 Any file opened with popen() should be closed using the 
 <A HREF="#pclose">pclose()</A> function.<P>
 
+<DT><A NAME="pow"><FONT SIZE="+1">pow(x,y)</FONT></A>
+<DD>
+<P>Evaluates x raised to the power of y.  See also <a href="#exp">Exp()</a><P>
+
 <DT><A NAME="prev"><FONT SIZE="+1">Prev(variable)</FONT></A>
 <DD>
 <P>Prev moves the internal array pointer for the given variable to the
@@ -3251,7 +3117,9 @@ in case of error.  See also <A HREF="#linkinfo">LinkInfo</A>.<P>
 
 <DT><A NAME="reg_match"><FONT SIZE="+1">reg_Match(expr,arg[,regs])</FONT></A>
 <DD>
-<P>reg_Match returns non-zero if the regular expression is matched
+<P><b>This function has been replaced by the <a href="#ereg">ereg()</a>
+function.  It is however still available for backwards compatibility.</b><br>
+reg_Match returns non-zero if the regular expression is matched
 in the argument string.  For example, the condition, <TT>&lt;?if (reg_match(&quot;^This.*&quot;,
 &quot;This is an example string&quot;)&gt;</TT> would be true since the &quot;^This.*&quot;
 expression says to match the word <STRONG>This</STRONG> at the beginning of the string and then
@@ -3263,7 +3131,9 @@ the <A HREF="#regexp">regular expression section</A> of this document.<P>
 
 <DT><A NAME="reg_replace"><FONT SIZE="+1">reg_replace(expr,replace,arg)</FONT></A>
 <DD>
-<P>reg_Replace scans the entire argument string and replaces any portions
+<P><b>This function has been replaced by the <a href="#ereg_replace">ereg_replace()</a>
+function.  It is however still available for backwards compatibility.</b><br>
+reg_Replace scans the entire argument string and replaces any portions
 of the string matched by the given expression with the replacement string.  For
 example, in the string, <TT>&quot;This is an example string&quot;</TT> we could
 very easily replace every space with a dash with the command:
@@ -3273,7 +3143,9 @@ of this document.<P>
 
 <DT><A NAME="reg_search"><FONT SIZE="+1">reg_Search(expr,arg[,regs])</FONT></A>
 <DD>
-<P>reg_Search will scan the entire argument string for any matches to
+<P><b>This function has been replaced by the <a href="#ereg">ereg()</a>
+function.  It is however still available for backwards compatibility.</b><br>
+reg_Search will scan the entire argument string for any matches to
 the given regular expression.  If a match is found, it will return the portion
 of the string starting at where the match occurred.  If no match is found a
 zero-length string is returned.  If the <EM>regs</EM> argument is present, then match

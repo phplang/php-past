@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: parse.raw,v 1.41 1996/09/05 06:13:23 rasmus Exp $ */
+/* $Id: parse.raw,v 1.42 1996/09/22 22:07:53 rasmus Exp $ */
 %{
 #include <stdio.h>
 #include <stdlib.h>
@@ -139,6 +139,8 @@ void php_init_yacc(void) {
 %token INTFUNC5
 %token INTFUNC6
 %token SETCOOKIE
+%token EREG
+%token EREGI
 
 /* Precedence */
 %left '+' '-'
@@ -608,19 +610,35 @@ func:
 		}
 	| REG_MATCH '(' expr ',' expr ')'
 		{
-			if(GetCurrentState(NULL) || inCase || inElseIf) RegMatch(NULL);
+			if(GetCurrentState(NULL) || inCase || inElseIf) RegMatch(NULL,0);
 		}
 	| REG_MATCH '(' expr ',' expr ',' VAR ')'
 		{		
-			if(GetCurrentState(NULL) || inCase || inElseIf) RegMatch((char *)$7);
+			if(GetCurrentState(NULL) || inCase || inElseIf) RegMatch((char *)$7,0);
 		}
 	| REG_SEARCH '(' expr ',' expr ')'
 		{		
-			if(GetCurrentState(NULL) || inCase || inElseIf) RegSearch(NULL);
+			if(GetCurrentState(NULL) || inCase || inElseIf) RegMatch(NULL,1);
 		}
 	| REG_SEARCH '(' expr ',' expr ',' VAR ')'
 		{		
-			if(GetCurrentState(NULL) || inCase || inElseIf) RegSearch((char *)$7);
+			if(GetCurrentState(NULL) || inCase || inElseIf) RegMatch((char *)$7,1);
+		}
+	| EREG '(' expr ',' expr ')'
+		{		
+			if(GetCurrentState(NULL) || inCase || inElseIf) EReg(NULL,0);
+		}
+	| EREG '(' expr ',' expr ',' VAR ')'
+		{		
+			if(GetCurrentState(NULL) || inCase || inElseIf) EReg((char *)$7,0);
+		}
+	| EREGI '(' expr ',' expr ')'
+		{		
+			if(GetCurrentState(NULL) || inCase || inElseIf) EReg(NULL,1);
+		}
+	| EREGI '(' expr ',' expr ',' VAR ')'
+		{		
+			if(GetCurrentState(NULL) || inCase || inElseIf) EReg((char *)$7,1);
 		}
 	| EXEC '(' expr ')'
 		{		
