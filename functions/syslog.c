@@ -27,7 +27,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: syslog.c,v 1.40 1998/07/28 22:00:16 rasmus Exp $ */
+/* $Id: syslog.c,v 1.42 1998/11/18 21:23:12 ssb Exp $ */
 #ifdef THREAD_SAFE
 #include "tls.h"
 #endif
@@ -198,7 +198,8 @@ static void start_syslog(void)
 	syslog_started=1;
 }
 
-
+/* {{{ proto void define_syslog_variables(void)
+   Initializes all syslog-related variables */
 void php3_define_syslog_variables(INTERNAL_FUNCTION_PARAMETERS)
 {
 	if (!syslog_started) {
@@ -206,12 +207,13 @@ void php3_define_syslog_variables(INTERNAL_FUNCTION_PARAMETERS)
 	}
 }
 
+/* {{{ proto int openlog(string ident, int option, int facility)
+   Open connection to system logger */
 /*
    ** OpenLog("nettopp", $LOG_PID, $LOG_LOCAL1);
    ** Syslog($LOG_EMERG, "help me!")
    ** CloseLog();
  */
-
 void php3_openlog(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *ident, *option, *facility;
@@ -228,8 +230,10 @@ void php3_openlog(INTERNAL_FUNCTION_PARAMETERS)
 	openlog(syslog_device, option->value.lval, facility->value.lval);
 	RETURN_TRUE;
 }
+/* }}} */
 
-
+/* {{{ proto int closelog(void)
+   Close connection to system logger */
 void php3_closelog(INTERNAL_FUNCTION_PARAMETERS)
 {
 	closelog();
@@ -239,8 +243,10 @@ void php3_closelog(INTERNAL_FUNCTION_PARAMETERS)
 	}
 	RETURN_TRUE;
 }
+/* }}} */
 
-
+/* {{{ proto int syslog(int priority, string message)
+   Generate a system log message */
 void php3_syslog(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *priority, *message;
@@ -259,6 +265,7 @@ void php3_syslog(INTERNAL_FUNCTION_PARAMETERS)
 	syslog(priority->value.lval, message->value.str.val);
 	RETURN_TRUE;
 }
+/* }}} */
 
 
 function_entry syslog_functions[] = {

@@ -29,7 +29,7 @@
  */
 
 
-/* $Id: phpmath.h,v 1.13 1998/09/24 01:06:51 rasmus Exp $ */
+/* $Id: phpmath.h,v 1.15 1998/12/21 20:45:22 kk Exp $ */
 
 #ifndef _PHPMATH_H
 #define _PHPMATH_H
@@ -49,6 +49,9 @@ extern void php3_sqrt(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_srand(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_rand(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_getrandmax(INTERNAL_FUNCTION_PARAMETERS);
+extern void php3_mt_srand(INTERNAL_FUNCTION_PARAMETERS);
+extern void php3_mt_rand(INTERNAL_FUNCTION_PARAMETERS);
+extern void php3_mt_getrandmax(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_abs(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_ceil(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_floor(INTERNAL_FUNCTION_PARAMETERS);
@@ -59,6 +62,7 @@ extern void php3_decoct(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_bindec(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_hexdec(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_octdec(INTERNAL_FUNCTION_PARAMETERS);
+extern void php3_base_convert(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_number_format(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_deg2rad(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_rad2deg(INTERNAL_FUNCTION_PARAMETERS);

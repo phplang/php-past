@@ -226,7 +226,7 @@ dbhead_t *dbf_open(char *dp, int o_flags)
 	dbhead_t *dbh;
 
 	cp = dp;
-	if ((fd = open(cp, o_flags)) < 0) {
+	if ((fd = open(cp, o_flags|O_BINARY)) < 0) {
 		cp = (char *)malloc(256);
 		strcpy(cp, dp); strcat(cp, ".dbf");
 		if ((fd = open(cp, o_flags)) < 0) {

@@ -27,7 +27,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: uniqid.c,v 1.29 1998/05/15 10:57:40 zeev Exp $ */
+/* $Id: uniqid.c,v 1.31 1998/11/18 21:23:12 ssb Exp $ */
 #ifdef THREAD_SAFE
 #include "tls.h"
 #endif
@@ -51,6 +51,8 @@
 
 #include "uniqid.h"
 
+/* {{{ proto string uniqid(string prefix)
+   Generate a unique id */
 void php3_uniqid(INTERNAL_FUNCTION_PARAMETERS)
 {
 #ifdef HAVE_GETTIMEOFDAY
@@ -87,6 +89,7 @@ void php3_uniqid(INTERNAL_FUNCTION_PARAMETERS)
 	RETURN_STRING(uniqid,1);
 #endif
 }
+/* }}} */
 
 function_entry uniqid_functions[] = {
 	{"uniqid",		php3_uniqid,		NULL},

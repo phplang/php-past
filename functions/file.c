@@ -26,7 +26,7 @@
    | Authors: Rasmus Lerdorf <rasmus@lerdorf.on.ca>                       |
    +----------------------------------------------------------------------+
  */
-/* $Id: file.c,v 1.182 1998/09/19 20:17:16 rasmus Exp $ */
+/* $Id: file.c,v 1.191 1998/12/23 14:43:22 rasmus Exp $ */
 #ifdef THREAD_SAFE
 #include "tls.h"
 #endif
@@ -209,18 +209,15 @@ php3_module_entry php3_file_module_entry = {
 	"PHP_file", php3_file_functions, php3_minit_file, NULL, NULL, NULL, NULL, STANDARD_MODULE_PROPERTIES
 };
 
-/* get_meta_tags(string filename);
-	extracts all meta tags from a file and returns an array
-	The meta tag must have a name and content attribute, otherwise it will be skipped. 
-	The function stops parsing at the closing head tag.
-*/
+/* {{{ proto array get_meta_tags(string filename [, int use_include_path])
+	Extracts all meta tag content attributes from a file and returns an array */
 void php3_get_meta_tags(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *filename, *arg2;
 	FILE *fp;
 	char buf[8192];
 	int use_include_path = 0;
 	int issock=0, socketd=0;
-	int len,var_namelen, i=0;
+	int len, var_namelen;
 	char var_name[50],*val=NULL,*tmp,*end,*slashed;
 	TLS_VARS;
 	
@@ -267,12 +264,12 @@ void php3_get_meta_tags(INTERNAL_FUNCTION_PARAMETERS) {
 	/* Now loop through the file and do the magic quotes thing if needed */
 	memset(buf,0,8191);
 	while((issock?SOCK_FGETS(buf,8191,socketd):(int)fgets(buf,8191,fp))
-		&& !strstr(buf,"</head>") && !strstr(buf,"</HEAD>")) {
-		if(strstr(buf,"<meta")||strstr(buf,"<META")) {
+		&& !php3i_stristr(buf,"</head>")) {
+		if(php3i_stristr(buf,"<meta")) {
 
 			memset(var_name,0,50);
 			/* get the variable name from the name attribute of the meta tag */
-			tmp=strstr(buf,"name=\"");
+			tmp=php3i_stristr(buf,"name=\"");
 			if(tmp) {
 				tmp+=6;
 				end=strstr(tmp,"\"");
@@ -282,7 +279,7 @@ void php3_get_meta_tags(INTERNAL_FUNCTION_PARAMETERS) {
 					snprintf(var_name,50,"%s",tmp);
 					*end='"';
 
-					c = var_name;
+					c = (unsigned char*)var_name;
 					while (*c) {
 						switch(*c) {
 							case '.':
@@ -307,7 +304,7 @@ void php3_get_meta_tags(INTERNAL_FUNCTION_PARAMETERS) {
 				}
 
 				/* get the variable value from the content attribute of the meta tag */
-				tmp=strstr(buf,"content=\"");
+				tmp=php3i_stristr(buf,"content=\"");
 				if(tmp) {
 					tmp+=9;
 					end=strstr(tmp,"\"");
@@ -319,17 +316,13 @@ void php3_get_meta_tags(INTERNAL_FUNCTION_PARAMETERS) {
 				}
 			}
 			if(*var_name && val) {
-				pval *pval_ptr;
 				if (php3_ini.magic_quotes_runtime) {
 					slashed = _php3_addslashes(val,0,&len,0);
 				} else {
 					slashed = estrndup(val,strlen(val));
 				}
-				add_get_index_string(return_value, i, slashed, (void **)&pval_ptr, 0);
-				_php3_hash_pointer_update(return_value->value.ht, var_name, strlen(var_name)+1, pval_ptr);
-				/*	SET_VAR_STRING(var_name,slashed); */
+				add_assoc_string(return_value, var_name, slashed, 0);
 				efree(val);
-				i++;
 			}
 		}
 	}
@@ -343,7 +336,10 @@ void php3_get_meta_tags(INTERNAL_FUNCTION_PARAMETERS) {
 		fclose(fp);
 	}
 }
+/* }}} */
 
+/* {{{ proto array file(string filename)
+Read entire file into an array */
 void php3_file(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *filename, *arg2;
 	FILE *fp;
@@ -409,6 +405,7 @@ void php3_file(INTERNAL_FUNCTION_PARAMETERS) {
 		fclose(fp);
 	}
 }
+/* }}} */
 
 
 static void __pclose(FILE *pipe)
@@ -446,7 +443,8 @@ int php3_minit_file(INIT_FUNC_ARGS)
 	return SUCCESS;
 }
 
-
+/* {{{ proto string tempnam(string dir, string prefix)
+Create a unique filename in a directory */
 void php3_tempnam(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *arg1, *arg2;
 	char *d;
@@ -466,7 +464,10 @@ void php3_tempnam(INTERNAL_FUNCTION_PARAMETERS) {
 	efree(d);
 	RETURN_STRING(t,1);
 }
+/* }}} */
 
+/* {{{ proto int fopen(string filename, string mode [, int use_include_path])
+Open a file or a URL and return a file pointer */
 void php3_fopen(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *arg1, *arg2, *arg3;
 	FILE *fp;
@@ -521,8 +522,11 @@ void php3_fopen(INTERNAL_FUNCTION_PARAMETERS) {
 	}
 	efree(p);
 	RETURN_LONG(id);
-}	
+}
+/* }}} */	
 
+/* {{{ proto int fclose(int fp)
+Close an open file pointer */
 void php3_fclose(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *arg1;
 	int id, type;
@@ -542,7 +546,10 @@ void php3_fclose(INTERNAL_FUNCTION_PARAMETERS) {
 	php3_list_delete(id);
 	RETURN_TRUE;
 }
+/* }}} */
 
+/* {{{ proto int popen(string command, string mode)
+Execute a command and open either a read or a write pipe to it */
 void php3_popen(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *arg1, *arg2;
 	FILE *fp;
@@ -590,7 +597,10 @@ void php3_popen(INTERNAL_FUNCTION_PARAMETERS) {
 	efree(p);
 	RETURN_LONG(id);
 }
+/* }}} */
 
+/* {{{ proto int pclose(int fp)
+Close a file pointer opened by popen() */
 void php3_pclose(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *arg1;
 	int id,type;
@@ -611,7 +621,10 @@ void php3_pclose(INTERNAL_FUNCTION_PARAMETERS) {
 	php3_list_delete(id);
 	RETURN_LONG(GLOBAL(pclose_ret));
 }
+/* }}} */
 
+/* {{{ proto int feof(int fp)
+Test for end-of-file on a file pointer */
 void php3_feof(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *arg1;
 	FILE *fp;
@@ -643,7 +656,10 @@ void php3_feof(INTERNAL_FUNCTION_PARAMETERS) {
 		RETURN_FALSE;
 	}
 }
+/* }}} */
 
+/* {{{ proto int set_socket_blocking(int socket descriptor, int mode)
+Set blocking/non-blocking mode on a socket */
 void php3_set_socket_blocking(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *arg1, *arg2;
@@ -702,6 +718,7 @@ void php3_set_socket_blocking(INTERNAL_FUNCTION_PARAMETERS)
 	/* FIXME: Shouldnt we return true on this function? */
 #endif
 }
+/* }}} */
 
 
 #if (0 && HAVE_SYS_TIME_H && HAVE_SETSOCKOPT && defined(SO_SNDTIMEO) && defined(SO_RCVTIMEO))
@@ -731,7 +748,8 @@ void php3_set_socket_timeout(INTERNAL_FUNCTION_PARAMETERS)
 }
 #endif
 
-
+/* {{{ proto string fgets(int fp, int length)
+Get a line from file pointer */
 void php3_fgets(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *arg1, *arg2;
@@ -777,7 +795,10 @@ void php3_fgets(INTERNAL_FUNCTION_PARAMETERS)
 	}
 	return;
 }
+/* }}} */
 
+/* {{{ proto string fgetc(int fp)
+Get a character from file pointer */
 void php3_fgetc(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *arg1;
 	FILE *fp;
@@ -815,8 +836,11 @@ void php3_fgetc(INTERNAL_FUNCTION_PARAMETERS) {
 	}
 	return;
 }
+/* }}} */
 
 /* Strip any HTML tags while reading */
+/* {{{ proto string fgetss(int fp, int length)
+Get a line from file pointer and strip HTML tags */
 void php3_fgetss(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *fd, *bytes;
@@ -937,8 +961,10 @@ void php3_fgetss(INTERNAL_FUNCTION_PARAMETERS)
 	RETVAL_STRING(rbuf,1);
 	efree(rbuf);
 }
+/* }}} */
 
-
+/* {{{ proto int fwrite(int fp, string str [, int length])
+Binary-safe file write */
 void php3_fwrite(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *arg1, *arg2, *arg3=NULL;
@@ -967,6 +993,7 @@ void php3_fwrite(INTERNAL_FUNCTION_PARAMETERS)
 			break;
 		default:
 			WRONG_PARAM_COUNT;
+			/* NOTREACHED */
 			break;
 	}				
 	convert_to_long(arg1);
@@ -994,9 +1021,11 @@ void php3_fwrite(INTERNAL_FUNCTION_PARAMETERS)
 		ret = fwrite(arg2->value.str.val,1,num_bytes,fp);
 	}
 	RETURN_LONG(ret);
-}	
+}
+/* }}} */	
 
-
+/* {{{ proto int rewind(int fp)
+Rewind the position of a file pointer */
 void php3_rewind(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *arg1;
 	int id,type;
@@ -1016,7 +1045,10 @@ void php3_rewind(INTERNAL_FUNCTION_PARAMETERS) {
 	rewind(fp);
 	RETURN_TRUE;
 }
+/* }}} */
 
+/* {{{ proto int ftell(int fp)
+Get file pointer's read/write position */
 void php3_ftell(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *arg1;
 	int id, type;
@@ -1037,7 +1069,10 @@ void php3_ftell(INTERNAL_FUNCTION_PARAMETERS) {
 	pos = ftell(fp);
 	RETURN_LONG(pos);
 }
+/* }}} */
 
+/* {{{ proto int fseek(int fp, int offset)
+Seek on a file pointer */
 void php3_fseek(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *arg1, *arg2;
 	int ret,id,type;
@@ -1070,7 +1105,10 @@ void php3_fseek(INTERNAL_FUNCTION_PARAMETERS) {
 #endif
 	RETURN_LONG(ret);
 }
+/* }}} */
 
+/* {{{ proto int mkdir(string pathname, int mode)
+Create a directory */
 void php3_mkdir(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *arg1, *arg2;
 	int ret,mode;
@@ -1091,8 +1129,11 @@ void php3_mkdir(INTERNAL_FUNCTION_PARAMETERS) {
 		RETURN_FALSE;
 	}
 	RETURN_TRUE;
-}	
+}
+/* }}} */	
 
+/* {{{ proto int rmdir(string dirname)
+Remove a directory */
 void php3_rmdir(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *arg1;
 	int ret;
@@ -1111,11 +1152,11 @@ void php3_rmdir(INTERNAL_FUNCTION_PARAMETERS) {
 		RETURN_FALSE;
 	}
 	RETURN_TRUE;
-}	
+}
+/* }}} */	
 
-/*
- * Read a file and write the ouput to stdout
- */
+/* {{{ proto int readfile(string filename [, int use_include_path])
+Output a file or a URL */
 void php3_readfile(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *arg1, *arg2;
 	char buf[8192];
@@ -1175,10 +1216,10 @@ void php3_readfile(INTERNAL_FUNCTION_PARAMETERS) {
 	}
 	RETURN_LONG(size);
 }
+/* }}} */
 
-/*
- * Return or change the umask.
- */
+/* {{{ proto int umask([int mask])
+Return or change the umask */
 void php3_fileumask(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *arg1;
 	int oldumask;
@@ -1199,10 +1240,13 @@ void php3_fileumask(INTERNAL_FUNCTION_PARAMETERS) {
 	}
 	RETURN_LONG(oldumask);
 }
+/* }}} */
 
 /*
  * Read to EOF on a file descriptor and write the output to stdout.
  */
+/* {{{ proto int fpassthru(int fp)
+Output all remaining data from a file pointer */
 void php3_fpassthru(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *arg1;
 	FILE *fp;
@@ -1248,8 +1292,10 @@ void php3_fpassthru(INTERNAL_FUNCTION_PARAMETERS) {
 	php3_list_delete(id);
 	RETURN_LONG(size);
 }
+/* }}} */
 
-
+/* {{{ proto int rename(string old_name, string new_name)
+Rename a file */
 void php3_rename(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *OLD, *NEW;
 	char *old, *new;
@@ -1279,8 +1325,10 @@ void php3_rename(INTERNAL_FUNCTION_PARAMETERS) {
 
 	RETVAL_TRUE;
 }
+/* }}} */
 
-
+/* {{{ proto int copy(string source_file, string destination_file)
+Copy a file */
 void php3_file_copy(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *source, *target;
@@ -1331,8 +1379,10 @@ void php3_file_copy(INTERNAL_FUNCTION_PARAMETERS)
 
 	RETVAL_TRUE;
 }
+/* }}} */
 
-
+/* {{{ proto int fread(int fp, int length)
+Binary-safe file read */
 void php3_fread(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *arg1, *arg2;
@@ -1374,7 +1424,13 @@ void php3_fread(INTERNAL_FUNCTION_PARAMETERS)
 	}
 	return_value->type = IS_STRING;
 }
+/* }}} */
 
+/* aparently needed for pdf to be compiled as a module under windows */
+PHPAPI int php3i_get_le_fp(void){
+	TLS_VARS;
+	return GLOBAL(le_fp);
+}
 
 /*
  * Local variables:

@@ -241,7 +241,7 @@ if(!$fp) {
    <refsect1>
     <title>Description</title>
     <funcsynopsis>
-     <funcdef>void <function>openlog</function></funcdef>
+     <funcdef>int <function>openlog</function></funcdef>
      <paramdef>string <parameter>ident</parameter></paramdef>
      <paramdef>int <parameter>option</parameter></paramdef>
      <paramdef>int <parameter>facility</parameter></paramdef>
@@ -269,7 +269,7 @@ if(!$fp) {
    <refsect1>
     <title>Description</title>
     <funcsynopsis>
-     <funcdef>void <function>syslog</function></funcdef>
+     <funcdef>int <function>syslog</function></funcdef>
      <paramdef>int <parameter>priority</parameter></paramdef>
      <paramdef>string <parameter>message</parameter></paramdef>
     </funcsynopsis>
@@ -282,6 +282,12 @@ if(!$fp) {
      two characters <literal>%m</literal> will be replaced by the
      error message string (strerror) corresponding to the present
      value of <errortype>errno</errortype>.
+    <para>
+     More information on the syslog facilities can be found in
+     the man pages for syslog on Unix machines.
+    <para>
+     On Windows NT, the syslog service is emulated using the
+     Event Log.
    </refsect1>
   </refentry>
 
@@ -293,7 +299,7 @@ if(!$fp) {
    <refsect1>
     <title>Description</title>
     <funcsynopsis>
-     <funcdef>string <function>passthru</function></funcdef>
+     <funcdef>int <function>closelog</function></funcdef>
      <void>
     </funcsynopsis>
     <para>
@@ -311,7 +317,7 @@ if(!$fp) {
    <refsect1>
     <title>Description</title>
     <funcsynopsis>
-     <funcdef>void <function>debugger_on</function></funcdef>
+     <funcdef>int <function>debugger_on</function></funcdef>
      <paramdef>string <parameter>address</parameter></paramdef>
     </funcsynopsis>
     <para>
@@ -329,7 +335,7 @@ if(!$fp) {
    <refsect1>
     <title>Description</title>
     <funcsynopsis>
-     <funcdef>void <function>debugger_off</function></funcdef>
+     <funcdef>int <function>debugger_off</function></funcdef>
      <void>
     </funcsynopsis>
     <para>

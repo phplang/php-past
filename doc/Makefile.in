@@ -26,7 +26,7 @@
 # +----------------------------------------------------------------------+
 
 #
-# $Id: Makefile.in,v 1.83 1998/08/27 10:51:01 jah Exp $
+# $Id: Makefile.in,v 1.88 1998/11/17 23:21:18 tommay Exp $
 #
 
 VPATH=@srcdir@
@@ -74,6 +74,7 @@ FUNCREF= \
 	functions/filesystem.sgml \
 	functions/http.sgml \
 	functions/hw.sgml \
+	functions/ibase.sgml \
 	functions/ifx.sgml \
 	functions/image.sgml \
 	functions/imap.sgml \
@@ -89,6 +90,7 @@ FUNCREF= \
 	functions/pgsql.sgml \
 	functions/info.sgml \
 	functions/regex.sgml \
+	functions/sem.sgml \
 	functions/solid.sgml \
 	functions/snmp.sgml \
 	functions/strings.sgml \
@@ -99,8 +101,9 @@ FUNCREF= \
 
 FILES=$(PREFACE) $(APPENDICES) $(CHAPTERS) $(FUNCREF)
 ONLINE_MANUAL=*.php3
-DIST_FILES=manual.zip manual.tar.gz manual.rtf copyright.html bigmanual.html
-MIRROR_TARGETS=manual.php3 $(DIST_FILES)
+DIST_FILES=manual.zip manual.tar.gz manual.rtf.gz bigmanual.html.gz \
+	manual.prc manual.txt.gz
+MIRROR_TARGETS=manual.php3 $(DIST_FILES) manual.html
 
 manual.sgml: .manual.sgml
 .manual.sgml: $(FILES)
@@ -110,13 +113,17 @@ html: manual.html
 phpweb: manual.php3
 rtf: manual.rtf
 dvi: manual.dvi
-ps print: manual.ps
+ps: manual.ps
 howto: howto.html
+
+Makefile: $(srcdir)/Makefile.in ../config.status
+	cd .. && CONFIG_FILES=doc/$@ CONFIG_HEADERS= ./config.status
 
 mirror-files: $(MIRROR_TARGETS)
 
 sync-no: mirror-files
 	-rsync -vc $(ONLINE_MANUAL) ../../phpweb/manual/
+	-rsync --exclude bigmanual.html -vc *.html ../../phpweb/manual/html/
 	-rsync -vc $(DIST_FILES) ../../phpweb/distributions/
 
 commit-no: sync-no
@@ -125,6 +132,11 @@ commit-no: sync-no
 	test -n "$$files" && cvs add $$files; \
 	cvs commit -m '$(MESSAGE)')
 	(cd ../../phpweb/distributions; cvs commit -m '$(MESSAGE)')
+
+snapshot: manual-snapshot.tar.gz
+
+manual-snapshot.tar.gz: bigmanual.html manual.html manual.rtf manual.txt
+	tar -cvzf $@ [a-z]*.html manual.rtf manual.txt
 
 status:
 	$(srcdir)/checkdoc -s > $(srcdir)/status.txt
@@ -136,11 +148,20 @@ makedoc: makedoc.cc
 bigmanual.html: $(srcdir)/manual.sgml $(HTML_STYLESHEET)
 	jade -V nochunks -d $(HTML_STYLESHEET) -t sgml $(srcdir)/manual.sgml > $@
 
+bigmanual.html.gz: bigmanual.html
+	gzip -c $< > $@
+
+manual.rtf.gz: manual.rtf
+	gzip -c $< > $@
+
+manual.txt.gz: manual.txt
+	gzip -c $< > $@
+
 manual.html: $(srcdir)/manual.sgml $(HTML_STYLESHEET)
 	jade -d $(HTML_STYLESHEET) -t sgml $(srcdir)/manual.sgml
 
 manual.php3: $(srcdir)/manual.sgml $(PHPWEB_STYLESHEET)
-	jade -d $(PHPWEB_STYLESHEET) -t sgml $(srcdir)/manual.sgml
+	-jade -d $(PHPWEB_STYLESHEET) -t sgml $(srcdir)/manual.sgml
 
 manual.txt: bigmanual.html
 	lynx -nolist -dump file:`pwd`/bigmanual.html > manual.txt
@@ -149,10 +170,10 @@ manual.prc: manual.txt makedoc
 	./makedoc -b manual.txt manual.prc 'PHP3 Manual'
 
 manual.zip: $(srcdir)/manual.html
-	-rm -f $@ && (cd $(srcdir); zip -q $@ [a-z]*.html)
+	-rm -f $@ && (cd $(srcdir); zip -@ -q $@ < HTML.manifest)
 
 manual.tar.gz: $(srcdir)/manual.html
-	-rm -f $@ && (cd $(srcdir); tar -cf - [a-z]*.html | gzip > manual.tar.gz)
+	-rm -f $@ && (cd $(srcdir); tar -T HTML.manifest -cf - | gzip > manual.tar.gz)
 
 howto.html: $(srcdir)/howto.sgml $(HOWTO_STYLESHEET) global.ent
 	jade -d $(HOWTO_STYLESHEET) -t sgml $(srcdir)/howto.sgml
@@ -183,7 +204,7 @@ clean:
 	cd $(srcdir); \
 	rm -f manual.txt [a-z]*.html manual.rtf manual.info \
 	rm -f manual.zip manual.tar.gz sync-no commit-no .manual.sgml \
-	rm -f manual.txt manual.prc makedoc \
+	rm -f manual.txt manual.prc makedoc *.manifest \
 	rm -f *.aux *.tex *.log *.dvi *.toc *.ps \
 	rm -f status.txt missing.txt \
 	rm -f *.php3 $(GENREF) \

@@ -29,7 +29,7 @@
  */
 
 
-/* $Id: internal_functions.c,v 1.327 1998/10/04 00:19:33 zeev Exp $ */
+/* $Id: internal_functions.c,v 1.334 1998/12/13 23:10:55 nyenyon Exp $ */
 
 #ifdef THREAD_SAFE
 #include "tls.h"
@@ -89,6 +89,13 @@
 #include "dl/snmp/php3_snmp.h"
 #include "functions/php3_zlib.h"
 #include "functions/php3_COM.h"
+#include "functions/php3_interbase.h"
+#include "functions/php3_xml.h"
+#include "functions/php3_pdf.h"
+#include "functions/php3_fdf.h"
+#include "functions/php3_sysvsem.h"
+#include "functions/php3_sysvshm.h"
+#include "functions/php3_dav.h"
 
 
 extern php3_ini_structure php3_ini;
@@ -144,6 +151,13 @@ php3_builtin_module php3_builtin_modules[] =
 	{"Zlib",						php3_zlib_module_ptr},
 	{"Win32 COM",					COM_module_ptr},
 	{"IMAP",						php3_imap_module_ptr},
+	{"InterBase",					php3_ibase_module_ptr},
+	{"XML",							xml_module_ptr},
+	{"PDF",							pdf_module_ptr},
+	{"FDF",							fdf_module_ptr},
+	{"System V semaphores",			sysvsem_module_ptr},
+	{"System V shared memory",			sysvshm_module_ptr},
+	{"DAV",							phpdav_module_ptr},
 	{NULL,							NULL}
 };
 

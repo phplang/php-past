@@ -28,7 +28,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: dns.c,v 1.47 1998/09/10 23:57:17 zeev Exp $ */
+/* $Id: dns.c,v 1.51 1998/11/18 21:23:04 ssb Exp $ */
 
 #ifdef THREAD_SAFE
 #include "tls.h"
@@ -38,7 +38,6 @@
 #include <sys/socket.h>
 #endif
 #if WIN32|WINNT
-#include <winsock.h>
 #if HAVE_BINDLIB
 #ifndef WINNT
 #define WINNT 1
@@ -49,10 +48,15 @@
 #include "arpa/nameser.h"
 #include "resolv.h"
 #endif
+#include <winsock.h>
 #else
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <netdb.h>
+#ifdef _OSD_POSIX
+#undef STATUS
+#undef T_UNSPEC
+#endif
 #include <arpa/nameser.h>
 #include <resolv.h>
 #endif
@@ -63,6 +67,8 @@
 char *_php3_gethostbyaddr(char *ip);
 char *_php3_gethostbyname(char *name);
 
+/* {{{ proto string gethostbyaddr(string ip_address)
+   Get the Internet host name corresponding to a given IP address */
 void php3_gethostbyaddr(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *arg;
@@ -77,6 +83,7 @@ void php3_gethostbyaddr(INTERNAL_FUNCTION_PARAMETERS)
 	return_value->value.str.len = strlen(return_value->value.str.val);
 	return_value->type = IS_STRING;
 }
+/* }}} */
 
 
 char *_php3_gethostbyaddr(char *ip)
@@ -100,7 +107,8 @@ char *_php3_gethostbyaddr(char *ip)
 	return estrdup(hp->h_name);
 }
 
-
+/* {{{ proto string gethostbyname(string hostname)
+   Get the IP address corresponding to a given Internet host name */
 void php3_gethostbyname(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *arg;
@@ -115,10 +123,10 @@ void php3_gethostbyname(INTERNAL_FUNCTION_PARAMETERS)
 	return_value->value.str.len = strlen(return_value->value.str.val);
 	return_value->type = IS_STRING;
 }
+/* }}} */
 
-/*
- * return a list of IP addresses that a given hostname resolves to.
- */
+/* {{{ proto array gethostbynamel(string hostname)
+   Return a list of IP addresses that a given hostname resolves to. */
 void php3_gethostbynamel(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *arg;
@@ -151,6 +159,7 @@ void php3_gethostbynamel(INTERNAL_FUNCTION_PARAMETERS)
 
 	return;
 }
+/* }}} */
 
 char *_php3_gethostbyname(char *name)
 {
@@ -170,6 +179,8 @@ char *_php3_gethostbyname(char *name)
 
 #if !(WIN32|WINNT)||HAVE_BINDLIB
 
+/* {{{ proto int checkdnsrr(string host [, string type])
+   Check DNS records corresponding to a given Internet host name or IP address */
 void php3_checkdnsrr(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *arg1,*arg2;
@@ -215,6 +226,7 @@ void php3_checkdnsrr(INTERNAL_FUNCTION_PARAMETERS)
 	}
 	RETURN_TRUE;
 }
+/* }}} */
 
 #ifndef HFIXEDSZ
 #define HFIXEDSZ        12      /* fixed data in header <arpa/nameser.h> */
@@ -228,6 +240,8 @@ void php3_checkdnsrr(INTERNAL_FUNCTION_PARAMETERS)
 #define MAXHOSTNAMELEN  256
 #endif /* MAXHOSTNAMELEN */
 
+/* {{{ proto int getmxrr(string hostname, array mxhosts [, array weight])
+   Get MX records corresponding to a given Internet host name */
 void php3_getmxrr(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *host, *mx_list, *weight_list;
@@ -284,12 +298,12 @@ void php3_getmxrr(INTERNAL_FUNCTION_PARAMETERS)
 	hp = (HEADER *)&ans;
 	cp = (u_char *)&ans + HFIXEDSZ;
 	end = (u_char *)&ans +i;
-	for ( qdc = ntohs(hp->qdcount); qdc--; cp += i + QFIXEDSZ) {
+	for ( qdc = ntohs((unsigned short)hp->qdcount); qdc--; cp += i + QFIXEDSZ) {
 		if ( (i = dn_skipname(cp,end)) < 0 ) {
 			RETURN_FALSE;
 		}
 	}
-	count = ntohs(hp->ancount);
+	count = ntohs((unsigned short)hp->ancount);
 	while ( --count >= 0 && cp < end ) {
 		if ( (i = dn_skipname(cp,end)) < 0 ) {
 			RETURN_FALSE;
@@ -319,6 +333,7 @@ void php3_getmxrr(INTERNAL_FUNCTION_PARAMETERS)
 	}
 	RETURN_TRUE;
 }
+/* }}} */
 
 #endif
 /*

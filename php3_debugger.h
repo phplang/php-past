@@ -36,7 +36,7 @@ extern php3_module_entry debugger_module_entry;
 #define debugger_module_ptr &debugger_module_entry
 
 #if WIN32|WINNT
-typedef int pid_t;
+typedef long pid_t;
 #endif
 
 typedef struct {

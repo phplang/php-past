@@ -23,7 +23,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: hg_comm.c,v 1.8 1998/10/03 19:10:13 shane Exp $ */
+/* $Id: hg_comm.c,v 1.10 1998/11/11 23:19:04 cschneid Exp $ */
 
 /* #define HW_DEBUG */
 
@@ -923,7 +923,6 @@ int open_hg_connection(char *server_name, int port)
 	struct sockaddr_in server_addr;
 	struct hostent *hp;
 	if ( (hp = gethostbyname(server_name)) == NULL )  {
-/*		php3_error(E_WARNING, "gethostbyname failed for %s", server_name); */
 		return(-1);
 	}
 
@@ -936,29 +935,26 @@ int open_hg_connection(char *server_name, int port)
 	bcopy(hp->h_addr, (char *) &server_addr.sin_addr, hp->h_length);
 
 	if ( (sockfd = socket(AF_INET, SOCK_STREAM, 0)) < 0 )  {
-/*		php3_error(E_WARNING, "socket"); */
-		return(-1);
+		return(-2);
 	}
 
 #if defined(SUN) || (WIN32|WINNT)
 	setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, (char *)&option, sizeof(option));
 #else
 	setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, &option, sizeof(option));
-#endif SUN
+#endif /* SUN */
 
 	if (connect(sockfd, (struct sockaddr *) &server_addr, sizeof(server_addr)) < 0) {
-/*		php3_error(E_WARNING, "connect"); */
 		close(sockfd);
-		return(-1);
+		return(-3);
 	} 
 
 #if !(WIN32|WINNT)
 	if ( (sock_flags = fcntl(sockfd, F_GETFL, 0)) == -1 )
-/*		php3_error(E_WARNING, "open_hg_connection: F_GETFL"); */
 #endif
 
 	if ( set_nonblocking(sockfd) == -1 )  {
-		return(-1);
+		return(-4);
 	}
 
 	return(sockfd);
@@ -980,31 +976,25 @@ int initialize_hg_connection(int sockfd, int *do_swap, int *version, char **user
 	*do_swap = 0;
 	buf = 'T';
 	if ( hg_write(sockfd, &buf, 1) == -1 )  {
-/*		php3_error(E_WARNING, "initialize_hg_connection: hg_write (1) returned -1\n"); */
-		return(-1);
+		return(-2);
 	}
 
 	if ( hg_read_exact(sockfd, &buf, 1) == -1 )  {
-/*		php3_error(E_WARNING, "initialize_hg_connection: hg_read (1) returned -1\n"); */
-		return(-1);
+		return(-3);
 	}
 	if ( buf == 'F' )  {
-/*		php3_error(E_WARNING, "initialize_hg_connection: got >>F<< from server\n"); */
-		return(-1);
+		return(-4);
 	}
 	if ( buf != 'T' )  {
-/*		php3_error(E_WARNING, "initialize_hg_connection: neither >>F<< nor >>T<< from server\n"); */
-		return(-1);
+		return(-5);
 	}
 
 	buf = c = ( *(char *)&i )  ? 'l' : 'B';
 	if ( hg_write(sockfd, &buf, 1) == -1 )  {
-/*		php3_error(E_WARNING, "initialize_hg_connection: hg_write (2) returned -1\n"); */
-		return(-1);
+		return(-6);
 	}
 	if ( hg_read_exact(sockfd, &buf, 1) == -1 )  {
-/*		php3_error(E_WARNING, "initialize_hg_connection: hg_read (2) returned -1\n"); */
-		return(-1);
+		return(-7);
 	}
 	if ( c != buf )  {
 		swap_on = 1;
@@ -1015,25 +1005,23 @@ int initialize_hg_connection(int sockfd, int *do_swap, int *version, char **user
 	}
 
 	if ( send_ready(sockfd) == -1) {
-/*		php3_error(E_WARNING, "send ready msg returned -1"); */
-		return(-1);
+		return(-8);
 		}
 
 	/* Receive return from Ready message */
 	if ( (ready_msg = recv_ready(sockfd)) == NULL )  {
-/*		php3_error(E_WARNING, "initialize_hg_connection: recv_ready returned NULL\n"); */
-		return(-1);
+		return(-9);
 	}   
 
 	if ((ready_msg->version_msgid & F_VERSION) < VERSION)
-		return -1;
+		return(-8);
 	*version = ready_msg->version_msgid;
 	*server_string = strdup(ready_msg->buf+4);
 	efree(ready_msg->buf);
 	efree(ready_msg);
 
-        /* If we have a username and password then do the identification. */
-        if((NULL != username) && (NULL != password)) {
+	/* If we have a username and password then do the identification. */
+	if((NULL != username) && (NULL != password)) {
 		length = HEADER_LENGTH + sizeof(int) + strlen(username) + 1 + strlen(password) + 1;
 
 		build_msg_header(&msg, length, msgid++, IDENTIFY_MESSAGE);
@@ -1049,16 +1037,16 @@ int initialize_hg_connection(int sockfd, int *do_swap, int *version, char **user
 
 		if ( send_hg_msg(sockfd, &msg, length) == -1 )  {
 			efree(msg.buf);
-			return(-1);
+			return(-10);
 		}
 		efree(msg.buf);
 	}
 
-        if((NULL != username) && (NULL != password)) {
+	if((NULL != username) && (NULL != password)) {
 		/* Receive return form identify message */
 		retmsg = recv_hg_msg(sockfd);
 		if ( retmsg == NULL )
-			return(-1);
+			return(-11);
 
 		*userdata = retmsg->buf;
 		efree(retmsg);

@@ -135,38 +135,57 @@ void _php3_info(void)
 	PUTS("</table>\n");
 
 	SECTION("Configuration");
+	PUTS("php3.ini file path is set to: ");
+	PUTS(CONFIGURATION_FILE_PATH);
+	PUTS("<br>\n");
 	PUTS("<table border=5 width=\"600\">\n");
 	PUTS("<tr><th bgcolor=\"" HEADER_COLOR "\">Directive</th><th bgcolor=\"" HEADER_COLOR "\">Master Value</th><th bgcolor=\"" HEADER_COLOR "\">Local Value</th></tr>\n");
-	PHP3_CONF_LONG("error_reporting", php3_ini_master.errors, php3_ini.errors);
-	PHP3_CONF_LONG("max execution time", php3_ini_master.max_execution_time, php3_ini.max_execution_time);
-	PHP3_CONF_LONG("memory limit", php3_ini_master.memory_limit, php3_ini.memory_limit);
-	PHP3_CONF_STR("error_log", php3_ini_master.error_log, php3_ini.error_log);
-	PHP3_CONF_LONG("magic_quotes_gpc", php3_ini_master.magic_quotes_gpc, php3_ini.magic_quotes_gpc);
-	PHP3_CONF_LONG("magic_quotes_runtime", php3_ini_master.magic_quotes_runtime, php3_ini.magic_quotes_runtime);
-	PHP3_CONF_LONG("track_errors", php3_ini_master.track_errors, php3_ini.track_errors);
-	PHP3_CONF_STR("doc_root", php3_ini_master.doc_root, php3_ini.doc_root);
-	PHP3_CONF_STR("user_dir", php3_ini_master.user_dir, php3_ini.user_dir);
-	PHP3_CONF_LONG("safe_mode", php3_ini_master.safe_mode, php3_ini.safe_mode);
-	PHP3_CONF_STR("open_basedir", php3_ini_master.open_basedir, php3_ini.open_basedir);
-	PHP3_CONF_LONG("track_vars", php3_ini_master.track_vars, php3_ini.track_vars);
-	PHP3_CONF_STR("safe_mode_exec_dir", php3_ini_master.safe_mode_exec_dir, php3_ini.safe_mode_exec_dir);
-	PHP3_CONF_STR("cgi_ext", php3_ini_master.cgi_ext, php3_ini.cgi_ext);
-	PHP3_CONF_STR("isapi_ext", php3_ini_master.isapi_ext, php3_ini.isapi_ext);
-	PHP3_CONF_STR("nsapi_ext", php3_ini_master.nsapi_ext, php3_ini.nsapi_ext);
-	PHP3_CONF_STR("include_path", php3_ini_master.include_path, php3_ini.include_path);
+	PHP3_CONF_STR("arg_separator", php3_ini_master.arg_separator, php3_ini.arg_separator);
+	PHP3_CONF_LONG("asp_tags", php3_ini_master.asp_tags, php3_ini.asp_tags);
 	PHP3_CONF_STR("auto_prepend_file", php3_ini_master.auto_prepend_file, php3_ini.auto_prepend_file);
 	PHP3_CONF_STR("auto_append_file", php3_ini_master.auto_append_file, php3_ini.auto_append_file);
-	PHP3_CONF_STR("upload_tmp_dir", php3_ini_master.upload_tmp_dir, php3_ini.upload_tmp_dir);
-	PHP3_CONF_LONG("enable_dl", php3_ini_master.enable_dl, php3_ini.enable_dl);
-	PHP3_CONF_STR("extension_dir", php3_ini_master.extension_dir, php3_ini.extension_dir);
-	PHP3_CONF_STR("arg_separator", php3_ini_master.arg_separator, php3_ini.arg_separator);
-	PHP3_CONF_LONG("short_open_tag", php3_ini_master.short_open_tag, php3_ini.short_open_tag);
+	PHP3_CONF_STR("browscap", php3_ini_master.browscap, php3_ini.browscap);
+	PHP3_CONF_STR("cgi_ext", php3_ini_master.cgi_ext, php3_ini.cgi_ext);
 	PHP3_CONF_STR("debugger.host", php3_ini_master.debugger_host, php3_ini.debugger_host);
 	PHP3_CONF_LONG("debugger.port", php3_ini_master.debugger_port, php3_ini.debugger_port);
-	PHP3_CONF_LONG("sql_safe_mode", php3_ini_master.sql_safe_mode, php3_ini.sql_safe_mode);
-	PHP3_CONF_LONG("xbithack", php3_ini_master.xbithack, php3_ini.xbithack);
+	PHP3_CONF_LONG("define_syslog_variables", php3_ini_master.define_syslog_variables, php3_ini.define_syslog_variables);
+	PHP3_CONF_LONG("display_errors", php3_ini_master.display_errors, php3_ini.display_errors);
+	PHP3_CONF_STR("doc_root", php3_ini_master.doc_root, php3_ini.doc_root);
+	PHP3_CONF_LONG("enable_dl", php3_ini_master.enable_dl, php3_ini.enable_dl);
 	PHP3_CONF_LONG("engine", php3_ini_master.engine, php3_ini.engine);
+	PHP3_CONF_STR("error_log", php3_ini_master.error_log, php3_ini.error_log);
+	PHP3_CONF_STR("error_append_string", php3_ini_master.error_append_string, php3_ini.error_append_string);
+	PHP3_CONF_STR("error_prepend_string", php3_ini_master.error_prepend_string, php3_ini.error_prepend_string);
+	PHP3_CONF_LONG("error_reporting", php3_ini_master.errors, php3_ini.errors);
+	PHP3_CONF_STR("extension_dir", php3_ini_master.extension_dir, php3_ini.extension_dir);
+	PHP3_CONF_STR("gpc_order", php3_ini_master.gpc_order, php3_ini.gpc_order);
+	PHP3_CONF_STR("include_path", php3_ini_master.include_path, php3_ini.include_path);
+	PHP3_CONF_STR("isapi_ext", php3_ini_master.isapi_ext, php3_ini.isapi_ext);
 	PHP3_CONF_LONG("last_modified", php3_ini_master.last_modified, php3_ini.last_modified);
+	PHP3_CONF_LONG("log_errors", php3_ini_master.log_errors, php3_ini.log_errors);
+	PHP3_CONF_LONG("max execution time", php3_ini_master.max_execution_time, php3_ini.max_execution_time);
+	PHP3_CONF_LONG("magic_quotes_gpc", php3_ini_master.magic_quotes_gpc, php3_ini.magic_quotes_gpc);
+	PHP3_CONF_LONG("magic_quotes_runtime", php3_ini_master.magic_quotes_runtime, php3_ini.magic_quotes_runtime);
+	PHP3_CONF_LONG("magic_quotes_sybase", php3_ini_master.magic_quotes_sybase, php3_ini.magic_quotes_sybase);
+	PHP3_CONF_LONG("memory limit", php3_ini_master.memory_limit, php3_ini.memory_limit);
+	PHP3_CONF_STR("nsapi_ext", php3_ini_master.nsapi_ext, php3_ini.nsapi_ext);
+	PHP3_CONF_STR("open_basedir", php3_ini_master.open_basedir, php3_ini.open_basedir);
+	PHP3_CONF_LONG("precision", php3_ini_master.precision, php3_ini.precision);
+	PHP3_CONF_LONG("safe_mode", php3_ini_master.safe_mode, php3_ini.safe_mode);
+	PHP3_CONF_STR("safe_mode_exec_dir", php3_ini_master.safe_mode_exec_dir, php3_ini.safe_mode_exec_dir);
+	PHP3_CONF_STR("sendmail_from", php3_ini_master.sendmail_from, php3_ini.sendmail_from);
+	PHP3_CONF_STR("sendmail_path", php3_ini_master.sendmail_path, php3_ini.sendmail_path);
+	PHP3_CONF_LONG("short_open_tag", php3_ini_master.short_open_tag, php3_ini.short_open_tag);
+	PHP3_CONF_STR("smtp", php3_ini_master.smtp, php3_ini.smtp);
+	PHP3_CONF_LONG("sql_safe_mode", php3_ini_master.sql_safe_mode, php3_ini.sql_safe_mode);
+	PHP3_CONF_LONG("track_errors", php3_ini_master.track_errors, php3_ini.track_errors);
+	PHP3_CONF_LONG("track_vars", php3_ini_master.track_vars, php3_ini.track_vars);
+	PHP3_CONF_LONG("upload_max_filesize", php3_ini_master.upload_max_filesize, php3_ini.upload_max_filesize);
+	PHP3_CONF_STR("upload_tmp_dir", php3_ini_master.upload_tmp_dir, php3_ini.upload_tmp_dir);
+	PHP3_CONF_STR("user_dir", php3_ini_master.user_dir, php3_ini.user_dir);
+	PHP3_CONF_LONG("warn_plus_overloading", php3_ini_master.warn_plus_overloading, php3_ini.warn_plus_overloading);
+	PHP3_CONF_LONG("xbithack", php3_ini_master.xbithack, php3_ini.xbithack);
+	PHP3_CONF_LONG("y2k_compliance", php3_ini_master.y2k_compliance, php3_ini.y2k_compliance);
 
 	/* And now for the highlight colours */
 	php3_printf("<tr><td bgcolor=\"" ENTRY_NAME_COLOR "\">highlight_comment</td><td bgcolor=\"" CONTENTS_COLOR "\"><font color=%s>&nbsp;%s</font></td><td bgcolor=\"" CONTENTS_COLOR "\"><font color=%s>&nbsp;%s</font></td></tr>\n",php3_ini_master.highlight_comment,php3_ini_master.highlight_comment,php3_ini.highlight_comment,php3_ini.highlight_comment);
@@ -384,6 +403,8 @@ void _php3_info(void)
 	
 }
 
+/* {{{ proto void phpinfo(void)
+   Output a page of useful information about PHP and the current request */
 void php3_info(INTERNAL_FUNCTION_PARAMETERS)
 {
 	TLS_VARS;
@@ -391,14 +412,17 @@ void php3_info(INTERNAL_FUNCTION_PARAMETERS)
 	_php3_info();
 	RETURN_TRUE;
 }
+/* }}} */
 
-
+/* {{{ proto string phpversion(void)
+   Return the current PHP version */
 void php3_version(INTERNAL_FUNCTION_PARAMETERS)
 {
 	TLS_VARS;
 	
     RETURN_STRING(PHP_VERSION,1);
 }
+/* }}} */
 
 /*
  * Local variables:

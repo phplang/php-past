@@ -28,7 +28,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: php.h,v 1.35 1998/09/10 23:56:56 zeev Exp $ */
+/* $Id: php.h,v 1.39 1998/12/03 22:58:48 shane Exp $ */
 
 #ifndef _PHP_H
 #define _PHP_H
@@ -83,7 +83,7 @@
 #  define dlopen(a,b) LoadLibrary(a)
 #  define dlsym GetProcAddress
 # else
-#if HAVE_DLFCN_H
+#if HAVE_DLFCN_H && !(defined(_AIX) && APACHE)
 #  include <dlfcn.h>
 #endif
 # endif
@@ -301,7 +301,7 @@ extern PHPAPI int php3_fhttpd_write(char *a,int n);
 # endif
 #endif
 
-#if defined(THREAD_SAFE) && defined(COMPILE_DL)
+#if defined(THREAD_SAFE) || defined(COMPILE_DL)
 #define PUTS(a) php3_printf("%s",a)
 #define PUTC(a) PUTS(a)
 #define PHPWRITE(a,n) php3_write((a),(n))
@@ -483,6 +483,9 @@ extern int end_current_file_execution(int *retval);
 extern void clean_input_source_stack(void);
 extern int _php3_hash_environment(void);
 extern int module_startup_modules(void);
+
+/* needed for modules only */
+extern PHPAPI int php3i_get_le_fp(void);
 
 /*from basic functions*/
 extern PHPAPI int _php3_error_log(int opt_err,char *message,char *opt,char *headers);

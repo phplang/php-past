@@ -29,7 +29,7 @@
  */
 
 
-/* $Id: basic_functions.h,v 1.34 1998/09/22 19:39:33 zeev Exp $ */
+/* $Id: basic_functions.h,v 1.35 1998/12/19 12:47:59 sas Exp $ */
 
 #ifndef _BASIC_FUNCTIONS_H
 #define _BASIC_FUNCTIONS_H
@@ -79,6 +79,8 @@ extern void php3_set_time_limit(INTERNAL_FUNCTION_PARAMETERS);
 
 extern void php3_get_cfg_var(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_set_magic_quotes_runtime(INTERNAL_FUNCTION_PARAMETERS);
+extern void php3_get_magic_quotes_runtime(INTERNAL_FUNCTION_PARAMETERS);
+extern void php3_get_magic_quotes_gpc(INTERNAL_FUNCTION_PARAMETERS);
 
 extern void php3_is_type(INTERNAL_FUNCTION_PARAMETERS, int type);
 extern void php3_is_long(INTERNAL_FUNCTION_PARAMETERS);

@@ -25,8 +25,11 @@
    +----------------------------------------------------------------------+
    | Authors: Stig Sæther Bakken <ssb@guardian.no>                        |
    |          Andreas Karajannis <Andreas.Karajannis@gmd.de>              |
+   |          Frank M. Kromann <fmk@businessnet.dk> Support for DB/2 CLI  |
    +----------------------------------------------------------------------+
  */
+
+/* $Id: unified_odbc.c,v 1.96 1998/12/18 19:25:51 swilliam Exp $ */
 
 /* This file is based on the Adabas D extension.
  * Adabas D will no longer be supported as separate module.
@@ -47,8 +50,10 @@
 #include "php.h"
 #include "internal_functions.h"
 #if PHP_31
+# include "ext/phpdl.h"
 # include "ext/standard/php3_string.h"
 #else
+# include "dl/phpdl.h"
 # include "php3_string.h"
 #endif
 #include "php3_unified_odbc.h"
@@ -69,8 +74,7 @@ typedef struct UODBC_GLOBAL_STRUCT {
 
 #define UODBC_GLOBAL(a) UODBC_GLOBALS->a
 
-#define UODBC_TLS_VARS \
-	UODBC_GLOBAL_STRUCT *UODBC_GLOBALS = TlsGetValue(UODBC_TLS); 
+#define UODBC_TLS_VARS UODBC_GLOBAL_STRUCT *UODBC_GLOBALS = TlsGetValue(UODBC_TLS); 
 
 #else
 UODBC_MODULE PHP3_UODBC_MODULE;
@@ -79,36 +83,64 @@ UODBC_MODULE PHP3_UODBC_MODULE;
 #endif
 
 function_entry UODBC_FUNCTIONS[] = {
-	{ODBC_SETOPTION,	PHP3_UODBC_SETOPTION,	NULL},
-	{ODBC_AUTOCOMMIT,	PHP3_UODBC_AUTOCOMMIT,	NULL},
-	{ODBC_CLOSE,		PHP3_UODBC_CLOSE,		NULL},
-	{ODBC_CLOSE_ALL,	PHP3_UDOBC_CLOSE_ALL,	NULL},
-	{ODBC_COMMIT,		PHP3_UODBC_COMMIT,		NULL},
-	{ODBC_CONNECT,		PHP3_UODBC_CONNECT,		NULL},
-	{ODBC_PCONNECT,		PHP3_UODBC_PCONNECT,	NULL},
-	{ODBC_CURSOR,		PHP3_UODBC_CURSOR,		NULL},
-	{ODBC_DO,			PHP3_UODBC_DO,			NULL},
-	{ODBC_EXEC,			PHP3_UODBC_DO,			NULL},
-	{ODBC_PREPARE,		PHP3_UODBC_PREPARE,		NULL},
-	{ODBC_EXECUTE,		PHP3_UODBC_EXECUTE,		NULL},
-	{ODBC_FETCH_ROW, 	PHP3_UODBC_FETCH_ROW,	NULL},
-	{ODBC_FETCH_INTO,	PHP3_UODBC_FETCH_INTO,	NULL},
-	{ODBC_FIELD_LEN, 	PHP3_UODBC_FIELD_LEN,	NULL},
-	{ODBC_FIELD_NAME,	PHP3_UODBC_FIELD_NAME,	NULL},
-	{ODBC_FIELD_TYPE,	PHP3_UODBC_FIELD_TYPE,	NULL},
-	{ODBC_FIELD_NUM,	PHP3_UODBC_FIELD_NUM,	NULL},
-	{ODBC_FREE_RESULT,	PHP3_UODBC_FREE_RESULT,	NULL},
-	{ODBC_NUM_FIELDS,	PHP3_UODBC_NUM_FIELDS,	NULL},
-	{ODBC_NUM_ROWS,		PHP3_UODBC_NUM_ROWS,	NULL},
-	{ODBC_RESULT,		PHP3_UODBC_RESULT,		NULL},
-	{ODBC_RESULT_ALL,	PHP3_UODBC_RESULT_ALL,	NULL},
-	{ODBC_ROLLBACK,		PHP3_UODBC_ROLLBACK,	NULL},
-	{ODBC_BINMODE,		PHP3_UODBC_BINMODE,	NULL},
-	{ODBC_LONGREADLEN,	PHP3_UODBC_LONGREADLEN,	NULL},
+	UODBC_FE(setoption, NULL),
+	UODBC_FE(autocommit, NULL),
+	UODBC_FE(close, NULL),
+	UODBC_FE(close_all, NULL),
+	UODBC_FE(commit, NULL),
+	UODBC_FE(connect, NULL),
+	UODBC_FE(pconnect, NULL),
+	UODBC_FE(cursor, NULL),
+	UODBC_FE_ALIAS(do, exec, NULL),
+	UODBC_FE(exec, NULL),
+	UODBC_FE(prepare, NULL),
+	UODBC_FE(execute, NULL),
+	UODBC_FE(fetch_row, NULL),
+	UODBC_FE(fetch_into, NULL),
+	UODBC_FE(field_len, NULL),
+	UODBC_FE(field_name, NULL),
+	UODBC_FE(field_type, NULL),
+	UODBC_FE(field_num, NULL),
+	UODBC_FE(free_result, NULL),
+	UODBC_FE(num_fields, NULL),
+	UODBC_FE(num_rows, NULL),
+	UODBC_FE(result, NULL),
+	UODBC_FE(result_all, NULL),
+	UODBC_FE(rollback, NULL),
+	UODBC_FE(binmode, NULL),
+	UODBC_FE(longreadlen, NULL),
+#if defined(USE_ODBC_ALIAS) && defined(UODBC_UNIQUE_NAMES)
+	UODBC_ALIAS(setoption, NULL),
+	UODBC_ALIAS(autocommit, NULL),
+	UODBC_ALIAS(close, NULL),
+	UODBC_ALIAS(close_all, NULL),
+	UODBC_ALIAS(commit, NULL),
+	UODBC_ALIAS(connect, NULL),
+	UODBC_ALIAS(pconnect, NULL),
+	UODBC_ALIAS(cursor, NULL),
+	UODBC_ALIAS_FE(do, exec, NULL),
+	UODBC_ALIAS(exec, NULL),
+	UODBC_ALIAS(prepare, NULL),
+	UODBC_ALIAS(execute, NULL),
+	UODBC_ALIAS(fetch_row, NULL),
+	UODBC_ALIAS(fetch_into, NULL),
+	UODBC_ALIAS(field_len, NULL),
+	UODBC_ALIAS(field_name, NULL),
+	UODBC_ALIAS(field_type, NULL),
+	UODBC_ALIAS(field_num, NULL),
+	UODBC_ALIAS(free_result, NULL),
+	UODBC_ALIAS(num_fields, NULL),
+	UODBC_ALIAS(num_rows, NULL),
+	UODBC_ALIAS(result, NULL),
+	UODBC_ALIAS(result_all, NULL),
+	UODBC_ALIAS(rollback, NULL),
+	UODBC_ALIAS(binmode, NULL),
+	UODBC_ALIAS(longreadlen, NULL),
+#endif
 #if HAVE_SOLID
 	{"solid_fetch_prev",php3_solid_fetch_prev,	NULL},
 #endif
-#if HAVE_IODBC
+#if 0 && HAVE_IODBC /* this won't work with the new system */
 /* for backwards compatibility with the older odbc module*/
 	{"sqlconnect",		php3_uodbc_connect,		NULL},
 	{"sqldisconnect",	php3_uodbc_close,		NULL},
@@ -122,19 +154,24 @@ function_entry UODBC_FUNCTIONS[] = {
 };
 
 php3_module_entry UODBC_MODULE_ENTRY = {
-    UODBC_MODULE_NAME, UODBC_FUNCTIONS, PHP3_MINIT_UODBC, PHP3_MSHUTDOWN_UODBC,
-    PHP3_RINIT_UODBC, NULL, PHP3_INFO_UODBC, STANDARD_MODULE_PROPERTIES
+    UODBC_MODULE_NAME, 
+	UODBC_FUNCTIONS, 
+	PHP3_MINIT_UODBC, 
+	PHP3_MSHUTDOWN_UODBC,
+    PHP3_RINIT_UODBC, 
+	NULL, 
+	PHP3_INFO_UODBC, 
+	STANDARD_MODULE_PROPERTIES
 };
 
 
 #if COMPILE_DL
-#include "ext/phpdl.h"
 DLEXPORT php3_module_entry *get_module() { return &UODBC_MODULE_ENTRY; };
 #endif
 
 #include "php3_list.h"
 
-static void _FREE_UODBC_RESULT(UODBC_RESULT *res)
+static void _free_result(UODBC_RESULT *res)
 {
 	int i;
 	
@@ -153,7 +190,9 @@ static void _FREE_UODBC_RESULT(UODBC_RESULT *res)
 						(UWORD)SQL_COMMIT);
 #endif
 			SQLFreeStmt(res->stmt,SQL_DROP);
+#if !HAVE_DB2
 			res->stmt = NULL;
+#endif
 		}
 		efree(res);
 	}
@@ -167,13 +206,15 @@ static int _results_cleanup(list_entry *le)
 		UODBC_CONNECTION *conn = ((UODBC_RESULT *) le->ptr)->conn_ptr;
 		if (!conn->open && ((UODBC_RESULT *) le->ptr)->stmt){
 			SQLFreeStmt(((UODBC_RESULT *) le->ptr)->stmt,SQL_DROP);
+#if !HAVE_DB2
 			((UODBC_RESULT *) le->ptr)->stmt = NULL;
+#endif
 		}
 	}
 	return 0;
 }
 
-static void _CLOSE_UODBC_CONNECTION(UODBC_CONNECTION *conn)
+static void _close_connection(UODBC_CONNECTION *conn)
 {
 	/* FIXME
 	 * Closing a connection will fail if there are
@@ -191,7 +232,7 @@ static void _CLOSE_UODBC_CONNECTION(UODBC_CONNECTION *conn)
 }
 
 
-static void _CLOSE_UODBC_PCONNECTION(UODBC_CONNECTION *conn)
+static void _close_pconnection(UODBC_CONNECTION *conn)
 {
 	UODBC_TLS_VARS;
 
@@ -239,41 +280,41 @@ int PHP3_MINIT_UODBC(INIT_FUNC_ARGS)
 	SQLAllocEnv(&UODBC_GLOBAL(PHP3_UODBC_MODULE).henv);
 	
 #if !PHP_31
-	cfg_get_string(ODBC_INI_DEFAULTDB,
+	cfg_get_string(ODBC_INI_VAR(default_db),
 				   &UODBC_GLOBAL(PHP3_UODBC_MODULE).defDB);
-	cfg_get_string(ODBC_INI_DEFAULTUSER,
+	cfg_get_string(ODBC_INI_VAR(default_user),
 				   &UODBC_GLOBAL(PHP3_UODBC_MODULE).defUser);
-	cfg_get_string(ODBC_INI_DEFAULTPW,
+	cfg_get_string(ODBC_INI_VAR(default_pw),
 				   &UODBC_GLOBAL(PHP3_UODBC_MODULE).defPW);
-	if (cfg_get_long(ODBC_INI_ALLOWPERSISTENT,
+	if (cfg_get_long(ODBC_INI_VAR(allow_persistent),
 					 &UODBC_GLOBAL(PHP3_UODBC_MODULE).allow_persistent)
 		== FAILURE) {
 		UODBC_GLOBAL(PHP3_UODBC_MODULE).allow_persistent = -1;
 	}
-	if (cfg_get_long(ODBC_INI_MAXPERSISTENT,
+	if (cfg_get_long(ODBC_INI_VAR(max_persistent),
 					 &UODBC_GLOBAL(PHP3_UODBC_MODULE).max_persistent)
 		== FAILURE) {
 		UODBC_GLOBAL(PHP3_UODBC_MODULE).max_persistent = -1;
 	}
-	if (cfg_get_long(ODBC_INI_MAXLINKS,
+	if (cfg_get_long(ODBC_INI_VAR(max_links),
 					 &UODBC_GLOBAL(PHP3_UODBC_MODULE).max_links)
 		== FAILURE) {
 		UODBC_GLOBAL(PHP3_UODBC_MODULE).max_links = -1;
 	}
 #else
-		UODBC_GLOBAL(PHP3_UODBC_MODULE).allow_persistent = -1;
-		UODBC_GLOBAL(PHP3_UODBC_MODULE).max_persistent = -1;
-		UODBC_GLOBAL(PHP3_UODBC_MODULE).max_links = -1;
+	UODBC_GLOBAL(PHP3_UODBC_MODULE).allow_persistent = -1;
+	UODBC_GLOBAL(PHP3_UODBC_MODULE).max_persistent = -1;
+	UODBC_GLOBAL(PHP3_UODBC_MODULE).max_links = -1;
 #endif
 
 	UODBC_GLOBAL(PHP3_UODBC_MODULE).num_persistent = 0;
 
 	UODBC_GLOBAL(PHP3_UODBC_MODULE).le_result =
-		register_list_destructors(_FREE_UODBC_RESULT, NULL);
+		register_list_destructors(_free_result, NULL);
 	UODBC_GLOBAL(PHP3_UODBC_MODULE).le_conn =
-		register_list_destructors(_CLOSE_UODBC_CONNECTION, NULL);
+		register_list_destructors(_close_connection, NULL);
 	UODBC_GLOBAL(PHP3_UODBC_MODULE).le_pconn =
-		register_list_destructors(NULL, _CLOSE_UODBC_PCONNECTION);
+		register_list_destructors(NULL, _close_pconnection);
 
 #ifdef SQLANY_BUG
 /* Make a dumb connection to avoid crash on SQLFreeEnv(),
@@ -293,6 +334,16 @@ int PHP3_MINIT_UODBC(INIT_FUNC_ARGS)
 	}
 #endif
 
+	REGISTER_LONG_CONSTANT("ODBC_BINMODE_PASSTHRU", 0, CONST_CS | CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("ODBC_BINMODE_RETURN", 1, CONST_CS | CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("ODBC_BINMODE_CONVERT", 2, CONST_CS | CONST_PERSISTENT);
+	/* Define Constants for different cursor options
+	   these Constants are are defined in <sqlext.h>
+	*/
+	REGISTER_MAIN_LONG_CONSTANT("SQL_CUR_USE_IF_NEEDED", SQL_CUR_USE_IF_NEEDED, CONST_PERSISTENT | CONST_CS);
+	REGISTER_MAIN_LONG_CONSTANT("SQL_CUR_USE_ODBC", SQL_CUR_USE_ODBC, CONST_PERSISTENT | CONST_CS);
+	REGISTER_MAIN_LONG_CONSTANT("SQL_CUR_USE_DRIVER", SQL_CUR_USE_DRIVER, CONST_PERSISTENT | CONST_CS);
+	REGISTER_MAIN_LONG_CONSTANT("SQL_CUR_DEFAULT", SQL_CUR_DEFAULT, CONST_PERSISTENT | CONST_CS);
 	return SUCCESS;
 }
 
@@ -308,11 +359,11 @@ int PHP3_RINIT_UODBC(INIT_FUNC_ARGS)
 		UODBC_GLOBAL(PHP3_UODBC_MODULE).defaultlrl = 4096;
 		UODBC_GLOBAL(PHP3_UODBC_MODULE).defaultbinmode = 1;
 #else
-	if (cfg_get_long(ODBC_INI_DEFAULTLRL, &UODBC_GLOBAL(PHP3_UODBC_MODULE).defaultlrl)
+	if (cfg_get_long(ODBC_INI_VAR(defaultlrl), &UODBC_GLOBAL(PHP3_UODBC_MODULE).defaultlrl)
 		== FAILURE){
 		UODBC_GLOBAL(PHP3_UODBC_MODULE).defaultlrl = 4096;
 	}
-	if (cfg_get_long(ODBC_INI_DEFAULTBINMODE, &UODBC_GLOBAL(PHP3_UODBC_MODULE).defaultbinmode) == FAILURE){
+	if (cfg_get_long(ODBC_INI_VAR(defaultbinmode), &UODBC_GLOBAL(PHP3_UODBC_MODULE).defaultbinmode) == FAILURE){
 		UODBC_GLOBAL(PHP3_UODBC_MODULE).defaultbinmode = 1;
 	}
 #endif
@@ -342,24 +393,37 @@ int PHP3_MSHUTDOWN_UODBC(void)
 
 void PHP3_INFO_UODBC(void)
 {
-#if !defined(COMPILE_DL) && defined(THREAD_SAFE)
-	TLS_VARS;
-#endif
-#if HAVE_SOLID
-	PUTS("Unified ODBC Support active (compiled with Solid)");
-#elif HAVE_ADABAS
-	PUTS("Unified ODBC Support active (compiled with Adabas D)");
-#elif HAVE_IODBC && !(WIN32|WINNT)
-	PUTS("Unified ODBC Support active (compiled with iODBC)");
-#elif WIN32|WINNT
-	PUTS("Unified ODBC Support active (compiled with win32 ODBC)");
-#elif HAVE_VELOCIS
-	PUTS("Unified ODBC Support active (compiled with Velocis)");
-#else
-	PUTS("Unified ODBC Support active (compiled with unknown library)");
-#endif
-}
+	UODBC_TLS_VARS;
 
+#if HAVE_SOLID
+	php3_printf("Unified ODBC Support active (compiled with Solid)");
+#elif HAVE_ADABAS
+	php3_printf("Unified ODBC Support active (compiled with Adabas D)");
+#elif HAVE_IODBC && !(WIN32|WINNT)
+	php3_printf("Unified ODBC Support active (compiled with iODBC)");
+#elif HAVE_VELOCIS
+	php3_printf("Unified ODBC Support active (compiled with Velocis)");
+#elif HAVE_DB2
+	php3_printf("Unified ODBC Support active (compiled with IBM DB2)");
+#elif WIN32|WINNT
+	php3_printf("Unified ODBC Support active (compiled with win32 ODBC)");
+#elif HAVE_EMPRESS
+        PUTS("Unified ODBC Support active (compiled with Empress)");
+#else
+	php3_printf("Unified ODBC Support active (compiled with unknown library)");
+#endif
+	php3_printf("<BR>");
+#if DEBUG
+	php3_printf("default_db: %s<br>\n",UODBC_GLOBAL(PHP3_UODBC_MODULE).defDB);
+	php3_printf("default_user: %s<br>\n",UODBC_GLOBAL(PHP3_UODBC_MODULE).defUser);
+	php3_printf("default_pw: %s<br>\n",UODBC_GLOBAL(PHP3_UODBC_MODULE).defPW);
+#endif
+	php3_printf("allow_persistent: %d<br>\n",UODBC_GLOBAL(PHP3_UODBC_MODULE).allow_persistent);
+	php3_printf("max_persistent: %d<br>\n",UODBC_GLOBAL(PHP3_UODBC_MODULE).max_persistent);
+	php3_printf("max_links: %d<br>\n",UODBC_GLOBAL(PHP3_UODBC_MODULE).max_links);
+}	 
+	 
+	 
 
 /*
  * List management functions
@@ -448,7 +512,11 @@ UODBC_CONNECTION *UODBC_GET_CONN(HashTable *list, int ind)
 	return NULL;
 }
 
+#if HAVE_DB2
+void UODBC_SQL_ERROR(SQLHANDLE conn, SQLHANDLE stmt, char *func)
+#else
 void UODBC_SQL_ERROR(HDBC conn, HSTMT stmt, char *func)
+#endif
 {
     char	state[6];     /* Not used */
 	SDWORD	error;        /* Not used */
@@ -456,19 +524,21 @@ void UODBC_SQL_ERROR(HDBC conn, HSTMT stmt, char *func)
 	SWORD	errormsgsize; /* Not used */
 	UODBC_TLS_VARS;
 	
-	SQLError(UODBC_GLOBAL(PHP3_UODBC_MODULE).henv, conn, stmt, state, &error, errormsg,
-				sizeof(errormsg)-1, &errormsgsize);
-	
-	if (func)
-		php3_error(E_WARNING, "SQL error: %s, SQL state %s in %s", errormsg,
-				   state, func);
-	else
-		php3_error(E_WARNING, "SQL error: %s, SQL state %s", errormsg, state);	
+	SQLError(UODBC_GLOBAL(PHP3_UODBC_MODULE).henv, conn, stmt, state,
+			 &error, errormsg, sizeof(errormsg)-1, &errormsgsize);
+	if (func) {
+		php3_error(E_WARNING, "SQL error: %s, SQL state %s in %s",
+				   errormsg, state, func);
+	} else {
+		php3_error(E_WARNING, "SQL error: %s, SQL state %s",
+				   errormsg, state);
+	}
 }
 
 /* Main User Functions */
-
-void PHP3_UDOBC_CLOSE_ALL(INTERNAL_FUNCTION_PARAMETERS)
+/* {{{ proto odbc_close_all(void)
+   Close all ODBC connections */
+UODBC_FUNCTION(close_all)
 {
 	void *ptr;
 	int type;
@@ -483,6 +553,7 @@ void PHP3_UDOBC_CLOSE_ALL(INTERNAL_FUNCTION_PARAMETERS)
 		}
 	}
 }
+/* }}} */
 
 void php3_uodbc_fetch_attribs(INTERNAL_FUNCTION_PARAMETERS, int mode)
 {
@@ -500,7 +571,7 @@ void php3_uodbc_fetch_attribs(INTERNAL_FUNCTION_PARAMETERS, int mode)
 	res_ind = arg1->value.lval;
 
     if (res_ind){           
-        if ((result = uodbc_get_result(list, res_ind)) == NULL){
+        if ((result = UODBC_GET_RESULT(list, res_ind)) == NULL){
             RETURN_FALSE;
         }
         if (mode)
@@ -517,15 +588,21 @@ void php3_uodbc_fetch_attribs(INTERNAL_FUNCTION_PARAMETERS, int mode)
 	RETURN_TRUE
 }
 
-void PHP3_UODBC_BINMODE(INTERNAL_FUNCTION_PARAMETERS)
+/* {{{ proto odbc_binmode(int result_id, int mode)
+   Handle binary column data */
+UODBC_FUNCTION(binmode)
 {
 	php3_uodbc_fetch_attribs(INTERNAL_FUNCTION_PARAM_PASSTHRU,0);
 }
+/* }}} */
 
-void PHP3_UODBC_LONGREADLEN(INTERNAL_FUNCTION_PARAMETERS)
+/* {{{ proto odbc_longreadlen(int result_id, int length)
+   Handle LONG columns */
+UODBC_FUNCTION(longreadlen)
 {
 	php3_uodbc_fetch_attribs(INTERNAL_FUNCTION_PARAM_PASSTHRU,1);
 }
+/* }}} */
 
 int UODBC_BINDCOLS(UODBC_RESULT *result)
 {
@@ -586,7 +663,9 @@ int UODBC_BINDCOLS(UODBC_RESULT *result)
     return 1;
 }
 
-void PHP3_UODBC_PREPARE(INTERNAL_FUNCTION_PARAMETERS)
+/* {{{ proto odbc_prepare(int connection_id, string query)
+   Prepares a statement for execution */
+UODBC_FUNCTION(prepare)
 {
 	pval     *arg1, *arg2;
 	int         conn;
@@ -653,15 +732,17 @@ void PHP3_UODBC_PREPARE(INTERNAL_FUNCTION_PARAMETERS)
 	result->fetched = 0;
 	RETURN_LONG(UODBC_ADD_RESULT(list, result));	
 }
+/* }}} */
 
 /*
  * Execute prepared SQL statement. Supports only input parameters.
  */
-
-void PHP3_UODBC_EXECUTE(INTERNAL_FUNCTION_PARAMETERS)
+/* {{{ proto odbc_execute(int result_id [, array parameters_array])
+   Execute a prepared statement */
+extern UODBC_FUNCTION(execute)
 { 
     pval *arg1, *arg2, arr, *tmp;
-    typedef struct params_t{
+    typedef struct params_t {
 		SDWORD vallen;
 		int fp;
 	} params_t;
@@ -712,7 +793,7 @@ void PHP3_UODBC_EXECUTE(INTERNAL_FUNCTION_PARAMETERS)
         _php3_hash_internal_pointer_reset(arr.value.ht);
         params = (params_t *)emalloc(sizeof(params_t) * result->numparams);
 		
-		for(i = 1; i <= result->numparams; i++){
+		for (i = 1; i <= result->numparams; i++) {
             if (_php3_hash_get_current_data(arr.value.ht, (void **) &tmp) == FAILURE) {
                 php3_error(E_WARNING,"Error getting parameter");
                 SQLFreeStmt(result->stmt,SQL_RESET_PARAMS);
@@ -720,42 +801,45 @@ void PHP3_UODBC_EXECUTE(INTERNAL_FUNCTION_PARAMETERS)
                 RETURN_FALSE;
             }
             convert_to_string(tmp);
-			if (tmp->type != IS_STRING){
+			if (tmp->type != IS_STRING) {
 				php3_error(E_WARNING,"Error converting parameter");
-				SQLFreeStmt(result->stmt,SQL_RESET_PARAMS);
+				SQLFreeStmt(result->stmt, SQL_RESET_PARAMS);
 				_php3_hash_destroy(arr.value.ht);
 				efree(arr.value.ht);
 				efree(params);
 				RETURN_FALSE;
 			}
 			
-            SQLDescribeParam(result->stmt,(UWORD)i,&sqltype,&precision,&scale,&nullable);
+            SQLDescribeParam(result->stmt, (UWORD)i, &sqltype, &precision,
+							 &scale, &nullable);
 			params[i-1].vallen = tmp->value.str.len;
 			params[i-1].fp = -1;
 
 
-			if (tmp->value.str.val[0] == '\''){
+			if (tmp->value.str.val[0] == '\'') {
 				filename = &tmp->value.str.val[1];
 				filename[tmp->value.str.len - 2] = '\0';
 
-                if ((params[i-1].fp = open(filename,O_RDONLY)) == -1){
-					php3_error(E_WARNING,"Can´t open file %s",filename);
-					SQLFreeStmt(result->stmt,SQL_RESET_PARAMS);
-					for(i = 0; i < result->numparams; i++){
-						if (params[i].fp != -1)
+                if ((params[i-1].fp = open(filename,O_RDONLY)) == -1) {
+					php3_error(E_WARNING,"Can't open file %s", filename);
+					SQLFreeStmt(result->stmt, SQL_RESET_PARAMS);
+					for (i = 0; i < result->numparams; i++) {
+						if (params[i].fp != -1) {
 							close(params[i].fp);
+						}
 					}
 					_php3_hash_destroy(arr.value.ht);
 					efree(arr.value.ht);
 					efree(params);
 					RETURN_FALSE;
-					}
+				}
 
 				params[i-1].vallen = SQL_LEN_DATA_AT_EXEC(0);
 
 				rc = SQLBindParameter(result->stmt, (UWORD)i, SQL_PARAM_INPUT,
-										SQL_C_BINARY, sqltype, precision, scale,
-										(void *)params[i-1].fp, 0, &params[i-1].vallen);
+									  SQL_C_BINARY, sqltype, precision, scale,
+									  (void *)params[i-1].fp, 0,
+									  &params[i-1].vallen);
 			} else {
 				/*if (IS_SQL_BINARY(sqltype)){
 	   				php3_error(E_WARNING,"No Filename for binary parameter");
@@ -767,8 +851,9 @@ void PHP3_UODBC_EXECUTE(INTERNAL_FUNCTION_PARAMETERS)
 				}
 */
 				rc = SQLBindParameter(result->stmt, (UWORD)i, SQL_PARAM_INPUT,
-										SQL_C_CHAR, sqltype, precision, scale,
-										tmp->value.str.val, 0, &params[i-1].vallen);
+									  SQL_C_CHAR, sqltype, precision, scale,
+									  tmp->value.str.val, 0,
+									  &params[i-1].vallen);
 			}
 			_php3_hash_move_forward(arr.value.ht);
 		}
@@ -777,7 +862,7 @@ void PHP3_UODBC_EXECUTE(INTERNAL_FUNCTION_PARAMETERS)
 	rc = SQLFreeStmt(result->stmt, SQL_CLOSE);
 
 	if (rc == SQL_ERROR){
-		uodbc_sql_error(result->conn_ptr->hdbc, result->stmt, "SQLFreeStmt");	
+		UODBC_SQL_ERROR(result->conn_ptr->hdbc, result->stmt, "SQLFreeStmt");	
 	}
 
 	rc = SQLExecute(result->stmt);
@@ -815,12 +900,14 @@ void PHP3_UODBC_EXECUTE(INTERNAL_FUNCTION_PARAMETERS)
 		RETVAL_TRUE;
 	}
 }
+/* }}} */
 
 /* odbc_cursor simply returns a cursor name for the given stmt
  * Adabas automagically generates cursor names, other drivers may not
  */
-
-void PHP3_UODBC_CURSOR(INTERNAL_FUNCTION_PARAMETERS)
+/* {{{ proto odbc_cursor(int result_id)
+   Get cursor name */
+UODBC_FUNCTION(cursor)
 {
 	pval     *arg1;
 	int			res_ind;
@@ -883,8 +970,11 @@ void PHP3_UODBC_CURSOR(INTERNAL_FUNCTION_PARAMETERS)
 		RETVAL_FALSE;
 	}
 }
+/* }}} */
 
-void PHP3_UODBC_DO(INTERNAL_FUNCTION_PARAMETERS)
+/* {{{ proto odbc_exec(int connection_id, string query)
+   Prepare and execute an SQL statement */
+UODBC_FUNCTION(exec)
 {
 	pval 	*arg1, *arg2;
 	int         conn;
@@ -979,8 +1069,11 @@ void PHP3_UODBC_DO(INTERNAL_FUNCTION_PARAMETERS)
 	result->fetched = 0;
 	RETURN_LONG(UODBC_ADD_RESULT(list, result));
 }
+/* }}} */
 
-void PHP3_UODBC_FETCH_INTO(INTERNAL_FUNCTION_PARAMETERS)
+/* {{{ proto odbc_fetch_into(int result_id [, int rownumber], array result_array)
+   Fetch one result row into an array */ 
+UODBC_FUNCTION(fetch_into)
 {
 	int         res_ind, numArgs, i;
 	UODBC_RESULT   *result;
@@ -1096,7 +1189,7 @@ void PHP3_UODBC_FETCH_INTO(INTERNAL_FUNCTION_PARAMETERS)
 								buf, result->longreadlen + 1, &result->values[i].vallen);
 
                 if (rc == SQL_ERROR) {
-					uodbc_sql_error(result->conn_ptr->hdbc, result->stmt, "SQLGetData");
+					UODBC_SQL_ERROR(result->conn_ptr->hdbc, result->stmt, "SQLGetData");
 					efree(buf);
 					RETURN_FALSE;
 				}
@@ -1125,6 +1218,7 @@ void PHP3_UODBC_FETCH_INTO(INTERNAL_FUNCTION_PARAMETERS)
 	if (buf) efree(buf);
 	RETURN_LONG(result->numcols);	
 }
+/* }}} */
 
 #if HAVE_SOLID
 void php3_solid_fetch_prev(INTERNAL_FUNCTION_PARAMETERS)
@@ -1160,8 +1254,10 @@ void php3_solid_fetch_prev(INTERNAL_FUNCTION_PARAMETERS)
 	RETURN_TRUE;
 }
 #endif
-						
-void PHP3_UODBC_FETCH_ROW(INTERNAL_FUNCTION_PARAMETERS)
+
+/* {{{ proto odbc_fetch_row(int result_id [, int row_number])
+   Fetch a row */
+UODBC_FUNCTION(fetch_row)
 {
 	int         res_ind, numArgs;
 	SDWORD      rownum = 1;
@@ -1219,8 +1315,11 @@ void PHP3_UODBC_FETCH_ROW(INTERNAL_FUNCTION_PARAMETERS)
 	
 	RETURN_TRUE;
 }	
+/* }}} */
 
-void PHP3_UODBC_RESULT(INTERNAL_FUNCTION_PARAMETERS)
+/* {{{ proto odbc_result(int result_id, mixed field)
+   Get result data */ 
+UODBC_FUNCTION(result)
 {
 	char        *field;
 	int         res_ind;
@@ -1335,7 +1434,7 @@ void PHP3_UODBC_RESULT(INTERNAL_FUNCTION_PARAMETERS)
                             field, fieldsize, &result->values[field_ind].vallen);
             
             if (rc == SQL_ERROR) {
-                uodbc_sql_error(result->conn_ptr->hdbc, result->stmt, "SQLGetData");
+                UODBC_SQL_ERROR(result->conn_ptr->hdbc, result->stmt, "SQLGetData");
                 efree(field);
                 RETURN_FALSE;
             }
@@ -1382,7 +1481,7 @@ void PHP3_UODBC_RESULT(INTERNAL_FUNCTION_PARAMETERS)
                             field, fieldsize, &result->values[field_ind].vallen);
 
 		if (rc == SQL_ERROR) {
-			uodbc_sql_error(result->conn_ptr->hdbc, result->stmt, "SQLGetData");
+			UODBC_SQL_ERROR(result->conn_ptr->hdbc, result->stmt, "SQLGetData");
             efree(field);
 			RETURN_FALSE;
 		}
@@ -1402,8 +1501,11 @@ void PHP3_UODBC_RESULT(INTERNAL_FUNCTION_PARAMETERS)
 	}
 	RETURN_TRUE;
 }
+/* }}} */
 
-void PHP3_UODBC_RESULT_ALL(INTERNAL_FUNCTION_PARAMETERS)
+/* {{{ proto odbc_result_all(int result_id [, string format])
+   Print result as HTML table */
+UODBC_FUNCTION(result_all)
 {
 	char *buf = NULL;
 	int         res_ind, numArgs;
@@ -1495,18 +1597,21 @@ void PHP3_UODBC_RESULT_ALL(INTERNAL_FUNCTION_PARAMETERS)
                     php3_printf("<td>");
 
                     if (rc == SQL_ERROR) {
-                        uodbc_sql_error(result->conn_ptr->hdbc, result->stmt, "SQLGetData");
+                        UODBC_SQL_ERROR(result->conn_ptr->hdbc, result->stmt, "SQLGetData");
                         php3_printf("</td></tr></table>");
                         efree(buf);
                         RETURN_FALSE;
                     }
-                    if (rc == SQL_SUCCESS_WITH_INFO) 
-                        PHPWRITE(buf,result->longreadlen);
+                    if (rc == SQL_SUCCESS_WITH_INFO)
+                        php3_printf(buf,result->longreadlen);
                     else if (result->values[i].vallen == SQL_NULL_DATA){
 						php3_printf("&nbsp;</td>");
 						break;
                     }
-                    PHPWRITE(buf, result->values[i].vallen);
+		    else
+		    {
+                    	php3_printf(buf, result->values[i].vallen);
+		    }
                     php3_printf("</td>");
                     break;
 
@@ -1532,8 +1637,11 @@ void PHP3_UODBC_RESULT_ALL(INTERNAL_FUNCTION_PARAMETERS)
     if (buf) efree(buf);
 	RETURN_LONG(result->fetched);
 }
+/* }}} */
 
-void PHP3_UODBC_FREE_RESULT(INTERNAL_FUNCTION_PARAMETERS)
+/* {{{ proto odbc_free_result(int result_id)
+   Free resources associated with a result */
+UODBC_FUNCTION(free_result)
 {
 	pval *arg1;
 	
@@ -1544,16 +1652,23 @@ void PHP3_UODBC_FREE_RESULT(INTERNAL_FUNCTION_PARAMETERS)
 	UODBC_DEL_RESULT(list, arg1->value.lval);
 	RETURN_TRUE;
 }
+/* }}} */
 
-void PHP3_UODBC_CONNECT(INTERNAL_FUNCTION_PARAMETERS)
+/* {{{ proto odbc_connect(string DSN, string user, string password [, int cursor_option])
+   Connect to a datasource */
+UODBC_FUNCTION(connect)
 {
 	PHP3_UODBC_DO_CONNECT(INTERNAL_FUNCTION_PARAM_PASSTHRU, 0);
 }
+/* }}} */
 
-void PHP3_UODBC_PCONNECT(INTERNAL_FUNCTION_PARAMETERS)
+/* {{{ proto odbc_connect(string DSN, string user, string password [, int cursor_option])
+   Establish a persistant connection to a datasource */
+UODBC_FUNCTION(pconnect)
 {
 	PHP3_UODBC_DO_CONNECT(INTERNAL_FUNCTION_PARAM_PASSTHRU, 1);
 }
+/* }}} */
 
 /* Persistent connections: two list-types le_pconn, le_conn and a plist
  * where hashed connection info is stored together with index pointer to
@@ -1573,21 +1688,50 @@ void PHP3_UODBC_DO_CONNECT(INTERNAL_FUNCTION_PARAMETERS, int persistent)
 	char    *db = NULL;
 	char    *uid = NULL;
 	char    *pwd = NULL;
-	pval *arg1, *arg2, *arg3;
+	pval *arg1, *arg2, *arg3, *arg4;
 	UODBC_CONNECTION *db_conn;
 	RETCODE rc;
 	list_entry *index_ptr;
 	char *hashed_details;
-	int hashed_len, len, id;
+	int hashed_len, len, id, cur_opt;
+	int type;
 	UODBC_TLS_VARS;
 
 	UODBC_GLOBAL(PHP3_UODBC_MODULE).resource_list = list;
 	UODBC_GLOBAL(PHP3_UODBC_MODULE).resource_plist = plist;
-	
-	if (getParameters(ht, 3, &arg1, &arg2, &arg3) == FAILURE) {
-		WRONG_PARAM_COUNT;
+
+	/*  Now an optional 4th parameter specifying the cursor type
+	 *  defaulting to the cursors default
+	 */
+	switch(ARG_COUNT(ht)) {
+		case 3:	
+			if (getParameters(ht, 3, &arg1, &arg2, &arg3) == FAILURE) {
+				WRONG_PARAM_COUNT;
+			}
+			/* Use Default: Probably a better way to do this */
+			cur_opt = SQL_CUR_DEFAULT;
+			break;
+		case 4:
+			if (getParameters(ht, 4, &arg1, &arg2, &arg3, &arg4) == FAILURE) {
+				WRONG_PARAM_COUNT;
+			}
+			convert_to_long(arg4);
+			cur_opt = arg4->value.lval;
+
+			/* Confirm the cur_opt range */
+			if (! (cur_opt == SQL_CUR_USE_IF_NEEDED || 
+				cur_opt == SQL_CUR_USE_ODBC || 
+				cur_opt == SQL_CUR_USE_DRIVER || 
+				cur_opt == SQL_CUR_DEFAULT) ) {
+				php3_error(E_WARNING, "uODBC: Invalid Cursor type (%d)", cur_opt);
+				RETURN_FALSE;
+			}
+			break;
+		default:
+			WRONG_PARAM_COUNT;
+			break;
 	}
-	
+
 	convert_to_string(arg1);
 	convert_to_string(arg2);
 	convert_to_string(arg3);
@@ -1596,7 +1740,7 @@ void PHP3_UODBC_DO_CONNECT(INTERNAL_FUNCTION_PARAMETERS, int persistent)
 	uid = arg2->value.str.val;
 	pwd = arg3->value.str.val;
 
-	if (!UODBC_GLOBAL(PHP3_UODBC_MODULE).allow_persistent) {
+	if (UODBC_GLOBAL(PHP3_UODBC_MODULE).allow_persistent <= 0) {
 		persistent = 0;
 	}
 
@@ -1618,7 +1762,7 @@ void PHP3_UODBC_DO_CONNECT(INTERNAL_FUNCTION_PARAMETERS, int persistent)
 		RETURN_FALSE;
 	}
 
-	len = strlen(db) + strlen(uid) + strlen(pwd) + 9; 
+	len = strlen(db) + strlen(uid) + strlen(pwd) + strlen(UODBC_NAME) + 5; 
 	hashed_details = emalloc(len);
 
 	if (hashed_details == NULL) {
@@ -1626,7 +1770,7 @@ void PHP3_UODBC_DO_CONNECT(INTERNAL_FUNCTION_PARAMETERS, int persistent)
 		RETURN_FALSE;
 	}
 
-	hashed_len = _php3_sprintf(hashed_details, "uodbc_%s_%s_%s", db, uid, pwd);
+	hashed_len = _php3_sprintf(hashed_details, "%s_%s_%s_%s_%d", UODBC_NAME, db, uid, pwd, cur_opt);
 
 	/* FIXME the idea of checking to see if our connection is already persistent
 		is good, but it adds a lot of overhead to non-persistent connections.  We
@@ -1635,8 +1779,8 @@ void PHP3_UODBC_DO_CONNECT(INTERNAL_FUNCTION_PARAMETERS, int persistent)
 	 * no matter if it is to be persistent or not
 	 */
 
-	if ((persistent || _php3_hash_find(list, hashed_details, hashed_len + 1,
-		  (void **) &index_ptr) == FAILURE) &&
+	if ((persistent || (_php3_hash_find(list, hashed_details, hashed_len + 1,
+		  (void **) &index_ptr) == FAILURE || !php3_list_find((int) index_ptr->ptr, &type))) &&
 		  _php3_hash_find(plist, hashed_details, hashed_len + 1,
 		  (void **) &index_ptr) == FAILURE) {
 		/* the link is not in the persistent list */
@@ -1653,8 +1797,73 @@ void PHP3_UODBC_DO_CONNECT(INTERNAL_FUNCTION_PARAMETERS, int persistent)
 		SQLSetConnectOption(db_conn->hdbc, SQL_TRANSLATE_OPTION,
 							SQL_SOLID_XLATOPT_NOCNV);
 #endif
+#if HAVE_OPENLINK
+		{
+			char dsnbuf[300];
+			short dsnbuflen;
+
+			rc = SQLDriverConnect(db_conn->hdbc, NULL, db, SQL_NTS,
+								  dsnbuf, sizeof(dsnbuf)-1, &dsnbuflen,
+								  SQL_DRIVER_COMPLETE);
+		}
+#else
+		if(cur_opt != SQL_CUR_DEFAULT){
+			rc = SQLSetConnectOption(db_conn->hdbc, SQL_ODBC_CURSORS, cur_opt);
+			if (rc != SQL_SUCCESS ) {  /* && rc != SQL_SUCCESS_WITH_INFO ? */
+				UODBC_SQL_ERROR(db_conn->hdbc, SQL_NULL_HSTMT, "SQLSetConnectOption");
+				SQLFreeConnect(db_conn->hdbc);
+				if (persistent)
+					free(db_conn);
+				else
+					efree(db_conn);
+				RETURN_FALSE;
+			}
+		}
+
+#if HAVE_EMPRESS
+                {
+                        int     direct = 0;
+                        char    dsnbuf[300];
+                        short   dsnbuflen;
+                        char    *ldb = 0;
+
+                        if (strstr ((char*)db, ";"))
+                        {
+                                direct = 1;
+                                if (uid && !strstr ((char*)db, "uid") &&
+                                                !strstr ((char*)db, "UID"))
+                                {
+                                        ldb = (char*) emalloc (strlen(db) +
+                                                        strlen (uid) +
+                                                        strlen (pwd) + 12);
+                                        sprintf (ldb, "%s;UID=%s;PWD=%s",
+                                                                db, uid, pwd);
+                                }
+                                else
+                                {
+                                        ldb = (char*) emalloc (strlen (db) + 1);
+                                        strcat (ldb, db);
+                                }
+                        }
+
+                        if (direct)
+                                rc = SQLDriverConnect (db_conn->hdbc, NULL,
+                                        ldb, strlen (ldb), dsnbuf, 300,
+                                        &dsnbuflen, SQL_DRIVER_NOPROMPT);
+
+                        else
+                                rc = SQLConnect(db_conn->hdbc, db, SQL_NTS,
+                                                uid, SQL_NTS, pwd, SQL_NTS);
+
+                        if (ldb)
+                                efree (ldb);
+                }
+#else
 		rc = SQLConnect(db_conn->hdbc, db, SQL_NTS, uid, SQL_NTS, pwd, SQL_NTS);
 
+#endif
+
+#endif
 		if (rc != SQL_SUCCESS && rc != SQL_SUCCESS_WITH_INFO) {
 			UODBC_SQL_ERROR(db_conn->hdbc, SQL_NULL_HSTMT, "SQLConnect");
 			SQLFreeConnect(db_conn->hdbc);
@@ -1700,7 +1909,7 @@ void PHP3_UODBC_DO_CONNECT(INTERNAL_FUNCTION_PARAMETERS, int persistent)
 					sizeof(list_entry),NULL)==FAILURE) {
 				SQLDisconnect(db_conn->hdbc);
 				SQLFreeConnect(db_conn->hdbc);
-				free(db_conn);
+				efree(db_conn);
 				efree(hashed_details);
 				RETURN_FALSE;
 			}
@@ -1709,13 +1918,11 @@ void PHP3_UODBC_DO_CONNECT(INTERNAL_FUNCTION_PARAMETERS, int persistent)
 		UODBC_GLOBAL(PHP3_UODBC_MODULE).num_links++;
 
 	} else {
-		int type;
-
 		/* we are already connected */
 #ifdef THREAD_SAFE
-			if (index_ptr->type != _php3_le_index_ptr()) {
+		if (index_ptr->type != _php3_le_index_ptr()) {
 #else
-			if (index_ptr->type != le_index_ptr) {
+		if (index_ptr->type != le_index_ptr) {
 #endif
 			efree(hashed_details);
 			RETURN_FALSE;
@@ -1747,7 +1954,9 @@ void PHP3_UODBC_DO_CONNECT(INTERNAL_FUNCTION_PARAMETERS, int persistent)
 	return_value->type = IS_LONG;
 }
 
-void PHP3_UODBC_CLOSE(INTERNAL_FUNCTION_PARAMETERS)
+/* {{{ proto odbc_close(int connection_id)
+   Close an ODBC connection */
+UODBC_FUNCTION(close)
 {
 	pval *arg1;
 	HDBC conn;
@@ -1767,8 +1976,11 @@ void PHP3_UODBC_CLOSE(INTERNAL_FUNCTION_PARAMETERS)
 	}
 	php3_list_delete(ind);
 }
+/* }}} */
 
-void PHP3_UODBC_NUM_ROWS(INTERNAL_FUNCTION_PARAMETERS)
+/* {{{ proto odbc_num_rows(int result_id)
+   Get number of rows in a result */
+UODBC_FUNCTION(num_rows)
 {
 	UODBC_RESULT   *result;
 	SDWORD      rows;
@@ -1787,8 +1999,11 @@ void PHP3_UODBC_NUM_ROWS(INTERNAL_FUNCTION_PARAMETERS)
 	SQLRowCount(result->stmt, &rows);
 	RETURN_LONG(rows);
 }
+/* }}} */
 
-void PHP3_UODBC_NUM_FIELDS(INTERNAL_FUNCTION_PARAMETERS)
+/* {{{ proto odbc_num_fields(int result_id)
+   Get number of columns in a result */
+UODBC_FUNCTION(num_fields)
 {
 	UODBC_RESULT   *result;
 	pval     *arg1;
@@ -1804,8 +2019,11 @@ void PHP3_UODBC_NUM_FIELDS(INTERNAL_FUNCTION_PARAMETERS)
 	}
 	RETURN_LONG(result->numcols);
 }
+/* }}} */
 
-void PHP3_UODBC_FIELD_NAME(INTERNAL_FUNCTION_PARAMETERS)
+/* {{{ proto odbc_field_name(int result_id, int field_number)
+   Get a column name */
+UODBC_FUNCTION(field_name)
 {
 	UODBC_RESULT       *result;
 	pval     *arg1, *arg2;
@@ -1838,8 +2056,11 @@ void PHP3_UODBC_FIELD_NAME(INTERNAL_FUNCTION_PARAMETERS)
 	
 	RETURN_STRING(result->values[arg2->value.lval - 1].name,1)
 }
+/* }}} */
 
-void PHP3_UODBC_FIELD_TYPE(INTERNAL_FUNCTION_PARAMETERS)
+/* {{{ proto odbc_field_type(int result_id, int field_number)
+   Get the datatype of a column */
+UODBC_FUNCTION(field_type)
 {
 	UODBC_RESULT	*result;
 	char    	tmp[32];
@@ -1871,8 +2092,11 @@ void PHP3_UODBC_FIELD_TYPE(INTERNAL_FUNCTION_PARAMETERS)
 					 SQL_COLUMN_TYPE_NAME, tmp, 31, &tmplen, NULL);
 	RETURN_STRING(tmp,1)
 }
+/* }}} */
 
-void PHP3_UODBC_FIELD_LEN(INTERNAL_FUNCTION_PARAMETERS)
+/* {{{ proto odbc_field_len(int result_id, int field_number)
+   Get the length of a column */   
+UODBC_FUNCTION(field_len)
 {
 	UODBC_RESULT       *result;
 	SDWORD  len;
@@ -1903,8 +2127,11 @@ void PHP3_UODBC_FIELD_LEN(INTERNAL_FUNCTION_PARAMETERS)
 	
 	RETURN_LONG(len);
 }
+/* }}} */
 
-void PHP3_UODBC_FIELD_NUM(INTERNAL_FUNCTION_PARAMETERS)
+/* {{{ proto odbc_field_num(int result_id, string field_name)
+   Return column number */
+UODBC_FUNCTION(field_num)
 {
 	int         field_ind;
 	char        *fname;
@@ -1937,34 +2164,60 @@ void PHP3_UODBC_FIELD_NUM(INTERNAL_FUNCTION_PARAMETERS)
 		RETURN_FALSE;
 	RETURN_LONG(field_ind);
 }
+/* }}} */
 
-void PHP3_UODBC_AUTOCOMMIT(INTERNAL_FUNCTION_PARAMETERS)
+/* {{{ proto odbc_autocommit(int connection_id, int OnOff)
+   Toggle autocommit mode */
+UODBC_FUNCTION(autocommit)
 {
 	UODBC_CONNECTION *curr_conn;
 	RETCODE rc;
-	pval *arg1, *arg2;
+	pval *arg1, *arg2 = NULL;
+	int argc;
 
- 	if ( getParameters(ht, 2, &arg1, &arg2) == FAILURE) {
+	argc = ARG_COUNT(ht);
+	if (argc == 2) {
+		if (getParameters(ht, 2, &arg1, &arg2) == FAILURE) {
+			WRONG_PARAM_COUNT;
+		}
+	} else if (argc == 1) {
+		if (getParameters(ht, 1, &arg1) == FAILURE) {
+			WRONG_PARAM_COUNT;
+		}
+	} else {
 		WRONG_PARAM_COUNT;
-	}                            
+	}
  
     convert_to_long(arg1);
-	convert_to_long(arg2);
+	if (arg2) {
+		convert_to_long(arg2);
+	}
 
-	if ((curr_conn = UODBC_GET_CONN(list, arg1->value.lval)) == NULL){
+	if ((curr_conn = UODBC_GET_CONN(list, arg1->value.lval)) == NULL) {
 		RETURN_FALSE;
 	}
 
-	rc = SQLSetConnectOption(curr_conn->hdbc, SQL_AUTOCOMMIT,
-							 (arg2->value.lval) ?
-							 SQL_AUTOCOMMIT_ON : SQL_AUTOCOMMIT_OFF);	
-	if (rc != SQL_SUCCESS && rc != SQL_SUCCESS_WITH_INFO){
-		UODBC_SQL_ERROR(curr_conn->hdbc, SQL_NULL_HSTMT, "Autocommit");
-		RETURN_FALSE;
-	}
+	if (arg2) {
+		rc = SQLSetConnectOption(curr_conn->hdbc, SQL_AUTOCOMMIT,
+								 (arg2->value.lval) ?
+								 SQL_AUTOCOMMIT_ON : SQL_AUTOCOMMIT_OFF);
+		if (rc != SQL_SUCCESS && rc != SQL_SUCCESS_WITH_INFO){
+			UODBC_SQL_ERROR(curr_conn->hdbc, SQL_NULL_HSTMT, "Set autocommit");
+			RETURN_FALSE;
+		}
+		RETVAL_TRUE;
+	} else {
+		SDWORD status;
 
-	RETURN_TRUE;
+		rc = SQLGetConnectOption(curr_conn->hdbc, SQL_AUTOCOMMIT, (PTR)&status);
+		if (rc != SQL_SUCCESS && rc != SQL_SUCCESS_WITH_INFO){
+			UODBC_SQL_ERROR(curr_conn->hdbc, SQL_NULL_HSTMT, "Test autocommit");
+			RETURN_FALSE;
+		}
+		RETVAL_LONG((long)status);
+	}
 }
+/* }}} */
 
 void PHP3_UODBC_TRANSACT(INTERNAL_FUNCTION_PARAMETERS, int type)
 {
@@ -1992,18 +2245,25 @@ void PHP3_UODBC_TRANSACT(INTERNAL_FUNCTION_PARAMETERS, int type)
 	RETURN_TRUE;
 }
 
-void PHP3_UODBC_COMMIT(INTERNAL_FUNCTION_PARAMETERS)
+/* {{{ proto odbc_commit(int connection_id)
+   Commit an ODBC transaction */
+UODBC_FUNCTION(commit)
 {
 	PHP3_UODBC_TRANSACT(INTERNAL_FUNCTION_PARAM_PASSTHRU, 1);
 }
+/* }}} */
 
-void PHP3_UODBC_ROLLBACK(INTERNAL_FUNCTION_PARAMETERS)
+/* {{{ proto odbc_rollback(int connection_id)
+   Rollback a transaction */
+UODBC_FUNCTION(rollback)
 {
 	PHP3_UODBC_TRANSACT(INTERNAL_FUNCTION_PARAM_PASSTHRU, 0);
 }
+/* }}} */
 
-
-void PHP3_UODBC_SETOPTION(INTERNAL_FUNCTION_PARAMETERS)
+/* {{{ proto odbc_setoption(??)
+   ?? */
+UODBC_FUNCTION(setoption)
 {
 	UODBC_CONNECTION *curr_conn;
 	UODBC_RESULT	*result;
@@ -2048,7 +2308,7 @@ void PHP3_UODBC_SETOPTION(INTERNAL_FUNCTION_PARAMETERS)
 
 	RETURN_TRUE;
 }
-
+/* }}} */
 
 #endif /* HAVE_UODBC */
 

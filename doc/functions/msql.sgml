@@ -17,7 +17,7 @@
      <paramdef>int <parameter>link_identifier</parameter></paramdef>
     </funcsynopsis>
     <para> 
-     Returns a positive mSQL result identifier to the query result, or
+     Returns a positive mSQL query identifier to the query result, or
      false on error.  
     <para>
      msql() selects a database and executes a query on it.  If the
@@ -30,6 +30,28 @@
    </refsect1>
   </refentry>
 
+  <refentry id="function.msql-affected-rows">
+   <refnamediv>
+    <refname>msql_affected_rows</refname> 
+    <refpurpose>returns number of affected rows</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>msql_affected_rows</function></funcdef>
+     <paramdef>int <parameter>query_identifier</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+     Returns number of affected ("touched") rows by a specific query
+     (i.e. the number of rows returned by a SELECT, the number of rows 
+      modified by an update, or the number of rows removed by a delete).
+    <para>
+     See also:
+     <function>msql_query</function>
+
+   </refsect1>
+  </refentry>
+ 
   <refentry id="function.msql-close">
    <refnamediv>
     <refname>msql_close</refname> 
@@ -105,7 +127,9 @@
     <title>Description</title>
     <funcsynopsis>
      <funcdef>int <function>msql_create_db</function></funcdef>
-     <void>
+     <paramdef>string <parameter>database name</parameter></paramdef>
+     <paramdef>int <parameter><optional>link_identifier</optional>  
+                   </parameter></paramdef>
     </funcsynopsis>
     <para>
      msql_create_db() attempts to create a new database on the server
@@ -126,7 +150,9 @@
     <title>Description</title>
     <funcsynopsis>
      <funcdef>int <function>msql_createdb</function></funcdef>
-     <void>
+     <paramdef>string <parameter>database name</parameter></paramdef>
+     <paramdef>int <parameter><optional>link_identifier</optional>  
+                   </parameter></paramdef>
     </funcsynopsis>
     <para>
      Identical to <function>msql_create_db</function>.
@@ -144,14 +170,14 @@
     <title>Description</title>
     <funcsynopsis>
      <funcdef>int <function>msql_data_seek</function></funcdef>
-     <paramdef>int <parameter>result_identifier</parameter></paramdef>
+     <paramdef>int <parameter>query_identifier</parameter></paramdef>
      <paramdef>int <parameter>row_number</parameter></paramdef>
     </funcsynopsis>
     <para>
      Returns true on success, false on failure.
     <para>
      msql_data_seek() moves the internal row pointer of the mSQL
-     result associated with the specified result identifier to pointer
+     result associated with the specified query identifier to pointer
      to the specifyed row number.  The next call to
      <function>msql_fetch_row</function> would return that row.
     <para> 
@@ -170,7 +196,7 @@
     <title>Description</title>
     <funcsynopsis>
      <funcdef>string <function>msql_dbname</function></funcdef>
-     <paramdef>string <parameter>result</parameter></paramdef>
+     <paramdef>int <parameter>query_identifier</parameter></paramdef>
      <paramdef>int <parameter>i</parameter></paramdef>
     </funcsynopsis>
     <para> 
@@ -245,7 +271,7 @@
     <title>Description</title>
     <funcsynopsis>
      <funcdef>int <function>msql_fetch_array</function></funcdef>
-     <paramdef>int <parameter>result</parameter></paramdef>
+     <paramdef>int <parameter>query_identifier</parameter></paramdef>
     </funcsynopsis>
     <para>
      Returns an array that corresponds to the fetched row, or false if
@@ -255,6 +281,10 @@
      <function>msql_fetch_row</function>.  In addition to storing the
      data in the numeric indices of the result array, it also stores
      the data in associative indices, using the field names as keys.
+    <para>
+     Be careful if you are retrieving results from a query that may
+     return a record that contains only one field that has a value
+     of 0 (or an empty string, or NULL).
     <para> 
      An important thing to note is that using msql_fetch_array() is
      NOT significantly slower than using
@@ -276,7 +306,7 @@
     <title>Description</title>
     <funcsynopsis>
      <funcdef>object <function>msql_fetch_field</function></funcdef>
-     <paramdef>int <parameter>result</parameter></paramdef>
+     <paramdef>int <parameter>query_identifier</parameter></paramdef>
      <paramdef>int <parameter>field_offset</parameter></paramdef>
     </funcsynopsis>
     <para>
@@ -318,7 +348,7 @@
     <title>Description</title>
     <funcsynopsis>
      <funcdef>int <function>msql_fetch_object</function></funcdef>
-     <paramdef>int <parameter>result</parameter></paramdef>
+     <paramdef>int <parameter>query_identifier</parameter></paramdef>
     </funcsynopsis>
     <para>
      Returns an object with properties that correspond to the fetched
@@ -350,14 +380,14 @@
     <title>Description</title>
     <funcsynopsis>
      <funcdef>array <function>msql_fetch_row</function></funcdef>
-     <paramdef>int <parameter>result</parameter></paramdef>
+     <paramdef>int <parameter>query_identifier</parameter></paramdef>
     </funcsynopsis>
     <para>
      Returns an array that corresponds to the fetched row, or false if
      there are no more rows.
     <para>
      msql_fetch_row() fetches one row of data from the result
-     associated with the specified result identifier.  The row is
+     associated with the specified query identifier.  The row is
      returned as an array.  Each result column is stored in an array
      offset, starting at offset 0.  
     <para> 
@@ -381,12 +411,12 @@
     <title>Description</title>
     <funcsynopsis>
      <funcdef>string <function>msql_fieldname</function></funcdef>
-     <paramdef>int <parameter>result</parameter></paramdef>
+     <paramdef>int <parameter>query_identifier</parameter></paramdef>
      <paramdef>int <parameter>field</parameter></paramdef>
     </funcsynopsis>
     <para>
      msql_fieldname() returns the name of the specified field.
-     <parameter>result</parameter> is the result identifier, and
+     <parameter>query_identifier</parameter> is the query identifier, and
      <parameter>field</parameter> is the field index.
      <literal>msql_fieldname($result, 2);</literal> will return the
      name of the second field in the result associated with the result
@@ -404,7 +434,7 @@
     <title>Description</title>
     <funcsynopsis>
      <funcdef>int <function>msql_field_seek</function></funcdef>
-     <paramdef>int <parameter>result</parameter></paramdef>
+     <paramdef>int <parameter>query_identifier</parameter></paramdef>
      <paramdef>int <parameter>field_offset</parameter></paramdef>
     </funcsynopsis>
     <para>
@@ -427,7 +457,7 @@
     <title>Description</title>
     <funcsynopsis>
      <funcdef>int <function>msql_fieldtable</function></funcdef>
-     <paramdef>int <parameter>result</parameter></paramdef>
+     <paramdef>int <parameter>query_identifier</parameter></paramdef>
      <paramdef>int <parameter>field</parameter></paramdef>
     </funcsynopsis>
     <para>
@@ -446,7 +476,7 @@
     <title>Description</title>
     <funcsynopsis>
      <funcdef>string <function>msql_fieldtype</function></funcdef>
-     <paramdef>string <parameter>result</parameter></paramdef>
+     <paramdef>int <parameter>query_identifier</parameter></paramdef>
      <paramdef>int <parameter>i</parameter></paramdef>
     </funcsynopsis>
     <para>
@@ -467,7 +497,7 @@
     <title>Description</title>
     <funcsynopsis>
      <funcdef>string <function>msql_fieldflags</function></funcdef>
-     <paramdef>string <parameter>result</parameter></paramdef>
+     <paramdef>int <parameter>query_identifier</parameter></paramdef>
      <paramdef>int <parameter>i</parameter></paramdef>
     </funcsynopsis>
     <para>
@@ -487,7 +517,7 @@
     <title>Description</title>
     <funcsynopsis>
      <funcdef>int <function>msql_fieldlen</function></funcdef>
-     <paramdef>string <parameter>result</parameter></paramdef>
+     <paramdef>int <parameter>query_identifier</parameter></paramdef>
      <paramdef>int <parameter>i</parameter></paramdef>
     </funcsynopsis>
     <para>
@@ -505,11 +535,11 @@
     <title>Description</title>
     <funcsynopsis>
      <funcdef>int <function>msql_free_result</function></funcdef>
-     <paramdef>int <parameter>result</parameter></paramdef>
+     <paramdef>int <parameter>query_identifier</parameter></paramdef>
     </funcsynopsis>
     <para>
      <function>msql_free_result</function> frees the memory associated
-     with <parameter>result</parameter>.  When PHP completes a
+     with <parameter>query_identifier</parameter>.  When PHP completes a
      request, this memory is freed automatically, so you only need to
      call this function when you want to make sure you don't use too
      much memory while the script is running.
@@ -550,7 +580,7 @@
      <function>msql_fieldlen</function>,
      <function>msql_fieldname</function>, and
      <function>msql_fieldtype</function>.  
-     A result identifier is a positive integer. The function returns
+     A query identifier is a positive integer. The function returns
      <literal>-1</literal> if a error occurs. A string describing the
      error will be placed in <literal>$phperrmsg</literal>, and unless
      the function was called as <literal>@msql_list_fields()</literal>
@@ -650,7 +680,7 @@
     <title>Description</title>
     <funcsynopsis>
      <funcdef>int <function>msql_num_fields</function></funcdef>
-     <paramdef>int <parameter>result</parameter></paramdef>
+     <paramdef>int <parameter>query_identifier</parameter></paramdef>
     </funcsynopsis>
     <para>
      msql_num_fields() returns the number of fields in a result set.
@@ -674,7 +704,7 @@
     <title>Description</title>
     <funcsynopsis>
      <funcdef>int <function>msql_num_rows</function></funcdef>
-     <paramdef>string <parameter>result</parameter></paramdef>
+     <paramdef>int <parameter>query_identifier</parameter></paramdef>
     </funcsynopsis>
     <para>
      msql_num_rows() returns the number of rows in a result set.
@@ -696,7 +726,7 @@
     <title>Description</title>
     <funcsynopsis>
      <funcdef>int <function>msql_numfields</function></funcdef>
-     <paramdef>int <parameter>result</parameter></paramdef>
+     <paramdef>int <parameter>query_identifier</parameter></paramdef>
     </funcsynopsis>
     <para>  
      Identical to <function>msql_num_fields</function>.
@@ -776,7 +806,7 @@
      the function tries to establish a link as if
      <function>msql_connect</function> was called, and use it.
     <para>
-     Returns a positive mSQL result identifier on success, or false on error.
+     Returns a positive mSQL query identifier on success, or false on error.
     <para>
      See also:  
      <function>msql</function>, 
@@ -807,7 +837,7 @@
     <title>Description</title>
     <funcsynopsis>
      <funcdef>int <function>msql_result</function></funcdef>
-     <paramdef>int <parameter>result</parameter></paramdef>
+     <paramdef>int <parameter>query_identifier</parameter></paramdef>
      <paramdef>int <parameter>i</parameter></paramdef>
      <paramdef>mixed <parameter>field</parameter></paramdef>
     </funcsynopsis>
@@ -892,7 +922,7 @@
     <title>Description</title>
     <funcsynopsis>
      <funcdef>string <function>msql_tablename</function></funcdef>
-     <paramdef>int <parameter>result</parameter></paramdef>
+     <paramdef>int <parameter>query_identifier</parameter></paramdef>
      <paramdef>int <parameter>field</parameter></paramdef>
     </funcsynopsis>
     <para>    

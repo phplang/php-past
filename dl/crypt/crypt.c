@@ -186,14 +186,13 @@ void php3_crypt(INTERNAL_FUNCTION_PARAMETERS)
 #endif
 
 
-function_entry sflcrypt_functions[] =
-{
-	{"encrypt", sflcrypt_encrypt},
-	{"decrypt", sflcrypt_decrypt},
+function_entry sflcrypt_functions[] = {
+	{"encrypt", sflcrypt_encrypt, NULL},
+	{"decrypt", sflcrypt_decrypt, NULL},
 #ifdef HAVE_CRYPT_H
 	{"crypt",	php3_crypt,		NULL},
 #endif
-	{NULL,NULL}
+	{NULL,NULL,NULL}
 };
 
 php3_module_entry sflcrypt_module_entry = {

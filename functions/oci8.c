@@ -30,7 +30,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: oci8.c,v 1.19 1998/10/01 18:24:13 ssb Exp $ */
+/* $Id: oci8.c,v 1.21 1998/11/17 20:09:03 ssb Exp $ */
 
 #include "php.h"
 #include "internal_functions.h"
@@ -413,33 +413,33 @@ oci8_error(OCIError *err_p, char *what, sword status)
     ub4 errcode = 0;
 
     switch (status) {
-	case OCI_SUCCESS:
-	    break;
-	case OCI_SUCCESS_WITH_INFO:
-	    php3_error(E_WARNING, "%s: OCI_SUCCESS_WITH_INFO", what);
-	    break;
-	case OCI_NEED_DATA:
-	    php3_error(E_WARNING, "%s: OCI_NEED_DATA", what);
-	    break;
-	case OCI_NO_DATA:
-	    php3_error(E_WARNING, "%s: OCI_NO_DATA", what);
-	    break;
-	case OCI_ERROR:
-	    OCIErrorGet(err_p, (ub4)1, NULL, &errcode, errbuf,
-					(ub4)sizeof(errbuf), (ub4)OCI_HTYPE_ERROR);
-	    php3_error(E_WARNING, "%s: %s", what, errbuf);
-	    break;
-	case OCI_INVALID_HANDLE:
-	    php3_error(E_WARNING, "%s: OCI_INVALID_HANDLE", what);
-	    break;
-	case OCI_STILL_EXECUTING:
-	    php3_error(E_WARNING, "%s: OCI_STILL_EXECUTING", what);
-	    break;
-	case OCI_CONTINUE:
-	    php3_error(E_WARNING, "%s: OCI_CONTINUE", what);
-	    break;
-	default:
-	    break;
+		case OCI_SUCCESS:
+			break;
+		case OCI_SUCCESS_WITH_INFO:
+			php3_error(E_WARNING, "%s: OCI_SUCCESS_WITH_INFO", what);
+			break;
+		case OCI_NEED_DATA:
+			php3_error(E_WARNING, "%s: OCI_NEED_DATA", what);
+			break;
+		case OCI_NO_DATA:
+			php3_error(E_WARNING, "%s: OCI_NO_DATA", what);
+			break;
+		case OCI_ERROR:
+			OCIErrorGet(err_p, (ub4)1, NULL, &errcode, errbuf,
+						(ub4)sizeof(errbuf), (ub4)OCI_HTYPE_ERROR);
+			php3_error(E_WARNING, "%s: %s", what, errbuf);
+			break;
+		case OCI_INVALID_HANDLE:
+			php3_error(E_WARNING, "%s: OCI_INVALID_HANDLE", what);
+			break;
+		case OCI_STILL_EXECUTING:
+			php3_error(E_WARNING, "%s: OCI_STILL_EXECUTING", what);
+			break;
+		case OCI_CONTINUE:
+			php3_error(E_WARNING, "%s: OCI_CONTINUE", what);
+			break;
+		default:
+			break;
     }
     return errcode;
 }
@@ -877,7 +877,9 @@ oci8_bind_out_callback(dvoid *ctxp, /* context pointer */
 
 /************************* EXTENSION FUNCTIONS *************************/
 
-/* {{{ int    OCIBindByName(int stmt, string name, mixed &var) */
+/* {{{ proto int    OCIBindByName(int stmt, string name, mixed &var)
+  Bind a PHP variable to an Oracle placeholder by name.
+ */
 
 void php3_oci8_bindbyname(INTERNAL_FUNCTION_PARAMETERS)
 {
@@ -945,7 +947,9 @@ void php3_oci8_bindbyname(INTERNAL_FUNCTION_PARAMETERS)
 }
 
 /* }}} */
-/* {{{ string OCIColumnName(int stmt, int col) */
+/* {{{ proto string OCIColumnName(int stmt, int col)
+  Tell the name of a column.
+ */
 
 void php3_oci8_columnname(INTERNAL_FUNCTION_PARAMETERS)
 {
@@ -971,7 +975,9 @@ void php3_oci8_columnname(INTERNAL_FUNCTION_PARAMETERS)
 }
 
 /* }}} */
-/* {{{ int    OCIColumnSize(int stmt, int col) */
+/* {{{ proto int    OCIColumnSize(int stmt, int col)
+  Tell the maximum data size of a column.
+ */
 
 void php3_oci8_columnsize(INTERNAL_FUNCTION_PARAMETERS)
 {
@@ -997,7 +1003,9 @@ void php3_oci8_columnsize(INTERNAL_FUNCTION_PARAMETERS)
 }
 
 /* }}} */
-/* {{{ mixed  OCIColumnType(int stmt, int col) */
+/* {{{ proto mixed  OCIColumnType(int stmt, int col)
+  Tell the data type of a column.
+ */
 
 void php3_oci8_columntype(INTERNAL_FUNCTION_PARAMETERS)
 {
@@ -1056,7 +1064,9 @@ void php3_oci8_columntype(INTERNAL_FUNCTION_PARAMETERS)
 }
 
 /* }}} */
-/* {{{ int    OCIColumnIsNULL(int stmt, int col) */
+/* {{{ proto int    OCIColumnIsNULL(int stmt, int col)
+  Tell whether a column is NULL.
+ */
 
 void php3_oci8_columnisnull(INTERNAL_FUNCTION_PARAMETERS)
 {
@@ -1086,7 +1096,9 @@ void php3_oci8_columnisnull(INTERNAL_FUNCTION_PARAMETERS)
 }
 
 /* }}} */
-/* {{{ void   OCIDebug(int onoff) */
+/* {{{ proto void   OCIDebug(int onoff)
+  Toggle internal debugging output for the OCI extension.
+ */
 
 /* Disables or enables the internal debug output.
  * By default it is disabled.
@@ -1105,7 +1117,9 @@ void php3_oci8_internaldebug(INTERNAL_FUNCTION_PARAMETERS)
 
 
 /* }}} */
-/* {{{ int    OCIExecute(int stmt) */
+/* {{{ proto int    OCIExecute(int stmt)
+  Execute a parsed statement.
+ */
 
 void php3_oci8_execute(INTERNAL_FUNCTION_PARAMETERS)
 {
@@ -1130,7 +1144,9 @@ void php3_oci8_execute(INTERNAL_FUNCTION_PARAMETERS)
 }
 
 /* }}} */
-/* {{{ int    OCIFetch(int stmt) */
+/* {{{ proto int    OCIFetch(int stmt)
+  Prepare a new row of data for reading.
+ */
 
 void php3_oci8_fetch(INTERNAL_FUNCTION_PARAMETERS)
 {
@@ -1156,7 +1172,9 @@ void php3_oci8_fetch(INTERNAL_FUNCTION_PARAMETERS)
 }
 
 /* }}} */
-/* {{{ int    OCIFetchInto(int stmt, array &output) */
+/* {{{ proto int    OCIFetchInto(int stmt, array &output)
+  Fetch a row of result data into an array.
+ */
 
 void php3_oci8_fetchinto(INTERNAL_FUNCTION_PARAMETERS)
 {
@@ -1199,7 +1217,9 @@ void php3_oci8_fetchinto(INTERNAL_FUNCTION_PARAMETERS)
 }
 
 /* }}} */
-/* {{{ int    OCIFreeStatement(int stmt) */
+/* {{{ proto int    OCIFreeStatement(int stmt)
+  Free all resources associated with a statement.
+ */
 
 void php3_oci8_freestatement(INTERNAL_FUNCTION_PARAMETERS)
 {
@@ -1220,7 +1240,9 @@ void php3_oci8_freestatement(INTERNAL_FUNCTION_PARAMETERS)
 }
 
 /* }}} */
-/* {{{ int    OCILogoff(int conn) */
+/* {{{ proto int    OCILogoff(int conn)
+  Disconnect from database.
+ */
 
 /* Logs off and disconnects.
  */
@@ -1249,7 +1271,9 @@ void php3_oci8_logoff(INTERNAL_FUNCTION_PARAMETERS)
 }
 
 /* }}} */
-/* {{{ int    OCILogon(string user, string pass[, string db]) */
+/* {{{ proto int    OCILogon(string user, string pass[, string db])
+  Connect to an Oracle database and log on.
+ */
 
 /* Connects to an Oracle 8 database and logs on.  If the
  * optional third parameter is not specified, PHP uses the environment
@@ -1331,7 +1355,9 @@ void php3_oci8_logon(INTERNAL_FUNCTION_PARAMETERS)
 }
 
 /* }}} */
-/* {{{ int    OCINumCols(int stmt) */
+/* {{{ proto int    OCINumCols(int stmt)
+  Return the number of result columns in a statement.
+ */
 
 void php3_oci8_numcols(INTERNAL_FUNCTION_PARAMETERS)
 {
@@ -1351,7 +1377,9 @@ void php3_oci8_numcols(INTERNAL_FUNCTION_PARAMETERS)
 }
 
 /* }}} */
-/* {{{ int    OCIParse(int conn, string query) */
+/* {{{ proto int    OCIParse(int conn, string query)
+  Parse a query and return a statement.
+ */
 
 void php3_oci8_parse(INTERNAL_FUNCTION_PARAMETERS)
 {
@@ -1378,7 +1406,9 @@ void php3_oci8_parse(INTERNAL_FUNCTION_PARAMETERS)
 }
 
 /* }}} */
-/* {{{ string OCIResult(int stmt, mixed column) */
+/* {{{ proto string OCIResult(int stmt, mixed column)
+  Return a single column of result data.
+ */
 
 void php3_oci8_result(INTERNAL_FUNCTION_PARAMETERS)
 {
@@ -1409,7 +1439,9 @@ void php3_oci8_result(INTERNAL_FUNCTION_PARAMETERS)
 }
 
 /* }}} */
-/* {{{ string OCIServerVersion(int conn) */
+/* {{{ proto string OCIServerVersion(int conn)
+  Return a string containing server version information.
+ */
 
 void php3_oci8_serverversion(INTERNAL_FUNCTION_PARAMETERS)
 {
@@ -1440,7 +1472,9 @@ void php3_oci8_serverversion(INTERNAL_FUNCTION_PARAMETERS)
 }
 
 /* }}} */
-/* {{{ int    OCIStatementType(int stmt) */
+/* {{{ proto int    OCIStatementType(int stmt)
+  Return the query type of an OCI statement.
+ */
 
 /* XXX it would be better with a general interface to OCIAttrGet() */
 

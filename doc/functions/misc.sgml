@@ -64,6 +64,71 @@ This is a cup with my coffee in it.
    </refsect1>
   </refentry>
 
+  <refentry id="function.die">
+   <refnamediv>
+    <refname>die</refname>
+    <refpurpose>Output a message and terminate the current script</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>void <function>die</function></funcdef>
+     <paramdef>string <parameter>message</parameter></paramdef>
+    </funcsynopsis>
+    <simpara>
+	 This language construct outputs a message and terminates parsing of the script.  It does not
+	 return.
+    <para>
+     <example>
+      <title>die example</title>
+      <programlisting>
+&lt;?php
+$filename = '/path/to/data-file';
+$file = fopen($filename, 'r')
+  or die "unable to open file ($filename)";
+?&gt;
+      </programlisting>
+     </example>
+   </refsect1>
+  </refentry>
+
+  <refentry id="function.exit">
+   <refnamediv>
+    <refname>exit</refname>
+    <refpurpose>Terminate current script</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>void <function>exit</function></funcdef>
+     <void>
+    </funcsynopsis>
+    <simpara>
+	 This language construct terminates parsing of the script.  It does not
+	 return.
+   </refsect1>
+  </refentry>
+
+  <refentry id="function.iptcparse">
+   <refnamediv>
+    <refname>iptcparse</refname>
+    <refpurpose>Parse a binary IPTC <ulink url="http://www.xe.net/iptc/">
+	  http://www.xe.net/iptc/</ulink> block into single tags.
+	</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>array <function>iptcparse</function></funcdef>
+     <paramdef>string <parameter>iptcblock</parameter></paramdef>
+    </funcsynopsis>
+    <simpara>
+	 This function parses a binary IPTC block into its single tags. It 
+	 returns an array using the tagmarker as an index and the value as the 
+	 value. It returns false on error or if no IPTC data was found. 
+	 See <function>GetImageSize</function> for a sample.
+   </refsect1>
+  </refentry>
 
   <refentry id="function.leak">
    <refnamediv>
@@ -84,7 +149,89 @@ This is a cup with my coffee in it.
    </refsect1>
   </refentry>
 
- <refentry id="function.register-shutdown-function">
+  <refentry id="function.pack">
+   <refnamediv>
+    <refname>pack</refname>
+    <refpurpose>pack data into binary string</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>string <function>pack</function></funcdef>
+     <paramdef>string <parameter>format</parameter></paramdef>
+     <paramdef>mixed <parameter><optional>args</optional></parameter>...</paramdef>
+    </funcsynopsis>
+    <para>
+     Pack given arguments into binary string according to
+     <parameter>format</parameter>. Returns binary string containing data.
+
+    <para>
+     The idea to this function was taken from Perl and all formatting
+     codes work the same as there. The format string consists of
+     format codes followed by an optional repeater argument. The
+     repeater argument can be either an integer value or * for
+     repeating to the end of the input data. For a, A, h, H the repeat
+     count specifies how many characters of one data argument are
+     taken, for @ it is the absolute position where to put the next
+     data, for everything else the repeat count specifies how many
+     data arguments are consumed and packed into the resulting binary
+     string. Currently implemented are
+     <itemizedlist>
+      <listitem><simpara>a NUL-padded string</simpara></listitem>
+      <listitem><simpara>A SPACE-padded string</simpara></listitem>
+      <listitem><simpara>h Hex string, low nibble first</simpara></listitem>
+      <listitem><simpara>H Hex string, high nibble first</simpara></listitem>
+      <listitem><simpara>c signed char</simpara></listitem>
+      <listitem><simpara>C unsigned char</simpara></listitem>
+      <listitem><simpara>s signed short (always 16 bit, machine byte order)</simpara></listitem>
+      <listitem><simpara>S unsigned short (always 16 bit, machine byte order)</simpara></listitem>
+      <listitem><simpara>n unsigned short (always 16 bit, big endian
+	byte order)</simpara></listitem>
+      <listitem><simpara>v unsigned short (always 16 bit, little
+	endian byte order)</simpara></listitem>
+      <listitem><simpara>i signed integer (machine dependant size and
+	byte order)</simpara></listitem>
+      <listitem><simpara>I unsigned integer (machine dependant size
+	and byte order)</simpara></listitem>
+      <listitem><simpara>l signed long (always 32 bit, machine byte order)</simpara></listitem>
+      <listitem><simpara>L unsigned long (always 32 bit, machine byte order)</simpara></listitem>
+      <listitem><simpara>N unsigned long (always 32 bit, big endian
+	byte order)</simpara></listitem>
+      <listitem><simpara>V unsigned long (always 32 bit, little endian
+	byte order)</simpara></listitem>
+      <listitem><simpara>f float (machine dependent size and representation)</simpara></listitem>
+      <listitem><simpara>d double (machine dependent size and representation)</simpara></listitem>
+      <listitem><simpara>x NUL byte</simpara></listitem>
+      <listitem><simpara>X Back up one byte</simpara></listitem>
+      <listitem><simpara>@ NUL-fill to absolute position</simpara></listitem>
+     </itemizedlist>
+
+     <example>
+      <title>pack format string</title>
+      <programlisting role=php>
+$binarydata = pack("nvc*", 0x1234, 0x5678, 65, 66);
+</programlisting>
+      <para>
+       The resulting binary string will be 6 bytes long and contain
+       the byte sequence 0x12, 0x34, 0x78, 0x56, 0x41, 0x42.
+     </example>
+
+    <para>
+     Note that the distinction between signed and unsigned values only 
+     affects the function <function>unpack</function>, where as
+     function <function>pack</function> gives the same result for
+     signed and unsigned format codes.
+
+    <para>
+     Also note that PHP internally stores integral values as signed
+     values of a machine dependant size. If you give it an unsigned
+     integral value too large to be stored that way it is converted to 
+     a double which often yields an undesired result.
+
+   </refsect1>
+  </refentry>
+
+  <refentry id="function.register-shutdown-function">
   <refnamediv>
    <refname>register_shutdown_function</refname>
    <refpurpose>Register a function for execution on shutdown.</refpurpose>
@@ -100,6 +247,55 @@ This is a cup with my coffee in it.
      executed when script processing is complete. 
   </refsect1>
  </refentry>
+
+  <refentry id="function.serialize">
+   <refnamediv>
+    <refname>serialize</refname>
+    <refpurpose>generates a storable representation of a value</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>string <function>serialize</function></funcdef>
+     <paramdef>mixed <parameter>value</parameter></paramdef>
+    </funcsynopsis>
+    <simpara>
+     <function>serialize</function> returns a string containing a
+     byte-stream representation of <parameter>value</parameter> that
+     can be stored anywhere.
+    <simpara>
+     This is useful for storing or passing PHP values around without
+     losing their type and structure.
+    <simpara>
+     To make the serialized string into a PHP value again, use
+     <function>unserialize</function>.  <function>serialize</function>
+     handles the types <type>integer</type>, <type>double</type>,
+     <type>string</type>, <type>array</type> (multidimensional) and
+     <type>object</type> (object properties will be serialized, but
+     methods are lost).
+    <para>
+     <example>
+      <title>serialize example</title>
+      <programlisting role=php>
+// $session_data contains a multi-dimensional array with session
+// information for the current user.  We use serialize() to store
+// it in a database at the end of the request.
+
+$conn = odbc_connect("webdb", "php", "chicken");
+$stmt = odbc_prepare($conn,
+                     "UPDATE sessions SET data = ? WHERE id = ?");
+$sqldata = array(serialize($session_data), $PHP_AUTH_USER);
+if (!odbc_execute($stmt, &$sqldata)) {
+    $stmt = odbc_prepare($conn,
+                         "INSERT INTO sessions (id, data) VALUES(?, ?)");
+    if (!odbc_execute($stmt, &$sqldata)) {
+        /* Something went wrong.  Bitch, whine and moan. */
+    }
+}
+</programlisting>
+     </example>
+   </refsect1>
+  </refentry>
 
   <refentry id="function.sleep">
    <refnamediv>
@@ -120,6 +316,128 @@ This is a cup with my coffee in it.
    </refsect1>
   </refentry>
 
+  <refentry id="function.unpack">
+   <refnamediv>
+    <refname>unpack</refname>
+    <refpurpose>unpack data from binary string</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>array <function>unpack</function></funcdef>
+     <paramdef>string <parameter>format</parameter></paramdef>
+     <paramdef>string <parameter>data</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+     Unpack from binary string into array according to
+     <parameter>format</parameter>. Returns array containing unpacked
+     elements of binary string.
+
+    <para>
+     Unpack works slightly different from Perl as the unpacked data is 
+     stored in an associative array. To accomplish this you have to
+     name the different format codes and separate them by a slash /.
+
+     <example>
+      <title>unpack format string</title>
+      <programlisting role=php>
+$array = unpack("c2chars/nint", $binarydata);
+</programlisting>
+      <para>
+       The resulting array will contain the entries "chars1",
+       "chars2" and "int".
+     </example>
+
+    <para>
+     For an explanation of the format codes see also:
+     <function>pack</function>
+
+    <para>
+     Note that PHP internally stores integral values as signed. If you
+     unpack a large unsigned long and it is of the same size as PHP
+     internally stored values the result will be a negative number
+     even though unsigned unpacking was specified.
+
+   </refsect1>
+  </refentry>
+
+  <refentry id="function.unserialize">
+   <refnamediv>
+    <refname>unserialize</refname>
+    <refpurpose>creates a PHP value from a stored representation</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>mixed <function>unserialize</function></funcdef>
+     <paramdef>string <parameter>str</parameter></paramdef>
+    </funcsynopsis>
+    <simpara>
+     <function>unserialize</function> takes a single serialized
+     variable (see <function>serialize</function>) and converts it
+     back into a PHP value.  The converted value is returned, and can
+     be an <type>integer</type>, <type>double</type>,
+     <type>string</type>, <type>array</type> or <type>object</type>.
+     If an object was serialized, its methods are not preserved in the
+     returned value.
+    <para>
+     <example>
+      <title>unserialize example</title>
+      <programlisting role=php>
+// Here, we use unserialize() to load session data from a database
+// into $session_data.  This example complements the one described
+// with <function>serialize</function>.
+
+$conn = odbc_connect("webdb", "php", "chicken");
+$stmt = odbc_prepare($conn, "SELECT data FROM sessions WHERE id = ?");
+$sqldata = array($PHP_AUTH_USER);
+if (!odbc_execute($stmt, &$sqldata) || !odbc_fetch_into($stmt, &$tmp)) {
+    // if the execute or fetch fails, initialize to empty array
+    $session_data = array();
+} else {
+    // we should now have the serialized data in $tmp[0].
+    $session_data = unserialize($tmp[0]);
+    if (!is_array($session_data)) {
+        // something went wrong, initialize to empty array
+        $session_data = array();
+    }
+}
+</programlisting>
+     </example>
+   </refsect1>
+  </refentry>
+
+  <refentry id="function.uniqid">
+   <refnamediv>
+    <refname>uniqid</refname>
+    <refpurpose>generate a unique id</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>uniqid</function></funcdef>
+     <paramdef>string <parameter>prefix</parameter></paramdef>
+    </funcsynopsis>
+    <simpara>
+     <function>uniqid</function> returns a prefixed unique identifier based on
+     current time in microseconds. The prefix can be useful for instance if you
+     generate identifiers simultaneously on several hosts that might happen to
+     generate the identifier at the same microsecond. The prefix can be up to 114
+     characters long.
+    <para>
+     If you need a unique identifier or token and you intend to give
+     out that token to the user via the network (i.e. session cookies),
+     it is recommended that you use something along the lines of
+     <informalexample><programlisting>
+$token = md5(uniqid("")); // no random portion
+$better_token = md5(uniqid(random())); // better, difficult to guess
+</programlisting></informalexample>
+    <simpara>
+     This will create a 32 character identifier (a 128 bit hex number)
+     that is extremely difficult to predict.
+   </refsect1>
+  </refentry>
+
   <refentry id="function.usleep">
    <refnamediv>
     <refname>usleep</refname>
@@ -136,26 +454,6 @@ This is a cup with my coffee in it.
      of <parameter>micro_seconds</parameter>.
     <simpara>
      See also <function>sleep</function>.
-   </refsect1>
-  </refentry>
-
-  <refentry id="function.uniqid">
-   <refnamediv>
-    <refname>uniqid</refname>
-    <refpurpose>generate a unique id</refpurpose>
-   </refnamediv>
-   <refsect1>
-    <title>Description</title>
-    <funcsynopsis>
-     <funcdef>int <function>uniqid</function></funcdef>
-     <paramdef>string <parameter>prefix</parameter></paramdef>
-    </funcsynopsis>
-    <simpara>
-     <function>Uniqid</function> returns a prefixed unique identifier based on
-     current time in microseconds. The prefix can be useful for instance if you
-     generate identifiers simultaneously on several hosts that might happen to
-     generate the identifier at the same microsecond. The prefix can be up to 114
-     characters long.
    </refsect1>
   </refentry>
 

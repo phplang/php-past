@@ -2,29 +2,70 @@
   <title>Apache Specific Functions</title>
   <titleabbrev>Apache</titleabbrev>
 
-  <refentry id="function.virtual">
+  <refentry id="function.apache-lookup-uri">
    <refnamediv>
-    <refname>virtual</refname>
-    <refpurpose>Perform an Apache sub-request</refpurpose>
+    <refname>apache_lookup_uri</refname>
+    <refpurpose>Perform a partial request for the specified URI and return all info about it</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
     <funcsynopsis>
-     <funcdef>int <function>virtual</function></funcdef>
+     <funcdef>class <function>apache_lookup_uri</function></funcdef>
      <paramdef>string <parameter>filename</parameter></paramdef>
     </funcsynopsis>
     <para>
-	<Function>virtual</function> is an Apache-specific function which is equivalent
-    to &lt;!--#include virtual...--&gt; in mod_include.  It performs an
-    Apache sub-request.  It is useful for including CGI scripts or .shtml
-    files, or anything else that you would parse through Apache.  Note that for
-	a CGI script, the script must generate valid CGI headers.  At the minimum that
-	means it must generate a Content-type header.
-    For PHP files, you should use <function>include</function> or 
-    <function>require</function>.
+	 This performs a partial request for a URI.  It goes just far enough to obtain all the
+	 important information about the given resource and returns this information in a class.
+	 The properties of the returned class are:
+	<simplelist>
+	<member>status</member>
+	<member>the_request</member>
+	<member>status_line</member>
+	<member>method</member>
+	<member>content_type</member>
+	<member>handler</member>
+	<member>uri</member>
+	<member>filename</member>
+	<member>path_info</member>
+	<member>args</member>
+	<member>boundary</member>
+	<member>no_cache</member>
+	<member>no_local_copy</member>
+	<member>allowed</member>
+	<member>send_bodyct</member>
+	<member>bytes_sent</member>
+	<member>byterange</member>
+	<member>clength</member>
+	<member>unparsed_uri</member>
+	<member>mtime</member>
+	<member>request_time</member>
+	</simplelist>
    </refsect1>
   </refentry>
 
+  <refentry id="function.apache-note">
+   <refnamediv>
+    <refname>apache_note</refname>
+    <refpurpose>Get and set apache request notes</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>string <function>apache_note</function></funcdef>
+     <paramdef>string <parameter>note_name</parameter></paramdef>
+     <paramdef>string <parameter><optional>note_value</optional></parameter></paramdef>
+    </funcsynopsis>
+    <para>
+     <function>apache_note</function> is an Apache-specific function
+     which gets and sets values in a request's
+     <literal>notes</literal> table. If called with one argument, it
+     returns the current value of note
+     <literal>note_name</literal>. If called with two arguments, it
+     sets the value of note <literal>note_name</literal> to
+     <literal>note_value</literal> and returns the previous value of
+     note <literal>note_name</literal>.
+   </refsect1>
+  </refentry>
 
   <refentry id="function.getallheaders">
    <refnamediv>
@@ -59,29 +100,29 @@ while (list($header, $value) = each($headers)) {
    </refsect1>
   </refentry>
 
-  <refentry id="function.apache-note">
+  <refentry id="function.virtual">
    <refnamediv>
-    <refname>apache_note</refname>
-    <refpurpose>Get and set apache request notes</refpurpose>
+    <refname>virtual</refname>
+    <refpurpose>Perform an Apache sub-request</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
     <funcsynopsis>
-     <funcdef>string <function>apache_note</function></funcdef>
-     <paramdef>string <parameter>note_name</parameter></paramdef>
-     <paramdef>string <parameter><optional>note_value</optional></parameter></paramdef>
+     <funcdef>int <function>virtual</function></funcdef>
+     <paramdef>string <parameter>filename</parameter></paramdef>
     </funcsynopsis>
     <para>
-     <function>apache_note</function> is an Apache-specific function
-     which gets and sets values in a request's
-     <literal>notes</literal> table. If called with one argument, it
-     returns the current value of note
-     <literal>note_name</literal>. If called with two arguments, it
-     sets the value of note <literal>note_name</literal> to
-     <literal>note_value</literal> and returns the previous value of
-     note <literal>note_name</literal>.
+	<Function>virtual</function> is an Apache-specific function which is equivalent
+    to &lt;!--#include virtual...--&gt; in mod_include.  It performs an
+    Apache sub-request.  It is useful for including CGI scripts or .shtml
+    files, or anything else that you would parse through Apache.  Note that for
+	a CGI script, the script must generate valid CGI headers.  At the minimum that
+	means it must generate a Content-type header.
+    For PHP files, you should use <function>include</function> or 
+    <function>require</function>.
    </refsect1>
   </refentry>
+
   
 
   </reference>

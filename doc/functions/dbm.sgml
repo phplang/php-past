@@ -9,6 +9,21 @@
    gdbm, and some system libraries, as well as a built-in flatfile
    library) stores key/value pairs (as opposed to the full-blown
    records supported by relational databases).
+  <para>
+   <example>
+    <title>dbm example</title>
+    <programlisting role=php>
+$dbm = dbmopen("lastseen", "w");
+if (dbmexists($dbm, $userid)) {
+  $last_seen = dbmfetch($dbm, $userid);
+} else {
+  dbminsert($dbm, $userid, time());
+}
+do_stuff();
+dbmreplace($dbm, $userid, time());
+dbmclose($dbm);
+</programlisting></example>
+  </para>
   </partintro>
 
   <refentry id="function.dbmopen">
@@ -26,7 +41,8 @@
     <para>
      The first argument is the full-path filename of the dbm file to be opened
      and the second is the file open mode which is one of "r", "n" or "w" for
-     read-only, new (implies read-write) and read-write respectively.
+     read-only, new (implies read-write, and may truncate an already-existing
+	 database of the same name) and read-write respectively.
     <para>
      Returns an identifer to be passed to the other dbm functions on success,
      or false on failure.

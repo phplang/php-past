@@ -28,7 +28,7 @@
  */
 
 
-/* $Id: php3_sybase-ct.h,v 1.14 1998/05/16 11:53:44 zeev Exp $ */
+/* $Id: php3_sybase-ct.h,v 1.19 1998/12/09 17:10:03 tommay Exp $ */
 
 #ifndef _PHP3_SYBASE_CT_H
 #define _PHP3_SYBASE_CT_H
@@ -64,24 +64,14 @@ extern void php3_sybct_fetch_array(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_sybct_fetch_object(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_sybct_data_seek(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_sybct_result(INTERNAL_FUNCTION_PARAMETERS);
+extern void php3_sybct_affected_rows(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_sybct_field_seek(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_sybct_min_client_severity(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_sybct_min_server_severity(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_sybct_fetch_field(INTERNAL_FUNCTION_PARAMETERS);
 
 
-
-#include <sybfront.h>
-#include <sybdb.h>
-#include <syberror.h>
-
-#define coltype(j) dbcoltype(sybct_ptr->link,j)
-#define intcol(i) ((int) *(DBINT *) dbdata(sybct_ptr->link,i))
-#define smallintcol(i) ((int) *(DBSMALLINT *) dbdata(sybct_ptr->link,i))
-#define tinyintcol(i) ((int) *(DBTINYINT *) dbdata(sybct_ptr->link,i))
-#define anyintcol(j) (coltype(j)==SYBINT4?intcol(j):(coltype(j)==SYBINT2?smallintcol(j):tinyintcol(j)))
-#define charcol(i) ((DBCHAR *) dbdata(sybct_ptr->link,i))
-#define floatcol(i) ((float) *(DBFLT8 *) dbdata(sybct_ptr->link,i))
+#include <ctpublic.h>
 
 typedef struct {
 	long default_link;
@@ -89,6 +79,7 @@ typedef struct {
 	long max_links,max_persistent;
 	long allow_persistent;
 	char *appname;
+	char *hostname;
 	char *server_message;
 	int le_link,le_plink,le_result;
 	long min_server_severity, min_client_severity;
@@ -99,6 +90,9 @@ typedef struct {
 	CS_CONNECTION *connection;
 	CS_COMMAND *cmd;
 	int valid;
+	int deadlock;
+	int dead;
+	long affected_rows;
 } sybct_link;
 
 #define SYBASE_ROWS_BLOCK 128

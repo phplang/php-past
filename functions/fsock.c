@@ -27,7 +27,7 @@
    |          Jim Winstead (jimw@php.net)                                 |
    +----------------------------------------------------------------------+
 */
-/* $Id: fsock.c,v 1.74 1998/09/10 23:57:18 zeev Exp $ */
+/* $Id: fsock.c,v 1.76 1998/11/18 21:23:06 ssb Exp $ */
 #ifdef THREAD_SAFE
 #include "tls.h"
 #endif
@@ -103,6 +103,8 @@ int lookup_hostname(const char *addr)
    passed by reference.  The error code from the connect call is written
    to this variable.
 */
+/* {{{ proto int fsockopen(string hostname, int port [, int errno [, string errstr]])
+   Open Internet or Unix domain socket connection */
 void php3_fsockopen(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *args[4];
 	int *sock=emalloc(sizeof(int));
@@ -207,6 +209,7 @@ void php3_fsockopen(INTERNAL_FUNCTION_PARAMETERS) {
 	id = php3_list_insert(sock,GLOBAL(wsa_fp));
 	RETURN_LONG(id);
 }
+/* }}} */
 
 
 int _php3_sock_fgets(char *buf, int maxlen, int socket)

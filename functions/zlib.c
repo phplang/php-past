@@ -22,7 +22,7 @@
    |          Stefan Röhrich <sr@linux.de>                                |
    +----------------------------------------------------------------------+
  */
-/* $Id: zlib.c,v 1.9 1998/09/19 20:17:19 rasmus Exp $ */
+/* $Id: zlib.c,v 1.11 1998/11/22 13:02:37 sr Exp $ */
 #if !PHP_31 && defined(THREAD_SAFE)
 #undef THREAD_SAFE
 #endif
@@ -335,6 +335,8 @@ static gzFile *php3_gzopen_with_path(char *filename, char *mode, char *path, cha
 	return NULL;
 }
 
+/* {{{ proto array gzfile(string filename)
+Read und uncompress entire .gz-file into an array */
 void php3_gzfile(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *filename, *arg2;
 	gzFile zp;
@@ -386,11 +388,11 @@ void php3_gzfile(INTERNAL_FUNCTION_PARAMETERS) {
 		}
 	}
 	gzclose(zp);
-
 }
+/* }}} */
 
-
-
+/* {{{ proto int gzopen(string filename, string mode [, int use_include_path])
+Open a .gz-file and return a .gz-file pointer */
 void php3_gzopen(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *arg1, *arg2, *arg3;
 	gzFile *zp;
@@ -421,7 +423,7 @@ void php3_gzopen(INTERNAL_FUNCTION_PARAMETERS) {
 
 	/*
 	 * We need a better way of returning error messages from
-	 * php3_gzopen__wrapper().
+	 * php3_gzopen_wrapper().
 	 */
 	zp = php3_gzopen_wrapper(arg1->value.str.val, p, use_include_path|ENFORCE_SAFE_MODE);
 	if (!zp) {
@@ -435,7 +437,10 @@ void php3_gzopen(INTERNAL_FUNCTION_PARAMETERS) {
 	efree(p);
 	RETURN_LONG(id);
 }	
+/* }}} */
 
+/* {{{ proto int gzclose(int zp)
+Close an open .gz-file pointer */
 void php3_gzclose(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *arg1;
 	int id, type;
@@ -455,8 +460,10 @@ void php3_gzclose(INTERNAL_FUNCTION_PARAMETERS) {
 	php3_list_delete(id);
 	RETURN_TRUE;
 }
+/* }}} */
 
-
+/* {{{ proto int gzeof(int zp)
+Test for end-of-file on a .gz-file pointer */
 void php3_gzeof(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *arg1;
 	gzFile *zp;
@@ -480,7 +487,10 @@ void php3_gzeof(INTERNAL_FUNCTION_PARAMETERS) {
 		RETURN_FALSE;
 	}
 }
+/* }}} */
 
+/* {{{ proto string gzgets(int zp, int length)
+Get a line from .gz-file pointer */
 void php3_gzgets(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *arg1, *arg2;
 	gzFile *zp;
@@ -518,11 +528,14 @@ void php3_gzgets(INTERNAL_FUNCTION_PARAMETERS) {
 	}
 	return;
 }
+/* }}} */
 
+/* {{{ proto string gzgetc(int zp)
+Get a character from .gz-file pointer */
 void php3_gzgetc(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *arg1;
 	gzFile *zp;
-	int id, type;
+	int id, type, c;
 	char *buf;
 	ZLIB_TLS_VARS;
 	
@@ -538,10 +551,11 @@ void php3_gzgetc(INTERNAL_FUNCTION_PARAMETERS) {
 		RETURN_FALSE;
 	}
 	buf = emalloc(sizeof(char) * 2);
-	if ((*buf=gzgetc(zp)) == (-1)) {
+	if ((c=gzgetc(zp)) == (-1)) {
 		efree(buf);
 		RETVAL_FALSE;
 	} else {
+		buf[0]=(char)c;
 		buf[1]='\0';
 		return_value->value.str.val = buf; 
 		return_value->value.str.len = 1; 
@@ -549,8 +563,11 @@ void php3_gzgetc(INTERNAL_FUNCTION_PARAMETERS) {
 	}
 	return;
 }
+/* }}} */
 
 /* Strip any HTML tags while reading */
+/* {{{ proto string gzgetss(int zp, int length)
+Get a line from file pointer and strip HTML tags */
 void php3_gzgetss(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *fd, *bytes;
@@ -664,8 +681,10 @@ void php3_gzgetss(INTERNAL_FUNCTION_PARAMETERS)
 	RETVAL_STRING(rbuf,1);
 	efree(rbuf);
 }
+/* }}} */
 
-
+/* {{{ proto int gzwrite(int zp, string str [, int length])
+Binary-safe .gz-file write */
 void php3_gzwrite(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *arg1, *arg2, *arg3=NULL;
 	gzFile *zp;
@@ -691,6 +710,7 @@ void php3_gzwrite(INTERNAL_FUNCTION_PARAMETERS) {
 			break;
 		default:
 			WRONG_PARAM_COUNT;
+			/* NOTREACHED */
 			break;
 	}				
 	convert_to_long(arg1);
@@ -710,7 +730,10 @@ void php3_gzwrite(INTERNAL_FUNCTION_PARAMETERS) {
 	ret = gzwrite(zp, arg2->value.str.val,num_bytes);
 	RETURN_LONG(ret);
 }	
+/* }}} */
 
+/* {{{ proto int gzrewind(int zp)
+Rewind the position of a .gz-file pointer */
 void php3_gzrewind(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *arg1;
 	int id,type;
@@ -730,7 +753,10 @@ void php3_gzrewind(INTERNAL_FUNCTION_PARAMETERS) {
 	gzrewind(zp);
 	RETURN_TRUE;
 }
+/* }}} */
 
+/* {{{ proto int gztell(int zp)
+Get .gz-file pointer's read/write position */
 void php3_gztell(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *arg1;
 	int id, type;
@@ -751,7 +777,10 @@ void php3_gztell(INTERNAL_FUNCTION_PARAMETERS) {
 	pos = gztell(zp);
 	RETURN_LONG(pos);
 }
+/* }}} */
 
+/* {{{ proto int gzseek(int zp, int offset)
+Seek on a file pointer */
 void php3_gzseek(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *arg1, *arg2;
 	int ret,id,type;
@@ -774,10 +803,13 @@ void php3_gzseek(INTERNAL_FUNCTION_PARAMETERS) {
  	ret = gzseek(zp,pos,SEEK_SET);
 	RETURN_LONG(ret);
 }
+/* }}} */
 
 /*
  * Read a file and write the ouput to stdout
  */
+/* {{{ proto int readgzfile(string filename [, int use_include_path])
+Output a .gz-file */
 void php3_readgzfile(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *arg1, *arg2;
 	char buf[8192];
@@ -824,10 +856,13 @@ void php3_readgzfile(INTERNAL_FUNCTION_PARAMETERS) {
    	gzclose(zp);
 	RETURN_LONG(size);
 }
+/* }}} */
 
 /*
  * Read to EOF on a file descriptor and write the output to stdout.
  */
+/* {{{ proto int gzpassthru(int zp)
+Output all remaining data from a .gz-file pointer */
 void php3_gzpassthru(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *arg1;
 	gzFile *zp;
@@ -856,7 +891,10 @@ void php3_gzpassthru(INTERNAL_FUNCTION_PARAMETERS) {
 	php3_list_delete(id);
 	RETURN_LONG(size);
 }
+/* }}} */
 
+/* {{{ proto int gzread(int zp, int length)
+Binary-safe file read */
 void php3_gzread(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *arg1, *arg2;
@@ -888,6 +926,7 @@ void php3_gzread(INTERNAL_FUNCTION_PARAMETERS)
 	}
 	return_value->type = IS_STRING;
 }
+/* }}} */
 
 #endif /* HAVE_ZLIB */
 /*

@@ -2559,7 +2559,7 @@ int include_file(pval *file, int display_source)
 	yy_switch_to_buffer(yy_create_buffer(yyin,YY_BUF_SIZE));
 	BEGIN(INITIAL);
 	GLOBAL(include_count)++;
-	GLOBAL(phplineno)=1+MAX_TOKENS_PER_CACHE*GLOBAL(include_count);
+	GLOBAL(phplineno) = 1 + (GLOBAL(include_count)<<TOKEN_BITS);
 	filename = estrndup(file->value.str.val,file->value.str.len);
 	_php3_hash_index_update(&GLOBAL(include_names),GLOBAL(include_count),(void *) &filename,sizeof(char *),NULL);
 	
@@ -2600,7 +2600,10 @@ void eval_string(pval *str,pval *return_offset, int display_source INLINE_TLS)
 	yyin=NULL;
 
 	if (!display_source) {
-		tcm_new(&GLOBAL(token_cache_manager));
+		if (tcm_new(&GLOBAL(token_cache_manager),TOKEN_CACHE_EVAL_BLOCK_SIZE)==FAILURE) {
+			php3_error(E_ERROR,"Unable to initialize a new token cache");
+			return;
+		}
 	} else {
 		if (display_source==2 && !pval_is_true(return_offset)) {
 			display_source=1;
@@ -2653,12 +2656,16 @@ int conditional_include_file(pval *file,pval *return_offset INLINE_TLS)
 	yy_switch_to_buffer(yy_create_buffer(yyin,YY_BUF_SIZE));
 	BEGIN(INITIAL);
 	GLOBAL(include_count)++;
-	GLOBAL(phplineno)=1+MAX_TOKENS_PER_CACHE*GLOBAL(include_count);
+	GLOBAL(phplineno) = 1 + (GLOBAL(include_count)<<TOKEN_BITS);
 	filename = file->value.str.val;
 	_php3_hash_index_update(&GLOBAL(include_names),GLOBAL(include_count),(void *) &filename,sizeof(char *),NULL);
 	
-	tcm_new(&GLOBAL(token_cache_manager));
-	return SUCCESS;
+	if (tcm_new(&GLOBAL(token_cache_manager),TOKEN_CACHE_INCLUDE_BLOCK_SIZE)==FAILURE) {
+		php3_error(E_ERROR, "Unable to initialize a new token cache");
+		return FAILURE;
+	} else {
+		return SUCCESS;
+	}
 }
 
 
@@ -2811,7 +2818,7 @@ void clean_input_source_stack(void)
 	}
 #endif
 
-#line 2815 "language-scanner.c"
+#line 2822 "language-scanner.c"
 
 /* Macros after this point can all be overridden by user definitions in
  * section 1.
@@ -2962,13 +2969,13 @@ YY_DECL
 	register char *yy_cp, *yy_bp;
 	register int yy_act;
 
-#line 454 "language-scanner.lex"
+#line 461 "language-scanner.lex"
 
 
 TLS_VARS;
 
 
-#line 2972 "language-scanner.c"
+#line 2979 "language-scanner.c"
 
 	if ( yy_init )
 		{
@@ -3053,504 +3060,504 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 459 "language-scanner.lex"
+#line 466 "language-scanner.lex"
 {
 	return EXIT;
 }
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 463 "language-scanner.lex"
+#line 470 "language-scanner.lex"
 {
 	return EXIT;
 }
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 467 "language-scanner.lex"
+#line 474 "language-scanner.lex"
 {
 	return OLD_FUNCTION;
 }
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 471 "language-scanner.lex"
+#line 478 "language-scanner.lex"
 {
 	return FUNCTION;
 }
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 475 "language-scanner.lex"
+#line 482 "language-scanner.lex"
 {
 	return PHP_CONST;
 }
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 479 "language-scanner.lex"
+#line 486 "language-scanner.lex"
 {
 	return RETURN;
 }
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 483 "language-scanner.lex"
+#line 490 "language-scanner.lex"
 {
 	return IF;
 }
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 487 "language-scanner.lex"
+#line 494 "language-scanner.lex"
 {
 	return ELSEIF;
 }
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 491 "language-scanner.lex"
+#line 498 "language-scanner.lex"
 {
 	return ENDIF;
 }
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 495 "language-scanner.lex"
+#line 502 "language-scanner.lex"
 {
 	return ELSE;
 }
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 499 "language-scanner.lex"
+#line 506 "language-scanner.lex"
 {
 	return WHILE;
 }
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 503 "language-scanner.lex"
+#line 510 "language-scanner.lex"
 {
 	return ENDWHILE;
 }
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 507 "language-scanner.lex"
+#line 514 "language-scanner.lex"
 {
 	return DO;
 }
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 511 "language-scanner.lex"
+#line 518 "language-scanner.lex"
 {
 	return FOR;
 }
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 515 "language-scanner.lex"
+#line 522 "language-scanner.lex"
 {
 	return ENDFOR;
 }
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 519 "language-scanner.lex"
+#line 526 "language-scanner.lex"
 {
 	return SWITCH;
 }
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 523 "language-scanner.lex"
+#line 530 "language-scanner.lex"
 {
 	return ENDSWITCH;
 }
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 527 "language-scanner.lex"
+#line 534 "language-scanner.lex"
 {
 	return CASE;
 }
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 531 "language-scanner.lex"
+#line 538 "language-scanner.lex"
 {
 	return DEFAULT;
 }
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 535 "language-scanner.lex"
+#line 542 "language-scanner.lex"
 {
 	return BREAK;
 }
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 539 "language-scanner.lex"
+#line 546 "language-scanner.lex"
 {
 	return CONTINUE;
 }
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 543 "language-scanner.lex"
+#line 550 "language-scanner.lex"
 {
 	return PHP_ECHO;
 }
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 547 "language-scanner.lex"
+#line 554 "language-scanner.lex"
 {
 	return PHP_PRINT;
 }
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 551 "language-scanner.lex"
+#line 558 "language-scanner.lex"
 {
 	return CLASS;
 }
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 555 "language-scanner.lex"
+#line 562 "language-scanner.lex"
 {
 	return EXTENDS;
 }
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 559 "language-scanner.lex"
+#line 566 "language-scanner.lex"
 {
 	return PHP_CLASS_OPERATOR;
 }
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 563 "language-scanner.lex"
+#line 570 "language-scanner.lex"
 {
 	return NEW;
 }
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 567 "language-scanner.lex"
+#line 574 "language-scanner.lex"
 {
 	return VAR;
 }
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 571 "language-scanner.lex"
+#line 578 "language-scanner.lex"
 {
 	return INT_CAST;
 }
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 575 "language-scanner.lex"
+#line 582 "language-scanner.lex"
 {
 	return DOUBLE_CAST;
 }
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 579 "language-scanner.lex"
+#line 586 "language-scanner.lex"
 {
 	return STRING_CAST;
 }
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 583 "language-scanner.lex"
+#line 590 "language-scanner.lex"
 {
 	return ARRAY_CAST;
 }
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 587 "language-scanner.lex"
+#line 594 "language-scanner.lex"
 {
 	return OBJECT_CAST;
 }
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 591 "language-scanner.lex"
+#line 598 "language-scanner.lex"
 {
 	return EVAL;
 }
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 595 "language-scanner.lex"
+#line 602 "language-scanner.lex"
 {
 	return INCLUDE;
 }
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 599 "language-scanner.lex"
+#line 606 "language-scanner.lex"
 {
 	return REQUIRE;
 }
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-#line 603 "language-scanner.lex"
+#line 610 "language-scanner.lex"
 {
 	return HIGHLIGHT_FILE;
 }
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
-#line 607 "language-scanner.lex"
+#line 614 "language-scanner.lex"
 {
 	return HIGHLIGHT_STRING;
 }
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
-#line 611 "language-scanner.lex"
+#line 618 "language-scanner.lex"
 {
 	return PHP_GLOBAL;
 }
 	YY_BREAK
 case 40:
 YY_RULE_SETUP
-#line 615 "language-scanner.lex"
+#line 622 "language-scanner.lex"
 {
 	return PHP_ISSET;
 }
 	YY_BREAK
 case 41:
 YY_RULE_SETUP
-#line 619 "language-scanner.lex"
+#line 626 "language-scanner.lex"
 {
 	return PHP_EMPTY;
 }
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
-#line 623 "language-scanner.lex"
+#line 630 "language-scanner.lex"
 {
 	return PHP_STATIC;
 }
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
-#line 627 "language-scanner.lex"
+#line 634 "language-scanner.lex"
 {
 	return PHP_UNSET;
 }
 	YY_BREAK
 case 44:
 YY_RULE_SETUP
-#line 631 "language-scanner.lex"
+#line 638 "language-scanner.lex"
 {
 	return PHP_DOUBLE_ARROW;
 }
 	YY_BREAK
 case 45:
 YY_RULE_SETUP
-#line 635 "language-scanner.lex"
+#line 642 "language-scanner.lex"
 {
 	return PHP_LIST;
 }
 	YY_BREAK
 case 46:
 YY_RULE_SETUP
-#line 639 "language-scanner.lex"
+#line 646 "language-scanner.lex"
 {
 	return PHP_ARRAY;
 }
 	YY_BREAK
 case 47:
 YY_RULE_SETUP
-#line 643 "language-scanner.lex"
+#line 650 "language-scanner.lex"
 {
 	return INCREMENT;
 }
 	YY_BREAK
 case 48:
 YY_RULE_SETUP
-#line 647 "language-scanner.lex"
+#line 654 "language-scanner.lex"
 {
 	return DECREMENT;
 }
 	YY_BREAK
 case 49:
 YY_RULE_SETUP
-#line 651 "language-scanner.lex"
+#line 658 "language-scanner.lex"
 {
 	return IS_EQUAL;
 }
 	YY_BREAK
 case 50:
 YY_RULE_SETUP
-#line 655 "language-scanner.lex"
+#line 662 "language-scanner.lex"
 {
 	return IS_NOT_EQUAL;
 }
 	YY_BREAK
 case 51:
 YY_RULE_SETUP
-#line 659 "language-scanner.lex"
+#line 666 "language-scanner.lex"
 {
 	return IS_SMALLER_OR_EQUAL;
 }
 	YY_BREAK
 case 52:
 YY_RULE_SETUP
-#line 663 "language-scanner.lex"
+#line 670 "language-scanner.lex"
 {
 	return IS_GREATER_OR_EQUAL;
 }
 	YY_BREAK
 case 53:
 YY_RULE_SETUP
-#line 667 "language-scanner.lex"
+#line 674 "language-scanner.lex"
 {
 	return PLUS_EQUAL;
 }
 	YY_BREAK
 case 54:
 YY_RULE_SETUP
-#line 671 "language-scanner.lex"
+#line 678 "language-scanner.lex"
 {
 	return MINUS_EQUAL;
 }
 	YY_BREAK
 case 55:
 YY_RULE_SETUP
-#line 675 "language-scanner.lex"
+#line 682 "language-scanner.lex"
 {
 	return MUL_EQUAL;
 }
 	YY_BREAK
 case 56:
 YY_RULE_SETUP
-#line 679 "language-scanner.lex"
+#line 686 "language-scanner.lex"
 {
 	return DIV_EQUAL;
 }
 	YY_BREAK
 case 57:
 YY_RULE_SETUP
-#line 683 "language-scanner.lex"
+#line 690 "language-scanner.lex"
 {
 	return CONCAT_EQUAL;
 }
 	YY_BREAK
 case 58:
 YY_RULE_SETUP
-#line 688 "language-scanner.lex"
+#line 695 "language-scanner.lex"
 {
 	return MOD_EQUAL;
 }
 	YY_BREAK
 case 59:
 YY_RULE_SETUP
-#line 692 "language-scanner.lex"
+#line 699 "language-scanner.lex"
 {
 	return SHIFT_LEFT_EQUAL;
 }
 	YY_BREAK
 case 60:
 YY_RULE_SETUP
-#line 696 "language-scanner.lex"
+#line 703 "language-scanner.lex"
 {
 	return SHIFT_RIGHT_EQUAL;
 }
 	YY_BREAK
 case 61:
 YY_RULE_SETUP
-#line 700 "language-scanner.lex"
+#line 707 "language-scanner.lex"
 {
 	return AND_EQUAL;
 }
 	YY_BREAK
 case 62:
 YY_RULE_SETUP
-#line 704 "language-scanner.lex"
+#line 711 "language-scanner.lex"
 {
 	return OR_EQUAL;
 }
 	YY_BREAK
 case 63:
 YY_RULE_SETUP
-#line 708 "language-scanner.lex"
+#line 715 "language-scanner.lex"
 {
 	return XOR_EQUAL;
 }
 	YY_BREAK
 case 64:
 YY_RULE_SETUP
-#line 712 "language-scanner.lex"
+#line 719 "language-scanner.lex"
 {
 	return BOOLEAN_OR;
 }
 	YY_BREAK
 case 65:
 YY_RULE_SETUP
-#line 716 "language-scanner.lex"
+#line 723 "language-scanner.lex"
 {
 	return BOOLEAN_AND;
 }
 	YY_BREAK
 case 66:
 YY_RULE_SETUP
-#line 720 "language-scanner.lex"
+#line 727 "language-scanner.lex"
 {
 	return LOGICAL_OR;
 }
 	YY_BREAK
 case 67:
 YY_RULE_SETUP
-#line 724 "language-scanner.lex"
+#line 731 "language-scanner.lex"
 {
 	return LOGICAL_AND;
 }
 	YY_BREAK
 case 68:
 YY_RULE_SETUP
-#line 728 "language-scanner.lex"
+#line 735 "language-scanner.lex"
 {
 	return LOGICAL_XOR;
 }
 	YY_BREAK
 case 69:
 YY_RULE_SETUP
-#line 732 "language-scanner.lex"
+#line 739 "language-scanner.lex"
 {
 	return SHIFT_LEFT;
 }
 	YY_BREAK
 case 70:
 YY_RULE_SETUP
-#line 736 "language-scanner.lex"
+#line 743 "language-scanner.lex"
 {
 	return SHIFT_RIGHT;
 }
 	YY_BREAK
 case 71:
 YY_RULE_SETUP
-#line 740 "language-scanner.lex"
+#line 747 "language-scanner.lex"
 {
 	return yytext[0];
 }
 	YY_BREAK
 case 72:
 YY_RULE_SETUP
-#line 744 "language-scanner.lex"
+#line 751 "language-scanner.lex"
 {
 	errno = 0;
 	phplval->value.lval = strtol(yytext, NULL, 0);
@@ -3566,7 +3573,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 73:
 YY_RULE_SETUP
-#line 757 "language-scanner.lex"
+#line 764 "language-scanner.lex"
 { /* treat numbers (almost) as strings inside encapsulated strings */
 	phplval->value.str.val = (char *)estrndup(yytext, yyleng);
 	phplval->value.str.len = yyleng;
@@ -3576,7 +3583,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 74:
 YY_RULE_SETUP
-#line 764 "language-scanner.lex"
+#line 771 "language-scanner.lex"
 {
 	phplval->value.dval = strtod(yytext,NULL);
 	phplval->type = IS_DOUBLE;
@@ -3585,7 +3592,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 75:
 YY_RULE_SETUP
-#line 770 "language-scanner.lex"
+#line 777 "language-scanner.lex"
 {
 	phplval->value.lval = php3_get_lineno(GLOBAL(current_lineno));
 	phplval->type = IS_LONG;
@@ -3594,7 +3601,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 76:
 YY_RULE_SETUP
-#line 776 "language-scanner.lex"
+#line 783 "language-scanner.lex"
 {
 	char *filename = php3_get_filename(GLOBAL(current_lineno));
 	
@@ -3606,7 +3613,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 77:
 YY_RULE_SETUP
-#line 786 "language-scanner.lex"
+#line 793 "language-scanner.lex"
 {
 	phplval->value.str.val = (char *) estrndup(yytext, yyleng);
 	phplval->value.str.len = yyleng;
@@ -3617,7 +3624,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 78:
 YY_RULE_SETUP
-#line 794 "language-scanner.lex"
+#line 801 "language-scanner.lex"
 {
 	if (php3_ini.short_open_tag || yyleng>2) { /* yyleng>2 means it's not <? but <script> */
 		if (!(GLOBAL(initialized) & INIT_ENVIRONMENT)) {
@@ -3640,7 +3647,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 79:
 YY_RULE_SETUP
-#line 814 "language-scanner.lex"
+#line 821 "language-scanner.lex"
 {
 	if (php3_ini.asp_tags) {
 		if (!(GLOBAL(initialized) & INIT_ENVIRONMENT)) {
@@ -3665,7 +3672,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 80:
 YY_RULE_SETUP
-#line 837 "language-scanner.lex"
+#line 844 "language-scanner.lex"
 {
 	HANDLE_NEWLINE(yytext[yyleng-1]);
 	if (!(GLOBAL(initialized) & INIT_ENVIRONMENT)) {
@@ -3680,7 +3687,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 81:
 YY_RULE_SETUP
-#line 849 "language-scanner.lex"
+#line 856 "language-scanner.lex"
 {
 	GLOBAL(php3_track_vars)=1;
 	HANDLE_NEWLINE(yytext[yyleng-1]);
@@ -3692,7 +3699,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 82:
 YY_RULE_SETUP
-#line 859 "language-scanner.lex"
+#line 866 "language-scanner.lex"
 {
 	pval result;
 	
@@ -3719,7 +3726,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 83:
 YY_RULE_SETUP
-#line 884 "language-scanner.lex"
+#line 891 "language-scanner.lex"
 {
 	phplval->value.str.val = (char *)estrndup(yytext, yyleng);
 	phplval->value.str.len = yyleng;
@@ -3729,7 +3736,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 84:
 YY_RULE_SETUP
-#line 892 "language-scanner.lex"
+#line 899 "language-scanner.lex"
 {
 	HANDLE_NEWLINES(yytext,yyleng);
 	if (GLOBAL(php3_display_source)) {
@@ -3739,7 +3746,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 85:
 YY_RULE_SETUP
-#line 900 "language-scanner.lex"
+#line 907 "language-scanner.lex"
 { /* eat one line comments */
 	HANDLE_NEWLINE(yytext[yyleng-1]);
 	if (GLOBAL(php3_display_source)) {
@@ -3755,7 +3762,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 86:
 YY_RULE_SETUP
-#line 913 "language-scanner.lex"
+#line 920 "language-scanner.lex"
 {
 	/* Eat C-style comments */
 	char c;
@@ -3802,7 +3809,7 @@ YY_RULE_SETUP
 		}
 
 		if (c==EOF) {
-			php3_error(E_WARNING,"Unterminated comment starting line %d.\n",start_lineno);
+			php3_error(E_WARNING,"Unterminated comment starting line %d.\n",php3_get_lineno(start_lineno));
 			break;
 		} else {
 			HANDLE_NEWLINE(c);
@@ -3812,7 +3819,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 87:
 YY_RULE_SETUP
-#line 967 "language-scanner.lex"
+#line 974 "language-scanner.lex"
 {
 	HANDLE_NEWLINE(yytext[yyleng-1]);
 	BEGIN(INITIAL);
@@ -3825,7 +3832,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 88:
 YY_RULE_SETUP
-#line 978 "language-scanner.lex"
+#line 985 "language-scanner.lex"
 {
 	HANDLE_NEWLINE(yytext[yyleng-1]);
 	if (php3_ini.asp_tags) {
@@ -3846,7 +3853,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 89:
 YY_RULE_SETUP
-#line 997 "language-scanner.lex"
+#line 1004 "language-scanner.lex"
 {
 	BEGIN(DOUBLE_QUOTES);
 	if (GLOBAL(php3_display_source)) {
@@ -3859,7 +3866,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 90:
 YY_RULE_SETUP
-#line 1007 "language-scanner.lex"
+#line 1014 "language-scanner.lex"
 {
 	BEGIN(BACKQUOTE);
 	if (GLOBAL(php3_display_source)) {
@@ -3872,7 +3879,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 91:
 YY_RULE_SETUP
-#line 1018 "language-scanner.lex"
+#line 1025 "language-scanner.lex"
 {
 	BEGIN(SINGLE_QUOTE);
 	if (GLOBAL(php3_display_source)) {
@@ -3885,7 +3892,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 92:
 YY_RULE_SETUP
-#line 1029 "language-scanner.lex"
+#line 1036 "language-scanner.lex"
 {
 	HANDLE_NEWLINES(yytext,yyleng);
 	phplval->value.str.val = (char *) estrndup(yytext, yyleng);
@@ -3896,7 +3903,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 93:
 YY_RULE_SETUP
-#line 1037 "language-scanner.lex"
+#line 1044 "language-scanner.lex"
 {
 	HANDLE_NEWLINES(yytext,yyleng);
 	phplval->value.str.val = (char *) estrndup(yytext, yyleng);
@@ -3907,7 +3914,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 94:
 YY_RULE_SETUP
-#line 1046 "language-scanner.lex"
+#line 1053 "language-scanner.lex"
 {
 	int i;
 
@@ -3919,7 +3926,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 95:
 YY_RULE_SETUP
-#line 1056 "language-scanner.lex"
+#line 1063 "language-scanner.lex"
 {
 	int i;
 
@@ -3931,7 +3938,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 96:
 YY_RULE_SETUP
-#line 1066 "language-scanner.lex"
+#line 1073 "language-scanner.lex"
 {
 	phplval->value.chval = yytext[0];
 	if (yyleng == 2) {
@@ -3944,7 +3951,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 97:
 YY_RULE_SETUP
-#line 1076 "language-scanner.lex"
+#line 1083 "language-scanner.lex"
 {
 	phplval->value.chval = yytext[0];
 	return yytext[0];
@@ -3952,7 +3959,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 98:
 YY_RULE_SETUP
-#line 1081 "language-scanner.lex"
+#line 1088 "language-scanner.lex"
 {
 	phplval->value.chval='\'';
 	return CHARACTER;
@@ -3960,7 +3967,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 99:
 YY_RULE_SETUP
-#line 1086 "language-scanner.lex"
+#line 1093 "language-scanner.lex"
 {
 	phplval->value.chval='\\';
 	return CHARACTER;
@@ -3968,7 +3975,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 100:
 YY_RULE_SETUP
-#line 1091 "language-scanner.lex"
+#line 1098 "language-scanner.lex"
 {
 	phplval->value.chval='"';
 	return CHARACTER;
@@ -3976,7 +3983,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 101:
 YY_RULE_SETUP
-#line 1096 "language-scanner.lex"
+#line 1103 "language-scanner.lex"
 {
 	phplval->value.chval='`';
 	return CHARACTER;
@@ -3984,7 +3991,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 102:
 YY_RULE_SETUP
-#line 1101 "language-scanner.lex"
+#line 1108 "language-scanner.lex"
 {
 	phplval->value.chval = (char) strtol (yytext+1, NULL, 8);
 	return CHARACTER;
@@ -3992,7 +3999,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 103:
 YY_RULE_SETUP
-#line 1106 "language-scanner.lex"
+#line 1113 "language-scanner.lex"
 {
 	phplval->value.chval = (char) strtol (yytext+2, NULL, 16);
 	return CHARACTER;
@@ -4000,7 +4007,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 104:
 YY_RULE_SETUP
-#line 1111 "language-scanner.lex"
+#line 1118 "language-scanner.lex"
 {
 	switch (yytext[1]) {
 		case 'n':
@@ -4030,7 +4037,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 105:
 YY_RULE_SETUP
-#line 1138 "language-scanner.lex"
+#line 1145 "language-scanner.lex"
 {
 	BEGIN(IN_PHP);
 	if (GLOBAL(php3_display_source)) {
@@ -4042,7 +4049,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 106:
 YY_RULE_SETUP
-#line 1148 "language-scanner.lex"
+#line 1155 "language-scanner.lex"
 {
 	BEGIN(IN_PHP);
 	if (GLOBAL(php3_display_source)) {
@@ -4054,7 +4061,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 107:
 YY_RULE_SETUP
-#line 1158 "language-scanner.lex"
+#line 1165 "language-scanner.lex"
 {
 	BEGIN(IN_PHP);
 	if (GLOBAL(php3_display_source)) {
@@ -4068,7 +4075,7 @@ case YY_STATE_EOF(DOUBLE_QUOTES):
 case YY_STATE_EOF(BACKQUOTE):
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(IN_PHP):
-#line 1168 "language-scanner.lex"
+#line 1175 "language-scanner.lex"
 {
 	int retval;
 
@@ -4079,17 +4086,17 @@ case YY_STATE_EOF(IN_PHP):
 	YY_BREAK
 case 108:
 YY_RULE_SETUP
-#line 1179 "language-scanner.lex"
+#line 1186 "language-scanner.lex"
 {
 	php3_error(E_WARNING,"Unexpected character in input:  '%c' (ASCII=%d) state=%d",yytext[0],yytext[0],YYSTATE);
 }
 	YY_BREAK
 case 109:
 YY_RULE_SETUP
-#line 1182 "language-scanner.lex"
+#line 1189 "language-scanner.lex"
 ECHO;
 	YY_BREAK
-#line 4093 "language-scanner.c"
+#line 4100 "language-scanner.c"
 case YY_STATE_EOF(SINGLE_QUOTE):
 	yyterminate();
 
@@ -4975,4 +4982,4 @@ int main()
 	return 0;
 	}
 #endif
-#line 1182 "language-scanner.lex"
+#line 1189 "language-scanner.lex"

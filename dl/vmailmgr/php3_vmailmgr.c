@@ -122,14 +122,13 @@ void vm_delalias(INTERNAL_FUNCTION_PARAMETERS)
 }
 
 
-function_entry vmailmgr_functions[] =
-{
-	{"vm_adduser", vm_adduser},
-	{"vm_deluser", vm_deluser},
-	{"vm_passwd", vm_passwd},
-	{"vm_addalias", vm_addalias},
-	{"vm_delalias", vm_delalias},
-	{NULL, NULL}
+function_entry vmailmgr_functions[] = {
+	{"vm_adduser", vm_adduser, NULL},
+	{"vm_deluser", vm_deluser, NULL},
+	{"vm_passwd", vm_passwd, NULL},
+	{"vm_addalias", vm_addalias, NULL},
+	{"vm_delalias", vm_delalias, NULL},
+	{NULL, NULL, NULL}
 };
 
 

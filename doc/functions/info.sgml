@@ -166,6 +166,9 @@ error_log("You messed up!", 3, "/var/tmp/my-errors.log");
     <para>
      Returns the value of the environment variable
      <parameter>varname</parameter>, or false on an error.
+	 <informalexample><programlisting>
+$ip = getenv("REMOTE_ADDR"); // get the ip number from the user 
+</programlisting></informalexample>
 
    </refsect1>
   </refentry>
@@ -182,11 +185,20 @@ error_log("You messed up!", 3, "/var/tmp/my-errors.log");
      <paramdef>string <parameter>varname</parameter></paramdef>
     </funcsynopsis>
 
-    <para>
+    <simpara>
      Returns the current value of the PHP configuration variable
      specified by <parameter>varname</parameter>, or false if an error
      occurs.
 
+    <simpara>
+	 It will not return configuration information set when the PHP was
+	 compiled, or read from an Apache configuration file (using the
+	 php3_configuration_option directives).
+
+	<simpara>
+	 To check whether the system is using a php3.ini file, try retrieving
+	 the value of the cfg_file_path configuration setting. If this is
+	 available, a php3.ini file is being used.
    </refsect1>
   </refentry>
 
@@ -213,6 +225,52 @@ error_log("You messed up!", 3, "/var/tmp/my-errors.log");
    </refsect1>
   </refentry>
 
+   <refentry id="function.get-magic-quotes-gpc">
+   <refnamediv>
+    <refname>get_magic_quotes_gpc</refname>
+    <refpurpose>Get the current active configuration setting of magic quotes gpc.</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>long <function>get_magic_quotes_gpc</function></funcdef>
+     <paramdef>void</paramdef>
+    </funcsynopsis>
+
+    <simpara>
+     Returns the current active configuration setting of 
+     <link linkend="ini.magic-quotes-gpc">magic_quotes_gpc</link>.
+     (0 for off, 1 for on)
+
+    <simpara>
+     See also <function>get_magic_quotes_runtime</function>,
+     <function>set_magic_quotes_runtime</function>.
+   </refsect1>
+  </refentry>
+
+  <refentry id="function.get-magic-quotes-runtime">
+   <refnamediv>
+    <refname>get_magic_quotes_runtime</refname>
+    <refpurpose>Get the current active configuration setting of magic_quotes_runtime.</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>long <function>get_magic_quotes_runtime</function></funcdef>
+     <paramdef>void</paramdef>
+    </funcsynopsis>
+
+    <simpara>
+     Returns the current active configuration setting of 
+     <link linkend="ini.magic-quotes-runtime">magic_quotes_runtime</link>.
+     (0 for off, 1 for on)
+
+    <simpara>
+     See also <function>get_magic_quotes_gpc</function>,
+     <function>set_magic_quotes_runtime</function>.
+   </refsect1>
+  </refentry>
+  
   <refentry id="function.getlastmod">
    <refnamediv>
     <refname>getlastmod</refname>
@@ -403,6 +461,29 @@ putenv("UNIQID=$uniqid");
       </programlisting>
      </example>
 
+   </refsect1>
+  </refentry>
+
+  <refentry id="function.set-magic-quotes-runtime">
+   <refnamediv>
+    <refname>set_magic_quotes_runtime</refname>
+    <refpurpose>Set the current active configuration setting of magic_quotes_runtime.</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>long <function>get_magic_quotes_runtime</function></funcdef>
+     <paramdef>int <parameter>new_setting</parameter></paramdef>
+    </funcsynopsis>
+
+    <simpara>
+     Set the current active configuration setting of 
+     <link linkend="ini.magic-quotes-runtime">magic_quotes_runtime</link>.
+     (0 for off, 1 for on)
+
+    <simpara>
+     See also <function>get_magic_quotes_gpc</function>,
+     <function>get_magic_quotes_runtime</function>.
    </refsect1>
   </refentry>
 

@@ -28,7 +28,7 @@
  */
 
 
-/* $Id: php3_msql.h,v 1.23 1998/05/15 10:57:33 zeev Exp $ */
+/* $Id: php3_msql.h,v 1.24 1998/12/20 02:29:25 sas Exp $ */
 
 #ifndef _PHP3_MSQL_H
 #define _PHP3_MSQL_H
@@ -59,6 +59,7 @@ extern DLEXPORT void php3_msql_list_dbs(INTERNAL_FUNCTION_PARAMETERS);
 extern DLEXPORT void php3_msql_list_tables(INTERNAL_FUNCTION_PARAMETERS);
 extern DLEXPORT void php3_msql_list_fields(INTERNAL_FUNCTION_PARAMETERS);
 extern DLEXPORT void php3_msql_error(INTERNAL_FUNCTION_PARAMETERS);
+extern DLEXPORT void php3_msql_affected_rows(INTERNAL_FUNCTION_PARAMETERS);
 extern DLEXPORT void php3_msql_query(INTERNAL_FUNCTION_PARAMETERS);
 extern DLEXPORT void php3_msql_db_query(INTERNAL_FUNCTION_PARAMETERS);
 extern DLEXPORT void php3_msql_result(INTERNAL_FUNCTION_PARAMETERS);
@@ -82,7 +83,7 @@ typedef struct {
 	long num_links,num_persistent;
 	long max_links,max_persistent;
 	long allow_persistent;
-	int le_result;
+	int le_query;
 	int le_link;
 	int le_plink;
 } msql_module;

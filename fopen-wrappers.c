@@ -27,7 +27,7 @@
    |          Jim Winstead <jimw@php.net>                                 |
    +----------------------------------------------------------------------+
  */
-/* $Id: fopen-wrappers.c,v 1.50 1998/09/22 14:59:53 rasmus Exp $ */
+/* $Id: fopen-wrappers.c,v 1.52 1998/12/07 16:14:12 shane Exp $ */
 
 #ifdef THREAD_SAFE
 #include "tls.h"
@@ -244,13 +244,18 @@ FILE *php3_fopen_for_parser(void)
 		}
 	} else
 #endif
+#if WIN32
+	if (php3_ini.doc_root && path_info && ('/' == *php3_ini.doc_root ||
+		'\\' == *php3_ini.doc_root || strstr(php3_ini.doc_root,":\\") ||
+		strstr(php3_ini.doc_root,":/"))) {
+#else
 	if (php3_ini.doc_root && '/' == *php3_ini.doc_root && path_info) {
-
+#endif
 		l = strlen(php3_ini.doc_root);
 		fn = emalloc(l + strlen(path_info) + 2);
 		if (fn) {
 			memcpy(fn, php3_ini.doc_root, l);
-			if ('/' != fn[l - 1])	/* l is never 0 */
+			if ('/' != fn[l - 1] || '\\' != fn[l - 1])	/* l is never 0 */
 				fn[l++] = '/';
 			if ('/' == path_info[0])
 				l--;
@@ -514,11 +519,11 @@ static FILE *php3_fopen_url_wrapper(char *path, char *mode, int options, int *is
 			strcpy(scratch, resource->user);
 			strcat(scratch, ":");
 			strcat(scratch, resource->pass);
-			tmp = _php3_base64_encode(scratch, strlen(scratch), NULL);
+			tmp = _php3_base64_encode((unsigned char *)scratch, strlen(scratch), NULL);
 
 			SOCK_WRITE("Authorization: Basic ", *socketd);
 			/* output "user:pass" as base64-encoded string */
-			SOCK_WRITE(tmp, *socketd);
+			SOCK_WRITE((char *)tmp, *socketd);
 			SOCK_WRITE("\n", *socketd);
 			efree(scratch);
 			efree(tmp);
@@ -901,7 +906,7 @@ static FILE *php3_fopen_url_wrapper(char *path, char *mode, int options, int *is
 		return (fp);
 	}
 
-	/* Should never get here. */
+	/* NOTREACHED */
 	SOCK_FCLOSE(*socketd);
 	*socketd = 0;
 	return NULL;

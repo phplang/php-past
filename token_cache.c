@@ -29,7 +29,7 @@
  */
 
 
-/* $Id: token_cache.c,v 1.89 1998/09/10 23:56:57 zeev Exp $ */
+/* $Id: token_cache.c,v 1.92 1998/10/22 21:49:33 zeev Exp $ */
 
 #ifdef THREAD_SAFE
 #include "tls.h"
@@ -83,10 +83,13 @@ int tcm_init(TokenCacheManager *tcm)
 
 
 /* prepare a new token cache */
-int tcm_new(TokenCacheManager *tcm)
+int tcm_new(TokenCacheManager *tcm, int block_size)
 {
 	TLS_VARS;
 	
+	if (tcm->initialized >= (1<<TC_BITS)) {
+		return FAILURE;
+	}
 	tcm->initialized++;
 	if (tcm->initialized >= tcm->max) {
 		tcm->token_caches = (TokenCache *) erealloc(tcm->token_caches, (tcm->max + TOKEN_CACHES_BLOCK_SIZE) * sizeof(TokenCache));
@@ -96,7 +99,7 @@ int tcm_new(TokenCacheManager *tcm)
 		tcm->max += TOKEN_CACHES_BLOCK_SIZE;
 	}
 	tcm->active = tcm->initialized - 1;
-	if (tc_init(&tcm->token_caches[tcm->active],TOKEN_CACHE_EVAL_BLOCK_SIZE) == FAILURE) {
+	if (tc_init(&tcm->token_caches[tcm->active],block_size) == FAILURE) {
 		return FAILURE;
 	}
 	GLOBAL(tc) = &tcm->token_caches[tcm->active];
@@ -150,7 +153,7 @@ int read_next_token(TokenCacheManager *tcm, Token **token, pval *phplval)
 		}
 		next_token.phplval = *phplval;
 		next_token.lineno = GLOBAL(phplineno);
-		next_token.phplval.offset = tcm->active * MAX_TOKENS_PER_CACHE + GLOBAL(tc)->count;
+		next_token.phplval.offset = (tcm->active<<TOKEN_BITS) + GLOBAL(tc)->count;
 		
 		/* ugly hack to support $keyword */
 		if (last_token_suggests_variable_reference() && is_reserved_word(next_token.token_type)) {
@@ -182,11 +185,13 @@ int seek_token(TokenCacheManager *tcm, int token_number, int *yychar)
 	
 	clear_lookahead(yychar);
 	
-	tc_offset = token_number / MAX_TOKENS_PER_CACHE;
+	
+	tc_offset = TC_OFFSET(token_number);
+	
 	if (tc_offset >= tcm->initialized) {
 		return FAILURE;
 	}
-	t_offset = token_number % MAX_TOKENS_PER_CACHE;
+	t_offset = TOKEN_OFFSET(token_number);
 	if (t_offset > tcm->token_caches[tc_offset].count) {
 		return FAILURE;
 	}
@@ -200,15 +205,15 @@ int seek_token(TokenCacheManager *tcm, int token_number, int *yychar)
 /* switch tokens between start to middle-1, and middle+1 to end  */
 int tc_switch(TokenCacheManager *tcm, int start, int end, int middle)
 {
-	int active = start/MAX_TOKENS_PER_CACHE;
+	int active = TC_OFFSET(start);
 	TokenCache *tc = &tcm->token_caches[active];
 	Token *temp_tokens, middle_token;
 	int first_chunk, second_chunk, i;
 
 
-	start %= MAX_TOKENS_PER_CACHE;
-	end %= MAX_TOKENS_PER_CACHE;
-	middle %= MAX_TOKENS_PER_CACHE;
+	start = TOKEN_OFFSET(start);
+	end = TOKEN_OFFSET(end);
+	middle = TOKEN_OFFSET(middle);
 	
 	if (start < 0 || end >= tc->count || middle < start || middle > end) {
 		return FAILURE;
@@ -239,7 +244,7 @@ int tc_switch(TokenCacheManager *tcm, int start, int end, int middle)
 	tc->tokens[start + second_chunk] = middle_token;
 
 	for (i = start; i <= end; i++) {
-		tc->tokens[i].phplval.offset = active * MAX_TOKENS_PER_CACHE + i;
+		tc->tokens[i].phplval.offset = (active<<TOKEN_BITS) + i;
 	}
 	return SUCCESS;
 }
@@ -247,9 +252,9 @@ int tc_switch(TokenCacheManager *tcm, int start, int end, int middle)
 
 inline int tc_set_token(TokenCacheManager *tcm, int offset, int type)
 {
-	TokenCache *tc = &tcm->token_caches[offset/MAX_TOKENS_PER_CACHE];
+	TokenCache *tc = &tcm->token_caches[TC_OFFSET(offset)];
 	
-	offset %= MAX_TOKENS_PER_CACHE;
+	offset = TOKEN_OFFSET(offset);
 	if (offset < 0 || offset >= tc->count) {
 		return FAILURE;
 	}
@@ -261,9 +266,9 @@ inline int tc_set_token(TokenCacheManager *tcm, int offset, int type)
 
 inline int tc_get_token(TokenCacheManager *tcm, int offset)
 {
-	TokenCache *tc = &tcm->token_caches[offset/MAX_TOKENS_PER_CACHE];
+	TokenCache *tc = &tcm->token_caches[TC_OFFSET(offset)];
 	
-	offset %= MAX_TOKENS_PER_CACHE;
+	offset = TOKEN_OFFSET(offset);
 	if (offset < 0 || offset >= tc->count) {
 		return FAILURE;
 	}
@@ -273,15 +278,15 @@ inline int tc_get_token(TokenCacheManager *tcm, int offset)
 
 int tc_get_current_offset(TokenCacheManager *tcm)
 {
-	return tcm->active * MAX_TOKENS_PER_CACHE + GLOBAL(tc)->pos;
+	return (tcm->active<<TOKEN_BITS) + GLOBAL(tc)->pos;
 }
 
 
 inline int tc_set_switched(TokenCacheManager *tcm, int offset)
 {
-	TokenCache *tc = &tcm->token_caches[offset / MAX_TOKENS_PER_CACHE];
+	TokenCache *tc = &tcm->token_caches[TC_OFFSET(offset)];
 	
-	offset %= MAX_TOKENS_PER_CACHE;
+	offset = TOKEN_OFFSET(offset);
 	if (offset < 0 || offset >= tc->count) {
 		return FAILURE;
 	}
@@ -293,9 +298,9 @@ inline int tc_set_switched(TokenCacheManager *tcm, int offset)
 
 inline int tc_set_included(TokenCacheManager *tcm, int offset)
 {
-	TokenCache *tc = &tcm->token_caches[offset / MAX_TOKENS_PER_CACHE];
+	TokenCache *tc = &tcm->token_caches[TC_OFFSET(offset)];
 	
-	offset %= MAX_TOKENS_PER_CACHE;
+	offset = TOKEN_OFFSET(offset);
 	if (offset < 0 || offset >= tc->count) {
 		return FAILURE;
 	}

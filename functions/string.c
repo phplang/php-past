@@ -30,7 +30,7 @@
  */
 
 
-/* $Id: string.c,v 1.144 1998/10/04 16:03:29 zeev Exp $ */
+/* $Id: string.c,v 1.158 1998/12/21 05:24:20 sas Exp $ */
 #ifdef THREAD_SAFE
 #include "tls.h"
 #endif
@@ -44,6 +44,8 @@
 #include <locale.h>
 #endif
 
+/* {{{ proto int strlen(string str)
+   Get string length */
 void php3_strlen(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *str;
@@ -55,8 +57,10 @@ void php3_strlen(INTERNAL_FUNCTION_PARAMETERS)
 	convert_to_string(str);
 	RETVAL_LONG(str->value.str.len);
 }
+/* }}} */
 
-
+/* {{{ proto int strcmp(string str1, string str2)
+   Binary safe string comparison */
 void php3_strcmp(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *s1,*s2;
@@ -68,8 +72,10 @@ void php3_strcmp(INTERNAL_FUNCTION_PARAMETERS)
 	convert_to_string(s2);
 	RETURN_LONG(php3_binary_strcmp(s1,s2));
 }
+/* }}} */
 
-
+/* {{{ proto int strcasecmp(string str1, string str2)
+   Binary safe case-insensitive string comparison */
 void php3_strcasecmp(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *s1,*s2;
@@ -81,7 +87,10 @@ void php3_strcasecmp(INTERNAL_FUNCTION_PARAMETERS)
 	convert_to_string(s2);
 	RETURN_LONG(strcasecmp(s1->value.str.val,s2->value.str.val));
 }
+/* }}} */
 
+/* {{{ proto int strspn(string str, string mask)
+   Find length of initial segment consisting entirely of characters found in mask */
 void php3_strspn(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *s1,*s2;
@@ -93,7 +102,10 @@ void php3_strspn(INTERNAL_FUNCTION_PARAMETERS)
 	convert_to_string(s2);
 	RETURN_LONG(strspn(s1->value.str.val,s2->value.str.val));
 }
+/* }}} */
 
+/* {{{ proto int strcspn(string str, string mask)
+   Find length of initial segment consisting entirely of characters not found in mask */
 void php3_strcspn(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *s1,*s2;
@@ -105,8 +117,10 @@ void php3_strcspn(INTERNAL_FUNCTION_PARAMETERS)
 	convert_to_string(s2);
 	RETURN_LONG(strcspn(s1->value.str.val,s2->value.str.val));
 }
+/* }}} */
 
-
+/* {{{ proto string chop(string str)
+   Remove trailing whitespace */
 void php3_chop(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *str;
@@ -134,7 +148,10 @@ void php3_chop(INTERNAL_FUNCTION_PARAMETERS)
 	}
 	RETURN_FALSE;
 }
+/* }}} */
 
+/* {{{ proto string trim(string str)
+   Strip whitespace from the beginning and end of a string */
 void php3_trim(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *str;
@@ -173,7 +190,10 @@ void php3_trim(INTERNAL_FUNCTION_PARAMETERS)
 	}
 	RETURN_FALSE;
 }
+/* }}} */
 
+/* {{{ proto string ltrim(string str)
+   Strip whitespace from the beginning of a string */
 void php3_ltrim(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *str;
@@ -202,7 +222,10 @@ void php3_ltrim(INTERNAL_FUNCTION_PARAMETERS)
 	}
 	RETURN_FALSE;
 }
+/* }}} */
 
+/* {{{ proto array(string separator, string str)
+   Split a string on string separator and return array of components */
 void php3_explode(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *str, *delim;
@@ -237,8 +260,10 @@ void php3_explode(INTERNAL_FUNCTION_PARAMETERS)
 	}
 	efree(work_str);
 }
+/* }}} */
 
-
+/* {{{ proto string implode(array src, string glue)
+   Join array elements placing glue string between items and return one string */
 void php3_implode(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *arg1, *arg2, *delim, *tmp, *arr;
@@ -294,11 +319,14 @@ void php3_implode(INTERNAL_FUNCTION_PARAMETERS)
 	return_value->type = IS_STRING;
 	return_value->value.str.len = len;
 }
+/* }}} */
 
 #ifndef THREAD_SAFE
 char *strtok_string;
 #endif
 
+/* {{{ proto string strtok([string str,] string token)
+   Tokenize a string */
 void php3_strtok(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *str, *tok;
@@ -357,6 +385,7 @@ void php3_strtok(INTERNAL_FUNCTION_PARAMETERS)
 		RETVAL_FALSE;
 	}
 }
+/* }}} */
 
 PHPAPI char *_php3_strtoupper(char *s)
 {
@@ -371,7 +400,8 @@ PHPAPI char *_php3_strtoupper(char *s)
 	return (s);
 }
 
-
+/* {{{ proto string strtoupper(string str)
+   Make a string uppercase */
 void php3_strtoupper(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *arg;
@@ -386,6 +416,7 @@ void php3_strtoupper(INTERNAL_FUNCTION_PARAMETERS)
 	ret = _php3_strtoupper(arg->value.str.val);
 	RETVAL_STRING(ret,1);
 }
+/* }}} */
 
 
 PHPAPI char *_php3_strtolower(char *s)
@@ -401,7 +432,8 @@ PHPAPI char *_php3_strtolower(char *s)
 	return (s);
 }
 
-
+/* {{{ proto string strtolower(string str)
+   Make a string lowercase */
 void php3_strtolower(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *str;
@@ -416,7 +448,10 @@ void php3_strtolower(INTERNAL_FUNCTION_PARAMETERS)
 	ret = _php3_strtolower(str->value.str.val);
 	RETVAL_STRING(ret,1);
 }
+/* }}} */
 
+/* {{{ proto string basename(string path)
+   Return the filename component of the path */
 void php3_basename(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *str;
@@ -447,6 +482,7 @@ void php3_basename(INTERNAL_FUNCTION_PARAMETERS)
 	}
 	efree(ret);
 }
+/* }}} */
 
 PHPAPI void _php3_dirname(char *str, int len) {
 	register char *c;
@@ -467,6 +503,8 @@ PHPAPI void _php3_dirname(char *str, int len) {
 		*c='\0';
 }
 
+/* {{{ proto string dirname(string path)
+   Return the directory name component of the path */
 void php3_dirname(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *str;
@@ -482,7 +520,55 @@ void php3_dirname(INTERNAL_FUNCTION_PARAMETERS)
 	RETVAL_STRING(ret,1);
 	efree(ret);
 }
+/* }}} */
 
+
+/* case-insensitve strstr */
+PHPAPI char *php3i_stristr(unsigned char *s, unsigned char *t)
+{
+	int i, j, k, l;
+	
+	for (i = 0; s[i]; i++) {
+		for (j = 0, l = k = i; s[k] && t[j] &&
+			tolower(s[k]) == tolower(t[j]); j++, k++)
+			;
+		if (t[j] == '\0')
+			return s + l;
+	}
+	return NULL;
+}
+
+/* {{{ proto string strstr(string haystack, string needle)
+   Find first occurrence of a string within another, case insensitive */
+void php3_stristr(INTERNAL_FUNCTION_PARAMETERS)
+{
+	pval *haystack, *needle;
+	char *found = NULL;
+	TLS_VARS;
+	
+	if (ARG_COUNT(ht) != 2 || getParameters(ht, 2, &haystack, &needle) ==
+		FAILURE) {
+		WRONG_PARAM_COUNT;
+	}
+	convert_to_string(haystack);
+	convert_to_string(needle);
+
+	if (strlen(needle->value.str.val)==0) {
+		php3_error(E_WARNING,"Empty delimiter");
+		RETURN_FALSE;
+	}
+	found = php3i_stristr(haystack->value.str.val, needle->value.str.val);
+
+	if (found) {
+		RETVAL_STRING(found,1);
+	} else {
+		RETVAL_FALSE;
+	}
+}
+/* }}} */
+
+/* {{{ proto string strstr(string haystack, string needle)
+   Find first occurrence of a string within another */
 void php3_strstr(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *haystack, *needle;
@@ -513,36 +599,60 @@ void php3_strstr(INTERNAL_FUNCTION_PARAMETERS)
 		RETVAL_FALSE;
 	}
 }
+/* }}} */
 
+/* {{{ proto int strpos(string haystack, string needle)
+   Find position of first occurrence of a string within another */
 void php3_strpos(INTERNAL_FUNCTION_PARAMETERS)
 {
-	pval *haystack, *needle;
+	pval *haystack, *needle, *OFFSET;
+	int offset = 0;
 	char *found = NULL;
 	TLS_VARS;
 	
-	if (ARG_COUNT(ht) != 2 || getParameters(ht, 2, &haystack, &needle) == FAILURE) {
+	switch(ARG_COUNT(ht)) {
+	case 2:
+		if (getParameters(ht, 2, &haystack, &needle) == FAILURE) {
+			WRONG_PARAM_COUNT;
+		}
+		break;
+	case 3:
+		if (getParameters(ht, 3, &haystack, &needle, &OFFSET) == FAILURE) {
+			WRONG_PARAM_COUNT;
+		}
+		convert_to_long(OFFSET);
+		offset = OFFSET->value.lval;
+		break;
+	default:
 		WRONG_PARAM_COUNT;
 	}
 	convert_to_string(haystack);
+	if (offset > haystack->value.str.len) {
+		php3_error(E_WARNING,"offset not contained in string");
+		RETURN_FALSE;
+	}
 
 	if (needle->type == IS_STRING) {
 		if (needle->value.str.len==0) {
 			php3_error(E_WARNING,"Empty delimiter");
 			RETURN_FALSE;
 		}
-		found = strstr(haystack->value.str.val, needle->value.str.val);
+		found = strstr(haystack->value.str.val+offset, needle->value.str.val);
 	} else {
 		convert_to_long(needle);
-		found = strchr(haystack->value.str.val, (char) needle->value.lval);
+		found = strchr(haystack->value.str.val+offset, (char) needle->value.lval);
 	}
 
 	if (found) {
-		RETVAL_LONG(haystack->value.str.len - strlen(found));
+		RETVAL_LONG(found - haystack->value.str.val);
 	} else {
 		RETVAL_FALSE;
 	}
 }
+/* }}} */
 
+/* {{{ proto int strrpos(string haystack, string needle)
+   Find the last occurrence of a character in a string within another */
 void php3_strrpos(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *haystack, *needle;
@@ -567,7 +677,10 @@ void php3_strrpos(INTERNAL_FUNCTION_PARAMETERS)
 		RETVAL_FALSE;
 	}
 }
+/* }}} */
 
+/* {{{ proto string strrchr(string haystack, string needle)
+   Find the last occurrence of a character in a string within another */
 void php3_strrchr(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *haystack, *needle;
@@ -595,9 +708,92 @@ void php3_strrchr(INTERNAL_FUNCTION_PARAMETERS)
 		RETVAL_FALSE;
 	}
 }
+/* }}} */
 
+static char *
+_php3_chunk_split(char *src, int srclen, char *end, int endlen, int chunklen)
+{
+	char *dest;
+	char *p, *q;
+	int chunks; /* complete chunks! */
+	int restlen;
 
-/* args s,m,n */
+	chunks = srclen / chunklen;
+	restlen = srclen - chunks * chunklen; /* srclen % chunklen */
+
+	dest = emalloc((srclen + (chunks + 1) * endlen + 1) * sizeof(char));
+
+	for(p = src, q = dest; p < (src + srclen - chunklen + 1); ) {
+		memcpy(q, p, chunklen);
+		q += chunklen;
+		memcpy(q, end, endlen);
+		q += endlen;
+		p += chunklen;
+	}
+
+	if(restlen) {
+		memcpy(q, p, restlen);
+		q += restlen;
+		memcpy(q, end, endlen);
+		q += endlen;
+	}
+
+	*q = '\0';
+
+	return(dest);
+}
+
+/* {{{ proto string chunk_split(string str [, int chunklen [, string ending]])
+   Return split line */
+void php3_chunk_split(INTERNAL_FUNCTION_PARAMETERS) 
+{
+	pval *p_str, *p_chunklen, *p_ending;
+	int argc;
+	char *result;
+	char *end    = "\r\n";
+	int endlen   = 2;
+	int chunklen = 76;
+	TLS_VARS;
+
+	argc = ARG_COUNT(ht);
+
+	if(!((argc == 1 && getParameters(ht, 1, &p_str) != FAILURE) ||
+		(argc == 2 && getParameters(ht, 2, &p_str, &p_chunklen) != FAILURE) ||
+		(argc == 3 && getParameters(ht, 3, &p_str, &p_chunklen,
+								   &p_ending) != FAILURE))) {
+		WRONG_PARAM_COUNT;
+	}
+	
+	switch(argc) {
+		case 3:
+			convert_to_string(p_ending);
+			end    = p_ending->value.str.val;
+			endlen = p_ending->value.str.len;
+		case 2:
+			convert_to_long(p_chunklen);
+			chunklen = p_chunklen->value.lval;
+		case 1:
+			convert_to_string(p_str);
+	}
+			
+	if(chunklen == 0) {
+		php3_error(E_WARNING, "chunk length is 0");
+		RETURN_FALSE;
+	}
+	
+	result = _php3_chunk_split(p_str->value.str.val, p_str->value.str.len,
+			end, endlen, chunklen);
+	
+	if(result) {
+		RETVAL_STRING(result, 0);
+	} else {
+		RETURN_FALSE;
+	}
+}
+/* }}} */
+
+/* {{{ proto string substr(string str, int start [, int length])
+   Return part of a string */
 void php3_substr(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *string, *from, *len;
@@ -652,13 +848,16 @@ void php3_substr(INTERNAL_FUNCTION_PARAMETERS)
 	}
 	RETVAL_STRING(string->value.str.val + f,1);
 }
+/* }}} */
 
-
+/* {{{ proto string quotemeta(string str)
+   Quote meta characters */
 void php3_quotemeta(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *arg;
-	register int x, y;
 	char *str, *old;
+	char *p, *q;
+	char c;
 	TLS_VARS;
 	
 	if (ARG_COUNT(ht) != 1 || getParameters(ht, 1, &arg) == FAILURE) {
@@ -671,9 +870,11 @@ void php3_quotemeta(INTERNAL_FUNCTION_PARAMETERS)
 	if (!*old) {
 		RETURN_FALSE;
 	}
+	
 	str = emalloc(2 * arg->value.str.len + 1);
-	for (x = 0, y = 0; old[x]; x++, y++) {
-		switch (old[x]) {
+	
+	for(p = old, q = str; (c = *p); p++) {
+		switch(c) {
 			case '.':
 			case '\\':
 			case '+':
@@ -685,16 +886,19 @@ void php3_quotemeta(INTERNAL_FUNCTION_PARAMETERS)
 			case '$':
 			case '(':
 			case ')':
-				str[y++] = '\\';
+				*q++ = '\\';
+				/* break is missing _intentionally_ */
+			default:
+				*q++ = c;
 		}
-		str[y] = old[x];
 	}
-	str[y] = '\0';
-	RETVAL_STRING(str,1);
-	efree(str);
+	*q = 0;
+	RETVAL_STRING(erealloc(str, q - str + 1), 0);
 }
+/* }}} */
 
-
+/* {{{ proto int ord(string character)
+   Return ASCII value of character */
 void php3_ord(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *str;
@@ -706,8 +910,10 @@ void php3_ord(INTERNAL_FUNCTION_PARAMETERS)
 	convert_to_string(str);
 	RETVAL_LONG((unsigned char)str->value.str.val[0]);
 }
+/* }}} */
 
-
+/* {{{ proto string chr(int ascii)
+   Convert ASCII code to a character */
 void php3_chr(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *num;
@@ -722,8 +928,10 @@ void php3_chr(INTERNAL_FUNCTION_PARAMETERS)
 	temp[1] = '\0';
 	RETVAL_STRINGL(temp, 1,1);
 }
+/* }}} */
 
-
+/* {{{ proto string(string str)
+   Make a string's first character uppercase */
 void php3_ucfirst(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *arg;
@@ -739,7 +947,10 @@ void php3_ucfirst(INTERNAL_FUNCTION_PARAMETERS)
 	*arg->value.str.val = toupper((unsigned char)*arg->value.str.val);
 	RETVAL_STRING(arg->value.str.val,1);
 }
+/* }}} */
 
+/* {{{ proto string ucwords(string str)
+   Uppercase the first character of every word in a string */
 void php3_ucwords(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *arg;
@@ -763,7 +974,10 @@ void php3_ucwords(INTERNAL_FUNCTION_PARAMETERS)
 	}
 	RETVAL_STRING(arg->value.str.val,1);
 }
+/* }}} */
 
+/* {{{ proto string strtr(string str, string from, string to)
+   Translate characters in str using given translation tables */
 void php3_strtr(INTERNAL_FUNCTION_PARAMETERS)
 {								/* strtr(STRING,FROM,TO) */
 	pval *str, *from, *to;
@@ -803,9 +1017,11 @@ void php3_strtr(INTERNAL_FUNCTION_PARAMETERS)
 
 	RETVAL_STRING((char *)string,1);
 }
+/* }}} */
 
 
-
+/* {{{ proto string strrev(string str)
+   Reverse a string */
 void php3_strrev(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *str;
@@ -829,6 +1045,7 @@ void php3_strrev(INTERNAL_FUNCTION_PARAMETERS)
 	*return_value = *str;
 	pval_copy_constructor(return_value);
 }
+/* }}} */
 
 
 /* be careful, this edits the string in-place */
@@ -879,7 +1096,8 @@ PHPAPI void _php3_stripslashes(char *string, int *len)
 	}
 }
 
-
+/* {{{ proto string addslashes(string str)
+   Escape single quote, double quotes and backslash characters in a string with backslashes */
 void php3_addslashes(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *str;
@@ -891,7 +1109,10 @@ void php3_addslashes(INTERNAL_FUNCTION_PARAMETERS)
 	return_value->value.str.val = _php3_addslashes(str->value.str.val,str->value.str.len,&return_value->value.str.len,0);
 	return_value->type = IS_STRING;
 }
+/* }}} */
 
+/* {{{ proto string stripslashes(string str)
+   Strip backslashes from a string */
 void php3_stripslashes(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *str;
@@ -906,6 +1127,7 @@ void php3_stripslashes(INTERNAL_FUNCTION_PARAMETERS)
 	RETVAL_STRING(str->value.str.val,1);
 	_php3_stripslashes(return_value->value.str.val,&return_value->value.str.len);
 }
+/* }}} */
 
 #ifndef HAVE_STRERROR
 #if !APACHE
@@ -927,29 +1149,22 @@ char *strerror(int errnum)
 
 PHPAPI char *_php3_addslashes(char *str, int length, int *new_length, int should_free)
 {
-	char *new_str = (char *) emalloc((length?length:strlen(str))*2+1); /* maximum string length, worst case situation */
-	register char *source,*target;
+	/* maximum string length, worst case situation */
+	char *new_str = (char *) emalloc((length?length:strlen(str))*2+1); 
+	char *source,*target;
 	char *end;
+	char c;
 	
-	if (new_length) {
-		*new_length=0;
-	}
-	for (source=str,end=source+length,target=new_str; *source || source<end; source++) {
-		switch(*source) {
+	for (source=str,end=source+length,target=new_str; (c = *source) || source<end; source++) {
+		switch(c) {
 			case '\0':
 				*target++ = '\\';
 				*target++ = '0';
-				if (new_length) {
-					(*new_length) +=2;
-				}
 				break;
 			case '\'':
 				if (php3_ini.magic_quotes_sybase) {
 					*target++ = '\'';
 					*target++ = '\'';
-					if (new_length) {
-						(*new_length) += 2;
-					}
 					break;
 				}
 				/* break is missing *intentionally* */
@@ -957,20 +1172,15 @@ PHPAPI char *_php3_addslashes(char *str, int length, int *new_length, int should
 			case '\\':
 				if (!php3_ini.magic_quotes_sybase) {
 					*target++ = '\\';
-					if (new_length) {
-						(*new_length)++;
-					}
 				}
 				/* break is missing *intentionally* */
 			default:
-				*target++ = *source;
-				if (new_length) {
-					(*new_length)++;
-				}
+				*target++ = c;
 				break;
 		}
 	}
 	*target = 0;
+	if(new_length) *new_length = target - new_str;
 	if (should_free) {
 		STR_FREE(str);
 	}
@@ -987,9 +1197,9 @@ PHPAPI char *_php3_addslashes(char *str, int length, int *new_length, int should
 static void _php3_char_to_str(char *str,uint len,char from,char *to,int to_len,pval *result)
 {
 	int char_count=0;
-	char *source,*target,*tmp,*source_end=str+len;
+	char *source,*target,*tmp,*source_end=str+len, *tmp_end=NULL;
 	
-	for (source=str; *source; source++) {
+	for (source=str; source<source_end; source++) {
 		if (*source==from) {
 			char_count++;
 		}
@@ -1008,7 +1218,7 @@ static void _php3_char_to_str(char *str,uint len,char from,char *to,int to_len,p
 	
 	for (source=str; source<source_end; source++) {
 		if (*source==from) {
-			for (tmp=to; *tmp; tmp++) {
+			for (tmp=to,tmp_end=tmp+to_len; tmp<tmp_end; tmp++) {
 				*target = *tmp;
 				target++;
 			}
@@ -1020,7 +1230,94 @@ static void _php3_char_to_str(char *str,uint len,char from,char *to,int to_len,p
 	*target = 0;
 }
 
+/*
+ * this is a binary safe equivalent to strnstr
+ * note that we don't check for the end in str_to_str but here
+ */
 
+static inline char *
+_php3_memnstr(char *haystack, char *needle, int needle_len, char *end)
+{
+	char *p = haystack;
+	char *s = NULL;
+
+	for(; p < end - needle_len + 1&& 
+			(s = memchr(p, *needle, end - haystack)); p = s + 1) {
+		if(memcmp(s, needle, needle_len) == 0)
+			return s;
+	}
+	return NULL;
+}
+
+/*
+ * because of efficiency we use malloc/realloc/free here
+ * erealloc _will_ move your data around - it took me some time
+ * to find out ... Sascha Schumann <sas@schell.de> 981220
+ */
+
+static char *_php3_str_to_str(char *haystack, int length, 
+	char *needle, int needle_len, char *str, int str_len, int *_new_length)
+{
+	char *p, *q;
+	char *r, *s;
+	char *end = haystack + length;
+	char *new;
+	
+	new = malloc(length);
+	/* we jump through haystack searching for the needle. hurray! */
+	for(p = haystack, q = new;
+			(r = _php3_memnstr(p, needle, needle_len, end));) {
+	/* this ain't optimal. you could call it `efficient memory usage' */
+		realloc(new, (q - new) + (r - p) + (str_len) + 1);
+		memcpy(q, p, r - p);
+		q += r - p;
+		memcpy(q, str, str_len);
+		q += str_len;
+		p = r + needle_len;
+	}
+	/* if there is a rest, copy it */
+	if((end - p)) {
+		s = (q) + (end - p);
+		new = realloc(new, s - new + 1);
+		memcpy(q, p, end - p);
+		q = s;
+	}
+	*q = '\0';
+	if(_new_length) *_new_length = q - new;
+	return new;
+}
+
+/* {{{ proto string str_replace(string needle, string str, string haystack)
+   Replace all occurrences of needle in haystack with str */
+void php3_str_replace(INTERNAL_FUNCTION_PARAMETERS)
+{
+	pval *haystack, *needle, *str;
+	char *new;
+
+	if(ARG_COUNT(ht) != 3 || 
+			getParameters(ht, 3, &needle, &str, &haystack) == FAILURE) {
+		WRONG_PARAM_COUNT;
+	}
+
+	convert_to_string(haystack);
+	convert_to_string(needle);
+	convert_to_string(str);
+
+	if(needle->value.str.len == 1) {
+		_php3_char_to_str(haystack->value.str.val,haystack->value.str.len,needle->value.str.val[0],str->value.str.val, str->value.str.len ,return_value);
+		return;
+	}
+
+	new = _php3_str_to_str(haystack->value.str.val, haystack->value.str.len, 
+				needle->value.str.val, needle->value.str.len, 
+				str->value.str.val, str->value.str.len,
+				&return_value->value.str.len);
+	return_value->value.str.val = emalloc(return_value->value.str.len + 1);
+	memcpy(return_value->value.str.val, new, return_value->value.str.len + 1);
+	free(new);
+	return_value->type = IS_STRING;
+}
+/* }}} */
 
 /* Converts Logical Hebrew text (Hebrew Windows style) to Visual text
  * Cheers/complaints/flames - Zeev Suraski <zeev@php.net>
@@ -1189,17 +1486,24 @@ static void _php3_hebrev(INTERNAL_FUNCTION_PARAMETERS,int convert_newlines)
 }
 
 
+/* {{{ proto string hebrev(string str [, int max_chars_per_line])
+   Convert logical Hebrew text to visual text */
 void php3_hebrev(INTERNAL_FUNCTION_PARAMETERS)
 {
 	_php3_hebrev(INTERNAL_FUNCTION_PARAM_PASSTHRU,0);
 }
+/* }}} */
 
+/* {{{ proto string hebrev(string str [, int max_chars_per_line])
+   Convert logical Hebrew text to visual text with newline conversion */
 void php3_hebrev_with_conversion(INTERNAL_FUNCTION_PARAMETERS)
 {
 	_php3_hebrev(INTERNAL_FUNCTION_PARAM_PASSTHRU,1);
 }
+/* }}} */
 
-
+/* {{{ proto string nl2br(string str)
+   Converts newlines to HTML line breaks */
 void php3_newline_to_br(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *str;
@@ -1212,7 +1516,10 @@ void php3_newline_to_br(INTERNAL_FUNCTION_PARAMETERS)
 	
 	_php3_char_to_str(str->value.str.val,str->value.str.len,'\n',"<br>\n",5,return_value);
 }
+/* }}} */
 
+/* {{{ proto string setlocale(string category, string locale)
+   Set locale information */
 void php3_setlocale(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *category, *locale;
@@ -1252,6 +1559,7 @@ void php3_setlocale(INTERNAL_FUNCTION_PARAMETERS)
 #endif
 	RETURN_FALSE;
 }
+/* }}} */
 
 /*
  * Local variables:

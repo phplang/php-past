@@ -26,7 +26,7 @@
    | Authors: Rasmus Lerdorf                                              |
    +----------------------------------------------------------------------+
  */
-/* $Id: image.c,v 1.35 1998/08/14 23:47:16 steffann Exp $ */
+/* $Id: image.c,v 1.43 1998/12/23 11:33:19 thies Exp $ */
 /* 
  * Based on Daniel Schmitt's imageinfo.c which carried the following
  * Copyright notice.
@@ -70,48 +70,48 @@ const char php3_sig_png[8] =
  (char) 0x1a, (char) 0x0a};
 
 /* return info as a struct, to make expansion easier */
+
 struct gfxinfo {
 	unsigned int width;
 	unsigned int height;
 };
 
 /* routine to handle GIF files. If only everything were that easy... ;} */
-static struct gfxinfo *php3_handle_gif (int infile)
+static struct gfxinfo *php3_handle_gif (FILE *fp)
 {
 	struct gfxinfo *result = NULL;
 	unsigned char a[2];
 
 	result = (struct gfxinfo *) emalloc(sizeof(struct gfxinfo));
-	lseek(infile, 6L, 0);
-	read(infile, a, 2);
+	fseek(fp, 6L, SEEK_SET);
+	fread(a,sizeof(a),1,fp);
 	result->width = (unsigned short)a[0] | (((unsigned short)a[1])<<8);
-	read(infile, a, 2);
+	fread(a,sizeof(a),1,fp);
 	result->height = (unsigned short)a[0] | (((unsigned short)a[1])<<8);
 	return result;
 }
 
-static unsigned long php3_read4(int infile)
+static unsigned long php3_read4(FILE *fp)
 {
-	unsigned char c1, c2, c3, c4;
+	unsigned char a[ 4 ];
 
 	/* just return 0 if we hit the end-of-file */
-	if (!read(infile, &c1, 1)) return 0;
-	if (!read(infile, &c2, 1)) return 0;
-	if (!read(infile, &c3, 1)) return 0;
-	if (!read(infile, &c4, 1)) return 0;
-	return (((unsigned long) c1) << 24) + (((unsigned long) c2) << 16) + (((unsigned long) c3) << 8) + ((unsigned long) c4);
+	if (fread(a,sizeof(a),1,fp) != 1) return 0;
+
+	return (((unsigned long) a[ 0 ]) << 24) + (((unsigned long) a[ 1 ]) << 16) + (((unsigned long) a[ 2 ]) << 8) + ((unsigned long) a[ 3 ]);
+
 }
 
 /* routine to handle PNG files. - even easier */
-static struct gfxinfo *php3_handle_png(int infile)
+static struct gfxinfo *php3_handle_png(FILE *fp)
 {
 	struct gfxinfo *result = NULL;
 	unsigned long in_width, in_height;
 
 	result = (struct gfxinfo *) emalloc(sizeof(struct gfxinfo));
-	lseek(infile, 16L, 0);
-	in_width = php3_read4(infile);
-	in_height = php3_read4(infile);
+	fseek(fp, 16L, SEEK_SET);
+	in_width = php3_read4(fp);
+	in_height = php3_read4(fp);
 	result->width = (unsigned int) in_width;
 	result->height = (unsigned int) in_height;
 	return result;
@@ -133,60 +133,108 @@ static struct gfxinfo *php3_handle_png(int infile)
 #define M_SOF13 0xCD
 #define M_SOF14 0xCE
 #define M_SOF15 0xCF
+#define M_SOI   0xD8  
 #define M_EOI   0xD9			/* End Of Image (end of datastream) */
 #define M_SOS   0xDA			/* Start Of Scan (begins compressed data) */
+#define M_APP0  0xe0
+#define M_APP1  0xe1
+#define M_APP2  0xe2
+#define M_APP3  0xe3
+#define M_APP4  0xe4
+#define M_APP5  0xe5
+#define M_APP6  0xe6
+#define M_APP7  0xe7
+#define M_APP8  0xe8
+#define M_APP9  0xe9
+#define M_APP10 0xea
+#define M_APP11 0xeb
+#define M_APP12 0xec
+#define M_APP13 0xed
+#define M_APP14 0xee
+#define M_APP15 0xef
 
-static unsigned short php3_read2(int infile)
+static unsigned short php3_read2(FILE *fp)
 {
-	unsigned char c1, c2;
+	unsigned char a[ 2 ];
 
 	/* just return 0 if we hit the end-of-file */
-	if (!read(infile, &c1, 1)) return 0;
-	if (!read(infile, &c2, 1)) return 0;
-	return (((unsigned short) c1) << 8) + ((unsigned short) c2);
+	if (fread(a,sizeof(a),1,fp) != 1) return 0;
+
+	return (((unsigned short) a[ 0 ]) << 8) + ((unsigned short) a[ 1 ]);
 }
 
-static unsigned int php3_next_marker(int infile)
+static unsigned int php3_next_marker(FILE *fp)
 	 /* get next marker byte from file */
 {
-	unsigned char c;
+	int c;
 
 	/* skip unimportant stuff */
-	read(infile, &c, 1);
-	while (c != (unsigned char) 0xff)
-		if (read(infile, &c, 1) != 1)
-			return M_EOI;		/* we hit EOF */
+
+	c = getc(fp);
+
+	while (c != 0xff) { 
+		if ((c = getc(fp)) == EOF)
+			return M_EOI; /* we hit EOF */
+	}
 
 	/* get marker byte, swallowing possible padding */
 	do {
-		if (read(infile, &c, 1) != 1)
+		if ((c = getc(fp)) == EOF)
 			return M_EOI;		/* we hit EOF */
-	} while (c == (unsigned char) 0xff);
+	} while (c == 0xff);
 
 	return (unsigned int) c;
 }
 
-static void php3_skip_variable(int infile)
+static void php3_skip_variable(FILE *fp)
 	 /* skip over a variable-length block; assumes proper length marker */
 {
 	unsigned short length;
 
-	length = php3_read2(infile);
+	length = php3_read2(fp);
 	length -= 2;				/* length includes itself */
-	lseek(infile, (long) length, 1);	/* skip the header */
+	fseek(fp, (long) length, SEEK_CUR);	/* skip the header */
 }
 
-static struct gfxinfo *php3_handle_jpeg(int infile)
+static void php3_read_APP(FILE *fp,unsigned int marker,pval *info)
+{
+	unsigned short length;
+	unsigned char *buffer;
+	unsigned char markername[ 16 ];
+
+	length = php3_read2(fp);
+	length -= 2;				/* length includes itself */
+
+    buffer = emalloc(length);
+
+ 	if (fread(buffer,length,1,fp) != 1) {
+		return;
+	}
+
+	sprintf(markername,"APP%d",marker - M_APP0);
+
+	add_assoc_stringl(info,markername,buffer,length,1);
+
+	efree(buffer);
+}
+
+static struct gfxinfo *php3_handle_jpeg(FILE *fp,pval *info)
 	 /* main loop to parse JPEG structure */
 {
 	struct gfxinfo *result = NULL;
 	unsigned int marker;
 	unsigned short in_width, in_height;
 
-	lseek(infile, 2L, 0);		/* position file pointer on first marker */
+	fseek(fp, 0L, SEEK_SET);		/* position file pointer on SOF */
+
+	if (getc(fp) != 0xFF)			/* JPEG header... */
+		return NULL;
+		
+	if (getc(fp) != M_SOI)			/* JPEG header... */
+		return NULL;
 
 	for (;;) {
-		marker = php3_next_marker(infile);
+		marker = php3_next_marker(fp);
 		switch (marker) {
 			case M_SOF0:
 			case M_SOF1:
@@ -201,67 +249,127 @@ static struct gfxinfo *php3_handle_jpeg(int infile)
 			case M_SOF13:
 			case M_SOF14:
 			case M_SOF15:
-				/* handle SOFn block */
-				lseek(infile, 3L, 1);	/* skip length and precision bytes */
-				in_height = php3_read2(infile);
-				in_width = php3_read2(infile);
-				/* fill a gfxinfo struct to return the data */
-				result = (struct gfxinfo *) emalloc(sizeof(struct gfxinfo));
-				result->width = (unsigned int) in_width;
-				result->height = (unsigned int) in_height;
-				return result;	/* this is all we were looking for */
+				if (result == NULL) {
+					/* handle SOFn block */
+					fseek(fp, 3L, SEEK_CUR);	/* skip length and precision bytes */
+					in_height = php3_read2(fp);
+					in_width = php3_read2(fp);
+					/* fill a gfxinfo struct to return the data */
+					result = (struct gfxinfo *) emalloc(sizeof(struct gfxinfo));
+
+					result->width = (unsigned int) in_width;
+					result->height = (unsigned int) in_height;	
+
+					if (! info) /* if we don't want an extanded info -> return */
+						return result;
+				} else {
+					php3_skip_variable(fp);
+				}	
 				break;
+
+			case M_APP0:
+			case M_APP1:
+			case M_APP2:
+			case M_APP3:
+			case M_APP4:
+			case M_APP5:
+			case M_APP6:
+			case M_APP7:
+			case M_APP8:
+			case M_APP9:
+			case M_APP10:
+			case M_APP11:
+			case M_APP12:
+			case M_APP13:
+			case M_APP14:
+			case M_APP15:
+				if (info) {	
+					php3_read_APP(fp,marker,info); /* read all the app markes... */
+				} else {
+				    php3_skip_variable(fp);
+				}
+				break;
+
 			case M_SOS:
 			case M_EOI:
-				return NULL;	/* we're about to hit image data, or are at EOF. Error. */
+				return result;	/* we're about to hit image data, or are at EOF. stop processing. */
 				break;
+
 			default:
-				php3_skip_variable(infile);		/* anything else isn't interesting */
+				php3_skip_variable(fp);		/* anything else isn't interesting */
 				break;
 		}
 	}
+
+	return NULL;
 }
 
 /* main function */
 void php3_getimagesize(INTERNAL_FUNCTION_PARAMETERS)
 {
-	pval *arg1;
-	int filehandle, itype = 0;
+	pval *arg1,*info = 0;
+	FILE *fp;
+	int itype = 0;
 	char filetype[3];
 	char pngtype[8];
 	char temp[64];
 	struct gfxinfo *result = NULL;
+	
+	switch(ARG_COUNT(ht)){
+	case 1:
+		if (getParameters(ht, 1, &arg1) == FAILURE) {
+			WRONG_PARAM_COUNT;
+		}
+		convert_to_string(arg1);
+		break;
 
-	if (getParameters(ht, 1, &arg1) == FAILURE) {
+	case 2:
+		if (getParameters(ht, 2, &arg1, &info) == FAILURE) {
+			WRONG_PARAM_COUNT;
+		}
+		if (!ParameterPassedByReference(ht, 2)) {
+            php3_error(E_WARNING, "Array to be filled with values must be passed by reference.");
+            RETURN_FALSE;
+        }
+
+		pval_destructor(info _INLINE_TLS);
+		if (array_init(info) == FAILURE) {
+			return;
+		}
+
+		convert_to_string(arg1);
+		break;
+
+	default:
 		WRONG_PARAM_COUNT;
+		break;
 	}
-	convert_to_string(arg1);
-
+		
 	/* Check open_basedir */
 	if (_php3_check_open_basedir(arg1->value.str.val)) return;
 	
-	if ((filehandle = open(arg1->value.str.val, O_RDONLY)) < 0) {
+	if ((fp = fopen(arg1->value.str.val,"rb")) == 0) {
 		php3_error(E_WARNING, "Unable to open %s", arg1->value.str.val);
 		return;
 	}
-	read(filehandle, filetype, sizeof(filetype));
+	fread(filetype,sizeof(filetype),1,fp);
 	if (!memcmp(filetype, php3_sig_gif, 3)) {
-		result = php3_handle_gif (filehandle);
+		result = php3_handle_gif (fp);
 		itype = 1;
 	} else if (!memcmp(filetype, php3_sig_jpg, 3)) {
-		result = php3_handle_jpeg(filehandle);
+		result = php3_handle_jpeg(fp,info);
 		itype = 2;
 	} else if (!memcmp(filetype, php3_sig_png, 3)) {
-		lseek(filehandle, 0L, 0);
-		read(filehandle, pngtype, sizeof(pngtype));
+		fseek(fp, 0L, SEEK_SET);
+		fread(pngtype, sizeof(pngtype), 1, fp);
 		if (!memcmp(pngtype, php3_sig_png, 8)) {
-			result = php3_handle_png(filehandle);
+			result = php3_handle_png(fp);
 			itype = 3;
 		} else {
 			php3_error(E_WARNING, "PNG file corrupted by ASCII conversion");
 		}
 	}
-	close(filehandle);
+	fclose(fp);
 	if (result) {
 		if (array_init(return_value) == FAILURE) {
 			php3_error(E_ERROR, "Unable to initialize array");
@@ -273,6 +381,7 @@ void php3_getimagesize(INTERNAL_FUNCTION_PARAMETERS)
 		add_index_long(return_value, 2, itype);
 		sprintf(temp, "width=\"%d\" height=\"%d\"", result->width, result->height); /* safe */
 		add_index_string(return_value, 3, temp, 1);
+		
 		efree(result);
 	}
 }

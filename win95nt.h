@@ -20,12 +20,12 @@ typedef char * caddr_t;
 #define	S_IFLNK		_IFLNK
 #define pclose		_pclose
 #define popen		_popen
-#define chdir		_chdir
+#define chdir(path) SetCurrentDirectory(path)
 #define mkdir(a,b)	_mkdir(a)
 #define rmdir		_rmdir
 #define getpid		_getpid
 #if !(APACHE)
-#define sleep(s)	_sleep(s*1000)
+#define sleep(t)	Sleep(t*1000)
 #endif
 #define getcwd		_getcwd
 #define snprintf	_snprintf
@@ -36,7 +36,7 @@ typedef unsigned long ulong;
 #if !NSAPI
 #define strcasecmp(s1, s2) stricmp(s1, s2)
 #define strncasecmp(s1, s2, n) strnicmp(s1, s2, n)
-typedef int pid_t;
+typedef long pid_t;
 #endif
 
 /* missing in vc5 math.h */

@@ -13,13 +13,21 @@
     <funcsynopsis>
      <funcdef>int <function>odbc_autocommit</function></funcdef>
      <paramdef>int <parameter>connection_id</parameter></paramdef>
-     <paramdef>int <parameter>OnOff</parameter></paramdef>
+     <paramdef>int <parameter><optional>OnOff</optional></parameter></paramdef>
     </funcsynopsis>
     <para>
-     Returns <literal>true</literal> on success,
-     <literal>false</literal> on failure.
+     Without the <parameter>OnOff</parameter> parameter, this function
+     returns auto-commit status for
+     <parameter>connection_id</parameter>.  True is returned if
+     auto-commit is on, false if it is off or an error occurs.
     <para>
-     By default, autocommit is on for a connection.
+     If <parameter>OnOff</parameter> is true, auto-commit is enabled,
+     if it is false auto-commit is disabled.  Returns
+     <literal>true</literal> on success, <literal>false</literal> on
+     failure.
+    <para>
+     By default, auto-commit is on for a connection.  Disabling
+     auto-commit is equivalent with starting a transaction.
     <simpara>
      See also
      <function>odbc_commit</function> and
@@ -43,21 +51,22 @@
     </para>
     <itemizedlist>
       <listitem><simpara>
-      0: Passthru BINARY data
+      ODBC_BINMODE_PASSTHRU: Passthru BINARY data
       </simpara></listitem> 
       <listitem><simpara>
-      1: Return as is
+      ODBC_BINMODE_RETURN: Return as is
       </simpara></listitem>
       <listitem><simpara>
-      2: Return and convert to char
+      ODBC_BINMODE_CONVERT: Convert to char and return
       </simpara></listitem>
     </itemizedlist>
     <para>
     When binary SQL data is converted to character C data, each byte
     (8 bits) of source data is represented as two ASCII characters.
     These characters are the ASCII character representation of the
-    number in its hexadecimal form. For example, a binary 00000001
-    is converted to "01" and a binary 11111111 is converted to "FF".
+    number in its hexadecimal form. For example, a binary 00000001 is
+    converted to <literal>"01"</literal> and a binary 11111111 is
+    converted to <literal>"FF"</literal>.
 
      <table>
       <title>LONGVARBINARY handling</title>
@@ -71,37 +80,37 @@
        </thead>
        <tbody>
 	<row>
-	 <entry>0</entry>
-	 <entry>0</entry>
-	 <entry>passthru</entry>
-	</row>
-	<row>
-	 <entry>1</entry>
+	 <entry>ODBC_BINMODE_PASSTHRU</entry>
 	 <entry>0</entry>
 	 <entry>passthru</entry>
 	</row>
 	<row>
-	 <entry>2</entry>
+	 <entry>ODBC_BINMODE_RETURN</entry>
 	 <entry>0</entry>
 	 <entry>passthru</entry>
 	</row>
 	<row>
-	 <entry>0</entry>
+	 <entry>ODBC_BINMODE_CONVERT</entry>
 	 <entry>0</entry>
 	 <entry>passthru</entry>
 	</row>
 	<row>
+	 <entry>ODBC_BINMODE_PASSTHRU</entry>
 	 <entry>0</entry>
+	 <entry>passthru</entry>
+	</row>
+	<row>
+	 <entry>ODBC_BINMODE_PASSTHRU</entry>
 	 <entry>>0</entry>
 	 <entry>passthru</entry>
 	</row>
 	<row>
-	 <entry>1</entry>
+	 <entry>ODBC_BINMODE_RETURN</entry>
 	 <entry>>0</entry>
 	 <entry>return as is</entry>
 	</row>
 	<row>
-	 <entry>2</entry>
+	 <entry>ODBC_BINMODE_CONVERT</entry>
 	 <entry>>0</entry>
 	 <entry>return as char</entry>
 	</row>
@@ -110,16 +119,18 @@
      </table>
 
     <para>
-     * if odbc_fetch_into is used, passthru means that an empty string
-     * is returned for these columns.
+     If <function>odbc_fetch_into</function> is used, passthru means
+     that an empty string is returned for these columns.
 
     <para>
-     If result_id is 0, the settings apply as default for new results.
+     If <parameter>result_id</parameter> is <literal>0</literal>, the
+     settings apply as default for new results.
 
-    <note><simpara>
-      Default for longreadlen is 4096 and binmode defaults to 1.
-      Handling of binary Long columns is also affected by 
-      <function>odbc_longreadlen</function>
+     <note><simpara> Default for longreadlen is
+       <literal>4096</literal> and binmode defaults to
+       <literal>ODBC_BINMODE_RETURN</literal>.  Handling of binary
+       long columns is also affected by
+       <function>odbc_longreadlen</function>
     </simpara>
     </note>
    </refsect1>
@@ -282,7 +293,7 @@
 <refentry id="function.odbc-execute">
  <refnamediv>
   <refname>odbc_execute</refname>
-   <refpurpose>execute a prepated statement</refpurpose>
+   <refpurpose>execute a prepared statement</refpurpose>
   </refnamediv>
   <refsect1>
    <title>Description</title>
@@ -392,7 +403,7 @@
    </refsect1>
   </refentry>
 
-
+<!--
   <refentry id="function.odbc-field-num">
    <refnamediv>
     <refname>odbc_field_num</refname>
@@ -401,7 +412,7 @@
    <refsect1>
     <title>Description</title>
     <funcsynopsis>
-     <funcdef>int <function>odbc_fieldnum</function></funcdef>
+     <funcdef>int <function>odbc_field_num</function></funcdef>
      <paramdef>int <parameter>result_id</parameter></paramdef>
      <paramdef>string <parameter>field_name</parameter></paramdef>
     </funcsynopsis>
@@ -413,7 +424,7 @@
  
    </refsect1>
   </refentry>
-
+-->
 
   <refentry id="function.odbc-field-type">
    <refnamediv>
@@ -425,12 +436,32 @@
     <funcsynopsis>
      <funcdef>string <function>odbc_field_type</function></funcdef>
      <paramdef>int <parameter>result_id</parameter></paramdef>
-     <paramdef>mixed <parameter>field</parameter></paramdef>
+     <paramdef>int <parameter>field_number</parameter></paramdef>
     </funcsynopsis>
     <para>
      <function>odbc_field_type</function> will return the SQL type of
-     the field referecend by name or number in the given ODBC result
-     identifier.  Field numbering runs from 1.
+     the field referecend by number in the given ODBC result
+     identifier.  Field numbering starts at 1.
+ 
+   </refsect1>
+  </refentry>
+
+  <refentry id="function.odbc-field-len">
+   <refnamediv>
+    <refname>odbc_field_len</refname>
+    <refpurpose>get the Length of a field</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>string <function>odbc_field_type</function></funcdef>
+     <paramdef>int <parameter>result_id</parameter></paramdef>
+     <paramdef>int <parameter>field_number</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+     <function>odbc_field_type</function> will return the length of
+     the field referecend by number in the given ODBC result
+     identifier.  Field numbering starts at 1.
  
    </refsect1>
   </refentry>
@@ -607,9 +638,30 @@
     <para>
      Returns the contents of the field.
     <para>
+     <parameter>field</parameter> can either be an integer containing
+     the column number of the field you want; or it can be a string
+     containing the name of the field. For example:
+     <informalexample><programlisting>
+     $item_3 = odbc_result($Query_ID, 3 );
+     $item_val = odbc_result($Query_ID, "val");
+</programlisting></informalexample>
+    <para>
+     The first call to <function>odbc_result</function> returns the
+     value of the third field in the current record of the query
+     result. The second function call to
+     <function>odbc_result</function> returns the value of the field
+     whose field name is "val" in the current record of the query
+     result. An error occurs if a column number parameter for a field
+     is less than one or exceeds the number of columns (or fields) in
+     the current record. Similarly, an error occurs if a field with a
+     name that is not one of the fieldnames of the table(s) that
+     is(are) being queried.
+
+    <para>
      Field indices start from 1. Regarding the way binary or
      long column data is returned refer to <function>odbc_binmode
      </function> and <function>odbc_longreadlen</function>.
+
 <!--
 
 If the requested field contains

@@ -26,7 +26,7 @@
    | Authors: Rasmus Lerdorf <rasmus@lerdorf.on.ca>                       |
    +----------------------------------------------------------------------+
  */
-/* $Id: snmp.c,v 1.19 1998/05/21 23:57:22 zeev Exp $ */
+/* $Id: snmp.c,v 1.20 1998/11/03 15:52:33 rasmus Exp $ */
 
 #ifndef __P
 #define __P(p) p
@@ -71,9 +71,9 @@ static oid objid_mib[] = {1, 3, 6, 1, 2, 1};
 void sprint_variable(char *, oid *, int, struct variable_list *);
 
 function_entry snmp_functions[] = {
-    {"snmpget", php3_snmpget},
-    {"snmpwalk", php3_snmpwalk},
-    {NULL,NULL}
+    {"snmpget", php3_snmpget, NULL},
+    {"snmpwalk", php3_snmpwalk, NULL},
+    {NULL,NULL,NULL}
 };
 
 php3_module_entry snmp_module_entry = {

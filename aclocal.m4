@@ -1,4 +1,4 @@
-dnl $Id: aclocal.m4,v 1.28 1998/09/23 13:47:21 ssb Exp $
+dnl $Id: aclocal.m4,v 1.30 1998/12/10 18:36:30 swilliam Exp $
 dnl
 dnl This file contains local autoconf functions.
 
@@ -53,6 +53,12 @@ AC_DEFUN(AC_FIND_SOLID_LIBS,[
     SOLID_LIBS=`echo $1/scl${ac_solid_os}*.a | cut -d' ' -f1`
   fi
   if test ! -f $SOLID_LIBS; then
+    SOLID_LIBS=`echo $1/scl2x${ac_solid_os}*.a | cut -d' ' -f1`
+  fi
+  if test ! -f $SOLID_LIBS; then
+    SOLID_LIBS=`echo $1/scl2x${ac_solid_os}*.a | cut -d' ' -f1`
+  fi
+  if test ! -f $SOLID_LIBS; then
     SOLID_LIBS=`echo $1/bcl${ac_solid_os}*.so | cut -d' ' -f1`
   fi
   if test ! -f $SOLID_LIBS; then
@@ -60,6 +66,19 @@ AC_DEFUN(AC_FIND_SOLID_LIBS,[
   fi
   AC_MSG_RESULT(`echo $SOLID_LIBS | sed -e 's!.*/!!'`)
 ])
+
+dnl
+dnl Figure out which library file to link with for the Empress support.
+dnl
+AC_DEFUN(AC_FIND_EMPRESS_LIBS,[
+  AC_MSG_CHECKING([Empress library file])
+  EMPRESS_LIBS=`echo $1/empodbc.so | cut -d' ' -f1`
+  if test ! -f $EMPRESS_LIBS; then
+    EMPRESS_LIBS=`echo $1/empodbc.a | cut -d' ' -f1`
+  fi
+  AC_MSG_RESULT(`echo $EMPRESS_LIBS | sed -e 's!.*/!!'`)
+])
+
 
 dnl
 dnl See if we have broken header files like SunOS has.

@@ -29,7 +29,7 @@
  */
 
 
-/* $Id: internal_functions.h,v 1.126 1998/07/28 22:00:00 rasmus Exp $ */
+/* $Id: internal_functions.h,v 1.127 1998/10/23 20:46:54 shane Exp $ */
 
 
 #ifndef _INTERNAL_FUNCTIONS_H
@@ -90,7 +90,7 @@ extern inline PHPAPI int add_get_index_double(pval *arg, uint idx, double d, voi
 extern inline PHPAPI int add_get_index_string(pval *arg, uint idx, char *str, void **dest, int duplicate);
 extern inline PHPAPI int add_get_index_stringl(pval *arg, uint idx, char *str, uint length, void **dest, int duplicate);
 
-extern int call_user_function(HashTable *function_table, pval *object, pval *function_name, pval *retval, int param_count, pval *params[]);
+extern PHPAPI int call_user_function(HashTable *function_table, pval *object, pval *function_name, pval *retval, int param_count, pval *params[]);
 
 #define add_property_long(arg,key,n)  add_assoc_long((arg),(key),(n))
 #define add_property_double(arg,key,d)  add_assoc_double((arg),(key),(n))

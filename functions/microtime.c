@@ -27,7 +27,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: microtime.c,v 1.20 1998/05/11 20:18:15 zeev Exp $ */
+/* $Id: microtime.c,v 1.22 1998/11/18 21:23:10 ssb Exp $ */
 
 #include <stdlib.h>
 #ifdef HAVE_UNISTD_H
@@ -56,6 +56,8 @@
 #define NUL  '\0'
 #define MICRO_IN_SEC 1000000.00
 
+/* {{{ proto string microtime(void)
+   Returns a string containing the current time in seconds and microseconds */
 #ifdef __cplusplus
 void php3_microtime(HashTable *)
 #else
@@ -77,6 +79,7 @@ void php3_microtime(INTERNAL_FUNCTION_PARAMETERS)
 	RETVAL_STRING(ret,1);
 #endif
 }
+/* }}} */
 
 /*
  * Local variables:

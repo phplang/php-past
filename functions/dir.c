@@ -27,7 +27,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: dir.c,v 1.53 1998/08/14 23:47:15 steffann Exp $ */
+/* $Id: dir.c,v 1.56 1998/11/25 07:37:18 rasmus Exp $ */
 
 #ifdef THREAD_SAFE
 #include "tls.h"
@@ -84,6 +84,8 @@ int php3_minit_dir(INIT_FUNC_ARGS)
 	return SUCCESS;
 }
 
+/* {{{ proto int opendir(string path)
+   Open a directory and return a dir_handle */
 void php3_opendir(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *arg;
@@ -108,7 +110,10 @@ void php3_opendir(INTERNAL_FUNCTION_PARAMETERS)
 	GLOBAL(dirp_id) = ret;
 	RETURN_LONG(ret);
 }
+/* }}} */
 
+/* {{{ proto void closedir([int dir_handle])
+Close directory connection identified by the dir_handle */
 void php3_closedir(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *id, *tmp;
@@ -141,7 +146,10 @@ void php3_closedir(INTERNAL_FUNCTION_PARAMETERS)
 	}
 	php3_list_delete(id_to_find);
 }
+/* }}} */
 
+/* {{{ proto int chdir(string directory)
+Change the current directory */
 void php3_chdir(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *arg;
@@ -160,7 +168,10 @@ void php3_chdir(INTERNAL_FUNCTION_PARAMETERS)
 	}
 	RETURN_TRUE;
 }
+/* }}} */
 
+/* {{{ proto void rewinddir([int dir_handle])
+Rewind dir_handle back to the start */
 void php3_rewinddir(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *id, *tmp;
@@ -193,7 +204,10 @@ void php3_rewinddir(INTERNAL_FUNCTION_PARAMETERS)
 	}
 	rewinddir(dirp);
 }
+/* }}} */
 
+/* {{{ proto string readdir([int dir_handle])
+Read directory entry from dir_handle */
 void php3_readdir(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *id, *tmp;
@@ -231,7 +245,10 @@ void php3_readdir(INTERNAL_FUNCTION_PARAMETERS)
 	}
 	RETURN_FALSE;
 }
+/* }}} */
 
+/* {{{ proto class dir(string directory)
+Directory class with properties, handle and class and methods read, rewind and close */
 void php3_getdir(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *arg;
 	DIR *dirp;
@@ -262,6 +279,7 @@ void php3_getdir(INTERNAL_FUNCTION_PARAMETERS) {
 	add_method(return_value, "rewind", php3_rewinddir);
 	add_method(return_value, "close", php3_closedir);
 }
+/* }}} */
 
 /*
  * Local variables:

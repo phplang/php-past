@@ -39,7 +39,7 @@
 5.  cd apache_1.3.x
 6.  ./configure --prefix=/www
 7.  cd ../php-3.0.x
-8.  ./configure --with-mysql --with-apache=../apache_1.3.x --enable-track-vars
+8.  ./configure --with-mysql=/usr/local/mysql --with-apache=../apache_1.3.x --enable-track-vars
 9.  make
 10. make install
 11. cd ../apache_1.3.x
@@ -60,7 +60,9 @@ If you prefer this file in another location, use --with-config-file=/path in ste
  
   You can choose any extension you wish here.  .php3 is simply the one we suggest.   
 
-18. Use your normal procedure for starting the Apache server.  
+18. Use your normal procedure for starting the Apache server. (You must
+stop and restart the server, not just cause the server to reload by
+use a HUP or USR1 signal.)
 
 	</programlisting>
 	</informalexample>
@@ -124,7 +126,7 @@ If you prefer this file in another location, use --with-config-file=/path in ste
      fhttpd, building PHP as a module will give better performance,
      more control and remote execution capability.
      
-   <sect2>
+   <sect2 id="install-cgi">
     <title>CGI version</title>
 
     <para>
@@ -399,6 +401,43 @@ If you prefer this file in another location, use --with-config-file=/path in ste
    <sect2>
     <title>Other configure options</title>
 
+    <sect3 id="enable-sysvsem">
+     <title>--enable-sysvsem</title>
+     <synopsis>
+      <option>--enable-sysvsem</option>
+     </synopsis>
+     <simpara>
+      Include support for Sys V semaphores (supported by most Unix
+      derivates). See the <link linkend="ref.sem">Semaphore and 
+	  Shared Memory documentation</link> for more information.
+    </simpara>
+    </sect3>
+
+    <sect3 id="enable-sysvshm">
+     <title>--enable-sysvshm</title>
+     <synopsis>
+      <option>--enable-sysvshm</option>
+     </synopsis>
+     <simpara>
+	  Include support for Sys V shared memory (supported by most Unix
+      derivates). See the <link linkend="ref.sem">Semaphore and 
+	  Shared Memory documentation</link> for more information.
+     </simpara>
+    </sect3>
+
+    <sect3 id="with-xml">
+     <title>--with-xml</title>
+     <synopsis>
+      <option>--with-xml</option>
+     </synopsis>
+     <simpara>
+      Include support for a non-validating XML parser using James
+      Clark's <ulink url="&url.expat;">expat library</ulink>.  See the
+      <link linkend="ref.xml">XML function reference</link> for
+      details.
+     </simpara>
+    </sect3>
+
     <sect3 id="enable-maintainer-mode">
      <title>--enable-maintainer-mode</title>
      <synopsis>
@@ -663,68 +702,482 @@ If you prefer this file in another location, use --with-config-file=/path in ste
   </sect1>
 
   <sect1 id="install-windows95-nt">
-   <title>Installing PHP on Windows95/NT</title>
+   <title>PHP3 Installation Guide for Windows</title>
 
+   <simpara>
+    This install guide will help you install and configure PHP3 on
+    your Windows 9x/NT webservers. This guide was compiled by
+    &link.bob;. The latest revision can be found at <ulink
+    url="&url.win32install">&url.win32install</ulink>.
+
+   <para>
+    This guide provides installation support for:
+    <simplelist>
+     <member>Personal Web Server (Newest version recommended)</member>
+     <member>Internet Information Server 3 or 4</member>
+     <member>Apache 1.3.x</member>
+     <member>Omni HTTPd 2.0b1</member>
+    </simplelist>
+   </para>
+ 
    <sect2>
-    <title>Apache/NT and Stronghold/NT</title>
-
+    <title>Configuration Changes for PHP3</title>
+    
     <simpara>
-     Follow the instructions for configuration under Unix.
+     All modules are now prefixed with 'php3_'. You will need to
+     change your <link linkend="php3.ini">php3.ini</link> file and/or
+     any scripts loading extensions with the <function>dl</function>
+     function (or you could always remove the 'php3_' prefix). This
+     will prevent confusion between php modules and their supporting
+     libraries.
+    <simpara>
+     The <ulink url="&url.php3.changelog;">ChangeLog</ulink>, <ulink
+     url="&url.php3.faq;">FAQ</ulink> and updated documentation can
+     always be found at the offical PHP website or any of its mirrors.
 
    </sect2>
 
    <sect2>
-    <title>IIS and MS-PWS</title>
+    <title>General Installation Steps</title>
 
-    <simpara>
-     You can access php scripts simply by putting the php.exe file
-     into your scripts directory and using a url such as:
-     <filename role=url>http://my.server/scripts/php.exe/page.php</filename>
+    <para>
+     The following steps should be performed on all installations
+     before the server specific instructions.
 
-    <simpara>
-     Redirection If you would like to use a url like:
-     <filename role=url>http://my.server/page.php</filename> you will
-     have to edit your registry.
+     <itemizedlist>
+      <listitem>
+       <para>
+	Extract the distribution file to a directory of your choice.
+	"C:\PHP3\" is a good start.
+       </para>
+      </listitem>
+      <listitem>
+       <para>
+	Copy the file, 'php3-dist.ini' to your '%WINDOWS%' directory
+	and rename it to 'php3.ini'. Your '%WINDOWS%' directory is
+	typically:
+	<simplelist>
+	 <member>c:\windows for Windows 95/98</member>
+	 <member>c:\winnt or c:\winnt40 for NT servers</member>
+	</simplelist>
+       </para>	
+      </listitem>
+      <listitem>
+       <para>
+	Edit your 'php3.ini' file:
+	<itemizedlist>
+	 <listitem>
+	  <simpara>
+	   You will need to change the 'extension_dir' setting to
+	   point to your php-install-dir, or where you have placed
+	   your 'php3_*.dll' files. ex: c:\php3
+	  </simpara>
+	 </listitem>
+	 <listitem>
+	  <simpara>
+	   Set the 'doc_root' to point to your webservers
+	   document_root. ex: c:\apache\htdocs or c:\webroot
+	  </simpara> 
+	 </listitem>
+	 <listitem>
+	  <simpara>
+	   Choose which modules you would like to load when PHP
+	   starts. You can uncomment the: 'extension=php3_*.dll' lines 
+	   to load these modules. Some modules require you to have
+	   additional libraries installed on your system for the
+	   module to work correctly. The PHP <ulink
+	    url="&url.php3.faq">FAQ</ulink> has more information on
+	   where to get supporting libraries. You can also load a
+	   module dynamically in your script using:
+	   <command>dl("php_*.dll");</command>
+	  </simpara>
+	 </listitem>
+	 <listitem>
+	  <simpara>
+	   On PWS and IIS, you can set the browscap.ini to point to:
+	   'c:\windows\system\inetsrv\browscap.ini' on Windows 95/98
+	   und 'c:\winnt\system32\inetsrv\browscap.ini' on NT
+	   Server. Additional information on using the browscap
+	   functionality in PHP can be found at this <ulink
+	    url="&url.browscap;">mirror</ulink>, select the "source"
+	   button to see it in action.
+	  </simpara>
+	 </listitem>
+	</itemizedlist>
+       </para>
+      </listitem>
+     </itemizedlist>
 
-    <note><simpara>
-     Disclaimer: Be sure you make a backup of your registry before
-     editing it.  The PHP Development Team is not responsible for
-     damaged registries.  If you damage your registry, you may not be
-     able to restart your computer without reinstalling your OS!
-    </simpara></note>
+    </sect2>
 
-    <simpara>
-     You can edit your registry by running regedit.exe.  To do this,
-     choose Run... from the Start menu, and type
-     <command>regedit</command> then click on OK.  The registry
-     setting you need to edit is:
-     <database>HKEY_LOCAL_MACHINE:System:CurrentControlSet:Services:W3Svc:Parameters:ScriptMap</database>.
-     Add a new string value here with the extension you would like to
-     use for your php scripts, and make the value data the path to the
-     php executable: <literal>.phtm3 "c:\webshare\scripts\php.exe"</literal>
+   <sect2>
+    <title>Windows 95/98/NT and PWS/IIS 3</title>
 
-    <simpara>
-     For the ISAPI version of PHP, use something like: <literal>.phtm
-     "c:\webshare\scripts\php3_isapi.dll"</literal>
+     <simpara>
+      The recommended method for configuring these servers is to use
+      the INF file included with the distribution
+      (php_iis_reg.inf). You may want to edit this file and make sure
+      the extensions and PHP install directories match your
+      configuration. Or you can follow the steps below to do it
+      manually.
+     </simpara>
+     <simpara>
+      WARNING: These steps involve working directly with the windows
+      registry. One error here can leave your system in an unstable
+      state. We highly recommend that you back up your registry
+      first. The PHP Development team will not be held responsible if
+      you damage your registry.
+     </simpara>
 
-    <simpara>
-     You must also make any directories containing php scripts
-     executable.  This is done in the IIS administrator.  Consult your
-     IIS documentation for more information.
+     <para>
+     <itemizedlist>
+      <listitem>
+       <simpara>
+	Run Regedit.
+       </simpara>
+      </listitem>
+      <listitem>
+       <simpara>
+	Navigate to: <literal>HKEY_LOCAL_MACHINE /System
+	 /CurrentControlSet /Services /W3Svc /Parameters
+	 /ScriptMap</literal>. 
+       </simpara>
+      </listitem>
+      <listitem>
+       <simpara>
+	On the edit menu select: <literal>New->String Value</literal>.
+       </simpara>
+      </listitem>
+      <listitem>
+       <simpara>
+	Type in the extension you wish to use for your php
+	scripts. ex: <literal>.php3</literal>
+       </simpara>
+      </listitem>
+      <listitem>
+       <simpara>
+	Double click on the new string value and enter the path to
+	<literal>php.exe</literal> in the value data field. ex:
+	<literal>c:\php3\php.exe %s %s</literal>. The '%s %s' is VERY
+	important, PHP will not work properly without it.
+       </simpara>
+      </listitem>
+      <listitem>
+       <simpara>
+	Repeat these steps for each extension you wish to associate
+	with PHP scripts.
+       </simpara>
+      </listitem>
+      <listitem>
+       <simpara>
+	Now navigate to: <literal>HKEY_CLASSES_ROOT</literal>
+       </simpara>
+      </listitem>
+      <listitem>
+       <simpara>
+	On the edit menu select: <literal>New->Key</literal>.
+       </simpara>
+      </listitem>
+      <listitem>
+       <simpara>
+	Name the key to the extension you setup in the previous
+	section. ex: <literal>.php3</literal>
+       </simpara>
+      </listitem>
+      <listitem>
+       <simpara>
+	Highlight the new key and in the right side pane, double click 
+	the "default value" and enter <literal>phpfile</literal>.
+       </simpara>
+      </listitem>
+      <listitem>
+       <simpara>
+	Repeat the last step for each extension you set up in the
+	previous section.
+       </simpara>
+      </listitem>
+      <listitem>
+       <simpara>
+	Now create another <literal>New->Key</literal> under
+	<literal>HKEY_CLASSES_ROOT</literal> and name it
+	<literal>phpfile</literal>. 
+       </simpara>
+      </listitem>
+      <listitem>
+       <simpara>
+	Highlight the new key <literal>phpfile</literal> and in the
+	right side pane, double click the "default value" and enter
+	<literal>PHP Script</literal>.
+       </simpara>
+      </listitem>
+      <listitem>
+       <simpara>
+	Right click on the <literal>phpfile</literal> key and select
+	<literal>New->Key</literal>, name it <literal>Shell</literal>.
+       </simpara>
+      </listitem>
+      <listitem>
+       <simpara>
+	Right click on the <literal>Shell</literal> key and select
+	<literal>New->Key</literal>, name it <literal>open</literal>.
+       </simpara>
+      </listitem>
+      <listitem>
+       <simpara>
+	Right click on the <literal>open</literal> key and select
+	<literal>New->Key</literal>, name it
+	<literal>command</literal>. 
+       </simpara>
+      </listitem>
+      <listitem>
+       <simpara>
+	Highlight the new key <literal>command</literal> and in the
+	right side pane, double click the "default value" and enter
+	the path to <literal>php.exe</literal>. ex:
+	<literal>c:\php3\php.exe -q %1</literal>. (don't forget the
+	<literal>%1</literal>). 
+       </simpara>
+      </listitem>
+      <listitem>
+       <simpara>
+	Exit Regedit.
+       </simpara>
+      </listitem>
+     </itemizedlist>
 
-    <simpara>
-     For other servers consult your server documentation.
-
-    <simpara>
-     PHP.INI File Under Windows, PHP will look for php3.ini
-     automaticaly, first under the windows os directory
-     (<filename>c:\windows</filename> or
-     <filename>c:\winnt</filename>) then in the directory in which the
-     PHP executable resides.  Alternately, you can set the environment
-     variable <envar>PHPRC=\pathto\php3.ini</envar>, though this does
-     not work with all servers (apache for one).
+     <simpara>
+      PWS and IIS 3 users now have a fully operational system. IIS 3
+      users can use a nifty <ulink
+      url="http://www.genusa.com/iis/iiscfg.html">tool</ulink> from
+      Steven Genusa to configure their script maps.
+     </simpara>
 
    </sect2>
+
+   <sect2>
+    <title>Windows NT and IIS 4</title>
+
+    <simpara>
+     To install PHP3 on an NT Server running IIS 4, follow these
+     instructions: 
+    </simpara>
+
+    <para>
+     <itemizedlist>
+      <listitem>
+       <simpara>
+	In Internet Service Manager (MMC), select the Web site or the
+	starting point directory of an application.
+       </simpara>
+      </listitem>
+      <listitem>
+       <simpara>
+	Open the directory's property sheets (by right clicking and
+	selecting properties), and then click the Home Directory,
+	Virtual Directory, or Directory tab.
+       </simpara>
+      </listitem>
+      <listitem>
+       <simpara>
+	Click the Configuration button, and then click the App
+	Mappings tab.
+       </simpara>
+      </listitem>
+      <listitem>
+       <simpara>
+	Click Add, and in the Executable box, type:
+	<literal>c:\path-to-php-dir\php.exe %s %s</literal>. You MUST
+	have the %s %s on the end, PHP will not function properly if
+	you fail to do this. 
+       </simpara>
+      </listitem>
+      <listitem>
+       <simpara>
+	In the Extension box, type the file name extension you want
+	associated with PHP scripts. (You must repeat step 5 and 6 for 
+	each extension you want accociated with PHP
+	scripts. (<literal>.php3</literal> and
+	<literal>.phtml</literal> are common)
+       </simpara>
+      </listitem>
+      <listitem>
+       <simpara>
+	Set up the appropriate security. (This is done in Internet
+	Service Manager), and if your NT Server uses NTFS file system, 
+	add execute rights for I_USR_ to the directory that contains
+	<literal>php.exe</literal>. 
+       </simpara>
+      </listitem>
+     </itemizedlist>
+    </para>
+
+   </sect2>
+
+   <sect2>
+    <title>Windows 9x/NT and Apache 1.3.x</title>
+    
+    <simpara>
+     You must edit your <literal>srm.conf</literal> or
+     <literal>httpd.conf</literal> to configure Apache to work with
+     the PHP CGI binary.
+    </simpara>
+    <simpara>
+     Although there can be a few variations of configuring PHP under
+     Apache, this one is simple enough to be used by the
+     newcomer. Please consult the Apache Docs for further
+     configuration directives.
+
+    <para>
+     <itemizedlist>
+      <listitem>
+       <simpara>
+	<literal>ScriptAlias /php3/
+	 "c:/path-to-php-dir/php.exe"</literal> 
+       </simpara>
+      </listitem>
+      <listitem>
+       <simpara>
+	<literal>AddType application/x-httpd-php3 .php3</literal>
+       </simpara>
+      </listitem>
+      <listitem>
+       <simpara>
+	<literal>AddType application/x-httpd-php3 .phtml</literal>
+       </simpara>
+      </listitem>
+      <listitem>
+       <simpara>
+	<literal>Action application/x-httpd-php3 "php3/php.exe"</literal>
+       </simpara>
+      </listitem>
+     </itemizedlist>
+    </para>
+
+    <simpara>
+     To use the source code highlighting feature, simply create a PHP
+     script file and stick this code in: <literal><?php show_source
+      ("original_php_script.php3"); ?></literal>. Substitute
+     <literal>original_php_script.php3</literal> with the name of the
+     file you wish to show the source of. (this is only one way of
+     doing it). <emphasis>Note:</emphasis> On Win-Apache all back
+     slashes in a path statement such as: "c:\directory\file.ext",
+     must be converted to forward slashes.
+    </simpara>
+
+   </sect2>
+
+   <sect2>
+    <title>Omni HTTPd 2.0b1 for Windows</title>
+    
+     <simpara>
+      This has got to be the easiest config there is:
+     </simpara>
+
+     <para>
+     <simplelist>
+      <member>Step 1: Install Omni server</member>
+      <member>Step 2: Right click on the blue OmniHTTPd icon in the
+       system tray and select <literal>Properties</literal></member>
+      <member>Step 3: Click on <literal>Web Server Global
+	Settings</literal></member> 
+      <member>Step 4: On the 'External' tab, enter: <literal>virtual = 
+      .php3 | actual = c:\path-to-php-dir\php.exe</literal></member>
+      <member>Step 5: On the <literal>Mime</literal> tab, enter:
+       <literal>virtual = wwwserver/stdcgi | actual =
+	.php3</literal></member> 
+      <member>Step 6: Click <literal>OK</literal></member>
+     </simplelist>
+
+     <simpara>
+      Repeat steps 2 - 6 for each extension you want to associate with
+      PHP.
+     </simpara>
+
+   </sect2>
+
+   <sect2>
+    <title>PHP Modules</title>
+
+     <para>
+     <table>
+      <title>PHP Modules</title>
+      <tgroup cols="2">
+       <tbody>
+	<row>
+	 <entry>php3_calendar.dll</entry>
+	 <entry>Calendar conversion functions</entry>
+	</row>
+	<row>
+	 <entry>php3_crypt.dll</entry>
+	 <entry>Crypt functions</entry>
+	</row>
+	<row>
+	 <entry>php3_dbase.dll</entry>
+	 <entry>DBase functions</entry>
+	</row>
+	<row>
+	 <entry>php3_dbm.dll</entry>
+	 <entry>GDBM emulation via Berkely DB2 library</entry>
+	</row>
+	<row>
+	 <entry>php3_filepro.dll</entry>
+	 <entry>READ ONLY access to filepro databases</entry>
+	</row>
+	<row>
+	 <entry>php3_gd.dll</entry>
+	 <entry>GD Library functions for gif manipulation</entry>
+	</row>
+	<row>
+	 <entry>php3_hyperwave.dll</entry>
+	 <entry>HyperWave functions</entry>
+	</row>
+	<row>
+	 <entry>php3_imap4r2.dll</entry>
+	 <entry>IMAP 4 functions</entry>
+	</row>
+	<row>
+	 <entry>php3_ldap.dll</entry>
+	 <entry>LDAP functions</entry>
+	</row>
+	<row>
+	 <entry>php3_msql1.dll</entry>
+	 <entry>mSQL 1 client</entry>
+	</row>
+	<row>
+	 <entry>php3_msql2.dll</entry>
+	 <entry>mSQL 2 client</entry>
+	</row>
+	<row>
+	 <entry>php3_mssql.dll</entry>
+	 <entry>MSSQL client (requires MSSQL DB-Libraries</entry>
+	</row>
+	<row>
+	 <entry>php3_mysql.dll</entry>
+	 <entry>MySQL functions</entry>
+	</row>
+	<row>
+	 <entry>php3_nsmail.dll</entry>
+	 <entry>Netscape mail functions</entry>
+	</row>
+	<row>
+	 <entry>php3_oci73.dll</entry>
+	 <entry>Oracle functions</entry>
+	</row>
+	<row>
+	 <entry>php3_snmp.dll</entry>
+	 <entry>SNMP get and walk functions (NT only!)</entry>
+	</row>
+	<row>
+	 <entry>php3_zlib.dll</entry>
+	 <entry>ZLib functions</entry>
+	</row>
+       </tbody>
+      </tgroup>
+     </table>
+     </para>
+
+   </sect2>
+
 
   </sect1>
 

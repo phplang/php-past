@@ -27,7 +27,7 @@
    +----------------------------------------------------------------------+
  */
  
-/* $Id: msql.c,v 1.97 1998/09/29 23:33:37 shane Exp $ */
+/* $Id: msql.c,v 1.100 1998/12/20 02:29:24 sas Exp $ */
 #ifdef THREAD_SAFE
 #include "tls.h"
 #endif
@@ -44,8 +44,6 @@
 #include "php3_msql.h"
 #include "functions/reg.h"
 #include "php3_string.h"
-
-
 
 #if HAVE_MSQL
 
@@ -105,6 +103,7 @@ function_entry msql_functions[] = {
 	{"msql_fieldtype",		php3_msql_field_type,		NULL},
 	{"msql_fieldflags",		php3_msql_field_flags,		NULL},
 	{"msql_regcase",		php3_sql_regcase,			NULL},
+	{"msql_affected_rows",	php3_msql_affected_rows,	NULL},
 	/* for downwards compatability */
 	{"msql",				php3_msql_db_query,			NULL},
 	{"msql_selectdb",		php3_msql_select_db,		NULL},
@@ -158,6 +157,42 @@ BOOL WINAPI DllMain(HANDLE hModule,
 #endif
 #endif
 
+typedef struct {
+	m_result *result;
+	int af_rows;
+} m_query;
+
+#define MSQL_GET_QUERY(res) \
+	convert_to_long((res)); \
+	msql_query = (m_query *) php3_list_find((res)->value.lval,&type); \
+	if (type!=MSQL_GLOBAL(php3_msql_module).le_query) { \
+		php3_error(E_WARNING,"%d is not a mSQL query index", \
+				res->value.lval); \
+		RETURN_FALSE; \
+	} \
+	msql_result = msql_query->result
+
+static void _delete_query(void *arg)
+{
+	m_query *query = (m_query *) arg;
+
+	if(query->result) msqlFreeResult(query->result);
+	efree(arg);
+}
+
+#define _new_query(a,b) \
+		__new_query(INTERNAL_FUNCTION_PARAM_PASSTHRU,a,b)
+
+static int __new_query(INTERNAL_FUNCTION_PARAMETERS, m_result *res, int af_rows)
+{
+	m_query *query = (m_query *) emalloc(sizeof(m_query));
+	
+	query->result = res;
+	query->af_rows = af_rows;
+	
+	return (php3_list_insert((void *) query, 
+			MSQL_GLOBAL(php3_msql_module).le_query));
+}
 
 static void _close_msql_link(int link)
 {
@@ -174,7 +209,6 @@ static void _close_msql_plink(int link)
 	MSQL_GLOBAL(php3_msql_module).num_persistent--;
 	MSQL_GLOBAL(php3_msql_module).num_links--;
 }
-
 
 DLEXPORT int php3_minit_msql(INIT_FUNC_ARGS)
 {
@@ -205,7 +239,7 @@ DLEXPORT int php3_minit_msql(INIT_FUNC_ARGS)
 		MSQL_GLOBAL(php3_msql_module).max_links=-1;
 	}
 	MSQL_GLOBAL(php3_msql_module).num_persistent=0;
-	MSQL_GLOBAL(php3_msql_module).le_result = register_list_destructors(msqlFreeResult,NULL);
+	MSQL_GLOBAL(php3_msql_module).le_query = register_list_destructors(_delete_query,NULL);
 	MSQL_GLOBAL(php3_msql_module).le_link = register_list_destructors(_close_msql_link,NULL);
 	MSQL_GLOBAL(php3_msql_module).le_plink = register_list_destructors(NULL,_close_msql_plink);
 	
@@ -239,6 +273,7 @@ DLEXPORT int php3_rinit_msql(INIT_FUNC_ARGS)
 	MSQL_TLS_VARS;
 	MSQL_GLOBAL(php3_msql_module).default_link=-1;
 	MSQL_GLOBAL(php3_msql_module).num_links = MSQL_GLOBAL(php3_msql_module).num_persistent;
+	msqlErrMsg[0]=0;
 	return SUCCESS;
 }
 
@@ -412,7 +447,6 @@ static void php3_msql_do_connect(INTERNAL_FUNCTION_PARAMETERS,int persistent)
 	MSQL_GLOBAL(php3_msql_module).default_link=return_value->value.lval;
 }
 
-
 static int php3_msql_get_default_link(INTERNAL_FUNCTION_PARAMETERS)
 {
 	MSQL_TLS_VARS;
@@ -426,17 +460,24 @@ static int php3_msql_get_default_link(INTERNAL_FUNCTION_PARAMETERS)
 	return MSQL_GLOBAL(php3_msql_module).default_link;
 }
 
-
+/* {{{ proto int msql_connect([string hostname[:port]] [, string username] [, string password])
+   Open a connection to an mSQL Server */
 DLEXPORT void php3_msql_connect(INTERNAL_FUNCTION_PARAMETERS)
 {
 	php3_msql_do_connect(INTERNAL_FUNCTION_PARAM_PASSTHRU,0);
 }
+/* }}} */
 
+/* {{{ proto int msql_pconnect([string hostname[:port]] [, string username] [, string password])
+   Open a persistent connection to an mSQL Server */
 DLEXPORT void php3_msql_pconnect(INTERNAL_FUNCTION_PARAMETERS)
 {
 	php3_msql_do_connect(INTERNAL_FUNCTION_PARAM_PASSTHRU,1);
 }
+/* }}} */
 
+/* {{{ proto int msql_close([int link_identifier])
+   Close an mSQL connection */
 DLEXPORT void php3_msql_close(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *msql_link;
@@ -469,8 +510,10 @@ DLEXPORT void php3_msql_close(INTERNAL_FUNCTION_PARAMETERS)
 	php3_list_delete(id);
 	RETURN_TRUE;
 }
-	
-			
+/* }}} */
+
+/* {{{ proto int msql_select_db(string database_name [, int link_identifier])
+   Select an mSQL database */
 DLEXPORT void php3_msql_select_db(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *db,*msql_link;
@@ -511,7 +554,10 @@ DLEXPORT void php3_msql_select_db(INTERNAL_FUNCTION_PARAMETERS)
 		RETURN_TRUE;
 	}
 }
+/* }}} */
 
+/* {{{ proto int msql_create_db(string database_name [, int link_identifier])
+   Create an mSQL database */
 DLEXPORT void php3_msql_create_db(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *db,*msql_link;
@@ -551,8 +597,10 @@ DLEXPORT void php3_msql_create_db(INTERNAL_FUNCTION_PARAMETERS)
 		RETURN_TRUE;
 	}
 }
+/* }}} */
 
-
+/* {{{ proto int msql_drop_db(string database_name [, int link_identifier])
+   Drop (delete) an mSQL database */
 DLEXPORT void php3_msql_drop_db(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *db,*msql_link;
@@ -592,14 +640,16 @@ DLEXPORT void php3_msql_drop_db(INTERNAL_FUNCTION_PARAMETERS)
 		RETURN_TRUE;
 	}
 }
+/* }}} */
 
-
+/* {{{ proto int msql_query(string query [, int link_identifier])
+   Send an SQL query to mSQL */
 DLEXPORT void php3_msql_query(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *query,*msql_link;
 	int id,type;
 	int msql;
-	m_result *msql_result;
+	int af_rows;
 	MSQL_TLS_VARS;
 	
 	switch(ARG_COUNT(ht)) {
@@ -628,27 +678,21 @@ DLEXPORT void php3_msql_query(INTERNAL_FUNCTION_PARAMETERS)
 	}
 	
 	convert_to_string(query);
-	if (msqlQuery(msql,query->value.str.val)==-1) {
+	if ((af_rows = msqlQuery(msql,query->value.str.val))==-1) {
 		RETURN_FALSE;
 	}
-	if ((msql_result=msqlStoreResult())==NULL) {
-		/*
-		php3_error(E_WARNING,"Unable to save mSQL query result");
-		RETURN_FALSE;
-		*/
-		RETURN_TRUE;
-	}
-	return_value->value.lval = php3_list_insert(msql_result,MSQL_GLOBAL(php3_msql_module).le_result);
-	return_value->type = IS_LONG;
+	RETVAL_LONG(_new_query(msqlStoreResult(), af_rows));
 }
+/* }}} */
 
-
+/* {{{ proto int msql_db_query(string database_name, string query [, int link_identifier])
+   Send an SQL query to mSQL */
 DLEXPORT void php3_msql_db_query(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *db,*query,*msql_link;
 	int id,type;
 	int msql;
-	m_result *msql_result;
+	int af_rows;
 	MSQL_TLS_VARS;
 	
 	switch(ARG_COUNT(ht)) {
@@ -682,21 +726,15 @@ DLEXPORT void php3_msql_db_query(INTERNAL_FUNCTION_PARAMETERS)
 	}
 	
 	convert_to_string(query);
-	if (msqlQuery(msql,query->value.str.val)==-1) {
+	if ((af_rows = msqlQuery(msql,query->value.str.val))==-1) {
 		RETURN_FALSE;
 	}
-	if ((msql_result=msqlStoreResult())==NULL) {
-		/*
-		php3_error(E_WARNING,"Unable to save mSQL query result");
-		RETURN_FALSE;
-		*/
-		RETURN_TRUE;
-	}
-	return_value->value.lval = php3_list_insert(msql_result,MSQL_GLOBAL(php3_msql_module).le_result);
-	return_value->type = IS_LONG;
+	RETVAL_LONG(_new_query(msqlStoreResult(), af_rows));
 }
+/* }}} */
 
-
+/* {{{ proto int msql_list_dbs([int link_identifier])
+   List databases available on an mSQL server */
 DLEXPORT void php3_msql_list_dbs(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *msql_link;
@@ -730,11 +768,12 @@ DLEXPORT void php3_msql_list_dbs(INTERNAL_FUNCTION_PARAMETERS)
 		php3_error(E_WARNING,"Unable to save mSQL query result");
 		RETURN_FALSE;
 	}
-	return_value->value.lval = php3_list_insert(msql_result,MSQL_GLOBAL(php3_msql_module).le_result);
-	return_value->type = IS_LONG;
+	RETVAL_LONG(_new_query(msql_result, 0));
 }
+/* }}} */
 
-
+/* {{{ proto int msql_list_tables(string database_name [, int link_identifier])
+   List tables in an mSQL database */
 DLEXPORT void php3_msql_list_tables(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *db,*msql_link;
@@ -776,11 +815,12 @@ DLEXPORT void php3_msql_list_tables(INTERNAL_FUNCTION_PARAMETERS)
 		php3_error(E_WARNING,"Unable to save mSQL query result");
 		RETURN_FALSE;
 	}
-	return_value->value.lval = php3_list_insert(msql_result,MSQL_GLOBAL(php3_msql_module).le_result);
-	return_value->type = IS_LONG;
+	RETVAL_LONG(_new_query(msql_result, 0));
 }
+/* }}} */
 
-
+/* {{{ proto int msql_list_fields(string database_name, string table_name [, int link_identifier])
+   List mSQL result fields */
 DLEXPORT void php3_msql_list_fields(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *db,*table,*msql_link;
@@ -823,11 +863,12 @@ DLEXPORT void php3_msql_list_fields(INTERNAL_FUNCTION_PARAMETERS)
 		php3_error(E_WARNING,"Unable to save mSQL query result");
 		RETURN_FALSE;
 	}
-	return_value->value.lval = php3_list_insert(msql_result,MSQL_GLOBAL(php3_msql_module).le_result);
-	return_value->type = IS_LONG;
+	RETVAL_LONG(_new_query(msql_result, 0));
 }
+/* }}} */
 
-
+/* {{{ proto string msql_error([int link_identifier])
+   Returns the text of the error message from previous mSQL operation */
 void php3_msql_error(INTERNAL_FUNCTION_PARAMETERS)
 {
 	if (ARG_COUNT(ht)) {
@@ -835,16 +876,18 @@ void php3_msql_error(INTERNAL_FUNCTION_PARAMETERS)
 	}
 	RETURN_STRING(msqlErrMsg,1);
 }
+/* }}} */
 
-
+/* {{{ proto int msql_result(int query, int row [, mixed field])
+   Get result data */
 DLEXPORT void php3_msql_result(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *result, *row, *field=NULL;
 	m_result *msql_result;
+	m_query *msql_query;
 	m_row sql_row;
 	int type,field_offset=0;
 	MSQL_TLS_VARS;
-	
 	
 	switch (ARG_COUNT(ht)) {
 		case 2:
@@ -862,17 +905,11 @@ DLEXPORT void php3_msql_result(INTERNAL_FUNCTION_PARAMETERS)
 			break;
 	}
 	
-	convert_to_long(result);
-	msql_result = (m_result *) php3_list_find(result->value.lval,&type);
-	
-	if (type!=MSQL_GLOBAL(php3_msql_module).le_result) {
-		php3_error(E_WARNING,"%d is not a mSQL result index",result->value.lval);
-		RETURN_FALSE;
-	}
+	MSQL_GET_QUERY(result);
 	
 	convert_to_long(row);
 	if (row->value.lval<0 || row->value.lval>=msqlNumRows(msql_result)) {
-		php3_error(E_WARNING,"Unable to jump to row %d on mSQL result index %d",row->value.lval,result->value.lval);
+		php3_error(E_WARNING,"Unable to jump to row %d on mSQL query index %d",row->value.lval,result->value.lval);
 		RETURN_FALSE;
 	}
 	msqlDataSeek(msql_result,row->value.lval);
@@ -904,7 +941,7 @@ DLEXPORT void php3_msql_result(INTERNAL_FUNCTION_PARAMETERS)
 						i++;
 					}
 					if (!tmp_field) { /* no match found */
-						php3_error(E_WARNING,"%s%s%s not found in mSQL result index %d",
+						php3_error(E_WARNING,"%s%s%s not found in mSQL query index %d",
 									(table_name?table_name:""), (table_name?".":""), field_name, result->value.lval);
 						efree(field_name);
 						if (table_name) {
@@ -942,12 +979,15 @@ DLEXPORT void php3_msql_result(INTERNAL_FUNCTION_PARAMETERS)
 	
 	return_value->type = IS_STRING;
 }
+/* }}} */
 
-
+/* {{{ proto int msql_num_rows(int query)
+   Get number of rows in a result */
 DLEXPORT void php3_msql_num_rows(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *result;
 	m_result *msql_result;
+	m_query *msql_query;
 	int type;
 	MSQL_TLS_VARS;
 	
@@ -955,23 +995,18 @@ DLEXPORT void php3_msql_num_rows(INTERNAL_FUNCTION_PARAMETERS)
 		WRONG_PARAM_COUNT;
 	}
 	
-	convert_to_long(result);
-	msql_result = (m_result *) php3_list_find(result->value.lval,&type);
-	
-	if (type!=MSQL_GLOBAL(php3_msql_module).le_result) {
-		php3_error(E_WARNING,"%d is not a mSQL result index",result->value.lval);
-		RETURN_FALSE;
-	}
-	
-	return_value->value.lval = msqlNumRows(msql_result);
-	return_value->type = IS_LONG;
+	MSQL_GET_QUERY(result);
+	RETVAL_LONG(msql_result ? msqlNumRows(msql_result) : 0);
 }
+/* }}} */
 
-
+/* {{{ proto int msql_num_fields(int query)
+   Get number of fields in a result */
 DLEXPORT void php3_msql_num_fields(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *result;
 	m_result *msql_result;
+	m_query *msql_query;
 	int type;
 	MSQL_TLS_VARS;
 	
@@ -979,24 +1014,19 @@ DLEXPORT void php3_msql_num_fields(INTERNAL_FUNCTION_PARAMETERS)
 		WRONG_PARAM_COUNT;
 	}
 	
-	convert_to_long(result);
-	msql_result = (m_result *) php3_list_find(result->value.lval,&type);
-	
-	if (type!=MSQL_GLOBAL(php3_msql_module).le_result) {
-		php3_error(E_WARNING,"%d is not a mSQL result index",result->value.lval);
-		RETURN_FALSE;
-	}
-	
-	return_value->value.lval = msqlNumFields(msql_result);
-	return_value->type = IS_LONG;
+	MSQL_GET_QUERY(result);
+	RETVAL_LONG(msql_result ? msqlNumFields(msql_result) : 0);
 }
+/* }}} */
 
-
+/* {{{ proto array msql_fetch_row(int query)
+   Get a result row as an enumerated array */
 DLEXPORT void php3_msql_fetch_row(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *result;
 	m_result *msql_result;
 	m_row msql_row;
+	m_query *msql_query;
 	int type;
 	int num_fields;
 	int i;
@@ -1006,17 +1036,10 @@ DLEXPORT void php3_msql_fetch_row(INTERNAL_FUNCTION_PARAMETERS)
 		WRONG_PARAM_COUNT;
 	}
 	
-	convert_to_long(result);
-	msql_result = (m_result *) php3_list_find(result->value.lval,&type);
-	
-	if (type!=MSQL_GLOBAL(php3_msql_module).le_result) {
-		php3_error(E_WARNING,"%d is not a mSQL result index",result->value.lval);
-		RETURN_FALSE;
-	}
-	if ((msql_row=msqlFetchRow(msql_result))==NULL) {
-		RETURN_FALSE;
-	}
-	if (array_init(return_value)==FAILURE) {
+	MSQL_GET_QUERY(result);
+	if (!msql_result ||
+			((msql_row = msqlFetchRow(msql_result)) == NULL) ||
+			(array_init(return_value)==FAILURE)) {
 		RETURN_FALSE;
 	}
 	num_fields = msqlNumFields(msql_result);
@@ -1029,7 +1052,7 @@ DLEXPORT void php3_msql_fetch_row(INTERNAL_FUNCTION_PARAMETERS)
 		}
 	}
 }
-
+/* }}} */
 
 static void php3_msql_fetch_hash(INTERNAL_FUNCTION_PARAMETERS)
 {
@@ -1037,6 +1060,7 @@ static void php3_msql_fetch_hash(INTERNAL_FUNCTION_PARAMETERS)
 	m_result *msql_result;
 	m_row msql_row;
 	m_field *msql_field;
+	m_query *msql_query;
 	int type;
 	int num_fields;
 	int i;
@@ -1047,14 +1071,8 @@ static void php3_msql_fetch_hash(INTERNAL_FUNCTION_PARAMETERS)
 		WRONG_PARAM_COUNT;
 	}
 	
-	convert_to_long(result);
-	msql_result = (m_result *) php3_list_find(result->value.lval,&type);
-	
-	if (type!=MSQL_GLOBAL(php3_msql_module).le_result) {
-		php3_error(E_WARNING,"%d is not a mSQL result index",result->value.lval);
-		RETURN_FALSE;
-	}
-	if ((msql_row=msqlFetchRow(msql_result))==NULL) {
+	MSQL_GET_QUERY(result);
+	if (!msql_result || (msql_row=msqlFetchRow(msql_result))==NULL) {
 		RETURN_FALSE;
 	}
 
@@ -1079,7 +1097,8 @@ static void php3_msql_fetch_hash(INTERNAL_FUNCTION_PARAMETERS)
 	}
 }
 
-
+/* {{{ proto object msql_fetch_object(int query)
+   Fetch a result row as an object */
 DLEXPORT void php3_msql_fetch_object(INTERNAL_FUNCTION_PARAMETERS)
 {
 	php3_msql_fetch_hash(INTERNAL_FUNCTION_PARAM_PASSTHRU);
@@ -1087,18 +1106,23 @@ DLEXPORT void php3_msql_fetch_object(INTERNAL_FUNCTION_PARAMETERS)
 		return_value->type=IS_OBJECT;
 	}
 }
+/* }}} */
 
-
+/* {{{ proto array msql_fetch_array(int query)
+   Fetch a result row as an associative array */
 DLEXPORT void php3_msql_fetch_array(INTERNAL_FUNCTION_PARAMETERS)
 {
 	php3_msql_fetch_hash(INTERNAL_FUNCTION_PARAM_PASSTHRU);
 }
+/* }}} */
 
-
+/* {{{ proto int msql_data_seek(int query, int row_number)
+   Move internal result pointer */
 DLEXPORT void php3_msql_data_seek(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *result,*offset;
 	m_result *msql_result;
+	m_query *msql_query;
 	int type;
 	MSQL_TLS_VARS;
 	
@@ -1106,22 +1130,18 @@ DLEXPORT void php3_msql_data_seek(INTERNAL_FUNCTION_PARAMETERS)
 		WRONG_PARAM_COUNT;
 	}
 	
-	convert_to_long(result);
-	msql_result = (m_result *) php3_list_find(result->value.lval,&type);
-	
-	if (type!=MSQL_GLOBAL(php3_msql_module).le_result) {
-		php3_error(E_WARNING,"%d is not a mSQL result index",result->value.lval);
-		RETURN_FALSE;
-	}
+	MSQL_GET_QUERY(result);
 	convert_to_long(offset);
-	if (offset->value.lval<0 || offset->value.lval>=msqlNumRows(msql_result)) {
-		php3_error(E_WARNING,"Offset %d is invalid for mSQL result index %d",offset->value.lval,result->value.lval);
+	if (!msql_result ||
+			offset->value.lval<0 || 
+			offset->value.lval>=msqlNumRows(msql_result)) {
+		php3_error(E_WARNING,"Offset %d is invalid for mSQL query index %d",offset->value.lval,result->value.lval);
 		RETURN_FALSE;
 	}
 	msqlDataSeek(msql_result,offset->value.lval);
 	RETURN_TRUE;
 }
-
+/* }}} */
 
 static char *php3_msql_get_field_name(int field_type)
 {
@@ -1161,12 +1181,14 @@ static char *php3_msql_get_field_name(int field_type)
 	}
 }
 
-
+/* {{{ proto object msql_fetch_field(int query [, int field_offset])
+   Get column information from a result and return as an object */
 DLEXPORT void php3_msql_fetch_field(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *result, *field=NULL;
 	m_result *msql_result;
 	m_field *msql_field;
+	m_query *msql_query;
 	int type;
 	MSQL_TLS_VARS;
 	
@@ -1185,13 +1207,7 @@ DLEXPORT void php3_msql_fetch_field(INTERNAL_FUNCTION_PARAMETERS)
 			WRONG_PARAM_COUNT;
 	}
 	
-	convert_to_long(result);
-	msql_result = (m_result *) php3_list_find(result->value.lval,&type);
-	
-	if (type!=MSQL_GLOBAL(php3_msql_module).le_result) {
-		php3_error(E_WARNING,"%d is not a mSQL result index",result->value.lval);
-		RETURN_FALSE;
-	}
+	MSQL_GET_QUERY(result);
 	
 	if (field) {
 		if (field->value.lval<0 || field->value.lval>=msqlNumRows(msql_result)) {
@@ -1200,7 +1216,7 @@ DLEXPORT void php3_msql_fetch_field(INTERNAL_FUNCTION_PARAMETERS)
 		}
 		msqlFieldSeek(msql_result,field->value.lval);
 	}
-	if ((msql_field=msqlFetchField(msql_result))==NULL) {
+	if (!msql_result || (msql_field=msqlFetchField(msql_result))==NULL) {
 		RETURN_FALSE;
 	}
 	if (object_init(return_value)==FAILURE) {
@@ -1218,11 +1234,15 @@ DLEXPORT void php3_msql_fetch_field(INTERNAL_FUNCTION_PARAMETERS)
 
 	add_property_string(return_value, "type",php3_msql_get_field_name(msql_field->type), 1);
 }
+/* }}} */
 
+/* {{{ proto int msql_field_seek(int query, int field_offset)
+   Set result pointer to a specific field offset */
 DLEXPORT void php3_msql_field_seek(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *result, *offset;
 	m_result *msql_result;
+	m_query *msql_query;
 	int type;
 	MSQL_TLS_VARS;
 	
@@ -1230,22 +1250,20 @@ DLEXPORT void php3_msql_field_seek(INTERNAL_FUNCTION_PARAMETERS)
 		WRONG_PARAM_COUNT;
 	}
 	
-	convert_to_long(result);
-	msql_result = (m_result *) php3_list_find(result->value.lval,&type);
-	
-	if (type!=MSQL_GLOBAL(php3_msql_module).le_result) {
-		php3_error(E_WARNING,"%d is not a mSQL result index",result->value.lval);
+	MSQL_GET_QUERY(result);
+	convert_to_long(offset);
+	if(!msql_result) {
 		RETURN_FALSE;
 	}
-	convert_to_long(offset);
 	if (offset->value.lval<0 || offset->value.lval>=msqlNumFields(msql_result)) {
-		php3_error(E_WARNING,"Field %d is invalid for mSQL result index %d",offset->value.lval,result->value.lval);
+		php3_error(E_WARNING,"Field %d is invalid for mSQL query index %d",
+				offset->value.lval,result->value.lval);
 		RETURN_FALSE;
 	}
 	msqlFieldSeek(msql_result,offset->value.lval);
 	RETURN_TRUE;
 }
-
+/* }}} */
 
 #define PHP3_MSQL_FIELD_NAME 1
 #define PHP3_MSQL_FIELD_TABLE 2
@@ -1258,6 +1276,7 @@ static void php3_msql_field_info(INTERNAL_FUNCTION_PARAMETERS, int entry_type)
 	pval *result, *field;
 	m_result *msql_result;
 	m_field *msql_field;
+	m_query *msql_query;
 	int type;
 	MSQL_TLS_VARS;
 	
@@ -1265,17 +1284,13 @@ static void php3_msql_field_info(INTERNAL_FUNCTION_PARAMETERS, int entry_type)
 		WRONG_PARAM_COUNT;
 	}
 	
-	convert_to_long(result);
-	msql_result = (m_result *) php3_list_find(result->value.lval,&type);
-	
-	if (type!=MSQL_GLOBAL(php3_msql_module).le_result) {
-		php3_error(E_WARNING,"%d is not a mSQL result index",result->value.lval);
+	MSQL_GET_QUERY(result);
+	if(!msql_result) {
 		RETURN_FALSE;
 	}
-	
 	convert_to_long(field);
 	if (field->value.lval<0 || field->value.lval>=msqlNumFields(msql_result)) {
-		php3_error(E_WARNING,"Field %d is invalid for mSQL result index %d",field->value.lval,result->value.lval);
+		php3_error(E_WARNING,"Field %d is invalid for mSQL query index %d",field->value.lval,result->value.lval);
 		RETURN_FALSE;
 	}
 	msqlFieldSeek(msql_result,field->value.lval);
@@ -1343,57 +1358,84 @@ static void php3_msql_field_info(INTERNAL_FUNCTION_PARAMETERS, int entry_type)
 	}
 }
 
-
+/* {{{ proto string msql_field_name(int query, int field_index)
+   Get the name of the specified field in a result */
 DLEXPORT void php3_msql_field_name(INTERNAL_FUNCTION_PARAMETERS)
 {
 	php3_msql_field_info(INTERNAL_FUNCTION_PARAM_PASSTHRU,PHP3_MSQL_FIELD_NAME);
 }
+/* }}} */
 
+/* {{{ proto string msql_field_table(int query, int field_offset)
+   Get name of the table the specified field is in */
 DLEXPORT void php3_msql_field_table(INTERNAL_FUNCTION_PARAMETERS)
 {
 	php3_msql_field_info(INTERNAL_FUNCTION_PARAM_PASSTHRU,PHP3_MSQL_FIELD_TABLE);
 }
+/* }}} */
 
+/* {{{ proto int msql_field_len(int query, int field_offet)
+   Returns the length of the specified field */
 DLEXPORT void php3_msql_field_len(INTERNAL_FUNCTION_PARAMETERS)
 {
 	php3_msql_field_info(INTERNAL_FUNCTION_PARAM_PASSTHRU,PHP3_MSQL_FIELD_LEN);
 }
+/* }}} */
 
+/* {{{ proto string msql_field_type(int query, int field_offset)
+   Get the type of the specified field in a result */
 DLEXPORT void php3_msql_field_type(INTERNAL_FUNCTION_PARAMETERS)
 {
 	php3_msql_field_info(INTERNAL_FUNCTION_PARAM_PASSTHRU,PHP3_MSQL_FIELD_TYPE);
 }
+/* }}} */
 
+/* {{{ proto string msql_field_flags(int query, int field_offset)
+   Get the flags associated with the specified field in a result */
 DLEXPORT void php3_msql_field_flags(INTERNAL_FUNCTION_PARAMETERS)
 {
 	php3_msql_field_info(INTERNAL_FUNCTION_PARAM_PASSTHRU,PHP3_MSQL_FIELD_FLAGS);
 }
+/* }}} */
 
 
+/* {{{ proto int msql_free_result(int query)
+   Free result memory */
 DLEXPORT void php3_msql_free_result(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *result;
 	m_result *msql_result;
+	m_query *msql_query;
 	int type;
 	MSQL_TLS_VARS;
 	
 	if (ARG_COUNT(ht)!=1 || getParameters(ht, 1, &result)==FAILURE) {
 		WRONG_PARAM_COUNT;
 	}
-	
-	convert_to_long(result);
-	if (result->value.lval==0) {
-		RETURN_FALSE;
-	}
-	msql_result = (m_result *) php3_list_find(result->value.lval,&type);
-	
-	if (type!=MSQL_GLOBAL(php3_msql_module).le_result) {
-		php3_error(E_WARNING,"%d is not a mSQL result index",result->value.lval);
-		RETURN_FALSE;
-	}
+
+	MSQL_GET_QUERY(result);
 	php3_list_delete(result->value.lval);
 	RETURN_TRUE;
 }
+/* }}} */
+
+/* {{{ proto int msql_affected_rows(int query)
+   Return number of affected rows */
+DLEXPORT void php3_msql_affected_rows(INTERNAL_FUNCTION_PARAMETERS) 
+{
+	pval *result;
+	m_result *msql_result;
+	m_query *msql_query;
+	int type;
+	MSQL_TLS_VARS;
+
+	if(ARG_COUNT(ht) != 1 || getParameters(ht, 1, &result) == FAILURE) {
+		WRONG_PARAM_COUNT;
+	}
+	MSQL_GET_QUERY(result);
+	RETVAL_LONG(msql_query->af_rows);
+}
+/* }}} */
 
 #endif
 

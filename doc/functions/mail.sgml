@@ -15,7 +15,7 @@
    <refsect1>
     <title>Description</title>
     <funcsynopsis>
-     <funcdef>void <function>mail</function></funcdef>
+     <funcdef>bool <function>mail</function></funcdef>
      <paramdef>string <parameter>to</parameter></paramdef>
      <paramdef>string <parameter>subject</parameter></paramdef>
      <paramdef>string <parameter>message</parameter></paramdef>
@@ -41,7 +41,8 @@ mail("rasmus@lerdorf.on.ca", "My Subject", "Line 1\nLine 2\nLine 3");
      <example>
       <title>Sending mail with extra headers.</title>
       <programlisting>
-mail("ssb@guardian.no", "the subject", $message, "X-Mailer: PHP/" . phpversion());
+mail("ssb@guardian.no", "the subject", $message,
+     "From: webmaster@$SERVER_NAME\nReply-To: webmaster@$SERVER_NAME\nX-Mailer: PHP/" . phpversion());
       </programlisting>
      </example>
    </refsect1>

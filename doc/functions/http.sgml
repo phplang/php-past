@@ -95,7 +95,7 @@ SetCookie("TestCookie",$value,time()+3600,"/~rasmus/",".utoronto.ca",1);
      Note that the value portion of the cookie will automatically be
      urlencoded when you send the cookie, and when it is received, it
      is automatically decoded and assigned to a variable by the same
-     name as the cookie name.  ie. to see the contents of our test
+     name as the cookie name.  To see the contents of our test
      cookie in a script, simply do:
 <informalexample><programlisting role=php>
 echo $TestCookie;
@@ -103,6 +103,10 @@ echo $TestCookie;
     <para>
      For more information on cookies, see Netscape's cookie
      specification at <ulink url="&spec.cookies;">&spec.cookies;</ulink>.
+	<simpara>
+	 Microsoft Internet Explorer 4 with Service Pack 1 applied does
+	 not correctly deal with cookies that have their path parameter
+	 set.
    </refsect1>
   </refentry>
 

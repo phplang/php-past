@@ -40,6 +40,8 @@
 
 #include "md5.h"
 
+/* {{{ proto string md5(string str)
+   Calculate the md5 hash of a string */
 void php3_md5(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *arg;
@@ -65,6 +67,7 @@ void php3_md5(INTERNAL_FUNCTION_PARAMETERS)
 	*r = '\0';
 	RETVAL_STRING(md5str,1);
 }
+/* }}} */
 
 /*
  * The remaining code is the reference MD5 code (md5c.c) from rfc1321

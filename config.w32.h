@@ -201,7 +201,9 @@
 #define HAVE_SETLOCALE 1
 
 /* Define if you have the setvbuf function.  */
+#ifndef HAVE_BINDLIB
 #define HAVE_SETVBUF 1
+#endif
 
 /* Define if you have the snprintf function.  */
 #define HAVE_SNPRINTF 1

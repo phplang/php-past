@@ -20,7 +20,7 @@ INTRODUCTION
     Norman Walsh's modular DocBook stylesheets. See:
     
         http://www.jclark.com/jade/
-        http://www.berkshire.net/~norm/docbook/dsssl/
+        http://nwalsh.com/docbook/dsssl/
     
     There is a DTD reference for DocBook at
     
@@ -60,6 +60,7 @@ FUNCTION REFERENCE FILE IN functions/:
 
  <reference>
   <title></title>
+  <titleabbrev></titleabbrev>
 
  </reference>
 <!-- Keep this comment at the end of the file

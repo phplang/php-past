@@ -157,6 +157,10 @@
 /* Define if your Apache has src/include/ap_compat.h */
 #define HAVE_AP_COMPAT_H 0
 
+#ifndef HAVE_EMPRESS
+#define HAVE_EMPRESS 0
+#endif
+
 #define HAVE_SYBASE 0
 #define HAVE_SYBASE_CT 0
 
@@ -186,6 +190,10 @@
 #define IFX_VERSION 0
 #endif
 
+#ifndef HAVE_IBASE
+#define HAVE_IBASE 0
+#endif
+
 #ifndef HAVE_PQCMDTUPLES
 #define HAVE_PQCMDTUPLES 0
 #endif
@@ -204,6 +212,9 @@
 /* Define if you want to enable the PHP TCP/IP debugger (experimental) */
 #define PHP_DEBUGGER 0
 
+/* Define if you want to enable PHP RPC (experimental) */
+#define PHP_RPC 0
+
 /* Define if you want to enable bc style precision math support */
 #define WITH_BCMATH 0
 
@@ -221,8 +232,33 @@
  */
 #define PHP3_URL_FOPEN 0
 
+/* Define if you want System V semaphore support.
+ */
+#define HAVE_SYSVSEM 0
+
+/* Define if you have union semun.
+ */
+#define HAVE_SEMUN 0
+
+/* Define if you want System V shared memory support.
+ */
+#define HAVE_SYSVSHM 0
+
+
 /* Define if you have broken header files like SunOS 4 */
 #define MISSING_FCLOSE_DECL 0
 
 /* Define if you have broken sprintf function like SunOS 4 */
 #define BROKEN_SPRINTF 0
+
+/* Define if you have the expat (XML Parser Toolkit) library */
+#define HAVE_LIBEXPAT 0
+
+/* Define if you have the pdflib library */
+#define HAVE_PDFLIB 0
+
+/* Define if you have the fdftk library */
+#define HAVE_FDFLIB 0
+
+/* Define to compile with mod_dav support */
+#define HAVE_MOD_DAV 0

@@ -182,8 +182,8 @@
 
     <para>
      Gzopen can be used to read a file which is not in gzip format; in
-     this case gzread will directly read from the file without
-     decompression.
+     this case <function>gzread</function> will directly read from the
+     file without decompression.
 
     <para>
      Gzopen returns a file pointer to the file opened, after that,
@@ -394,6 +394,11 @@ gzclose( $zd );
     </funcsynopsis>
     <para> Reads a file, decompresses it and writes it to standard
     output.
+
+    <para>
+     Readgzfile() can be used to read a file which is not in gzip
+     format; in this case readgzfile() will directly read from the
+     file without decompression.
 
     <para> Returns the number of (uncompressed) bytes read from the
      file. If an error occurs, false is returned and unless the

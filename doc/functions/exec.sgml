@@ -43,7 +43,7 @@ system(EscapeShellCmd($cmd))
     </funcsynopsis>
 
     <para>
-    Exec executes the given <parameter>command</parameter>, however it does not
+    <function>exec</function> executes the given <parameter>command</parameter>, however it does not
     output anything.  It simply returns the last line from the result of the command.
     If you need to execute a command and have all the data from the command passed
     directly back without any interference, use the <function>PassThru</function>

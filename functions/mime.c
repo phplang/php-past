@@ -26,7 +26,7 @@
    | Authors: Rasmus Lerdorf <rasmus@lerdorf.on.ca>                       |
    +----------------------------------------------------------------------+
  */
-/* $Id: mime.c,v 1.54 1998/08/25 19:56:38 rasmus Exp $ */
+/* $Id: mime.c,v 1.55 1998/10/09 04:39:41 zeev Exp $ */
 #ifdef THREAD_SAFE
 #include "tls.h"
 #endif
@@ -97,7 +97,13 @@ void php3_mime_split(char *buf, int cnt, char *boundary, pval *http_post_vars)
 						php3_error(E_WARNING, "File Upload Mime headers garbled [%c%c%c%c%c]", *name, *(name + 1), *(name + 2), *(name + 3), *(name + 4));
 						SAFE_RETURN;
 					}
+					if (namebuf) {
+						efree(namebuf);
+					}
 					namebuf = estrndup(name, s-name);
+					if (lbuf) {
+						efree(lbuf);
+					}
 					lbuf = emalloc(s-name + MAX(MAX(sizeof("_name"),sizeof("_size")),sizeof("_type")));
 					state = 2;
 					loc2 = memchr(loc + 1, '\n', rem);
@@ -114,6 +120,9 @@ void php3_mime_split(char *buf, int cnt, char *boundary, pval *http_post_vars)
 					if (!s) {
 						php3_error(E_WARNING, "File Upload Mime headers garbled [%c%c%c%c%c]", *filename, *(filename + 1), *(filename + 2), *(filename + 3), *(filename + 4));
 						SAFE_RETURN;
+					}
+					if (filenamebuf) {
+						efree(filenamebuf);
 					}
 					filenamebuf = estrndup(filename, s-filename);
 					sprintf(lbuf, "%s_name", namebuf);

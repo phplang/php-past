@@ -26,7 +26,7 @@
    | Author: Jim Winstead (jimw@php.net)                                  |
    +----------------------------------------------------------------------+
  */
-/* $Id: base64.c,v 1.22 1998/06/01 07:07:02 rasmus Exp $ */
+/* $Id: base64.c,v 1.27 1998/12/21 05:24:19 sas Exp $ */
 
 #ifdef THREAD_SAFE
 #include "tls.h"
@@ -85,7 +85,7 @@ unsigned char *_php3_base64_encode(const unsigned char *string, int length, int 
 /* as above, but backwards. :) */
 unsigned char *_php3_base64_decode(const unsigned char *string, int length, int *ret_length) {
 	const unsigned char *current = string;
-	int ch, i = 0, j = 0;
+	int ch, i = 0, j = 0, k;
 
 	unsigned char *result = (unsigned char *)emalloc((length / 4 * 3 + 1) * sizeof(char));
 	if (result == NULL) {
@@ -121,6 +121,7 @@ unsigned char *_php3_base64_decode(const unsigned char *string, int length, int 
 		i++;
 	}
 
+	k = j;
 	/* mop things up if we ended on a boundary */
 	if (ch == base64_pad) {
 		switch(i % 4) {
@@ -129,18 +130,20 @@ unsigned char *_php3_base64_decode(const unsigned char *string, int length, int 
 			efree(result);
 			return NULL;
 		case 2:
-			j++;
+			k++;
 		case 3:
-			result[j++] = 0;
+			result[k++] = 0;
 		}
 	}
 	if(ret_length) {
 		*ret_length = j;
 	}
-	result[j] = '\0';
+	result[k] = '\0';
 	return result;
 }
 
+/* {{{ proto string base64_encode(string str)
+   Encodes string using MIME base64 algorithm */
 void php3_base64_encode(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *string;
 	unsigned char *result;
@@ -160,7 +163,11 @@ void php3_base64_encode(INTERNAL_FUNCTION_PARAMETERS) {
 		RETURN_FALSE;
 	}
 }
+/* }}} */
 
+
+/* {{{ proto string base64_decode(string str)
+   Decodes string using MIME base64 algorithm */
 void php3_base64_decode(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *string;
 	unsigned char *result;
@@ -180,6 +187,7 @@ void php3_base64_decode(INTERNAL_FUNCTION_PARAMETERS) {
 		RETURN_FALSE;
 	}
 }
+/* }}} */
 
 
 /*

@@ -4,9 +4,9 @@
 
   <partintro>
   <simpara>
-	These SNMP functions are only available through the optional SNMP dynamically
-    loadable PHP extension.  You can find this extension in the dl/ directory in
-	the PHP3 distribution.
+	In order to use the SNMP functions on Unix you need to install the ucd-snmp package.
+    There is a link to the current version in the PHP FAQ.  On Windows these functions are
+	only available on NT and not on Win95/98.
   </partintro>
   <refentry id="function.snmpget">
    <refnamediv>
@@ -45,8 +45,8 @@
    <refsect1>
     <title>Description</title>
     <funcsynopsis>
-     <funcdef>int <function>snmpwalk</function></funcdef>
-     <paramdef>int <parameter>hostname</parameter></paramdef>
+     <funcdef>array <function>snmpwalk</function></funcdef>
+     <paramdef>string <parameter>hostname</parameter></paramdef>
      <paramdef>string <parameter>community</parameter></paramdef>
      <paramdef>string <parameter>object_id</parameter></paramdef>
     </funcsynopsis>

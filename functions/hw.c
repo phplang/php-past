@@ -23,7 +23,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: hw.c,v 1.12 1998/10/03 19:10:14 shane Exp $ */
+/* $Id: hw.c,v 1.18 1998/12/02 16:16:17 steinm Exp $ */
 #if COMPILE_DL
 #include "dl/phpdl.h"
 #endif
@@ -448,52 +448,30 @@ static void php3_hw_do_connect(INTERNAL_FUNCTION_PARAMETERS, int persistent)
 
 	/* Host: */
 	convert_to_string(argv[0]);
-	if (argv[0]->value.str.val) {
-		host = (char *) estrndup(argv[0]->value.str.val,argv[0]->value.str.len);
-	} else {
-		php3_error(E_WARNING, "No hostname given");
-		if(host) efree(host);
-		RETURN_FALSE;
-	}
+	host = (char *) estrndup(argv[0]->value.str.val,argv[0]->value.str.len);
 
 	/* Port: */
 	convert_to_long(argv[1]);
-	if (argv[1]->value.lval) {
-		port = argv[1]->value.lval;
-	} else {
-		php3_error(E_WARNING, "No port number given");
-		RETURN_FALSE;
-	}
+	port = argv[1]->value.lval;
 
 	/* Username and Password */
 	if(argc > 2) {
 		/* Username */
 		convert_to_string(argv[2]);
-		if (argv[2]->value.str.val) {
-			username = (char *) estrndup(argv[2]->value.str.val,argv[2]->value.str.len);
-		} else {
-			php3_error(E_WARNING, "No username given");
-			if(username) efree(username);
-			RETURN_FALSE;
-		}
-		
+		username = (char *) estrndup(argv[2]->value.str.val,argv[2]->value.str.len);
 		/* Password */
 		convert_to_string(argv[3]);
-		if (argv[3]->value.str.val) {
-			password = (char *) estrndup(argv[3]->value.str.val,argv[3]->value.str.len);
-		} else {
-			php3_error(E_WARNING, "No password given");
-			if(password) efree(password);
-			RETURN_FALSE;
-		}
+		password = (char *) estrndup(argv[3]->value.str.val,argv[3]->value.str.len);
 	}
 
 	/* Create identifier string for connection */
 	sprintf(buffer, "%d", port);
 	hashed_details_length = strlen(host)+strlen(buffer)+8;
 	if(NULL == (hashed_details = (char *) emalloc(hashed_details_length+1))) {
+		if(host) efree(host);
 		if(password) efree(password);
 		if(username) efree(username);
+		php3_error(E_ERROR, "Could not get memory for connection details");
 		RETURN_FALSE;
 	}
 	sprintf(hashed_details,"hw_%s_%d",host,port);
@@ -506,7 +484,7 @@ static void php3_hw_do_connect(INTERNAL_FUNCTION_PARAMETERS, int persistent)
 			list_entry new_le;
 
 			if (php3_hw_module.max_links!=-1 && php3_hw_module.num_links>=php3_hw_module.max_links) {
-				php3_error(E_WARNING,"Hyperwave:  Too many open links (%d)",php3_hw_module.num_links);
+				php3_error(E_ERROR,"Hyperwave:  Too many open links (%d)",php3_hw_module.num_links);
 				if(host) efree(host);
 				if(username) efree(username);
 				if(password) efree(password);
@@ -514,7 +492,7 @@ static void php3_hw_do_connect(INTERNAL_FUNCTION_PARAMETERS, int persistent)
 				RETURN_FALSE;
 			}
 			if (php3_hw_module.max_persistent!=-1 && php3_hw_module.num_persistent>=php3_hw_module.max_persistent) {
-/*				php3_error(E_WARNING,"Hyperwave:  Too many open persistent links (%d)",php3_hw_module.num_persistent); */
+				php3_error(E_ERROR,"Hyperwave: Too many open persistent links (%d)",php3_hw_module.num_persistent);
 				if(host) efree(host);
 				if(username) efree(username);
 				if(password) efree(password);
@@ -523,7 +501,7 @@ static void php3_hw_do_connect(INTERNAL_FUNCTION_PARAMETERS, int persistent)
 			}
 
 			if ( (sockfd = open_hg_connection(host, port)) < 0 )  {
-/*				php3_error(E_WARNING, "open_hg_connection to %s (%d)returned -1", host, port); */
+				php3_error(E_ERROR, "Could not open connection to %s, Port: %d (retval=%d)", host, port, sockfd);
 				if(host) efree(host);
 				if(username) efree(username);
 				if(password) efree(password);
@@ -532,6 +510,7 @@ static void php3_hw_do_connect(INTERNAL_FUNCTION_PARAMETERS, int persistent)
 				}
 	
 			if(NULL == (ptr = malloc(sizeof(hw_connection)))) {
+				php3_error(E_ERROR, "Could not get memory for connection structure");
 				if(host) efree(host);
 				if(username) efree(username);
 				if(password) efree(password);
@@ -540,7 +519,7 @@ static void php3_hw_do_connect(INTERNAL_FUNCTION_PARAMETERS, int persistent)
 			}
 	
 			if(0 != (ptr->lasterror = initialize_hg_connection(sockfd, &do_swap, &version, &userdata, &server_string, username, password))) {
-/*				php3_error(E_WARNING, "initalize hg connection returned -1"); */
+				php3_error(E_ERROR, "Could not initalize hyperwave connection");
 				if(host) efree(host);
 				if(username) efree(username);
 				if(password) efree(password);
@@ -565,6 +544,7 @@ static void php3_hw_do_connect(INTERNAL_FUNCTION_PARAMETERS, int persistent)
 			new_le.type = php3_hw_module.le_psocketp;;
 
 			if (_php3_hash_update(plist,hashed_details,hashed_details_length+1,(void *) &new_le, sizeof(list_entry), NULL)==FAILURE) {
+				php3_error(E_ERROR, "Could not hash table with connection details");
 				if(host) efree(host);
 				if(username) efree(username);
 				if(password) efree(password);
@@ -590,8 +570,8 @@ static void php3_hw_do_connect(INTERNAL_FUNCTION_PARAMETERS, int persistent)
 		list_entry *index_ptr,new_index_ptr;
 
 		/* first we check the hash for the hashed_details key.  if it exists,
-		 * it should point us to the right offset where the actual pgsql link sits.
-		 * if it doesn't, open a new pgsql link, add it to the resource list,
+		 * it should point us to the right offset where the actual hyperwave link sits.
+		 * if it doesn't, open a new hyperwave link, add it to the resource list,
 		 * and add a pointer to it with hashed_details as the key.
 		 */
 		if (_php3_hash_find(list,hashed_details,hashed_details_length+1,(void **) &index_ptr)==SUCCESS) {
@@ -609,7 +589,7 @@ static void php3_hw_do_connect(INTERNAL_FUNCTION_PARAMETERS, int persistent)
 				efree(hashed_details);
 				if(username) efree(username);
 				if(password) efree(password);
-	  			if(host) efree(host);
+	  		if(host) efree(host);
 				return;
 			} else {
 				_php3_hash_del(list,hashed_details,hashed_details_length+1);
@@ -617,8 +597,8 @@ static void php3_hw_do_connect(INTERNAL_FUNCTION_PARAMETERS, int persistent)
 		}
 	
 		if ( (sockfd = open_hg_connection(host, port)) < 0 )  {
-/*			php3_error(E_WARNING, "open_hg_connection returned -1");*/
-		  	if(host) efree(host);
+			php3_error(E_ERROR, "Could not open connection to %s, Port: %d (retval=%d", host, port, sockfd);
+		  if(host) efree(host);
 			if(username) efree(username);
 			if(password) efree(password);
 			efree(hashed_details);
@@ -634,7 +614,7 @@ static void php3_hw_do_connect(INTERNAL_FUNCTION_PARAMETERS, int persistent)
 		}
 	
 		if(0 != (ptr->lasterror = initialize_hg_connection(sockfd, &do_swap, &version, &userdata, &server_string, username, password))) {
-/*			php3_error(E_WARNING, "initalize hg connection returned -1"); */
+			php3_error(E_ERROR, "Could not initalize hyperwave connection");
 			if(host) efree(host);
 			if(username) efree(username);
 			if(password) efree(password);
@@ -661,6 +641,8 @@ static void php3_hw_do_connect(INTERNAL_FUNCTION_PARAMETERS, int persistent)
 		new_index_ptr.ptr = (void *) return_value->value.lval;
 		new_index_ptr.type = le_index_ptr;
 		if (_php3_hash_update(list,hashed_details,hashed_details_length+1,(void *) &new_index_ptr, sizeof(list_entry), NULL)==FAILURE) {
+			php3_error(E_ERROR, "Could not update connection details in hash table");
+			if(host) efree(host);
 			efree(hashed_details);
 			RETURN_FALSE;
 		}
@@ -671,7 +653,9 @@ static void php3_hw_do_connect(INTERNAL_FUNCTION_PARAMETERS, int persistent)
 	if(host) efree(host);
 	php3_hw_module.default_link=return_value->value.lval;
 
-	/* If there is no userdata because hw_connect was called without username
+	/* At this point we have a working connection. If userdata was given
+	   we are also indentified.
+	   If there is no userdata because hw_connect was called without username
 	   and password, we don't evaluate userdata.
 	*/
 	if(NULL == userdata)
@@ -688,16 +672,26 @@ static void php3_hw_do_connect(INTERNAL_FUNCTION_PARAMETERS, int persistent)
 	efree(userdata);
 }
 
+/* Start of user level functions */
+/* ***************************** */
+/* {{{ proto int hw_connect(string host, int port [string username [, string password]])
+   Connect to the Hyperwave server */
 void php3_hw_connect(INTERNAL_FUNCTION_PARAMETERS)
 {
 	php3_hw_do_connect(INTERNAL_FUNCTION_PARAM_PASSTHRU,0);
 }
+/* }}} */
 
+/* {{{ proto int hw_pconnect(string host, int port [string username [, string password]])
+   Connect to the Hyperwave server persistent */
 void php3_hw_pconnect(INTERNAL_FUNCTION_PARAMETERS)
 {
 	php3_hw_do_connect(INTERNAL_FUNCTION_PARAM_PASSTHRU,1);
 }
+/* }}} */
 
+/* {{{ proto void hw_close(int link)
+   Close connection to Hyperwave server */
 void php3_hw_close(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *arg1;
 	int id, type;
@@ -717,7 +711,10 @@ void php3_hw_close(INTERNAL_FUNCTION_PARAMETERS) {
 	php3_list_delete(id);
 	RETURN_TRUE;
 }
+/* }}} */
 
+/* {{{ proto void hw_info(int link)
+   Outputs info string */
 void php3_hw_info(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *arg1;
@@ -748,7 +745,10 @@ void php3_hw_info(INTERNAL_FUNCTION_PARAMETERS)
 		}
 	RETURN_FALSE;
 }
+/* }}} */
 
+/* {{{ proto int hw_error(int link)
+   Returns last error number */
 void php3_hw_error(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *arg1;
@@ -768,7 +768,10 @@ void php3_hw_error(INTERNAL_FUNCTION_PARAMETERS)
 	}
 	RETURN_LONG(ptr->lasterror);
 }
+/* }}} */
 
+/* {{{ proto string hw_errormsg(int link)
+   Returns last error message */
 void php3_hw_errormsg(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *arg1;
@@ -854,13 +857,17 @@ void php3_hw_errormsg(INTERNAL_FUNCTION_PARAMETERS)
 		}
 	RETURN_STRING(errstr, 1);
 }
+/* }}} */
 
+/* {{{ proto hw_root(void)
+   Returns object id of root collection */
 void php3_hw_root(INTERNAL_FUNCTION_PARAMETERS)
 {
 	TLS_VARS;
 	return_value->value.lval = 0;
 	return_value->type = IS_LONG;
 }
+/* }}} */
 
 char *php3_hw_command(INTERNAL_FUNCTION_PARAMETERS, int comm) {
 	pval *arg1;
@@ -889,6 +896,8 @@ char *php3_hw_command(INTERNAL_FUNCTION_PARAMETERS, int comm) {
 	}
 }
 
+/* {{{ proto string hw_stat(int link)
+   Returns status string */
 void php3_hw_stat(INTERNAL_FUNCTION_PARAMETERS) {
         char *object;
 
@@ -900,7 +909,10 @@ void php3_hw_stat(INTERNAL_FUNCTION_PARAMETERS) {
 	return_value->value.str.len = strlen(object);
 	return_value->type = IS_STRING;
 }
+/* }}} */
 
+/* {{{ proto array hw_who(int link)
+   Returns names and info of users loged in */
 void php3_hw_who(INTERNAL_FUNCTION_PARAMETERS) {
 	pval user_arr;
         char *object, *ptr, *temp, *attrname;
@@ -1008,6 +1020,7 @@ void php3_hw_who(INTERNAL_FUNCTION_PARAMETERS) {
 	efree(object);
 
 }
+/* }}} */
 
 void php3_hw_dummy(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *arg1, *arg2, *arg3;
@@ -1043,6 +1056,8 @@ php3_printf("%s", object);
 	}
 }
 
+/* {{{ proto string hw_getobject(int link, int objid)
+   Returns object record  */
 void php3_hw_getobject(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *arg1, *arg2;
 	int link, id, type;
@@ -1075,7 +1090,10 @@ void php3_hw_getobject(INTERNAL_FUNCTION_PARAMETERS) {
 	*/
 	}
 }
+/* }}} */
 
+/* {{{ proto int hw_insertobject(int link, string objrec, string parms)
+   Inserts an object */
 void php3_hw_insertobject(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *arg1, *arg2, *arg3;
 	int link, type;
@@ -1107,7 +1125,10 @@ void php3_hw_insertobject(INTERNAL_FUNCTION_PARAMETERS) {
 	RETURN_LONG(objid);
 	}
 }
+/* }}} */
 
+/* {{{ proto string hw_getandlock(int link, int objid)
+   Returns object record and locks object */
 void php3_hw_getandlock(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *arg1, *arg2;
 	int link, id, type;
@@ -1134,25 +1155,13 @@ void php3_hw_getandlock(INTERNAL_FUNCTION_PARAMETERS) {
 	if (0 != (ptr->lasterror = send_getandlock(ptr->socket, id, &object)))
 		RETURN_FALSE;
 
-	if (array_init(return_value) == FAILURE) {
-		php3_error(E_ERROR, "Unable to initialize array");
-		efree(object);
-		RETURN_FALSE;
-	}
-	attrname = strtok(object, "\n");
-	while(attrname != NULL) {
-		str = attrname;
-		while((*str != '=') && (*str != '\0'))
-			str++;
-		*str = '\0';
-		str++;
-		add_assoc_string(return_value, attrname, str, 1);
-		attrname = strtok(NULL, "\n");
-	}
-	efree(object);
+	RETURN_STRING(object, 0);
 	}
 }
+/* }}} */
 
+/* {{{ proto void hw_unlock(int link, int objid)
+   Unlocks object */
 void php3_hw_unlock(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *arg1, *arg2;
 	int link, id, type;
@@ -1178,7 +1187,10 @@ void php3_hw_unlock(INTERNAL_FUNCTION_PARAMETERS) {
 
 	RETURN_TRUE;
 }
+/* }}} */
 
+/* {{{ proto void hw_deleteobject(int link, int objid)
+   Deletes object */
 void php3_hw_deleteobject(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *arg1, *arg2;
 	int link, id, type;
@@ -1203,7 +1215,10 @@ void php3_hw_deleteobject(INTERNAL_FUNCTION_PARAMETERS) {
 		RETURN_FALSE;
 	RETURN_TRUE;
 }
+/* }}} */
 
+/* {{{ proto void hw_changeobject(int link, int objid, array attributes)
+   Changes attributes of an object */
 void php3_hw_changeobject(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *arg1, *arg2, *arg3;
 	int link, id, type, i;
@@ -1283,6 +1298,7 @@ void php3_hw_changeobject(INTERNAL_FUNCTION_PARAMETERS) {
 	free(modification);
 	RETURN_TRUE;
 }
+/* }}} */
 
 void php3_hw_mvcp(INTERNAL_FUNCTION_PARAMETERS, int mvcp) {
 	pval *arg1, *arg2, *arg3, *arg4, **objvIDs;
@@ -1382,14 +1398,22 @@ void php3_hw_mvcp(INTERNAL_FUNCTION_PARAMETERS, int mvcp) {
 	RETURN_LONG(docIDcount + collIDcount);
 }
 
+/* {{{ proto void hw_mv(int link, array objrec, int from, int dest)
+   Moves object */
 void php3_hw_mv(INTERNAL_FUNCTION_PARAMETERS) {
 	php3_hw_mvcp(INTERNAL_FUNCTION_PARAM_PASSTHRU, MOVE);
 }
+/* }}} */
 
+/* {{{ proto void hw_cp(int link, array objrec, int dest)
+   Copies object */
 void php3_hw_cp(INTERNAL_FUNCTION_PARAMETERS) {
 	php3_hw_mvcp(INTERNAL_FUNCTION_PARAM_PASSTHRU, COPY);
 }
+/* }}} */
 
+/* {{{ proto hwdoc hw_gettext(int link, int objid[, int rootid])
+   Returns text document. Links are relative to rootid if given */
 void php3_hw_gettext(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *argv[3];
 	int argc, link, id, type, mode;
@@ -1439,7 +1463,10 @@ void php3_hw_gettext(INTERNAL_FUNCTION_PARAMETERS) {
 	return_value->type = IS_LONG;
 	}
 }
+/* }}} */
 
+/* {{{ proto void hw_edittext(int link, hwdoc doc)
+   Modifies text document */
 void php3_hw_edittext(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *arg1, *arg2;
 	int link, id, doc, type;
@@ -1478,7 +1505,10 @@ void php3_hw_edittext(INTERNAL_FUNCTION_PARAMETERS) {
 	}
 	RETURN_TRUE;
 }
+/* }}} */
 
+/* {{{ proto hwdoc hw_getcgi(int link, int objid)
+   Returns the output of a cgi script */
 void php3_hw_getcgi(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *arg1, *arg2;
 	int link, id, type;
@@ -1537,7 +1567,10 @@ void php3_hw_getcgi(INTERNAL_FUNCTION_PARAMETERS) {
 	return_value->type = IS_LONG;
 	}
 }
+/* }}} */
 
+/* {{{ proto hwdoc hw_getremote(int link, int objid)
+   Returns the output of a remote document */
 void php3_hw_getremote(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *arg1, *arg2;
 	int link, id, type;
@@ -1575,7 +1608,10 @@ void php3_hw_getremote(INTERNAL_FUNCTION_PARAMETERS) {
 	return_value->type = IS_LONG;
 	}
 }
+/* }}} */
 
+/* {{{ proto [array|hwdoc] hw_getremotechildren(int link, int objid)
+   Returns the remote document if only one or an array of object records */
 void php3_hw_getremotechildren(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *arg1, *arg2;
 	int link, type, i;
@@ -1631,7 +1667,10 @@ void php3_hw_getremotechildren(INTERNAL_FUNCTION_PARAMETERS) {
 	efree(remainder);
 	}
 }
+/* }}} */
 
+/* {{{ proto void hw_setlinkroot(int link, int rootid)
+   Set the id to which links are calculated */
 void php3_hw_setlinkroot(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *arg1, *arg2;
 	int link, type, rootid;
@@ -1653,8 +1692,11 @@ void php3_hw_setlinkroot(INTERNAL_FUNCTION_PARAMETERS) {
 
 	ptr->linkroot = rootid;
 	RETURN_LONG(rootid);
-	}
+}
+/* }}} */
 
+/* {{{ proto hwdoc hw_pipedocument(int link, int objid)
+   Returns document */
 void php3_hw_pipedocument(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *argv[3];
 	int link, id, type, argc, mode;
@@ -1667,7 +1709,7 @@ void php3_hw_pipedocument(INTERNAL_FUNCTION_PARAMETERS) {
 	TLS_VARS;
 
 	argc = ARG_COUNT(ht);
-	if((argc > 3) || (argc < 2))
+	if((argc > 2) || (argc < 2))
 		WRONG_PARAM_COUNT;
 		
 	if (getParametersArray(ht, argc, argv) == FAILURE)
@@ -1705,7 +1747,7 @@ void php3_hw_pipedocument(INTERNAL_FUNCTION_PARAMETERS) {
 #if APACHE
   serv->server_hostname,
 #else
-  "localhost",
+  getenv("HOST"),
 #endif
    id, mode, rootid, &attributes, &bodytag, &object, &count)))
 		RETURN_FALSE;
@@ -1719,8 +1761,10 @@ fprintf(stderr, "size = %d\n", count);
 	return_value->value.lval = php3_list_insert(doc,php3_hw_module.le_document);
 	return_value->type = IS_LONG;
 	}
-}
+}  /* }}} */
 
+/* {{{ proto hwdoc hw_pipecgi(int link, int objid)
+   Returns output of cgi script */
 void php3_hw_pipecgi(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *arg1, *arg2;
 	int link, id, type;
@@ -1767,7 +1811,7 @@ void php3_hw_pipecgi(INTERNAL_FUNCTION_PARAMETERS) {
 #if APACHE
   serv->server_hostname,
 #else
-  "localhost",
+  getenv("HOST"),
 #endif
   id, cgi_env_str, &attributes, &object, &count)))
 		RETURN_FALSE;
@@ -1780,13 +1824,18 @@ void php3_hw_pipecgi(INTERNAL_FUNCTION_PARAMETERS) {
 	return_value->value.lval = php3_list_insert(doc,php3_hw_module.le_document);
 	return_value->type = IS_LONG;
 	}
-}
+}  /* }}} */
 
+/* {{{ proto void hw_insertdocument(int link, int parentid, hwdoc doc) 
+   Insert new document */
 void php3_hw_insertdocument(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *arg1, *arg2, *arg3;
 	int link, id, doc, type;
 	hw_connection *ptr;
 	hw_document *docptr;
+#if APACHE
+	server_rec *serv = GLOBAL(php3_rqst)->server;
+#endif
 	TLS_VARS;
 
 	if (ARG_COUNT(ht) != 3 || getParameters(ht, 3, &arg1, &arg2, &arg3) == FAILURE) {
@@ -1812,13 +1861,21 @@ void php3_hw_insertdocument(INTERNAL_FUNCTION_PARAMETERS) {
 
 	set_swap(ptr->swap_on);
 	{
-	if (0 != (ptr->lasterror =  send_putdocument(ptr->socket, "localhost", id, docptr->attributes, docptr->data, docptr->size))) {
+	if (0 != (ptr->lasterror =  send_putdocument(ptr->socket,
+#if APACHE
+  serv->server_hostname,
+#else
+  getenv("HOST"),
+#endif
+             id, docptr->attributes, docptr->data, docptr->size))) {
 		RETURN_FALSE;
 		}
 	}
 	RETURN_TRUE;
-}
+}  /* }}} */
 
+/* {{{ proto hwdoc hw_new_document(int link, string data, string objrec, int size)
+   Create a new document */
 void php3_hw_new_document(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *arg1, *arg2, *arg3;
 	hw_document *doc;
@@ -1839,8 +1896,10 @@ void php3_hw_new_document(INTERNAL_FUNCTION_PARAMETERS) {
 	doc->size = arg3->value.lval;
 	return_value->value.lval = php3_list_insert(doc,php3_hw_module.le_document);
 	return_value->type = IS_LONG;
-}
+}  /* }}} */
 
+/* {{{ proto void hw_free_document(hwdoc doc)
+   Frees memory of document */
 void php3_hw_free_document(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *arg1;
 	int id, type;
@@ -1859,8 +1918,10 @@ void php3_hw_free_document(INTERNAL_FUNCTION_PARAMETERS) {
 	}
 	php3_list_delete(id);
 	RETURN_TRUE;
-}
+}  /* }}} */
 
+/* {{{ proto void hw_output_document(hwdoc doc)
+   Prints document */
 void php3_hw_output_document(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *arg1;
 	int id, type, count;
@@ -1889,8 +1950,10 @@ void php3_hw_output_document(INTERNAL_FUNCTION_PARAMETERS) {
 	}
 
 	RETURN_TRUE;
-}
+}  /* }}} */
 
+/* {{{ proto string hw_document_bodytag(hwdoc doc [, string prefix])
+   Return bodytag prefixed by prefix */
 void php3_hw_document_bodytag(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *argv[2];
 	int id, type, argc;
@@ -1927,8 +1990,10 @@ void php3_hw_document_bodytag(INTERNAL_FUNCTION_PARAMETERS) {
 	} else {
 		RETURN_STRING(ptr->bodytag, 1);
 	}
-}
+}  /* }}} */
 
+/* {{{ proto string hw_document_content(hwdoc doc)
+   Returns content of document */
 void php3_hw_document_content(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *argv[1];
 	int id, type, argc;
@@ -1951,8 +2016,10 @@ void php3_hw_document_content(INTERNAL_FUNCTION_PARAMETERS) {
 	}
 
 	RETURN_STRING(ptr->data, 1);
-}
+}  /* }}} */
 
+/* {{{ proto int hw_document_content(hwdoc doc)
+   Returns size of document */
 void php3_hw_document_size(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *arg1;
 	int id, type;
@@ -1971,8 +2038,10 @@ void php3_hw_document_size(INTERNAL_FUNCTION_PARAMETERS) {
 	}
 
 	RETURN_LONG(ptr->size);
-}
+}  /* }}} */
 
+/* {{{ proto string hw_document_content(hwdoc doc)
+   Returns object record of document */
 void php3_hw_document_attributes(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *arg1;
 	int id, type;
@@ -1992,8 +2061,10 @@ void php3_hw_document_attributes(INTERNAL_FUNCTION_PARAMETERS) {
 
 	RETURN_STRING(ptr->attributes, 1);
 /*	make_return_array_from_objrec(&return_value, ptr->attributes); */
-}
+}  /* }}} */
 
+/* {{{ proto array hw_getparentsobj(int link, int objid)
+   Returns array of parent object records */
 void php3_hw_getparentsobj(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *arg1, *arg2;
 	int link, id, type;
@@ -2025,8 +2096,10 @@ void php3_hw_getparentsobj(INTERNAL_FUNCTION_PARAMETERS) {
 	/* create return value and free all memory */
 	if( 0 > make_return_objrec(&return_value, childObjRecs, count))
 		RETURN_FALSE;
-}
+}  /* }}} */
 
+/* {{{ proto array hw_getparents(int link, int objid)
+   Returns array of parent object ids */
 void php3_hw_getparents(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *arg1, *arg2;
 	int link, id, type;
@@ -2068,8 +2141,10 @@ void php3_hw_getparents(INTERNAL_FUNCTION_PARAMETERS) {
 	efree(childIDs);
 	}
 
-}
+}  /* }}} */
 
+/* {{{ proto array hw_children(int link, int objid)
+   Returns array of children object ids */
 void php3_hw_children(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *arg1, *arg2;
 	int link, id, type;
@@ -2111,8 +2186,10 @@ void php3_hw_children(INTERNAL_FUNCTION_PARAMETERS) {
 	efree(childIDs);
 	}
 		
-}
+}  /* }}} */
 
+/* {{{ proto array hw_children(int link, int objid)
+   Returns array of children object records */
 void php3_hw_childrenobj(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *arg1, *arg2;
 	int link, id, type;
@@ -2144,8 +2221,10 @@ void php3_hw_childrenobj(INTERNAL_FUNCTION_PARAMETERS) {
 	/* create return value and free all memory */
 	if( 0 > make_return_objrec(&return_value, childObjRecs, count))
 		RETURN_FALSE;
-}
+}  /* }}} */
 
+/* {{{ proto array hw_childcoll(int link, int objid)
+   Returns array of child collection object ids */
 void php3_hw_getchildcoll(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *arg1, *arg2;
 	int link, id, type;
@@ -2187,8 +2266,10 @@ void php3_hw_getchildcoll(INTERNAL_FUNCTION_PARAMETERS) {
 	efree(childIDs);
 	}
 		
-}
+}  /* }}} */
 
+/* {{{ proto array hw_childcollobj(int link, int objid)
+   Returns array of child collection object records */
 void php3_hw_getchildcollobj(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *arg1, *arg2;
 	int link, id, type;
@@ -2220,8 +2301,10 @@ void php3_hw_getchildcollobj(INTERNAL_FUNCTION_PARAMETERS) {
 	/* create return value and free all memory */
 	if( 0 > make_return_objrec(&return_value, childObjRecs, count))
 		RETURN_FALSE;
-}
+}  /* }}} */
 
+/* {{{ proto int hw_docbyanchor(int link, int anchorid)
+   Returns objid of document belonging to anchorid */
 void php3_hw_docbyanchor(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *arg1, *arg2;
 	int link, id, type;
@@ -2249,8 +2332,10 @@ void php3_hw_docbyanchor(INTERNAL_FUNCTION_PARAMETERS) {
 
 	RETURN_LONG(objectID);
 	}
-}
+}  /* }}} */
 
+/* {{{ proto array hw_docbyanchorobj(int link, int anchorid)
+   Returns object record of document belonging to anchorid */
 void php3_hw_docbyanchorobj(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *arg1, *arg2;
 	int link, id, type;
@@ -2276,11 +2361,16 @@ void php3_hw_docbyanchorobj(INTERNAL_FUNCTION_PARAMETERS) {
 	if (0 != (ptr->lasterror = send_docbyanchorobj(ptr->socket, id, &object)))
 		RETURN_FALSE;
 
+	RETURN_STRING(object, 0);
+	/*
 	make_return_array_from_objrec(&return_value, object);
 	efree(object);
+	*/
 	}
-}
+}  /* }}} */
 
+/* {{{ proto array hw_getobjectbyquery(int link, string query, int maxhits)
+   Search for query and return maxhits objids */
 void php3_hw_getobjectbyquery(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *arg1, *arg2, *arg3;
 	int link, type, maxhits;
@@ -2320,8 +2410,10 @@ void php3_hw_getobjectbyquery(INTERNAL_FUNCTION_PARAMETERS) {
 	for(i=0; i<count; i++)
 		add_index_long(return_value, i, childIDs[i]);
 	efree(childIDs);
-}
+}  /* }}} */
 
+/* {{{ proto array hw_getobjectbyqueryobj(int link, string query, int maxhits)
+   Search for query and return maxhits object records */
 void php3_hw_getobjectbyqueryobj(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *arg1, *arg2, *arg3;
 	int link, type, maxhits;
@@ -2356,8 +2448,10 @@ void php3_hw_getobjectbyqueryobj(INTERNAL_FUNCTION_PARAMETERS) {
 	/* create return value and free all memory */
 	if( 0 > make_return_objrec(&return_value, childObjRecs, count))
 		RETURN_FALSE;
-}
+}  /* }}} */
 
+/* {{{ proto array hw_getobjectbyquerycoll(int link, int collid, string query, int maxhits)
+   Search for query in collection and return maxhits objids */
 void php3_hw_getobjectbyquerycoll(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *arg1, *arg2, *arg3, *arg4;
 	int link, id, type, maxhits;
@@ -2399,8 +2493,10 @@ void php3_hw_getobjectbyquerycoll(INTERNAL_FUNCTION_PARAMETERS) {
 	for(i=0; i<count; i++)
 		add_index_long(return_value, i, childIDs[i]);
 	efree(childIDs);
-}
+}  /* }}} */
 
+/* {{{ proto array hw_getobjectbyquerycollobj(int link, int collid, string query, int maxhits)
+   Search for query in collection and return maxhits object records */
 void php3_hw_getobjectbyquerycollobj(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *arg1, *arg2, *arg3, *arg4;
 	int link, id, type, maxhits;
@@ -2437,8 +2533,10 @@ void php3_hw_getobjectbyquerycollobj(INTERNAL_FUNCTION_PARAMETERS) {
 	/* create return value and free all memory */
 	if( 0 > make_return_objrec(&return_value, childObjRecs, count))
 		RETURN_FALSE;
-}
+}  /* }}} */
 
+/* {{{ proto array hw_getchilddoccoll(int link, int objid)
+   Returns all children ids which are documents */
 void php3_hw_getchilddoccoll(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *arg1, *arg2;
 	int link, id, type;
@@ -2474,8 +2572,10 @@ void php3_hw_getchilddoccoll(INTERNAL_FUNCTION_PARAMETERS) {
 	for(i=0; i<count; i++)
 		add_index_long(return_value, i, childIDs[i]);
 	efree(childIDs);
-}
+}  /* }}} */
 
+/* {{{ proto array hw_getchilddoccollobj(int link, int objid)
+   Returns all children object records which are documents */
 void php3_hw_getchilddoccollobj(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *arg1, *arg2;
 	int link, id, type;
@@ -2507,8 +2607,10 @@ void php3_hw_getchilddoccollobj(INTERNAL_FUNCTION_PARAMETERS) {
 	if( 0 > make_return_objrec(&return_value, childObjRecs, count))
 		RETURN_FALSE;
 
-}
+}  /* }}} */
 
+/* {{{ proto array hw_getanchors(int link, int objid)
+   Return all anchors of object */
 void php3_hw_getanchors(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *arg1, *arg2;
 	int link, id, type;
@@ -2544,8 +2646,10 @@ void php3_hw_getanchors(INTERNAL_FUNCTION_PARAMETERS) {
 	for(i=0; i<count; i++)
 		add_index_long(return_value, i, anchorIDs[i]);
 	efree(anchorIDs);
-}
+}  /* }}} */
 
+/* {{{ proto array hw_getanchorsobj(int link, int objid)
+   Return all object records of anchors of object */
 void php3_hw_getanchorsobj(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *arg1, *arg2;
 	int link, id, type;
@@ -2576,8 +2680,10 @@ void php3_hw_getanchorsobj(INTERNAL_FUNCTION_PARAMETERS) {
 	/* create return value and free all memory */
 	if( 0 > make_return_objrec(&return_value, anchorObjRecs, count))
 		RETURN_FALSE;
-}
+}  /* }}} */
 
+/* {{{ proto string hw_getusername(int link)
+   Returns the current user name */
 void php3_hw_getusername(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *arg1;
 	int link, type;
@@ -2598,9 +2704,11 @@ void php3_hw_getusername(INTERNAL_FUNCTION_PARAMETERS) {
 	return_value->value.str.val = estrdup(ptr->username);
 	return_value->value.str.len = strlen(ptr->username);
 	return_value->type = IS_STRING;
-	}
+}  /* }}} */
 
 
+/* {{{ proto void hw_identify(int link, string username, string password)
+   Identifies at Hyperwave server */
 void php3_hw_identify(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *arg1, *arg2, *arg3;
 	int link, type;
@@ -2647,7 +2755,10 @@ void php3_hw_identify(INTERNAL_FUNCTION_PARAMETERS) {
 		ptr->username = NULL;
 	}
 }
+/* }}} */
 
+/* {{{ proto array hw_objrec2array(string objrec)
+   Returns object array of object record*/
 void php3_hw_objrec2array(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *arg1;
 	TLS_VARS;
@@ -2658,7 +2769,10 @@ void php3_hw_objrec2array(INTERNAL_FUNCTION_PARAMETERS) {
 	convert_to_string(arg1);
 	make_return_array_from_objrec(&return_value, arg1->value.str.val);
 }
+/* }}} */
 
+/* {{{ proto string hw_array2objrec(array objarr)
+   Returns object record of object array */
 void php3_hw_array2objrec(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *arg1;
 	char *objrec, *retobj;
@@ -2676,7 +2790,10 @@ void php3_hw_array2objrec(INTERNAL_FUNCTION_PARAMETERS) {
 	} else
 		RETURN_FALSE;
 }
+/* }}} */
 
+/* {{{ proto array hw_incollections(int link, array objids, array collids, int para)
+   Returns object ids which are in collections */
 void php3_hw_incollections(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *arg1, *arg2, *arg3, *arg4;
 	int type, link, i;
@@ -2735,7 +2852,10 @@ void php3_hw_incollections(INTERNAL_FUNCTION_PARAMETERS) {
 	efree(retIDs);
 
 }
+/* }}} */
 
+/* {{{ proto void hw_inscoll(int link, int parentid, array objarr)
+   Inserts collection */
 void php3_hw_inscoll(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *arg1, *arg2, *arg3;
 	char *objrec;
@@ -2771,7 +2891,10 @@ void php3_hw_inscoll(INTERNAL_FUNCTION_PARAMETERS) {
 	if(objrec) free(objrec);
 	RETURN_LONG(newid);
 }
+/* }}} */
 
+/* {{{ proto void hw_inscoll(int link, int parentid, array objarr [, string text])
+   Inserts document */
 void php3_hw_insdoc(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *argv[4];
 	char *objrec, *text;
@@ -2811,7 +2934,10 @@ void php3_hw_insdoc(INTERNAL_FUNCTION_PARAMETERS) {
 
 	RETURN_LONG(newid);
 }
+/* }}} */
 
+/* {{{ proto int hw_getsrcbydestobj(int link, int destid)
+   Returns object id of source docuent by destination anchor */
 void php3_hw_getsrcbydestobj(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *arg1, *arg2;
 	int link, type, id;
@@ -2843,7 +2969,10 @@ void php3_hw_getsrcbydestobj(INTERNAL_FUNCTION_PARAMETERS) {
 	if( 0 > make_return_objrec(&return_value, childObjRecs, count))
 		RETURN_FALSE;
 }
+/* }}} */
 
+/* {{{ proto string hw_getrellink(int link, int rootid, int sourceid, int destid)
+   Get link form source to dest relative to rootid */
 void php3_hw_getrellink(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *arg1, *arg2, *arg3, *arg4;
 	int link, type;
@@ -2877,11 +3006,12 @@ void php3_hw_getrellink(INTERNAL_FUNCTION_PARAMETERS) {
 
 	RETURN_STRING(anchorstr, 0);
 }
+/* }}} */
 	
 
 void php3_info_hw()
 {
-	php3_printf("Hyperwave Info: blaba");
+	php3_printf("HG-CSP Version: 7.17");
 }
 
 void php3_hw_connection_info(INTERNAL_FUNCTION_PARAMETERS)

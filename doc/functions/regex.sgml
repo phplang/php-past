@@ -175,6 +175,10 @@ echo ereg_replace( "(( )is)", "\\2was", $string );
       <programlisting>
 $passwd_list = split( ":", $passwd_line, 5 );
 </programlisting></example>
+    <para>
+     Note that <parameter>pattern</parameter> is case-sensitive.
+    <para>
+     See also: <function>explode</function> and <function>implode</function>.
 
    </refsect1>
   </refentry>

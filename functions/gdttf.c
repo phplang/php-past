@@ -231,6 +231,12 @@ gdImageColorResolve(gdImagePtr im, int r, int g, int b)
  *---------------------------------------------------------------------------
  */
  
+#ifndef CHARSET_EBCDIC
+#define ASC(ch) (ch)
+#else /*CHARSET_EBCDIC*/
+#define ASC(ch) os_toascii[(unsigned char) (ch)]
+#endif /*CHARSET_EBCDIC*/
+
 #define Tcl_UniChar int
 #define TCL_UTF_MAX 3
 static int
@@ -266,7 +272,7 @@ gdTcl_UtfToUniChar(char *str, Tcl_UniChar *chPtr)
      * Unroll 1 to 3 byte UTF-8 sequences, use loop to handle longer ones.
      */
 
-    byte = *((unsigned char *) str);
+    byte = ASC(*((unsigned char *) str));
     if (byte < 0xC0) {
 	/*
 	 * Handles properly formed UTF-8 characters between 0x01 and 0x7F.
@@ -277,12 +283,12 @@ gdTcl_UtfToUniChar(char *str, Tcl_UniChar *chPtr)
 	*chPtr = (Tcl_UniChar) byte;
 	return 1;
     } else if (byte < 0xE0) {
-	if ((str[1] & 0xC0) == 0x80) {
+	if ((ASC(str[1]) & 0xC0) == 0x80) {
 	    /*
 	     * Two-byte-character lead-byte followed by a trail-byte.
 	     */
 	     
-	    *chPtr = (Tcl_UniChar) (((byte & 0x1F) << 6) | (str[1] & 0x3F));
+	    *chPtr = (Tcl_UniChar) (((byte & 0x1F) << 6) | (ASC(str[1]) & 0x3F));
 	    return 2;
 	}
 	/*
@@ -293,13 +299,13 @@ gdTcl_UtfToUniChar(char *str, Tcl_UniChar *chPtr)
 	*chPtr = (Tcl_UniChar) byte;
 	return 1;
     } else if (byte < 0xF0) {
-	if (((str[1] & 0xC0) == 0x80) && ((str[2] & 0xC0) == 0x80)) {
+	if (((ASC(str[1]) & 0xC0) == 0x80) && ((ASC(str[2]) & 0xC0) == 0x80)) {
 	    /*
 	     * Three-byte-character lead byte followed by two trail bytes.
 	     */
 
 	    *chPtr = (Tcl_UniChar) (((byte & 0x0F) << 12) 
-		    | ((str[1] & 0x3F) << 6) | (str[2] & 0x3F));
+		    | ((ASC(str[1]) & 0x3F) << 6) | (ASC(str[2]) & 0x3F));
 	    return 3;
 	}
 	/*
@@ -320,12 +326,12 @@ gdTcl_UtfToUniChar(char *str, Tcl_UniChar *chPtr)
 	    ch = byte & (0x3F >> trail);
 	    do {
 		str++;
-		if ((*str & 0xC0) != 0x80) {
+		if ((ASC(*str) & 0xC0) != 0x80) {
 		    *chPtr = byte;
 		    return 1;
 		}
 		ch <<= 6;
-		ch |= (*str & 0x3F);
+		ch |= (ASC(*str) & 0x3F);
 		trail--;
 	    } while (trail > 0);
 	    *chPtr = ch;

@@ -23,13 +23,14 @@
    | If you did not, or have any questions about PHP licensing, please    |
    | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
-   | Authors: Amitay Isaacs <amitay@w-o-i.com>                            |
-   |          Eric Warnke   <ericw@albany.edu>                            |
+   | Authors: Amitay Isaacs  <amitay@w-o-i.com>                           |
+   |          Eric Warnke    <ericw@albany.edu>                           |
+   |          Rasmus Lerdorf <rasmus@lerdorf.on.ca>                       |
    +----------------------------------------------------------------------+
  */
  
 
-/* $Id: ldap.c,v 1.58 1998/09/30 04:35:04 amitay Exp $ */
+/* $Id: ldap.c,v 1.63 1998/11/18 21:23:08 ssb Exp $ */
 #define IS_EXT_MODULE
 #if !PHP_31 && defined(THREAD_SAFE)
 #undef THREAD_SAFE
@@ -304,7 +305,7 @@ void php3_info_ldap(void)
 
 	php3_printf("<table>"
 				"<tr><td>Total links:</td><td>%d/%s</td></tr>\n"
-		        "<tr><td>RCS Version:</td><td>$Id: ldap.c,v 1.58 1998/09/30 04:35:04 amitay Exp $</td></tr>\n"
+		        "<tr><td>RCS Version:</td><td>$Id: ldap.c,v 1.63 1998/11/18 21:23:08 ssb Exp $</td></tr>\n"
 #if HAVE_NSLDAP
 				"<tr><td>SDK Version:</td><td>%f</td></tr>"
 				"<tr><td>Highest LDAP Protocol Supported:</td><td>%f</td></tr>"
@@ -326,7 +327,8 @@ void php3_info_ldap(void)
 
 }
 
-
+/* {{{ proto int ldap_connect([string host [, int port]])
+   Connect to an LDAP server */
 void php3_ldap_connect(INTERNAL_FUNCTION_PARAMETERS)
 {
 	char *host;
@@ -398,6 +400,7 @@ void php3_ldap_connect(INTERNAL_FUNCTION_PARAMETERS)
 	}
 
 }
+/* }}} */
 
 
 static LDAP * _get_ldap_link(pval *link, HashTable *list)
@@ -470,19 +473,20 @@ static BerElement * _get_ber_entry(pval *berp, HashTable *list)
 	return ber;
 }
 
-
+#if 0
 void php3_ber_free(INTERNAL_FUNCTION_PARAMETERS)
 {
         pval *berp;
 		
 	if ( getParameters(ht,1,&berp) == FAILURE ) RETURN_FALSE;
-	/*_free_ber_entry(_get_ber_entry(berp,list));*/
 	
 	php3_list_delete(berp->value.lval);
 	RETURN_TRUE;
 }
+#endif
 
-
+/* {{{ proto int ldap_bind(int link [, string dn, string password])
+   Bind to LDAP directory */
 void php3_ldap_bind(INTERNAL_FUNCTION_PARAMETERS)
 {
 pval *link, *bind_rdn, *bind_pw;
@@ -523,15 +527,22 @@ LDAP *ldap;
 
 	if (ldap_bind_s(ldap, ldap_bind_rdn, ldap_bind_pw, LDAP_AUTH_SIMPLE) != LDAP_SUCCESS) {
 #if !HAVE_NSLDAP
+#if LDAP_API_VERSION > 2000
+		/* New versions of OpenLDAP do it this way */
+		php3_error(E_WARNING,"LDAP:  Unable to bind to server: %s",ldap_err2string(ldap_get_lderrno(ldap,NULL,NULL)));
+#else
 		php3_error(E_WARNING,"LDAP:  Unable to bind to server: %s",ldap_err2string(ldap->ld_errno));
+#endif
 #endif
 		RETURN_FALSE;
 	} else {
 		RETURN_TRUE;
 	}
 }
+/* }}} */
 
-
+/* {{{ proto int ldap_unbind(int link)
+   Unbind from LDAP directory */
 void php3_ldap_unbind(INTERNAL_FUNCTION_PARAMETERS)
 {
 pval *link;
@@ -546,10 +557,10 @@ LDAP *ldap;
 	ldap = _get_ldap_link(link, list);
 	if (ldap == NULL) RETURN_FALSE;
 
-	/* dont do _close_ldap_link(ldap);*/
 	php3_list_delete(link->value.lval);
 	RETURN_TRUE;
 }
+/* }}} */
 
 
 static void php3_ldap_do_search(INTERNAL_FUNCTION_PARAMETERS, int scope)
@@ -633,7 +644,11 @@ static void php3_ldap_do_search(INTERNAL_FUNCTION_PARAMETERS, int scope)
 
 	if (ldap_search_s(ldap, ldap_base_dn, scope, ldap_filter, ldap_attrs, attrsonly, &ldap_result) != LDAP_SUCCESS) {
 #if !HAVE_NSLDAP
+#if LDAP_API_VERSION > 2000
+		php3_error(E_WARNING,"LDAP:  Unable to perform the search: %s",ldap_err2string(ldap_get_lderrno(ldap,NULL,NULL)));
+#else
 		php3_error(E_WARNING, "LDAP: Unable to perform the search: %s", ldap_err2string(ldap->ld_errno));
+#endif
 #endif
 		RETVAL_FALSE;
 	} else  {
@@ -647,25 +662,33 @@ static void php3_ldap_do_search(INTERNAL_FUNCTION_PARAMETERS, int scope)
 	return;
 }
 
-
+/* {{{ proto int ldap_read(int link, string base_dn, string filter [, string attributes])
+   Read an entry */
 void php3_ldap_read(INTERNAL_FUNCTION_PARAMETERS)
 {
 	php3_ldap_do_search(INTERNAL_FUNCTION_PARAM_PASSTHRU, LDAP_SCOPE_BASE);
 }
+/* }}} */
 
-
+/* {{{ proto int ldap_list(int link, string base_dn, string filter [, string attributes])
+   Single-level search */
 void php3_ldap_list(INTERNAL_FUNCTION_PARAMETERS)
 {
 	php3_ldap_do_search(INTERNAL_FUNCTION_PARAM_PASSTHRU, LDAP_SCOPE_ONELEVEL);
 }
+/* }}} */
 
 
+/* {{{ proto int ldap_search(int link, string base_dn, string filter [, string attributes])
+   Search LDAP tree under base_dn */
 void php3_ldap_search(INTERNAL_FUNCTION_PARAMETERS)
 {
 	php3_ldap_do_search(INTERNAL_FUNCTION_PARAM_PASSTHRU, LDAP_SCOPE_SUBTREE);
 }
+/* }}} */
 
-
+/* {{{ proto int ldap_free_result(int result)
+   Free result memory */
 void php3_ldap_free_result(INTERNAL_FUNCTION_PARAMETERS)
 {
 pval *result;
@@ -679,14 +702,15 @@ LDAPMessage *ldap_result;
 	if (ldap_result == NULL) {
 		RETVAL_FALSE;
 	} else {
-		_free_ldap_result(ldap_result);
-		php3_list_delete(result->value.lval);
+		php3_list_delete(result->value.lval);  /* Delete list entry and call registered destructor function */
 		RETVAL_TRUE;
 	}
 	return;
 }
+/* }}} */
 
-
+/* {{{ proto int ldap_count_entries(int link, int result)
+   Count the number of entries in a search result */
 void php3_ldap_count_entries(INTERNAL_FUNCTION_PARAMETERS)
 {
 pval *result, *link;
@@ -705,8 +729,10 @@ LDAPMessage *ldap_result;
 
 	RETURN_LONG(ldap_count_entries(ldap, ldap_result));
 }
+/* }}} */
 
-
+/* {{{ proto int ldap_first_entry(int link, int result)
+   Return first result id */
 void php3_ldap_first_entry(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *result, *link;
@@ -726,14 +752,15 @@ void php3_ldap_first_entry(INTERNAL_FUNCTION_PARAMETERS)
 	if (ldap_result == NULL) RETURN_FALSE;
 
 	if ((ldap_result_entry = ldap_first_entry(ldap, ldap_result)) == NULL) {
-	        /* php3_error(E_WARNING, "LDAP: Unable to read the entries from result : %s", ldap_err2string(ldap->ld_errno));*/
 		RETURN_FALSE;
 	} else {
 		RETURN_LONG(php3_list_insert(ldap_result_entry, LDAP_GLOBAL(le_result_entry)));
 	}
 }
+/* }}} */
 
-
+/* {{{ proto int ldap_next_entry(int link, int entry)
+   Get next result entry */
 void php3_ldap_next_entry(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *result_entry, *link;
@@ -752,15 +779,15 @@ void php3_ldap_next_entry(INTERNAL_FUNCTION_PARAMETERS)
 	if (ldap_result_entry == NULL) RETURN_FALSE;
 
 	if ((ldap_result_entry_next = ldap_next_entry(ldap, ldap_result_entry)) == NULL) {
-	        /* php3_error(E_WARNING, "LDAP: Unable to read the entries from result : %s", ldap_err2string(ldap->ld_errno));*/
 		RETURN_FALSE;
 	} else {
-	/* php3_list_delete(result->value.lval); */
 		RETURN_LONG(php3_list_insert(ldap_result_entry_next, LDAP_GLOBAL(le_result_entry)));
 	}
 }
+/* }}} */
 
-
+/* {{{ proto array ldap_get_entries(int link, int result)
+   Get all result entries */
 void php3_ldap_get_entries(INTERNAL_FUNCTION_PARAMETERS)
 {
 pval *link, *result;
@@ -840,8 +867,10 @@ char *dn;
 
 	add_assoc_long(return_value, "count", num_entries);
 }
+/* }}} */
 
-
+/* {{{ proto string ldap_first_attribute(int link, int result, int ber)
+   Return first attribute */
 void php3_ldap_first_attribute(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *result,*link,*berp;
@@ -862,7 +891,6 @@ void php3_ldap_first_attribute(INTERNAL_FUNCTION_PARAMETERS)
 	if (ldap_result_entry == NULL) RETURN_FALSE;
 
 	if ((attribute = ldap_first_attribute(ldap, ldap_result_entry, &ber)) == NULL) {
-	  /* php3_error(E_WARNING, "LDAP: Unable to read the attributes from entry : %s", ldap_err2string(ldap->ld_errno)); */
 		RETURN_FALSE;
 	} else {
 		/* brep is passed by ref so we do not have to account for memory */
@@ -875,8 +903,10 @@ void php3_ldap_first_attribute(INTERNAL_FUNCTION_PARAMETERS)
 #endif
 	}
 }
+/* }}} */
 
-
+/* {{{ proto string ldap_next_attribute(int link, int result, int ber)
+   Get the next attribute in result */
 void php3_ldap_next_attribute(INTERNAL_FUNCTION_PARAMETERS)
 {
 pval *result,*link,*berp;
@@ -898,7 +928,6 @@ char *attribute;
 	ber = _get_ber_entry(berp,list);
 
 	if ((attribute = ldap_next_attribute(ldap, ldap_result_entry, ber)) == NULL) {
-	  /* php3_error(E_WARNING, "LDAP: Unable to read the attributes from entry : %s", ldap_err2string(ldap->ld_errno)); */
 		RETURN_FALSE;
 	} else {
 		RETVAL_STRING(attribute,1);
@@ -907,8 +936,10 @@ char *attribute;
 #endif
 	}
 }
+/* }}} */
 
-
+/* {{{ proto array ldap_get_attributes(int link, int result)
+   Get attributes from a search result entry */
 void php3_ldap_get_attributes(INTERNAL_FUNCTION_PARAMETERS)
 {
 pval *link, *result_entry;
@@ -962,8 +993,10 @@ BerElement *ber;
 	
 	add_assoc_long(return_value, "count", num_attrib);
 }
+/* }}} */
 
-
+/* {{{ proto array ldap_get_values(int link, int result, string attribute)
+   Get all values from a result entry */
 void php3_ldap_get_values(INTERNAL_FUNCTION_PARAMETERS)
 {
 pval *link, *result_entry, *attr;
@@ -988,7 +1021,11 @@ int i, num_values;
 
 	if ((ldap_value = ldap_get_values(ldap, ldap_result_entry, attribute)) == NULL) {
 #if !HAVE_NSLDAP
+#if LDAP_API_VERSION > 2000
+		php3_error(E_WARNING, "LDAP: Cannot get the value(s) of attribute %s", ldap_err2string(ldap_get_lderrno(ldap,NULL,NULL)));
+#else
 		php3_error(E_WARNING, "LDAP: Cannot get the value(s) of attribute %s", ldap_err2string(ldap->ld_errno));
+#endif
 #endif
 		RETURN_FALSE;
 	}
@@ -1007,8 +1044,10 @@ int i, num_values;
 
 	ldap_value_free(ldap_value);
 }
+/* }}} */
 
-
+/* {{{ proto string ldap_get_dn(int link, int result)
+   Get the DN of a result entry */
 void php3_ldap_get_dn(INTERNAL_FUNCTION_PARAMETERS) 
 {
 	pval *link,*entryp;
@@ -1036,8 +1075,10 @@ void php3_ldap_get_dn(INTERNAL_FUNCTION_PARAMETERS)
 		RETURN_FALSE;
 	}
 }
+/* }}} */
 
-
+/* {{{ proto array ldap_explode_dn(string dn, int with_attrib)
+   Splits DN into its component parts */
 void php3_ldap_explode_dn(INTERNAL_FUNCTION_PARAMETERS)
 {
 pval *dn, *with_attrib;
@@ -1068,8 +1109,10 @@ int i, count;
 
 	ldap_value_free(ldap_value);
 }
+/* }}} */
 
-
+/* {{{ proto string ldap_dn2ufn(string dn)
+   Convert DN to User Friendly Naming format */
 void php3_ldap_dn2ufn(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *dn;
@@ -1092,6 +1135,7 @@ void php3_ldap_dn2ufn(INTERNAL_FUNCTION_PARAMETERS)
 		RETURN_FALSE;
 	}
 }
+/* }}} */
 	
 
 static void php3_ldap_do_modify(INTERNAL_FUNCTION_PARAMETERS, int oper)
@@ -1186,18 +1230,25 @@ ulong index;
 	return;
 }
 
-
+/* {{{ proto int ldap_add(int link, string dn, array entry)
+   Add entries to LDAP directory */
 void php3_ldap_add(INTERNAL_FUNCTION_PARAMETERS)
 {
 	php3_ldap_do_modify(INTERNAL_FUNCTION_PARAM_PASSTHRU, LDAP_MOD_ADD);
 }
+/* }}} */
 
 
+/* {{{ proto int ldap_modify(int link, string dn, array entry)
+   Modify an LDAP entry */
 void php3_ldap_modify(INTERNAL_FUNCTION_PARAMETERS)
 {
-	php3_ldap_do_modify(INTERNAL_FUNCTION_PARAM_PASSTHRU, LDAP_MOD_REPLACE);
+	php3_ldap_do_modify(INTERNAL_FUNCTION_PARAM_PASSTHRU, LDAP_MOD_REPLACE); 
 }
+/* }}} */
 
+/* {{{ proto int ldap_delete(int link, string dn)
+   Delete an entry from a directory */
 void php3_ldap_delete(INTERNAL_FUNCTION_PARAMETERS)
 {
 pval *link, *dn;
@@ -1221,5 +1272,6 @@ char *ldap_dn;
 
 	RETURN_TRUE;
 }
+/* }}} */
 
 #endif

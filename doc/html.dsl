@@ -6,19 +6,21 @@
 
 <!--
 
-  $Id: html.dsl,v 1.6 1998/03/11 03:02:59 ssb Exp $
+  $Id: html.dsl,v 1.7 1998/10/23 11:36:33 ssb Exp $
 
   HTML-specific stylesheet customization.
 
 -->
 
 <style-specification id="docbook-php-html" use="docbook">
+<style-specification-body>
 
 (define %html-ext% ".html")
 
 &html-common.dsl;
 &common.dsl;
 
+</style-specification-body>
 </style-specification>
 
 <external-specification id="docbook" document="docbook.dsl">

@@ -29,7 +29,7 @@
  */
 
 
-/* $Id: token_cache.h,v 1.32 1998/07/28 22:00:05 rasmus Exp $ */
+/* $Id: token_cache.h,v 1.33 1998/10/17 18:17:28 zeev Exp $ */
 
 
 #ifndef _TOKEN_CACHE
@@ -58,8 +58,17 @@ typedef struct {
 
 #define TOKEN_CACHE_BLOCK_SIZE 8192
 #define TOKEN_CACHE_EVAL_BLOCK_SIZE 32
+#define TOKEN_CACHE_INCLUDE_BLOCK_SIZE 512
+
 #define TOKEN_CACHES_BLOCK_SIZE 4
-#define MAX_TOKENS_PER_CACHE 1048576
+
+#define TOKEN_BITS 20
+#define TC_BITS ((sizeof(int))*8-TOKEN_BITS)
+
+#define TC_OFFSET(token_number)		(token_number>>TOKEN_BITS)
+#define TOKEN_OFFSET(token_number)	(token_number & ((1<<TOKEN_BITS)-1))
+#define FILE_OFFSET TC_OFFSET
+#define LINE_OFFSET TOKEN_OFFSET
 
 extern int tcm_init(TokenCacheManager *tcm);
 extern int tc_init(TokenCache *tc,int block_size);
@@ -75,7 +84,7 @@ extern inline int tc_set_included(TokenCacheManager *tcm, int offset);
 extern int tc_get_current_offset(TokenCacheManager *tcm);
 extern int tc_destroy(TokenCache *tc);
 extern void tcm_destroy(TokenCacheManager *tcm);
-extern int tcm_new(TokenCacheManager *tcm);
+extern int tcm_new(TokenCacheManager *tcm, int block_size);
 extern void tcm_save(TokenCacheManager *tcm);
 #if FHTTPD
 extern int tcm_load(TokenCacheManager *tcm, FILE *input);

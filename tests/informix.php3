@@ -80,6 +80,9 @@ while (is_array($row)) {
    printf("\n");
    $row = ifx_fetch_row($resultid, "next");
 }
+
+printf("Number of rows fetched so far : %d\n", ifx_num_rows($resultid));
+
 printf("+----------------------------------------+\n");
 printf("|       and now in reverse order :       |\n");
 printf("+----------------------------------------+\n");
@@ -92,6 +95,8 @@ while (is_array($row)) {
    printf("\n");
    $row = ifx_fetch_row($resultid, "previous");
 }
+
+printf("Number of rows fetched so far : %d\n", ifx_num_rows($resultid));
 
 printf("+-----------------------------------------+\n");
 printf("|         and now row number 10           |\n");
@@ -205,6 +210,7 @@ printf("\n");
 printf("+-----------------------------------------+\n");
 printf("|      some execute immediates(prepared)  |\n");
 printf("+-----------------------------------------+\n");
+
 $query = "create table testdh (k serial, d char(100), primary key (k))";
 $resultid = ifx_prepare($query, $res);
 if (!check_ifx($resultid)) {
@@ -224,7 +230,7 @@ printf("create table successfully executed\n");
 ifx_free_result($resultid);
 printf("\n");
 printf("+-----------------------------------------+\n");
-printf("|      some inserts unprepared)           |\n");
+printf("|      some inserts (unprepared)           |\n");
 printf("+-----------------------------------------+\n");
 
 for ($i = 1; $i < 20; $i++) {
@@ -239,6 +245,26 @@ for ($i = 1; $i < 20; $i++) {
     }
     ifx_free_result($rc);
 }
+
+printf("\n");
+printf("+-----------------------------------------+\n");
+printf("|      some updates (unprepared)           |\n");
+printf("+-----------------------------------------+\n");
+
+for ($i = 1; $i < 20; $i++) {
+    $query = sprintf(
+                  "update testdh set d = \"- this is still row " .
+                  "number %d -\" where k = %d",
+	           $i, $i);
+    echo $query . "\n";
+    $rc = ifx_query($query, $res);
+    if (! $rc) {
+        printf("update fails : %s:%s\n", ifx_error($res), ifx_errormsg());
+        die;
+    }
+    ifx_free_result($rc);
+}
+
 
 printf("\n");
 printf("+-----------------------------------------+\n");

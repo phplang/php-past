@@ -69,7 +69,7 @@ LINK32=link.exe
 # ADD BASE CPP /nologo /W3 /Gm /GX /Zi /Od /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /YX /FD /c
 # ADD CPP /nologo /MTd /W3 /Gm /GX /ZI /Od /I "." /I "regex\\" /I "d:\src\bind\include" /D "DEBUG" /D "_DEBUG" /D "MSVC5" /D "WIN32" /D "_CONSOLE" /D "_MBCS" /FR /YX /FD /c
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
-# ADD RSC /l 0x409 /d "_DEBUG"
+# ADD RSC /l 0x409 /i "c:\include" /d "_DEBUG"
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
@@ -269,6 +269,10 @@ SOURCE=.\functions\image.c
 # Begin Source File
 
 SOURCE=.\functions\info.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\functions\iptc.c
 # End Source File
 # Begin Source File
 
@@ -484,6 +488,14 @@ SOURCE=.\control_structures_inline.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\functions\cyr_convert.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\functions\cyr_convert.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\debugger.c
 # End Source File
 # Begin Source File
@@ -585,6 +597,14 @@ SOURCE=.\php3_realpath.c
 # Begin Source File
 
 SOURCE=.\php3_realpath.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\functions\quot_print.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\functions\quot_print.h
 # End Source File
 # Begin Source File
 

@@ -2,7 +2,7 @@
   <title>Language constructs</title>
 
   <simpara>
-   Any PHP 3 script is built out of a series of statements.  A
+   Any PHP script is built out of a series of statements.  A
    statement can be an assignment, a function call, a loop, a
    conditional statement of even a statement that does nothing (an
    empty statement).  Statements usually end with a semicolon.  In
@@ -12,11 +12,45 @@
    statement types are described in this chapter.
   </simpara>
 
+  <sect1 id="constants">
+   <title>Constants</title>
+   <simpara>
+    PHP defines a few constants and provides a mechanism for defining
+    more at run-time. Constants are much like variables, but they have
+    a slightly different syntax.
+   <para>
+    The pre-defined constants are __FILE__ and __LINE__, which
+    correspond to the filename and line number being processed when
+    they are encountered.
+    <example><title>Using __FILE__ and __LINE__</title>
+     <programlisting>
+&lt;?php
+    function report_error($file, $line, $message) {
+        echo "An error occured in $file on line $line: $message.";
+    }
+    
+    report_error(__FILE__,__LINE__, "Something went wrong!");
+?&gt;
+     </programlisting>
+    </example>
+   <para>
+    You can define additional constants using the <function>define</function>
+    and <function>undefine</function> functions.
+    <example><title>Defining Constants</title>
+     <programlisting>
+&lt;?php
+    define("CONSTANT", "Hello world.");
+    echo CONSTANT; // outputs "Hello world."
+    undefine ("CONSTANT");
+?&gt;
+     </programlisting>
+    </example>
+
   <sect1 id="expressions">
    <title>Expressions</title>
    <simpara>
-    Expressions are the most important building stones of PHP.  In PHP
-    3.0, almost anything you write is an expression.  The simplest yet
+    Expressions are the most important building stones of PHP.  In PHP,
+    almost anything you write is an expression.  The simplest yet
     most accurate way to define an expressions is "anything that has a
     value".
    <simpara>
@@ -53,7 +87,7 @@
 
    <simpara>
     Of course, values in PHP don't have to be integers, and very often
-    they aren't.  PHP supports 3 scalar value types: integer values,
+    they aren't.  PHP supports three scalar value types: integer values,
     floating point values and string values (scalar values are values that
     you can't 'break' into smaller pieces, unlike arrays, for instance).
     PHP also supports two composite (non-scalar) types: arrays and
@@ -62,8 +96,8 @@
 
    <simpara>
     So far, users of PHP/FI 2 shouldn't feel any change.  However, PHP
-    3 takes expressions much further, in the same way many other
-    languages do.  PHP 3 is an expression-oriented language, in the
+    takes expressions much further, in the same way many other
+    languages do.  PHP is an expression-oriented language, in the
     sense that almost everything is an expression.  Consider the
     example we've already dealt with, '$a = 5'.  It's easy to see that
     there are two values involved here, the value of the integer
@@ -84,8 +118,8 @@
     variable--.  These are increment and decrement operators.  In
     PHP/FI 2, the statement '$a++' has no value (is not an
     expression), and thus you can't assign it or use it in any way.
-    PHP 3 enhances the increment/decrement capabilities by making
-    these expressions as well, like in C.  In PHP 3, like in C, there
+    PHP enhances the increment/decrement capabilities by making
+    these expressions as well, like in C.  In PHP, like in C, there
     are two types of increment - pre-increment and post-increment.
     Both pre-increment and post-increment essentially increment the
     variable, and the effect on the variable is idential.  The
@@ -114,7 +148,7 @@
     very efficient or comfortable way.  A much more common practice is
     to write '$a = $a + 3'.  '$a + 3' evaluates to the value of $a
     plus 3, and is assigned back into $a, which results in
-    incrementing $a by 3.  In PHP 3, as in several other languages
+    incrementing $a by 3.  In PHP, as in several other languages
     like C, you can write this in a shorter way, which with time would
     become clearer and quicker to understand as well.  Adding 3 to the
     current value of $a can be written '$a += 3'.  This means exactly
@@ -126,6 +160,17 @@
     assigned into $a).  Any two-place operator can be used in this
     operator-assignment mode, for example '$a -= 5' (subtract 5 from
     the value of $a), '$b *= 7' (multiply the value of $b by 7), etc.
+
+   <para>
+    There is one more expression that may seem odd if you haven't
+	seen it in other languages, the terniary conditional operator:
+	<informalexample><programlisting>
+$first ? $second : $third
+</programlisting></informalexample>
+	If the value of the first subexpression is true (non-zero), then
+	it the second subexpression is evaluated, and that is the result of
+	the conditional expression. Otherwise, the third subexpression is
+	evaluated, and that is the value.
 
    <para>
     The following example should help you understand pre- and
@@ -141,7 +186,7 @@ $c = $a++;          /* post-increment, assign original value of $a (5) to $c */
 $e = $d = ++$b;     /* pre-increment, assign the incremented value of $b (6) to $d and $e */
 /* at this point, both $d and $e are equal to 6 */
 $f = double($d++);  /* assign twice the value of $d <emphasis>before</emphasis> the increment, 2*6 = 12 to $f */
-$g = double($++e);  /* assign twice the value of $e <emphasis>after</emphasis> the increment, 2*7 = 14 to $f */
+$g = double(++$e);  /* assign twice the value of $e <emphasis>after</emphasis> the increment, 2*7 = 14 to $f */
 $h = $g += 10;      /* first, $g is incremented by 10 and ends with the value of 24.
                        the value of the assignment (24) is then assigned into $h,
                        and $h ends with the value of 24 as well. */
@@ -169,12 +214,12 @@ $h = $g += 10;      /* first, $g is incremented by 10 and ends with the value of
     contains no elements it's considered FALSE, otherwise it's
     considered TRUE.
    <simpara>
-    PHP 3 provides a full and powerful implementation of expressions,
-    and documenting it entirely goes beyond the scope of this manual.
-    The above examples should give you a good idea about what
-    expressions are and how you can construct useful expressions.
-    Throughout the rest of this manual we'll write 'expr' to mark any
-    valid PHP3 expression.
+    PHP provides a full and powerful implementation of expressions, and
+    documenting it entirely goes beyond the scope of this manual. The
+    above examples should give you a good idea about what expressions
+    are and how you can construct useful expressions. Throughout the
+    rest of this manual we'll write 'expr' to indicate any valid PHP
+    expression.
     
   <sect1 id="construct.if">
    <title>IF</title>
@@ -349,7 +394,9 @@ endif;
 /* example 1 */
 $i=1;
 while ($i<=10) {
-    print $i++;  /* the printed value would be $i before the increment (post-increment) */
+    print $i++;  /* the printed value would be
+                    $i before the increment
+                    (post-increment) */
 }
 
 /* example 2 */
@@ -464,16 +511,21 @@ for (;;) {
     print $i;
     $i++;
 }
+
+/* example 4 */
+for ($i=1; $i<=10; print $i, $i++) ;
+
 </programlisting></informalexample>
 
    <simpara>
-    Of course, the first example appears to be the nicest one, but you
-    may find that being able to use empty expressions in FOR loops comes
-    in handy in many occasions.
+    Of course, the first example appears to be the nicest one (or perhaps
+	the fourth), but you may find that being able to use empty expressions
+	in FOR loops comes in handy in many occasions.
 
-   <para>There is only one format for FOR loops in PHP 3.
-    <informalexample><programlisting>
-    FOR(expr): ... ENDFOR;  is NOT supported.
+   <para>
+    PHP also supports the alternate "colon syntax" for FOR loops.
+     <informalexample><programlisting>
+    FOR (expr1; expr2; expr3): statement; ...; endfor;
 </programlisting></informalexample>
 
    <para>
@@ -481,6 +533,35 @@ for (;;) {
     or hash. PHP uses the while statement and the <function>list</function>
     and <function>each</function> functions for this. See the documentation
     for these functions for an example.
+
+  <sect1 id="construct.break">
+   <title>BREAK</title>
+
+   <para>
+    BREAK breaks out of the current looping construct.
+     <informalexample><programlisting>
+$i = 0;
+while ($i < 10) {
+    if ($arr[$i] == "stop") {
+        break;
+    }
+    $i++;
+}
+</programlisting></informalexample>
+
+  <sect1 id="construct.continue">
+   <title>CONTINUE</title>
+
+   <para>
+    CONTINUE jumps to the beginning of enclosing the looping construct.
+     <informalexample><programlisting>
+while (list($key,$value) = each($arr)) {
+    if ($key % 2) { // skip even members
+        continue;
+    }
+    do_something_odd($value);
+}
+</programlisting></informalexample>
 
   <sect1 id="construct.switch">
    <title>SWITCH</title>
@@ -597,7 +678,7 @@ require('header.inc');
   <sect1 id="function.include">
    <title>INCLUDE</title>
    <simpara>
-    The INCLUDE statement includes the specified file.
+    The INCLUDE statement includes and evaluates the specified file.
    <para>
     This happens each time the INCLUDE statement is encountered,
     so you can use an INCLUDE statement within a looping structure
@@ -608,6 +689,37 @@ for ($i = 0; $i < count($files); $i++) {
   include($files[$i]);
 }
 </programlisting></informalexample>
+   <para>
+    <function>include</function> differs from <function>require</function> in that the
+    include statement is re-evaluated each time it is encountered (and only when it is
+    being executed), whereas the <function>require</function> statement is replaced by
+    the required file when it is first encountered, whether the contents of the file
+    will be evaluated or not (for example, if it is inside an if statement whose
+    condition evaluated to false).
+   <para>
+    Because <function>include</function> is a special language construct, you
+    must enclose it within a statement block if it is inside a conditional
+    block.
+   <informalexample><programlisting>
+/* This is WRONG and will not work as desired. */
+if ($condition)
+    include($file);
+else
+    include($other);
+
+/* This is CORRECT. */
+if ($condition) {
+    include($file);
+} else {
+    include($other);
+}
+</programlisting></informalexample>
+   <para>
+    When the file is evaluated, the parser beings in "HTML-mode" which will
+    output the contents of the file until the first PHP start tag (&lt;?)
+    is encountered.
+   <para>
+    See also <function>readfile</function>, <function>virtual</function>.
 
   <sect1 id="keyword.function">
    <title>FUNCTION</title>
@@ -626,6 +738,9 @@ function foo( $arg_1, $arg_2, ..., $arg_n ) {
     Any valid PHP3 code may appear inside a function, even other
     functions and <link linkend="keyword.class">class</link> definitions.
     
+   <simpara>
+    Functions must be defined before they are referenced.
+
    <sect2 id="keyword.function.return">
     <title>Returning values</title>
     <para>
@@ -663,10 +778,14 @@ list( $zero, $one, $two ) = foo();
     <para>
      PHP3 supports passing arguments by value (the default), <link
      linkend="keyword.function.arguments.reference">passing by
-     reference</link>, and <link
-      linkend="keyword.function.arguments.default">default argument
-      values</link>. Variable-length argument lists are not supported, 
+     reference</link>, and <link linkend="keyword.function.arguments.default">default argument
+     values</link>. Variable-length argument lists are not supported, 
      but a similar effect may be achieved by passing arrays.
+     <informalexample><programlisting>
+function takes_array($input) {
+	echo "$input[0] + $input[1] = ", $input[0]+$input[1];
+}
+</programlisting></informalexample>
 
     <sect3 id="keyword.function.arguments.reference">
      <title>Passing by reference</title>
@@ -730,6 +849,10 @@ echo makecoffee( "espresso" );
 Making a cup of cappucino.
 Making a cup of espresso.
       </screen>
+
+	 <simpara>
+	  The default value must be a constant expression, not (for
+	  example) a variable or class member.
 
      <para>
       Note that when using default arguments, any defaults should be on

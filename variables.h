@@ -29,7 +29,7 @@
  */
 
 
-/* $Id: variables.h,v 1.51 1998/09/18 16:55:03 rasmus Exp $ */
+/* $Id: variables.h,v 1.53 1998/12/04 16:35:52 ssb Exp $ */
 
 
 #ifndef _VARIABLES_H
@@ -66,8 +66,15 @@ extern void php3_empty(pval *result, pval *var_ptr);
 
 extern PHPAPI void var_reset(pval *var);
 extern PHPAPI void var_uninit(pval *var);
+extern PHPAPI HashTable *php3i_get_symbol_table(void);
+extern PHPAPI HashTable *php3i_get_function_table(void);
 
 extern void read_pointer_value(pval *result,pval *array_result INLINE_TLS);
 extern inline void get_regular_variable_pointer(pval *result, pval *varname INLINE_TLS);
+
+extern PHPAPI pval *php3i_long_pval(long);
+extern PHPAPI pval *php3i_double_pval(double);
+extern PHPAPI pval *php3i_string_pval(const char *);
+extern PHPAPI char *php3i_pval_strdup(pval *);
 
 #endif

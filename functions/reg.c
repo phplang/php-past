@@ -28,7 +28,7 @@
    |          Jaakko Hyvätti <jaakko@hyvatti.iki.fi>                      | 
    +----------------------------------------------------------------------+
  */
-/* $Id: reg.c,v 1.86 1998/09/10 23:57:21 zeev Exp $ */
+/* $Id: reg.c,v 1.88 1998/11/18 21:23:11 ssb Exp $ */
 #ifdef THREAD_SAFE
 #include "tls.h"
 #endif
@@ -209,15 +209,21 @@ static void _php3_ereg(INTERNAL_FUNCTION_PARAMETERS, int icase)
 	regfree(&re);
 }
 
+/* {{{ proto int ereg(string pattern, string string [, array registers])
+   Regular expression match */
 void php3_ereg(INTERNAL_FUNCTION_PARAMETERS)
 {
 	_php3_ereg(INTERNAL_FUNCTION_PARAM_PASSTHRU, 0);
 }
+/* }}} */
 
+/* {{{ proto int eregi(string pattern, string string [, array registers])
+   Case-insensitive regular expression match */
 void php3_eregi(INTERNAL_FUNCTION_PARAMETERS)
 {
 	_php3_ereg(INTERNAL_FUNCTION_PARAM_PASSTHRU, 1);
 }
+/* }}} */
 
 /* this is the meat and potatoes of regex replacement! */
 char *_php3_regreplace(const char *pattern, const char *replace, const char *string, int icase, int extended)
@@ -418,18 +424,26 @@ static void _php3_eregreplace(INTERNAL_FUNCTION_PARAMETERS, int icase)
 	STR_FREE(pattern);
 }
 
+/* {{{ proto string ereg_replace(string pattern, string string [, array registers])
+   Replace regular expression */
 void php3_eregreplace(INTERNAL_FUNCTION_PARAMETERS)
 {
 	_php3_eregreplace(INTERNAL_FUNCTION_PARAM_PASSTHRU, 0);
 }
+/* }}} */
 
+/* {{{ proto string eregi_replace(string pattern, string string [, array registers])
+   Case insensitive replace regular expression */
 void php3_eregireplace(INTERNAL_FUNCTION_PARAMETERS)
 {
 	_php3_eregreplace(INTERNAL_FUNCTION_PARAM_PASSTHRU, 1);
 }
+/* }}} */
 
 /* ("root", "passwd", "uid", "gid", "other:stuff:like:/bin/sh")
    = split(":", $passwd_file, 5); */
+/* {{{ proto array split(string pattern, string string [, int limit])
+   split string into array by regular expression */
 void php3_split(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *spliton, *str, *arg_count = NULL;
@@ -522,8 +536,10 @@ void php3_split(INTERNAL_FUNCTION_PARAMETERS)
 
 	return;
 }
+/* }}} */
 
-
+/* {{{ proto string sql_regcase(string string)
+   Make regular expression for case insensitive match */
 PHPAPI void php3_sql_regcase(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *string;
@@ -550,6 +566,7 @@ PHPAPI void php3_sql_regcase(INTERNAL_FUNCTION_PARAMETERS)
 	return_value->value.str.len = string->value.str.len*4;
 	return_value->type = IS_STRING;
 }
+/* }}} */
 
 /*
  * Local variables:

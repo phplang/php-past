@@ -20,8 +20,10 @@ make
 make install
 cd ../apache_1.3.x
 ./configure --prefix=/www --activate-module=src/modules/php3/libphp3.a
+ (The above line is correct!  Yes, we know libphp3.a does not exist at this
+  stage.  It isn't supposed to.  It will be created.)
 make
-(you should now have an httpd binary which you can copy to your Apache bin dir)
+ (you should now have an httpd binary which you can copy to your Apache bin dir)
 cd ../php-3.0.x
 cp php3.ini-dist /usr/local/lib/php3.ini
 You can edit /usr/local/lib/php3.ini file to set PHP options.
@@ -118,7 +120,7 @@ Installing PHP3 can be done in four simple steps:
 
    So, as an example, your EXTRA_LIBS line might look like:
 
-	EXTRA_LIBS=-L. -lphp3 -gdbm -ldb -L/usr/local/mysql/lib -lmysqlclient
+	EXTRA_LIBS=-L. -lphp3 -lgdbm -ldb -L/usr/local/mysql/lib -lmysqlclient
 
    NOTE: You should not enclose the EXTRA_LIBS line in double-quotes, as it
    is in the libphp3.module file.

@@ -26,7 +26,7 @@
    | Author: Bjørn Borud - Guardian Networks AS <borud@guardian.no>    |
    +----------------------------------------------------------------------+
  */
-/* $Id: soundex.c,v 1.27 1998/05/15 10:57:37 zeev Exp $ */
+/* $Id: soundex.c,v 1.29 1998/11/18 21:23:11 ssb Exp $ */
 
 #include "php.h"
 #include "internal_functions.h"
@@ -36,6 +36,8 @@
 #include "php3_string.h"
 
 /* Simple soundex algorithm as described by Knuth in TAOCP, vol 3 */
+/* {{{ proto string soundex(string str)
+   Calculate the soundex key of a string */
 void soundex(INTERNAL_FUNCTION_PARAMETERS)
 {
 	char l, u;
@@ -125,6 +127,7 @@ void soundex(INTERNAL_FUNCTION_PARAMETERS)
 	return_value->value.str.len = strlen(soundex);
 	return_value->type = IS_STRING;
 }
+/* }}} */
 
 /*
  * Local variables:

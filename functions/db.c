@@ -28,9 +28,17 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: db.c,v 1.77 1998/09/19 20:17:15 rasmus Exp $ */
+/* $Id: db.c,v 1.79 1998/10/23 20:07:15 shane Exp $ */
+#define IS_EXT_MODULE
 #if COMPILE_DL
-#include "dl/phpdl.h"
+#ifdef PHP_31
+# include "../phpdl.h"
+#else
+# ifdef THREAD_SAFE
+# undef THREAD_SAFE
+# endif
+# include "dl/phpdl.h"
+#endif
 #endif
 
 #include "php.h"
@@ -48,7 +56,11 @@
 
 #if HAVE_SYS_FILE_H && !HAVE_LOCKF && HAVE_FLOCK
 #if WIN32|WINNT
+#ifdef PHP_31
+#include "os/nt/flock.h"
+#else
 #include "win32/flock.h"
+#endif
 #else
 #include <sys/file.h>
 #endif
@@ -149,8 +161,13 @@ datum flatfile_firstkey(FILE *dbf);
 datum flatfile_nextkey(FILE *dbf);
 #endif
 
+#ifdef PHP_31
+#include "php3_db.h"
+#include "ext/standard/php3_string.h"
+#else
 #include "functions/db.h"
 #include "functions/php3_string.h"
+#endif
 
 #if THREAD_SAFE
 DWORD DbmTls;
@@ -161,10 +178,7 @@ typedef struct dbm_global_struct{
 }dbm_global_struct;
 
 #define DBM_GLOBAL(a) dbm_globals->a
-
-#define DBM_TLS_VARS \
-	dbm_global_struct *dbm_globals; \
-	dbm_globals=TlsGetValue(DbmTls); 
+#define DBM_TLS_VARS dbm_global_struct *dbm_globals = TlsGetValue(DbmTls); 
 
 #else
 static int le_db;
@@ -244,7 +258,7 @@ static char *php3_get_info_db(void)
 
 void php3_info_db(void)
 {
-	PUTS(php3_get_info_db());
+	php3_printf(php3_get_info_db());
 }
 
 void php3_dblist(INTERNAL_FUNCTION_PARAMETERS)
@@ -256,7 +270,7 @@ void php3_dblist(INTERNAL_FUNCTION_PARAMETERS)
 
 void php3_dbmopen(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *filename, *mode;
-	dbm_info *info;
+	dbm_info *info=NULL;
 	int ret;
 	DBM_TLS_VARS;
 
@@ -288,7 +302,7 @@ dbm_info *_php3_dbmopen(char *filename, char *mode) {
 	int retries = 0;
 #endif
 
-	DBM_TYPE dbf;
+	DBM_TYPE dbf=NULL;
 	DBM_MODE_TYPE imode;
 
 	if (filename == NULL) {
@@ -296,9 +310,11 @@ dbm_info *_php3_dbmopen(char *filename, char *mode) {
 		return NULL;
 	}
 
+#ifndef PHP_31 /* FIXME php3_ini cannot be accessed in modules */
 	if (php3_ini.safe_mode && (!_php3_checkuid(filename, 2))) {
 		return NULL;
 	}
+#endif
 
 	if (_php3_check_open_basedir(filename)) {
 		return NULL;
@@ -360,6 +376,7 @@ dbm_info *_php3_dbmopen(char *filename, char *mode) {
 #endif /* else NFS_HACK */
 
 	}
+
 	dbf = DBM_OPEN(filename, imode);
 
 #if !NDBM && !GDBM
@@ -551,10 +568,12 @@ int _php3_dbmreplace(dbm_info *info, char *key, char *value) {
 	int ret;
 	datum key_datum, value_datum;
 
+#ifndef PHP_31 /* FIXME php3_ini cannot be accessed in modules */
 	if (php3_ini.magic_quotes_runtime) {
 		_php3_stripslashes(key,NULL);
 		_php3_stripslashes(value,NULL);
 	}
+#endif
 
 	value_datum.dptr = estrdup(value);
 	value_datum.dsize = strlen(value);
@@ -642,9 +661,11 @@ char *_php3_dbmfetch(dbm_info *info, char *key) {
 	else
 		ret = NULL;
 
+#ifndef PHP_31 /* FIXME php3_ini cannot be accessed in modules */
 	if (ret && php3_ini.magic_quotes_runtime) {
 		ret = _php3_addslashes(ret, value_datum.dsize, NULL, 1);
 	}
+#endif
 	return(ret);
 }
 
@@ -856,9 +877,11 @@ char *_php3_dbmnextkey(dbm_info *info, char *key) {
 	}
 	else ret=NULL;
 
+#ifndef PHP_31 /* FIXME php3_ini cannot be accessed in modules */
 	if (ret && php3_ini.magic_quotes_runtime) {
 		ret = _php3_addslashes(ret, ret_datum.dsize, NULL, 1);
 	}
+#endif
 	return(ret);
 }
 
@@ -1091,21 +1114,23 @@ datum flatfile_nextkey(FILE *dbf) {
 
 int php3_minit_db(INIT_FUNC_ARGS)
 {
-#ifdef THREAD_SAFE
+#if defined(THREAD_SAFE)
 	dbm_global_struct *dbm_globals;
-#if !COMPILE_DL
-	CREATE_MUTEX(dbm_mutex,"DBM_TLS");
-	SET_MUTEX(dbm_mutex);
+	PHP3_MUTEX_ALLOC(dbm_mutex);
+	PHP3_MUTEX_LOCK(dbm_mutex);
 	numthreads++;
 	if (numthreads==1){
-	if ((DbmTls=TlsAlloc())==0xFFFFFFFF){
-		FREE_MUTEX(dbm_mutex);
-		return 0;
-	}}
-	FREE_MUTEX(dbm_mutex);
-#endif
-	dbm_globals = (dbm_global_struct *) LocalAlloc(LPTR, sizeof(dbm_global_struct)); 
-	TlsSetValue(DbmTls, (void *) dbm_globals);
+		if (!PHP3_TLS_PROC_STARTUP(DbmTls)){
+			PHP3_MUTEX_UNLOCK(dbm_mutex);
+			PHP3_MUTEX_FREE(dbm_mutex);
+			return FAILURE;
+		}
+	}
+	PHP3_MUTEX_UNLOCK(dbm_mutex);
+	if(!PHP3_TLS_THREAD_INIT(DbmTls,dbm_globals,dbm_global_struct)){
+		PHP3_MUTEX_FREE(dbm_mutex);
+		return FAILURE;
+	}
 #endif
 
 	DBM_GLOBAL(le_db) = register_list_destructors(_php3_dbmclose,NULL);
@@ -1113,21 +1138,18 @@ int php3_minit_db(INIT_FUNC_ARGS)
 }
 
 static int php3_mend_db(void){
+	DBM_TLS_VARS;
 #ifdef THREAD_SAFE
-	dbm_global_struct *dbm_globals;
-	dbm_globals = TlsGetValue(DbmTls); 
-	if (dbm_globals != 0) 
-		LocalFree((HLOCAL) dbm_globals); 
-#if !COMPILE_DL
-	SET_MUTEX(dbm_mutex);
+	PHP3_TLS_THREAD_FREE(dbm_globals);
+	PHP3_MUTEX_LOCK(dbm_mutex);
 	numthreads--;
-	if (!numthreads){
-	if (!TlsFree(DbmTls)){
-		FREE_MUTEX(dbm_mutex);
-		return 0;
-	}}
-	FREE_MUTEX(dbm_mutex);
-#endif
+	if (numthreads<1) {
+		PHP3_TLS_PROC_SHUTDOWN(DbmTls);
+		PHP3_MUTEX_UNLOCK(dbm_mutex);
+		PHP3_MUTEX_FREE(dbm_mutex);
+		return SUCCESS;
+	}
+	PHP3_MUTEX_UNLOCK(dbm_mutex);
 #endif
 	return SUCCESS;
 }
@@ -1160,34 +1182,6 @@ php3_module_entry dbm_module_entry = {
 
 #if COMPILE_DL
 DLEXPORT php3_module_entry *get_module(void) { return &dbm_module_entry; }
-
-#if (WIN32|WINNT) && defined(THREAD_SAFE)
-
-/*NOTE: You should have an odbc.def file where you
-export DllMain*/
-BOOL WINAPI DllMain(HANDLE hModule, 
-                      DWORD  ul_reason_for_call, 
-                      LPVOID lpReserved)
-{
-    switch( ul_reason_for_call ) {
-    case DLL_PROCESS_ATTACH:
-		if ((DbmTls=TlsAlloc())==0xFFFFFFFF){
-			return 0;
-		}
-		break;    
-    case DLL_THREAD_ATTACH:
-		break;
-    case DLL_THREAD_DETACH:
-		break;
-	case DLL_PROCESS_DETACH:
-		if (!TlsFree(DbmTls)){
-			return 0;
-		}
-		break;
-    }
-    return 1;
-}
-#endif
 #endif
 
 /*

@@ -23,10 +23,10 @@
    | If you did not, or have any questions about PHP licensing, please    |
    | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
-   | Author: Rasmus Lerdorf                                               |
+   | Author: Rasmus Lerdorf   <rasmus@lerdorf.on.ca>                      |
    +----------------------------------------------------------------------+
  */
-/* $Id: exec.c,v 1.78 1998/09/10 23:57:18 zeev Exp $ */
+/* $Id: exec.c,v 1.80 1998/11/18 21:23:05 ssb Exp $ */
 
 #ifdef THREAD_SAFE
 #include "tls.h"
@@ -193,6 +193,8 @@ static int _Exec(int type, char *cmd, pval *array, pval *return_value)
 	return ret;
 }
 
+/* {{{ proto int exec(string command [, array output [, int return_value]])
+   Execute an external program */
 void php3_exec(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *arg1, *arg2, *arg3;
@@ -225,7 +227,10 @@ void php3_exec(INTERNAL_FUNCTION_PARAMETERS)
 			break;
 	}
 }
+/* }}} */
 
+/* {{{ proto int system(string command [, int return_value])
+   Execute an external program and display output */
 void php3_system(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *arg1, *arg2;
@@ -249,7 +254,10 @@ void php3_system(INTERNAL_FUNCTION_PARAMETERS)
 			break;
 	}
 }
+/* }}} */
 
+/* {{{ proto int passthru(string command [, int return_value])
+   Execute an external program and display raw output */
 void php3_passthru(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *arg1, *arg2;
@@ -273,6 +281,7 @@ void php3_passthru(INTERNAL_FUNCTION_PARAMETERS)
 			break;
 	}
 }
+/* }}} */
 
 static int php3_ind(char *s, char c)
 {
@@ -312,6 +321,8 @@ char * _php3_escapeshellcmd(char *str) {
 	return cmd;
 }
 
+/* {{{ proto escapeshellcmd(string command)
+   escape shell metacharacters */
 void php3_escapeshellcmd(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *arg1;
@@ -326,6 +337,7 @@ void php3_escapeshellcmd(INTERNAL_FUNCTION_PARAMETERS)
 	RETVAL_STRING(cmd,1);
 	efree(cmd);
 }
+/* }}} */
 /*
  * Local variables:
  * tab-width: 4

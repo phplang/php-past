@@ -99,7 +99,7 @@ pg_exec ($database, "end")
    <refsect1>
     <title>Description</title>
     <funcsynopsis>
-     <funcdef>void <function>pg_close</function></funcdef>
+     <funcdef>bool <function>pg_close</function></funcdef>
      <paramdef>int <parameter>connection</parameter></paramdef>
     </funcsynopsis>
     <para>

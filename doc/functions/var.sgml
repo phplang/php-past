@@ -61,7 +61,7 @@
      See also <function>doubleval</function>,
      <function>strval</function>,
      <function>settype</function> and <link
-     linkend="typejuggling">Type juggling</link>.
+     linkend="variable-typejuggling">Type juggling</link>.
 
    </refsect1>
   </refentry>
@@ -89,7 +89,7 @@
      See also <function>intval</function>,
      <function>strval</function>,
      <function>settype</function> and <link
-     linkend="typejuggling">Type juggling</link>.
+     linkend="variable-typejuggling">Type juggling</link>.
 
    </refsect1>
   </refentry>
@@ -109,42 +109,14 @@
     
     <simpara>
      Returns false if <parameter>var</parameter> exists and has a
-     value; true otherwise.
+     non-empty or non-zero value; true otherwise.
     
     <simpara>
-     See also <function>isset</function>.
+     See also <function>isset</function> and <function>unset</function>.
 
    </refsect1>
   </refentry>
 
-
-  <refentry id="function.strval">
-   <refnamediv>
-    <refname>strval</refname>
-    <refpurpose>Get string value of a variable.</refpurpose>
-   </refnamediv>
-   <refsect1>
-    <title>Description</title>
-    <funcsynopsis>
-     <funcdef>string <function>strval</function></funcdef>
-     <paramdef>mixed <parameter>var</parameter></paramdef>
-    </funcsynopsis>
-
-    <simpara>
-     Returns the string value of <parameter>var</parameter>.
-
-    <simpara>
-     <parameter>var</parameter> may be any scalar type. You cannot use
-     <function>strval</function> on arrays or objects.
-
-    <simpara>
-     See also <function>doubleval</function>,
-     <function>intval</function>,
-     <function>settype</function> and <link
-     linkend="typejuggling">Type juggling</link>.
-
-   </refsect1>
-  </refentry>
 
   <refentry id="function.is-array">
    <refnamediv>
@@ -428,8 +400,18 @@
      Returns true if <parameter>var</parameter> exists;
      false otherwise.
     
+    <para>
+     If a variable has been unset with <function>unset</function>,
+     it will no longer be <function>isset</function>.
+    <informalexample><programlisting>
+$a = "test";
+echo isset($a); // true
+unset($a);
+echo isset($a); // false
+</programlisting></informalexample>
+    
     <simpara>
-     See also <function>empty</function>.
+     See also <function>empty</function> and <function>unset</function>.
 
    </refsect1>
   </refentry>
@@ -468,6 +450,67 @@
     <para>
      See also <function>gettype</function>.
 
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.strval">
+   <refnamediv>
+    <refname>strval</refname>
+    <refpurpose>Get string value of a variable.</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>string <function>strval</function></funcdef>
+     <paramdef>mixed <parameter>var</parameter></paramdef>
+    </funcsynopsis>
+
+    <simpara>
+     Returns the string value of <parameter>var</parameter>.
+
+    <simpara>
+     <parameter>var</parameter> may be any scalar type. You cannot use
+     <function>strval</function> on arrays or objects.
+
+    <simpara>
+     See also <function>doubleval</function>,
+     <function>intval</function>,
+     <function>settype</function> and <link
+     linkend="variable-typejuggling">Type juggling</link>.
+
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.unset">
+   <refnamediv>
+    <refname>unset</refname>
+    <refpurpose>Unset a given variable</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>unset</function></funcdef>
+     <paramdef>mixed <parameter>var</parameter></paramdef>
+    </funcsynopsis>
+
+    <para>
+     <function>unset</function> destroys the specified variable and
+     returns true.
+
+    <para>
+     <example>
+      <title><function>unset</function> example</title>
+      <programlisting>
+unset( $foo );
+unset( $bar['quux'] );
+      </programlisting>
+     </example>
+
+    <para>
+     See also <function>isset</function> and <function>empty</function>.
+     
    </refsect1>
   </refentry>
 

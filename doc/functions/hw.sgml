@@ -44,6 +44,54 @@
      at all. You may even add a link to a document without modifying
      the document itself.
     <para>
+     Saying that <function>hw_pipedocument</function> and
+     <function>hw_gettext</function> do the link insertion automatically
+     is not as simple as it sounds. Inserting links implies a certain
+     hierachy of the documents. On a web server this is given by the
+     file system, but Hyperwave has its own hierachy and names do not
+     reflect the position of an object in that hierachy. Therefore
+     creation of links first of all requires a mapping from the Hyperwave
+     hierachy and namespace into a web hierachy respective web namespace.
+     The fundamental difference between Hyperwave and the web is the clear
+     distingtion between names and hierachy in Hyperwave. The name does
+     not contain any information about the objects position in the hierachy.
+     In the web the
+     name also contains the information on where the object is located
+     in the hierachy. This leads to two possibles ways of mapping. Either
+     the Hyperwave hierachy and name of the Hyperwave object is reflected
+     in the URL or the name only.
+     To make things simple the second approach is used.
+     Hyperwave object with name 'my_object' is mapped to
+     'http://host/my_object' diregarding where it resides in the
+     Hyperwave hierachy.
+     An object with name 'parent/my_object' could be the child of
+     'my_object' in the Hyperwave hierachy, though in a web namespace it
+     appears to be just the opposite and the user might get confused. 
+     This can only be prevented by selecting reasonable obect names.
+    <para>
+     Having made this decission a second problem arises. How do you
+     involve php3? The URL http://host/my_object will not call any
+     php3 script unless you tell your web server to rewrite it to
+     e.g. 'http://host/php3_script/my_object' and the script 'php3_script'
+     evaluates the $PATH_INFO variable and retrieves the object with
+     name 'my_object' from the Hyperwave server. Their is just one little
+     drawback which can be fixed easily. Rewriting any URL would not allow
+     any access to other document on the web server. A php3 script for
+     searching in the Hyperwave server would be impossible. Therefore
+     you will need at least a second rewriting rule to exclude certain
+     URLS like all e.g. starting with http://host/Hyperwave. This is
+     basically sharing of a namespace by the web and Hyperwave server.
+    <para>
+     Based on the above mechanism links are insert into documents.
+    <para>
+     It gets more complicated if php3 is not run as a module/CGI script
+     but as a standalone application e.g. to dump the content of the
+     Hyperwave server on a CD-ROM. In such a case it makes sense to
+     retain the Hyperwave hierachy and map in onto the filesystem. This
+     conflicts with the object names if they reflect its own hierachy
+     (e.g. by chosing names including '/'). Therefore '/' has to be
+     replaced by another character, e.g. '_'. to be continued.
+    <para>
      The network protocol to communicate with the Hyperwave server is
      called <ulink
      url="http://www.hyperwave.de/hg-csp-0xc31b08d4">HG-CSP</ulink>
@@ -419,6 +467,42 @@ RewriteEngine on
    </refsect1>
   </refentry>
 
+  <refentry id="function.hw-docbyanchor">
+   <refnamediv>
+    <refname>hw_DocByAnchor</refname>
+    <refpurpose>object id object belonging to anchor</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>hw_docbyanchor</function></funcdef>
+     <paramdef>int <parameter>connection</parameter></paramdef>
+     <paramdef>int <parameter>anchorID</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+     Returns an th object id of the document to
+     which <parameter>anchorID</parameter> belongs.
+   </refsect1>
+  </refentry>
+
+  <refentry id="function.hw-docbyanchorobj">
+   <refnamediv>
+    <refname>hw_DocByAnchorObj</refname>
+    <refpurpose>object record object belonging to anchor</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>string <function>hw_docbyanchorobj</function></funcdef>
+     <paramdef>int <parameter>connection</parameter></paramdef>
+     <paramdef>int <parameter>anchorID</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+     Returns an th object record of the document to
+     which <parameter>anchorID</parameter> belongs.
+   </refsect1>
+  </refentry>
+
   <refentry id="function.hw-documentattributes">
    <refnamediv>
     <refname>hw_DocumentAttributes</refname>
@@ -428,7 +512,7 @@ RewriteEngine on
     <title>Description</title>
     <funcsynopsis>
      <funcdef>string <function>hw_documentattributes</function></funcdef>
-     <paramdef>hw_document <parameter>document</parameter></paramdef>
+     <paramdef>int <parameter>hw_document</parameter></paramdef>
     </funcsynopsis>
     <para>
      Returns the object record of the document.
@@ -447,7 +531,7 @@ RewriteEngine on
     <title>Description</title>
     <funcsynopsis>
      <funcdef>string <function>hw_documentbodytag</function></funcdef>
-     <paramdef>hw_document <parameter>document</parameter></paramdef>
+     <paramdef>int <parameter>hw_document</parameter></paramdef>
     </funcsynopsis>
     <para>
      Returns the BODY tag of the document. If the document is an HTML
@@ -467,7 +551,7 @@ RewriteEngine on
     <title>Description</title>
     <funcsynopsis>
      <funcdef>int <function>hw_documentsize</function></funcdef>
-     <paramdef>hw_document <parameter>document</parameter></paramdef>
+     <paramdef>int <parameter>hw_document</parameter></paramdef>
     </funcsynopsis>
     <para>
      Returns the size in bytes of the document.
@@ -477,15 +561,15 @@ RewriteEngine on
    </refsect1>
   </refentry>
 
-  <refentry id="function.hw-echo-error">
+  <refentry id="function.hw-errormsg">
    <refnamediv>
-    <refname>hw_Echo_Error</refname>
-    <refpurpose>error message</refpurpose>
+    <refname>hw_ErrorMsg</refname>
+    <refpurpose>returns error message</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
     <funcsynopsis>
-     <funcdef>string <function>hw_echo_error</function></funcdef>
+     <funcdef>string <function>hw_errormsg</function></funcdef>
      <paramdef>int <parameter>connection</parameter></paramdef>
     </funcsynopsis>
     <para>
@@ -503,9 +587,9 @@ RewriteEngine on
    <refsect1>
     <title>Description</title>
     <funcsynopsis>
-     <funcdef>hw_document <function>hw_edittext</function></funcdef>
+     <funcdef>int <function>hw_edittext</function></funcdef>
      <paramdef>int <parameter>connection</parameter></paramdef>
-     <paramdef>hw_document <parameter>document</parameter></paramdef>
+     <paramdef>int <parameter>hw_document</parameter></paramdef>
     </funcsynopsis>
     <para>
      Uploads the text document to the server. The object record
@@ -541,16 +625,16 @@ RewriteEngine on
    </refsect1>
   </refentry>
 
-  <refentry id="function.hw-freedocument">
+  <refentry id="function.hw-free-document">
    <refnamediv>
-    <refname>hw_FreeDocument</refname>
+    <refname>hw_Free_Document</refname>
     <refpurpose>frees hw_document</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
     <funcsynopsis>
-     <funcdef>int <function>hw_freedocument</function></funcdef>
-     <paramdef>hw_document <parameter>document</parameter></paramdef>
+     <funcdef>int <function>hw_free_document</function></funcdef>
+     <paramdef>int <parameter>hw_document</parameter></paramdef>
     </funcsynopsis>
     <para>
      Frees the memory occupied by the Hyperwave document.
@@ -641,6 +725,27 @@ RewriteEngine on
    </refsect1>
   </refentry>
 
+  <refentry id="function.hw-getsrcbydestobj">
+   <refnamediv>
+    <refname>hw_GetSrcByDestObj</refname>
+    <refpurpose>Returns anchors pointing at object</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>array <function>hw_getsrcbydestobj</function></funcdef>
+     <paramdef>int <parameter>connection</parameter></paramdef>
+     <paramdef>int <parameter>objectID</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+     Returns the object records of all anchors pointing to the object with ID
+     <parameter>objectID</parameter>. The object can either be a document
+     or an anchor of type destination.
+    <para>
+     See also <function>hw_GetAnchors</function>.
+   </refsect1>
+  </refentry>
+
   <refentry id="function.hw-getobject">
    <refnamediv>
     <refname>hw_GetObject</refname>
@@ -664,12 +769,12 @@ RewriteEngine on
   <refentry id="function.hw-getandlock">
    <refnamediv>
     <refname>hw_GetAndLock</refname>
-    <refpurpose>object record, lock object</refpurpose>
+    <refpurpose>return bject record and lock object</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
     <funcsynopsis>
-     <funcdef>array <function>hw_getandlock</function></funcdef>
+     <funcdef>string <function>hw_getandlock</function></funcdef>
      <paramdef>int <parameter>connection</parameter></paramdef>
      <paramdef>int <parameter>objectID</parameter></paramdef>
     </funcsynopsis>
@@ -692,7 +797,7 @@ RewriteEngine on
    <refsect1>
     <title>Description</title>
     <funcsynopsis>
-     <funcdef>hw_document <function>hw_gettext</function></funcdef>
+     <funcdef>int <function>hw_gettext</function></funcdef>
      <paramdef>int <parameter>connection</parameter></paramdef>
      <paramdef>int <parameter>objectID</parameter></paramdef>
      <paramdef>int <parameter>rootID</parameter></paramdef>
@@ -704,11 +809,27 @@ RewriteEngine on
      The optional parameter <parameter>rootID</parameter> determines
      how links are inserted
      into the document. The default is 0 and will result in links that
-     are constructed from the name of the link's destination object. If
-     <parameter>rootID</parameter> is unequal to 0 the link is
+     are constructed from the name of the link's destination object. This
+     is useful for web applications. If a link points to an object with
+     name 'internet_movie' the HTML link will be
+     &lt;A HREF="/internet_movie">. The actual location of the source and
+     destination object in the document hierachy is disregarded. You
+     will have to set up your web browser, to rewrite that URL to for
+     example '/my_script.php3/internet_movie'. 'my_script.php3' will
+     have to evaluate $PATH_INFO and retrieve the document.
+    <para>
+     If <parameter>rootID</parameter> is unequal to 0 the link is
      constructed from all the names
      starting at the object with the id <parameter>rootID</parameter>
      separated by a slash relative to the current object.
+     If for example the above document 'internet_movie' is located
+     at 'a-b-c-internet_movie' with '-' being the seperator between
+     hierachy levels and the source document is located at
+     'a-b-d-source' the resulting HTML link would be:
+     &lt;A HREF="../c/internet_movie">. This is useful if you want
+     to download the whole server content onto disk and map
+     the document hierachy onto the file system.
+    <para>
      This function will only work for pure text documents. It will
      not open a special data connection and therefore blocks the
      control connection during the transfer.
@@ -793,7 +914,7 @@ RewriteEngine on
    </refsect1>
   </refentry>
 
-  <refentry id="function.hw-getobjbectyquerycollobj">
+  <refentry id="function.hw-getobjectbyquerycollobj">
    <refnamediv>
     <refname>hw_GetObjectByQueryCollObj</refname>
     <refpurpose>search object in collection</refpurpose>
@@ -1027,14 +1148,17 @@ RewriteEngine on
     <funcsynopsis>
      <funcdef>int <function>hw_insdoc</function></funcdef>
      <paramdef>int <parameter>connection</parameter></paramdef>
-     <paramdef>array <parameter>object_array</parameter></paramdef>
+     <paramdef>int <parameter>parentID</parameter></paramdef>
+     <paramdef>string <parameter>object_record</parameter></paramdef>
+     <paramdef>string <parameter>text</parameter></paramdef>
     </funcsynopsis>
     <para>
      Inserts a new document with attributes as in
-     <parameter>object_array</parameter> into collection with object ID
-     <parameter>objectID</parameter>. This function inserts only
-     the object record but not the document data. If you want to
-     insert the document data as well use
+     <parameter>object_record</parameter> into collection with object ID
+     <parameter>parentID</parameter>. This function inserts either 
+     an object record only or an object record and a pure ascii text in
+     <parameter>text</parameter> if <parameter>text</parameter> is given.
+     If you want to insert a general document of any kind use
      <function>hw_insertdocument</function> instead.
     <para>
      See also <function>hw_InsertDocument</function>,
@@ -1053,7 +1177,7 @@ RewriteEngine on
      <funcdef>int <function>hw_putdocument</function></funcdef>
      <paramdef>int <parameter>connection</parameter></paramdef>
      <paramdef>int <parameter>parent_id</parameter></paramdef>
-     <paramdef>hw_document <parameter>document</parameter></paramdef>
+     <paramdef>int <parameter>hw_document</parameter></paramdef>
     </funcsynopsis>
     <para>
       Uploads a document into the collection with
@@ -1068,7 +1192,7 @@ RewriteEngine on
    </refsect1>
   </refentry>
 
-  <refentry id="function.hw-newdocument">
+  <refentry id="function.hw-new-document">
    <refnamediv>
     <refname>hw_New_Document</refname>
     <refpurpose>create new document</refpurpose>
@@ -1076,13 +1200,13 @@ RewriteEngine on
    <refsect1>
     <title>Description</title>
     <funcsynopsis>
-     <funcdef>hw_document <function>hw_new_document</function></funcdef>
+     <funcdef>int <function>hw_new_document</function></funcdef>
      <paramdef>string <parameter>document_data</parameter></paramdef>
      <paramdef>string <parameter>object_record</parameter></paramdef>
      <paramdef>int <parameter>document_size</parameter></paramdef>
     </funcsynopsis>
     <para>
-     Returns a new document with document data set to
+     Returns a new Hyperwave document with document data set to
      <parameter>document_data</parameter> and object record set to
      <parameter>object_record</parameter>. The length of the 
      <parameter>document_data</parameter> has to passed in
@@ -1097,15 +1221,15 @@ RewriteEngine on
    </refsect1>
   </refentry>
 
-  <refentry id="function.hw-object2array">
+  <refentry id="function.hw-objrec2array">
    <refnamediv>
-    <refname>hw_Object2Array</refname>
+    <refname>hw_Objrec2Array</refname>
     <refpurpose>convert attributes from object record to object array</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
     <funcsynopsis>
-     <funcdef>array <function>hw_object2array</function></funcdef>
+     <funcdef>array <function>hw_objrec2array</function></funcdef>
      <paramdef>string <parameter>object_record</parameter></paramdef>
     </funcsynopsis>
     <para>
@@ -1122,7 +1246,7 @@ RewriteEngine on
     <title>Description</title>
     <funcsynopsis>
      <funcdef>int <function>hw_outputdocument</function></funcdef>
-     <paramdef>hw_document <parameter>document</parameter></paramdef>
+     <paramdef>int <parameter>hw_document</parameter></paramdef>
     </funcsynopsis>
     <para>
      Prints the document without the BODY tag.
@@ -1167,18 +1291,18 @@ RewriteEngine on
    <refsect1>
     <title>Description</title>
     <funcsynopsis>
-     <funcdef>hw_document <function>hw_pipedocument</function></funcdef>
+     <funcdef>int <function>hw_pipedocument</function></funcdef>
      <paramdef>int <parameter>connection</parameter></paramdef>
      <paramdef>int <parameter>objectID</parameter></paramdef>
     </funcsynopsis>
     <para>
-     Returns the document with object ID <parameter>objectID</parameter>.
-     If the document
+     Returns the Hyperwave document with object ID
+     <parameter>objectID</parameter>. If the document
      has anchors which can be inserted, they will have been inserted already.
      The document will be transfered via a special data connection which
      does not block the control connection.
     <para>
-     See also <function>hw_GetText</function>,
+     See also <function>hw_GetText</function> for more on link insertion,
               <function>hw_FreeDocument</function>,
               <function>hw_DocumentSize</function>,
               <function>hw_DocumentBodyTag</function>,

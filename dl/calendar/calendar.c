@@ -12,19 +12,18 @@
  * {"PHPScriptFunctionName",dllFunctionName,1} 
  */
 
-function_entry calendar_functions[] =
-{
-	{"jdtogregorian", cal_jdtogreg},
-	{"gregoriantojd", cal_gregtojd},
-	{"jdtojulian", cal_jdtojul},
-	{"juliantojd", cal_jultojd},
-	{"jdtojewish", cal_jdtojewish},
-	{"jewishtojd", cal_jewishtojd},
-	{"jdtofrench", cal_jdtofrench},
-	{"frenchtojd", cal_frenchtojd},
-	{"jddayofweek", cal_jddayofweek},
-	{"jdmonthname", cal_monthname},
-	{NULL, NULL}
+function_entry calendar_functions[] = {
+	{"jdtogregorian", cal_jdtogreg, NULL},
+	{"gregoriantojd", cal_gregtojd, NULL},
+	{"jdtojulian", cal_jdtojul, NULL},
+	{"juliantojd", cal_jultojd, NULL},
+	{"jdtojewish", cal_jdtojewish, NULL},
+	{"jewishtojd", cal_jewishtojd, NULL},
+	{"jdtofrench", cal_jdtofrench, NULL},
+	{"frenchtojd", cal_frenchtojd, NULL},
+	{"jddayofweek", cal_jddayofweek, NULL},
+	{"jdmonthname", cal_monthname, NULL},
+	{NULL, NULL, NULL}
 };
 
 

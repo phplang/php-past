@@ -14,3 +14,6 @@ specify the root directory to store the logging databases in.
 Note that these scripts are provided as an example only, and are not
 thoroughly tested. You use them at your own risk. Questions about them
 should be directed to the general PHP3 mailing list (php3@lists.php.net).
+Nobody has submitted support files for other logging methods (such
+as mysql). Mail asking for such support will likely be ignored.
+

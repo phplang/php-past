@@ -138,5 +138,5 @@ test.link is a regular file
 test.link is not a directory
 file is a directory
 test.file is not a directory
-test.file exists (cached)
+test.file does not exist
 test.file does not exist

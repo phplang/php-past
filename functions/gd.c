@@ -29,14 +29,19 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: gd.c,v 1.93 1998/09/14 15:59:23 martin Exp $ */
+/* $Id: gd.c,v 1.103 1998/12/21 05:24:20 sas Exp $ */
 
 /* gd 1.2 is copyright 1994, 1995, Quest Protein Database Center, 
    Cold Spring Harbor Labs. */
 
 /* Note that there is no code from the gd package in this file */
+#define IS_EXT_MODULE
 #ifdef THREAD_SAFE
-# include "tls.h"
+# ifndef PHP_31
+#  undef THREAD_SAFE /*no need in 3.0*/
+# else
+#  include "tls.h"
+# endif
 #endif
 #include "php.h"
 #include "internal_functions.h"
@@ -64,7 +69,11 @@
 #include <gdfontl.h>  /* 4 Large font */
 #include <gdfontg.h>  /* 5 Giant font */
 #if HAVE_LIBTTF
-#include <functions/gdttf.h>
+# if PHP_31
+#  include "gdttf.h"
+# else
+#  include "functions/gdttf.h"
+# endif
 #endif
 
 #ifndef M_PI
@@ -78,6 +87,7 @@ static void php3_imagettftext_common(INTERNAL_FUNCTION_PARAMETERS, int);
 #ifdef THREAD_SAFE
 DWORD GDlibTls;
 static int numthreads=0;
+void *gdlib_mutex=NULL;
 
 typedef struct gdlib_global_struct{
 	int le_gd;
@@ -85,10 +95,7 @@ typedef struct gdlib_global_struct{
 } gdlib_global_struct;
 
 # define GD_GLOBAL(a) gdlib_globals->a
-
-# define GD_TLS_VARS \
-	gdlib_global_struct *gdlib_globals; \
-	gdlib_globals=TlsGetValue(GDlibTls); 
+# define GD_TLS_VARS gdlib_global_struct *gdlib_globals = TlsGetValue(GDlibTls);
 
 #else
 #  define GD_GLOBAL(a) a
@@ -104,12 +111,14 @@ function_entry gd_functions[] = {
 	{"imagecolorallocate",		php3_imagecolorallocate,	NULL},
 	{"imagecolorat",		php3_imagecolorat,		NULL},
 	{"imagecolorclosest",		php3_imagecolorclosest,		NULL},
+	{"imagecolordeallocate",	php3_imagecolordeallocate,	NULL},
 	{"imagecolorresolve",		php3_imagecolorresolve,		NULL},
 	{"imagecolorexact",			php3_imagecolorexact,		NULL},
 	{"imagecolorset",		php3_imagecolorset,		NULL},
 	{"imagecolortransparent",	php3_imagecolortransparent,	NULL},
 	{"imagecolorstotal",		php3_imagecolorstotal,		NULL},
 	{"imagecolorsforindex",		php3_imagecolorsforindex,	NULL},
+	{"imagecopy",			php3_imagecopy,			NULL},
 	{"imagecopyresized",		php3_imagecopyresized,		NULL},
 	{"imagecreate",				php3_imagecreate,			NULL},
 	{"imagecreatefromgif",		php3_imagecreatefromgif,	NULL},
@@ -144,36 +153,12 @@ php3_module_entry gd_module_entry = {
 };
 
 #if COMPILE_DL
-#include "dl/phpdl.h"
+# if PHP_31
+#  include "../phpdl.h"
+# else
+#  include "dl/phpdl.h"
+# endif
 DLEXPORT php3_module_entry *get_module(void) { return &gd_module_entry; }
-
-#if (WIN32|WINNT) && defined(THREAD_SAFE)
-
-/*NOTE: You should have an odbc.def file where you
-export DllMain*/
-BOOL WINAPI DllMain(HANDLE hModule, 
-                      DWORD  ul_reason_for_call, 
-                      LPVOID lpReserved)
-{
-    switch( ul_reason_for_call ) {
-    case DLL_PROCESS_ATTACH:
-		if ((GDlibTls=TlsAlloc())==0xFFFFFFFF){
-			return 0;
-		}
-		break;    
-    case DLL_THREAD_ATTACH:
-		break;
-    case DLL_THREAD_DETACH:
-		break;
-	case DLL_PROCESS_DETACH:
-		if (!TlsFree(GDlibTls)){
-			return 0;
-		}
-		break;
-    }
-    return 1;
-}
-#endif
 #endif
 
 
@@ -182,23 +167,24 @@ BOOL WINAPI DllMain(HANDLE hModule,
 
 int php3_minit_gd(INIT_FUNC_ARGS)
 {
-#ifdef THREAD_SAFE
+#if defined(THREAD_SAFE)
 	gdlib_global_struct *gdlib_globals;
-#if !COMPILE_DL
-	CREATE_MUTEX(gdlib_mutex,"GDLIB_TLS");
-	SET_MUTEX(gdlib_mutex);
+	PHP3_MUTEX_ALLOC(gdlib_mutex);
+	PHP3_MUTEX_LOCK(gdlib_mutex);
 	numthreads++;
 	if (numthreads==1){
-	if ((GDlibTls=TlsAlloc())==0xFFFFFFFF){
-		FREE_MUTEX(gdlib_mutex);
-		return 0;
-	}}
-	FREE_MUTEX(gdlib_mutex);
+		if (!PHP3_TLS_PROC_STARTUP(GDlibTls)){
+			PHP3_MUTEX_UNLOCK(gdlib_mutex);
+			PHP3_MUTEX_FREE(gdlib_mutex);
+			return FAILURE;
+		}
+	}
+	PHP3_MUTEX_UNLOCK(gdlib_mutex);
+	if(!PHP3_TLS_THREAD_INIT(GDlibTls,gdlib_globals,gdlib_global_struct)){
+		PHP3_MUTEX_FREE(gdlib_mutex);
+		return FAILURE;
+	}
 #endif
-	gdlib_globals = (gdlib_global_struct *) LocalAlloc(LPTR, sizeof(gdlib_global_struct)); 
-	TlsSetValue(GDlibTls, (void *) gdlib_globals);
-#endif
-
 	GD_GLOBAL(le_gd) = register_list_destructors(gdImageDestroy, NULL);
 	GD_GLOBAL(le_gd_font) = register_list_destructors(php3_free_gd_font, NULL);
 	return SUCCESS;
@@ -217,21 +203,18 @@ void php3_info_gd(void) {
 }
 
 int php3_mend_gd(void){
+	GD_TLS_VARS;
 #ifdef THREAD_SAFE
-	gdlib_global_struct *gdlib_globals;
-	gdlib_globals = TlsGetValue(GDlibTls); 
-	if (gdlib_globals != 0) 
-		LocalFree((HLOCAL) gdlib_globals); 
-#if !COMPILE_DL
-	SET_MUTEX(gdlib_mutex);
+	PHP3_TLS_THREAD_FREE(gdlib_globals);
+	PHP3_MUTEX_LOCK(gdlib_mutex);
 	numthreads--;
-	if (!numthreads){
-	if (!TlsFree(GDlibTls)){
-		FREE_MUTEX(gdlib_mutex);
-		return 0;
-	}}
-	FREE_MUTEX(gdlib_mutex);
-#endif
+	if (numthreads<1) {
+		PHP3_TLS_PROC_SHUTDOWN(GDlibTls);
+		PHP3_MUTEX_UNLOCK(gdlib_mutex);
+		PHP3_MUTEX_FREE(gdlib_mutex);
+		return SUCCESS;
+	}
+	PHP3_MUTEX_UNLOCK(gdlib_mutex);
 #endif
 	return SUCCESS;
 }
@@ -294,6 +277,8 @@ void php3_free_gd_font(gdFontPtr fp)
 	efree(fp);
 }
 
+/* {{{ proto int imageloadfont(string filename)
+Load a new font */
 void php3_imageloadfont(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *file;
 	int hdr_size = sizeof(gdFont) - sizeof(char *);
@@ -372,7 +357,10 @@ void php3_imageloadfont(INTERNAL_FUNCTION_PARAMETERS) {
 
 	RETURN_LONG(ind);
 }
+/* }}} */
 
+/* {{{ proto int imagecreate(int x_size, int y_size)
+Create a new image */
 void php3_imagecreate(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *x_size, *y_size;
 	int ind;
@@ -391,7 +379,10 @@ void php3_imagecreate(INTERNAL_FUNCTION_PARAMETERS) {
 
 	RETURN_LONG(ind);
 }
+/* }}} */
 
+/* {{{ proto int imagecreatefromgif(string filename)
+Create a new image from file or URL */
 void php3_imagecreatefromgif (INTERNAL_FUNCTION_PARAMETERS) {
 	pval *file;
 	int ind;
@@ -430,7 +421,10 @@ void php3_imagecreatefromgif (INTERNAL_FUNCTION_PARAMETERS) {
 
 	RETURN_LONG(ind);
 }
+/* }}} */
 
+/* {{{ proto int imagedestroy(int im)
+Destroy an image */
 void php3_imagedestroy(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *imgind;
 
@@ -444,7 +438,10 @@ void php3_imagedestroy(INTERNAL_FUNCTION_PARAMETERS) {
 
 	RETURN_TRUE;
 }
+/* }}} */
 
+/* {{{ proto int imagecolorallocate(int im, int red, int green, int blue)
+Allocate a color for an image */
 void php3_imagecolorallocate(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *imgind, *red, *green, *blue;
 	int ind, ind_type;
@@ -476,8 +473,11 @@ void php3_imagecolorallocate(INTERNAL_FUNCTION_PARAMETERS) {
 	col = gdImageColorAllocate(im, r, g, b);
 	RETURN_LONG(col);
 }
+/* }}} */
 
 /* im, x, y */
+/* {{{ proto int imagecolorat(int im, int x, int y)
+Get the index of the color of a pixel */
 void php3_imagecolorat(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *imgind, *x, *y;
 	int ind, ind_type;
@@ -510,7 +510,10 @@ void php3_imagecolorat(INTERNAL_FUNCTION_PARAMETERS) {
 		RETURN_FALSE;
 	}
 }
+/* }}} */
 
+/* {{{ proto int imagecolorclosest(int im, int red, int green, int blue)
+Get the index of the closest color to the specified color */
 void php3_imagecolorclosest(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *imgind, *red, *green, *blue;
 	int ind, ind_type;
@@ -542,7 +545,44 @@ void php3_imagecolorclosest(INTERNAL_FUNCTION_PARAMETERS) {
 	col = gdImageColorClosest(im, r, g, b);
 	RETURN_LONG(col);
 }
+/* }}} */
 
+/* {{{ proto int imagecolordeallocate(int im, int index)
+De-allocate a color for an image */
+void php3_imagecolordeallocate(INTERNAL_FUNCTION_PARAMETERS) {
+	pval *imgind, *index;
+	int ind, ind_type, col;
+	gdImagePtr im;
+	GD_TLS_VARS;
+
+	if (ARG_COUNT(ht) != 2 || getParameters(ht, 2, &imgind, &index) == FAILURE) {
+	WRONG_PARAM_COUNT;
+	}
+
+	convert_to_long(imgind);
+	convert_to_long(index);
+	ind = imgind->value.lval;
+	col = index->value.lval;
+
+	im = php3_list_find(ind, &ind_type);
+	if (!im || ind_type != GD_GLOBAL(le_gd)) {
+		php3_error(E_WARNING, "ImageColorDeallocate: Unable to find image pointer");
+		RETURN_FALSE;
+	}
+
+	if (col >= 0 && col < gdImageColorsTotal(im)) {
+		gdImageColorDeallocate(im, col);
+		RETURN_TRUE;
+        }
+        else {
+                php3_error(E_WARNING, "Color index out of range");
+                RETURN_FALSE;
+        }
+}
+/* }}} */
+
+/* {{{ proto int imagecolorresolve(int im, int red, int green, int blue)
+Get the index of the specified color or its closest possible alternative */
 void php3_imagecolorresolve(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *imgind, *red, *green, *blue;
 	int ind, ind_type;
@@ -574,7 +614,10 @@ void php3_imagecolorresolve(INTERNAL_FUNCTION_PARAMETERS) {
 	col = gdImageColorResolve(im, r, g, b);
 	RETURN_LONG(col);
 }
+/* }}} */
 
+/* {{{ proto int imagecolorexact(int im, int red, int green, int blue)
+Get the index of the specified color */
 void php3_imagecolorexact(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *imgind, *red, *green, *blue;
 	int ind, ind_type;
@@ -606,7 +649,10 @@ void php3_imagecolorexact(INTERNAL_FUNCTION_PARAMETERS) {
 	col = gdImageColorExact(im, r, g, b);
 	RETURN_LONG(col);
 }
+/* }}} */
 
+/* {{{ proto int imagecolorset(int im, int col, int red, int green, int blue)
+Set the color for the specified palette index */
 void php3_imagecolorset(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *imgind, *color, *red, *green, *blue;
 	int ind, ind_type;
@@ -645,7 +691,10 @@ void php3_imagecolorset(INTERNAL_FUNCTION_PARAMETERS) {
 		RETURN_FALSE;
 	}
 }
+/* }}} */
 
+/* {{{ proto array imagecolorsforindex(int im, int col)
+Get the colors for an index */
 void php3_imagecolorsforindex(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *imgind, *index;
 	int col, ind, ind_type;
@@ -680,7 +729,10 @@ void php3_imagecolorsforindex(INTERNAL_FUNCTION_PARAMETERS) {
 		RETURN_FALSE;
 	}
 }
+/* }}} */
 
+/* {{{ proto int imagegif(int im, string filename)
+Output image to browser or file */
 void php3_imagegif (INTERNAL_FUNCTION_PARAMETERS) {
 	pval *imgind, *file;
 	gdImagePtr im;
@@ -754,7 +806,10 @@ void php3_imagegif (INTERNAL_FUNCTION_PARAMETERS) {
 
 	RETURN_TRUE;
 }
+/* }}} */
 
+/* {{{ proto int imagesetpixel(int im, int x, int y, int col)
+Set a single pixel */
 void php3_imagesetpixel(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *imarg, *xarg, *yarg, *colarg;
 	gdImagePtr im;
@@ -786,9 +841,12 @@ void php3_imagesetpixel(INTERNAL_FUNCTION_PARAMETERS) {
 	gdImageSetPixel(im,x,y,col);
 
 	RETURN_TRUE;
-}	
+}
+/* }}} */	
 
 /* im, x1, y1, x2, y2, col */
+/* {{{ proto int imageline(int im, int x1, int y1, int x2, int y2, int col)
+Draw a line */
 void php3_imageline(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *IM, *COL, *X1, *Y1, *X2, *Y2;
 	gdImagePtr im;
@@ -823,8 +881,11 @@ void php3_imageline(INTERNAL_FUNCTION_PARAMETERS) {
 
 	gdImageLine(im,x1,y1,x2,y2,col);
 	RETURN_TRUE;
-}	
+}
+/* }}} */	
 
+/* {{{ proto int imagedashedline(int im, int x1, int y1, int x2, int y2, int col)
+Draw a dashed line */
 void php3_imagedashedline(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *IM, *COL, *X1, *Y1, *X2, *Y2;
 	gdImagePtr im;
@@ -859,8 +920,11 @@ void php3_imagedashedline(INTERNAL_FUNCTION_PARAMETERS) {
 	gdImageDashedLine(im,x1,y1,x2,y2,col);
 	RETURN_TRUE;
 }
+/* }}} */
 
 /* im, x1, y1, x2, y2, col */
+/* {{{ proto int imagerectangle(int im, int x1, int y1, int x2, int y2, int col)
+Draw a rectangle */
 void php3_imagerectangle(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *IM, *COL, *X1, *Y1, *X2, *Y2;
 	gdImagePtr im;
@@ -895,9 +959,12 @@ void php3_imagerectangle(INTERNAL_FUNCTION_PARAMETERS) {
 
 	gdImageRectangle(im,x1,y1,x2,y2,col);
 	RETURN_TRUE;
-}	
+}
+/* }}} */	
 
 /* im, x1, y1, x2, y2, col */
+/* {{{ proto int imagefilledrectangle(int im, int x1, int y1, int x2, int y2, int col)
+Draw a filled rectangle */
 void php3_imagefilledrectangle(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *IM, *COL, *X1, *Y1, *X2, *Y2;
 	gdImagePtr im;
@@ -932,8 +999,11 @@ void php3_imagefilledrectangle(INTERNAL_FUNCTION_PARAMETERS) {
 
 	gdImageFilledRectangle(im,x1,y1,x2,y2,col);
 	RETURN_TRUE;
-}	
+}
+/* }}} */	
 
+/* {{{ proto int imagearc(int im, int cx, int cy, int w, int h, int s, int e, int col)
+Draw a partial ellipse */
 void php3_imagearc(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *COL, *E, *ST, *H, *W, *CY, *CX, *IM;
 	gdImagePtr im;
@@ -957,12 +1027,19 @@ void php3_imagearc(INTERNAL_FUNCTION_PARAMETERS) {
 	convert_to_long(COL);
 
 	col = COL->value.lval;
-	e = E->value.lval % 360;
-	st = ST->value.lval % 360;
+	e = E->value.lval;
+	st = ST->value.lval;
 	h = H->value.lval;
 	w = W->value.lval;
 	cy = CY->value.lval;
 	cx = CX->value.lval;
+
+	if (e < 0) {
+		e %= 360;
+	}
+	if (st < 0) {
+		st %= 360;
+	}
 
 	im = php3_list_find(IM->value.lval, &ind_type);
 	if (!im || ind_type != GD_GLOBAL(le_gd)) {
@@ -972,9 +1049,12 @@ void php3_imagearc(INTERNAL_FUNCTION_PARAMETERS) {
 
 	gdImageArc(im,cx,cy,w,h,st,e,col);
 	RETURN_TRUE;
-}	
+}
+/* }}} */	
 
 /* im, x, y, border, col */
+/* {{{ proto int imagefilltoborder(int im, int x, int y, int border, int col)
+Flood fill to specific color */
 void php3_imagefilltoborder(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *IM, *X, *Y, *BORDER, *COL;
 	gdImagePtr im;
@@ -1007,9 +1087,12 @@ void php3_imagefilltoborder(INTERNAL_FUNCTION_PARAMETERS) {
 
 	gdImageFillToBorder(im,x,y,border,col);
 	RETURN_TRUE;
-}	
+}
+/* }}} */	
 
 /* im, x, y, col */
+/* {{{ proto int imagefill(int im, int x, int y, int col)
+Flood fill */
 void php3_imagefill(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *IM, *X, *Y, *COL;
 	gdImagePtr im;
@@ -1040,8 +1123,11 @@ void php3_imagefill(INTERNAL_FUNCTION_PARAMETERS) {
 
 	gdImageFill(im,x,y,col);
 	RETURN_TRUE;
-}	
+}
+/* }}} */	
 
+/* {{{ proto int imagecolorstotal(int im)
+Find out the number of colors in an image's palette */
 void php3_imagecolorstotal(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *IM;
 	gdImagePtr im;
@@ -1060,25 +1146,35 @@ void php3_imagecolorstotal(INTERNAL_FUNCTION_PARAMETERS) {
 	}
 
 	RETURN_LONG(gdImageColorsTotal(im));
-}	
+}
+/* }}} */	
 
 /* im, col */
+/* {{{ proto int imagecolortransparent(int im [, int col])
+Define a color as transparent */
 void php3_imagecolortransparent(INTERNAL_FUNCTION_PARAMETERS) {
-	pval *IM, *COL;
+	pval *IM, *COL = NULL;
 	gdImagePtr im;
 	int col;
 	int ind_type;
 	GD_TLS_VARS;
 
-	if (ARG_COUNT(ht) != 2 || getParameters(ht, 2, &IM, &COL) == FAILURE)
-	{
+	switch(ARG_COUNT(ht)) {
+	case 1:
+		if (getParameters(ht, 1, &IM) == FAILURE) {
+			WRONG_PARAM_COUNT;
+		}
+		break;
+	case 2:
+		if (getParameters(ht, 2, &IM, &COL) == FAILURE) {
+			WRONG_PARAM_COUNT;
+		}
+		convert_to_long(COL);
+		break;
+	default:
 		WRONG_PARAM_COUNT;
 	}
-
 	convert_to_long(IM);
-	convert_to_long(COL);
-
-	col = COL->value.lval;
 
 	im = php3_list_find(IM->value.lval, &ind_type);
 	if (!im || ind_type != GD_GLOBAL(le_gd)) {
@@ -1086,27 +1182,41 @@ void php3_imagecolortransparent(INTERNAL_FUNCTION_PARAMETERS) {
 		RETURN_FALSE;
 	}
 
-	gdImageColorTransparent(im,col);
-	RETURN_TRUE;
-}	
+	if (COL != NULL) {
+		col = COL->value.lval;
+		gdImageColorTransparent(im,col);
+	}
+	col = gdImageGetTransparent(im);
+	RETURN_LONG(col);
+}
+/* }}} */	
 
 /* im, interlace */
+/* {{{ proto int imageinterlace(int im [, int interlace])
+Enable or disable interlace */
 void php3_imageinterlace(INTERNAL_FUNCTION_PARAMETERS) {
-	pval *IM, *INT;
+	pval *IM, *INT = NULL;
 	gdImagePtr im;
 	int interlace;
 	int ind_type;
 	GD_TLS_VARS;
 
-	if (ARG_COUNT(ht) != 2 || getParameters(ht, 2, &IM, &INT) == FAILURE)
-	{
+	switch(ARG_COUNT(ht)) {
+	case 1:
+		if (getParameters(ht, 1, &IM) == FAILURE) {
+			WRONG_PARAM_COUNT;
+		}
+		break;
+	case 2:
+		if (getParameters(ht, 2, &IM, &INT) == FAILURE) {
+			WRONG_PARAM_COUNT;
+		}
+		convert_to_long(INT);
+		break;
+	default:
 		WRONG_PARAM_COUNT;
 	}
-
 	convert_to_long(IM);
-	convert_to_long(INT);
-
-	interlace = INT->value.lval;
 
 	im = php3_list_find(IM->value.lval, &ind_type);
 	if (!im || ind_type != GD_GLOBAL(le_gd)) {
@@ -1114,9 +1224,14 @@ void php3_imageinterlace(INTERNAL_FUNCTION_PARAMETERS) {
 		RETURN_FALSE;
 	}
 
-	gdImageInterlace(im,interlace);
-	RETURN_TRUE;
-}	
+	if (INT != NULL) {
+		interlace = INT->value.lval;
+		gdImageInterlace(im,interlace);
+	}
+	interlace = gdImageGetInterlaced(im);
+	RETURN_LONG(interlace);
+}
+/* }}} */	
 
 /* arg = 0  normal polygon
    arg = 1  filled polygon */
@@ -1203,16 +1318,21 @@ static void _php3_imagepolygon(INTERNAL_FUNCTION_PARAMETERS, int filled) {
 }
 
 
+/* {{{ proto int imagepolygon(int im, array point, int num_points, int col)
+Draw a polygon */
 void php3_imagepolygon(INTERNAL_FUNCTION_PARAMETERS)
 {
 	_php3_imagepolygon(INTERNAL_FUNCTION_PARAM_PASSTHRU, 0);
 }
+/* }}} */
 
-
+/* {{{ proto int imagefilledpolygon(int im, array point, int num_points, int col)
+Draw a filled polygon */
 void php3_imagefilledpolygon(INTERNAL_FUNCTION_PARAMETERS)
 {
 	_php3_imagepolygon(INTERNAL_FUNCTION_PARAM_PASSTHRU, 1);
 }
+/* }}} */
 
 
 static gdFontPtr _php3_find_gd_font(HashTable *list, int size)
@@ -1271,16 +1391,21 @@ static void _php3_imagefontsize(INTERNAL_FUNCTION_PARAMETERS, int arg)
 }
 
 
+/* {{{ proto int imagefontwidth(int font)
+Get font width */
 void php3_imagefontwidth(INTERNAL_FUNCTION_PARAMETERS)
 {
 	_php3_imagefontsize(INTERNAL_FUNCTION_PARAM_PASSTHRU, 0);
 }
+/* }}} */
 
-
+/* {{{ proto int imagefontheight(int font)
+Get font height */
 void php3_imagefontheight(INTERNAL_FUNCTION_PARAMETERS)
 {
 	_php3_imagefontsize(INTERNAL_FUNCTION_PARAM_PASSTHRU, 1);
 }
+/* }}} */
 
 
 /* workaround for a bug in gd 1.2 */
@@ -1386,27 +1511,86 @@ static void _php3_imagechar(INTERNAL_FUNCTION_PARAMETERS, int mode) {
 	RETURN_TRUE;
 }	
 
-
+/* {{{ proto int imagechar(int im, int font, int x, int y, string c, int col)
+Draw a character */ 
 void php3_imagechar(INTERNAL_FUNCTION_PARAMETERS) {
 	_php3_imagechar(INTERNAL_FUNCTION_PARAM_PASSTHRU, 0);
 }
+/* }}} */
 
-
+/* {{{ proto int imagecharup(int im, int font, int x, int y, string c, int col)
+Draw a character rotated 90 degrees counter-clockwise */
 void php3_imagecharup(INTERNAL_FUNCTION_PARAMETERS) {
 	_php3_imagechar(INTERNAL_FUNCTION_PARAM_PASSTHRU, 1);
 }
+/* }}} */
 
-
+/* {{{ proto int imagestring(int im, int font, int x, int y, string str, int col)
+Draw a string horizontally */
 void php3_imagestring(INTERNAL_FUNCTION_PARAMETERS) {
 	_php3_imagechar(INTERNAL_FUNCTION_PARAM_PASSTHRU, 2);
 }
+/* }}} */
 
-
+/* {{{ proto int imagestringup(int im, int font, int x, int y, string str, int col)
+Draw a string vertically - rotated 90 degrees counter-clockwise */
 void php3_imagestringup(INTERNAL_FUNCTION_PARAMETERS) {
 	_php3_imagechar(INTERNAL_FUNCTION_PARAM_PASSTHRU, 3);
 }
+/* }}} */
 
+/* {{{ proto int imagecopy(int dst_im, int src_im, int dstX, int dstY, int srcX, int srcY, int srcW, int srcH)
+Copy part of an image */ 
+void php3_imagecopy(INTERNAL_FUNCTION_PARAMETERS)
+{
+	pval *SIM, *DIM, *SX, *SY, *SW, *SH, *DX, *DY;
+	gdImagePtr im_dst;
+	gdImagePtr im_src;
+	int srcH, srcW, srcY, srcX, dstY, dstX;
+	int ind_type;
+	GD_TLS_VARS;
 
+	if (ARG_COUNT(ht) != 8 ||
+		getParameters(ht, 8, &DIM, &SIM, &DX, &DY, &SX, &SY, &SW, &SH)
+						 == FAILURE) {
+		WRONG_PARAM_COUNT;
+	}
+
+	convert_to_long(SIM);
+	convert_to_long(DIM);
+	convert_to_long(SX);
+	convert_to_long(SY);
+	convert_to_long(SW);
+	convert_to_long(SH);
+	convert_to_long(DX);
+	convert_to_long(DY);
+
+	srcX = SX->value.lval;
+	srcY = SY->value.lval;
+	srcH = SH->value.lval;
+	srcW = SW->value.lval;
+	dstX = DX->value.lval;
+	dstY = DY->value.lval;
+
+	im_src = php3_list_find(SIM->value.lval, &ind_type);
+	if (!im_src || ind_type != GD_GLOBAL(le_gd)) {
+		php3_error(E_WARNING, "Unable to find image pointer");
+		RETURN_FALSE;
+	}
+
+	im_dst = php3_list_find(DIM->value.lval, &ind_type);
+	if (!im_dst || ind_type != GD_GLOBAL(le_gd)) {
+		php3_error(E_WARNING, "Unable to find image pointer");
+		RETURN_FALSE;
+	}
+
+	gdImageCopy(im_dst, im_src, dstX, dstY, srcX, srcY, srcW, srcH);
+	RETURN_TRUE;
+}
+/* }}} */
+
+/* {{{ proto int imagecopyresized(int dst_im, int src_im, int dstX, int dstY, int srcX, int srcY, int dstW, int dstH, int srcW, int srcH);
+Copy and resize part of an image */
 void php3_imagecopyresized(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *SIM, *DIM, *SX, *SY, *SW, *SH, *DX, *DY, *DW, *DH;
@@ -1457,8 +1641,11 @@ void php3_imagecopyresized(INTERNAL_FUNCTION_PARAMETERS)
 	gdImageCopyResized(im_dst, im_src, dstX, dstY, srcX, srcY, dstW, dstH,
 					   srcW, srcH);
 	RETURN_TRUE;
-}	
+}
+/* }}} */	
 
+/* {{{ proto int imagesx(int im)
+Get image width */
 void php3_imagesxfn(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *IM;
@@ -1478,7 +1665,10 @@ void php3_imagesxfn(INTERNAL_FUNCTION_PARAMETERS)
 
 	RETURN_LONG(gdImageSX(im));
 }
+/* }}} */
 
+/* {{{ proto int imagesy(int im)
+Get image height */
 void php3_imagesyfn(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *IM;
@@ -1498,21 +1688,28 @@ void php3_imagesyfn(INTERNAL_FUNCTION_PARAMETERS)
 
 	RETURN_LONG(gdImageSY(im));
 }
+/* }}} */
 
 #if HAVE_LIBTTF
 
 #define TTFTEXT_DRAW 0
 #define TTFTEXT_BBOX 1
 
+/* {{{ proto array imagettfbbox(int size, int angle, string font_file, string text)
+Give the bounding box of a text using TypeType fonts */
 void php3_imagettfbbox(INTERNAL_FUNCTION_PARAMETERS)
 {
 	php3_imagettftext_common(INTERNAL_FUNCTION_PARAM_PASSTHRU, TTFTEXT_BBOX);
 }
+/* }}} */
 
+/* {{{ proto array imagettftext(int im, int size, int angle, int x, int y, int col, string font_file, string text)
+Write text to the image using a TrueType font */
 void php3_imagettftext(INTERNAL_FUNCTION_PARAMETERS)
 {
 	php3_imagettftext_common(INTERNAL_FUNCTION_PARAM_PASSTHRU, TTFTEXT_DRAW);
 }
+/* }}} */
 
 static
 void php3_imagettftext_common(INTERNAL_FUNCTION_PARAMETERS, int mode)

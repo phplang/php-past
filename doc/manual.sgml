@@ -1,7 +1,7 @@
 <!DOCTYPE BOOK PUBLIC "-//Davenport//DTD DocBook V3.0//EN" [
-<!ENTITY % build.version    SYSTEM "version.ent">
 <!ENTITY % global.entities  SYSTEM "global.ent">
 <!ENTITY % global.chapters  SYSTEM "chapters.ent">
+<!ENTITY % build.version    SYSTEM "version.ent">
 %global.entities;
 %global.chapters;
 %build.version;
@@ -11,6 +11,15 @@
  <title>PHP3 Manual</title>
 
  &bookinfo;
+
+ <dedication>
+    <para>
+     Date: &php.build-date;
+    </para><para>
+     Release: &php.version;
+    </para>
+ </dedication>
+
  &preface;
 
  <part id="langref">
@@ -45,6 +54,7 @@
   &reference.imap;
   &reference.info;
   &reference.ifx;
+  &reference.ibase;
   &reference.ldap;
   &reference.mail;
   &reference.math;
@@ -55,14 +65,17 @@
   &reference.network;
   &reference.uodbc;
   &reference.oracle;
+  &reference.pdf;
   &reference.pgsql;
   &reference.regex;
+  &reference.sem;
   &reference.solid;
   &reference.snmp;
   &reference.strings;
   &reference.url;
   &reference.var;
   &reference.zlib;
+  &reference.xml;
  </part>
 
  <part id="appendixes">

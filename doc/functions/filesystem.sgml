@@ -6,7 +6,7 @@
   <refentry id="function.basename">
    <refnamediv>
     <refname>basename</refname>
-    <refpurpose>return file name part of path</refpurpose>
+    <refpurpose>return filename component of path</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
@@ -151,6 +151,8 @@ chmod( "/somedir/somefile", 0755 );  // octal; correct value of mode
      status check, for instance if the file is being checked many
      times and may change or disappear, use this function to clear the
      results of the last call from memory.
+	<para>
+	 This value is only cached for the lifetime of a single request.
 
     <para>
      Affected functions include <function>stat</function>,
@@ -209,7 +211,7 @@ if (!copy($file, $file.'.bak')) {
   <refentry id="function.dirname">
    <refnamediv>
     <refname>dirname</refname>
-    <refpurpose>return file name part of path</refpurpose>
+    <refpurpose>return directory name component of path</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
@@ -334,11 +336,14 @@ $file = dirname($path); // $file is set to "/etc"
     <para>
      Returns a string of up to length - 1 bytes read from the file
      pointed to by fp. Reading ends when length - 1 bytes have been
-     read, on a newline, or on EOF (whichever comes first).
+     read, on a newline (which is included in the return value), or
+	 on EOF (whichever comes first).
 
-    <para> If an error occurs, returns false.
+    <para>
+	 If an error occurs, returns false.
 
-    <para> The file pointer must be valid, and must point to a file
+    <para>
+	 The file pointer must be valid, and must point to a file
      successfully opened by <function>fopen</function>,
      <function>popen</function>, or <function>fsockopen</function>.
 
@@ -388,8 +393,9 @@ $file = dirname($path); // $file is set to "/etc"
     </funcsynopsis>
 
     <para> 
-     Identical to <function>readfile</function>, except that file()
-     returns the file in an array.
+     Identical to <function>readfile</function>, except that <function>file</function>
+     returns the file in an array. Each element of the array corresponds
+	 to a line in the file, with the newline still attached.
      
     <para> 
      See also <function>readfile</function>,
@@ -451,8 +457,9 @@ $file = dirname($path); // $file is set to "/etc"
      <funcdef>int <function>filectime</function></funcdef>
      <paramdef>string <parameter>filename</parameter></paramdef>
     </funcsynopsis>
-<para>    Returns the time the file was last changed, or false in case of an
-    error.
+	<para>
+	 Returns the time the file was last changed, or false in case of an
+     error.
 
    </refsect1>
   </refentry>
@@ -504,8 +511,9 @@ $file = dirname($path); // $file is set to "/etc"
      <funcdef>int <function>filemtime</function></funcdef>
      <paramdef>string <parameter>filename</parameter></paramdef>
     </funcsynopsis>
-<para>    Returns the time the file was last modified, or false in case of an
-    error.
+	<simpara>
+	 Returns the time the file was last modified, or false in case of an
+     error.
 
    </refsect1>
   </refentry>
@@ -608,7 +616,8 @@ $file = dirname($path); // $file is set to "/etc"
      If <parameter>filename</parameter> begins with "ftp://" (not case sensitive), an ftp
      connection to the specified server is opened and a pointer to the
      requested file is returned. If the server does not support
-     passive mode ftp, this will fail.
+     passive mode ftp, this will fail. You can open files for either
+	 reading and writing via ftp (but not both simultaneously).
 
     <simpara>
      If <parameter>filename</parameter> begins with anything else, the
@@ -652,8 +661,9 @@ $file = dirname($path); // $file is set to "/etc"
      <example>
       <title>fopen() example</title>
       <programlisting>
-$fp = fopen( "/home/rasmus/file.txt", "r" );
-$fp = fopen( "http://www.php.net/", "r" );
+$fp = fopen("/home/rasmus/file.txt", "r");
+$fp = fopen("http://www.php.net/", "r");
+$fp = fopen("ftp://user:password@example.com/", "w");
 </programlisting></example>
 
     <simpara>
@@ -661,6 +671,13 @@ $fp = fopen( "http://www.php.net/", "r" );
      files and you're using the server module version of PHP, remember 
      to make sure that the files and directories you're using are
      accessible to the server process.
+
+	<para>
+	 On the Windows platform, be careful to escape any backslashes
+	 used in the path to the file, or use forward slashes.
+     <informalexample><programlisting>
+$fp = fopen("c:\\data\\info.txt", "r");
+</programlisting></informalexample>
 
     <simpara>
      See also <function>fclose</function>,
@@ -1044,6 +1061,13 @@ fclose( $fd );
     </funcsynopsis>
     <para>
      Attempts to create the directory specified by pathname.
+     
+    <para>
+     Note that you probably want to specify the mode as an
+     octal number, which means it should have a leading zero.
+     <informalexample><programlisting>
+mkdir("/path/to/my/dir", 0700);
+</programlisting></informalexample>
 
     <para>
      Returns true on success and false on failure.
@@ -1125,26 +1149,33 @@ fclose( $fd );
      <funcdef>int <function>readfile</function></funcdef>
      <paramdef>string <parameter>filename</parameter></paramdef>
     </funcsynopsis>
-    <para>    Reads a file and writes it to standard output.
-    <para>    Returns the number of bytes read from the file. If an error
+    <para>
+     Reads a file and writes it to standard output.
+    <para>
+     Returns the number of bytes read from the file. If an error
      occurs, false is returned and unless the function was called as
      @readfile, an error message is printed.
-    <para>    If <parameter>filename</parameter> begins with "http://"
+    <para>
+     If <parameter>filename</parameter> begins with "http://"
      (not case sensitive), an HTTP 1.0 connection is opened to the
      specified server and the text of the response is written to
      standard output.
-    <para>    Does not handle HTTP redirects, so you must include trailing
+    <para>
+     Does not handle HTTP redirects, so you must include trailing
      slashes on directories.
-    <para>    If <parameter>filename</parameter> begins with "ftp://"
+    <para>
+     If <parameter>filename</parameter> begins with "ftp://"
      (not case sensitive), an ftp connection to the specified server is
      opened and the requested file is written to standard output. If the server
      does not support passive mode ftp, this will fail.
-    <para>    If <parameter>filename</parameter> begins with neither
+    <para>
+     If <parameter>filename</parameter> begins with neither
      of these strings, the file will be opened from the filesystem and
      its contents written to standard output.
     <para>
      See also <function>fpassthru</function>, <function>file</function>,
-     and <function>fopen</function>.
+     <function>fopen</function>, <function>include</function>,
+     <function>require</function>, and <function>virtual</function>.
 
    </refsect1>
   </refentry>
@@ -1157,7 +1188,7 @@ fclose( $fd );
    <refsect1>
     <title>Description</title>
     <funcsynopsis>
-     <funcdef>int <function>readlink</function></funcdef>
+     <funcdef>string <function>readlink</function></funcdef>
      <paramdef>string <parameter>path</parameter></paramdef>
     </funcsynopsis>
     <para>
@@ -1324,7 +1355,9 @@ fclose( $fd );
      <paramdef>string <parameter>link</parameter></paramdef>
     </funcsynopsis>
     <para>
-     <function>Symlink</function> creates a symbolic link.
+     <function>symlink</function> creates a symbolic link
+     from the existing <parameter>target</parameter> with
+     the specified name <parameter>link</parameter>.
     <para>
      See also <function>link</function> to create hard links,
      and <function>readlink</function> along with
@@ -1346,7 +1379,9 @@ fclose( $fd );
      <paramdef>string <parameter>prefix</parameter></paramdef>
     </funcsynopsis>
     <para>
-     Creates a unique temporary filename.
+     Creates a unique temporary filename in the specified directory.
+     If the directory does not exist, <function>tempnam</function>
+     may generate a filename in the system's temporary directory.
 
     <para>
      Returns the new temporary filename, or the null string on

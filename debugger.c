@@ -68,6 +68,7 @@
 #include "functions/fsock.h"
 
 extern int lookup_hostname(const char *addr);
+int _php3_send_error(char *message, char *address);
 
 #ifndef THREAD_SAFE
 static int debug_socket = 0;
@@ -421,6 +422,8 @@ void php3_debugger_error(char *message, int type, char *filename, int lineno)
 	debugger_send_string("end", errtype);
 }
 
+/* {{{ proto int debugger_on(string ip_address)
+   Enable internal PHP debugger */
 /*FIXME
   we also need a way to dissable the cgi timer so we dont
   time out while debugging.
@@ -439,7 +442,10 @@ void php3_debugger_on(INTERNAL_FUNCTION_PARAMETERS){
 	}
 	RETVAL_FALSE;
 }
+/* }}} */
 
+/* {{{ proto int debugger_off(void)
+   Disable internal PHP debugger */
 void php3_debugger_off(INTERNAL_FUNCTION_PARAMETERS){
 	TLS_VARS;
 	
@@ -448,6 +454,7 @@ void php3_debugger_off(INTERNAL_FUNCTION_PARAMETERS){
 		php3_stop_debugger();
 	}
 }
+/* }}} */
 
 
 /*FIXME

@@ -6,7 +6,7 @@
   <refentry id="function.parse-url">
    <refnamediv>
     <refname>parse_url</refname>
-    <refpurpose>parse a query string like PHP does with form data</refpurpose>
+    <refpurpose>parse a URL and return its components</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
@@ -14,10 +14,11 @@
      <funcdef>array <function>parse_url</function></funcdef>
      <paramdef>string <parameter>url</parameter></paramdef>
     </funcsynopsis>
-<para>Returns:    This function returns an associative array returning any of the various
-   components of the URL that are present. This includes the "scheme", "host",
-   "port", "user", "pass", "path", "query", and "fragment".
- </para>
+    <para>
+     This function returns an associative array returning any of the
+     various components of the URL that are present. This includes the
+     "scheme", "host", "port", "user", "pass", "path", "query", and
+     "fragment".
    </refsect1>
   </refentry>
 

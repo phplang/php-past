@@ -29,7 +29,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: apache.c,v 1.41 1998/09/04 13:31:45 rasmus Exp $ */
+/* $Id: apache.c,v 1.44 1998/11/30 16:04:31 rasmus Exp $ */
 #ifdef THREAD_SAFE
 #include "tls.h"
 #endif
@@ -70,7 +70,8 @@ php3_module_entry apache_module_entry = {
 	"Apache", apache_functions, NULL, NULL, NULL, NULL, php3_info_apache, STANDARD_MODULE_PROPERTIES
 };
 
-
+/* {{{ proto string apache_note(string note_name [, string note_value])
+   Get and set Apache request notes */
 void php3_apache_note(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *arg_name,*arg_val;
@@ -97,6 +98,7 @@ TLS_VARS;
 		RETURN_FALSE;
 	}
 }
+/* }}} */
 
 void php3_info_apache(void) {
 	module *modp = NULL;
@@ -146,7 +148,7 @@ void php3_info_apache(void) {
 	PUTS("<br></td?</tr>\n");
 }
 
-/* This function is equivilent to <!--#include virtual...-->
+/* This function is equivalent to <!--#include virtual...-->
  * in mod_include. It does an Apache sub-request. It is useful
  * for including CGI scripts or .shtml files, or anything else
  * that you'd parse through Apache (for .phtml files, you'd probably
@@ -154,6 +156,8 @@ void php3_info_apache(void) {
  * as an Apache module, since it uses the Apache API for doing
  * sub requests.
  */
+/* {{{ proto int virtual(string filename)
+   Perform an Apache sub-request */
 void php3_virtual(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *filename;
@@ -198,8 +202,10 @@ TLS_VARS;
 		RETURN_TRUE;
 	}
 }
+/* }}} */
 
-
+/* {{{ proto array getallheaders(void)
+   Fetch all HTTP request headers */
 void php3_getallheaders(INTERNAL_FUNCTION_PARAMETERS)
 {
     array_header *env_arr;
@@ -217,12 +223,15 @@ void php3_getallheaders(INTERNAL_FUNCTION_PARAMETERS)
 			 !strncasecmp(tenv[i].key, "authorization", 13))) {
 			continue;
 		}
-		if (add_assoc_string(return_value, tenv[i].key,tenv[i].val, 1)==FAILURE) {
+		if (add_assoc_string(return_value, tenv[i].key,(tenv[i].val==NULL) ? "" : tenv[i].val, 1)==FAILURE) {
 			RETURN_FALSE;
 		}
     }
 }
+/* }}} */
 
+/* {{{ proto class apache_lookup_uri(string URI)
+   Perform a partial request of the given URI to obtain information about it */
 void php3_apache_lookup_uri(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *filename;
@@ -291,6 +300,7 @@ void php3_apache_lookup_uri(INTERNAL_FUNCTION_PARAMETERS)
 
 	destroy_sub_req(rr);
 }
+/* }}} */
 
 #if 0
 This function is most likely a bad idea.  Just playing with it for now.

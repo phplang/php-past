@@ -44,6 +44,8 @@
 
 char *_php3_number_format(double, int, char ,char);
 
+/* {{{ proto int abs(int number)
+   Return the absolute value of the number */
 void php3_abs(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *value;
 	TLS_VARS;
@@ -65,7 +67,10 @@ void php3_abs(INTERNAL_FUNCTION_PARAMETERS) {
 
 	RETURN_FALSE;
 }
+/* }}} */
 
+/* {{{ proto int ceil(double number)
+   Returns the next highest integer value of the number */
 void php3_ceil(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *value;
 	TLS_VARS;
@@ -87,7 +92,10 @@ void php3_ceil(INTERNAL_FUNCTION_PARAMETERS) {
 
 	RETURN_FALSE;
 }
+/* }}} */
 
+/* {{{ proto int floor(double number)
+   Returns the next lowest integer value from the number */
 void php3_floor(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *value;
 	TLS_VARS;
@@ -109,6 +117,7 @@ void php3_floor(INTERNAL_FUNCTION_PARAMETERS) {
 
 	RETURN_FALSE;
 }
+/* }}} */
 
 #ifndef HAVE_RINT
 /* emulate rint */
@@ -124,6 +133,8 @@ inline double rint(double n)
 }
 #endif
 
+/* {{{ proto int round(double number)
+   Returns the rounded value of the number */
 void php3_round(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *value;
@@ -143,7 +154,10 @@ void php3_round(INTERNAL_FUNCTION_PARAMETERS)
 	}
 	RETURN_FALSE;
 }
+/* }}} */
 
+/* {{{ proto double sin(double number)
+   Returns the sine of the number in radians */
 void php3_sin(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *num;
@@ -155,7 +169,10 @@ void php3_sin(INTERNAL_FUNCTION_PARAMETERS)
 	return_value->value.dval = sin(num->value.dval);
 	return_value->type = IS_DOUBLE;
 }
+/* }}} */
 
+/* {{{ proto double cos(double number)
+   Returns the cosine of the number in radians */
 void php3_cos(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *num;
@@ -167,7 +184,10 @@ void php3_cos(INTERNAL_FUNCTION_PARAMETERS)
 	return_value->value.dval = cos(num->value.dval);
 	return_value->type = IS_DOUBLE;
 }
+/* }}} */
 
+/* {{{ proto double tan(double number)
+   Returns the tangent of the number in radians */
 void php3_tan(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *num;
@@ -179,7 +199,10 @@ void php3_tan(INTERNAL_FUNCTION_PARAMETERS)
 	return_value->value.dval = tan(num->value.dval);
 	return_value->type = IS_DOUBLE;
 }
+/* }}} */
 
+/* {{{ proto double asin(double number)
+   Returns the arc sine of the number in radians */
 void php3_asin(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *num;
@@ -191,7 +214,10 @@ void php3_asin(INTERNAL_FUNCTION_PARAMETERS)
 	return_value->value.dval = asin(num->value.dval);
 	return_value->type = IS_DOUBLE;
 }
+/* }}} */
 
+/* {{{ proto double acos(double number)
+   Return the arc cosine of the number in radians */
 void php3_acos(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *num;
@@ -203,7 +229,10 @@ void php3_acos(INTERNAL_FUNCTION_PARAMETERS)
 	return_value->value.dval = acos(num->value.dval);
 	return_value->type = IS_DOUBLE;
 }
+/* }}} */
 
+/* {{{ proto double atan(double number)
+   Returns the arc tangent of the number in radians */
 void php3_atan(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *num;
@@ -215,7 +244,10 @@ void php3_atan(INTERNAL_FUNCTION_PARAMETERS)
 	return_value->value.dval = atan(num->value.dval);
 	return_value->type = IS_DOUBLE;
 }
+/* }}} */
 
+/* {{{ proto double atan2(double y, double x)
+   Returns the arc tangent of y/x, with the resulting quadrant determined by the signs of y and x */
 void php3_atan2(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *num1, *num2;
@@ -228,13 +260,19 @@ void php3_atan2(INTERNAL_FUNCTION_PARAMETERS)
 	return_value->value.dval = atan2(num1->value.dval,num2->value.dval);
 	return_value->type = IS_DOUBLE;
 }
+/* }}} */
 
+/* {{{ proto double pi(void)
+   Returns an approximation of pi */
 void php3_pi(INTERNAL_FUNCTION_PARAMETERS)
 {
 	return_value->value.dval = M_PI;
 	return_value->type = IS_DOUBLE;
 }
+/* }}} */
 
+/* {{{ proto double pow(double base, double exponent)
+   Returns base raised to the power of expopent */
 void php3_pow(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *num1, *num2;
@@ -247,7 +285,10 @@ void php3_pow(INTERNAL_FUNCTION_PARAMETERS)
 	convert_to_double(num2);
 	RETURN_DOUBLE(pow(num1->value.dval, num2->value.dval));
 }
+/* }}} */
 
+/* {{{ proto double exp(double number)
+   Returns e raised to the power of the number */
 void php3_exp(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *num;
@@ -259,7 +300,10 @@ void php3_exp(INTERNAL_FUNCTION_PARAMETERS)
 	return_value->value.dval = exp(num->value.dval);
 	return_value->type = IS_DOUBLE;
 }
+/* }}} */
 
+/* {{{ proto double log(double number)
+   Returns the natural logarithm of the number */
 void php3_log(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *num;
@@ -271,7 +315,10 @@ void php3_log(INTERNAL_FUNCTION_PARAMETERS)
 	return_value->value.dval = log(num->value.dval);
 	return_value->type = IS_DOUBLE;
 }
+/* }}} */
 
+/* {{{ proto double log10(double number)
+   Returns the base-10 logarithm of the number */
 void php3_log10(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *num;
@@ -283,7 +330,10 @@ void php3_log10(INTERNAL_FUNCTION_PARAMETERS)
 	return_value->value.dval = log10(num->value.dval);
 	return_value->type = IS_DOUBLE;
 }
+/* }}} */
 
+/* {{{ proto double sqrt(double number)
+   Returns the square root of the number */
 void php3_sqrt(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *num;
@@ -295,8 +345,10 @@ void php3_sqrt(INTERNAL_FUNCTION_PARAMETERS)
 	return_value->value.dval = sqrt(num->value.dval);
 	return_value->type = IS_DOUBLE;
 }
+/* }}} */
 
-
+/* {{{ proto double deg2rad(double number)
+   Converts the number in degrees to the radian equivalent  */
 void php3_deg2rad(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *deg;
@@ -308,8 +360,10 @@ void php3_deg2rad(INTERNAL_FUNCTION_PARAMETERS)
 	convert_to_double(deg);
 	RETVAL_DOUBLE((deg->value.dval / 180.0) * M_PI);
 }
+/* }}} */
 
-
+/* {{{ proto double rad2deg(double number)
+   Converts the radian number to the equivalent number in degrees */
 void php3_rad2deg(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *rad;
@@ -321,6 +375,7 @@ void php3_rad2deg(INTERNAL_FUNCTION_PARAMETERS)
 	convert_to_double(rad);
 	RETVAL_DOUBLE((rad->value.dval / M_PI) * 180);
 }
+/* }}} */
 
 
 /*
@@ -395,7 +450,8 @@ _php3_longtobase(pval *arg, int base)
 	return ret;
 }	
 
-
+/* {{{ proto int bindec(string binary_number)
+   Returns the decimal equivalent of the binary number */
 void php3_bindec(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *arg;
@@ -411,9 +467,10 @@ void php3_bindec(INTERNAL_FUNCTION_PARAMETERS)
 
 	RETVAL_LONG(ret);
 }
+/* }}} */
 
-
-/* Hexadecimal to Decimal */
+/* {{{ proto int hexdec(string hexadimal_number)
+   Returns the decimal equivalent of the hexadecimal number */
 void php3_hexdec(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *arg;
@@ -429,9 +486,10 @@ void php3_hexdec(INTERNAL_FUNCTION_PARAMETERS)
 	ret = _php3_basetolong(arg, 16);
 	RETVAL_LONG(ret);
 }
+/* }}} */
 
-
-/* Octal to Decimal */
+/* {{{ proto int octdec(string octal_number)
+   Returns the decimal equivalent of an octal string */
 void php3_octdec(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *arg;
@@ -447,8 +505,10 @@ void php3_octdec(INTERNAL_FUNCTION_PARAMETERS)
 	ret = _php3_basetolong(arg, 8);
 	RETVAL_LONG(ret);
 }
+/* }}} */
 
-
+/* {{{ proto string decbin(int decimal_number)
+   Returns a string containing a binary representation of the number */
 void php3_decbin(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *arg;
@@ -465,8 +525,10 @@ void php3_decbin(INTERNAL_FUNCTION_PARAMETERS)
 	return_value->value.str.len = strlen(result);
 	return_value->value.str.val = result;
 }
+/* }}} */
 
-
+/* {{{ proto string decoct(int decimal_number)
+   Returns a string containing an octal representation of the given number */
 void php3_decoct(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *arg;
@@ -483,8 +545,10 @@ void php3_decoct(INTERNAL_FUNCTION_PARAMETERS)
 	return_value->value.str.len = strlen(result);
 	return_value->value.str.val = result;
 }
+/* }}} */
 
-
+/* {{{ proto string dechex(int decimal_number)
+   Returns a string containing a hexadecimal representation of the given number */
 void php3_dechex(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *arg;
@@ -501,6 +565,39 @@ void php3_dechex(INTERNAL_FUNCTION_PARAMETERS)
 	return_value->value.str.len = strlen(result);
 	return_value->value.str.val = result;
 }
+/* }}} */
+
+
+/* {{{ proto string base_convert(string number, int frombase, int tobase)
+   Converts a number in a string from any base <= 36 to any base <= 36.
+*/
+void php3_base_convert(INTERNAL_FUNCTION_PARAMETERS)
+{
+	pval *number, *frombase, *tobase, temp;
+	char *result;
+
+	if (ARG_COUNT(ht) != 3 || getParameters(ht, 3, &number, &frombase, &tobase)
+		== FAILURE) {
+		WRONG_PARAM_COUNT;
+	}
+	convert_to_string(number);
+	convert_to_long(frombase);
+	convert_to_long(tobase);
+	if (frombase->value.lval < 2 || frombase->value.lval > 36) {
+		php3_error(E_WARNING, "base_convert: invalid `from base' (%d)",
+				   frombase->value.lval);
+		RETURN_FALSE;
+	}
+	if (tobase->value.lval < 2 || tobase->value.lval > 36) {
+		php3_error(E_WARNING, "base_convert: invalid `to base' (%d)",
+				   tobase->value.lval);
+		RETURN_FALSE;
+	}
+	temp.type = IS_LONG;
+	temp.value.lval = _php3_basetolong(number, frombase->value.lval);
+	result = _php3_longtobase(&temp, tobase->value.lval);
+	RETVAL_STRING(result, 0);
+} /* }}} */
 
 
 char *_php3_number_format(double d,int dec,char dec_point,char thousand_sep)
@@ -559,7 +656,8 @@ char *_php3_number_format(double d,int dec,char dec_point,char thousand_sep)
 	return resbuf;
 }
 
-
+/* {{{ proto string number_format(double number, [,int num_decimal_places [, string  dec_seperator, string thousands_seperator)]])
+   Formats a number with grouped thousands */
 void php3_number_format(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *num,*dec,*t_s,*d_p;
@@ -602,6 +700,7 @@ void php3_number_format(INTERNAL_FUNCTION_PARAMETERS)
 			break;
 	}
 }
+/* }}} */
 /*
  * Local variables:
  * tab-width: 4

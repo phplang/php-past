@@ -24,9 +24,11 @@
    | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
    | Authors: Andreas Karajannis <Andreas.Karajannis@gmd.de>              |
-   |                                                                      |
    +----------------------------------------------------------------------+
  */
+
+/* $Id: adabasd.c,v 1.56 1998/11/14 15:39:44 rasmus Exp $ */
+
 /*
  * TODO/FIXME 
    - Add/StripSlashes ?

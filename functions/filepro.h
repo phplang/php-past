@@ -34,7 +34,7 @@
 
  */
 
-/* $Id: filepro.h,v 1.7 1998/04/29 13:24:12 ssb Exp $ */
+/* $Id: filepro.h,v 1.8 1998/12/22 14:29:22 rasmus Exp $ */
 
 #ifndef _FILEPRO_H
 #define _FILEPRO_H
@@ -49,6 +49,8 @@ extern void php3_filepro_fieldtype(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_filepro_fieldwidth(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_filepro_fieldcount(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_filepro_retrieve(INTERNAL_FUNCTION_PARAMETERS);
+extern int php3_minit_filepro(INIT_FUNC_ARGS);
+extern int php3_mend_filepro(void);
 #else
 #define filepro_module_ptr NULL
 #endif

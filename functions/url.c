@@ -26,7 +26,7 @@
    | Author: Jim Winstead (jimw@php.net)                                  |
    +----------------------------------------------------------------------+
  */
-/* $Id: url.c,v 1.37 1998/09/14 15:55:08 martin Exp $ */
+/* $Id: url.c,v 1.42 1998/11/18 21:23:12 ssb Exp $ */
 
 #include <stdlib.h>
 #include <string.h>
@@ -41,9 +41,16 @@
 #include "internal_functions.h"
 
 #include "url.h"
-#ifdef CHARSET_EBCDIC
+#ifdef _OSD_POSIX
+#ifndef APACHE
+#error On this EBCDIC platform, PHP3 is only supported as an Apache module.
+#else /*APACHE*/
+#ifndef CHARSET_EBCDIC
+#define CHARSET_EBCDIC /* this machine uses EBCDIC, not ASCII! */
+#endif
 #include "ebcdic.h"
-#endif /*CHARSET_EBCDIC*/
+#endif /*APACHE*/
+#endif /*_OSD_POSIX*/
 
 
 void free_url(url * theurl)
@@ -75,7 +82,7 @@ url *url_parse(char *string)
 
 	url *ret = (url *) emalloc(sizeof(url));
 	if (!ret) {
-		printf("unable to alloc memory\n");
+		/*php3_error(E_WARNING,"Unable to allocate memory\n");*/
 		return NULL;
 	}
 	memset(ret, 0, sizeof(url));
@@ -84,29 +91,35 @@ url *url_parse(char *string)
 	   http://www.ics.uci.edu/~fielding/url/url.txt */
 	err = regcomp(&re, "^(([^:/?#]+):)?(//([^/?#]*))?([^?#]*)(\\?([^#]*))?(#(.*))?", REG_EXTENDED);
 	if (err) {
-		printf("unable to compile regex: %d\n", err);
+		/*php3_error(E_WARNING,"Unable to compile regex: %d\n", err);*/
+		efree(ret);
 		return NULL;
 	}
 	err = regexec(&re, string, 10, subs, 0);
 	if (err) {
-		printf("error with regex\n");
+		/*php3_error(E_WARNING,"Error with regex\n");*/
+		efree(ret);
 		return NULL;
 	}
 	/* no processing necessary on the scheme */
-	if (subs[2].rm_so != -1 && subs[2].rm_so < length)
+	if (subs[2].rm_so != -1 && subs[2].rm_so < length) {
 		ret->scheme = estrndup(string + subs[2].rm_so, subs[2].rm_eo - subs[2].rm_so);
+	}
 
 	/* the path to the resource */
-	if (subs[5].rm_so != -1 && subs[5].rm_so < length)
+	if (subs[5].rm_so != -1 && subs[5].rm_so < length) {
 		ret->path = estrndup(string + subs[5].rm_so, subs[5].rm_eo - subs[5].rm_so);
+	}
 
 	/* the query part */
-	if (subs[7].rm_so != -1 && subs[7].rm_so < length)
+	if (subs[7].rm_so != -1 && subs[7].rm_so < length) {
 		ret->query = estrndup(string + subs[7].rm_so, subs[7].rm_eo - subs[7].rm_so);
+	}
 
 	/* the fragment */
-	if (subs[9].rm_so != -1 && subs[9].rm_so < length)
+	if (subs[9].rm_so != -1 && subs[9].rm_so < length) {
 		ret->fragment = estrndup(string + subs[9].rm_so, subs[9].rm_eo - subs[9].rm_so);
+	}
 
 	/* extract the username, pass, and port from the hostname */
 	if (subs[4].rm_so != -1 && subs[4].rm_so < length) {
@@ -115,32 +128,39 @@ url *url_parse(char *string)
 		length = strlen(result);
 
 		regfree(&re);			/* free the old regex */
-		err = regcomp(&re, "^(([^@:]+)(:([^@:]+))?@)?([^:@]+)(:([^:@]+))?", REG_EXTENDED);
-		if (err) {
-			printf("unable to compile regex: %d\n", err);
-			return NULL;
-		}
-		err = regexec(&re, result, 10, subs, 0);
-		if (err) {
-			printf("error with regex\n");
+		
+		if ((err=regcomp(&re, "^(([^@:]+)(:([^@:]+))?@)?([^:@]+)(:([^:@]+))?", REG_EXTENDED))
+			|| (err=regexec(&re, result, 10, subs, 0))) {
+			STR_FREE(ret->scheme);
+			STR_FREE(ret->path);
+			STR_FREE(ret->query);
+			STR_FREE(ret->fragment);
+			efree(ret);
+			efree(result);
+			/*php3_error(E_WARNING,"Unable to compile regex: %d\n", err);*/
 			return NULL;
 		}
 		/* now deal with all of the results */
-		if (subs[2].rm_so != -1 && subs[2].rm_so < length)
+		if (subs[2].rm_so != -1 && subs[2].rm_so < length) {
 			ret->user = estrndup(result + subs[2].rm_so, subs[2].rm_eo - subs[2].rm_so);
-		if (subs[4].rm_so != -1 && subs[4].rm_so < length)
+		}
+		if (subs[4].rm_so != -1 && subs[4].rm_so < length) {
 			ret->pass = estrndup(result + subs[4].rm_so, subs[4].rm_eo - subs[4].rm_so);
-		if (subs[5].rm_so != -1 && subs[5].rm_so < length)
+		}
+		if (subs[5].rm_so != -1 && subs[5].rm_so < length) {
 			ret->host = estrndup(result + subs[5].rm_so, subs[5].rm_eo - subs[5].rm_so);
-		if (subs[7].rm_so != -1 && subs[7].rm_so < length)
+		}
+		if (subs[7].rm_so != -1 && subs[7].rm_so < length) {
 			ret->port = (unsigned short) strtol(result + subs[7].rm_so, NULL, 10);
-
+		}
 		efree(result);
 	}
 	regfree(&re);
 	return ret;
 }
 
+/* {{{ proto array parse_url(string url)
+   Parse a URL and return its components */
 void php3_parse_url(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *string;
@@ -182,6 +202,7 @@ void php3_parse_url(INTERNAL_FUNCTION_PARAMETERS)
 		add_assoc_string(return_value, "fragment", resource->fragment, 1);
 	free_url(resource);
 }
+/* }}} */
 
 static int php3_htoi(char *s)
 {
@@ -247,6 +268,8 @@ char *_php3_urlencode(char *s, int len)
 	return ((char *) str);
 }
 
+/* {{{ proto string urlencode(string str)
+   URL-encodes string */
 void php3_urlencode(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *arg;
@@ -265,7 +288,10 @@ void php3_urlencode(INTERNAL_FUNCTION_PARAMETERS)
 	RETVAL_STRING(str, 1);
 	efree(str);
 }
+/* }}} */
 
+/* {{{ proto string urldecode(string str)
+   Decodes URL-encoded string */
 void php3_urldecode(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *arg;
@@ -284,6 +310,7 @@ void php3_urldecode(INTERNAL_FUNCTION_PARAMETERS)
 
 	RETVAL_STRINGL(arg->value.str.val, len, 1);
 }
+/* }}} */
 
 int _php3_urldecode(char *str, int len)
 {
@@ -338,6 +365,8 @@ char *_php3_rawurlencode(char *s, int len)
 	return ((char *) str);
 }
 
+/* {{{ proto string rawurlencode(string str)
+   URL-encodes string */
 void php3_rawurlencode(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *arg;
@@ -356,7 +385,10 @@ void php3_rawurlencode(INTERNAL_FUNCTION_PARAMETERS)
 	RETVAL_STRING(str, 1);
 	efree(str);
 }
+/* }}} */
 
+/* {{{ proto string rawurldecode(string str)
+   Decodes URL-encodes string */
 void php3_rawurldecode(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *arg;
@@ -375,6 +407,7 @@ void php3_rawurldecode(INTERNAL_FUNCTION_PARAMETERS)
 
 	RETVAL_STRINGL(arg->value.str.val, len, 1);
 }
+/* }}} */
 
 int _php3_rawurldecode(char *str, int len)
 {

@@ -27,7 +27,7 @@
    | (with helpful hints from Dean Gaudet <dgaudet@arctic.org>            |
    +----------------------------------------------------------------------+
  */
-/* $Id: mod_php3.c,v 1.81 1998/08/25 19:56:27 rasmus Exp $ */
+/* $Id: mod_php3.c,v 1.87 1998/12/04 19:22:58 ssb Exp $ */
 
 #ifdef THREAD_SAFE
 #include "tls.h"
@@ -53,7 +53,13 @@
 
 #include "php_version.h"
 #include "mod_php3.h"
+#if HAVE_MOD_DAV
+# include "mod_dav.h"
+#endif
 
+/* ### these should be defined in mod_php3.h or somewhere else */
+#define USE_PATH 1
+#define IGNORE_URL 2
 
 module MODULE_VAR_EXPORT php3_module;
 
@@ -75,10 +81,24 @@ int saved_umask;
 #define GLOBAL(x) x
 #endif
 
+#if WIN32|WINNT
+/* popenf isn't working on Windows, use open instead*/
+# ifdef popenf
+#  undef popenf
+# endif
+# define popenf(p,n,f,m) open((n),(f),(m))
+# ifdef pclosef
+#  undef pclosef
+# endif
+# define pclosef(p,f) close(f)
+#else
+# define php3i_popenf(p,n,f,m) popenf((p),(n),(f),(m))
+#endif
+
 extern php3_ini_structure php3_ini;  /* active config */
 extern php3_ini_structure php3_ini_master;  /* master copy of config */
 
-extern int apache_php3_module_main(request_rec * r, int fd, int display_source_mode, int preprocessed);
+extern int apache_php3_module_main(request_rec *, int, int, int, FILE *);
 extern int php3_module_startup();
 extern void php3_module_shutdown();
 extern void php3_module_shutdown_for_exec();
@@ -155,44 +175,45 @@ void php3_restore_umask()
 	umask(GLOBAL(saved_umask));
 }
 
-int send_php3(request_rec *r, int display_source_mode, int preprocessed)
+int send_php3(request_rec *r, int display_source_mode, int preprocessed, char *filename)
 {
 	int fd, retval;
 	php3_ini_structure *conf;
 
-	/* We don't aacept OPTIONS requests, but take everything else */
+	/* We don't accept OPTIONS requests, but take everything else */
 	if (r->method_number == M_OPTIONS) {
 		r->allowed |= (1 << METHODS) - 1;
 		return DECLINED;
 	}
 
 	/* Make sure file exists */
-	if (r->finfo.st_mode == 0)
+	if (filename == NULL && r->finfo.st_mode == 0) {
 		return NOT_FOUND;
+	}
 
 	/* grab configuration settings */
-	conf = (php3_ini_structure *) get_module_config(r->per_dir_config, &php3_module);
-	memcpy(&php3_ini,conf,sizeof(php3_ini_structure)); /* copy to active configuration */
+	conf = (php3_ini_structure *) get_module_config(r->per_dir_config,
+													&php3_module);
+	/* copy to active configuration */
+	memcpy(&php3_ini,conf,sizeof(php3_ini_structure));
 
-	/* 
-	 * If PHP parser engine has been turned off with the phpEngine off directive,
-	 * then decline to handle this request
+	/* If PHP parser engine has been turned off with a "php3_engine off"
+	 * directive, then decline to handle this request
 	 */
 	if (!conf->engine) {
 		r->content_type = "text/html";
 		r->allowed |= (1 << METHODS) - 1;
 		return DECLINED;
 	}
+	if (filename == NULL) {
+		filename = r->filename;
+	}
 	/* Open the file */
-	/* popenf isnt working on windows, so lets just open it*/
-#if WIN32|WINNT
-	fd = open(r->filename, O_RDONLY,0);
-#else
-	if ((fd = popenf(r->pool, r->filename, O_RDONLY, 0)) == -1) {
-		log_reason("file permissions deny server access", r->filename, r);
+	if ((fd = popenf(r->pool, filename, O_RDONLY, 0)) == -1) {
+		log_reason("file permissions deny server access", filename, r);
 		return FORBIDDEN;
 	}
-#endif
+
 	/* Apache 1.2 has a more complex mechanism for reading POST data */
 #if MODULE_MAGIC_NUMBER > 19961007
 	if ((retval = setup_client_block(r, REQUEST_CHUNKED_ERROR)))
@@ -218,36 +239,31 @@ int send_php3(request_rec *r, int display_source_mode, int preprocessed)
 	hard_timeout("send", r);
 
 	php3_save_umask();
-	chdir_file(r->filename);
+	chdir_file(filename);
 	add_common_vars(r);
 	add_cgi_vars(r);
-	apache_php3_module_main(r, fd, display_source_mode, preprocessed);
+	apache_php3_module_main(r, fd, display_source_mode, preprocessed, NULL);
 
 	/* Done, restore umask, turn off timeout, close file and return */
 	php3_restore_umask();
 	kill_timeout(r);
-#if WIN32|WINNT
-	close(fd);
-#else
 	pclosef(r->pool, fd);
-#endif
 	return OK;
 }
 
 int send_parsed_preprocessed_php3(request_rec * r)
 {
-	return send_php3(r, 0, 1);
+	return send_php3(r, 0, 1, NULL);
 }
 
 int send_parsed_php3(request_rec * r)
 {
-	return send_php3(r, 0, 0);
+	return send_php3(r, 0, 0, NULL);
 }
-
 
 int send_parsed_php3_source(request_rec * r)
 {
-	return send_php3(r, 1, 0);
+	return send_php3(r, 1, 0, NULL);
 }
 
 /*
@@ -322,6 +338,8 @@ static void *php3_merge_dir(pool *p, void *basev, void *addv)
 	if (add->error_append_string != orig.error_append_string) new->error_append_string = add->error_append_string;
 	if (add->open_basedir != orig.open_basedir) new->open_basedir = add->open_basedir;
 	if (add->enable_dl != orig.enable_dl) new->enable_dl = add->enable_dl;
+	if (add->asp_tags != orig.asp_tags) new->asp_tags = add->asp_tags;
+	if (add->dav_script != orig.dav_script) new->dav_script = add->dav_script;
 	
 	return new;
 }
@@ -377,6 +395,9 @@ char *php3flaghandler(cmd_parms * cmd, php3_ini_structure * conf, int val)
 			break;
 		case 13:
 			conf->enable_dl = val;
+			break;
+		case 14:
+			conf->asp_tags = val;
 			break;
 	}
 	return NULL;
@@ -460,6 +481,9 @@ char *php3take1handler(cmd_parms * cmd, php3_ini_structure * conf, char *arg)
 		case 19:
 			conf->upload_max_filesize = atol(arg);
 			break;
+		case 20:
+			conf->dav_script = pstrdup(cmd->pool, arg);
+			break;
 	}
 	return NULL;
 }
@@ -487,6 +511,48 @@ void php3_init_handler(server_rec *s, pool *p)
 	ap_add_version_component("PHP/" PHP_VERSION);
 #endif
 }
+
+
+#if HAVE_MOD_DAV
+
+extern int phpdav_mkcol_test_handler(request_rec *r);
+extern int phpdav_mkcol_create_handler(request_rec *r);
+
+/* conf is being read twice (both here and in send_php3()) */
+int send_parsed_php3_dav_script(request_rec *r)
+{
+	php3_ini_structure *conf;
+
+	conf = (php3_ini_structure *) get_module_config(r->per_dir_config,
+													&php3_module);
+	return send_php3(r, 0, 0, conf->dav_script);
+}
+
+static int php3_type_checker(request_rec *r)
+{
+	php3_ini_structure *conf;
+
+	conf = (php3_ini_structure *)get_module_config(r->per_dir_config,
+												   &php3_module);
+
+    /* If DAV support is enabled, use mod_dav's type checker. */
+    if (conf->dav_script) {
+		dav_api_set_request_handler(r, send_parsed_php3_dav_script);
+		dav_api_set_mkcol_handlers(r, phpdav_mkcol_test_handler,
+								   phpdav_mkcol_create_handler);
+		/* leave the rest of the request to mod_dav */
+		return dav_api_type_checker(r);
+	}
+
+    return DECLINED;
+}
+
+#else /* HAVE_MOD_DAV */
+
+# define php3_type_checker NULL
+
+#endif /* HAVE_MOD_DAV */
+
 
 handler_rec php3_handlers[] =
 {
@@ -520,7 +586,10 @@ command_rec php3_commands[] =
 	{"php3_error_append_string", php3take1handler, (void *)17, OR_OPTIONS, TAKE1, "String to add after an error message from PHP"},
 	{"php3_open_basedir", php3take1handler, (void *)18, OR_OPTIONS|RSRC_CONF, TAKE1, "Limit opening of files to this directory"},
 	{"php3_upload_max_filesize", php3take1handler, (void *)19, OR_OPTIONS|RSRC_CONF, TAKE1, "Limit uploaded files to this many bytes"},
-
+#if HAVE_MOD_DAV
+	{"php3_dav_script", php3take1handler, (void *)20, OR_OPTIONS|RSRC_CONF, TAKE1,
+	 "Lets PHP handle DAV requests by parsing this script."},
+#endif
 	{"php3_track_errors", php3flaghandler, (void *)0, OR_OPTIONS, FLAG, "on|off"},
 	{"php3_magic_quotes_gpc", php3flaghandler, (void *)1, OR_OPTIONS, FLAG, "on|off"},
 	{"php3_magic_quotes_runtime", php3flaghandler, (void *)2, OR_OPTIONS, FLAG, "on|off"},
@@ -535,6 +604,7 @@ command_rec php3_commands[] =
 	{"php3_display_errors", php3flaghandler, (void *)11, OR_OPTIONS, FLAG, "on|off"},
 	{"php3_magic_quotes_sybase", php3flaghandler, (void *)12, OR_OPTIONS, FLAG, "on|off"},
 	{"php3_enable_dl", php3flaghandler, (void *)13, RSRC_CONF|ACCESS_CONF, FLAG, "on|off"},
+	{"php3_asp_tags", php3flaghandler, (void *)14, OR_OPTIONS, FLAG, "on|off"},
 	{NULL}
 };
 
@@ -554,7 +624,7 @@ module MODULE_VAR_EXPORT php3_module =
 	NULL,						/* check_user_id */
 	NULL,						/* check auth */
 	NULL,						/* check access */
-	NULL,						/* type_checker */
+	php3_type_checker,			/* type_checker */
 	NULL,						/* fixups */
 	NULL						/* logger */
 #if MODULE_MAGIC_NUMBER >= 19970103

@@ -44,7 +44,7 @@ ndx_header_t *ndx_get_header(int fd)
 	return np;
 }
 
-ndx_page_t *ndx_get_page(ndx_header_t *hp, int pageno)
+static ndx_page_t *ndx_get_page(ndx_header_t *hp, int pageno)
 {
 	ndx_page_t	*fp;
 	dndx_page_t	*dp;
@@ -84,7 +84,7 @@ ndx_page_t *ndx_get_page(ndx_header_t *hp, int pageno)
 /*
  * get the first entry for this ndx
  */
-ndx_page_t *ndx_get_first_pg(ndx_header_t *hp)
+static ndx_page_t *ndx_get_first_pg(ndx_header_t *hp)
 {
 	ndx_page_t	*fp;
 
@@ -96,7 +96,7 @@ ndx_page_t *ndx_get_first_pg(ndx_header_t *hp)
 	return fp;
 }
 
-ndx_record_t *ndx_get_record(ndx_page_t *fp, int rec_no)
+static ndx_record_t *ndx_get_record(ndx_page_t *fp, int rec_no)
 {
 	ndx_record_t		*rp;
 	ndx_header_t		*hp = fp->ndxp_header_p;
@@ -124,7 +124,7 @@ ndx_record_t *ndx_get_record(ndx_page_t *fp, int rec_no)
 	return rp;
 }
 
-ndx_record_t *ndx_scan_down(ndx_header_t *hp, ndx_page_t *fp, int recno)
+static ndx_record_t *ndx_scan_down(ndx_header_t *hp, ndx_page_t *fp, int recno)
 {
 	ndx_page_t	*np;
 	ndx_record_t	*rp;
@@ -139,7 +139,7 @@ ndx_record_t *ndx_scan_down(ndx_header_t *hp, ndx_page_t *fp, int recno)
 	return rp;
 }
 
-ndx_record_t *ndx_scan_up(ndx_header_t *hp, ndx_page_t *fp, int recno)
+static ndx_record_t *ndx_scan_up(ndx_header_t *hp, ndx_page_t *fp, int recno)
 {
 	ndx_record_t	*rp;
 

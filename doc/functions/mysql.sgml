@@ -2,11 +2,19 @@
  <reference id="ref.mysql">
   <title>MySQL Functions</title>
   <titleabbrev>MySQL</titleabbrev>
+  <partintro>
+   <simpara>
+    These functions allow you to access MySQL database servers.
+   <simpara>
+    More information about MySQL can be found at <ulink
+      url="http://www.mysql.com/">http://www.mysql.com/</ulink>.
+  </partintro>
 
   <refentry id="function.mysql-affected-rows">
    <refnamediv>
-    <refname>mysql_affected_rows</refname>
-    <refpurpose>get number of affected rows in last query</refpurpose>
+    <refname>mysql_affected_rows</refname> 
+    <refpurpose>Get number of affected rows in previous MySQL
+     operation</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
@@ -15,13 +23,15 @@
      <paramdef>int <parameter><optional>link_identifier</optional>
                    </parameter></paramdef>
     </funcsynopsis>
-    <para>
-     Returns: The number of affected rows by the last query.
     <para> 
      <function>mysql_affected_rows</function> returns the number of
      rows affected by the last INSERT, UPDATE or DELETE query on the
      server associated with the specified link identifier.  If the
      link identifier isn't specified, the last opened link is assumed.
+    <para>
+     If the last query was a DELETE query with no WHERE clause, all
+     of the records will have been deleted from the table but this
+     function will return zero.
     <para>
      This command is not effective for SELECT statements, only on
      statements which modify records. To retrieve the number of rows
@@ -64,14 +74,15 @@
   <refentry id="function.mysql-connect">
    <refnamediv>
     <refname>mysql_connect</refname>
-    <refpurpose>open MySQL server connection</refpurpose>
+    <refpurpose>Open a connection to a MySQL Server</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
     <funcsynopsis>
      <funcdef>int <function>mysql_connect</function></funcdef>
      <paramdef>string <parameter><optional>hostname</optional>
-                      </parameter></paramdef>
+                      <optional>:port</optional></parameter>
+                      </paramdef>
      <paramdef>string <parameter><optional>username</optional>
                       </parameter></paramdef>
      <paramdef>string <parameter><optional>password</optional>
@@ -84,8 +95,9 @@
      <function>mysql_connect</function> establishes a connection to a
      MySQL server.  All of the arguments are optional, and if they're
      missing, defaults are assumed ('localhost', user name of the user
-     that owns the server process, empty password).  The hostname string
-	 can also include a port number.  eg. &quot;hostname:port&quot;
+     that owns the server process, empty password).  The hostname
+     string can also include a port number.
+     eg. &quot;hostname:port&quot;
     <para> 
      In case a second call is made to
      <function>mysql_connect</function> with the same arguments, no
@@ -104,7 +116,7 @@
   <refentry id="function.mysql-create-db">
    <refnamediv>
     <refname>mysql_create_db</refname>
-    <refpurpose>create MySQL database</refpurpose>
+    <refpurpose>Create a MySQL database</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
@@ -125,28 +137,10 @@
    </refsect1>
   </refentry>
 
-<!--
-  <refentry id="function.mysql-createdb">
-   <refnamediv>
-    <refname>mysql_createdb</refname>
-    <refpurpose>create MySQL database</refpurpose>
-   </refnamediv>
-   <refsect1>
-    <title>Description</title>
-    <funcsynopsis>
-     <funcdef>int <function>mysql_createdb</function></funcdef>
-     <void>
-    </funcsynopsis>
-    <para> 
-     Identical to <function>mysql_create_db</function>.
-   </refsect1>
-  </refentry>
--->
-
   <refentry id="function.mysql-data-seek">
    <refnamediv>
     <refname>mysql_data_seek</refname>
-    <refpurpose>move internal row pointer</refpurpose>
+    <refpurpose>Move internal result pointer</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
@@ -162,11 +156,10 @@
      pointer of the MySQL result associated with the specified result
      identifier to point to the specified row number.  The next call
      to <function>mysql_fetch_row</function> would return that row.
-    <para> 
-     See also: <function>mysql_data_seek</function>.
    </refsect1>
   </refentry>
 
+<!--
   <refentry id="function.mysql-dbname">
    <refnamediv>
     <refname>mysql_dbname</refname>
@@ -187,11 +180,12 @@
      used to determine how many database names are available.
    </refsect1>
   </refentry>
+-->
 
   <refentry id="function.mysql-db-query">
    <refnamediv>
     <refname>mysql_db_query</refname>
-    <refpurpose>send MySQL query</refpurpose>
+    <refpurpose>Send an MySQL query to MySQL</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
@@ -199,7 +193,8 @@
      <funcdef>int <function>mysql_db_query</function></funcdef>
      <paramdef>string <parameter>database</parameter></paramdef>
      <paramdef>string <parameter>query</parameter></paramdef>
-     <paramdef>int <parameter>link_identifier</parameter></paramdef>
+     <paramdef>int <parameter><optional>link_identifier</optional>
+                   </parameter></paramdef>
     </funcsynopsis>
     <para> 
      Returns: A positive MySQL result identifier to the query result,
@@ -217,39 +212,11 @@
    </refsect1>
   </refentry>
 
-<!--
-  <refentry id="function.mysql">
-   <refnamediv>
-    <refname>mysql</refname>
-    <refpurpose>send MySQL query</refpurpose>
-   </refnamediv>
-   <refsect1>
-    <title>Description</title>
-    <funcsynopsis>
-     <funcdef>int <function>mysql</function></funcdef>
-     <paramdef>string <parameter>database</parameter></paramdef>
-     <paramdef>string <parameter>query</parameter></paramdef>
-     <paramdef>int <parameter>link_identifier</parameter></paramdef>
-    </funcsynopsis>
-    <para> 
-     Returns: A positive MySQL result identifier to the query result,
-     or false on error.
-    <para> 
-     <function>mysql</function> selects a database and executes a
-     query on it.  If the optional link identifier isn't specified,
-     the function will try to find an open link to the MySQL server
-     and if no such link is found it'll try to create one as if
-     <function>mysql_connect</function> was called with no arguments
-    <para> 
-     See also <function>mysql_connect</function>.  
-   </refsect1>
-  </refentry>
--->
 
   <refentry id="function.mysql-drop-db">
    <refnamediv>
     <refname>mysql_drop_db</refname>
-    <refpurpose>drop (delete) MySQL database</refpurpose>
+    <refpurpose>Drop (delete) a MySQL database</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
@@ -271,42 +238,19 @@
    </refsect1>
   </refentry>
 
-<!--
-  <refentry id="function.mysql-dropdb">
-   <refnamediv>
-    <refname>mysql_dropdb</refname>
-    <refpurpose>drop (delete) MySQL database</refpurpose>
-   </refnamediv>
-   <refsect1>
-    <title>Description</title>
-    <funcsynopsis>
-     <funcdef>int <function>mysql_drop_db</function></funcdef>
-     <paramdef>string <parameter>database_name</parameter></paramdef>
-     <paramdef>int <parameter><optional>link_identifier</optional>
-                   </parameter></paramdef>
-    </funcsynopsis>
-    <para> 
-     Returns: true on success, false on failure.  
-    <para> 
-     <function>mysql_drop_db</function> attempts to drop (remove) an
-     entire database from the server associated with the specified
-     link identifier.
-    <para> 
-     See also: <function>mysql_create_db</function>
-   </refsect1>
-  </refentry>
--->
 
   <refentry id="function.mysql-errno">
    <refnamediv>
-    <refname>mysql_errno</refname>
-    <refpurpose>returns error number of last mysql call</refpurpose>
+    <refname>mysql_errno</refname> 
+    <refpurpose>Returns the number of the error message from previous
+     MySQL operation</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
     <funcsynopsis>
      <funcdef>int <function>mysql_errno</function></funcdef>
-     <paramdef><parameter></parameter></paramdef>
+     <paramdef>int <parameter><optional>link_identifier</optional>
+                   </parameter></paramdef>
     </funcsynopsis>
     <para>
      Errors coming back from the mySQL database backend no longer
@@ -334,13 +278,15 @@ echo mysql_errno().": ".mysql_error()."&lt;BR>";
   <refentry id="function.mysql-error">
    <refnamediv>
     <refname>mysql_error</refname>
-    <refpurpose>returns error message of last mysql call</refpurpose>
+    <refpurpose>Returns the text of the error message from previous
+     MySQL operation</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
     <funcsynopsis>
      <funcdef>string <function>mysql_error</function></funcdef>
-     <paramdef><parameter></parameter></paramdef>
+     <paramdef>int <parameter><optional>link_identifier</optional>
+                   </parameter></paramdef>
     </funcsynopsis>
     <para>
      Errors coming back from the mySQL database backend no longer
@@ -368,7 +314,7 @@ echo mysql_errno().": ".mysql_error()."&lt;BR>";
   <refentry id="function.mysql-fetch-array">
    <refnamediv>
     <refname>mysql_fetch_array</refname>
-    <refpurpose>fetch row as array</refpurpose>
+    <refpurpose>Fetch a result row as an associative array</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
@@ -377,13 +323,21 @@ echo mysql_errno().": ".mysql_error()."&lt;BR>";
      <paramdef>int <parameter>result</parameter></paramdef>
     </funcsynopsis>
     <para> 
-     Returns: An array that corresponds to the fetched row, or false
+     Returns an array that corresponds to the fetched row, or false
      if there are no more rows.
     <para>
      <function>mysql_fetch_array</function> is an extended version of
      <function>mysql_fetch_row</function>.  In addition to storing the
      data in the numeric indices of the result array, it also stores
      the data in associative indices, using the field names as keys.
+    <para>
+     If two or more columns of the result have the same field names,
+     the last column will take precedence. To access the other column(s)
+     of the same name, you must the numeric index of the column or
+     make an alias for the column.
+     <informalexample><programlisting>
+select t1.f1 as foo t2.f1 as bar from t1, t2
+</programlisting></informalexample>
     <para>
      An important thing to note is that using
      <function>mysql_fetch_array</function> is NOT significantly
@@ -414,7 +368,8 @@ mysql_free_result($result);
   <refentry id="function.mysql-fetch-field">
    <refnamediv>
     <refname>mysql_fetch_field</refname>
-    <refpurpose>get field information</refpurpose>
+    <refpurpose>Get column information from a result and return as an
+     object</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
@@ -482,12 +437,13 @@ mysql_free_result($result);
   <refentry id="function.mysql-fetch-lengths">
    <refnamediv>
     <refname>mysql_fetch_lengths</refname>
-    <refpurpose>get max data size of output columns</refpurpose>
+    <refpurpose>Get max data size of each output in a
+     result</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
     <funcsynopsis>
-     <funcdef>int <function>mysql_fetch_lengths</function></funcdef>
+     <funcdef>array <function>mysql_fetch_lengths</function></funcdef>
      <paramdef>int <parameter>result</parameter></paramdef>
     </funcsynopsis>
     <para> 
@@ -507,16 +463,16 @@ mysql_free_result($result);
   <refentry id="function.mysql-fetch-object">
    <refnamediv>
     <refname>mysql_fetch_object</refname>
-    <refpurpose>fetch row as object</refpurpose>
+    <refpurpose>Fetch a result row as an object</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
     <funcsynopsis>
-     <funcdef>int <function>mysql_fetch_object</function></funcdef>
+     <funcdef>object <function>mysql_fetch_object</function></funcdef>
      <paramdef>int <parameter>result</parameter></paramdef>
     </funcsynopsis>
     <para> 
-     Returns: An object with properties that correspond to the fetched
+     Returns an object with properties that correspond to the fetched
      row, or false if there are no more rows.
     <para> 
      <function>mysql_fetch_object</function> is similar to
@@ -529,6 +485,21 @@ mysql_free_result($result);
      <function>mysql_fetch_array</function>, and almost as quick as
      <function>mysql_fetch_row</function> (the difference is
      insignificant).
+    <example>
+     <title>mysql fetch object</title>
+     <programlisting role=php>
+&lt;?php 
+mysql_connect($host,$user,$password);
+$result = mysql_db_query("database","select * from table");
+while($row = mysql_fetch_object($result)) {
+    echo $row->user_id;
+    echo $row->fullname;
+}
+mysql_free_result($result);
+?>
+</programlisting>
+    </example>
+
     <para> See also: <function>mysql_fetch_array</function> and
                      <function>mysql_fetch_row</function>.
    </refsect1>
@@ -537,7 +508,7 @@ mysql_free_result($result);
   <refentry id="function.mysql-fetch-row">
    <refnamediv>
     <refname>mysql_fetch_row</refname>
-    <refpurpose>get row as enumerated array</refpurpose>
+    <refpurpose>Get a result row as an enumerated array</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
@@ -569,14 +540,15 @@ mysql_free_result($result);
   <refentry id="function.mysql-field-name">
    <refnamediv>
     <refname>mysql_field_name</refname> 
-    <refpurpose>get field name</refpurpose>
+    <refpurpose>Get the name of the specified field in a
+     result</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
     <funcsynopsis>
      <funcdef>string <function>mysql_field_name</function></funcdef>
-     <paramdef>string <parameter>result</parameter></paramdef>
-     <paramdef>int <parameter>i</parameter></paramdef>
+     <paramdef>int <parameter>result</parameter></paramdef>
+     <paramdef>int <parameter>field_index</parameter></paramdef>
     </funcsynopsis>
     <para>
      <function>mysql_field_name</function> returns the name of the
@@ -592,34 +564,11 @@ mysql_free_result($result);
    </refsect1>
   </refentry>
 
-<!--
-  <refentry id="function.mysql-fieldname">
-   <refnamediv>
-    <refname>mysql_fieldname</refname> 
-    <refpurpose>get field name</refpurpose>
-   </refnamediv>
-   <refsect1>
-    <title>Description</title>
-    <funcsynopsis>
-     <funcdef>string <function>mysql_fieldname</function></funcdef>
-     <paramdef>string <parameter>result</parameter></paramdef>
-     <paramdef>int <parameter>i</parameter></paramdef>
-    </funcsynopsis>
-    <para>
-     mysql_fieldname() returns the name of the specified
-     field. Arguments to the function is the result identifier and the
-     field index, ie. <literal>mysql_fieldname($result,2);</literal>
-    <para>
-     Will return the name of the second field in the result associated
-     with the result identifier.
-   </refsect1>
-  </refentry>
--->
 
   <refentry id="function.mysql-field-seek">
    <refnamediv>
     <refname>mysql_field_seek</refname>
-    <refpurpose>set field offset</refpurpose>
+    <refpurpose>Set result pointer to a specified field offset</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
@@ -640,7 +589,8 @@ mysql_free_result($result);
   <refentry id="function.mysql-field-table">
    <refnamediv>
     <refname>mysql_field_table</refname>
-    <refpurpose>get table name for field</refpurpose>
+    <refpurpose>Get name of the table the specified field is
+     in</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
@@ -655,42 +605,26 @@ mysql_free_result($result);
    </refsect1>
   </refentry>
 
-<!--
-  <refentry id="function.mysql-fieldtable">
-   <refnamediv>
-    <refname>mysql_fieldtable</refname>
-    <refpurpose>get table name for field</refpurpose>
-   </refnamediv>
-   <refsect1>
-    <title>Description</title>
-    <funcsynopsis>
-     <funcdef>string <function>mysql_fieldtable</function></funcdef>
-     <paramdef>int <parameter>result</parameter></paramdef>
-     <paramdef>int <parameter>field_offset</parameter></paramdef>
-    </funcsynopsis>
-    <para> 
-     Get the table name for field.
-   </refsect1>
-  </refentry>
--->
 
   <refentry id="function.mysql-field-type">
    <refnamediv>
     <refname>mysql_field_type</refname>
-    <refpurpose>get field type</refpurpose>
+    <refpurpose>Get the type of the specified field in a
+     result</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
     <funcsynopsis>
      <funcdef>string <function>mysql_field_type</function></funcdef>
-     <paramdef>string <parameter>result</parameter></paramdef>
+     <paramdef>int <parameter>result</parameter></paramdef>
      <paramdef>int <parameter>field_offset</parameter></paramdef>
     </funcsynopsis>
     <para>
      <function>mysql_field_type</function> is similar to the
      <function>mysql_field_name</function> function. The arguments are
      identical, but the field type is returned. This will be one of
-     "int", "real", "string", or "blob".
+     "int", "real", "string", "blob", or others as detailed in the
+     MySQL documentation.
  
     <example>
      <title>mysql field types</title>
@@ -725,65 +659,18 @@ mysql_close();
    </refsect1>
   </refentry>
 
-<!--
-  <refentry id="function.mysql-fieldtype">
-   <refnamediv>
-    <refname>mysql_fieldtype</refname>
-    <refpurpose>get field type</refpurpose>
-   </refnamediv>
-   <refsect1>
-    <title>Description</title>
-    <funcsynopsis>
-     <funcdef>string <function>mysql_field_type</function></funcdef>
-     <paramdef>string <parameter>result</parameter></paramdef>
-     <paramdef>int <parameter>field_offset</parameter></paramdef>
-    </funcsynopsis>
-    <para>
-     <function>mysql_fieldtype</function> is similar to the
-     <function>mysql_fieldname</function> function. The arguments are
-     identical, but the field type is returned. This will be one of
-     "int", "real", "string", or "blob".
-
-    <example>
-     <title>mysql field types</title>
-     <programlisting role=php>
-&lt;?php 
-mysql_connect("localhost:3306");
-mysql_select_db("wisconsin");
-$result = mysql("SELECT * FROM onek");
-$fields = mysql_numfields($result);
-$rows   = mysql_numrows($result);
-$i = 0;
-$table = mysql_fieldtable($result, $i);
-echo "Your '".$table."' table has ".$fields." fields and ".$rows." records &lt;BR>";
-echo "The table has the following fields &lt;BR>"; 
-while ($i &lt; $fields) {
-    $type  = mysql_fieldtype  ($result, $i);
-    $name  = mysql_fieldname  ($result, $i);
-    $len   = mysql_fieldlen   ($result, $i);
-    $flags = mysql_fieldflags ($result, $i);
-    echo $type." ".$name." ".$len." ".$flags."&lt;BR>";
-    $i++;
-}
-mysql_close();
-?>
-</programlisting>
-    </example>
-
-   </refsect1>
-  </refentry>
--->
 
   <refentry id="function.mysql-field-flags">
    <refnamediv>
     <refname>mysql_field_flags</refname>
-    <refpurpose>get field flags</refpurpose>
+    <refpurpose>Get the flags associated with the specified field in a
+     result</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
     <funcsynopsis>
      <funcdef>string <function>mysql_field_flags</function></funcdef>
-     <paramdef>string <parameter>result</parameter></paramdef>
+     <paramdef>int <parameter>result</parameter></paramdef>
      <paramdef>int <parameter>field_offset</parameter></paramdef>
     </funcsynopsis>
     <para> 
@@ -801,38 +688,17 @@ mysql_close();
    </refsect1>
   </refentry>
 
-<!--
-  <refentry id="function.mysql-fieldflags">
-   <refnamediv>
-    <refname>mysql_fieldflags</refname>
-    <refpurpose>get field flags</refpurpose>
-   </refnamediv>
-   <refsect1>
-    <title>Description</title>
-    <funcsynopsis>
-     <funcdef>string <function>mysql_fieldflags</function></funcdef>
-     <paramdef>string <parameter>result</parameter></paramdef>
-     <paramdef>int <parameter>field_offset</parameter></paramdef>
-    </funcsynopsis>
-    <para> 
-     <function>mysql_fieldflags</function> returns the field flags of
-     the specified field. Currently this is either, "not null",
-     "primary key", a combination of the two or "" (an empty string).
-    </para>
-   </refsect1>
-  </refentry>
--->
 
   <refentry id="function.mysql-field-len">
    <refnamediv>
     <refname>mysql_field_len</refname>
-    <refpurpose>get field length</refpurpose>
+    <refpurpose>Returns the length of the specified field</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
     <funcsynopsis>
      <funcdef>int <function>mysql_field_len</function></funcdef>
-     <paramdef>string <parameter>result</parameter></paramdef>
+     <paramdef>int <parameter>result</parameter></paramdef>
      <paramdef>int <parameter>field_offset</parameter></paramdef>
     </funcsynopsis>
     <para>
@@ -843,31 +709,11 @@ mysql_close();
    </refsect1>
   </refentry>
 
-<!--
-  <refentry id="function.mysql-fieldlen">
-   <refnamediv>
-    <refname>mysql_fieldlen</refname>
-    <refpurpose>get field length</refpurpose>
-   </refnamediv>
-   <refsect1>
-    <title>Description</title>
-    <funcsynopsis>
-     <funcdef>int <function>mysql_fieldlen</function></funcdef>
-     <paramdef>string <parameter>result</parameter></paramdef>
-     <paramdef>int <parameter>field_offset</parameter></paramdef>
-    </funcsynopsis>
-    <para>
-     <function>mysql_fieldlen</function> returns the length of the
-     specified field.
-    </para>
-   </refsect1>
-  </refentry>
--->
 
   <refentry id="function.mysql-free-result">
    <refnamediv>
     <refname>mysql_free_result</refname>
-    <refpurpose>free result memory</refpurpose>
+    <refpurpose>Free result memory</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
@@ -886,39 +732,19 @@ mysql_close();
    </refsect1>
   </refentry>
 
-<!--
-  <refentry id="function.mysql-freeresult">
-   <refnamediv>
-    <refname>mysql_freeresult</refname>
-    <refpurpose>free result memory</refpurpose>
-   </refnamediv>
-   <refsect1>
-    <title>Description</title>
-    <funcsynopsis>
-     <funcdef>int <function>mysql_freeresult</function></funcdef>
-     <paramdef>int <parameter>result</parameter></paramdef>
-    </funcsynopsis>
-    <para>
-     <function>mysql_freeresult</function> only needs to be called if
-     you are worried about using too much memory while your script is
-     running. All result memory will automatically be freed when the
-     script, you may call mysql_freeresult() with the result
-     identifier as an argument and the associated result memory will
-     be freed.
-   </refsect1>
-  </refentry>
--->
 
   <refentry id="function.mysql-insert-id">
    <refnamediv>
     <refname>mysql_insert_id</refname>
-    <refpurpose>get generated id from last INSERT</refpurpose>
+    <refpurpose>Get the id generated from the previous INSERT
+     operation</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
     <funcsynopsis>
      <funcdef>int <function>mysql_insert_id</function></funcdef>
-     <void>
+     <paramdef>int <parameter><optional>link_identifier</optional>
+                   </parameter></paramdef>
     </funcsynopsis>
     <para> 
      <function>mysql_insert_id</function> returns the ID generated for
@@ -931,14 +757,16 @@ mysql_close();
   <refentry id="function.mysql-list-fields">
    <refnamediv>
     <refname>mysql_list_fields</refname>
-    <refpurpose>list result fields</refpurpose>
+    <refpurpose>List MySQL result fields</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
     <funcsynopsis>
      <funcdef>int <function>mysql_list_fields</function></funcdef>
-     <paramdef>string <parameter>database</parameter></paramdef>
-     <paramdef>string <parameter>tablename</parameter></paramdef>
+     <paramdef>string <parameter>database_name</parameter></paramdef>
+     <paramdef>string <parameter>table_name</parameter></paramdef>
+     <paramdef>int <parameter><optional>link_identifier</optional>
+                   </parameter></paramdef>
     </funcsynopsis>
     <para>
      <function>mysql_list_fields</function> retrieves information
@@ -961,53 +789,23 @@ mysql_close();
    </refsect1>
   </refentry>
 
-<!--
-  <refentry id="function.mysql-listfields">
-   <refnamediv>
-    <refname>mysql_listfields</refname>
-    <refpurpose>list result fields</refpurpose>
-   </refnamediv>
-   <refsect1>
-    <title>Description</title>
-    <funcsynopsis>
-     <funcdef>int <function>mysql_listfields</function></funcdef>
-     <paramdef>string <parameter>database</parameter></paramdef>
-     <paramdef>string <parameter>tablename</parameter></paramdef>
-    </funcsynopsis>
-    <para>
-     <function>mysql_list_fields</function> retrieves information
-     about the given tablename. Arguments are the database name and
-     the table name. A result pointer is returned which can be used
-     with
-     <function>mysql_fieldflags</function>, 
-     <function>mysql_fieldlen</function>, 
-     <function>mysql_fieldname</function>, and
-     <function>mysql_fieldtype</function>. 
-    <para>
-     A result identifier is a positive integer. The function returns
-     -1 if a error occurs. A string describing the error will be
-     placed in <literal>$phperrmsg</literal>, and unless the function
-     was called as <literal>@mysql()</literal> then this error string
-     will also be printed out.
-   </refsect1>
-  </refentry>
--->
 
   <refentry id="function.mysql-list-dbs">
    <refnamediv>
     <refname>mysql_list_dbs</refname>
-    <refpurpose>list MySQL databases on server</refpurpose>
+    <refpurpose>List databases available on on MySQL server</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
     <funcsynopsis>
-     <funcdef>int <function>mysql_listdbs</function></funcdef>
-     <void>
+     <funcdef>int <function>mysql_list_dbs</function></funcdef>
+     <paramdef>int <parameter><optional>link_identifier</optional>
+                   </parameter></paramdef>
     </funcsynopsis>
     <para>
-     <function>mysql_listdbs</function> will return a result pointer
+     <function>mysql_list_dbs</function> will return a result pointer
      containing the databases available from the current mysql
-     daemon. Use the <function>mysql_dbname</function> function to
+     daemon. Use the <function>mysql_tablename</function> function to
      traverse this result pointer.
     <para>
      For downward compatibility <function>mysql_listdbs</function> can
@@ -1015,37 +813,19 @@ mysql_close();
    </refsect1>
   </refentry>
 
-<!--
-  <refentry id="function.mysql-listdbs">
-   <refnamediv>
-    <refname>mysql_listdbs</refname>
-    <refpurpose>list MySQL databases on server</refpurpose>
-   </refnamediv>
-   <refsect1>
-    <title>Description</title>
-    <funcsynopsis>
-     <funcdef>int <function>mysql_listdbs</function></funcdef>
-     <void>
-    </funcsynopsis>
-    <para>
-     <function>mysql_listdbs</function> will return a result pointer
-     containing the databases available from the current mysql
-     daemon. Use the <function>mysql_dbname</function> function to
-     traverse this result pointer.
-   </refsect1>
-  </refentry>
--->
 
   <refentry id="function.mysql-list-tables">
    <refnamediv>
     <refname>mysql_list_tables</refname>
-    <refpurpose>list tables in a MySQL database</refpurpose>
+    <refpurpose>List tables in a MySQL database</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
     <funcsynopsis>
      <funcdef>int <function>mysql_list_tables</function></funcdef>
      <paramdef>string <parameter>database</parameter></paramdef>
+     <paramdef>int <parameter><optional>link_identifier</optional>
+                   </parameter></paramdef>
     </funcsynopsis>
     <para> 
      <function>mysql_list_tables</function> takes a database name and
@@ -1059,32 +839,11 @@ mysql_close();
    </refsect1>
   </refentry>
 
-<!--
-  <refentry id="function.mysql-listtables">
-   <refnamediv>
-    <refname>mysql_listtables</refname>
-    <refpurpose>list tables in a MySQL database</refpurpose>
-   </refnamediv>
-   <refsect1>
-    <title>Description</title>
-    <funcsynopsis>
-     <funcdef>int <function>mysql_listtables</function></funcdef>
-     <paramdef>string <parameter>database</parameter></paramdef>
-    </funcsynopsis>
-    <para> 
-     <function>mysql_listtables</function> takes a database name and
-     result pointer much like the <function>mysql_db_query</function>
-     function.  The <function>mysql_tablename</function> function
-     should be used to extract the actual table names from the result
-     pointer.
-   </refsect1>
-  </refentry>
--->
 
   <refentry id="function.mysql-num-fields">
    <refnamediv>
     <refname>mysql_num_fields</refname>
-    <refpurpose>get number of fields in result</refpurpose>
+    <refpurpose>Get number of fields in result</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
@@ -1107,41 +866,17 @@ mysql_close();
    </refsect1>
   </refentry>
 
-<!--
-  <refentry id="function.mysql-numfields">
-   <refnamediv>
-    <refname>mysql_numfields</refname>
-    <refpurpose>get number of fields in result</refpurpose>
-   </refnamediv>
-   <refsect1>
-    <title>Description</title>
-    <funcsynopsis>
-     <funcdef>int <function>mysql_numfields</function></funcdef>
-     <paramdef>int <parameter>result</parameter></paramdef>
-    </funcsynopsis>
-    <para> 
-     <function>mysql_numfields</function> returns the number of fields
-     in a result set.
-    <para> 
-     See also:  
-     <function>mysql_db_query</function>, 
-     <function>mysql_query</function>, 
-     <function>mysql_fetchfield</function>, 
-     <function>mysql_numrows</function>.
-   </refsect1>
-  </refentry>
--->
 
   <refentry id="function.mysql-num-rows">
    <refnamediv>
     <refname>mysql_num_rows</refname>
-    <refpurpose>get number of rows in result</refpurpose>
+    <refpurpose>Get number of rows in result</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
     <funcsynopsis>
      <funcdef>int <function>mysql_num_rows</function></funcdef>
-     <paramdef>string <parameter>result</parameter></paramdef>
+     <paramdef>int <parameter>result</parameter></paramdef>
     </funcsynopsis>
     <para>
      <function>mysql_num_rows</function> returns the number of rows in
@@ -1157,42 +892,19 @@ mysql_close();
    </refsect1>
   </refentry>
 
-<!--
-  <refentry id="function.mysql-numrows">
-   <refnamediv>
-    <refname>mysql_numrows</refname>
-    <refpurpose>get number of rows in result</refpurpose>
-   </refnamediv>
-   <refsect1>
-    <title>Description</title>
-    <funcsynopsis>
-     <funcdef>int <function>mysql_numrows</function></funcdef>
-     <paramdef>string <parameter>result</parameter></paramdef>
-    </funcsynopsis>
-    <para>
-     <function>mysql_numrows</function> returns the number of rows in
-     a result set.
-    <para>
-     See also:  
-     <function>mysql_db_query</function>, 
-     <function>mysql_query</function> and, 
-     <function>mysql_fetch_row</function>.
-    </para>
-   </refsect1>
-  </refentry>
--->
-
 
   <refentry id="function.mysql-pconnect">
    <refnamediv>
-    <refname>mysql_pconnect</refname>
-    <refpurpose>open persistent MySQL connection</refpurpose>
+    <refname>mysql_pconnect</refname> 
+    <refpurpose>Open a persistent connection to a MySQL
+     Server</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
     <funcsynopsis>
      <funcdef>int <function>mysql_pconnect</function></funcdef>
      <paramdef>string <parameter><optional>hostname</optional>
+                                 <optional>:port</optional>  
                       </parameter></paramdef>
      <paramdef>string <parameter><optional>username</optional>
                       </parameter></paramdef>
@@ -1223,7 +935,7 @@ mysql_close();
   <refentry id="function.mysql-query">
    <refnamediv>
     <refname>mysql_query</refname>
-    <refpurpose>send MySQL query</refpurpose>
+    <refpurpose>Send an SQL query to MySQL</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
@@ -1234,15 +946,18 @@ mysql_close();
                    </parameter></paramdef>
     </funcsynopsis>
     <para> 
-     Returns: A positive MySQL result identifier on success, or false
-     on error.  
-    <para> 
      <function>mysql_query</function> sends a query to the currently
      active database on the server that's associated with the
-     specified link identifier.  If the link identifier isn't
-     specified, the last opened link is assumed.  If no link is open,
-     the function tries to establish a link as if
-     <function>mysql_connect</function> was called, and use it.
+     specified link identifier.  If
+     <parameter>link_identifier</parameter> isn't specified, the last
+     opened link is assumed.  If no link is open, the function tries
+     to establish a link as if <function>mysql_connect</function> was
+     called, and use it.
+    <para>
+     This function returns TRUE or FALSE to indicate the success of
+     UPDATE, INSERT, and DELETE queries. For SELECT queries it returns
+     a new result identifier. The resources used by the query can
+     then be freed by calling <function>mysql_free_result</function>.
     <para>
      See also:  
      <function>mysql_db_query</function>, 
@@ -1254,7 +969,7 @@ mysql_close();
   <refentry id="function.mysql-result">
    <refnamediv>
     <refname>mysql_result</refname>
-    <refpurpose>get result data</refpurpose>
+    <refpurpose>Get result data</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
@@ -1264,9 +979,6 @@ mysql_close();
      <paramdef>int <parameter>row</parameter></paramdef>
      <paramdef>mixed <parameter>field</parameter></paramdef>
     </funcsynopsis>
-    <para> 
-     Returns: The contents of the cell at the row and offset in the
-     specified MySQL result set.
     <para>
      <function>mysql_result</function> returns the contents of one
      cell from a MySQL result set.  The field argument can be the
@@ -1283,6 +995,9 @@ mysql_close();
      numeric offset for the field argument is much quicker than
      specifying a fieldname or tablename.fieldname argument.
     <para>
+     Calls <function>mysql_result</function> should not be mixed
+     with calls to other functions that deal with the result set.
+    <para>
      Recommended high-performance alternatives:
      <function>mysql_fetch_row</function>, 
      <function>mysql_fetch_array</function>, and
@@ -1293,7 +1008,7 @@ mysql_close();
   <refentry id="function.mysql-select-db">
    <refnamediv>
     <refname>mysql_select_db</refname>
-    <refpurpose>select MySQL database</refpurpose>
+    <refpurpose>Select a MySQL database</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
@@ -1325,38 +1040,6 @@ mysql_close();
    </refsect1>
   </refentry>
 
-<!--
-  <refentry id="function.mysql-selectdb">
-   <refnamediv>
-    <refname>mysql_selectdb</refname>
-    <refpurpose>select MySQL database</refpurpose>
-   </refnamediv>
-   <refsect1>
-    <title>Description</title>
-    <funcsynopsis>
-     <funcdef>int <function>mysql_selectdb</function></funcdef>
-     <paramdef>string <parameter>database_name</parameter></paramdef>
-     <paramdef>int <parameter>link_identifier</parameter></paramdef>
-    </funcsynopsis>
-    <para> 
-     Returns: true on success, false on error
-    <para> 
-     <function>mysql_selectdb</function> sets the current active
-     database on the server that's associated with the specified link
-     identifier.  If no link identifier is specified, the last opened
-     link is assumed.  If no link is open, the function will try to
-     establish a link as if <function>mysql_connect</function> was
-     called, and use it.
-    <para>
-     Every subsequent call to <function>mysql_query</function> will be
-     made on the active database.
-    <para> See also:
-     <function>mysql_connect</function>, 
-     <function>mysql_pconnect</function>, and
-     <function>mysql_query</function>
-   </refsect1>
-  </refentry>
--->
 
   <refentry id="function.mysql-tablename">
    <refnamediv>

@@ -184,7 +184,7 @@ int include_file(pval *file, int display_source)
 	yy_switch_to_buffer(yy_create_buffer(yyin,YY_BUF_SIZE));
 	BEGIN(INITIAL);
 	GLOBAL(include_count)++;
-	GLOBAL(phplineno)=1+MAX_TOKENS_PER_CACHE*GLOBAL(include_count);
+	GLOBAL(phplineno) = 1 + (GLOBAL(include_count)<<TOKEN_BITS);
 	filename = estrndup(file->value.str.val,file->value.str.len);
 	_php3_hash_index_update(&GLOBAL(include_names),GLOBAL(include_count),(void *) &filename,sizeof(char *),NULL);
 	
@@ -225,7 +225,10 @@ void eval_string(pval *str,pval *return_offset, int display_source INLINE_TLS)
 	yyin=NULL;
 
 	if (!display_source) {
-		tcm_new(&GLOBAL(token_cache_manager));
+		if (tcm_new(&GLOBAL(token_cache_manager),TOKEN_CACHE_EVAL_BLOCK_SIZE)==FAILURE) {
+			php3_error(E_ERROR,"Unable to initialize a new token cache");
+			return;
+		}
 	} else {
 		if (display_source==2 && !pval_is_true(return_offset)) {
 			display_source=1;
@@ -278,12 +281,16 @@ int conditional_include_file(pval *file,pval *return_offset INLINE_TLS)
 	yy_switch_to_buffer(yy_create_buffer(yyin,YY_BUF_SIZE));
 	BEGIN(INITIAL);
 	GLOBAL(include_count)++;
-	GLOBAL(phplineno)=1+MAX_TOKENS_PER_CACHE*GLOBAL(include_count);
+	GLOBAL(phplineno) = 1 + (GLOBAL(include_count)<<TOKEN_BITS);
 	filename = file->value.str.val;
 	_php3_hash_index_update(&GLOBAL(include_names),GLOBAL(include_count),(void *) &filename,sizeof(char *),NULL);
 	
-	tcm_new(&GLOBAL(token_cache_manager));
-	return SUCCESS;
+	if (tcm_new(&GLOBAL(token_cache_manager),TOKEN_CACHE_INCLUDE_BLOCK_SIZE)==FAILURE) {
+		php3_error(E_ERROR, "Unable to initialize a new token cache");
+		return FAILURE;
+	} else {
+		return SUCCESS;
+	}
 }
 
 
@@ -956,7 +963,7 @@ TLS_VARS;
 		}
 
 		if (c==EOF) {
-			php3_error(E_WARNING,"Unterminated comment starting line %d.\n",start_lineno);
+			php3_error(E_WARNING,"Unterminated comment starting line %d.\n",php3_get_lineno(start_lineno));
 			break;
 		} else {
 			HANDLE_NEWLINE(c);

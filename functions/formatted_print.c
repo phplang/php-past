@@ -27,7 +27,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: formatted_print.c,v 1.39 1998/05/21 23:57:29 zeev Exp $ */
+/* $Id: formatted_print.c,v 1.44 1998/11/19 22:03:23 zeev Exp $ */
 
 #include <math.h>				/* modf() */
 #ifdef THREAD_SAFE
@@ -49,7 +49,13 @@
 #define FLOAT_PRECISION 6
 #define MAX_FLOAT_DIGITS 38
 #define MAX_FLOAT_PRECISION 40
-#undef SPRINTF_DEBUG
+
+#if 0
+/* trick to control varargs functions through cpp */
+# define PRINTF_DEBUG(arg) php3_printf arg
+#else
+# define PRINTF_DEBUG(arg)
+#endif
 
 static char hexchars[] = "0123456789abcdef";
 static char HEXCHARS[] = "0123456789ABCDEF";
@@ -67,7 +73,7 @@ static char HEXCHARS[] = "0123456789ABCDEF";
  *      sign is set to 0 for positive, 1 for negative
  */
 static char *
- _php3_cvt(double arg, int ndigits, int *decpt, int *sign, int eflag)
+_php3_cvt(double arg, int ndigits, int *decpt, int *sign, int eflag)
 {
 	register int r2;
 	double fi, fj;
@@ -145,37 +151,32 @@ static char *
 }
 
 
-inline static void _php3_sprintf_appendchar(char **buffer, int *pos, int *size, char add)
+inline static void
+_php3_sprintf_appendchar(char **buffer, int *pos, int *size, char add)
 {
 	if ((*pos + 1) >= *size) {
 		*size <<= 1;
-#ifdef SPRINTF_DEBUG
-		php3_printf("sprintf: ereallocing buffer to %d bytes\n", *size);
-#endif
+		PRINTF_DEBUG(("%s: ereallocing buffer to %d bytes\n", GLOBAL(function_state.function_name), *size));
 		*buffer = erealloc(*buffer, *size);
 	}
-#ifdef SPRINTF_DEBUG
-	php3_printf("sprintf: appending '%c', pos=\n", add, *pos);
-#endif
+	PRINTF_DEBUG(("sprintf: appending '%c', pos=\n", add, *pos));
 	(*buffer)[(*pos)++] = add;
 }
 
 
-inline static void _php3_sprintf_appendstring(char **buffer, int *pos, int *size, char *add,
-							  int min_width, int max_width, char padding,
-											  int alignment)
+inline static void
+_php3_sprintf_appendstring(char **buffer, int *pos, int *size, char *add,
+						   int min_width, int max_width, char padding,
+						   int alignment, int len)
 {
-	register int len = strlen(add), npad = min_width - MIN(len,(max_width?max_width:len));
+	register int npad = min_width - MIN(len,(max_width?max_width:len));
 
 	if (npad<0) {
 		npad=0;
 	}
 	
-#ifdef SPRINTF_DEBUG
-	php3_printf("sprintf: appendstring(%x, %d, %d, \"%s\", %d, '%c', %d)\n",
-				*buffer, *pos, *size, add, min_width, padding, alignment);
-#endif
-
+	PRINTF_DEBUG(("sprintf: appendstring(%x, %d, %d, \"%s\", %d, '%c', %d)\n",
+				  *buffer, *pos, *size, add, min_width, padding, alignment));
 	if (max_width == 0) {
 		max_width = MAX(min_width,len);
 	}
@@ -183,9 +184,7 @@ inline static void _php3_sprintf_appendstring(char **buffer, int *pos, int *size
 		while ((*pos + max_width) >= *size) {
 			*size <<= 1;
 		}
-#ifdef SPRINTF_DEBUG
-		php3_printf("sprintf ereallocing buffer to %d bytes\n", *size);
-#endif
+		PRINTF_DEBUG(("sprintf ereallocing buffer to %d bytes\n", *size));
 		*buffer = erealloc(*buffer, *size);
 	}
 	if (alignment == ALIGN_RIGHT) {
@@ -193,9 +192,7 @@ inline static void _php3_sprintf_appendstring(char **buffer, int *pos, int *size
 			(*buffer)[(*pos)++] = padding;
 		}
 	}
-#ifdef SPRINTF_DEBUG
-	php3_printf("sprintf: appending \"%s\"\n", add);
-#endif
+	PRINTF_DEBUG(("sprintf: appending \"%s\"\n", add));
 	strncpy(&(*buffer)[*pos], add, max_width);
 	*pos += MIN(max_width,len);
 	if (alignment == ALIGN_LEFT) {
@@ -206,17 +203,15 @@ inline static void _php3_sprintf_appendstring(char **buffer, int *pos, int *size
 }
 
 
-inline static void _php3_sprintf_appendint(char **buffer, int *pos, int *size, int number,
-								  int width, char padding, int alignment)
+inline static void
+_php3_sprintf_appendint(char **buffer, int *pos, int *size, int number,
+						int width, char padding, int alignment)
 {
 	char numbuf[NUM_BUF_SIZE];
 	register unsigned int magn, nmagn, i = NUM_BUF_SIZE - 1, neg = 0;
 
-#ifdef SPRINTF_DEBUG
-	php3_printf("sprintf: appendint(%x, %x, %x, %d, %d, '%c', %d)\n",
-				*buffer, pos, size, number, width, padding, alignment);
-#endif
-
+	PRINTF_DEBUG(("sprintf: appendint(%x, %x, %x, %d, %d, '%c', %d)\n",
+				  *buffer, pos, size, number, width, padding, alignment));
 	if (number < 0) {
 		neg = 1;
 		magn = ((unsigned int) -(number + 1)) + 1;
@@ -236,32 +231,27 @@ inline static void _php3_sprintf_appendint(char **buffer, int *pos, int *size, i
 	if (neg) {
 		numbuf[--i] = '-';
 	}
-#ifdef SPRINTF_DEBUG
-	php3_printf("sprintf: appending %d as \"%s\", i=%d\n",
-				number, &numbuf[i], i);
-#endif
-
+	PRINTF_DEBUG(("sprintf: appending %d as \"%s\", i=%d\n",
+				  number, &numbuf[i], i));
 	_php3_sprintf_appendstring(buffer, pos, size, &numbuf[i], width, 0,
-							   padding, alignment);
+							   padding, alignment, (NUM_BUF_SIZE - 1) - i);
 }
 
 
-inline static void _php3_sprintf_appenddouble(char **buffer, int *pos,
-											  int *size, double number,
-											  int width, char padding,
-											  int alignment, int precision,
-											  int adjust, char fmt)
+inline static void
+_php3_sprintf_appenddouble(char **buffer, int *pos,
+						   int *size, double number,
+						   int width, char padding,
+						   int alignment, int precision,
+						   int adjust, char fmt)
 {
 	char numbuf[NUM_BUF_SIZE];
 	char *cvt;
 	register int i = 0, j = 0;
 	int sign, decpt;
 
-#ifdef SPRINTF_DEBUG
-	php3_printf("sprintf: appenddouble(%x, %x, %x, %f, %d, '%c', %d, %c)\n",
-				*buffer, pos, size, number, width, padding, alignment, fmt);
-#endif
-
+	PRINTF_DEBUG(("sprintf: appenddouble(%x, %x, %x, %f, %d, '%c', %d, %c)\n",
+				  *buffer, pos, size, number, width, padding, alignment, fmt));
 	if ((adjust & ADJ_PRECISION) == 0) {
 		precision = FLOAT_PRECISION;
 	} else if (precision > MAX_FLOAT_PRECISION) {
@@ -305,24 +295,23 @@ inline static void _php3_sprintf_appenddouble(char **buffer, int *pos,
 		width += (precision + 1);
 	}
 	_php3_sprintf_appendstring(buffer, pos, size, numbuf, width, 0, padding,
-							   alignment);
+							   alignment, i);
 }
 
 
-inline static void _php3_sprintf_append2n(char **buffer, int *pos, int *size, int number,
-						   int width, char padding, int alignment, int n,
-										  char *chartable)
+inline static void
+_php3_sprintf_append2n(char **buffer, int *pos, int *size, int number,
+					   int width, char padding, int alignment, int n,
+					   char *chartable)
 {
 	char numbuf[NUM_BUF_SIZE];
 	register unsigned int num, i = NUM_BUF_SIZE - 1, neg = 0;
 	register int andbits = (1 << n) - 1;
 
-#ifdef SPRINTF_DEBUG
-	php3_printf("sprintf: append2n(%x, %x, %x, %d, %d, '%c', %d, %d, %x)\n",
-				*buffer, pos, size, number, width, padding, alignment, n,
-				chartable);
-	php3_printf("sprintf: append2n 2^%d andbits=%x\n", n, andbits);
-#endif
+	PRINTF_DEBUG(("sprintf: append2n(%x, %x, %x, %d, %d, '%c', %d, %d, %x)\n",
+				  *buffer, pos, size, number, width, padding, alignment, n,
+				  chartable));
+	PRINTF_DEBUG(("sprintf: append2n 2^%d andbits=%x\n", n, andbits));
 
 	if (number < 0) {
 		neg = 1;
@@ -343,11 +332,12 @@ inline static void _php3_sprintf_append2n(char **buffer, int *pos, int *size, in
 		numbuf[--i] = '-';
 	}
 	_php3_sprintf_appendstring(buffer, pos, size, &numbuf[i], width, 0,
-							   padding, alignment);
+							   padding, alignment, (NUM_BUF_SIZE - 1) - i);
 }
 
 
-inline static int _php3_sprintf_getnumber(char *buffer, int *pos)
+inline static int
+_php3_sprintf_getnumber(char *buffer, int *pos)
 {
 	char *endptr;
 	register int num = strtol(&buffer[*pos], &endptr, 10);
@@ -356,9 +346,7 @@ inline static int _php3_sprintf_getnumber(char *buffer, int *pos)
 	if (endptr != NULL) {
 		i = (endptr - &buffer[*pos]);
 	}
-#ifdef SPRINTF_DEBUG
-	php3_printf("sprintf_getnumber: number was %d bytes long\n", i);
-#endif
+	PRINTF_DEBUG(("sprintf_getnumber: number was %d bytes long\n", i));
 	*pos += i;
 	return num;
 }
@@ -387,7 +375,8 @@ inline static int _php3_sprintf_getnumber(char *buffer, int *pos)
  *  "X"   integer argument is printed as uppercase hexadecimal
  *
  */
-static char *php3_formatted_print(HashTable *ht)
+static char *
+php3_formatted_print(HashTable *ht, int *len)
 {
 	pval **args;
 	int argc, size = 240, inpos = 0, outpos = 0;
@@ -412,10 +401,8 @@ static char *php3_formatted_print(HashTable *ht)
 	currarg = 1;
 
 	while (format[inpos]) {
-#ifdef SPRINTF_DEBUG
-		php3_printf("sprintf: format[%d]='%c'\n", inpos, format[inpos]);
-		php3_printf("sprintf: outpos=%d\n", outpos);
-#endif
+		PRINTF_DEBUG(("sprintf: format[%d]='%c'\n", inpos, format[inpos]));
+		PRINTF_DEBUG(("sprintf: outpos=%d\n", outpos));
 		if (format[inpos] != '%') {
 			_php3_sprintf_appendchar(&result, &outpos, &size, format[inpos++]);
 		} else if (format[inpos + 1] == '%') {
@@ -423,7 +410,9 @@ static char *php3_formatted_print(HashTable *ht)
 			inpos += 2;
 		} else {
 			if (currarg >= argc && format[inpos + 1] != '%') {
-				php3_error(E_WARNING, "sprintf: too few arguments");
+				efree(result);
+				efree(args);
+				php3_error(E_WARNING, "%s(): too few arguments",GLOBAL(function_state.function_name));
 				return NULL;
 			}
 			/* starting a new format specifier, reset variables */
@@ -432,18 +421,13 @@ static char *php3_formatted_print(HashTable *ht)
 			padding = ' ';
 			inpos++;			/* skip the '%' */
 
-#ifdef SPRINTF_DEBUG
-			php3_printf("sprintf: first looking at '%c', inpos=%d\n",
-						format[inpos], inpos);
-#endif
-
+			PRINTF_DEBUG(("sprintf: first looking at '%c', inpos=%d\n",
+						  format[inpos], inpos));
 			if (isascii((int)format[inpos]) && !isalpha((int)format[inpos])) {
 				/* first look for modifiers */
-#ifdef SPRINTF_DEBUG
-				php3_printf("sprintf: looking for modifiers\n"
-							"sprintf: now looking at '%c', inpos=%d\n",
-							format[inpos], inpos);
-#endif
+				PRINTF_DEBUG(("sprintf: looking for modifiers\n"
+							  "sprintf: now looking at '%c', inpos=%d\n",
+							  format[inpos], inpos));
 				for (;; inpos++) {
 					if (format[inpos] == ' ' || format[inpos] == '0') {
 						padding = format[inpos];
@@ -453,39 +437,29 @@ static char *php3_formatted_print(HashTable *ht)
 					} else if (format[inpos] == '\'') {
 						padding = format[++inpos];
 					} else {
-#ifdef SPRINTF_DEBUG
-						php3_printf("sprintf: end of modifiers\n");
-#endif
+						PRINTF_DEBUG(("sprintf: end of modifiers\n"));
 						break;
 					}
 				}
-#ifdef SPRINTF_DEBUG
-				php3_printf("sprintf: padding='%c'\n", padding);
-				php3_printf("sprintf: alignment=%s\n",
-							(alignment == ALIGN_LEFT) ? "left" : "right");
-#endif
+				PRINTF_DEBUG(("sprintf: padding='%c'\n", padding));
+				PRINTF_DEBUG(("sprintf: alignment=%s\n",
+							  (alignment == ALIGN_LEFT) ? "left" : "right"));
 
 
 				/* after modifiers comes width */
 				if (isdigit((int)format[inpos])) {
-#ifdef SPRINTF_DEBUG
-					php3_printf("sprintf: getting width\n");
-#endif
+					PRINTF_DEBUG(("sprintf: getting width\n"));
 					width = _php3_sprintf_getnumber(format, &inpos);
 					adjusting |= ADJ_WIDTH;
 				} else {
 					width = 0;
 				}
-#ifdef SPRINTF_DEBUG
-				php3_printf("sprintf: width=%d\n", width);
-#endif
+				PRINTF_DEBUG(("sprintf: width=%d\n", width));
 
 				/* after width comes precision */
 				if (format[inpos] == '.') {
 					inpos++;
-#ifdef SPRINTF_DEBUG
-					php3_printf("sprintf: getting precision\n");
-#endif
+					PRINTF_DEBUG(("sprintf: getting precision\n"));
 					if (isdigit((int)format[inpos])) {
 						precision = _php3_sprintf_getnumber(format, &inpos);
 						adjusting |= ADJ_PRECISION;
@@ -495,9 +469,7 @@ static char *php3_formatted_print(HashTable *ht)
 				} else {
 					precision = 0;
 				}
-#ifdef SPRINTF_DEBUG
-				php3_printf("sprintf: precision=%d\n", precision);
-#endif
+				PRINTF_DEBUG(("sprintf: precision=%d\n", precision));
 			} else {
 				width = precision = 0;
 			}
@@ -505,17 +477,16 @@ static char *php3_formatted_print(HashTable *ht)
 			if (format[inpos] == 'l') {
 				inpos++;
 			}
-#ifdef SPRINTF_DEBUG
-			php3_printf("sprintf: format character='%c'\n", format[inpos]);
-#endif
+			PRINTF_DEBUG(("sprintf: format character='%c'\n", format[inpos]));
 			/* now we expect to find a type specifier */
 			switch (format[inpos]) {
 				case 's':
 					convert_to_string(args[currarg]);
 					_php3_sprintf_appendstring(&result, &outpos, &size,
-											 args[currarg]->value.str.val,
+											   args[currarg]->value.str.val,
 											   width, precision, padding,
-											   alignment);
+											   alignment,
+											   args[currarg]->value.str.len);
 					break;
 
 				case 'd':
@@ -590,34 +561,36 @@ static char *php3_formatted_print(HashTable *ht)
 	
 	/* possibly, we have to make sure we have room for the terminating null? */
 	result[outpos]=0;
-	
+	*len = outpos;	
 	return result;
 }
 
 
-void php3_user_sprintf(INTERNAL_FUNCTION_PARAMETERS)
+PHP_FUNCTION(user_sprintf)
 {
 	char *result;
+	int len;
 	TLS_VARS;
 	
-	if ((result=php3_formatted_print(ht))==NULL) {
+	if ((result=php3_formatted_print(ht,&len))==NULL) {
 		RETURN_FALSE;
 	}
-	RETVAL_STRING(result,1);
+	RETVAL_STRINGL(result,len,1);
 	efree(result);
 }
 
 
-void php3_user_printf(INTERNAL_FUNCTION_PARAMETERS)
+PHP_FUNCTION(user_printf)
 {
 	char *result;
+	int len;
 	TLS_VARS;
 	
-	if ((result=php3_formatted_print(ht))==NULL) {
+	if ((result=php3_formatted_print(ht,&len))==NULL) {
 		RETURN_FALSE;
 	}
 	if (php3_header())
-		PUTS(result);
+		PHPWRITE(result,len);
 	efree(result);
 }
 

@@ -222,6 +222,9 @@ echo "Result: $result&lt;BR>Out: $output&lt;BR>In: $input";
      from and <replaceable>NNNNN</replaceable> identifies the error
      message.
     <para>
+     The <parameter>cursor</parameter> parameter can as of PHP 3. 0.6
+     also be a connection id.
+    <para>
      On UNIX versions of Oracle, you can find details about an error
      message like this:
      <computeroutput>
@@ -252,6 +255,9 @@ echo "Result: $result&lt;BR>Out: $output&lt;BR>In: $input";
      Returns the numeric error code of the last executed statement on
      the specified cursor.
      <comment>FIXME: should possible values be listed?</comment>
+    <para>
+     The <parameter>cursor</parameter> parameter can as of PHP 3. 0.6
+     also be a connection id.
 
    </refsect1>
   </refentry>
@@ -363,7 +369,23 @@ echo "Result: $result&lt;BR>Out: $output&lt;BR>In: $input";
      given username and password.
 
     <para>
-     Returns a connection index on success, or False on failure.
+     Connections can be made using <productname>SQL*Net</productname>
+     by supplying the <acronym>TNS</acronym> name to
+     <parameter>user</parameter> like this:
+     <informalexample>
+      <programlisting role=php>
+$conn = Ora_Logon("user<emphasis>@TNSNAME</emphasis>", "pass");
+</programlisting>
+     </informalexample>
+
+    <para>
+     If you have character data with non-ASCII characters, you should
+     make sure that <envar>NLS_LANG</envar> is set in your
+     environment.  For server modules, you should set it in the
+     server's environment before starting the server.
+
+    <para>
+     Returns a connection index on success, or false on failure.
      Details about the error can be retrieved using the <function>ora_error</function> and <function>ora_errorcode</function>
      functions.
 

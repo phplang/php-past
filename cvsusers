@@ -28,7 +28,7 @@ bwk
 eric
 tcobb         Troy Cobb                                  www
 gareth                                                   www
-willer        Steve Willer
+willer        Steve Willer    willer@interlog.com        pack
 cmv           Colin Viebrock  cmv@privateworld.com       www
 soderman
 tin
@@ -54,3 +54,9 @@ holger        Holger Zimmermann  zimpel@t-online.de      Pi3Web support
 sgk           Shigeru Kanemoto  sgk@happysize.co.jp      Japanese language support
 jimjag        Jim Jagielski   jim@jaguNET.com            Misc scraps
 martin        Martin Kraemer  Martin.Kraemer@Mch.SNI.De  EBCDIC (BS2000 mainframe port)
+kwazy         Landon Bradshaw landon@bradshaw.org        Documentation
+thies         Thies C. Arntzen thies@digicol.de          implement IPTC reader, maybe some oracle stuff
+cschneid      Christian Schneider cschneid@relog.ch      gzip run-time encoding of output stream
+tommay        Tom May         tom@go2net.com             Sybase-CT
+swilliam      Steve Williams  swilliam@empress.com       Empress support in unified ODBC
+sas           Sascha Schumann sas@schell.de              Various tweaks

@@ -29,7 +29,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: main.c,v 1.472 1998/10/03 19:43:18 zeev Exp $ */
+/* $Id: main.c,v 1.483 1998/12/20 20:08:27 shane Exp $ */
 
 /* #define CRASH_DETECTION */
 
@@ -145,13 +145,13 @@ static void str_free(void **ptr)
 
 int php3_get_lineno(int lineno)
 {
-	return (lineno % MAX_TOKENS_PER_CACHE);
+	return LINE_OFFSET(lineno);
 }
 
 char *php3_get_filename(int lineno)
 {
 	char **filename_ptr;
-	int file_offset = lineno / MAX_TOKENS_PER_CACHE;
+	int file_offset = FILE_OFFSET(lineno);
 	TLS_VARS;
 
 	if ((GLOBAL(initialized) & INIT_INCLUDE_NAMES_HASH) && _php3_hash_index_find(&GLOBAL(include_names), file_offset, (void **) &filename_ptr) == SUCCESS) {
@@ -200,7 +200,7 @@ void php3_log_err(char *log_message)
 
 	/* Try to use the specified logging location. */
 	if (php3_ini.error_log != NULL) {
-#if HAVE_SYLOG_H
+#if HAVE_SYSLOG_H
 		if (strcmp(php3_ini.error_log, "syslog")) {
 			syslog(LOG_NOTICE, log_message);
 			return;
@@ -213,7 +213,7 @@ void php3_log_err(char *log_message)
 				fclose(log_file);
 				return;
 			}
-#if HAVE_SYLOG_H
+#if HAVE_SYSLOG_H
 		}
 #endif
 	}
@@ -356,7 +356,7 @@ PHPAPI void php3_error(int type, const char *format,...)
 				if(php3_ini.error_prepend_string) {
 					PUTS(php3_ini.error_prepend_string);
 				}		
-				php3_printf("<br>\n<b>%s</b>:  %s in <b>%s</b> on line <b>%d</b><br>\n", error_type_str, buffer, filename, GLOBAL(current_lineno) % MAX_TOKENS_PER_CACHE);
+				php3_printf("<br>\n<b>%s</b>:  %s in <b>%s</b> on line <b>%d</b><br>\n", error_type_str, buffer, filename, php3_get_lineno(GLOBAL(current_lineno)));
 				if(php3_ini.error_append_string) {
 					PUTS(php3_ini.error_append_string);
 				}		
@@ -384,8 +384,7 @@ PHPAPI void php3_error(int type, const char *format,...)
 	if (GLOBAL(debugger_on)) {
 		va_start(args, format);
 		vsnprintf(buffer, sizeof(buffer) - 1, format, args);
-		php3_debugger_error(buffer, type, filename,
-						  GLOBAL(current_lineno) % MAX_TOKENS_PER_CACHE);
+		php3_debugger_error(buffer, type, filename, php3_get_lineno(GLOBAL(current_lineno)));
 		va_end(args);
 	}
 #endif
@@ -701,6 +700,8 @@ void php3_request_shutdown(void *dummy INLINE_TLS)
 	}
 #endif
 
+	php3_call_shutdown_functions();
+	
 	if (GLOBAL(initialized) & INIT_LIST) {
 		SHUTDOWN_DEBUG("Resource list");
 		destroy_resource_list();
@@ -883,6 +884,11 @@ void php3_request_shutdown(void *dummy INLINE_TLS)
 
 static int php3_config_ini_startup(INLINE_TLS_VOID)
 {
+	/* set the memory limit to a reasonable number so that we can get
+	 * through this startup phase properly
+	 */
+	php3_ini.memory_limit=1<<23; /* 8MB */
+	
 	if (php3_init_config() == FAILURE) {
 		php3_printf("PHP:  Unable to parse configuration file.\n");
 		return FAILURE;
@@ -900,7 +906,7 @@ static int php3_config_ini_startup(INLINE_TLS_VOID)
 			php3_ini.max_execution_time = 30;
 		}
 		if (cfg_get_long("memory_limit", &php3_ini.memory_limit) == FAILURE) {
-			php3_ini.memory_limit = 8 * 1048576;
+			php3_ini.memory_limit = 1<<23;  /* 8MB */
 		}
 		if (cfg_get_long("precision", &php3_ini.precision) == FAILURE) {
 			php3_ini.precision = 14;
@@ -1106,7 +1112,7 @@ int php3_module_startup(INLINE_TLS_VOID)
 #endif
 
 	start_memory_manager();
-	
+
 #if HAVE_SETLOCALE
 	setlocale(LC_CTYPE, "");
 #endif
@@ -1158,11 +1164,14 @@ int php3_module_startup(INLINE_TLS_VOID)
 	}
 	GLOBAL(module_initialized) |= INIT_CONSTANTS;
 
+	/* We cannot do the config starup until after all the above
+	happens, otherwise loading modules from ini file breaks */
 #if !USE_SAPI
 	if (php3_config_ini_startup(_INLINE_TLS_VOID) == FAILURE) {
 		return FAILURE;
 	}
-#endif
+#endif	
+
 
 	if (module_startup_modules() == FAILURE) {
 		php3_printf("Unable to start modules\n");
@@ -1849,7 +1858,6 @@ PHPAPI int apache_php3_module_main(request_rec * r, int fd, int display_source_m
 	}
 	if (GLOBAL(initialized)) {
 		php3_header();			/* Make sure headers have been sent */
-		php3_call_shutdown_functions();
 	}
 	return (OK);
 }

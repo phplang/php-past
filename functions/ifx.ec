@@ -89,6 +89,12 @@ Changes 14.9.1998 (chc@idgruppe.de)
 Changes 25.9.1998 (danny.heijl@cevi.be)
 - cursory and non-cursory stored procedures
 
+Changes 24.10.1998 (chc@idgruppe.de)
+- changes the internal structure of IFX_BLOB and IFX_SLOB into one structure. it is now prepared for general-id-usage
+- fixed a lvarchar-bug (i hate esql/c)
+
+Changes 12.11.1998 (danny.heijl@cevi.be)
+- added proto comments
 */
 
 
@@ -123,10 +129,20 @@ void *ifx_mutex;
 
 #if HAVE_IFX
 
-#define BL_BYTE 0
-#define BL_TEXT 1
-#define BL_INMEM    0
-#define BL_INFILE   1
+#ifndef CLIENT_SQLI_VER					/* 7.10 on (at least) AIX is missing this */
+#define CLIENT_SQLI_VER IFX_VERSION
+#endif
+
+#define TYPE_BLBYTE 0
+#define TYPE_BLTEXT 1
+#define TYPE_SLOB 2
+#define TYPE_CHAR 3
+
+
+#define BLMODE_INMEM    0
+#define BLMODE_INFILE   1
+
+
 #define IFX_SCROLL  1
 #define IFX_HOLD    2
 
@@ -169,6 +185,11 @@ function_entry ifx_functions[] = {
     {"ifx_byteasvarchar"  ,php3_ifx_byteasvarchar,      NULL},
     {"ifx_nullformat"     ,php3_ifx_nullformat,         NULL},
     {"ifx_blobinfile_mode",php3_ifx_blobinfile_mode,    NULL},
+
+    {"ifx_create_char",    php3_ifx_create_char,        NULL},
+    {"ifx_free_char",      php3_ifx_free_char,          NULL},
+    {"ifx_get_char",       php3_ifx_get_char,           NULL},
+    {"ifx_update_char",    php3_ifx_update_char,        NULL},
 
 $ifdef HAVE_IFX_IUS;
     {"ifxus_create_slob",  php3_ifxus_create_slob,      NULL},
@@ -423,9 +444,7 @@ int php3_minit_ifx(INIT_FUNC_ARGS)
     Informix_GLOBAL(php3_ifx_module).sv_sqlcode=0;
     Informix_GLOBAL(php3_ifx_module).le_result = 
             register_list_destructors(ifx_free_result,NULL);
-    Informix_GLOBAL(php3_ifx_module).le_blobresult = 
-            register_list_destructors(ifx_free_result,NULL);
-    Informix_GLOBAL(php3_ifx_module).le_slobresult = 
+    Informix_GLOBAL(php3_ifx_module).le_idresult = 
             register_list_destructors(ifx_free_result,NULL);
     Informix_GLOBAL(php3_ifx_module).le_link =  
             register_list_destructors(_close_ifx_link,NULL);
@@ -526,7 +545,7 @@ void php3_info_ifx(void)
 }
 
 /* ----------------------------------------------------------------------
-** int ifx_(p)connect($database,$userid,$password)
+** int ifx_(p)connect(string $database,string $userid,string $password)
 **
 ** connects to $database (db@server syntax) using $userid and $password
 **
@@ -534,6 +553,8 @@ void php3_info_ifx(void)
 ** ----------------------------------------------------------------------
 */
 
+/* {{{ proto int ifx_(p)connect(string database,string userid,string password)
+   connects to database using userid/password, returns connection id */
 static void php3_ifx_do_connect(INTERNAL_FUNCTION_PARAMETERS,int persistent)
 {
 
@@ -785,7 +806,18 @@ static void php3_ifx_do_connect(INTERNAL_FUNCTION_PARAMETERS,int persistent)
     efree(hashed_details);
     Informix_GLOBAL(php3_ifx_module).default_link=return_value->value.lval;
 }
+/* }}} */
 
+
+void php3_ifx_connect(INTERNAL_FUNCTION_PARAMETERS)
+{
+    php3_ifx_do_connect(INTERNAL_FUNCTION_PARAM_PASSTHRU,0);
+}
+
+void php3_ifx_pconnect(INTERNAL_FUNCTION_PARAMETERS)
+{
+    php3_ifx_do_connect(INTERNAL_FUNCTION_PARAM_PASSTHRU,1);
+}
 
 static int php3_ifx_get_default_link(INTERNAL_FUNCTION_PARAMETERS)
 {
@@ -801,17 +833,6 @@ static int php3_ifx_get_default_link(INTERNAL_FUNCTION_PARAMETERS)
     return Informix_GLOBAL(php3_ifx_module).default_link;
 }
 
-
-void php3_ifx_connect(INTERNAL_FUNCTION_PARAMETERS)
-{
-    php3_ifx_do_connect(INTERNAL_FUNCTION_PARAM_PASSTHRU,0);
-}
-
-void php3_ifx_pconnect(INTERNAL_FUNCTION_PARAMETERS)
-{
-    php3_ifx_do_connect(INTERNAL_FUNCTION_PARAM_PASSTHRU,1);
-}
-
 /* ----------------------------------------------------------------------
 ** int ifx_close(int $connid)
 **
@@ -820,6 +841,8 @@ void php3_ifx_pconnect(INTERNAL_FUNCTION_PARAMETERS)
 ** ----------------------------------------------------------------------
 */
 
+/* {{{ proto int ifx_close(int connid)
+   close informix connection */
 void php3_ifx_close(INTERNAL_FUNCTION_PARAMETERS)
 {
     pval *ifx_link;
@@ -868,6 +891,7 @@ EXEC SQL END DECLARE SECTION;
     php3_list_delete(id);
     RETURN_TRUE;
 }
+/* }}} */
 
 /* ----------------------------------------------------------------------
 ** int ifx_query(string $query, int $connid, 
@@ -892,6 +916,8 @@ EXEC SQL END DECLARE SECTION;
 ** ----------------------------------------------------------------------
 */
 
+/* {{{ proto int ifx_query(string query, int connid, [int cursortype], [array idarray])
+   perform a query on a given connection */
 void php3_ifx_query(INTERNAL_FUNCTION_PARAMETERS)
 {
     pval *query,*ifx_link, *cursortype, *dummy;
@@ -908,8 +934,15 @@ EXEC SQL BEGIN DECLARE SECTION;
     int  i;                   /* field index       */
     short fieldtype;
     loc_t *locator;
-    int loc_t_type=CLOCATORTYPE;  /* WORKAROUND:TYPE=CLOCATORTYPE doesn't work, 
-                                     don't ask me, why. */
+    int loc_t_type=CLOCATORTYPE;  /* WORKAROUND:TYPE=CLOCATORTYPE doesn't work,  */
+    int sqlchar_type=SQLCHAR;     /* don't ask me, why. */
+    char *char_tmp;
+    long len;
+    int indicator;    
+$ifdef HAVE_IFX_IUS;
+    fixed binary 'blob' ifx_lo_t *slocator;
+$endif;
+
 EXEC SQL END DECLARE SECTION;
 
     char *blobfilename;
@@ -1004,12 +1037,8 @@ EXEC SQL END DECLARE SECTION;
     Ifx_Result->rowid = 0;
     strcpy(Ifx_Result->connecid, ifx); 
     strcpy(Ifx_Result->descrpid, descrpid);
-    for (i = 0; i < MAXBLOBS; ++i)
-        Ifx_Result->blob_id[i] = -1;
-$ifdef HAVE_IFX_IUS;
-    for (i = 0; i < MAXSLOBS; ++i)
-        Ifx_Result->slob_id[i] = -1;
-$endif;
+    for (i = 0; i < MAX_RESID; ++i)
+        Ifx_Result->res_id[i] = -1;
     
     cursoryproc = 0;
     if (query_type == SQ_EXECPROC) {
@@ -1054,24 +1083,43 @@ $endif;
           while (_php3_hash_get_current_data(pblobidarr->value.ht, 
                                            (void **) &tmp) == SUCCESS) {
               convert_to_long(tmp);
-              locator=php3_intifx_get_blobloc((int)tmp->value.lval,list);
-              if(locator==NULL) {
-                  php3_error(E_WARNING,"%d is not a Informix blob-result index",
-                             (int)tmp->value.lval);
-                  EXEC SQL DEALLOCATE DESCRIPTOR :descrpid;
-                  EXEC SQL free :statemid;
-                  efree(Ifx_Result);
-                  RETURN_FALSE;
-              }
-              if(locator->loc_loctype==LOCFNAME) {       
-                  locator->loc_oflags=LOC_RONLY;
-              }
               if ((query_type == SQ_UPDATE) || (query_type == SQ_UPDALL)) {
-                  EXEC SQL SET DESCRIPTOR :descrpid COUNT = :i;
+                   EXEC SQL SET DESCRIPTOR :descrpid COUNT = :i;
+               }
+              /* TEXT/BYTE */
+ 	      if(php3_intifx_getType((int)tmp->value.lval,list)==TYPE_BLTEXT || php3_intifx_getType((int)tmp->value.lval,list)==TYPE_BLBYTE) {
+               locator=php3_intifx_get_blobloc((int)tmp->value.lval,list);
+               if(locator==NULL) {
+                   php3_error(E_WARNING,"%d is not a Informix blob-result index",
+                              (int)tmp->value.lval);
+                   EXEC SQL DEALLOCATE DESCRIPTOR :descrpid;
+                   EXEC SQL free :statemid;
+                   efree(Ifx_Result);
+                   RETURN_FALSE;
+               }
+               if(locator->loc_loctype==LOCFNAME) {       
+                   locator->loc_oflags=LOC_RONLY;
+               }
+               EXEC SQL SET DESCRIPTOR :descrpid VALUE :i 
+                                        DATA= :*locator, 
+                                        TYPE= :loc_t_type;
               }
-              EXEC SQL SET DESCRIPTOR :descrpid VALUE :i 
-                                       DATA= :*locator, 
-                                       TYPE= :loc_t_type;
+              
+              /* CHAR */
+              if(php3_intifx_getType((int)tmp->value.lval,list)==TYPE_CHAR) {
+               len=php3_intifx_get_char((int)tmp->value.lval,list,&char_tmp);
+               indicator=0;
+               if(char_tmp==NULL || len<0)
+                indicator=-1;
+               len++;
+               EXEC SQL SET DESCRIPTOR :descrpid VALUE :i 
+                                        DATA= :char_tmp,
+                                        LENGTH= :len, 
+                                        INDICATOR= :indicator,
+                                        TYPE= :sqlchar_type;
+              }
+              
+              
               i++;
               _php3_hash_move_forward(pblobidarr->value.ht);
           }
@@ -1178,28 +1226,41 @@ $endif;
         locind = 0;
         for (i = 1; i <= fieldcount; ++i) {
            EXEC SQL GET DESCRIPTOR :descrpid VALUE :i  :fieldtype = TYPE;
-           if ((fieldtype == SQLTEXT) || (fieldtype == SQLBYTES)) {
+           if (
+               (fieldtype == SQLTEXT) || (fieldtype == SQLBYTES)
+$ifdef HAVE_IFX_IUS;
+               || (fieldtype==SQLUDTFIXED)
+$endif;
+                ) {
             
                int bid;
                if(fieldtype==SQLTEXT) {
-                   bid=php3_intifx_create_blob(BL_TEXT,BL_INMEM,"",-1,list);
+                   bid=php3_intifx_create_blob(TYPE_BLTEXT,BLMODE_INMEM,"",-1,list);
                    locator=php3_intifx_get_blobloc(bid,list);
+                   EXEC SQL SET DESCRIPTOR :descrpid VALUE :i DATA = :*locator;
                } 
                if(fieldtype==SQLBYTES) {
                    if(Informix_GLOBAL(php3_ifx_module).blobinfile==0) {
-                       bid=php3_intifx_create_blob(BL_BYTE,BL_INMEM,"",-1,list);
+                       bid=php3_intifx_create_blob(TYPE_BLBYTE,BLMODE_INMEM,"",-1,list);
                        locator=php3_intifx_get_blobloc(bid,list);
                    } else {
                        blobfilename=php3_intifx_create_tmpfile(i);
                        bid=php3_intifx_create_blob(
-                                      BL_BYTE,BL_INFILE,
+                                      TYPE_BLBYTE,BLMODE_INFILE,
                                       blobfilename,strlen(blobfilename),list);
                        locator=php3_intifx_get_blobloc(bid,list);
                        locator->loc_oflags=LOC_WONLY;
                    }
+                   EXEC SQL SET DESCRIPTOR :descrpid VALUE :i DATA = :*locator;
                 } 
-                Ifx_Result->blob_id[locind]=bid;
-                EXEC SQL SET DESCRIPTOR :descrpid VALUE :i DATA = :*locator;
+$ifdef HAVE_IFX_IUS;
+               if(fieldtype==SQLUDTFIXED) {
+                   bid=php3_intifxus_new_slob(list);
+                   slocator=php3_intifxus_get_slobloc(bid,list);
+                   EXEC SQL SET DESCRIPTOR :descrpid VALUE :i DATA = :*slocator;  
+                } 
+$endif;
+                Ifx_Result->res_id[locind]=bid;
                 ++locind;
             }
         }
@@ -1209,6 +1270,7 @@ $endif;
 
     RETURN_LONG(php3_list_insert(Ifx_Result,Informix_GLOBAL(php3_ifx_module).le_result));
 }
+/* }}} */
 
 
 /* ----------------------------------------------------------------------
@@ -1229,6 +1291,8 @@ $endif;
 ** ----------------------------------------------------------------------
 */
 
+/* {{{ proto int ifx_prepare(string query, int connid, [int cursortype], [array idarray])
+   prepare a query on a given connection */
 void php3_ifx_prepare(INTERNAL_FUNCTION_PARAMETERS)
 {
    
@@ -1246,8 +1310,16 @@ EXEC SQL BEGIN DECLARE SECTION;
     int  i;                   /* field index       */
     short fieldtype;
     loc_t *locator;
-    int loc_t_type=CLOCATORTYPE; /* WORKAROUND: TYPE=CLOCATORTYPE doesn't work,
-                                    don't ask me, why. */
+    int loc_t_type=CLOCATORTYPE; /* WORKAROUND: TYPE=CLOCATORTYPE doesn't work, */
+    int sqlchar_type=SQLCHAR;     /* don't ask me, why. */
+    char *char_tmp;
+    long len;
+    int indicator;    
+
+$ifdef HAVE_IFX_IUS;
+    fixed binary 'blob' ifx_lo_t *slocator;
+$endif;
+
 EXEC SQL END DECLARE SECTION;
 
     char *blobfilename;
@@ -1345,12 +1417,8 @@ EXEC SQL END DECLARE SECTION;
     strcpy(Ifx_Result->connecid, ifx); 
     strcpy(Ifx_Result->descrpid, descrpid);
     strcpy(Ifx_Result->statemid, statemid);
-    for (i = 0; i < MAXBLOBS; ++i)
-        Ifx_Result->blob_id[i] = -1;
-$ifdef HAVE_IFX_IUS;
-    for (i = 0; i < MAXSLOBS; ++i)
-        Ifx_Result->slob_id[i] = -1;
-$endif;
+    for (i = 0; i < MAX_RESID; ++i)
+        Ifx_Result->res_id[i] = -1;
   
     cursoryproc = 0;
     if (query_type == SQ_EXECPROC) {
@@ -1394,7 +1462,12 @@ $endif;
            i=1;
            while (_php3_hash_get_current_data(pblobidarr->value.ht, 
                                               (void **) &tmp) == SUCCESS) {
-                convert_to_long(tmp);
+              convert_to_long(tmp);
+              if ((query_type == SQ_UPDATE) || (query_type == SQ_UPDALL)) {
+                  EXEC SQL SET DESCRIPTOR :descrpid COUNT = :i;
+              }
+              /* TEXT/BYTE */
+ 	      if(php3_intifx_getType((int)tmp->value.lval,list)==TYPE_BLTEXT || php3_intifx_getType((int)tmp->value.lval,list)==TYPE_BLBYTE) {
                 locator=php3_intifx_get_blobloc((int)tmp->value.lval,list);
                 if(locator==NULL) {
                     php3_error(E_WARNING,"%d is not a Informix blob-result index",
@@ -1407,14 +1480,26 @@ $endif;
                 if(locator->loc_loctype==LOCFNAME) {       
                     locator->loc_oflags=LOC_RONLY;
                 }
-                if ((query_type == SQ_UPDATE) || (query_type == SQ_UPDALL)) {
-                    EXEC SQL SET DESCRIPTOR :descrpid COUNT = :i;
-                }
                 EXEC SQL SET DESCRIPTOR :descrpid VALUE :i 
                                         DATA= :*locator, 
                                         TYPE=:loc_t_type; 
-                i++;
-                _php3_hash_move_forward(pblobidarr->value.ht);
+              }
+              /* CHAR */
+              if(php3_intifx_getType((int)tmp->value.lval,list)==TYPE_CHAR) {
+               len=php3_intifx_get_char((int)tmp->value.lval,list,&char_tmp);
+               indicator=0;
+               if(char_tmp==NULL || len<0)
+                indicator=-1;
+               len++;
+               EXEC SQL SET DESCRIPTOR :descrpid VALUE :i 
+                                        DATA= :char_tmp,
+                                        LENGTH= :len, 
+                                        INDICATOR= :indicator,
+                                        TYPE= :sqlchar_type;
+              }
+               
+              i++;
+              _php3_hash_move_forward(pblobidarr->value.ht);
             } /* while */
       } /* if paramquery */
       Ifx_Result->affected_rows = affected_rows;   /* saved estimated */
@@ -1470,6 +1555,7 @@ $endif;
 
    RETURN_LONG(php3_list_insert(Ifx_Result,Informix_GLOBAL(php3_ifx_module).le_result));
 }
+/* }}} */
 
 /* ----------------------------------------------------------------------
 ** int ifx_do(int $resultid)
@@ -1484,6 +1570,8 @@ $endif;
 ** ----------------------------------------------------------------------
 */
 
+/* {{{ proto int ifx_do(int resultid)
+   executes a previously prepared query or opens a cursor for it */
 void php3_ifx_do(INTERNAL_FUNCTION_PARAMETERS)
 {
     pval *result;
@@ -1499,6 +1587,11 @@ EXEC SQL BEGIN DECLARE SECTION;
     int  i;                   /* field index       */
     short fieldtype;
     loc_t *locator;
+
+$ifdef HAVE_IFX_IUS;
+    fixed binary 'blob' ifx_lo_t *slocator;
+$endif;
+
 EXEC SQL END DECLARE SECTION;
 
     int  locind;
@@ -1586,28 +1679,41 @@ EXEC SQL END DECLARE SECTION;
         locind = 0;
         for (i = 1; i <= fieldcount; ++i) {
            EXEC SQL GET DESCRIPTOR :descrpid VALUE :i  :fieldtype = TYPE;
-           if ((fieldtype == SQLTEXT) || (fieldtype == SQLBYTES)) {
+           if (
+               (fieldtype == SQLTEXT) || (fieldtype == SQLBYTES) 
+$ifdef HAVE_IFX_IUS;
+               || (fieldtype==SQLUDTFIXED)
+$endif;
+               ) {
             
                int bid;
                if(fieldtype==SQLTEXT) {
-                   bid=php3_intifx_create_blob(BL_TEXT,BL_INMEM,"",-1,list);
+                   bid=php3_intifx_create_blob(TYPE_BLTEXT,BLMODE_INMEM,"",-1,list);
                    locator=php3_intifx_get_blobloc(bid,list);
+                   EXEC SQL SET DESCRIPTOR :descrpid VALUE :i DATA = :*locator;
                } 
                if(fieldtype==SQLBYTES) {
                    if(Informix_GLOBAL(php3_ifx_module).blobinfile==0) {
-                       bid=php3_intifx_create_blob(BL_BYTE,BL_INMEM,"",-1,list);
+                       bid=php3_intifx_create_blob(TYPE_BLBYTE,BLMODE_INMEM,"",-1,list);
                        locator=php3_intifx_get_blobloc(bid,list);
                    } else {
                        blobfilename=php3_intifx_create_tmpfile(i);
                        bid=php3_intifx_create_blob(
-                                BL_BYTE,BL_INFILE,
+                                TYPE_BLBYTE,BLMODE_INFILE,
                                 blobfilename,strlen(blobfilename),list);
                        locator=php3_intifx_get_blobloc(bid,list);
                        locator->loc_oflags=LOC_WONLY;
                    }
+                   EXEC SQL SET DESCRIPTOR :descrpid VALUE :i DATA = :*locator;
                 } 
-                Ifx_Result->blob_id[locind]=bid;
-                EXEC SQL SET DESCRIPTOR :descrpid VALUE :i DATA = :*locator;
+$ifdef HAVE_IFX_IUS;
+               if(fieldtype==SQLUDTFIXED) {
+                   bid=php3_intifxus_new_slob(list);
+                   slocator=php3_intifxus_get_slobloc(bid,list);
+                   EXEC SQL SET DESCRIPTOR :descrpid VALUE :i DATA = :*slocator;  
+                } 
+$endif;
+                Ifx_Result->res_id[locind]=bid;
                 ++locind;
             }
         }
@@ -1617,18 +1723,22 @@ EXEC SQL END DECLARE SECTION;
     RETURN_TRUE;
 
 }
+/* }}} */
 
 
 
 
 /* ----------------------------------------------------------------------
-** string ifx_error(int connection_id);
+** string ifx_error([int connection_id]);
 **
 ** returns the Informix error codes (SQLSTATE & SQLCODE)
 **
 ** connection id is not checked, but remains for compatibility
 ** ----------------------------------------------------------------------
 */
+
+/* {{{ proto string ifx_error();
+   returns the Informix error codes (SQLSTATE & SQLCODE) */
 void php3_ifx_error(INTERNAL_FUNCTION_PARAMETERS)
 {
     pval *ifx_link;
@@ -1665,6 +1775,7 @@ void php3_ifx_error(INTERNAL_FUNCTION_PARAMETERS)
 */  
     RETURN_STRING(ifx_error(0),0); /* ifx_error returns emalloced string */
 }
+/* }}} */
 
 /* ----------------------------------------------------------------------
 ** string ifx_errormsg([int errorcode])
@@ -1676,6 +1787,8 @@ void php3_ifx_error(INTERNAL_FUNCTION_PARAMETERS)
 ** ----------------------------------------------------------------------
 */
 
+/* {{{ proto string ifx_errormsg([int errorcode])
+   returns the Informix errormessage associated with  */
 void php3_ifx_errormsg(INTERNAL_FUNCTION_PARAMETERS)
 {
     pval *errcode;
@@ -1726,6 +1839,7 @@ void php3_ifx_errormsg(INTERNAL_FUNCTION_PARAMETERS)
      
     RETURN_STRING(returnmsg,0);    /* do not dup, emalloced ! */
 }
+/* }}} */
 
 /* --------------------------------------------------------------
 ** int ifx_affected_rows(int $resultid)
@@ -1737,6 +1851,8 @@ void php3_ifx_errormsg(INTERNAL_FUNCTION_PARAMETERS)
 ** ---------------------------------------------------------------
 */
 
+/* {{{ proto int ifx_affected_rows(int resultid)
+   returns the number of rows affected by query identified by resultid */
 void php3_ifx_affected_rows(INTERNAL_FUNCTION_PARAMETERS)
 {
     pval *result;
@@ -1772,6 +1888,7 @@ void php3_ifx_affected_rows(INTERNAL_FUNCTION_PARAMETERS)
     return_value->value.lval = Ifx_Result->affected_rows;
     return_value->type = IS_LONG;
 }
+/* }}} */
 
 /* ----------------------------------------------------------------------
 ** array ifx_fetch_row(int $resultid, [mixed $position])
@@ -1787,6 +1904,8 @@ void php3_ifx_affected_rows(INTERNAL_FUNCTION_PARAMETERS)
 ** ----------------------------------------------------------------------
 */
 
+/* {{{ array ifx_fetch_row(int resultid, [mixed position])
+   fetches the next row or <position> row if using a scroll cursor */
 void php3_ifx_fetch_row(INTERNAL_FUNCTION_PARAMETERS)
 {
     pval *result, *position;
@@ -1809,6 +1928,7 @@ EXEC SQL BEGIN DECLARE SECTION;
 
 $ifdef HAVE_IFX_IUS;
     ifx_int8_t  int8_var;
+    lvarchar	*lvar_tmp;
 $endif;
    
     short      indicator;
@@ -1820,6 +1940,11 @@ $endif;
     decimal    dec_data = {0};
     short      short_data;
     loc_t      *locator, *locator_b;
+
+$ifdef HAVE_IFX_IUS;
+    fixed binary 'blob' ifx_lo_t *slocator;
+$endif;
+
     float      float_data;
     double     double_data;
     int        fetch_row;
@@ -1974,14 +2099,19 @@ EXEC SQL END DECLARE SECTION;
               || (Informix_GLOBAL(php3_ifx_module).byteasvarchar==0 
                                                   && fieldtype==SQLBYTES)) {
   
-              bid_b=Ifx_Result->blob_id[locind];
+              bid_b=Ifx_Result->res_id[locind];
               bid=php3_intifx_copy_blob(bid_b, list);
               php3_intifx_update_blob(bid,nullstr,strlen(nullstr),list);
               add_assoc_long(return_value,fieldname,bid);
               ++locind;
               continue; 
             }
-            if(fieldtype==SQLTEXT || fieldtype==SQLBYTES) {
+            if (
+                (fieldtype==SQLTEXT) || (fieldtype==SQLBYTES)
+$ifdef HAVE_IFX_IUS;
+                 || (fieldtype==SQLUDTFIXED)
+$endif;
+                ) {
               ++locind;
             }
             add_assoc_string(return_value, fieldname, nullstr, DUP);
@@ -2045,12 +2175,24 @@ $ifdef HAVE_IFX_IUS;
                 add_assoc_string(return_value, fieldname, string_data, DUP);
                 break;
             case SQLLVARCHAR:
+            	ifx_var_flag(&lvar_tmp,1);
+                EXEC SQL GET DESCRIPTOR :descrpid VALUE :i :lvar_tmp = DATA;
+
+		fieldleng=ifx_var_getlen(&lvar_tmp);
+                if ((char_data = (char *)emalloc(fieldleng + 1)) == NULL) {
+                    php3_error(E_WARNING, "Out of memory");
+                    RETURN_FALSE;
+                }
+                memcpy(char_data,ifx_var_getdata(&lvar_tmp),fieldleng);
+		ifx_var_dealloc(&lvar_tmp);
+                add_assoc_stringl(return_value, fieldname, char_data, fieldleng,0);
+                break;
             case SQLBOOL:
 $endif;
-            case SQLCHAR    :
             case SQLVCHAR   :
-            case SQLNCHAR   :
             case SQLNVCHAR  :
+            case SQLCHAR    :
+            case SQLNCHAR   :
                 if ((char_data = (char *)emalloc(fieldleng + 1)) == NULL) {
                     php3_error(E_WARNING, "Out of memory");
                     RETURN_FALSE;
@@ -2064,9 +2206,23 @@ $endif;
                 efree(char_data);
                 char_data = NULL;
                 break;
+
+$ifdef HAVE_IFX_IUS;
+            case SQLUDTFIXED   :   
+                bid_b=Ifx_Result->res_id[locind];
+                add_assoc_long(return_value,fieldname,bid_b);
+
+                bid=php3_intifxus_new_slob(list);
+                slocator=php3_intifxus_get_slobloc(bid,list);
+                EXEC SQL SET DESCRIPTOR :descrpid VALUE :i DATA = :*slocator;  
+                Ifx_Result->res_id[locind]=bid;
+                ++locind;
+		break;
+$endif;
+		
             case SQLBYTES   :   
             case SQLTEXT    :        /* NULL has already been dealt with */   
-                bid_b=Ifx_Result->blob_id[locind];
+                bid_b=Ifx_Result->res_id[locind];
                 locator_b=php3_intifx_get_blobloc(bid_b,list); 
                 ++locind;
 
@@ -2122,6 +2278,7 @@ $endif;
     
    efree(nullstr);
 }
+/* }}} */
 
 
 
@@ -2135,6 +2292,8 @@ $endif;
 ** ----------------------------------------------------------------------
 */
 
+/* {{{ proto int ifx_htmltbl_result(int resultid, [string htmltableoptions])
+   formats all rows of the $resultid query into a html table */
 void php3_ifx_htmltbl_result(INTERNAL_FUNCTION_PARAMETERS)
 {
     pval *result, *arg2;
@@ -2156,6 +2315,7 @@ EXEC SQL BEGIN DECLARE SECTION;
 
 $ifdef HAVE_IFX_IUS;
     ifx_int8_t  int8_var;
+    lvarchar	*lvar_tmp;
 $endif;
 
     short     indicator;
@@ -2368,6 +2528,19 @@ $ifdef HAVE_IFX_IUS;
                     php3_printf("<td>%s</td>", string_data);
                     break;
                 case SQLLVARCHAR:
+	            	ifx_var_flag(&lvar_tmp,1);
+        	        EXEC SQL GET DESCRIPTOR :descrpid VALUE :i :lvar_tmp = DATA;
+
+			fieldleng=ifx_var_getlen(&lvar_tmp);
+        	        if ((char_data = (char *)emalloc(fieldleng + 1)) == NULL) {
+                	    php3_error(E_WARNING, "Out of memory");
+            	        RETURN_FALSE;
+             	   }
+                	memcpy(char_data,ifx_var_getdata(&lvar_tmp),fieldleng);
+			ifx_var_dealloc(&lvar_tmp);
+                	add_assoc_stringl(return_value, fieldname, char_data, fieldleng,0);
+                	break;
+
                 case SQLBOOL    :
 $endif;
                 case SQLCHAR    :
@@ -2391,7 +2564,7 @@ $endif;
                                 /* NULL has already been dealt with          */
                                 /* treated always as a long VARCHAR here     */
                                 /* if blobinbfile, too bad                   */
-                    bid_b=Ifx_Result->blob_id[locind];
+                    bid_b=Ifx_Result->res_id[locind];
                     ++locind;
 
                     locator_b=php3_intifx_get_blobloc(bid_b,list); 
@@ -2464,6 +2637,7 @@ $endif;
     RETURN_LONG(Ifx_Result->rowid);
 
 }
+/* }}} */
 
 /* ----------------------------------------------------------------------
 ** array ifx_fieldtypes(int $resultid)
@@ -2476,6 +2650,8 @@ $endif;
 */
 
 
+/* {{{ proto array ifx_fieldtypes(int resultid)
+   returns an associative array with fieldnames as key for query <resultid> */
 void php3_ifx_fieldtypes(INTERNAL_FUNCTION_PARAMETERS)
 {
     pval *result, *arg2;
@@ -2661,6 +2837,7 @@ $endif;
     }   /* for() */ 
     
 }
+/* }}} */
 
 /* ----------------------------------------------------------------------
 ** array ifx_fieldproperties(int $resultid)
@@ -2676,6 +2853,8 @@ $endif;
 ** ----------------------------------------------------------------------
 */
 
+/* {{{ proto array ifx_fieldproperties(int resultid)
+   returns an associative for query <resultid> array with fieldnames as key */
 void php3_ifx_fieldproperties(INTERNAL_FUNCTION_PARAMETERS)
 {
     pval *result, *arg2;
@@ -2875,8 +3054,19 @@ $endif;
     }   /* for() */ 
     
 }
+/* }}} */
 
 
+/* --------------------------------------------------------------
+** int ifx_num_rows(int $resultid)
+**
+** returns the number of rows already fetched for query $resultid
+**
+** ---------------------------------------------------------------
+*/
+
+/* {{{ proto int ifx_num_rows(int resultid)
+   returns the number of rows already fetched for query identified by resultid */
 void php3_ifx_num_rows(INTERNAL_FUNCTION_PARAMETERS)
 {
     pval *result;
@@ -2899,9 +3089,10 @@ void php3_ifx_num_rows(INTERNAL_FUNCTION_PARAMETERS)
         RETURN_FALSE;
     }
     
-    return_value->value.lval = -1;    /* not supported */
+    return_value->value.lval = Ifx_Result->rowid;
     return_value->type = IS_LONG;
 }
+/* }}} */
 
 /* ----------------------------------------------------------------------
 ** int ifx_num_fields(int $resultid)
@@ -2911,6 +3102,8 @@ void php3_ifx_num_rows(INTERNAL_FUNCTION_PARAMETERS)
 ** ----------------------------------------------------------------------
 */
 
+/* {{{ proto int ifx_num_fields(int resultid)
+   returns the number of columns in query resultid */
 void php3_ifx_num_fields(INTERNAL_FUNCTION_PARAMETERS)
 {
     pval *result;
@@ -2936,6 +3129,7 @@ void php3_ifx_num_fields(INTERNAL_FUNCTION_PARAMETERS)
     return_value->value.lval = Ifx_Result->numcols;
     return_value->type = IS_LONG;
 }
+/* }}} */
 
 
 
@@ -2949,6 +3143,8 @@ void php3_ifx_num_fields(INTERNAL_FUNCTION_PARAMETERS)
 ** ----------------------------------------------------------------------
 */
 
+/* {{{ proto int ifx_free_result(int resultid)
+   releases resources for query associated with resultid */
 void php3_ifx_free_result(INTERNAL_FUNCTION_PARAMETERS)
 {
     pval *result;
@@ -2988,20 +3184,12 @@ EXEC SQL END DECLARE SECTION;
     Informix_GLOBAL(php3_ifx_module).sv_sqlcode = 0;
 
 
-    for (i = 0; i < MAXBLOBS; ++i) {
-        if (Ifx_Result->blob_id[i]>0) {
-         php3_intifx2_free_blob(Ifx_Result->blob_id[i],list);
-         Ifx_Result->blob_id[i]=-1;
+    for (i = 0; i < MAX_RESID; ++i) {
+        if (Ifx_Result->res_id[i]>0) {
+         php3_intifx2_free_blob(Ifx_Result->res_id[i],list);
+         Ifx_Result->res_id[i]=-1;
         }
     }
-$ifdef HAVE_IFX_IUS;
-    for (i = 0; i < MAXSLOBS; ++i) {
-        if (Ifx_Result->slob_id[i]>0) {
-            php3_intifxus_free_slob(Ifx_Result->slob_id[i],list); 
-            Ifx_Result->slob_id[i]=-1;
-        }
-    }
-$endif;
 
     cursorid   = Ifx_Result->cursorid;
     statemid   = Ifx_Result->statemid;
@@ -3019,11 +3207,43 @@ $endif;
     php3_list_delete(result->value.lval);
     RETURN_TRUE;
 }
+/* }}} */
+
+
+
+
 
 /* ----------------------------------------------------------------------
-** int php3_ifx_create_blob(int type, int mode, string param)
+ * internal function
+ * long php3_intifx_getType(long id, HashTable *list)
+ *
+ * returns the type of an id-object
+ *  bid: Id of object
+ *  list: internal hashlist of php3
+ * 
+ * return -1 on error otherwise the type: TYPE_BLTEXT, TYPE_BLBYTE, TYPE_SLOB
+ * ----------------------------------------------------------------------
+*/
+long php3_intifx_getType(long id, HashTable *list) {
+ IFX_IDRES *Ifx_res;
+ int type;
+
+ Ifx_res = (IFX_IDRES *) php3_list_find(id,&type);
+ if (type!=Informix_GLOBAL(php3_ifx_module).le_idresult) {
+  php3_error(E_WARNING,"%d is not a Informix id-result index",
+            id);
+  return -1;
+ }
+ return Ifx_res->type;
+ }
+
+
+
+
+/* ----------------------------------------------------------------------
+** int ifx_create_blob(int type, int mode, string param)
 **
-** creates an blob-object
+** creates a blob-object
 **  type: 1=TEXT, 0=BYTE
 **  mode: blob-object holds 0=the content in memory, 1=content in file
 **  param: if mode=0: pointer to the content
@@ -3031,6 +3251,9 @@ $endif;
 ** return false on error otherwise the new Blob-Object-id
 ** ----------------------------------------------------------------------
 */
+
+/* {{{ proto int ifx_create_blob(int type, int mode, string param)
+   creates a blob-object */
 void php3_ifx_create_blob(INTERNAL_FUNCTION_PARAMETERS) {
  pval *pmode, *pparam,*ptype;
  long id;
@@ -3045,10 +3268,10 @@ void php3_ifx_create_blob(INTERNAL_FUNCTION_PARAMETERS) {
 
  type=ptype->value.lval;
  if(type!=0) 
-  type=BL_TEXT;
+  type=TYPE_BLTEXT;
  mode=pmode->value.lval;
  if(mode!=0) 
-  mode=BL_INFILE;
+  mode=BLMODE_INFILE;
   
  id=php3_intifx_create_blob(type,mode,pparam->value.str.val,pparam->value.str.len,list); 
  if(id<0) {
@@ -3056,6 +3279,7 @@ void php3_ifx_create_blob(INTERNAL_FUNCTION_PARAMETERS) {
  } 
  RETURN_LONG(id);
 }
+/* }}} */
 
 /* ----------------------------------------------------------------------
  * internal function
@@ -3072,21 +3296,25 @@ void php3_ifx_create_blob(INTERNAL_FUNCTION_PARAMETERS) {
  * ----------------------------------------------------------------------
 */
 long php3_intifx_create_blob(long type, long mode, char* param, long len, HashTable *list) {
- IFX_BLOBRES *Ifx_blob;
+ IFX_IDRES *Ifx_blob;
 
 
- Ifx_blob=emalloc(sizeof(IFX_BLOBRES));
+ Ifx_blob=emalloc(sizeof(IFX_IDRES));
  if(Ifx_blob==NULL) {
   php3_error(E_WARNING,"can't create blob-resource");
   return -1;
  }
  
- memset(Ifx_blob, 0, sizeof(IFX_BLOBRES));      
+ memset(Ifx_blob, 0, sizeof(IFX_IDRES));      
  
- Ifx_blob->type=(int)type;
- Ifx_blob->mode=(int)mode;
+ if(type==0 ) {
+  Ifx_blob->type=TYPE_BLBYTE;
+ } else {
+  Ifx_blob->type=TYPE_BLTEXT;
+ }
+ Ifx_blob->BLOB.mode=(int)mode;
 
- if(mode==BL_INMEM) {
+ if(mode==BLMODE_INMEM) {
   if(len>=0) {
    char *content=emalloc(len);
    if(content==NULL) {
@@ -3094,21 +3322,21 @@ long php3_intifx_create_blob(long type, long mode, char* param, long len, HashTa
     return -1;
    }
    memcpy(content,param,len);
-   Ifx_blob->blob_data.loc_loctype=LOCMEMORY;
-   Ifx_blob->blob_data.loc_buffer=content;
-   Ifx_blob->blob_data.loc_bufsize=len;
-   Ifx_blob->blob_data.loc_size=len;
-   Ifx_blob->blob_data.loc_mflags=0;
-   Ifx_blob->blob_data.loc_oflags=0;
+   Ifx_blob->BLOB.blob_data.loc_loctype=LOCMEMORY;
+   Ifx_blob->BLOB.blob_data.loc_buffer=content;
+   Ifx_blob->BLOB.blob_data.loc_bufsize=len;
+   Ifx_blob->BLOB.blob_data.loc_size=len;
+   Ifx_blob->BLOB.blob_data.loc_mflags=0;
+   Ifx_blob->BLOB.blob_data.loc_oflags=0;
   } else {
-   Ifx_blob->blob_data.loc_loctype=LOCMEMORY;
-   Ifx_blob->blob_data.loc_buffer=NULL;
-   Ifx_blob->blob_data.loc_bufsize=-1;
-   Ifx_blob->blob_data.loc_size=-1;
-   Ifx_blob->blob_data.loc_mflags=0;
-   Ifx_blob->blob_data.loc_oflags=0;
+   Ifx_blob->BLOB.blob_data.loc_loctype=LOCMEMORY;
+   Ifx_blob->BLOB.blob_data.loc_buffer=NULL;
+   Ifx_blob->BLOB.blob_data.loc_bufsize=-1;
+   Ifx_blob->BLOB.blob_data.loc_size=-1;
+   Ifx_blob->BLOB.blob_data.loc_mflags=0;
+   Ifx_blob->BLOB.blob_data.loc_oflags=0;
   }
- } else {                             /* mode = BL_INFILE */
+ } else {                             /* mode = BLMODE_INFILE */
   char *filename=emalloc(len+1);
   if(filename==NULL)  {
    php3_error(E_WARNING,"can't create blob-resource");
@@ -3116,19 +3344,19 @@ long php3_intifx_create_blob(long type, long mode, char* param, long len, HashTa
   }
   memcpy(filename,param,len);
   filename[len]=0;
-  Ifx_blob->blob_data.loc_loctype=LOCFNAME;
-  Ifx_blob->blob_data.loc_fname=filename;
-  Ifx_blob->blob_data.loc_oflags=LOC_WONLY;
-  Ifx_blob->blob_data.loc_size=-1;
+  Ifx_blob->BLOB.blob_data.loc_loctype=LOCFNAME;
+  Ifx_blob->BLOB.blob_data.loc_fname=filename;
+  Ifx_blob->BLOB.blob_data.loc_oflags=LOC_WONLY;
+  Ifx_blob->BLOB.blob_data.loc_size=-1;
  }
- return php3_list_insert(Ifx_blob,Informix_GLOBAL(php3_ifx_module).le_blobresult);
+ return php3_list_insert(Ifx_blob,Informix_GLOBAL(php3_ifx_module).le_idresult);
 }
 
 
 
 
 /* ----------------------------------------------------------------------
-** int php3_ifx_copy_blob(int bid)
+** int ifx_copy_blob(int bid)
 **
 ** duplicates the given blob-object
 **  bid: Id of Blobobject
@@ -3136,6 +3364,9 @@ long php3_intifx_create_blob(long type, long mode, char* param, long len, HashTa
 ** return false on error otherwise the new Blob-Object-id
 ** ----------------------------------------------------------------------
 */
+
+/* {{{ proto int ifx_copy_blob(int bid)
+   duplicates the given blob-object */
 void php3_ifx_copy_blob(INTERNAL_FUNCTION_PARAMETERS) {
  pval *pbid;
  long newid;
@@ -3152,6 +3383,7 @@ void php3_ifx_copy_blob(INTERNAL_FUNCTION_PARAMETERS) {
  
  RETURN_LONG(newid);
 }
+/* }}} */
 
 
 
@@ -3167,31 +3399,31 @@ void php3_ifx_copy_blob(INTERNAL_FUNCTION_PARAMETERS) {
  * ----------------------------------------------------------------------
 */
 long php3_intifx_copy_blob(long bid, HashTable *list) {
- IFX_BLOBRES *Ifx_blob, *Ifx_blob_orig;
+ IFX_IDRES *Ifx_blob, *Ifx_blob_orig;
  loc_t *locator, *locator_orig;
  int type;
 
- Ifx_blob_orig = (IFX_BLOBRES *) php3_list_find(bid,&type);
- if (type!=Informix_GLOBAL(php3_ifx_module).le_blobresult) {
+ Ifx_blob_orig = (IFX_IDRES *) php3_list_find(bid,&type);
+ if (type!=Informix_GLOBAL(php3_ifx_module).le_idresult || !(Ifx_blob_orig->type==TYPE_BLBYTE || Ifx_blob_orig->type==TYPE_BLTEXT)) {
   php3_error(E_WARNING,"%d is not a Informix blob-result index",
             bid);
   return -1;
  }
- Ifx_blob=emalloc(sizeof(IFX_BLOBRES));
+ Ifx_blob=emalloc(sizeof(IFX_IDRES));
  if(Ifx_blob==NULL) {
   php3_error(E_WARNING,"can't create blob-resource");
   return -1;
  }
  
- memset(Ifx_blob, 0, sizeof(IFX_BLOBRES));
+ memset(Ifx_blob, 0, sizeof(IFX_IDRES));
   
  Ifx_blob->type=Ifx_blob_orig->type;
- Ifx_blob->mode=Ifx_blob_orig->mode;
+ Ifx_blob->BLOB.mode=Ifx_blob_orig->BLOB.mode;
  
- locator=&(Ifx_blob->blob_data);
- locator_orig=&(Ifx_blob_orig->blob_data);
+ locator=&(Ifx_blob->BLOB.blob_data);
+ locator_orig=&(Ifx_blob_orig->BLOB.blob_data);
 
- if(Ifx_blob->mode==BL_INMEM) {
+ if(Ifx_blob->BLOB.mode==BLMODE_INMEM) {
   char *content;
   if(locator_orig->loc_size>=0 && locator_orig->loc_buffer!=NULL) {
    if((content=emalloc(locator_orig->loc_size))==NULL) {
@@ -3210,7 +3442,7 @@ long php3_intifx_copy_blob(long bid, HashTable *list) {
   locator->loc_loctype=LOCMEMORY;
   locator->loc_mflags=0;
   locator->loc_oflags=0;
- } else {  /* BL_INFILE */
+ } else {  /* BLMODE_INFILE */
   char *filename;
 
   if((filename=emalloc(strlen(locator_orig->loc_fname)+1))==NULL)  {
@@ -3224,19 +3456,22 @@ long php3_intifx_copy_blob(long bid, HashTable *list) {
   locator->loc_oflags=locator_orig->loc_oflags;
  }
  
- return php3_list_insert(Ifx_blob,Informix_GLOBAL(php3_ifx_module).le_blobresult);
+ return php3_list_insert(Ifx_blob,Informix_GLOBAL(php3_ifx_module).le_idresult);
 }
 
 
 
 /* ----------------------------------------------------------------------
-** int php3_ifx_free_blob(int bid)
+** int ifx_free_blob(int bid)
 **
 ** deletes the blob-object
 **  bid: Id of Blobobject
 ** return false on error otherwise true
 ** ----------------------------------------------------------------------
 */
+
+/* {{{ proto int ifx_free_blob(int bid)
+   deletes the blob-object */
 void php3_ifx_free_blob(INTERNAL_FUNCTION_PARAMETERS) {
  pval *pid;
  long ret;
@@ -3252,6 +3487,7 @@ void php3_ifx_free_blob(INTERNAL_FUNCTION_PARAMETERS) {
  } 
  RETURN_TRUE;
 }
+/* }}} */
 
 /* ----------------------------------------------------------------------
  * internal function
@@ -3266,23 +3502,23 @@ void php3_ifx_free_blob(INTERNAL_FUNCTION_PARAMETERS) {
  * ----------------------------------------------------------------------
 */
 long php3_intifx_free_blob(long bid, HashTable *list) {
- IFX_BLOBRES *Ifx_blob;
+ IFX_IDRES *Ifx_blob;
  int type;
  
- Ifx_blob = (IFX_BLOBRES *) php3_list_find(bid,&type);
- if (type!=Informix_GLOBAL(php3_ifx_module).le_blobresult) {
+ Ifx_blob = (IFX_IDRES *) php3_list_find(bid,&type);
+ if (type!=Informix_GLOBAL(php3_ifx_module).le_idresult && !(Ifx_blob->type==TYPE_BLTEXT || Ifx_blob->type==TYPE_BLBYTE)) {
   php3_error(E_WARNING,"%d is not a Informix blob-result index",
             bid);
   return -1;
  }
- if(Ifx_blob->mode==BL_INMEM) {
-    if(Ifx_blob->blob_data.loc_buffer==NULL 
-       || Ifx_blob->blob_data.loc_size<=0) {;} else {
-       efree(Ifx_blob->blob_data.loc_buffer);  
+ if(Ifx_blob->BLOB.mode==BLMODE_INMEM) {
+    if(Ifx_blob->BLOB.blob_data.loc_buffer==NULL 
+       || Ifx_blob->BLOB.blob_data.loc_size<=0) {;} else {
+       efree(Ifx_blob->BLOB.blob_data.loc_buffer);  
     }
- } else {   /* BL_INFILE */
-    if(Ifx_blob->blob_data.loc_fname!=NULL) {
-       efree(Ifx_blob->blob_data.loc_fname); 
+ } else {   /* BLMODE_INFILE */
+    if(Ifx_blob->BLOB.blob_data.loc_fname!=NULL) {
+       efree(Ifx_blob->BLOB.blob_data.loc_fname); 
     }
  }
 
@@ -3308,23 +3544,23 @@ long php3_intifx_free_blob(long bid, HashTable *list) {
  * ----------------------------------------------------------------------
 */
 long php3_intifx2_free_blob(long bid, HashTable *list) {
- IFX_BLOBRES *Ifx_blob;
+ IFX_IDRES *Ifx_blob;
  int type;
  
- Ifx_blob = (IFX_BLOBRES *) php3_list_find(bid,&type);
- if (type!=Informix_GLOBAL(php3_ifx_module).le_blobresult) {
+ Ifx_blob = (IFX_IDRES *) php3_list_find(bid,&type);
+ if (type!=Informix_GLOBAL(php3_ifx_module).le_idresult && !(Ifx_blob->type==TYPE_BLTEXT || Ifx_blob->type==TYPE_BLBYTE)) {
   php3_error(E_WARNING,"%d is not a Informix blob-result index",
             bid);
   return -1;
  }
- if(Ifx_blob->mode==BL_INMEM) {
-    if(Ifx_blob->blob_data.loc_buffer==NULL ||
-       Ifx_blob->blob_data.loc_size<=0) {;} else {
-       free(Ifx_blob->blob_data.loc_buffer);  
+ if(Ifx_blob->BLOB.mode==BLMODE_INMEM) {
+    if(Ifx_blob->BLOB.blob_data.loc_buffer==NULL ||
+       Ifx_blob->BLOB.blob_data.loc_size<=0) {;} else {
+       free(Ifx_blob->BLOB.blob_data.loc_buffer);  
     }
  } else {
-    if(Ifx_blob->blob_data.loc_fname!=NULL) {
-       efree(Ifx_blob->blob_data.loc_fname); 
+    if(Ifx_blob->BLOB.blob_data.loc_fname!=NULL) {
+       efree(Ifx_blob->BLOB.blob_data.loc_fname); 
     }
  }
  
@@ -3334,13 +3570,16 @@ long php3_intifx2_free_blob(long bid, HashTable *list) {
 }
 
 /* ----------------------------------------------------------------------
-** string php3_ifx_get_blob(int bid)
+** string ifx_get_blob(int bid)
 **
 ** returns the content of the blob-object
 **  bid: Id of Blobobject
 ** return the content
 ** ----------------------------------------------------------------------
 */
+
+/* {{{ proto string ifx_get_blob(int bid)
+   returns the content of the blob-object */
 void php3_ifx_get_blob(INTERNAL_FUNCTION_PARAMETERS) {
  pval *pbid;
  char *content;
@@ -3358,6 +3597,7 @@ void php3_ifx_get_blob(INTERNAL_FUNCTION_PARAMETERS) {
  }
  RETURN_STRINGL(content,len,1);
 }
+/* }}} */
 
 
 /* ----------------------------------------------------------------------
@@ -3373,22 +3613,22 @@ void php3_ifx_get_blob(INTERNAL_FUNCTION_PARAMETERS) {
  * ----------------------------------------------------------------------
 */
 long php3_intifx_get_blob(long bid, HashTable *list, char** content) {
- IFX_BLOBRES *Ifx_blob;
+ IFX_IDRES *Ifx_blob;
  int type;
  
- Ifx_blob = (IFX_BLOBRES *) php3_list_find(bid,&type);
- if (type!=Informix_GLOBAL(php3_ifx_module).le_blobresult) {
+ Ifx_blob = (IFX_IDRES *) php3_list_find(bid,&type);
+ if (type!=Informix_GLOBAL(php3_ifx_module).le_idresult && !(Ifx_blob->type==TYPE_BLTEXT || Ifx_blob->type==TYPE_BLBYTE)) {
   php3_error(E_WARNING,"%d is not a Informix blob-result index",
             bid);
   return -1;
  }
 
- if(Ifx_blob->mode==BL_INMEM) {
-  *content=Ifx_blob->blob_data.loc_buffer;
-  return Ifx_blob->blob_data.loc_size;
+ if(Ifx_blob->BLOB.mode==BLMODE_INMEM) {
+  *content=Ifx_blob->BLOB.blob_data.loc_buffer;
+  return Ifx_blob->BLOB.blob_data.loc_size;
  }
- *content=Ifx_blob->blob_data.loc_fname;
- return strlen(Ifx_blob->blob_data.loc_fname);
+ *content=Ifx_blob->BLOB.blob_data.loc_fname;
+ return strlen(Ifx_blob->BLOB.blob_data.loc_fname);
 }
 
 
@@ -3403,23 +3643,23 @@ long php3_intifx_get_blob(long bid, HashTable *list, char** content) {
  * ----------------------------------------------------------------------
 */
 loc_t *php3_intifx_get_blobloc(long bid, HashTable *list) {
- IFX_BLOBRES *Ifx_blob;
+ IFX_IDRES *Ifx_blob;
  int type;
  
- Ifx_blob = (IFX_BLOBRES *) php3_list_find(bid,&type);
- if (type!=Informix_GLOBAL(php3_ifx_module).le_blobresult) {
+ Ifx_blob = (IFX_IDRES *) php3_list_find(bid,&type);
+ if (type!=Informix_GLOBAL(php3_ifx_module).le_idresult && !(Ifx_blob->type==TYPE_BLTEXT || Ifx_blob->type==TYPE_BLBYTE)) {
   php3_error(E_WARNING,"%d is not a Informix blob-result index",
             bid);
   return NULL;
  }
 
- return &(Ifx_blob->blob_data);
+ return &(Ifx_blob->BLOB.blob_data);
 }
 
 
 
 /* ----------------------------------------------------------------------
-** int php3_ifx_update_blob(int bid, string content)
+** int update_blob(int bid, string content)
 **
 ** updates the content of the blob-object
 **  bid: Id of Blobobject
@@ -3428,6 +3668,8 @@ loc_t *php3_intifx_get_blobloc(long bid, HashTable *list) {
 ** ----------------------------------------------------------------------
 */
 
+/* {{{ proto int update_blob(int bid, string content)
+   updates the content of the blob-object */
 void php3_ifx_update_blob(INTERNAL_FUNCTION_PARAMETERS) {
  pval *pbid,*pparam;
  long ret;
@@ -3448,6 +3690,7 @@ void php3_ifx_update_blob(INTERNAL_FUNCTION_PARAMETERS) {
  } 
  RETURN_TRUE;
 }
+/* }}} */
 
 
 /* ----------------------------------------------------------------------
@@ -3463,50 +3706,50 @@ void php3_ifx_update_blob(INTERNAL_FUNCTION_PARAMETERS) {
  * ----------------------------------------------------------------------
 */
 long php3_intifx_update_blob(long bid, char* param, long len, HashTable *list) {
- IFX_BLOBRES *Ifx_blob;
+ IFX_IDRES *Ifx_blob;
  int type;
  
- Ifx_blob = (IFX_BLOBRES *) php3_list_find(bid,&type);
- if (type!=Informix_GLOBAL(php3_ifx_module).le_blobresult) {
+ Ifx_blob = (IFX_IDRES *) php3_list_find(bid,&type);
+ if (type!=Informix_GLOBAL(php3_ifx_module).le_idresult && !(Ifx_blob->type==TYPE_BLTEXT || Ifx_blob->type==TYPE_BLBYTE)) {
   php3_error(E_WARNING,"%d is not a Informix blob-result index",
             bid);
   return -1;
  }
 
- if(Ifx_blob->mode==BL_INMEM) {
+ if(Ifx_blob->BLOB.mode==BLMODE_INMEM) {
   char *content;
 
-  if(Ifx_blob->blob_data.loc_buffer!=NULL)
-   efree(Ifx_blob->blob_data.loc_buffer);
+  if(Ifx_blob->BLOB.blob_data.loc_buffer!=NULL)
+   efree(Ifx_blob->BLOB.blob_data.loc_buffer);
   if(len>=0) {
    if((content=emalloc(len))==NULL) {
     php3_error(E_WARNING,"can't create blob-resource");
     return -1;
    }
    memcpy(content,param, len);
-   Ifx_blob->blob_data.loc_buffer=content;
-   Ifx_blob->blob_data.loc_bufsize=len;
-   Ifx_blob->blob_data.loc_size=len;
+   Ifx_blob->BLOB.blob_data.loc_buffer=content;
+   Ifx_blob->BLOB.blob_data.loc_bufsize=len;
+   Ifx_blob->BLOB.blob_data.loc_size=len;
   } else {
-   Ifx_blob->blob_data.loc_buffer=NULL;
-   Ifx_blob->blob_data.loc_bufsize=-1;
-   Ifx_blob->blob_data.loc_size=-1;
+   Ifx_blob->BLOB.blob_data.loc_buffer=NULL;
+   Ifx_blob->BLOB.blob_data.loc_bufsize=-1;
+   Ifx_blob->BLOB.blob_data.loc_size=-1;
   }
-  Ifx_blob->blob_data.loc_mflags=0;
-  Ifx_blob->blob_data.loc_oflags=0;
+  Ifx_blob->BLOB.blob_data.loc_mflags=0;
+  Ifx_blob->BLOB.blob_data.loc_oflags=0;
  } else {
   char *filename;
 
-  if(Ifx_blob->blob_data.loc_fname!=NULL)
-   efree(Ifx_blob->blob_data.loc_fname);
+  if(Ifx_blob->BLOB.blob_data.loc_fname!=NULL)
+   efree(Ifx_blob->BLOB.blob_data.loc_fname);
   if((filename=emalloc(len+1))==NULL)  {
    php3_error(E_WARNING,"can't create blob-resource");
    return -1;
   }
   memcpy(filename,param, len);
   filename[len]=0;
-  Ifx_blob->blob_data.loc_fname=filename;
-  Ifx_blob->blob_data.loc_size=-1;
+  Ifx_blob->BLOB.blob_data.loc_fname=filename;
+  Ifx_blob->BLOB.blob_data.loc_size=-1;
  }
  return 0;
 }
@@ -3546,7 +3789,7 @@ char* php3_intifx_create_tmpfile(long bid) {
 
 
 /* ----------------------------------------------------------------------
-** void php3_ifx_blobinfile_mode(int $mode)
+** void ifx_blobinfile_mode(int $mode)
 **
 ** sets the default blob-mode for all select-queries 
 **  mode=0: save Byte-Blobs in momory
@@ -3554,6 +3797,9 @@ char* php3_intifx_create_tmpfile(long bid) {
 ** return nothing
 ** ----------------------------------------------------------------------
 */
+
+/* {{{ proto void ifx_blobinfile_mode(int mode)
+   sets the default blob-mode for all select-queries  */
 void php3_ifx_blobinfile_mode(INTERNAL_FUNCTION_PARAMETERS) {
  pval *pmode;
 
@@ -3566,11 +3812,12 @@ void php3_ifx_blobinfile_mode(INTERNAL_FUNCTION_PARAMETERS) {
   Informix_GLOBAL(php3_ifx_module).blobinfile=pmode->value.lval;
   RETURN_TRUE;
 }
+/* }}} */
 
 
 
 /* ----------------------------------------------------------------------
-** void php3_ifx_textasvarchar(int $mode)
+** void ifx_textasvarchar(int $mode)
 **
 ** sets the default text-mode for all select-queries 
 **  mode=0: select returns a blob-id
@@ -3578,6 +3825,9 @@ void php3_ifx_blobinfile_mode(INTERNAL_FUNCTION_PARAMETERS) {
 ** return nothing
 ** ----------------------------------------------------------------------
 */
+
+/* {{{ proto void ifx_textasvarchar(int mode)
+   sets the default text-mode for all select-queries */
 void php3_ifx_textasvarchar(INTERNAL_FUNCTION_PARAMETERS) {
  pval *pmode;
 
@@ -3590,11 +3840,12 @@ void php3_ifx_textasvarchar(INTERNAL_FUNCTION_PARAMETERS) {
   Informix_GLOBAL(php3_ifx_module).textasvarchar=pmode->value.lval;
   RETURN_TRUE;
 }
+/* }}} */
 
 
 
 /* ----------------------------------------------------------------------
-** void php3_ifx_byteasvarchar(int $mode)
+** void ifx_byteasvarchar(int $mode)
 **
 ** sets the default byte-mode for all select-queries 
 **  mode=0: select returns a blob-id
@@ -3602,9 +3853,11 @@ void php3_ifx_textasvarchar(INTERNAL_FUNCTION_PARAMETERS) {
 ** return nothing
 ** ----------------------------------------------------------------------
 */
+
+/* {{{ proto void ifx_byteasvarchar(int mode)
+   sets the default byte-mode for all select-queries  */
 void php3_ifx_byteasvarchar(INTERNAL_FUNCTION_PARAMETERS) {
  pval *pmode;
-
   
  if (ARG_COUNT(ht)!=1 || getParameters(ht, 1, &pmode)==FAILURE) {
    WRONG_PARAM_COUNT;
@@ -3618,7 +3871,7 @@ void php3_ifx_byteasvarchar(INTERNAL_FUNCTION_PARAMETERS) {
 
 
 /* ----------------------------------------------------------------------
-** void php3_ifx_nullformat(int $mode)
+** void ifx_nullformat(int $mode)
 **
 ** sets the default return value of a NULL-value un a fetch-row 
 **  mode=0: return ""
@@ -3626,6 +3879,9 @@ void php3_ifx_byteasvarchar(INTERNAL_FUNCTION_PARAMETERS) {
 ** return nothing
 ** ----------------------------------------------------------------------
 */
+
+/* {{{ proto void ifx_nullformat(int mode)
+   sets the default return value of a NULL-value un a fetch-row  */
 void php3_ifx_nullformat(INTERNAL_FUNCTION_PARAMETERS) {
  pval *pmode;
 
@@ -3638,6 +3894,7 @@ void php3_ifx_nullformat(INTERNAL_FUNCTION_PARAMETERS) {
   Informix_GLOBAL(php3_ifx_module).nullformat=pmode->value.lval;
   RETURN_TRUE;
 }
+/* }}} */
 
 
 /* ----------------------------------------------------------------------
@@ -3671,19 +3928,321 @@ char* php3_intifx_null() {
 
 
 
+
+
+/* ----------------------------------------------------------------------
+** int ifx_create_char(string param)
+**
+** creates an char-object
+**  param: content
+** return false on error otherwise the new char-Object-id
+** ----------------------------------------------------------------------
+*/
+
+/* {{{ proto int ifx_create_char(string param)
+   creates a char-object */
+void php3_ifx_create_char(INTERNAL_FUNCTION_PARAMETERS) {
+ pval *pparam;
+ long id;
+  
+ if (ARG_COUNT(ht)!=1 || getParameters(ht, 1, &pparam)==FAILURE) {
+   WRONG_PARAM_COUNT;
+ }
+ convert_to_string(pparam);
+
+ id=php3_intifx_create_char(pparam->value.str.val,pparam->value.str.len,list); 
+ if(id<0) {
+    RETURN_FALSE;
+ } 
+ RETURN_LONG(id);
+}
+/* }}} */
+
+/* ----------------------------------------------------------------------
+ * internal function
+ * long php3_intifx_create_char(char* param, long len, HashTable *list)
+ *
+ * creates an char-object
+ *  param: content
+ *  len: length of param
+ *  list: internal hashlist of php3
+ * return -1 on error otherwise the new char-Object-id
+ * ----------------------------------------------------------------------
+*/
+long php3_intifx_create_char(char* param, long len, HashTable *list) {
+ IFX_IDRES *Ifx_char;
+
+
+ Ifx_char=emalloc(sizeof(IFX_IDRES));
+ if(Ifx_char==NULL) {
+  php3_error(E_WARNING,"can't create char-resource");
+  return -1;
+ }
+
+ Ifx_char->type=TYPE_CHAR;
+
+ if(param==NULL || len<0) {
+  Ifx_char->CHAR.char_data=NULL;
+  Ifx_char->CHAR.len=0;
+ } else {
+  Ifx_char->CHAR.char_data=emalloc(len+1);
+  if(Ifx_char->CHAR.char_data==NULL) {
+   efree(Ifx_char);
+   php3_error(E_WARNING,"can't create char-resource");
+   return -1;
+  } 
+  memcpy(Ifx_char->CHAR.char_data,param,len);
+  Ifx_char->CHAR.char_data[len]=0;
+  Ifx_char->CHAR.len=len;
+ }
+ return php3_list_insert(Ifx_char,Informix_GLOBAL(php3_ifx_module).le_idresult);
+}
+
+/* ----------------------------------------------------------------------
+** string ifx_get_char(int bid)
+**
+** returns the content of the char-object
+**  bid: Id of charobject
+** return the content
+** ----------------------------------------------------------------------
+*/
+
+/* {{{ proto string ifx_get_char(int bid)
+   returns the content of the char-object */
+void php3_ifx_get_char(INTERNAL_FUNCTION_PARAMETERS) {
+ pval *pbid;
+ char *content;
+ long len;
+ 
+  
+ if (ARG_COUNT(ht)!=1 || getParameters(ht, 1, &pbid)==FAILURE) {
+   WRONG_PARAM_COUNT;
+ }
+ convert_to_long(pbid);
+
+ len=php3_intifx_get_char(pbid->value.lval,list,&content); 
+ if(content==NULL || len<0) {
+   RETURN_STRING("",1);
+ }
+ RETURN_STRINGL(content,len,1);
+}
+/* }}} */
+
+
+/* ----------------------------------------------------------------------
+ * internal function
+ * long php3_intifx_get_char(long bid, HashTable *list, char** content)
+ *
+ * returns the content of the char-object
+ *  bid: Id of charobject
+ *  list: internal hashlist of php3
+ * 
+ * return -1 on error
+ * returns the pointer to the content in char** content and the amount of content in bytes
+ * ----------------------------------------------------------------------
+*/
+long php3_intifx_get_char(long bid, HashTable *list, char** content) {
+ IFX_IDRES *Ifx_char;
+ int type;
+ 
+ Ifx_char = (IFX_IDRES *) php3_list_find(bid,&type);
+ if (type!=Informix_GLOBAL(php3_ifx_module).le_idresult && !(Ifx_char->type==TYPE_CHAR)) {
+  php3_error(E_WARNING,"%d is not a Informix char-result index",
+            bid);
+  return -1;
+ }
+
+ *content=Ifx_char->CHAR.char_data;
+ return Ifx_char->CHAR.len;
+}
+
+/* ----------------------------------------------------------------------
+** int ifx_free_char(int bid)
+**
+** deletes the char-object
+**  bid: Id of charobject
+** return false on error otherwise true
+** ----------------------------------------------------------------------
+*/
+
+/* {{{ proto int ifx_free_char(int bid)
+   deletes the char-object */
+void php3_ifx_free_char(INTERNAL_FUNCTION_PARAMETERS) {
+ pval *pid;
+ long ret;
+  
+ if (ARG_COUNT(ht)!=1 || getParameters(ht, 1, &pid)==FAILURE) {
+   WRONG_PARAM_COUNT;
+ }
+ convert_to_long(pid);
+
+ ret=php3_intifx_free_char(pid->value.lval,list); 
+ if(ret<0) {
+  RETURN_FALSE;
+ } 
+ RETURN_TRUE;
+}
+/* }}} */
+
+/* ----------------------------------------------------------------------
+ * internal function
+ * long php3_intifx_free_char(long bid, HashTable *list)
+ *
+ * deletes the char-object
+ *  bid: Id of Charobject
+ *  list: internal hashlist of php3
+ * 
+ * return -1 on error otherwise 0
+ * ----------------------------------------------------------------------
+*/
+long php3_intifx_free_char(long bid, HashTable *list) {
+ IFX_IDRES *Ifx_char;
+ int type;
+ 
+ Ifx_char = (IFX_IDRES *) php3_list_find(bid,&type);
+ if (type!=Informix_GLOBAL(php3_ifx_module).le_idresult && !(Ifx_char->type==TYPE_CHAR)) {
+  php3_error(E_WARNING,"%d is not a Informix char-result index",
+            bid);
+  return -1;
+ }
+
+ if(Ifx_char->CHAR.char_data!=NULL) {
+  efree(Ifx_char->CHAR.char_data);
+ }
+ 
+ php3_list_delete(bid);
+ efree(Ifx_char); 
+ return 0;
+}
+
+/* ----------------------------------------------------------------------
+** int ifx_update_char(int bid, string content)
+**
+** updates the content of the char-object
+**  bid: Id of charobject
+**  content: string of new data
+** return false on error otherwise true
+** ----------------------------------------------------------------------
+*/
+
+/* {{{ proto int ifx_update_char(int bid, string content)
+   updates the content of the char-object */
+void php3_ifx_update_char(INTERNAL_FUNCTION_PARAMETERS) {
+ pval *pbid,*pparam;
+ long ret;
+ 
+  
+ if (ARG_COUNT(ht)!=2 || getParameters(ht, 2, &pbid,&pparam)==FAILURE) {
+   WRONG_PARAM_COUNT;
+ }
+ convert_to_long(pbid);
+ convert_to_string(pparam);
+ 
+ ret=php3_intifx_update_char(pbid->value.lval,
+                             pparam->value.str.val,
+                             pparam->value.str.len,
+                             list); 
+ if(ret<0) {
+  RETURN_FALSE;
+ } 
+ RETURN_TRUE;
+}
+/* }}} */
+
+
+/* ----------------------------------------------------------------------
+ * internal function
+ * long php3_intifx_update_char(long bid, char* param, long len, HashTable *list)
+ *
+ * updates the content of the char-object
+ *  bid: Id of charobject
+ *  param: string of new data
+ *  len: length of string
+ *  list: internal hashlist of php3
+ * return nothing
+ * ----------------------------------------------------------------------
+*/
+long php3_intifx_update_char(long bid, char* param, long len, HashTable *list) {
+ IFX_IDRES *Ifx_char;
+ int type;
+ 
+ Ifx_char = (IFX_IDRES *) php3_list_find(bid,&type);
+ if (type!=Informix_GLOBAL(php3_ifx_module).le_idresult && !(Ifx_char->type==TYPE_CHAR)) {
+  php3_error(E_WARNING,"%d is not a Informix char-result index",
+            bid);
+  return -1;
+ }
+
+ if(Ifx_char->CHAR.char_data!=NULL) {
+  efree(Ifx_char->CHAR.char_data);
+ }
+ Ifx_char->CHAR.char_data=NULL;
+ Ifx_char->CHAR.len=0;
+ 
+ if(param==NULL || len<0) {
+  Ifx_char->CHAR.char_data=NULL;
+  Ifx_char->CHAR.len=0;
+ } else {
+  Ifx_char->CHAR.char_data=emalloc(len+1);
+  if(Ifx_char->CHAR.char_data==NULL) {
+   php3_error(E_WARNING,"can't create char-resource");
+   return -1;
+  } 
+  memcpy(Ifx_char->CHAR.char_data,param,len);
+  Ifx_char->CHAR.char_data[len]=0;
+  Ifx_char->CHAR.len=len;
+ }
+ return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 $ifdef HAVE_IFX_IUS;
 
 
 
 
 /* ----------------------------------------------------------------------
-** int php3_ifxus_create_slob( int mode)
+** int ifxus_create_slob( int mode)
 **
 ** creates an slob-object and opens it
 **  mode: 1=LO_RDONLY, 2=LO_WRONLY, 4=LO_APPEND, 8=LO_RDWR, 16=LO_BUFFER, 32=LO_NOBUFFER -> or-mask
 ** return false on error otherwise the new Slob-Object-id
 ** ----------------------------------------------------------------------
 */
+
+/* {{{ proto int ifxus_create_slob(int mode)
+   creates a slob-object and opens it */
 void php3_ifxus_create_slob(INTERNAL_FUNCTION_PARAMETERS) {
  pval *pmode;
  long id;
@@ -3717,6 +4276,7 @@ void php3_ifxus_create_slob(INTERNAL_FUNCTION_PARAMETERS) {
  } 
  RETURN_LONG(id);
 }
+/* }}} */
 
 /* ----------------------------------------------------------------------
  * internal function
@@ -3729,42 +4289,45 @@ void php3_ifxus_create_slob(INTERNAL_FUNCTION_PARAMETERS) {
  * ----------------------------------------------------------------------
 */
 long php3_intifxus_create_slob(long create_mode, HashTable *list) {
- IFX_SLOBRES *Ifx_slob;
+ IFX_IDRES *Ifx_slob;
  int errcode;
  
 
- Ifx_slob=emalloc(sizeof(IFX_SLOBRES));
+ Ifx_slob=emalloc(sizeof(IFX_IDRES));
  if(Ifx_slob==NULL) {
   php3_error(E_WARNING,"can't create slob-resource");
   return -1;
  }
 
- errcode=ifx_lo_def_create_spec(&(Ifx_slob->createspec));     
+ errcode=ifx_lo_def_create_spec(&(Ifx_slob->SLOB.createspec));     
  if(errcode<0) {
   php3_error(E_WARNING,"can't create slob-resource");
   return -1;
  }
 
-
- Ifx_slob->lofd=ifx_lo_create(Ifx_slob->createspec,create_mode,&(Ifx_slob->slobdata),&errcode);     
- if(errcode<0 || Ifx_slob->lofd<0) {
+ Ifx_slob->type=TYPE_SLOB;
+ Ifx_slob->SLOB.lofd=ifx_lo_create(Ifx_slob->SLOB.createspec,create_mode,&(Ifx_slob->SLOB.slob_data),&errcode);     
+ if(errcode<0 || Ifx_slob->SLOB.lofd<0) {
   php3_error(E_WARNING,"can't create slob-resource");
   return -1;
  }
 
- return php3_list_insert(Ifx_slob,Informix_GLOBAL(php3_ifx_module).le_slobresult);
+ return php3_list_insert(Ifx_slob,Informix_GLOBAL(php3_ifx_module).le_idresult);
 }
 
 
 
 /* ----------------------------------------------------------------------
-** int php3_ifxus_free_slob(int bid)
+** int ifxus_free_slob(int bid)
 **
 ** deletes the slob-object
 **  bid: Id of Slobobject
 ** return false on error otherwise true
 ** ----------------------------------------------------------------------
 */
+
+/* {{{ proto int ifxus_free_slob(int bid)
+   deletes the slob-object */
 void php3_ifxus_free_slob(INTERNAL_FUNCTION_PARAMETERS) {
  pval *pid;
  long ret;
@@ -3780,6 +4343,7 @@ void php3_ifxus_free_slob(INTERNAL_FUNCTION_PARAMETERS) {
  } 
  RETURN_TRUE;
 }
+/* }}} */
 
 /* ----------------------------------------------------------------------
  * internal function
@@ -3793,11 +4357,11 @@ void php3_ifxus_free_slob(INTERNAL_FUNCTION_PARAMETERS) {
  * ----------------------------------------------------------------------
 */
 long php3_intifxus_free_slob(long bid, HashTable *list) {
- IFX_SLOBRES *Ifx_slob;
+ IFX_IDRES *Ifx_slob;
  int type;
  
- Ifx_slob = (IFX_SLOBRES *) php3_list_find(bid,&type);
- if (type!=Informix_GLOBAL(php3_ifx_module).le_slobresult) {
+ Ifx_slob = (IFX_IDRES *) php3_list_find(bid,&type);
+ if (type!=Informix_GLOBAL(php3_ifx_module).le_idresult || Ifx_slob->type!=TYPE_SLOB) {
   php3_error(E_WARNING,"%d is not a Informix slob-result index",
             bid);
   return -1;
@@ -3807,9 +4371,9 @@ long php3_intifxus_free_slob(long bid, HashTable *list) {
  if(php3_intifxus_close_slob(bid, list)<0) {
   return -1;
  }
- if(Ifx_slob->createspec!=NULL) {
-  ifx_lo_spec_free(Ifx_slob->createspec);
-  Ifx_slob->createspec=NULL;
+ if(Ifx_slob->SLOB.createspec!=NULL) {
+  ifx_lo_spec_free(Ifx_slob->SLOB.createspec);
+  Ifx_slob->SLOB.createspec=NULL;
  }
  efree(Ifx_slob);
  php3_list_delete(bid);
@@ -3820,13 +4384,16 @@ long php3_intifxus_free_slob(long bid, HashTable *list) {
 
 
 /* ----------------------------------------------------------------------
-** int php3_ifxus_close_slob(int bid)
+** int ifxus_close_slob(int bid)
 **
 ** deletes the slob-object
 **  bid: Id of Slobobject
 ** return false on error otherwise true
 ** ----------------------------------------------------------------------
 */
+
+/* {{{ proto int ifxus_close_slob(int bid)
+   deletes the slob-object */
 void php3_ifxus_close_slob(INTERNAL_FUNCTION_PARAMETERS) {
  pval *pid;
  long ret;
@@ -3842,6 +4409,7 @@ void php3_ifxus_close_slob(INTERNAL_FUNCTION_PARAMETERS) {
  } 
  RETURN_TRUE;
 }
+/* }}} */
 
 /* ----------------------------------------------------------------------
  * internal function
@@ -3855,28 +4423,28 @@ void php3_ifxus_close_slob(INTERNAL_FUNCTION_PARAMETERS) {
  * ----------------------------------------------------------------------
 */
 long php3_intifxus_close_slob(long bid, HashTable *list) {
- IFX_SLOBRES *Ifx_slob;
+ IFX_IDRES *Ifx_slob;
  int type;
  
- Ifx_slob = (IFX_SLOBRES *) php3_list_find(bid,&type);
- if (type!=Informix_GLOBAL(php3_ifx_module).le_slobresult) {
+ Ifx_slob = (IFX_IDRES *) php3_list_find(bid,&type);
+ if (type!=Informix_GLOBAL(php3_ifx_module).le_idresult || Ifx_slob->type!=TYPE_SLOB) {
   php3_error(E_WARNING,"%d is not a Informix slob-result index",
             bid);
   return -1;
  }
 
 
- if(Ifx_slob->lofd<0) {
+ if(Ifx_slob->SLOB.lofd<0) {
   php3_error(E_WARNING,"slob-resource already closed");
   return -1;
  }
 
- if(ifx_lo_close(Ifx_slob->lofd)<0) {
+ if(ifx_lo_close(Ifx_slob->SLOB.lofd)<0) {
   php3_error(E_WARNING,"can't close slob-resource");
   return -1;
  }
 
- Ifx_slob->lofd=-1;
+ Ifx_slob->SLOB.lofd=-1;
  return 0;
 }
 
@@ -3885,7 +4453,7 @@ long php3_intifxus_close_slob(long bid, HashTable *list) {
 
 
 /* ----------------------------------------------------------------------
-** int php3_ifxus_open_slob(long bid, int mode)
+** int ifxus_open_slob(long bid, int mode)
 **
 ** opens an slob-object
 **  bid: existing slob-id
@@ -3893,6 +4461,9 @@ long php3_intifxus_close_slob(long bid, HashTable *list) {
 ** return false on error otherwise the new Slob-Object-id
 ** ----------------------------------------------------------------------
 */
+
+/* {{{ proto int ifxus_open_slob(long bid, int mode)
+   opens an slob-object */
 void php3_ifxus_open_slob(INTERNAL_FUNCTION_PARAMETERS) {
  pval *pbid,*pmode;
  long id;
@@ -3921,6 +4492,7 @@ void php3_ifxus_open_slob(INTERNAL_FUNCTION_PARAMETERS) {
 
  RETURN_LONG(php3_intifxus_open_slob(pbid->value.lval,create_mode,list));
 }
+/* }}} */
 
 
 /* ----------------------------------------------------------------------
@@ -3934,25 +4506,25 @@ void php3_ifxus_open_slob(INTERNAL_FUNCTION_PARAMETERS) {
  * ----------------------------------------------------------------------
 */
 long php3_intifxus_open_slob(long bid, long create_mode, HashTable *list) {
- IFX_SLOBRES *Ifx_slob;
+ IFX_IDRES *Ifx_slob;
  int errcode;
  int type;
  
 
- Ifx_slob = (IFX_SLOBRES *) php3_list_find(bid,&type);
- if (type!=Informix_GLOBAL(php3_ifx_module).le_slobresult) {
+ Ifx_slob = (IFX_IDRES *) php3_list_find(bid,&type);
+ if (type!=Informix_GLOBAL(php3_ifx_module).le_idresult  || Ifx_slob->type!=TYPE_SLOB) {
   php3_error(E_WARNING,"%d is not a Informix slob-result index",
             bid);
   return -1;
  }
 
- if(Ifx_slob->lofd>0) {
+ if(Ifx_slob->SLOB.lofd>0) {
   php3_error(E_WARNING,"slob-resource already open");
   return -1;
  }
 
- Ifx_slob->lofd=ifx_lo_open(&(Ifx_slob->slobdata),create_mode,&errcode);     
- if(errcode<0 || Ifx_slob->lofd<0) {
+ Ifx_slob->SLOB.lofd=ifx_lo_open(&(Ifx_slob->SLOB.slob_data),create_mode,&errcode);     
+ if(errcode<0 || Ifx_slob->SLOB.lofd<0) {
   php3_error(E_WARNING,"can't open slob-resource");
   return -1;
  }
@@ -3968,52 +4540,53 @@ long php3_intifxus_open_slob(long bid, long create_mode, HashTable *list) {
 
 /* ----------------------------------------------------------------------
  * internal function
- * long php3_intifx_new_slob(HashTable *list)
+ * long php3_intifxus_new_slob(HashTable *list)
  *
  * creates an slob-object but don't open it
  *  list: internal hashlist of php3
- * return -1 on error otherwise the new Blob-Object-id
+ * return -1 on error otherwise the new slob-Object-id
  * ----------------------------------------------------------------------
 */
 long php3_intifxus_new_slob(HashTable *list) {
- IFX_SLOBRES *Ifx_slob;
+ IFX_IDRES *Ifx_slob;
  int errcode;
  
 
- Ifx_slob=emalloc(sizeof(IFX_SLOBRES));
+ Ifx_slob=emalloc(sizeof(IFX_IDRES));
  if(Ifx_slob==NULL) {
   php3_error(E_WARNING,"can't create slob-resource");
   return -1;
  }
 
- Ifx_slob->lofd=-1;
- Ifx_slob->createspec=NULL;
- return php3_list_insert(Ifx_slob,Informix_GLOBAL(php3_ifx_module).le_slobresult);
+ Ifx_slob->type=TYPE_SLOB;
+ Ifx_slob->SLOB.lofd=-1;
+ Ifx_slob->SLOB.createspec=NULL;
+ return php3_list_insert(Ifx_slob,Informix_GLOBAL(php3_ifx_module).le_idresult);
 }
 
 
 
 /* ----------------------------------------------------------------------
  * internal function
- * ifx_lo_t *php3_intifx_get_slobloc(long bid, HashTable *list)
+ * ifx_lo_t *php3_intifxus_get_slobloc(long bid, HashTable *list)
  *
  * retuens the ifx_lo_t-structure of a slob-object
  *  list: internal hashlist of php3
  * return -1 on error otherwise the new Blob-Object-id
  * ----------------------------------------------------------------------
 */
-ifx_lo_t *php3_intifx_get_slobloc(long bid, HashTable *list) {
- IFX_SLOBRES *Ifx_slob;
+ifx_lo_t *php3_intifxus_get_slobloc(long bid, HashTable *list) {
+ IFX_IDRES *Ifx_slob;
  int errcode, type;
  
- Ifx_slob = (IFX_SLOBRES *) php3_list_find(bid,&type);
- if (type!=Informix_GLOBAL(php3_ifx_module).le_slobresult) {
+ Ifx_slob = (IFX_IDRES *) php3_list_find(bid,&type);
+ if (type!=Informix_GLOBAL(php3_ifx_module).le_idresult  || Ifx_slob->type!=TYPE_SLOB) {
   php3_error(E_WARNING,"%d is not a Informix slob-result index",
             bid);
   return NULL;
  }
-
- return &(Ifx_slob->slobdata);
+ 
+ return &(Ifx_slob->SLOB.slob_data);
 }
 
 
@@ -4023,17 +4596,20 @@ ifx_lo_t *php3_intifx_get_slobloc(long bid, HashTable *list) {
 
 
 /* ----------------------------------------------------------------------
-** int php3_ifxus_tell_slob(long bid)
+** int ifxus_tell_slob(long bid)
 **
 ** returns the current file or seek position of an open slob-object
 **  bid: existing slob-id
 ** return false on error otherwise the seek-position
 ** ----------------------------------------------------------------------
 */
+
+/* {{{ proto int ifxus_tell_slob(long bid)
+   returns the current file or seek position of an open slob-object */
 void php3_ifxus_tell_slob(INTERNAL_FUNCTION_PARAMETERS) {
  pval *pbid;
  long bid;
- IFX_SLOBRES *Ifx_slob;
+ IFX_IDRES *Ifx_slob;
  ifx_int8_t akt_seek_pos;
  int type;
  long lakt_seek_pos;
@@ -4043,14 +4619,14 @@ void php3_ifxus_tell_slob(INTERNAL_FUNCTION_PARAMETERS) {
  }
  convert_to_long(pbid);
  bid=pbid->value.lval;
- Ifx_slob = (IFX_SLOBRES *) php3_list_find(bid,&type);
- if (type!=Informix_GLOBAL(php3_ifx_module).le_slobresult) {
+ Ifx_slob = (IFX_IDRES *) php3_list_find(bid,&type);
+ if (type!=Informix_GLOBAL(php3_ifx_module).le_idresult || Ifx_slob->type!=TYPE_SLOB) {
   php3_error(E_WARNING,"%d is not a Informix slob-result index",
             bid);
   RETURN_FALSE;
  }
  
- if(ifx_lo_tell(Ifx_slob->lofd,&akt_seek_pos)<0) {
+ if(ifx_lo_tell(Ifx_slob->SLOB.lofd,&akt_seek_pos)<0) {
   php3_error(E_WARNING,"can't perform tell-operation");
   RETURN_FALSE;
  }
@@ -4061,11 +4637,12 @@ void php3_ifxus_tell_slob(INTERNAL_FUNCTION_PARAMETERS) {
  }
  RETURN_LONG(lakt_seek_pos);
 }
+/* }}} */
 
 
 
 /* ----------------------------------------------------------------------
-** int php3_ifxus_seek_slob(long bid, int mode, long offset)
+** int ifxus_seek_slob(long bid, int mode, long offset)
 **
 ** sets the current file or seek position of an open slob-object
 **  bid: existing slob-id
@@ -4074,10 +4651,13 @@ void php3_ifxus_tell_slob(INTERNAL_FUNCTION_PARAMETERS) {
 ** return false on error otherwise the seek-position
 ** ----------------------------------------------------------------------
 */
+
+/* {{{ proto int ifxus_seek_slob(long bid, int mode, long offset)
+   sets the current file or seek position of an open slob-object */
 void php3_ifxus_seek_slob(INTERNAL_FUNCTION_PARAMETERS) {
  pval *pbid, *pmode, *poffset;
  long bid,lakt_seek_pos;
- IFX_SLOBRES *Ifx_slob;
+ IFX_IDRES *Ifx_slob;
  ifx_int8_t akt_seek_pos,offset;
  int type,mode;
  
@@ -4089,8 +4669,8 @@ void php3_ifxus_seek_slob(INTERNAL_FUNCTION_PARAMETERS) {
  convert_to_long(poffset);
  
  bid=pbid->value.lval;
- Ifx_slob = (IFX_SLOBRES *) php3_list_find(bid,&type);
- if (type!=Informix_GLOBAL(php3_ifx_module).le_slobresult) {
+ Ifx_slob = (IFX_IDRES *) php3_list_find(bid,&type);
+ if (type!=Informix_GLOBAL(php3_ifx_module).le_idresult || Ifx_slob->type!=TYPE_SLOB) {
   php3_error(E_WARNING,"%d is not a Informix slob-result index",
             bid);
   RETURN_FALSE;
@@ -4105,7 +4685,7 @@ void php3_ifxus_seek_slob(INTERNAL_FUNCTION_PARAMETERS) {
  }
  
  ifx_int8cvlong(poffset->value.lval,&offset);
- if(ifx_lo_seek(Ifx_slob->lofd,&offset, mode,&akt_seek_pos)<0) {
+ if(ifx_lo_seek(Ifx_slob->SLOB.lofd,&offset, mode,&akt_seek_pos)<0) {
   php3_error(E_WARNING,"can't perform seek-operation");
   RETURN_FALSE;
  }
@@ -4116,12 +4696,13 @@ void php3_ifxus_seek_slob(INTERNAL_FUNCTION_PARAMETERS) {
  }
  RETURN_LONG(lakt_seek_pos);
 }
+/* }}} */
 
 
 
 
 /* ----------------------------------------------------------------------
-** int php3_ifxus_read_slob(long bid, long nbytes)
+** int ifxus_read_slob(long bid, long nbytes)
 **
 ** reads nbytes of the slob-object
 **  bid: existing slob-id
@@ -4129,10 +4710,13 @@ void php3_ifxus_seek_slob(INTERNAL_FUNCTION_PARAMETERS) {
 ** return false on error otherwise the string
 ** ----------------------------------------------------------------------
 */
+
+/* {{{ proto int ifxus_read_slob(long bid, long nbytes)
+   reads nbytes of the slob-object */
 void php3_ifxus_read_slob(INTERNAL_FUNCTION_PARAMETERS) {
  pval *pbid, *pnbytes;
  long bid, nbytes;
- IFX_SLOBRES *Ifx_slob;
+ IFX_IDRES *Ifx_slob;
  int errcode,type;
  char *buffer;
  
@@ -4144,8 +4728,8 @@ void php3_ifxus_read_slob(INTERNAL_FUNCTION_PARAMETERS) {
  convert_to_long(pnbytes); 
  
  bid=pbid->value.lval;
- Ifx_slob = (IFX_SLOBRES *) php3_list_find(bid,&type);
- if (type!=Informix_GLOBAL(php3_ifx_module).le_slobresult) {
+ Ifx_slob = (IFX_IDRES *) php3_list_find(bid,&type);
+ if (type!=Informix_GLOBAL(php3_ifx_module).le_idresult || Ifx_slob->type!=TYPE_SLOB) {
   php3_error(E_WARNING,"%d is not a Informix slob-result index",
             bid);
   RETURN_FALSE;
@@ -4157,7 +4741,7 @@ void php3_ifxus_read_slob(INTERNAL_FUNCTION_PARAMETERS) {
   php3_error(E_WARNING,"cannot allocate memory");
   RETURN_FALSE;
  }
- if(ifx_lo_read(Ifx_slob->lofd,buffer,nbytes,&errcode)<0) {
+ if(ifx_lo_read(Ifx_slob->SLOB.lofd,buffer,nbytes,&errcode)<0) {
   efree(buffer);
   php3_error(E_WARNING,"error during reading slob");
   RETURN_FALSE;
@@ -4165,10 +4749,11 @@ void php3_ifxus_read_slob(INTERNAL_FUNCTION_PARAMETERS) {
  
  RETURN_STRINGL(buffer,nbytes,0); 
 }
+/* }}} */
 
 
 /* ----------------------------------------------------------------------
-** int php3_ifxus_write_slob(long bid, string content)
+** int ifxus_write_slob(long bid, string content)
 **
 ** writes a string into the slob-object
 **  bid: existing slob-id
@@ -4176,10 +4761,13 @@ void php3_ifxus_read_slob(INTERNAL_FUNCTION_PARAMETERS) {
 ** return false on error otherwise bytes written
 ** ----------------------------------------------------------------------
 */
+
+/* {{{ proto int ifxus_write_slob(long bid, string content)
+   writes a string into the slob-object */
 void php3_ifxus_write_slob(INTERNAL_FUNCTION_PARAMETERS) {
  pval *pbid, *pcontent;
  long bid, nbytes;
- IFX_SLOBRES *Ifx_slob;
+ IFX_IDRES *Ifx_slob;
  int errcode,type;
  char *buffer;
  
@@ -4191,8 +4779,8 @@ void php3_ifxus_write_slob(INTERNAL_FUNCTION_PARAMETERS) {
  convert_to_string(pcontent); 
  
  bid=pbid->value.lval;
- Ifx_slob = (IFX_SLOBRES *) php3_list_find(bid,&type);
- if (type!=Informix_GLOBAL(php3_ifx_module).le_slobresult) {
+ Ifx_slob = (IFX_IDRES *) php3_list_find(bid,&type);
+ if (type!=Informix_GLOBAL(php3_ifx_module).le_idresult || Ifx_slob->type!=TYPE_SLOB) {
   php3_error(E_WARNING,"%d is not a Informix slob-result index",
             bid);
   RETURN_FALSE;
@@ -4204,13 +4792,14 @@ void php3_ifxus_write_slob(INTERNAL_FUNCTION_PARAMETERS) {
   php3_error(E_WARNING,"string has no content");
   RETURN_FALSE;
  }
- if((nbytes=ifx_lo_write(Ifx_slob->lofd,buffer,nbytes,&errcode))<0) {
+ if((nbytes=ifx_lo_write(Ifx_slob->SLOB.lofd,buffer,nbytes,&errcode))<0) {
   php3_error(E_WARNING,"error during writing slob");
   RETURN_FALSE;
  }
  
  RETURN_LONG(nbytes); 
 }
+/* }}} */
 
 $endif;
 

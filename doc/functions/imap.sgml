@@ -4,14 +4,12 @@
 
   <partintro>
   <simpara>
-    To get these functions to work, you have to compile
-    PHP with --with-imap. That requires the c-client library
-    to be installed. Grab it from
-    ftp://ftp.cac.washington.edu/imap/imap-4.2.tar.Z and compile it.
-    Then copy c-client/c-client.a to /usr/local/lib or some
-    other directory on your link path and copy c-client/rfc822.h,
-    mail.h and linkage.h to /usr/local/include or some
-    other directory in your include path.
+    To get these functions to work, you have to compile PHP with --with-imap. That
+    requires the c-client library to be installed. Grab the latest version from <ulink
+    url="ftp://ftp.cac.washington.edu/imap/">ftp://ftp.cac.washington.edu/imap/</ulink>
+    and compile it. Then copy c-client/c-client.a to /usr/local/lib or some other
+    directory on your link path and copy c-client/rfc822.h, mail.h and linkage.h to
+    /usr/local/include or some other directory in your include path.
   </partintro>
 
   <refentry id="function.imap-append">
@@ -29,14 +27,16 @@
      <paramdef>string<parameter>flags</parameter></paramdef>
     </funcsynopsis>
     <para>
-	Returns true on sucess, false on error.
+     Returns true on sucess, false on error.
     <para>  
-	imap_append() function appends a string message to the specified
-	mailbox <parameter>mbox</parameter>. 
-     If the optional flags is specified, writes the <parameter>flags</parameter> to that mailbox also.
+     <function>imap_append</function> appends a string message to the specified
+     mailbox <parameter>mbox</parameter>. If the optional <parameter>flags</parameter>
+     is specified, writes the <parameter>flags</parameter> to that mailbox also.
+    <para>
+     When talking to the Cyrus IMAP server, you must use "\r\n" as your end-of-line
+     terminator instead of "\n" or the operation will fail.
    </refsect1>
   </refentry>
-
 
   <refentry id="function.imap-base64">
    <refnamediv>
@@ -50,8 +50,8 @@
      <paramdef>string <parameter>text</parameter></paramdef>
     </funcsynopsis>
     <para>
-	imap_base64() function decodes a BASE64 encoded text. The decoded
-	message is returned as a string. 
+     <function>imap_base64</function> function decodes BASE-64 encoded text. The
+     decoded message is returned as a string.
    </refsect1>
   </refentry>
 
@@ -70,9 +70,9 @@
      <paramdef>int <parameter>flags</parameter></paramdef>
     </funcsynopsis>
     <para>
-	imap_body() returns the body of the message, numbered <parameter>
-	msg_number</parameter> in the current mailbox.
-       The optional <parameter>flags</parameter> are a bit mask with one or more of the following:
+     <function>imap_body</function> returns the body of the message, numbered
+     <parameter> msg_number</parameter> in the current mailbox. The optional
+     <parameter>flags</parameter> are a bit mask with one or more of the following:
      <itemizedlist>
       <listitem><simpara>
 	FT_UID - The msgno is a UID
@@ -100,7 +100,7 @@
     <para>
 	Returns information about the current mailbox. Returns FALSE on failure.
     <para>  
-	The imap_check() function checks the current mailbox status on the server
+	The <function>imap_check</function> function checks the current mailbox status on the server
 	and returns the information in an object with following properties.
 	<para>
 	<informalexample>
@@ -130,11 +130,10 @@
      <paramdef>int <parameter>flags</parameter></paramdef>
     </funcsynopsis>
     <para>  
-	Close the imap stream. Takes an optional <parameter>flag</parameter> CL_EXPUNGE, which
-       will silently expunge the mailbox before closing.
+     Close the imap stream. Takes an optional <parameter>flag</parameter> CL_EXPUNGE,
+     which will silently expunge the mailbox before closing.
    </refsect1>
   </refentry>
-
 
   <refentry id="function.imap-createmailbox">
    <refnamediv>
@@ -148,10 +147,10 @@
      <paramdef>int <parameter>imap_stream</parameter></paramdef>
      <paramdef>string <parameter>mbox</parameter></paramdef>
     </funcsynopsis>
-    <para>
-	Returns true on success and false on error.
     <para>  
-	imap_createmailbox() creates a new mailbox specified by mbox.
+	 <function>imap_createmailbox</function> creates a new mailbox specified by <parameter>mbox</parameter>.
+    <para>
+     Returns true on success and false on error.
    </refsect1>
   </refentry>
 
@@ -171,9 +170,9 @@
     <para>
 	Returns true.
     <para>  
-	imap_delete() function marks message pointed by msg_number for
-	deletion. Actual deletion of the messages is done by <function>
-	imap_expunge </function>.
+	<function>imap_delete</function> function marks message pointed by
+    <parameter>msg_number</parameter> for deletion. Actual deletion of the messages is
+    done by <function>imap_expunge</function>.
    </refsect1>
   </refentry>
 
@@ -190,10 +189,10 @@
      <paramdef>int <parameter>imap_stream</parameter></paramdef>
      <paramdef>string <parameter>mbox</parameter></paramdef>
     </funcsynopsis>
-    <para>
-	Returns true on success and false on error.
     <para>  
-	imap_deletemailbox() deletes the specified mailbox.
+     <function>imap_deletemailbox</function> deletes the specified mailbox.
+    <para>
+     Returns true on success and false on error.
    </refsect1>
   </refentry>
 
@@ -209,11 +208,11 @@
      <funcdef>int <function>imap_expunge</function></funcdef>
      <paramdef>int <parameter>imap_stream</parameter></paramdef>
     </funcsynopsis>
-    <para>
-	Returns true.
     <para>  
-	imap_expunge() deletes all the messages marked for deletion by 
-	<function>imap_delete</function>.
+     <function>imap_expunge</function> deletes all the messages marked for deletion by
+     <function>imap_delete</function>.
+    <para>
+     Returns true.
    </refsect1>
   </refentry>
 
@@ -239,7 +238,7 @@
 	index into a body part list as per the IMAP4 specification. Body parts
 	are not decoded by this function.
      <para>
-     The options for imap_fetchbody are a bitmask with one or more of the following
+     The options for <function>imap_fetchbody </function>e a bitmask with one or more of the following
      <itemizedlist>
       <listitem><simpara>
 	FT_UID - The msgono is a UID
@@ -264,25 +263,24 @@
      <funcdef>array <function>imap_fetchstructure</function></funcdef>
      <paramdef>int <parameter>imap_stream</parameter></paramdef>
      <paramdef>int <parameter>msg_number</parameter></paramdef>
-     <paramdef>int <parameter>flags</parameter></paramdef>
     </funcsynopsis>
     <para>
-	This function causes a fetch of all the structured information for the
-	given msg_number. The returned value is an object with following
-	elements.
+	 This function causes a fetch of all the structured information for the given
+     <parameter>msg_number</parameter>. The returned value is an object with following
+     elements.
     <para>  
-	<informalexample><literallayout>
-	type, encoding, ifsubtype, subtype, ifdescription, description, ifid,
-	id, lines, bytes, ifparameters
-	</literallayout></informalexample>
+	 <informalexample><literallayout>
+	 type, encoding, ifsubtype, subtype, ifdescription, description, ifid,
+	 id, lines, bytes, ifparameters
+</literallayout></informalexample>
 	<para>
-	It also returns an array of objects called parameters[]. This object
-	has following properties.
+	 It also returns an array of objects called parameters[]. This object
+	 has following properties.
 	<informalexample><literallayout>
 	attribute, value
-	</literallayout></informalexample>
-	In case of multipart, it also returns an array of objects of all the
-	properties, called parts[].
+</literallayout></informalexample>
+	 In case of multipart, it also returns an array of objects of all the
+	 properties, called parts[].
    </refsect1>
   </refentry>
 
@@ -418,9 +416,9 @@ fetchsubject (subject line formatted to fit <parameter>subjectlength</parameter>
      <paramdef>string <parameter>pattern</parameter></paramdef>
     </funcsynopsis>
     <para>
-	Returns an array of all the mailboxes that you have subscribed.
-	The ref and pattern arguments specify the base location to search 
-	from and the pattern the mailbox name must match.  
+	Returns an array of all the mailboxes that you have subscribed. The
+    <parameter>ref</parameter> and <parameter>pattern</parameter> arguments specify the
+    base location to search from and the pattern the mailbox name must match.
    </refsect1>
   </refentry>
 
@@ -442,8 +440,8 @@ fetchsubject (subject line formatted to fit <parameter>subjectlength</parameter>
     <para>
 	Returns true on success and false on error.
     <para>  
-	Copies mail messages specified by <parameter>msglist</parameter> to
-	specified mailbox. msglist is a range not just message numbers.
+	Copies mail messages specified by <parameter>msglist</parameter> to specified
+    mailbox. <parameter>msglist</parameter> is a range not just message numbers.
      <para> flags is a bitmask of one or more of
      <itemizedlist>
       <listitem><simpara>
@@ -469,11 +467,11 @@ fetchsubject (subject line formatted to fit <parameter>subjectlength</parameter>
      <paramdef>string <parameter>msglist</parameter></paramdef>
      <paramdef>string <parameter>mbox</parameter></paramdef>
     </funcsynopsis>
-    <para>
-	Returns true on success and false on error.
     <para>  
-	Moves mail messages specified by <parameter>msglist</parameter> to
-	specified mailbox. msglist is a range not just message numbers.
+	 Moves mail messages specified by <parameter>msglist</parameter> to specified
+     mailbox. <parameter>msglist</parameter> is a range not just message numbers.
+    <para>
+     Returns true on success and false on error.
    </refsect1>
   </refentry>
 
@@ -528,9 +526,28 @@ fetchsubject (subject line formatted to fit <parameter>subjectlength</parameter>
      <paramdef>int <parameter>flags</parameter></paramdef>
     </funcsynopsis>
     <para>
-	Returns an IMAP stream on success and false on error.
-     <para>
-        the options are a bit mask with noe or more of the following:
+     Returns an IMAP stream on success and false on error.  This
+     function can also be used to open streams to POP3 and NNTP
+     servers.  To connect to an IMAP server running on port 143 on the
+     local machine, do the following:
+     <informalexample><programlisting role=php>
+$mbox = imap_open("{localhost:143}INBOX","user_id","password");
+</programlisting></informalexample>
+
+     To connect to a POP3 server on port 110 on the local server, use:
+     <informalexample><programlisting>
+$mbox = imap_open("{localhost/pop3:110}INBOX","user_id","password");
+</programlisting></informalexample>
+
+     To connect to an NNTP server on port 119 on the local server, use:
+     <informalexample><programlisting>
+$nntp = imap_open("{localhost/nntp:119}comp.test","","");
+</programlisting></informalexample>
+
+     To connect to a remote server replace "localhost" with the name
+     or the IP address of the server you want to connect to.
+    <para>
+     The options are a bit mask with one or more of the following:
      <itemizedlist>
       <listitem><simpara>
 	OP_READONLY - Open mailbox read-only
@@ -558,12 +575,11 @@ fetchsubject (subject line formatted to fit <parameter>subjectlength</parameter>
      <paramdef>int <parameter>imap_stream</parameter></paramdef>
     </funcsynopsis>
     <para>  
-	Returns true if the stream is still alive, false otherwise.
+	 Returns true if the stream is still alive, false otherwise.
     <para>
-	imap_ping() function pings the stream to see it is still active. It may
-	discover new mail; this is the preferred method for a periodic "new
-	mail check" as well as a "keep alive" for servers which have inactivity
-	timeout. 
+	 <function>imap_ping</function> function pings the stream to see it is still
+     active. It may discover new mail; this is the preferred method for a periodic "new
+     mail check" as well as a "keep alive" for servers which have inactivity timeout.
    </refsect1>
   </refentry>
 
@@ -581,10 +597,10 @@ fetchsubject (subject line formatted to fit <parameter>subjectlength</parameter>
      <paramdef>string <parameter>old_mbox</parameter></paramdef>
      <paramdef>string <parameter>new_mbox</parameter></paramdef>
     </funcsynopsis>
-    <para>
-	Returns true on success and false on error.
     <para>  
 	This function renames on old mailbox to new mailbox.
+    <para>
+    Returns true on success and false on error.
    </refsect1>
   </refentry>
 
@@ -607,7 +623,7 @@ fetchsubject (subject line formatted to fit <parameter>subjectlength</parameter>
     <para>  
 	This function reopens the specified stream to new mailbox.
       <para>
-        the options are a bit mask with noe or more of the following:
+        the options are a bit mask with one or more of the following:
      <itemizedlist>
       <listitem><simpara>
 	OP_READONLY - Open mailbox read-only
@@ -635,10 +651,10 @@ fetchsubject (subject line formatted to fit <parameter>subjectlength</parameter>
      <paramdef>int <parameter>imap_stream</parameter></paramdef>
      <paramdef>string <parameter>mbox</parameter></paramdef>
     </funcsynopsis>
-    <para>
-	Returns true on success and false on error.
     <para>  
 	Subscribe to a new mailbox.
+    <para>
+    Returns true on success and false on error.
    </refsect1>
   </refentry>
 
@@ -655,11 +671,11 @@ fetchsubject (subject line formatted to fit <parameter>subjectlength</parameter>
      <paramdef>int <parameter>imap_stream</parameter></paramdef>
      <paramdef>int <parameter>msg_number</parameter></paramdef>
     </funcsynopsis>
-    <para>
-	Returns true on success and false on error.
     <para>  
 	This function removes the deletion flag for a specified message, which
 	is set by <function>imap_delete</function>.
+    <para>
+    Returns true on success and false on error.
    </refsect1>
   </refentry>
 
@@ -676,10 +692,10 @@ fetchsubject (subject line formatted to fit <parameter>subjectlength</parameter>
      <paramdef>int <parameter>imap_stream</parameter></paramdef>
      <paramdef>string <parameter>mbox</parameter></paramdef>
     </funcsynopsis>
-    <para>
-	Returns true on success and false on error.
     <para>  
 	Unsubscribe from a specified mailbox.
+    <para>
+    Returns true on success and false on error.
    </refsect1>
   </refentry>
 
@@ -694,10 +710,10 @@ fetchsubject (subject line formatted to fit <parameter>subjectlength</parameter>
      <funcdef>string <function>imap_qprint</function></funcdef>
      <paramdef>string <parameter>string</parameter></paramdef>
     </funcsynopsis>
-    <para>
-	Returns an 8 bit (binary) string
     <para>  
 	Convert a quoted-printable string to an 8 bit string
+    <para>
+    Returns an 8 bit (binary) string
    </refsect1>
   </refentry>
 
@@ -712,10 +728,10 @@ fetchsubject (subject line formatted to fit <parameter>subjectlength</parameter>
      <funcdef>string <function>imap_8bit</function></funcdef>
      <paramdef>string <parameter>string</parameter></paramdef>
     </funcsynopsis>
-    <para>
-	Returns a quoted-printable string
     <para>  
 	Convert an 8bit string to a quoted-printable string.
+    <para>
+    Returns a quoted-printable string
    </refsect1>
   </refentry>
 
@@ -730,10 +746,10 @@ fetchsubject (subject line formatted to fit <parameter>subjectlength</parameter>
      <funcdef>string <function>imap_binary</function></funcdef>
      <paramdef>string <parameter>string</parameter></paramdef>
     </funcsynopsis>
-    <para>
-	Returns a base64 string
     <para>  
 	Convert an 8bit string to a base64 string.
+    <para>
+    Returns a base64 string
    </refsect1>
   </refentry>
 
@@ -753,7 +769,8 @@ fetchsubject (subject line formatted to fit <parameter>subjectlength</parameter>
      <paramdef>string <parameter>string</parameter></paramdef>
     </funcsynopsis>
     <para>
-	Returns an array containing the names of the mailboxes that have that string in the text of the mailbox.
+	 Returns an array containing the names of the mailboxes that have
+     <parameter>string</parameter> in the text of the mailbox.
    </refsect1>
   </refentry>
 
@@ -762,7 +779,7 @@ fetchsubject (subject line formatted to fit <parameter>subjectlength</parameter>
   <refentry id="function.imap-mailboxmsginfo">
    <refnamediv>
     <refname>imap_mailboxmsginfo</refname>
-    <refpurpose>Mailboxmsginfo current mailbox</refpurpose>
+    <refpurpose>Get information about the current mailbox</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
@@ -773,7 +790,7 @@ fetchsubject (subject line formatted to fit <parameter>subjectlength</parameter>
     <para>
 	Returns information about the current mailbox. Returns FALSE on failure.
     <para>  
-	The imap_mailboxmsginfo() function checks the current mailbox status on the server
+	The <function>imap_mailboxmsginfo</function> function checks the current mailbox status on the server
 	and returns the information in an object with following properties.
 	<para>
 	<informalexample>
@@ -805,7 +822,7 @@ fetchsubject (subject line formatted to fit <parameter>subjectlength</parameter>
      <paramdef>string <parameter>personal</parameter></paramdef>
     </funcsynopsis>
     <para>
-Returns a properly formatted email address given the mailbox, host, and personal info.
+     Returns a properly formatted email address given the mailbox, host, and personal info.
    </refsect1>
   </refentry>
 
@@ -824,10 +841,15 @@ Returns a properly formatted email address given the mailbox, host, and personal
     <para>
      This function parses the address tring and for each address, returns an array of objects.
      The 4 objects are:
+    <para>
+    <informalexample>
+    <literallayout>
      mailbox - the mailbox name (username)
      host   - the host name
      personal - the personal name
      adl - at domain source route
+    </literallayout>
+    </informalexample>
    </refsect1>
   </refentry>
 
@@ -846,13 +868,16 @@ Returns a properly formatted email address given the mailbox, host, and personal
      <paramdef>string <parameter>options</parameter></paramdef>
     </funcsynopsis>
     <para>
-    This function causes a store to add the specified flag to the flags
-set for the messages in the specified sequence.
-<para>
+     This function causes a store to add the specified flag to the flags set for the
+     messages in the specified sequence.
+    <para>
      The options are a bit mask with one or more of the following:
+    <informalexample>
+    <literallayout>
         ST_UID          The sequence argument contains UIDs instead of
                          sequence numbers
-</para>
+    </literallayout>
+    </informalexample>
    </refsect1>
   </refentry>
 
@@ -872,11 +897,14 @@ set for the messages in the specified sequence.
     </funcsynopsis>
     <para>
     This function causes a store to delete the specified flag to the flags set for the messages in the specified sequence.
-<para>
+    <para>
      The options are a bit mask with one or more of the following:
+    <informalexample>
+    <literallayout>
         ST_UID          The sequence argument contains UIDs instead of
                          sequence numbers
-</para>
+    </literallayout>
+    </informalexample>
    </refsect1>
   </refentry>
 
@@ -895,11 +923,13 @@ set for the messages in the specified sequence.
      <paramdef>int <parameter>options</parameter></paramdef>
     </funcsynopsis>
     <para>
-Returns an array of message numbers sorted by the given parameters
-<para>
-Rev is 1 for reverse-sorting.
-<para>
-Criteria can be one (and only one) of the following:
+     Returns an array of message numbers sorted by the given parameters
+    <para>
+     Rev is 1 for reverse-sorting.
+    <para>
+     Criteria can be one (and only one) of the following:
+    <informalexample>
+    <literallayout>
                 SORTDATE        message Date
                 SORTARRIVAL     arrival date
                 SORTFROM        mailbox in first From address
@@ -907,13 +937,16 @@ Criteria can be one (and only one) of the following:
                 SORTTO          mailbox in first To address 
                 SORTCC          mailbox in first cc address 
                 SORTSIZE        size of message in octets
-
-<para>
-The flags are a bitmask of one or more of the following:
+    </literallayout>
+    </informalexample>
+    <para>
+     The flags are a bitmask of one or more of the following:
+    <informalexample>
+    <literallayout>
         SE_UID          Return UIDs instead of sequence numbers
         SE_NOPREFETCH   Don't prefetch searched messages.
-
-</para>
+    </literallayout>
+    </informalexample>
    </refsect1>
   </refentry>
 
@@ -933,10 +966,12 @@ The flags are a bitmask of one or more of the following:
     </funcsynopsis>
     <para>
      This function causes a fetch of the complete, unfiltered RFC 822
-format header of the specified message as a text string and returns
-that text string.
-<para>
-The options are:
+     format header of the specified message as a text string and returns
+     that text string.
+    <para>
+     The options are:
+    <informalexample>
+    <literallayout>
         FT_UID          The msgno argument is a UID 
         FT_INTERNAL     The return string is in "internal" format,
                          without any attempt to canonicalize to CRLF
@@ -946,7 +981,8 @@ The options are:
                          IMAP connection if a full message text is
                          desired (e.g. in a "save to local file"
                          operation)
-
+    </literallayout>
+    </informalexample>
    </refsect1>
   </refentry>
 
@@ -963,14 +999,11 @@ The options are:
      <paramdef>int <parameter>msgno</parameter></paramdef>
     </funcsynopsis>
     <para>
-This function returns the UID for the given message sequence number
+     This function returns the UID for the given message sequence number
    </refsect1>
   </refentry>
 
-
-
  </reference>
-
 
 <!-- Keep this comment at the end of the file
 Local variables:

@@ -90,9 +90,9 @@ struct ndx_page {
 };
 typedef struct ndx_page ndx_page_t;
 
-extern ndx_header_t *ndx_get_header();
+extern ndx_header_t *ndx_get_header(int);
 
-extern ndx_record_t *ndx_get_first_rec();
-extern ndx_record_t *ndx_get_next_rec();
+extern ndx_record_t *ndx_get_first_rec(ndx_header_t *);
+extern ndx_record_t *ndx_get_next_rec(ndx_header_t *, ndx_record_t *);
 
 #endif /* _DBF_NDX_H_ */

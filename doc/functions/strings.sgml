@@ -28,7 +28,8 @@
      and NUL (the null byte).
 
     <para>
-     See also <function>stripslashes</function> and <function>quotemeta</function>.
+     See also <function>stripslashes</function>, <function>htmlspecialchars</function>
+	 and <function>quotemeta</function>.
 
    </refsect1>
   </refentry>
@@ -87,6 +88,78 @@ $str = sprintf("The string ends in escape: %c", 27);
    </refsect1>
   </refentry>
 
+  <refentry id="function.chunk-split">
+   <refnamediv>
+    <refname>chunk_split</refname>
+    <refpurpose>Split a string into smaller chunks</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>string <function>chunk_split</function></funcdef>
+     <paramdef>string <parameter>string</parameter></paramdef>
+     <paramdef>int <parameter><optional>chunklen</optional>
+      </parameter></paramdef>
+     <paramdef>string <parameter><optional>end</optional>
+      </parameter></paramdef>
+    </funcsynopsis>
+    <para>
+     Can be used to split a string into smaller chunks which is useful
+     for e.g. converting <link
+     linkend="function.base64-encode">base64_encode</link> output to
+     match RFC 2045 behaviour. It inserts every
+     <parameter>chunklen</parameter> (defaults to 76) chars the string
+     <parameter>end</parameter> (defaults to "\r\n").  It returns the
+     new string leaving the original string untouched.
+     <example>
+      <title>chr_replace() example</title>
+      <programlisting>
+# format $data using RFC 2045 semantics
+
+$new_string = chunk_split(base64_encode($data));
+
+</programlisting></example>
+     
+     This function is significantly faster than
+     <function>ereg_replace</function>.
+   </refsect1>
+  </refentry>
+
+  <refentry id="function.convert-cyr-string">
+   <refnamediv>
+    <refname>convert_cyr_string</refname>
+    <refpurpose>Convert from one Cyrillic character set to another</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>string <function>convert_cyr_string</function></funcdef>
+     <paramdef>string <parameter>str</parameter></paramdef>
+     <paramdef>string <parameter>from</parameter></paramdef>
+     <paramdef>string <parameter>to</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+	This function converts the given string from one Cyrillic character set to
+	another.  The <parameter>from</parameter> and <parameter>to</parameter> arguments
+	are single characters that represent the source and target Cyrillic character
+	sets.  The supported types are:
+     <itemizedlist>
+      <listitem><simpara>
+         k - koi8-r
+      <listitem><simpara>
+         w - windows-1251
+      <listitem><simpara>
+         i - iso8859-5
+      <listitem><simpara>
+         a - x-cp866
+      <listitem><simpara>
+         d - x-cp866
+      <listitem><simpara>
+         m - x-mac-cyrillic
+     </itemizedlist>
+   </refsect1>
+  </refentry>
+
   <refentry id="function.crypt">
    <refnamediv>
     <refname>crypt</refname>
@@ -119,6 +192,9 @@ $str = sprintf("The string ends in escape: %c", 27);
 	 2-character DES salt by default unless the default encryption type
 	 on the system is MD5 in which case a random MD5-compatible salt
 	 is generated.
+	<simpara>
+	 The standard DES encryption <function>crypt</function> contains
+	 the salt as the first two characters of the output.
     <simpara>
      There is no decrypt function, since <function>crypt</function>
      uses a one-way algorithm.
@@ -133,12 +209,23 @@ $str = sprintf("The string ends in escape: %c", 27);
    <refsect1>
     <title>Description</title>
     <funcsynopsis>
-     <funcdef <function>echo</function></funcdef>
+     <funcdef><function>echo</function></funcdef>
      <paramdef>string <parameter>arg1</parameter></paramdef>
      <paramdef>string <parameter><optional>argn</optional>...</parameter></paramdef>
     </funcsynopsis>
     <simpara>
      Outputs all parameters.
+	<para>
+	 <function>echo</function> is not actually a function (it
+	 is a language construct) so you are not required to use
+	 parantheses with it.
+
+     <example><title>echo example</title>
+      <programlisting>
+echo "Hello World";
+</programlisting>
+     </example>
+	</para>	 
 
     <simpara>
      See also:
@@ -199,6 +286,50 @@ $pieces = explode(" ", $pizza);
    </refsect1>
   </refentry>
 
+  <refentry id="function.get-meta-tags">
+   <refnamediv>
+    <refname>get_meta_tags</refname>
+    <refpurpose>Extracts all meta tag content attributes from a file
+     and returns an array</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>array <function>get_meta_tags</function></funcdef>
+     <paramdef>string <parameter>filename</parameter></paramdef>
+     <paramdef>int
+     <parameter><optional>use_include_path</optional></parameter></paramdef>
+    </funcsynopsis>
+    <para>
+     Opens <parameter>filename</parameter> and parses it line by line
+     for &lt;meta> tags of the form
+
+    <example>
+     <title>Meta Tags Example</title>
+      <programlisting>
+&lt;meta name="author" content="name">
+&lt;meta name="tags" content="php3 documentation">
+&lt;/head> &lt;!-- parsing stops here -->
+</programlisting></example>
+
+     (pay attention to line endings - PHP3 uses a native function to parse
+     the input, so a Mac file won't work on Unix).
+
+    <para> 
+
+     The value of the name property becomes the key, the value of the
+     content property becomes the value of the returned array, so you
+     can easily use standard array functions to traverse it or access
+     single values. Special characters in the value of the name
+     property are substituted with '_', the rest is converted to lower
+     case.
+     
+    <para>
+     Setting <parameter>use_include_path</parameter> to 1 will result
+     in PHP3 trying to open the file along the standard include path.
+   </refsect1>
+  </refentry>
+
   <refentry id="function.htmlspecialchars">
    <refnamediv>
     <refname>htmlspecialchars</refname>
@@ -216,6 +347,11 @@ $pieces = explode(" ", $pizza);
      be represented by HTML entities if they are to preserve their
      meanings. This function returns a string with these conversions
      made.
+
+    <simpara>
+	 This function is useful in preventing user-supplied text from
+	 containing HTML markup, such as in a message board or
+	 guest book application.
 
     <para>
      At present, the translations that are done are:
@@ -237,7 +373,7 @@ $pieces = explode(" ", $pizza);
     <para>
      Note that this functions does not translate anything beyond what
      is listed above. For full entity translation, see <function>htmlentities</function>.
-
+	
     <para>
      See also <function>htmlentities</function> and <function>nl2br</function>.
 
@@ -353,7 +489,8 @@ $colon_separated = implode($array, ":");
 
     <para>
      Calculates the MD5 hash of <parameter>str</parameter> using the
-     RSA Data Security, Inc. MD5 Message-Digest Algorithm.
+     <ulink url="http://ds.internic.net/rfc/rfc1321.txt">RSA Data
+     Security, Inc. MD5 Message-Digest Algorithm</ulink>.
 
    </refsect1>
   </refentry>
@@ -448,7 +585,7 @@ echo $second[1]; /* prints "another" */
    <refsect1>
     <title>Description</title>
     <funcsynopsis>
-     <funcdef <function>print</function></funcdef>
+     <funcdef><function>print</function></funcdef>
      <paramdef>string <parameter>arg</parameter></paramdef>
     </funcsynopsis>
     <simpara>
@@ -489,6 +626,24 @@ echo $second[1]; /* prints "another" */
    </refsect1>
   </refentry>
 
+  <refentry id="function.quoted-printable-decode">
+   <refnamediv>
+    <refname>quoted_printable_decode</refname>
+    <refpurpose>Convert a quoted-printable string to an 8 bit string
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>string <function>quoted_printable_decode</function></funcdef>
+     <paramdef>string <parameter>str</parameter></paramdef>
+    </funcsynopsis>
+	<simpara>
+	 This function returns an 8-bit binary string corresponding to the decoded
+	 quoted printable string.  This function is similar to <function>imap_qprint</function>,
+	 except this one does not require the IMAP module to work.
+   </refsect1>
+  </refentry>
+
   <refentry id="function.quotemeta">
    <refnamediv>
     <refname>QuoteMeta</refname>
@@ -508,8 +663,9 @@ echo $second[1]; /* prints "another" */
     <simpara>
      See also <function>addslashes</function>,
      <function>htmlentities</function>, 
-     <function>htmlspecialchars</function>, and 
-     <function>nl2br</function>.
+     <function>htmlspecialchars</function>, 
+     <function>nl2br</function>, and 
+     <function>stripslashes</function>.
 
    </refsect1>
   </refentry>
@@ -678,7 +834,7 @@ soundex("Lukasiewicz") == soundex("Lissajous") == 'L222';
    <refsect1>
     <title>Description</title>
     <funcsynopsis>
-     <funcdef <function>sprintf</function></funcdef>
+     <funcdef><function>sprintf</function></funcdef>
      <paramdef>string <parameter>format</parameter></paramdef>
      <paramdef>mixed <parameter><optional>args</optional></parameter>...</paramdef>
     </funcsynopsis>
@@ -727,7 +883,8 @@ soundex("Lukasiewicz") == soundex("Lissajous") == 'L222';
     An optional <emphasis>precision specifier</emphasis> that says
     how many decimal digits should be displayed for floating-point
     numbers.  This option has no effect for other types than
-    double.
+    double. (Another function useful for formatting numbers is
+	<function>number_format</function>.)
 
       <listitem><para>
 
@@ -789,7 +946,7 @@ soundex("Lukasiewicz") == soundex("Lissajous") == 'L222';
 
     <simpara>
      See also:
-     <function>printf</function>
+     <function>printf</function>, <function>number_format</function>
 
    </refsect1>
 
@@ -800,6 +957,17 @@ soundex("Lukasiewicz") == soundex("Lissajous") == 'L222';
       <title>sprintf: zero-padded integers</title>
       <programlisting>
 $isodate = sprintf("%04d-%02d-%02d", $year, $month, $day);
+</programlisting></example>
+
+     <example>
+      <title>sprintf: formatting currency</title>
+      <programlisting>
+$money1 = 68.75;
+$money2 = 54.35;
+$money = $money1 + $money2;
+// echo $money will output "123.1";
+$formatted = sprintf ("%01.2f", $money);
+// echo $formatted will output "123.10"
 </programlisting></example>
 
     </para>
@@ -923,7 +1091,7 @@ $isodate = sprintf("%04d-%02d-%02d", $year, $month, $day);
    <refsect1>
     <title>Description</title>
     <funcsynopsis>
-     <funcdef>string <function>strrpos</function></funcdef>
+     <funcdef>int <function>strrpos</function></funcdef>
      <paramdef>string <parameter>haystack</parameter></paramdef>
      <paramdef>char <parameter>needle</parameter></paramdef>
     </funcsynopsis>
@@ -956,9 +1124,10 @@ $isodate = sprintf("%04d-%02d-%02d", $year, $month, $day);
    <refsect1>
     <title>Description</title>
     <funcsynopsis>
-     <funcdef>string <function>strpos</function></funcdef>
+     <funcdef>int <function>strpos</function></funcdef>
      <paramdef>string <parameter>haystack</parameter></paramdef>
      <paramdef>string <parameter>needle</parameter></paramdef>
+     <paramdef>int <parameter><optional>offset</optional></parameter></paramdef>
     </funcsynopsis>
 
     <para>
@@ -973,6 +1142,11 @@ $isodate = sprintf("%04d-%02d-%02d", $year, $month, $day);
     <para>
      If <parameter>needle</parameter> is not a string, it is converted to
      an integer and applied as the ordinal value of a character.
+    <para>
+     The optional <parameter>offset</parameter> parameter allows you to
+     specify which character in <parameter>haystack</parameter> to start
+     searching. The position returned is still relative to the the beginning
+     of <parameter>haystack</parameter>.
 
     <para>
      See also <function>strrpos</function>, <function>strrchr</function>,
@@ -1002,10 +1176,6 @@ $isodate = sprintf("%04d-%02d-%02d", $year, $month, $day);
 
     <para>
      Returns false if <parameter>needle</parameter> is not found.
-
-    <para>
-     If <parameter>needle</parameter> is not found, false is
-     returned.
 
     <para>
      If <parameter>needle</parameter> contains more than one character,
@@ -1053,7 +1223,7 @@ $last = substr( strrchr( $text, 10 ), 1 );
 
   <refentry id="function.strspn">
    <refnamediv>
-    <refname>strcspn</refname>
+    <refname>strspn</refname>
     <refpurpose>find length of initial segment matching mask</refpurpose>
    </refnamediv>
    <refsect1>
@@ -1118,7 +1288,7 @@ $last = substr( strrchr( $text, 10 ), 1 );
      <paramdef>string <parameter>arg2</parameter></paramdef>
     </funcsynopsis>
     <para>
-     strtok() is used to tokenize a string.  That is, if you have a
+     <function>strtok</function> is used to tokenize a string.  That is, if you have a
      string like "This is an example string" you could tokenize this
      string into its individual words by using the space character as
      the token.
@@ -1142,6 +1312,10 @@ $last = substr( strrchr( $text, 10 ), 1 );
      multiple tokens in the token parameter.  The string will be
      tokenized when any one of the characters in the argument are
      found.
+
+    <para>
+     Also be careful that your tokens may be equal to "0". This
+     evaluates to false in conditional expressions.
 
     <para>
      See also <function>split</function> and
@@ -1206,6 +1380,44 @@ $last = substr( strrchr( $text, 10 ), 1 );
    </refsect1>
   </refentry>
 
+  <refentry id="function.str-replace">
+   <refnamediv>
+    <refname>str_replace</refname>
+    <refpurpose>Replace all occurrences of needle in haystack with str</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>string <function>str_replace</function></funcdef>
+     <paramdef>string <parameter>needle</parameter></paramdef>
+     <paramdef>string <parameter>str</parameter></paramdef>
+     <paramdef>string <parameter>haystack</parameter></paramdef>
+    </funcsynopsis>
+
+    <para>
+     This function replaces all occurences of <parameter>needle</parameter>
+     in <parameter>haystack</parameter> with the given 
+     <parameter>str</parameter>. If you don't need fancy replacing
+     rules, you should always use this function instead of
+     <function>ereg_replace</function>. 
+    <para>
+
+     <example>
+      <title>str_replace() example</title>
+      <programlisting>
+$bodytag = str_replace("%body%", "black", "&lt;body text=%body%>");
+      </programlisting>
+     </example>
+
+    <para>
+     This function is binary safe.
+     
+    <para>
+     See also <function>ereg_replace</function>.
+
+   </refsect1>
+  </refentry>
+
   <refentry id="function.strtr">
    <refnamediv>
     <refname>strtr</refname>
@@ -1266,18 +1478,30 @@ $addr = strtr($addr, "дец", "aao");
     <para>
      If <parameter>start</parameter> is positive, the returned string
      will start at the <parameter>start</parameter>'th character of
-     <parameter>string</parameter>.
+     <parameter>string</parameter>.  Examples:
+     <informalexample><programlisting role=php>
+$rest = substr("abcdef", 1); // returns "bcdef"
+$rest = substr("abcdef", 1, 3); // returns "bcd"
+</programlisting>
+     </informalexample>
 
     <para>
      If <parameter>start</parameter> is negative, the returned string
      will start at the <parameter>start</parameter>'th character
-     from the end of <parameter>string</parameter>.
+     from the end of <parameter>string</parameter>.  Examples:
+     <informalexample><programlisting role=php>
+$rest = substr("abcdef", -1); // returns "f"
+$rest = substr("abcdef", -2); // returns "ef"
+$rest = substr("abcdef", -3, 1); // returns "d"
+</programlisting>
+     </informalexample>
 
     <para>
      If <parameter>length</parameter> is given and is positive,
      the string returned will end <parameter>length</parameter>
      characters from <parameter>start</parameter>. If this would
-     result in a string with negative length, then the returned string
+     result in a string with negative length (because the start
+     is past the end of the string), then the returned string
      will contain the single character at <parameter>start</parameter>.
 
     <para>
@@ -1286,6 +1510,11 @@ $addr = strtr($addr, "дец", "aao");
      characters from the end of <parameter>string</parameter>. If this would
      result in a string with negative length, then the returned string
      will contain the single character at <parameter>start</parameter>.
+     Examples:
+     <informalexample><programlisting role=php>
+$rest = substr("abcdef", -1, -1); // returns "bcde"
+</programlisting>
+     </informalexample>
 
     <para>
      See also <function>strrchr</function> and
@@ -1315,8 +1544,7 @@ $addr = strtr($addr, "дец", "aao");
 
   <refentry id="function.ucfirst">
    <refnamediv>
-    <refname>ucfirst</refname> <refpurpose>Make a string's first
-    character uppercase.</refpurpose>
+    <refname>ucfirst</refname> <refpurpose>Make a string's first character uppercase</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
@@ -1337,6 +1565,28 @@ $addr = strtr($addr, "дец", "aao");
     <para>
      See also <function>strtoupper</function> and
      <function>strtolower</function>.
+
+   </refsect1>
+  </refentry>
+
+  <refentry id="function.ucwords">
+   <refnamediv>
+    <refname>ucwords</refname> <refpurpose>Uppercase the first character of each word in a string</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>string <function>ucwords</function></funcdef>
+     <paramdef>string <parameter>str</parameter></paramdef>
+    </funcsynopsis>
+
+    <simpara>
+     Capitalizes the first character of each word in <parameter>str</parameter> if
+     that character is alphabetic.
+
+    <para>
+     See also <function>strtoupper</function>,
+     <function>strtolower</function> and <function>ucfirst</function>.
 
    </refsect1>
   </refentry>

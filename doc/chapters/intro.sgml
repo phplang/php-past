@@ -18,27 +18,31 @@
      <simplelist columns=2>
       <member>Oracle</member>
       <member>Sybase</member>
-      <member>mSQL 1.x and 2.x</member>
+      <member>mSQL</member>
       <member>MySQL</member>
       <member>Solid</member>
-      <member>Generic ODBC</member>
+      <member>ODBC</member>
       <member>PostgreSQL</member>
       <member>Adabas D</member>
       <member>FilePro</member>
       <member>Velocis</member>
-      <member>All database systems with ODBC interface</member>
+      <member>Informix</member>
       <member>dBase</member>
       <member>Unix dbm</member>
      </simplelist>
     </blockquote>
 
+<!--
   <sect1 id="intro-concepts">
    <title>PHP3 Concepts</title>
    <simpara></simpara>
+-->
 
+<!--
   <sect1 id="intro-examples">
    <title>Some examples</title>
    <simpara></simpara>
+-->
 
   <sect1 id="intro-history">
    <title>A Brief History of PHP</title>

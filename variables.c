@@ -29,7 +29,7 @@
  */
 
 
-/* $Id: variables.c,v 1.155 1998/09/18 16:55:01 rasmus Exp $ */
+/* $Id: variables.c,v 1.159 1998/12/04 16:35:48 ssb Exp $ */
 
 #ifdef THREAD_SAFE
 #include "tls.h"
@@ -92,7 +92,7 @@ inline void pval_destructor(pval *pvalue INLINE_TLS)
 }
 
 
-void php3tls_pval_destructor(pval *pvalue)
+PHPAPI void php3tls_pval_destructor(pval *pvalue)
 {
 	TLS_VARS;
 
@@ -455,8 +455,9 @@ void php3_unset(pval *result, pval *var_ptr)
 		
 		if (!var_ptr || var_ptr->cs_data.array_write) { /* variable didn't exist before unset(), remove it completely */
 			clean_unassigned_variable_top(1 _INLINE_TLS);
+		} else if (!(var=var_ptr->value.varptr.pvalue)) {
+			result->value.lval = 1; /* the variable didn't parse properly, so it was obviously not set */
 		} else {
-			var = var_ptr->value.varptr.pvalue;
 			pval_destructor(var _INLINE_TLS);
 			var->value.str.val = undefined_variable_string;
 			var->value.str.len=0;
@@ -701,6 +702,64 @@ void get_regular_variable_pointer(pval *result, pval *varname INLINE_TLS)
 		}
 		pval_destructor(varname _INLINE_TLS);
 	}
+}
+
+
+/* CALLBACK functions to provide pointers to external modules
+ * that may need them. 
+ */
+PHPAPI HashTable *php3i_get_symbol_table(void) {
+	TLS_VARS;
+	return &GLOBAL(symbol_table);
+}
+
+PHPAPI HashTable *php3i_get_function_table(void) {
+	TLS_VARS;
+	return &GLOBAL(function_table);
+}
+
+
+PHPAPI pval *php3i_long_pval(long value)
+{
+	pval *ret = emalloc(sizeof(pval));
+
+	ret->type = IS_LONG;
+	ret->value.lval = value;
+	return ret;
+}
+
+
+PHPAPI pval *php3i_double_pval(double value)
+{
+	pval *ret = emalloc(sizeof(pval));
+
+	ret->type = IS_DOUBLE;
+	ret->value.dval = value;
+	return ret;
+}
+
+
+PHPAPI pval *php3i_string_pval(const char *str)
+{
+	pval *ret = emalloc(sizeof(pval));
+	int len = strlen(str);
+
+	ret->type = IS_STRING;
+	ret->value.str.len = len;
+	ret->value.str.val = estrndup(str, len);
+	return ret;
+}
+
+
+PHPAPI char *php3i_pval_strdup(pval *val)
+{
+	if (val->type == IS_STRING) {
+		char *buf = emalloc(val->value.str.len + 1);
+		memcpy(buf, val->value.str.val, val->value.str.len);
+		buf[val->value.str.len] = '\0';
+		return buf;
+	}
+	return NULL;
 }
 
 

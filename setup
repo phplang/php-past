@@ -29,7 +29,7 @@
 # |             Ariel Shkedi <ars@ziplink.net> or <as@altavista.net>     |
 # +----------------------------------------------------------------------+
 # 
-# $Id: setup,v 1.44 1998/09/22 15:57:22 steinm Exp $
+# $Id: setup,v 1.52 1998/12/19 21:07:58 sas Exp $
 
 if [ "$1" = "-q" ]; then
     quiet_mode=on
@@ -295,12 +295,24 @@ define_option with-solid 'Solid support?' yesnodir \
 '     Whether to build PHP with Solid support.\n
      More information about Solid can be found at http://www.solidtech.com/.'
 
+define_option with-empress 'Empress support?' yesnodir \
+    "no $EMPRESSPATH Empress home" \
+'    Whether to build PHP with Empress support.  Has been confirmed to
+    work with Empress Version 8.10.  If you have not set up your
+    Empress environment, enter what $EMPRESSPATH is usually set to here.
+    More info about Empress can be found at http://www.empress.com/.'
+
 define_option with-informix 'Informix support?' yesnodir \
     "no $INFORMIXDIR Informix home" \
 '    Whether to build PHP with Informix support. If you have not set up your\n
     Informix environment, enter what $INFORMIXDIR is usually set to here.\n
     You MUST set $INFORMIXDIR before trying to compile!\n
     More info about Informix can be found at http://www.informix.com/.'
+
+define_option with-interbase 'InterBase support?' yesnodir \
+    'no /usr/interbase InterBase base install' \
+'     Whether to build PHP with InterBase support. More\n
+      information about InterBase can be found at http://www.interbase.com/.'
 
 define_option with-hyperwave 'Hyperwave support?' yesno no \
 '     Whether to build with Hyperwave support. More\n
@@ -339,8 +351,9 @@ define_option enable-unified-odbc 'Enable unified ODBC support?' yesno yes \
 '    Whether to enabled the unified ODBC support.  This is a database\n
     module that compiles with the C API of several DBMSes that happen to\n
     use ODBC as their C-API.  Has been tested with iODBC, Solid, Adabas D,\n
-    and Sybase SQL Anywhere. Requires that some one (and only one) specific\n 
-	ODBC module is enabled, or some custom ODBC library specified instead.'
+    Empress, and Sybase SQL Anywhere. Requires that some one (and only one)\n
+    specific ODBC module is enabled, or some custom ODBC library specified\n
+    instead.'
 fi
 
 define_option with-dbase 'dBase support? ' yesno no \
@@ -349,10 +362,27 @@ define_option with-dbase 'dBase support? ' yesno no \
 define_option with-filepro 'filePro support? ' yesno no \
 '    Whether to use the bundled filePro library.  Read-access only.'
 
+define_option with-pdflib 'pdflib 0.6 support? ' yesnodir \
+    'no /usr/local pdflib install' \
+'    Whether to use the pdflib support to write .pdf-files.\n
+    Tested for version 0.6!'
+
+define_option with-fdftk 'Acrobat Forms (Ftf Toolkit 2.0) support? ' yesnodir \
+    'no /usr/local ftktk install' \
+'    Whether to use the Ftf Toolkit support to write/read .fdf-files.\n
+    Tested for version 2.0!'
+
 define_option with-zlib 'zlib (>= 1.0.9) support? ' yesnodir \
     'no /usr zlib install' \
 '    Whether to use the zlib support to read/write .gz-files.\n
     Requires zlib version >= 1.0.9!'
+
+define_option enable-sysvshm 'System V shared memory support? ' yesno no \
+'    Whether to use the System V shared memory (currently only solaris and linux).'
+
+define_option enable-sysvsem 'System V semaphores support? ' yesno no \
+'    Whether to use the System V semaphores (currently only solaris and linux).'
+
 
 define_option with-config-file-path 'Default config directory?' yesnodir \
     'no /usr/local/lib Configuration file' \

@@ -7,6 +7,8 @@
 #include <stdio.h>
 #include <sys/types.h>
 
+#include "dbf_misc.h"
+
 /*
  * routine to change little endian long to host long
  */

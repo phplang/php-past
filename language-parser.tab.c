@@ -132,7 +132,7 @@
 */
 
 
-/* $Id: language-parser.y,v 1.176 1998/10/04 12:26:59 zeev Exp $ */
+/* $Id: language-parser.y,v 1.177 1998/10/23 20:46:54 shane Exp $ */
 
 
 /* 
@@ -1518,7 +1518,7 @@ static const short yycheck[] = {     2,
 #define YYPURE 1
 
 /* -*-C-*-  Note some compilers choke on comments on `#line' lines.  */
-#line 3 "/usr/lib/bison.simple"
+#line 3 "/usr/local/share/bison.simple"
 
 /* Skeleton output parser for bison,
    Copyright (C) 1984, 1989, 1990 Free Software Foundation, Inc.
@@ -1711,7 +1711,7 @@ __yy_memcpy (char *to, char *from, int count)
 #endif
 #endif
 
-#line 196 "/usr/lib/bison.simple"
+#line 196 "/usr/local/share/bison.simple"
 
 /* The user can define YYPARSE_PARAM as the name of an argument to be passed
    into yyparse.  The argument should have type void *.
@@ -3059,7 +3059,7 @@ case 295:
     break;}
 }
    /* the action file gets copied in in place of this dollarsign */
-#line 498 "/usr/lib/bison.simple"
+#line 498 "/usr/local/share/bison.simple"
 
   yyvsp -= yylen;
   yyssp -= yylen;
@@ -3269,7 +3269,7 @@ inline void clear_lookahead(int *yychar)
 /*** Manhattan project ***/
 /* Be able to call user-levle functions from C */
 /* "A beer and serious lack of sleep do wonders" -- Zeev */
-int call_user_function(HashTable *function_table, pval *object, pval *function_name, pval *retval, int param_count, pval *params[])
+PHPAPI int call_user_function(HashTable *function_table, pval *object, pval *function_name, pval *retval, int param_count, pval *params[])
 {
 	pval *func;
 	pval return_offset;

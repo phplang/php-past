@@ -29,7 +29,7 @@
  */
 
 
-/* $Id: php3_string.h,v 1.22 1998/08/04 13:32:10 rasmus Exp $ */
+/* $Id: php3_string.h,v 1.27 1998/12/20 15:44:58 rasmus Exp $ */
 
 #ifndef _PHPSTRING_H
 #define _PHPSTRING_H
@@ -43,6 +43,7 @@ extern void php3_strcmp(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_strspn(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_strcspn(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_strcasecmp(INTERNAL_FUNCTION_PARAMETERS);
+extern void php3_str_replace(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_chop(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_trim(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_ltrim(INTERNAL_FUNCTION_PARAMETERS);
@@ -75,6 +76,8 @@ extern void php3_chr(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_ord(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_newline_to_br(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_setlocale(INTERNAL_FUNCTION_PARAMETERS);
+extern void php3_stristr(INTERNAL_FUNCTION_PARAMETERS);
+extern void php3_chunk_split(INTERNAL_FUNCTION_PARAMETERS);
 
 #if HAVE_CRYPT
 extern php3_module_entry crypt_module_entry;
@@ -90,5 +93,6 @@ extern char *_StrTr(char *string, char *str_from, char *str_to);
 extern PHPAPI char *_php3_addslashes(char *string, int length, int *new_length, int freeit);
 extern PHPAPI void _php3_stripslashes(char *string, int *len);
 extern PHPAPI void _php3_dirname(char *str, int len);
+extern PHPAPI char *php3i_stristr(unsigned char *s, unsigned char *t);
 
 #endif /* _PHPSTRING_H */

@@ -13,6 +13,7 @@
 
 #include <stdio.h>
 #include <fcntl.h>
+#include <ctype.h>
 
 #define	OPEN_RDWR	(O_RDWR | O_CREAT | O_TRUNC)
 #define	OPEN_RDONLY	(O_RDONLY)

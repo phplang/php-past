@@ -611,7 +611,7 @@ ifx_free_result ($rid);
      <paramdef>string <parameter><optional>html_table_options</optional></parameter></paramdef>
     </funcsynopsis>
     <para>
-     Returns TRUE on success, FALSE on error.
+     Returns the number of rows fetched or FALSE on error.
     </para><para>
      Formats all rows of the <parameter>result_id</parameter> query
      into a html table. The optional second argument is a string of
@@ -734,6 +734,26 @@ for ($i = 0; $i < count($properties); $i++) {
    </refsect1>
   </refentry>
 
+ <refentry id="function.ifx-num-rows">
+   <refnamediv>
+    <refname>ifx_num_rows</refname>
+    <refpurpose>Count the rows already fetched a query</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>ifx_num_rows</function></funcdef>
+     <paramdef>int <parameter>result_id</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+     Gives the number of rows fetched so far for a query with
+     <parameter>result_id</parameter> after a
+     <function>ifx_query</function> or <function>ifx_do</function>
+     query.
+    </para>
+   </refsect1>
+  </refentry>
+
   <refentry id="function.ifx-free-result">
    <refnamediv>
     <refname>ifx_free_result</refname>
@@ -748,6 +768,82 @@ for ($i = 0; $i < count($properties); $i++) {
     <para>
      Releases resources for the query associated with
      <parameter>result_id</parameter>.  Returns FALSE on error.
+    </para>
+   </refsect1>
+  </refentry>
+
+  <refentry id="function.ifx-create-char">
+   <refnamediv>
+    <refname>ifx_create_char</refname>
+    <refpurpose>Creates an char object</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>ifx_create_char</function></funcdef>
+     <paramdef>string <parameter>param</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+     Creates an char object. <parameter>param</parameter> should
+     be the char content.
+    </para> 
+   </refsect1>
+  </refentry>
+
+  <refentry id="function.ifx-free-char">
+   <refnamediv>
+    <refname>ifx_free_char</refname>
+    <refpurpose>Deletes the char object</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>ifx_free_char</function></funcdef>
+     <paramdef>int <parameter>bid</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+     Deletes the charobject for the given char object-id
+     <parameter>bid</parameter>. Returns FALSE on error otherwise
+     TRUE.  
+    </para>
+   </refsect1>
+  </refentry>
+
+  <refentry id="function.ifx-update-char">
+   <refnamediv>
+    <refname>ifx_update_char</refname>
+    <refpurpose>Updates the content of the char object</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>ifx_update_char</function></funcdef>
+     <paramdef>int <parameter>bid</parameter></paramdef>
+     <paramdef>string <parameter>content</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+     Updates the content of the char object for the given char object
+     <parameter>bid</parameter>. <parameter>content</parameter> is a
+     string with new data. Returns FALSE on error otherwise TRUE.
+    </para>
+   </refsect1>
+  </refentry>
+
+  <refentry id="function.ifx-get-char">
+   <refnamediv>
+    <refname>ifx_get_char</refname>
+    <refpurpose>Return the content of the char object</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>ifx_get_char</function></funcdef>
+     <paramdef>int <parameter>bid</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+     Returns the content of the char object for the given char
+     object-id <parameter>bid</parameter>.
+    </para>
    </refsect1>
   </refentry>
 
@@ -932,24 +1028,6 @@ for ($i = 0; $i < count($properties); $i++) {
    </refsect1>
   </refentry>
 
-  <refentry id="function.ifx-intifx-null">
-   <refnamediv>
-    <refname>ifx_intifx_null</refname>
-    <refpurpose>Returns the NULL-string depending on nullformat</refpurpose>
-   </refnamediv>
-   <refsect1>
-    <title>Description</title>
-    <funcsynopsis>
-     <funcdef>void <function>ifx_intifx_null</function></funcdef>
-     <paramdef>void </paramdef>
-    </funcsynopsis>
-    <para>
-     Return the NULL-string depending on
-     <function>ifx_nullformat</function> Returns "" or "NULL".
-    </para>
-   </refsect1>
-  </refentry>
-
   <refentry id="function.ifxus-create-slob">
    <refnamediv>
     <refname>ifxus_create_slob</refname>
@@ -1112,62 +1190,6 @@ for ($i = 0; $i < count($properties); $i++) {
    </refsect1>
   </refentry>
 
-<!-- was solls? --> 
-<!--
- <refentry id="function.ifx-num-rows">
-   <refnamediv>
-    <refname>ifx_num_rows</refname>
-    <refpurpose></refpurpose>
-   </refnamediv>
-   <refsect1>
-    <title>Description</title>
-    <funcsynopsis>
-     <funcdef><function>ifx_num_rows</function></funcdef>
-     <paramdef><parameter></parameter></paramdef>
-    </funcsynopsis>
-   </refsect1>
-  </refentry>
-
-  <refentry id="function.ifx-result">
-   <refnamediv>
-    <refname>ifx_result</refname>
-    <refpurpose>get result data</refpurpose>
-   </refnamediv>
-   <refsect1>
-    <title>Description</title>
-    <funcsynopsis>
-     <funcdef>int <function>ifx_result</function></funcdef>
-     <paramdef>int <parameter>result</parameter></paramdef>
-     <paramdef>int <parameter>row</parameter></paramdef>
-     <paramdef>mixed <parameter>field</parameter></paramdef>
-    </funcsynopsis>
-    <para> 
-     Returns: The contents of the cell at the row and offset in the
-     specified Informix result set.
-    <para>
-     <function>ifx_result</function> returns the contents of one
-     cell from a Informix result set.  The field argument can be the
-     field's offset, or the field's name, or the field's table dot
-     field's name (fieldname.tablename).  If the column name has been
-     aliased ('select foo as bar from...'), use the alias instead of
-     the column name.
-    <para>
-     When working on large result sets, you should consider using one
-     of the functions that fetch an entire row (specified below).  As
-     these functions return the contents of multiple cells in one
-     function call, they're MUCH quicker than
-     <function>ifx_result</function>.  Also, note that specifying a
-     numeric offset for the field argument is much quicker than
-     specifying a fieldname or tablename.fieldname argument.
-    <para>
-     Recommended high-performance alternatives:
-     <function>ifx_fetch_row</function>, 
-     <function>ifx_fetch_array</function>, and
-     <function>ifx_fetch_object</function>.
-   </refsect1>
-  </refentry>
-
--->
 
  </reference>
 

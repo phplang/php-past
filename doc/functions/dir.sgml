@@ -105,8 +105,22 @@ $d->close();
      <funcdef>string <function>readdir</function></funcdef>
      <paramdef>int <parameter>dir_handle</parameter></paramdef>
     </funcsynopsis>
-<para>    Returns the filename of the next file from the directory. The
-    filenames are not returned in any particular order.</para>
+    <para>
+     Returns the filename of the next file from the directory. The
+     filenames are not returned in any particular order.
+    <example><title>List all files in the current directory</title>
+    <programlisting>
+&lt;?php
+    $handle=opendir('.');
+    echo "Directory handle: $handle\n";
+    echo "Files:\n";
+    while ($file = readdir($handle)) {
+        echo "$file\n";
+    }
+    closedir($handle); 
+?>
+    </programlisting>
+    </example>
    </refsect1>
   </refentry>
 

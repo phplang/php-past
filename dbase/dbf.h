@@ -18,10 +18,15 @@
 
 #include <stdlib.h>
 #include <string.h>
-#if MSVC5
+#ifdef WIN32
 #include <io.h>
 #else
 #include <unistd.h>
+#endif
+
+/* So we can use O_BINARY on non-Win32 systems. */
+#if !defined(O_BINARY) && !defined(WIN32)
+#define O_BINARY (0)
 #endif
 
 struct dbf_dhead {

@@ -26,7 +26,7 @@
    | Authors: Rasmus Lerdorf <rasmus@lerdorf.on.ca>                       |
    +----------------------------------------------------------------------+
  */
-/* $Id: snmp.c,v 1.2 1998/09/19 14:21:25 rasmus Exp $ */
+/* $Id: snmp.c,v 1.7 1998/11/15 07:45:19 jah Exp $ */
 
 #include "php.h"
 #include "internal_functions.h"
@@ -52,6 +52,15 @@
 #include <unistd.h>
 #endif
 #if HAVE_SNMP
+
+#ifndef __P
+#ifdef __GNUC__
+#define __P(args) args
+#else
+#define __P(args) ()
+#endif
+#endif
+
 #include "asn1.h"
 #include "snmp_api.h"
 #include "snmp_client.h"
@@ -59,6 +68,12 @@
 #include "snmp.h"
 #include "parse.h"
 #include "mib.h"
+
+/* ucd-snmp 3.3.1 changed the name of a few #defines... They've been changed back to the original ones in 3.5.3! */
+#ifndef SNMP_MSG_GET
+#define SNMP_MSG_GET GET_REQ_MSG
+#define SNMP_MSG_GETNEXT GETNEXT_REQ_MSG
+#endif
 
 void _php3_snmp(INTERNAL_FUNCTION_PARAMETERS, int st);
 
@@ -71,7 +86,7 @@ void sprint_variable(char *, oid *, int, struct variable_list *);
 function_entry snmp_functions[] = {
     {"snmpget", php3_snmpget, NULL},
     {"snmpwalk", php3_snmpwalk, NULL},
-    {NULL,NULL}
+    {NULL,NULL,NULL}
 };
 
 php3_module_entry snmp_module_entry = {
@@ -238,13 +253,19 @@ retry:
 	snmp_close(ss);
 }
 
+/* {{{ proto string snmpget(string host, string community, string object_id [, int timeout [, int retries]]) 
+   Fetch an SNMP object */
 void php3_snmpget(INTERNAL_FUNCTION_PARAMETERS) {
 	_php3_snmp(INTERNAL_FUNCTION_PARAM_PASSTHRU,1);
 }
+/* }}} */
 
+/* {{{ proto string snmpwalk(string host, string community, string object_id [, int timeout [, int retries]]) 
+   Return all objects under the specified object id */
 void php3_snmpwalk(INTERNAL_FUNCTION_PARAMETERS) {
 	return _php3_snmp(INTERNAL_FUNCTION_PARAM_PASSTHRU,2);
 }
+/* }}} */
 
 #endif
 

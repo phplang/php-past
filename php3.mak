@@ -25,9 +25,6 @@ NULL=
 NULL=nul
 !ENDIF 
 
-CPP=cl.exe
-RSC=rc.exe
-
 !IF  "$(CFG)" == "php3 - Win32 Release"
 
 OUTDIR=.\cgi_release
@@ -79,6 +76,7 @@ CLEAN :
 	-@erase "$(INTDIR)\image.obj"
 	-@erase "$(INTDIR)\info.obj"
 	-@erase "$(INTDIR)\internal_functions.obj"
+	-@erase "$(INTDIR)\iptc.obj"
 	-@erase "$(INTDIR)\language-parser.tab.obj"
 	-@erase "$(INTDIR)\language-scanner.obj"
 	-@erase "$(INTDIR)\link.obj"
@@ -119,7 +117,7 @@ CLEAN :
 	-@erase "$(INTDIR)\url.obj"
 	-@erase "$(INTDIR)\var.obj"
 	-@erase "$(INTDIR)\variables.obj"
-	-@erase "$(INTDIR)\vc50.idb"
+	-@erase "$(INTDIR)\vc60.idb"
 	-@erase "$(INTDIR)\wfile.obj"
 	-@erase "$(INTDIR)\winsnmp.obj"
 	-@erase "$(INTDIR)\winutil.obj"
@@ -129,95 +127,120 @@ CLEAN :
 "$(OUTDIR)" :
     if not exist "$(OUTDIR)/$(NULL)" mkdir "$(OUTDIR)"
 
-CPP_PROJ=/nologo /MT /W3 /GX /O2 /I "." /I "regex\\" /I "d:\src\bind\include"\
- /D "NDEBUG" /D "MSVC5" /D "WIN32" /D "_CONSOLE" /D "_MBCS"\
- /Fp"$(INTDIR)\php3.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c 
-CPP_OBJS=.\cgi_release/
-CPP_SBRS=.
+CPP=cl.exe
+CPP_PROJ=/nologo /MT /W3 /GX /O2 /I "." /I "regex\\" /I "d:\src\bind\include" /D "NDEBUG" /D "MSVC5" /D "WIN32" /D "_CONSOLE" /D "_MBCS" /Fp"$(INTDIR)\php3.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c 
+
+.c{$(INTDIR)}.obj::
+   $(CPP) @<<
+   $(CPP_PROJ) $< 
+<<
+
+.cpp{$(INTDIR)}.obj::
+   $(CPP) @<<
+   $(CPP_PROJ) $< 
+<<
+
+.cxx{$(INTDIR)}.obj::
+   $(CPP) @<<
+   $(CPP_PROJ) $< 
+<<
+
+.c{$(INTDIR)}.sbr::
+   $(CPP) @<<
+   $(CPP_PROJ) $< 
+<<
+
+.cpp{$(INTDIR)}.sbr::
+   $(CPP) @<<
+   $(CPP_PROJ) $< 
+<<
+
+.cxx{$(INTDIR)}.sbr::
+   $(CPP) @<<
+   $(CPP_PROJ) $< 
+<<
+
+RSC=rc.exe
 BSC32=bscmake.exe
 BSC32_FLAGS=/nologo /o"$(OUTDIR)\php3.bsc" 
 BSC32_SBRS= \
 	
 LINK32=link.exe
-LINK32_FLAGS=lib44bsd95.lib resolv.lib winmm.lib wsock32.lib netapi32.lib\
- kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib\
- shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo\
- /version:3.0 /subsystem:console /incremental:no /pdb:"$(OUTDIR)\php.pdb"\
- /machine:I386 /out:"$(OUTDIR)\php.exe" /libpath:"\src\lib"\
- /libpath:"d:\src\bind\lib" 
+LINK32_FLAGS=lib44bsd95.lib resolv.lib winmm.lib wsock32.lib netapi32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /version:3.0 /subsystem:console /incremental:no /pdb:"$(OUTDIR)\php.pdb" /machine:I386 /out:"$(OUTDIR)\php.exe" /libpath:"\src\lib" /libpath:"d:\src\bind\lib" 
 LINK32_OBJS= \
-	"$(INTDIR)\alloc.obj" \
+	"$(INTDIR)\COM.obj" \
+	"$(INTDIR)\pwd.obj" \
+	"$(INTDIR)\readdir.obj" \
+	"$(INTDIR)\sendmail.obj" \
+	"$(INTDIR)\time.obj" \
+	"$(INTDIR)\wfile.obj" \
+	"$(INTDIR)\winsnmp.obj" \
+	"$(INTDIR)\winutil.obj" \
+	"$(INTDIR)\wsyslog.obj" \
 	"$(INTDIR)\apache.obj" \
 	"$(INTDIR)\base64.obj" \
 	"$(INTDIR)\basic_functions.obj" \
 	"$(INTDIR)\bcmath.obj" \
 	"$(INTDIR)\browscap.obj" \
-	"$(INTDIR)\COM.obj" \
-	"$(INTDIR)\configuration-parser.tab.obj" \
-	"$(INTDIR)\configuration-scanner.obj" \
-	"$(INTDIR)\constants.obj" \
 	"$(INTDIR)\datetime.obj" \
-	"$(INTDIR)\debugger.obj" \
 	"$(INTDIR)\dir.obj" \
 	"$(INTDIR)\dl.obj" \
 	"$(INTDIR)\dns.obj" \
 	"$(INTDIR)\exec.obj" \
 	"$(INTDIR)\file.obj" \
 	"$(INTDIR)\filestat.obj" \
-	"$(INTDIR)\fopen-wrappers.obj" \
 	"$(INTDIR)\formatted_print.obj" \
 	"$(INTDIR)\fsock.obj" \
-	"$(INTDIR)\getopt.obj" \
 	"$(INTDIR)\head.obj" \
-	"$(INTDIR)\highlight.obj" \
 	"$(INTDIR)\html.obj" \
 	"$(INTDIR)\image.obj" \
 	"$(INTDIR)\info.obj" \
-	"$(INTDIR)\internal_functions.obj" \
-	"$(INTDIR)\language-parser.tab.obj" \
-	"$(INTDIR)\language-scanner.obj" \
+	"$(INTDIR)\iptc.obj" \
 	"$(INTDIR)\link.obj" \
-	"$(INTDIR)\list.obj" \
 	"$(INTDIR)\mail.obj" \
-	"$(INTDIR)\main.obj" \
 	"$(INTDIR)\math.obj" \
 	"$(INTDIR)\md5.obj" \
 	"$(INTDIR)\microtime.obj" \
 	"$(INTDIR)\mime.obj" \
 	"$(INTDIR)\number.obj" \
-	"$(INTDIR)\operators.obj" \
 	"$(INTDIR)\pack.obj" \
 	"$(INTDIR)\pageinfo.obj" \
-	"$(INTDIR)\php3_hash.obj" \
-	"$(INTDIR)\php3_realpath.obj" \
 	"$(INTDIR)\post.obj" \
-	"$(INTDIR)\pwd.obj" \
 	"$(INTDIR)\rand.obj" \
-	"$(INTDIR)\readdir.obj" \
 	"$(INTDIR)\reg.obj" \
-	"$(INTDIR)\regcomp.obj" \
-	"$(INTDIR)\regerror.obj" \
-	"$(INTDIR)\regexec.obj" \
-	"$(INTDIR)\regfree.obj" \
-	"$(INTDIR)\request_info.obj" \
-	"$(INTDIR)\safe_mode.obj" \
-	"$(INTDIR)\sendmail.obj" \
 	"$(INTDIR)\soundex.obj" \
-	"$(INTDIR)\stack.obj" \
 	"$(INTDIR)\string.obj" \
 	"$(INTDIR)\syslog.obj" \
-	"$(INTDIR)\time.obj" \
-	"$(INTDIR)\token_cache.obj" \
 	"$(INTDIR)\type.obj" \
 	"$(INTDIR)\unified_odbc.obj" \
 	"$(INTDIR)\uniqid.obj" \
 	"$(INTDIR)\url.obj" \
 	"$(INTDIR)\var.obj" \
-	"$(INTDIR)\variables.obj" \
-	"$(INTDIR)\wfile.obj" \
-	"$(INTDIR)\winsnmp.obj" \
-	"$(INTDIR)\winutil.obj" \
-	"$(INTDIR)\wsyslog.obj"
+	"$(INTDIR)\regcomp.obj" \
+	"$(INTDIR)\regerror.obj" \
+	"$(INTDIR)\regexec.obj" \
+	"$(INTDIR)\regfree.obj" \
+	"$(INTDIR)\alloc.obj" \
+	"$(INTDIR)\configuration-parser.tab.obj" \
+	"$(INTDIR)\configuration-scanner.obj" \
+	"$(INTDIR)\constants.obj" \
+	"$(INTDIR)\debugger.obj" \
+	"$(INTDIR)\fopen-wrappers.obj" \
+	"$(INTDIR)\getopt.obj" \
+	"$(INTDIR)\highlight.obj" \
+	"$(INTDIR)\internal_functions.obj" \
+	"$(INTDIR)\language-parser.tab.obj" \
+	"$(INTDIR)\language-scanner.obj" \
+	"$(INTDIR)\list.obj" \
+	"$(INTDIR)\main.obj" \
+	"$(INTDIR)\operators.obj" \
+	"$(INTDIR)\php3_hash.obj" \
+	"$(INTDIR)\php3_realpath.obj" \
+	"$(INTDIR)\request_info.obj" \
+	"$(INTDIR)\safe_mode.obj" \
+	"$(INTDIR)\stack.obj" \
+	"$(INTDIR)\token_cache.obj" \
+	"$(INTDIR)\variables.obj"
 
 "$(OUTDIR)\php.exe" : "$(OUTDIR)" $(DEF_FILE) $(LINK32_OBJS)
     $(LINK32) @<<
@@ -303,6 +326,8 @@ CLEAN :
 	-@erase "$(INTDIR)\info.sbr"
 	-@erase "$(INTDIR)\internal_functions.obj"
 	-@erase "$(INTDIR)\internal_functions.sbr"
+	-@erase "$(INTDIR)\iptc.obj"
+	-@erase "$(INTDIR)\iptc.sbr"
 	-@erase "$(INTDIR)\language-parser.tab.obj"
 	-@erase "$(INTDIR)\language-parser.tab.sbr"
 	-@erase "$(INTDIR)\language-scanner.obj"
@@ -383,8 +408,8 @@ CLEAN :
 	-@erase "$(INTDIR)\var.sbr"
 	-@erase "$(INTDIR)\variables.obj"
 	-@erase "$(INTDIR)\variables.sbr"
-	-@erase "$(INTDIR)\vc50.idb"
-	-@erase "$(INTDIR)\vc50.pdb"
+	-@erase "$(INTDIR)\vc60.idb"
+	-@erase "$(INTDIR)\vc60.pdb"
 	-@erase "$(INTDIR)\wfile.obj"
 	-@erase "$(INTDIR)\wfile.sbr"
 	-@erase "$(INTDIR)\winsnmp.obj"
@@ -404,87 +429,116 @@ CLEAN :
 "$(INTDIR)" :
     if not exist "$(INTDIR)/$(NULL)" mkdir "$(INTDIR)"
 
-CPP_PROJ=/nologo /MTd /W3 /Gm /GX /Zi /Od /I "." /I "regex\\" /I\
- "d:\src\bind\include" /D "DEBUG" /D "_DEBUG" /D "MSVC5" /D "WIN32" /D\
- "_CONSOLE" /D "_MBCS" /FR"$(INTDIR)\\" /Fp"$(INTDIR)\php3.pch" /YX\
- /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c 
-CPP_OBJS=.\cgi_debug/
-CPP_SBRS=.\cgi_debug/
+CPP=cl.exe
+CPP_PROJ=/nologo /MTd /W3 /Gm /GX /ZI /Od /I "." /I "regex\\" /I "d:\src\bind\include" /D "DEBUG" /D "_DEBUG" /D "MSVC5" /D "WIN32" /D "_CONSOLE" /D "_MBCS" /FR"$(INTDIR)\\" /Fp"$(INTDIR)\php3.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c 
+
+.c{$(INTDIR)}.obj::
+   $(CPP) @<<
+   $(CPP_PROJ) $< 
+<<
+
+.cpp{$(INTDIR)}.obj::
+   $(CPP) @<<
+   $(CPP_PROJ) $< 
+<<
+
+.cxx{$(INTDIR)}.obj::
+   $(CPP) @<<
+   $(CPP_PROJ) $< 
+<<
+
+.c{$(INTDIR)}.sbr::
+   $(CPP) @<<
+   $(CPP_PROJ) $< 
+<<
+
+.cpp{$(INTDIR)}.sbr::
+   $(CPP) @<<
+   $(CPP_PROJ) $< 
+<<
+
+.cxx{$(INTDIR)}.sbr::
+   $(CPP) @<<
+   $(CPP_PROJ) $< 
+<<
+
+RSC=rc.exe
 BSC32=bscmake.exe
 BSC32_FLAGS=/nologo /o"$(OUTDIR)\php3.bsc" 
 BSC32_SBRS= \
-	"$(INTDIR)\alloc.sbr" \
+	"$(INTDIR)\COM.sbr" \
+	"$(INTDIR)\pwd.sbr" \
+	"$(INTDIR)\readdir.sbr" \
+	"$(INTDIR)\sendmail.sbr" \
+	"$(INTDIR)\time.sbr" \
+	"$(INTDIR)\wfile.sbr" \
+	"$(INTDIR)\winsnmp.sbr" \
+	"$(INTDIR)\winutil.sbr" \
+	"$(INTDIR)\wsyslog.sbr" \
 	"$(INTDIR)\apache.sbr" \
 	"$(INTDIR)\base64.sbr" \
 	"$(INTDIR)\basic_functions.sbr" \
 	"$(INTDIR)\bcmath.sbr" \
 	"$(INTDIR)\browscap.sbr" \
-	"$(INTDIR)\COM.sbr" \
-	"$(INTDIR)\configuration-parser.tab.sbr" \
-	"$(INTDIR)\configuration-scanner.sbr" \
-	"$(INTDIR)\constants.sbr" \
 	"$(INTDIR)\datetime.sbr" \
-	"$(INTDIR)\debugger.sbr" \
 	"$(INTDIR)\dir.sbr" \
 	"$(INTDIR)\dl.sbr" \
 	"$(INTDIR)\dns.sbr" \
 	"$(INTDIR)\exec.sbr" \
 	"$(INTDIR)\file.sbr" \
 	"$(INTDIR)\filestat.sbr" \
-	"$(INTDIR)\fopen-wrappers.sbr" \
 	"$(INTDIR)\formatted_print.sbr" \
 	"$(INTDIR)\fsock.sbr" \
-	"$(INTDIR)\getopt.sbr" \
 	"$(INTDIR)\head.sbr" \
-	"$(INTDIR)\highlight.sbr" \
 	"$(INTDIR)\html.sbr" \
 	"$(INTDIR)\image.sbr" \
 	"$(INTDIR)\info.sbr" \
-	"$(INTDIR)\internal_functions.sbr" \
-	"$(INTDIR)\language-parser.tab.sbr" \
-	"$(INTDIR)\language-scanner.sbr" \
+	"$(INTDIR)\iptc.sbr" \
 	"$(INTDIR)\link.sbr" \
-	"$(INTDIR)\list.sbr" \
 	"$(INTDIR)\mail.sbr" \
-	"$(INTDIR)\main.sbr" \
 	"$(INTDIR)\math.sbr" \
 	"$(INTDIR)\md5.sbr" \
 	"$(INTDIR)\microtime.sbr" \
 	"$(INTDIR)\mime.sbr" \
 	"$(INTDIR)\number.sbr" \
-	"$(INTDIR)\operators.sbr" \
 	"$(INTDIR)\pack.sbr" \
 	"$(INTDIR)\pageinfo.sbr" \
-	"$(INTDIR)\php3_hash.sbr" \
-	"$(INTDIR)\php3_realpath.sbr" \
 	"$(INTDIR)\post.sbr" \
-	"$(INTDIR)\pwd.sbr" \
 	"$(INTDIR)\rand.sbr" \
-	"$(INTDIR)\readdir.sbr" \
 	"$(INTDIR)\reg.sbr" \
-	"$(INTDIR)\regcomp.sbr" \
-	"$(INTDIR)\regerror.sbr" \
-	"$(INTDIR)\regexec.sbr" \
-	"$(INTDIR)\regfree.sbr" \
-	"$(INTDIR)\request_info.sbr" \
-	"$(INTDIR)\safe_mode.sbr" \
-	"$(INTDIR)\sendmail.sbr" \
 	"$(INTDIR)\soundex.sbr" \
-	"$(INTDIR)\stack.sbr" \
 	"$(INTDIR)\string.sbr" \
 	"$(INTDIR)\syslog.sbr" \
-	"$(INTDIR)\time.sbr" \
-	"$(INTDIR)\token_cache.sbr" \
 	"$(INTDIR)\type.sbr" \
 	"$(INTDIR)\unified_odbc.sbr" \
 	"$(INTDIR)\uniqid.sbr" \
 	"$(INTDIR)\url.sbr" \
 	"$(INTDIR)\var.sbr" \
-	"$(INTDIR)\variables.sbr" \
-	"$(INTDIR)\wfile.sbr" \
-	"$(INTDIR)\winsnmp.sbr" \
-	"$(INTDIR)\winutil.sbr" \
-	"$(INTDIR)\wsyslog.sbr"
+	"$(INTDIR)\regcomp.sbr" \
+	"$(INTDIR)\regerror.sbr" \
+	"$(INTDIR)\regexec.sbr" \
+	"$(INTDIR)\regfree.sbr" \
+	"$(INTDIR)\alloc.sbr" \
+	"$(INTDIR)\configuration-parser.tab.sbr" \
+	"$(INTDIR)\configuration-scanner.sbr" \
+	"$(INTDIR)\constants.sbr" \
+	"$(INTDIR)\debugger.sbr" \
+	"$(INTDIR)\fopen-wrappers.sbr" \
+	"$(INTDIR)\getopt.sbr" \
+	"$(INTDIR)\highlight.sbr" \
+	"$(INTDIR)\internal_functions.sbr" \
+	"$(INTDIR)\language-parser.tab.sbr" \
+	"$(INTDIR)\language-scanner.sbr" \
+	"$(INTDIR)\list.sbr" \
+	"$(INTDIR)\main.sbr" \
+	"$(INTDIR)\operators.sbr" \
+	"$(INTDIR)\php3_hash.sbr" \
+	"$(INTDIR)\php3_realpath.sbr" \
+	"$(INTDIR)\request_info.sbr" \
+	"$(INTDIR)\safe_mode.sbr" \
+	"$(INTDIR)\stack.sbr" \
+	"$(INTDIR)\token_cache.sbr" \
+	"$(INTDIR)\variables.sbr"
 
 "$(OUTDIR)\php3.bsc" : "$(OUTDIR)" $(BSC32_SBRS)
     $(BSC32) @<<
@@ -492,85 +546,81 @@ BSC32_SBRS= \
 <<
 
 LINK32=link.exe
-LINK32_FLAGS=lib44bsd95.lib resolv.lib winmm.lib wsock32.lib netapi32.lib\
- kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib\
- shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo\
- /version:3.0 /subsystem:console /incremental:yes /pdb:"$(OUTDIR)\php.pdb"\
- /debug /machine:I386 /out:"$(OUTDIR)\php.exe" /pdbtype:sept /libpath:"\src\lib"\
- /libpath:"d:\src\bind\lib" 
+LINK32_FLAGS=lib44bsd95.lib resolv.lib winmm.lib wsock32.lib netapi32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /version:3.0 /subsystem:console /incremental:yes /pdb:"$(OUTDIR)\php.pdb" /debug /machine:I386 /out:"$(OUTDIR)\php.exe" /pdbtype:sept /libpath:"\src\lib" /libpath:"d:\src\bind\lib" 
 LINK32_OBJS= \
-	"$(INTDIR)\alloc.obj" \
+	"$(INTDIR)\COM.obj" \
+	"$(INTDIR)\pwd.obj" \
+	"$(INTDIR)\readdir.obj" \
+	"$(INTDIR)\sendmail.obj" \
+	"$(INTDIR)\time.obj" \
+	"$(INTDIR)\wfile.obj" \
+	"$(INTDIR)\winsnmp.obj" \
+	"$(INTDIR)\winutil.obj" \
+	"$(INTDIR)\wsyslog.obj" \
 	"$(INTDIR)\apache.obj" \
 	"$(INTDIR)\base64.obj" \
 	"$(INTDIR)\basic_functions.obj" \
 	"$(INTDIR)\bcmath.obj" \
 	"$(INTDIR)\browscap.obj" \
-	"$(INTDIR)\COM.obj" \
-	"$(INTDIR)\configuration-parser.tab.obj" \
-	"$(INTDIR)\configuration-scanner.obj" \
-	"$(INTDIR)\constants.obj" \
 	"$(INTDIR)\datetime.obj" \
-	"$(INTDIR)\debugger.obj" \
 	"$(INTDIR)\dir.obj" \
 	"$(INTDIR)\dl.obj" \
 	"$(INTDIR)\dns.obj" \
 	"$(INTDIR)\exec.obj" \
 	"$(INTDIR)\file.obj" \
 	"$(INTDIR)\filestat.obj" \
-	"$(INTDIR)\fopen-wrappers.obj" \
 	"$(INTDIR)\formatted_print.obj" \
 	"$(INTDIR)\fsock.obj" \
-	"$(INTDIR)\getopt.obj" \
 	"$(INTDIR)\head.obj" \
-	"$(INTDIR)\highlight.obj" \
 	"$(INTDIR)\html.obj" \
 	"$(INTDIR)\image.obj" \
 	"$(INTDIR)\info.obj" \
-	"$(INTDIR)\internal_functions.obj" \
-	"$(INTDIR)\language-parser.tab.obj" \
-	"$(INTDIR)\language-scanner.obj" \
+	"$(INTDIR)\iptc.obj" \
 	"$(INTDIR)\link.obj" \
-	"$(INTDIR)\list.obj" \
 	"$(INTDIR)\mail.obj" \
-	"$(INTDIR)\main.obj" \
 	"$(INTDIR)\math.obj" \
 	"$(INTDIR)\md5.obj" \
 	"$(INTDIR)\microtime.obj" \
 	"$(INTDIR)\mime.obj" \
 	"$(INTDIR)\number.obj" \
-	"$(INTDIR)\operators.obj" \
 	"$(INTDIR)\pack.obj" \
 	"$(INTDIR)\pageinfo.obj" \
-	"$(INTDIR)\php3_hash.obj" \
-	"$(INTDIR)\php3_realpath.obj" \
 	"$(INTDIR)\post.obj" \
-	"$(INTDIR)\pwd.obj" \
 	"$(INTDIR)\rand.obj" \
-	"$(INTDIR)\readdir.obj" \
 	"$(INTDIR)\reg.obj" \
-	"$(INTDIR)\regcomp.obj" \
-	"$(INTDIR)\regerror.obj" \
-	"$(INTDIR)\regexec.obj" \
-	"$(INTDIR)\regfree.obj" \
-	"$(INTDIR)\request_info.obj" \
-	"$(INTDIR)\safe_mode.obj" \
-	"$(INTDIR)\sendmail.obj" \
 	"$(INTDIR)\soundex.obj" \
-	"$(INTDIR)\stack.obj" \
 	"$(INTDIR)\string.obj" \
 	"$(INTDIR)\syslog.obj" \
-	"$(INTDIR)\time.obj" \
-	"$(INTDIR)\token_cache.obj" \
 	"$(INTDIR)\type.obj" \
 	"$(INTDIR)\unified_odbc.obj" \
 	"$(INTDIR)\uniqid.obj" \
 	"$(INTDIR)\url.obj" \
 	"$(INTDIR)\var.obj" \
-	"$(INTDIR)\variables.obj" \
-	"$(INTDIR)\wfile.obj" \
-	"$(INTDIR)\winsnmp.obj" \
-	"$(INTDIR)\winutil.obj" \
-	"$(INTDIR)\wsyslog.obj"
+	"$(INTDIR)\regcomp.obj" \
+	"$(INTDIR)\regerror.obj" \
+	"$(INTDIR)\regexec.obj" \
+	"$(INTDIR)\regfree.obj" \
+	"$(INTDIR)\alloc.obj" \
+	"$(INTDIR)\configuration-parser.tab.obj" \
+	"$(INTDIR)\configuration-scanner.obj" \
+	"$(INTDIR)\constants.obj" \
+	"$(INTDIR)\debugger.obj" \
+	"$(INTDIR)\fopen-wrappers.obj" \
+	"$(INTDIR)\getopt.obj" \
+	"$(INTDIR)\highlight.obj" \
+	"$(INTDIR)\internal_functions.obj" \
+	"$(INTDIR)\language-parser.tab.obj" \
+	"$(INTDIR)\language-scanner.obj" \
+	"$(INTDIR)\list.obj" \
+	"$(INTDIR)\main.obj" \
+	"$(INTDIR)\operators.obj" \
+	"$(INTDIR)\php3_hash.obj" \
+	"$(INTDIR)\php3_realpath.obj" \
+	"$(INTDIR)\request_info.obj" \
+	"$(INTDIR)\safe_mode.obj" \
+	"$(INTDIR)\stack.obj" \
+	"$(INTDIR)\token_cache.obj" \
+	"$(INTDIR)\variables.obj"
 
 "$(OUTDIR)\php.exe" : "$(OUTDIR)" $(DEF_FILE) $(LINK32_OBJS)
     $(LINK32) @<<
@@ -579,35 +629,14 @@ LINK32_OBJS= \
 
 !ENDIF 
 
-.c{$(CPP_OBJS)}.obj::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
 
-.cpp{$(CPP_OBJS)}.obj::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-.cxx{$(CPP_OBJS)}.obj::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-.c{$(CPP_SBRS)}.sbr::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-.cpp{$(CPP_SBRS)}.sbr::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-.cxx{$(CPP_SBRS)}.sbr::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
+!IF "$(NO_EXTERNAL_DEPS)" != "1"
+!IF EXISTS("php3.dep")
+!INCLUDE "php3.dep"
+!ELSE 
+!MESSAGE Warning: cannot find "php3.dep"
+!ENDIF 
+!ENDIF 
 
 
 !IF "$(CFG)" == "php3 - Win32 Release" || "$(CFG)" == "php3 - Win32 Debug"
@@ -615,64 +644,15 @@ SOURCE=.\functions\COM.c
 
 !IF  "$(CFG)" == "php3 - Win32 Release"
 
-DEP_CPP_COM_C=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\fopen-wrappers.h"\
-	".\functions\php3_COM.h"\
-	".\internal_functions.h"\
-	".\mod_php3.h"\
-	".\modules.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php3_list.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\COM.obj" : $(SOURCE) $(DEP_CPP_COM_C) "$(INTDIR)"
+"$(INTDIR)\COM.obj" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
 !ELSEIF  "$(CFG)" == "php3 - Win32 Debug"
 
-DEP_CPP_COM_C=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\fopen-wrappers.h"\
-	".\functions\php3_COM.h"\
-	".\internal_functions.h"\
-	".\mod_php3.h"\
-	".\modules.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php3_list.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\COM.obj"	"$(INTDIR)\COM.sbr" : $(SOURCE) $(DEP_CPP_COM_C)\
- "$(INTDIR)"
+"$(INTDIR)\COM.obj"	"$(INTDIR)\COM.sbr" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
@@ -682,80 +662,33 @@ SOURCE=.\win32\pwd.c
 
 !IF  "$(CFG)" == "php3 - Win32 Release"
 
-DEP_CPP_PWD_C=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\fopen-wrappers.h"\
-	".\mod_php3.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\grp.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\pwd.obj" : $(SOURCE) $(DEP_CPP_PWD_C) "$(INTDIR)"
+"$(INTDIR)\pwd.obj" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
 !ELSEIF  "$(CFG)" == "php3 - Win32 Debug"
 
-DEP_CPP_PWD_C=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\fopen-wrappers.h"\
-	".\mod_php3.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\grp.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\pwd.obj"	"$(INTDIR)\pwd.sbr" : $(SOURCE) $(DEP_CPP_PWD_C)\
- "$(INTDIR)"
+"$(INTDIR)\pwd.obj"	"$(INTDIR)\pwd.sbr" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
 !ENDIF 
 
 SOURCE=.\win32\readdir.c
-DEP_CPP_READD=\
-	".\win32\readdir.h"\
-	
 
 !IF  "$(CFG)" == "php3 - Win32 Release"
 
 
-"$(INTDIR)\readdir.obj" : $(SOURCE) $(DEP_CPP_READD) "$(INTDIR)"
+"$(INTDIR)\readdir.obj" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
 !ELSEIF  "$(CFG)" == "php3 - Win32 Debug"
 
 
-"$(INTDIR)\readdir.obj"	"$(INTDIR)\readdir.sbr" : $(SOURCE) $(DEP_CPP_READD)\
- "$(INTDIR)"
+"$(INTDIR)\readdir.obj"	"$(INTDIR)\readdir.sbr" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
@@ -765,102 +698,51 @@ SOURCE=.\win32\sendmail.c
 
 !IF  "$(CFG)" == "php3 - Win32 Release"
 
-DEP_CPP_SENDM=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\fopen-wrappers.h"\
-	".\mod_php3.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win32\sendmail.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\sendmail.obj" : $(SOURCE) $(DEP_CPP_SENDM) "$(INTDIR)"
+"$(INTDIR)\sendmail.obj" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
 !ELSEIF  "$(CFG)" == "php3 - Win32 Debug"
 
-DEP_CPP_SENDM=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\fopen-wrappers.h"\
-	".\mod_php3.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win32\sendmail.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\sendmail.obj"	"$(INTDIR)\sendmail.sbr" : $(SOURCE) $(DEP_CPP_SENDM)\
- "$(INTDIR)"
+"$(INTDIR)\sendmail.obj"	"$(INTDIR)\sendmail.sbr" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
 !ENDIF 
 
 SOURCE=.\win32\time.c
-DEP_CPP_TIME_=\
-	".\win32\unistd.h"\
-	
 
 !IF  "$(CFG)" == "php3 - Win32 Release"
 
 
-"$(INTDIR)\time.obj" : $(SOURCE) $(DEP_CPP_TIME_) "$(INTDIR)"
+"$(INTDIR)\time.obj" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
 !ELSEIF  "$(CFG)" == "php3 - Win32 Debug"
 
 
-"$(INTDIR)\time.obj"	"$(INTDIR)\time.sbr" : $(SOURCE) $(DEP_CPP_TIME_)\
- "$(INTDIR)"
+"$(INTDIR)\time.obj"	"$(INTDIR)\time.sbr" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
 !ENDIF 
 
 SOURCE=.\win32\wfile.c
-DEP_CPP_WFILE=\
-	".\win32\wfile.h"\
-	
 
 !IF  "$(CFG)" == "php3 - Win32 Release"
 
 
-"$(INTDIR)\wfile.obj" : $(SOURCE) $(DEP_CPP_WFILE) "$(INTDIR)"
+"$(INTDIR)\wfile.obj" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
 !ELSEIF  "$(CFG)" == "php3 - Win32 Debug"
 
 
-"$(INTDIR)\wfile.obj"	"$(INTDIR)\wfile.sbr" : $(SOURCE) $(DEP_CPP_WFILE)\
- "$(INTDIR)"
+"$(INTDIR)\wfile.obj"	"$(INTDIR)\wfile.sbr" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
@@ -870,84 +752,33 @@ SOURCE=.\dl\snmp\winsnmp.c
 
 !IF  "$(CFG)" == "php3 - Win32 Release"
 
-DEP_CPP_WINSN=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\dl\snmp\php3_snmp.h"\
-	".\fopen-wrappers.h"\
-	".\internal_functions.h"\
-	".\mod_php3.h"\
-	".\modules.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\winsnmp.obj" : $(SOURCE) $(DEP_CPP_WINSN) "$(INTDIR)"
+"$(INTDIR)\winsnmp.obj" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
 !ELSEIF  "$(CFG)" == "php3 - Win32 Debug"
 
-DEP_CPP_WINSN=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\dl\snmp\php3_snmp.h"\
-	".\fopen-wrappers.h"\
-	".\internal_functions.h"\
-	".\mod_php3.h"\
-	".\modules.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\winsnmp.obj"	"$(INTDIR)\winsnmp.sbr" : $(SOURCE) $(DEP_CPP_WINSN)\
- "$(INTDIR)"
+"$(INTDIR)\winsnmp.obj"	"$(INTDIR)\winsnmp.sbr" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
 !ENDIF 
 
 SOURCE=.\win32\winutil.c
-DEP_CPP_WINUT=\
-	".\win32\winutil.h"\
-	
 
 !IF  "$(CFG)" == "php3 - Win32 Release"
 
 
-"$(INTDIR)\winutil.obj" : $(SOURCE) $(DEP_CPP_WINUT) "$(INTDIR)"
+"$(INTDIR)\winutil.obj" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
 !ELSEIF  "$(CFG)" == "php3 - Win32 Debug"
 
 
-"$(INTDIR)\winutil.obj"	"$(INTDIR)\winutil.sbr" : $(SOURCE) $(DEP_CPP_WINUT)\
- "$(INTDIR)"
+"$(INTDIR)\winutil.obj"	"$(INTDIR)\winutil.sbr" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
@@ -957,58 +788,15 @@ SOURCE=.\win32\wsyslog.c
 
 !IF  "$(CFG)" == "php3 - Win32 Release"
 
-DEP_CPP_WSYSL=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\fopen-wrappers.h"\
-	".\mod_php3.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win32\syslog.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\wsyslog.obj" : $(SOURCE) $(DEP_CPP_WSYSL) "$(INTDIR)"
+"$(INTDIR)\wsyslog.obj" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
 !ELSEIF  "$(CFG)" == "php3 - Win32 Debug"
 
-DEP_CPP_WSYSL=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\fopen-wrappers.h"\
-	".\mod_php3.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win32\syslog.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\wsyslog.obj"	"$(INTDIR)\wsyslog.sbr" : $(SOURCE) $(DEP_CPP_WSYSL)\
- "$(INTDIR)"
+"$(INTDIR)\wsyslog.obj"	"$(INTDIR)\wsyslog.sbr" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
@@ -1018,62 +806,15 @@ SOURCE=.\functions\apache.c
 
 !IF  "$(CFG)" == "php3 - Win32 Release"
 
-DEP_CPP_APACH=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\fopen-wrappers.h"\
-	".\functions\head.h"\
-	".\internal_functions.h"\
-	".\mod_php3.h"\
-	".\modules.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\apache.obj" : $(SOURCE) $(DEP_CPP_APACH) "$(INTDIR)"
+"$(INTDIR)\apache.obj" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
 !ELSEIF  "$(CFG)" == "php3 - Win32 Debug"
 
-DEP_CPP_APACH=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\fopen-wrappers.h"\
-	".\functions\head.h"\
-	".\internal_functions.h"\
-	".\mod_php3.h"\
-	".\modules.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\apache.obj"	"$(INTDIR)\apache.sbr" : $(SOURCE) $(DEP_CPP_APACH)\
- "$(INTDIR)"
+"$(INTDIR)\apache.obj"	"$(INTDIR)\apache.sbr" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
@@ -1083,62 +824,15 @@ SOURCE=.\functions\base64.c
 
 !IF  "$(CFG)" == "php3 - Win32 Release"
 
-DEP_CPP_BASE6=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\fopen-wrappers.h"\
-	".\functions\base64.h"\
-	".\internal_functions.h"\
-	".\mod_php3.h"\
-	".\modules.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\base64.obj" : $(SOURCE) $(DEP_CPP_BASE6) "$(INTDIR)"
+"$(INTDIR)\base64.obj" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
 !ELSEIF  "$(CFG)" == "php3 - Win32 Debug"
 
-DEP_CPP_BASE6=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\fopen-wrappers.h"\
-	".\functions\base64.h"\
-	".\internal_functions.h"\
-	".\mod_php3.h"\
-	".\modules.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\base64.obj"	"$(INTDIR)\base64.sbr" : $(SOURCE) $(DEP_CPP_BASE6)\
- "$(INTDIR)"
+"$(INTDIR)\base64.obj"	"$(INTDIR)\base64.sbr" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
@@ -1148,109 +842,15 @@ SOURCE=.\functions\basic_functions.c
 
 !IF  "$(CFG)" == "php3 - Win32 Release"
 
-DEP_CPP_BASIC=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\fopen-wrappers.h"\
-	".\functions\base64.h"\
-	".\functions\basic_functions.h"\
-	".\functions\datetime.h"\
-	".\functions\dns.h"\
-	".\functions\exec.h"\
-	".\functions\fsock.h"\
-	".\functions\global.h"\
-	".\functions\html.h"\
-	".\functions\image.h"\
-	".\functions\info.h"\
-	".\functions\md5.h"\
-	".\functions\microtime.h"\
-	".\functions\pageinfo.h"\
-	".\functions\php3_filestat.h"\
-	".\functions\php3_link.h"\
-	".\functions\php3_mail.h"\
-	".\functions\php3_string.h"\
-	".\functions\php3_var.h"\
-	".\functions\phpmath.h"\
-	".\functions\post.h"\
-	".\functions\uniqid.h"\
-	".\functions\url.h"\
-	".\internal_functions.h"\
-	".\internal_functions_registry.h"\
-	".\mod_php3.h"\
-	".\modules.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php3_list.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win32\unistd.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\basic_functions.obj" : $(SOURCE) $(DEP_CPP_BASIC) "$(INTDIR)"
+"$(INTDIR)\basic_functions.obj" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
 !ELSEIF  "$(CFG)" == "php3 - Win32 Debug"
 
-DEP_CPP_BASIC=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\fopen-wrappers.h"\
-	".\functions\base64.h"\
-	".\functions\basic_functions.h"\
-	".\functions\datetime.h"\
-	".\functions\dns.h"\
-	".\functions\exec.h"\
-	".\functions\fsock.h"\
-	".\functions\global.h"\
-	".\functions\html.h"\
-	".\functions\image.h"\
-	".\functions\info.h"\
-	".\functions\md5.h"\
-	".\functions\microtime.h"\
-	".\functions\pageinfo.h"\
-	".\functions\php3_filestat.h"\
-	".\functions\php3_link.h"\
-	".\functions\php3_mail.h"\
-	".\functions\php3_string.h"\
-	".\functions\phpmath.h"\
-	".\functions\post.h"\
-	".\functions\uniqid.h"\
-	".\functions\url.h"\
-	".\internal_functions.h"\
-	".\internal_functions_registry.h"\
-	".\mod_php3.h"\
-	".\modules.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php3_list.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win32\unistd.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\basic_functions.obj"	"$(INTDIR)\basic_functions.sbr" : $(SOURCE)\
- $(DEP_CPP_BASIC) "$(INTDIR)"
+"$(INTDIR)\basic_functions.obj"	"$(INTDIR)\basic_functions.sbr" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
@@ -1260,64 +860,15 @@ SOURCE=.\functions\bcmath.c
 
 !IF  "$(CFG)" == "php3 - Win32 Release"
 
-DEP_CPP_BCMAT=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\fopen-wrappers.h"\
-	".\functions\number.h"\
-	".\functions\php3_bcmath.h"\
-	".\internal_functions.h"\
-	".\mod_php3.h"\
-	".\modules.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\bcmath.obj" : $(SOURCE) $(DEP_CPP_BCMAT) "$(INTDIR)"
+"$(INTDIR)\bcmath.obj" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
 !ELSEIF  "$(CFG)" == "php3 - Win32 Debug"
 
-DEP_CPP_BCMAT=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\fopen-wrappers.h"\
-	".\functions\number.h"\
-	".\functions\php3_bcmath.h"\
-	".\internal_functions.h"\
-	".\mod_php3.h"\
-	".\modules.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\bcmath.obj"	"$(INTDIR)\bcmath.sbr" : $(SOURCE) $(DEP_CPP_BCMAT)\
- "$(INTDIR)"
+"$(INTDIR)\bcmath.obj"	"$(INTDIR)\bcmath.sbr" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
@@ -1327,62 +878,15 @@ SOURCE=.\functions\browscap.c
 
 !IF  "$(CFG)" == "php3 - Win32 Release"
 
-DEP_CPP_BROWS=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\fopen-wrappers.h"\
-	".\functions\php3_browscap.h"\
-	".\internal_functions.h"\
-	".\mod_php3.h"\
-	".\modules.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\browscap.obj" : $(SOURCE) $(DEP_CPP_BROWS) "$(INTDIR)"
+"$(INTDIR)\browscap.obj" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
 !ELSEIF  "$(CFG)" == "php3 - Win32 Debug"
 
-DEP_CPP_BROWS=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\fopen-wrappers.h"\
-	".\functions\php3_browscap.h"\
-	".\internal_functions.h"\
-	".\mod_php3.h"\
-	".\modules.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\browscap.obj"	"$(INTDIR)\browscap.sbr" : $(SOURCE) $(DEP_CPP_BROWS)\
- "$(INTDIR)"
+"$(INTDIR)\browscap.obj"	"$(INTDIR)\browscap.sbr" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
@@ -1392,64 +896,15 @@ SOURCE=.\functions\datetime.c
 
 !IF  "$(CFG)" == "php3 - Win32 Release"
 
-DEP_CPP_DATET=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\fopen-wrappers.h"\
-	".\functions\datetime.h"\
-	".\internal_functions.h"\
-	".\mod_php3.h"\
-	".\modules.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\snprintf.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\datetime.obj" : $(SOURCE) $(DEP_CPP_DATET) "$(INTDIR)"
+"$(INTDIR)\datetime.obj" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
 !ELSEIF  "$(CFG)" == "php3 - Win32 Debug"
 
-DEP_CPP_DATET=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\fopen-wrappers.h"\
-	".\functions\datetime.h"\
-	".\internal_functions.h"\
-	".\mod_php3.h"\
-	".\modules.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\snprintf.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\datetime.obj"	"$(INTDIR)\datetime.sbr" : $(SOURCE) $(DEP_CPP_DATET)\
- "$(INTDIR)"
+"$(INTDIR)\datetime.obj"	"$(INTDIR)\datetime.sbr" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
@@ -1459,66 +914,15 @@ SOURCE=.\functions\dir.c
 
 !IF  "$(CFG)" == "php3 - Win32 Release"
 
-DEP_CPP_DIR_C=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\fopen-wrappers.h"\
-	".\functions\php3_dir.h"\
-	".\internal_functions.h"\
-	".\mod_php3.h"\
-	".\modules.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php3_list.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win32\readdir.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\dir.obj" : $(SOURCE) $(DEP_CPP_DIR_C) "$(INTDIR)"
+"$(INTDIR)\dir.obj" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
 !ELSEIF  "$(CFG)" == "php3 - Win32 Debug"
 
-DEP_CPP_DIR_C=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\fopen-wrappers.h"\
-	".\functions\php3_dir.h"\
-	".\internal_functions.h"\
-	".\mod_php3.h"\
-	".\modules.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php3_list.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win32\readdir.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\dir.obj"	"$(INTDIR)\dir.sbr" : $(SOURCE) $(DEP_CPP_DIR_C)\
- "$(INTDIR)"
+"$(INTDIR)\dir.obj"	"$(INTDIR)\dir.sbr" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
@@ -1528,63 +932,15 @@ SOURCE=.\functions\dl.c
 
 !IF  "$(CFG)" == "php3 - Win32 Release"
 
-DEP_CPP_DL_C20=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\fopen-wrappers.h"\
-	".\functions\dl.h"\
-	".\internal_functions.h"\
-	".\mod_php3.h"\
-	".\modules.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win32\winutil.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\dl.obj" : $(SOURCE) $(DEP_CPP_DL_C20) "$(INTDIR)"
+"$(INTDIR)\dl.obj" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
 !ELSEIF  "$(CFG)" == "php3 - Win32 Debug"
 
-DEP_CPP_DL_C20=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\fopen-wrappers.h"\
-	".\functions\dl.h"\
-	".\internal_functions.h"\
-	".\mod_php3.h"\
-	".\modules.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win32\winutil.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\dl.obj"	"$(INTDIR)\dl.sbr" : $(SOURCE) $(DEP_CPP_DL_C20) "$(INTDIR)"
+"$(INTDIR)\dl.obj"	"$(INTDIR)\dl.sbr" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
@@ -1594,76 +950,15 @@ SOURCE=.\functions\dns.c
 
 !IF  "$(CFG)" == "php3 - Win32 Release"
 
-DEP_CPP_DNS_C=\
-	"..\..\bind\include\arpa\inet.h"\
-	"..\..\bind\include\arpa\nameser.h"\
-	"..\..\bind\include\netdb.h"\
-	"..\..\bind\include\portability.h"\
-	"..\..\bind\include\resolv.h"\
-	"..\..\bind\include\sys\bitypes.h"\
-	"..\..\bind\include\sys\cdefs.h"\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\fopen-wrappers.h"\
-	".\functions\dns.h"\
-	".\internal_functions.h"\
-	".\mod_php3.h"\
-	".\modules.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\dns.obj" : $(SOURCE) $(DEP_CPP_DNS_C) "$(INTDIR)"
+"$(INTDIR)\dns.obj" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
 !ELSEIF  "$(CFG)" == "php3 - Win32 Debug"
 
-DEP_CPP_DNS_C=\
-	"..\..\bind\include\arpa\inet.h"\
-	"..\..\bind\include\arpa\nameser.h"\
-	"..\..\bind\include\netdb.h"\
-	"..\..\bind\include\portability.h"\
-	"..\..\bind\include\resolv.h"\
-	"..\..\bind\include\sys\bitypes.h"\
-	"..\..\bind\include\sys\cdefs.h"\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\fopen-wrappers.h"\
-	".\functions\dns.h"\
-	".\internal_functions.h"\
-	".\mod_php3.h"\
-	".\modules.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\dns.obj"	"$(INTDIR)\dns.sbr" : $(SOURCE) $(DEP_CPP_DNS_C)\
- "$(INTDIR)"
+"$(INTDIR)\dns.obj"	"$(INTDIR)\dns.sbr" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
@@ -1673,66 +968,15 @@ SOURCE=.\functions\exec.c
 
 !IF  "$(CFG)" == "php3 - Win32 Release"
 
-DEP_CPP_EXEC_=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\fopen-wrappers.h"\
-	".\functions\exec.h"\
-	".\functions\head.h"\
-	".\functions\php3_string.h"\
-	".\internal_functions.h"\
-	".\mod_php3.h"\
-	".\modules.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\exec.obj" : $(SOURCE) $(DEP_CPP_EXEC_) "$(INTDIR)"
+"$(INTDIR)\exec.obj" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
 !ELSEIF  "$(CFG)" == "php3 - Win32 Debug"
 
-DEP_CPP_EXEC_=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\fopen-wrappers.h"\
-	".\functions\exec.h"\
-	".\functions\head.h"\
-	".\functions\php3_string.h"\
-	".\internal_functions.h"\
-	".\mod_php3.h"\
-	".\modules.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\exec.obj"	"$(INTDIR)\exec.sbr" : $(SOURCE) $(DEP_CPP_EXEC_)\
- "$(INTDIR)"
+"$(INTDIR)\exec.obj"	"$(INTDIR)\exec.sbr" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
@@ -1742,74 +986,15 @@ SOURCE=.\functions\file.c
 
 !IF  "$(CFG)" == "php3 - Win32 Release"
 
-DEP_CPP_FILE_=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\fopen-wrappers.h"\
-	".\functions\file.h"\
-	".\functions\fsock.h"\
-	".\functions\head.h"\
-	".\functions\php3_string.h"\
-	".\internal_functions.h"\
-	".\mod_php3.h"\
-	".\modules.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php3_list.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\snprintf.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win32\winutil.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\file.obj" : $(SOURCE) $(DEP_CPP_FILE_) "$(INTDIR)"
+"$(INTDIR)\file.obj" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
 !ELSEIF  "$(CFG)" == "php3 - Win32 Debug"
 
-DEP_CPP_FILE_=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\fopen-wrappers.h"\
-	".\functions\file.h"\
-	".\functions\fsock.h"\
-	".\functions\head.h"\
-	".\functions\php3_string.h"\
-	".\internal_functions.h"\
-	".\mod_php3.h"\
-	".\modules.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php3_list.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\snprintf.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win32\winutil.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\file.obj"	"$(INTDIR)\file.sbr" : $(SOURCE) $(DEP_CPP_FILE_)\
- "$(INTDIR)"
+"$(INTDIR)\file.obj"	"$(INTDIR)\file.sbr" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
@@ -1819,62 +1004,15 @@ SOURCE=.\functions\filestat.c
 
 !IF  "$(CFG)" == "php3 - Win32 Release"
 
-DEP_CPP_FILES=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\fopen-wrappers.h"\
-	".\functions\php3_filestat.h"\
-	".\internal_functions.h"\
-	".\mod_php3.h"\
-	".\modules.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\filestat.obj" : $(SOURCE) $(DEP_CPP_FILES) "$(INTDIR)"
+"$(INTDIR)\filestat.obj" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
 !ELSEIF  "$(CFG)" == "php3 - Win32 Debug"
 
-DEP_CPP_FILES=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\fopen-wrappers.h"\
-	".\functions\php3_filestat.h"\
-	".\internal_functions.h"\
-	".\mod_php3.h"\
-	".\modules.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\filestat.obj"	"$(INTDIR)\filestat.sbr" : $(SOURCE) $(DEP_CPP_FILES)\
- "$(INTDIR)"
+"$(INTDIR)\filestat.obj"	"$(INTDIR)\filestat.sbr" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
@@ -1884,64 +1022,15 @@ SOURCE=.\functions\formatted_print.c
 
 !IF  "$(CFG)" == "php3 - Win32 Release"
 
-DEP_CPP_FORMA=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\fopen-wrappers.h"\
-	".\functions\head.h"\
-	".\functions\php3_string.h"\
-	".\internal_functions.h"\
-	".\mod_php3.h"\
-	".\modules.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\formatted_print.obj" : $(SOURCE) $(DEP_CPP_FORMA) "$(INTDIR)"
+"$(INTDIR)\formatted_print.obj" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
 !ELSEIF  "$(CFG)" == "php3 - Win32 Debug"
 
-DEP_CPP_FORMA=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\fopen-wrappers.h"\
-	".\functions\head.h"\
-	".\functions\php3_string.h"\
-	".\internal_functions.h"\
-	".\mod_php3.h"\
-	".\modules.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\formatted_print.obj"	"$(INTDIR)\formatted_print.sbr" : $(SOURCE)\
- $(DEP_CPP_FORMA) "$(INTDIR)"
+"$(INTDIR)\formatted_print.obj"	"$(INTDIR)\formatted_print.sbr" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
@@ -1951,72 +1040,15 @@ SOURCE=.\functions\fsock.c
 
 !IF  "$(CFG)" == "php3 - Win32 Release"
 
-DEP_CPP_FSOCK=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\fopen-wrappers.h"\
-	".\functions\base64.h"\
-	".\functions\file.h"\
-	".\functions\fsock.h"\
-	".\functions\post.h"\
-	".\functions\url.h"\
-	".\internal_functions.h"\
-	".\mod_php3.h"\
-	".\modules.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php3_list.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\fsock.obj" : $(SOURCE) $(DEP_CPP_FSOCK) "$(INTDIR)"
+"$(INTDIR)\fsock.obj" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
 !ELSEIF  "$(CFG)" == "php3 - Win32 Debug"
 
-DEP_CPP_FSOCK=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\fopen-wrappers.h"\
-	".\functions\base64.h"\
-	".\functions\file.h"\
-	".\functions\fsock.h"\
-	".\functions\post.h"\
-	".\functions\url.h"\
-	".\internal_functions.h"\
-	".\mod_php3.h"\
-	".\modules.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php3_list.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\fsock.obj"	"$(INTDIR)\fsock.sbr" : $(SOURCE) $(DEP_CPP_FSOCK)\
- "$(INTDIR)"
+"$(INTDIR)\fsock.obj"	"$(INTDIR)\fsock.sbr" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
@@ -2026,76 +1058,15 @@ SOURCE=.\functions\head.c
 
 !IF  "$(CFG)" == "php3 - Win32 Release"
 
-DEP_CPP_HEAD_=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\fopen-wrappers.h"\
-	".\functions\datetime.h"\
-	".\functions\head.h"\
-	".\functions\pageinfo.h"\
-	".\functions\php3_string.h"\
-	".\functions\post.h"\
-	".\functions\reg.h"\
-	".\functions\url.h"\
-	".\internal_functions.h"\
-	".\main.h"\
-	".\mod_php3.h"\
-	".\modules.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\head.obj" : $(SOURCE) $(DEP_CPP_HEAD_) "$(INTDIR)"
+"$(INTDIR)\head.obj" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
 !ELSEIF  "$(CFG)" == "php3 - Win32 Debug"
 
-DEP_CPP_HEAD_=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\fopen-wrappers.h"\
-	".\functions\datetime.h"\
-	".\functions\head.h"\
-	".\functions\pageinfo.h"\
-	".\functions\php3_string.h"\
-	".\functions\post.h"\
-	".\functions\reg.h"\
-	".\functions\url.h"\
-	".\internal_functions.h"\
-	".\main.h"\
-	".\mod_php3.h"\
-	".\modules.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\head.obj"	"$(INTDIR)\head.sbr" : $(SOURCE) $(DEP_CPP_HEAD_)\
- "$(INTDIR)"
+"$(INTDIR)\head.obj"	"$(INTDIR)\head.sbr" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
@@ -2105,64 +1076,15 @@ SOURCE=.\functions\html.c
 
 !IF  "$(CFG)" == "php3 - Win32 Release"
 
-DEP_CPP_HTML_=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\fopen-wrappers.h"\
-	".\functions\html.h"\
-	".\functions\reg.h"\
-	".\internal_functions.h"\
-	".\mod_php3.h"\
-	".\modules.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\html.obj" : $(SOURCE) $(DEP_CPP_HTML_) "$(INTDIR)"
+"$(INTDIR)\html.obj" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
 !ELSEIF  "$(CFG)" == "php3 - Win32 Debug"
 
-DEP_CPP_HTML_=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\fopen-wrappers.h"\
-	".\functions\html.h"\
-	".\functions\reg.h"\
-	".\internal_functions.h"\
-	".\mod_php3.h"\
-	".\modules.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\html.obj"	"$(INTDIR)\html.sbr" : $(SOURCE) $(DEP_CPP_HTML_)\
- "$(INTDIR)"
+"$(INTDIR)\html.obj"	"$(INTDIR)\html.sbr" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
@@ -2172,62 +1094,15 @@ SOURCE=.\functions\image.c
 
 !IF  "$(CFG)" == "php3 - Win32 Release"
 
-DEP_CPP_IMAGE=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\fopen-wrappers.h"\
-	".\functions\image.h"\
-	".\internal_functions.h"\
-	".\mod_php3.h"\
-	".\modules.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\image.obj" : $(SOURCE) $(DEP_CPP_IMAGE) "$(INTDIR)"
+"$(INTDIR)\image.obj" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
 !ELSEIF  "$(CFG)" == "php3 - Win32 Debug"
 
-DEP_CPP_IMAGE=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\fopen-wrappers.h"\
-	".\functions\image.h"\
-	".\internal_functions.h"\
-	".\mod_php3.h"\
-	".\modules.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\image.obj"	"$(INTDIR)\image.sbr" : $(SOURCE) $(DEP_CPP_IMAGE)\
- "$(INTDIR)"
+"$(INTDIR)\image.obj"	"$(INTDIR)\image.sbr" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
@@ -2237,62 +1112,33 @@ SOURCE=.\functions\info.c
 
 !IF  "$(CFG)" == "php3 - Win32 Release"
 
-DEP_CPP_INFO_=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\fopen-wrappers.h"\
-	".\functions\head.h"\
-	".\functions\info.h"\
-	".\mod_php3.h"\
-	".\modules.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\info.obj" : $(SOURCE) $(DEP_CPP_INFO_) "$(INTDIR)"
+"$(INTDIR)\info.obj" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
 !ELSEIF  "$(CFG)" == "php3 - Win32 Debug"
 
-DEP_CPP_INFO_=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\fopen-wrappers.h"\
-	".\functions\head.h"\
-	".\functions\info.h"\
-	".\mod_php3.h"\
-	".\modules.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\info.obj"	"$(INTDIR)\info.sbr" : $(SOURCE) $(DEP_CPP_INFO_)\
- "$(INTDIR)"
+"$(INTDIR)\info.obj"	"$(INTDIR)\info.sbr" : $(SOURCE) "$(INTDIR)"
+	$(CPP) $(CPP_PROJ) $(SOURCE)
+
+
+!ENDIF 
+
+SOURCE=.\functions\iptc.c
+
+!IF  "$(CFG)" == "php3 - Win32 Release"
+
+
+"$(INTDIR)\iptc.obj" : $(SOURCE) "$(INTDIR)"
+	$(CPP) $(CPP_PROJ) $(SOURCE)
+
+
+!ELSEIF  "$(CFG)" == "php3 - Win32 Debug"
+
+
+"$(INTDIR)\iptc.obj"	"$(INTDIR)\iptc.sbr" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
@@ -2302,62 +1148,15 @@ SOURCE=.\functions\link.c
 
 !IF  "$(CFG)" == "php3 - Win32 Release"
 
-DEP_CPP_LINK_=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\fopen-wrappers.h"\
-	".\functions\php3_link.h"\
-	".\internal_functions.h"\
-	".\mod_php3.h"\
-	".\modules.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\link.obj" : $(SOURCE) $(DEP_CPP_LINK_) "$(INTDIR)"
+"$(INTDIR)\link.obj" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
 !ELSEIF  "$(CFG)" == "php3 - Win32 Debug"
 
-DEP_CPP_LINK_=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\fopen-wrappers.h"\
-	".\functions\php3_link.h"\
-	".\internal_functions.h"\
-	".\mod_php3.h"\
-	".\modules.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\link.obj"	"$(INTDIR)\link.sbr" : $(SOURCE) $(DEP_CPP_LINK_)\
- "$(INTDIR)"
+"$(INTDIR)\link.obj"	"$(INTDIR)\link.sbr" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
@@ -2367,64 +1166,15 @@ SOURCE=.\functions\mail.c
 
 !IF  "$(CFG)" == "php3 - Win32 Release"
 
-DEP_CPP_MAIL_=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\fopen-wrappers.h"\
-	".\functions\php3_mail.h"\
-	".\internal_functions.h"\
-	".\mod_php3.h"\
-	".\modules.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win32\sendmail.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\mail.obj" : $(SOURCE) $(DEP_CPP_MAIL_) "$(INTDIR)"
+"$(INTDIR)\mail.obj" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
 !ELSEIF  "$(CFG)" == "php3 - Win32 Debug"
 
-DEP_CPP_MAIL_=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\fopen-wrappers.h"\
-	".\functions\php3_mail.h"\
-	".\internal_functions.h"\
-	".\mod_php3.h"\
-	".\modules.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win32\sendmail.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\mail.obj"	"$(INTDIR)\mail.sbr" : $(SOURCE) $(DEP_CPP_MAIL_)\
- "$(INTDIR)"
+"$(INTDIR)\mail.obj"	"$(INTDIR)\mail.sbr" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
@@ -2434,64 +1184,15 @@ SOURCE=.\functions\math.c
 
 !IF  "$(CFG)" == "php3 - Win32 Release"
 
-DEP_CPP_MATH_=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\fopen-wrappers.h"\
-	".\functions\phpmath.h"\
-	".\internal_functions.h"\
-	".\mod_php3.h"\
-	".\modules.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\snprintf.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\math.obj" : $(SOURCE) $(DEP_CPP_MATH_) "$(INTDIR)"
+"$(INTDIR)\math.obj" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
 !ELSEIF  "$(CFG)" == "php3 - Win32 Debug"
 
-DEP_CPP_MATH_=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\fopen-wrappers.h"\
-	".\functions\phpmath.h"\
-	".\internal_functions.h"\
-	".\mod_php3.h"\
-	".\modules.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\snprintf.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\math.obj"	"$(INTDIR)\math.sbr" : $(SOURCE) $(DEP_CPP_MATH_)\
- "$(INTDIR)"
+"$(INTDIR)\math.obj"	"$(INTDIR)\math.sbr" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
@@ -2501,64 +1202,15 @@ SOURCE=.\functions\md5.c
 
 !IF  "$(CFG)" == "php3 - Win32 Release"
 
-DEP_CPP_MD5_C=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\fopen-wrappers.h"\
-	".\functions\global.h"\
-	".\functions\md5.h"\
-	".\internal_functions.h"\
-	".\mod_php3.h"\
-	".\modules.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\md5.obj" : $(SOURCE) $(DEP_CPP_MD5_C) "$(INTDIR)"
+"$(INTDIR)\md5.obj" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
 !ELSEIF  "$(CFG)" == "php3 - Win32 Debug"
 
-DEP_CPP_MD5_C=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\fopen-wrappers.h"\
-	".\functions\global.h"\
-	".\functions\md5.h"\
-	".\internal_functions.h"\
-	".\mod_php3.h"\
-	".\modules.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\md5.obj"	"$(INTDIR)\md5.sbr" : $(SOURCE) $(DEP_CPP_MD5_C)\
- "$(INTDIR)"
+"$(INTDIR)\md5.obj"	"$(INTDIR)\md5.sbr" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
@@ -2568,64 +1220,15 @@ SOURCE=.\functions\microtime.c
 
 !IF  "$(CFG)" == "php3 - Win32 Release"
 
-DEP_CPP_MICRO=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\fopen-wrappers.h"\
-	".\functions\microtime.h"\
-	".\internal_functions.h"\
-	".\mod_php3.h"\
-	".\modules.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\snprintf.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\microtime.obj" : $(SOURCE) $(DEP_CPP_MICRO) "$(INTDIR)"
+"$(INTDIR)\microtime.obj" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
 !ELSEIF  "$(CFG)" == "php3 - Win32 Debug"
 
-DEP_CPP_MICRO=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\fopen-wrappers.h"\
-	".\functions\microtime.h"\
-	".\internal_functions.h"\
-	".\mod_php3.h"\
-	".\modules.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\snprintf.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\microtime.obj"	"$(INTDIR)\microtime.sbr" : $(SOURCE)\
- $(DEP_CPP_MICRO) "$(INTDIR)"
+"$(INTDIR)\microtime.obj"	"$(INTDIR)\microtime.sbr" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
@@ -2635,68 +1238,15 @@ SOURCE=.\functions\mime.c
 
 !IF  "$(CFG)" == "php3 - Win32 Release"
 
-DEP_CPP_MIME_=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\fopen-wrappers.h"\
-	".\functions\mime.h"\
-	".\functions\post.h"\
-	".\functions\type.h"\
-	".\internal_functions.h"\
-	".\mod_php3.h"\
-	".\modules.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php3_list.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\mime.obj" : $(SOURCE) $(DEP_CPP_MIME_) "$(INTDIR)"
+"$(INTDIR)\mime.obj" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
 !ELSEIF  "$(CFG)" == "php3 - Win32 Debug"
 
-DEP_CPP_MIME_=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\fopen-wrappers.h"\
-	".\functions\mime.h"\
-	".\functions\post.h"\
-	".\functions\type.h"\
-	".\internal_functions.h"\
-	".\mod_php3.h"\
-	".\modules.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php3_list.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\mime.obj"	"$(INTDIR)\mime.sbr" : $(SOURCE) $(DEP_CPP_MIME_)\
- "$(INTDIR)"
+"$(INTDIR)\mime.obj"	"$(INTDIR)\mime.sbr" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
@@ -2706,58 +1256,15 @@ SOURCE=.\functions\number.c
 
 !IF  "$(CFG)" == "php3 - Win32 Release"
 
-DEP_CPP_NUMBE=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\fopen-wrappers.h"\
-	".\functions\number.h"\
-	".\mod_php3.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\number.obj" : $(SOURCE) $(DEP_CPP_NUMBE) "$(INTDIR)"
+"$(INTDIR)\number.obj" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
 !ELSEIF  "$(CFG)" == "php3 - Win32 Debug"
 
-DEP_CPP_NUMBE=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\fopen-wrappers.h"\
-	".\functions\number.h"\
-	".\mod_php3.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\number.obj"	"$(INTDIR)\number.sbr" : $(SOURCE) $(DEP_CPP_NUMBE)\
- "$(INTDIR)"
+"$(INTDIR)\number.obj"	"$(INTDIR)\number.sbr" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
@@ -2767,72 +1274,15 @@ SOURCE=.\functions\pack.c
 
 !IF  "$(CFG)" == "php3 - Win32 Release"
 
-DEP_CPP_PACK_=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\fopen-wrappers.h"\
-	".\functions\fsock.h"\
-	".\functions\head.h"\
-	".\functions\pack.h"\
-	".\functions\php3_string.h"\
-	".\internal_functions.h"\
-	".\mod_php3.h"\
-	".\modules.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php3_list.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\snprintf.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\pack.obj" : $(SOURCE) $(DEP_CPP_PACK_) "$(INTDIR)"
+"$(INTDIR)\pack.obj" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
 !ELSEIF  "$(CFG)" == "php3 - Win32 Debug"
 
-DEP_CPP_PACK_=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\fopen-wrappers.h"\
-	".\functions\fsock.h"\
-	".\functions\head.h"\
-	".\functions\pack.h"\
-	".\functions\php3_string.h"\
-	".\internal_functions.h"\
-	".\mod_php3.h"\
-	".\modules.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php3_list.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\snprintf.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\pack.obj"	"$(INTDIR)\pack.sbr" : $(SOURCE) $(DEP_CPP_PACK_)\
- "$(INTDIR)"
+"$(INTDIR)\pack.obj"	"$(INTDIR)\pack.sbr" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
@@ -2842,58 +1292,15 @@ SOURCE=.\functions\pageinfo.c
 
 !IF  "$(CFG)" == "php3 - Win32 Release"
 
-DEP_CPP_PAGEI=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\fopen-wrappers.h"\
-	".\functions\pageinfo.h"\
-	".\mod_php3.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\pageinfo.obj" : $(SOURCE) $(DEP_CPP_PAGEI) "$(INTDIR)"
+"$(INTDIR)\pageinfo.obj" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
 !ELSEIF  "$(CFG)" == "php3 - Win32 Debug"
 
-DEP_CPP_PAGEI=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\fopen-wrappers.h"\
-	".\functions\pageinfo.h"\
-	".\mod_php3.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\pageinfo.obj"	"$(INTDIR)\pageinfo.sbr" : $(SOURCE) $(DEP_CPP_PAGEI)\
- "$(INTDIR)"
+"$(INTDIR)\pageinfo.obj"	"$(INTDIR)\pageinfo.sbr" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
@@ -2903,70 +1310,15 @@ SOURCE=.\functions\post.c
 
 !IF  "$(CFG)" == "php3 - Win32 Release"
 
-DEP_CPP_POST_=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\fopen-wrappers.h"\
-	".\functions\mime.h"\
-	".\functions\php3_string.h"\
-	".\functions\post.h"\
-	".\functions\type.h"\
-	".\functions\url.h"\
-	".\internal_functions.h"\
-	".\mod_php3.h"\
-	".\modules.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\post.obj" : $(SOURCE) $(DEP_CPP_POST_) "$(INTDIR)"
+"$(INTDIR)\post.obj" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
 !ELSEIF  "$(CFG)" == "php3 - Win32 Debug"
 
-DEP_CPP_POST_=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\fopen-wrappers.h"\
-	".\functions\mime.h"\
-	".\functions\php3_string.h"\
-	".\functions\post.h"\
-	".\functions\type.h"\
-	".\functions\url.h"\
-	".\internal_functions.h"\
-	".\mod_php3.h"\
-	".\modules.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\post.obj"	"$(INTDIR)\post.sbr" : $(SOURCE) $(DEP_CPP_POST_)\
- "$(INTDIR)"
+"$(INTDIR)\post.obj"	"$(INTDIR)\post.sbr" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
@@ -2976,62 +1328,15 @@ SOURCE=.\functions\rand.c
 
 !IF  "$(CFG)" == "php3 - Win32 Release"
 
-DEP_CPP_RAND_=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\fopen-wrappers.h"\
-	".\functions\phpmath.h"\
-	".\internal_functions.h"\
-	".\mod_php3.h"\
-	".\modules.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\rand.obj" : $(SOURCE) $(DEP_CPP_RAND_) "$(INTDIR)"
+"$(INTDIR)\rand.obj" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
 !ELSEIF  "$(CFG)" == "php3 - Win32 Debug"
 
-DEP_CPP_RAND_=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\fopen-wrappers.h"\
-	".\functions\phpmath.h"\
-	".\internal_functions.h"\
-	".\mod_php3.h"\
-	".\modules.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\rand.obj"	"$(INTDIR)\rand.sbr" : $(SOURCE) $(DEP_CPP_RAND_)\
- "$(INTDIR)"
+"$(INTDIR)\rand.obj"	"$(INTDIR)\rand.sbr" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
@@ -3041,64 +1346,15 @@ SOURCE=.\functions\reg.c
 
 !IF  "$(CFG)" == "php3 - Win32 Release"
 
-DEP_CPP_REG_C=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\fopen-wrappers.h"\
-	".\functions\php3_string.h"\
-	".\functions\reg.h"\
-	".\internal_functions.h"\
-	".\mod_php3.h"\
-	".\modules.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\reg.obj" : $(SOURCE) $(DEP_CPP_REG_C) "$(INTDIR)"
+"$(INTDIR)\reg.obj" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
 !ELSEIF  "$(CFG)" == "php3 - Win32 Debug"
 
-DEP_CPP_REG_C=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\fopen-wrappers.h"\
-	".\functions\php3_string.h"\
-	".\functions\reg.h"\
-	".\internal_functions.h"\
-	".\mod_php3.h"\
-	".\modules.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\reg.obj"	"$(INTDIR)\reg.sbr" : $(SOURCE) $(DEP_CPP_REG_C)\
- "$(INTDIR)"
+"$(INTDIR)\reg.obj"	"$(INTDIR)\reg.sbr" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
@@ -3108,62 +1364,15 @@ SOURCE=.\functions\soundex.c
 
 !IF  "$(CFG)" == "php3 - Win32 Release"
 
-DEP_CPP_SOUND=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\fopen-wrappers.h"\
-	".\functions\php3_string.h"\
-	".\internal_functions.h"\
-	".\mod_php3.h"\
-	".\modules.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\soundex.obj" : $(SOURCE) $(DEP_CPP_SOUND) "$(INTDIR)"
+"$(INTDIR)\soundex.obj" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
 !ELSEIF  "$(CFG)" == "php3 - Win32 Debug"
 
-DEP_CPP_SOUND=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\fopen-wrappers.h"\
-	".\functions\php3_string.h"\
-	".\internal_functions.h"\
-	".\mod_php3.h"\
-	".\modules.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\soundex.obj"	"$(INTDIR)\soundex.sbr" : $(SOURCE) $(DEP_CPP_SOUND)\
- "$(INTDIR)"
+"$(INTDIR)\soundex.obj"	"$(INTDIR)\soundex.sbr" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
@@ -3173,66 +1382,15 @@ SOURCE=.\functions\string.c
 
 !IF  "$(CFG)" == "php3 - Win32 Release"
 
-DEP_CPP_STRIN=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\fopen-wrappers.h"\
-	".\functions\php3_string.h"\
-	".\functions\post.h"\
-	".\functions\reg.h"\
-	".\internal_functions.h"\
-	".\mod_php3.h"\
-	".\modules.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\string.obj" : $(SOURCE) $(DEP_CPP_STRIN) "$(INTDIR)"
+"$(INTDIR)\string.obj" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
 !ELSEIF  "$(CFG)" == "php3 - Win32 Debug"
 
-DEP_CPP_STRIN=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\fopen-wrappers.h"\
-	".\functions\php3_string.h"\
-	".\functions\post.h"\
-	".\functions\reg.h"\
-	".\internal_functions.h"\
-	".\mod_php3.h"\
-	".\modules.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\string.obj"	"$(INTDIR)\string.sbr" : $(SOURCE) $(DEP_CPP_STRIN)\
- "$(INTDIR)"
+"$(INTDIR)\string.obj"	"$(INTDIR)\string.sbr" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
@@ -3242,64 +1400,15 @@ SOURCE=.\functions\syslog.c
 
 !IF  "$(CFG)" == "php3 - Win32 Release"
 
-DEP_CPP_SYSLO=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\fopen-wrappers.h"\
-	".\functions\php3_syslog.h"\
-	".\internal_functions.h"\
-	".\mod_php3.h"\
-	".\modules.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win32\syslog.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\syslog.obj" : $(SOURCE) $(DEP_CPP_SYSLO) "$(INTDIR)"
+"$(INTDIR)\syslog.obj" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
 !ELSEIF  "$(CFG)" == "php3 - Win32 Debug"
 
-DEP_CPP_SYSLO=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\fopen-wrappers.h"\
-	".\functions\php3_syslog.h"\
-	".\internal_functions.h"\
-	".\mod_php3.h"\
-	".\modules.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win32\syslog.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\syslog.obj"	"$(INTDIR)\syslog.sbr" : $(SOURCE) $(DEP_CPP_SYSLO)\
- "$(INTDIR)"
+"$(INTDIR)\syslog.obj"	"$(INTDIR)\syslog.sbr" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
@@ -3309,58 +1418,15 @@ SOURCE=.\functions\type.c
 
 !IF  "$(CFG)" == "php3 - Win32 Release"
 
-DEP_CPP_TYPE_=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\fopen-wrappers.h"\
-	".\functions\type.h"\
-	".\mod_php3.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\type.obj" : $(SOURCE) $(DEP_CPP_TYPE_) "$(INTDIR)"
+"$(INTDIR)\type.obj" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
 !ELSEIF  "$(CFG)" == "php3 - Win32 Debug"
 
-DEP_CPP_TYPE_=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\fopen-wrappers.h"\
-	".\functions\type.h"\
-	".\mod_php3.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\type.obj"	"$(INTDIR)\type.sbr" : $(SOURCE) $(DEP_CPP_TYPE_)\
- "$(INTDIR)"
+"$(INTDIR)\type.obj"	"$(INTDIR)\type.sbr" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
@@ -3370,70 +1436,15 @@ SOURCE=.\functions\unified_odbc.c
 
 !IF  "$(CFG)" == "php3 - Win32 Release"
 
-DEP_CPP_UNIFI=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\fopen-wrappers.h"\
-	".\functions\head.h"\
-	".\functions\php3_string.h"\
-	".\functions\php3_unified_odbc.h"\
-	".\internal_functions.h"\
-	".\mod_php3.h"\
-	".\modules.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php3_list.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\snprintf.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\unified_odbc.obj" : $(SOURCE) $(DEP_CPP_UNIFI) "$(INTDIR)"
+"$(INTDIR)\unified_odbc.obj" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
 !ELSEIF  "$(CFG)" == "php3 - Win32 Debug"
 
-DEP_CPP_UNIFI=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\fopen-wrappers.h"\
-	".\functions\head.h"\
-	".\functions\php3_string.h"\
-	".\functions\php3_unified_odbc.h"\
-	".\internal_functions.h"\
-	".\mod_php3.h"\
-	".\modules.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php3_list.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\snprintf.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\unified_odbc.obj"	"$(INTDIR)\unified_odbc.sbr" : $(SOURCE)\
- $(DEP_CPP_UNIFI) "$(INTDIR)"
+"$(INTDIR)\unified_odbc.obj"	"$(INTDIR)\unified_odbc.sbr" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
@@ -3443,62 +1454,15 @@ SOURCE=.\functions\uniqid.c
 
 !IF  "$(CFG)" == "php3 - Win32 Release"
 
-DEP_CPP_UNIQI=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\fopen-wrappers.h"\
-	".\functions\uniqid.h"\
-	".\internal_functions.h"\
-	".\mod_php3.h"\
-	".\modules.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\uniqid.obj" : $(SOURCE) $(DEP_CPP_UNIQI) "$(INTDIR)"
+"$(INTDIR)\uniqid.obj" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
 !ELSEIF  "$(CFG)" == "php3 - Win32 Debug"
 
-DEP_CPP_UNIQI=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\fopen-wrappers.h"\
-	".\functions\uniqid.h"\
-	".\internal_functions.h"\
-	".\mod_php3.h"\
-	".\modules.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\uniqid.obj"	"$(INTDIR)\uniqid.sbr" : $(SOURCE) $(DEP_CPP_UNIQI)\
- "$(INTDIR)"
+"$(INTDIR)\uniqid.obj"	"$(INTDIR)\uniqid.sbr" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
@@ -3508,62 +1472,15 @@ SOURCE=.\functions\url.c
 
 !IF  "$(CFG)" == "php3 - Win32 Release"
 
-DEP_CPP_URL_C=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\fopen-wrappers.h"\
-	".\functions\url.h"\
-	".\internal_functions.h"\
-	".\mod_php3.h"\
-	".\modules.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\url.obj" : $(SOURCE) $(DEP_CPP_URL_C) "$(INTDIR)"
+"$(INTDIR)\url.obj" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
 !ELSEIF  "$(CFG)" == "php3 - Win32 Debug"
 
-DEP_CPP_URL_C=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\fopen-wrappers.h"\
-	".\functions\url.h"\
-	".\internal_functions.h"\
-	".\mod_php3.h"\
-	".\modules.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\url.obj"	"$(INTDIR)\url.sbr" : $(SOURCE) $(DEP_CPP_URL_C)\
- "$(INTDIR)"
+"$(INTDIR)\url.obj"	"$(INTDIR)\url.sbr" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
@@ -3573,87 +1490,15 @@ SOURCE=.\functions\var.c
 
 !IF  "$(CFG)" == "php3 - Win32 Release"
 
-DEP_CPP_VAR_C=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\fopen-wrappers.h"\
-	".\functions\php3_string.h"\
-	".\functions\post.h"\
-	".\functions\reg.h"\
-	".\internal_functions.h"\
-	".\mod_php3.h"\
-	".\modules.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\var.obj" : $(SOURCE) $(DEP_CPP_VAR_C) "$(INTDIR)"
+"$(INTDIR)\var.obj" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
 !ELSEIF  "$(CFG)" == "php3 - Win32 Debug"
 
-DEP_CPP_VAR_C=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\FlexSafe.h"\
-	".\fopen-wrappers.h"\
-	".\functions\head.h"\
-	".\functions\number.h"\
-	".\functions\php3_string.h"\
-	".\functions\post.h"\
-	".\functions\reg.h"\
-	".\internal_functions.h"\
-	".\mod_php3.h"\
-	".\modules.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\serverapi\sapi.h"\
-	".\stack.h"\
-	".\tls.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win32\sendmail.h"\
-	".\win95nt.h"\
-	{$(INCLUDE)}"sys\stat.h"\
-	{$(INCLUDE)}"sys\types.h"\
-	
-NODEP_CPP_VAR_C=\
-	".\ap_compat.h"\
-	".\ap_config.h"\
-	".\compat.h"\
-	".\config.h"\
-	".\http_config.h"\
-	".\http_core.h"\
-	".\http_log.h"\
-	".\http_main.h"\
-	".\http_protocol.h"\
-	".\http_request.h"\
-	".\httpd.h"\
-	
 
-"$(INTDIR)\var.obj"	"$(INTDIR)\var.sbr" : $(SOURCE) $(DEP_CPP_VAR_C)\
- "$(INTDIR)"
+"$(INTDIR)\var.obj"	"$(INTDIR)\var.sbr" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
@@ -3663,32 +1508,15 @@ SOURCE=.\regex\regcomp.c
 
 !IF  "$(CFG)" == "php3 - Win32 Release"
 
-DEP_CPP_REGCO=\
-	".\regex\cclass.h"\
-	".\regex\cname.h"\
-	".\regex\regcomp.ih"\
-	".\regex\regex.h"\
-	".\regex\regex2.h"\
-	".\regex\utils.h"\
-	
 
-"$(INTDIR)\regcomp.obj" : $(SOURCE) $(DEP_CPP_REGCO) "$(INTDIR)"
+"$(INTDIR)\regcomp.obj" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
 !ELSEIF  "$(CFG)" == "php3 - Win32 Debug"
 
-DEP_CPP_REGCO=\
-	".\regex\cclass.h"\
-	".\regex\cname.h"\
-	".\regex\regcomp.ih"\
-	".\regex\regex.h"\
-	".\regex\regex2.h"\
-	".\regex\utils.h"\
-	
 
-"$(INTDIR)\regcomp.obj"	"$(INTDIR)\regcomp.sbr" : $(SOURCE) $(DEP_CPP_REGCO)\
- "$(INTDIR)"
+"$(INTDIR)\regcomp.obj"	"$(INTDIR)\regcomp.sbr" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
@@ -3698,26 +1526,15 @@ SOURCE=.\regex\regerror.c
 
 !IF  "$(CFG)" == "php3 - Win32 Release"
 
-DEP_CPP_REGER=\
-	".\regex\regerror.ih"\
-	".\regex\regex.h"\
-	".\regex\utils.h"\
-	
 
-"$(INTDIR)\regerror.obj" : $(SOURCE) $(DEP_CPP_REGER) "$(INTDIR)"
+"$(INTDIR)\regerror.obj" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
 !ELSEIF  "$(CFG)" == "php3 - Win32 Debug"
 
-DEP_CPP_REGER=\
-	".\regex\regerror.ih"\
-	".\regex\regex.h"\
-	".\regex\utils.h"\
-	
 
-"$(INTDIR)\regerror.obj"	"$(INTDIR)\regerror.sbr" : $(SOURCE) $(DEP_CPP_REGER)\
- "$(INTDIR)"
+"$(INTDIR)\regerror.obj"	"$(INTDIR)\regerror.sbr" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
@@ -3727,30 +1544,15 @@ SOURCE=.\regex\regexec.c
 
 !IF  "$(CFG)" == "php3 - Win32 Release"
 
-DEP_CPP_REGEX=\
-	".\regex\engine.c"\
-	".\regex\engine.ih"\
-	".\regex\regex.h"\
-	".\regex\regex2.h"\
-	".\regex\utils.h"\
-	
 
-"$(INTDIR)\regexec.obj" : $(SOURCE) $(DEP_CPP_REGEX) "$(INTDIR)"
+"$(INTDIR)\regexec.obj" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
 !ELSEIF  "$(CFG)" == "php3 - Win32 Debug"
 
-DEP_CPP_REGEX=\
-	".\regex\engine.c"\
-	".\regex\engine.ih"\
-	".\regex\regex.h"\
-	".\regex\regex2.h"\
-	".\regex\utils.h"\
-	
 
-"$(INTDIR)\regexec.obj"	"$(INTDIR)\regexec.sbr" : $(SOURCE) $(DEP_CPP_REGEX)\
- "$(INTDIR)"
+"$(INTDIR)\regexec.obj"	"$(INTDIR)\regexec.sbr" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
@@ -3760,26 +1562,15 @@ SOURCE=.\regex\regfree.c
 
 !IF  "$(CFG)" == "php3 - Win32 Release"
 
-DEP_CPP_REGFR=\
-	".\regex\regex.h"\
-	".\regex\regex2.h"\
-	".\regex\utils.h"\
-	
 
-"$(INTDIR)\regfree.obj" : $(SOURCE) $(DEP_CPP_REGFR) "$(INTDIR)"
+"$(INTDIR)\regfree.obj" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
 !ELSEIF  "$(CFG)" == "php3 - Win32 Debug"
 
-DEP_CPP_REGFR=\
-	".\regex\regex.h"\
-	".\regex\regex2.h"\
-	".\regex\utils.h"\
-	
 
-"$(INTDIR)\regfree.obj"	"$(INTDIR)\regfree.sbr" : $(SOURCE) $(DEP_CPP_REGFR)\
- "$(INTDIR)"
+"$(INTDIR)\regfree.obj"	"$(INTDIR)\regfree.sbr" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
@@ -3789,57 +1580,14 @@ SOURCE=.\alloc.c
 
 !IF  "$(CFG)" == "php3 - Win32 Release"
 
-DEP_CPP_ALLOC=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\fopen-wrappers.h"\
-	".\main.h"\
-	".\mod_php3.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\alloc.obj" : $(SOURCE) $(DEP_CPP_ALLOC) "$(INTDIR)"
+"$(INTDIR)\alloc.obj" : $(SOURCE) "$(INTDIR)"
 
 
 !ELSEIF  "$(CFG)" == "php3 - Win32 Debug"
 
-DEP_CPP_ALLOC=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\fopen-wrappers.h"\
-	".\main.h"\
-	".\mod_php3.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\alloc.obj"	"$(INTDIR)\alloc.sbr" : $(SOURCE) $(DEP_CPP_ALLOC)\
- "$(INTDIR)"
+"$(INTDIR)\alloc.obj"	"$(INTDIR)\alloc.sbr" : $(SOURCE) "$(INTDIR)"
 
 
 !ENDIF 
@@ -3848,67 +1596,14 @@ SOURCE=".\configuration-parser.tab.c"
 
 !IF  "$(CFG)" == "php3 - Win32 Release"
 
-DEP_CPP_CONFI=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\fopen-wrappers.h"\
-	".\functions\dl.h"\
-	".\functions\file.h"\
-	".\functions\php3_browscap.h"\
-	".\mod_php3.h"\
-	".\modules.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win32\wfile.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\configuration-parser.tab.obj" : $(SOURCE) $(DEP_CPP_CONFI)\
- "$(INTDIR)"
+"$(INTDIR)\configuration-parser.tab.obj" : $(SOURCE) "$(INTDIR)"
 
 
 !ELSEIF  "$(CFG)" == "php3 - Win32 Debug"
 
-DEP_CPP_CONFI=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\fopen-wrappers.h"\
-	".\functions\dl.h"\
-	".\functions\file.h"\
-	".\functions\php3_browscap.h"\
-	".\mod_php3.h"\
-	".\modules.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win32\wfile.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\configuration-parser.tab.obj"\
-	"$(INTDIR)\configuration-parser.tab.sbr" : $(SOURCE) $(DEP_CPP_CONFI)\
- "$(INTDIR)"
+"$(INTDIR)\configuration-parser.tab.obj"	"$(INTDIR)\configuration-parser.tab.sbr" : $(SOURCE) "$(INTDIR)"
 
 
 !ENDIF 
@@ -3917,57 +1612,14 @@ SOURCE=".\configuration-scanner.c"
 
 !IF  "$(CFG)" == "php3 - Win32 Release"
 
-DEP_CPP_CONFIG=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\configuration-parser.tab.h"\
-	".\constants.h"\
-	".\fopen-wrappers.h"\
-	".\mod_php3.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\configuration-scanner.obj" : $(SOURCE) $(DEP_CPP_CONFIG) "$(INTDIR)"
+"$(INTDIR)\configuration-scanner.obj" : $(SOURCE) "$(INTDIR)"
 
 
 !ELSEIF  "$(CFG)" == "php3 - Win32 Debug"
 
-DEP_CPP_CONFIG=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\configuration-parser.tab.h"\
-	".\constants.h"\
-	".\fopen-wrappers.h"\
-	".\mod_php3.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\configuration-scanner.obj"	"$(INTDIR)\configuration-scanner.sbr" : \
-$(SOURCE) $(DEP_CPP_CONFIG) "$(INTDIR)"
+"$(INTDIR)\configuration-scanner.obj"	"$(INTDIR)\configuration-scanner.sbr" : $(SOURCE) "$(INTDIR)"
 
 
 !ENDIF 
@@ -3976,59 +1628,14 @@ SOURCE=.\constants.c
 
 !IF  "$(CFG)" == "php3 - Win32 Release"
 
-DEP_CPP_CONST=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\fopen-wrappers.h"\
-	".\internal_functions.h"\
-	".\mod_php3.h"\
-	".\modules.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\constants.obj" : $(SOURCE) $(DEP_CPP_CONST) "$(INTDIR)"
+"$(INTDIR)\constants.obj" : $(SOURCE) "$(INTDIR)"
 
 
 !ELSEIF  "$(CFG)" == "php3 - Win32 Debug"
 
-DEP_CPP_CONST=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\fopen-wrappers.h"\
-	".\internal_functions.h"\
-	".\mod_php3.h"\
-	".\modules.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\constants.obj"	"$(INTDIR)\constants.sbr" : $(SOURCE)\
- $(DEP_CPP_CONST) "$(INTDIR)"
+"$(INTDIR)\constants.obj"	"$(INTDIR)\constants.sbr" : $(SOURCE) "$(INTDIR)"
 
 
 !ENDIF 
@@ -4037,65 +1644,14 @@ SOURCE=.\debugger.c
 
 !IF  "$(CFG)" == "php3 - Win32 Release"
 
-DEP_CPP_DEBUG=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\fopen-wrappers.h"\
-	".\functions\fsock.h"\
-	".\internal_functions.h"\
-	".\main.h"\
-	".\mod_php3.h"\
-	".\modules.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_debugger.h"\
-	".\php3_hash.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\debugger.obj" : $(SOURCE) $(DEP_CPP_DEBUG) "$(INTDIR)"
+"$(INTDIR)\debugger.obj" : $(SOURCE) "$(INTDIR)"
 
 
 !ELSEIF  "$(CFG)" == "php3 - Win32 Debug"
 
-DEP_CPP_DEBUG=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\fopen-wrappers.h"\
-	".\functions\fsock.h"\
-	".\internal_functions.h"\
-	".\main.h"\
-	".\mod_php3.h"\
-	".\modules.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_debugger.h"\
-	".\php3_hash.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\debugger.obj"	"$(INTDIR)\debugger.sbr" : $(SOURCE) $(DEP_CPP_DEBUG)\
- "$(INTDIR)"
+"$(INTDIR)\debugger.obj"	"$(INTDIR)\debugger.sbr" : $(SOURCE) "$(INTDIR)"
 
 
 !ENDIF 
@@ -4104,71 +1660,14 @@ SOURCE=".\fopen-wrappers.c"
 
 !IF  "$(CFG)" == "php3 - Win32 Release"
 
-DEP_CPP_FOPEN=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\fopen-wrappers.h"\
-	".\functions\base64.h"\
-	".\functions\fsock.h"\
-	".\functions\head.h"\
-	".\functions\php3_string.h"\
-	".\functions\url.h"\
-	".\mod_php3.h"\
-	".\modules.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php3_list.h"\
-	".\php3_realpath.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\fopen-wrappers.obj" : $(SOURCE) $(DEP_CPP_FOPEN) "$(INTDIR)"
+"$(INTDIR)\fopen-wrappers.obj" : $(SOURCE) "$(INTDIR)"
 
 
 !ELSEIF  "$(CFG)" == "php3 - Win32 Debug"
 
-DEP_CPP_FOPEN=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\fopen-wrappers.h"\
-	".\functions\base64.h"\
-	".\functions\fsock.h"\
-	".\functions\head.h"\
-	".\functions\php3_string.h"\
-	".\functions\url.h"\
-	".\mod_php3.h"\
-	".\modules.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php3_list.h"\
-	".\php3_realpath.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\fopen-wrappers.obj"	"$(INTDIR)\fopen-wrappers.sbr" : $(SOURCE)\
- $(DEP_CPP_FOPEN) "$(INTDIR)"
+"$(INTDIR)\fopen-wrappers.obj"	"$(INTDIR)\fopen-wrappers.sbr" : $(SOURCE) "$(INTDIR)"
 
 
 !ENDIF 
@@ -4177,57 +1676,14 @@ SOURCE=.\getopt.c
 
 !IF  "$(CFG)" == "php3 - Win32 Release"
 
-DEP_CPP_GETOP=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\fopen-wrappers.h"\
-	".\getopt.h"\
-	".\mod_php3.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\getopt.obj" : $(SOURCE) $(DEP_CPP_GETOP) "$(INTDIR)"
+"$(INTDIR)\getopt.obj" : $(SOURCE) "$(INTDIR)"
 
 
 !ELSEIF  "$(CFG)" == "php3 - Win32 Debug"
 
-DEP_CPP_GETOP=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\fopen-wrappers.h"\
-	".\getopt.h"\
-	".\mod_php3.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\getopt.obj"	"$(INTDIR)\getopt.sbr" : $(SOURCE) $(DEP_CPP_GETOP)\
- "$(INTDIR)"
+"$(INTDIR)\getopt.obj"	"$(INTDIR)\getopt.sbr" : $(SOURCE) "$(INTDIR)"
 
 
 !ENDIF 
@@ -4236,61 +1692,14 @@ SOURCE=.\highlight.c
 
 !IF  "$(CFG)" == "php3 - Win32 Release"
 
-DEP_CPP_HIGHL=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\fopen-wrappers.h"\
-	".\highlight.h"\
-	".\language-parser.tab.h"\
-	".\main.h"\
-	".\mod_php3.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\highlight.obj" : $(SOURCE) $(DEP_CPP_HIGHL) "$(INTDIR)"
+"$(INTDIR)\highlight.obj" : $(SOURCE) "$(INTDIR)"
 
 
 !ELSEIF  "$(CFG)" == "php3 - Win32 Debug"
 
-DEP_CPP_HIGHL=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\fopen-wrappers.h"\
-	".\highlight.h"\
-	".\language-parser.tab.h"\
-	".\main.h"\
-	".\mod_php3.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\highlight.obj"	"$(INTDIR)\highlight.sbr" : $(SOURCE)\
- $(DEP_CPP_HIGHL) "$(INTDIR)"
+"$(INTDIR)\highlight.obj"	"$(INTDIR)\highlight.sbr" : $(SOURCE) "$(INTDIR)"
 
 
 !ENDIF 
@@ -4299,151 +1708,14 @@ SOURCE=.\internal_functions.c
 
 !IF  "$(CFG)" == "php3 - Win32 Release"
 
-DEP_CPP_INTER=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\dl\snmp\php3_snmp.h"\
-	".\fopen-wrappers.h"\
-	".\functions\adabasd.h"\
-	".\functions\base64.h"\
-	".\functions\basic_functions.h"\
-	".\functions\db.h"\
-	".\functions\dbase.h"\
-	".\functions\dl.h"\
-	".\functions\dns.h"\
-	".\functions\exec.h"\
-	".\functions\file.h"\
-	".\functions\filepro.h"\
-	".\functions\global.h"\
-	".\functions\head.h"\
-	".\functions\html.h"\
-	".\functions\hw.h"\
-	".\functions\imap.h"\
-	".\functions\md5.h"\
-	".\functions\oracle.h"\
-	".\functions\pack.h"\
-	".\functions\php3_bcmath.h"\
-	".\functions\php3_browscap.h"\
-	".\functions\php3_COM.h"\
-	".\functions\php3_dir.h"\
-	".\functions\php3_filestat.h"\
-	".\functions\php3_gd.h"\
-	".\functions\php3_ifx.h"\
-	".\functions\php3_ldap.h"\
-	".\functions\php3_mail.h"\
-	".\functions\php3_msql.h"\
-	".\functions\php3_mysql.h"\
-	".\functions\php3_oci8.h"\
-	".\functions\php3_pgsql.h"\
-	".\functions\php3_solid.h"\
-	".\functions\php3_string.h"\
-	".\functions\php3_sybase-ct.h"\
-	".\functions\php3_sybase.h"\
-	".\functions\php3_syslog.h"\
-	".\functions\php3_unified_odbc.h"\
-	".\functions\php3_velocis.h"\
-	".\functions\php3_zlib.h"\
-	".\functions\phpmath.h"\
-	".\functions\post.h"\
-	".\functions\reg.h"\
-	".\internal_functions.h"\
-	".\internal_functions_registry.h"\
-	".\mod_php3.h"\
-	".\modules.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_debugger.h"\
-	".\php3_hash.h"\
-	".\php3_list.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\internal_functions.obj" : $(SOURCE) $(DEP_CPP_INTER) "$(INTDIR)"
+"$(INTDIR)\internal_functions.obj" : $(SOURCE) "$(INTDIR)"
 
 
 !ELSEIF  "$(CFG)" == "php3 - Win32 Debug"
 
-DEP_CPP_INTER=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\dl\snmp\php3_snmp.h"\
-	".\fopen-wrappers.h"\
-	".\functions\adabasd.h"\
-	".\functions\base64.h"\
-	".\functions\basic_functions.h"\
-	".\functions\db.h"\
-	".\functions\dbase.h"\
-	".\functions\dl.h"\
-	".\functions\dns.h"\
-	".\functions\exec.h"\
-	".\functions\file.h"\
-	".\functions\filepro.h"\
-	".\functions\global.h"\
-	".\functions\head.h"\
-	".\functions\html.h"\
-	".\functions\hw.h"\
-	".\functions\imap.h"\
-	".\functions\md5.h"\
-	".\functions\oracle.h"\
-	".\functions\pack.h"\
-	".\functions\php3_bcmath.h"\
-	".\functions\php3_browscap.h"\
-	".\functions\php3_COM.h"\
-	".\functions\php3_dir.h"\
-	".\functions\php3_filestat.h"\
-	".\functions\php3_gd.h"\
-	".\functions\php3_ifx.h"\
-	".\functions\php3_ldap.h"\
-	".\functions\php3_mail.h"\
-	".\functions\php3_msql.h"\
-	".\functions\php3_mysql.h"\
-	".\functions\php3_oci8.h"\
-	".\functions\php3_pgsql.h"\
-	".\functions\php3_solid.h"\
-	".\functions\php3_string.h"\
-	".\functions\php3_sybase-ct.h"\
-	".\functions\php3_sybase.h"\
-	".\functions\php3_syslog.h"\
-	".\functions\php3_unified_odbc.h"\
-	".\functions\php3_velocis.h"\
-	".\functions\php3_zlib.h"\
-	".\functions\phpmath.h"\
-	".\functions\post.h"\
-	".\functions\reg.h"\
-	".\internal_functions.h"\
-	".\internal_functions_registry.h"\
-	".\mod_php3.h"\
-	".\modules.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_debugger.h"\
-	".\php3_hash.h"\
-	".\php3_list.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\internal_functions.obj"	"$(INTDIR)\internal_functions.sbr" : \
-$(SOURCE) $(DEP_CPP_INTER) "$(INTDIR)"
+"$(INTDIR)\internal_functions.obj"	"$(INTDIR)\internal_functions.sbr" : $(SOURCE) "$(INTDIR)"
 
 
 !ENDIF 
@@ -4452,69 +1724,14 @@ SOURCE=".\language-parser.tab.c"
 
 !IF  "$(CFG)" == "php3 - Win32 Release"
 
-DEP_CPP_LANGU=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\control_structures.h"\
-	".\control_structures_inline.h"\
-	".\fopen-wrappers.h"\
-	".\functions\head.h"\
-	".\internal_functions.h"\
-	".\main.h"\
-	".\mod_php3.h"\
-	".\modules.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php3_list.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\language-parser.tab.obj" : $(SOURCE) $(DEP_CPP_LANGU) "$(INTDIR)"
+"$(INTDIR)\language-parser.tab.obj" : $(SOURCE) "$(INTDIR)"
 
 
 !ELSEIF  "$(CFG)" == "php3 - Win32 Debug"
 
-DEP_CPP_LANGU=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\control_structures.h"\
-	".\control_structures_inline.h"\
-	".\fopen-wrappers.h"\
-	".\functions\head.h"\
-	".\internal_functions.h"\
-	".\main.h"\
-	".\mod_php3.h"\
-	".\modules.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php3_list.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\language-parser.tab.obj"	"$(INTDIR)\language-parser.tab.sbr" : \
-$(SOURCE) $(DEP_CPP_LANGU) "$(INTDIR)"
+"$(INTDIR)\language-parser.tab.obj"	"$(INTDIR)\language-parser.tab.sbr" : $(SOURCE) "$(INTDIR)"
 
 
 !ENDIF 
@@ -4523,69 +1740,14 @@ SOURCE=".\language-scanner.c"
 
 !IF  "$(CFG)" == "php3 - Win32 Release"
 
-DEP_CPP_LANGUA=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\control_structures.h"\
-	".\fopen-wrappers.h"\
-	".\functions\post.h"\
-	".\highlight.h"\
-	".\language-parser.tab.h"\
-	".\language-scanner.h"\
-	".\main.h"\
-	".\mod_php3.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php3_list.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\language-scanner.obj" : $(SOURCE) $(DEP_CPP_LANGUA) "$(INTDIR)"
+"$(INTDIR)\language-scanner.obj" : $(SOURCE) "$(INTDIR)"
 
 
 !ELSEIF  "$(CFG)" == "php3 - Win32 Debug"
 
-DEP_CPP_LANGUA=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\control_structures.h"\
-	".\fopen-wrappers.h"\
-	".\functions\post.h"\
-	".\highlight.h"\
-	".\language-parser.tab.h"\
-	".\language-scanner.h"\
-	".\main.h"\
-	".\mod_php3.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php3_list.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\language-scanner.obj"	"$(INTDIR)\language-scanner.sbr" : $(SOURCE)\
- $(DEP_CPP_LANGUA) "$(INTDIR)"
+"$(INTDIR)\language-scanner.obj"	"$(INTDIR)\language-scanner.sbr" : $(SOURCE) "$(INTDIR)"
 
 
 !ENDIF 
@@ -4594,63 +1756,14 @@ SOURCE=.\list.c
 
 !IF  "$(CFG)" == "php3 - Win32 Release"
 
-DEP_CPP_LIST_=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\fopen-wrappers.h"\
-	".\functions\db.h"\
-	".\mod_php3.h"\
-	".\modules.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php3_list.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win32\readdir.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\list.obj" : $(SOURCE) $(DEP_CPP_LIST_) "$(INTDIR)"
+"$(INTDIR)\list.obj" : $(SOURCE) "$(INTDIR)"
 
 
 !ELSEIF  "$(CFG)" == "php3 - Win32 Debug"
 
-DEP_CPP_LIST_=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\fopen-wrappers.h"\
-	".\functions\db.h"\
-	".\mod_php3.h"\
-	".\modules.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php3_list.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win32\readdir.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\list.obj"	"$(INTDIR)\list.sbr" : $(SOURCE) $(DEP_CPP_LIST_)\
- "$(INTDIR)"
+"$(INTDIR)\list.obj"	"$(INTDIR)\list.sbr" : $(SOURCE) "$(INTDIR)"
 
 
 !ENDIF 
@@ -4659,85 +1772,14 @@ SOURCE=.\main.c
 
 !IF  "$(CFG)" == "php3 - Win32 Release"
 
-DEP_CPP_MAIN_=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\control_structures.h"\
-	".\fopen-wrappers.h"\
-	".\functions\basic_functions.h"\
-	".\functions\head.h"\
-	".\functions\info.h"\
-	".\functions\post.h"\
-	".\functions\type.h"\
-	".\getopt.h"\
-	".\highlight.h"\
-	".\internal_functions.h"\
-	".\language-parser.tab.h"\
-	".\main.h"\
-	".\mod_php3.h"\
-	".\modules.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php3_list.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\snprintf.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win32\syslog.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\main.obj" : $(SOURCE) $(DEP_CPP_MAIN_) "$(INTDIR)"
+"$(INTDIR)\main.obj" : $(SOURCE) "$(INTDIR)"
 
 
 !ELSEIF  "$(CFG)" == "php3 - Win32 Debug"
 
-DEP_CPP_MAIN_=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\control_structures.h"\
-	".\fopen-wrappers.h"\
-	".\functions\basic_functions.h"\
-	".\functions\head.h"\
-	".\functions\info.h"\
-	".\functions\post.h"\
-	".\functions\type.h"\
-	".\getopt.h"\
-	".\highlight.h"\
-	".\internal_functions.h"\
-	".\language-parser.tab.h"\
-	".\main.h"\
-	".\mod_php3.h"\
-	".\modules.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php3_list.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\snprintf.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win32\syslog.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\main.obj"	"$(INTDIR)\main.sbr" : $(SOURCE) $(DEP_CPP_MAIN_)\
- "$(INTDIR)"
+"$(INTDIR)\main.obj"	"$(INTDIR)\main.sbr" : $(SOURCE) "$(INTDIR)"
 
 
 !ENDIF 
@@ -4746,59 +1788,14 @@ SOURCE=.\operators.c
 
 !IF  "$(CFG)" == "php3 - Win32 Release"
 
-DEP_CPP_OPERA=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\fopen-wrappers.h"\
-	".\functions\number.h"\
-	".\mod_php3.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\snprintf.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\operators.obj" : $(SOURCE) $(DEP_CPP_OPERA) "$(INTDIR)"
+"$(INTDIR)\operators.obj" : $(SOURCE) "$(INTDIR)"
 
 
 !ELSEIF  "$(CFG)" == "php3 - Win32 Debug"
 
-DEP_CPP_OPERA=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\fopen-wrappers.h"\
-	".\functions\number.h"\
-	".\mod_php3.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\snprintf.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\operators.obj"	"$(INTDIR)\operators.sbr" : $(SOURCE)\
- $(DEP_CPP_OPERA) "$(INTDIR)"
+"$(INTDIR)\operators.obj"	"$(INTDIR)\operators.sbr" : $(SOURCE) "$(INTDIR)"
 
 
 !ENDIF 
@@ -4807,55 +1804,14 @@ SOURCE=.\php3_hash.c
 
 !IF  "$(CFG)" == "php3 - Win32 Release"
 
-DEP_CPP_PHP3_=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\fopen-wrappers.h"\
-	".\mod_php3.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\php3_hash.obj" : $(SOURCE) $(DEP_CPP_PHP3_) "$(INTDIR)"
+"$(INTDIR)\php3_hash.obj" : $(SOURCE) "$(INTDIR)"
 
 
 !ELSEIF  "$(CFG)" == "php3 - Win32 Debug"
 
-DEP_CPP_PHP3_=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\fopen-wrappers.h"\
-	".\mod_php3.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\php3_hash.obj"	"$(INTDIR)\php3_hash.sbr" : $(SOURCE)\
- $(DEP_CPP_PHP3_) "$(INTDIR)"
+"$(INTDIR)\php3_hash.obj"	"$(INTDIR)\php3_hash.sbr" : $(SOURCE) "$(INTDIR)"
 
 
 !ENDIF 
@@ -4864,55 +1820,14 @@ SOURCE=.\php3_realpath.c
 
 !IF  "$(CFG)" == "php3 - Win32 Release"
 
-DEP_CPP_PHP3_R=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\fopen-wrappers.h"\
-	".\mod_php3.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\php3_realpath.obj" : $(SOURCE) $(DEP_CPP_PHP3_R) "$(INTDIR)"
+"$(INTDIR)\php3_realpath.obj" : $(SOURCE) "$(INTDIR)"
 
 
 !ELSEIF  "$(CFG)" == "php3 - Win32 Debug"
 
-DEP_CPP_PHP3_R=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\fopen-wrappers.h"\
-	".\mod_php3.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\php3_realpath.obj"	"$(INTDIR)\php3_realpath.sbr" : $(SOURCE)\
- $(DEP_CPP_PHP3_R) "$(INTDIR)"
+"$(INTDIR)\php3_realpath.obj"	"$(INTDIR)\php3_realpath.sbr" : $(SOURCE) "$(INTDIR)"
 
 
 !ENDIF 
@@ -4921,55 +1836,14 @@ SOURCE=.\request_info.c
 
 !IF  "$(CFG)" == "php3 - Win32 Release"
 
-DEP_CPP_REQUE=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\fopen-wrappers.h"\
-	".\mod_php3.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\request_info.obj" : $(SOURCE) $(DEP_CPP_REQUE) "$(INTDIR)"
+"$(INTDIR)\request_info.obj" : $(SOURCE) "$(INTDIR)"
 
 
 !ELSEIF  "$(CFG)" == "php3 - Win32 Debug"
 
-DEP_CPP_REQUE=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\fopen-wrappers.h"\
-	".\mod_php3.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\request_info.obj"	"$(INTDIR)\request_info.sbr" : $(SOURCE)\
- $(DEP_CPP_REQUE) "$(INTDIR)"
+"$(INTDIR)\request_info.obj"	"$(INTDIR)\request_info.sbr" : $(SOURCE) "$(INTDIR)"
 
 
 !ENDIF 
@@ -4978,57 +1852,14 @@ SOURCE=.\safe_mode.c
 
 !IF  "$(CFG)" == "php3 - Win32 Release"
 
-DEP_CPP_SAFE_=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\fopen-wrappers.h"\
-	".\functions\pageinfo.h"\
-	".\mod_php3.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\safe_mode.obj" : $(SOURCE) $(DEP_CPP_SAFE_) "$(INTDIR)"
+"$(INTDIR)\safe_mode.obj" : $(SOURCE) "$(INTDIR)"
 
 
 !ELSEIF  "$(CFG)" == "php3 - Win32 Debug"
 
-DEP_CPP_SAFE_=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\fopen-wrappers.h"\
-	".\functions\pageinfo.h"\
-	".\mod_php3.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\safe_mode.obj"	"$(INTDIR)\safe_mode.sbr" : $(SOURCE)\
- $(DEP_CPP_SAFE_) "$(INTDIR)"
+"$(INTDIR)\safe_mode.obj"	"$(INTDIR)\safe_mode.sbr" : $(SOURCE) "$(INTDIR)"
 
 
 !ENDIF 
@@ -5037,55 +1868,14 @@ SOURCE=.\stack.c
 
 !IF  "$(CFG)" == "php3 - Win32 Release"
 
-DEP_CPP_STACK=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\fopen-wrappers.h"\
-	".\mod_php3.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\stack.obj" : $(SOURCE) $(DEP_CPP_STACK) "$(INTDIR)"
+"$(INTDIR)\stack.obj" : $(SOURCE) "$(INTDIR)"
 
 
 !ELSEIF  "$(CFG)" == "php3 - Win32 Debug"
 
-DEP_CPP_STACK=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\fopen-wrappers.h"\
-	".\mod_php3.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\stack.obj"	"$(INTDIR)\stack.sbr" : $(SOURCE) $(DEP_CPP_STACK)\
- "$(INTDIR)"
+"$(INTDIR)\stack.obj"	"$(INTDIR)\stack.sbr" : $(SOURCE) "$(INTDIR)"
 
 
 !ENDIF 
@@ -5094,65 +1884,14 @@ SOURCE=.\token_cache.c
 
 !IF  "$(CFG)" == "php3 - Win32 Release"
 
-DEP_CPP_TOKEN=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\control_structures.h"\
-	".\fopen-wrappers.h"\
-	".\highlight.h"\
-	".\language-parser.tab.h"\
-	".\main.h"\
-	".\mod_php3.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php3_list.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\token_cache.obj" : $(SOURCE) $(DEP_CPP_TOKEN) "$(INTDIR)"
+"$(INTDIR)\token_cache.obj" : $(SOURCE) "$(INTDIR)"
 
 
 !ELSEIF  "$(CFG)" == "php3 - Win32 Debug"
 
-DEP_CPP_TOKEN=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\control_structures.h"\
-	".\fopen-wrappers.h"\
-	".\highlight.h"\
-	".\language-parser.tab.h"\
-	".\main.h"\
-	".\mod_php3.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php3_list.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\token_cache.obj"	"$(INTDIR)\token_cache.sbr" : $(SOURCE)\
- $(DEP_CPP_TOKEN) "$(INTDIR)"
+"$(INTDIR)\token_cache.obj"	"$(INTDIR)\token_cache.sbr" : $(SOURCE) "$(INTDIR)"
 
 
 !ENDIF 
@@ -5161,65 +1900,14 @@ SOURCE=.\variables.c
 
 !IF  "$(CFG)" == "php3 - Win32 Release"
 
-DEP_CPP_VARIA=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\control_structures.h"\
-	".\fopen-wrappers.h"\
-	".\functions\head.h"\
-	".\internal_functions.h"\
-	".\mod_php3.h"\
-	".\modules.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php3_list.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\variables.obj" : $(SOURCE) $(DEP_CPP_VARIA) "$(INTDIR)"
+"$(INTDIR)\variables.obj" : $(SOURCE) "$(INTDIR)"
 
 
 !ELSEIF  "$(CFG)" == "php3 - Win32 Debug"
 
-DEP_CPP_VARIA=\
-	".\alloc.h"\
-	".\config.w32.h"\
-	".\constants.h"\
-	".\control_structures.h"\
-	".\fopen-wrappers.h"\
-	".\functions\head.h"\
-	".\internal_functions.h"\
-	".\mod_php3.h"\
-	".\modules.h"\
-	".\operators.h"\
-	".\php.h"\
-	".\php3_hash.h"\
-	".\php3_list.h"\
-	".\php_version.h"\
-	".\regex\regex.h"\
-	".\request_info.h"\
-	".\safe_mode.h"\
-	".\stack.h"\
-	".\token_cache.h"\
-	".\variables.h"\
-	".\win32\param.h"\
-	".\win32\pwd.h"\
-	".\win95nt.h"\
-	
 
-"$(INTDIR)\variables.obj"	"$(INTDIR)\variables.sbr" : $(SOURCE)\
- $(DEP_CPP_VARIA) "$(INTDIR)"
+"$(INTDIR)\variables.obj"	"$(INTDIR)\variables.sbr" : $(SOURCE) "$(INTDIR)"
 
 
 !ENDIF 
@@ -5228,28 +1916,24 @@ DEP_CPP_VARIA=\
 
 "php_custom_build - Win32 Release" : 
    cd "."
-   $(MAKE) /$(MAKEFLAGS) /F .\php_custom_build.mak\
- CFG="php_custom_build - Win32 Release" 
+   $(MAKE) /$(MAKEFLAGS) /F .\php_custom_build.mak CFG="php_custom_build - Win32 Release" 
    cd "."
 
 "php_custom_build - Win32 ReleaseCLEAN" : 
    cd "."
-   $(MAKE) /$(MAKEFLAGS) CLEAN /F .\php_custom_build.mak\
- CFG="php_custom_build - Win32 Release" RECURSE=1 
+   $(MAKE) /$(MAKEFLAGS) /F .\php_custom_build.mak CFG="php_custom_build - Win32 Release" RECURSE=1 CLEAN 
    cd "."
 
 !ELSEIF  "$(CFG)" == "php3 - Win32 Debug"
 
 "php_custom_build - Win32 Debug" : 
    cd "."
-   $(MAKE) /$(MAKEFLAGS) /F .\php_custom_build.mak\
- CFG="php_custom_build - Win32 Debug" 
+   $(MAKE) /$(MAKEFLAGS) /F .\php_custom_build.mak CFG="php_custom_build - Win32 Debug" 
    cd "."
 
 "php_custom_build - Win32 DebugCLEAN" : 
    cd "."
-   $(MAKE) /$(MAKEFLAGS) CLEAN /F .\php_custom_build.mak\
- CFG="php_custom_build - Win32 Debug" RECURSE=1 
+   $(MAKE) /$(MAKEFLAGS) /F .\php_custom_build.mak CFG="php_custom_build - Win32 Debug" RECURSE=1 CLEAN 
    cd "."
 
 !ENDIF 

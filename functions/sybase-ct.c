@@ -24,10 +24,11 @@
    | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
    | Authors: Zeev Suraski <bourbon@netvision.net.il>                     |
+   |          Tom May <tom@go2net.com>                                    |
    +----------------------------------------------------------------------+
  */
  
-/* $Id: sybase-ct.c,v 1.44 1998/09/10 23:57:22 zeev Exp $ */
+/* $Id: sybase-ct.c,v 1.58 1998/12/09 17:10:03 tommay Exp $ */
 
 
 #ifndef MSVC5
@@ -40,7 +41,6 @@
 
 #if HAVE_SYBASE_CT
 
-#include <ctpublic.h>
 #include "php3_list.h"
 
 
@@ -60,6 +60,7 @@ function_entry sybct_functions[] = {
 	{"sybase_fetch_field",	php3_sybct_fetch_field,		NULL},
 	{"sybase_field_seek",	php3_sybct_field_seek,		NULL},
 	{"sybase_result",		php3_sybct_result,			NULL},
+	{"sybase_affected_rows",php3_sybct_affected_rows,	NULL},
 	{"sybase_min_client_severity",	php3_sybct_min_client_severity,		NULL},
 	{"sybase_min_server_severity",	php3_sybct_min_server_severity,		NULL},
 	{"mssql_connect",		php3_sybct_connect,			NULL},
@@ -77,6 +78,7 @@ function_entry sybct_functions[] = {
 	{"mssql_fetch_field",	php3_sybct_fetch_field,		NULL},
 	{"mssql_field_seek",	php3_sybct_field_seek,		NULL},
 	{"mssql_result",		php3_sybct_result,			NULL},
+	{"mssql_affected_rows",	php3_sybct_affected_rows,	NULL},
 	{"mssql_min_client_severity",	php3_sybct_min_client_severity,		NULL},
 	{"mssql_min_server_severity",	php3_sybct_min_server_severity,		NULL},
 	{NULL, NULL, NULL}
@@ -138,9 +140,27 @@ static void _free_sybct_result(sybct_result *result)
 
 static void _close_sybct_link(sybct_link *sybct_ptr)
 {
+	CS_INT con_status;
+
 	sybct_ptr->valid = 0;
 	_php3_hash_apply(resource_list,(int (*)(void *))_clean_invalid_results);
-	ct_close(sybct_ptr->connection, CS_UNUSED);
+
+	/* Non-persistent connections will always be connected or we wouldn't
+	 * get here, but since we want to check the death status anyway
+	 * we might as well double-check the connect status.
+	 */
+	if (ct_con_props(sybct_ptr->connection, CS_GET, CS_CON_STATUS,
+					 &con_status, CS_UNUSED, NULL)!=CS_SUCCEED) {
+		php3_error(E_WARNING,"Sybase:  Unable to get connection status on close");
+		/* Assume the worst. */
+		con_status = CS_CONSTAT_CONNECTED | CS_CONSTAT_DEAD;
+	}
+	if (con_status & CS_CONSTAT_CONNECTED) {
+		if ((con_status & CS_CONSTAT_DEAD) || ct_close(sybct_ptr->connection, CS_UNUSED)!=CS_SUCCEED) {
+			ct_close(sybct_ptr->connection, CS_FORCE_CLOSE);
+		}
+	}
+
 	ct_con_drop(sybct_ptr->connection);
 	efree(sybct_ptr);
 	php3_sybct_module.num_links--;
@@ -149,7 +169,23 @@ static void _close_sybct_link(sybct_link *sybct_ptr)
 
 static void _close_sybct_plink(sybct_link *sybct_ptr)
 {
-	ct_close(sybct_ptr->connection, CS_UNUSED);
+	CS_INT con_status;
+
+	/* Persistent connections may have been closed before a failed
+	 * reopen attempt.
+	 */
+	if (ct_con_props(sybct_ptr->connection, CS_GET, CS_CON_STATUS,
+					 &con_status, CS_UNUSED, NULL)!=CS_SUCCEED) {
+		php3_error(E_WARNING,"Sybase:  Unable to get connection status on close");
+		/* Assume the worst. */
+		con_status = CS_CONSTAT_CONNECTED | CS_CONSTAT_DEAD;
+	}
+	if (con_status & CS_CONSTAT_CONNECTED) {
+		if ((con_status & CS_CONSTAT_DEAD) || ct_close(sybct_ptr->connection, CS_UNUSED)!=CS_SUCCEED) {
+			ct_close(sybct_ptr->connection, CS_FORCE_CLOSE);
+		}
+	}
+
 	ct_con_drop(sybct_ptr->connection);
 	free(sybct_ptr);
 	php3_sybct_module.num_persistent--;
@@ -162,6 +198,18 @@ static CS_RETCODE _client_message_handler(CS_CONTEXT *context, CS_CONNECTION *co
 	if (CS_SEVERITY(errmsg->msgnumber) >= php3_sybct_module.min_client_severity) {
 		php3_error(E_WARNING,"Sybase:  Client message:  %s (severity %d)",errmsg->msgstring, CS_SEVERITY(errmsg->msgnumber));
 	}
+
+	/* If this is a timeout message, return CS_FAIL to cancel the
+	 * operation and mark the connection as dead.
+	 */
+	if (CS_SEVERITY(errmsg->msgnumber) == CS_SV_RETRY_FAIL &&
+		CS_NUMBER(errmsg->msgnumber) == 63 &&
+		CS_ORIGIN(errmsg->msgnumber) == 2 &&
+		CS_LAYER(errmsg->msgnumber) == 1)
+	{
+		return CS_FAIL;
+	}
+
     return CS_SUCCEED;
 }
 
@@ -172,12 +220,30 @@ static CS_RETCODE _server_message_handler(CS_CONTEXT *context, CS_CONNECTION *co
 		php3_error(E_WARNING,"Sybase:  Server message:  %s (severity %d, procedure %s)",
 					srvmsg->text, srvmsg->severity, ((srvmsg->proclen>0) ? srvmsg->proc : "N/A"));
 	}
+
+	/* If this is a deadlock message, set the connection's deadlock flag
+	 * so we will retry the request.  Sorry about the bare constant here,
+	 * but it's not defined anywhere and it's a "well-known" number.
+	 */
+	if (srvmsg->msgnumber == 1205) {
+		sybct_link *sybct;
+
+		if (ct_con_props(connection, CS_GET, CS_USERDATA, &sybct, CS_SIZEOF(sybct), NULL)==CS_SUCCEED) {
+		    sybct->deadlock = 1;
+		}
+		else {
+			/* oh well */
+		}
+	}
+
     return CS_SUCCEED;
 }
 
 
 int php3_minit_sybct(INIT_FUNC_ARGS)
 {
+	long timeout;
+
 	if (cs_ctx_alloc(CTLIB_VERSION, &context)!=CS_SUCCEED || ct_init(context,CTLIB_VERSION)!=CS_SUCCEED) {
 		return FAILURE;
 	}
@@ -190,6 +256,40 @@ int php3_minit_sybct(INIT_FUNC_ARGS)
 		php3_error(E_WARNING,"Sybase:  Unable to set client message handler");
 	}
 	
+	/* Set datetime conversion format to "Nov  3 1998  8:06PM".
+	 * This is the default format for the ct-lib that comes with
+	 * Sybase ASE 11.5.1 for Solaris, but the Linux libraries that
+	 * come with 11.0.3.3 default to "03/11/98" which is singularly
+	 * useless.  This levels the playing field for all platforms.
+	 */
+	{
+		CS_INT dt_convfmt = CS_DATES_SHORT;
+		if (cs_dt_info(context, CS_SET, NULL, CS_DT_CONVFMT, CS_UNUSED, &dt_convfmt, sizeof(dt_convfmt), NULL)!=CS_SUCCEED) {
+			php3_error(E_WARNING,"Sybase:  Unable to set datetime conversion format");
+		}
+	}
+
+	/* Set the login and command timeouts.  These are per-context and
+	 * can't be set with ct_con_props(), so set them globally from
+	 * their config values if requested.  The defaults are 1 minute
+	 * for CS_LOGIN_TIMEOUT and CS_NO_LIMIT for CS_TIMEOUT.  The latter
+	 * especially is fairly useless for web applications.
+	 * Note that depite some noise in the documentation about using
+	 * signals to implement timeouts, they are actually implemented
+	 * by using poll() or select() on Solaris and Linux.
+	 */
+	if (cfg_get_long("sybct.login_timeout",&timeout)==SUCCESS) {
+		CS_INT cs_login_timeout = timeout;
+		if (ct_config(context, CS_SET, CS_LOGIN_TIMEOUT, &cs_login_timeout, CS_UNUSED, NULL)!=CS_SUCCEED) {
+			php3_error(E_WARNING,"Sybase:  Unable to set login timeoutt");
+		}
+	}
+	if (cfg_get_long("sybct.timeout",&timeout)==SUCCESS) {
+		CS_INT cs_timeout = timeout;
+		if (ct_config(context, CS_SET, CS_TIMEOUT, &cs_timeout, CS_UNUSED, NULL)!=CS_SUCCEED) {
+			php3_error(E_WARNING,"Sybase:  Unable to set timeout");
+		}
+	}
 
 	if (cfg_get_long("sybct.allow_persistent",&php3_sybct_module.allow_persistent)==FAILURE) {
 		php3_sybct_module.allow_persistent=1;
@@ -207,6 +307,10 @@ int php3_minit_sybct(INIT_FUNC_ARGS)
 		php3_sybct_module.cfg_min_client_severity=10;
 	}
 	
+	if (cfg_get_string("sybct.hostname",&php3_sybct_module.hostname)==FAILURE
+		|| php3_sybct_module.hostname[0]==0) {
+		php3_sybct_module.hostname=NULL;
+	}
 
 	php3_sybct_module.num_persistent=0;
 	php3_sybct_module.le_link = register_list_destructors(_close_sybct_link,NULL);
@@ -244,12 +348,61 @@ int php3_rshutdown_sybct(void)
 	return SUCCESS;
 }
 
+
+static int _php3_sybct_really_connect(sybct_link *sybct, char *host, char *user, char *passwd)
+{
+	/* set a CS_CONNECTION record */
+	if (ct_con_alloc(context, &sybct->connection)!=CS_SUCCEED) {
+		php3_error(E_WARNING,"Sybase:  Unable to allocate connection record");
+		return 0;
+	}
+	
+	/* Note - this saves a copy of sybct, not a pointer to it. */
+	if (ct_con_props(sybct->connection, CS_SET, CS_USERDATA, &sybct, CS_SIZEOF(sybct), NULL)!=CS_SUCCEED) {
+		php3_error(E_WARNING,"Sybase:  Unable to set userdata");
+		ct_con_drop(sybct->connection);
+		return 0;
+	}
+
+	if (user) {
+		ct_con_props(sybct->connection, CS_SET, CS_USERNAME, user, CS_NULLTERM, NULL);
+	}
+	if (passwd) {
+		ct_con_props(sybct->connection, CS_SET, CS_PASSWORD, passwd, CS_NULLTERM, NULL);
+	}
+	ct_con_props(sybct->connection, CS_SET, CS_APPNAME, php3_sybct_module.appname, CS_NULLTERM, NULL);
+
+	if (php3_sybct_module.hostname) {
+		ct_con_props(sybct->connection, CS_SET, CS_HOSTNAME, php3_sybct_module.hostname, CS_NULLTERM, NULL);
+	}
+
+	sybct->valid = 1;
+	sybct->dead = 0;
+
+	/* create the link */
+	if (ct_connect(sybct->connection, host, CS_NULLTERM)!=CS_SUCCEED) {
+		php3_error(E_WARNING,"Sybase:  Unable to connect");
+		ct_con_drop(sybct->connection);
+		return 0;
+	}
+
+	if (ct_cmd_alloc(sybct->connection,&sybct->cmd)!=CS_SUCCEED) {
+		php3_error(E_WARNING,"Sybase:  Unable to allocate command record");
+		ct_close(sybct->connection,CS_UNUSED);
+		ct_con_drop(sybct->connection);
+		return 0;
+	}
+
+	return 1;
+}
+
+
 static void php3_sybct_do_connect(INTERNAL_FUNCTION_PARAMETERS,int persistent)
 {
 	char *user,*passwd,*host;
 	char *hashed_details;
 	int hashed_details_length;
-	sybct_link sybct,*sybct_ptr;
+	sybct_link *sybct_ptr;
 
 	resource_list = list;
 	resource_plist = plist;
@@ -314,21 +467,6 @@ static void php3_sybct_do_connect(INTERNAL_FUNCTION_PARAMETERS,int persistent)
 	}
 
 
-	/* set a CS_CONNECTION record */
-	if (ct_con_alloc(context, &sybct.connection)!=CS_SUCCEED) {
-		php3_error(E_WARNING,"Sybase:  Unable to allocate connection record");
-		RETURN_FALSE;
-	}
-	
-	if (user) {
-		ct_con_props(sybct.connection, CS_SET, CS_USERNAME, user, CS_NULLTERM, NULL);
-	}
-	if (passwd) {
-		ct_con_props(sybct.connection, CS_SET, CS_PASSWORD, passwd, CS_NULLTERM, NULL);
-	}
-	ct_con_props(sybct.connection, CS_SET, CS_APPNAME, php3_sybct_module.appname, CS_NULLTERM, NULL);
-	sybct.valid = 1;
-
 	if (!php3_sybct_module.allow_persistent) {
 		persistent=0;
 	}
@@ -342,64 +480,76 @@ static void php3_sybct_do_connect(INTERNAL_FUNCTION_PARAMETERS,int persistent)
 			if (php3_sybct_module.max_links!=-1 && php3_sybct_module.num_links>=php3_sybct_module.max_links) {
 				php3_error(E_WARNING,"Sybase:  Too many open links (%d)",php3_sybct_module.num_links);
 				efree(hashed_details);
-				ct_con_drop(sybct.connection);
 				RETURN_FALSE;
 			}
 			if (php3_sybct_module.max_persistent!=-1 && php3_sybct_module.num_persistent>=php3_sybct_module.max_persistent) {
 				php3_error(E_WARNING,"Sybase:  Too many open persistent links (%d)",php3_sybct_module.num_persistent);
 				efree(hashed_details);
-				ct_con_drop(sybct.connection);
-				RETURN_FALSE;
-			}
-			/* create the link */
-			if (ct_connect(sybct.connection, host, CS_NULLTERM)!=CS_SUCCEED) {
-				efree(hashed_details);
-				ct_con_drop(sybct.connection);
 				RETURN_FALSE;
 			}
 
-			if (ct_cmd_alloc(sybct.connection,&sybct.cmd)!=CS_SUCCEED) {
+			sybct_ptr = (sybct_link *) malloc(sizeof(sybct_link));
+			if (!_php3_sybct_really_connect(sybct_ptr, host, user, passwd)) {
+				free(sybct_ptr);
 				efree(hashed_details);
-				ct_close(sybct.connection,CS_UNUSED);
-				ct_con_drop(sybct.connection);
 				RETURN_FALSE;
 			}
 
 			/* hash it up */
-			sybct_ptr = (sybct_link *) malloc(sizeof(sybct_link));
-			memcpy(sybct_ptr,&sybct,sizeof(sybct_link));
 			new_le.type = php3_sybct_module.le_plink;
 			new_le.ptr = sybct_ptr;
 			if (_php3_hash_update(plist, hashed_details, hashed_details_length+1, (void *) &new_le, sizeof(list_entry),NULL)==FAILURE) {
+				ct_close(sybct_ptr->connection, CS_UNUSED);
+				ct_con_drop(sybct_ptr->connection);
 				free(sybct_ptr);
 				efree(hashed_details);
-				ct_close(sybct.connection, CS_UNUSED);
-				ct_con_drop(sybct.connection);
 				RETURN_FALSE;
 			}
 			php3_sybct_module.num_persistent++;
 			php3_sybct_module.num_links++;
 		} else {  /* we do */
+			CS_INT con_status;
+
 			if (le->type != php3_sybct_module.le_plink) {
+				efree(hashed_details);
 				RETURN_FALSE;
 			}
 			
 			sybct_ptr = (sybct_link *) le->ptr;
-			/* test that the link hasn't died */
-			/* No clue how to do it with CT-lib...
-			if (DBDEAD(sybct_ptr->link)==TRUE) {
-				if (dbopen(sybct_ptr->login,host)==FAIL) {
-					_php3_hash_del(plist, hashed_details, hashed_details_length+1);
-					efree(hashed_details);
-					RETURN_FALSE;
-				}
-				if (dbsetopt(sybct_ptr->link,DBBUFFER,"2",-1)==FAIL) {
-					_php3_hash_del(plist, hashed_details, hashed_details_length+1);
-					efree(hashed_details);
-					RETURN_FALSE;
-				}
+
+			/* If the link has died, close it and overwrite it with a new one. */
+
+			if (ct_con_props(sybct_ptr->connection, CS_GET, CS_CON_STATUS,
+							 &con_status, CS_UNUSED, NULL)!=CS_SUCCEED) {
+				php3_error(E_WARNING,"Sybase:  Unable to get connection status");
+				efree(hashed_details);
+				RETURN_FALSE;
 			}
-			*/
+			if (!(con_status & CS_CONSTAT_CONNECTED) || (con_status & CS_CONSTAT_DEAD) || sybct_ptr->dead) {
+				sybct_link sybct;
+
+				if (con_status & CS_CONSTAT_CONNECTED) {
+					ct_close(sybct_ptr->connection, CS_FORCE_CLOSE);
+				}
+				/* Create a new connection, then replace the old
+				 * connection.  If we fail to create a new connection,
+				 * put the old one back so there will be a connection,
+				 * even if it is a non-functional one.  This is because
+				 * code may still be holding an id for this connection
+				 * so we can't free the CS_CONNECTION.
+				 * (This is actually totally hokey, it would be better
+				 * to just ct_con_drop() the connection and set
+				 * sybct_ptr->connection to NULL, then test it for
+				 * NULL before trying to use it elsewhere . . .)
+				 */
+				memcpy(&sybct,sybct_ptr,sizeof(sybct_link));
+				if (!_php3_sybct_really_connect(sybct_ptr, host, user, passwd)) {
+					memcpy(sybct_ptr,&sybct,sizeof(sybct_link));
+					efree(hashed_details);
+					RETURN_FALSE;
+				}
+				ct_con_drop(sybct.connection); /* drop old connection */
+			}
 		}
 		return_value->value.lval = php3_list_insert(sybct_ptr,php3_sybct_module.le_plink);
 		return_value->type = IS_LONG;
@@ -416,6 +566,7 @@ static void php3_sybct_do_connect(INTERNAL_FUNCTION_PARAMETERS,int persistent)
 			void *ptr;
 
 			if (index_ptr->type != le_index_ptr) {
+				efree(hashed_details);
 				RETURN_FALSE;
 			}
 			link = (int) index_ptr->ptr;
@@ -432,27 +583,17 @@ static void php3_sybct_do_connect(INTERNAL_FUNCTION_PARAMETERS,int persistent)
 		if (php3_sybct_module.max_links!=-1 && php3_sybct_module.num_links>=php3_sybct_module.max_links) {
 			php3_error(E_WARNING,"Sybase:  Too many open links (%d)",php3_sybct_module.num_links);
 			efree(hashed_details);
-			ct_con_drop(sybct.connection);
-			RETURN_FALSE;
-		}
-		
-		if (ct_connect(sybct.connection,host,CS_NULLTERM)!=CS_SUCCEED) {
-			efree(hashed_details);
-			ct_con_drop(sybct.connection);
 			RETURN_FALSE;
 		}
 
-		if (ct_cmd_alloc(sybct.connection,&sybct.cmd)!=CS_SUCCEED) {
+		sybct_ptr = (sybct_link *) emalloc(sizeof(sybct_link));
+		if (!_php3_sybct_really_connect(sybct_ptr, host, user, passwd)) {
+			efree(sybct_ptr);
 			efree(hashed_details);
-			ct_close(sybct.connection,CS_UNUSED);
-			ct_con_drop(sybct.connection);
 			RETURN_FALSE;
 		}
-
 
 		/* add it to the list */
-		sybct_ptr = (sybct_link *) emalloc(sizeof(sybct_link));
-		memcpy(sybct_ptr,&sybct,sizeof(sybct_link));
 		return_value->value.lval = php3_list_insert(sybct_ptr,php3_sybct_module.le_link);
 		return_value->type = IS_LONG;
 		
@@ -460,6 +601,9 @@ static void php3_sybct_do_connect(INTERNAL_FUNCTION_PARAMETERS,int persistent)
 		new_index_ptr.ptr = (void *) return_value->value.lval;
 		new_index_ptr.type = le_index_ptr;
 		if (_php3_hash_update(list,hashed_details,hashed_details_length+1,(void *) &new_index_ptr, sizeof(list_entry),NULL)==FAILURE) {
+			ct_close(sybct_ptr->connection, CS_UNUSED);
+			ct_con_drop(sybct_ptr->connection);
+			efree(sybct_ptr);
 			efree(hashed_details);
 			RETURN_FALSE;
 		}
@@ -528,8 +672,15 @@ void php3_sybct_close(INTERNAL_FUNCTION_PARAMETERS)
 
 static int exec_cmd(sybct_link *sybct_ptr,char *cmdbuf)
 {
+	CS_RETCODE retcode;
 	CS_INT restype;
 	int failure=0;
+
+	/* Fail if we already marked this connection dead. */
+
+	if (sybct_ptr->dead) {
+		return FAILURE;
+	}
 
 	/*
 	 ** Get a command handle, store the command string in it, and
@@ -537,13 +688,15 @@ static int exec_cmd(sybct_link *sybct_ptr,char *cmdbuf)
 	 */
 	
 	if (ct_command(sybct_ptr->cmd, CS_LANG_CMD, cmdbuf, CS_NULLTERM, CS_UNUSED)!=CS_SUCCEED) {
+		sybct_ptr->dead = 1;
 		return FAILURE;
 	}
 	if (ct_send(sybct_ptr->cmd)!=CS_SUCCEED) {
+		sybct_ptr->dead = 1;
 		return FAILURE;
 	}
 	
-	while (ct_results(sybct_ptr->cmd, &restype)==CS_SUCCEED) {
+	while ((retcode = ct_results(sybct_ptr->cmd, &restype))==CS_SUCCEED) {
 		switch ((int) restype) {
 			case CS_CMD_SUCCEED:
 			case CS_CMD_DONE:
@@ -567,7 +720,28 @@ static int exec_cmd(sybct_link *sybct_ptr,char *cmdbuf)
 		}
 	}
 
-	return SUCCESS;
+	switch (retcode) {
+		case CS_END_RESULTS:
+			return SUCCESS;
+			break;
+
+		case CS_FAIL:
+			/* Hopefully this either cleans up the connection, or the
+			 * connection ends up marked dead so it will be reopened
+			 * if it is persistent.  We may want to do
+			 * ct_close(CS_FORCE_CLOSE) if ct_cancel() fails; see the
+			 * doc for ct_results()==CS_FAIL.
+			 */
+			ct_cancel(NULL, sybct_ptr->cmd, CS_CANCEL_ALL);
+			/* Don't take chances with the vagaries of ct-lib.  Mark it
+			 * dead ourselves.
+			 */
+			sybct_ptr->dead = 1;
+			return FAILURE;
+
+		default:
+			return FAILURE;
+	}
 }
 
 
@@ -619,78 +793,18 @@ void php3_sybct_select_db(INTERNAL_FUNCTION_PARAMETERS)
 }
 
 
-void php3_sybct_query(INTERNAL_FUNCTION_PARAMETERS)
+static sybct_result * _php3_sybct_fetch_result_set (sybct_link *sybct_ptr)
 {
-	pval *query,*sybct_link_index;
-	int id,type;
-	sybct_link *sybct_ptr;
-	sybct_result *result;
 	int num_fields;
-	CS_INT rows_read;
-	int blocks_initialized=1;
-	int i,j,retcode;
-	CS_INT restype;
-	CS_DATAFMT *datafmt;
+	sybct_result *result;
 	char **tmp_buffer;
 	CS_INT *lengths;
 	CS_SMALLINT *indicators;
-	int failure=0;
 	unsigned char *numerics;
 	CS_INT *types;
-	
-	switch(ARG_COUNT(ht)) {
-		case 1:
-			if (getParameters(ht, 1, &query)==FAILURE) {
-				RETURN_FALSE;
-			}
-			id = php3_sybct_module.default_link;
-			break;
-		case 2:
-			if (getParameters(ht, 2, &query, &sybct_link_index)==FAILURE) {
-				RETURN_FALSE;
-			}
-			convert_to_long(sybct_link_index);
-			id = sybct_link_index->value.lval;
-			break;
-		default:
-			WRONG_PARAM_COUNT;
-			break;
-	}
-	
-	sybct_ptr = (sybct_link *) php3_list_find(id,&type);
-	if (type!=php3_sybct_module.le_link && type!=php3_sybct_module.le_plink) {
-		php3_error(E_WARNING,"%d is not a Sybase link index",id);
-		RETURN_FALSE;
-	}
-	
-	convert_to_string(query);
-	
-	if (ct_command(sybct_ptr->cmd, CS_LANG_CMD, query->value.str.val, CS_NULLTERM, CS_UNUSED)!=CS_SUCCEED) {
-		RETURN_FALSE;
-	}
-	if (ct_send(sybct_ptr->cmd)!=CS_SUCCEED) {
-		ct_cancel(NULL, sybct_ptr->cmd, CS_CANCEL_CURRENT);
-		RETURN_FALSE;
-	}
-	
-	ct_results(sybct_ptr->cmd, &restype);
-	switch ((int) restype) {
-		case CS_CMD_FAIL:
-			failure=1;
-		case CS_CMD_SUCCEED:
-		case CS_CMD_DONE:
-		case CS_COMPUTEFMT_RESULT:
-		case CS_ROWFMT_RESULT:
-		case CS_DESCRIBE_RESULT:
-		case CS_MSG_RESULT:
-			while(ct_results(sybct_ptr->cmd,&restype)==CS_SUCCEED);
-			if (failure) {
-				RETURN_FALSE;
-			} else {
-				RETURN_TRUE;
-			}
-			break;
-	}
+	CS_DATAFMT *datafmt;
+	int i,j,retcode;
+	int blocks_initialized=1;
 
 	/* The following is more or less the equivalent of mysql_store_result().
 	 * fetch all rows from the server into the row buffer, thus:
@@ -698,14 +812,13 @@ void php3_sybct_query(INTERNAL_FUNCTION_PARAMETERS)
 	 * 2)  Having numrows accessible
 	 */
 
-	ct_res_info(sybct_ptr->cmd, CS_NUMDATA, &num_fields, CS_UNUSED, NULL);
-
-	if (num_fields<=0) {
-		RETURN_FALSE;
+	if (ct_res_info(sybct_ptr->cmd, CS_NUMDATA, &num_fields, CS_UNUSED, NULL)!=CS_SUCCEED) {
+		return NULL;
 	}
 	
 	result = (sybct_result *) emalloc(sizeof(sybct_result));
 	result->data = (pval **) emalloc(sizeof(pval *)*SYBASE_ROWS_BLOCK);
+	result->fields = NULL;
 	result->sybct_ptr = sybct_ptr;
 	result->cur_field=result->cur_row=result->num_rows=0;
 	result->num_fields = num_fields;
@@ -741,16 +854,16 @@ void php3_sybct_query(INTERNAL_FUNCTION_PARAMETERS)
 				numerics[i] = 1;
 				break;
 			case CS_SMALLINT_TYPE:
-				datafmt[i].maxlength = 6;
+				datafmt[i].maxlength = 7;
 				numerics[i] = 1;
 				break;
 			case CS_INT_TYPE:
-				datafmt[i].maxlength = 11;
+				datafmt[i].maxlength = 12;
 				numerics[i] = 1;
 				break;
 			case CS_REAL_TYPE:
 			case CS_FLOAT_TYPE:
-				datafmt[i].maxlength = 20;
+				datafmt[i].maxlength = 24;
 				numerics[i] = 1;
 				break;
 			case CS_MONEY_TYPE:
@@ -765,7 +878,7 @@ void php3_sybct_query(INTERNAL_FUNCTION_PARAMETERS)
 				break;
 			case CS_NUMERIC_TYPE:
 			case CS_DECIMAL_TYPE:
-				datafmt[i].maxlength = CS_MAX_PREC+1;
+				datafmt[i].maxlength = datafmt[i].precision + 3;
 				numerics[i] = 1;
 				break;
 			default:
@@ -779,24 +892,20 @@ void php3_sybct_query(INTERNAL_FUNCTION_PARAMETERS)
 		ct_bind(sybct_ptr->cmd,i+1,&datafmt[i],tmp_buffer[i],&lengths[i],&indicators[i]);
 	}
 	
-	i=0;
-	while ((retcode=ct_fetch(sybct_ptr->cmd,CS_UNUSED,CS_UNUSED,CS_UNUSED,&rows_read))==CS_SUCCEED
+	while ((retcode=ct_fetch(sybct_ptr->cmd,CS_UNUSED,CS_UNUSED,CS_UNUSED,NULL))==CS_SUCCEED
 			|| retcode==CS_ROW_FAIL) {
-		result->num_rows += rows_read;
-		if (result->num_rows > blocks_initialized*SYBASE_ROWS_BLOCK) {
-			result->data = (pval **) erealloc(result->data,sizeof(pval *)*SYBASE_ROWS_BLOCK*(++blocks_initialized));
-		}
 		/*
 		if (retcode==CS_ROW_FAIL) {
 			php3_error(E_WARNING,"Sybase:  Error reading row %d",result->num_rows);
 		}
 		*/
-		if (rows_read<=0) {
-			break;
+		i = result->num_rows++;
+		if (result->num_rows > blocks_initialized*SYBASE_ROWS_BLOCK) {
+			result->data = (pval **) erealloc(result->data,sizeof(pval *)*SYBASE_ROWS_BLOCK*(++blocks_initialized));
 		}
-		result->data[result->num_rows-1] = (pval *) emalloc(sizeof(pval)*num_fields);
+		result->data[i] = (pval *) emalloc(sizeof(pval)*num_fields);
 		for (j=0; j<num_fields; j++) {
-			if (indicators[j] && (!tmp_buffer[j] || lengths[j]==0)) { /* null value */
+			if (indicators[j] == -1) { /* null value */
 				var_reset(&result->data[i][j]);
 			} else {
 				result->data[i][j].value.str.len = lengths[j]-1;  /* we don't need the NULL in the length */
@@ -804,30 +913,35 @@ void php3_sybct_query(INTERNAL_FUNCTION_PARAMETERS)
 				result->data[i][j].type = IS_STRING;
 			}
 		}
-		i++;
 	}
-	
-	result->fields = (sybct_field *) emalloc(sizeof(sybct_field)*num_fields);
-	j=0;
-	for (i=0; i<num_fields; i++) {
-		char computed_buf[16];
+
+	if (retcode != CS_END_DATA) {
+		_free_sybct_result(result);
+		result = NULL;
+	} else {
+		result->fields = (sybct_field *) emalloc(sizeof(sybct_field)*num_fields);
+		j=0;
+		for (i=0; i<num_fields; i++) {
+			char computed_buf[16];
 		
-		if (datafmt[i].namelen>0) {
-			result->fields[i].name = estrndup(datafmt[i].name,datafmt[i].namelen);
-		} else {
-			if (j>0) {
-				snprintf(computed_buf,16,"computed%d",j);
+			if (datafmt[i].namelen>0) {
+				result->fields[i].name = estrndup(datafmt[i].name,datafmt[i].namelen);
 			} else {
-				strcpy(computed_buf,"computed");
+				if (j>0) {
+					snprintf(computed_buf,16,"computed%d",j);
+				} else {
+					strcpy(computed_buf,"computed");
+				}
+				result->fields[i].name = estrdup(computed_buf);
+				j++;
 			}
-			result->fields[i].name = estrdup(computed_buf);
-			j++;
+			result->fields[i].column_source = empty_string;
+			result->fields[i].max_length = datafmt[i].maxlength-1;
+			result->fields[i].numeric = numerics[i];
+			result->fields[i].type = types[i];
 		}
-		result->fields[i].column_source = empty_string;
-		result->fields[i].max_length = datafmt[i].maxlength-1;
-		result->fields[i].numeric = numerics[i];
-		result->fields[i].type = types[i];
 	}
+
 	efree(datafmt);
 	efree(lengths);
 	efree(indicators);
@@ -838,27 +952,217 @@ void php3_sybct_query(INTERNAL_FUNCTION_PARAMETERS)
 	}
 	efree(tmp_buffer);
 
-	while (ct_results(sybct_ptr->cmd, &restype)==CS_SUCCEED) {
-		switch ((int) restype) {
-			case CS_CMD_SUCCEED:
-			case CS_CMD_DONE:
-				break;
-		
-			case CS_CMD_FAIL:
-				failure=1;
-				break;
-			
-			case CS_STATUS_RESULT:
-				ct_cancel(NULL, sybct_ptr->cmd, CS_CANCEL_CURRENT);
-				break;
-			
-			default:
-				failure=1;
-				break;
+	return result;
+}
+
+
+void php3_sybct_query(INTERNAL_FUNCTION_PARAMETERS)
+{
+	pval *query,*sybct_link_index;
+	int id,type;
+	sybct_link *sybct_ptr;
+	sybct_result *result;
+	CS_INT restype;
+	CS_RETCODE retcode;
+	enum {
+		Q_RESULT,				/* Success with results. */
+		Q_SUCCESS,				/* Success but no results. */
+		Q_FAILURE,				/* Failure, no results. */
+	} status;
+	
+	switch(ARG_COUNT(ht)) {
+		case 1:
+			if (getParameters(ht, 1, &query)==FAILURE) {
+				RETURN_FALSE;
+			}
+			id = php3_sybct_module.default_link;
+			break;
+		case 2:
+			if (getParameters(ht, 2, &query, &sybct_link_index)==FAILURE) {
+				RETURN_FALSE;
+			}
+			convert_to_long(sybct_link_index);
+			id = sybct_link_index->value.lval;
+			break;
+		default:
+			WRONG_PARAM_COUNT;
+			break;
+	}
+	
+	sybct_ptr = (sybct_link *) php3_list_find(id,&type);
+	if (type!=php3_sybct_module.le_link && type!=php3_sybct_module.le_plink) {
+		php3_error(E_WARNING,"%d is not a Sybase link index",id);
+		RETURN_FALSE;
+	}
+	
+	convert_to_string(query);
+	
+	/* Fail if we already marked this connection dead. */
+
+	if (sybct_ptr->dead) {
+		RETURN_FALSE;
+	}
+
+	/* Repeat until we don't deadlock. */
+
+	for (;;) {
+		result = NULL;
+		sybct_ptr->deadlock = 0;
+		sybct_ptr->affected_rows = 0;
+
+		/* On Solaris 11.5, ct_command() can be moved outside the
+		 * loop, but not on Linux 11.0.
+		 */
+		if (ct_command(sybct_ptr->cmd, CS_LANG_CMD, query->value.str.val, CS_NULLTERM, CS_UNUSED)!=CS_SUCCEED) {
+			/* If this didn't work, the connection is screwed but
+			 * ct-lib might not set CS_CONSTAT_DEAD.  So set our own
+			 * flag.  This happens sometimes when the database is restarted
+			 * and/or its machine is rebooted, and ct_command() returns
+			 * CS_BUSY for some reason.
+			 */
+			sybct_ptr->dead = 1;
+		    RETURN_FALSE;
 		}
-		if (failure) {
+
+		if (ct_send(sybct_ptr->cmd)!=CS_SUCCEED) {
 			ct_cancel(NULL, sybct_ptr->cmd, CS_CANCEL_ALL);
+			sybct_ptr->dead = 1;
+			RETURN_FALSE;
 		}
+
+		/* Use the first result set or succeed/fail status and discard the
+		 * others.  Applications really shouldn't be making calls that
+		 * return multiple result sets, but if they do then we need to
+		 * properly read or cancel them or the connection will become
+		 * unusable.
+		 */
+		if (ct_results(sybct_ptr->cmd, &restype)!=CS_SUCCEED) {
+			ct_cancel(NULL, sybct_ptr->cmd, CS_CANCEL_ALL);
+			sybct_ptr->dead = 1;
+			RETURN_FALSE;
+		}
+
+		switch ((int) restype) {
+			case CS_CMD_FAIL:
+			default:
+				status = Q_FAILURE;
+				break;
+			case CS_CMD_SUCCEED:
+			case CS_CMD_DONE: {
+					CS_INT row_count;
+					if (ct_res_info(sybct_ptr->cmd, CS_ROW_COUNT, &row_count, CS_UNUSED, NULL)==CS_SUCCEED) {
+						sybct_ptr->affected_rows = (long)row_count;
+					}
+				}
+				/* Fall through */
+			case CS_COMPUTEFMT_RESULT:
+			case CS_ROWFMT_RESULT:
+			case CS_DESCRIBE_RESULT:
+			case CS_MSG_RESULT:
+				status = Q_SUCCESS;
+				break;
+			case CS_COMPUTE_RESULT:
+			case CS_CURSOR_RESULT:
+			case CS_PARAM_RESULT:
+			case CS_ROW_RESULT:
+			case CS_STATUS_RESULT:
+				result = _php3_sybct_fetch_result_set(sybct_ptr);
+				if (result == NULL) {
+					ct_cancel(NULL, sybct_ptr->cmd, CS_CANCEL_ALL);
+					sybct_ptr->dead = 1;
+					RETURN_FALSE;
+				}
+				status = Q_RESULT;
+				break;
+		}
+
+		/* The only restype we should get now is CS_CMD_DONE, possibly
+		 * followed by a CS_STATUS_RESULT/CS_CMD_SUCCEED/CS_CMD_DONE
+		 * sequence if the command was a stored procedure call.  But we
+		 * still need to read and discard unexpected results.  We might
+		 * want to return a failure in this case because the application
+		 * won't be getting all the results it asked for.
+		 */
+		while ((retcode = ct_results(sybct_ptr->cmd, &restype))==CS_SUCCEED) {
+			switch ((int) restype) {
+				case CS_CMD_SUCCEED:
+				case CS_CMD_DONE:
+					break;
+
+				case CS_CMD_FAIL:
+					status = Q_FAILURE;
+					break;
+			
+				case CS_COMPUTE_RESULT:
+				case CS_CURSOR_RESULT:
+				case CS_PARAM_RESULT:
+				case CS_ROW_RESULT:
+					/* Unexpected results, cancel them. */
+				case CS_STATUS_RESULT:
+					ct_cancel(NULL, sybct_ptr->cmd, CS_CANCEL_CURRENT);
+					break;
+			
+				default:
+					status = Q_FAILURE;
+					break;
+			}
+			if (status == Q_FAILURE) {
+				ct_cancel(NULL, sybct_ptr->cmd, CS_CANCEL_ALL);
+			}
+		}
+
+		switch (retcode) {
+			case CS_END_RESULTS:
+				/* Normal. */
+				break;
+
+			case CS_FAIL:
+				/* Hopefully this either cleans up the connection, or the
+				 * connection ends up marked dead so it will be reopened
+				 * if it is persistent.  We may want to do
+				 * ct_close(CS_FORCE_CLOSE) if ct_cancel() fails; see the
+				 * doc for ct_results()==CS_FAIL.
+				 */
+				ct_cancel(NULL, sybct_ptr->cmd, CS_CANCEL_ALL);
+				/* Don't take chances with the vagaries of ct-lib.  Mark it
+				 * dead ourselves.
+				 */
+				sybct_ptr->dead = 1;
+			case CS_CANCELED:
+			default:
+				status = Q_FAILURE;
+				break;
+		}
+
+		/* If query completed without deadlock, break out of the loop.
+		 * Sometimes deadlock results in failures and sometimes not,
+		 * it seems to depend on the server flavor.  But we want to
+		 * retry all deadlocks.
+		 */
+		if (sybct_ptr->dead || sybct_ptr->deadlock == 0) {
+			break;
+		}
+
+		/* Get rid of any results we may have fetched.  This happens:
+		 * e.g., our result set may be a stored procedure status which
+		 * is returned even if the stored procedure deadlocks.  As an
+		 * optimization, we could try not to fetch results in known
+		 * deadlock conditions, but deadlock is (should be) rare.
+		 */
+		if (result != NULL) {
+			_free_sybct_result(result);
+		}
+	}
+
+	if (status == Q_SUCCESS) {
+		RETURN_TRUE;
+	}
+
+	if (status == Q_FAILURE) {
+		if (result != NULL) {
+			_free_sybct_result(result);
+		}
+		RETURN_FALSE;
 	}
 
 	return_value->value.lval = php3_list_insert(result,php3_sybct_module.le_result);
@@ -1255,6 +1559,40 @@ void php3_sybct_result(INTERNAL_FUNCTION_PARAMETERS)
 
 	*return_value = result->data[row->value.lval][field_offset];
 	pval_copy_constructor(return_value);
+}
+
+
+void php3_sybct_affected_rows(INTERNAL_FUNCTION_PARAMETERS)
+{
+	pval *sybct_link_index;
+	int id,type;
+	sybct_link *sybct_ptr;
+	CS_INT row_count;
+	
+	switch(ARG_COUNT(ht)) {
+		case 0:
+			id = php3_sybct_get_default_link(INTERNAL_FUNCTION_PARAM_PASSTHRU);
+			break;
+		case 1:
+			if (getParameters(ht, 1, &sybct_link_index)==FAILURE) {
+				RETURN_FALSE;
+			}
+			convert_to_long(sybct_link_index);
+			id = sybct_link_index->value.lval;
+			break;
+		default:
+			WRONG_PARAM_COUNT;
+			break;
+	}
+	
+	sybct_ptr = (sybct_link *) php3_list_find(id,&type);
+	if (type!=php3_sybct_module.le_link && type!=php3_sybct_module.le_plink) {
+		php3_error(E_WARNING,"%d is not a Sybase link index",id);
+		RETURN_FALSE;
+	}
+
+	return_value->value.lval = sybct_ptr->affected_rows;
+	return_value->type = IS_LONG;
 }
 
 

@@ -34,6 +34,7 @@ Stig Bakken (ssb@guardian.no)
 * Oracle support
 * configure/install script work
 * sprintf reimplementation
+* XML support
 * SGML documentation framework
 
 
@@ -69,7 +70,7 @@ Major Contributors
   soundex code and lots of enthusiasm
 
 * Christian Cartus (chc@idgruppe.de)
-Informix Universal Server support
+  Informix Universal Server support
 
 * John Ellson (ellson@lucent.com)
   Freetype support
@@ -100,6 +101,9 @@ Informix Universal Server support
 
 * Richard Lynch (lynch@lscorp.com)
   Documentation
+
+* Tom May (tom@go2net.com)
+  Sybase-CT work
 
 * Muhammad A Muquit (MA_Muquit@fccc.ed)
   Original Sybase module
@@ -139,6 +143,9 @@ Informix Universal Server support
 
 * Lars Torben Wilson (torben@netmill.com)
   Documentation
+
+* Uwe Steinmann (Uwe.Steinmann@fernuni-hagen.de)
+  Hyperwave, PDF, Acrobat FDF Toolkit
 
 ------------------------------------------------------------------------------
 

@@ -26,7 +26,7 @@
    | Authors: Jim Winstead <jimw@php.net>                                 |
    +----------------------------------------------------------------------+
  */
-/* $Id: */
+/* $Id: pageinfo.c,v 1.39 1998/11/18 21:23:10 ssb Exp $ */
 #ifdef THREAD_SAFE
 #include "tls.h"
 #endif
@@ -96,6 +96,8 @@ long _php3_getuid(void)
 	return (GLOBAL(page_uid));
 }
 
+/* {{{ proto int getmyuid(void)
+   Get PHP script owner's UID */
 void php3_getmyuid(INTERNAL_FUNCTION_PARAMETERS)
 {
 	long uid;
@@ -108,7 +110,10 @@ void php3_getmyuid(INTERNAL_FUNCTION_PARAMETERS)
 		RETURN_LONG(uid);
 	}
 }
+/* }}} */
 
+/* {{{ proto int getmypid(void)
+   Get current process ID */
 void php3_getmypid(INTERNAL_FUNCTION_PARAMETERS)
 {
 	int pid;
@@ -121,7 +126,10 @@ void php3_getmypid(INTERNAL_FUNCTION_PARAMETERS)
 		RETURN_LONG((long) pid);
 	}
 }
+/* }}} */
 
+/* {{{ proto int getmyinode(void)
+   Get the inode of the current script being parsed */
 void php3_getmyinode(INTERNAL_FUNCTION_PARAMETERS)
 {
 	TLS_VARS;
@@ -133,7 +141,10 @@ void php3_getmyinode(INTERNAL_FUNCTION_PARAMETERS)
 		RETURN_LONG(GLOBAL(page_inode));
 	}
 }
+/* }}} */
 
+/* {{{ proto int getlastmod(void)
+   Get time of last page modification */
 void php3_getlastmod(INTERNAL_FUNCTION_PARAMETERS)
 {
 	TLS_VARS;
@@ -145,3 +156,4 @@ void php3_getlastmod(INTERNAL_FUNCTION_PARAMETERS)
 		RETURN_LONG(GLOBAL(page_mtime));
 	}
 }
+/* }}} */

@@ -42,6 +42,7 @@
 #include "fopen-wrappers.h"
 
 #if DBASE
+#include "dbase.h"
 #include "../dbase/dbf.h"
 #if defined(THREAD_SAFE)
 DWORD DbaseTls;
@@ -117,6 +118,8 @@ static int php3_mend_dbase(void){
 	return SUCCESS;
 }
 
+/* {{{ proto int dbase_open(string name, int mode)
+   Opens a dBase-format database file */
 void php3_dbase_open(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *dbf_name, *options;
 	dbhead_t *dbh;
@@ -146,7 +149,10 @@ void php3_dbase_open(INTERNAL_FUNCTION_PARAMETERS) {
 	handle = php3_list_insert(dbh, DBase_GLOBAL(le_dbhead));
 	RETURN_LONG(handle);
 }
+/* }}} */
 
+/* {{{ proto bool dbase_close(int identifier)
+   Closes an open dBase-format database file */
 void php3_dbase_close(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *dbh_id;
 	dbhead_t *dbh;
@@ -166,7 +172,10 @@ void php3_dbase_close(INTERNAL_FUNCTION_PARAMETERS) {
 	php3_list_delete(dbh_id->value.lval);
 	RETURN_TRUE;
 }
+/* }}} */
 
+/* {{{ proto int dbase_numrecords(int identifier)
+   Returns the number of records in the database */
 void php3_dbase_numrecords(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *dbh_id;
 	dbhead_t *dbh;
@@ -185,7 +194,10 @@ void php3_dbase_numrecords(INTERNAL_FUNCTION_PARAMETERS) {
 
 	RETURN_LONG(dbh->db_records);
 }
+/* }}} */
 
+/* {{{ proto int dbase_numfields(int identifier)
+   Returns the number of fields (columns) in the database */
 void php3_dbase_numfields(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *dbh_id;
 	dbhead_t *dbh;
@@ -204,7 +216,10 @@ void php3_dbase_numfields(INTERNAL_FUNCTION_PARAMETERS) {
 
 	RETURN_LONG(dbh->db_nfields);
 }
+/* }}} */
 
+/* {{{ proto bool dbase_pack(int identifier)
+   Packs the database (deletes records marked for deletion) */
 void php3_dbase_pack(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *dbh_id;
 	dbhead_t *dbh;
@@ -225,7 +240,10 @@ void php3_dbase_pack(INTERNAL_FUNCTION_PARAMETERS) {
         put_dbf_info(dbh);
 	RETURN_TRUE;
 }
+/* }}} */
 
+/* {{{ proto bool dbase_add_record(int identifier, array data)
+   Adds a record to the database */
 void php3_dbase_add_record(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *dbh_id, *fields, *field;
 	dbhead_t *dbh;
@@ -290,7 +308,10 @@ void php3_dbase_add_record(INTERNAL_FUNCTION_PARAMETERS) {
 
 	RETURN_TRUE;
 }
+/* }}} */
 
+/* {{{ proto bool dbase_delete_record(int identifier, int record)
+   Marks a record to be deleted */
 void php3_dbase_delete_record(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *dbh_id, *record;
 	dbhead_t *dbh;
@@ -321,7 +342,10 @@ void php3_dbase_delete_record(INTERNAL_FUNCTION_PARAMETERS) {
         put_dbf_info(dbh);
 	RETURN_TRUE;
 }
+/* }}} */
 
+/* {{{ proto array dbase_get_record(int identifier, int record)
+   Returns an array representing a record from the database */
 void php3_dbase_get_record(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *dbh_id, *record;
 	dbhead_t *dbh;
@@ -395,8 +419,11 @@ void php3_dbase_get_record(INTERNAL_FUNCTION_PARAMETERS) {
 
 	free(data);
 }
+/* }}} */
 
 /* From Martin Kuba <makub@aida.inet.cz> */
+/* {{{ proto array dbase_get_record_with_names(int identifier, int record)
+   Returns an associative array representing a record from the database */
 void php3_dbase_get_record_with_names(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *dbh_id, *record;
 	dbhead_t *dbh;
@@ -468,7 +495,10 @@ void php3_dbase_get_record_with_names(INTERNAL_FUNCTION_PARAMETERS) {
 
 	free(data);
 }
+/* }}} */
 
+/* {{{ proto bool dbase_create(string filename, array fields)
+   Creates a new dBase-format database file */
 void php3_dbase_create(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *filename, *fields, *field, *value;
 	int fd;
@@ -497,7 +527,7 @@ void php3_dbase_create(INTERNAL_FUNCTION_PARAMETERS) {
 		RETURN_FALSE;
 	}
 
-	if ((fd = open(filename->value.str.val, O_RDWR|O_CREAT, 0644)) < 0) {
+	if ((fd = open(filename->value.str.val, O_BINARY|O_RDWR|O_CREAT, 0644)) < 0) {
 		php3_error(E_WARNING, "Unable to create database (%d): %s", errno, strerror(errno));
 		RETURN_FALSE;
 	}
@@ -611,6 +641,7 @@ void php3_dbase_create(INTERNAL_FUNCTION_PARAMETERS) {
 	handle = php3_list_insert(dbh, DBase_GLOBAL(le_dbhead));
 	RETURN_LONG(handle);
 }
+/* }}} */
 
 function_entry dbase_functions[] = {
 	{"dbase_open",			php3_dbase_open,			NULL},
@@ -620,7 +651,7 @@ function_entry dbase_functions[] = {
 	{"dbase_numfields",		php3_dbase_numfields,		NULL},
 	{"dbase_add_record",	php3_dbase_add_record,		NULL},
 	{"dbase_get_record",	php3_dbase_get_record,		NULL},
-       {"dbase_get_record_with_names", php3_dbase_get_record_with_names,               NULL},
+	{"dbase_get_record_with_names", php3_dbase_get_record_with_names,               NULL},
 	{"dbase_delete_record",	php3_dbase_delete_record,	NULL},
 	{"dbase_pack",			php3_dbase_pack,			NULL},
 	{NULL, NULL, NULL}

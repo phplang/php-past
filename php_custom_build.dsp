@@ -66,7 +66,7 @@ LIB32=link.exe -lib
 # ADD BASE CPP /nologo /W3 /GX /Z7 /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /YX /FD /c
 # ADD CPP /nologo /W3 /GX /Z7 /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /YX /FD /c
 # ADD BASE RSC /l 0x409
-# ADD RSC /l 0x409
+# ADD RSC /l 0x409 /i "c:\include"
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
@@ -154,11 +154,11 @@ InputPath=".\language-parser.y"
 
 !ELSEIF  "$(CFG)" == "php_custom_build - Win32 Debug"
 
-# Begin Custom Build - Build Language Bison Parser
+# Begin Custom Build - Performing Custom Build Step on $(InputPath)
 InputPath=".\language-parser.y"
 
 "language-parser.tab.c" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	bison -p php -v -d language-parser.y
+	bison.exe -p php -v -d language-parser.y
 
 # End Custom Build
 

@@ -24,9 +24,9 @@ Created from the snmputil sample in the Microsoft SDK for NT
 
 
 function_entry snmp_functions[] = {
-    {"snmpget", php3_snmpget},
-    {"snmpwalk", php3_snmpwalk},
-    {NULL,NULL}
+    {"snmpget", php3_snmpget, NULL},
+    {"snmpwalk", php3_snmpwalk, NULL},
+    {NULL,NULL,NULL}
 };
 
 php3_module_entry snmp_module_entry = {

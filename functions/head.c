@@ -26,7 +26,7 @@
    | Authors: Rasmus Lerdorf <rasmus@lerdorf.on.ca>                       |
    +----------------------------------------------------------------------+
  */
-/* $Id: head.c,v 1.107 1998/08/18 12:49:29 rasmus Exp $ */
+/* $Id: head.c,v 1.109 1998/10/26 05:31:46 zeev Exp $ */
 #ifdef THREAD_SAFE
 #include "tls.h"
 #endif

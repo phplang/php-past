@@ -21,6 +21,7 @@
     <funcsynopsis>
      <funcdef>array <function>getimagesize</function></funcdef>
      <paramdef>string <parameter>filename</parameter></paramdef>
+     <paramdef>array <parameter><optional>imageinfo</optional></parameter></paramdef>
     </funcsynopsis>
     <para>
      The <function>GetImageSize</function> function will determine the
@@ -41,6 +42,27 @@
       <programlisting>
 &lt;?php $size = GetImageSize("img/flag.jpg"); ?>
 &lt;IMG SRC="img/flag.jpg" &lt;?php echo $size[3]; ?>>
+</programlisting></example>
+
+    <para>
+     The optional <parameter>imageinfo</parameter> parameter allows you to
+     extract some extended information from the image file. Currently this 
+	 will return the diffrent <acronym>JPG</acronym> APP markers in an 
+	 associative Array. Some Programs use these APP markers to embedd text
+	 information in images. A very common one in to embed IPTC <ulink 
+	  url="http://www.xe.net/iptc/">http://www.xe.net/iptc/</ulink> information 
+	 in the APP13 marker. You can use the <function>iptcparse</function> function 
+	 to parse the binary APP13 marker into something readable.
+     <example>
+      <title>GetImageSize returning IPTC</title>
+	 <programlisting>
+&lt;?php 
+    $size = GetImageSize("testimg.jpg",&$info);
+    if (isset($info["APP13"])) {
+        $iptc = iptcparse($info["APP13"]);
+        var_dump($iptc);
+    }
+?>
 </programlisting></example>
 
      <note><simpara>
@@ -95,10 +117,11 @@
      <paramdef>int <parameter>col</parameter></paramdef>
     </funcsynopsis>
     <para>
-     ImageChar draws the first character of c in the image identified
-     by id at coordinates x, y (top left is 0,0) with the color col.
-     If font is 1, 2, 3, 4 or 5, a built-in font is used.
-
+     ImageChar draws the first character of <parameter>c</parameter> in the image
+     identified by <parameter>id</parameter> with its upper-left at
+     <parameter>x</parameter>,<parameter>y</parameter> (top left is 0,0) with the
+     color <parameter>col</parameter>. If font is 1, 2, 3, 4 or 5, a built-in font is
+     used (with higher numbers corresponding to larger fonts).
     <para>
      See also <function>imageloadfont</function>.
 
@@ -143,11 +166,15 @@
      <paramdef>int <parameter>green</parameter></paramdef>
      <paramdef>int <parameter>blue</parameter></paramdef>
     </funcsynopsis>
-<para>    ImageColorAllocate returns a color identifier representing the
-    color composed of the given RGB components.  The im
-    argument is the return from the <function>imagecreate</function>
-    function.  ImageColorAllocate must be called to create each color
-    that is to be used in the image represented by im.
+	<para>
+     ImageColorAllocate returns a color identifier representing the color composed of
+     the given RGB components.  The im argument is the return from the
+     <function>imagecreate</function> function.  ImageColorAllocate must be called to
+     create each color that is to be used in the image represented by im.
+     <informalexample><programlisting>
+$white = ImageColorAllocate($im, 255,255,255);
+$black = ImageColorAllocate($im, 0,0,0);
+</programlisting></informalexample>
    </refsect1>
   </refentry>
 
@@ -161,12 +188,16 @@
     <funcsynopsis>
      <funcdef>int <function>imagecolortransparent</function></funcdef>
      <paramdef>int <parameter>im</parameter></paramdef>
-     <paramdef>int <parameter>col</parameter></paramdef>
+     <paramdef>int <parameter><optional>col</optional></parameter></paramdef>
     </funcsynopsis>
-<para>    ImageColorTransparent sets the transparent color in the im image
-    to col.  im is the image identifier returned by <function>imagecreate</function>
-    and col is the color identifier returned by
-    <function>imagecolorallocate</function>.
+    <para>
+     ImageColorTransparent sets the transparent color in the im image
+     to col.  im is the image identifier returned by <function>imagecreate</function>
+     and col is a color identifier returned by
+     <function>imagecolorallocate</function>.
+    <para>
+     The identifier of the new (or current, if none is specified) transparent 
+     color is returned.
    </refsect1>
   </refentry>
 
@@ -375,8 +406,11 @@
      <funcdef>int <function>imagefontheight</function></funcdef>
      <paramdef>int <parameter>font</parameter></paramdef>
     </funcsynopsis>
-<para>    Returns the pixel width of a character in font.
-  <para>    See also <function>imagefontwidth</function> and <function>imageloadfont</function>.
+    <para>
+     Returns the pixel height of a character in the specified font.
+    <para>
+     See also <function>imagefontwidth</function> and
+     <function>imageloadfont</function>.
    </refsect1>
   </refentry>
 
@@ -434,11 +468,14 @@
     <funcsynopsis>
      <funcdef>int <function>imageinterlace</function></funcdef>
      <paramdef>int <parameter>im</parameter></paramdef>
-     <paramdef>int <parameter>interlace</parameter></paramdef>
+     <paramdef>int <parameter><optional>interlace</optional></parameter></paramdef>
     </funcsynopsis>
-<para>    ImageInterlace turns the interlace bit on or off.  If interlace is
-    1 the im image will be interlaced, and if interlace is 0 the
-    interlace bit is turned off.
+    <para>
+     <function>ImageInterlace</function> turns the interlace bit on or off.
+     If interlace is 1 the im image will be interlaced, and if interlace
+     is 0 the interlace bit is turned off.
+    <para>
+     This functions returns whether the interlace bit is set for the image.
    </refsect1>
   </refentry>
 
@@ -551,7 +588,7 @@
     <funcsynopsis>
      <funcdef>int <function>imagepolygon</function></funcdef>
      <paramdef>int <parameter>im</parameter></paramdef>
-     <paramdef>int <parameter>points</parameter></paramdef>
+     <paramdef>array <parameter>points</parameter></paramdef>
      <paramdef>int <parameter>num_points</parameter></paramdef>
      <paramdef>int <parameter>col</parameter></paramdef>
     </funcsynopsis>
@@ -849,7 +886,8 @@ ImageDestroy($im);
 </programlisting></example>
 
     <para>
-     This function requires both the GD library and the Freetype library.
+     This function requires both the GD library and the <ulink
+      url="http://www.freetype.org/">FreeType</ulink< library.
     <para>
      See also <function>ImageTTFBBox</function>.
    </refsect1>

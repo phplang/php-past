@@ -49,6 +49,7 @@
 #include "locator.h"
 #include "sqltypes.h"
 
+
 extern php3_module_entry ifx_module_entry;
 #define ifx_module_ptr &ifx_module_entry
 
@@ -73,13 +74,12 @@ extern void php3_ifx_htmltbl_result(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_ifx_fieldtypes(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_ifx_fieldproperties(INTERNAL_FUNCTION_PARAMETERS);
 
+long php3_intifx_getType(long id, HashTable *list);
 extern void php3_ifx_create_blob(INTERNAL_FUNCTION_PARAMETERS);
 long php3_intifx_create_blob(long type, long mode, char* param, long len, HashTable *list);
 extern void php3_ifx_free_blob(INTERNAL_FUNCTION_PARAMETERS) ;
 long php3_intifx_free_blob(long id, HashTable *list);
-
 long php3_intifx2_free_blob(long id, HashTable *list);
-
 extern void php3_ifx_get_blob(INTERNAL_FUNCTION_PARAMETERS);
 long php3_intifx_get_blob(long bid, HashTable *list, char** content);
 extern void php3_ifx_update_blob(INTERNAL_FUNCTION_PARAMETERS);
@@ -94,6 +94,16 @@ extern void php3_ifx_byteasvarchar(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_ifx_nullformat(INTERNAL_FUNCTION_PARAMETERS);
 char* php3_intifx_null();
 
+extern void php3_ifx_create_char(INTERNAL_FUNCTION_PARAMETERS);
+long php3_intifx_create_char(char* param, long len, HashTable *list);
+extern void php3_ifx_free_char(INTERNAL_FUNCTION_PARAMETERS) ;
+long php3_intifx_free_char(long id, HashTable *list);
+extern void php3_ifx_update_char(INTERNAL_FUNCTION_PARAMETERS);
+long php3_intifx_update_char(long bid, char* param, long len, HashTable *list);
+extern void php3_ifx_get_char(INTERNAL_FUNCTION_PARAMETERS);
+long php3_intifx_get_char(long bid, HashTable *list, char** content);
+
+
 #if HAVE_IFX_IUS
 extern void php3_ifxus_create_slob(INTERNAL_FUNCTION_PARAMETERS);
 long php3_intifxus_create_slob(long create_mode, HashTable *list);
@@ -104,7 +114,7 @@ long php3_intifxus_close_slob(long bid, HashTable *list);
 extern void php3_ifxus_open_slob(INTERNAL_FUNCTION_PARAMETERS) ;
 long php3_intifxus_open_slob(long bid, long create_mode, HashTable *list);
 long php3_intifxus_new_slob(HashTable *list);
-ifx_lo_t *php3_intifx_get_slobloc(long bid, HashTable *list);
+ifx_lo_t *php3_intifxus_get_slobloc(long bid, HashTable *list);
 extern void php3_ifxus_read_slob(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_ifxus_write_slob(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_ifxus_seek_slob(INTERNAL_FUNCTION_PARAMETERS);
@@ -116,7 +126,7 @@ typedef struct {
 	long num_links,num_persistent;
 	long max_links,max_persistent;
 	long allow_persistent;
-	int le_result,le_link,le_plink,le_blobresult,le_slobresult;
+	int le_result,le_link,le_plink,le_idresult;
 	char *default_host, *default_user, *default_password;
 	int connectionid;
 	int cursorid;
@@ -128,8 +138,7 @@ typedef struct {
         long nullformat;     /* 0=NULL as "", 1= NULL as "NULL" */
 } ifx_module;
 
-#define MAXBLOBS          64
-#define MAXSLOBS          64
+#define MAX_RESID          64
 #define BLOBINFILE 0      /* 0=in memory, 1=in file */
 
 typedef struct ifx_res {
@@ -144,30 +153,46 @@ typedef struct ifx_res {
 	int  numcols;
 	int  rowid;
         int  affected_rows;
-        int blob_id[MAXBLOBS];
-      #if HAVE_IFX_IUS
-        int slob_id[MAXSLOBS];
-      #endif
+        int res_id[MAX_RESID];
 } IFX_RES;
 
 
 
 
 
-typedef struct ifx_blobres {
-  	  int mode;
-	  loc_t blob_data;
+typedef struct _IFX_IDRES {
  	  int type;
-} IFX_BLOBRES;
+          union {
+           struct {
+  	    int mode;
+	    loc_t blob_data;
+	   } BLOBRES;
+	   struct {
+	     char *char_data;
+	     int len;
+ 	   } CHARRES;
+#if HAVE_IFX_IUS
+	   struct {
+            ifx_lo_t slob_data;
+            ifx_lo_create_spec_t *createspec;
+            int lofd;
+ 	   } SLOBRES;
+#endif
+	  } DATARES;
+} IFX_IDRES;
 
+
+
+#define BLOB DATARES.BLOBRES
+#define CHAR DATARES.CHARRES
 
 #if HAVE_IFX_IUS
-typedef struct ifx_slobres {
-          ifx_lo_t slobdata;
-          ifx_lo_create_spec_t *createspec;
-          int lofd;
-} IFX_SLOBRES;
+#define SLOB DATARES.SLOBRES
 #endif
+
+
+
+
 
 
 #ifndef THREAD_SAFE

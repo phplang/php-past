@@ -74,6 +74,9 @@
 #include "functions/base64.h"
 #include "functions/php3_mail.h"
 #include "functions/php3_var.h"
+#include "functions/php3_iptc.h"
+#include "functions/quot_print.h"
+#include "functions/cyr_convert.h"
 #if WIN32|WINNT
 #include "win32/unistd.h"
 #endif
@@ -106,8 +109,8 @@ function_entry basic_functions[] = {
 	{"sort",		php3_sort,					first_arg_force_ref},
 	{"rsort",		php3_rsort,					first_arg_force_ref},
 	{"usort",		php3_user_sort,				first_arg_force_ref},
-	{"uksort",		php3_user_key_sort,			first_arg_force_ref},
 	{"uasort",		php3_auser_sort,			first_arg_force_ref},
+	{"uksort",		php3_user_key_sort,			first_arg_force_ref},
 	{"array_walk",  php3_array_walk,			first_arg_force_ref},
 	{"sizeof",		php3_count,					first_arg_allow_ref},
 	{"count",		php3_count,					first_arg_allow_ref},
@@ -138,6 +141,8 @@ function_entry basic_functions[] = {
 
 	{"addslashes",	php3_addslashes,			NULL},
 	{"chop",		php3_chop,					NULL},
+	{"str_replace",	php3_str_replace,			NULL},
+	{"chunk_split",	php3_chunk_split,			NULL},
 	{"trim",		php3_trim,					NULL},
 	{"ltrim",		php3_ltrim,					NULL},
 	{"rtrim",		php3_chop,					NULL},
@@ -149,6 +154,7 @@ function_entry basic_functions[] = {
 	{"htmlentities",		php3_htmlentities,	NULL},
 	{"md5",					php3_md5,			NULL},
 
+	{"iptcparse",	php3_iptcparse,				NULL},
 	{"parse_url",	php3_parse_url,				NULL},
 
 	{"parse_str",	php3_parsestr,				NULL},
@@ -173,6 +179,7 @@ function_entry basic_functions[] = {
 	{"dirname", 	php3_dirname,				NULL},
 	{"stripslashes",	php3_stripslashes,		NULL},
 	{"strstr",		php3_strstr,				NULL},
+	{"stristr",		php3_stristr,				NULL},
 	{"strrchr",		php3_strrchr,				NULL},
 	{"substr",		php3_substr,				NULL},
 	{"quotemeta",	php3_quotemeta,				NULL},
@@ -197,6 +204,9 @@ function_entry basic_functions[] = {
 	{"rand",		php3_rand,					NULL},
 	{"srand",		php3_srand,					NULL},
 	{"getrandmax",	php3_getrandmax,			NULL},
+	{"mt_rand",		php3_mt_rand,				NULL},
+	{"mt_srand",		php3_mt_srand,			NULL},
+	{"mt_getrandmax",	php3_mt_getrandmax,		NULL},
 	{"gethostbyaddr",	php3_gethostbyaddr,		NULL},
 	{"gethostbyname",	php3_gethostbyname,		NULL},
 	{"gethostbynamel",	php3_gethostbynamel,	NULL},
@@ -248,6 +258,7 @@ function_entry basic_functions[] = {
 	{"decbin",		php3_decbin,				NULL},
 	{"decoct",		php3_decoct,				NULL},
 	{"dechex",		php3_dechex,				NULL},
+	{"base_convert",php3_base_convert,			NULL},
 	{"number_format",	php3_number_format,		NULL},
 
 #if HAVE_PUTENV
@@ -259,11 +270,16 @@ function_entry basic_functions[] = {
 	{"readlink",	php3_readlink,				NULL},
 	{"symlink",		php3_symlink,				NULL},
 	{"link",		php3_link,					NULL},
+	{"quoted_printable_decode",	php3_quoted_printable_decode, NULL},	
+	{"convert_cyr_string",	php3_convert_cyr_string, NULL},	
 	{"get_current_user",	php3_get_current_user,	NULL},
 	{"set_time_limit",	php3_set_time_limit,	NULL},
 	
 	{"get_cfg_var",	php3_get_cfg_var,			NULL},
 	{"magic_quotes_runtime",	php3_set_magic_quotes_runtime,	NULL},
+	{"set_magic_quotes_runtime",	php3_set_magic_quotes_runtime,	NULL},
+	{"get_magic_quotes_gpc",		php3_get_magic_quotes_gpc,	NULL},
+	{"get_magic_quotes_runtime",	php3_get_magic_quotes_runtime,	NULL},
 	
 	{"is_long",		php3_is_long,				first_arg_allow_ref},
 	{"is_int",		php3_is_long,				first_arg_allow_ref},
@@ -360,10 +376,6 @@ int php3_rshutdown_basic(void)
 #if HAVE_PUTENV
 	_php3_hash_destroy(&putenv_ht);
 #endif
-	if (user_shutdown_function_names) {
-		_php3_hash_destroy(user_shutdown_function_names);
-		efree(user_shutdown_function_names);
-	}
 	return SUCCESS;
 }
 
@@ -1459,7 +1471,16 @@ void php3_set_magic_quotes_runtime(INTERNAL_FUNCTION_PARAMETERS)
 	php3_ini.magic_quotes_runtime=new_setting->value.lval;
 	RETURN_TRUE;
 }
+	
+void php3_get_magic_quotes_runtime(INTERNAL_FUNCTION_PARAMETERS)
+{
+	RETURN_LONG(php3_ini.magic_quotes_runtime);
+}
 
+void php3_get_magic_quotes_gpc(INTERNAL_FUNCTION_PARAMETERS)
+{
+	RETURN_LONG(php3_ini.magic_quotes_gpc);
+}
 
 void php3_is_type(INTERNAL_FUNCTION_PARAMETERS,int type)
 {
@@ -1604,6 +1625,10 @@ PHPAPI int _php3_error_log(int opt_err,char *message,char *opt,char *headers){
 		break;
 	case 3: /*save to a file*/
 		logfile=php3_fopen_wrapper(opt,"a", (IGNORE_URL|ENFORCE_SAFE_MODE), &issock, &socketd);
+		if(!logfile) {
+			php3_error(E_WARNING,"error_log: Unable to write to %s",opt);
+			return FAILURE;
+		}
 		fwrite(message,strlen(message),1,logfile);
 		fclose(logfile);
 		break;
@@ -1681,20 +1706,16 @@ void user_shutdown_function_dtor(pval *user_shutdown_function_name)
 }
 
 
-int user_shutdown_function_executor(pval *user_shutdown_function_name)
-{
-	return 1;
-}
-
-
 void php3_call_shutdown_functions(void)
 {
 	if (user_shutdown_function_names) {
-		_php3_hash_apply(user_shutdown_function_names, (int(*)(void *)) user_shutdown_function_executor);
+		_php3_hash_destroy(user_shutdown_function_names);
+		efree(user_shutdown_function_names);
 	}
 }
 
-
+/* {{{ proto void register_shutdown_function(string function_name)
+   Register a user-level function to be called on request termination */
 PHP_FUNCTION(register_shutdown_function)
 {
 	pval *arg, shutdown_function_name;
@@ -1714,6 +1735,7 @@ PHP_FUNCTION(register_shutdown_function)
 	
 	_php3_hash_next_index_insert(user_shutdown_function_names, &shutdown_function_name, sizeof(pval), NULL);
 }
+/* }}} */
 
 /*
  * Local variables:

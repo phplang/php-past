@@ -46,6 +46,7 @@ unsigned char cache_count[MAX_CACHED_MEMORY];
 
 # if MEMORY_LIMIT
 static unsigned int allocated_memory;
+static unsigned char memory_exhausted;
 #endif
 #endif
 
@@ -65,8 +66,11 @@ static unsigned int allocated_memory;
 											php3_log_err(buf); \
 										} \
 										exit(1); \
-									} else {\
+									} else if (memory_exhausted) { \
+										/* do nothing, let it go through */ \
+									} else { \
 										if (!GLOBAL(shutdown_requested)) { \
+											memory_exhausted=1;	\
 											if (!file) { \
 												php3_error(E_ERROR,"Allowed memory size of %d bytes exhausted (tried to allocate %d bytes)",php3_ini.memory_limit,s); \
 											} else { \
@@ -126,6 +130,8 @@ PHPAPI void *_emalloc(size_t size)
 	}
 
 	if (!p) {
+		fprintf(stderr,"FATAL:  emalloc():  Unable to allocate %d bytes\n", size);
+		exit(1);
 		UNBLOCK_INTERRUPTIONS;
 		return (void *)p;
 	}
@@ -220,6 +226,8 @@ PHPAPI void *_erealloc(void *ptr, size_t size)
 	REMOVE_POINTER_FROM_LIST(p);
 	p = (mem_header *) realloc(p,sizeof(mem_header)+size+PLATFORM_PADDING);
 	if (!p) {
+		fprintf(stderr,"FATAL:  erealloc():  Unable to allocate %d bytes\n", size);
+		exit(1);
 		orig->pNext = GLOBAL(head);
 		if (GLOBAL(head)) {
 			GLOBAL(head)->pLast = orig;
@@ -323,6 +331,7 @@ void start_memory_manager(void)
 	
 #if MEMORY_LIMIT
 	allocated_memory=0;
+	memory_exhausted=0;
 #endif
 
 	memset(GLOBAL(cache_count),0,MAX_CACHED_MEMORY*sizeof(unsigned char));

@@ -28,12 +28,13 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: link.c,v 1.30 1998/09/19 20:17:18 rasmus Exp $ */
+/* $Id: link.c,v 1.34 1998/11/18 21:23:08 ssb Exp $ */
 #ifdef THREAD_SAFE
 #include "tls.h"
 #endif
 #include "php.h"
 #include "internal_functions.h"
+#include "php3_filestat.h"
 
 #include <stdlib.h>
 #if HAVE_UNISTD_H
@@ -61,6 +62,8 @@
 #include "safe_mode.h"
 #include "php3_link.h"
 
+/* {{{ proto string readlink(string filename)
+   Return the target of a symbolic link */
 void php3_readlink(INTERNAL_FUNCTION_PARAMETERS)
 {
 #if HAVE_SYMLINK
@@ -83,7 +86,10 @@ void php3_readlink(INTERNAL_FUNCTION_PARAMETERS)
 	RETURN_STRING(buff,1);
 #endif
 }
+/* }}} */
 
+/* {{{ proto int linkinfo(string filename)
+   Returns the st_dev field of the UNIX C stat structure describing the link */
 void php3_linkinfo(INTERNAL_FUNCTION_PARAMETERS)
 {
 #if HAVE_SYMLINK
@@ -104,7 +110,10 @@ void php3_linkinfo(INTERNAL_FUNCTION_PARAMETERS)
 	RETURN_LONG((long) sb.st_dev);
 #endif
 }
+/* }}} */
 
+/* {{{ proto int symlink(string target, string link)
+   Create a symbolic link */
 void php3_symlink(INTERNAL_FUNCTION_PARAMETERS)
 {
 #if HAVE_SYMLINK
@@ -129,7 +138,10 @@ void php3_symlink(INTERNAL_FUNCTION_PARAMETERS)
 	RETURN_TRUE;
 #endif
 }
+/* }}} */
 
+/* {{{ proto int link(string target, string link)
+   Create a hard link */
 void php3_link(INTERNAL_FUNCTION_PARAMETERS)
 {
 #if HAVE_LINK
@@ -154,7 +166,10 @@ void php3_link(INTERNAL_FUNCTION_PARAMETERS)
 	RETURN_TRUE;
 #endif
 }
+/* }}} */
 
+/* {{{ proto int unlink(string filename)
+   Delete a file */
 void php3_unlink(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *filename;
@@ -175,8 +190,11 @@ void php3_unlink(INTERNAL_FUNCTION_PARAMETERS)
 		php3_error(E_WARNING, "Unlink failed (%s)", strerror(errno));
 		RETURN_FALSE;
 	}
+	/* Clear stat cache */
+	php3_clearstatcache(INTERNAL_FUNCTION_PARAM_PASSTHRU);
 	RETURN_TRUE;
 }
+/* }}} */
 
 function_entry link_functions[] = {
 	{"readlink",		php3_readlink,		NULL},

@@ -29,7 +29,7 @@
  */
 
 
-/* $Id: php3_gd.h,v 1.23 1998/07/11 21:57:25 rasmus Exp $ */
+/* $Id: php3_gd.h,v 1.25 1998/10/12 22:40:35 zeev Exp $ */
 
 #ifndef _PHP3_GD_H
 #define _PHP3_GD_H
@@ -57,12 +57,14 @@ extern void php3_imagecharup(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_imagecolorallocate(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_imagecolorat(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_imagecolorclosest(INTERNAL_FUNCTION_PARAMETERS);
+extern void php3_imagecolordeallocate(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_imagecolorresolve(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_imagecolorexact(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_imagecolorset(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_imagecolorstotal(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_imagecolorsforindex(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_imagecolortransparent(INTERNAL_FUNCTION_PARAMETERS);
+extern void php3_imagecopy(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_imagecopyresized(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_imagecreate(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_imagecreatefromgif (INTERNAL_FUNCTION_PARAMETERS);

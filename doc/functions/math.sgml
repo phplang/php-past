@@ -3,6 +3,44 @@
   <title>Mathematical Functions</title>
   <titleabbrev>Math.</titleabbrev>
 
+  <partintro>
+   <sect1>
+    <title>Introduction</title>
+    <para>
+     These math functions will only handle values within the range of
+     the long and double types on your computer.  If you need to
+     handle bigger numbers, take a look at the <link
+     linkend="ref.bc">arbitrary precision math functions</link>.
+    </para>
+    <sect2>
+     <title>Math constants</title>
+     <para>
+      The following values are defined as constants in PHP by the math
+      extension:
+      <table>
+       <title>Math constants</title>
+       <tgroup cols="3">
+	<thead>
+	 <row>
+	  <entry>Constant</entry>
+	  <entry>Value</entry>
+	  <entry>Description</entry>
+	 </row>
+	</thead>
+	<tbody>
+	 <row>
+	  <entry>M_PI</entry>
+	  <entry>3.14159265358979323846</entry>
+	  <entry>The value of ¶ (pi)</entry>
+	 </row>
+	</tbody>
+       </tgroup>
+      </table>
+     </para>
+    </sect2>
+   </sect1>
+  </partintro>
+
   <refentry id="function.abs">
    <refnamediv>
     <refname>Abs</refname>
@@ -81,6 +119,62 @@
     <para>
      See also <function>acos</function> and <function>atan</function>.
 
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.atan2">
+   <refnamediv>
+    <refname>Atan2</refname>
+    <refpurpose>arc tangent of two variables</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>float <function>atan2</function></funcdef>
+     <paramdef>float <parameter>y</parameter></paramdef>
+     <paramdef>float <parameter>x</parameter></paramdef>
+    </funcsynopsis>
+    <simpara>
+     This function calculates the arc tangent of the two variables x and y.  It is similar to calculating the
+     arc tangent of y / x, except that the signs of both arguments are used to determine the quadrant of the result. 
+	<simpara>
+	 The function returns the result in radians, which is between -PI and PI (inclusive).
+    <para>
+     See also <function>acos</function> and <function>atan</function>.
+
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.base-convert">
+   <refnamediv>
+    <refname>base_convert</refname>
+    <refpurpose>convert a number between arbitrary bases</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>strin <function>base_convert</function></funcdef>
+     <paramdef>string <parameter>number</parameter></paramdef>
+     <paramdef>int <parameter>frombase</parameter></paramdef>
+     <paramdef>int <parameter>tobase</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+     Returns a string containing <parameter>number</parameter>
+     represented in base <parameter>tobase</parameter>.  The base in
+     which <parameter>number</parameter> is given is specified in
+     <parameter>frombase</parameter>.  Both
+     <parameter>frombase</parameter> and <parameter>tobase</parameter>
+     have to be between 2 and 36, inclusive.  Digits in numbers with a
+     base higher than 10 will be represented with the letters a-z,
+     with a meaning 10, b meaning 11 and z meaning 36.
+     <example>
+      <title>base_convert()</title>
+      <programlisting role=php>
+$binary = base_convert($hexadecimal, 16, 2);
+</programlisting>
+     </example>
    </refsect1>
   </refentry>
 
@@ -295,8 +389,11 @@
      <function>rand</function>.
 
     <simpara>
-     See also <function>rand</function> and
-     <function>srand</function>.
+     See also <function>rand</function>,
+     <function>srand</function>
+     <function>mt_rand</function>,
+     <function>mt_srand</function> and
+     <function>mt_getrandmax</function>.
     
    </refsect1>
   </refentry>
@@ -426,6 +523,111 @@
    </refsect1>
   </refentry>
 
+  <refentry id="function.mt-rand">
+   <refnamediv>
+    <refname>mt_rand</refname>
+    <refpurpose>generate a better random value</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>mt_rand</function></funcdef>
+     <paramdef><parameter><optional>int min</optional></parameter></paramdef>
+     <paramdef><parameter><optional>int max</optional></parameter></paramdef>
+    </funcsynopsis>
+
+    <simpara>
+     Many random number generators of older libcs have dubious or
+     unknown characteristics and are slow. By default, PHP uses the
+     libc random number generator with the <function>rand</function>
+     function.  <function>mt_rand</function> function is a drop-in
+     replacement for this.  It uses a random number generator with
+     known characteristics, the Mersenne Twister, which will produce
+     random numbers that should be suitable for cryptographic purposes
+     and is four times faster than what the average libc provides. The
+     Homepage of the Mersenne Twister can be found at <ulink
+     url="http://www.math.keio.ac.jp/~matumoto/emt.html">http://www.math.keio.ac.jp/~matumoto/emt.html</ulink>,
+     and an optimized version of the MT source is available from
+     <ulink
+     url="http://www.scp.syr.edu/~marc/hawk/twister.html">http://www.scp.syr.edu/~marc/hawk/twister.html</ulink>.
+
+    <simpara>
+     If called without the optional min,max arguments
+     <function>mt_rand</function> returns a pseudo-random value
+     between 0 and RAND_MAX.  If you want a random number between 5
+     and 15 (inclusive), for example, use mt_rand(5,15).
+    <simpara>
+     Remember to seed the random number generator before use with
+     <function>mt_srand</function>.
+    <simpara>
+     See also <function>mt_srand</function>,
+     <function>mt_getrandmax</function>,
+     <function>srand</function>,
+     <function>rand</function> and 
+     <function>getrandmax</function>.
+   </refsect1>
+  </refentry>
+
+  <refentry id="function.mt-srand">
+   <refnamediv>
+    <refname>mt_srand</refname>
+    <refpurpose>seed the better random number generator</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>void <function>mt_srand</function></funcdef>
+     <paramdef>int <parameter>seed</parameter></paramdef>
+    </funcsynopsis>
+    
+    <para>
+     Seeds the random number generator with
+     <parameter>seed</parameter>.
+
+     <informalexample>
+      <programlisting>
+// seed with microseconds since last "whole" second
+mt_srand((double)microtime()*1000000);
+$randval = mt_rand();
+      </programlisting>
+     </informalexample>
+ 
+    <simpara>
+     See also <function>mt_rand</function>,
+     <function>mt_getrandmax</function>,
+     <function>srand</function>,
+     <function>rand</function> and 
+     <function>getrandmax</function>.
+    
+   </refsect1>
+  </refentry>
+
+  <refentry id="function.mt-getrandmax">
+   <refnamediv>
+    <refname>mt_getrandmax</refname>
+    <refpurpose>show largest possible random value</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>mt_getrandmax</function></funcdef>
+     <paramdef>void </paramdef>
+    </funcsynopsis>
+    
+    <simpara>
+     Returns the maximum value that can be returned by a call to
+     <function>mt_rand</function>.
+
+    <simpara>
+     See also <function>mt_rand</function>,
+     <function>mt_srand</function>
+     <function>rand</function>,
+     <function>srand</function> and
+     <function>getrandmax</function>.
+    
+   </refsect1>
+  </refentry>
+
 
   <refentry id="function.number-format">
    <refnamediv>
@@ -479,8 +681,8 @@
      <paramdef>string <parameter>octal_string</parameter></paramdef>
     </funcsynopsis>
     <para>
-     Returns the decimal equivalent of the hexadecimal number
-     represented by the hex_string argument.
+     Returns the decimal equivalent of the octal number
+     represented by the octal_string argument.
      OctDec converts an octal string to a decimal number. The largest
      number that can be converted is 17777777777 or 2147483647 in
      decimal.
@@ -540,44 +742,24 @@
     <title>Description</title>
     <funcsynopsis>
      <funcdef>int <function>rand</function></funcdef>
-     <paramdef>void </paramdef>
+     <paramdef><parameter><optional>int min</optional></parameter></paramdef>
+     <paramdef><parameter><optional>int max</optional></parameter></paramdef>
     </funcsynopsis>
 
     <simpara>
-     Returns a pseudo-random value between 0 and RAND_MAX.  If you want a
-	 random number between 5 and 15, for example, use rand()%10 + 5.
+     If called without the optional min,max arguments rand() returns a
+     pseudo-random value between 0 and RAND_MAX.  If you want a random
+     number between 5 and 15 (inclusive), for example, use rand(5,15).
 
     <simpara>
      Remember to seed the random number generator before use with
      <function>srand</function>.
-
-	<para>
- 	Here are two handy functions that use <function>rand</function>. One returns a random integer less 
-	than a specified maximum value, the other does the same but returns a real value.  
-	<example><title>rand example functions</title>
-	<programlisting>
-function randomint($max = 100) { 
-    static $startseed = 0; 
-    if (!$startseed) {
-        $startseed = (double)microtime()*getrandmax(); 
-        srand($startseed);
-    } 
-    return (rand()%$max); 
-} 
-
-function random($max = 1) { 
-    static $startseed = 0; 
-    if (!$startseed) { 
-        $startseed = (double)microtime()*getrandmax();
-        srand($startseed); 
-    }
-    return ((rand()/getrandmax())*$max); 
-}
-	</programlisting></example>
-	</para>
     <simpara>
-     See also <function>srand</function> and
-     <function>getrandmax</function>.
+     See also <function>srand</function>,
+     <function>getrandmax</function>,
+     <function>mt_rand</function>,
+     <function>mt_srand</function> and
+     <function>mt_getrandmax</function>.
 
    </refsect1>
   </refentry>
@@ -678,7 +860,11 @@ $randval = rand();
      </informalexample>
  
     <simpara>
-     See also <function>rand</function> and <function>getrandmax</function>.
+     See also <function>rand</function>,
+     <function>getrandmax</function>,
+     <function>mt_rand</function>,
+     <function>mt_srand</function> and
+     <function>mt_getrandmax</function>.
     
    </refsect1>
   </refentry>

@@ -27,7 +27,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: log.c,v 1.10 1998/05/21 23:57:18 zeev Exp $ */
+/* $Id: log.c,v 1.11 1998/11/03 15:52:31 rasmus Exp $ */
 
 #include "phpdl.h"
 #include "log.h"
@@ -51,18 +51,18 @@ logging_conf log_conf;
 
 function_entry log_functions[] = {
 	/* logging support */
-	{"getlastaccess", php3_getlastaccess},
-	{"getlastbrowser", php3_getlastbrowser},
-	{"getlastemail", php3_getlastemail},
-	{"getlasthost", php3_getlasthost},
-	{"getlastref", php3_getlastref},
-	{"getlogdir", php3_getlogdir},
-	{"getloghost", php3_getloghost},
-	{"getstartlogging", php3_getstartlogging},
-	{"gettoday", php3_gettoday},
-	{"gettotal", php3_gettotal},
-	{"logas", php3_logas},
-	{NULL,NULL}
+	{"getlastaccess", php3_getlastaccess, NULL},
+	{"getlastbrowser", php3_getlastbrowser, NULL},
+	{"getlastemail", php3_getlastemail, NULL},
+	{"getlasthost", php3_getlasthost, NULL},
+	{"getlastref", php3_getlastref, NULL},
+	{"getlogdir", php3_getlogdir, NULL},
+	{"getloghost", php3_getloghost, NULL},
+	{"getstartlogging", php3_getstartlogging, NULL},
+	{"gettoday", php3_gettoday, NULL},
+	{"gettotal", php3_gettotal, NULL},
+	{"logas", php3_logas, NULL},
+	{NULL,NULL,NULL}
 };
 
 DLEXPORT int dl_initialize(void *handle)

@@ -219,7 +219,9 @@ void register_constant(php3_constant *c)
 #endif
 
 	php3_str_tolower(lowercase_name, c->name_len);
-	_php3_hash_add(&GLOBAL(php3_constants), lowercase_name, c->name_len, (void *) c, sizeof(php3_constant), NULL);
+	if (_php3_hash_add(&GLOBAL(php3_constants), lowercase_name, c->name_len, (void *) c, sizeof(php3_constant), NULL)==FAILURE) {
+		pval_destructor(&c->value);
+	}
 	free(lowercase_name);
 }
 

@@ -332,9 +332,9 @@ while ( list( $key, $val ) = each( $HTTP_POST_VARS ) ) {
      </example>
 
     <para>
-     See also <function>key</function>, <function>current</function>,
-     <function>reset</function>, <function>next</function>, and
-     <function>prev</function>.
+     See also <function>key</function>, <function>list</function>,
+	 <function>current</function>, <function>reset</function>,
+	 <function>next</function>, and <function>prev</function>.
 
    </refsect1>
   </refentry>
@@ -356,7 +356,7 @@ while ( list( $key, $val ) = each( $HTTP_POST_VARS ) ) {
      internal pointer to the last element.
     <para>
      See also:
-     <function>current</function>, <function>end</function>
+     <function>current</function>, <function>each</function>, <function>end</function>
      <function>next</function> and <function>reset</function>
    </refsect1>
   </refentry>
@@ -377,7 +377,7 @@ while ( list( $key, $val ) = each( $HTTP_POST_VARS ) ) {
      current array position.
     <para>
      See also:
-     <function>current</function>
+     <function>current</function>,
      <function>next</function>
    </refsect1>
   </refentry>
@@ -465,6 +465,7 @@ while (list($id, $name, $salary) = mysql_fetch_row($result)) {
 
     <para>
      See also:
+	 <function>each</function>,
      <function>array</function>.
    </refsect1>
   </refentry>
@@ -560,15 +561,18 @@ while (list($id, $name, $salary) = mysql_fetch_row($result)) {
    <refsect1>
     <title>Description</title>
     <funcsynopsis>
-     <funcdef><function>reset</function></funcdef>
+     <funcdef>mixed <function>reset</function></funcdef>
      <paramdef>array <parameter>array</parameter></paramdef>
     </funcsynopsis>
     <para>
      <function>reset</function> rewinds <parameter>array</parameter>'s
      internal pointer to the first element.
     <para>
+     <function>reset</function> returns the value of the first array
+     element.
+    <para>
      See also:
-     <function>current</function>, <function>next</function>
+     <function>current</function>, <function>each</function>, <function>next</function>
      <function>prev</function> and <function>reset</function>
    </refsect1>
   </refentry>
@@ -591,8 +595,8 @@ while (list($id, $name, $salary) = mysql_fetch_row($result)) {
 	<programlisting>
     $fruits = array("lemon","orange","banana","apple");
     rsort($fruits);
-    for(reset($fruits); $key = key($fruits); next($fruits)) {
-        echo "fruits[$key] = ".$fruits[$key]."\n";
+    for(reset($fruits); ($key,$value) = each($fruits); ) {
+        echo "fruits[$key] = ".$value."\n";
     }
 	</programlisting></example>
 	This example would display:
@@ -665,10 +669,73 @@ fruits[3] = orange
    </refsect1>
   </refentry>
 
+  <refentry id="function.uasort">
+   <refnamediv>
+    <refname>uasort</refname>
+    <refpurpose>Sort an array with a user-defined comparison function and maintain index association</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>void <function>uasort</function></funcdef>
+     <paramdef>array <parameter>array</parameter></paramdef>
+     <paramdef>function <parameter>cmp_function</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+     This function sorts an array such that array indices maintain their 
+     correlation with the array elements they are associated with.  This is
+     used mainly when sorting associative arrays where the actual element
+     order is significant.  The comparison function is user-defined.
+   </refsect1>
+  </refentry>
+
+  <refentry id="function.uksort">
+   <refnamediv>
+    <refname>uksort</refname>
+    <refpurpose>Sort an array by keys using a user-defined comparison function</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>void <function>uksort</function></funcdef>
+     <paramdef>array <parameter>array</parameter></paramdef>
+     <paramdef>function <parameter>cmp_function</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+     This function will sort the keys of an array using a
+     user-supplied comparison function.  If the array you wish to sort
+     needs to be sorted by some non-trivial criteria, you should use
+     this function.
+     <example>
+      <title><function>uksort</function> example</title>
+	<programlisting>
+function mycompare($a, $b) {   
+    if ($a == $b) return 0;
+    return ($a > $b) ? -1 : 1;
+}
+$a = array(4 => "four", 3 => "three", 20 => "twenty", 10 => "ten");
+uksort($a, mycompare);
+while(list($key, $value) = each($a)) {
+    echo "$key: $value\n";
+}
+</programlisting></example>
+     This example would display:
+     <computeroutput>
+20: twenty
+10: ten
+4: four
+3: three
+</computeroutput>
+    <para>
+     See also <function>arsort</function>, <function>asort</function>, <function>uasort</function>,
+     <function>ksort</function>, <function>rsort</function> and <function>sort</function>.
+   </refsect1>
+  </refentry>
+
   <refentry id="function.usort">
    <refnamediv>
     <refname>usort</refname>
-    <refpurpose>Sort an array using a user-define comparison function</refpurpose>
+    <refpurpose>Sort an array by values using a user-defined comparison function</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
@@ -678,18 +745,19 @@ fruits[3] = orange
      <paramdef>function <parameter>cmp_function</parameter></paramdef>
     </funcsynopsis>
     <para>
-     This function will sort an array using a user-supplied comparison function.
-	 If the array you wish to sort needs to be sorted by some non-trivial
-	 criteria, you should use this function.
+     This function will sort an array by its values using a
+     user-supplied comparison function.  If the array you wish to sort
+     needs to be sorted by some non-trivial criteria, you should use
+     this function.
      <example>
       <title><function>usort</function> example</title>
 	<programlisting>
 function cmp($a,$b) {   
-    if($a==$b) return 0;
-    return ($a>$b) ? -1:1;
+    if ($a == $b) return 0;
+    return ($a > $b) ? -1 : 1;
 }
 $a = array(3,2,5,6,1);
-usort($a,cmp);
+usort($a, cmp);
 while(list($key,$value) = each($a)) {
     echo "$key: $value\n";
 }

@@ -6,18 +6,25 @@
 
 <!--
 
-  $Id: phpweb.dsl,v 1.18 1998/04/27 12:35:49 ssb Exp $
+  $Id: phpweb.dsl,v 1.19 1998/10/23 11:36:33 ssb Exp $
 
   HTML-specific stylesheet customization for use by the online manual.
 
 -->
 
 <style-specification id="docbook-php-website" use="docbook">
+<style-specification-body>
 
 (declare-flow-object-class processing-instruction
   "UNREGISTERED::James Clark//Flow Object Class::processing-instruction")
 
 (define %html-ext% ".php3")
+(define %html-manifest% "PHPWEB.manifest")
+
+;; XXX hackish workaround.  I'm not sure what side effects setting
+;; the element number to 0 would have?
+(define (generate-anchor #!optional (nd (current-node)))
+  (string-append "AEN" (number->string (or (all-element-number nd) 0))))
 
 (define (phpweb-quote str)
   (string-replace str "'" "\\'"))
@@ -105,6 +112,7 @@
 &html-common.dsl;
 &common.dsl;
 
+</style-specification-body>
 </style-specification>
 
 <external-specification id="docbook" document="docbook.dsl">

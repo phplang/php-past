@@ -69,7 +69,11 @@ static char *php3_getpost(pval *http_post_vars)
 		php3_error(E_WARNING, "POST Error: content-type missing");
 		return NULL;
 	}
-	if (strncasecmp(ctype, "application/x-www-form-urlencoded", 33) && strncasecmp(ctype, "multipart/form-data", 19)) {
+	if (strncasecmp(ctype, "application/x-www-form-urlencoded", 33) && strncasecmp(ctype, "multipart/form-data", 19)
+#if HAVE_FDFLIB
+ && strncasecmp(ctype, "application/vnd.fdf", 19)
+#endif
+      ) {
 		php3_error(E_WARNING, "Unsupported content-type: %s", ctype);
 		return NULL;
 	}
@@ -137,6 +141,17 @@ static char *php3_getpost(pval *http_post_vars)
 		return NULL;
 	}
 	buf[cnt] = '\0';
+
+#if HAVE_FDFLIB
+	if (!strncasecmp(ctype, "application/vnd.fdf", 19)) {
+		pval postdata, *postdata_ptr;
+		postdata_ptr = &postdata;
+		postdata_ptr->type = IS_STRING;
+		postdata_ptr->value.str.val = (char *) estrdup(buf);
+		postdata_ptr->value.str.len = cnt;
+		_php3_hash_add(&GLOBAL(symbol_table), "HTTP_FDF_DATA", sizeof("HTTP_FDF_DATA"), postdata_ptr, sizeof(pval),NULL);
+	}
+#endif
 	return (buf);
 }
 

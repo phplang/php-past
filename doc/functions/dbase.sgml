@@ -8,8 +8,8 @@
     (dbf) databases.
    <simpara>
     There is no support for indexes or memo fields. There is no support
-    for locking, too. Two concurrent webserver processes accessing the
-    same dBase file will ruin your database.
+    for locking, too. Two concurrent webserver processes modifying the
+    same dBase file will very likely ruin your database.
    <simpara>
     Unlike SQL databases, dBase "databases" cannot change the database
     definition afterwards.  Once the file is created, the database
@@ -84,13 +84,10 @@
      <example>
       <title>Creating a dBase database file</title>
 <programlisting role=php>
-
 // "database" name
-
 $dbname = "/tmp/test.dbf";
 
 // database "definition"
-
 $def =
     array(
         array("date",     "D"),
@@ -101,7 +98,6 @@ $def =
     );
 
 // creation
-
 if (!dbase_create($dbname, $def))
     print "&lt;strong>Error!&lt;/strong>";
 

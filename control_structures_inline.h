@@ -29,7 +29,7 @@
  */
 
 
-/* $Id: control_structures_inline.h,v 1.190 1998/10/04 12:26:59 zeev Exp $ */
+/* $Id: control_structures_inline.h,v 1.192 1998/11/19 13:30:22 rasmus Exp $ */
 
 #ifdef THREAD_SAFE
 #include "tls.h"
@@ -1070,12 +1070,22 @@ inline void cs_start_class_decleration(pval *classname, pval *parent INLINE_TLS)
 			php3_error(E_ERROR,"%s is already a function or class",classname->value.str.val);
 		}
 		if (parent) { /* inheritance */
+			pval *ctor_ptr, ctor;
+			
 			if (_php3_hash_find(&GLOBAL(function_table), parent->value.str.val, parent->value.str.len+1, (void **) &parent_ptr) == FAILURE) {
 				php3_error(E_ERROR, "Cannot extend non existant class %s", parent->value.str.val);
 				return;
 			}
 			new_class = *parent_ptr;
 			pval_copy_constructor(&new_class);
+			
+			if (_php3_hash_find(new_class.value.ht, parent->value.str.val, parent->value.str.len+1, (void **) &ctor_ptr)==SUCCESS) {
+				ctor = *ctor_ptr;
+				pval_copy_constructor(&ctor);
+				_php3_hash_update(new_class.value.ht, classname->value.str.val, classname->value.str.len+1, &ctor, sizeof(pval), NULL);
+				_php3_hash_del(new_class.value.ht, parent->value.str.val, parent->value.str.len+1);
+			}
+				
 		} else {
 			new_class.type = IS_CLASS;
 			new_class.value.ht = (HashTable *) emalloc(sizeof(HashTable));
@@ -1398,7 +1408,7 @@ inline void cs_system(pval *result,pval *expr INLINE_TLS)
 		int readbytes,total_readbytes=0,allocated_space;
 		
 		if (php3_ini.safe_mode) {
-			php3_error(E_WARNING,"Cannot execute using backqutoes in safe mode");
+			php3_error(E_WARNING,"Cannot execute using backquotes in safe mode");
 			pval_destructor(expr _INLINE_TLS);
 			var_reset(result);
 			return;

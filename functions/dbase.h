@@ -27,7 +27,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: dbase.h,v 1.11 1998/05/15 10:57:21 zeev Exp $ */
+/* $Id: dbase.h,v 1.12 1998/12/20 15:14:30 rasmus Exp $ */
 
 #ifndef _DBASE_H
 #define _DBASE_H
@@ -45,6 +45,7 @@ extern void php3_dbase_add_record(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_dbase_get_record(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_dbase_delete_record(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_dbase_pack(INTERNAL_FUNCTION_PARAMETERS);
+extern void php3_dbase_get_record_with_names(INTERNAL_FUNCTION_PARAMETERS);
 #else
 #define dbase_module_ptr NULL
 #endif

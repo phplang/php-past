@@ -111,15 +111,21 @@ static void _php3_htmlentities(INTERNAL_FUNCTION_PARAMETERS, int all)
     efree(new);
 }
 
+/* {{{ proto string htmlspecialchars(string string)
+   Convert special characters to HTML entities */
 void php3_htmlspecialchars(INTERNAL_FUNCTION_PARAMETERS)
 {
 	_php3_htmlentities(INTERNAL_FUNCTION_PARAM_PASSTHRU,0);
 }
+/* }}} */
 
+/* {{{ proto string htmlentities(string string)
+   Convert all applicable characters to HTML entities */
 void php3_htmlentities(INTERNAL_FUNCTION_PARAMETERS)
 {
 	_php3_htmlentities(INTERNAL_FUNCTION_PARAM_PASSTHRU,1);
 }
+/* }}} */
 
 /*
  * Local variables:
