@@ -2,7 +2,7 @@
    +----------------------------------------------------------------------+
    | PHP HTML Embedded Scripting Language Version 3.0                     |
    +----------------------------------------------------------------------+
-   | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
+   | Copyright (c) 1997-1999 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
    | it under the terms of one of the following licenses:                 |
@@ -27,7 +27,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: php3_filestat.h,v 1.11 1998/09/06 06:50:22 jaakko Exp $ */
+/* $Id: php3_filestat.h,v 1.13 1999/01/22 21:42:33 rasmus Exp $ */
 
 #ifndef _FILESTAT_H
 #define _FILESTAT_H
@@ -57,6 +57,7 @@ extern void php3_chown(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_chgrp(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_chmod(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_touch(INTERNAL_FUNCTION_PARAMETERS);
+extern void php3_diskfreespace(INTERNAL_FUNCTION_PARAMETERS);
 
 extern php3_module_entry php3_filestat_module_entry;
 #define php3_filestat_module_ptr &php3_filestat_module_entry

@@ -2,7 +2,7 @@
    +----------------------------------------------------------------------+
    | PHP HTML Embedded Scripting Language Version 3.0                     |
    +----------------------------------------------------------------------+
-   | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
+   | Copyright (c) 1997-1999 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
    | it under the terms of one of the following licenses:                 |
@@ -30,7 +30,7 @@
  */
  
 
-/* $Id: ldap.c,v 1.63 1998/11/18 21:23:08 ssb Exp $ */
+/* $Id: ldap.c,v 1.66 1999/02/01 02:31:10 sas Exp $ */
 #define IS_EXT_MODULE
 #if !PHP_31 && defined(THREAD_SAFE)
 #undef THREAD_SAFE
@@ -305,7 +305,7 @@ void php3_info_ldap(void)
 
 	php3_printf("<table>"
 				"<tr><td>Total links:</td><td>%d/%s</td></tr>\n"
-		        "<tr><td>RCS Version:</td><td>$Id: ldap.c,v 1.63 1998/11/18 21:23:08 ssb Exp $</td></tr>\n"
+		        "<tr><td>RCS Version:</td><td>$Id: ldap.c,v 1.66 1999/02/01 02:31:10 sas Exp $</td></tr>\n"
 #if HAVE_NSLDAP
 				"<tr><td>SDK Version:</td><td>%f</td></tr>"
 				"<tr><td>Highest LDAP Protocol Supported:</td><td>%f</td></tr>"
@@ -541,6 +541,10 @@ LDAP *ldap;
 }
 /* }}} */
 
+/* {{{ proto int ldap_close(int link)
+   Alias to ldap_unbind */
+/* }}} */
+
 /* {{{ proto int ldap_unbind(int link)
    Unbind from LDAP directory */
 void php3_ldap_unbind(INTERNAL_FUNCTION_PARAMETERS)
@@ -662,7 +666,7 @@ static void php3_ldap_do_search(INTERNAL_FUNCTION_PARAMETERS, int scope)
 	return;
 }
 
-/* {{{ proto int ldap_read(int link, string base_dn, string filter [, string attributes])
+/* {{{ proto int ldap_read(int link, string base_dn, string filter [, array attributes])
    Read an entry */
 void php3_ldap_read(INTERNAL_FUNCTION_PARAMETERS)
 {
@@ -670,7 +674,7 @@ void php3_ldap_read(INTERNAL_FUNCTION_PARAMETERS)
 }
 /* }}} */
 
-/* {{{ proto int ldap_list(int link, string base_dn, string filter [, string attributes])
+/* {{{ proto int ldap_list(int link, string base_dn, string filter [, array attributes])
    Single-level search */
 void php3_ldap_list(INTERNAL_FUNCTION_PARAMETERS)
 {
@@ -679,7 +683,7 @@ void php3_ldap_list(INTERNAL_FUNCTION_PARAMETERS)
 /* }}} */
 
 
-/* {{{ proto int ldap_search(int link, string base_dn, string filter [, string attributes])
+/* {{{ proto int ldap_search(int link, string base_dn, string filter [, array attributes])
    Search LDAP tree under base_dn */
 void php3_ldap_search(INTERNAL_FUNCTION_PARAMETERS)
 {

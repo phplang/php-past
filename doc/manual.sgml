@@ -38,6 +38,7 @@
   &reference.adabas;
   &reference.apache;
   &reference.array;
+  &reference.aspell;
   &reference.bc;
   &reference.calendar;
   &reference.datetime;
@@ -60,10 +61,12 @@
   &reference.math;
   &reference.misc;
   &reference.msql;
+  &reference.mssql;
   &reference.mysql;
   &reference.sybase;
   &reference.network;
   &reference.uodbc;
+  &reference.oci8;
   &reference.oracle;
   &reference.pdf;
   &reference.pgsql;
@@ -74,6 +77,8 @@
   &reference.strings;
   &reference.url;
   &reference.var;
+  &reference.vmailmgr;
+  &reference.wddx;
   &reference.zlib;
   &reference.xml;
  </part>

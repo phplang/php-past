@@ -2,7 +2,7 @@
    +----------------------------------------------------------------------+
    | PHP HTML Embedded Scripting Language Version 3.0                     |
    +----------------------------------------------------------------------+
-   | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
+   | Copyright (c) 1997-1999 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
    | it under the terms of the GNU General Public License as published by |
@@ -23,7 +23,7 @@
  */
 
 
-/* $Id: hw_error.h,v 1.1 1998/08/12 09:29:17 steinm Exp $ */
+/* $Id: hw_error.h,v 1.2 1999/01/01 17:59:11 zeev Exp $ */
 #ifndef _HW_ERROR_H
 #define _HW_ERROR_H
 

@@ -1,3 +1,4 @@
+/* $Id: oracle.h,v 1.35 1998/12/28 09:43:58 sas Exp $ */
 
 #ifndef _PHP3_ORACLE_H
 #define _PHP3_ORACLE_H

@@ -265,8 +265,8 @@ if ($ds) {
     <funcsynopsis>
      <funcdef>int <function>ldap_bind</function></funcdef>
      <paramdef>int <parameter>link_identifier</parameter></paramdef>
-     <paramdef>string <parameter>bind_rdn</parameter></paramdef>
-     <paramdef>string <parameter>bind_password</parameter></paramdef>
+     <paramdef>string <parameter><optional>bind_rdn</optional></parameter></paramdef>
+     <paramdef>string <parameter><optional>bind_password</optional></parameter></paramdef>
     </funcsynopsis>
     <para>
      Binds to the LDAP directory with specified RDN and
@@ -314,8 +314,8 @@ if ($ds) {
     <title>Description</title>
     <funcsynopsis>
      <funcdef>int <function>ldap_connect</function></funcdef>
-     <paramdef>string <parameter>hostname</parameter></paramdef>
-     <paramdef>int <parameter>port</parameter></paramdef>
+     <paramdef>string <parameter><optional>hostname</optional></parameter></paramdef>
+     <paramdef>int <parameter><optional>port</optional></parameter></paramdef>
     </funcsynopsis>
     <para>
      Returns a positive LDAP link identifier on success, or false on
@@ -526,7 +526,7 @@ if ($ds) {
      <parameter>result_entry_identifier</parameter></paramdef>
     </funcsynopsis>
     <para>
-     Returns a comlete entry information in a multi-dimensional array
+     Returns a complete entry information in a multi-dimensional array
      on success and false on error.  
     <para>
      <function>ldap_get_attributes</function> function is used to
@@ -734,6 +734,8 @@ for ($i=0; $i &lt; $values["count"]; $i++)
      <paramdef>int <parameter>link_identifier</parameter></paramdef>
      <paramdef>string <parameter>base_dn</parameter></paramdef>
      <paramdef>string <parameter>filter</parameter></paramdef>
+     <paramdef>array
+      <parameter><optional>attributes</optional></parameter></paramdef>
     </funcsynopsis>
     <para>
      Returns a search result identifier or false on error.  

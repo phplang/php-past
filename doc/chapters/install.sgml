@@ -27,11 +27,11 @@
    </sect2>
   
    <sect2>
-	<title>Quick Installation Instructions (Apache Module Version)</title>
-	<para>
-	<informalexample>
-	<programlisting>
+    <title>Quick Installation Instructions (Apache Module Version)</title>
 
+    <para>
+     <informalexample>
+      <programlisting>
 1.  gunzip apache_1.3.x.tar.gz
 2.  tar xvf apache_1.3.x.tar
 3.  gunzip php-3.0.x.tar.gz
@@ -39,36 +39,42 @@
 5.  cd apache_1.3.x
 6.  ./configure --prefix=/www
 7.  cd ../php-3.0.x
-8.  ./configure --with-mysql=/usr/local/mysql --with-apache=../apache_1.3.x --enable-track-vars
+8.  ./configure --with-mysql --with-apache=../apache_1.3.x --enable-track-vars
 9.  make
 10. make install
 11. cd ../apache_1.3.x
 12. ./configure --prefix=/www --activate-module=src/modules/php3/libphp3.a
 13. make
 14. make install
-  Instead of this step you may prefer to simply copy the httpd binary overtop
-  of your existing binary.  Make sure you shut down your server first though.
+
+  Instead of this step you may prefer to simply copy the httpd binary
+  overtop of your existing binary.  Make sure you shut down your
+  server first though.
 
 15. cd ../php-3.0.x
 16. cp php3.ini-dist /usr/local/lib/php3.ini
-You can edit /usr/local/lib/php3.ini file to set PHP options.
-If you prefer this file in another location, use --with-config-file=/path in step 8.
+
+  You can edit /usr/local/lib/php3.ini file to set PHP options.  If
+  you prefer this file in another location, use
+  --with-config-file=/path in step 8.
 
 17. Edit your httpd.conf or srm.conf file and add: 
       
             AddType application/x-httpd-php3 .php3
  
-  You can choose any extension you wish here.  .php3 is simply the one we suggest.   
+  You can choose any extension you wish here.  .php3 is simply the one
+  we suggest.
 
 18. Use your normal procedure for starting the Apache server. (You must
-stop and restart the server, not just cause the server to reload by
-use a HUP or USR1 signal.)
+    stop and restart the server, not just cause the server to reload by
+    use a HUP or USR1 signal.)
+      </programlisting>
+     </informalexample>
+    </para>
 
-	</programlisting>
-	</informalexample>
-	</para>
    </sect2>
  
+
    <sect2>
     <title>Configuration</title>
     <para>
@@ -103,8 +109,8 @@ use a HUP or USR1 signal.)
     <title>Apache module</title>
 
     <para>
-     To build PHP3 as an Apache module, answer "yes" to "Build as an Apache
-     module?" (the <option><link linkend="with-apache">
+     To build PHP3 as an Apache module, answer "yes" to "Build as an
+     Apache module?" (the <option><link linkend="with-apache">
      --with-apache</link>=<replaceable>DIR</replaceable></option>
      option to configure) and specify the Apache distribution base
      directory.  If you have unpacked your Apache distribution in
@@ -117,14 +123,14 @@ use a HUP or USR1 signal.)
     <title>fhttpd module</title>
 
     <para>
-     To build PHP3 as an fhttpd module, answer "yes" to "Build as an fhttpd
-     module?" (the <option><link linkend="with-fhttpd">
+     To build PHP3 as an fhttpd module, answer "yes" to "Build as an
+     fhttpd module?" (the <option><link linkend="with-fhttpd">
      --with-fhttpd</link>=<replaceable>DIR</replaceable></option>
-     option to configure) and specify the fhttpd source base directory.
-     The default directory is <filename
-     class=directory>/usr/local/src/fhttpd</filename>. If you are running   
-     fhttpd, building PHP as a module will give better performance,
-     more control and remote execution capability.
+     option to configure) and specify the fhttpd source base
+     directory.  The default directory is <filename
+     class=directory>/usr/local/src/fhttpd</filename>. If you are
+     running fhttpd, building PHP as a module will give better
+     performance, more control and remote execution capability.
      
    <sect2 id="install-cgi">
     <title>CGI version</title>
@@ -135,8 +141,8 @@ use a HUP or USR1 signal.)
      generally go for that solution for performance reasons.  However,
      the CGI version enables Apache users to run different
      PHP3-enabled pages under different user-ids.  Please make sure
-	 you read through the <link linkend="config-security">Security chapter</link>
-	 if you are going to run PHP as a CGI.
+     you read through the <link linkend="config-security">Security
+     chapter</link> if you are going to run PHP as a CGI.
 
    <sect2>
     <title>Database Support Options</title>
@@ -145,7 +151,7 @@ use a HUP or USR1 signal.)
      PHP3 has native support for a number of databases (as well as
      ODBC):
 
-    </para>
+
     <sect3 id="with-adabas">
      <title>Adabas D</title>
      <synopsis>
@@ -195,7 +201,8 @@ use a HUP or USR1 signal.)
       databases, and vice-versa.
      <simpara>
       See also <link linkend="ini.sect.msql">mSQL Configuration</link>
-      Directives in the <link linkend="php3.ini">configuration file</link>.
+      Directives in the <link linkend="php3.ini">configuration
+      file</link>.
      <simpara>
       <ulink url="http://www.hughes.com.au">mSQL home page</ulink>
     </sect3>
@@ -206,13 +213,14 @@ use a HUP or USR1 signal.)
       <option>--with-mysql<replaceable>=DIR</replaceable></option>
      </synopsis>
      <simpara>
-      Enables MySQL support.  The parameter to this
-      option is the MySQL install directory and defaults to <filename
-       class=directory>/usr/local</filename>.  This is the default
+      Enables MySQL support.  The parameter to this option is the
+      MySQL install directory and defaults to <filename
+      class=directory>/usr/local</filename>.  This is the default
       installation directory of the MySQL distribution.
      <simpara>
-      See also <link linkend="ini.sect.mysql">MySQL Configuration</link>
-      Directives in the <link linkend="php3.ini">configuration file</link>.
+      See also <link linkend="ini.sect.mysql">MySQL
+      Configuration</link> Directives in the <link
+      linkend="php3.ini">configuration file</link>.
      <simpara>
       <ulink url="http://www.tcx.se">MySQL home page</ulink>
     </sect3>
@@ -224,13 +232,13 @@ use a HUP or USR1 signal.)
      </synopsis>
      <simpara>
       Includes iODBC support.  This feature was first developed for
-      iODBC Driver Manager, a freely redistributable ODBC driver manager
-      which runs under many flavors of UNIX. The parameter to this option is
-      the iODBC installation directory and defaults to <filename
-      class=directory>/usr/local</filename>.
+      iODBC Driver Manager, a freely redistributable ODBC driver
+      manager which runs under many flavors of UNIX. The parameter to
+      this option is the iODBC installation directory and defaults to
+      <filename class=directory>/usr/local</filename>.
      <simpara>
-      <ulink url="http://users.ids.net/~bjepson/freeODBC/">FreeODBC home 
-      page</ulink>
+      <ulink url="http://users.ids.net/~bjepson/freeODBC/">FreeODBC
+      home page</ulink>
     </sect3>
 
     <sect3 id="with-openlink">
@@ -244,7 +252,7 @@ use a HUP or USR1 signal.)
       <filename class=directory>/usr/local/openlink</filename>.
      <simpara>
       <ulink url="http://www.openlinksw.com/">OpenLink Software's home
-       page</ulink>
+      page</ulink>
     </sect3>
 
     <sect3 id="with-oracle">
@@ -268,14 +276,16 @@ use a HUP or USR1 signal.)
       <option>--with-pgsql<replaceable>=DIR</replaceable></option>
      </synopsis>
      <simpara>
-      Includes PostgreSQL support.  The parameter is the PostgreSQL base
-      install directory and defaults to <filename
+      Includes PostgreSQL support.  The parameter is the PostgreSQL
+      base install directory and defaults to <filename
       class=directory>/usr/local/pgsql</filename>.
      <simpara>
-      See also <link linkend="ini.sect.pgsql">Postgres Configuration</link>
-      Directives in the <link linkend="php3.ini">configuration file</link>.
+      See also <link linkend="ini.sect.pgsql">Postgres
+      Configuration</link> Directives in the <link
+      linkend="php3.ini">configuration file</link>.
      <simpara>
-      <ulink url="http://www.postgreSQL.org/">PostgreSQL home page</ulink>
+      <ulink url="http://www.postgreSQL.org/">PostgreSQL home
+      page</ulink>
     </sect3>
 
     <sect3 id="with-solid">
@@ -301,8 +311,9 @@ use a HUP or USR1 signal.)
       directory and defaults to <filename
       class=directory>/home/sybase</filename>.
      <simpara>
-      See also <link linkend="ini.sect.sybase">Sybase Configuration</link>
-      Directives in the <link linkend="php3.ini">configuration file</link>.
+      See also <link linkend="ini.sect.sybase">Sybase
+      Configuration</link> Directives in the <link
+      linkend="php3.ini">configuration file</link>.
      <simpara>
       <ulink url="http://www.sybase.com">Sybase home page</ulink>
     </sect3>
@@ -317,8 +328,9 @@ use a HUP or USR1 signal.)
       install directory and defaults to <filename
       class=directory>/home/sybase</filename>.
      <simpara>
-      See also <link linkend="ini.sect.sybct">Sybase-CT Configuration</link>
-      Directives in the <link linkend="php3.ini">configuration file</link>.
+      See also <link linkend="ini.sect.sybct">Sybase-CT
+      Configuration</link> Directives in the <link
+      linkend="php3.ini">configuration file</link>.
     </sect3>
 
     <sect3 id="with-velocis">
@@ -340,21 +352,23 @@ use a HUP or USR1 signal.)
       <option>--with-custom-odbc<replaceable>=DIR</replaceable></option>
      </synopsis>
      <simpara>
-      Includes support for an arbitrary custom ODBC library.  The parameter 
-	  is the base directory and defaults to 
-	  <filename class=directory>/usr/local</filename>.
+      Includes support for an arbitrary custom ODBC library.  The
+      parameter is the base directory and defaults to <filename
+      class=directory>/usr/local</filename>.
      <simpara>
       This option implies that you have defined CUSTOM_ODBC_LIBS when
-      you run the configure script. You also must have a valid odbc.h header
-	  somewhere in your include path. If you don't have one, create it and
-      include your specific header from there. Your header may also require
-      some extra definitions, particularly when it is multiplatform. Define
-	  them in CFLAGS.
+      you run the configure script. You also must have a valid odbc.h
+      header somewhere in your include path. If you don't have one,
+      create it and include your specific header from there. Your
+      header may also require some extra definitions, particularly
+      when it is multiplatform. Define them in CFLAGS.
      <simpara>
-      For example, you can use Sybase SQL Anywhere on QNX as following:
-		<literal>
-		CFLAGS=-DODBC_QNX LDFLAGS=-lunix CUSTOM_ODBC_LIBS="-ldblib -lodbc" ./configure --with-custom-odbc=/usr/lib/sqlany50
-		</literal>
+      For example, you can use Sybase SQL Anywhere on QNX as
+      following:
+      <literal>
+       CFLAGS=-DODBC_QNX LDFLAGS=-lunix CUSTOM_ODBC_LIBS="-ldblib
+       -lodbc" ./configure --with-custom-odbc=/usr/lib/sqlany50
+      </literal>
     </sect3>
 
     <sect3 id="disable-unified-odbc">
@@ -365,19 +379,21 @@ use a HUP or USR1 signal.)
      <simpara>
       Disables the Unified ODBC module, which is a common interface to
       all the databases with ODBC-based interfaces, such as Solid and
-      Adabas D.  It also works for normal ODBC libraries. Has been tested with
-      iODBC, Solid, Adabas D and Sybase SQL Anywhere. Requires that one 
-	  (and only one) of these modules or the Velocis module is enabled, or a
-      custom ODBC library specified. This option is only applicable
-      if one of the following options is used:
-      <link linkend="with-iodbc">--with-iodbc</link>,
-      <link linkend="with-solid">--with-solid</link>,
-      <link linkend="with-adabas">--with-adabas</link>,
-      <link linkend="with-velocis">--with-velocis</link>, or
-      <link linkend="with-adabas">--with-custom-odbc</link>,
+      Adabas D.  It also works for normal ODBC libraries. Has been
+      tested with iODBC, Solid, Adabas D and Sybase SQL
+      Anywhere. Requires that one (and only one) of these modules or
+      the Velocis module is enabled, or a custom ODBC library
+      specified. This option is only applicable if one of the
+      following options is used: <link
+      linkend="with-iodbc">--with-iodbc</link>, <link
+      linkend="with-solid">--with-solid</link>, <link
+      linkend="with-adabas">--with-adabas</link>, <link
+      linkend="with-velocis">--with-velocis</link>, or <link
+      linkend="with-adabas">--with-custom-odbc</link>,
      <simpara>
-      See also <link linkend="ini.sect.uodbc">Unified ODBC Configuration</link>
-      Directives in the <link linkend="php3.ini">configuration file</link>.
+      See also <link linkend="ini.sect.uodbc">Unified ODBC
+      Configuration</link> Directives in the <link
+      linkend="php3.ini">configuration file</link>.
     </sect3>
 
     <sect3 id="with-ldap">
@@ -391,9 +407,10 @@ use a HUP or USR1 signal.)
       directory, defaults to <filename
       class=directory>/usr/local/ldap</filename>.
      <simpara>
-      More information about LDAP can be found in
-      <ulink url="ftp://ftp.isi.edu/in-notes/rfc1777.txt">RFC1777</ulink>
-      and <ulink url="ftp://ftp.isi.edu/in-notes/rfc1778.txt">RFC1778</ulink>.
+      More information about LDAP can be found in <ulink
+      url="ftp://ftp.isi.edu/in-notes/rfc1777.txt">RFC1777</ulink> and
+      <ulink
+      url="ftp://ftp.isi.edu/in-notes/rfc1778.txt">RFC1778</ulink>.
     </sect3>
 
    </sect2>
@@ -408,8 +425,8 @@ use a HUP or USR1 signal.)
      </synopsis>
      <simpara>
       Include support for Sys V semaphores (supported by most Unix
-      derivates). See the <link linkend="ref.sem">Semaphore and 
-	  Shared Memory documentation</link> for more information.
+      derivates). See the <link linkend="ref.sem">Semaphore and Shared
+      Memory documentation</link> for more information.
     </simpara>
     </sect3>
 
@@ -419,9 +436,9 @@ use a HUP or USR1 signal.)
       <option>--enable-sysvshm</option>
      </synopsis>
      <simpara>
-	  Include support for Sys V shared memory (supported by most Unix
-      derivates). See the <link linkend="ref.sem">Semaphore and 
-	  Shared Memory documentation</link> for more information.
+       Include support for Sys V shared memory (supported by most Unix
+       derivates). See the <link linkend="ref.sem">Semaphore and
+       Shared Memory documentation</link> for more information.
      </simpara>
     </sect3>
 
@@ -456,9 +473,10 @@ use a HUP or USR1 signal.)
      <simpara>
       Uses the system's regular expression library rather than the
       bundled one.  If you are building PHP3 as a server module, you
-      must use the same library when building PHP3 as when linking the server.
-      Enable this if the system's library provides special features you need.
-      It is recommended that you use the bundled library if possible.
+      must use the same library when building PHP3 as when linking the
+      server.  Enable this if the system's library provides special
+      features you need.  It is recommended that you use the bundled
+      library if possible.
     </sect3>
 
     <sect3 id="with-config-file-path">
@@ -481,8 +499,8 @@ use a HUP or USR1 signal.)
       Defaults to <filename class=directory>/usr/local/bin</filename>.
       This option only sets the default, it may be changed with the
       <link linkend="ini.safe-mode-exec-dir">safe_mode_exec_dir</link>
-      directive in the <link linkend="php3.ini">configuration file</link>
-      later.
+      directive in the <link linkend="php3.ini">configuration
+      file</link> later.
     </sect3>
 
     <sect3 id="disable-debug">
@@ -503,13 +521,14 @@ use a HUP or USR1 signal.)
       <option>--enable-safe-mode</option>
      </synopsis>
      <simpara>
-      Enables "safe mode" by default. This imposes several restrictions
-      on what PHP can do, such as opening only files within the document
-      root.  Read the <link linkend="config-security">Security chapter</link>
-      for more more information.  CGI users should always enable secure mode.
-      This option only sets the default, it may be enabled or disabled with
-      the <link linkend="ini.safe-mode">safe_mode</link> directive in the
-      <link linkend="php3.ini">configuration file</link> later.
+      Enables "safe mode" by default. This imposes several
+      restrictions on what PHP can do, such as opening only files
+      within the document root.  Read the <link
+      linkend="config-security">Security chapter</link> for more more
+      information.  CGI users should always enable secure mode.  This
+      option only sets the default, it may be enabled or disabled with
+      the <link linkend="ini.safe-mode">safe_mode</link> directive in
+      the <link linkend="php3.ini">configuration file</link> later.
     </sect3>
 
     <sect3 id="enable-track-vars">
@@ -520,9 +539,9 @@ use a HUP or USR1 signal.)
      <simpara>
       Makes PHP3 keep track of where GET/POST/cookie variables come
       from in the arrays HTTP_GET_VARS, HTTP_POST_VARS and
-      HTTP_COOKIE_VARS.
-      This option only sets the default, it may be enabled or disabled with
-      the <link linkend="ini.track-vars">track_vars</link> directive in the
+      HTTP_COOKIE_VARS.  This option only sets the default, it may be
+      enabled or disabled with the <link
+      linkend="ini.track-vars">track_vars</link> directive in the
       <link linkend="php3.ini">configuration file</link> later.
     </sect3>
 
@@ -532,13 +551,15 @@ use a HUP or USR1 signal.)
       <option>--enable-magic-quotes</option>
      </synopsis>
      <simpara>
-      Enable magic quotes by default.
-      This option only sets the default, it may be enabled or disabled with
-      the <link linkend="ini.magic-quotes-runtime">magic_quotes_runtime</link>
-      directive in the <link linkend="php3.ini">configuration file</link>
-      later. See also the <link linkend="ini.magic-quotes-gpc">
-      magic_quotes_gpc</link> and the <link
-      linkend="ini.magic-quotes-sybase">magic_quotes_sybase</link> directives.
+      Enable magic quotes by default.  This option only sets the
+      default, it may be enabled or disabled with the <link
+      linkend="ini.magic-quotes-runtime">magic_quotes_runtime</link>
+      directive in the <link linkend="php3.ini">configuration
+      file</link> later. See also the <link
+      linkend="ini.magic-quotes-gpc"> magic_quotes_gpc</link> and the
+      <link
+      linkend="ini.magic-quotes-sybase">magic_quotes_sybase</link>
+      directives.
     </sect3>
 
     <sect3 id="enable-debugger">
@@ -549,8 +570,9 @@ use a HUP or USR1 signal.)
      <simpara>
       Enables the internal PHP3 debugger support.  This feature is
       still in an experimental state. See also the <link
-      linkend="ini.sect.debugger">Debugger Configuration</link> directives
-      in the <link linkend="php3.ini">configuration file</link>.
+      linkend="ini.sect.debugger">Debugger Configuration</link>
+      directives in the <link linkend="php3.ini">configuration
+      file</link>.
     </sect3>
 
     <sect3 id="enable-discard-path">
@@ -561,9 +583,9 @@ use a HUP or USR1 signal.)
      <simpara>
       If this is enabled, the PHP CGI binary can safely be placed
       outside of the web tree and people will not be able to
-      circumvent .htaccess security.
-      Read the <link linkend="config-security-cgi-shell">section in
-      the security chapter</link> about this option.
+      circumvent .htaccess security.  Read the <link
+      linkend="config-security-cgi-shell">section in the security
+      chapter</link> about this option.
     </sect3>
 
     <sect3 id="enable-bcmath">
@@ -573,8 +595,9 @@ use a HUP or USR1 signal.)
      </synopsis>
      <simpara>
       Enables <command>bc</command> style arbitrary precision math
-      functions. See also the <link linkend="ini.sect.bcmath">bcmath.scale
-      </link> option in the <link linkend="php3.ini">configuration file</link>.
+      functions. See also the <link
+      linkend="ini.sect.bcmath">bcmath.scale </link> option in the
+      <link linkend="php3.ini">configuration file</link>.
     </sect3>
 
     <sect3 id="enable-force-cgi-redirect">
@@ -619,10 +642,11 @@ use a HUP or USR1 signal.)
       Disables the short form <literal>&lt;? ?&gt;</literal> PHP3
       tags.  You must disable the short form if you want to use PHP3
       with <acronym>XML</acronym>.  With short tags disabled, the only
-      PHP3 code tag is <literal>&lt;?php ?&gt;</literal>.
-      This option only sets the default, it may be enabled or disabled with
-      the <link linkend="ini.short-open-tag">short_open_tag</link> directive
-      in the <link linkend="php3.ini">configuration file</link> later.
+      PHP3 code tag is <literal>&lt;?php ?&gt;</literal>.  This option
+      only sets the default, it may be enabled or disabled with the
+      <link linkend="ini.short-open-tag">short_open_tag</link>
+      directive in the <link linkend="php3.ini">configuration
+      file</link> later.
     </sect3>
 
     <sect3 id="enable-url-includes">
@@ -631,10 +655,11 @@ use a HUP or USR1 signal.)
       <option>--enable-url-includes</option>
      </synopsis>
      <simpara>
-      Makes it possible to run code on other HTTP or FTP servers directly
-      from PHP3 with <link linkend="function.include">include()</link>.
-      See also the <link linkend="ini.include-path">include_path</link> option
-      in the <link linkend="php3.ini">configuration file</link>.
+      Makes it possible to run code on other HTTP or FTP servers
+      directly from PHP3 with <link
+      linkend="function.include">include()</link>.  See also the <link
+      linkend="ini.include-path">include_path</link> option in the
+      <link linkend="php3.ini">configuration file</link>.
     </sect3>
 
     <sect3 id="disable-syntax-hl">
@@ -649,11 +674,12 @@ use a HUP or USR1 signal.)
     <sect3>
      <title>CPPFLAGS and LDFLAGS</title>
      <para>
-      To make the PHP3 installation look for header or library files in
-      different directories, modify the <envar>CPPFLAGS</envar> and
+      To make the PHP3 installation look for header or library files
+      in different directories, modify the <envar>CPPFLAGS</envar> and
       <envar>LDFLAGS</envar> environment variables, respectively.  If
       you are using a sensible shell, you should be able to do
-      <command>LDFLAGS=-L/my/lib/dir CPPFLAGS=-I/my/include/dir ./configure
+      <command>
+       LDFLAGS=-L/my/lib/dir CPPFLAGS=-I/my/include/dir ./configure
       </command>
     </sect3>
 
@@ -689,14 +715,16 @@ use a HUP or USR1 signal.)
    <sect2>
     <title>Benchmarking</title>
     <simpara>
-     If you have built PHP3 as a CGI program, you may benchmark your build
-     by typing <command>make bench</command>. Note that if safe mode is on
-     by default, the benchmark may not be able to finish if it takes longer
-     then the 30 seconds allowed. This is because the
-     <function>set_time_limit</function> can not be used in safe mode. Use
-     the <link linkend="ini.max-execution-time">max_execution_time</link>
-     to control this time for you own scripts. <command>make bench</command>
-     ignores the <link linkend="php3.ini">configuration file</link>.
+     If you have built PHP3 as a CGI program, you may benchmark your
+     build by typing <command>make bench</command>. Note that if safe
+     mode is on by default, the benchmark may not be able to finish if
+     it takes longer then the 30 seconds allowed. This is because the
+     <function>set_time_limit</function> can not be used in safe
+     mode. Use the <link
+     linkend="ini.max-execution-time">max_execution_time</link> to
+     control this time for you own scripts. <command>make
+     bench</command> ignores the <link
+     linkend="php3.ini">configuration file</link>.
    </sect2>
 
   </sect1>
@@ -713,12 +741,19 @@ use a HUP or USR1 signal.)
    <para>
     This guide provides installation support for:
     <simplelist>
-     <member>Personal Web Server (Newest version recommended)</member>
-     <member>Internet Information Server 3 or 4</member>
-     <member>Apache 1.3.x</member>
-     <member>Omni HTTPd 2.0b1</member>
+     <member>
+      Personal Web Server (Newest version recommended)
+     </member>
+     <member>
+      Internet Information Server 3 or 4
+     </member>
+     <member>
+      Apache 1.3.x
+     </member> 
+     <member>Omni HTTPd 2.0b1
+     </member>
     </simplelist>
-   </para>
+
  
    <sect2>
     <title>Configuration Changes for PHP3</title>
@@ -782,11 +817,11 @@ use a HUP or USR1 signal.)
 	 <listitem>
 	  <simpara>
 	   Choose which modules you would like to load when PHP
-	   starts. You can uncomment the: 'extension=php3_*.dll' lines 
+	   starts. You can uncomment the: 'extension=php3_*.dll' lines
 	   to load these modules. Some modules require you to have
 	   additional libraries installed on your system for the
 	   module to work correctly. The PHP <ulink
-	    url="&url.php3.faq">FAQ</ulink> has more information on
+	   url="&url.php3.faq">FAQ</ulink> has more information on
 	   where to get supporting libraries. You can also load a
 	   module dynamically in your script using:
 	   <command>dl("php_*.dll");</command>
@@ -799,7 +834,7 @@ use a HUP or USR1 signal.)
 	   und 'c:\winnt\system32\inetsrv\browscap.ini' on NT
 	   Server. Additional information on using the browscap
 	   functionality in PHP can be found at this <ulink
-	    url="&url.browscap;">mirror</ulink>, select the "source"
+	   url="&url.browscap;">mirror</ulink>, select the "source"
 	   button to see it in action.
 	  </simpara>
 	 </listitem>
@@ -1056,7 +1091,7 @@ use a HUP or USR1 signal.)
     <simpara>
      To use the source code highlighting feature, simply create a PHP
      script file and stick this code in: <literal><?php show_source
-      ("original_php_script.php3"); ?></literal>. Substitute
+     ("original_php_script.php3"); ?></literal>. Substitute
      <literal>original_php_script.php3</literal> with the name of the
      file you wish to show the source of. (this is only one way of
      doing it). <emphasis>Note:</emphasis> On Win-Apache all back
@@ -1075,17 +1110,28 @@ use a HUP or USR1 signal.)
 
      <para>
      <simplelist>
-      <member>Step 1: Install Omni server</member>
-      <member>Step 2: Right click on the blue OmniHTTPd icon in the
-       system tray and select <literal>Properties</literal></member>
-      <member>Step 3: Click on <literal>Web Server Global
-	Settings</literal></member> 
-      <member>Step 4: On the 'External' tab, enter: <literal>virtual = 
-      .php3 | actual = c:\path-to-php-dir\php.exe</literal></member>
-      <member>Step 5: On the <literal>Mime</literal> tab, enter:
-       <literal>virtual = wwwserver/stdcgi | actual =
-	.php3</literal></member> 
-      <member>Step 6: Click <literal>OK</literal></member>
+      <member>
+       Step 1: Install Omni server
+      </member>
+      <member>
+       Step 2: Right click on the blue OmniHTTPd icon in the system
+       tray and select <literal>Properties</literal>
+      </member>
+      <member>
+       Step 3: Click on <literal>Web Server Global
+	Settings</literal>
+      </member> 
+      <member>
+       Step 4: On the 'External' tab, enter: <literal>virtual = .php3
+       | actual = c:\path-to-php-dir\php.exe</literal>
+      </member>
+      <member>
+       Step 5: On the <literal>Mime</literal> tab, enter:
+       <literal>virtual = wwwserver/stdcgi | actual = .php3</literal>
+      </member> 
+      <member>
+       Step 6: Click <literal>OK</literal>
+      </member>
      </simplelist>
 
      <simpara>

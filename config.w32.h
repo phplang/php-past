@@ -9,6 +9,8 @@
    are availabe in the ntbind distribution */
 #define HAVE_BINDLIB 1
 
+#define HAVE_INET_ATON HAVE_BINDLIB
+
 /* set to enable bcmath */
 #define WITH_BCMATH 1
 /* should be added to runtime config*/
@@ -109,7 +111,7 @@
 
 #define HAVE_TZSET 1
 /* Define if you have the flock function.  */
-#define HAVE_FLOCK 1
+#define HAVE_FLOCK 0
 
 /* Define if using alloca.c.  */
 /* #undef C_ALLOCA */
@@ -254,7 +256,7 @@
 /* #undef HAVE_SYS_DIR_H */
 
 /* Define if you have the <sys/file.h> header file.  */
-#define HAVE_SYS_FILE_H 1
+#define HAVE_SYS_FILE_H 0
 
 /* Define if you have the <sys/ndir.h> header file.  */
 /* #undef HAVE_SYS_NDIR_H */

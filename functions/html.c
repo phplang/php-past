@@ -2,7 +2,7 @@
    +----------------------------------------------------------------------+
    | PHP HTML Embedded Scripting Language Version 3.0                     |
    +----------------------------------------------------------------------+
-   | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
+   | Copyright (c) 1997-1999 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
    | it under the terms of one of the following licenses:                 |
@@ -27,6 +27,8 @@
    |          Jaakko Hyvätti <jaakko.hyvatti@iki.fi>                      |
    +----------------------------------------------------------------------+
  */
+
+/* $Id: html.c,v 1.30 1999/02/11 19:09:34 thies Exp $ */
 
 #ifdef THREAD_SAFE
 #include "tls.h"
@@ -58,28 +60,20 @@ static char EntTable[][7] =
 	"uuml","yacute","thorn","yuml"
 };
 
-static void _php3_htmlentities(INTERNAL_FUNCTION_PARAMETERS, int all)
+PHPAPI char * _php3_htmlentities(char *s, int i, int all)
 {
-    pval *arg;
-    int i, len, maxlen;
+	int len, maxlen;
     unsigned char *old;
 	char *new;
-	TLS_VARS;
 
-    if (ARG_COUNT(ht) != 1 || getParameters(ht, 1, &arg) == FAILURE) {
-		WRONG_PARAM_COUNT;
-    }
+	old = (unsigned char *)s;
 
-    convert_to_string(arg);
-
-	maxlen = 2 * arg->value.str.len;
+	maxlen = 2 * i;
 	if (maxlen < 128)
 		maxlen = 128;
 	new = emalloc (maxlen);
 	len = 0;
 
-	old = (unsigned char *)arg->value.str.val;
-	i = arg->value.str.len;
 	while (i--) {
 		if (len + 9 > maxlen)
 			new = erealloc (new, maxlen += 128);
@@ -106,16 +100,32 @@ static void _php3_htmlentities(INTERNAL_FUNCTION_PARAMETERS, int all)
 		old++;
 	}
     new [len] = '\0';
+	return new;
+}
 
-    RETVAL_STRINGL(new,len,1);
-    efree(new);
+static void _htmlentities(INTERNAL_FUNCTION_PARAMETERS, int all)
+{
+    pval *arg;
+	char *new;
+	TLS_VARS;
+
+    if (ARG_COUNT(ht) != 1 || getParameters(ht, 1, &arg) == FAILURE) {
+		WRONG_PARAM_COUNT;
+    }
+
+    convert_to_string(arg);
+ 
+	new = _php3_htmlentities(arg->value.str.val, arg->value.str.len, all);
+
+	RETVAL_STRINGL(new,strlen(new),0);
 }
 
 /* {{{ proto string htmlspecialchars(string string)
    Convert special characters to HTML entities */
 void php3_htmlspecialchars(INTERNAL_FUNCTION_PARAMETERS)
 {
-	_php3_htmlentities(INTERNAL_FUNCTION_PARAM_PASSTHRU,0);
+/*      _php3_htmlentities(INTERNAL_FUNCTION_PARAM_PASSTHRU,0);*/
+	_htmlentities(INTERNAL_FUNCTION_PARAM_PASSTHRU,0);
 }
 /* }}} */
 
@@ -123,7 +133,8 @@ void php3_htmlspecialchars(INTERNAL_FUNCTION_PARAMETERS)
    Convert all applicable characters to HTML entities */
 void php3_htmlentities(INTERNAL_FUNCTION_PARAMETERS)
 {
-	_php3_htmlentities(INTERNAL_FUNCTION_PARAM_PASSTHRU,1);
+/*      _php3_htmlentities(INTERNAL_FUNCTION_PARAM_PASSTHRU,1);*/
+	_htmlentities(INTERNAL_FUNCTION_PARAM_PASSTHRU,1);
 }
 /* }}} */
 

@@ -2,7 +2,7 @@
    +----------------------------------------------------------------------+
    | PHP HTML Embedded Scripting Language Version 3.0                     |
    +----------------------------------------------------------------------+
-   | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
+   | Copyright (c) 1997-1999 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
    | it under the terms of one of the following licenses:                 |
@@ -27,7 +27,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: xml.c,v 1.16 1998/12/21 15:48:33 shane Exp $ */
+/* $Id: xml.c,v 1.22 1999/02/08 15:53:01 rasmus Exp $ */
 #define IS_EXT_MODULE
 #if COMPILE_DL
 # if PHP_31
@@ -111,7 +111,7 @@ static void xml_destroy_parser(xml_parser *);
 static void xml_set_handler(char **, pval *);
 inline static unsigned short xml_encode_iso_8859_1(unsigned char);
 inline static char xml_decode_iso_8859_1(unsigned short);
-inline static unsigned short xml_encode_us_ascii(char);
+inline static unsigned short xml_encode_us_ascii(unsigned char);
 inline static char xml_decode_us_ascii(unsigned short);
 static XML_Char *xml_utf8_encode(const char *, int, int *, const XML_Char *);
 static char *xml_utf8_decode(const XML_Char *, int, int *, const XML_Char *);
@@ -405,7 +405,6 @@ xml_call_handler(xml_parser *parser, char *funcName, int argc, pval **argv)
 inline static unsigned short
 xml_encode_iso_8859_1(unsigned char c)
 {
-	php3_printf("c=%d ", c);
 	return (unsigned short)c;
 }
 
@@ -422,7 +421,7 @@ xml_decode_iso_8859_1(unsigned short c)
     /* {{{ xml_encode_us_ascii() */
 
 inline static unsigned short
-xml_encode_us_ascii(char c)
+xml_encode_us_ascii(unsigned char c)
 {
 	return (unsigned short)c;
 }
@@ -461,7 +460,7 @@ xml_utf8_encode(const char *s, int len, int *newlen, const XML_Char *encoding)
 	int pos = len;
 	char *newbuf;
 	unsigned short c;
-	unsigned short (*encoder)(char) = NULL;
+	unsigned short (*encoder)(unsigned char) = NULL;
 	xml_encoding *enc = xml_get_encoding(encoding);
 
 	*newlen = 0;
@@ -611,10 +610,15 @@ void php3i_xml_startElementHandler(void *userData, const char *name,
 		while (attributes && *attributes) {
 			char *key = (char *)attributes[0];
 			char *value = (char *)attributes[1];
+			char *decoded_value;
+			int decoded_len;
 			if (parser->case_folding) {
 				key = _php3_strtoupper(estrdup(key));
 			}
-			add_assoc_string(args[2], key, value, 1);
+			decoded_value = xml_utf8_decode(value, strlen(value),
+											&decoded_len,
+											parser->target_encoding);
+			add_assoc_string(args[2], key, decoded_value, 0);
 			if (parser->case_folding) {
 				efree(key);
 			}
@@ -815,8 +819,8 @@ php3i_xml_externalEntityRefHandler(XML_Parser parserPtr,
 
 /************************* EXTENSION FUNCTIONS *************************/
 
-/* {{{ int    xml_parser_create() */
-
+/* {{{ proto int xml_parser_create() 
+   Create an XML parser */
 PHP_FUNCTION(xml_parser_create)
 {
 	xml_parser *parser;
@@ -859,13 +863,6 @@ PHP_FUNCTION(xml_parser_create)
 	parser->parser = XML_ParserCreate(encoding);
 	parser->target_encoding = encoding;
 	XML_SetUserData(parser->parser, parser);
-	XML_SetElementHandler(parser->parser, php3i_xml_startElementHandler, php3i_xml_endElementHandler);
-	XML_SetCharacterDataHandler(parser->parser, php3i_xml_characterDataHandler);
-	XML_SetProcessingInstructionHandler(parser->parser, php3i_xml_processingInstructionHandler);
-	XML_SetDefaultHandler(parser->parser, php3i_xml_defaultHandler);
-	XML_SetUnparsedEntityDeclHandler(parser->parser, php3i_xml_unparsedEntityDeclHandler);
-	XML_SetNotationDeclHandler(parser->parser, php3i_xml_notationDeclHandler);
-	XML_SetExternalEntityRefHandler(parser->parser, php3i_xml_externalEntityRefHandler);
 	id = php3_list_insert(parser, XML_GLOBAL(php3_xml_module).le_xml_parser);
 	parser = xml_get_parser(id, thisfunc, list);
 	parser->index = id;
@@ -873,10 +870,10 @@ PHP_FUNCTION(xml_parser_create)
 
 	RETVAL_LONG(id);
 }
-
 /* }}} */
-/* {{{ int    xml_set_element_handler(int pind, string shdl, string ehdl) */
 
+/* {{{ proto int xml_set_element_handler(int pind, string shdl, string ehdl) 
+   Set up start and end element handlers */
 PHP_FUNCTION(xml_set_element_handler)
 {
 	xml_parser *parser;
@@ -896,12 +893,13 @@ PHP_FUNCTION(xml_set_element_handler)
 	}
 	xml_set_handler(&parser->startElementHandler, shdl);
 	xml_set_handler(&parser->endElementHandler, ehdl);
+	XML_SetElementHandler(parser->parser, php3i_xml_startElementHandler, php3i_xml_endElementHandler);
 	RETVAL_TRUE;
 }
-
 /* }}} */
-/* {{{ int    xml_set_character_data_handler(int pind, string hdl) */
 
+/* {{{ proto int xml_set_character_data_handler(int pind, string hdl) 
+   Set up character data handler */
 PHP_FUNCTION(xml_set_character_data_handler)
 {
 	xml_parser *parser;
@@ -918,12 +916,13 @@ PHP_FUNCTION(xml_set_character_data_handler)
 		RETURN_FALSE;
 	}
 	xml_set_handler(&parser->characterDataHandler, hdl);
+	XML_SetCharacterDataHandler(parser->parser, php3i_xml_characterDataHandler);
 	RETVAL_TRUE;
 }
-
 /* }}} */
-/* {{{ int    xml_set_processing_instruction_handler(int pind, string hdl) */
 
+/* {{{ proto int xml_set_processing_instruction_handler(int pind, string hdl) 
+   Set up processing instruction (PI) handler */
 PHP_FUNCTION(xml_set_processing_instruction_handler)
 {
 	xml_parser *parser;
@@ -940,12 +939,13 @@ PHP_FUNCTION(xml_set_processing_instruction_handler)
 		RETURN_FALSE;
 	}
 	xml_set_handler(&parser->processingInstructionHandler, hdl);
+	XML_SetProcessingInstructionHandler(parser->parser, php3i_xml_processingInstructionHandler);
 	RETVAL_TRUE;
 }
-
 /* }}} */
-/* {{{ int    xml_set_default_handler(int pind, string hdl) */
 
+/* {{{ proto int xml_set_default_handler(int pind, string hdl) 
+   Set up default handler */
 PHP_FUNCTION(xml_set_default_handler)
 {
 	xml_parser *parser;
@@ -962,12 +962,13 @@ PHP_FUNCTION(xml_set_default_handler)
 		RETURN_FALSE;
 	}
 	xml_set_handler(&parser->defaultHandler, hdl);
+	XML_SetDefaultHandler(parser->parser, php3i_xml_defaultHandler);
 	RETVAL_TRUE;
 }
-
 /* }}} */
-/* {{{ int    xml_set_unparsed_entity_decl_handler(int pind, string hdl) */
 
+/* {{{ proto int xml_set_unparsed_entity_decl_handler(int pind, string hdl) 
+   Set up unparsed entity declaration handler */
 PHP_FUNCTION(xml_set_unparsed_entity_decl_handler)
 {
 	xml_parser *parser;
@@ -984,12 +985,13 @@ PHP_FUNCTION(xml_set_unparsed_entity_decl_handler)
 		RETURN_FALSE;
 	}
 	xml_set_handler(&parser->unparsedEntityDeclHandler, hdl);
+	XML_SetUnparsedEntityDeclHandler(parser->parser, php3i_xml_unparsedEntityDeclHandler);
 	RETVAL_TRUE;
 }
-
 /* }}} */
-/* {{{ int    xml_set_notation_decl_handler(int pind, string hdl) */
 
+/* {{{ proto int xml_set_notation_decl_handler(int pind, string hdl) 
+   Set up notation declaration handler */
 PHP_FUNCTION(xml_set_notation_decl_handler)
 {
 	xml_parser *parser;
@@ -1006,12 +1008,13 @@ PHP_FUNCTION(xml_set_notation_decl_handler)
 		RETURN_FALSE;
 	}
 	xml_set_handler(&parser->notationDeclHandler, hdl);
+	XML_SetNotationDeclHandler(parser->parser, php3i_xml_notationDeclHandler);
 	RETVAL_TRUE;
 }
-
 /* }}} */
-/* {{{ int    xml_set_external_entity_ref_handler(int pind, string hdl) */
 
+/* {{{ proto int xml_set_external_entity_ref_handler(int pind, string hdl) 
+   Set up external entity reference handler */
 PHP_FUNCTION(xml_set_external_entity_ref_handler)
 {
 	xml_parser *parser;
@@ -1028,12 +1031,13 @@ PHP_FUNCTION(xml_set_external_entity_ref_handler)
 		RETURN_FALSE;
 	}
 	xml_set_handler(&parser->externalEntityRefHandler, hdl);
+	XML_SetExternalEntityRefHandler(parser->parser, php3i_xml_externalEntityRefHandler);
 	RETVAL_TRUE;
 }
-
 /* }}} */
-/* {{{ int    xml_parse(int pind, string data[, int isFinal]) */
 
+/* {{{ proto int xml_parse(int pind, string data[, int isFinal]) 
+   Start parsing an XML document */
 PHP_FUNCTION(xml_parse)
 {
 	xml_parser *parser;
@@ -1061,10 +1065,10 @@ PHP_FUNCTION(xml_parse)
 	ret = XML_Parse(parser->parser, data->value.str.val, data->value.str.len, isFinal);
 	RETVAL_LONG(ret);
 }
-
 /* }}} */
-/* {{{ int    xml_get_error_code(int pind) */
 
+/* {{{ proto int xml_get_error_code(int pind) 
+   Get XML parser error code */
 PHP_FUNCTION(xml_get_error_code)
 {
 	xml_parser *parser;
@@ -1081,10 +1085,10 @@ PHP_FUNCTION(xml_get_error_code)
 	}
 	RETVAL_LONG((long)XML_GetErrorCode(parser->parser));
 }
-
 /* }}} */
-/* {{{ string xml_error_string(int code) */
 
+/* {{{ proto string xml_error_string(int code)
+   Get XML parser error string */
 PHP_FUNCTION(xml_error_string)
 {
 	pval *code;
@@ -1100,10 +1104,10 @@ PHP_FUNCTION(xml_error_string)
 		RETVAL_STRING(str, 1);
 	}
 }
-
 /* }}} */
-/* {{{ int    xml_get_current_line_number(int pind) */
 
+/* {{{ proto int xml_get_current_line_number(int pind) 
+   Get current line number for an XML parser */
 PHP_FUNCTION(xml_get_current_line_number)
 {
 	xml_parser *parser;
@@ -1120,10 +1124,11 @@ PHP_FUNCTION(xml_get_current_line_number)
 	}
 	RETVAL_LONG(XML_GetCurrentLineNumber(parser->parser));
 }
-
 /* }}} */
-/* {{{ int    xml_get_current_column_number(int pind) */
 
+/* {{{ proto int xml_get_current_column_number(int pind)
+   Get current column number for an XML parser
+*/
 PHP_FUNCTION(xml_get_current_column_number)
 {
 	xml_parser *parser;
@@ -1140,10 +1145,10 @@ PHP_FUNCTION(xml_get_current_column_number)
 	}
 	RETVAL_LONG(XML_GetCurrentColumnNumber(parser->parser));
 }
-
 /* }}} */
-/* {{{ int    xml_get_current_byte_index(int pind) */
 
+/* {{{ proto int xml_get_current_byte_index(int pind) 
+   Get current byte index for an XML parser */
 PHP_FUNCTION(xml_get_current_byte_index)
 {
 	xml_parser *parser;
@@ -1160,10 +1165,10 @@ PHP_FUNCTION(xml_get_current_byte_index)
 	}
 	RETVAL_LONG(XML_GetCurrentByteIndex(parser->parser));
 }
-
 /* }}} */
-/* {{{ int    xml_parser_free(int pind) */
 
+/* {{{ proto int xml_parser_free(int pind) 
+   Free an XML parser */
 PHP_FUNCTION(xml_parser_free)
 {
 	pval *pind;
@@ -1178,10 +1183,10 @@ PHP_FUNCTION(xml_parser_free)
 	}
 	RETVAL_TRUE;
 }
-
 /* }}} */
-/* {{{ int    xml_parser_set_option(int pind, int option, mixed value) */
 
+/* {{{ proto int xml_parser_set_option(int pind, int option, mixed value) 
+   Set options in an XML parser */
 PHP_FUNCTION(xml_parser_set_option)
 {
 	xml_parser *parser;
@@ -1220,10 +1225,10 @@ PHP_FUNCTION(xml_parser_set_option)
 	}
 	RETVAL_TRUE;
 }
-
 /* }}} */
-/* {{{ int    xml_parser_get_option(int pind, int option) */
 
+/* {{{ proto int xml_parser_get_option(int pind, int option) 
+   Get options from an XML parser */
 PHP_FUNCTION(xml_parser_get_option)
 {
 	xml_parser *parser;
@@ -1254,10 +1259,10 @@ PHP_FUNCTION(xml_parser_get_option)
 	}
 	RETVAL_FALSE;
 }
-
 /* }}} */
-/* {{{ string utf8_encode(string data) */
 
+/* {{{ proto string utf8_encode(string data) 
+   Encodes an ISO-8859-1 string to UTF-8 */
 PHP_FUNCTION(utf8_encode)
 {
 	pval *arg;
@@ -1275,10 +1280,10 @@ PHP_FUNCTION(utf8_encode)
 	}
 	RETVAL_STRINGL(encoded, len, 0);
 }
-
 /* }}} */
-/* {{{ string utf8_decode(string data) */
 
+/* {{{ proto string utf8_decode(string data) 
+   Converts a UTF-8 encoded string to ISO-8859-1 */
 PHP_FUNCTION(utf8_decode)
 {
 	pval *arg;
@@ -1296,7 +1301,6 @@ PHP_FUNCTION(utf8_decode)
 	}
 	RETVAL_STRINGL(decoded, len, 0);
 }
-
 /* }}} */
 
 #endif

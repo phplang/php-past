@@ -1,3 +1,5 @@
+/* $Id: safe_mode.h,v 1.7 1998/12/28 09:43:53 sas Exp $ */
+
 #ifndef _SAFE_MODE_H_
 #define _SAFE_MODE_H_
 

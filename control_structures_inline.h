@@ -2,7 +2,7 @@
    +----------------------------------------------------------------------+
    | PHP HTML Embedded Scripting Language Version 3.0                     |
    +----------------------------------------------------------------------+
-   | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
+   | Copyright (c) 1997-1999 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
    | it under the terms of one of the following licenses:                 |
@@ -29,7 +29,7 @@
  */
 
 
-/* $Id: control_structures_inline.h,v 1.192 1998/11/19 13:30:22 rasmus Exp $ */
+/* $Id: control_structures_inline.h,v 1.194 1999/01/01 17:58:48 zeev Exp $ */
 
 #ifdef THREAD_SAFE
 #include "tls.h"
@@ -1083,7 +1083,6 @@ inline void cs_start_class_decleration(pval *classname, pval *parent INLINE_TLS)
 				ctor = *ctor_ptr;
 				pval_copy_constructor(&ctor);
 				_php3_hash_update(new_class.value.ht, classname->value.str.val, classname->value.str.len+1, &ctor, sizeof(pval), NULL);
-				_php3_hash_del(new_class.value.ht, parent->value.str.val, parent->value.str.len+1);
 			}
 				
 		} else {

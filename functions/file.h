@@ -2,7 +2,7 @@
    +----------------------------------------------------------------------+
    | PHP HTML Embedded Scripting Language Version 3.0                     |
    +----------------------------------------------------------------------+
-   | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
+   | Copyright (c) 1997-1999 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
    | it under the terms of one of the following licenses:                 |
@@ -27,7 +27,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: file.h,v 1.25 1998/09/01 19:40:50 shane Exp $ */
+/* $Id: file.h,v 1.27 1999/01/31 16:15:38 sas Exp $ */
 
 #ifndef _FILE_H
 #define _FILE_H
@@ -65,5 +65,6 @@ extern void php3_file(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_set_socket_blocking(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_set_socket_timeout(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_get_meta_tags(INTERNAL_FUNCTION_PARAMETERS);
+extern PHP_FUNCTION(flock);
 
 #endif /* _FILE_H */

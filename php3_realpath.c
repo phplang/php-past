@@ -2,7 +2,7 @@
    +----------------------------------------------------------------------+
    | PHP HTML Embedded Scripting Language Version 3.0                     |
    +----------------------------------------------------------------------+
-   | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
+   | Copyright (c) 1997-1999 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
    | it under the terms of one of the following licenses:                 |
@@ -27,6 +27,8 @@
    +----------------------------------------------------------------------+
  */
 
+/* $Id: php3_realpath.c,v 1.11 1999/02/15 17:25:44 steffann Exp $ */
+
 #ifdef THREAD_SAFE
 #include "tls.h"
 #endif
@@ -44,6 +46,12 @@
 
 #ifndef S_ISDIR
 #define S_ISDIR(mode)   (((mode)&S_IFMT) == S_IFDIR)
+#endif
+
+#if WIN32|WINNT
+#define PATH_SEPARATOR	'\\'
+#else
+#define PATH_SEPARATOR	'/'
 #endif
 
 char *_php3_realpath(char *path, char resolved_path[]);
@@ -124,11 +132,7 @@ char *_php3_realpath(char *path, char resolved_path []) {
 	/* Go to the end, then stop */
 	while(*workpos != 0) {
 		/* Strip (back)slashes */
-#if WIN32|WINNT
-		while(*workpos == '\\') workpos++;
-#else
-		while(*workpos == '/') workpos++;
-#endif
+		while(*workpos == PATH_SEPARATOR) workpos++;
 
 #if WIN32|WINNT
 		/* reset dotcount */
@@ -265,19 +269,57 @@ char *_php3_realpath(char *path, char resolved_path []) {
 #endif /* WIN32|WINNT */
 	}
 
+	/* We are only interested in the directory */
 	/* Check if the resolved path is a directory */
-	if (stat(path_construction, &filestat) != 0) return NULL;
-	if (S_ISDIR(filestat.st_mode)) {
-		/* It's a directory, append a / if needed */
-		if (*(writepos-1) != '/') {
-			/* Check for overflow */
-			if ((strlen(workpos) + 2) >= MAXPATHLEN) return NULL;
+	if (stat(path_construction, &filestat) == 0) {
+		/* path_construction exists and stats available */
+		if (S_ISDIR(filestat.st_mode)) {
+			/* It's a directory, append a / or \ if needed */
+			if (*(writepos-1) != PATH_SEPARATOR) {
+				/* Check for overflow */
+				if ((strlen(workpos) + 2) >= MAXPATHLEN) return NULL;
 
-			*writepos++ = '/';
-			*writepos = 0;
+				*writepos++ = PATH_SEPARATOR;
+				*writepos = 0;
+			}
+		} else {
+			/* it's a file, strip filename */
+			while (*--writepos != PATH_SEPARATOR);
+			*++writepos = 0;
+		}
+	} else {
+		/* it doesn't exist, try to strip the last element */
+		/* if last element ends with a /, skip that / */
+		if (*(writepos-1) == PATH_SEPARATOR) {
+			*--writepos = 0;
+		}
+		
+		while (*--writepos != PATH_SEPARATOR);
+		*writepos = 0;
+		
+		/* Now try this */
+		if (stat(path_construction, &filestat) == 0) {
+			/* path_construction exists and stats available */
+			if (S_ISDIR(filestat.st_mode)) {
+				/* It's a directory, append a / if needed */
+				if (*(writepos-1) != PATH_SEPARATOR) {
+					/* Check for overflow */
+					if ((strlen(workpos) + 2) >= MAXPATHLEN) return NULL;
+
+					*writepos++ = PATH_SEPARATOR;
+					*writepos = 0;
+				}
+			} else {
+				/* User tries to use something that is not a directory as
+				   a directory */
+				return NULL;
+			}
+		} else {
+			/* Even this doesn't exist */
+			return NULL;
 		}
 	}
-	
+		
 	strcpy(resolved_path, path_construction);
 	return resolved_path;
 }

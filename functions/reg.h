@@ -2,7 +2,7 @@
    +----------------------------------------------------------------------+
    | PHP HTML Embedded Scripting Language Version 3.0                     |
    +----------------------------------------------------------------------+
-   | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
+   | Copyright (c) 1997-1999 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
    | it under the terms of one of the following licenses:                 |
@@ -28,7 +28,7 @@
  */
 
 
-/* $Id: reg.h,v 1.12 1998/04/29 13:24:27 ssb Exp $ */
+/* $Id: reg.h,v 1.17 1999/01/06 07:19:06 fmk Exp $ */
 
 #ifndef _REG_H
 #define _REG_H
@@ -36,7 +36,8 @@
 extern php3_module_entry regexp_module_entry;
 #define regexp_module_ptr &regexp_module_entry
 
-extern char *_php3_regreplace(const char *pattern, const char *replace, const char *string, int icase, int extended);
+extern PHPAPI char * _php3_regreplace(const char *pattern, 
+		const char *replace, const char *string, int icase, int extended);
 
 extern void php3_ereg(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_eregi(INTERNAL_FUNCTION_PARAMETERS);

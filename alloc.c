@@ -1,32 +1,9 @@
 /*
-   +----------------------------------------------------------------------+
-   | PHP HTML Embedded Scripting Language Version 3.0                     |
-   +----------------------------------------------------------------------+
-   | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
-   +----------------------------------------------------------------------+
-   | This program is free software; you can redistribute it and/or modify |
-   | it under the terms of one of the following licenses:                 |
-   |                                                                      |
-   |  A) the GNU General Public License as published by the Free Software |
-   |     Foundation; either version 2 of the License, or (at your option) |
-   |     any later version.                                               |
-   |                                                                      |
-   |  B) the PHP License as published by the PHP Development Team and     |
-   |     included in the distribution in the file: LICENSE                |
-   |                                                                      |
-   | This program is distributed in the hope that it will be useful,      |
-   | but WITHOUT ANY WARRANTY; without even the implied warranty of       |
-   | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the        |
-   | GNU General Public License for more details.                         |
-   |                                                                      |
-   | You should have received a copy of both licenses referred to here.   |
-   | If you did not, or have any questions about PHP licensing, please    |
-   | contact core@php.net.                                                |
-   +----------------------------------------------------------------------+
-   | Authors: Andi Gutmans   <andi@php.net>                               |
-   |          Zeev Suraski   <bourbon@netvision.net.il>                   |
-   |          Rasmus Lerdorf <rasmus@lerdorf.on.ca>                       |
-   +----------------------------------------------------------------------+
+ * This file is a part of the Zend scripting language engine.  It may
+ * be freely distributed as an integrated part of the PHP scripting language,
+ * or under the Zend license, which is not yet available at this time.
+ *
+ * Authors:  Andi Gutmans <andi@zend.com>, Zeev Suraski <zeev@zend.com>
  */
 
 
@@ -37,6 +14,14 @@
 #include "php.h"
 
 #include "main.h"
+
+#if DEBUG
+# define END_MAGIC_SIZE sizeof(long)
+# define END_ALIGNMENT(size) (((size)%PLATFORM_ALIGNMENT)?(PLATFORM_ALIGNMENT-((size)%PLATFORM_ALIGNMENT)):0)
+#else
+# define END_MAGIC_SIZE 0
+# define END_ALIGNMENT(size) 0
+#endif
 
 
 #ifndef THREAD_SAFE
@@ -111,7 +96,7 @@ PHPAPI void *_emalloc(size_t size)
 
 #if DEBUG
 	if (!(initialized & INIT_MEMORY_MANAGER)) {
-		fprintf(stderr,"WARNING:  Call to emalloc() before memory manager is started from %s:%d (%d bytes)\n",filename,lineno,size);
+		fprintf(stderr,"WARNING:  Call to emalloc() before memory manager is started from %s:%u (%ul bytes)\n",filename,lineno, size);
 	}
 #endif
 
@@ -120,17 +105,18 @@ PHPAPI void *_emalloc(size_t size)
 	if ((size < MAX_CACHED_MEMORY) && (GLOBAL(cache_count[size]) > 0)) {
 		p = GLOBAL(cache[size][--GLOBAL(cache_count[size])]);
 #if DEBUG
-		p->filename = strdup(filename);
+		p->filename = filename;
 		p->lineno = lineno;
+		p->magic = MEM_BLOCK_START_MAGIC;
 #endif
 		UNBLOCK_INTERRUPTIONS;
 		return (void *)((char *)p + sizeof(mem_header) + PLATFORM_PADDING);
 	} else {
-		p  = (mem_header *) malloc(sizeof(mem_header) + size + PLATFORM_PADDING);
+		p  = (mem_header *) malloc(sizeof(mem_header) + size + PLATFORM_PADDING + END_ALIGNMENT(size) + END_MAGIC_SIZE);
 	}
 
 	if (!p) {
-		fprintf(stderr,"FATAL:  emalloc():  Unable to allocate %d bytes\n", size);
+		fprintf(stderr,"FATAL:  emalloc():  Unable to allocate %ul bytes\n", size);
 		exit(1);
 		UNBLOCK_INTERRUPTIONS;
 		return (void *)p;
@@ -141,11 +127,13 @@ PHPAPI void *_emalloc(size_t size)
 	}
 	p->pLast = (mem_header *) NULL;
 	GLOBAL(head) = p;
-#if DEBUG
-	p->filename = strdup(filename);
-	p->lineno = lineno;
-#endif
 	p->size = size;
+#if DEBUG
+	p->filename = filename;
+	p->lineno = lineno;
+	p->magic = MEM_BLOCK_START_MAGIC;
+	*((long *)(((char *) p) + sizeof(mem_header)+size+PLATFORM_PADDING+END_ALIGNMENT(size))) = MEM_BLOCK_END_MAGIC;
+#endif
 #if MEMORY_LIMIT
 	CHECK_MEMORY_LIMIT(size);
 #endif
@@ -162,20 +150,21 @@ PHPAPI void _efree(void *ptr)
 {
 	mem_header *p = (mem_header *) ((char *)ptr - sizeof(mem_header) - PLATFORM_PADDING);
 	TLS_VARS;
-	
+
+#if DEBUG
+	_mem_block_check(ptr, 1, filename, lineno);
+	memset(ptr, 0x5a, p->size);
+#endif
+
 	if ((p->size < MAX_CACHED_MEMORY) && (GLOBAL(cache_count[p->size]) < MAX_CACHED_ENTRIES)) {
 		GLOBAL(cache[p->size][GLOBAL(cache_count[p->size]++)]) = p;
 #if DEBUG
-		free(p->filename);
-		p->filename = NULL;
+		p->magic = MEM_BLOCK_CACHED_MAGIC;
 #endif
 		return;
 	}
 	BLOCK_INTERRUPTIONS;
 	REMOVE_POINTER_FROM_LIST(p);
-#if DEBUG
-	free(p->filename);
-#endif
 
 #if MEMORY_LIMIT
 	allocated_memory -= p->size;
@@ -206,7 +195,7 @@ PHPAPI void *_ecalloc(size_t nmemb, size_t size)
 		UNBLOCK_INTERRUPTIONS;
 		return (void *) p;
 	}
-	memset(p,(int)NULL,final_size);
+	memset(p,0,final_size);
 	UNBLOCK_INTERRUPTIONS;
 	return p;
 }
@@ -222,11 +211,18 @@ PHPAPI void *_erealloc(void *ptr, size_t size)
 	mem_header *orig = p;
 	TLS_VARS;
 
+	if (!ptr) {
+#if DEBUG
+		return _emalloc(size, filename, lineno);
+#else
+		return emalloc(size);
+#endif
+	}
 	BLOCK_INTERRUPTIONS;
 	REMOVE_POINTER_FROM_LIST(p);
-	p = (mem_header *) realloc(p,sizeof(mem_header)+size+PLATFORM_PADDING);
+	p = (mem_header *) realloc(p,sizeof(mem_header)+size+PLATFORM_PADDING+END_ALIGNMENT(size)+END_MAGIC_SIZE);
 	if (!p) {
-		fprintf(stderr,"FATAL:  erealloc():  Unable to allocate %d bytes\n", size);
+		fprintf(stderr,"FATAL:  erealloc():  Unable to allocate %ul bytes\n", size);
 		exit(1);
 		orig->pNext = GLOBAL(head);
 		if (GLOBAL(head)) {
@@ -244,9 +240,10 @@ PHPAPI void *_erealloc(void *ptr, size_t size)
 	p->pLast = (mem_header *) NULL;
 	GLOBAL(head) = p;
 #if DEBUG
-	free(p->filename);
-	p->filename = strdup(filename);
+	p->filename = filename;
 	p->lineno = lineno;
+	p->magic = MEM_BLOCK_START_MAGIC;
+	*((long *)(((char *) p) + sizeof(mem_header)+size+PLATFORM_PADDING+END_ALIGNMENT(size))) = MEM_BLOCK_END_MAGIC;
 #endif	
 #if MEMORY_LIMIT
 	CHECK_MEMORY_LIMIT(size - p->size);
@@ -349,11 +346,6 @@ void shutdown_memory_manager(void)
 		for (j=0; j<GLOBAL(cache_count[i]); j++) {
 			p = GLOBAL(cache[i][j]);
 			REMOVE_POINTER_FROM_LIST(p);
-#if DEBUG
-			if (p->filename) {
-				free(p->filename);
-			}
-#endif
 			free(p);
 		}
 	}
@@ -375,19 +367,142 @@ void shutdown_memory_manager(void)
 			log_error(memory_leak_buf,GLOBAL(php3_rqst)->server);
 #endif
 # else
-			php3_printf("Freeing %x (%d bytes), allocated in %s on line %d<br>\n",(void *)((char *)t+sizeof(mem_header)+PLATFORM_PADDING),t->size,t->filename,t->lineno);
+			php3_printf("Freeing 0x%0.8X (%d bytes), allocated in %s on line %d<br>\n",(void *)((char *)t+sizeof(mem_header)+PLATFORM_PADDING),t->size,t->filename,t->lineno);
 # endif			
 		}
 #endif
 		p = t->pNext;
-#if DEBUG
-		free(t->filename);
-#endif
 		free(t);
 		t = p;
 	}
 	GLOBAL(initialized) &= ~INIT_MEMORY_MANAGER;
 }
+
+
+#if DEBUG
+int _mem_block_check(void *ptr, int silent, char *filename, int lineno)
+{
+	mem_header *p = (mem_header *) ((char *)ptr - sizeof(mem_header) - PLATFORM_PADDING);
+	int no_cache_notice=0;
+	int valid_beginning=1;
+	int had_problems=0;
+
+	if (silent==2) {
+		silent=1;
+		no_cache_notice=1;
+	}
+	if (silent==3) {
+		silent=0;
+		no_cache_notice=1;
+	}
+	if (!silent) {
+		fprintf(stderr,"---------------------------------------\n");
+		fprintf(stderr,"Block 0x%0.8lX status at %s:%d:\n", (long) p, filename, lineno);
+		fprintf(stderr,"%10s\t","Beginning:  ");
+	}
+
+	switch (p->magic) {
+		case MEM_BLOCK_START_MAGIC:
+			if (!silent) {
+				fprintf(stderr, "OK (allocated on %s:%d, %d bytes)\n", p->filename, p->lineno, p->size);
+			}
+			break; /* ok */
+		case MEM_BLOCK_FREED_MAGIC:
+			if (!silent) {
+				fprintf(stderr,"Freed\n");
+				had_problems=1;
+			} else {
+				return _mem_block_check(ptr, 0, filename, lineno);
+			}
+			break;
+		case MEM_BLOCK_CACHED_MAGIC:
+			if (!silent) {
+				if (!no_cache_notice) {
+					fprintf(stderr,"Cached (allocated on %s:%d, %d bytes)\n", p->filename, p->lineno, p->size);
+					had_problems=1;
+				}
+			} else {
+				if (!no_cache_notice) {
+					return _mem_block_check(ptr, 0, filename, lineno);
+				}
+			}
+			break;
+		default:
+			if (!silent) {
+				fprintf(stderr,"Overrun (magic=0x%0.8lX, expected=0x%0.8lX)\n", p->magic, MEM_BLOCK_START_MAGIC);
+			} else {
+				return _mem_block_check(ptr, 0, filename, lineno);
+			}
+			had_problems=1;
+			valid_beginning=0;
+			break;
+	}
+
+
+	if (valid_beginning
+		&& *((long *)(((char *) p)+sizeof(mem_header)+p->size+PLATFORM_PADDING+END_ALIGNMENT(p->size))) != MEM_BLOCK_END_MAGIC) {
+		long magic_num = MEM_BLOCK_END_MAGIC;
+		char *overflow_ptr, *magic_ptr=(char *) &magic_num;
+		int overflows=0;
+		int i;
+
+		if (silent) {
+			return _mem_block_check(ptr, 0, filename, lineno);
+		}
+		had_problems=1;
+		overflow_ptr = ((char *) p)+sizeof(mem_header)+p->size+PLATFORM_PADDING;
+
+		for (i=0; i<sizeof(long); i++) {
+			if (overflow_ptr[i]!=magic_ptr[i]) {
+				overflows++;
+			}
+		}
+
+		fprintf(stderr,"%10s\t", "End:");
+		fprintf(stderr,"Overflown (magic=0x%0.8lX instead of 0x%0.8lX)\n", 
+				*((long *)(((char *) p) + sizeof(mem_header)+p->size+PLATFORM_PADDING+END_ALIGNMENT(p->size))), MEM_BLOCK_END_MAGIC);
+		fprintf(stderr,"%10s\t","");
+		if (overflows>=sizeof(long)) {
+			fprintf(stderr, "At least %lu bytes overflown\n", (unsigned long)sizeof(long));
+		} else {
+			fprintf(stderr, "%d byte(s) overflown\n", overflows);
+		}
+	} else if (!silent) {
+		fprintf(stderr,"%10s\t", "End:");
+		if (valid_beginning) {
+			fprintf(stderr,"OK\n");
+		} else {
+			fprintf(stderr,"Unknown\n");
+		}
+	}
+		
+	if (!silent) {
+		fprintf(stderr,"---------------------------------------\n");
+	}
+	return ((!had_problems) ? 1 : 0);
+}
+
+
+void _full_mem_check(int silent, char *filename, uint lineno)
+{
+	mem_header *p = head;
+	int errors=0;
+
+	fprintf(stderr,"------------------------------------------------\n");
+	fprintf(stderr,"Full Memory Check at %s:%d\n", filename, lineno);
+
+	while (p) {
+		if (!_mem_block_check((void *)((char *)p + sizeof(mem_header) + PLATFORM_PADDING), (silent?2:3), filename, lineno)) {
+			errors++;
+		}
+		p = p->pNext;
+	}
+	fprintf(stderr,"End of full memory check %s:%d (%d errors)\n", filename, lineno, errors);
+	fprintf(stderr,"------------------------------------------------\n");
+}
+#endif
+
+
 
 /*
  * Local variables:

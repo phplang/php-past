@@ -1,3 +1,5 @@
+/* $Id: isapi_sapi.c,v 1.18 1998/12/28 09:35:04 sas Exp $ */
+
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <stdio.h>

@@ -1,3 +1,5 @@
+/* $Id: gdttf.h,v 1.6 1998/12/28 09:43:58 sas Exp $ */
+
 #ifdef _OSD_POSIX
 #ifndef APACHE
 #error On this EBCDIC platform, PHP3 is only supported as an Apache module.

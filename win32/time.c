@@ -8,6 +8,8 @@
  * Copyright 1994 The Downhill Project                                       *
  * 
  * Modified by Shane Caraveo for use with PHP
+ * 
+ * $Id: time.c,v 1.13 1998/12/28 09:44:05 sas Exp $
  *
  *****************************************************************************/
 

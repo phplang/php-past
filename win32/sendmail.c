@@ -1,3 +1,4 @@
+/* $Id: sendmail.c,v 1.23 1998/12/28 09:44:04 sas Exp $ */
 
 /* 
  *    PHP Sendmail for Windows.

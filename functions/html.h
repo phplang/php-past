@@ -2,7 +2,7 @@
    +----------------------------------------------------------------------+
    | PHP HTML Embedded Scripting Language Version 3.0                     |
    +----------------------------------------------------------------------+
-   | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
+   | Copyright (c) 1997-1999 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
    | it under the terms of one of the following licenses:                 |
@@ -27,12 +27,13 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: html.h,v 1.6 1998/04/29 13:24:14 ssb Exp $ */
+/* $Id: html.h,v 1.9 1999/02/11 19:09:34 thies Exp $ */
 
 #ifndef _HTML_H
 #define _HTML_H
 
 extern void php3_htmlspecialchars(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_htmlentities(INTERNAL_FUNCTION_PARAMETERS);
+PHPAPI char * _php3_htmlentities(char *s, int i, int all);
 
 #endif /* _HTML_H */

@@ -7,14 +7,14 @@ READ THIS FIRST
     how the SGML stuff works.
 
     If you just want to read the documentation, download it from
-    http://www.php.net/documentation.php3
+    http://www.php.net/docs.php3
 
 INTRODUCTION
 
     All the documentation is written with SGML using the DocBook DTD.
     See:
     
-        http://ww.ora.com/davenport/
+        http://www.ora.com/davenport/
     
     If you want to produce something viewable, you need Jade and
     Norman Walsh's modular DocBook stylesheets. See:

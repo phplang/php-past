@@ -2,7 +2,7 @@
    +----------------------------------------------------------------------+
    | PHP HTML Embedded Scripting Language Version 3.0                     |
    +----------------------------------------------------------------------+
-   | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
+   | Copyright (c) 1997-1999 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
    | it under the terms of one of the following licenses:                 |
@@ -28,7 +28,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: php.h,v 1.39 1998/12/03 22:58:48 shane Exp $ */
+/* $Id: php.h,v 1.49 1999/02/28 23:00:41 zeev Exp $ */
 
 #ifndef _PHP_H
 #define _PHP_H
@@ -52,7 +52,7 @@
 #define inline
 #endif
 
-#if MSVC5
+#if WIN32
 #include "config.w32.h"
 #include "win95nt.h"
 # if defined(COMPILE_DL)
@@ -145,6 +145,7 @@
 # endif 
 #endif 
 
+//#include "compat.h"
 
 #include "php3_hash.h"
 #include "alloc.h"
@@ -203,7 +204,7 @@ extern request_rec *php3_rqst;
 #endif
 
 #if HAVE_PWD_H
-# if MSVC5
+# if WIN32
 #include "win32/pwd.h"
 #include "win32/param.h"
 # else
@@ -246,13 +247,13 @@ extern PHPAPI char *undefined_variable_string;
 #define EXEC_INPUT_BUF 4096
 
 #if APACHE
-extern PHPAPI void php3_apache_puts(const char *s);
-extern PHPAPI void php3_apache_putc(char c);
-# if !defined(COMPILE_DL)
-# define PUTS(s) php3_apache_puts(s)
-# define PUTC(c) php3_apache_putc(c)
-# define PHPWRITE(a,n) rwrite((a),(n),GLOBAL(php3_rqst))
-# endif
+extern PHPAPI void php3_puts(const char *s);
+extern PHPAPI void php3_putc(char c);
+extern PHPAPI int php3_write(const void *a, int n);
+# define PUTS(s) php3_puts(s)
+# define PUTC(c) php3_putc(c)
+# define PHPWRITE(a,n) php3_write(a,n)
+/* thies@digicol.de 990119 # define PHPWRITE(a,n) rwrite((a),(n),GLOBAL(php3_rqst)) */
 #endif
 
 #if FHTTPD
@@ -286,25 +287,26 @@ extern PHPAPI void php3_fhttpd_puts_header(char *s);
 extern PHPAPI void php3_fhttpd_puts(char *s);
 extern PHPAPI void php3_fhttpd_putc(char c);
 extern PHPAPI int php3_fhttpd_write(char *a,int n);
-# if !defined(COMPILE_DL)
 # define PUTS(s) php3_fhttpd_puts(s)
 # define PUTC(c) php3_fhttpd_putc(c)
 # define PHPWRITE(a,n) php3_fhttpd_write((a),(n))
-# endif
 #endif
 
 #if CGI_BINARY
-# if !defined(COMPILE_DL)
-# define PUTS(a) fputs((a),stdout)
-# define PUTC(a) fputc((a),stdout)
-# define PHPWRITE(a,n) fwrite((a),(n),1,stdout)
+extern PHPAPI void php3_puts(const char *s);
+extern PHPAPI void php3_putc(char c);
+extern PHPAPI int php3_write(const void *a, int n);
+/* to test user abort in a cgi, make CGI_CHECK_ABOUT = 1 */
+#define CGI_CHECK_ABORT 0
+# if CGI_CHECK_ABORT
+#  define PUTS(a) php3_puts(a)
+#  define PUTC(a) php3_putc(a)
+#  define PHPWRITE(a,n) php3_write((a),(n))
+# else
+#  define PUTS(a) fputs(a,stdout)
+#  define PUTC(a) fputc(a,stdout)
+#  define PHPWRITE(a,n) fwrite((a),1,(n),stdout)
 # endif
-#endif
-
-#if defined(THREAD_SAFE) || defined(COMPILE_DL)
-#define PUTS(a) php3_printf("%s",a)
-#define PUTC(a) PUTS(a)
-#define PHPWRITE(a,n) php3_write((a),(n))
 #endif
 
 #define E_ERROR 0x1
@@ -440,6 +442,11 @@ typedef struct {
 	pval *object_pointer;
 } FunctionState;
 
+/* Connection states */
+#define PHP_CONNECTION_NORMAL  0
+#define PHP_CONNECTION_ABORTED 1
+#define PHP_CONNECTION_TIMEOUT 2
+
 
 /* global variables */
 #ifndef THREAD_SAFE
@@ -447,6 +454,8 @@ extern HashTable symbol_table, function_table;
 extern HashTable include_names;
 extern HashTable *active_symbol_table;
 extern int phplineno, current_lineno;
+extern int php_connection_status;
+extern int ignore_user_abort;
 extern int error_reporting,tmp_error_reporting;
 extern pval *data,globals;
 extern FunctionState function_state;

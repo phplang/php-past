@@ -4,7 +4,7 @@
 *							All rights reserved.
 *
 * Filename:		$RCSfile: dlist.c,v $
-* Version:		$Revision: 1.1 $
+* Version:		$Revision: 1.2 $
 *
 * Language:		ANSI C
 * Environment:	any
@@ -12,12 +12,15 @@
 * Description:	Module to implement doubly linked lists. Includes a routine
 *				to peform a mergesort on the doubly linked list.
 *
-* $Id: dlist.c,v 1.1 1998/08/12 09:29:16 steinm Exp $
+* $Id: dlist.c,v 1.2 1999/02/02 05:44:12 andrey Exp $
 *
 * Revision History:
 * -----------------
 *
 * $Log: dlist.c,v $
+* Revision 1.2  1999/02/02 05:44:12  andrey
+* Initial check-in of my WDDX module and the documentation for it.
+*
 * Revision 1.1  1998/08/12 09:29:16  steinm
 * First version of Hyperwave module.
 *
@@ -42,7 +45,7 @@
 #include "config.h"
 #endif
 
-#if HYPERWAVE
+#if HYPERWAVE|HAVE_LIBEXPAT
 
 #include <stdio.h>
 #include <malloc.h>

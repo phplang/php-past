@@ -321,6 +321,7 @@ echo mysql_errno().": ".mysql_error()."&lt;BR>";
     <funcsynopsis>
      <funcdef>array <function>mysql_fetch_array</function></funcdef>
      <paramdef>int <parameter>result</parameter></paramdef>
+     <paramdef>int <parameter><optional>result_typ</optional></parameter></paramdef>
     </funcsynopsis>
     <para> 
      Returns an array that corresponds to the fetched row, or false
@@ -343,6 +344,10 @@ select t1.f1 as foo t2.f1 as bar from t1, t2
      <function>mysql_fetch_array</function> is NOT significantly
      slower than using <function>mysql_fetch_row</function>, while it
      provides a significant added value.
+    <para>
+     The optional second argument <parameter>result_typ</parameter> in
+     <function>mysql_fetch_array</function> is a constant and can take
+     the following values: MYSQL_ASSOC, MYSQL_NUM, and MYSQL_BOTH.
     <para>
      For further details, also see
      <function>mysql_fetch_row</function>
@@ -415,7 +420,7 @@ mysql_free_result($result);
 	numeric - 1 if the column is numeric
        </simpara></listitem> 
       <listitem><simpara>
-	blob - 1 it the column is a BLOB
+	blob - 1 if the column is a BLOB
        </simpara></listitem>
       <listitem><simpara>
 	type - the type of the column
@@ -470,6 +475,7 @@ mysql_free_result($result);
     <funcsynopsis>
      <funcdef>object <function>mysql_fetch_object</function></funcdef>
      <paramdef>int <parameter>result</parameter></paramdef>
+     <paramdef>int <parameter><optional>result_typ</optional></parameter></paramdef>
     </funcsynopsis>
     <para> 
      Returns an object with properties that correspond to the fetched
@@ -480,6 +486,10 @@ mysql_free_result($result);
      object is returned, instead of an array.  Indirectly, that means
      that you can only access the data by the field names, and not by
      their offsets (numbers are illegal property names).
+    <para>
+     The optional argument <parameter>result_typ</parameter> is a
+     constant and can take the following values: MYSQL_ASSOC,
+     MYSQL_NUM, and MYSQL_BOTH.
     <para>
      Speed-wise, the function is identical to
      <function>mysql_fetch_array</function>, and almost as quick as

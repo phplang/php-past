@@ -2,7 +2,7 @@
    +----------------------------------------------------------------------+
    | PHP HTML Embedded Scripting Language Version 3.0                     |
    +----------------------------------------------------------------------+
-   | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
+   | Copyright (c) 1997-9 PHP Development Team (See Credits file)         |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
    | it under the terms of one of the following licenses:                 |
@@ -83,3 +83,6 @@
 #define PHP_LDAP_LIBS		"@LDAP_LIBS@"
 #define PHP_VELOCIS_INCLUDE     "@VELOCIS_INCLUDE@"
 #define PHP_VELOCIS_LIBS        "@VELOCIS_LIBS@"
+#define PHP_IMAGICK_INCLUDE	"@IMAGICK_INCLUDE@"
+#define PHP_IMAGICK_LFLAGS	"@IMAGICK_LFLAGS@"
+#define PHP_IMAGICK_LIBS	"@IMAGICK_LIBS@"

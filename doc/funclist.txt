@@ -1,10 +1,3 @@
-# debugger.c
-debugger_off
-debugger_on
-# internal_functions.c
-# internal_functions.h
-# modules.h
-# php.h
 # dl/calendar/calendar.c
 frenchtojd
 gregoriantojd
@@ -54,10 +47,10 @@ mssql_pconnect
 mssql_query
 mssql_result
 mssql_select_db
-# dl/snmp/winsnmp.c
+# dl/snmp/snmp.c
 snmpget
 snmpwalk
-# dl/snmp/snmp.c
+# dl/snmp/winsnmp.c
 snmpget
 snmpwalk
 # dl/vmailmgr/php3_vmailmgr.c
@@ -66,6 +59,13 @@ vm_adduser
 vm_delalias
 vm_deluser
 vm_passwd
+# debugger.c
+debugger_off
+debugger_on
+# internal_functions.c
+# internal_functions.h
+# modules.h
+# php.h
 # functions/COM.c
 com_get
 com_invoke
@@ -109,6 +109,7 @@ atan
 atan2
 base64_decode
 base64_encode
+base_convert
 basename
 bindec
 call_user_func
@@ -118,7 +119,9 @@ checkdate
 checkdnsrr
 chop
 chr
+chunk_split
 clearstatcache
+convert_cyr_string
 cos
 count
 current
@@ -144,6 +147,8 @@ flush
 fsockopen
 get_cfg_var
 get_current_user
+get_magic_quotes_gpc
+get_magic_quotes_runtime
 getdate
 getenv
 gethostbyaddr
@@ -157,6 +162,8 @@ getmyinode
 getmypid
 getmyuid
 getrandmax
+getrusage
+gettimeofday
 gettype
 gmdate
 gmmktime
@@ -191,6 +198,9 @@ md5
 microtime
 min
 mktime
+mt_getrandmax
+mt_rand
+mt_srand
 next
 nl2br
 number_format
@@ -207,6 +217,7 @@ pow
 prev
 printf
 putenv
+quoted_printable_decode
 quotemeta
 rad2deg
 rand
@@ -219,6 +230,7 @@ round
 rsort
 rtrim
 serialize
+set_magic_quotes_runtime
 set_time_limit
 setlocale
 settype
@@ -231,12 +243,14 @@ soundex
 sprintf
 sqrt
 srand
+str_replace
 strcasecmp
 strchr
 strcmp
 strcspn
 strftime
 stripslashes
+stristr
 strlen
 strpos
 strrchr
@@ -566,6 +580,18 @@ imap_subscribe
 imap_uid
 imap_undelete
 imap_unsubscribe
+# functions/interbase.c
+ibase_bind
+ibase_close
+ibase_connect
+ibase_execute
+ibase_fetch_row
+ibase_free_query
+ibase_free_result
+ibase_pconnect
+ibase_prepare
+ibase_query
+ibase_timefmt
 # functions/ldap.c
 ldap_add
 ldap_bind
@@ -599,6 +625,7 @@ unlink
 mail
 # functions/msql.c
 msql
+msql_affected_rows
 msql_close
 msql_connect
 msql_create_db
@@ -688,6 +715,24 @@ mysql_result
 mysql_select_db
 mysql_selectdb
 mysql_tablename
+# functions/oci8.c
+ocibindbyname
+ocicolumnisnull
+ocicolumnname
+ocicolumnsize
+ocicolumntype
+ociexecute
+ocifetch
+ocifetchinto
+ocifreestatement
+ociinternaldebug
+ocilogoff
+ocilogon
+ocinumcols
+ociparse
+ociresult
+ociserverversion
+ocistatementtype
 # functions/oracle.c
 ora_bind
 ora_close
@@ -715,6 +760,64 @@ ora_rollback
 # functions/pack.c
 pack
 unpack
+# functions/pdf.c
+pdf_add_outline
+pdf_arc
+pdf_begin_page
+pdf_circle
+pdf_clip
+pdf_close
+pdf_closepath
+pdf_closepath_fill_stroke
+pdf_closepath_stroke
+pdf_continue_text
+pdf_curveto
+pdf_end_page
+pdf_endpath
+pdf_fill
+pdf_fill_stroke
+pdf_get_info
+pdf_lineto
+pdf_moveto
+pdf_open
+pdf_rect
+pdf_restore
+pdf_rotate
+pdf_save
+pdf_scale
+pdf_set_char_spacing
+pdf_set_duration
+pdf_set_font
+pdf_set_horiz_scaling
+pdf_set_info_author
+pdf_set_info_creator
+pdf_set_info_keywords
+pdf_set_info_subject
+pdf_set_info_title
+pdf_set_leading
+pdf_set_text_matrix
+pdf_set_text_pos
+pdf_set_text_rendering
+pdf_set_text_rise
+pdf_set_transition
+pdf_set_word_spacing
+pdf_setdash
+pdf_setflat
+pdf_setgray
+pdf_setgray_fill
+pdf_setgray_stroke
+pdf_setlinecap
+pdf_setlinejoin
+pdf_setlinewidth
+pdf_setmiterlimit
+pdf_setrgbcolor
+pdf_setrgbcolor_fill
+pdf_setrgbcolor_stroke
+pdf_show
+pdf_show_xy
+pdf_stringwidth
+pdf_stroke
+pdf_translate
 # functions/pgsql.c
 pg_close
 pg_cmdtuples
@@ -756,6 +859,9 @@ eregi_replace
 join
 split
 sql_regcase
+# functions/snmp.c
+snmpget
+snmpwalk
 # functions/solid.c
 solid_close
 solid_connect
@@ -846,6 +952,10 @@ closelog
 define_syslog_variables
 openlog
 syslog
+# functions/sysvsem.c
+sem_acquire
+sem_get
+sem_release
 # functions/unified_odbc.c
 odbc_autocommit
 odbc_binmode
@@ -896,98 +1006,6 @@ velocis_freeresult
 velocis_off_autocommit
 velocis_result
 velocis_rollback
-# functions/zlib.c
-gzclose
-gzeof
-gzfile
-gzgetc
-gzgets
-gzgetss
-gzopen
-gzpassthru
-gzputs
-gzread
-gzrewind
-gzseek
-gztell
-gzwrite
-readgzfile
-# functions/pdf.c
-pdf_add_outline
-pdf_arc
-pdf_begin_page
-pdf_circle
-pdf_clip
-pdf_close
-pdf_closepath
-pdf_closepath_fill_stroke
-pdf_closepath_stroke
-pdf_continue_text
-pdf_curveto
-pdf_end_page
-pdf_endpath
-pdf_fill
-pdf_fill_stroke
-pdf_get_info
-pdf_lineto
-pdf_moveto
-pdf_open
-pdf_rect
-pdf_restore
-pdf_rotate
-pdf_save
-pdf_scale
-pdf_set_char_spacing
-pdf_set_duration
-pdf_set_font
-pdf_set_horiz_scaling
-pdf_set_info_author
-pdf_set_info_creator
-pdf_set_info_keywords
-pdf_set_info_subject
-pdf_set_info_title
-pdf_set_leading
-pdf_set_text_matrix
-pdf_set_text_pos
-pdf_set_text_rendering
-pdf_set_text_rise
-pdf_set_transition
-pdf_set_word_spacing
-pdf_setdash
-pdf_setflat
-pdf_setgray
-pdf_setgray_fill
-pdf_setgray_stroke
-pdf_setlinecap
-pdf_setlinejoin
-pdf_setlinewidth
-pdf_setmiterlimit
-pdf_setrgbcolor
-pdf_setrgbcolor_fill
-pdf_setrgbcolor_stroke
-pdf_show
-pdf_show_xy
-pdf_stringwidth
-pdf_stroke
-pdf_translate
-# functions/oci8.c
-ocibindbyname
-ocicolumnisnull
-ocicolumnname
-ocicolumnsize
-ocicolumntype
-ociexecute
-ocifetch
-ocifetchinto
-ocifreestatement
-ociinternaldebug
-ocilogoff
-ocilogon
-ocinumcols
-ociparse
-ociresult
-ociserverversion
-ocistatementtype
 # functions/xml.c
 utf8_decode
 utf8_encode
@@ -1008,21 +1026,44 @@ xml_set_external_entity_ref_handler
 xml_set_notation_decl_handler
 xml_set_processing_instruction_handler
 xml_set_unparsed_entity_decl_handler
-# functions/snmp.c
-snmpget
-snmpwalk
-# functions/interbase.c
-ibase_bind
-ibase_close
-ibase_connect
-ibase_execute
-ibase_fetch_row
-ibase_free_query
-ibase_free_result
-ibase_pconnect
-ibase_prepare
-ibase_query
-ibase_timefmt
+# functions/zlib.c
+gzclose
+gzeof
+gzfile
+gzgetc
+gzgets
+gzgetss
+gzopen
+gzpassthru
+gzputs
+gzread
+gzrewind
+gzseek
+gztell
+gzwrite
+readgzfile
+# functions/dav.c
+dav_set_mkcol_handlers
+# functions/fdf.c
+fdf_close
+fdf_create
+fdf_get_file
+fdf_get_status
+fdf_get_value
+fdf_next_field_name
+fdf_open
+fdf_save
+fdf_set_ap
+fdf_set_file
+fdf_set_status
+fdf_set_value
+# functions/sysvshm.c
+shm_attach
+shm_detach
+shm_get_var
+shm_put_var
+shm_remove
+shm_remove_var
 AND
 OR
 XOR

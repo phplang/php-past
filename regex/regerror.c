@@ -1,3 +1,5 @@
+/* $Id: regerror.c,v 1.5 1998/12/28 09:44:01 sas Exp $ */
+
 #include <sys/types.h>
 #include <stdio.h>
 #include <string.h>

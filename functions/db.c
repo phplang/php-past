@@ -2,7 +2,7 @@
    +----------------------------------------------------------------------+
    | PHP HTML Embedded Scripting Language Version 3.0                     |
    +----------------------------------------------------------------------+
-   | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
+   | Copyright (c) 1997-1999 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
    | it under the terms of one of the following licenses:                 |
@@ -28,7 +28,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: db.c,v 1.79 1998/10/23 20:07:15 shane Exp $ */
+/* $Id: db.c,v 1.87 1999/02/28 23:32:32 rasmus Exp $ */
 #define IS_EXT_MODULE
 #if COMPILE_DL
 #ifdef PHP_31
@@ -42,6 +42,7 @@
 #endif
 
 #include "php.h"
+#include "php_compat.h"
 #include "internal_functions.h"
 #include "php3_list.h"
 #include "safe_mode.h"
@@ -54,20 +55,12 @@
 #include <unistd.h>
 #endif
 
-#if HAVE_SYS_FILE_H && !HAVE_LOCKF && HAVE_FLOCK
-#if WIN32|WINNT
-#ifdef PHP_31
-#include "os/nt/flock.h"
-#else
-#include "win32/flock.h"
-#endif
-#else
-#include <sys/file.h>
-#endif
-#endif
-
 #if HAVE_FCNTL_H
 #include <fcntl.h>
+#endif
+
+#if HAVE_SYS_FILE_H
+#include <sys/file.h>
 #endif
 
 #if GDBM
@@ -261,13 +254,17 @@ void php3_info_db(void)
 	php3_printf(php3_get_info_db());
 }
 
+/* {{{ proto string dblist(void)
+   Describes the dbm-compatible library being used */
 void php3_dblist(INTERNAL_FUNCTION_PARAMETERS)
 {
 	char *str = php3_get_info_db();
 	RETURN_STRING(str,1);
 }
+/* }}} */
 
-
+/* {{{ proto int dbmopen(string filename, string mode)
+   Opens a dbm database */
 void php3_dbmopen(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *filename, *mode;
 	dbm_info *info=NULL;
@@ -289,6 +286,7 @@ void php3_dbmopen(INTERNAL_FUNCTION_PARAMETERS) {
 		RETURN_FALSE;
 	}
 }
+/* }}} */
 
 dbm_info *_php3_dbmopen(char *filename, char *mode) {
 	dbm_info *info;
@@ -362,13 +360,7 @@ dbm_info *_php3_dbmopen(char *filename, char *mode) {
 		lockfd = open(lockfn,O_RDWR|O_CREAT,0644);
 
 		if (lockfd) {
-#if HAVE_LOCKF 
-			lockf(lockfd,F_LOCK,0);
-#else
-#if HAVE_FLOCK 
 			flock(lockfd,LOCK_EX);
-#endif 
-#endif 
 			close(lockfd);
 		} else {
 			php3_error(E_WARNING, "Unable to establish lock: %s",filename);
@@ -434,6 +426,8 @@ dbm_info *_php3_dbmopen(char *filename, char *mode) {
 	return NULL;
 }
 
+/* {{{ proto bool dbmclose(int dbm_identifier)
+   Closes a dbm database */
 void php3_dbmclose(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *id;
 
@@ -448,6 +442,7 @@ void php3_dbmclose(INTERNAL_FUNCTION_PARAMETERS) {
 		RETURN_FALSE;
 	}
 }
+/* }}} */
 
 int _php3_dbmclose(dbm_info *info) {
 	int ret = 0;
@@ -461,13 +456,7 @@ int _php3_dbmclose(dbm_info *info) {
 #else
 	if (info->lockfn) {
 		lockfd = open(info->lockfn,O_RDWR,0644);
-#if HAVE_LOCKF
-		lockf(lockfd,F_ULOCK,0);
-#else
-# if HAVE_FLOCK
 		flock(lockfd,LOCK_UN);
-# endif
-#endif
 		close(lockfd);
 	}
 #endif
@@ -488,6 +477,8 @@ int _php3_dbmclose(dbm_info *info) {
  * ret = 0  success
  * ret = 1  key already exists - nothing done
  */
+/* {{{ proto int dbminsert(int dbm_identifier, string key, string value)
+   Inserts a value for a key in a dbm database */
 void php3_dbminsert(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *id, *key, *value;
@@ -509,6 +500,7 @@ void php3_dbminsert(INTERNAL_FUNCTION_PARAMETERS)
 	ret = _php3_dbminsert(info, key->value.str.val, value->value.str.val);
 	RETURN_LONG(ret);
 }
+/* }}} */
 
 int _php3_dbminsert(dbm_info *info, char *key, char *value) {
 	datum key_datum, value_datum;
@@ -541,6 +533,8 @@ int _php3_dbminsert(dbm_info *info, char *key, char *value) {
 	return(ret);	
 }	
 
+/* {{{ proto int dbmreplace(int dbm_identifier, string key, string value)
+   Replaces the value for a key in a dbm database */
 void php3_dbmreplace(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *id, *key, *value;
@@ -562,6 +556,7 @@ void php3_dbmreplace(INTERNAL_FUNCTION_PARAMETERS)
 	ret = _php3_dbmreplace(info, key->value.str.val, value->value.str.val);
 	RETURN_LONG(ret);
 }
+/* }}} */
 
 int _php3_dbmreplace(dbm_info *info, char *key, char *value) {
 	DBM_TYPE dbf;
@@ -598,6 +593,8 @@ int _php3_dbmreplace(dbm_info *info, char *key, char *value) {
 	return(ret);	
 }	
 
+/* {{{ proto string dbmfetch(int dbm_identifier, string key)
+   Fetches a value for a key from a dbm database */
 void php3_dbmfetch(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *id, *key;
@@ -622,6 +619,7 @@ void php3_dbmfetch(INTERNAL_FUNCTION_PARAMETERS)
 		RETURN_FALSE;
 	}
 }
+/* }}} */
 
 char *_php3_dbmfetch(dbm_info *info, char *key) {
 	datum key_datum, value_datum;
@@ -670,6 +668,8 @@ char *_php3_dbmfetch(dbm_info *info, char *key) {
 }
 
 
+/* {{{ proto int dbmexists(int dbm_identifier, string key)
+   Tells if a value exists for a key in a dbm database */
 void php3_dbmexists(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *id, *key;
@@ -712,7 +712,10 @@ int _php3_dbmexists(dbm_info *info, char *key) {
 
 	return(ret);
 }
+/* }}} */
 		
+/* {{{ proto int dbmdelete(int dbm_identifier, string key)
+   Deletes the value for a key from a dbm database */
 void php3_dbmdelete(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *id, *key;
@@ -733,6 +736,7 @@ void php3_dbmdelete(INTERNAL_FUNCTION_PARAMETERS)
 	ret = _php3_dbmdelete(info, key->value.str.val);
 	RETURN_LONG(ret);
 }
+/* }}} */
 
 int _php3_dbmdelete(dbm_info *info, char *key) {
 	datum key_datum;
@@ -755,6 +759,8 @@ int _php3_dbmdelete(dbm_info *info, char *key) {
 	return(ret);
 }
 
+/* {{{ proto string dbmfirstkey(int dbm_identifier)
+   Retrieves the first key from a dbm database */
 void php3_dbmfirstkey(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *id;
@@ -780,6 +786,7 @@ void php3_dbmfirstkey(INTERNAL_FUNCTION_PARAMETERS)
 		return_value->type = IS_STRING;
 	}
 }
+/* }}} */
 
 char *_php3_dbmfirstkey(dbm_info *info) {
 	datum ret_datum;
@@ -812,6 +819,8 @@ char *_php3_dbmfirstkey(dbm_info *info) {
 	return (ret);
 }
 
+/* {{{ proto string dbmnextkey(int dbm_identifier, string key)
+   Retrieves the next key from a dbm database */
 void php3_dbmnextkey(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *id, *key;
@@ -838,6 +847,7 @@ void php3_dbmnextkey(INTERNAL_FUNCTION_PARAMETERS)
 		return_value->type = IS_STRING;
 	}
 }
+/* }}} */
 
 char *_php3_dbmnextkey(dbm_info *info, char *key) {
 	datum key_datum, ret_datum;

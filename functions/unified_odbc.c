@@ -2,7 +2,7 @@
    +----------------------------------------------------------------------+
    | PHP HTML Embedded Scripting Language Version 3.0                     |
    +----------------------------------------------------------------------+
-   | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
+   | Copyright (c) 1997-1999 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
    | it under the terms of one of the following licenses:                 |
@@ -29,7 +29,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: unified_odbc.c,v 1.96 1998/12/18 19:25:51 swilliam Exp $ */
+/* $Id: unified_odbc.c,v 1.103 1999/02/18 17:48:53 shane Exp $ */
 
 /* This file is based on the Adabas D extension.
  * Adabas D will no longer be supported as separate module.
@@ -413,7 +413,7 @@ void PHP3_INFO_UODBC(void)
 	php3_printf("Unified ODBC Support active (compiled with unknown library)");
 #endif
 	php3_printf("<BR>");
-#if DEBUG
+#if 0 && DEBUG
 	php3_printf("default_db: %s<br>\n",UODBC_GLOBAL(PHP3_UODBC_MODULE).defDB);
 	php3_printf("default_user: %s<br>\n",UODBC_GLOBAL(PHP3_UODBC_MODULE).defUser);
 	php3_printf("default_pw: %s<br>\n",UODBC_GLOBAL(PHP3_UODBC_MODULE).defPW);
@@ -536,7 +536,7 @@ void UODBC_SQL_ERROR(HDBC conn, HSTMT stmt, char *func)
 }
 
 /* Main User Functions */
-/* {{{ proto odbc_close_all(void)
+/* {{{ proto void odbc_close_all(void)
    Close all ODBC connections */
 UODBC_FUNCTION(close_all)
 {
@@ -588,7 +588,7 @@ void php3_uodbc_fetch_attribs(INTERNAL_FUNCTION_PARAMETERS, int mode)
 	RETURN_TRUE
 }
 
-/* {{{ proto odbc_binmode(int result_id, int mode)
+/* {{{ proto int odbc_binmode(int result_id, int mode)
    Handle binary column data */
 UODBC_FUNCTION(binmode)
 {
@@ -596,7 +596,7 @@ UODBC_FUNCTION(binmode)
 }
 /* }}} */
 
-/* {{{ proto odbc_longreadlen(int result_id, int length)
+/* {{{ proto int odbc_longreadlen(int result_id, int length)
    Handle LONG columns */
 UODBC_FUNCTION(longreadlen)
 {
@@ -663,7 +663,7 @@ int UODBC_BINDCOLS(UODBC_RESULT *result)
     return 1;
 }
 
-/* {{{ proto odbc_prepare(int connection_id, string query)
+/* {{{ proto int odbc_prepare(int connection_id, string query)
    Prepares a statement for execution */
 UODBC_FUNCTION(prepare)
 {
@@ -737,7 +737,7 @@ UODBC_FUNCTION(prepare)
 /*
  * Execute prepared SQL statement. Supports only input parameters.
  */
-/* {{{ proto odbc_execute(int result_id [, array parameters_array])
+/* {{{ proto int odbc_execute(int result_id [, array parameters_array])
    Execute a prepared statement */
 extern UODBC_FUNCTION(execute)
 { 
@@ -905,7 +905,7 @@ extern UODBC_FUNCTION(execute)
 /* odbc_cursor simply returns a cursor name for the given stmt
  * Adabas automagically generates cursor names, other drivers may not
  */
-/* {{{ proto odbc_cursor(int result_id)
+/* {{{ proto string odbc_cursor(int result_id)
    Get cursor name */
 UODBC_FUNCTION(cursor)
 {
@@ -972,7 +972,7 @@ UODBC_FUNCTION(cursor)
 }
 /* }}} */
 
-/* {{{ proto odbc_exec(int connection_id, string query)
+/* {{{ proto int odbc_exec(int connection_id, string query)
    Prepare and execute an SQL statement */
 UODBC_FUNCTION(exec)
 {
@@ -1071,7 +1071,7 @@ UODBC_FUNCTION(exec)
 }
 /* }}} */
 
-/* {{{ proto odbc_fetch_into(int result_id [, int rownumber], array result_array)
+/* {{{ proto int odbc_fetch_into(int result_id [, int rownumber], array result_array)
    Fetch one result row into an array */ 
 UODBC_FUNCTION(fetch_into)
 {
@@ -1221,6 +1221,8 @@ UODBC_FUNCTION(fetch_into)
 /* }}} */
 
 #if HAVE_SOLID
+/* {{{ proto int solid_fetch_prev(int result_id)
+   ?? */
 void php3_solid_fetch_prev(INTERNAL_FUNCTION_PARAMETERS)
 {
 	int         res_ind;
@@ -1253,9 +1255,10 @@ void php3_solid_fetch_prev(INTERNAL_FUNCTION_PARAMETERS)
 
 	RETURN_TRUE;
 }
+/* }}} */
 #endif
 
-/* {{{ proto odbc_fetch_row(int result_id [, int row_number])
+/* {{{ proto int odbc_fetch_row(int result_id [, int row_number])
    Fetch a row */
 UODBC_FUNCTION(fetch_row)
 {
@@ -1317,7 +1320,7 @@ UODBC_FUNCTION(fetch_row)
 }	
 /* }}} */
 
-/* {{{ proto odbc_result(int result_id, mixed field)
+/* {{{ proto mixed odbc_result(int result_id, mixed field)
    Get result data */ 
 UODBC_FUNCTION(result)
 {
@@ -1503,7 +1506,7 @@ UODBC_FUNCTION(result)
 }
 /* }}} */
 
-/* {{{ proto odbc_result_all(int result_id [, string format])
+/* {{{ proto int odbc_result_all(int result_id [, string format])
    Print result as HTML table */
 UODBC_FUNCTION(result_all)
 {
@@ -1639,7 +1642,7 @@ UODBC_FUNCTION(result_all)
 }
 /* }}} */
 
-/* {{{ proto odbc_free_result(int result_id)
+/* {{{ proto int odbc_free_result(int result_id)
    Free resources associated with a result */
 UODBC_FUNCTION(free_result)
 {
@@ -1654,7 +1657,7 @@ UODBC_FUNCTION(free_result)
 }
 /* }}} */
 
-/* {{{ proto odbc_connect(string DSN, string user, string password [, int cursor_option])
+/* {{{ proto int odbc_connect(string DSN, string user, string password [, int cursor_option])
    Connect to a datasource */
 UODBC_FUNCTION(connect)
 {
@@ -1662,7 +1665,7 @@ UODBC_FUNCTION(connect)
 }
 /* }}} */
 
-/* {{{ proto odbc_connect(string DSN, string user, string password [, int cursor_option])
+/* {{{ proto int odbc_pconnect(string DSN, string user, string password [, int cursor_option])
    Establish a persistant connection to a datasource */
 UODBC_FUNCTION(pconnect)
 {
@@ -1762,7 +1765,10 @@ void PHP3_UODBC_DO_CONNECT(INTERNAL_FUNCTION_PARAMETERS, int persistent)
 		RETURN_FALSE;
 	}
 
-	len = strlen(db) + strlen(uid) + strlen(pwd) + strlen(UODBC_NAME) + 5; 
+	/* cur_opt has a maximum value of 2. Thus allocating 3 bytes for it
+	   in hashed_details should be safe 
+	*/
+	len = strlen(db) + strlen(uid) + strlen(pwd) + strlen(UODBC_NAME) + 8; 
 	hashed_details = emalloc(len);
 
 	if (hashed_details == NULL) {
@@ -1778,7 +1784,6 @@ void PHP3_UODBC_DO_CONNECT(INTERNAL_FUNCTION_PARAMETERS, int persistent)
 	/* try to find if we already have this link in our persistent list,
 	 * no matter if it is to be persistent or not
 	 */
-
 	if ((persistent || (_php3_hash_find(list, hashed_details, hashed_len + 1,
 		  (void **) &index_ptr) == FAILURE || !php3_list_find((int) index_ptr->ptr, &type))) &&
 		  _php3_hash_find(plist, hashed_details, hashed_len + 1,
@@ -1954,7 +1959,7 @@ void PHP3_UODBC_DO_CONNECT(INTERNAL_FUNCTION_PARAMETERS, int persistent)
 	return_value->type = IS_LONG;
 }
 
-/* {{{ proto odbc_close(int connection_id)
+/* {{{ proto void odbc_close(int connection_id)
    Close an ODBC connection */
 UODBC_FUNCTION(close)
 {
@@ -1978,7 +1983,7 @@ UODBC_FUNCTION(close)
 }
 /* }}} */
 
-/* {{{ proto odbc_num_rows(int result_id)
+/* {{{ proto int odbc_num_rows(int result_id)
    Get number of rows in a result */
 UODBC_FUNCTION(num_rows)
 {
@@ -2001,7 +2006,7 @@ UODBC_FUNCTION(num_rows)
 }
 /* }}} */
 
-/* {{{ proto odbc_num_fields(int result_id)
+/* {{{ proto int odbc_num_fields(int result_id)
    Get number of columns in a result */
 UODBC_FUNCTION(num_fields)
 {
@@ -2021,7 +2026,7 @@ UODBC_FUNCTION(num_fields)
 }
 /* }}} */
 
-/* {{{ proto odbc_field_name(int result_id, int field_number)
+/* {{{ proto string odbc_field_name(int result_id, int field_number)
    Get a column name */
 UODBC_FUNCTION(field_name)
 {
@@ -2058,7 +2063,7 @@ UODBC_FUNCTION(field_name)
 }
 /* }}} */
 
-/* {{{ proto odbc_field_type(int result_id, int field_number)
+/* {{{ proto string odbc_field_type(int result_id, int field_number)
    Get the datatype of a column */
 UODBC_FUNCTION(field_type)
 {
@@ -2094,7 +2099,7 @@ UODBC_FUNCTION(field_type)
 }
 /* }}} */
 
-/* {{{ proto odbc_field_len(int result_id, int field_number)
+/* {{{ proto int odbc_field_len(int result_id, int field_number)
    Get the length of a column */   
 UODBC_FUNCTION(field_len)
 {
@@ -2129,7 +2134,7 @@ UODBC_FUNCTION(field_len)
 }
 /* }}} */
 
-/* {{{ proto odbc_field_num(int result_id, string field_name)
+/* {{{ proto int odbc_field_num(int result_id, string field_name)
    Return column number */
 UODBC_FUNCTION(field_num)
 {
@@ -2166,7 +2171,7 @@ UODBC_FUNCTION(field_num)
 }
 /* }}} */
 
-/* {{{ proto odbc_autocommit(int connection_id, int OnOff)
+/* {{{ proto int odbc_autocommit(int connection_id, int OnOff)
    Toggle autocommit mode */
 UODBC_FUNCTION(autocommit)
 {
@@ -2245,7 +2250,7 @@ void PHP3_UODBC_TRANSACT(INTERNAL_FUNCTION_PARAMETERS, int type)
 	RETURN_TRUE;
 }
 
-/* {{{ proto odbc_commit(int connection_id)
+/* {{{ proto int odbc_commit(int connection_id)
    Commit an ODBC transaction */
 UODBC_FUNCTION(commit)
 {
@@ -2253,7 +2258,7 @@ UODBC_FUNCTION(commit)
 }
 /* }}} */
 
-/* {{{ proto odbc_rollback(int connection_id)
+/* {{{ proto int odbc_rollback(int connection_id)
    Rollback a transaction */
 UODBC_FUNCTION(rollback)
 {
@@ -2261,8 +2266,8 @@ UODBC_FUNCTION(rollback)
 }
 /* }}} */
 
-/* {{{ proto odbc_setoption(??)
-   ?? */
+/* {{{ proto int odbc_setoption(int id, int function, int option, int param)
+   Adjust ODBC settings. */
 UODBC_FUNCTION(setoption)
 {
 	UODBC_CONNECTION *curr_conn;

@@ -2,7 +2,7 @@
    +----------------------------------------------------------------------+
    | PHP HTML Embedded Scripting Language Version 3.0                     |
    +----------------------------------------------------------------------+
-   | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
+   | Copyright (c) 1997-1999 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
    | it under the terms of one of the following licenses:                 |
@@ -28,7 +28,7 @@
    +----------------------------------------------------------------------+
  */
 
-
+/* $Id: basic_functions.c,v 1.258 1999/02/11 06:23:40 andrey Exp $ */
 #ifdef THREAD_SAFE
 #include "tls.h"
 #endif
@@ -51,6 +51,13 @@
 #include <string.h>
 #else
 #include <strings.h>
+#endif
+#if MSVC5
+#include <winsock.h>
+#else
+#include <netinet/in.h>
+#include <netdb.h>
+#include <arpa/inet.h>
 #endif
 #include "safe_mode.h"
 #include "functions/basic_functions.h"
@@ -82,7 +89,6 @@
 #endif
 
 static unsigned char second_and_third_args_force_ref[] = { 3, BYREF_NONE, BYREF_FORCE, BYREF_FORCE };
-static unsigned char third_and_fourth_args_force_ref[] = { 4, BYREF_NONE, BYREF_NONE, BYREF_FORCE, BYREF_FORCE };
 #if PHP_DEBUGGER
 extern int _php3_send_error(char *message, char *address);
 #endif
@@ -148,13 +154,13 @@ function_entry basic_functions[] = {
 	{"rtrim",		php3_chop,					NULL},
 	{"pos",			array_current,				first_arg_force_ref},
 
-	{"fsockopen",			php3_fsockopen,		third_and_fourth_args_force_ref},
 	{"getimagesize",		php3_getimagesize,	NULL},
 	{"htmlspecialchars",	php3_htmlspecialchars,	NULL},
 	{"htmlentities",		php3_htmlentities,	NULL},
 	{"md5",					php3_md5,			NULL},
 
 	{"iptcparse",	php3_iptcparse,				NULL},
+	{"iptcembed",	php3_iptcembed,				NULL},
 	{"parse_url",	php3_parse_url,				NULL},
 
 	{"parse_str",	php3_parsestr,				NULL},
@@ -192,6 +198,7 @@ function_entry basic_functions[] = {
 	{"strtr",		php3_strtr,					NULL},
 	{"sprintf",		php3_user_sprintf,			NULL},
 	{"printf",		php3_user_printf,			NULL},
+	{"similar_text",	php3_similar_text,		NULL},
 	{"setlocale",	php3_setlocale,				NULL},
 
 	{"exec",			php3_exec,				second_and_third_args_force_ref},
@@ -264,7 +271,13 @@ function_entry basic_functions[] = {
 #if HAVE_PUTENV
 	{"putenv",		php3_putenv,				NULL},
 #endif
+#if HAVE_GETRUSAGE
+	{"getrusage",	php3_getrusage,				NULL},
+#endif
+#if HAVE_GETTIMEOFDAY
+	{"gettimeofday",	php3_gettimeofday,		NULL},
 	{"microtime",	php3_microtime,				NULL},
+#endif
 	{"uniqid",		php3_uniqid,				NULL},
 	{"linkinfo",	php3_linkinfo,				NULL},
 	{"readlink",	php3_readlink,				NULL},
@@ -302,6 +315,15 @@ function_entry basic_functions[] = {
 	
 	PHP_FE(register_shutdown_function,	NULL)
 	
+	PHP_FE(connection_aborted,	NULL)
+	PHP_FE(connection_timeout,	NULL)
+	PHP_FE(connection_status,	NULL)
+	PHP_FE(ignore_user_abort,	NULL)
+
+	PHP_FE(extract, NULL)
+	
+	PHP_FE(function_exists,		NULL)
+
 	{NULL, NULL, NULL}
 };
 
@@ -346,11 +368,21 @@ static void _php3_putenv_destructor(putenv_entry *pe)
 #define M_PI 3.14159265358979323846
 #endif
 
+#define EXTR_OVERWRITE		0
+#define EXTR_SKIP			1
+#define EXTR_PREFIX_SAME	2
+#define	EXTR_PREFIX_ALL		3
+
 int php3_minit_basic(INIT_FUNC_ARGS)
 {
 	TLS_VARS;
 
 	REGISTER_DOUBLE_CONSTANT("M_PI", M_PI, CONST_CS | CONST_PERSISTENT);
+	
+	REGISTER_LONG_CONSTANT("EXTR_OVERWRITE", EXTR_OVERWRITE, CONST_CS | CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("EXTR_SKIP", EXTR_SKIP, CONST_CS | CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("EXTR_PREFIX_SAME", EXTR_PREFIX_SAME, CONST_CS | CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("EXTR_PREFIX_ALL", EXTR_PREFIX_ALL, CONST_CS | CONST_PERSISTENT);
 	return SUCCESS;
 }
 
@@ -382,7 +414,8 @@ int php3_rshutdown_basic(void)
 /********************
  * System Functions *
  ********************/
-
+/* {{{ proto string getenv(string varname)
+   Get the value of an environment variable */
 void php3_getenv(INTERNAL_FUNCTION_PARAMETERS)
 {
 #if FHTTPD
@@ -433,8 +466,10 @@ void php3_getenv(INTERNAL_FUNCTION_PARAMETERS)
 	}
 	RETURN_FALSE;
 }
+/* }}} */
 
-
+/* {{{ proto void putenv(string setting)
+   Set the value of an environment variable */
 #if HAVE_PUTENV
 void php3_putenv(INTERNAL_FUNCTION_PARAMETERS)
 {
@@ -482,8 +517,67 @@ void php3_putenv(INTERNAL_FUNCTION_PARAMETERS)
 	}
 }
 #endif
+/* }}} */
 
+/* {{{ proto int connection_aborted()
+   Did we have any write-errors on the output side? */
+void php3_connection_aborted(INTERNAL_FUNCTION_PARAMETERS)
+{
+	TLS_VARS;
 
+	RETVAL_LONG(GLOBAL(php_connection_status)&PHP_CONNECTION_ABORTED);
+}
+/* }}} */
+
+/* {{{ proto int connection_timeout()
+   Did the connection time out? */
+void php3_connection_timeout(INTERNAL_FUNCTION_PARAMETERS)
+{
+	TLS_VARS;
+
+	RETVAL_LONG(GLOBAL(php_connection_status)&PHP_CONNECTION_TIMEOUT);
+}
+/* }}} */
+
+/* {{{ proto int connection_status()
+   Return the connection status bitfield */
+void php3_connection_status(INTERNAL_FUNCTION_PARAMETERS)
+{
+	TLS_VARS;
+
+	RETVAL_LONG(GLOBAL(php_connection_status));
+}
+/* }}} */
+
+/* {{{ proto int ignore_user_abort(boolean value)
+   Set whether we want to ignore a user abort event or not */
+void php3_ignore_user_abort(INTERNAL_FUNCTION_PARAMETERS)
+{
+	pval *arg;
+	int old_setting;
+	TLS_VARS;
+
+	old_setting = GLOBAL(ignore_user_abort);
+	switch (ARG_COUNT(ht)) {
+		case 0:
+			break;
+		case 1:
+			if (getParameters(ht,1,&arg) == FAILURE) {
+				RETURN_FALSE;
+			}
+			convert_to_long(arg);
+			GLOBAL(ignore_user_abort)=arg->value.lval;
+			break;
+		default:
+			WRONG_PARAM_COUNT;
+			break;
+	}
+	RETVAL_LONG(old_setting);
+}
+/* }}} */
+
+/* {{{ proto int error_reporting([int level])
+   Set/get the current error reporting level */
 void php3_error_reporting(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *arg;
@@ -508,7 +602,10 @@ void php3_error_reporting(INTERNAL_FUNCTION_PARAMETERS)
 	
 	RETVAL_LONG(old_error_reporting);
 }
+/* }}} */
 
+/* {{{ proto int short_tags(int state)
+   Turn the short tags option on or off - returns previous state */
 void php3_toggle_short_open_tag(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *value;
 	int ret;
@@ -523,11 +620,13 @@ void php3_toggle_short_open_tag(INTERNAL_FUNCTION_PARAMETERS) {
 	php3_ini.short_open_tag = value->value.lval;
 	RETURN_LONG(ret);
 }
+/* }}} */
 
 /*******************
  * Basic Functions *
  *******************/
-
+/* {{{ proto int intval(mixed var [, int base])
+   Get the integer value of a variable using the optional base for the conversion */
 void int_value(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *num, *arg_base;
@@ -554,8 +653,10 @@ void int_value(INTERNAL_FUNCTION_PARAMETERS)
 	convert_to_long_base(num, base);
 	*return_value = *num;
 }
+/* }}} */
 
-
+/* {{{ proto double doubleval(mixed var)
+   Get the double-precision value of a variable */
 void double_value(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *num;
@@ -566,8 +667,10 @@ void double_value(INTERNAL_FUNCTION_PARAMETERS)
 	convert_to_double(num);
 	*return_value = *num;
 }
+/* }}} */
 
-
+/* {{{ proto string strval(mixed var) 
+   Get the string value of a variable */
 void string_value(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *num;
@@ -579,6 +682,7 @@ void string_value(INTERNAL_FUNCTION_PARAMETERS)
 	*return_value = *num;
 	pval_copy_constructor(return_value);
 }
+/* }}} */
 
 static int array_key_compare(const void *a, const void *b)
 {
@@ -604,7 +708,8 @@ static int array_key_compare(const void *a, const void *b)
 	}
 }
 
-
+/* {{{ proto int ksort(array array_arg)
+   Sort an array by key */
 void php3_key_sort(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *array;
@@ -626,12 +731,18 @@ void php3_key_sort(INTERNAL_FUNCTION_PARAMETERS)
 	}
 	RETURN_TRUE;
 }
-
+/* }}} */
 
 /* the current implementation of count() is a definite example of what
  * user functions should NOT look like.  It's a hack, until we get
  * unset() to work right in 3.1
  */
+/* {{{ proto int sizeof(mixed var)
+   An alias for count */
+/* }}} */
+
+/* {{{ proto int count(mixed var)
+   Count the number of elements in a variable (usually an array) */
 void php3_count(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *array;
@@ -661,7 +772,7 @@ void php3_count(INTERNAL_FUNCTION_PARAMETERS)
 	
 	RETURN_LONG(num_elements);
 }
-
+/* }}} */
 
 /* Numbers are always smaller than strings int this function as it
  * anyway doesn't make much sense to compare two different data types.
@@ -719,6 +830,8 @@ static int array_reverse_data_compare(const void *a, const void *b)
 	return array_data_compare(a,b)*-1;
 }
 
+/* {{{ proto void asort(array array_arg)
+   Sort an array and maintain index association */
 void php3_asort(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *array;
@@ -740,7 +853,10 @@ void php3_asort(INTERNAL_FUNCTION_PARAMETERS)
 	}
 	RETURN_TRUE;
 }
+/* }}} */
 
+/* {{{ proto void arsort(array array_arg)
+   Sort an array in reverse order and maintain index association */
 void php3_arsort(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *array;
@@ -762,7 +878,10 @@ void php3_arsort(INTERNAL_FUNCTION_PARAMETERS)
 	}
 	RETURN_TRUE;
 }
+/* }}} */
 
+/* {{{ proto void sort(array array_arg)
+   Sort an array */
 void php3_sort(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *array;
@@ -784,7 +903,11 @@ void php3_sort(INTERNAL_FUNCTION_PARAMETERS)
 	}
 	RETURN_TRUE;
 }
+/* }}} */
 
+
+/* {{{ proto void rsort(array array_arg)
+   Sort an array in reverse order */
 void php3_rsort(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *array;
@@ -806,6 +929,7 @@ void php3_rsort(INTERNAL_FUNCTION_PARAMETERS)
 	}
 	RETURN_TRUE;
 }
+/* }}} */
 
 
 static int array_user_compare(const void *a, const void *b)
@@ -829,7 +953,8 @@ static int array_user_compare(const void *a, const void *b)
 	}
 }
 
-
+/* {{{ proto void usort(array array_arg, string cmp_function)
+   Sort an array by values using a user-defined comparison function */
 void php3_user_sort(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *array;
@@ -854,7 +979,11 @@ void php3_user_sort(INTERNAL_FUNCTION_PARAMETERS)
 	user_compare_func_name = old_compare_func;
 	RETURN_TRUE;
 }
+/* }}} */
 
+
+/* {{{ proto void uasort(array array_arg, string cmp_function)
+   Sort an array with a user-defined comparison function and maintain index association */
 void php3_auser_sort(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *array;
@@ -879,7 +1008,7 @@ void php3_auser_sort(INTERNAL_FUNCTION_PARAMETERS)
 	user_compare_func_name = old_compare_func;
 	RETURN_TRUE;
 }
-
+/* }}} */
 
 static int array_user_key_compare(const void *a, const void *b)
 {
@@ -926,7 +1055,8 @@ static int array_user_key_compare(const void *a, const void *b)
 	}
 }
 
-
+/* {{{ proto void uksort(array array_arg, string cmp_function)
+   Sort an array by keys using a user-defined comparison function */
 void php3_user_key_sort(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *array;
@@ -951,8 +1081,10 @@ void php3_user_key_sort(INTERNAL_FUNCTION_PARAMETERS)
 	user_compare_func_name = old_compare_func;
 	RETURN_TRUE;
 }
+/* }}} */
 
-
+/* {{{ proto mixed end(array array_arg)
+   Advances array argument's internal pointer to the last element and return it */
 void array_end(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *array, *entry;
@@ -981,8 +1113,10 @@ void array_end(INTERNAL_FUNCTION_PARAMETERS)
 	*return_value = *entry;
 	pval_copy_constructor(return_value);
 }
+/* }}} */
 
-
+/* {{{ proto mixed prev(array array_arg)
+   Move array argument's internal pointer to the previous element and return it */
 void array_prev(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *array, *entry;
@@ -1004,7 +1138,10 @@ void array_prev(INTERNAL_FUNCTION_PARAMETERS)
 	*return_value = *entry;
 	pval_copy_constructor(return_value);
 }
+/* }}} */
 
+/* {{{ proto mixed next(array array_arg)
+   Move array argument's internal pointer to the next element and return it */
 void array_next(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *array, *entry;
@@ -1026,7 +1163,10 @@ void array_next(INTERNAL_FUNCTION_PARAMETERS)
 	*return_value = *entry;
 	pval_copy_constructor(return_value);
 }
+/* }}} */
 
+/* {{{ proto array each(array array_arg)
+   Return next key/value pair from an array */
 void array_each(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *array,*entry,real_entry;
@@ -1069,7 +1209,10 @@ void array_each(INTERNAL_FUNCTION_PARAMETERS)
 	_php3_hash_pointer_update(return_value->value.ht, "key", sizeof("key"), (void *) inserted_pointer);
 	_php3_hash_move_forward(array->value.ht);
 }
-	
+/* }}} */
+
+/* {{{ proto mixed reset(array array_arg)
+   Set array argument's internal pointer to the first element and return it */
 void array_reset(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *array, *entry;
@@ -1096,7 +1239,14 @@ void array_reset(INTERNAL_FUNCTION_PARAMETERS)
 	*return_value = *entry;
 	pval_copy_constructor(return_value);
 }
+/* }}} */
 
+/* {{{ proto mixed pos(array array_arg)
+   An alias for current */
+/* }}} */
+
+/* {{{ proto mixed current(array array_arg)
+   Return the element currently pointed to by the internal array pointer */
 void array_current(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *array, *entry;
@@ -1114,8 +1264,10 @@ void array_current(INTERNAL_FUNCTION_PARAMETERS)
 	*return_value = *entry;
 	pval_copy_constructor(return_value);
 }
+/* }}} */
 
-
+/* {{{ proto mixed key(array array_arg)
+   Return the key of the element currently pointed to by the internal array pointer */
 void array_current_key(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *array;
@@ -1146,7 +1298,10 @@ void array_current_key(INTERNAL_FUNCTION_PARAMETERS)
 			return;
 	}
 }
+/* }}} */
 
+/* {{{ proto void flush(void)
+   Flush the output buffer */
 #ifdef __cplusplus
 void php3_flush(HashTable *)
 #else
@@ -1156,13 +1311,17 @@ void php3_flush(INTERNAL_FUNCTION_PARAMETERS)
 #if APACHE
 	TLS_VARS;
 #  if MODULE_MAGIC_NUMBER > 19970110
-	rflush(GLOBAL(php3_rqst));
+	if (rflush(GLOBAL(php3_rqst)) == -1)
+		GLOBAL(php_connection_status) |= PHP_CONNECTION_ABORTED;
 #  else
-	bflush(GLOBAL(php3_rqst)->connection->client);
+	if (bflush(GLOBAL(php3_rqst)->connection->client) == -1)
+		GLOBAL(php_connection_status) |= PHP_CONNECTION_ABORTED;
 #  endif
 #endif
 #if FHTTPD
-       /*FIXME -- what does it flush really? the whole response?*/
+       /*FIXME -- what does it flush really? the whole response?
+		It flushes whatever has been sent to Apache so far -RL
+        */
 #endif
 #if CGI_BINARY
 	fflush(stdout);
@@ -1172,8 +1331,10 @@ void php3_flush(INTERNAL_FUNCTION_PARAMETERS)
 	GLOBAL(sapi_rqst)->flush(GLOBAL(sapi_rqst)->scid);
 #endif
 }
+/* }}} */
 
-
+/* {{{ proto void sleep(int seconds)
+   Delay for a given number of seconds */
 void php3_sleep(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *num;
@@ -1184,7 +1345,10 @@ void php3_sleep(INTERNAL_FUNCTION_PARAMETERS)
 	convert_to_long(num);
 	sleep(num->value.lval);
 }
+/* }}} */
 
+/* {{{ proto void usleep(int micro_seconds)
+   Delay for a given number of micro seconds */
 void php3_usleep(INTERNAL_FUNCTION_PARAMETERS)
 {
 #if HAVE_USLEEP
@@ -1197,7 +1361,10 @@ void php3_usleep(INTERNAL_FUNCTION_PARAMETERS)
 	usleep(num->value.lval);
 #endif
 }
+/* }}} */
 
+/* {{{ proto string gettype(mixed var)
+   Returns the type of the variable */
 void php3_gettype(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *arg;
@@ -1232,8 +1399,10 @@ void php3_gettype(INTERNAL_FUNCTION_PARAMETERS)
 			RETVAL_STRING("unknown type",1);
 	}
 }
+/* }}} */
 
-
+/* {{{ proto int settype(string var, string type)
+   Set the type of the variable */
 void php3_settype(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *var, *type;
@@ -1263,8 +1432,10 @@ void php3_settype(INTERNAL_FUNCTION_PARAMETERS)
 	}
 	RETVAL_TRUE;
 }
+/* }}} */
 
-
+/* {{{ proto mixed min(mixed arg1 [, mixed arg2 [, ...]])
+   Return the lowest value in an array or a series of arguments */
 void php3_min(INTERNAL_FUNCTION_PARAMETERS)
 {
 	int argc=ARG_COUNT(ht);
@@ -1297,8 +1468,10 @@ void php3_min(INTERNAL_FUNCTION_PARAMETERS)
 		}
 	}
 }
+/* }}} */
 
-
+/* {{{ proto mixed max(mixed arg1 [, mixed arg2 [, ...]])
+   Return the highest value in an array or a series of arguments */
 void php3_max(INTERNAL_FUNCTION_PARAMETERS)
 {
 	int argc=ARG_COUNT(ht);
@@ -1331,6 +1504,7 @@ void php3_max(INTERNAL_FUNCTION_PARAMETERS)
 		}
 	}
 }
+/* }}} */
 
 static pval *php3_array_walk_func_name;
 
@@ -1345,6 +1519,8 @@ static int _php3_array_walk(const void *a)
 	return 0;
 }
 
+/* {{{ proto int array_walk(array array_arg, string function)
+   Apply the given function on every element of the argument array */
 void php3_array_walk(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *array, *old_walk_func_name;
 	TLS_VARS;
@@ -1364,6 +1540,7 @@ void php3_array_walk(INTERNAL_FUNCTION_PARAMETERS) {
 	php3_array_walk_func_name = old_walk_func_name;
 	RETURN_TRUE;
 }
+/* }}} */
 
 #if 0
 void php3_max(INTERNAL_FUNCTION_PARAMETERS)
@@ -1434,14 +1611,18 @@ void php3_max(INTERNAL_FUNCTION_PARAMETERS)
 }
 #endif
 
+/* {{{ proto string get_current_user(void)
+   Get the name of the owner of the current PHP script */
 void php3_get_current_user(INTERNAL_FUNCTION_PARAMETERS)
 {
 	TLS_VARS;
 
 	RETURN_STRING(_php3_get_current_user(),1);
 }
+/* }}} */
 
-
+/* {{{ proto string get_cfg_var(string option_name)
+   Get the value of a PHP configuration option */
 void php3_get_cfg_var(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *varname;
@@ -1458,7 +1639,10 @@ void php3_get_cfg_var(INTERNAL_FUNCTION_PARAMETERS)
 	}
 	RETURN_STRING(value,1);
 }
+/* }}} */
 
+/* {{{ proto int set_magic_quotes_runtime(int new_setting)
+   Set the current active configuration setting of magic_quotes_runtime and return previous */
 void php3_set_magic_quotes_runtime(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *new_setting;
@@ -1471,16 +1655,23 @@ void php3_set_magic_quotes_runtime(INTERNAL_FUNCTION_PARAMETERS)
 	php3_ini.magic_quotes_runtime=new_setting->value.lval;
 	RETURN_TRUE;
 }
-	
+/* }}} */
+
+/* {{{ proto int get_magic_quotes_runtime(void)
+   Get the current active configuration setting of magic_quotes_runtime */
 void php3_get_magic_quotes_runtime(INTERNAL_FUNCTION_PARAMETERS)
 {
 	RETURN_LONG(php3_ini.magic_quotes_runtime);
 }
+/* }}} */
 
+/* {{{ proto int get_magic_quotes_gpc(void)
+   Get the current active configuration setting of magic_quotes_gpc */
 void php3_get_magic_quotes_gpc(INTERNAL_FUNCTION_PARAMETERS)
 {
 	RETURN_LONG(php3_ini.magic_quotes_gpc);
 }
+/* }}} */
 
 void php3_is_type(INTERNAL_FUNCTION_PARAMETERS,int type)
 {
@@ -1496,14 +1687,49 @@ void php3_is_type(INTERNAL_FUNCTION_PARAMETERS,int type)
 	}
 }
 
+/* {{{ proto bool is_int(mixed var)
+   An alias for is_long */
+/* }}} */
 
+/* {{{ proto bool is_integer(mixed var)
+   An alias for is_long */
+/* }}} */
+
+/* {{{ proto bool is_long(mixed var)
+   Returns true if variable is a long (integer) */
 void php3_is_long(INTERNAL_FUNCTION_PARAMETERS) { php3_is_type(INTERNAL_FUNCTION_PARAM_PASSTHRU, IS_LONG); }
+/* }}} */
+
+/* {{{ proto bool is_float(mixed var)
+   An alias for is_double */
+/* }}} */
+
+/* {{{ proto bool is_real(mixed var)
+   An alias for is_double */
+/* }}} */
+
+/* {{{ proto bool is_double(mixed var)
+   Returns true if variable is a double */
 void php3_is_double(INTERNAL_FUNCTION_PARAMETERS) { php3_is_type(INTERNAL_FUNCTION_PARAM_PASSTHRU, IS_DOUBLE); }
+/* }}} */
+
+/* {{{ proto bool is_string(mixed var)
+   Returns true if variable is a string */
 void php3_is_string(INTERNAL_FUNCTION_PARAMETERS) { php3_is_type(INTERNAL_FUNCTION_PARAM_PASSTHRU, IS_STRING); }
+/* }}} */
+
+/* {{{ proto bool is_array(mixed var)
+   Returns true if variable is an array */
 void php3_is_array(INTERNAL_FUNCTION_PARAMETERS) { php3_is_type(INTERNAL_FUNCTION_PARAM_PASSTHRU, IS_ARRAY); }
+/* }}} */
+
+/* {{{ proto bool is_object(mixed var)
+   Returns true if variable is an object */
 void php3_is_object(INTERNAL_FUNCTION_PARAMETERS) { php3_is_type(INTERNAL_FUNCTION_PARAM_PASSTHRU, IS_OBJECT); }
+/* }}} */
 
-
+/* {{{ proto void leak(int bytes)
+   Leak memory - only useful for debugging internal PHP memory manager issues */
 void php3_leak(INTERNAL_FUNCTION_PARAMETERS)
 {
 	int leakbytes=3;
@@ -1518,6 +1744,7 @@ void php3_leak(INTERNAL_FUNCTION_PARAMETERS)
 	
 	emalloc(leakbytes);
 }
+/* }}} */
 
 /* 
 	1st arg = error message
@@ -1531,7 +1758,8 @@ void php3_leak(INTERNAL_FUNCTION_PARAMETERS)
 	2 = send via tcp/ip to 3rd parameter (name or ip:port)
 	3 = save to file in 3rd parameter
 */
-
+/* {{{ proto int error_log(string message, int message_type [, string destination] [, string extra_headers])
+   Send an error message somewhere */
 void php3_error_log(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *string, *erropt = NULL, *option = NULL, *emailhead = NULL;
@@ -1595,6 +1823,7 @@ void php3_error_log(INTERNAL_FUNCTION_PARAMETERS)
 
 	RETURN_TRUE;
 }
+/* }}} */
 
 PHPAPI int _php3_error_log(int opt_err,char *message,char *opt,char *headers){
 	FILE *logfile;
@@ -1639,7 +1868,8 @@ PHPAPI int _php3_error_log(int opt_err,char *message,char *opt,char *headers){
 	return SUCCESS;
 }
 
-
+/* {{{ proto mixed call_user_func(???)
+   ??? */
 void php3_call_user_func(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval **params;
@@ -1663,8 +1893,10 @@ void php3_call_user_func(INTERNAL_FUNCTION_PARAMETERS)
 	}
 	efree(params);
 }
+/* }}} */
 
-
+/* {{{ proto mixed call_user_method(???)
+   ??? */
 void php3_call_user_method(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval **params;
@@ -1693,7 +1925,7 @@ void php3_call_user_method(INTERNAL_FUNCTION_PARAMETERS)
 	}
 	efree(params);
 }
-
+/* }}} */
 
 void user_shutdown_function_dtor(pval *user_shutdown_function_name)
 {
@@ -1734,6 +1966,155 @@ PHP_FUNCTION(register_shutdown_function)
 	pval_copy_constructor(&shutdown_function_name);
 	
 	_php3_hash_next_index_insert(user_shutdown_function_names, &shutdown_function_name, sizeof(pval), NULL);
+}
+/* }}} */
+
+
+/* {{{ proto int function_exists(string function_name) 
+   Checks if a given function has been defined */
+PHP_FUNCTION(function_exists)
+{
+	pval *fname;
+	pval *tmp;
+	
+	if (ARG_COUNT(ht)!=1 || getParameters(ht, 1, &fname)==FAILURE) {
+		WRONG_PARAM_COUNT;
+	}
+	
+	if (_php3_hash_find(&GLOBAL(function_table), fname->value.str.val,
+						fname->value.str.len+1, (void**)&tmp) == FAILURE) {
+		RETURN_FALSE;
+	} else {
+		RETURN_TRUE;
+	}
+}
+/* }}} */
+
+
+/* {{{ int _php3_valid_var_name(char *varname) */
+static int _php3_valid_var_name(char *varname)
+{
+	int len, i;
+	
+	if (!varname)
+		return 0;
+	
+	len = strlen(varname);
+	
+	if (!isalpha((int)varname[0]) && varname[0] != '_')
+		return 0;
+	
+	if (len > 1) {
+		for(i=1; i<len; i++) {
+			if (!isalnum((int)varname[i]) && varname[i] != '_') {
+				return 0;
+			}
+		}
+	}
+	
+	return 1;
+}
+/* }}} */
+
+
+/* {{{ proto void extract(array var_array, int extract_type [, string prefix])
+   Imports variables into symbol table from an array */
+PHP_FUNCTION(extract)
+{
+	pval *var_array, *etype, *prefix;
+	pval *var, *exist;
+	pval data;
+	char *varname, *finalname;
+	ulong lkey;
+	int res;
+	
+	switch(ARG_COUNT(ht)) {
+		case 2:
+			if (getParameters(ht, 2, &var_array, &etype) == FAILURE) {
+				WRONG_PARAM_COUNT;
+			}
+			convert_to_long(etype);
+			if (etype->value.lval > EXTR_SKIP && etype->value.lval <= EXTR_PREFIX_ALL) {
+				WRONG_PARAM_COUNT;
+			}
+			break;
+			
+		case 3:
+			if (getParameters(ht, 3, &var_array, &etype, &prefix) == FAILURE) {
+				WRONG_PARAM_COUNT;
+			}
+			break;
+
+		default:
+			WRONG_PARAM_COUNT;
+			break;
+	}
+	
+	if (etype->value.lval < EXTR_OVERWRITE || etype->value.lval > EXTR_PREFIX_ALL) {
+		php3_error(E_WARNING, "Wrong argument in call to extract()");
+		return;
+	}
+	
+	if (!(var_array->type & IS_HASH)) {
+		php3_error(E_WARNING, "Wrong datatype in call to extract()");
+		return;
+	}
+		
+	_php3_hash_internal_pointer_reset(var_array->value.ht);
+	while(_php3_hash_get_current_data(var_array->value.ht, (void **)&var) == SUCCESS) {
+		if (!(var->type == IS_STRING &&
+			var->value.str.val == undefined_variable_string)) {
+
+			if (_php3_hash_get_current_key(var_array->value.ht, &varname, &lkey) ==
+					HASH_KEY_IS_STRING) {
+
+				data = *var;
+				pval_copy_constructor(&data);
+								
+				if (_php3_valid_var_name(varname)) {
+					finalname = NULL;
+					
+					res = _php3_hash_find(GLOBAL(active_symbol_table),
+										  varname, strlen(varname)+1, (void**)&exist);
+					switch (etype->value.lval) {
+						case EXTR_OVERWRITE:
+							finalname = estrdup(varname);
+							break;
+
+						case EXTR_PREFIX_SAME:
+							if (res != SUCCESS)
+								finalname = estrdup(varname);
+							/* break omitted intentionally */
+
+						case EXTR_PREFIX_ALL:
+							if (!finalname) {
+								finalname = emalloc(strlen(varname) + prefix->value.str.len + 2);
+								strcpy(finalname, prefix->value.str.val);
+								strcat(finalname, "_");
+								strcat(finalname, varname);
+							}
+							break;
+							
+						default:
+							if (res != SUCCESS)
+								finalname = estrdup(varname);
+							break;
+					}
+					
+					if (finalname) {
+						_php3_hash_update(GLOBAL(active_symbol_table), finalname,
+										  strlen(finalname)+1, &data, sizeof(pval), NULL);
+						efree(finalname);
+					}
+					else
+						pval_destructor(&data);
+				}
+
+				efree(varname);
+			}
+		}
+		_php3_hash_move_forward(var_array->value.ht);
+	}
 }
 /* }}} */
 

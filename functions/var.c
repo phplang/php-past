@@ -2,7 +2,7 @@
    +----------------------------------------------------------------------+
    | PHP HTML Embedded Scripting Language Version 3.0                     |
    +----------------------------------------------------------------------+
-   | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
+   | Copyright (c) 1997-1999 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
    | it under the terms of one of the following licenses:                 |
@@ -27,6 +27,8 @@
    +----------------------------------------------------------------------+
  */
 
+/* $Id: var.c,v 1.13 1999/01/08 14:14:56 rasmus Exp $ */
+
 #ifdef THREAD_SAFE
 #include "tls.h"
 #endif
@@ -34,6 +36,7 @@
 #include <stdlib.h>
 #include <errno.h>
 #include "php.h"
+#include "head.h"
 #include "internal_functions.h"
 #include "fopen-wrappers.h"
 #include "reg.h"
@@ -52,6 +55,8 @@ void php3api_var_dump(pval *struc, int level)
 	int i, c = 0;
 	pval *data;
 	char buf[512];
+
+	if(!php3_header()) return;
 
 	switch (struc->type) {
 		case IS_LONG:
@@ -90,9 +95,12 @@ void php3api_var_dump(pval *struc, int level)
 					strcpy(buf, "\n");
 					PHPWRITE(buf, strlen(buf));
 				}
-				c++;
 				if (_php3_hash_get_current_data(struc->value.ht, (void **) (&data)) != SUCCESS || !data || (data == struc))
 					continue;
+				if (data->type==IS_STRING && data->value.str.val==undefined_variable_string) {
+					continue;
+				}
+				c++;
 				switch (i) {
 					case HASH_KEY_IS_LONG:{
 							pval d;
@@ -126,7 +134,8 @@ void php3api_var_dump(pval *struc, int level)
 	}
 }
 
-
+/* {{{ proto void var_dump(mixed var)
+   Dumps a string representation of variable to output */
 PHP_FUNCTION(var_dump)
 {
 	pval *struc;
@@ -136,7 +145,7 @@ PHP_FUNCTION(var_dump)
 	}
 	php3api_var_dump(struc, 1);
 }
-
+/* }}} */
 
 
 #define STR_CAT(P,S,I) {\
@@ -203,7 +212,7 @@ void php3api_var_serialize(pval *buf, pval *struc)
 				pval *data;
 				pval d;
 				ulong index;
-				
+
 				_php3_hash_internal_pointer_reset(struc->value.ht);
 				for (;; _php3_hash_move_forward(struc->value.ht)) {
 					if ((i = _php3_hash_get_current_key(struc->value.ht, &key, &index)) == HASH_KEY_NON_EXISTANT) {
@@ -212,6 +221,10 @@ void php3api_var_serialize(pval *buf, pval *struc)
 					if (_php3_hash_get_current_data(struc->value.ht, (void **) (&data)) != SUCCESS || !data || (data == struc)) {
 						continue;
 					}
+					if (data->type==IS_STRING && data->value.str.val==undefined_variable_string) {
+						continue;
+					}
+				
 					switch (i) {
 						case HASH_KEY_IS_LONG:
 							d.type = IS_LONG;
@@ -353,6 +366,8 @@ int php3api_var_unserialize(pval *rval, char **p, char *max)
 }
 
 
+/* {{{ proto string serialize(mixed variable)
+   Returns a string representation of variable (which can later be unserialized) */
 PHP_FUNCTION(serialize)
 {
 	pval *struc;
@@ -365,8 +380,11 @@ PHP_FUNCTION(serialize)
 	return_value->value.str.len = 0;
 	php3api_var_serialize(return_value, struc);
 }
+/* }}} */
 
 
+/* {{{ proto mixed unserialize(string variable_representation)
+   Takes a string representation of variable and recreates it */
 PHP_FUNCTION(unserialize)
 {
 	pval *buf;
@@ -383,6 +401,7 @@ PHP_FUNCTION(unserialize)
 		RETURN_FALSE;
 	}
 }
+/* }}} */
 
 /*
  * Local variables:

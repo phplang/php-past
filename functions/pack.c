@@ -2,7 +2,7 @@
    +----------------------------------------------------------------------+
    | PHP HTML Embedded Scripting Language Version 3.0                     |
    +----------------------------------------------------------------------+
-   | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
+   | Copyright (c) 1997-1999 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
    | it under the terms of one of the following licenses:                 |
@@ -26,7 +26,7 @@
    | Authors: Chris Schneider <cschneid@relog.ch>                         |
    +----------------------------------------------------------------------+
  */
-/* $Id: pack.c,v 1.21 1998/12/07 16:14:13 shane Exp $ */
+/* $Id: pack.c,v 1.23 1999/01/22 20:55:49 rasmus Exp $ */
 #ifdef THREAD_SAFE
 #include "tls.h"
 #endif
@@ -60,10 +60,10 @@
 #endif
 #endif
 #include "snprintf.h"
-#include "fsock.h"
 #if HAVE_NETINET_IN_H
 #include <netinet/in.h>
 #endif
+#include "fsock.h"
 
 function_entry pack_functions[] = {
 	{"pack",		php3_pack,	NULL},

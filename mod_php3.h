@@ -2,7 +2,7 @@
    +----------------------------------------------------------------------+
    | PHP HTML Embedded Scripting Language Version 3.0                     |
    +----------------------------------------------------------------------+
-   | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
+   | Copyright (c) 1997-1999 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
    | it under the terms of one of the following licenses:                 |
@@ -26,7 +26,7 @@
    | Authors: Rasmus Lerdorf <rasmus@lerdorf.on.ca>                       |
    +----------------------------------------------------------------------+
  */
-/* $Id: mod_php3.h,v 1.49 1998/12/04 20:19:15 ssb Exp $ */
+/* $Id: mod_php3.h,v 1.51 1999/01/27 21:55:47 rasmus Exp $ */
 
 #ifndef _MOD_PHP3_H
 #define _MOD_PHP3_H
@@ -90,6 +90,7 @@ typedef struct {
 	char *error_append_string;
 	char *open_basedir;
 	long enable_dl;
+	long ignore_user_abort;
 	char *dav_script;
 } php3_ini_structure;
 

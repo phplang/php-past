@@ -2,7 +2,7 @@
    +----------------------------------------------------------------------+
    | PHP HTML Embedded Scripting Language Version 3.0                     |
    +----------------------------------------------------------------------+
-   | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
+   | Copyright (c) 1997-1999 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
    | it under the terms of one of the following licenses:                 |
@@ -27,7 +27,7 @@
    +----------------------------------------------------------------------+
  */
 
-
+/* $Id: constants.c,v 1.24 1999/01/04 14:25:10 jah Exp $ */
 #ifdef THREAD_SAFE
 #include "tls.h"
 #endif
@@ -225,7 +225,8 @@ void register_constant(php3_constant *c)
 	free(lowercase_name);
 }
 
-
+/* {{{ proto bool define(string var_name, mixed value[, int case_sensitive])
+   Defines a constant value */
 void php3_define(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *var, *val, *non_cs;
@@ -274,8 +275,11 @@ void php3_define(INTERNAL_FUNCTION_PARAMETERS)
 	register_constant(&c);
 	RETURN_TRUE;
 }
+/* }}} */
 
 
+/* {{{ proto int defined(string constant_name)
+   Tests if a constant is defined */
 void php3_defined(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *var;
@@ -305,6 +309,7 @@ void php3_defined(INTERNAL_FUNCTION_PARAMETERS)
 	
 	RETURN_LONG(defined);
 }
+/* }}} */
 
 /*
  * Local variables:

@@ -102,7 +102,7 @@ InputPath=".\configuration-parser.y"
 InputPath=".\configuration-parser.y"
 
 "configuration-parser.tab.c" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	bison.exe -p cfg -v -d configuration-parser.y
+	bison -d -S "C:\Program Files\Cygnus\share\bison.simple" -p cfg configuration-parser.y
 
 # End Custom Build
 
@@ -157,9 +157,14 @@ InputPath=".\language-parser.y"
 # Begin Custom Build - Performing Custom Build Step on $(InputPath)
 InputPath=".\language-parser.y"
 
-"language-parser.tab.c" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	bison.exe -p php -v -d language-parser.y
+BuildCmds= \
+	bison -v -d -S "C:\Program Files\Cygnus\share\bison.simple" -p php language-parser.y
 
+"language-parser.tab.c" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+   $(BuildCmds)
+
+"language-parser.tab.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+   $(BuildCmds)
 # End Custom Build
 
 !ENDIF 

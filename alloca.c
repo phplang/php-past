@@ -21,6 +21,8 @@
    allocating any.  It is a good idea to use alloca(0) in
    your main control loop, etc. to force garbage collection.  */
 
+/* $Id: alloca.c,v 1.3 1998/12/28 09:34:42 sas Exp $ */
+
 #include <config.h>
 
 #if !HAVE_ALLOCA

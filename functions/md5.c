@@ -2,7 +2,7 @@
    +----------------------------------------------------------------------+
    | PHP HTML Embedded Scripting Language Version 3.0                     |
    +----------------------------------------------------------------------+
-   | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
+   | Copyright (c) 1997-1999 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
    | it under the terms of one of the following licenses:                 |
@@ -27,6 +27,8 @@
    +----------------------------------------------------------------------+
  */
 
+/* $Id: md5.c,v 1.36 1999/02/01 07:44:07 fmk Exp $ */
+
 /* 
  * md5.c - Copyright 1997 Lachlan Roche 
  */
@@ -40,22 +42,12 @@
 
 #include "md5.h"
 
-/* {{{ proto string md5(string str)
-   Calculate the md5 hash of a string */
-void php3_md5(INTERNAL_FUNCTION_PARAMETERS)
+PHPAPI void _php3_md5(pval *arg, char *md5str) 
 {
-	pval *arg;
-	char md5str[33];
 	PHP3_MD5_CTX context;
 	unsigned char digest[16];
 	int i;
 	char *r;
-	TLS_VARS;
-	
-	if (ARG_COUNT(ht) != 1 || getParameters(ht, 1, &arg) == FAILURE) {
-		WRONG_PARAM_COUNT;
-	}
-	convert_to_string(arg);
 
 	md5str[0] = '\0';
 	PHP3_MD5Init(&context);
@@ -65,6 +57,23 @@ void php3_md5(INTERNAL_FUNCTION_PARAMETERS)
 		sprintf(r, "%02x", digest[i]);
 	}
 	*r = '\0';
+}
+
+/* {{{ proto string md5(string str)
+   Calculate the md5 hash of a string */
+void php3_md5(INTERNAL_FUNCTION_PARAMETERS)
+{
+	char md5str[33];
+	pval *arg;
+	TLS_VARS;
+	
+	if (ARG_COUNT(ht) != 1 || getParameters(ht, 1, &arg) == FAILURE) {
+		WRONG_PARAM_COUNT;
+	}
+	convert_to_string(arg);
+
+	_php3_md5(arg, md5str);
+
 	RETVAL_STRING(md5str,1);
 }
 /* }}} */

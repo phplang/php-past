@@ -2,7 +2,7 @@
    +----------------------------------------------------------------------+
    | PHP HTML Embedded Scripting Language Version 3.0                     |
    +----------------------------------------------------------------------+
-   | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
+   | Copyright (c) 1997-1999 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
    | it under the terms of one of the following licenses:                 |
@@ -28,7 +28,7 @@
    +----------------------------------------------------------------------+
  */
  
-/* $Id: sybase-ct.c,v 1.58 1998/12/09 17:10:03 tommay Exp $ */
+/* $Id: sybase-ct.c,v 1.61 1999/01/05 07:08:24 jah Exp $ */
 
 
 #ifndef MSVC5
@@ -1561,7 +1561,8 @@ void php3_sybct_result(INTERNAL_FUNCTION_PARAMETERS)
 	pval_copy_constructor(return_value);
 }
 
-
+/* {{{ proto int sybase_affected_rows([int link_id])
+   Get number of affected rows in last query */
 void php3_sybct_affected_rows(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *sybct_link_index;
@@ -1594,7 +1595,7 @@ void php3_sybct_affected_rows(INTERNAL_FUNCTION_PARAMETERS)
 	return_value->value.lval = sybct_ptr->affected_rows;
 	return_value->type = IS_LONG;
 }
-
+/* }}} */
 
 void php3_info_sybct(void)
 {
@@ -1624,7 +1625,8 @@ void php3_info_sybct(void)
 				php3_sybct_module.appname);
 }
 
-
+/* {{{ proto void sybase_min_client_severity(int severity)
+   ??? */
 void php3_sybct_min_client_severity(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *severity;
@@ -1635,8 +1637,10 @@ void php3_sybct_min_client_severity(INTERNAL_FUNCTION_PARAMETERS)
 	convert_to_long(severity);
 	php3_sybct_module.min_client_severity = severity->value.lval;
 }
+/* }}} */
 
-
+/* {{{ proto void sybase_min_server_severity(int severity)
+   ??? */
 void php3_sybct_min_server_severity(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *severity;
@@ -1647,6 +1651,6 @@ void php3_sybct_min_server_severity(INTERNAL_FUNCTION_PARAMETERS)
 	convert_to_long(severity);
 	php3_sybct_module.min_server_severity = severity->value.lval;
 }
-
+/* }}} */
 
 #endif

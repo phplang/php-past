@@ -2,7 +2,7 @@
    +----------------------------------------------------------------------+
    | PHP HTML Embedded Scripting Language Version 3.0                     |
    +----------------------------------------------------------------------+
-   | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
+   | Copyright (c) 1997-1999 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
    | it under the terms of one of the following licenses:                 |
@@ -27,7 +27,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: pdf.c,v 1.12 1998/12/20 15:14:30 rasmus Exp $ */
+/* $Id: pdf.c,v 1.25 1999/02/28 23:03:51 steffann Exp $ */
 
 /* pdflib 0.6 is subject to the ALADDIN FREE PUBLIC LICENSE.
    Copyright (C) 1997 Thomas Merz. */
@@ -63,6 +63,7 @@ DWORD PDFlibTls;
 static int numthreads=0;
 
 typedef struct pdflib_global_struct{
+	int le_pdf_image;
 	int le_pdf_info;
 	int le_pdf;
 } pdflib_global_struct;
@@ -73,6 +74,7 @@ typedef struct pdflib_global_struct{
 #else
 #  define PDF_GLOBAL(a) a
 #  define PDF_TLS_VARS
+int le_pdf_image;
 int le_pdf_info;
 int le_pdf;
 #endif
@@ -135,6 +137,12 @@ function_entry pdf_functions[] = {
 	{"pdf_add_outline",			php3_pdf_add_outline,		NULL},
 	{"pdf_set_transition",			php3_pdf_set_transition,		NULL},
 	{"pdf_set_duration",			php3_pdf_set_duration,		NULL},
+	{"pdf_open_jpeg",			php3_pdf_open_jpeg,		NULL},
+	{"pdf_open_gif",			php3_pdf_open_gif,		NULL},
+	{"pdf_close_image",			php3_pdf_close_image,		NULL},
+	{"pdf_place_image",			php3_pdf_place_image,		NULL},
+	{"pdf_put_image",			php3_pdf_put_image,			NULL},
+	{"pdf_execute_image",		php3_pdf_execute_image,		NULL},
 	{NULL, NULL, NULL}
 };
 
@@ -156,8 +164,17 @@ static void _free_pdf_info(PDF_info *info)
 	if(info->Creator) efree(info->Creator);
 }
 
+static void _free_pdf_image(PDF_image *image)
+{
+	/* The first parameter isn't used in any of the image close
+	   functions. It should be the PDF doc.
+	 */
+	PDF_close_image(NULL, image);
+}
+
 int php3_minit_pdf(INIT_FUNC_ARGS)
 {
+	PDF_GLOBAL(le_pdf_image) = register_list_destructors(_free_pdf_image, NULL);
 	PDF_GLOBAL(le_pdf_info) = register_list_destructors(_free_pdf_info, NULL);
 	PDF_GLOBAL(le_pdf) = register_list_destructors(php3_pdf_close, NULL);
 	return SUCCESS;
@@ -367,6 +384,16 @@ void php3_pdf_open(INTERNAL_FUNCTION_PARAMETERS) {
 	if(!pdf)
 		RETURN_FALSE;
 
+	/* Due to a problem with pdf_info() we need to get rid of it
+	   right here. The problem is: When pdf_close() is called it
+	   will call the pdflib function pdf_finalize() which then
+	   frees the space for the struct of pdf_info. At this point the
+	   elements of pdf_info still occupy space which now cannot be
+	   freed anymore because the struct is already gone. Before this
+	   fix, _free_pdf_info() tried to remove the elements and caused
+	   an segm fault. This shouldn't happen anymore.
+	*/
+	php3_list_delete(id); 
 	id = php3_list_insert(pdf,PDF_GLOBAL(le_pdf));
 	RETURN_LONG(id);
 }
@@ -391,8 +418,8 @@ void php3_pdf_close(INTERNAL_FUNCTION_PARAMETERS) {
 		php3_error(E_WARNING,"Unable to find file identifier %d",id);
 		RETURN_FALSE;
 	}
-
 	PDF_close(pdf);
+/*	php3_list_delete(id); */
 
 	RETURN_TRUE;
 }
@@ -482,7 +509,7 @@ void php3_pdf_show(INTERNAL_FUNCTION_PARAMETERS) {
 }
 /* }}} */
 
-/* {{{ proto void pdf_show_xy(int pdfdoc, string text)
+/* {{{ proto void pdf_show_xy(int pdfdoc, string text, double x-koor, double y-koor)
    Output text at position */
 void php3_pdf_show_xy(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *arg1, *arg2, *arg3, *arg4;
@@ -511,7 +538,7 @@ void php3_pdf_show_xy(INTERNAL_FUNCTION_PARAMETERS) {
 }
 /* }}} */
 
-/* {{{ proto void pdf_set_font(int pdfdoc, string font, double size, string encoding)
+/* {{{ proto void pdf_set_font(int pdfdoc, string font, double size, int encoding)
    Select the current font face and size */
 void php3_pdf_set_font(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *arg1, *arg2, *arg3, *arg4;
@@ -526,7 +553,7 @@ void php3_pdf_set_font(INTERNAL_FUNCTION_PARAMETERS) {
 	convert_to_long(arg1);
 	convert_to_string(arg2);
 	convert_to_double(arg3);
-	convert_to_string(arg4);
+	convert_to_long(arg4);
 	id=arg1->value.lval;
 	pdf = php3_list_find(id,&type);
 	if(!pdf || type!=PDF_GLOBAL(le_pdf)) {
@@ -534,7 +561,7 @@ void php3_pdf_set_font(INTERNAL_FUNCTION_PARAMETERS) {
 		RETURN_FALSE;
 	}
 	
-	PDF_set_font(pdf, arg2->value.str.val, (float) arg3->value.dval, builtin);
+	PDF_set_font(pdf, arg2->value.str.val, (float) arg3->value.dval, arg4->value.lval);
 
 	RETURN_TRUE;
 }
@@ -698,7 +725,7 @@ void php3_pdf_set_text_matrix(INTERNAL_FUNCTION_PARAMETERS) {
 /* }}} */
 
 /* {{{ proto void pdf_set_text_pos(int pdfdoc, double x, double y)
-   */
+   ??? */
 void php3_pdf_set_text_pos(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *arg1, *arg2, *arg3;
 	int id, type;
@@ -1390,7 +1417,7 @@ void php3_pdf_closepath_stroke(INTERNAL_FUNCTION_PARAMETERS) {
 }
 /* }}} */
 
-/* {{{ proto void pdf_closepath_stroke(int pdfdoc)
+/* {{{ proto void pdf_stroke(int pdfdoc)
    Draw line along path path */
 void php3_pdf_stroke(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *arg1;
@@ -1641,6 +1668,8 @@ void php3_pdf_setrgbcolor_fill(INTERNAL_FUNCTION_PARAMETERS) {
 
 	convert_to_long(arg1);
 	convert_to_double(arg2);
+	convert_to_double(arg3);
+	convert_to_double(arg4);
 	id=arg1->value.lval;
 	pdf = php3_list_find(id,&type);
 	if(!pdf || type!=PDF_GLOBAL(le_pdf)) {
@@ -1668,6 +1697,8 @@ void php3_pdf_setrgbcolor_stroke(INTERNAL_FUNCTION_PARAMETERS) {
 
 	convert_to_long(arg1);
 	convert_to_double(arg2);
+	convert_to_double(arg3);
+	convert_to_double(arg4);
 	id=arg1->value.lval;
 	pdf = php3_list_find(id,&type);
 	if(!pdf || type!=PDF_GLOBAL(le_pdf)) {
@@ -1695,6 +1726,8 @@ void php3_pdf_setrgbcolor(INTERNAL_FUNCTION_PARAMETERS) {
 
 	convert_to_long(arg1);
 	convert_to_double(arg2);
+	convert_to_double(arg3);
+	convert_to_double(arg4);
 	id=arg1->value.lval;
 	pdf = php3_list_find(id,&type);
 	if(!pdf || type!=PDF_GLOBAL(le_pdf)) {
@@ -1729,7 +1762,7 @@ void php3_pdf_add_outline(INTERNAL_FUNCTION_PARAMETERS) {
 		RETURN_FALSE;
 	}
 
-	PDF_add_outline(pdf, arg2->value.str.val);
+	PDF_add_outline(pdf, estrdup(arg2->value.str.val));
 
 	RETURN_TRUE;
 }
@@ -1784,6 +1817,214 @@ void php3_pdf_set_duration(INTERNAL_FUNCTION_PARAMETERS) {
 	}
 
 	PDF_set_duration(pdf, (float) arg2->value.dval);
+
+	RETURN_TRUE;
+}
+/* }}} */
+
+/* {{{ proto int pdf_open_gif(int pdf, string giffile)
+   Returns an image for placement in a pdf document */
+void php3_pdf_open_gif(INTERNAL_FUNCTION_PARAMETERS) {
+	pval *arg1, *arg2;
+	int id, type;
+	PDF_image *pdf_image;
+	PDF *pdf;
+	PDF_TLS_VARS;
+
+	if (ARG_COUNT(ht) != 2 || getParameters(ht, 2, &arg1, &arg2) == FAILURE) {
+		WRONG_PARAM_COUNT;
+	}
+
+	convert_to_long(arg1);
+	convert_to_string(arg2);
+	id=arg1->value.lval;
+	pdf = php3_list_find(id,&type);
+	if(!pdf || type!=PDF_GLOBAL(le_pdf)) {
+		php3_error(E_WARNING,"Unable to find file identifier %d",id);
+		RETURN_FALSE;
+	}
+
+	pdf_image = PDF_open_GIF(pdf, arg2->value.str.val);
+
+	if(!pdf_image) {
+		php3_error(E_WARNING, "Could not open image");
+		RETURN_FALSE;
+	}
+
+	id = php3_list_insert(pdf_image,PDF_GLOBAL(le_pdf_image));
+	RETURN_LONG(id);
+}
+/* }}} */
+
+/* {{{ proto int pdf_open_jpeg(int pdf, string jpegfile)
+   Returns an image for placement in a pdf document */
+void php3_pdf_open_jpeg(INTERNAL_FUNCTION_PARAMETERS) {
+	pval *arg1, *arg2;
+	int id, type;
+	PDF_image *pdf_image;
+	PDF *pdf;
+	PDF_TLS_VARS;
+
+	if (ARG_COUNT(ht) != 2 || getParameters(ht, 2, &arg1, &arg2) == FAILURE) {
+		WRONG_PARAM_COUNT;
+	}
+
+	convert_to_long(arg1);
+	convert_to_string(arg2);
+	id=arg1->value.lval;
+	pdf = php3_list_find(id,&type);
+	if(!pdf || type!=PDF_GLOBAL(le_pdf)) {
+		php3_error(E_WARNING,"Unable to find file identifier %d",id);
+		RETURN_FALSE;
+	}
+
+	pdf_image = PDF_open_JPEG(pdf, arg2->value.str.val);
+
+	if(!pdf_image) {
+		php3_error(E_WARNING, "Could not open image");
+		RETURN_FALSE;
+	}
+
+	id = php3_list_insert(pdf_image,PDF_GLOBAL(le_pdf_image));
+	RETURN_LONG(id);
+}
+/* }}} */
+
+/* {{{ proto void pdf_close_image(int pdfimage)
+   Closes the pdf image */
+void php3_pdf_close_image(INTERNAL_FUNCTION_PARAMETERS) {
+	pval *arg1;
+	int id, type;
+	PDF_image *pdf_image;
+	PDF_TLS_VARS;
+
+	if (ARG_COUNT(ht) != 1 || getParameters(ht, 1, &arg1) == FAILURE) {
+		WRONG_PARAM_COUNT;
+	}
+
+	convert_to_long(arg1);
+	id=arg1->value.lval;
+	pdf_image = php3_list_find(id,&type);
+	if(!pdf_image || type!=PDF_GLOBAL(le_pdf_image)) {
+		php3_error(E_WARNING,"Unable to find file identifier %d",id);
+		RETURN_FALSE;
+	}
+
+	/* See comment in _free_pdf_image() */
+	PDF_close_image(NULL, pdf_image);
+
+	RETURN_TRUE;
+}
+/* }}} */
+
+/* {{{ proto void pdf_place_image(int pdf, int pdfimage, int x, int y, int scale)
+   Places image in the pdf document */
+void php3_pdf_place_image(INTERNAL_FUNCTION_PARAMETERS) {
+	pval *arg1, *arg2, *arg3, *arg4, *arg5;
+	int id, type;
+	PDF_image *pdf_image;
+	PDF *pdf;
+	PDF_TLS_VARS;
+
+	if (ARG_COUNT(ht) != 5 || getParameters(ht, 5, &arg1, &arg2, &arg3, &arg4, &arg5) == FAILURE) {
+		WRONG_PARAM_COUNT;
+	}
+
+	convert_to_long(arg1);
+	id=arg1->value.lval;
+	pdf = php3_list_find(id,&type);
+	if(!pdf || type!=PDF_GLOBAL(le_pdf)) {
+		php3_error(E_WARNING,"Unable to find file identifier %d",id);
+		RETURN_FALSE;
+	}
+
+	convert_to_long(arg2);
+	id=arg2->value.lval;
+	pdf_image = php3_list_find(id,&type);
+	if(!pdf_image || type!=PDF_GLOBAL(le_pdf_image)) {
+		php3_error(E_WARNING,"Unable to find file identifier %d",id);
+		RETURN_FALSE;
+	}
+
+	convert_to_double(arg3);
+	convert_to_double(arg4);
+	convert_to_double(arg5);
+
+	PDF_place_image(pdf, pdf_image, (float) arg3->value.dval, (float) arg4->value.dval, arg5->value.dval);
+
+	RETURN_TRUE;
+}
+/* }}} */
+
+/* {{{ proto void pdf_put_image(int pdf, int pdfimage)
+   Stores image in the pdf document for later use */
+void php3_pdf_put_image(INTERNAL_FUNCTION_PARAMETERS) {
+	pval *arg1, *arg2;
+	int id, type;
+	PDF_image *pdf_image;
+	PDF *pdf;
+	PDF_TLS_VARS;
+	
+	if (ARG_COUNT(ht) != 2 || getParameters(ht, 2, &arg1, &arg2) == FAILURE) {
+		WRONG_PARAM_COUNT;
+	}
+
+	convert_to_long(arg1);
+	id=arg1->value.lval;
+	pdf = php3_list_find(id,&type);
+	if(!pdf || type!=PDF_GLOBAL(le_pdf)) {
+		php3_error(E_WARNING,"Unable to find file identifier %d",id);
+		RETURN_FALSE;
+	}
+
+	convert_to_long(arg2);
+	id=arg2->value.lval;
+	pdf_image = php3_list_find(id,&type);
+	if(!pdf_image || type!=PDF_GLOBAL(le_pdf_image)) {
+		php3_error(E_WARNING,"Unable to find file identifier %d",id);
+		RETURN_FALSE;
+	}
+	
+	PDF_put_image(pdf, pdf_image);
+	
+	RETURN_TRUE;
+}
+/* }}} */
+
+/* {{{ proto void pdf_execute_image(int pdf, int pdfimage, int x, int y, int scale)
+   Places stored image in the pdf document */
+void php3_pdf_execute_image(INTERNAL_FUNCTION_PARAMETERS) {
+	pval *arg1, *arg2, *arg3, *arg4, *arg5;
+	int id, type;
+	PDF_image *pdf_image;
+	PDF *pdf;
+	PDF_TLS_VARS;
+
+	if (ARG_COUNT(ht) != 5 || getParameters(ht, 5, &arg1, &arg2, &arg3, &arg4, &arg5) == FAILURE) {
+		WRONG_PARAM_COUNT;
+	}
+
+	convert_to_long(arg1);
+	id=arg1->value.lval;
+	pdf = php3_list_find(id,&type);
+	if(!pdf || type!=PDF_GLOBAL(le_pdf)) {
+		php3_error(E_WARNING,"Unable to find file identifier %d",id);
+		RETURN_FALSE;
+	}
+
+	convert_to_long(arg2);
+	id=arg2->value.lval;
+	pdf_image = php3_list_find(id,&type);
+	if(!pdf_image || type!=PDF_GLOBAL(le_pdf_image)) {
+		php3_error(E_WARNING,"Unable to find file identifier %d",id);
+		RETURN_FALSE;
+	}
+
+	convert_to_double(arg3);
+	convert_to_double(arg4);
+	convert_to_double(arg5);
+
+	PDF_execute_image(pdf, pdf_image, (float) arg3->value.dval, (float) arg4->value.dval, arg5->value.dval);
 
 	RETURN_TRUE;
 }

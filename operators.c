@@ -2,7 +2,7 @@
    +----------------------------------------------------------------------+
    | PHP HTML Embedded Scripting Language Version 3.0                     |
    +----------------------------------------------------------------------+
-   | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
+   | Copyright (c) 1997-1999 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
    | it under the terms of one of the following licenses:                 |
@@ -29,7 +29,7 @@
  */
 
 
-/* $Id: operators.c,v 1.97 1998/09/10 23:56:56 zeev Exp $ */
+/* $Id: operators.c,v 1.101 1999/02/25 14:57:54 rasmus Exp $ */
 
 #ifdef THREAD_SAFE
 #include "tls.h"
@@ -1073,6 +1073,28 @@ void php3_str_tolower(char *str, unsigned int length)
 	}
 }
 
+
+inline int php3_binary_strcasecmp(pval *s1, pval *s2)
+{
+	const unsigned char *p1 = (const unsigned char *) s1->value.str.val;
+	const unsigned char *p2 = (const unsigned char *) s2->value.str.val;
+	unsigned char c1=0, c2=0;
+	int len, len2;
+
+	len  = s1->value.str.len;
+	len2 = s2->value.str.len;
+	
+	if (len != len2 || !len)
+		return len - len2;
+	
+	while(len--) {
+		c1 = tolower(*p1++);
+		c2 = tolower(*p2++);
+		if (c1 != c2) break;
+	}
+	
+	return c1 - c2;
+}
 
 inline int php3_binary_strcmp(pval *s1, pval *s2)
 {

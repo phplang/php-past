@@ -2,7 +2,7 @@
    +----------------------------------------------------------------------+
    | PHP HTML Embedded Scripting Language Version 3.0                     |
    +----------------------------------------------------------------------+
-   | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
+   | Copyright (c) 1997-1999 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
    | it under the terms of one of the following licenses:                 |
@@ -33,6 +33,9 @@
   web site at http://www.fileproplus.com/
 
  */
+
+/* $Id: filepro.c,v 1.39 1999/01/04 19:43:39 eschmid Exp $ */
+
 #ifdef THREAD_SAFE
 #include "tls.h"
 #endif
@@ -188,6 +191,8 @@ BOOL WINAPI DllMain(HANDLE hModule,
  * a user is using it!  We cannot lock anything since Web connections don't
  * provide the ability to later unlock what we locked.  Be smart, be safe.
  */
+/* {{{ proto bool filepro(string directory)
+   Read and verify the map file */
 void php3_filepro(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *dir;
@@ -273,6 +278,7 @@ void php3_filepro(INTERNAL_FUNCTION_PARAMETERS)
 
 	RETVAL_TRUE;
 }
+/* }}} */
 
 
 /*
@@ -284,6 +290,8 @@ void php3_filepro(INTERNAL_FUNCTION_PARAMETERS)
  * 
  * Errors return false, success returns the row count.
  */
+/* {{{ proto int filepro_rowcount(void)
+   Find out how many rows are in a filePro database */
 void php3_filepro_rowcount(INTERNAL_FUNCTION_PARAMETERS)
 {
 	FILE *fp;
@@ -331,6 +339,7 @@ void php3_filepro_rowcount(INTERNAL_FUNCTION_PARAMETERS)
 	
 	RETVAL_LONG(records);
 }
+/* }}} */
 
 
 /*
@@ -338,6 +347,8 @@ void php3_filepro_rowcount(INTERNAL_FUNCTION_PARAMETERS)
  * 
  * Errors return false, success returns the name of the field.
  */
+/* {{{ proto string filepro_fieldname(int fieldnumber)
+   Gets the name of a field */
 void php3_filepro_fieldname(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *fno;
@@ -369,6 +380,7 @@ void php3_filepro_fieldname(INTERNAL_FUNCTION_PARAMETERS)
 
 	RETVAL_FALSE;
 }
+/* }}} */
 
 
 /*
@@ -376,6 +388,8 @@ void php3_filepro_fieldname(INTERNAL_FUNCTION_PARAMETERS)
  * 
  * Errors return false, success returns the type (edit) of the field
  */
+/* {{{ proto string filepro_fieldtype(int field_number)
+   Gets the type of a field */
 void php3_filepro_fieldtype(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *fno;
@@ -405,13 +419,16 @@ void php3_filepro_fieldtype(INTERNAL_FUNCTION_PARAMETERS)
 				fno->value.lval);
 	RETVAL_FALSE;
 }
+/* }}} */
 
 
 /*
- * STRING filePro_fieldwidth(int field_number)
+ * LONG filePro_fieldwidth(int field_number)
  * 
  * Errors return false, success returns the character width of the field.
  */
+/* {{{ proto int filepro_fieldwidth(int field_number)
+   Gets the width of a field */
 void php3_filepro_fieldwidth(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *fno;
@@ -441,6 +458,7 @@ void php3_filepro_fieldwidth(INTERNAL_FUNCTION_PARAMETERS)
 				fno->value.lval);
 	RETVAL_FALSE;
 }
+/* }}} */
 
 
 /*
@@ -448,6 +466,8 @@ void php3_filepro_fieldwidth(INTERNAL_FUNCTION_PARAMETERS)
  * 
  * Errors return false, success returns the field count.
  */
+/* {{{ proto int filepro_fieldcount(void)
+   Find out how many fields are in a filePro database */
 void php3_filepro_fieldcount(INTERNAL_FUNCTION_PARAMETERS)
 {
 	FP_TLS_VARS;
@@ -465,6 +485,7 @@ void php3_filepro_fieldcount(INTERNAL_FUNCTION_PARAMETERS)
 	/* Read in the first line from the map file */
 	RETVAL_LONG(FP_GLOBAL(fp_fcount));
 }
+/* }}} */
 
 
 /*
@@ -472,6 +493,8 @@ void php3_filepro_fieldcount(INTERNAL_FUNCTION_PARAMETERS)
  * 
  * Errors return false, success returns the datum.
  */
+/* {{{ proto string filepro_retrieve(int row_number, int field_number)
+   Retrieves data from a filePro database */
 void php3_filepro_retrieve(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *rno, *fno;
@@ -541,6 +564,7 @@ void php3_filepro_retrieve(INTERNAL_FUNCTION_PARAMETERS)
     fclose(fp);
 	RETURN_STRING(readbuf,1);
 }
+/* }}} */
 
 #endif
 

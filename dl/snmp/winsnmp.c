@@ -1,5 +1,7 @@
 /*
 Created from the snmputil sample in the Microsoft SDK for NT
+
+$Id: winsnmp.c,v 1.9 1998/12/28 09:34:51 sas Exp $ 
 */
 
 #include "php.h"

@@ -1,3 +1,5 @@
+/* $Id: win95nt.h,v 1.21 1998/12/28 09:43:53 sas Exp $ */
+
 /* Defines and types for Windows 95/NT */
 #define WIN32_LEAN_AND_MEAN
 #include <io.h>

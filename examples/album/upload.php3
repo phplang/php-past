@@ -44,13 +44,13 @@
 	if($album=="none") {
 		$album = $new_album;
 	}
-	if(mysql_query("insert into photos values ('uploads/$file_name','$album','$desc')")) {
+	if($ret=mysql_query("insert into photos values ('uploads/$file_name','$album','$desc')")) {
 		$size = getimagesize("uploads/$file_name");
 		echo "You uploaded this photo:<P><img src=\"uploads/$file_name\" $size[3]><br>";
 		echo stripslashes($desc);
 		$page="received";
 	} else {
-		echo "Unable to insert the photo in the database<P>\n";
+		echo "Unable to insert the photo in the database ($ret)<P>\n";
 	}
 }
 

@@ -2,7 +2,7 @@
    +----------------------------------------------------------------------+
    | PHP HTML Embedded Scripting Language Version 3.0                     |
    +----------------------------------------------------------------------+
-   | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
+   | Copyright (c) 1997-1999 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
    | it under the terms of one of the following licenses:                 |
@@ -67,7 +67,7 @@ typedef struct {
 typedef struct {
 	XML_Char *name;
 	char (*decoding_function)(unsigned short);
-	unsigned short (*encoding_function)(char);
+	unsigned short (*encoding_function)(unsigned char);
 } xml_encoding;
 
 
@@ -75,7 +75,7 @@ extern php3_module_entry xml_module_entry;
 # define xml_module_ptr &xml_module_entry
 
 enum php3_xml_option {
-    PHP3_XML_OPTION_CASE_FOLDING,
+    PHP3_XML_OPTION_CASE_FOLDING = 1,
     PHP3_XML_OPTION_TARGET_ENCODING
 };
 

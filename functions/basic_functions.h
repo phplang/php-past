@@ -2,7 +2,7 @@
    +----------------------------------------------------------------------+
    | PHP HTML Embedded Scripting Language Version 3.0                     |
    +----------------------------------------------------------------------+
-   | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
+   | Copyright (c) 1997-1999 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
    | it under the terms of one of the following licenses:                 |
@@ -29,7 +29,7 @@
  */
 
 
-/* $Id: basic_functions.h,v 1.35 1998/12/19 12:47:59 sas Exp $ */
+/* $Id: basic_functions.h,v 1.41 1999/02/11 06:23:40 andrey Exp $ */
 
 #ifndef _BASIC_FUNCTIONS_H
 #define _BASIC_FUNCTIONS_H
@@ -95,6 +95,13 @@ extern void php3_error_log(INTERNAL_FUNCTION_PARAMETERS);
 
 extern void php3_call_user_func(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_call_user_method(INTERNAL_FUNCTION_PARAMETERS);
+extern void php3_connection_aborted(INTERNAL_FUNCTION_PARAMETERS);
+extern void php3_connection_timeout(INTERNAL_FUNCTION_PARAMETERS);
+extern void php3_connection_status(INTERNAL_FUNCTION_PARAMETERS);
+extern void php3_ignore_user_abort(INTERNAL_FUNCTION_PARAMETERS);
+
+extern PHP_FUNCTION(function_exists);
+extern PHP_FUNCTION(extract);
 
 PHP_FUNCTION(register_shutdown_function);
 

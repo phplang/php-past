@@ -1,4 +1,6 @@
 /*
+    $Id: oracle_hack.c,v 1.3 1998/12/28 09:34:56 sas Exp $
+
 	This file needs to be compiled in with php on windows so that the
 	oracle dll will work (and can be compiled).  preferably, I would
 	like to see if there is another way accomplish what needs to be

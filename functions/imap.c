@@ -2,7 +2,7 @@
    +----------------------------------------------------------------------+
    | PHP HTML Embedded Scripting Language Version 3.0                     |
    +----------------------------------------------------------------------+
-   | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
+   | Copyright (c) 1997-1999 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
    | it under the terms of one of the following licenses:                 |
@@ -31,7 +31,7 @@
    |          Rasmus Lerdorf      <rasmus@lerdorf.on.ca>                  |
    +----------------------------------------------------------------------+
  */
-/* $Id: imap.c,v 1.49 1998/11/23 05:52:03 jim Exp $ */
+/* $Id: imap.c,v 1.55 1999/01/20 16:10:56 musone Exp $ */
 
 #define IMAP41
 
@@ -540,7 +540,7 @@ void php3_imap_append(INTERNAL_FUNCTION_PARAMETERS)
 }
 /* }}} */
 
-/* {{{ proto imap_num_msg(int stream_id)
+/* {{{ proto int imap_num_msg(int stream_id)
    Gives the number of messages in the current mailbox */
 void php3_imap_num_msg(INTERNAL_FUNCTION_PARAMETERS)
 {
@@ -737,7 +737,11 @@ void php3_imap_headers(INTERNAL_FUNCTION_PARAMETERS)
 }
 /* }}} */
 
-/* {{{ proto imap_body(int stream_id, int msg_no [, int options])
+/* {{{ proto string imap_fetchtext(int stream_id, int msg_no [, int options])
+   An alias for imap_body */
+/* }}} */
+
+/* {{{ proto string imap_body(int stream_id, int msg_no [, int options])
    Read the message body */
 void php3_imap_body(INTERNAL_FUNCTION_PARAMETERS)
 {
@@ -822,7 +826,7 @@ void php3_imap_mail_copy(INTERNAL_FUNCTION_PARAMETERS)
 }
 /* }}} */
 
-/* {{{ proto imap_mail_move(int stream_id, int msg_no, string mailbox)
+/* {{{ proto bool imap_mail_move(int stream_id, int msg_no, string mailbox)
    Move specified message to a mailbox */
 void php3_imap_mail_move(INTERNAL_FUNCTION_PARAMETERS)
 {
@@ -854,6 +858,10 @@ void php3_imap_mail_move(INTERNAL_FUNCTION_PARAMETERS)
 }
 /* }}} */
 
+/* {{{ proto int imap_create(int stream_id, string mailbox)
+   An alias for imap_createmailbox */
+/* }}} */
+
 /* {{{ proto int imap_createmailbox(int stream_id, string mailbox)
    Create a new mailbox */
 void php3_imap_createmailbox(INTERNAL_FUNCTION_PARAMETERS)
@@ -882,6 +890,10 @@ void php3_imap_createmailbox(INTERNAL_FUNCTION_PARAMETERS)
 		RETURN_FALSE;
 	}
 }
+/* }}} */
+
+/* {{{ proto int imap_rename(int stream_id, string old_name, string new_name)
+   An alias for imap_renamemailbox */
 /* }}} */
 
 /* {{{ proto int imap_renamemailbox(int stream_id, string old_name, string new_name)
@@ -915,7 +927,7 @@ void php3_imap_renamemailbox(INTERNAL_FUNCTION_PARAMETERS)
 }
 /* }}} */
 
-/* {{{ proto imap_deletemailbox(int stream_id, string mailbox)
+/* {{{ proto bool imap_deletemailbox(int stream_id, string mailbox)
    Delete a mailbox */
 void php3_imap_deletemailbox(INTERNAL_FUNCTION_PARAMETERS)
 {
@@ -943,6 +955,10 @@ void php3_imap_deletemailbox(INTERNAL_FUNCTION_PARAMETERS)
 		RETURN_FALSE;
 	}
 }
+/* }}} */
+
+/* {{{ proto array imap_listmailbox(int stream_id, string ref, string pattern)
+   An alias for imap_list */
 /* }}} */
 
 /* {{{ proto array imap_list(int stream_id, string ref, string pattern)
@@ -985,7 +1001,11 @@ void php3_imap_list(INTERNAL_FUNCTION_PARAMETERS)
 }
 /* }}} */
 
-/* {{{ proto imap_scan(int stream_id, string ref, string pattern, string content)
+/* {{{ proto array imap_scanmailbox(int stream_id, string ref, string pattern, string content)
+   An alias for imap_scan */
+/* }}} */
+
+/* {{{ proto array imap_scan(int stream_id, string ref, string pattern, string content)
    Read list of mailboxes containing a certain string */
 void php3_imap_listscan(INTERNAL_FUNCTION_PARAMETERS)
 {
@@ -1121,6 +1141,10 @@ void php3_imap_undelete(INTERNAL_FUNCTION_PARAMETERS)
 }
 /* }}} */
 
+/* {{{ proto object imap_headerinfo(int stream_id, int msg_no [, int from_length [, int subject_length [, string default_host]]])
+   An alias for imap_header */
+/* }}} */
+
 /* {{{ proto object imap_header(int stream_id, int msg_no [, int from_length [, int subject_length [, string default_host]]])
    Read the header of the message */
 void php3_imap_headerinfo(INTERNAL_FUNCTION_PARAMETERS)
@@ -1204,7 +1228,8 @@ if(en->to)
 	ok=0;  /* stop looping */
 	strcat(fulladdress,", ...");
 	}
-      addresstmp=addresstmp2; /* reset the pointer to the next address first! */
+      addresstmp->next=addresstmp2; /* reset the pointer to the next address first! */
+	  addresstmp=addresstmp->next;
     }
 
   if(fulladdress) add_property_string( return_value, "toaddress", fulladdress, 1);
@@ -1243,7 +1268,8 @@ if(en->from)
 	ok=0;  /* stop looping */
 	strcat(fulladdress,", ...");
 	}
-      addresstmp=addresstmp2; /* reset the pointer to the next address first! */
+      addresstmp->next=addresstmp2; /* reset the pointer to the next address first! */
+	  addresstmp=addresstmp->next;
     }
 
       if(fulladdress) add_property_string( return_value, "fromaddress", fulladdress, 1);
@@ -1282,7 +1308,8 @@ if(en->cc)
 	ok=0;  /* stop looping */
         strcat(fulladdress,", ..."); 
 	}
-      addresstmp=addresstmp2; /* reset the pointer to the next address first! */
+      addresstmp->next=addresstmp2; /* reset the pointer to the next address first! */
+	  addresstmp=addresstmp->next;
     }
 
       if(fulladdress) add_property_string( return_value, "ccaddress", fulladdress, 1);
@@ -1320,7 +1347,8 @@ if(en->bcc)
 	ok=0;  /* stop looping */
         strcat(fulladdress,", ..."); 
 	}
-      addresstmp=addresstmp2; /* reset the pointer to the next address first! */
+      addresstmp->next=addresstmp2; /* reset the pointer to the next address first! */
+	  addresstmp=addresstmp->next;
     }
 
       if(fulladdress) add_property_string( return_value, "bccaddress", fulladdress, 1);
@@ -1358,7 +1386,8 @@ if(en->reply_to)
 	ok=0;  /* stop looping */
         strcat(fulladdress,", ..."); 
 	}
-      addresstmp=addresstmp2; /* reset the pointer to the next address first! */
+      addresstmp->next=addresstmp2; /* reset the pointer to the next address first! */
+	  addresstmp=addresstmp->next;
     }
 
       if(fulladdress) add_property_string( return_value, "reply_toaddress", fulladdress, 1);
@@ -1396,7 +1425,8 @@ if(en->sender)
 	  ok=0;  /* stop looping */
 	  strcat(fulladdress,", ..."); 
 	}
-      addresstmp=addresstmp2; /* reset the pointer to the next address first! */
+      addresstmp->next=addresstmp2; /* reset the pointer to the next address first! */
+	  addresstmp=addresstmp->next;
     }
 
       if(fulladdress) add_property_string( return_value, "senderaddress", fulladdress, 1);
@@ -1434,7 +1464,8 @@ if(en->return_path)
 	  ok=0;  /* stop looping */
 	  strcat(fulladdress,", ..."); 
 	}
-      addresstmp=addresstmp2; /* reset the pointer to the next address first! */
+      addresstmp->next=addresstmp2; /* reset the pointer to the next address first! */
+	  addresstmp=addresstmp->next;
     }
   
   if(fulladdress) add_property_string( return_value, "return_pathaddress", fulladdress, 1);
@@ -1479,6 +1510,10 @@ add_property_string(return_value,"fetchsubject",fulladdress,1);
 /* }}} */
 
 /* KMLANG */
+/* {{{ proto array imap_listsubscribed(int stream_id, string ref, string pattern)
+   An alias for imap_lsub */
+/* }}} */
+
 /* {{{ proto array imap_lsub(int stream_id, string ref, string pattern)
    Return a list of subscribed mailboxes */
 void php3_imap_lsub(INTERNAL_FUNCTION_PARAMETERS)
@@ -1711,7 +1746,7 @@ void php3_imap_fetchstructure(INTERNAL_FUNCTION_PARAMETERS)
 }
 /* }}} */
 
-/* {{{ proto string imap_fetchbody(int stream_id, int msg_no, int section [, int options])
+/* {{{ proto string imap_fetchbody(int stream_id, int msg_no, string section [, int options])
    Get a specific body section */
 void php3_imap_fetchbody(INTERNAL_FUNCTION_PARAMETERS)
 {
@@ -1962,7 +1997,7 @@ void php3_imap_setflag_full(INTERNAL_FUNCTION_PARAMETERS)
 }
 /* }}} */
 
-/* {{{ proto imap_clearflag_full(int stream_id, string sequence, string flag [, int options])
+/* {{{ proto void imap_clearflag_full(int stream_id, string sequence, string flag [, int options])
    Clears flags on messages */
 void php3_imap_clearflag_full(INTERNAL_FUNCTION_PARAMETERS)
 {
@@ -2668,3 +2703,10 @@ void mm_fatal (char *string)
 }
 
 #endif
+
+/*
+ * Local variables:
+ * tab-width: 4
+ * c-basic-offset: 4
+ * End:
+ */

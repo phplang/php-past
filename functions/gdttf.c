@@ -2,6 +2,8 @@
 /*                                          */
 /* John Ellson   ellson@lucent.com          */
 
+/* $Id: gdttf.c,v 1.19 1999/01/24 22:41:45 rasmus Exp $ */
+
 #if WIN32|WINNT
 #include "config.w32.h"
 #else
@@ -91,6 +93,7 @@ typedef struct {
 typedef struct {
 	int					character;	/* key */
 	int					hinting;	/* key */
+	int					gray_render;
 	font_t				*font;
 } glyphkey_t;
 
@@ -411,7 +414,8 @@ fontFetch ( char **error, void *key )
 	for (i = 0; i < n; i++) {
 		TT_Get_CharMap_ID(a->face, i, &platform, &encoding);
 		if ((platform == 3 && encoding == 1)  ||
-	  	(platform == 0 && encoding == 0)) {
+		    (platform == 2 && encoding == 1)  ||
+	  	    (platform == 0)) {
 			TT_Get_CharMap(a->face, i, &a->char_map);
 			i = n+1;
 		}
@@ -455,7 +459,8 @@ glyphTest ( void *element, void *key )
 	glyphkey_t *b=(glyphkey_t *)key;
 
 	return (a->character == b->character
-		&& a->hinting == b->hinting);
+		&& a->hinting == b->hinting
+		&& a->gray_render == b->gray_render);
 }
 
 static void *
@@ -471,7 +476,7 @@ glyphFetch ( char **error, void *key )
 	a = (glyph_t *)malloc(sizeof(glyph_t));
 	a->character = b->character;
 	a->hinting = b->hinting;
-	a->gray_render = (b->font->ptsize < MINANTIALIASPTSIZE)?FALSE:TRUE;
+	a->gray_render = b->gray_render;
 	a->oldx = a->oldy = 0;
 
 	/* create glyph container */
@@ -684,6 +689,8 @@ gdttfchar(gdImage *im, int fg, font_t *font,
 
 	glyphkey.character = ch;
 	glyphkey.hinting = 1;
+	/* if fg is specified by a negative color idx, then don't antialias */
+	glyphkey.gray_render = ((font->ptsize < MINANTIALIASPTSIZE) || (fg <0))?FALSE:TRUE;
     glyphkey.font = font;
     glyph = (glyph_t *)gdCacheGet(font->glyphCache, &glyphkey);
     if (! glyph)
@@ -782,7 +789,6 @@ gdttf(gdImage *im, int *brect, int fg, char *fontname,
 	}
 	sin_a = font->sin_a;
 	cos_a = font->cos_a;
-
 	advance_x = advance_y = 0;
 
 	next=string;

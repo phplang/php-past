@@ -1,45 +1,29 @@
 /*
-   +----------------------------------------------------------------------+
-   | PHP HTML Embedded Scripting Language Version 3.0                     |
-   +----------------------------------------------------------------------+
-   | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
-   +----------------------------------------------------------------------+
-   | This program is free software; you can redistribute it and/or modify |
-   | it under the terms of one of the following licenses:                 |
-   |                                                                      |
-   |  A) the GNU General Public License as published by the Free Software |
-   |     Foundation; either version 2 of the License, or (at your option) |
-   |     any later version.                                               |
-   |                                                                      |
-   |  B) the PHP License as published by the PHP Development Team and     |
-   |     included in the distribution in the file: LICENSE                |
-   |                                                                      |
-   | This program is distributed in the hope that it will be useful,      |
-   | but WITHOUT ANY WARRANTY; without even the implied warranty of       |
-   | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the        |
-   | GNU General Public License for more details.                         |
-   |                                                                      |
-   | You should have received a copy of both licenses referred to here.   |
-   | If you did not, or have any questions about PHP licensing, please    |
-   | contact core@php.net.                                                |
-   +----------------------------------------------------------------------+
-   | Authors: Andi Gutmans   <andi@php.net>                               |
-   |          Zeev Suraski   <bourbon@netvision.net.il>                   |
-   |          Rasmus Lerdorf <rasmus@lerdorf.on.ca>                       |
-   +----------------------------------------------------------------------+
+ * This file is a part of the Zend scripting language engine.  It may
+ * be freely distributed as an integrated part of the PHP scripting language,
+ * or under the Zend license, which is not yet available at this time.
+ *
+ * Authors:  Andi Gutmans <andi@zend.com>, Zeev Suraski <zeev@zend.com>
  */
+
 #ifndef _ALLOC_H
 #define _ALLOC_H
 #include <stdio.h>
 #include "php.h"
 
+#define MEM_BLOCK_START_MAGIC	0x7312F8DCL
+#define MEM_BLOCK_END_MAGIC		0x2A8FCC84L
+#define MEM_BLOCK_FREED_MAGIC	0x99954317L
+#define MEM_BLOCK_CACHED_MAGIC	0xFB8277DCL
+
 typedef struct _mem_header {
-    struct _mem_header *pNext;
-    struct _mem_header *pLast;
 #if DEBUG
+	long magic;
 	char *filename;
 	uint lineno;
 #endif
+    struct _mem_header *pNext;
+    struct _mem_header *pLast;
 	int size;
 } mem_header;
 
@@ -49,7 +33,7 @@ typedef union {
 	long lng;
 } align_test;
 
-#define MAX_CACHED_MEMORY	64
+#define MAX_CACHED_MEMORY   64
 #define MAX_CACHED_ENTRIES	16
 
 #define PLATFORM_ALIGNMENT (sizeof(align_test))
@@ -96,6 +80,18 @@ extern PHPAPI char *_estrndup(const char *s, unsigned int length);
 
 extern void start_memory_manager(void);
 extern void shutdown_memory_manager(void);
+
+#if DEBUG
+int _mem_block_check(void *ptr, int silent, char *filename, int lineno);
+void _full_mem_check(int silent, char *filename, uint lineno);
+#define mem_block_check(ptr, silent) _mem_block_check(ptr, silent, __FILE__, __LINE__)
+#define mem_block_check(ptr, silent) _mem_block_check(ptr, silent, __FILE__, __LINE__)
+#define full_mem_check(silent) _full_mem_check(silent, __FILE__, __LINE__)
+#else
+#define mem_block_check(type, ptr, silent)
+#define full_mem_check(silent)
+#endif
+
 
 #endif
 

@@ -2,7 +2,7 @@
    +----------------------------------------------------------------------+
    | PHP HTML Embedded Scripting Language Version 3.0                     |
    +----------------------------------------------------------------------+
-   | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
+   | Copyright (c) 1997-1999 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
    | it under the terms of one of the following licenses:                 |
@@ -27,7 +27,7 @@
    | (with helpful hints from Dean Gaudet <dgaudet@arctic.org>            |
    +----------------------------------------------------------------------+
  */
-/* $Id: mod_php3.c,v 1.87 1998/12/04 19:22:58 ssb Exp $ */
+/* $Id: mod_php3.c,v 1.90 1999/02/15 17:25:44 steffann Exp $ */
 
 #ifdef THREAD_SAFE
 #include "tls.h"
@@ -336,8 +336,19 @@ static void *php3_merge_dir(pool *p, void *basev, void *addv)
 	if (add->gpc_order != orig.gpc_order) new->gpc_order = add->gpc_order;
 	if (add->error_prepend_string != orig.error_prepend_string) new->error_prepend_string = add->error_prepend_string;
 	if (add->error_append_string != orig.error_append_string) new->error_append_string = add->error_append_string;
-	if (add->open_basedir != orig.open_basedir) new->open_basedir = add->open_basedir;
+	if (add->open_basedir != orig.open_basedir) {
+		if (new->open_basedir == NULL) {
+			new->open_basedir = add->open_basedir;
+		} else {
+#if WIN32|WINNT
+			new->open_basedir = pstrcat(p, add->open_basedir, ";", new->open_basedir, NULL);
+#else
+			new->open_basedir = pstrcat(p, add->open_basedir, ":", new->open_basedir, NULL);
+#endif
+		}
+	}
 	if (add->enable_dl != orig.enable_dl) new->enable_dl = add->enable_dl;
+	if (add->ignore_user_abort != orig.ignore_user_abort) new->ignore_user_abort = add->ignore_user_abort;
 	if (add->asp_tags != orig.asp_tags) new->asp_tags = add->asp_tags;
 	if (add->dav_script != orig.dav_script) new->dav_script = add->dav_script;
 	
@@ -398,6 +409,9 @@ char *php3flaghandler(cmd_parms * cmd, php3_ini_structure * conf, int val)
 			break;
 		case 14:
 			conf->asp_tags = val;
+			break;
+		case 15:
+			conf->ignore_user_abort = val;
 			break;
 	}
 	return NULL;
@@ -476,7 +490,15 @@ char *php3take1handler(cmd_parms * cmd, php3_ini_structure * conf, char *arg)
 			conf->error_append_string = pstrdup(cmd->pool, arg);
 			break;
 		case 18:
-			conf->open_basedir = pstrdup(cmd->pool, arg);
+			if (conf->open_basedir == NULL) {
+				conf->open_basedir = pstrdup(cmd->pool, arg);
+			} else {
+#if WIN32|WINNT
+				conf->open_basedir = pstrcat(cmd->pool, conf->open_basedir, ";", arg, NULL);
+#else
+				conf->open_basedir = pstrcat(cmd->pool, conf->open_basedir, ":", arg, NULL);
+#endif
+			}
 			break;
 		case 19:
 			conf->upload_max_filesize = atol(arg);
@@ -584,7 +606,7 @@ command_rec php3_commands[] =
 	{"php3_gpc_order", php3take1handler, (void *)15, OR_OPTIONS, TAKE1, "Set GET-COOKIE-POST order [default is GPC]"},
 	{"php3_error_prepend_string", php3take1handler, (void *)16, OR_OPTIONS, TAKE1, "String to add before an error message from PHP"},
 	{"php3_error_append_string", php3take1handler, (void *)17, OR_OPTIONS, TAKE1, "String to add after an error message from PHP"},
-	{"php3_open_basedir", php3take1handler, (void *)18, OR_OPTIONS|RSRC_CONF, TAKE1, "Limit opening of files to this directory"},
+	{"php3_open_basedir", php3take1handler, (void *)18, OR_OPTIONS|RSRC_CONF, ITERATE, "Limit opening of files to this directory"},
 	{"php3_upload_max_filesize", php3take1handler, (void *)19, OR_OPTIONS|RSRC_CONF, TAKE1, "Limit uploaded files to this many bytes"},
 #if HAVE_MOD_DAV
 	{"php3_dav_script", php3take1handler, (void *)20, OR_OPTIONS|RSRC_CONF, TAKE1,
@@ -605,6 +627,7 @@ command_rec php3_commands[] =
 	{"php3_magic_quotes_sybase", php3flaghandler, (void *)12, OR_OPTIONS, FLAG, "on|off"},
 	{"php3_enable_dl", php3flaghandler, (void *)13, RSRC_CONF|ACCESS_CONF, FLAG, "on|off"},
 	{"php3_asp_tags", php3flaghandler, (void *)14, OR_OPTIONS, FLAG, "on|off"},
+	{"php3_ignore_user_abort", php3flaghandler, (void *)13, RSRC_CONF|ACCESS_CONF, FLAG, "on|off"},
 	{NULL}
 };
 

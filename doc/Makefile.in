@@ -26,7 +26,7 @@
 # +----------------------------------------------------------------------+
 
 #
-# $Id: Makefile.in,v 1.88 1998/11/17 23:21:18 tommay Exp $
+# $Id: Makefile.in,v 1.90 1999/02/19 16:17:29 thies Exp $
 #
 
 VPATH=@srcdir@
@@ -86,6 +86,7 @@ FUNCREF= \
 	functions/mysql.sgml \
 	functions/sybase.sgml \
 	functions/network.sgml \
+	functions/oci8.sgml \
 	functions/oracle.sgml \
 	functions/pgsql.sgml \
 	functions/info.sgml \
@@ -97,6 +98,7 @@ FUNCREF= \
 	functions/uodbc.sgml \
 	functions/url.sgml \
 	functions/var.sgml \
+	functions/wddx.sgml \
 	functions/zlib.sgml
 
 FILES=$(PREFACE) $(APPENDICES) $(CHAPTERS) $(FUNCREF)

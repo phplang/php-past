@@ -8,6 +8,61 @@
     categories seemed to fit.
   </partintro>
 
+  <refentry id="function.connection-aborted">
+   <refnamediv>
+    <refname>connection_aborted</refname>
+    <refpurpose>Return true if client disconnected</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>connection_aborted</function></funcdef>
+     <paramdef>void <parameter></parameter></paramdef>
+    </funcsynopsis>
+    <simpara>
+     Returns true if client disconnected.  See the Connection Handling
+     description in the Feature chapter for a complete explanation.
+    </simpara>
+   </refsect1>
+  </refentry>
+
+  <refentry id="function.connection-status">
+   <refnamediv>
+    <refname>connection_status</refname>
+    <refpurpose>Returns connection status bitfield</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>connection_status</function></funcdef>
+     <paramdef>void <parameter></parameter></paramdef>
+    </funcsynopsis>
+    <simpara>
+     Returns the connection status bitfield.  See the Connection
+     Handling description in the Feature chapter for a complete
+     explanation.
+    </simpara>
+   </refsect1>
+  </refentry>
+
+  <refentry id="function.connection-timeout">
+   <refnamediv>
+    <refname>connection_timeout</refname>
+    <refpurpose>Return true if script timed out</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>connection_timeout</function></funcdef>
+     <paramdef>void <parameter></parameter></paramdef>
+    </funcsynopsis>
+    <simpara>
+     Returns true if script timed out.  See the Connection Handling
+     description in the Feature chapter for a complete explanation.
+    </simpara>
+   </refsect1>
+  </refentry>
+
   <refentry id="function.eval">
    <refnamediv>
     <refname>eval</refname>
@@ -64,6 +119,108 @@ This is a cup with my coffee in it.
    </refsect1>
   </refentry>
 
+  <refentry id="function.extract">
+   <refnamediv>
+    <refname>extract</refname>
+    <refpurpose>Import variables into the symbol table from an array</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>void <function>extract</function></funcdef>
+	 <paramdef>array <parameter>var_array</parameter></paramdef>
+	 <paramdef>int <parameter>extract_type</parameter></paramdef>
+	 <paramdef>string <parameter><optional>var_array</optional></parameter></paramdef>
+    </funcsynopsis>
+    <para>
+     This function is used to import variables from an array into the
+     current symbol table.  It takes associative array
+     <parameter>var_array</parameter> and treats keys as variable
+     names and values as variable values.  For each key/value pair it
+     will create a variable in the current symbol table, subject to
+     <parameter>extract_type</parameter> and
+     <parameter>prefix</parameter> parameters.
+	<para>
+	 <function>extract</function> checks for colissions with existing variables.
+     The way collisions are treated is determined by
+     <parameter>extract_type</parameter>. It can be one of the
+     following values:
+	 <variablelist>
+	  <varlistentry>
+	   <term>EXTR_OVERWRITE</term>
+	   <listitem>
+	    <simpara>If there is a collision, overwrite the existing variable.</simpara>
+	   </listitem>
+	  </varlistentry>
+	  <varlistentry>
+	   <term>EXTR_SKIP</term>
+	   <listitem>
+	    <simpara>If there is a collision, don't overwrite the existing variable.</simpara>
+	   </listitem>
+	  </varlistentry>
+	  <varlistentry>
+	   <term>EXTR_PREFIX_SAME</term>
+	   <listitem>
+	    <simpara>If there is a collision, prefix the new variable with
+		<parameter>prefix</parameter>.
+		</simpara>
+	   </listitem>
+	  </varlistentry>
+	  <varlistentry>
+	   <term>EXTR_PREFIX_ALL</term>
+	   <listitem>
+	    <simpara>Prefix all variables with <parameter>prefix</parameter>.</simpara>
+	   </listitem>
+	  </varlistentry>
+	 </variablelist>
+	<para>
+     Note that <parameter>prefix</parameter> is only required if
+     <parameter>extract_type</parameter> is EXTR_PREFIX_SAME or
+     EXTR_PREFIX_ALL.
+	<para>
+     <function>extract</function> checks each key to see if it
+     constitues a valid variable name, and if it does only then does
+     it proceed to import it.
+	<para>
+     A possible use for extract is to import into symbol table
+     variables contained in an associative array returned by
+     <function>wddx_deserialize</function>.
+    <para>
+     <example>
+      <title>extract example</title>
+      <programlisting>
+&lt;?
+
+/* Suppose that $var_array is an array returned from
+   wddx_deserialize */
+$size = "large";
+$var_array = array("color" => "blue",
+                   "size"  => "medium",
+                   "shape" => "sphere");
+extract($var_array, EXTR_PREFIX_SAME, "wddx");
+
+print "$color, $size, $shape, $wddx_size\n";
+
+?>
+      </programlisting>
+     </example>
+	 
+	<para>
+	 The above example will produce:
+	 <programlisting>
+blue, large, sphere, medium
+	 </programlisting>
+	 
+	<para>
+     The $size wasn't overwritten, becaus we specified
+     EXTR_PREFIX_SAME, which resulted in $wddx_size being created. 
+     If EXTR_SKIP was specified, then $wddx_size wouldn't even have
+     been created.  EXTR_OVERWRITE would have cause $size to have
+     value "medium", and EXTR_PREFIX_ALL would result in new
+     variables being named $wddx_color, $wddx_size, and $wddx_shape.
+   </refsect1>
+  </refentry>
+
   <refentry id="function.die">
    <refnamediv>
     <refname>die</refname>
@@ -76,8 +233,8 @@ This is a cup with my coffee in it.
      <paramdef>string <parameter>message</parameter></paramdef>
     </funcsynopsis>
     <simpara>
-	 This language construct outputs a message and terminates parsing of the script.  It does not
-	 return.
+     This language construct outputs a message and terminates parsing
+     of the script.  It does not return.
     <para>
      <example>
       <title>die example</title>
@@ -104,17 +261,57 @@ $file = fopen($filename, 'r')
      <void>
     </funcsynopsis>
     <simpara>
-	 This language construct terminates parsing of the script.  It does not
-	 return.
+     This language construct terminates parsing of the script.  It
+     does not return.
+   </refsect1>
+  </refentry> 
+
+  <refentry id="function.function-exists">
+   <refnamediv>
+    <refname>function_exists</refname>
+    <refpurpose>Return true if the given function has been defined</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>function_exists</function></funcdef>
+     <paramdef>string <parameter>function_name</parameter></paramdef>
+    </funcsynopsis>
+    <simpara>
+     Checks the list of defined functions for <parameter>function_name</parameter>.
+	 Returns true if the given function name was found, false otherwise.
+    </simpara>
    </refsect1>
   </refentry>
 
+  <refentry id="function.ignore-user-abort">
+   <refnamediv>
+    <refname>ignore_user_abort</refname>
+    <refpurpose>Set whether a client disconnect should abort script execution</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>ignore_user_abort</function></funcdef>
+     <paramdef>int <parameter><optional>setting</optional></parameter></paramdef>
+    </funcsynopsis>
+    <simpara>
+     This function sets whether a client disconnect should cause a
+     script to be aborted.  It will return the previous setting and
+     can be called without an argument to not change the current
+     setting and only return the current setting.  See the Connection
+     Handling section in the Features chapter for a complete
+     description of connection handling in PHP.
+    </simpara>
+   </refsect1>
+  </refentry> 
+	
   <refentry id="function.iptcparse">
    <refnamediv>
     <refname>iptcparse</refname>
     <refpurpose>Parse a binary IPTC <ulink url="http://www.xe.net/iptc/">
-	  http://www.xe.net/iptc/</ulink> block into single tags.
-	</refpurpose>
+      http://www.xe.net/iptc/</ulink> block into single tags.
+    </refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
@@ -123,10 +320,10 @@ $file = fopen($filename, 'r')
      <paramdef>string <parameter>iptcblock</parameter></paramdef>
     </funcsynopsis>
     <simpara>
-	 This function parses a binary IPTC block into its single tags. It 
-	 returns an array using the tagmarker as an index and the value as the 
-	 value. It returns false on error or if no IPTC data was found. 
-	 See <function>GetImageSize</function> for a sample.
+     This function parses a binary IPTC block into its single tags. It
+     returns an array using the tagmarker as an index and the value as
+     the value. It returns false on error or if no IPTC data was
+     found.  See <function>GetImageSize</function> for a sample.
    </refsect1>
   </refentry>
 
@@ -244,7 +441,7 @@ $binarydata = pack("nvc*", 0x1234, 0x5678, 65, 66);
    </funcsynopsis>
    <simpara>
      Registers the function named by <parameter>func</parameter> to be
-     executed when script processing is complete. 
+     executed when script processing is complete.
   </refsect1>
  </refentry>
 
@@ -419,11 +616,11 @@ if (!odbc_execute($stmt, &$sqldata) || !odbc_fetch_into($stmt, &$tmp)) {
      <paramdef>string <parameter>prefix</parameter></paramdef>
     </funcsynopsis>
     <simpara>
-     <function>uniqid</function> returns a prefixed unique identifier based on
-     current time in microseconds. The prefix can be useful for instance if you
-     generate identifiers simultaneously on several hosts that might happen to
-     generate the identifier at the same microsecond. The prefix can be up to 114
-     characters long.
+     <function>uniqid</function> returns a prefixed unique identifier
+     based on current time in microseconds. The prefix can be useful
+     for instance if you generate identifiers simultaneously on
+     several hosts that might happen to generate the identifier at the
+     same microsecond. The prefix can be up to 114 characters long.
     <para>
      If you need a unique identifier or token and you intend to give
      out that token to the user via the network (i.e. session cookies),

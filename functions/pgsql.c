@@ -2,7 +2,7 @@
    +----------------------------------------------------------------------+
    | PHP HTML Embedded Scripting Language Version 3.0                     |
    +----------------------------------------------------------------------+
-   | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
+   | Copyright (c) 1997-1999 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
    | it under the terms of one of the following licenses:                 |
@@ -28,7 +28,7 @@
    +----------------------------------------------------------------------+
  */
  
-/* $Id: pgsql.c,v 1.75 1998/12/21 05:24:20 sas Exp $ */
+/* $Id: pgsql.c,v 1.81 1999/01/04 07:38:15 jah Exp $ */
 
 #include <stdlib.h>
 
@@ -376,7 +376,7 @@ void php3_pgsql_connect(INTERNAL_FUNCTION_PARAMETERS)
 }
 /* }}} */
 
-/* {{{ proto int pg_connect([string connection_string] | [string host, string port, [string options, [string tty,]] string database)
+/* {{{ proto int pg_pconnect([string connection_string] | [string host, string port, [string options, [string tty,]] string database)
    Open a persistent PostgreSQL connection */
 void php3_pgsql_pconnect(INTERNAL_FUNCTION_PARAMETERS)
 {
@@ -870,7 +870,7 @@ void php3_pgsql_result(INTERNAL_FUNCTION_PARAMETERS)
 }
 /* }}} */
 
-/* {{{ proto array pg_fetchrow(int result, int row)
+/* {{{ proto array pg_fetch_row(int result, int row)
    Get a row as an enumerated array */ 
 void php3_pgsql_fetch_row(INTERNAL_FUNCTION_PARAMETERS)
 {
@@ -903,21 +903,20 @@ void php3_pgsql_fetch_row(INTERNAL_FUNCTION_PARAMETERS)
 	}
 	array_init(return_value);
 	for (i=0,num_fields=PQnfields(pgsql_result); i<num_fields; i++) {
+		char *tmp;
+		
 		element = PQgetvalue(pgsql_result,row->value.lval,i);
-		element_len = (element ? strlen(element) : 0);
-		element = safe_estrndup(element,element_len);
-        if (element) {
-            if (php3_ini.magic_quotes_runtime) {
-                char *tmp=_php3_addslashes(element,element_len,&element_len,0);
-
-                add_index_stringl(return_value, i, tmp, element_len, 0);
-            } else {
-                add_index_stringl(return_value, i, element, element_len, 1);
-            }
-        } else {
-            /* NULL field, don't set it */
-            /*add_index_stringl(return_value, i, empty_string, 0, 1);*/
-        }
+		if (element) {
+			element_len = strlen(element);
+			if (php3_ini.magic_quotes_runtime) {
+				tmp = _php3_addslashes(element, element_len, &element_len, 0);
+			} else {
+				tmp = estrndup(element, element_len);
+			}
+			add_index_stringl(return_value, i, tmp, element_len, 0);
+		} else {
+			/* element is NULL, don't add it */
+		}
 	}
 }
 /* }}} */
@@ -953,23 +952,24 @@ void php3_pgsql_fetch_hash(INTERNAL_FUNCTION_PARAMETERS)
 	}
 	array_init(return_value);
 	for (i=0,num_fields=PQnfields(pgsql_result); i<num_fields; i++) {
-		element = PQgetvalue(pgsql_result,row->value.lval,i);
-		element_len = (element ? strlen(element) : 0);
-		element = safe_estrndup(element,element_len);
-		if (element) {
-            if (php3_ini.magic_quotes_runtime) {
-                char *tmp=_php3_addslashes(element,element_len,&element_len,0);
+		char *tmp;
 
-                add_get_index_stringl(return_value, i, tmp, element_len, (void **) &pval_ptr, 0);
-            } else {
-                add_get_index_stringl(return_value, i, element, element_len, (void **) &pval_ptr, 1);
-            }
-			field_name = PQfname(pgsql_result,i);
-            _php3_hash_pointer_update(return_value->value.ht, field_name, strlen(field_name)+1, pval_ptr);
-        } else {
-            /* NULL field, don't set it */
-            /* add_get_index_stringl(return_value, i, empty_string, 0, (void **) &pval_ptr); */
-        }
+		element = PQgetvalue(pgsql_result,row->value.lval,i);
+		if (element) {
+			element_len = strlen(element);
+			if (php3_ini.magic_quotes_runtime) {
+				tmp = _php3_addslashes(element, element_len, &element_len, 0);
+			} else {
+				tmp = estrndup(element, element_len);
+			}
+		} else {
+			tmp = estrdup(empty_string);
+			element_len = 0;
+		}
+
+		add_get_index_stringl(return_value, i, tmp, element_len, (void **) &pval_ptr, 0);
+		field_name = PQfname(pgsql_result, i);
+		_php3_hash_pointer_update(return_value->value.ht, field_name, strlen(field_name)+1, pval_ptr);
 	}
 }
 

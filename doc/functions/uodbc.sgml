@@ -218,12 +218,42 @@
      <paramdef>string <parameter>dsn</parameter></paramdef>
      <paramdef>string <parameter>user</parameter></paramdef>
      <paramdef>string <parameter>password</parameter></paramdef>
+     <paramdef>int <parameter><optional>cursor_type</optional></parameter></paramdef>
     </funcsynopsis>
     <para>
      Returns an ODBC connection id or 0 (<literal>false</literal>) on error.
-    <para>
+    <simpara>
      The connection id returned by this functions is needed by other
      ODBC functions. You can have multiple connections open at once.
+     The optional fourth parameter sets the type of cursor to be used
+     for this connection. This parameter is not normally needed, but
+     can be useful for working around problems with some ODBC drivers.
+    <simpara>
+     With some ODBC drivers, executing a complex stored procedure may
+     fail with an error similar to: "Cannot open a cursor on a stored
+     procedure that has anything other than a single select statement
+     in it".  Using SQL_CUR_USE_ODBC may avoid that error. Also, some
+     drivers don't support the optional row_number parameter in
+     <function>odbc_fetch_row</function>. SQL_CUR_USE_ODBC might help
+     in that case, too.
+    <simpara>
+     The following constants are defined for cursortype:
+    <para>
+     <itemizedlist>
+      <listitem><simpara>
+      SQL_CUR_USE_IF_NEEDED
+      </simpara></listitem> 
+      <listitem><simpara>
+      SQL_CUR_USE_ODBC
+      </simpara></listitem> 
+      <listitem><simpara>
+      SQL_CUR_USE_DRIVER
+      </simpara></listitem> 
+      <listitem><simpara>
+      SQL_CUR_DEFAULT
+      </simpara></listitem> 
+    </itemizedlist>
+	<simpara>
      For persistent connections see <function>odbc_pconnect</function>.
    </refsect1>
   </refentry>
@@ -454,12 +484,12 @@
    <refsect1>
     <title>Description</title>
     <funcsynopsis>
-     <funcdef>string <function>odbc_field_type</function></funcdef>
+     <funcdef>int <function>odbc_field_len</function></funcdef>
      <paramdef>int <parameter>result_id</parameter></paramdef>
      <paramdef>int <parameter>field_number</parameter></paramdef>
     </funcsynopsis>
     <para>
-     <function>odbc_field_type</function> will return the length of
+     <function>odbc_field_len</function> will return the length of
      the field referecend by number in the given ODBC result
      identifier.  Field numbering starts at 1.
  
@@ -555,6 +585,7 @@
      <paramdef>string <parameter>dsn</parameter></paramdef>
      <paramdef>string <parameter>user</parameter></paramdef>
      <paramdef>string <parameter>password</parameter></paramdef>
+     <paramdef>int <parameter><optional>cursor_type</optional></parameter></paramdef>
     </funcsynopsis>
     <para>
      Returns an ODBC connection id or 0 (<literal>false</literal>) on error.  This
@@ -572,7 +603,9 @@
        program.
       </simpara></note>
     <para>
-     For more information on persistent connections, refer to the PHP3
+     For information about the optional cursor_type parameter see the
+	 <function>odbc_connect</function> function.  For more information 
+	 on persistent connections, refer to the PHP3
      FAQ.
    </refsect1>
 </refentry>
@@ -719,6 +752,74 @@ longer than 4096 bytes, the contents is not
    </refsect1>
   </refentry>
 
+  <refentry id="function.odbc-setoption">
+   <refnamediv>
+    <refname>odbc_setoption</refname> 
+    <refpurpose>
+     Adjust ODBC settings. Returns false if an error occurs, otherwise
+     true.
+    </refpurpose>
+   </refnamediv>
+    <refsect1>
+     <title>Description</title>
+     <funcsynopsis>
+      <funcdef>int <function>odbc_setoption</function></funcdef>
+      <paramdef>int <parameter>id</parameter></paramdef>
+      <paramdef>int <parameter>function</parameter></paramdef>
+      <paramdef>int <parameter>option</parameter></paramdef>
+      <paramdef>int <parameter>param</parameter></paramdef>
+     </funcsynopsis>
+     <para>
+      This function allows fiddling with the ODBC options for a
+      particular connection or query result.  It was written to help
+      find work arounds to problems in quirky ODBC drivers.  You
+      should probably only use this function if you are an ODBC
+      programmer and understand the effects the various options will
+      have.  You will certainly need a good ODBC reference to explain
+      all the different options and values that can be used.
+      Different driver versions support different options.
+     <para>
+      Because the effects may vary depending on the ODBC driver, use
+      of this function in scripts to be made publicly available is
+      strongly discouraged.  Also, some ODBC options are not available
+      to this function because they must be set before the connection
+      is established or the query is prepared.  However, if on a
+      particular job it can make PHP work so your boss doesn't tell
+      you to use a commercial product, that's all that really matters.
+     <para>
+      <parameter>Id</parameter> is a connection id or result id on
+      which to change the settings.For SQLSetConnectOption(), this is 
+      a connection id. For SQLSetStmtOption(), this is a result id.
+     <para>
+      <parameter>function</parameter> is the ODBC function to use. The
+      value should be 1 for SQLSetConnectOption() and 2 for
+      SQLSetStmtOption().
+     <para>
+      Parmeter <parameter>option</parameter> is the option to set.
+     <para>
+      Parameter <parameter>param</parameter> is the value for the
+      given <parameter>option</parameter>.
+
+     <example>
+      <title>ODBC Setoption Examples</title>
+      <programlisting role="php">
+// 1. Option 102 of SQLSetConnectOption() is SQL_AUTOCOMMIT.
+//    Value 1 of SQL_AUTOCOMMIT is SQL_AUTOCOMMIT_ON.
+//    This example has the same effect as
+//    odbc_autocommit($conn, true);
+
+odbc_setoption ($conn, 1, 102, 1);
+
+// 2. Option 0 of SQLSetStmtOption() is SQL_QUERY_TIMEOUT.
+//    This example sets the query to timeout after 30 seconds.
+
+$result = odbc_prepare ($conn, $sql);
+odbc_setoption ($result, 2, 0, 30);
+odbc_execute ($result);
+       </programlisting>
+     </example>
+    </refsect1>
+   </refentry>
 
  </reference>
 

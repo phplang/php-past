@@ -1,3 +1,5 @@
+/* $Id: imap.h,v 1.10 1998/12/28 09:43:58 sas Exp $ */
+
 #ifndef _INCLUDED_IMAP_H
 #define _INCLUDED_IMAP_H
 

@@ -1,3 +1,5 @@
+/* $Id: utils.h,v 1.6 1998/12/28 09:44:02 sas Exp $ */
+
 /* utility definitions */
 #ifndef _POSIX2_RE_DUP_MAX
 #define _POSIX2_RE_DUP_MAX   255

@@ -2,7 +2,7 @@
    +----------------------------------------------------------------------+
    | PHP HTML Embedded Scripting Language Version 3.0                     |
    +----------------------------------------------------------------------+
-   | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
+   | Copyright (c) 1997-1999 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
    | it under the terms of one of the following licenses:                 |
@@ -29,7 +29,7 @@
  */
 
 
-/* $Id: control_structures.h,v 1.41 1998/07/28 21:59:58 rasmus Exp $ */
+/* $Id: control_structures.h,v 1.42 1999/01/01 17:58:48 zeev Exp $ */
 
 
 #ifndef _CONTROL_STRUCTURES_H

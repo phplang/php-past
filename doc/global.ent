@@ -1,6 +1,6 @@
 <!-- -*- SGML -*-
 
- $Id: global.ent,v 1.17 1998/11/28 18:17:43 eschmid Exp $
+ $Id: global.ent,v 1.18 1999/02/02 05:44:10 andrey Exp $
 
  Contains global "macros" for all the SGML documents.
 
@@ -33,6 +33,7 @@
 <!ENTITY url.rec-xml "http://www.w3.org/TR/1998/REC-xml-19980210">
 <!ENTITY url.win32install "http://www.umesd.k12.or.us/php/win32install.html">
 <!ENTITY url.browscap "http://www.netvision.net.il/browser-id.php3">
+<!ENTITY url.wddx "http://www.wddx.org">
 
 <!ENTITY php.homepage '<systemitem class=resource><ulink url="&url.php;">&url.php;</ulink></systemitem>'>
 

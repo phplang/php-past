@@ -22,15 +22,30 @@
 #undef PHP3_MD5_CRYPT
 #undef PHP3_BLOWFISH_CRYPT
 
+/* Solaris YP check */
+#undef SOLARIS_YP
+
+/* Netscape LDAP SDK check */
+#undef HAVE_NSLDAP
+
+/* ImageMagick check */
+#undef HAVE_LIBMAGICK
+
 /* Define if you have dirent.h but opendir() resides in libc rather than in libdir */
 /* This will cause HAVE_DIRENT_H defined twice sometimes, but it should be problem */
 #define HAVE_DIRENT_H 0
+
+/* Define if you have struct flock */
+#define HAVE_STRUCT_FLOCK 0
 
 /* Define if you have the resolv library (-lresolv). */
 #define HAVE_LIBRESOLV 0
 
 /* Define if you have the gd library (-lgd). */
 #define HAVE_LIBGD 0
+
+/* Define if you have the GNU gettext library (-lintl). */
+#define HAVE_LIBINTL 0
 
 /* Define if you have the zlib library */
 #define HAVE_ZLIB 0
@@ -109,11 +124,17 @@
 /* Define if you want the LDAP directory interface */
 #define HAVE_LDAP 0
 
+/* Define if you want the Cybercash MCK support */
+#define HAVE_MCK 0
+
 /* Define if you want the SNMP interface */
 #define HAVE_SNMP 0
 
 /* Define if you want the IMAP directory interface */
 #define HAVE_IMAP 0
+
+/* Define if you want the ASPELL interface */
+#define HAVE_ASPELL 0
 
 /* Define if you want to use a custom ODBC database driver */
 #define HAVE_CODBC 0
@@ -135,6 +156,9 @@
 
 /* Define if you have and want to use libsocket */
 #define HAVE_LIBSOCKET 0
+
+/* Define if you have and want to use libpam */
+#define HAVE_LIBPAM 0
 
 /* Define if you have the sendmail program available */
 #define HAVE_SENDMAIL 0
@@ -206,6 +230,9 @@
 /* Define if your system has the gettimeofday() call */
 #define HAVE_GETTIMEOFDAY 0
 
+/* Define if your system has the getrusage() call */
+#define HAVE_GETRUSAGE 0
+
 /* Define if your system has the putenv() library call */
 #define HAVE_PUTENV 0
 
@@ -240,10 +267,11 @@
  */
 #define HAVE_SEMUN 0
 
-/* Define if you want System V shared memory support.
- */
+/* Define if you want System V shared memory support.  */
 #define HAVE_SYSVSHM 0
 
+/* Define if you want to enable displaying source support. */
+#define HAVE_DISPLAY_SOURCE 0
 
 /* Define if you have broken header files like SunOS 4 */
 #define MISSING_FCLOSE_DECL 0
@@ -262,3 +290,6 @@
 
 /* Define to compile with mod_dav support */
 #define HAVE_MOD_DAV 0
+
+/* Define to enable yp/nis support */
+#define HAVE_YP 0

@@ -2,7 +2,7 @@
    +----------------------------------------------------------------------+
    | PHP HTML Embedded Scripting Language Version 3.0                     |
    +----------------------------------------------------------------------+
-   | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
+   | Copyright (c) 1997-1999 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
    | it under the terms of the GNU General Public License as published by |
@@ -23,7 +23,7 @@
  */
 
 
-/* $Id: hg_comm.h,v 1.2 1998/08/28 11:15:12 steinm Exp $ */
+/* $Id: hg_comm.h,v 1.4 1999/01/14 17:47:50 steinm Exp $ */
 
 #ifndef _HG_COMM_H
 #define _HG_COMM_H
@@ -178,7 +178,7 @@ extern int send_children(int sockfd, hw_objectID objectID, hw_objectID **childID
 extern int send_getparentsobj(int sockfd, hw_objectID objectID, char ***childrec, int *count);
 extern int send_pipedocument(int sockfd, char *hostname, hw_objectID objectID, int mode, int rootid, char** objattr, char **bodytag, char **text, int *count);
 extern int send_pipecgi(int sockfd, char *host, hw_objectID objectID, char *cgi_env_str, char **objattr, char **text, int *count);
-extern int send_putdocument(int sockfd, char *hostname, hw_objectID objectID, char *objectRec, char *text, int count);
+extern int send_putdocument(int sockfd, char *hostname, hw_objectID parentID, char *objectRec, char *text, int count, hw_objectID *objectID);
 extern int send_inscoll(int sockfd, hw_objectID objectID, char *objrec, hw_objectID *new_objectID);
 extern int send_insertobject(int sockfd, char *objrec, char *parms, hw_objectID *objectID);
 extern int send_insdoc(int sockfd, hw_objectID objectID, char *objrec, char *text, hw_objectID *new_objectID);

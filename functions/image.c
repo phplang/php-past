@@ -2,7 +2,7 @@
    +----------------------------------------------------------------------+
    | PHP HTML Embedded Scripting Language Version 3.0                     |
    +----------------------------------------------------------------------+
-   | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
+   | Copyright (c) 1997-1999 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
    | it under the terms of one of the following licenses:                 |
@@ -26,7 +26,7 @@
    | Authors: Rasmus Lerdorf                                              |
    +----------------------------------------------------------------------+
  */
-/* $Id: image.c,v 1.43 1998/12/23 11:33:19 thies Exp $ */
+/* $Id: image.c,v 1.47 1999/01/22 21:42:32 rasmus Exp $ */
 /* 
  * Based on Daniel Schmitt's imageinfo.c which carried the following
  * Copyright notice.
@@ -222,7 +222,7 @@ static struct gfxinfo *php3_handle_jpeg(FILE *fp,pval *info)
 	 /* main loop to parse JPEG structure */
 {
 	struct gfxinfo *result = NULL;
-	unsigned int marker;
+	unsigned int marker=0;
 	unsigned short in_width, in_height;
 
 	fseek(fp, 0L, SEEK_SET);		/* position file pointer on SOF */
@@ -305,6 +305,8 @@ static struct gfxinfo *php3_handle_jpeg(FILE *fp,pval *info)
 }
 
 /* main function */
+/* {{{ proto array getimagesize(string imagefile[, array info])
+   Get the size of an image as 4-element array */
 void php3_getimagesize(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *arg1,*info = 0;
@@ -385,3 +387,11 @@ void php3_getimagesize(INTERNAL_FUNCTION_PARAMETERS)
 		efree(result);
 	}
 }
+/* }}} */
+
+/*
+ * Local variables:
+ * tab-width: 4
+ * c-basic-offset: 4
+ * End:
+ */

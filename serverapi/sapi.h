@@ -1,5 +1,6 @@
 /*
 	Server API Abstraction Layer
+	$Id: sapi.h,v 1.10 1998/12/28 09:44:04 sas Exp $
 
 	This set of functions is required to create a new
 	api interface for php.  These functions map

@@ -1,0 +1,144 @@
+Some notes for RedHat 5.x users
+===============================
+
+These instructions assume you want to use pre-built RPM's as much as
+possible.  There is nothing stopping you from grabbing the Apache and
+PHP tarballs and working completely from sources.  Simply follow the
+instructions in the INSTALL file.  But if you like having most things
+under rpm control, read on.
+
+The first thing you need to do is upgrade your Apache to at least 
+version 1.3.4.  You need the apache-1.3.4 rpm along with the apache-devel
+RPM.  At the time of this writing the only apache-1.3.4 rpm available
+from RedHat is the Rawhide version which requires glibc-2.1.  You may not
+wish to move your entire system to the new glibc at this point.  If that
+is the case, I have built an apache-1.3.4 rpm that works nicely with the 
+standard RH-5.1 and RH-5.2 distributions.  It is available from:
+
+   http://www.lerdorf.on.ca/apache/
+
+You will also need the PHP tarball.  The PHP rpm available from RedHat is 
+ok if you don't need database support or any of the other PHP add-ons.  If 
+you do need to add your own set of features, download the latest PHP tarball
+and follow the steps below:
+
+Step 1: Remove old Apache packages, if installed.
+
+     rpm -e apache
+     rpm -e apache-devel
+
+Step 2: Install new Apache packages
+
+     rpm -i apache-1.3.4-1.i386.rpm
+     rpm -i apache-devel-1.3.4-1.i386.rpm
+
+Step 3: Determine which PHP extensions you want to use
+
+     ./configure --help
+
+This will give you a list of all the available options.  See
+the "PHP Extensions" section of this file for specific instructions
+on how to build in support for each extension.
+
+Step 4: Build PHP
+
+A typical configure line would look like this:
+
+     ./configure --with-apxs=/usr/bin/apxs --with-mysql --with-ldap
+
+Then type:
+
+     make
+     make install
+
+The 'make install' step should produce something very similar to:
+
+     /usr/bin/apxs -i -a -n php3 libphp3.so
+     cp libphp3.so /usr/lib/apache/libphp3.so
+     chmod 755 /usr/lib/apache/libphp3.so
+     [activating module `php3' in /etc/httpd/conf/httpd.conf]
+
+At this point you just need to tell your server to restart.
+
+     /etc/rc.d/init.d/httpd restart
+
+     NOTE: If you get an error at this point saying that the libphp3.so
+           file could not be found, it is likely because you are using
+           the RedHat rawhide apache-1.3.4 rpm.  To fix it, type:
+  
+           ln -s /usr/lib /etc/httpd
+
+     and then start your server with:
+
+           /etc/rc.d/init.d/httpd start
+         
+Step 5: Test your setup
+
+     Create a file in your document root directory.  I usually call 
+     it info.php3 and in it put this single line:
+
+     <?phpinfo()?>
+
+     Then load it up in your browser:
+
+     http://your.machine/info.php3
+
+     You should see a nice summary page showing all sorts of information
+     about your setup.  You probably shouldn't leave this file around on
+     a production server, but for debugging and general info during 
+     development, it is very handy.
+
+
+PHP Extensions
+==============
+
+In all cases, it is a good idea to remove the 'config.cache' when
+trying to reconfigure PHP to include new options.  
+
+Package                   Suggested ./configure swicth
+-------                   ----------------------------
+
+GD                        <none>
+    You need the standard gd-devel RPM installed.  PHP will automatically
+    detect it and include support for it if the gd-devel RPM has been
+    installed.
+
+FreeType (libttf)         <none>
+    You need to install the freetype and freetype-devel RPM's available
+    from any RedHatContrib mirror site.  Once installed PHP will 
+    automatically detect them and add TTF stuff.  Note that you also need
+    GD support for TTF support to be activated.
+
+ImageMagick               -with-imagick
+    You need the bzip2 RPM along with the ImageMagick-devel-4.2.0-1 RPM
+    or later.
+
+IMAP                      --with-imap
+    Get the latest imap-devel RPM from a RedHatContrib mirror site and
+    install it.
+
+LDAP                      --with-ldap
+    Get the latest openldap-libs and openldap-devel RPM's from any 
+    RedHatContrib mirror site.
+
+mSQL                      --with-msql=/usr/lib/Hughes
+    Get the msql RPM from a RedHatContrib mirror
+
+MySQL                     --with-mysql
+    Grab the latest rpm packages directly from http://www.tcx.se or a mirror.
+    You should get all three.  MySQL, MySQL-client and MySQL-devel, but the
+    only package required in order to compile in MySQL support in PHP is the
+    MySQL-devel RPM. 
+
+PostgreSQL                --with-pgsql
+    You need the postgresql-devel RPM
+
+SNMP                      --with-snmp
+    You need the ucd-snmp-devel RPM
+
+YP                        --with-yp
+    libnsl contains the functions for this one and should already be installed.
+    It is usually part of the glibc-devel RPM.
+
+Zlib                      --with-zlib
+    You need the standard zlib-devel RPM (version >= 1.0.9) installed.

@@ -1,3 +1,5 @@
+/* $Id: sqlfront.h,v 1.3 1998/12/28 09:43:57 sas Exp $ */
+
 #ifndef _INC_SQLFRONT
 #define _INC_SQLFRONT
 

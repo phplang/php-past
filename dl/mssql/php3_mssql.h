@@ -28,22 +28,26 @@
  */
 
 
-/* $Id: php3_mssql.h,v 1.2 1998/09/07 16:47:25 shane Exp $ */
+/* $Id: php3_mssql.h,v 1.3 1999/01/06 07:27:12 fmk Exp $ */
 
 #ifndef _PHP3_MSSQL_H
 #define _PHP3_MSSQL_H
 
+
 #if COMPILE_DL
 #undef HAVE_MSSQL
 #define HAVE_MSSQL 1
+#include "dl/phpdl.h"
 #endif
 
 #if HAVE_MSSQL
+#ifndef DLEXPORT
+#define DLEXPORT
+#endif
 
 extern php3_module_entry mssql_module_entry;
 #define mssql_module_ptr &mssql_module_entry
 
-#include "phpdl.h"
 
 int php3_minit_mssql(INIT_FUNC_ARGS);
 int php3_rinit_mssql(INIT_FUNC_ARGS);
@@ -112,6 +116,7 @@ typedef struct {
 	long min_error_severity,min_message_severity;
 	long cfg_min_error_severity,cfg_min_message_severity;
 	void (*get_column_content)(mssql_link *mssql_ptr,int offset,pval *result,int column_type);
+	long textsize, textlimit; 
 	HashTable *resource_list, *resource_plist;
 } mssql_module;
 
@@ -119,7 +124,8 @@ typedef struct {
 
 typedef struct {
 	char *name,*column_source;
-	int max_length, numeric;
+	long max_length; 
+	int numeric;
 	int type;
 } mssql_field;
 

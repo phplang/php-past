@@ -2,7 +2,7 @@
    +----------------------------------------------------------------------+
    | PHP HTML Embedded Scripting Language Version 3.0                     |
    +----------------------------------------------------------------------+
-   | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
+   | Copyright (c) 1997-1999 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
    | it under the terms of one of the following licenses:                 |
@@ -27,7 +27,9 @@
    +----------------------------------------------------------------------+
  */
 
-/* !!!! experimental, use at your own risk! !!!! */
+
+/* !!!! experimental, use at your own risk! !!!! 
+   $Id: COM.c,v 1.7 1999/01/04 14:25:18 jah Exp $ */
 
 #if WIN32|WINNT
 
@@ -137,6 +139,8 @@ int php3_mshutdown_COM(void)
 }
 
 
+/* {{{ proto int com_load(string module_name)
+   ??? */
 void php3_COM_load(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *module_name;
@@ -193,7 +197,7 @@ void php3_COM_load(INTERNAL_FUNCTION_PARAMETERS)
 
 	RETURN_LONG(php3_list_insert(i_dispatch,le_idispatch));
 }
-
+/* }}} */
 
 
 
@@ -270,6 +274,8 @@ static void _php3_pval_to_variant(pval *pval_arg, VARIANTARG *var_arg)
 }
 
 
+/* {{{ proto mixed com_invoke(int module, string handler_name[, mixed arg[, ...]])
+   ??? */
 void php3_COM_invoke(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval **arguments;
@@ -352,8 +358,15 @@ void php3_COM_invoke(INTERNAL_FUNCTION_PARAMETERS)
 	efree(variant_args);
 	efree(funcname);
 }
+/* }}} */
 
 
+/* {{{ proto mixed com_get(int module, string property_name)
+   An alias for com_propget */
+/* }}} */
+
+/* {{{ proto mixed com_propget(int module, string property_name)
+   ??? */
 void php3_COM_propget(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *arg_idispatch, *arg_property;
@@ -411,8 +424,19 @@ void php3_COM_propget(INTERNAL_FUNCTION_PARAMETERS)
 
 	efree(funcname);
 }
+/* }}} */
 
 
+/* {{{ proto bool com_set(int module, string property_name, mixed value)
+   An alias for com_propput */
+/* }}} */
+
+/* {{{ proto bool com_propset(int module, string property_name, mixed value)
+   An alias for com_propput */
+/* }}} */
+
+/* {{{ proto bool com_propput(int module, string property_name, mixed value)
+   ??? */
 void php3_COM_propput(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *arg_idispatch, *arg_property, *arg_new_value;
@@ -471,7 +495,17 @@ void php3_COM_propput(INTERNAL_FUNCTION_PARAMETERS)
 	}
 
 	efree(funcname);
+
 	RETURN_TRUE;
 }
+/* }}} */
 
 #endif
+
+
+/*
+ * Local variables:
+ * tab-width: 4
+ * c-basic-offset: 4
+ * End:
+ */

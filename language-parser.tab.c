@@ -1,6 +1,6 @@
 
 /*  A Bison parser, made from language-parser.y
- by  GNU Bison version 1.25
+ by  GNU Bison version 1.26
   */
 
 #define YYBISON 1  /* Identify Bison output.  */
@@ -12,91 +12,91 @@
 #define yychar phpchar
 #define yydebug phpdebug
 #define yynerrs phpnerrs
-#define	LOGICAL_OR	258
-#define	LOGICAL_XOR	259
-#define	LOGICAL_AND	260
-#define	PHP_PRINT	261
-#define	PLUS_EQUAL	262
-#define	MINUS_EQUAL	263
-#define	MUL_EQUAL	264
-#define	DIV_EQUAL	265
-#define	CONCAT_EQUAL	266
-#define	MOD_EQUAL	267
-#define	AND_EQUAL	268
-#define	OR_EQUAL	269
-#define	XOR_EQUAL	270
-#define	SHIFT_LEFT_EQUAL	271
-#define	SHIFT_RIGHT_EQUAL	272
-#define	BOOLEAN_OR	273
-#define	BOOLEAN_AND	274
-#define	IS_EQUAL	275
-#define	IS_NOT_EQUAL	276
-#define	IS_SMALLER_OR_EQUAL	277
-#define	IS_GREATER_OR_EQUAL	278
-#define	SHIFT_LEFT	279
-#define	SHIFT_RIGHT	280
-#define	INCREMENT	281
-#define	DECREMENT	282
-#define	INT_CAST	283
-#define	DOUBLE_CAST	284
-#define	STRING_CAST	285
-#define	ARRAY_CAST	286
-#define	OBJECT_CAST	287
-#define	NEW	288
-#define	EXIT	289
-#define	IF	290
-#define	ELSEIF	291
-#define	ELSE	292
-#define	ENDIF	293
-#define	LNUMBER	294
-#define	DNUMBER	295
-#define	STRING	296
-#define	NUM_STRING	297
-#define	INLINE_HTML	298
-#define	CHARACTER	299
-#define	BAD_CHARACTER	300
-#define	ENCAPSED_AND_WHITESPACE	301
-#define	PHP_ECHO	302
-#define	DO	303
-#define	WHILE	304
-#define	ENDWHILE	305
-#define	FOR	306
-#define	ENDFOR	307
-#define	SWITCH	308
-#define	ENDSWITCH	309
-#define	CASE	310
-#define	DEFAULT	311
-#define	BREAK	312
-#define	CONTINUE	313
-#define	CONTINUED_WHILE	314
-#define	CONTINUED_DOWHILE	315
-#define	CONTINUED_FOR	316
-#define	OLD_FUNCTION	317
-#define	FUNCTION	318
-#define	IC_FUNCTION	319
-#define	PHP_CONST	320
-#define	RETURN	321
-#define	INCLUDE	322
-#define	REQUIRE	323
-#define	HIGHLIGHT_FILE	324
-#define	HIGHLIGHT_STRING	325
-#define	PHP_GLOBAL	326
-#define	PHP_STATIC	327
-#define	PHP_UNSET	328
-#define	PHP_ISSET	329
-#define	PHP_EMPTY	330
-#define	CLASS	331
-#define	EXTENDS	332
-#define	PHP_CLASS_OPERATOR	333
-#define	PHP_DOUBLE_ARROW	334
-#define	PHP_LIST	335
-#define	PHP_ARRAY	336
-#define	VAR	337
-#define	EVAL	338
-#define	DONE_EVAL	339
-#define	PHP_LINE	340
-#define	PHP_FILE	341
-#define	STRING_CONSTANT	342
+#define	LOGICAL_OR	257
+#define	LOGICAL_XOR	258
+#define	LOGICAL_AND	259
+#define	PHP_PRINT	260
+#define	PLUS_EQUAL	261
+#define	MINUS_EQUAL	262
+#define	MUL_EQUAL	263
+#define	DIV_EQUAL	264
+#define	CONCAT_EQUAL	265
+#define	MOD_EQUAL	266
+#define	AND_EQUAL	267
+#define	OR_EQUAL	268
+#define	XOR_EQUAL	269
+#define	SHIFT_LEFT_EQUAL	270
+#define	SHIFT_RIGHT_EQUAL	271
+#define	BOOLEAN_OR	272
+#define	BOOLEAN_AND	273
+#define	IS_EQUAL	274
+#define	IS_NOT_EQUAL	275
+#define	IS_SMALLER_OR_EQUAL	276
+#define	IS_GREATER_OR_EQUAL	277
+#define	SHIFT_LEFT	278
+#define	SHIFT_RIGHT	279
+#define	INCREMENT	280
+#define	DECREMENT	281
+#define	INT_CAST	282
+#define	DOUBLE_CAST	283
+#define	STRING_CAST	284
+#define	ARRAY_CAST	285
+#define	OBJECT_CAST	286
+#define	NEW	287
+#define	EXIT	288
+#define	IF	289
+#define	ELSEIF	290
+#define	ELSE	291
+#define	ENDIF	292
+#define	LNUMBER	293
+#define	DNUMBER	294
+#define	STRING	295
+#define	NUM_STRING	296
+#define	INLINE_HTML	297
+#define	CHARACTER	298
+#define	BAD_CHARACTER	299
+#define	ENCAPSED_AND_WHITESPACE	300
+#define	PHP_ECHO	301
+#define	DO	302
+#define	WHILE	303
+#define	ENDWHILE	304
+#define	FOR	305
+#define	ENDFOR	306
+#define	SWITCH	307
+#define	ENDSWITCH	308
+#define	CASE	309
+#define	DEFAULT	310
+#define	BREAK	311
+#define	CONTINUE	312
+#define	CONTINUED_WHILE	313
+#define	CONTINUED_DOWHILE	314
+#define	CONTINUED_FOR	315
+#define	OLD_FUNCTION	316
+#define	FUNCTION	317
+#define	IC_FUNCTION	318
+#define	PHP_CONST	319
+#define	RETURN	320
+#define	INCLUDE	321
+#define	REQUIRE	322
+#define	HIGHLIGHT_FILE	323
+#define	HIGHLIGHT_STRING	324
+#define	PHP_GLOBAL	325
+#define	PHP_STATIC	326
+#define	PHP_UNSET	327
+#define	PHP_ISSET	328
+#define	PHP_EMPTY	329
+#define	CLASS	330
+#define	EXTENDS	331
+#define	PHP_CLASS_OPERATOR	332
+#define	PHP_DOUBLE_ARROW	333
+#define	PHP_LIST	334
+#define	PHP_ARRAY	335
+#define	VAR	336
+#define	EVAL	337
+#define	DONE_EVAL	338
+#define	PHP_LINE	339
+#define	PHP_FILE	340
+#define	STRING_CONSTANT	341
 
 #line 1 "language-parser.y"
 
@@ -105,7 +105,7 @@
    +----------------------------------------------------------------------+
    | PHP HTML Embedded Scripting Language Version 3.0                     |
    +----------------------------------------------------------------------+
-   | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
+   | Copyright (c) 1997-1999 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
    | it under the terms of one of the following licenses:                 |
@@ -132,7 +132,7 @@
 */
 
 
-/* $Id: language-parser.y,v 1.177 1998/10/23 20:46:54 shane Exp $ */
+/* $Id: language-parser.y,v 1.178 1999/01/01 17:58:50 zeev Exp $ */
 
 
 /* 
@@ -305,7 +305,7 @@ int clean_module_resource_destructors(list_destructors_entry *ld, int *module_nu
 #define	YYFLAG		-32768
 #define	YYNTBASE	117
 
-#define YYTRANSLATE(x) ((unsigned)(x) <= 342 ? yytranslate[x] : 222)
+#define YYTRANSLATE(x) ((unsigned)(x) <= 341 ? yytranslate[x] : 222)
 
 static const char yytranslate[] = {     0,
      2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
@@ -333,16 +333,16 @@ static const char yytranslate[] = {     0,
      2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
      2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
      2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-     2,     2,     2,     2,     2,     1,     2,     4,     5,     6,
-     7,     9,    10,    11,    12,    13,    14,    15,    16,    17,
-    18,    19,    22,    23,    27,    28,    30,    32,    33,    34,
-    43,    44,    45,    46,    47,    48,    49,    52,    53,    54,
-    55,    56,    57,    58,    59,    60,    61,    62,    63,    64,
-    65,    66,    67,    68,    69,    70,    71,    72,    73,    74,
-    75,    76,    77,    78,    79,    80,    81,    82,    83,    84,
-    85,    86,    87,    88,    89,    90,    91,    92,    93,    94,
-    95,    96,    97,    98,    99,   100,   101,   102,   103,   104,
-   105,   106
+     2,     2,     2,     2,     2,     1,     4,     5,     6,     7,
+     9,    10,    11,    12,    13,    14,    15,    16,    17,    18,
+    19,    22,    23,    27,    28,    30,    32,    33,    34,    43,
+    44,    45,    46,    47,    48,    49,    52,    53,    54,    55,
+    56,    57,    58,    59,    60,    61,    62,    63,    64,    65,
+    66,    67,    68,    69,    70,    71,    72,    73,    74,    75,
+    76,    77,    78,    79,    80,    81,    82,    83,    84,    85,
+    86,    87,    88,    89,    90,    91,    92,    93,    94,    95,
+    96,    97,    98,    99,   100,   101,   102,   103,   104,   105,
+   106
 };
 
 #if YYDEBUG != 0
@@ -546,7 +546,7 @@ static const char * const yytname[] = {   "$","error","$undefined.","','","LOGIC
 "HIGHLIGHT_FILE","HIGHLIGHT_STRING","PHP_GLOBAL","PHP_STATIC","PHP_UNSET","PHP_ISSET",
 "PHP_EMPTY","CLASS","EXTENDS","PHP_CLASS_OPERATOR","PHP_DOUBLE_ARROW","PHP_LIST",
 "PHP_ARRAY","VAR","EVAL","DONE_EVAL","PHP_LINE","PHP_FILE","STRING_CONSTANT",
-"'{'","'}'","'('","')'","';'","'$'","'`'","'\"'","'''","']'","statement_list",
+"'{'","'}'","'('","')'","';'","'$'","'`'","'\\\"'","'\\''","']'","statement_list",
 "statement","@1","@2","@3","@4","@5","@6","@7","@8","@9","@10","@11","@12","@13",
 "@14","@15","@16","@17","@18","@19","@20","for_statement","switch_case_list",
 "while_statement","while_iterations","@21","do_while_iterations","@22","@23",
@@ -1519,6 +1519,7 @@ static const short yycheck[] = {     2,
 
 /* -*-C-*-  Note some compilers choke on comments on `#line' lines.  */
 #line 3 "/usr/local/share/bison.simple"
+/* This file comes from bison-1.26.  */
 
 /* Skeleton output parser for bison,
    Copyright (C) 1984, 1989, 1990 Free Software Foundation, Inc.
@@ -1535,46 +1536,66 @@ static const short yycheck[] = {     2,
 
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
-   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  */
+   Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.  */
 
 /* As a special exception, when this file is copied by Bison into a
    Bison output file, you may use that output file without restriction.
    This special exception was added by the Free Software Foundation
    in version 1.24 of Bison.  */
 
-#ifndef alloca
-#ifdef __GNUC__
-#define alloca __builtin_alloca
-#else /* not GNU C.  */
-#if (!defined (__STDC__) && defined (sparc)) || defined (__sparc__) || defined (__sparc) || defined (__sgi)
-#include <alloca.h>
-#else /* not sparc */
-#if defined (MSDOS) && !defined (__TURBOC__)
-#include <malloc.h>
-#else /* not MSDOS, or __TURBOC__ */
-#if defined(_AIX)
-#include <malloc.h>
- #pragma alloca
-#else /* not MSDOS, __TURBOC__, or _AIX */
-#ifdef __hpux
-#ifdef __cplusplus
-extern "C" {
-void *alloca (unsigned int);
-};
-#else /* not __cplusplus */
-void *alloca ();
-#endif /* not __cplusplus */
-#endif /* __hpux */
-#endif /* not _AIX */
-#endif /* not MSDOS, or __TURBOC__ */
-#endif /* not sparc.  */
-#endif /* not GNU C.  */
-#endif /* alloca not defined.  */
-
 /* This is the parser code that is written into each bison parser
   when the %semantic_parser declaration is not specified in the grammar.
   It was written by Richard Stallman by simplifying the hairy parser
   used when %semantic_parser is specified.  */
+
+#ifndef YYSTACK_USE_ALLOCA
+#ifdef alloca
+#define YYSTACK_USE_ALLOCA
+#else /* alloca not defined */
+#ifdef __GNUC__
+#define YYSTACK_USE_ALLOCA
+#define alloca __builtin_alloca
+#else /* not GNU C.  */
+#if (!defined (__STDC__) && defined (sparc)) || defined (__sparc__) || defined (__sparc) || defined (__sgi) || (defined (__sun) && defined (__i386))
+#define YYSTACK_USE_ALLOCA
+#include <alloca.h>
+#else /* not sparc */
+/* We think this test detects Watcom and Microsoft C.  */
+/* This used to test MSDOS, but that is a bad idea
+   since that symbol is in the user namespace.  */
+#if (defined (_MSDOS) || defined (_MSDOS_)) && !defined (__TURBOC__)
+#if 0 /* No need for malloc.h, which pollutes the namespace;
+	 instead, just don't use alloca.  */
+#include <malloc.h>
+#endif
+#else /* not MSDOS, or __TURBOC__ */
+#if defined(_AIX)
+/* I don't know what this was needed for, but it pollutes the namespace.
+   So I turned it off.   rms, 2 May 1997.  */
+/* #include <malloc.h>  */
+ #pragma alloca
+#define YYSTACK_USE_ALLOCA
+#else /* not MSDOS, or __TURBOC__, or _AIX */
+#if 0
+#ifdef __hpux /* haible@ilog.fr says this works for HPUX 9.05 and up,
+		 and on HPUX 10.  Eventually we can turn this on.  */
+#define YYSTACK_USE_ALLOCA
+#define alloca __builtin_alloca
+#endif /* __hpux */
+#endif
+#endif /* not _AIX */
+#endif /* not MSDOS, or __TURBOC__ */
+#endif /* not sparc */
+#endif /* not GNU C */
+#endif /* alloca not defined */
+#endif /* YYSTACK_USE_ALLOCA not defined */
+
+#ifdef YYSTACK_USE_ALLOCA
+#define YYSTACK_ALLOC alloca
+#else
+#define YYSTACK_ALLOC malloc
+#endif
 
 /* Note: there must be only one dollar sign in this file.
    It is replaced by the list of actions, each action
@@ -1584,8 +1605,8 @@ void *alloca ();
 #define yyclearin	(yychar = YYEMPTY)
 #define YYEMPTY		-2
 #define YYEOF		0
-#define YYACCEPT	return(0)
-#define YYABORT 	return(1)
+#define YYACCEPT	goto yyacceptlab
+#define YYABORT 	goto yyabortlab
 #define YYERROR		goto yyerrlab1
 /* Like YYERROR except do call yyerror.
    This remains here temporarily to ease the
@@ -1666,12 +1687,12 @@ int yydebug;			/*  nonzero means print parse trace	*/
 #ifndef YYMAXDEPTH
 #define YYMAXDEPTH 10000
 #endif
-
-/* Prevent warning if -Wstrict-prototypes.  */
-#ifdef __GNUC__
-int yyparse (void);
-#endif
 
+/* Define __yy_memcpy.  Note that the size argument
+   should be passed with type unsigned int, because that is what the non-GCC
+   definitions require.  With GCC, __builtin_memcpy takes an arg
+   of type size_t, but it can handle unsigned int.  */
+
 #if __GNUC__ > 1		/* GNU C and GNU C++ define this.  */
 #define __yy_memcpy(TO,FROM,COUNT)	__builtin_memcpy(TO,FROM,COUNT)
 #else				/* not GNU C or C++ */
@@ -1683,7 +1704,7 @@ static void
 __yy_memcpy (to, from, count)
      char *to;
      char *from;
-     int count;
+     unsigned int count;
 {
   register char *f = from;
   register char *t = to;
@@ -1698,10 +1719,10 @@ __yy_memcpy (to, from, count)
 /* This is the most reliable way to avoid incompatibilities
    in available built-in functions on various systems.  */
 static void
-__yy_memcpy (char *to, char *from, int count)
+__yy_memcpy (char *to, char *from, unsigned int count)
 {
-  register char *f = from;
   register char *t = to;
+  register char *f = from;
   register int i = count;
 
   while (i-- > 0)
@@ -1711,7 +1732,7 @@ __yy_memcpy (char *to, char *from, int count)
 #endif
 #endif
 
-#line 196 "/usr/local/share/bison.simple"
+#line 216 "/usr/local/share/bison.simple"
 
 /* The user can define YYPARSE_PARAM as the name of an argument to be passed
    into yyparse.  The argument should have type void *.
@@ -1731,6 +1752,15 @@ __yy_memcpy (char *to, char *from, int count)
 #define YYPARSE_PARAM_ARG
 #define YYPARSE_PARAM_DECL
 #endif /* not YYPARSE_PARAM */
+
+/* Prevent warning if -Wstrict-prototypes.  */
+#ifdef __GNUC__
+#ifdef YYPARSE_PARAM
+int yyparse (void *);
+#else
+int yyparse (void);
+#endif
+#endif
 
 int
 yyparse(YYPARSE_PARAM_ARG)
@@ -1760,6 +1790,7 @@ yyparse(YYPARSE_PARAM_ARG)
 #endif
 
   int yystacksize = YYINITDEPTH;
+  int yyfree_stacks = 0;
 
 #ifdef YYPURE
   int yychar;
@@ -1844,18 +1875,32 @@ yynewstate:
       if (yystacksize >= YYMAXDEPTH)
 	{
 	  yyerror("parser stack overflow");
+	  if (yyfree_stacks)
+	    {
+	      free (yyss);
+	      free (yyvs);
+#ifdef YYLSP_NEEDED
+	      free (yyls);
+#endif
+	    }
 	  return 2;
 	}
       yystacksize *= 2;
       if (yystacksize > YYMAXDEPTH)
 	yystacksize = YYMAXDEPTH;
-      yyss = (short *) alloca (yystacksize * sizeof (*yyssp));
-      __yy_memcpy ((char *)yyss, (char *)yyss1, size * sizeof (*yyssp));
-      yyvs = (YYSTYPE *) alloca (yystacksize * sizeof (*yyvsp));
-      __yy_memcpy ((char *)yyvs, (char *)yyvs1, size * sizeof (*yyvsp));
+#ifndef YYSTACK_USE_ALLOCA
+      yyfree_stacks = 1;
+#endif
+      yyss = (short *) YYSTACK_ALLOC (yystacksize * sizeof (*yyssp));
+      __yy_memcpy ((char *)yyss, (char *)yyss1,
+		   size * (unsigned int) sizeof (*yyssp));
+      yyvs = (YYSTYPE *) YYSTACK_ALLOC (yystacksize * sizeof (*yyvsp));
+      __yy_memcpy ((char *)yyvs, (char *)yyvs1,
+		   size * (unsigned int) sizeof (*yyvsp));
 #ifdef YYLSP_NEEDED
-      yyls = (YYLTYPE *) alloca (yystacksize * sizeof (*yylsp));
-      __yy_memcpy ((char *)yyls, (char *)yyls1, size * sizeof (*yylsp));
+      yyls = (YYLTYPE *) YYSTACK_ALLOC (yystacksize * sizeof (*yylsp));
+      __yy_memcpy ((char *)yyls, (char *)yyls1,
+		   size * (unsigned int) sizeof (*yylsp));
 #endif
 #endif /* no yyoverflow */
 
@@ -3059,7 +3104,7 @@ case 295:
     break;}
 }
    /* the action file gets copied in in place of this dollarsign */
-#line 498 "/usr/local/share/bison.simple"
+#line 542 "/usr/local/share/bison.simple"
 
   yyvsp -= yylen;
   yyssp -= yylen;
@@ -3254,6 +3299,30 @@ yyerrhandle:
 
   yystate = yyn;
   goto yynewstate;
+
+ yyacceptlab:
+  /* YYACCEPT comes here.  */
+  if (yyfree_stacks)
+    {
+      free (yyss);
+      free (yyvs);
+#ifdef YYLSP_NEEDED
+      free (yyls);
+#endif
+    }
+  return 0;
+
+ yyabortlab:
+  /* YYABORT comes here.  */
+  if (yyfree_stacks)
+    {
+      free (yyss);
+      free (yyvs);
+#ifdef YYLSP_NEEDED
+      free (yyls);
+#endif
+    }
+  return 1;
 }
 #line 726 "language-parser.y"
 

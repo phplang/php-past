@@ -2,7 +2,7 @@
    +----------------------------------------------------------------------+
    | PHP HTML Embedded Scripting Language Version 3.0                     |
    +----------------------------------------------------------------------+
-   | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
+   | Copyright (c) 1997-1999 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
    | it under the terms of one of the following licenses:                 |
@@ -30,7 +30,7 @@
  */
 
 
-/* $Id: dl.h,v 1.20 1998/05/15 10:57:21 zeev Exp $ */
+/* $Id: dl.h,v 1.21 1999/01/01 17:59:08 zeev Exp $ */
 
 #ifndef _DL_H
 #define _DL_H

@@ -15,7 +15,7 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-   $Header: /repository/php3/win32/pwd.c,v 1.9 1998/05/11 20:19:25 zeev Exp $
+   $Id: pwd.c,v 1.11 1998/12/28 09:44:04 sas Exp $
  */
 
 /* This 'implementation' is conjectured from the use of this functions in

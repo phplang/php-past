@@ -2,7 +2,7 @@
    +----------------------------------------------------------------------+
    | PHP HTML Embedded Scripting Language Version 3.0                     |
    +----------------------------------------------------------------------+
-   | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
+   | Copyright (c) 1997-1999 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
    | it under the terms of one of the following licenses:                 |
@@ -26,7 +26,7 @@
    | Author: Bjørn Borud - Guardian Networks AS <borud@guardian.no>    |
    +----------------------------------------------------------------------+
  */
-/* $Id: soundex.c,v 1.29 1998/11/18 21:23:11 ssb Exp $ */
+/* $Id: soundex.c,v 1.30 1999/01/01 17:59:18 zeev Exp $ */
 
 #include "php.h"
 #include "internal_functions.h"

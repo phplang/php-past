@@ -2,7 +2,7 @@
    +----------------------------------------------------------------------+
    | PHP HTML Embedded Scripting Language Version 3.0                     |
    +----------------------------------------------------------------------+
-   | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
+   | Copyright (c) 1997-1999 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
    | it under the terms of one of the following licenses:                 |
@@ -27,6 +27,7 @@
    +----------------------------------------------------------------------+
  */
 
+/* $Id: bcmath.c,v 1.29 1999/01/30 20:46:49 rasmus Exp $ */
 #ifndef MSVC5
 #include "config.h"
 #include "build-defs.h"
@@ -385,7 +386,7 @@ void php3_bcmath_sqrt(INTERNAL_FUNCTION_PARAMETERS)
 }
 /* }}} */
 
-/* {{{ proto string bccomp(string left_operand, string right_operand [, int scale])
+/* {{{ proto int bccomp(string left_operand, string right_operand [, int scale])
    Compares two arbitrary precision numbers */
 void php3_bcmath_comp(INTERNAL_FUNCTION_PARAMETERS)
 {

@@ -2,7 +2,7 @@
    +----------------------------------------------------------------------+
    | PHP HTML Embedded Scripting Language Version 3.0                     |
    +----------------------------------------------------------------------+
-   | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
+   | Copyright (c) 1997-1999 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
    | it under the terms of one of the following licenses:                 |
@@ -27,7 +27,7 @@
    +----------------------------------------------------------------------+
  */
  
-/* $Id: msql.c,v 1.100 1998/12/20 02:29:24 sas Exp $ */
+/* $Id: msql.c,v 1.104 1999/02/27 14:35:03 sas Exp $ */
 #ifdef THREAD_SAFE
 #include "tls.h"
 #endif
@@ -50,6 +50,9 @@
 #if defined(WIN32) && defined(MSQL1)
 #include <msql1.h>
 #else
+#ifndef APIENTRY
+#define APIENTRY
+#endif
 #include <msql.h>
 #endif
 #include "php3_list.h"
@@ -57,6 +60,7 @@
 #ifdef THREAD_SAFE
 DWORD MSQLTls;
 static int numthreads=0;
+void *msql_mutex;
 
 typedef struct msql_global_struct{
 	msql_module php3_msql_module;
@@ -97,11 +101,17 @@ function_entry msql_functions[] = {
 	{"msql_fetch_field",	php3_msql_fetch_field,		NULL},
 	{"msql_field_seek",		php3_msql_field_seek,		NULL},
 	{"msql_free_result",	php3_msql_free_result,		NULL},
+	{"msql_field_name",		php3_msql_field_name,		NULL},
+	{"msql_field_table",	php3_msql_field_table,		NULL},
+	{"msql_field_len",		php3_msql_field_len,		NULL},
+	{"msql_field_type",		php3_msql_field_type,		NULL},
+	{"msql_field_flags",	php3_msql_field_flags,		NULL},
 	{"msql_fieldname",		php3_msql_field_name,		NULL},
 	{"msql_fieldtable",		php3_msql_field_table,		NULL},
 	{"msql_fieldlen",		php3_msql_field_len,		NULL},
 	{"msql_fieldtype",		php3_msql_field_type,		NULL},
 	{"msql_fieldflags",		php3_msql_field_flags,		NULL},
+	
 	{"msql_regcase",		php3_sql_regcase,			NULL},
 	{"msql_affected_rows",	php3_msql_affected_rows,	NULL},
 	/* for downwards compatability */

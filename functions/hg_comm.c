@@ -2,7 +2,7 @@
    +----------------------------------------------------------------------+
    | PHP HTML Embedded Scripting Language Version 3.0                     |
    +----------------------------------------------------------------------+
-   | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
+   | Copyright (c) 1997-1999 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
    | it under the terms of the GNU General Public License as published by |
@@ -23,7 +23,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: hg_comm.c,v 1.10 1998/11/11 23:19:04 cschneid Exp $ */
+/* $Id: hg_comm.c,v 1.13 1999/01/14 17:47:50 steinm Exp $ */
 
 /* #define HW_DEBUG */
 
@@ -251,192 +251,199 @@ DLIST *fnCreateAnchorList(char **anchors, char **docofanchorrec, char **reldestr
 			docofanchorptr = docofanchorrec[i];
 			reldestptr = reldestrec[i];
 	
-			/* Determine Position. Doesn't matter if Src or Dest */
+			/* Determine Position. Doesn't matter if Src or Dest
+			   The Position field should always be there. Though there
+			   are case in which the position has no meaning, e.g. if
+			   a document is annotated and the annotation text doesn't
+			   contain a link of type annotation,
+			   In such a case the Position has the value 'invisible' */
 			str = strstr(object, "Position");
 			str += 9;
-			sscanf(str, "0x%X 0x%X", &start, &end);
+			if(0 != strncmp(str, "invisible", 9)) {
+				sscanf(str, "0x%X 0x%X", &start, &end);
+		
+				/* Determine ObjectID */
+				objectID = 0;
+				if(NULL != (str = strstr(object, "ObjectID"))) {
+					str += 9;
+					sscanf(str, "0x%X", &objectID);
+				}
+		
+				cur_ptr = fnAddAnchor(pAnchorList, objectID, start, end);
+		
+				/* Determine Type of Anchor */
+				str = strstr(object, "TAnchor");
+				str += 8;
+				if(*str == 'S') {
+					char destdocname[200];
+					char nameanchor[200];
+					cur_ptr->tanchor = 1;
+		
+					cur_ptr->destdocname = NULL;
+					if(NULL != (str = strstr(object, "Dest"))) {
+						char *tempptr;
 	
-			/* Determine ObjectID */
-			objectID = 0;
-			if(NULL != (str = strstr(object, "ObjectID"))) {
-				str += 9;
-				sscanf(str, "0x%X", &objectID);
-			}
-	
-			cur_ptr = fnAddAnchor(pAnchorList, objectID, start, end);
-	
-			/* Determine Type of Anchor */
-			str = strstr(object, "TAnchor");
-			str += 8;
-			if(*str == 'S') {
-				char destdocname[200];
-				char nameanchor[200];
-				cur_ptr->tanchor = 1;
-	
-				cur_ptr->destdocname = NULL;
-				if(NULL != (str = strstr(object, "Dest"))) {
-					char *tempptr;
-
-					/* No need to care about the value of Dest, because we take the info
-					   from docofanchorptr.
-					   Since the anchor has a destination there are two possibilities.
-					   1. The destination is an anchor or
-					   2. or the destination is a document already.
-					   In both cases docofanchorptr has the proper info because GETDOCBYANCHOR
-					   is such a nice message.
-					*/
-					switch(anchormode) {
-						case 0:
-							tempptr = docofanchorptr;
-							break;
-						default:
-							tempptr = reldestptr;
-					}
-					if(NULL != tempptr) {
-						/* It's always nice to deal with names, so let's first check
-					  		for a name. If there is none we take the ObjectID.
+						/* No need to care about the value of Dest, because we take the info
+						   from docofanchorptr.
+						   Since the anchor has a destination there are two possibilities.
+						   1. The destination is an anchor or
+						   2. or the destination is a document already.
+						   In both cases docofanchorptr has the proper info because GETDOCBYANCHOR
+						   is such a nice message.
 						*/
-						if(NULL != (str = strstr(tempptr, "Name="))) {
-							str += 5;
-						} else if(NULL != (str = strstr(tempptr, "ObjectID="))) {
-							str += 9;
+						switch(anchormode) {
+							case 0:
+								tempptr = docofanchorptr;
+								break;
+							default:
+								tempptr = reldestptr;
 						}
-						if(sscanf(str, "%s\n", destdocname)) {
-							cur_ptr->destdocname = estrdup(destdocname);
-						}
-						destid = 0;
-						if(NULL != (str = strstr(tempptr, "ObjectID="))) {
-							str += 9;
-							sscanf(str, "0x%X", &destid);
+						if(NULL != tempptr) {
+							/* It's always nice to deal with names, so let's first check
+						  		for a name. If there is none we take the ObjectID.
+							*/
+							if(NULL != (str = strstr(tempptr, "Name="))) {
+								str += 5;
+							} else if(NULL != (str = strstr(tempptr, "ObjectID="))) {
+								str += 9;
+							}
+							if(sscanf(str, "%s\n", destdocname)) {
+								cur_ptr->destdocname = estrdup(destdocname);
+							}
+							destid = 0;
+							if(NULL != (str = strstr(tempptr, "ObjectID="))) {
+								str += 9;
+								sscanf(str, "0x%X", &destid);
+							}
 						}
 					}
-				}
-	
-				/* Get the Id of the anchor destination and the document id that belongs
-				   to that anchor. We need that soon in order to determine if the anchor
-				   points to a document or a dest anchor in a document.
-				*/
-				anchordestid = 0;
-				if(NULL != (str = strstr(object, "Dest="))) {
-					str += 5;
-					sscanf(str, "0x%X", &anchordestid);
-				}
-				
-				/* if anchordestid != destid then the destination is an anchor in a document whose
-				   name (objectID) is already in destdocname. We will have to extend the link
-				   by '#...'
-				*/
-				cur_ptr->nameanchor = NULL;
-				if(anchordestid != destid) {
+		
+					/* Get the Id of the anchor destination and the document id that belongs
+					   to that anchor. We need that soon in order to determine if the anchor
+					   points to a document or a dest anchor in a document.
+					*/
+					anchordestid = 0;
 					if(NULL != (str = strstr(object, "Dest="))) {
 						str += 5;
+						sscanf(str, "0x%X", &anchordestid);
+					}
+					
+					/* if anchordestid != destid then the destination is an anchor in a document whose
+					   name (objectID) is already in destdocname. We will have to extend the link
+					   by '#...'
+					*/
+					cur_ptr->nameanchor = NULL;
+					if(anchordestid != destid) {
+						if(NULL != (str = strstr(object, "Dest="))) {
+							str += 5;
+							if(sscanf(str, "%s\n", nameanchor))
+								cur_ptr->nameanchor = estrdup(nameanchor);
+						}
+					}
+		
+					if(!cur_ptr->destdocname) {
+					cur_ptr->link = NULL;
+					if(NULL != (str = strstr(object, "Hint=URL:"))) {
+						str += 9;
+						if(sscanf(str, "%s\n", link))
+							cur_ptr->link = estrdup(link);
+					} else if(NULL != (str = strstr(object, "Hint="))) {
+						str += 5;
+						if(sscanf(str, "%s\n", link))
+							cur_ptr->link = estrdup(link);
+					}
+					}
+		
+					cur_ptr->fragment = NULL;
+					if(NULL != (str = strstr(object, "Fragment="))) {
+						str += 9;
+						if(sscanf(str, "%s\n", link))
+							cur_ptr->fragment = estrdup(link);
+					}
+		
+					cur_ptr->htmlattr = NULL;
+					if(NULL != (str = strstr(object, "HtmlAttr="))) {
+						str += 9;
+						str1 = str;
+						while((*str1 != '\n') && (*str1 != '\0'))
+							str1++;
+						cur_ptr->htmlattr = emalloc(str1 - str + 1);
+						strncpy(cur_ptr->htmlattr, str, str1 - str);
+						cur_ptr->htmlattr[str1 - str] = '\0';
+					}
+		
+					if(NULL != (str = strstr(object, "LinkType="))) {
+						str += 9;
+						if(strncmp(str, "background", 10) == 0)
+							cur_ptr->linktype=HW_BACKGROUND_LINK;
+						else
+						if(strncmp(str, "intag", 5) == 0) {
+							cur_ptr->linktype=HW_INTAG_LINK;
+							cur_ptr->tagattr = NULL;
+							if(NULL != (str = strstr(object, "TagAttr="))) {
+								str += 8;
+								str1 = str;
+								while((*str1 != '\n') && (*str1 != '\0'))
+									str1++;
+								cur_ptr->tagattr = emalloc(str1 - str + 1);
+								memcpy(cur_ptr->tagattr, str, str1 - str);
+								cur_ptr->tagattr[str1 - str] = '\0';
+							}
+						} else
+						if(strncmp(str, "applet", 6) == 0) {
+							cur_ptr->linktype=HW_APPLET_LINK;
+							cur_ptr->codebase = NULL;
+							if(NULL != (str = strstr(object, "CodeBase="))) {
+								str += 9;
+								str1 = str;
+								while((*str1 != '\n') && (*str1 != '\0'))
+									str1++;
+								cur_ptr->codebase = emalloc(str1 - str + 1);
+								memcpy(cur_ptr->codebase, str, str1 - str);
+								cur_ptr->codebase[str1 - str] = '\0';
+							}
+							cur_ptr->code = NULL;
+							if(NULL != (str = strstr(object, "Code="))) {
+								str += 5;
+								str1 = str;
+								while((*str1 != '\n') && (*str1 != '\0'))
+									str1++;
+								cur_ptr->code = emalloc(str1 - str + 1);
+								memcpy(cur_ptr->code, str, str1 - str);
+								cur_ptr->code[str1 - str] = '\0';
+							}
+						} else
+							cur_ptr->linktype=HW_DEFAULT_LINK;
+					} else
+						cur_ptr->linktype=HW_DEFAULT_LINK;
+		
+				} else { /* Destination Anchor */
+					char nameanchor[200];
+		
+					cur_ptr->tanchor = 2;
+					cur_ptr->link = NULL;
+		
+					/* Here is the only additional info for the name attribute */
+					cur_ptr->nameanchor = NULL;
+					if(NULL != (str = strstr(object, "ObjectID="))) {
+						str += 9;
 						if(sscanf(str, "%s\n", nameanchor))
 							cur_ptr->nameanchor = estrdup(nameanchor);
 					}
+		
+					cur_ptr->keyword = NULL;
+					if(NULL != (str = strstr(object, "Keyword="))) {
+						str += 8;
+						if(sscanf(str, "%s\n", nameanchor))
+							cur_ptr->keyword = estrdup(nameanchor);
+					}
+		
 				}
-	
-				if(!cur_ptr->destdocname) {
-				cur_ptr->link = NULL;
-				if(NULL != (str = strstr(object, "Hint=URL:"))) {
-					str += 9;
-					if(sscanf(str, "%s\n", link))
-						cur_ptr->link = estrdup(link);
-				} else if(NULL != (str = strstr(object, "Hint="))) {
-					str += 5;
-					if(sscanf(str, "%s\n", link))
-						cur_ptr->link = estrdup(link);
-				}
-				}
-	
-				cur_ptr->fragment = NULL;
-				if(NULL != (str = strstr(object, "Fragment="))) {
-					str += 9;
-					if(sscanf(str, "%s\n", link))
-						cur_ptr->fragment = estrdup(link);
-				}
-	
-				cur_ptr->htmlattr = NULL;
-				if(NULL != (str = strstr(object, "HtmlAttr="))) {
-					str += 9;
-					str1 = str;
-					while((*str1 != '\n') && (*str1 != '\0'))
-						str1++;
-					cur_ptr->htmlattr = emalloc(str1 - str + 1);
-					strncpy(cur_ptr->htmlattr, str, str1 - str);
-					cur_ptr->htmlattr[str1 - str] = '\0';
-				}
-	
-				if(NULL != (str = strstr(object, "LinkType="))) {
-					str += 9;
-					if(strncmp(str, "background", 10) == 0)
-						cur_ptr->linktype=HW_BACKGROUND_LINK;
-					else
-					if(strncmp(str, "intag", 5) == 0) {
-						cur_ptr->linktype=HW_INTAG_LINK;
-						cur_ptr->tagattr = NULL;
-						if(NULL != (str = strstr(object, "TagAttr="))) {
-							str += 8;
-							str1 = str;
-							while((*str1 != '\n') && (*str1 != '\0'))
-								str1++;
-							cur_ptr->tagattr = emalloc(str1 - str + 1);
-							memcpy(cur_ptr->tagattr, str, str1 - str);
-							cur_ptr->tagattr[str1 - str] = '\0';
-						}
-					} else
-					if(strncmp(str, "applet", 6) == 0) {
-						cur_ptr->linktype=HW_APPLET_LINK;
-						cur_ptr->codebase = NULL;
-						if(NULL != (str = strstr(object, "CodeBase="))) {
-							str += 9;
-							str1 = str;
-							while((*str1 != '\n') && (*str1 != '\0'))
-								str1++;
-							cur_ptr->codebase = emalloc(str1 - str + 1);
-							memcpy(cur_ptr->codebase, str, str1 - str);
-							cur_ptr->codebase[str1 - str] = '\0';
-						}
-						cur_ptr->code = NULL;
-						if(NULL != (str = strstr(object, "Code="))) {
-							str += 5;
-							str1 = str;
-							while((*str1 != '\n') && (*str1 != '\0'))
-								str1++;
-							cur_ptr->code = emalloc(str1 - str + 1);
-							memcpy(cur_ptr->code, str, str1 - str);
-							cur_ptr->code[str1 - str] = '\0';
-						}
-					} else
-						cur_ptr->linktype=HW_DEFAULT_LINK;
-				} else
-					cur_ptr->linktype=HW_DEFAULT_LINK;
-	
-			} else { /* Destination Anchor */
-				char nameanchor[200];
-	
-				cur_ptr->tanchor = 2;
-				cur_ptr->link = NULL;
-	
-				/* Here is the only additional info for the name attribute */
-				cur_ptr->nameanchor = NULL;
-				if(NULL != (str = strstr(object, "ObjectID="))) {
-					str += 9;
-					if(sscanf(str, "%s\n", nameanchor))
-						cur_ptr->nameanchor = estrdup(nameanchor);
-				}
-	
-				cur_ptr->keyword = NULL;
-				if(NULL != (str = strstr(object, "Keyword="))) {
-					str += 8;
-					if(sscanf(str, "%s\n", nameanchor))
-						cur_ptr->keyword = estrdup(nameanchor);
-				}
-	
+		
+				efree(anchors[i]);
+				if(docofanchorrec[i]) efree(docofanchorrec[i]);
+				if(reldestrec[i]) efree(reldestrec[i]);
 			}
-	
-			efree(anchors[i]);
-			if(docofanchorrec[i]) efree(docofanchorrec[i]);
-			if(reldestrec[i]) efree(reldestrec[i]);
 		}
 	}
 	return pAnchorList;
@@ -3119,6 +3126,7 @@ int send_getreldestforanchorsobj(int sockfd, char **anchorrec, char ***reldestre
 				send_incollections(sockfd, 1, 1, &thisID, 1, &rootID, &countthis, &retthisIDs);
 				send_incollections(sockfd, 1, 1, &destdocid, 1, &rootID, &countdest, &retdestIDs);
 
+/*
 fprintf(stderr, "%d: ", thisID);
 for(k=0; k<countthis; k++)
 	fprintf(stderr,"%d, ", retthisIDs[k]);
@@ -3127,6 +3135,7 @@ fprintf(stderr,"%d: ", destdocid);
 for(k=0; k<countdest; k++)
 	fprintf(stderr,"%d: %d, ", destdocid, retdestIDs[k]);
 fprintf(stderr,"\n");
+*/
 
 				mincount = (countthis < countdest) ? countthis : countdest;
 				for(j=0; (j<mincount) && (retthisIDs[j]==retdestIDs[j]); j++)
@@ -3154,10 +3163,10 @@ fprintf(stderr,"\n");
 							*strptr = '_';
 						strptr++;
 					}
-fprintf(stderr, "Adding '%s' to '%s'\n", temp, anchorstr);
+/* fprintf(stderr, "Adding '%s' to '%s'\n", temp, anchorstr); */
 					strcat(anchorstr, temp);
 					strcat(anchorstr, "/");
-fprintf(stderr, "Is now '%s'\n", anchorstr);
+/* fprintf(stderr, "Is now '%s'\n", anchorstr); */
 					efree(temprec);
 				}
 				/* if the anchor destination is a collection it may not be added anymore. */
@@ -3175,7 +3184,7 @@ fprintf(stderr, "Is now '%s'\n", anchorstr);
 				strcat(anchorstr, "\n");
 				sprintf(temp, "ObjectID=0x%x", destdocid);
 				strcat(anchorstr, temp);
-fprintf(stderr, "%s\n", anchorstr);
+/* fprintf(stderr, "%s\n", anchorstr); */
 				efree(retthisIDs);
 				efree(retdestIDs);
 				reldestptr[i] = estrdup(anchorstr);
@@ -4243,7 +4252,7 @@ int send_pipecgi(int sockfd, char *host, hw_objectID objectID, char *cgi_env_str
 	return(0);
 }
 
-int send_putdocument(int sockfd, char *host, hw_objectID parentID, char *objectRec, char *text, int count)
+int send_putdocument(int sockfd, char *host, hw_objectID parentID, char *objectRec, char *text, int count, hw_objectID *objectID)
 {
 	hg_msg msg, *retmsg;
 	int length, len;
@@ -4251,7 +4260,7 @@ int send_putdocument(int sockfd, char *host, hw_objectID parentID, char *objectR
 	struct sockaddr_in serv_addr;
 	struct hostent *hostptr;
 	char *hostip = NULL;
-	int newfd, fd, port, objectID, error;
+	int newfd, fd, port, error;
 	int *ptr;
 
 	/* First of all we have to insert the document record */
@@ -4283,7 +4292,7 @@ int send_putdocument(int sockfd, char *host, hw_objectID parentID, char *objectR
 	ptr = (int *) retmsg->buf;
 	if(0 == (error = *ptr)) {
 		ptr++;
-		objectID = *ptr;
+		*objectID = *ptr;
 	} else {
 		efree(retmsg);
 		if(retmsg->buf) efree(retmsg->buf);
@@ -4336,7 +4345,7 @@ int send_putdocument(int sockfd, char *host, hw_objectID parentID, char *objectR
 		return(-1);
 	}
 
-	tmp = build_msg_int(msg.buf, objectID);
+	tmp = build_msg_int(msg.buf, *objectID);
 	tmp = build_msg_int(tmp, port);
 	tmp = build_msg_str(tmp, hostip);
 	tmp = build_msg_str(tmp, "Hyperwave");

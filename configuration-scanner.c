@@ -454,7 +454,7 @@ char *yytext;
    +----------------------------------------------------------------------+
    | PHP HTML Embedded Scripting Language Version 3.0                     |
    +----------------------------------------------------------------------+
-   | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
+   | Copyright (c) 1997-1999 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
    | it under the terms of the GNU General Public License as published by |
@@ -474,6 +474,7 @@ char *yytext;
    +----------------------------------------------------------------------+
 */
 
+/* $id$ */
 
 #include "php.h"
 #include "configuration-parser.tab.h"
@@ -487,7 +488,7 @@ void init_cfg_scanner()
 }
 
 
-#line 491 "configuration-scanner.c"
+#line 492 "configuration-scanner.c"
 
 /* Macros after this point can all be overridden by user definitions in
  * section 1.
@@ -638,10 +639,10 @@ YY_DECL
 	register char *yy_cp, *yy_bp;
 	register int yy_act;
 
-#line 45 "configuration-scanner.lex"
+#line 46 "configuration-scanner.lex"
 
 
-#line 645 "configuration-scanner.c"
+#line 646 "configuration-scanner.c"
 
 	if ( yy_init )
 		{
@@ -734,7 +735,7 @@ do_action:	/* This label is used only to access EOF actions. */
 	{ /* beginning of action switch */
 case 1:
 YY_RULE_SETUP
-#line 47 "configuration-scanner.lex"
+#line 48 "configuration-scanner.lex"
 {
 #if 0
 	printf("found extension\n");
@@ -744,7 +745,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 54 "configuration-scanner.lex"
+#line 55 "configuration-scanner.lex"
 {
 	cfglval->value.str.val = php3_strndup("1",1);
 	cfglval->value.str.len = 1;
@@ -754,7 +755,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 62 "configuration-scanner.lex"
+#line 63 "configuration-scanner.lex"
 {
 	cfglval->value.str.val = php3_strndup("",0);
 	cfglval->value.str.len = 0;
@@ -764,7 +765,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 70 "configuration-scanner.lex"
+#line 71 "configuration-scanner.lex"
 {
 	/* SECTION */
 
@@ -786,7 +787,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 90 "configuration-scanner.lex"
+#line 91 "configuration-scanner.lex"
 {
 	/* ENCAPSULATED STRING */
 	register int i;
@@ -805,7 +806,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 107 "configuration-scanner.lex"
+#line 108 "configuration-scanner.lex"
 {
 	/* STRING */
 	register int i;
@@ -840,21 +841,21 @@ YY_RULE_SETUP
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 141 "configuration-scanner.lex"
+#line 142 "configuration-scanner.lex"
 {
 	return yytext[0];
 }
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 145 "configuration-scanner.lex"
+#line 146 "configuration-scanner.lex"
 {
 	return '\n';
 }
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 149 "configuration-scanner.lex"
+#line 150 "configuration-scanner.lex"
 {
 	/* comment */
 	return '\n';
@@ -862,14 +863,14 @@ YY_RULE_SETUP
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 154 "configuration-scanner.lex"
+#line 155 "configuration-scanner.lex"
 {
 	/* eat whitespace */
 }
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 158 "configuration-scanner.lex"
+#line 159 "configuration-scanner.lex"
 {
 #if DEBUG
 	php3_error(E_NOTICE,"Unexpected character on line %d:  '%s' (ASCII %d)\n",yylineno,yytext,yytext[0]);
@@ -878,10 +879,10 @@ YY_RULE_SETUP
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 163 "configuration-scanner.lex"
+#line 164 "configuration-scanner.lex"
 ECHO;
 	YY_BREAK
-#line 885 "configuration-scanner.c"
+#line 886 "configuration-scanner.c"
 			case YY_STATE_EOF(INITIAL):
 				yyterminate();
 
@@ -1765,4 +1766,4 @@ int main()
 	return 0;
 	}
 #endif
-#line 163 "configuration-scanner.lex"
+#line 164 "configuration-scanner.lex"

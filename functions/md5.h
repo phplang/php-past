@@ -2,7 +2,7 @@
    +----------------------------------------------------------------------+
    | PHP HTML Embedded Scripting Language Version 3.0                     |
    +----------------------------------------------------------------------+
-   | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
+   | Copyright (c) 1997-1999 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
    | it under the terms of one of the following licenses:                 |
@@ -26,6 +26,9 @@
    | Authors: Rasmus Lerdorf <rasmus@lerdorf.on.ca>                       |
    +----------------------------------------------------------------------+
  */
+
+/* $Id: md5.h,v 1.14 1999/02/01 07:44:10 fmk Exp $ */
+
 #ifndef _md5_h
 #define _md5_h
 /* MD5.H - header file for MD5C.C
@@ -66,6 +69,6 @@ void PHP3_MD5Init PROTO_LIST((PHP3_MD5_CTX *));
 void PHP3_MD5Update PROTO_LIST((PHP3_MD5_CTX *, const unsigned char *, unsigned int));
 void PHP3_MD5Final PROTO_LIST((unsigned char[16], PHP3_MD5_CTX *));
 
+PHPAPI void _php3_md5(pval *arg, char *md5str);
 extern void php3_md5(INTERNAL_FUNCTION_PARAMETERS);
-
 #endif

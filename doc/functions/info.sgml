@@ -383,6 +383,40 @@ echo "Last modified: ".date( "F d Y H:i:s.", getlastmod() );
    </refsect1>
   </refentry>
 
+  <refentry id="function.getrusage">
+   <refnamediv>
+    <refname>getrusage</refname>
+    <refpurpose>Get the current resource usages.</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>array <function>getrusage</function></funcdef>
+     <paramdef>int <parameter><optional>who</optional></parameter></paramdef>
+    </funcsynopsis>
+
+    <para>
+     This is an interface to getrusage(2). It returns an associative array
+     containing the data returned from the system call. If who is 1, getrusage
+     will be called with RUSAGE_CHILDREN.
+     
+     All entries are accessible by using their documented field names.
+
+     <example>
+      <title>Getrusage Example</title>
+      <programlisting role="php">
+$dat = getrusage();
+echo $dat["ru_nswap"];         # number of swaps
+echo $dat["ru_majflt"];        # number of page faults
+echo $dat["ru_utime.tv_sec"];  # user time used (seconds)
+echo $dat["ru_utime.tv_usec"]; # user time used (microseconds)
+</programlisting></example>
+
+     See your system's man page for more details. 
+    </para>
+   </refsect1>
+  </refentry>
+
   <refentry id="function.phpinfo">
    <refnamediv>
     <refname>phpinfo</refname>
@@ -472,7 +506,7 @@ putenv("UNIQID=$uniqid");
    <refsect1>
     <title>Description</title>
     <funcsynopsis>
-     <funcdef>long <function>get_magic_quotes_runtime</function></funcdef>
+     <funcdef>long <function>set_magic_quotes_runtime</function></funcdef>
      <paramdef>int <parameter>new_setting</parameter></paramdef>
     </funcsynopsis>
 

@@ -2,7 +2,7 @@
    +----------------------------------------------------------------------+
    | PHP HTML Embedded Scripting Language Version 3.0                     |
    +----------------------------------------------------------------------+
-   | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
+   | Copyright (c) 1997-1999 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
    | it under the terms of one of the following licenses:                 |
@@ -30,7 +30,7 @@
    | Based on code from: Shawn Cokus <Cokus@math.washington.edu>          |
    +----------------------------------------------------------------------+
  */
-/* $Id: rand.c,v 1.30 1998/12/21 23:33:21 rasmus Exp $ */
+/* $Id: rand.c,v 1.35 1999/02/15 06:04:11 rasmus Exp $ */
 
 #include <stdlib.h>
 
@@ -213,6 +213,8 @@ static inline uint32 randomMT(void)
 #define PHP_RAND_MAX RAND_MAX
 #endif
 
+/* {{{ proto void srand(int seed)
+   Seeds random number generator */
 void php3_srand(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *arg;
@@ -231,7 +233,10 @@ void php3_srand(INTERNAL_FUNCTION_PARAMETERS)
 #endif
 #endif
 }
+/* }}} */
 
+/* {{{ proto void mt_srand(int seed)
+   Seeds Mersenne Twister random number generator */
 void php3_mt_srand(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *arg;
@@ -241,7 +246,10 @@ void php3_mt_srand(INTERNAL_FUNCTION_PARAMETERS)
 	convert_to_long(arg);
 	seedMT(arg->value.lval);
 }
+/* }}} */
 
+/* {{{ proto int rand([int min, int max])
+   Returns a random number */
 void php3_rand(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *p_min=NULL, *p_max=NULL;
@@ -274,13 +282,40 @@ void php3_rand(INTERNAL_FUNCTION_PARAMETERS)
 	return_value->value.lval = rand();
 #endif
 #endif
-
+    /* 
+	 * A bit of tricky math here.  We want to avoid using a modulus because
+	 * that simply tosses the high-order bits and might skew the distribution
+	 * of random values over the range.  Instead we map the range directly.
+	 *
+	 * We need to map the range from 0...M evenly to the range a...b
+	 * Let n = the random number and n' = the mapped random number
+	 *
+	 * Then we have: n' = a + n(b-a)/M
+	 *
+	 * We have a problem here in that only n==M will get mapped to b which
+	 # means the chances of getting b is much much less than getting any of
+	 # the other values in the range.  We can fix this by increasing our range
+	 # artifically and using:
+	 #
+	 #               n' = a + n(b-a+1)/M
+	 *
+	 # Now we only have a problem if n==M which would cause us to produce a
+	 # number of b+1 which would be bad.  So we bump M up by one to make sure
+	 # this will never happen, and the final algorithm looks like this:
+	 #
+	 #               n' = a + n(b-a+1)/(M+1) 
+	 *
+	 * -RL
+	 */
 	if (p_min && p_max) { /* implement range */
 		return_value->value.lval = p_min->value.lval +
-			(int)((double)p_max->value.lval * return_value->value.lval/(PHP_RAND_MAX+(double)p_min->value.lval));
+			(int)((double)(p_max->value.lval - p_min->value.lval + 1) * return_value->value.lval/(PHP_RAND_MAX+1.0));
 	}
 }
+/* }}} */
 
+/* {{{ proto int mt_rand([int min, int max])
+   Returns a random number from Mersenne Twister */
 void php3_mt_rand(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *p_min=NULL, *p_max=NULL;
@@ -314,18 +349,25 @@ void php3_mt_rand(INTERNAL_FUNCTION_PARAMETERS)
 	 */
 	return_value->value.lval = (long)(randomMT() >> 1);
 
+	/* see the comment in the php3_rand() function about this ugly algorithm */
 	if (p_min && p_max) { /* implement range */
 		return_value->value.lval = p_min->value.lval +
-			(int)((double)p_max->value.lval * return_value->value.lval/(PHP_RAND_MAX+(double)p_min->value.lval));
+			(int)((double)(p_max->value.lval - p_min->value.lval + 1) * return_value->value.lval/(PHP_RAND_MAX+1.0));
 	}
 }
+/* }}} */
 
+/* {{{ proto int getrandmax(void)
+   Returns the maximum value a random number can have */
 void php3_getrandmax(INTERNAL_FUNCTION_PARAMETERS)
 {
 	return_value->type = IS_LONG;
 	return_value->value.lval = PHP_RAND_MAX;
 }
+/* }}} */
 
+/* {{{ proto int mt_getrandmax(void)
+   Returns the maximum value a random number from Mersenne Twister can have */
 void php3_mt_getrandmax(INTERNAL_FUNCTION_PARAMETERS)
 {
 	return_value->type = IS_LONG;
@@ -335,6 +377,7 @@ void php3_mt_getrandmax(INTERNAL_FUNCTION_PARAMETERS)
 	 */
   	return_value->value.lval = 2147483647;	/* 2^^31 */
 }
+/* }}} */
 
 /*
  * Local variables:

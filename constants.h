@@ -1,3 +1,5 @@
+/* $Id: constants.h,v 1.12 1998/12/28 09:43:53 sas Exp $ */
+
 #ifndef _CONSTANTS_H
 #define _CONSTANTS_H
 

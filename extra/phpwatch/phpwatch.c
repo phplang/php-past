@@ -11,6 +11,7 @@
 *       Microsoft samples programs.
 \******************************************************************************/
 
+/* $Id: phpwatch.c,v 1.3 1998/12/28 09:34:52 sas Exp $ */
 #define WIN32_LEAN_AND_MEAN
 #include <winsock2.h>
 #include <stdlib.h>

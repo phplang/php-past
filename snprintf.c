@@ -53,6 +53,8 @@
  * <panos@alumni.cs.colorado.edu> for xinetd.
  */
 
+/* $Id: snprintf.c,v 1.14 1998/12/28 09:34:43 sas Exp $ */
+ 
 #include "config.h"
 
 #if !defined(APACHE) || (!APACHE)

@@ -8,6 +8,8 @@
  * code by Shane Caraveo shane@caraveo.com
  * copy freely!
  *
+ * $Id: phpvmail.h,v 1.3 1998/12/28 09:43:57 sas Exp $ 
+ *
  * USE AT YOUR OWN RISK!
  */
 

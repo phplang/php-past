@@ -1,3 +1,5 @@
+/* $Id: prelude.h,v 1.3 1998/12/28 09:43:56 sas Exp $ */
+
 /*  ----------------------------------------------------------------<Prolog>-
     Name:       prelude.h
     Title:      Universal Header File for C programming

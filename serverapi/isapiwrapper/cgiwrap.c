@@ -4,6 +4,8 @@
  * Demonstrates an executable which can be used to load an ISAPI DLL like  *
  * a CGI script.                                                           *
  * ======================================================================= *
+ *
+ * $Id: cgiwrap.c,v 1.7 1998/12/28 09:35:05 sas Exp $ 
 */
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>

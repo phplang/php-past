@@ -2,7 +2,7 @@
    +----------------------------------------------------------------------+
    | PHP HTML Embedded Scripting Language Version 3.0                     |
    +----------------------------------------------------------------------+
-   | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
+   | Copyright (c) 1997-1999 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
    | it under the terms of one of the following licenses:                 |
@@ -26,7 +26,7 @@
    | Authors: Jim Winstead <jimw@php.net>                                 |
    +----------------------------------------------------------------------+
  */
-/* $Id: fopen-wrappers.h,v 1.20 1998/08/14 23:47:12 steffann Exp $ */
+/* $Id: fopen-wrappers.h,v 1.23 1999/02/25 14:57:54 rasmus Exp $ */
 
 #ifndef _FOPEN_WRAPPERS_H
 #define _FOPEN_WRAPPERS_H
@@ -72,12 +72,12 @@ extern PHPAPI FILE *php3_fopen_wrapper(char *filename, char *mode, int options, 
 extern FILE *php3_fopen_for_parser(void);
 
 extern PHPAPI int _php3_check_open_basedir(char *path);
+extern PHPAPI int _php3_check_specific_open_basedir(char *basedir, char *path);
 
 extern PHPAPI FILE *php3_fopen_with_path(char *filename, char *mode, char *path, char **opened_path);
 
 extern PHPAPI int php3_isurl(char *path);
 extern PHPAPI char *php3_strip_url_passwd(char *path);
-extern PHPAPI int php3_write(void *buf, int size);
 
 extern PHPAPI char *expand_filepath(char *filepath);
 

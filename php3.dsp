@@ -62,12 +62,12 @@ LINK32=link.exe
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 1
-# PROP Output_Dir "c:\php3"
+# PROP Output_Dir "c:\projects\php3\cgi_debug"
 # PROP Intermediate_Dir "cgi_debug"
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /Gm /GX /Zi /Od /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /YX /FD /c
-# ADD CPP /nologo /MTd /W3 /Gm /GX /ZI /Od /I "." /I "regex\\" /I "d:\src\bind\include" /D "DEBUG" /D "_DEBUG" /D "MSVC5" /D "WIN32" /D "_CONSOLE" /D "_MBCS" /FR /YX /FD /c
+# ADD CPP /nologo /MTd /W3 /Gm /GX /ZI /Od /I "." /I "regex\\" /I "d:\src\bind\include" /I "d:/src/wc5sdk/server/include/cpp" /I "c:\projects\php3\include" /D DEBUG=1 /D "_DEBUG" /D "MSVC5" /D "WIN32" /D "_CONSOLE" /D "_MBCS" /FR /YX /FD /c
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
 # ADD RSC /l 0x409 /i "c:\include" /d "_DEBUG"
 BSC32=bscmake.exe
@@ -75,7 +75,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 lib44bsd95.lib resolv.lib winmm.lib wsock32.lib netapi32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /version:3.0 /subsystem:console /debug /machine:I386 /out:"c:\php3\php.exe" /pdbtype:sept /libpath:"\src\lib" /libpath:"d:\src\bind\lib"
+# ADD LINK32 lib44bsd95.lib resolv.lib winmm.lib wsock32.lib netapi32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /version:3.0 /subsystem:console /debug /machine:I386 /out:"c:\projects\php3\cgi_debug\php.exe" /pdbtype:sept /libpath:"\src\lib" /libpath:"d:\src\bind\lib" /libpath:"d:/src/wc5sdk/server/lib" /libpath:"c:\projects\php3\lib"
 
 !ENDIF 
 
@@ -597,6 +597,14 @@ SOURCE=.\php3_realpath.c
 # Begin Source File
 
 SOURCE=.\php3_realpath.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\php_compat.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\php_compat.h
 # End Source File
 # Begin Source File
 

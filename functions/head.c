@@ -2,7 +2,7 @@
    +----------------------------------------------------------------------+
    | PHP HTML Embedded Scripting Language Version 3.0                     |
    +----------------------------------------------------------------------+
-   | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
+   | Copyright (c) 1997-1999 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
    | it under the terms of one of the following licenses:                 |
@@ -26,7 +26,7 @@
    | Authors: Rasmus Lerdorf <rasmus@lerdorf.on.ca>                       |
    +----------------------------------------------------------------------+
  */
-/* $Id: head.c,v 1.109 1998/10/26 05:31:46 zeev Exp $ */
+/* $Id: head.c,v 1.112 1999/01/04 14:25:20 jah Exp $ */
 #ifdef THREAD_SAFE
 #include "tls.h"
 #endif
@@ -84,6 +84,8 @@ void php3_noheader(void)
 
 
 /* Implementation of the language Header() function */
+/* {{{ proto void header(string header)
+   Send a raw HTTP header */
 void php3_Header(INTERNAL_FUNCTION_PARAMETERS)
 {
 	char *r;
@@ -216,6 +218,7 @@ TLS_VARS;
 	}
 #endif
 }
+/* }}} */
 
 /*
  * php3_header() flushes the header info built up using calls to
@@ -420,6 +423,8 @@ CookieList *php3_PopCookieList(void)
 }
 
 /* php3_SetCookie(name,value,expires,path,domain,secure) */
+/* {{{ proto void setcookie(string name[, string value[, int expires[, string path[, string domain[, string secure]]]]])
+   Send a cookie */
 void php3_SetCookie(INTERNAL_FUNCTION_PARAMETERS)
 {
 #if !APACHE
@@ -548,6 +553,7 @@ void php3_SetCookie(INTERNAL_FUNCTION_PARAMETERS)
 	efree(tempstr);
 #endif
 }
+/* }}} */
 
 
 int php3_headers_unsent(void)

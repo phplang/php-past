@@ -79,7 +79,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /dll /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 php.lib libdb.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /version:2 /subsystem:windows /dll /debug /machine:I386 /out:"c:\php3/php3_dbm.dll" /pdbtype:sept /libpath:"..\..\lib" /libpath:"cgi_debug"
+# ADD LINK32 php.lib libdb.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /version:2 /subsystem:windows /dll /debug /machine:I386 /out:"c:\php3/php3_dbm.dll" /pdbtype:sept /libpath:"..\..\lib" /libpath:"c:\php3"
 
 !ENDIF 
 
@@ -90,14 +90,6 @@ LINK32=link.exe
 # Begin Source File
 
 SOURCE=.\functions\db.c
-# End Source File
-# Begin Source File
-
-SOURCE=.\win32\flock.c
-# End Source File
-# Begin Source File
-
-SOURCE=.\win32\flock.h
 # End Source File
 # End Target
 # End Project

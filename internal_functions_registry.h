@@ -2,7 +2,7 @@
    +----------------------------------------------------------------------+
    | PHP HTML Embedded Scripting Language Version 3.0                     |
    +----------------------------------------------------------------------+
-   | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
+   | Copyright (c) 1997-1999 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
    | it under the terms of one of the following licenses:                 |
@@ -29,7 +29,7 @@
  */
 
 
-/* $Id: internal_functions_registry.h,v 1.100 1998/05/15 10:56:20 zeev Exp $ */
+/* $Id: internal_functions_registry.h,v 1.101 1999/01/01 17:58:49 zeev Exp $ */
 
 #ifndef _INTERNAL_FUNCTIONS_REGISTRY_H
 #define _INTERNAL_FUNCTIONS_REGISTRY_H

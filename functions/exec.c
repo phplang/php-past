@@ -2,7 +2,7 @@
    +----------------------------------------------------------------------+
    | PHP HTML Embedded Scripting Language Version 3.0                     |
    +----------------------------------------------------------------------+
-   | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
+   | Copyright (c) 1997-1999 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
    | it under the terms of one of the following licenses:                 |
@@ -26,7 +26,7 @@
    | Author: Rasmus Lerdorf   <rasmus@lerdorf.on.ca>                      |
    +----------------------------------------------------------------------+
  */
-/* $Id: exec.c,v 1.80 1998/11/18 21:23:05 ssb Exp $ */
+/* $Id: exec.c,v 1.82 1999/01/31 14:40:14 rasmus Exp $ */
 
 #ifdef THREAD_SAFE
 #include "tls.h"
@@ -321,7 +321,7 @@ char * _php3_escapeshellcmd(char *str) {
 	return cmd;
 }
 
-/* {{{ proto escapeshellcmd(string command)
+/* {{{ proto string escapeshellcmd(string command)
    escape shell metacharacters */
 void php3_escapeshellcmd(INTERNAL_FUNCTION_PARAMETERS)
 {

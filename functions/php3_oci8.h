@@ -2,7 +2,7 @@
    +----------------------------------------------------------------------+
    | PHP HTML Embedded Scripting Language Version 3.0                     |
    +----------------------------------------------------------------------+
-   | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
+   | Copyright (c) 1997-1999 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
    | it under the terms of one of the following licenses:                 |
@@ -58,13 +58,33 @@ typedef struct {
 # endif
 
 typedef struct {
+	int id;
     OCIEnv *pEnv;
-    OCIError *pError;
+    OCIServer *pServer;
     OCISvcCtx *pServiceContext;
+    OCIError *pError;
+	OCISession *pSession;
+	HashTable *descriptors;
+	int descriptors_count;
     int open;
 } oci8_connection;
 
 typedef struct {
+	dvoid *ocidescr;
+	ub4 type;
+} oci8_descriptor;
+
+typedef struct {
+    pval *pval;
+    text *name;
+    ub4 name_len;
+	ub4 type;
+	char *data;			/* for pval cache */
+} oci8_define;
+
+
+typedef struct {
+	int id;
 	oci8_connection *conn;
     OCIError *pError;
     OCIStmt *pStmt;
@@ -72,30 +92,36 @@ typedef struct {
 	HashTable *columns;
 	int ncolumns;
 	HashTable *binds;
+	HashTable *defines;
+	int executed;
 } oci8_statement;
 
 typedef struct {
 	OCIBind *pBind;
 	pval *value;
-	ub4 size;
-	dvoid *buf;
+	dvoid *descr;		/* used for binding of LOBS etc */
+	ub4 maxsize;
 	sb2 indicator;
-	ub2 is_opaque;
-	ub2 rcode;
+	ub2 retcode;
 } oci8_bind;
 
 typedef struct {
+	oci8_statement *statement;
 	OCIDefine *pDefine;
     text *name;
     ub4 name_len;
     ub2 type;
-    ub2 size;
-    ub2 storage_size;
-    text *data;
+    ub4 size4;
+    ub4 storage_size4;
+	ub2 size2;
 	sb2 indicator;
 	ub2 retcode;
-	ub2 is_opaque;
-	pval *value;
+	ub4 rlen;
+	ub2 is_descr;
+    int descr;
+    oci8_descriptor *pdescr;
+	void *data;
+	oci8_define *define;
 } oci8_out_column;
 
 typedef struct {
@@ -109,9 +135,7 @@ typedef struct {
     long num_persistent;
     long num_links;
     int le_conn;
-/*    int le_pconn;*/
-    int le_stmt;
-	sb4 max_bind_data_size;
+    int le_stmt; 
 } oci8_module;
 
 extern php3_module_entry oci8_module_entry;
@@ -123,6 +147,7 @@ extern php3_module_entry oci8_module_entry;
 /* this one has to be changed to include persistent connections as well */
 # define OCI8_CONN_TYPE(x) ((x)==OCI8_GLOBAL(php3_oci8_module).le_conn)
 # define OCI8_STMT_TYPE(x) ((x)==OCI8_GLOBAL(php3_oci8_module).le_stmt)
+# define OCI8_DESCR_TYPE(x) ((x)==OCI8_GLOBAL(php3_oci8_module).le_descr)
 
 # define RETURN_OUT_OF_MEMORY \
 	php3_error(E_WARNING, "Out of memory");\

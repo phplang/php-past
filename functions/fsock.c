@@ -2,7 +2,7 @@
    +----------------------------------------------------------------------+
    | PHP HTML Embedded Scripting Language Version 3.0                     |
    +----------------------------------------------------------------------+
-   | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
+   | Copyright (c) 1997-1999 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
    | it under the terms of one of the following licenses:                 |
@@ -27,7 +27,7 @@
    |          Jim Winstead (jimw@php.net)                                 |
    +----------------------------------------------------------------------+
 */
-/* $Id: fsock.c,v 1.76 1998/11/18 21:23:06 ssb Exp $ */
+/* $Id: fsock.c,v 1.85 1999/02/27 17:04:46 sas Exp $ */
 #ifdef THREAD_SAFE
 #include "tls.h"
 #endif
@@ -38,20 +38,19 @@
 #if HAVE_UNISTD_H
 #include <unistd.h>
 #endif
-#include "fsock.h"
 
 #include <sys/types.h>
 #if HAVE_SYS_SOCKET_H
 #include <sys/socket.h>
 #endif
-#if MSVC5
+#ifdef WIN32
 #include <winsock.h>
 #else
 #include <netinet/in.h>
 #include <netdb.h>
 #include <arpa/inet.h>
 #endif
-#if MSVC5
+#ifdef WIN32
 #undef AF_UNIX
 #endif
 #if defined(AF_UNIX)
@@ -65,12 +64,13 @@
 #include "file.h"
 #include "post.h"
 #include "url.h"
+#include "fsock.h"
 
 #ifndef THREAD_SAFE
 extern int le_fp;
 #endif
 
-#define FREE_SOCK efree(sock)
+#define FREE_SOCK efree(sock); if (key) efree(key)
 
 #if WIN32|WINNT
 #define EWOULDBLOCK WSAEWOULDBLOCK
@@ -78,38 +78,73 @@ extern int le_fp;
 #include "build-defs.h"
 #endif
 
+static unsigned char third_and_fourth_args_force_ref[] = { 4, BYREF_NONE, BYREF_NONE, BYREF_FORCE, BYREF_FORCE };
+
+function_entry fsock_functions[] = {
+	PHP_FE(fsockopen, third_and_fourth_args_force_ref)
+	PHP_FE(pfsockopen, third_and_fourth_args_force_ref)
+	{NULL, NULL, NULL}
+};
+
+static int php3_minit_fsock(INIT_FUNC_ARGS);
+static int php3_mshutdown_fsock(void);
+
+php3_module_entry fsock_module_entry = {
+	"Socket functions", fsock_functions, php3_minit_fsock, php3_mshutdown_fsock, NULL, NULL, NULL, STANDARD_MODULE_PROPERTIES
+};
+
+#ifndef THREAD_SAFE
+static HashTable ht_keys;
+static HashTable ht_socks;
+#endif
+
+	/* {{{ lookup_hostname */
+
 /*
  * Converts a host name to an IP address.
  */
-int lookup_hostname(const char *addr)
+int lookup_hostname(const char *addr, struct in_addr *in)
 {
-	uint r;
 	struct hostent *host_info;
 
-	r = inet_addr(addr);
-	if (r == (uint) - 1) {
+	if(!inet_aton(addr, in)) {
 		host_info = gethostbyname(addr);
 		if (host_info == 0) {
 			/* Error: unknown host */
 			return -1;
 		}
-		memcpy((char *) &r, host_info->h_addr, host_info->h_length);
+		*in = *((struct in_addr *) host_info->h_addr);
 	}
-	return r;
+	return 0;
 }
+/* }}} */
+	/* {{{ _php3_is_persistent_sock */
+
+int _php3_is_persistent_sock(int sock)
+{
+	char *key;
+
+	if (_php3_hash_find(&ht_socks, (char *) &sock, sizeof(sock),
+				(void **) &key) == SUCCESS) {
+		return 1;
+	}
+	return 0;
+}
+/* }}} */
+	/* {{{ _php3_fsockopen() */
 
 /* 
    This function takes an optional third argument which should be
    passed by reference.  The error code from the connect call is written
    to this variable.
 */
-/* {{{ proto int fsockopen(string hostname, int port [, int errno [, string errstr]])
-   Open Internet or Unix domain socket connection */
-void php3_fsockopen(INTERNAL_FUNCTION_PARAMETERS) {
+static void _php3_fsockopen(INTERNAL_FUNCTION_PARAMETERS, int persistent) {
 	pval *args[4];
 	int *sock=emalloc(sizeof(int));
+	int *sockp;
 	int id, socketd, arg_count=ARG_COUNT(ht);
 	unsigned short portno;
+	char *key = NULL;
 	TLS_VARS;
 	
 	if (arg_count > 4 || arg_count < 2 || getParametersArray(ht,arg_count,args)==FAILURE) {
@@ -138,6 +173,16 @@ void php3_fsockopen(INTERNAL_FUNCTION_PARAMETERS) {
 	convert_to_long(args[1]);
 	portno = (unsigned short) args[1]->value.lval;
 
+	key = emalloc(args[0]->value.str.len + 10);
+	sprintf(key, "%s:%d", args[0]->value.str.val, portno);
+
+	if (persistent && _php3_hash_find(&ht_keys, key, strlen(key) + 1,
+				(void *) &sockp) == SUCCESS) {
+		efree(key);
+		*sock = *sockp;
+		RETURN_LONG(php3_list_insert(sock, GLOBAL(wsa_fp)));
+	}
+	
 	if (portno) {
 		struct sockaddr_in server;
 
@@ -148,10 +193,9 @@ void php3_fsockopen(INTERNAL_FUNCTION_PARAMETERS) {
 			RETURN_FALSE;
 		}
 	  
-		server.sin_addr.s_addr = lookup_hostname(args[0]->value.str.val);
 		server.sin_family = AF_INET;
 		
-		if (server.sin_addr.s_addr == -1) {
+		if (lookup_hostname(args[0]->value.str.val, &server.sin_addr)) {
 			FREE_SOCK;
 			RETURN_FALSE;
 		}
@@ -206,11 +250,33 @@ void php3_fsockopen(INTERNAL_FUNCTION_PARAMETERS) {
 #endif
 
 	*sock=socketd;
+	if (persistent) {
+		_php3_hash_update(&ht_keys, key, strlen(key) + 1, 
+				sock, sizeof(*sock), NULL);
+		_php3_hash_update(&ht_socks, (char *) sock, sizeof(*sock),
+				key, strlen(key) + 1, NULL);
+	}
+	if(key) efree(key);
 	id = php3_list_insert(sock,GLOBAL(wsa_fp));
 	RETURN_LONG(id);
 }
 /* }}} */
 
+/* {{{ proto int fsockopen(string hostname, int port [, int errno [, string errstr]])
+   Open Internet or Unix domain socket connection */
+PHP_FUNCTION(fsockopen) 
+{
+	_php3_fsockopen(INTERNAL_FUNCTION_PARAM_PASSTHRU, 0);
+}
+/* }}} */
+
+/* {{{ proto int pfsockopen(string hostname, int port [, int errno [, string errstr]])
+   Open persistent Internet or Unix domain socket connection */
+PHP_FUNCTION(pfsockopen) 
+{
+	_php3_fsockopen(INTERNAL_FUNCTION_PARAM_PASSTHRU, 1);
+}
+/* }}} */
 
 int _php3_sock_fgets(char *buf, int maxlen, int socket)
 {
@@ -245,6 +311,43 @@ int _php3_sock_fread(char *buf, int maxlen, int socket)
 	*buf = '\0';
 	return count;
 }
+
+/* {{{ module start/shutdown functions */
+
+	/* {{{ _php3_sock_destroy */
+#ifndef THREAD_SAFE
+static void _php3_sock_destroy(void *data)
+{
+	int *sock = (int *) data;
+
+	close(*sock);
+}
+#endif
+/* }}} */
+	/* {{{ php3_minit_fsock */
+
+static int php3_minit_fsock(INIT_FUNC_ARGS)
+{
+#ifndef THREAD_SAFE
+	_php3_hash_init(&ht_keys, 0, NULL, NULL, 1);
+	_php3_hash_init(&ht_socks, 0, NULL, _php3_sock_destroy, 1);
+#endif
+	return SUCCESS;
+}
+/* }}} */
+	/* {{{ php3_mshutdown_fsock */
+
+static int php3_mshutdown_fsock(void)
+{
+#ifndef THREAD_SAFE
+	_php3_hash_destroy(&ht_socks);
+	_php3_hash_destroy(&ht_keys);
+#endif
+	return SUCCESS;
+}
+/* }}} */
+/* }}} */
+
 /*
  * Local variables:
  * tab-width: 4

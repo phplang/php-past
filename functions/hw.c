@@ -2,7 +2,7 @@
    +----------------------------------------------------------------------+
    | PHP HTML Embedded Scripting Language Version 3.0                     |
    +----------------------------------------------------------------------+
-   | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
+   | Copyright (c) 1997-1999 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
    | it under the terms of the GNU General Public License as published by |
@@ -23,7 +23,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: hw.c,v 1.18 1998/12/02 16:16:17 steinm Exp $ */
+/* $Id: hw.c,v 1.22 1999/01/12 17:36:18 steinm Exp $ */
 #if COMPILE_DL
 #include "dl/phpdl.h"
 #endif
@@ -81,6 +81,7 @@ function_entry hw_functions[] = {
 	{"hw_cp",			php3_hw_cp,			NULL},
 	{"hw_deleteobject",		php3_hw_deleteobject,		NULL},
 	{"hw_changeobject",		php3_hw_changeobject,		NULL},
+	{"hw_modifyobject",		php3_hw_modifyobject,		NULL},
 	{"hw_docbyanchor",		php3_hw_docbyanchor,		NULL},
 	{"hw_docbyanchorobj",		php3_hw_docbyanchorobj,		NULL},
 	{"hw_getobjectbyquery",		php3_hw_getobjectbyquery,	NULL},
@@ -228,11 +229,14 @@ int make_return_objrec(pval **return_value, char **objrecs, int count)
 ** creates an array return value from object record
 */
 int make_return_array_from_objrec(pval **return_value, char *objrec) {
-	pval title_arr, desc_arr;
 	char *attrname, *str, *temp, language[3], *title;
-	int iTitle, iDesc;
+	int iTitle, iDesc, iKeyword;
+	pval title_arr;
+	pval desc_arr;
+	pval keyword_arr;
 	int hasTitle = 0;
 	int hasDescription = 0;
+	int hasKeyword = 0;
 
 	if (array_init(*return_value) == FAILURE) {
 		(*return_value)->type = IS_STRING;
@@ -241,37 +245,37 @@ int make_return_array_from_objrec(pval **return_value, char *objrec) {
 		return -1;
 	}
 
-	/* Array for titles. Only if we have at least one title */
-/*	if(0 == strncmp(objrec, "Title=", 6)) { */
-		if (array_init(&title_arr) == FAILURE) {
-			return -1;
-		}
-		hasTitle = 1;
-/*	} */
-
-	/* Array for Descriptions. Only if we have at least one description */
-/*	if(0 == strncmp(objrec, "Description=", 12)) { */
-		if (array_init(&desc_arr) == FAILURE) {
-			return -1;
-		}
-		hasDescription = 1;
-/*	} */
-
-	/* Fill Array of titles and descriptions */
+	/* Fill Array of titles, descriptions and keywords */
 	temp = estrdup(objrec);
 	attrname = strtok(temp, "\n");
 	while(attrname != NULL) {
 		str = attrname;
 		iTitle = 0;
 		iDesc = 0;
+		iKeyword = 0;
 		if(0 == strncmp(attrname, "Title=", 6)) {
+			if ((hasTitle == 0) && (array_init(&title_arr) == FAILURE)) {
+				return -1;
+			}
+			hasTitle = 1;
 			str += 6;
 			iTitle = 1;
 		} else if(0 == strncmp(attrname, "Description=", 12)) {
+			if ((hasDescription == 0) && (array_init(&desc_arr) == FAILURE)) {
+				return -1;
+			}
+			hasDescription = 1;
 			str += 12;
 			iDesc = 1;
-		}
-		if(iTitle || iDesc) {			/* Poor error check if end of string */
+		} else if(0 == strncmp(attrname, "Keyword=", 8)) {
+			if ((hasKeyword == 0) && (array_init(&keyword_arr) == FAILURE)) {
+				return -1;
+			}
+			hasKeyword = 1;
+			str += 8;
+			iKeyword = 1;
+		} 
+		if(iTitle || iDesc || iKeyword) {	/* Poor error check if end of string */
 			if(str[2] == ':') {
 				str[2] = '\0';
 				strcpy(language, str);
@@ -280,13 +284,12 @@ int make_return_array_from_objrec(pval **return_value, char *objrec) {
 				strcpy(language, "xx");
 
 			title = str;
-/*			while((*str != '=') && (*str != '\0'))
-				str++;
-			*str = '\0';
-*/			if(iTitle)
+			if(iTitle)
 				add_assoc_string(&title_arr, language, title, 1);
-			else
+			else if(iDesc)
 				add_assoc_string(&desc_arr, language, title, 1);
+			else if(iKeyword)
+				add_assoc_string(&keyword_arr, language, title, 1);
 		}
 		attrname = strtok(NULL, "\n");
 	}
@@ -306,14 +309,22 @@ int make_return_array_from_objrec(pval **return_value, char *objrec) {
 		/* The description array can now be freed, but I don't know how */
 	}
 
+	if(hasKeyword) {
+	/* Add the keyword array, if we have one */
+		_php3_hash_update((*return_value)->value.ht, "Keyword", 8, &keyword_arr, sizeof(pval), NULL);
+
+		/* The keyword array can now be freed, but I don't know how */
+	}
+
 	/* All other attributes. Make a another copy first */
 	temp = estrdup(objrec);
 	attrname = strtok(temp, "\n");
 	while(attrname != NULL) {
 		str = attrname;
-		/* We don't want to insert titles a second time */
+		/* We don't want to insert titles, descr., keywords a second time */
 		if((0 != strncmp(attrname, "Title=", 6)) &&
-		   (0 != strncmp(attrname, "Description=", 12))) {
+		   (0 != strncmp(attrname, "Description=", 12)) &&
+		   (0 != strncmp(attrname, "Keyword=", 8))) {
 			while((*str != '=') && (*str != '\0'))
 				str++;
 			*str = '\0';
@@ -859,7 +870,7 @@ void php3_hw_errormsg(INTERNAL_FUNCTION_PARAMETERS)
 }
 /* }}} */
 
-/* {{{ proto hw_root(void)
+/* {{{ proto int hw_root(void)
    Returns object id of root collection */
 void php3_hw_root(INTERNAL_FUNCTION_PARAMETERS)
 {
@@ -1022,6 +1033,8 @@ void php3_hw_who(INTERNAL_FUNCTION_PARAMETERS) {
 }
 /* }}} */
 
+/* {{{ proto string hw_dummy(int link, int id, int msgid)
+   ??? */
 void php3_hw_dummy(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *arg1, *arg2, *arg3;
 	int link, id, type, msgid;
@@ -1055,6 +1068,7 @@ php3_printf("%s", object);
 	return_value->type = IS_STRING;
 	}
 }
+/* }}} */
 
 /* {{{ proto string hw_getobject(int link, int objid)
    Returns object record  */
@@ -1259,18 +1273,18 @@ void php3_hw_changeobject(INTERNAL_FUNCTION_PARAMETERS) {
 		switch(data->type) {
 			case IS_STRING:
 				if(strlen(data->value.str.val) == 0)
-					noinsert = 0;
+					sprintf(newattribute, "rem %s", key);
 				else
-					sprintf(newattribute, "%s=%s", key, data->value.str.val);
+					sprintf(newattribute, "add %s=%s", key, data->value.str.val);
+				noinsert = 0;
 				break;
 			default:
 				sprintf(newattribute, "%s", "");
 		}
-
 		if(!noinsert) {
 			modification = fnInsStr(modification, 0, "\\");
 			modification = fnInsStr(modification, 0, newattribute);
-			modification = fnInsStr(modification, 0, "add ");
+//			modification = fnInsStr(modification, 0, "add ");
 
 			/* Retrieve the old attribute from object record */
 			if(NULL != (str = strstr(oldobjrec, key))) {
@@ -1292,7 +1306,94 @@ void php3_hw_changeobject(INTERNAL_FUNCTION_PARAMETERS) {
 
 	set_swap(ptr->swap_on);
 	modification[strlen(modification)-1] = '\0';
-/*	php3_printf("0x%X, %s", id, modification); */
+	if (0 != (ptr->lasterror = send_changeobject(ptr->socket, id, modification)))
+		RETURN_FALSE;
+	free(modification);
+	RETURN_TRUE;
+}
+/* }}} */
+
+/* {{{ proto void hw_modifyobject(int link, int objid, array attributes)
+   Changes attributes of an object */
+void php3_hw_modifyobject(INTERNAL_FUNCTION_PARAMETERS) {
+	pval *arg1, *arg2, *arg3, *arg4;
+	int link, id, type, i;
+	hw_connection *ptr;
+	char *modification, buf[200];
+	HashTable *remobjarr, *addobjarr;
+	TLS_VARS;
+
+	if (ARG_COUNT(ht) != 4 || getParameters(ht, 4, &arg1, &arg2, &arg3, &arg4) == FAILURE) {
+		WRONG_PARAM_COUNT;
+	}
+	convert_to_long(arg1); /* Connection */
+	convert_to_long(arg2); /* object ID */
+	convert_to_array(arg3); /* Array with attributes to remove */
+	convert_to_array(arg4); /* Array with attributes to add */
+	link=arg1->value.lval;
+	id=arg2->value.lval;
+	remobjarr=arg3->value.ht;
+	addobjarr=arg4->value.ht;
+	ptr = php3_list_find(link,&type);
+	if(!ptr || (type!=php3_hw_module.le_socketp && type!=php3_hw_module.le_psocketp)) {
+		php3_error(E_WARNING,"Unable to find file identifier %d",id);
+		RETURN_FALSE;
+	}
+
+	modification = strdup("");
+	if(addobjarr != NULL) {
+		_php3_hash_internal_pointer_reset(addobjarr);
+		for(i=0; i<_php3_hash_num_elements(addobjarr); i++) {
+			char *key, *str, *str1, addattribute[200];
+			pval *data;
+			int j, noinsert=1;
+			ulong ind;
+
+			_php3_hash_get_current_key(addobjarr, &key, &ind);
+			_php3_hash_get_current_data(addobjarr, (void *) &data);
+			switch(data->type) {
+				case IS_STRING:
+					sprintf(addattribute, "add %s=%s", key, data->value.str.val);
+					noinsert = 0;
+					break;
+			}
+			if(!noinsert) {
+				modification = fnInsStr(modification, 0, "\\");
+				modification = fnInsStr(modification, 0, addattribute);
+			}
+			efree(key);
+			_php3_hash_move_forward(addobjarr);
+		}
+	}
+
+	if(remobjarr != NULL) {
+		_php3_hash_internal_pointer_reset(remobjarr);
+		for(i=0; i<_php3_hash_num_elements(remobjarr); i++) {
+			char *key, *str, *str1, remattribute[200];
+			pval *data;
+			int j, noinsert=1;
+			ulong ind;
+
+			_php3_hash_get_current_key(remobjarr, &key, &ind);
+			_php3_hash_get_current_data(remobjarr, (void *) &data);
+			switch(data->type) {
+				case IS_STRING:
+					sprintf(remattribute, "rem %s=%s", key, data->value.str.val);
+					noinsert = 0;
+					break;
+			}
+			if(!noinsert) {
+				modification = fnInsStr(modification, 0, "\\");
+				modification = fnInsStr(modification, 0, remattribute);
+			}
+			efree(key);
+			_php3_hash_move_forward(remobjarr);
+		}
+	}
+
+	set_swap(ptr->swap_on);
+	modification[strlen(modification)-1] = '\0';
+/*	fprintf(stderr, "modifyobject: %s\n", modification);  */
 	if (0 != (ptr->lasterror = send_changeobject(ptr->socket, id, modification)))
 		RETURN_FALSE;
 	free(modification);
@@ -1757,11 +1858,12 @@ void php3_hw_pipedocument(INTERNAL_FUNCTION_PARAMETERS) {
 	doc->attributes = attributes;
 	doc->bodytag = bodytag;
 	doc->size = count;
-fprintf(stderr, "size = %d\n", count);
+/* fprintf(stderr, "size = %d\n", count); */
 	return_value->value.lval = php3_list_insert(doc,php3_hw_module.le_document);
 	return_value->type = IS_LONG;
 	}
-}  /* }}} */
+}
+/* }}} */
 
 /* {{{ proto hwdoc hw_pipecgi(int link, int objid)
    Returns output of cgi script */
@@ -1824,7 +1926,8 @@ void php3_hw_pipecgi(INTERNAL_FUNCTION_PARAMETERS) {
 	return_value->value.lval = php3_list_insert(doc,php3_hw_module.le_document);
 	return_value->type = IS_LONG;
 	}
-}  /* }}} */
+}
+/* }}} */
 
 /* {{{ proto void hw_insertdocument(int link, int parentid, hwdoc doc) 
    Insert new document */
@@ -1872,7 +1975,8 @@ void php3_hw_insertdocument(INTERNAL_FUNCTION_PARAMETERS) {
 		}
 	}
 	RETURN_TRUE;
-}  /* }}} */
+}
+/* }}} */
 
 /* {{{ proto hwdoc hw_new_document(int link, string data, string objrec, int size)
    Create a new document */
@@ -1896,7 +2000,8 @@ void php3_hw_new_document(INTERNAL_FUNCTION_PARAMETERS) {
 	doc->size = arg3->value.lval;
 	return_value->value.lval = php3_list_insert(doc,php3_hw_module.le_document);
 	return_value->type = IS_LONG;
-}  /* }}} */
+}
+/* }}} */
 
 /* {{{ proto void hw_free_document(hwdoc doc)
    Frees memory of document */
@@ -1918,7 +2023,12 @@ void php3_hw_free_document(INTERNAL_FUNCTION_PARAMETERS) {
 	}
 	php3_list_delete(id);
 	RETURN_TRUE;
-}  /* }}} */
+}
+/* }}} */
+
+/* {{{ proto void hw_outputdocument(hwdoc doc)
+   An alias for hw_output_document */
+/* }}} */
 
 /* {{{ proto void hw_output_document(hwdoc doc)
    Prints document */
@@ -1950,7 +2060,12 @@ void php3_hw_output_document(INTERNAL_FUNCTION_PARAMETERS) {
 	}
 
 	RETURN_TRUE;
-}  /* }}} */
+}
+/* }}} */
+
+/* {{{ proto string hw_documentbodytag(hwdoc doc [, string prefix])
+   An alias for hw_document_bodytag */
+/* }}} */
 
 /* {{{ proto string hw_document_bodytag(hwdoc doc [, string prefix])
    Return bodytag prefixed by prefix */
@@ -1990,7 +2105,8 @@ void php3_hw_document_bodytag(INTERNAL_FUNCTION_PARAMETERS) {
 	} else {
 		RETURN_STRING(ptr->bodytag, 1);
 	}
-}  /* }}} */
+}
+/* }}} */
 
 /* {{{ proto string hw_document_content(hwdoc doc)
    Returns content of document */
@@ -2016,9 +2132,14 @@ void php3_hw_document_content(INTERNAL_FUNCTION_PARAMETERS) {
 	}
 
 	RETURN_STRING(ptr->data, 1);
-}  /* }}} */
+}
+/* }}} */
 
-/* {{{ proto int hw_document_content(hwdoc doc)
+/* {{{ proto int hw_documentsize(hwdoc doc)
+   An alias for hw_document_size */
+/* }}} */
+
+/* {{{ proto int hw_document_size(hwdoc doc)
    Returns size of document */
 void php3_hw_document_size(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *arg1;
@@ -2038,9 +2159,14 @@ void php3_hw_document_size(INTERNAL_FUNCTION_PARAMETERS) {
 	}
 
 	RETURN_LONG(ptr->size);
-}  /* }}} */
+}
+/* }}} */
 
-/* {{{ proto string hw_document_content(hwdoc doc)
+/* {{{ proto string hw_documentattributes(hwdoc doc)
+   An alias for hw_document_attributes */
+/* }}} */
+
+/* {{{ proto string hw_document_attributes(hwdoc doc)
    Returns object record of document */
 void php3_hw_document_attributes(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *arg1;
@@ -2061,7 +2187,8 @@ void php3_hw_document_attributes(INTERNAL_FUNCTION_PARAMETERS) {
 
 	RETURN_STRING(ptr->attributes, 1);
 /*	make_return_array_from_objrec(&return_value, ptr->attributes); */
-}  /* }}} */
+}
+/* }}} */
 
 /* {{{ proto array hw_getparentsobj(int link, int objid)
    Returns array of parent object records */
@@ -2096,7 +2223,8 @@ void php3_hw_getparentsobj(INTERNAL_FUNCTION_PARAMETERS) {
 	/* create return value and free all memory */
 	if( 0 > make_return_objrec(&return_value, childObjRecs, count))
 		RETURN_FALSE;
-}  /* }}} */
+}
+/* }}} */
 
 /* {{{ proto array hw_getparents(int link, int objid)
    Returns array of parent object ids */
@@ -2141,7 +2269,8 @@ void php3_hw_getparents(INTERNAL_FUNCTION_PARAMETERS) {
 	efree(childIDs);
 	}
 
-}  /* }}} */
+}
+/* }}} */
 
 /* {{{ proto array hw_children(int link, int objid)
    Returns array of children object ids */
@@ -2186,9 +2315,10 @@ void php3_hw_children(INTERNAL_FUNCTION_PARAMETERS) {
 	efree(childIDs);
 	}
 		
-}  /* }}} */
+}
+/* }}} */
 
-/* {{{ proto array hw_children(int link, int objid)
+/* {{{ proto array hw_childrenobj(int link, int objid)
    Returns array of children object records */
 void php3_hw_childrenobj(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *arg1, *arg2;
@@ -2221,9 +2351,10 @@ void php3_hw_childrenobj(INTERNAL_FUNCTION_PARAMETERS) {
 	/* create return value and free all memory */
 	if( 0 > make_return_objrec(&return_value, childObjRecs, count))
 		RETURN_FALSE;
-}  /* }}} */
+}
+/* }}} */
 
-/* {{{ proto array hw_childcoll(int link, int objid)
+/* {{{ proto array hw_getchildcoll(int link, int objid)
    Returns array of child collection object ids */
 void php3_hw_getchildcoll(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *arg1, *arg2;
@@ -2266,9 +2397,10 @@ void php3_hw_getchildcoll(INTERNAL_FUNCTION_PARAMETERS) {
 	efree(childIDs);
 	}
 		
-}  /* }}} */
+}
+/* }}} */
 
-/* {{{ proto array hw_childcollobj(int link, int objid)
+/* {{{ proto array hw_getchildcollobj(int link, int objid)
    Returns array of child collection object records */
 void php3_hw_getchildcollobj(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *arg1, *arg2;
@@ -2301,7 +2433,8 @@ void php3_hw_getchildcollobj(INTERNAL_FUNCTION_PARAMETERS) {
 	/* create return value and free all memory */
 	if( 0 > make_return_objrec(&return_value, childObjRecs, count))
 		RETURN_FALSE;
-}  /* }}} */
+}
+/* }}} */
 
 /* {{{ proto int hw_docbyanchor(int link, int anchorid)
    Returns objid of document belonging to anchorid */
@@ -2332,7 +2465,8 @@ void php3_hw_docbyanchor(INTERNAL_FUNCTION_PARAMETERS) {
 
 	RETURN_LONG(objectID);
 	}
-}  /* }}} */
+}
+/* }}} */
 
 /* {{{ proto array hw_docbyanchorobj(int link, int anchorid)
    Returns object record of document belonging to anchorid */
@@ -2367,7 +2501,8 @@ void php3_hw_docbyanchorobj(INTERNAL_FUNCTION_PARAMETERS) {
 	efree(object);
 	*/
 	}
-}  /* }}} */
+}
+/* }}} */
 
 /* {{{ proto array hw_getobjectbyquery(int link, string query, int maxhits)
    Search for query and return maxhits objids */
@@ -2410,7 +2545,8 @@ void php3_hw_getobjectbyquery(INTERNAL_FUNCTION_PARAMETERS) {
 	for(i=0; i<count; i++)
 		add_index_long(return_value, i, childIDs[i]);
 	efree(childIDs);
-}  /* }}} */
+}
+/* }}} */
 
 /* {{{ proto array hw_getobjectbyqueryobj(int link, string query, int maxhits)
    Search for query and return maxhits object records */
@@ -2448,7 +2584,8 @@ void php3_hw_getobjectbyqueryobj(INTERNAL_FUNCTION_PARAMETERS) {
 	/* create return value and free all memory */
 	if( 0 > make_return_objrec(&return_value, childObjRecs, count))
 		RETURN_FALSE;
-}  /* }}} */
+}
+/* }}} */
 
 /* {{{ proto array hw_getobjectbyquerycoll(int link, int collid, string query, int maxhits)
    Search for query in collection and return maxhits objids */
@@ -2493,7 +2630,8 @@ void php3_hw_getobjectbyquerycoll(INTERNAL_FUNCTION_PARAMETERS) {
 	for(i=0; i<count; i++)
 		add_index_long(return_value, i, childIDs[i]);
 	efree(childIDs);
-}  /* }}} */
+}
+/* }}} */
 
 /* {{{ proto array hw_getobjectbyquerycollobj(int link, int collid, string query, int maxhits)
    Search for query in collection and return maxhits object records */
@@ -2533,7 +2671,8 @@ void php3_hw_getobjectbyquerycollobj(INTERNAL_FUNCTION_PARAMETERS) {
 	/* create return value and free all memory */
 	if( 0 > make_return_objrec(&return_value, childObjRecs, count))
 		RETURN_FALSE;
-}  /* }}} */
+}
+/* }}} */
 
 /* {{{ proto array hw_getchilddoccoll(int link, int objid)
    Returns all children ids which are documents */
@@ -2572,7 +2711,8 @@ void php3_hw_getchilddoccoll(INTERNAL_FUNCTION_PARAMETERS) {
 	for(i=0; i<count; i++)
 		add_index_long(return_value, i, childIDs[i]);
 	efree(childIDs);
-}  /* }}} */
+}
+/* }}} */
 
 /* {{{ proto array hw_getchilddoccollobj(int link, int objid)
    Returns all children object records which are documents */
@@ -2607,7 +2747,8 @@ void php3_hw_getchilddoccollobj(INTERNAL_FUNCTION_PARAMETERS) {
 	if( 0 > make_return_objrec(&return_value, childObjRecs, count))
 		RETURN_FALSE;
 
-}  /* }}} */
+}
+/* }}} */
 
 /* {{{ proto array hw_getanchors(int link, int objid)
    Return all anchors of object */
@@ -2646,7 +2787,8 @@ void php3_hw_getanchors(INTERNAL_FUNCTION_PARAMETERS) {
 	for(i=0; i<count; i++)
 		add_index_long(return_value, i, anchorIDs[i]);
 	efree(anchorIDs);
-}  /* }}} */
+}
+/* }}} */
 
 /* {{{ proto array hw_getanchorsobj(int link, int objid)
    Return all object records of anchors of object */
@@ -2680,7 +2822,8 @@ void php3_hw_getanchorsobj(INTERNAL_FUNCTION_PARAMETERS) {
 	/* create return value and free all memory */
 	if( 0 > make_return_objrec(&return_value, anchorObjRecs, count))
 		RETURN_FALSE;
-}  /* }}} */
+}
+/* }}} */
 
 /* {{{ proto string hw_getusername(int link)
    Returns the current user name */
@@ -2704,8 +2847,8 @@ void php3_hw_getusername(INTERNAL_FUNCTION_PARAMETERS) {
 	return_value->value.str.val = estrdup(ptr->username);
 	return_value->value.str.len = strlen(ptr->username);
 	return_value->type = IS_STRING;
-}  /* }}} */
-
+}
+/* }}} */
 
 /* {{{ proto void hw_identify(int link, string username, string password)
    Identifies at Hyperwave server */
@@ -2893,7 +3036,7 @@ void php3_hw_inscoll(INTERNAL_FUNCTION_PARAMETERS) {
 }
 /* }}} */
 
-/* {{{ proto void hw_inscoll(int link, int parentid, array objarr [, string text])
+/* {{{ proto void hw_insdoc(int link, int parentid, array objarr [, string text])
    Inserts document */
 void php3_hw_insdoc(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *argv[4];
@@ -3014,6 +3157,8 @@ void php3_info_hw()
 	php3_printf("HG-CSP Version: 7.17");
 }
 
+/* {{{ proto void hw_connection_info(int link)
+   Prints information about the connection to Hyperwave server */
 void php3_hw_connection_info(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *arg1;
@@ -3033,6 +3178,7 @@ void php3_hw_connection_info(INTERNAL_FUNCTION_PARAMETERS)
 	
 	php3_printf("Hyperwave Info:\nhost=%s,\nserver string=%s\nversion=%d\nswap=%d\n", ptr->hostname, ptr->server_string, ptr->version, ptr->swap_on);
 }
+/* }}} */
 
 void print_msg(hg_msg *msg, char *str, int txt)
 {
@@ -3062,5 +3208,6 @@ void print_msg(hg_msg *msg, char *str, int txt)
 /*
  * Local variables:
  * tab-width: 4
+ * c-basic-offset: 4
  * End:
  */

@@ -29,6 +29,9 @@
    | Based on the MySQL code by:  Zeev Suraski <bourbon@netvision.net.il> |
    +----------------------------------------------------------------------+
  */
+
+/* $Id: ifx.ec,v 1.38 1999/01/04 07:38:14 jah Exp $ */
+
 /* -------------------------------------------------------------------
  * if you want a function reference : "grep '^\*\*' ifx.ec" will give
  * you a very short one
@@ -553,8 +556,6 @@ void php3_info_ifx(void)
 ** ----------------------------------------------------------------------
 */
 
-/* {{{ proto int ifx_(p)connect(string database,string userid,string password)
-   connects to database using userid/password, returns connection id */
 static void php3_ifx_do_connect(INTERNAL_FUNCTION_PARAMETERS,int persistent)
 {
 
@@ -806,18 +807,23 @@ static void php3_ifx_do_connect(INTERNAL_FUNCTION_PARAMETERS,int persistent)
     efree(hashed_details);
     Informix_GLOBAL(php3_ifx_module).default_link=return_value->value.lval;
 }
-/* }}} */
 
 
+/* {{{ proto int ifx_connect([string database[, string userid[, string password]]])
+   connects to database using userid/password, returns connection id */
 void php3_ifx_connect(INTERNAL_FUNCTION_PARAMETERS)
 {
     php3_ifx_do_connect(INTERNAL_FUNCTION_PARAM_PASSTHRU,0);
 }
+/* }}} */
 
+/* {{{ proto int ifx_pconnect([string database[, string userid[, string password]]])
+   connects to database using userid/password, returns connection id */
 void php3_ifx_pconnect(INTERNAL_FUNCTION_PARAMETERS)
 {
     php3_ifx_do_connect(INTERNAL_FUNCTION_PARAM_PASSTHRU,1);
 }
+/* }}} */
 
 static int php3_ifx_get_default_link(INTERNAL_FUNCTION_PARAMETERS)
 {
@@ -1904,7 +1910,7 @@ void php3_ifx_affected_rows(INTERNAL_FUNCTION_PARAMETERS)
 ** ----------------------------------------------------------------------
 */
 
-/* {{{ array ifx_fetch_row(int resultid, [mixed position])
+/* {{{ proto array ifx_fetch_row(int resultid, [mixed position])
    fetches the next row or <position> row if using a scroll cursor */
 void php3_ifx_fetch_row(INTERNAL_FUNCTION_PARAMETERS)
 {
@@ -3668,7 +3674,7 @@ loc_t *php3_intifx_get_blobloc(long bid, HashTable *list) {
 ** ----------------------------------------------------------------------
 */
 
-/* {{{ proto int update_blob(int bid, string content)
+/* {{{ proto int ifx_update_blob(int bid, string content)
    updates the content of the blob-object */
 void php3_ifx_update_blob(INTERNAL_FUNCTION_PARAMETERS) {
  pval *pbid,*pparam;

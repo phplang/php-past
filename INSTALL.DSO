@@ -1,0 +1,137 @@
+Compiling PHP as an Apache Dynamic Shared Object (DSO)
+------------------------------------------------------
+
+A caveat before you continue.  There have been reports of instability
+of the DSO version of Apache/PHP on some platforms.  If you experience
+odd behaviour, try the static compile described in the INSTALL file.  
+Also if you are not using at least Apache version 1.3.4, give up and 
+go back to the static compile, or upgrade your Apache before continuing.
+
+Contents of this file:
+
+  METHOD 1: The APXS Approach
+  METHOD 2: The --with-shared-apache approach
+  Troubleshooting
+
+
+METHOD 1: The APXS Approach
+---------------------------
+
+This is probably the slickest way to add PHP to an already 
+compiled/running Apache server.  Your server must have been
+built to include mod_so (you can check by typing httpd -l)
+and it needs to have the 'apxs' Perl script installed and
+configured for your setup.  You can build such a server setup
+using Step 1 below.  
+
+Step 1: Build Apache once (if not already built) and make sure
+mod_so is enabled.  Something like this would do the trick:
+
+   cd apache-1.3.x
+   ./configure --prefix=/some/path --enable-shared=max
+   make
+   make install
+
+Refer to the README.configure file in the Apache distribution for full
+details on Apache configure options.  Make sure /some/path/bin/apxs
+exists at this point.  You need to know where to find this 'apxs'
+program in order to move onto step 2.
+
+Step 2: Build PHP
+
+   cd php-3.0.x
+   ./configure  --with-apxs=/some/path/bin/apxs \
+                --with-config-file-path=/some/path
+  make
+  make install
+
+You will of course most likely want more options here.  Run 
+./configure --help for a full list.
+
+Step 3: Edit /some/path/conf/httpd.conf and make sure you have a 
+line similar to:
+
+  AddType application/x-httpd-php3 .php3
+
+If this is a brand new setup, you should of course also set the
+other Apache site-specific things in your httpd.conf.  
+
+You should also copy php3.ini-dist to /some/path/php3.ini and have a 
+look at it.
+
+Step 4: Start/Restart your server:
+
+   /some/path/bin/apachectl start
+
+or 
+
+   /some/path/bin/apachectl restart
+
+or
+   /some/path/bin/apachectl graceful
+
+
+METHOD 2: The --with-shared-apache approach
+
+This method is not quite as slick as method 1, but it is useful if 
+for some reason you can't use the apxs approach.  You need a full
+Apache source tree in order to compile PHP using this approach whereas
+in method 1 you only need the files produced by a 'make install' 
+from an Apache setup.
+
+Step 1: Make sure Apache's ./configure program has been run at least
+once.  You don't need to do a full compile, but the Apache ./configure
+program generates some header files that PHP needs.  The options you pass
+to this Apache ./configure step are irrelevant.
+
+Step 2: Now you need to configure PHP and tell it where your Apache source
+tree lives.  Use something like this:
+
+./configure --with-shared-apache=/some/path/to/src/of/apache-1.3.X \
+            --with-config-file-path=/some/path
+make
+make install
+
+If you need specific extra PHP options, add other flags to the above configure
+line.  Run ./configure --help to see a full list.
+
+Step 3: Building Apache
+
+Go to your Apache src tree directory and run something like:
+
+./configure --prefix=/some/path \
+            --activate-module=src/modules/php3/libphp3.a \
+            --enable-shared=php3
+make 
+make install
+
+If you already have a full Apache installation that predates the 
+'make install' feature in Apache, I'd suggest doing a 'make install'
+anyway, but set your --prefix directory to some temporary spot and
+then go have a look at the files it generates.  Especially the
+httpd.conf entries to load the PHP module.  The only extra thing you
+need to do is uncomment (remove the initial #) from the php3 AddType
+line.  eg. it should look like this:
+
+  AddType application/x-httpd-php3 .php3
+
+
+Troubleshooting
+---------------
+
+If you are compiling PHP with support for a whole whack of modules and
+want to load the whole mess dynamically, you may find yourself getting
+the following error:
+
+ld: fatal: too many symbols require `small' PIC references:
+        have 2077, maximum 2048 -- recompile some modules -K PIC.
+
+This should not happen on any Intel platforms, but I ran across it on
+a Sun Sparc box running Solaris.  The message which comes from the
+linker is assuming I am using the native Sun C compiler I guess and
+suggests I use "-K PIC".  This may be correct if you are using that
+compiler.  For gcc the way to fix it is to edit the PHP Makefile and
+near the top find the line that says: CFLAGS_SHLIB = -fpic
+and change the "-fpic" to "-fPIC".  I would imagine that this would
+slow things down a bit though and you might want to consider doing a
+static build instead.

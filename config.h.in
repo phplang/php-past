@@ -89,11 +89,26 @@
 #undef PHP3_MD5_CRYPT
 #undef PHP3_BLOWFISH_CRYPT
 
+/* Solaris YP check */
+#undef SOLARIS_YP
+
+/* Netscape LDAP SDK check */
+#undef HAVE_NSLDAP
+
+/* ImageMagick check */
+#undef HAVE_LIBMAGICK
+
+/* Define if you have struct flock */
+#define HAVE_STRUCT_FLOCK 0
+
 /* Define if you have the resolv library (-lresolv). */
 #define HAVE_LIBRESOLV 0
 
 /* Define if you have the gd library (-lgd). */
 #define HAVE_LIBGD 0
+
+/* Define if you have the GNU gettext library (-lintl). */
+#define HAVE_LIBINTL 0
 
 /* Define if you have the zlib library */
 #define HAVE_ZLIB 0
@@ -155,11 +170,17 @@
 /* Define if you want the LDAP directory interface */
 #define HAVE_LDAP 0
 
+/* Define if you want the Cybercash MCK support */
+#define HAVE_MCK 0
+
 /* Define if you want the SNMP interface */
 #define HAVE_SNMP 0
 
 /* Define if you want the IMAP directory interface */
 #define HAVE_IMAP 0
+
+/* Define if you want the ASPELL interface */
+#define HAVE_ASPELL 0
 
 /* Define if you want to use a custom ODBC database driver */
 #define HAVE_CODBC 0
@@ -181,6 +202,9 @@
 
 /* Define if you have and want to use libsocket */
 #define HAVE_LIBSOCKET 0
+
+/* Define if you have and want to use libpam */
+#define HAVE_LIBPAM 0
 
 /* Define if you have the sendmail program available */
 #define HAVE_SENDMAIL 0
@@ -249,6 +273,9 @@
 #define HAVE_SOLID 0
 #define DEBUG 0
 
+/* Define if your system has the getrusage() call */
+#define HAVE_GETRUSAGE 0
+
 /* Define if you want to enable the PHP TCP/IP debugger (experimental) */
 #define PHP_DEBUGGER 0
 
@@ -277,9 +304,11 @@
  */
 #define HAVE_SEMUN 0
 
-/* Define if you want System V shared memory support.
- */
+/* Define if you want System V shared memory support.  */
 #define HAVE_SYSVSHM 0
+
+/* Define if you want to enable displaying source support. */
+#define HAVE_DISPLAY_SOURCE 0
 
 /* Define if you have broken header files like SunOS 4 */
 #define MISSING_FCLOSE_DECL 0
@@ -298,6 +327,9 @@
 
 /* Define to compile with mod_dav support */
 #define HAVE_MOD_DAV 0
+
+/* Define to enable yp/nis support */
+#define HAVE_YP 0
 
 /* Define if you have the crypt function.  */
 #undef HAVE_CRYPT
@@ -319,6 +351,9 @@
 
 /* Define if you have the gettimeofday function.  */
 #undef HAVE_GETTIMEOFDAY
+
+/* Define if you have the inet_aton function.  */
+#undef HAVE_INET_ATON
 
 /* Define if you have the link function.  */
 #undef HAVE_LINK
@@ -367,6 +402,12 @@
 
 /* Define if you have the srandom function.  */
 #undef HAVE_SRANDOM
+
+/* Define if you have the statfs function.  */
+#undef HAVE_STATFS
+
+/* Define if you have the statvfs function.  */
+#undef HAVE_STATVFS
 
 /* Define if you have the strcasecmp function.  */
 #undef HAVE_STRCASECMP
@@ -458,8 +499,17 @@
 /* Define if you have the <sys/ndir.h> header file.  */
 #undef HAVE_SYS_NDIR_H
 
+/* Define if you have the <sys/resource.h> header file.  */
+#undef HAVE_SYS_RESOURCE_H
+
 /* Define if you have the <sys/socket.h> header file.  */
 #undef HAVE_SYS_SOCKET_H
+
+/* Define if you have the <sys/statfs.h> header file.  */
+#undef HAVE_SYS_STATFS_H
+
+/* Define if you have the <sys/statvfs.h> header file.  */
+#undef HAVE_SYS_STATVFS_H
 
 /* Define if you have the <sys/time.h> header file.  */
 #undef HAVE_SYS_TIME_H

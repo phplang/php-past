@@ -3,7 +3,7 @@
    +----------------------------------------------------------------------+
    | PHP HTML Embedded Scripting Language Version 3.0                     |
    +----------------------------------------------------------------------+
-   | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
+   | Copyright (c) 1997-1999 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
    | it under the terms of one of the following licenses:                 |
@@ -30,7 +30,7 @@
  */
 
 
-/* $Id: language-scanner.h,v 1.18 1998/04/29 13:22:40 ssb Exp $ */
+/* $Id: language-scanner.h,v 1.19 1999/01/01 17:58:50 zeev Exp $ */
 
 
 #ifndef _LANGUAGE_SCANNER_H

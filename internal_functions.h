@@ -2,7 +2,7 @@
    +----------------------------------------------------------------------+
    | PHP HTML Embedded Scripting Language Version 3.0                     |
    +----------------------------------------------------------------------+
-   | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
+   | Copyright (c) 1997-1999 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
    | it under the terms of one of the following licenses:                 |
@@ -29,7 +29,7 @@
  */
 
 
-/* $Id: internal_functions.h,v 1.127 1998/10/23 20:46:54 shane Exp $ */
+/* $Id: internal_functions.h,v 1.130 1999/02/25 16:27:06 thies Exp $ */
 
 
 #ifndef _INTERNAL_FUNCTIONS_H
@@ -63,7 +63,7 @@ extern PHPAPI void wrong_param_count(void);
 #define BYREF_FORCE 1
 #define BYREF_ALLOW 2
 
-#if !MSVC5
+#if !WIN32
 #define DLEXPORT
 #endif
 
@@ -93,7 +93,7 @@ extern inline PHPAPI int add_get_index_stringl(pval *arg, uint idx, char *str, u
 extern PHPAPI int call_user_function(HashTable *function_table, pval *object, pval *function_name, pval *retval, int param_count, pval *params[]);
 
 #define add_property_long(arg,key,n)  add_assoc_long((arg),(key),(n))
-#define add_property_double(arg,key,d)  add_assoc_double((arg),(key),(n))
+#define add_property_double(arg,key,d)  add_assoc_double((arg),(key),(d))
 #define add_property_string(arg,key,str,dup)  add_assoc_string((arg),(key),(str),(dup))
 #define add_property_stringl(arg,key,str,length,dup)  add_assoc_stringl((arg),(key),(str),(length),(dup))
 #define add_method(arg,key,method)	add_assoc_function((arg),(key),(method))

@@ -1,25 +1,25 @@
  <chapter id="configuration">
   <title>Configuration</title>
-   <simpara>
 
   <sect1 id="php3.ini">
    <title>The php3.ini file</title>
+
    <simpara>
     The <filename>php3.ini</filename> file is read when PHP's parser
     starts up.  For the server module versions of PHP, this happens
     only once when the web server is started.  For the
     <acronym>CGI</acronym> version, it happens on every invocation.
-   </simpara>
+
    <simpara>
     Just about every directive listed here has a corresponding Apache
     <filename>httpd.conf</filename> directive.  Simply prepend
     <emphasis>php3_</emphasis> to the start of the directive names
     listed here.
-   </simpara>
+
    <simpara>
-    You can view the settings of most of the configuration values
-	in the output of <function>phpinfo</function>.
-   </simpara>
+    You can view the settings of most of the configuration values in
+    the output of <function>phpinfo</function>.
+
    
    <sect2 id="ini.sect.general">
     <title>General Configuration Directives</title>
@@ -205,6 +205,13 @@
 	 be used as base-directory.
 	</para>
 	<para>
+	 From PHP 3.0.7, it is possible to supply more than one directory.
+	 Under Windows, separate the directories with a semicolon. On all
+	 other systems, separate the directories with a colon. As an Apache
+	 module, open_basedir paths from parent directories are now
+	 automatically inherited.
+	</para>
+	<para>
 	 The default is to allow all files to be opened.
 	</para>
        </listitem>
@@ -222,6 +229,20 @@
 	 "GP", for example, will cause PHP to completely ignore cookies
 	 and to overwrite any GET method variables with POST-method
 	 variables of the same name.
+	</para>
+       </listitem>
+      </varlistentry>
+
+      <varlistentry id="ini.ignore-user-abort">
+       <term>
+	<parameter>ignore_user_abort</parameter>
+	<type>string</type>
+       </term>
+       <listitem>
+	<para>
+	 Off by default.  If changed to On scripts will run to completion even
+	 if the remote client disconnects in the middle.  See also 
+	 <function>ignore_user_abort</function>.
 	</para>
        </listitem>
       </varlistentry>
@@ -251,8 +272,8 @@ include_path=.:/home/httpd/php-lib
 include_path=".;c:\www\phplib"
 </programlisting>
 	 </example>
-	 The default value for this directive is <literal>.</literal> (only
-	 the current directory).
+	 The default value for this directive is <literal>.</literal>
+	 (only the current directory).
        </listitem>
       </varlistentry>
 
@@ -413,8 +434,8 @@ include_path=".;c:\www\phplib"
        </term>
        <listitem>
 	<para>
-	 If enabled, GET, POST and cookie input can be found in the global
-	 associative arrays <symbol>$HTTP_GET_VARS</symbol>,
+	 If enabled, GET, POST and cookie input can be found in the
+	 global associative arrays <symbol>$HTTP_GET_VARS</symbol>,
 	 <symbol>$HTTP_POST_VARS</symbol> and
 	 <symbol>$HTTP_COOKIE_VARS</symbol>, respectively.
        </listitem>
@@ -427,8 +448,9 @@ include_path=".;c:\www\phplib"
        </term>
        <listitem>
 	<para>
-	 The temporary directory used for storing files when doing file
-	 upload.  Must be writable by whatever user PHP is running as.
+	 The temporary directory used for storing files when doing
+	 file upload.  Must be writable by whatever user PHP is
+	 running as.
        </listitem>
       </varlistentry>
 
@@ -530,8 +552,8 @@ include_path=".;c:\www\phplib"
       <listitem>
        <para>
 	Whether to enable PHP's safe mode. Read the <link
-	linkend="config-security">Security chapter</link> for more more
-	information.
+	linkend="config-security">Security chapter</link> for more
+	more information.
       </listitem>
      </varlistentry>
 
@@ -758,7 +780,8 @@ include_path=".;c:\www\phplib"
       </term>
       <listitem>
        <para>
-	The maximum number of persistent Postgres connections per process.
+	The maximum number of persistent Postgres connections per
+	process.
        </para>
       </listitem>
      </varlistentry>
@@ -770,8 +793,8 @@ include_path=".;c:\www\phplib"
       </term>
       <listitem>
        <para>
-	The maximum number of Postgres connections per process, including
-	persistent connections.
+	The maximum number of Postgres connections per process,
+	including persistent connections.
        </para>
       </listitem>
      </varlistentry>
@@ -802,7 +825,8 @@ include_path=".;c:\www\phplib"
       </term>
       <listitem>
        <para>
-	The maximum number of persistent Sybase connections per process.
+	The maximum number of persistent Sybase connections per
+	process.
        </para>
       </listitem>
      </varlistentry>
@@ -814,8 +838,8 @@ include_path=".;c:\www\phplib"
       </term>
       <listitem>
        <para>
-	The maximum number of Sybase connections per process, including
-	persistent connections.
+	The maximum number of Sybase connections per process,
+	including persistent connections.
        </para>
       </listitem>
      </varlistentry>
@@ -923,10 +947,10 @@ include_path=".;c:\www\phplib"
       <listitem>
        <para>
         The maximum time in seconds to wait for a select_db or query
-	operation to succeed before returning failure.  Note that if
-	max_execution_time has been exceeded when am operation times out,
-	your script will be terminated before it can take action on failure.
-	The default is no limit.
+        operation to succeed before returning failure.  Note that if
+        max_execution_time has been exceeded when am operation times
+        out, your script will be terminated before it can take action
+        on failure.  The default is no limit.
        </para>
       </listitem>
      </varlistentry>
@@ -938,8 +962,8 @@ include_path=".;c:\www\phplib"
       </term>
       <listitem>
        <para>
-        The name of the host you claim to be connecting from,
-        for display by sp_who.  The default is none.
+        The name of the host you claim to be connecting from, for
+        display by sp_who.  The default is none.
        </para>
       </listitem>
      </varlistentry>
@@ -1175,10 +1199,10 @@ include_path=".;c:\www\phplib"
 
        <simpara>
 	In PHP, compile-time configuration option <link
-	 linkend="enable-force-cgi-redirect">--enable-force-cgi-redirect</link>
+	linkend="enable-force-cgi-redirect">--enable-force-cgi-redirect</link>
 	and runtime configuration directives <link
-	 linkend="ini.doc-root">doc_root</link> and <link
-	 linkend="ini.user-dir">user_dir</link> can be used to prevent
+	linkend="ini.doc-root">doc_root</link> and <link
+	linkend="ini.user-dir">user_dir</link> can be used to prevent
 	this attack, if the server document tree has any directories
 	with access restrictions.  See below for full explanation of
 	different combinations.
@@ -1214,13 +1238,14 @@ include_path=".;c:\www\phplib"
     <sect3 id="config-security-cgi-force">
      <title>Case 2: using --enable-force-cgi-redirect</title>
      <simpara>
-      This compile-time option prevents anyone from calling PHP directly 
-      with a url like <filename role=php>http://my.host/cgi-bin/php/secretdir/script.php3</filename>.
-      Instead, PHP will only parse in this mode if it has gone through 
-      a web server redirect rule. 
+      This compile-time option prevents anyone from calling PHP
+      directly with a url like <filename
+      role=php>http://my.host/cgi-bin/php/secretdir/script.php3</filename>.
+      Instead, PHP will only parse in this mode if it has gone through
+      a web server redirect rule.
      <simpara>
       Usually the redirection in the Apache configuration is done with
-      the following directives: 
+      the following directives:
      <programlisting role="apache-conf">
 Action php3-script /cgi-bin/php
 AddHandler php3-script .php3
@@ -1303,7 +1328,9 @@ AddHandler php3-script .php3
       similar to:
       
       <informalexample>
-       <programlisting>#!/usr/local/bin/php</programlisting>
+       <programlisting>
+#!/usr/local/bin/php
+       </programlisting>
       </informalexample>
 	
       as the first line of any file containing PHP tags.  You will

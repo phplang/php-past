@@ -2,7 +2,7 @@
    +----------------------------------------------------------------------+
    | PHP HTML Embedded Scripting Language Version 3.0                     |
    +----------------------------------------------------------------------+
-   | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
+   | Copyright (c) 1997-1999 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
    | it under the terms of one of the following licenses:                 |
@@ -27,7 +27,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: filestat.c,v 1.78 1998/09/19 20:17:17 rasmus Exp $ */
+/* $Id: filestat.c,v 1.87 1999/03/01 18:33:53 sas Exp $ */
 #ifdef THREAD_SAFE
 #include "tls.h"
 #endif
@@ -45,6 +45,12 @@
 
 #if HAVE_UNISTD_H
 # include <unistd.h>
+#endif
+
+#if defined(HAVE_SYS_STATVFS_H) && defined(HAVE_STATVFS)
+# include <sys/statvfs.h>
+#elif defined(HAVE_SYS_STATFS_H) && defined(HAVE_STATFS)
+# include <sys/statfs.h>
 #endif
 
 #if HAVE_PWD_H
@@ -115,6 +121,62 @@ int php3_shutdown_filestat(void)
 	return SUCCESS;
 }
 
+/* {{{ proto bool diskfree(string path)
+   return number of kilobytes free in path */
+void php3_diskfreespace(INTERNAL_FUNCTION_PARAMETERS)
+{
+#ifdef WINDOWS
+	pval *path;
+	double bytesfree;
+	
+ 	ULARGE_INTEGER FreeBytesAvailableToCaller;
+	ULARGE_INTEGER TotalNumberOfBytes;
+  	ULARGE_INTEGER TotalNumberOfFreeBytes;
+#else /* not - WINDOWS */
+	pval *path;
+#if defined(HAVE_SYS_STATVFS_H) && defined(HAVE_STATVFS)
+	struct statvfs buf;
+#elif defined(HAVE_SYS_STATFS_H) && defined(HAVE_STATFS)
+	struct statfs buf;
+#endif
+	double bytesfree = 0;
+	TLS_VARS;
+#endif /* WINDOWS */
+
+	if (ARG_COUNT(ht)!=1 || getParameters(ht,1,&path)==FAILURE) {
+		WRONG_PARAM_COUNT;
+	}
+
+	convert_to_string(path);
+
+	if (_php3_check_open_basedir(path->value.str.val)) RETURN_FALSE;
+
+#ifdef WINDOWS
+	if (GetDiskFreeSpaceEx(path->value.str.val,
+		&FreeBytesAvailableToCaller,
+		&TotalNumberOfBytes,
+		&TotalNumberOfFreeBytes) == 0) RETURN_FALSE;
+
+	/* i know - this is ugly, but i works (thies@digicol.de) */
+	bytesfree  = FreeBytesAvailableToCaller.HighPart * 
+		(double) (((unsigned long)1) << 31) * 2.0 +
+		FreeBytesAvailableToCaller.LowPart;
+#else /* WINDOWS */
+#if defined(HAVE_SYS_STATVFS_H) && defined(HAVE_STATVFS)
+	if (statvfs(path->value.str.val,&buf)) RETURN_FALSE;
+	bytesfree = (((double)buf.f_bavail) * ((double)buf.f_frsize));
+#elif defined(HAVE_SYS_STATFS_H) && defined(HAVE_STATFS)
+	if (statfs(path->value.str.val,&buf)) RETURN_FALSE;
+	bytesfree = (((double)buf.f_bsize) * ((double)buf.f_bavail));
+#endif
+#endif /* WINDOWS */
+
+	RETURN_DOUBLE(bytesfree);
+}
+/* }}} */
+
+/* {{{ proto bool chgrp(string filename, mixed group)
+   Change file group */
 void php3_chgrp(INTERNAL_FUNCTION_PARAMETERS)
 {
 #ifndef WINDOWS
@@ -161,7 +223,10 @@ void php3_chgrp(INTERNAL_FUNCTION_PARAMETERS)
 #endif
 	RETURN_TRUE;
 }
+/* }}} */
 
+/* {{{ proto bool chown(string filename, mixed user)
+   Change file owner */
 void php3_chown(INTERNAL_FUNCTION_PARAMETERS)
 {
 #ifndef WINDOWS
@@ -205,7 +270,10 @@ void php3_chown(INTERNAL_FUNCTION_PARAMETERS)
 #endif
 	RETURN_TRUE;
 }
+/* }}} */
 
+/* {{{ proto bool chmod(string filename, int mode)
+   Change file mode */
 void php3_chmod(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *filename, *mode;
 	int ret;
@@ -231,7 +299,10 @@ void php3_chmod(INTERNAL_FUNCTION_PARAMETERS) {
 	}
 	RETURN_TRUE;
 }
+/* }}} */
 
+/* {{{ proto bool touch(string filename[, int time])
+   Set modification time of file */
 void php3_touch(INTERNAL_FUNCTION_PARAMETERS) {
 #if HAVE_UTIME
 	pval *filename, *filetime;
@@ -296,7 +367,10 @@ void php3_touch(INTERNAL_FUNCTION_PARAMETERS) {
 	}
 #endif
 }
+/* }}} */
 
+/* {{{ proto void clearstatcache(void)
+   Clear file stat cache */
 void php3_clearstatcache(INTERNAL_FUNCTION_PARAMETERS) {
 	TLS_VARS;
 	
@@ -305,6 +379,7 @@ void php3_clearstatcache(INTERNAL_FUNCTION_PARAMETERS) {
 		GLOBAL(CurrentStatFile) = NULL;
 	}
 }
+/* }}} */
 
 static void _php3_stat(const char *filename, int type, pval *return_value)
 {
@@ -450,24 +525,95 @@ void name(INTERNAL_FUNCTION_PARAMETERS) { \
 	_php3_stat(filename->value.str.val, funcnum, return_value); \
 }
 
+/* {{{ proto int fileperms(string filename)
+   Get file permissions */
 FileFunction(php3_fileperms,0)
+/* }}} */
+
+/* {{{ proto int fileinode(string filename)
+   Get file inode */
 FileFunction(php3_fileinode,1)
+/* }}} */
+
+/* {{{ proto int filesize(string filename)
+   Get file size */
 FileFunction(php3_filesize, 2)
+/* }}} */
+
+/* {{{ proto int fileowner(string filename)
+   Get file owner */
 FileFunction(php3_fileowner,3)
+/* }}} */
+
+/* {{{ proto int filegroup(string filename)
+   Get file group */
 FileFunction(php3_filegroup,4)
+/* }}} */
+
+/* {{{ proto int fileatime(string filename)
+   Get last access time of file */
 FileFunction(php3_fileatime,5)
+/* }}} */
+
+/* {{{ proto int filemtime(string filename)
+   Get last modification time of file */
 FileFunction(php3_filemtime,6)
+/* }}} */
+
+/* {{{ proto int filectime(string filename)
+   Get inode modification time of file */
 FileFunction(php3_filectime,7)
+/* }}} */
+
+/* {{{ proto string filetype(string filename)
+   Get file type */
 FileFunction(php3_filetype, 8)
+/* }}} */
+
+/* {{{ proto int is_writeable(string filename)
+   Returns true if file can be written to */
 FileFunction(php3_iswritable, 9)
+/* }}} */
+
+/* {{{ proto int is_readable(string filename)
+   Returns true if file can be read */
 FileFunction(php3_isreadable,10)
+/* }}} */
+
+/* {{{ proto int is_executable(string filename)
+   Returns true if file is executable */
 FileFunction(php3_isexec,11)
+/* }}} */
+
+/* {{{ proto int is_file(string filename)
+   Returns true if file is a regular file */
 FileFunction(php3_isfile,12)
+/* }}} */
+
+/* {{{ proto int is_dir(string filename)
+   Returns true if file is directory */
 FileFunction(php3_isdir,13)
+/* }}} */
+
+/* {{{ proto int is_link(string filename)
+   Returns true if file is symbolic link */
 FileFunction(php3_islink,14)
+/* }}} */
+
+/* {{{ proto bool file_exists(string filename)
+   Returns true if filename exists */
 FileFunction(php3_fileexists,15)
+/* }}} */
+
+/* {{{ proto array lstat(string filename)
+   Give information about a file or symbolic link */
 FileFunction(php3_lstat,16)
+/* }}} */
+
+/* {{{ proto array stat(string filename)
+   Give information about a file */
 FileFunction(php3_stat,17)
+/* }}} */
 
 function_entry php3_filestat_functions[] = {
 	{"fileatime",	php3_fileatime,		NULL},
@@ -492,6 +638,7 @@ function_entry php3_filestat_functions[] = {
 	{"chgrp",		php3_chgrp,			NULL},
 	{"chmod",		php3_chmod,			NULL},
 	{"touch",		php3_touch,			NULL},
+	{"diskfreespace",php3_diskfreespace,NULL},
 	{NULL, NULL, NULL}
 };
 

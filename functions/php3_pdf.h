@@ -2,7 +2,7 @@
    +----------------------------------------------------------------------+
    | PHP HTML Embedded Scripting Language Version 3.0                     |
    +----------------------------------------------------------------------+
-   | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
+   | Copyright (c) 1997-1999 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
    | it under the terms of one of the following licenses:                 |
@@ -26,7 +26,7 @@
    | Authors: Uwe Steinmann                                               |
    +----------------------------------------------------------------------+
  */
-/* $Id: php3_pdf.h,v 1.4 1998/11/03 17:00:32 steinm Exp $ */
+/* $Id: php3_pdf.h,v 1.8 1999/02/28 23:03:51 steffann Exp $ */
 
 #ifndef _PHP3_PDF_H
 #define _PHP3_PDF_H
@@ -100,6 +100,12 @@ extern void php3_pdf_setrgbcolor(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_pdf_add_outline(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_pdf_set_transition(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_pdf_set_duration(INTERNAL_FUNCTION_PARAMETERS);
+extern void php3_pdf_open_jpeg(INTERNAL_FUNCTION_PARAMETERS);
+extern void php3_pdf_open_gif(INTERNAL_FUNCTION_PARAMETERS);
+extern void php3_pdf_close_image(INTERNAL_FUNCTION_PARAMETERS);
+extern void php3_pdf_place_image(INTERNAL_FUNCTION_PARAMETERS);
+extern void php3_pdf_put_image(INTERNAL_FUNCTION_PARAMETERS);
+extern void php3_pdf_execute_image(INTERNAL_FUNCTION_PARAMETERS);
 #else
 #define pdf_module_ptr NULL
 #endif

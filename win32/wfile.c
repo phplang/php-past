@@ -1,3 +1,4 @@
+/* $Id: wfile.c,v 1.7 1998/12/28 09:44:05 sas Exp $ */
 
 /* Function borrowed from the Downhill Project */
 #include "wfile.h"

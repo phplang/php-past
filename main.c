@@ -2,7 +2,7 @@
    +----------------------------------------------------------------------+
    | PHP HTML Embedded Scripting Language Version 3.0                     |
    +----------------------------------------------------------------------+
-   | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
+   | Copyright (c) 1997-1999 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
    | it under the terms of one of the following licenses:                 |
@@ -29,7 +29,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: main.c,v 1.483 1998/12/20 20:08:27 shane Exp $ */
+/* $Id: main.c,v 1.495 1999/01/30 00:52:20 shane Exp $ */
 
 /* #define CRASH_DETECTION */
 
@@ -99,6 +99,8 @@ struct sapi_request_info *sapi_rqst;
 void *gLock;					/*mutex variable */
 
 #ifndef THREAD_SAFE
+int php_connection_status;
+int ignore_user_abort;
 int error_reporting, tmp_error_reporting;
 int initialized;				/* keep track of which resources were successfully initialized */
 static int module_initialized = 0;
@@ -169,29 +171,61 @@ void phperror(char *error)
 }
 
 
+PHPAPI int php3_write(const void *a, int n)
+{
+	int ret;
+	TLS_VARS;
+
 #if APACHE
-void php3_apache_puts(const char *s)
+	ret = rwrite(a,n,GLOBAL(php3_rqst)); 
+#else /* CGI */
+	ret = fwrite(a,1,n,stdout);
+#endif
+
+	if (ret != n) {
+		GLOBAL(php_connection_status) |= PHP_CONNECTION_ABORTED;
+	}
+
+	return ret;
+}
+
+PHPAPI void php3_puts(const char *s)
 {
 	TLS_VARS;
 
+#if APACHE
 	if (GLOBAL(php3_rqst)) {
-		rputs(s, GLOBAL(php3_rqst));
+		if (rputs(s, GLOBAL(php3_rqst)) == -1) {
+			GLOBAL(php_connection_status) |= PHP_CONNECTION_ABORTED;
+		}
 	} else {
 		fputs(s, stdout);
 	}
+#else /* CGI */
+	if (fputs(s, stdout) < 0) {
+		GLOBAL(php_connection_status) |= PHP_CONNECTION_ABORTED;
+	}
+#endif
 }
 
-void php3_apache_putc(char c)
+PHPAPI void php3_putc(char c)
 {
 	TLS_VARS;
 
+#if APACHE
 	if (GLOBAL(php3_rqst)) {
-		rputc(c, GLOBAL(php3_rqst));
+		if (rputc(c, GLOBAL(php3_rqst)) != c) {
+			GLOBAL(php_connection_status) |= PHP_CONNECTION_ABORTED;
+		}
 	} else {
 		fputc(c, stdout);
 	}
-}
+#else
+	if (fputc(c, stdout) != c) {
+		GLOBAL(php_connection_status) |= PHP_CONNECTION_ABORTED;
+	}
 #endif
+}
 
 void php3_log_err(char *log_message)
 {
@@ -201,7 +235,7 @@ void php3_log_err(char *log_message)
 	/* Try to use the specified logging location. */
 	if (php3_ini.error_log != NULL) {
 #if HAVE_SYSLOG_H
-		if (strcmp(php3_ini.error_log, "syslog")) {
+		if (!strcmp(php3_ini.error_log, "syslog")) {
 			syslog(LOG_NOTICE, log_message);
 			return;
 		} else {
@@ -247,13 +281,6 @@ void php3_log_err(char *log_message)
 
 /* is 4K big enough? */
 #define PRINTF_BUFFER_SIZE 1024*4
-
-/* wrapper for modules to use PHPWRITE */
-PHPAPI int php3_write(void *buf, int size)
-{
-	TLS_VARS;
-	return PHPWRITE(buf, size);
-}
 
 PHPAPI int php3_printf(const char *format,...)
 {
@@ -408,24 +435,46 @@ int phplex(pval *phplval)
 {
 	Token *token;
 
+	/* this is timing for windows */
 #if (WIN32|WINNT)
-	if (GLOBAL(wintimer) && !(++GLOBAL(wintimer_counter) & 0xff) && (GLOBAL(wintimer) < (unsigned int) clock())) {
-		php3_error(E_WARNING, "PHP Timed out!<br>\n");
+	if (GLOBAL(wintimer) && !(++GLOBAL(wintimer_counter) & 0xff) 
+		  && (GLOBAL(wintimer) < (unsigned int) clock())) {
+		php3_error(E_NOTICE, "PHP Timed out!<br>\n");
 		GLOBAL(shutdown_requested) = ABNORMAL_SHUTDOWN;
+		GLOBAL(php_connection_status) |= PHP_CONNECTION_TIMEOUT;
+		/*GLOBAL(ignore_user_abort) = 1;*/
 	}
 #endif
-
+	
 	if (!GLOBAL(initialized) || GLOBAL(shutdown_requested)) {
 		if (GLOBAL(shutdown_requested)==TERMINATE_CURRENT_PHPPARSE) {
 			GLOBAL(shutdown_requested)=0;
 		}
 		return 0;
 	}
+
+
 #if APACHE
-	if (php3_rqst->connection->aborted) {
+	if ((php3_rqst->connection->aborted || GLOBAL(php_connection_status)&PHP_CONNECTION_ABORTED) 
+		  && !GLOBAL(ignore_user_abort)) {
 		GLOBAL(shutdown_requested) = ABNORMAL_SHUTDOWN;
+		/* 
+			ignore_user_abort is used to tell phplex() that even though we know that the
+			remote client is no longer listening to us, we still want it to continue in case
+			we come back here as part of a registered shutdown function.  Without this flag
+			a user-registered shutdown function would never run to completion.
+		*/
+		GLOBAL(ignore_user_abort) = 1;
 		return 0;
 	}
+#else /* CGI */
+#if CGI_CHECK_ABORT
+	if ((GLOBAL(php_connection_status)&PHP_CONNECTION_ABORTED) && !GLOBAL(ignore_user_abort)) {
+		GLOBAL(shutdown_requested) = ABNORMAL_SHUTDOWN;
+		GLOBAL(ignore_user_abort) = 1;
+		return 0;
+	}
+#endif
 #endif
 
 #ifdef THREAD_SAFE
@@ -457,7 +506,8 @@ static void php3_timeout(int dummy)
 	TLS_VARS;
 
 	if (!GLOBAL(shutdown_requested)) {
-		php3_error(E_ERROR, "Maximum execution time of %d seconds exceeded", php3_ini.max_execution_time);
+		php3_error(E_ERROR, "Maximum execution time exceeded");
+		GLOBAL(php_connection_status) |= PHP_CONNECTION_TIMEOUT;
 		/* Now, schedule another alarm.  If we're stuck in a code portion that will not go through
 		 * phplex() or if the parser is broken, end the process ungracefully
 		 */
@@ -508,6 +558,8 @@ static void php3_unset_timeout(INLINE_TLS_VOID)
 }
 
 
+/* {{{ proto void set_time_limit(int seconds)
+   Sets the limit of maximum time a script can run */
 void php3_set_time_limit(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *new_timeout;
@@ -530,11 +582,18 @@ void php3_set_time_limit(INTERNAL_FUNCTION_PARAMETERS)
 	   be.  If we use a bound thread and proper masking it
 	   should work fine.  Is this FIXME a WIN32 problem?  Is
 	   there no way to do per-thread timers on WIN32?
+
+	   Something to keep in mind here is that the SIGPROF itimer
+	   we are currently using is not a real-time timer.  It is 
+	   only active when the process is in user or kernel space.
+	   ie. a sleep(10); call in a script will not count towards
+	   the timeout limit. -RL
 	 */
 	GLOBAL(max_execution_time) = new_timeout->value.lval;
 	php3_unset_timeout(_INLINE_TLS_VOID);
 	php3_set_timeout(new_timeout->value.lval _INLINE_TLS);
 }
+/* }}} */
 
 
 int php3_request_startup(INLINE_TLS_VOID)
@@ -589,6 +648,8 @@ int php3_request_startup(INLINE_TLS_VOID)
 		GLOBAL(shutdown_requested) = 0;
 		GLOBAL(header_is_being_sent) = 0;
 		GLOBAL(php3_track_vars) = php3_ini.track_vars;
+		GLOBAL(php_connection_status) = PHP_CONNECTION_NORMAL;
+		GLOBAL(ignore_user_abort) = 0;
 	}
 
 	if (php3_init_request_info((void *) &php3_ini)) {
@@ -699,7 +760,6 @@ void php3_request_shutdown(void *dummy INLINE_TLS)
 		log_error(log_message, php3_rqst->server);
 	}
 #endif
-
 	php3_call_shutdown_functions();
 	
 	if (GLOBAL(initialized) & INIT_LIST) {
@@ -1076,6 +1136,9 @@ static int php3_config_ini_startup(INLINE_TLS_VOID)
 		if (cfg_get_long("enable_dl", &php3_ini.enable_dl) == FAILURE) {
 			php3_ini.enable_dl = 1;
 		}
+		if (cfg_get_long("ignore_user_abort", &php3_ini.ignore_user_abort) == FAILURE) {
+			php3_ini.ignore_user_abort = 0;
+		}
 		/* THREADX  Will have to look into this on windows
 		 * Make a master copy to use as a basis for every per-dir config.
 		 * Without two copies we would have a previous requst's per-dir
@@ -1295,11 +1358,9 @@ int _php3_hash_environment(void)
 		register int i;
 		array_header *arr = table_elts(GLOBAL(php3_rqst)->subprocess_env);
 		table_entry *elts = (table_entry *) arr->elts;
-		int len;
 
 		for (i = 0; i < arr->nelts; i++) {
-			len = strlen(elts[i].key);
-			t = estrndup(elts[i].key, len);
+			t = elts[i].key;
 			if (elts[i].val) {
 				tmp.value.str.len = strlen(elts[i].val);
 				tmp.value.str.val = estrndup(elts[i].val, tmp.value.str.len);
@@ -1308,10 +1369,9 @@ int _php3_hash_environment(void)
 				tmp.value.str.val = empty_string;
 			}
 			tmp.type = IS_STRING;
-			if (_php3_hash_update(&GLOBAL(symbol_table), t, len + 1, &tmp, sizeof(pval), NULL) == FAILURE) {
+			if (_php3_hash_update(&GLOBAL(symbol_table), t, strlen(t)+1, &tmp, sizeof(pval), NULL) == FAILURE) {
 				STR_FREE(tmp.value.str.val);
 			}
-			efree(t);
 		}
 		/* insert special variables */
 		if (_php3_hash_find(&GLOBAL(symbol_table), "SCRIPT_FILENAME", sizeof("SCRIPT_FILENAME"), (void **) & tmp_ptr) == SUCCESS) {

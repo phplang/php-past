@@ -28,6 +28,8 @@
                 the hope that it will be useful, but without any warranty.
  ------------------------------------------------------------------</Prolog>-*/
 
+/* $Id: sflcryp.c,v 1.6 1998/12/28 09:34:49 sas Exp $ */
+
 #define DEFINE_CRYPT_TABLES
 
 #include "prelude.h"                    /*  Universal header file            */

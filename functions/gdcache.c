@@ -1,5 +1,5 @@
 /* 
- * gdcache.c
+ * $Id: gdcache.c,v 1.3 1998/12/28 09:34:53 sas Exp $
  *
  * Caches of pointers to user structs in which the least-recently-used 
  * element is replaced in the event of a cache miss after the cache has 

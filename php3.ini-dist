@@ -118,7 +118,6 @@ extension_dir	=	./				; directory in which the loadable extensions (modules) res
 ;extension=php3_nsmail.dll
 ;extension=php3_calendar.dll
 ;extension=php3_dbase.dll
-;extension=php3_filepro.dll
 ;extension=php3_gd.dll
 ;extension=php3_dbm.dll
 ;extension=php3_mssql.dll

@@ -2,7 +2,7 @@
    +----------------------------------------------------------------------+
    | PHP HTML Embedded Scripting Language Version 3.0                     |
    +----------------------------------------------------------------------+
-   | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
+   | Copyright (c) 1997-1999 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
    | it under the terms of one of the following licenses:                 |
@@ -27,7 +27,7 @@
    +----------------------------------------------------------------------+
  */
  
-/* $Id: mysql.c,v 1.176 1998/12/14 12:58:36 rasmus Exp $ */
+/* $Id: mysql.c,v 1.180 1999/02/27 19:10:38 eschmid Exp $ */
 
 
 /* TODO:
@@ -98,6 +98,9 @@
 #define mysql_row_length_type unsigned int
 #endif
 
+#define MYSQL_ASSOC		1<<0
+#define MYSQL_NUM		1<<1
+#define MYSQL_BOTH		(MYSQL_ASSOC|MYSQL_NUM)
 
 function_entry mysql_functions[] = {
 	{"mysql_connect",		php3_mysql_connect,			NULL},
@@ -302,6 +305,10 @@ int php3_minit_mysql(INIT_FUNC_ARGS)
 	printf("Registered:  %d,%d,%d\n",MySQL_GLOBAL(php3_mysql_module).le_result,MySQL_GLOBAL(php3_mysql_module).le_link,MySQL_GLOBAL(php3_mysql_module).le_plink);
 #endif
 	mysql_module_entry.type = type;
+
+	REGISTER_LONG_CONSTANT("MYSQL_ASSOC", MYSQL_ASSOC, CONST_CS | CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("MYSQL_NUM", MYSQL_NUM, CONST_CS | CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("MYSQL_BOTH", MYSQL_BOTH, CONST_CS | CONST_PERSISTENT);
 
 	return SUCCESS;
 }
@@ -1419,64 +1426,10 @@ void php3_mysql_num_fields(INTERNAL_FUNCTION_PARAMETERS)
 }
 /* }}} */
 
-/* {{{ proto array mysql_fetch_row(int result)
-   Get a result row as an enumerated array */
-void php3_mysql_fetch_row(INTERNAL_FUNCTION_PARAMETERS)
-{
-	pval *result;
-	MYSQL_RES *mysql_result;
-	MYSQL_ROW mysql_row;
-	mysql_row_length_type *mysql_row_lengths;
-	int type;
-	int num_fields;
-	int i;
-	MySQL_TLS_VARS;
 
-	
-	if (ARG_COUNT(ht)!=1 || getParameters(ht, 1, &result)==FAILURE) {
-		WRONG_PARAM_COUNT;
-	}
-	
-	convert_to_long(result);
-	mysql_result = (MYSQL_RES *) php3_list_find(result->value.lval,&type);
-	
-	if (type!=MySQL_GLOBAL(php3_mysql_module).le_result) {
-		php3_error(E_WARNING,"%d is not a MySQL result index",result->value.lval);
-		RETURN_FALSE;
-	}
-	if ((mysql_row=mysql_fetch_row(mysql_result))==NULL 
-		|| (mysql_row_lengths=mysql_fetch_lengths(mysql_result))==NULL) {
-		RETURN_FALSE;
-	}
-	if (array_init(return_value)==FAILURE) {
-		RETURN_FALSE;
-	}
-	num_fields = mysql_num_fields(mysql_result);
-	
-	for (i=0; i<num_fields; i++) {
-		if (mysql_row[i]) {
-#ifndef PHP_31 /* FIXME cannot access php3_ini in modules */
-			if (php3_ini.magic_quotes_runtime) {
-				int len;
-				char *tmp=_php3_addslashes(mysql_row[i],mysql_row_lengths[i],&len,0);
-				
-				add_index_stringl(return_value, i, tmp, len, 0);
-			} else 
-#endif
-			{
-				add_index_stringl(return_value, i, mysql_row[i], mysql_row_lengths[i], 1);
-			}
-		} else {
-			/* NULL field, don't set it */
-			/*add_index_stringl(return_value, i, empty_string, 0, 1);*/
-		}
-	}
-}
-/* }}} */
-
-static void php3_mysql_fetch_hash(INTERNAL_FUNCTION_PARAMETERS)
+static void php3_mysql_fetch_hash(INTERNAL_FUNCTION_PARAMETERS, int result_type)
 {
-	pval *result;
+	pval *result, *arg2;
 	MYSQL_RES *mysql_result;
 	MYSQL_ROW mysql_row;
 	MYSQL_FIELD *mysql_field;
@@ -1484,13 +1437,30 @@ static void php3_mysql_fetch_hash(INTERNAL_FUNCTION_PARAMETERS)
 	int type;
 	int num_fields;
 	int i;
-	pval *pval_ptr;
 	MySQL_TLS_VARS;
 
-	
-	if (ARG_COUNT(ht)!=1 || getParameters(ht, 1, &result)==FAILURE) {
-		WRONG_PARAM_COUNT;
+
+	switch (ARG_COUNT(ht)) {
+		case 1:
+			if (getParameters(ht, 1, &result)==FAILURE) {
+				RETURN_FALSE;
+			}
+			if (!result_type) {
+				result_type = MYSQL_BOTH;
+			}
+			break;
+		case 2:
+			if (getParameters(ht, 2, &result, &arg2)==FAILURE) {
+				RETURN_FALSE;
+			}
+			convert_to_long(arg2);
+			result_type = arg2->value.lval;
+			break;
+		default:
+			WRONG_PARAM_COUNT;
+			break;
 	}
+	
 	
 	convert_to_long(result);
 	mysql_result = (MYSQL_RES *) php3_list_find(result->value.lval,&type);
@@ -1512,19 +1482,26 @@ static void php3_mysql_fetch_hash(INTERNAL_FUNCTION_PARAMETERS)
 	
 	mysql_field_seek(mysql_result,0);
 	for (mysql_field=mysql_fetch_field(mysql_result),i=0; mysql_field; mysql_field=mysql_fetch_field(mysql_result),i++) {
+		char *data;
+		int data_len;
+		int should_copy;
+
 		if (mysql_row[i]) {
-#ifndef PHP_31 /* FIXME cannot access php3_ini in modules */
 			if (php3_ini.magic_quotes_runtime) {
-				int len;
-				char *tmp=_php3_addslashes(mysql_row[i],mysql_row_lengths[i],&len,0);
-				
-				add_get_index_stringl(return_value, i, tmp, len, (void **) &pval_ptr, 0);
-			} else 
-#endif
-			{
-				add_get_index_stringl(return_value, i, mysql_row[i], mysql_row_lengths[i], (void **) &pval_ptr, 1);
+				data=_php3_addslashes(mysql_row[i],mysql_row_lengths[i],&data_len,0);
+				should_copy=0;
+			} else {
+				data = mysql_row[i];
+				data_len = mysql_row_lengths[i];
+				should_copy=1;
 			}
-			_php3_hash_pointer_update(return_value->value.ht, mysql_field->name, strlen(mysql_field->name)+1, pval_ptr);
+			if (result_type & MYSQL_ASSOC) {
+				add_assoc_stringl(return_value, mysql_field->name, data, data_len, should_copy);
+				should_copy=1;
+			}
+			if (result_type & MYSQL_NUM) {
+				add_index_stringl(return_value, i, data, data_len, should_copy);
+			}
 		} else {
 			/* NULL field, don't set it */
 			/* add_get_index_stringl(return_value, i, empty_string, 0, (void **) &pval_ptr); */
@@ -1532,22 +1509,33 @@ static void php3_mysql_fetch_hash(INTERNAL_FUNCTION_PARAMETERS)
 	}
 }
 
-/* {{{ proto object mysql_fetch_object(int result)
+
+/* {{{ proto array mysql_fetch_row(int result)
+   Get a result row as an enumerated array */
+void php3_mysql_fetch_row(INTERNAL_FUNCTION_PARAMETERS)
+{
+	php3_mysql_fetch_hash(INTERNAL_FUNCTION_PARAM_PASSTHRU, MYSQL_NUM);
+}
+/* }}} */
+
+
+/* {{{ proto object mysql_fetch_object(int result [, int result_typ])
    Fetch a result row as an object */
 void php3_mysql_fetch_object(INTERNAL_FUNCTION_PARAMETERS)
 {
-	php3_mysql_fetch_hash(INTERNAL_FUNCTION_PARAM_PASSTHRU);
+	php3_mysql_fetch_hash(INTERNAL_FUNCTION_PARAM_PASSTHRU, 0);
 	if (return_value->type==IS_ARRAY) {
 		return_value->type=IS_OBJECT;
 	}
 }
 /* }}} */
 
-/* {{{ proto array mysql_fetch_array(int result)
+
+/* {{{ proto array mysql_fetch_array(int result [, int result_typ])
    Fetch a result row as an associative array */
 void php3_mysql_fetch_array(INTERNAL_FUNCTION_PARAMETERS)
 {
-	php3_mysql_fetch_hash(INTERNAL_FUNCTION_PARAM_PASSTHRU);
+	php3_mysql_fetch_hash(INTERNAL_FUNCTION_PARAM_PASSTHRU, 0);
 }
 /* }}} */
 
@@ -1912,7 +1900,7 @@ void php3_mysql_field_table(INTERNAL_FUNCTION_PARAMETERS)
 }
 /* }}} */
 
-/* {{{ proto int mysql_field_len(int result, int field_offet)
+/* {{{ proto int mysql_field_len(int result, int field_offset)
    Returns the length of the specified field */
 void php3_mysql_field_len(INTERNAL_FUNCTION_PARAMETERS)
 {

@@ -3,7 +3,10 @@
  * code by Shane Caraveo shane@caraveo.com
  * copy freely!
  *
+ * $Id: calendar.c,v 1.16 1999/01/04 19:08:24 shane Exp $
  */
+
+
 
 #include "sdncal.h"
 
@@ -36,6 +39,8 @@ php3_module_entry calendar_module_entry = {
 DLEXPORT php3_module_entry *get_module(void) { return &calendar_module_entry; }
 #endif
 
+/* {{{ proto string jdtogregorian(int juliandaycount)
+   convert a julian day count to a gregorian calendar date.  returns string. */
 DLEXPORT void cal_jdtogreg(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *julday;
@@ -57,6 +62,8 @@ DLEXPORT void cal_jdtogreg(INTERNAL_FUNCTION_PARAMETERS)
 }
 
 
+/* {{{ proto int gregoriantojd(int month, int day, int year)
+   convert a gregorian calendar date to julian day count.  */
 DLEXPORT void cal_gregtojd(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *year, *month, *day;
@@ -77,6 +84,8 @@ DLEXPORT void cal_gregtojd(INTERNAL_FUNCTION_PARAMETERS)
 }
 
 
+/* {{{ proto string jdtojulian(int juliandaycount)
+   convert a julian day count to a julian calendar date.  returns string. */
 DLEXPORT void cal_jdtojul(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *julday;
@@ -98,6 +107,8 @@ DLEXPORT void cal_jdtojul(INTERNAL_FUNCTION_PARAMETERS)
 }
 
 
+/* {{{ proto int juliantojd(int month, int day, int year)
+   convert a julian calendar date to julian day count.*/
 DLEXPORT void cal_jultojd(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *year, *month, *day;
@@ -118,6 +129,8 @@ DLEXPORT void cal_jultojd(INTERNAL_FUNCTION_PARAMETERS)
 }
 
 
+/* {{{ proto string jdtojewish(int juliandaycount)
+   convert a julian day count to a jewish calendar date.  returns string. */
 DLEXPORT void cal_jdtojewish(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *julday;
@@ -139,6 +152,8 @@ DLEXPORT void cal_jdtojewish(INTERNAL_FUNCTION_PARAMETERS)
 }
 
 
+/* {{{ proto int jewishtojd(int month, int day, int year)
+   convert a jewish calendar date to a julian day count*/
 DLEXPORT void cal_jewishtojd(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *year, *month, *day;
@@ -159,6 +174,8 @@ DLEXPORT void cal_jewishtojd(INTERNAL_FUNCTION_PARAMETERS)
 }
 
 
+/* {{{ proto string jdtofrench(int juliandaycount)
+   convert a julian day count to a french republic calendar date.  returns string. */
 DLEXPORT void cal_jdtofrench(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *julday;
@@ -180,6 +197,8 @@ DLEXPORT void cal_jdtofrench(INTERNAL_FUNCTION_PARAMETERS)
 }
 
 
+/* {{{ proto int frenchtojd(int month, int day, int year)
+   convert a french republic calendar date to julian day count */
 DLEXPORT void cal_frenchtojd(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *year, *month, *day;
@@ -200,6 +219,8 @@ DLEXPORT void cal_frenchtojd(INTERNAL_FUNCTION_PARAMETERS)
 }
 
 
+/* {{{ proto mixed jddayofweek(int juliandaycount, int mode)
+   returns name or number of day of week from julian day count. */
 DLEXPORT void cal_jddayofweek(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *julday, *mode;
@@ -241,6 +262,8 @@ DLEXPORT void cal_jddayofweek(INTERNAL_FUNCTION_PARAMETERS)
 }
 
 
+/* {{{ proto string jdmonthname(int juliandaycount, int mode)
+   returns name of month for julian day count. */
 DLEXPORT void cal_monthname(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *julday, *mode;
@@ -252,10 +275,6 @@ DLEXPORT void cal_monthname(INTERNAL_FUNCTION_PARAMETERS)
 		convert_to_long(mode);
 
 		switch (mode->value.lval) {
-			case 0L:			/* gregorian or julian month */
-				SdnToGregorian(julday->value.lval, &year, &month, &day);
-				monthname = MonthNameShort[month];
-				break;
 			case 1L:			/* gregorian or julian month */
 				SdnToGregorian(julday->value.lval, &year, &month, &day);
 				monthname = MonthNameLong[month];
@@ -277,7 +296,8 @@ DLEXPORT void cal_monthname(INTERNAL_FUNCTION_PARAMETERS)
 				monthname = FrenchMonthName[month];
 				break;
 			default:			/* default gregorian */
-				/* FIXME - need to set monthname to something here ?? */
+				SdnToGregorian(julday->value.lval, &year, &month, &day);
+				monthname = MonthNameShort[month];
 				break;
 		}
 		return_value->value.str.val = estrdup(monthname);

@@ -3,6 +3,8 @@
  * Permission granted to use, copy, modify, distribute and sell so long as
  * the above copyright and this permission statement are retained in all
  * copies.  THERE IS NO WARRANTY - USE AT YOUR OWN RISK.
+ *
+ * $Id: jewish.c,v 1.2 1998/12/28 09:34:47 sas Exp $ 
  */
 
 /**************************************************************************

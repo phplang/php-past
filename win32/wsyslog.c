@@ -1,6 +1,8 @@
 /*
  * This file modified from sources for imap4 for use
  * in PHP 3
+ *
+ * $Id: wsyslog.c,v 1.16 1998/12/28 09:44:05 sas Exp $
  */
 /*
  * Program:   Unix compatibility routines

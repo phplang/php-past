@@ -2,7 +2,7 @@
    +----------------------------------------------------------------------+
    | PHP HTML Embedded Scripting Language Version 3.0                     |
    +----------------------------------------------------------------------+
-   | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
+   | Copyright (c) 1997-1999 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
    | it under the terms of one of the following licenses:                 |
@@ -27,7 +27,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: dav.c,v 1.3 1998/12/04 20:44:18 ssb Exp $ */
+/* $Id: dav.c,v 1.5 1999/02/14 20:51:42 rasmus Exp $ */
 
 #define IS_EXT_MODULE
 #if COMPILE_DL
@@ -48,7 +48,6 @@
 #if HAVE_MOD_DAV
 
 # include "mod_dav.h"
-# include "phpdav.h"
 # include "variables.h"
 
 /* {{{ thread safety stuff */

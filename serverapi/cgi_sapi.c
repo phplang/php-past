@@ -3,6 +3,7 @@
 
 	functions for CGI
 
+	$Id: cgi_sapi.c,v 1.14 1998/12/28 09:35:04 sas Exp $ 
 */
 #include <stdio.h>
 #include <stdarg.h>

@@ -2,7 +2,7 @@
    +----------------------------------------------------------------------+
    | PHP HTML Embedded Scripting Language Version 3.0                     |
    +----------------------------------------------------------------------+
-   | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
+   | Copyright (c) 1997-1999 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
    | it under the terms of the GNU General Public License as published by |
@@ -23,7 +23,7 @@
  */
 
 
-/* $Id: hw.h,v 1.3 1998/09/15 23:40:03 shane Exp $ */
+/* $Id: hw.h,v 1.5 1999/01/12 17:36:18 steinm Exp $ */
 
 #ifndef _HW_H
 #define _HW_H
@@ -65,6 +65,7 @@ extern void php3_hw_mv(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_hw_cp(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_hw_deleteobject(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_hw_changeobject(INTERNAL_FUNCTION_PARAMETERS);
+extern void php3_hw_modifyobject(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_hw_getparents(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_hw_getparentsobj(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_hw_children(INTERNAL_FUNCTION_PARAMETERS);

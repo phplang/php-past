@@ -2,7 +2,7 @@
    +----------------------------------------------------------------------+
    | PHP HTML Embedded Scripting Language Version 3.0                     |
    +----------------------------------------------------------------------+
-   | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
+   | Copyright (c) 1997-1999 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
    | it under the terms of one of the following licenses:                 |
@@ -28,7 +28,7 @@
    |          Rasmus Lerdorf <rasmus@lerdorf.on.ca>                       |
    +----------------------------------------------------------------------+
  */
-/* $Id: crypt.c,v 1.39 1998/09/22 18:17:40 rasmus Exp $ */
+/* $Id: crypt.c,v 1.41 1999/01/03 22:46:42 rasmus Exp $ */
 #include <stdlib.h>
 
 #include "php.h"
@@ -111,6 +111,8 @@ static void php3i_to64(char *s, long v, int n)	{
 	} 
 } 
 
+/* {{{ proto string crypt(string str [, string salt])
+   Encrypt a string */
 void php3_crypt(INTERNAL_FUNCTION_PARAMETERS)
 {
 	char salt[PHP3_MAX_SALT_LEN];
@@ -169,7 +171,7 @@ void php3_crypt(INTERNAL_FUNCTION_PARAMETERS)
 }
 
 #endif
-
+/* }}} */
 
 
 /*

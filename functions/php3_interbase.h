@@ -2,7 +2,7 @@
    +----------------------------------------------------------------------+
    | PHP HTML Embedded Scripting Language Version 3.0                     |
    +----------------------------------------------------------------------+
-   | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
+   | Copyright (c) 1997-1999 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
    | it under the terms of one of the following licenses:                 |
@@ -24,11 +24,11 @@
    | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
    | Authors: Jouni Ahto <jah@cultnet.fi>                                 |
-   |                                                                      |
+   |          Andrew Avdeev <andy@simgts.mv.ru>                           |
    +----------------------------------------------------------------------+
  */
 
-/* $Id: php3_interbase.h,v 1.2 1998/12/19 19:00:04 jah Exp $ */
+/* $Id: php3_interbase.h,v 1.5 1999/01/31 10:33:10 andrew Exp $ */
 
 #ifndef _PHP3_IBASE_H
 #define _PHP3_IBASE_H
@@ -53,6 +53,7 @@ extern void php3_ibase_pconnect(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_ibase_close(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_ibase_query(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_ibase_fetch_row(INTERNAL_FUNCTION_PARAMETERS);
+extern void php3_ibase_fetch_object(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_ibase_free_result(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_ibase_prepare(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_ibase_bind(INTERNAL_FUNCTION_PARAMETERS);
@@ -60,27 +61,68 @@ extern void php3_ibase_execute(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_ibase_free_query(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_ibase_timefmt(INTERNAL_FUNCTION_PARAMETERS);
 
+extern void php3_ibase_num_fields(INTERNAL_FUNCTION_PARAMETERS);
+extern void php3_ibase_field_info(INTERNAL_FUNCTION_PARAMETERS);
+
+extern void php3_ibase_trans(INTERNAL_FUNCTION_PARAMETERS);
+extern void php3_ibase_commit(INTERNAL_FUNCTION_PARAMETERS);
+extern void php3_ibase_rollback(INTERNAL_FUNCTION_PARAMETERS);
+
+extern void php3_ibase_blob_create(INTERNAL_FUNCTION_PARAMETERS);
+extern void php3_ibase_blob_add(INTERNAL_FUNCTION_PARAMETERS);
+extern void php3_ibase_blob_cancel(INTERNAL_FUNCTION_PARAMETERS);
+extern void php3_ibase_blob_open(INTERNAL_FUNCTION_PARAMETERS);
+extern void php3_ibase_blob_get(INTERNAL_FUNCTION_PARAMETERS);
+extern void php3_ibase_blob_close(INTERNAL_FUNCTION_PARAMETERS);
+extern void php3_ibase_blob_echo(INTERNAL_FUNCTION_PARAMETERS);
+extern void php3_ibase_blob_info(INTERNAL_FUNCTION_PARAMETERS);
+extern void php3_ibase_blob_import(INTERNAL_FUNCTION_PARAMETERS);
+
+extern void php3_ibase_errmsg(INTERNAL_FUNCTION_PARAMETERS);
+
+#define IBASE_MSGSIZE 256
+#define MAX_ERRMSG (IBASE_MSGSIZE*2)
+
 typedef struct {
 	long default_link;
 	long num_links, num_persistent;
 	long max_links, max_persistent;
 	long allow_persistent;
-	int le_link, le_plink, le_result, le_query;
+	int le_blob, le_trans, le_link, le_plink, le_result, le_query;
 	char *default_user, *default_password;
-	long manualtransactions;
 	char *timeformat;
+    char *cfg_timeformat;
+    char *errmsg;
 } ibase_module;
+
+typedef struct {
+    isc_tr_handle trans;
+} ibase_trans;
+
+typedef struct {
+    isc_tr_handle default_trans; /* default transaction*/
+	isc_db_handle link;
+} ibase_db_link;
+
+typedef struct {
+    isc_tr_handle trans_handle; 
+    isc_db_handle link;
+    ISC_QUAD bl_qd;
+    isc_blob_handle bl_handle;
+} ibase_blob_handle;
 
 typedef struct _php3_ibase_result {
 	isc_stmt_handle result;
-	isc_tr_handle trans;
+    isc_tr_handle trans_handle;
+    int trans_single; /* commit transaction when free result */
+	isc_db_handle link; /* db link for this result */
 	XSQLDA *sqlda;
-	int commitok;
 } ibase_result_handle;
 
 typedef struct _php3_ibase_query {
 	isc_stmt_handle query;
-	isc_tr_handle trans;
+    isc_tr_handle trans_handle;
+    int trans_single; /* commit transaction when free query */
 	XSQLDA *sqlda;
 	int alloced;
 } ibase_query_handle;

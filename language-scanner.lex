@@ -4,7 +4,7 @@
    +----------------------------------------------------------------------+
    | PHP HTML Embedded Scripting Language Version 3.0                     |
    +----------------------------------------------------------------------+
-   | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
+   | Copyright (c) 1997-1999 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
    | it under the terms of one of the following licenses:                 |
@@ -30,6 +30,7 @@
    +----------------------------------------------------------------------+
 */
 
+/* $id$ */
 
 %}
 
@@ -95,6 +96,13 @@ static int in_eval;
 #define BEGIN_STRONG()	{ PUTS("<STRONG>"); }
 #define END_STRONG()	{ PUTS("</STRONG>"); }
 
+#if HAVE_DISPLAY_SOURCE
+#define IF_DISPLAY_SOURCE(a) \
+	if (GLOBAL(php3_display_source)) { a }
+#else
+#define IF_DISPLAY_SOURCE(a) if(0) { }
+#endif
+	
 #define HANDLE_NEWLINES(s,l) \
 do { \
 	char *p = (s),*boundary = p+(l); \
@@ -804,10 +812,10 @@ TLS_VARS;
 			_php3_hash_environment();
 		}
 		BEGIN(IN_PHP);
-		if (GLOBAL(php3_display_source)) {
+		IF_DISPLAY_SOURCE(
 			BEGIN_COLOR(php3_ini.highlight_default);
 			html_puts(yytext,yyleng);
-		}
+		)
 		HANDLE_NEWLINES(yytext,yyleng);
 	} else {
 		phplval->value.str.val = (char *) estrndup(yytext, yyleng);
@@ -824,10 +832,10 @@ TLS_VARS;
 			_php3_hash_environment();
 		}
 		BEGIN(IN_PHP);
-		if (GLOBAL(php3_display_source)) {
+		IF_DISPLAY_SOURCE(
 			BEGIN_COLOR(php3_ini.highlight_default);
 			html_puts(yytext,yyleng);
-		}
+		)
 		if (yyleng==3) { /* this tag is <%=, implicit echo */
 			return PHP_ECHO;
 		}
@@ -847,19 +855,19 @@ TLS_VARS;
 		_php3_hash_environment();
 	}
 	BEGIN(IN_PHP);
-	if (GLOBAL(php3_display_source)) {
+	IF_DISPLAY_SOURCE(
 		BEGIN_COLOR(php3_ini.highlight_default);
 		html_puts(yytext,yyleng);
-	}
+	)
 }
 
 <INITIAL>"<?php_track_vars?>"([\n]|"\r\n")? {
 	GLOBAL(php3_track_vars)=1;
 	HANDLE_NEWLINE(yytext[yyleng-1]);
-	if (GLOBAL(php3_display_source)) {
+	IF_DISPLAY_SOURCE(
 		BEGIN_COLOR(php3_ini.highlight_default);
 		html_puts(yytext,yyleng);
-	}
+	)
 }
 
 
@@ -898,15 +906,15 @@ TLS_VARS;
 
 <IN_PHP>{WHITESPACE} {
 	HANDLE_NEWLINES(yytext,yyleng);
-	if (GLOBAL(php3_display_source)) {
+	IF_DISPLAY_SOURCE(
 		html_puts(yytext, yyleng);
-	}
+	)
 }
 
 
 <IN_PHP>([#]|"//")([^\n\r?]|"?"[^>\n\r])*("?\n"|"?\r\n")? { /* eat one line comments */
 	HANDLE_NEWLINE(yytext[yyleng-1]);
-	if (GLOBAL(php3_display_source)) {
+	IF_DISPLAY_SOURCE(
 		END_COLOR();
 		BEGIN_ITALIC();
 		BEGIN_COLOR_SIZE(php3_ini.highlight_comment, "-1");
@@ -914,7 +922,7 @@ TLS_VARS;
 		END_COLOR();
 		END_ITALIC();
 		BEGIN_COLOR(php3_ini.highlight_default);
-	}
+	)
 }
 
 <IN_PHP>"/*" {
@@ -924,40 +932,40 @@ TLS_VARS;
 
 	start_lineno=GLOBAL(phplineno);
 
-	if (GLOBAL(php3_display_source)) {
+	IF_DISPLAY_SOURCE(
 		END_COLOR();
 		BEGIN_ITALIC();
 		BEGIN_COLOR_SIZE(php3_ini.highlight_comment, "-1");
 		html_puts(yytext,yyleng);
-	}
+	)
 	for (;;) {
-		if (GLOBAL(php3_display_source)) {
+		IF_DISPLAY_SOURCE(	
 			while((c=MY_INPUT())!='*' && c!=EOF) {
 				HANDLE_NEWLINE(c);
 				html_putc(c);
 			}
-		} else {
+		) else {
 			while ((c=MY_INPUT())!='*' && c!=EOF) { /* eat up text of comment */
 				HANDLE_NEWLINE(c);
 			}
 		}
 		if (c=='*') {
-			if (GLOBAL(php3_display_source)) {
+			IF_DISPLAY_SOURCE(	
 				html_putc(c);
 				while ((c=MY_INPUT())=='*') {
 					html_putc(c);
 				}
-			} else {
+			) else {
 				while ((c=MY_INPUT())=='*');
 			}
-			if (GLOBAL(php3_display_source)) {
+			IF_DISPLAY_SOURCE(	
 				html_putc(c);
-			}
+			)
 			if (c=='/') {
-				if (GLOBAL(php3_display_source)) {
+				IF_DISPLAY_SOURCE(	
 					END_COLOR(); END_ITALIC();
 					BEGIN_COLOR(php3_ini.highlight_default);
-				}
+				)
 				break;	/* found the end */
 			}
 		}
@@ -974,10 +982,10 @@ TLS_VARS;
 <IN_PHP>("?>"|"</script"{WHITESPACE}*">")([\n]|"\r\n")? {
 	HANDLE_NEWLINE(yytext[yyleng-1]);
 	BEGIN(INITIAL);
-	if (GLOBAL(php3_display_source)) {
+	IF_DISPLAY_SOURCE(
 		html_puts(yytext,yyleng);
 		END_COLOR();
-	}
+	)
 	return ';';  /* implicit ';' at php-end tag */
 }
 
@@ -986,10 +994,10 @@ TLS_VARS;
 	HANDLE_NEWLINE(yytext[yyleng-1]);
 	if (php3_ini.asp_tags) {
 		BEGIN(INITIAL);
-		if (GLOBAL(php3_display_source)) {
+		IF_DISPLAY_SOURCE(
 			html_puts(yytext,yyleng);
 			END_COLOR();
-		}
+		)
 		return ';';  /* implicit ';' at php-end tag */
 	} else {
 		phplval->value.str.val = (char *) estrndup(yytext, yyleng);
@@ -1003,32 +1011,32 @@ TLS_VARS;
 
 <IN_PHP>["] {
 	BEGIN(DOUBLE_QUOTES);
-	if (GLOBAL(php3_display_source)) {
+	IF_DISPLAY_SOURCE(
 		BEGIN_COLOR(php3_ini.highlight_string);
 		BEGIN_STRONG();
 		html_putc(yytext[0]);
-	}
+	)
 	return '\"';
 }
 
 <IN_PHP>[`] {
 	BEGIN(BACKQUOTE);
-	if (GLOBAL(php3_display_source)) {
+	IF_DISPLAY_SOURCE(
 		BEGIN_COLOR(php3_ini.highlight_string);
 		BEGIN_STRONG();
 		html_putc(yytext[0]);
-	}
+	)
 	return '`';
 }
 
 
 <IN_PHP>['] {
 	BEGIN(SINGLE_QUOTE);
-	if (GLOBAL(php3_display_source)) {
+	IF_DISPLAY_SOURCE(
 		BEGIN_COLOR(php3_ini.highlight_string);
 		BEGIN_STRONG();
 		html_putc(yytext[0]);
-	}
+	)
 	return '\'';
 }
 
@@ -1144,30 +1152,30 @@ TLS_VARS;
 
 <DOUBLE_QUOTES>["] {
 	BEGIN(IN_PHP);
-	if (GLOBAL(php3_display_source)) {
+	IF_DISPLAY_SOURCE(
 		html_putc(yytext[0]);
 		END_STRONG(); END_COLOR();
-	}
+	)
 	return '\"';
 }
 
 
 <BACKQUOTE>[`] {
 	BEGIN(IN_PHP);
-	if (GLOBAL(php3_display_source)) {
+	IF_DISPLAY_SOURCE(
 		html_putc(yytext[0]);
 		END_STRONG(); END_COLOR();
-	}
+	)
 	return '`';
 }
 
 
 <SINGLE_QUOTE>['] {
 	BEGIN(IN_PHP);
-	if (GLOBAL(php3_display_source)) {
+	IF_DISPLAY_SOURCE(
 		html_putc(yytext[0]);
 		END_STRONG(); END_COLOR();
-	}
+	)
 	return '\'';
 }
 

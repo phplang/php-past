@@ -5,6 +5,7 @@
  * by Shane Caraveo shane@caraveo.com
  * see below for more details
  *
+ * $Id: sdncal.h,v 1.10 1998/12/28 09:43:55 sas Exp $ 
  */
 
 /* $selId: sdncal.h,v 2.0 1995/10/24 01:13:06 lees Exp $

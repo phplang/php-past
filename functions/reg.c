@@ -2,7 +2,7 @@
    +----------------------------------------------------------------------+
    | PHP HTML Embedded Scripting Language Version 3.0                     |
    +----------------------------------------------------------------------+
-   | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
+   | Copyright (c) 1997-1999 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
    | it under the terms of one of the following licenses:                 |
@@ -28,7 +28,7 @@
    |          Jaakko Hyvätti <jaakko@hyvatti.iki.fi>                      | 
    +----------------------------------------------------------------------+
  */
-/* $Id: reg.c,v 1.88 1998/11/18 21:23:11 ssb Exp $ */
+/* $Id: reg.c,v 1.98 1999/02/28 17:25:57 rasmus Exp $ */
 #ifdef THREAD_SAFE
 #include "tls.h"
 #endif
@@ -36,6 +36,7 @@
 #include "php.h"
 #include "internal_functions.h"
 #include "php3_string.h"
+#include "php3_list.h"
 #include "reg.h"
 
 unsigned char third_argument_force_ref[] = { 3, BYREF_NONE, BYREF_NONE, BYREF_FORCE };
@@ -51,13 +52,65 @@ function_entry reg_functions[] = {
 	{NULL, NULL, NULL}
 };
 
+static int php3_minit_regex(INIT_FUNC_ARGS);
+static int php3_mshutdown_regex(void);
+static void php3_info_regex(void);
+
 php3_module_entry regexp_module_entry = {
-	"Regular Expressions", reg_functions, NULL, NULL, NULL, NULL, NULL, STANDARD_MODULE_PROPERTIES
+	"Regular Expressions", reg_functions, php3_minit_regex, php3_mshutdown_regex, NULL, NULL, php3_info_regex, STANDARD_MODULE_PROPERTIES
 };
 
 /* This is the maximum number of (..) constructs we'll generate from a
    call to ereg() or eregi() with the optional third argument. */
 #define  NS  10
+
+
+#ifndef THREAD_SAFE
+
+typedef struct {
+    regex_t preg;
+    int cflags;
+} reg_cache;
+
+static HashTable ht_rc;
+
+static void php3_info_regex(void) {
+#if HSREGEX
+	PUTS("Bundled regex library enabled\n");
+#else
+	PUTS("System regex library enabled\n");
+#endif
+}
+
+static int _php3_regcomp(regex_t *preg, const char *pattern, int cflags)
+{
+	int r = 0;
+	int patlen = strlen(pattern);
+	reg_cache *rc = NULL;
+	
+	if(_php3_hash_find(&ht_rc, (char *) pattern, patlen + 1, (void **) &rc)
+				== FAILURE || rc->cflags != cflags) {
+		r = regcomp(preg, pattern, cflags);
+		if(r == 0) {
+			reg_cache rcp;
+			
+			rcp.cflags = cflags;
+			memcpy(&rcp.preg, preg, sizeof(*preg));
+			_php3_hash_update(&ht_rc, (char *) pattern, patlen + 1, 
+					(void *) &rcp, sizeof(*rc),  NULL);
+		}
+	} else {
+		memcpy(preg, &rc->preg, sizeof(*preg));
+	}
+	return r;
+}
+
+#define _php3_regfree(a);
+
+#else
+#define _php3_regcomp(a,b,c) regcomp(a,b,c)
+#define _php3_regfree(a) regfree(a)
+#endif
 
 /*
  * _php3_reg_eprint - convert error number to name
@@ -141,18 +194,19 @@ static void _php3_ereg(INTERNAL_FUNCTION_PARAMETERS, int icase)
 
 	/* compile the regular expression from the supplied regex */
 	if (regex->type == IS_STRING) {
-		err = regcomp(&re, regex->value.str.val, REG_EXTENDED | copts);
+		err = _php3_regcomp(&re, regex->value.str.val, REG_EXTENDED | copts);
 	} else {
 		/* we convert numbers to integers and treat them as a string */
 		if (regex->type == IS_DOUBLE)
 			convert_to_long(regex);	/* get rid of decimal places */
 		convert_to_string(regex);
 		/* don't bother doing an extended regex with just a number */
-		err = regcomp(&re, regex->value.str.val, copts);
+		err = _php3_regcomp(&re, regex->value.str.val, copts);
 	}
 
 	if (err) {
 		_php3_reg_eprint(err, &re);
+		_php3_regfree(&re);
 		RETURN_FALSE;
 	}
 
@@ -164,7 +218,7 @@ static void _php3_ereg(INTERNAL_FUNCTION_PARAMETERS, int icase)
 	err = regexec(&re, string, (size_t) NS, subs, 0);
 	if (err && err != REG_NOMATCH) {
 		_php3_reg_eprint(err, &re);
-		regfree(&re);
+		_php3_regfree(&re);
 		RETURN_FALSE;
 	}
 	match_len = 1;
@@ -206,7 +260,7 @@ static void _php3_ereg(INTERNAL_FUNCTION_PARAMETERS, int icase)
 			match_len = 1;
 		RETVAL_LONG(match_len);
 	}
-	regfree(&re);
+	_php3_regfree(&re);
 }
 
 /* {{{ proto int ereg(string pattern, string string [, array registers])
@@ -226,7 +280,8 @@ void php3_eregi(INTERNAL_FUNCTION_PARAMETERS)
 /* }}} */
 
 /* this is the meat and potatoes of regex replacement! */
-char *_php3_regreplace(const char *pattern, const char *replace, const char *string, int icase, int extended)
+PHPAPI char * _php3_regreplace(const char *pattern, 
+		const char *replace, const char *string, int icase, int extended)
 {
 	regex_t re;
 	regmatch_t subs[NS];
@@ -247,7 +302,7 @@ char *_php3_regreplace(const char *pattern, const char *replace, const char *str
 		copts = REG_ICASE;
 	if (extended)
 		copts |= REG_EXTENDED;
-	err = regcomp(&re, pattern, copts);
+	err = _php3_regcomp(&re, pattern, copts);
 	if (err) {
 		_php3_reg_eprint(err, &re);
 		return ((char *) -1);
@@ -259,7 +314,7 @@ char *_php3_regreplace(const char *pattern, const char *replace, const char *str
 	buf = emalloc(buf_len * sizeof(char));
 	if (!buf) {
 		php3_error(E_WARNING, "Unable to allocate memory in _php3_regreplace");
-		regfree(&re);
+		_php3_regfree(&re);
 		return ((char *) -1);
 	}
 
@@ -271,7 +326,7 @@ char *_php3_regreplace(const char *pattern, const char *replace, const char *str
 
 		if (err && err != REG_NOMATCH) {
 			_php3_reg_eprint(err, &re);
-			regfree(&re);
+			_php3_regfree(&re);
 			return ((char *) -1);
 		}
 		if (!err) {
@@ -356,11 +411,12 @@ char *_php3_regreplace(const char *pattern, const char *replace, const char *str
 			}
 			/* stick that last bit of string on our output */
 			strcat(buf, &string[pos]);
+			
 		}
 	}
 
-	/* don't want to leak memory .. */
-	regfree(&re);
+	_php3_regfree(&re);
+	buf [new_l] = '\0';
 
 	/* whew. */
 	return (buf);
@@ -475,14 +531,14 @@ void php3_split(INTERNAL_FUNCTION_PARAMETERS)
 	strp = str->value.str.val;
 	endp = str->value.str.val + strlen(str->value.str.val);
 
-	err = regcomp(&re, spliton->value.str.val, REG_EXTENDED);
+	err = _php3_regcomp(&re, spliton->value.str.val, REG_EXTENDED);
 	if (err) {
 		php3_error(E_WARNING, "unexpected regex error (%d)", err);
 		RETURN_FALSE;
 	}
 
 	if (array_init(return_value) == FAILURE) {
-		regfree(&re);
+		_php3_regfree(&re);
 		RETURN_FALSE;
 	}
 
@@ -495,8 +551,8 @@ void php3_split(INTERNAL_FUNCTION_PARAMETERS)
 			strp+=subs[0].rm_eo;
 		} else if (subs[0].rm_so==0 && subs[0].rm_eo==0) {
 			/* No more matches */
-			regfree(&re);
 			php3_error(E_WARNING, "bad regular expression for split()");
+			_php3_regfree(&re);
 			_php3_hash_destroy(return_value->value.ht);
 			efree(return_value->value.ht);
 			RETURN_FALSE;
@@ -521,7 +577,7 @@ void php3_split(INTERNAL_FUNCTION_PARAMETERS)
 	/* see if we encountered an error */
 	if (err && err != REG_NOMATCH) {
 		php3_error(E_WARNING, "unexpected regex error (%d)", err);
-		regfree(&re);
+		_php3_regfree(&re);
 		_php3_hash_destroy(return_value->value.ht);
 		efree(return_value->value.ht);
 		RETURN_FALSE;
@@ -532,7 +588,7 @@ void php3_split(INTERNAL_FUNCTION_PARAMETERS)
 	
 	add_next_index_stringl(return_value, strp, size, 1);
 
-	regfree(&re);
+	_php3_regfree(&re);
 
 	return;
 }
@@ -567,6 +623,32 @@ PHPAPI void php3_sql_regcase(INTERNAL_FUNCTION_PARAMETERS)
 	return_value->type = IS_STRING;
 }
 /* }}} */
+
+#ifndef THREAD_SAFE
+static void _free_reg_cache(void *data)
+{
+	reg_cache *rc = (reg_cache *) data;
+
+	regfree(&rc->preg);
+}
+#endif
+
+static int php3_minit_regex(INIT_FUNC_ARGS)
+{
+#ifndef THREAD_SAFE
+	_php3_hash_init(&ht_rc, 0, NULL, _free_reg_cache, 1);
+#endif
+	return SUCCESS;
+}
+
+
+static int php3_mshutdown_regex(void)
+{
+#ifndef THREAD_SAFE
+	_php3_hash_destroy(&ht_rc);
+#endif
+	return SUCCESS;
+}
 
 /*
  * Local variables:

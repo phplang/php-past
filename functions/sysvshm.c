@@ -2,7 +2,7 @@
    +----------------------------------------------------------------------+
    | PHP HTML Embedded Scripting Language Version 3.0                     |
    +----------------------------------------------------------------------+
-   | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
+   | Copyright (c) 1997-1999 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
    | it under the terms of one of the following licenses:                 |
@@ -27,7 +27,7 @@
    +----------------------------------------------------------------------+
  */
  
-/* $Id: sysvshm.c,v 1.5 1998/12/19 19:42:50 sas Exp $ */
+/* $Id: sysvshm.c,v 1.8 1999/01/06 18:27:05 eschmid Exp $ */
 
 /* This has been built and tested on Solaris 2.6.
  * It may not compile or execute correctly on other systems.
@@ -91,8 +91,8 @@ int php3_minit_sysvshm(INIT_FUNC_ARGS)
 }
 
 
-/* {{{ proto int shm_attach(int key, int size, int flag)
-   Return an id for the shared memory with the given key. */
+/* {{{ proto int shm_attach(int key, int memsize, int perm)
+   Creates or open a shared memory segment. */
 void php3_sysvshm_attach(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *arg_key,*arg_size,*arg_flag;
@@ -182,9 +182,8 @@ void php3_sysvshm_attach(INTERNAL_FUNCTION_PARAMETERS)
 /* }}} */
 
 
-
-/* {{{ proto int shm_detach(int id)
-   releases the shared memory attachment with the given id. */
+/* {{{ proto int shm_detach(int shm_identifier)
+   Disconnects from shared memory segment. */
 void php3_sysvshm_detach(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *arg_id;
@@ -220,11 +219,8 @@ void php3_sysvshm_detach(INTERNAL_FUNCTION_PARAMETERS)
 /* }}} */
 
 
-
-
-
-/* {{{ proto int shm_remove(int key)
-   removes the shared memory with the given key. */
+/* {{{ proto int shm_remove(int shm_identifier)
+   Removes shared memory from Unix systems. */
 void php3_sysvshm_remove(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *arg_key;
@@ -260,8 +256,8 @@ void php3_sysvshm_remove(INTERNAL_FUNCTION_PARAMETERS)
 
 
 
-/* {{{ proto int shm_put(int id, int key, object *variable)
-   insert a variable into shared memory. */
+/* {{{ proto int shm_put_var(int shm_identifier, int variable_key, mixed variable)
+   Inserts or updates a variable in shared memory. */
 void php3_sysvshm_put_var(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *arg_id, *arg_key, *arg_var;
@@ -315,8 +311,8 @@ void php3_sysvshm_put_var(INTERNAL_FUNCTION_PARAMETERS)
 
 
 
-/* {{{ proto string/float/int/array shm_get_var(int id, int key)
-   returns a variable into shared memory. */
+/* {{{ proto mixed shm_get_var(int id, int variable_key)
+   Returns a variable from shared memory. */
 void php3_sysvshm_get_var(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *arg_id, *arg_key;
@@ -366,8 +362,8 @@ void php3_sysvshm_get_var(INTERNAL_FUNCTION_PARAMETERS)
 }
 /* }}} */
 
-/* {{{ proto int shm_remove_var(int id, int key)
-   removes variable from shared memory. */
+/* {{{ proto int shm_remove_var(int id, int variable_key)
+   Removes variable from shared memory. */
 void php3_sysvshm_remove_var(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *arg_id, *arg_key;

@@ -2,7 +2,7 @@
    +----------------------------------------------------------------------+
    | PHP HTML Embedded Scripting Language Version 3.0                     |
    +----------------------------------------------------------------------+
-   | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
+   | Copyright (c) 1997-1999 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
    | it under the terms of one of the following licenses:                 |
@@ -26,7 +26,7 @@
    | Authors: Rasmus Lerdorf <rasmus@lerdorf.on.ca>                       |
    +----------------------------------------------------------------------+
  */
-/* $Id: file.c,v 1.191 1998/12/23 14:43:22 rasmus Exp $ */
+/* $Id: file.c,v 1.201 1999/02/28 23:00:42 zeev Exp $ */
 #ifdef THREAD_SAFE
 #include "tls.h"
 #endif
@@ -65,9 +65,22 @@
 #if HAVE_SYS_TIME_H
 #include <sys/time.h>
 #endif
+#if MSVC5
+#include <winsock.h>
+#else
+#include <netinet/in.h>
+#include <netdb.h>
+#include <arpa/inet.h>
+#endif
 #include "snprintf.h"
 #include "fsock.h"
 #include "fopen-wrappers.h"
+
+#include "php_compat.h"
+
+#if HAVE_SYS_FILE_H
+#include <sys/file.h>
+#endif
 
 #if MISSING_FCLOSE_DECL
 extern int fclose();
@@ -174,33 +187,34 @@ tempnam(const char *dir, const char *pfx)
 #endif
 
 function_entry php3_file_functions[] = {
-	{"pclose",		php3_pclose,	NULL},
-	{"popen",		php3_popen,		NULL},
-	{"readfile",	php3_readfile,	NULL},
-	{"rewind",		php3_rewind,	NULL},
-	{"rmdir",		php3_rmdir,		NULL},
+	PHP_FE(pclose, NULL)
+	PHP_FE(popen, NULL)
+	PHP_FE(readfile, NULL)
+	PHP_FE(rewind, NULL)
 	{"umask",		php3_fileumask,	NULL},
-	{"fclose",		php3_fclose,	NULL},
-	{"feof",		php3_feof,		NULL},
-	{"fgetc",		php3_fgetc,		NULL},
-	{"fgets",		php3_fgets,		NULL},
-	{"fgetss",		php3_fgetss,	NULL},
-	{"fread",		php3_fread,		NULL},
-	{"fopen",		php3_fopen,		NULL},
-	{"fpassthru",	php3_fpassthru,	NULL},
-	{"fseek",		php3_fseek,		NULL},
-	{"ftell",		php3_ftell,		NULL},
-	{"fwrite",		php3_fwrite,	NULL},
+	PHP_FE(rmdir, NULL)
+	PHP_FE(fclose, NULL)
+	PHP_FE(feof, NULL)
+	PHP_FE(fgetc, NULL)
+	PHP_FE(fgets, NULL)
+	PHP_FE(fgetss, NULL)
+	PHP_FE(fpassthru, NULL)
+	PHP_FE(fread, NULL)
+	PHP_FE(fopen, NULL)
+	PHP_FE(fseek, NULL)
+	PHP_FE(ftell, NULL)
+	PHP_FE(fwrite, NULL)
 	{"fputs",		php3_fwrite,	NULL},
-	{"mkdir",		php3_mkdir,		NULL},
-	{"rename",		php3_rename,	NULL},
+	PHP_FE(mkdir, NULL)
+	PHP_FE(rename, NULL)
 	{"copy",		php3_file_copy,	NULL},
-	{"tempnam",		php3_tempnam,	NULL},
-	{"file",		php3_file,		NULL},
-	{"get_meta_tags",	php3_get_meta_tags,	NULL},
-	{"set_socket_blocking",	php3_set_socket_blocking,	NULL},
+	PHP_FE(tempnam, NULL)
+	PHP_FE(file, NULL)
+	PHP_FE(flock, NULL)
+	PHP_FE(get_meta_tags, NULL)
+	PHP_FE(set_socket_blocking, NULL)
 #if (0 && HAVE_SYS_TIME_H && HAVE_SETSOCKOPT && defined(SO_SNDTIMEO) && defined(SO_RCVTIMEO))
-	{"set_socket_timeout",	php3_set_socket_timeout,	NULL},
+	PHP_FE(set_socket_timeout, NULL)
 #endif
 	{NULL, NULL, NULL}
 };
@@ -263,7 +277,7 @@ void php3_get_meta_tags(INTERNAL_FUNCTION_PARAMETERS) {
 	}
 	/* Now loop through the file and do the magic quotes thing if needed */
 	memset(buf,0,8191);
-	while((issock?SOCK_FGETS(buf,8191,socketd):(int)fgets(buf,8191,fp))
+	while((issock?SOCK_FGETS(buf,8191,socketd):fgets(buf,8191,fp) != NULL)
 		&& !php3i_stristr(buf,"</head>")) {
 		if(php3i_stristr(buf,"<meta")) {
 
@@ -338,7 +352,7 @@ void php3_get_meta_tags(INTERNAL_FUNCTION_PARAMETERS) {
 }
 /* }}} */
 
-/* {{{ proto array file(string filename)
+/* {{{ proto array file(string filename [, int use_include_path])
 Read entire file into an array */
 void php3_file(INTERNAL_FUNCTION_PARAMETERS) {
 	pval *filename, *arg2;
@@ -385,7 +399,7 @@ void php3_file(INTERNAL_FUNCTION_PARAMETERS) {
 
 	/* Now loop through the file and do the magic quotes thing if needed */
 	memset(buf,0,8191);
-	while(issock?SOCK_FGETS(buf,8191,socketd):(int)fgets(buf,8191,fp)) {
+	while(issock?SOCK_FGETS(buf,8191,socketd):fgets(buf,8191,fp) != NULL) {
 		if (php3_ini.magic_quotes_runtime) {
 			int len;
 			
@@ -417,11 +431,13 @@ TLS_VARS;
 static void _php3_closesocket(int *sock) {
 	int socketd=*sock;
 	if (socketd){
+		if(!_php3_is_persistent_sock(socketd)) {
 #if WIN32|WINNT
 		closesocket(socketd);
 #else
 		close(socketd);
 #endif
+		}
 		efree(sock);
 	}
 }
@@ -781,7 +797,7 @@ void php3_fgets(INTERNAL_FUNCTION_PARAMETERS)
 	buf = emalloc(sizeof(char) * (len + 1));
 	/* needed because recv doesnt put a null at the end*/
 	memset(buf,0,len+1);
-	if (!(issock?SOCK_FGETS(buf,len,socketd):(int)fgets(buf,len,fp))) {
+	if (!(issock?SOCK_FGETS(buf,len,socketd):fgets(buf,len,fp) != NULL)) {
 		efree(buf);
 		RETVAL_FALSE;
 	} else {
@@ -875,7 +891,7 @@ void php3_fgetss(INTERNAL_FUNCTION_PARAMETERS)
 	buf = emalloc(sizeof(char) * (len + 1));
 	/*needed because recv doesnt set null char at end*/
 	memset(buf,0,len+1);
-	if (!(issock?SOCK_FGETS(buf,len,socketd):(int)fgets(buf, len, fp))) {
+	if (!(issock?SOCK_FGETS(buf,len,socketd):fgets(buf, len, fp) != NULL)) {
 		efree(buf);
 		RETURN_FALSE;
 	}
@@ -961,6 +977,10 @@ void php3_fgetss(INTERNAL_FUNCTION_PARAMETERS)
 	RETVAL_STRING(rbuf,1);
 	efree(rbuf);
 }
+/* }}} */
+
+/* {{{ proto int fputs(int fp, string str [, int length])
+   An alias for fwrite */
 /* }}} */
 
 /* {{{ proto int fwrite(int fp, string str [, int length])
@@ -1431,6 +1451,59 @@ PHPAPI int php3i_get_le_fp(void){
 	TLS_VARS;
 	return GLOBAL(le_fp);
 }
+
+static int flock_values[] = { LOCK_SH, LOCK_EX, LOCK_UN };
+
+/* {{{ proto bool flock(int fp, int operation)
+   portable file locking */
+PHP_FUNCTION(flock)
+{
+	pval *arg1, *arg2;
+	FILE *fp;
+	int type;
+	int issock=0;
+	int *sock, fd=0;
+	int act = 0;
+	TLS_VARS;
+	
+	if (ARG_COUNT(ht) != 2 || getParameters(ht, 2, &arg1, &arg2) == FAILURE) {
+		WRONG_PARAM_COUNT;
+	}
+
+	convert_to_long(arg1);
+	convert_to_long(arg2);
+
+	fp = php3_list_find(arg1->value.lval, &type);
+	if (type == GLOBAL(wsa_fp)){
+		issock = 1;
+		sock = php3_list_find(arg1->value.lval, &type);
+		fd = *sock;
+	}
+	
+	if ((!fp || (type!=GLOBAL(le_fp) && type!=GLOBAL(le_pp))) && (!fd || type!=GLOBAL(wsa_fp))) {
+		php3_error(E_WARNING,"Unable to find file identifier %d",arg1->value.lval);
+		RETURN_FALSE;
+	}
+	
+	if (!issock) {
+		fd = fileno(fp);
+	}
+	
+	act = arg2->value.lval & 3;
+	if(act < 1 || act > 3) {
+			php3_error(E_WARNING, "illegal value for second argument");
+			RETURN_FALSE;
+	}
+	/* flock_values contains all possible actions 
+	   if (arg2 & 4) we won't block on the lock */
+	act = flock_values[act - 1] | (arg2->value.lval & 4 ? LOCK_NB : 0);
+	if (flock(fd, act) == -1) {
+		RETURN_FALSE;
+	}
+	
+	RETURN_TRUE;
+}
+/* }}} */
 
 /*
  * Local variables:

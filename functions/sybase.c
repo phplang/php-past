@@ -2,7 +2,7 @@
    +----------------------------------------------------------------------+
    | PHP HTML Embedded Scripting Language Version 3.0                     |
    +----------------------------------------------------------------------+
-   | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
+   | Copyright (c) 1997-1999 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
    | it under the terms of one of the following licenses:                 |
@@ -31,7 +31,7 @@
    +----------------------------------------------------------------------+
  */
  
-/* $Id: sybase.c,v 1.106 1998/09/10 23:57:23 zeev Exp $ */
+/* $Id: sybase.c,v 1.109 1999/01/04 14:25:22 jah Exp $ */
 
 
 #ifndef MSVC5
@@ -510,17 +510,24 @@ static int php3_sybase_get_default_link(INTERNAL_FUNCTION_PARAMETERS)
 }
 
 
+/* {{{ proto int sybase_connect([string host[, string user[, string password]]])
+   Open Sybase server connection */
 void php3_sybase_connect(INTERNAL_FUNCTION_PARAMETERS)
 {
 	php3_sybase_do_connect(INTERNAL_FUNCTION_PARAM_PASSTHRU,0);
 }
+/* }}} */
 
+/* {{{ proto int sybase_pconnect([string host[, string user[, string password]]])
+   Open persistent Sybase connection */
 void php3_sybase_pconnect(INTERNAL_FUNCTION_PARAMETERS)
 {
 	php3_sybase_do_connect(INTERNAL_FUNCTION_PARAM_PASSTHRU,1);
 }
+/* }}} */
 
-
+/* {{{ proto bool sybase_close([int link_id])
+   Close Sybase connection */
 void php3_sybase_close(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *sybase_link_index;
@@ -551,8 +558,10 @@ void php3_sybase_close(INTERNAL_FUNCTION_PARAMETERS)
 	php3_list_delete(id);
 	RETURN_TRUE;
 }
+/* }}} */
 	
-
+/* {{{ proto bool sybase_select_db(string database[, int link_id])
+   Select Sybase database */
 void php3_sybase_select_db(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *db,*sybase_link_index;
@@ -595,7 +604,7 @@ void php3_sybase_select_db(INTERNAL_FUNCTION_PARAMETERS)
 		RETURN_TRUE;
 	}
 }
-
+/* }}} */
 
 static void php3_sybase_get_column_content(sybase_link *sybase_ptr,int offset,pval *result, int column_type)
 {
@@ -674,7 +683,8 @@ static void php3_sybase_get_column_content(sybase_link *sybase_ptr,int offset,pv
 	}
 }
 
-
+/* {{{ proto int sybase_query(string query[, int link_id])
+   Send Sybase query */
 void php3_sybase_query(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *query,*sybase_link_index;
@@ -810,8 +820,10 @@ void php3_sybase_query(INTERNAL_FUNCTION_PARAMETERS)
 	return_value->value.lval = php3_list_insert(result,php3_sybase_module.le_result);
 	return_value->type = IS_LONG;
 }
-
+/* }}} */
                         
+/* {{{ proto bool sybase_free_result(int result)
+   Free result memory */
 void php3_sybase_free_result(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *sybase_result_index;
@@ -835,14 +847,18 @@ void php3_sybase_free_result(INTERNAL_FUNCTION_PARAMETERS)
 	php3_list_delete(sybase_result_index->value.lval);
 	RETURN_TRUE;
 }
+/* }}} */
 
-
+/* {{{ proto string sybase_get_last_message(void)
+   Returns the last message from server (over min_message_severity?) */
 void php3_sybase_get_last_message(INTERNAL_FUNCTION_PARAMETERS)
 {
 	RETURN_STRING(php3_sybase_module.server_message,1);
 }
+/* }}} */
 
-
+/* {{{ proto int sybase_num_rows(int result)
+   Get number of rows in result */
 void php3_sybase_num_rows(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *result_index;
@@ -865,8 +881,10 @@ void php3_sybase_num_rows(INTERNAL_FUNCTION_PARAMETERS)
 	return_value->value.lval = result->num_rows;
 	return_value->type = IS_LONG;
 }
+/* }}} */
 
-
+/* {{{ proto int sybase_num_fields(int result)
+   Get number of fields in result */
 void php3_sybase_num_fields(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *result_index;
@@ -889,8 +907,10 @@ void php3_sybase_num_fields(INTERNAL_FUNCTION_PARAMETERS)
 	return_value->value.lval = result->num_fields;
 	return_value->type = IS_LONG;
 }
+/* }}} */
 
-
+/* {{{ proto array sybase_fetch_row(int result)
+   Get row as enumerated array */
 void php3_sybase_fetch_row(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *sybase_result_index;
@@ -923,7 +943,7 @@ void php3_sybase_fetch_row(INTERNAL_FUNCTION_PARAMETERS)
 	}
 	result->cur_row++;
 }
-
+/* }}} */
 
 static void php3_sybase_fetch_hash(INTERNAL_FUNCTION_PARAMETERS)
 {
@@ -966,6 +986,8 @@ static void php3_sybase_fetch_hash(INTERNAL_FUNCTION_PARAMETERS)
 }
 
 
+/* {{{ proto object sybase_fetch_object(int result)
+   Fetch row as object */
 void php3_sybase_fetch_object(INTERNAL_FUNCTION_PARAMETERS)
 {
 	php3_sybase_fetch_hash(INTERNAL_FUNCTION_PARAM_PASSTHRU);
@@ -973,13 +995,18 @@ void php3_sybase_fetch_object(INTERNAL_FUNCTION_PARAMETERS)
 		return_value->type=IS_OBJECT;
 	}
 }
+/* }}} */
 
-
+/* {{{ proto array sybase_fetch_array(int result)
+   Fetch row as array */
 void php3_sybase_fetch_array(INTERNAL_FUNCTION_PARAMETERS)
 {
 	php3_sybase_fetch_hash(INTERNAL_FUNCTION_PARAM_PASSTHRU);
 }
+/* }}} */
 
+/* {{{ proto bool sybase_data_seek(int result, int offset)
+   Move internal row pointer */
 void php3_sybase_data_seek(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *sybase_result_index,*offset;
@@ -1008,7 +1035,7 @@ void php3_sybase_data_seek(INTERNAL_FUNCTION_PARAMETERS)
 	result->cur_row = offset->value.lval;
 	RETURN_TRUE;
 }
-
+/* }}} */
 
 static char *php3_sybase_get_field_name(int type)
 {
@@ -1056,7 +1083,8 @@ static char *php3_sybase_get_field_name(int type)
 	}
 }
 
-
+/* {{{ proto object sybase_fetch_field(int result[, int offset])
+   Get field information */
 void php3_sybase_fetch_field(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *sybase_result_index,*offset;
@@ -1112,7 +1140,10 @@ void php3_sybase_fetch_field(INTERNAL_FUNCTION_PARAMETERS)
 	add_property_long(return_value, "numeric", result->fields[field_offset].numeric);
 	add_property_string(return_value, "type", php3_sybase_get_field_name(result->fields[field_offset].type), 1);
 }
+/* }}} */
 
+/* {{{ proto bool sybase_field_seek(int result, int offset)
+   Set field offset */
 void php3_sybase_field_seek(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *sybase_result_index,*offset;
@@ -1143,8 +1174,10 @@ void php3_sybase_field_seek(INTERNAL_FUNCTION_PARAMETERS)
 	result->cur_field = field_offset;
 	RETURN_TRUE;
 }
+/* }}} */
 
-
+/* {{{ proto string sybase_result(int result, int row, mixed field)
+   Get result data */
 void php3_sybase_result(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *row, *field, *sybase_result_index;
@@ -1200,7 +1233,7 @@ void php3_sybase_result(INTERNAL_FUNCTION_PARAMETERS)
 	*return_value = result->data[row->value.lval][field_offset];
 	pval_copy_constructor(return_value);
 }
-
+/* }}} */
 
 void php3_info_sybase(void)
 {
@@ -1232,7 +1265,8 @@ void php3_info_sybase(void)
 				dbversion());
 }
 
-
+/* {{{ proto void sybase_min_error_severity(int severity)
+   ??? */
 void php3_sybase_min_error_severity(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *severity;
@@ -1243,8 +1277,10 @@ void php3_sybase_min_error_severity(INTERNAL_FUNCTION_PARAMETERS)
 	convert_to_long(severity);
 	php3_sybase_module.min_error_severity = severity->value.lval;
 }
+/* }}} */
 
-
+/* {{{ proto void sybase_min_message_severity(int severity)
+   ??? */
 void php3_sybase_min_message_severity(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *severity;
@@ -1255,5 +1291,13 @@ void php3_sybase_min_message_severity(INTERNAL_FUNCTION_PARAMETERS)
 	convert_to_long(severity);
 	php3_sybase_module.min_message_severity = severity->value.lval;
 }
+/* }}} */
 
 #endif
+
+/*
+ * Local variables:
+ * tab-width: 4
+ * c-basic-offset: 4
+ * End:
+ */

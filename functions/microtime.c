@@ -2,7 +2,7 @@
    +----------------------------------------------------------------------+
    | PHP HTML Embedded Scripting Language Version 3.0                     |
    +----------------------------------------------------------------------+
-   | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
+   | Copyright (c) 1997-1999 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
    | it under the terms of one of the following licenses:                 |
@@ -27,11 +27,18 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: microtime.c,v 1.22 1998/11/18 21:23:10 ssb Exp $ */
+/* $Id: microtime.c,v 1.29 1999/02/12 09:13:07 fmk Exp $ */
 
+#include "php.h"
 #include <stdlib.h>
-#ifdef HAVE_UNISTD_H
+#if HAVE_UNISTD_H
 #include <unistd.h>
+#endif
+#if HAVE_SYS_TIME_H
+#include <sys/time.h>
+#endif
+#if HAVE_SYS_RESOURCE_H
+#include <sys/resource.h>
 #endif
 #include <string.h>
 #include <errno.h>
@@ -39,14 +46,13 @@
 #ifdef THREAD_SAFE
 #include "tls.h"
 #endif
-#include "php.h"
 #include "internal_functions.h"
 #include "microtime.h"
 #include "snprintf.h"
 
 #include <stdio.h>
 #if HAVE_GETTIMEOFDAY
-#if MSVC5
+#if WIN32
 #include "win32/time.h"
 #else
 #include <sys/time.h>
@@ -78,6 +84,78 @@ void php3_microtime(INTERNAL_FUNCTION_PARAMETERS)
 	snprintf(ret, 100, "%.8f %ld", msec, sec);
 	RETVAL_STRING(ret,1);
 #endif
+}
+/* }}} */
+
+/* {{{ proto array gettimeofday(void)
+   Returns the current time as array */
+void php3_gettimeofday(INTERNAL_FUNCTION_PARAMETERS)
+{
+	_php3_gettimeofday(return_value);
+}
+
+void _php3_gettimeofday(pval *return_value) {
+#if HAVE_GETTIMEOFDAY
+	struct timeval tp;
+	struct timezone tz;
+
+	if(gettimeofday(&tp, &tz) == 0) {
+		array_init(return_value);
+		add_assoc_long(return_value, "sec", tp.tv_sec);
+		add_assoc_long(return_value, "usec", tp.tv_usec);
+		add_assoc_long(return_value, "minuteswest", tz.tz_minuteswest);
+		add_assoc_long(return_value, "dsttime", tz.tz_dsttime);
+	} else {
+		RETURN_FALSE;
+	}
+#endif
+}
+/* }}} */
+
+/* {{{ proto array getrusage([ int who ])
+   returns an array of usage statistics */
+void php3_getrusage(INTERNAL_FUNCTION_PARAMETERS)
+{
+#if HAVE_GETRUSAGE
+	struct rusage usg;
+	int ac = ARG_COUNT(ht);
+	pval *pwho;
+	int who = RUSAGE_SELF;
+
+	if(ac == 1 &&
+		getParameters(ht, ac, &pwho) != FAILURE) {
+		convert_to_long(pwho);
+		if(pwho->value.lval == 1)
+			who = RUSAGE_CHILDREN;
+	}
+
+	if(getrusage(who, &usg) == -1) {
+		RETURN_FALSE;
+	}
+
+	array_init(return_value);
+#define PHP3_RUSAGE_PARA(a) \
+		add_assoc_long(return_value, #a, usg.a)
+#ifndef _OSD_POSIX /* BS2000 has only a few fields in the rusage struct */
+	PHP3_RUSAGE_PARA(ru_oublock);
+	PHP3_RUSAGE_PARA(ru_inblock);
+	PHP3_RUSAGE_PARA(ru_msgsnd);
+	PHP3_RUSAGE_PARA(ru_msgrcv);
+	PHP3_RUSAGE_PARA(ru_maxrss);
+	PHP3_RUSAGE_PARA(ru_ixrss);
+	PHP3_RUSAGE_PARA(ru_idrss);
+	PHP3_RUSAGE_PARA(ru_minflt);
+	PHP3_RUSAGE_PARA(ru_majflt);
+	PHP3_RUSAGE_PARA(ru_nsignals);
+	PHP3_RUSAGE_PARA(ru_nvcsw);
+	PHP3_RUSAGE_PARA(ru_nivcsw);
+#endif /*_OSD_POSIX*/
+	PHP3_RUSAGE_PARA(ru_utime.tv_usec);
+	PHP3_RUSAGE_PARA(ru_utime.tv_sec);
+	PHP3_RUSAGE_PARA(ru_stime.tv_usec);
+	PHP3_RUSAGE_PARA(ru_stime.tv_sec);
+#undef PHP3_RUSAGE_PARA
+#endif /* HAVE_GETRUSAGE */
 }
 /* }}} */
 

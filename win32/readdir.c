@@ -1,3 +1,5 @@
+/* $Id: readdir.c,v 1.6 1998/12/28 09:44:04 sas Exp $ */
+
 #include <malloc.h>
 #include <string.h>
 #include <errno.h>

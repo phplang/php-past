@@ -787,6 +787,35 @@ echo '&lt;A HREF="http://x.com/department_list_script/',
    </refsect1>
   </refentry>
 
+  <refentry id="function.similar-text">
+   <refnamediv>
+    <refname>similar_text</refname>
+    <refpurpose>calculate the similarity between two strings</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>similar_text</function></funcdef>
+     <paramdef>string <parameter>first</parameter></paramdef>
+     <paramdef>string <parameter>second</parameter></paramdef>
+     <paramdef>double <parameter><optional>percent</optional></parameter></paramdef>
+    </funcsynopsis>
+   
+    <para>
+     This calculates the similarity between two strings as 
+     described in Oliver [1993]. Note that this implementation does
+     not use a stack as in Oliver's pseudo code, but recursive calls
+     which may or may not speed up the whole process. Note also
+     that the complexity of this algorithm is O(N**3) where N
+     is the length of the longest string.
+     
+    <para>
+     By passing a reference as third argument, <function>similar_text</function>
+     will calculate the similarity in percent for you. It returns
+     the number of matching chars in both strings.
+   </refsect1>
+  </refentry>
+    
   <refentry id="function.soundex">
    <refnamediv>
     <refname>soundex</refname>

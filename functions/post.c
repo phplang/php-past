@@ -2,7 +2,7 @@
    +----------------------------------------------------------------------+
    | PHP HTML Embedded Scripting Language Version 3.0                     |
    +----------------------------------------------------------------------+
-   | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
+   | Copyright (c) 1997-1999 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
    | it under the terms of one of the following licenses:                 |
@@ -468,6 +468,8 @@ void php3_TreatHeaders(void)
 #endif
 }
 
+/* {{{ proto void parse_str(string str)
+   Parses str as if it were the query string passed via an URL and sets variables in the current scope */
 void php3_parsestr(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *arg;
@@ -482,6 +484,7 @@ void php3_parsestr(INTERNAL_FUNCTION_PARAMETERS)
 	}
 	php3_treat_data(PARSE_STRING, res);
 }
+/* }}} */
 
 /*
  * Local variables:

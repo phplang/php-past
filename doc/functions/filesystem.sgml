@@ -241,6 +241,30 @@ $file = dirname($path); // $file is set to "/etc"
    </refsect1>
   </refentry>
 
+  <refentry id="function.diskfreespace">
+   <refnamediv>
+    <refname>diskfreespace</refname>
+    <refpurpose>return available space in directory</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>float <function>diskfreespace</function></funcdef>
+     <paramdef>string <parameter>directory</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+     Given a string containing a directory, this function will
+     return the number of bytes available on the corresponding 
+	 disk.
+    <para>
+     <example><title><function>diskfreespace</function> example</title>
+      <programlisting>
+$df = diskfreespace("/"); // $df contains the number of bytes available on "/"
+</programlisting>
+     </example>
+   </refsect1>
+  </refentry>
+
 
   <refentry id="function.fclose">
    <refnamediv>
@@ -312,7 +336,7 @@ $file = dirname($path); // $file is set to "/etc"
      successfully opened by <function>fopen</function>,
      <function>popen</function>, or <function>fsockopen</function>.
 
-    <para> See also <function>fopen</function>,
+    <para> See also <function>fread</function>, <function>fopen</function>,
     <function>popen</function>, <function>fsockopen</function>, and
     <function>fgets</function>.
 
@@ -347,7 +371,7 @@ $file = dirname($path); // $file is set to "/etc"
      successfully opened by <function>fopen</function>,
      <function>popen</function>, or <function>fsockopen</function>.
 
-    <para> See also
+    <para> See also <function>fread</function>,
      <function>fopen</function>, <function>popen</function>, 
      <function>fgetc</function>, and <function>fsockopen</function>.
 
@@ -587,6 +611,41 @@ $file = dirname($path); // $file is set to "/etc"
     block, link, file, and
     unknown.
   <para>    Returns false if an error occurs.
+
+   </refsect1>
+  </refentry>
+
+  <refentry id="function.flock">
+   <refnamediv>
+    <refname>flock</refname>
+    <refpurpose>portable file locking</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>bool <function>flock</function></funcdef>
+     <paramdef>int <parameter>fp</parameter></paramdef>
+     <paramdef>int <parameter>operation</parameter></paramdef>
+    </funcsynopsis>
+    <simpara>
+     PHP supports a portable way of locking whole files in an
+     advisory way (which means all accessing programs have to
+     use the same way of locking or it will not work).
+
+    <simpara>
+     To lock a file, you have to open it first and pass the
+     resulting file pointer to flock. The operations you can
+     use are 1 for locking the file as a reader (shared lock),
+     2 for locking the file as a writer (exclusive lock) and
+     3 for releasing a lock. This enables a simple reader/writer
+     model which can be used on almost every platform (including
+     most Unixes and even Windows).
+    
+    <simpara>
+     If you add 4 to the operation parameter, locking will be tried
+     in a non-blocking way. It returns false, if the lock cannot
+     be acquired non-blocking. Otherwise, flock will always
+     return true.
 
    </refsect1>
   </refentry>

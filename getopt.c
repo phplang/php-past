@@ -1,5 +1,7 @@
 /* Borrowed from Apache NT Port */
 
+/* $Id: getopt.c,v 1.8 1998/12/28 09:34:42 sas Exp $ */
+
 #if !APACHE
 
 #include <stdio.h>

@@ -2,7 +2,7 @@
    +----------------------------------------------------------------------+
    | PHP HTML Embedded Scripting Language Version 3.0                     |
    +----------------------------------------------------------------------+
-   | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
+   | Copyright (c) 1997-1999 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
    | it under the terms of the GNU General Public License as published by |
@@ -22,7 +22,7 @@
    |          Stefan Röhrich <sr@linux.de>                                |
    +----------------------------------------------------------------------+
  */
-/* $Id: zlib.c,v 1.11 1998/11/22 13:02:37 sr Exp $ */
+/* $Id: zlib.c,v 1.14 1999/02/27 15:52:14 sas Exp $ */
 #if !PHP_31 && defined(THREAD_SAFE)
 #undef THREAD_SAFE
 #endif
@@ -377,7 +377,7 @@ void php3_gzfile(INTERNAL_FUNCTION_PARAMETERS) {
 
 	/* Now loop through the file and do the magic quotes thing if needed */
 	memset(buf,0,8191);
-	while((int)gzgets(zp, buf, 8191)) {
+	while(gzgets(zp, buf, 8191) != NULL) {
 		if (ZLIB_INI(magic_quotes_runtime)) {
 			int len;
 			
@@ -514,7 +514,7 @@ void php3_gzgets(INTERNAL_FUNCTION_PARAMETERS) {
 	buf = emalloc(sizeof(char) * (len + 1));
 	/* needed because recv doesnt put a null at the end*/
 	memset(buf,0,len+1);
-	if (!((int)gzgets(zp, buf, len))) {
+	if (gzgets(zp, buf, len) == NULL) {
 		efree(buf);
 		RETVAL_FALSE;
 	} else {
@@ -595,7 +595,7 @@ void php3_gzgetss(INTERNAL_FUNCTION_PARAMETERS)
 	buf = emalloc(sizeof(char) * (len + 1));
 	/*needed because recv doesnt set null char at end*/
 	memset(buf,0,len+1);
-	if (!((int)gzgets(zp, buf, len))) {
+	if (gzgets(zp, buf, len) == NULL) {
 		efree(buf);
 		RETURN_FALSE;
 	}
@@ -681,6 +681,10 @@ void php3_gzgetss(INTERNAL_FUNCTION_PARAMETERS)
 	RETVAL_STRING(rbuf,1);
 	efree(rbuf);
 }
+/* }}} */
+
+/* {{{ proto int gzputs(int zp, string str [, int length])
+   An alias for gzwrite */
 /* }}} */
 
 /* {{{ proto int gzwrite(int zp, string str [, int length])

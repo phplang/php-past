@@ -2,8 +2,9 @@ Installation Instructions for PHP3
 ----------------------------------
 
 For the impatient here is a quick set of steps that will build PHP3
-as an Apache module for Apache 1.3.0 with MySQL support.  A more verbose 
-explanation follows.
+as a static Apache module for Apache 1.3.0 with MySQL support.  A more 
+verbose explanation follows.  For shared module (DSO) instructions see
+the 'INSTALL.DSO' file.
 
 
 QUICK INSTALL
@@ -29,6 +30,44 @@ cp php3.ini-dist /usr/local/lib/php3.ini
 You can edit /usr/local/lib/php3.ini file to set PHP options.
 Edit your httpd.conf or srm.conf file and add:
   AddType application/x-httpd-php3 .php3
+
+RESOLVING COMMON PROBLEMS
+
+- If you are recompiling PHP to enable a new feature, it is a good idea to first
+remove the 'config.cache' file.  This is especially important for something
+like the FreeType TTF library.
+
+- If you can't get PHP to recognize a library, have a quick peak at the
+configure.in file.  It isn't all that cryptic and you should be able to
+see where PHP is looking for stuff.  Note that the $withval variable you 
+see in that file refers to the string you feed the --with-whatever option.
+So, for example, if you are trying to get PHP to recognize gd and you installed
+it in /my/path, you would feed it --with-gd=/my/path and when you look at the
+configure.in file $withval would be equal to '/my/path' and you would see that
+it looks for /my/path/lib/libgd.a and /my/path/include/gd.h (among other places).
+
+- When compiling Apache you might see an error similar to this:
+
+> ./gen_test_char: error in loading shared libraries
+> libmysqlclient.so: cannot open shared object file: No such file or directory
+
+Or it may be some other .so file.  On Linux, edit your /etc/ld.so.conf file
+and add the directory where the file can be found.  For the MySQL case it might
+be /usr/local/lib/mysql, but check to make sure.  Then run 'ldconfig' and go back
+to your Apache directory and type: 'make clean'.  Then try compiling again.  If
+you are not on Linux and you see this error, a quick-fix is to create a symbolic
+link to the shared lib from one of the directories on your link path.  Something
+like 'ln -s /usr/local/lib/mysql/libmysqlclient.so /usr/lib'.
+
+- If you are seeing all sorts of unresolved references trying to compile PHP with
+Oracle support, try playing around with the set of libraries defined on the LIBS
+line in the Apache Makefile (after you have run Apache's configure or 
+src/Configure script).  The set and interdenpecies of libs needed to link Oracle
+correctly seems to change randomly from platform to platform and from version
+to version.  PHP tries to figure it out, but doesn't always get it right.  Reports
+are that the correct Oracle-Linux set of libs is:
+
+   -L$ORACLE_HOME/lib -lclntsh -lpsa -lcore4 -lnlsrtl3 -lclntsh -lm
 
 
 VERBOSE INSTALL

@@ -2,7 +2,7 @@
    +----------------------------------------------------------------------+
    | PHP HTML Embedded Scripting Language Version 3.0                     |
    +----------------------------------------------------------------------+
-   | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
+   | Copyright (c) 1997-1999 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
    | it under the terms of one of the following licenses:                 |
@@ -29,7 +29,7 @@
  */
 
 
-/* $Id: internal_functions.c,v 1.334 1998/12/13 23:10:55 nyenyon Exp $ */
+/* $Id: internal_functions.c,v 1.346 1999/02/25 12:17:01 thies Exp $ */
 
 #ifdef THREAD_SAFE
 #include "tls.h"
@@ -55,6 +55,7 @@
 #include "functions/phpmath.h"
 #include "functions/php3_string.h"
 #include "functions/php3_oci8.h"
+#include "functions/php3_magick.h"
 #include "functions/oracle.h"
 #include "functions/base64.h"
 #include "functions/php3_dir.h"
@@ -66,6 +67,7 @@
 #include "functions/reg.h"
 #include "functions/php3_mail.h"
 #include "functions/imap.h"
+#include "functions/php3_aspell.h"
 #include "functions/md5.h"
 #include "functions/php3_gd.h"
 #include "functions/html.h"
@@ -96,7 +98,16 @@
 #include "functions/php3_sysvsem.h"
 #include "functions/php3_sysvshm.h"
 #include "functions/php3_dav.h"
+#include "functions/php3_gettext.h"
+#include "functions/php3_wddx.h"
+#include "functions/php3_wddx_a.h"
+#include "functions/php3_yp.h"
 
+#ifndef WIN32
+#include <netinet/in.h>
+#endif
+#include "functions/fsock.h"
+#include "functions/php3_mckcrypt.h"
 
 extern php3_ini_structure php3_ini;
 extern php3_ini_structure php3_ini_master;
@@ -119,6 +130,7 @@ php3_builtin_module php3_builtin_modules[] =
 	{"Directory",					php3_dir_module_ptr},
 	{"File statting",				php3_filestat_module_ptr},
 	{"File handling",				php3_file_module_ptr},
+	{"GNU gettext",					php3_gettext_module_ptr},
 	{"HTTP Header",					php3_header_module_ptr},
 	{"Sendmail",					mail_module_ptr},
 	{"Debugger",					debugger_module_ptr},
@@ -134,6 +146,9 @@ php3_builtin_module php3_builtin_modules[] =
 	{"Sybase SQL - CT",				sybct_module_ptr},
 	{"Unified ODBC",				uodbc_module_ptr},
 	{"DBase",						dbase_module_ptr},
+	{"WDDX",						wddx_module_ptr},
+	{"WDDX_A",						wddx_module_ptr_a},
+	{"Socket functions",			fsock_module_ptr},
 	{"Hyperwave",					hw_module_ptr},
 	{"Regular Expressions",			regexp_module_ptr},
 	{"Solid",						solid_module_ptr},
@@ -151,13 +166,17 @@ php3_builtin_module php3_builtin_modules[] =
 	{"Zlib",						php3_zlib_module_ptr},
 	{"Win32 COM",					COM_module_ptr},
 	{"IMAP",						php3_imap_module_ptr},
+	{"ASPELL",						php3_aspell_module_ptr},
 	{"InterBase",					php3_ibase_module_ptr},
 	{"XML",							xml_module_ptr},
 	{"PDF",							pdf_module_ptr},
 	{"FDF",							fdf_module_ptr},
 	{"System V semaphores",			sysvsem_module_ptr},
-	{"System V shared memory",			sysvshm_module_ptr},
+	{"System V shared memory",		sysvshm_module_ptr},
 	{"DAV",							phpdav_module_ptr},
+	{"MCK Crypt",					mckcrypt_module_ptr},
+    {"YP",                          yp_module_ptr},
+	{"ImageMagick",					magick_module_ptr},
 	{NULL,							NULL}
 };
 

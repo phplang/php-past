@@ -1,31 +1,45 @@
 
  <reference id="ref.pdf">
-  <title>PDF functions</title>
+  <title>PDF Functions</title>
   <titleabbrev>PDF</titleabbrev>
 
   <partintro>
+
    <simpara>
     You can use the pdf functions in PHP to create pdf files if you
-    have the PDF library (available at <ulink
-    url="http://www.ifconnection.de/~tm/">http://www.ifconnection.de/~tm/</ulink>)
+    have the PDF library (available at <ulink url =
+    "http://www.ifconnection.de/~tm/">http://www.ifconnection.de/~tm/</ulink>)
     by Thomas Merz.  Please consult the excelent documentation for
     pdflib shipped with the source distribution of pdflib or available
-    at <ulink
-    url="http://www.ifconnection.de/~tm/software/pdflib/PDFlib-0.6.pdf">http://www.ifconnection.de/~tm/software/pdflib/PDFlib-0.6.pdf</ulink>.
+    at <ulink url =
+    "http://www.ifconnection.de/~tm/software/pdflib/PDFlib-0.6.pdf">
+    http://www.ifconnection.de/~tm/software/pdflib/PDFlib-0.6.pdf</ulink>.
     As long as this documentation is not complete the pdflib
     documentation should be your first choice. The functions in pdflib
     and the php3 module have the same name. The parameteres are also
     identical.  You should also understand some of the concepts of pdf
     to efficiently use this module.
 
+   <simpara> 
     The pdf module introduces two new types of variables. They are called
     <parameter>pdfdoc</parameter> and <parameter>pdfinfo</parameter>. 
+    <parameter>pdfdoc</parameter> is a pointer to a PDF document and
+    almost all functions need it as its first parameter.
+    <parameter>pdfinfo</parameter> contains meta data about the PDF
+    document.
+
+   <simpara>
+    In order to output text into a PDF document you will need to provide
+    the afm file for each font. By default these afm files are searched
+    for in a directory named 'fonts' relative to the directory where the
+    php3 script is located. 
   </partintro>
+
 
   <refentry id="function.pdf-get-info">
    <refnamediv>
-    <refname>PDF_get_info</refname>
-    <refpurpose>Returns a default info structure for a pdf document</refpurpose>
+    <refname>PDF_get_info</refname> <refpurpose>Returns a default info
+    structure for a pdf document</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
@@ -220,7 +234,8 @@ PDF_set_info_creator($info, "Name of Author") ?>
      with <function>fopen</function> and the file descriptor passed
      as argument <parameter>file</parameter>. <parameter>info</parameter>
      is the an info structure that has to be created with
-     <function>pdf_get_info</function>.
+     <function>pdf_get_info</function>. The info structure will be deleted
+     within this function.
 
      <note><simpara>
        The return value is needed as the first parameter in all other
@@ -246,13 +261,16 @@ PDF_set_info_creator($info, "Name of Author") ?>
      <paramdef>int <parameter>pdf document</parameter></paramdef>
     </funcsynopsis>
     <para>
-     The <function>PDF_close</function> function closes the pdf document
-     <parameter>int</parameter>.
+     The <function>PDF_close</function> function closes the pdf document.
 
-     <note><simpara>
-       It will not close the file. You need to call an extra
-       <function>fclose</function> after <function>pdf_close</function>.
-      </simpara></note>
+    <para>Note: Due to an unclean implementation of the pdflib 0.6 the
+     internal closing of the document also closes the file. This should
+     not be done because pdflib didn't open the file, but expects an
+     already open file when <function>PDF_open</function> is called.
+     Consequently it shouldn't close the file. In order to fix this
+     just take out line 190 of the file p_basic.c in the pdflib
+     source distribution until the next release of pdflib will fix
+     this.
 
     <para>
      See also <function>PDF_open</function>,
@@ -330,7 +348,7 @@ PDF_set_info_creator($info, "Name of Author") ?>
 
   <refentry id="function.pdf-show-xy">
    <refnamediv>
-    <refname>PDF_show</refname>
+    <refname>PDF_show_xy</refname>
     <refpurpose>Output text at position</refpurpose>
    </refnamediv>
    <refsect1>
@@ -365,13 +383,16 @@ PDF_set_info_creator($info, "Name of Author") ?>
      <paramdef>int <parameter>pdf document</parameter></paramdef>
      <paramdef>string <parameter>font name</parameter></paramdef>
      <paramdef>double <parameter>size</parameter></paramdef>
-     <paramdef>string <parameter>encoding</parameter></paramdef>
+     <paramdef>int <parameter>encoding</parameter></paramdef>
     </funcsynopsis>
     <para>
      The <function>PDF_set_font</function> function sets the the
      current font face, font size and encoding. You will need to
      provide the Adobe Font Metrics (afm-files) for the font in the
-     font path (default is ./fonts).
+     font path (default is ./fonts). The last parameter
+     <parameter>encoding</parameter> can take the following values:
+     0 = builtin, 1 = pdfdoc, 2 = macroman, 3 = macexpert, 4 = winansi,
+     5 = encoding_count.
 
     <para>
      See also <function>PDF_info</function>.
@@ -1323,6 +1344,12 @@ PDF_restore($pdf) ?>
      The <function>PDF_add_outline</function> function adds a bookmark
      with text <parameter>text</parameter> that points to the current page.
 
+    <simpara>
+     Unfortunately pdflib does not make a copy of the string, which forces
+     PHP3 to allocate the memory. Currently this piece of memory is not
+     been freed by any PDF function but will be taken care of by the
+     PHP3 memory manager.
+
    </refsect1>
   </refentry>
 
@@ -1368,6 +1395,116 @@ PDF_restore($pdf) ?>
     <para>
      The <function>PDF_set_duration</function> function set the duration
      between following pages in seconds.
+   </refsect1>
+  </refentry>
+
+  <refentry id="function.pdf-open-jpeg">
+   <refnamediv>
+    <refname>PDF_open_jpeg</refname>
+    <refpurpose>Opens a JPEG image</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>pdf_open_jpeg</function></funcdef>
+     <paramdef>int <parameter>pdf document</parameter></paramdef>
+     <paramdef>string <parameter>file name</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+     The <function>PDF_open_jpeg</function> function opens an image stored
+     in the file with the name <parameter>file name</parameter>.
+     The format of the image has to be jpeg.
+    <para>
+     See also <function>PDF_close_image</function>,
+   </refsect1>
+  </refentry>
+
+  <refentry id="function.pdf-close-image">
+   <refnamediv>
+    <refname>PDF_close_image</refname>
+    <refpurpose>Closes an image</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>void <function>pdf_close_image</function></funcdef>
+     <paramdef>int <parameter>image</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+     The <function>PDF_close_image</function> function closes an image
+     which has been opened with any of the <function>PDF_open_xxx</function>
+     functions. 
+    <para>
+     See also <function>PDF_open_jpeg</function>,
+   </refsect1>
+  </refentry>
+
+  <refentry id="function.pdf-place-image">
+   <refnamediv>
+    <refname>PDF_place_image</refname>
+    <refpurpose>Places an image on the page</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>void <function>pdf_place_image</function></funcdef>
+     <paramdef>int <parameter>pdf document</parameter></paramdef>
+     <paramdef>int <parameter>image</parameter></paramdef>
+     <paramdef>double <parameter>x-koor</parameter></paramdef>
+     <paramdef>double <parameter>y-koor</parameter></paramdef>
+     <paramdef>double <parameter>skale</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+     The <function>PDF_place_image</function> function places an image
+     on the page at postion (<parameter>x-koor</parameter>,
+     <parameter>x-koor</parameter>). The image can be skaled at the same
+     time.
+   </refsect1>
+  </refentry>
+
+  <refentry id="function.pdf-put-image">
+   <refnamediv>
+    <refname>PDF_put_image</refname>
+    <refpurpose>Stores an image in the PDF for later use</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>void <function>pdf_put_image</function></funcdef>
+     <paramdef>int <parameter>pdf document</parameter></paramdef>
+     <paramdef>int <parameter>image</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+     The PDF_put_image function places an image
+     in the PDF file without showing it. The stored image can be
+     displayed with the <function>PDF_execute_image</function>
+     function. This is useful when using the same image multiple
+     times.
+   </refsect1>
+  </refentry>
+
+  <refentry id="function.pdf-execute-image">
+   <refnamediv>
+    <refname>PDF_execute_image</refname>
+    <refpurpose>Places a stored image on the page</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>void <function>pdf_execute_image</function></funcdef>
+     <paramdef>int <parameter>pdf document</parameter></paramdef>
+     <paramdef>int <parameter>image</parameter></paramdef>
+     <paramdef>double <parameter>x-coor</parameter></paramdef>
+     <paramdef>double <parameter>y-coor</parameter></paramdef>
+     <paramdef>double <parameter>scale</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+     The PDF_execute_image function displays an image that has been
+     put in the PDF file with the <function>PDF_put_image</function>
+     function on the current page at the given coordinates.
+    <para>
+     The image can be scaled while displaying it. A scale of 1.0
+     will show the image in the original size.
    </refsect1>
   </refentry>
 

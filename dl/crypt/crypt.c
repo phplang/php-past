@@ -1,3 +1,5 @@
+/* $Id: crypt.c,v 1.14 1999/01/05 07:08:21 jah Exp $ */
+
 #include "../phpdl.h"
 #include "prelude.h"
 #include "sflcryp.h"
@@ -55,6 +57,8 @@ inline int rup(double n)
 */
 
 
+/* {{{ proto string encrypt(string data, int type, string key)
+   Encrypts string with key using algorithm type */
 DLEXPORT void sflcrypt_encrypt(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *data, *type, *key;
@@ -104,7 +108,10 @@ DLEXPORT void sflcrypt_encrypt(INTERNAL_FUNCTION_PARAMETERS)
 	return_value->type = IS_STRING;
 	return;
 }
+/* }}} */
 
+/* {{{ proto string decrypt(string data, int type, string key)
+   Decrypts string with key using algorithm type */
 DLEXPORT void sflcrypt_decrypt(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *data, *type, *key;
@@ -145,12 +152,15 @@ DLEXPORT void sflcrypt_decrypt(INTERNAL_FUNCTION_PARAMETERS)
 	return_value->type = IS_STRING;
 	return;
 }
+/* }}} */
 
 #ifdef HAVE_CRYPT_H
 #if WIN32
 extern int _getpid(void);
 #endif
 
+/* {{{ proto string crypt(string data[, string salt])
+   A one-way crypt that can't be decrypted anymore */
 void php3_crypt(INTERNAL_FUNCTION_PARAMETERS)
 {
 	char salt[4];
@@ -182,6 +192,7 @@ void php3_crypt(INTERNAL_FUNCTION_PARAMETERS)
 	return_value->type = IS_STRING;
 	pval_copy_constructor(return_value);
 }
+/* }}} */
 
 #endif
 

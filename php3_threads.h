@@ -1,3 +1,4 @@
+/* $Id: php3_threads.h,v 1.3 1998/12/28 09:43:53 sas Exp $ */
 
 #if WIN32|WINNT 
 #define MUTEX_T void

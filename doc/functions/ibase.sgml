@@ -164,23 +164,6 @@
 
  </reference>
 
-<!--
-
-  <refentry id="function.ibase-">
-   <refnamediv>
-    <refname>ibase_</refname>
-    <refpurpose></refpurpose>
-   </refnamediv>
-   <refsect1>
-    <title>Description</title>
-    <funcsynopsis>
-     <funcdef> <function>ibase_</function></funcdef>
-     <paramdef> <parameter></parameter></paramdef>
-    </funcsynopsis>
-   </refsect1>
-  </refentry>
-
--->
 
 <!-- Keep this comment at the end of the file
 Local variables:

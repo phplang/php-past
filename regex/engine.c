@@ -5,6 +5,8 @@
  * of code.
  */
 
+/* $Id: engine.c,v 1.6 1998/12/28 09:44:01 sas Exp $ */
+
 #ifdef SNAMES
 #define	matcher	smatcher
 #define	fast	sfast

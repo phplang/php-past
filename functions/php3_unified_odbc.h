@@ -2,7 +2,7 @@
    +----------------------------------------------------------------------+
    | PHP HTML Embedded Scripting Language Version 3.0                     |
    +----------------------------------------------------------------------+
-   | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
+   | Copyright (c) 1997-1999 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
    | it under the terms of one of the following licenses:                 |
@@ -29,7 +29,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: php3_unified_odbc.h,v 1.43 1998/12/21 15:48:33 shane Exp $ */
+/* $Id: php3_unified_odbc.h,v 1.47 1999/02/02 14:50:29 kara Exp $ */
 
 #ifndef _UNIFIED_ODBC_H
 #define _UNIFIED_ODBC_H
@@ -82,6 +82,21 @@ extern void php3_solid_fetch_prev(INTERNAL_FUNCTION_PARAMETERS);
 #  include <sql.h>
 #  include <sqlext.h>
 #  define HAVE_SQL_EXTENDED_FETCH 0
+#  if defined(UODBC_UNIQUE_NAMES)
+#   define UODBC_TYPE empress
+#   define UODBC_NAME "empress"
+#   define UODBC_FE(name, arg_types) UODBC_NAMED_FE(empress_##name, php3_empress_##name, arg_types)
+#   define UODBC_FE_ALIAS(php_name, name, arg_types) UODBC_NAMED_FE(empress_##php_name, php3_empress_##name, arg_types)
+#   define UODBC_FUNCTION(name) UODBC_NAMED_FUNCTION(php3_empress_##name)
+#   define UODBC_FNAME(name) php3i_empress_##name
+#   define ODBC_INI_VAR_NAME(name) #name
+#   define ODBC_INI_VAR(a) ODBC_INI_VAR_NAME(empress.##a)
+#   define UODBC_VAR_NAME(name) name
+#   define UODBC_VAR(a) UODBC_VAR_NAME(empress_##a)
+#       define PHP3_UODBC_VAR(a) UODBC_VAR_NAME(php3_empress_##a)
+#   define UODBC_MODULE_ENTRY UODBC_VAR(module_entry)
+#   define empress_module_ptr &UODBC_MODULE_ENTRY
+#  endif
 
 #elif HAVE_ADABAS
 #include <WINDOWS.H>
@@ -107,15 +122,17 @@ extern void php3_solid_fetch_prev(INTERNAL_FUNCTION_PARAMETERS);
 # elif HAVE_IODBC  && !(WIN32|WINNT)
 #  include <isql.h>
 #  include <isqlext.h>
-#  include <odbc_types.h>
-#  include <odbc_funcs.h>
 #  define HAVE_SQL_EXTENDED_FETCH 1
-#  define SQL_FD_FETCH_ABSOLUTE   0x00000010L
-#  define SQL_CURSOR_DYNAMIC      2UL
-#  define SQL_NO_TOTAL            (-4)
-#  define SQL_SO_DYNAMIC          0x00000004L
-#  define SQL_LEN_DATA_AT_EXEC_OFFSET  (-100)
-#  define SQL_LEN_DATA_AT_EXEC(length) (-(length)+SQL_LEN_DATA_AT_EXEC_OFFSET)
+#  ifndef SQL_ACTIVE_STATEMENTS
+#    include <odbc_types.h>
+#    include <odbc_funcs.h>
+#    define SQL_FD_FETCH_ABSOLUTE   0x00000010L
+#    define SQL_CURSOR_DYNAMIC      2UL
+#    define SQL_NO_TOTAL            (-4)
+#    define SQL_SO_DYNAMIC          0x00000004L
+#    define SQL_LEN_DATA_AT_EXEC_OFFSET  (-100)
+#    define SQL_LEN_DATA_AT_EXEC(length) (-(length)+SQL_LEN_DATA_AT_EXEC_OFFSET)
+#  endif
 #  if defined(UODBC_UNIQUE_NAMES)
 #   define UODBC_TYPE iodbc
 #   define UODBC_NAME "iodbc"
@@ -275,7 +292,7 @@ extern void php3_solid_fetch_prev(INTERNAL_FUNCTION_PARAMETERS);
 #define UODBC_GLOBAL_STRUCT UODBC_VAR(global_struct)
 #define UODBC_GLOBALS UODBC_VAR(globals)
 /* defines for variables, structs, etc */
-#define UODBC_MODULE_NAME "ODBC"
+#define UODBC_MODULE_NAME "ODBC/" UODBC_NAME
 #define UODBC_FUNCTIONS UODBC_VAR(functions)
 #define UODBC_CONNECTION UODBC_VAR(connection)
 #define UODBC_RESULT_VALUE UODBC_VAR(result_value)

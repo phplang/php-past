@@ -2,7 +2,7 @@
    +----------------------------------------------------------------------+
    | PHP HTML Embedded Scripting Language Version 3.0                     |
    +----------------------------------------------------------------------+
-   | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
+   | Copyright (c) 1997-1999 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
    | it under the terms of one of the following licenses:                 |
@@ -29,7 +29,7 @@
  */
 
 
-/* $Id: php3_hash.c,v 1.7 1998/09/21 11:11:12 zeev Exp $ */
+/* $Id: php3_hash.c,v 1.8 1999/01/01 17:58:51 zeev Exp $ */
 #ifdef THREAD_SAFE
 #include "tls.h"
 #endif

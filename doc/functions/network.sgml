@@ -58,6 +58,29 @@ if(!$fp) {
    </refsect1>
   </refentry>
 
+  <refentry id="function.pfsockopen">
+   <refnamediv>
+    <refname>pfsockopen</refname>
+    <refpurpose>Open persistent Internet or Unix domain socket connection.</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+     <funcsynopsis>
+     <funcdef>int <function>pfsockopen</function></funcdef>
+     <paramdef>string <parameter>hostname</parameter></paramdef>
+     <paramdef>int <parameter>port</parameter></paramdef>
+     <paramdef>int <parameter><optional>errno</optional></parameter></paramdef>
+     <paramdef>string <parameter><optional>errstr</optional></parameter></paramdef>
+    </funcsynopsis>
+
+    <para>
+     This function behaves exactly as <function>fsockopen</function>
+     with the difference that the connection is not closed after
+     the request is finished. It is the persistent version of 
+     fsockopen. 
+   </refsect1>
+  </refentry>
+
   <refentry id="function.set-socket-blocking">
    <refnamediv>
     <refname>set_socket_blocking</refname>

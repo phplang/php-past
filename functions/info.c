@@ -2,7 +2,7 @@
    +----------------------------------------------------------------------+
    | PHP HTML Embedded Scripting Language Version 3.0                     |
    +----------------------------------------------------------------------+
-   | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
+   | Copyright (c) 1997-1999 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
    | it under the terms of one of the following licenses:                 |
@@ -27,6 +27,9 @@
    |          Zeev Suraski <bourbon@netvision.net.il>                     |
    +----------------------------------------------------------------------+
  */
+
+/* $Id: info.c,v 1.73 1999/02/12 16:03:43 steffann Exp $ */
+
 #ifdef THREAD_SAFE
 #include "tls.h"
 #endif
@@ -159,6 +162,7 @@ void _php3_info(void)
 	PHP3_CONF_LONG("error_reporting", php3_ini_master.errors, php3_ini.errors);
 	PHP3_CONF_STR("extension_dir", php3_ini_master.extension_dir, php3_ini.extension_dir);
 	PHP3_CONF_STR("gpc_order", php3_ini_master.gpc_order, php3_ini.gpc_order);
+	PHP3_CONF_LONG("ignore_user_abort", php3_ini_master.ignore_user_abort, php3_ini.ignore_user_abort);
 	PHP3_CONF_STR("include_path", php3_ini_master.include_path, php3_ini.include_path);
 	PHP3_CONF_STR("isapi_ext", php3_ini_master.isapi_ext, php3_ini.isapi_ext);
 	PHP3_CONF_LONG("last_modified", php3_ini_master.last_modified, php3_ini.last_modified);
@@ -185,6 +189,7 @@ void _php3_info(void)
 	PHP3_CONF_STR("user_dir", php3_ini_master.user_dir, php3_ini.user_dir);
 	PHP3_CONF_LONG("warn_plus_overloading", php3_ini_master.warn_plus_overloading, php3_ini.warn_plus_overloading);
 	PHP3_CONF_LONG("xbithack", php3_ini_master.xbithack, php3_ini.xbithack);
+	PHP3_CONF_STR("browscap", php3_ini_master.browscap, php3_ini.browscap);
 	PHP3_CONF_LONG("y2k_compliance", php3_ini_master.y2k_compliance, php3_ini.y2k_compliance);
 
 	/* And now for the highlight colours */
@@ -332,9 +337,9 @@ void _php3_info(void)
 		PUTS("<tr><th bgcolor=\"" HEADER_COLOR "\">Variable</th><th bgcolor=\"" HEADER_COLOR "\">Value</th></tr>\n");
 		for (i=0; i < arr->nelts; i++) {
 			PUTS("<tr><td bgcolor=\"" ENTRY_NAME_COLOR "\">");
-			PUTS(elts[i].key);
+			if (elts[i].key) PUTS(elts[i].key);
 			PUTS("</td><td bgcolor=\"" CONTENTS_COLOR "\">");
-			PUTS(elts[i].val);
+			if (elts[i].val) PUTS(elts[i].val);
 			PUTS("&nbsp;</td></tr>\n");
 		}
 		PUTS("</table>\n");
@@ -360,7 +365,7 @@ void _php3_info(void)
 				PUTS("<tr><td bgcolor=\"" ENTRY_NAME_COLOR "\">");
 				PUTS(env[i].key);
 				PUTS("</td><td bgcolor=\"" CONTENTS_COLOR "\">");
-				PUTS(env[i].val);
+				if (env[i].val) PUTS(env[i].val);
 				PUTS("&nbsp;</td></tr>\n");
 			}
 		}
@@ -372,7 +377,7 @@ void _php3_info(void)
 				PUTS("<tr><td bgcolor=\"" ENTRY_NAME_COLOR "\">");
 				PUTS(env[i].key);
 				PUTS("</td><td bgcolor=\"" CONTENTS_COLOR "\">");
-				PUTS(env[i].val);
+				if (env[i].val) PUTS(env[i].val);
 				PUTS("&nbsp;</td></tr>\n");
 			}
 		}

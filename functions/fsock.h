@@ -2,7 +2,7 @@
    +----------------------------------------------------------------------+
    | PHP HTML Embedded Scripting Language Version 3.0                     |
    +----------------------------------------------------------------------+
-   | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
+   | Copyright (c) 1997-1999 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
    | it under the terms of one of the following licenses:                 |
@@ -27,14 +27,19 @@
    |          Jim Winstead (jimw@php.net)                                 |
    +----------------------------------------------------------------------+
 */
-/* $Id: fsock.h,v 1.13 1998/05/12 19:28:04 zeev Exp $ */
+/* $Id: fsock.h,v 1.16 1999/01/24 23:53:19 sas Exp $ */
 
 #ifndef _FSOCK_H
 #define _FSOCK_H
 
-extern void php3_fsockopen(INTERNAL_FUNCTION_PARAMETERS);
-extern int lookup_hostname(const char *addr);
+extern php3_module_entry fsock_module_entry;
+#define fsock_module_ptr &fsock_module_entry
+
+extern PHP_FUNCTION(fsockopen);
+extern PHP_FUNCTION(pfsockopen);
+extern int lookup_hostname(const char *addr, struct in_addr *in);
 extern int _php3_sock_fgets(char *buf, int maxlen, int socket);
 extern int _php3_sock_fread(char *buf, int maxlen, int socket);
+extern int _php3_is_persistent_sock(int);
 
 #endif /* _FSOCK_H */

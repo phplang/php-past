@@ -1,3 +1,5 @@
+/* $Id: sflcryp.h,v 1.3 1998/12/28 09:43:56 sas Exp $ */
+
 /*  ----------------------------------------------------------------<Prolog>-
     Name:       sflcryp.h
     Title:      Encryption and decryption functions

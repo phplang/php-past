@@ -1,4 +1,6 @@
 /*
+ * $Id: regex2.h,v 1.5 1998/12/28 09:44:02 sas Exp $
+ *
  * First, the stuff that ends up in the outside-world include file
  = #ifdef WIN32
  = #define API_EXPORT(type)    __declspec(dllexport) type __stdcall

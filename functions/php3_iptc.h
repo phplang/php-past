@@ -2,7 +2,7 @@
    +----------------------------------------------------------------------+
    | PHP HTML Embedded Scripting Language Version 3.0                     |
    +----------------------------------------------------------------------+
-   | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
+   | Copyright (c) 1997-1999 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
    | it under the terms of one of the following licenses:                 |
@@ -28,11 +28,12 @@
  */
 
 
-/* $Id: php3_iptc.h,v 1.1 1998/10/22 08:05:59 thies Exp $ */
+/* $Id: php3_iptc.h,v 1.3 1999/01/06 13:28:45 thies Exp $ */
 
 #ifndef _PHPIPTC_H
 #define _PHPIPTC_H
 
 extern void php3_iptcparse(INTERNAL_FUNCTION_PARAMETERS);
+extern void php3_iptcembed(INTERNAL_FUNCTION_PARAMETERS);
 
 #endif /* _PHPIPTC_H */

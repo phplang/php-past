@@ -2,7 +2,7 @@
    +----------------------------------------------------------------------+
    | PHP HTML Embedded Scripting Language Version 3.0                     |
    +----------------------------------------------------------------------+
-   | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
+   | Copyright (c) 1997-1999 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
    | it under the terms of one of the following licenses:                 |
@@ -26,7 +26,7 @@
    | Author: Jim Winstead (jimw@php.net)                                  |
    +----------------------------------------------------------------------+
  */
-/* $Id: base64.c,v 1.27 1998/12/21 05:24:19 sas Exp $ */
+/* $Id: base64.c,v 1.29 1999/02/27 16:11:08 sas Exp $ */
 
 #ifdef THREAD_SAFE
 #include "tls.h"
@@ -86,6 +86,7 @@ unsigned char *_php3_base64_encode(const unsigned char *string, int length, int 
 unsigned char *_php3_base64_decode(const unsigned char *string, int length, int *ret_length) {
 	const unsigned char *current = string;
 	int ch, i = 0, j = 0, k;
+	char *chp;
 
 	unsigned char *result = (unsigned char *)emalloc((length / 4 * 3 + 1) * sizeof(char));
 	if (result == NULL) {
@@ -95,12 +96,12 @@ unsigned char *_php3_base64_decode(const unsigned char *string, int length, int 
 	/* run through the whole string, converting as we go */
 	while ((ch = *current++) != '\0') {
 		if (ch == base64_pad) break;
-		ch = (int)strchr(base64_table, ch);
-		if (ch == 0) {
+		chp = strchr(base64_table, ch);
+		if (chp == NULL) {
 			efree(result);
 			return NULL;
 		}
-		ch -= (int)base64_table;
+		ch = chp - base64_table;
 
 		switch(i % 4) {
 		case 0:

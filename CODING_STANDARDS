@@ -59,6 +59,18 @@ Exceptions:
     check its man page again, and only then, consider using it, and even then,
     try avoiding it.
 
+[7] NEVER use initialization of global variables.  Global variables should
+    only be initizlized and destructed on the per-request startup/shutdown
+    functions.  The reason behind this is that PHP, in its module mode,
+    is practically nothing but a complex function, that is called, and
+    recalled for every hit.  Global variable initilaztion only happens once,
+    when the program (in our case, httpd) starts up, when we really want it
+    to happen for every request.  This is especially important for pointers
+    that point to emalloc()'d memory - remember that at the end of every
+    request, all emalloc()'d memory is freed, so your pointer would be
+    pointing at garbage, unless you explicitly reinitialize it on every
+    hit.
+
 
 Naming Conventions
 ------------------

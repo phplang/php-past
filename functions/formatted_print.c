@@ -2,7 +2,7 @@
    +----------------------------------------------------------------------+
    | PHP HTML Embedded Scripting Language Version 3.0                     |
    +----------------------------------------------------------------------+
-   | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
+   | Copyright (c) 1997-1999 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
    | it under the terms of one of the following licenses:                 |
@@ -27,7 +27,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: formatted_print.c,v 1.44 1998/11/19 22:03:23 zeev Exp $ */
+/* $Id: formatted_print.c,v 1.46 1999/01/04 18:13:29 rasmus Exp $ */
 
 #include <math.h>				/* modf() */
 #ifdef THREAD_SAFE
@@ -566,6 +566,8 @@ php3_formatted_print(HashTable *ht, int *len)
 }
 
 
+/* {{{ proto string sprintf(string format [, mixed arg1 [, ...]])
+   Return a formatted string */
 PHP_FUNCTION(user_sprintf)
 {
 	char *result;
@@ -578,8 +580,10 @@ PHP_FUNCTION(user_sprintf)
 	RETVAL_STRINGL(result,len,1);
 	efree(result);
 }
+/* }}} */
 
-
+/* {{{ proto int printf(string format [, mixed arg1 [, ...]])
+   Output a formatted string */
 PHP_FUNCTION(user_printf)
 {
 	char *result;
@@ -593,7 +597,7 @@ PHP_FUNCTION(user_printf)
 		PHPWRITE(result,len);
 	efree(result);
 }
-
+/* }}} */
 
 /*
  * Local variables:

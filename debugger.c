@@ -2,7 +2,7 @@
    +----------------------------------------------------------------------+
    | PHP HTML Embedded Scripting Language Version 3.0                     |
    +----------------------------------------------------------------------+
-   | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
+   | Copyright (c) 1997-1999 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
    | it under the terms of one of the following licenses:                 |
@@ -27,6 +27,7 @@
    +----------------------------------------------------------------------+
  */
 
+/* $Id: debugger.c,v 1.68 1999/01/29 21:42:13 shane Exp $ */
 #if THREAD_SAFE
 #include "tls.h"
 #endif
@@ -67,7 +68,7 @@
 #include "php3_debugger.h"
 #include "functions/fsock.h"
 
-extern int lookup_hostname(const char *addr);
+extern int lookup_hostname(const char *addr, struct in_addr *in);
 int _php3_send_error(char *message, char *address);
 
 #ifndef THREAD_SAFE
@@ -125,7 +126,7 @@ static int create_debugger_socket(const char *hostname, int dport)
 	int sockfd;
 
 	memset(&address, 0, sizeof(address));
-	address.sin_addr.s_addr = lookup_hostname(hostname);
+	lookup_hostname(hostname, &address.sin_addr);
 	address.sin_family = AF_INET;
 	address.sin_port = htons((unsigned short)dport);
 
@@ -167,7 +168,7 @@ find_hostname(void)
 {
 	char tmpname[33];
 	int err;
-
+	
 	memset(tmpname, 0, sizeof(tmpname));
 	err = gethostname(tmpname, sizeof(tmpname) - 1);
 	if (err == -1) {
@@ -501,7 +502,7 @@ int _php3_send_error(char *message, char *hostaddr){
 	dport=atoi(delim+1);
 
 	memset(&address, 0, sizeof(address));
-	address.sin_addr.s_addr = lookup_hostname(hostname);
+	lookup_hostname(hostname, &address.sin_addr);
 	address.sin_family = AF_INET;
 	address.sin_port = htons((unsigned short)dport);
 

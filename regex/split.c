@@ -1,3 +1,5 @@
+/* $Id: split.c,v 1.4 1998/12/28 09:44:02 sas Exp $ */
+
 #include <stdio.h>
 #include <string.h>
 

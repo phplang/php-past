@@ -2,7 +2,7 @@
    +----------------------------------------------------------------------+
    | PHP HTML Embedded Scripting Language Version 3.0                     |
    +----------------------------------------------------------------------+
-   | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
+   | Copyright (c) 1997-1999 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
    | it under the terms of one of the following licenses:                 |
@@ -29,6 +29,9 @@
    |          Andreas Karajannis <Andreas.Karajannis@gmd.de>              |
    +----------------------------------------------------------------------+
  */
+
+/* $Id: oracle.c,v 1.95 1999/02/23 17:45:33 thies Exp $ */
+
 #if defined(COMPILE_DL)
 # if PHP_31
 #  include "../phpdl.h"
@@ -45,8 +48,10 @@
 
 #if HAVE_ORACLE
 #include "php3_list.h"
-#if !(WIN32|WINNT)
-#include "build-defs.h"
+#ifdef WIN32
+# include "variables.h"
+#else
+# include "build-defs.h"
 #endif
 #include "snprintf.h"
 
@@ -78,6 +83,9 @@ oracle_module php3_oracle_module;
 #undef ORACLE_DEBUG
 
 #define DB_SIZE 65536
+
+#define ORA_FETCHINTO_ASSOC (1<<0)
+#define ORA_FETCHINTO_NULLS (1<<1)
 
 static oraConnection *ora_get_conn(HashTable *, int);
 static int ora_add_cursor(HashTable *, oraCursor *);
@@ -298,6 +306,14 @@ int php3_minit_oracle(INIT_FUNC_ARGS)
 	REGISTER_LONG_CONSTANT("ORA_BIND_IN",    1, CONST_CS | CONST_PERSISTENT);
 	REGISTER_LONG_CONSTANT("ORA_BIND_OUT",   2, CONST_CS | CONST_PERSISTENT);
 
+	REGISTER_LONG_CONSTANT("ORA_FETCHINTO_ASSOC",ORA_FETCHINTO_ASSOC, CONST_CS | CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("ORA_FETCHINTO_NULLS",ORA_FETCHINTO_NULLS, CONST_CS | CONST_PERSISTENT);
+
+#if NEEDED
+	opinit(OCI_EV_TSF); /* initialize threaded environment - must match the threaded mode 
+						   of the oci8 driver if both are used at the same time!! */
+#endif
+
 	return SUCCESS;
 }
 
@@ -448,9 +464,11 @@ void php3_Ora_Do_Logon(INTERNAL_FUNCTION_PARAMETERS, int persistent)
 			php3_error(E_WARNING, "Out of memory");
 			RETURN_FALSE;
 		}
+		
+		memset((void *) db_conn,0,sizeof(oraConnection));	
 
-		if (orlon(&db_conn->lda, db_conn->hda, user,
-				 strlen(user), pwd, strlen(pwd), 0)) {
+		if (olog(&db_conn->lda, db_conn->hda, user,
+				 strlen(user), pwd, strlen(pwd), 0, -1, OCI_LM_DEF)) {
 			php3_error(E_WARNING, "Unable to connect to ORACLE (%s)",
 					   ora_error(&db_conn->lda));
 			if (persistent)
@@ -510,8 +528,8 @@ void php3_Ora_Do_Logon(INTERNAL_FUNCTION_PARAMETERS, int persistent)
 					type == ORACLE_GLOBAL(php3_oracle_module).le_pconn)){
 			if(!_ora_ping(db_conn)) {
 				/* XXX Reinitialize lda, hda ? */
-				if(orlon(&db_conn->lda, db_conn->hda, user,
-						 strlen(user), pwd, strlen(pwd), 0)) {
+				if(olog(&db_conn->lda, db_conn->hda, user,
+						 strlen(user), pwd, strlen(pwd), 0, -1, OCI_LM_DEF)) {
 					php3_error(E_WARNING, "Unable to reconnect to ORACLE (%s)",
 							   ora_error(&db_conn->lda));
 					/* Delete list entry for this connection */
@@ -1057,17 +1075,34 @@ void php3_Ora_Fetch(INTERNAL_FUNCTION_PARAMETERS)
 }
 /* }}} */
 
-/* {{{ proto int ora_fetchinto(int cursor, array result)
+/* {{{ proto int ora_fetch_into(int cursor, array result [ , int flags ])
    Fetch a row into the specified result array */
 void php3_Ora_FetchInto(INTERNAL_FUNCTION_PARAMETERS)
-{								/* cursor_index, array ref */
-	pval     *arg1, *arr, tmp;
+{
+	pval     *arg1, *arr, *flg, tmp;
 	oraCursor *cursor;
 	ub4 ret_len;
 	int i;
+	int flags = 0;
 
-	if (getParameters(ht, 2, &arg1, &arr) == FAILURE) {
-		WRONG_PARAM_COUNT;
+	switch(ARG_COUNT(ht)){
+		case 2:
+			if (getParameters(ht, 2, &arg1, &arr) == FAILURE) {
+				WRONG_PARAM_COUNT;
+			}
+			break;
+
+		case 3:
+			if (getParameters(ht, 3, &arg1, &arr, &flg) == FAILURE) {
+				WRONG_PARAM_COUNT;
+			}
+			convert_to_long(flg);
+			flags = flg->value.lval;
+			break;
+
+		default:
+			WRONG_PARAM_COUNT;
+			break;
 	}
 
 	if (!ParameterPassedByReference(ht, 2)){
@@ -1108,7 +1143,12 @@ void php3_Ora_FetchInto(INTERNAL_FUNCTION_PARAMETERS)
 		tmp.value.str.len = 0;
        
 		if (cursor->columns[i].col_retcode == 1405) {
-			continue; /* don't add anything for NULL columns */
+			if (!(flags&ORA_FETCHINTO_NULLS)){
+				continue; /* don't add anything for NULL columns, unless the calles wants it */
+			} else {
+				tmp.value.str.val = empty_string;
+				tmp.value.str.len = 0;
+			}
 		} else if (cursor->columns[i].col_retcode != 0 &&
 				   cursor->columns[i].col_retcode != 1406) {
 			/* So error fetching column.  The most common is 1405, a NULL */
@@ -1135,7 +1175,13 @@ void php3_Ora_FetchInto(INTERNAL_FUNCTION_PARAMETERS)
 			tmp.value.str.val = estrndup(cursor->columns[i].buf,
 										 tmp.value.str.len);
 		}
-		_php3_hash_index_update(arr->value.ht, i, (void *) &tmp, sizeof(pval), NULL);
+
+		if (flags&ORA_FETCHINTO_ASSOC){
+			_php3_hash_update(arr->value.ht, cursor->columns[i].cbuf, cursor->columns[i].cbufl+1, (void *) &tmp, sizeof(pval), NULL);
+		} else {
+			_php3_hash_index_update(arr->value.ht, i, (void *) &tmp, sizeof(pval), NULL);
+		}
+
 	}
 
 	RETURN_LONG(cursor->ncols); 
@@ -1621,9 +1667,6 @@ ora_describe_define(oraCursor * cursor)
 	return 1;
 }
 
-/* see oracle_hack.c */
-extern PHPAPI HashTable *php3i_get_symbol_table(void);
-
 int ora_set_param_values(oraCursor *cursor, int isout)
 {
 	char *paramname;
@@ -1631,7 +1674,7 @@ int ora_set_param_values(oraCursor *cursor, int isout)
 	pval *pdata;
 	int i, len;
 #if (WIN32|WINNT)
-	/* see oracle_hack.c */
+	/* see variables.c */
 	HashTable *symbol_table=php3i_get_symbol_table();
 #endif
 	_php3_hash_internal_pointer_reset(cursor->params);

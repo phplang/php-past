@@ -21,7 +21,7 @@
      considered valid if:
      <itemizedlist>
       <listitem><simpara>
-        year is between 1900 and 32767 inclusive
+        year is between 0 and 32767 inclusive
        </simpara></listitem>
       <listitem><simpara>
         month is between 1 and 12 inclusive
@@ -212,6 +212,30 @@ print(strftime("%A.\n"));
    </refsect1>
   </refentry>
 
+  <refentry id="function.gettimeofday">
+   <refnamediv>
+    <refname>gettimeofday</refname>
+    <refpurpose>get current time</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>array <function>gettimeofday</function></funcdef>
+     <paramdef>void</paramdef>
+    </funcsynopsis>
+    <para>
+     This is an interface to gettimeofday(2). It returns an
+     associative array containing the data returned from the
+     system call.
+     <itemizedlist>
+      <listitem><simpara>"sec" - seconds</simpara></listitem>
+      <listitem><simpara>"usec" - microseconds</simpara></listitem>
+      <listitem><simpara>"minuteswest" - minutes west of Greenwich</simpara></listitem>
+      <listitem><simpara>"dsttime" - type of dst correction</simpara></listitem>
+     </itemizedlist>
+    </para>
+   </refsect1>
+  </refentry>
 
   <refentry id="function.gmdate">
    <refnamediv>

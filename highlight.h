@@ -1,3 +1,5 @@
+/* $Id: highlight.h,v 1.4 1998/12/28 09:43:53 sas Exp $ */
+
 #ifndef _HILIGHT_H
 #define _HILIGHT_H
 

@@ -4,7 +4,10 @@
  * This file includes engine.c *twice*, after muchos fiddling with the
  * macros that code uses.  This lets the same code operate on two different
  * representations for state sets.
+ *
+ * $Id: regexec.c,v 1.5 1998/12/28 09:44:02 sas Exp $ 
  */
+
 #include <sys/types.h>
 #include <stdio.h>
 #include <stdlib.h>

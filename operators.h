@@ -3,7 +3,7 @@
    +----------------------------------------------------------------------+
    | PHP HTML Embedded Scripting Language Version 3.0                     |
    +----------------------------------------------------------------------+
-   | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
+   | Copyright (c) 1997-1999 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
    | it under the terms of one of the following licenses:                 |
@@ -30,7 +30,7 @@
  */
 
 
-/* $Id: operators.h,v 1.35 1998/09/10 23:56:56 zeev Exp $ */
+/* $Id: operators.h,v 1.37 1999/02/09 13:28:38 sas Exp $ */
 
 
 #ifndef _OPERATORS_H
@@ -84,6 +84,7 @@ extern int pval_is_true(pval *op);
 extern int compare_function(pval *result, pval *op1, pval *op2 INLINE_TLS);
 
 extern void php3_str_tolower(char *str, unsigned int length);
+extern int php3_binary_strcasecmp(pval *s1, pval *s2);
 extern int php3_binary_strcmp(pval *s1, pval *s2);
 extern inline void php3_smart_strcmp(pval *result, pval *s1, pval *s2);
 

@@ -24,7 +24,7 @@ ndx_header_t *ndx_get_header(int fd)
 		free(dp);
 		return NULL;
 	}
-	if ((lseek(fd, 0, 0) < 0) || (read(fd, dp, NDX_PAGE_SZ) < 0)) {
+	if ((lseek(fd, 0, 0) < 0) || (read(fd, (void *)dp, NDX_PAGE_SZ) < 0)) {
 		free(dp); free(np);
 		return NULL;
 	}
@@ -65,7 +65,7 @@ static ndx_page_t *ndx_get_page(ndx_header_t *hp, int pageno)
 	}
 	fp->ndxp_page_data = dp;
 	if ((lseek(hp->ndx_fd, pageno * NDX_PAGE_SZ, 0) < 0) ||
-		(read(hp->ndx_fd, dp, NDX_PAGE_SZ) < 0)) {
+		(read(hp->ndx_fd, (void *)dp, NDX_PAGE_SZ) < 0)) {
 		free(fp); free(dp);
 		return NULL;
 	}

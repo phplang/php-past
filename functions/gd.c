@@ -2,7 +2,7 @@
    +----------------------------------------------------------------------+
    | PHP HTML Embedded Scripting Language Version 3.0                     |
    +----------------------------------------------------------------------+
-   | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
+   | Copyright (c) 1997-1999 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
    | it under the terms of one of the following licenses:                 |
@@ -29,7 +29,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: gd.c,v 1.103 1998/12/21 05:24:20 sas Exp $ */
+/* $Id: gd.c,v 1.106 1999/01/18 20:51:08 eschmid Exp $ */
 
 /* gd 1.2 is copyright 1994, 1995, Quest Protein Database Center, 
    Cold Spring Harbor Labs. */
@@ -791,7 +791,7 @@ void php3_imagegif (INTERNAL_FUNCTION_PARAMETERS) {
 		if (output) {
 			gdImageGif (im, tmp);
 			fseek(tmp, 0, SEEK_SET);
-#ifdef CHARSET_EBCDIC
+#if APACHE && defined(CHARSET_EBCDIC)
 			/* This is a binary file already: avoid EBCDIC->ASCII conversion */
 			ap_bsetflag(php3_rqst->connection->client, B_EBCDIC2ASCII, 0);
 #endif
@@ -1696,7 +1696,7 @@ void php3_imagesyfn(INTERNAL_FUNCTION_PARAMETERS)
 #define TTFTEXT_BBOX 1
 
 /* {{{ proto array imagettfbbox(int size, int angle, string font_file, string text)
-Give the bounding box of a text using TypeType fonts */
+Give the bounding box of a text using TrueType fonts */
 void php3_imagettfbbox(INTERNAL_FUNCTION_PARAMETERS)
 {
 	php3_imagettftext_common(INTERNAL_FUNCTION_PARAM_PASSTHRU, TTFTEXT_BBOX);

@@ -2,7 +2,7 @@
    +----------------------------------------------------------------------+
    | PHP HTML Embedded Scripting Language Version 3.0                     |
    +----------------------------------------------------------------------+
-   | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
+   | Copyright (c) 1997-1999 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
    | it under the terms of one of the following licenses:                 |
@@ -30,7 +30,7 @@
  */
 
 
-/* $Id: datetime.c,v 1.43 1998/09/22 14:34:07 zeev Exp $ */
+/* $Id: datetime.c,v 1.48 1999/01/18 12:53:57 rasmus Exp $ */
 
 
 #ifdef THREAD_SAFE
@@ -76,11 +76,14 @@ static int phpday_tab[2][12] =
 	{31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31}
 };
 
+/* {{{ proto int time(void)
+   Return current UNIX timestamp */
 void php3_time(INTERNAL_FUNCTION_PARAMETERS)
 {
 	return_value->value.lval = (long) time(NULL);
 	return_value->type = IS_LONG;
 }
+/* }}} */
 
 void _php3_mktime(INTERNAL_FUNCTION_PARAMETERS, int gm)
 {
@@ -97,18 +100,16 @@ void _php3_mktime(INTERNAL_FUNCTION_PARAMETERS, int gm)
 		convert_to_long(arguments[i]);
 	}
 	t=time(NULL);
-	if (gm) {
-		tn = gmtime(&t);
 #if HAVE_TZSET
-		tzset();
+	tzset();
+#endif
+	tn = localtime(&t);
+	if (gm) {
 #if HAVE_TM_ZONE
 		gmadjust=(tn->tm_gmtoff)/3600;
 #else
 		gmadjust=timezone/3600;
 #endif
-#endif
-	} else {
-		tn = localtime(&t);
 	}
 	memcpy(&ta,tn,sizeof(struct tm));
 	ta.tm_isdst = -1;
@@ -138,15 +139,21 @@ void _php3_mktime(INTERNAL_FUNCTION_PARAMETERS, int gm)
 	return_value->type = IS_LONG;
 }
 
+/* {{{ proto int mktime(int hour, int min, int sec, int mon, int mday, int year)
+   Get UNIX timestamp for a date */
 void php3_mktime(INTERNAL_FUNCTION_PARAMETERS)
 {
 	_php3_mktime(INTERNAL_FUNCTION_PARAM_PASSTHRU, 0);
 }
+/* }}} */
 
+/* {{{ proto int gmmktime(int hour, int min, int sec, int mon, int mday, int year)
+   Get UNIX timestamp for a GMT date */
 void php3_gmmktime(INTERNAL_FUNCTION_PARAMETERS)
 {
 	_php3_mktime(INTERNAL_FUNCTION_PARAM_PASSTHRU, 1);
 }
+/* }}} */
 
 static void
 _php3_date(INTERNAL_FUNCTION_PARAMETERS, int gm)
@@ -340,16 +347,24 @@ _php3_date(INTERNAL_FUNCTION_PARAMETERS, int gm)
 	return_value->type = IS_STRING;
 }
 
+/* {{{ proto string date(string format[, int timestamp])
+   Format a local time/date */
 void php3_date(INTERNAL_FUNCTION_PARAMETERS)
 {
 	_php3_date(INTERNAL_FUNCTION_PARAM_PASSTHRU, 0);
 }
+/* }}} */
 
+/* {{{ proto string gmdate(string format[, int timestamp])
+   Format a GMT/CUT date/time */
 void php3_gmdate(INTERNAL_FUNCTION_PARAMETERS)
 {
 	_php3_date(INTERNAL_FUNCTION_PARAM_PASSTHRU, 1);
 }
+/* }}} */
 
+/* {{{ proto array getdate([int timestamp])
+   Get date/time information */
 void php3_getdate(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *timestamp_arg;
@@ -386,6 +401,7 @@ void php3_getdate(INTERNAL_FUNCTION_PARAMETERS)
 	add_assoc_string(return_value, "month", mon_full_names[ta->tm_mon], 1);
 	add_index_long(return_value, 0, timestamp);
 }
+/* }}} */
 
 /* Return date string in standard format for http headers */
 char *php3_std_date(time_t t)
@@ -420,6 +436,8 @@ char *php3_std_date(time_t t)
  *  returns True(1) if it is valid date
  *
  */
+/* {{{ proto bool checkdate(int month, int day, int year)
+   Validate a date/time */
 #define isleap(year) (((year%4) == 0 && (year%100)!=0) || (year%400)==0)
 void php3_checkdate(INTERNAL_FUNCTION_PARAMETERS)
 {
@@ -438,8 +456,10 @@ void php3_checkdate(INTERNAL_FUNCTION_PARAMETERS)
 	m = month->value.lval;
 	d = day->value.lval;
 
+#if 0
 	if (y < 100)
 		y += 1900;
+#endif
 
 	if (y < 0 || y > 32767) {
 		RETURN_FALSE;
@@ -452,10 +472,13 @@ void php3_checkdate(INTERNAL_FUNCTION_PARAMETERS)
 	}
 	RETURN_TRUE;				/* True : This month,day,year arguments are valid */
 }
+/* }}} */
 
 
 #if HAVE_STRFTIME
 
+/* {{{ proto string strftime(string format[, int timestamp])
+   Format a local time/date according to locale settings */
 void php3_strftime(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *format_arg, *timestamp_arg;
@@ -500,6 +523,7 @@ void php3_strftime(INTERNAL_FUNCTION_PARAMETERS)
 	return_value->value.str.len = real_len;
 	return_value->type = IS_STRING;
 }
+/* }}} */
 #endif
 /*
  * Local variables:

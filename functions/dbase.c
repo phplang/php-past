@@ -2,7 +2,7 @@
    +----------------------------------------------------------------------+
    | PHP HTML Embedded Scripting Language Version 3.0                     |
    +----------------------------------------------------------------------+
-   | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
+   | Copyright (c) 1997-1999 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
    | it under the terms of one of the following licenses:                 |
@@ -26,6 +26,8 @@
    | Authors: Jim Winstead (jimw@php.net)                                 |
    +----------------------------------------------------------------------+
  */
+
+/* $Id: dbase.c,v 1.72 1999/01/01 17:59:08 zeev Exp $ */
 #if defined(COMPILE_DL)
 #include "dl/phpdl.h"
 #endif

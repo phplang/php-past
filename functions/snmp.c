@@ -2,7 +2,7 @@
    +----------------------------------------------------------------------+
    | PHP HTML Embedded Scripting Language Version 3.0                     |
    +----------------------------------------------------------------------+
-   | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
+   | Copyright (c) 1997-1999 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
    | it under the terms of one of the following licenses:                 |
@@ -26,7 +26,7 @@
    | Authors: Rasmus Lerdorf <rasmus@lerdorf.on.ca>                       |
    +----------------------------------------------------------------------+
  */
-/* $Id: snmp.c,v 1.7 1998/11/15 07:45:19 jah Exp $ */
+/* $Id: snmp.c,v 1.9 1999/01/05 16:12:28 martin Exp $ */
 
 #include "php.h"
 #include "internal_functions.h"
@@ -45,7 +45,11 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
+#ifndef _OSD_POSIX
 #include <sys/errno.h>
+#else
+#include <errno.h>  /* BS2000/OSD uses <errno.h>, not <sys/errno.h> */
+#endif
 #include <netdb.h>
 #endif
 #ifdef HAVE_UNISTD_H

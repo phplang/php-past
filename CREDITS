@@ -110,6 +110,7 @@ Major Contributors
 
 * Mark Musone (musone@edgeglobal.com)
   IMAP
+  ASpell
   
 * Jeroen van der Most (jvdmost@digiface.nl)
   Solid
@@ -146,6 +147,9 @@ Major Contributors
 
 * Uwe Steinmann (Uwe.Steinmann@fernuni-hagen.de)
   Hyperwave, PDF, Acrobat FDF Toolkit
+
+* Thies C. Arntzen (thies@digicol.de)
+  IPTC-Support, Oracle-OCI8
 
 ------------------------------------------------------------------------------
 

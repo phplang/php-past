@@ -29,14 +29,14 @@
 # |             Ariel Shkedi <ars@ziplink.net> or <as@altavista.net>     |
 # +----------------------------------------------------------------------+
 # 
-# $Id: setup,v 1.52 1998/12/19 21:07:58 sas Exp $
+# $Id: setup,v 1.53 1999/01/05 15:23:19 martin Exp $
 
 if [ "$1" = "-q" ]; then
     quiet_mode=on
     shift
 fi
 
-if [ `echo -e "\n" | wc -l` = 2 ]; then
+if [ `echo -e "\n" | wc -c` = 2 ]; then
 # bash supports echo -e for handling escape sequences
 	ECHO_CMD="echo -e"
 elif test -f /bin/echo; then
@@ -297,9 +297,9 @@ define_option with-solid 'Solid support?' yesnodir \
 
 define_option with-empress 'Empress support?' yesnodir \
     "no $EMPRESSPATH Empress home" \
-'    Whether to build PHP with Empress support.  Has been confirmed to
-    work with Empress Version 8.10.  If you have not set up your
-    Empress environment, enter what $EMPRESSPATH is usually set to here.
+'    Whether to build PHP with Empress support.  Has been confirmed to\n
+    work with Empress Version 8.10.  If you have not set up your\n
+    Empress environment, enter what $EMPRESSPATH is usually set to here.\n
     More info about Empress can be found at http://www.empress.com/.'
 
 define_option with-informix 'Informix support?' yesnodir \
@@ -322,13 +322,16 @@ define_option with-ldap 'LDAP support?' yesnodir \
     'no /usr/local/ldap LDAP base install' \
 '     Whether to build with LDAP (Lightweight Directory Access Protocol)\n
      support.\n
-     More information about LDAP can be found in RFC1777 and RFC1778.'
+     More information about LDAP can be found in RFC1777 and RFC1778,\n
+     and at http://www.OpenLDAP.org/'
 
 define_option with-imap 'IMAP support?' yesnodir \
     'no /usr/local/imap IMAP base install' \
 '     Whether to build with IMAP (Internet Message Access Protocol)\n
      support.\n
-     More information about LDAP can be found in RFC1777 and RFC1778.'
+     More information about IMAP can be found at\n
+     The IMAP Connection (http://www.IMAP.org/) and\n
+     The IMAP Information Center (http://www.washington.edu/imap/).'
 
 define_option with-velocis 'Velocis support?' yesnodir \
     'no /usr/local/velocis Velocis install' \

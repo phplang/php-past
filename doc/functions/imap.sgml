@@ -228,7 +228,7 @@
      <funcdef>string <function>imap_fetchbody</function></funcdef>
      <paramdef>int <parameter>imap_stream</parameter></paramdef>
      <paramdef>int <parameter>msg_number</parameter></paramdef>
-     <paramdef>int <parameter>part_number</parameter></paramdef>
+     <paramdef>string <parameter>part_number</parameter></paramdef>
      <paramdef>flags <parameter>flags</parameter></paramdef>
     </funcsynopsis>
     <para>

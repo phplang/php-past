@@ -2,7 +2,7 @@
    +----------------------------------------------------------------------+
    | PHP HTML Embedded Scripting Language Version 3.0                     |
    +----------------------------------------------------------------------+
-   | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
+   | Copyright (c) 1997-1999 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
    | it under the terms of one of the following licenses:                 |
@@ -28,7 +28,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: dns.c,v 1.51 1998/11/18 21:23:04 ssb Exp $ */
+/* $Id: dns.c,v 1.53 1999/02/27 17:03:50 sas Exp $ */
 
 #ifdef THREAD_SAFE
 #include "tls.h"
@@ -88,16 +88,17 @@ void php3_gethostbyaddr(INTERNAL_FUNCTION_PARAMETERS)
 
 char *_php3_gethostbyaddr(char *ip)
 {
-	unsigned long addr;
 	struct hostent *hp;
-
-	if ((int) (addr = inet_addr(ip)) == -1) {
+	struct in_addr in;
+	
+	
+	if (!inet_aton(ip, &in)) {
 #if DEBUG
 		php3_error(E_WARNING, "address not in a.b.c.d form");
 #endif
 		return estrdup(ip);
 	}
-	hp = gethostbyaddr((char *) &addr, sizeof(addr), AF_INET);
+	hp = gethostbyaddr((char *) &in, sizeof(in), AF_INET);
 	if (!hp) {
 #if DEBUG
 		php3_error(E_WARNING, "Unable to resolve %s\n", ip);

@@ -2,7 +2,7 @@
    +----------------------------------------------------------------------+
    | PHP HTML Embedded Scripting Language Version 3.0                     |
    +----------------------------------------------------------------------+
-   | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
+   | Copyright (c) 1997-1999 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
    | it under the terms of one of the following licenses:                 |
@@ -26,6 +26,8 @@
    | Authors: Stig Sæther Bakken <ssb@guardian.no>                        |
    +----------------------------------------------------------------------+
  */
+
+/* $Id: snprintf.h,v 1.9 1999/01/01 17:58:52 zeev Exp $ */
 
 #ifndef _PHP3_SNPRINTF_H
 #define _PHP3_SNPRINTF_H

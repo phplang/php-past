@@ -2,7 +2,7 @@
    +----------------------------------------------------------------------+
    | PHP HTML Embedded Scripting Language Version 3.0                     |
    +----------------------------------------------------------------------+
-   | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
+   | Copyright (c) 1997-1999 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
    | it under the terms of one of the following licenses:                 |
@@ -26,7 +26,7 @@
    | Authors: Jim Winstead (jimw@php.net)                                 |
    +----------------------------------------------------------------------+
  */
-/* $Id: url.h,v 1.14 1998/04/29 13:24:31 ssb Exp $ */
+/* $Id: url.h,v 1.15 1999/01/01 17:59:20 zeev Exp $ */
 
 typedef struct url {
 	char *scheme;

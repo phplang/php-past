@@ -1,4 +1,4 @@
-dnl $Id: aclocal.m4,v 1.30 1998/12/10 18:36:30 swilliam Exp $
+dnl $Id: aclocal.m4,v 1.31 1999/02/06 19:33:17 sas Exp $
 dnl
 dnl This file contains local autoconf functions.
 
@@ -22,6 +22,7 @@ AC_DEFUN(AC_MSQL_VERSION,[
   ac_php_oldcflags=$CFLAGS
   CFLAGS="$MSQL_INCLUDE $CFLAGS";
   AC_TRY_COMPILE([#include <sys/types.h>
+#define APIENTRY
 #include "msql.h"],[int i = IDX_TYPE],[
     AC_DEFINE(MSQL1,0)
     MSQL_VERSION="2.0 or newer"

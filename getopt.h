@@ -1,3 +1,5 @@
+/* $Id: getopt.h,v 1.6 1998/12/28 09:43:53 sas Exp $ */
+
 /* Borrowed from Apache NT Port */
 #include "php.h"
 

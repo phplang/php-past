@@ -27,7 +27,7 @@ dbhead_t *get_dbf_head(int fd)
 		return NULL;
 	if (lseek(fd, 0, 0) < 0)
 		return NULL;
-	if ((ret = read(fd, &dbhead, sizeof(dbhead))) < 0)
+	if ((ret = read(fd, (void *)&dbhead, sizeof(dbhead))) < 0)
 		return NULL;
 
 	/* build in core info */
@@ -106,7 +106,7 @@ int put_dbf_head(dbhead_t *dbh)
 
 	if (lseek(fd, 0, 0) < 0)
 		return -1;
-	if ((ret = write(fd, &dbhead, sizeof(dbhead))) < 0)
+	if ((ret = write(fd, (void *)&dbhead, sizeof(dbhead))) < 0)
 		return -1;
 	return ret;
 }
@@ -119,7 +119,7 @@ int get_dbf_field(dbhead_t *dbh, dbfield_t *dbf)
 	struct dbf_dfield	dbfield;
 	int ret;
 
-	if ((ret = read(dbh->db_fd, &dbfield, sizeof(dbfield))) < 0) {
+	if ((ret = read(dbh->db_fd, (void *)&dbfield, sizeof(dbfield))) < 0) {
 		return ret;
 	}
 
@@ -170,7 +170,7 @@ int put_dbf_field(dbhead_t *dbh, dbfield_t *dbf)
 	}
 
 	/* now write it out to disk */
-	if ((ret = write(dbh->db_fd, &dbfield, sizeof(dbfield))) < 0) {
+	if ((ret = write(dbh->db_fd, (void *)&dbfield, sizeof(dbfield))) < 0) {
 		return ret;
 	}
 	return 1;

@@ -2,7 +2,7 @@
    +----------------------------------------------------------------------+
    | PHP HTML Embedded Scripting Language Version 3.0                     |
    +----------------------------------------------------------------------+
-   | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
+   | Copyright (c) 1997-1999 PHP Development Team (See Credits file)      |
    +----------------------------------------------------------------------+
    | This program is free software; you can redistribute it and/or modify |
    | it under the terms of one of the following licenses:                 |
@@ -27,7 +27,8 @@
    +----------------------------------------------------------------------+
  */
 
-/* number.h: Arbitrary precision numbers header file. */
+/* $Id: number.h,v 1.18 1999/01/01 17:59:14 zeev Exp $
+   Arbitrary precision numbers header file. */
 
 /*  This file is part of GNU bc.
     Copyright (C) 1991, 1992, 1993, 1994, 1997 Free Software Foundation, Inc.
