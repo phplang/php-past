@@ -1,21 +1,21 @@
 <HTML
 ><HEAD
 ><TITLE
->FDF_create</TITLE
+>fdf_create</TITLE
 ><META
 NAME="GENERATOR"
 CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
 REL="HOME"
-TITLE="PHP3 Manual"
+TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
 TITLE="Forms Data Format functions"
 HREF="ref.fdf.html"><LINK
 REL="PREVIOUS"
-TITLE="FDF_close"
+TITLE="fdf_close"
 HREF="function.fdf-close.html"><LINK
 REL="NEXT"
-TITLE="FDF_save"
+TITLE="fdf_save"
 HREF="function.fdf-save.html"></HEAD
 ><BODY
 BGCOLOR="#FFFFFF"
@@ -34,7 +34,7 @@ CELLSPACING="0"
 ><TH
 COLSPAN="3"
 ALIGN="center"
->PHP3 Manual</TH
+>PHP Manual</TH
 ></TR
 ><TR
 ><TD
@@ -66,18 +66,18 @@ WIDTH="100%"></DIV
 ><H1
 ><A
 NAME="FUNCTION.FDF-CREATE"
->FDF_create</A
+>fdf_create</A
 ></H1
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN6463"
+NAME="AEN7140"
 ></A
->FDF_create -- </DIV
+>fdf_create -- Create a new FDF document</DIV
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN6466"
+NAME="AEN7143"
 ></A
 ><H2
 >Description</H2
@@ -92,35 +92,70 @@ CLASS="FUNCDEF"
 ></P
 ></DIV
 ><P
->     The <A
-HREF="function.fdf-create.html"
-><B
+>     The <B
 CLASS="FUNCTION"
->FDF_create()</B
-></A
+>fdf_create()</B
 > creates a new
-     fdf document.
+     FDF document. This function is needed if one would like to
+     populate input fields in a PDF document with data.
+    </P
+><P
+>    <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="EXAMPLE"
+><P
+><B
+>Example 1. Populating a PDF document</B
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>&lt;?php
+$outfdf = fdf_create();
+fdf_set_value($outfdf, "volume", $volume, 0);
+
+fdf_set_file($outfdf, "http:/testfdf/resultlabel.pdf");
+fdf_save($outfdf, "outtest.fdf");
+fdf_close($outfdf);
+Header("Content-type: application/vnd.fdf");
+$fp = fopen("outtest.fdf", "r");
+fpassthru($fp);
+unlink("outtest.fdf");
+?&#62;
+     </PRE
+></DIV
+></TD
+></TR
+></TABLE
+>
+
     </P
 ><P
 >     See also <A
 HREF="function.fdf-close.html"
 ><B
 CLASS="FUNCTION"
->FDF_close()</B
+>fdf_close()</B
 ></A
 >,
               <A
 HREF="function.fdf-save.html"
 ><B
 CLASS="FUNCTION"
->FDF_save()</B
+>fdf_save()</B
 ></A
 >,
               <A
 HREF="function.fdf-open.html"
 ><B
 CLASS="FUNCTION"
->FDF_open()</B
+>fdf_open()</B
 ></A
 >.
 
@@ -166,7 +201,7 @@ HREF="function.fdf-save.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->FDF_close</TD
+>fdf_close</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"
@@ -179,7 +214,7 @@ HREF="ref.fdf.html"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->FDF_save</TD
+>fdf_save</TD
 ></TR
 ></TABLE
 ></DIV

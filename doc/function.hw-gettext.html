@@ -6,7 +6,7 @@
 NAME="GENERATOR"
 CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
 REL="HOME"
-TITLE="PHP3 Manual"
+TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
 TITLE="Hyperwave functions"
@@ -34,7 +34,7 @@ CELLSPACING="0"
 ><TH
 COLSPAN="3"
 ALIGN="center"
->PHP3 Manual</TH
+>PHP Manual</TH
 ></TR
 ><TR
 ><TD
@@ -71,13 +71,13 @@ NAME="FUNCTION.HW-GETTEXT"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN8569"
+NAME="AEN9274"
 ></A
 >hw_GetText -- retrieve text document</DIV
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN8572"
+NAME="AEN9277"
 ></A
 ><H2
 >Description</H2
@@ -88,7 +88,13 @@ CLASS="FUNCSYNOPSIS"
 ><CODE
 CLASS="FUNCDEF"
 >int hw_gettext</CODE
->(int connection, int objectID, int rootID);<P
+>(int connection, int objectID, mixed 
+             [<SPAN
+CLASS="OPTIONAL"
+>rootID/prefix</SPAN
+>]
+      
+     );<P
 ></P
 ></DIV
 ><P
@@ -103,9 +109,10 @@ CLASS="PARAMETER"
      The optional parameter <TT
 CLASS="PARAMETER"
 ><I
->rootID</I
+>rootID/prefix</I
 ></TT
-> determines
+> can
+     be a string or an integer. If it is an integer it determines
      how links are inserted
      into the document. The default is 0 and will result in links that
      are constructed from the name of the link's destination object. This
@@ -116,26 +123,35 @@ CLASS="PARAMETER"
      will have to set up your web browser, to rewrite that URL to for
      example '/my_script.php3/internet_movie'. 'my_script.php3' will
      have to evaluate $PATH_INFO and retrieve the document.
+     All links will have the prefix '/my_script.php3/'. If you do not
+     want this you can set the optional parameter
+     <TT
+CLASS="PARAMETER"
+><I
+>rootID/prefix</I
+></TT
+> to any prefix which
+     is used instead. Is this case it has to be a string.
     </P
 ><P
 >     If <TT
 CLASS="PARAMETER"
 ><I
->rootID</I
+>rootID/prefix</I
 ></TT
-> is unequal to 0 the link is
-     constructed from all the names
+> is an integer and
+     unequal to 0 the link is constructed from all the names
      starting at the object with the id <TT
 CLASS="PARAMETER"
 ><I
->rootID</I
+>rootID/prefix</I
 ></TT
 >
      separated by a slash relative to the current object.
      If for example the above document 'internet_movie' is located
      at 'a-b-c-internet_movie' with '-' being the seperator between
-     hierachy levels and the source document is located at
-     'a-b-d-source' the resulting HTML link would be:
+     hierachy levels on the Hyperwave server and the source document is
+     located at 'a-b-d-source' the resulting HTML link would be:
      &lt;A HREF="../c/internet_movie"&#62;. This is useful if you want
      to download the whole server content onto disk and map
      the document hierachy onto the file system.

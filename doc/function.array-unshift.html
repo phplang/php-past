@@ -1,0 +1,255 @@
+<HTML
+><HEAD
+><TITLE
+>array_unshift</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Array functions"
+HREF="ref.array.html"><LINK
+REL="PREVIOUS"
+TITLE="array_pop"
+HREF="function.array-pop.html"><LINK
+REL="NEXT"
+TITLE="array_shift"
+HREF="function.array-shift.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.array-pop.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.array-shift.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="FUNCTION.ARRAY-UNSHIFT"
+>array_unshift</A
+></H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN3018"
+></A
+>array_unshift -- Push one or more elements
+     onto the beginning of array</DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN3021"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int array_unshift</CODE
+>(array array, mixed var, [<SPAN
+CLASS="OPTIONAL"
+>...</SPAN
+>]);</CODE
+></P
+><P
+></P
+></DIV
+><P
+>     <B
+CLASS="FUNCTION"
+>array_unshift()</B
+> prepends passed elements to
+     the front of the <TT
+CLASS="PARAMETER"
+><I
+>array</I
+></TT
+>. Note that the list
+     of elements is prepended as a whole, so that the prepended
+     elements stay in the same order.
+
+    </P
+><P
+>     Returns the new number of elements in the
+     <TT
+CLASS="PARAMETER"
+><I
+>array</I
+></TT
+>.
+
+    </P
+><P
+>     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="EXAMPLE"
+><P
+><B
+>Example 1. <B
+CLASS="FUNCTION"
+>array_unshift()</B
+> example</B
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>$queue = array("p1", "p3");
+array_unshift($queue, "p4", "p5", "p6");
+      </PRE
+></DIV
+></TD
+></TR
+></TABLE
+>
+     This would result in $queue having 5 elements: "p4", "p5", "p6",
+     "p1", and "p3".
+
+    </P
+><P
+>     See also <A
+HREF="function.array-shift.html"
+><B
+CLASS="FUNCTION"
+>array_shift()</B
+></A
+>,
+     <A
+HREF="function.array-push.html"
+><B
+CLASS="FUNCTION"
+>array_push()</B
+></A
+>, and
+     <A
+HREF="function.array-pop.html"
+><B
+CLASS="FUNCTION"
+>array_pop()</B
+></A
+>.
+
+    <DIV
+CLASS="NOTE"
+><BLOCKQUOTE
+CLASS="NOTE"
+><P
+><B
+>Note: </B
+>      This function was added in PHP 4.0. 
+    </P
+></BLOCKQUOTE
+></DIV
+>
+   </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.array-pop.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.array-shift.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>array_pop</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.array.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>array_shift</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

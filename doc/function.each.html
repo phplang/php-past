@@ -6,7 +6,7 @@
 NAME="GENERATOR"
 CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
 REL="HOME"
-TITLE="PHP3 Manual"
+TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
 TITLE="Array functions"
@@ -34,7 +34,7 @@ CELLSPACING="0"
 ><TH
 COLSPAN="3"
 ALIGN="center"
->PHP3 Manual</TH
+>PHP Manual</TH
 ></TR
 ><TR
 ><TD
@@ -71,13 +71,13 @@ NAME="FUNCTION.EACH"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN2985"
+NAME="AEN3401"
 ></A
->each -- return next key/value pair from an array</DIV
+>each -- Return the next key and value pair from an array</DIV
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN2988"
+NAME="AEN3404"
 ></A
 ><H2
 >Description</H2
@@ -92,44 +92,51 @@ CLASS="FUNCDEF"
 ></P
 ></DIV
 ><P
->     Returns the current key/value pair from the array
+>     Returns the current key and value pair from the array
      <TT
 CLASS="PARAMETER"
 ><I
 >array</I
 ></TT
-> and advances the array cursor. This 
-	 pair is returned in a four-element array, with the keys 
-	 <I
+> and advances the array
+     cursor. This pair is returned in a four-element array,
+     with the keys <I
 CLASS="EMPHASIS"
 >0</I
+>, <I
+CLASS="EMPHASIS"
+>1</I
 >,
      <I
 CLASS="EMPHASIS"
->1</I
->, <I
-CLASS="EMPHASIS"
 >key</I
->, and
-     <I
+>, and <I
 CLASS="EMPHASIS"
 >value</I
->. Elements <I
+>. Elements
+     <I
 CLASS="EMPHASIS"
 >0</I
-> and
-     <I
+> and <I
 CLASS="EMPHASIS"
 >key</I
-> each contain the key name of the array
-     element, and <I
+> contain
+     the key name of the array element, and <I
 CLASS="EMPHASIS"
 >1</I
-> and
-     <I
+>
+     and <I
 CLASS="EMPHASIS"
 >value</I
 > contain the data.
+
+    </P
+><P
+>     If the internal pointer for the array points past the end of the
+     array contents, <B
+CLASS="FUNCTION"
+>each()</B
+> returns false.
      
     </P
 ><P
@@ -145,7 +152,10 @@ CLASS="EXAMPLE"
 CLASS="EXAMPLE"
 ><P
 ><B
->Example 1. each() examples</B
+>Example 1. <B
+CLASS="FUNCTION"
+>each()</B
+> examples</B
 ></P
 ><PRE
 CLASS="PROGRAMLISTING"
@@ -235,7 +245,6 @@ COMPACT="COMPACT"
 ></TABLE
 >
       
-
     </P
 ><P
 >     <B
@@ -263,12 +272,15 @@ CLASS="EXAMPLE"
 CLASS="EXAMPLE"
 ><P
 ><B
->Example 2. Traversing $HTTP_POST_VARS with each()</B
+>Example 2. Traversing $HTTP_POST_VARS with <B
+CLASS="FUNCTION"
+>each()</B
+></B
 ></P
 ><PRE
 CLASS="PROGRAMLISTING"
 >echo "Values submitted via POST method:&lt;br&gt;";
-while ( list( $key, $val ) = each( $HTTP_POST_VARS ) ) {
+while (list($key, $val) = each($HTTP_POST_VARS)) {
    echo "$key =&#62; $val&lt;br&gt;";
 }
       </PRE
@@ -278,14 +290,14 @@ while ( list( $key, $val ) = each( $HTTP_POST_VARS ) ) {
 ></TABLE
 >
 
-	</P
+     </P
 ><P
->	 After <B
+>      After <B
 CLASS="FUNCTION"
 >each()</B
 > has executed, the array cursor
-	 will be left on the next element of the array, or on the last
-	 element if it hits the end of the array.
+      will be left on the next element of the array, or on the last
+      element if it hits the end of the array.
 
     </P
 ><P

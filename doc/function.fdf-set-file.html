@@ -1,21 +1,21 @@
 <HTML
 ><HEAD
 ><TITLE
->FDF_set_file</TITLE
+>fdf_set_file</TITLE
 ><META
 NAME="GENERATOR"
 CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
 REL="HOME"
-TITLE="PHP3 Manual"
+TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
 TITLE="Forms Data Format functions"
 HREF="ref.fdf.html"><LINK
 REL="PREVIOUS"
-TITLE="FDF_get_status"
+TITLE="fdf_get_status"
 HREF="function.fdf-get-status.html"><LINK
 REL="NEXT"
-TITLE="FDF_get_file"
+TITLE="fdf_get_file"
 HREF="function.fdf-get-file.html"></HEAD
 ><BODY
 BGCOLOR="#FFFFFF"
@@ -34,7 +34,7 @@ CELLSPACING="0"
 ><TH
 COLSPAN="3"
 ALIGN="center"
->PHP3 Manual</TH
+>PHP Manual</TH
 ></TR
 ><TR
 ><TD
@@ -66,18 +66,18 @@ WIDTH="100%"></DIV
 ><H1
 ><A
 NAME="FUNCTION.FDF-SET-FILE"
->FDF_set_file</A
+>fdf_set_file</A
 ></H1
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN6609"
+NAME="AEN7292"
 ></A
->FDF_set_file -- Sets the value of the /F key</DIV
+>fdf_set_file -- Set the value of the /F key</DIV
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN6612"
+NAME="AEN7295"
 ></A
 ><H2
 >Description</H2
@@ -88,18 +88,17 @@ CLASS="FUNCSYNOPSIS"
 ><CODE
 CLASS="FUNCDEF"
 >void fdf_set_file</CODE
->(int fdf document, string filename);<P
+>(int fdf_document, string filename);<P
 ></P
 ></DIV
 ><P
->     The <A
-HREF="function.fdf-set-file.html"
-><B
+>     The <B
 CLASS="FUNCTION"
->FDF_set_file()</B
-></A
+>fdf_set_file()</B
 > sets the value
-     of the /F key.
+     of the /F key. The /F key is just a reference to a PDF form
+     which is to be populated with data.
+     In a web environment it is a URL (e.g. http:/testfdf/resultlabel.pdf).
 
     </P
 ><P
@@ -107,7 +106,14 @@ CLASS="FUNCTION"
 HREF="function.fdf-get-file.html"
 ><B
 CLASS="FUNCTION"
->FDF_get_file()</B
+>fdf_get_file()</B
+></A
+> and example for
+              <A
+HREF="function.fdf-create.html"
+><B
+CLASS="FUNCTION"
+>fdf_create()</B
 ></A
 >.
 
@@ -153,7 +159,7 @@ HREF="function.fdf-get-file.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->FDF_get_status</TD
+>fdf_get_status</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"
@@ -166,7 +172,7 @@ HREF="ref.fdf.html"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->FDF_get_file</TD
+>fdf_get_file</TD
 ></TR
 ></TABLE
 ></DIV

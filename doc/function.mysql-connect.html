@@ -6,7 +6,7 @@
 NAME="GENERATOR"
 CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
 REL="HOME"
-TITLE="PHP3 Manual"
+TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
 TITLE="MySQL functions"
@@ -34,7 +34,7 @@ CELLSPACING="0"
 ><TH
 COLSPAN="3"
 ALIGN="center"
->PHP3 Manual</TH
+>PHP Manual</TH
 ></TR
 ><TR
 ><TD
@@ -71,13 +71,13 @@ NAME="FUNCTION.MYSQL-CONNECT"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN15113"
+NAME="AEN15772"
 ></A
 >mysql_connect -- Open a connection to a MySQL Server</DIV
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN15116"
+NAME="AEN15775"
 ></A
 ><H2
 >Description</H2
@@ -88,15 +88,22 @@ CLASS="FUNCSYNOPSIS"
 ><CODE
 CLASS="FUNCDEF"
 >int mysql_connect</CODE
->(string [<SPAN
+>(string 
+             [<SPAN
 CLASS="OPTIONAL"
->hostname</SPAN
->]
-                      [<SPAN
+>hostname
+	[<SPAN
 CLASS="OPTIONAL"
 >:port</SPAN
 >]
-                      , string [<SPAN
+	[<SPAN
+CLASS="OPTIONAL"
+>:/path/to/socket</SPAN
+>]
+       </SPAN
+>]
+      
+     , string [<SPAN
 CLASS="OPTIONAL"
 >username</SPAN
 >]
@@ -120,9 +127,28 @@ CLASS="FUNCTION"
 > establishes a connection to a
      MySQL server.  All of the arguments are optional, and if they're
      missing, defaults are assumed ('localhost', user name of the user
-     that owns the server process, empty password).  The hostname
-     string can also include a port number.
-     eg. &quot;hostname:port&quot;
+     that owns the server process, empty password).  
+    </P
+><P
+>     The hostname string can also include a port
+     number. eg. &quot;hostname:port&quot; or a path to a socket
+     eg. &quot;:/path/to/socket&quot; for the localhost.
+     <DIV
+CLASS="NOTE"
+><BLOCKQUOTE
+CLASS="NOTE"
+><P
+><B
+>Note: </B
+>       Support for &quot;:port&quot; wass added in 3.0B4.
+      </P
+><P
+>       Support for the &quot;:/path/to/socket&quot; was added in
+       3.0.10.
+     </P
+></BLOCKQUOTE
+></DIV
+>
     </P
 ><P
 > 
@@ -135,8 +161,7 @@ CLASS="FUNCTION"
      the already opened link will be returned.
     </P
 ><P
-> 
-     The link to the server will be closed as soon as the execution of
+>     The link to the server will be closed as soon as the execution of
      the script ends, unless it's closed earlier by explicitly calling
      <A
 HREF="function.mysql-close.html"
@@ -144,18 +169,18 @@ HREF="function.mysql-close.html"
 CLASS="FUNCTION"
 >mysql_close()</B
 ></A
->.
+>.  
     </P
 ><P
-> 
-     See also <A
+> See also
+     <A
 HREF="function.mysql-pconnect.html"
 ><B
 CLASS="FUNCTION"
 >mysql_pconnect()</B
 ></A
->, and 
-              <A
+>, and
+     <A
 HREF="function.mysql-close.html"
 ><B
 CLASS="FUNCTION"

@@ -6,14 +6,14 @@
 NAME="GENERATOR"
 CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
 REL="HOME"
-TITLE="PHP3 Manual"
+TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
 TITLE="Array functions"
 HREF="ref.array.html"><LINK
 REL="PREVIOUS"
-TITLE="asort"
-HREF="function.asort.html"><LINK
+TITLE="compact"
+HREF="function.compact.html"><LINK
 REL="NEXT"
 TITLE="current"
 HREF="function.current.html"></HEAD
@@ -34,7 +34,7 @@ CELLSPACING="0"
 ><TH
 COLSPAN="3"
 ALIGN="center"
->PHP3 Manual</TH
+>PHP Manual</TH
 ></TR
 ><TR
 ><TD
@@ -42,7 +42,7 @@ WIDTH="10%"
 ALIGN="left"
 VALIGN="bottom"
 ><A
-HREF="function.asort.html"
+HREF="function.compact.html"
 >Prev</A
 ></TD
 ><TD
@@ -71,13 +71,13 @@ NAME="FUNCTION.COUNT"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN2943"
+NAME="AEN3354"
 ></A
 >count -- count elements in a variable</DIV
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN2946"
+NAME="AEN3357"
 ></A
 ><H2
 >Description</H2
@@ -101,10 +101,48 @@ CLASS="PARAMETER"
      typically an array (since anything else will have one element).
     </P
 ><P
->     Returns 0 if the variable is not set.
+>     Returns 1 if the variable is not an array.
     </P
 ><P
->     Returns 1 if the variable is not an array.
+>     Returns 0 if the variable is not set.
+    <DIV
+CLASS="WARNING"
+><P
+></P
+><TABLE
+CLASS="WARNING"
+BORDER="1"
+WIDTH="100%"
+><TR
+><TD
+ALIGN="CENTER"
+><B
+>Warning</B
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+><P
+>      <B
+CLASS="FUNCTION"
+>count()</B
+> may return 0 for a variable that isn't
+      set, but it may also return 0 for a variable that has been initialized
+      with an empty array. Use <A
+HREF="function.isset.html"
+><B
+CLASS="FUNCTION"
+>isset()</B
+></A
+> to test if a
+      variable is set.
+     </P
+></TD
+></TR
+></TABLE
+></DIV
+>
     </P
 ><P
 >     See also:
@@ -145,7 +183,7 @@ WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
 ><A
-HREF="function.asort.html"
+HREF="function.compact.html"
 >Prev</A
 ></TD
 ><TD
@@ -170,7 +208,7 @@ HREF="function.current.html"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->asort</TD
+>compact</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"

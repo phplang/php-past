@@ -1,0 +1,298 @@
+<HTML
+><HEAD
+><TITLE
+>array_slice</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Array functions"
+HREF="ref.array.html"><LINK
+REL="PREVIOUS"
+TITLE="array_shift"
+HREF="function.array-shift.html"><LINK
+REL="NEXT"
+TITLE="array_splice"
+HREF="function.array-splice.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.array-shift.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.array-splice.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="FUNCTION.ARRAY-SLICE"
+>array_slice</A
+></H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN3077"
+></A
+>array_slice -- Extract a slice of the array</DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN3080"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><CODE
+CLASS="FUNCDEF"
+>array array_slice</CODE
+>(array array, int offset, int
+             [<SPAN
+CLASS="OPTIONAL"
+>length</SPAN
+>]
+      
+     );<P
+></P
+></DIV
+><P
+>     <B
+CLASS="FUNCTION"
+>array_slice()</B
+> returns a sequence of elements
+     from the <TT
+CLASS="PARAMETER"
+><I
+>array</I
+></TT
+> specified by the
+     <TT
+CLASS="PARAMETER"
+><I
+>offset</I
+></TT
+> and <TT
+CLASS="PARAMETER"
+><I
+>length</I
+></TT
+>
+     parameters.
+
+    </P
+><P
+>     If <TT
+CLASS="PARAMETER"
+><I
+>offset</I
+></TT
+> is positive, the sequence will
+     start at that offset in the <TT
+CLASS="PARAMETER"
+><I
+>array</I
+></TT
+>.  If
+     <TT
+CLASS="PARAMETER"
+><I
+>offset</I
+></TT
+> is negative, the sequence will
+     start that far from the end of the <TT
+CLASS="PARAMETER"
+><I
+>array</I
+></TT
+>.
+
+    </P
+><P
+>     If <TT
+CLASS="PARAMETER"
+><I
+>length</I
+></TT
+> is given and is positive, then
+     the sequence will have that many elements in it. If
+     <TT
+CLASS="PARAMETER"
+><I
+>length</I
+></TT
+> is given and is negative then the
+     sequence will stop that many elements from the end of the
+     array. If it is omitted, then the sequence will have everything
+     from <TT
+CLASS="PARAMETER"
+><I
+>offset</I
+></TT
+> up until the end of the
+     <TT
+CLASS="PARAMETER"
+><I
+>array</I
+></TT
+>.
+
+    </P
+><P
+>     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="EXAMPLE"
+><P
+><B
+>Example 1. <B
+CLASS="FUNCTION"
+>array_slice()</B
+> examples</B
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>$input = array("a", "b", "c", "d", "e");
+
+$output = array_slice($input, 2);      // returns "c", "d", and "e"
+$output = array_slice($input, 2, -1);  // returns "c", "d"
+$output = array_slice($input, -2, 1);  // returns "d"
+$output = array_slice($input, 0, 3);   // returns "a", "b", and "c"
+      </PRE
+></DIV
+></TD
+></TR
+></TABLE
+>
+
+    </P
+><P
+>     See also <A
+HREF="function.array-splice.html"
+><B
+CLASS="FUNCTION"
+>array_splice()</B
+></A
+>.
+
+    <DIV
+CLASS="NOTE"
+><BLOCKQUOTE
+CLASS="NOTE"
+><P
+><B
+>Note: </B
+>      This function was added in PHP 4.0. 
+    </P
+></BLOCKQUOTE
+></DIV
+>     
+   </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.array-shift.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.array-splice.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>array_shift</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.array.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>array_splice</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

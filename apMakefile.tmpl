@@ -36,6 +36,12 @@ libphp3.so: $(SHLIB_OBJS) $(SHLIB_OBJS_LIB)
 	rm -f $@
 	$(LD_SHLIB) $(LDFLAGS_SHLIB) -o $@ $(SHLIB_OBJS) $(SHLIB_OBJS_LIB) $(LIBS)
 
+# Build OS/2 dll
+libphp3.dll: $(OBJS) mod_php3.def
+	$(LD_SHLIB) $(LDFLAGS_SHLIB) -o $* $(OBJS) libmodphp3.a $(LIBS_SHLIB) $(EXTRA_LIBS) $(LIBS1)
+	emxbind -b -q -s -h0 -dmod_php3.def $* && \
+	rm $*
+
 # 1. extension .o for shared objects cannot be used here because
 #    first these files aren't still shared objects and second we
 #    have to use a different name to trigger the different
@@ -43,7 +49,7 @@ libphp3.so: $(SHLIB_OBJS) $(SHLIB_OBJS_LIB)
 # 2. extension -so.o (as used elsewhere) cannot be used because
 #    the suffix feature of Make really wants just .x, so we use
 #    extension .so-o
-.SUFFIXES: .o .so-o
+.SUFFIXES: .o .so-o .dll
 .c.o:
 	$(CC) -c $(INCLUDES) $(CFLAGS) $(SPACER) $<
 .c.so-o:

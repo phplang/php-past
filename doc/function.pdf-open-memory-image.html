@@ -6,7 +6,7 @@
 NAME="GENERATOR"
 CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
 REL="HOME"
-TITLE="PHP3 Manual"
+TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
 TITLE="PDF functions"
@@ -34,7 +34,7 @@ CELLSPACING="0"
 ><TH
 COLSPAN="3"
 ALIGN="center"
->PHP3 Manual</TH
+>PHP Manual</TH
 ></TR
 ><TR
 ><TD
@@ -71,13 +71,13 @@ NAME="FUNCTION.PDF-OPEN-MEMORY-IMAGE"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN19168"
+NAME="AEN20257"
 ></A
 >PDF_open_memory_image -- Opens an image created with PHP's image functions</DIV
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN19171"
+NAME="AEN20260"
 ></A
 ><H2
 >Description</H2
@@ -100,7 +100,41 @@ CLASS="FUNCTION"
 ></A
 > function takes
      an image created with the PHP's image functions and makes it available
-     for the pdf document.
+     for the pdf document. The function returns a pdf
+     image identifier.
+
+     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="EXAMPLE"
+><P
+><B
+>Example 1. Including a memory image</B
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>&lt;?php
+$im = ImageCreate(100, 100);
+$col = ImageColorAllocate($im, 80, 45, 190);
+ImageFill($im, 10, 10, $col);
+$pim = PDF_open_memory_image($pdf, $im);
+ImageDestroy($im);
+pdf_place_image($pdf, $pim, 100, 100, 1);
+pdf_close_image($pdf, $pim);
+?&#62;
+     </PRE
+></DIV
+></TD
+></TR
+></TABLE
+>
+
     </P
 ><P
 >     See also <A

@@ -16,7 +16,7 @@ RANLIB=@RANLIB@
 
 TARGETS = dbflst tmpl dbfadd dbfdel dbfpack dbfget dbfndx dbfcreat \
 	  dbfcr dbfscan dbftst
-THINGS = tmpl.dbf
+THINGS = #tmpl.dbf
 
 DBF_SRCS=dbf.h dbf_head.c dbf_rec.c dbf_misc.c dbftst.c dbflst.c \
 	dbf_sym.h yyerr.c tmpl.c dbfadd.c \
@@ -71,8 +71,8 @@ dbfcreat: dbfcreat.o $(DBF_LIB)
 dbfndx: dbfndx.o $(DBF_LIB)
 	$(CC) -o $@ dbfndx.o $(DBF_LIB)
 
-dbfcr: dbfcr.sh
-	sed "s;LIB_DEF;$(LIB);" dbfcr.sh >dbfcr
+dbfcr: $(srcdir)/dbfcr.sh
+	sed "s;LIB_DEF;$(LIB);" $(srcdir)/dbfcr.sh >dbfcr
 	chmod +x dbfcr
 
 dbfscan: $(srcdir)/dbfscan.sh

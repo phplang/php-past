@@ -6,7 +6,7 @@
 NAME="GENERATOR"
 CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
 REL="HOME"
-TITLE="PHP3 Manual"
+TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
 TITLE="ClibPDF functions"
@@ -34,7 +34,7 @@ CELLSPACING="0"
 ><TH
 COLSPAN="3"
 ALIGN="center"
->PHP3 Manual</TH
+>PHP Manual</TH
 ></TR
 ><TR
 ><TD
@@ -71,13 +71,13 @@ NAME="FUNCTION.CPDF-OPEN"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN3985"
+NAME="AEN4492"
 ></A
 >cpdf_open -- Opens a new pdf document</DIV
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN3988"
+NAME="AEN4495"
 ></A
 ><H2
 >Description</H2
@@ -100,13 +100,19 @@ CLASS="FUNCTION"
      on if it is unequal to 0. The second optional parameter sets the
      file in which the document is written. If it is omitted the document
      is created in memory and can either be written into a file with
-     the <B
+     the <A
+HREF="function.cpdf-save-to-file.html"
+><B
 CLASS="FUNCTION"
 >cpdf_save_to_file()</B
+></A
 > or written to standard
-     output with <B
+     output with <A
+HREF="function.cpdf-output-buffer.html"
+><B
 CLASS="FUNCTION"
 >cpdf_output_buffer()</B
+></A
 >.
 
      <DIV
@@ -116,13 +122,22 @@ CLASS="NOTE"
 ><P
 ><B
 >Note: </B
->       The return value will be needed in futher versons as the 
-       first parameter in all other functions writing to the pdf document.
+>       The return value will be needed in futher versions of ClibPDF as the 
+       first parameter in all other functions which are writing to the pdf
+       document.
       </P
 ><P
 >       The ClibPDF library takes the filename "-" as a synonym for stdout.
        If PHP is compiled as an apache module this will not work because the
-       way ClibPDF outputs to stdout does not work with apache.
+       way ClibPDF outputs to stdout does not work with apache. You can solve
+       this problem by skipping the filename and using
+       <A
+HREF="function.cpdf-output-buffer.html"
+><B
+CLASS="FUNCTION"
+>cpdf_output_buffer()</B
+></A
+> to output the pdf document.
       </P
 ></BLOCKQUOTE
 ></DIV
@@ -135,6 +150,13 @@ HREF="function.cpdf-close.html"
 ><B
 CLASS="FUNCTION"
 >cpdf_close()</B
+></A
+>,
+              <A
+HREF="function.cpdf-output-buffer.html"
+><B
+CLASS="FUNCTION"
+>cpdf_output_buffer()</B
 ></A
 >.
 

@@ -1,3 +1,8 @@
+#undef HAVE_LIBGD14
+#undef HAVE_LIBGD15
+#undef HAVE_LIBGD16
+#undef HAVE_LIBGD_LZW
+#undef ushort
 
 #undef UCD_SNMP_HACK
 
@@ -139,6 +144,9 @@
 
 /* Define if you want Solid database support */
 #define HAVE_SOLID 0
+
+/* Define if you want IBM DB2 database support */
+#define HAVE_IBMDB2 0
 
 /* Define if you want to use the supplied dbase library */
 #define DBASE 0
@@ -345,4 +353,7 @@
 #undef HAVE_LIBT1_OUTLINE
 
 #define HAVE_LIBTTF 0
+#define HAVE_LIBFREETYPE 0
+#define FREETYPE_4BIT_ANTIALIAS_HACK 0
+
 #define HAVE_POSIX 0

@@ -1,12 +1,12 @@
 <HTML
 ><HEAD
 ><TITLE
->FDF_open</TITLE
+>fdf_open</TITLE
 ><META
 NAME="GENERATOR"
 CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
 REL="HOME"
-TITLE="PHP3 Manual"
+TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
 TITLE="Forms Data Format functions"
@@ -15,7 +15,7 @@ REL="PREVIOUS"
 TITLE="Forms Data Format functions"
 HREF="ref.fdf.html"><LINK
 REL="NEXT"
-TITLE="FDF_close"
+TITLE="fdf_close"
 HREF="function.fdf-close.html"></HEAD
 ><BODY
 BGCOLOR="#FFFFFF"
@@ -34,7 +34,7 @@ CELLSPACING="0"
 ><TH
 COLSPAN="3"
 ALIGN="center"
->PHP3 Manual</TH
+>PHP Manual</TH
 ></TR
 ><TR
 ><TD
@@ -66,18 +66,18 @@ WIDTH="100%"></DIV
 ><H1
 ><A
 NAME="FUNCTION.FDF-OPEN"
->FDF_open</A
+>fdf_open</A
 ></H1
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN6432"
+NAME="AEN7104"
 ></A
->FDF_open -- Opens a new fdf document</DIV
+>fdf_open -- Open a FDF document</DIV
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN6435"
+NAME="AEN7107"
 ></A
 ><H2
 >Description</H2
@@ -87,25 +87,69 @@ CLASS="FUNCSYNOPSIS"
 ></P
 ><CODE
 CLASS="FUNCDEF"
->int pdf_open</CODE
+>int fdf_open</CODE
 >(string filename);<P
 ></P
 ></DIV
 ><P
->     The <A
-HREF="function.fdf-open.html"
+>     The <B
+CLASS="FUNCTION"
+>fdf_open()</B
+> function opens
+     a file with form data. This file must contain the data as returned
+     from a PDF form. Currently, the file has to be created 'manually'
+     by using <A
+HREF="function.fopen.html"
 ><B
 CLASS="FUNCTION"
->FDF_open()</B
+>fopen()</B
 ></A
-> function opens
-     a new fdf document. If the parameter <TT
-CLASS="PARAMETER"
-><I
->filename</I
-></TT
+> and writing the content
+     of HTTP_FDF_DATA with <A
+HREF="function.fwrite.html"
+><B
+CLASS="FUNCTION"
+>fwrite()</B
+></A
+> into it.
+     A mechanism like for HTML form data where for each input
+     field a variable is created does not exist.
+
+    </P
+><P
+>    <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="EXAMPLE"
+><P
+><B
+>Example 1. Accessing the form data</B
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>&lt;?php
+// Save the FDF data into a temp file
+$fdffp = fopen("test.fdf", "w");
+fwrite($fdffp, $HTTP_FDF_DATA, strlen($HTTP_FDF_DATA));
+fclose($fdffp);
+
+// Open temp file and evaluate data
+$fdf = fdf_open("test.fdf");
+...
+fdf_close($fdf);
+?&#62;
+     </PRE
+></DIV
+></TD
+></TR
+></TABLE
 >
-     is '.' the file is read from stdin.
 
     </P
 ><P
@@ -172,7 +216,7 @@ HREF="ref.fdf.html"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->FDF_close</TD
+>fdf_close</TD
 ></TR
 ></TABLE
 ></DIV

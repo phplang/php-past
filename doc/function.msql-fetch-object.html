@@ -6,7 +6,7 @@
 NAME="GENERATOR"
 CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
 REL="HOME"
-TITLE="PHP3 Manual"
+TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
 TITLE="mSQL functions"
@@ -34,7 +34,7 @@ CELLSPACING="0"
 ><TH
 COLSPAN="3"
 ALIGN="center"
->PHP3 Manual</TH
+>PHP Manual</TH
 ></TR
 ><TR
 ><TD
@@ -71,13 +71,13 @@ NAME="FUNCTION.MSQL-FETCH-OBJECT"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN14351"
+NAME="AEN15020"
 ></A
 >msql_fetch_object -- fetch row as object</DIV
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN14354"
+NAME="AEN15023"
 ></A
 ><H2
 >Description</H2
@@ -88,7 +88,12 @@ CLASS="FUNCSYNOPSIS"
 ><CODE
 CLASS="FUNCDEF"
 >int msql_fetch_object</CODE
->(int query_identifier);<P
+>(int query_identifier, int
+      [<SPAN
+CLASS="OPTIONAL"
+>result_type</SPAN
+>]
+     );<P
 ></P
 ></DIV
 ><P
@@ -96,7 +101,10 @@ CLASS="FUNCDEF"
      row, or false if there are no more rows.  
     </P
 ><P
->     msql_fetch_object() is similar to
+>     <B
+CLASS="FUNCTION"
+>msql_fetch_object()</B
+> is similar to
      <A
 HREF="function.msql-fetch-array.html"
 ><B
@@ -107,6 +115,22 @@ CLASS="FUNCTION"
      object is returned, instead of an array.  Indirectly, that means
      that you can only access the data by the field names, and not by
      their offsets (numbers are illegal property names).  
+    </P
+><P
+>     The optional second argument <TT
+CLASS="PARAMETER"
+><I
+>result_type</I
+></TT
+>
+     in <A
+HREF="function.msql-fetch-array.html"
+><B
+CLASS="FUNCTION"
+>msql_fetch_array()</B
+></A
+> is a constant and can
+     take the following values: MSQL_ASSOC, MSQL_NUM, and MSQL_BOTH.
     </P
 ><P
 >     Speed-wise, the function is identical to

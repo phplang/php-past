@@ -32,11 +32,33 @@ CAL_OBJS =  calendar/calendar.o calendar/dow.o calendar/french.o \
             calendar/gregor.o calendar/jewish.o calendar/julian.o \
             calendar/easter.o
 
+IFX_OBJ = informix/ifx.o
+
+IFX_LIBS = -L$(INFORMIXDIR)/lib -L$(INFORMIXDIR)/lib/esql \
+	-lifsql \
+	-lifasf \
+	-lifgen \
+	-lifos \
+	-lifgls \
+	-lm \
+	-ldl \
+	-lcrypt \
+	$(INFORMIXDIR)/lib/esql/checkapi.o \
+	-lifglx
+
 calendar.so: $(CAL_OBJS)
 	$(LD) -o $@ $(CAL_OBJS)
 
 calendar/%.o: calendar/%.c
 	$(CC) $(CFLAGS) -DCOMPILE_DL=1 -c -o $@ $<
+
+informix/ifx.o:	../functions/ifx.ec
+	esql -c -EDHAVE_IFX_US=1 -DCOMPILE_DL=1 -I.. -I../functions \
+		../functions/ifx.ec -o informix/ifx.o
+
+ifx.so: $(IFX_OBJ)
+	$(LD) -o $@ $(IFX_OBJ) $(IFX_LIBS)
+	
 
 snmp.so: snmp/snmp.o
 	$(LD) -o $@ snmp/snmp.o -lsnmp

@@ -6,7 +6,7 @@
 NAME="GENERATOR"
 CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
 REL="HOME"
-TITLE="PHP3 Manual"
+TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
 TITLE="MySQL functions"
@@ -34,7 +34,7 @@ CELLSPACING="0"
 ><TH
 COLSPAN="3"
 ALIGN="center"
->PHP3 Manual</TH
+>PHP Manual</TH
 ></TR
 ><TR
 ><TD
@@ -71,14 +71,14 @@ NAME="FUNCTION.MYSQL-PCONNECT"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN15641"
+NAME="AEN16305"
 ></A
->mysql_pconnect -- Open a persistent connection to a MySQL
-     Server</DIV
+>mysql_pconnect --      Open a persistent connection to a MySQL Server
+    </DIV
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN15644"
+NAME="AEN16308"
 ></A
 ><H2
 >Description</H2
@@ -89,29 +89,68 @@ CLASS="FUNCSYNOPSIS"
 ><CODE
 CLASS="FUNCDEF"
 >int mysql_pconnect</CODE
->(string [<SPAN
+>(string 
+             [<SPAN
 CLASS="OPTIONAL"
->hostname</SPAN
->]
-                                 [<SPAN
+>hostname
+	[<SPAN
 CLASS="OPTIONAL"
 >:port</SPAN
 >]  
-                      , string [<SPAN
+	[<SPAN
+CLASS="OPTIONAL"
+>:/path/to/socket</SPAN
+>]
+       </SPAN
+>]
+      
+     , string 
+      [<SPAN
 CLASS="OPTIONAL"
 >username</SPAN
 >]
-                      , string [<SPAN
+     , string 
+      [<SPAN
 CLASS="OPTIONAL"
 >password</SPAN
 >]
-                      );<P
+     );<P
 ></P
 ></DIV
 ><P
 > 
      Returns: A positive MySQL persistent link identifier on success,
      or false on error
+    </P
+><P
+>     <B
+CLASS="FUNCTION"
+>mysql_pconnect()</B
+> establishes a connection to a
+     MySQL server.  All of the arguments are optional, and if they're
+     missing, defaults are assumed ('localhost', user name of the user
+     that owns the server process, empty password).  
+    </P
+><P
+>     The hostname string can also include a port
+     number. eg. &quot;hostname:port&quot; or a path to a socket
+     eg. &quot;:/path/to/socket&quot; for the localhost.
+     <DIV
+CLASS="NOTE"
+><BLOCKQUOTE
+CLASS="NOTE"
+><P
+><B
+>Note: </B
+>       Support for &quot;:port&quot; wass added in 3.0B4.
+      </P
+><P
+>       Support for the &quot;:/path/to/socket&quot; was added in
+       3.0.10.
+     </P
+></BLOCKQUOTE
+></DIV
+>     
     </P
 ><P
 >     <B
@@ -144,9 +183,9 @@ CLASS="FUNCTION"
 >mysql_close()</B
 ></A
 > will not
-     close links established by <TT
-CLASS="LITERAL"
->mysql_pconnect()</TT
+     close links established by <B
+CLASS="FUNCTION"
+>mysql_pconnect()</B
 >).
     </P
 ><P

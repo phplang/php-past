@@ -1,0 +1,204 @@
+<HTML
+><HEAD
+><TITLE
+>OCIRowCount</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Oracle 8 functions"
+HREF="ref.oci8.html"><LINK
+REL="PREVIOUS"
+TITLE="OCINewDescriptor"
+HREF="function.ocinewdescriptor.html"><LINK
+REL="NEXT"
+TITLE="OCINumCols"
+HREF="function.ocinumcols.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.ocinewdescriptor.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.ocinumcols.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="FUNCTION.OCIROWCOUNT"
+>OCIRowCount</A
+></H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN18021"
+></A
+>OCIRowCount -- Gets the number of affected rows</DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN18024"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><CODE
+CLASS="FUNCDEF"
+>int OCIRowCount</CODE
+>(int statement);<P
+></P
+></DIV
+><P
+>     <B
+CLASS="FUNCTION"
+>OCIRowCounts()</B
+> returns the number of rows affected
+	 for eg update-statements. This funtions will not tell you the number
+	 of rows that a select will return!
+    </P
+><P
+>     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="EXAMPLE"
+><P
+><B
+>Example 1. OCIRowCount</B
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>&lt;?php
+    print "&lt;HTML&#62;&lt;PRE&#62;";
+    $conn = OCILogon("scott","tiger");
+    $stmt = OCIParse($conn,"create table emp2 as select * from emp");
+    OCIExecute($stmt);
+    print OCIRowCount($stmt) . " rows inserted.&lt;BR&#62;";
+    OCIFreeStatement($stmt);
+    $stmt = OCIParse($conn,"delete from emp2");
+    OCIExecute($stmt);
+    print OCIRowCount($stmt) . " rows deleted.&lt;BR&#62;";
+    OCICommit($conn);
+    OCIFreeStatement($stmt);
+    $stmt = OCIParse($conn,"drop table emp2");
+    OCIExecute($stmt);
+    OCIFreeStatement($stmt);
+    OCILogOff($conn);
+    print "&lt;/PRE&#62;&lt;/HTML&#62;";
+?&#62; </PRE
+></DIV
+></TD
+></TR
+></TABLE
+>
+ 
+   </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.ocinewdescriptor.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.ocinumcols.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>OCINewDescriptor</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.oci8.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>OCINumCols</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

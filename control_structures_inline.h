@@ -29,7 +29,7 @@
  */
 
 
-/* $Id: control_structures_inline.h,v 1.198 1999/05/19 19:10:58 zeev Exp $ */
+/* $Id: control_structures_inline.h,v 1.200 1999/07/16 18:04:59 jim Exp $ */
 
 #ifdef THREAD_SAFE
 #include "tls.h"
@@ -213,7 +213,7 @@ inline int cs_static_variable(pval *varname, pval *value INLINE_TLS)
 inline void cs_start_while(pval *while_token, pval *expr INLINE_TLS)
 {
 	GLOBAL(function_state).loop_nest_level++;
-	stack_push(&GLOBAL(css), &GLOBAL(ExecuteFlag), sizeof(int));
+	php3i_stack_push(&GLOBAL(css), &GLOBAL(ExecuteFlag), sizeof(int));
 
 	if (GLOBAL(Execute)) {
 		tc_set_token(&GLOBAL(token_cache_manager), while_token->offset, WHILE);
@@ -247,8 +247,8 @@ inline void cs_end_while(pval *while_token,int *yychar INLINE_TLS)
 			GLOBAL(function_state).loop_change_level = 0;
 		}
 	}
-	GLOBAL(ExecuteFlag) = stack_int_top(&GLOBAL(css));
-	stack_del_top(&GLOBAL(css));
+	GLOBAL(ExecuteFlag) = php3i_stack_int_top(&GLOBAL(css));
+	php3i_stack_del_top(&GLOBAL(css));
 	GLOBAL(Execute) = SHOULD_EXECUTE;
 	GLOBAL(function_state).loop_nest_level--;
 }
@@ -257,7 +257,7 @@ inline void cs_end_while(pval *while_token,int *yychar INLINE_TLS)
 inline void cs_start_do_while(pval *do_token INLINE_TLS)
 {
 	GLOBAL(function_state).loop_nest_level++;
-	stack_push(&GLOBAL(css), &GLOBAL(ExecuteFlag), sizeof(int));
+	php3i_stack_push(&GLOBAL(css), &GLOBAL(ExecuteFlag), sizeof(int));
 	if (GLOBAL(Execute)) {
 		tc_set_token(&GLOBAL(token_cache_manager), do_token->offset, DO);
 	}
@@ -296,8 +296,8 @@ inline void cs_end_do_while(pval *do_token, pval *expr, int *yychar INLINE_TLS)
 			GLOBAL(function_state).loop_change_level = 0;
 		}
 	}
-	GLOBAL(ExecuteFlag) = stack_int_top(&GLOBAL(css));
-	stack_del_top(&GLOBAL(css));
+	GLOBAL(ExecuteFlag) = php3i_stack_int_top(&GLOBAL(css));
+	php3i_stack_del_top(&GLOBAL(css));
 	GLOBAL(Execute) = SHOULD_EXECUTE;
 	GLOBAL(function_state).loop_nest_level--;
 }
@@ -305,7 +305,7 @@ inline void cs_end_do_while(pval *do_token, pval *expr, int *yychar INLINE_TLS)
 
 inline void cs_start_if (pval *expr INLINE_TLS)
 {
-	stack_push(&GLOBAL(css), &GLOBAL(ExecuteFlag), sizeof(int));	/* push current state to stack */
+	php3i_stack_push(&GLOBAL(css), &GLOBAL(ExecuteFlag), sizeof(int));	/* push current state to stack */
 
 	if (GLOBAL(Execute)) {				/* we're in a code block that needs to be evaluated */
 		if (pval_is_true(expr)) {	/* the IF expression is pval_is_true, execute IF code */
@@ -325,8 +325,8 @@ inline void cs_start_if (pval *expr INLINE_TLS)
 inline void cs_end_if ( INLINE_TLS_VOID)
 {
 	/* restore previous status */
-	GLOBAL(ExecuteFlag) = stack_int_top(&GLOBAL(css));
-	stack_del_top(&GLOBAL(css));
+	GLOBAL(ExecuteFlag) = php3i_stack_int_top(&GLOBAL(css));
+	php3i_stack_del_top(&GLOBAL(css));
 	GLOBAL(Execute) = SHOULD_EXECUTE;
 }
 
@@ -372,8 +372,8 @@ inline void cs_elseif_start_evaluate( INLINE_TLS_VOID)
 		GLOBAL(ExecuteFlag) = DONT_EXECUTE;
 		GLOBAL(Execute) = SHOULD_EXECUTE;
 	}	
-	local_stack_top = stack_int_top(&GLOBAL(css));
-	stack_push(&GLOBAL(css), &GLOBAL(ExecuteFlag), sizeof(int));
+	local_stack_top = php3i_stack_int_top(&GLOBAL(css));
+	php3i_stack_push(&GLOBAL(css), &GLOBAL(ExecuteFlag), sizeof(int));
 	if (GLOBAL(ExecuteFlag) == BEFORE_EXECUTE && local_stack_top == EXECUTE) {
 		GLOBAL(ExecuteFlag) = EXECUTE;
 		GLOBAL(Execute) = SHOULD_EXECUTE;
@@ -383,8 +383,8 @@ inline void cs_elseif_start_evaluate( INLINE_TLS_VOID)
 
 inline void cs_elseif_end_evaluate( INLINE_TLS_VOID)
 {
-	GLOBAL(ExecuteFlag) = stack_int_top(&GLOBAL(css));
-	stack_del_top(&GLOBAL(css));
+	GLOBAL(ExecuteFlag) = php3i_stack_int_top(&GLOBAL(css));
+	php3i_stack_del_top(&GLOBAL(css));
 	GLOBAL(Execute) = SHOULD_EXECUTE;
 }
 
@@ -495,7 +495,7 @@ inline void pass_parameter_by_value(pval *expr INLINE_TLS)
 
 inline void start_function_decleration(INLINE_TLS_VOID)
 {
-	stack_push(&GLOBAL(css), &GLOBAL(ExecuteFlag), sizeof(int));
+	php3i_stack_push(&GLOBAL(css), &GLOBAL(ExecuteFlag), sizeof(int));
 	GLOBAL(ExecuteFlag) = DONT_EXECUTE;
 	GLOBAL(Execute) = SHOULD_EXECUTE;
 }
@@ -505,9 +505,9 @@ inline void end_function_decleration(pval *function_token, pval *function_name I
 {
 	HashTable *target_symbol_table;
 	
-	GLOBAL(ExecuteFlag) = stack_int_top(&GLOBAL(css));
+	GLOBAL(ExecuteFlag) = php3i_stack_int_top(&GLOBAL(css));
 	GLOBAL(Execute) = SHOULD_EXECUTE;
-	stack_del_top(&GLOBAL(css));
+	php3i_stack_del_top(&GLOBAL(css));
 	
 	if (GLOBAL(Execute)) {
 		php3_str_tolower(function_name->value.str.val, function_name->value.str.len);
@@ -538,10 +538,10 @@ inline void end_function_decleration(pval *function_token, pval *function_name I
 inline void for_pre_expr1(pval *for_token INLINE_TLS)
 {
 	GLOBAL(function_state).loop_nest_level++;
-	stack_push(&GLOBAL(css), &GLOBAL(ExecuteFlag), sizeof(int));
+	php3i_stack_push(&GLOBAL(css), &GLOBAL(ExecuteFlag), sizeof(int));
 	if (GLOBAL(Execute)) {
 		tc_set_token(&GLOBAL(token_cache_manager), for_token->offset, FOR);
-		if (stack_int_top(&GLOBAL(for_stack)) == (long) for_token->offset) {	/* 2nd or later iteration */
+		if (php3i_stack_int_top(&GLOBAL(for_stack)) == (long) for_token->offset) {	/* 2nd or later iteration */
 			GLOBAL(ExecuteFlag) = DONT_EXECUTE;
 			GLOBAL(Execute) = SHOULD_EXECUTE;
 		}
@@ -555,9 +555,9 @@ inline void for_pre_expr1(pval *for_token INLINE_TLS)
  */
 inline void for_pre_expr2(pval *for_token INLINE_TLS)
 {	
-	GLOBAL(ExecuteFlag) = stack_int_top(&GLOBAL(css));
+	GLOBAL(ExecuteFlag) = php3i_stack_int_top(&GLOBAL(css));
 	GLOBAL(Execute) = SHOULD_EXECUTE;
-	if (for_token->cs_data.switched && stack_int_top(&GLOBAL(for_stack)) != (long) for_token->offset) {
+	if (for_token->cs_data.switched && php3i_stack_int_top(&GLOBAL(for_stack)) != (long) for_token->offset) {
 		GLOBAL(ExecuteFlag) = DONT_EXECUTE;
 		GLOBAL(Execute) = SHOULD_EXECUTE;	/* first iteration of already switched for */
 	}
@@ -570,10 +570,10 @@ inline void for_pre_expr2(pval *for_token INLINE_TLS)
  */
 inline void for_pre_expr3(pval *for_token, pval *expr2 INLINE_TLS)
 {
-	if (for_token->cs_data.switched && stack_int_top(&GLOBAL(for_stack)) != (long) for_token->offset) {
+	if (for_token->cs_data.switched && php3i_stack_int_top(&GLOBAL(for_stack)) != (long) for_token->offset) {
 		var_reset(expr2);
 	}
-	GLOBAL(ExecuteFlag) = stack_int_top(&GLOBAL(css));
+	GLOBAL(ExecuteFlag) = php3i_stack_int_top(&GLOBAL(css));
 	GLOBAL(Execute) = SHOULD_EXECUTE;
 	if (GLOBAL(Execute) && !for_token->cs_data.switched) {
 		GLOBAL(ExecuteFlag) = DONT_EXECUTE;
@@ -584,7 +584,7 @@ inline void for_pre_expr3(pval *for_token, pval *expr2 INLINE_TLS)
 
 inline void for_pre_statement(pval *for_token, pval *expr2, pval *expr3 INLINE_TLS)
 {
-	GLOBAL(ExecuteFlag) = stack_int_top(&GLOBAL(css));
+	GLOBAL(ExecuteFlag) = php3i_stack_int_top(&GLOBAL(css));
 	GLOBAL(Execute) = SHOULD_EXECUTE;
 	if (GLOBAL(Execute) && !for_token->cs_data.switched) {
 		var_reset(expr3);
@@ -612,8 +612,8 @@ inline void for_pre_statement(pval *for_token, pval *expr2, pval *expr3 INLINE_T
 
 inline void for_post_statement(pval *for_token, pval *first_semicolon, pval *second_semicolon, pval *close_parentheses, int *yychar INLINE_TLS)
 {
-	if (stack_int_top(&GLOBAL(for_stack)) != (long) for_token->offset) {	/* first iteration */
-		stack_push(&GLOBAL(for_stack), &for_token->offset, sizeof(int));
+	if (php3i_stack_int_top(&GLOBAL(for_stack)) != (long) for_token->offset) {	/* first iteration */
+		php3i_stack_push(&GLOBAL(for_stack), &for_token->offset, sizeof(int));
 	}
 	if (!for_token->cs_data.switched) {
 		tc_switch(&GLOBAL(token_cache_manager), first_semicolon->offset + 1, close_parentheses->offset - 1, second_semicolon->offset);
@@ -628,26 +628,26 @@ inline void for_post_statement(pval *for_token, pval *first_semicolon, pval *sec
 				tc_set_token(&GLOBAL(token_cache_manager), for_token->offset, CONTINUED_FOR);
 				seek_token(&GLOBAL(token_cache_manager), for_token->offset, yychar);
 			} else {
-				if (stack_int_top(&GLOBAL(for_stack)) == (long) for_token->offset) {
+				if (php3i_stack_int_top(&GLOBAL(for_stack)) == (long) for_token->offset) {
 #if (_DEBUG_ & CONTROL_DEBUG)
 					fprintf(stderr, "Deleting for addr=%d from for stack", for_token->offset);
 #endif
-					stack_del_top(&GLOBAL(for_stack));
+					php3i_stack_del_top(&GLOBAL(for_stack));
 				}
 			}
 			GLOBAL(function_state).loop_change_type = DO_NOTHING;
 			GLOBAL(function_state).loop_change_level = 0;
 		} else {
-			if (stack_int_top(&GLOBAL(for_stack)) == (long) for_token->offset) {
+			if (php3i_stack_int_top(&GLOBAL(for_stack)) == (long) for_token->offset) {
 #if (_DEBUG_ & CONTROL_DEBUG)
 				fprintf(stderr, "Deleting for addr=%d from for stack", for_token->offset);
 #endif
-				stack_del_top(&GLOBAL(for_stack));
+				php3i_stack_del_top(&GLOBAL(for_stack));
 			}
 		}
 	}
-	GLOBAL(ExecuteFlag) = stack_int_top(&GLOBAL(css));
-	stack_del_top(&GLOBAL(css));
+	GLOBAL(ExecuteFlag) = php3i_stack_int_top(&GLOBAL(css));
+	php3i_stack_del_top(&GLOBAL(css));
 	GLOBAL(Execute) = SHOULD_EXECUTE;
 
 	GLOBAL(function_state).loop_nest_level--;
@@ -692,7 +692,7 @@ inline void php3cs_start_require(pval *include_token INLINE_TLS)
 		return;
 	}
 
-	stack_push(&GLOBAL(css), &GLOBAL(ExecuteFlag), sizeof(int));
+	php3i_stack_push(&GLOBAL(css), &GLOBAL(ExecuteFlag), sizeof(int));
 	GLOBAL(php3g_function_state_for_require) = GLOBAL(function_state);
 
 	if (!include_token->cs_data.included) {
@@ -712,8 +712,8 @@ inline void php3cs_end_require(pval *include_token, pval *expr INLINE_TLS)
 	if (GLOBAL(php3_display_source)) {
 		return;
 	}
-	GLOBAL(ExecuteFlag) = stack_int_top(&GLOBAL(css));
-	stack_del_top(&GLOBAL(css));
+	GLOBAL(ExecuteFlag) = php3i_stack_int_top(&GLOBAL(css));
+	php3i_stack_del_top(&GLOBAL(css));
 	GLOBAL(function_state) = GLOBAL(php3g_function_state_for_require);
 	GLOBAL(Execute) = SHOULD_EXECUTE;
 	
@@ -731,7 +731,7 @@ inline void php3cs_end_require(pval *include_token, pval *expr INLINE_TLS)
 inline void start_display_source(int start_in_php INLINE_TLS)
 {
 	php3_header();
-	stack_push(&GLOBAL(css), &GLOBAL(ExecuteFlag), sizeof(int));
+	php3i_stack_push(&GLOBAL(css), &GLOBAL(ExecuteFlag), sizeof(int));
 	GLOBAL(ExecuteFlag) = DONT_EXECUTE;
 	GLOBAL(Execute) = 0;
 	GLOBAL(php3_display_source)=1;
@@ -750,7 +750,7 @@ inline void cs_show_source(pval *expr INLINE_TLS)
 
 inline void cs_pre_boolean_or(pval *left_expr INLINE_TLS)
 {
-	stack_push(&GLOBAL(css), &GLOBAL(ExecuteFlag), sizeof(int));
+	php3i_stack_push(&GLOBAL(css), &GLOBAL(ExecuteFlag), sizeof(int));
 	if (GLOBAL(Execute) && pval_is_true(left_expr)) {
 		GLOBAL(ExecuteFlag) = DONT_EXECUTE;
 		GLOBAL(Execute) = SHOULD_EXECUTE;;
@@ -760,8 +760,8 @@ inline void cs_pre_boolean_or(pval *left_expr INLINE_TLS)
 
 inline void cs_post_boolean_or(pval *result, pval *left_expr, pval *right_expr INLINE_TLS)
 {
-	GLOBAL(ExecuteFlag) = stack_int_top(&GLOBAL(css));
-	stack_del_top(&GLOBAL(css));
+	GLOBAL(ExecuteFlag) = php3i_stack_int_top(&GLOBAL(css));
+	php3i_stack_del_top(&GLOBAL(css));
 	GLOBAL(Execute) = SHOULD_EXECUTE;
 	if (GLOBAL(Execute)) {
 		boolean_or_function(result, left_expr, right_expr);
@@ -771,7 +771,7 @@ inline void cs_post_boolean_or(pval *result, pval *left_expr, pval *right_expr I
 
 inline void cs_pre_boolean_and(pval *left_expr INLINE_TLS)
 {
-	stack_push(&GLOBAL(css), &GLOBAL(ExecuteFlag), sizeof(int));
+	php3i_stack_push(&GLOBAL(css), &GLOBAL(ExecuteFlag), sizeof(int));
 	if (GLOBAL(Execute) && !pval_is_true(left_expr)) {
 		GLOBAL(ExecuteFlag) = DONT_EXECUTE;
 		GLOBAL(Execute) = SHOULD_EXECUTE;
@@ -781,8 +781,8 @@ inline void cs_pre_boolean_and(pval *left_expr INLINE_TLS)
 
 inline void cs_post_boolean_and(pval *result, pval *left_expr, pval *right_expr INLINE_TLS)
 {
-	GLOBAL(ExecuteFlag) = stack_int_top(&GLOBAL(css));
-	stack_del_top(&GLOBAL(css));
+	GLOBAL(ExecuteFlag) = php3i_stack_int_top(&GLOBAL(css));
+	php3i_stack_del_top(&GLOBAL(css));
 	GLOBAL(Execute) = SHOULD_EXECUTE;
 	if (GLOBAL(Execute)) {
 		boolean_and_function(result, left_expr, right_expr);
@@ -792,7 +792,7 @@ inline void cs_post_boolean_and(pval *result, pval *left_expr, pval *right_expr 
 
 inline void cs_questionmark_op_pre_expr1(pval *truth_value INLINE_TLS)
 {
-	stack_push(&GLOBAL(css), &GLOBAL(ExecuteFlag), sizeof(int));
+	php3i_stack_push(&GLOBAL(css), &GLOBAL(ExecuteFlag), sizeof(int));
 	if (GLOBAL(Execute) && !pval_is_true(truth_value)) {
 		GLOBAL(ExecuteFlag) = DONT_EXECUTE;
 		GLOBAL(Execute) = SHOULD_EXECUTE;
@@ -802,7 +802,7 @@ inline void cs_questionmark_op_pre_expr1(pval *truth_value INLINE_TLS)
 
 inline void cs_questionmark_op_pre_expr2(pval *truth_value INLINE_TLS)
 {
-	GLOBAL(ExecuteFlag) = stack_int_top(&GLOBAL(css));
+	GLOBAL(ExecuteFlag) = php3i_stack_int_top(&GLOBAL(css));
 	GLOBAL(Execute) = SHOULD_EXECUTE;
 	if (GLOBAL(Execute) && pval_is_true(truth_value)) {
 		GLOBAL(ExecuteFlag) = DONT_EXECUTE;
@@ -813,8 +813,8 @@ inline void cs_questionmark_op_pre_expr2(pval *truth_value INLINE_TLS)
 
 inline void cs_questionmark_op_post_expr2(pval *result, pval *truth_value, pval *expr1, pval *expr2 INLINE_TLS)
 {
-	GLOBAL(ExecuteFlag) = stack_int_top(&GLOBAL(css));
-	stack_del_top(&GLOBAL(css));
+	GLOBAL(ExecuteFlag) = php3i_stack_int_top(&GLOBAL(css));
+	php3i_stack_del_top(&GLOBAL(css));
 	GLOBAL(Execute) = SHOULD_EXECUTE;
 	if (GLOBAL(Execute)) {
 		if (pval_is_true(truth_value)) {
@@ -865,8 +865,8 @@ inline void cs_functioncall_pre_variable_passing(pval *function_name, pval *clas
 				return;
 			}
 			/* we're gonna call the function... */
-			stack_push(&GLOBAL(for_stack), &minus_one, sizeof(int));
-			stack_push(&GLOBAL(function_state_stack), &GLOBAL(function_state), sizeof(FunctionState));	/* save function state */
+			php3i_stack_push(&GLOBAL(for_stack), &minus_one, sizeof(int));
+			php3i_stack_push(&GLOBAL(function_state_stack), &GLOBAL(function_state), sizeof(FunctionState));	/* save function state */
 			function_name->cs_data.function_call_type = data->type;
 			function_name->offset = data->offset;
 			GLOBAL(function_state).function_symbol_table = (HashTable *) emalloc(sizeof(HashTable));
@@ -916,7 +916,7 @@ inline void cs_functioncall_pre_variable_passing(pval *function_name, pval *clas
 inline void cs_functioncall_post_variable_passing(pval *function_name, int *yychar INLINE_TLS)
 {
 	if (function_name->cs_data.function_call_type) {
-		stack_push(&GLOBAL(css), &GLOBAL(ExecuteFlag), sizeof(int));
+		php3i_stack_push(&GLOBAL(css), &GLOBAL(ExecuteFlag), sizeof(int));
 
 
 		/* prepare a new function state */
@@ -963,10 +963,10 @@ inline void cs_functioncall_end(pval *result, pval *function_name, pval *close_p
 			pval_destructor(function_name _INLINE_TLS);
 		}
 		
-		while (stack_int_top(&GLOBAL(for_stack)) != -1) {  /* pop FOR stack */
-			stack_del_top(&GLOBAL(for_stack));
+		while (php3i_stack_int_top(&GLOBAL(for_stack)) != -1) {  /* pop FOR stack */
+			php3i_stack_del_top(&GLOBAL(for_stack));
 		}
-		stack_del_top(&GLOBAL(for_stack));
+		php3i_stack_del_top(&GLOBAL(for_stack));
 		
 		/* jump back */
 		if (GLOBAL(function_state).function_type == IS_USER_FUNCTION) {
@@ -974,14 +974,14 @@ inline void cs_functioncall_end(pval *result, pval *function_name, pval *close_p
 		}
 		
 		/* get previous function state */
-		stack_top(&GLOBAL(function_state_stack), (void **) &fs_ptr);
+		php3i_stack_top(&GLOBAL(function_state_stack), (void **) &fs_ptr);
 		GLOBAL(function_state) = *fs_ptr;
-		stack_del_top(&GLOBAL(function_state_stack));
+		php3i_stack_del_top(&GLOBAL(function_state_stack));
 		GLOBAL(active_symbol_table) = GLOBAL(function_state).symbol_table;
 
 		/* restore execution state */
-		GLOBAL(ExecuteFlag) = stack_int_top(&GLOBAL(css));
-		stack_del_top(&GLOBAL(css));
+		GLOBAL(ExecuteFlag) = php3i_stack_int_top(&GLOBAL(css));
+		php3i_stack_del_top(&GLOBAL(css));
 		GLOBAL(Execute) = SHOULD_EXECUTE;
 	} else {
 		var_reset(result);
@@ -994,12 +994,12 @@ inline void cs_switch_start(pval *switch_token, pval *expr INLINE_TLS)
 	switch_expr se;
 
 	GLOBAL(function_state).loop_nest_level++;
-	stack_push(&GLOBAL(css), &GLOBAL(ExecuteFlag), sizeof(int));
+	php3i_stack_push(&GLOBAL(css), &GLOBAL(ExecuteFlag), sizeof(int));
 
 	se.expr = *expr;
 	se.offset = switch_token->offset;
 	se.Execute = GLOBAL(Execute);
-	stack_push(&GLOBAL(switch_stack), &se, sizeof(switch_expr));
+	php3i_stack_push(&GLOBAL(switch_stack), &se, sizeof(switch_expr));
 }
 
 
@@ -1011,7 +1011,7 @@ inline void cs_switch_case_pre(pval *case_expr INLINE_TLS)
 		pval expr, result;
 		int is_equal = 0;
 
-		stack_top(&GLOBAL(switch_stack), (void **) &se);
+		php3i_stack_top(&GLOBAL(switch_stack), (void **) &se);
 		if (se->offset != -1) {	/* no matched case yet */
 			/* if case_expr is NULL, we're in the special 'default' case */
 			if (case_expr) {
@@ -1038,7 +1038,7 @@ inline void cs_switch_case_pre(pval *case_expr INLINE_TLS)
 
 inline void cs_switch_case_post( INLINE_TLS_VOID)
 {
-	GLOBAL(ExecuteFlag) = stack_int_top(&GLOBAL(css));
+	GLOBAL(ExecuteFlag) = php3i_stack_int_top(&GLOBAL(css));
 	GLOBAL(Execute) = SHOULD_EXECUTE;
 }
 
@@ -1052,15 +1052,15 @@ inline void cs_switch_end(pval *expr INLINE_TLS)
 			GLOBAL(function_state).loop_change_type = DO_NOTHING;
 		}
 	}
-	GLOBAL(ExecuteFlag) = stack_int_top(&GLOBAL(css));
-	stack_del_top(&GLOBAL(css));
+	GLOBAL(ExecuteFlag) = php3i_stack_int_top(&GLOBAL(css));
+	php3i_stack_del_top(&GLOBAL(css));
 	GLOBAL(Execute) = SHOULD_EXECUTE;
 	
-	stack_top(&GLOBAL(switch_stack), (void **) &se);
+	php3i_stack_top(&GLOBAL(switch_stack), (void **) &se);
 	if (se->Execute) {
 		pval_destructor(expr _INLINE_TLS);
 	}
-	stack_del_top(&GLOBAL(switch_stack));
+	php3i_stack_del_top(&GLOBAL(switch_stack));
 	GLOBAL(function_state).loop_nest_level--;
 }
 
@@ -1143,7 +1143,7 @@ inline void start_array_parsing(pval *array_name,pval *class_ptr INLINE_TLS)
 				vt.strlen = array_name->value.str.len;
 				vt.strval = estrndup(array_name->value.str.val,vt.strlen);
 				vt.ht = target_symbol_table;
-				stack_push(&GLOBAL(variable_unassign_stack),(void *) &vt, sizeof(variable_tracker));
+				php3i_stack_push(&GLOBAL(variable_unassign_stack),(void *) &vt, sizeof(variable_tracker));
 			} else {
 				GLOBAL(array_ptr)->cs_data.array_write=0;
 			}
@@ -1227,7 +1227,7 @@ inline void fetch_array_index(pval *result, pval *expr, pval *dimension INLINE_T
 								vt.type = IS_LONG;
 								vt.lval = expr->value.lval;
 								vt.ht = arr_ptr->value.ht;
-								stack_push(&GLOBAL(variable_unassign_stack),(void *) &vt, sizeof(variable_tracker));
+								php3i_stack_push(&GLOBAL(variable_unassign_stack),(void *) &vt, sizeof(variable_tracker));
 							}
 						} else {
 							result->value.varptr.pvalue = localdata;
@@ -1250,7 +1250,7 @@ inline void fetch_array_index(pval *result, pval *expr, pval *dimension INLINE_T
 								vt.strval = estrndup(expr->value.str.val,expr->value.str.len);
 								vt.strlen = expr->value.str.len;
 								vt.ht = arr_ptr->value.ht;
-								stack_push(&GLOBAL(variable_unassign_stack),(void *) &vt, sizeof(variable_tracker));
+								php3i_stack_push(&GLOBAL(variable_unassign_stack),(void *) &vt, sizeof(variable_tracker));
 							}
 						} else {
 							result->value.varptr.pvalue = localdata;
@@ -1274,7 +1274,7 @@ inline void fetch_array_index(pval *result, pval *expr, pval *dimension INLINE_T
 					vt.type = IS_LONG;
 					vt.lval = new_index;
 					vt.ht = arr_ptr->value.ht;
-					stack_push(&GLOBAL(variable_unassign_stack),(void *) &vt, sizeof(variable_tracker));
+					php3i_stack_push(&GLOBAL(variable_unassign_stack),(void *) &vt, sizeof(variable_tracker));
 				}
 			}
 		} else {
@@ -1304,7 +1304,7 @@ inline void clean_unassigned_variable_top(int delete_var INLINE_TLS)
 {
 	variable_tracker *vt;
 	
-	if (stack_top(&GLOBAL(variable_unassign_stack),(void **) &vt)==SUCCESS) {
+	if (php3i_stack_top(&GLOBAL(variable_unassign_stack),(void **) &vt)==SUCCESS) {
 		switch(vt->type) {
 			case IS_LONG:
 				if (delete_var) {
@@ -1319,7 +1319,7 @@ inline void clean_unassigned_variable_top(int delete_var INLINE_TLS)
 				break;
 		}
 	}
-	stack_del_top(&GLOBAL(variable_unassign_stack));
+	php3i_stack_del_top(&GLOBAL(variable_unassign_stack));
 }
 
 
@@ -1352,7 +1352,7 @@ inline void get_class_variable_pointer(pval *result, pval *class_ptr, pval *varn
 				vt.strlen = varname->value.str.len;
 				vt.strval = estrndup(varname->value.str.val,vt.strlen);
 				vt.ht = object->value.ht;
-				stack_push(&GLOBAL(variable_unassign_stack),(void *) &vt, sizeof(variable_tracker));
+				php3i_stack_push(&GLOBAL(variable_unassign_stack),(void *) &vt, sizeof(variable_tracker));
 				result->cs_data.array_write = 1;
 			} else {
 				result->cs_data.array_write = 0;
@@ -1421,6 +1421,7 @@ inline void cs_system(pval *result,pval *expr INLINE_TLS)
 
 		convert_to_string(expr);
 #if WIN32|WINNT
+		(void)AllocConsole();
 		if ((in=popen(expr->value.str.val,"rt"))==NULL) {
 #else
 		if ((in=popen(expr->value.str.val,"r"))==NULL) {

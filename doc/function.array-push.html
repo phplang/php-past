@@ -1,0 +1,265 @@
+<HTML
+><HEAD
+><TITLE
+>array_push</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Array functions"
+HREF="ref.array.html"><LINK
+REL="PREVIOUS"
+TITLE="array"
+HREF="function.array.html"><LINK
+REL="NEXT"
+TITLE="array_pop"
+HREF="function.array-pop.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.array.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.array-pop.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="FUNCTION.ARRAY-PUSH"
+>array_push</A
+></H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN2956"
+></A
+>array_push -- Push one or more elements onto the end of array</DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN2959"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><CODE
+CLASS="FUNCDEF"
+>int array_push</CODE
+>(array array, mixed var, [<SPAN
+CLASS="OPTIONAL"
+>...</SPAN
+>]);<P
+></P
+></DIV
+><P
+>     <B
+CLASS="FUNCTION"
+>array_push()</B
+> treats
+     <TT
+CLASS="PARAMETER"
+><I
+>array</I
+></TT
+> as a stack, and pushes the passed
+     variables onto the end of <TT
+CLASS="PARAMETER"
+><I
+>array</I
+></TT
+>. The
+     length of <TT
+CLASS="PARAMETER"
+><I
+>array</I
+></TT
+> increases by the number of
+     variables pushed. Has the same effect as:
+     <PRE
+CLASS="PROGRAMLISTING"
+>$array[] = $var;
+     </PRE
+>
+     repeated for each <TT
+CLASS="PARAMETER"
+><I
+>var</I
+></TT
+>.
+
+    </P
+><P
+>     Returns the new number of elements in the array.
+
+    </P
+><P
+>     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="EXAMPLE"
+><P
+><B
+>Example 1. <B
+CLASS="FUNCTION"
+>array_push()</B
+> example</B
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>$stack = array(1, 2);
+array_push($stack, "+", 3);
+      </PRE
+></DIV
+></TD
+></TR
+></TABLE
+>
+     This example would result in $stack having 4 elements: 1, 2, "+", and 3.
+
+    </P
+><P
+>     See also <A
+HREF="function.array-pop.html"
+><B
+CLASS="FUNCTION"
+>array_pop()</B
+></A
+>,
+     <A
+HREF="function.array-shift.html"
+><B
+CLASS="FUNCTION"
+>array_shift()</B
+></A
+>, and
+     <A
+HREF="function.array-unshift.html"
+><B
+CLASS="FUNCTION"
+>array_unshift()</B
+></A
+>.
+
+    <DIV
+CLASS="NOTE"
+><BLOCKQUOTE
+CLASS="NOTE"
+><P
+><B
+>Note: </B
+>      This function was added in PHP 4.0. 
+    </P
+></BLOCKQUOTE
+></DIV
+>
+   </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.array.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.array-pop.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>array</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.array.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>array_pop</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

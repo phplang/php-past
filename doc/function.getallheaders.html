@@ -6,7 +6,7 @@
 NAME="GENERATOR"
 CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
 REL="HOME"
-TITLE="PHP3 Manual"
+TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
 TITLE="Apache-specific functions"
@@ -34,7 +34,7 @@ CELLSPACING="0"
 ><TH
 COLSPAN="3"
 ALIGN="center"
->PHP3 Manual</TH
+>PHP Manual</TH
 ></TR
 ><TR
 ><TD
@@ -71,13 +71,13 @@ NAME="FUNCTION.GETALLHEADERS"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN2809"
+NAME="AEN2895"
 ></A
 >getallheaders -- Fetch all HTTP request headers</DIV
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN2812"
+NAME="AEN2898"
 ></A
 ><H2
 >Description</H2
@@ -94,6 +94,27 @@ CLASS="FUNCDEF"
 ><P
 >     This function returns an associative array of all the HTTP headers in the 
      current request.
+    <DIV
+CLASS="NOTE"
+><BLOCKQUOTE
+CLASS="NOTE"
+><P
+><B
+>Note: </B
+>      You can also get at the value of the common CGI variables by reading
+      them from the environment, which works whether or not you are using
+      PHP as an Apache module. Use <A
+HREF="function.phpinfo.html"
+><B
+CLASS="FUNCTION"
+>phpinfo()</B
+></A
+> to see a
+      list of all of the environment variables defined this way.
+     </P
+></BLOCKQUOTE
+></DIV
+>
      <TABLE
 WIDTH="100%"
 BORDER="0"
@@ -106,7 +127,7 @@ CLASS="EXAMPLE"
 CLASS="EXAMPLE"
 ><P
 ><B
->Example 1. GetAllHeaders() Example</B
+>Example 1. getallheaders() Example</B
 ></P
 ><PRE
 CLASS="PROGRAMLISTING"
@@ -128,12 +149,9 @@ CLASS="NOTE"
 ><P
 ><B
 >Note: </B
->       <A
-HREF="function.getallheaders.html"
-><B
+>       <B
 CLASS="FUNCTION"
->GetAllHeaders()</B
-></A
+>getallheaders()</B
 > is currently only supported
        when PHP runs as an <SPAN
 CLASS="PRODUCTNAME"

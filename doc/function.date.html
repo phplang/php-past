@@ -6,7 +6,7 @@
 NAME="GENERATOR"
 CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
 REL="HOME"
-TITLE="PHP3 Manual"
+TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
 TITLE="Date and Time functions"
@@ -34,7 +34,7 @@ CELLSPACING="0"
 ><TH
 COLSPAN="3"
 ALIGN="center"
->PHP3 Manual</TH
+>PHP Manual</TH
 ></TR
 ><TR
 ><TD
@@ -71,13 +71,13 @@ NAME="FUNCTION.DATE"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN5182"
+NAME="AEN5800"
 ></A
 >date -- format a local time/date</DIV
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN5185"
+NAME="AEN5803"
 ></A
 ><H2
 >Description</H2
@@ -88,7 +88,13 @@ CLASS="FUNCSYNOPSIS"
 ><CODE
 CLASS="FUNCDEF"
 >string date</CODE
->(string format, int timestamp);<P
+>(string format, int 
+             [<SPAN
+CLASS="OPTIONAL"
+>timestamp</SPAN
+>]
+      
+     );<P
 ></P
 ></DIV
 ><P
@@ -234,27 +240,28 @@ CLASS="FUNCTION"
 ></P
 ><PRE
 CLASS="PROGRAMLISTING"
->print(date( "l dS of F Y h:i:s A" ));
-print("July 1, 2000 is on a " . date("l", mktime(0,0,0,7,1,2000)));</PRE
+>print (date("l dS of F Y h:i:s A"));
+print ("July 1, 2000 is on a " . date("l", mktime(0,0,0,7,1,2000)));
+      </PRE
 ></DIV
 ></TD
 ></TR
 ></TABLE
 >
-     </P
+    </P
 ><P
->      It is possible to use <B
+>     It is possible to use <B
 CLASS="FUNCTION"
 >date()</B
 > and
-      <A
+     <A
 HREF="function.mktime.html"
 ><B
 CLASS="FUNCTION"
 >mktime()</B
 ></A
-> together to find dates in the
-      future or the past.
+> together to find dates in the future
+     or the past.
 
      <TABLE
 WIDTH="100%"
@@ -268,7 +275,7 @@ CLASS="EXAMPLE"
 CLASS="EXAMPLE"
 ><P
 ><B
->Example 2. <B
+>Example 2.        <B
 CLASS="FUNCTION"
 >date()</B
 > and <A
@@ -277,13 +284,15 @@ HREF="function.mktime.html"
 CLASS="FUNCTION"
 >mktime()</B
 ></A
-> example</B
+> example
+      </B
 ></P
 ><PRE
 CLASS="PROGRAMLISTING"
 >$tomorrow  = mktime(0,0,0,date("m")  ,date("d")+1,date("Y"));
 $lastmonth = mktime(0,0,0,date("m")-1,date("d"),  date("Y"));
-$nextyear  = mktime(0,0,0,date("m"),  date("d",   date("Y")+1);</PRE
+$nextyear  = mktime(0,0,0,date("m"),  date("d",   date("Y")+1);
+      </PRE
 ></DIV
 ></TD
 ></TR
@@ -291,8 +300,8 @@ $nextyear  = mktime(0,0,0,date("m"),  date("d",   date("Y")+1);</PRE
 >
     </P
 ><P
->	 To format dates in other languages, you should use the
-	 <A
+>     To format dates in other languages, you should use the
+     <A
 HREF="function.setlocale.html"
 ><B
 CLASS="FUNCTION"
@@ -305,7 +314,7 @@ CLASS="FUNCTION"
 >strftime()</B
 ></A
 >
-	 functions.
+     functions.
     </P
 ><P
 >     See also <A

@@ -6,7 +6,7 @@
 NAME="GENERATOR"
 CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
 REL="HOME"
-TITLE="PHP3 Manual"
+TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
 TITLE="Hyperwave functions"
@@ -34,7 +34,7 @@ CELLSPACING="0"
 ><TH
 COLSPAN="3"
 ALIGN="center"
->PHP3 Manual</TH
+>PHP Manual</TH
 ></TR
 ><TR
 ><TD
@@ -71,13 +71,13 @@ NAME="FUNCTION.HW-GETOBJECT"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN8534"
+NAME="AEN9223"
 ></A
 >hw_GetObject -- object record</DIV
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN8537"
+NAME="AEN9226"
 ></A
 ><H2
 >Description</H2
@@ -88,7 +88,7 @@ CLASS="FUNCSYNOPSIS"
 ><CODE
 CLASS="FUNCDEF"
 >array hw_getobject</CODE
->(int connection, int objectID);<P
+>(int connection, [int|array] objectID, string query);<P
 ></P
 ></DIV
 ><P
@@ -98,7 +98,42 @@ CLASS="PARAMETER"
 ><I
 >objectID</I
 ></TT
->.
+> if the second parameter is an integer.
+     If the second parameter is an array of integer the function will
+     return an array of object records. In such a case the last
+     parameter is also evaluated which is a query string.
+    </P
+><P
+>     The query string has the following syntax:
+    </P
+><P
+>     &lt;expr&#62; ::= "(" &lt;expr&#62; ")" |  </P
+><P
+>             "!" &lt;expr&#62; |          /* NOT */</P
+><P
+>             &lt;expr&#62; "||" &lt;expr&#62; |  /* OR */</P
+><P
+>             &lt;expr&#62; "&amp;&amp;" &lt;expr&#62; |  /* AND */</P
+><P
+>             &lt;attribute&#62; &lt;operator&#62; &lt;value&#62;</P
+><P
+>&#13;  &lt;attribute&#62; ::= /* any attribute name (Title, Author, DocumentType ...) */</P
+><P
+>&#13;  &lt;operator&#62; ::= "=" |    /* equal */</P
+><P
+>                 "&lt;" |    /* less than (string compare) */</P
+><P
+>                 "&#62;" |    /* greater than (string compare) */</P
+><P
+>                 "~"      /* regular expression matching */</P
+><P
+>    </P
+><P
+>     The query allows to further select certain objects from the list
+     of given objects. Unlike the other
+     query functions, this query may use not indexed attributes. How many
+     object records are returned depends on the query and if access to
+     the object is allowed.
     </P
 ><P
 >     See also <A
@@ -106,6 +141,13 @@ HREF="function.hw-getandlock.html"
 ><B
 CLASS="FUNCTION"
 >hw_GetAndLock()</B
+></A
+>,
+              <A
+HREF="function.hw-getobjectbyquery.html"
+><B
+CLASS="FUNCTION"
+>hw_GetObjectByQuery()</B
 ></A
 >.
    </P

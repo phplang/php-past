@@ -6,7 +6,7 @@
 NAME="GENERATOR"
 CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
 REL="HOME"
-TITLE="PHP3 Manual"
+TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
 TITLE="PDF functions"
@@ -34,7 +34,7 @@ CELLSPACING="0"
 ><TH
 COLSPAN="3"
 ALIGN="center"
->PHP3 Manual</TH
+>PHP Manual</TH
 ></TR
 ><TR
 ><TD
@@ -71,13 +71,13 @@ NAME="FUNCTION.PDF-PUT-IMAGE"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN19256"
+NAME="AEN20348"
 ></A
 >PDF_put_image -- Stores an image in the PDF for later use</DIV
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN19259"
+NAME="AEN20351"
 ></A
 ><H2
 >Description</H2
@@ -101,11 +101,34 @@ CLASS="FUNCTION"
 >PDF_execute_image()</B
 ></A
 >
-     function. This is useful when using the same image multiple
-     times.
+     function as many times as needed. This is useful when using the same
+     image multiple times in order to keep the file size small. Using
+     <A
+HREF="function.pdf-put-image.html"
+><B
+CLASS="FUNCTION"
+>PDF_put_image()</B
+></A
+> and
+     <A
+HREF="function.pdf-execute-image.html"
+><B
+CLASS="FUNCTION"
+>PDF_execute_image()</B
+></A
+> is highly recommended for
+     larger images (several kb) if they show up more than once in the
+     document.
     </P
 ><P
 >     See also <A
+HREF="function.pdf-put-image.html"
+><B
+CLASS="FUNCTION"
+>PDF_put_image()</B
+></A
+>,
+              <A
 HREF="function.pdf-place-image.html"
 ><B
 CLASS="FUNCTION"

@@ -1,9 +1,0 @@
---TEST--
-Testing string scanner confirmance                            ...
---POST--
---GET--
---FILE--
-<?php echo "\"\t\\'" . '\n\\\'a\\\b\\' ?>
---EXPECT--
-Content-type: text/html
-"	\'\n\'a\\b\

@@ -1,4 +1,4 @@
-dnl $Id: aclocal.m4,v 1.43 1999/06/27 17:39:22 sas Exp $
+dnl $Id: aclocal.m4,v 1.45 1999/07/27 14:30:53 rasmus Exp $
 dnl
 dnl This file contains local autoconf functions.
 
@@ -41,6 +41,7 @@ AC_DEFUN(AC_ADD_LIBPATH,[
   AC_EXPAND_PATH($1, ai_p)
   AC_PHP_ONCE(LIBPATH, $ai_p, [
     EXTRA_LIBS="$EXTRA_LIBS -L$ai_p"
+    RAW_RPATHS="$RAW_RPATHS ${raw_runpath_switch}$ai_p"
     if test -n "$APXS" ; then
       RPATHS="$RPATHS ${apxs_runpath_switch}$ai_p'"
     else

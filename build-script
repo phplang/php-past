@@ -1,0 +1,106 @@
+#! /bin/sh
+#
+# another build script ($Id: build-script,v 1.5 1999/07/01 00:46:08 sas Exp $)
+#
+# you can put this in your crontab
+# redirect STDOUT to /dev/null, error messages are on STDERR
+# e.g.:
+#      30 2 * * *     (cd /home/user/php3 && ./build-script) >/dev/null
+#
+#
+# $config_file should contain at least:
+#
+# #! /bin/sh
+# ../configure "$@"
+#
+# note the ".." at the beginning. 
+# don't forget to chmod 755 it.
+#
+# you need some software in your path for this
+# (autoconf, make, cc or gcc)
+
+########################################################
+# leave an option empty (""), if you want to disable it!
+
+# path to Apache's apxs utility (Apache needs to be installed first)
+apxs="/home/user/httpd/bin/apxs"
+# path to an uninstalled Apache source tree
+apache_src="/home/user/apache_1.3.6"
+# your config script which performs basic configuration
+config_file="mydo-conf"
+# the email address error logs are sent to
+# don't direct this to any public mailing list
+mailto="foo@bar.baz"
+# whether the script shall perform a CVS update
+update_cvs=1
+# want to run make test?
+make_test=1
+
+
+die ( ) {
+	echo $* 1>&2
+	exit 1
+}
+
+alarm ( ) {
+	file=$1
+	shift
+	msg="$*"
+
+	cat $file | mail -s "[AUTO BUILD] $msg" $mailto
+}
+
+try_compile ( ) {
+	name="$1"
+	shift
+	args="$*"
+	
+	echo "Running $name with \"$args\""
+	
+	path="comp-$name"
+	log="log-$name"
+	
+	rm -rf $path
+	mkdir $path
+
+	( \
+	cd $path || die "cannot cd into $path" ; \
+	sh ../$config_file $* ; \
+	test -f Makefile || \
+			alarm ../$log "configure failed for $name with $args" ; \
+	test -f Makefile && make || \
+			alarm ../$log "build failed for $name with $args" ; \
+	) > $log 2>&1 
+}
+
+try_make_test ( ) {
+	log=logtest
+	
+	PHP="`pwd`/comp-cgi/php"
+# not sure whether we need this:
+	export PHP
+	( \
+	(cd comp-cgi && make test) || \
+			alarm ../$log "make test failed" \
+	) > $log 2>&1
+}
+
+test -f configure.in || die "cannot find sources."
+test -f "$config_file" || die "cannot find $config_file."
+
+test -d CVS && test "$update_cvs" = "1" && \
+	( echo "updating CVS" ; cvs upd -d -P >/dev/null 2>&1)
+
+autoheader && autoconf || die "autoconf failed"
+
+test -n "$apxs" && \
+	try_compile apxs --with-apxs="$apxs"
+test -n "$apache_src" && \
+	try_compile apache --with-apache="$apache_src"
+test -n "$apache_src" && \
+	try_compile shared-apache --with-shared-apache="$apache_src"
+try_compile cgi
+
+# still broken
+#test -n "$make_test" && test -f comp-cgi/php && \
+#	try_make_test

@@ -6,7 +6,7 @@
 NAME="GENERATOR"
 CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
 REL="HOME"
-TITLE="PHP3 Manual"
+TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
 TITLE="ClibPDF functions"
@@ -34,7 +34,7 @@ CELLSPACING="0"
 ><TH
 COLSPAN="3"
 ALIGN="center"
->PHP3 Manual</TH
+>PHP Manual</TH
 ></TR
 ><TR
 ><TD
@@ -71,13 +71,13 @@ NAME="FUNCTION.CPDF-SET-PAGE-ANIMATION"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN5065"
+NAME="AEN5642"
 ></A
 >cpdf_set_page_animation -- Sets duration between pages</DIV
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN5068"
+NAME="AEN5645"
 ></A
 ><H2
 >Description</H2
@@ -87,7 +87,7 @@ CLASS="FUNCSYNOPSIS"
 ></P
 ><CODE
 CLASS="FUNCDEF"
->void cpdf_set_duration</CODE
+>void cpdf_set_page_animation</CODE
 >(int pdf document, int transition, double duration);<P
 ></P
 ></DIV
@@ -106,14 +106,55 @@ CLASS="PARAMETER"
 >transition</I
 ></TT
 >
-     can be 0 for none,
-     1 for two lines sweeping across the screen reveal the page,
-     2 for multiple lines sweeping across the screen reveal the page,
-     3 for a box reveals the page,
-     4 for a single line sweeping across the screen reveals the page,
-     5 for the old page dissolves to reveal the page,
-     6 for the dissolve effect moves from one screen edge to another,
-     7 for the old page is simply replaced by the new page (default)
+     can be
+     <P
+></P
+><TABLE
+BORDER="0"
+><TR
+><TD
+>       0 for none,
+      </TD
+></TR
+><TR
+><TD
+>       1 for two lines sweeping across the screen reveal the page,
+      </TD
+></TR
+><TR
+><TD
+>       2 for multiple lines sweeping across the screen reveal the page,
+      </TD
+></TR
+><TR
+><TD
+>       3 for a box reveals the page,
+      </TD
+></TR
+><TR
+><TD
+>       4 for a single line sweeping across the screen reveals the page,
+      </TD
+></TR
+><TR
+><TD
+>       5 for the old page dissolves to reveal the page,
+      </TD
+></TR
+><TR
+><TD
+>       6 for the dissolve effect moves from one screen edge to another,
+      </TD
+></TR
+><TR
+><TD
+>       7 for the old page is simply replaced by the new page (default)
+      </TD
+></TR
+></TABLE
+><P
+></P
+>
 
     </P
 ><P

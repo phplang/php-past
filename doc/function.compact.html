@@ -1,0 +1,250 @@
+<HTML
+><HEAD
+><TITLE
+>compact</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+REL="HOME"
+TITLE="PHP Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Array functions"
+HREF="ref.array.html"><LINK
+REL="PREVIOUS"
+TITLE="asort"
+HREF="function.asort.html"><LINK
+REL="NEXT"
+TITLE="count"
+HREF="function.count.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.asort.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.count.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="FUNCTION.COMPACT"
+>compact</A
+></H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN3324"
+></A
+>compact -- Create array containing variables and their values</DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN3327"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><CODE
+CLASS="FUNCDEF"
+>array compact</CODE
+>(string varname | array
+     varnames, [<SPAN
+CLASS="OPTIONAL"
+>...</SPAN
+>]);<P
+></P
+></DIV
+><P
+>     <B
+CLASS="FUNCTION"
+>compact()</B
+> takes a variable number of
+     parameters. Each parameter can be either a string containing the
+     name of the variable, or an array of variable names.  The array
+     can contain other arrays of variable names inside it;
+     <B
+CLASS="FUNCTION"
+>compact()</B
+> handles it recursively.
+
+    </P
+><P
+>     For each of these, <B
+CLASS="FUNCTION"
+>compact()</B
+> looks for a
+     variable with that name in the current symbol table and adds it
+     to the output array such that the variable name becomes the key
+     and the contents of the variable become the value for that key.
+     In short, it does the opposite of <A
+HREF="function.extract.html"
+><B
+CLASS="FUNCTION"
+>extract()</B
+></A
+>.
+     It returns the output array with all the variables added to it.
+
+    </P
+><P
+>     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="EXAMPLE"
+><P
+><B
+>Example 1. <B
+CLASS="FUNCTION"
+>compact()</B
+> example</B
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>$city = "San Francisco";
+$state = "CA";
+$event = "SIGGRAPH";
+
+$location_vars = array("city", "state");
+
+$result = compact("event", $location_vars);
+      </PRE
+><P
+>       After this, $result will be array("event" =&#62; "SIGGRAPH", "city" =&#62; "San Francisco", "state" =&#62; "CA").
+     </P
+></DIV
+></TD
+></TR
+></TABLE
+>
+
+    </P
+><P
+>     See also <A
+HREF="function.extract.html"
+><B
+CLASS="FUNCTION"
+>extract()</B
+></A
+>.
+
+    <DIV
+CLASS="NOTE"
+><BLOCKQUOTE
+CLASS="NOTE"
+><P
+><B
+>Note: </B
+>      This function was added in PHP 4.0.
+    </P
+></BLOCKQUOTE
+></DIV
+>
+   </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.asort.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.count.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>asort</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.array.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>count</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

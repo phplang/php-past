@@ -6,7 +6,7 @@
 NAME="GENERATOR"
 CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
 REL="HOME"
-TITLE="PHP3 Manual"
+TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
 TITLE="Array functions"
@@ -34,7 +34,7 @@ CELLSPACING="0"
 ><TH
 COLSPAN="3"
 ALIGN="center"
->PHP3 Manual</TH
+>PHP Manual</TH
 ></TR
 ><TR
 ><TD
@@ -71,13 +71,13 @@ NAME="FUNCTION.CURRENT"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN2962"
+NAME="AEN3377"
 ></A
->current -- return the current element in an array</DIV
+>current -- Return the current element in an array</DIV
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN2965"
+NAME="AEN3380"
 ></A
 ><H2
 >Description</H2
@@ -92,12 +92,9 @@ CLASS="FUNCDEF"
 ></P
 ></DIV
 ><P
->     Each array variable has an internal pointer that points to one of
-     its elements.  In addition, all of the elements in the array are
-     linked by a bidirectional linked list for traversing purposes.
-     The internal pointer points to the first element that was inserted
-     to the array until you run one of the functions that modify that
-     pointer on that array.
+>     Every array has an internal pointer to its "current" element,
+     which is initialized to the first element inserted into the
+     array.
 
     </P
 ><P
@@ -113,25 +110,47 @@ CLASS="FUNCTION"
 >current()</B
 > returns false.
 
-    </P
+    <DIV
+CLASS="WARNING"
+><P
+></P
+><TABLE
+CLASS="WARNING"
+BORDER="1"
+WIDTH="100%"
+><TR
+><TD
+ALIGN="CENTER"
+><B
+>Warning</B
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
 ><P
 > 
-     <I
-CLASS="EMPHASIS"
->Warning:</I
-> if the array contains empty
-     elements (0 or "", the empty string) then this function
-     will return false for these elements as well. It is
-     undecideable if the current element is just a zero-value or
-     you have traversed beyond the end of the array. To properly
-     traverse an array, use the <A
+      If the array contains empty elements (0 or "", the empty string)
+      then this function will return false for these elements as well.
+      This makes it impossible to determine if you are really at the
+      end of the list in such an array using <B
+CLASS="FUNCTION"
+>current()</B
+>.
+      To properly traverse an array that may contain empty elements,
+      use the <A
 HREF="function.each.html"
 ><B
 CLASS="FUNCTION"
 >each()</B
 ></A
+> function.
+    </P
+></TD
+></TR
+></TABLE
+></DIV
 >
-     function.
 
     </P
 ><P

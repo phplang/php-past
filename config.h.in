@@ -68,6 +68,12 @@
 /* Define to `int' if <sys/types.h> doesn't define.  */
 #undef uid_t
 
+#undef HAVE_LIBGD14
+#undef HAVE_LIBGD15
+#undef HAVE_LIBGD16
+#undef HAVE_LIBGD_LZW
+#undef ushort
+
 #undef UCD_SNMP_HACK
 
 /* Define if you want dmalloc checking */
@@ -188,6 +194,9 @@
 
 /* Define if you want Solid database support */
 #define HAVE_SOLID 0
+
+/* Define if you want IBM DB2 database support */
+#define HAVE_IBMDB2 0
 
 /* Define if you want to use the supplied dbase library */
 #define DBASE 0
@@ -382,6 +391,9 @@
 #undef HAVE_LIBT1_OUTLINE
 
 #define HAVE_LIBTTF 0
+#define HAVE_LIBFREETYPE 0
+#define FREETYPE_4BIT_ANTIALIAS_HACK 0
+
 #define HAVE_POSIX 0
 
 /* The number of bytes in a int.  */
@@ -410,6 +422,9 @@
 
 /* Define if you have the getpgid function.  */
 #undef HAVE_GETPGID
+
+/* Define if you have the getrlimit function.  */
+#undef HAVE_GETRLIMIT
 
 /* Define if you have the getsid function.  */
 #undef HAVE_GETSID
@@ -540,6 +555,9 @@
 /* Define if you have the <fcntl.h> header file.  */
 #undef HAVE_FCNTL_H
 
+/* Define if you have the <features.h> header file.  */
+#undef HAVE_FEATURES_H
+
 /* Define if you have the <grp.h> header file.  */
 #undef HAVE_GRP_H
 
@@ -617,6 +635,9 @@
 
 /* Define if you have the <unix.h> header file.  */
 #undef HAVE_UNIX_H
+
+/* Define if you have the gd library (-lgd).  */
+#undef HAVE_LIBGD
 
 /* Define if you have the m library (-lm).  */
 #undef HAVE_LIBM

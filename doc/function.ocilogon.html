@@ -6,7 +6,7 @@
 NAME="GENERATOR"
 CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
 REL="HOME"
-TITLE="PHP3 Manual"
+TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
 TITLE="Oracle 8 functions"
@@ -15,8 +15,8 @@ REL="PREVIOUS"
 TITLE="OCIBindByName"
 HREF="function.ocibindbyname.html"><LINK
 REL="NEXT"
-TITLE="OCILogOff"
-HREF="function.ocilogoff.html"></HEAD
+TITLE="OCIPLogon"
+HREF="function.ociplogon.html"></HEAD
 ><BODY
 BGCOLOR="#FFFFFF"
 TEXT="#000000"
@@ -34,7 +34,7 @@ CELLSPACING="0"
 ><TH
 COLSPAN="3"
 ALIGN="center"
->PHP3 Manual</TH
+>PHP Manual</TH
 ></TR
 ><TR
 ><TD
@@ -55,7 +55,7 @@ WIDTH="10%"
 ALIGN="right"
 VALIGN="bottom"
 ><A
-HREF="function.ocilogoff.html"
+HREF="function.ociplogon.html"
 >Next</A
 ></TD
 ></TR
@@ -71,13 +71,13 @@ NAME="FUNCTION.OCILOGON"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN17177"
+NAME="AEN17876"
 ></A
 >OCILogon -- Establishes a connection to Oracle</DIV
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN17180"
+NAME="AEN17879"
 ></A
 ><H2
 >Description</H2
@@ -90,7 +90,7 @@ CLASS="FUNCDEF"
 >int OCILogon</CODE
 >(string username, string password, string [<SPAN
 CLASS="OPTIONAL"
->OCACLE_SID</SPAN
+>ORACLE_SID</SPAN
 >]);<P
 ></P
 ></DIV
@@ -102,8 +102,138 @@ CLASS="FUNCTION"
 >OCILogon()</B
 ></A
 > returns an connection identified
-	 needed for most other OCI calls.
+	 needed for most other OCI calls.  If the optional third parameter is not specified,
+	 PHP uses the environment variable ORACLE_SID to determine which database to connect 
+	 to.  Connections are shared at the page level when using <A
+HREF="function.ocilogon.html"
+><B
+CLASS="FUNCTION"
+>OCILogon()</B
+></A
+>.  
+     This means that commits and rollbacks apply to all open transactions in the page, 
+     even if you have created multiple  connections.
     </P
+><P
+>     This example demonstrates how the connections are shared.
+     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="EXAMPLE"
+><P
+><B
+>Example 1. OCILogon</B
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>&lt;?php
+print "&lt;HTML&#62;&lt;PRE&#62;";
+$db = "";
+
+$c1 = ocilogon("scott","tiger",$db);
+$c2 = ocilogon("scott","tiger",$db);
+
+function create_table($conn)
+{ $stmt = ociparse($conn,"create table scott.hallo (test
+varchar2(32))");
+  ociexecute($stmt);
+  echo $conn." created table\n\n";
+}
+
+function drop_table($conn)
+{ $stmt = ociparse($conn,"drop table scott.hallo");
+  ociexecute($stmt);
+  echo $conn." dropped table\n\n";
+}
+
+function insert_data($conn)
+{ $stmt = ociparse($conn,"insert into scott.hallo values($conn || ' ' || to_char(sysdate,'DD-MON-YY HH24:MI:SS'))");
+  ociexecute($stmt,OCI_DEFAULT);
+  echo $conn." inserted hallo\n\n";
+}
+
+function delete_data($conn)
+{ $stmt = ociparse($conn,"delete from scott.hallo");
+  ociexecute($stmt,OCI_DEFAULT);
+  echo $conn." deleted hallo\n\n";
+}
+
+function commit($conn)
+{ ocicommit($conn);
+  echo $conn." commited\n\n";
+}
+
+function rollback($conn)
+{ ocirollback($conn);
+  echo $conn." rollback\n\n";
+}
+
+function select_data($conn)
+{ $stmt = ociparse($conn,"select * from scott.hallo");
+  ociexecute($stmt,OCI_DEFAULT);
+  echo $conn."----selecting\n\n";
+  while (ocifetch($stmt))
+    echo $conn." &lt;".ociresult($stmt,"TEST")."&#62;\n\n";
+  echo $conn."----done\n\n";
+}
+
+create_table($c1);
+insert_data($c1);   // Insert a row using c1
+insert_data($c2);   // Insert a row using c2
+
+select_data($c1);   // Results of both inserts are returned
+select_data($c2);   
+
+rollback($c1);      // Rollback using c1
+
+select_data($c1);   // Both inserts have been rolled back
+select_data($c2);   
+
+insert_data($c2);   // Insert a row using c2
+commit($c2);        // commit using c2
+
+select_data($c1);   // result of c2 insert is returned
+
+delete_data($c1);   // delete all rows in table using c1
+select_data($c1);   // no rows returned
+select_data($c2);   // no rows returned
+commit($c1);        // commit using c1
+
+select_data($c1);   // no rows returned
+select_data($c2);   // no rows returned
+
+
+drop_table($c1);
+print "&lt;/PRE&#62;&lt;/HTML&#62;";
+?&#62;</PRE
+></DIV
+></TD
+></TR
+></TABLE
+>
+    </P
+><P
+>     See also <A
+HREF="function.ociplogon.html"
+><B
+CLASS="FUNCTION"
+>OCIPLogon()</B
+></A
+> and
+     <A
+HREF="function.ocinlogon.html"
+><B
+CLASS="FUNCTION"
+>OCINLogon()</B
+></A
+>.
+   </P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -136,7 +266,7 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><A
-HREF="function.ocilogoff.html"
+HREF="function.ociplogon.html"
 >Next</A
 ></TD
 ></TR
@@ -158,7 +288,7 @@ HREF="ref.oci8.html"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->OCILogOff</TD
+>OCIPLogon</TD
 ></TR
 ></TABLE
 ></DIV

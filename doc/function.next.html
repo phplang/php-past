@@ -6,7 +6,7 @@
 NAME="GENERATOR"
 CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
 REL="HOME"
-TITLE="PHP3 Manual"
+TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
 TITLE="Array functions"
@@ -34,7 +34,7 @@ CELLSPACING="0"
 ><TH
 COLSPAN="3"
 ALIGN="center"
->PHP3 Manual</TH
+>PHP Manual</TH
 ></TR
 ><TR
 ><TD
@@ -71,13 +71,13 @@ NAME="FUNCTION.NEXT"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN3126"
+NAME="AEN3627"
 ></A
->next -- advance the internal array pointer</DIV
+>next -- Advance the internal array pointer of an array</DIV
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN3129"
+NAME="AEN3630"
 ></A
 ><H2
 >Description</H2
@@ -94,40 +94,61 @@ CLASS="FUNCDEF"
 ><P
 >     Returns the array element in the next place that's pointed by the
      internal array pointer, or false if there are no more elements.
-     <I
-CLASS="EMPHASIS"
->Warning:</I
-> if the array contains empty
-     elements then this function will return false for these elements as
-     well.  To properly traverse an array which may contain empty elements
-     see the <A
-HREF="function.each.html"
-><B
-CLASS="FUNCTION"
->each()</B
-></A
-> function. 
     </P
 ><P
 >     <B
 CLASS="FUNCTION"
 >next()</B
-> behaves like
-      <A
+> behaves like <A
 HREF="function.current.html"
 ><B
 CLASS="FUNCTION"
 >current()</B
 ></A
->, with one difference.  It advances
-      the internal array pointer one place forward before returning
-      the element.  That means it returns the next array element and
-      advances the internal array pointer by one.  If advancing the
-      internal array pointer results in going beyond the end of the
-      element list, <B
+>,
+     with one difference.  It advances the internal array pointer one
+     place forward before returning the element.  That means it returns
+     the next array element and advances the internal array pointer by
+     one.  If advancing the internal array pointer results in going beyond
+     the end of the element list, <B
 CLASS="FUNCTION"
 >next()</B
 > returns false.
+    <DIV
+CLASS="WARNING"
+><P
+></P
+><TABLE
+CLASS="WARNING"
+BORDER="1"
+WIDTH="100%"
+><TR
+><TD
+ALIGN="CENTER"
+><B
+>Warning</B
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+><P
+>      If the array contains empty elements then this function will return
+      false for these elements as well.  To properly traverse an array
+      which may contain empty elements see the <A
+HREF="function.each.html"
+><B
+CLASS="FUNCTION"
+>each()</B
+></A
+>
+      function.
+     </P
+></TD
+></TR
+></TABLE
+></DIV
+>
 
     </P
 ><P

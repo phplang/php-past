@@ -6,7 +6,7 @@
 NAME="GENERATOR"
 CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
 REL="HOME"
-TITLE="PHP3 Manual"
+TITLE="PHP Manual"
 HREF="manual.html"><LINK
 REL="UP"
 TITLE="MySQL functions"
@@ -34,7 +34,7 @@ CELLSPACING="0"
 ><TH
 COLSPAN="3"
 ALIGN="center"
->PHP3 Manual</TH
+>PHP Manual</TH
 ></TR
 ><TR
 ><TD
@@ -71,13 +71,13 @@ NAME="FUNCTION.MYSQL-QUERY"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN15669"
+NAME="AEN16340"
 ></A
 >mysql_query -- Send an SQL query to MySQL</DIV
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN15672"
+NAME="AEN16343"
 ></A
 ><H2
 >Description</H2
@@ -117,13 +117,139 @@ CLASS="FUNCTION"
 >mysql_connect()</B
 ></A
 > was
-     called, and use it.
+     called with no arguments, and use it.
     </P
 ><P
->     This function returns TRUE or FALSE to indicate the success of
-     UPDATE, INSERT, and DELETE queries. For SELECT queries it returns
-     a new result identifier. The resources used by the query can
-     then be freed by calling <A
+>     The query string should not end with a semicolon.
+    </P
+><P
+>     <B
+CLASS="FUNCTION"
+>mysql_query()</B
+> returns TRUE (non-zero) or FALSE
+     to indicate whether or not the query succeeded.  A return value
+     of TRUE means that the query was legal and could be executed by
+     the server.  It does not indicate anything about the number of
+     rows affected or returned. It is perfectly possible for a query
+     to succeed but affect no rows or return no rows.
+    </P
+><P
+>     The following query is syntactically invalid, so
+     <B
+CLASS="FUNCTION"
+>mysql_query()</B
+> fails and returns FALSE:
+
+     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="EXAMPLE"
+><P
+><B
+>Example 1. <B
+CLASS="FUNCTION"
+>mysql_query()</B
+></B
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>&lt;?php
+$result = mysql_query ("SELECT * WHERE 1=1")
+    or die ("Invalid query");
+?&#62;
+      </PRE
+></DIV
+></TD
+></TR
+></TABLE
+>
+
+    </P
+><P
+>     The following query is semantically invalid if
+     <TT
+CLASS="LITERAL"
+>my_col</TT
+> is not a column in the table
+     <TT
+CLASS="LITERAL"
+>my_tbl</TT
+>, so <B
+CLASS="FUNCTION"
+>mysql_query()</B
+>
+     fails and returns FALSE:
+  
+     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="EXAMPLE"
+><P
+><B
+>Example 2. <B
+CLASS="FUNCTION"
+>mysql_query()</B
+></B
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>&lt;?php
+$result = mysql_query ("SELECT my_col FROM my_tbl")
+    or die ("Invalid query");
+?&#62;
+      </PRE
+></DIV
+></TD
+></TR
+></TABLE
+>
+
+    </P
+><P
+>     <B
+CLASS="FUNCTION"
+>mysql_query()</B
+> will also fail and return FALSE
+     if you don't have permission to access the table(s) referenced by
+     the query.
+    </P
+><P
+>     Assuming the query succeeds, you can call
+     <A
+HREF="function.mysql-affected-rows.html"
+><B
+CLASS="FUNCTION"
+>mysql_affected_rows()</B
+></A
+> to find out how many
+     rows were affected (for DELETE, INSERT, REPLACE, or UPDATE
+     statements).  For SELECT statements,
+     <B
+CLASS="FUNCTION"
+>mysql_query()</B
+> returns a new result identifier
+     that you can pass to <A
+HREF="function.mysql-result.html"
+><B
+CLASS="FUNCTION"
+>mysql_result()</B
+></A
+>.  When you
+     are done with the result set, you can free the resources
+     associated with it by calling
+     <A
 HREF="function.mysql-free-result.html"
 ><B
 CLASS="FUNCTION"
@@ -132,21 +258,41 @@ CLASS="FUNCTION"
 >.
     </P
 ><P
->     See also:  
+>     See also: <A
+HREF="function.mysql-affected-rows.html"
+><B
+CLASS="FUNCTION"
+>mysql_affected_rows()</B
+></A
+>,
      <A
 HREF="function.mysql-db-query.html"
 ><B
 CLASS="FUNCTION"
 >mysql_db_query()</B
 ></A
->, 
+>,
+     <A
+HREF="function.mysql-free-result.html"
+><B
+CLASS="FUNCTION"
+>mysql_free_result()</B
+></A
+>,
+     <A
+HREF="function.mysql-result.html"
+><B
+CLASS="FUNCTION"
+>mysql_result()</B
+></A
+>,
      <A
 HREF="function.mysql-select-db.html"
 ><B
 CLASS="FUNCTION"
 >mysql_select_db()</B
 ></A
->, and 
+>, and
      <A
 HREF="function.mysql-connect.html"
 ><B

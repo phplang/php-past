@@ -74,6 +74,13 @@ Oracle-Linux set of libs is:
 
    -L$ORACLE_HOME/lib -lclntsh -lpsa -lcore4 -lnlsrtl3 -lclntsh -lm
 
+- If you configure Apache using --enable-shared=max but want the PHP
+  module as a static module, make sure you put the --activate-module
+  switch for PHP *after* the --enable-shared=max switch.
+
+eg. ./configure --prefix=/www --enable-shared=max \
+                --activate-module=src/modules/php3/libphp3.a
+
 
 VERBOSE INSTALL
 
