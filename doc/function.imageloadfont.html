@@ -1,0 +1,285 @@
+<HTML
+><HEAD
+><TITLE
+>ImageLoadFont</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+REL="HOME"
+TITLE="PHP3 Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Image functions"
+HREF="ref.image.html"><LINK
+REL="PREVIOUS"
+TITLE="ImageLine"
+HREF="function.imageline.html"><LINK
+REL="NEXT"
+TITLE="ImagePolygon"
+HREF="function.imagepolygon.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP3 Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.imageline.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.imagepolygon.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="FUNCTION.IMAGELOADFONT"
+>ImageLoadFont</A
+></H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN9545"
+></A
+>ImageLoadFont -- load a new font</DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN9548"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><CODE
+CLASS="FUNCDEF"
+>int imageloadfont</CODE
+>(string file);<P
+></P
+></DIV
+><P
+>     ImageLoadFont loads a user-defined bitmap font and returns an
+     identifier for the font (that is always greater than 5, so it will
+     not conflict with the built-in fonts).
+
+    </P
+><P
+>     The font file format is currently binary and architecture
+     dependent.  This means you should generate the font files on the
+     same type of CPU as the machine you are running PHP on.
+
+    </P
+><P
+>     <DIV
+CLASS="TABLE"
+><P
+><B
+>Table 1. Font file format</B
+></P
+><TABLE
+BORDER="1"
+CLASS="CALSTABLE"
+><TR
+><TH
+ALIGN="LEFT"
+VALIGN="TOP"
+>byte position</TH
+><TH
+ALIGN="LEFT"
+VALIGN="TOP"
+>C data type</TH
+><TH
+ALIGN="LEFT"
+VALIGN="TOP"
+>description</TH
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>byte 0-3</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>int</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>number of characters in the font</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>byte 4-7</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>int</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>       value of first character in the font (often 32 for space)
+      </TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>byte 8-11</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>int</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>pixel width of each character</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>byte 12-15</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>int</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>pixel height of each character</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>byte 16-</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>char</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>       array with character data, one byte per pixel in each
+       character, for a total of (nchars*width*height) bytes.
+      </TD
+></TR
+></TABLE
+></DIV
+>
+
+    </P
+><P
+>     See also <A
+HREF="function.imagefontwidth.html"
+><B
+CLASS="FUNCTION"
+>ImageFontWidth()</B
+></A
+> and
+     <A
+HREF="function.imagefontheight.html"
+><B
+CLASS="FUNCTION"
+>ImageFontHeight()</B
+></A
+>.
+
+   </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.imageline.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.imagepolygon.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>ImageLine</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.image.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>ImagePolygon</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

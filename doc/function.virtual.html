@@ -1,0 +1,179 @@
+<HTML
+><HEAD
+><TITLE
+>virtual</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+REL="HOME"
+TITLE="PHP3 Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Apache-specific functions"
+HREF="ref.apache.html"><LINK
+REL="PREVIOUS"
+TITLE="getallheaders"
+HREF="function.getallheaders.html"><LINK
+REL="NEXT"
+TITLE="Array functions"
+HREF="ref.array.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP3 Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.getallheaders.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="ref.array.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="FUNCTION.VIRTUAL"
+>virtual</A
+></H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN2827"
+></A
+>virtual -- Perform an Apache sub-request</DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN2830"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><CODE
+CLASS="FUNCDEF"
+>int virtual</CODE
+>(string filename);<P
+></P
+></DIV
+><P
+>	<B
+CLASS="FUNCTION"
+>virtual()</B
+> is an Apache-specific function which is equivalent
+    to &lt;!--#include virtual...--&gt; in mod_include.  It performs an
+    Apache sub-request.  It is useful for including CGI scripts or .shtml
+    files, or anything else that you would parse through Apache.  Note that for
+	a CGI script, the script must generate valid CGI headers.  At the minimum that
+	means it must generate a Content-type header.
+    For PHP files, you should use <A
+HREF="function.include.html"
+><B
+CLASS="FUNCTION"
+>include()</B
+></A
+> or 
+    <A
+HREF="function.require.html"
+><B
+CLASS="FUNCTION"
+>require()</B
+></A
+>.
+   </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.getallheaders.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="ref.array.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>getallheaders</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.apache.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Array functions</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,217 @@
+<HTML
+><HEAD
+><TITLE
+>srand</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+REL="HOME"
+TITLE="PHP3 Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Mathematical functions"
+HREF="ref.math.html"><LINK
+REL="PREVIOUS"
+TITLE="Sqrt"
+HREF="function.sqrt.html"><LINK
+REL="NEXT"
+TITLE="Tan"
+HREF="function.tan.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP3 Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.sqrt.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.tan.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="FUNCTION.SRAND"
+>srand</A
+></H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN13258"
+></A
+>srand -- seed the random number generator</DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN13261"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><CODE
+CLASS="FUNCDEF"
+>void srand</CODE
+>(int seed);<P
+></P
+></DIV
+><P
+>     Seeds the random number generator with
+     <TT
+CLASS="PARAMETER"
+><I
+>seed</I
+></TT
+>.
+
+     <DIV
+CLASS="INFORMALEXAMPLE"
+><P
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>// seed with microseconds since last "whole" second
+srand((double)microtime()*1000000);
+$randval = rand();
+      </PRE
+><P
+></P
+></DIV
+>
+ 
+    </P
+><P
+>     See also <A
+HREF="function.rand.html"
+><B
+CLASS="FUNCTION"
+>rand()</B
+></A
+>,
+     <A
+HREF="function.getrandmax.html"
+><B
+CLASS="FUNCTION"
+>getrandmax()</B
+></A
+>,
+     <A
+HREF="function.mt-rand.html"
+><B
+CLASS="FUNCTION"
+>mt_rand()</B
+></A
+>,
+     <A
+HREF="function.mt-srand.html"
+><B
+CLASS="FUNCTION"
+>mt_srand()</B
+></A
+> and
+     <A
+HREF="function.mt-getrandmax.html"
+><B
+CLASS="FUNCTION"
+>mt_getrandmax()</B
+></A
+>.
+    
+   </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.sqrt.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.tan.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Sqrt</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.math.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Tan</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,228 @@
+<HTML
+><HEAD
+><TITLE
+>checkdnsrr</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+REL="HOME"
+TITLE="PHP3 Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Network functions"
+HREF="ref.network.html"><LINK
+REL="PREVIOUS"
+TITLE="gethostbynamel"
+HREF="function.gethostbynamel.html"><LINK
+REL="NEXT"
+TITLE="getmxrr"
+HREF="function.getmxrr.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP3 Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.gethostbynamel.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.getmxrr.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="FUNCTION.CHECKDNSRR"
+>checkdnsrr</A
+></H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN16217"
+></A
+>checkdnsrr -- Check DNS records corresponding to a given
+    Internet host name or IP address.</DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN16220"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><CODE
+CLASS="FUNCDEF"
+>int checkdnsrr</CODE
+>(string host, string [<SPAN
+CLASS="OPTIONAL"
+>type</SPAN
+>]);<P
+></P
+></DIV
+><P
+>     Searches DNS for records of type <TT
+CLASS="PARAMETER"
+><I
+>type</I
+></TT
+>
+     corresponding to <TT
+CLASS="PARAMETER"
+><I
+>host</I
+></TT
+>. Returns true if any
+     records are found; returns false if no records were found or if
+     an error occurred.
+
+    </P
+><P
+>     <TT
+CLASS="PARAMETER"
+><I
+>type</I
+></TT
+> may be any one of: A, MX, NS, SOA,
+     PTR, CNAME, or ANY.  The default is MX.
+
+    </P
+><P
+>     <TT
+CLASS="PARAMETER"
+><I
+>host</I
+></TT
+> may either be the IP address in
+     dotted-quad notation or the host name.
+
+    </P
+><P
+>     See also
+     <A
+HREF="function.getmxrr.html"
+><B
+CLASS="FUNCTION"
+>getmxrr()</B
+></A
+>,
+     <A
+HREF="function.gethostbyaddr.html"
+><B
+CLASS="FUNCTION"
+>gethostbyaddr()</B
+></A
+>, 
+     <A
+HREF="function.gethostbyname.html"
+><B
+CLASS="FUNCTION"
+>gethostbyname()</B
+></A
+>, 
+     <A
+HREF="function.gethostbynamel.html"
+><B
+CLASS="FUNCTION"
+>gethostbynamel()</B
+></A
+>, and
+     the named(8) manual page.
+
+   </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.gethostbynamel.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.getmxrr.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>gethostbynamel</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.network.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>getmxrr</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -26,7 +26,7 @@
    | Authors: Rasmus Lerdorf <rasmus@lerdorf.on.ca>                       |
    +----------------------------------------------------------------------+
  */
-/* $Id: head.c,v 1.119 1999/06/01 19:57:04 jim Exp $ */
+/* $Id: head.c,v 1.120 1999/06/26 16:47:22 fmk Exp $ */
 #ifdef THREAD_SAFE
 #include "tls.h"
 #endif
@@ -98,6 +98,18 @@ void php3_noheader(void)
    Send a raw HTTP header */
 void php3_Header(INTERNAL_FUNCTION_PARAMETERS)
 {
+	pval *arg1;
+
+	if (getParameters(ht, 1, &arg1) == FAILURE) {
+		WRONG_PARAM_COUNT;
+	}
+	convert_to_string(arg1);
+	_php3_Header(arg1->value.str.val);
+}
+
+
+PHPAPI void _php3_Header(char *strHeader)
+{
 	char *r;
 #if APACHE
 	char *rr = NULL;
@@ -105,15 +117,8 @@ void php3_Header(INTERNAL_FUNCTION_PARAMETERS)
 	long myuid = 0L;
 	char temp2[32];
 #endif
-	pval *arg1;
 TLS_VARS;
 
-
-
-	if (getParameters(ht, 1, &arg1) == FAILURE) {
-		WRONG_PARAM_COUNT;
-	}
-	convert_to_string(arg1);
 	if (GLOBAL(php3_HeaderPrinted) == 1) {
 		php3_error(E_WARNING, "Cannot add more header information - the header was already sent "
 							  "(header information may be added only before any output is generated from the script - "
@@ -125,10 +130,10 @@ TLS_VARS;
 	 * Not entirely sure this is the right way to support the header
 	 * command in the Apache module.  Comments?
 	 */
-	r = strchr(arg1->value.str.val, ':');
+	r = strchr(strHeader, ':');
 	if (r) {
 		*r = '\0';
-		if (!strcasecmp(arg1->value.str.val, "Content-type")) {
+		if (!strcasecmp(strHeader, "Content-type")) {
 			if (*(r + 1) == ' ')
 				GLOBAL(php3_rqst)->content_type = pstrdup(GLOBAL(php3_rqst)->pool,r + 2);
 			else
@@ -139,7 +144,7 @@ TLS_VARS;
 				rr = r + 2;
 			else
 				rr = r + 1;
-			if (php3_ini.safe_mode && (!strcasecmp(arg1->value.str.val, "WWW-authenticate"))) {
+			if (php3_ini.safe_mode && (!strcasecmp(strHeader, "WWW-authenticate"))) {
 				myuid = _php3_getuid();
 				sprintf(temp2, "realm=\"%ld ", myuid);  /* SAFE */
 				temp = _php3_regreplace("realm=\"", temp2, rr, 1, 0);
@@ -151,32 +156,32 @@ TLS_VARS;
 						temp = _php3_regreplace("$", temp2, rr, 0, 0);
 					}
 				}
-				table_set(GLOBAL(php3_rqst)->headers_out, arg1->value.str.val, temp);
+				table_set(GLOBAL(php3_rqst)->headers_out, strHeader, temp);
 			} else
-				table_set(GLOBAL(php3_rqst)->headers_out, arg1->value.str.val, rr);
+				table_set(GLOBAL(php3_rqst)->headers_out, strHeader, rr);
 		}
-		if (!strcasecmp(arg1->value.str.val, "location")) {
+		if (!strcasecmp(strHeader, "location")) {
 			GLOBAL(php3_rqst)->status = REDIRECT;
 		}
 		*r = ':';
 		GLOBAL(php3_HeaderPrinted) = 2;
 	}
-	if (!strncasecmp(arg1->value.str.val, "http/", 5)) {
-		if (strlen(arg1->value.str.val) > 9) {
-			GLOBAL(php3_rqst)->status = atoi(&((arg1->value.str.val)[9]));
+	if (!strncasecmp(strHeader, "http/", 5)) {
+		if (strlen(strHeader) > 9) {
+			GLOBAL(php3_rqst)->status = atoi(&((strHeader)[9]));
 		}
 		/* Use a pstrdup here to get the memory straight from Apache's per-request pool to
 		 * avoid having our own memory manager complain about this memory not being freed
 		 * because it really shouldn't be freed until the end of the request and it isn't
 		 * easy for us to figure out when we allocated it vs. when something else might have.
 		 */
-		GLOBAL(php3_rqst)->status_line = pstrdup(GLOBAL(php3_rqst)->pool,&((arg1->value.str.val)[9]));
+		GLOBAL(php3_rqst)->status_line = pstrdup(GLOBAL(php3_rqst)->pool,&((strHeader)[9]));
 	}
 #else
-	r = strchr(arg1->value.str.val, ':');
+	r = strchr(strHeader, ':');
 	if (r) {
 		*r = '\0';
-		if (!strcasecmp(arg1->value.str.val, "Content-type")) {
+		if (!strcasecmp(strHeader, "Content-type")) {
 			if (GLOBAL(cont_type)) efree(GLOBAL(cont_type));
 			GLOBAL(cont_type) = estrdup(r + 1);
 #if 0 /*WIN32|WINNT / *M$ does us again*/
@@ -190,7 +195,7 @@ TLS_VARS;
 			*r = ':';
 #if USE_SAPI
 			{
-				char *tempstr=emalloc(strlen(arg1->value.str.val)+2);
+				char *tempstr=emalloc(strlen(strHeader)+2);
 				
 				sprintf(tempstr,"%s\015\012",tempstr);
 				GLOBAL(sapi_rqst)->header(GLOBAL(sapi_rqst)->scid,tempstr);
@@ -198,10 +203,10 @@ TLS_VARS;
 			}
 #else /* CGI BINARY or FHTTPD */
 #if FHTTPD
-            php3_fhttpd_puts_header(arg1->value.str.val);
+            php3_fhttpd_puts_header(strHeader);
             php3_fhttpd_puts_header("\r\n");
 #else
-			PUTS(arg1->value.str.val);
+			PUTS(strHeader);
 			PUTS("\015\012");
 #endif
 #endif/* end if SAPI */
@@ -209,17 +214,17 @@ TLS_VARS;
 	} else {
 #if USE_SAPI
 		{
-		char *tempstr=emalloc(strlen(arg1->value.str.val)+2);
+		char *tempstr=emalloc(strlen(strHeader)+2);
 		sprintf(tempstr,"%s\015\012",tempstr);
 		GLOBAL(sapi_rqst)->header(GLOBAL(sapi_rqst)->scid,tempstr);
 		efree(tempstr);
 		}
 #else /* CGI BINARY or FHTTPD */
 #if FHTTPD
-        php3_fhttpd_puts_header(arg1->value.str.val);
+        php3_fhttpd_puts_header(strHeader);
         php3_fhttpd_puts_header("\r\n");
 #else
-		PUTS(arg1->value.str.val);
+		PUTS(strHeader);
 		PUTS("\015\012");
 #endif
 #endif /* endif SAPI */

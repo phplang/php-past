@@ -1,0 +1,186 @@
+<HTML
+><HEAD
+><TITLE
+>imap_append</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+REL="HOME"
+TITLE="PHP3 Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="IMAP functions"
+HREF="ref.imap.html"><LINK
+REL="PREVIOUS"
+TITLE="IMAP functions"
+HREF="ref.imap.html"><LINK
+REL="NEXT"
+TITLE="imap_base64"
+HREF="function.imap-base64.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP3 Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="ref.imap.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.imap-base64.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="FUNCTION.IMAP-APPEND"
+>imap_append</A
+></H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN10172"
+></A
+>imap_append -- Append a string message to a specified mailbox</DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN10175"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><CODE
+CLASS="FUNCDEF"
+>int imap_append</CODE
+>(int imap_stream, string mbox, string message, stringflags);<P
+></P
+></DIV
+><P
+>     Returns true on sucess, false on error.  
+    </P
+><P
+>     <B
+CLASS="FUNCTION"
+>imap_append()</B
+> appends a string message to the
+     specified mailbox <TT
+CLASS="PARAMETER"
+><I
+>mbox</I
+></TT
+>. If the optional
+     <TT
+CLASS="PARAMETER"
+><I
+>flags</I
+></TT
+> is specified, writes the
+     <TT
+CLASS="PARAMETER"
+><I
+>flags</I
+></TT
+> to that mailbox also.
+    </P
+><P
+>     When talking to the Cyrus IMAP server, you must use "\r\n" as
+     your end-of-line terminator instead of "\n" or the operation will
+     fail.
+   </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="ref.imap.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.imap-base64.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>IMAP functions</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.imap.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>imap_base64</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

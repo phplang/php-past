@@ -1,0 +1,393 @@
+<HTML
+><HEAD
+><TITLE
+>each</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+REL="HOME"
+TITLE="PHP3 Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Array functions"
+HREF="ref.array.html"><LINK
+REL="PREVIOUS"
+TITLE="current"
+HREF="function.current.html"><LINK
+REL="NEXT"
+TITLE="end"
+HREF="function.end.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP3 Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.current.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.end.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="FUNCTION.EACH"
+>each</A
+></H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN2985"
+></A
+>each -- return next key/value pair from an array</DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN2988"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><CODE
+CLASS="FUNCDEF"
+>array each</CODE
+>(array array);<P
+></P
+></DIV
+><P
+>     Returns the current key/value pair from the array
+     <TT
+CLASS="PARAMETER"
+><I
+>array</I
+></TT
+> and advances the array cursor. This 
+	 pair is returned in a four-element array, with the keys 
+	 <I
+CLASS="EMPHASIS"
+>0</I
+>,
+     <I
+CLASS="EMPHASIS"
+>1</I
+>, <I
+CLASS="EMPHASIS"
+>key</I
+>, and
+     <I
+CLASS="EMPHASIS"
+>value</I
+>. Elements <I
+CLASS="EMPHASIS"
+>0</I
+> and
+     <I
+CLASS="EMPHASIS"
+>key</I
+> each contain the key name of the array
+     element, and <I
+CLASS="EMPHASIS"
+>1</I
+> and
+     <I
+CLASS="EMPHASIS"
+>value</I
+> contain the data.
+     
+    </P
+><P
+>     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="EXAMPLE"
+><P
+><B
+>Example 1. each() examples</B
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>$foo = array( "bob", "fred", "jussi", "jouni" );
+$bar = each( $foo );
+      </PRE
+><P
+>       <TT
+CLASS="LITERAL"
+>$bar</TT
+> now contains the following key/value
+       pairs:
+       
+       <P
+></P
+><UL
+COMPACT="COMPACT"
+><LI
+><SPAN
+>0 =&#62; 0
+        </SPAN
+></LI
+><LI
+><SPAN
+>1 =&#62; 'bob'
+        </SPAN
+></LI
+><LI
+><SPAN
+>key =&#62; 0
+        </SPAN
+></LI
+><LI
+><SPAN
+>value =&#62; 'bob'
+       </SPAN
+></LI
+></UL
+>
+
+       <PRE
+CLASS="PROGRAMLISTING"
+>$foo = array( "Robert" =&#62; "Bob", "Seppo" =&#62; "Sepi" );
+$bar = each( $foo );
+       </PRE
+>
+
+      </P
+><P
+>       <TT
+CLASS="LITERAL"
+>$bar</TT
+> now contains the following key/value
+       pairs:
+
+       <P
+></P
+><UL
+COMPACT="COMPACT"
+><LI
+><SPAN
+>0 =&#62; 'Robert'
+        </SPAN
+></LI
+><LI
+><SPAN
+>1 =&#62; 'Bob'
+        </SPAN
+></LI
+><LI
+><SPAN
+>key =&#62; 'Robert'
+        </SPAN
+></LI
+><LI
+><SPAN
+>value =&#62; 'Bob'
+       </SPAN
+></LI
+></UL
+>
+
+    </P
+></DIV
+></TD
+></TR
+></TABLE
+>
+      
+
+    </P
+><P
+>     <B
+CLASS="FUNCTION"
+>each()</B
+> is typically used in conjunction with
+     <A
+HREF="function.list.html"
+><B
+CLASS="FUNCTION"
+>list()</B
+></A
+> to traverse an array; for instance,
+     $HTTP_POST_VARS: 
+
+     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="EXAMPLE"
+><P
+><B
+>Example 2. Traversing $HTTP_POST_VARS with each()</B
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>echo "Values submitted via POST method:&lt;br&gt;";
+while ( list( $key, $val ) = each( $HTTP_POST_VARS ) ) {
+   echo "$key =&#62; $val&lt;br&gt;";
+}
+      </PRE
+></DIV
+></TD
+></TR
+></TABLE
+>
+
+	</P
+><P
+>	 After <B
+CLASS="FUNCTION"
+>each()</B
+> has executed, the array cursor
+	 will be left on the next element of the array, or on the last
+	 element if it hits the end of the array.
+
+    </P
+><P
+>     See also <A
+HREF="function.key.html"
+><B
+CLASS="FUNCTION"
+>key()</B
+></A
+>, <A
+HREF="function.list.html"
+><B
+CLASS="FUNCTION"
+>list()</B
+></A
+>,
+	 <A
+HREF="function.current.html"
+><B
+CLASS="FUNCTION"
+>current()</B
+></A
+>, <A
+HREF="function.reset.html"
+><B
+CLASS="FUNCTION"
+>reset()</B
+></A
+>,
+	 <A
+HREF="function.next.html"
+><B
+CLASS="FUNCTION"
+>next()</B
+></A
+>, and <A
+HREF="function.prev.html"
+><B
+CLASS="FUNCTION"
+>prev()</B
+></A
+>.
+
+   </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.current.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.end.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>current</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.array.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>end</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

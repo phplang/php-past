@@ -1,0 +1,250 @@
+<HTML
+><HEAD
+><TITLE
+>fwrite</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+REL="HOME"
+TITLE="PHP3 Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Filesystem functions"
+HREF="ref.filesystem.html"><LINK
+REL="PREVIOUS"
+TITLE="ftell"
+HREF="function.ftell.html"><LINK
+REL="NEXT"
+TITLE="set_file_buffer"
+HREF="function.set-file-buffer.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP3 Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.ftell.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.set-file-buffer.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="FUNCTION.FWRITE"
+>fwrite</A
+></H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN7439"
+></A
+>fwrite -- Binary-safe file write</DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN7442"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><CODE
+CLASS="FUNCDEF"
+>int fwrite</CODE
+>(int fp, string string, int [<SPAN
+CLASS="OPTIONAL"
+>length</SPAN
+>]);<P
+></P
+></DIV
+><P
+>     <B
+CLASS="FUNCTION"
+>fwrite()</B
+> writes the contents of
+     <TT
+CLASS="PARAMETER"
+><I
+>string</I
+></TT
+> to the file stream pointed to by
+     <TT
+CLASS="PARAMETER"
+><I
+>fp</I
+></TT
+>. If the <TT
+CLASS="PARAMETER"
+><I
+>length</I
+></TT
+>
+     argument is given, writing will stop after
+     <TT
+CLASS="PARAMETER"
+><I
+>length</I
+></TT
+> bytes have been written or the end
+     of <TT
+CLASS="PARAMETER"
+><I
+>string</I
+></TT
+> is reached, whichever comes
+     first. 
+
+    </P
+><P
+>     Note that if the <TT
+CLASS="PARAMETER"
+><I
+>length</I
+></TT
+> argument is given,
+     then the <A
+HREF="configuration.html#INI.MAGIC-QUOTES-RUNTIME"
+>magic_quotes_runtime</A
+>
+     configuration option will be ignored and no slashes will be
+     stripped from <TT
+CLASS="PARAMETER"
+><I
+>string</I
+></TT
+>. 
+
+    </P
+><P
+>     See also <A
+HREF="function.fread.html"
+><B
+CLASS="FUNCTION"
+>fread()</B
+></A
+>, <A
+HREF="function.fopen.html"
+><B
+CLASS="FUNCTION"
+>fopen()</B
+></A
+>,
+     <A
+HREF="function.fsockopen.html"
+><B
+CLASS="FUNCTION"
+>fsockopen()</B
+></A
+>, <A
+HREF="function.popen.html"
+><B
+CLASS="FUNCTION"
+>popen()</B
+></A
+>, and
+     <A
+HREF="function.fputs.html"
+><B
+CLASS="FUNCTION"
+>fputs()</B
+></A
+>.
+   </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.ftell.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.set-file-buffer.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>ftell</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.filesystem.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>set_file_buffer</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,194 @@
+<HTML
+><HEAD
+><TITLE
+>imap_body</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+REL="HOME"
+TITLE="PHP3 Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="IMAP functions"
+HREF="ref.imap.html"><LINK
+REL="PREVIOUS"
+TITLE="imap_base64"
+HREF="function.imap-base64.html"><LINK
+REL="NEXT"
+TITLE="imap_check"
+HREF="function.imap-check.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP3 Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.imap-base64.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.imap-check.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="FUNCTION.IMAP-BODY"
+>imap_body</A
+></H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN10209"
+></A
+>imap_body -- Read the message body</DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN10212"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><CODE
+CLASS="FUNCDEF"
+>string imap_body</CODE
+>(int imap_stream, int msg_number, int flags);<P
+></P
+></DIV
+><P
+>     <B
+CLASS="FUNCTION"
+>imap_body()</B
+> returns the body of the message,
+     numbered <TT
+CLASS="PARAMETER"
+><I
+> msg_number</I
+></TT
+> in the current
+     mailbox. The optional <TT
+CLASS="PARAMETER"
+><I
+>flags</I
+></TT
+> are a bit mask
+     with one or more of the following:
+     <P
+></P
+><UL
+><LI
+><P
+>	FT_UID - The msgno is a UID
+      </P
+></LI
+><LI
+><P
+>	FT_PEEK - Do not set the \Seen flag if not already set
+      </P
+></LI
+><LI
+><P
+>	FT_INTERNAL - The return string is in internal format, will
+	not canonicalize to CRLF.
+     </P
+></LI
+></UL
+>
+   </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.imap-base64.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.imap-check.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>imap_base64</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.imap.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>imap_check</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

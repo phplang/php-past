@@ -1,0 +1,185 @@
+<HTML
+><HEAD
+><TITLE
+>mysql_field_flags</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+REL="HOME"
+TITLE="PHP3 Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="MySQL functions"
+HREF="ref.mysql.html"><LINK
+REL="PREVIOUS"
+TITLE="mysql_field_type"
+HREF="function.mysql-field-type.html"><LINK
+REL="NEXT"
+TITLE="mysql_field_len"
+HREF="function.mysql-field-len.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP3 Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.mysql-field-type.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.mysql-field-len.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="FUNCTION.MYSQL-FIELD-FLAGS"
+>mysql_field_flags</A
+></H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN15474"
+></A
+>mysql_field_flags -- Get the flags associated with the specified field in a
+     result</DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN15477"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><CODE
+CLASS="FUNCDEF"
+>string mysql_field_flags</CODE
+>(int result, int field_offset);<P
+></P
+></DIV
+><P
+> 
+     <B
+CLASS="FUNCTION"
+>mysql_field_flags()</B
+> returns the field flags of
+     the specified field. The flags are reported as a single word
+     per flag separated by a single space, so that you can split the
+     returned value using <A
+HREF="function.explode.html"
+><B
+CLASS="FUNCTION"
+>explode()</B
+></A
+>.
+    </P
+><P
+>The following flags are reported, if your version of MySQL
+     is current enough to support them: "not_null", "primary_key",
+     "unique_key", "multiple_key", "blob", "unsigned", "zerofill",
+     "binary", "enum", "auto_increment", "timestamp".
+    </P
+><P
+> 
+     For downward compatibility <B
+CLASS="FUNCTION"
+>mysql_fieldflags()</B
+>
+     can also be used.
+   </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.mysql-field-type.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.mysql-field-len.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>mysql_field_type</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.mysql.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>mysql_field_len</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,206 @@
+<HTML
+><HEAD
+><TITLE
+>cpdf_restore</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+REL="HOME"
+TITLE="PHP3 Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="ClibPDF functions"
+HREF="ref.cpdf.html"><LINK
+REL="PREVIOUS"
+TITLE="cpdf_save"
+HREF="function.cpdf-save.html"><LINK
+REL="NEXT"
+TITLE="cpdf_translate"
+HREF="function.cpdf-translate.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP3 Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.cpdf-save.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.cpdf-translate.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="FUNCTION.CPDF-RESTORE"
+>cpdf_restore</A
+></H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN4398"
+></A
+>cpdf_restore -- Restores formerly saved enviroment</DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN4401"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><CODE
+CLASS="FUNCDEF"
+>void cpdf_restore</CODE
+>(int pdf document);<P
+></P
+></DIV
+><P
+>     The <B
+CLASS="FUNCTION"
+>cpdf_restore()</B
+> function restores the
+     enviroment saved with <A
+HREF="function.cpdf-save.html"
+><B
+CLASS="FUNCTION"
+>cpdf_save()</B
+></A
+>. It works
+     like the postscript command grestore. Very
+     useful if you want to translate or rotate an object without effecting
+     other objects.
+
+     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="EXAMPLE"
+><P
+><B
+>Example 1. Save/Restore</B
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>&lt;?php cpdf_save($pdf);
+// do all kinds of rotations, transformations, ...
+cpdf_restore($pdf) ?&#62;</PRE
+></DIV
+></TD
+></TR
+></TABLE
+>
+
+    </P
+><P
+>     See also <A
+HREF="function.cpdf-save.html"
+><B
+CLASS="FUNCTION"
+>cpdf_save()</B
+></A
+>.
+
+   </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.cpdf-save.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.cpdf-translate.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>cpdf_save</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.cpdf.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>cpdf_translate</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

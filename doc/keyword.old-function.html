@@ -1,0 +1,186 @@
+<HTML
+><HEAD
+><TITLE
+>old_function</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+REL="HOME"
+TITLE="PHP3 Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Control Structures"
+HREF="control-structures.html"><LINK
+REL="PREVIOUS"
+TITLE="Returning values"
+HREF="keyword.function.return.html"><LINK
+REL="NEXT"
+TITLE="class"
+HREF="keyword.class.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP3 Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="keyword.function.return.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 10. Control Structures</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="keyword.class.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="KEYWORD.OLD-FUNCTION"
+><TT
+CLASS="LITERAL"
+>old_function</TT
+></A
+></H1
+><P
+>     The <TT
+CLASS="LITERAL"
+>old_function</TT
+> statement allows you to declare
+     a function using a syntax identical to PHP/FI2 (except you must
+     replace 'function' with 'old_function'.
+    </P
+><P
+>     This is a deprecated feature, and should only be used by the
+     PHP/FI2-&#62;PHP3 convertor.
+    </P
+><P
+>     Functions declared as <TT
+CLASS="LITERAL"
+>old_function</TT
+>
+     cannot be called from PHP's internal code. Among other
+     things, this means you can't use them in functions such as
+     <A
+HREF="function.usort.html"
+><B
+CLASS="FUNCTION"
+>usort()</B
+></A
+>, <A
+HREF="function.array-walk.html"
+><B
+CLASS="FUNCTION"
+>array_walk()</B
+></A
+>, and
+     <A
+HREF="function.register-shutdown-function.html"
+><B
+CLASS="FUNCTION"
+>register_shutdown_function()</B
+></A
+>. You can get around
+     this limitation by writing a wrapper function (in normal PHP3 form)
+     to call the <TT
+CLASS="LITERAL"
+>old_function</TT
+>.
+ 
+   </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="keyword.function.return.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="keyword.class.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Returning values</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="control-structures.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><TT
+CLASS="LITERAL"
+>class</TT
+></TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,276 @@
+<HTML
+><HEAD
+><TITLE
+>include</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+REL="HOME"
+TITLE="PHP3 Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Control Structures"
+HREF="control-structures.html"><LINK
+REL="PREVIOUS"
+TITLE="require"
+HREF="function.require.html"><LINK
+REL="NEXT"
+TITLE="function"
+HREF="keyword.function.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP3 Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.require.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 10. Control Structures</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="keyword.function.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="FUNCTION.INCLUDE"
+><TT
+CLASS="LITERAL"
+>include</TT
+></A
+></H1
+><P
+>     The <TT
+CLASS="LITERAL"
+>include</TT
+> statement includes and evaluates
+     the specified file.
+ 
+    </P
+><P
+>     This happens each time the <TT
+CLASS="LITERAL"
+>include</TT
+> statement is
+     encountered, so you can use an <TT
+CLASS="LITERAL"
+>include</TT
+> statement
+     within a looping structure to include a number of different file.
+ 
+     <DIV
+CLASS="INFORMALEXAMPLE"
+><P
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+> $files = array ('first.inc', 'second.inc', 'third.inc');
+ for ($i = 0; $i &#60; count($files); $i++) {
+     include $files[$i];
+ }
+      </PRE
+><P
+></P
+></DIV
+>
+
+    </P
+><P
+>     <A
+HREF="function.include.html"
+><TT
+CLASS="LITERAL"
+>include</TT
+></A
+>
+     differs from <A
+HREF="function.require.html"
+><TT
+CLASS="LITERAL"
+>require</TT
+></A
+>
+     in that the include statement is re-evaluated each time it is
+     encountered (and only when it is being executed), whereas the
+     <A
+HREF="function.require.html"
+><TT
+CLASS="LITERAL"
+>require</TT
+></A
+>
+     statement is replaced by the required file when it is first
+     encountered, whether the contents of the file will be evaluated or
+     not (for example, if it is inside an if statement whose condition
+     evaluated to false).
+ 
+    </P
+><P
+>     Because <A
+HREF="function.include.html"
+><TT
+CLASS="LITERAL"
+>include</TT
+></A
+> is a
+     special language construct, you must enclose it within a statement
+     block if it is inside a conditional block.
+ 
+     <DIV
+CLASS="INFORMALEXAMPLE"
+><P
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+> /* This is WRONG and will not work as desired. */
+ 
+ if ($condition)
+     include($file);
+ else
+     include($other);
+ 
+ /* This is CORRECT. */
+ 
+ if ($condition) {
+     include($file);
+ } else {
+     include($other);
+ }
+      </PRE
+><P
+></P
+></DIV
+>
+ 
+    </P
+><P
+>     When the file is evaluated, the parser begins in "HTML-mode" which
+     will output the contents of the file until the first PHP start tag
+     (&lt;?)  is encountered.
+
+    </P
+><P
+>     See also <A
+HREF="function.readfile.html"
+><B
+CLASS="FUNCTION"
+>readfile()</B
+></A
+>, <A
+HREF="function.require.html"
+><B
+CLASS="FUNCTION"
+>require()</B
+></A
+>,
+     <A
+HREF="function.virtual.html"
+><B
+CLASS="FUNCTION"
+>virtual()</B
+></A
+>.
+ 
+   </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.require.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="keyword.function.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><TT
+CLASS="LITERAL"
+>require</TT
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="control-structures.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><TT
+CLASS="LITERAL"
+>function</TT
+></TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

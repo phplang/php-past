@@ -56,7 +56,7 @@ function_entry posix_functions[] = {
 	{"posix_getppid",		php3_posix_getppid,	NULL},
 	{"posix_getpgrp",		php3_posix_getpgrp,	NULL},
 	{"posix_getpgid",		php3_posix_getpgid,	NULL},
-	{"posix_getsid",		php3_posix_getpgid,	NULL},
+	{"posix_getsid",		php3_posix_getsid,	NULL},
 
 	{"posix_getuid",		php3_posix_getuid,	NULL},
 	{"posix_getgid",		php3_posix_getgid,	NULL},
@@ -146,6 +146,7 @@ void php3_posix_getpgrp(INTERNAL_FUNCTION_PARAMETERS)
    Get the process group id of the specified process */
 void php3_posix_getpgid(INTERNAL_FUNCTION_PARAMETERS)
 {
+#if HAVE_GETPGID
 	pid_t  pgid;
 	pval  *pid;
 
@@ -164,6 +165,9 @@ void php3_posix_getpgid(INTERNAL_FUNCTION_PARAMETERS)
 
 	return_value->type= IS_LONG;
 	return_value->value.lval = pgid;
+#else
+	RETURN_FALSE;
+#endif
 }
 /* }}} */
 
@@ -171,6 +175,7 @@ void php3_posix_getpgid(INTERNAL_FUNCTION_PARAMETERS)
    get process group ID of session leader */
 void php3_posix_getsid(INTERNAL_FUNCTION_PARAMETERS)
 {
+#if HAVE_GETSID
 	pid_t  sid;
 	pval  *pid;
 
@@ -179,7 +184,7 @@ void php3_posix_getsid(INTERNAL_FUNCTION_PARAMETERS)
 	}
 
 	convert_to_long(pid);
-	sid = getpgid(pid->value.lval);
+	sid = getsid(pid->value.lval);
 	if (sid < 0) {
 		php3_error(E_WARNING, "posix_getsid(%d) failed with '%s'", 
 			pid->value.lval,
@@ -189,6 +194,9 @@ void php3_posix_getsid(INTERNAL_FUNCTION_PARAMETERS)
 
 	return_value->type= IS_LONG;
 	return_value->value.lval = sid;
+#else
+	RETURN_FALSE;
+#endif
 }
 /* }}} */
 

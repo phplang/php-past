@@ -1,0 +1,221 @@
+<HTML
+><HEAD
+><TITLE
+>passthru</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+REL="HOME"
+TITLE="PHP3 Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Program Execution functions"
+HREF="ref.exec.html"><LINK
+REL="PREVIOUS"
+TITLE="system"
+HREF="function.system.html"><LINK
+REL="NEXT"
+TITLE="Forms Data Format functions"
+HREF="ref.fdf.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP3 Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.system.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="ref.fdf.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="FUNCTION.PASSTHRU"
+>passthru</A
+></H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN6401"
+></A
+>passthru -- Execute an external program and display raw output</DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN6404"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><CODE
+CLASS="FUNCDEF"
+>string passthru</CODE
+>(string command, int [<SPAN
+CLASS="OPTIONAL"
+>return_var</SPAN
+>]);<P
+></P
+></DIV
+><P
+>     The <B
+CLASS="FUNCTION"
+>passthru()</B
+> function is similar to the
+     <A
+HREF="function.exec.html"
+><B
+CLASS="FUNCTION"
+>Exec()</B
+></A
+> function in that it executes a
+     <TT
+CLASS="PARAMETER"
+><I
+>command</I
+></TT
+>.  If the
+     <TT
+CLASS="PARAMETER"
+><I
+>return_var</I
+></TT
+> argument is present, the return
+     status of the Unix command will be placed here.  This function
+     should be used in place of <A
+HREF="function.exec.html"
+><B
+CLASS="FUNCTION"
+>Exec()</B
+></A
+> or
+     <A
+HREF="function.system.html"
+><B
+CLASS="FUNCTION"
+>System()</B
+></A
+> when the output from the Unix command
+     is binary data which needs to be passed directly back to the
+     browser.  A common use for this is to execute something like the
+     pbmplus utilities that can output an image stream directly.  By
+     setting the content-type to <I
+CLASS="EMPHASIS"
+>image/gif</I
+> and
+     then calling a pbmplus program to output a gif, you can create
+     PHP scripts that output images directly.
+    </P
+><P
+>     See also <A
+HREF="function.exec.html"
+><B
+CLASS="FUNCTION"
+>exec()</B
+></A
+> and <A
+HREF="function.fpassthru.html"
+><B
+CLASS="FUNCTION"
+>fpassthru()</B
+></A
+>.
+   </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.system.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="ref.fdf.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>system</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.exec.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Forms Data Format functions</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

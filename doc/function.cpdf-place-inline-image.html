@@ -1,0 +1,189 @@
+<HTML
+><HEAD
+><TITLE
+>cpdf_place_inline_image</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+REL="HOME"
+TITLE="PHP3 Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="ClibPDF functions"
+HREF="ref.cpdf.html"><LINK
+REL="PREVIOUS"
+TITLE="cpdf_import_jpeg"
+HREF="function.cpdf-import-jpeg.html"><LINK
+REL="NEXT"
+TITLE="Date and Time functions"
+HREF="ref.datetime.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP3 Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.cpdf-import-jpeg.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="ref.datetime.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="FUNCTION.CPDF-PLACE-INLINE-IMAGE"
+>cpdf_place_inline_image</A
+></H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN5124"
+></A
+>cpdf_place_inline_image -- Places an image on the page</DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN5127"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><CODE
+CLASS="FUNCDEF"
+>void cpdf_place_inline_image</CODE
+>(int pdf document, int image, double x-koor, double y-koor, double angle, double width, double height, int mode);<P
+></P
+></DIV
+><P
+>     The <B
+CLASS="FUNCTION"
+>cpdf_place_inline_image()</B
+> function places an image
+     created with the php image functions on the page at postion
+     (<TT
+CLASS="PARAMETER"
+><I
+>x-koor</I
+></TT
+>,
+     <TT
+CLASS="PARAMETER"
+><I
+>y-koor</I
+></TT
+>). The image can be scaled at the same
+     time.
+    </P
+><P
+>     The last optional parameter determines the unit length. If is 0 or omitted
+     the default unit as specified for the page is used. Otherwise the koodinates
+     are measured in postscript points disregarding the current unit.
+
+    </P
+><P
+>     See also <A
+HREF="function.cpdf-import-jpeg.html"
+><B
+CLASS="FUNCTION"
+>cpdf_import_jpeg()</B
+></A
+>,
+   </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.cpdf-import-jpeg.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="ref.datetime.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>cpdf_import_jpeg</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.cpdf.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Date and Time functions</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

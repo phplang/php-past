@@ -1,0 +1,207 @@
+<HTML
+><HEAD
+><TITLE
+>cpdf_arc</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+REL="HOME"
+TITLE="PHP3 Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="ClibPDF functions"
+HREF="ref.cpdf.html"><LINK
+REL="PREVIOUS"
+TITLE="cpdf_circle"
+HREF="function.cpdf-circle.html"><LINK
+REL="NEXT"
+TITLE="cpdf_rect"
+HREF="function.cpdf-rect.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP3 Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.cpdf-circle.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.cpdf-rect.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="FUNCTION.CPDF-ARC"
+>cpdf_arc</A
+></H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN4731"
+></A
+>cpdf_arc -- Draws an arc</DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN4734"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><CODE
+CLASS="FUNCDEF"
+>void cpdf_arc</CODE
+>(int pdf document, double x-koor, double y-koor, double radius, double start, double end, int mode);<P
+></P
+></DIV
+><P
+>     The <B
+CLASS="FUNCTION"
+>cpdf_arc()</B
+> function draws an arc with
+     center at point 
+     (<TT
+CLASS="PARAMETER"
+><I
+>x-koor</I
+></TT
+>, <TT
+CLASS="PARAMETER"
+><I
+>y-koor</I
+></TT
+>)
+     and radius <TT
+CLASS="PARAMETER"
+><I
+>radius</I
+></TT
+>, starting at angle
+     <TT
+CLASS="PARAMETER"
+><I
+>start</I
+></TT
+> and ending at angle
+     <TT
+CLASS="PARAMETER"
+><I
+>end</I
+></TT
+>.
+
+    </P
+><P
+>     The last optional parameter determines the unit length. If is 0 or omitted
+     the default unit as specified for the page is used. Otherwise the koodinates
+     are measured in postscript points disregarding the current unit.
+
+    </P
+><P
+>     See also <A
+HREF="function.cpdf-circle.html"
+><B
+CLASS="FUNCTION"
+>cpdf_circle()</B
+></A
+>.
+
+   </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.cpdf-circle.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.cpdf-rect.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>cpdf_circle</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.cpdf.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>cpdf_rect</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,189 @@
+<HTML
+><HEAD
+><TITLE
+>ldap_read</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+REL="HOME"
+TITLE="PHP3 Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="LDAP functions"
+HREF="ref.ldap.html"><LINK
+REL="PREVIOUS"
+TITLE="ldap_next_entry"
+HREF="function.ldap-next-entry.html"><LINK
+REL="NEXT"
+TITLE="ldap_search"
+HREF="function.ldap-search.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP3 Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.ldap-next-entry.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.ldap-search.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="FUNCTION.LDAP-READ"
+>ldap_read</A
+></H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN12594"
+></A
+>ldap_read -- Read an entry</DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN12597"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><CODE
+CLASS="FUNCDEF"
+>int ldap_read</CODE
+>(int link_identifier, string base_dn, string filter, array 
+      [<SPAN
+CLASS="OPTIONAL"
+>attributes</SPAN
+>]);<P
+></P
+></DIV
+><P
+>     Returns a search result identifier or false on error.
+    </P
+><P
+>  
+     <B
+CLASS="FUNCTION"
+>ldap_read()</B
+> performs the search for a
+     specified filter on the directory with the scope
+     LDAP_SCOPE_BASE. So it is equivalent to reading an entry from the
+     directory.
+    </P
+><P
+>     An empty filter is not allowed. If you want to retrieve
+     absolutely all information for this entry, use a filter of
+     "objectClass=*". If you know which entry types are used on the
+     directory server, you might use an appropriate filter such as
+     "objectClass=inetOrgPerson".
+    </P
+><P
+>     This call takes an optional fourth parameter which is an array of
+     the attributes required. See <A
+HREF="function.ldap-search.html"
+><B
+CLASS="FUNCTION"
+>ldap_search()</B
+></A
+>
+     notes.
+   </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.ldap-next-entry.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.ldap-search.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>ldap_next_entry</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.ldap.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>ldap_search</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

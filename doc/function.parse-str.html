@@ -1,0 +1,196 @@
+<HTML
+><HEAD
+><TITLE
+>parse_str</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+REL="HOME"
+TITLE="PHP3 Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="String functions"
+HREF="ref.strings.html"><LINK
+REL="PREVIOUS"
+TITLE="Ord"
+HREF="function.ord.html"><LINK
+REL="NEXT"
+TITLE="print"
+HREF="function.print.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP3 Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.ord.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.print.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="FUNCTION.PARSE-STR"
+>parse_str</A
+></H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN20859"
+></A
+>parse_str -- parses the string into variables</DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN20862"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><CODE
+CLASS="FUNCDEF"
+>void parse_str</CODE
+>(string str);<P
+></P
+></DIV
+><P
+>     Parses <TT
+CLASS="PARAMETER"
+><I
+>str</I
+></TT
+> as if it were the query string
+     passed via an URL and sets variables in the current scope.
+
+    </P
+><P
+>     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="EXAMPLE"
+><P
+><B
+>Example 1. Using <B
+CLASS="FUNCTION"
+>parse_str()</B
+></B
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>$str = "first=value&amp;second[]=this+works&amp;second[]=another";
+parse_str($str);
+echo $first; /* prints "value" */
+echo $second[0]; /* prints "this works" */
+echo $second[1]; /* prints "another" */
+      </PRE
+></DIV
+></TD
+></TR
+></TABLE
+>
+   </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.ord.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.print.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Ord</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.strings.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>print</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,241 @@
+<HTML
+><HEAD
+><TITLE
+>Basic syntax</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+REL="HOME"
+TITLE="PHP3 Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Language Reference"
+HREF="langref.html"><LINK
+REL="PREVIOUS"
+TITLE="Language Reference"
+HREF="langref.html"><LINK
+REL="NEXT"
+TITLE="Instruction separation"
+HREF="language.basic-syntax.instruction-separation.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP3 Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="langref.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="language.basic-syntax.instruction-separation.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="CHAPTER"
+><H1
+><A
+NAME="LANGUAGE.BASIC-SYNTAX"
+>Chapter 4. Basic syntax</A
+></H1
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Table of Contents</B
+></DT
+><DT
+><A
+HREF="language.basic-syntax.html#LANGUAGE.BASIC-SYNTAX.PHPMODE"
+>Escaping from HTML</A
+></DT
+><DT
+><A
+HREF="language.basic-syntax.instruction-separation.html"
+>Instruction separation</A
+></DT
+><DT
+><A
+HREF="language.basic-syntax.comments.html"
+>Comments</A
+></DT
+></DL
+></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="LANGUAGE.BASIC-SYNTAX.PHPMODE"
+>Escaping from HTML</A
+></H1
+><P
+>     There are four ways of escaping from HTML and entering "PHP code
+     mode":
+
+    </P
+><P
+>     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="EXAMPLE"
+><P
+><B
+>Example 4-1. Ways of escaping from HTML</B
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>1.  &lt;? echo ("this is the simplest, an SGML processing instruction\n"); ?&#62;
+ 
+2.  &lt;?php echo("if you want to serve XML documents, do like this\n"); ?&#62;
+
+3.  &lt;script language="php"&#62; 
+        echo ("some editors (like FrontPage) don't
+              like processing instructions");
+    &lt;/script&#62;
+
+4.  &lt;% echo ("You may optionally use ASP-style tags"); %&#62;
+    &lt;%= $variable; # This is a shortcut for "&lt;%echo .." %&#62;
+      </PRE
+></DIV
+></TD
+></TR
+></TABLE
+>
+
+    </P
+><P
+>     The first way is only available if short tags have been enabled
+     (either by calling <B
+CLASS="FUNCTION"
+>short_tags()</B
+>, they are
+     configured on using the short_tags run-time configuration setting,
+     or they are enabled using the --enable-short-tags compile-time
+     configuration setting.
+
+    </P
+><P
+>     The fourth way is only available if ASP-style tags have been
+     enabled using either the asp_tags configuration setting or the
+     --enable-asp-tags compile-time configuration setting.
+
+    <DIV
+CLASS="NOTE"
+><BLOCKQUOTE
+CLASS="NOTE"
+><P
+><B
+>Note: </B
+>Support for ASP-style tags was added in 3.0.4.</P
+></BLOCKQUOTE
+></DIV
+>
+
+    </P
+><P
+>     The closing "bracket" for the block will include the immediately
+     trailing newline if one is present.
+
+   </P
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="langref.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="language.basic-syntax.instruction-separation.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Language Reference</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="langref.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Instruction separation</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,258 @@
+<HTML
+><HEAD
+><TITLE
+>do..while</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+REL="HOME"
+TITLE="PHP3 Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Control Structures"
+HREF="control-structures.html"><LINK
+REL="PREVIOUS"
+TITLE="while"
+HREF="control-structures.while.html"><LINK
+REL="NEXT"
+TITLE="for"
+HREF="control-structures.for.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP3 Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="control-structures.while.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 10. Control Structures</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="control-structures.for.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="CONTROL-STRUCTURES.DO.WHILE"
+><TT
+CLASS="LITERAL"
+>do..while</TT
+></A
+></H1
+><P
+>     <TT
+CLASS="LITERAL"
+>do..while</TT
+> loops are very similar to
+     <TT
+CLASS="LITERAL"
+>while</TT
+> loops, except the truth expression is
+     checked at the end of each iteration instead of in the beginning.
+     The main difference from regular <TT
+CLASS="LITERAL"
+>while</TT
+> loops
+     is that the first iteration of a <TT
+CLASS="LITERAL"
+>do..while</TT
+>
+     loop is guarenteed to run (the truth expression is only checked
+     at the end of the iteration), whereas it's may not necessarily run
+     with a regular <TT
+CLASS="LITERAL"
+>while</TT
+> loop (the truth expression
+     is checked at the beginning of each iteration, if it evaluates
+     to <TT
+CLASS="LITERAL"
+>FALSE</TT
+> right from the beginning, the loop
+     execution would end immediately).
+
+    </P
+><P
+>     There is just one syntax for <TT
+CLASS="LITERAL"
+>do..while</TT
+> loops:
+ 
+     <DIV
+CLASS="INFORMALEXAMPLE"
+><P
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+> $i = 0;
+ do {
+     print $i;
+ } while ($i&#62;0);
+      </PRE
+><P
+></P
+></DIV
+>
+ 
+    </P
+><P
+>     The above loop would run one time exactly, since after the first
+     iteration, when truth expression is checked, it evaluates to
+     <TT
+CLASS="LITERAL"
+>FALSE</TT
+> ($i is not bigger than 0) and the loop
+     execution ends.
+ 
+    </P
+><P
+>     Advanced C users may be familiar with a different usage of
+     the <TT
+CLASS="LITERAL"
+>do..while</TT
+> loop, to allow stopping
+     execution in the middle of code blocks, by encapsulating
+     them with <TT
+CLASS="LITERAL"
+>do..while</TT
+>(0), and using the <A
+HREF="control-structures.break.html"
+><TT
+CLASS="LITERAL"
+>break</TT
+></A
+> statement.
+     The following code fragment demonstrates this:
+ 
+     <DIV
+CLASS="INFORMALEXAMPLE"
+><P
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+> do {
+     if ($i &#60; 5) {
+         print "i is not big enough";
+         break;
+     }
+     $i *= $factor;
+     if ($i &#60; $minimum_limit) {
+         break;
+     }
+     print "i is ok";
+     ...process i...
+ } while(0);
+      </PRE
+><P
+></P
+></DIV
+>
+ 
+    </P
+><P
+>     Don't worry if you don't understand this right away or at all.
+     You can code scripts and even powerful scripts without using this
+     `feature'.
+ 
+   </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="control-structures.while.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="control-structures.for.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><TT
+CLASS="LITERAL"
+>while</TT
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="control-structures.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><TT
+CLASS="LITERAL"
+>for</TT
+></TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

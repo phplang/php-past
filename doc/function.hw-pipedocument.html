@@ -1,0 +1,200 @@
+<HTML
+><HEAD
+><TITLE
+>hw_PipeDocument</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+REL="HOME"
+TITLE="PHP3 Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Hyperwave functions"
+HREF="ref.hyperwave.html"><LINK
+REL="PREVIOUS"
+TITLE="hw_pConnect"
+HREF="function.hw-pconnect.html"><LINK
+REL="NEXT"
+TITLE="hw_Root"
+HREF="function.hw-root.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP3 Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.hw-pconnect.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.hw-root.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="FUNCTION.HW-PIPEDOCUMENT"
+>hw_PipeDocument</A
+></H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN9044"
+></A
+>hw_PipeDocument -- retrieve any document</DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN9047"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><CODE
+CLASS="FUNCDEF"
+>int hw_pipedocument</CODE
+>(int connection, int objectID);<P
+></P
+></DIV
+><P
+>     Returns the Hyperwave document with object ID
+     <TT
+CLASS="PARAMETER"
+><I
+>objectID</I
+></TT
+>. If the document
+     has anchors which can be inserted, they will have been inserted already.
+     The document will be transfered via a special data connection which
+     does not block the control connection.
+    </P
+><P
+>     See also <A
+HREF="function.hw-gettext.html"
+><B
+CLASS="FUNCTION"
+>hw_GetText()</B
+></A
+> for more on link insertion,
+              <B
+CLASS="FUNCTION"
+>hw_FreeDocument()</B
+>,
+              <A
+HREF="function.hw-documentsize.html"
+><B
+CLASS="FUNCTION"
+>hw_DocumentSize()</B
+></A
+>,
+              <A
+HREF="function.hw-documentbodytag.html"
+><B
+CLASS="FUNCTION"
+>hw_DocumentBodyTag()</B
+></A
+>,
+              <A
+HREF="function.hw-outputdocument.html"
+><B
+CLASS="FUNCTION"
+>hw_OutputDocument()</B
+></A
+>.
+   </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.hw-pconnect.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.hw-root.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>hw_pConnect</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.hyperwave.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>hw_Root</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,195 @@
+<HTML
+><HEAD
+><TITLE
+>msql_query</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+REL="HOME"
+TITLE="PHP3 Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="mSQL functions"
+HREF="ref.msql.html"><LINK
+REL="PREVIOUS"
+TITLE="msql_pconnect"
+HREF="function.msql-pconnect.html"><LINK
+REL="NEXT"
+TITLE="msql_regcase"
+HREF="function.msql-regcase.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP3 Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.msql-pconnect.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.msql-regcase.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="FUNCTION.MSQL-QUERY"
+>msql_query</A
+></H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN14655"
+></A
+>msql_query -- send mSQL query</DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN14658"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><CODE
+CLASS="FUNCDEF"
+>int msql_query</CODE
+>(string query, int link_identifier);<P
+></P
+></DIV
+><P
+>     msql_query() sends a query to the currently
+     active database on the server that's associated with the
+     specified link identifier.  If the link identifier isn't
+     specified, the last opened link is assumed.  If no link is open,
+     the function tries to establish a link as if
+     <A
+HREF="function.msql-connect.html"
+><B
+CLASS="FUNCTION"
+>msql_connect()</B
+></A
+> was called, and use it.
+    </P
+><P
+>     Returns a positive mSQL query identifier on success, or false on error.
+    </P
+><P
+>     See also:  
+     <A
+HREF="function.msql.html"
+><B
+CLASS="FUNCTION"
+>msql()</B
+></A
+>, 
+     <A
+HREF="function.msql-select-db.html"
+><B
+CLASS="FUNCTION"
+>msql_select_db()</B
+></A
+>, and
+     <A
+HREF="function.msql-connect.html"
+><B
+CLASS="FUNCTION"
+>msql_connect()</B
+></A
+>.
+   </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.msql-pconnect.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.msql-regcase.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>msql_pconnect</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.msql.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>msql_regcase</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

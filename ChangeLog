@@ -1,5 +1,13 @@
 PHP 3.0 CHANGE LOG                                                    ChangeLog
 |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+June 27, 1999, Version 3.0.11
+- detect missing getpgid function, fix posix_getsid (Jim)
+- fix diskspacefree() on Win95 pre-OSR2 (Jim)
+- fix APXS argument order (Sascha)
+- decrease lexer memory footprint (see #1600) (alanc@soar.berkeley.edu, Sascha)
+- add dbase_replace_record() (Greg <greg@darkphoton.com>, Sascha)
+- bringing preg_split() behavior in line with split() (Andrey)
+- fix APXS build on AIX (Rasmus)
 
 June 25, 1999, Version 3.0.10
 - fix base64_decode to match RFC 2045 semantics (Sascha & bfranklin@dct.com)

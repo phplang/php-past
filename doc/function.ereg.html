@@ -1,0 +1,265 @@
+<HTML
+><HEAD
+><TITLE
+>ereg</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+REL="HOME"
+TITLE="PHP3 Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Regular expression functions"
+HREF="ref.regex.html"><LINK
+REL="PREVIOUS"
+TITLE="Regular expression functions"
+HREF="ref.regex.html"><LINK
+REL="NEXT"
+TITLE="ereg_replace"
+HREF="function.ereg-replace.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP3 Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="ref.regex.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.ereg-replace.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="FUNCTION.EREG"
+>ereg</A
+></H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN19895"
+></A
+>ereg -- regular expression match</DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN19898"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><CODE
+CLASS="FUNCDEF"
+>int ereg</CODE
+>(string pattern, string string, array [<SPAN
+CLASS="OPTIONAL"
+>regs</SPAN
+>]);<P
+></P
+></DIV
+><P
+>     Searchs <TT
+CLASS="PARAMETER"
+><I
+>string</I
+></TT
+> for matches to the regular expression
+     given in <TT
+CLASS="PARAMETER"
+><I
+>pattern</I
+></TT
+>. 
+
+    </P
+><P
+>     If matches are found for parenthesized substrings of
+     <TT
+CLASS="PARAMETER"
+><I
+>pattern</I
+></TT
+> and the function is called with
+     the third argument <TT
+CLASS="PARAMETER"
+><I
+>regs</I
+></TT
+>, the matches will
+     be stored in the elements of
+     <TT
+CLASS="PARAMETER"
+><I
+>regs</I
+></TT
+>. $regs[1] will contain the substring
+     which starts at the first left parenthesis; $regs[2] will contain the
+     substring starting at the second, and so on. $regs[0] will
+     contain a copy of <TT
+CLASS="PARAMETER"
+><I
+>string</I
+></TT
+>.
+
+    </P
+><P
+>     Searching is case sensitive.
+
+    </P
+><P
+>     Returns true if a match for pattern was found in string, or false
+     if no matches were found or an error occurred.
+    
+    </P
+><P
+>     The following code snippet takes a date in ISO format (YYYY-MM-DD)
+     and prints it in DD.MM.YYYY format:
+     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="EXAMPLE"
+><P
+><B
+>Example 1. ereg() example</B
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>if ( ereg( "([0-9]{4})-([0-9]{1,2})-([0-9]{1,2})", $date, $regs ) ) {
+    echo "$regs[3].$regs[2].$regs[1]";
+} else {
+    echo "Invalid date format: $date";
+}</PRE
+></DIV
+></TD
+></TR
+></TABLE
+>
+
+    </P
+><P
+>     See also <A
+HREF="function.eregi.html"
+><B
+CLASS="FUNCTION"
+>eregi()</B
+></A
+>, <A
+HREF="function.ereg-replace.html"
+><B
+CLASS="FUNCTION"
+>ereg_replace()</B
+></A
+>, and <A
+HREF="function.eregi-replace.html"
+><B
+CLASS="FUNCTION"
+>eregi_replace()</B
+></A
+>.
+
+   </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="ref.regex.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.ereg-replace.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Regular expression functions</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.regex.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>ereg_replace</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

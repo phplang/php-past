@@ -1,0 +1,436 @@
+<HTML
+><HEAD
+><TITLE
+>Control Structures</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+REL="HOME"
+TITLE="PHP3 Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Language Reference"
+HREF="langref.html"><LINK
+REL="PREVIOUS"
+TITLE="Operator Precedence"
+HREF="language.operators.precedence.html"><LINK
+REL="NEXT"
+TITLE="else"
+HREF="control-structures.else.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP3 Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="language.operators.precedence.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="control-structures.else.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="CHAPTER"
+><H1
+><A
+NAME="CONTROL-STRUCTURES"
+>Chapter 10. Control Structures</A
+></H1
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Table of Contents</B
+></DT
+><DT
+><A
+HREF="control-structures.html#CONTROL-STRUCTURES.IF"
+><TT
+CLASS="LITERAL"
+>if</TT
+></A
+></DT
+><DT
+><A
+HREF="control-structures.else.html"
+><TT
+CLASS="LITERAL"
+>else</TT
+></A
+></DT
+><DT
+><A
+HREF="control-structures.elseif.html"
+><TT
+CLASS="LITERAL"
+>elseif</TT
+></A
+></DT
+><DT
+><A
+HREF="x2176.html"
+>Alternative syntax for <TT
+CLASS="LITERAL"
+>if</TT
+> structures: <TT
+CLASS="LITERAL"
+>if(): ... endif;</TT
+></A
+></DT
+><DT
+><A
+HREF="control-structures.while.html"
+><TT
+CLASS="LITERAL"
+>while</TT
+></A
+></DT
+><DT
+><A
+HREF="control-structures.do.while.html"
+><TT
+CLASS="LITERAL"
+>do..while</TT
+></A
+></DT
+><DT
+><A
+HREF="control-structures.for.html"
+><TT
+CLASS="LITERAL"
+>for</TT
+></A
+></DT
+><DT
+><A
+HREF="control-structures.break.html"
+><TT
+CLASS="LITERAL"
+>break</TT
+></A
+></DT
+><DT
+><A
+HREF="control-structures.continue.html"
+><TT
+CLASS="LITERAL"
+>continue</TT
+></A
+></DT
+><DT
+><A
+HREF="control-structures.switch.html"
+><TT
+CLASS="LITERAL"
+>switch</TT
+></A
+></DT
+><DT
+><A
+HREF="function.require.html"
+><TT
+CLASS="LITERAL"
+>require</TT
+></A
+></DT
+><DT
+><A
+HREF="function.include.html"
+><TT
+CLASS="LITERAL"
+>include</TT
+></A
+></DT
+><DT
+><A
+HREF="keyword.function.html"
+><TT
+CLASS="LITERAL"
+>function</TT
+></A
+></DT
+><DT
+><A
+HREF="keyword.function.return.html"
+>Returning values</A
+></DT
+><DT
+><A
+HREF="keyword.old-function.html"
+><TT
+CLASS="LITERAL"
+>old_function</TT
+></A
+></DT
+><DT
+><A
+HREF="keyword.class.html"
+><TT
+CLASS="LITERAL"
+>class</TT
+></A
+></DT
+></DL
+></DIV
+><P
+>    Any PHP script is built out of a series of statements. A statement can
+    be an assignment, a function call, a loop, a conditional statement of
+    even a statement that does nothing (an empty statement). Statements
+    usually end with a semicolon. In addition, statements can be grouped
+    into a statement-group by encapsulating a group of statements with
+    curly braces. A statement-group is a statement by itself as well. The
+    various statement types are described in this chapter.
+
+   </P
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="CONTROL-STRUCTURES.IF"
+><TT
+CLASS="LITERAL"
+>if</TT
+></A
+></H1
+><P
+>     The <TT
+CLASS="LITERAL"
+>if</TT
+> construct is one of the most important
+     features of many languages, PHP included.  It allows for conditional
+     execution of code fragments.  PHP features an <TT
+CLASS="LITERAL"
+>if</TT
+>
+     structure that is similar to that of C:
+
+     <DIV
+CLASS="INFORMALEXAMPLE"
+><P
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+> if (expr)
+     statement
+ </PRE
+><P
+></P
+></DIV
+>
+ 
+    </P
+><P
+>     As described in the section about expressions, expr is evaluated
+     to its truth value.  If <TT
+CLASS="REPLACEABLE"
+><I
+>expr</I
+></TT
+> evaluates
+     to <TT
+CLASS="LITERAL"
+>TRUE</TT
+>, PHP will execute statement, and if it
+     evaluates to <TT
+CLASS="LITERAL"
+>FALSE</TT
+> - it'll ignore it.
+ 
+    </P
+><P
+>     The following example would display <TT
+CLASS="COMPUTEROUTPUT"
+>a is bigger
+     than b</TT
+> if <TT
+CLASS="REPLACEABLE"
+><I
+>$a</I
+></TT
+> is bigger
+     than <TT
+CLASS="REPLACEABLE"
+><I
+>$b</I
+></TT
+>:
+ 
+     <DIV
+CLASS="INFORMALEXAMPLE"
+><P
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+> if ($a &#62; $b)
+     print "a is bigger than b";
+ </PRE
+><P
+></P
+></DIV
+>
+
+    </P
+><P
+>     Often you'd want to have more than one statement to be executed
+     conditionally.  Of course, there's no need to wrap each statement
+     with an <TT
+CLASS="LITERAL"
+>if</TT
+> clause.  Instead, you can group
+     several statements into a statement group.
+     For example, this code would display <TT
+CLASS="COMPUTEROUTPUT"
+>a is bigger than
+     b</TT
+> if <TT
+CLASS="REPLACEABLE"
+><I
+>$a</I
+></TT
+> is bigger than
+     <TT
+CLASS="REPLACEABLE"
+><I
+>$b</I
+></TT
+>, and would then assign the value of
+     <TT
+CLASS="REPLACEABLE"
+><I
+>$a</I
+></TT
+> into <TT
+CLASS="REPLACEABLE"
+><I
+>$b</I
+></TT
+>:
+ 
+     <DIV
+CLASS="INFORMALEXAMPLE"
+><P
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+> if ($a &#62; $b) {
+     print "a is bigger than b";
+     $b = $a;
+ }
+ </PRE
+><P
+></P
+></DIV
+>
+ 
+    </P
+><P
+>     If statements can be nested indefinitely within other
+     <TT
+CLASS="LITERAL"
+>if</TT
+> statements, which provides you with complete
+     flexibility for conditional execution of the various parts of
+     your program.
+ 
+  </P
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="language.operators.precedence.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="control-structures.else.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Operator Precedence</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="langref.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><TT
+CLASS="LITERAL"
+>else</TT
+></TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,205 @@
+<HTML
+><HEAD
+><TITLE
+>sql_regcase</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+REL="HOME"
+TITLE="PHP3 Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Regular expression functions"
+HREF="ref.regex.html"><LINK
+REL="PREVIOUS"
+TITLE="split"
+HREF="function.split.html"><LINK
+REL="NEXT"
+TITLE="Semaphore and shared memory functions"
+HREF="ref.sem.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP3 Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.split.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="ref.sem.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="FUNCTION.SQL-REGCASE"
+>sql_regcase</A
+></H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN20037"
+></A
+>sql_regcase -- make regular expression for case insensitive match</DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN20040"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><CODE
+CLASS="FUNCDEF"
+>string sql_regcase</CODE
+>(string string);<P
+></P
+></DIV
+><P
+>     Returns a valid regular expression which will match <TT
+CLASS="PARAMETER"
+><I
+>string</I
+></TT
+>,
+     ignoring case. This expression is <TT
+CLASS="PARAMETER"
+><I
+>string</I
+></TT
+> with each character
+     converted to a bracket expression; this bracket expression
+     contains that character's uppercase and lowercase form if
+     applicable, otherwise it contains the original character
+     twice.
+     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="EXAMPLE"
+><P
+><B
+>Example 1. sql_regcase() example</B
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>echo sql_regcase( "Foo bar" );</PRE
+></DIV
+></TD
+></TR
+></TABLE
+>
+
+     prints <PRE
+CLASS="SCREEN"
+>[Ff][Oo][Oo][  ][Bb][Aa][Rr]</PRE
+>.
+
+    </P
+><P
+>     This can be used to achieve case insensitive pattern matching in
+     products which support only case sensitive regular expressions.
+  
+   </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.split.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="ref.sem.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>split</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.regex.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Semaphore and shared memory functions</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

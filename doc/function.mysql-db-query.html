@@ -1,0 +1,195 @@
+<HTML
+><HEAD
+><TITLE
+>mysql_db_query</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+REL="HOME"
+TITLE="PHP3 Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="MySQL functions"
+HREF="ref.mysql.html"><LINK
+REL="PREVIOUS"
+TITLE="mysql_data_seek"
+HREF="function.mysql-data-seek.html"><LINK
+REL="NEXT"
+TITLE="mysql_drop_db"
+HREF="function.mysql-drop-db.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP3 Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.mysql-data-seek.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.mysql-drop-db.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="FUNCTION.MYSQL-DB-QUERY"
+>mysql_db_query</A
+></H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN15178"
+></A
+>mysql_db_query -- Send an MySQL query to MySQL</DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN15181"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><CODE
+CLASS="FUNCDEF"
+>int mysql_db_query</CODE
+>(string database, string query, int [<SPAN
+CLASS="OPTIONAL"
+>link_identifier</SPAN
+>]
+                   );<P
+></P
+></DIV
+><P
+> 
+     Returns: A positive MySQL result identifier to the query result,
+     or false on error.
+    </P
+><P
+> 
+     <B
+CLASS="FUNCTION"
+>mysql_db_query()</B
+> selects a database and
+     executes a query on it.  If the optional link identifier isn't
+     specified, the function will try to find an open link to the
+     MySQL server and if no such link is found it'll try to create one
+     as if <A
+HREF="function.mysql-connect.html"
+><B
+CLASS="FUNCTION"
+>mysql_connect()</B
+></A
+> was called with no
+     arguments
+    </P
+><P
+> 
+     See also <A
+HREF="function.mysql-connect.html"
+><B
+CLASS="FUNCTION"
+>mysql_connect()</B
+></A
+>.  For downwards
+     compatibility <B
+CLASS="FUNCTION"
+>mysql()</B
+> can also be used.
+   </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.mysql-data-seek.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.mysql-drop-db.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>mysql_data_seek</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.mysql.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>mysql_drop_db</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

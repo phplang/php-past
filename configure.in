@@ -1,4 +1,4 @@
-dnl $Id: configure.in,v 1.405 1999/06/24 13:18:51 sas Exp $
+dnl $Id: configure.in,v 1.413 1999/06/27 17:53:49 sas Exp $
 dnl Process this file with autoconf to produce a configure script.
 
 AC_INIT(main.c)
@@ -31,11 +31,25 @@ AC_PROG_CC_C_O
 AC_PROG_LN_S
 AC_PATH_PROG(PERL_PATH, perl)
 
+dnl Make flex scanners use const if they can, even if __STDC__ is not
+dnl true, for compilers like Sun's that only set __STDC__ true in
+dnl "limit-to-ANSI-standard" mode, not in "ANSI-compatible" mode
+AC_C_CONST
+if test "$ac_cv_c_const" = "yes" ; then
+  LEX_CFLAGS="-DYY_USE_CONST"
+fi
+AC_SUBST(LEX_CFLAGS)
+    
 dnl Ugly hack to get around a problem with gcc on AIX.
 if test "$CC" = "gcc" -a "$ac_cv_prog_cc_g" = "yes" -a \
    "`uname -sv`" = "AIX 4"; then
 	CFLAGS=`echo $CFLAGS | sed -e 's/-g//'`
 fi
+
+if test "`uname -sv`" = "AIX 4" -a "$GCC" != "yes"; then
+	APXS_EXP="-bE:mod_php3.exp"
+fi
+AC_SUBST(APXS_EXP)
 
 dnl check for -R, etc. switch
 AC_MSG_CHECKING(if compiler supports -R)
@@ -211,7 +225,7 @@ AC_CHECK_TYPE(ptrdiff_t, unsigned long)
 	
 dnl Checks for library functions.
 AC_FUNC_VPRINTF
-AC_CHECK_FUNCS(memcpy memmove strdup strerror strcasecmp strstr flock lockf putenv tempnam usleep setlocale gettimeofday setvbuf srand48 lrand48 srandom random link symlink regcomp getlogin cuserid vsnprintf snprintf gcvt utime crypt setitimer rint unsetenv strftime setsockopt tzset statvfs statfs inet_aton shutdown truncate)
+AC_CHECK_FUNCS(memcpy memmove strdup strerror strcasecmp strstr flock lockf putenv tempnam usleep setlocale gettimeofday setvbuf srand48 lrand48 srandom random link symlink regcomp getlogin cuserid vsnprintf snprintf gcvt utime crypt setitimer rint unsetenv strftime setsockopt tzset statvfs statfs inet_aton shutdown truncate getpgid getsid)
 AC_FUNC_UTIME_NULL
 AC_FUNC_ALLOCA
 AC_BROKEN_SPRINTF
@@ -249,7 +263,7 @@ AC_ARG_WITH(apxs,
         withval=apxs
     fi
     APXS="$withval"
-	APXS_LDFLAGS="@RPATHS@ @SYBASE_CT_LFLAGS@ @SYBASE_CT_LIBS@ @FHTTPD_LIB@ @ORACLE_LFLAGS@ @ORACLE_LIBS@ @IODBC_LFLAGS@ @IODBC_LIBS@ @SYBASE_LFLAGS@ @SYBASE_LIBS@ @SYBASE_CT_LFLAGS@ @SYBASE_CT_LIBS@ @ADA_LFLAGS@ @ADA_LIBS@ @SOLID_LIBS@ @EMPRESS_LIBS@ @OPENLINK_LFLAGS@ @OPENLINK_LIBS@ @MCK_LFLAGS@ @MCK_LIBS@ @VELOCIS_LIBS@ @CODBC_LFLAGS@ @CODBC_LIBS@ @ZLIB_LIBS@ @PDFLIB_LIBS@ @CPDFLIB_LIBS@ @FDFLIB_LIBS@ @IFX_LFLAGS@ @IFX_LIBS@ @IBASE_LFLAGS@ @IBASE_LIBS@ @DBM_LIB@ @IMAP_LIBS@ @DBASE_LIBS@ @PCRE_LIB@ @EXTRA_LIBS@"
+	APXS_LDFLAGS="@SYBASE_CT_LFLAGS@ @SYBASE_CT_LIBS@ @FHTTPD_LIB@ @ORACLE_LFLAGS@ @ORACLE_LIBS@ @IODBC_LFLAGS@ @IODBC_LIBS@ @SYBASE_LFLAGS@ @SYBASE_LIBS@ @SYBASE_CT_LFLAGS@ @SYBASE_CT_LIBS@ @ADA_LFLAGS@ @ADA_LIBS@ @SOLID_LIBS@ @EMPRESS_LIBS@ @OPENLINK_LFLAGS@ @OPENLINK_LIBS@ @VELOCIS_LIBS@ @CODBC_LFLAGS@ @CODBC_LIBS@ @ZLIB_LIBS@ @PDFLIB_LIBS@ @CPDFLIB_LIBS@ @FDFLIB_LIBS@ @IFX_LFLAGS@ @IFX_LIBS@ @IBASE_LFLAGS@ @IBASE_LIBS@ @DBM_LIB@ @DBASE_LIBS@ @PCRE_LIB@ @EXTRA_LIBS@"
 
     APACHE_INCLUDE="-I`$APXS -q INCLUDEDIR`"
     BINNAME=libphp3.so
@@ -471,7 +485,7 @@ AC_ARG_WITH(system-regex,
 [  --with-system-regex     Do not use the bundled regex library],
 [
 	if test -n "$APXS"; then
-		if test -n "`$APXS -q CFLAGS | grep USE_HSREGEX`"; then		
+		if test -z "`$APXS -q CFLAGS | grep USE_HSREGEX`"; then		
 			REGEX_LIB=regex/libregex.a
 			HSREGEX=yes
 			AC_MSG_RESULT(yes)
@@ -498,7 +512,7 @@ AC_ARG_WITH(system-regex,
 	fi
 ],[
 	if test -n "$APXS"; then
-		if test -n "`$APXS -q CFLAGS | grep USE_HSREGEX`"; then		
+		if test -z "`$APXS -q CFLAGS | grep USE_HSREGEX`"; then		
 			REGEX_LIB=regex/libregex.a
 			HSREGEX=yes
 			AC_MSG_RESULT(yes)
@@ -608,7 +622,8 @@ AC_ARG_WITH(imap,
 		else
 			IMAP_INC_DIR=$withval/include
 		fi
-		if test ! -f $IMAP_INC_DIR/mail.h; then
+		
+        if test ! -f $IMAP_INC_DIR/mail.h; then
 			AC_MSG_ERROR(could not find mail.h in $IMAP_INC_DIR !)
 		fi
 		if test ! -f  $IMAP_INC_DIR/rfc822.h; then
@@ -617,40 +632,19 @@ AC_ARG_WITH(imap,
 		if test ! -f $IMAP_INC_DIR/linkage.h; then
 			AC_MSG_ERROR(could not find linkage.h in $IMAP_INC_DIR !)
 		fi
-		if test -n "$APXS"; then
-			if test -f $IMAP_DIR/lib/libimap.a; then
-				IMAP_LIBS="${apxs_runpath_switch}$IMAP_DIR/lib' -L$IMAP_DIR/lib -limap"
-#           for FreeBSD
-			elif test -f $IMAP_DIR/lib/libc-client4.a; then
-				IMAP_LIBS="${apxs_runpath_switch}$IMAP_DIR/lib' -L$IMAP_DIR/lib -lc-client4"
-			elif test ! -f $IMAP_DIR/lib/libc-client.a; then
-				if test ! -f $IMAP_DIR/lib/libc-client4.so; then
-					AC_MSG_ERROR(You need to copy or link $IMAP_DIR/lib/c-client.a to $IMAP_DIR/lib/libc-client.a)
-				else
-					IMAP_LIBS="${apxs_runpath_switch}$IMAP_DIR/lib' -L$IMAP_DIR/lib -lc-client4"
-				fi
-			else
-				IMAP_LIBS="${apxs_runpath_switch}$IMAP_DIR/lib' -L$IMAP_DIR/lib -lc-client"
-			fi
+
+		if test -f "$IMAP_DIR/lib/libimap.a" ; then
+		  AC_ADD_LIBRARY_WITH_PATH(imap, $IMAP_DIR/lib)
+		elif test -f "$IMAP_DIR/lib/libc-client4.a" || test -f "$IMAP_DIR/lib/libc-client4.so"; then
+		  AC_ADD_LIBRARY_WITH_PATH(c-client4, $IMAP_DIR/lib)
+	    elif test -f "$IMAP_DIR/lib/libc-client.a" || test -f "$IMAP_DIR/lib/libc-client.so"; then
+		  AC_ADD_LIBRARY_WITH_PATH(c-client, $IMAP_DIR/lib)
+        elif test -f "$IMAP_DIR/lib/c-client.a" ; then
+          EXTRA_LIBS="$EXTRA_LIBS $IMAP_DIR/lib/c-client.a"
 		else
-			if test -f $IMAP_DIR/lib/libimap.a; then
-				IMAP_LIBS="-L$IMAP_DIR/lib -limap"
-#           for FreeBSD
-			elif test -f $IMAP_DIR/lib/libc-client4.a; then
-				IMAP_LIBS="${apxs_runpath_switch}$IMAP_DIR/lib' -L$IMAP_DIR/lib -lc-client4"
-			elif test ! -f $IMAP_DIR/lib/c-client.a; then
-				if test ! -f $IMAP_DIR/lib/libc-client4.so; then
-					AC_MSG_ERROR(could not find c-client.a in $IMAP_DIR/lib !)
-				else
-					IMAP_LIBS="${ld_runpath_switch}$IMAP_DIR/lib -L$IMAP_DIR/lib -lc-client4"
-				fi
-			else
-				IMAP_LIBS="-L$IMAP_DIR/lib $IMAP_DIR/lib/c-client.a"
-			fi
-		fi
-		IMAP_INCLUDE="-I$IMAP_INC_DIR/"
-		AC_SUBST(IMAP_INCLUDE)
-		AC_SUBST(IMAP_LIBS)
+		  AC_MSG_ERROR(Please copy or link $IMAP_DIR/lib/c-client.a to $IMAP_DIR/lib/libc-client.a)
+        fi
+		AC_ADD_INCLUDE($IMAP_INC_DIR)
         AC_DEFINE(HAVE_IMAP)
 	    AC_MSG_RESULT(yes)
 	else
@@ -743,6 +737,7 @@ if test -f /usr/pkg/include/gd/gd.h -a -z "$GD_INCLUDE" ; then
        AC_ADD_INCLUDE(/usr/pkg/include/gd)
 fi
 if test "$ac_cv_lib_gd_gdImageLine" = "yes"; then
+  CHECK_TTF="yes"
   AC_ARG_WITH(ttf,
   [  --with-ttf[=DIR]        Include Freetype support],[
   if test "$withval" != "no" ; then
@@ -949,11 +944,7 @@ AC_ARG_WITH(oracle,
     # Oracle libs - nightmare :-)
 
     ORACLE_LIBDIR=lib
-	if test -n "$APXS"; then
-    	ORACLE_LFLAGS="-L$ORACLEINST_TOP/$ORACLE_LIBDIR ${apxs_runpath_switch}$ORACLEINST_TOP/$ORACLE_LIBDIR'"
-	else
-    	ORACLE_LFLAGS="-L$ORACLEINST_TOP/$ORACLE_LIBDIR ${ld_runpath_switch}$ORACLEINST_TOP/$ORACLE_LIBDIR"
-	fi
+    AC_ADD_LIBPATH($ORACLEINST_TOP/$ORACLE_LIBDIR)
     if test -f "$ORACLEINST_TOP/rdbms/lib/sysliblist"
     then
       ORA_SYSLIB="`cat $ORACLEINST_TOP/rdbms/lib/sysliblist`"
@@ -1490,13 +1481,8 @@ AC_ARG_WITH(mck,
           MCK_INCDIR=$withval/c-api
           MCK_LIBDIR=$withval/c-api/lib
        fi
-    MCK_INCLUDE=-I$MCK_INCDIR
-	if test -n "$APXS"; then
-    	MCK_LFLAGS="-L$MCK_LIBDIR ${apxs_runpath_switch}$MCK_LIBDIR'"
-	else
-    	MCK_LFLAGS="-L$MCK_LIBDIR ${ld_runpath_switch}$MCK_LIBDIR"
-	fi
-    MCK_LIBS="-lmckcrypto"
+    AC_ADD_LIBRARY_WITH_PATH(mckcrypto, $MCK_LIBDIR)
+    AC_ADD_INCLUDE($MCK_INCDIR)
 
     AC_DEFINE(HAVE_MCK)
 

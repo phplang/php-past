@@ -1,0 +1,185 @@
+<HTML
+><HEAD
+><TITLE
+>uniqid</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+REL="HOME"
+TITLE="PHP3 Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Miscellaneous functions"
+HREF="ref.misc.html"><LINK
+REL="PREVIOUS"
+TITLE="unserialize"
+HREF="function.unserialize.html"><LINK
+REL="NEXT"
+TITLE="usleep"
+HREF="function.usleep.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP3 Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.unserialize.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.usleep.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="FUNCTION.UNIQID"
+>uniqid</A
+></H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN14087"
+></A
+>uniqid -- generate a unique id</DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN14090"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><CODE
+CLASS="FUNCDEF"
+>int uniqid</CODE
+>(string prefix);<P
+></P
+></DIV
+><P
+>     <B
+CLASS="FUNCTION"
+>uniqid()</B
+> returns a prefixed unique identifier
+     based on current time in microseconds. The prefix can be useful
+     for instance if you generate identifiers simultaneously on
+     several hosts that might happen to generate the identifier at the
+     same microsecond. The prefix can be up to 114 characters long.
+    </P
+><P
+>     If you need a unique identifier or token and you intend to give
+     out that token to the user via the network (i.e. session cookies),
+     it is recommended that you use something along the lines of
+     <DIV
+CLASS="INFORMALEXAMPLE"
+><P
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>$token = md5(uniqid("")); // no random portion
+$better_token = md5(uniqid(rand())); // better, difficult to guess</PRE
+><P
+></P
+></DIV
+>
+    </P
+><P
+>     This will create a 32 character identifier (a 128 bit hex number)
+     that is extremely difficult to predict.
+   </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.unserialize.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.usleep.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>unserialize</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.misc.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>usleep</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

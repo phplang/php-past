@@ -1,0 +1,200 @@
+<HTML
+><HEAD
+><TITLE
+>imap_fetchstructure</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+REL="HOME"
+TITLE="PHP3 Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="IMAP functions"
+HREF="ref.imap.html"><LINK
+REL="PREVIOUS"
+TITLE="imap_fetchbody"
+HREF="function.imap-fetchbody.html"><LINK
+REL="NEXT"
+TITLE="imap_header"
+HREF="function.imap-header.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP3 Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.imap-fetchbody.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.imap-header.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="FUNCTION.IMAP-FETCHSTRUCTURE"
+>imap_fetchstructure</A
+></H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN10360"
+></A
+>imap_fetchstructure -- Read the structure of a particular message</DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN10363"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><CODE
+CLASS="FUNCDEF"
+>array imap_fetchstructure</CODE
+>(int imap_stream, int msg_number);<P
+></P
+></DIV
+><P
+>     This function causes a fetch of all the structured information
+     for the given <TT
+CLASS="PARAMETER"
+><I
+>msg_number</I
+></TT
+>. The returned
+     value is an object with following elements.
+    </P
+><P
+>  
+
+     <DIV
+CLASS="INFORMALEXAMPLE"
+><P
+></P
+><P
+CLASS="LITERALLAYOUT"
+>	&nbsp;type,&nbsp;encoding,&nbsp;ifsubtype,&nbsp;subtype,&nbsp;ifdescription,&nbsp;description,&nbsp;ifid,<br>
+	&nbsp;id,&nbsp;lines,&nbsp;bytes,&nbsp;ifparameters<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</P
+><P
+></P
+></DIV
+>
+    </P
+><P
+>     It also returns an array of objects called parameters[]. This
+     object has following properties.
+
+     <DIV
+CLASS="INFORMALEXAMPLE"
+><P
+></P
+><P
+CLASS="LITERALLAYOUT"
+>	attribute,&nbsp;value<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</P
+><P
+></P
+></DIV
+>
+     In case of multipart, it also returns an array of objects of all
+     the properties, called parts[].
+   </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.imap-fetchbody.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.imap-header.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>imap_fetchbody</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.imap.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>imap_header</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

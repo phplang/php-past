@@ -1,0 +1,231 @@
+<HTML
+><HEAD
+><TITLE
+>Ora_Bind</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+REL="HOME"
+TITLE="PHP3 Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Oracle functions"
+HREF="ref.oracle.html"><LINK
+REL="PREVIOUS"
+TITLE="Oracle functions"
+HREF="ref.oracle.html"><LINK
+REL="NEXT"
+TITLE="Ora_Close"
+HREF="function.ora-close.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP3 Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="ref.oracle.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.ora-close.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="FUNCTION.ORA-BIND"
+>Ora_Bind</A
+></H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN17367"
+></A
+>Ora_Bind -- bind a PHP variable to an Oracle parameter</DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN17370"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><CODE
+CLASS="FUNCDEF"
+>int ora_bind</CODE
+>(int cursor, string PHP variable name, string SQL parameter name, int length, int [<SPAN
+CLASS="OPTIONAL"
+>type</SPAN
+>]);<P
+></P
+></DIV
+><P
+>     Returns true if the bind succeeds, otherwise false.  Details
+     about the error can be retrieved using the
+     <A
+HREF="function.ora-error.html"
+><B
+CLASS="FUNCTION"
+>ora_error()</B
+></A
+> and
+     <A
+HREF="function.ora-errorcode.html"
+><B
+CLASS="FUNCTION"
+>ora_errorcode()</B
+></A
+> functions.
+
+    </P
+><P
+>     This function binds the named PHP variable with a SQL parameter.
+     The SQL parameter must be in the form ":name".  With the optional
+     type parameter, you can define whether the SQL parameter is an
+     in/out (0, default), in (1) or out (2) parameter.  As of PHP
+     3.0.1, you can use the constants ORA_BIND_INOUT, ORA_BIND_IN and
+     ORA_BIND_OUT instead of the numbers.
+ 
+    </P
+><P
+>     ora_bind must be called after <A
+HREF="function.ora-parse.html"
+><B
+CLASS="FUNCTION"
+>ora_parse()</B
+></A
+> and
+     before <A
+HREF="function.ora-exec.html"
+><B
+CLASS="FUNCTION"
+>ora_exec()</B
+></A
+>. Input values can be given  
+     by assignment to the bound PHP variables, after calling 
+     <A
+HREF="function.ora-exec.html"
+><B
+CLASS="FUNCTION"
+>ora_exec()</B
+></A
+> the bound PHP variables contain the output
+     values if available. 
+
+<DIV
+CLASS="INFORMALEXAMPLE"
+><P
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>&lt;?php
+ora_parse($curs, "declare tmp INTEGER; begin tmp := :in; :out := tmp; :x := 7.77; end;");
+ora_bind($curs, "result", ":x", $len, 2);
+ora_bind($curs, "input", ":in", 5, 1);
+ora_bind($curs, "output", ":out", 5, 2);
+$input = 765;
+ora_exec($curs);
+echo "Result: $result&lt;BR&#62;Out: $output&lt;BR&#62;In: $input";
+?&#62;</PRE
+><P
+></P
+></DIV
+>
+
+   </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="ref.oracle.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.ora-close.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Oracle functions</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.oracle.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Ora_Close</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

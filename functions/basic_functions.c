@@ -28,7 +28,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: basic_functions.c,v 1.267 1999/06/20 17:40:05 jim Exp $ */
+/* $Id: basic_functions.c,v 1.269 1999/06/26 18:03:28 jim Exp $ */
 #ifdef THREAD_SAFE
 #include "tls.h"
 #endif
@@ -47,7 +47,7 @@
 #ifdef HAVE_UNISTD_H
 # include <unistd.h>
 #endif
-#if HAVE_STRING_H
+#ifdef HAVE_STRING_H
 #include <string.h>
 #else
 #include <strings.h>
@@ -59,6 +59,11 @@
 #include <netdb.h>
 #include <arpa/inet.h>
 #endif
+
+#ifdef HAVE_SIGNAL_H
+#include <signal.h>
+#endif
+
 #include "safe_mode.h"
 #include "functions/basic_functions.h"
 #include "functions/phpmath.h"
@@ -94,6 +99,9 @@ extern int _php3_send_error(char *message, char *address);
 #endif
 static pval *user_compare_func_name;
 static HashTable *user_shutdown_function_names;
+
+typedef void (*php_sighandler_t)(int);
+static php_sighandler_t old_alrm_handler;
 
 /* some prototypes for local functions */
 void user_shutdown_function_dtor(pval *user_shutdown_function_name);
@@ -328,6 +336,9 @@ function_entry basic_functions[] = {
 	PHP_FE(extract, NULL)
 	
 	PHP_FE(function_exists,		NULL)
+#if 0
+	PHP_FE(alarm, NULL)
+#endif
 
 	{NULL, NULL, NULL}
 };
@@ -608,6 +619,42 @@ void php3_error_reporting(INTERNAL_FUNCTION_PARAMETERS)
 	RETVAL_LONG(old_error_reporting);
 }
 /* }}} */
+
+#if 0
+static void _php_alrm_handler(int i)
+{
+	signal(SIGALRM, old_alrm_handler);
+	old_alrm_handler = NULL;
+}
+
+/* {{{ proto int alarm(int seconds)
+   user-level alarm() call. Returns remaining seconds */
+PHP_FUNCTION(alarm)
+{
+	pval *value;
+	unsigned int remaining = 0;
+	
+	if(ARG_COUNT(ht) != 1 || getParameters(ht, 1, &value) == FAILURE) {
+		WRONG_PARAM_COUNT;
+	}
+
+	convert_to_long(value);
+	
+	if(value->value.lval == 0 && old_alrm_handler != NULL) {
+		/* deinstall our handler */
+		signal(SIGALRM, old_alrm_handler);
+		old_alrm_handler = NULL;
+	} else if(value->value.lval > 0 && old_alrm_handler == NULL) {
+		/* install our handler, if not already installed */
+		old_alrm_handler = signal(SIGALRM, _php_alrm_handler);
+	}
+	
+	remaining = alarm(value->value.lval);
+	
+	RETURN_LONG(remaining);
+}
+/* }}} */
+#endif
 
 /* {{{ proto int short_tags(int state)
    Turn the short tags option on or off - returns previous state */

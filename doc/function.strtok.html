@@ -1,0 +1,224 @@
+<HTML
+><HEAD
+><TITLE
+>strtok</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+REL="HOME"
+TITLE="PHP3 Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="String functions"
+HREF="ref.strings.html"><LINK
+REL="PREVIOUS"
+TITLE="strstr"
+HREF="function.strstr.html"><LINK
+REL="NEXT"
+TITLE="strtolower"
+HREF="function.strtolower.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP3 Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.strstr.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.strtolower.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="FUNCTION.STRTOK"
+>strtok</A
+></H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN21376"
+></A
+>strtok -- tokenize string</DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN21379"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><CODE
+CLASS="FUNCDEF"
+>string strtok</CODE
+>(string arg1, string arg2);<P
+></P
+></DIV
+><P
+>     <B
+CLASS="FUNCTION"
+>strtok()</B
+> is used to tokenize a string.  That is, if you have a
+     string like "This is an example string" you could tokenize this
+     string into its individual words by using the space character as
+     the token.
+     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="EXAMPLE"
+><P
+><B
+>Example 1. strtok() example</B
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>    $string = "This is an example string";
+    $tok = strtok($string," ");
+    while($tok) {
+        echo "Word=$tok&lt;br&#62;";
+        $tok = strtok(" ");
+    }</PRE
+></DIV
+></TD
+></TR
+></TABLE
+>
+
+    </P
+><P
+>     Note that only the first call to strtok uses the string argument.
+     Every subsequent call to strtok only needs the token to use, as
+     it keeps track of where it is in the current string.  To start
+     over, or to tokenize a new string you simply call strtok with the
+     string argument again to initialize it.  Note that you may put
+     multiple tokens in the token parameter.  The string will be
+     tokenized when any one of the characters in the argument are
+     found.
+
+    </P
+><P
+>     Also be careful that your tokens may be equal to "0". This
+     evaluates to false in conditional expressions.
+
+    </P
+><P
+>     See also <A
+HREF="function.split.html"
+><B
+CLASS="FUNCTION"
+>split()</B
+></A
+> and
+     <A
+HREF="function.explode.html"
+><B
+CLASS="FUNCTION"
+>explode()</B
+></A
+>.
+
+   </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.strstr.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.strtolower.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>strstr</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.strings.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>strtolower</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

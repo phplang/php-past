@@ -1,0 +1,357 @@
+<HTML
+><HEAD
+><TITLE
+>preg_replace</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+REL="HOME"
+TITLE="PHP3 Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Perl-compatible Regular Expression functions"
+HREF="ref.pcre.html"><LINK
+REL="PREVIOUS"
+TITLE="preg_match_all"
+HREF="function.preg-match-all.html"><LINK
+REL="NEXT"
+TITLE="preg_split"
+HREF="function.preg-split.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP3 Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.preg-match-all.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.preg-split.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="FUNCTION.PREG-REPLACE"
+>preg_replace</A
+></H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN17790"
+></A
+>preg_replace -- Perform a regular expression search and replace</DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN17793"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><CODE
+CLASS="FUNCDEF"
+>mixed preg_replace</CODE
+>(mixed pattern, mixed replacement, mixed subject);<P
+></P
+></DIV
+><P
+>     Searches <TT
+CLASS="PARAMETER"
+><I
+>subject</I
+></TT
+> for matches to <TT
+CLASS="PARAMETER"
+><I
+>     pattern</I
+></TT
+> and replaces them with <TT
+CLASS="PARAMETER"
+><I
+>replacement
+     </I
+></TT
+>.
+
+    </P
+><P
+>     <TT
+CLASS="PARAMETER"
+><I
+>replacement</I
+></TT
+> may contain references of the form
+     <TT
+CLASS="LITERAL"
+>\\<TT
+CLASS="REPLACEABLE"
+><I
+>n</I
+></TT
+></TT
+>.  Every such
+     reference will be replaced by the text captured by the
+     <TT
+CLASS="REPLACEABLE"
+><I
+>n</I
+></TT
+>'th parenthesized pattern.  <TT
+CLASS="REPLACEABLE"
+><I
+>n
+     </I
+></TT
+>can be from 0 to 99, and <TT
+CLASS="LITERAL"
+>\\0</TT
+> refers to
+     the text matched by the whole pattern. Opening parentheses are
+     counted from left to right (starting from 1) to obtain the number
+     of the capturing subpattern.
+
+    </P
+><P
+>     If no matches are found in <TT
+CLASS="PARAMETER"
+><I
+>subject</I
+></TT
+>, then
+     it will be returned unchanged.
+    
+    </P
+><P
+>     Every parameter to <B
+CLASS="FUNCTION"
+>preg_replace()</B
+> can be an array.
+
+    </P
+><P
+>     If <TT
+CLASS="PARAMETER"
+><I
+>subject</I
+></TT
+> is an array, then the search and
+     replace is performed on every entry of <TT
+CLASS="PARAMETER"
+><I
+>subject</I
+></TT
+>,
+     and the return value is an array as well.
+
+    </P
+><P
+>     If <TT
+CLASS="PARAMETER"
+><I
+>pattern</I
+></TT
+> and <TT
+CLASS="PARAMETER"
+><I
+>replacement</I
+></TT
+>
+     are arrays, then <B
+CLASS="FUNCTION"
+>preg_replace()</B
+> takes a value from
+     each array and uses them to do search and replace on
+     <TT
+CLASS="PARAMETER"
+><I
+>subject</I
+></TT
+>.  If <TT
+CLASS="PARAMETER"
+><I
+>replacement</I
+></TT
+>
+     has fewer values than <TT
+CLASS="PARAMETER"
+><I
+>pattern</I
+></TT
+>, then empty string
+     is used for the rest of replacement values.  If <TT
+CLASS="PARAMETER"
+><I
+>pattern
+     </I
+></TT
+> is an array and <TT
+CLASS="PARAMETER"
+><I
+>replacement</I
+></TT
+> is a
+     string; then this replacement string is used for every value of
+     <TT
+CLASS="PARAMETER"
+><I
+>pattern</I
+></TT
+>.  The converse would not make sense,
+     though.
+
+    </P
+><P
+>     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="EXAMPLE"
+><P
+><B
+>Example 1. Replacing several values</B
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>$patterns = array("/(19|20\d{2})-(\d{1,2})-(\d{1,2})/", "/^\s*{(\w+)}\s*=/");
+$replace = array("\\3/\\4/\\1", "$\\1 =");
+print preg_replace($patterns, $replace, "{startDate} = 1999-5-27");
+      </PRE
+></DIV
+></TD
+></TR
+></TABLE
+>
+
+     This example will produce:
+
+     <PRE
+CLASS="PROGRAMLISTING"
+>      $startDate = 5/27/1999
+     </PRE
+>
+
+     See also <A
+HREF="function.preg-match.html"
+><B
+CLASS="FUNCTION"
+>preg_match()</B
+></A
+>,
+     <A
+HREF="function.preg-match-all.html"
+><B
+CLASS="FUNCTION"
+>preg_match_all()</B
+></A
+>, and
+     <A
+HREF="function.preg-split.html"
+><B
+CLASS="FUNCTION"
+>preg_split()</B
+></A
+>.
+   </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.preg-match-all.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.preg-split.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>preg_match_all</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.pcre.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>preg_split</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

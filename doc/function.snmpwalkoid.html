@@ -1,0 +1,259 @@
+<HTML
+><HEAD
+><TITLE
+>snmpwalkoid</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+REL="HOME"
+TITLE="PHP3 Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="SNMP functions"
+HREF="ref.snmp.html"><LINK
+REL="PREVIOUS"
+TITLE="snmpwalk"
+HREF="function.snmpwalk.html"><LINK
+REL="NEXT"
+TITLE="snmp_get_quick_print"
+HREF="function.snmp-get-quick-print.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP3 Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.snmpwalk.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.snmp-get-quick-print.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="FUNCTION.SNMPWALKOID"
+>snmpwalkoid</A
+></H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN20395"
+></A
+>snmpwalkoid -- Query for a tree of information about a network entity
+    </DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN20398"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><CODE
+CLASS="FUNCDEF"
+>array snmpwalkoid</CODE
+>(string hostname, string community, string object_id, int [<SPAN
+CLASS="OPTIONAL"
+>timeout</SPAN
+>]
+     , int [<SPAN
+CLASS="OPTIONAL"
+>retries</SPAN
+>]
+     );<P
+></P
+></DIV
+><P
+>     Returns an associative array with object ids and their respective
+     object value starting from the <TT
+CLASS="PARAMETER"
+><I
+>object_id</I
+></TT
+>
+     as root and false on error.
+
+    </P
+><P
+>     <B
+CLASS="FUNCTION"
+>snmpwalkoid()</B
+> function is used to read all
+     object ids and their respective values from an SNMP agent
+     specified by the hostname. Community specifies the read
+     <TT
+CLASS="PARAMETER"
+><I
+>community</I
+></TT
+> for that agent. A null
+     <TT
+CLASS="PARAMETER"
+><I
+>object_id</I
+></TT
+> is taken as the root of the SNMP
+     objects tree and all objects under that tree are returned as an
+     array. If <TT
+CLASS="PARAMETER"
+><I
+>object_id</I
+></TT
+> is specified, all the
+     SNMP objects below that <TT
+CLASS="PARAMETER"
+><I
+>object_id</I
+></TT
+> are
+     returned.
+
+    </P
+><P
+>     The existence of <B
+CLASS="FUNCTION"
+>snmpwalkoid()</B
+> and
+     <A
+HREF="function.snmpwalk.html"
+><B
+CLASS="FUNCTION"
+>snmpwalk()</B
+></A
+> has historical reasons.  Both
+     functions are provided for backward compatibility.
+
+     <DIV
+CLASS="INFORMALEXAMPLE"
+><P
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+> 
+$a = snmpwalkoid("127.0.0.1", "public", ""); 
+      </PRE
+><P
+></P
+></DIV
+> 
+
+    </P
+><P
+>     Above function call would return all the SNMP objects from the
+     SNMP agent running on localhost. One can step through the values
+     with a loop
+
+     <DIV
+CLASS="INFORMALEXAMPLE"
+><P
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>for (reset($a); $i = key($a); next($a)) {
+    echo "$i: $a[$i]&lt;br&#62;\n";
+}
+      </PRE
+><P
+></P
+></DIV
+>
+	
+   </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.snmpwalk.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.snmp-get-quick-print.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>snmpwalk</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.snmp.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>snmp_get_quick_print</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

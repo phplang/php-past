@@ -1,0 +1,260 @@
+<HTML
+><HEAD
+><TITLE
+>while</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+REL="HOME"
+TITLE="PHP3 Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Control Structures"
+HREF="control-structures.html"><LINK
+REL="PREVIOUS"
+TITLE="Alternative syntax for if structures: if(): ... endif;"
+HREF="x2176.html"><LINK
+REL="NEXT"
+TITLE="do..while"
+HREF="control-structures.do.while.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP3 Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x2176.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 10. Control Structures</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="control-structures.do.while.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="CONTROL-STRUCTURES.WHILE"
+><TT
+CLASS="LITERAL"
+>while</TT
+></A
+></H1
+><P
+>     <TT
+CLASS="LITERAL"
+>while</TT
+> loops are the simplest type of loop in PHP.
+     They behave just like their C counterparts.  The basic form of a
+     <TT
+CLASS="LITERAL"
+>while</TT
+> statement is:
+ 
+     <DIV
+CLASS="INFORMALEXAMPLE"
+><P
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+> while (expr) statement
+      </PRE
+><P
+></P
+></DIV
+>
+ 
+    </P
+><P
+>     The meaning of a <TT
+CLASS="LITERAL"
+>while</TT
+> statement is simple.
+     It tells PHP to execute the nested statement(s) repeatedly,
+     as long as the <TT
+CLASS="LITERAL"
+>while</TT
+> expression evaluates
+     to <TT
+CLASS="LITERAL"
+>TRUE</TT
+>.  The value of the expression is
+     checked each time at the beginning of the loop, so even if this
+     value changes during the execution of the nested statement(s),
+     execution will not stop until the end of the iteration (each
+     time PHP runs the statements in the loop is one iteration).
+     Sometimes, if the <TT
+CLASS="LITERAL"
+>while</TT
+> expression evaluates
+     to <TT
+CLASS="LITERAL"
+>FALSE</TT
+> from the very beginning, the nested
+     statement(s) won't even be run once.
+ 
+    </P
+><P
+>     Like with the <TT
+CLASS="LITERAL"
+>if</TT
+> statement, you can group
+     multiple statements within the same <TT
+CLASS="LITERAL"
+>while</TT
+> loop
+     by surrounding a group of statements with curly braces, or by using
+     the alternate syntax:
+ 
+     <DIV
+CLASS="INFORMALEXAMPLE"
+><P
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>     while (expr): statement ... endwhile;
+ </PRE
+><P
+></P
+></DIV
+>
+ 
+     </P
+><P
+>      The following examples are identical, and both print numbers from
+      1 to 10:
+ 
+     <DIV
+CLASS="INFORMALEXAMPLE"
+><P
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+> /* example 1 */
+ 
+ $i = 1;
+ while ($i &#60;= 10) {
+     print $i++;  /* the printed value would be
+                     $i before the increment
+                     (post-increment) */
+ }
+ 
+ /* example 2 */
+ 
+ $i = 1;
+ while ($i &#60;= 10):
+     print $i;
+     $i++;
+ endwhile;
+      </PRE
+><P
+></P
+></DIV
+>
+ 
+ 
+   </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x2176.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="control-structures.do.while.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Alternative syntax for <TT
+CLASS="LITERAL"
+>if</TT
+> structures: <TT
+CLASS="LITERAL"
+>if(): ... endif;</TT
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="control-structures.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><TT
+CLASS="LITERAL"
+>do..while</TT
+></TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

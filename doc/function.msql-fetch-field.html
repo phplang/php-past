@@ -1,0 +1,214 @@
+<HTML
+><HEAD
+><TITLE
+>msql_fetch_field</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+REL="HOME"
+TITLE="PHP3 Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="mSQL functions"
+HREF="ref.msql.html"><LINK
+REL="PREVIOUS"
+TITLE="msql_fetch_array"
+HREF="function.msql-fetch-array.html"><LINK
+REL="NEXT"
+TITLE="msql_fetch_object"
+HREF="function.msql-fetch-object.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP3 Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.msql-fetch-array.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.msql-fetch-object.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="FUNCTION.MSQL-FETCH-FIELD"
+>msql_fetch_field</A
+></H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN14320"
+></A
+>msql_fetch_field -- get field information</DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN14323"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><CODE
+CLASS="FUNCDEF"
+>object msql_fetch_field</CODE
+>(int query_identifier, int field_offset);<P
+></P
+></DIV
+><P
+>     Returns an object containing field information
+    </P
+><P
+>  
+     msql_fetch_field() can be used in order to obtain information
+     about fields in a certain query result.  If the field offset
+     isn't specified, the next field that wasn't yet retreived by
+     msql_fetch_field() is retreived.
+    </P
+><P
+>  
+     The properties of the object are:
+     <P
+></P
+><UL
+><LI
+><P
+>name - column name</P
+></LI
+><LI
+><P
+>table - name of the table the column belongs
+	to</P
+></LI
+><LI
+><P
+>not_null - 1 if the column cannot be
+	null</P
+></LI
+><LI
+><P
+>primary_key - 1 if the column is a primary
+	key</P
+></LI
+><LI
+><P
+>unique - 1 if the column is a unique
+	key</P
+></LI
+><LI
+><P
+>type - the type of the
+	column</P
+></LI
+></UL
+>
+    </P
+><P
+>  
+     See also
+     <A
+HREF="function.msql-field-seek.html"
+><B
+CLASS="FUNCTION"
+>msql_field_seek()</B
+></A
+>.
+
+   </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.msql-fetch-array.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.msql-fetch-object.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>msql_fetch_array</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.msql.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>msql_fetch_object</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,223 @@
+<HTML
+><HEAD
+><TITLE
+>mysql_field_type</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+REL="HOME"
+TITLE="PHP3 Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="MySQL functions"
+HREF="ref.mysql.html"><LINK
+REL="PREVIOUS"
+TITLE="mysql_field_table"
+HREF="function.mysql-field-table.html"><LINK
+REL="NEXT"
+TITLE="mysql_field_flags"
+HREF="function.mysql-field-flags.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP3 Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.mysql-field-table.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.mysql-field-flags.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="FUNCTION.MYSQL-FIELD-TYPE"
+>mysql_field_type</A
+></H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN15453"
+></A
+>mysql_field_type -- Get the type of the specified field in a
+     result</DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN15456"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><CODE
+CLASS="FUNCDEF"
+>string mysql_field_type</CODE
+>(int result, int field_offset);<P
+></P
+></DIV
+><P
+>     <B
+CLASS="FUNCTION"
+>mysql_field_type()</B
+> is similar to the
+     <A
+HREF="function.mysql-field-name.html"
+><B
+CLASS="FUNCTION"
+>mysql_field_name()</B
+></A
+> function. The arguments are
+     identical, but the field type is returned. This will be one of
+     "int", "real", "string", "blob", or others as detailed in the
+     MySQL documentation.
+ 
+    <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="EXAMPLE"
+><P
+><B
+>Example 1. mysql field types</B
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>&lt;?php 
+mysql_connect("localhost:3306");
+mysql_select_db("wisconsin");
+$result = mysql_query("SELECT * FROM onek");
+$fields = mysql_num_fields($result);
+$rows   = mysql_num_rows($result);
+$i = 0;
+$table = mysql_field_table($result, $i);
+echo "Your '".$table."' table has ".$fields." fields and ".$rows." records &lt;BR&#62;";
+echo "The table has the following fields &lt;BR&#62;"; 
+while ($i &lt; $fields) {
+    $type  = mysql_field_type  ($result, $i);
+    $name  = mysql_field_name  ($result, $i);
+    $len   = mysql_field_len   ($result, $i);
+    $flags = mysql_field_flags ($result, $i);
+    echo $type." ".$name." ".$len." ".$flags."&lt;BR&#62;";
+    $i++;
+}
+mysql_close();
+?&#62;</PRE
+></DIV
+></TD
+></TR
+></TABLE
+>
+
+    </P
+><P
+> 
+     For downward compatibility <B
+CLASS="FUNCTION"
+>mysql_fieldtype()</B
+>
+     can also be used.
+
+   </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.mysql-field-table.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.mysql-field-flags.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>mysql_field_table</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.mysql.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>mysql_field_flags</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,279 @@
+<HTML
+><HEAD
+><TITLE
+>Types</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+REL="HOME"
+TITLE="PHP3 Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Language Reference"
+HREF="langref.html"><LINK
+REL="PREVIOUS"
+TITLE="Comments"
+HREF="language.basic-syntax.comments.html"><LINK
+REL="NEXT"
+TITLE="Floating point numbers"
+HREF="language.types.double.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP3 Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="language.basic-syntax.comments.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="language.types.double.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="CHAPTER"
+><H1
+><A
+NAME="LANGUAGE.TYPES"
+>Chapter 5. Types</A
+></H1
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Table of Contents</B
+></DT
+><DT
+><A
+HREF="language.types.html#LANGUAGE.TYPES.INTEGER"
+>Integers</A
+></DT
+><DT
+><A
+HREF="language.types.double.html"
+>Floating point numbers</A
+></DT
+><DT
+><A
+HREF="language.types.string.html"
+>Strings</A
+></DT
+><DT
+><A
+HREF="language.types.array.html"
+>Arrays</A
+></DT
+><DT
+><A
+HREF="language.types.object.html"
+>Objects</A
+></DT
+><DT
+><A
+HREF="language.types.type-juggling.html"
+>Type juggling</A
+></DT
+></DL
+></DIV
+><P
+>    PHP supports the following types:
+
+    <P
+></P
+><UL
+><LI
+><P
+><A
+HREF="language.types.html#LANGUAGE.TYPES.INTEGER"
+>integer</A
+>
+     </P
+></LI
+><LI
+><P
+><A
+HREF="language.types.double.html"
+>floating-point numbers</A
+>
+     </P
+></LI
+><LI
+><P
+><A
+HREF="language.types.string.html"
+>string</A
+>
+     </P
+></LI
+><LI
+><P
+><A
+HREF="language.types.array.html"
+>array</A
+>
+     </P
+></LI
+><LI
+><P
+><A
+HREF="language.types.object.html"
+>object</A
+>
+    </P
+></LI
+></UL
+>
+
+   </P
+><P
+>    The type of a variable is usually not set by the programmer;
+    rather, it is decided at runtime by PHP depending on the context
+    in which that variable is used.
+
+   </P
+><P
+>    If you would like to force a variable to be converted to a certain 
+    type, you may either <A
+HREF="language.types.type-juggling.html#LANGUAGE.TYPES.TYPECASTING"
+>cast</A
+> the variable or use 
+    the <A
+HREF="function.settype.html"
+><B
+CLASS="FUNCTION"
+>settype()</B
+></A
+> function on it.
+
+   </P
+><P
+>    Note that a variable may behave in different manners in certain
+    situations, depending on what type it is a the time. For more
+    information, see the section on <A
+HREF="language.types.type-juggling.html"
+>Type Juggling</A
+>.
+
+   </P
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="LANGUAGE.TYPES.INTEGER"
+>Integers</A
+></H1
+><P
+>     Integers can be specified using any of the following syntaxes:
+    <DIV
+CLASS="INFORMALEXAMPLE"
+><P
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>$a = 1234; # decimal number
+$a = -123; # a negative number
+$a = 0123; # octal number (equivalent to 83 decimal)
+$a = 0x12; # hexadecimal number (equivalent to 18 decimal)</PRE
+><P
+></P
+></DIV
+>
+
+   </P
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="language.basic-syntax.comments.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="language.types.double.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Comments</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="langref.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Floating point numbers</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

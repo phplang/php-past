@@ -1,0 +1,292 @@
+<HTML
+><HEAD
+><TITLE
+>Type juggling</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+REL="HOME"
+TITLE="PHP3 Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Types"
+HREF="language.types.html"><LINK
+REL="PREVIOUS"
+TITLE="Objects"
+HREF="language.types.object.html"><LINK
+REL="NEXT"
+TITLE="Variables"
+HREF="language.variables.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP3 Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="language.types.object.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 5. Types</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="language.variables.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="LANGUAGE.TYPES.TYPE-JUGGLING"
+>Type juggling</A
+></H1
+><P
+>     PHP does not require (or support) explicit type definition in
+     variable declaration; a variable's type is determined by the
+     context in which that variable is used. That is to say, if you
+     assign a string value to variable <TT
+CLASS="PARAMETER"
+><I
+>var</I
+></TT
+>,
+     <TT
+CLASS="PARAMETER"
+><I
+>var</I
+></TT
+> becomes a string. If you then assign
+     an integer value to <TT
+CLASS="PARAMETER"
+><I
+>var</I
+></TT
+>, it becomes an
+     integer.
+
+    </P
+><P
+>     An example of PHP's automatic type conversion is the addition
+     operator '+'. If any of the operands is a double, then all
+     operands are evaluated as doubles, and the result will be a
+     double. Otherwise, the operands will be interpreted as integers,
+     and the result will also be an integer. Note that this does NOT
+     change the types of the operands themselves; the only change is
+     in how the operands are evaluated.
+
+    <DIV
+CLASS="INFORMALEXAMPLE"
+><P
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>$foo = "0";  // $foo is string (ASCII 48)
+$foo++;      // $foo is the string "1" (ASCII 49)
+$foo += 1;   // $foo is now an integer (2)
+$foo = $foo + 1.3;  // $foo is now a double (3.3)
+$foo = 5 + "10 Little Piggies"; // $foo is integer (15)
+$foo = 5 + "10 Small Pigs";     // $foo is integer (15)
+     </PRE
+><P
+></P
+></DIV
+>
+
+    </P
+><P
+>     If the last two examples above seem odd, see <A
+HREF="language.types.string.html#LANGUAGE.TYPES.STRING.CONVERSION"
+>String conversion</A
+>.  
+
+    </P
+><P
+>     If you wish to force a variable to be evaluated as a certain
+     type, see the section on <A
+HREF="language.types.type-juggling.html#LANGUAGE.TYPES.TYPECASTING"
+>Type casting</A
+>. If you
+     wish to change the type of a variable, see
+     <A
+HREF="function.settype.html"
+><B
+CLASS="FUNCTION"
+>settype()</B
+></A
+>.
+
+    </P
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="LANGUAGE.TYPES.TYPECASTING"
+>Type casting</A
+></H2
+><P
+>      Type casting in PHP works much as it does in C: the name of the
+      desired type is written in parentheses before the variable which
+      is to be cast.
+
+     <DIV
+CLASS="INFORMALEXAMPLE"
+><P
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>$foo = 10;   // $foo is an integer
+$bar = (double) $foo;   // $bar is a double
+      </PRE
+><P
+></P
+></DIV
+>
+    
+     </P
+><P
+>      The casts allowed are:
+      <P
+></P
+><UL
+><LI
+><P
+>(int), (integer) - cast to integer
+       </P
+></LI
+><LI
+><P
+>(real), (double), (float) - cast to double
+       </P
+></LI
+><LI
+><P
+>(string) - cast to string
+       </P
+></LI
+><LI
+><P
+>(array) - cast to array
+       </P
+></LI
+><LI
+><P
+>(object) - cast to object
+      </P
+></LI
+></UL
+>
+
+     </P
+><P
+>      Note that tabs and spaces are allowed inside the parentheses, so
+      the following are functionally equivalent:
+
+     <DIV
+CLASS="INFORMALEXAMPLE"
+><P
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>$foo = (int) $bar;
+$foo = ( int ) $bar;
+      </PRE
+><P
+></P
+></DIV
+>
+
+  </P
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="language.types.object.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="language.variables.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Objects</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="language.types.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Variables</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,244 @@
+<HTML
+><HEAD
+><TITLE
+>pg_Fetch_Row</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+REL="HOME"
+TITLE="PHP3 Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="PostgreSQL functions"
+HREF="ref.pgsql.html"><LINK
+REL="PREVIOUS"
+TITLE="pg_Fetch_Object"
+HREF="function.pg-fetch-object.html"><LINK
+REL="NEXT"
+TITLE="pg_FieldIsNull"
+HREF="function.pg-fieldisnull.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP3 Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.pg-fetch-object.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.pg-fieldisnull.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="FUNCTION.PG-FETCH-ROW"
+>pg_Fetch_Row</A
+></H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN19491"
+></A
+>pg_Fetch_Row -- get row as enumerated array</DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN19494"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><CODE
+CLASS="FUNCDEF"
+>array pg_fetch_row</CODE
+>(int result, int row);<P
+></P
+></DIV
+><P
+> 
+     Returns: An array that corresponds to the fetched row, or false
+     if there are no more rows.
+    </P
+><P
+>     <B
+CLASS="FUNCTION"
+>pg_fetch_row()</B
+> fetches one row of data from
+     the result associated with the specified result identifier.  The
+     row is returned as an array.  Each result column is stored in an
+     array offset, starting at offset 0.
+    </P
+><P
+>     Subsequent call to <B
+CLASS="FUNCTION"
+>pg_fetch_row()</B
+> would
+     return the next row in the result set, or false if there are no
+     more rows.
+    </P
+><P
+>     See also: <A
+HREF="function.pg-fetch-array.html"
+><B
+CLASS="FUNCTION"
+>pg_fetch_array()</B
+></A
+>,
+               <A
+HREF="function.pg-fetch-object.html"
+><B
+CLASS="FUNCTION"
+>pg_fetch_object()</B
+></A
+>,
+               <A
+HREF="function.pg-result.html"
+><B
+CLASS="FUNCTION"
+>pg_result()</B
+></A
+>.
+
+    <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="EXAMPLE"
+><P
+><B
+>Example 1. Postgres fetch row</B
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>&lt;?php 
+$conn = pg_pconnect("","","","","publisher");
+if (!$conn) {
+    echo "An error occured.\n";
+    exit;
+}
+
+$result = pg_Exec ($conn, "SELECT * FROM authors");
+if (!$result) {
+    echo "An error occured.\n";
+    exit;
+}
+
+$row = pg_fetch_row ($result, 0);
+echo $row[0] . " &#60;- row\n";
+
+$row = pg_fetch_row ($result, 1);
+echo $row[0] . " &#60;- row\n";
+
+$row = pg_fetch_row ($result, 2);
+echo $row[1] . " &#60;- row\n";
+?&#62;</PRE
+></DIV
+></TD
+></TR
+></TABLE
+>
+
+   </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.pg-fetch-object.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.pg-fieldisnull.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>pg_Fetch_Object</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.pgsql.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>pg_FieldIsNull</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

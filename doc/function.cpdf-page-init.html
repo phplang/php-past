@@ -1,0 +1,210 @@
+<HTML
+><HEAD
+><TITLE
+>cpdf_page_init</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+REL="HOME"
+TITLE="PHP3 Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="ClibPDF functions"
+HREF="ref.cpdf.html"><LINK
+REL="PREVIOUS"
+TITLE="cpdf_close"
+HREF="function.cpdf-close.html"><LINK
+REL="NEXT"
+TITLE="cpdf_finalize_page"
+HREF="function.cpdf-finalize-page.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP3 Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.cpdf-close.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.cpdf-finalize-page.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="FUNCTION.CPDF-PAGE-INIT"
+>cpdf_page_init</A
+></H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN4025"
+></A
+>cpdf_page_init -- Starts new page</DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN4028"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><CODE
+CLASS="FUNCDEF"
+>void cpdf_page_init</CODE
+>(int pdf document, int page number, int orientation, double height, double width, double unit);<P
+></P
+></DIV
+><P
+>     The <B
+CLASS="FUNCTION"
+>cpdf_page_init()</B
+> function starts a new
+     page with height <TT
+CLASS="PARAMETER"
+><I
+>height</I
+></TT
+> and width
+     <TT
+CLASS="PARAMETER"
+><I
+>width</I
+></TT
+>. The page has number
+     <TT
+CLASS="PARAMETER"
+><I
+>page number</I
+></TT
+> and orientation
+     <TT
+CLASS="PARAMETER"
+><I
+>orientation</I
+></TT
+>. <TT
+CLASS="PARAMETER"
+><I
+>orientation</I
+></TT
+>
+     can be 0 for portrait and 1 for landscape. The last optional parameter
+     <TT
+CLASS="PARAMETER"
+><I
+>unit</I
+></TT
+> sets the unit for the koordinate system.
+     The value should be the number of postscript points per unit. Since
+     one inch is equal to 72 points, a value of 72 would set the unit
+     to one inch. The default is also 72.
+
+    </P
+><P
+>     See also <A
+HREF="function.cpdf-set-current-page.html"
+><B
+CLASS="FUNCTION"
+>cpdf_set_current_page()</B
+></A
+>.
+
+   </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.cpdf-close.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.cpdf-finalize-page.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>cpdf_close</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.cpdf.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>cpdf_finalize_page</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -24,7 +24,7 @@
 #
 # Written by Stig Bakken <ssb@fast.no>     1997-05-28.
 #
-# $Id: makedist,v 1.26 1999/06/19 01:05:48 jim Exp $
+# $Id: makedist,v 1.27 1999/06/27 20:44:57 jim Exp $
 #
 
 CVSROOT=:pserver:cvsread@cvs.php.net:/repository
@@ -103,10 +103,10 @@ flex -Pcfg -oconfiguration-scanner.c -i configuration-scanner.lex
 cd convertor
 flex -i -Pphp -olanguage-scanner.c language-scanner.lex
 bison -p php -v -d language-parser.y
+cd ..
 
 # pull down the latest version of the documentation
 rsync -avzC rsync.php.net::phpweb/manual/html/ doc/
-cd ..
 
 #perl -i -p -e 's/\r\n/\n/' *.dsw *.dsp
 set +x

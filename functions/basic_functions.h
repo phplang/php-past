@@ -29,7 +29,7 @@
  */
 
 
-/* $Id: basic_functions.h,v 1.42 1999/05/16 18:55:08 jim Exp $ */
+/* $Id: basic_functions.h,v 1.43 1999/06/25 22:53:23 sas Exp $ */
 
 #ifndef _BASIC_FUNCTIONS_H
 #define _BASIC_FUNCTIONS_H
@@ -106,6 +106,7 @@ extern PHP_FUNCTION(function_exists);
 extern PHP_FUNCTION(extract);
 
 PHP_FUNCTION(register_shutdown_function);
+PHP_FUNCTION(alarm);
 
 #if HAVE_PUTENV
 typedef struct {

@@ -27,7 +27,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: pcre.c,v 1.10 1999/06/09 21:22:10 andrey Exp $ */
+/* $Id: pcre.c,v 1.11 1999/06/25 22:08:14 andrey Exp $ */
 
 #include "php.h"
 
@@ -755,7 +755,7 @@ PHP_FUNCTION(preg_split)
 	match = NULL;
 	
 	/* Get next piece if no limit or limit not yet reached and something matched*/
-	while ((limit_val == -1 || limit_val > 0) && count >= 0) {
+	while ((limit_val == -1 || limit_val > 1) && count >= 0) {
 		count = pcre_exec(re, extra, piece,
 						  subject_end-piece, subject->value.str.val,
 						  (piece==subject->value.str.val ? exoptions : exoptions|PCRE_NOTBOL),
@@ -783,16 +783,12 @@ PHP_FUNCTION(preg_split)
 			if (limit_val != -1)
 				limit_val--;
 		}
-		else { /* if no match */
-			/* Add the last piece to the return value, if there is
-			   something left */
-			if (limit_val != 0)
-				add_next_index_stringl(return_value,
-									   piece ,
-									   subject_end-piece, 1);
-		}
 	}
 	
+	/* Add the last piece to the return value */
+	add_next_index_stringl(return_value,
+						   piece ,
+						   subject_end-piece, 1);
 	/* Clean up */
 	efree(offsets);
 }

@@ -1,0 +1,219 @@
+<HTML
+><HEAD
+><TITLE
+>Variable variables</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+REL="HOME"
+TITLE="PHP3 Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Variables"
+HREF="language.variables.html"><LINK
+REL="PREVIOUS"
+TITLE="Variables"
+HREF="language.variables.html"><LINK
+REL="NEXT"
+TITLE="Variables from outside PHP"
+HREF="language.variables.external.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP3 Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="language.variables.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 6. Variables</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="language.variables.external.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="LANGUAGE.VARIABLES.VARIABLE"
+>Variable variables</A
+></H1
+><P
+>     Sometimes it is convenient to be able to have variable variable
+     names.  That is, a variable name which can be set and used
+     dynamically.  A normal variable is set with a statement such as:
+
+    </P
+><DIV
+CLASS="INFORMALEXAMPLE"
+><P
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>$a = "hello";
+     </PRE
+><P
+></P
+></DIV
+><P
+>     A variable variable takes the value of a variable and treats that as the
+     name of a variable.  In the above example, <I
+CLASS="EMPHASIS"
+>hello</I
+>, can
+     be used as the name of a variable by using two dollar signs. ie.
+
+    </P
+><DIV
+CLASS="INFORMALEXAMPLE"
+><P
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>$$a = "world";
+     </PRE
+><P
+></P
+></DIV
+><P
+>     At this point two variables have been defined and stored in the
+     PHP symbol tree: $a with contents "hello" and $hello with contents
+     "world".  Therefore, this statement:
+
+    </P
+><DIV
+CLASS="INFORMALEXAMPLE"
+><P
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>echo "$a ${$a}";
+     </PRE
+><P
+></P
+></DIV
+><P
+>     produces the exact same output as:
+
+    </P
+><DIV
+CLASS="INFORMALEXAMPLE"
+><P
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>echo "$a $hello";
+     </PRE
+><P
+></P
+></DIV
+><P
+>     ie. they both produce: <I
+CLASS="EMPHASIS"
+>hello world</I
+>.
+
+    </P
+><P
+>     In order to use variable variables with arrays, you have to
+     resolve an ambiguity problem.  That is, if you write $$a[1] then
+     the parser needs to know if you meant to use $a[1] as a variable,
+     or if you wanted $$a as the variable and then the [1] index from
+     that variable.  The syntax for resolving this ambiguity is:
+     ${$a[1]} for the first case and ${$a}[1] for the second.
+
+   </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="language.variables.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="language.variables.external.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Variables</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="language.variables.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Variables from outside PHP</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,242 @@
+<HTML
+><HEAD
+><TITLE
+>hw_GetText</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+REL="HOME"
+TITLE="PHP3 Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Hyperwave functions"
+HREF="ref.hyperwave.html"><LINK
+REL="PREVIOUS"
+TITLE="hw_GetAndLock"
+HREF="function.hw-getandlock.html"><LINK
+REL="NEXT"
+TITLE="hw_GetObjectByQuery"
+HREF="function.hw-getobjectbyquery.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP3 Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.hw-getandlock.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.hw-getobjectbyquery.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="FUNCTION.HW-GETTEXT"
+>hw_GetText</A
+></H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN8569"
+></A
+>hw_GetText -- retrieve text document</DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN8572"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><CODE
+CLASS="FUNCDEF"
+>int hw_gettext</CODE
+>(int connection, int objectID, int rootID);<P
+></P
+></DIV
+><P
+>     Returns the document with object ID
+     <TT
+CLASS="PARAMETER"
+><I
+>objectID</I
+></TT
+>. If the document
+     has anchors which can be inserted, they will be inserted already.
+     The optional parameter <TT
+CLASS="PARAMETER"
+><I
+>rootID</I
+></TT
+> determines
+     how links are inserted
+     into the document. The default is 0 and will result in links that
+     are constructed from the name of the link's destination object. This
+     is useful for web applications. If a link points to an object with
+     name 'internet_movie' the HTML link will be
+     &lt;A HREF="/internet_movie"&#62;. The actual location of the source and
+     destination object in the document hierachy is disregarded. You
+     will have to set up your web browser, to rewrite that URL to for
+     example '/my_script.php3/internet_movie'. 'my_script.php3' will
+     have to evaluate $PATH_INFO and retrieve the document.
+    </P
+><P
+>     If <TT
+CLASS="PARAMETER"
+><I
+>rootID</I
+></TT
+> is unequal to 0 the link is
+     constructed from all the names
+     starting at the object with the id <TT
+CLASS="PARAMETER"
+><I
+>rootID</I
+></TT
+>
+     separated by a slash relative to the current object.
+     If for example the above document 'internet_movie' is located
+     at 'a-b-c-internet_movie' with '-' being the seperator between
+     hierachy levels and the source document is located at
+     'a-b-d-source' the resulting HTML link would be:
+     &lt;A HREF="../c/internet_movie"&#62;. This is useful if you want
+     to download the whole server content onto disk and map
+     the document hierachy onto the file system.
+    </P
+><P
+>     This function will only work for pure text documents. It will
+     not open a special data connection and therefore blocks the
+     control connection during the transfer.
+    </P
+><P
+>     See also <A
+HREF="function.hw-pipedocument.html"
+><B
+CLASS="FUNCTION"
+>hw_PipeDocument()</B
+></A
+>,
+              <B
+CLASS="FUNCTION"
+>hw_FreeDocument()</B
+>,
+              <A
+HREF="function.hw-documentbodytag.html"
+><B
+CLASS="FUNCTION"
+>hw_DocumentBodyTag()</B
+></A
+>,
+              <A
+HREF="function.hw-documentsize.html"
+><B
+CLASS="FUNCTION"
+>hw_DocumentSize()</B
+></A
+>,
+              <A
+HREF="function.hw-outputdocument.html"
+><B
+CLASS="FUNCTION"
+>hw_OutputDocument()</B
+></A
+>.
+   </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.hw-getandlock.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.hw-getobjectbyquery.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>hw_GetAndLock</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.hyperwave.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>hw_GetObjectByQuery</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,226 @@
+<HTML
+><HEAD
+><TITLE
+>strtr</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+REL="HOME"
+TITLE="PHP3 Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="String functions"
+HREF="ref.strings.html"><LINK
+REL="PREVIOUS"
+TITLE="str_replace"
+HREF="function.str-replace.html"><LINK
+REL="NEXT"
+TITLE="substr"
+HREF="function.substr.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP3 Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.str-replace.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.substr.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="FUNCTION.STRTR"
+>strtr</A
+></H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN21460"
+></A
+>strtr -- Translate certain characters.</DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN21463"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><CODE
+CLASS="FUNCDEF"
+>string strtr</CODE
+>(string str, string from, string to);<P
+></P
+></DIV
+><P
+>     This function operates on <TT
+CLASS="PARAMETER"
+><I
+>str</I
+></TT
+>, translating
+     all occurrences of each character in <TT
+CLASS="PARAMETER"
+><I
+>from</I
+></TT
+>
+     to the corresponding character in <TT
+CLASS="PARAMETER"
+><I
+>to</I
+></TT
+> and
+     returning the result.
+
+    </P
+><P
+>     If <TT
+CLASS="PARAMETER"
+><I
+>from</I
+></TT
+> and <TT
+CLASS="PARAMETER"
+><I
+>to</I
+></TT
+> are
+     different lengths, the extra characters in the longer of the two
+     are ignored.
+
+     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="EXAMPLE"
+><P
+><B
+>Example 1. strtr() example</B
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>$addr = strtr($addr, "дец", "aao");
+      </PRE
+></DIV
+></TD
+></TR
+></TABLE
+>
+
+    </P
+><P
+>     See also <A
+HREF="function.ereg-replace.html"
+><B
+CLASS="FUNCTION"
+>ereg_replace()</B
+></A
+>.
+
+   </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.str-replace.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.substr.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>str_replace</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.strings.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>substr</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

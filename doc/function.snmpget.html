@@ -1,0 +1,199 @@
+<HTML
+><HEAD
+><TITLE
+>snmpget</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+REL="HOME"
+TITLE="PHP3 Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="SNMP functions"
+HREF="ref.snmp.html"><LINK
+REL="PREVIOUS"
+TITLE="SNMP functions"
+HREF="ref.snmp.html"><LINK
+REL="NEXT"
+TITLE="snmpwalk"
+HREF="function.snmpwalk.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP3 Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="ref.snmp.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.snmpwalk.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="FUNCTION.SNMPGET"
+>snmpget</A
+></H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN20336"
+></A
+>snmpget -- Fetch an SNMP object</DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN20339"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><CODE
+CLASS="FUNCDEF"
+>int snmpget</CODE
+>(string hostname, string community, string object_id);<P
+></P
+></DIV
+><P
+>     Returns SNMP object value on success and false on error.  
+
+    </P
+><P
+>     The <B
+CLASS="FUNCTION"
+>snmpget()</B
+> function is used to read the
+     value of an SNMP object specified by the
+     <TT
+CLASS="PARAMETER"
+><I
+>object_id</I
+></TT
+>. SNMP agent is specified by the
+     <TT
+CLASS="PARAMETER"
+><I
+>hostname</I
+></TT
+> and the read community is
+     specified by the <TT
+CLASS="PARAMETER"
+><I
+>community</I
+></TT
+> parameter.
+
+    </P
+><P
+>     <DIV
+CLASS="INFORMALEXAMPLE"
+><P
+></P
+><P
+CLASS="LITERALLAYOUT"
+>snmpget("127.0.0.1",&nbsp;"public",&nbsp;"system.SysContact.0")<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</P
+><P
+></P
+></DIV
+>
+
+   </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="ref.snmp.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.snmpwalk.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>SNMP functions</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.snmp.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>snmpwalk</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,172 @@
+<HTML
+><HEAD
+><TITLE
+>set_time_limit</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+REL="HOME"
+TITLE="PHP3 Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="PHP options & information"
+HREF="ref.info.html"><LINK
+REL="PREVIOUS"
+TITLE="set_magic_quotes_runtime"
+HREF="function.set-magic-quotes-runtime.html"><LINK
+REL="NEXT"
+TITLE="Informix functions"
+HREF="ref.ifx.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP3 Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.set-magic-quotes-runtime.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="ref.ifx.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="FUNCTION.SET-TIME-LIMIT"
+>set_time_limit</A
+></H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN11213"
+></A
+>set_time_limit -- limit the maximum execution time</DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN11216"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><CODE
+CLASS="FUNCDEF"
+>void set_time_limit</CODE
+>(int seconds);<P
+></P
+></DIV
+><P
+>     Set the number of seconds a script is allowed to run.  If this is
+     reached, the script returns a fatal error.  The default limit is 30
+     seconds or, if it exists, the max_execution_time value defined in
+     php3.ini.  If seconds is set to zero, no time limit is imposed.
+
+    </P
+><P
+>     When called, <B
+CLASS="FUNCTION"
+>set_time_limit()</B
+> restarts the timeout
+     counter from zero. In other words, if the timeout is the default 30
+     seconds, and 25 seconds into script execution a call such as
+     set_time_limit(20) is made, the script will run for a total of
+     45 seconds before timing out.
+
+   </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.set-magic-quotes-runtime.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="ref.ifx.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>set_magic_quotes_runtime</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.info.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Informix functions</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

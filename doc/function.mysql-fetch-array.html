@@ -1,0 +1,261 @@
+<HTML
+><HEAD
+><TITLE
+>mysql_fetch_array</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+REL="HOME"
+TITLE="PHP3 Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="MySQL functions"
+HREF="ref.mysql.html"><LINK
+REL="PREVIOUS"
+TITLE="mysql_error"
+HREF="function.mysql-error.html"><LINK
+REL="NEXT"
+TITLE="mysql_fetch_field"
+HREF="function.mysql-fetch-field.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP3 Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.mysql-error.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.mysql-fetch-field.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="FUNCTION.MYSQL-FETCH-ARRAY"
+>mysql_fetch_array</A
+></H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN15255"
+></A
+>mysql_fetch_array -- Fetch a result row as an associative array</DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN15258"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><CODE
+CLASS="FUNCDEF"
+>array mysql_fetch_array</CODE
+>(int result, int [<SPAN
+CLASS="OPTIONAL"
+>result_typ</SPAN
+>]);<P
+></P
+></DIV
+><P
+> 
+     Returns an array that corresponds to the fetched row, or false
+     if there are no more rows.
+    </P
+><P
+>     <B
+CLASS="FUNCTION"
+>mysql_fetch_array()</B
+> is an extended version of
+     <A
+HREF="function.mysql-fetch-row.html"
+><B
+CLASS="FUNCTION"
+>mysql_fetch_row()</B
+></A
+>.  In addition to storing the
+     data in the numeric indices of the result array, it also stores
+     the data in associative indices, using the field names as keys.
+    </P
+><P
+>     If two or more columns of the result have the same field names,
+     the last column will take precedence. To access the other column(s)
+     of the same name, you must the numeric index of the column or
+     make an alias for the column.
+     <DIV
+CLASS="INFORMALEXAMPLE"
+><P
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>select t1.f1 as foo t2.f1 as bar from t1, t2</PRE
+><P
+></P
+></DIV
+>
+    </P
+><P
+>     An important thing to note is that using
+     <B
+CLASS="FUNCTION"
+>mysql_fetch_array()</B
+> is NOT significantly
+     slower than using <A
+HREF="function.mysql-fetch-row.html"
+><B
+CLASS="FUNCTION"
+>mysql_fetch_row()</B
+></A
+>, while it
+     provides a significant added value.
+    </P
+><P
+>     The optional second argument <TT
+CLASS="PARAMETER"
+><I
+>result_typ</I
+></TT
+> in
+     <B
+CLASS="FUNCTION"
+>mysql_fetch_array()</B
+> is a constant and can take
+     the following values: MYSQL_ASSOC, MYSQL_NUM, and MYSQL_BOTH.
+    </P
+><P
+>     For further details, also see
+     <A
+HREF="function.mysql-fetch-row.html"
+><B
+CLASS="FUNCTION"
+>mysql_fetch_row()</B
+></A
+>
+    </P
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="EXAMPLE"
+><P
+><B
+>Example 1. mysql fetch array</B
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>&lt;?php 
+mysql_connect($host,$user,$password);
+$result = mysql_db_query("database","select * from table");
+while($row = mysql_fetch_array($result)) {
+    echo $row["user_id"];
+    echo $row["fullname"];
+}
+mysql_free_result($result);
+?&#62;</PRE
+></DIV
+></TD
+></TR
+></TABLE
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.mysql-error.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.mysql-fetch-field.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>mysql_error</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.mysql.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>mysql_fetch_field</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

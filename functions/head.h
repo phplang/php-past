@@ -27,7 +27,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: head.h,v 1.27 1999/05/19 18:49:11 rasmus Exp $ */
+/* $Id: head.h,v 1.28 1999/06/26 16:47:22 fmk Exp $ */
 
 #ifndef _HEAD_H
 #define _HEAD_H
@@ -57,6 +57,7 @@ extern php3_module_entry php3_header_module_entry;
 
 extern int php3_init_head(INIT_FUNC_ARGS);
 extern void php3_Headers_Sent(INTERNAL_FUNCTION_PARAMETERS);
+extern PHPAPI void _php3_Header(char *strHeader);
 extern void php3_Header(INTERNAL_FUNCTION_PARAMETERS);
 extern PHPAPI void _php3_SetCookie(char * name, char * value, time_t expires, char * path, char * domain, int secure);
 extern void php3_SetCookie(INTERNAL_FUNCTION_PARAMETERS);

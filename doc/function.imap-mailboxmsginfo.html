@@ -1,0 +1,186 @@
+<HTML
+><HEAD
+><TITLE
+>imap_mailboxmsginfo</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+REL="HOME"
+TITLE="PHP3 Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="IMAP functions"
+HREF="ref.imap.html"><LINK
+REL="PREVIOUS"
+TITLE="imap_scanmailbox"
+HREF="function.imap-scanmailbox.html"><LINK
+REL="NEXT"
+TITLE="imap_rfc822_write_address"
+HREF="function.imap-rfc822-write-address.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP3 Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.imap-scanmailbox.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.imap-rfc822-write-address.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="FUNCTION.IMAP-MAILBOXMSGINFO"
+>imap_mailboxmsginfo</A
+></H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN10716"
+></A
+>imap_mailboxmsginfo -- Get information about the current mailbox</DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN10719"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><CODE
+CLASS="FUNCDEF"
+>array imap_mailboxmsginfo</CODE
+>(int imap_stream);<P
+></P
+></DIV
+><P
+>     Returns information about the current mailbox. Returns FALSE on failure.
+    </P
+><P
+>  
+     The <B
+CLASS="FUNCTION"
+>imap_mailboxmsginfo()</B
+> function checks the
+     current mailbox status on the server and returns the information
+     in an object with following properties.
+    </P
+><P
+>     <DIV
+CLASS="INFORMALEXAMPLE"
+><P
+></P
+><P
+CLASS="LITERALLAYOUT"
+>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Date&nbsp;:&nbsp;date&nbsp;of&nbsp;the&nbsp;message<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Driver&nbsp;:&nbsp;driver<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Mailbox&nbsp;:&nbsp;name&nbsp;of&nbsp;the&nbsp;mailbox	<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Nmsgs&nbsp;:&nbsp;number&nbsp;of&nbsp;messages	<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Recent&nbsp;:&nbsp;number&nbsp;of&nbsp;recent&nbsp;messages<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Unread&nbsp;:&nbsp;number&nbsp;of&nbsp;unread&nbsp;messages<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Size&nbsp;:&nbsp;mailbox&nbsp;size<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</P
+><P
+></P
+></DIV
+>
+   </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.imap-scanmailbox.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.imap-rfc822-write-address.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>imap_scanmailbox</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.imap.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>imap_rfc822_write_address</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

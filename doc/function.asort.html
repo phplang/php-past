@@ -1,0 +1,227 @@
+<HTML
+><HEAD
+><TITLE
+>asort</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+REL="HOME"
+TITLE="PHP3 Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Array functions"
+HREF="ref.array.html"><LINK
+REL="PREVIOUS"
+TITLE="arsort"
+HREF="function.arsort.html"><LINK
+REL="NEXT"
+TITLE="count"
+HREF="function.count.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP3 Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.arsort.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.count.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="FUNCTION.ASORT"
+>asort</A
+></H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN2921"
+></A
+>asort -- Sort an array and maintain index association</DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN2924"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><CODE
+CLASS="FUNCDEF"
+>void asort</CODE
+>(array array);<P
+></P
+></DIV
+><P
+>     This function sorts an array such that array indices maintain their 
+     correlation with the array elements they are associated with.  This is
+     used mainly when sorting associative arrays where the actual element
+     order is significant.  
+     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="EXAMPLE"
+><P
+><B
+>Example 1. <B
+CLASS="FUNCTION"
+>asort()</B
+> example</B
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>$fruits = array("d"=&#62;"lemon","a"=&#62;"orange","b"=&#62;"banana","c"=&#62;"apple");
+asort($fruits);
+for(reset($fruits); $key = key($fruits); next($fruits)) {
+    echo "fruits[$key] = ".$fruits[$key]."\n";
+}</PRE
+></DIV
+></TD
+></TR
+></TABLE
+>
+     This example would display:
+     <TT
+CLASS="COMPUTEROUTPUT"
+>fruits[c] = apple
+fruits[b] = banana
+fruits[d] = lemon
+fruits[a] = orange</TT
+>
+     The fruits have been sorted in alphabetical order, and the index
+     associated with each element has been maintained.
+    </P
+><P
+>     See also <A
+HREF="function.arsort.html"
+><B
+CLASS="FUNCTION"
+>arsort()</B
+></A
+>, <A
+HREF="function.rsort.html"
+><B
+CLASS="FUNCTION"
+>rsort()</B
+></A
+>,
+     <A
+HREF="function.ksort.html"
+><B
+CLASS="FUNCTION"
+>ksort()</B
+></A
+>, and <A
+HREF="function.sort.html"
+><B
+CLASS="FUNCTION"
+>sort()</B
+></A
+>.
+   </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.arsort.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.count.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>arsort</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.array.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>count</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

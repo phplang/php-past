@@ -1,0 +1,194 @@
+<HTML
+><HEAD
+><TITLE
+>mysql_error</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+REL="HOME"
+TITLE="PHP3 Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="MySQL functions"
+HREF="ref.mysql.html"><LINK
+REL="PREVIOUS"
+TITLE="mysql_errno"
+HREF="function.mysql-errno.html"><LINK
+REL="NEXT"
+TITLE="mysql_fetch_array"
+HREF="function.mysql-fetch-array.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP3 Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.mysql-errno.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.mysql-fetch-array.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="FUNCTION.MYSQL-ERROR"
+>mysql_error</A
+></H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN15238"
+></A
+>mysql_error -- Returns the text of the error message from previous
+     MySQL operation</DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN15241"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><CODE
+CLASS="FUNCDEF"
+>string mysql_error</CODE
+>(int [<SPAN
+CLASS="OPTIONAL"
+>link_identifier</SPAN
+>]
+                   );<P
+></P
+></DIV
+><P
+>     Errors coming back from the mySQL database backend no longer
+     issue warnings. Instead, use these functions to retrieve the
+     error string.
+
+     <DIV
+CLASS="INFORMALEXAMPLE"
+><P
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>&lt;?php
+mysql_connect("marliesle");
+echo mysql_errno().": ".mysql_error()."&lt;BR&#62;";
+mysql_select_db("nonexistentdb");
+echo mysql_errno().": ".mysql_error()."&lt;BR&#62;";
+$conn = mysql_query("SELECT * FROM nonexistenttable");
+echo mysql_errno().": ".mysql_error()."&lt;BR&#62;";
+?&#62;</PRE
+><P
+></P
+></DIV
+>
+
+    </P
+><P
+> 
+     See also: <A
+HREF="function.mysql-errno.html"
+><B
+CLASS="FUNCTION"
+>mysql_errno()</B
+></A
+>
+   </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.mysql-errno.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.mysql-fetch-array.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>mysql_errno</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.mysql.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>mysql_fetch_array</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

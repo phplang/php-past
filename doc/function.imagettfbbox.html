@@ -1,0 +1,339 @@
+<HTML
+><HEAD
+><TITLE
+>ImageTTFBBox</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+REL="HOME"
+TITLE="PHP3 Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Image functions"
+HREF="ref.image.html"><LINK
+REL="PREVIOUS"
+TITLE="ImageSY"
+HREF="function.imagesy.html"><LINK
+REL="NEXT"
+TITLE="ImageTTFText"
+HREF="function.imagettftext.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP3 Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.imagesy.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.imagettftext.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="FUNCTION.IMAGETTFBBOX"
+>ImageTTFBBox</A
+></H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN9732"
+></A
+>ImageTTFBBox -- give the bounding box of a text using TypeType fonts</DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN9735"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><CODE
+CLASS="FUNCDEF"
+>array ImageTTFBBox</CODE
+>(int size, int angle, string fontfile, string text);<P
+></P
+></DIV
+><P
+>     This function calculates and returns the bounding box in pixels
+     a TrueType text.
+     <P
+></P
+><DL
+><DT
+><TT
+CLASS="PARAMETER"
+><I
+>text</I
+></TT
+></DT
+><DD
+><P
+>The string to be measured.
+      </P
+></DD
+><DT
+><TT
+CLASS="PARAMETER"
+><I
+>size</I
+></TT
+></DT
+><DD
+><P
+>The font size.
+      </P
+></DD
+><DT
+><TT
+CLASS="PARAMETER"
+><I
+>fontfile</I
+></TT
+></DT
+><DD
+><P
+>The name of the TrueType font file.  (Can
+	 also be an URL.)
+      </P
+></DD
+><DT
+><TT
+CLASS="PARAMETER"
+><I
+>angle</I
+></TT
+></DT
+><DD
+><P
+>Angle in degrees in which
+	 <TT
+CLASS="PARAMETER"
+><I
+>text</I
+></TT
+> will be measured.
+      </P
+></DD
+></DL
+>
+
+     <A
+HREF="function.imagettfbbox.html"
+><B
+CLASS="FUNCTION"
+>ImageTTFBBox()</B
+></A
+> returns an array with 8
+     elements representing four points making the bounding box of the
+     text:
+
+     <DIV
+CLASS="INFORMALTABLE"
+><P
+></P
+><TABLE
+BORDER="1"
+CLASS="CALSTABLE"
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>0</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>lower left corner, X position</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>1</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>lower left corner, Y position</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>2</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>lower right corner, X position</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>3</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>lower right corner, Y position</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>4</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>upper right corner, X position</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>5</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>upper right corner, Y position</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>6</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>upper left corner, X position</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>7</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>upper left corner, Y position</TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+>
+     The points are relative to the <I
+CLASS="EMPHASIS"
+>text</I
+>
+     regardless of the angle, so "upper left" means in the top
+     left-hand corner seeing the text horizontallty.
+    </P
+><P
+>     This function requires both the GD library and the Freetype library.
+    </P
+><P
+>     See also <A
+HREF="function.imagettftext.html"
+><B
+CLASS="FUNCTION"
+>ImageTTFText()</B
+></A
+>.
+   </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.imagesy.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.imagettftext.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>ImageSY</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.image.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>ImageTTFText</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

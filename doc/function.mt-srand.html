@@ -1,0 +1,217 @@
+<HTML
+><HEAD
+><TITLE
+>mt_srand</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+REL="HOME"
+TITLE="PHP3 Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Mathematical functions"
+HREF="ref.math.html"><LINK
+REL="PREVIOUS"
+TITLE="mt_rand"
+HREF="function.mt-rand.html"><LINK
+REL="NEXT"
+TITLE="mt_getrandmax"
+HREF="function.mt-getrandmax.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP3 Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.mt-rand.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.mt-getrandmax.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="FUNCTION.MT-SRAND"
+>mt_srand</A
+></H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN13079"
+></A
+>mt_srand -- seed the better random number generator</DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN13082"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><CODE
+CLASS="FUNCDEF"
+>void mt_srand</CODE
+>(int seed);<P
+></P
+></DIV
+><P
+>     Seeds the random number generator with
+     <TT
+CLASS="PARAMETER"
+><I
+>seed</I
+></TT
+>.
+
+     <DIV
+CLASS="INFORMALEXAMPLE"
+><P
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>// seed with microseconds since last "whole" second
+mt_srand((double)microtime()*1000000);
+$randval = mt_rand();
+      </PRE
+><P
+></P
+></DIV
+>
+ 
+    </P
+><P
+>     See also <A
+HREF="function.mt-rand.html"
+><B
+CLASS="FUNCTION"
+>mt_rand()</B
+></A
+>,
+     <A
+HREF="function.mt-getrandmax.html"
+><B
+CLASS="FUNCTION"
+>mt_getrandmax()</B
+></A
+>,
+     <A
+HREF="function.srand.html"
+><B
+CLASS="FUNCTION"
+>srand()</B
+></A
+>,
+     <A
+HREF="function.rand.html"
+><B
+CLASS="FUNCTION"
+>rand()</B
+></A
+> and 
+     <A
+HREF="function.getrandmax.html"
+><B
+CLASS="FUNCTION"
+>getrandmax()</B
+></A
+>.
+    
+   </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.mt-rand.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.mt-getrandmax.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>mt_rand</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.math.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>mt_getrandmax</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

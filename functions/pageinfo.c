@@ -26,7 +26,7 @@
    | Authors: Jim Winstead <jimw@php.net>                                 |
    +----------------------------------------------------------------------+
  */
-/* $Id: pageinfo.c,v 1.41 1999/06/16 11:34:22 ssb Exp $ */
+/* $Id: pageinfo.c,v 1.42 1999/06/26 16:46:32 fmk Exp $ */
 #ifdef THREAD_SAFE
 #include "tls.h"
 #endif
@@ -147,13 +147,21 @@ void php3_getmyinode(INTERNAL_FUNCTION_PARAMETERS)
    Get time of last page modification */
 void php3_getlastmod(INTERNAL_FUNCTION_PARAMETERS)
 {
-	TLS_VARS;
-	
-	_php3_statpage();
-	if (GLOBAL(page_mtime) < 0) {
+	time_t mtime;
+
+	mtime = _php3_getlastmod();
+	if (mtime < 0) {
 		RETURN_FALSE;
 	} else {
-		RETURN_LONG(GLOBAL(page_mtime));
+		RETURN_LONG(mtime);
 	}
 }
 /* }}} */
+
+PHPAPI time_t _php3_getlastmod(void)
+{
+	TLS_VARS;
+
+	_php3_statpage();
+	return GLOBAL(page_mtime);
+}

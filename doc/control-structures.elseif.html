@@ -1,0 +1,267 @@
+<HTML
+><HEAD
+><TITLE
+>elseif</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+REL="HOME"
+TITLE="PHP3 Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Control Structures"
+HREF="control-structures.html"><LINK
+REL="PREVIOUS"
+TITLE="else"
+HREF="control-structures.else.html"><LINK
+REL="NEXT"
+TITLE="Alternative syntax for if structures: if(): ... endif;"
+HREF="x2176.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP3 Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="control-structures.else.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 10. Control Structures</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x2176.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="CONTROL-STRUCTURES.ELSEIF"
+><TT
+CLASS="LITERAL"
+>elseif</TT
+></A
+></H1
+><P
+>     <TT
+CLASS="LITERAL"
+>elseif</TT
+>, as its name suggests, is a combination
+     of <TT
+CLASS="LITERAL"
+>if</TT
+> and <TT
+CLASS="LITERAL"
+>else</TT
+>.  Like
+     <TT
+CLASS="LITERAL"
+>else</TT
+>, it extends an <TT
+CLASS="LITERAL"
+>if</TT
+>
+     statement to execute a different statement in case the
+     original <TT
+CLASS="LITERAL"
+>if</TT
+> expression evaluates to
+     <TT
+CLASS="LITERAL"
+>FALSE</TT
+>.  However, unlike <TT
+CLASS="LITERAL"
+>else</TT
+>,
+     it will execute that alternative expression only if the
+     <TT
+CLASS="LITERAL"
+>elseif</TT
+> conditional expression evaluates to
+     <TT
+CLASS="LITERAL"
+>TRUE</TT
+>.  For example, the following code would
+     display <TT
+CLASS="COMPUTEROUTPUT"
+>a is bigger than b</TT
+>,
+     <TT
+CLASS="COMPUTEROUTPUT"
+>a equal to b</TT
+> or <TT
+CLASS="COMPUTEROUTPUT"
+>a
+     is smaller than b</TT
+>:
+ 
+     <DIV
+CLASS="INFORMALEXAMPLE"
+><P
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+> if ($a &#62; $b) {
+     print "a is bigger than b";
+ } elseif ($a == $b) {
+     print "a is equal to b";
+ } else {
+     print "a is smaller than b";
+ }
+      </PRE
+><P
+></P
+></DIV
+>
+ 
+    </P
+><P
+>     There may be several <TT
+CLASS="LITERAL"
+>elseif</TT
+>s within the same
+     <TT
+CLASS="LITERAL"
+>if</TT
+> statement.  The first <TT
+CLASS="LITERAL"
+>elseif</TT
+>
+     expression (if any) that evaluates to <TT
+CLASS="LITERAL"
+>true</TT
+>
+     would be executed.  In PHP, you can also write 'else if' (in two
+     words) and the behavior would be identical to the one of 'elseif'
+     (in a single word).  The syntactic meaning is slightly different
+     (if you're familiar with C, this is the same behavior) but the
+     bottom line is that both would result in exactly the same behavior.
+     
+    </P
+><P
+>     The <TT
+CLASS="LITERAL"
+>elseif</TT
+> statement is only executed if the preceding
+     <TT
+CLASS="LITERAL"
+>if</TT
+> expression and any
+     preceding <TT
+CLASS="LITERAL"
+>elseif</TT
+> expressions evaluated to <TT
+CLASS="LITERAL"
+>FALSE</TT
+>, and the current
+     <TT
+CLASS="LITERAL"
+>elseif</TT
+> expression evaluated to <TT
+CLASS="LITERAL"
+>TRUE</TT
+>.
+ 
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="control-structures.else.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x2176.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><TT
+CLASS="LITERAL"
+>else</TT
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="control-structures.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Alternative syntax for <TT
+CLASS="LITERAL"
+>if</TT
+> structures: <TT
+CLASS="LITERAL"
+>if(): ... endif;</TT
+></TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

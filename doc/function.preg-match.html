@@ -1,0 +1,245 @@
+<HTML
+><HEAD
+><TITLE
+>preg_match</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+REL="HOME"
+TITLE="PHP3 Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Perl-compatible Regular Expression functions"
+HREF="ref.pcre.html"><LINK
+REL="PREVIOUS"
+TITLE="Perl-compatible Regular Expression functions"
+HREF="ref.pcre.html"><LINK
+REL="NEXT"
+TITLE="preg_match_all"
+HREF="function.preg-match-all.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP3 Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="ref.pcre.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.preg-match-all.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="FUNCTION.PREG-MATCH"
+>preg_match</A
+></H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN17706"
+></A
+>preg_match -- Perform a regular expression match</DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN17709"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><CODE
+CLASS="FUNCDEF"
+>int preg_match</CODE
+>(string pattern, string subject, array [<SPAN
+CLASS="OPTIONAL"
+>matches</SPAN
+>]);<P
+></P
+></DIV
+><P
+>     Searches <TT
+CLASS="PARAMETER"
+><I
+>subject</I
+></TT
+> for a match to the regular
+     expression given in <TT
+CLASS="PARAMETER"
+><I
+>pattern</I
+></TT
+>.
+
+    </P
+><P
+>     If <TT
+CLASS="PARAMETER"
+><I
+>matches</I
+></TT
+> is provided, then it is filled
+     with the results of search.  $matches[0] will contain the text that
+     match the full pattern, $matches[1] will have the text that matched
+     the first captured parenthesized subpattern, and so on.
+
+    </P
+><P
+>     Returns true if a match for <TT
+CLASS="PARAMETER"
+><I
+>pattern</I
+></TT
+> was
+     found in the subject string, or false if not match was found
+     or an error occurred.
+
+    </P
+><P
+>     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="EXAMPLE"
+><P
+><B
+>Example 1. Getting the page number out of a string</B
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>if (preg_match("/page\s+#(\d+)/i", "Go to page #9.", $parts))
+    print "Next page is $parts[1]";
+else
+    print "Page not found.";
+      </PRE
+></DIV
+></TD
+></TR
+></TABLE
+>
+
+     See also <A
+HREF="function.preg-match-all.html"
+><B
+CLASS="FUNCTION"
+>preg_match_all()</B
+></A
+>, 
+     <A
+HREF="function.preg-replace.html"
+><B
+CLASS="FUNCTION"
+>preg_replace()</B
+></A
+>, and
+     <A
+HREF="function.preg-split.html"
+><B
+CLASS="FUNCTION"
+>preg_split()</B
+></A
+>.
+   </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="ref.pcre.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.preg-match-all.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Perl-compatible Regular Expression functions</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.pcre.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>preg_match_all</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>
