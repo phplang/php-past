@@ -696,7 +696,7 @@
     <title>Description</title>
     <funcsynopsis>
      <funcdef>int <function>msql_numfields</function></funcdef>
-     <void>
+     <paramdef>int <parameter>result</parameter></paramdef>
     </funcsynopsis>
     <para>  
      Identical to <function>msql_num_fields</function>.

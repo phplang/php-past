@@ -252,6 +252,11 @@ include_path=.;c:\www\phplib
        </term>
        <listitem>
 	<para>
+	 Sets the magic_quotes state for GPC (Get/Post/Cookie) operations.  
+	 When magic_quotes are on, all ' (single-quote), &quot; (double quote),
+	 \ (backslash) and NUL's are escaped with a backslash automatically.
+	 If magic_quotes_sybase is also on, a single-quote is escaped with a
+	 single-quote instead of a backslash.  
 	</para>
        </listitem>
       </varlistentry>

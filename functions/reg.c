@@ -28,7 +28,7 @@
    |          Jaakko Hyvätti <jaakko@hyvatti.iki.fi>                      | 
    +----------------------------------------------------------------------+
  */
-/* $Id: reg.c,v 1.81 1998/05/30 14:28:26 zeev Exp $ */
+/* $Id: reg.c,v 1.83 1998/06/22 20:28:35 zeev Exp $ */
 #ifdef THREAD_SAFE
 #include "tls.h"
 #endif
@@ -193,7 +193,7 @@ static void _php3_ereg(INTERNAL_FUNCTION_PARAMETERS, int icase)
 			} else {
 				var_reset(&entry);
 			}
-			hash_index_update(array->value.ht, i, &entry, sizeof(pval),NULL);
+			_php3_hash_index_update(array->value.ht, i, &entry, sizeof(pval),NULL);
 		}
 		efree(buf);
 	}
@@ -483,7 +483,7 @@ void php3_split(INTERNAL_FUNCTION_PARAMETERS)
 			/* No more matches */
 			regfree(&re);
 			php3_error(E_WARNING, "bad regular expression for split()");
-			hash_destroy(return_value->value.ht);
+			_php3_hash_destroy(return_value->value.ht);
 			efree(return_value->value.ht);
 			RETURN_FALSE;
 		} else {
@@ -508,7 +508,7 @@ void php3_split(INTERNAL_FUNCTION_PARAMETERS)
 	if (err && err != REG_NOMATCH) {
 		php3_error(E_WARNING, "unexpected regex error (%d)", err);
 		regfree(&re);
-		hash_destroy(return_value->value.ht);
+		_php3_hash_destroy(return_value->value.ht);
 		efree(return_value->value.ht);
 		RETURN_FALSE;
 	}

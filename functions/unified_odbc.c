@@ -179,7 +179,7 @@ static void _CLOSE_UODBC_CONNECTION(UODBC_CONNECTION *conn)
 	UODBC_TLS_VARS;
 
 	conn->open = 0;
-	hash_apply(UODBC_GLOBAL(PHP3_UODBC_MODULE).resource_list,
+	_php3_hash_apply(UODBC_GLOBAL(PHP3_UODBC_MODULE).resource_list,
 				(int (*)(void *))_results_cleanup);
 	SQLDisconnect(conn->hdbc);
 	SQLFreeConnect(conn->hdbc);
@@ -194,7 +194,7 @@ static void _CLOSE_UODBC_PCONNECTION(UODBC_CONNECTION *conn)
 
 
 	conn->open = 0;
-	hash_apply(UODBC_GLOBAL(PHP3_UODBC_MODULE).resource_plist,
+	_php3_hash_apply(UODBC_GLOBAL(PHP3_UODBC_MODULE).resource_plist,
 				(int (*)(void *))_results_cleanup);
 
 	SQLDisconnect(conn->hdbc);
@@ -295,8 +295,13 @@ int PHP3_RINIT_UODBC(INIT_FUNC_ARGS)
 	UODBC_GLOBAL(PHP3_UODBC_MODULE).defConn = -1;
 	UODBC_GLOBAL(PHP3_UODBC_MODULE).num_links = 
 			UODBC_GLOBAL(PHP3_UODBC_MODULE).num_persistent;
-	UODBC_GLOBAL(PHP3_UODBC_MODULE).defaultlrl = 0;
-	UODBC_GLOBAL(PHP3_UODBC_MODULE).defaultbinmode = 0;
+	if (cfg_get_long(ODBC_INI_DEFAULTLRL, &UODBC_GLOBAL(PHP3_UODBC_MODULE).defaultlrl)
+		== FAILURE){
+		UODBC_GLOBAL(PHP3_UODBC_MODULE).defaultlrl = 4096;
+	}
+	if (cfg_get_long(ODBC_INI_DEFAULTBINMODE, &UODBC_GLOBAL(PHP3_UODBC_MODULE).defaultbinmode) == FAILURE){
+		UODBC_GLOBAL(PHP3_UODBC_MODULE).defaultbinmode = 1;
+	}
 	return SUCCESS;
 }
 
@@ -459,7 +464,7 @@ void PHP3_UDOBC_CLOSE_ALL(INTERNAL_FUNCTION_PARAMETERS)
 {
 	void *ptr;
 	int type;
-	int i, nument = hash_next_free_element(list);
+	int i, nument = _php3_hash_next_free_element(list);
 	UODBC_TLS_VARS;
 
 	for (i = 1; i < nument; i++) {
@@ -689,18 +694,18 @@ void PHP3_UODBC_EXECUTE(INTERNAL_FUNCTION_PARAMETERS)
 	}
 
     if (result->numparams > 0){
-		if ((ne = hash_num_elements(arr.value.ht)) < result->numparams){
+		if ((ne = _php3_hash_num_elements(arr.value.ht)) < result->numparams){
 			php3_error(E_WARNING,"Not enough parameters (%d should be %d) given",
 					   ne, result->numparams);
 			RETURN_FALSE;
 		}
 
         yystype_copy_constructor(arg2);
-        hash_internal_pointer_reset(arr.value.ht);
+        _php3_hash_internal_pointer_reset(arr.value.ht);
         params = (params_t *)emalloc(sizeof(params_t) * result->numparams);
 		
 		for(i = 1; i <= result->numparams; i++){
-            if (hash_get_current_data(arr.value.ht, (void **) &tmp) == FAILURE) {
+            if (_php3_hash_get_current_data(arr.value.ht, (void **) &tmp) == FAILURE) {
                 php3_error(E_WARNING,"Error getting parameter");
                 SQLFreeStmt(result->stmt,SQL_RESET_PARAMS);
 				efree(params);
@@ -710,7 +715,7 @@ void PHP3_UODBC_EXECUTE(INTERNAL_FUNCTION_PARAMETERS)
 			if (tmp->type != IS_STRING){
 				php3_error(E_WARNING,"Error converting parameter");
 				SQLFreeStmt(result->stmt,SQL_RESET_PARAMS);
-				hash_destroy(arr.value.ht);
+				_php3_hash_destroy(arr.value.ht);
 				efree(arr.value.ht);
 				efree(params);
 				RETURN_FALSE;
@@ -732,7 +737,7 @@ void PHP3_UODBC_EXECUTE(INTERNAL_FUNCTION_PARAMETERS)
 						if (params[i].fp != -1)
 							close(params[i].fp);
 					}
-					hash_destroy(arr.value.ht);
+					_php3_hash_destroy(arr.value.ht);
 					efree(arr.value.ht);
 					efree(params);
 					RETURN_FALSE;
@@ -747,7 +752,7 @@ void PHP3_UODBC_EXECUTE(INTERNAL_FUNCTION_PARAMETERS)
 				/*if (IS_SQL_BINARY(sqltype)){
 	   				php3_error(E_WARNING,"No Filename for binary parameter");
 					SQLFreeStmt(result->stmt,SQL_RESET_PARAMS);
-					hash_destroy(arr.value.ht);
+					_php3_hash_destroy(arr.value.ht);
 					efree(arr.value.ht);
 					efree(params);
 					RETURN_FALSE;
@@ -757,7 +762,7 @@ void PHP3_UODBC_EXECUTE(INTERNAL_FUNCTION_PARAMETERS)
 										SQL_C_CHAR, sqltype, precision, scale,
 										tmp->value.str.val, 0, &params[i-1].vallen);
 			}
-			hash_move_forward(arr.value.ht);
+			_php3_hash_move_forward(arr.value.ht);
 		}
 	}
 	/* Close cursor, needed for doing multiple selects */
@@ -793,7 +798,7 @@ void PHP3_UODBC_EXECUTE(INTERNAL_FUNCTION_PARAMETERS)
 			if (params[i].fp != -1)
 				close(params[i].fp);
 		}
-		hash_destroy(arr.value.ht);
+		_php3_hash_destroy(arr.value.ht);
 		efree(arr.value.ht);
 		efree(params);
 	}
@@ -1107,7 +1112,7 @@ void PHP3_UODBC_FETCH_INTO(INTERNAL_FUNCTION_PARAMETERS)
 				tmp.value.str.val = estrndup(result->values[i].value,tmp.value.str.len);
 				break;
 		}
-		hash_index_update(arr->value.ht, i, (void *) &tmp, sizeof(pval), NULL);
+		_php3_hash_index_update(arr->value.ht, i, (void *) &tmp, sizeof(pval), NULL);
 	}
 	if (buf) efree(buf);
 	RETURN_LONG(result->numcols);	
@@ -1613,7 +1618,7 @@ void PHP3_UODBC_DO_CONNECT(INTERNAL_FUNCTION_PARAMETERS, int persistent)
 	 * no matter if it is to be persistent or not
 	 */
 
-	if (hash_find(plist, hashed_details, hashed_len + 1,
+	if (_php3_hash_find(plist, hashed_details, hashed_len + 1,
 		  (void **) &index_ptr) == FAILURE) {
 		/* the link is not in the persistent list */
 		list_entry new_le, new_index_ptr;
@@ -1647,7 +1652,7 @@ void PHP3_UODBC_DO_CONNECT(INTERNAL_FUNCTION_PARAMETERS, int persistent)
 				php3_plist_insert(db_conn, UODBC_GLOBAL(PHP3_UODBC_MODULE).le_pconn);
 			new_index_ptr.ptr = (void *) return_value->value.lval;
 			new_index_ptr.type = le_index_ptr;
-			if (hash_update(plist,hashed_details,hashed_len + 1,(void *) &new_index_ptr,
+			if (_php3_hash_update(plist,hashed_details,hashed_len + 1,(void *) &new_index_ptr,
 					sizeof(list_entry),NULL)==FAILURE) {
 				SQLDisconnect(db_conn->hdbc);
 				SQLFreeConnect(db_conn->hdbc);

@@ -242,7 +242,7 @@ void php3_dbase_add_record(INTERNAL_FUNCTION_PARAMETERS) {
 		RETURN_FALSE;
 	}
 
-	num_fields = hash_num_elements(fields->value.ht);
+	num_fields = _php3_hash_num_elements(fields->value.ht);
 
 	if (num_fields != dbh->db_nfields) {
 		php3_error(E_WARNING, "Wrong number of fields specified");
@@ -258,7 +258,7 @@ void php3_dbase_add_record(INTERNAL_FUNCTION_PARAMETERS) {
 
 	dbf = dbh->db_fields;
 	for (i = 0, cur_f = dbf; cur_f < &dbf[num_fields]; i++, cur_f++) {
-		if (hash_index_find(fields->value.ht, i, (void **)&field) == FAILURE) {
+		if (_php3_hash_index_find(fields->value.ht, i, (void **)&field) == FAILURE) {
 			php3_error(E_WARNING, "unexpected error");
 			efree(cp);
 			RETURN_FALSE;
@@ -411,7 +411,7 @@ void php3_dbase_create(INTERNAL_FUNCTION_PARAMETERS) {
 		RETURN_FALSE;
 	}
 
-	num_fields = hash_num_elements(fields->value.ht);
+	num_fields = _php3_hash_num_elements(fields->value.ht);
 
 	/* have to use regular malloc() because this gets free()d by
 	   code in the dbase library */
@@ -435,7 +435,7 @@ void php3_dbase_create(INTERNAL_FUNCTION_PARAMETERS) {
 	
 	for (i = 0, cur_f = dbf; i < num_fields; i++, cur_f++) {
 		/* look up the first field */
-		if (hash_index_find(fields->value.ht, i, (void **)&field) == FAILURE) {
+		if (_php3_hash_index_find(fields->value.ht, i, (void **)&field) == FAILURE) {
 			php3_error(E_WARNING, "unable to find field %d", i);
 			free_dbf_head(dbh);
 			RETURN_FALSE;
@@ -448,7 +448,7 @@ void php3_dbase_create(INTERNAL_FUNCTION_PARAMETERS) {
 		}
 
 		/* field name */
-		if (hash_index_find(field->value.ht, 0, (void **)&value) == FAILURE) {
+		if (_php3_hash_index_find(field->value.ht, 0, (void **)&value) == FAILURE) {
 			php3_error(E_WARNING, "expected field name as first element of list in field %d", i);
 			free_dbf_head(dbh);
 			RETURN_FALSE;
@@ -462,7 +462,7 @@ void php3_dbase_create(INTERNAL_FUNCTION_PARAMETERS) {
 		copy_crimp(cur_f->db_fname, value->value.str.val, value->value.str.len);
 
 		/* field type */
-		if (hash_index_find(field->value.ht,1,(void **)&value) == FAILURE) {
+		if (_php3_hash_index_find(field->value.ht,1,(void **)&value) == FAILURE) {
 			php3_error(E_WARNING, "expected field type as sececond element of list in field %d", i);
 			RETURN_FALSE;
 		}
@@ -487,7 +487,7 @@ void php3_dbase_create(INTERNAL_FUNCTION_PARAMETERS) {
 		case 'N':
 		case 'C':
 			/* field length */
-			if (hash_index_find(field->value.ht,2,(void **)&value) == FAILURE) {
+			if (_php3_hash_index_find(field->value.ht,2,(void **)&value) == FAILURE) {
 				php3_error(E_WARNING, "expected field length as third element of list in field %d", i);
 				free_dbf_head(dbh);
 				RETURN_FALSE;
@@ -496,7 +496,7 @@ void php3_dbase_create(INTERNAL_FUNCTION_PARAMETERS) {
 			cur_f->db_flen = value->value.lval;
 
 			if (cur_f->db_type == 'N') {
-				if (hash_index_find(field->value.ht,3,(void **)&value) == FAILURE) {
+				if (_php3_hash_index_find(field->value.ht,3,(void **)&value) == FAILURE) {
 					php3_error(E_WARNING, "expected field precision as fourth element of list in field %d", i);
 					free_dbf_head(dbh);
 					RETURN_FALSE;

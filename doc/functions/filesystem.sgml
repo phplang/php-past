@@ -660,12 +660,17 @@ $fp = fopen( "http://www.php.net/", "r" );
      standard output.
 
     <para>
-     If an error occurs, returns false.
+     If an error occurs, <function>fpassthru</function> returns false.
 
     <para>
      The file pointer must be valid, and must point to a file
      successfully opened by <function>fopen</function>,
      <function>popen</function>, or <function>fsockopen</function>.
+
+    <para>
+     The file is closed when
+     <function>fpassthru</function> is done reading it (leaving
+     <parameter>fp</parameter> useless).
 
    </refsect1>
   </refentry>

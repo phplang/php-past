@@ -28,7 +28,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: php.h,v 1.24 1998/06/04 17:00:05 rasmus Exp $ */
+/* $Id: php.h,v 1.26 1998/06/22 20:28:08 zeev Exp $ */
 
 #ifndef _PHP_H
 #define _PHP_H
@@ -146,7 +146,7 @@
 #endif 
 
 
-#include "hash.h"
+#include "php3_hash.h"
 #include "alloc.h"
 
 #if REGEX
@@ -470,7 +470,7 @@ extern void initialize_input_file_buffer(FILE *f);
 extern void eval_string(pval *str, pval *return_offset, int display_source);
 #endif
 extern void clean_input_source_stack(void);
-extern int hash_environment(void);
+extern int _php3_hash_environment(void);
 extern int module_startup_modules(void);
 
 /*from basic functions*/
@@ -535,7 +535,7 @@ extern PHPAPI php3_ini_structure php3_ini;
                                var.value.str.val = (str); \
                                var.value.str.len = strlen((str)); \
                                var.type = IS_STRING; \
-                               hash_update(&GLOBAL(symbol_table), (n), strlen((n))+1, &var, sizeof(pval),NULL); \
+                               _php3_hash_update(&GLOBAL(symbol_table), (n), strlen((n))+1, &var, sizeof(pval),NULL); \
                            } \
                        }
 #define SET_VAR_STRINGL(n,v,l) { \
@@ -545,7 +545,7 @@ extern PHPAPI php3_ini_structure php3_ini;
                                var.value.str.val = (v); \
                                var.value.str.len = (l); \
                                var.type = IS_STRING; \
-                               hash_update(&GLOBAL(symbol_table), name, strlen(name)+1, &var, sizeof(pval),NULL); \
+                               _php3_hash_update(&GLOBAL(symbol_table), name, strlen(name)+1, &var, sizeof(pval),NULL); \
                            } \
                        }
 #define SET_VAR_LONG(n,v) { \
@@ -553,7 +553,7 @@ extern PHPAPI php3_ini_structure php3_ini;
                                pval var; \
                                var.value.lval = (v); \
                                var.type = IS_LONG; \
-                               hash_update(&GLOBAL(symbol_table), (n), strlen((n))+1, &var, sizeof(pval),NULL); \
+                               _php3_hash_update(&GLOBAL(symbol_table), (n), strlen((n))+1, &var, sizeof(pval),NULL); \
                            } \
                        }
 #define SET_VAR_DOUBLE(n,v) { \
@@ -561,7 +561,7 @@ extern PHPAPI php3_ini_structure php3_ini;
                                pval var; \
                                var.value.dval = (v); \
                                var.type = IS_DOUBLE; \
-                               hash_update(&GLOBAL(symbol_table)), (n), strlen((n))+1, &var, sizeof(pval),NULL); \
+                               _php3_hash_update(&GLOBAL(symbol_table)), (n), strlen((n))+1, &var, sizeof(pval),NULL); \
                            } \
                        }
 

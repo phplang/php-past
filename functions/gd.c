@@ -29,7 +29,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: gd.c,v 1.73 1998/05/22 12:54:45 zeev Exp $ */
+/* $Id: gd.c,v 1.82 1998/07/02 17:52:48 ssb Exp $ */
 
 /* gd 1.2 is copyright 1994, 1995, Quest Protein Database Center, 
    Cold Spring Harbor Labs. */
@@ -70,6 +70,8 @@
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
 #endif
+
+static void php3_imagettftext_common(INTERNAL_FUNCTION_PARAMETERS, int);
 
 #ifdef THREAD_SAFE
 DWORD GDlibTls;
@@ -128,13 +130,14 @@ function_entry gd_functions[] = {
 	{"imagesy",					php3_imagesyfn,				NULL},
 	{"imagedashedline",			php3_imagedashedline,  		NULL},
 #if HAVE_LIBTTF
+	{"imagettfbbox",			php3_imagettfbbox,			NULL},
 	{"imagettftext",			php3_imagettftext,			NULL},
 #endif
 	{NULL, NULL, NULL}
 };
 
 php3_module_entry gd_module_entry = {
-	"gd", gd_functions, php3_minit_gd, php3_mend_gd, NULL, NULL, NULL, STANDARD_MODULE_PROPERTIES
+	"gd", gd_functions, php3_minit_gd, php3_mend_gd, NULL, NULL, php3_info_gd, STANDARD_MODULE_PROPERTIES
 };
 
 #if COMPILE_DL
@@ -198,6 +201,16 @@ int php3_minit_gd(INIT_FUNC_ARGS)
 	return SUCCESS;
 }
 
+void php3_info_gd(void) {
+#if HAVE_LIBGD13
+	PUTS("Version 1.3");
+#else
+	PUTS("Version 1.2");
+#endif
+#if HAVE_LIBTTF
+	PUTS(" with FreeType support");
+#endif
+}
 
 int php3_mend_gd(void){
 #ifdef THREAD_SAFE
@@ -433,7 +446,11 @@ void php3_imagecolorat(INTERNAL_FUNCTION_PARAMETERS) {
 		RETURN_FALSE;
 	}
 	if (gdImageBoundsSafe(im, x->value.lval, y->value.lval)) {
+#if HAVE_LIBGD13
+		RETURN_LONG(im->pixels[y->value.lval][x->value.lval]);
+#else
 		RETURN_LONG(im->pixels[x->value.lval][y->value.lval]);
+#endif
 	}
 	else {
 		RETURN_FALSE;
@@ -1055,7 +1072,7 @@ static void _php3_imagepolygon(INTERNAL_FUNCTION_PARAMETERS, int filled) {
     }
 */
 
-	nelem = hash_num_elements(POINTS->value.ht);
+	nelem = _php3_hash_num_elements(POINTS->value.ht);
 	if (nelem < 6) {
 		php3_error(E_WARNING,
 					"you must have at least 3 points in your array");
@@ -1075,11 +1092,11 @@ static void _php3_imagepolygon(INTERNAL_FUNCTION_PARAMETERS, int filled) {
 	}
 
 	for (i = 0; i < npoints; i++) {
-		if (hash_index_find(POINTS->value.ht, (i * 2), (void **)&var) == SUCCESS) {
+		if (_php3_hash_index_find(POINTS->value.ht, (i * 2), (void **)&var) == SUCCESS) {
 			convert_to_long(var);
 			points[i].x = var->value.lval;
 		}
-		if (hash_index_find(POINTS->value.ht, (i * 2) + 1, (void **)&var) == SUCCESS) {
+		if (_php3_hash_index_find(POINTS->value.ht, (i * 2) + 1, (void **)&var) == SUCCESS) {
 			convert_to_long(var);
 			points[i].y = var->value.lval;
 		}
@@ -1393,7 +1410,22 @@ void php3_imagesyfn(INTERNAL_FUNCTION_PARAMETERS)
 }
 
 #if HAVE_LIBTTF
+
+#define TTFTEXT_DRAW 0
+#define TTFTEXT_BBOX 1
+
+void php3_imagettfbbox(INTERNAL_FUNCTION_PARAMETERS)
+{
+	php3_imagettftext_common(INTERNAL_FUNCTION_PARAM_PASSTHRU, TTFTEXT_BBOX);
+}
+
 void php3_imagettftext(INTERNAL_FUNCTION_PARAMETERS)
+{
+	php3_imagettftext_common(INTERNAL_FUNCTION_PARAM_PASSTHRU, TTFTEXT_DRAW);
+}
+
+static
+void php3_imagettftext_common(INTERNAL_FUNCTION_PARAMETERS, int mode)
 {
 	pval *IM, *PTSIZE, *ANGLE, *X, *Y, *C, *FONTNAME, *COL;
 	gdImagePtr im;
@@ -1407,34 +1439,49 @@ void php3_imagettftext(INTERNAL_FUNCTION_PARAMETERS)
 
 	GD_TLS_VARS;
 
-	if (ARG_COUNT(ht) != 8 ||
-		getParameters(ht, 8, &IM, &PTSIZE, &ANGLE, &X, &Y, &COL, &FONTNAME, &C) == FAILURE) {
-		WRONG_PARAM_COUNT;
+	if (mode == TTFTEXT_BBOX) {
+		if (ARG_COUNT(ht) != 4 || getParameters(ht, 4, &PTSIZE, &ANGLE, &FONTNAME, &C) == FAILURE) {
+			WRONG_PARAM_COUNT;
+		}
+	} else {
+		if (ARG_COUNT(ht) != 8 || getParameters(ht, 8, &IM, &PTSIZE, &ANGLE, &X, &Y, &COL, &FONTNAME, &C) == FAILURE) {
+			WRONG_PARAM_COUNT;
+		}
 	}
 
-	convert_to_long(IM);
 	convert_to_double(PTSIZE);
 	convert_to_double(ANGLE);
-	convert_to_long(X);
-	convert_to_long(Y);
-	convert_to_long(COL);
 	convert_to_string(FONTNAME);
 	convert_to_string(C);
+	if (mode == TTFTEXT_BBOX) {
+		IM->type = IS_LONG;
+		IM->value.lval = -1;
+		col = x = y = -1;
+	} else {
+		convert_to_long(X);
+		convert_to_long(Y);
+		convert_to_long(IM);
+		convert_to_long(COL);
+		col = COL->value.lval;
+		y = Y->value.lval;
+		x = X->value.lval;
+	}
 
-	y = Y->value.lval;
-	x = X->value.lval;
 	ptsize = PTSIZE->value.dval;
 	angle = ANGLE->value.dval * (M_PI/180); /* convert to radians */
 
-	col = COL->value.lval;
 	string = (unsigned char *) C->value.str.val;
 	l = strlen(string);
 	fontname = (unsigned char *) FONTNAME->value.str.val;
 
-	im = php3_list_find(IM->value.lval, &ind_type);
-	if (!im || ind_type != GD_GLOBAL(le_gd)) {
-		php3_error(E_WARNING, "Unable to find image pointer");
-		RETURN_FALSE;
+	if (mode == TTFTEXT_BBOX) {
+		im = NULL;
+	} else {
+		im = php3_list_find(IM->value.lval, &ind_type);
+		if (!im || ind_type != GD_GLOBAL(le_gd)) {
+			php3_error(E_WARNING, "Unable to find image pointer");
+			RETURN_FALSE;
+		}
 	}
 
 	str = (int *)emalloc(l * sizeof(int));
@@ -1452,14 +1499,20 @@ void php3_imagettftext(INTERNAL_FUNCTION_PARAMETERS)
 		efree(str);
 	}
 
-
 	if (error) {
 		php3_error(E_WARNING, error);
 		RETURN_FALSE;
 	}
 
 	
-	RETURN_TRUE;
+	if (array_init(return_value) == FAILURE) {
+		RETURN_FALSE;
+	}
+
+	/* return array with the text's bounding box */
+	for (i = 0; i < 8; i++) {
+		add_next_index_long(return_value, brect[i]);
+	}
 }
 #endif
 #endif

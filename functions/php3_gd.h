@@ -29,7 +29,7 @@
  */
 
 
-/* $Id: php3_gd.h,v 1.19 1998/05/21 23:57:34 zeev Exp $ */
+/* $Id: php3_gd.h,v 1.21 1998/07/02 12:28:54 rasmus Exp $ */
 
 #ifndef _PHP3_GD_H
 #define _PHP3_GD_H
@@ -47,6 +47,7 @@ extern php3_module_entry gd_module_entry;
 #define gd_module_ptr &gd_module_entry
 
 /* gd.c functions */
+extern void php3_info_gd(void);
 extern int php3_minit_gd(INIT_FUNC_ARGS);
 extern int php3_mend_gd(void);
 extern void php3_imagearc(INTERNAL_FUNCTION_PARAMETERS);
@@ -85,6 +86,7 @@ extern void php3_free_gd_font(gdFontPtr);
 extern void _php3_gdimagecharup(gdImagePtr, gdFontPtr, int, int, int, int);
 extern void php3_imagedashedline(INTERNAL_FUNCTION_PARAMETERS);
 #ifdef HAVE_LIBTTF
+extern void php3_imagettfbbox(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_imagettftext(INTERNAL_FUNCTION_PARAMETERS);
 #endif
 #else

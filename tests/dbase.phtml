@@ -2,13 +2,13 @@
 #  $fn = tempnam(".", "dbase") . ".dbf";
   $fn = "dbase.dbf";
 
-  $db_struct = ({ ({"text", "c", 10}), /* 10 character field */
-		  ({"number", "n", 20, 0}), /* 20-digit number */
-		  ({"double", "n", 10, 2}), /* 10-digit number with 2 decimal places */
-#		  ({"memo", "m"}), /* memo field (not really supported) */
-		  ({"logical", "l"}), /* logical field */
-		  ({"date", "d"}) /* date field */
-		});
+  $db_struct = array( array("text", "c", 10), /* 10 character field */
+		  array("number", "n", 20, 0), /* 20-digit number */
+		  array("double", "n", 10, 2), /* 10-digit number with 2 decimal places */
+#		  array("memo", "m"), /* memo field (not really supported) */
+		  array("logical", "l"), /* logical field */
+		  array("date", "d") /* date field */
+		);
 
   echo "creating $fn\n";
   $id = dbase_create($fn, &$db_struct);

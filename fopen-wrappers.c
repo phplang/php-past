@@ -27,7 +27,7 @@
    |          Jim Winstead <jimw@php.net>                                 |
    +----------------------------------------------------------------------+
  */
-/* $Id: fopen-wrappers.c,v 1.36 1998/06/01 07:06:59 rasmus Exp $ */
+/* $Id: fopen-wrappers.c,v 1.39 1998/06/26 14:58:18 rasmus Exp $ */
 
 #ifdef THREAD_SAFE
 #include "tls.h"
@@ -198,7 +198,7 @@ FILE *php3_fopen_for_parser(void)
 		STR_FREE(GLOBAL(request_info).filename);	/* for same reason as above */
 		return NULL;
 	}
-	hash_index_update(&GLOBAL(include_names), 0, (void *) &fn, sizeof(char *), NULL);
+	_php3_hash_index_update(&GLOBAL(include_names), 0, (void *) &fn, sizeof(char *), NULL);
 
 	temp = strdup(fn);
 	_php3_dirname(temp, strlen(temp));
@@ -324,7 +324,8 @@ static FILE *php3_fopen_url_wrapper(char *path, char *mode, int options, int *is
 {
 	url *resource;
 	int result;
-	char *scratch, *tmp;
+	char *scratch;
+	unsigned char *tmp;
 
 	char tmp_line[256];
 	char location[256];

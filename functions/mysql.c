@@ -27,7 +27,7 @@
    +----------------------------------------------------------------------+
  */
  
-/* $Id: mysql.c,v 1.160 1998/05/23 23:42:08 zeev Exp $ */
+/* $Id: mysql.c,v 1.162 1998/06/22 20:28:33 zeev Exp $ */
 
 
 /* TODO:
@@ -438,7 +438,7 @@ static void php3_mysql_do_connect(INTERNAL_FUNCTION_PARAMETERS,int persistent)
 		list_entry *le;
 		
 		/* try to find if we already have this link in our persistent list */
-		if (hash_find(plist, hashed_details, hashed_details_length+1, (void **) &le)==FAILURE) {  /* we don't */
+		if (_php3_hash_find(plist, hashed_details, hashed_details_length+1, (void **) &le)==FAILURE) {  /* we don't */
 			list_entry new_le;
 
 			if (MySQL_GLOBAL(php3_mysql_module).max_links!=-1 && MySQL_GLOBAL(php3_mysql_module).num_links>=MySQL_GLOBAL(php3_mysql_module).max_links) {
@@ -463,7 +463,7 @@ static void php3_mysql_do_connect(INTERNAL_FUNCTION_PARAMETERS,int persistent)
 			/* hash it up */
 			new_le.type = MySQL_GLOBAL(php3_mysql_module).le_plink;
 			new_le.ptr = mysql;
-			if (hash_update(plist, hashed_details, hashed_details_length+1, (void *) &new_le, sizeof(list_entry), NULL)==FAILURE) {
+			if (_php3_hash_update(plist, hashed_details, hashed_details_length+1, (void *) &new_le, sizeof(list_entry), NULL)==FAILURE) {
 				free(mysql);
 				efree(hashed_details);
 				RETURN_FALSE;
@@ -489,7 +489,7 @@ static void php3_mysql_do_connect(INTERNAL_FUNCTION_PARAMETERS,int persistent)
 #endif
 				if (mysql_connect(le->ptr,host,user,passwd)==NULL) {
 					php3_error(E_WARNING,"MySQL:  Link to server lost, unable to reconnect");
-					hash_del(plist, hashed_details, hashed_details_length+1);
+					_php3_hash_del(plist, hashed_details, hashed_details_length+1);
 					efree(hashed_details);
 					RETURN_FALSE;
 				}
@@ -509,7 +509,7 @@ static void php3_mysql_do_connect(INTERNAL_FUNCTION_PARAMETERS,int persistent)
 		 * if it doesn't, open a new mysql link, add it to the resource list,
 		 * and add a pointer to it with hashed_details as the key.
 		 */
-		if (hash_find(list,hashed_details,hashed_details_length+1,(void **) &index_ptr)==SUCCESS) {
+		if (_php3_hash_find(list,hashed_details,hashed_details_length+1,(void **) &index_ptr)==SUCCESS) {
 			int type,link;
 			void *ptr;
 
@@ -524,7 +524,7 @@ static void php3_mysql_do_connect(INTERNAL_FUNCTION_PARAMETERS,int persistent)
 				efree(hashed_details);
 				return;
 			} else {
-				hash_del(list,hashed_details,hashed_details_length+1);
+				_php3_hash_del(list,hashed_details,hashed_details_length+1);
 			}
 		}
 		if (MySQL_GLOBAL(php3_mysql_module).max_links!=-1 && MySQL_GLOBAL(php3_mysql_module).num_links>=MySQL_GLOBAL(php3_mysql_module).max_links) {
@@ -547,7 +547,7 @@ static void php3_mysql_do_connect(INTERNAL_FUNCTION_PARAMETERS,int persistent)
 		/* add it to the hash */
 		new_index_ptr.ptr = (void *) return_value->value.lval;
 		new_index_ptr.type = le_index_ptr;
-		if (hash_update(list,hashed_details,hashed_details_length+1,(void *) &new_index_ptr, sizeof(list_entry), NULL)==FAILURE) {
+		if (_php3_hash_update(list,hashed_details,hashed_details_length+1,(void *) &new_index_ptr, sizeof(list_entry), NULL)==FAILURE) {
 			efree(hashed_details);
 			RETURN_FALSE;
 		}
@@ -565,9 +565,9 @@ static int php3_mysql_get_default_link(INTERNAL_FUNCTION_PARAMETERS)
 	if (MySQL_GLOBAL(php3_mysql_module).default_link==-1) { /* no link opened yet, implicitly open one */
 		HashTable tmp;
 		
-		hash_init(&tmp,0,NULL,NULL,0);
+		_php3_hash_init(&tmp,0,NULL,NULL,0);
 		php3_mysql_do_connect(&tmp,return_value,list,plist,0);
-		hash_destroy(&tmp);
+		_php3_hash_destroy(&tmp);
 	}
 	return MySQL_GLOBAL(php3_mysql_module).default_link;
 }
@@ -1400,7 +1400,7 @@ static void php3_mysql_fetch_hash(INTERNAL_FUNCTION_PARAMETERS)
 			} else {
 				add_get_index_stringl(return_value, i, mysql_row[i], mysql_row_lengths[i], (void **) &yystype_ptr, 1);
 			}
-			hash_pointer_update(return_value->value.ht, mysql_field->name, strlen(mysql_field->name)+1, yystype_ptr);
+			_php3_hash_pointer_update(return_value->value.ht, mysql_field->name, strlen(mysql_field->name)+1, yystype_ptr);
 		} else {
 			/* NULL field, don't set it */
 			/* add_get_index_stringl(return_value, i, empty_string, 0, (void **) &yystype_ptr); */

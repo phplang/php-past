@@ -28,7 +28,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: link.c,v 1.28 1998/05/15 10:57:26 zeev Exp $ */
+/* $Id: link.c,v 1.29 1998/06/18 21:13:16 jim Exp $ */
 #ifdef THREAD_SAFE
 #include "tls.h"
 #endif
@@ -117,12 +117,10 @@ void php3_symlink(INTERNAL_FUNCTION_PARAMETERS)
 	convert_to_string(topath);
 	convert_to_string(frompath);
 
-#if PHP_SAFE_MODE
-	if (!_php3_checkuid(topath->value.str.val, 2)) {
+	if (php3_ini.safe_mode && !_php3_checkuid(topath->value.str.val, 2)) {
 		php3_error(E_WARNING, "SAFE MODE Restriction in effect.  Invalid owner of file to be linked.");
 		RETURN_FALSE;
 	}
-#endif
 
 	ret = symlink(topath->value.str.val, frompath->value.str.val);
 	if (ret == -1) {
@@ -145,12 +143,10 @@ void php3_link(INTERNAL_FUNCTION_PARAMETERS)
 	convert_to_string(topath);
 	convert_to_string(frompath);
 
-#if PHP_SAFE_MODE
-	if (!_php3_checkuid(topath->value.str.val, 2)) {
+	if (php3_ini.safe_mode && !_php3_checkuid(topath->value.str.val, 2)) {
 		php3_error(E_WARNING, "SAFE MODE Restriction in effect.  Invalid owner of file to be linked.");
 		RETURN_FALSE;
 	}
-#endif
 
 	ret = link(topath->value.str.val, frompath->value.str.val);
 	if (ret == -1) {
@@ -172,12 +168,10 @@ void php3_unlink(INTERNAL_FUNCTION_PARAMETERS)
 	}
 	convert_to_string(filename);
 
-#if PHP_SAFE_MODE
-	if (!_php3_checkuid(filename->value.str.val, 2)) {
+	if (php3_ini.safe_mode && !_php3_checkuid(filename->value.str.val, 2)) {
 		php3_error(E_WARNING, "SAFE MODE Restriction in effect.  Invalid owner of file to be unlinked.");
 		RETURN_FALSE;
 	}
-#endif
 
 	ret = unlink(filename->value.str.val);
 	if (ret == -1) {

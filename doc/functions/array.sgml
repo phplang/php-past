@@ -200,9 +200,10 @@ fruits[a] = orange
      <paramdef>array <parameter>array</parameter></paramdef>
     </funcsynopsis>
     <para>
-     Returns the next key/value pair from the array
-     <parameter>array</parameter>. This pair is returned in a
-     four-element array, with the keys <emphasis>0</emphasis>,
+     Returns the current key/value pair from the array
+     <parameter>array</parameter> and advances the array cursor. This 
+	 pair is returned in a four-element array, with the keys 
+	 <emphasis>0</emphasis>,
      <emphasis>1</emphasis>, <emphasis>key</emphasis>, and
      <emphasis>value</emphasis>. Elements <emphasis>0</emphasis> and
      <emphasis>key</emphasis> each contain the key name of the array

@@ -380,9 +380,10 @@ int MailConnect()
 		return (FAILED_TO_GET_HOSTNAME);
 
 	// Resolve the servers IP
-	GLOBAL(adr) = gethostbyname(GLOBAL(MailHost));
-	if (!GLOBAL(adr))
-		return (FAILED_TO_RESOLVE_HOST);
+	//if (!isdigit(GLOBAL(MailHost)[0])||!gethostbyname(GLOBAL(MailHost)))
+	//{
+	//	return (FAILED_TO_RESOLVE_HOST);
+	//}
 
 	// Connect to server
 	GLOBAL(sock_in).sin_family = AF_INET;

@@ -27,7 +27,7 @@
    +----------------------------------------------------------------------+
  */
  
-/* $Id: msql.c,v 1.93 1998/05/21 23:57:32 zeev Exp $ */
+/* $Id: msql.c,v 1.95 1998/06/22 20:28:33 zeev Exp $ */
 #ifdef THREAD_SAFE
 #include "tls.h"
 #endif
@@ -320,7 +320,7 @@ static void php3_msql_do_connect(INTERNAL_FUNCTION_PARAMETERS,int persistent)
 		}
 		
 		/* try to find if we already have this link in our persistent list */
-		if (hash_find(plist, hashed_details, hashed_details_length+1, (void **) &le)==FAILURE) {  /* we don't */
+		if (_php3_hash_find(plist, hashed_details, hashed_details_length+1, (void **) &le)==FAILURE) {  /* we don't */
 			list_entry new_le;
 			
 			/* create the link */
@@ -332,7 +332,7 @@ static void php3_msql_do_connect(INTERNAL_FUNCTION_PARAMETERS,int persistent)
 			/* hash it up */
 			new_le.type = MSQL_GLOBAL(php3_msql_module).le_plink;
 			new_le.ptr = (void *) msql;
-			if (hash_update(plist, hashed_details, hashed_details_length+1, (void *) &new_le, sizeof(list_entry), NULL)==FAILURE) {
+			if (_php3_hash_update(plist, hashed_details, hashed_details_length+1, (void *) &new_le, sizeof(list_entry), NULL)==FAILURE) {
 				efree(hashed_details);
 				RETURN_FALSE;
 			}
@@ -349,7 +349,7 @@ static void php3_msql_do_connect(INTERNAL_FUNCTION_PARAMETERS,int persistent)
 			if (msql_stat(le->ptr)==NULL) { /* the link died */
 				if (msql_connect(le->ptr,host,user,passwd)==NULL) {
 					php3_error(E_WARNING,"mSQL link lost, unable to reconnect");
-					hash_del(plist,hashed_details,hashed_details_length+1);
+					_php3_hash_del(plist,hashed_details,hashed_details_length+1);
 					efree(hashed_details);
 					RETURN_FALSE;
 				}
@@ -367,7 +367,7 @@ static void php3_msql_do_connect(INTERNAL_FUNCTION_PARAMETERS,int persistent)
 		 * if it doesn't, open a new msql link, add it to the resource list,
 		 * and add a pointer to it with hashed_details as the key.
 		 */
-		if (hash_find(list,hashed_details,hashed_details_length+1,(void **) &index_ptr)==SUCCESS) {
+		if (_php3_hash_find(list,hashed_details,hashed_details_length+1,(void **) &index_ptr)==SUCCESS) {
 			int type,link;
 			void *ptr;
 
@@ -382,7 +382,7 @@ static void php3_msql_do_connect(INTERNAL_FUNCTION_PARAMETERS,int persistent)
 				efree(hashed_details);
 				return;
 			} else {
-				hash_del(list,hashed_details,hashed_details_length+1);
+				_php3_hash_del(list,hashed_details,hashed_details_length+1);
 			}
 		}
 		if (MSQL_GLOBAL(php3_msql_module).max_links!=-1 && MSQL_GLOBAL(php3_msql_module).num_links>=MSQL_GLOBAL(php3_msql_module).max_links) {
@@ -402,7 +402,7 @@ static void php3_msql_do_connect(INTERNAL_FUNCTION_PARAMETERS,int persistent)
 		/* add it to the hash */
 		new_index_ptr.ptr = (void *) return_value->value.lval;
 		new_index_ptr.type = le_index_ptr;
-		if (hash_update(list,hashed_details,hashed_details_length+1,(void *) &new_index_ptr, sizeof(list_entry), NULL)==FAILURE) {
+		if (_php3_hash_update(list,hashed_details,hashed_details_length+1,(void *) &new_index_ptr, sizeof(list_entry), NULL)==FAILURE) {
 			efree(hashed_details);
 			RETURN_FALSE;
 		}
@@ -419,9 +419,9 @@ static int php3_msql_get_default_link(INTERNAL_FUNCTION_PARAMETERS)
 	if (MSQL_GLOBAL(php3_msql_module).default_link==-1) { /* no link opened yet, implicitly open one */
 		HashTable tmp;
 		
-		hash_init(&tmp,0,NULL,NULL,0);
+		_php3_hash_init(&tmp,0,NULL,NULL,0);
 		php3_msql_do_connect(&tmp,return_value,list,plist,0);
-		hash_destroy(&tmp);
+		_php3_hash_destroy(&tmp);
 	}
 	return MSQL_GLOBAL(php3_msql_module).default_link;
 }
@@ -1075,7 +1075,7 @@ static void php3_msql_fetch_hash(INTERNAL_FUNCTION_PARAMETERS)
 		} else {
 			add_get_index_stringl(return_value, i, empty_string, 0, (void **) &yystype_ptr, 1);
 		}
-		hash_pointer_update(return_value->value.ht, msql_field->name, strlen(msql_field->name)+1, yystype_ptr);
+		_php3_hash_pointer_update(return_value->value.ht, msql_field->name, strlen(msql_field->name)+1, yystype_ptr);
 	}
 }
 

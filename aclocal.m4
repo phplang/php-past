@@ -1,4 +1,4 @@
-dnl $Id: aclocal.m4,v 1.18 1998/05/14 15:53:54 rasmus Exp $
+dnl $Id: aclocal.m4,v 1.19 1998/07/02 16:22:47 ssb Exp $
 dnl
 dnl This file contains local autoconf functions.
 
@@ -51,6 +51,12 @@ AC_DEFUN(AC_FIND_SOLID_LIBS,[
   SOLID_LIBS=`echo $1/scl${ac_solid_os}*.so | cut -d' ' -f1`
   if test ! -f $SOLID_LIBS; then
     SOLID_LIBS=`echo $1/scl${ac_solid_os}*.a | cut -d' ' -f1`
+  fi
+  if test ! -f $SOLID_LIBS; then
+    SOLID_LIBS=`echo $1/bcl${ac_solid_os}*.so | cut -d' ' -f1`
+  fi
+  if test ! -f $SOLID_LIBS; then
+    SOLID_LIBS=`echo $1/bcl${ac_solid_os}*.a | cut -d' ' -f1`
   fi
   AC_MSG_RESULT(`echo $SOLID_LIBS | sed -e 's!.*/!!'`)
 ])

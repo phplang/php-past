@@ -29,7 +29,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: main.c,v 1.446 1998/06/04 17:00:04 rasmus Exp $ */
+/* $Id: main.c,v 1.449 1998/07/02 02:25:50 zeev Exp $ */
 
 /* #define CRASH_DETECTION */
 
@@ -121,7 +121,6 @@ unsigned int wintimer_counter = 0;
 
 HashTable configuration_hash;
 
-extern char *strtok_string;
 extern FILE *phpin;
 #endif
 
@@ -149,7 +148,7 @@ char *php3_get_filename(int lineno)
 	int file_offset = lineno / MAX_TOKENS_PER_CACHE;
 	TLS_VARS;
 
-	if ((GLOBAL(initialized) & INIT_INCLUDE_NAMES_HASH) && hash_index_find(&GLOBAL(include_names), file_offset, (void **) &filename_ptr) == SUCCESS) {
+	if ((GLOBAL(initialized) & INIT_INCLUDE_NAMES_HASH) && _php3_hash_index_find(&GLOBAL(include_names), file_offset, (void **) &filename_ptr) == SUCCESS) {
 		return *filename_ptr;
 	} else {
 		return "-";
@@ -360,7 +359,7 @@ PHPAPI void php3_error(int type, const char *format,...)
 		tmp.value.str.len = size;
 		tmp.type = IS_STRING;
 
-		hash_update(GLOBAL(active_symbol_table), "php_errormsg", sizeof("php_errormsg"), (void *) & tmp, sizeof(pval), NULL);
+		_php3_hash_update(GLOBAL(active_symbol_table), "php_errormsg", sizeof("php_errormsg"), (void *) & tmp, sizeof(pval), NULL);
 	}
 #if PHP_DEBUGGER
 	/* Send a message to the debugger no matter if we are configured
@@ -567,7 +566,6 @@ int php3_request_startup(INLINE_TLS_VOID)
 		GLOBAL(function_state.function_name) = NULL;
 		GLOBAL(function_state.handler) = NULL;
 		GLOBAL(phplineno) = 1;
-		GLOBAL(strtok_string) = NULL;
 		GLOBAL(error_reporting) = php3_ini.errors;
 		GLOBAL(shutdown_requested) = 0;
 		GLOBAL(php3_track_vars) = php3_ini.track_vars;
@@ -580,14 +578,14 @@ int php3_request_startup(INLINE_TLS_VOID)
 	GLOBAL(initialized) |= INIT_REQUEST_INFO;
 
 	/* prepare general symbol table hash */
-	if (hash_init(&GLOBAL(symbol_table), 50, NULL, pval_DESTRUCTOR, 0) == FAILURE) {
+	if (_php3_hash_init(&GLOBAL(symbol_table), 50, NULL, pval_DESTRUCTOR, 0) == FAILURE) {
 		php3_printf("Unable to initialize symbol table.\n");
 		return FAILURE;
 	}
 	/* this pval will be used for the GLOBALS[] array implementation */
 	GLOBAL(globals.value.ht) = &GLOBAL(symbol_table);
 	GLOBAL(globals.type) = IS_ARRAY;
-	hash_pointer_update(&GLOBAL(symbol_table), "GLOBALS", sizeof("GLOBALS"), (void *) & GLOBAL(globals));
+	_php3_hash_pointer_update(&GLOBAL(symbol_table), "GLOBALS", sizeof("GLOBALS"), (void *) & GLOBAL(globals));
 	GLOBAL(initialized) |= INIT_SYMBOL_TABLE;
 
 
@@ -636,10 +634,10 @@ int php3_request_startup(INLINE_TLS_VOID)
 	GLOBAL(initialized) |= INIT_VARIABLE_UNASSIGN_STACK;
 
 	/* call request startup for modules */
-	hash_apply(&GLOBAL(module_registry), (int (*)(void *)) module_registry_request_startup);
+	_php3_hash_apply(&GLOBAL(module_registry), (int (*)(void *)) module_registry_request_startup);
 
 	/* include file names */
-	if (hash_init(&GLOBAL(include_names), 0, NULL, (void (*)(void *ptr)) str_free, 0) == FAILURE) {
+	if (_php3_hash_init(&GLOBAL(include_names), 0, NULL, (void (*)(void *ptr)) str_free, 0) == FAILURE) {
 		php3_printf("Unable to start include names stack.\n");
 		return FAILURE;
 	}
@@ -682,14 +680,14 @@ void php3_request_shutdown(void *dummy INLINE_TLS)
 	}
 #endif
 	if (GLOBAL(initialized) & INIT_SYMBOL_TABLE) {
-		hash_destroy(&GLOBAL(symbol_table));
+		_php3_hash_destroy(&GLOBAL(symbol_table));
 		GLOBAL(initialized) &= ~INIT_SYMBOL_TABLE;
 	}
 	GLOBAL(initialized) &= ~INIT_ENVIRONMENT;	/* does not require any special shutdown */
 
 	/* remove classes and user-functions */
 	if (GLOBAL(module_initialized) & INIT_FUNCTION_TABLE) {
-		hash_apply(&GLOBAL(function_table), (int (*)(void *)) is_not_internal_function);
+		_php3_hash_apply(&GLOBAL(function_table), (int (*)(void *)) is_not_internal_function);
 	}
 	if (GLOBAL(initialized) & INIT_TOKEN_CACHE) {
 		tcm_destroy(&GLOBAL(token_cache_manager));
@@ -723,7 +721,7 @@ void php3_request_shutdown(void *dummy INLINE_TLS)
 			if (tmp->function_name) {
 				efree(tmp->function_name);
 				if (tmp->symbol_table && tmp->symbol_table != &GLOBAL(symbol_table)) {
-					hash_destroy(tmp->symbol_table);
+					_php3_hash_destroy(tmp->symbol_table);
 					efree(tmp->symbol_table);
 				}
 			}
@@ -732,7 +730,7 @@ void php3_request_shutdown(void *dummy INLINE_TLS)
 		if (GLOBAL(function_state).function_name) {
 			efree(GLOBAL(function_state).function_name);
 			if (GLOBAL(function_state).symbol_table && GLOBAL(function_state).symbol_table != &GLOBAL(symbol_table)) {
-				hash_destroy(GLOBAL(function_state).symbol_table);
+				_php3_hash_destroy(GLOBAL(function_state).symbol_table);
 				efree(GLOBAL(function_state).symbol_table);
 			}
 		}
@@ -758,7 +756,7 @@ void php3_request_shutdown(void *dummy INLINE_TLS)
 	}
 	
 	/* clean temporary dl's, run request shutdown's for modules */
-	hash_apply(&GLOBAL(module_registry), (int (*)(void *)) module_registry_cleanup);
+	_php3_hash_apply(&GLOBAL(module_registry), (int (*)(void *)) module_registry_cleanup);
 
 
 	if (GLOBAL(module_initialized) & INIT_CONSTANTS) {
@@ -773,7 +771,7 @@ void php3_request_shutdown(void *dummy INLINE_TLS)
 		GLOBAL(initialized) &= ~INIT_REQUEST_INFO;
 	}
 	if (GLOBAL(initialized) & INIT_INCLUDE_NAMES_HASH) {
-		hash_destroy(&GLOBAL(include_names));
+		_php3_hash_destroy(&GLOBAL(include_names));
 		GLOBAL(initialized) &= ~INIT_INCLUDE_NAMES_HASH;
 	}
 	if (GLOBAL(initialized) & INIT_SCANNER) {
@@ -1062,21 +1060,21 @@ int php3_module_startup(INLINE_TLS_VOID)
 #endif
 
 	/* prepare function table hash */
-	if (hash_init(&GLOBAL(function_table), 100, NULL, pval_DESTRUCTOR, 1) == FAILURE) {
+	if (_php3_hash_init(&GLOBAL(function_table), 100, NULL, pval_DESTRUCTOR, 1) == FAILURE) {
 		php3_printf("Unable to initialize function table.\n");
 		return FAILURE;
 	}
 	GLOBAL(module_initialized) |= INIT_FUNCTION_TABLE;
 
 	/* prepare the module registry */
-	if (hash_init(&GLOBAL(module_registry), 50, NULL, (void (*)(void *)) module_destructor, 1) == FAILURE) {
+	if (_php3_hash_init(&GLOBAL(module_registry), 50, NULL, (void (*)(void *)) module_destructor, 1) == FAILURE) {
 		php3_printf("Unable to initialize module registry.\n");
 		return FAILURE;
 	}
 	GLOBAL(module_initialized) |= INIT_MODULE_REGISTRY;
 
 	/* resource-list destructors */
-	if (hash_init(&GLOBAL(list_destructors), 50, NULL, NULL, 1) == FAILURE) {
+	if (_php3_hash_init(&GLOBAL(list_destructors), 50, NULL, NULL, 1) == FAILURE) {
 		php3_printf("Unable to initialize resource list destructors hash.\n");
 		return FAILURE;
 	}
@@ -1120,7 +1118,7 @@ void php3_module_shutdown_for_exec()
 void php3_module_shutdown(INLINE_TLS_VOID)
 {
 	if (GLOBAL(module_initialized) & INIT_MODULE_REGISTRY) {
-		hash_destroy(&GLOBAL(module_registry));
+		_php3_hash_destroy(&GLOBAL(module_registry));
 		GLOBAL(module_initialized) &= ~INIT_MODULE_REGISTRY;
 	}
 	if (GLOBAL(module_initialized) & INIT_PLIST) {
@@ -1128,7 +1126,7 @@ void php3_module_shutdown(INLINE_TLS_VOID)
 		GLOBAL(module_initialized) &= ~INIT_PLIST;
 	}
 	if (GLOBAL(module_initialized) & INIT_LIST_DESTRUCTORS) {
-		hash_destroy(&GLOBAL(list_destructors));
+		_php3_hash_destroy(&GLOBAL(list_destructors));
 		GLOBAL(module_initialized) &= ~INIT_LIST_DESTRUCTORS;
 	}
 	if (GLOBAL(module_initialized) & INIT_CONSTANTS) {
@@ -1141,7 +1139,7 @@ void php3_module_shutdown(INLINE_TLS_VOID)
 #endif
 
 	if (GLOBAL(module_initialized) & INIT_FUNCTION_TABLE) {
-		hash_destroy(&GLOBAL(function_table));
+		_php3_hash_destroy(&GLOBAL(function_table));
 		GLOBAL(module_initialized) &= ~INIT_FUNCTION_TABLE;
 	}
 #if (WIN32|WINNT) && !(USE_SAPI)
@@ -1165,7 +1163,7 @@ void php3_module_shutdown(INLINE_TLS_VOID)
 
 
 /* in 3.1 some of this should move into sapi */
-int hash_environment(void)
+int _php3_hash_environment(void)
 {
 	char **env, *p, *t;
 	unsigned char _gpc_flags[3] = {0,0,0};
@@ -1209,7 +1207,7 @@ int hash_environment(void)
 		tmp.value.str.val = estrndup(p + 1, tmp.value.str.len);
 		tmp.type = IS_STRING;
 		/* environmental variables never take precedence over get/post/cookie variables */
-		if (hash_add(&GLOBAL(symbol_table), t, p - *env + 1, &tmp, sizeof(pval), NULL) == FAILURE) {
+		if (_php3_hash_add(&GLOBAL(symbol_table), t, p - *env + 1, &tmp, sizeof(pval), NULL) == FAILURE) {
 			efree(tmp.value.str.val);
 		}
 		efree(t);
@@ -1234,21 +1232,21 @@ int hash_environment(void)
 				tmp.value.str.val = empty_string;
 			}
 			tmp.type = IS_STRING;
-			if (hash_update(&GLOBAL(symbol_table), t, len + 1, &tmp, sizeof(pval), NULL) == FAILURE) {
+			if (_php3_hash_update(&GLOBAL(symbol_table), t, len + 1, &tmp, sizeof(pval), NULL) == FAILURE) {
 				STR_FREE(tmp.value.str.val);
 			}
 			efree(t);
 		}
 		/* insert special variables */
-		if (hash_find(&GLOBAL(symbol_table), "SCRIPT_FILENAME", sizeof("SCRIPT_FILENAME"), (void **) & tmp_ptr) == SUCCESS) {
+		if (_php3_hash_find(&GLOBAL(symbol_table), "SCRIPT_FILENAME", sizeof("SCRIPT_FILENAME"), (void **) & tmp_ptr) == SUCCESS) {
 			tmp2 = *tmp_ptr;
 			yystype_copy_constructor(&tmp2);
-			hash_update(&GLOBAL(symbol_table), "PATH_TRANSLATED", sizeof("PATH_TRANSLATED"), (void *) & tmp2, sizeof(pval), NULL);
+			_php3_hash_update(&GLOBAL(symbol_table), "PATH_TRANSLATED", sizeof("PATH_TRANSLATED"), (void *) & tmp2, sizeof(pval), NULL);
 		}
 		tmp.value.str.len = strlen(GLOBAL(php3_rqst)->uri);
 		tmp.value.str.val = estrndup(GLOBAL(php3_rqst)->uri, tmp.value.str.len);
 		tmp.type = IS_STRING;
-		hash_update(&GLOBAL(symbol_table), "PHP_SELF", sizeof("PHP_SELF"), (void *) & tmp, sizeof(pval), NULL);
+		_php3_hash_update(&GLOBAL(symbol_table), "PHP_SELF", sizeof("PHP_SELF"), (void *) & tmp, sizeof(pval), NULL);
 	}
 #else
 #if FHTTPD
@@ -1260,7 +1258,7 @@ int hash_environment(void)
 					tmp.value.str.len = strlen(req->lines[i].params[1]);
 					tmp.value.str.val = estrndup(req->lines[i].params[1], tmp.value.str.len);
 					tmp.type = IS_STRING;
-					if (hash_update(&GLOBAL(symbol_table), req->lines[i].params[0],
+					if (_php3_hash_update(&GLOBAL(symbol_table), req->lines[i].params[0],
 						strlen(req->lines[i].params[0]) + 1,
 						&tmp, sizeof(pval), NULL) == FAILURE) {
 						efree(tmp.value.str.val);
@@ -1272,7 +1270,7 @@ int hash_environment(void)
 				tmp.value.str.len = i;
 				tmp.value.str.val = estrndup(req->script_name_resolved, i);
 				tmp.type = IS_STRING;
-				if (hash_update(&GLOBAL(symbol_table), "PATH_TRANSLATED",
+				if (_php3_hash_update(&GLOBAL(symbol_table), "PATH_TRANSLATED",
 								sizeof("PATH_TRANSLATED"),
 								&tmp, sizeof(pval), NULL) == FAILURE) {
 					efree(tmp.value.str.val);
@@ -1285,7 +1283,7 @@ int hash_environment(void)
 						tmp.value.str.len = j;
 						tmp.value.str.val = estrndup(req->script_name_resolved, j);
 						tmp.type = IS_STRING;
-						if (hash_update(&GLOBAL(symbol_table), "DOCUMENT_ROOT",
+						if (_php3_hash_update(&GLOBAL(symbol_table), "DOCUMENT_ROOT",
 										sizeof("DOCUMENT_ROOT"),
 							   &tmp, sizeof(pval), NULL) == FAILURE) {
 							efree(tmp.value.str.val);
@@ -1314,7 +1312,7 @@ int hash_environment(void)
 		tmp.value.str.val = emalloc(l + 1);
 		tmp.value.str.len = _php3_sprintf(tmp.value.str.val, "%s%s", (sn ? sn : ""), (pi ? pi : ""));	/* SAFE */
 		tmp.type = IS_STRING;
-		hash_update(&GLOBAL(symbol_table), "PHP_SELF", sizeof("PHP_SELF"), (void *) & tmp, sizeof(pval), NULL);
+		_php3_hash_update(&GLOBAL(symbol_table), "PHP_SELF", sizeof("PHP_SELF"), (void *) & tmp, sizeof(pval), NULL);
 	}
 #endif
 
@@ -1335,11 +1333,11 @@ void _php3_build_argv(char *s)
 	TLS_VARS;
 
 	arr.value.ht = (HashTable *) emalloc(sizeof(HashTable));
-	if (!arr.value.ht || hash_init(arr.value.ht, 0, NULL, pval_DESTRUCTOR, 0) == FAILURE) {
+	if (!arr.value.ht || _php3_hash_init(arr.value.ht, 0, NULL, pval_DESTRUCTOR, 0) == FAILURE) {
 		php3_error(E_WARNING, "Unable to create argv array");
 	} else {
 		arr.type = IS_ARRAY;
-		hash_update(&GLOBAL(symbol_table), "argv", sizeof("argv"), &arr, sizeof(pval), NULL);
+		_php3_hash_update(&GLOBAL(symbol_table), "argv", sizeof("argv"), &arr, sizeof(pval), NULL);
 	}
 	/* now pick out individual entries */
 	ss = s;
@@ -1353,7 +1351,7 @@ void _php3_build_argv(char *s)
 		tmp.value.str.len = strlen(ss);
 		tmp.value.str.val = estrndup(ss, tmp.value.str.len);
 		count++;
-		if (hash_next_index_insert(arr.value.ht, &tmp, sizeof(pval), NULL) == FAILURE) {
+		if (_php3_hash_next_index_insert(arr.value.ht, &tmp, sizeof(pval), NULL) == FAILURE) {
 			if (tmp.type == IS_STRING)
 				efree(tmp.value.str.val);
 		}
@@ -1366,7 +1364,7 @@ void _php3_build_argv(char *s)
 	}
 	tmp.value.lval = count;
 	tmp.type = IS_LONG;
-	hash_add(&GLOBAL(symbol_table), "argc", sizeof("argc"), &tmp, sizeof(pval), NULL);
+	_php3_hash_add(&GLOBAL(symbol_table), "argc", sizeof("argc"), &tmp, sizeof(pval), NULL);
 }
 
 static void php3_parse(FILE * yyin INLINE_TLS)
@@ -1777,7 +1775,7 @@ PHPAPI int apache_php3_module_main(request_rec * r, int fd, int display_source_m
 		GLOBAL(phpin) = in;
 		phprestart(GLOBAL(phpin));
 		GLOBAL(initialized) |= INIT_SCANNER;
-		hash_index_update(&GLOBAL(include_names), 0, (void *) &GLOBAL(request_info).filename, sizeof(char *), NULL);
+		_php3_hash_index_update(&GLOBAL(include_names), 0, (void *) &GLOBAL(request_info).filename, sizeof(char *), NULL);
 	} else {
 		return OK;
 	}

@@ -190,7 +190,7 @@ int include_file(pval *file, int display_source)
 	GLOBAL(include_count)++;
 	GLOBAL(phplineno)=1+MAX_TOKENS_PER_CACHE*GLOBAL(include_count);
 	filename = estrndup(file->value.str.val,file->value.str.len);
-	hash_index_update(&GLOBAL(include_names),GLOBAL(include_count),(void *) &filename,sizeof(char *),NULL);
+	_php3_hash_index_update(&GLOBAL(include_names),GLOBAL(include_count),(void *) &filename,sizeof(char *),NULL);
 	
 	return SUCCESS;
 }
@@ -284,7 +284,7 @@ int conditional_include_file(pval *file,pval *return_offset INLINE_TLS)
 	GLOBAL(include_count)++;
 	GLOBAL(phplineno)=1+MAX_TOKENS_PER_CACHE*GLOBAL(include_count);
 	filename = file->value.str.val;
-	hash_index_update(&GLOBAL(include_names),GLOBAL(include_count),(void *) &filename,sizeof(char *),NULL);
+	_php3_hash_index_update(&GLOBAL(include_names),GLOBAL(include_count),(void *) &filename,sizeof(char *),NULL);
 	
 	tcm_new(&GLOBAL(token_cache_manager));
 	return SUCCESS;
@@ -612,6 +612,14 @@ TLS_VARS;
 	return MOD_EQUAL;
 }
 
+<IN_PHP>"<<=" {
+	return SHIFT_LEFT_EQUAL;
+}
+
+<IN_PHP>">>=" {
+	return SHIFT_RIGHT_EQUAL;
+}
+
 <IN_PHP>"&=" {
 	return AND_EQUAL;
 }
@@ -642,6 +650,14 @@ TLS_VARS;
 
 <IN_PHP>"XOR" {
 	return LOGICAL_XOR;
+}
+
+<IN_PHP>"<<" {
+	return SHIFT_LEFT;
+}
+
+<IN_PHP>">>" {
+	return SHIFT_RIGHT;
 }
 
 <IN_PHP>{TOKENS} {
@@ -701,7 +717,7 @@ TLS_VARS;
 <INITIAL>"<?"|"<script"{WHITESPACE}+"language"{WHITESPACE}*"="{WHITESPACE}*("php"|"\"php\""|"\'php\'"){WHITESPACE}*">" {
 	if (php3_ini.short_open_tag || yyleng>2) { /* yyleng>2 means it's not <? but <script> */
 		if (!(GLOBAL(initialized) & INIT_ENVIRONMENT)) {
-			hash_environment();
+			_php3_hash_environment();
 		}
 		BEGIN(IN_PHP);
 		if (GLOBAL(php3_display_source)) {
@@ -721,7 +737,7 @@ TLS_VARS;
 <INITIAL>"<?php"[ \n\r\t] {
 	HANDLE_NEWLINE(yytext[yyleng-1]);
 	if (!(GLOBAL(initialized) & INIT_ENVIRONMENT)) {
-		hash_environment();
+		_php3_hash_environment();
 	}
 	BEGIN(IN_PHP);
 	if (GLOBAL(php3_display_source)) {

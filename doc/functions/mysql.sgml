@@ -80,7 +80,8 @@
      <function>mysql_connect</function> establishes a connection to a
      MySQL server.  All of the arguments are optional, and if they're
      missing, defaults are assumed ('localhost', user name of the user
-     that owns the server process, empty password).  
+     that owns the server process, empty password).  The hostname string
+	 can also include a port number.  eg. &quot;hostname:port&quot;
     <para> 
      In case a second call is made to
      <function>mysql_connect</function> with the same arguments, no
@@ -368,7 +369,7 @@ echo mysql_errno().": ".mysql_error()."&lt;BR>";
    <refsect1>
     <title>Description</title>
     <funcsynopsis>
-     <funcdef>int <function>mysql_fetch_array</function></funcdef>
+     <funcdef>array <function>mysql_fetch_array</function></funcdef>
      <paramdef>int <parameter>result</parameter></paramdef>
     </funcsynopsis>
     <para> 
@@ -388,6 +389,21 @@ echo mysql_errno().": ".mysql_error()."&lt;BR>";
      For further details, also see
      <function>mysql_fetch_row</function>
     </para>
+    <example>
+     <title>mysql fetch array</title>
+     <programlisting role=php>
+&lt;?php 
+mysql_connect($host,$user,$password);
+$result = mysql_db_query("database","select * from table");
+while($row = mysql_fetch_array($result)) {
+    echo $row["user_id"];
+    echo $row["fullname"];
+}
+mysql_free_result($result);
+?>
+</programlisting>
+    </example>
+
    </refsect1>
   </refentry>
 

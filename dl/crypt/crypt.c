@@ -2,7 +2,9 @@
 #include "prelude.h"
 #include "sflcryp.h"
 #ifdef HAVE_CRYPT_H
+#if 0
 #include <ufc-crypt.h>
+#endif
 #include <crypt.h>
 #endif
 

@@ -29,7 +29,7 @@
  */
  
 
-/* $Id: ldap.c,v 1.47 1998/05/27 10:20:24 rasmus Exp $ */
+/* $Id: ldap.c,v 1.49 1998/06/22 20:28:32 zeev Exp $ */
 
 #ifndef MSVC5
 #include "config.h"
@@ -270,7 +270,7 @@ void php3_info_ldap(void)
 
 	php3_printf("<table>"
 				"<tr><td>Total links:</td><td>%d/%s</td></tr>\n"
-		        "<tr><td>RCS Version:</td><td>$Id: ldap.c,v 1.47 1998/05/27 10:20:24 rasmus Exp $</td></tr>\n"
+		        "<tr><td>RCS Version:</td><td>$Id: ldap.c,v 1.49 1998/06/22 20:28:32 zeev Exp $</td></tr>\n"
 #if HAVE_NSLDAP
 				"<tr><td>SDK Version:</td><td>%f</td></tr>"
 				"<tr><td>Highest LDAP Protocol Supported:</td><td>%f</td></tr>"
@@ -553,7 +553,7 @@ int num_attribs=0, i;
 			ldap_base_dn = base_dn->value.str.val;
 			ldap_filter = filter->value.str.val;
 
-			num_attribs = hash_num_elements(attrs->value.ht);
+			num_attribs = _php3_hash_num_elements(attrs->value.ht);
 			if ((ldap_attrs = emalloc((num_attribs+1) * sizeof(char *))) == NULL) {
 				php3_error(E_WARNING, "LDAP: Could not allocate memory");
 				RETURN_FALSE;
@@ -561,7 +561,7 @@ int num_attribs=0, i;
 			}
 
 			for(i=0; i<num_attribs; i++) {
-				if (hash_index_find(attrs->value.ht, i, (void **) &attr) == FAILURE) {
+				if (_php3_hash_index_find(attrs->value.ht, i, (void **) &attr) == FAILURE) {
 					php3_error(E_WARNING, "LDAP: Array initialization wrong");
 					RETURN_FALSE;
 					return;
@@ -779,7 +779,7 @@ char *dn;
 			}	
 			free(ldap_value);
 
-			hash_update(tmp1.value.ht, _php3_strtolower(attribute), strlen(attribute)+1, (void *) &tmp2, sizeof(pval), NULL);
+			_php3_hash_update(tmp1.value.ht, _php3_strtolower(attribute), strlen(attribute)+1, (void *) &tmp2, sizeof(pval), NULL);
 			add_index_string(&tmp1, attr_count, attribute, 1);
 
 			attr_count++;
@@ -790,7 +790,7 @@ char *dn;
 		dn = ldap_get_dn(ldap, ldap_result_entry);
 		add_assoc_string(&tmp1, "dn", dn, 1);
 
-		hash_index_update(return_value->value.ht, entry_count, (void *) &tmp1, sizeof(pval), NULL);
+		_php3_hash_index_update(return_value->value.ht, entry_count, (void *) &tmp1, sizeof(pval), NULL);
 		
 		entry_count++;
 		ldap_result_entry = ldap_next_entry(ldap, ldap_result_entry);
@@ -928,7 +928,7 @@ BerElement *ber;
 		}
 		free(ldap_value);
 
-		hash_update(return_value->value.ht, attribute, strlen(attribute)+1, (void *) &tmp, sizeof(pval), NULL);
+		_php3_hash_update(return_value->value.ht, attribute, strlen(attribute)+1, (void *) &tmp, sizeof(pval), NULL);
 		add_index_string(return_value, count, attribute, 1);
 
 		count++;
@@ -1094,30 +1094,30 @@ int index;
 	convert_to_string(dn);
 	ldap_dn = dn->value.str.val;
 
-	num_attribs = hash_num_elements(entry->value.ht);
+	num_attribs = _php3_hash_num_elements(entry->value.ht);
 
 	ldap_mods = emalloc((num_attribs+1) * sizeof(LDAPMod *));
 
-	hash_internal_pointer_reset(entry->value.ht);
+	_php3_hash_internal_pointer_reset(entry->value.ht);
 
 	for(i=0; i<num_attribs; i++) {
 		ldap_mods[i] = emalloc(sizeof(LDAPMod));
 
 		ldap_mods[i]->mod_op = oper;
 
-		if (hash_get_current_key(entry->value.ht, &attribute, &index) == HASH_KEY_IS_STRING) {
+		if (_php3_hash_get_current_key(entry->value.ht, &attribute, &index) == HASH_KEY_IS_STRING) {
 			ldap_mods[i]->mod_type = estrdup(attribute);
 			efree(attribute);
 		} else {
 			php3_error(E_WARNING, "LDAP: Unknown Attribute in the data");
 		}
 
-		hash_get_current_data(entry->value.ht, (void **) &value);
+		_php3_hash_get_current_data(entry->value.ht, (void **) &value);
 
 		if (value->type != IS_ARRAY) {
 			num_values = 1;
 		} else {
-			num_values = hash_num_elements(value->value.ht);
+			num_values = _php3_hash_num_elements(value->value.ht);
 		}
 
 		ldap_mods[i]->mod_values = emalloc((num_values+1) * sizeof(char *));
@@ -1127,14 +1127,14 @@ int index;
 			ldap_mods[i]->mod_values[0] = value->value.str.val;
 		} else {	
 			for(j=0; j<num_values; j++) {
-				hash_index_find(value->value.ht, j, (void **) &ivalue);
+				_php3_hash_index_find(value->value.ht, j, (void **) &ivalue);
 				convert_to_string(ivalue);
 				ldap_mods[i]->mod_values[j] = ivalue->value.str.val;
 			}
 		}
 		ldap_mods[i]->mod_values[num_values] = NULL;
 
-		hash_move_forward(entry->value.ht);
+		_php3_hash_move_forward(entry->value.ht);
 	}
 	ldap_mods[num_attribs] = NULL;
 

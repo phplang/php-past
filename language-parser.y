@@ -31,7 +31,7 @@
 */
 
 
-/* $Id: language-parser.y,v 1.156 1998/05/30 18:01:02 zeev Exp $ */
+/* $Id: language-parser.y,v 1.159 1998/07/03 06:21:25 zeev Exp $ */
 
 
 /* 
@@ -135,28 +135,28 @@ int init_resource_list(void)
 {
 	TLS_VARS;
 	
-	return hash_init(&GLOBAL(list), 0, NULL, list_entry_destructor, 0);
+	return _php3_hash_init(&GLOBAL(list), 0, NULL, list_entry_destructor, 0);
 }
 
 int init_resource_plist(void)
 {
 	TLS_VARS;
 	
-	return hash_init(&GLOBAL(plist), 0, NULL, plist_entry_destructor, 1);
+	return _php3_hash_init(&GLOBAL(plist), 0, NULL, plist_entry_destructor, 1);
 }
 
 void destroy_resource_list(void)
 {
 	TLS_VARS;
 	
-	hash_destroy(&GLOBAL(list));
+	_php3_hash_destroy(&GLOBAL(list));
 }
 
 void destroy_resource_plist(void)
 {
 	TLS_VARS;
 	
-	hash_destroy(&GLOBAL(plist));
+	_php3_hash_destroy(&GLOBAL(plist));
 }
 
 int clean_module_resource(list_entry *le, int *resource_id)
@@ -174,7 +174,7 @@ int clean_module_resource_destructors(list_destructors_entry *ld, int *module_nu
 {
 	TLS_VARS;
 	if (ld->module_number == *module_number) {
-		hash_apply_with_argument(&GLOBAL(plist), (int (*)(void *,void *)) clean_module_resource, (void *) &(ld->resource_id));
+		_php3_hash_apply_with_argument(&GLOBAL(plist), (int (*)(void *,void *)) clean_module_resource, (void *) &(ld->resource_id));
 		return 1;
 	} else {
 		return 0;
@@ -191,7 +191,7 @@ int clean_module_resource_destructors(list_destructors_entry *ld, int *module_nu
 %left LOGICAL_XOR
 %left LOGICAL_AND
 %right PHP_PRINT
-%left '=' PLUS_EQUAL MINUS_EQUAL MUL_EQUAL DIV_EQUAL CONCAT_EQUAL MOD_EQUAL AND_EQUAL OR_EQUAL XOR_EQUAL
+%left '=' PLUS_EQUAL MINUS_EQUAL MUL_EQUAL DIV_EQUAL CONCAT_EQUAL MOD_EQUAL AND_EQUAL OR_EQUAL XOR_EQUAL SHIFT_LEFT_EQUAL SHIFT_RIGHT_EQUAL
 %left '?' ':'
 %left BOOLEAN_OR
 %left BOOLEAN_AND
@@ -486,6 +486,8 @@ expr_without_variable:
 	|	assignment_variable_pointer	AND_EQUAL expr { if (GLOBAL(Execute)) assign_to_variable(&$$,&$1,&$3,bitwise_and_function _INLINE_TLS); }	
 	|	assignment_variable_pointer	OR_EQUAL expr { if (GLOBAL(Execute)) assign_to_variable(&$$,&$1,&$3,bitwise_or_function _INLINE_TLS); }
 	|	assignment_variable_pointer	XOR_EQUAL expr { if (GLOBAL(Execute)) assign_to_variable(&$$,&$1,&$3,bitwise_xor_function _INLINE_TLS); }
+	|	assignment_variable_pointer SHIFT_LEFT_EQUAL expr { if (GLOBAL(Execute)) assign_to_variable(&$$,&$1,&$3,shift_left_function _INLINE_TLS); }
+	|	assignment_variable_pointer SHIFT_RIGHT_EQUAL expr { if (GLOBAL(Execute)) assign_to_variable(&$$,&$1,&$3,shift_right_function _INLINE_TLS); }
 	|	assignment_variable_pointer  INCREMENT { if (GLOBAL(Execute)) incdec_variable(&$$,&$1,increment_function,1 _INLINE_TLS); }
 	|	INCREMENT assignment_variable_pointer { if (GLOBAL(Execute)) incdec_variable(&$$,&$2,increment_function,0 _INLINE_TLS); }
 	|	assignment_variable_pointer DECREMENT { if (GLOBAL(Execute)) incdec_variable(&$$,&$1,decrement_function,1 _INLINE_TLS); }
@@ -504,6 +506,8 @@ expr_without_variable:
 	|	expr '*' expr { if (GLOBAL(Execute)) mul_function(&$$,&$1,&$3 _INLINE_TLS); }
 	|	expr '/' expr { if (GLOBAL(Execute)) div_function(&$$,&$1,&$3 _INLINE_TLS); }
 	|	expr '%' expr { if (GLOBAL(Execute)) mod_function(&$$,&$1,&$3 _INLINE_TLS); }
+	| 	expr SHIFT_LEFT expr { if (GLOBAL(Execute)) shift_left_function(&$$,&$1,&$3 _INLINE_TLS); }
+	|	expr SHIFT_RIGHT expr { if (GLOBAL(Execute)) shift_right_function(&$$,&$1,&$3 _INLINE_TLS); }
 	|	'+' expr { if (GLOBAL(Execute)) { pval tmp;  tmp.value.lval=0;  tmp.type=IS_LONG;  add_function(&$$,&tmp,&$2 _INLINE_TLS); } }
 	|	'-' expr { if (GLOBAL(Execute)) { pval tmp;  tmp.value.lval=0;  tmp.type=IS_LONG;  sub_function(&$$,&tmp,&$2 _INLINE_TLS); } }
 	|	'!' expr { if (GLOBAL(Execute)) boolean_not_function(&$$,&$2); }
@@ -597,23 +601,23 @@ assignment_list:
 
 	if (GLOBAL(Execute)) {
 		$$=$1;
-		hash_next_index_insert($$.value.ht,&$3,sizeof(pval),NULL);
+		_php3_hash_next_index_insert($$.value.ht,&$3,sizeof(pval),NULL);
 	}
 }
 	|	assignment_variable_pointer {
 
 	if (GLOBAL(Execute)) {
 		$$.value.ht = (HashTable *) emalloc(sizeof(HashTable));
-		hash_init($$.value.ht,0,NULL,NULL,0);
+		_php3_hash_init($$.value.ht,0,NULL,NULL,0);
 		$$.type = IS_ARRAY;
-		hash_next_index_insert($$.value.ht,&$1,sizeof(pval),NULL);
+		_php3_hash_next_index_insert($$.value.ht,&$1,sizeof(pval),NULL);
 	}
 }
 	|	assignment_list ',' {
 	if (GLOBAL(Execute)) {
 		$$=$1;
 		$2.value.varptr.yystype = NULL; /* $2 is just used as temporary space */
-		hash_next_index_insert($$.value.ht,&$2,sizeof(pval),NULL);
+		_php3_hash_next_index_insert($$.value.ht,&$2,sizeof(pval),NULL);
 	}
 }
 	|	/* empty */ {
@@ -621,10 +625,10 @@ assignment_list:
 		pval tmp;
 
 		$$.value.ht = (HashTable *) emalloc(sizeof(HashTable));
-		hash_init($$.value.ht,0,NULL,NULL,0);
+		_php3_hash_init($$.value.ht,0,NULL,NULL,0);
 		$$.type = IS_ARRAY;
 		tmp.value.varptr.yystype = NULL;
-		hash_next_index_insert($$.value.ht,&tmp,sizeof(pval),NULL);
+		_php3_hash_next_index_insert($$.value.ht,&tmp,sizeof(pval),NULL);
 	}
 }
 ;
@@ -658,7 +662,7 @@ dimensions:
 
 
 array_pair_list:
-		/* empty */ { if (GLOBAL(Execute)) { $$.value.ht = (HashTable *) emalloc(sizeof(HashTable));  hash_init($$.value.ht,0,NULL,pval_DESTRUCTOR,0); $$.type = IS_ARRAY; } }
+		/* empty */ { if (GLOBAL(Execute)) { $$.value.ht = (HashTable *) emalloc(sizeof(HashTable));  _php3_hash_init($$.value.ht,0,NULL,pval_DESTRUCTOR,0); $$.type = IS_ARRAY; } }
 	|	non_empty_array_pair_list { $$ = $1; }
 ;
 

@@ -28,7 +28,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: apache.c,v 1.32 1998/05/23 13:07:03 zeev Exp $ */
+/* $Id: apache.c,v 1.34 1998/07/02 13:05:25 rasmus Exp $ */
 #ifdef THREAD_SAFE
 #include "tls.h"
 #endif
@@ -46,10 +46,14 @@
 
 #if APACHE
 #include "http_request.h"
+#include "build-defs.h"
+
+extern module *top_module;
 
 void php3_virtual(INTERNAL_FUNCTION_PARAMETERS);
 void php3_getallheaders(INTERNAL_FUNCTION_PARAMETERS);
 void php3_apachelog(INTERNAL_FUNCTION_PARAMETERS);
+void php3_info_apache(void);
 
 function_entry apache_functions[] = {
 	{"virtual",			php3_virtual,		NULL},
@@ -58,8 +62,56 @@ function_entry apache_functions[] = {
 };
 
 php3_module_entry apache_module_entry = {
-	"Apache", apache_functions, NULL, NULL, NULL, NULL, NULL, STANDARD_MODULE_PROPERTIES
+	"Apache", apache_functions, NULL, NULL, NULL, NULL, php3_info_apache, STANDARD_MODULE_PROPERTIES
 };
+
+void php3_info_apache(void) {
+	module *modp = NULL;
+#if !defined(WIN32) && !defined(WINNT)
+	char name[64];
+	char *p;
+#endif
+	server_rec *serv = GLOBAL(php3_rqst)->server;
+	extern char server_root[MAX_STRING_LEN];
+	extern uid_t user_id;
+	extern char *user_name;
+	extern gid_t group_id;
+	extern int max_requests_per_child;
+
+#if WIN32|WINNT
+	PUTS("Apache for Windows 95/NT<br>");
+#else
+	php3_printf("<tt>APACHE_INCLUDE=%s<br>\n", PHP_APACHE_INCLUDE);
+	php3_printf("APACHE_TARGET=%s<br></tt>\n", PHP_APACHE_TARGET);
+#endif
+	php3_printf("Apache Version: <b>%s</b><br>",SERVER_VERSION);
+#ifdef APACHE_RELEASE
+	php3_printf("Apache Release: <b>%d</b><br>",APACHE_RELEASE);
+#endif
+	php3_printf("Apache API Version: <b>%d</b><br>",MODULE_MAGIC_NUMBER);
+	php3_printf("Hostname/port: <b>%s:%u</b><br>\n",serv->server_hostname,serv->port);
+#if !defined(WIN32) && !defined(WINNT)
+	php3_printf("User/Group: <b>%s(%d)/%d</b><br>\n",user_name,(int)user_id,(int)group_id);
+	php3_printf("Max Requests: <b>per child: %d &nbsp;&nbsp; keep alive: %s &nbsp;&nbsp; max per connection: %d</b><br>\n",max_requests_per_child,serv->keep_alive ? "on":"off", serv->keep_alive_max);
+#endif
+	php3_printf("Timeouts: <b>connection: %d &nbsp;&nbsp; keep-alive: %d</b><br>",serv->timeout,serv->keep_alive_timeout);
+#if !defined(WIN32) && !defined(WINNT)
+	php3_printf("Server Root: <b>%s</b><br>\n",server_root);
+
+	PUTS("Loaded modules: ");
+	for(modp = top_module; modp; modp = modp->next) {
+		strncpy(name, modp->name, sizeof(name) - 1);
+		if ((p = strrchr(name, '.'))) {
+			*p='\0'; /* Cut off ugly .c extensions on module names */
+		}
+		PUTS(name);
+		if (modp->next) {
+			PUTS(", ");
+		}
+	}
+#endif
+	PUTS("<br></td?</tr>\n");
+}
 
 /* This function is equivilent to <!--#include virtual...-->
  * in mod_include. It does an Apache sub-request. It is useful
@@ -69,7 +121,6 @@ php3_module_entry apache_module_entry = {
  * as an Apache module, since it uses the Apache API for doing
  * sub requests.
  */
-
 void php3_virtual(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *filename;

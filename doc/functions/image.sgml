@@ -687,6 +687,96 @@
    </refsect1>
   </refentry>
 
+  <refentry id="function.imagettfbbox">
+   <refnamediv>
+    <refname>ImageTTFBBox</refname>
+    <refpurpose>give the bounding box of a text using TypeType fonts</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>array <function>ImageTTFBBox</function></funcdef>
+     <paramdef>int <parameter>size</parameter></paramdef>
+     <paramdef>int <parameter>angle</parameter></paramdef>
+     <paramdef>string <parameter>fontfile</parameter></paramdef>
+     <paramdef>string <parameter>text</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+     This function calculates and returns the bounding box in pixels
+     a TrueType text.
+     <variablelist>
+      <varlistentry>
+       <term><parameter>text</parameter></term>
+       <listitem><simpara>The string to be measured.
+      </varlistentry>
+      <varlistentry>
+       <term><parameter>size</parameter></term>
+       <listitem><simpara>The font size.
+      </varlistentry>
+      <varlistentry>
+       <term><parameter>fontfile</parameter></term>
+       <listitem><simpara>The name of the TrueType font file.  (Can
+	 also be an URL.)
+      </varlistentry>
+      <varlistentry>
+       <term><parameter>angle</parameter></term>
+       <listitem><simpara>Angle in degrees in which
+	 <parameter>text</parameter> will be measured.
+      </varlistentry>
+     </variablelist>
+
+     <function>ImageTTFBBox</function> returns an array with 8
+     elements representing four points making the bounding box of the
+     text:
+
+     <informaltable>
+      <tgroup cols="2">
+       <tbody>
+	<row>
+	 <entry>0</entry>
+	 <entry>upper left corner, X position</entry>
+	</row>
+	<row>
+	 <entry>1</entry>
+	 <entry>upper left corner, Y position</entry>
+	</row>
+	<row>
+	 <entry>2</entry>
+	 <entry>upper right corner, X position</entry>
+	</row>
+	<row>
+	 <entry>3</entry>
+	 <entry>upper right corner, Y position</entry>
+	</row>
+	<row>
+	 <entry>4</entry>
+	 <entry>lower right corner, X position</entry>
+	</row>
+	<row>
+	 <entry>5</entry>
+	 <entry>lower right corner, Y position</entry>
+	</row>
+	<row>
+	 <entry>6</entry>
+	 <entry>lower left corner, X position</entry>
+	</row>
+	<row>
+	 <entry>7</entry>
+	 <entry>lower left corner, Y position</entry>
+	</row>
+       </tbody>
+      </tgroup>
+     </informaltable>
+     The points are relative to the <emphasis>text</emphasis>
+     regardless of the angle, so "upper left" means in the top
+     left-hand corner seeing the text horizontallty.
+    <para>
+     This function requires both the GD library and the Freetype library.
+    <para>
+     See also <function>ImageTTFText</function>.
+   </refsect1>
+  </refentry>
+
   <refentry id="function.imagettftext">
    <refnamediv>
     <refname>ImageTTFText</refname>
@@ -695,7 +785,7 @@
    <refsect1>
     <title>Description</title>
     <funcsynopsis>
-     <funcdef>int <function>imagettftext</function></funcdef>
+     <funcdef>array <function>ImageTTFText</function></funcdef>
      <paramdef>int <parameter>im</parameter></paramdef>
      <paramdef>int <parameter>size</parameter></paramdef>
      <paramdef>int <parameter>angle</parameter></paramdef>
@@ -713,9 +803,10 @@
      <parameter>col</parameter>, using the TrueType font file
      identified by <parameter>fontfile</parameter>.
     <para>
-     The coordinates given by <parameter>x,y</parameter> will define
-     the basepoint of the first character (roughly the bottom-left
-     corner of the character).  This is different from the
+     The coordinates given by
+     <parameter>x</parameter>,<parameter>y</parameter> will define the
+     basepoint of the first character (roughly the lower-left corner
+     of the character).  This is different from the
      <function>ImageString</function>, where x,y define the
      upper-right corner of the first character.
     <para>
@@ -724,7 +815,15 @@
      values representing a counter-clockwise rotation.  (i.e., a value
      of 90 would result in bottom-to-top reading text).
     <para>
-     <parameter>fontfile</parameter> is the path to the TrueType font you wish to use.
+     <parameter>fontfile</parameter> is the path to the TrueType font
+     you wish to use.
+    <para>
+     <function>ImageTTFText</function> returns an array with 8
+     elements representing four points making the bounding box of the
+     text.  The order of the points is upper left, upper right, lower
+     right, lower left.  The points are relative to the text
+     regardless of the angle, so "upper left" means in the top
+     left-hand corner when you see the text horizontallty.
     <para>
      This example script will produce a black GIF 400x30 pixels, with
      the words "Testing..."  in white in the font Arial.
@@ -744,6 +843,8 @@ ImageDestroy($im);
 
     <para>
      This function requires both the GD library and the Freetype library.
+    <para>
+     See also <function>ImageTTFBBox</function>.
    </refsect1>
   </refentry>
 

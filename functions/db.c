@@ -28,7 +28,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: db.c,v 1.70 1998/06/01 04:16:07 shane Exp $ */
+/* $Id: db.c,v 1.73 1998/07/02 16:18:50 rasmus Exp $ */
 #if COMPILE_DL
 #include "dl/phpdl.h"
 #endif
@@ -182,9 +182,9 @@ dbm_info *_php3_finddbm(pval *id,HashTable *list)
 	DBM_TLS_VARS;
 
 	if (id->type == IS_STRING) {
-		numitems = hash_num_elements(list);
+		numitems = _php3_hash_num_elements(list);
 		for (i=1; i<=numitems; i++) {
-			if (hash_index_find(list, i, (void **) &le)==FAILURE) {
+			if (_php3_hash_index_find(list, i, (void **) &le)==FAILURE) {
 				continue;
 			}
 			if (le->type == DBM_GLOBAL(le_db)) {
@@ -860,7 +860,7 @@ int flatfile_store(FILE *dbf, datum key_datum, datum value_datum, int mode) {
 	int ret;
 
 	if (mode == DBM_INSERT) {
-		if (flatfile_findkey(dbf, datum)) {
+		if (flatfile_findkey(dbf, key_datum)) {
 			return 1;
 		}
 		fseek(dbf,0L,SEEK_END);

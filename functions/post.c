@@ -193,16 +193,16 @@ void _php3_parse_gpc_data(char *val, char *var, pval *track_vars_array)
 		pval arr1, arr2, *arr_ptr, entry;
 
 		/* If the array doesn't exist, create it */
-		if (hash_find(GLOBAL(active_symbol_table), var, var_len+1, (void **) &arr_ptr) == FAILURE) {
+		if (_php3_hash_find(GLOBAL(active_symbol_table), var, var_len+1, (void **) &arr_ptr) == FAILURE) {
 			if (array_init(&arr1)==FAILURE) {
 				return;
 			}
-			hash_update(GLOBAL(active_symbol_table), var, var_len+1, &arr1, sizeof(pval), NULL);
+			_php3_hash_update(GLOBAL(active_symbol_table), var, var_len+1, &arr1, sizeof(pval), NULL);
 			if (track_vars_array) {
 				if (array_init(&arr2)==FAILURE) {
 					return;
 				}
-				hash_update(track_vars_array->value.ht, var, var_len+1, (void *) &arr2, sizeof(pval),NULL);
+				_php3_hash_update(track_vars_array->value.ht, var, var_len+1, (void *) &arr2, sizeof(pval),NULL);
 			}
 		} else {
 			if (arr_ptr->type!=IS_ARRAY) {
@@ -214,11 +214,11 @@ void _php3_parse_gpc_data(char *val, char *var, pval *track_vars_array)
 					if (array_init(&arr2)==FAILURE) {
 						return;
 					}
-					hash_update(track_vars_array->value.ht, var, var_len+1, (void *) &arr2, sizeof(pval),NULL);
+					_php3_hash_update(track_vars_array->value.ht, var, var_len+1, (void *) &arr2, sizeof(pval),NULL);
 				}
 			}
 			arr1 = *arr_ptr;
-			if (track_vars_array && hash_find(track_vars_array->value.ht, var, var_len+1, (void **) &arr_ptr) == FAILURE) {
+			if (track_vars_array && _php3_hash_find(track_vars_array->value.ht, var, var_len+1, (void **) &arr_ptr) == FAILURE) {
 				return;
 			}
 			arr2 = *arr_ptr;
@@ -235,25 +235,25 @@ void _php3_parse_gpc_data(char *val, char *var, pval *track_vars_array)
 		/* And then insert it */
 		if (ret) {		/* indexed array */
 			if (php3_check_type(ret) == IS_LONG) {
-				hash_index_update(arr1.value.ht, atol(ret), &entry, sizeof(pval),NULL);	/* s[ret]=tmp */
+				_php3_hash_index_update(arr1.value.ht, atol(ret), &entry, sizeof(pval),NULL);	/* s[ret]=tmp */
 				if (track_vars_array) {
 					yystype_copy_constructor(&entry);
-					hash_index_update(arr2.value.ht, atol(ret), &entry, sizeof(pval),NULL);
+					_php3_hash_index_update(arr2.value.ht, atol(ret), &entry, sizeof(pval),NULL);
 				}
 			} else {
-				hash_update(arr1.value.ht, ret, strlen(ret)+1, &entry, sizeof(pval),NULL);	/* s["ret"]=tmp */
+				_php3_hash_update(arr1.value.ht, ret, strlen(ret)+1, &entry, sizeof(pval),NULL);	/* s["ret"]=tmp */
 				if (track_vars_array) {
 					yystype_copy_constructor(&entry);
-					hash_update(arr2.value.ht, ret, strlen(ret)+1, &entry, sizeof(pval),NULL);
+					_php3_hash_update(arr2.value.ht, ret, strlen(ret)+1, &entry, sizeof(pval),NULL);
 				}
 			}
 			efree(ret);
 			ret = NULL;
 		} else {		/* non-indexed array */
-			hash_next_index_insert(arr1.value.ht, &entry, sizeof(pval),NULL);
+			_php3_hash_next_index_insert(arr1.value.ht, &entry, sizeof(pval),NULL);
 			if (track_vars_array) {
 				yystype_copy_constructor(&entry);
-				hash_next_index_insert(arr2.value.ht, &entry, sizeof(pval),NULL);
+				_php3_hash_next_index_insert(arr2.value.ht, &entry, sizeof(pval),NULL);
 			}
 		}
 	} else {			/* we have a normal variable */
@@ -266,10 +266,10 @@ void _php3_parse_gpc_data(char *val, char *var, pval *track_vars_array)
 			entry.value.str.val = estrndup(tmp,entry.value.str.len);
 		}
 		entry.type = IS_STRING;
-		hash_update(GLOBAL(active_symbol_table), var, var_len+1, (void *) &entry, sizeof(pval),NULL);
+		_php3_hash_update(GLOBAL(active_symbol_table), var, var_len+1, (void *) &entry, sizeof(pval),NULL);
 		if (track_vars_array) {
 			yystype_copy_constructor(&entry);
-			hash_update(track_vars_array->value.ht, var, var_len+1, (void *) &entry, sizeof(pval),NULL);
+			_php3_hash_update(track_vars_array->value.ht, var, var_len+1, (void *) &entry, sizeof(pval),NULL);
 		}
 	}
 
@@ -293,13 +293,13 @@ void php3_treat_data(int arg, char *str)
 				array_ptr = &array;
 				switch (arg) {
 					case PARSE_POST:
-						hash_add(&GLOBAL(symbol_table), "HTTP_POST_VARS", sizeof("HTTP_POST_VARS"), array_ptr, sizeof(pval),NULL);
+						_php3_hash_add(&GLOBAL(symbol_table), "HTTP_POST_VARS", sizeof("HTTP_POST_VARS"), array_ptr, sizeof(pval),NULL);
 						break;
 					case PARSE_GET:
-						hash_add(&GLOBAL(symbol_table), "HTTP_GET_VARS", sizeof("HTTP_GET_VARS"), array_ptr, sizeof(pval),NULL);
+						_php3_hash_add(&GLOBAL(symbol_table), "HTTP_GET_VARS", sizeof("HTTP_GET_VARS"), array_ptr, sizeof(pval),NULL);
 						break;
 					case PARSE_COOKIE:
-						hash_add(&GLOBAL(symbol_table), "HTTP_COOKIE_VARS", sizeof("HTTP_COOKIE_VARS"), array_ptr, sizeof(pval),NULL);
+						_php3_hash_add(&GLOBAL(symbol_table), "HTTP_COOKIE_VARS", sizeof("HTTP_COOKIE_VARS"), array_ptr, sizeof(pval),NULL);
 						break;
 				}
 			} else {

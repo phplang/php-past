@@ -92,7 +92,7 @@ ac_help="$ac_help
   --with-config-file-path=PATH  Sets the path in which to look for php3.ini
                           defaults to /usr/local/lib"
 ac_help="$ac_help
-  --enable-debug         Compile with debugging symbols"
+  --enable-debug          Compile with debugging symbols"
 ac_help="$ac_help
   --enable-safe-mode      Enable safe mode by default."
 ac_help="$ac_help
@@ -4437,6 +4437,12 @@ echo "configure:4426: checking Solid library file" >&5
   if test ! -f $SOLID_LIBS; then
     SOLID_LIBS=`echo $SOLID_LIBDIR/scl${ac_solid_os}*.a | cut -d' ' -f1`
   fi
+  if test ! -f $SOLID_LIBS; then
+    SOLID_LIBS=`echo $SOLID_LIBDIR/bcl${ac_solid_os}*.so | cut -d' ' -f1`
+  fi
+  if test ! -f $SOLID_LIBS; then
+    SOLID_LIBS=`echo $SOLID_LIBDIR/bcl${ac_solid_os}*.a | cut -d' ' -f1`
+  fi
   echo "$ac_t""`echo $SOLID_LIBS | sed -e 's!.*/!!'`" 1>&6
 
 fi
@@ -4445,7 +4451,7 @@ fi
 
 
 echo $ac_n "checking for LDAP support""... $ac_c" 1>&6
-echo "configure:4449: checking for LDAP support" >&5
+echo "configure:4455: checking for LDAP support" >&5
 # Check whether --with-ldap or --without-ldap was given.
 if test "${with_ldap+set}" = set; then
   withval="$with_ldap"
@@ -4484,7 +4490,7 @@ fi
 
 
 echo $ac_n "checking for Velocis support""... $ac_c" 1>&6
-echo "configure:4488: checking for Velocis support" >&5
+echo "configure:4494: checking for Velocis support" >&5
 # Check whether --with-velocis or --without-velocis was given.
 if test "${with_velocis+set}" = set; then
   withval="$with_velocis"
@@ -4532,7 +4538,7 @@ fi
 
 
 echo $ac_n "checking for a custom ODBC support""... $ac_c" 1>&6
-echo "configure:4536: checking for a custom ODBC support" >&5
+echo "configure:4542: checking for a custom ODBC support" >&5
 # Check whether --with-custom-odbc or --without-custom-odbc was given.
 if test "${with_custom_odbc+set}" = set; then
   withval="$with_custom_odbc"
@@ -4570,7 +4576,7 @@ fi
 
 
 echo $ac_n "checking for zlib support""... $ac_c" 1>&6
-echo "configure:4574: checking for zlib support" >&5
+echo "configure:4580: checking for zlib support" >&5
 # Check whether --with-zlib or --without-zlib was given.
 if test "${with_zlib+set}" = set; then
   withval="$with_zlib"
@@ -4583,7 +4589,7 @@ fi
 echo "$ac_t""$use_zlib" 1>&6
 if test ".$use_zlib" != ".no" ; then
 		echo $ac_n "checking for gzgets in -lz""... $ac_c" 1>&6
-echo "configure:4587: checking for gzgets in -lz" >&5
+echo "configure:4593: checking for gzgets in -lz" >&5
 ac_lib_var=`echo z'_'gzgets | sed 'y%./+-%__p_%'`
 if eval "test \"`echo '$''{'ac_cv_lib_$ac_lib_var'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
@@ -4591,7 +4597,7 @@ else
   ac_save_LIBS="$LIBS"
 LIBS="-lz  $LIBS"
 cat > conftest.$ac_ext <<EOF
-#line 4595 "configure"
+#line 4601 "configure"
 #include "confdefs.h"
 /* Override any gcc2 internal prototype to avoid an error.  */
 /* We use char because int might match the return type of a gcc2
@@ -4602,7 +4608,7 @@ int main() {
 gzgets()
 ; return 0; }
 EOF
-if { (eval echo configure:4606: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest; then
+if { (eval echo configure:4612: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest; then
   rm -rf conftest*
   eval "ac_cv_lib_$ac_lib_var=yes"
 else
@@ -4631,7 +4637,7 @@ fi
 
 
 echo $ac_n "checking whether to include the bundled dbase library""... $ac_c" 1>&6
-echo "configure:4635: checking whether to include the bundled dbase library" >&5
+echo "configure:4641: checking whether to include the bundled dbase library" >&5
 # Check whether --with-dbase or --without-dbase was given.
 if test "${with_dbase+set}" = set; then
   withval="$with_dbase"
@@ -4667,7 +4673,7 @@ fi
 
 
 echo $ac_n "checking whether to include the bundled filePro support""... $ac_c" 1>&6
-echo "configure:4671: checking whether to include the bundled filePro support" >&5
+echo "configure:4677: checking whether to include the bundled filePro support" >&5
 # Check whether --with-filepro or --without-filepro was given.
 if test "${with_filepro+set}" = set; then
   withval="$with_filepro"
@@ -4699,7 +4705,7 @@ fi
 
 
 echo $ac_n "checking whether to enable unified ODBC support""... $ac_c" 1>&6
-echo "configure:4703: checking whether to enable unified ODBC support" >&5
+echo "configure:4709: checking whether to enable unified ODBC support" >&5
 # Check whether --enable-unified-odbc or --disable-unified-odbc was given.
 if test "${enable_unified_odbc+set}" = set; then
   enableval="$enable_unified_odbc"
@@ -4752,7 +4758,7 @@ fi
 
 
 echo $ac_n "checking whether to use a configuration file""... $ac_c" 1>&6
-echo "configure:4756: checking whether to use a configuration file" >&5
+echo "configure:4762: checking whether to use a configuration file" >&5
 # Check whether --with-config-file-path or --without-config-file-path was given.
 if test "${with_config_file_path+set}" = set; then
   withval="$with_config_file_path"
@@ -4808,7 +4814,7 @@ fi
 
 
 echo $ac_n "checking whether to include debugging symbols""... $ac_c" 1>&6
-echo "configure:4812: checking whether to include debugging symbols" >&5
+echo "configure:4818: checking whether to include debugging symbols" >&5
 # Check whether --enable-debug or --disable-debug was given.
 if test "${enable_debug+set}" = set; then
   enableval="$enable_debug"
@@ -4851,7 +4857,7 @@ fi
 
 
 echo $ac_n "checking whether to enable safe mode by default""... $ac_c" 1>&6
-echo "configure:4855: checking whether to enable safe mode by default" >&5
+echo "configure:4861: checking whether to enable safe mode by default" >&5
 # Check whether --enable-safe-mode or --disable-safe-mode was given.
 if test "${enable_safe_mode+set}" = set; then
   enableval="$enable_safe_mode"
@@ -4883,7 +4889,7 @@ fi
 
 
 echo $ac_n "checking for safe mode exec dir""... $ac_c" 1>&6
-echo "configure:4887: checking for safe mode exec dir" >&5
+echo "configure:4893: checking for safe mode exec dir" >&5
 # Check whether --with-exec-dir or --without-exec-dir was given.
 if test "${with_exec_dir+set}" = set; then
   withval="$with_exec_dir"
@@ -4923,7 +4929,7 @@ fi
 
 
 echo $ac_n "checking whether to enable track_vars variables by default""... $ac_c" 1>&6
-echo "configure:4927: checking whether to enable track_vars variables by default" >&5
+echo "configure:4933: checking whether to enable track_vars variables by default" >&5
 # Check whether --enable-track-vars or --disable-track-vars was given.
 if test "${enable_track_vars+set}" = set; then
   enableval="$enable_track_vars"
@@ -4955,7 +4961,7 @@ fi
 
 
 echo $ac_n "checking whether to enable magic quotes by default""... $ac_c" 1>&6
-echo "configure:4959: checking whether to enable magic quotes by default" >&5
+echo "configure:4965: checking whether to enable magic quotes by default" >&5
 # Check whether --enable-magic-quotes or --disable-magic-quotes was given.
 if test "${enable_magic_quotes+set}" = set; then
   enableval="$enable_magic_quotes"
@@ -4987,7 +4993,7 @@ fi
 
 
 echo $ac_n "checking whether to enable remote debugger support""... $ac_c" 1>&6
-echo "configure:4991: checking whether to enable remote debugger support" >&5
+echo "configure:4997: checking whether to enable remote debugger support" >&5
 # Check whether --enable-debugger or --disable-debugger was given.
 if test "${enable_debugger+set}" = set; then
   enableval="$enable_debugger"
@@ -5018,7 +5024,7 @@ fi
  
 
 echo $ac_n "checking whether to enable bc style precision math functions""... $ac_c" 1>&6
-echo "configure:5022: checking whether to enable bc style precision math functions" >&5
+echo "configure:5028: checking whether to enable bc style precision math functions" >&5
 # Check whether --enable-bcmath or --disable-bcmath was given.
 if test "${enable_bcmath+set}" = set; then
   enableval="$enable_bcmath"
@@ -5050,7 +5056,7 @@ fi
 
 if test "$BINNAME" = "php"; then
 echo $ac_n "checking whether to force Apache CGI redirect""... $ac_c" 1>&6
-echo "configure:5054: checking whether to force Apache CGI redirect" >&5
+echo "configure:5060: checking whether to force Apache CGI redirect" >&5
 # Check whether --enable-force-cgi-redirect or --disable-force-cgi-redirect was given.
 if test "${enable_force_cgi_redirect+set}" = set; then
   enableval="$enable_force_cgi_redirect"
@@ -5084,7 +5090,7 @@ fi
  
 
 echo $ac_n "checking whether to discard path_info + path_translated""... $ac_c" 1>&6
-echo "configure:5088: checking whether to discard path_info + path_translated" >&5
+echo "configure:5094: checking whether to discard path_info + path_translated" >&5
 # Check whether --enable-discard_path or --disable-discard_path was given.
 if test "${enable_discard_path+set}" = set; then
   enableval="$enable_discard_path"
@@ -5119,7 +5125,7 @@ fi
 fi
 
 echo $ac_n "checking whether to enable a memory limit""... $ac_c" 1>&6
-echo "configure:5123: checking whether to enable a memory limit" >&5
+echo "configure:5129: checking whether to enable a memory limit" >&5
 # Check whether --enable-memory-limit or --disable-memory-limit was given.
 if test "${enable_memory_limit+set}" = set; then
   enableval="$enable_memory_limit"
@@ -5150,7 +5156,7 @@ fi
  
 
 echo $ac_n "checking whether to enable short tags by default""... $ac_c" 1>&6
-echo "configure:5154: checking whether to enable short tags by default" >&5
+echo "configure:5160: checking whether to enable short tags by default" >&5
 # Check whether --enable-short-tags or --disable-short-tags was given.
 if test "${enable_short_tags+set}" = set; then
   enableval="$enable_short_tags"
@@ -5181,7 +5187,7 @@ fi
  
 
 echo $ac_n "checking whether to enable the URL-aware fopen wrapper""... $ac_c" 1>&6
-echo "configure:5185: checking whether to enable the URL-aware fopen wrapper" >&5
+echo "configure:5191: checking whether to enable the URL-aware fopen wrapper" >&5
 # Check whether --enable-url-fopen-wrapper or --disable-url-fopen-wrapper was given.
 if test "${enable_url_fopen_wrapper+set}" = set; then
   enableval="$enable_url_fopen_wrapper"
@@ -5212,6 +5218,10 @@ fi
 
 
 test -n "$auto_cflags" && test -n "$GCC" && CFLAGS="$CFLAGS -O2"
+
+if test -n "$auto_cflags" && test "`uname -s 2>/dev/null`" = "HP-UX"; then
+   test -n "$GCC" || CFLAGS="-Ae $CFLAGS"
+fi
 
 
 

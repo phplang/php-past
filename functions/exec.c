@@ -26,7 +26,7 @@
    | Author: Rasmus Lerdorf                                               |
    +----------------------------------------------------------------------+
  */
-/* $Id: exec.c,v 1.73 1998/05/30 14:16:01 rasmus Exp $ */
+/* $Id: exec.c,v 1.76 1998/06/22 20:28:31 zeev Exp $ */
 
 #ifdef THREAD_SAFE
 #include "tls.h"
@@ -63,7 +63,7 @@ static int _Exec(int type, char *cmd, pval *array, pval *return_value)
 	if (php3_ini.safe_mode) {
 		lcmd = strlen(cmd);
 		ldir = strlen(php3_ini.safe_mode_exec_dir);
-		l = lcmd + ldir + 3;
+		l = lcmd + ldir + 2;
 		overflow_limit = l;
 		c = strchr(cmd, ' ');
 		if (c) *c = '\0';
@@ -71,17 +71,17 @@ static int _Exec(int type, char *cmd, pval *array, pval *return_value)
 			php3_error(E_WARNING, "No '..' components allowed in path");
 			return -1;
 		}
-		b = strrchr(cmd, '/');
 		d = emalloc(l);
-		strncpy(d, php3_ini.safe_mode_exec_dir, l - 1);
+		strcpy(d, php3_ini.safe_mode_exec_dir);
 		overflow_limit -= ldir;
+		b = strrchr(cmd, '/');
 		if (b) {
-			strncat(d, b, overflow_limit);
+			strcat(d, b);
 			overflow_limit -= strlen(b);
 		} else {
 			strcat(d, "/");
-			strncat(d, cmd, overflow_limit-1);
-			overflow_limit-=(lcmd+1);
+			strcat(d, cmd);
+			overflow_limit-=(strlen(cmd)+1);
 		}
 		if (c) {
 			*c = ' ';
@@ -153,7 +153,7 @@ static int _Exec(int type, char *cmd, pval *array, pval *return_value)
 				tmp.value.str.len = strlen(buf);
 				tmp.value.str.val = estrndup(buf,tmp.value.str.len);
 				tmp.type = IS_STRING;
-				hash_next_index_insert(array->value.ht,(void *) &tmp, sizeof(pval), NULL);
+				_php3_hash_next_index_insert(array->value.ht,(void *) &tmp, sizeof(pval), NULL);
 			}
 		}
 

@@ -29,7 +29,7 @@
  */
 
 
-/* $Id: control_structures_inline.h,v 1.168 1998/05/25 20:56:51 zeev Exp $ */
+/* $Id: control_structures_inline.h,v 1.172 1998/06/22 20:28:03 zeev Exp $ */
 
 #ifdef THREAD_SAFE
 #include "tls.h"
@@ -119,25 +119,25 @@ inline int cs_global_variable(pval *varname INLINE_TLS)
 			php3_error(E_WARNING, "Incorrect variable type or name in global in function %s()", GLOBAL(function_state).function_name);
 			return FAILURE;
 		}
-		if (hash_find(GLOBAL(active_symbol_table), varname->value.str.val, varname->value.str.len+1, (void **) &localdata) == SUCCESS) {
+		if (_php3_hash_find(GLOBAL(active_symbol_table), varname->value.str.val, varname->value.str.len+1, (void **) &localdata) == SUCCESS) {
 			php3_error(E_WARNING, "Variable used in global statement already exists in the function");
 			STR_FREE(varname->value.str.val);
 			return FAILURE;
 		}
-		if (hash_find(&GLOBAL(symbol_table), varname->value.str.val, varname->value.str.len+1, (void **) &localdata) == FAILURE) {
+		if (_php3_hash_find(&GLOBAL(symbol_table), varname->value.str.val, varname->value.str.len+1, (void **) &localdata) == FAILURE) {
 			pval tmp;
 		
 			tmp.type = IS_STRING;
 			tmp.value.str.val = undefined_variable_string;	
 			tmp.value.str.len = 0;
 			
-			if (hash_update(&GLOBAL(symbol_table), varname->value.str.val, varname->value.str.len+1, (void *) &tmp, sizeof(pval), (void **) &localdata)==FAILURE) {
+			if (_php3_hash_update(&GLOBAL(symbol_table), varname->value.str.val, varname->value.str.len+1, (void *) &tmp, sizeof(pval), (void **) &localdata)==FAILURE) {
 				php3_error(E_WARNING, "Unable to initialize global variable $%s",varname->value.str.val);
 				STR_FREE(varname->value.str.val);
 				return FAILURE;
 			}
 		}
-		if (hash_pointer_update(GLOBAL(active_symbol_table), varname->value.str.val, varname->value.str.len+1, (void *) localdata) == FAILURE) {
+		if (_php3_hash_pointer_update(GLOBAL(active_symbol_table), varname->value.str.val, varname->value.str.len+1, (void *) localdata) == FAILURE) {
 			php3_error(E_WARNING, "Error updating symbol table");
 			STR_FREE(varname->value.str.val);
 			return FAILURE;
@@ -166,7 +166,7 @@ inline int cs_static_variable(pval *varname, pval *value INLINE_TLS)
 			php3_error(E_WARNING, "Incorrect variable type or name in static in function %s()", GLOBAL(function_state).function_name);
 			return FAILURE;
 		}
-		if (hash_find(GLOBAL(function_state).hosting_function_table, GLOBAL(function_state).function_name, strlen(GLOBAL(function_state).function_name)+1, (void **) &func_ent) == FAILURE) {
+		if (_php3_hash_find(GLOBAL(function_state).hosting_function_table, GLOBAL(function_state).function_name, strlen(GLOBAL(function_state).function_name)+1, (void **) &func_ent) == FAILURE) {
 			STR_FREE(varname->value.str.val);
 			if (value) {
 				yystype_destructor(value _INLINE_TLS);
@@ -175,17 +175,17 @@ inline int cs_static_variable(pval *varname, pval *value INLINE_TLS)
 		}
 		if (!func_ent->value.func.addr.statics) {
  			func_ent->value.func.addr.statics = (HashTable *) emalloc(sizeof(HashTable));
-			hash_init(func_ent->value.func.addr.statics, 0, NULL, pval_DESTRUCTOR, 0);
+			_php3_hash_init(func_ent->value.func.addr.statics, 0, NULL, pval_DESTRUCTOR, 0);
 		}
-		if (hash_find(func_ent->value.func.addr.statics, varname->value.str.val, varname->value.str.len+1, (void **) &variable_entry) == FAILURE) {
+		if (_php3_hash_find(func_ent->value.func.addr.statics, varname->value.str.val, varname->value.str.len+1, (void **) &variable_entry) == FAILURE) {
 			if (value) {
-				hash_update(func_ent->value.func.addr.statics, varname->value.str.val, varname->value.str.len+1, value, sizeof(pval), (void **) &variable_entry);
+				_php3_hash_update(func_ent->value.func.addr.statics, varname->value.str.val, varname->value.str.len+1, value, sizeof(pval), (void **) &variable_entry);
 			} else {
 				var_uninit(&tmp);
-				hash_update(func_ent->value.func.addr.statics, varname->value.str.val, varname->value.str.len+1, &tmp, sizeof(pval), (void **) &variable_entry);
+				_php3_hash_update(func_ent->value.func.addr.statics, varname->value.str.val, varname->value.str.len+1, &tmp, sizeof(pval), (void **) &variable_entry);
 			}
 			/*
-			if (hash_find(func_ent->value.func.addr.statics, varname->value.str.val, varname->value.str.len+1, (void **) &variable_entry) == FAILURE) {
+			if (_php3_hash_find(func_ent->value.func.addr.statics, varname->value.str.val, varname->value.str.len+1, (void **) &variable_entry) == FAILURE) {
 				php3_error(E_ERROR, "Inserted static variable got lost");
 				STR_FREE(varname->value.str.val);
 				if (value) {
@@ -195,7 +195,7 @@ inline int cs_static_variable(pval *varname, pval *value INLINE_TLS)
 			}
 			*/
 		}
-		if (hash_pointer_update(GLOBAL(active_symbol_table), varname->value.str.val, varname->value.str.len+1, (void *) variable_entry) == FAILURE) {
+		if (_php3_hash_pointer_update(GLOBAL(active_symbol_table), varname->value.str.val, varname->value.str.len+1, (void *) variable_entry) == FAILURE) {
 			php3_error(E_ERROR, "Unable to initialize static variable");
 			STR_FREE(varname->value.str.val);
 			if (value) {
@@ -203,7 +203,7 @@ inline int cs_static_variable(pval *varname, pval *value INLINE_TLS)
 			}
 			return FAILURE;
 		} else {
-			hash_find(GLOBAL(active_symbol_table), varname->value.str.val, varname->value.str.len+1, (void **) &variable_entry);
+			_php3_hash_find(GLOBAL(active_symbol_table), varname->value.str.val, varname->value.str.len+1, (void **) &variable_entry);
 		}
 		STR_FREE(varname->value.str.val);
 	}
@@ -423,24 +423,24 @@ inline void get_function_parameter(pval *varname, unsigned char type, pval *defa
 	if (GLOBAL(Execute)) {
 		pval tmp,*data;
 
-		if (hash_index_find(GLOBAL(active_symbol_table), GLOBAL(param_index), (void **) &data) == FAILURE) {
+		if (_php3_hash_index_find(GLOBAL(active_symbol_table), GLOBAL(param_index), (void **) &data) == FAILURE) {
 			if (default_value) {
 				tmp = *default_value;
 			} else {
 				php3_error(E_WARNING, "Missing argument %d in call to %s()",GLOBAL(param_index)+1,GLOBAL(function_state).function_name);
 				var_uninit(&tmp);
 			}
-			hash_update(GLOBAL(active_symbol_table), varname->value.str.val, varname->value.str.len+1, &tmp, sizeof(pval), NULL);
-		} else if (!hash_index_is_pointer(GLOBAL(active_symbol_table), GLOBAL(param_index))) { /* passed by value */
+			_php3_hash_update(GLOBAL(active_symbol_table), varname->value.str.val, varname->value.str.len+1, &tmp, sizeof(pval), NULL);
+		} else if (!_php3_hash_index_is_pointer(GLOBAL(active_symbol_table), GLOBAL(param_index))) { /* passed by value */
 			tmp = *data;
 			yystype_copy_constructor(&tmp);
-			hash_update(GLOBAL(active_symbol_table), varname->value.str.val, varname->value.str.len+1, &tmp, sizeof(pval), NULL);
+			_php3_hash_update(GLOBAL(active_symbol_table), varname->value.str.val, varname->value.str.len+1, &tmp, sizeof(pval), NULL);
 			if (default_value) {
 				yystype_destructor(default_value _INLINE_TLS);
 			}
 		} else { /* passed by reference */
-			hash_pointer_update(GLOBAL(active_symbol_table), varname->value.str.val, varname->value.str.len+1, data);
-			hash_index_del(GLOBAL(active_symbol_table), GLOBAL(param_index));
+			_php3_hash_pointer_update(GLOBAL(active_symbol_table), varname->value.str.val, varname->value.str.len+1, data);
+			_php3_hash_index_del(GLOBAL(active_symbol_table), GLOBAL(param_index));
 			if (default_value) {
 				yystype_destructor(default_value _INLINE_TLS);
 			}
@@ -475,7 +475,7 @@ inline void pass_parameter_by_value(pval *expr INLINE_TLS)
 {
 	if (GLOBAL(Execute)) {
 		if (GLOBAL(function_state).func_arg_types) {
-			unsigned char argument_offset=hash_next_free_element(GLOBAL(function_state).function_symbol_table)+1;
+			unsigned char argument_offset=_php3_hash_next_free_element(GLOBAL(function_state).function_symbol_table)+1;
 			
 			if (argument_offset<=GLOBAL(function_state).func_arg_types[0]
 				&& GLOBAL(function_state).func_arg_types[argument_offset]==BYREF_FORCE) {
@@ -484,7 +484,7 @@ inline void pass_parameter_by_value(pval *expr INLINE_TLS)
 			}
 		}
 		
-		if (hash_next_index_insert(GLOBAL(function_state).function_symbol_table, expr, sizeof(pval),NULL) == FAILURE) {
+		if (_php3_hash_next_index_insert(GLOBAL(function_state).function_symbol_table, expr, sizeof(pval),NULL) == FAILURE) {
 			php3_error(E_WARNING, "Error updating symbol table");
 			yystype_destructor(expr _INLINE_TLS);
 			GLOBAL(function_state).function_type = 0;	/* don't execute the function call */
@@ -516,18 +516,18 @@ inline void end_function_decleration(pval *function_token, pval *function_name I
 		php3_str_tolower(function_name->value.str.val, function_name->value.str.len);
 		if (GLOBAL(class_name)) {
 			target_symbol_table = GLOBAL(class_symbol_table);
-			hash_del(GLOBAL(class_symbol_table), function_name->value.str.val, function_name->value.str.len+1);	/* for inheritance */
+			_php3_hash_del(GLOBAL(class_symbol_table), function_name->value.str.val, function_name->value.str.len+1);	/* for inheritance */
 		} else {
 			target_symbol_table = &GLOBAL(function_table);
 		}
-		if (hash_exists(target_symbol_table, function_name->value.str.val, function_name->value.str.len+1)) {
+		if (_php3_hash_exists(target_symbol_table, function_name->value.str.val, function_name->value.str.len+1)) {
 			php3_error(E_ERROR, "Can't redeclare already declared function");
 			return;
 		}
 		function_token->type = IS_USER_FUNCTION;
 		function_token->value.func.addr.statics = NULL;
 		function_token->value.func.arg_types = GLOBAL(function_state).func_arg_types;
-		hash_update(target_symbol_table, function_name->value.str.val, function_name->value.str.len+1, function_token, sizeof(pval), NULL);
+		_php3_hash_update(target_symbol_table, function_name->value.str.val, function_name->value.str.len+1, function_token, sizeof(pval), NULL);
 	}
 }
 
@@ -829,7 +829,7 @@ inline void cs_functioncall_pre_variable_passing(pval *function_name, pval *clas
 			return;
 		}
 		php3_str_tolower(function_name->value.str.val, function_name->value.str.len);
-		if (hash_find(target_symbol_table, function_name->value.str.val, function_name->value.str.len+1, (void **) &data) == SUCCESS) {
+		if (_php3_hash_find(target_symbol_table, function_name->value.str.val, function_name->value.str.len+1, (void **) &data) == SUCCESS) {
 			if (!(data->type & VALID_FUNCTION)) {
 				if (data->type == IS_UNSUPPORTED_FUNCTION) {
 					php3_error(E_ERROR, "Function %s() is not supported in this compilation", function_name->value.str.val);
@@ -837,6 +837,7 @@ inline void cs_functioncall_pre_variable_passing(pval *function_name, pval *clas
 					php3_error(E_ERROR, "Function call to a non-function (%s)", function_name->value.str.val);
 				}
 				function_name->cs_data.function_call_type=0;
+				GLOBAL(function_state).symbol_table = NULL;
 				return;
 			}
 			/* we're gonna call the function... */
@@ -854,25 +855,28 @@ inline void cs_functioncall_pre_variable_passing(pval *function_name, pval *clas
 			if (!GLOBAL(function_state).function_symbol_table) {
 				php3_error(E_ERROR, "Unable to allocate necessary memory for function call");
 				function_name->cs_data.function_call_type=0;
+				GLOBAL(function_state).symbol_table = NULL;
 				return;
 			}
-			if (hash_init(GLOBAL(function_state).function_symbol_table, 0, NULL, pval_DESTRUCTOR, 0) == FAILURE) {
+			if (_php3_hash_init(GLOBAL(function_state).function_symbol_table, 0, NULL, pval_DESTRUCTOR, 0) == FAILURE) {
 				php3_error(E_ERROR, "Unable to initialize new symbol table in function call");
 				function_name->cs_data.function_call_type=0;
+				GLOBAL(function_state).symbol_table = NULL;
 				return;
 			}
 			/* push GLOBAL */
 			GLOBAL(globals).type = IS_ARRAY;
 			GLOBAL(globals).value.ht = &GLOBAL(symbol_table);
 			if (data->type==IS_USER_FUNCTION) {
-				hash_pointer_update(GLOBAL(function_state).function_symbol_table, "GLOBALS", sizeof("GLOBALS"), (void *) &GLOBAL(globals));
+				_php3_hash_pointer_update(GLOBAL(function_state).function_symbol_table, "GLOBALS", sizeof("GLOBALS"), (void *) &GLOBAL(globals));
 			}
 			if (object) {	/* push $this */
-				hash_pointer_update(GLOBAL(function_state).function_symbol_table, "this", sizeof("this"), (void *) object);
+				_php3_hash_pointer_update(GLOBAL(function_state).function_symbol_table, "this", sizeof("this"), (void *) object);
 			}
 		} else {
 			php3_error(E_ERROR, "Call to unsupported or undefined function %s()", function_name->value.str.val);
 			function_name->cs_data.function_call_type=0;
+			GLOBAL(function_state).symbol_table = NULL;
 			return;
 		}
 	} else {
@@ -919,7 +923,7 @@ inline void cs_functioncall_end(pval *result, pval *function_name, pval *close_p
 		}
 		
 		/* clean up */
-		hash_destroy(GLOBAL(function_state).symbol_table);
+		_php3_hash_destroy(GLOBAL(function_state).symbol_table);
 		efree(GLOBAL(function_state).symbol_table);
 		yystype_destructor(function_name _INLINE_TLS);
 		
@@ -946,6 +950,8 @@ inline void cs_functioncall_end(pval *result, pval *function_name, pval *close_p
 		GLOBAL(ExecuteFlag) = stack_int_top(&GLOBAL(css));
 		stack_del_top(&GLOBAL(css));
 		GLOBAL(Execute) = SHOULD_EXECUTE;
+	} else {
+		var_reset(result);
 	}
 }
 
@@ -1031,11 +1037,11 @@ inline void cs_start_class_decleration(pval *classname, pval *parent INLINE_TLS)
 	if (GLOBAL(Execute)) {
 		pval new_class, *parent_ptr;
 
-		if (hash_exists(&GLOBAL(function_table), classname->value.str.val, classname->value.str.len+1)) {
+		if (_php3_hash_exists(&GLOBAL(function_table), classname->value.str.val, classname->value.str.len+1)) {
 			php3_error(E_ERROR,"%s is already a function or class",classname->value.str.val);
 		}
 		if (parent) {
-			if (hash_find(&GLOBAL(function_table), parent->value.str.val, parent->value.str.len+1, (void **) &parent_ptr) == FAILURE) {
+			if (_php3_hash_find(&GLOBAL(function_table), parent->value.str.val, parent->value.str.len+1, (void **) &parent_ptr) == FAILURE) {
 				php3_error(E_ERROR, "Cannot extend non existant class %s", parent->value.str.val);
 				return;
 			}
@@ -1044,9 +1050,9 @@ inline void cs_start_class_decleration(pval *classname, pval *parent INLINE_TLS)
 		} else {
 			new_class.type = IS_CLASS;
 			new_class.value.ht = (HashTable *) emalloc(sizeof(HashTable));
-			hash_init(new_class.value.ht, 0, NULL, pval_DESTRUCTOR, 0);
+			_php3_hash_init(new_class.value.ht, 0, NULL, pval_DESTRUCTOR, 0);
 		}
-		if (hash_update(&GLOBAL(function_table), classname->value.str.val, classname->value.str.len+1, &new_class, sizeof(pval),NULL) == FAILURE) {
+		if (_php3_hash_update(&GLOBAL(function_table), classname->value.str.val, classname->value.str.len+1, &new_class, sizeof(pval),NULL) == FAILURE) {
 			php3_error(E_ERROR, "Unable to initialize new class");
 		}
 		GLOBAL(class_name) = classname->value.str.val;
@@ -1083,12 +1089,12 @@ inline void start_array_parsing(pval *array_name,pval *class_ptr INLINE_TLS)
 				}
 				target_symbol_table = object->value.ht;
 			}
-			if (hash_find(target_symbol_table,array_name->value.str.val, array_name->value.str.len+1, (void **)&GLOBAL(array_ptr)) == FAILURE) {
+			if (_php3_hash_find(target_symbol_table,array_name->value.str.val, array_name->value.str.len+1, (void **)&GLOBAL(array_ptr)) == FAILURE) {
 				pval tmp;
 				variable_tracker vt;
 
 				array_init(&tmp);
-				hash_update(target_symbol_table,array_name->value.str.val,array_name->value.str.len+1,(void *) &tmp, sizeof(pval),(void **) &GLOBAL(array_ptr));
+				_php3_hash_update(target_symbol_table,array_name->value.str.val,array_name->value.str.len+1,(void *) &tmp, sizeof(pval),(void **) &GLOBAL(array_ptr));
 				GLOBAL(array_ptr)->cs_data.array_write=1;
 								
 				vt.type = IS_STRING;
@@ -1166,9 +1172,9 @@ inline void fetch_array_index(pval *result, pval *expr, pval *dimension INLINE_T
 					case IS_LONG:
 					case IS_DOUBLE:
 						convert_to_long(expr);
-						if (new_array || hash_index_find(arr_ptr->value.ht, expr->value.lval, (void **) &localdata) == FAILURE) {
+						if (new_array || _php3_hash_index_find(arr_ptr->value.ht, expr->value.lval, (void **) &localdata) == FAILURE) {
 							tmp.type = IS_NULL;
-							hash_index_update(arr_ptr->value.ht, expr->value.lval, (void *)&tmp, sizeof(pval),(void **) &localdata);
+							_php3_hash_index_update(arr_ptr->value.ht, expr->value.lval, (void *)&tmp, sizeof(pval),(void **) &localdata);
 							result->value.varptr.yystype = localdata;
 							result->cs_data.array_write = 1;
 							if (!original_array_write) { /* we raised the write flag just now, record this variable */
@@ -1184,9 +1190,9 @@ inline void fetch_array_index(pval *result, pval *expr, pval *dimension INLINE_T
 						}
 						break;
 					case IS_STRING:
-						if (new_array || hash_find(arr_ptr->value.ht, expr->value.str.val, expr->value.str.len+1, (void **) &localdata)==FAILURE) {
+						if (new_array || _php3_hash_find(arr_ptr->value.ht, expr->value.str.val, expr->value.str.len+1, (void **) &localdata)==FAILURE) {
 							tmp.type = IS_NULL;
-							if (hash_update(arr_ptr->value.ht, expr->value.str.val, expr->value.str.len+1, (void *) &tmp, sizeof(pval),(void **) &localdata)==FAILURE) {
+							if (_php3_hash_update(arr_ptr->value.ht, expr->value.str.val, expr->value.str.len+1, (void *) &tmp, sizeof(pval),(void **) &localdata)==FAILURE) {
 								result->value.varptr.yystype=NULL;
 								STR_FREE(expr->value.str.val);
 								return;
@@ -1212,10 +1218,10 @@ inline void fetch_array_index(pval *result, pval *expr, pval *dimension INLINE_T
 						break;
 				}
 			} else { /* assign-next */
-				int new_index=hash_next_free_element(arr_ptr->value.ht);
+				int new_index=_php3_hash_next_free_element(arr_ptr->value.ht);
 				
 				tmp.type = IS_NULL;
-				hash_next_index_insert(arr_ptr->value.ht, (void *) &tmp, sizeof(pval), (void **) &localdata);
+				_php3_hash_next_index_insert(arr_ptr->value.ht, (void *) &tmp, sizeof(pval), (void **) &localdata);
 				result->value.varptr.yystype = localdata;
 				result->cs_data.array_write=1;
 				if (!original_array_write) { /* we raised the write flag just now, record this variable */
@@ -1258,12 +1264,12 @@ inline void clean_unassigned_variable_top(int delete_var INLINE_TLS)
 		switch(vt->type) {
 			case IS_LONG:
 				if (delete_var) {
-					hash_index_del(vt->ht,vt->lval);
+					_php3_hash_index_del(vt->ht,vt->lval);
 				}
 				break;
 			case IS_STRING:
 				if (delete_var) {
-					hash_del(vt->ht,vt->strval,vt->strlen+1);
+					_php3_hash_del(vt->ht,vt->strval,vt->strlen+1);
 				}
 				STR_FREE(vt->strval);
 				break;
@@ -1291,12 +1297,12 @@ inline void get_class_variable_pointer(pval *result, pval *class_ptr, pval *varn
 		} else {
 			pval *data;
 
-			if (hash_find(object->value.ht,varname->value.str.val, varname->value.str.len+1, (void **)&data) == FAILURE) {
+			if (_php3_hash_find(object->value.ht,varname->value.str.val, varname->value.str.len+1, (void **)&data) == FAILURE) {
 				pval tmp;
 				variable_tracker vt;
 
 				var_reset(&tmp);
-				hash_update(object->value.ht,varname->value.str.val,varname->value.str.len+1,(void *) &tmp, sizeof(pval),(void **) &data);
+				_php3_hash_update(object->value.ht,varname->value.str.val,varname->value.str.len+1,(void *) &tmp, sizeof(pval),(void **) &data);
 				
 				vt.type = IS_STRING;
 				vt.strlen = varname->value.str.len;
@@ -1322,7 +1328,7 @@ inline void pass_parameter(pval *var, int by_reference INLINE_TLS)
 		/* ... check if we need to force by reference (set by_reference=1) */
 
 		if (GLOBAL(function_state).func_arg_types) {
-			unsigned char argument_offset=hash_next_free_element(GLOBAL(function_state).function_symbol_table)+1;
+			unsigned char argument_offset=_php3_hash_next_free_element(GLOBAL(function_state).function_symbol_table)+1;
 			
 			if (argument_offset<=GLOBAL(function_state).func_arg_types[0]
 				&& GLOBAL(function_state).func_arg_types[argument_offset]!=BYREF_NONE) {
@@ -1332,7 +1338,7 @@ inline void pass_parameter(pval *var, int by_reference INLINE_TLS)
 				
 		if (!by_reference) {
 			read_pointer_value(&tmp,var _INLINE_TLS);
-			if (hash_next_index_insert(GLOBAL(function_state).function_symbol_table, &tmp, sizeof(pval),NULL) == FAILURE) {
+			if (_php3_hash_next_index_insert(GLOBAL(function_state).function_symbol_table, &tmp, sizeof(pval),NULL) == FAILURE) {
 				php3_error(E_WARNING, "Error updating symbol table");
 				yystype_destructor(&tmp _INLINE_TLS);
 				GLOBAL(function_state).function_type = 0;	/* don't execute the function call */
@@ -1346,7 +1352,7 @@ inline void pass_parameter(pval *var, int by_reference INLINE_TLS)
 				GLOBAL(function_state).function_type = 0;
 				return;
 			}
-			if (hash_next_index_pointer_insert(GLOBAL(function_state).function_symbol_table, (void *) var->value.varptr.yystype) == FAILURE) {
+			if (_php3_hash_next_index_pointer_insert(GLOBAL(function_state).function_symbol_table, (void *) var->value.varptr.yystype) == FAILURE) {
 				php3_error(E_WARNING, "Error updating symbol table");
 				GLOBAL(function_state).function_type = 0;	/* don't execute the function call */
 				return;

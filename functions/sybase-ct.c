@@ -27,7 +27,7 @@
    +----------------------------------------------------------------------+
  */
  
-/* $Id: sybase-ct.c,v 1.41 1998/05/16 11:53:44 zeev Exp $ */
+/* $Id: sybase-ct.c,v 1.43 1998/06/22 20:28:37 zeev Exp $ */
 
 
 #ifndef MSVC5
@@ -139,7 +139,7 @@ static void _free_sybct_result(sybct_result *result)
 static void _close_sybct_link(sybct_link *sybct_ptr)
 {
 	sybct_ptr->valid = 0;
-	hash_apply(resource_list,(int (*)(void *))_clean_invalid_results);
+	_php3_hash_apply(resource_list,(int (*)(void *))_clean_invalid_results);
 	ct_close(sybct_ptr->connection, CS_UNUSED);
 	ct_con_drop(sybct_ptr->connection);
 	efree(sybct_ptr);
@@ -336,7 +336,7 @@ static void php3_sybct_do_connect(INTERNAL_FUNCTION_PARAMETERS,int persistent)
 		list_entry *le;
 
 		/* try to find if we already have this link in our persistent list */
-		if (hash_find(plist, hashed_details, hashed_details_length+1, (void **) &le)==FAILURE) {  /* we don't */
+		if (_php3_hash_find(plist, hashed_details, hashed_details_length+1, (void **) &le)==FAILURE) {  /* we don't */
 			list_entry new_le;
 
 			if (php3_sybct_module.max_links!=-1 && php3_sybct_module.num_links>=php3_sybct_module.max_links) {
@@ -370,7 +370,7 @@ static void php3_sybct_do_connect(INTERNAL_FUNCTION_PARAMETERS,int persistent)
 			memcpy(sybct_ptr,&sybct,sizeof(sybct_link));
 			new_le.type = php3_sybct_module.le_plink;
 			new_le.ptr = sybct_ptr;
-			if (hash_update(plist, hashed_details, hashed_details_length+1, (void *) &new_le, sizeof(list_entry),NULL)==FAILURE) {
+			if (_php3_hash_update(plist, hashed_details, hashed_details_length+1, (void *) &new_le, sizeof(list_entry),NULL)==FAILURE) {
 				free(sybct_ptr);
 				efree(hashed_details);
 				ct_close(sybct.connection, CS_UNUSED);
@@ -389,12 +389,12 @@ static void php3_sybct_do_connect(INTERNAL_FUNCTION_PARAMETERS,int persistent)
 			/* No clue how to do it with CT-lib...
 			if (DBDEAD(sybct_ptr->link)==TRUE) {
 				if (dbopen(sybct_ptr->login,host)==FAIL) {
-					hash_del(plist, hashed_details, hashed_details_length+1);
+					_php3_hash_del(plist, hashed_details, hashed_details_length+1);
 					efree(hashed_details);
 					RETURN_FALSE;
 				}
 				if (dbsetopt(sybct_ptr->link,DBBUFFER,"2",-1)==FAIL) {
-					hash_del(plist, hashed_details, hashed_details_length+1);
+					_php3_hash_del(plist, hashed_details, hashed_details_length+1);
 					efree(hashed_details);
 					RETURN_FALSE;
 				}
@@ -411,7 +411,7 @@ static void php3_sybct_do_connect(INTERNAL_FUNCTION_PARAMETERS,int persistent)
 		 * if it doesn't, open a new sybct link, add it to the resource list,
 		 * and add a pointer to it with hashed_details as the key.
 		 */
-		if (hash_find(list,hashed_details,hashed_details_length+1,(void **) &index_ptr)==SUCCESS) {
+		if (_php3_hash_find(list,hashed_details,hashed_details_length+1,(void **) &index_ptr)==SUCCESS) {
 			int type,link;
 			void *ptr;
 
@@ -426,7 +426,7 @@ static void php3_sybct_do_connect(INTERNAL_FUNCTION_PARAMETERS,int persistent)
 				efree(hashed_details);
 				return;
 			} else {
-				hash_del(list,hashed_details,hashed_details_length+1);
+				_php3_hash_del(list,hashed_details,hashed_details_length+1);
 			}
 		}
 		if (php3_sybct_module.max_links!=-1 && php3_sybct_module.num_links>=php3_sybct_module.max_links) {
@@ -459,7 +459,7 @@ static void php3_sybct_do_connect(INTERNAL_FUNCTION_PARAMETERS,int persistent)
 		/* add it to the hash */
 		new_index_ptr.ptr = (void *) return_value->value.lval;
 		new_index_ptr.type = le_index_ptr;
-		if (hash_update(list,hashed_details,hashed_details_length+1,(void *) &new_index_ptr, sizeof(list_entry),NULL)==FAILURE) {
+		if (_php3_hash_update(list,hashed_details,hashed_details_length+1,(void *) &new_index_ptr, sizeof(list_entry),NULL)==FAILURE) {
 			efree(hashed_details);
 			RETURN_FALSE;
 		}
@@ -475,9 +475,9 @@ static int php3_sybct_get_default_link(INTERNAL_FUNCTION_PARAMETERS)
 	if (php3_sybct_module.default_link==-1) { /* no link opened yet, implicitly open one */
 		HashTable dummy;
 
-		hash_init(&dummy,0,NULL,NULL,0);
+		_php3_hash_init(&dummy,0,NULL,NULL,0);
 		php3_sybct_do_connect(&dummy,return_value,list,plist,0);
-		hash_destroy(&dummy);
+		_php3_hash_destroy(&dummy);
 	}
 	return php3_sybct_module.default_link;
 }
@@ -977,7 +977,7 @@ void php3_sybct_fetch_row(INTERNAL_FUNCTION_PARAMETERS)
 	for (i=0; i<result->num_fields; i++) {
 		field_content = result->data[result->cur_row][i];
 		yystype_copy_constructor(&field_content);
-		hash_index_update(return_value->value.ht, i, (void *) &field_content, sizeof(pval),NULL);
+		_php3_hash_index_update(return_value->value.ht, i, (void *) &field_content, sizeof(pval),NULL);
 	}
 	result->cur_row++;
 }
@@ -1017,8 +1017,8 @@ static void php3_sybct_fetch_hash(INTERNAL_FUNCTION_PARAMETERS)
 		if (php3_ini.magic_quotes_runtime && tmp.type == IS_STRING) {
 			tmp.value.str.val = _php3_addslashes(tmp.value.str.val,tmp.value.str.len,&tmp.value.str.len,1);
 		}
-		hash_index_update(return_value->value.ht, i, (void *) &tmp, sizeof(pval), (void **) &yystype_ptr);
-		hash_pointer_update(return_value->value.ht, result->fields[i].name, strlen(result->fields[i].name)+1, yystype_ptr);
+		_php3_hash_index_update(return_value->value.ht, i, (void *) &tmp, sizeof(pval), (void **) &yystype_ptr);
+		_php3_hash_pointer_update(return_value->value.ht, result->fields[i].name, strlen(result->fields[i].name)+1, yystype_ptr);
 	}
 	result->cur_row++;
 }

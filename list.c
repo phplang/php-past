@@ -29,7 +29,7 @@
  */
 
 
-/* $Id: list.c,v 1.80 1998/05/11 20:17:22 zeev Exp $ */
+/* $Id: list.c,v 1.82 1998/06/22 20:28:06 zeev Exp $ */
 
 #ifdef THREAD_SAFE
 #include "tls.h"
@@ -58,13 +58,13 @@ PHPAPI int php3_list_do_insert(HashTable *list,void *ptr, int type)
 	int index;
 	list_entry le;
 
-	index = hash_next_free_element(list);
+	index = _php3_hash_next_free_element(list);
 
 	if (index==0) index++;
 
 	le.ptr=ptr;
 	le.type=type;
-	if (hash_index_update(list, index, (void *) &le, sizeof(list_entry), NULL)==FAILURE) {
+	if (_php3_hash_index_update(list, index, (void *) &le, sizeof(list_entry), NULL)==FAILURE) {
 		php3_log_err("Failed inserting resource");
 	}
 	return index;
@@ -72,14 +72,14 @@ PHPAPI int php3_list_do_insert(HashTable *list,void *ptr, int type)
 
 PHPAPI int php3_list_do_delete(HashTable *list,int id)
 {
-	return hash_index_del(list, id);
+	return _php3_hash_index_del(list, id);
 }
 
 PHPAPI void *php3_list_do_find(HashTable *list,int id, int *type)
 {
 	list_entry *le;
 
-	if (hash_index_find(list, id, (void **) &le)==SUCCESS) {
+	if (_php3_hash_index_find(list, id, (void **) &le)==SUCCESS) {
 		*type = le->type;
 		return le->ptr;
 	} else {
@@ -94,7 +94,7 @@ PHPAPI void list_entry_destructor(void *ptr)
 	list_destructors_entry *ld;
 	TLS_VARS;
 	
-	if (hash_index_find(&GLOBAL(list_destructors),le->type,(void **) &ld)==SUCCESS) {
+	if (_php3_hash_index_find(&GLOBAL(list_destructors),le->type,(void **) &ld)==SUCCESS) {
 		if (ld->list_destructor) {
 			(ld->list_destructor)(le->ptr);
 		}
@@ -110,7 +110,7 @@ PHPAPI void plist_entry_destructor(void *ptr)
 	list_destructors_entry *ld;
 	TLS_VARS;
 
-	if (hash_index_find(&GLOBAL(list_destructors),le->type,(void **) &ld)==SUCCESS) {
+	if (_php3_hash_index_find(&GLOBAL(list_destructors),le->type,(void **) &ld)==SUCCESS) {
 		if (ld->plist_destructor) {
 			(ld->plist_destructor)(le->ptr);
 		}

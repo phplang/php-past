@@ -29,7 +29,7 @@
  */
 
 
-/* $Id: internal_functions.c,v 1.316 1998/05/29 21:53:11 zeev Exp $ */
+/* $Id: internal_functions.c,v 1.318 1998/06/22 20:28:04 zeev Exp $ */
 
 #ifdef THREAD_SAFE
 #include "tls.h"
@@ -148,7 +148,7 @@ PHPAPI int getParameters(HashTable *ht, int param_count,...)
 
 	for (i = 0; i < param_count; i++) {
 		param = va_arg(ptr, pval **);
-		if (hash_index_find(ht, i, (void **) &tmp) == FAILURE) {
+		if (_php3_hash_index_find(ht, i, (void **) &tmp) == FAILURE) {
 			va_end(ptr);
 			return FAILURE;
 		}
@@ -165,7 +165,7 @@ PHPAPI int getParametersArray(HashTable *ht, int param_count, pval **argument_ar
 	pval *data;
 
 	for (i = 0; i < param_count; i++) {
-		if (hash_index_find(ht, i, (void **) &data) == FAILURE) {
+		if (_php3_hash_index_find(ht, i, (void **) &data) == FAILURE) {
 			return FAILURE;
 		}
 		argument_array[i] = data;
@@ -177,7 +177,7 @@ PHPAPI int getThis(pval **this) {
 	pval *data;
 	TLS_VARS;
 
-	if (hash_find(GLOBAL(active_symbol_table), "this", sizeof("this"), (void **)&data) == FAILURE) {
+	if (_php3_hash_find(GLOBAL(active_symbol_table), "this", sizeof("this"), (void **)&data) == FAILURE) {
 		return FAILURE;
 	}
 	*this = data;
@@ -186,7 +186,7 @@ PHPAPI int getThis(pval **this) {
 
 PHPAPI int ParameterPassedByReference(HashTable *ht, uint n)
 {
-	return hash_index_is_pointer(ht, n-1);
+	return _php3_hash_index_is_pointer(ht, n-1);
 }
 
 
@@ -201,7 +201,7 @@ PHPAPI void wrong_param_count()
 inline PHPAPI int array_init(pval *arg)
 {
 	arg->value.ht = (HashTable *) emalloc(sizeof(HashTable));
-	if (!arg->value.ht || hash_init(arg->value.ht, 0, NULL, pval_DESTRUCTOR, 0)) {
+	if (!arg->value.ht || _php3_hash_init(arg->value.ht, 0, NULL, pval_DESTRUCTOR, 0)) {
 		php3_error(E_CORE_ERROR, "Cannot allocate memory for array");
 		return FAILURE;
 	}
@@ -212,7 +212,7 @@ inline PHPAPI int array_init(pval *arg)
 inline PHPAPI int object_init(pval *arg)
 {
 	arg->value.ht = (HashTable *) emalloc(sizeof(HashTable));
-	if (!arg->value.ht || hash_init(arg->value.ht, 0, NULL, pval_DESTRUCTOR, 0)) {
+	if (!arg->value.ht || _php3_hash_init(arg->value.ht, 0, NULL, pval_DESTRUCTOR, 0)) {
 		php3_error(E_CORE_ERROR, "Cannot allocate memory for array");
 		return FAILURE;
 	}
@@ -227,7 +227,7 @@ inline PHPAPI int add_assoc_long(pval *arg, char *key, long n)
 
 	tmp.type = IS_LONG;
 	tmp.value.lval = n;
-	return hash_update(arg->value.ht, key, strlen(key)+1, (void *) &tmp, sizeof(pval), NULL);
+	return _php3_hash_update(arg->value.ht, key, strlen(key)+1, (void *) &tmp, sizeof(pval), NULL);
 }
 
 
@@ -237,7 +237,7 @@ inline PHPAPI int add_assoc_double(pval *arg, char *key, double d)
 
 	tmp.type = IS_DOUBLE;
 	tmp.value.dval = d;
-	return hash_update(arg->value.ht, key, strlen(key)+1, (void *) &tmp, sizeof(pval), NULL);
+	return _php3_hash_update(arg->value.ht, key, strlen(key)+1, (void *) &tmp, sizeof(pval), NULL);
 }
 
 
@@ -252,7 +252,7 @@ inline PHPAPI int add_assoc_string(pval *arg, char *key, char *str, int duplicat
 	} else {
 		tmp.value.str.val = str;
 	}
-	return hash_update(arg->value.ht, key, strlen(key)+1, (void *) &tmp, sizeof(pval), NULL);
+	return _php3_hash_update(arg->value.ht, key, strlen(key)+1, (void *) &tmp, sizeof(pval), NULL);
 }
 
 
@@ -267,7 +267,7 @@ inline PHPAPI int add_assoc_stringl(pval *arg, char *key, char *str, uint length
 	} else {
 		tmp.value.str.val = str;
 	}
-	return hash_update(arg->value.ht, key, strlen(key)+1, (void *) &tmp, sizeof(pval), NULL);
+	return _php3_hash_update(arg->value.ht, key, strlen(key)+1, (void *) &tmp, sizeof(pval), NULL);
 }
 
 
@@ -277,7 +277,7 @@ inline PHPAPI int add_assoc_function(pval *arg, char *key,void (*function_ptr)(I
 	
 	tmp.type = IS_INTERNAL_FUNCTION;
 	tmp.value.func.addr.internal = function_ptr;
-	return hash_update(arg->value.ht, key, strlen(key)+1, (void *) &tmp, sizeof(pval), NULL);
+	return _php3_hash_update(arg->value.ht, key, strlen(key)+1, (void *) &tmp, sizeof(pval), NULL);
 }
 
 
@@ -287,7 +287,7 @@ inline PHPAPI int add_index_long(pval *arg, uint index, long n)
 
 	tmp.type = IS_LONG;
 	tmp.value.lval = n;
-	return hash_index_update(arg->value.ht, index, (void *) &tmp, sizeof(pval),NULL);
+	return _php3_hash_index_update(arg->value.ht, index, (void *) &tmp, sizeof(pval),NULL);
 }
 
 
@@ -297,7 +297,7 @@ inline PHPAPI int add_index_double(pval *arg, uint index, double d)
 
 	tmp.type = IS_DOUBLE;
 	tmp.value.dval = d;
-	return hash_index_update(arg->value.ht, index, (void *) &tmp, sizeof(pval),NULL);
+	return _php3_hash_index_update(arg->value.ht, index, (void *) &tmp, sizeof(pval),NULL);
 }
 
 
@@ -312,7 +312,7 @@ inline PHPAPI int add_index_string(pval *arg, uint index, char *str, int duplica
 	} else {
 		tmp.value.str.val = str;
 	}
-	return hash_index_update(arg->value.ht, index, (void *) &tmp, sizeof(pval),NULL);
+	return _php3_hash_index_update(arg->value.ht, index, (void *) &tmp, sizeof(pval),NULL);
 }
 
 
@@ -327,7 +327,7 @@ inline PHPAPI int add_index_stringl(pval *arg, uint index, char *str, uint lengt
 	} else {
 		tmp.value.str.val = str;
 	}
-	return hash_index_update(arg->value.ht, index, (void *) &tmp, sizeof(pval),NULL);
+	return _php3_hash_index_update(arg->value.ht, index, (void *) &tmp, sizeof(pval),NULL);
 }
 
 inline PHPAPI int add_next_index_long(pval *arg, long n)
@@ -336,7 +336,7 @@ inline PHPAPI int add_next_index_long(pval *arg, long n)
 
 	tmp.type = IS_LONG;
 	tmp.value.lval = n;
-	return hash_next_index_insert(arg->value.ht, &tmp, sizeof(pval),NULL);
+	return _php3_hash_next_index_insert(arg->value.ht, &tmp, sizeof(pval),NULL);
 }
 
 
@@ -346,7 +346,7 @@ inline PHPAPI int add_next_index_double(pval *arg, double d)
 
 	tmp.type = IS_DOUBLE;
 	tmp.value.dval = d;
-	return hash_next_index_insert(arg->value.ht, &tmp, sizeof(pval),NULL);
+	return _php3_hash_next_index_insert(arg->value.ht, &tmp, sizeof(pval),NULL);
 }
 
 
@@ -361,7 +361,7 @@ inline PHPAPI int add_next_index_string(pval *arg, char *str, int duplicate)
 	} else {
 		tmp.value.str.val = str;
 	}
-	return hash_next_index_insert(arg->value.ht, &tmp, sizeof(pval),NULL);
+	return _php3_hash_next_index_insert(arg->value.ht, &tmp, sizeof(pval),NULL);
 }
 
 
@@ -376,7 +376,7 @@ inline PHPAPI int add_next_index_stringl(pval *arg, char *str, uint length, int 
 	} else {
 		tmp.value.str.val = str;
 	}
-	return hash_next_index_insert(arg->value.ht, &tmp, sizeof(pval),NULL);
+	return _php3_hash_next_index_insert(arg->value.ht, &tmp, sizeof(pval),NULL);
 }
 
 
@@ -391,7 +391,7 @@ inline PHPAPI int add_get_assoc_string(pval *arg, char *key, char *str, void **d
 	} else {
 		tmp.value.str.val = str;
 	}
-	return hash_update(arg->value.ht, key, strlen(key)+1, (void *) &tmp, sizeof(pval), dest);
+	return _php3_hash_update(arg->value.ht, key, strlen(key)+1, (void *) &tmp, sizeof(pval), dest);
 }
 
 
@@ -406,7 +406,7 @@ inline PHPAPI int add_get_assoc_stringl(pval *arg, char *key, char *str, uint le
 	} else {
 		tmp.value.str.val = str;
 	}
-	return hash_update(arg->value.ht, key, strlen(key)+1, (void *) &tmp, sizeof(pval), dest);
+	return _php3_hash_update(arg->value.ht, key, strlen(key)+1, (void *) &tmp, sizeof(pval), dest);
 }
 
 
@@ -416,7 +416,7 @@ inline PHPAPI int add_get_index_long(pval *arg, uint index, long l, void **dest)
 
 	tmp.type = IS_LONG;
 	tmp.value.lval= l;
-	return hash_index_update(arg->value.ht, index, (void *) &tmp, sizeof(pval),dest);
+	return _php3_hash_index_update(arg->value.ht, index, (void *) &tmp, sizeof(pval),dest);
 }
 
 inline PHPAPI int add_get_index_double(pval *arg, uint index, double d, void **dest)
@@ -425,7 +425,7 @@ inline PHPAPI int add_get_index_double(pval *arg, uint index, double d, void **d
 
 	tmp.type = IS_DOUBLE;
 	tmp.value.dval= d;
-	return hash_index_update(arg->value.ht, index, (void *) &tmp, sizeof(pval),dest);
+	return _php3_hash_index_update(arg->value.ht, index, (void *) &tmp, sizeof(pval),dest);
 }
 
 
@@ -440,7 +440,7 @@ inline PHPAPI int add_get_index_string(pval *arg, uint index, char *str, void **
 	} else {
 		tmp.value.str.val = str;
 	}
-	return hash_index_update(arg->value.ht, index, (void *) &tmp, sizeof(pval),dest);
+	return _php3_hash_index_update(arg->value.ht, index, (void *) &tmp, sizeof(pval),dest);
 }
 
 
@@ -455,7 +455,7 @@ inline PHPAPI int add_get_index_stringl(pval *arg, uint index, char *str, uint l
 	} else {
 		tmp.value.str.val = str;
 	}
-	return hash_index_update(arg->value.ht, index, (void *) &tmp, sizeof(pval),dest);
+	return _php3_hash_index_update(arg->value.ht, index, (void *) &tmp, sizeof(pval),dest);
 }
 
 int module_startup_modules(void)
@@ -496,7 +496,7 @@ int _register_list_destructors(void (*list_destructor)(void *), void (*plist_des
 	ld.module_number = module_number;
 	ld.resource_id = GLOBAL(list_destructors).nNextFreeElement;
 	
-	if (hash_next_index_insert(&GLOBAL(list_destructors),(void *) &ld,sizeof(list_destructors_entry),NULL)==FAILURE) {
+	if (_php3_hash_next_index_insert(&GLOBAL(list_destructors),(void *) &ld,sizeof(list_destructors_entry),NULL)==FAILURE) {
 		return FAILURE;
 	}
 	return GLOBAL(list_destructors).nNextFreeElement-1;
@@ -520,7 +520,7 @@ PHPAPI int register_functions(function_entry *functions)
 			unregister_functions(functions,count);
 			return FAILURE;
 		}
-		if (hash_add(&GLOBAL(function_table), ptr->fname, strlen(ptr->fname)+1, &phps, sizeof(pval), NULL) == FAILURE) {
+		if (_php3_hash_add(&GLOBAL(function_table), ptr->fname, strlen(ptr->fname)+1, &phps, sizeof(pval), NULL) == FAILURE) {
 			unload=1;
 			break;
 		}
@@ -529,7 +529,7 @@ PHPAPI int register_functions(function_entry *functions)
 	}
 	if (unload) { /* before unloading, display all remaining bad function in the module */
 		while (ptr->fname) {
-			if (hash_exists(&GLOBAL(function_table), ptr->fname, strlen(ptr->fname)+1)) {
+			if (_php3_hash_exists(&GLOBAL(function_table), ptr->fname, strlen(ptr->fname)+1)) {
 				php3_error(E_CORE_WARNING,"Module load failed - duplicate function name - %s",ptr->fname);
 			}
 			ptr++;
@@ -556,7 +556,7 @@ PHPAPI void unregister_functions(function_entry *functions,int count)
 #if 0
 		php3_printf("Unregistering %s()\n",ptr->fname);
 #endif
-		hash_del(&GLOBAL(function_table),ptr->fname,strlen(ptr->fname)+1);
+		_php3_hash_del(&GLOBAL(function_table),ptr->fname,strlen(ptr->fname)+1);
 		ptr++;
 		i++;
 	}
@@ -575,7 +575,7 @@ int register_module(php3_module_entry *module)
 		return FAILURE;
 	}
 	module->module_started=1;
-	return hash_add(&GLOBAL(module_registry),module->name,strlen(module->name)+1,(void *)module,sizeof(php3_module_entry),NULL);
+	return _php3_hash_add(&GLOBAL(module_registry),module->name,strlen(module->name)+1,(void *)module,sizeof(php3_module_entry),NULL);
 }
 
 
@@ -583,7 +583,7 @@ void module_destructor(php3_module_entry *module)
 {
 	TLS_VARS;
 	if (module->type == MODULE_TEMPORARY) {
-		hash_apply_with_argument(&GLOBAL(list_destructors), (int (*)(void *,void *)) clean_module_resource_destructors, (void *) &(module->module_number));
+		_php3_hash_apply_with_argument(&GLOBAL(list_destructors), (int (*)(void *,void *)) clean_module_resource_destructors, (void *) &(module->module_number));
 		clean_module_constants(module->module_number);
 	}
 

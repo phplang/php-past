@@ -145,11 +145,11 @@ SOURCE=".\fopen-wrappers.h"
 # End Source File
 # Begin Source File
 
-SOURCE=.\hash.c
+SOURCE=.\php3_hash.c
 # End Source File
 # Begin Source File
 
-SOURCE=.\hash.h
+SOURCE=.\php3_hash.h
 # End Source File
 # Begin Source File
 

@@ -907,12 +907,12 @@ void php3_imap_unsubscribe(INTERNAL_FUNCTION_PARAMETERS)
 
 inline int add_assoc_object(pval *arg, char *key, pval tmp)
 {
- return hash_update(arg->value.ht, key, strlen(key)+1, (void *) &tmp, sizeof(pval), NULL);
+ return _php3_hash_update(arg->value.ht, key, strlen(key)+1, (void *) &tmp, sizeof(pval), NULL);
 }
 
 inline int add_next_index_object(pval *arg, pval tmp)
 {
- return hash_next_index_insert( arg->value.ht, (void *) &tmp, sizeof(pval), NULL); 
+ return _php3_hash_next_index_insert( arg->value.ht, (void *) &tmp, sizeof(pval), NULL); 
 }
 
 void imap_add_body( pval *arg, BODY *body )

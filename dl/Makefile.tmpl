@@ -49,6 +49,12 @@ imap.so: imap/imap.o
 imap/%.o: imap/%.c
 	$(CC) $(CFLAGS) -DCOMPILE_DL=1 -c -o $@ $<
 
+crypt.so: crypt/crypt.o crypt/sflcryp.o
+	$(LD) -o $@ crypt/crypt.o crypt/sflcryp.o
+
+crypt/%.o: crypt/%.c
+	$(CC) $(CFLAGS) -DCOMPILE_DL=1 -c -o $@ $<
+
 LOG_OBJS = log/log.o log/log_db.o #log/log_sql.o
 log.so: $(LOG_OBJS)
 	$(LD) -o $@ $(LOG_OBJS)

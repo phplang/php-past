@@ -36,6 +36,11 @@ QNX4 Installation Notes
    I don't know so far why this required for QNX, may be it is Watcom 
    compiler problem.
 
+  If you building Apache module with SQL Anywhere support, you'll get
+  symbol conflict with BOOL. It is defined in Apache (httpd.h) and in 
+  SQL Anywhere (odbc.h). This has nothing to do with PHP, so you have to 
+  fix it yourself someway.
+
 6. With above precautions, it should compile as is and pass regression
 	tests completely:
 		make
@@ -45,5 +50,5 @@ QNX4 Installation Notes
 	Don't bother me unless you really sure you made	that all but it 
 	still doesn't work.
 
-June 5, 1998
+June 28, 1998
 Igor Kovalenko -- owl@infomarket.ru

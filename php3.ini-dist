@@ -80,7 +80,7 @@ warn_plus_overloading	=	Off		; warn if the + operator is used with strings
 magic_quotes_gpc	=	On		; magic quotes for incoming GET/POST/Cookie data
 magic_quotes_runtime=	Off		; magic quotes for runtime-generated data, e.g. data from SQL, from exec(), etc.
 magic_quotes_sybase	=	Off		; Use Sybase-style magic quotes (escape ' with '' instead of \')
-track_vars			=	On		; enable $PHP_GET_VARS[], $PHP_POST_VARS[] and $PHP_COOKIE_VARS[] arrays
+track_vars			=	On		; enable $HTTP_GET_VARS[], $HTTP_POST_VARS[] and $HTTP_COOKIE_VARS[] arrays
 ; automatically add files before or after any PHP 3.0 document
 auto_prepend_file	=
 auto_append_file	=
@@ -152,8 +152,8 @@ sql.safe_mode	=	Off
 uodbc.allow_persistent	=	On	; allow or prevent persistent links
 uodbc.max_persistent	=	-1	; maximum number of persistent links. -1 means no limit
 uodbc.max_links			=	-1	; maximum number of links (persistent+non persistent). -1 means no limit
-uodbc.defaultlrl		=	0	; Handling of LONG fields. Returns number of bytes to variables, 0 means passthru
-uodbc.defaultbinmode	= 	0	; Handling of binary data. 0 means passthru, 1 return as is, 2 convert to char
+uodbc.defaultlrl	=	4096	; Handling of LONG fields. Returns number of bytes to variables, 0 means passthru
+uodbc.defaultbinmode	= 	1	; Handling of binary data. 0 means passthru, 1 return as is, 2 convert to char
 ; See the documentation on odbc_binmode and odbc_longreadlen for an explanation of uodbc.defaultlrl
 ; and uodbc.defaultbinmode
 

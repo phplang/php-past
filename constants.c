@@ -75,7 +75,7 @@ static int clean_module_constant(php3_constant *c, int *module_number)
 void clean_module_constants(int module_number)
 {
 	TLS_VARS;
-	hash_apply_with_argument(&GLOBAL(php3_constants), (int (*)(void *,void *)) clean_module_constant, (void *) &module_number);
+	_php3_hash_apply_with_argument(&GLOBAL(php3_constants), (int (*)(void *,void *)) clean_module_constant, (void *) &module_number);
 }
 
 int php3_startup_constants()
@@ -101,7 +101,7 @@ int php3_startup_constants()
 #endif
 
 
-	if (hash_init(&GLOBAL(php3_constants), 20, NULL, (void(*)(void *)) free_php3_constant, 1)==FAILURE) {
+	if (_php3_hash_init(&GLOBAL(php3_constants), 20, NULL, (void(*)(void *)) free_php3_constant, 1)==FAILURE) {
 		return FAILURE;
 	}
 	
@@ -117,7 +117,7 @@ int php3_startup_constants()
 int php3_shutdown_constants()
 {
 	TLS_VARS;
-	hash_destroy(&GLOBAL(php3_constants));
+	_php3_hash_destroy(&GLOBAL(php3_constants));
 	return SUCCESS;
 }
 
@@ -125,7 +125,7 @@ int php3_shutdown_constants()
 void clean_non_persistent_constants()
 {
 	TLS_VARS;
-	hash_apply(&GLOBAL(php3_constants), (int (*)(void *)) clean_non_persistent_constant);
+	_php3_hash_apply(&GLOBAL(php3_constants), (int (*)(void *)) clean_non_persistent_constant);
 }
 
 
@@ -187,7 +187,7 @@ int php3_get_constant(char *name, uint name_len, pval *result)
 
 	php3_str_tolower(lookup_name, name_len);
 
-	if (hash_find(&GLOBAL(php3_constants), lookup_name, name_len+1, (void **) &c)==SUCCESS) {
+	if (_php3_hash_find(&GLOBAL(php3_constants), lookup_name, name_len+1, (void **) &c)==SUCCESS) {
 		if ((c->flags & CONST_CS) && memcmp(c->name, name, name_len)!=0) {
 			retval=0;
 		} else {
@@ -214,7 +214,7 @@ void register_constant(php3_constant *c)
 #endif
 
 	php3_str_tolower(lowercase_name, c->name_len);
-	hash_add(&GLOBAL(php3_constants), lowercase_name, c->name_len, (void *) c, sizeof(php3_constant), NULL);
+	_php3_hash_add(&GLOBAL(php3_constants), lowercase_name, c->name_len, (void *) c, sizeof(php3_constant), NULL);
 	free(lowercase_name);
 }
 
@@ -285,7 +285,7 @@ void php3_defined(INTERNAL_FUNCTION_PARAMETERS)
 	lowercase_str = estrndup(var->value.str.val, var->value.str.len);
 	php3_str_tolower(lowercase_str,var->value.str.len);
 
-	if (hash_find(&GLOBAL(php3_constants), lowercase_str, var->value.str.len+1, (void **) &c)==SUCCESS) {
+	if (_php3_hash_find(&GLOBAL(php3_constants), lowercase_str, var->value.str.len+1, (void **) &c)==SUCCESS) {
 		if ((c->flags & CONST_CS) && memcmp(c->name, var->value.str.val, var->value.str.len)!=0) {
 			defined=0;
 		} else {

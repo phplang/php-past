@@ -1,6 +1,31 @@
 PHP 3.0 CHANGE LOG                                                    ChangeLog
 |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
-June 6 Version 3.0
+July 04 1998 Version 3.0.1
+- echo/print of empty strings don't trigger sending the header anymore.
+- Implemented shift left and shift right operators (<< and >>)
+- Compile fix for cc on HP-UX.
+- Look for beta-version Solid libraries as well.
+- Make GD module show more info in phpinfo().
+- Compile fix for NextStep 3.0.
+- Fix for Oracle extension on OSF/1.
+- Fix gd 1.3 bug in ImageColorAt().
+- pg_loread() hopefully handles binary data now.
+- Turned off some warnings in dns.c
+- Added ImageTTFBBox() and made ImageTTFText() return bounding box.
+- Added constants for Ora_Bind()'s modes.
+- Renamed all hash_*() routines to _php3_hash_*() to avoid clashes with other
+  libraries.
+- Changed uodbc default LONG behaviour: longreadlen 4096 bytes, binmode 1.
+  The module now actually uses the php.ini settings.
+- New PostgreSQL functions:  pg_fetch_row(), pg_fetch_array()
+  and pg_fetch_object()
+- Fix a segmentation fault when calling invalid functions in certain
+  circumstances
+- Fix bug that caused link-related functions to not pay attention to
+  run-time safe mode setting (it was using whatever was set at compile time).
+- Fix bug in exec() function when used in safe mode
+
+June 6 1998 Version 3.0
 - Add checkdnsrr function (check availability DNS records)
 - Add getmxrr function (get MX hostnames and weights)
 - Fixed bug in nl2br() function
@@ -21,7 +46,7 @@ June 6 Version 3.0
 - Several fixes to the configuration file parser
 - LDAP fixes - fixed return values on several functions
 
-May 23 Version 3.0RC5
+May 23 1998 Version 3.0RC5
 - The BC math library functions now compile in by default.
 - Fixed a bug in virtual() and other types of SSI's (e.g. <!--#exec).  Under
   certain circumstances, this used to result in random problems.
@@ -134,7 +159,7 @@ May 23 Version 3.0RC5
 - Integrated the FreeType support in the GD extension.
 - Added --with-gd=DIR and --without-gd options to configure
 
-April 18 Version 3.0 Release Candidate 4
+April 18 1998 Version 3.0 Release Candidate 4
 - Auto-prepended and auto-appended files were reporting the wrong filename
   in errors and in __FILE__ - fixed.
 - Fix GPC problem related to mixed scalar and array vars with the same name
@@ -153,14 +178,14 @@ April 18 Version 3.0 Release Candidate 4
 - Fix off-by-one error in fgets() when used on a socket
 - Fix bug in ImageSetPixel() (Thanks to ecain@Phosphor.net)
 
-March 31 Version 3.0 Release Candidate 3
+March 31 1998 Version 3.0 Release Candidate 3
 - Tiny bugfix for magic_quotes_sybase
 - Fix Apache build problems introduced in RC2
 - $a["0"]==$a[0] fix
 - Apache-1.3 build changes to support 100% automatic builds and shared library
   module builds.  See INSTALL file.
  
-March 30 Version 3.0 Release Candidate 2
+March 30 1998 Version 3.0 Release Candidate 2
 - Changed the socket implementation under UNIX to not use FILE pointers, in
   order to work around the buggy Solaris libc (and possibly buggy libc's
   in other platforms).
@@ -190,7 +215,7 @@ March 30 Version 3.0 Release Candidate 2
 - Fixed cgi bug in windows that prevented files from being parsed on many
   systems and servers.
 
-March 23 Version 3.0 Release Candidate
+March 23 1998 Version 3.0 Release Candidate
 - Added support for the Raima database (ALPHA)
 - Fixed a bug in persistent PostgreSQL links and the connection-string method.
 - Added EXTENSION_STATUS file, that specifies the stability and status of
@@ -242,7 +267,7 @@ March 23 Version 3.0 Release Candidate
 - Made it possible to disable auto_prepend/append with "none" filename
 - Allow safe CGI calling through #!php style scripts
 
-March 2 Version 3.0b6
+March 2 1998 Version 3.0b6
 - Made [s]printf handle %ld
 - Changed CGI version to only open regular files as input script
 - Added ignore_missing_userfunc_args directive to suppress warnings messages
@@ -255,7 +280,7 @@ March 2 Version 3.0b6
 - Fixed file descriptor leak in auto-prepend/append
 - Imap module is usable. See README in dl/imap.
 
-February 24 Version 3.0b5
+February 24 1998 Version 3.0b5
 - Made the URL aware file functions be enabled by default
 - Fixed an unlikely crash bug in the parser, with uninitialized array elements
   which are refered to as objects.
@@ -329,7 +354,7 @@ February 24 Version 3.0b5
   letters in their names couldn't be redefined.
 - Made chown(), chgrp() and chmod() return TRUE/FALSE instead of 0/-1.
 
-February 02 Version 3.0b4
+February 02 1998 Version 3.0b4
 - Fixed a segfault bug in one of the unified ODBC error messages.
 - Set default file modes to binary on win32 (solved a lot of bs)
 - Fixed file copy on win32
@@ -409,7 +434,7 @@ February 02 Version 3.0b4
 - Fixed MySQL Info function on win32 platform
 - Fixed compilation of syntax highlighting mode
 
-January 17 Version 3.0b3
+January 17 1998 Version 3.0b3
 - Added mysql support under windows ;)  happy happy joy joy
 - Fixed dbase.dll for win32 to actualy load now.
 - Enhanced the convertor to recognize ?> as a php-close-block as well.
@@ -455,7 +480,7 @@ January 17 Version 3.0b3
 - Fixed segfault bug in the Adabas module, with queries that don't return
   rows (update, insert, etc).
 
-December 22 Version 3.0b2
+December 22 1997 Version 3.0b2
 - Changed variable type conversions that do not specify base to always use
   base 10.  "010" is no more 8, it is 10.  Use intval ($x, 0) to get C-style
   octal and hex numbers recognized.
@@ -489,7 +514,7 @@ December 22 Version 3.0b2
 - Changed include() to be executed conditionally.  PHP-3.0 efficient
   unconditional include is now require()
 
-December 08 Version 3.0b1
+December 08 1997 Version 3.0b1
 - Switched to public beta test phase
 - Generalized unset() and isset() to work on any type of variables, including
   specific array indices or object properties (e.g., unset($a[4]) now works).
@@ -516,7 +541,7 @@ December 08 Version 3.0b1
 - Added support for autoprepend and autoprepend
 - Added some more warning flags if gcc is used
 
-December 03 Version 3.0a4
+December 03 1997 Version 3.0a4
 - Improved the internal functions API - no need to explicitly pass
   parameters by reference to internal functions that specifically
   require them, e.g. sort(), ksort(), reset(), count(), etc.
@@ -546,7 +571,7 @@ December 03 Version 3.0a4
 - Safe Mode file open implementation
 - SVR3 portability problem fix
 
-November 23 Version 3.0a3
+November 23 1997 Version 3.0a3
 - Made the global statement behave like PHP 2 with undefined variables
 - Added msql_fetch_object() and msql_fetch_array()
 - Switched between the 1st and 2nd parameters to explode(), so that it acts
@@ -579,7 +604,7 @@ November 23 Version 3.0a3
 - Fixed mysql_field*() functions
 - Made mysql_connect() smarter, after a mysql_close() (applies to msql and pgsql too)
 
-November 6 Version 3.0a2
+November 6 1997 Version 3.0a2
 - Fixed a segfault bug caused by non-persistent connect in [m,My,Postgres]SQL modules
 - Fix command line argument handling
 - Made empty array list assignments work ($a=({});)
@@ -604,5 +629,5 @@ November 6 Version 3.0a2
 - Fixed a problem in the mSQL, MySQL and PostgresSQL drivers and NULL fields.
 - Fixed the GLOBAL statement to be able to declare an array.
 
-October 29 Version 3.0a1
+October 29 1997 Version 3.0a1
 - Start with excellent new parser from Andi and Zeev

@@ -1,5 +1,5 @@
 <?php
-/* $Id: log-header.php3,v 1.3 1998/01/19 03:08:03 jim Exp $ */
+/* $Id: log-header.php3,v 1.4 1998/06/14 02:40:39 jim Exp $ */
 
 /* These are global variables. You should use the setshowinfo(),
    setlogging(), and setlogsuccessive() functions to change these
@@ -17,7 +17,7 @@ $_log_logas = ereg_replace("^/~[^/]+/", "", $GLOBALS['SCRIPT_NAME']);
    by the logging module that gets loaded. */
 
 function log_undefined() {
-	echo "<P><B>Fatal error:</B> No logging moduled loaded.\n";
+	echo "<P><B>Fatal error:</B> No logging module loaded. Make sure that logging.method is set in your php3.ini file.\n";
 }
 
 $_log_getlastfunc = 'log_undefined';	# function to get last info

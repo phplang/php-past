@@ -154,7 +154,7 @@ static const text *ora_func_tab[] =
 php3_module_entry *get_module() { return &oracle_module_entry; };
 #if (WIN32|WINNT) && defined(THREAD_SAFE)
 
-/* NOTE: You should have an odbc.def file where you export DllMain */
+/* NOTE: You should have an oracle.def file where you export DllMain */
 BOOL WINAPI DllMain(HANDLE hModule, DWORD  ul_reason_for_call, 
 				       LPVOID lpReserved)
 {
@@ -207,11 +207,10 @@ static void _close_oraconn(oraConnection *conn)
   ORACLE_TLS_VARS;
   
   conn->open = 0;
-  hash_apply(ORACLE_GLOBAL(php3_oracle_module).resource_list,
+  _php3_hash_apply(ORACLE_GLOBAL(php3_oracle_module).resource_list,
 	     (int (*)(void *))_cursors_cleanup);
   
   ologof(&conn->lda);
-  efree(conn);
   ORACLE_GLOBAL(php3_oracle_module).num_links--;
   efree(conn);
 }
@@ -221,7 +220,7 @@ static void _close_orapconn(oraConnection *conn)
   ORACLE_TLS_VARS;
   
   conn->open = 0;
-  hash_apply(ORACLE_GLOBAL(php3_oracle_module).resource_plist,
+  _php3_hash_apply(ORACLE_GLOBAL(php3_oracle_module).resource_plist,
 	     (int (*)(void *))_cursors_cleanup);
   
   ologof(&conn->lda);
@@ -239,7 +238,9 @@ static void _close_oracur(oraCursor *cur)
 			efree(cur->query);
 		}
 		if (cur->params){
-			hash_destroy(cur->params);
+			_php3_hash_destroy(cur->params);
+			efree(cur->params);
+			cur->params = NULL;
 		}
 		if (cur->columns){
 			for(i = 0; i < cur->ncols; i++){
@@ -310,6 +311,10 @@ int php3_minit_oracle(INIT_FUNC_ARGS)
 		register_list_destructors(_close_oraconn, NULL);
 	ORACLE_GLOBAL(php3_oracle_module).le_pconn =
 		register_list_destructors(NULL, _close_orapconn);
+
+	REGISTER_LONG_CONSTANT("ORA_BIND_INOUT", 0, CONST_CS | CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("ORA_BIND_IN",    1, CONST_CS | CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("ORA_BIND_OUT",   2, CONST_CS | CONST_PERSISTENT);
 
 	return SUCCESS;
 }
@@ -445,7 +450,7 @@ void php3_Ora_Do_Logon(INTERNAL_FUNCTION_PARAMETERS, int persistent)
 	 * no matter if it is to be persistent or not
 	 */
 
-	if (hash_find(plist, hashed_details, hashed_len + 1,
+	if (_php3_hash_find(plist, hashed_details, hashed_len + 1,
 				  (void **) &index_ptr) == FAILURE) {
 		/* the link is not in the persistent list */
 		list_entry new_index_ptr;
@@ -481,7 +486,7 @@ void php3_Ora_Do_Logon(INTERNAL_FUNCTION_PARAMETERS, int persistent)
 				php3_plist_insert(db_conn, ORACLE_GLOBAL(php3_oracle_module).le_pconn);
 			new_index_ptr.ptr = (void *) return_value->value.lval;
 			new_index_ptr.type = le_index_ptr;
-			if (hash_update(plist,hashed_details,hashed_len + 1,(void *) &new_index_ptr,
+			if (_php3_hash_update(plist,hashed_details,hashed_len + 1,(void *) &new_index_ptr,
 							sizeof(list_entry),NULL) == FAILURE) {
 				ologof(&db_conn->lda);
 				free(db_conn);
@@ -521,7 +526,7 @@ void php3_Ora_Do_Logon(INTERNAL_FUNCTION_PARAMETERS, int persistent)
 					/* Delete list entry for this connection */
 					php3_plist_delete(id);
 					/* Delete hashed list entry for this dead connection */
-					hash_del(plist, hashed_details, hashed_len); 
+					_php3_hash_del(plist, hashed_details, hashed_len); 
 					efree(hashed_details);
 					RETURN_FALSE;
 				}
@@ -733,7 +738,7 @@ void php3_Ora_Parse(INTERNAL_FUNCTION_PARAMETERS)
 	cursor->query = query;
 	cursor->fetched = 0;
 	if(cursor->params && cursor->nparams > 0){
-		hash_destroy(cursor->params);
+		_php3_hash_destroy(cursor->params);
 		efree(cursor->params);
 		cursor->params = NULL;
 		cursor->nparams = 0;
@@ -775,7 +780,7 @@ void php3_Ora_Bind(INTERNAL_FUNCTION_PARAMETERS)
 	if(cursor->params == NULL){
 		cursor->params = (HashTable *)emalloc(sizeof(HashTable));
 		if (!cursor->params ||
-			hash_init(cursor->params, 19, NULL,
+			_php3_hash_init(cursor->params, 19, NULL,
 			(void (*)(void *))yystype_ora_param_destructor, 0) ==
 			FAILURE){
 			php3_error(E_ERROR, "Unable to initialize parameter list");
@@ -793,8 +798,8 @@ void php3_Ora_Bind(INTERNAL_FUNCTION_PARAMETERS)
 		RETURN_FALSE;
 	}
 
-	if (hash_add(cursor->params, paramname, argv[1]->value.str.len + 1, newparam, sizeof(oraParam), (void **)&paramptr) == FAILURE) {
-		/* XXX hash_destroy */
+	if (_php3_hash_add(cursor->params, paramname, argv[1]->value.str.len + 1, newparam, sizeof(oraParam), (void **)&paramptr) == FAILURE) {
+		/* XXX _php3_hash_destroy */
 		efree(paramname);
 		efree(newparam);
 		php3_error(E_ERROR, "Could not make parameter placeholder");
@@ -831,12 +836,14 @@ void php3_Ora_Bind(INTERNAL_FUNCTION_PARAMETERS)
 	RETURN_TRUE;
 }
 
-/* 
+/*
+  XXX Make return values compatible with old module ? 
  */
 void php3_Ora_Exec(INTERNAL_FUNCTION_PARAMETERS)
 {								/* cursor_index */
 	pval *arg;
 	oraCursor *cursor = NULL;
+
 	if (getParameters(ht, 1, &arg) == FAILURE)
 		WRONG_PARAM_COUNT;
 
@@ -1092,7 +1099,7 @@ void php3_Ora_FetchInto(INTERNAL_FUNCTION_PARAMETERS)
 				}
 			tmp.value.str.val = estrndup(cursor->columns[i].buf, tmp.value.str.len);
 		}
-		hash_index_update(arr->value.ht, i, (void *) &tmp, sizeof(pval), NULL);
+		_php3_hash_index_update(arr->value.ht, i, (void *) &tmp, sizeof(pval), NULL);
 	}
 
 	RETURN_LONG(cursor->ncols); 
@@ -1410,13 +1417,7 @@ ora_get_conn(HashTable *list, int ind)
 	php3_error(E_WARNING,"Bad Oracle connection number (%d)", ind);
 	return NULL;
 }
-/*
-static void
-ora_del_conn(HashTable *list, int ind)
-{
-	php3_list_delete(ind);
-}
-*/
+
 int ora_add_cursor(HashTable *list, oraCursor *cursor)
 {
 	ORACLE_TLS_VARS;
@@ -1571,20 +1572,21 @@ int ora_set_param_values(oraCursor *cursor, int isout)
 	oraParam *param;
 	pval *pdata;
 	int i, len;
-	hash_internal_pointer_reset(cursor->params);
+	_php3_hash_internal_pointer_reset(cursor->params);
 
-	if(hash_num_elements(cursor->params) != cursor->nparams){
+	if(_php3_hash_num_elements(cursor->params) != cursor->nparams){
 		php3_error(E_WARNING, "Mismatch in number of parameters");
 		return 0;
 	}
 
-	for(i = 0; i < cursor->nparams; i++, hash_move_forward(cursor->params)){
-		if(hash_get_current_key(cursor->params, &paramname, NULL) != HASH_KEY_IS_STRING){
+	for(i = 0; i < cursor->nparams; i++, _php3_hash_move_forward(cursor->params)){
+		if(_php3_hash_get_current_key(cursor->params, &paramname, NULL) != HASH_KEY_IS_STRING){
 			php3_error(E_WARNING, "Can't get parameter name");
 			return 0;
 		}
-		if(hash_get_current_data(cursor->params, (void **)&param) == FAILURE){
+		if(_php3_hash_get_current_data(cursor->params, (void **)&param) == FAILURE){
             php3_error(E_WARNING, "Can't get parameter data");
+			/* XXX efree paramname */
             return 0;
         }
 
@@ -1593,13 +1595,16 @@ int ora_set_param_values(oraCursor *cursor, int isout)
 			if(param->type != 1 && param->alen > 0){
 				SET_VAR_STRINGL(paramname, param->progv, param->alen);
 			}
+			/* XXX efree paramname */
 			continue;
 		}else if(param->type == 2){
+			/* XXX efree paramname */
 			continue;
 		}
 
-		if(hash_find(&GLOBAL(symbol_table), paramname, strlen(paramname) + 1, (void **)&pdata) == FAILURE){
+		if(_php3_hash_find(&GLOBAL(symbol_table), paramname, strlen(paramname) + 1, (void **)&pdata) == FAILURE){
 			php3_error(E_WARNING, "Can't find variable for parameter");
+			/* XXX efree paramname */
 			return 0;
 		}
 		convert_to_string(pdata);
@@ -1611,55 +1616,12 @@ int ora_set_param_values(oraCursor *cursor, int isout)
 		strncpy(param->progv, pdata->value.str.val, len);
 
 		param->progv[len] = '\0';
+		/* XXX efree paramname */
 	}
 	return 1;
 	
 }
 
-/* Scan statement for parameters and setup hash if any found. Currently only named
-   parameters are supported (e.g. :foo). Returns number of distinct parameters.
-*/
-#if 0
-int ora_numparams(char *sql, oraCursor *curs)
-{
-	while(*sql) {
-		if (*sql == '\'')
-	    	in_literal = ~in_literal;
-		if ((*sql != ':' && *sql != '?') || in_literal) {
-	    	sql++;
-	    	continue;
-		}
-		start = sql;			/* save name inc colon	*/ 
-		sql++;
-		if (*start == '?') {		/* X/Open standard	*/
-	    	return -1;
-		} else if (isDIGIT(*sql)){	/* ':1'		*/
-			return -1;
-		} else if (isALNUM(*src)) {	/* ':foo'	*/
-	    	while(isALNUM(*src))	/* includes '_'	*/
-				sql++;
-		} else {			/* perhaps ':=' PL/SQL construct */
-	    	continue;
-		}
-		namelen = sql - start;
-		if (curs->params == NULL){
-			 if (!(curs->params = (HashTable *)emalloc(sizeof(HashTable)))){
-				 php3_error(E_WARNING, "Out of memory");
-				 return -1;
-			 }
-			 if (hash_init(cursor->params, 19, NULL,
-				 (void (*)(void *))yystype_ora_param_destructor, 0) ==
-				 FAILURE){
-				 php3_error(E_WARNING, "Unable to initialize parameter list");
-				 efree(curs->params);
-				 curs->params = NULL;
-				 return -1;
-			 }
-		}
-		hash_add(curs->params, start, namelen, ptr, size, (void **)&pDest)
-		
-}
-#endif
 #endif							/* HAVE_ORACLE */
 
 /*

@@ -108,9 +108,9 @@ error_log("You messed up!", 3, "/var/tmp/my-errors.log");
      <paramdef>int <parameter><optional>level</optional></parameter></paramdef>
     </funcsynopsis>
     <para>
-     Sets PHP's error reporting level.  This is a bitmask of the
-     following values (follow the links for the internal values to get
-     their meanings):
+     Sets PHP's error reporting level and returns the old level.  The
+     error reporting level is a bitmask of the following values
+     (follow the links for the internal values to get their meanings):
      <table>
       <title><function>error_reporting</function> bit values</title>
       <tgroup cols="2">

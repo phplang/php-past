@@ -28,7 +28,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: php3_unified_odbc.h,v 1.30 1998/06/05 14:27:10 owl Exp $ */
+/* $Id: php3_unified_odbc.h,v 1.31 1998/06/24 07:02:16 ssb Exp $ */
 
 #ifndef _UNIFIED_ODBC_H
 #define _UNIFIED_ODBC_H
@@ -465,7 +465,7 @@ typedef struct {
 	int defConn;
 	int le_result, le_conn, le_pconn;
     long defaultlrl;
-    int defaultbinmode;
+    long defaultbinmode;
 	HashTable *resource_list;
 	HashTable *resource_plist;
 } UODBC_MODULE;

@@ -4,6 +4,18 @@
 
 #if HAVE_ORACLE
 
+#if (defined(__osf__) && defined(__alpha))
+# ifndef A_OSF
+#  define A_OSF
+# endif
+# ifndef OSF1
+#  define OSF1
+# endif
+# ifndef _INTRINSICS
+#  define _INTRINSICS
+# endif
+#endif /* osf alpha */
+
 #include "oratypes.h"
 #include "ocidfn.h"
 #ifdef __STDC__

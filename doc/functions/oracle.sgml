@@ -3,6 +3,59 @@
   <title>Oracle functions</title>
   <titleabbrev>Oracle</titleabbrev>
 
+  <refentry id="function.ora-bind">
+   <refnamediv>
+    <refname>Ora_Bind</refname>
+    <refpurpose>bind a PHP variable to an Oracle parameter</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>ora_bind</function></funcdef>
+     <paramdef>int <parameter>cursor</parameter></paramdef>
+     <paramdef>string <parameter>PHP variable name</parameter></paramdef>
+     <paramdef>string <parameter>SQL parameter name</parameter></paramdef>
+     <paramdef>int <parameter>length</parameter></paramdef>
+     <paramdef>int <parameter><optional>type</optional></parameter></paramdef>
+    </funcsynopsis>
+    <para>
+     Returns true if the bind succeeds, otherwise false.  Details
+     about the error can be retrieved using the
+     <function>ora_error</function> and
+     <function>ora_errorcode</function> functions.
+
+    <para>
+     This function binds the named PHP variable with a SQL parameter.
+     The SQL parameter must be in the form ":name".  With the optional
+     type parameter, you can define whether the SQL parameter is an
+     in/out (0, default), in (1) or out (2) parameter.  As of PHP
+     3.0.1, you can use the constants ORA_BIND_INOUT, ORA_BIND_IN and
+     ORA_BIND_OUT instead of the numbers.
+ 
+    <para>
+     ora_bind must be called after <function>ora_parse</function> and
+     before <function>ora_exec</function>. Input values can be given  
+     by assignment to the bound PHP variables, after calling 
+     <function>ora_exec</function> the bound PHP variables contain the output
+     values if available. 
+
+<informalexample>
+      <programlisting role=php>
+&lt;?php
+ora_parse($curs, "declare tmp INTEGER; begin tmp := :in; :out := tmp; :x := 7.77; end;");
+ora_bind($curs, "result", ":x", $len, 2);
+ora_bind($curs, "input", ":in", 5, 1);
+ora_bind($curs, "output", ":out", 5, 2);
+$input = 765;
+ora_exec($curs);
+echo "Result: $result&lt;BR>Out: $output&lt;BR>In: $input";
+?>
+</programlisting>
+     </informalexample>
+
+   </refsect1>
+  </refentry>
+
   <refentry id="function.ora-close">
    <refnamediv>
     <refname>Ora_Close</refname>

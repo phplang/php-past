@@ -38,3 +38,4 @@ extern void php3_defined(INTERNAL_FUNCTION_PARAMETERS);
 
 
 #endif
+

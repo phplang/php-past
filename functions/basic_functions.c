@@ -298,7 +298,7 @@ int php3_rinit_basic(INIT_FUNC_ARGS)
 	TLS_VARS;
 	GLOBAL(strtok_string) = NULL;
 #if HAVE_PUTENV
-	if (hash_init(&putenv_ht, 1, NULL, (void (*)(void *)) _php3_putenv_destructor, 0) == FAILURE) {
+	if (_php3_hash_init(&putenv_ht, 1, NULL, (void (*)(void *)) _php3_putenv_destructor, 0) == FAILURE) {
 		return FAILURE;
 	}
 #endif
@@ -310,7 +310,7 @@ int php3_rshutdown_basic(void)
 	TLS_VARS;
 	STR_FREE(GLOBAL(strtok_string));
 #if HAVE_PUTENV
-	hash_destroy(&putenv_ht);
+	_php3_hash_destroy(&putenv_ht);
 #endif
 	return SUCCESS;
 }
@@ -396,7 +396,7 @@ void php3_putenv(INTERNAL_FUNCTION_PARAMETERS)
 		pe.key_len = strlen(pe.key);
 		pe.key = estrndup(pe.key,pe.key_len);
 		
-		hash_del(&putenv_ht,pe.key,pe.key_len+1);
+		_php3_hash_del(&putenv_ht,pe.key,pe.key_len+1);
 		
 		/* find previous value */
 		pe.previous_value = NULL;
@@ -408,7 +408,7 @@ void php3_putenv(INTERNAL_FUNCTION_PARAMETERS)
 		}
 
 		if ((ret=putenv(pe.putenv_string))==0) { /* success */
-			hash_add(&putenv_ht,pe.key,pe.key_len+1,(void **) &pe,sizeof(putenv_entry),NULL);
+			_php3_hash_add(&putenv_ht,pe.key,pe.key_len+1,(void **) &pe,sizeof(putenv_entry),NULL);
 			RETURN_TRUE;
 		} else {
 			efree(pe.putenv_string);
@@ -557,7 +557,7 @@ void php3_key_sort(INTERNAL_FUNCTION_PARAMETERS)
 		php3_error(E_WARNING, "Array not passed by reference in call to ksort()");
 		return;
 	}
-	if (hash_sort(array->value.ht, array_key_compare,0) == FAILURE) {
+	if (_php3_hash_sort(array->value.ht, array_key_compare,0) == FAILURE) {
 		return;
 	}
 	RETURN_TRUE;
@@ -671,7 +671,7 @@ void php3_asort(INTERNAL_FUNCTION_PARAMETERS)
         php3_error(E_WARNING, "Array not passed by reference in call to asort()");
 		return;
     }
-	if (hash_sort(array->value.ht, array_data_compare,0) == FAILURE) {
+	if (_php3_hash_sort(array->value.ht, array_data_compare,0) == FAILURE) {
 		return;
 	}
 	RETURN_TRUE;
@@ -693,7 +693,7 @@ void php3_arsort(INTERNAL_FUNCTION_PARAMETERS)
         php3_error(E_WARNING, "Array not passed by reference in call to arsort()");
 		return;
     }
-	if (hash_sort(array->value.ht, array_reverse_data_compare,0) == FAILURE) {
+	if (_php3_hash_sort(array->value.ht, array_reverse_data_compare,0) == FAILURE) {
 		return;
 	}
 	RETURN_TRUE;
@@ -715,7 +715,7 @@ void php3_sort(INTERNAL_FUNCTION_PARAMETERS)
         php3_error(E_WARNING, "Array not passed by reference in call to sort()");
 		return;
     }
-	if (hash_sort(array->value.ht, array_data_compare,1) == FAILURE) {
+	if (_php3_hash_sort(array->value.ht, array_data_compare,1) == FAILURE) {
 		return;
 	}
 	RETURN_TRUE;
@@ -737,7 +737,7 @@ void php3_rsort(INTERNAL_FUNCTION_PARAMETERS)
         php3_error(E_WARNING, "Array not passed by reference in call to rsort()");
 		return;
     }
-	if (hash_sort(array->value.ht, array_reverse_data_compare,1) == FAILURE) {
+	if (_php3_hash_sort(array->value.ht, array_reverse_data_compare,1) == FAILURE) {
 		return;
 	}
 	RETURN_TRUE;
@@ -758,13 +758,13 @@ void array_end(INTERNAL_FUNCTION_PARAMETERS)
     if (!ParameterPassedByReference(ht,1)) {
         php3_error(E_WARNING, "Array not passed by reference in call to end()");
     }
-	hash_internal_pointer_end(array->value.ht);
+	_php3_hash_internal_pointer_end(array->value.ht);
 	while (1) {
-		if (hash_get_current_data(array->value.ht, (void **) &entry) == FAILURE) {
+		if (_php3_hash_get_current_data(array->value.ht, (void **) &entry) == FAILURE) {
 			RETURN_FALSE;
 		}
 		if (entry->type == IS_STRING && entry->value.str.val==undefined_variable_string) {
-			hash_move_backwards(array->value.ht);
+			_php3_hash_move_backwards(array->value.ht);
 		} else {
 			break;
 		}
@@ -786,8 +786,8 @@ void array_prev(INTERNAL_FUNCTION_PARAMETERS)
 		RETURN_FALSE;
 	}
 	do {
-		hash_move_backwards(array->value.ht);
-		if (hash_get_current_data(array->value.ht, (void **) &entry) == FAILURE) {
+		_php3_hash_move_backwards(array->value.ht);
+		if (_php3_hash_get_current_data(array->value.ht, (void **) &entry) == FAILURE) {
 			RETURN_FALSE;
 		}
 	} while (entry->type==IS_STRING && entry->value.str.val==undefined_variable_string);
@@ -808,8 +808,8 @@ void array_next(INTERNAL_FUNCTION_PARAMETERS)
 		RETURN_FALSE;
 	}
 	do {
-		hash_move_forward(array->value.ht);
-		if (hash_get_current_data(array->value.ht, (void **) &entry) == FAILURE) {
+		_php3_hash_move_forward(array->value.ht);
+		if (_php3_hash_get_current_data(array->value.ht, (void **) &entry) == FAILURE) {
 			RETURN_FALSE;
 		}
 	} while (entry->type==IS_STRING && entry->value.str.val==undefined_variable_string);
@@ -833,9 +833,9 @@ void array_each(INTERNAL_FUNCTION_PARAMETERS)
 		php3_error(E_WARNING,"Variable passed to each() is not an array or object");
 		return;
 	}
-	while((retval=hash_get_current_data(array->value.ht, (void **) &entry)) == SUCCESS) {
+	while((retval=_php3_hash_get_current_data(array->value.ht, (void **) &entry)) == SUCCESS) {
 		if (entry->type == IS_STRING && entry->value.str.val==undefined_variable_string) {
-			hash_move_forward(array->value.ht);
+			_php3_hash_move_forward(array->value.ht);
 			continue;
 		} else {
 			break;
@@ -847,9 +847,9 @@ void array_each(INTERNAL_FUNCTION_PARAMETERS)
 	array_init(return_value);
 	real_entry = *entry;
 	yystype_copy_constructor(&real_entry);
-	hash_index_update(return_value->value.ht,1,(void *) &real_entry,sizeof(pval),(void **) &inserted_pointer);
-	hash_pointer_update(return_value->value.ht, "value", sizeof("value"), (void *) inserted_pointer);
-	switch (hash_get_current_key(array->value.ht, &string_key, &int_key)) {
+	_php3_hash_index_update(return_value->value.ht,1,(void *) &real_entry,sizeof(pval),(void **) &inserted_pointer);
+	_php3_hash_pointer_update(return_value->value.ht, "value", sizeof("value"), (void *) inserted_pointer);
+	switch (_php3_hash_get_current_key(array->value.ht, &string_key, &int_key)) {
 		case HASH_KEY_IS_STRING:
 			add_get_index_string(return_value,0,string_key,(void **) &inserted_pointer,0);
 			break;
@@ -857,8 +857,8 @@ void array_each(INTERNAL_FUNCTION_PARAMETERS)
 			add_get_index_long(return_value,0,int_key, (void **) &inserted_pointer);
 			break;
 	}
-	hash_pointer_update(return_value->value.ht, "key", sizeof("key"), (void *) inserted_pointer);
-	hash_move_forward(array->value.ht);
+	_php3_hash_pointer_update(return_value->value.ht, "key", sizeof("key"), (void *) inserted_pointer);
+	_php3_hash_move_forward(array->value.ht);
 }
 	
 void array_reset(INTERNAL_FUNCTION_PARAMETERS)
@@ -872,13 +872,13 @@ void array_reset(INTERNAL_FUNCTION_PARAMETERS)
 		php3_error(E_WARNING, "Variable passed to reset() is not an array or object");
 		return;
 	}
-	hash_internal_pointer_reset(array->value.ht);
+	_php3_hash_internal_pointer_reset(array->value.ht);
 	while (1) {
-		if (hash_get_current_data(array->value.ht, (void **) &entry) == FAILURE) {
+		if (_php3_hash_get_current_data(array->value.ht, (void **) &entry) == FAILURE) {
 			return;
 		}
 		if (entry->type==IS_STRING && entry->value.str.val==undefined_variable_string) {
-			hash_move_forward(array->value.ht);
+			_php3_hash_move_forward(array->value.ht);
 		} else {
 			break;
 		}
@@ -899,7 +899,7 @@ void array_current(INTERNAL_FUNCTION_PARAMETERS)
 		php3_error(E_WARNING, "Variable passed to current() is not an array or object");
 		return;
 	}
-	if (hash_get_current_data(array->value.ht, (void **) &entry) == FAILURE) {
+	if (_php3_hash_get_current_data(array->value.ht, (void **) &entry) == FAILURE) {
 		return;
 	}
 	*return_value = *entry;
@@ -923,7 +923,7 @@ void array_current_key(INTERNAL_FUNCTION_PARAMETERS)
     if (!ParameterPassedByReference(ht,1)) {
         php3_error(E_WARNING, "Array not passed by reference in call to key()");
     }
-	switch (hash_get_current_key(array->value.ht, &string_key, &int_key)) {
+	switch (_php3_hash_get_current_key(array->value.ht, &string_key, &int_key)) {
 		case HASH_KEY_IS_STRING:
 			return_value->value.str.val = string_key;
 			return_value->value.str.len = strlen(string_key);
@@ -1071,7 +1071,7 @@ void php3_min(INTERNAL_FUNCTION_PARAMETERS)
 			arr->type != IS_ARRAY) {
 			WRONG_PARAM_COUNT;
 		}
-		if (hash_minmax(arr->value.ht, array_data_compare, 0, (void **) &result)==SUCCESS) {
+		if (_php3_hash_minmax(arr->value.ht, array_data_compare, 0, (void **) &result)==SUCCESS) {
 			*return_value = *result;
 			yystype_copy_constructor(return_value);
 		} else {
@@ -1079,7 +1079,7 @@ void php3_min(INTERNAL_FUNCTION_PARAMETERS)
 			var_uninit(return_value);
 		}
 	} else {
-		if (hash_minmax(ht, array_data_compare, 0, (void **) &result)==SUCCESS) {
+		if (_php3_hash_minmax(ht, array_data_compare, 0, (void **) &result)==SUCCESS) {
 			*return_value = *result;
 			yystype_copy_constructor(return_value);
 		}
@@ -1105,7 +1105,7 @@ void php3_max(INTERNAL_FUNCTION_PARAMETERS)
 			arr->type != IS_ARRAY) {
 			WRONG_PARAM_COUNT;
 		}
-		if (hash_minmax(arr->value.ht, array_data_compare, 1, (void **) &result)==SUCCESS) {
+		if (_php3_hash_minmax(arr->value.ht, array_data_compare, 1, (void **) &result)==SUCCESS) {
 			*return_value = *result;
 			yystype_copy_constructor(return_value);
 		} else {
@@ -1113,7 +1113,7 @@ void php3_max(INTERNAL_FUNCTION_PARAMETERS)
 			var_uninit(return_value);
 		}
 	} else {
-		if (hash_minmax(ht, array_data_compare, 1, (void **) &result)==SUCCESS) {
+		if (_php3_hash_minmax(ht, array_data_compare, 1, (void **) &result)==SUCCESS) {
 			*return_value = *result;
 			yystype_copy_constructor(return_value);
 		}
@@ -1145,7 +1145,7 @@ void php3_max(INTERNAL_FUNCTION_PARAMETERS)
 		}
 		/* replace the function parameters with the array */
 		ht = argv[0]->value.ht;
-		argc = hash_num_elements(ht);
+		argc = _php3_hash_num_elements(ht);
 		efree(argv);
 	} else if (argc < 2) {
 		WRONG_PARAM_COUNT;

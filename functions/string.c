@@ -30,7 +30,7 @@
  */
 
 
-/* $Id: string.c,v 1.126 1998/06/04 21:59:20 rasmus Exp $ */
+/* $Id: string.c,v 1.129 1998/07/02 02:25:55 zeev Exp $ */
 #ifdef THREAD_SAFE
 #include "tls.h"
 #endif
@@ -222,8 +222,8 @@ void php3_implode(INTERNAL_FUNCTION_PARAMETERS)
 	}
 
 	/* convert everything to strings, and calculate length */
-	hash_internal_pointer_reset(arr->value.ht);
-	while (hash_get_current_data(arr->value.ht, (void **) &tmp) == SUCCESS) {
+	_php3_hash_internal_pointer_reset(arr->value.ht);
+	while (_php3_hash_get_current_data(arr->value.ht, (void **) &tmp) == SUCCESS) {
 		convert_to_string(tmp);
 		if (tmp->type == IS_STRING) {
 			len += tmp->value.str.len;
@@ -232,15 +232,15 @@ void php3_implode(INTERNAL_FUNCTION_PARAMETERS)
 			}
 			count++;
 		}
-		hash_move_forward(arr->value.ht);
+		_php3_hash_move_forward(arr->value.ht);
 	}
 
 	/* do it */
 	return_value->value.str.val = (char *) emalloc(len + 1);
 	return_value->value.str.val[0] = '\0';
 	return_value->value.str.val[len] = '\0';
-	hash_internal_pointer_reset(arr->value.ht);
-	while (hash_get_current_data(arr->value.ht, (void **) &tmp) == SUCCESS) {
+	_php3_hash_internal_pointer_reset(arr->value.ht);
+	while (_php3_hash_get_current_data(arr->value.ht, (void **) &tmp) == SUCCESS) {
 		if (tmp->type == IS_STRING) {
 			count--;
 			strcat(return_value->value.str.val, tmp->value.str.val);
@@ -248,7 +248,7 @@ void php3_implode(INTERNAL_FUNCTION_PARAMETERS)
 				strcat(return_value->value.str.val, delim->value.str.val);
 			}
 		}
-		hash_move_forward(arr->value.ht);
+		_php3_hash_move_forward(arr->value.ht);
 	}
 	return_value->type = IS_STRING;
 	return_value->value.str.len = len;
@@ -284,7 +284,6 @@ void php3_strtok(INTERNAL_FUNCTION_PARAMETERS)
 		convert_to_string(str);
 
 		STR_FREE(GLOBAL(strtok_string));
-		GLOBAL(strtok_string) = NULL;
 		GLOBAL(strtok_string) = estrndup(str->value.str.val,str->value.str.len);
 		STATIC(strtok_pos1) = GLOBAL(strtok_string);
 		STATIC(strtok_pos2) = NULL;

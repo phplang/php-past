@@ -26,7 +26,7 @@
    | Authors: Rasmus Lerdorf <rasmus@lerdorf.on.ca>                       |
    +----------------------------------------------------------------------+
  */
-/* $Id: file.c,v 1.173 1998/05/22 12:54:44 zeev Exp $ */
+/* $Id: file.c,v 1.174 1998/07/02 17:04:18 ssb Exp $ */
 #ifdef THREAD_SAFE
 #include "tls.h"
 #endif
@@ -80,6 +80,96 @@ static int fgetss_state = 0;
 int le_fp,le_pp;
 int wsa_fp; /*to handle reading and writing to windows sockets*/
 static int pclose_ret;
+#endif
+
+#ifndef HAVE_TEMPNAM
+*
+ * Copyright (c) 1988, 1993
+ *      The Regents of the University of California.  All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ * 3. All advertising materials mentioning features or use of this software
+ *    must display the following acknowledgement:
+ *      This product includes software developed by the University of
+ *      California, Berkeley and its contributors.
+ * 4. Neither the name of the University nor the names of its contributors
+ *    may be used to endorse or promote products derived from this software
+ *    without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+ * SUCH DAMAGE.
+ */
+
+#include <unistd.h>
+
+#ifndef MAXPATHLEN
+# ifdef PATH_MAX
+#  define MAXPATHLEN PATH_MAX
+# else
+#  define MAXPATHLEN 255
+# endif
+#endif
+
+char *
+tempnam(const char *dir, const char *pfx)
+{
+	int save_errno;
+	char *f, *name;
+	static char path_tmp[] = "/tmp";
+
+	if (!(name = emalloc(MAXPATHLEN))) {
+		return(NULL);
+	}
+
+	if (!pfx) {
+		pfx = "tmp.";
+	}
+
+	if (f = getenv("TMPDIR")) {
+		(void)snprintf(name, MAXPATHLEN, "%s%s%sXXXXXX", f,
+					   *(f + strlen(f) - 1) == '/'? "": "/", pfx);
+		if (f = mktemp(name))
+			return(f);
+	}
+
+	if (f = (char *)dir) {
+		(void)snprintf(name, MAXPATHLEN, "%s%s%sXXXXXX", f,
+					   *(f + strlen(f) - 1) == '/'? "": "/", pfx);
+		if (f = mktemp(name))
+			return(f);
+	}
+
+	f = P_tmpdir;
+	(void)snprintf(name, MAXPATHLEN, "%s%sXXXXXX", f, pfx);
+	if (f = mktemp(name))
+		return(f);
+
+	f = path_tmp;
+	(void)snprintf(name, MAXPATHLEN, "%s%sXXXXXX", f, pfx);
+	if (f = mktemp(name))
+		return(f);
+
+	save_errno = errno;
+	efree(name);
+	errno = save_errno;
+	return(NULL);
+}
 #endif
 
 function_entry php3_file_functions[] = {

@@ -29,7 +29,7 @@
  */
 
 
-/* $Id: hash.c,v 1.95 1998/05/23 21:10:05 zeev Exp $ */
+/* $Id: php3_hash.c,v 1.2 1998/06/22 20:28:08 zeev Exp $ */
 #ifdef THREAD_SAFE
 #include "tls.h"
 #endif
@@ -91,7 +91,7 @@ static uint hashpjw(char *arKey, uint nKeyLength)
 	return h;
 }
 
-PHPAPI int hash_init(HashTable *ht, uint nSize, uint(*pHashFunction) (char *arKey, uint nKeyLength), void (*pDestructor) (void *pData),int persistent)
+PHPAPI int _php3_hash_init(HashTable *ht, uint nSize, uint(*pHashFunction) (char *arKey, uint nKeyLength), void (*pDestructor) (void *pData),int persistent)
 {
 	uint i;
 
@@ -129,7 +129,7 @@ PHPAPI int hash_init(HashTable *ht, uint nSize, uint(*pHashFunction) (char *arKe
 	return SUCCESS;
 }
 
-PHPAPI int hash_add_or_update(HashTable *ht, char *arKey, uint nKeyLength, void *pData, uint nDataSize, void **pDest, int flag)
+PHPAPI int _php3_hash_add_or_update(HashTable *ht, char *arKey, uint nKeyLength, void *pData, uint nDataSize, void **pDest, int flag)
 {
 	uint h, nIndex;
 	Bucket *p;
@@ -139,12 +139,12 @@ PHPAPI int hash_add_or_update(HashTable *ht, char *arKey, uint nKeyLength, void 
 
 	if (nKeyLength <= 0) {
 #if DEBUG
-		PUTS("hash_update: Can't put in empty key\n");
+		PUTS("_php3_hash_update: Can't put in empty key\n");
 #endif
 		return FAILURE;
 	}
 
-	HANDLE_NUMERIC(arKey,nKeyLength,hash_index_update_or_next_insert(ht,idx,pData,nDataSize,pDest,flag));
+	HANDLE_NUMERIC(arKey,nKeyLength,_php3_hash_index_update_or_next_insert(ht,idx,pData,nDataSize,pDest,flag));
 	
 	h = ht->pHashFunction(arKey, nKeyLength);
 	nIndex = h % ht->nTableSize;
@@ -159,7 +159,7 @@ PHPAPI int hash_add_or_update(HashTable *ht, char *arKey, uint nKeyLength, void 
 				BLOCK_INTERRUPTIONS;
 #if DEBUG
 				if (p->pData == pData) {
-					PUTS("Fatal error in hash_update: p->pData == pData\n");
+					PUTS("Fatal error in _php3_hash_update: p->pData == pData\n");
 					UNBLOCK_INTERRUPTIONS;
 					return FAILURE;
 				}
@@ -227,7 +227,7 @@ PHPAPI int hash_add_or_update(HashTable *ht, char *arKey, uint nKeyLength, void 
 }
 
 
-PHPAPI int hash_index_update_or_next_insert(HashTable *ht, uint h, void *pData, uint nDataSize, void **pDest, int flag)
+PHPAPI int _php3_hash_index_update_or_next_insert(HashTable *ht, uint h, void *pData, uint nDataSize, void **pDest, int flag)
 {
 	uint nIndex;
 	Bucket *p;
@@ -249,7 +249,7 @@ PHPAPI int hash_index_update_or_next_insert(HashTable *ht, uint h, void *pData, 
 			BLOCK_INTERRUPTIONS;
 #if DEBUG
 			if (p->pData == pData) {
-				PUTS("Fatal error in hash_index_update: p->pData == pData\n");
+				PUTS("Fatal error in _php3_hash_index_update: p->pData == pData\n");
 				UNBLOCK_INTERRUPTIONS;
 				return FAILURE;
 			}
@@ -313,7 +313,7 @@ PHPAPI int hash_index_update_or_next_insert(HashTable *ht, uint h, void *pData, 
 	return SUCCESS;
 }
 
-PHPAPI int hash_pointer_update(HashTable *ht, char *arKey, uint nKeyLength, void *pData)
+PHPAPI int _php3_hash_pointer_update(HashTable *ht, char *arKey, uint nKeyLength, void *pData)
 {
 	uint h, nIndex;
 	Bucket *p;
@@ -324,12 +324,12 @@ PHPAPI int hash_pointer_update(HashTable *ht, char *arKey, uint nKeyLength, void
 
 	if (nKeyLength <= 0) {
 #if DEBUG
-		PUTS("hash_update: Can't put in empty key\n");
+		PUTS("_php3_hash_update: Can't put in empty key\n");
 #endif
 		return FAILURE;
 	}
 	
-	HANDLE_NUMERIC(arKey,nKeyLength,hash_pointer_index_update_or_next_insert(ht,idx,pData,HASH_UPDATE));
+	HANDLE_NUMERIC(arKey,nKeyLength,_php3_hash_pointer_index_update_or_next_insert(ht,idx,pData,HASH_UPDATE));
 	
 	h = ht->pHashFunction(arKey, nKeyLength);
 	nIndex = h % ht->nTableSize;
@@ -341,7 +341,7 @@ PHPAPI int hash_pointer_update(HashTable *ht, char *arKey, uint nKeyLength, void
 			if (!memcmp(p->arKey, arKey, nKeyLength)) {
 #if DEBUG
 				if (p->pData == pData) {
-					PUTS("Fatal error in hash_pointer_update: p->pData == pData\n");
+					PUTS("Fatal error in _php3_hash_pointer_update: p->pData == pData\n");
 					return FAILURE;
 				}
 #endif
@@ -399,7 +399,7 @@ PHPAPI int hash_pointer_update(HashTable *ht, char *arKey, uint nKeyLength, void
 }
 
 
-PHPAPI int hash_pointer_index_update_or_next_insert(HashTable *ht, uint h, void *pData, int flag)
+PHPAPI int _php3_hash_pointer_index_update_or_next_insert(HashTable *ht, uint h, void *pData, int flag)
 {
 	uint nIndex;
 	Bucket *p;
@@ -420,7 +420,7 @@ PHPAPI int hash_pointer_index_update_or_next_insert(HashTable *ht, uint h, void 
 			}
 #if DEBUG
 			if (p->pData == pData) {
-				PUTS("Fatal error in hash_pointer_update: p->pData == pData\n");
+				PUTS("Fatal error in _php3_hash_pointer_update: p->pData == pData\n");
 				return FAILURE;
 			}
 #endif
@@ -478,7 +478,7 @@ PHPAPI int hash_pointer_index_update_or_next_insert(HashTable *ht, uint h, void 
 }
 
 
-PHPAPI int hash_is_pointer(HashTable *ht, char *arKey, uint nKeyLength)
+PHPAPI int _php3_hash_is_pointer(HashTable *ht, char *arKey, uint nKeyLength)
 {
 	uint h, nIndex;
 	Bucket *p;
@@ -488,12 +488,12 @@ PHPAPI int hash_is_pointer(HashTable *ht, char *arKey, uint nKeyLength)
 
 	if (nKeyLength <= 0) {
 #if DEBUG
-		PUTS("hash_update: Can't check for empty key\n");
+		PUTS("_php3_hash_update: Can't check for empty key\n");
 #endif
 		return FAILURE;
 	}
 
-	HANDLE_NUMERIC(arKey,nKeyLength,hash_index_is_pointer(ht, idx));
+	HANDLE_NUMERIC(arKey,nKeyLength,_php3_hash_index_is_pointer(ht, idx));
 		
 	h = ht->pHashFunction(arKey, nKeyLength);
 	nIndex = h % ht->nTableSize;
@@ -510,7 +510,7 @@ PHPAPI int hash_is_pointer(HashTable *ht, char *arKey, uint nKeyLength)
 	return 0;
 }
 
-PHPAPI int hash_index_is_pointer(HashTable *ht, uint h)
+PHPAPI int _php3_hash_index_is_pointer(HashTable *ht, uint h)
 {
 
 	uint nIndex;
@@ -541,7 +541,7 @@ int if_full_do_resize(HashTable *ht)
 			ht->arBuckets = t;
 			ht->nTableSize = PrimeNumbers[ht->nHashSizeIndex + 1];
 			ht->nHashSizeIndex++;
-			hash_rehash(ht);
+			_php3_hash_rehash(ht);
 			UNBLOCK_INTERRUPTIONS;
 			return SUCCESS;
 		}
@@ -550,7 +550,7 @@ int if_full_do_resize(HashTable *ht)
 	return SUCCESS;
 }
 
-int hash_rehash(HashTable *ht)
+int _php3_hash_rehash(HashTable *ht)
 {
 	Bucket *p;
 	uint nIndex;
@@ -566,13 +566,13 @@ int hash_rehash(HashTable *ht)
 	return SUCCESS;
 }
 
-PHPAPI int hash_del_key_or_index(HashTable *ht, char *arKey, uint nKeyLength, uint h, int flag)
+PHPAPI int _php3_hash_del_key_or_index(HashTable *ht, char *arKey, uint nKeyLength, uint h, int flag)
 {
 	uint nIndex;
 	Bucket *p, *t = NULL;		/* initialize just to shut gcc up with -Wall */
 
 	if (flag == HASH_DEL_KEY) {
-		HANDLE_NUMERIC(arKey,nKeyLength,hash_del_key_or_index(ht,arKey,nKeyLength,idx,HASH_DEL_INDEX));
+		HANDLE_NUMERIC(arKey,nKeyLength,_php3_hash_del_key_or_index(ht,arKey,nKeyLength,idx,HASH_DEL_INDEX));
 		h = ht->pHashFunction(arKey, nKeyLength);
 	}
 	nIndex = h % ht->nTableSize;
@@ -622,7 +622,7 @@ PHPAPI int hash_del_key_or_index(HashTable *ht, char *arKey, uint nKeyLength, ui
 }
 
 
-PHPAPI void hash_destroy(HashTable *ht)
+PHPAPI void _php3_hash_destroy(HashTable *ht)
 {
 	Bucket *p, *q;
 
@@ -651,7 +651,7 @@ PHPAPI void hash_destroy(HashTable *ht)
  * destruct() receives the data and decides if the entry should be deleted 
  * or not
  */
-PHPAPI void hash_apply(HashTable *ht,int (*destruct) (void *))
+PHPAPI void _php3_hash_apply(HashTable *ht,int (*destruct) (void *))
 {
 	Bucket *p, *q;
 
@@ -661,16 +661,16 @@ PHPAPI void hash_apply(HashTable *ht,int (*destruct) (void *))
 		p = p->pListNext;
 		if (destruct(q->pData)) {
 			if (q->arKey == NULL) {
-				hash_index_del(ht, q->h);
+				_php3_hash_index_del(ht, q->h);
 			} else {
-				hash_del(ht,q->arKey,q->nKeyLength);
+				_php3_hash_del(ht,q->arKey,q->nKeyLength);
 			}
 		}
 	}
 }
 
 
-PHPAPI void hash_apply_with_argument(HashTable *ht,int (*destruct) (void *, void *), void *argument)
+PHPAPI void _php3_hash_apply_with_argument(HashTable *ht,int (*destruct) (void *, void *), void *argument)
 {
 	Bucket *p, *q;
 
@@ -680,9 +680,9 @@ PHPAPI void hash_apply_with_argument(HashTable *ht,int (*destruct) (void *, void
 		p = p->pListNext;
 		if (destruct(q->pData, argument)) {
 			if (q->arKey == NULL) {
-				hash_index_del(ht, q->h);
+				_php3_hash_index_del(ht, q->h);
 			} else {
-				hash_del(ht,q->arKey,q->nKeyLength);
+				_php3_hash_del(ht,q->arKey,q->nKeyLength);
 			}
 		}
 	}
@@ -690,7 +690,7 @@ PHPAPI void hash_apply_with_argument(HashTable *ht,int (*destruct) (void *, void
 
 
 #if 1
-PHPAPI void hash_copy(HashTable **target, HashTable *source, void (*pCopyConstructor) (void *pData), void *tmp, uint size)
+PHPAPI void _php3_hash_copy(HashTable **target, HashTable *source, void (*pCopyConstructor) (void *pData), void *tmp, uint size)
 {
 	HashTable *t;
 	Bucket *p;
@@ -700,7 +700,7 @@ PHPAPI void hash_copy(HashTable **target, HashTable *source, void (*pCopyConstru
 		*target = NULL;
 		return;
 	}
-    if (hash_init(t, source->nTableSize, source->pHashFunction,source->pDestructor, 0) == FAILURE) {
+    if (_php3_hash_init(t, source->nTableSize, source->pHashFunction,source->pDestructor, 0) == FAILURE) {
         *target = NULL;
         return;
     }
@@ -710,9 +710,9 @@ PHPAPI void hash_copy(HashTable **target, HashTable *source, void (*pCopyConstru
 		memcpy(tmp, p->pData, size);
 		pCopyConstructor(tmp);
 		if (p->arKey) {
-			hash_update(t, p->arKey, p->nKeyLength, tmp, size, NULL);
+			_php3_hash_update(t, p->arKey, p->nKeyLength, tmp, size, NULL);
 		} else {
-			hash_index_update(t, p->h, tmp, size, NULL);
+			_php3_hash_index_update(t, p->h, tmp, size, NULL);
 		}
 		p = p->pListNext;
 	}
@@ -721,7 +721,7 @@ PHPAPI void hash_copy(HashTable **target, HashTable *source, void (*pCopyConstru
 }
 
 
-PHPAPI void hash_merge(HashTable *target, HashTable *source, void (*pCopyConstructor) (void *pData), void *tmp, uint size)
+PHPAPI void _php3_hash_merge(HashTable *target, HashTable *source, void (*pCopyConstructor) (void *pData), void *tmp, uint size)
 {
 	Bucket *p;
 	void *t;
@@ -730,11 +730,11 @@ PHPAPI void hash_merge(HashTable *target, HashTable *source, void (*pCopyConstru
 	while (p) {
 		memcpy(tmp, p->pData, size);
 		if (p->arKey) {
-			if (hash_add(target, p->arKey, p->nKeyLength, tmp, size, &t)==SUCCESS && pCopyConstructor) {
+			if (_php3_hash_add(target, p->arKey, p->nKeyLength, tmp, size, &t)==SUCCESS && pCopyConstructor) {
 				pCopyConstructor(t);
 			}
 		} else {
-			if (!hash_index_exists(target, p->h) && hash_index_update(target, p->h, tmp, size, &t)==SUCCESS && pCopyConstructor) {
+			if (!_php3_hash_index_exists(target, p->h) && _php3_hash_index_update(target, p->h, tmp, size, &t)==SUCCESS && pCopyConstructor) {
 				pCopyConstructor(t);
 			}
 		}
@@ -745,7 +745,7 @@ PHPAPI void hash_merge(HashTable *target, HashTable *source, void (*pCopyConstru
 
 #else
 
-PHPAPI void hash_copy(HashTable **target, HashTable *source, void (*pCopyConstructor) (void *pData), void *tmp, uint size)
+PHPAPI void _php3_hash_copy(HashTable **target, HashTable *source, void (*pCopyConstructor) (void *pData), void *tmp, uint size)
 {
 	HashTable *t;
 	Bucket *p,*nb;
@@ -823,12 +823,12 @@ PHPAPI void hash_copy(HashTable **target, HashTable *source, void (*pCopyConstru
  * data is returned in pData. The reason is that there's no reason
  * someone using the hash table might not want to have NULL data
  */
-PHPAPI int hash_find(HashTable *ht, char *arKey, uint nKeyLength, void **pData)
+PHPAPI int _php3_hash_find(HashTable *ht, char *arKey, uint nKeyLength, void **pData)
 {
 	uint h, nIndex;
 	Bucket *p;
 
-	HANDLE_NUMERIC(arKey, nKeyLength, hash_index_find(ht,idx,pData));
+	HANDLE_NUMERIC(arKey, nKeyLength, _php3_hash_index_find(ht,idx,pData));
 
 	h = ht->pHashFunction(arKey, nKeyLength);
 	nIndex = h % ht->nTableSize;
@@ -846,12 +846,12 @@ PHPAPI int hash_find(HashTable *ht, char *arKey, uint nKeyLength, void **pData)
 	return FAILURE;
 }
 
-PHPAPI int hash_exists(HashTable *ht, char *arKey, uint nKeyLength)
+PHPAPI int _php3_hash_exists(HashTable *ht, char *arKey, uint nKeyLength)
 {
 	uint h, nIndex;
 	Bucket *p;
 
-	HANDLE_NUMERIC(arKey, nKeyLength, hash_index_exists(ht,idx));
+	HANDLE_NUMERIC(arKey, nKeyLength, _php3_hash_index_exists(ht,idx));
 
 	h = ht->pHashFunction(arKey, nKeyLength);
 	nIndex = h % ht->nTableSize;
@@ -869,7 +869,7 @@ PHPAPI int hash_exists(HashTable *ht, char *arKey, uint nKeyLength)
 }
 
 
-PHPAPI int hash_index_find(HashTable *ht, uint h, void **pData)
+PHPAPI int _php3_hash_index_find(HashTable *ht, uint h, void **pData)
 {
 	uint nIndex;
 	Bucket *p;
@@ -888,7 +888,7 @@ PHPAPI int hash_index_find(HashTable *ht, uint h, void **pData)
 }
 
 
-PHPAPI int hash_index_exists(HashTable *ht, uint h)
+PHPAPI int _php3_hash_index_exists(HashTable *ht, uint h)
 {
 	uint nIndex;
 	Bucket *p;
@@ -906,13 +906,13 @@ PHPAPI int hash_index_exists(HashTable *ht, uint h)
 }
 
 
-PHPAPI inline int hash_num_elements(HashTable *ht)
+PHPAPI inline int _php3_hash_num_elements(HashTable *ht)
 {
 	return ht->nNumOfElements;
 }
 
 
-void hash_internal_pointer_reset(HashTable *ht)
+void _php3_hash_internal_pointer_reset(HashTable *ht)
 {
 	ht->pInternalPointer = ht->pListHead;
 }
@@ -921,20 +921,20 @@ void hash_internal_pointer_reset(HashTable *ht)
 /* This function will be extremely optimized by remembering 
  * the end of the list
  */
-PHPAPI void hash_internal_pointer_end(HashTable *ht)
+PHPAPI void _php3_hash_internal_pointer_end(HashTable *ht)
 {
 	ht->pInternalPointer = ht->pListTail;
 }
 
 
-PHPAPI void hash_move_forward(HashTable *ht)
+PHPAPI void _php3_hash_move_forward(HashTable *ht)
 {
 	if (ht->pInternalPointer) {
 		ht->pInternalPointer = ht->pInternalPointer->pListNext;
 	}
 }
 
-PHPAPI void hash_move_backwards(HashTable *ht)
+PHPAPI void _php3_hash_move_backwards(HashTable *ht)
 {
 	if (ht->pInternalPointer) {
 		ht->pInternalPointer = ht->pInternalPointer->pListLast;
@@ -942,7 +942,7 @@ PHPAPI void hash_move_backwards(HashTable *ht)
 }
 
 
-PHPAPI int hash_get_current_key(HashTable *ht, char **str_index, int *int_index)
+PHPAPI int _php3_hash_get_current_key(HashTable *ht, char **str_index, int *int_index)
 {
 	Bucket *p = ht->pInternalPointer;
 
@@ -960,7 +960,7 @@ PHPAPI int hash_get_current_key(HashTable *ht, char **str_index, int *int_index)
 }
 
 
-PHPAPI int hash_get_current_data(HashTable *ht, void **pData)
+PHPAPI int _php3_hash_get_current_data(HashTable *ht, void **pData)
 {
 	Bucket *p = ht->pInternalPointer;
 
@@ -973,7 +973,7 @@ PHPAPI int hash_get_current_data(HashTable *ht, void **pData)
 }
 
 
-PHPAPI int hash_sort(HashTable *ht, int (*compar) (const void *, const void *), int renumber)
+PHPAPI int _php3_hash_sort(HashTable *ht, int (*compar) (const void *, const void *), int renumber)
 {
 	Bucket **arTmp;
 	Bucket *p;
@@ -1025,13 +1025,13 @@ PHPAPI int hash_sort(HashTable *ht, int (*compar) (const void *, const void *), 
 			p = p->pListNext;
 		}
 		ht->nNextFreeElement = i;
-		hash_rehash(ht);
+		_php3_hash_rehash(ht);
 	}
 	return SUCCESS;
 }
 
 
-PHPAPI int hash_minmax(HashTable *ht, int (*compar) (const void *, const void *), int flag, void **pData)
+PHPAPI int _php3_hash_minmax(HashTable *ht, int (*compar) (const void *, const void *), int flag, void **pData)
 {
 	Bucket *p,*res;
 
@@ -1057,14 +1057,14 @@ PHPAPI int hash_minmax(HashTable *ht, int (*compar) (const void *, const void *)
 }
 
 
-PHPAPI uint hash_next_free_element(HashTable *ht)
+PHPAPI uint _php3_hash_next_free_element(HashTable *ht)
 {
 	return ht->nNextFreeElement;
 
 }
 
 #if DEBUG
-PHPAPI void hash_display_pListTail(HashTable *ht)
+PHPAPI void _php3_hash_display_pListTail(HashTable *ht)
 {
 	Bucket *p;
 
@@ -1075,7 +1075,7 @@ PHPAPI void hash_display_pListTail(HashTable *ht)
 	}
 }
 
-PHPAPI void hash_display(HashTable *ht)
+PHPAPI void _php3_hash_display(HashTable *ht)
 {
 	Bucket *p;
 	uint i;

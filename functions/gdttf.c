@@ -680,3 +680,10 @@ gdttf(gdImage *im, int *brect, int fg, char *fontname,
 }
    
 #endif /* HAVE_LIBTTF */
+
+/*
+ * Local variables:
+ * tab-width: 4
+ * c-basic-offset: 4
+ * End:
+ */

@@ -208,7 +208,7 @@ DEP_CPP_CALEN=\
 	"..\build-defs.h"\
 	"..\config.w32.h"\
 	"..\environment.h"\
-	"..\hash.h"\
+	"..\php3_hash.h"\
 	"..\operators.h"\
 	"..\php.h"\
 	"..\stack.h"\
@@ -231,7 +231,7 @@ DEP_CPP_CALEN=\
 	"..\build-defs.h"\
 	"..\config.w32.h"\
 	"..\environment.h"\
-	"..\hash.h"\
+	"..\php3_hash.h"\
 	"..\operators.h"\
 	"..\php.h"\
 	"..\stack.h"\
@@ -258,7 +258,7 @@ DEP_CPP_DOW_C=\
 	"..\build-defs.h"\
 	"..\config.w32.h"\
 	"..\environment.h"\
-	"..\hash.h"\
+	"..\php3_hash.h"\
 	"..\operators.h"\
 	"..\php.h"\
 	"..\stack.h"\
@@ -281,7 +281,7 @@ DEP_CPP_DOW_C=\
 	"..\build-defs.h"\
 	"..\config.w32.h"\
 	"..\environment.h"\
-	"..\hash.h"\
+	"..\php3_hash.h"\
 	"..\operators.h"\
 	"..\php.h"\
 	"..\stack.h"\
@@ -308,7 +308,7 @@ DEP_CPP_FRENC=\
 	"..\build-defs.h"\
 	"..\config.w32.h"\
 	"..\environment.h"\
-	"..\hash.h"\
+	"..\php3_hash.h"\
 	"..\operators.h"\
 	"..\php.h"\
 	"..\stack.h"\
@@ -331,7 +331,7 @@ DEP_CPP_FRENC=\
 	"..\build-defs.h"\
 	"..\config.w32.h"\
 	"..\environment.h"\
-	"..\hash.h"\
+	"..\php3_hash.h"\
 	"..\operators.h"\
 	"..\php.h"\
 	"..\stack.h"\
@@ -358,7 +358,7 @@ DEP_CPP_GREGO=\
 	"..\build-defs.h"\
 	"..\config.w32.h"\
 	"..\environment.h"\
-	"..\hash.h"\
+	"..\php3_hash.h"\
 	"..\operators.h"\
 	"..\php.h"\
 	"..\stack.h"\
@@ -381,7 +381,7 @@ DEP_CPP_GREGO=\
 	"..\build-defs.h"\
 	"..\config.w32.h"\
 	"..\environment.h"\
-	"..\hash.h"\
+	"..\php3_hash.h"\
 	"..\operators.h"\
 	"..\php.h"\
 	"..\stack.h"\
@@ -408,7 +408,7 @@ DEP_CPP_JEWIS=\
 	"..\build-defs.h"\
 	"..\config.w32.h"\
 	"..\environment.h"\
-	"..\hash.h"\
+	"..\php3_hash.h"\
 	"..\operators.h"\
 	"..\php.h"\
 	"..\stack.h"\
@@ -431,7 +431,7 @@ DEP_CPP_JEWIS=\
 	"..\build-defs.h"\
 	"..\config.w32.h"\
 	"..\environment.h"\
-	"..\hash.h"\
+	"..\php3_hash.h"\
 	"..\operators.h"\
 	"..\php.h"\
 	"..\stack.h"\
@@ -458,7 +458,7 @@ DEP_CPP_JULIA=\
 	"..\build-defs.h"\
 	"..\config.w32.h"\
 	"..\environment.h"\
-	"..\hash.h"\
+	"..\php3_hash.h"\
 	"..\operators.h"\
 	"..\php.h"\
 	"..\stack.h"\
@@ -481,7 +481,7 @@ DEP_CPP_JULIA=\
 	"..\build-defs.h"\
 	"..\config.w32.h"\
 	"..\environment.h"\
-	"..\hash.h"\
+	"..\php3_hash.h"\
 	"..\operators.h"\
 	"..\php.h"\
 	"..\stack.h"\

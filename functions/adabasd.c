@@ -252,7 +252,7 @@ void php3_Ada_closeAll(INTERNAL_FUNCTION_PARAMETERS)
 {
 	void *ptr;
 	int type;
-	int i, nument = hash_next_free_element(list);
+	int i, nument = _php3_hash_next_free_element(list);
 
 	for (i = 1; i < nument; i++) {
 		ptr = php3_list_find(i, &type);
@@ -482,7 +482,7 @@ void php3_Ada_aFetch(INTERNAL_FUNCTION_PARAMETERS)
 			tmp.value.str.len = 0;
 			tmp.value.str.val = empty_string;
 		}
-		hash_index_update(arr->value.ht, i, (void *) &tmp, sizeof(pval), NULL);
+		_php3_hash_index_update(arr->value.ht, i, (void *) &tmp, sizeof(pval), NULL);
 	}
 	RETURN_LONG(result->numcols);	
 }

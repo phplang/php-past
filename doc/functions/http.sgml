@@ -55,7 +55,7 @@ while (list($header, $value) = each($headers)) {
     <para>
      The <function>Header</function> function is used at the top of an
      <acronym>HTML</acronym> file to send raw <acronym>HTTP</acronym>
-     header strings.  See the <ulink url="&spec.http1.0;">HTTP 1.0
+     header strings.  See the <ulink url="&spec.http1.1;">HTTP 1.1
      Specification</ulink> for more information on raw http headers.
      Remember that the <function>Header</function> function must be
      called before any actual output is sent either by normal HTML

@@ -30,7 +30,7 @@
  */
 
 
-/* $Id: operators.h,v 1.33 1998/05/15 10:56:24 zeev Exp $ */
+/* $Id: operators.h,v 1.34 1998/07/03 06:21:26 zeev Exp $ */
 
 
 #ifndef _OPERATORS_H
@@ -54,6 +54,8 @@ extern int bitwise_not_function(pval *result, pval *op1 INLINE_TLS);
 extern int bitwise_or_function(pval *result, pval *op1, pval *op2 INLINE_TLS);
 extern int bitwise_and_function(pval *result, pval *op1, pval *op2 INLINE_TLS);
 extern int bitwise_xor_function(pval *result, pval *op1, pval *op2 INLINE_TLS);
+extern int shift_left_function(pval *result, pval *op1, pval *op2 INLINE_TLS);
+extern int shift_right_function(pval *result, pval *op1, pval *op2 INLINE_TLS);
 extern int concat_function_with_free(pval *result, pval *op1, pval *op2 INLINE_TLS);
 extern int concat_function(pval *result, pval *op1, pval *op2, int free_op2 INLINE_TLS);
 

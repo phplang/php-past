@@ -29,7 +29,7 @@
  */
 
 
-/* $Id: variables.c,v 1.141 1998/05/29 22:16:09 zeev Exp $ */
+/* $Id: variables.c,v 1.144 1998/07/04 16:08:55 zeev Exp $ */
 
 #ifdef THREAD_SAFE
 #include "tls.h"
@@ -75,12 +75,12 @@ inline void yystype_destructor(pval *yystype INLINE_TLS)
 		STR_FREE(yystype->value.str.val);
 	} else if (yystype->type & (IS_ARRAY | IS_CLASS | IS_OBJECT)) {
 		if (yystype->value.ht && (yystype->value.ht != &GLOBAL(symbol_table))) {
-			hash_destroy(yystype->value.ht);
+			_php3_hash_destroy(yystype->value.ht);
 			efree(yystype->value.ht);
 		}
 	} else if (yystype->type==IS_USER_FUNCTION) {
 		if (yystype->value.func.addr.statics) {
-			hash_destroy(yystype->value.func.addr.statics);
+			_php3_hash_destroy(yystype->value.func.addr.statics);
 			efree(yystype->value.func.addr.statics);
 		}
 		if (yystype->value.func.arg_types) {
@@ -125,7 +125,7 @@ int yystype_copy_constructor(pval *yystype)
 			var_reset(yystype);
 			return FAILURE;
 		}
-		hash_copy(&(yystype->value.ht), yystype->value.ht, (void (*)(void *pData)) yystype_copy_constructor, (void *) &tmp, sizeof(pval));
+		_php3_hash_copy(&(yystype->value.ht), yystype->value.ht, (void (*)(void *pData)) yystype_copy_constructor, (void *) &tmp, sizeof(pval));
 		if (!yystype->value.ht) {
 			var_reset(yystype);
 			return FAILURE;
@@ -140,10 +140,10 @@ void assign_to_list(pval *result, pval *list, pval *expr INLINE_TLS)
 	pval *varp=NULL, *vardata=NULL, *exprdata=NULL; /* Shut up the compiler */
 
 	if (GLOBAL(Execute)) {
-		list_size = hash_num_elements(list->value.ht);
+		list_size = _php3_hash_num_elements(list->value.ht);
 
 		for (i=list_size-1; i>=0; i--) { /* Go in reverse because of unassigned variable stack */
-			if (hash_index_find(list->value.ht, i, (void **)&varp) == FAILURE) {
+			if (_php3_hash_index_find(list->value.ht, i, (void **)&varp) == FAILURE) {
 				continue;
 			}
 			if (!varp->value.varptr.yystype) {
@@ -162,7 +162,7 @@ void assign_to_list(pval *result, pval *list, pval *expr INLINE_TLS)
 					yystype_copy_constructor(vardata);
 				}
 			} else {
-				if (hash_index_find(expr->value.ht, i, (void **)&exprdata) == FAILURE) {
+				if (_php3_hash_index_find(expr->value.ht, i, (void **)&exprdata) == FAILURE) {
 					var_uninit(vardata);
 				} else {
 					*vardata = *exprdata;
@@ -248,7 +248,7 @@ int get_regular_variable_contents(pval *result, pval *varname, int free_varname 
 		}
 		return FAILURE;
 	} else {
-		if (hash_find(GLOBAL(active_symbol_table), varname->value.str.val, varname->value.str.len+1, (void **) &data) == FAILURE) {
+		if (_php3_hash_find(GLOBAL(active_symbol_table), varname->value.str.val, varname->value.str.len+1, (void **) &data) == FAILURE) {
 			php3_error(E_NOTICE, "Using uninitialized variable $%s", varname->value.str.val);
 			var_reset(result);
 			if (free_varname) {
@@ -272,7 +272,7 @@ void get_array_variable(pval *result, pval *varname, pval *index INLINE_TLS)
 
 	convert_double_to_long(index);
 
-	if (hash_find(GLOBAL(active_symbol_table), varname->value.str.val, varname->value.str.len+1, (void **) &array) == FAILURE) {
+	if (_php3_hash_find(GLOBAL(active_symbol_table), varname->value.str.val, varname->value.str.len+1, (void **) &array) == FAILURE) {
 		php3_error(E_NOTICE, "Using uninitialized array $%s", varname->value.str.val);
 		var_reset(result);
 		return;
@@ -298,7 +298,7 @@ void get_array_variable(pval *result, pval *varname, pval *index INLINE_TLS)
 		return;
 	} else {
 		if (index->type == IS_LONG) {
-			if (hash_index_find(array->value.ht, index->value.lval, (void **) &data) == FAILURE) {
+			if (_php3_hash_index_find(array->value.ht, index->value.lval, (void **) &data) == FAILURE) {
 				php3_error(E_NOTICE, "Using uninitialized index or property of $%s - %d", varname->value.str.val, index->value.lval);
 				var_reset(result);
 				return;
@@ -310,7 +310,7 @@ void get_array_variable(pval *result, pval *varname, pval *index INLINE_TLS)
 				}
 			}
 		} else if (index->type == IS_STRING) {
-			if (hash_find(array->value.ht, index->value.str.val, index->value.str.len+1, (void **) &data) == FAILURE) {
+			if (_php3_hash_find(array->value.ht, index->value.str.val, index->value.str.len+1, (void **) &data) == FAILURE) {
 				php3_error(E_NOTICE, "Using uninitialized index or property of $%s - '%s'", varname->value.str.val, index->value.str.val);
 				var_reset(result);
 				return;
@@ -376,8 +376,11 @@ int incdec_variable(pval *result, pval *var_ptr, int (*func) (pval *), int post 
 
 void print_variable(pval *var INLINE_TLS) 
 {
-	if (!php3_header()) return;
 	convert_to_string(var);
+	if (var->value.str.len==0) { /* optimize away empty strings */
+		return;
+	}
+	if (!php3_header()) return;
 	PHPWRITE(var->value.str.val,var->value.str.len);
 }
 
@@ -389,26 +392,26 @@ void add_array_pair_list(pval *result, pval *index, pval *value, int initialize 
 {
 	if (initialize) {
 		result->value.ht = (HashTable *) emalloc(sizeof(HashTable));
-		hash_init(result->value.ht, 0, NULL, pval_DESTRUCTOR, 0);
+		_php3_hash_init(result->value.ht, 0, NULL, pval_DESTRUCTOR, 0);
 		result->type = IS_ARRAY;
 	}
 	if (index) {
 		if (index->type == IS_STRING) {
-			hash_update(result->value.ht, index->value.str.val, index->value.str.len+1, value, sizeof(pval),NULL);
+			_php3_hash_update(result->value.ht, index->value.str.val, index->value.str.len+1, value, sizeof(pval),NULL);
 			yystype_destructor(index _INLINE_TLS);
 			return;
 		} else if (index->type == IS_LONG || index->type == IS_DOUBLE) {
 			if (index->type == IS_DOUBLE) {
 				convert_to_long(index);
 			}
-			hash_index_update(result->value.ht, index->value.lval, value, sizeof(pval),NULL);
+			_php3_hash_index_update(result->value.ht, index->value.lval, value, sizeof(pval),NULL);
 		} else {
 			yystype_destructor(index _INLINE_TLS);
 			yystype_destructor(value _INLINE_TLS);
 			var_reset(result);
 		}
 	} else {
-		hash_next_index_insert(result->value.ht, value, sizeof(pval),NULL);
+		_php3_hash_next_index_insert(result->value.ht, value, sizeof(pval),NULL);
 	}
 }
 
@@ -498,7 +501,7 @@ void declare_class_variable(pval *varname, pval *expr INLINE_TLS)
 		} else {
 			var_reset(&new_var);
 		}
-		if (hash_update(GLOBAL(class_symbol_table), varname->value.str.val, varname->value.str.len+1, &new_var, sizeof(pval),NULL) == FAILURE) {
+		if (_php3_hash_update(GLOBAL(class_symbol_table), varname->value.str.val, varname->value.str.len+1, &new_var, sizeof(pval),NULL) == FAILURE) {
 			php3_error(E_ERROR, "Unable to declare new variable %s::$%s", GLOBAL(class_name), varname->value.str.val);
 		}
 	}
@@ -520,7 +523,7 @@ void get_object_property(pval *result, pval *class_ptr, pval *varname INLINE_TLS
 		yystype_destructor(varname _INLINE_TLS);
 		return;
 	}
-	if (hash_find(object->value.ht, varname->value.str.val, varname->value.str.len+1, (void **) &data) == FAILURE) {
+	if (_php3_hash_find(object->value.ht, varname->value.str.val, varname->value.str.len+1, (void **) &data) == FAILURE) {
 		php3_error(E_NOTICE, "Using uninitialized variable $%s", varname->value.str.val);
 		STR_FREE(varname->value.str.val);
 		var_reset(result);
@@ -560,7 +563,7 @@ void get_object_symtable(pval *result, pval *parent, pval *child INLINE_TLS)
 			return;
 		}
 		
-		if (hash_find(target_symbol_table, child->value.str.val, child->value.str.len+1, (void **) &data) == FAILURE) {
+		if (_php3_hash_find(target_symbol_table, child->value.str.val, child->value.str.len+1, (void **) &data) == FAILURE) {
 			php3_error(E_WARNING, "Object %s not found", child->value.str.val);
 			result->value.varptr.yystype=NULL;
 			return;
@@ -581,7 +584,7 @@ void assign_new_object(pval *result, pval *classname INLINE_TLS)
 		pval *data;
 
 		convert_to_string(classname);
-		if (hash_find(&GLOBAL(function_table), classname->value.str.val, classname->value.str.len+1, (void **) &data) == FAILURE
+		if (_php3_hash_find(&GLOBAL(function_table), classname->value.str.val, classname->value.str.len+1, (void **) &data) == FAILURE
 			|| data->type != IS_CLASS) {
 			php3_error(E_ERROR, "%s is not a class", classname->value.str.val);
 			return;
@@ -646,12 +649,12 @@ void get_regular_variable_pointer(pval *result, pval *varname INLINE_TLS)
 		} else {
 			pval *data;
 
-			if (hash_find(GLOBAL(active_symbol_table),varname->value.str.val, varname->value.str.len+1, (void **)&data) == FAILURE) {
+			if (_php3_hash_find(GLOBAL(active_symbol_table),varname->value.str.val, varname->value.str.len+1, (void **)&data) == FAILURE) {
 				pval tmp;
 				variable_tracker vt;
 
 				var_uninit(&tmp);
-				hash_update(GLOBAL(active_symbol_table),varname->value.str.val,varname->value.str.len+1,(void *) &tmp, sizeof(pval), (void **) &data);
+				_php3_hash_update(GLOBAL(active_symbol_table),varname->value.str.val,varname->value.str.len+1,(void *) &tmp, sizeof(pval), (void **) &data);
 				
 				vt.type = IS_STRING;
 				vt.strlen = varname->value.str.len;

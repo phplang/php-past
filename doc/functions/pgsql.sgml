@@ -60,6 +60,9 @@
    </table>
 
    <para>
+    One can also establish a connection with the following command:
+    <command>$conn = pg_Connect("host=localhost port=5432 dbname=chris");</command>
+   <para>
     To use the large object (lo) interface, it is necessary to enclose
     it within a transaction block. A transaction block starts with a
     <command>begin</command> and if the transaction was valid ends
@@ -232,6 +235,154 @@ echo $cmdtuples . " <- cmdtuples affected.";
      selects that did not return anything. No such assumption can be
      made in PHP3.  
     </simpara></note>
+   </refsect1>
+  </refentry>
+
+  <refentry id="function.pg-fetch-array">
+   <refnamediv>
+    <refname>pg_fetch_array</refname>
+    <refpurpose>fetch row as array</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>array <function>pg_fetch_array</function></funcdef>
+     <paramdef>int <parameter>result</parameter></paramdef>
+     <paramdef>mixed <parameter>field</parameter></paramdef>
+    </funcsynopsis>
+    <para> 
+     Returns: An array that corresponds to the fetched row, or false
+     if there are no more rows.
+    <para>
+     <function>pg_fetch_array</function> is an extended version of
+     <function>pg_fetch_row</function>.  In addition to storing the
+     data in the numeric indices of the result array, it also stores
+     the data in associative indices, using the field names as keys.
+    <para>
+     An important thing to note is that using
+     <function>pg_fetch_array</function> is NOT significantly
+     slower than using <function>pg_fetch_row</function>, while it
+     provides a significant added value.
+    <para>
+     For further details, also see
+     <function>pg_fetch_row</function>
+    </para>
+    <example>
+     <title>PostgreSQL fetch array</title>
+     <programlisting role=php>
+&lt;?php 
+$conn = pg_pconnect("","","","","publisher");
+if (!$conn) {
+  echo "An error occured.\n";
+  exit;
+}
+
+$result = pg_Exec ($conn, "SELECT * FROM authors");
+if (!$result) {
+  echo "An error occured.\n";
+  exit;
+}
+
+$arr = pg_fetch_array ($result, 0);
+echo $arr[0] . " <- array\n";
+
+$arr = pg_fetch_array ($result, 1);
+echo $arr["author"] . " <- array\n";
+?>
+</programlisting>
+    </example>
+
+   </refsect1>
+  </refentry>
+
+  <refentry id="function.pg-fetch-object">
+   <refnamediv>
+    <refname>pg_fetch_object</refname>
+    <refpurpose>fetch row as object</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>object <function>pg_fetch_object</function></funcdef>
+     <paramdef>int <parameter>result</parameter></paramdef>
+     <paramdef>mixed <parameter>field</parameter></paramdef>
+    </funcsynopsis>
+    <para> 
+     Returns: An object with properties that correspond to the fetched
+     row, or false if there are no more rows.
+    <para> 
+     <function>pg_fetch_object</function> is similar to
+     <function>pg_fetch_array</function>, with one difference - an
+     object is returned, instead of an array.  Indirectly, that means
+     that you can only access the data by the field names, and not by
+     their offsets (numbers are illegal property names).
+    <para>
+     Speed-wise, the function is identical to
+     <function>pg_fetch_array</function>, and almost as quick as
+     <function>pg_fetch_row</function> (the difference is
+     insignificant).
+    <para> See also: <function>pg_fetch_array</function> and
+                     <function>pg_fetch_row</function>.
+   </refsect1>
+  </refentry>
+
+  <refentry id="function.pg-fetch-row">
+   <refnamediv>
+    <refname>pg_fetch_row</refname>
+    <refpurpose>get row as enumerated array</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>array <function>pg_fetch_row</function></funcdef>
+     <paramdef>int <parameter>result</parameter></paramdef>
+     <paramdef>int <parameter>field</parameter></paramdef>
+    </funcsynopsis>
+    <para> 
+     Returns: An array that corresponds to the fetched row, or false
+     if there are no more rows.
+    <para>
+     <function>pg_fetch_row</function> fetches one row of data from
+     the result associated with the specified result identifier.  The
+     row is returned as an array.  Each result column is stored in an
+     array offset, starting at offset 0.
+    <para>
+     Subsequent call to <function>pg_fetch_row</function> would
+     return the next row in the result set, or false if there are no
+     more rows.
+    <para>
+     See also: <function>pg_fetch_array</function>,
+               <function>pg_fetch_object</function>,
+               <function>pg_result</function>.
+
+    <example>
+     <title>Postgres fetch row</title>
+     <programlisting role=php>
+&lt;?php 
+      $conn = pg_pconnect("","","","","publisher");
+      if (!$conn) {
+        echo "An error occured.\n";
+        exit;
+      }
+
+      $result = pg_Exec ($conn, "SELECT * FROM authors");
+      if (!$result) {
+        echo "An error occured.\n";
+        exit;
+      }
+
+      $row = pg_fetch_row ($result, 0);
+      echo $row[0] . " <- row\n";
+
+      $row = pg_fetch_row ($result, 1);
+      echo $row[0] . " <- row\n";
+
+      $row = pg_fetch_row ($result, 2);
+      echo $row[1] . " <- row\n";
+?>
+</programlisting>
+    </example>
+
    </refsect1>
   </refentry>
 
@@ -486,19 +637,17 @@ echo $cmdtuples . " <- cmdtuples affected.";
    <refsect1>
     <title>Description</title>
     <funcsynopsis>
-     <funcdef>void <function>pg_loread</function></funcdef>
+     <funcdef>string <function>pg_loread</function></funcdef>
      <paramdef>int <parameter>fd</parameter></paramdef>
-     <paramdef>string <parameter>bufvar</parameter></paramdef>
+     <paramdef>int <parameter>len</parameter></paramdef>
     </funcsynopsis>
     <para>
      <function>pg_loread</function> reads at most
-     <parameter>len</parameter> bytes from a large object into a
-     variable name <parameter>bufvar</parameter>.
+     <parameter>len</parameter> bytes from a large object and
+     returns it as a string.
      <parameter>fd</parameter> specifies a valid large object file
-     descriptor. <parameter>bufvar</parameter> specifies a valid buffer
-     variable to contain the large object segment and
-     <parameter>len</parameter> specifies the maximum allowable size
-     of the large object segment.
+     descriptor and<parameter>len</parameter> specifies the maximum
+     allowable size of the large object segment.
    </refsect1>
   </refentry>
 
@@ -546,14 +695,14 @@ echo $cmdtuples . " <- cmdtuples affected.";
    <refsect1>
     <title>Description</title>
     <funcsynopsis>
-     <funcdef>void <function>pg_lowrite</function></funcdef>
+     <funcdef>int <function>pg_lowrite</function></funcdef>
      <paramdef>int <parameter>fd</parameter></paramdef>
      <paramdef>string <parameter>buf</parameter></paramdef>
     </funcsynopsis>
     <para>
-     <function>pg_lowrite</function> writes at most
-     <parameter>len</parameter> bytes to a large object from a
-     variable <parameter>buf</parameter>.
+     <function>pg_lowrite</function> writes at most to a large object
+     from a variable <parameter>buf</parameter> and returns the number
+     of bytes actually written, or false in the case of an error.
      <parameter>fd</parameter> is a file descriptor for the large
      object from <function>pg_loopen</function>.
    </refsect1>

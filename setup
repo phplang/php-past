@@ -29,7 +29,7 @@
 # |             Ariel Shkedi <ars@ziplink.net> or <as@altavista.net>     |
 # +----------------------------------------------------------------------+
 # 
-# $Id: setup,v 1.34 1998/06/05 14:27:02 owl Exp $
+# $Id: setup,v 1.35 1998/07/02 16:43:24 ssb Exp $
 
 if [ "$1" = "-q" ]; then
     quiet_mode=on
@@ -311,7 +311,7 @@ define_option with-filepro 'filePro support? ' yesno no \
 '    Whether to use the bundled filePro library.  Read-access only.'
 
 define_option with-config-file-path 'Default config directory?' yesnodir \
-    'yes /usr/local/lib Configuration file' \
+    'no /usr/local/lib Configuration file' \
 '    Directory where the PHP3 configuration file (php3.ini) is\n
     located.'
 

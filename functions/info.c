@@ -58,10 +58,6 @@ extern char **environ;
 
 #define SECTION(name)  PUTS("<hr><h2>" name "</h2>\n")
 
-#if APACHE
-extern module *top_module;
-#endif
-
 #define ENTRY_NAME_COLOR "#999999"
 #define CONTENTS_COLOR "#DDDDDD"
 #define HEADER_COLOR "#00DDDD"
@@ -70,7 +66,7 @@ static int _display_module_info(php3_module_entry *module)
 {
 	TLS_VARS;
 	
-	PUTS("<tr><th bgcolor=\"" ENTRY_NAME_COLOR "\">");
+	PUTS("<tr><th align=left bgcolor=\"" ENTRY_NAME_COLOR "\">");
 	PUTS(module->name);
 	PUTS("</th><td bgcolor=\"" CONTENTS_COLOR "\">");
 	if (module->info_func) {
@@ -130,65 +126,13 @@ void _php3_info(void)
 	PUTS("<tr><th bgcolor=\"" HEADER_COLOR "\">Extensions</th><th bgcolor=\"" HEADER_COLOR "\">Additional Information</th></tr>\n");
 	
 #ifndef MSVC5
-	PUTS("<tr><th bgcolor=\"" ENTRY_NAME_COLOR "\">PHP core</th>\n");
+	PUTS("<tr><th align=left bgcolor=\"" ENTRY_NAME_COLOR "\">PHP core</th>\n");
 	PUTS("<td bgcolor=\"" CONTENTS_COLOR "\"><tt>CFLAGS=" PHP_CFLAGS "<br>\n");
 	PUTS("HSREGEX=" PHP_HSREGEX "</td></tr>\n");
 #endif
 
-#if APACHE
-	{
-		module *modp = NULL;
-#if !defined(WIN32) && !defined(WINNT)
-		char name[64];
-		char *p;
-#endif
-		server_rec *serv = GLOBAL(php3_rqst)->server;
-		extern char server_root[MAX_STRING_LEN];
-		extern uid_t user_id;
-		extern char *user_name;
-		extern gid_t group_id;
-		extern int max_requests_per_child;
-
-		PUTS("<tr><th bgcolor=\"" ENTRY_NAME_COLOR "\">Apache</th><td>\n");
-#if WIN32|WINNT
-		PUTS("Apache for Windows 95/NT<br>");
-#else
-		php3_printf("<tt>APACHE_INCLUDE=%s<br>\n", PHP_APACHE_INCLUDE);
-		php3_printf("APACHE_TARGET=%s<br></tt>\n", PHP_APACHE_TARGET);
-#endif
-		php3_printf("Apache Version: <b>%s</b><br>",SERVER_VERSION);
-#ifdef APACHE_RELEASE
-		php3_printf("Apache Release: <b>%d</b><br>",APACHE_RELEASE);
-#endif
-		php3_printf("Apache API Version: <b>%d</b><br>",MODULE_MAGIC_NUMBER);
-		php3_printf("Hostname/port: <b>%s:%u</b><br>\n",serv->server_hostname,serv->port);
-#if !defined(WIN32) && !defined(WINNT)
-		php3_printf("User/Group: <b>%s(%d)/%d</b><br>\n",user_name,(int)user_id,(int)group_id);
-		php3_printf("Max Requests: <b>per child: %d &nbsp;&nbsp; keep alive: %s &nbsp;&nbsp; max per connection: %d</b><br>\n",max_requests_per_child,serv->keep_alive ? "on":"off", serv->keep_alive_max);
-#endif
-		php3_printf("Timeouts: <b>connection: %d &nbsp;&nbsp; keep-alive: %d</b><br>",serv->timeout,serv->keep_alive_timeout);
-#if !defined(WIN32) && !defined(WINNT)
-		php3_printf("Server Root: <b>%s</b><br>\n",server_root);
-		
-		PUTS("Loaded modules: ");
-		for(modp = top_module; modp; modp = modp->next) {
-			strncpy(name, modp->name, sizeof(name) - 1);
-			if ((p = strrchr(name, '.'))) {
-				*p='\0'; /* Cut off ugly .c extensions on module names */
-			}
-			PUTS(name);
-			if (modp->next) {
-				PUTS(", ");
-			}
-		}
-#endif
-		PUTS("<br>\n");
-	}	
-	PUTS("</td></tr>\n");
-#endif
-	hash_apply(&GLOBAL(module_registry),(int (*)(void *))_display_module_info);
+	_php3_hash_apply(&GLOBAL(module_registry),(int (*)(void *))_display_module_info);
 	PUTS("</table>\n");
-
 
 	SECTION("Configuration");
 	PUTS("<table border=5 width=\"600\">\n");
@@ -320,15 +264,15 @@ void _php3_info(void)
 
 	PUTS("</center>");
 	SECTION("PHP License");
-	PUTS("<TT>This program is free software; you can redistribute it and/or modify\n");
+	PUTS("<PRE>This program is free software; you can redistribute it and/or modify\n");
 	PUTS("it under the terms of:\n");
 	PUTS("\n");
 	PUTS("A) the GNU General Public License as published by the Free Software\n");
-    PUTS("Foundation; either version 2 of the License, or (at your option)\n");
-    PUTS("any later version.\n");
+    PUTS("   Foundation; either version 2 of the License, or (at your option)\n");
+    PUTS("   any later version.\n");
 	PUTS("\n");
 	PUTS("B) the PHP License as published by the PHP Development Team and\n");
-    PUTS("included in the distribution in the file: LICENSE\n");
+    PUTS("   included in the distribution in the file: LICENSE\n");
 	PUTS("\n");
 	PUTS("This program is distributed in the hope that it will be useful,\n");
 	PUTS("but WITHOUT ANY WARRANTY; without even the implied warranty of\n");
@@ -337,7 +281,7 @@ void _php3_info(void)
 	PUTS("\n");
 	PUTS("You should have received a copy of both licenses referred to here.\n");
 	PUTS("If you did not, or have any questions about PHP licensing, please\n");
-	PUTS("contact core@php.net.</TT>\n");
+	PUTS("contact core@php.net.</PRE>\n");
 	
 }
 

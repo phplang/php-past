@@ -117,9 +117,7 @@
      If result_id is 0, the settings apply as default for new results.
 
     <note><simpara>
-      Default for both longreadlen and binmode is 0.
-      This means that columns of type binary and/or LONG get
-      passedthru.
+      Default for longreadlen is 4096 and binmode defaults to 1.
       Handling of binary Long columns is also affected by 
       <function>odbc_longreadlen</function>
     </simpara>

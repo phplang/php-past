@@ -27,7 +27,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: dir.c,v 1.49 1998/05/15 10:57:21 zeev Exp $ */
+/* $Id: dir.c,v 1.51 1998/06/22 20:28:30 zeev Exp $ */
 
 #ifdef THREAD_SAFE
 #include "tls.h"
@@ -115,7 +115,7 @@ void php3_closedir(INTERNAL_FUNCTION_PARAMETERS)
 	
 	if (ARG_COUNT(ht) == 0) {
 		if (getThis(&id) == SUCCESS) {
-			if (hash_find(id->value.ht, "handle", sizeof("handle"), (void **)&tmp) == FAILURE) {
+			if (_php3_hash_find(id->value.ht, "handle", sizeof("handle"), (void **)&tmp) == FAILURE) {
 				php3_error(E_WARNING, "unable to find my handle property");
 				RETURN_FALSE;
 			}
@@ -167,7 +167,7 @@ void php3_rewinddir(INTERNAL_FUNCTION_PARAMETERS)
 	
 	if (ARG_COUNT(ht) == 0) {
 		if (getThis(&id) == SUCCESS) {
-			if (hash_find(id->value.ht, "handle", sizeof("handle"), (void **)&tmp) == FAILURE) {
+			if (_php3_hash_find(id->value.ht, "handle", sizeof("handle"), (void **)&tmp) == FAILURE) {
 				php3_error(E_WARNING, "unable to find my handle property");
 				RETURN_FALSE;
 			}
@@ -201,7 +201,7 @@ void php3_readdir(INTERNAL_FUNCTION_PARAMETERS)
 	
 	if (ARG_COUNT(ht) == 0) {
 		if (getThis(&id) == SUCCESS) {
-			if (hash_find(id->value.ht, "handle", sizeof("handle"), (void **)&tmp) == FAILURE) {
+			if (_php3_hash_find(id->value.ht, "handle", sizeof("handle"), (void **)&tmp) == FAILURE) {
 				php3_error(E_WARNING, "unable to find my handle property");
 				RETURN_FALSE;
 			}

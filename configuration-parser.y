@@ -30,7 +30,7 @@
 
 
 
-/* $Id: configuration-parser.y,v 1.72 1998/06/01 20:34:17 shane Exp $ */
+/* $Id: configuration-parser.y,v 1.74 1998/06/22 20:28:02 zeev Exp $ */
 
 #define DEBUG_CFG_PARSER 1
 #ifdef THREAD_SAFE
@@ -56,7 +56,7 @@ static HashTable configuration_hash;
 extern HashTable browser_hash;
 extern char *php3_ini_path;
 #endif
-static HashTable *active_hash_table;
+static HashTable *active__php3_hash_table;
 static pval *current_section;
 static char *currently_parsed_filename;
 
@@ -73,7 +73,7 @@ PHPAPI int cfg_get_long(char *varname,long *result)
 {
 	pval *tmp,var;
 	
-	if (hash_find(&configuration_hash,varname,strlen(varname)+1,(void **) &tmp)==FAILURE) {
+	if (_php3_hash_find(&configuration_hash,varname,strlen(varname)+1,(void **) &tmp)==FAILURE) {
 		*result=(long)NULL;
 		return FAILURE;
 	}
@@ -89,7 +89,7 @@ PHPAPI int cfg_get_double(char *varname,double *result)
 {
 	pval *tmp,var;
 	
-	if (hash_find(&configuration_hash,varname,strlen(varname)+1,(void **) &tmp)==FAILURE) {
+	if (_php3_hash_find(&configuration_hash,varname,strlen(varname)+1,(void **) &tmp)==FAILURE) {
 		*result=(double)0;
 		return FAILURE;
 	}
@@ -105,7 +105,7 @@ PHPAPI int cfg_get_string(char *varname, char **result)
 {
 	pval *tmp;
 
-	if (hash_find(&configuration_hash,varname,strlen(varname)+1,(void **) &tmp)==FAILURE) {
+	if (_php3_hash_find(&configuration_hash,varname,strlen(varname)+1,(void **) &tmp)==FAILURE) {
 		*result=NULL;
 		return FAILURE;
 	}
@@ -131,7 +131,7 @@ static void yystype_config_destructor(pval *yystype)
 static void yystype_browscap_destructor(pval *yystype)
 {
 	if (yystype->type == IS_OBJECT || yystype->type == IS_ARRAY) {
-		hash_destroy(yystype->value.ht);
+		_php3_hash_destroy(yystype->value.ht);
 		free(yystype->value.ht);
 	}
 }
@@ -141,7 +141,7 @@ int php3_init_config(void)
 {
 	TLS_VARS;
 
-	if (hash_init(&configuration_hash, 0, NULL, (void (*)(void *))yystype_config_destructor, 1)==FAILURE) {
+	if (_php3_hash_init(&configuration_hash, 0, NULL, (void (*)(void *))yystype_config_destructor, 1)==FAILURE) {
 		return FAILURE;
 	}
 
@@ -207,14 +207,14 @@ int php3_init_config(void)
 			tmp.value.str.val = opened_path;
 			tmp.value.str.len = strlen(opened_path);
 			tmp.type = IS_STRING;
-			hash_update(&configuration_hash,"cfg_file_path",sizeof("cfg_file_path"),(void *) &tmp,sizeof(pval),NULL);
+			_php3_hash_update(&configuration_hash,"cfg_file_path",sizeof("cfg_file_path"),(void *) &tmp,sizeof(pval),NULL);
 #if 0
 			php3_printf("INI file opened at '%s'\n",opened_path);
 #endif
 		}
 			
 		init_cfg_scanner();
-		active_hash_table = &configuration_hash;
+		active__php3_hash_table = &configuration_hash;
 		parsing_mode = PARSING_MODE_CFG;
 		currently_parsed_filename = "php3.ini";
 		yyparse();
@@ -232,7 +232,7 @@ int php3_minit_browscap(INIT_FUNC_ARGS)
 	TLS_VARS;
 
 	if (php3_ini.browscap) {
-		if (hash_init(&GLOBAL(browser_hash), 0, NULL, (void (*)(void *))yystype_browscap_destructor, 1)==FAILURE) {
+		if (_php3_hash_init(&GLOBAL(browser_hash), 0, NULL, (void (*)(void *))yystype_browscap_destructor, 1)==FAILURE) {
 			return FAILURE;
 		}
 
@@ -242,7 +242,7 @@ int php3_minit_browscap(INIT_FUNC_ARGS)
 			return FAILURE;
 		}
 		init_cfg_scanner();
-		active_hash_table = &GLOBAL(browser_hash);
+		active__php3_hash_table = &GLOBAL(browser_hash);
 		parsing_mode = PARSING_MODE_BROWSCAP;
 		currently_parsed_filename = php3_ini.browscap;
 		yyparse();
@@ -255,7 +255,7 @@ int php3_minit_browscap(INIT_FUNC_ARGS)
 
 int php3_shutdown_config(void)
 {
-	hash_destroy(&configuration_hash);
+	_php3_hash_destroy(&configuration_hash);
 	return SUCCESS;
 }
 
@@ -265,7 +265,7 @@ int php3_mshutdown_browscap(void)
 	TLS_VARS;
 
 	if (php3_ini.browscap) {
-		hash_destroy(&GLOBAL(browser_hash));
+		_php3_hash_destroy(&GLOBAL(browser_hash));
 	}
 	return SUCCESS;
 }
@@ -337,10 +337,10 @@ statement:
 #endif
 			$3.type = IS_STRING;
 			if (parsing_mode==PARSING_MODE_CFG) {
-				hash_update(active_hash_table, $1.value.str.val, $1.value.str.len+1, &$3, sizeof(pval), NULL);
+				_php3_hash_update(active__php3_hash_table, $1.value.str.val, $1.value.str.len+1, &$3, sizeof(pval), NULL);
 			} else if (parsing_mode==PARSING_MODE_BROWSCAP) {
 				php3_str_tolower($1.value.str.val,$1.value.str.len);
-				hash_update(current_section->value.ht, $1.value.str.val, $1.value.str.len+1, &$3, sizeof(pval), NULL);
+				_php3_hash_update(current_section->value.ht, $1.value.str.val, $1.value.str.len+1, &$3, sizeof(pval), NULL);
 			}
 			free($1.value.str.val);
 		}
@@ -359,14 +359,14 @@ statement:
 
 				/*printf("'%s' (%d)\n",$1.value.str.val,$1.value.str.len+1);*/
 				tmp.value.ht = (HashTable *) malloc(sizeof(HashTable));
-				hash_init(tmp.value.ht, 0, NULL, (void (*)(void *))yystype_config_destructor, 1);
+				_php3_hash_init(tmp.value.ht, 0, NULL, (void (*)(void *))yystype_config_destructor, 1);
 				tmp.type = IS_OBJECT;
-				hash_update(active_hash_table, $1.value.str.val, $1.value.str.len+1, (void *) &tmp, sizeof(pval), (void **) &current_section);
+				_php3_hash_update(active__php3_hash_table, $1.value.str.val, $1.value.str.len+1, (void *) &tmp, sizeof(pval), (void **) &current_section);
 				tmp.value.str.val = php3_strndup($1.value.str.val,$1.value.str.len);
 				tmp.value.str.len = $1.value.str.len;
 				tmp.type = IS_STRING;
 				convert_browscap_pattern(&tmp);
-				hash_update(current_section->value.ht,"browser_name_pattern",sizeof("browser_name_pattern"),(void *) &tmp, sizeof(pval), NULL);
+				_php3_hash_update(current_section->value.ht,"browser_name_pattern",sizeof("browser_name_pattern"),(void *) &tmp, sizeof(pval), NULL);
 			}
 			free($1.value.str.val);
 		}

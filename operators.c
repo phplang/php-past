@@ -29,7 +29,7 @@
  */
 
 
-/* $Id: operators.c,v 1.90 1998/06/05 07:11:00 andi Exp $ */
+/* $Id: operators.c,v 1.93 1998/07/03 06:21:26 zeev Exp $ */
 
 #ifdef THREAD_SAFE
 #include "tls.h"
@@ -104,7 +104,7 @@ PHPAPI void convert_to_long_base(pval *op, int base)
 			break;
 		case IS_ARRAY:
 		case IS_OBJECT:
-			tmp = (hash_num_elements(op->value.ht)?1:0);
+			tmp = (_php3_hash_num_elements(op->value.ht)?1:0);
 			yystype_destructor(op _INLINE_TLS);
 			op->value.lval = tmp;
 			op->type = IS_LONG;
@@ -143,7 +143,7 @@ PHPAPI void convert_to_double(pval *op)
 			break;
 		case IS_ARRAY:
 		case IS_OBJECT:
-			tmp = (hash_num_elements(op->value.ht)?1:0);
+			tmp = (_php3_hash_num_elements(op->value.ht)?1:0);
 			yystype_destructor(op _INLINE_TLS);
 			op->value.dval = tmp;
 			op->type = IS_DOUBLE;
@@ -185,7 +185,7 @@ PHPAPI void convert_to_boolean_long(pval *op)
 			break;
 		case IS_ARRAY:
 		case IS_OBJECT:
-			tmp = (hash_num_elements(op->value.ht)?1:0);
+			tmp = (_php3_hash_num_elements(op->value.ht)?1:0);
 			yystype_destructor(op _INLINE_TLS);
 			op->value.lval = tmp;
 			op->type = IS_LONG;
@@ -254,14 +254,14 @@ static void convert_scalar_to_array(pval *op,int type)
 	pval tmp = *op;
 	
 	op->value.ht = (HashTable *) emalloc(sizeof(HashTable));
-	hash_init(op->value.ht, 0, NULL, pval_DESTRUCTOR, 0);
+	_php3_hash_init(op->value.ht, 0, NULL, pval_DESTRUCTOR, 0);
 	switch (type) {
 		case IS_ARRAY:
-			hash_index_update(op->value.ht, 0, (void *) &tmp, sizeof(pval), NULL);
+			_php3_hash_index_update(op->value.ht, 0, (void *) &tmp, sizeof(pval), NULL);
 			op->type = IS_ARRAY;
 			break;
 		case IS_OBJECT:
-			hash_update(op->value.ht, "scalar", sizeof("scalar"), (void *) &tmp, sizeof(pval), NULL);
+			_php3_hash_update(op->value.ht, "scalar", sizeof("scalar"), (void *) &tmp, sizeof(pval), NULL);
 			op->type = IS_OBJECT;
 			break;
 	}
@@ -308,7 +308,7 @@ int add_function(pval *result, pval *op1, pval *op2 INLINE_TLS)
 	if (op1->type == IS_ARRAY && op2->type == IS_ARRAY) {
 		pval tmp;
 		
-		hash_merge(op1->value.ht,op2->value.ht,(void (*)(void *pData)) yystype_copy_constructor, (void *) &tmp, sizeof(pval));
+		_php3_hash_merge(op1->value.ht,op2->value.ht,(void (*)(void *pData)) yystype_copy_constructor, (void *) &tmp, sizeof(pval));
 		*result = *op1;
 		yystype_destructor(op2 _INLINE_TLS);
 		return SUCCESS;
@@ -676,6 +676,27 @@ int bitwise_xor_function(pval *result, pval *op1, pval *op2 INLINE_TLS)
 	result->value.lval = op1->value.lval ^ op2->value.lval;
 	return SUCCESS;
 }
+
+
+int shift_left_function(pval *result, pval *op1, pval *op2 INLINE_TLS)
+{
+	convert_to_long(op1);
+	convert_to_long(op2);
+	result->value.lval = op1->value.lval << op2->value.lval;
+	result->type = IS_LONG;
+	return SUCCESS;
+}
+
+
+int shift_right_function(pval *result, pval *op1, pval *op2 INLINE_TLS)
+{
+	convert_to_long(op1);
+	convert_to_long(op2);
+	result->value.lval = op1->value.lval >> op2->value.lval;
+	result->type = IS_LONG;
+	return SUCCESS;
+}
+
 
 int add_char_to_string(pval *result, pval *op1, pval *op2 INLINE_TLS)
 {

@@ -59,7 +59,7 @@ static int browser_reg_compare(pval *browser)
 	if (GLOBAL(found_browser_entry)) { /* already found */
 		return 0;
 	}
-	hash_find(browser->value.ht,"browser_name_pattern",sizeof("browser_name_pattern"),(void **) &browser_name);
+	_php3_hash_find(browser->value.ht,"browser_name_pattern",sizeof("browser_name_pattern"),(void **) &browser_name);
 	if (!strchr(browser_name->value.str.val,'*')) {
 		return 0;
 	}
@@ -84,7 +84,7 @@ void php3_get_browser(INTERNAL_FUNCTION_PARAMETERS)
 	
 	switch(ARG_COUNT(ht)) {
 		case 0:
-			if (hash_find(&GLOBAL(symbol_table), "HTTP_USER_AGENT", sizeof("HTTP_USER_AGENT"), (void **) &agent_name)==FAILURE) {
+			if (_php3_hash_find(&GLOBAL(symbol_table), "HTTP_USER_AGENT", sizeof("HTTP_USER_AGENT"), (void **) &agent_name)==FAILURE) {
 				agent_name = &tmp;
 				var_reset(agent_name);
 			}
@@ -101,14 +101,14 @@ void php3_get_browser(INTERNAL_FUNCTION_PARAMETERS)
 	
 	convert_to_string(agent_name);
 
-	if (hash_find(&GLOBAL(browser_hash), agent_name->value.str.val, agent_name->value.str.len+1, (void **) &agent)==FAILURE) {
+	if (_php3_hash_find(&GLOBAL(browser_hash), agent_name->value.str.val, agent_name->value.str.len+1, (void **) &agent)==FAILURE) {
 		GLOBAL(lookup_browser_name) = agent_name->value.str.val;
 		GLOBAL(found_browser_entry) = NULL;
-		hash_apply(&GLOBAL(browser_hash),(int (*)(void *)) browser_reg_compare);
+		_php3_hash_apply(&GLOBAL(browser_hash),(int (*)(void *)) browser_reg_compare);
 		
 		if (GLOBAL(found_browser_entry)) {
 			agent = GLOBAL(found_browser_entry);
-		} else if (hash_find(&GLOBAL(browser_hash), "Default Browser", sizeof("Default Browser"), (void **) &agent)==FAILURE) {
+		} else if (_php3_hash_find(&GLOBAL(browser_hash), "Default Browser", sizeof("Default Browser"), (void **) &agent)==FAILURE) {
 			RETURN_FALSE;
 		}
 	}
@@ -118,11 +118,11 @@ void php3_get_browser(INTERNAL_FUNCTION_PARAMETERS)
 	yystype_copy_constructor(return_value);
 	return_value->value.ht->pDestructor = pval_DESTRUCTOR;
 
-	while (hash_find(agent->value.ht, "parent", sizeof("parent"), (void **) &agent_name)==SUCCESS) {
-		if (hash_find(&GLOBAL(browser_hash), agent_name->value.str.val, agent_name->value.str.len+1, (void **) &agent)==FAILURE) {
+	while (_php3_hash_find(agent->value.ht, "parent", sizeof("parent"), (void **) &agent_name)==SUCCESS) {
+		if (_php3_hash_find(&GLOBAL(browser_hash), agent_name->value.str.val, agent_name->value.str.len+1, (void **) &agent)==FAILURE) {
 			break;
 		}
-		hash_merge(return_value->value.ht,agent->value.ht,(void (*)(void *pData)) yystype_copy_constructor, (void *) &tmp, sizeof(pval));
+		_php3_hash_merge(return_value->value.ht,agent->value.ht,(void (*)(void *pData)) yystype_copy_constructor, (void *) &tmp, sizeof(pval));
 	}
 }
 

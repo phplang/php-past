@@ -78,7 +78,7 @@ static void _php3_htmlentities(INTERNAL_FUNCTION_PARAMETERS, int all)
 	new = emalloc (maxlen);
 	len = 0;
 
-	old = arg->value.str.val;
+	old = (unsigned char *)arg->value.str.val;
 	i = arg->value.str.len;
 	while (i--) {
 		if (len + 9 > maxlen)

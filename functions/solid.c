@@ -97,10 +97,10 @@ static void _close_solidconn(SQLConn *conn)
 #if 0
 	list_entry *le2;
 	SQLResult *res;
-	int i, nument = hash_num_elements(&list);
+	int i, nument = _php3_hash_num_elements(&list);
 
 	for (i = 0; i < nument; i++) {
-		if (hash_index_find(&list, i, (void **)&le2) == FAILURE ||
+		if (_php3_hash_index_find(&list, i, (void **)&le2) == FAILURE ||
 			le2->type != php3_solid_module.le_result) {
 			continue;
 		}

@@ -28,7 +28,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: dns.c,v 1.43 1998/06/05 21:46:28 cslawi Exp $ */
+/* $Id: dns.c,v 1.46 1998/06/25 21:41:21 rasmus Exp $ */
 
 #ifdef THREAD_SAFE
 #include "tls.h"
@@ -138,7 +138,9 @@ void php3_gethostbynamel(INTERNAL_FUNCTION_PARAMETERS)
 
 	hp = gethostbyname(arg->value.str.val);
 	if (hp == NULL || hp->h_addr_list == NULL) {
+#if DEBUG
 		php3_error(E_WARNING, "Unable to resolve %s\n", arg->value.str.val);
+#endif
 		return;
 	}
 
@@ -157,7 +159,9 @@ char *_php3_gethostbyname(char *name)
 
 	hp = gethostbyname(name);
 	if (!hp || !hp->h_addr_list) {
+#if DEBUG
 		php3_error(E_WARNING, "Unable to resolve %s\n", name);
+#endif
 		return estrdup(name);
 	}
 	memcpy(&in.s_addr, *(hp->h_addr_list), sizeof(in.s_addr));
@@ -306,11 +310,11 @@ void php3_getmxrr(INTERNAL_FUNCTION_PARAMETERS)
 		tmp1.value.str.len = strlen(buf);
 		tmp1.value.str.val = estrndup(buf,tmp1.value.str.len);
 		tmp1.type = IS_STRING;
-		hash_next_index_insert(mx_list->value.ht, (void *)&tmp1, sizeof(pval), NULL);
+		_php3_hash_next_index_insert(mx_list->value.ht, (void *)&tmp1, sizeof(pval), NULL);
 		if ( need_weight ) {
 			tmp2.value.lval = (long)weight;
 			tmp2.type = IS_LONG;
-			hash_next_index_insert(weight_list->value.ht, (void *)&tmp2, sizeof(pval), NULL);
+			_php3_hash_next_index_insert(weight_list->value.ht, (void *)&tmp2, sizeof(pval), NULL);
 		}
 	}
 	RETURN_TRUE;

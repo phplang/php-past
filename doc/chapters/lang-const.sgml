@@ -302,13 +302,13 @@ A = 5
      the alternative format:
      <informalexample><programlisting>
 if ($a==5):
-    print "a equals to 5";
+    print "a equals 5";
     print "...";
 elseif ($a==6):
-    print "a equals to 6";
+    print "a equals 6";
     print "!!!";
-else
-    print "a is not 5 nor 6";
+else:
+    print "a is neither 5 nor 6";
 endif;
 </programlisting></informalexample>
 
