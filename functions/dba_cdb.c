@@ -27,7 +27,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: dba_cdb.c,v 1.10 1999/05/10 11:52:05 sas Exp $ */
+/* $Id: dba_cdb.c,v 1.11 1999/06/22 20:25:26 jimjag Exp $ */
 
 #include "php.h"
 
@@ -62,7 +62,7 @@ DBA_OPEN_FUNC(cdb)
 		/* currently not supported: */
 #if 0
 		case DBA_WRITER: 
-			gmode = O_RDWR | O_CREAT; break;
+			gmode = O_RDWR; break;
 #endif
 		default: 
 			return FAILURE;

@@ -28,7 +28,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: tls.h,v 1.61 1999/01/01 17:58:52 zeev Exp $ */
+/* $Id: tls.h,v 1.62 1999/06/16 11:34:13 ssb Exp $ */
 
 #ifndef _TLS_H_
 #define _TLS_H_
@@ -163,7 +163,7 @@ typedef struct php3_global_struct{
 	int CurrentStatLength;
 #endif
 	struct stat sb;
-#if HAVE_SYMLINK
+#ifdef HAVE_SYMLINK
 	struct stat lsb;
 #endif
 	/*formated_print.c*/

@@ -1,0 +1,315 @@
+<HTML
+><HEAD
+><TITLE
+>setcookie</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+REL="HOME"
+TITLE="PHP3 Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Functions related to HTTP"
+HREF="ref.http.html"><LINK
+REL="PREVIOUS"
+TITLE="header"
+HREF="function.header.html"><LINK
+REL="NEXT"
+TITLE="Hyperwave functions"
+HREF="ref.hyperwave.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP3 Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.header.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="ref.hyperwave.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="FUNCTION.SETCOOKIE"
+>setcookie</A
+></H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN6682"
+></A
+>setcookie -- Send a cookie</DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN6685"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><CODE
+CLASS="FUNCDEF"
+>int setcookie</CODE
+>(string name, string value, int expire, string path, string domain, int secure);<P
+></P
+></DIV
+><P
+>     <A
+HREF="function.setcookie.html"
+><B
+CLASS="FUNCTION"
+>SetCookie()</B
+></A
+> defines a cookie to be sent along
+     with the rest of the header information.  Cookies must be sent
+     <I
+CLASS="EMPHASIS"
+>before</I
+> any other headers are sent (this is a
+     restriction of Cookies, not PHP). This requires you to place
+     calls to this function before any <TT
+CLASS="LITERAL"
+>&lt;html&#62;</TT
+> or
+     <TT
+CLASS="LITERAL"
+>&lt;head&#62;</TT
+> tags.
+     </P
+><P
+>     All the arguments except the <TT
+CLASS="PARAMETER"
+><I
+>name</I
+></TT
+> argument are 
+     optional.  If only the name argument is present, the cookie by that name will
+     be deleted from the remote client.  You may also replace any
+     argument with an empty string (<I
+CLASS="EMPHASIS"
+>&quot;&quot;</I
+>)
+     in order to skip that argument.  The
+     <TT
+CLASS="PARAMETER"
+><I
+>expire</I
+></TT
+> and <TT
+CLASS="PARAMETER"
+><I
+>secure</I
+></TT
+>
+     arguments are integers and cannot be skipped with an empty
+     string.  Use a zero (<I
+CLASS="EMPHASIS"
+>0</I
+>) instead.  The
+     <TT
+CLASS="PARAMETER"
+><I
+>expire</I
+></TT
+> argument is a regular Unix time
+     integer as returned by the <A
+HREF="function.time.html"
+><B
+CLASS="FUNCTION"
+>time()</B
+></A
+> or
+     <A
+HREF="function.mktime.html"
+><B
+CLASS="FUNCTION"
+>mktime()</B
+></A
+> functions.  The
+     <TT
+CLASS="PARAMETER"
+><I
+>secure</I
+></TT
+> indicates that the cookie should
+     only be transmitted over a secure HTTPS connection.  
+     </P
+><P
+>  
+     Common Pitfalls:
+     </P
+><P
+>     Cookies will not become visable until the next loading of a page that 
+     the cookie should be visable for. 
+     </P
+><P
+>     Multiple calls to setcookie in the same script will be performed in the reverse
+     order. If you are trying to delete one cookie before inserting another you 
+     should put the insert before the delete. 
+     </P
+><P
+>     Some examples follow:
+     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="EXAMPLE"
+><P
+><B
+>Example 1. SetCookie examples</B
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>SetCookie("TestCookie","Test Value");
+SetCookie("TestCookie",$value,time()+3600);  /* expire in 1 hour */
+SetCookie("TestCookie",$value,time()+3600,"/~rasmus/",".utoronto.ca",1);</PRE
+></DIV
+></TD
+></TR
+></TABLE
+>
+    </P
+><P
+>     Note that the value portion of the cookie will automatically be
+     urlencoded when you send the cookie, and when it is received, it
+     is automatically decoded and assigned to a variable by the same
+     name as the cookie name.  To see the contents of our test
+     cookie in a script, simply use one of the following examples:
+<DIV
+CLASS="INFORMALEXAMPLE"
+><P
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>echo $TestCookie;
+echo $HTTP_COOKIE_VARS["TestCookie"];</PRE
+><P
+></P
+></DIV
+>
+    </P
+><P
+>     For more information on cookies, see Netscape's cookie
+     specification at <A
+HREF="http://www.netscape.com/newsref/std/cookie_spec.html"
+TARGET="_top"
+>http://www.netscape.com/newsref/std/cookie_spec.html</A
+>.
+        </P
+><P
+>         
+	</P
+><P
+>	 Microsoft Internet Explorer 4 with Service Pack 1 applied does
+	 not correctly deal with cookies that have their path parameter
+	 set.
+	</P
+><P
+>	 Netscape Communicator 4.05 and Microsoft Internet Explorer 3.x
+ 	 appear to handle cookies incorrectly when the path and time
+	 are not set.
+   </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.header.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="ref.hyperwave.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>header</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.http.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Hyperwave functions</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

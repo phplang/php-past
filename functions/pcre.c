@@ -27,7 +27,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: pcre.c,v 1.8 1999/06/04 14:03:33 andrey Exp $ */
+/* $Id: pcre.c,v 1.10 1999/06/09 21:22:10 andrey Exp $ */
 
 #include "php.h"
 
@@ -448,15 +448,15 @@ PHP_FUNCTION(preg_match_all)
 /* {{{ int _pcre_get_backref(const char *walk, int *backref) */
 static int _pcre_get_backref(const char *walk, int *backref)
 {
-	if (*walk < '0' && *walk > '9')
-		return 0;
-	else
+	if (*walk && *walk >= '0' && *walk <= '9')
 		*backref = *walk - '0';
+	else
+		return 0;
 	
-	if (walk[1] >= '0' && walk[1] <= '9')
+	if (walk[1] && walk[1] >= '0' && walk[1] <= '9')
 		*backref = *backref * 10 + walk[1] - '0';
 
-	return 1;	
+	return 1;
 }
 /* }}} */
 
@@ -784,9 +784,9 @@ PHP_FUNCTION(preg_split)
 				limit_val--;
 		}
 		else { /* if no match */
-			/* Add the last piece to the return value, if there
-			   were matches before */
-			if (piece > subject->value.str.val)
+			/* Add the last piece to the return value, if there is
+			   something left */
+			if (limit_val != 0)
 				add_next_index_stringl(return_value,
 									   piece ,
 									   subject_end-piece, 1);

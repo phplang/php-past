@@ -28,7 +28,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: basic_functions.c,v 1.264 1999/06/02 23:53:16 cmv Exp $ */
+/* $Id: basic_functions.c,v 1.267 1999/06/20 17:40:05 jim Exp $ */
 #ifdef THREAD_SAFE
 #include "tls.h"
 #endif
@@ -44,8 +44,8 @@
 #include <math.h>
 #include <time.h>
 #include <stdio.h>
-#if HAVE_UNISTD_H
-#include <unistd.h>
+#ifdef HAVE_UNISTD_H
+# include <unistd.h>
 #endif
 #if HAVE_STRING_H
 #include <string.h>
@@ -122,8 +122,6 @@ function_entry basic_functions[] = {
 	{"sizeof",		php3_count,					first_arg_allow_ref},
 	{"count",		php3_count,					first_arg_allow_ref},
 	{"time",		php3_time,					NULL},
-	{"easter_date",		php3_easter_date,			NULL},
-	{"easter_days",		php3_easter_days,			NULL},
 	{"mktime",		php3_mktime,				NULL},
 	{"gmmktime",	php3_gmmktime,				NULL},
 #if HAVE_STRFTIME
@@ -171,6 +169,7 @@ function_entry basic_functions[] = {
 	{"parse_str",	php3_parsestr,				NULL},
 	{"phpinfo",		php3_info,					NULL},
 	{"phpversion",	php3_version,				NULL},
+	PHP_FE(extension_loaded,				NULL)
 	{"strlen",		php3_strlen,				NULL},
 	{"strcmp",		php3_strcmp,				NULL},
 	{"strspn",		php3_strspn,				NULL},

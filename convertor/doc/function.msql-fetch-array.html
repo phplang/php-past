@@ -1,0 +1,200 @@
+<HTML
+><HEAD
+><TITLE
+>msql_fetch_array</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+REL="HOME"
+TITLE="PHP3 Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="mSQL Functions"
+HREF="ref.msql.html"><LINK
+REL="PREVIOUS"
+TITLE="msql_error"
+HREF="function.msql-error.html"><LINK
+REL="NEXT"
+TITLE="msql_fetch_field"
+HREF="function.msql-fetch-field.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP3 Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.msql-error.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.msql-fetch-field.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="FUNCTION.MSQL-FETCH-ARRAY"
+>msql_fetch_array</A
+></H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN12938"
+></A
+>msql_fetch_array -- fetch row as array</DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN12941"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><CODE
+CLASS="FUNCDEF"
+>int msql_fetch_array</CODE
+>(int query_identifier);<P
+></P
+></DIV
+><P
+>     Returns an array that corresponds to the fetched row, or false if
+     there are no more rows.
+    </P
+><P
+>     msql_fetch_array() is an extended version of
+     <A
+HREF="function.msql-fetch-row.html"
+><B
+CLASS="FUNCTION"
+>msql_fetch_row()</B
+></A
+>.  In addition to storing the
+     data in the numeric indices of the result array, it also stores
+     the data in associative indices, using the field names as keys.
+    </P
+><P
+>     Be careful if you are retrieving results from a query that may
+     return a record that contains only one field that has a value
+     of 0 (or an empty string, or NULL).
+    </P
+><P
+> 
+     An important thing to note is that using msql_fetch_array() is
+     NOT significantly slower than using
+     <A
+HREF="function.msql-fetch-row.html"
+><B
+CLASS="FUNCTION"
+>msql_fetch_row()</B
+></A
+>, while it provides a
+     significant added value.
+    </P
+><P
+> 
+     For further details, also see
+     <A
+HREF="function.msql-fetch-row.html"
+><B
+CLASS="FUNCTION"
+>msql_fetch_row()</B
+></A
+>
+
+   </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.msql-error.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.msql-fetch-field.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>msql_error</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.msql.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>msql_fetch_field</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -29,7 +29,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: apache.c,v 1.47 1999/05/11 12:11:40 rasmus Exp $ */
+/* $Id: apache.c,v 1.48 1999/06/16 11:34:17 ssb Exp $ */
 #ifdef THREAD_SAFE
 #include "tls.h"
 #endif
@@ -38,8 +38,8 @@
 #include "functions/head.h"
 
 #include <stdlib.h>
-#if HAVE_UNISTD_H
-#include <unistd.h>
+#ifdef HAVE_UNISTD_H
+# include <unistd.h>
 #endif
 #include <string.h>
 #include <errno.h>

@@ -1,0 +1,180 @@
+<HTML
+><HEAD
+><TITLE
+>msql</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+REL="HOME"
+TITLE="PHP3 Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="mSQL Functions"
+HREF="ref.msql.html"><LINK
+REL="PREVIOUS"
+TITLE="mSQL Functions"
+HREF="ref.msql.html"><LINK
+REL="NEXT"
+TITLE="msql_affected_rows"
+HREF="function.msql-affected-rows.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP3 Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="ref.msql.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.msql-affected-rows.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="FUNCTION.MSQL"
+>msql</A
+></H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN12761"
+></A
+>msql -- send mSQL query</DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN12764"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><CODE
+CLASS="FUNCDEF"
+>int msql</CODE
+>(string database, string query, int link_identifier);<P
+></P
+></DIV
+><P
+> 
+     Returns a positive mSQL query identifier to the query result, or
+     false on error.  
+    </P
+><P
+>     msql() selects a database and executes a query on it.  If the
+     optional link identifier isn't specified, the function will try
+     to find an open link to the mSQL server and if no such link is
+     found it'll try to create one as if
+     <A
+HREF="function.msql-connect.html"
+><B
+CLASS="FUNCTION"
+>msql_connect()</B
+></A
+> was called with no arguments
+     (see <A
+HREF="function.msql-connect.html"
+><B
+CLASS="FUNCTION"
+>msql_connect()</B
+></A
+>).
+
+   </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="ref.msql.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.msql-affected-rows.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>mSQL Functions</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.msql.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>msql_affected_rows</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,261 @@
+<HTML
+><HEAD
+><TITLE
+>fgets</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+REL="HOME"
+TITLE="PHP3 Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Filesystem Functions"
+HREF="ref.filesystem.html"><LINK
+REL="PREVIOUS"
+TITLE="fgetcsv"
+HREF="function.fgetcsv.html"><LINK
+REL="NEXT"
+TITLE="fgetss"
+HREF="function.fgetss.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP3 Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.fgetcsv.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.fgetss.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="FUNCTION.FGETS"
+>fgets</A
+></H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN5710"
+></A
+>fgets -- get line from file pointer</DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN5713"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><CODE
+CLASS="FUNCDEF"
+>string fgets</CODE
+>(int fp, int length);<P
+></P
+></DIV
+><P
+>     Returns a string of up to length - 1 bytes read from the file
+     pointed to by fp. Reading ends when length - 1 bytes have been
+     read, on a newline (which is included in the return value), or
+	 on EOF (whichever comes first).
+
+    </P
+><P
+>	 If an error occurs, returns false.
+    </P
+><P
+>    Common Pitfalls:
+    </P
+><P
+>         People used to the 'C' semantics of fgets should note the difference
+         in how EOF is returned.
+    </P
+><P
+>	 The file pointer must be valid, and must point to a file
+     successfully opened by <A
+HREF="function.fopen.html"
+><B
+CLASS="FUNCTION"
+>fopen()</B
+></A
+>,
+     <A
+HREF="function.popen.html"
+><B
+CLASS="FUNCTION"
+>popen()</B
+></A
+>, or <A
+HREF="function.fsockopen.html"
+><B
+CLASS="FUNCTION"
+>fsockopen()</B
+></A
+>.
+
+    </P
+><P
+>    A simple example follows:
+    <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="EXAMPLE"
+><P
+><B
+>Example 1. Reading a file line by line</B
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>$fd = fopen("/tmp/inputfile.txt", "r");
+while ($buffer = fgets($fd, 4096)) {
+  echo $buffer;
+}
+fclose($fd);</PRE
+></DIV
+></TD
+></TR
+></TABLE
+>
+    
+    </P
+><P
+> See also <A
+HREF="function.fread.html"
+><B
+CLASS="FUNCTION"
+>fread()</B
+></A
+>,
+     <A
+HREF="function.fopen.html"
+><B
+CLASS="FUNCTION"
+>fopen()</B
+></A
+>, <A
+HREF="function.popen.html"
+><B
+CLASS="FUNCTION"
+>popen()</B
+></A
+>, 
+     <A
+HREF="function.fgetc.html"
+><B
+CLASS="FUNCTION"
+>fgetc()</B
+></A
+>, and <A
+HREF="function.fsockopen.html"
+><B
+CLASS="FUNCTION"
+>fsockopen()</B
+></A
+>.
+
+   </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.fgetcsv.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.fgetss.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>fgetcsv</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.filesystem.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>fgetss</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

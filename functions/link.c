@@ -28,7 +28,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: link.c,v 1.35 1999/01/01 17:59:12 zeev Exp $ */
+/* $Id: link.c,v 1.36 1999/06/16 11:34:21 ssb Exp $ */
 #ifdef THREAD_SAFE
 #include "tls.h"
 #endif
@@ -37,8 +37,8 @@
 #include "php3_filestat.h"
 
 #include <stdlib.h>
-#if HAVE_UNISTD_H
-#include <unistd.h>
+#ifdef HAVE_UNISTD_H
+# include <unistd.h>
 #endif
 #include <sys/stat.h>
 #include <string.h>
@@ -49,12 +49,12 @@
 #include <pwd.h>
 #endif
 #endif
-#if HAVE_GRP_H
-#if MSVC5
-#include "win32/grp.h"
-#else
-#include <grp.h>
-#endif
+#ifdef HAVE_GRP_H
+# if MSVC5
+#  include "win32/grp.h"
+# else
+#  include <grp.h>
+# endif
 #endif
 #include <errno.h>
 #include <ctype.h>
@@ -66,7 +66,7 @@
    Return the target of a symbolic link */
 void php3_readlink(INTERNAL_FUNCTION_PARAMETERS)
 {
-#if HAVE_SYMLINK
+#ifdef HAVE_SYMLINK
 	pval *filename;
 	char buff[256];
 	int ret;
@@ -92,7 +92,7 @@ void php3_readlink(INTERNAL_FUNCTION_PARAMETERS)
    Returns the st_dev field of the UNIX C stat structure describing the link */
 void php3_linkinfo(INTERNAL_FUNCTION_PARAMETERS)
 {
-#if HAVE_SYMLINK
+#ifdef HAVE_SYMLINK
 	pval *filename;
 	struct stat sb;
 	int ret;
@@ -116,7 +116,7 @@ void php3_linkinfo(INTERNAL_FUNCTION_PARAMETERS)
    Create a symbolic link */
 void php3_symlink(INTERNAL_FUNCTION_PARAMETERS)
 {
-#if HAVE_SYMLINK
+#ifdef HAVE_SYMLINK
 	pval *topath, *frompath;
 	int ret;
 
@@ -144,7 +144,7 @@ void php3_symlink(INTERNAL_FUNCTION_PARAMETERS)
    Create a hard link */
 void php3_link(INTERNAL_FUNCTION_PARAMETERS)
 {
-#if HAVE_LINK
+#ifdef HAVE_LINK
 	pval *topath, *frompath;
 	int ret;
 

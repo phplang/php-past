@@ -27,7 +27,7 @@
    +----------------------------------------------------------------------+
  */
  
-/* $Id: mysql.c,v 1.181 1999/04/13 20:30:07 cslawi Exp $ */
+/* $Id: mysql.c,v 1.185 1999/06/18 12:12:28 sas Exp $ */
 
 
 /* TODO:
@@ -386,9 +386,9 @@ static void php3_mysql_do_connect(INTERNAL_FUNCTION_PARAMETERS,int persistent)
 #if APACHE
 	void (*handler) (int);
 #endif
-	char *user,*passwd,*host,*tmp;
+	char *user,*passwd,*host,*socket = NULL,*tmp;
 	char *hashed_details;
-	int hashed_details_length,port;
+	int hashed_details_length,port = 0;
 	MYSQL *mysql;
 	MySQL_TLS_VARS;
 
@@ -464,7 +464,11 @@ static void php3_mysql_do_connect(INTERNAL_FUNCTION_PARAMETERS,int persistent)
 	if (host && (tmp=strchr(host,':'))) {
 		*tmp=0;
 		tmp++;
-		port = atoi(tmp);
+		if (tmp[0] != '/') {
+			port = atoi(tmp);
+		} else {
+			socket = tmp;
+		}
 	} else {
 		port = MySQL_GLOBAL(php3_mysql_module).default_port;
 	}
@@ -497,7 +501,7 @@ static void php3_mysql_do_connect(INTERNAL_FUNCTION_PARAMETERS,int persistent)
 		mysql = (MYSQL *) malloc(sizeof(MYSQL));
 #if MYSQL_VERSION_ID > 32199 /* this lets us set the port number */
 		mysql_init(mysql);
-		if (mysql_real_connect(mysql,host,user,passwd,NULL,port,NULL,0)==NULL) {
+		if (mysql_real_connect(mysql,host,user,passwd,NULL,port,socket,0)==NULL) {
 #else
 		if (mysql_connect(mysql,host,user,passwd)==NULL) {
 #endif
@@ -535,7 +539,7 @@ static void php3_mysql_do_connect(INTERNAL_FUNCTION_PARAMETERS,int persistent)
 				signal(SIGPIPE,handler);
 #endif
 #if MYSQL_VERSION_ID > 32199 /* this lets us set the port number */
-				if (mysql_real_connect(le->ptr,host,user,passwd,NULL,port,NULL,0)==NULL) {
+				if (mysql_real_connect(le->ptr,host,user,passwd,NULL,port,socket,0)==NULL) {
 #else
 				if (mysql_connect(le->ptr,host,user,passwd)==NULL) {
 #endif
@@ -591,7 +595,7 @@ static void php3_mysql_do_connect(INTERNAL_FUNCTION_PARAMETERS,int persistent)
 		mysql = (MYSQL *) emalloc(sizeof(MYSQL));
 #if MYSQL_VERSION_ID > 32199 /* this lets us set the port number */
 		mysql_init(mysql);
-		if (mysql_real_connect(mysql,host,user,passwd,NULL,port,NULL,0)==NULL) {
+		if (mysql_real_connect(mysql,host,user,passwd,NULL,port,socket,0)==NULL) {
 #else
 		if (mysql_connect(mysql,host,user,passwd)==NULL) {
 #endif
@@ -1497,10 +1501,10 @@ static void php3_mysql_fetch_hash(INTERNAL_FUNCTION_PARAMETERS, int result_type)
 			}
 			if (result_type & MYSQL_NUM) {
 				add_index_stringl(return_value, i, data, data_len, should_copy);
+				should_copy=1;
 			}
 			if (result_type & MYSQL_ASSOC) {
 				add_assoc_stringl(return_value, mysql_field->name, data, data_len, should_copy);
-				should_copy=1;
 			}
 		} else {
 			/* NULL field, don't set it */

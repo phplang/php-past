@@ -26,7 +26,7 @@
    | Authors: Jim Winstead <jimw@php.net>                                 |
    +----------------------------------------------------------------------+
  */
-/* $Id: pageinfo.c,v 1.40 1999/01/01 17:59:14 zeev Exp $ */
+/* $Id: pageinfo.c,v 1.41 1999/06/16 11:34:22 ssb Exp $ */
 #ifdef THREAD_SAFE
 #include "tls.h"
 #endif
@@ -42,8 +42,8 @@
 #include <pwd.h>
 #endif
 #endif
-#if HAVE_UNISTD_H
-#include <unistd.h>
+#ifdef HAVE_UNISTD_H
+# include <unistd.h>
 #endif
 #include <sys/stat.h>
 #if MSVC5

@@ -27,7 +27,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: dba_ndbm.c,v 1.12 1999/05/18 03:15:47 sas Exp $ */
+/* $Id: dba_ndbm.c,v 1.13 1999/06/22 20:25:26 jimjag Exp $ */
 
 #include "php.h"
 
@@ -54,6 +54,9 @@ DBA_OPEN_FUNC(ndbm)
 			gmode = O_RDONLY;
 			break;
 		case DBA_WRITER:
+			gmode = O_RDWR;
+			break;
+		case DBA_CREAT:
 			gmode = O_RDWR | O_CREAT;
 			break;
 		case DBA_TRUNC:

@@ -1,0 +1,208 @@
+<HTML
+><HEAD
+><TITLE
+>isset</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+REL="HOME"
+TITLE="PHP3 Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Variable functions"
+HREF="ref.var.html"><LINK
+REL="PREVIOUS"
+TITLE="is_string"
+HREF="function.is-string.html"><LINK
+REL="NEXT"
+TITLE="settype"
+HREF="function.settype.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP3 Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.is-string.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.settype.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="FUNCTION.ISSET"
+>isset</A
+></H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN20400"
+></A
+>isset -- determine whether a variable is set</DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN20403"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><CODE
+CLASS="FUNCDEF"
+>int isset</CODE
+>(mixed var);<P
+></P
+></DIV
+><P
+>     Returns true if <TT
+CLASS="PARAMETER"
+><I
+>var</I
+></TT
+> exists;
+     false otherwise.
+    
+    </P
+><P
+>     If a variable has been unset with <A
+HREF="function.unset.html"
+><B
+CLASS="FUNCTION"
+>unset()</B
+></A
+>,
+     it will no longer be <B
+CLASS="FUNCTION"
+>isset()</B
+>.
+    <DIV
+CLASS="INFORMALEXAMPLE"
+><P
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>$a = "test";
+echo isset($a); // true
+unset($a);
+echo isset($a); // false</PRE
+><P
+></P
+></DIV
+>
+    
+    </P
+><P
+>     See also <A
+HREF="function.empty.html"
+><B
+CLASS="FUNCTION"
+>empty()</B
+></A
+> and <A
+HREF="function.unset.html"
+><B
+CLASS="FUNCTION"
+>unset()</B
+></A
+>.
+
+   </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.is-string.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.settype.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>is_string</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.var.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>settype</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

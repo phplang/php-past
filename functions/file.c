@@ -26,7 +26,7 @@
    | Authors: Rasmus Lerdorf <rasmus@lerdorf.on.ca>                       |
    +----------------------------------------------------------------------+
  */
-/* $Id: file.c,v 1.214 1999/05/28 14:52:46 sas Exp $ */
+/* $Id: file.c,v 1.221 1999/06/24 14:40:32 sas Exp $ */
 #ifdef THREAD_SAFE
 #include "tls.h"
 #endif
@@ -62,15 +62,15 @@
 #include <pwd.h>
 #endif
 #endif
-#if HAVE_SYS_TIME_H
-#include <sys/time.h>
+#ifdef HAVE_SYS_TIME_H
+# include <sys/time.h>
 #endif
-#if MSVC5
-#include <winsock.h>
+#if WIN32|WINNT
+# include <winsock.h>
 #else
-#include <netinet/in.h>
-#include <netdb.h>
-#include <arpa/inet.h>
+# include <netinet/in.h>
+# include <netdb.h>
+# include <arpa/inet.h>
 #endif
 #include "snprintf.h"
 #include "fsock.h"
@@ -78,15 +78,13 @@
 
 #include "php_compat.h"
 
-#if HAVE_SYS_FILE_H
-#include <sys/file.h>
+#ifdef HAVE_SYS_FILE_H
+# include <sys/file.h>
 #endif
 
 #if MISSING_FCLOSE_DECL
 extern int fclose();
 #endif
-
-static void _php3_closesocket(int *);
 
 #ifndef THREAD_SAFE
 static int fgetss_state = 0;
@@ -215,7 +213,7 @@ function_entry php3_file_functions[] = {
 	PHP_FE(fgetcsv, NULL)
 	PHP_FE(get_meta_tags, NULL)
 	PHP_FE(set_socket_blocking, NULL)
-#if (0 && HAVE_SYS_TIME_H && HAVE_SETSOCKOPT && defined(SO_SNDTIMEO) && defined(SO_RCVTIMEO))
+#if (0 && defined(HAVE_SYS_TIME_H) && HAVE_SETSOCKOPT && defined(SO_SNDTIMEO) && defined(SO_RCVTIMEO))
 	PHP_FE(set_socket_timeout, NULL)
 #endif
 	{NULL, NULL, NULL}
@@ -317,6 +315,7 @@ void php3_get_meta_tags(INTERNAL_FUNCTION_PARAMETERS) {
 
 				/* get the variable value from the content attribute of the meta tag */
 				tmp=php3i_stristr(buf,"content=\"");
+				val = NULL;
 				if(tmp) {
 					tmp+=9;
 					end=strstr(tmp,"\"");
@@ -419,15 +418,8 @@ TLS_VARS;
 }
 
 static void _php3_closesocket(int *sock) {
-	int socketd=*sock;
-	if (socketd){
-		_php3_sock_destroy(socketd);
-		if(!_php3_is_persistent_sock(socketd)) {
-#if HAVE_SHUTDOWN
-			shutdown(socketd, 0);
-#endif
-			SOCK_FCLOSE(socketd);
-		}
+	if(sock) {
+		SOCK_FCLOSE(*sock);
 		efree(sock);
 	}
 }
@@ -472,6 +464,9 @@ void php3_tempnam(INTERNAL_FUNCTION_PARAMETERS) {
 
 	t = tempnam(d,p);
 	efree(d);
+	if(!t) {
+		RETURN_FALSE;
+	}
 	RETURN_STRING(t,1);
 }
 /* }}} */
@@ -667,13 +662,42 @@ void php3_feof(INTERNAL_FUNCTION_PARAMETERS) {
 }
 /* }}} */
 
+PHPAPI int _php3_set_sock_blocking(int socketd, int block)
+{
+	int ret = SUCCESS;
+	int flags;
+	int myflag = 0;
+	
+#if WIN32|WINNT
+	/* with ioctlsocket, a non-zero sets nonblocking, a zero sets blocking */
+	flags=block;
+	if (ioctlsocket(socketd,FIONBIO,&flags)==SOCKET_ERROR){
+		php3_error(E_WARNING,"%s",WSAGetLastError());
+		ret = FALSE;
+	}
+#else
+	flags = fcntl(socketd, F_GETFL);
+#ifdef O_NONBLOCK
+	myflag = O_NONBLOCK; /* POSIX version */
+#elif defined(O_NDELAY)
+	myflag = O_NDELAY;   /* old non-POSIX version */
+#endif
+	if(block) {
+		flags |= myflag;
+	} else {
+		flags &= ~myflag;
+	}
+	fcntl(socketd,F_SETFL,flags);
+#endif
+	return ret;
+}
+
 /* {{{ proto int set_socket_blocking(int socket descriptor, int mode)
 Set blocking/non-blocking mode on a socket */
 void php3_set_socket_blocking(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *arg1, *arg2;
 	int id, type, block;
-	int flags;
 	int socketd=0, *sock;
 	TLS_VARS;
 	
@@ -691,47 +715,15 @@ void php3_set_socket_blocking(INTERNAL_FUNCTION_PARAMETERS)
 		RETURN_FALSE;
 	}
 	socketd=*sock;
-	_php3_sock_set_blocking(socketd, block == 0 ? 0 : 1);
-#if WIN32|WINNT
-	/* with ioctlsocket, a non-zero sets nonblocking, a zero sets blocking */
-	flags=block;
-	if (ioctlsocket(socketd,FIONBIO,&flags)==SOCKET_ERROR){
-		php3_error(E_WARNING,"%s",WSAGetLastError());
+	if(_php3_set_sock_blocking(socketd, block) == FAILURE)
 		RETURN_FALSE;
-	} else {
-		RETURN_TRUE;
-	}
-#else
-	flags = fcntl(socketd, F_GETFL);
-# ifdef O_NONBLOCK
-	/* POSIX version */
-	if (block) {
-		if ((flags & O_NONBLOCK)) {
-			flags ^= O_NONBLOCK;
-		}
-	} else {
-		if (!(flags & O_NONBLOCK)) {
-			flags |= O_NONBLOCK;
-		}
-	}
-# else
-#  ifdef O_NDELAY
-	/* old non-POSIX version */
-	if (block) {
-		flags |= O_NDELAY;
-	} else {
-		flags ^= O_NDELAY;
-	}
-#  endif
-# endif
-	fcntl(socketd,F_SETFL,flags);
-	/* FIXME: Shouldnt we return true on this function? */
-#endif
+	_php3_sock_set_blocking(socketd, block == 0 ? 0 : 1);
+	RETURN_TRUE;
 }
 /* }}} */
 
 
-#if (0 && HAVE_SYS_TIME_H && HAVE_SETSOCKOPT && defined(SO_SNDTIMEO) && defined(SO_RCVTIMEO))
+#if (0 && defined(HAVE_SYS_TIME_H) && HAVE_SETSOCKOPT && defined(SO_SNDTIMEO) && defined(SO_RCVTIMEO))
 /* this doesn't work, as it appears those properties are read-only :( */
 void php3_set_socket_timeout(INTERNAL_FUNCTION_PARAMETERS)
 {
@@ -844,7 +836,6 @@ void php3_fgetc(INTERNAL_FUNCTION_PARAMETERS) {
 		return_value->value.str.len = 1; 
 		return_value->type = IS_STRING;
 	}
-	return;
 }
 /* }}} */
 
@@ -1263,17 +1254,6 @@ void php3_fpassthru(INTERNAL_FUNCTION_PARAMETERS) {
 			size += b ;
 		}
 	}
-/*
-	if (issock) { 
-#if WIN32|WINNT
-		closesocket(socketd);
-#else
-		close(socketd);
-#endif
-	} else {
-		fclose(fp);
-	}
-*/
 	php3_list_delete(id);
 	RETURN_LONG(size);
 }
@@ -1475,20 +1455,41 @@ PHP_FUNCTION(flock)
    get line from file pointer and parse for CSV fields */
 void php3_fgetcsv(INTERNAL_FUNCTION_PARAMETERS) {
 	char *temp, *tptr, *bptr;
-	char delimiter = ',';	/* allow this to be set as parameter if required in future version? */
+	char delimiter = ',';	/* allow this to be set as parameter */
 
 	/* first section exactly as php3_fgetss */
 
-	pval *fd, *bytes;
+	pval *fd, *bytes, *p_delim;
 	FILE *fp;
 	int id, len, type;
-	char *buf;
+	char *buf, *lineEnd;
 	int issock=0;
 	int *sock,socketd=0;
 	TLS_VARS;
 
-	if (ARG_COUNT(ht) != 2 || getParameters(ht, 2, &fd, &bytes) == FAILURE) {
-		WRONG_PARAM_COUNT;
+	switch(ARG_COUNT(ht)) {
+		case 2:
+			if (getParameters(ht, 2, &fd, &bytes) == FAILURE) {
+				WRONG_PARAM_COUNT;
+			}
+		break;
+		
+		case 3:
+			if (getParameters(ht, 3, &fd, &bytes, &p_delim) == FAILURE) {
+				WRONG_PARAM_COUNT;
+			}
+			convert_to_string(p_delim);
+			/* Make sure that there is at least one character in string */
+			if (p_delim->value.str.len < 1) {
+				WRONG_PARAM_COUNT;
+			}
+			/* use first character from string */
+			delimiter = p_delim->value.str.val[0];
+		break;
+		
+		default:
+			WRONG_PARAM_COUNT;
+		break;
 	}
 
 	convert_to_long(fd);
@@ -1518,15 +1519,18 @@ void php3_fgetcsv(INTERNAL_FUNCTION_PARAMETERS) {
 
 	/* Now into new section that parses buf for comma/quote delimited fields */
 
-	/* Strip trailing space from buf */
+	/* Strip trailing space from buf, saving end of line in case required for quoted field */
 
+	lineEnd = emalloc(sizeof(char) * (len + 1));
 	bptr = buf;
 	tptr = buf + strlen(buf) -1;
-	while ( isspace(*tptr) && (tptr > bptr) ) *tptr--=0;
+	while ( isspace(*tptr) && (tptr > bptr) ) tptr--;
+	tptr++;
+	strcpy(lineEnd, tptr);
 
 	/* add single space - makes it easier to parse trailing null field */
-	*++tptr = ' ';
-	*++tptr = 0;
+	*tptr++ = ' ';
+	*tptr = 0;
 
 	/* reserve workspace for building each individual field */
 
@@ -1535,6 +1539,7 @@ void php3_fgetcsv(INTERNAL_FUNCTION_PARAMETERS) {
 
 	/* Initialize return array */
 	if (array_init(return_value) == FAILURE) {
+		efree(lineEnd);
 		efree(temp);
 		efree(buf);
 		RETURN_FALSE;
@@ -1566,6 +1571,26 @@ void php3_fgetcsv(INTERNAL_FUNCTION_PARAMETERS) {
 				} else {
 				/* normal character */
 					*tptr++ = *bptr++;
+
+					if (*bptr == 0)	{	/* embedded line end? */
+						*(tptr-1)=0;		/* remove space character added on reading line */
+						strcat(temp,lineEnd);	/* add the embedded line end to the field */
+
+							/* read a new line from input, as at start of routine */
+						memset(buf,0,len+1);
+						if (!(issock?SOCK_FGETS(buf,len,socketd):fgets(buf, len, fp))) {
+							efree(lineEnd); efree(temp); efree(buf);
+							RETURN_FALSE;
+							}
+						bptr = buf;
+						tptr = buf + strlen(buf) -1;
+						while ( isspace(*tptr) && (tptr > bptr) ) tptr--;
+						tptr++; strcpy(lineEnd, tptr);
+						*tptr++ = ' ';	*tptr = 0;
+
+						tptr=temp;	/* reset temp pointer to end of field as read so far */
+						while (*tptr) tptr++;
+					}
 				}
 			}
 		} else {
@@ -1577,11 +1602,13 @@ void php3_fgetcsv(INTERNAL_FUNCTION_PARAMETERS) {
 				while (isspace(*tptr)) *tptr-- = 0;	/* strip any trailing spaces */
 			}
 			if (*bptr == delimiter) bptr++;
+				
 		}
 		/* 3. Now pass our field back to php */
 		add_next_index_string(return_value, temp, 1);
 		tptr=temp;
 	} while (*bptr);
+	efree(lineEnd);
 	efree(temp);
 	efree(buf);
 }

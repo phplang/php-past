@@ -1,0 +1,173 @@
+<HTML
+><HEAD
+><TITLE
+>odbc_fetch_into</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+REL="HOME"
+TITLE="PHP3 Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="ODBC Functions"
+HREF="ref.odbc.html"><LINK
+REL="PREVIOUS"
+TITLE="odbc_execute"
+HREF="function.odbc-execute.html"><LINK
+REL="NEXT"
+TITLE="odbc_fetch_row"
+HREF="function.odbc-fetch-row.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP3 Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.odbc-execute.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.odbc-fetch-row.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="FUNCTION.ODBC-FETCH-INTO"
+>odbc_fetch_into</A
+></H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN15437"
+></A
+>odbc_fetch_into -- Fetch one result row into array</DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN15440"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><CODE
+CLASS="FUNCDEF"
+>int odbc_fetch_into</CODE
+>(int result_id, int [<SPAN
+CLASS="OPTIONAL"
+>rownumber</SPAN
+>], array result_array);<P
+></P
+></DIV
+><P
+>     Returns the number of columns in the result;
+     <TT
+CLASS="LITERAL"
+>false</TT
+> on error.
+     <TT
+CLASS="PARAMETER"
+><I
+>result_array</I
+></TT
+> must be passed by reference,
+     but it can be of any type since it will be converted to type
+     array. The array will contain the column values starting at array
+     index 0.
+   </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.odbc-execute.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.odbc-fetch-row.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>odbc_execute</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.odbc.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>odbc_fetch_row</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

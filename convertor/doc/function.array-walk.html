@@ -1,0 +1,277 @@
+<HTML
+><HEAD
+><TITLE
+>array_walk</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+REL="HOME"
+TITLE="PHP3 Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Array Functions"
+HREF="ref.array.html"><LINK
+REL="PREVIOUS"
+TITLE="array"
+HREF="function.array.html"><LINK
+REL="NEXT"
+TITLE="arsort"
+HREF="function.arsort.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP3 Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.array.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.arsort.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="FUNCTION.ARRAY-WALK"
+>array_walk</A
+></H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN2837"
+></A
+>array_walk --      Apply a user function to every member of an array.
+    </DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN2840"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><CODE
+CLASS="FUNCDEF"
+>int array_walk</CODE
+>(array arr, string func);<P
+></P
+></DIV
+><P
+>     Applies the function named by <TT
+CLASS="PARAMETER"
+><I
+>func</I
+></TT
+> to each
+     element of <TT
+CLASS="PARAMETER"
+><I
+>arr</I
+></TT
+>. The elements are passed as
+     the first argument of <TT
+CLASS="PARAMETER"
+><I
+>func</I
+></TT
+>; if
+     <TT
+CLASS="PARAMETER"
+><I
+>func</I
+></TT
+> requires more than one argument, a
+     warning will be generated each time
+     <B
+CLASS="FUNCTION"
+>array_walk()</B
+> calls
+     <TT
+CLASS="PARAMETER"
+><I
+>func</I
+></TT
+>. These warnings may be suppressed by
+     prepending the '@' sign to the <B
+CLASS="FUNCTION"
+>array_walk()</B
+>
+     call, or by using <A
+HREF="function.error-reporting.html"
+><B
+CLASS="FUNCTION"
+>error_reporting()</B
+></A
+>.
+
+    </P
+><P
+>     Note that <TT
+CLASS="PARAMETER"
+><I
+>func</I
+></TT
+> will actually be working
+     with the elements of <TT
+CLASS="PARAMETER"
+><I
+>arr</I
+></TT
+>, so any changes
+     made to those elements will actually be made in the array itself.
+
+    </P
+><P
+>     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="EXAMPLE"
+><P
+><B
+>Example 1. <B
+CLASS="FUNCTION"
+>array_walk()</B
+> example</B
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>$fruits = array("d"=&#62;"lemon","a"=&#62;"orange","b"=&#62;"banana","c"=&#62;"apple");
+
+function test_alter( $item1 ) {
+   $item1 = 'bogus';
+}
+
+function test_print( $item2 ) {
+   echo "$item2&lt;br&gt;\n";
+}
+
+array_walk( $fruits, 'test_print' );
+array_walk( $fruits, 'test_alter' );
+array_walk( $fruits, 'test_print' );
+      </PRE
+></DIV
+></TD
+></TR
+></TABLE
+>
+
+    </P
+><P
+>     See also <A
+HREF="function.each.html"
+><B
+CLASS="FUNCTION"
+>each()</B
+></A
+> and <A
+HREF="function.list.html"
+><B
+CLASS="FUNCTION"
+>list()</B
+></A
+>.
+
+   </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.array.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.arsort.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>array</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.array.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>arsort</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

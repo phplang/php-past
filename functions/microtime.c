@@ -27,18 +27,18 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: microtime.c,v 1.30 1999/05/18 12:56:39 sas Exp $ */
+/* $Id: microtime.c,v 1.31 1999/06/16 11:34:21 ssb Exp $ */
 
 #include "php.h"
 #include <stdlib.h>
-#if HAVE_UNISTD_H
-#include <unistd.h>
+#ifdef HAVE_UNISTD_H
+# include <unistd.h>
 #endif
-#if HAVE_SYS_TIME_H
-#include <sys/time.h>
+#ifdef HAVE_SYS_TIME_H
+# include <sys/time.h>
 #endif
-#if HAVE_SYS_RESOURCE_H
-#include <sys/resource.h>
+#ifdef HAVE_SYS_RESOURCE_H
+# include <sys/resource.h>
 #endif
 #include <string.h>
 #include <errno.h>

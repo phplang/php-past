@@ -29,7 +29,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: unified_odbc.c,v 1.106 1999/05/10 15:37:18 kara Exp $ */
+/* $Id: unified_odbc.c,v 1.107 1999/06/11 11:23:46 swilliam Exp $ */
 
 /* This file is based on the Adabas D extension.
  * Adabas D will no longer be supported as separate module.
@@ -915,6 +915,20 @@ extern UODBC_FUNCTION(execute)
 
 	if (rc == SQL_SUCCESS){
 		RETVAL_TRUE;
+	}
+
+	if (result->numcols == 0)
+	{
+		SQLNumResultCols(result->stmt, &(result->numcols));
+
+		if (result->numcols > 0){
+			if (!UODBC_BINDCOLS(result)){
+				efree(result);
+                        	RETVAL_FALSE;
+			}
+		} else {
+			result->values = NULL;
+		}
 	}
 }
 /* }}} */

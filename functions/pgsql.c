@@ -28,7 +28,7 @@
    +----------------------------------------------------------------------+
  */
  
-/* $Id: pgsql.c,v 1.84 1999/05/27 15:00:50 steinm Exp $ */
+/* $Id: pgsql.c,v 1.85 1999/06/20 16:30:47 sas Exp $ */
 
 #include <stdlib.h>
 
@@ -957,6 +957,7 @@ void php3_pgsql_fetch_hash(INTERNAL_FUNCTION_PARAMETERS)
 	array_init(return_value);
 	for (i=0,num_fields=PQnfields(pgsql_result); i<num_fields; i++) {
 		char *tmp;
+		int len;
 
 		element = PQgetvalue(pgsql_result,row->value.lval,i);
 		if (element) {
@@ -973,7 +974,9 @@ void php3_pgsql_fetch_hash(INTERNAL_FUNCTION_PARAMETERS)
 
 		add_get_index_stringl(return_value, i, tmp, element_len, (void **) &pval_ptr, 0);
 		field_name = PQfname(pgsql_result, i);
-		_php3_hash_pointer_update(return_value->value.ht, field_name, strlen(field_name)+1, pval_ptr);
+		len = strlen(field_name);
+		_php3_hash_pointer_update(return_value->value.ht, estrndup(field_name, len), len+1, pval_ptr);
+		free(field_name);
 	}
 }
 

@@ -26,14 +26,18 @@
    | Authors: Uwe Steinmann                                               |
    +----------------------------------------------------------------------+
  */
-/* $Id: php3_pdf.h,v 1.8 1999/02/28 23:03:51 steffann Exp $ */
+/* $Id: php3_pdf.h,v 1.10 1999/06/08 09:16:34 steinm Exp $ */
 
 #ifndef _PHP3_PDF_H
 #define _PHP3_PDF_H
 
 #if HAVE_PDFLIB
 
+#if HAVE_PDFLIB2
+#include <pdflib.h>
+#else
 #include <pdf.h>
+#endif
 
 extern int le_fp;
 
@@ -43,7 +47,10 @@ extern php3_module_entry pdf_module_entry;
 extern void php3_info_pdf(void);
 extern int php3_minit_pdf(INIT_FUNC_ARGS);
 extern int php3_mend_pdf(void);
+#if HAVE_PDFLIB2
+#else
 extern void php3_pdf_get_info(INTERNAL_FUNCTION_PARAMETERS);
+#endif
 extern void php3_pdf_set_info_creator(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_pdf_set_info_title(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_pdf_set_info_subject(INTERNAL_FUNCTION_PARAMETERS);
@@ -101,6 +108,9 @@ extern void php3_pdf_add_outline(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_pdf_set_transition(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_pdf_set_duration(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_pdf_open_jpeg(INTERNAL_FUNCTION_PARAMETERS);
+#if HAVE_LIBGD13 && HAVE_PDFLIB2
+extern void php3_pdf_open_memory_image(INTERNAL_FUNCTION_PARAMETERS);
+#endif
 extern void php3_pdf_open_gif(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_pdf_close_image(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_pdf_place_image(INTERNAL_FUNCTION_PARAMETERS);

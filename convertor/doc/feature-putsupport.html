@@ -1,0 +1,196 @@
+<HTML
+><HEAD
+><TITLE
+>PUT Method Support</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+REL="HOME"
+TITLE="PHP3 Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Features"
+HREF="features.html"><LINK
+REL="PREVIOUS"
+TITLE="File upload support"
+HREF="feature-fileupload.html"><LINK
+REL="NEXT"
+TITLE="HTTP cookie support"
+HREF="feature-cookies.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP3 Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="feature-fileupload.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 4. Features</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="feature-cookies.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="FEATURE-PUTSUPPORT"
+>PUT Method Support</A
+></H1
+><P
+>    PHP provides support for the HTTP PUT method used by clients such
+    as Netscape Composer and W3C Amaya.  PUT requests are much simpler
+    than a file upload and they look something like this:
+   </P
+><P
+>    <I
+CLASS="EMPHASIS"
+>PUT /path/filename.html HTTP/1.1</I
+>
+   </P
+><P
+>    This would normally mean that the remote client would like to save
+    the content that follows as: /path/filename.html in your web tree.
+    It is obviously not a good idea for Apache or PHP to automatically
+    let everybody overwrite any files in your web tree.  So, to handle
+    such a request you have to first tell your web server that you
+    want a certain PHP script to handle the request.  In Apache you do
+    this with the <I
+CLASS="EMPHASIS"
+>Script</I
+> directive.  It can be
+    placed almost anywhere in your Apache configuration file.  A
+    common place is inside a &lt;Directory&gt; block or perhaps inside
+    a &lt;Virtualhost&gt; block.  A line like this would do the trick:
+   </P
+><P
+>    <I
+CLASS="EMPHASIS"
+>Script PUT /put.php3</I
+>
+   </P
+><P
+>    This tells Apache to send all PUT requests for URIs that match the
+    context in which you put this line to the put.php3 script.  This
+    assumes, of course, that you have PHP enabled for the .php3
+    extension and PHP is active.
+   </P
+><P
+>    Inside your put.php3 file you would then do something like this:
+   </P
+><P
+>    &lt;? copy($PHP_UPLOADED_FILE_NAME,$DOCUMENT_ROOT.$REQUEST_URI); ?&gt;
+   </P
+><P
+>    This would copy the file to the location requested by the remote
+    client.  You would probably want to perform some checks and/or
+    authenticate the user before performing this file copy.  The only
+    trick here is that when PHP sees a PUT-method request it stores
+    the uploaded file in a temporary file just like the <A
+HREF="feature-fileupload.html"
+>File Upload</A
+> feature.  When the
+    request ends, this temporary file is deleted.  So, your PUT
+    handling PHP script has to copy that file somewhere.  The filename
+    of this temporary file is in the $PHP_PUT_FILENAME variable, and
+    you can see the suggested destination filename in the $REQUEST_URI
+    (may vary on non-Apache web servers).  This destination filename
+    is the one that the remote client specified.  You do not have to
+    listen to this client.  You could, for example, copy all uploaded
+    files to a special uploads directory.
+   </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="feature-fileupload.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="feature-cookies.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>File upload support</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="features.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>HTTP cookie support</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

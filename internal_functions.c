@@ -29,7 +29,7 @@
  */
 
 
-/* $Id: internal_functions.c,v 1.351 1999/05/27 15:42:50 andrey Exp $ */
+/* $Id: internal_functions.c,v 1.352 1999/06/12 10:28:34 kk Exp $ */
 
 #ifdef THREAD_SAFE
 #include "tls.h"
@@ -107,6 +107,7 @@
 #include "functions/php_mcrypt.h"
 #include "functions/php_mhash.h"
 #include "functions/php3_pcre.h"
+#include "functions/php3_posix.h"
 
 #ifndef WIN32
 #include <netinet/in.h>
@@ -187,6 +188,7 @@ php3_builtin_module php3_builtin_modules[] =
     {"YP",                          yp_module_ptr},
 	{"ImageMagick",					magick_module_ptr},
 	{"PCRE",					pcre_module_ptr},
+    {"Posix",						posix_module_ptr},
 	{NULL,							NULL}
 };
 

@@ -1,0 +1,224 @@
+<HTML
+><HEAD
+><TITLE
+>mktime</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+REL="HOME"
+TITLE="PHP3 Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Date/Time Functions"
+HREF="ref.datetime.html"><LINK
+REL="PREVIOUS"
+TITLE="easter_days"
+HREF="function.easter-days.html"><LINK
+REL="NEXT"
+TITLE="gmmktime"
+HREF="function.gmmktime.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP3 Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.easter-days.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.gmmktime.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="FUNCTION.MKTIME"
+>mktime</A
+></H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN4120"
+></A
+>mktime -- get UNIX timestamp for a date</DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN4123"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><CODE
+CLASS="FUNCDEF"
+>int mktime</CODE
+>(int hour, int minute, int second, int month, int day, int year);<P
+></P
+></DIV
+><P
+>     <I
+CLASS="EMPHASIS"
+>Warning:</I
+> Note the strange order of
+     arguments, which differs from the order of arguments in
+     a regular UNIX mktime() call and which does not lend
+     itself well to leaving out parameters from right to left
+     (see below). It is a common error to mix these values up
+     in a script.
+    </P
+><P
+>     Returns the Unix timestamp corresponding to the arguments
+     given. This timestamp is a long integer containing the number of
+     seconds between the Unix Epoch (January 1 1970) and the time
+     specified.
+    </P
+><P
+>     Arguments may be left out in order from right to left; any
+     arguments thus omitted will be set to the current value according
+     to the local date and time.
+    </P
+><P
+>     MkTime is useful for doing date arithmetic and validation, as it
+     will automatically calculate the correct value for out-of-range
+     input. For example, each of the following lines produces the
+     string "Jan-01-1998".
+     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="EXAMPLE"
+><P
+><B
+>Example 1. <B
+CLASS="FUNCTION"
+>mktime()</B
+> example</B
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>echo date( "M-d-Y", mktime(0,0,0,12,32,1997) );
+echo date( "M-d-Y", mktime(0,0,0,13,1,1997) );
+echo date( "M-d-Y", mktime(0,0,0,1,1,1998) );</PRE
+></DIV
+></TD
+></TR
+></TABLE
+>
+    </P
+><P
+>     See also <A
+HREF="function.date.html"
+><B
+CLASS="FUNCTION"
+>date()</B
+></A
+> and <A
+HREF="function.time.html"
+><B
+CLASS="FUNCTION"
+>time()</B
+></A
+>.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.easter-days.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.gmmktime.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>easter_days</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.datetime.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>gmmktime</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

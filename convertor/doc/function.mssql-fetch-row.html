@@ -1,0 +1,202 @@
+<HTML
+><HEAD
+><TITLE
+>mssql_fetch_row</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+REL="HOME"
+TITLE="PHP3 Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="MS SQL Server Functions"
+HREF="ref.mssql.html"><LINK
+REL="PREVIOUS"
+TITLE="mssql_fetch_object"
+HREF="function.mssql-fetch-object.html"><LINK
+REL="NEXT"
+TITLE="mssql_field_seek"
+HREF="function.mssql-field-seek.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP3 Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.mssql-fetch-object.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.mssql-field-seek.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="FUNCTION.MSSQL-FETCH-ROW"
+>mssql_fetch_row</A
+></H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN13533"
+></A
+>mssql_fetch_row -- get row as enumerated array</DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN13536"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><CODE
+CLASS="FUNCDEF"
+>array mssql_fetch_row</CODE
+>(int result);<P
+></P
+></DIV
+><P
+> Returns: An array that corresponds to the fetched row, or
+    false if there are no more rows.
+    </P
+><P
+>     mssql_fetch_row() fetches one row of data from the result
+     associated with the specified result identifier.  The row is
+     returned as an array.  Each result column is stored in an array
+     offset, starting at offset 0.
+    </P
+><P
+>     Subsequent call to mssql_fetch_rows() would return the next row
+     in the result set, or false if there are no more rows.
+    </P
+><P
+>     See also: <A
+HREF="function.mssql-fetch-array.html"
+><B
+CLASS="FUNCTION"
+>mssql_fetch_array()</B
+></A
+>,
+               <A
+HREF="function.mssql-fetch-object.html"
+><B
+CLASS="FUNCTION"
+>mssql_fetch_object()</B
+></A
+>,
+               <A
+HREF="function.mssql-data-seek.html"
+><B
+CLASS="FUNCTION"
+>mssql_data_seek()</B
+></A
+>,
+               <B
+CLASS="FUNCTION"
+>mssql_fetch_lengths()</B
+>, and
+               <A
+HREF="function.mssql-result.html"
+><B
+CLASS="FUNCTION"
+>mssql_result()</B
+></A
+>.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.mssql-fetch-object.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.mssql-field-seek.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>mssql_fetch_object</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.mssql.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>mssql_field_seek</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -56,6 +56,12 @@ line similar to:
 If this is a brand new setup, you should of course also set the
 other Apache site-specific things in your httpd.conf.  
 
+Additionally you need to tell Apache to load and activate the 
+PHP module. Add the following lines to /some/path/conf/httpd.conf
+
+    LoadModule php3_module libexec/libphp3.so
+    AddModule mod_php3.c
+
 You should also copy php3.ini-dist to /some/path/php3.ini and have a 
 look at it.
 

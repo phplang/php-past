@@ -160,7 +160,8 @@ int include_file(pval *file, int display_source)
 	YY_BUFFER_STATE buffer_state = YY_CURRENT_BUFFER;
 	PHPLexState lex_state;
 	char *filename;
-	int issock=0, socketd=0; 
+	int issock=0, socketd=0;
+	int oldcs;
 	TLS_VARS;
 
 	convert_to_string(file);
@@ -178,10 +179,12 @@ int include_file(pval *file, int display_source)
 	
 	stack_push(&GLOBAL(input_source_stack),&lex_state,sizeof(PHPLexState));
 
+	oldcs = _php3_sock_set_def_chunk_size(1);
 	tmp = php3_fopen_wrapper(file->value.str.val, "r", USE_PATH|IGNORE_URL_WIN, &issock, &socketd);
 	if(issock) {
 		tmp = fdopen(socketd,"r");
 	}
+	_php3_sock_set_def_chunk_size(oldcs);
 	if (!tmp) {
 		php3_error(E_ERROR,"Failed opening required '%s'",
 			    php3_strip_url_passwd(file->value.str.val));
@@ -260,7 +263,8 @@ int conditional_include_file(pval *file,pval *return_offset INLINE_TLS)
 	YY_BUFFER_STATE buffer_state = YY_CURRENT_BUFFER;
 	FILE *tmp;
 	char *filename;
-	int issock=0, socketd=0;;
+	int issock=0, socketd=0;
+	int oldcs;
 
 	convert_to_string(file);
 
@@ -274,10 +278,12 @@ int conditional_include_file(pval *file,pval *return_offset INLINE_TLS)
 	GLOBAL(in_eval) = 0;
 	stack_push(&GLOBAL(input_source_stack),&lex_state,sizeof(PHPLexState));
 
+	oldcs = _php3_sock_set_def_chunk_size(1);
 	tmp = php3_fopen_wrapper(file->value.str.val, "r", USE_PATH|IGNORE_URL_WIN, &issock, &socketd);
 	if(issock) {
 		tmp = fdopen(socketd,"r");
 	}
+	_php3_sock_set_def_chunk_size(oldcs);
 	if (!tmp) {
 		php3_error(E_WARNING,"Failed opening '%s' for inclusion",
 			    php3_strip_url_passwd(file->value.str.val));

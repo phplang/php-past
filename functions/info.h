@@ -27,13 +27,14 @@
    |          Zeev Suraski <bourbon@netvision.net.il>                     |
    +----------------------------------------------------------------------+
  */
-/* $Id: info.h,v 1.6 1999/01/01 17:59:12 zeev Exp $ */
+/* $Id: info.h,v 1.7 1999/06/19 02:35:16 jim Exp $ */
 
 #ifndef _INFO_H
 #define _INFO_H
 
 extern void php3_version(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_info(INTERNAL_FUNCTION_PARAMETERS);
+extern PHP_FUNCTION(extension_loaded);
 
 extern void _php3_info(void);
 

@@ -1,0 +1,245 @@
+<HTML
+><HEAD
+><TITLE
+>ifx_connect</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+REL="HOME"
+TITLE="PHP3 Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Informix Functions"
+HREF="ref.ifx.html"><LINK
+REL="PREVIOUS"
+TITLE="Informix Functions"
+HREF="ref.ifx.html"><LINK
+REL="NEXT"
+TITLE="ifx_pconnect"
+HREF="function.ifx-pconnect.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP3 Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="ref.ifx.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.ifx-pconnect.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="FUNCTION.IFX-CONNECT"
+>ifx_connect</A
+></H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN9912"
+></A
+>ifx_connect -- Open Informix server connection</DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN9915"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><CODE
+CLASS="FUNCDEF"
+>int ifx_connect</CODE
+>(string [<SPAN
+CLASS="OPTIONAL"
+>database</SPAN
+>]
+                      , string [<SPAN
+CLASS="OPTIONAL"
+>userid</SPAN
+>]
+                      , string [<SPAN
+CLASS="OPTIONAL"
+>password</SPAN
+>]
+                      );<P
+></P
+></DIV
+><P
+> 
+     Returns an connection identifier on success, or FALSE on
+     error.
+    </P
+><P
+> 
+     <B
+CLASS="FUNCTION"
+>ifx_connect()</B
+> establishes a connection to an
+     Informix server.  All of the arguments are optional, and if they're
+     missing, defaults are taken from values supplied in php3.ini
+     (ifx.default_host for the host (Informix libraries will use
+     $INFORMIXSERVER environment value if not defined), ifx.default_user
+     for user, ifx.default_password for the password (none if not defined).
+    </P
+><P
+> 
+     In case a second call is made to
+     <B
+CLASS="FUNCTION"
+>ifx_connect()</B
+> with the same arguments, no
+     new link will be established, but instead, the link identifier of
+     the already opened link will be returned.
+    </P
+><P
+> 
+     The link to the server will be closed as soon as the execution of
+     the script ends, unless it's closed earlier by explicitly calling
+     <A
+HREF="function.ifx-close.html"
+><B
+CLASS="FUNCTION"
+>ifx_close()</B
+></A
+>.
+    </P
+><P
+> 
+     See also <A
+HREF="function.ifx-pconnect.html"
+><B
+CLASS="FUNCTION"
+>ifx_pconnect()</B
+></A
+>, and 
+              <A
+HREF="function.ifx-close.html"
+><B
+CLASS="FUNCTION"
+>ifx_close()</B
+></A
+>.
+     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="EXAMPLE"
+><P
+><B
+>Example 1. Connect to a Informix database</B
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>$conn_id = ifx_pconnect (mydb@ol_srv1, "imyself", "mypassword");
+      </PRE
+></DIV
+></TD
+></TR
+></TABLE
+>
+   </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="ref.ifx.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.ifx-pconnect.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Informix Functions</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.ifx.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>ifx_pconnect</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

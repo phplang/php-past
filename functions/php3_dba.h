@@ -27,7 +27,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: php3_dba.h,v 1.10 1999/05/10 11:15:02 sas Exp $ */
+/* $Id: php3_dba.h,v 1.11 1999/06/22 20:25:26 jimjag Exp $ */
 
 #ifndef _DBA_H
 #define _DBA_H
@@ -39,7 +39,8 @@
 typedef enum { 
 	DBA_READER = 1,
 	DBA_WRITER,
-	DBA_TRUNC
+	DBA_TRUNC,
+	DBA_CREAT
 } dba_mode_t;
 
 typedef struct dba_info {

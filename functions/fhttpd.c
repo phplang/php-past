@@ -27,7 +27,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: fhttpd.c,v 1.9 1999/01/01 17:59:09 zeev Exp $ */
+/* $Id: fhttpd.c,v 1.10 1999/06/16 11:34:18 ssb Exp $ */
 #ifdef THREAD_SAFE
 #include "tls.h"
 #endif
@@ -35,8 +35,8 @@
 #include "internal_functions.h"
 
 #include <stdlib.h>
-#if HAVE_UNISTD_H
-#include <unistd.h>
+#ifdef HAVE_UNISTD_H
+# include <unistd.h>
 #endif
 #include <string.h>
 #include <errno.h>

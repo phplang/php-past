@@ -1,4 +1,4 @@
-/* $Id: sendmail.c,v 1.23 1998/12/28 09:44:04 sas Exp $ */
+/* $Id: sendmail.c,v 1.24 1999/06/10 08:55:58 fmk Exp $ */
 
 /* 
  *    PHP Sendmail for Windows.
@@ -325,19 +325,21 @@ int PostHeader(char *RPath, char *Subject, char *mailTo, char *xheaders)
 	zoneh /= (60 * 60);
 	zonem = (abs(_timezone) / 60) - (zoneh * 60);
 
-	p += sprintf(p, "Date: %s, %02d %s %04d %02d:%02d:%02d %s%02d%02d\r\n",
-				 days[tm->tm_wday],
-				 tm->tm_mday,
-				 months[tm->tm_mon],
-				 tm->tm_year + 1900,
-				 tm->tm_hour,
-				 tm->tm_min,
-				 tm->tm_sec,
-				 (_timezone > 0) ? "+" : (_timezone < 0) ? "-" : "",
-				 zoneh,
-				 zonem);
+	if(!xheaders || !strstr(xheaders, "Date:")){
+		p += sprintf(p, "Date: %s, %02d %s %04d %02d:%02d:%02d %s%02d%02d\r\n",
+					 days[tm->tm_wday],
+					 tm->tm_mday,
+					 months[tm->tm_mon],
+					 tm->tm_year + 1900,
+					 tm->tm_hour,
+					 tm->tm_min,
+					 tm->tm_sec,
+					 (_timezone > 0) ? "+" : (_timezone < 0) ? "-" : "",
+					 zoneh,
+					 zonem);
+	}
 
-	if(xheaders && strnicmp("From:",xheaders,5)){
+	if(!xheaders || !strstr(xheaders, "From:")){
 		p += sprintf(p, "From: %s\r\n", RPath);
 	}
 	p += sprintf(p, "Subject: %s\r\n", Subject);

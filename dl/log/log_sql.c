@@ -27,22 +27,22 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: log_sql.c,v 1.5 1998/05/21 23:57:18 zeev Exp $ */
+/* $Id: log_sql.c,v 1.6 1999/06/16 11:34:15 ssb Exp $ */
 
 #include "phpdl.h"
 
 #include <stdlib.h>
 
-#if HAVE_UNISTD_H
-#include <unistd.h>
+#ifdef HAVE_UNISTD_H
+# include <unistd.h>
 #endif
 
-#if HAVE_SYS_FILE_H
-#if !HAVE_LOCKF
-#if HAVE_FLOCK
-#include <sys/file.h>
-#endif
-#endif
+#ifdef HAVE_SYS_FILE_H
+# ifndef HAVE_LOCKF
+#  ifdef HAVE_FLOCK
+#   include <sys/file.h>
+#  endif
+# endif
 #endif
 
 #include <time.h>
@@ -208,10 +208,10 @@ void SQLLog(char *filename) {
 	/* Lock database */
 	lockfd = open(lockfn,O_RDWR|O_CREAT,0644);
 	if (lockfd) {
-#if HAVE_LOCKF
+#ifdef HAVE_LOCKF
 		lockf(lockfd,F_LOCK,0);
 #else
-#if HAVE_FLOCK
+#ifdef HAVE_FLOCK
 		flock(lockfd,LOCK_EX);
 #endif
 #endif
@@ -336,13 +336,13 @@ void SQLLog(char *filename) {
 		
 #endif
 	}
-#if HAVE_LOCKF
+#ifdef HAVE_LOCKF
 #if MSQLLOGGING
 	lockf(lockfd,F_ULOCK,0);
 	close(lockfd);
 #endif
 #else
-#if HAVE_FLOCK
+#ifdef HAVE_FLOCK
 #if MSQLLOGGING
 	flock(lockfd,LOCK_UN);
 	close(lockfd);

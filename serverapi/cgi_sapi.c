@@ -3,12 +3,12 @@
 
 	functions for CGI
 
-	$Id: cgi_sapi.c,v 1.14 1998/12/28 09:35:04 sas Exp $ 
+	$Id: cgi_sapi.c,v 1.15 1999/06/19 19:06:11 sas Exp $ 
 */
 #include <stdio.h>
 #include <stdarg.h>
 #include "php.h"
-#include "getopt.h"
+#include "php_getopt.h"
 #define SAPI_INTERFACE 1
 #include "sapi.h"
 #include <windows.h>

@@ -1,0 +1,254 @@
+<HTML
+><HEAD
+><TITLE
+>flock</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+REL="HOME"
+TITLE="PHP3 Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Filesystem Functions"
+HREF="ref.filesystem.html"><LINK
+REL="PREVIOUS"
+TITLE="filetype"
+HREF="function.filetype.html"><LINK
+REL="NEXT"
+TITLE="fopen"
+HREF="function.fopen.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP3 Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.filetype.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.fopen.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="FUNCTION.FLOCK"
+>flock</A
+></H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN5922"
+></A
+>flock -- portable advisory file locking</DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN5925"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><CODE
+CLASS="FUNCDEF"
+>bool flock</CODE
+>(int fp, int operation);<P
+></P
+></DIV
+><P
+>     PHP supports a portable way of locking complete files in an advisory way
+     (which means all accessing programs have to use the same way of locking
+     or it will not work).
+
+    </P
+><P
+>     <B
+CLASS="FUNCTION"
+>flock()</B
+> operates on <TT
+CLASS="PARAMETER"
+><I
+>fp</I
+></TT
+> which
+     must be an open file pointer. <TT
+CLASS="PARAMETER"
+><I
+>operation</I
+></TT
+> is one of
+     the following values:
+
+    </P
+><P
+>     <P
+></P
+><UL
+><LI
+><P
+>       To acquire a shared lock (reader), set <TT
+CLASS="PARAMETER"
+><I
+>operation</I
+></TT
+>
+       to 1.
+
+      </P
+></LI
+><LI
+><P
+>       To acquire an exclusive lock (writer), set
+       <TT
+CLASS="PARAMETER"
+><I
+>operation</I
+></TT
+> to 2.
+
+      </P
+></LI
+><LI
+><P
+>       To release a lock (shared or exclusive), set
+       <TT
+CLASS="PARAMETER"
+><I
+>operation</I
+></TT
+> to 3.
+
+      </P
+></LI
+><LI
+><P
+>       If you don't want <B
+CLASS="FUNCTION"
+>flock()</B
+> to block while locking,
+       add 4 to <TT
+CLASS="PARAMETER"
+><I
+>operation</I
+></TT
+>.
+
+     </P
+></LI
+></UL
+>
+    </P
+><P
+>     <B
+CLASS="FUNCTION"
+>flock()</B
+> allows you to perform a simple reader/writer
+     model which can be used on virtually every platform (including most
+     Unices and even Windows).
+    
+    </P
+><P
+>     <B
+CLASS="FUNCTION"
+>flock()</B
+> returns true on success and false on error
+     (e.g. when a lock could not be acquired).
+
+   </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.filetype.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.fopen.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>filetype</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.filesystem.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>fopen</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

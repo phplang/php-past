@@ -1,0 +1,314 @@
+<HTML
+><HEAD
+><TITLE
+>Pattern Options</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+REL="HOME"
+TITLE="PHP3 Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="PCRE functions"
+HREF="ref.pcre.html"><LINK
+REL="PREVIOUS"
+TITLE="preg_split"
+HREF="function.preg-split.html"><LINK
+REL="NEXT"
+TITLE="PDF Functions"
+HREF="ref.pdf.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP3 Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.preg-split.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="ref.pdf.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="PATTERN.OPTIONS"
+>Pattern Options</A
+></H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN16506"
+></A
+>Pattern Options -- describes possible options in regex
+     patterns</DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN16509"
+></A
+><H2
+>Description</H2
+><P
+>     The current possible PCRE options are listed below.  The names in
+     parentheses refer internal PCRE names for these options.
+
+    </P
+><P
+>     <BLOCKQUOTE
+><P
+></P
+><DL
+><DT
+><I
+CLASS="EMPHASIS"
+>i</I
+> (PCRE_CASELESS)</DT
+><DD
+><P
+>	  If this option is set, letters in the pattern match both
+	  upper and lower case letters.
+	</P
+></DD
+><DT
+><I
+CLASS="EMPHASIS"
+>m</I
+> (PCRE_MULTILINE)</DT
+><DD
+><P
+>	  By default, PCRE treats the subject string as consisting of a
+	  single "line" of characters (even if it actually contains
+	  several newlines). The "start of line" metacharacter (^)
+	  matches only at the start of the string, while the "end of
+	  line" metacharacter ($) matches only at the end of the
+	  string, or before a terminating newline (unless
+	  <I
+CLASS="EMPHASIS"
+>E</I
+> option is set). This is the same as
+	  Perl.
+	  
+	 </P
+><P
+>	  When this option is set, the "start of line" and "end of
+	  line" constructs match immediately following or immediately
+	  before any newline in the subject string, respectively, as
+	  well as at the very start and end. This is equivalent to
+	  Perl's /m option. If there are no "\n" characters in a
+	  subject string, or no occurrences of ^ or $ in a pattern,
+	  setting this option has no effect.
+	</P
+></DD
+><DT
+><I
+CLASS="EMPHASIS"
+>s</I
+> (PCRE_DOTALL)</DT
+><DD
+><P
+>	  If this option is set, a dot metacharater in the pattern
+	  matches all characters, including newlines. Without it,
+	  newlines are excluded. This option is equivalent to Perl's
+	  /s option.  A negative class such as [^a] always matches a
+	  newline character, independent of the setting of this
+	  option.
+	</P
+></DD
+><DT
+><I
+CLASS="EMPHASIS"
+>x</I
+> (PCRE_EXTENDED)</DT
+><DD
+><P
+>	  If this option is set, whitespace data characters in the
+	  pattern are totally ignored except when escaped or inside a
+	  character class, and characters between an unescaped #
+	  outside a character class and the next newline character,
+	  inclusive, are also ignored. This is equivalent to Perl's /x
+	  option, and makes it possible to include comments inside
+	  complicated patterns. Note, however, that this applies only
+	  to data characters. Whitespace characters may never appear
+	  within special character sequences in a pattern, for example
+	  within the sequence (?( which introduces a conditional
+	  subpattern.
+	</P
+></DD
+><DT
+><I
+CLASS="EMPHASIS"
+>A</I
+> (PCRE_ANCHORED)</DT
+><DD
+><P
+>	  If this option is set, the pattern is forced to be
+	  "anchored", that is, it is constrained to match only at the
+	  start of the string which is being searched (the "subject
+	  string").  This effect can also be achieved by appropriate
+	  constructs in the pattern itself, which is the only way to
+	  do it in Perl.
+	</P
+></DD
+><DT
+><I
+CLASS="EMPHASIS"
+>E</I
+> (PCRE_DOLLAR_ENDONLY)</DT
+><DD
+><P
+>	  If this option is set, a dollar metacharacter in the pattern
+	  matches only at the end of the subject string. Without this
+	  option, a dollar also matches immediately before the final
+	  character if it is a newline (but not before any other
+	  newlines).  This option is ignored if <I
+CLASS="EMPHASIS"
+>m</I
+>
+	  option is set. There is no equivalent to this option in
+	  Perl.
+	</P
+></DD
+><DT
+><I
+CLASS="EMPHASIS"
+>S</I
+></DT
+><DD
+><P
+>	  When a pattern is going to be used several times, it is
+	  worth spending more time analyzing it in order to speed up
+	  the time taken for matching. If this option is set, then
+	  this extra analysis is performed. At present, studying a
+	  pattern is useful only for non-anchored patterns that do not
+	  have a single fixed starting character.
+	</P
+></DD
+><DT
+><I
+CLASS="EMPHASIS"
+>U</I
+> (PCRE_UNGREEDY)</DT
+><DD
+><P
+>	  This option inverts the "greediness" of the quantifiers so
+	  that they are not greedy by default, but become greedy if
+	  followed by "?". It is not compatible with Perl. It can also
+	  be set by a (?U) option setting within the pattern.
+	</P
+></DD
+><DT
+><I
+CLASS="EMPHASIS"
+>X</I
+> (PCRE_EXTRA)</DT
+><DD
+><P
+>	  This option turns on additional functionality of PCRE that
+	  is incompatible with Perl. Any backslash in a pattern that
+	  is followed by a letter that has no special meaning causes
+	  an error, thus reserving these combinations for future
+	  expansion. By default, as in Perl, a backslash followed by a
+	  letter with no special meaning is treated as a literal.
+	  There are at present no other features controlled by this
+	  option.
+	</P
+></DD
+></DL
+></BLOCKQUOTE
+>
+   </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.preg-split.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="ref.pdf.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>preg_split</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.pcre.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>PDF Functions</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,263 @@
+<HTML
+><HEAD
+><TITLE
+>Regular expressions</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+REL="HOME"
+TITLE="PHP3 Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Features"
+HREF="features.html"><LINK
+REL="PREVIOUS"
+TITLE="HTTP cookie support"
+HREF="feature-cookies.html"><LINK
+REL="NEXT"
+TITLE="Error handling"
+HREF="feature-error-handling.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP3 Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="feature-cookies.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 4. Features</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="feature-error-handling.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="FEATURE-REGEXPS"
+>Regular expressions</A
+></H1
+><P
+>    Regular expressions are used for complex string manipulation in
+    PHP.  The functions that support regular expressions are:
+
+    <P
+></P
+><UL
+><LI
+><P
+><A
+HREF="function.ereg.html"
+><B
+CLASS="FUNCTION"
+>ereg()</B
+></A
+>
+     </P
+></LI
+><LI
+><P
+><A
+HREF="function.ereg-replace.html"
+><B
+CLASS="FUNCTION"
+>ereg_replace()</B
+></A
+>
+     </P
+></LI
+><LI
+><P
+><A
+HREF="function.eregi.html"
+><B
+CLASS="FUNCTION"
+>eregi()</B
+></A
+>
+     </P
+></LI
+><LI
+><P
+><A
+HREF="function.eregi-replace.html"
+><B
+CLASS="FUNCTION"
+>eregi_replace()</B
+></A
+>
+     </P
+></LI
+><LI
+><P
+><A
+HREF="function.split.html"
+><B
+CLASS="FUNCTION"
+>split()</B
+></A
+>
+     </P
+></LI
+></UL
+>
+
+    These functions all take a regular expression string as their
+    first argument.  PHP uses the POSIX extended regular expressions
+    as defined by POSIX 1003.2.  For a full description of POSIX
+    regular expressions see the regex man pages included in the regex
+    directory in the PHP distribution.
+
+
+   </P
+><P
+>    <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="EXAMPLE"
+><P
+><B
+>Example 4-5. Regular expression examples</B
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>ereg(&quot;abc&quot;,$string);            
+/* Returns true if &quot;abc&quot;
+   is found anywhere in $string. */
+
+ereg(&quot;^abc&quot;,$string);
+/* Returns true if &quot;abc&quot;
+   is found at the beginning of $string. */
+
+ereg("abc$",$string);
+/* Returns true if &quot;abc&quot;
+   is found at the end of $string. */
+
+eregi("(ozilla.[23]|MSIE.3)",$HTTP_USER_AGENT);  
+/* Returns true if client browser
+   is Netscape 2, 3 or MSIE 3. */
+
+ereg("([[:alnum:]]+) ([[:alnum:]]+) ([[:alnum:]]+)",
+     $string,$regs); 
+/* Places three space separated words
+   into $regs[1], $regs[2] and $regs[3]. */
+
+ereg_replace("^","&lt;BR&gt;",$string); 
+/* Put a &lt;BR&gt; tag at the beginning of $string. */
+ 
+ereg_replace("$","&lt;BR&gt;",$string); 
+/* Put a &lt;BR&gt; tag at the end of $string. */
+
+ereg_replace("\n","",$string);
+/* Get rid of any carriage return
+   characters in $string. */
+     </PRE
+></DIV
+></TD
+></TR
+></TABLE
+>
+
+
+  </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="feature-cookies.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="feature-error-handling.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>HTTP cookie support</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="features.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Error handling</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

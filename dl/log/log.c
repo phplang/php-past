@@ -27,15 +27,15 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: log.c,v 1.11 1998/11/03 15:52:31 rasmus Exp $ */
+/* $Id: log.c,v 1.12 1999/06/16 11:34:15 ssb Exp $ */
 
 #include "phpdl.h"
 #include "log.h"
 
 #include <stdlib.h>
 
-#if HAVE_UNISTD_H
-#include <unistd.h>
+#ifdef HAVE_UNISTD_H
+# include <unistd.h>
 #endif
 
 #include <time.h>

@@ -1,0 +1,142 @@
+#!/usr/bin/perl
+#
+# This script can be used to periodically update and build a CVS
+# checkout of php3.
+#
+# To turn it into a cron job that sends a log to an email address
+# when problems occur, add a line like this to your crontab:
+#
+#   0 4 * * * (cd /path/to/php3; /path/to/buildcheck mail-here@example.com)
+#
+# You can also set the MAILFROM and MAILINJECT environment variables
+# to change the From: line of the mail, and to use something other
+# than /var/qmail/bin/qmail-inject to send the mail.
+#
+# This does open up a rather large security hole if the hordes who
+# have checkin access to the php3 CVS tree turn out to be untrustworthy,
+# so do this at your own risk.
+#
+# You will probably want to make a seperate copy of this script
+# somewhere so you can change the options passed to ./configure.
+#
+# Originally written by Jim Winstead <jimw@php.net> and released
+# to the public domain.
+#
+# $Id: buildcheck,v 1.1 1999/06/19 03:08:39 jim Exp $
+#
+
+use POSIX qw(tmpnam);
+
+my $mail_inject = $ENV{'MAILINJECT'} || '/var/qmail/bin/qmail-inject';
+my $mailfrom = $ENV{'MAILFROM'} || 'jimw\@php.net';
+
+my @configure_options = (
+  '--with-mysql=/opt/mysql',
+  '--with-dbase',
+  '--with-zlib',
+  '--enable-sysvsem',
+  '--enable-sysvshm',
+  '--with-xml',
+);
+
+# save our stdout and stderr
+open SAVEOUT, ">&STDOUT";
+open SAVEERR, ">&STDERR";
+
+my $log = tmpnam;
+my $line = "=================================================\n";
+
+open LOG, ">$log"
+  or die "unable to open log file";
+
+open STDOUT, ">&LOG"
+  or die "unable to redirect stdout";
+open STDERR, ">&STDOUT"
+  or die "can't dup stdout";
+
+select STDERR; $| = 1; # make unbuffered
+select STDOUT; $| = 1; # make unbuffered
+
+my $status = 1;
+
+# if we have a Makefile, make distclean
+if (-f "Makefile") {
+  print $line;
+  print "make distclean\n";
+  system 'make', 'distclean';
+}
+
+# get the latest sources
+print $line;
+print "cvs update -dP\n";
+(system 'cvs', 'update', '-dP') == 0
+  or goto error;
+
+# update the configure scripts
+print $line;
+print "autoconf\n";
+(system 'autoconf') == 0
+  or goto error;
+print $line;
+print "autoheader\n";
+(system 'autoheader') == 0
+  or goto error;
+
+# run configure
+print $line;
+print "configure ", (join ' ', @configure_options), "\n";
+(system './configure', @configure_options) == 0
+  or goto error;
+
+# run make
+print $line;
+print "make\n";
+(system 'make') == 0
+  or goto error;
+
+# run the tests if we built the cgi version
+if (-x "./php") {
+  print $line;
+  print "make test\n";
+  (system 'make', 'test') == 0
+    or goto error;
+}
+
+# if we got here, everything was successful.
+$status = 0;
+
+error:
+if ($status) {
+  my $errcode = $? / 256;
+  print STDERR "Failed (exit code = $errcode).\n";
+  print SAVEERR "Failed (exit code = $errcode).\n";
+}
+
+# close up the logfile
+close STDERR;
+close STDOUT;
+close LOG;
+
+if ($ARGV[1] && $status) {
+  open MAIL, "| $mail_inject";
+  # Why MOOCOW? Moo.
+  print MAIL <<MOOCOW;
+To: $ARGV[1]
+From: $mailfrom
+Subject: buildcheck failure
+
+This is 'buildcheck'. Pulling and building failed here. The log is
+attached below.
+
+MOOCOW
+
+  open LOG, "<$log"
+    or die "unable to open $log: $!\n";
+  print MAIL join '', <LOG>;
+  close LOG;
+
+  close MAIL;
+}
+
+unlink $log;
+exit $status;

@@ -17,7 +17,7 @@
 #include <netinet/in.h>
 #endif
 
-#if !HAVE_FLOCK
+#ifndef HAVE_FLOCK
 
 #define LOCK_SH 1
 #define LOCK_EX 2

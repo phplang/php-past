@@ -2,14 +2,18 @@
 
 error_reporting(15);
 
-function dba_test($handler) {
+function dba_test($handler, $readonly = false) {
 	echo "testing with $handler\n";
 	$count = 100;
-	$h = dba_open("test.$handler", "n", $handler, 0600);
+	if($readonly) 
+		$h = dba_open("test.$handler", "r", $handler, 0600);
+	else
+		$h = dba_open("test.$handler", "n", $handler, 0600);
 	
 	if(!$h) 
 		die("cannot open db\n");
-
+	
+	if(!$readonly) {
 	echo "replacing\n";
 	for($i = 0; $i < $count; $i++)
 		if(!dba_replace($i, "test$i.val", $h))
@@ -18,6 +22,7 @@ function dba_test($handler) {
 	echo "optimizing\n";
 	if(!dba_optimize($h)) 
 		die( "dba_optimize failed\n");
+	}
 
 	echo "fetching\n";
 	for($i = 0; $i < $count; $i++)
@@ -38,14 +43,17 @@ function dba_test($handler) {
 			die("dba_exists failed for $i\n");
 	
 	
+	if(!$readonly) {
 	echo "deleting\n";
 	for($i = 0; $i < $count; $i++)
 		if(!dba_delete($i, $h))
 			die ("dba_delete failed for $i\n");
+	}
 
 	dba_close($h);
 	echo "passed\n\n";
 }
+dba_test("cdb", true);
 
 # cdb only supports reading and is not tested as such
 $dbs = array("dbm", "gdbm", "ndbm", "db2");

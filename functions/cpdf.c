@@ -27,7 +27,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: cpdf.c,v 1.10 1999/06/01 18:15:12 steinm Exp $ */
+/* $Id: cpdf.c,v 1.12 1999/06/16 11:34:17 ssb Exp $ */
 /* cpdflib.h -- C language API definitions for ClibPDF library
  * Copyright (C) 1998 FastIO Systems, All Rights Reserved.
 */
@@ -48,10 +48,7 @@
 #include "gd.h"
 #endif
 
-#if HAVE_SYS_WAIT_H
-# include <sys/wait.h>
-#endif
-#if HAVE_UNISTD_H
+#ifdef HAVE_UNISTD_H
 # include <unistd.h>
 #endif
 #if WIN32|WINNT
@@ -89,6 +86,7 @@ function_entry cpdf_functions[] = {
 	{"cpdf_close",				php3_cpdf_close,			NULL},
 	{"cpdf_set_viewer_preferences",	php3_cpdf_set_viewer_preferences,NULL},
 	{"cpdf_page_init",			php3_cpdf_page_init,		NULL},
+	{"cpdf_finalize_page",			php3_cpdf_finalize_page,			NULL},
 	{"cpdf_set_current_page",	php3_cpdf_set_current_page,	NULL},
 	{"cpdf_begin_text",			php3_cpdf_begin_text,		NULL},
 	{"cpdf_end_text",			php3_cpdf_end_text,			NULL},
@@ -167,9 +165,15 @@ static void _free_outline(CPDFoutlineEntry *outline)
 {
 }
 
+static void _free_doc(int *pdf)
+{
+	cpdf_close();
+}
+
 int php3_minit_cpdf(INIT_FUNC_ARGS)
 {
 	CPDF_GLOBAL(le_outline) = register_list_destructors(_free_outline, NULL);
+	CPDF_GLOBAL(le_cpdf) = register_list_destructors(_free_doc, NULL);
 	return SUCCESS;
 }
 
@@ -401,8 +405,7 @@ void php3_cpdf_close(INTERNAL_FUNCTION_PARAMETERS) {
 		php3_error(E_WARNING,"Unable to find identifier %d",id);
 		RETURN_FALSE;
 	}
-	cpdf_close();
-/*	php3_list_delete(id);  */
+	php3_list_delete(id);
 
 	RETURN_TRUE;
 }
@@ -2346,7 +2349,7 @@ void php3_cpdf_place_inline_image(INTERNAL_FUNCTION_PARAMETERS) {
 	gid=argv[1]->value.lval;
 	im = php3_list_find(gid, &type);
 	if (!im || type != php3i_get_le_gd()) {
-		php3_error(E_WARNING, "ImageColorAllocate: Unable to find image pointer");
+		php3_error(E_WARNING, "cpdf: Unable to find image pointer");
 		RETURN_FALSE;
 	}
 

@@ -1,0 +1,185 @@
+<HTML
+><HEAD
+><TITLE
+>mysql_affected_rows</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+REL="HOME"
+TITLE="PHP3 Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="MySQL Functions"
+HREF="ref.mysql.html"><LINK
+REL="PREVIOUS"
+TITLE="MySQL Functions"
+HREF="ref.mysql.html"><LINK
+REL="NEXT"
+TITLE="mysql_close"
+HREF="function.mysql-close.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP3 Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="ref.mysql.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.mysql-close.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="FUNCTION.MYSQL-AFFECTED-ROWS"
+>mysql_affected_rows</A
+></H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN13712"
+></A
+>mysql_affected_rows -- Get number of affected rows in previous MySQL
+     operation</DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN13715"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><CODE
+CLASS="FUNCDEF"
+>int mysql_affected_rows</CODE
+>(int [<SPAN
+CLASS="OPTIONAL"
+>link_identifier</SPAN
+>]
+                   );<P
+></P
+></DIV
+><P
+> 
+     <B
+CLASS="FUNCTION"
+>mysql_affected_rows()</B
+> returns the number of
+     rows affected by the last INSERT, UPDATE or DELETE query on the
+     server associated with the specified link identifier.  If the
+     link identifier isn't specified, the last opened link is assumed.
+    </P
+><P
+>     If the last query was a DELETE query with no WHERE clause, all
+     of the records will have been deleted from the table but this
+     function will return zero.
+    </P
+><P
+>     This command is not effective for SELECT statements, only on
+     statements which modify records. To retrieve the number of rows
+     returned from a SELECT, use <A
+HREF="function.mysql-num-rows.html"
+><B
+CLASS="FUNCTION"
+>mysql_num_rows()</B
+></A
+>.
+   </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="ref.mysql.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.mysql-close.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>MySQL Functions</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.mysql.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>mysql_close</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,368 @@
+<HTML
+><HEAD
+><TITLE
+>hw_Modifyobject</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+REL="HOME"
+TITLE="PHP3 Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Hyperwave functions"
+HREF="ref.hyperwave.html"><LINK
+REL="PREVIOUS"
+TITLE="Hyperwave functions"
+HREF="ref.hyperwave.html"><LINK
+REL="NEXT"
+TITLE="hw_Children"
+HREF="function.hw-children.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP3 Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="ref.hyperwave.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.hw-children.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="FUNCTION.HW-MODIFYOBJECT"
+>hw_Modifyobject</A
+></H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN6839"
+></A
+>hw_Modifyobject -- modifies object record</DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN6842"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><CODE
+CLASS="FUNCDEF"
+>int hw_modifyobject</CODE
+>(int connection, int object_to_change, array remove, array add);<P
+></P
+></DIV
+><P
+>     This command allows to remove, add, or modify individual attributes
+     of an object record.  The object is specified by the Object ID
+     <TT
+CLASS="PARAMETER"
+><I
+>object_to_change</I
+></TT
+>. The first array
+     <TT
+CLASS="PARAMETER"
+><I
+>remove</I
+></TT
+> is a list of attributes to remove.
+     The second array <TT
+CLASS="PARAMETER"
+><I
+>add</I
+></TT
+> is a list of attributes
+     to add. In order to modify an attribute one will have to remove
+     the old one and add a new one. <B
+CLASS="FUNCTION"
+>hw_modifyobject()</B
+>
+     will always remove the attributes before it adds attributes unless
+     the value of the attribute to remove is not a string or array.
+
+    </P
+><P
+>     The keys of both arrays are the attributes name. The value of each
+     array element can either be an array, a string or anything else.
+     If it is an array
+     each attribute value is constructed by the key of each element plus
+     a colon and the value of each element. If it is a string it is taken
+     as the attribute value. An empty string will result in a complete
+     removal of that attribute. If the value is neither a string nor an
+     array but something else, e.g. an integer, no operation at all will
+     be performed on the attribute. This is neccessary if you want to
+     to add a completely new attribute not just a new value for an existing
+     attribute. If the remove array contained
+     an empty string for that attribute, the attribute would be tried to
+     removed which would fail since it doesn't exist. The following addition of
+     a new value for that attribute would also fail. Setting the value
+     for that attribute to e.g. 0 would not even try to remove it since
+     the addition will work.
+
+    </P
+><P
+>     If you would like to change the attribute 'Name' with the current
+     value 'books' into 'articles' you will have to create two arrays
+     and call <B
+CLASS="FUNCTION"
+>hw_modifyobject()</B
+>.
+     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="EXAMPLE"
+><P
+><B
+>Example 1. modifying an attribute</B
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>       // $connect is an existing connection to the Hyperwave server
+       // $objid is the ID of the object to modify
+       $remarr = array("Name" =&#62; "books");
+       $addarr = array("Name" =&#62; "articles");
+       $hw_modifyobject($connect, $objid, $remarr, $addarr);
+      </PRE
+></DIV
+></TD
+></TR
+></TABLE
+>
+     In order to delete/add a name=value pair from/to the object record just
+     pass the remove/add array and set the last/third parameter to an empty
+     array. If the attribute is the first one with that name to add, set
+     attribute value in the remove array to an integer.
+     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="EXAMPLE"
+><P
+><B
+>Example 2. adding a completly new attribute</B
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>       // $connect is an existing connection to the Hyperwave server
+       // $objid is the ID of the object to modify
+       $remarr = array("Name" =&#62; 0);
+       $addarr = array("Name" =&#62; "articles");
+       $hw_modifyobject($connect, $objid, $remarr, $addarr);
+      </PRE
+></DIV
+></TD
+></TR
+></TABLE
+>
+    </P
+><P
+>     Note: Multilingual attributes, e.g. 'Title', can be modified in two
+     ways. Either by providing the attributes value in its  native form
+     'language':'title' or by providing an array with elements for each
+     language as described above. The above example would than be:
+     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="EXAMPLE"
+><P
+><B
+>Example 3. modifying Title attribute</B
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>       $remarr = array("Title" =&#62; "en:Books");
+       $addarr = array("Title" =&#62; "en:Articles");
+       $hw_modifyobject($connect, $objid, $remarr, $addarr);
+      </PRE
+></DIV
+></TD
+></TR
+></TABLE
+>
+     or
+     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="EXAMPLE"
+><P
+><B
+>Example 4. modifying Title attribute</B
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>       $remarr = array("Title" =&#62; array("en" =&#62; "Books"));
+       $addarr = array("Title" =&#62; array("en" =&#62; "Articles", "ge"=&#62;"Artikel"));
+       $hw_modifyobject($connect, $objid, $remarr, $addarr);
+      </PRE
+></DIV
+></TD
+></TR
+></TABLE
+>
+     This removes the english title 'Books' and adds the english title
+     'Articles' and the german title 'Artikel'.
+     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="EXAMPLE"
+><P
+><B
+>Example 5. removing attribute</B
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>       $remarr = array("Title" =&#62; "");
+       $addarr = array("Title" =&#62; "en:Articles");
+       $hw_modifyobject($connect, $objid, $remarr, $addarr);
+      </PRE
+></DIV
+></TD
+></TR
+></TABLE
+>
+     This will remove all attributes with the name 'Title' and adds a
+     new 'Title' attribute. This comes in handy if you want to remove
+     attributes recursively.
+    </P
+><P
+>     If you need to delete all attributes with a certain name you will have
+     to pass an empty string as the attribute value.
+    </P
+><P
+>     Note: Only the attributes 'Title', 'Description' and 'Keyword' will
+     properly handle the language prefix. If those attributes don't carry
+     a language prefix, the prefix 'xx' will be assigned.
+    </P
+><P
+>     Returns TRUE if no error occurs otherwise FALSE.
+   </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="ref.hyperwave.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.hw-children.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Hyperwave functions</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.hyperwave.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>hw_Children</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -30,7 +30,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: ifx.ec,v 1.43 1999/05/08 21:46:52 jah Exp $ */
+/* $Id: ifx.ec,v 1.44 1999/06/21 18:59:13 jim Exp $ */
 
 /* -------------------------------------------------------------------
  * if you want a function reference : "grep '^\*\*' ifx.ec" will give
@@ -2527,7 +2527,7 @@ EXEC SQL END DECLARE SECTION;
     
     /* start spitting out rows untill none left */    
     while (moredata) { 
-        printf("<tr>");
+        php3_printf("<tr>");
         locind = 0;
         for (i = 1; i <= num_fields; i++) {
             EXEC SQL GET DESCRIPTOR :descrpid VALUE :i :fieldtype = TYPE,

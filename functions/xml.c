@@ -27,7 +27,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: xml.c,v 1.26 1999/05/16 18:23:52 ssb Exp $ */
+/* $Id: xml.c,v 1.27 1999/06/21 00:40:57 jim Exp $ */
 #define IS_EXT_MODULE
 #if COMPILE_DL
 # if PHP_31
@@ -660,7 +660,7 @@ void php3i_xml_startElementHandler(void *userData, const char *name,
 												&decoded_len,
 												parser->target_encoding);
 				
-				add_assoc_string(args[2], key, decoded_value, 0);
+				add_assoc_stringl(args[2], key, decoded_value, decoded_len, 0);
 				if (parser->case_folding) {
 					efree(key);
 				}

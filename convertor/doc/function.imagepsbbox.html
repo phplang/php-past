@@ -1,0 +1,291 @@
+<HTML
+><HEAD
+><TITLE
+>ImagePSBBox</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+REL="HOME"
+TITLE="PHP3 Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Image functions"
+HREF="ref.image.html"><LINK
+REL="PREVIOUS"
+TITLE="ImagePSText"
+HREF="function.imagepstext.html"><LINK
+REL="NEXT"
+TITLE="IMAP Functions"
+HREF="ref.imap.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP3 Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.imagepstext.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="ref.imap.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="FUNCTION.IMAGEPSBBOX"
+>ImagePSBBox</A
+></H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN8770"
+></A
+>ImagePSBBox -- give the bounding box of a text rectangle using PostScript Type1 fonts</DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN8773"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><CODE
+CLASS="FUNCDEF"
+>array imagepsbbox</CODE
+>(string text, int font, int size, int space, int width, float angle);<P
+></P
+></DIV
+><P
+>     <TT
+CLASS="PARAMETER"
+><I
+>size</I
+></TT
+> is expressed in pixels.
+    </P
+><P
+>     <TT
+CLASS="PARAMETER"
+><I
+>space</I
+></TT
+> allows you to change the default value of a space in a font.
+     This amount is added to the normal value and can also be negative.
+    </P
+><P
+>     <TT
+CLASS="PARAMETER"
+><I
+>tightness</I
+></TT
+> allows you to control the amount of white space
+     between characters. This amount is added to the normal character width and can also be negative.
+    </P
+><P
+>     <TT
+CLASS="PARAMETER"
+><I
+>angle</I
+></TT
+> is in degrees.
+    </P
+><P
+>     Parameters <TT
+CLASS="PARAMETER"
+><I
+>space</I
+></TT
+> and <TT
+CLASS="PARAMETER"
+><I
+>tightness</I
+></TT
+>
+     are expressed in character space units, where 1 unit is 1/1000th of an em-square.
+    </P
+><P
+>     Parameters <TT
+CLASS="PARAMETER"
+><I
+>space</I
+></TT
+>, <TT
+CLASS="PARAMETER"
+><I
+>tightness</I
+></TT
+> and
+     <TT
+CLASS="PARAMETER"
+><I
+>angle</I
+></TT
+> are optional.
+    </P
+><P
+>     The bounding box is calculated using information available from character metrics,
+     and unfortunately tends to differ slightly from the results achieved by actually
+     rasterizing the text. If the angle is 0 degrees, you can expect the text to need
+     1 pixel more to every direction. 
+    </P
+><P
+>     This function returns an array containing the following elements:
+     <DIV
+CLASS="INFORMALTABLE"
+><P
+></P
+><TABLE
+BORDER="1"
+CLASS="CALSTABLE"
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>0</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>lower left x-coordinate</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>1</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>lower left y-coordinate</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>2</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>upper right x-coordinate</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>3</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>upper right y-coordinate</TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+>
+    </P
+><P
+>     See also <A
+HREF="function.imagepstext.html"
+><B
+CLASS="FUNCTION"
+>imagepstext()</B
+></A
+>.
+   </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.imagepstext.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="ref.imap.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>ImagePSText</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.image.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>IMAP Functions</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

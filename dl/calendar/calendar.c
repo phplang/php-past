@@ -3,7 +3,7 @@
  * code by Shane Caraveo shane@caraveo.com
  * copy freely!
  *
- * $Id: calendar.c,v 1.16 1999/01/04 19:08:24 shane Exp $
+ * $Id: calendar.c,v 1.17 1999/06/20 17:14:05 jim Exp $
  */
 
 
@@ -26,6 +26,8 @@ function_entry calendar_functions[] = {
 	{"frenchtojd", cal_frenchtojd, NULL},
 	{"jddayofweek", cal_jddayofweek, NULL},
 	{"jdmonthname", cal_monthname, NULL},
+	{"easter_date", cal_easter_date, NULL},
+	{"easter_days", cal_easter_days, NULL},
 	{NULL, NULL, NULL}
 };
 

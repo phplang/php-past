@@ -24,7 +24,7 @@
 # +----------------------------------------------------------------------+
 
 #
-# $Id: Makefile.in,v 1.319 1999/06/03 14:05:10 sas Exp $
+# $Id: Makefile.in,v 1.325 1999/06/24 13:18:51 sas Exp $
 #
 
 prefix = @prefix@
@@ -34,10 +34,11 @@ VPATH = @srcdir@
 bindir = @bindir@
 
 CC = @CC@
+LN_S = @LN_S@
 AR = ar rc
 BINNAME = @BINNAME@
 INSTALL_IT = @INSTALL_IT@
-INCLUDE = -I$(srcdir) -I. @DBA_INCLUDE@ @GDBM_INCLUDE@ @ORACLE_INCLUDE@ @APACHE_INCLUDE@ @FHTTPD_INCLUDE@ @ADA_INCLUDE@ @IODBC_INCLUDE@ @SYBASE_INCLUDE@ @SYBASE_CT_INCLUDE@ @MYSQL_INCLUDE@ @MSQL_INCLUDE@ @SOLID_INCLUDE@ @EMPRESS_INCLUDE@ @OPENLINK_INCLUDE@ @PGSQL_INCLUDE@ @LDAP_INCLUDE@ @MCK_INCLUDE@ @VELOCIS_INCLUDE@ @CODBC_INCLUDE@ @GD_INCLUDE@ @IMAP_INCLUDE@ @ASPELL_INCLUDE@ @ZLIB_INCLUDE@ @PDFLIB_INCLUDE@ @CPDFLIB_INCLUDE@ @FDFLIB_INCLUDE@ @IFX_INCLUDE@ @SNMP_INCLUDE@ @IBASE_INCLUDE@ @GETTEXT_INCLUDE@ @IMAGICK_INCLUDE@ @INCLUDES@
+INCLUDE = -I$(srcdir) -I. @GDBM_INCLUDE@ @ORACLE_INCLUDE@ @APACHE_INCLUDE@ @FHTTPD_INCLUDE@ @ADA_INCLUDE@ @IODBC_INCLUDE@ @SYBASE_INCLUDE@ @SYBASE_CT_INCLUDE@ @SOLID_INCLUDE@ @EMPRESS_INCLUDE@ @OPENLINK_INCLUDE@ @MCK_INCLUDE@ @VELOCIS_INCLUDE@ @CODBC_INCLUDE@ @IMAP_INCLUDE@ @ZLIB_INCLUDE@ @PDFLIB_INCLUDE@ @CPDFLIB_INCLUDE@ @FDFLIB_INCLUDE@ @IFX_INCLUDE@ @IBASE_INCLUDE@ @INCLUDES@
 PROF_CFLAGS =
 CFLAGS_SHLIB = @CFLAGS_SHLIB@
 LDFLAGS_SHLIB = @LDFLAGS_SHLIB@
@@ -52,6 +53,7 @@ MAINT = @MAINT@
 APXS = @APXS@
 APXS_LDFLAGS = @PHP_LIBS@ @APXS_LDFLAGS@ @LIBS@
 WARNING_LEVEL = @WARNING_LEVEL@
+DBF_OBJS=dbase/dbf_head.o dbase/dbf_rec.o dbase/dbf_misc.o dbase/dbf_ndx.o
 
 SOURCE = language-parser.tab.c language-scanner.c main.c php3_hash.c operators.c \
        variables.c token_cache.c stack.c internal_functions.c \
@@ -97,33 +99,31 @@ FUNCTIONS_SOURCE = functions/adabasd.c functions/aspell.c functions/apache.c fun
        functions/yp.c functions/dba.c functions/dba_gdbm.c \
 	   functions/dba_dbm.c functions/dba_ndbm.c functions/dba_cdb.c \
 	   functions/mcrypt.c functions/dba_db2.c functions/mhash.c \
-       functions/pcre.c
+       functions/pcre.c functions/posix.c
 
 FUNCTIONS = $(FUNCTIONS_SOURCE:.c=.o)
 
-LIBS = @SYBASE_CT_LFLAGS@ @SYBASE_CT_LIBS@ @FHTTPD_LIB@ @DBASE_LIB@ @PCRE_LIB@ @REGEX_LIB@ @DBM_LIB@ @ORACLE_LFLAGS@ @ORACLE_LIBS@ @IODBC_LFLAGS@ @IODBC_LIBS@ @SYBASE_LFLAGS@ @SYBASE_LIBS@ @SYBASE_CT_LFLAGS@ @SYBASE_CT_LIBS@ @MYSQL_LFLAGS@ @MYSQL_LIBS@ @MSQL_LFLAGS@ @MSQL_LIBS@ @ADA_LFLAGS@ @ADA_LIBS@ @SOLID_LIBS@ @EMPRESS_LIBS@ @OPENLINK_LFLAGS@ @OPENLINK_LIBS@ @PGSQL_LFLAGS@ @PGSQL_LIBS@ @LDAP_LFLAGS@ @LDAP_LIBS@ @MCK_LFLAGS@ @MCK_LIBS@ @VELOCIS_LIBS@ @CODBC_LFLAGS@ @CODBC_LIBS@ @IMAP_LIBS@ @ASPELL_LIBS@ @GD_LIBS@ @ZLIB_LIBS@ @PDFLIB_LIBS@ @CPDFLIB_LIBS@ @FDFLIB_LIBS@ @IFX_LFLAGS@ @IFX_LIBS@ @SNMP_LFLAGS@ @SNMP_LIBS@ @IBASE_LFLAGS@ @IBASE_LIBS@ @XML_LIBS@ @GETTEXT_LFLAGS@ @GETTEXT_LIBS@ @IMAGICK_LFLAGS@ @IMAGICK_LIBS@ @DBA_LFLAGS@ @DBA_LIBS@ @EXTRA_LIBS@ @LIBS@ 
+LIBS = @RPATHS@ @SYBASE_CT_LFLAGS@ @SYBASE_CT_LIBS@ @FHTTPD_LIB@ @DBASE_LIB@ @PCRE_LIB@ @REGEX_LIB@ @DBM_LIB@ @ORACLE_LFLAGS@ @ORACLE_LIBS@ @IODBC_LFLAGS@ @IODBC_LIBS@ @SYBASE_LFLAGS@ @SYBASE_LIBS@ @SYBASE_CT_LFLAGS@ @SYBASE_CT_LIBS@ @ADA_LFLAGS@ @ADA_LIBS@ @SOLID_LIBS@ @EMPRESS_LIBS@ @OPENLINK_LFLAGS@ @OPENLINK_LIBS@ @MCK_LFLAGS@ @MCK_LIBS@ @VELOCIS_LIBS@ @CODBC_LFLAGS@ @CODBC_LIBS@ @IMAP_LIBS@ @ZLIB_LIBS@ @PDFLIB_LIBS@ @CPDFLIB_LIBS@ @FDFLIB_LIBS@ @IFX_LFLAGS@ @IFX_LIBS@ @IBASE_LFLAGS@ @IBASE_LIBS@ @EXTRA_LIBS@ @LIBS@ 
 all: $(BINNAME)
 
 php: $(OBJS) $(FUNCTIONS) @PCRE_LIB@ @REGEX_LIB@ @FHTTPD_LIB@ @DBASE_LIB@
 	$(CC) $(CFLAGS) -o $(BINNAME) $(LDFLAGS) $(OBJS) $(FUNCTIONS) $(LIBS)
 
-libphp3.a: $(OBJS) $(FUNCTIONS) @PCRE_LIB@ @DBASE_OBJS@
+libphp3.a: $(OBJS) $(FUNCTIONS) @PCRE_LIB@ @DBASE_LIB@
 	$(AR) $(BINNAME) $(OBJS) $(FUNCTIONS) @DBASE_OBJS@
 	$(RANLIB) $(BINNAME)
 
-libmodphp3.a: $(OBJS) $(FUNCTIONS) @PCRE_LIB@ @DBASE_OBJS@
+libmodphp3.a: $(OBJS) $(FUNCTIONS) @PCRE_LIB@ @DBASE_LIB@
 	$(AR) $(BINNAME) $(OBJS) $(FUNCTIONS) @DBASE_OBJS@
 	$(RANLIB) $(BINNAME)
 
-libmodphp3-so.a: $(OBJS) $(FUNCTIONS) @PCRE_LIB@ @DBASE_OBJS@
+libmodphp3-so.a: $(OBJS) $(FUNCTIONS) @PCRE_LIB@ @DBASE_LIB@
 	$(AR) libmodphp3-so.a $(OBJS) $(FUNCTIONS) @DBASE_OBJS@
 	$(RANLIB) libmodphp3-so.a
 
 libphp3.so: mod_php3.c libmodphp3-so.a @DBASE_LIB@ @PCRE_LIB@
-	$(APXS) -c -o libphp3.so $(APXS_LDFLAGS) mod_php3.c libmodphp3-so.a @PCRE_LIBS@
-
-docs:
-	cd doc; $(MAKE)
+	-@test -f mod_php3.c || test -L mod_php3.c || $(LN_S) $(srcdir)/mod_php3.c mod_php3.c
+	$(APXS) -c -o libphp3.so -I$(srcdir) -I. mod_php3.c libmodphp3-so.a $(APXS_LDFLAGS) @PCRE_LIBS@
 
 pcrelib/libpcre.a:
 	(cd pcrelib; $(MAKE))
@@ -174,9 +174,8 @@ distclean: clean
 	-rm -f pcrelib/*.o pcrelib/*.a
 	-rm -f regex/*.o regex/*.a regex/*.ih
 	-rm -f dbase/*.o dbase/*.a
-	-rm -f doc/checkdoc doc/funcparse doc/version.ent
 	-rm -f do-conf test/test.log extra/gd/bdf2gdfont
-	-rm -f doc/Makefile regex/Makefile dbase/Makefile pcrelib/Makefile
+	-rm -f regex/Makefile dbase/Makefile pcrelib/Makefile
 
 bench: $(BINNAME)
 	./$(BINNAME) -c. tests/bench.phtml
@@ -187,7 +186,7 @@ regression check: $(BINNAME)
 	cd test && ./testall
 
 config.status: configure
-	cd $(srcdir) && ./config.status --recheck
+	./config.status --recheck
 
 build-defs.h config.h: stamp-h
 stamp-h: config.h.in config.status

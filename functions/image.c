@@ -26,7 +26,7 @@
    | Authors: Rasmus Lerdorf                                              |
    +----------------------------------------------------------------------+
  */
-/* $Id: image.c,v 1.48 1999/05/02 15:27:42 thies Exp $ */
+/* $Id: image.c,v 1.49 1999/06/16 11:34:21 ssb Exp $ */
 /* 
  * Based on Daniel Schmitt's imageinfo.c which carried the following
  * Copyright notice.
@@ -54,8 +54,8 @@
 #endif
 #include "internal_functions.h"
 #include "fopen-wrappers.h"
-#if HAVE_UNISTD_H
-#include <unistd.h>
+#ifdef HAVE_UNISTD_H
+# include <unistd.h>
 #endif
 #include "image.h"
 

@@ -27,7 +27,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: dir.c,v 1.58 1999/05/16 15:45:57 ssb Exp $ */
+/* $Id: dir.c,v 1.59 1999/06/16 11:34:18 ssb Exp $ */
 
 #ifdef THREAD_SAFE
 #include "tls.h"
@@ -39,12 +39,12 @@
 
 #include "php3_dir.h"
 
-#if HAVE_DIRENT_H
-#include <dirent.h>
+#ifdef HAVE_DIRENT_H
+# include <dirent.h>
 #endif
 
-#if HAVE_UNISTD_H
-#include <unistd.h>
+#ifdef HAVE_UNISTD_H
+# include <unistd.h>
 #endif
 
 #include <errno.h>

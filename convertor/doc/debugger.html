@@ -1,0 +1,247 @@
+<HTML
+><HEAD
+><TITLE
+>The PHP Debugger</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+REL="HOME"
+TITLE="PHP3 Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Appendixes"
+HREF="appendixes.html"><LINK
+REL="PREVIOUS"
+TITLE="Hitchhiker's guide to PHP internals"
+HREF="phpdevel-hhgtpi.html"><LINK
+REL="NEXT"
+TITLE="Debugger Protocol"
+HREF="debugger-protocol.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP3 Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="phpdevel-hhgtpi.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="debugger-protocol.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="APPENDIX"
+><H1
+><A
+NAME="DEBUGGER"
+>Appendix C. The PHP Debugger</A
+></H1
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Table of Contents</B
+></DT
+><DT
+><A
+HREF="debugger.html#DEBUGGER-USING"
+>Using the Debugger</A
+></DT
+><DT
+><A
+HREF="debugger-protocol.html"
+>Debugger Protocol</A
+></DT
+></DL
+></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="DEBUGGER-USING"
+>Using the Debugger</A
+></H1
+><P
+>   PHP's internal debugger is useful for tracking down evasive bugs.
+   The debugger works by connecting to a <SPAN
+CLASS="ACRONYM"
+>TCP</SPAN
+> port
+   for every time PHP starts up.  All error messages from that request
+   will be sent to this TCP connection.  This information is intended
+   for "debugging server" that can run inside an
+   <SPAN
+CLASS="ACRONYM"
+>IDE</SPAN
+> or programmable editor (such as Emacs).
+
+  </P
+><P
+>   How to set up the debugger:
+   <P
+></P
+><OL
+TYPE="1"
+><LI
+><P
+> Set up a TCP port for the debugger in <A
+HREF="configuration.html#PHP3.INI"
+>php3.ini</A
+> (<A
+HREF="configuration.html#INI.DEBUGGER.PORT"
+>debugger.port</A
+>) and enable it
+      (<A
+HREF="configuration.html#INI.DEBUGGER.ENABLED"
+>debugger.enabled</A
+>).
+      
+    </P
+></LI
+><LI
+><P
+> Set up a TCP listener on that port somewhere
+      (for example <B
+CLASS="COMMAND"
+>socket -l -s 1400</B
+> on UNIX).
+      
+    </P
+></LI
+><LI
+><P
+> In your code, run
+      "debugger_on(<TT
+CLASS="REPLACEABLE"
+><I
+>host</I
+></TT
+>)", where
+      <TT
+CLASS="REPLACEABLE"
+><I
+>host</I
+></TT
+> is the IP number or name of the
+      host running the <SPAN
+CLASS="ACRONYM"
+>TCP</SPAN
+> listener.
+      
+   </P
+></LI
+></OL
+>
+
+   Now, all warnings, notices etc. will show up on that listener
+   socket, <I
+CLASS="EMPHASIS"
+>even if you them turned off with
+    <A
+HREF="function.error-reporting.html"
+><B
+CLASS="FUNCTION"
+>error_reporting()</B
+></A
+></I
+>.
+
+ </P
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="phpdevel-hhgtpi.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="debugger-protocol.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Hitchhiker's guide to PHP internals</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="appendixes.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Debugger Protocol</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

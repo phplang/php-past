@@ -28,7 +28,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: db.c,v 1.90 1999/03/21 18:13:19 jimjag Exp $ */
+/* $Id: db.c,v 1.92 1999/06/20 18:11:43 jim Exp $ */
 #define IS_EXT_MODULE
 #if COMPILE_DL
 #ifdef PHP_31
@@ -51,16 +51,16 @@
 #include <stdlib.h>
 #include <string.h>
 #include <errno.h>
-#if HAVE_UNISTD_H
-#include <unistd.h>
+#ifdef HAVE_UNISTD_H
+# include <unistd.h>
 #endif
 
 #if HAVE_FCNTL_H
 #include <fcntl.h>
 #endif
 
-#if HAVE_SYS_FILE_H
-#include <sys/file.h>
+#ifdef HAVE_SYS_FILE_H
+# include <sys/file.h>
 #endif
 
 #if GDBM
@@ -89,6 +89,8 @@
 
 #if HAVE_NDBM_H
 #include <ndbm.h>
+#elif HAVE_DB1_NDBM_H
+#include <db1/ndbm.h>
 #elif HAVE_DB_H
 #define DB_DBM_HSEARCH 1
 #include <db.h>

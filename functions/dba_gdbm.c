@@ -27,7 +27,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: dba_gdbm.c,v 1.11 1999/05/18 03:15:47 sas Exp $ */
+/* $Id: dba_gdbm.c,v 1.12 1999/06/22 20:25:26 jimjag Exp $ */
 
 #include "php.h"
 
@@ -51,7 +51,8 @@ DBA_OPEN_FUNC(gdbm)
 	int filemode = 0644;
 
 	gmode = info->mode == DBA_READER ? GDBM_READER :
-		info->mode == DBA_WRITER ? GDBM_WRCREAT : 
+		info->mode == DBA_WRITER ? GDBM_WRITER : 
+		info->mode == DBA_CREAT  ? GDBM_WRCREAT : 
 		info->mode == DBA_TRUNC ? GDBM_NEWDB : -1;
 		
 	if(gmode == -1) 

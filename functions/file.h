@@ -27,7 +27,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: file.h,v 1.29 1999/04/27 12:55:20 rasmus Exp $ */
+/* $Id: file.h,v 1.30 1999/06/13 10:07:43 sas Exp $ */
 
 #ifndef _FILE_H
 #define _FILE_H
@@ -68,5 +68,7 @@ extern void php3_set_socket_blocking(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_set_socket_timeout(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_get_meta_tags(INTERNAL_FUNCTION_PARAMETERS);
 extern PHP_FUNCTION(flock);
+
+PHPAPI int _php3_set_sock_blocking(int socketd, int block);
 
 #endif /* _FILE_H */

@@ -30,7 +30,7 @@
  */
 
 
-/* $Id: string.c,v 1.192 1999/05/22 22:34:56 sas Exp $ */
+/* $Id: string.c,v 1.193 1999/06/16 11:34:22 ssb Exp $ */
 #ifdef THREAD_SAFE
 #include "tls.h"
 #endif
@@ -40,8 +40,8 @@
 #include "reg.h"
 #include "post.h"
 #include "php3_string.h"
-#if HAVE_SETLOCALE
-#include <locale.h>
+#ifdef HAVE_LOCALE_H
+# include <locale.h>
 #endif
 
 static char hexconvtab[] = "0123456789abcdef";
@@ -1787,7 +1787,7 @@ void php3_setlocale(INTERNAL_FUNCTION_PARAMETERS)
 
 	if (ARG_COUNT(ht)!=2 || getParameters(ht, 2, &category, &locale)==FAILURE)
 		WRONG_PARAM_COUNT;
-#if HAVE_SETLOCALE
+#ifdef HAVE_SETLOCALE
 	convert_to_string(category);
 	convert_to_string(locale);
 	if (!strcasecmp ("LC_ALL", category->value.str.val))

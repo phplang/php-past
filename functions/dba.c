@@ -27,7 +27,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: dba.c,v 1.17 1999/05/18 03:15:47 sas Exp $ */
+/* $Id: dba.c,v 1.18 1999/06/22 20:25:26 jimjag Exp $ */
 
 #include "php.h"
 
@@ -128,7 +128,7 @@ typedef struct dba_handler {
 
 /* check whether the user has write access */
 #define DBA_WRITE_CHECK \
-	if(info->mode != DBA_WRITER && info->mode != DBA_TRUNC) { \
+	if(info->mode != DBA_WRITER && info->mode != DBA_TRUNC && info->mode != DBA_CREAT) { \
 		php3_error(E_WARNING, "you cannot perform a modification to a database without proper access"); \
 		RETURN_FALSE; \
 	}
@@ -197,7 +197,7 @@ static void php3_info_dba(void)
 {
 	dba_handler *hptr;
 	
-	PUTS("V1 ($Id: dba.c,v 1.17 1999/05/18 03:15:47 sas Exp $)");
+	PUTS("V1 ($Id: dba.c,v 1.18 1999/06/22 20:25:26 jimjag Exp $)");
 	for(hptr = handler; hptr->name; hptr++) {
 		PUTS(" ");
 		PUTS(hptr->name);
@@ -285,6 +285,9 @@ static void _php3_dba_open(INTERNAL_FUNCTION_PARAMETERS, int persistent)
 	}
 
 	switch(args[1]->value.str.val[0]) {
+		case 'c': 
+			modenr = DBA_CREAT; 
+			break;
 		case 'w': 
 			modenr = DBA_WRITER; 
 			break;

@@ -27,12 +27,12 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: quot_print.c,v 1.5 1999/01/01 17:59:17 zeev Exp $ */
+/* $Id: quot_print.c,v 1.6 1999/06/16 11:34:22 ssb Exp $ */
 
 #include <stdlib.h>
 
 #ifdef HAVE_UNISTD_H
-#include <unistd.h>
+# include <unistd.h>
 #endif
 #include <string.h>
 #include <errno.h>

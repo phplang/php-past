@@ -28,8 +28,9 @@ LD = @LD@
 
 all: calendar.so
 
-CAL_OBJS =  calendar/calendar.o calendar/dow.o calendar/french.o calendar/gregor.o \
-			calendar/jewish.o calendar/julian.o
+CAL_OBJS =  calendar/calendar.o calendar/dow.o calendar/french.o \
+            calendar/gregor.o calendar/jewish.o calendar/julian.o \
+            calendar/easter.o
 
 calendar.so: $(CAL_OBJS)
 	$(LD) -o $@ $(CAL_OBJS)

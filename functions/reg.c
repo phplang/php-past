@@ -28,7 +28,7 @@
    |          Jaakko Hyvätti <jaakko@hyvatti.iki.fi>                      | 
    +----------------------------------------------------------------------+
  */
-/* $Id: reg.c,v 1.101 1999/06/05 14:17:31 andrey Exp $ */
+/* $Id: reg.c,v 1.103 1999/06/21 22:12:21 andrey Exp $ */
 #ifdef THREAD_SAFE
 #include "tls.h"
 #endif
@@ -295,8 +295,6 @@ PHPAPI char * _php3_regreplace(const char *pattern,
 	int err, copts = 0;
 
 	string_len = strlen(string);
-	if (!string_len)
-		return (char *)string;
 
 	if (icase)
 		copts = REG_ICASE;
@@ -543,7 +541,7 @@ void php3_split(INTERNAL_FUNCTION_PARAMETERS)
 	}
 
 	/* churn through str, generating array entries as we go */
-	while ((count == -1 || count > 0) && !(err = regexec(&re, strp, 1, subs, 0))) {
+	while ((count == -1 || count > 1) && !(err = regexec(&re, strp, 1, subs, 0))) {
 		if (subs[0].rm_so == 0 && subs[0].rm_eo) {
 			/* match is at start of string, return empty string */
 			add_next_index_stringl(return_value, empty_string, 0, 1);
@@ -584,10 +582,8 @@ void php3_split(INTERNAL_FUNCTION_PARAMETERS)
 	}
 
 	/* otherwise we just have one last element to add to the array */
-	if (count != 0) {
-		size = endp - strp;
-		add_next_index_stringl(return_value, strp, size, 1);
-	}
+	size = endp - strp;
+	add_next_index_stringl(return_value, strp, size, 1);
 
 	_php3_regfree(&re);
 

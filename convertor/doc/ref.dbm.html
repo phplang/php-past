@@ -1,0 +1,241 @@
+<HTML
+><HEAD
+><TITLE
+>dbm Functions</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+REL="HOME"
+TITLE="PHP3 Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Function Reference"
+HREF="funcref.html"><LINK
+REL="PREVIOUS"
+TITLE="dbase_numrecords"
+HREF="function.dbase-numrecords.html"><LINK
+REL="NEXT"
+TITLE="dbmopen"
+HREF="function.dbmopen.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP3 Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.dbase-numrecords.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.dbmopen.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="REFERENCE"
+><A
+NAME="REF.DBM"
+></A
+><DIV
+CLASS="TITLEPAGE"
+><H1
+CLASS="TITLE"
+>X. dbm Functions</H1
+><DIV
+CLASS="PARTINTRO"
+><A
+NAME="AEN4745"
+></A
+><P
+>   These functions allow you to store records stored in a dbm-style
+   database. This type of database (supported by the Berkeley db,
+   gdbm, and some system libraries, as well as a built-in flatfile
+   library) stores key/value pairs (as opposed to the full-blown
+   records supported by relational databases).
+  </P
+><P
+>   <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="EXAMPLE"
+><P
+><B
+>Example 1. dbm example</B
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>$dbm = dbmopen("lastseen", "w");
+if (dbmexists($dbm, $userid)) {
+  $last_seen = dbmfetch($dbm, $userid);
+} else {
+  dbminsert($dbm, $userid, time());
+}
+do_stuff();
+dbmreplace($dbm, $userid, time());
+dbmclose($dbm);</PRE
+></DIV
+></TD
+></TR
+></TABLE
+>
+  </P
+></DIV
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Table of Contents</B
+></DT
+><DT
+><A
+HREF="function.dbmopen.html"
+>dbmopen</A
+> &#8212; opens a dbm database</DT
+><DT
+><A
+HREF="function.dbmclose.html"
+>dbmclose</A
+> &#8212; closes a dbm database</DT
+><DT
+><A
+HREF="function.dbmexists.html"
+>dbmexists</A
+> &#8212; tells if a value exists for a key in a dbm database</DT
+><DT
+><A
+HREF="function.dbmfetch.html"
+>dbmfetch</A
+> &#8212; fetches a value for a key from a dbm database</DT
+><DT
+><A
+HREF="function.dbminsert.html"
+>dbminsert</A
+> &#8212; inserts a value for a key in a dbm database</DT
+><DT
+><A
+HREF="function.dbmreplace.html"
+>dbmreplace</A
+> &#8212; replaces the value for a key in a dbm database</DT
+><DT
+><A
+HREF="function.dbmdelete.html"
+>dbmdelete</A
+> &#8212; deletes the value for a key from a dbm database</DT
+><DT
+><A
+HREF="function.dbmfirstkey.html"
+>dbmfirstkey</A
+> &#8212; retrieves the first key from a dbm database</DT
+><DT
+><A
+HREF="function.dbmnextkey.html"
+>dbmnextkey</A
+> &#8212; retrieves the next key from a dbm database</DT
+><DT
+><A
+HREF="function.dblist.html"
+>dblist</A
+> &#8212; describes the dbm-compatible library being used</DT
+></DL
+></DIV
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.dbase-numrecords.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.dbmopen.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>dbase_numrecords</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="funcref.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>dbmopen</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,216 @@
+<HTML
+><HEAD
+><TITLE
+>chunk_split</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+REL="HOME"
+TITLE="PHP3 Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="String functions"
+HREF="ref.strings.html"><LINK
+REL="PREVIOUS"
+TITLE="Chr"
+HREF="function.chr.html"><LINK
+REL="NEXT"
+TITLE="convert_cyr_string"
+HREF="function.convert-cyr-string.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP3 Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.chr.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.convert-cyr-string.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="FUNCTION.CHUNK-SPLIT"
+>chunk_split</A
+></H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN18982"
+></A
+>chunk_split -- Split a string into smaller chunks</DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN18985"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><CODE
+CLASS="FUNCDEF"
+>string chunk_split</CODE
+>(string string, int [<SPAN
+CLASS="OPTIONAL"
+>chunklen</SPAN
+>]
+      , string [<SPAN
+CLASS="OPTIONAL"
+>end</SPAN
+>]
+      );<P
+></P
+></DIV
+><P
+>     Can be used to split a string into smaller chunks which is useful
+     for e.g. converting <A
+HREF="function.base64-encode.html"
+>base64_encode</A
+> output to
+     match RFC 2045 behaviour. It inserts every
+     <TT
+CLASS="PARAMETER"
+><I
+>chunklen</I
+></TT
+> (defaults to 76) chars the string
+     <TT
+CLASS="PARAMETER"
+><I
+>end</I
+></TT
+> (defaults to "\r\n").  It returns the
+     new string leaving the original string untouched.
+     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="EXAMPLE"
+><P
+><B
+>Example 1. chr_replace() example</B
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+># format $data using RFC 2045 semantics
+
+$new_string = chunk_split(base64_encode($data));&#13;</PRE
+></DIV
+></TD
+></TR
+></TABLE
+>
+     
+     This function is significantly faster than
+     <A
+HREF="function.ereg-replace.html"
+><B
+CLASS="FUNCTION"
+>ereg_replace()</B
+></A
+>.
+   </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.chr.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.convert-cyr-string.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Chr</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.strings.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>convert_cyr_string</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

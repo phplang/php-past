@@ -27,7 +27,7 @@
    |          Mike Jackson <mhjack@tscnet.com>                            |
    +----------------------------------------------------------------------+
  */
-/* $Id: snmp.c,v 1.14 1999/05/22 14:38:40 rasmus Exp $ */
+/* $Id: snmp.c,v 1.16 1999/06/20 12:38:42 sas Exp $ */
 
 #include "php.h"
 #include "internal_functions.h"
@@ -54,7 +54,7 @@
 #include <netdb.h>
 #endif
 #ifdef HAVE_UNISTD_H
-#include <unistd.h>
+# include <unistd.h>
 #endif
 #if HAVE_SNMP
 
@@ -204,7 +204,11 @@ void _php3_snmp(INTERNAL_FUNCTION_PARAMETERS, int st) {
 	 * in (at least) ucd-snmp 3.6.1 which frees
 	 * memory it did not allocate
 	 */
+#ifdef UCD_SNMP_HACK
 	session.community = (u_char *) strdup(a2->value.str.val);
+#else
+	session.community = (u_char *) a2->value.str.val;
+#endif
 	session.community_len = a2->value.str.len;
 	session.retries = retries;
 	session.timeout = timeout;

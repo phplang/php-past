@@ -1,0 +1,193 @@
+<HTML
+><HEAD
+><TITLE
+>ldap_first_entry</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+REL="HOME"
+TITLE="PHP3 Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="LDAP Functions"
+HREF="ref.ldap.html"><LINK
+REL="PREVIOUS"
+TITLE="ldap_first_attribute"
+HREF="function.ldap-first-attribute.html"><LINK
+REL="NEXT"
+TITLE="ldap_free_result"
+HREF="function.ldap-free-result.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP3 Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.ldap-first-attribute.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.ldap-free-result.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="FUNCTION.LDAP-FIRST-ENTRY"
+>ldap_first_entry</A
+></H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN11011"
+></A
+>ldap_first_entry -- Return first result id</DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN11014"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><CODE
+CLASS="FUNCDEF"
+>int ldap_first_entry</CODE
+>(int link_identifier, int result_identifier);<P
+></P
+></DIV
+><P
+>     Returns the result entry identifier for the first entry on
+     success and false on error.
+    </P
+><P
+>  
+     Entries in the LDAP result are read sequentially using the
+     <B
+CLASS="FUNCTION"
+>ldap_first_entry()</B
+> and
+     <A
+HREF="function.ldap-next-entry.html"
+><B
+CLASS="FUNCTION"
+>ldap_next_entry()</B
+></A
+>
+     functions. <B
+CLASS="FUNCTION"
+>ldap_first_entry()</B
+> returns the
+     entry identifier for first entry in the result. This entry
+     identifier is then supplied to
+     <B
+CLASS="FUNCTION"
+>lap_next_entry()</B
+> routine to get successive
+     entries from the result.
+    </P
+><P
+>     see also <A
+HREF="function.ldap-get-entries.html"
+><B
+CLASS="FUNCTION"
+>ldap_get_entries()</B
+></A
+>.
+   </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.ldap-first-attribute.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.ldap-free-result.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>ldap_first_attribute</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.ldap.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>ldap_free_result</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

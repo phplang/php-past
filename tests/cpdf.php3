@@ -78,6 +78,7 @@
   cpdf_newpath($cpdf);  /* needed because clip doesn't consume path */
   draw_text($cpdf, "Helvetica", 18.0, 250, 130);
   cpdf_import_jpeg($cpdf, "figure.jpg", 300, 50, 0.0, 0.0, 300.0, 0.0, 0.0, 0, 1);  /* watch for the second last parameter. It is 0 to disable extra gsave/grestore */
+
   cpdf_restore($cpdf);
 
   cpdf_finalize($cpdf);

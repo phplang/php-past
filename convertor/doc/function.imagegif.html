@@ -1,0 +1,185 @@
+<HTML
+><HEAD
+><TITLE
+>ImageGif</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+REL="HOME"
+TITLE="PHP3 Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Image functions"
+HREF="ref.image.html"><LINK
+REL="PREVIOUS"
+TITLE="ImageFontWidth"
+HREF="function.imagefontwidth.html"><LINK
+REL="NEXT"
+TITLE="ImageInterlace"
+HREF="function.imageinterlace.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP3 Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.imagefontwidth.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.imageinterlace.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="FUNCTION.IMAGEGIF"
+>ImageGif</A
+></H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN8145"
+></A
+>ImageGif -- output image to browser or file</DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN8148"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><CODE
+CLASS="FUNCDEF"
+>int imagegif</CODE
+>(int im, string filename);<P
+></P
+></DIV
+><P
+>    ImageGif creates the GIF file in filename from the image im.  The im argument is the return from the
+    <A
+HREF="function.imagecreate.html"
+><B
+CLASS="FUNCTION"
+>imagecreate()</B
+></A
+> function.
+  </P
+><P
+>    The image format will be GIF87a unless the image has
+    been made transparent with <A
+HREF="function.imagecolortransparent.html"
+><B
+CLASS="FUNCTION"
+>imagecolortransparent()</B
+></A
+>, in
+    which case the image format will be GIF89a.
+  </P
+><P
+>    The filename argument is optional, and if left off,
+    the raw image stream will be output directly.  By sending an
+    image/gif content-type using the
+
+    header
+
+    function, you can create a PHP script that outputs GIF images
+    directly.
+   </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.imagefontwidth.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.imageinterlace.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>ImageFontWidth</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.image.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>ImageInterlace</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

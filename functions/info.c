@@ -28,12 +28,13 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: info.c,v 1.75 1999/05/19 02:06:06 rasmus Exp $ */
+/* $Id: info.c,v 1.76 1999/06/19 02:35:16 jim Exp $ */
 
 #ifdef THREAD_SAFE
 #include "tls.h"
 #endif
 #include "php.h"
+#include "internal_functions.h"
 #include "head.h"
 #include "info.h"
 #ifndef MSVC5
@@ -425,7 +426,45 @@ void php3_version(INTERNAL_FUNCTION_PARAMETERS)
 {
 	TLS_VARS;
 	
-    RETURN_STRING(PHP_VERSION,1);
+	RETURN_STRING(PHP_VERSION,1);
+}
+/* }}} */
+
+static int extension_found;
+static char *finding_extension;
+
+static int _find_extension(php3_module_entry *module)
+{
+	TLS_VARS;
+
+	if (strcmp(finding_extension, module->name) == 0) {
+		extension_found = 1;
+	}
+	
+	return 0;
+}
+
+/* {{{ proto bool extension_loaded(string)
+   Returns true if the specified extension is loaded. */
+PHP_FUNCTION(extension_loaded)
+{
+	pval *extension;
+	TLS_VARS;
+
+	if (ARG_COUNT(ht) != 1 || getParameters(ht, 1, &extension) == FAILURE) {
+		WRONG_PARAM_COUNT;
+	}
+	convert_to_string(extension);
+
+	/* What would be nice is if we could pass our own little chunk of data
+	   to _php3_hash_apply to pass on to our function so we didn't rely
+	   on static data. */
+	finding_extension = extension->value.str.val;
+	extension_found = 0;
+	_php3_hash_apply(&GLOBAL(module_registry),(int (*)(void *))_find_extension);
+	finding_extension = NULL;
+
+	RETURN_LONG(extension_found);
 }
 /* }}} */
 

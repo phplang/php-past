@@ -23,7 +23,7 @@
  */
 
 
-/* $Id: hg_comm.h,v 1.7 1999/06/02 10:06:42 steinm Exp $ */
+/* $Id: hg_comm.h,v 1.8 1999/06/10 09:25:01 steinm Exp $ */
 
 #ifndef _HG_COMM_H
 #define _HG_COMM_H
@@ -88,15 +88,17 @@
 #define DOCUMENT                      0
 #define COLLECTION                    1
 
+
 #if WIN32|WINNT
 # define SOCK_ERR INVALID_SOCKET
 # define SOCK_CONN_ERR SOCKET_ERROR
-# define SOCK_FCLOSE(s) closesocket(s)
+# define HWSOCK_FCLOSE(s) closesocket(s)
 #else
 # define SOCK_ERR -1
 # define SOCK_CONN_ERR -1
-# define SOCK_FCLOSE(s) close(s)
+# define HWSOCK_FCLOSE(s) close(s)
 #endif
+
 
 /* Low error messages */
 #define LE_MALLOC                    -1

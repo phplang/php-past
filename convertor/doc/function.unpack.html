@@ -1,0 +1,216 @@
+<HTML
+><HEAD
+><TITLE
+>unpack</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+REL="HOME"
+TITLE="PHP3 Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Miscellaneous Functions"
+HREF="ref.misc.html"><LINK
+REL="PREVIOUS"
+TITLE="sleep"
+HREF="function.sleep.html"><LINK
+REL="NEXT"
+TITLE="unserialize"
+HREF="function.unserialize.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP3 Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.sleep.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.unserialize.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="FUNCTION.UNPACK"
+>unpack</A
+></H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN12679"
+></A
+>unpack -- unpack data from binary string</DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN12682"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><CODE
+CLASS="FUNCDEF"
+>array unpack</CODE
+>(string format, string data);<P
+></P
+></DIV
+><P
+>     Unpack from binary string into array according to
+     <TT
+CLASS="PARAMETER"
+><I
+>format</I
+></TT
+>. Returns array containing unpacked
+     elements of binary string.
+
+    </P
+><P
+>     Unpack works slightly different from Perl as the unpacked data is 
+     stored in an associative array. To accomplish this you have to
+     name the different format codes and separate them by a slash /.
+
+     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="EXAMPLE"
+><P
+><B
+>Example 1. unpack format string</B
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>$array = unpack("c2chars/nint", $binarydata);</PRE
+><P
+>       The resulting array will contain the entries "chars1",
+       "chars2" and "int".
+     </P
+></DIV
+></TD
+></TR
+></TABLE
+>
+
+    </P
+><P
+>     For an explanation of the format codes see also:
+     <A
+HREF="function.pack.html"
+><B
+CLASS="FUNCTION"
+>pack()</B
+></A
+>
+
+    </P
+><P
+>     Note that PHP internally stores integral values as signed. If you
+     unpack a large unsigned long and it is of the same size as PHP
+     internally stored values the result will be a negative number
+     even though unsigned unpacking was specified.
+
+   </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.sleep.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.unserialize.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>sleep</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.misc.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>unserialize</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

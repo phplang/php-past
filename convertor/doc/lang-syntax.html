@@ -1,0 +1,367 @@
+<HTML
+><HEAD
+><TITLE
+>Syntax and grammar</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+REL="HOME"
+TITLE="PHP3 Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Language Reference"
+HREF="langref.html"><LINK
+REL="PREVIOUS"
+TITLE="Connection  Handling"
+HREF="feature-connection-handling.html"><LINK
+REL="NEXT"
+TITLE="Types"
+HREF="types.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP3 Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="feature-connection-handling.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="types.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="CHAPTER"
+><H1
+><A
+NAME="LANG-SYNTAX"
+>Chapter 5. Syntax and grammar</A
+></H1
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Table of Contents</B
+></DT
+><DT
+><A
+HREF="lang-syntax.html#BASIC-SYNTAX"
+>Basic Syntax</A
+></DT
+><DT
+><A
+HREF="types.html"
+>Types</A
+></DT
+><DT
+><A
+HREF="variables.html"
+>Variables</A
+></DT
+><DT
+><A
+HREF="constants.html"
+>Constants</A
+></DT
+><DT
+><A
+HREF="expressions.html"
+>Expressions</A
+></DT
+><DT
+><A
+HREF="operators.html"
+>Operators</A
+></DT
+><DT
+><A
+HREF="control-structures.html"
+>Control Structures</A
+></DT
+></DL
+></DIV
+><P
+>    PHP's syntax is borrowed primarily from C.  Java and Perl have
+    also influenced the syntax.
+
+  </P
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="BASIC-SYNTAX"
+>Basic Syntax</A
+></H1
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="BASIC-SYNTAX.PHPMODE"
+>Escaping from HTML</A
+></H2
+><P
+>     There are four ways of escaping from HTML and entering "PHP code
+     mode":
+
+    </P
+><P
+>     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="EXAMPLE"
+><P
+><B
+>Example 5-1. Ways of escaping from HTML</B
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>1.  &lt;? echo ("this is the simplest, an SGML processing instruction\n"); ?&#62;
+ 
+2.  &lt;?php echo("if you want to serve XML documents, do like this\n"); ?&#62;
+
+3.  &lt;script language="php"&#62; 
+        echo ("some editors (like FrontPage) don't
+              like processing instructions");
+    &lt;/script&#62;
+
+4.  &lt;% echo ("As of PHP 3.0.4 you may optionally use ASP-style tags"); %&#62;
+    &lt;%= $variable; # This is a shortcut for "&lt;%echo .." %&#62;
+      </PRE
+></DIV
+></TD
+></TR
+></TABLE
+>
+
+    </P
+><P
+>     The first way is only available if short tags have been enabled
+     (either by calling <B
+CLASS="FUNCTION"
+>short_tags()</B
+>, they are
+     configured on using the short_tags run-time configuration setting,
+     or they are enabled using the --enable-short-tags compile-time
+     configuration setting.
+
+    </P
+><P
+>     The fourth way is only available if ASP-style tags have been
+     enabled using either the asp_tags configuration setting or the
+     --enable-asp-tags compile-time configuration setting.
+
+    </P
+><P
+>     The closing "bracket" for the block will include the immediately
+     trailing newline if one is present.
+
+   </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="BASIC-SYNTAX.INSTRUCTION-SEPARATION"
+>Instruction separation</A
+></H2
+><P
+>     Instructions are separated the same as in C or perl - terminate
+     each statement with a semicolon.
+
+    </P
+><P
+>     The closing tag (?&gt;) also implies the end of the statement, so the
+     following are equivalent:
+
+     <DIV
+CLASS="INFORMALEXAMPLE"
+><P
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>&lt;?php
+    echo "This is a test";
+?&#62;
+
+&lt;?php echo "This is a test" ?&#62;
+      </PRE
+><P
+></P
+></DIV
+>
+
+   </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="BASIC-SYNTAX.COMMENTS"
+>Comments</A
+></H2
+><P
+>     PHP supports 'C', 'C++' and Unix shell-style comments. For example:
+
+    <DIV
+CLASS="INFORMALEXAMPLE"
+><P
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>&lt;?php
+    echo "This is a test"; // This is a one-line c++ style comment
+    /* This is a multi line comment
+       yet another line of comment */
+    echo "This is yet another test";
+    echo "One Final Test"; # This is shell-style style comment
+?&#62;
+     </PRE
+><P
+></P
+></DIV
+>
+
+    </P
+><P
+>     The "one-line" comment styles actually only comment to the
+     end of the line or the current block of PHP code, whichever
+     comes first.
+    </P
+><DIV
+CLASS="INFORMALEXAMPLE"
+><P
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>&lt;h1&#62;This is an &lt;?# echo "simple";?&#62; example.&lt;/h1&#62;
+&lt;p&#62;The header above will say 'This is an example'.</PRE
+><P
+></P
+></DIV
+><P
+>     You should be careful not to nest 'C' style comments, which can
+     happen when commenting out large blocks.
+
+    </P
+><DIV
+CLASS="INFORMALEXAMPLE"
+><P
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>&lt;?php
+ /* 
+    echo "This is a test"; /* This comment will cause a problem */
+ */
+?&#62;
+    </PRE
+><P
+></P
+></DIV
+></DIV
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="feature-connection-handling.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="types.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Connection  Handling</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="langref.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Types</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

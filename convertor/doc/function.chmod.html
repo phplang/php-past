@@ -1,0 +1,219 @@
+<HTML
+><HEAD
+><TITLE
+>chmod</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+REL="HOME"
+TITLE="PHP3 Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Filesystem Functions"
+HREF="ref.filesystem.html"><LINK
+REL="PREVIOUS"
+TITLE="chgrp"
+HREF="function.chgrp.html"><LINK
+REL="NEXT"
+TITLE="chown"
+HREF="function.chown.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP3 Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.chgrp.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.chown.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="FUNCTION.CHMOD"
+>chmod</A
+></H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN5478"
+></A
+>chmod -- change file mode</DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN5481"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><CODE
+CLASS="FUNCDEF"
+>int chmod</CODE
+>(string filename, int mode);<P
+></P
+></DIV
+><P
+>     Attempts to change the mode of the file specified by
+     <TT
+CLASS="PARAMETER"
+><I
+>filename</I
+></TT
+> to that given in
+     <TT
+CLASS="PARAMETER"
+><I
+>mode</I
+></TT
+>.
+
+    </P
+><P
+>     Note that <TT
+CLASS="PARAMETER"
+><I
+>mode</I
+></TT
+> is not automatically
+     assumed to be an octal value. To ensure the expected operation,
+     you need to prefix <TT
+CLASS="PARAMETER"
+><I
+>mode</I
+></TT
+> with a zero (0):
+
+     <DIV
+CLASS="INFORMALEXAMPLE"
+><P
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>chmod( "/somedir/somefile", 755 );   // decimal; probably incorrect       
+chmod( "/somedir/somefile", 0755 );  // octal; correct value of mode
+      </PRE
+><P
+></P
+></DIV
+>
+
+    </P
+><P
+>     Returns true on success and false otherwise.
+
+    </P
+><P
+>     See also <A
+HREF="function.chown.html"
+><B
+CLASS="FUNCTION"
+>chown()</B
+></A
+> and <A
+HREF="function.chgrp.html"
+><B
+CLASS="FUNCTION"
+>chgrp()</B
+></A
+>.
+   </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.chgrp.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.chown.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>chgrp</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.filesystem.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>chown</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

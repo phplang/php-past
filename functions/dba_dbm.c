@@ -27,7 +27,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: dba_dbm.c,v 1.14 1999/05/18 03:15:47 sas Exp $ */
+/* $Id: dba_dbm.c,v 1.15 1999/06/22 20:25:26 jimjag Exp $ */
 
 #include "php.h"
 
@@ -78,7 +78,7 @@ DBA_OPEN_FUNC(dbm)
 		TRUNC_IT(".dir", O_TRUNC);
 	}
 
-	if(info->mode == DBA_WRITER) {
+	if(info->mode == DBA_CREAT) {
 		char buf[PATH_MAX + 1];
 
 		TRUNC_IT(".pag", 0);

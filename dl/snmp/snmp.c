@@ -26,7 +26,7 @@
    | Authors: Rasmus Lerdorf <rasmus@lerdorf.on.ca>                       |
    +----------------------------------------------------------------------+
  */
-/* $Id: snmp.c,v 1.20 1998/11/03 15:52:33 rasmus Exp $ */
+/* $Id: snmp.c,v 1.21 1999/06/16 11:34:16 ssb Exp $ */
 
 #ifndef __P
 #define __P(p) p
@@ -52,7 +52,7 @@
 #include <netdb.h>
 #endif
 #ifdef HAVE_UNISTD_H
-#include <unistd.h>
+# include <unistd.h>
 #endif
 
 #include "asn1.h"

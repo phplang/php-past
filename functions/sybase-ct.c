@@ -28,7 +28,7 @@
    +----------------------------------------------------------------------+
  */
  
-/* $Id: sybase-ct.c,v 1.61 1999/01/05 07:08:24 jah Exp $ */
+/* $Id: sybase-ct.c,v 1.62 1999/06/24 18:29:07 sas Exp $ */
 
 
 #ifndef MSVC5
@@ -193,7 +193,7 @@ static void _close_sybct_plink(sybct_link *sybct_ptr)
 }
 
 
-static CS_RETCODE _client_message_handler(CS_CONTEXT *context, CS_CONNECTION *connection, CS_CLIENTMSG *errmsg)
+CS_STATIC CS_PUBLIC CS_RETCODE _client_message_handler(CS_CONTEXT *context, CS_CONNECTION *connection, CS_CLIENTMSG *errmsg)
 {
 	if (CS_SEVERITY(errmsg->msgnumber) >= php3_sybct_module.min_client_severity) {
 		php3_error(E_WARNING,"Sybase:  Client message:  %s (severity %d)",errmsg->msgstring, CS_SEVERITY(errmsg->msgnumber));

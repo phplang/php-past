@@ -26,7 +26,7 @@
    | Author: Jim Winstead (jimw@php.net)                                  |
    +----------------------------------------------------------------------+
  */
-/* $Id: base64.c,v 1.29 1999/02/27 16:11:08 sas Exp $ */
+/* $Id: base64.c,v 1.30 1999/06/24 17:06:40 sas Exp $ */
 
 #ifdef THREAD_SAFE
 #include "tls.h"
@@ -97,10 +97,7 @@ unsigned char *_php3_base64_decode(const unsigned char *string, int length, int 
 	while ((ch = *current++) != '\0') {
 		if (ch == base64_pad) break;
 		chp = strchr(base64_table, ch);
-		if (chp == NULL) {
-			efree(result);
-			return NULL;
-		}
+		if (chp == NULL) continue;
 		ch = chp - base64_table;
 
 		switch(i % 4) {

@@ -27,7 +27,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: var.c,v 1.13 1999/01/08 14:14:56 rasmus Exp $ */
+/* $Id: var.c,v 1.14 1999/06/16 11:34:22 ssb Exp $ */
 
 #ifdef THREAD_SAFE
 #include "tls.h"
@@ -42,8 +42,8 @@
 #include "reg.h"
 #include "post.h"
 #include "php3_string.h"
-#if HAVE_SETLOCALE
-#include <locale.h>
+#ifdef HAVE_LOCALE_H
+# include <locale.h>
 #endif
 
 #include "php3_var.h"

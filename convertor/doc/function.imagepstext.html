@@ -1,0 +1,347 @@
+<HTML
+><HEAD
+><TITLE
+>ImagePSText</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+REL="HOME"
+TITLE="PHP3 Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Image functions"
+HREF="ref.image.html"><LINK
+REL="PREVIOUS"
+TITLE="ImagePSEncodeFont"
+HREF="function.imagepsencodefont.html"><LINK
+REL="NEXT"
+TITLE="ImagePSBBox"
+HREF="function.imagepsbbox.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP3 Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.imagepsencodefont.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.imagepsbbox.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="FUNCTION.IMAGEPSTEXT"
+>ImagePSText</A
+></H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN8693"
+></A
+>ImagePSText -- to draw a text string over an image using PostScript Type1 fonts</DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN8696"
+></A
+><H2
+>Descriptiom</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><CODE
+CLASS="FUNCDEF"
+>array imagepstext</CODE
+>(int image, string text, int font, int size, int foreground, int background, int x, int y, int space, int tightness, float angle, int antialias_steps);<P
+></P
+></DIV
+><P
+>     <TT
+CLASS="PARAMETER"
+><I
+>size</I
+></TT
+> is expressed in pixels.
+    </P
+><P
+>     <TT
+CLASS="PARAMETER"
+><I
+>foreground</I
+></TT
+> is the color in which the text will be painted.
+     <TT
+CLASS="PARAMETER"
+><I
+>background</I
+></TT
+> is the color to which the text will try to fade in
+     with antialiasing. No pixels with the color <TT
+CLASS="PARAMETER"
+><I
+>background</I
+></TT
+> are
+     actually painted, so the background image does not need to be of solid color.
+    </P
+><P
+>     The coordinates given by <TT
+CLASS="PARAMETER"
+><I
+>x</I
+></TT
+>, <TT
+CLASS="PARAMETER"
+><I
+>y</I
+></TT
+>
+     will define the origin (or reference point) of the first character
+     (roughly the lower-left corner of the character).  This is different from the
+     <A
+HREF="function.imagestring.html"
+><B
+CLASS="FUNCTION"
+>ImageString()</B
+></A
+>, where x, y define the
+     upper-right corner of the first character. Refer to PostScipt documentation
+     about fonts and their measuring system if you have trouble understanding
+     how this works.
+    </P
+><P
+>     <TT
+CLASS="PARAMETER"
+><I
+>space</I
+></TT
+> allows you to change the default value of a space in a font.
+     This amount is added to the normal value and can also be negative.
+    </P
+><P
+>     <TT
+CLASS="PARAMETER"
+><I
+>tightness</I
+></TT
+> allows you to control the amount of white space
+     between characters. This amount is added to the normal character width and can also be negative.
+    </P
+><P
+>     <TT
+CLASS="PARAMETER"
+><I
+>angle</I
+></TT
+> is in degrees.
+    </P
+><P
+>     <TT
+CLASS="PARAMETER"
+><I
+>antialias_steps</I
+></TT
+> allows you to control the number of colours
+     used for antialiasing text. Allowed values are 4 and 16. The higher value is
+     recommended for text sizes lower than 20, where the effect in text quality is quite visible.
+     With bigger sizes, use 4. It's less computationally intensive.
+    </P
+><P
+>     Parameters <TT
+CLASS="PARAMETER"
+><I
+>space</I
+></TT
+> and <TT
+CLASS="PARAMETER"
+><I
+>tightness</I
+></TT
+>
+     are expressed in character space units, where 1 unit is 1/1000th of an em-square.
+    </P
+><P
+>     Parameters <TT
+CLASS="PARAMETER"
+><I
+>space</I
+></TT
+>, <TT
+CLASS="PARAMETER"
+><I
+>tightness</I
+></TT
+>,
+     <TT
+CLASS="PARAMETER"
+><I
+>angle</I
+></TT
+> and <TT
+CLASS="PARAMETER"
+><I
+>antialias</I
+></TT
+> are optional.
+    </P
+><P
+>     This function returns an array containing the following elements:
+     <DIV
+CLASS="INFORMALTABLE"
+><P
+></P
+><TABLE
+BORDER="1"
+CLASS="CALSTABLE"
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>0</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>lower left x-coordinate</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>1</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>lower left y-coordinate</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>2</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>upper right x-coordinate</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>3</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>upper right y-coordinate</TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+>
+    </P
+><P
+>     See also <A
+HREF="function.imagepsbbox.html"
+><B
+CLASS="FUNCTION"
+>imagepsbbox()</B
+></A
+>.
+   </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.imagepsencodefont.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.imagepsbbox.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>ImagePSEncodeFont</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.image.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>ImagePSBBox</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

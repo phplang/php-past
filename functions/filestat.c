@@ -27,7 +27,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: filestat.c,v 1.87 1999/03/01 18:33:53 sas Exp $ */
+/* $Id: filestat.c,v 1.88 1999/06/16 11:34:19 ssb Exp $ */
 #ifdef THREAD_SAFE
 #include "tls.h"
 #endif
@@ -43,7 +43,7 @@
 #include <ctype.h>
 #include <time.h>
 
-#if HAVE_UNISTD_H
+#ifdef HAVE_UNISTD_H
 # include <unistd.h>
 #endif
 
@@ -61,7 +61,7 @@
 # endif
 #endif
 
-#if HAVE_GRP_H
+#ifdef HAVE_GRP_H
 # if MSVC5
 #  include "win32/grp.h"
 # else
@@ -87,7 +87,7 @@ static unsigned int CurrentStatLength=0;
 static int CurrentStatLength=0;
 # endif
 static struct stat sb;
-#if HAVE_SYMLINK
+#ifdef HAVE_SYMLINK
 static struct stat lsb;
 #endif
 #endif
@@ -395,7 +395,7 @@ static void _php3_stat(const char *filename, int type, pval *return_value)
 		} else {
 			strcpy(GLOBAL(CurrentStatFile),filename);
 		}
-#if HAVE_SYMLINK
+#ifdef HAVE_SYMLINK
 		GLOBAL(lsb).st_mode = 0; /* mark lstat buf invalid */
 #endif
 		if (stat(GLOBAL(CurrentStatFile),&GLOBAL(sb))==-1) {
@@ -408,7 +408,7 @@ static void _php3_stat(const char *filename, int type, pval *return_value)
 		}
 	}
 
-#if HAVE_SYMLINK
+#ifdef HAVE_SYMLINK
 	if (8 == type /* filetype */
 		|| 14 == type /* is link */
 		|| 16 == type) { /* lstat */
@@ -442,7 +442,7 @@ static void _php3_stat(const char *filename, int type, pval *return_value)
 	case 7: /* filectime */
 		RETURN_LONG((long)GLOBAL(sb).st_ctime);
 	case 8: /* filetype */
-#if HAVE_SYMLINK
+#ifdef HAVE_SYMLINK
 		if (S_ISLNK(GLOBAL(lsb).st_mode)) {
 			RETURN_STRING("link",1);
 		}
@@ -467,7 +467,7 @@ static void _php3_stat(const char *filename, int type, pval *return_value)
 	case 13: /*is dir*/
 		RETURN_LONG(S_ISDIR(GLOBAL(sb).st_mode));
 	case 14: /*is link*/
-#if HAVE_SYMLINK
+#ifdef HAVE_SYMLINK
 		RETURN_LONG(S_ISLNK(GLOBAL(lsb).st_mode));
 #else
 		RETURN_FALSE;
@@ -475,7 +475,7 @@ static void _php3_stat(const char *filename, int type, pval *return_value)
 	case 15: /*file exists*/
 		RETURN_TRUE; /* the false case was done earlier */
 	case 16: /* lstat */
-#if HAVE_SYMLINK
+#ifdef HAVE_SYMLINK
 		stat_sb = &GLOBAL(lsb);
 #endif
 		/* FALLTHROUGH */
@@ -498,12 +498,12 @@ static void _php3_stat(const char *filename, int type, pval *return_value)
 		add_next_index_long(return_value, stat_sb->st_atime);
 		add_next_index_long(return_value, stat_sb->st_mtime);
 		add_next_index_long(return_value, stat_sb->st_ctime);
-#if HAVE_ST_BLKSIZE
+#ifdef HAVE_ST_BLKSIZE
 		add_next_index_long(return_value, stat_sb->st_blksize);
 #else
 		add_next_index_long(return_value, -1);
 #endif
-#if HAVE_ST_BLOCKS
+#ifdef HAVE_ST_BLOCKS
 		add_next_index_long(return_value, stat_sb->st_blocks);
 #else
 		add_next_index_long(return_value, -1);

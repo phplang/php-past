@@ -28,14 +28,17 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: dns.c,v 1.53 1999/02/27 17:03:50 sas Exp $ */
+/* $Id: dns.c,v 1.55 1999/06/24 12:27:59 sas Exp $ */
 
 #ifdef THREAD_SAFE
 #include "tls.h"
 #endif
 #include "php.h"
-#if HAVE_SYS_SOCKET_H
-#include <sys/socket.h>
+#ifdef HAVE_SYS_SOCKET_H
+# include <sys/socket.h>
+#endif
+#ifdef HAVE_SYS_TYPES_H
+#include <sys/types.h>
 #endif
 #if WIN32|WINNT
 #if HAVE_BINDLIB

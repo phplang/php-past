@@ -1,0 +1,193 @@
+<HTML
+><HEAD
+><TITLE
+>mssql_query</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+REL="HOME"
+TITLE="PHP3 Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="MS SQL Server Functions"
+HREF="ref.mssql.html"><LINK
+REL="PREVIOUS"
+TITLE="mssql_pconnect"
+HREF="function.mssql-pconnect.html"><LINK
+REL="NEXT"
+TITLE="mssql_result"
+HREF="function.mssql-result.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP3 Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.mssql-pconnect.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.mssql-result.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="FUNCTION.MSSQL-QUERY"
+>mssql_query</A
+></H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN13641"
+></A
+>mssql_query -- send MS SQL query</DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN13644"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><CODE
+CLASS="FUNCDEF"
+>int mssql_query</CODE
+>(string query, int link_identifier);<P
+></P
+></DIV
+><P
+> Returns: A positive MS SQL result identifier on success, or
+    false on error.
+    </P
+><P
+> mssql_query() sends a query to the currently active
+    database on the server that's associated with the specified link
+    identifier.  If the link identifier isn't specified, the last
+    opened link is assumed.  If no link is open, the function tries to
+    establish a link as if <A
+HREF="function.mssql-connect.html"
+><B
+CLASS="FUNCTION"
+>mssql_connect()</B
+></A
+> was
+    called, and use it.
+    </P
+><P
+>     See also:  
+     <B
+CLASS="FUNCTION"
+>mssql_db_query()</B
+>, 
+     <A
+HREF="function.mssql-select-db.html"
+><B
+CLASS="FUNCTION"
+>mssql_select_db()</B
+></A
+>, and 
+     <A
+HREF="function.mssql-connect.html"
+><B
+CLASS="FUNCTION"
+>mssql_connect()</B
+></A
+>.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.mssql-pconnect.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.mssql-result.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>mssql_pconnect</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.mssql.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>mssql_result</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

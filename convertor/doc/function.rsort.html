@@ -1,0 +1,231 @@
+<HTML
+><HEAD
+><TITLE
+>rsort</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+REL="HOME"
+TITLE="PHP3 Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Array Functions"
+HREF="ref.array.html"><LINK
+REL="PREVIOUS"
+TITLE="reset"
+HREF="function.reset.html"><LINK
+REL="NEXT"
+TITLE="shuffle"
+HREF="function.shuffle.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP3 Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.reset.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.shuffle.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="FUNCTION.RSORT"
+>rsort</A
+></H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN3201"
+></A
+>rsort -- Sort an array in reverse order</DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN3204"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><CODE
+CLASS="FUNCDEF"
+>void rsort</CODE
+>(array array);<P
+></P
+></DIV
+><P
+>	This function sorts an array in reverse order (highest to lowest).
+	<TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="EXAMPLE"
+><P
+><B
+>Example 1. <B
+CLASS="FUNCTION"
+>rsort()</B
+> example</B
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>    $fruits = array("lemon","orange","banana","apple");
+    rsort($fruits);
+    for(reset($fruits); ($key,$value) = each($fruits); ) {
+        echo "fruits[$key] = ".$value."\n";
+    }
+	</PRE
+></DIV
+></TD
+></TR
+></TABLE
+>
+	This example would display:
+	<TT
+CLASS="COMPUTEROUTPUT"
+>	fruits[0] = orange
+	fruits[1] = lemon
+	fruits[2] = banana
+	fruits[3] = apple
+	</TT
+>
+	The fruits have been sorted in reverse alphabetical order.
+    </P
+><P
+>     See also <A
+HREF="function.arsort.html"
+><B
+CLASS="FUNCTION"
+>arsort()</B
+></A
+>, <A
+HREF="function.asort.html"
+><B
+CLASS="FUNCTION"
+>asort()</B
+></A
+>,
+     <A
+HREF="function.ksort.html"
+><B
+CLASS="FUNCTION"
+>ksort()</B
+></A
+>, <A
+HREF="function.sort.html"
+><B
+CLASS="FUNCTION"
+>sort()</B
+></A
+> and <A
+HREF="function.usort.html"
+><B
+CLASS="FUNCTION"
+>usort()</B
+></A
+>.
+   </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.reset.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.shuffle.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>reset</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.array.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>shuffle</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -65,6 +65,8 @@
 /* Define to `int' if <sys/types.h> doesn't define.  */
 #undef uid_t
 
+#undef UCD_SNMP_HACK
+
 /* Define if you want dmalloc checking */
 #define HAVE_DMALLOC 0
 
@@ -360,6 +362,9 @@
 /* Define if you have the pdflib library */
 #define HAVE_PDFLIB 0
 
+/* Define if you have the pdflib library */
+#define HAVE_PDFLIB2 0
+
 /* Define if you have the fdftk library */
 #define HAVE_FDFLIB 0
 
@@ -370,7 +375,11 @@
 #define HAVE_YP 0
 
 /* Define if you have the t1 library (-lt1).  */
+#define HAVE_LIBT1 0
 #undef HAVE_LIBT1_OUTLINE
+
+#define HAVE_LIBTTF 0
+#define HAVE_POSIX 0
 
 /* The number of bytes in a int.  */
 #undef SIZEOF_INT
@@ -504,6 +513,9 @@
 /* Define if you have the <db.h> header file.  */
 #undef HAVE_DB_H
 
+/* Define if you have the <db1/ndbm.h> header file.  */
+#undef HAVE_DB1_NDBM_H
+
 /* Define if you have the <dbm.h> header file.  */
 #undef HAVE_DBM_H
 
@@ -524,6 +536,9 @@
 
 /* Define if you have the <limits.h> header file.  */
 #undef HAVE_LIMITS_H
+
+/* Define if you have the <locale.h> header file.  */
+#undef HAVE_LOCALE_H
 
 /* Define if you have the <memory.h> header file.  */
 #undef HAVE_MEMORY_H
@@ -594,14 +609,8 @@
 /* Define if you have the <unix.h> header file.  */
 #undef HAVE_UNIX_H
 
-/* Define if you have the gd library (-lgd).  */
-#undef HAVE_LIBGD
-
 /* Define if you have the m library (-lm).  */
 #undef HAVE_LIBM
 
 /* Define if you have the resolv library (-lresolv).  */
 #undef HAVE_LIBRESOLV
-
-/* Define if you have the ttf library (-lttf).  */
-#undef HAVE_LIBTTF

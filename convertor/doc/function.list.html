@@ -1,0 +1,228 @@
+<HTML
+><HEAD
+><TITLE
+>list</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+REL="HOME"
+TITLE="PHP3 Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Array Functions"
+HREF="ref.array.html"><LINK
+REL="PREVIOUS"
+TITLE="ksort"
+HREF="function.ksort.html"><LINK
+REL="NEXT"
+TITLE="next"
+HREF="function.next.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP3 Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.ksort.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.next.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="FUNCTION.LIST"
+>list</A
+></H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN3077"
+></A
+>list --      assign variables as if they were an array
+    </DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN3080"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><CODE
+CLASS="FUNCDEF"
+>void list</CODE
+>(...);<P
+></P
+></DIV
+><P
+>     Like <A
+HREF="function.array.html"
+><B
+CLASS="FUNCTION"
+>array()</B
+></A
+>, this is not really a function,
+     but a language construct.  <B
+CLASS="FUNCTION"
+>list()</B
+> is used to
+     assign a list of variables in one operation.
+
+     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="EXAMPLE"
+><P
+><B
+>Example 1. <B
+CLASS="FUNCTION"
+>list()</B
+> example</B
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>&lt;table&#62;
+ &lt;tr&#62;
+  &lt;th&#62;Employee name&lt;/th&#62;
+  &lt;th&#62;Salary&lt;/th&#62;
+ &lt;/tr&#62;
+&lt;?php
+
+$result = mysql($conn, "SELECT id, name, salary FROM employees");
+while (list($id, $name, $salary) = mysql_fetch_row($result)) {
+    print(" &lt;tr&#62;\n".
+          "  &lt;td&#62;&lt;a href=\"info.php3?id=$id\"&#62;$name&lt;/a&#62;&lt;/td&#62;\n".
+          "  &lt;td&#62;$salary&lt;/td&#62;\n".
+          " &lt;/tr&#62;\n");
+}
+
+?&#62;&lt;/table&#62;</PRE
+></DIV
+></TD
+></TR
+></TABLE
+>
+
+    </P
+><P
+>     See also:
+	 <A
+HREF="function.each.html"
+><B
+CLASS="FUNCTION"
+>each()</B
+></A
+>,
+     <A
+HREF="function.array.html"
+><B
+CLASS="FUNCTION"
+>array()</B
+></A
+>.
+   </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.ksort.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.next.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>ksort</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.array.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>next</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

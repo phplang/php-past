@@ -1,0 +1,387 @@
+<HTML
+><HEAD
+><TITLE
+>Mathematical Functions</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+REL="HOME"
+TITLE="PHP3 Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Function Reference"
+HREF="funcref.html"><LINK
+REL="PREVIOUS"
+TITLE="mail"
+HREF="function.mail.html"><LINK
+REL="NEXT"
+TITLE="Abs"
+HREF="function.abs.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP3 Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.mail.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.abs.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="REFERENCE"
+><A
+NAME="REF.MATH"
+></A
+><DIV
+CLASS="TITLEPAGE"
+><H1
+CLASS="TITLE"
+>XXVI. Mathematical Functions</H1
+><DIV
+CLASS="PARTINTRO"
+><A
+NAME="AEN11344"
+></A
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="AEN11345"
+>Introduction</A
+></H1
+><P
+>     These math functions will only handle values within the range of
+     the long and double types on your computer.  If you need to
+     handle bigger numbers, take a look at the <A
+HREF="ref.bc.html"
+>arbitrary precision math functions</A
+>.
+    </P
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN11349"
+>Math constants</A
+></H2
+><P
+>      The following values are defined as constants in PHP by the math
+      extension:
+      <DIV
+CLASS="TABLE"
+><P
+><B
+>Table 1. Math constants</B
+></P
+><TABLE
+BORDER="1"
+CLASS="CALSTABLE"
+><TR
+><TH
+ALIGN="LEFT"
+VALIGN="TOP"
+>Constant</TH
+><TH
+ALIGN="LEFT"
+VALIGN="TOP"
+>Value</TH
+><TH
+ALIGN="LEFT"
+VALIGN="TOP"
+>Description</TH
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>M_PI</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>3.14159265358979323846</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>The value of ¶ (pi)</TD
+></TR
+></TABLE
+></DIV
+>
+     </P
+></DIV
+></DIV
+></DIV
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Table of Contents</B
+></DT
+><DT
+><A
+HREF="function.abs.html"
+>Abs</A
+> &#8212; absolute value</DT
+><DT
+><A
+HREF="function.acos.html"
+>Acos</A
+> &#8212; arc cosine</DT
+><DT
+><A
+HREF="function.asin.html"
+>Asin</A
+> &#8212; arc sine</DT
+><DT
+><A
+HREF="function.atan.html"
+>Atan</A
+> &#8212; arc tangent</DT
+><DT
+><A
+HREF="function.atan2.html"
+>Atan2</A
+> &#8212; arc tangent of two variables</DT
+><DT
+><A
+HREF="function.base-convert.html"
+>base_convert</A
+> &#8212; convert a number between arbitrary bases</DT
+><DT
+><A
+HREF="function.bindec.html"
+>BinDec</A
+> &#8212; binary to decimal</DT
+><DT
+><A
+HREF="function.ceil.html"
+>Ceil</A
+> &#8212; round fractions up</DT
+><DT
+><A
+HREF="function.cos.html"
+>Cos</A
+> &#8212; cosine</DT
+><DT
+><A
+HREF="function.decbin.html"
+>DecBin</A
+> &#8212; decimal to binary</DT
+><DT
+><A
+HREF="function.dechex.html"
+>DecHex</A
+> &#8212; decimal to hexadecimal</DT
+><DT
+><A
+HREF="function.decoct.html"
+>DecOct</A
+> &#8212; decimal to octal</DT
+><DT
+><A
+HREF="function.exp.html"
+>Exp</A
+> &#8212; e to the power of...</DT
+><DT
+><A
+HREF="function.floor.html"
+>Floor</A
+> &#8212; round fractions down</DT
+><DT
+><A
+HREF="function.getrandmax.html"
+>getrandmax</A
+> &#8212; show largest possible random value</DT
+><DT
+><A
+HREF="function.hexdec.html"
+>HexDec</A
+> &#8212; hexadecimal to decimal</DT
+><DT
+><A
+HREF="function.log.html"
+>Log</A
+> &#8212; natural logarithm</DT
+><DT
+><A
+HREF="function.log10.html"
+>Log10</A
+> &#8212; base-10 logarithm</DT
+><DT
+><A
+HREF="function.max.html"
+>max</A
+> &#8212; find highest value</DT
+><DT
+><A
+HREF="function.min.html"
+>min</A
+> &#8212; find lowest value</DT
+><DT
+><A
+HREF="function.mt-rand.html"
+>mt_rand</A
+> &#8212; generate a better random value</DT
+><DT
+><A
+HREF="function.mt-srand.html"
+>mt_srand</A
+> &#8212; seed the better random number generator</DT
+><DT
+><A
+HREF="function.mt-getrandmax.html"
+>mt_getrandmax</A
+> &#8212; show largest possible random value</DT
+><DT
+><A
+HREF="function.number-format.html"
+>number_format</A
+> &#8212; format a number with grouped thousands</DT
+><DT
+><A
+HREF="function.octdec.html"
+>OctDec</A
+> &#8212; octal to decimal</DT
+><DT
+><A
+HREF="function.pi.html"
+>pi</A
+> &#8212; get value of pi</DT
+><DT
+><A
+HREF="function.pow.html"
+>pow</A
+> &#8212; exponential expression</DT
+><DT
+><A
+HREF="function.rand.html"
+>rand</A
+> &#8212; generate a random value</DT
+><DT
+><A
+HREF="function.round.html"
+>round</A
+> &#8212; Rounds a float.</DT
+><DT
+><A
+HREF="function.sin.html"
+>Sin</A
+> &#8212; sine</DT
+><DT
+><A
+HREF="function.sqrt.html"
+>Sqrt</A
+> &#8212; square root</DT
+><DT
+><A
+HREF="function.srand.html"
+>srand</A
+> &#8212; seed the random number generator</DT
+><DT
+><A
+HREF="function.tan.html"
+>Tan</A
+> &#8212; tangent</DT
+></DL
+></DIV
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.mail.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.abs.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>mail</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="funcref.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Abs</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

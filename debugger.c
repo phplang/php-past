@@ -27,7 +27,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: debugger.c,v 1.69 1999/04/22 13:19:48 ssb Exp $ */
+/* $Id: debugger.c,v 1.70 1999/06/16 11:34:12 ssb Exp $ */
 #if THREAD_SAFE
 #include "tls.h"
 #endif
@@ -57,7 +57,7 @@
 # include <netdb.h>
 #endif
 
-#if HAVE_UNISTD_H
+#ifdef HAVE_UNISTD_H
 # include <unistd.h>
 #endif
 #if HAVE_SYS_TIME_H

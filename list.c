@@ -29,7 +29,7 @@
  */
 
 
-/* $Id: list.c,v 1.86 1999/01/01 17:58:50 zeev Exp $ */
+/* $Id: list.c,v 1.87 1999/06/16 11:34:13 ssb Exp $ */
 
 #ifdef THREAD_SAFE
 #include "tls.h"
@@ -40,8 +40,8 @@
 
 #include "functions/db.h"
 
-#if HAVE_DIRENT_H
-#include <dirent.h>
+#ifdef HAVE_DIRENT_H
+# include <dirent.h>
 #endif
 
 #if MSVC5

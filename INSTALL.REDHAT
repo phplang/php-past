@@ -70,7 +70,7 @@ are uncommented:
 
 in /etc/httpd/conf/httpd.conf:
 
-   LoadModule php3_module      modules/libphp3.so
+   LoadModule php3_module      libexec/libphp3.so
    AddModule mod_php3.c
 
 And in /etc/httpd/conf/srm.conf:

@@ -1,0 +1,317 @@
+<HTML
+><HEAD
+><TITLE
+>fsockopen</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+REL="HOME"
+TITLE="PHP3 Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Network Functions"
+HREF="ref.network.html"><LINK
+REL="PREVIOUS"
+TITLE="Network Functions"
+HREF="ref.network.html"><LINK
+REL="NEXT"
+TITLE="pfsockopen"
+HREF="function.pfsockopen.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP3 Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="ref.network.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.pfsockopen.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="FUNCTION.FSOCKOPEN"
+>fsockopen</A
+></H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN14719"
+></A
+>fsockopen -- Open Internet or Unix domain socket connection.</DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN14722"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><CODE
+CLASS="FUNCDEF"
+>int fsockopen</CODE
+>(string hostname, int port, int [<SPAN
+CLASS="OPTIONAL"
+>errno</SPAN
+>], string [<SPAN
+CLASS="OPTIONAL"
+>errstr</SPAN
+>], int
+     [<SPAN
+CLASS="OPTIONAL"
+>timeout</SPAN
+>]);<P
+></P
+></DIV
+><P
+>     Initiates a stream connection in the Internet (AF_INET) or Unix (AF_UNIX)
+     domain. For the Internet domain, it will open a TCP socket connection to
+     <TT
+CLASS="PARAMETER"
+><I
+>hostname</I
+></TT
+> on port <TT
+CLASS="PARAMETER"
+><I
+>port</I
+></TT
+>. For
+     the Unix domain, <TT
+CLASS="PARAMETER"
+><I
+>hostname</I
+></TT
+> will be used as the path
+     to the socket, <TT
+CLASS="PARAMETER"
+><I
+>port</I
+></TT
+> must be set to 0 in this case.
+     The optional <TT
+CLASS="PARAMETER"
+><I
+>timeout</I
+></TT
+> can be used to set a timeout
+     in seconds for the connect system call.
+
+    </P
+><P
+>     <B
+CLASS="FUNCTION"
+>fsockopen()</B
+> returns a file pointer which may be used
+     together with the other file functions (such as
+     <A
+HREF="function.fgets.html"
+><B
+CLASS="FUNCTION"
+>fgets()</B
+></A
+>, <A
+HREF="function.fgetss.html"
+><B
+CLASS="FUNCTION"
+>fgetss()</B
+></A
+>,
+     <A
+HREF="function.fputs.html"
+><B
+CLASS="FUNCTION"
+>fputs()</B
+></A
+>, <A
+HREF="function.fclose.html"
+><B
+CLASS="FUNCTION"
+>fclose()</B
+></A
+>,
+     <A
+HREF="function.feof.html"
+><B
+CLASS="FUNCTION"
+>feof()</B
+></A
+>).  
+     
+    </P
+><P
+>     If the call fails, it will return false and if the optional
+     <TT
+CLASS="PARAMETER"
+><I
+>errno</I
+></TT
+> and <TT
+CLASS="PARAMETER"
+><I
+>errstr</I
+></TT
+> arguments
+     are present they will be set to indicate the actual system level error
+     that occurred on the system-level connect() call. If the returned errno is
+     0 and the function returned false, it is an indication that the error
+     occurred before the connect() call. This is most likely due to a problem
+     initializing the socket. Note that the errno and errstr arguments must be
+     passed by reference.
+
+    </P
+><P
+>     Depending on the environment, the Unix domain or the optional connect
+     timeout may not be available. 
+     
+	</P
+><P
+>     The socket will by default be opened in blocking mode.  You can switch it
+     to non-blocking mode by using <A
+HREF="function.set-socket-blocking.html"
+><B
+CLASS="FUNCTION"
+>set_socket_blocking()</B
+></A
+>.
+	 <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="EXAMPLE"
+><P
+><B
+>Example 1. fsockopen example</B
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>$fp = fsockopen("www.php.net", 80, &#38;$errno, &#38;$errstr, 30);
+if(!$fp) {
+	echo "$errstr ($errno)&lt;br&gt;\n";
+} else {
+	fputs($fp,"GET / HTTP/1.0\n\n");
+	while(!feof($fp)) {
+		echo fgets($fp,128);
+	}
+	fclose($fp);
+}
+	  </PRE
+></DIV
+></TD
+></TR
+></TABLE
+>
+
+     See also: <A
+HREF="function.pfsockopen.html"
+><B
+CLASS="FUNCTION"
+>pfsockopen()</B
+></A
+>
+     
+   </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="ref.network.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.pfsockopen.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Network Functions</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.network.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>pfsockopen</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

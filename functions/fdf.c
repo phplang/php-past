@@ -27,7 +27,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: fdf.c,v 1.4 1999/05/16 15:38:01 rasmus Exp $ */
+/* $Id: fdf.c,v 1.5 1999/06/16 11:34:18 ssb Exp $ */
 
 /* FdfTk lib 2.0 is a Complete C/C++ FDF Toolkit available from
    http://beta1.adobe.com/ada/acrosdk/forms.html. */
@@ -45,10 +45,10 @@
 #include <math.h>
 #include "php3_fdf.h"
 
-#if HAVE_SYS_WAIT_H
+#ifdef HAVE_SYS_WAIT_H
 # include <sys/wait.h>
 #endif
-#if HAVE_UNISTD_H
+#ifdef HAVE_UNISTD_H
 # include <unistd.h>
 #endif
 #if WIN32|WINNT

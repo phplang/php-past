@@ -26,7 +26,7 @@
    | Authors: Sascha Schumann <sas@schell.de>                             |
    +----------------------------------------------------------------------+
 
-   $Id: php_compat.c,v 1.1 1999/02/28 23:10:56 zeev Exp $
+   $Id: php_compat.c,v 1.2 1999/06/16 11:34:13 ssb Exp $
  */
 
 
@@ -43,7 +43,7 @@
 #include <io.h>
 #endif
 
-#if !HAVE_FLOCK
+#ifndef HAVE_FLOCK
 PHPAPI int flock(int fd, int operation)
 #if HAVE_STRUCT_FLOCK
 {
@@ -160,7 +160,7 @@ PHPAPI int flock(int fd, int operation)
 	return 0;
 }
 #endif
-#endif /* !HAVE_FLOCK */
+#endif /* !defined(HAVE_FLOCK) */
 
 #if !(HAVE_INET_ATON)
 

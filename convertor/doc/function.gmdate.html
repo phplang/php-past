@@ -1,0 +1,215 @@
+<HTML
+><HEAD
+><TITLE
+>gmdate</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+REL="HOME"
+TITLE="PHP3 Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Date/Time Functions"
+HREF="ref.datetime.html"><LINK
+REL="PREVIOUS"
+TITLE="gettimeofday"
+HREF="function.gettimeofday.html"><LINK
+REL="NEXT"
+TITLE="easter_date"
+HREF="function.easter-date.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP3 Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.gettimeofday.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.easter-date.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="FUNCTION.GMDATE"
+>gmdate</A
+></H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN4053"
+></A
+>gmdate -- format a GMT/CUT date/time</DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN4056"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><CODE
+CLASS="FUNCDEF"
+>string gmdate</CODE
+>(string format, int timestamp);<P
+></P
+></DIV
+><P
+>     Identical to the <A
+HREF="function.date.html"
+><B
+CLASS="FUNCTION"
+>date()</B
+></A
+>
+     function except that the time returned is Greenwich Mean Time
+     (GMT). For example, when run in Finland (GMT +0200), the first
+     line below prints "Jan 01 1998 00:00:00", while the second prints
+     "Dec 31 1997 22:00:00".
+     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="EXAMPLE"
+><P
+><B
+>Example 1. <B
+CLASS="FUNCTION"
+>gmdate()</B
+> example</B
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>echo date( "M d Y H:i:s",mktime(0,0,0,1,1,1998) );
+echo gmdate( "M d Y H:i:s",mktime(0,0,0,1,1,1998) );</PRE
+></DIV
+></TD
+></TR
+></TABLE
+>
+    </P
+><P
+>     See also <A
+HREF="function.date.html"
+><B
+CLASS="FUNCTION"
+>date()</B
+></A
+>,
+     <A
+HREF="function.mktime.html"
+><B
+CLASS="FUNCTION"
+>mktime()</B
+></A
+> and <A
+HREF="function.gmmktime.html"
+><B
+CLASS="FUNCTION"
+>gmmktime()</B
+></A
+>.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.gettimeofday.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.easter-date.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>gettimeofday</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.datetime.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>easter_date</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

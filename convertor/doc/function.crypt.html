@@ -1,0 +1,226 @@
+<HTML
+><HEAD
+><TITLE
+>crypt</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+REL="HOME"
+TITLE="PHP3 Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="String functions"
+HREF="ref.strings.html"><LINK
+REL="PREVIOUS"
+TITLE="convert_cyr_string"
+HREF="function.convert-cyr-string.html"><LINK
+REL="NEXT"
+TITLE="echo"
+HREF="function.echo.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP3 Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.convert-cyr-string.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.echo.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="FUNCTION.CRYPT"
+>crypt</A
+></H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN19038"
+></A
+>crypt -- DES-encrypt a string</DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN19041"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><CODE
+CLASS="FUNCDEF"
+>string crypt</CODE
+>(string str, string [<SPAN
+CLASS="OPTIONAL"
+>salt</SPAN
+>]);<P
+></P
+></DIV
+><P
+>     <B
+CLASS="FUNCTION"
+>crypt()</B
+> will encrypt a string using the
+     standard Unix <SPAN
+CLASS="ABBREV"
+>DES</SPAN
+> encryption method.  Arguments
+     are a string to be encrypted and an optional two-character salt
+     string to base the encryption on.  See the Unix man page for your
+     crypt function for more information.  
+	</P
+><P
+>	 If the salt argument is not provided, it will be randomly generated
+	 by PHP.  
+	</P
+><P
+>	 Some operating systems support more than one type of encryption.  
+	 In fact, sometimes the standard DES encryption is replaced by an
+	 MD5 based encryption algorithm.  The encryption type is triggered by
+	 the salt argument.  At install time, PHP determines the capabilities
+	 of the crypt function and will accept salts for other encryption
+	 types.  If no salt is provided, PHP will auto-generate a standard
+	 2-character DES salt by default unless the default encryption type
+	 on the system is MD5 in which case a random MD5-compatible salt
+	 is generated.  PHP sets a constant named CRYPT_SALT_LENGTH which 
+	 tells you whether a regular 2-character salt applies to your system
+	 or the longer 12-char MD5 salt is applicable.
+	</P
+><P
+>	 The standard DES encryption <B
+CLASS="FUNCTION"
+>crypt()</B
+> contains
+	 the salt as the first two characters of the output.
+	</P
+><P
+>	 On systems where the crypt() function supports multiple encryption
+	 types, the following constants are set to 0 or 1 depending on whether
+	 the given type is available:
+	</P
+><P
+></P
+><UL
+><LI
+><P
+>CRYPT_STD_DES - Standard DES encryption with a 2-char SALT</P
+></LI
+><LI
+><P
+>CRYPT_EXT_DES - Extended DES encryption with a 9-char SALT</P
+></LI
+><LI
+><P
+>CRYPT_MD5 - MD5 encryption with a 12-char SALT starting with $1$</P
+></LI
+><LI
+><P
+>CRYPT_BLOWFISH - Extended DES encryption with a 16-char SALT starting with $2$</P
+></LI
+></UL
+><P
+>     There is no decrypt function, since <B
+CLASS="FUNCTION"
+>crypt()</B
+>
+     uses a one-way algorithm.
+   </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.convert-cyr-string.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.echo.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>convert_cyr_string</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.strings.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>echo</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

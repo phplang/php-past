@@ -1,0 +1,191 @@
+<HTML
+><HEAD
+><TITLE
+>ldap_close</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+REL="HOME"
+TITLE="PHP3 Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="LDAP Functions"
+HREF="ref.ldap.html"><LINK
+REL="PREVIOUS"
+TITLE="ldap_bind"
+HREF="function.ldap-bind.html"><LINK
+REL="NEXT"
+TITLE="ldap_connect"
+HREF="function.ldap-connect.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP3 Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.ldap-bind.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.ldap-connect.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="FUNCTION.LDAP-CLOSE"
+>ldap_close</A
+></H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN10883"
+></A
+>ldap_close -- Close link to LDAP server</DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN10886"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><CODE
+CLASS="FUNCDEF"
+>int ldap_close</CODE
+>(int link_identifier);<P
+></P
+></DIV
+><P
+>     Returns true on success, false on error. 
+    </P
+><P
+>     <B
+CLASS="FUNCTION"
+>ldap_close()</B
+> closes the link to the LDAP
+     server that's associated with the specified
+     <TT
+CLASS="PARAMETER"
+><I
+>link_identifier</I
+></TT
+>.
+    </P
+><P
+>     This call is internally identical to
+     <A
+HREF="function.ldap-unbind.html"
+><B
+CLASS="FUNCTION"
+>ldap_unbind()</B
+></A
+>. The LDAP API uses the call
+     <A
+HREF="function.ldap-unbind.html"
+><B
+CLASS="FUNCTION"
+>ldap_unbind()</B
+></A
+>, so perhaps you should use this
+     in preference to <B
+CLASS="FUNCTION"
+>ldap_close()</B
+>.
+   </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.ldap-bind.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.ldap-connect.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>ldap_bind</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.ldap.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>ldap_connect</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

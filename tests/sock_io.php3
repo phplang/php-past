@@ -5,21 +5,43 @@
 
 # fetches one file and prints out how many bytes it has retrieve
 
-$host = "guerilla";
-$port = 8080;
-$req = "GET /abc2 HTTP/1.0\r\n\r\n";
+
+$host = "funweb.de";
+$port = 80;
+$uri = "/int21.php3";
+$req = "GET $uri HTTP/1.0\r\n\r\n";
+$url = "http://$host:$port$uri";
 
 function get_request() {
 	global $host, $port, $allbuf, $req, $block;
 
 	$allbuf = "";
-	$fp = fsockopen($host, $port, &$a, &$b, 5);
-	if(!$fp) die("fsck\n");
-	set_socket_blocking($fp, $block);
+	if($block > 2)
+		$fp = pfsockopen($host, $port, &$a, &$b, 30);
+	else
+		$fp = fsockopen($host, $port, &$a, &$b, 30);
+	if(!$fp) die("socket open failed ($a, $b)\n");
+	set_socket_blocking($fp, $block % 2);
 
 	fputs($fp, $req);
 	return $fp;
 }
+
+echo "fopen/fpassthru\n";
+$fd = fopen($url, "r");
+fpassthru($fd);
+
+echo "readfile\n";
+readfile($url);
+
+echo "require\n";
+require($url);
+
+echo "include\n";
+include($url);
+
+$a = file($url);
+echo join("", $a);
 
 for($block = 0; $block < 2; $block++) {
 
@@ -29,6 +51,7 @@ for($block = 0; $block < 2; $block++) {
 # (expect a too low value, if the server is slower than loopback)
 
 $fp = get_request();
+sleep(1);
 while(($buf = fgets($fp, 256)) != false) $allbuf .= $buf;
 echo strlen($allbuf)."\n";
 

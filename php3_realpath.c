@@ -27,7 +27,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: php3_realpath.c,v 1.11 1999/02/15 17:25:44 steffann Exp $ */
+/* $Id: php3_realpath.c,v 1.12 1999/06/16 11:34:13 ssb Exp $ */
 
 #ifdef THREAD_SAFE
 #include "tls.h"
@@ -35,8 +35,8 @@
 
 #include "php.h"
 
-#if HAVE_UNISTD_H
-#include <unistd.h>
+#ifdef HAVE_UNISTD_H
+# include <unistd.h>
 #endif
 #include <sys/stat.h>
 
@@ -225,7 +225,7 @@ char *_php3_realpath(char *path, char resolved_path []) {
 			}
 		}
 
-#if HAVE_SYMLINK
+#ifdef HAVE_SYMLINK
 		/* We are going to use path_construction, so close it */
 		*writepos = 0;
 

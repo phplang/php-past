@@ -1,0 +1,226 @@
+<HTML
+><HEAD
+><TITLE
+>gzopen</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+REL="HOME"
+TITLE="PHP3 Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Gz-file Functions"
+HREF="ref.zlib.html"><LINK
+REL="PREVIOUS"
+TITLE="gzgetss"
+HREF="function.gzgetss.html"><LINK
+REL="NEXT"
+TITLE="gzpassthru"
+HREF="function.gzpassthru.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP3 Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.gzgetss.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.gzpassthru.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="FUNCTION.GZOPEN"
+>gzopen</A
+></H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN20833"
+></A
+>gzopen -- open gz-file</DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN20836"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><CODE
+CLASS="FUNCDEF"
+>int gzopen</CODE
+>(string filename, string mode);<P
+></P
+></DIV
+><P
+>     Opens a gzip (.gz) file for reading or writing. The mode
+     parameter is as in <A
+HREF="function.fopen.html"
+><B
+CLASS="FUNCTION"
+>fopen()</B
+></A
+> ("rb" or "wb") but
+     can also include a compression level ("wb9") or a strategy: 'f'
+     for filtered data as in "wb6f", 'h' for Huffman only compression
+     as in "wb1h". (See the description of deflateInit2 in zlib.h for
+     more information about the strategy parameter.)
+
+    </P
+><P
+>     Gzopen can be used to read a file which is not in gzip format; in
+     this case <A
+HREF="function.gzread.html"
+><B
+CLASS="FUNCTION"
+>gzread()</B
+></A
+> will directly read from the
+     file without decompression.
+
+    </P
+><P
+>     Gzopen returns a file pointer to the file opened, after that,
+     everything you read from this file descriptor will be
+     transparently decompressed and what you write gets compressed.
+
+    </P
+><P
+>     If the open fails, the function returns false.
+
+    </P
+><P
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="EXAMPLE"
+><P
+><B
+>Example 1. gzopen() example</B
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>$fp = gzopen("/tmp/file.gz", "r");</PRE
+></DIV
+></TD
+></TR
+></TABLE
+>
+
+    </P
+><P
+>     See also <A
+HREF="function.gzclose.html"
+><B
+CLASS="FUNCTION"
+>gzclose()</B
+></A
+>.
+
+   </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.gzgetss.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.gzpassthru.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>gzgetss</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.zlib.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>gzpassthru</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

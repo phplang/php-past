@@ -26,7 +26,7 @@
    | Authors: Rasmus Lerdorf <rasmus@lerdorf.on.ca>                       |
    +----------------------------------------------------------------------+
  */
-/* $Id: mime.c,v 1.56 1999/01/01 17:59:13 zeev Exp $ */
+/* $Id: mime.c,v 1.57 1999/06/10 12:31:40 brian Exp $ */
 #ifdef THREAD_SAFE
 #include "tls.h"
 #endif
@@ -44,7 +44,7 @@ extern HashTable list;
 #endif
 
 #define NEW_BOUNDARY_CHECK 1
-#define SAFE_RETURN { if (namebuf) efree(namebuf); if (filenamebuf) efree(filenamebuf); if (lbuf) efree(lbuf); return; }
+#define SAFE_RETURN { if (namebuf) efree(namebuf); if (filenamebuf) efree(filenamebuf); if (lbuf) efree(lbuf); if (abuf) efree(abuf); return; }
 
 /*
  * Split raw mime stream up into appropriate components
@@ -54,7 +54,8 @@ void php3_mime_split(char *buf, int cnt, char *boundary, pval *http_post_vars)
 	char *ptr, *loc, *loc2, *s, *name, *filename, *u, *fn;
 	int len, state = 0, Done = 0, rem, urem;
 	long bytes, max_file_size = 0;
-	char *namebuf=NULL, *filenamebuf=NULL, *lbuf=NULL;
+	char *namebuf=NULL, *filenamebuf=NULL, *lbuf=NULL, *abuf=NULL;
+	char sbytes[16];
 	FILE *fp;
 	int itype;
 	TLS_VARS;
@@ -104,7 +105,7 @@ void php3_mime_split(char *buf, int cnt, char *boundary, pval *http_post_vars)
 					if (lbuf) {
 						efree(lbuf);
 					}
-					lbuf = emalloc(s-name + MAX(MAX(sizeof("_name"),sizeof("_size")),sizeof("_type")));
+					lbuf = emalloc(s-name + MAX(MAX(sizeof("_name"),sizeof("_size")),sizeof("_type")) + 4);
 					state = 2;
 					loc2 = memchr(loc + 1, '\n', rem);
 					rem -= (loc2 - ptr) + 1;
@@ -125,18 +126,32 @@ void php3_mime_split(char *buf, int cnt, char *boundary, pval *http_post_vars)
 						efree(filenamebuf);
 					}
 					filenamebuf = estrndup(filename, s-filename);
-					sprintf(lbuf, "%s_name", namebuf);
+					if (strstr(namebuf, "[]")) {
+						if (abuf) {
+							efree(abuf);
+						}
+						abuf = estrndup(namebuf, strlen(namebuf) - 2);
+						sprintf(lbuf, "%s_name[]", abuf);
+					} else {
+						sprintf(lbuf, "%s_name", namebuf);
+					}
 					s = strrchr(filenamebuf, '\\');
 					if (s && s > filenamebuf) {
-						SET_VAR_STRING(lbuf, estrdup(s + 1));
+						/* SET_VAR_STRING(lbuf, estrdup(s + 1)); */
+						_php3_parse_gpc_data(estrdup(s + 1), lbuf, http_post_vars);
 					} else {
-						SET_VAR_STRING(lbuf, estrdup(filenamebuf));
+						/* SET_VAR_STRING(lbuf, estrdup(filenamebuf)); */
+						_php3_parse_gpc_data(estrdup(filenamebuf), lbuf, http_post_vars);
 					}
 					state = 3;
 					if ((loc2 - loc) > 2) {
 						if (!strncasecmp(loc + 1, "Content-Type:", 13)) {
 							*(loc2 - 1) = '\0';
-							sprintf(lbuf, "%s_type", namebuf);
+							if (abuf) {
+								sprintf(lbuf, "%s_type[]", abuf);
+							} else {
+								sprintf(lbuf, "%s_type", namebuf);
+							}
 							SET_VAR_STRING(lbuf, estrdup(loc + 15));
 							*(loc2 - 1) = '\n';
 						}
@@ -208,14 +223,17 @@ void php3_mime_split(char *buf, int cnt, char *boundary, pval *http_post_vars)
 				if ((loc - ptr - 4) > php3_ini.upload_max_filesize) {
 					php3_error(E_WARNING, "Max file size of %ld bytes exceeded - file [%s] not saved", php3_ini.upload_max_filesize,namebuf);
 					bytes=0;	
-					SET_VAR_STRING(namebuf, estrdup("none"));
+					/* SET_VAR_STRING(namebuf, estrdup("none")); */
+					_php3_parse_gpc_data(estrdup("none"), namebuf, http_post_vars);
 				} else if (max_file_size && ((loc - ptr - 4) > max_file_size)) {
 					php3_error(E_WARNING, "Max file size exceeded - file [%s] not saved", namebuf);
 					bytes = 0;
-					SET_VAR_STRING(namebuf, estrdup("none"));
+					/* SET_VAR_STRING(namebuf, estrdup("none")); */
+					_php3_parse_gpc_data(estrdup("none"), namebuf, http_post_vars);
 				} else if ((loc - ptr - 4) <= 0) {
 					bytes = 0;
-					SET_VAR_STRING(namebuf, estrdup("none"));
+					/* SET_VAR_STRING(namebuf, estrdup("none")); */
+					_php3_parse_gpc_data(estrdup("none"), namebuf, http_post_vars);
 				} else {
 					fp = fopen(fn, "w");
 					if (!fp) {
@@ -228,10 +246,21 @@ void php3_mime_split(char *buf, int cnt, char *boundary, pval *http_post_vars)
 					if (bytes < (loc - ptr - 4)) {
 						php3_error(E_WARNING, "Only %d bytes were written, expected to write %ld", bytes, loc - ptr - 4);
 					}
-					SET_VAR_STRING(namebuf, estrdup(fn));
+					/* SET_VAR_STRING(namebuf, estrdup(fn)); */
+					_php3_parse_gpc_data(estrdup(fn), namebuf, http_post_vars);
 				}
-				sprintf(lbuf, "%s_size", namebuf);
-				SET_VAR_LONG(lbuf, bytes);
+				
+				/* SET_VAR_LONG(lbuf, bytes); */
+
+				if (abuf) {
+					sprintf(lbuf, "%s_size[]", abuf);
+				} else {
+					sprintf(lbuf, "%s_size", namebuf);
+				}
+				memset(sbytes, 0, 16);
+				sprintf(sbytes, "%ld", bytes);
+				_php3_parse_gpc_data(estrdup(sbytes), lbuf, http_post_vars);
+								
 				state = 0;
 				rem -= (loc - ptr);
 				ptr = loc;

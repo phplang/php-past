@@ -1,0 +1,203 @@
+<HTML
+><HEAD
+><TITLE
+>bccomp</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+REL="HOME"
+TITLE="PHP3 Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="BC (Arbitrary Precision) Functions"
+HREF="ref.bc.html"><LINK
+REL="PREVIOUS"
+TITLE="bcadd"
+HREF="function.bcadd.html"><LINK
+REL="NEXT"
+TITLE="bcdiv"
+HREF="function.bcdiv.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP3 Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.bcadd.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.bcdiv.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="FUNCTION.BCCOMP"
+>bccomp</A
+></H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN3462"
+></A
+>bccomp -- Compare two arbitrary precision numbers.</DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN3465"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><CODE
+CLASS="FUNCDEF"
+>int bccomp</CODE
+>(string left operand, string right operand, int [<SPAN
+CLASS="OPTIONAL"
+>scale</SPAN
+>]);<P
+></P
+></DIV
+><P
+>    Compares the <TT
+CLASS="PARAMETER"
+><I
+>left operand</I
+></TT
+> to the
+    <TT
+CLASS="PARAMETER"
+><I
+>right operand</I
+></TT
+> and returns the
+    result as an integer.  The optional <TT
+CLASS="PARAMETER"
+><I
+>scale</I
+></TT
+>
+    parameter is used to set the number of digits after the decimal place
+    which will be used in the comparion.  The return value is 0 if the
+    two operands are equal.  If the <TT
+CLASS="PARAMETER"
+><I
+>left operand</I
+></TT
+>
+    is larger than the <TT
+CLASS="PARAMETER"
+><I
+>right operand</I
+></TT
+> the return
+    value is +1 and if the <TT
+CLASS="PARAMETER"
+><I
+>left operand</I
+></TT
+> is less than
+    the <TT
+CLASS="PARAMETER"
+><I
+>right operand</I
+></TT
+> the return value is -1.
+   </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.bcadd.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.bcdiv.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>bcadd</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.bc.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>bcdiv</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

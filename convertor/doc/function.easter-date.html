@@ -1,0 +1,224 @@
+<HTML
+><HEAD
+><TITLE
+>easter_date</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+REL="HOME"
+TITLE="PHP3 Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Date/Time Functions"
+HREF="ref.datetime.html"><LINK
+REL="PREVIOUS"
+TITLE="gmdate"
+HREF="function.gmdate.html"><LINK
+REL="NEXT"
+TITLE="easter_days"
+HREF="function.easter-days.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP3 Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.gmdate.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.easter-days.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="FUNCTION.EASTER-DATE"
+>easter_date</A
+></H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN4076"
+></A
+>easter_date -- get UNIX timestamp for midnight on Easter of a given year</DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN4079"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><CODE
+CLASS="FUNCDEF"
+>int easter_date</CODE
+>(int year);<P
+></P
+></DIV
+><P
+>     Returns the UNIX timestamp corresponding to midnight on
+     Easter of the given year.  If no year is specified, the
+     current year is assumed.
+    </P
+><P
+>     <I
+CLASS="EMPHASIS"
+>Warning:</I
+> This function will generate
+     a warning if the year is outside of the range for UNIX
+     timestamps (i.e. before 1970 or after 2037).
+     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="EXAMPLE"
+><P
+><B
+>Example 1. <B
+CLASS="FUNCTION"
+>easter_date()</B
+> example</B
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>echo date( "M-d-Y", easter_date(1999) );        /* "Apr-04-1999" */
+echo date( "M-d-Y", easter_date(2000) );        /* "Apr-23-2000" */
+echo date( "M-d-Y", easter_date(2001) );        /* "Apr-15-2001" */</PRE
+></DIV
+></TD
+></TR
+></TABLE
+>
+    </P
+><P
+>     The date of Easter Day was defined by the Council of
+     Nicaea in AD325 as the Sunday after the first full moon
+     which falls on or after the Spring Equinox.  The
+     Equinox is assumed to always fall on 21st March, so the
+     calculation reduces to determining the date of the full
+     moon and the date of the following Sunday.  The algorithm
+     used here was introduced around the year 532 by Dionysius
+     Exiguus.  Under the Julian Calendar (for years before 1753)
+     a simple 19-year cycle is used to track the phases of the Moon.
+     Under the Gregorian Calendar (for years after 1753 - devised 
+     by Clavius and Lilius, and introduced by Pope Gregory XIII 
+     in October 1582, and into Britain and its then colonies in 
+     September 1752) two correction factors are added to make the 
+     cycle more accurate.
+    </P
+><P
+>     (The code is based on a C program by Simon Kershaw,
+     &lt;webmaster@ely.anglican.org&gt;)
+    </P
+><P
+>     See <A
+HREF="function.easter-days.html"
+><B
+CLASS="FUNCTION"
+>easter_days()</B
+></A
+> for calculating Easter
+     before 1970 or after 2037.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.gmdate.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.easter-days.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>gmdate</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.datetime.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>easter_days</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,228 @@
+<HTML
+><HEAD
+><TITLE
+>easter_days</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+REL="HOME"
+TITLE="PHP3 Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Date/Time Functions"
+HREF="ref.datetime.html"><LINK
+REL="PREVIOUS"
+TITLE="easter_date"
+HREF="function.easter-date.html"><LINK
+REL="NEXT"
+TITLE="mktime"
+HREF="function.mktime.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP3 Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.easter-date.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.mktime.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="FUNCTION.EASTER-DAYS"
+>easter_days</A
+></H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN4098"
+></A
+>easter_days -- get number of days after March 21 on which Easter falls for a given year</DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN4101"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><CODE
+CLASS="FUNCDEF"
+>int easter_days</CODE
+>(int year);<P
+></P
+></DIV
+><P
+>     Returns the number of days after March 21 on which Easter falls
+     for a given year.  If no year is specified, the current year is assumed.
+    </P
+><P
+>     This function can be used instead of <A
+HREF="function.easter-date.html"
+><B
+CLASS="FUNCTION"
+>easter_date()</B
+></A
+>
+     to calculate Easter for years which fall outside the range of UNIX 
+     timestamps (i.e. before 1970 or after 2037).
+     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="EXAMPLE"
+><P
+><B
+>Example 1. <A
+HREF="function.easter-date.html"
+><B
+CLASS="FUNCTION"
+>easter_date()</B
+></A
+> example</B
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>echo easter_days(1999);        /* 14, i.e. April 4   */
+echo easter_days(1492);        /* 32, i.e. April 22  */
+echo easter_days(1913);        /*  2, i.e. March 23  */</PRE
+></DIV
+></TD
+></TR
+></TABLE
+>
+    </P
+><P
+>     The date of Easter Day was defined by the Council of
+     Nicaea in AD325 as the Sunday after the first full moon
+     which falls on or after the Spring Equinox.  The
+     Equinox is assumed to always fall on 21st March, so the
+     calculation reduces to determining the date of the full
+     moon and the date of the following Sunday.  The algorithm
+     used here was introduced around the year 532 by Dionysius
+     Exiguus.  Under the Julian Calendar (for years before 1753)
+     a simple 19-year cycle is used to track the phases of the Moon.
+     Under the Gregorian Calendar (for years after 1753 - devised 
+     by Clavius and Lilius, and introduced by Pope Gregory XIII 
+     in October 1582, and into Britain and its then colonies in 
+     September 1752) two correction factors are added to make the 
+     cycle more accurate.
+    </P
+><P
+>     (The code is based on a C program by Simon Kershaw,
+     &lt;webmaster@ely.anglican.org&gt;)
+    </P
+><P
+>     See also <A
+HREF="function.easter-date.html"
+><B
+CLASS="FUNCTION"
+>easter_date()</B
+></A
+>.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.easter-date.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.mktime.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>easter_date</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.datetime.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>mktime</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

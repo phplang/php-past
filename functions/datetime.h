@@ -29,15 +29,13 @@
  */
 
 
-/* $Id: datetime.h,v 1.13 1999/06/02 23:53:17 cmv Exp $ */
+/* $Id: datetime.h,v 1.14 1999/06/20 17:14:05 jim Exp $ */
 
 #ifndef _DATETIME_H
 #define _DATETIME_H
 
 extern void php3_time(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_mktime(INTERNAL_FUNCTION_PARAMETERS);
-extern void php3_easter_date(INTERNAL_FUNCTION_PARAMETERS);
-extern void php3_easter_days(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_gmmktime(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_date(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_gmdate(INTERNAL_FUNCTION_PARAMETERS);

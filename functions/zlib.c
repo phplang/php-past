@@ -22,7 +22,7 @@
    |          Stefan Röhrich <sr@linux.de>                                |
    +----------------------------------------------------------------------+
  */
-/* $Id: zlib.c,v 1.15 1999/05/16 15:44:57 ssb Exp $ */
+/* $Id: zlib.c,v 1.16 1999/06/16 11:34:22 ssb Exp $ */
 #if !PHP_31 && defined(THREAD_SAFE)
 #undef THREAD_SAFE
 #endif
@@ -73,7 +73,7 @@
 #include "snprintf.h"
 #if HAVE_ZLIB
 #if defined(HAVE_UNISTD_H) && (WIN32|WINNT)
-#undef HAVE_UNISTD_H
+# undef HAVE_UNISTD_H
 #endif
 
 #include <zlib.h>

@@ -1,0 +1,194 @@
+<HTML
+><HEAD
+><TITLE
+>linkinfo</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+REL="HOME"
+TITLE="PHP3 Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Filesystem Functions"
+HREF="ref.filesystem.html"><LINK
+REL="PREVIOUS"
+TITLE="link"
+HREF="function.link.html"><LINK
+REL="NEXT"
+TITLE="mkdir"
+HREF="function.mkdir.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP3 Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.link.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.mkdir.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="FUNCTION.LINKINFO"
+>linkinfo</A
+></H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN6304"
+></A
+>linkinfo -- Get information about a link</DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN6307"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><CODE
+CLASS="FUNCDEF"
+>int linkinfo</CODE
+>(string path);<P
+></P
+></DIV
+><P
+>    <A
+HREF="function.linkinfo.html"
+><B
+CLASS="FUNCTION"
+>Linkinfo()</B
+></A
+> returns the st_dev field of the UNIX C
+    stat structure returned by the lstat system call.  This
+    function is used to verify if a link (pointed to by <TT
+CLASS="PARAMETER"
+><I
+>path</I
+></TT
+>)
+    really exists (using the same method as the S_ISLNK macro defined in stat.h).
+    Returns 0 or FALSE in case of error.
+    </P
+><P
+>    See also <A
+HREF="function.symlink.html"
+><B
+CLASS="FUNCTION"
+>symlink()</B
+></A
+>, <A
+HREF="function.link.html"
+><B
+CLASS="FUNCTION"
+>link()</B
+></A
+>,
+    and <A
+HREF="function.readlink.html"
+><B
+CLASS="FUNCTION"
+>readlink()</B
+></A
+>.
+   </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.link.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.mkdir.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>link</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.filesystem.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>mkdir</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

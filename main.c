@@ -29,7 +29,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: main.c,v 1.498 1999/05/21 19:32:06 sas Exp $ */
+/* $Id: main.c,v 1.501 1999/06/19 19:06:19 sas Exp $ */
 
 /* #define CRASH_DETECTION */
 
@@ -49,17 +49,17 @@
 #else
 #include "build-defs.h"
 #endif
-#if HAVE_SYS_TIME_H
-#include <sys/time.h>
+#ifdef HAVE_SYS_TIME_H
+# include <sys/time.h>
 #endif
-#if HAVE_UNISTD_H
-#include <unistd.h>
+#ifdef HAVE_UNISTD_H
+# include <unistd.h>
 #endif
-#if HAVE_SIGNAL_H
-#include <signal.h>
+#ifdef HAVE_SIGNAL_H
+# include <signal.h>
 #endif
-#if HAVE_SETLOCALE
-#include <locale.h>
+#ifdef HAVE_SETLOCALE
+# include <locale.h>
 #endif
 #include "language-parser.tab.h"
 #include "main.h"
@@ -93,7 +93,7 @@ struct sapi_request_info *sapi_rqst;
 #endif
 
 #if MSVC5 || !defined(HAVE_GETOPT)
-#include "getopt.h"
+#include "php_getopt.h"
 #endif
 
 void *gLock;					/*mutex variable */
@@ -178,9 +178,13 @@ PHPAPI int php3_write(const void *a, int n)
 	TLS_VARS;
 
 #if APACHE
-	ret = rwrite(a,n,GLOBAL(php3_rqst)); 
+	ret = rwrite(a,n,GLOBAL(php3_rqst));
+#else
+#if FHTTPD
+	ret = php3_fhttpd_write((void*)a,n); 
 #else /* CGI */
 	ret = fwrite(a,1,n,stdout);
+#endif
 #endif
 
 	if (ret != n) {
@@ -202,10 +206,14 @@ PHPAPI void php3_puts(const char *s)
 	} else {
 		fputs(s, stdout);
 	}
+#else
+#if FHTTPD
+	php3_fhttpd_puts((char*)s);
 #else /* CGI */
 	if (fputs(s, stdout) < 0) {
 		GLOBAL(php_connection_status) |= PHP_CONNECTION_ABORTED;
 	}
+#endif
 #endif
 }
 
@@ -222,9 +230,13 @@ PHPAPI void php3_putc(char c)
 		fputc(c, stdout);
 	}
 #else
+#if FHTTPD
+	php3_fhttpd_putc(c);
+#else /* CGI */
 	if (fputc(c, stdout) != c) {
 		GLOBAL(php_connection_status) |= PHP_CONNECTION_ABORTED;
 	}
+#endif
 #endif
 }
 
@@ -312,7 +324,7 @@ PHPAPI int php3_printf(const char *format,...)
 
 #if FHTTPD
 	size = vsnprintf(buffer, PRINTF_BUFFER_SIZE, format, args);
-	ret = PHPWRITE(buffer, size);
+	ret = php3_fhttpd_write(buffer, size);
 #endif
 
 #if USE_SAPI
@@ -1177,7 +1189,7 @@ int php3_module_startup(INLINE_TLS_VOID)
 
 	start_memory_manager();
 
-#if HAVE_SETLOCALE
+#ifdef HAVE_SETLOCALE
 	setlocale(LC_CTYPE, "");
 #endif
 
@@ -2009,7 +2021,7 @@ int main(int argc, char **argv)
 	}
 #endif
 
-#if HAVE_SETLOCALE
+#ifdef HAVE_SETLOCALE
 	setlocale(LC_CTYPE, "");
 #endif
 

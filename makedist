@@ -7,7 +7,7 @@
 #  <package>_<version>
 #
 # where <package> is the package name and the CVS module
-# and <version> s the version number with underscores instead of dots.
+# and <version> is the version number with underscores instead of dots.
 #
 # For example: cvs tag php_3_0a1
 #
@@ -24,7 +24,7 @@
 #
 # Written by Stig Bakken <ssb@fast.no>     1997-05-28.
 #
-# $Id: makedist,v 1.24 1999/04/22 13:19:48 ssb Exp $
+# $Id: makedist,v 1.26 1999/06/19 01:05:48 jim Exp $
 #
 
 CVSROOT=:pserver:cvsread@cvs.php.net:/repository
@@ -103,6 +103,9 @@ flex -Pcfg -oconfiguration-scanner.c -i configuration-scanner.lex
 cd convertor
 flex -i -Pphp -olanguage-scanner.c language-scanner.lex
 bison -p php -v -d language-parser.y
+
+# pull down the latest version of the documentation
+rsync -avzC rsync.php.net::phpweb/manual/html/ doc/
 cd ..
 
 #perl -i -p -e 's/\r\n/\n/' *.dsw *.dsp

@@ -28,7 +28,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: php.h,v 1.52 1999/06/03 12:03:05 sas Exp $ */
+/* $Id: php.h,v 1.54 1999/06/22 00:26:37 jim Exp $ */
 
 #ifndef _PHP_H
 #define _PHP_H
@@ -62,9 +62,12 @@
 # else
 # define PHPAPI __declspec(dllexport) 
 # endif
+/* This is used for functions we always need to export. */
+# define PHPAPI_EXPORT __declspec(dllexport)
 #else
 # include "config.h"
 # define PHPAPI
+# define PHPAPI_EXPORT
 # define THREAD_LS
 #endif
 
@@ -136,8 +139,8 @@
 
 #include <stdlib.h>
 #include <ctype.h>
-#if HAVE_UNISTD_H
-#include <unistd.h>
+#ifdef HAVE_UNISTD_H
+# include <unistd.h>
 #endif
 #if HAVE_STDARG_H
 #include <stdarg.h>

@@ -1,0 +1,368 @@
+<HTML
+><HEAD
+><TITLE
+>odbc_binmode</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+REL="HOME"
+TITLE="PHP3 Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="ODBC Functions"
+HREF="ref.odbc.html"><LINK
+REL="PREVIOUS"
+TITLE="odbc_autocommit"
+HREF="function.odbc-autocommit.html"><LINK
+REL="NEXT"
+TITLE="odbc_close"
+HREF="function.odbc-close.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP3 Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.odbc-autocommit.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.odbc-close.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="FUNCTION.ODBC-BINMODE"
+>odbc_binmode</A
+></H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN15217"
+></A
+>odbc_binmode -- handling of binary column data</DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN15220"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><CODE
+CLASS="FUNCDEF"
+>int odbc_binmode</CODE
+>(int result_id, int mode);<P
+></P
+></DIV
+><P
+>(ODBC SQL types affected: BINARY, VARBINARY, LONGVARBINARY)
+    </P
+><P
+></P
+><UL
+><LI
+><P
+>      ODBC_BINMODE_PASSTHRU: Passthru BINARY data
+      </P
+></LI
+><LI
+><P
+>      ODBC_BINMODE_RETURN: Return as is
+      </P
+></LI
+><LI
+><P
+>      ODBC_BINMODE_CONVERT: Convert to char and return
+      </P
+></LI
+></UL
+><P
+>    When binary SQL data is converted to character C data, each byte
+    (8 bits) of source data is represented as two ASCII characters.
+    These characters are the ASCII character representation of the
+    number in its hexadecimal form. For example, a binary 00000001 is
+    converted to <TT
+CLASS="LITERAL"
+>"01"</TT
+> and a binary 11111111 is
+    converted to <TT
+CLASS="LITERAL"
+>"FF"</TT
+>.
+
+     <DIV
+CLASS="TABLE"
+><P
+><B
+>Table 1. LONGVARBINARY handling</B
+></P
+><TABLE
+BORDER="1"
+CLASS="CALSTABLE"
+><TR
+><TH
+ALIGN="LEFT"
+VALIGN="TOP"
+>binmode</TH
+><TH
+ALIGN="LEFT"
+VALIGN="TOP"
+>longreadlen</TH
+><TH
+ALIGN="LEFT"
+VALIGN="TOP"
+>result</TH
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>ODBC_BINMODE_PASSTHRU</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>0</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>passthru</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>ODBC_BINMODE_RETURN</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>0</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>passthru</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>ODBC_BINMODE_CONVERT</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>0</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>passthru</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>ODBC_BINMODE_PASSTHRU</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>0</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>passthru</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>ODBC_BINMODE_PASSTHRU</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>&#62;0</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>passthru</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>ODBC_BINMODE_RETURN</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>&#62;0</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>return as is</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>ODBC_BINMODE_CONVERT</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>&#62;0</TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+>return as char</TD
+></TR
+></TABLE
+></DIV
+>
+
+    </P
+><P
+>     If <A
+HREF="function.odbc-fetch-into.html"
+><B
+CLASS="FUNCTION"
+>odbc_fetch_into()</B
+></A
+> is used, passthru means
+     that an empty string is returned for these columns.
+
+    </P
+><P
+>     If <TT
+CLASS="PARAMETER"
+><I
+>result_id</I
+></TT
+> is <TT
+CLASS="LITERAL"
+>0</TT
+>, the
+     settings apply as default for new results.
+
+     <DIV
+CLASS="NOTE"
+><BLOCKQUOTE
+CLASS="NOTE"
+><P
+><B
+>Note: </B
+> Default for longreadlen is
+       <TT
+CLASS="LITERAL"
+>4096</TT
+> and binmode defaults to
+       <TT
+CLASS="LITERAL"
+>ODBC_BINMODE_RETURN</TT
+>.  Handling of binary
+       long columns is also affected by
+       <A
+HREF="function.odbc-longreadlen.html"
+><B
+CLASS="FUNCTION"
+>odbc_longreadlen()</B
+></A
+>
+    </P
+></BLOCKQUOTE
+></DIV
+>
+   </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.odbc-autocommit.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.odbc-close.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>odbc_autocommit</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.odbc.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>odbc_close</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

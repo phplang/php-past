@@ -1,9 +1,86 @@
-dnl $Id: aclocal.m4,v 1.37 1999/05/12 17:54:23 sas Exp $
+dnl $Id: aclocal.m4,v 1.42 1999/06/24 17:04:56 sas Exp $
 dnl
 dnl This file contains local autoconf functions.
 
 dnl dummy function for PHP4 compatibility
 AC_DEFUN(PHP_EXTENSION,[])
+
+dnl
+dnl AC_PHP_ONCE(namespace, variable, code)
+dnl
+dnl execute code, if variable is not set in namespace
+dnl
+AC_DEFUN(AC_PHP_ONCE,[
+  unique=`echo $ac_n "$2$ac_c" | tr -c -d a-zA-Z0-9`
+  cmd="echo $ac_n \"\$$1$unique$ac_c\""
+  if test -n "$unique" && test "`eval $cmd`" = "" ; then
+    eval "$1$unique=set"
+    $3
+  fi
+])
+
+dnl
+dnl AC_EXPAND_PATH(path, variable)
+dnl
+dnl expands path to an absolute path and assigns it to variable
+dnl
+AC_DEFUN(AC_EXPAND_PATH,[
+  if echo "$1" | grep '^/' >/dev/null ; then
+    $2="$1"
+  else
+    $2="`pwd`/$1"
+  fi
+])
+
+dnl
+dnl AC_ADD_LIBPATH(path)
+dnl
+dnl add a library to linkpath/runpath
+dnl
+AC_DEFUN(AC_ADD_LIBPATH,[
+  AC_EXPAND_PATH($1, ai_p)
+  AC_PHP_ONCE(LIBPATH, $ai_p, [
+    EXTRA_LIBS="$EXTRA_LIBS -L$ai_p"
+    if test -n "$APXS" ; then
+      RPATHS="$RPATHS ${apxs_runpath_switch}$ai_p'"
+    else
+      RPATHS="$RPATHS ${ld_runpath_switch}$ai_p"
+    fi
+  ])
+])
+
+dnl
+dnl AC_ADD_INCLUDE(path)
+dnl
+dnl add a include path
+dnl
+AC_DEFUN(AC_ADD_INCLUDE,[
+  AC_EXPAND_PATH($1, ai_p)
+  AC_PHP_ONCE(INCLUDEPATH, $ai_p, [
+    INCLUDES="$INCLUDES -I$ai_p"
+  ])
+])
+
+dnl
+dnl AC_ADD_LIBRARY(library)
+dnl
+dnl add a library to the link line
+dnl
+AC_DEFUN(AC_ADD_LIBRARY,[
+  AC_PHP_ONCE(LIBRARY, $1, [
+    EXTRA_LIBS="$EXTRA_LIBS -l$1"
+  ])
+])
+
+dnl
+dnl AC_ADD_LIBRARY_WITH_PATH(library, path)
+dnl
+dnl add a library to the link line and path to linkpath/runpath
+dnl
+AC_DEFUN(AC_ADD_LIBRARY_WITH_PATH,[
+  AC_ADD_LIBPATH($2)
+  AC_ADD_LIBRARY($1)
+])
 
 AC_DEFUN(AC_TEMP_LDFLAGS,[
   old_LDFLAGS="$LDFLAGS"
@@ -35,7 +112,7 @@ dnl
 AC_DEFUN(AC_MSQL_VERSION,[
   AC_MSG_CHECKING([mSQL version])
   ac_php_oldcflags=$CFLAGS
-  CFLAGS="$MSQL_INCLUDE $CFLAGS";
+  CFLAGS="$INCLUDES $CFLAGS";
   AC_TRY_COMPILE([#include <sys/types.h>
 #define APIENTRY
 #include "msql.h"],[int i = IDX_TYPE],[
@@ -132,8 +209,8 @@ AC_DEFUN(AC_PREFERRED_DB_LIB,[
 dnl Assign INCLUDE/LFLAGS from PREFIX
 AC_DEFUN(AC_DBA_STD_ASSIGN,[
   if test "$THIS_PREFIX" != "" -a "$THIS_PREFIX" != "/usr"; then
-    THIS_INCLUDE="-I$THIS_PREFIX/include"
-    THIS_LFLAGS="-L$THIS_PREFIX/lib"
+    THIS_INCLUDE="$THIS_PREFIX/include"
+    THIS_LFLAGS="$THIS_PREFIX/lib"
   fi
 ])
 
@@ -151,9 +228,8 @@ AC_DEFUN(AC_DBA_STD_CHECK,[
 
 dnl Attach THIS_x to DBA_x
 AC_DEFUN(AC_DBA_STD_ATTACH,[
-  DBA_INCLUDE="$DBA_INCLUDE $THIS_INCLUDE"
-  DBA_LIBS="$DBA_LIBS $THIS_LIBS"
-  DBA_LFLAGS="$DBA_LFLAGS $THIS_LFLAGS"
+  AC_ADD_INCLUDE($THIS_INCLUDE)
+  AC_ADD_LIBRARY_WITH_PATH($THIS_LIBS, $THIS_LFLAGS)
 
   THIS_INCLUDE=""
   THIS_LIBS=""

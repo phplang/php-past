@@ -9,6 +9,8 @@
    are availabe in the ntbind distribution */
 #define HAVE_BINDLIB 1
 
+#define HAVE_DB_H 1
+
 #define HAVE_INET_ATON HAVE_BINDLIB
 
 #define SIZEOF_INT 4
@@ -66,7 +68,7 @@
    ---------------------------------------------------------------*/
 
 /* Define if you have the link function.  */
-#define HAVE_LINK 0
+#undef HAVE_LINK
 
 /* Define if you have the lockf function.  */
 /* #undef HAVE_LOCKF */
@@ -78,7 +80,7 @@
 /* #undef HAVE_SRAND48 */
 
 /* Define if you have the symlink function.  */
-#define HAVE_SYMLINK 0
+#undef HAVE_SYMLINK
 
 /* Define if you have the usleep function.  */
 #define HAVE_USLEEP 1
@@ -114,7 +116,7 @@
 
 #define HAVE_TZSET 1
 /* Define if you have the flock function.  */
-#define HAVE_FLOCK 0
+#undef HAVE_FLOCK
 
 /* Define if using alloca.c.  */
 /* #undef C_ALLOCA */
@@ -133,7 +135,7 @@
 /* #undef HAVE_ALLOCA_H */
 
 /* Define if you have <sys/time.h> */
-#define HAVE_SYS_TIME_H 0
+#undef HAVE_SYS_TIME_H
 
 /* Define if you have <signal.h> */
 #define HAVE_SIGNAL_H 1
@@ -142,10 +144,10 @@
 /* #undef HAVE_DOPRNT */
 
 /* Define if your struct stat has st_blksize.  */
-#define HAVE_ST_BLKSIZE 0
+#undef HAVE_ST_BLKSIZE
 
 /* Define if your struct stat has st_blocks.  */
-#define HAVE_ST_BLOCKS 0
+#undef HAVE_ST_BLOCKS
 
 /* Define if your struct stat has st_rdev.  */
 #define HAVE_ST_RDEV 1
@@ -204,6 +206,7 @@
 
 /* Define if you have the setlocale function.  */
 #define HAVE_SETLOCALE 1
+#define HAVE_LOCALE_H 1
 
 /* Define if you have the setvbuf function.  */
 #ifndef HAVE_BINDLIB
@@ -235,13 +238,13 @@
 /* #undef HAVE_CRYPT_H */
 
 /* Define if you have the <dirent.h> header file.  */
-#define HAVE_DIRENT_H 0
+#undef HAVE_DIRENT_H
 
 /* Define if you have the <fcntl.h> header file.  */
 #define HAVE_FCNTL_H 1
 
 /* Define if you have the <grp.h> header file.  */
-#define HAVE_GRP_H 0
+#undef HAVE_GRP_H
 
 /* Define if you have the <memory.h> header file.  */
 #define HAVE_MEMORY_H 1
@@ -259,22 +262,22 @@
 /* #undef HAVE_SYS_DIR_H */
 
 /* Define if you have the <sys/file.h> header file.  */
-#define HAVE_SYS_FILE_H 0
+#undef HAVE_SYS_FILE_H
 
 /* Define if you have the <sys/ndir.h> header file.  */
 /* #undef HAVE_SYS_NDIR_H */
 
 /* Define if you have the <sys/socket.h> header file.  */
-#define HAVE_SYS_SOCKET_H 0
+#undef HAVE_SYS_SOCKET_H
 
 /* Define if you have the <sys/wait.h> header file.  */
-#define HAVE_SYS_WAIT_H 0
+#undef HAVE_SYS_WAIT_H
 
 /* Define if you have the <syslog.h> header file.  */
 #define HAVE_SYSLOG_H 1
 
 /* Define if you have the <unistd.h> header file.  */
-#define HAVE_UNISTD_H 0
+#undef HAVE_UNISTD_H
 
 /* Define if you have the crypt library (-lcrypt).  */
 /* #undef HAVE_LIBCRYPT 0 */
@@ -292,7 +295,7 @@
 /* #undef HAVE_LIBSOCKET */
 
 /* Define if you have the cuserid function.  */
-#define HAVE_CUSERID 0
+#undef HAVE_CUSERID
 
 /* Define if you have the rint function.  */
 #undef HAVE_RINT

@@ -27,7 +27,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: syslog.c,v 1.44 1999/04/22 13:19:51 ssb Exp $ */
+/* $Id: syslog.c,v 1.45 1999/06/16 11:34:22 ssb Exp $ */
 #ifdef THREAD_SAFE
 #include "tls.h"
 #endif
@@ -35,8 +35,8 @@
 #include "internal_functions.h"
 
 #include <stdlib.h>
-#if HAVE_UNISTD_H
-#include <unistd.h>
+#ifdef HAVE_UNISTD_H
+# include <unistd.h>
 #endif
 #if MSVC5
 #include "win32/syslog.h"

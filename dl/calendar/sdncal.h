@@ -5,7 +5,7 @@
  * by Shane Caraveo shane@caraveo.com
  * see below for more details
  *
- * $Id: sdncal.h,v 1.10 1998/12/28 09:43:55 sas Exp $ 
+ * $Id: sdncal.h,v 1.11 1999/06/20 17:14:05 jim Exp $ 
  */
 
 /* $selId: sdncal.h,v 2.0 1995/10/24 01:13:06 lees Exp $
@@ -80,6 +80,8 @@ DLEXPORT void cal_jdtofrench(INTERNAL_FUNCTION_PARAMETERS);
 DLEXPORT void cal_frenchtojd(INTERNAL_FUNCTION_PARAMETERS);
 DLEXPORT void cal_jddayofweek(INTERNAL_FUNCTION_PARAMETERS);
 DLEXPORT void cal_monthname(INTERNAL_FUNCTION_PARAMETERS);
+DLEXPORT void cal_easter_days(INTERNAL_FUNCTION_PARAMETERS);
+DLEXPORT void cal_easter_date(INTERNAL_FUNCTION_PARAMETERS);
 
 /* These functions are internal to the dll */
 /* Gregorian calendar conversions. */

@@ -1,0 +1,214 @@
+<HTML
+><HEAD
+><TITLE
+>yp_match</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+REL="HOME"
+TITLE="PHP3 Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="NIS Functions"
+HREF="ref.nis.html"><LINK
+REL="PREVIOUS"
+TITLE="yp_master"
+HREF="function.yp-master.html"><LINK
+REL="NEXT"
+TITLE="yp_first"
+HREF="function.yp-first.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP3 Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.yp-master.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.yp-first.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="FUNCTION.YP-MATCH"
+>yp_match</A
+></H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN15063"
+></A
+>yp_match -- Returns the mached line</DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN15066"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><CODE
+CLASS="FUNCDEF"
+>string yp_match</CODE
+>(string domain, string map, string key);<P
+></P
+></DIV
+><P
+>     <B
+CLASS="FUNCTION"
+>yp_match()</B
+> returns the value associated with
+     the passed key out of the specified map or FALSE. This key must
+     be exact.
+    </P
+><P
+>     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="EXAMPLE"
+><P
+><B
+>Example 1. Example for NIS match</B
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>&lt;?php
+    $entry = yp_match($domain, "passwd.byname", "joe");
+
+    if(!$entry) {
+        echo yp_errno() . ": " . yp_err_string();
+    }
+
+    echo "Matched entry is: " . $entry;
+?&#62;
+      </PRE
+></DIV
+></TD
+></TR
+></TABLE
+>
+        
+    </P
+><P
+>     In this case this could be: joe:##joe:11111:100:Joe
+     User:/home/j/joe:/usr/local/bin/bash
+
+    </P
+><P
+>     See also: <A
+HREF="function.yp-get-default-domain.html"
+>     yp_get_default_domain</A
+> <A
+HREF="function.yp-errno.html"
+>yp_errno</A
+> and <A
+HREF="function.yp-err-string.html"
+>yp_err_string</A
+>
+
+   </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.yp-master.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.yp-first.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>yp_master</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.nis.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>yp_first</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,6 +1,6 @@
 /* Borrowed from Apache NT Port */
 
-/* $Id: getopt.c,v 1.8 1998/12/28 09:34:42 sas Exp $ */
+/* $Id: getopt.c,v 1.9 1999/06/19 19:06:19 sas Exp $ */
 
 #if !APACHE
 
@@ -8,7 +8,7 @@
 #include <string.h>
 #include <assert.h>
 #include <stdlib.h>
-#include "getopt.h"
+#include "php_getopt.h"
 #define OPTERRCOLON (1)
 #define OPTERRNF (2)
 #define OPTERRARG (3)

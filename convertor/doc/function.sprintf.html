@@ -1,0 +1,448 @@
+<HTML
+><HEAD
+><TITLE
+>sprintf</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+REL="HOME"
+TITLE="PHP3 Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="String functions"
+HREF="ref.strings.html"><LINK
+REL="PREVIOUS"
+TITLE="soundex"
+HREF="function.soundex.html"><LINK
+REL="NEXT"
+TITLE="strchr"
+HREF="function.strchr.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP3 Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.soundex.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.strchr.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="FUNCTION.SPRINTF"
+>sprintf</A
+></H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN19497"
+></A
+>sprintf -- return a formatted string</DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN19500"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><CODE
+CLASS="FUNCDEF"
+>sprintf</CODE
+>(string format, mixed [<SPAN
+CLASS="OPTIONAL"
+>args</SPAN
+>]...);<P
+></P
+></DIV
+><P
+>     Returns a string produced according to the formatting string
+     <TT
+CLASS="PARAMETER"
+><I
+>format</I
+></TT
+>.
+
+    </P
+><P
+>     The format string is composed by zero or more directives:
+     ordinary characters (excluding <TT
+CLASS="LITERAL"
+>%</TT
+>) that are
+     copied directly to the result, and <I
+CLASS="EMPHASIS"
+>conversion
+     specifications</I
+>, each of which results in fetching its
+     own parameter.  This applies to both <B
+CLASS="FUNCTION"
+>sprintf()</B
+>
+     and <A
+HREF="function.printf.html"
+><B
+CLASS="FUNCTION"
+>printf()</B
+></A
+>
+
+    </P
+><P
+>     Each conversion specification consists of these elements, in
+     order:
+     <P
+></P
+><OL
+TYPE="1"
+><LI
+><P
+>&#13;    An optional <I
+CLASS="EMPHASIS"
+>padding specifier</I
+> that says
+    what character will be used for padding the results to the
+    right string size.  This may be a space character or a
+    <TT
+CLASS="LITERAL"
+>0</TT
+> (zero character).  The default is to pad
+    with spaces.  An alternate padding character can be specified
+    by prefixing it with a single quote (<TT
+CLASS="LITERAL"
+>'</TT
+>).
+    See the examples below.
+
+      </P
+></LI
+><LI
+><P
+>&#13;    An optional <I
+CLASS="EMPHASIS"
+>alignment specifier</I
+> that says
+    if the result should be left-justified or right-justified.
+    The default is right-justified; a <TT
+CLASS="LITERAL"
+>-</TT
+>
+    character here will make it left-justified.
+
+      </P
+></LI
+><LI
+><P
+>&#13;    An optional number, a <I
+CLASS="EMPHASIS"
+>width specifier</I
+>
+    that says how many characters (minimum) this conversion should
+    result in.
+
+      </P
+></LI
+><LI
+><P
+>&#13;    An optional <I
+CLASS="EMPHASIS"
+>precision specifier</I
+> that says
+    how many decimal digits should be displayed for floating-point
+    numbers.  This option has no effect for other types than
+    double. (Another function useful for formatting numbers is
+	<A
+HREF="function.number-format.html"
+><B
+CLASS="FUNCTION"
+>number_format()</B
+></A
+>.)
+
+      </P
+></LI
+><LI
+><P
+>&#13;    A <I
+CLASS="EMPHASIS"
+>type specifier</I
+> that says what type the
+    argument data should be treated as.  Possible types:
+    <P
+></P
+><TABLE
+BORDER="0"
+><TR
+><TD
+>      <TT
+CLASS="LITERAL"
+>%</TT
+> - a literal percent character. No
+      argument is required.
+     </TD
+></TR
+><TR
+><TD
+>      <TT
+CLASS="LITERAL"
+>b</TT
+> - the argument is treated as an
+      integer, and presented as a binary number.
+     </TD
+></TR
+><TR
+><TD
+>      <TT
+CLASS="LITERAL"
+>c</TT
+> - the argument is treated as an
+      integer, and presented as the character with that ASCII
+      value.
+     </TD
+></TR
+><TR
+><TD
+>      <TT
+CLASS="LITERAL"
+>d</TT
+> - the argument is treated as an
+      integer, and presented as a decimal number.
+     </TD
+></TR
+><TR
+><TD
+>      <TT
+CLASS="LITERAL"
+>f</TT
+> - the argument is treated as a double,
+      and presented as a floating-point number.
+     </TD
+></TR
+><TR
+><TD
+>      <TT
+CLASS="LITERAL"
+>o</TT
+> - the argument is treated as an
+      integer, and presented as an octal number.
+     </TD
+></TR
+><TR
+><TD
+>      <TT
+CLASS="LITERAL"
+>s</TT
+> - the argument is treated as and
+      presented as a string.
+     </TD
+></TR
+><TR
+><TD
+>      <TT
+CLASS="LITERAL"
+>x</TT
+> - the argument is treated as an
+      integer and presented as a hexadecimal number (with
+      lowercase letters).
+     </TD
+></TR
+><TR
+><TD
+>      <TT
+CLASS="LITERAL"
+>X</TT
+> - the argument is treated as an
+      integer and presented as a hexadecimal number (with
+      uppercase letters).
+     </TD
+></TR
+></TABLE
+><P
+></P
+>
+
+     </P
+></LI
+></OL
+>
+
+    </P
+><P
+>     See also:
+     <A
+HREF="function.printf.html"
+><B
+CLASS="FUNCTION"
+>printf()</B
+></A
+>, <A
+HREF="function.number-format.html"
+><B
+CLASS="FUNCTION"
+>number_format()</B
+></A
+>
+
+   </P
+></DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN19560"
+></A
+><H2
+>Examples</H2
+><P
+>     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="EXAMPLE"
+><P
+><B
+>Example 1. sprintf: zero-padded integers</B
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>$isodate = sprintf("%04d-%02d-%02d", $year, $month, $day);</PRE
+></DIV
+></TD
+></TR
+></TABLE
+>
+
+     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="EXAMPLE"
+><P
+><B
+>Example 2. sprintf: formatting currency</B
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>$money1 = 68.75;
+$money2 = 54.35;
+$money = $money1 + $money2;
+// echo $money will output "123.1";
+$formatted = sprintf ("%01.2f", $money);
+// echo $formatted will output "123.10"</PRE
+></DIV
+></TD
+></TR
+></TABLE
+>
+
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.soundex.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.strchr.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>soundex</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.strings.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>strchr</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

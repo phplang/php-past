@@ -1,0 +1,222 @@
+<HTML
+><HEAD
+><TITLE
+>fgetcsv</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+REL="HOME"
+TITLE="PHP3 Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Filesystem Functions"
+HREF="ref.filesystem.html"><LINK
+REL="PREVIOUS"
+TITLE="fgetc"
+HREF="function.fgetc.html"><LINK
+REL="NEXT"
+TITLE="fgets"
+HREF="function.fgets.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP3 Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="function.fgetc.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.fgets.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="FUNCTION.FGETCSV"
+>fgetcsv</A
+></H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN5686"
+></A
+>fgetcsv -- get line from file pointer and parse for CSV fields</DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN5689"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><CODE
+CLASS="FUNCDEF"
+>array fgetcsv</CODE
+>(int fp, int length);<P
+></P
+></DIV
+><P
+>	 Similar to fgets() except that fgetcsv() parses the line it reads for
+	 fields in CSV format and returns an array containing the fields read.
+    </P
+><P
+>	 fp must be a valid file pointer to a file successfully opened by
+	 <A
+HREF="function.fopen.html"
+><B
+CLASS="FUNCTION"
+>fopen()</B
+></A
+>, <A
+HREF="function.popen.html"
+><B
+CLASS="FUNCTION"
+>popen()</B
+></A
+>, or <A
+HREF="function.fsockopen.html"
+><B
+CLASS="FUNCTION"
+>fsockopen()</B
+></A
+>
+	</P
+><P
+>	 length must be greater than the longest line to be found in the CSV
+	 file (allowing for trailing line-end characters).
+	</P
+><P
+>	 fgetcsv() returns false on error, including end of file.
+	</P
+><P
+>	 NB A blank line in a CSV file will be returned as an array comprising
+	 just one single null field, and will not be treated as an error.
+
+	</P
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="EXAMPLE"
+><P
+><B
+>Example 1. fgetcsv() example - Read and print entire contents of a CSV file</B
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>$row=1;
+$fp = fopen("test.csv","r");
+while ($data = fgetcsv($fp,1000)) {
+	$num = count($data);
+	print "&lt;p&#62; $num fields in line $row: &lt;br&#62;";
+	$row++;
+	for ( $c=0; $c&#60;$num; $c++ ) print $data[$c] . "&lt;br&#62;";
+}
+fclose($fp);
+      </PRE
+></DIV
+></TD
+></TR
+></TABLE
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="function.fgetc.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.fgets.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>fgetc</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.filesystem.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>fgets</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

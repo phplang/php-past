@@ -29,7 +29,7 @@
  */
 
 
-/* $Id: php3_hash.h,v 1.7 1999/01/01 17:58:51 zeev Exp $ */
+/* $Id: php3_hash.h,v 1.8 1999/06/22 10:18:19 thies Exp $ */
 
 
 #ifndef _HASH_
@@ -73,6 +73,9 @@ typedef struct hashtable {
 	Bucket **arBuckets;
 	void (*pDestructor) (void *pData);
 	unsigned char persistent;
+#if DEBUG
+	unsigned char indestroy;
+#endif
 } HashTable;
 
 

@@ -23,7 +23,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: hg_comm.c,v 1.21 1999/06/02 10:06:42 steinm Exp $ */
+/* $Id: hg_comm.c,v 1.23 1999/06/10 09:25:01 steinm Exp $ */
 
 /* #define HW_DEBUG */
 
@@ -954,7 +954,7 @@ int open_hg_connection(char *server_name, int port)
 #endif /* SUN */
 
 	if (connect(sockfd, (struct sockaddr *) &server_addr, sizeof(server_addr)) != 0) {
-		SOCK_FCLOSE(sockfd);
+		HWSOCK_FCLOSE(sockfd);
 		return(-3);
 	} 
 
@@ -963,7 +963,7 @@ int open_hg_connection(char *server_name, int port)
 #endif
 
 	if ( set_nonblocking(sockfd) == -1 )  {
-		SOCK_FCLOSE(sockfd);
+		HWSOCK_FCLOSE(sockfd);
 		return(-4);
 	}
 
@@ -1540,7 +1540,7 @@ int send_lock(int sockfd, hw_objectID objectID)
 		return(-1);
 	}
 
-	error = (int) *(retmsg->buf);
+	error = *((int *) retmsg->buf);
 
 	efree(retmsg->buf);
 	efree(retmsg);
@@ -3996,11 +3996,11 @@ int send_pipedocument(int sockfd, char *host, hw_objectID objectID, int mode, in
 	if(host) {
 		if((hostptr = gethostbyname(host)) == NULL) {
 			php3_error(E_WARNING, "gethostbyname failed for %s", host);
-			SOCK_FCLOSE(fd);
+			HWSOCK_FCLOSE(fd);
 			return(-1);
 		}
 	} else {
-		SOCK_FCLOSE(fd);
+		HWSOCK_FCLOSE(fd);
 		return(-1);
 	}
 	 
@@ -4013,20 +4013,20 @@ int send_pipedocument(int sockfd, char *host, hw_objectID objectID, int mode, in
 			hostip = inet_ntoa(*ptr1);
 			break;
 		default:
-			SOCK_FCLOSE(fd);
+			HWSOCK_FCLOSE(fd);
 			return(-1);
 			break;
 	}
 	 
 	/* Bottom half of send_getobject */
 	if(0 > bh_send_getobject(sockfd, objectID)) {
-		SOCK_FCLOSE(fd);
+		HWSOCK_FCLOSE(fd);
 		return -1;
 	}
 
 	/* Upper half of send_getobject */
 	if(0 > (error = uh_send_getobject(sockfd, &attributes))) {
-		SOCK_FCLOSE(fd);
+		HWSOCK_FCLOSE(fd);
 		return error;
 	}
 
@@ -4046,7 +4046,7 @@ int send_pipedocument(int sockfd, char *host, hw_objectID objectID, int mode, in
 	if ( send_hg_msg(sockfd, &msg, length) == -1 )	{
 		if(attributes) efree(attributes);
 		efree(msg.buf);
-		SOCK_FCLOSE(fd);
+		HWSOCK_FCLOSE(fd);
 		return(-1);
 	}
 	efree(msg.buf);
@@ -4055,7 +4055,7 @@ int send_pipedocument(int sockfd, char *host, hw_objectID objectID, int mode, in
 	retmsg = recv_hg_msg(sockfd);
 	if ( retmsg == NULL ) {
 		if(attributes) efree(attributes);
-		SOCK_FCLOSE(fd);
+		HWSOCK_FCLOSE(fd);
 		return(-1);
 	}
 
@@ -4065,7 +4065,7 @@ int send_pipedocument(int sockfd, char *host, hw_objectID objectID, int mode, in
 		efree(retmsg);
 		if(retmsg->buf) efree(retmsg->buf);
 		if(attributes) efree(attributes);
-		SOCK_FCLOSE(fd);
+		HWSOCK_FCLOSE(fd);
 		return(error);
 	}
 
@@ -4079,10 +4079,10 @@ int send_pipedocument(int sockfd, char *host, hw_objectID objectID, int mode, in
 	if((newfd = accept(fd, (struct sockaddr *) &serv_addr, &len)) < 0) {
 /*		php3_printf("client: can't open data connection to server\n"); */
 		if(attributes) efree(attributes);
-		SOCK_FCLOSE(fd);
+		HWSOCK_FCLOSE(fd);
 		return(-1);
 	} else {
-		SOCK_FCLOSE(fd);
+		HWSOCK_FCLOSE(fd);
 	}
 
 	/* First of all read the header */
@@ -4106,7 +4106,7 @@ int send_pipedocument(int sockfd, char *host, hw_objectID objectID, int mode, in
 	}
 
 	/* close the data connection */
-	SOCK_FCLOSE(newfd);
+	HWSOCK_FCLOSE(newfd);
 
 	documenttype = fnAttributeValue(attributes, "DocumentType");
 
@@ -4173,11 +4173,11 @@ int send_pipecgi(int sockfd, char *host, hw_objectID objectID, char *cgi_env_str
 	if(host) {
 		if((hostptr = gethostbyname(host)) == NULL) {
 			php3_error(E_WARNING, "gethostbyname failed for %s", host);
-			SOCK_FCLOSE(fd);
+			HWSOCK_FCLOSE(fd);
 			return(-1);
 		}
 	} else {
-		SOCK_FCLOSE(fd);
+		HWSOCK_FCLOSE(fd);
 		return(-1);
 	}
 	 
@@ -4196,13 +4196,13 @@ int send_pipecgi(int sockfd, char *host, hw_objectID objectID, char *cgi_env_str
 	 
 	/* Bottom half of send_getobject */
 	if(0 > bh_send_getobject(sockfd, objectID)) {
-		SOCK_FCLOSE(fd);
+		HWSOCK_FCLOSE(fd);
 		return -1;
 	}
 
 	/* Upper half of send_getobject */
 	if(0 > (error = uh_send_getobject(sockfd, &attributes))) {
-		SOCK_FCLOSE(fd);
+		HWSOCK_FCLOSE(fd);
 		return error;
 	}
 
@@ -4229,7 +4229,7 @@ int send_pipecgi(int sockfd, char *host, hw_objectID objectID, char *cgi_env_str
 	if ( send_hg_msg(sockfd, &msg, length) == -1 )	{
 		if(attributes) efree(attributes);
 		efree(msg.buf);
-		SOCK_FCLOSE(fd);
+		HWSOCK_FCLOSE(fd);
 		return(-1);
 	}
 	efree(msg.buf);
@@ -4238,7 +4238,7 @@ int send_pipecgi(int sockfd, char *host, hw_objectID objectID, char *cgi_env_str
 	retmsg = recv_hg_msg(sockfd);
 	if ( retmsg == NULL ) {
 		if(attributes) efree(attributes);
-		SOCK_FCLOSE(fd);
+		HWSOCK_FCLOSE(fd);
 		return(-1);
 	}
 
@@ -4247,7 +4247,7 @@ int send_pipecgi(int sockfd, char *host, hw_objectID objectID, char *cgi_env_str
 		efree(retmsg);
 		if(retmsg->buf) efree(retmsg->buf);
 		if(attributes) efree(attributes);
-		SOCK_FCLOSE(fd);
+		HWSOCK_FCLOSE(fd);
 		return(-1);
 	}
 
@@ -4260,10 +4260,10 @@ int send_pipecgi(int sockfd, char *host, hw_objectID objectID, char *cgi_env_str
 	len = sizeof(serv_addr);
 	if((newfd = accept(fd, (struct sockaddr *) &serv_addr, &len)) < 0) {
 		if(attributes) efree(attributes);
-		SOCK_FCLOSE(fd);
+		HWSOCK_FCLOSE(fd);
 		return(-1);
 	} else {
-		SOCK_FCLOSE(fd);
+		HWSOCK_FCLOSE(fd);
 	}
 
 	/* First of all read the header */
@@ -4286,7 +4286,7 @@ int send_pipecgi(int sockfd, char *host, hw_objectID objectID, char *cgi_env_str
 	}
 
 	/* close the data connection */
-	SOCK_FCLOSE(newfd);
+	HWSOCK_FCLOSE(newfd);
 
 	documenttype = fnAttributeValue(attributes, "DocumentType");
 
@@ -4401,7 +4401,7 @@ int send_putdocument(int sockfd, char *host, hw_objectID parentID, char *objectR
 
 	if ( send_hg_msg(sockfd, &msg, length) == -1 )	{
 		efree(msg.buf);
-		SOCK_FCLOSE(fd);
+		HWSOCK_FCLOSE(fd);
 		return(-1);
 	}
 	efree(msg.buf);
@@ -4411,10 +4411,10 @@ int send_putdocument(int sockfd, char *host, hw_objectID parentID, char *objectR
         */
 	len = sizeof(serv_addr);
 	if((newfd = accept(fd, (struct sockaddr *) &serv_addr, &len)) < 0) {
-		SOCK_FCLOSE(fd);
+		HWSOCK_FCLOSE(fd);
 		return(-1);
 	} else {
-		SOCK_FCLOSE(fd);
+		HWSOCK_FCLOSE(fd);
 	}
 
 	/* First of all write the header. According to the documentation
@@ -4426,24 +4426,24 @@ int send_putdocument(int sockfd, char *host, hw_objectID parentID, char *objectR
 	sprintf(header, "HGHDR\nsz=%d\nref=12345678\n", count);
 	len = strlen(header) + 1;
 	if(len != write_to(newfd, header, len, wtimeout)) {
-		SOCK_FCLOSE(newfd);
+		HWSOCK_FCLOSE(newfd);
 		return(-1);
 	}
 
 	/* And now the document */
 	if(count != write_to(newfd, text, count, wtimeout)) {
-		SOCK_FCLOSE(newfd);
+		HWSOCK_FCLOSE(newfd);
 		return(-1);
 	}
 	
  	/* The data connection has to be close before the return
 	   msg can be read. The server will not sent it before. */
-	SOCK_FCLOSE(newfd);
+	HWSOCK_FCLOSE(newfd);
 
 	/* Just check if the command was understood */
 	retmsg = recv_hg_msg(sockfd);
 	if ( retmsg == NULL ) {
-		SOCK_FCLOSE(fd);
+		HWSOCK_FCLOSE(fd);
 		return(-1);
 	}
 
@@ -4451,7 +4451,7 @@ int send_putdocument(int sockfd, char *host, hw_objectID parentID, char *objectR
 	if((ptr == NULL) || (*ptr != 0)) {
 		efree(retmsg);
 		if(retmsg->buf) efree(retmsg->buf);
-		SOCK_FCLOSE(fd);
+		HWSOCK_FCLOSE(fd);
 		return(-1);
 	}
 
@@ -4746,7 +4746,7 @@ static int swap(int val)
 void close_hg_connection(int sockfd)
 {
 	shutdown(sockfd, 2);
-	SOCK_FCLOSE(sockfd);
+	HWSOCK_FCLOSE(sockfd);
 }
 
 #endif

@@ -1,3 +1,6 @@
+
+#undef UCD_SNMP_HACK
+
 /* Define if you want dmalloc checking */
 #define HAVE_DMALLOC 0
 
@@ -66,7 +69,7 @@
 
 /* Define if you have dirent.h but opendir() resides in libc rather than in libdir */
 /* This will cause HAVE_DIRENT_H defined twice sometimes, but it should be problem */
-#define HAVE_DIRENT_H 0
+#undef HAVE_DIRENT_H
 
 /* Define if your struct tm has tm_gmtoff.  */
 #undef HAVE_TM_GMTOFF
@@ -325,6 +328,9 @@
 /* Define if you have the pdflib library */
 #define HAVE_PDFLIB 0
 
+/* Define if you have the pdflib library */
+#define HAVE_PDFLIB2 0
+
 /* Define if you have the fdftk library */
 #define HAVE_FDFLIB 0
 
@@ -335,4 +341,8 @@
 #define HAVE_YP 0
 
 /* Define if you have the t1 library (-lt1).  */
+#define HAVE_LIBT1 0
 #undef HAVE_LIBT1_OUTLINE
+
+#define HAVE_LIBTTF 0
+#define HAVE_POSIX 0

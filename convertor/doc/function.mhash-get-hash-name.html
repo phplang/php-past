@@ -1,0 +1,207 @@
+<HTML
+><HEAD
+><TITLE
+>mhash_get_hash_name</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+REL="HOME"
+TITLE="PHP3 Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="mhash functions"
+HREF="ref.mhash.html"><LINK
+REL="PREVIOUS"
+TITLE="mhash functions"
+HREF="ref.mhash.html"><LINK
+REL="NEXT"
+TITLE="mhash_get_block_size"
+HREF="function.mhash-get-block-size.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP3 Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="ref.mhash.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="function.mhash-get-block-size.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="FUNCTION.MHASH-GET-HASH-NAME"
+>mhash_get_hash_name</A
+></H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN12276"
+></A
+>mhash_get_hash_name -- Get the name of the specified hash</DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN12279"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><CODE
+CLASS="FUNCDEF"
+>string mhash_get_hash_name</CODE
+>(int hash);<P
+></P
+></DIV
+><P
+>     <B
+CLASS="FUNCTION"
+>mhash_get_hash_name()</B
+> is used to get the name of the
+     specified hash.
+
+    </P
+><P
+>     <B
+CLASS="FUNCTION"
+>mhash_get_hash_name()</B
+> takes the hash id as an argument
+     and returns the name of the hash or false, if the hash does not exist.
+     
+    </P
+><P
+>     <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="EXAMPLE"
+><P
+><B
+>Example 1. mhash_get_hash_name example</B
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>&lt;?php
+$hash = MHASH_MD5;
+
+print mhash_get_hash_name($hash);
+?&gt;
+      </PRE
+></DIV
+></TD
+></TR
+></TABLE
+>
+	 
+     The above example will print out:
+     <PRE
+CLASS="PROGRAMLISTING"
+>MD5
+     </PRE
+>
+	
+   </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="ref.mhash.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="function.mhash-get-block-size.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>mhash functions</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="ref.mhash.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>mhash_get_block_size</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

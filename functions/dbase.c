@@ -27,7 +27,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: dbase.c,v 1.72 1999/01/01 17:59:08 zeev Exp $ */
+/* $Id: dbase.c,v 1.73 1999/06/23 22:20:31 sas Exp $ */
 #if defined(COMPILE_DL)
 #include "dl/phpdl.h"
 #endif
@@ -36,6 +36,10 @@
 #include "tls.h"
 #endif
 #include <stdlib.h>
+
+#ifdef HAVE_SYS_TYPES_H
+#include <sys/types.h>
+#endif
 
 #include "php.h"
 #include "internal_functions.h"
@@ -354,6 +358,7 @@ void php3_dbase_get_record(INTERNAL_FUNCTION_PARAMETERS) {
 	int dbh_type;
 	dbfield_t *dbf, *cur_f;
 	char *data, *fnp, *str_value;
+	size_t cursize = 0;
 	DBase_TLS_VARS;
 
 	if (ARG_COUNT(ht) != 2 || getParameters(ht,2,&dbh_id,&record)==FAILURE) {
@@ -379,11 +384,17 @@ void php3_dbase_get_record(INTERNAL_FUNCTION_PARAMETERS) {
 		RETURN_FALSE;
 	}
 
-        fnp = (char *)emalloc(dbh->db_rlen);
+		fnp = NULL;
         for (cur_f = dbf; cur_f < &dbf[dbh->db_nfields]; cur_f++) {
 		/* get the value */
 		str_value = (char *)emalloc(cur_f->db_flen + 1);
-                sprintf(str_value, cur_f->db_format, get_field_val(data, cur_f, fnp));
+
+		if(cursize <= cur_f->db_flen) {
+			cursize = cur_f->db_flen + 1;
+			fnp = erealloc(fnp, cursize);
+		}
+		
+                snprintf(str_value, cursize, cur_f->db_format, get_field_val(data, cur_f, fnp));
 
 		/* now convert it to the right php internal type */
 	        switch (cur_f->db_type) {

@@ -1,0 +1,263 @@
+<HTML
+><HEAD
+><TITLE
+>File upload support</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.41"><LINK
+REL="HOME"
+TITLE="PHP3 Manual"
+HREF="manual.html"><LINK
+REL="UP"
+TITLE="Features"
+HREF="features.html"><LINK
+REL="PREVIOUS"
+TITLE="GIF creation with PHP"
+HREF="feature-images.html"><LINK
+REL="NEXT"
+TITLE="PUT Method Support"
+HREF="feature-putsupport.html"></HEAD
+><BODY
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHP3 Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="feature-images.html"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 4. Features</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="feature-putsupport.html"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="FEATURE-FILEUPLOAD"
+>File upload support</A
+></H1
+><P
+>    PHP is capable of receiving file uploads from any RFC-1867
+    compliant browser (which includes Netscape Navigator 3 or later,
+    Microsoft Internet Explorer 3 with a patch from Microsoft, or
+    later without a patch).  This feature lets people upload both text
+    and binary files.  With PHP's authentication and file manipulation
+    functions, you have full control over who is allowed to upload and
+    what is to be done with the file once it has been uploaded.
+   </P
+><P
+>	Note that PHP also supports PUT-method file uploads as used by 
+	Netscape Composer and W3C's Amaya clients.  See the
+	<A
+HREF="feature-putsupport.html"
+>PUT Method Support</A
+> for more 
+	details.
+   </P
+><P
+>    A file upload screen can be built by creating a special form which
+    looks something like this:
+
+    <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="EXAMPLE"
+><P
+><B
+>Example 4-4. File Upload Form</B
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>&lt;FORM ENCTYPE=&quot;multipart/form-data&quot; ACTION=&quot;_URL_&quot; METHOD=POST&gt;
+&lt;INPUT TYPE=&quot;hidden&quot; name=&quot;MAX_FILE_SIZE&quot; value=&quot;1000&quot;&gt;
+Send this file: &lt;INPUT NAME=&quot;userfile&quot; TYPE=&quot;file&quot;&gt;
+&lt;INPUT TYPE=&quot;submit&quot; VALUE=&quot;Send File&quot;&gt;
+&lt;/FORM&gt;
+     </PRE
+></DIV
+></TD
+></TR
+></TABLE
+>
+    
+    The _URL_ should point to a php html file.  The MAX_FILE_SIZE
+    hidden field must precede the file input field and its value is
+    the maximum filesize accepted.  The value is in bytes.  In this
+    destination file, the following variables will be defined upon a
+    successful upload:
+    </P
+><P
+>     <P
+></P
+><UL
+><LI
+><P
+>        $userfile - The temporary filename in which the uploaded file
+        was stored on the server machine.
+       </P
+></LI
+><LI
+><P
+>        $userfile_name - The original name of the file on the sender's
+        system.
+       </P
+></LI
+><LI
+><P
+>        $userfile_size - The size of the uploaded file in bytes.
+       </P
+></LI
+><LI
+><P
+>        $userfile_type - The mime type of the file if the browser
+        provided this information.  An example would be
+        &quot;image/gif&quot;.
+       </P
+></LI
+></UL
+>
+    
+    Note that the &quot;$userfile&quot; part of the above variables is
+    whatever the name of the INPUT field of TYPE=file is in the upload
+    form.  In the above upload form example, we chose to call it
+    &quot;userfile&quot;.
+  
+   </P
+><P
+>    Files will by default be stored in the server's default temporary
+    directory.  This can be changed by setting the environment
+    variable TMPDIR in the environment in which PHP runs.  Setting it
+    using a PutEnv() call from within a PHP script will not work
+    though.
+   </P
+><P
+>    The PHP script which receives the uploaded file should implement
+    whatever logic is necessary for determining what should be done
+    with the uploaded file.  You can for example use the $file_size
+    variable to throw away any files that are either too small or too
+    big.  You could use the $file_type variable to throw away any
+    files that didn't match a certain type criteria.  Whatever the
+    logic, you should either delete the file from the temporary
+    directory or move it elsewhere.
+   </P
+><P
+>    The file will be deleted from the temporary directory at the end
+    of the request if it has not been moved away or renamed.
+   </P
+><P
+>   Common Pitfalls:
+   </P
+><P
+>    The MAX_FILE_SIZE item cannot specify a file size greater than the file 
+    size that has been set in the upload_max_filesize in the PHP3.ini file
+    or the corresponding php3_upload_max_filesize Apache .conf directive. 
+    The default is 2 Megabytes.
+   </P
+><P
+>    Please note that the CERN httpd seems to strip off everything
+    starting at the first whitespace in the content-type mime header
+    it gets from the client.  As long as this is the case, CERN httpd
+    will not support the file upload feature.
+  </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="feature-images.html"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manual.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="feature-putsupport.html"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>GIF creation with PHP</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="features.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>PUT Method Support</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

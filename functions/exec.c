@@ -26,7 +26,7 @@
    | Author: Rasmus Lerdorf   <rasmus@lerdorf.on.ca>                      |
    +----------------------------------------------------------------------+
  */
-/* $Id: exec.c,v 1.82 1999/01/31 14:40:14 rasmus Exp $ */
+/* $Id: exec.c,v 1.83 1999/06/16 11:34:18 ssb Exp $ */
 
 #ifdef THREAD_SAFE
 #include "tls.h"
@@ -40,8 +40,8 @@
 #include "head.h"
 #include "exec.h"
 
-#if HAVE_SYS_WAIT_H
-#include <sys/wait.h>
+#ifdef HAVE_SYS_WAIT_H
+# include <sys/wait.h>
 #endif
 
 /*
@@ -183,7 +183,7 @@ static int _Exec(int type, char *cmd, pval *array, pval *return_value)
 	}
 	
 	ret = pclose(fp);
-#if HAVE_SYS_WAIT_H
+#ifdef HAVE_SYS_WAIT_H
 	if (WIFEXITED(ret)) {
 		ret = WEXITSTATUS(ret);
 	}

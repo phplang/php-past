@@ -29,7 +29,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: gd.c,v 1.123 1999/06/01 22:04:25 jah Exp $ */
+/* $Id: gd.c,v 1.125 1999/06/22 00:26:38 jim Exp $ */
 
 /* gd 1.2 is copyright 1994, 1995, Quest Protein Database Center, 
    Cold Spring Harbor Labs. */
@@ -50,10 +50,7 @@
 #include <math.h>
 #include "php3_gd.h"
 
-#if HAVE_SYS_WAIT_H
-# include <sys/wait.h>
-#endif
-#if HAVE_UNISTD_H
+#ifdef HAVE_UNISTD_H
 # include <unistd.h>
 #endif
 #if WIN32|WINNT
@@ -263,7 +260,7 @@ int php3_mend_gd(void){
 }
 
 /* Need this for cpdf. See also comment in file.c php3i_get_le_fp() */
-PHPAPI int php3i_get_le_gd(void){
+PHPAPI_EXPORT int php3i_get_le_gd(void){
 	TLS_VARS;
 	return GLOBAL(le_gd);
 }

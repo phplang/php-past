@@ -33,7 +33,7 @@
 
 #define OCI8_USE_EMALLOC 0		/* set this to 1 if you want to use the php memory manager! */
 
-/* $Id: oci8.c,v 1.108 1999/06/04 10:25:09 thies Exp $ */
+/* $Id: oci8.c,v 1.112 1999/06/24 08:07:09 thies Exp $ */
 
 /* TODO list:
  *
@@ -153,11 +153,15 @@ BOOL WINAPI DllMain(HANDLE hModule, DWORD  ul_reason_for_call,
 /* }}} */
 /* {{{ startup/shutdown/info/internal function prototypes */
 
+#ifndef ZEND_MODULE_INFO_FUNC_ARGS
+#define ZEND_MODULE_INFO_FUNC_ARGS void
+#endif
+
 int php3_minit_oci8(INIT_FUNC_ARGS);
 int php3_rinit_oci8(INIT_FUNC_ARGS);
 int php3_mshutdown_oci8(SHUTDOWN_FUNC_ARGS);
 int php3_rshutdown_oci8(SHUTDOWN_FUNC_ARGS);
-void php3_info_oci8(void);
+void php3_info_oci8(ZEND_MODULE_INFO_FUNC_ARGS);
 
 static ub4 oci8_error(OCIError *err_p, char *what, sword status);
 /* static int oci8_ping(oci8_connection *conn); XXX NYI */
@@ -203,37 +207,37 @@ static sb4 oci8_failover_callback(dvoid *svchp,dvoid* envhp,dvoid *fo_ctx,ub4 fo
 /* }}} */
 /* {{{ extension function prototypes */
 
-void php3_oci8_bindbyname(INTERNAL_FUNCTION_PARAMETERS);
-void php3_oci8_definebyname(INTERNAL_FUNCTION_PARAMETERS);
-void php3_oci8_columnisnull(INTERNAL_FUNCTION_PARAMETERS);
-void php3_oci8_columnname(INTERNAL_FUNCTION_PARAMETERS);
-void php3_oci8_columnsize(INTERNAL_FUNCTION_PARAMETERS);
-void php3_oci8_columntype(INTERNAL_FUNCTION_PARAMETERS);
-void php3_oci8_execute(INTERNAL_FUNCTION_PARAMETERS);
-void php3_oci8_fetch(INTERNAL_FUNCTION_PARAMETERS);
-void php3_oci8_cancel(INTERNAL_FUNCTION_PARAMETERS);
-void php3_oci8_fetchinto(INTERNAL_FUNCTION_PARAMETERS);
-void php3_oci8_fetchstatement(INTERNAL_FUNCTION_PARAMETERS);
-void php3_oci8_freestatement(INTERNAL_FUNCTION_PARAMETERS);
-void php3_oci8_internaldebug(INTERNAL_FUNCTION_PARAMETERS);
-void php3_oci8_logout(INTERNAL_FUNCTION_PARAMETERS);
-void php3_oci8_logon(INTERNAL_FUNCTION_PARAMETERS);
-void php3_oci8_nlogon(INTERNAL_FUNCTION_PARAMETERS);
-void php3_oci8_plogon(INTERNAL_FUNCTION_PARAMETERS);
-void php3_oci8_error(INTERNAL_FUNCTION_PARAMETERS);
-void php3_oci8_freedesc(INTERNAL_FUNCTION_PARAMETERS);
-void php3_oci8_savedesc(INTERNAL_FUNCTION_PARAMETERS);
-void php3_oci8_loaddesc(INTERNAL_FUNCTION_PARAMETERS);
-void php3_oci8_commit(INTERNAL_FUNCTION_PARAMETERS);
-void php3_oci8_rollback(INTERNAL_FUNCTION_PARAMETERS);
-void php3_oci8_newdescriptor(INTERNAL_FUNCTION_PARAMETERS);
-void php3_oci8_numcols(INTERNAL_FUNCTION_PARAMETERS);
-void php3_oci8_parse(INTERNAL_FUNCTION_PARAMETERS);
-void php3_oci8_newcursor(INTERNAL_FUNCTION_PARAMETERS);
-void php3_oci8_result(INTERNAL_FUNCTION_PARAMETERS);
-void php3_oci8_serverversion(INTERNAL_FUNCTION_PARAMETERS);
-void php3_oci8_statementtype(INTERNAL_FUNCTION_PARAMETERS);
-void php3_oci8_rowcount(INTERNAL_FUNCTION_PARAMETERS);
+PHP_FUNCTION(oci8_bindbyname);
+PHP_FUNCTION(oci8_definebyname);
+PHP_FUNCTION(oci8_columnisnull);
+PHP_FUNCTION(oci8_columnname);
+PHP_FUNCTION(oci8_columnsize);
+PHP_FUNCTION(oci8_columntype);
+PHP_FUNCTION(oci8_execute);
+PHP_FUNCTION(oci8_fetch);
+PHP_FUNCTION(oci8_cancel);
+PHP_FUNCTION(oci8_fetchinto);
+PHP_FUNCTION(oci8_fetchstatement);
+PHP_FUNCTION(oci8_freestatement);
+PHP_FUNCTION(oci8_internaldebug);
+PHP_FUNCTION(oci8_logout);
+PHP_FUNCTION(oci8_logon);
+PHP_FUNCTION(oci8_nlogon);
+PHP_FUNCTION(oci8_plogon);
+PHP_FUNCTION(oci8_error);
+PHP_FUNCTION(oci8_freedesc);
+PHP_FUNCTION(oci8_savedesc);
+PHP_FUNCTION(oci8_loaddesc);
+PHP_FUNCTION(oci8_commit);
+PHP_FUNCTION(oci8_rollback);
+PHP_FUNCTION(oci8_newdescriptor);
+PHP_FUNCTION(oci8_numcols);
+PHP_FUNCTION(oci8_parse);
+PHP_FUNCTION(oci8_newcursor);
+PHP_FUNCTION(oci8_result);
+PHP_FUNCTION(oci8_serverversion);
+PHP_FUNCTION(oci8_statementtype);
+PHP_FUNCTION(oci8_rowcount);
 
 /* }}} */
 /* {{{ extension definition structures */
@@ -559,7 +563,7 @@ int php3_rshutdown_oci8(SHUTDOWN_FUNC_ARGS)
 }
 
 
-void php3_info_oci8()
+void php3_info_oci8(ZEND_MODULE_INFO_FUNC_ARGS)
 {
 #if !(WIN32|WINNT)
 	php3_printf("Oracle version: %s<br>\n"
@@ -924,10 +928,6 @@ oci8_make_pval(pval *value,oci8_statement *statement,oci8_out_column *column, ch
 				value->type = IS_STRING;
 				value->value.str.len = loblen;
 				value->value.str.val = buffer;
-#if PHP_API_VERSION >= 19990421
-				value->refcount = 1;
-				value->is_ref = 0;
-#endif
 			} else {
 				var_reset(value);
 			}
@@ -952,12 +952,8 @@ oci8_make_pval(pval *value,oci8_statement *statement,oci8_out_column *column, ch
 				/* this seems to be a BUG in oracle with 1-digit numbers */
 
 				if (column->rlen <= 0) {
-					if (column->indicator > 0) { /* XXX this is our "oci-bug" */
-						/*
-						size = column->indicator; 
-						*/
-
-						size = 1;
+					if (column->size2 > 0) { /* XXX this is our "oci-bug" */
+						size = column->size2;
 					} else {
 						size = 1;
 					}
@@ -989,11 +985,6 @@ oci8_make_pval(pval *value,oci8_statement *statement,oci8_out_column *column, ch
 		value->type = IS_STRING;
 		value->value.str.len = size;
 		value->value.str.val = estrndup(column->data,size);
-#if PHP_API_VERSION >= 19990421
-		value->refcount = 1;
-		value->is_ref = 0;
-#endif
-	
 	}
 
 	return 0;
@@ -1125,6 +1116,10 @@ oci8_execute(oci8_statement *statement, char *func,ub4 mode, HashTable *list)
 			statement->conn->open = 0;
 			statement->conn->session->open = 0;
 			statement->conn->session->server->open = 0;
+			return 0;
+			break;
+
+		default:
 			return 0;
 			break;
 		}
@@ -1382,7 +1377,7 @@ oci8_fetch(oci8_statement *statement, ub4 nrows, char *func)
 				continue;
 			}
 				 
-			pval_destructor(column->define->pval);
+			php3tls_pval_destructor(column->define->pval);
 
 			oci8_make_pval(column->define->pval,statement,column,"OCIFetch",0);
 		}
@@ -2315,7 +2310,7 @@ static void oci8_do_connect(INTERNAL_FUNCTION_PARAMETERS,int persistent,int excl
   if you want to define a LOB/CLOB etc make sure you allocate it via OCINewDescriptor BEFORE defining!!!
  */
 
-void php3_oci8_definebyname(INTERNAL_FUNCTION_PARAMETERS)
+PHP_FUNCTION(oci8_definebyname)
 {
 	pval *stmt, *name, *var, *type;
 	oci8_statement *statement;
@@ -2378,7 +2373,7 @@ void php3_oci8_definebyname(INTERNAL_FUNCTION_PARAMETERS)
   if you want to bind a LOB/CLOB etc make sure you allocate it via OCINewDescriptor BEFORE binding!!!
  */
 
-void php3_oci8_bindbyname(INTERNAL_FUNCTION_PARAMETERS)
+PHP_FUNCTION(oci8_bindbyname)
 {
 	pval *stmt, *name, *var, *maxlen, *tmp,*type;
 	oci8_statement *statement;
@@ -2521,14 +2516,18 @@ void php3_oci8_bindbyname(INTERNAL_FUNCTION_PARAMETERS)
 /* {{{ proto string ocifreedesc(object lob)
  */
 
-void php3_oci8_freedesc(INTERNAL_FUNCTION_PARAMETERS)
+PHP_FUNCTION(oci8_freedesc)
 {
 	pval *id, *conn, *desc;
 	oci8_connection *connection;
 
 	OCI8_TLS_VARS;
 
+#if PHP_API_VERSION < 19990421       
 	if (getThis(&id) == SUCCESS) {
+#else
+	if (id = getThis()) {
+#endif
         if (_php3_hash_find(id->value.ht, "connection", sizeof("connection"), (void **)&conn) == FAILURE) {
             php3_error(E_WARNING, "unable to find my statement property");
             RETURN_FALSE;
@@ -2557,7 +2556,7 @@ void php3_oci8_freedesc(INTERNAL_FUNCTION_PARAMETERS)
 /* {{{ proto string ocisavedesc(object lob)
  */
 
-void php3_oci8_savedesc(INTERNAL_FUNCTION_PARAMETERS)
+PHP_FUNCTION(oci8_savedesc)
 {
 	pval *id, *tmp, *conn, *arg;
 	OCILobLocator *mylob;
@@ -2567,7 +2566,11 @@ void php3_oci8_savedesc(INTERNAL_FUNCTION_PARAMETERS)
 
 	OCI8_TLS_VARS;
 
+#if PHP_API_VERSION < 19990421       
 	if (getThis(&id) == SUCCESS) {
+#else
+	if (id = getThis()) {
+#endif
    		if (_php3_hash_find(id->value.ht, "connection", sizeof("connection"), (void **)&conn) == FAILURE) {
 			php3_error(E_WARNING, "unable to find my statement property");
 			RETURN_FALSE;
@@ -2637,7 +2640,7 @@ void php3_oci8_savedesc(INTERNAL_FUNCTION_PARAMETERS)
 /* {{{ proto string ociloaddesc(object lob)
  */
 
-void php3_oci8_loaddesc(INTERNAL_FUNCTION_PARAMETERS)
+PHP_FUNCTION(oci8_loaddesc)
 {
 	pval *id, *tmp, *conn;
 	oci8_connection *connection;
@@ -2647,7 +2650,11 @@ void php3_oci8_loaddesc(INTERNAL_FUNCTION_PARAMETERS)
 
 	OCI8_TLS_VARS;
 
+#if PHP_API_VERSION < 19990421       
 	if (getThis(&id) == SUCCESS) {
+#else
+	if (id = getThis()) {
+#endif
    		if (_php3_hash_find(id->value.ht, "connection", sizeof("connection"), (void **)&conn) == FAILURE) {
 			php3_error(E_WARNING, "unable to find my statement property");
 			RETURN_FALSE;
@@ -2682,7 +2689,7 @@ void php3_oci8_loaddesc(INTERNAL_FUNCTION_PARAMETERS)
   initialize a new empty descriptor LOB/FILE (LOB is default)
  */
 
-void php3_oci8_newdescriptor(INTERNAL_FUNCTION_PARAMETERS)
+PHP_FUNCTION(oci8_newdescriptor)
 {
 	pval *conn, *type;
 	oci8_connection *connection;
@@ -2758,7 +2765,7 @@ void php3_oci8_newdescriptor(INTERNAL_FUNCTION_PARAMETERS)
   rollback the current context
  */
 
-void php3_oci8_rollback(INTERNAL_FUNCTION_PARAMETERS)
+PHP_FUNCTION(oci8_rollback)
 {
 	pval *conn;
 	oci8_connection *connection;
@@ -2792,7 +2799,7 @@ void php3_oci8_rollback(INTERNAL_FUNCTION_PARAMETERS)
   commit the current context
  */
 
-void php3_oci8_commit(INTERNAL_FUNCTION_PARAMETERS)
+PHP_FUNCTION(oci8_commit)
 {
 	pval *conn;
 	oci8_connection *connection;
@@ -2826,7 +2833,7 @@ void php3_oci8_commit(INTERNAL_FUNCTION_PARAMETERS)
   Tell the name of a column.
  */
 
-void php3_oci8_columnname(INTERNAL_FUNCTION_PARAMETERS)
+PHP_FUNCTION(oci8_columnname)
 {
 	pval *stmt, *col;
 	oci8_statement *statement;
@@ -2854,7 +2861,7 @@ void php3_oci8_columnname(INTERNAL_FUNCTION_PARAMETERS)
   Tell the maximum data size of a column.
  */
 
-void php3_oci8_columnsize(INTERNAL_FUNCTION_PARAMETERS)
+PHP_FUNCTION(oci8_columnsize)
 {
 	pval *stmt, *col;
 	oci8_statement *statement;
@@ -2881,7 +2888,7 @@ void php3_oci8_columnsize(INTERNAL_FUNCTION_PARAMETERS)
   Tell the data type of a column.
  */
 
-void php3_oci8_columntype(INTERNAL_FUNCTION_PARAMETERS)
+PHP_FUNCTION(oci8_columntype)
 {
 	pval *stmt, *col;
 	oci8_statement *statement;
@@ -2947,7 +2954,7 @@ void php3_oci8_columntype(INTERNAL_FUNCTION_PARAMETERS)
   Tell whether a column is NULL.
  */
 
-void php3_oci8_columnisnull(INTERNAL_FUNCTION_PARAMETERS)
+PHP_FUNCTION(oci8_columnisnull)
 {
 	pval *stmt, *col;
 	oci8_statement *statement;
@@ -2981,7 +2988,7 @@ void php3_oci8_columnisnull(INTERNAL_FUNCTION_PARAMETERS)
 /* Disables or enables the internal debug output.
  * By default it is disabled.
  */
-void php3_oci8_internaldebug(INTERNAL_FUNCTION_PARAMETERS)
+PHP_FUNCTION(oci8_internaldebug)
 {
 	pval *arg;
 	OCI8_TLS_VARS;
@@ -2999,7 +3006,7 @@ void php3_oci8_internaldebug(INTERNAL_FUNCTION_PARAMETERS)
   Execute a parsed statement.
  */
 
-void php3_oci8_execute(INTERNAL_FUNCTION_PARAMETERS)
+PHP_FUNCTION(oci8_execute)
 {
 	pval *stmt,*mode;
 	oci8_statement *statement;
@@ -3033,7 +3040,7 @@ void php3_oci8_execute(INTERNAL_FUNCTION_PARAMETERS)
   Prepare a new row of data for reading.
  */
 
-void php3_oci8_cancel(INTERNAL_FUNCTION_PARAMETERS)
+PHP_FUNCTION(oci8_cancel)
 {
 	pval *stmt;
 	oci8_statement *statement;
@@ -3060,7 +3067,7 @@ void php3_oci8_cancel(INTERNAL_FUNCTION_PARAMETERS)
   Prepare a new row of data for reading.
  */
 
-void php3_oci8_fetch(INTERNAL_FUNCTION_PARAMETERS)
+PHP_FUNCTION(oci8_fetch)
 {
 	pval *stmt;
 	oci8_statement *statement;
@@ -3088,7 +3095,7 @@ void php3_oci8_fetch(INTERNAL_FUNCTION_PARAMETERS)
   Fetch a row of result data into an array.
  */
 
-void php3_oci8_fetchinto(INTERNAL_FUNCTION_PARAMETERS)
+PHP_FUNCTION(oci8_fetchinto)
 {
 	pval *stmt, *array, *element, *fmode;
 	oci8_statement *statement;
@@ -3140,6 +3147,7 @@ void php3_oci8_fetchinto(INTERNAL_FUNCTION_PARAMETERS)
 	element = emalloc(sizeof(pval));
 #endif
 
+
 	for (i = 0; i < statement->ncolumns; i++) {
 		column = oci8_get_col(statement, i + 1, 0, "OCIFetchInto");
 		if (column == NULL) { /* should not happen... */
@@ -3186,13 +3194,16 @@ void php3_oci8_fetchinto(INTERNAL_FUNCTION_PARAMETERS)
   Fetch all rows of result data into an array.
  */
 
-void php3_oci8_fetchstatement(INTERNAL_FUNCTION_PARAMETERS)
+PHP_FUNCTION(oci8_fetchstatement)
 {
-	pval *stmt, *array, element, *fmode;
+	pval *stmt, *array, *element, *fmode, *tmp;
 	oci8_statement *statement;
 	oci8_out_column **columns;
+#if PHP_API_VERSION < 19990421
 	pval **outarrs;
-	pval tmp;
+#else
+	pval ***outarrs;
+#endif
 	ub4 nrows = 1;
 	int i;
 	int mode = OCI_NUM;
@@ -3221,27 +3232,68 @@ void php3_oci8_fetchstatement(INTERNAL_FUNCTION_PARAMETERS)
 	}
 
 	columns = emalloc(statement->ncolumns * sizeof(oci8_out_column *));
+#if PHP_API_VERSION < 19990421
 	outarrs = emalloc(statement->ncolumns * sizeof(pval));
+#else
+	outarrs = emalloc(statement->ncolumns * sizeof(pval*));
+#endif
+
+#if PHP_API_VERSION < 19990421
+	tmp = emalloc(sizeof(pval));
+#endif
 
 	for (i = 0; i < statement->ncolumns; i++) {
 		columns[ i ] = oci8_get_col(statement, i + 1, 0, "OCIFetchStatement");
 
-		array_init(&tmp);
+#if PHP_API_VERSION >= 19990421
+		tmp = emalloc(sizeof(pval));
+		tmp->is_ref = 0;
+		tmp->refcount = 1;
+#endif
+
+		array_init(tmp);
 
 		memcpy(namebuf,columns[ i ]->name, columns[ i ]->name_len);
 		namebuf[ columns[ i ]->name_len ] = 0;
 				
-		_php3_hash_update(array->value.ht, namebuf, columns[ i ]->name_len+1, (void *) &tmp, sizeof(pval), (void **) &(outarrs[ i ]));
+#if PHP_API_VERSION < 19990421
+		_php3_hash_update(array->value.ht, namebuf, columns[ i ]->name_len+1, (void *) tmp, sizeof(pval), (void **) &(outarrs[ i ]));
+#else
+		_php3_hash_update(array->value.ht, namebuf, columns[ i ]->name_len+1, (void *) &tmp, sizeof(pval*), (void **) &(outarrs[ i ]));
+#endif
 	}
+
+#if PHP_API_VERSION < 19990421
+	efree(tmp);
+#endif
+
+#if PHP_API_VERSION < 19990421
+	element = emalloc(sizeof(pval));
+#endif
 
 	while (oci8_fetch(statement, nrows, "OCIFetchStatement")) {
 		for (i = 0; i < statement->ncolumns; i++) {
-			oci8_make_pval(&element,statement,columns[ i ], "OCIFetchStatement",OCI_RETURN_LOBS);
-			_php3_hash_index_update(outarrs[ i ]->value.ht, rows, (void *)&element, sizeof(pval), NULL);
+#if PHP_API_VERSION >= 19990421
+			element = emalloc(sizeof(pval));
+#endif
+
+			oci8_make_pval(element,statement,columns[ i ], "OCIFetchStatement",OCI_RETURN_LOBS);
+
+#if PHP_API_VERSION < 19990421
+			_php3_hash_index_update(outarrs[ i ]->value.ht, rows, (void *)element, sizeof(pval), NULL);
+#else
+			element->refcount = 1;
+			element->is_ref = 0;
+			_php3_hash_index_update((*(outarrs[ i ]))->value.ht, rows, (void *)&element, sizeof(pval*), NULL);
+#endif
 		}
 		rows++;
 	}
 	
+#if PHP_API_VERSION < 19990421
+	efree(element);
+#endif
+
 	efree(columns);
 	efree(outarrs);
 
@@ -3253,7 +3305,7 @@ void php3_oci8_fetchstatement(INTERNAL_FUNCTION_PARAMETERS)
   Free all resources associated with a statement.
  */
 
-void php3_oci8_freestatement(INTERNAL_FUNCTION_PARAMETERS)
+PHP_FUNCTION(oci8_freestatement)
 {
 	pval *stmt;
 	oci8_statement *statement;
@@ -3280,7 +3332,7 @@ void php3_oci8_freestatement(INTERNAL_FUNCTION_PARAMETERS)
 
 /* Logs off and disconnects.
  */
-void php3_oci8_logout(INTERNAL_FUNCTION_PARAMETERS)
+PHP_FUNCTION(oci8_logout)
 {
 	oci8_connection *connection;
 	pval *arg;
@@ -3325,7 +3377,7 @@ void php3_oci8_logout(INTERNAL_FUNCTION_PARAMETERS)
  * optional third parameter is not specified, PHP uses the environment
  * variable ORACLE_SID to determine which database to connect to.
  */
-void php3_oci8_nlogon(INTERNAL_FUNCTION_PARAMETERS)
+PHP_FUNCTION(oci8_nlogon)
 {
 	oci8_do_connect(INTERNAL_FUNCTION_PARAM_PASSTHRU,0,1);
 }
@@ -3339,7 +3391,7 @@ void php3_oci8_nlogon(INTERNAL_FUNCTION_PARAMETERS)
  * optional third parameter is not specified, PHP uses the environment
  * variable ORACLE_SID to determine which database to connect to.
  */
-void php3_oci8_logon(INTERNAL_FUNCTION_PARAMETERS)
+PHP_FUNCTION(oci8_logon)
 {
 	oci8_do_connect(INTERNAL_FUNCTION_PARAM_PASSTHRU,0,0);
 }
@@ -3353,7 +3405,7 @@ void php3_oci8_logon(INTERNAL_FUNCTION_PARAMETERS)
  * optional third parameter is not specified, PHP uses the environment
  * variable ORACLE_SID to determine which database to connect to.
  */
-void php3_oci8_plogon(INTERNAL_FUNCTION_PARAMETERS)
+PHP_FUNCTION(oci8_plogon)
 {
 	oci8_do_connect(INTERNAL_FUNCTION_PARAM_PASSTHRU,1,0);
 }
@@ -3363,7 +3415,7 @@ void php3_oci8_plogon(INTERNAL_FUNCTION_PARAMETERS)
   Return the last error of stmt|conn|global. If no error happened returns false.
  */
 
-void php3_oci8_error(INTERNAL_FUNCTION_PARAMETERS)
+PHP_FUNCTION(oci8_error)
 {
 	pval *mixed;
 	oci8_statement *statement;
@@ -3419,7 +3471,7 @@ void php3_oci8_error(INTERNAL_FUNCTION_PARAMETERS)
   Return the number of result columns in a statement.
  */
 
-void php3_oci8_numcols(INTERNAL_FUNCTION_PARAMETERS)
+PHP_FUNCTION(oci8_numcols)
 {
 	pval *stmt;
 	oci8_statement *statement;
@@ -3441,7 +3493,7 @@ void php3_oci8_numcols(INTERNAL_FUNCTION_PARAMETERS)
   Parse a query and return a statement.
  */
 
-void php3_oci8_parse(INTERNAL_FUNCTION_PARAMETERS)
+PHP_FUNCTION(oci8_parse)
 {
 	pval *conn, *query;
 	oci8_connection *connection;
@@ -3471,7 +3523,7 @@ void php3_oci8_parse(INTERNAL_FUNCTION_PARAMETERS)
  
  */
 
-void php3_oci8_newcursor(INTERNAL_FUNCTION_PARAMETERS)
+PHP_FUNCTION(oci8_newcursor)
 {
 	pval *conn;
 	oci8_connection *connection;
@@ -3499,7 +3551,7 @@ void php3_oci8_newcursor(INTERNAL_FUNCTION_PARAMETERS)
   Return a single column of result data.
  */
 
-void php3_oci8_result(INTERNAL_FUNCTION_PARAMETERS)
+PHP_FUNCTION(oci8_result)
 {
 	pval *stmt, *col;
 	oci8_statement *statement;
@@ -3532,7 +3584,7 @@ void php3_oci8_result(INTERNAL_FUNCTION_PARAMETERS)
   Return a string containing server version information.
  */
 
-void php3_oci8_serverversion(INTERNAL_FUNCTION_PARAMETERS)
+PHP_FUNCTION(oci8_serverversion)
 {
 	oci8_connection *connection;
 	pval *arg;
@@ -3569,7 +3621,7 @@ void php3_oci8_serverversion(INTERNAL_FUNCTION_PARAMETERS)
  
 /* XXX it would be better with a general interface to OCIAttrGet() */
 
-void php3_oci8_statementtype(INTERNAL_FUNCTION_PARAMETERS)
+PHP_FUNCTION(oci8_statementtype)
 {
 	pval *stmt;
 	oci8_statement *statement;
@@ -3630,7 +3682,7 @@ void php3_oci8_statementtype(INTERNAL_FUNCTION_PARAMETERS)
 	}
 }
 
-void php3_oci8_rowcount(INTERNAL_FUNCTION_PARAMETERS)
+PHP_FUNCTION(oci8_rowcount)
 {
 	pval *stmt;
 	oci8_statement *statement;
