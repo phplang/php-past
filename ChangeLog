@@ -1,6 +1,9 @@
 PHP 3.0 CHANGE LOG                                                    ChangeLog
 |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 
+October ??, 2000, Version 3.0.18
+- Fixed file upload bugs (Sascha)
+
 October 11, 2000, Version 3.0.17
 - Fixed output functions (Sascha)
 - Added odbc_tables() (Frank)

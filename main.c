@@ -29,7 +29,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: main.c,v 1.516 2000/10/11 09:31:30 kk Exp $ */
+/* $Id: main.c,v 1.517 2000/10/16 17:21:08 sas Exp $ */
 
 /* #define CRASH_DETECTION */
 
@@ -672,6 +672,8 @@ int php3_request_startup(INLINE_TLS_VOID)
 		php3_printf("Unable to initialize request info.\n");
 		return FAILURE;
 	}
+	_php3_hash_init(&GLOBAL(request_info).rfc1867_uploaded_files, 5, NULL, NULL, 0);
+
 	GLOBAL(initialized) |= INIT_REQUEST_INFO;
 
 	/* prepare general symbol table hash */
@@ -888,6 +890,7 @@ void php3_request_shutdown(void *dummy INLINE_TLS)
 		SHUTDOWN_DEBUG("Request info");
 		php3_destroy_request_info((void *) &php3_ini);
 		GLOBAL(initialized) &= ~INIT_REQUEST_INFO;
+		_php3_hash_destroy(&GLOBAL(request_info).rfc1867_uploaded_files);
 	}
 	if (GLOBAL(initialized) & INIT_INCLUDE_NAMES_HASH) {
 		SHUTDOWN_DEBUG("Include names hash");

@@ -29,7 +29,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: unified_odbc.c,v 1.113 2000/09/28 16:26:10 fmk Exp $ */
+/* $Id: unified_odbc.c,v 1.115 2000/10/11 22:33:54 fmk Exp $ */
 
 /* This file is based on the Adabas D extension.
  * Adabas D will no longer be supported as separate module.
@@ -601,10 +601,10 @@ UODBC_FUNCTION(tables)
 	}
 
 	rc = SQLTables(result->stmt, 
-            cat, strlen(cat), 
-            schema, strlen(schema),
-            table, strlen(table),
-            type, strlen(type));
+            cat, (short int)strlen(cat), 
+            schema, (short int)strlen(schema),
+            table, (short int)strlen(table),
+            type, (short int)strlen(type));
 
 	if (rc == SQL_ERROR) {
 		UODBC_SQL_ERROR(conn->hdbc, SQL_NULL_HSTMT, "SQLTables");

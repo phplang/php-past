@@ -26,7 +26,7 @@
    | Authors: Rasmus Lerdorf <rasmus@php.net>                             |
    +----------------------------------------------------------------------+
  */
-/* $Id: mime.c,v 1.63 2000/09/09 21:05:45 zeev Exp $ */
+/* $Id: mime.c,v 1.64 2000/10/17 01:30:59 sas Exp $ */
 #include <stdio.h>
 #include "php.h"
 #include "internal_functions.h"
@@ -183,10 +183,7 @@ void php3_mime_split(char *buf, int cnt, char *boundary, pval *http_post_vars)
 				}
 				*(loc - 4) = '\0';
 
-				/* Check to make sure we are not overwriting special file upload variables */
-				if(memcmp(namebuf,sbuf,strlen(sbuf))) {
-					_php3_parse_gpc_data(ptr,namebuf,http_post_vars);
-				}
+				_php3_parse_gpc_data(ptr,namebuf,http_post_vars);
 
 				/* And a little kludge to pick out special MAX_FILE_SIZE */
 				itype = php3_check_ident_type(namebuf);
@@ -237,11 +234,13 @@ void php3_mime_split(char *buf, int cnt, char *boundary, pval *http_post_vars)
 					php3_error(E_WARNING, "Max file size exceeded - file [%s] not saved", namebuf);
 					bytes = 0;
 					/* SET_VAR_STRING(namebuf, estrdup("none")); */
-					_php3_parse_gpc_data(estrdup("none"), namebuf, http_post_vars);
+					if(memcmp(namebuf,sbuf,strlen(sbuf)))
+						_php3_parse_gpc_data(estrdup("none"), namebuf, http_post_vars);
 				} else if ((loc - ptr - 4) <= 0) {
 					bytes = 0;
 					/* SET_VAR_STRING(namebuf, estrdup("none")); */
-					_php3_parse_gpc_data(estrdup("none"), namebuf, http_post_vars);
+					if(memcmp(namebuf,sbuf,strlen(sbuf)))
+						_php3_parse_gpc_data(estrdup("none"), namebuf, http_post_vars);
 				} else {
 					fp = fopen(fn, "w");
 					if (!fp) {
