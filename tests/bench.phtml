@@ -1,5 +1,5 @@
 <?php // -*- C++ -*-
-
+set_time_limit(0);
 $iterations=10000;
 
 function utime()
@@ -52,7 +52,7 @@ while ($i<=$iterations) {
     $i++;
 }
 printf("\rDone, took %.2f seconds.\n", ($full_while=utime()-$starttime));
-printf("That means the extra function was adding %.2f secs per iteration.\n",
+printf("That means the extra function was adding %.5f secs per iteration.\n",
        (($full_while-$idle_while)/doubleval($iterations)));
 //echo "\rDone, took ".($full_while=time()-$starttime)." seconds.\n";
 //echo "That means the extra function was adding ".(($full_while-$idle_while)/doubleval($iterations))." seconds per iteration.\n";

@@ -22,11 +22,12 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: html.h,v 1.2 1997/12/31 15:56:30 rasmus Exp $ */
+/* $Id: html.h,v 1.3 1998/02/09 03:59:18 jaakko Exp $ */
 
 #ifndef _HTML_H
 #define _HTML_H
 
 extern void php3_htmlspecialchars(INTERNAL_FUNCTION_PARAMETERS);
+extern void php3_htmlentities(INTERNAL_FUNCTION_PARAMETERS);
 
 #endif /* _HTML_H */

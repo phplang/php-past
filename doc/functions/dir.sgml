@@ -3,10 +3,30 @@
   <title>Directory Functions</title>
 
 
+  <refentry id="function.chdir">
+   <refnamediv>
+    <refname>chdir</refname>
+    <refpurpose>change directory</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>chdir</function></funcdef>
+     <paramdef>string <parameter>directory</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+     Changes PHP's current directory to
+     <parameter>directory</parameter>.  Returns FALSE if unable to
+     change directory, TRUE otherwise.
+
+   </refsect1>
+  </refentry>
+
+
   <refentry id="function.closedir">
    <refnamediv>
     <refname>closedir</refname>
-    <refpurpose></refpurpose>
+    <refpurpose>close directory handle</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
@@ -14,6 +34,10 @@
      <funcdef>void <function>closedir</function></funcdef>
      <paramdef>int <parameter>dir_handle</parameter></paramdef>
     </funcsynopsis>
+    <para>
+     Closes the directory stream indicated by
+     <parameter>dir_handle</parameter>. The stream must have previously
+     been opened by <link linkend="function.opendir">opendir</link>.
 
    </refsect1>
   </refentry>
@@ -22,7 +46,7 @@
   <refentry id="function.opendir">
    <refnamediv>
     <refname>opendir</refname>
-    <refpurpose></refpurpose>
+    <refpurpose>open directory handle</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
@@ -39,7 +63,7 @@
   <refentry id="function.readdir">
    <refnamediv>
     <refname>readdir</refname>
-    <refpurpose></refpurpose>
+    <refpurpose>read entry from directory handle</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
@@ -56,7 +80,7 @@
   <refentry id="function.rewinddir">
    <refnamediv>
     <refname>rewinddir</refname>
-    <refpurpose></refpurpose>
+    <refpurpose>rewind directory handle</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
@@ -64,6 +88,11 @@
      <funcdef>void <function>rewinddir</function></funcdef>
      <paramdef>int <parameter>dir_handle</parameter></paramdef>
     </funcsynopsis>
+
+     <para>
+     Resets the directory stream indicated by
+     <parameter>dir_handle</parameter> to the beginning of the directory.
+
 
    </refsect1>
   </refentry>

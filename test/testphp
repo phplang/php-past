@@ -16,6 +16,8 @@ fi
 # this is handy for debugging
 $ECHO_N $ECHO_C "$1: "
 
+unset REQUEST_METHOD CONTENT_TYPE REDIRECT_STATUS PATH_TRANSLATED QUERY_STRING
+
 CMD=`awk -f testphp.awk $1`
 eval $CMD
 

@@ -1,12 +1,12 @@
 
  <reference id="ref.datetime">
   <title>Date/Time Functions</title>
-
+  
 
   <refentry id="function.checkdate">
    <refnamediv>
     <refname>checkdate</refname>
-    <refpurpose></refpurpose>
+    <refpurpose>validate a date/time</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
@@ -22,15 +22,15 @@
      considered valid if:
      <itemizedlist>
       <listitem><simpara>
-	year is between 1900 and 32767 inclusive
+        year is between 1900 and 32767 inclusive
        </simpara></listitem>
       <listitem><simpara>
-	month is between 1 and 12 inclusive
+        month is between 1 and 12 inclusive
        </simpara></listitem>
       <listitem><simpara>
-	day is within the allowed number of days for the given month.
-	Leap years are taken into consideration.
-      </simpara></listitem>
+        day is within the allowed number of days for the given month.
+        Leap years are taken into consideration.
+       </simpara></listitem>
      </itemizedlist>
     </para>
    </refsect1>
@@ -40,7 +40,7 @@
   <refentry id="function.date">
    <refnamediv>
     <refname>date</refname>
-    <refpurpose></refpurpose>
+    <refpurpose>format a local time/date</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
@@ -51,8 +51,33 @@
     </funcsynopsis>
     <para>
      Returns a string formatted according to the given format string
-     using the given timestamp or the current local time if no
+     using the given <parameter>timestamp</parameter> or the current local time if no
      timestamp is given.
+
+    <para>
+     The following characters are recognized in the format string:
+     <itemizedlist>
+      <listitem><simpara>U - seconds since the epoch</simpara></listitem>
+      <listitem><simpara>Y - year, numeric, 4 digits</simpara></listitem>
+      <listitem><simpara>y - year, numeric, 2 digits</simpara></listitem>
+      <listitem><simpara>F - month, textual, long; i.e. "January"</simpara></listitem>
+      <listitem><simpara>M - month, textual, 3 letters; i.e. "Jan"</simpara></listitem>
+      <listitem><simpara>m - month, numeric</simpara></listitem>
+      <listitem><simpara>z - day of the year, numeric; i.e. "299"</simpara></listitem>
+      <listitem><simpara>d - day of the month, numeric</simpara></listitem>
+      <listitem><simpara>l (lowercase 'L') - day of the week, textual, long; i.e. "Friday"</simpara></listitem>
+      <listitem><simpara>D - day of the week, textual, 3 letters; i.e. "Fri"</simpara></listitem>
+      <listitem><simpara>w - day of the week, numeric, 1 digit</simpara></listitem>
+      <listitem><simpara>H - hour, numeric, 24 hour format</simpara></listitem>
+      <listitem><simpara>h - hour, numeric, 12 hour format</simpara></listitem>
+      <listitem><simpara>i - minutes, numeric</simpara></listitem>
+      <listitem><simpara>s - seconds, numeric</simpara></listitem>
+      <listitem><simpara>A - "AM" or "PM"</simpara></listitem>
+      <listitem><simpara>a - "am" or "pm"</simpara></listitem>
+      <listitem><simpara>S - English ordinal suffix, textual, 2 characters; i.e. "th", "nd"</simpara></listitem>
+     </itemizedlist>
+     Unrecognized characters in the format string will be printed as-is. 
+     
      <example>
       <title>date() example</title>
       <programlisting>
@@ -69,7 +94,7 @@ print("July 1, 2000 is on a " . date("l", mktime(0,0,0,7,1,2000)));
   <refentry id="function.getdate">
    <refnamediv>
     <refname>getdate</refname>
-    <refpurpose></refpurpose>
+    <refpurpose>get date/time information</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
@@ -101,7 +126,7 @@ print("July 1, 2000 is on a " . date("l", mktime(0,0,0,7,1,2000)));
   <refentry id="function.gmdate">
    <refnamediv>
     <refname>gmdate</refname>
-    <refpurpose></refpurpose>
+    <refpurpose>format a GMT/CUT date/time</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
@@ -133,7 +158,7 @@ echo gmdate( "M d Y H:i:s",mktime(0,0,0,1,1,1998) );
   <refentry id="function.mktime">
    <refnamediv>
     <refname>mktime</refname>
-    <refpurpose></refpurpose>
+    <refpurpose>get UNIX timestamp for a date</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
@@ -178,7 +203,7 @@ echo date( "M-d-Y", mktime(0,0,0,1,1,1998) );
   <refentry id="function.time">
    <refnamediv>
     <refname>time</refname>
-    <refpurpose></refpurpose>
+    <refpurpose>return current UNIX timestamp</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
@@ -191,6 +216,26 @@ echo date( "M-d-Y", mktime(0,0,0,1,1,1998) );
      the Unix Epoch (January 1, 1970).
     </para><para>
      See also <link linkend="function.date">date()</link>.
+    </para>
+   </refsect1>
+  </refentry>
+
+  <refentry id="function.set-time-limit">
+   <refnamediv>
+    <refname>set_time_limit</refname>
+    <refpurpose>limit execution time</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>void <function>set_time_limit</function></funcdef>
+     <paramdef>int <parameter>seconds</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+     Set the number of seconds a script is allowed to run.  If this is
+     reached, the script returns a fatal error.  The default limit is 30
+     seconds or, if it exists, the max_execution_time value defined in
+     php3.ini.  If seconds is set to zero, no time limit is imposed.
     </para>
    </refsect1>
   </refentry>

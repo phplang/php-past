@@ -6,7 +6,7 @@
   <refentry id="function.count">
    <refnamediv>
     <refname>count</refname>
-    <refpurpose></refpurpose>
+    <refpurpose>count elements in array</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
@@ -14,8 +14,31 @@
      <funcdef>int <function>count</function></funcdef>
      <paramdef>array <parameter>array</parameter></paramdef>
     </funcsynopsis>
-<para>Returns:     The number of elements in the array.
-  </para>
+    <para>
+     Returns the number of elements in the array.
+    <para>
+     See also:
+     <link linkend="function.sizeof"><function>sizeof()</function></link>
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.sizeof">
+   <refnamediv>
+    <refname>sizeof</refname>
+    <refpurpose>get size of array</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>sizeof</function></funcdef>
+     <paramdef>array <parameter>array</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+     Returns the number of elements in the array.
+    <para>
+     See also:
+     <link linkend="function.count"><function>count()</function></link>
    </refsect1>
   </refentry>
 
@@ -23,7 +46,7 @@
   <refentry id="function.current">
    <refnamediv>
     <refname>current</refname>
-    <refpurpose></refpurpose>
+    <refpurpose>give the current element in an array</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
@@ -31,20 +54,30 @@
      <funcdef>mixed <function>current</function></funcdef>
      <paramdef>array <parameter>array</parameter></paramdef>
     </funcsynopsis>
-<para>Returns:     The array element that's currently being pointed by the internal array pointer.
+    <para>
+     Returns the array element that's currently being pointed by the
+     internal array pointer.
   
+    <para>
+     Each array variable has an internal pointer that points to one of
+     its elements.  In addition, all of the elements in the array are
+     linked by a bidirectional linked list for traversing purposes.
+     The internal pointer points to the first element that was inserted
+     to the array until you run one of the functions that modify that
+     pointer on that array.
 
-  Each array variable has an internal pointer that points to one of its elements.  In
-  addition, all of the elements in the array are linked by a bidirectional linked list
-  for traversing purposes.
-  The internal pointer points to the first element that was inserted to the array until
-  you run one of the functions that modify that pointer on that array.
-  The current() function simply returns the array element that's currently being pointed
-  by the internal pointer.  It does not move the pointer in any way.
-  If the internal pointer points beyond the end of the elements list, current() returns
-  an empty string.
+    <para>
+     The current() function simply returns the array element that's
+     currently being pointed by the internal pointer.  It does not
+     move the pointer in any way.  If the internal pointer points
+     beyond the end of the elements list, current() returns false.
 
-  See also:  <link linkend="function.next">next</link>, <link linkend="function.prev">prev</link>.</para>
+    <para>
+     See also:
+     <link linkend="function.end"><function>end()</function></link>
+     <link linkend="function.next"><function>next()</function></link>
+     <link linkend="function.prev"><function>prev()</function></link>
+     <link linkend="function.reset"><function>reset()</function></link>
    </refsect1>
   </refentry>
 
@@ -52,7 +85,7 @@
   <refentry id="function.next">
    <refnamediv>
     <refname>next</refname>
-    <refpurpose></refpurpose>
+    <refpurpose>advance the internal array pointer</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
@@ -60,17 +93,26 @@
      <funcdef>mixed <function>next</function></funcdef>
      <paramdef>array <parameter>array</parameter></paramdef>
     </funcsynopsis>
-<para>Returns:     The array element in the next place that's pointed by the internal array pointer,
-    or false if there are no more elements.
+    <para>
+     Returns the array element in the next place that's pointed by the
+     internal array pointer, or false if there are no more elements.
   
+    <para>
+     <function>next()</function> behaves like <link
+      linkend="function.current"><function>current()</function></link>,
+      with one difference.  It advances the internal array pointer one
+      place forward before returning the element.  That means it
+      returns the next array element and advances the internal array
+      pointer by one.  If advancing the internal array pointer results
+      in going beyond the end of the element list,
+      <function>next()</function> returns false.
 
-  next() behaves like <link linkend="function.current">current</link> with one difference.  It advances
-  the internal array pointer one place forward before returning the element.  That
-  means it returns the next array element and advances the internal array pointer by one.
-  If advancing the internal array pointer results in going beyond the end of the element
-  list, next() returns an empty string (false).
-
-  See also:  <link linkend="function.current">current</link>, <link linkend="function.prev">prev</link>.</para>
+    <para>
+     See also:
+     <link linkend="function.current"><function>current()</function></link>
+     <link linkend="function.end"><function>end()</function></link>
+     <link linkend="function.prev"><function>prev()</function></link>
+     <link linkend="function.reset"><function>reset()</function></link>
    </refsect1>
   </refentry>
 
@@ -78,7 +120,7 @@
   <refentry id="function.prev">
    <refnamediv>
     <refname>prev</refname>
-    <refpurpose></refpurpose>
+    <refpurpose>rewind internal array pointer</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
@@ -86,14 +128,93 @@
      <funcdef>mixed <function>prev</function></funcdef>
      <paramdef>array <parameter>array</parameter></paramdef>
     </funcsynopsis>
-<para>Returns:     The array element in the previous place that's pointed by the internal array pointer,
-    or false if there are no more elements.
-  
+    <para>
+     Returns the array element in the previous place that's pointed by
+     the internal array pointer, or false if there are no more
+     elements.
+    <para>  
+     <function>prev()</function> behaves just like
+     <link linkend="function.next"><function>next()</function></link>,
+     except it rewinds the internal array pointer one place instead of
+     advancing it.
+    <para>
+     See also:
+     <link linkend="function.current"><function>current()</function></link>
+     <link linkend="function.end"><function>end()</function></link>
+     <link linkend="function.next"><function>next()</function></link>
+     <link linkend="function.reset"><function>reset()</function></link>
+   </refsect1>
+  </refentry>
 
-  prev() behaves just like <link linkend="function.next">next</link>, except it rewinds the internal array pointer
-  one place instead of advancing it.
 
-  See also:  <link linkend="function.current">current</link>, <link linkend="function.next">next</link>.</para>
+  <refentry id="function.key">
+   <refnamediv>
+    <refname>key</refname>
+    <refpurpose>fetch a key from an associative array</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>mixed <function>prev</function></funcdef>
+     <paramdef>array <parameter>array</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+     <function>key()</function> returns the index element of the
+     current array position.
+    <para>
+     See also:
+     <link linkend="function.current"><function>current()</function></link>
+     <link linkend="function.next"><function>next()</function></link>
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.reset">
+   <refnamediv>
+    <refname>reset</refname>
+    <refpurpose>set internal pointer of array to first element</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef><function>reset</function></funcdef>
+     <paramdef>array <parameter>array</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+     <function>reset()</function> rewinds
+     <parameter>array</parameter>'s internal pointer to the first
+     element.
+    <para>
+     See also:
+     <link linkend="function.current"><function>current()</function></link>
+     <link linkend="function.next"><function>next()</function></link>
+     <link linkend="function.prev"><function>prev()</function></link>
+     <link linkend="function.reset"><function>reset()</function></link>
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.end">
+   <refnamediv>
+    <refname>end</refname>
+    <refpurpose>set internal pointer of array to last element</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef><function>end</function></funcdef>
+     <paramdef>array <parameter>array</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+     <function>end()</function> advances
+     <parameter>array</parameter>'s internal pointer to the last
+     element.
+    <para>
+     See also:
+     <link linkend="function.current"><function>current()</function></link>
+     <link linkend="function.end"><function>end()</function></link>
+     <link linkend="function.next"><function>next()</function></link>
+     <link linkend="function.reset"><function>reset()</function></link>
    </refsect1>
   </refentry>
 

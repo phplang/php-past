@@ -22,7 +22,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: filestat.c,v 1.55 1998/01/25 22:25:23 ssb Exp $ */
+/* $Id: filestat.c,v 1.63 1998/02/21 23:46:38 shane Exp $ */
 #ifdef THREAD_SAFE
 #include "tls.h"
 #endif
@@ -77,8 +77,19 @@ static int CurrentStatLength=0;
 static struct stat sb;
 #endif
 
+#ifndef S_ISDIR
+#define S_ISDIR(mode)	(((mode)&S_IFMT) == S_IFDIR)
+#endif
+#ifndef S_ISREG
+#define S_ISREG(mode)	(((mode)&S_IFMT) == S_IFREG)
+#endif
+#ifndef S_ISLNK
+#define S_ISLNK(mode)	(((mode)&S_IFMT) == S_IFLNK)
+#endif
 
-int php3_init_filestat(INITFUNCARG) {
+
+int php3_init_filestat(INITFUNCARG)
+{
 	TLS_VARS;
 	
 	GLOBAL(CurrentStatFile)=NULL;
@@ -86,7 +97,8 @@ int php3_init_filestat(INITFUNCARG) {
 	return SUCCESS;
 }
 
-int php3_shutdown_filestat(void) {
+int php3_shutdown_filestat(void)
+{
 	TLS_VARS;
 	
 	if (GLOBAL(CurrentStatFile))
@@ -94,7 +106,8 @@ int php3_shutdown_filestat(void) {
 	return SUCCESS;
 }
 
-void php3_chgrp(INTERNAL_FUNCTION_PARAMETERS) {
+void php3_chgrp(INTERNAL_FUNCTION_PARAMETERS)
+{
 #ifndef WINDOWS
 	YYSTYPE *filename, *group;
 	gid_t gid;
@@ -112,8 +125,9 @@ void php3_chgrp(INTERNAL_FUNCTION_PARAMETERS) {
 	if (group->type == IS_STRING) {
 		gr = getgrnam(group->value.strval);
 		if (!gr) {
-			php3_error(E_WARNING, "unable to find gid for %s", group->value.strval);
-			return;
+			php3_error(E_WARNING, "unable to find gid for %s",
+					   group->value.strval);
+			RETURN_FALSE;
 		}
 		gid = gr->gr_gid;
 	} else {
@@ -123,26 +137,29 @@ void php3_chgrp(INTERNAL_FUNCTION_PARAMETERS) {
 
 /* #if PHP_SAFE_MODE */
 	if (php3_ini.safe_mode &&(!_php3_checkuid(filename->value.strval, 1))) {
-		php3_error(E_WARNING, "SAFE MODE restriction in effect. Invalid owner of file to be changed.");
-		return;
+		php3_error(E_WARNING, "SAFE MODE restriction in effect.  "
+				   "Invalid owner of file to be changed.");
+		RETURN_FALSE;
 	}
 /* #endif */
 
 	ret = chown(filename->value.strval, -1, gid);
 	if (ret == -1) {
 		php3_error(E_WARNING, "chgrp failed: %s", strerror(errno));
+		RETURN_FALSE;
 	}
 #endif
-	RETURN_LONG(ret);
+	RETURN_TRUE;
 }
 
-void php3_chown(INTERNAL_FUNCTION_PARAMETERS) {
-	int ret;
+void php3_chown(INTERNAL_FUNCTION_PARAMETERS)
+{
 #ifndef WINDOWS
-
 	YYSTYPE *filename, *user;
+	int ret;
 	uid_t uid;
 	struct passwd *pw = NULL;
+	TLS_VARS;
 
 	if (ARG_COUNT(ht)!=2 || getParameters(ht,2,&filename,&user)==FAILURE) {
 		WRONG_PARAM_COUNT;
@@ -151,8 +168,9 @@ void php3_chown(INTERNAL_FUNCTION_PARAMETERS) {
 	if (user->type == IS_STRING) {
 		pw = getpwnam(user->value.strval);
 		if (!pw) {
-			php3_error(E_WARNING, "unable to find uid for %s", user->value.strval);
-			return;
+			php3_error(E_WARNING, "unable to find uid for %s",
+					   user->value.strval);
+			RETURN_FALSE;
 		}
 		uid = pw->pw_uid;
 	} else {
@@ -161,19 +179,20 @@ void php3_chown(INTERNAL_FUNCTION_PARAMETERS) {
 	}
 
 	if (php3_ini.safe_mode &&(!_php3_checkuid(filename->value.strval, 1))) {
-		php3_error(E_WARNING, "SAFE MODE restriction in effect. Invalid owner of file to be changed.");
-		return;
+		php3_error(E_WARNING, "SAFE MODE restriction in effect.  "
+				   "Invalid owner of file to be changed.");
+		RETURN_FALSE;
 	}
 
 	ret = chown(filename->value.strval, uid, -1);
 	if (ret == -1) {
 		php3_error(E_WARNING, "chown failed: %s", strerror(errno));
+		RETURN_FALSE;
 	}
 #else
 	TLS_VARS;
-	ret = 0;
 #endif
-	RETURN_LONG(ret);
+	RETURN_TRUE;
 }
 
 void php3_chmod(INTERNAL_FUNCTION_PARAMETERS) {
@@ -188,15 +207,17 @@ void php3_chmod(INTERNAL_FUNCTION_PARAMETERS) {
 	convert_to_long(mode);
 
 	if (php3_ini.safe_mode &&(!_php3_checkuid(filename->value.strval, 1))) {
-		php3_error(E_WARNING, "SAFE MODE restriction in effect. Invalid owner of file to be changed.");
-		return;
+		php3_error(E_WARNING, "SAFE MODE restriction in effect.  "
+				   "Invalid owner of file to be changed.");
+		RETURN_FALSE;
 	}
 
 	ret = chmod(filename->value.strval, mode->value.lval);
 	if (ret == -1) {
 		php3_error(E_WARNING, "chmod failed: %s", strerror(errno));
+		RETURN_FALSE;
 	}
-	RETURN_LONG(ret);
+	RETURN_TRUE;
 }
 
 void php3_touch(INTERNAL_FUNCTION_PARAMETERS) {
@@ -341,7 +362,6 @@ void php3_stat(INTERNAL_FUNCTION_PARAMETERS) {
 static void _php3_stat(const char *filename, int type, YYSTYPE *return_value)
 {
 	TLS_VARS;
-	
 #if APACHE
 	if(!GLOBAL(CurrentStatFile)) {
 		GLOBAL(CurrentStatLength) = strlen(GLOBAL(php3_rqst)->filename);
@@ -359,17 +379,25 @@ static void _php3_stat(const char *filename, int type, YYSTYPE *return_value)
 			if(GLOBAL(CurrentStatFile)) efree(GLOBAL(CurrentStatFile));
 			GLOBAL(CurrentStatLength) = strlen(filename);
 			GLOBAL(CurrentStatFile) = estrndup(filename,GLOBAL(CurrentStatLength));
+		} else if (!GLOBAL(CurrentStatFile)){
+			GLOBAL(CurrentStatLength) = strlen(filename);
+			GLOBAL(CurrentStatFile) = estrndup(filename,GLOBAL(CurrentStatLength));
 		} else {
 			strcpy(GLOBAL(CurrentStatFile),filename);
 		}
 		if(stat(GLOBAL(CurrentStatFile),&GLOBAL(sb))==-1) {
-			php3_error(E_NOTICE,"stat failed for %s (errno=%d - %s)",GLOBAL(CurrentStatFile),errno,strerror(errno));
-			efree(GLOBAL(CurrentStatFile));
-			GLOBAL(CurrentStatFile)=NULL;
-			GLOBAL(CurrentStatLength)=0;
-			RETURN_FALSE;
+			if(type == 15 && errno == ENOENT) {
+				memset(&GLOBAL(sb),0,sizeof(GLOBAL(sb)));
+			} else {
+				php3_error(E_NOTICE,"stat failed for %s (errno=%d - %s)",GLOBAL(CurrentStatFile),errno,strerror(errno));
+				efree(GLOBAL(CurrentStatFile));
+				GLOBAL(CurrentStatFile)=NULL;
+				GLOBAL(CurrentStatLength)=0;
+				RETURN_FALSE;
+			}
 		}
 	}
+
 	switch(type) {
 	case 0: /* fileperms */
 		RETURN_LONG((long)GLOBAL(sb).st_mode);
@@ -423,6 +451,27 @@ static void _php3_stat(const char *filename, int type, YYSTYPE *return_value)
 			break;
 		}
 		break;
+	case 9: /*is writable*/
+		RETURN_LONG((GLOBAL(sb).st_mode&S_IWRITE)!=0);
+		break;
+	case 10: /*is readable*/
+		RETURN_LONG((GLOBAL(sb).st_mode&S_IREAD)!=0);
+		break;
+	case 11: /*is executable*/
+		RETURN_LONG((GLOBAL(sb).st_mode&S_IEXEC)!=0 && !S_ISDIR(GLOBAL(sb).st_mode));
+		break;
+	case 12: /*is file*/
+		RETURN_LONG(S_ISREG(GLOBAL(sb).st_mode));
+		break;
+	case 13: /*is dir*/
+		RETURN_LONG(S_ISDIR(GLOBAL(sb).st_mode));
+		break;
+	case 14: /*is link*/
+		RETURN_LONG(S_ISLNK(GLOBAL(sb).st_mode));
+		break;
+	case 15: /*file exists*/
+		RETURN_LONG(GLOBAL(sb).st_mode >0);
+		break;
 	default:
 		php3_error(E_WARNING, "didn't understand stat call");
 		RETURN_FALSE;
@@ -450,7 +499,13 @@ FileFunction(php3_fileatime,5)
 FileFunction(php3_filemtime,6)
 FileFunction(php3_filectime,7)
 FileFunction(php3_filetype, 8)
-
+FileFunction(php3_iswritable, 9)
+FileFunction(php3_isreadable,10)
+FileFunction(php3_isexec,11)
+FileFunction(php3_isfile,12)
+FileFunction(php3_isdir,13)
+FileFunction(php3_islink,14)
+FileFunction(php3_fileexists,15)
 
 function_entry php3_filestat_functions[] = {
 	{"fileatime",	php3_fileatime,		NULL},
@@ -462,6 +517,13 @@ function_entry php3_filestat_functions[] = {
 	{"fileperms",	php3_fileperms,		NULL},
 	{"filesize",	php3_filesize,		NULL},
 	{"filetype",	php3_filetype,		NULL},
+	{"file_exists",	php3_fileexists,	NULL},
+	{"is_writeable",php3_iswritable,	NULL},
+	{"is_readable",	php3_isreadable,	NULL},
+	{"is_executable",php3_isexec,		NULL},
+	{"is_file",		php3_isfile,		NULL},
+	{"is_dir",		php3_isdir,			NULL},
+	{"is_link",		php3_islink,		NULL},
 	{"stat",		php3_stat,			NULL},
 	{"chown",		php3_chown,			NULL},
 	{"chgrp",		php3_chgrp,			NULL},

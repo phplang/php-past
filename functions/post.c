@@ -324,10 +324,13 @@ void php3_treat_data(int arg, char *str)
 	if (!*res) {
 		return;
 	}
-	if (arg == PARSE_COOKIE)
+	if (arg == PARSE_COOKIE) {
 		s = strtok(res, ";");
-	else
+	} else if(arg == PARSE_POST) {
 		s = strtok(res, "&");
+	} else {
+		s = strtok(res, php3_ini.arg_separator);
+	}
 	
 
 	while (s) {
@@ -352,10 +355,13 @@ void php3_treat_data(int arg, char *str)
 			if (tt)
 				*tt = o;
 		}
-		if (arg == PARSE_COOKIE)
+		if (arg == PARSE_COOKIE) {
 			s = strtok(NULL, ";");
-		else
+		} else if(arg == PARSE_POST) {
 			s = strtok(NULL, "&");
+		} else {
+			s = strtok(NULL, php3_ini.arg_separator);
+		}
 	}
 	efree(res);
 }

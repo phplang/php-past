@@ -21,24 +21,19 @@
    | Authors: Rasmus Lerdorf <rasmus@lerdorf.on.ca>                       |
    +----------------------------------------------------------------------+
  */
-/* $Id: phpdl.h,v 1.9 1997/12/31 15:56:00 rasmus Exp $ */
+/* $Id: phpdl.h,v 1.10 1998/02/20 22:50:49 shane Exp $ */
 #ifndef _PHPDL_H
 #define _PHPDL_H
 
-#define DL_MODULE 1
 #include "parser.h"
 #include "internal_functions.h"
 
-
-#if MSVC5
+#if WIN32|WINNT
 #include <windows.h>
-#define DLEXPORT __declspec( dllexport )
+#define DLEXPORT __declspec(dllexport)
 #else
 #define DLEXPORT
 #endif
-
-/* include any stray header files */
-#include "functions/dl.h"
 
 #endif
 

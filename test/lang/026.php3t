@@ -3,7 +3,7 @@ Testing string scanner confirmance                            ...
 --POST--
 --GET--
 --FILE--
-<? echo "\"\t\\'" + '\n\\\'a\\\b\\' ?>
+<? echo "\"\t\\'" . '\n\\\'a\\\b\\' ?>
 --EXPECT--
 Content-type: text/html
 "	\'\n\'a\\b\

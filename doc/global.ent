@@ -1,6 +1,6 @@
 <!-- -*- SGML -*-
 
- $Id: global.ent,v 1.4 1998/01/26 06:45:22 ssb Exp $
+ $Id: global.ent,v 1.5 1998/02/24 13:10:01 ssb Exp $
 
  Contains global "macros" for all the SGML documents.
 
@@ -9,8 +9,9 @@
 <!ENTITY url.docbook "http://www.ora.com/davenport/">
 <!ENTITY url.docbook-ref "http://www.ora.com/davenport/">
 <!ENTITY url.docbook-dtdref "http://www.ora.com/homepages/dtdparse/docbook/3.0/">
+<!ENTITY url.docbook-intro "http://nis-www.lanl.gov/~rosalia/mydocs/docbook-intro.html">
 <!ENTITY url.jade "http://www.jclark.com/jade/">
-<!ENTITY url.dbstyle "http://www.berkshire.net/~norm/dsssl/docbook/">
+<!ENTITY url.dbstyle "http://www.berkshire.net/~norm/docbook/dsssl/">
 <!ENTITY url.emacs-src "ftp://ftp.gnu.org/pub/gnu/emacs-20.2.tar.gz">
 <!ENTITY url.emacs-nt "http://ftp.sunet.se/pub/os/Win32/ntEmacs/docs/ntemacs.html">
 <!ENTITY url.psgml "ftp://ftp.lysator.liu.se/pub/sgml/psgml-1.0.1.tar.gz">

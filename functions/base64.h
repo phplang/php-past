@@ -21,7 +21,7 @@
    | Author: Jim Winstead (jimw@php.net)                                  |
    +----------------------------------------------------------------------+
  */
-/* $Id: base64.h,v 1.6 1998/01/15 22:01:07 jim Exp $ */
+/* $Id: base64.h,v 1.7 1998/02/06 10:22:50 ssb Exp $ */
 
 #ifndef _BASE64_h
 #define _BASE64_h
@@ -29,8 +29,8 @@
 extern void php3_base64_decode(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_base64_encode(INTERNAL_FUNCTION_PARAMETERS);
 
-extern char *base64_encode(const char *);
-extern char *base64_decode(const char *);
+extern unsigned char *base64_encode(const unsigned char *);
+extern unsigned char *base64_decode(const unsigned char *);
 
 #endif /* _BASE64_h */
 

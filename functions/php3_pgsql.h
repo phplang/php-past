@@ -22,7 +22,7 @@
    +----------------------------------------------------------------------+
  */
  
-/* $Id: php3_pgsql.h,v 1.9 1998/01/22 23:00:30 zeev Exp $ */
+/* $Id: php3_pgsql.h,v 1.10 1998/02/28 20:50:40 zeev Exp $ */
 
 #ifndef _PHP3_PGSQL_H
 #define _PHP3_PGSQL_H
@@ -51,6 +51,7 @@ extern void php3_pgsql_host(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_pgsql_exec(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_pgsql_num_rows(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_pgsql_num_fields(INTERNAL_FUNCTION_PARAMETERS);
+extern void php3_pgsql_cmdtuples(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_pgsql_field_name(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_pgsql_field_size(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_pgsql_field_type(INTERNAL_FUNCTION_PARAMETERS);

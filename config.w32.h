@@ -61,7 +61,7 @@
 
 #else
 #define HAVE_SNMP 0
-#define HAVE_MYSQL 1
+#define HAVE_MYSQL 0
 
 #define HAVE_LDAP 0
 #define DBASE 0

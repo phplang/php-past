@@ -159,8 +159,8 @@ echo ereg_replace( "(( )is)", "\\2was", $string );
     <title>Description</title>
     <funcsynopsis>
      <funcdef>array <function>split</function></funcdef>
-     <paramdef>string <parameter>string</parameter></paramdef>
      <paramdef>string <parameter>pattern</parameter></paramdef>
+     <paramdef>string <parameter>string</parameter></paramdef>
      <paramdef>int <parameter>limit</parameter></paramdef>
     </funcsynopsis>
     <para>

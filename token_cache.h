@@ -24,7 +24,7 @@
  */
 
 
-/* $Id: token_cache.h,v 1.18 1998/01/17 21:23:32 andi Exp $ */
+/* $Id: token_cache.h,v 1.20 1998/02/24 21:25:23 zeev Exp $ */
 
 
 #ifndef _TOKEN_CACHE

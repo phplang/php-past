@@ -84,7 +84,7 @@ int _CRTAPI1 main(int argc, char **argv) {
 		    0,
 		    NULL 
 		);
-		fprintf(stderr,"Error: Dll %s not found -%d\n%s\n",	argv[0],GetLastError(),lpMsgBuf);
+		fprintf(stderr,"Error: Dll %s not found -%d\n%s\n",	szModuleFileName,GetLastError(),lpMsgBuf);
 		LocalFree( lpMsgBuf );
 		return -1;
 	}

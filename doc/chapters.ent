@@ -17,13 +17,16 @@
 <!ENTITY reference.dir               SYSTEM "functions/dir.sgml">
 <!ENTITY reference.filesystem        SYSTEM "functions/filesystem.sgml">
 <!ENTITY reference.image             SYSTEM "functions/image.sgml">
+<!ENTITY reference.ldap              SYSTEM "functions/ldap.sgml">
 <!ENTITY reference.math              SYSTEM "functions/math.sgml">
 <!ENTITY reference.msql              SYSTEM "functions/msql.sgml">
 <!ENTITY reference.mysql             SYSTEM "functions/mysql.sgml">
+<!ENTITY reference.network           SYSTEM "functions/network.sgml">
 <!ENTITY reference.oracle            SYSTEM "functions/oracle.sgml">
 <!ENTITY reference.pgsql             SYSTEM "functions/pgsql.sgml">
 <!ENTITY reference.regex             SYSTEM "functions/regex.sgml">
 <!ENTITY reference.strings           SYSTEM "functions/strings.sgml">
+<!ENTITY reference.uodbc             SYSTEM "functions/uodbc.sgml">
 <!ENTITY reference.url               SYSTEM "functions/url.sgml">
 
 <!ENTITY appendix.migration          SYSTEM "appendices/migration.sgml">

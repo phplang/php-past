@@ -24,7 +24,7 @@
  */
 
 
-/* $Id: variables.c,v 1.123 1998/01/29 22:33:41 shane Exp $ */
+/* $Id: variables.c,v 1.127 1998/02/20 04:03:57 zeev Exp $ */
 
 #ifdef THREAD_SAFE
 #include "tls.h"
@@ -57,7 +57,13 @@ inline PHPAPI void var_reset(YYSTYPE *var)
 	var->strlen = 0;
 }
 
-
+inline PHPAPI void var_uninit(YYSTYPE *var)
+{
+	var->type = IS_STRING;
+	var->value.strval = undefined_variable_string;
+	var->strlen = 0;
+}
+		
 inline void yystype_destructor(YYSTYPE *yystype INLINE_TLS)
 {
 	if (yystype->type == IS_STRING) {
@@ -87,7 +93,11 @@ int yystype_copy_constructor(YYSTYPE *yystype)
 
 	if (yystype->type == IS_STRING && yystype->value.strval) {
 		if (yystype->strlen==0) {
-			yystype->value.strval = empty_string;
+			if (yystype->value.strval==undefined_variable_string) {
+				yystype->value.strval = undefined_variable_string;
+			} else {
+				yystype->value.strval = empty_string;
+			}
 			return SUCCESS;
 		}
 		yystype->value.strval = (char *) estrndup(yystype->value.strval, yystype->strlen);
@@ -343,15 +353,16 @@ int incdec_variable(YYSTYPE *result, YYSTYPE *var_ptr, int (*func) (YYSTYPE *), 
 }
 
 
-void print_variable(YYSTYPE *varname INLINE_TLS) 
+void print_variable(YYSTYPE *var INLINE_TLS) 
 {
 	if(!php3_header(0, NULL)) return;
-	switch (varname->type) {
+	switch (var->type) {
 		case IS_LONG:
-			php3_printf("%ld", varname->value.lval);
+			php3_printf("%ld", var->value.lval);
 			break;
 		case IS_DOUBLE:
-			php3_printf("%f", varname->value.dval);
+			convert_to_string(var);
+			PUTS(var->value.strval);
 			break;
 		case IS_STRING:
 #if 0
@@ -361,11 +372,11 @@ void print_variable(YYSTYPE *varname INLINE_TLS)
 */
 
 			if(php3_ini.magic_quotes_gpc) {
-				_php3_stripslashes(varname->value.strval);
-				varname->strlen = strlen(varname->value.strval);
+				_php3_stripslashes(var->value.strval);
+				var->strlen = strlen(var->value.strval);
 			}
 #endif
-			PUTS(varname->value.strval);
+			PHPWRITE(var->value.strval,var->strlen);
 			break;
 		case IS_ARRAY:
 			PUTS("Array\n");
@@ -455,6 +466,26 @@ void php3_isset(YYSTYPE *result, YYSTYPE *var_ptr)
 		} else {
 			result->value.lval=1;
 			/*clean_unassigned_variable_top(0 _INLINE_TLS);*/
+		}
+	}
+}
+
+
+void php3_empty(YYSTYPE *result, YYSTYPE *var_ptr)
+{
+	if (GLOBAL(Execute)) {
+		TLS_VARS;
+		
+		php3_isset(result,var_ptr);
+		if (result->value.lval) { /* variable is set */
+			YYSTYPE var = *((YYSTYPE *) var_ptr->value.yystype_ptr);
+			
+			yystype_copy_constructor(&var);
+			if (yystype_true(&var)) {
+				result->value.lval=0;
+			}
+		} else { /* variable is not set */
+			result->value.lval = 1;
 		}
 	}
 }
@@ -552,6 +583,7 @@ void assign_new_object(YYSTYPE *result, YYSTYPE *classname INLINE_TLS)
 	if (GLOBAL(Execute)) {
 		YYSTYPE *data;
 
+		convert_to_string(classname);
 		if (hash_find(&GLOBAL(function_table), classname->value.strval, classname->strlen+1, (void **) &data) == FAILURE
 			|| data->type != IS_CLASS) {
 			php3_error(E_ERROR, "%s is not a class", classname->value.strval);
@@ -560,6 +592,7 @@ void assign_new_object(YYSTYPE *result, YYSTYPE *classname INLINE_TLS)
 		*result = *data;
 		result->type = IS_OBJECT;
 		yystype_copy_constructor(result);
+		yystype_destructor(classname);
 	}
 }
 
@@ -584,7 +617,7 @@ void read_pointer_value(YYSTYPE *result,YYSTYPE *var_ptr INLINE_TLS)
 			} else {
 				php3_error(E_NOTICE,"Uninitialized variable");
 			}
-			var_reset(result);
+			var_uninit(result);
 			if (var_ptr->cs_data.array_write) {
 				clean_unassigned_variable_top(1 _INLINE_TLS);
 			}
@@ -622,7 +655,7 @@ void get_regular_variable_pointer(YYSTYPE *result, YYSTYPE *varname INLINE_TLS)
 				YYSTYPE tmp;
 				variable_tracker vt;
 
-				var_reset(&tmp);
+				var_uninit(&tmp);
 				hash_update(GLOBAL(active_symbol_table),varname->value.strval,varname->strlen+1,(void *) &tmp, sizeof(YYSTYPE), (void **) &data);
 				
 				vt.type = IS_STRING;

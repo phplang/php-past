@@ -61,19 +61,19 @@ Correct result - 3:  <? echo $j%$i; ?>
   $i = 5.0;
   $j = 3.0;
 ?>
-Correct result - 8.0:  <? echo $i+$j; ?>
+Correct result - 8:  <? echo $i+$j; ?>
 
-Correct result - 8.0:  <? echo $i+$j; ?>
+Correct result - 8:  <? echo $i+$j; ?>
 
-Correct result - 2.0:  <? echo $i-$j; ?>
+Correct result - 2:  <? echo $i-$j; ?>
 
-Correct result - -2.0:  <? echo $j-$i; ?>
+Correct result - -2:  <? echo $j-$i; ?>
 
-Correct result - 15.0:  <? echo $i*$j; ?>
+Correct result - 15:  <? echo $i*$j; ?>
 
-Correct result - 15.0:  <? echo $j*$i; ?>
+Correct result - 15:  <? echo $j*$i; ?>
 
-Correct result - 1.666:  <? echo $i/$j; ?>
+Correct result - 1.666667:  <? echo $i/$j; ?>
 
 Correct result - 0.6:  <? echo $j/$i; ?>
 
@@ -270,7 +270,7 @@ while ($i<$arr_len) {
   while ($j<$arr_len) {
     $k=0;
     while ($k<$arr_len) {
-      echo "\${test$i$j}\[$k\] = ".${"test$i$j"}[$k]."\n";
+      echo "\${test$i$j}[$k] = ".${"test$i$j"}[$k]."\n";
       $k++;
     }
     $j++;
@@ -415,14 +415,14 @@ Correct result - 3:  3
 
 *** Testing real operators ***
 
-Correct result - 8.0:  8.000000
-Correct result - 8.0:  8.000000
-Correct result - 2.0:  2.000000
-Correct result - -2.0:  -2.000000
-Correct result - 15.0:  15.000000
-Correct result - 15.0:  15.000000
-Correct result - 1.666:  1.666667
-Correct result - 0.6:  0.600000
+Correct result - 8:  8
+Correct result - 8:  8
+Correct result - 2:  2
+Correct result - -2:  -2
+Correct result - 15:  15
+Correct result - 15:  15
+Correct result - 1.666667:  1.666667
+Correct result - 0.6:  0.6
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -664,14 +664,14 @@ Correct result - 3:  3
 
 *** Testing real operators ***
 
-Correct result - 8.0:  8.000000
-Correct result - 8.0:  8.000000
-Correct result - 2.0:  2.000000
-Correct result - -2.0:  -2.000000
-Correct result - 15.0:  15.000000
-Correct result - 15.0:  15.000000
-Correct result - 1.666:  1.666667
-Correct result - 0.6:  0.600000
+Correct result - 8:  8
+Correct result - 8:  8
+Correct result - 2:  2
+Correct result - -2:  -2
+Correct result - 15:  15
+Correct result - 15:  15
+Correct result - 1.666667:  1.666667
+Correct result - 0.6:  0.6
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -913,14 +913,14 @@ Correct result - 3:  3
 
 *** Testing real operators ***
 
-Correct result - 8.0:  8.000000
-Correct result - 8.0:  8.000000
-Correct result - 2.0:  2.000000
-Correct result - -2.0:  -2.000000
-Correct result - 15.0:  15.000000
-Correct result - 15.0:  15.000000
-Correct result - 1.666:  1.666667
-Correct result - 0.6:  0.600000
+Correct result - 8:  8
+Correct result - 8:  8
+Correct result - 2:  2
+Correct result - -2:  -2
+Correct result - 15:  15
+Correct result - 15:  15
+Correct result - 1.666667:  1.666667
+Correct result - 0.6:  0.6
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -1162,14 +1162,14 @@ Correct result - 3:  3
 
 *** Testing real operators ***
 
-Correct result - 8.0:  8.000000
-Correct result - 8.0:  8.000000
-Correct result - 2.0:  2.000000
-Correct result - -2.0:  -2.000000
-Correct result - 15.0:  15.000000
-Correct result - 15.0:  15.000000
-Correct result - 1.666:  1.666667
-Correct result - 0.6:  0.600000
+Correct result - 8:  8
+Correct result - 8:  8
+Correct result - 2:  2
+Correct result - -2:  -2
+Correct result - 15:  15
+Correct result - 15:  15
+Correct result - 1.666667:  1.666667
+Correct result - 0.6:  0.6
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -1411,14 +1411,14 @@ Correct result - 3:  3
 
 *** Testing real operators ***
 
-Correct result - 8.0:  8.000000
-Correct result - 8.0:  8.000000
-Correct result - 2.0:  2.000000
-Correct result - -2.0:  -2.000000
-Correct result - 15.0:  15.000000
-Correct result - 15.0:  15.000000
-Correct result - 1.666:  1.666667
-Correct result - 0.6:  0.600000
+Correct result - 8:  8
+Correct result - 8:  8
+Correct result - 2:  2
+Correct result - -2:  -2
+Correct result - 15:  15
+Correct result - 15:  15
+Correct result - 1.666667:  1.666667
+Correct result - 0.6:  0.6
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -1660,14 +1660,14 @@ Correct result - 3:  3
 
 *** Testing real operators ***
 
-Correct result - 8.0:  8.000000
-Correct result - 8.0:  8.000000
-Correct result - 2.0:  2.000000
-Correct result - -2.0:  -2.000000
-Correct result - 15.0:  15.000000
-Correct result - 15.0:  15.000000
-Correct result - 1.666:  1.666667
-Correct result - 0.6:  0.600000
+Correct result - 8:  8
+Correct result - 8:  8
+Correct result - 2:  2
+Correct result - -2:  -2
+Correct result - 15:  15
+Correct result - 15:  15
+Correct result - 1.666667:  1.666667
+Correct result - 0.6:  0.6
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -1909,14 +1909,14 @@ Correct result - 3:  3
 
 *** Testing real operators ***
 
-Correct result - 8.0:  8.000000
-Correct result - 8.0:  8.000000
-Correct result - 2.0:  2.000000
-Correct result - -2.0:  -2.000000
-Correct result - 15.0:  15.000000
-Correct result - 15.0:  15.000000
-Correct result - 1.666:  1.666667
-Correct result - 0.6:  0.600000
+Correct result - 8:  8
+Correct result - 8:  8
+Correct result - 2:  2
+Correct result - -2:  -2
+Correct result - 15:  15
+Correct result - 15:  15
+Correct result - 1.666667:  1.666667
+Correct result - 0.6:  0.6
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -2158,14 +2158,14 @@ Correct result - 3:  3
 
 *** Testing real operators ***
 
-Correct result - 8.0:  8.000000
-Correct result - 8.0:  8.000000
-Correct result - 2.0:  2.000000
-Correct result - -2.0:  -2.000000
-Correct result - 15.0:  15.000000
-Correct result - 15.0:  15.000000
-Correct result - 1.666:  1.666667
-Correct result - 0.6:  0.600000
+Correct result - 8:  8
+Correct result - 8:  8
+Correct result - 2:  2
+Correct result - -2:  -2
+Correct result - 15:  15
+Correct result - 15:  15
+Correct result - 1.666667:  1.666667
+Correct result - 0.6:  0.6
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -2407,14 +2407,14 @@ Correct result - 3:  3
 
 *** Testing real operators ***
 
-Correct result - 8.0:  8.000000
-Correct result - 8.0:  8.000000
-Correct result - 2.0:  2.000000
-Correct result - -2.0:  -2.000000
-Correct result - 15.0:  15.000000
-Correct result - 15.0:  15.000000
-Correct result - 1.666:  1.666667
-Correct result - 0.6:  0.600000
+Correct result - 8:  8
+Correct result - 8:  8
+Correct result - 2:  2
+Correct result - -2:  -2
+Correct result - 15:  15
+Correct result - 15:  15
+Correct result - 1.666667:  1.666667
+Correct result - 0.6:  0.6
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -2656,14 +2656,14 @@ Correct result - 3:  3
 
 *** Testing real operators ***
 
-Correct result - 8.0:  8.000000
-Correct result - 8.0:  8.000000
-Correct result - 2.0:  2.000000
-Correct result - -2.0:  -2.000000
-Correct result - 15.0:  15.000000
-Correct result - 15.0:  15.000000
-Correct result - 1.666:  1.666667
-Correct result - 0.6:  0.600000
+Correct result - 8:  8
+Correct result - 8:  8
+Correct result - 2:  2
+Correct result - -2:  -2
+Correct result - 15:  15
+Correct result - 15:  15
+Correct result - 1.666667:  1.666667
+Correct result - 0.6:  0.6
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -2905,14 +2905,14 @@ Correct result - 3:  3
 
 *** Testing real operators ***
 
-Correct result - 8.0:  8.000000
-Correct result - 8.0:  8.000000
-Correct result - 2.0:  2.000000
-Correct result - -2.0:  -2.000000
-Correct result - 15.0:  15.000000
-Correct result - 15.0:  15.000000
-Correct result - 1.666:  1.666667
-Correct result - 0.6:  0.600000
+Correct result - 8:  8
+Correct result - 8:  8
+Correct result - 2:  2
+Correct result - -2:  -2
+Correct result - 15:  15
+Correct result - 15:  15
+Correct result - 1.666667:  1.666667
+Correct result - 0.6:  0.6
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -3154,14 +3154,14 @@ Correct result - 3:  3
 
 *** Testing real operators ***
 
-Correct result - 8.0:  8.000000
-Correct result - 8.0:  8.000000
-Correct result - 2.0:  2.000000
-Correct result - -2.0:  -2.000000
-Correct result - 15.0:  15.000000
-Correct result - 15.0:  15.000000
-Correct result - 1.666:  1.666667
-Correct result - 0.6:  0.600000
+Correct result - 8:  8
+Correct result - 8:  8
+Correct result - 2:  2
+Correct result - -2:  -2
+Correct result - 15:  15
+Correct result - 15:  15
+Correct result - 1.666667:  1.666667
+Correct result - 0.6:  0.6
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -3403,14 +3403,14 @@ Correct result - 3:  3
 
 *** Testing real operators ***
 
-Correct result - 8.0:  8.000000
-Correct result - 8.0:  8.000000
-Correct result - 2.0:  2.000000
-Correct result - -2.0:  -2.000000
-Correct result - 15.0:  15.000000
-Correct result - 15.0:  15.000000
-Correct result - 1.666:  1.666667
-Correct result - 0.6:  0.600000
+Correct result - 8:  8
+Correct result - 8:  8
+Correct result - 2:  2
+Correct result - -2:  -2
+Correct result - 15:  15
+Correct result - 15:  15
+Correct result - 1.666667:  1.666667
+Correct result - 0.6:  0.6
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -3652,14 +3652,14 @@ Correct result - 3:  3
 
 *** Testing real operators ***
 
-Correct result - 8.0:  8.000000
-Correct result - 8.0:  8.000000
-Correct result - 2.0:  2.000000
-Correct result - -2.0:  -2.000000
-Correct result - 15.0:  15.000000
-Correct result - 15.0:  15.000000
-Correct result - 1.666:  1.666667
-Correct result - 0.6:  0.600000
+Correct result - 8:  8
+Correct result - 8:  8
+Correct result - 2:  2
+Correct result - -2:  -2
+Correct result - 15:  15
+Correct result - 15:  15
+Correct result - 1.666667:  1.666667
+Correct result - 0.6:  0.6
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -3901,14 +3901,14 @@ Correct result - 3:  3
 
 *** Testing real operators ***
 
-Correct result - 8.0:  8.000000
-Correct result - 8.0:  8.000000
-Correct result - 2.0:  2.000000
-Correct result - -2.0:  -2.000000
-Correct result - 15.0:  15.000000
-Correct result - 15.0:  15.000000
-Correct result - 1.666:  1.666667
-Correct result - 0.6:  0.600000
+Correct result - 8:  8
+Correct result - 8:  8
+Correct result - 2:  2
+Correct result - -2:  -2
+Correct result - 15:  15
+Correct result - 15:  15
+Correct result - 1.666667:  1.666667
+Correct result - 0.6:  0.6
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -4150,14 +4150,14 @@ Correct result - 3:  3
 
 *** Testing real operators ***
 
-Correct result - 8.0:  8.000000
-Correct result - 8.0:  8.000000
-Correct result - 2.0:  2.000000
-Correct result - -2.0:  -2.000000
-Correct result - 15.0:  15.000000
-Correct result - 15.0:  15.000000
-Correct result - 1.666:  1.666667
-Correct result - 0.6:  0.600000
+Correct result - 8:  8
+Correct result - 8:  8
+Correct result - 2:  2
+Correct result - -2:  -2
+Correct result - 15:  15
+Correct result - 15:  15
+Correct result - 1.666667:  1.666667
+Correct result - 0.6:  0.6
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -4399,14 +4399,14 @@ Correct result - 3:  3
 
 *** Testing real operators ***
 
-Correct result - 8.0:  8.000000
-Correct result - 8.0:  8.000000
-Correct result - 2.0:  2.000000
-Correct result - -2.0:  -2.000000
-Correct result - 15.0:  15.000000
-Correct result - 15.0:  15.000000
-Correct result - 1.666:  1.666667
-Correct result - 0.6:  0.600000
+Correct result - 8:  8
+Correct result - 8:  8
+Correct result - 2:  2
+Correct result - -2:  -2
+Correct result - 15:  15
+Correct result - 15:  15
+Correct result - 1.666667:  1.666667
+Correct result - 0.6:  0.6
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -4648,14 +4648,14 @@ Correct result - 3:  3
 
 *** Testing real operators ***
 
-Correct result - 8.0:  8.000000
-Correct result - 8.0:  8.000000
-Correct result - 2.0:  2.000000
-Correct result - -2.0:  -2.000000
-Correct result - 15.0:  15.000000
-Correct result - 15.0:  15.000000
-Correct result - 1.666:  1.666667
-Correct result - 0.6:  0.600000
+Correct result - 8:  8
+Correct result - 8:  8
+Correct result - 2:  2
+Correct result - -2:  -2
+Correct result - 15:  15
+Correct result - 15:  15
+Correct result - 1.666667:  1.666667
+Correct result - 0.6:  0.6
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -4897,14 +4897,14 @@ Correct result - 3:  3
 
 *** Testing real operators ***
 
-Correct result - 8.0:  8.000000
-Correct result - 8.0:  8.000000
-Correct result - 2.0:  2.000000
-Correct result - -2.0:  -2.000000
-Correct result - 15.0:  15.000000
-Correct result - 15.0:  15.000000
-Correct result - 1.666:  1.666667
-Correct result - 0.6:  0.600000
+Correct result - 8:  8
+Correct result - 8:  8
+Correct result - 2:  2
+Correct result - -2:  -2
+Correct result - 15:  15
+Correct result - 15:  15
+Correct result - 1.666667:  1.666667
+Correct result - 0.6:  0.6
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -5146,14 +5146,14 @@ Correct result - 3:  3
 
 *** Testing real operators ***
 
-Correct result - 8.0:  8.000000
-Correct result - 8.0:  8.000000
-Correct result - 2.0:  2.000000
-Correct result - -2.0:  -2.000000
-Correct result - 15.0:  15.000000
-Correct result - 15.0:  15.000000
-Correct result - 1.666:  1.666667
-Correct result - 0.6:  0.600000
+Correct result - 8:  8
+Correct result - 8:  8
+Correct result - 2:  2
+Correct result - -2:  -2
+Correct result - 15:  15
+Correct result - 15:  15
+Correct result - 1.666667:  1.666667
+Correct result - 0.6:  0.6
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -5395,14 +5395,14 @@ Correct result - 3:  3
 
 *** Testing real operators ***
 
-Correct result - 8.0:  8.000000
-Correct result - 8.0:  8.000000
-Correct result - 2.0:  2.000000
-Correct result - -2.0:  -2.000000
-Correct result - 15.0:  15.000000
-Correct result - 15.0:  15.000000
-Correct result - 1.666:  1.666667
-Correct result - 0.6:  0.600000
+Correct result - 8:  8
+Correct result - 8:  8
+Correct result - 2:  2
+Correct result - -2:  -2
+Correct result - 15:  15
+Correct result - 15:  15
+Correct result - 1.666667:  1.666667
+Correct result - 0.6:  0.6
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -5644,14 +5644,14 @@ Correct result - 3:  3
 
 *** Testing real operators ***
 
-Correct result - 8.0:  8.000000
-Correct result - 8.0:  8.000000
-Correct result - 2.0:  2.000000
-Correct result - -2.0:  -2.000000
-Correct result - 15.0:  15.000000
-Correct result - 15.0:  15.000000
-Correct result - 1.666:  1.666667
-Correct result - 0.6:  0.600000
+Correct result - 8:  8
+Correct result - 8:  8
+Correct result - 2:  2
+Correct result - -2:  -2
+Correct result - 15:  15
+Correct result - 15:  15
+Correct result - 1.666667:  1.666667
+Correct result - 0.6:  0.6
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -5893,14 +5893,14 @@ Correct result - 3:  3
 
 *** Testing real operators ***
 
-Correct result - 8.0:  8.000000
-Correct result - 8.0:  8.000000
-Correct result - 2.0:  2.000000
-Correct result - -2.0:  -2.000000
-Correct result - 15.0:  15.000000
-Correct result - 15.0:  15.000000
-Correct result - 1.666:  1.666667
-Correct result - 0.6:  0.600000
+Correct result - 8:  8
+Correct result - 8:  8
+Correct result - 2:  2
+Correct result - -2:  -2
+Correct result - 15:  15
+Correct result - 15:  15
+Correct result - 1.666667:  1.666667
+Correct result - 0.6:  0.6
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -6142,14 +6142,14 @@ Correct result - 3:  3
 
 *** Testing real operators ***
 
-Correct result - 8.0:  8.000000
-Correct result - 8.0:  8.000000
-Correct result - 2.0:  2.000000
-Correct result - -2.0:  -2.000000
-Correct result - 15.0:  15.000000
-Correct result - 15.0:  15.000000
-Correct result - 1.666:  1.666667
-Correct result - 0.6:  0.600000
+Correct result - 8:  8
+Correct result - 8:  8
+Correct result - 2:  2
+Correct result - -2:  -2
+Correct result - 15:  15
+Correct result - 15:  15
+Correct result - 1.666667:  1.666667
+Correct result - 0.6:  0.6
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -6391,14 +6391,14 @@ Correct result - 3:  3
 
 *** Testing real operators ***
 
-Correct result - 8.0:  8.000000
-Correct result - 8.0:  8.000000
-Correct result - 2.0:  2.000000
-Correct result - -2.0:  -2.000000
-Correct result - 15.0:  15.000000
-Correct result - 15.0:  15.000000
-Correct result - 1.666:  1.666667
-Correct result - 0.6:  0.600000
+Correct result - 8:  8
+Correct result - 8:  8
+Correct result - 2:  2
+Correct result - -2:  -2
+Correct result - 15:  15
+Correct result - 15:  15
+Correct result - 1.666667:  1.666667
+Correct result - 0.6:  0.6
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -6640,14 +6640,14 @@ Correct result - 3:  3
 
 *** Testing real operators ***
 
-Correct result - 8.0:  8.000000
-Correct result - 8.0:  8.000000
-Correct result - 2.0:  2.000000
-Correct result - -2.0:  -2.000000
-Correct result - 15.0:  15.000000
-Correct result - 15.0:  15.000000
-Correct result - 1.666:  1.666667
-Correct result - 0.6:  0.600000
+Correct result - 8:  8
+Correct result - 8:  8
+Correct result - 2:  2
+Correct result - -2:  -2
+Correct result - 15:  15
+Correct result - 15:  15
+Correct result - 1.666667:  1.666667
+Correct result - 0.6:  0.6
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -6889,14 +6889,14 @@ Correct result - 3:  3
 
 *** Testing real operators ***
 
-Correct result - 8.0:  8.000000
-Correct result - 8.0:  8.000000
-Correct result - 2.0:  2.000000
-Correct result - -2.0:  -2.000000
-Correct result - 15.0:  15.000000
-Correct result - 15.0:  15.000000
-Correct result - 1.666:  1.666667
-Correct result - 0.6:  0.600000
+Correct result - 8:  8
+Correct result - 8:  8
+Correct result - 2:  2
+Correct result - -2:  -2
+Correct result - 15:  15
+Correct result - 15:  15
+Correct result - 1.666667:  1.666667
+Correct result - 0.6:  0.6
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -7138,14 +7138,14 @@ Correct result - 3:  3
 
 *** Testing real operators ***
 
-Correct result - 8.0:  8.000000
-Correct result - 8.0:  8.000000
-Correct result - 2.0:  2.000000
-Correct result - -2.0:  -2.000000
-Correct result - 15.0:  15.000000
-Correct result - 15.0:  15.000000
-Correct result - 1.666:  1.666667
-Correct result - 0.6:  0.600000
+Correct result - 8:  8
+Correct result - 8:  8
+Correct result - 2:  2
+Correct result - -2:  -2
+Correct result - 15:  15
+Correct result - 15:  15
+Correct result - 1.666667:  1.666667
+Correct result - 0.6:  0.6
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -7387,14 +7387,14 @@ Correct result - 3:  3
 
 *** Testing real operators ***
 
-Correct result - 8.0:  8.000000
-Correct result - 8.0:  8.000000
-Correct result - 2.0:  2.000000
-Correct result - -2.0:  -2.000000
-Correct result - 15.0:  15.000000
-Correct result - 15.0:  15.000000
-Correct result - 1.666:  1.666667
-Correct result - 0.6:  0.600000
+Correct result - 8:  8
+Correct result - 8:  8
+Correct result - 2:  2
+Correct result - -2:  -2
+Correct result - 15:  15
+Correct result - 15:  15
+Correct result - 1.666667:  1.666667
+Correct result - 0.6:  0.6
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -7636,14 +7636,14 @@ Correct result - 3:  3
 
 *** Testing real operators ***
 
-Correct result - 8.0:  8.000000
-Correct result - 8.0:  8.000000
-Correct result - 2.0:  2.000000
-Correct result - -2.0:  -2.000000
-Correct result - 15.0:  15.000000
-Correct result - 15.0:  15.000000
-Correct result - 1.666:  1.666667
-Correct result - 0.6:  0.600000
+Correct result - 8:  8
+Correct result - 8:  8
+Correct result - 2:  2
+Correct result - -2:  -2
+Correct result - 15:  15
+Correct result - 15:  15
+Correct result - 1.666667:  1.666667
+Correct result - 0.6:  0.6
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -7885,14 +7885,14 @@ Correct result - 3:  3
 
 *** Testing real operators ***
 
-Correct result - 8.0:  8.000000
-Correct result - 8.0:  8.000000
-Correct result - 2.0:  2.000000
-Correct result - -2.0:  -2.000000
-Correct result - 15.0:  15.000000
-Correct result - 15.0:  15.000000
-Correct result - 1.666:  1.666667
-Correct result - 0.6:  0.600000
+Correct result - 8:  8
+Correct result - 8:  8
+Correct result - 2:  2
+Correct result - -2:  -2
+Correct result - 15:  15
+Correct result - 15:  15
+Correct result - 1.666667:  1.666667
+Correct result - 0.6:  0.6
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -8134,14 +8134,14 @@ Correct result - 3:  3
 
 *** Testing real operators ***
 
-Correct result - 8.0:  8.000000
-Correct result - 8.0:  8.000000
-Correct result - 2.0:  2.000000
-Correct result - -2.0:  -2.000000
-Correct result - 15.0:  15.000000
-Correct result - 15.0:  15.000000
-Correct result - 1.666:  1.666667
-Correct result - 0.6:  0.600000
+Correct result - 8:  8
+Correct result - 8:  8
+Correct result - 2:  2
+Correct result - -2:  -2
+Correct result - 15:  15
+Correct result - 15:  15
+Correct result - 1.666667:  1.666667
+Correct result - 0.6:  0.6
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -8383,14 +8383,14 @@ Correct result - 3:  3
 
 *** Testing real operators ***
 
-Correct result - 8.0:  8.000000
-Correct result - 8.0:  8.000000
-Correct result - 2.0:  2.000000
-Correct result - -2.0:  -2.000000
-Correct result - 15.0:  15.000000
-Correct result - 15.0:  15.000000
-Correct result - 1.666:  1.666667
-Correct result - 0.6:  0.600000
+Correct result - 8:  8
+Correct result - 8:  8
+Correct result - 2:  2
+Correct result - -2:  -2
+Correct result - 15:  15
+Correct result - 15:  15
+Correct result - 1.666667:  1.666667
+Correct result - 0.6:  0.6
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -8632,14 +8632,14 @@ Correct result - 3:  3
 
 *** Testing real operators ***
 
-Correct result - 8.0:  8.000000
-Correct result - 8.0:  8.000000
-Correct result - 2.0:  2.000000
-Correct result - -2.0:  -2.000000
-Correct result - 15.0:  15.000000
-Correct result - 15.0:  15.000000
-Correct result - 1.666:  1.666667
-Correct result - 0.6:  0.600000
+Correct result - 8:  8
+Correct result - 8:  8
+Correct result - 2:  2
+Correct result - -2:  -2
+Correct result - 15:  15
+Correct result - 15:  15
+Correct result - 1.666667:  1.666667
+Correct result - 0.6:  0.6
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -8881,14 +8881,14 @@ Correct result - 3:  3
 
 *** Testing real operators ***
 
-Correct result - 8.0:  8.000000
-Correct result - 8.0:  8.000000
-Correct result - 2.0:  2.000000
-Correct result - -2.0:  -2.000000
-Correct result - 15.0:  15.000000
-Correct result - 15.0:  15.000000
-Correct result - 1.666:  1.666667
-Correct result - 0.6:  0.600000
+Correct result - 8:  8
+Correct result - 8:  8
+Correct result - 2:  2
+Correct result - -2:  -2
+Correct result - 15:  15
+Correct result - 15:  15
+Correct result - 1.666667:  1.666667
+Correct result - 0.6:  0.6
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -9130,14 +9130,14 @@ Correct result - 3:  3
 
 *** Testing real operators ***
 
-Correct result - 8.0:  8.000000
-Correct result - 8.0:  8.000000
-Correct result - 2.0:  2.000000
-Correct result - -2.0:  -2.000000
-Correct result - 15.0:  15.000000
-Correct result - 15.0:  15.000000
-Correct result - 1.666:  1.666667
-Correct result - 0.6:  0.600000
+Correct result - 8:  8
+Correct result - 8:  8
+Correct result - 2:  2
+Correct result - -2:  -2
+Correct result - 15:  15
+Correct result - 15:  15
+Correct result - 1.666667:  1.666667
+Correct result - 0.6:  0.6
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -9379,14 +9379,14 @@ Correct result - 3:  3
 
 *** Testing real operators ***
 
-Correct result - 8.0:  8.000000
-Correct result - 8.0:  8.000000
-Correct result - 2.0:  2.000000
-Correct result - -2.0:  -2.000000
-Correct result - 15.0:  15.000000
-Correct result - 15.0:  15.000000
-Correct result - 1.666:  1.666667
-Correct result - 0.6:  0.600000
+Correct result - 8:  8
+Correct result - 8:  8
+Correct result - 2:  2
+Correct result - -2:  -2
+Correct result - 15:  15
+Correct result - 15:  15
+Correct result - 1.666667:  1.666667
+Correct result - 0.6:  0.6
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -9628,14 +9628,14 @@ Correct result - 3:  3
 
 *** Testing real operators ***
 
-Correct result - 8.0:  8.000000
-Correct result - 8.0:  8.000000
-Correct result - 2.0:  2.000000
-Correct result - -2.0:  -2.000000
-Correct result - 15.0:  15.000000
-Correct result - 15.0:  15.000000
-Correct result - 1.666:  1.666667
-Correct result - 0.6:  0.600000
+Correct result - 8:  8
+Correct result - 8:  8
+Correct result - 2:  2
+Correct result - -2:  -2
+Correct result - 15:  15
+Correct result - 15:  15
+Correct result - 1.666667:  1.666667
+Correct result - 0.6:  0.6
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -9877,14 +9877,14 @@ Correct result - 3:  3
 
 *** Testing real operators ***
 
-Correct result - 8.0:  8.000000
-Correct result - 8.0:  8.000000
-Correct result - 2.0:  2.000000
-Correct result - -2.0:  -2.000000
-Correct result - 15.0:  15.000000
-Correct result - 15.0:  15.000000
-Correct result - 1.666:  1.666667
-Correct result - 0.6:  0.600000
+Correct result - 8:  8
+Correct result - 8:  8
+Correct result - 2:  2
+Correct result - -2:  -2
+Correct result - 15:  15
+Correct result - 15:  15
+Correct result - 1.666667:  1.666667
+Correct result - 0.6:  0.6
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -10126,14 +10126,14 @@ Correct result - 3:  3
 
 *** Testing real operators ***
 
-Correct result - 8.0:  8.000000
-Correct result - 8.0:  8.000000
-Correct result - 2.0:  2.000000
-Correct result - -2.0:  -2.000000
-Correct result - 15.0:  15.000000
-Correct result - 15.0:  15.000000
-Correct result - 1.666:  1.666667
-Correct result - 0.6:  0.600000
+Correct result - 8:  8
+Correct result - 8:  8
+Correct result - 2:  2
+Correct result - -2:  -2
+Correct result - 15:  15
+Correct result - 15:  15
+Correct result - 1.666667:  1.666667
+Correct result - 0.6:  0.6
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -10375,14 +10375,14 @@ Correct result - 3:  3
 
 *** Testing real operators ***
 
-Correct result - 8.0:  8.000000
-Correct result - 8.0:  8.000000
-Correct result - 2.0:  2.000000
-Correct result - -2.0:  -2.000000
-Correct result - 15.0:  15.000000
-Correct result - 15.0:  15.000000
-Correct result - 1.666:  1.666667
-Correct result - 0.6:  0.600000
+Correct result - 8:  8
+Correct result - 8:  8
+Correct result - 2:  2
+Correct result - -2:  -2
+Correct result - 15:  15
+Correct result - 15:  15
+Correct result - 1.666667:  1.666667
+Correct result - 0.6:  0.6
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -10624,14 +10624,14 @@ Correct result - 3:  3
 
 *** Testing real operators ***
 
-Correct result - 8.0:  8.000000
-Correct result - 8.0:  8.000000
-Correct result - 2.0:  2.000000
-Correct result - -2.0:  -2.000000
-Correct result - 15.0:  15.000000
-Correct result - 15.0:  15.000000
-Correct result - 1.666:  1.666667
-Correct result - 0.6:  0.600000
+Correct result - 8:  8
+Correct result - 8:  8
+Correct result - 2:  2
+Correct result - -2:  -2
+Correct result - 15:  15
+Correct result - 15:  15
+Correct result - 1.666667:  1.666667
+Correct result - 0.6:  0.6
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -10873,14 +10873,14 @@ Correct result - 3:  3
 
 *** Testing real operators ***
 
-Correct result - 8.0:  8.000000
-Correct result - 8.0:  8.000000
-Correct result - 2.0:  2.000000
-Correct result - -2.0:  -2.000000
-Correct result - 15.0:  15.000000
-Correct result - 15.0:  15.000000
-Correct result - 1.666:  1.666667
-Correct result - 0.6:  0.600000
+Correct result - 8:  8
+Correct result - 8:  8
+Correct result - 2:  2
+Correct result - -2:  -2
+Correct result - 15:  15
+Correct result - 15:  15
+Correct result - 1.666667:  1.666667
+Correct result - 0.6:  0.6
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -11122,14 +11122,14 @@ Correct result - 3:  3
 
 *** Testing real operators ***
 
-Correct result - 8.0:  8.000000
-Correct result - 8.0:  8.000000
-Correct result - 2.0:  2.000000
-Correct result - -2.0:  -2.000000
-Correct result - 15.0:  15.000000
-Correct result - 15.0:  15.000000
-Correct result - 1.666:  1.666667
-Correct result - 0.6:  0.600000
+Correct result - 8:  8
+Correct result - 8:  8
+Correct result - 2:  2
+Correct result - -2:  -2
+Correct result - 15:  15
+Correct result - 15:  15
+Correct result - 1.666667:  1.666667
+Correct result - 0.6:  0.6
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -11371,14 +11371,14 @@ Correct result - 3:  3
 
 *** Testing real operators ***
 
-Correct result - 8.0:  8.000000
-Correct result - 8.0:  8.000000
-Correct result - 2.0:  2.000000
-Correct result - -2.0:  -2.000000
-Correct result - 15.0:  15.000000
-Correct result - 15.0:  15.000000
-Correct result - 1.666:  1.666667
-Correct result - 0.6:  0.600000
+Correct result - 8:  8
+Correct result - 8:  8
+Correct result - 2:  2
+Correct result - -2:  -2
+Correct result - 15:  15
+Correct result - 15:  15
+Correct result - 1.666667:  1.666667
+Correct result - 0.6:  0.6
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -11620,14 +11620,14 @@ Correct result - 3:  3
 
 *** Testing real operators ***
 
-Correct result - 8.0:  8.000000
-Correct result - 8.0:  8.000000
-Correct result - 2.0:  2.000000
-Correct result - -2.0:  -2.000000
-Correct result - 15.0:  15.000000
-Correct result - 15.0:  15.000000
-Correct result - 1.666:  1.666667
-Correct result - 0.6:  0.600000
+Correct result - 8:  8
+Correct result - 8:  8
+Correct result - 2:  2
+Correct result - -2:  -2
+Correct result - 15:  15
+Correct result - 15:  15
+Correct result - 1.666667:  1.666667
+Correct result - 0.6:  0.6
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -11869,14 +11869,14 @@ Correct result - 3:  3
 
 *** Testing real operators ***
 
-Correct result - 8.0:  8.000000
-Correct result - 8.0:  8.000000
-Correct result - 2.0:  2.000000
-Correct result - -2.0:  -2.000000
-Correct result - 15.0:  15.000000
-Correct result - 15.0:  15.000000
-Correct result - 1.666:  1.666667
-Correct result - 0.6:  0.600000
+Correct result - 8:  8
+Correct result - 8:  8
+Correct result - 2:  2
+Correct result - -2:  -2
+Correct result - 15:  15
+Correct result - 15:  15
+Correct result - 1.666667:  1.666667
+Correct result - 0.6:  0.6
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -12118,14 +12118,14 @@ Correct result - 3:  3
 
 *** Testing real operators ***
 
-Correct result - 8.0:  8.000000
-Correct result - 8.0:  8.000000
-Correct result - 2.0:  2.000000
-Correct result - -2.0:  -2.000000
-Correct result - 15.0:  15.000000
-Correct result - 15.0:  15.000000
-Correct result - 1.666:  1.666667
-Correct result - 0.6:  0.600000
+Correct result - 8:  8
+Correct result - 8:  8
+Correct result - 2:  2
+Correct result - -2:  -2
+Correct result - 15:  15
+Correct result - 15:  15
+Correct result - 1.666667:  1.666667
+Correct result - 0.6:  0.6
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -12367,14 +12367,14 @@ Correct result - 3:  3
 
 *** Testing real operators ***
 
-Correct result - 8.0:  8.000000
-Correct result - 8.0:  8.000000
-Correct result - 2.0:  2.000000
-Correct result - -2.0:  -2.000000
-Correct result - 15.0:  15.000000
-Correct result - 15.0:  15.000000
-Correct result - 1.666:  1.666667
-Correct result - 0.6:  0.600000
+Correct result - 8:  8
+Correct result - 8:  8
+Correct result - 2:  2
+Correct result - -2:  -2
+Correct result - 15:  15
+Correct result - 15:  15
+Correct result - 1.666667:  1.666667
+Correct result - 0.6:  0.6
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************
@@ -12616,14 +12616,14 @@ Correct result - 3:  3
 
 *** Testing real operators ***
 
-Correct result - 8.0:  8.000000
-Correct result - 8.0:  8.000000
-Correct result - 2.0:  2.000000
-Correct result - -2.0:  -2.000000
-Correct result - 15.0:  15.000000
-Correct result - 15.0:  15.000000
-Correct result - 1.666:  1.666667
-Correct result - 0.6:  0.600000
+Correct result - 8:  8
+Correct result - 8:  8
+Correct result - 2:  2
+Correct result - -2:  -2
+Correct result - 15:  15
+Correct result - 15:  15
+Correct result - 1.666667:  1.666667
+Correct result - 0.6:  0.6
 Correct result - 2:  2
 Correct result - 3:  3
 *********************************

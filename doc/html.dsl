@@ -5,7 +5,7 @@
 
 <!--
 
-  $Id: html.dsl,v 1.3 1998/01/26 04:04:35 ssb Exp $
+  $Id: html.dsl,v 1.4 1998/02/06 11:48:31 ssb Exp $
 
   This file contains HTML-specific stylesheet customization.
 
@@ -13,10 +13,7 @@
 
 <style-specification id="local-docbook" use="docbook">
 
-(define %gentext-nav-tblwidth% "100%")
-
-(define %legalnotice-link-file% (string-append "copyright" %html-ext%))
-(define %generate-legalnotice-link% #t)
+(define %html-ext% ".htm")
 
 ;; Returns the depth of the auto-generated TOC (table of contents) that
 ;; should be made at the nd-level

@@ -40,8 +40,8 @@ struct sapi_request_info{
 
 #if !SAPI_INTERFACE
 #if !defined(COMPILE_DL)
-#define PUTS(a) GLOBAL(sapi_rqst)->puts(GLOBAL(sapi_rqst)->scid,a)
-#define PUTC(a) GLOBAL(sapi_rqst)->putc(GLOBAL(sapi_rqst)->scid,a)
+#define PUTS(a) GLOBAL(sapi_rqst)->puts(GLOBAL(sapi_rqst)->scid,(a))
+#define PUTC(a) GLOBAL(sapi_rqst)->putc(GLOBAL(sapi_rqst)->scid,(a))
 #define PHPWRITE(a,n) GLOBAL(sapi_rqst)->writeclient(GLOBAL(sapi_rqst)->scid,(a),(n))
 #define BLOCK_INTERRUPTIONS
 #define UNBLOCK_INTERRUPTIONS
@@ -57,8 +57,6 @@ extern void sapi_puts(void * scid, char *);
 
 /*emulates putc*/
 extern void sapi_putc(void * scid, char);
-
-extern void sapi_log(char *log_message);
 
 /*emulates getenv*/
 extern char *sapi_getenv(void * scid, char *);
@@ -80,7 +78,7 @@ extern void sapi_block(void *);
 extern void sapi_unblock(void *);
 
 /*logs messages to servers error log*/
-extern void sapi_log(void * scid, char *log_message);
+extern void sapi_log(void *scid, char *log_message);
 
 /* this is the main function in main.c  Initialization 
  * may be required before calling this function.

@@ -36,11 +36,6 @@ int php3_init_request_info(void *conf) {
 	char *buf;
 	TLS_VARS;
 
-	/* We always need to emalloc() filename, since it gets placed into
-	   the include file hash table, and gets freed with that table.
-	   Notice that this means that we don't need to efree() it in
-	   php3_destroy_request_info()! */
-	GLOBAL(request_info).filename = NULL;
 	GLOBAL(request_info).path_info = getenv("PATH_INFO");
 	GLOBAL(request_info).path_translated = getenv("PATH_TRANSLATED");
 	GLOBAL(request_info).query_string = getenv("QUERY_STRING");
@@ -52,6 +47,18 @@ int php3_init_request_info(void *conf) {
 	GLOBAL(request_info).content_length = (buf ? atoi(buf) : 0);
 	GLOBAL(request_info).content_type = getenv("CONTENT_TYPE");
 	GLOBAL(request_info).cookies = getenv("HTTP_COOKIE");
+
+	/* doc_root configuration variable is currently ignored,
+	   as it is with every other access method currently also. */
+
+	/* We always need to emalloc() filename, since it gets placed into
+	   the include file hash table, and gets freed with that table.
+	   Notice that this means that we don't need to efree() it in
+	   php3_destroy_request_info()! */
+	if (GLOBAL(request_info).path_translated)
+		GLOBAL(request_info).filename = estrdup(GLOBAL(request_info).path_translated);
+	else
+		GLOBAL(request_info).filename = NULL;
 
 	return SUCCESS;
 }

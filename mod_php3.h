@@ -22,7 +22,7 @@
    |                                                                      |
    +----------------------------------------------------------------------+
  */
-/* $Id: mod_php3.h,v 1.25 1998/02/01 01:17:13 jim Exp $ */
+/* $Id: mod_php3.h,v 1.30 1998/03/02 04:02:47 ssb Exp $ */
 
 #ifndef _MOD_PHP3_H
 #define _MOD_PHP3_H
@@ -43,7 +43,9 @@ typedef struct {
     long magic_quotes_sybase;
     long track_errors;
     long display_errors;
+    long ignore_missing_userfunc_args;
     long log_errors;
+    long warn_plus_overloading;
     char *doc_root;
     char *user_dir;
     long safe_mode;
@@ -74,6 +76,7 @@ typedef struct {
 	long max_execution_time;
 	long memory_limit;
 	char *browscap;
+	char *arg_separator;
 } php3_ini_structure;
 
 #if MSVC5
@@ -81,3 +84,10 @@ typedef struct {
 #endif
 
 #endif							/* _MOD_PHP3_H */
+
+/*
+ * Local variables:
+ * tab-width: 4
+ * c-basic-offset: 4
+ * End:
+ */

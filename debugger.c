@@ -37,6 +37,7 @@
 
 #include <sys/types.h>
 #include <errno.h>
+#include <limits.h>
 
 #if MSVC5
 # include <winsock.h>
@@ -78,6 +79,14 @@ static int mypid=0;
 # else
 static pid_t mypid = 0;
 # endif
+#endif
+
+#if WIN32|WINNT
+#define SCLOSE(a) closesocket(a)
+#define SSEND(a,b,c) send(a,b,c,0)
+#else
+#define SCLOSE(a) close(a)
+#define SSEND(a,b,c) write(a,b,c)
 #endif
 
 
@@ -143,7 +152,7 @@ static int create_debugger_socket(const char *hostname, int dport)
 				   hostname, dport, strerror(errno));
 #endif
 #endif
-		close(sockfd);
+		SCLOSE(sockfd);
 		return -1;
 	}
 	return sockfd;
@@ -202,11 +211,7 @@ static void debugger_message(char *msg)
 	TLS_VARS;
 	
 	if (GLOBAL(debug_socket) > 0) {
-#if WIN32|WINNT
-		send(GLOBAL(debug_socket), msg, strlen(msg),0);
-#else
-		write(GLOBAL(debug_socket), msg, strlen(msg));
-#endif
+		SSEND(GLOBAL(debug_socket), msg, strlen(msg));
 	}
 }
 
@@ -319,15 +324,14 @@ int php3_stop_debugger(void)
 	TLS_VARS;
 	
 	if (GLOBAL(debug_socket) > 0) {
-#if WIN32|WINNT
-		closesocket(GLOBAL(debug_socket));
-#else
-		close(GLOBAL(debug_socket));
-#endif
+		SCLOSE(GLOBAL(debug_socket));
 	}
 	return SUCCESS;
 }
 
+#ifndef PATH_MAX
+#define PATH_MAX 256
+#endif
 
 void php3_debugger_frame_location(FunctionState *fs, int level)
 {
@@ -457,6 +461,63 @@ void php3_debugger_off(INTERNAL_FUNCTION_PARAMETERS){
 */
 void send_debug_info(void) {
 	
+}
+
+
+/*  
+	sends a log message to an ip address 
+	This is seperate from the rest of the debugger
+	stuff, but I felt this was a more apropriate
+	place to put it, as basicly its related to
+	that.  However, this will be used by error_log
+	in basic_functions.c as a way for the user-level
+	script to send a message to a debugger.
+
+	It is seperated out to avoid interference with
+	anything we might do with the regular debugger.
+*/    
+int _php3_send_error(char *message, char *hostaddr){
+	struct sockaddr_in address;
+	int err = -1;
+	int sockfd;
+	int dport;
+	char *hostname,*delim;
+
+	/*hostaddr is expected in this form: name:port*/
+	if(!(delim=strchr(hostaddr,(int)(":")))){
+		return 0;
+	}
+	
+	hostname=estrndup(hostaddr,delim-hostaddr-1);
+	dport=atoi(delim+1);
+
+	memset(&address, 0, sizeof(address));
+	address.sin_addr.s_addr = lookup_hostname(hostname);
+	address.sin_family = AF_INET;
+	address.sin_port = htons((unsigned short)dport);
+
+	sockfd = socket(address.sin_family, SOCK_STREAM, 0);
+	if (sockfd SOCK_ERR) {
+		php3_error(E_WARNING,"Couln't create socket!");
+		return 0;
+	}
+
+	while ((err = connect(sockfd, (struct sockaddr *) &address,
+						  sizeof(address))) SOCK_ERR && errno == EAGAIN);
+	
+	if (err < 0) {
+		SCLOSE(sockfd);
+		return 0;
+	}
+
+	if(! SSEND(sockfd, message, strlen(message))){
+		return 0;
+	}
+
+	SCLOSE(sockfd);
+
+	efree(hostname);
+	return 0;
 }
 
 #endif

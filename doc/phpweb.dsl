@@ -5,7 +5,7 @@
 
 <!--
 
-  $Id: phpweb.dsl,v 1.3 1998/01/26 07:14:46 ssb Exp $
+  $Id: phpweb.dsl,v 1.6 1998/03/02 20:52:15 ssb Exp $
 
   This file contains HTML-specific stylesheet customization
   for use on the network of PHP3 web sites.
@@ -18,10 +18,7 @@
   "UNREGISTERED::James Clark//Flow Object Class::processing-instruction")
 
 (define %html-ext% ".php3")
-(define %gentext-nav-tblwidth% "100%")
 (define %gentext-nav-use-ff% #f)
-(define %legalnotice-link-file% (string-append "copyright" %html-ext%))
-(define %generate-legalnotice-link% #t)
 
 ;; Returns the depth of the auto-generated TOC (table of contents) that
 ;; should be made at the nd-level
@@ -31,20 +28,61 @@
       1 ; the depth of all other TOCs
       ))
 
-(define (phpweb-include-header-text title)
+(define (php3-code code)
   (make processing-instruction
-	data: (string-append " chdir(\"..\"); "
-			     "$title = \"" title "\"; "
-			     "$head_closed = 1; "
-			     "include(\"include/header.inc\"); "
-			     "?")))
+    data: (string-append "php " code " ?")))
+
+(define (phpweb-include-header-text title)
+  (php3-code
+   (string-append "chdir(\"..\");"
+		  "$title = \"" title "\";"
+		  "$head_closed = 1;"
+		  "include(\"include/header.inc\");"
+		  "include(\"include/funcsearch.inc\");")))
 
 (define (phpweb-include-header titlenode)
   (phpweb-include-header-text (data titlenode)))
 
 (define (phpweb-include-footer)
-  (make processing-instruction
-	data: " include(\"include/footer.inc\"); ?"))
+  (php3-code "include(\"include/footer.inc\");"))
+
+;; Navigation buttons
+(define (gifimg base)
+  (string-append "<?php gifimg(\"" base "\"); ?>"))
+
+(define %phpweb-prev-button% (gifimg "prev.gif"))
+(define %phpweb-prevsib-button% (gifimg "prev.gif"))
+(define %phpweb-next-button% (gifimg "next.gif"))
+(define %phpweb-nextsib-button% (gifimg "next.gif"))
+(define %phpweb-up-button% (gifimg "up.gif"))
+(define %phpweb-home-button% (gifimg "home.gif"))
+
+(define (phpweb-button src)
+  (make element gi: "IMG"
+	attributes: (list
+		     (list "BORDER" "0")
+		     (list "SRC" src))))
+
+;; These are functions from the stylesheet we modify to insert
+;; an image instead of text.
+;(define (gentext-nav-prev prev) 
+;  (phpweb-button %phpweb-prev-button%))
+;
+;(define (gentext-nav-prevsib prevsib) 
+;  (phpweb-button %phpweb-prevsib-button%))
+;
+;(define (gentext-nav-nextsib nextsib)
+;  (phpweb-button %phpweb-next-button%))
+;
+;(define (gentext-nav-next next)
+;  (phpweb-button %phpweb-nextsib-button%))
+;
+;(define (gentext-nav-up up)
+;  (phpweb-button %phpweb-up-button%))
+;
+;(define (gentext-nav-home home)
+;  (phpweb-button %phpweb-home-button%))
+
 
 (element BOOK 
   (let* ((btitle (select-elements (children (current-node)) "TITLE"))

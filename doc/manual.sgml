@@ -31,9 +31,12 @@
   &reference.dir;
   &reference.filesystem;
   &reference.image;
+  &reference.ldap;
   &reference.math;
   &reference.msql;
   &reference.mysql;
+  &reference.network;
+  &reference.uodbc;
   &reference.oracle;
   &reference.pgsql;
   &reference.regex;

@@ -65,8 +65,8 @@ LINK32=link.exe
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 1
-# PROP Output_Dir "sapi_Debug"
-# PROP Intermediate_Dir "sapi_Debug"
+# PROP Output_Dir "sapi_core_debug"
+# PROP Intermediate_Dir "sapi_core_debug"
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MTd /W3 /Gm /GX /Zi /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /YX /FD /c
@@ -126,6 +126,14 @@ SOURCE=.\control_structures_inline.h
 # Begin Source File
 
 SOURCE=.\debugger.c
+# End Source File
+# Begin Source File
+
+SOURCE=".\fopen-wrappers.c"
+# End Source File
+# Begin Source File
+
+SOURCE=".\fopen-wrappers.h"
 # End Source File
 # Begin Source File
 
@@ -482,6 +490,14 @@ SOURCE=.\functions\mysql.c
 # Begin Source File
 
 SOURCE=.\functions\number.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\functions\pack.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\functions\pack.h
 # End Source File
 # Begin Source File
 

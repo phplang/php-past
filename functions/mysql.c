@@ -22,15 +22,17 @@
    +----------------------------------------------------------------------+
  */
  
-/* $Id: mysql.c,v 1.133 1998/01/23 01:29:45 zeev Exp $ */
+/* $Id: mysql.c,v 1.140 1998/02/27 17:17:05 zeev Exp $ */
 
 
 /* TODO:
  *
- * ? Set the result types according to their MySQL-reported type, don't always assume STRING.
  * ? Safe mode implementation
  */
- 
+
+#if defined(COMPILE_DL)
+#include "dl/phpdl.h"
+#endif
 #if defined(THREAD_SAFE)
 #include "tls.h"
 DWORD MySQLTls;
@@ -41,16 +43,19 @@ void *mysql_mutex;
 #include "config.h"
 #include "build-defs.h"
 #endif
-#if defined(COMPILE_DL)
-#include "dl/phpdl.h"
-#include "functions/dl.h"
-#endif
 #include "parser.h"
 #include "internal_functions.h"
 #include "php3_string.h"
 #include "php3_mysql.h"
 
 #if HAVE_MYSQL
+#include <mysql.h>
+#ifdef HAVE_MYSQL_REAL_CONNECT
+#ifdef HAVE_ERRMSG_H
+#include <errmsg.h>
+#endif
+#endif
+#include "list.h"
 
 function_entry mysql_functions[] = {
 	{"mysql_connect",		php3_mysql_connect,			NULL},
@@ -77,12 +82,17 @@ function_entry mysql_functions[] = {
 	{"mysql_fetch_field",	php3_mysql_fetch_field,		NULL},
 	{"mysql_field_seek",	php3_mysql_field_seek,		NULL},
 	{"mysql_free_result",	php3_mysql_free_result,		NULL},
+	{"mysql_field_name",	php3_mysql_field_name,	NULL},
+	{"mysql_field_table",	php3_mysql_field_table,		NULL},
+	{"mysql_field_len",		php3_mysql_field_len,		NULL},
+	{"mysql_field_type",	php3_mysql_field_type,	NULL},
+	{"mysql_field_flags",	php3_mysql_field_flags,		NULL}, 
+	/* for downwards compatability */
 	{"mysql_fieldname",		php3_mysql_field_name,		NULL},
 	{"mysql_fieldtable",	php3_mysql_field_table,		NULL},
 	{"mysql_fieldlen",		php3_mysql_field_len,		NULL},
 	{"mysql_fieldtype",		php3_mysql_field_type,		NULL},
 	{"mysql_fieldflags",	php3_mysql_field_flags,		NULL},
-	/* for downwards compatability */
 	{"mysql_selectdb",		php3_mysql_select_db,		NULL},
 	{"mysql_createdb",		php3_mysql_create_db,		NULL},
 	{"mysql_dropdb",		php3_mysql_drop_db,			NULL},
@@ -101,17 +111,18 @@ php3_module_entry mysql_module_entry = {
 	"MySQL", mysql_functions, php3_minit_mysql, php3_mshutdown_mysql, php3_rinit_mysql, NULL, php3_info_mysql, 0, 0, 0, NULL
 };
 
-#if defined(COMPILE_DL)
+#if COMPILE_DL
 DLEXPORT php3_module_entry *get_module(void) { return &mysql_module_entry; }
+#if WIN32|WINNT
+BOOL WINAPI DllMain(HANDLE hModule, 
+                      DWORD  ul_reason_for_call, 
+                      LPVOID lpReserved)
+{
+	printf("\n\nI'm in DllMain!\n\n");
+    return 1;
+}
 #endif
-
-#include <mysql.h>
-#ifdef HAVE_MYSQL_REAL_CONNECT
-#ifdef HAVE_ERRMSG_H
-#include <errmsg.h>
 #endif
-#endif
-#include "list.h"
 
 #if APACHE
 extern void timeout(int sig);
@@ -138,24 +149,48 @@ mysql_module php3_mysql_module;
 
 static void _close_mysql_link(MYSQL *link)
 {
+#if APACHE
+	void (*handler) (int);
+#endif
 	MySQL_TLS_VARS;
 
+#if APACHE
+	handler = signal(SIGPIPE, SIG_IGN);
+#endif
+
 	mysql_close(link);
+
+#if APACHE
+	signal(SIGPIPE,handler);
+#endif
+
 	efree(link);
 	MySQL_GLOBAL(php3_mysql_module).num_links--;
 }
 
 static void _close_mysql_plink(MYSQL *link)
 {
+#if APACHE
+	void (*handler) (int);
+#endif
 	MySQL_TLS_VARS;
 
+#if APACHE
+	handler = signal(SIGPIPE, SIG_IGN);
+#endif
+
 	mysql_close(link);
+
+#if APACHE
+	signal(SIGPIPE,handler);
+#endif
+
 	free(link);
 	MySQL_GLOBAL(php3_mysql_module).num_persistent--;
 	MySQL_GLOBAL(php3_mysql_module).num_links--;
 }
 
-DLEXPORT int php3_minit_mysql(INITFUNCARG)
+int php3_minit_mysql(INITFUNCARG)
 {
 #if defined(THREAD_SAFE)
 	mysql_global_struct *mysql_globals;
@@ -185,6 +220,7 @@ DLEXPORT int php3_minit_mysql(INITFUNCARG)
 	MySQL_GLOBAL(php3_mysql_module).le_result = register_list_destructors(mysql_free_result,NULL);
 	MySQL_GLOBAL(php3_mysql_module).le_link = register_list_destructors(_close_mysql_link,NULL);
 	MySQL_GLOBAL(php3_mysql_module).le_plink = register_list_destructors(NULL,_close_mysql_plink);
+	MySQL_GLOBAL(php3_mysql_module).default_port = MYSQL_PORT;
 
 #if 0
 	printf("Registered:  %d,%d,%d\n",MySQL_GLOBAL(php3_mysql_module).le_result,MySQL_GLOBAL(php3_mysql_module).le_link,MySQL_GLOBAL(php3_mysql_module).le_plink);
@@ -195,7 +231,7 @@ DLEXPORT int php3_minit_mysql(INITFUNCARG)
 }
 
 
-DLEXPORT int php3_mshutdown_mysql(void){
+int php3_mshutdown_mysql(void){
 #if defined(THREAD_SAFE)
 	mysql_global_struct *mysql_globals;
 	mysql_globals = TlsGetValue(MySQLTls); 
@@ -213,17 +249,18 @@ DLEXPORT int php3_mshutdown_mysql(void){
 	return SUCCESS;
 }
 
-DLEXPORT int php3_rinit_mysql(INITFUNCARG)
+int php3_rinit_mysql(INITFUNCARG)
 {
 	MySQL_TLS_VARS;
 
 	MySQL_GLOBAL(php3_mysql_module).default_link=-1;
 	MySQL_GLOBAL(php3_mysql_module).num_links = MySQL_GLOBAL(php3_mysql_module).num_persistent;
+	mysql_port = MySQL_GLOBAL(php3_mysql_module).default_port;
 	return SUCCESS;
 }
 
 
-DLEXPORT void php3_info_mysql(void)
+void php3_info_mysql(void)
 {
 	char maxp[16],maxl[16];
 	MySQL_TLS_VARS;
@@ -266,12 +303,14 @@ DLEXPORT void php3_info_mysql(void)
 
 static void php3_mysql_do_connect(INTERNAL_FUNCTION_PARAMETERS,int persistent)
 {
-	char *user,*passwd,*host;
+#if APACHE
+	void (*handler) (int);
+#endif
+	char *user,*passwd,*host,*tmp;
 	char *hashed_details;
 	int hashed_details_length;
 	MYSQL *mysql;
 	MySQL_TLS_VARS;
-
 
 	if (php3_ini.sql_safe_mode) {
 		if (ARG_COUNT(ht)>0) {
@@ -344,6 +383,11 @@ static void php3_mysql_do_connect(INTERNAL_FUNCTION_PARAMETERS,int persistent)
 	}	
 
 	
+	if (host && (tmp=strchr(host,':'))) {
+		*tmp=0;
+		tmp++;
+		mysql_port = atoi(tmp);
+	}
 	if (!MySQL_GLOBAL(php3_mysql_module).allow_persistent) {
 		persistent=0;
 	}
@@ -389,7 +433,7 @@ static void php3_mysql_do_connect(INTERNAL_FUNCTION_PARAMETERS,int persistent)
 			}
 			/* ensure that the link did not die */
 #if APACHE
-			signal(SIGPIPE,SIG_IGN);
+			handler=signal(SIGPIPE,SIG_IGN);
 #endif
 #if 0
 			mysql_stat(le->ptr);
@@ -398,7 +442,7 @@ static void php3_mysql_do_connect(INTERNAL_FUNCTION_PARAMETERS,int persistent)
 			if (!strcasecmp(mysql_stat(le->ptr),"mysql server has gone away")) { /* the link died */
 #endif
 #if APACHE
-				signal(SIGPIPE,timeout);
+				signal(SIGPIPE,handler);
 #endif
 				if (mysql_connect(le->ptr,host,user,passwd)==NULL) {
 					php3_error(E_WARNING,"MySQL:  Link to server lost, unable to reconnect");
@@ -408,7 +452,7 @@ static void php3_mysql_do_connect(INTERNAL_FUNCTION_PARAMETERS,int persistent)
 				}
 			}
 #if APACHE
-			signal(SIGPIPE,timeout);
+			signal(SIGPIPE,handler);
 #endif
 			mysql = (MYSQL *) le->ptr;
 		}
@@ -486,17 +530,17 @@ static int php3_mysql_get_default_link(INTERNAL_FUNCTION_PARAMETERS)
 }
 
 
-DLEXPORT void php3_mysql_connect(INTERNAL_FUNCTION_PARAMETERS)
+void php3_mysql_connect(INTERNAL_FUNCTION_PARAMETERS)
 {
 	php3_mysql_do_connect(INTERNAL_FUNCTION_PARAM_PASSTHRU,0);
 }
 
-DLEXPORT void php3_mysql_pconnect(INTERNAL_FUNCTION_PARAMETERS)
+void php3_mysql_pconnect(INTERNAL_FUNCTION_PARAMETERS)
 {
 	php3_mysql_do_connect(INTERNAL_FUNCTION_PARAM_PASSTHRU,1);
 }
 
-DLEXPORT void php3_mysql_close(INTERNAL_FUNCTION_PARAMETERS)
+void php3_mysql_close(INTERNAL_FUNCTION_PARAMETERS)
 {
 	YYSTYPE *mysql_link;
 	int id,type;
@@ -531,7 +575,7 @@ DLEXPORT void php3_mysql_close(INTERNAL_FUNCTION_PARAMETERS)
 }
 	
 			
-DLEXPORT void php3_mysql_select_db(INTERNAL_FUNCTION_PARAMETERS)
+void php3_mysql_select_db(INTERNAL_FUNCTION_PARAMETERS)
 {
 	YYSTYPE *db,*mysql_link;
 	int id,type;
@@ -576,7 +620,7 @@ DLEXPORT void php3_mysql_select_db(INTERNAL_FUNCTION_PARAMETERS)
 	}
 }
 
-DLEXPORT void php3_mysql_create_db(INTERNAL_FUNCTION_PARAMETERS)
+void php3_mysql_create_db(INTERNAL_FUNCTION_PARAMETERS)
 {
 	YYSTYPE *db,*mysql_link;
 	int id,type;
@@ -616,7 +660,7 @@ DLEXPORT void php3_mysql_create_db(INTERNAL_FUNCTION_PARAMETERS)
 }
 
 
-DLEXPORT void php3_mysql_drop_db(INTERNAL_FUNCTION_PARAMETERS)
+void php3_mysql_drop_db(INTERNAL_FUNCTION_PARAMETERS)
 {
 	YYSTYPE *db,*mysql_link;
 	int id,type;
@@ -656,7 +700,7 @@ DLEXPORT void php3_mysql_drop_db(INTERNAL_FUNCTION_PARAMETERS)
 }
 
 
-DLEXPORT void php3_mysql_query(INTERNAL_FUNCTION_PARAMETERS)
+void php3_mysql_query(INTERNAL_FUNCTION_PARAMETERS)
 {
 	YYSTYPE *query,*mysql_link;
 	int id,type;
@@ -706,7 +750,7 @@ DLEXPORT void php3_mysql_query(INTERNAL_FUNCTION_PARAMETERS)
 }
 
 
-DLEXPORT void php3_mysql_db_query(INTERNAL_FUNCTION_PARAMETERS)
+void php3_mysql_db_query(INTERNAL_FUNCTION_PARAMETERS)
 {
 	YYSTYPE *db,*query,*mysql_link;
 	int id,type;
@@ -765,7 +809,7 @@ DLEXPORT void php3_mysql_db_query(INTERNAL_FUNCTION_PARAMETERS)
 }
 
 
-DLEXPORT void php3_mysql_list_dbs(INTERNAL_FUNCTION_PARAMETERS)
+void php3_mysql_list_dbs(INTERNAL_FUNCTION_PARAMETERS)
 {
 	YYSTYPE *mysql_link;
 	int id,type;
@@ -806,7 +850,7 @@ DLEXPORT void php3_mysql_list_dbs(INTERNAL_FUNCTION_PARAMETERS)
 }
 
 
-DLEXPORT void php3_mysql_list_tables(INTERNAL_FUNCTION_PARAMETERS)
+void php3_mysql_list_tables(INTERNAL_FUNCTION_PARAMETERS)
 {
 	YYSTYPE *db,*mysql_link;
 	int id,type;
@@ -856,7 +900,7 @@ DLEXPORT void php3_mysql_list_tables(INTERNAL_FUNCTION_PARAMETERS)
 }
 
 
-DLEXPORT void php3_mysql_list_fields(INTERNAL_FUNCTION_PARAMETERS)
+void php3_mysql_list_fields(INTERNAL_FUNCTION_PARAMETERS)
 {
 	YYSTYPE *db,*table,*mysql_link;
 	int id,type;
@@ -907,7 +951,7 @@ DLEXPORT void php3_mysql_list_fields(INTERNAL_FUNCTION_PARAMETERS)
 }
 
 
-DLEXPORT void php3_mysql_affected_rows(INTERNAL_FUNCTION_PARAMETERS)
+void php3_mysql_affected_rows(INTERNAL_FUNCTION_PARAMETERS)
 {
 	YYSTYPE *mysql_link;
 	int id,type;
@@ -942,7 +986,7 @@ DLEXPORT void php3_mysql_affected_rows(INTERNAL_FUNCTION_PARAMETERS)
 }
 
 
-DLEXPORT void php3_mysql_insert_id(INTERNAL_FUNCTION_PARAMETERS)
+void php3_mysql_insert_id(INTERNAL_FUNCTION_PARAMETERS)
 {
 	YYSTYPE *mysql_link;
 	int id,type;
@@ -977,7 +1021,7 @@ DLEXPORT void php3_mysql_insert_id(INTERNAL_FUNCTION_PARAMETERS)
 }
 
 
-DLEXPORT void php3_mysql_result(INTERNAL_FUNCTION_PARAMETERS)
+void php3_mysql_result(INTERNAL_FUNCTION_PARAMETERS)
 {
 	YYSTYPE *result, *row, *field=NULL;
 	MYSQL_RES *mysql_result;
@@ -1089,7 +1133,7 @@ DLEXPORT void php3_mysql_result(INTERNAL_FUNCTION_PARAMETERS)
 }
 
 
-DLEXPORT void php3_mysql_num_rows(INTERNAL_FUNCTION_PARAMETERS)
+void php3_mysql_num_rows(INTERNAL_FUNCTION_PARAMETERS)
 {
 	YYSTYPE *result;
 	MYSQL_RES *mysql_result;
@@ -1114,7 +1158,7 @@ DLEXPORT void php3_mysql_num_rows(INTERNAL_FUNCTION_PARAMETERS)
 }
 
 
-DLEXPORT void php3_mysql_num_fields(INTERNAL_FUNCTION_PARAMETERS)
+void php3_mysql_num_fields(INTERNAL_FUNCTION_PARAMETERS)
 {
 	YYSTYPE *result;
 	MYSQL_RES *mysql_result;
@@ -1139,7 +1183,7 @@ DLEXPORT void php3_mysql_num_fields(INTERNAL_FUNCTION_PARAMETERS)
 }
 
 
-DLEXPORT void php3_mysql_fetch_row(INTERNAL_FUNCTION_PARAMETERS)
+void php3_mysql_fetch_row(INTERNAL_FUNCTION_PARAMETERS)
 {
 	YYSTYPE *result;
 	MYSQL_RES *mysql_result;
@@ -1239,7 +1283,7 @@ static void php3_mysql_fetch_hash(INTERNAL_FUNCTION_PARAMETERS)
 }
 
 
-DLEXPORT void php3_mysql_fetch_object(INTERNAL_FUNCTION_PARAMETERS)
+void php3_mysql_fetch_object(INTERNAL_FUNCTION_PARAMETERS)
 {
 	php3_mysql_fetch_hash(INTERNAL_FUNCTION_PARAM_PASSTHRU);
 	if (return_value->type==IS_ARRAY) {
@@ -1248,13 +1292,13 @@ DLEXPORT void php3_mysql_fetch_object(INTERNAL_FUNCTION_PARAMETERS)
 }
 
 
-DLEXPORT void php3_mysql_fetch_array(INTERNAL_FUNCTION_PARAMETERS)
+void php3_mysql_fetch_array(INTERNAL_FUNCTION_PARAMETERS)
 {
 	php3_mysql_fetch_hash(INTERNAL_FUNCTION_PARAM_PASSTHRU);
 }
 
 
-DLEXPORT void php3_mysql_data_seek(INTERNAL_FUNCTION_PARAMETERS)
+void php3_mysql_data_seek(INTERNAL_FUNCTION_PARAMETERS)
 {
 	YYSTYPE *result,*offset;
 	MYSQL_RES *mysql_result;
@@ -1283,7 +1327,7 @@ DLEXPORT void php3_mysql_data_seek(INTERNAL_FUNCTION_PARAMETERS)
 }
 
 
-DLEXPORT void php3_mysql_fetch_lengths(INTERNAL_FUNCTION_PARAMETERS)
+void php3_mysql_fetch_lengths(INTERNAL_FUNCTION_PARAMETERS)
 {
 	YYSTYPE *result;
 	MYSQL_RES *mysql_result;
@@ -1366,7 +1410,7 @@ static char *php3_mysql_get_field_name(int field_type)
 }
 
 
-DLEXPORT void php3_mysql_fetch_field(INTERNAL_FUNCTION_PARAMETERS)
+void php3_mysql_fetch_field(INTERNAL_FUNCTION_PARAMETERS)
 {
 	YYSTYPE *result,*field=NULL;
 	MYSQL_RES *mysql_result;
@@ -1428,7 +1472,7 @@ DLEXPORT void php3_mysql_fetch_field(INTERNAL_FUNCTION_PARAMETERS)
 }
 
 
-DLEXPORT void php3_mysql_field_seek(INTERNAL_FUNCTION_PARAMETERS)
+void php3_mysql_field_seek(INTERNAL_FUNCTION_PARAMETERS)
 {
 	YYSTYPE *result, *offset;
 	MYSQL_RES *mysql_result;
@@ -1537,32 +1581,32 @@ static void php3_mysql_field_info(INTERNAL_FUNCTION_PARAMETERS, int entry_type)
 }
 
 
-DLEXPORT void php3_mysql_field_name(INTERNAL_FUNCTION_PARAMETERS)
+void php3_mysql_field_name(INTERNAL_FUNCTION_PARAMETERS)
 {
 	php3_mysql_field_info(INTERNAL_FUNCTION_PARAM_PASSTHRU,PHP3_MYSQL_FIELD_NAME);
 }
 
-DLEXPORT void php3_mysql_field_table(INTERNAL_FUNCTION_PARAMETERS)
+void php3_mysql_field_table(INTERNAL_FUNCTION_PARAMETERS)
 {
 	php3_mysql_field_info(INTERNAL_FUNCTION_PARAM_PASSTHRU,PHP3_MYSQL_FIELD_TABLE);
 }
 
-DLEXPORT void php3_mysql_field_len(INTERNAL_FUNCTION_PARAMETERS)
+void php3_mysql_field_len(INTERNAL_FUNCTION_PARAMETERS)
 {
 	php3_mysql_field_info(INTERNAL_FUNCTION_PARAM_PASSTHRU,PHP3_MYSQL_FIELD_LEN);
 }
 
-DLEXPORT void php3_mysql_field_type(INTERNAL_FUNCTION_PARAMETERS)
+void php3_mysql_field_type(INTERNAL_FUNCTION_PARAMETERS)
 {
 	php3_mysql_field_info(INTERNAL_FUNCTION_PARAM_PASSTHRU,PHP3_MYSQL_FIELD_TYPE);
 }
 
-DLEXPORT void php3_mysql_field_flags(INTERNAL_FUNCTION_PARAMETERS)
+void php3_mysql_field_flags(INTERNAL_FUNCTION_PARAMETERS)
 {
 	php3_mysql_field_info(INTERNAL_FUNCTION_PARAM_PASSTHRU,PHP3_MYSQL_FIELD_FLAGS);
 }
 
-DLEXPORT void php3_mysql_free_result(INTERNAL_FUNCTION_PARAMETERS)
+void php3_mysql_free_result(INTERNAL_FUNCTION_PARAMETERS)
 {
 	YYSTYPE *result;
 	MYSQL_RES *mysql_result;

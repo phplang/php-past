@@ -187,6 +187,8 @@ void _php3_info(void)
 	PUTS("<table border=5 width=\"600\">\n");
 	PUTS("<tr><th bgcolor=\"" HEADER_COLOR "\">Directive</th><th bgcolor=\"" HEADER_COLOR "\">Master Value</th><th bgcolor=\"" HEADER_COLOR "\">Local Value</th></tr>\n");
 	PHP3_CONF_LONG("error_reporting", php3_ini_master.errors, php3_ini.errors);
+	PHP3_CONF_LONG("max execution time", php3_ini_master.max_execution_time, php3_ini.max_execution_time);
+	PHP3_CONF_LONG("memory limit", php3_ini_master.memory_limit, php3_ini.memory_limit);
 	PHP3_CONF_STR("error_log", php3_ini_master.error_log, php3_ini.error_log);
 	PHP3_CONF_LONG("magic_quotes_gpc", php3_ini_master.magic_quotes_gpc, php3_ini.magic_quotes_gpc);
 	PHP3_CONF_LONG("magic_quotes_runtime", php3_ini_master.magic_quotes_runtime, php3_ini.magic_quotes_runtime);
@@ -204,7 +206,7 @@ void _php3_info(void)
 	PHP3_CONF_STR("auto_append_file", php3_ini_master.auto_append_file, php3_ini.auto_append_file);
 	PHP3_CONF_STR("upload_tmp_dir", php3_ini_master.upload_tmp_dir, php3_ini.upload_tmp_dir);
 	PHP3_CONF_STR("extension_dir", php3_ini_master.extension_dir, php3_ini.extension_dir);
-	PHP3_CONF_STR("extension_dir", php3_ini_master.extension_dir, php3_ini.extension_dir);
+	PHP3_CONF_STR("arg_separator", php3_ini_master.arg_separator, php3_ini.arg_separator);
 	PHP3_CONF_LONG("short_open_tag", php3_ini_master.short_open_tag, php3_ini.short_open_tag);
 	PHP3_CONF_STR("debugger.host", php3_ini_master.debugger_host, php3_ini.debugger_host);
 	PHP3_CONF_LONG("debugger.port", php3_ini_master.debugger_port, php3_ini.debugger_port);
@@ -271,24 +273,32 @@ void _php3_info(void)
 		int i;
 
 		SECTION("HTTP Headers Information");
-		php3_printf("<p><b>HTTP Request:</b> %s<p>\n", GLOBAL(php3_rqst)->the_request);
-		PUTS("<table border=0 width=\"600\">\n");
-		PUTS(" <tr><th colspan=2>HTTP&nbsp;Request&nbsp;Headers:</th></tr>\n");
+		PUTS("<table border=5 width=\"600\">\n");
+		PUTS(" <tr><th colspan=2 bgcolor=\"" HEADER_COLOR "\">HTTP Request Headers</th></tr>\n");
+		PUTS("<tr><td bgcolor=\"" ENTRY_NAME_COLOR "\">HTTP Request</td><td bgcolor=\"" CONTENTS_COLOR "\">");
+		PUTS(GLOBAL(php3_rqst)->the_request);
+		PUTS("&nbsp;</td></tr>\n");
 		env_arr = table_elts(GLOBAL(php3_rqst)->headers_in);
 		env = (table_entry *)env_arr->elts;
 		for (i = 0; i < env_arr->nelts; ++i) {
 			if (env[i].key) {
-				php3_printf(" <tr><th align=right>%s:</th><td align=left>%s</td></tr>\n",
-							env[i].key, env[i].val);
+				PUTS("<tr><td bgcolor=\"" ENTRY_NAME_COLOR "\">");
+				PUTS(env[i].key);
+				PUTS("</td><td bgcolor=\"" CONTENTS_COLOR "\">");
+				PUTS(env[i].val);
+				PUTS("&nbsp;</td></tr>\n");
 			}
 		}
-		PUTS(" <tr><th colspan=2>HTTP&nbsp;Response&nbsp;Headers:</th></tr>\n");
+		PUTS(" <tr><th colspan=2  bgcolor=\"" HEADER_COLOR "\">HTTP Response Headers</th></tr>\n");
 		env_arr = table_elts(GLOBAL(php3_rqst)->headers_out);
 		env = (table_entry *)env_arr->elts;
 		for(i = 0; i < env_arr->nelts; ++i) {
 			if (env[i].key) {
-				php3_printf(" <tr><th align=right>%s:</th><td align=left>%s</td></tr>\n",
-							env[i].key, env[i].val);
+				PUTS("<tr><td bgcolor=\"" ENTRY_NAME_COLOR "\">");
+				PUTS(env[i].key);
+				PUTS("</td><td bgcolor=\"" CONTENTS_COLOR "\">");
+				PUTS(env[i].val);
+				PUTS("&nbsp;</td></tr>\n");
 			}
 		}
 		PUTS("</table>\n\n");

@@ -4,17 +4,20 @@ engine = 1  ; enable PHP 3.0 parser
 max_execution_time = 30     ; Maximum execution time of each script, in seconds
 memory_limit = 4194304		; Maximum amount of memory a script may consume (4MB)
 
-; This is a bit-field.  Add each number up to get desired error reporting level
+; error_reporting is a bit-field.  Add each number up to get desired error reporting level
 ;  1 = Normal errors
 ;  2 = Normal warnings
 ;  4 = Parser errors
 ;  8 = Really picky warnings - ie. using a variable before defining it
 error_reporting=7
 display_errors=1           ; Print out errors (as a part of the HTML script)
-log_errors=1			   ; Log errors into a log file (server-specific log, stderr, or error_log (below))
+log_errors=0			   ; Log errors into a log file (server-specific log, stderr, or error_log (below))
 track_errors=0             ; Store the last error/warning message in $php_errormsg (boolean)
 ;error_log=filename		; log errors to specified file
 ;error_log=syslog		; log errors to syslog (Event Log on NT, not valid in Windows 95)
+
+warn_plus_overloading=0		; warn if the + operator is used with strings
+ignore_missing_userfunc_args=0	; don't produce warnings on missing arguments to user-defined functions
 
 magic_quotes_gpc = 1       ; magic quotes for incoming GET/POST/Cookie data
 magic_quotes_runtime = 0   ; magic quotes for runtime-generated data, e.g. data from SQL, from exec(), etc.
@@ -24,8 +27,8 @@ short_open_tag=1           ; allow the <? tag.  otherwise, only <?php is recogni
 
 ; paths and directories
 include_path=
-doc_root=/webshare/wwwroot    ; the document root of the web server
-user_dir=public_html          ; the directory under which the web server checks when using /~username
+doc_root=                     ; the root of the php pages, used only if nonempty
+user_dir=                     ; the directory under which php opens the script using /~username, used only if nonempty
 upload_tmp_dir=\windows\temp  ; temporary directory for HTTP uploaded files
 extension_dir=./              ; directory in which the loadable extensions (modules) reside
 

@@ -24,7 +24,7 @@
  */
 
 /*
- *  $Id: oracle.c,v 1.46 1998/02/02 05:02:54 ssb Exp $
+ *  $Id: oracle.c,v 1.47 1998/02/13 14:48:17 ssb Exp $
  *
  * TODO:
  *
@@ -759,6 +759,11 @@ ora_add_cursor(HashTable *list)
 	ORACLE_TLS_VARS;
 
 	cursor = emalloc(sizeof(oraCursor));
+	if (!cursor) {
+		php3_error(E_ERROR, "Out of memory");
+		return NULL;
+	}
+	memset(cursor, 0, sizeof(oraCursor));
 
 	i = php3_list_insert(cursor, ORACLE_GLOBAL(php3_oracle_module).le_cursor);
 	cursor->ind = i;

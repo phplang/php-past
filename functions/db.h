@@ -23,7 +23,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: db.h,v 1.15 1998/01/15 22:01:07 jim Exp $ */
+/* $Id: db.h,v 1.16 1998/02/20 22:49:06 shane Exp $ */
 
 #ifndef _PHP3_DB_H
 #define _PHP3_DB_H
@@ -53,30 +53,30 @@ extern php3_module_entry dbm_module_entry;
 #define dbm_module_ptr NULL
 #endif
 
-DLEXPORT dbm_info *_php3_finddbm(YYSTYPE *id,HashTable *list);
-DLEXPORT int _php3_dbmclose(dbm_info *info);
-DLEXPORT dbm_info *_php3_dbmopen(char *filename, char *mode);
-DLEXPORT int _php3_dbminsert(dbm_info *info, char *key, char *value);
-DLEXPORT char *_php3_dbmfetch(dbm_info *info, char *key);
-DLEXPORT int _php3_dbmreplace(dbm_info *info, char *key, char *value);
-DLEXPORT int _php3_dbmexists(dbm_info *info, char *key);
-DLEXPORT int _php3_dbmdelete(dbm_info *info, char *key);
-DLEXPORT char *_php3_dbmfirstkey(dbm_info *info);
-DLEXPORT char *_php3_dbmnextkey(dbm_info *info, char *key);
+dbm_info *_php3_finddbm(YYSTYPE *id,HashTable *list);
+int _php3_dbmclose(dbm_info *info);
+dbm_info *_php3_dbmopen(char *filename, char *mode);
+int _php3_dbminsert(dbm_info *info, char *key, char *value);
+char *_php3_dbmfetch(dbm_info *info, char *key);
+int _php3_dbmreplace(dbm_info *info, char *key, char *value);
+int _php3_dbmexists(dbm_info *info, char *key);
+int _php3_dbmdelete(dbm_info *info, char *key);
+char *_php3_dbmfirstkey(dbm_info *info);
+char *_php3_dbmnextkey(dbm_info *info, char *key);
 
 /* db file functions */
-extern DLEXPORT int php3_minit_db(INITFUNCARG);
-extern DLEXPORT int php3_rinit_db(INITFUNCARG);
-extern DLEXPORT void php3_info_db(void);
-extern DLEXPORT void php3_dblist(INTERNAL_FUNCTION_PARAMETERS);
-extern DLEXPORT void php3_dbmopen(INTERNAL_FUNCTION_PARAMETERS);
-extern DLEXPORT void php3_dbmclose(INTERNAL_FUNCTION_PARAMETERS);
-extern DLEXPORT void php3_dbminsert(INTERNAL_FUNCTION_PARAMETERS);
-extern DLEXPORT void php3_dbmfetch(INTERNAL_FUNCTION_PARAMETERS);
-extern DLEXPORT void php3_dbmreplace(INTERNAL_FUNCTION_PARAMETERS);
-extern DLEXPORT void php3_dbmexists(INTERNAL_FUNCTION_PARAMETERS);
-extern DLEXPORT void php3_dbmdelete(INTERNAL_FUNCTION_PARAMETERS);
-extern DLEXPORT void php3_dbmfirstkey(INTERNAL_FUNCTION_PARAMETERS);
-extern DLEXPORT void php3_dbmnextkey(INTERNAL_FUNCTION_PARAMETERS);
+extern int php3_minit_db(INITFUNCARG);
+extern int php3_rinit_db(INITFUNCARG);
+extern void php3_info_db(void);
+extern void php3_dblist(INTERNAL_FUNCTION_PARAMETERS);
+extern void php3_dbmopen(INTERNAL_FUNCTION_PARAMETERS);
+extern void php3_dbmclose(INTERNAL_FUNCTION_PARAMETERS);
+extern void php3_dbminsert(INTERNAL_FUNCTION_PARAMETERS);
+extern void php3_dbmfetch(INTERNAL_FUNCTION_PARAMETERS);
+extern void php3_dbmreplace(INTERNAL_FUNCTION_PARAMETERS);
+extern void php3_dbmexists(INTERNAL_FUNCTION_PARAMETERS);
+extern void php3_dbmdelete(INTERNAL_FUNCTION_PARAMETERS);
+extern void php3_dbmfirstkey(INTERNAL_FUNCTION_PARAMETERS);
+extern void php3_dbmnextkey(INTERNAL_FUNCTION_PARAMETERS);
 
 #endif /* _PHP3_DB_H */

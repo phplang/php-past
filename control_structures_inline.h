@@ -24,7 +24,7 @@
  */
 
 
-/* $Id: control_structures_inline.h,v 1.137 1998/02/01 23:53:05 zeev Exp $ */
+/* $Id: control_structures_inline.h,v 1.149 1998/02/28 21:49:18 zeev Exp $ */
 
 #ifdef THREAD_SAFE
 #include "tls.h"
@@ -402,18 +402,19 @@ inline void cs_start_else( INLINE_TLS_VOID)
 inline void get_function_parameter(YYSTYPE *varname INLINE_TLS)
 {
 	if (GLOBAL(Execute)) {
-		YYSTYPE tmp;
+		YYSTYPE tmp,*data;
 
-		if (hash_index_find(GLOBAL(active_symbol_table), GLOBAL(param_index), (void **) &GLOBAL(data)) == FAILURE) {
-			php3_error(E_WARNING, "Missing argument %d in call to %s()",GLOBAL(param_index)+1,GLOBAL(function_state).function_name);
+		if (hash_index_find(GLOBAL(active_symbol_table), GLOBAL(param_index), (void **) &data) == FAILURE) {
+			if (!php3_ini.ignore_missing_userfunc_args)
+				php3_error(E_WARNING, "Missing argument %d in call to %s()",GLOBAL(param_index)+1,GLOBAL(function_state).function_name);
 			var_reset(&tmp);
 			hash_update(GLOBAL(active_symbol_table), varname->value.strval, varname->strlen+1, &tmp, sizeof(YYSTYPE), NULL);
 		} else if (!hash_index_is_pointer(GLOBAL(active_symbol_table), GLOBAL(param_index))) { /* passed by value */
-			tmp = *GLOBAL(data);
+			tmp = *data;
 			yystype_copy_constructor(&tmp);
 			hash_update(GLOBAL(active_symbol_table), varname->value.strval, varname->strlen+1, &tmp, sizeof(YYSTYPE), NULL);
 		} else { /* passed by reference */
-			hash_pointer_update(GLOBAL(active_symbol_table), varname->value.strval, varname->strlen+1, GLOBAL(data));
+			hash_pointer_update(GLOBAL(active_symbol_table), varname->value.strval, varname->strlen+1, data);
 			hash_index_del(GLOBAL(active_symbol_table), GLOBAL(param_index));
 		}
 
@@ -453,13 +454,13 @@ inline void start_function_decleration(YYSTYPE *function_token, YYSTYPE *functio
 	if (GLOBAL(Execute)) {
 		yystype_copy_constructor(function_name);
 		
+		php3_str_tolower(function_name->value.strval, function_name->strlen);
 		if (GLOBAL(class_name)) {
 			target_symbol_table = GLOBAL(class_symbol_table);
 			hash_del(GLOBAL(class_symbol_table), function_name->value.strval, function_name->strlen+1);	/* for inheritance */
 		} else {
 			target_symbol_table = &GLOBAL(function_table);
 		}
-		php3_str_tolower(function_name->value.strval, function_name->strlen);
 		if (hash_exists(target_symbol_table, function_name->value.strval, function_name->strlen+1)) {
 			php3_error(E_ERROR, "Can't redeclare already declared function");
 			yystype_destructor(function_name _INLINE_TLS);
@@ -648,15 +649,21 @@ inline void cs_end_include(YYSTYPE *include_token, YYSTYPE *expr INLINE_TLS)
 
 
 
+inline void start_display_source(int start_in_php INLINE_TLS)
+{
+	php3_header(0, NULL);
+	stack_push(&GLOBAL(css), &GLOBAL(ExecuteFlag), sizeof(int));
+	GLOBAL(ExecuteFlag) = DONT_EXECUTE;
+	GLOBAL(Execute) = 0;
+	GLOBAL(php3_display_source)=1;
+	php3_printf("<font color=%s>", (start_in_php?php3_ini.highlight_default:php3_ini.highlight_html));
+}
+
+
 inline void cs_show_source(YYSTYPE *expr INLINE_TLS)
 {
 	if (include_file(expr,1)==SUCCESS) {
-		php3_header(0, NULL);
-		stack_push(&GLOBAL(css), &GLOBAL(ExecuteFlag), sizeof(int));
-		GLOBAL(ExecuteFlag) = DONT_EXECUTE;
-		GLOBAL(Execute) = 0;
-		GLOBAL(php3_display_source)=1;
-		php3_printf("<font color=%s>", php3_ini.highlight_html);
+		start_display_source(0 _INLINE_TLS);
 	}
 	yystype_destructor(expr _INLINE_TLS);
 }
@@ -749,6 +756,8 @@ inline void cs_functioncall_pre_variable_passing(YYSTYPE *function_name, YYSTYPE
 
 	target_symbol_table = &GLOBAL(function_table);
 	if (GLOBAL(Execute)) {
+		YYSTYPE *data;
+		
 		if (class_ptr) {		/* use member function rather than global function */
 			object = (YYSTYPE *) class_ptr->value.yystype_ptr;
 			
@@ -765,9 +774,9 @@ inline void cs_functioncall_pre_variable_passing(YYSTYPE *function_name, YYSTYPE
 			return;
 		}
 		php3_str_tolower(function_name->value.strval, function_name->strlen);
-		if (hash_find(target_symbol_table, function_name->value.strval, function_name->strlen+1, (void **) &GLOBAL(data)) == SUCCESS) {
-			if (!(GLOBAL(data)->type & VALID_FUNCTION)) {
-				if (GLOBAL(data)->type == IS_UNSUPPORTED_FUNCTION) {
+		if (hash_find(target_symbol_table, function_name->value.strval, function_name->strlen+1, (void **) &data) == SUCCESS) {
+			if (!(data->type & VALID_FUNCTION)) {
+				if (data->type == IS_UNSUPPORTED_FUNCTION) {
 					php3_error(E_ERROR, "Function %s() is not supported in this compilation", function_name->value.strval);
 				} else {
 					php3_error(E_ERROR, "Function call to a non-function (%s)", function_name->value.strval);
@@ -778,23 +787,21 @@ inline void cs_functioncall_pre_variable_passing(YYSTYPE *function_name, YYSTYPE
 			/* we're gonna call the function... */
 			stack_push(&GLOBAL(for_stack), &minus_one, sizeof(int));
 			stack_push(&GLOBAL(function_state_stack), &GLOBAL(function_state), sizeof(FunctionState));	/* save function state */
-			function_name->cs_data.function_call_type = GLOBAL(data)->type;
-			function_name->offset = GLOBAL(data)->offset;
+			function_name->cs_data.function_call_type = data->type;
+			function_name->offset = data->offset;
 			GLOBAL(function_state).function_symbol_table = (HashTable *) emalloc(sizeof(HashTable));
-			GLOBAL(function_state).function_name = (char *) estrndup(function_name->value.strval,function_name->strlen);
-			GLOBAL(function_state).function_type = GLOBAL(data)->type;
-			GLOBAL(function_state).handler = (void (*)(INTERNAL_FUNCTION_PARAMETERS)) GLOBAL(data)->value.internal_function;
-			GLOBAL(function_state).func_arg_types = GLOBAL(data)->func_arg_types;
+			GLOBAL(function_state).function_name = function_name->value.strval;
+			GLOBAL(function_state).function_type = data->type;
+			GLOBAL(function_state).handler = (void (*)(INTERNAL_FUNCTION_PARAMETERS)) data->value.internal_function;
+			GLOBAL(function_state).func_arg_types = data->func_arg_types;
 			GLOBAL(function_state).lineno = GLOBAL(current_lineno);
-			if (!GLOBAL(function_state).function_symbol_table || !GLOBAL(function_state).function_name) {
+			if (!GLOBAL(function_state).function_symbol_table) {
 				php3_error(E_ERROR, "Unable to allocate necessary memory for function call");
-				STR_FREE(function_name->value.strval);
 				function_name->cs_data.function_call_type=0;
 				return;
 			}
 			if (hash_init(GLOBAL(function_state).function_symbol_table, 0, NULL, YYSTYPE_DESTRUCTOR, 0) == FAILURE) {
 				php3_error(E_ERROR, "Unable to initialize new symbol table in function call");
-				STR_FREE(function_name->value.strval);
 				function_name->cs_data.function_call_type=0;
 				return;
 			}
@@ -827,13 +834,12 @@ inline void cs_functioncall_post_variable_passing(YYSTYPE *function_name INLINE_
 		GLOBAL(function_state).function_symbol_table = NULL;
 		GLOBAL(function_state).loop_nest_level = GLOBAL(function_state).loop_change_level = GLOBAL(function_state).loop_change_type = 0;
 
+		var_reset(&GLOBAL(return_value)); 
 		switch (GLOBAL(function_state).function_type) {
 			case IS_USER_FUNCTION:
 				seek_token(&GLOBAL(token_cache_manager), function_name->offset);
 				break;
 			case IS_INTERNAL_FUNCTION:
-			case IS_TEMPORARY_INTERNAL_FUNCTION:
-				var_reset(&GLOBAL(return_value)); 
 				GLOBAL(function_state).handler(GLOBAL(function_state).symbol_table,&GLOBAL(return_value),&GLOBAL(list),&GLOBAL(plist));
 				break;
 			default:			/* don't execute the function call */
@@ -857,7 +863,6 @@ inline void cs_functioncall_end(YYSTYPE *result, YYSTYPE *function_name, YYSTYPE
 		/* clean up */
 		hash_destroy(GLOBAL(function_state).symbol_table);
 		efree(GLOBAL(function_state).symbol_table);
-		STR_FREE(GLOBAL(function_state).function_name);
 		yystype_destructor(function_name _INLINE_TLS);
 		
 		while (stack_int_top(&GLOBAL(for_stack)) != -1) {  /* pop FOR stack */

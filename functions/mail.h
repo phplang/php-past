@@ -23,7 +23,7 @@
  */
 
 
-/* $Id: mail.h,v 1.4 1997/12/31 15:56:33 rasmus Exp $ */
+/* $Id: mail.h,v 1.5 1998/02/03 19:40:00 shane Exp $ */
 
 #ifndef _MAIL_H
 #define _MAIL_H
@@ -33,6 +33,8 @@ extern php3_module_entry mail_module_entry;
 
 extern void php3_mail(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_info_mail(void);
+extern int _php3_mail(char *to, char *subject, char *message, char *headers);
+
 #else
 #define mail_module_ptr NULL
 #endif

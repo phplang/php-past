@@ -25,7 +25,7 @@
  */
 
 
-/* $Id: operators.h,v 1.24 1998/02/01 01:27:12 zeev Exp $ */
+/* $Id: operators.h,v 1.25 1998/02/08 18:01:51 zeev Exp $ */
 
 
 #ifndef _OPERATORS_H
@@ -42,6 +42,7 @@ extern int mul_function(YYSTYPE *result, YYSTYPE *op1, YYSTYPE *op2 INLINE_TLS);
 extern int div_function(YYSTYPE *result, YYSTYPE *op1, YYSTYPE *op2 INLINE_TLS);
 extern int mod_function(YYSTYPE *result, YYSTYPE *op1, YYSTYPE *op2 INLINE_TLS);
 extern int boolean_or_function(YYSTYPE *result, YYSTYPE *op1, YYSTYPE *op2);
+extern int boolean_xor_function(YYSTYPE *result, YYSTYPE *op1, YYSTYPE *op2);
 extern int boolean_and_function(YYSTYPE *result, YYSTYPE *op1, YYSTYPE *op2);
 extern int boolean_not_function(YYSTYPE *result, YYSTYPE *op1);
 extern int bitwise_not_function(YYSTYPE *result, YYSTYPE *op1 INLINE_TLS);

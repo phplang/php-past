@@ -65,6 +65,7 @@ uodbc_module php3_uodbc_module;
 #endif
 
 function_entry uodbc_functions[] = {
+	{"odbc_setoption",	php3_uodbc_setoption,	NULL},
 	{"odbc_autocommit",	php3_uodbc_autocommit,	NULL},
 	{"odbc_close",		php3_uodbc_close,		NULL},
 	{"odbc_close_all",	php3_uodbc_close_all,	NULL},
@@ -114,23 +115,7 @@ BOOL WINAPI DllMain(HANDLE hModule,
                       DWORD  ul_reason_for_call, 
                       LPVOID lpReserved)
 {
-    switch( ul_reason_for_call ) {
-    case DLL_PROCESS_ATTACH:
-		if((UODBCTls=TlsAlloc())==0xFFFFFFFF){
-			return 0;
-		}
-		break;    
-    case DLL_THREAD_ATTACH:
-		break;
-    case DLL_THREAD_DETACH:
-		break;
-	case DLL_PROCESS_DETACH:
-		if(!TlsFree(UODBCTls)){
-			return 0;
-		}
-		break;
-    }
-    return 1;
+    return TRUE;
 }
 #endif
 #endif
@@ -530,7 +515,9 @@ void php3_uodbc_prepare(INTERNAL_FUNCTION_PARAMETERS)
 		RETURN_ZERO;
 	}
 
+#if 0
 	_php3_stripslashes(query);
+#endif
 
 	result = (uodbc_result *)emalloc(sizeof(uodbc_result));
 	if(result == NULL){
@@ -827,7 +814,9 @@ void php3_uodbc_do(INTERNAL_FUNCTION_PARAMETERS)
 		RETURN_ZERO;
 	}
 
+#if 0
 	_php3_stripslashes(query);
+#endif
 	
 	result = (uodbc_result *)emalloc(sizeof(uodbc_result));
 	if(result == NULL){
@@ -927,7 +916,7 @@ void php3_uodbc_fetch_into(INTERNAL_FUNCTION_PARAMETERS)
 
 	if (!ParameterPassedByReference(ht, numArgs)){
 		php3_error(E_WARNING, "Array not passed by reference in call to odbc_fetch_into()");
-		return;
+		RETURN_FALSE;
 	}
 #else
 	YYSTYPE     *arg1, *arr, tmp;
@@ -940,7 +929,7 @@ void php3_uodbc_fetch_into(INTERNAL_FUNCTION_PARAMETERS)
 
 	if (!ParameterPassedByReference(ht, numArgs)){
 		php3_error(E_WARNING, "Array not passed by reference in call to odbc_fetch_into()");
-		return;
+		RETURN_FALSE;
 	}
 #endif				
 	
@@ -954,7 +943,7 @@ void php3_uodbc_fetch_into(INTERNAL_FUNCTION_PARAMETERS)
 		RETURN_FALSE;
 	}
 
-	if(result->numcols == 0){
+	if(result->numcols == 0) {
 		php3_error(E_WARNING, "No tuples available at this result index");
 		RETURN_FALSE;
 	}
@@ -962,7 +951,7 @@ void php3_uodbc_fetch_into(INTERNAL_FUNCTION_PARAMETERS)
 	if(arr->type != IS_ARRAY){
 		if (array_init(arr) == FAILURE){
 			php3_error(E_WARNING, "Can't convert to type Array");
-			return;
+			RETURN_FALSE;
 		}
 	}
 
@@ -987,14 +976,15 @@ void php3_uodbc_fetch_into(INTERNAL_FUNCTION_PARAMETERS)
 #endif
 		result->fetched++;
 
-	for(i = 0; i < result->numcols; i++){
-		if(result->values[i].value != NULL &&
+	for (i = 0; i < result->numcols; i++) {
+		if (result->values[i].value != NULL &&
 			result->values[i].vallen != SQL_NO_TOTAL &&
-			result->values[i].passthru == 0){
+			result->values[i].vallen != SQL_NULL_DATA &&
+			result->values[i].passthru == 0) {
 			tmp.type = IS_STRING;
 			tmp.strlen = strlen(result->values[i].value);
 			tmp.value.strval = estrndup(result->values[i].value,tmp.strlen);
-		}else{
+		} else {
 			tmp.type = IS_STRING;
 			tmp.strlen = 0;
 			tmp.value.strval = empty_string;
@@ -1388,6 +1378,10 @@ void php3_uodbc_do_connect(INTERNAL_FUNCTION_PARAMETERS, int persistent)
 			db_conn = (uodbc_connection *)emalloc(sizeof(uodbc_connection));
 
 		SQLAllocConnect(UODBC_GLOBAL(php3_uodbc_module).henv, &db_conn->hdbc);
+#if HAVE_SOLID
+		SQLSetConnectOption(db_conn->hdbc, SQL_TRANSLATE_OPTION,
+							SQL_SOLID_XLATOPT_NOCNV);
+#endif
 		rc = SQLConnect(db_conn->hdbc, db, SQL_NTS, uid, SQL_NTS, pwd, SQL_NTS);
 
 		if (rc != SQL_SUCCESS && rc != SQL_SUCCESS_WITH_INFO) {
@@ -1426,8 +1420,9 @@ void php3_uodbc_do_connect(INTERNAL_FUNCTION_PARAMETERS, int persistent)
 	} else {
 		void *ptr;
 		int type;
+
 		/* the link is already in the persistent list */
-		if (le.type != le_index_ptr) {
+		if (index_ptr->type != le_index_ptr) {
 			efree(hashed_details);
 			RETURN_FALSE;
 		}
@@ -1672,8 +1667,9 @@ void php3_uodbc_autocommit(INTERNAL_FUNCTION_PARAMETERS)
 		RETURN_FALSE;
 	}
 
-	rc = SQLSetConnectOption(curr_conn->hdbc, SQL_AUTOCOMMIT, (arg2->value.lval)?
-								SQL_AUTOCOMMIT_ON:SQL_AUTOCOMMIT_OFF);	
+	rc = SQLSetConnectOption(curr_conn->hdbc, SQL_AUTOCOMMIT,
+							 (arg2->value.lval) ?
+							 SQL_AUTOCOMMIT_ON : SQL_AUTOCOMMIT_OFF);	
 	if(rc != SQL_SUCCESS && rc != SQL_SUCCESS_WITH_INFO){
 		uodbc_sql_error(curr_conn->hdbc, SQL_NULL_HSTMT, "Autocommit");
 		RETURN_FALSE;
@@ -1719,6 +1715,58 @@ void php3_uodbc_rollback(INTERNAL_FUNCTION_PARAMETERS)
 {
 	php3_uodbc_transact(INTERNAL_FUNCTION_PARAM_PASSTHRU, 0);
 }
+
+
+void php3_uodbc_setoption(INTERNAL_FUNCTION_PARAMETERS)
+{
+	uodbc_connection *curr_conn;
+	uodbc_result	*result;
+	RETCODE rc;
+	YYSTYPE *arg1, *arg2, *arg3, *arg4;
+
+ 	if( getParameters(ht, 3, &arg1, &arg2, &arg3, &arg4) == FAILURE) {
+		WRONG_PARAM_COUNT;
+	}                            
+ 
+	convert_to_long(arg1);
+	convert_to_long(arg2);
+	convert_to_long(arg3);
+	convert_to_long(arg4);
+
+	switch (arg2->value.lval) {
+		case 1:		/* SQLSetConnectOption */
+			curr_conn = uodbc_get_conn(list, arg1->value.lval);
+			if(curr_conn == NULL){
+				php3_error(E_WARNING, "Bad ODBC connection number (%d)", arg1->value.lval);
+				RETURN_FALSE;
+			}
+			rc = SQLSetConnectOption(curr_conn->hdbc, (unsigned short)(arg3->value.lval), (arg4->value.lval));
+			if(rc != SQL_SUCCESS && rc != SQL_SUCCESS_WITH_INFO){
+				uodbc_sql_error(curr_conn->hdbc, SQL_NULL_HSTMT, "SetConnectOption\0");
+				RETURN_FALSE;
+			}
+			break;
+		case 2:		/* SQLSetStmtOption */
+			result = uodbc_get_result(list, arg1->value.lval);
+			if(result == NULL){
+				php3_error(E_WARNING, "Bad result index");
+				RETURN_FALSE;
+			}
+			rc = SQLSetStmtOption(result->stmt, (unsigned short)(arg3->value.lval), (arg4->value.lval));
+			if(rc != SQL_SUCCESS && rc != SQL_SUCCESS_WITH_INFO){
+				uodbc_sql_error(result->conn_ptr->hdbc, result->stmt, "SetStmtOption\0");
+				RETURN_FALSE;
+			}
+			break;
+		default:
+			php3_error(E_WARNING, "Unknown option type");
+			RETURN_FALSE;
+			break;
+	}
+
+	RETURN_TRUE;
+}
+
 
 #endif /* HAVE_UODBC */
 

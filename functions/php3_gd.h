@@ -24,7 +24,7 @@
  */
 
 
-/* $Id: php3_gd.h,v 1.10 1998/02/01 15:24:45 ssb Exp $ */
+/* $Id: php3_gd.h,v 1.11 1998/02/19 20:09:43 rasmus Exp $ */
 
 #ifndef _PHP3_GD_H
 #define _PHP3_GD_H
@@ -78,6 +78,7 @@ extern void php3_imagesxfn(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_imagesyfn(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_free_gd_font(gdFontPtr);
 extern void _php3_gdimagecharup(gdImagePtr, gdFontPtr, int, int, int, int);
+extern void php3_imagedashedline(INTERNAL_FUNCTION_PARAMETERS);
 
 #else
 

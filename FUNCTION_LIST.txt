@@ -180,20 +180,26 @@ file_functions
 	file
 
 filestat_functions
-u	fileatime
-u	filectime
+	fileatime
+	filectime
 u	filegroup
 u	fileinode
-u	filemtime
+	filemtime
 u	fileowner
-u	fileperms
-u	filesize
-u	filetype
-u	stat
+	fileperms
+	filesize
+	filetype
+	stat
 u	chown
 u	chgrp
 u	chmod
-u	touch
+	touch
+	file_exists
+	is_executable
+	is_dir
+	is_readable
+	is_writeable
+u	is_link
 
 header_functions
 	setcookie
@@ -210,14 +216,14 @@ reg_functions
 	split
 	sql_regcase
 
-syslog_functions
+syslog_functions (writes to event log on win NT)
 	openlog
 	syslog
 	closelog
 
 The following are optional modules and may or may not be compiled into php, or may be compiled as a loadable module.
 
-odbc_functions
+odbc_functions (obsolete, use uodbc below)
 	sqlconnect
 	sqldisconnect
 	sqlfetch
@@ -227,23 +233,28 @@ odbc_functions
 	sqlrowcount
 
 uodbc_functions
-    odbc_autocommit
-    odbc_close
-    odbc_close_all
-    odbc_commit
-    odbc_connect
-    odbc_exec
-    odbc_fetch_row
-    odbc_fetch_into
-    odbc_field_len
-    odbc_field_name
-    odbc_field_type
-    odbc_free_result
-    odbc_num_fields
-    odbc_num_rows
-    odbc_result
-    odbc_result_all
-    odbc_rollback
+    (int) odbc_autocommit($connection_id, $OnOff)
+    (void) odbc_close($connection_id)
+    (void) odbc_close_all(void)
+    (int) odbc_commit($connection_id)
+    (int) odbc_connect($dsn, $user, $password)
+    (int) odbc_pconnect($dsn, $user, $password)
+    (string) odbc_cursor($result_id)
+    (int) odbc_do($connection_id, $query_string)
+    (int) odbc_exec($connection_id, $query_string)
+    (int) odbc_prepare($connection_id, $query_string)
+    (int) odbc_execute($result_id, $array)
+    (int) odbc_fetch_row($result_id, $row_number)
+    (int) odbc_fetch_into($result_id, $row_number, $array_ptr)
+    (int) odbc_field_len($result_id, $field_number)
+    (string) odbc_field_name($result_id, $field_number)
+    (string) odbc_field_type($result_id, $field)
+    (int) odbc_free_result($result_id)
+    (int) odbc_num_fields($result_id)
+    (int) odbc_num_rows($result_id)
+    (string) odbc_result($result_id, $field)
+    (int) odbc_result_all($result_id, $format)
+    (int) odbc_rollback($connection_id)
 
 msql_functions
 	msql_connect
@@ -288,22 +299,23 @@ msql_functions
 
 ldap_functions
 	ldap_connect
-	ldap_pconnect
-	ldap_close
 	ldap_bind
 	ldap_unbind
+	ldap_read
+	ldap_list
 	ldap_search
 	ldap_free_result
 	ldap_count_entries
 	ldap_first_entry
 	ldap_next_entry
+	ldap_get_entries
 	ldap_free_entry
-/* not yet implemented
 	ldap_first_attribute
 	ldap_next_attribute
-*/
+	ldap_get_attributes
 	ldap_get_values
-	ldap_count_values
+	ldap_get_dn
+	ldap_dn2ufn
 	ldap_add
 	ldap_delete
 	ldap_modify
@@ -343,7 +355,6 @@ filepro_functions
 	filepro_fieldwidth
 	filepro_fieldcount
 	filepro_retrieve
-
 
 dbm_functions
 	dblist

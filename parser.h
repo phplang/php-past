@@ -23,11 +23,13 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: parser.h,v 1.232 1998/02/01 23:59:34 shane Exp $ */
+/* $Id: parser.h,v 1.240 1998/03/02 19:14:22 rasmus Exp $ */
 
 
 #ifndef _PARSER_H
 #define _PARSER_H
+
+#define YYDEBUG 0
 
 #define CGI_BINARY (!APACHE && !USE_SAPI)
 
@@ -111,8 +113,9 @@
 #if REGEX
 #include "regex/regex.h"
 #define _REGEX_H 1				/* this should stop Apache from loading the system version of regex.h */
-#define _RX_H 1				  		/* Try defining these for Linux to	*/
-#define __REGEXP_LIBRARY_H__ 1 		/* avoid Apache including regex.h	*/
+#define _RX_H 1				  	/* Try defining these for Linux to	*/
+#define __REGEXP_LIBRARY_H__ 1 	/* avoid Apache including regex.h	*/
+#define _H_REGEX 1              /* This one is for AIX */
 #else
 #include <regex.h>
 #endif
@@ -165,8 +168,6 @@ extern PHPAPI char *empty_string;
 extern PHPAPI char *undefined_variable_string;
 
 #define EXEC_INPUT_BUF 4096
-#define PHP_DOCUMENT_ROOT "/webshare/wwwroot"
-#define PHP_USER_DIR "public_html"
 
 #if DEBUG
 #ifdef inline
@@ -213,16 +214,14 @@ extern PHPAPI void php3_apache_putc(char c);
 #define IS_DOUBLE 0x2
 #define IS_STRING 0x4
 #define IS_ARRAY 0x8
-#define IS_EMPTY 0x10
-#define IS_USER_FUNCTION 0x20
-#define IS_INTERNAL_FUNCTION 0x40
-#define IS_TEMPORARY_INTERNAL_FUNCTION 0x80
-#define IS_UNSUPPORTED_FUNCTION 0x100
-#define IS_CLASS 0x200
-#define IS_OBJECT 0x400
-#define IS_NULL 0x800
+#define IS_USER_FUNCTION 0x10
+#define IS_INTERNAL_FUNCTION 0x20
+#define IS_UNSUPPORTED_FUNCTION 0x40
+#define IS_CLASS 0x80
+#define IS_OBJECT 0x100
+#define IS_NULL 0x200
 
-#define VALID_FUNCTION (IS_USER_FUNCTION|IS_INTERNAL_FUNCTION|IS_TEMPORARY_INTERNAL_FUNCTION)
+#define VALID_FUNCTION (IS_USER_FUNCTION|IS_INTERNAL_FUNCTION)
 #define IS_HASH (IS_ARRAY | IS_OBJECT)
 
 /* general definitions */
@@ -270,6 +269,7 @@ typedef union {
 	void *yystype_ptr;  /* used for implementation of multi-dimensional arrays */
 } yystype_value;
 
+
 struct _yystype_struct {
 	/* Variable information */
 	unsigned short type;		/* active type */
@@ -283,8 +283,6 @@ struct _yystype_struct {
 	yystype_value value;		/* value */
 	int strlen;		/* string length */
 };
-
-
 
 typedef struct {
 	char *fname;
@@ -306,7 +304,6 @@ typedef struct {
 	unsigned short function_type;
 	void (*handler)(INTERNAL_FUNCTION_PARAMETERS);
 } FunctionState;
-
 
 
 /* global variables */
@@ -342,10 +339,13 @@ extern void html_putc(char c);
 extern int include_file(YYSTYPE *file,int display_source);
 extern int conditional_include_file(YYSTYPE *file, YYSTYPE *return_offset);
 extern void initialize_input_file_buffer(FILE *f);
-extern void eval_string(YYSTYPE *str, YYSTYPE *return_offset);
+extern void eval_string(YYSTYPE *str, YYSTYPE *return_offset, int display_source);
 #endif
 extern int hash_environment(void);
 extern int module_startup_modules(void);
+
+/*from basic functions*/
+extern PHPAPI int _php3_error_log(int opt_err,char *message,char *opt,char *headers);
 
 
 /* configuration abstraction layer */

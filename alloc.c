@@ -24,6 +24,7 @@
    +----------------------------------------------------------------------+
  */
 
+
 #ifdef THREAD_SAFE
 #include "tls.h"
 #endif
@@ -32,24 +33,44 @@
 
 #include "main.h"
 
+#define MAX_CACHED_MEMORY	64
+#define MAX_CACHED_ENTRIES	16
+
 #ifndef THREAD_SAFE
 static mem_header *head;
+void *cache[MAX_CACHED_MEMORY][MAX_CACHED_ENTRIES];
+unsigned char cache_count[MAX_CACHED_MEMORY];
+
 #if MEMORY_LIMIT
 static unsigned int allocated_memory;
 #define CHECK_MEMORY_LIMIT(s) { allocated_memory += (s);\
-								if (php3_ini.memory_limit<allocated_memory) \
-									if (allocated_memory>php3_ini.memory_limit+1048576) \
+								if (php3_ini.memory_limit<allocated_memory) {\
+									if (allocated_memory>php3_ini.memory_limit+1048576) {\
 										exit(1); \
-									else \
+									} else {\
 										if (!GLOBAL(shutdown_requested)) \
 											php3_error(E_ERROR,"Allowed memory size of %d bytes exhausted",php3_ini.memory_limit); \
-								}
+									}\
+								}\
+							  }
 #endif
 #endif
 
 #ifndef CHECK_MEMORY_LIMIT
 #define CHECK_MEMORY_LIMIT(s)
 #endif
+
+
+#define REMOVE_POINTER_FROM_LIST(p) \
+	if (p == GLOBAL(head)) { \
+		GLOBAL(head) = p->pNext; \
+	} else { \
+		p->pLast->pNext = p->pNext; \
+	} \
+	if (p->pNext) { \
+		p->pNext->pLast = p->pLast; \
+	}
+
 
 /* used by ISAPI and NSAPI */
 
@@ -64,7 +85,17 @@ PHPAPI void *_emalloc(size_t size)
 
 	BLOCK_INTERRUPTIONS;
 
-	p  = (mem_header *) malloc(sizeof(mem_header) + size + PLATFORM_PADDING);
+	if ((size < MAX_CACHED_MEMORY) && (cache_count[size] > 0)) {
+		p = cache[size][--cache_count[size]];
+#if DEBUG
+		p->filename = strdup(filename);
+		p->lineno = lineno;
+#endif
+		UNBLOCK_INTERRUPTIONS;
+		return (void *)((char *)p + sizeof(mem_header) + PLATFORM_PADDING);
+	} else {
+		p  = (mem_header *) malloc(sizeof(mem_header) + size + PLATFORM_PADDING);
+	}
 
 	if (!p) {
 		UNBLOCK_INTERRUPTIONS;
@@ -80,11 +111,10 @@ PHPAPI void *_emalloc(size_t size)
 	p->filename = strdup(filename);
 	p->lineno = lineno;
 #endif
-#if DEBUG | MEMORY_LIMIT
 	p->size = size;
-#endif
+#if MEMORY_LIMIT
 	CHECK_MEMORY_LIMIT(size);
-
+#endif
 	UNBLOCK_INTERRUPTIONS;
 	return (void *)((char *)p + sizeof(mem_header) + PLATFORM_PADDING);
 }
@@ -99,15 +129,16 @@ PHPAPI void _efree(void *ptr)
 	mem_header *p = (mem_header *) ((char *)ptr - sizeof(mem_header) - PLATFORM_PADDING);
 	TLS_VARS;
 	
+	if ((p->size < MAX_CACHED_MEMORY) && (cache_count[p->size] < MAX_CACHED_ENTRIES)) {
+		cache[p->size][cache_count[p->size]++] = p;
+#if DEBUG
+		free(p->filename);
+		p->filename = NULL;
+#endif
+		return;
+	}
 	BLOCK_INTERRUPTIONS;
-	if (p == GLOBAL(head)) {
-		GLOBAL(head) = p->pNext;
-	} else {
-		p->pLast->pNext = p->pNext;
-	}
-	if (p->pNext) {
-		p->pNext->pLast = p->pLast;
-	}
+	REMOVE_POINTER_FROM_LIST(p);
 #if DEBUG
 	free(p->filename);
 #endif
@@ -115,7 +146,7 @@ PHPAPI void _efree(void *ptr)
 #if MEMORY_LIMIT
 	allocated_memory -= p->size;
 #endif
-
+	
 	free(p);
 	UNBLOCK_INTERRUPTIONS;
 }
@@ -127,36 +158,23 @@ PHPAPI void *_ecalloc(size_t nmemb, size_t size, char *filename, uint lineno)
 PHPAPI void *_ecalloc(size_t nmemb, size_t size)
 #endif
 {
-	mem_header *p;
-	int final_size;
+	void *p;
+	int final_size=size*nmemb;
 	TLS_VARS;
 
-	final_size = sizeof(mem_header) + PLATFORM_PADDING + (nmemb * size);
-
 	BLOCK_INTERRUPTIONS;
-	p = (mem_header *) malloc(final_size);
+#if DEBUG
+	p = (void *) _emalloc(final_size,filename,lineno);
+#else
+	p = (char *) emalloc(final_size);
+#endif
 	if (!p) {
 		UNBLOCK_INTERRUPTIONS;
 		return (void *) p;
 	}
 	memset(p,(int)NULL,final_size);
-	p->pNext = GLOBAL(head);
-	if (GLOBAL(head)) {
-		GLOBAL(head)->pLast = p;
-	}
-	p->pLast = (mem_header *) NULL;
-	GLOBAL(head) = p;
-#if DEBUG
-	p->filename = strdup(filename);
-	p->lineno = lineno;
-#endif	
-#if DEBUG | MEMORY_LIMIT
-	p->size = nmemb*size;
-#endif
-	CHECK_MEMORY_LIMIT(p->size);
-
 	UNBLOCK_INTERRUPTIONS;
-	return (void *)((char *)p + sizeof(mem_header) + PLATFORM_PADDING);
+	return p;
 }
 
 
@@ -171,15 +189,7 @@ PHPAPI void *_erealloc(void *ptr, size_t size)
 	TLS_VARS;
 	
 	BLOCK_INTERRUPTIONS;
-
-	if (p == GLOBAL(head)) {
-		GLOBAL(head) = p->pNext;
-	} else {
-		p->pLast->pNext = p->pNext;
-	}
-	if (p->pNext) {
-		p->pNext->pLast = p->pLast;
-	}
+	REMOVE_POINTER_FROM_LIST(p);
 	p = (mem_header *) realloc(p,sizeof(mem_header)+size+PLATFORM_PADDING);
 	if (!p) {
 		orig->pNext = GLOBAL(head);
@@ -189,7 +199,7 @@ PHPAPI void *_erealloc(void *ptr, size_t size)
 		orig->pLast = (mem_header *) NULL;
 		GLOBAL(head) = orig;
 		UNBLOCK_INTERRUPTIONS;
-		return (void *)p;
+		return (void *)NULL;
 	}
 	p->pNext = GLOBAL(head);
 	if (GLOBAL(head)) {
@@ -202,10 +212,10 @@ PHPAPI void *_erealloc(void *ptr, size_t size)
 	p->filename = strdup(filename);
 	p->lineno = lineno;
 #endif	
+#if MEMORY_LIMIT
 	CHECK_MEMORY_LIMIT(size - p->size);
-#if DEBUG | MEMORY_LIMIT
-	p->size = size;
 #endif
+	p->size = size;
 
 	UNBLOCK_INTERRUPTIONS;
 	return (void *)((char *)p+sizeof(mem_header)+PLATFORM_PADDING);
@@ -230,7 +240,7 @@ PHPAPI char *_estrdup(const char *s)
 #endif
 	if (!p) {
 		UNBLOCK_INTERRUPTIONS;
-		return p;
+		return (char *)NULL;
 	}
 	UNBLOCK_INTERRUPTIONS;
 	memcpy(p,s,length);
@@ -254,7 +264,7 @@ PHPAPI char *_estrndup(const char *s, uint length)
 #endif
 	if (!p) {
 		UNBLOCK_INTERRUPTIONS;
-		return p;
+		return (char *)NULL;
 	}
 	UNBLOCK_INTERRUPTIONS;
 	memcpy(p,s,length);
@@ -262,13 +272,13 @@ PHPAPI char *_estrndup(const char *s, uint length)
 	return p;
 }
 
-PHPAPI char *strndup(const char *s, uint length)
+PHPAPI char *php3_strndup(const char *s, uint length)
 {
 	char *p;
 
 	p = (char *) malloc(length+1);
 	if (!p) {
-		return p;
+		return (char *)NULL;
 	}
 	if (length) {
 		memcpy(p,s,length);
@@ -282,15 +292,34 @@ void start_memory_manager(void)
 	TLS_VARS;
 
 	GLOBAL(head) = NULL;
+	
 #if MEMORY_LIMIT
 	allocated_memory=0;
 #endif
+
+	memset(cache_count,0,MAX_CACHED_MEMORY*sizeof(unsigned char));
 }
 
 void shutdown_memory_manager(void)
 {
 	mem_header *p, *t;
+	unsigned int i,j;
 	TLS_VARS;
+	
+	BLOCK_INTERRUPTIONS;
+	for (i=0; i<MAX_CACHED_MEMORY; i++) {
+		for (j=0; j<cache_count[i]; j++) {
+			p = cache[i][j];
+			REMOVE_POINTER_FROM_LIST(p);
+#if DEBUG
+			if (p->filename) {
+				free(p->filename);
+			}
+#endif
+			free(p);
+		}
+	}
+	UNBLOCK_INTERRUPTIONS;
 	
 	p=GLOBAL(head);
 	t=GLOBAL(head);

@@ -22,7 +22,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: formatted_print.c,v 1.29 1998/01/31 23:30:52 zeev Exp $ */
+/* $Id: formatted_print.c,v 1.31 1998/03/02 20:59:50 ssb Exp $ */
 
 #include <math.h>				/* modf() */
 #ifdef THREAD_SAFE
@@ -413,6 +413,9 @@ static char *php3_formatted_print(HashTable *ht)
 #endif
 		if (format[inpos] != '%') {
 			_php3_sprintf_appendchar(&result, &outpos, &size, format[inpos++]);
+		} else if (format[inpos + 1] == '%') {
+			_php3_sprintf_appendchar(&result, &outpos, &size, '%');
+			inpos += 2;
 		} else {
 			if (currarg >= argc && format[inpos + 1] != '%') {
 				php3_error(E_WARNING, "sprintf: too few arguments");
@@ -494,6 +497,9 @@ static char *php3_formatted_print(HashTable *ht)
 				width = precision = 0;
 			}
 
+			if (format[inpos] == 'l') {
+				inpos++;
+			}
 #ifdef SPRINTF_DEBUG
 			php3_printf("sprintf: format character='%c'\n", format[inpos]);
 #endif

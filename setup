@@ -22,7 +22,7 @@
 # | Authors: Stig Sæther Bakken <ssb@guardian.no>                        |
 # +----------------------------------------------------------------------+
 # 
-# $Id: setup,v 1.10 1998/02/02 04:50:36 ssb Exp $
+# $Id: setup,v 1.11 1998/02/03 11:56:38 ssb Exp $
 #
 
 if [ "$1" = "-q" ]; then
@@ -302,7 +302,7 @@ define_option enable-safe-mode 'Enable safe mode?' yesno "$safemode" \
     the document root.  Read the Security chapter of the documentation
     for more information.  CGI users should always enable secure mode."
 
-define_option enable-url-includes 'Enable URL includes?' yesno no \
+define_option enable-url-fopen-wrapper 'Enable URL fopen wrappers?' yesno no \
 "    Whether to make it possible to use http and ftp URLs in the
     Include() function.  This feature is disabled by default to make
     sure people are aware of the dangers of including code from other

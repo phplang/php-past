@@ -6,4 +6,3 @@ Current Known Bugs:
 
 * split() function doesn't return regex errors nicely
 * Preprocessed scripts don't work with require()
-* __LINE__ won't accurately report the line number inside eval()

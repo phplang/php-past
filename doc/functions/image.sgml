@@ -5,7 +5,7 @@
   <refentry id="function.getimagesize">
    <refnamediv>
     <refname>GetImageSize</refname>
-    <refpurpose></refpurpose>
+    <refpurpose>get the size of a GIF, JPG or PNG image</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
@@ -43,7 +43,7 @@
   <refentry id="function.imagearc">
    <refnamediv>
     <refname>ImageArc</refname>
-    <refpurpose></refpurpose>
+    <refpurpose>draw a partial ellipse</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
@@ -72,7 +72,7 @@
   <refentry id="function.imagechar">
    <refnamediv>
     <refname>ImageChar</refname>
-    <refpurpose></refpurpose>
+    <refpurpose>draw a character horizontally</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
@@ -101,7 +101,7 @@
   <refentry id="function.imagecharup">
    <refnamediv>
     <refname>ImageCharUp</refname>
-    <refpurpose></refpurpose>
+    <refpurpose>draw a character vertically</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
@@ -126,7 +126,7 @@
   <refentry id="function.imagecolorallocate">
    <refnamediv>
     <refname>ImageColorAllocate</refname>
-    <refpurpose></refpurpose>
+    <refpurpose>allocate a color for an image</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
@@ -149,7 +149,7 @@
   <refentry id="function.imagecolortransparent">
    <refnamediv>
     <refname>ImageColorTransparent</refname>
-    <refpurpose></refpurpose>
+    <refpurpose>define a color as transparent</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
@@ -167,8 +167,8 @@
 
   <refentry id="function.imagecopyresized">
    <refnamediv>
-    <refname>imagecopyresized</refname>
-    <refpurpose></refpurpose>
+    <refname>ImageCopyResized</refname>
+    <refpurpose>copy and resize part of an image</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
@@ -185,15 +185,17 @@
      <paramdef>int <parameter>srcW</parameter></paramdef>
      <paramdef>int <parameter>srcH</parameter></paramdef>
     </funcsynopsis>
-<para>    ImageCopyResized copies a rectangular portion of one image to
-    another image.  dst_im is the destination image,
-    src_im is the source image identifier.  If the
-    source and destination coordinates and width and heights differ,
-    appropriate stretching or shrinking of the image fragment will be
-    performed.  The coordinates refer to the upper left corner.  This
-    function can be used to copy regions within the same image (if
-    dst_im is the same as src_im) but if
-    the regions overlap the results will be unpredictable.
+    <para>
+     ImageCopyResized copies a rectangular portion of one image to
+     another image.  <parameter>dst_im</parameter> is the destination
+     image, <parameter>src_im</parameter> is the source image
+     identifier.  If the source and destination coordinates and width
+     and heights differ, appropriate stretching or shrinking of the
+     image fragment will be performed.  The coordinates refer to the
+     upper left corner.  This function can be used to copy regions
+     within the same image (if <parameter>dst_im</parameter> is the
+     same as <parameter>src_im</parameter>) but if the regions overlap
+     the results will be unpredictable.
    </refsect1>
   </refentry>
 
@@ -201,7 +203,7 @@
   <refentry id="function.imagecreate">
    <refnamediv>
     <refname>ImageCreate</refname>
-    <refpurpose></refpurpose>
+    <refpurpose>create a new image</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
@@ -219,7 +221,7 @@
   <refentry id="function.imagecreatefromgif">
    <refnamediv>
     <refname>ImageCreateFromGif</refname>
-    <refpurpose></refpurpose>
+    <refpurpose>create a new image from file or URL</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
@@ -232,11 +234,34 @@
    </refsect1>
   </refentry>
 
+  <refentry id="function.imagedashedline">
+   <refnamediv>
+    <refname>ImageDashedLine</refname>
+    <refpurpose>draw a dashed line</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>imagedashedline</function></funcdef>
+     <paramdef>int <parameter>im</parameter></paramdef>
+     <paramdef>int <parameter>x1</parameter></paramdef>
+     <paramdef>int <parameter>y1</parameter></paramdef>
+     <paramdef>int <parameter>x2</parameter></paramdef>
+     <paramdef>int <parameter>y2</parameter></paramdef>
+     <paramdef>int <parameter>col</parameter></paramdef>
+    </funcsynopsis>
+<para>    ImageLine draws a dashed line from x1,y1 to
+    x2,y2 (top left is
+    0,0) in image im of color
+    col.
+  <para>    See also <link linkend="function.imageline">imageline</link>.
+   </refsect1>
+  </refentry>
 
   <refentry id="function.imagedestroy">
    <refnamediv>
     <refname>ImageDestroy</refname>
-    <refpurpose></refpurpose>
+    <refpurpose>destroy an image</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
@@ -254,7 +279,7 @@
   <refentry id="function.imagefill">
    <refnamediv>
     <refname>ImageFill</refname>
-    <refpurpose></refpurpose>
+    <refpurpose>flood fill</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
@@ -273,7 +298,7 @@
   <refentry id="function.imagefilledpolygon">
    <refnamediv>
     <refname>ImageFilledPolygon</refname>
-    <refpurpose></refpurpose>
+    <refpurpose>draw a filled polygon</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
@@ -296,7 +321,7 @@
   <refentry id="function.imagefilledrectangle">
    <refnamediv>
     <refname>ImageFilledRectangle</refname>
-    <refpurpose></refpurpose>
+    <refpurpose>draw a filled rectangle</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
@@ -320,7 +345,7 @@
   <refentry id="function.imagefilltoborder">
    <refnamediv>
     <refname>ImageFillToBorder</refname>
-    <refpurpose></refpurpose>
+    <refpurpose>flood fill to specific color</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
@@ -344,7 +369,7 @@
   <refentry id="function.imagefontheight">
    <refnamediv>
     <refname>ImageFontHeight</refname>
-    <refpurpose></refpurpose>
+    <refpurpose>get font height</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
@@ -361,7 +386,7 @@
   <refentry id="function.imagefontwidth">
    <refnamediv>
     <refname>ImageFontWidth</refname>
-    <refpurpose></refpurpose>
+    <refpurpose>get font width</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
@@ -378,7 +403,7 @@
   <refentry id="function.imagegif">
    <refnamediv>
     <refname>ImageGif</refname>
-    <refpurpose></refpurpose>
+    <refpurpose>output image to browser or file</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
@@ -407,7 +432,7 @@
   <refentry id="function.imageinterlace">
    <refnamediv>
     <refname>ImageInterlace</refname>
-    <refpurpose></refpurpose>
+    <refpurpose>enable or disable interlace</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
@@ -426,7 +451,7 @@
   <refentry id="function.imageline">
    <refnamediv>
     <refname>ImageLine</refname>
-    <refpurpose></refpurpose>
+    <refpurpose>draw a line</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
@@ -451,7 +476,7 @@
   <refentry id="function.imageloadfont">
    <refnamediv>
     <refname>ImageLoadFont</refname>
-    <refpurpose></refpurpose>
+    <refpurpose>load a new font</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
@@ -529,7 +554,7 @@
   <refentry id="function.imagepolygon">
    <refnamediv>
     <refname>ImagePolygon</refname>
-    <refpurpose></refpurpose>
+    <refpurpose>draw a polygon</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
@@ -551,7 +576,7 @@
   <refentry id="function.imagerectangle">
    <refnamediv>
     <refname>ImageRectangle</refname>
-    <refpurpose></refpurpose>
+    <refpurpose>draw a rectangle</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
@@ -574,7 +599,7 @@
   <refentry id="function.imagesetpixel">
    <refnamediv>
     <refname>ImageSetPixel</refname>
-    <refpurpose></refpurpose>
+    <refpurpose>set a single pixel</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
@@ -596,7 +621,7 @@
   <refentry id="function.imagestring">
    <refnamediv>
     <refname>ImageString</refname>
-    <refpurpose></refpurpose>
+    <refpurpose>draw a string horizontally</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
@@ -620,7 +645,7 @@
   <refentry id="function.imagestringup">
    <refnamediv>
     <refname>ImageStringUp</refname>
-    <refpurpose></refpurpose>
+    <refpurpose>draw a string vertically</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
@@ -645,7 +670,7 @@
   <refentry id="function.imagesx">
    <refnamediv>
     <refname>ImageSX</refname>
-    <refpurpose></refpurpose>
+    <refpurpose>get image width</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
@@ -663,7 +688,7 @@
   <refentry id="function.imagesy">
    <refnamediv>
     <refname>ImageSY</refname>
-    <refpurpose></refpurpose>
+    <refpurpose>get image height</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>

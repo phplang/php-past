@@ -19,10 +19,11 @@
 # +----------------------------------------------------------------------+
 
 #
-# $Id: Makefile.in,v 1.179 1998/02/02 21:35:32 zeev Exp $
+# $Id: Makefile.in,v 1.184 1998/03/02 00:47:53 ssb Exp $
 #
 
-prefix = /usr/local
+prefix = @prefix@
+exec_prefix = @exec_prefix@
 srcdir = @srcdir@
 VPATH = @srcdir@
 bindir = @bindir@
@@ -62,7 +63,8 @@ FUNCTIONS_SOURCE = functions/adabasd.c functions/apache.c \
        functions/link.c functions/mail.c functions/math.c \
        functions/md5.c functions/microtime.c functions/mime.c \
        functions/msql.c functions/mysql.c \
-       functions/oracle.c functions/pageinfo.c functions/pgsql.c \
+       functions/oracle.c functions/pack.c \
+	   functions/pageinfo.c functions/pgsql.c \
        functions/post.c functions/rand.c functions/reg.c \
        functions/solid.c functions/soundex.c \
        functions/string.c functions/syslog.c functions/type.c \
@@ -82,7 +84,8 @@ FUNCTIONS = functions/adabasd.o functions/apache.o \
        functions/link.o functions/mail.o functions/math.o \
        functions/md5.o functions/microtime.o functions/mime.o \
        functions/msql.o functions/mysql.o \
-       functions/oracle.o functions/pageinfo.o functions/pgsql.o \
+       functions/oracle.o functions/pack.o \
+	   functions/pageinfo.o functions/pgsql.o \
        functions/post.o functions/rand.o functions/reg.o \
        functions/solid.o functions/soundex.o \
        functions/string.o functions/syslog.o functions/type.o \
@@ -148,6 +151,7 @@ distclean: clean
 	-rm -f Makefile Makefile.depend config.h build-defs.h
 	-rm -f regex/*.o regex/*.a regex/*.ih
 	-rm -f dbase/*.o dbase/*.a
+	-rm -f doc/checkdoc extra/gd/bdf2gdfont
 
 bench: $(BINNAME)
 	./$(BINNAME) tests/bench.phtml
@@ -241,16 +245,16 @@ internal_functions.o: internal_functions.c parser.h version.h config.h \
  internal_functions_registry.h list.h functions/php3_ldap.h \
  functions/php3_mysql.h functions/php3_bcmath.h functions/php3_msql.h \
  functions/basic_functions.h functions/phpmath.h \
- functions/php3_string.h functions/oracle.h functions/odbc.h \
- functions/base64.h functions/php3_dir.h functions/dns.h \
- functions/php3_pgsql.h functions/php3_sybase.h \
- functions/php3_sybase-ct.h functions/reg.h functions/mail.h \
- functions/md5.h functions/global.h functions/php3_gd.h \
- functions/html.h functions/dl.h functions/head.h functions/post.h \
- functions/exec.h functions/php3_solid.h functions/sybsql.h \
- functions/adabasd.h functions/file.h functions/dbase.h \
- functions/filepro.h functions/db.h functions/php3_syslog.h \
- functions/php3_filestat.h functions/php3_browscap.h php3_debugger.h \
+ functions/php3_string.h functions/oracle.h functions/base64.h \
+ functions/php3_dir.h functions/dns.h functions/php3_pgsql.h \
+ functions/php3_sybase.h functions/php3_sybase-ct.h functions/reg.h \
+ functions/mail.h functions/md5.h functions/global.h \
+ functions/php3_gd.h functions/html.h functions/dl.h functions/head.h \
+ functions/post.h functions/exec.h functions/php3_solid.h \
+ functions/sybsql.h functions/adabasd.h functions/file.h \
+ functions/dbase.h functions/filepro.h functions/db.h \
+ functions/php3_syslog.h functions/php3_filestat.h \
+ functions/php3_browscap.h functions/pack.h php3_debugger.h \
  functions/php3_unified_odbc.h dl/snmp/php3_snmp.h
 snprintf.o: snprintf.c config.h
 alloc.o: alloc.c alloc.h parser.h version.h config.h request_info.h \
@@ -306,7 +310,8 @@ functions/basic_functions.o: functions/basic_functions.c parser.h version.h \
  functions/exec.h functions/info.h functions/url.h \
  functions/datetime.h functions/fsock.h functions/image.h \
  functions/php3_link.h functions/php3_filestat.h functions/microtime.h \
- functions/pageinfo.h functions/uniqid.h functions/base64.h
+ functions/pageinfo.h functions/uniqid.h functions/base64.h \
+ functions/mail.h
 functions/crypt.o: functions/crypt.c parser.h version.h config.h request_info.h \
  hash.h alloc.h  safe_mode.h fopen-wrappers.h mod_php3.h \
  stack.h operators.h token_cache.h variables.h internal_functions.h \
@@ -420,6 +425,12 @@ functions/oracle.o: functions/oracle.c parser.h version.h config.h \
  request_info.h hash.h alloc.h  safe_mode.h \
  fopen-wrappers.h mod_php3.h stack.h operators.h token_cache.h \
  variables.h internal_functions.h modules.h functions/oracle.h
+functions/pack.o: functions/pack.c parser.h version.h config.h request_info.h \
+ hash.h alloc.h  safe_mode.h fopen-wrappers.h mod_php3.h \
+ stack.h operators.h token_cache.h variables.h functions/head.h \
+ modules.h internal_functions.h list.h functions/php3_string.h \
+ functions/pack.h snprintf.h functions/fsock.h \
+ /usr/include/netinet/in.h
 functions/pageinfo.o: functions/pageinfo.c parser.h version.h config.h \
  request_info.h hash.h alloc.h  safe_mode.h \
  fopen-wrappers.h mod_php3.h stack.h operators.h token_cache.h \
@@ -515,6 +526,7 @@ functions/browscap.o: functions/browscap.c parser.h version.h config.h \
  request_info.h hash.h alloc.h  safe_mode.h \
  fopen-wrappers.h mod_php3.h stack.h operators.h token_cache.h \
  variables.h internal_functions.h modules.h functions/php3_browscap.h
+
 
 # Local Variables:
 # tab-width: 4

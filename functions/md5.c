@@ -75,9 +75,6 @@ void php3_md5(INTERNAL_FUNCTION_PARAMETERS)
 	}
 	*r = '\0';
 #endif
-#if DEBUG
-	php3_printf("Md5 returned [%s]\n", md5str);
-#endif
 	RETVAL_STRING(md5str);
 }
 

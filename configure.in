@@ -1,4 +1,4 @@
-dnl $Id: configure.in,v 1.135 1998/02/02 04:50:35 ssb Exp $
+dnl $Id: configure.in,v 1.145 1998/03/02 19:08:26 rasmus Exp $
 dnl Process this file with autoconf to produce a configure script.
 
 AC_INIT(main.c)
@@ -18,6 +18,8 @@ AC_PROG_YACC
 AC_PROG_CC
 AC_PROG_RANLIB
 AC_PROG_CC_C_O
+AC_PATH_PROG(PERL_PATH, perl)
+
 dnl Haven't quite figured out how to make libtool go yet
 dnl AM_PROG_LIBTOOL
 dnl AC_PROG_INSTALL
@@ -71,7 +73,7 @@ dnl Checks for header files.
 AC_HEADER_STDC
 AC_HEADER_DIRENT
 AC_MISSING_FCLOSE_DECL
-AC_CHECK_HEADERS(fcntl.h unistd.h crypt.h sys/file.h memory.h pwd.h grp.h sys/socket.h sys/wait.h syslog.h string.h sys/varargs.h stdarg.h sys/time.h signal.h)
+AC_CHECK_HEADERS(fcntl.h unistd.h crypt.h sys/file.h memory.h pwd.h grp.h sys/socket.h sys/wait.h syslog.h string.h sys/varargs.h stdarg.h sys/time.h signal.h netinet/in.h)
 if test "$best_dbm" = "-lgdbm"; then
 	AC_CHECK_HEADER(gdbm.h, [ GDBM_INCLUDE="" ], [ 
 		AC_MSG_RESULT("Try /usr/local/include/gdbm.h"); 
@@ -139,7 +141,7 @@ AC_ARG_WITH(apache,
 	    APACHE_TARGET=$withval/src
 	    BINNAME=libphp3.a
 	    AC_DEFINE(APACHE)
-	    AC_MSG_RESULT(yes)
+	    AC_MSG_RESULT(yes - Apache 1.2.x)
 		STRONGHOLD=
 # For Apache 1.3.x
 	  elif test -f $withval/src/main/httpd.h; then
@@ -147,7 +149,7 @@ AC_ARG_WITH(apache,
 	    APACHE_TARGET=$withval/src/modules/extra
 	    BINNAME=libphp3.a
 	    AC_DEFINE(APACHE)
-	    AC_MSG_RESULT(yes)
+	    AC_MSG_RESULT(yes - Apache 1.3.x)
 		STRONGHOLD=
 # Also for Apache 1.3.x
 	  elif test -f $withval/src/include/httpd.h; then
@@ -155,14 +157,15 @@ AC_ARG_WITH(apache,
 	    APACHE_TARGET=$withval/src/modules/extra
 	    BINNAME=libphp3.a
 	    AC_DEFINE(APACHE)
-	    AC_MSG_RESULT(yes)
+	    AC_MSG_RESULT(yes - Apache 1.3.x)
 		STRONGHOLD=
 # For StrongHold 2.2
 	  elif test -f $withval/apache/httpd.h; then
-	    APACHE_INCLUDE=-I$withval/apache
+	    APACHE_INCLUDE=-"I$withval/apache -I$withval/ssl/include"
 	    APACHE_TARGET=$withval/apache
 	    BINNAME=libphp3.a
 		STRONGHOLD=-DSTRONGHOLD=1
+	    AC_DEFINE(APACHE)
 		AC_MSG_RESULT(yes - StrongHold)
 	  else
 	    AC_MSG_RESULT(no)
@@ -815,9 +818,32 @@ AC_ARG_ENABLE(bcmath,
   AC_MSG_RESULT(no)
 ]) 
 
+if test "$BINNAME" = "php"; then
+AC_MSG_CHECKING(whether to force Apache CGI redirect)
+AC_ARG_ENABLE(force-cgi-redirect,
+[  --enable-force-cgi-redirect Enable the security check for internal server
+                               redirects.  You should use this if you are
+							   running the CGI version with Apache. ],
+[
+  if test "$enableval" = "yes"; then
+    AC_DEFINE(FORCE_CGI_REDIRECT, 1)
+    AC_MSG_RESULT(yes)
+    REDIRECT=1
+  else
+    AC_DEFINE(FORCE_CGI_REDIRECT, 0)
+    AC_MSG_RESULT(no)
+    REDIRECT=0
+  fi
+],[
+  AC_DEFINE(FORCE_CGI_REDIRECT, 0)
+  AC_MSG_RESULT(no)
+  REDIRECT=0
+]) 
+fi
+
 AC_MSG_CHECKING(whether to enable a memory limit)
 AC_ARG_ENABLE(memory-limit,
-[  --enable-memory-limit         Compile with memory limit support. ],
+[  --enable-memory-limit   Compile with memory limit support. ],
 [
   if test "$enableval" = "yes"; then
     AC_DEFINE(MEMORY_LIMIT, 1)
@@ -849,23 +875,19 @@ AC_ARG_ENABLE(short-tags,
 
 AC_MSG_CHECKING(whether to enable the URL-aware fopen wrapper)
 AC_ARG_ENABLE(url-fopen-wrapper,
-[  --enable-url-fopen-wrapper Enable the URL-aware fopen wrapper that allows
-                          accessing files via http or ftp. WARNING! This
-                          features should be used with extreme care. See the
-                          "Security" chapter of the documentation.],
+[  --disable-url-fopen-wrapper Enable the URL-aware fopen wrapper that allows
+                              accessing files via http or ftp.],
 [
   if test "$enableval" = "yes"; then
     AC_DEFINE(PHP3_URL_FOPEN, 1)
     AC_MSG_RESULT(yes)
-    AC_MSG_WARN([You should read the "Security" chapter of the documentation
-                    before allowing the URL-aware fopen wrapper!])
   else
     AC_DEFINE(PHP3_URL_FOPEN, 0)
     AC_MSG_RESULT(no)
   fi
 ],[
-  AC_DEFINE(PHP3_URL_FOPEN, 0)
-  AC_MSG_RESULT(no)
+  AC_DEFINE(PHP3_URL_FOPEN, 1)
+  AC_MSG_RESULT(yes)
 ])
 
 dnl If we're using gcc and the user hasn't specified CFLAGS, add -O2.
@@ -876,8 +898,20 @@ AC_SUBST(PROG_SENDMAIL)
 
 BUILD_DATE=`date '+%Y-%m-%d'`
 AC_SUBST(BUILD_DATE)
-AC_OUTPUT(Makefile build-defs.h stamp-h mod_php3.module doc/Makefile doc/version.ent)
-
+AC_OUTPUT(Makefile build-defs.h stamp-h mod_php3.module doc/Makefile
+          doc/version.ent doc/checkdoc extra/gd/bdf2gdfont, [
+  chmod +x doc/checkdoc extra/gd/bdf2gdfont
+], [
+if test "$BINNAME" = "php"; then
+	if test "$REDIRECT" = "0"; then
+		echo "WARNING: You will be compiling the CGI version of PHP without any"
+		echo "         redirection checking.  By putting this cgi binary somewhere"
+		echo "         in your web space, users may be able to circumvent existing .htaccess"
+		echo "         security by loading files directly through the parser.  See"
+		echo "         http://www.php.net/manual/configuration05.php3 for more details."
+	fi
+fi
+])
 # Local Variables:
 # tab-width: 4
 # End:

@@ -46,9 +46,12 @@ typedef struct php3_global_struct{
 
 	mem_header *head;
 	/*debbuger.c*/
+	char *debugger_host;
+	long debugger_port;
+	long debugger_default;
+	int debugger_on;
 	int debug_socket;
 	char *myhostname;
-	int debugger_on;
 	int mypid;
 	char *currenttime;
 	char debug_timebuf[50]; /*STATIC VAR*/
@@ -77,12 +80,12 @@ typedef struct php3_global_struct{
 	HashTable *active_symbol_table;  
 	int Execute;  
 	int ExecuteFlag;
-	int current_lineno;            
+	int current_lineno;
 	int include_count;
 	FunctionState function_state;
 	char *class_name;
 	HashTable *class_symbol_table;
-	YYSTYPE *data,return_value,globals;
+	YYSTYPE return_value,globals;
 	unsigned int param_index;
 	YYSTYPE *array_ptr;
 	/*list.c*/
@@ -96,6 +99,7 @@ typedef struct php3_global_struct{
 	int module_initialized;
 	int shutdown_requested;
 	int phplineno;
+	int in_eval;
 	int php3_display_source;
 	int php3_preprocess;
 #if APACHE
@@ -210,7 +214,7 @@ extern DWORD phpLexTlsIndex;
 extern int include_file(YYSTYPE *file,int display_source);
 extern int conditional_include_file(YYSTYPE *file, YYSTYPE *return_offset INLINE_TLS);
 extern void initialize_input_file_buffer(FILE *f);
-extern void eval_string(YYSTYPE *str, YYSTYPE *return_offset INLINE_TLS);
+extern void eval_string(YYSTYPE *str, YYSTYPE *return_offset, int display_source INLINE_TLS);
 
 /* Other needed defines */
 #if !defined(COMPILE_DL)

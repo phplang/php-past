@@ -21,7 +21,7 @@
    | Authors: Rasmus Lerdorf <rasmus@lerdorf.on.ca>                       |
    +----------------------------------------------------------------------+
  */
-/* $Id: file.c,v 1.134 1998/02/02 07:56:53 shane Exp $ */
+/* $Id: file.c,v 1.138 1998/02/03 21:43:12 shane Exp $ */
 #ifdef THREAD_SAFE
 #include "tls.h"
 #endif
@@ -107,7 +107,7 @@ void php3_file(INTERNAL_FUNCTION_PARAMETERS) {
 	register int i=0;
 	int use_include_path = 0;
 
-	SOCK_VARS;
+	SOCK_VARS
 	TLS_VARS;
 	
 	/* check args */
@@ -229,7 +229,7 @@ void php3_fopen(INTERNAL_FUNCTION_PARAMETERS) {
 #endif
 	int id;
 	int use_include_path = 0;
-	SOCK_VARS;
+	SOCK_VARS
 	TLS_VARS;
 	
 	switch(ARG_COUNT(ht)) {
@@ -423,7 +423,7 @@ void php3_fgets(INTERNAL_FUNCTION_PARAMETERS) {
 	int id, len, type;
 	char *buf;
 #if WIN32|WINNT
-	int issock;
+	int issock=0;
 	int *sock, socketd=0;
 #endif
 	TLS_VARS;
@@ -478,7 +478,7 @@ void php3_fgetc(INTERNAL_FUNCTION_PARAMETERS) {
 	int id, type, ch;
 	char *buf;
 #if WIN32|WINNT
-	int issock;
+	int issock=0;
 	int *sock, socketd;
 #endif
 	TLS_VARS;
@@ -669,7 +669,6 @@ void php3_fputs(INTERNAL_FUNCTION_PARAMETERS) {
 	}
 	convert_to_long(arg1);
 	convert_to_string(arg2);
-	buf = estrndup(arg2->value.strval,arg2->strlen);
 	id = arg1->value.lval;	
 
 	fp = php3_list_find(id,&type);
@@ -684,24 +683,28 @@ void php3_fputs(INTERNAL_FUNCTION_PARAMETERS) {
 	if(!fp || (type!=GLOBAL(le_fp) && type!=GLOBAL(le_pp))) {
 #endif
 		php3_error(E_WARNING,"Unable to find file identifier %d",id);
-		efree(buf);
 		RETURN_FALSE;
 	}
 
 	if (php3_ini.magic_quotes_runtime) {
+		buf = estrndup(arg2->value.strval,arg2->strlen);
 		_php3_stripslashes(buf);
+	}
+	else {
+		buf = arg2->value.strval;
 	}
 
 #if WIN32|WINNT
 	if(issock){
-		SOCK_WRITE(buf,socketd);
+		SOCK_WRITEL(buf,arg2->strlen,socketd);
 	}else{
 #endif
-	ret = fputs(buf,fp);
+		ret = fwrite(buf,arg2->strlen,1,fp);
 #if WIN32|WINNT
 	}
 #endif
-	efree(buf);
+	if (buf != arg2->value.strval)
+		efree(buf);
 	RETURN_LONG(ret);
 }	
 
@@ -829,7 +832,7 @@ void php3_readfile(INTERNAL_FUNCTION_PARAMETERS) {
 	int b, size;
 	int use_include_path = 0;
 
-	SOCK_VARS;
+	SOCK_VARS
 	TLS_VARS;
 	
 	/* check args */

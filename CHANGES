@@ -160,7 +160,7 @@ Downwards incompatible language changes
 		while ("" != (string)$key) {
 
 
-[6]	The structure of error messages as changed.
+[6]	The structure of error messages has changed.
 
 	Although the error messages are usually more accurate, you won't be shown
 	the actual line of text and actual place in which the error occured.
@@ -244,8 +244,11 @@ New Language Features
 	the loop is run as long as the second expression is evaluated as TRUE,
 	and after each iteration, the 3rd expression is evaluated.
 
-	Note:  There's NO support for colon-mode FOR loops (i.e. for:
-	... endfor;), and no such support is planned.
+	Colon-mode FOR loops are also supported:
+	for (expr; expr; expr):
+		statements
+		...
+	endfor;
 
 
 [3]	do..while(expr) loops are now supported.
@@ -410,23 +413,17 @@ New Language Features
 
 	would assign 5 to $test123.
 
-[9]	A string concatenation operator was added.
+[9]	A string concatenation operator was added, '+' no longer concatenates strings.
 
-	A perl-like string concatenation operator was added, the dot operator.
+	A perl-like string concatenation operator was added, the '.' operator.
 	It converts both of its arguments to strings, and concatenates them.
 	For example:
 
 		$result = "abcd".5;
 
-	assigns "abcd5" to result.  Note that under PHP 3.0, if you were
-	to use the plus operator:
-
-		$result = "abcd"+5;
-
-	$result would be set to 5 - as mentioned earlier, if one argument is a
-	string and the other is an integer, the string is converted to an integer,
-	which in this case results in 0, plus 5 - result is 5.
-
+	assigns "abcd5" to result.  Note that under PHP 3.0, the '+' operator
+	no longer performs concatenation if its arguments are strings.  Use
+	the '.' operator instead.
 
 [10]	Supports passing function arguments by references instead of by value.
 

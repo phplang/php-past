@@ -24,7 +24,7 @@
  */
 
 
-/* $Id: control_structures.h,v 1.30 1998/01/17 21:23:25 andi Exp $ */
+/* $Id: control_structures.h,v 1.34 1998/02/05 03:39:15 shane Exp $ */
 
 
 #ifndef _CONTROL_STRUCTURES_H
@@ -67,5 +67,6 @@ extern int init_resource_list(void);
 extern int init_resource_plist(void);
 extern void destroy_resource_list(void);
 extern void destroy_resource_plist(void);
+extern inline void start_display_source(int start_in_php INLINE_TLS);
 
 #endif

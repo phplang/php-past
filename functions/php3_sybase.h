@@ -23,7 +23,7 @@
  */
 
 
-/* $Id: php3_sybase.h,v 1.27 1997/12/31 15:56:44 rasmus Exp $ */
+/* $Id: php3_sybase.h,v 1.29 1998/02/04 11:48:48 zeev Exp $ */
 
 #ifndef _PHP3_SYBASE_H
 #define _PHP3_SYBASE_H
@@ -58,6 +58,8 @@ extern void php3_sybase_fetch_object(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_sybase_data_seek(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_sybase_result(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_sybase_field_seek(INTERNAL_FUNCTION_PARAMETERS);
+extern void php3_sybase_min_error_severity(INTERNAL_FUNCTION_PARAMETERS);
+extern void php3_sybase_min_message_severity(INTERNAL_FUNCTION_PARAMETERS);
 
 extern void php3_sybase_db_query(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_sybase_list_fields(INTERNAL_FUNCTION_PARAMETERS);
@@ -94,6 +96,7 @@ typedef struct {
 	char *server_message;
 	int le_link,le_plink,le_result;
 	long min_error_severity,min_message_severity;
+	long cfg_min_error_severity,cfg_min_message_severity;
 } sybase_module;
 
 typedef struct {

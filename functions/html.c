@@ -31,21 +31,11 @@
 #include "reg.h"
 #include "html.h"
 
-typedef struct php_extra_ents {
-	int code;
-	char str[6];
-} php_extra_ents;
-
-void php3_htmlspecialchars(INTERNAL_FUNCTION_PARAMETERS)
-{
-    YYSTYPE *arg;
-    int i, len, maxlen;
-    char *old, *new;
-	TLS_VARS;
+/* This must be fixed to handle the input string according to LC_CTYPE.
+   Defaults to ISO-8859-1 for now. */
 	
-#ifdef HARDCODE_ISO_8859_1_AND_DO_SOMETHING_UNNECESSARY_ANYWAY
-    static char EntTable[][7] =
-    {
+static char EntTable[][7] =
+{
 	"nbsp","iexcl","cent","pound","curren","yen","brvbar",
 	"sect","uml","copy","ordf","laquo","not","shy","reg",
 	"macr","deg","plusmn","sup2","sup3","acute","micro",
@@ -61,8 +51,15 @@ void php3_htmlspecialchars(INTERNAL_FUNCTION_PARAMETERS)
 	"iuml","eth","ntilde","ograve","oacute","ocirc","otilde",
 	"ouml","divide","oslash","ugrave","uacute","ucirc",
 	"uuml","yacute","thorn","yuml"
-    };
-#endif
+};
+
+static void _php3_htmlentities(INTERNAL_FUNCTION_PARAMETERS, int all)
+{
+    YYSTYPE *arg;
+    int i, len, maxlen;
+    unsigned char *old;
+	char *new;
+	TLS_VARS;
 
     if (ARG_COUNT(ht) != 1 || getParameters(ht, 1, &arg) == FAILURE) {
 		WRONG_PARAM_COUNT;
@@ -93,13 +90,11 @@ void php3_htmlspecialchars(INTERNAL_FUNCTION_PARAMETERS)
 		} else if (62 == *old) {
 			memcpy (new + len, "&gt;", 4);
 			len += 4;
-#ifdef HARDCODE_ISO_8859_1_AND_DO_SOMETHING_UNNECESSARY_ANYWAY
-		} else if (160 <= *old) {
+		} else if (all && 160 <= *old) {
 			new [len++] = '&';
 			strcpy (new + len, EntTable [*old - 160]);
 			len += strlen (EntTable [*old - 160]);
 			new [len++] = ';';
-#endif
 		} else {
 			new [len++] = *old;
 		}
@@ -111,6 +106,15 @@ void php3_htmlspecialchars(INTERNAL_FUNCTION_PARAMETERS)
     efree(new);
 }
 
+void php3_htmlspecialchars(INTERNAL_FUNCTION_PARAMETERS)
+{
+	_php3_htmlentities(INTERNAL_FUNCTION_PARAM_PASSTHRU,0);
+}
+
+void php3_htmlentities(INTERNAL_FUNCTION_PARAMETERS)
+{
+	_php3_htmlentities(INTERNAL_FUNCTION_PARAM_PASSTHRU,1);
+}
 
 /*
  * Local variables:

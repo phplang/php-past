@@ -6,7 +6,7 @@
   <refentry id="function.msql">
    <refnamediv>
     <refname>msql</refname>
-    <refpurpose></refpurpose>
+    <refpurpose>do mSQL query</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
@@ -29,32 +29,10 @@
   </refentry>
 
 
-  <refentry id="function.msql-affected-rows">
-   <refnamediv>
-    <refname>msql_affected_rows</refname>
-    <refpurpose></refpurpose>
-   </refnamediv>
-   <refsect1>
-    <title>Description</title>
-    <funcsynopsis>
-     <funcdef>int <function>msql_affected_rows</function></funcdef>
-     <paramdef>int <parameter>link_identifier</parameter></paramdef>
-    </funcsynopsis>
-    <para>
-     Returns the number of affected rows by the last query.
-    <para>  
-  msql_affected_rows() returns the number of rows affected by the last
-  insert, update or delete query on the server associated with the
-  specified link identifier.  If the link identifier isn't specified,
-  the last opened link is assumed.</para>
-   </refsect1>
-  </refentry>
-
-
   <refentry id="function.msql-close">
    <refnamediv>
     <refname>msql_close</refname>
-    <refpurpose></refpurpose>
+    <refpurpose>close mSQL connection</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
@@ -84,23 +62,20 @@
   <refentry id="function.msql-connect">
    <refnamediv>
     <refname>msql_connect</refname>
-    <refpurpose></refpurpose>
+    <refpurpose>open mSQL connection</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
     <funcsynopsis>
      <funcdef>int <function>msql_connect</function></funcdef>
      <paramdef>string <parameter>hostname</parameter></paramdef>
-     <paramdef>string <parameter>username</parameter></paramdef>
-     <paramdef>string <parameter>password</parameter></paramdef>
     </funcsynopsis>
     <para>
      Returns a positive mSQL link identifier on success, or false on error.
     <para>
   msql_connect() establishes a connection to a mSQL server.
-  All of the arguments are optional, and if they're missing, defaults
-  are assumed ('localhost', user name of the user that owns the server
-  process, empty password).
+  The hostname argument is optional, and if it's missing, localhost
+  is assumed.
 
   In case a second call is made to msql_connect() with the same
   arguments, no new link will be established, but instead, the link
@@ -118,7 +93,7 @@
   <refentry id="function.msql-create-db">
    <refnamediv>
     <refname>msql_create_db</refname>
-    <refpurpose></refpurpose>
+    <refpurpose>create mSQL database</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
@@ -138,7 +113,7 @@
   <refentry id="function.msql-createdb">
    <refnamediv>
     <refname>msql_createdb</refname>
-    <refpurpose></refpurpose>
+    <refpurpose>create mSQL database</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
@@ -154,7 +129,7 @@
   <refentry id="function.msql-data-seek">
    <refnamediv>
     <refname>msql_data_seek</refname>
-    <refpurpose></refpurpose>
+    <refpurpose>move internal row pointer</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
@@ -179,7 +154,7 @@
   <refentry id="function.msql-dbname">
    <refnamediv>
     <refname>msql_dbname</refname>
-    <refpurpose></refpurpose>
+    <refpurpose>get current database name</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
@@ -211,7 +186,7 @@
   <refentry id="function.msql-drop-db">
    <refnamediv>
     <refname>msql_drop_db</refname>
-    <refpurpose></refpurpose>
+    <refpurpose>drop (delete) mSQL database</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
@@ -235,7 +210,7 @@
   <refentry id="function.msql-fetch-array">
    <refnamediv>
     <refname>msql_fetch_array</refname>
-    <refpurpose></refpurpose>
+    <refpurpose>get row as array</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
@@ -263,7 +238,7 @@
   <refentry id="function.msql-fetch-field">
    <refnamediv>
     <refname>msql_fetch_field</refname>
-    <refpurpose></refpurpose>
+    <refpurpose>get field information</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
@@ -301,34 +276,10 @@
   </refentry>
 
 
-  <refentry id="function.msql-fetch-lengths">
-   <refnamediv>
-    <refname>msql_fetch_lengths</refname>
-    <refpurpose></refpurpose>
-   </refnamediv>
-   <refsect1>
-    <title>Description</title>
-    <funcsynopsis>
-     <funcdef>int <function>msql_fetch_lengths</function></funcdef>
-     <paramdef>int <parameter>result</parameter></paramdef>
-    </funcsynopsis>
-    <para>
-     Returns an array that corresponds to the lengths of each field in the
-     last row fetched by msql_fetch_row(), or false on error.
-    <para>
-  msql_fetch_lengths() stores the lengths of each result column
-  in the last row returned by msql_fetch_row() in an array,
-  starting at offset 0.
-    <para>  
-  See also:  <link linkend="function.msql-fetch-row">msql_fetch_row</link>
-   </refsect1>
-  </refentry>
-
-
   <refentry id="function.msql-fetch-object">
    <refnamediv>
     <refname>msql_fetch_object</refname>
-    <refpurpose></refpurpose>
+    <refpurpose>fetch row as object</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
@@ -356,7 +307,7 @@
   <refentry id="function.msql-fetch-row">
    <refnamediv>
     <refname>msql_fetch_row</refname>
-    <refpurpose></refpurpose>
+    <refpurpose>get row as enumerated array</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
@@ -379,7 +330,7 @@
   rows.
 <para>  
   See also:  <link linkend="function.msql-fetch-array">msql_fetch_array</link>, <link linkend="function.msql-fetch-object">msql_fetch_object</link>,
-             <link linkend="function.msql-data-seek">msql_data_seek</link>, <link linkend="function.msql-fetch-lengths">msql_fetch_lengths</link>,
+             <link linkend="function.msql-data-seek">msql_data_seek</link>,
              <link linkend="function.msql-result">msql_result</link>
    </refsect1>
   </refentry>
@@ -387,23 +338,23 @@
 
   <refentry id="function.msql-field-name">
    <refnamediv>
-    <refname>msql_field_name</refname>
-    <refpurpose></refpurpose>
+    <refname>msql_fieldname</refname>
+    <refpurpose>get field name</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
     <funcsynopsis>
-     <funcdef>string <function>msql_field_name</function></funcdef>
-     <paramdef>string <parameter>result</parameter></paramdef>
-     <paramdef>int <parameter>i</parameter></paramdef>
+     <funcdef>string <function>msql_fieldname</function></funcdef>
+     <paramdef>int <parameter>result</parameter></paramdef>
+     <paramdef>int <parameter>field</parameter></paramdef>
     </funcsynopsis>
     <para>
-     msql_field_name returns the name of the specified field. Arguments
-     to the function is the result identifier and the field index, ie.
-     <literal>msql_fieldname($result,2);</literal>
-    <para>
-     Will return the name of the second field in the result associated
-     with the result identifier.
+     <function>msql_fieldname</function> returns the name of the
+     specified field.  <parameter>result</parameter> is the result
+     identifier, and <parameter>field</parameter> is the field index.
+     <literal>msql_fieldname($result, 2);</literal> will return
+     the name of the second field in the result associated with the
+     result identifier.
    </refsect1>
   </refentry>
 
@@ -411,7 +362,7 @@
   <refentry id="function.msql-field-seek">
    <refnamediv>
     <refname>msql_field_seek</refname>
-    <refpurpose></refpurpose>
+    <refpurpose>set field offset</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
@@ -420,51 +371,53 @@
      <paramdef>int <parameter>result</parameter></paramdef>
      <paramdef>int <parameter>field_offset</parameter></paramdef>
     </funcsynopsis>
-<para>
-  Seeks to the specified field offset.  If the next call
-  to msql_fetch_field() won't include a field offset,
-  this field would be returned.
-  
-  See also:  <link linkend="function.msql-fetch-field">msql_fetch_field</link></para>
+    <para>
+     Seeks to the specified field offset.  If the next call to
+     <function>msql_fetch_field</function> won't include a field
+     offset, this field would be returned.
+     
+     See also:
+     <link linkend="function.msql-fetch-field">msql_fetch_field</link></para>
    </refsect1>
   </refentry>
 
 
   <refentry id="function.msql-field-table">
    <refnamediv>
-    <refname>msql_field_table</refname>
-    <refpurpose></refpurpose>
+    <refname>msql_fieldtable</refname>
+    <refpurpose>get table name for field</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
     <funcsynopsis>
-     <funcdef>int <function>msql_field_table</function></funcdef>
-     <void>
+     <funcdef>int <function>msql_fieldtable</function></funcdef>
+     <paramdef>int <parameter>result</parameter></paramdef>
+     <paramdef>int <parameter>field</parameter></paramdef>
     </funcsynopsis>
-<para>    Another new function in PHP 3. This function is listed in
-    PHPFUNCTIONS as msql_fieldtable!!!
-  </para>
+    <para>
+     Returns the name of the table <parameter>field</parameter> was
+     fetched from.
    </refsect1>
   </refentry>
 
 
   <refentry id="function.msql-field-type">
    <refnamediv>
-    <refname>msql_field_type</refname>
-    <refpurpose></refpurpose>
+    <refname>msql_fieldtype</refname>
+    <refpurpose>get field type</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
     <funcsynopsis>
-     <funcdef>string <function>msql_field_type</function></funcdef>
+     <funcdef>string <function>msql_fieldtype</function></funcdef>
      <paramdef>string <parameter>result</parameter></paramdef>
      <paramdef>int <parameter>i</parameter></paramdef>
     </funcsynopsis>
-<para>
-   msql_field_type is similar to the <link linkend="function.msql-field-name">msql_field_name</link>
-   function. The arguments are identical, but the field type is
-   returned. This will be one of "int", "char" or "real".
-  </para>
+    <para>
+     <function>msql_fieldtype</function> is similar to the <link
+      linkend="function.msql-field-name">msql_fieldname</link>
+     function. The arguments are identical, but the field type is
+     returned. This will be one of "int", "char" or "real".
    </refsect1>
   </refentry>
 
@@ -472,7 +425,7 @@
   <refentry id="function.msql-fieldflags">
    <refnamediv>
     <refname>msql_fieldflags</refname>
-    <refpurpose></refpurpose>
+    <refpurpose>get field flags</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
@@ -481,11 +434,10 @@
      <paramdef>string <parameter>result</parameter></paramdef>
      <paramdef>int <parameter>i</parameter></paramdef>
     </funcsynopsis>
-<para>   
-    msql_fieldflags returns the field flags of the specified
-    field. Currently this is either, "not null", "primary key", a
-    combination of the two or "" (an empty string).
-  </para>
+    <para>
+     <function>msql_fieldflags</function> returns the field flags of
+     the specified field. Currently this is either, "not null",
+     "primary key", a combination of the two or "" (an empty string).
    </refsect1>
   </refentry>
 
@@ -493,7 +445,7 @@
   <refentry id="function.msql-fieldlen">
    <refnamediv>
     <refname>msql_fieldlen</refname>
-    <refpurpose></refpurpose>
+    <refpurpose>get field length</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
@@ -502,9 +454,9 @@
      <paramdef>string <parameter>result</parameter></paramdef>
      <paramdef>int <parameter>i</parameter></paramdef>
     </funcsynopsis>
-<para>
-   msql_fieldlen returns the length of the specified field.
-  </para>
+    <para>
+     <function>msql_fieldlen</function> returns the length of the
+     specified field.
    </refsect1>
   </refentry>
 
@@ -512,7 +464,7 @@
   <refentry id="function.msql-freeresult">
    <refnamediv>
     <refname>msql_freeresult</refname>
-    <refpurpose></refpurpose>
+    <refpurpose>free result memory</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
@@ -520,35 +472,12 @@
      <funcdef>int <function>msql_freeresult</function></funcdef>
      <paramdef>int <parameter>result</parameter></paramdef>
     </funcsynopsis>
-<para>
-     msql_freeresult only needs to be called if you are worried about
-     using too much memory while your script is running. All result
-     memory will automatically be freed when the script, you may call
-     msql_freeresult with the result identifier as an argument and
-     the associated result memory will be freed.
-  </para>
-   </refsect1>
-  </refentry>
-
-
-  <refentry id="function.msql-insert-id">
-   <refnamediv>
-    <refname>msql_insert_id</refname>
-    <refpurpose></refpurpose>
-   </refnamediv>
-   <refsect1>
-    <title>Description</title>
-    <funcsynopsis>
-     <funcdef>int <function>msql_insert_id</function></funcdef>
-     <void>
-    </funcsynopsis>
-<para>    msql_insert_id() returns the ID generated for an AUTO_INCREMENTED
-    field. This function takes no arguments. It will return the
-    auto-generated ID returned by the last INSERT
- query
-    performed
-
-  </para>
+    <para>
+     <function>msql_freeresult</function> frees the memory associated
+     with <parameter>result</parameter>.  When PHP completes a
+     request, this memory is freed automatically, so you only need to
+     call this function when you want to make sure you don't use too
+     much memory while the script is running.
    </refsect1>
   </refentry>
 
@@ -556,7 +485,7 @@
   <refentry id="function.msql-list-fields">
    <refnamediv>
     <refname>msql_list_fields</refname>
-    <refpurpose></refpurpose>
+    <refpurpose>list result fields</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
@@ -565,19 +494,20 @@
      <paramdef>string <parameter>database</parameter></paramdef>
      <paramdef>string <parameter>tablename</parameter></paramdef>
     </funcsynopsis>
-<para>
-    msql_list_fields retrieves information about the given
-    tablename. Arguments are the database name and the table name. A
-    result pointer is returned which can be used with
-    <link linkend="function.msql-fieldflags">msql_fieldflags</link>, 
-    <link linkend="function.msql-fieldlen">msql_fieldlen</link>, 
-    <link linkend="function.msql-field-name">msql_field_name</link>, and
-    <link linkend="function.msql-field-type">msql_field_type</link>. 
-    A result identifier is a positive integer. The function returns -1
-    if a error occurs. A string describing the error will be placed in
-    $phperrmsg, and unless the function was called as @msql() then
-    this error string will also be printed out.
-  </para>
+    <para>
+     <function>msql_list_fields</function> retrieves information about
+     the given tablename. Arguments are the database name and the
+     table name. A result pointer is returned which can be used with
+     <link linkend="function.msql-fieldflags">msql_fieldflags</link>,
+     <link linkend="function.msql-fieldlen">msql_fieldlen</link>,
+     <link linkend="function.msql-field-name">msql_fieldname</link>,
+     and <link
+     linkend="function.msql-field-type">msql_fieldtype</link>.  A
+     result identifier is a positive integer. The function returns
+     <literal>-1</literal> if a error occurs. A string describing the
+     error will be placed in <literal>$phperrmsg</literal>, and unless
+     the function was called as <literal>@msql_list_fields()</literal>
+     then this error string will also be printed out.
    </refsect1>
   </refentry>
 
@@ -585,7 +515,7 @@
   <refentry id="function.msql-listdbs">
    <refnamediv>
     <refname>msql_listdbs</refname>
-    <refpurpose></refpurpose>
+    <refpurpose>list databases</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
@@ -606,7 +536,7 @@
   <refentry id="function.msql-listtables">
    <refnamediv>
     <refname>msql_listtables</refname>
-    <refpurpose></refpurpose>
+    <refpurpose>list tables in a database</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
@@ -614,11 +544,13 @@
      <funcdef>int <function>msql_listtables</function></funcdef>
      <paramdef>string <parameter>database</parameter></paramdef>
     </funcsynopsis>
-<para>
-    msql_listtables takes a database name and result pointer much
-    like the <link linkend="function.msql">msql</link> function. The <link linkend="function.msql-tablename">msql_tablename</link> function should be used to extract the
-    actual table names from the result pointer.
-  </para>
+    <para>
+     <function>msql_listtables</function> takes a database name and
+     result pointer much like the <link
+      linkend="function.msql">msql</link> function. The <link
+      linkend="function.msql-tablename">msql_tablename</link> function
+     should be used to extract the actual table names from the result
+     pointer.
    </refsect1>
   </refentry>
 
@@ -626,7 +558,7 @@
   <refentry id="function.msql-num-fields">
    <refnamediv>
     <refname>msql_num_fields</refname>
-    <refpurpose></refpurpose>
+    <refpurpose>get number of fields in result</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
@@ -634,10 +566,14 @@
      <funcdef>int <function>msql_num_fields</function></funcdef>
      <paramdef>int <parameter>result</parameter></paramdef>
     </funcsynopsis>
-<para>
-  msql_num_fields() returns the number of fields in a result set.
-  
-  See also:  <link linkend="function.msql">msql</link>, <link linkend="function.msql-query">msql_query</link>, <link linkend="function.msql-fetch-field">msql_fetch_field</link>, <link linkend="function.msql-num-rows">msql_num_rows</link>,</para>
+    <para>
+     <function>msql_num_fields</function> returns the number of fields
+     in a result set.
+    <para>
+     See also:  <link linkend="function.msql">msql</link>
+     <link linkend="function.msql-query">msql_query</link>
+     <link linkend="function.msql-fetch-field">msql_fetch_field</link>
+     <link linkend="function.msql-num-rows">msql_num_rows</link>
    </refsect1>
   </refentry>
 
@@ -645,7 +581,7 @@
   <refentry id="function.msql-num-rows">
    <refnamediv>
     <refname>msql_num_rows</refname>
-    <refpurpose></refpurpose>
+    <refpurpose>get number of rows in a result</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
@@ -653,10 +589,14 @@
      <funcdef>int <function>msql_num_rows</function></funcdef>
      <paramdef>string <parameter>result</parameter></paramdef>
     </funcsynopsis>
-<para>
-  msql_num_rows() returns the number of rows in a result set.
-  
-  See also:  <link linkend="function.msql">msql</link>, <link linkend="function.msql-query">msql_query</link>, <link linkend="function.msql-fetch-row">msql_fetch_row</link></para>
+    <para>
+     <function>msql_num_rows</function> returns the number of rows in
+     a result set.
+    <para>
+     See also:
+     <link linkend="function.msql">msql</link>
+     <link linkend="function.msql-query">msql_query</link>
+     <link linkend="function.msql-fetch-row">msql_fetch_row</link>
    </refsect1>
   </refentry>
 
@@ -664,7 +604,7 @@
   <refentry id="function.msql-numfields">
    <refnamediv>
     <refname>msql_numfields</refname>
-    <refpurpose></refpurpose>
+    <refpurpose>get number of fields in result</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
@@ -680,7 +620,7 @@
   <refentry id="function.msql-numrows">
    <refnamediv>
     <refname>msql_numrows</refname>
-    <refpurpose></refpurpose>
+    <refpurpose>get number of rows in a result</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
@@ -696,15 +636,13 @@
   <refentry id="function.msql-pconnect">
    <refnamediv>
     <refname>msql_pconnect</refname>
-    <refpurpose></refpurpose>
+    <refpurpose>open persistent mSQL connection</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
     <funcsynopsis>
      <funcdef>int <function>msql_pconnect</function></funcdef>
      <paramdef>string <parameter>hostname</parameter></paramdef>
-     <paramdef>string <parameter>username</parameter></paramdef>
-     <paramdef>string <parameter>password</parameter></paramdef>
     </funcsynopsis>
     <para>
      Returns a positive mSQL persistent link identifier on success, or
@@ -716,8 +654,8 @@
     <para>  
      First, when connecting, the function would first try to find
      a (persistent) link that's already open with the same
-     host, username and password.  If one is found, an identifier
-     for it will be returned instead of opening a new connection.
+     host.  If one is found, an identifier for it will be returned
+     instead of opening a new connection.
     <para>  
      Second, the connection to the SQL server will not be closed when
      the execution of the script ends.  Instead, the link will remain
@@ -733,7 +671,7 @@
   <refentry id="function.msql-query">
    <refnamediv>
     <refname>msql_query</refname>
-    <refpurpose></refpurpose>
+    <refpurpose>do mSQL query</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
@@ -743,13 +681,14 @@
      <paramdef>int <parameter>link_identifier</parameter></paramdef>
     </funcsynopsis>
     <para>
+     <function>msql_query</function> sends a query to the currently
+     active database on the server that's associated with the
+     specified link identifier.  If the link identifier isn't
+     specified, the last opened link is assumed.  If no link is open,
+     the function tries to establish a link as if
+     <function>msql_connect</function> was called, and use it.
+    <para>
      Returns a positive mSQL result identifier on success, or false on error.
-    <para>  
-  msql_query() sends a query to the currently active database on
-  the server that's associated with the specified link identifier.
-  If the link identifier isn't specified, the last opened link
-  is assumed.  If no link is open, the function tries to
-  establish a link as if msql_connect() was called, and use it.
     <para>
   See also:  <link linkend="function.msql">msql</link>, <link linkend="function.msql-select-db">msql_select_db</link>, <link linkend="function.msql-connect">msql_connect</link>
    </refsect1>
@@ -759,7 +698,7 @@
   <refentry id="function.msql-result">
    <refnamediv>
     <refname>msql_result</refname>
-    <refpurpose></refpurpose>
+    <refpurpose>get result data</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
@@ -798,7 +737,7 @@
   <refentry id="function.msql-select-db">
    <refnamediv>
     <refname>msql_select_db</refname>
-    <refpurpose></refpurpose>
+    <refpurpose>select database</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
@@ -827,14 +766,14 @@
   <refentry id="function.msql-tablename">
    <refnamediv>
     <refname>msql_tablename</refname>
-    <refpurpose></refpurpose>
+    <refpurpose>get table name of field</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
     <funcsynopsis>
      <funcdef>string <function>msql_tablename</function></funcdef>
      <paramdef>int <parameter>result</parameter></paramdef>
-     <paramdef>int <parameter>i</parameter></paramdef>
+     <paramdef>int <parameter>field</parameter></paramdef>
     </funcsynopsis>
     <para>    
      msql_tablename takes a result pointer returned by the <link

@@ -10,6 +10,8 @@
 #include "getopt.h"
 #define SAPI_INTERFACE 1
 #include "sapi.h"
+#include <windows.h>
+#include <winsock.h>
 
 /* for cgi this can be global */
 struct sapi_request_info sapi_info;
@@ -41,6 +43,10 @@ void sapi_putc(void *scid, char c){
 
 int sapi_writeclient(void *scid, char *string, int len){
 	return fwrite(string,len,1,stdout);
+}
+
+void sapi_log(void *scid, char *message){
+	fprintf(stderr,message);
 }
 
 void sapi_block(void *scid){}
@@ -80,6 +86,7 @@ void sapi_init(struct sapi_request_info *sapi_info)
 	sapi_info->readclient=sapi_readclient;
 	sapi_info->block=sapi_block;
 	sapi_info->unblock=sapi_unblock;
+	sapi_info->log=sapi_log;
 }
 /* php cgi functions */
 static void
@@ -114,9 +121,15 @@ extern int optind;
 
 int main(int argc, char *argv[])
 {
-	int arg = 1, c, i, len;
+	int arg = 1, c, i, len, ret=0;
 	FILE *in = NULL;
 	char *s;
+#if WIN32|WINNT
+	WORD wVersionRequested;
+	WSADATA wsaData;
+ 
+	wVersionRequested = MAKEWORD( 2, 0 );
+#endif
 	sapi_info.cgi=0;
 	sapi_info.quiet_mode=0;
 	sapi_info.preprocess=0;
@@ -124,10 +137,14 @@ int main(int argc, char *argv[])
 	sapi_info.display_source_mode = 0;
 	sapi_info.filename=NULL;
 
+	if ( WSAStartup( wVersionRequested, &wsaData ) != 0 ) {
+		return 0;
+	}
+
 	while ((c = getopt(argc, argv, "f:qvishpe?v")) != -1) {
 		switch (c) {
 			case 'f':
-				sapi_info.filename = estrdup(optarg);
+				sapi_info.filename = strdup(optarg);
 			case 'q':
 				sapi_info.quiet_mode=1;
 				break;
@@ -176,13 +193,22 @@ int main(int argc, char *argv[])
 	}
 
 	if (sapi_info.filename == NULL && !sapi_info.cgi && argc > arg) {
-		sapi_info.filename = estrdup(argv[arg]);
+		sapi_info.filename = strdup(argv[arg]);
 	} else if (sapi_info.cgi) {
 		sapi_info.filename=NULL;
 	}
 
 		sapi_init(&sapi_info);
 
-	return php3_sapi_main(&sapi_info);
+	ret=php3_sapi_main(&sapi_info);
+
+	/*close down sockets*/
+	WSACleanup();
+
+	/* 
+		not realy worried about freeing sapi_info.filename
+		because this is cgi, but will probably do it eventualy
+	*/
+	return ret;
 }
 

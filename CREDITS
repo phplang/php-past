@@ -62,6 +62,9 @@ Major Contributors
 * Bjørn Borud (borud@guardian.no) 
   soundex code and lots of enthusiasm
 
+* Dean Gaudet (dgaudet@arctic.org)
+  Apache module debugging + helpful hints along the way
+
 * Mitch Golden (mgolden@interport.net)
   Oracle testing and bug fixes
 
@@ -72,7 +75,7 @@ Major Contributors
   Various odds and ends
 
 * Jaakko Hyvätti (jaakko@hyvatti.iki.fi)
-  Prototype cop and regular expression code fixes
+  Prototype cop, regular expression code fixes, CGI security issues
 
 * Andreas Karajannis (Andreas.Karajannis@gmd.de) 
   Adabas D

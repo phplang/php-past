@@ -24,7 +24,7 @@
  */
 
 
-/* $Id: basic_functions.h,v 1.14 1998/01/30 04:40:46 jim Exp $ */
+/* $Id: basic_functions.h,v 1.17 1998/02/20 20:57:08 shane Exp $ */
 
 #ifndef _BASIC_FUNCTIONS_H
 #define _BASIC_FUNCTIONS_H
@@ -32,7 +32,8 @@
 extern php3_module_entry basic_functions_module;
 #define basic_functions_module_ptr &basic_functions_module
 
-extern int php3_minit_basic_functions(INITFUNCARG);
+extern int php3_rinit_basic(INITFUNCARG);
+extern int php3_rshutdown_basic(void);
 extern void int_value(INTERNAL_FUNCTION_PARAMETERS);
 extern void double_value(INTERNAL_FUNCTION_PARAMETERS);
 extern void string_value(INTERNAL_FUNCTION_PARAMETERS);
@@ -41,7 +42,9 @@ extern void php3_sleep(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_usleep(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_key_sort(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_asort(INTERNAL_FUNCTION_PARAMETERS);
+extern void php3_arsort(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_sort(INTERNAL_FUNCTION_PARAMETERS);
+extern void php3_rsort(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_count(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_flush(INTERNAL_FUNCTION_PARAMETERS);
 extern void array_end(INTERNAL_FUNCTION_PARAMETERS);

@@ -23,7 +23,7 @@
  */
 
 
-/* $Id: php3_sybase-ct.h,v 1.5 1997/12/31 15:56:44 rasmus Exp $ */
+/* $Id: php3_sybase-ct.h,v 1.7 1998/02/04 11:48:48 zeev Exp $ */
 
 #ifndef _PHP3_SYBASE_CT_H
 #define _PHP3_SYBASE_CT_H
@@ -60,18 +60,9 @@ extern void php3_sybct_fetch_object(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_sybct_data_seek(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_sybct_result(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_sybct_field_seek(INTERNAL_FUNCTION_PARAMETERS);
-
-extern void php3_sybct_db_query(INTERNAL_FUNCTION_PARAMETERS);
-extern void php3_sybct_list_fields(INTERNAL_FUNCTION_PARAMETERS);
-extern void php3_sybct_fetch_lengths(INTERNAL_FUNCTION_PARAMETERS);
+extern void php3_sybct_min_client_severity(INTERNAL_FUNCTION_PARAMETERS);
+extern void php3_sybct_min_server_severity(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_sybct_fetch_field(INTERNAL_FUNCTION_PARAMETERS);
-extern void php3_sybct_field_seek(INTERNAL_FUNCTION_PARAMETERS);
-extern void php3_sybct_free_result(INTERNAL_FUNCTION_PARAMETERS);
-extern void php3_sybct_field_name(INTERNAL_FUNCTION_PARAMETERS);
-extern void php3_sybct_field_table(INTERNAL_FUNCTION_PARAMETERS);
-extern void php3_sybct_field_len(INTERNAL_FUNCTION_PARAMETERS);
-extern void php3_sybct_field_type(INTERNAL_FUNCTION_PARAMETERS);
-extern void php3_sybct_field_flags(INTERNAL_FUNCTION_PARAMETERS);
 
 
 
@@ -96,6 +87,7 @@ typedef struct {
 	char *server_message;
 	int le_link,le_plink,le_result;
 	long min_server_severity, min_client_severity;
+	long cfg_min_server_severity, cfg_min_client_severity;
 } sybct_module;
 
 typedef struct {

@@ -24,7 +24,7 @@
  */
  
 
-/* $Id: ldap.c,v 1.27 1998/01/30 19:53:09 shane Exp $ */
+/* $Id: ldap.c,v 1.30 1998/02/19 22:39:43 amitay Exp $ */
 
 #ifndef MSVC5
 #include "config.h"
@@ -65,7 +65,6 @@ ldap_module php3_ldap_module;
 
 function_entry ldap_functions[] = {
 	{"ldap_connect", 				php3_ldap_connect,				NULL},
-	/* {"ldap_pconnect", 			php3_ldap_pconnect,				NULL}, */
 	{"ldap_close", 					php3_ldap_unbind,				NULL},
 	{"ldap_bind",					php3_ldap_bind,					NULL},
 	{"ldap_unbind",					php3_ldap_unbind,				NULL},
@@ -81,13 +80,11 @@ function_entry ldap_functions[] = {
 	{"ldap_first_attribute",		php3_ldap_first_attribute,		NULL},
 	{"ldap_next_attribute",			php3_ldap_next_attribute,		NULL},
 	{"ldap_get_attributes",			php3_ldap_get_attributes,		NULL},
-	{"ldap_get_attribute_values",	php3_ldap_get_attribute_values,	NULL},
 	{"ldap_get_values",				php3_ldap_get_values,			NULL},
 	{"ldap_get_dn",					php3_ldap_get_dn,				NULL},
 	{"ldap_explode_rdn",			php3_ldap_explode_rdn,			NULL},
 	{"ldap_explode_dn",				php3_ldap_explode_dn,			NULL},
 	{"ldap_dn2ufn",					php3_ldap_dn2ufn,				NULL},
-
 	{"ldap_add", 					php3_ldap_add,					NULL},
 	{"ldap_delete",					php3_ldap_delete,				NULL},
 	{"ldap_modify",					php3_ldap_modify,				NULL},
@@ -114,14 +111,6 @@ static void _close_ldap_link(LDAP *ld)
 	php3_ldap_module.num_links--;
 }
 
-#if 0
-static void _close_ldap_plink(LDAP *ld)
-{
-        ldap_unbind_s(ld);
-	php3_ldap_module.num_persistent--;
-	php3_ldap_module.num_links--;
-}
-#endif
 
 static void _free_ldap_result(LDAPMessage *result)
 {
@@ -137,14 +126,6 @@ static void _free_ber_entry(BerElement *ber)
 
 int php3_minit_ldap(INITFUNCARG)
 {
-#if 0
-	if (cfg_get_long("ldap.allow_persistent", &php3_ldap_module.allow_persistent) == FAILURE) {
-		php3_ldap_module.allow_persistent = 1;
-	}
-	if (cfg_get_long("ldap.max_persistent", &php3_ldap_module.max_persistent) == FAILURE) {
-		php3_ldap_module.max_persistent = -1;
-	}
-#endif
 	if (cfg_get_long("ldap.max_links", &php3_ldap_module.max_links) == FAILURE) {
 		php3_ldap_module.max_links = -1;
 	}
@@ -153,39 +134,21 @@ int php3_minit_ldap(INITFUNCARG)
 		php3_ldap_module.base_dn = NULL;
 	}
 
-	php3_ldap_module.num_persistent = 0;
 	php3_ldap_module.le_result = register_list_destructors(_free_ldap_result, NULL);
 	php3_ldap_module.le_result_entry = register_list_destructors(NULL, NULL);
 	php3_ldap_module.le_ber_entry = register_list_destructors(NULL, NULL);
 	php3_ldap_module.le_link = register_list_destructors(_close_ldap_link, NULL);
-	/* php3_ldap_module.le_plink = register_list_destructors(NULL, _close_ldap_plink); */
 
 	ldap_module_entry.type = type;
 
 	return SUCCESS;
 }
 
-#if 0
-int php3_rinit_ldap(INITFUNCARG)
-{
-	php3_ldap_module.default_link = -1;
-	php3_ldap_module.num_links = php3_ldap_module.num_persistent;
-
-	return SUCCESS;
-}
-#endif
 
 void php3_info_ldap(void)
 {
 	char maxl[16];
-	/*
-	if(php3_ldap_module.max_persistent == -1) {
-		strcpy(maxp, "Unlimited");
-	} else {
-		snprintf(maxp, 15, "%ld", php3_ldap_module.max_persistent);
-		maxp[15] = 0;
-	}
-	*/
+
 	if(php3_ldap_module.max_links == -1) {
 		strcpy(maxl, "Unlimited");
 	} else {
@@ -194,13 +157,9 @@ void php3_info_ldap(void)
 	}
 
 	php3_printf("<table>"
-		    /* "<tr><td>Allow persistent links:</td><td>%s</td></tr>\n"
-				"<tr><td>Persistent links:</td><td>%d/%s</td></tr>\n"*/
 				"<tr><td>Total links:</td><td>%d/%s</td></tr>\n"
-		                "<tr><td>RCS Version:</td><td>$Id: ldap.c,v 1.27 1998/01/30 19:53:09 shane Exp $</td></tr>\n"
+		                "<tr><td>RCS Version:</td><td>$Id: ldap.c,v 1.30 1998/02/19 22:39:43 amitay Exp $</td></tr>\n"
 				"</table>\n",
-		    /*	(php3_ldap_module.allow_persistent?"Yes":"No"),
-				php3_ldap_module.num_persistent,maxp,*/
 				php3_ldap_module.num_links,maxl);
 }
 
@@ -261,105 +220,12 @@ void php3_ldap_connect(INTERNAL_FUNCTION_PARAMETERS)
 			WRONG_PARAM_COUNT;
 			break;
 	}
-#if 0
-	if(!php3_ldap_module.allow_persistent) {
-		persistent = 0;
-	}
 
-	if (persistent) {
-		list_entry *le;
-
-		if (php3_ldap_module.max_links!=-1 && php3_ldap_module.num_links>=php3_ldap_module.max_links) {
-			php3_error(E_WARNING, "LDAP: Too many open links (%d)", php3_ldap_module.num_links);
-			efree(hashed_details);
-			RETURN_FALSE;
-		}
-		if (php3_ldap_module.max_persistent!=-1 && php3_ldap_module.num_persistent>=php3_ldap_module.max_persistent) {
-			php3_error(E_WARNING, "LDAP: Too many open persistent links (%d)", php3_ldap_module.num_persistent);
-			efree(hashed_details);
-			RETURN_FALSE;
-		}	
-	
-		if(hash_find(plist, hashed_details, hashed_details_length+1, (void **) &le) == FAILURE) {
-			list_entry new_le;
-
-			if ((ldap = ldap_open(host, port)) == NULL) {
-				php3_error(E_WARNING,"LDAP:  Unable to connect to server: %s",ldap->ld_error);
-				efree(hashed_details);
-				RETURN_FALSE;
-			}
-
-			new_le.type = php3_ldap_module.le_plink;
-			new_le.ptr = ldap;
-			if (hash_update(plist, hashed_details, hashed_details_length+1, (void *)&new_le, sizeof(list_entry), NULL) == FAILURE) {
-				efree(hashed_details);
-				RETURN_FALSE;
-			}
-
-			php3_ldap_module.num_persistent++;
-			php3_ldap_module.num_links++;
-		} else {	
-			if (le->type != php3_ldap_module.le_plink) {
-				efree(hashed_details);
-				RETURN_FALSE;
-			}
-
-			ldap = (LDAP *) le->ptr;
-		}
-		return_value->value.lval = php3_list_insert(ldap, php3_ldap_module.le_plink);
-		return_value->type = IS_LONG;
-	} else {
-		list_entry *index_ptr, new_index_ptr;
-
-		if(hash_find(list, hashed_details, hashed_details_length+1, (void **) &index_ptr) == SUCCESS) {
-			int type, link;
-			void *ptr;
-
-			if(index_ptr->type != le_index_ptr) {
-				RETURN_FALSE;
-			}	
-
-			link = (int) index_ptr->ptr;
-			ptr = php3_list_find(link, &type);  /* check if the link is still there */
-			if (ptr || !(type == php3_ldap_module.le_link || type == php3_ldap_module.le_plink)) {
-				return_value->value.lval = php3_ldap_module.default_link = link;
-				return_value->type = IS_LONG;
-				efree(hashed_details);
-				return;
-			} else {
-				hash_del(list, hashed_details, hashed_details_length+1);
-			}
-		}
-
-		if (php3_ldap_module.max_links!=-1 && php3_ldap_module.num_links>=php3_ldap_module.max_links) {
-			php3_error(E_WARNING, "LDAP: Too many open links (%d)", php3_ldap_module.num_links);
-			efree(hashed_details);
-			RETURN_FALSE;
-		}
-		if ((ldap = ldap_open(host, port)) == NULL) {
-			efree(hashed_details);
-			RETURN_FALSE;
-		}
-
-		return_value->value.lval = php3_list_insert((void *)ldap, php3_ldap_module.le_link);
-		return_value->type = IS_LONG;
-
-		new_index_ptr.ptr = (void *) return_value->value.lval;
-		new_index_ptr.type = le_index_ptr;
-		if (hash_update(list,hashed_details,hashed_details_length+1,(void *) &new_index_ptr, sizeof(list_entry), NULL) == FAILURE) {
-			efree(hashed_details);
-			RETURN_FALSE;
-		}
-		php3_ldap_module.num_links++;
-
-	}
-	efree(hashed_details);
-	php3_ldap_module.default_link = return_value->value.lval;
-#endif
 	if (php3_ldap_module.max_links!=-1 && php3_ldap_module.num_links>=php3_ldap_module.max_links) {
 	  php3_error(E_WARNING, "LDAP: Too many open links (%d)", php3_ldap_module.num_links);
 	  RETURN_FALSE;
 	}
+
 	ldap = ldap_open(host,port);
 	if ( ldap == NULL ) {
 	  RETURN_FALSE;
@@ -369,33 +235,6 @@ void php3_ldap_connect(INTERNAL_FUNCTION_PARAMETERS)
 
 }
 
-#if 0
-static int php3_ldap_get_default_link(INTERNAL_FUNCTION_PARAMETERS)
-{
-	if(php3_ldap_module.default_link == -1) {
-		HashTable dummy;
-
-		hash_init(&dummy, 0, NULL, NULL, 0);
-		php3_ldap_do_connect(&dummy, return_value, list, plist, 0);
-		hash_destroy(&dummy);
-	}
-
-	return php3_ldap_module.default_link;
-}
-#endif
-
-#if 0
-void php3_ldap_connect(INTERNAL_FUNCTION_PARAMETERS)
-{
-	php3_ldap_do_connect(INTERNAL_FUNCTION_PARAM_PASSTHRU, 0);
-}
-
-
-void php3_ldap_pconnect(INTERNAL_FUNCTION_PARAMETERS)
-{
-	php3_ldap_do_connect(INTERNAL_FUNCTION_PARAM_PASSTHRU, 1);
-}
-#endif
 
 static LDAP * _get_ldap_link(YYSTYPE *link, HashTable *list)
 {
@@ -405,7 +244,7 @@ int type;
 	convert_to_long(link);
 	ldap = (LDAP *) php3_list_find(link->value.lval, &type);
 	
-	if (!ldap || !(type == php3_ldap_module.le_link || type == php3_ldap_module.le_plink)) {
+	if (!ldap || !(type == php3_ldap_module.le_link)) {
 	  php3_error(E_WARNING, "%d is not a LDAP link index", link->value.lval);
 	  return NULL;
 	}
@@ -865,9 +704,8 @@ char *attribute;
 	  /* php3_error(E_WARNING, "LDAP: Unable to read the attributes from entry : %s", ldap_err2string(ldap->ld_errno)); */
 		RETURN_FALSE;
 	} else {
-
-	        /* brep is passed by ref so we do not have to account for memory */
-	        berp->type=IS_LONG;
+		/* brep is passed by ref so we do not have to account for memory */
+		berp->type=IS_LONG;
 		berp->value.lval=php3_list_insert(ber, php3_ldap_module.le_ber_entry);
 
 		RETVAL_STRING(attribute);
@@ -912,89 +750,6 @@ char *attribute;
 
 
 void php3_ldap_get_attributes(INTERNAL_FUNCTION_PARAMETERS)
-{
-YYSTYPE *result, *link;
-LDAP *ldap;
-LDAPMessage *ldap_result_entry;
-BerElement *ber;
-char *attribute;
-int count;
-
-	if(ARG_COUNT(ht) != 2 || getParameters(ht, 2, &link, &result) == FAILURE) {
-		WRONG_PARAM_COUNT;
-	}
-
-	ldap = _get_ldap_link(link, list);
-	if(ldap == NULL) RETURN_FALSE;
-
-	ldap_result_entry = _get_ldap_result_entry(result, list);
-	if(ldap_result_entry == NULL) RETURN_FALSE;
-
-	if(array_init(return_value) == FAILURE) {
-		RETURN_FALSE;
-	}
-	
-	count = 0;
-	if((attribute = ldap_first_attribute(ldap, ldap_result_entry, &ber)) == NULL) {
-		php3_error(E_WARNING, "LDAP: Unable to read the attributes from entry : %s", ldap_err2string(ldap->ld_errno));
-		RETURN_FALSE;
-	} else {
-		add_next_index_string(return_value, attribute, 1);
-		count++;
-		while((attribute = ldap_next_attribute(ldap, ldap_result_entry, ber)) != NULL) {
-			add_next_index_string(return_value, attribute, 1);
-			count++;
-		}
-	}
-
-	add_assoc_long(return_value, "count", count);
-}
-
-
-void php3_ldap_get_attribute_values(INTERNAL_FUNCTION_PARAMETERS)
-{
-YYSTYPE *link, *result_entry, *attr;
-LDAP *ldap;
-LDAPMessage *ldap_result_entry;
-char *attribute;
-char **ldap_value;
-int i, num_values;
-
-	if(ARG_COUNT(ht) != 3 || getParameters(ht, 3, &link, &result_entry, &attr) == FAILURE) {
-		WRONG_PARAM_COUNT;
-	}
-
-	ldap = _get_ldap_link(link, list);
-	if(ldap == NULL) RETURN_FALSE;
-
-	ldap_result_entry = _get_ldap_result_entry(result_entry, list);
-	if(ldap_result_entry == NULL) RETURN_FALSE;
-
-	convert_to_string(attr);
-	attribute = attr->value.strval;
-
-	if((ldap_value = ldap_get_values(ldap, ldap_result_entry, attribute)) == NULL) {
-		php3_error(E_WARNING, "LDAP: Cannot get the value(s) of attribute %s", ldap_err2string(ldap->ld_errno));
-		RETURN_FALSE;
-	}
-
-	num_values = ldap_count_values(ldap_value);
-
-	if(array_init(return_value) == FAILURE) {
-		RETURN_FALSE;
-	}
-
-	for(i=0; i<num_values; i++) {
-		add_next_index_string(return_value, ldap_value[i], 1);
-	}
-	
-	add_assoc_long(return_value, "count", num_values);
-
-	ldap_value_free(ldap_value);
-}
-
-
-void php3_ldap_get_values(INTERNAL_FUNCTION_PARAMETERS)
 {
 YYSTYPE *link, *result_entry;
 YYSTYPE tmp;
@@ -1046,6 +801,49 @@ BerElement *ber;
 	}
 	
 	add_assoc_long(return_value, "count", num_attrib);
+}
+
+
+void php3_ldap_get_values(INTERNAL_FUNCTION_PARAMETERS)
+{
+YYSTYPE *link, *result_entry, *attr;
+LDAP *ldap;
+LDAPMessage *ldap_result_entry;
+char *attribute;
+char **ldap_value;
+int i, num_values;
+
+	if(ARG_COUNT(ht) != 3 || getParameters(ht, 3, &link, &result_entry, &attr) == FAILURE) {
+		WRONG_PARAM_COUNT;
+	}
+
+	ldap = _get_ldap_link(link, list);
+	if(ldap == NULL) RETURN_FALSE;
+
+	ldap_result_entry = _get_ldap_result_entry(result_entry, list);
+	if(ldap_result_entry == NULL) RETURN_FALSE;
+
+	convert_to_string(attr);
+	attribute = attr->value.strval;
+
+	if((ldap_value = ldap_get_values(ldap, ldap_result_entry, attribute)) == NULL) {
+		php3_error(E_WARNING, "LDAP: Cannot get the value(s) of attribute %s", ldap_err2string(ldap->ld_errno));
+		RETURN_FALSE;
+	}
+
+	num_values = ldap_count_values(ldap_value);
+
+	if(array_init(return_value) == FAILURE) {
+		RETURN_FALSE;
+	}
+
+	for(i=0; i<num_values; i++) {
+		add_next_index_string(return_value, ldap_value[i], 1);
+	}
+	
+	add_assoc_long(return_value, "count", num_values);
+
+	ldap_value_free(ldap_value);
 }
 
 
@@ -1114,19 +912,21 @@ void php3_ldap_dn2ufn(INTERNAL_FUNCTION_PARAMETERS)
 }
 	
 
-void php3_ldap_modify(INTERNAL_FUNCTION_PARAMETERS)
+static void php3_ldap_do_modify(INTERNAL_FUNCTION_PARAMETERS, int oper)
 {
-YYSTYPE *link, *dn, *attr, *values, *value;
+YYSTYPE *link, *dn, *entry, *value, *ivalue;
 LDAP *ldap;
-char *ldap_dn, *ldap_attr;
+char *ldap_dn;
 LDAPMod **ldap_mods;
-int i, num_values;
+int i, j, num_attribs, num_values;
+char *attribute;
+int index;
 
-	if(ARG_COUNT(ht) != 4 || getParameters(ht, 4, &link, &dn, &attr, &values) == FAILURE) {
+	if(ARG_COUNT(ht) != 3 || getParameters(ht, 3, &link, &dn, &entry) == FAILURE) {
 		WRONG_PARAM_COUNT;
-	}
+	}	
 
-	if(values->type != IS_ARRAY) {
+	if(entry->type != IS_ARRAY) {
 		php3_error(E_WARNING, "LDAP: Expected Array as the last element");
 		RETURN_FALSE;
 	}
@@ -1137,39 +937,67 @@ int i, num_values;
 	convert_to_string(dn);
 	ldap_dn = dn->value.strval;
 
-	convert_to_string(attr);
-	ldap_attr = attr->value.strval;
+	num_attribs = hash_num_elements(entry->value.ht);
 
-	num_values = hash_num_elements(values->value.ht);
-	
-	ldap_mods = emalloc(2 * sizeof(LDAPMod *));
+	ldap_mods = emalloc((num_attribs+1) * sizeof(LDAPMod *));
 
-	ldap_mods[0] = emalloc(sizeof(LDAPMod));
+	hash_internal_pointer_reset(entry->value.ht);
 
-	ldap_mods[0]->mod_op = LDAP_MOD_REPLACE;
-	ldap_mods[0]->mod_type = estrdup(ldap_attr);
-	ldap_mods[0]->mod_values = emalloc((num_values+1) * sizeof(char *));
-	
-	for(i=0; i<num_values; i++) {
-		hash_index_find(values->value.ht, i, (void **) &value);
-		convert_to_string(value);
-		ldap_mods[0]->mod_values[i] = value->value.strval;
+	for(i=0; i<num_attribs; i++) {
+		ldap_mods[i] = emalloc(sizeof(LDAPMod));
+
+		ldap_mods[i]->mod_op = oper;
+
+		if(hash_get_current_key(entry->value.ht, &attribute, &index) == HASH_KEY_IS_STRING) {
+			ldap_mods[i]->mod_type = estrdup(attribute);
+			efree(attribute);
+		} else {
+			php3_error(E_WARNING, "LDAP: Unknown Attribute in the data");
+		}
+
+		hash_get_current_data(entry->value.ht, (void **) &value);
+
+		if(value->type != IS_ARRAY) {
+			num_values = 1;
+		} else {
+			num_values = hash_num_elements(value->value.ht);
+		}
+
+		ldap_mods[i]->mod_values = emalloc((num_values+1) * sizeof(char *));
+		
+		if(num_values == 1) {
+			convert_to_string(value);
+			ldap_mods[i]->mod_values[0] = value->value.strval;
+		} else {	
+			for(j=0; j<num_values; j++) {
+				hash_index_find(value->value.ht, j, (void **) &ivalue);
+				convert_to_string(ivalue);
+				ldap_mods[i]->mod_values[j] = ivalue->value.strval;
+			}
+		}
+		ldap_mods[i]->mod_values[num_values] = NULL;
+
+		hash_move_forward(entry->value.ht);
 	}
-	ldap_mods[0]->mod_values[num_values] = NULL;
+	ldap_mods[num_attribs] = NULL;
 
-	ldap_mods[1] = NULL;
-
-	if(ldap_modify_s(ldap, ldap_dn, ldap_mods) != LDAP_SUCCESS) {
-		ldap_perror(ldap, "LDAP");
-/*
-		php3_error(E_WARNING, "LDAP: modify operation could not be completed.");
-*/
+	if(oper == LDAP_MOD_ADD) {
+		if(ldap_add_s(ldap, ldap_dn, ldap_mods) != LDAP_SUCCESS) {
+			ldap_perror(ldap, "LDAP");
+			php3_error(E_WARNING, "LDAP: add operation could not be completed.");
+		}
+	} else {
+		if(ldap_modify_s(ldap, ldap_dn, ldap_mods) != LDAP_SUCCESS) {
+			php3_error(E_WARNING, "LDAP: modify operation could not be completed.");
+		}	
 	}
 
-	efree(ldap_mods[0]->mod_type);
-	efree(ldap_mods[0]->mod_values);
-	efree(ldap_mods[0]);
-	efree(ldap_mods);
+	for(i=0; i<num_attribs; i++) {
+		efree(ldap_mods[i]->mod_type);
+		efree(ldap_mods[i]->mod_values);
+		efree(ldap_mods[i]);
+	}
+	efree(ldap_mods);	
 
 	RETURN_TRUE;
 }
@@ -1177,9 +1005,14 @@ int i, num_values;
 
 void php3_ldap_add(INTERNAL_FUNCTION_PARAMETERS)
 {
-	RETURN_TRUE;
+	php3_ldap_do_modify(INTERNAL_FUNCTION_PARAM_PASSTHRU, LDAP_MOD_ADD);
 }
 
+
+void php3_ldap_modify(INTERNAL_FUNCTION_PARAMETERS)
+{
+	php3_ldap_do_modify(INTERNAL_FUNCTION_PARAM_PASSTHRU, LDAP_MOD_REPLACE);
+}
 
 void php3_ldap_delete(INTERNAL_FUNCTION_PARAMETERS)
 {
@@ -1204,6 +1037,5 @@ char *ldap_dn;
 
 	RETURN_TRUE;
 }
-
 
 #endif

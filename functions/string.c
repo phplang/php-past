@@ -25,7 +25,7 @@
  */
 
 
-/* $Id: string.c,v 1.93 1998/01/28 21:50:18 andi Exp $ */
+/* $Id: string.c,v 1.100 1998/02/25 02:00:07 lr Exp $ */
 #ifdef THREAD_SAFE
 #include "tls.h"
 #endif
@@ -117,39 +117,46 @@ void php3_explode(INTERNAL_FUNCTION_PARAMETERS)
 
 void php3_implode(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *arg1, *delim, *tmp, arr;
+	YYSTYPE *arg1, *arg2, *delim, *tmp, *arr;
 	int len = 0, count = 0;
 	TLS_VARS;
 	
-	if (ARG_COUNT(ht) != 2 || getParameters(ht, 2, &arg1, &delim) == FAILURE) {
+	if (ARG_COUNT(ht) != 2 || getParameters(ht, 2, &arg1, &arg2) == FAILURE) {
 		WRONG_PARAM_COUNT;
 	}
-	arr = *arg1;
-	convert_to_string(delim);
-	if (arr.type != IS_ARRAY || delim->type != IS_STRING) {
-		php3_error(E_WARNING, "Bad arguments to %s()", GLOBAL(function_state).function_name);
+
+	if (arg1->type == IS_ARRAY && arg2->type == IS_STRING) {
+		arr = arg1;
+		delim = arg2;
+	} else if (arg2->type == IS_ARRAY) {
+		convert_to_string(arg1);
+		arr = arg2;
+		delim = arg1;
+	} else {
+		php3_error(E_WARNING, "Bad arguments to %s()",
+				   GLOBAL(function_state).function_name);
 		return;
 	}
-	yystype_copy_constructor(arg1);
 
 	/* convert everything to strings, and calculate length */
-	hash_internal_pointer_reset(arr.value.ht);
-	while (hash_get_current_data(arr.value.ht, (void **) &tmp) == SUCCESS) {
+	hash_internal_pointer_reset(arr->value.ht);
+	while (hash_get_current_data(arr->value.ht, (void **) &tmp) == SUCCESS) {
 		convert_to_string(tmp);
 		if (tmp->type == IS_STRING) {
 			len += tmp->strlen;
 			len += delim->strlen;
 			count++;
 		}
-		hash_move_forward(arr.value.ht);
+		hash_move_forward(arr->value.ht);
 	}
 	len = len - delim->strlen;
 
 	/* do it */
 	return_value->value.strval = (char *) emalloc(len + 1);
-	return_value->value.strval[0] = 0;
-	hash_internal_pointer_reset(arr.value.ht);
-	while (hash_get_current_data(arr.value.ht, (void **) &tmp) == SUCCESS) {
+	return_value->value.strval[0] = '\0';
+	return_value->value.strval[len] = '\0';
+	hash_internal_pointer_reset(arr->value.ht);
+	while (hash_get_current_data(arr->value.ht, (void **) &tmp) == SUCCESS) {
 		if (tmp->type == IS_STRING) {
 			count--;
 			strcat(return_value->value.strval, tmp->value.strval);
@@ -157,16 +164,14 @@ void php3_implode(INTERNAL_FUNCTION_PARAMETERS)
 				strcat(return_value->value.strval, delim->value.strval);
 			}
 		}
-		hash_move_forward(arr.value.ht);
+		hash_move_forward(arr->value.ht);
 	}
 	return_value->type = IS_STRING;
 	return_value->strlen = len;
-	hash_destroy(arr.value.ht);
-	efree(arr.value.ht);
 }
 
 #ifndef THREAD_SAFE
-char *strtok_string = NULL;
+char *strtok_string;
 #endif
 
 void php3_strtok(INTERNAL_FUNCTION_PARAMETERS)
@@ -194,10 +199,8 @@ void php3_strtok(INTERNAL_FUNCTION_PARAMETERS)
 	if (argc == 2) {
 		convert_to_string(str);
 
-		if (GLOBAL(strtok_string)) {
-			efree(GLOBAL(strtok_string));
-			GLOBAL(strtok_string) = NULL;
-		}
+		STR_FREE(GLOBAL(strtok_string));
+		GLOBAL(strtok_string) = NULL;
 		GLOBAL(strtok_string) = estrndup(str->value.strval,str->strlen);
 		STATIC(strtok_pos1) = GLOBAL(strtok_string);
 		STATIC(strtok_pos2) = NULL;
@@ -497,7 +500,7 @@ void php3_ord(INTERNAL_FUNCTION_PARAMETERS)
 		WRONG_PARAM_COUNT;
 	}
 	convert_to_string(str);
-	RETVAL_LONG(str->value.strval[0]);
+	RETVAL_LONG((unsigned char)str->value.strval[0]);
 }
 
 
@@ -607,12 +610,17 @@ PHPAPI void _php3_stripslashes(char *string)
 {
 	char *s, *t;
 	int l;
+	char escape_char='\\';
+
+	if (php3_ini.magic_quotes_sybase) {
+		escape_char='\'';
+	}
 
 	l = strlen(string);
 	s = string;
 	t = string;
 	while (l > 0 && *t != '\0') {
-		if (*t == '\\') {
+		if (*t == escape_char) {
 			t++;				/* skip the slash */
 			l--;
 			if (l > 0 && *t != '\0') {
@@ -698,8 +706,10 @@ PHPAPI char *_php3_addslashes(char *str, int should_free)
 				/* break is missing *intentionally* */
 			case '\"':
 			case '\\':
-				*target = '\\';
-				target++;
+				if (!php3_ini.magic_quotes_sybase) {
+					*target = '\\';
+					target++;
+				}
 				/* break is missing *intentionally* */
 			default:
 				*target = *source;

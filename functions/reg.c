@@ -23,13 +23,14 @@
    |          Jaakko Hyvätti <jaakko@hyvatti.iki.fi>                      | 
    +----------------------------------------------------------------------+
  */
-/* $Id: reg.c,v 1.70 1998/01/28 21:18:31 rasmus Exp $ */
+/* $Id: reg.c,v 1.71 1998/02/23 03:13:29 ssb Exp $ */
 #ifdef THREAD_SAFE
 #include "tls.h"
 #endif
 #include <stdio.h>
 #include "parser.h"
 #include "internal_functions.h"
+#include "php3_string.h"
 #include "reg.h"
 
 unsigned char third_argument_force_ref[] = { 3, BYREF_NONE, BYREF_NONE, BYREF_FORCE };
@@ -40,6 +41,7 @@ function_entry reg_functions[] = {
 	{"eregi",			php3_eregi,			third_argument_force_ref },
 	{"eregi_replace",	php3_eregireplace,	NULL },
 	{"split",			php3_split,			NULL},
+	{"join",			php3_implode,		NULL},
 	{"sql_regcase",		php3_sql_regcase,	NULL},
 	{NULL, NULL, NULL}
 };

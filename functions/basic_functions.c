@@ -24,7 +24,7 @@
  */
 
 
-/* $Id: basic_functions.c,v 1.118 1998/02/01 20:31:18 shane Exp $ */
+/* $Id: basic_functions.c,v 1.135 1998/02/28 13:33:28 zeev Exp $ */
 
 #ifdef THREAD_SAFE
 #include "tls.h"
@@ -69,12 +69,15 @@
 #include "functions/pageinfo.h"
 #include "functions/uniqid.h"
 #include "functions/base64.h"
+#include "functions/mail.h"
 #if WIN32|WINNT
 #include "win32/unistd.h"
 #endif
 
 static unsigned char second_and_third_args_force_ref[] = { 3, BYREF_NONE, BYREF_FORCE, BYREF_FORCE };
-
+#if PHP_DEBUGGER
+extern int _php3_send_error(char *message, char *address);
+#endif
 
 function_entry basic_functions[] = {
 	{"intval",		int_value,					NULL},
@@ -85,7 +88,10 @@ function_entry basic_functions[] = {
 	{"usleep",		php3_usleep,				NULL},
 	{"ksort",		php3_key_sort,				first_arg_force_ref},
 	{"asort",		php3_asort,					first_arg_force_ref},
+	{"arsort",		php3_arsort,				first_arg_force_ref},
 	{"sort",		php3_sort,					first_arg_force_ref},
+	{"rsort",		php3_rsort,					first_arg_force_ref},
+	{"sizeof",		php3_count,					first_arg_allow_ref},
 	{"count",		php3_count,					first_arg_allow_ref},
 	{"time",		php3_time,					NULL},
 	{"mktime",		php3_mktime,				NULL},
@@ -114,6 +120,7 @@ function_entry basic_functions[] = {
 	{"fsockopen",			php3_fsockopen,		NULL},
 	{"getimagesize",		php3_getimagesize,	NULL},
 	{"htmlspecialchars",	php3_htmlspecialchars,	NULL},
+	{"htmlentities",		php3_htmlentities,	NULL},
 	{"md5",					php3_md5,			NULL},
 
 	{"parse_url",	php3_parse_url,				NULL},
@@ -182,9 +189,9 @@ function_entry basic_functions[] = {
 	{"sin",			php3_sin,					NULL},
 	{"cos",			php3_cos,					NULL},
 	{"tan",			php3_tan,					NULL},
-	{"asin",		php3_sin,					NULL},
-	{"acos",		php3_cos,					NULL},
-	{"atan",		php3_tan,					NULL},
+	{"asin",		php3_asin,					NULL},
+	{"acos",		php3_acos,					NULL},
+	{"atan",		php3_atan,					NULL},
 	{"pi",			php3_pi,					NULL},
 	{"pow",			php3_pow,					NULL},
 	{"exp",			php3_exp,					NULL},
@@ -212,7 +219,9 @@ function_entry basic_functions[] = {
 	{"magic_quotes_runtime",	php3_set_magic_quotes_runtime,	NULL},
 	
 	{"is_long",		php3_is_long,				first_arg_force_ref},
+	{"is_integer",	php3_is_long,				first_arg_force_ref},
 	{"is_double",	php3_is_double,				first_arg_force_ref},
+	{"is_real",		php3_is_double,				first_arg_force_ref},
 	{"is_string",	php3_is_string,				first_arg_force_ref},
 	{"is_array",	php3_is_array,				first_arg_force_ref},
 	{"is_object",	php3_is_object,				first_arg_force_ref},
@@ -223,9 +232,20 @@ function_entry basic_functions[] = {
 };
 
 php3_module_entry basic_functions_module = {
-	"Basic Functions", basic_functions, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, NULL
+	"Basic Functions", basic_functions, NULL, NULL, php3_rinit_basic, php3_rshutdown_basic, NULL, 0, 0, 0, NULL
 };
 
+int php3_rinit_basic(INITFUNCARG)
+{
+	GLOBAL(strtok_string) = NULL;
+	return SUCCESS;
+}
+
+int php3_rshutdown_basic(void)
+{
+	STR_FREE(GLOBAL(strtok_string));
+	return SUCCESS;
+}
 
 /********************
  * System Functions *
@@ -274,7 +294,7 @@ void php3_putenv(INTERNAL_FUNCTION_PARAMETERS)
 		/* Some versions of putenv() use the string verbatim,
 		   so we can't just pass it in. But since we can never
 		   safely clean this up, we don't want to use estrndup(). */
-		ret = putenv(strndup(str->value.strval,str->strlen));
+		ret = putenv(php3_strndup(str->value.strval,str->strlen));
 		if (!ret) {
 			RETURN_TRUE;
 		}
@@ -291,6 +311,10 @@ void php3_error_reporting(INTERNAL_FUNCTION_PARAMETERS)
 	int old_error_reporting;
 	TLS_VARS;
 
+	if (ARG_COUNT(ht)==0) {
+		RETURN_LONG(GLOBAL(error_reporting));
+	}
+	
 	if (ARG_COUNT(ht) != 1 || getParameters(ht,1,&arg) == FAILURE) {
 		WRONG_PARAM_COUNT;
 	}
@@ -511,6 +535,10 @@ static int array_data_compare(const void *a, const void *b)
 	return 0;					/* Anything else is equal as it can't be compared */
 }
 
+static int array_reverse_data_compare(const void *a, const void *b)
+{
+	return array_data_compare(a,b)*-1;
+}
 
 void php3_asort(INTERNAL_FUNCTION_PARAMETERS)
 {
@@ -534,6 +562,27 @@ void php3_asort(INTERNAL_FUNCTION_PARAMETERS)
 	RETURN_TRUE;
 }
 
+void php3_arsort(INTERNAL_FUNCTION_PARAMETERS)
+{
+	YYSTYPE *array;
+	TLS_VARS;
+
+	if (ARG_COUNT(ht) != 1 || getParameters(ht, 1, &array) == FAILURE) {
+		WRONG_PARAM_COUNT;
+	}
+	if (!(array->type & IS_HASH)) {
+		php3_error(E_WARNING, "Wrong datatype in arsort() call");
+		return;
+	}
+    if (!ParameterPassedByReference(ht,1)) {
+        php3_error(E_WARNING, "Array not passed by reference in call to arsort()");
+		return;
+    }
+	if (hash_sort(array->value.ht, array_reverse_data_compare,0) == FAILURE) {
+		return;
+	}
+	RETURN_TRUE;
+}
 
 void php3_sort(INTERNAL_FUNCTION_PARAMETERS)
 {
@@ -552,6 +601,28 @@ void php3_sort(INTERNAL_FUNCTION_PARAMETERS)
 		return;
     }
 	if (hash_sort(array->value.ht, array_data_compare,1) == FAILURE) {
+		return;
+	}
+	RETURN_TRUE;
+}
+
+void php3_rsort(INTERNAL_FUNCTION_PARAMETERS)
+{
+	YYSTYPE *array;
+	TLS_VARS;
+
+	if (ARG_COUNT(ht) != 1 || getParameters(ht, 1, &array) == FAILURE) {
+		WRONG_PARAM_COUNT;
+	}
+	if (!(array->type & IS_HASH)) {
+		php3_error(E_WARNING, "Wrong datatype in rsort() call");
+		return;
+	}
+    if (!ParameterPassedByReference(ht,1)) {
+        php3_error(E_WARNING, "Array not passed by reference in call to rsort()");
+		return;
+    }
+	if (hash_sort(array->value.ht, array_reverse_data_compare,1) == FAILURE) {
 		return;
 	}
 	RETURN_TRUE;
@@ -1023,19 +1094,106 @@ void php3_leak(INTERNAL_FUNCTION_PARAMETERS)
 	emalloc(leakbytes);
 }
 
+/* 
+	1st arg = error message
+	2nd arg = error option
+	3rd arg = optional parameters (email address or tcp address)
+	4th arg = used for additional headers if email
+
+  error options
+    0 = send to php3_error_log (uses syslog or file depending on ini setting)
+	1 = send via email to 3rd parameter 4th option = additional headers
+	2 = send via tcp/ip to 3rd parameter (name or ip:port)
+	4 = save to file in 3rd parameter
+*/
+
 void php3_error_log(INTERNAL_FUNCTION_PARAMETERS)
 {
-	YYSTYPE *string;
+	YYSTYPE *string, *erropt, *option, *emailhead;
+	int opt_err=0;
+	char *message, *opt=NULL, *headers=NULL;
 	TLS_VARS;
 
-	if (ARG_COUNT(ht) != 1 || getParameters(ht,1,&string) == FAILURE) {
+	if (ARG_COUNT(ht) != 1 || (ARG_COUNT(ht) > 2 && ARG_COUNT(ht) < 4)) {
 		WRONG_PARAM_COUNT;
 	}
-	convert_to_string(string);
-
-	php3_log_err(string->value.strval);
+	if (getParameters(ht,1,&string) == FAILURE){
+		php3_error(E_WARNING,"Invalid argument 1 in error_log");
+		RETURN_FALSE;
+	} else {
+		convert_to_string(string);
+		message=string->value.strval;
+	}
+	if (ARG_COUNT(ht) > 2){
+		if (getParameters(ht,2,&erropt) == FAILURE){
+			php3_error(E_WARNING,"Invalid argument 2 in error_log");
+			RETURN_FALSE;
+		} else {
+			convert_to_long(erropt);
+			opt_err=erropt->value.lval;
+		}
+		if (getParameters(ht,3,&option) == FAILURE){
+			php3_error(E_WARNING,"Invalid argument 3 in error_log");
+			RETURN_FALSE;
+		} else {
+			convert_to_string(option);
+			opt=option->value.strval;
+		}
+		if (ARG_COUNT(ht) > 3){
+			if (getParameters(ht,4,&emailhead) == FAILURE){
+				php3_error(E_WARNING,"Invalid argument 4 in error_log");
+				RETURN_FALSE;
+			} else {
+				convert_to_string(emailhead);
+				headers=emailhead->value.strval;
+			}
+		}
+	} 
+	if(_php3_error_log(opt_err,message,opt,headers)==FAILURE)
+		RETURN_FALSE;
+	RETURN_TRUE;
 }
-    
+
+PHPAPI int _php3_error_log(int opt_err,char *message,char *opt,char *headers){
+	FILE *logfile;
+
+	switch(opt_err){
+	case 1: /*send an email*/
+		{
+#if HAVE_SENDMAIL
+		if (!_php3_mail(opt,"PHP3 error_log message",message,headers)){
+			return FAILURE;
+		}
+#else
+		php3_error(E_WARNING,"Mail option not available!");
+		return FAILURE;
+#endif
+		}
+		break;
+	case 2: /*send to an address */
+#if PHP_DEBUGGER
+		if (!_php3_send_error(message,opt)){
+			return FAILURE;
+		}
+#else
+		php3_error(E_WARNING,"TCP/IP option not available!");
+		return FAILURE;
+#endif
+		break;
+	case 3: /*save to a file*/
+		/*FIXME does this need safe_mode stuff?*/
+		logfile=fopen(opt,"a");
+		fwrite(message,sizeof(message),1,logfile);
+		fclose(logfile);
+		break;
+	default:
+		php3_log_err(message);
+		break;
+	}
+	return SUCCESS;
+}
+
+
 /*
  * Local variables:
  * tab-width: 4

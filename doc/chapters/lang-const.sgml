@@ -163,11 +163,10 @@ $h = $g += 10;      /* first, $g is incremented by 10 and ends with the value of
     dedicated boolean type).  The truth value of expressions in PHP is
     calculated in a similar way to perl.  Any numeric non-zero numeric
     value is TRUE, zero is FALSE.  Be sure to note that negative
-    values are non-zero and are thus considered TRUE!  With strings,
-    empty strings are considered FALSE, any other string is considered
-    TRUE.  With non-scalar values (arrays and objects) - if the value
-    contains no elements it's considered FALSE, otherwise it's
-    considered TRUE.
+    values are non-zero and are thus considered TRUE!  Any non-empty
+    string is considered to be TRUE; empty strings are FALSE.  With
+    non-scalar values (arrays and objects) - if the value contains no
+    elements it's considered FALSE, otherwise it's considered TRUE.
    <simpara>
     PHP 3 provides a full and powerful implementation of expressions,
     and documenting it entirely goes beyond the scope of this manual.
@@ -255,9 +254,9 @@ if ($a>$b) {
     $a>$b, 'a is equal to b' if $a==$b, and 'a is smaller than b' if
     $a<$b:
     <informalexample><programlisting>
-if ($a>$b) {
+if ($a > $b) {
     print "a is bigger than b";
-} elseif {
+} elseif ($a == $b) {
     print "a is equal to b";
 } else {
     print "a is smaller than b";

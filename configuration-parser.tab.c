@@ -47,7 +47,7 @@
 
 
 
-/* $Id: configuration-parser.y,v 1.58 1998/01/07 20:39:07 shane Exp $ */
+/* $Id: configuration-parser.y,v 1.61 1998/02/12 18:30:37 zeev Exp $ */
 
 #define DEBUG_CFG_PARSER 1
 #ifdef THREAD_SAFE
@@ -191,6 +191,7 @@ int php3_init_config(void)
 
 		php3_ini.safe_mode = 0;
 		cfgin = php3_fopen_with_path("php3.ini","r",php_ini_path,&opened_path);
+		free(php_ini_path);
 		php3_ini.safe_mode = safe_mode_state;
 
 		if (!cfgin) {
@@ -218,6 +219,7 @@ int php3_init_config(void)
 		parsing_mode = PARSING_MODE_CFG;
 		currently_parsed_filename = "php3.ini";
 		yyparse();
+		fclose(cfgin);
 	}
 	
 #endif
@@ -245,6 +247,7 @@ int php3_minit_browscap(INITFUNCARGS)
 		parsing_mode = PARSING_MODE_BROWSCAP;
 		currently_parsed_filename = php3_ini.browscap;
 		yyparse();
+		fclose(cfgin);
 	}
 
 	return SUCCESS;
@@ -376,8 +379,8 @@ static const short yyrhs[] = {    11,
 
 #if YYDEBUG != 0
 static const short yyrline[] = { 0,
-   304,   306,   309,   323,   324,   329,   346,   350,   352,   355,
-   357,   358,   359
+   307,   309,   312,   326,   327,   332,   349,   353,   355,   358,
+   360,   361,   362
 };
 #endif
 
@@ -434,7 +437,7 @@ static const short yycheck[] = {     0,
 #define YYPURE 1
 
 /* -*-C-*-  Note some compilers choke on comments on `#line' lines.  */
-#line 3 "/usr/lib/bison.simple"
+#line 3 "/usr/local/share/bison.simple"
 
 /* Skeleton output parser for bison,
    Copyright (C) 1984, 1989, 1990 Free Software Foundation, Inc.
@@ -627,7 +630,7 @@ __yy_memcpy (char *to, char *from, int count)
 #endif
 #endif
 
-#line 196 "/usr/lib/bison.simple"
+#line 196 "/usr/local/share/bison.simple"
 
 /* The user can define YYPARSE_PARAM as the name of an argument to be passed
    into yyparse.  The argument should have type void *.
@@ -932,7 +935,7 @@ yyreduce:
   switch (yyn) {
 
 case 3:
-#line 310 "configuration-parser.y"
+#line 313 "configuration-parser.y"
 {
 #if 0
 			printf("'%s' = '%s'\n",yyvsp[-2].value.strval,yyvsp[0].value.strval);
@@ -948,11 +951,11 @@ case 3:
 		;
     break;}
 case 4:
-#line 323 "configuration-parser.y"
+#line 326 "configuration-parser.y"
 { free(yyvsp[0].value.strval); ;
     break;}
 case 5:
-#line 324 "configuration-parser.y"
+#line 327 "configuration-parser.y"
 {
 			YYSTYPE dummy;
 			
@@ -960,7 +963,7 @@ case 5:
 		;
     break;}
 case 6:
-#line 329 "configuration-parser.y"
+#line 332 "configuration-parser.y"
 { 
 			if (parsing_mode==PARSING_MODE_BROWSCAP) {
 				YYSTYPE tmp;
@@ -970,7 +973,7 @@ case 6:
 				hash_init(tmp.value.ht, 0, NULL, (void (*)(void *))yystype_config_destructor, 1);
 				tmp.type = IS_OBJECT;
 				hash_update(active_hash_table, yyvsp[0].value.strval, yyvsp[0].strlen+1, (void *) &tmp, sizeof(YYSTYPE), (void **) &current_section);
-				tmp.value.strval = strndup(yyvsp[0].value.strval,yyvsp[0].strlen);
+				tmp.value.strval = php3_strndup(yyvsp[0].value.strval,yyvsp[0].strlen);
 				tmp.strlen = yyvsp[0].strlen;
 				tmp.type = IS_STRING;
 				convert_browscap_pattern(&tmp);
@@ -980,32 +983,32 @@ case 6:
 		;
     break;}
 case 8:
-#line 351 "configuration-parser.y"
+#line 354 "configuration-parser.y"
 { yyval = yyvsp[0]; ;
     break;}
 case 9:
-#line 352 "configuration-parser.y"
+#line 355 "configuration-parser.y"
 { yyval = yyvsp[0]; ;
     break;}
 case 10:
-#line 356 "configuration-parser.y"
+#line 359 "configuration-parser.y"
 { yyval = yyvsp[0]; ;
     break;}
 case 11:
-#line 357 "configuration-parser.y"
+#line 360 "configuration-parser.y"
 { yyval = yyvsp[0]; ;
     break;}
 case 12:
-#line 358 "configuration-parser.y"
+#line 361 "configuration-parser.y"
 { yyval = yyvsp[0]; ;
     break;}
 case 13:
-#line 359 "configuration-parser.y"
+#line 362 "configuration-parser.y"
 { yyval.value.strval = strdup(""); yyval.strlen=0; yyval.type = IS_STRING; ;
     break;}
 }
    /* the action file gets copied in in place of this dollarsign */
-#line 498 "/usr/lib/bison.simple"
+#line 498 "/usr/local/share/bison.simple"
 
   yyvsp -= yylen;
   yyssp -= yylen;
@@ -1201,4 +1204,4 @@ yyerrhandle:
   yystate = yyn;
   goto yynewstate;
 }
-#line 369 "configuration-parser.y"
+#line 372 "configuration-parser.y"

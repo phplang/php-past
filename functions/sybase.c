@@ -26,7 +26,7 @@
    +----------------------------------------------------------------------+
  */
  
-/* $Id: sybase.c,v 1.82 1998/01/28 16:11:12 zeev Exp $ */
+/* $Id: sybase.c,v 1.85 1998/02/04 11:52:53 zeev Exp $ */
 
 
 #ifndef MSVC5
@@ -65,6 +65,26 @@ function_entry sybase_functions[] = {
 	{"sybase_fetch_field",		php3_sybase_fetch_field,		NULL},
 	{"sybase_field_seek",		php3_sybase_field_seek,			NULL},
 	{"sybase_result",			php3_sybase_result,				NULL},
+	{"sybase_min_error_severity",	php3_sybase_min_error_severity,		NULL},
+	{"sybase_min_message_severity",	php3_sybase_min_message_severity,	NULL},
+	{"mssql_connect",			php3_sybase_connect,			NULL},
+	{"mssql_pconnect",			php3_sybase_pconnect,			NULL},
+	{"mssql_close",				php3_sybase_close,				NULL},
+	{"mssql_select_db",			php3_sybase_select_db,			NULL},
+	{"mssql_query",				php3_sybase_query,				NULL},
+	{"mssql_free_result",		php3_sybase_free_result,		NULL},
+	{"mssql_get_last_message",	php3_sybase_get_last_message,	NULL},
+	{"mssql_num_rows",			php3_sybase_num_rows,			NULL},
+	{"mssql_num_fields",		php3_sybase_num_fields,			NULL},
+	{"mssql_fetch_row",			php3_sybase_fetch_row,			NULL},
+	{"mssql_fetch_array",		php3_sybase_fetch_array,		NULL},
+	{"mssql_fetch_object",		php3_sybase_fetch_object,		NULL},
+	{"mssql_data_seek",			php3_sybase_data_seek,			NULL},
+	{"mssql_fetch_field",		php3_sybase_fetch_field,		NULL},
+	{"mssql_field_seek",		php3_sybase_field_seek,			NULL},
+	{"mssql_result",			php3_sybase_result,				NULL},
+	{"mssql_min_error_severity",	php3_sybase_min_error_severity,		NULL},
+	{"mssql_min_message_severity",	php3_sybase_min_message_severity,	NULL},
 	{NULL, NULL, NULL}
 };
 
@@ -188,11 +208,11 @@ int php3_minit_sybase(INITFUNCARG)
 	if (cfg_get_long("sybase.max_links",&php3_sybase_module.max_links)==FAILURE) {
 		php3_sybase_module.max_links=-1;
 	}
-	if (cfg_get_long("sybase.min_error_severity",&php3_sybase_module.min_error_severity)==FAILURE) {
-		php3_sybase_module.min_error_severity=10;
+	if (cfg_get_long("sybase.min_error_severity",&php3_sybase_module.cfg_min_error_severity)==FAILURE) {
+		php3_sybase_module.cfg_min_error_severity=10;
 	}
-	if (cfg_get_long("sybase.min_message_severity",&php3_sybase_module.min_message_severity)==FAILURE) {
-		php3_sybase_module.min_message_severity=10;
+	if (cfg_get_long("sybase.min_message_severity",&php3_sybase_module.cfg_min_message_severity)==FAILURE) {
+		php3_sybase_module.cfg_min_message_severity=10;
 	}
 	
 	php3_sybase_module.num_persistent=0;
@@ -210,6 +230,8 @@ int php3_rinit_sybase(INITFUNCARG)
 	php3_sybase_module.num_links = php3_sybase_module.num_persistent;
 	php3_sybase_module.appname = estrndup("PHP 3.0",7);
 	php3_sybase_module.server_message = empty_string;
+	php3_sybase_module.min_error_severity = php3_sybase_module.cfg_min_error_severity;
+	php3_sybase_module.min_message_severity = php3_sybase_module.cfg_min_message_severity;
 	return SUCCESS;
 }
 
@@ -1094,6 +1116,30 @@ void php3_info_sybase(void)
 				php3_sybase_module.num_links,maxl,
 				php3_sybase_module.appname,
 				dbversion());
+}
+
+
+void php3_sybase_min_error_severity(INTERNAL_FUNCTION_PARAMETERS)
+{
+	YYSTYPE *severity;
+	
+	if (ARG_COUNT(ht)!=1 || getParameters(ht, 1, &severity)==FAILURE) {
+		WRONG_PARAM_COUNT;
+	}
+	convert_to_long(severity);
+	php3_sybase_module.min_error_severity = severity->value.lval;
+}
+
+
+void php3_sybase_min_message_severity(INTERNAL_FUNCTION_PARAMETERS)
+{
+	YYSTYPE *severity;
+	
+	if (ARG_COUNT(ht)!=1 || getParameters(ht, 1, &severity)==FAILURE) {
+		WRONG_PARAM_COUNT;
+	}
+	convert_to_long(severity);
+	php3_sybase_module.min_message_severity = severity->value.lval;
 }
 
 #endif

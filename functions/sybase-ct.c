@@ -22,7 +22,7 @@
    +----------------------------------------------------------------------+
  */
  
-/* $Id: sybase-ct.c,v 1.23 1998/01/26 18:02:29 zeev Exp $ */
+/* $Id: sybase-ct.c,v 1.28 1998/02/24 14:48:17 zeev Exp $ */
 
 
 #ifndef MSVC5
@@ -55,6 +55,25 @@ function_entry sybct_functions[] = {
 	{"sybase_fetch_field",	php3_sybct_fetch_field,		NULL},
 	{"sybase_field_seek",	php3_sybct_field_seek,		NULL},
 	{"sybase_result",		php3_sybct_result,			NULL},
+	{"sybase_min_client_severity",	php3_sybct_min_client_severity,		NULL},
+	{"sybase_min_server_severity",	php3_sybct_min_server_severity,		NULL},
+	{"mssql_connect",		php3_sybct_connect,			NULL},
+	{"mssql_pconnect",		php3_sybct_pconnect,		NULL},
+	{"mssql_close",			php3_sybct_close,			NULL},
+	{"mssql_select_db",		php3_sybct_select_db,		NULL},
+	{"mssql_query",			php3_sybct_query,			NULL},
+	{"mssql_free_result",	php3_sybct_free_result,		NULL},
+	{"mssql_num_rows",		php3_sybct_num_rows,		NULL},
+	{"mssql_num_fields",	php3_sybct_num_fields,		NULL},
+	{"mssql_fetch_row",		php3_sybct_fetch_row,		NULL},
+	{"mssql_fetch_array",	php3_sybct_fetch_array,		NULL},
+	{"mssql_fetch_object",	php3_sybct_fetch_object,	NULL},
+	{"mssql_data_seek",		php3_sybct_data_seek,		NULL},
+	{"mssql_fetch_field",	php3_sybct_fetch_field,		NULL},
+	{"mssql_field_seek",	php3_sybct_field_seek,		NULL},
+	{"mssql_result",		php3_sybct_result,			NULL},
+	{"mssql_min_client_severity",	php3_sybct_min_client_severity,		NULL},
+	{"mssql_min_server_severity",	php3_sybct_min_server_severity,		NULL},
 	{NULL, NULL, NULL}
 };
 
@@ -176,11 +195,11 @@ int php3_minit_sybct(INITFUNCARG)
 	if (cfg_get_long("sybct.max_links",&php3_sybct_module.max_links)==FAILURE) {
 		php3_sybct_module.max_links=-1;
 	}
-	if (cfg_get_long("sybct.min_server_severity",&php3_sybct_module.min_server_severity)==FAILURE) {
-		php3_sybct_module.min_server_severity=10;
+	if (cfg_get_long("sybct.min_server_severity",&php3_sybct_module.cfg_min_server_severity)==FAILURE) {
+		php3_sybct_module.cfg_min_server_severity=10;
 	}
-	if (cfg_get_long("sybct.min_client_severity",&php3_sybct_module.min_client_severity)==FAILURE) {
-		php3_sybct_module.min_client_severity=10;
+	if (cfg_get_long("sybct.min_client_severity",&php3_sybct_module.cfg_min_client_severity)==FAILURE) {
+		php3_sybct_module.cfg_min_client_severity=10;
 	}
 	
 
@@ -199,6 +218,8 @@ int php3_rinit_sybct(INITFUNCARG)
 	php3_sybct_module.num_links = php3_sybct_module.num_persistent;
 	php3_sybct_module.appname = estrndup("PHP 3.0",7);
 	php3_sybct_module.server_message = NULL;
+	php3_sybct_module.min_server_severity = php3_sybct_module.cfg_min_server_severity;
+	php3_sybct_module.min_client_severity = php3_sybct_module.cfg_min_client_severity;
 	return SUCCESS;
 }
 
@@ -690,10 +711,51 @@ void php3_sybct_query(INTERNAL_FUNCTION_PARAMETERS)
 
 	for (i=0; i<num_fields; i++) {
 		ct_describe(sybct_ptr->cmd,i+1,&datafmt[i]);
-		tmp_buffer[i] = (char *)emalloc(datafmt[i].maxlength+1);
+		switch (datafmt[i].datatype) {
+			case CS_CHAR_TYPE:
+			case CS_VARCHAR_TYPE:
+			case CS_TEXT_TYPE:
+			case CS_IMAGE_TYPE:
+				datafmt[i].maxlength++;
+				break;
+			case CS_BINARY_TYPE:
+			case CS_VARBINARY_TYPE:
+				datafmt[i].maxlength *= 2;
+				datafmt[i].maxlength++;
+				break;
+			case CS_BIT_TYPE:
+			case CS_TINYINT_TYPE:
+				datafmt[i].maxlength = 3;
+				break;
+			case CS_SMALLINT_TYPE:
+				datafmt[i].maxlength = 6;
+				break;
+			case CS_INT_TYPE:
+				datafmt[i].maxlength = 11;
+				break;
+			case CS_REAL_TYPE:
+			case CS_FLOAT_TYPE:
+				datafmt[i].maxlength = 20;
+				break;
+			case CS_MONEY_TYPE:
+			case CS_MONEY4_TYPE:
+				datafmt[i].maxlength = 24;
+				break;
+			case CS_DATETIME_TYPE:
+			case CS_DATETIME4_TYPE:
+				datafmt[i].maxlength = 30;
+				break;
+			case CS_NUMERIC_TYPE:
+			case CS_DECIMAL_TYPE:
+				datafmt[i].maxlength = CS_MAX_PREC+1;
+				break;
+			default:
+				datafmt[i].maxlength++;
+				break;
+		}
+		tmp_buffer[i] = (char *)emalloc(datafmt[i].maxlength);
 		datafmt[i].datatype = CS_CHAR_TYPE;
 		datafmt[i].format = CS_FMT_NULLTERM;
-		datafmt[i].maxlength++;
 		ct_bind(sybct_ptr->cmd,i+1,&datafmt[i],tmp_buffer[i],&lengths[i],&indicators[i]);
 	}
 	
@@ -1148,5 +1210,30 @@ void php3_info_sybct(void)
 				php3_sybct_module.num_links,maxl,
 				php3_sybct_module.appname);
 }
+
+
+void php3_sybct_min_client_severity(INTERNAL_FUNCTION_PARAMETERS)
+{
+	YYSTYPE *severity;
+	
+	if (ARG_COUNT(ht)!=1 || getParameters(ht, 1, &severity)==FAILURE) {
+		WRONG_PARAM_COUNT;
+	}
+	convert_to_long(severity);
+	php3_sybct_module.min_client_severity = severity->value.lval;
+}
+
+
+void php3_sybct_min_server_severity(INTERNAL_FUNCTION_PARAMETERS)
+{
+	YYSTYPE *severity;
+	
+	if (ARG_COUNT(ht)!=1 || getParameters(ht, 1, &severity)==FAILURE) {
+		WRONG_PARAM_COUNT;
+	}
+	convert_to_long(severity);
+	php3_sybct_module.min_server_severity = severity->value.lval;
+}
+
 
 #endif

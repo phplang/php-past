@@ -24,7 +24,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: gd.c,v 1.54 1998/02/01 20:26:34 jim Exp $ */
+/* $Id: gd.c,v 1.56 1998/02/19 20:09:42 rasmus Exp $ */
 
 /* gd 1.2 is copyright 1994, 1995, Quest Protein Database Center, 
    Cold Spring Harbor Labs. */
@@ -113,6 +113,7 @@ function_entry gd_functions[] = {
 	{"imagestringup",			php3_imagestringup,			NULL},
 	{"imagesx",					php3_imagesxfn,				NULL},
 	{"imagesy",					php3_imagesyfn,				NULL},
+	{"imagedashedline",			php3_imagedashedline,  		NULL},
 	{NULL, NULL, NULL}
 };
 
@@ -216,7 +217,7 @@ void php3_imageloadfont(INTERNAL_FUNCTION_PARAMETERS) {
 	int ind, body_size, n, b;
 	gdFontPtr font;
 	FILE *fp;
-	SOCK_VARS;
+	SOCK_VARS
 	GD_TLS_VARS;
 
 
@@ -226,7 +227,7 @@ void php3_imageloadfont(INTERNAL_FUNCTION_PARAMETERS) {
 
 	convert_to_string(file);
 
-	fp = php3_fopen_wrapper(file->value.strval, "r", IGNORE_PATH|IGNORE_URL_WIN SOCK_ARG);
+	fp = php3_fopen_wrapper(file->value.strval, "r", IGNORE_PATH|IGNORE_URL_WIN SOCK_PARG);
 	if (fp == NULL) {
 		php3_error(E_WARNING, "ImageFontLoad: unable to open file");
 		RETURN_FALSE;
@@ -310,7 +311,7 @@ void php3_imagecreatefromgif(INTERNAL_FUNCTION_PARAMETERS) {
 	gdImagePtr im;
 	char *fn=NULL;
 	FILE *fp;
-	SOCK_VARS;
+	SOCK_VARS
 	GD_TLS_VARS;
 
 	if (ARG_COUNT(ht) != 1 || getParameters(ht, 1, &file) == FAILURE) {
@@ -321,7 +322,7 @@ void php3_imagecreatefromgif(INTERNAL_FUNCTION_PARAMETERS) {
 
 	fn = file->value.strval;
 
-	fp = php3_fopen_wrapper(file->value.strval, "r", IGNORE_PATH|IGNORE_URL_WIN SOCK_ARG);
+	fp = php3_fopen_wrapper(file->value.strval, "r", IGNORE_PATH|IGNORE_URL_WIN SOCK_PARG);
 	if(!fp) {
 		php3_strip_url_passwd(fn);
 		php3_error(E_WARNING,
@@ -692,6 +693,41 @@ void php3_imageline(INTERNAL_FUNCTION_PARAMETERS) {
 	gdImageLine(im,x1,y1,x2,y2,col);
 	RETURN_TRUE;
 }	
+
+void php3_imagedashedline(INTERNAL_FUNCTION_PARAMETERS) {
+	YYSTYPE *IM, *COL, *X1, *Y1, *X2, *Y2;
+	gdImagePtr im;
+	int col, y2, x2, y1, x1;
+	int ind_type;
+	GD_TLS_VARS;
+
+	if (ARG_COUNT(ht) != 6 || getParameters(ht, 6, &IM, &X1, &Y1, &X2, &Y2, &COL) == FAILURE)
+	{
+		WRONG_PARAM_COUNT;
+	}
+
+	convert_to_long(IM);
+	convert_to_long(X1);
+	convert_to_long(Y1);
+	convert_to_long(X2);
+	convert_to_long(Y2);
+	convert_to_long(COL);
+
+	x1 = X1->value.lval;
+	y1 = Y1->value.lval;
+	x2 = X2->value.lval;
+	y2 = Y2->value.lval;
+	col = COL->value.lval;
+
+	im = php3_list_find(IM->value.lval, &ind_type);
+	if(!im || ind_type != GD_GLOBAL(le_gd)) {
+		php3_error(E_WARNING, "Unable to find image pointer");
+		RETURN_FALSE;
+	}
+
+	gdImageDashedLine(im,x1,y1,x2,y2,col);
+	RETURN_TRUE;
+}
 
 /* im, x1, y1, x2, y2, col */
 void php3_imagerectangle(INTERNAL_FUNCTION_PARAMETERS) {

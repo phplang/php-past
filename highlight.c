@@ -40,8 +40,10 @@ extern int ExecuteFlag,Execute; /* remove me */
 void syntax_highlight(Token *next_token)
 {
 	register int i;
+	int highlight_keyword;
 	YY_TLS_VARS;
 	TLS_VARS;
+	
 	switch (next_token->token_type) {
 		case FUNCTION:
 		case OLD_FUNCTION:
@@ -59,13 +61,19 @@ void syntax_highlight(Token *next_token)
 		case ENDWHILE:
 		case DO:
 		case FOR:
+		case ENDFOR:
 		case BREAK:
 		case CONTINUE:
 		case INCLUDE:
-		case SHOW_SOURCE:
+		case HIGHLIGHT_FILE:
+		case HIGHLIGHT_STRING:
 		case EVAL:
 		case PHP_ARRAY:
 		case PHP_LIST:
+		case PHP_LINE:
+		case PHP_FILE:
+		case PHP_TRUE:
+		case PHP_FALSE:
 		case '{':
 		case '}':
 		case '(':
@@ -73,9 +81,7 @@ void syntax_highlight(Token *next_token)
 		case '"':
 		case '\'':
 		case '`':
-			PUTS("<font color=\"");
-			PUTS(php3_ini.highlight_keyword);
-			PUTS("\">");
+			highlight_keyword=1;
 			break;
 		case ';':
 			if (phpleng == 1) {
@@ -83,43 +89,22 @@ void syntax_highlight(Token *next_token)
 				PUTS(php3_ini.highlight_keyword);
 				PUTS("\">");
 			}
+			highlight_keyword=0;
 			break;
+		default:
+			highlight_keyword=0;
+			break;
+	}
+	if (highlight_keyword) {
+		PUTS("<font color=\"");
+		PUTS(php3_ini.highlight_keyword);
+		PUTS("\">");
 	}
 	for (i = 0; i < phpleng; i++) {
 		html_putc(phptext[i]);
 	}
-	switch (next_token->token_type) {
-		case FUNCTION:
-		case OLD_FUNCTION:
-		case CLASS:
-		case EXTENDS:
-		case VAR:
-		case NEW:
-		case PHP_ECHO:
-		case PHP_PRINT:
-		case IF:
-		case ELSE:
-		case ELSEIF:
-		case ENDIF:
-		case WHILE:
-		case ENDWHILE:
-		case DO:
-		case FOR:
-		case BREAK:
-		case CONTINUE:
-		case INCLUDE:
-		case SHOW_SOURCE:
-		case EVAL:
-		case '{':
-		case '}':
-		case '(':
-		case ')':
-		case '"':
-		case '\'':
-		case '`':
-		case ';':
-			PUTS("</font>");
-			break;
+	if (highlight_keyword || next_token->token_type==';') {
+		PUTS("</font>");
 	}
 	if (next_token->phplval.type==IS_STRING) {
 		efree(next_token->phplval.value.strval);

@@ -21,7 +21,7 @@
    | Author: Jim Winstead (jimw@php.net)                                  |
    +----------------------------------------------------------------------+
  */
-/* $Id: base64.c,v 1.15 1998/01/15 22:01:06 jim Exp $ */
+/* $Id: base64.c,v 1.16 1998/02/06 10:22:50 ssb Exp $ */
 
 #ifdef THREAD_SAFE
 #include "tls.h"
@@ -41,11 +41,11 @@ static char base64_table[] =
 	};
 static char base64_pad = '=';
 
-char *base64_encode(const char *string) {
-	const char *current = string;
+unsigned char *base64_encode(const unsigned char *string) {
+	const unsigned char *current = string;
 	int length = strlen(string);
 	int i = 0;
-	char *result = (char *)emalloc(((length + 3 - length % 3) * 4 / 3 + 1) * sizeof(char));
+	unsigned char *result = (unsigned char *)emalloc(((length + 3 - length % 3) * 4 / 3 + 1) * sizeof(char));
 
 	while (length > 2) { /* keep going until we have less than 24 bits */
 		result[i++] = base64_table[current[0] >> 2];
@@ -77,12 +77,12 @@ char *base64_encode(const char *string) {
 }
 
 /* as above, but backwards. :) */
-char *base64_decode(const char *string) {
-	const char *current = string;
+unsigned char *base64_decode(const unsigned char *string) {
+	const unsigned char *current = string;
 	int length = strlen(string);
 	int ch, i = 0, j = 0;
 
-	char *result = (char *)emalloc((length / 4 * 3 + 1) * sizeof(char));
+	unsigned char *result = (unsigned char *)emalloc((length / 4 * 3 + 1) * sizeof(char));
 	if (result == NULL) {
 		return NULL;
 	}
@@ -136,7 +136,7 @@ char *base64_decode(const char *string) {
 
 void php3_base64_encode(INTERNAL_FUNCTION_PARAMETERS) {
 	YYSTYPE *string;
-	char *result;
+	unsigned char *result;
 	TLS_VARS;
 
 	if (ARG_COUNT(ht)!=1 || getParameters(ht,1,&string) == FAILURE) {
@@ -155,7 +155,7 @@ void php3_base64_encode(INTERNAL_FUNCTION_PARAMETERS) {
 
 void php3_base64_decode(INTERNAL_FUNCTION_PARAMETERS) {
 	YYSTYPE *string;
-	char *result;
+	unsigned char *result;
 	TLS_VARS;
 
 	if (ARG_COUNT(ht)!=1 || getParameters(ht,1,&string) == FAILURE) {

@@ -315,6 +315,10 @@ SOURCE=.\functions\number.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\functions\pack.c
+# End Source File
+# Begin Source File
+
 SOURCE=.\functions\pageinfo.c
 # End Source File
 # Begin Source File

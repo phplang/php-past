@@ -59,14 +59,14 @@ Correct result - 3:  3<br>
 
 *** Testing real operators ***<br>
 
-Correct result - 8.0:  8.000000<br>
-Correct result - 8.0:  8.000000<br>
-Correct result - 2.0:  2.000000<br>
-Correct result - -2.0:  -2.000000<br>
-Correct result - 15.0:  15.000000<br>
-Correct result - 15.0:  15.000000<br>
-Correct result - 1.666:  1.666667<br>
-Correct result - 0.6:  0.600000<br>
+Correct result - 8:  8<br>
+Correct result - 8:  8<br>
+Correct result - 2:  2<br>
+Correct result - -2:  -2<br>
+Correct result - 15:  15<br>
+Correct result - 15:  15<br>
+Correct result - 1.666667:  1.666667<br>
+Correct result - 0.6:  0.6<br>
 Correct result - 2:  2<br>
 Correct result - 3:  3<br>
 *********************************<br>

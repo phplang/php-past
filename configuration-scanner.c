@@ -706,7 +706,7 @@ case 1:
 YY_RULE_SETUP
 #line 22 "configuration-scanner.lex"
 {
-	cfglval->value.strval = strndup("1",1);
+	cfglval->value.strval = php3_strndup("1",1);
 	cfglval->strlen = 1;
 	cfglval->type = IS_STRING;
 	return TRUE;
@@ -716,7 +716,7 @@ case 2:
 YY_RULE_SETUP
 #line 30 "configuration-scanner.lex"
 {
-	cfglval->value.strval = strndup("",0);
+	cfglval->value.strval = php3_strndup("",0);
 	cfglval->strlen = 0;
 	cfglval->type = IS_STRING;
 	return FALSE;
@@ -738,7 +738,7 @@ YY_RULE_SETUP
 	yytext++;
 	yyleng--;
 
-	cfglval->value.strval = strndup(yytext,yyleng);
+	cfglval->value.strval = php3_strndup(yytext,yyleng);
 	cfglval->strlen = yyleng;
 	cfglval->type = IS_STRING;
 	return SECTION;
@@ -782,7 +782,7 @@ YY_RULE_SETUP
 	/* eat leading " */
 	yytext++;
 
-	cfglval->value.strval = strndup(yytext,yyleng);
+	cfglval->value.strval = php3_strndup(yytext,yyleng);
 	cfglval->strlen = yyleng;
 	cfglval->type = IS_STRING;
 	return ENCAPSULATED_STRING;
@@ -814,7 +814,7 @@ YY_RULE_SETUP
 		}
 	}
 	if (yyleng!=0) {
-		cfglval->value.strval = strndup(yytext,yyleng);
+		cfglval->value.strval = php3_strndup(yytext,yyleng);
 		cfglval->strlen = yyleng;
 		cfglval->type = IS_STRING;
 		return STRING;
@@ -848,7 +848,7 @@ YY_RULE_SETUP
 			break;
 		}
 	}
-	cfglval->value.strval = strndup(yytext,yyleng);
+	cfglval->value.strval = php3_strndup(yytext,yyleng);
 	cfglval->strlen = yyleng;
 	cfglval->type = IS_STRING;
 	return ENCAPSULATED_STRING;
@@ -873,11 +873,12 @@ YY_RULE_SETUP
 #line 167 "configuration-scanner.lex"
 {
 	/* comment */
+	return '\n';
 }
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 171 "configuration-scanner.lex"
+#line 172 "configuration-scanner.lex"
 {
 #if DEBUG
 	php3_error(E_NOTICE,"Unexpected character on line %d:  '%s'\n",yylineno,yytext);
@@ -886,10 +887,10 @@ YY_RULE_SETUP
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 176 "configuration-scanner.lex"
+#line 177 "configuration-scanner.lex"
 ECHO;
 	YY_BREAK
-#line 893 "configuration-scanner.c"
+#line 894 "configuration-scanner.c"
 			case YY_STATE_EOF(INITIAL):
 				yyterminate();
 
@@ -1773,4 +1774,4 @@ int main()
 	return 0;
 	}
 #endif
-#line 176 "configuration-scanner.lex"
+#line 177 "configuration-scanner.lex"

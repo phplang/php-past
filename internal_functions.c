@@ -24,7 +24,7 @@
  */
 
 
-/* $Id: internal_functions.c,v 1.299 1998/01/23 01:29:39 zeev Exp $ */
+/* $Id: internal_functions.c,v 1.303 1998/02/18 21:15:00 andi Exp $ */
 
 #ifdef THREAD_SAFE
 #include "tls.h"
@@ -60,7 +60,6 @@
 #include "functions/phpmath.h"
 #include "functions/php3_string.h"
 #include "functions/oracle.h"
-#include "functions/odbc.h"
 #include "functions/base64.h"
 #include "functions/php3_dir.h"
 #include "functions/dns.h"
@@ -86,6 +85,7 @@
 #include "functions/php3_syslog.h"
 #include "functions/php3_filestat.h"
 #include "functions/php3_browscap.h"
+#include "functions/pack.h"
 #include "php3_debugger.h"
 #include "functions/php3_unified_odbc.h"
 #include "dl/snmp/php3_snmp.h"
@@ -117,7 +117,6 @@ php3_builtin_module php3_builtin_modules[] =
 	{"mSQL",						msql_module_ptr},
 	{"PostgresSQL",					pgsql_module_ptr},
 	{"LDAP",						ldap_module_ptr},
-	{"ODBC",						odbc_module_ptr},
 	{"FilePro",						filepro_module_ptr},
 	{"Sybase SQL",					sybase_module_ptr},
 	{"Sybase SQL - CT",				sybct_module_ptr},
@@ -135,6 +134,7 @@ php3_builtin_module php3_builtin_modules[] =
 	{"bcmath",						bcmath_module_ptr},
 	{"browscap",					browscap_module_ptr},
 	{"SNMP",						snmp_module_ptr},
+	{"Pack/Unpack",					pack_module_ptr},
 	{NULL,							NULL}
 };
 
@@ -469,7 +469,7 @@ int _register_list_destructors(void (*list_destructor)(void *), void (*plist_des
 	ld.list_destructor=(void (*)(void *)) list_destructor;
 	ld.plist_destructor=(void (*)(void *)) plist_destructor;
 	
-	if (hash_next_index_insert(&GLOBAL(list_destructors),(void *) &ld,sizeof(GLOBAL(list_destructors)),NULL)==FAILURE) {
+	if (hash_next_index_insert(&GLOBAL(list_destructors),(void *) &ld,sizeof(list_destructors_entry),NULL)==FAILURE) {
 		return FAILURE;
 	}
 	return GLOBAL(list_destructors).nNextFreeElement-1;

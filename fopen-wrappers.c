@@ -22,7 +22,7 @@
    |          Jim Winstead <jimw@php.net>                                 |
    +----------------------------------------------------------------------+
  */
-/* $Id: fopen-wrappers.c,v 1.7 1998/02/02 00:08:55 shane Exp $ */
+/* $Id: fopen-wrappers.c,v 1.13 1998/03/02 16:05:14 jaakko Exp $ */
 
 #ifdef THREAD_SAFE
 # include "tls.h"
@@ -111,107 +111,101 @@ PHPAPI FILE *php3_fopen_wrapper(char *path, char *mode, int options SOCK_ARG_IN)
 	}
 }
 
+#if CGI_BINARY || USE_SAPI
+
 /* FIXME: What does the comment below mean? jimw */
 /* Lots more stuff needs to go in here.  Trivial case for now */
-FILE *php3_fopen_for_parser(char *filename) {
-	FILE *fp = NULL;
-	char *fn;
-
-#if (!APACHE)
-	char *temp = NULL;
-#if CGI_BINARY || USE_SAPI
+FILE *php3_fopen_for_parser(void) {
+	FILE *fp;
+	struct stat st;
+	char *temp, *path_info, *fn;
 	int l;
-#endif
-#if HAVE_PWD_H
-	char *s, user[32];
-	struct passwd *pw = NULL;
-#endif
-#endif
 	TLS_VARS;
-	
-	
-	fn = filename;
 
-#if CGI_BINARY || USE_SAPI
-/* CGI is the only case where we're never not given a filename and
-   we have to build it from the path_info and the DOCUMENT_ROOT */
-	if (!fn) {
-		fn = GLOBAL(request_info).path_info;
-		if (fn) {
-			GLOBAL(request_info).filename = estrdup(fn);
+
+	fn = GLOBAL(request_info).filename;
+	path_info = GLOBAL(request_info).path_info;
 #if HAVE_PWD_H
-			if (*(fn + 1) == '~') {
-				s = strchr(fn + 1, '/');
-				if (s) {
-					*s = '\0';
-				}
-				strcpy(user, fn + 2);	/* This strcpy is safe, path size is known */
-				if (s) {
-					*s = '/';
-				}
-				l = strlen(php3_ini.user_dir);
-				if (user) {
-					pw = getpwnam(user);
-					if (pw) {
-						temp = emalloc(l + strlen(fn) + strlen(PHP_USER_DIR) + strlen(pw->pw_dir) + 4);
-						strcpy(temp, pw->pw_dir);
-						strcat(temp, "/");
-						strcat(temp, php3_ini.user_dir);
-						strcat(temp, "/");
-						if (s) {
-							strcat(temp, s);
-						}
-						STR_FREE(GLOBAL(request_info).filename);
-						GLOBAL(request_info).filename = fn = temp;
-					}
-				}
-			} else {
-#endif
-				l = strlen(php3_ini.doc_root);
-				temp = emalloc(l + strlen(fn) + 2);
-				if (temp) {
-					strcpy(temp, php3_ini.doc_root);
-					if ((php3_ini.doc_root[l - 1] != '/') && (fn[0] != '/')) {
-						strcat(temp, "/");
-					}
-					strcat(temp, fn);
+	if (php3_ini.user_dir && *php3_ini.user_dir
+		&& path_info && '/' == path_info[0] && '~' == path_info[1]) {
+
+		char user[32];
+		struct passwd *pw;
+		char *s = strchr(path_info + 2, '/');
+
+		fn = NULL; /* discard the original filename, it must not be used */
+		if (s) { /* if there is no path name after the file, do not bother
+					to try open the directory */
+			l = s-(path_info+2);
+			if (l > sizeof (user) - 1)
+				l = sizeof (user) - 1;
+			memcpy (user, path_info+2, l);
+			user [l] = '\0';
+
+			pw = getpwnam(user);
+			if (pw && pw->pw_dir) {
+				fn = emalloc(strlen(php3_ini.user_dir) + strlen(path_info) + strlen(pw->pw_dir) + 4);
+				if (fn) {
+					strcpy(fn, pw->pw_dir); /* safe */
+					strcat(fn, "/"); /* safe */
+					strcat(fn, php3_ini.user_dir); /* safe */
+					strcat(fn, "/"); /* safe */
+					strcat(fn, s+1); /* safe (shorter than path_info) */
 					STR_FREE(GLOBAL(request_info).filename);
-					GLOBAL(request_info).filename = fn = temp;
+					GLOBAL(request_info).filename = fn;
 				}
-#if HAVE_PWD_H
 			}
-#endif
 		}
-	}
+	} else
 #endif
+		if (php3_ini.doc_root && '/' == *php3_ini.doc_root && path_info) {
+
+			l = strlen(php3_ini.doc_root);
+			fn = emalloc(l + strlen(path_info) + 2);
+			if (fn) {
+				memcpy(fn, php3_ini.doc_root, l);
+				if ('/' != fn[l-1]) /* l is never 0 */
+					fn[l++] = '/';
+				if ('/' == path_info[0])
+					l--;
+				strcpy (fn + l, path_info);
+				STR_FREE(GLOBAL(request_info).filename);
+				GLOBAL(request_info).filename = fn;
+			}
+		} /* if doc_root && path_info */
 
 	if (!fn) {
-		php3_error(E_WARNING, "fn is empty");
 		/* we have to free request_info.filename here because
 		   php3_destroy_request_info assumes that it will get
 		   freed when the include_names hash is emptied, but
 		   we're not adding it in this case */
 		STR_FREE(GLOBAL(request_info).filename);
+		GLOBAL(request_info).filename=NULL;
 		return NULL;
 	}
 	fp = fopen(fn, "r");
+
+	/* refuse to open anything that is not a regular file */
+	if (fp && (0 > fstat (fileno (fp), &st) || !S_ISREG(st.st_mode))) {
+		fclose (fp);
+		fp = NULL;
+	}
 	if (!fp) {
 		php3_error(E_ERROR, "Unable to open %s", fn);
 		STR_FREE(GLOBAL(request_info).filename); /* for same reason as above */
-	} else {
-		hash_index_update(&GLOBAL(include_names), 0, (void *) &fn, sizeof(char *),NULL);
+		return NULL;
 	}
+	hash_index_update(&GLOBAL(include_names), 0, (void *) &fn, sizeof(char *),NULL);
 
-#if CGI_BINARY || USE_SAPI
 	temp=strdup(fn);
 	_php3_dirname(temp);
-	if(strlen(temp)) chdir(temp);
+	if(*temp) chdir(temp);
 	free(temp);
-#endif
 
 	return fp;
 }
 
+#endif /* CGI_BINARY || USE_SAPI */
 
 /*
  * Tries to open a file with a PATH-style list of directories.
@@ -885,5 +879,6 @@ PHPAPI char *php3_strip_url_passwd(char *path)
 /*
  * Local variables:
  * tab-width: 4
+ * c-basic-offset: 4
  * End:
  */

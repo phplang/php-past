@@ -1,0 +1,564 @@
+ <reference id="ref.ldap">
+  <title>LDAP Functions</title>
+
+
+  <refentry id="function.ldap-add">
+   <refnamediv>
+    <refname>ldap_add</refname>
+    <refpurpose></refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>ldap_add</function></funcdef>
+     <paramdef>int <parameter>link_identifier</parameter></paramdef>
+     <paramdef>string <parameter>dn</parameter></paramdef>
+     <paramdef>array <parameter>entry</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+    returns true on success and false on error.
+    <para>  
+    ldap_add() function is used to add entries in the LDAP directory. The DN 
+    of the entry to be added is specified by dn. Array entry specifies the
+    information about the entry. The values in the entries are indexed by
+    individual attributes. In case of multiple values for an attribute, they
+    are indexed using integers starting with 0.
+	<para>
+	<programlisting>
+		entry["attribute1"] = value
+		
+		entry["attribute2"][0] = value1
+		entry["attribute2"][1] = value2
+	</programlisting>
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.ldap-bind">
+   <refnamediv>
+    <refname>ldap_bind</refname>
+    <refpurpose></refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>ldap_bind</function></funcdef>
+     <paramdef>int <parameter>link_identifier</parameter></paramdef>
+     <paramdef>string <parameter>bind_rdn</parameter></paramdef>
+     <paramdef>string <parameter>bind_password</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+    Binds to the LDAP directory with specified RDN and password. Returns
+    true on success and false on error.
+    <para>  
+    ldap_bind() does a bind operation on the directory. bind_rdn and 
+    bind_password are optional. If not specified, anonymous bind is 
+    attempted.
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.ldap-close">
+   <refnamediv>
+    <refname>ldap_close</refname>
+    <refpurpose></refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>ldap_close</function></funcdef>
+     <paramdef>int <parameter>link_identifier</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+    Returns true on success, false on error.
+    <para>  
+    ldap_close() closes the link to the LDAP server that's associated with
+    the specified link identifier. 
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.ldap-connect">
+   <refnamediv>
+    <refname>ldap_connect</refname>
+    <refpurpose></refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>ldap_connect</function></funcdef>
+     <paramdef>string <parameter>hostname</parameter></paramdef>
+     <paramdef>int <parameter>port</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+    Returns a positive LDAP link identifier on success, or false on error.
+    <para>  
+    ldap_connect() establishes a connection to a LDAP server on a specified 
+    host and port. Both the arguments are optional. If no arguments are 
+    specified then the link identifier of the already opened link will be
+    returned. If only hostname is specified, then the port defaults to 389.
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.ldap-count-entries">
+   <refnamediv>
+    <refname>ldap_count_entries</refname>
+    <refpurpose></refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>ldap_count_entries</function></funcdef>
+     <paramdef>int <parameter>link_identifier</parameter></paramdef>
+     <paramdef>int <parameter>result_identifier</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+    returns number of entries in the result or false on error.
+    <para>  
+    ldap_count_entries() returns the number of entries stored in the result
+    of previous search operations. result_identifier identifies the internal
+    ldap result.
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.ldap-delete">
+   <refnamediv>
+    <refname>ldap_delete</refname>
+    <refpurpose></refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>ldap_delete</function></funcdef>
+     <paramdef>int <parameter>link_identifier</parameter></paramdef>
+     <paramdef>string <parameter>dn</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+    returns true on success and false on error.
+    <para>  
+    ldap_delete() function delete a particular entry in LDAP directory 
+    specified by dn.
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.ldap-first-attribute">
+   <refnamediv>
+    <refname>ldap_first_attribute</refname>
+    <refpurpose></refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>ldap_first_attribute</function></funcdef>
+     <paramdef>int <parameter>link_identifier</parameter></paramdef>
+     <paramdef>int <parameter>result_entry_identifier</parameter></paramdef>
+     <paramdef>int <parameter>ber_identifier</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+    returns the first attribute in the entry on success and false on error.
+    <para>  
+    Similar to reading entries, attributes are also read one
+    by one from a particular entry. <link linkend="function.ldap-first-attribute">
+	ldap_first_attribute()</link> returns the
+    first attribute in the entry pointed by the entry identifier.  Remaining
+    attributes are retrieved by calling <link linkend="function.ldap-next-attribute">
+	ldap_next_attribute() </link> successively. 
+    ber_identifier is the identifier to internal memory location pointer. It 
+    is passed by reference. The same ber_identifier is passed to the 
+    ldap_next_attribute() function, which modifies that pointer.
+	<para>
+	see also <link linkend="function.ldap-get-attributes"> ldap_get_attributes
+	</link>
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.ldap-first-entry">
+   <refnamediv>
+    <refname>ldap_first_entry</refname>
+    <refpurpose></refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>ldap_first_entry</function></funcdef>
+     <paramdef>int <parameter>link_identifier</parameter></paramdef>
+     <paramdef>int <parameter>result_identifier</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+    returns the result entry identifier for the first entry on success and
+    false on error.
+    <para>  
+    Entries in the LDAP result are read sequentially using the ldap_first_entry()
+    and ldap_next_entry() functions. ldap_first_entry() returns the entry
+    identifier for first entry in the result. This entry identifier is then
+    supplied to <link linkend="function.ldap-next-entry"> ldap_next_entry()
+	</link> routine to get successive entries from the result.
+	<para>
+	see also.<link linkend="function.ldap-get-entries"> ldap_get_entries() </link>
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.ldap-free-entry">
+   <refnamediv>
+    <refname>ldap_free_entry</refname>
+    <refpurpose></refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>ldap_free_entry</function></funcdef>
+     <paramdef>int <parameter>result_entry_identifier</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+    returns true on success and false on error.
+    <para>  
+    ldap_free_entry() deallocates memory used to store the entries in LDAP
+    result. All memory allocated for entries is automatically freed when
+    the script terminates.
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.ldap-free-result">
+   <refnamediv>
+    <refname>ldap_free_result</refname>
+    <refpurpose></refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>ldap_free_result</function></funcdef>
+     <paramdef>int <parameter>result_identifier</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+    returns true on success and false on error.
+    <para>  
+    ldap_free_result() frees up the memory allocated internally to store
+    the result and pointed by the result_identifier. All result memory 
+    will be automatically freed when the script terminates. 
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.ldap-get-attributes">
+   <refnamediv>
+    <refname>ldap_get_attributes</refname>
+    <refpurpose></refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>ldap_get_attributes</function></funcdef>
+     <paramdef>int <parameter>link_identifier</parameter></paramdef>
+     <paramdef>int <parameter>result_entry_identifier</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+    returns a comlete entry information in a multi-dimensional array on success
+    and false on error.
+    <para>  
+    ldap_get_attributes() function is used to simplify reading the attributes 
+    and values from an entry in the search result. The return value is a 
+    multi-dimensional array of attributes and values.
+	<para>
+	<programlisting>
+    return_value["count"] = number of attributes in the entry
+    return_value[0] = first attribute
+    return_value[n] = nth attribute
+
+    return_value["attribute"]["count"] = number of values for attribute
+    return_value["attribute"][0] = first value of the attribute
+    return_value["attribute"][i] = ith value of the attribute
+	</programlisting>
+
+	see also <link linkend="function.ldap-first-attribute">
+	ldap_first_attribute() </link> and 
+	<link linkend="function.ldap-next-attribute">
+	ldap_next_attribute() </link>
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.ldap-get-dn">
+   <refnamediv>
+    <refname>ldap_get_dn</refname>
+    <refpurpose></refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>string <function>ldap_get_dn</function></funcdef>
+     <paramdef>int <parameter>link_identifier</parameter></paramdef>
+     <paramdef>int <parameter>result_entry_identifier</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+    returns the dn of the result entry and false on error.
+    <para>  
+	ldap_get_dn() function is used to find out the DN of an entry in the
+	result.
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.ldap-get-entries">
+   <refnamediv>
+    <refname>ldap_get_entries</refname>
+    <refpurpose></refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>ldap_get_entries</function></funcdef>
+     <paramdef>int <parameter>link_identifier</parameter></paramdef>
+     <paramdef>int <parameter>result_identifier</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+    returns a complete result information in a multi-dimenasional array on
+    success and false on error.
+    <para>  
+    ldap_get_entries() function is used to simplify reading multiple entries
+    from the result and then reading the attributes and multiple values. The
+    entire information is returned by one function call in a multi-dimensional
+    array. The structure of the array is as follows.
+    <para>
+    <programlisting>
+    return_value["count"] = number of entries in the result
+    return_value[0] : refers to the details of first entry
+
+    return_value[i]["dn"] =  DN of the ith entry in the result
+
+    return_value[i]["count"] = number of attributes in ith entry
+    return_value[i][j] = jth attribute in the ith entry in the result
+
+    return_value[i]["attribute"]["count"] = number of values for attribute in ith entry
+    return_value[i]["attribute"][j] = jth value of attribute in ith entry
+    </programlisting>
+	
+	see also <link linkend="function.ldap-first-entry"> ldap_first_entry()
+	</link> and <link linkend="function.ldap-next-entry"> ldap_next_entry()
+	</link>
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.ldap-get-values">
+   <refnamediv>
+    <refname>ldap_get_values</refname>
+    <refpurpose></refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>ldap_get_values</function></funcdef>
+     <paramdef>int <parameter>link_identifier</parameter></paramdef>
+     <paramdef>int <parameter>result_entry_identifier</parameter></paramdef>
+     <paramdef>string <parameter>attribute</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+    returns an array of values for the attribute on success and false on error.
+    <para>  
+    ldap_get_values() function is used to read all the values of 
+    the attribute in the entry in the result. entry is specified by the 
+    result_entry_identifier. The number of values can be found by indexing
+    "count" in the resultant array. Individual values are accessed by 
+    integer index in the array.  Index starts with 0.
+   	<para> 
+	<programlisting>
+    return_value["count"] = number of values for attribute
+    return_value[0] = first value of attribute
+    return_value[i] = ith value of attribute
+	</programlisting>
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.ldap-list">
+   <refnamediv>
+    <refname>ldap_list</refname>
+    <refpurpose></refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>ldap_list</function></funcdef>
+     <paramdef>int <parameter>link_identifier</parameter></paramdef>
+     <paramdef>string <parameter>base_dn</parameter></paramdef>
+     <paramdef>string <parameter>filter</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+    reutrns a search result identifier or false on error.
+    <para>  
+    ldap_list() performs the search for a specified filter on the directory
+    with the scope LDAP_SCOPE_ONELEVEL. 
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.ldap-modify">
+   <refnamediv>
+    <refname>ldap_modify</refname>
+    <refpurpose></refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>ldap_modify</function></funcdef>
+     <paramdef>int <parameter>link_identifier</parameter></paramdef>
+     <paramdef>string <parameter>dn</parameter></paramdef>
+     <paramdef>array <parameter>entry</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+    returns true on success and false on error.
+    <para>  
+    ldap_modify() function is used to modify the existing entries in LDAP
+    directory. The structure of the entry is same as in ldap_add(). see
+	<link linkend="function.ldap-add">ldap_add()</link>
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.ldap-next-attribute">
+   <refnamediv>
+    <refname>ldap_next_attribute</refname>
+    <refpurpose></refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>ldap_next_attribute</function></funcdef>
+     <paramdef>int <parameter>link_identifier</parameter></paramdef>
+     <paramdef>int <parameter>result_entry_identifier</parameter></paramdef>
+     <paramdef>int <parameter>ber_identifier</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+    returns the next attribute in an entry on success and false on error.
+    <para>  
+    ldap_next_attribute() is called to retrieve the attributes in an entry.
+    The internal state of the pointer is maintained by the ber_identifier. It
+    is passed by reference to the function. The first call to
+	ldap_next_attribute() is made with the result_entry_identifier returned
+	from <link linkend="function.ldap-first-attribute">
+	ldap_first_attribute() </link>.
+	<para>
+	see also <link linkend="function.ldap-get-attributes"> ldap_get_attributes
+	</link>
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.ldap-next-entry">
+   <refnamediv>
+    <refname>ldap_next_entry</refname>
+    <refpurpose></refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>ldap_next_entry</function></funcdef>
+     <paramdef>int <parameter>link_identifier</parameter></paramdef>
+     <paramdef>int <parameter>result_entry_identifier</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+    returns entry identifier for the next entry in the result whose entries
+    are being read starting with ldap_first_entry(). If there are no more 
+    entries in the result then it returns false.
+    <para>  
+    ldap_next_entry() function is used to retrieve the entries stored in 
+    the result. Successive calls to the ldap_next_entry() return entries one
+    by one till there are no more entries. The first call to ldap_next_entry()
+	is made after the call to <link linkend="function.ldap-first-entry">
+	ldap_first_entry() </link> with the result_identifier as returned from
+	the ldap_first_entry().
+	<para>
+	see also.<link linkend="function.ldap-get-entries"> ldap_get_entries() </link>
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.ldap-read">
+   <refnamediv>
+    <refname>ldap_read</refname>
+    <refpurpose></refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>ldap_read</function></funcdef>
+     <paramdef>int <parameter>link_identifier</parameter></paramdef>
+     <paramdef>string <parameter>base_dn</parameter></paramdef>
+     <paramdef>string <parameter>filter</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+    reutrns a search result identifier or false on error.
+    <para>  
+    ldap_read() performs the search for a specified filter on the directory
+    with the scope LDAP_SCOPE_BASE. So it is equivalent to reading an entry
+    from the directory.
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.ldap-search">
+   <refnamediv>
+    <refname>ldap_search</refname>
+    <refpurpose></refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>ldap_search</function></funcdef>
+     <paramdef>int <parameter>link_identifier</parameter></paramdef>
+     <paramdef>string <parameter>base_dn</parameter></paramdef>
+     <paramdef>string <parameter>filter</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+    reutrns a search result identifier or false on error.
+    <para>  
+    ldap_search() performs the search for a specified filter on the directory
+    with the scope of LDAP_SCOPE_SUBTREE. This is equivalent to searching 
+    the entire directory. base_dn specifies the base dn for the directory.
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.ldap-unbind">
+   <refnamediv>
+    <refname>ldap_unbind</refname>
+    <refpurpose></refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>ldap_unbind</function></funcdef>
+     <paramdef>int <parameter>link_identifier</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+    returns true on success and false on error.
+    <para>  
+    ldap_unbind() function unbinds from the LDAP directory.
+   </refsect1>
+  </refentry>
+
+
+ </reference>
+
+<!-- Keep this comment at the end of the file
+Local variables:
+mode: sgml
+sgml-omittag:t
+sgml-shorttag:t
+sgml-minimize-attributes:nil
+sgml-always-quote-attributes:t
+sgml-indent-step:1
+sgml-indent-data:t
+sgml-parent-document:nil
+sgml-default-dtd-file:"../manual.ced"
+sgml-exposed-tags:nil
+sgml-local-catalogs:nil
+sgml-local-ecat-files:nil
+End:
+-->

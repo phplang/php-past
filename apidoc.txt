@@ -191,7 +191,7 @@ Table of Contents
       YYSTYPE arr;
   
       if (array_init(&arr) == FAILURE) { failed... };
-      hash_update(active_symbol_table,"foo",strlen("foo"),&arr,sizeof(YYSTYPE));
+      hash_update(active_symbol_table,"foo",strlen("foo"),&arr,sizeof(YYSTYPE),NULL);
   
   This code declares a new array, named $foo, in the active symbol table.
   This array is empty.
@@ -203,12 +203,17 @@ Table of Contents
       entry.type = IS_LONG;
       entry.value.lval = 5;
   
-      hash_update(arr.value.ht,"bar",strlen("bar"),&entry,sizeof(YYSTYPE)); /* defines $foo["bar"] = 5 */
-      hash_index_update(arr.value.ht,7,&entry,sizeof(YYSTYPE)); /* defines $foo[7] = 5 */
-      hash_next_index_insert(arr.value.ht,&entry,sizeof(YYSTYPE)); /* defines the next free place in $foo[],
-                                                                * $foo[8], to be 5 (works like php2)
-                                                                */
+      hash_update(arr.value.ht,"bar",strlen("bar"),&entry,sizeof(YYSTYPE),NULL); /* defines $foo["bar"] = 5 */
+      hash_index_update(arr.value.ht,7,&entry,sizeof(YYSTYPE),NULL); /* defines $foo[7] = 5 */
+      hash_next_index_insert(arr.value.ht,&entry,sizeof(YYSTYPE),NULL); /* defines the next free place in $foo[],
+                                                                         * $foo[8], to be 5 (works like php2)
+                                                                         */
   
+  If you'd like to modify a value that you inserted to a hash, you must first retreive it from the hash.  To
+  prevent that overhead, you can supply a YYSTYPE ** to the hash add function, and it'll be updated with the
+  YYSTYPE * address of the inserted element inside the hash.  If that value is NULL (like in all of the
+  above examples) - that parameter is ignored.
+
   hash_next_index_insert() works more or less using the same logic
   "$foo[] = bar;" works in PHP 2.0.
 

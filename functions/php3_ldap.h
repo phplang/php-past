@@ -24,7 +24,7 @@
  */
 
 
-/* $Id: php3_ldap.h,v 1.10 1998/01/14 23:52:51 amitay Exp $ */
+/* $Id: php3_ldap.h,v 1.11 1998/02/18 00:02:49 amitay Exp $ */
 
 #ifndef _PHP3_LDAP_H
 #define _PHP3_LDAP_H
@@ -41,12 +41,10 @@ extern php3_module_entry ldap_module_entry;
 
 /* LDAP functions */
 extern int php3_minit_ldap(INITFUNCARG);
-extern int php3_rinit_ldap(INITFUNCARG);
 
 extern void php3_info_ldap(void);
 
 extern void php3_ldap_connect(INTERNAL_FUNCTION_PARAMETERS);
-extern void php3_ldap_pconnect(INTERNAL_FUNCTION_PARAMETERS);
 
 extern void php3_ldap_bind(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_ldap_unbind(INTERNAL_FUNCTION_PARAMETERS);
@@ -67,7 +65,6 @@ extern void php3_ldap_first_attribute(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_ldap_next_attribute(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_ldap_get_attributes(INTERNAL_FUNCTION_PARAMETERS);
 
-extern void php3_ldap_get_attribute_values(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_ldap_get_values(INTERNAL_FUNCTION_PARAMETERS);
 
 /*extern void php3_ber_free(INTERNAL_FUNCTION_PARAMETERS);*/
@@ -82,13 +79,10 @@ extern void php3_ldap_modify(INTERNAL_FUNCTION_PARAMETERS);
 
 typedef struct {
 	long default_link;
-	long num_links,num_persistent;
-	long max_links,max_persistent;
-	long allow_persistent;
+	long num_links, max_links;
 	char *base_dn;
 	int le_result, le_result_entry, le_ber_entry;
 	int le_link;
-	int le_plink;
 } ldap_module;
 
 extern ldap_module php3_ldap_module;

@@ -24,7 +24,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: main.c,v 1.328 1998/02/02 18:28:43 zeev Exp $ */
+/* $Id: main.c,v 1.359 1998/03/02 18:36:38 rasmus Exp $ */
 
 #ifdef THREAD_SAFE
 #include "tls.h"
@@ -86,10 +86,7 @@ struct sapi_request_info *sapi_rqst;
 
 void *gLock; /*mutex variable*/
 
-#ifdef THREAD_SAFE
-int ini_parsed = 0;
-int ini_close = 0;
-#else
+#ifndef THREAD_SAFE
 int error_reporting,tmp_error_reporting;
 int initialized;	/* keep track of which resources were successfully initialized */
 static int module_initialized=0;
@@ -120,7 +117,7 @@ php3_ini_structure php3_ini_master;
 
 void _php3_build_argv(char *);
 static void php3_timeout(int dummy);
-static void php3_set_timeout(long seconds);
+static void php3_set_timeout(long seconds INLINE_TLS);
 
 /* string destructor for hash */
 static void str_free(void **ptr)
@@ -137,6 +134,7 @@ char *php3_get_filename(int lineno)
 {
 	char **filename_ptr;
 	int file_offset = lineno / MAX_TOKENS_PER_CACHE;
+	TLS_VARS;
 
 	if (hash_index_find(&GLOBAL(include_names), file_offset, (void **) &filename_ptr) == SUCCESS) {
 		return *filename_ptr;
@@ -157,6 +155,7 @@ void phperror(char *error)
 void php3_apache_puts(char *s)
 {
 	TLS_VARS;
+	
 	if (GLOBAL(php3_rqst)) {
 		rputs(s,GLOBAL(php3_rqst));
 	} else {
@@ -167,6 +166,7 @@ void php3_apache_puts(char *s)
 void php3_apache_putc(char c)
 {
 	TLS_VARS;
+	
 	if (GLOBAL(php3_rqst)) {
 		rputc(c,GLOBAL(php3_rqst));
 	} else {
@@ -178,6 +178,7 @@ void php3_apache_putc(char c)
 void php3_log_err(char *log_message)
 {
 	FILE *log_file;
+	TLS_VARS;
 
 	/* Try to use the specified logging location. */
 	if (php3_ini.error_log != NULL) {
@@ -217,7 +218,9 @@ void php3_log_err(char *log_message)
 	}
 #endif
 #if USE_SAPI
-	GLOBAL(sapi_rqst)->log(GLOBAL(sapi_rqst)->scid, log_message);
+	if (php3_header(0,NULL)) {
+		GLOBAL(sapi_rqst)->log(GLOBAL(sapi_rqst)->scid, log_message);
+	}
 #endif
 }
 
@@ -273,7 +276,6 @@ PHPAPI void php3_error(int type, const char *format,...)
 	int size=0;
 	TLS_VARS;
 
-
 	if (!(type & E_CORE)) {
 		if (!GLOBAL(initialized) || GLOBAL(shutdown_requested)) {/* don't display further errors after php3_request_shutdown() */
 			return;
@@ -328,7 +330,6 @@ PHPAPI void php3_error(int type, const char *format,...)
 			}
 		}
 	}
-
 	if (php3_ini.track_errors && (GLOBAL(initialized) & INIT_SYMBOL_TABLE)) {
 		YYSTYPE tmp;
 		
@@ -341,7 +342,7 @@ PHPAPI void php3_error(int type, const char *format,...)
 		tmp.strlen = size;
 		tmp.type = IS_STRING;
 		
-		hash_update(&GLOBAL(symbol_table),"php_errormsg",sizeof("php_errormsg"),(void *) &tmp,sizeof(YYSTYPE),NULL);
+		hash_update(GLOBAL(active_symbol_table),"php_errormsg",sizeof("php_errormsg"),(void *) &tmp,sizeof(YYSTYPE),NULL);
 	}
 		
 #if PHP_DEBUGGER
@@ -359,6 +360,7 @@ PHPAPI void php3_error(int type, const char *format,...)
 
 	switch (type) {
 		case E_ERROR:
+		case E_CORE_ERROR:
 		case E_PARSE:
 			GLOBAL(shutdown_requested)=ABNORMAL_SHUTDOWN;
 			break;
@@ -375,11 +377,7 @@ int phplex(YYSTYPE *phplval)
 {
 	Token *token;
 
-/* this is a BAD place for this as it slows php down
-   too much.  need to find a better location where it
-   will get called every so often
-*/
-#if WIN32|WINNT
+#if (WIN32|WINNT)
 	if(GLOBAL(wintimer) && !(++GLOBAL(wintimer_counter) & 0xff) && (GLOBAL(wintimer) < (unsigned int)clock())){
 		php3_error(E_WARNING,"PHP Timed out!<br>\n");
 		GLOBAL(shutdown_requested)=ABNORMAL_SHUTDOWN;
@@ -389,6 +387,13 @@ int phplex(YYSTYPE *phplval)
 	if (!GLOBAL(initialized) || GLOBAL(shutdown_requested)) {
 		return 0;
 	}
+#if APACHE
+	if (php3_rqst->connection->aborted) {
+		GLOBAL(shutdown_requested)=ABNORMAL_SHUTDOWN;
+		return 0;
+	}
+#endif
+
 #ifdef THREAD_SAFE
 	switch (read_next_token(&GLOBAL(token_cache_manager), &token, phplval, php3_globals, php_flex_gbl)) {
 #else
@@ -407,13 +412,6 @@ int phplex(YYSTYPE *phplval)
 			break;
 	}
 	*phplval = token->phplval;
-/*this is a temporary futzing around with the debugger to see if this
-	is a good place to call the debugger once per line*/
-#if 0
-	if((unsigned int)GLOBAL(current_lineno) < token->lineno && GLOBAL(debugger_on)){
-		php3_printf("\nLine: %d\n",token->lineno);
-	}
-#endif
 	GLOBAL(current_lineno) = token->lineno;
 	return token->token_type;
 }
@@ -437,8 +435,16 @@ static void php3_timeout(int dummy)
 #endif
 
 
-static void php3_set_timeout(long seconds)
+static void php3_set_timeout(long seconds INLINE_TLS)
 {
+#if WIN32|WINNT
+	if(seconds>0){
+		GLOBAL(timerstart)=(unsigned int)clock();
+		GLOBAL(wintimer) = GLOBAL(timerstart)+(CLOCKS_PER_SEC * seconds);
+	}else{
+		GLOBAL(wintimer)=0;
+	}
+#else
 #if HAVE_SETITIMER
 	struct itimerval t_r;  /* timeout requested */
 	
@@ -448,17 +454,22 @@ static void php3_set_timeout(long seconds)
 	setitimer(ITIMER_PROF, &t_r, NULL);
 	signal(SIGPROF, php3_timeout);
 #endif
+#endif
 }
 
 
-static void php3_unset_timeout(void)
+static void php3_unset_timeout(INLINE_TLS_VOID)
 {
+#if WIN32|WINNT
+	GLOBAL(wintimer)=0;
+#else
 #if HAVE_SETITIMER
 	struct itimerval no_timeout;
 	
-	no_timeout.it_value.tv_sec = no_timeout.it_value.tv_usec = 0;
+	no_timeout.it_value.tv_sec = no_timeout.it_value.tv_usec = no_timeout.it_interval.tv_sec = no_timeout.it_interval.tv_usec = 0;
 	
 	setitimer(ITIMER_PROF, &no_timeout, NULL);
+#endif
 #endif
 }
 
@@ -483,28 +494,15 @@ void php3_set_time_limit(INTERNAL_FUNCTION_PARAMETERS)
 	   INI variables should not be reset via a user script
 	*/
 	GLOBAL(max_execution_time)=new_timeout->value.lval;
-#if WIN32|WINNT
-	if(GLOBAL(max_execution_time)>0){
-		GLOBAL(wintimer) = GLOBAL(timerstart)+(CLOCKS_PER_SEC * GLOBAL(max_execution_time));
-	}else{
-		GLOBAL(wintimer)=0;
-	}
-#else
-	php3_unset_timeout();
-	php3_set_timeout(new_timeout->value.lval);
-#endif
+	php3_unset_timeout(_INLINE_TLS_VOID);
+	php3_set_timeout(new_timeout->value.lval _INLINE_TLS);
 }
 
 
 int php3_request_startup( INLINE_TLS_VOID)
 {
 	GLOBAL(max_execution_time)=php3_ini.max_execution_time;
-#if WIN32|WINNT
-	GLOBAL(timerstart)=(unsigned int)clock();
-	GLOBAL(wintimer)=GLOBAL(timerstart)+(CLOCKS_PER_SEC * GLOBAL(max_execution_time));
-#else
-	php3_set_timeout(GLOBAL(max_execution_time));
-#endif
+	php3_set_timeout(GLOBAL(max_execution_time) _INLINE_TLS);
 	
 	GLOBAL(initialized)=0;
 	
@@ -669,7 +667,7 @@ void php3_request_shutdown(void *dummy INLINE_TLS)
 	}
 	if (GLOBAL(initialized) & INIT_FUNCTION_STATE_STACK) {
 		FunctionState *tmp;
-
+		
 		while (stack_top(&GLOBAL(function_state_stack), (void **) &tmp) != FAILURE) {
 			if (tmp->function_name) {
 				efree(tmp->function_name);
@@ -679,6 +677,13 @@ void php3_request_shutdown(void *dummy INLINE_TLS)
 				}
 			}
 			stack_del_top(&GLOBAL(function_state_stack));
+		}
+		if (GLOBAL(function_state).function_name) {
+			efree(GLOBAL(function_state).function_name);
+			if (GLOBAL(function_state).symbol_table) {
+				hash_destroy(GLOBAL(function_state).symbol_table);
+				efree(GLOBAL(function_state).symbol_table);
+			}
 		}
 		stack_destroy(&GLOBAL(function_state_stack));
 		GLOBAL(initialized) &= ~INIT_FUNCTION_STATE_STACK;
@@ -737,7 +742,7 @@ void php3_request_shutdown(void *dummy INLINE_TLS)
 		php3_error(E_WARNING, "Unknown resources in request shutdown function");
 	}
 
-	php3_unset_timeout();
+	php3_unset_timeout(_INLINE_TLS_VOID);
 		
 #if CGI_BINARY
 	fflush(stdout);
@@ -747,71 +752,13 @@ void php3_request_shutdown(void *dummy INLINE_TLS)
 #endif
 }
 
-
-int php3_module_startup( INLINE_TLS_VOID)
-{
-#if WIN32|WINNT
-	WORD wVersionRequested;
-	WSADATA wsaData;
- 
-	wVersionRequested = MAKEWORD( 2, 0 );
-#endif
-
-	GLOBAL(error_reporting)=E_ALL;
-
-#if WIN32|WINNT
-	/* start up winsock services */
-	if ( WSAStartup( wVersionRequested, &wsaData ) != 0 ) {
-		php3_printf("\nwinsock.dll unusable. %d\n",WSAGetLastError());
-		return FAILURE;
-	}
-	GLOBAL(module_initialized) |= INIT_WINSOCK;
-#endif
-
-	/* prepare function table hash */
-	if (hash_init(&GLOBAL(function_table), 100, NULL, YYSTYPE_DESTRUCTOR, 1) == FAILURE) {
-		php3_printf("Unable to initialize function table.\n");
-		return FAILURE;
-	}
-	GLOBAL(module_initialized) |= INIT_FUNCTION_TABLE;
-
-	/* prepare the module registry */
-	if (hash_init(&GLOBAL(module_registry),50,NULL,(void (*)(void *)) module_destructor,1)==FAILURE) {
-		php3_printf("Unable to initialize module registry.\n");
-		return FAILURE;
-	}
-	GLOBAL(module_initialized) |= INIT_MODULE_REGISTRY;
-
-	/* resource-list destructors */
-	if (hash_init(&GLOBAL(list_destructors), 50, NULL, NULL, 1)==FAILURE) {
-		php3_printf("Unable to initialize resource list destructors hash.\n");
-		return FAILURE;
-	}
-	SET_MUTEX(gLock);
-	le_index_ptr = register_list_destructors(NULL,NULL);
-	FREE_MUTEX(gLock);
-	GLOBAL(module_initialized) |= INIT_LIST_DESTRUCTORS;
-
-	/* persistent list */
-	if (init_resource_plist()==FAILURE) {
-		php3_printf("PHP:  Unable to start persistent object list hash.\n");
-		return FAILURE;
-	}
-	GLOBAL(module_initialized) |= INIT_PLIST;
-
-	/*ini_parsed will prevent the ini file from being read
-	  more than once */
-#ifdef THREAD_SAFE
-	if (!ini_parsed){
-#endif
+int php3_config_ini_startup( INLINE_TLS_VOID) {
 	if (php3_init_config()==FAILURE) {
 		php3_printf("PHP:  Unable to parse configuration file.\n");
 		return FAILURE;
 	}
+#if !USE_SAPI
 	GLOBAL(module_initialized) |= INIT_CONFIG;
-	
-#ifdef THREAD_SAFE
-	ini_parsed = 1; /*we've parsed the ini file now*/
 #endif
 	/* initialize run-time variables */
 	/* I have remarked out some stuff 
@@ -823,7 +770,7 @@ int php3_module_startup( INLINE_TLS_VOID)
 			php3_ini.max_execution_time = 30;
 		}
 		if (cfg_get_long("memory_limit",&php3_ini.memory_limit)==FAILURE) {
-			php3_ini.memory_limit=2*1048576;
+			php3_ini.memory_limit=4*1048576;
 		}
 		if (cfg_get_string("SMTP",&php3_ini.smtp)==FAILURE) {
 			php3_ini.smtp = "localhost";
@@ -866,6 +813,9 @@ int php3_module_startup( INLINE_TLS_VOID)
 		if (cfg_get_long("log_errors",&php3_ini.log_errors)==FAILURE) {
 			php3_ini.log_errors=0;
 		}
+		if (cfg_get_long("warn_plus_overloading",&php3_ini.warn_plus_overloading)==FAILURE) {
+			php3_ini.warn_plus_overloading=0;
+		}
 		if (cfg_get_long("magic_quotes_gpc",&php3_ini.magic_quotes_gpc)==FAILURE) {
 			php3_ini.magic_quotes_gpc = MAGIC_QUOTES;
 		}
@@ -875,18 +825,25 @@ int php3_module_startup( INLINE_TLS_VOID)
 		if (cfg_get_long("magic_quotes_sybase",&php3_ini.magic_quotes_sybase)==FAILURE) {
 			php3_ini.magic_quotes_sybase=0;
 		}
+		if (cfg_get_long("ignore_missing_userfunc_args",&php3_ini.ignore_missing_userfunc_args)==FAILURE) {
+			php3_ini.ignore_missing_userfunc_args=0;
+		}
 		if (cfg_get_string("doc_root",&php3_ini.doc_root)==FAILURE) {
-			if ((temp=getenv("DOCUMENT_ROOT"))) {
+			if ((temp=getenv("PHP_DOCUMENT_ROOT"))) {
 				php3_ini.doc_root = temp;
 			} else {
-				php3_ini.doc_root = PHP_DOCUMENT_ROOT;
+				php3_ini.doc_root = NULL;
 			}
 		}
 		if (cfg_get_long("short_open_tag",&php3_ini.short_open_tag)==FAILURE) {
 			php3_ini.short_open_tag = DEFAULT_SHORT_OPEN_TAG;
 		}
 		if (cfg_get_string("user_dir",&php3_ini.user_dir)==FAILURE) {
-			php3_ini.user_dir = PHP_USER_DIR;
+			if ((temp=getenv("PHP_USER_DIR"))) {
+				php3_ini.user_dir = temp;
+			} else {
+				php3_ini.user_dir = NULL;
+			}
 		}
 		if (cfg_get_long("safe_mode",&php3_ini.safe_mode)==FAILURE) {
 			php3_ini.safe_mode = PHP_SAFE_MODE;
@@ -961,9 +918,11 @@ int php3_module_startup( INLINE_TLS_VOID)
 		if (cfg_get_long("xbithack", &php3_ini.xbithack)==FAILURE) {
 			php3_ini.xbithack=0;
 		}
-		
 		if (cfg_get_string("browscap", &php3_ini.browscap)==FAILURE) {
 			php3_ini.browscap=NULL;
+		}
+		if (cfg_get_string("arg_separator", &php3_ini.arg_separator)==FAILURE) {
+			php3_ini.arg_separator="&";
 		}
 
 		/* THREADX  Will have to look into this on windows
@@ -973,15 +932,86 @@ int php3_module_startup( INLINE_TLS_VOID)
          */
 		memcpy(&php3_ini_master,&php3_ini,sizeof(php3_ini));
 	}
-#ifdef THREAD_SAFE
-	} /*ini_parsed*/
+	return SUCCESS;
+}
+
+void php3_config_ini_shutdown(INLINE_TLS_VOID){
+#if USE_SAPI
+		php3_shutdown_config();
+#else
+	if (GLOBAL(module_initialized) & INIT_CONFIG) {
+		php3_shutdown_config();
+		GLOBAL(module_initialized) &= ~INIT_CONFIG;
+	}
+#endif
+}
+
+int php3_module_startup( INLINE_TLS_VOID)
+{
+#if (WIN32|WINNT) && !(USE_SAPI)
+	WORD wVersionRequested;
+	WSADATA wsaData;
+ 
+	wVersionRequested = MAKEWORD( 2, 0 );
+#else 
+	if(GLOBAL(module_initialized)) {
+		return SUCCESS;
+	}
+#endif
+
+	GLOBAL(error_reporting)=E_ALL;
+
+#if (WIN32|WINNT) && !(USE_SAPI)
+	/* start up winsock services */
+	if ( WSAStartup( wVersionRequested, &wsaData ) != 0 ) {
+		php3_printf("\nwinsock.dll unusable. %d\n",WSAGetLastError());
+		return FAILURE;
+	}
+	GLOBAL(module_initialized) |= INIT_WINSOCK;
+#endif
+
+	/* prepare function table hash */
+	if (hash_init(&GLOBAL(function_table), 100, NULL, YYSTYPE_DESTRUCTOR, 1) == FAILURE) {
+		php3_printf("Unable to initialize function table.\n");
+		return FAILURE;
+	}
+	GLOBAL(module_initialized) |= INIT_FUNCTION_TABLE;
+
+	/* prepare the module registry */
+	if (hash_init(&GLOBAL(module_registry),50,NULL,(void (*)(void *)) module_destructor,1)==FAILURE) {
+		php3_printf("Unable to initialize module registry.\n");
+		return FAILURE;
+	}
+	GLOBAL(module_initialized) |= INIT_MODULE_REGISTRY;
+
+	/* resource-list destructors */
+	if (hash_init(&GLOBAL(list_destructors), 50, NULL, NULL, 1)==FAILURE) {
+		php3_printf("Unable to initialize resource list destructors hash.\n");
+		return FAILURE;
+	}
+	SET_MUTEX(gLock);
+	le_index_ptr = register_list_destructors(NULL,NULL);
+	FREE_MUTEX(gLock);
+	GLOBAL(module_initialized) |= INIT_LIST_DESTRUCTORS;
+
+	/* persistent list */
+	if (init_resource_plist()==FAILURE) {
+		php3_printf("PHP:  Unable to start persistent object list hash.\n");
+		return FAILURE;
+	}
+	GLOBAL(module_initialized) |= INIT_PLIST;
+
+#if !USE_SAPI
+	if(php3_config_ini_startup(_INLINE_TLS_VOID)==FAILURE){
+		return FAILURE;
+	}
 #endif
 
 	if (module_startup_modules()==FAILURE) {
 		php3_printf("Unable to start modules\n");
 		return FAILURE;
 	}
-	
+
 	return SUCCESS;
 }
 
@@ -1001,34 +1031,17 @@ void php3_module_shutdown( INLINE_TLS_VOID)
 		GLOBAL(module_initialized) &= ~INIT_LIST_DESTRUCTORS;
 	}
 
-	/* The thread that initialy opened the dll may not
-	   necessarily be the last thread that will close it,
-	   so we should handle that here.
-	   ini_close should be set to 1 before the last call
-	   to module_shutdown, when the dll is being unloaded
-	*/
-#ifdef THREAD_SAFE
-	if (ini_close){
-		php3_shutdown_config();
-	}
-	/* in either case, we should let the thread exit without
-	   error
-	*/
-	if (GLOBAL(module_initialized) & INIT_CONFIG) {
-		GLOBAL(module_initialized) &= ~INIT_CONFIG;
-	}
-#else
-	if (GLOBAL(module_initialized) & INIT_CONFIG) {
-		php3_shutdown_config();
-		GLOBAL(module_initialized) &= ~INIT_CONFIG;
-	}
+#if !USE_SAPI
+	/* close down the ini config */
+	php3_config_ini_shutdown(_INLINE_TLS_VOID);
 #endif
+
 	if (GLOBAL(module_initialized) & INIT_FUNCTION_TABLE) {
 		hash_destroy(&GLOBAL(function_table));
 		GLOBAL(module_initialized) &= ~INIT_FUNCTION_TABLE;
 	}
 
-#if WIN32|WINNT
+#if (WIN32|WINNT) && !(USE_SAPI)
 	/*close winsock*/
 	if (GLOBAL(module_initialized) & INIT_WINSOCK){
 		WSACleanup();
@@ -1043,7 +1056,7 @@ void php3_module_shutdown( INLINE_TLS_VOID)
 #if CGI_BINARY
 	fflush(stdout);
 #endif
-#if USE_SAPI
+#if 0 /* SAPI */
 	GLOBAL(sapi_rqst)->flush(GLOBAL(sapi_rqst)->scid);
 #endif
 }
@@ -1073,8 +1086,13 @@ int hash_environment(void)
 		for (i=0; i<arr->nelts; i++) {
 			len = strlen(elts[i].key);
 			t = estrndup(elts[i].key,len);
-			tmp.strlen = strlen(elts[i].val);
-			tmp.value.strval = estrndup(elts[i].val,tmp.strlen);
+			if (elts[i].val) {
+				tmp.strlen = strlen(elts[i].val);
+				tmp.value.strval = estrndup(elts[i].val,tmp.strlen);
+			} else {
+				tmp.strlen=0;
+				tmp.value.strval = empty_string;
+			}
 			tmp.type = IS_STRING;
 			if (hash_add(&GLOBAL(symbol_table),t,len+1,&tmp,sizeof(YYSTYPE),NULL)==FAILURE) {
 				efree(tmp.value.strval);
@@ -1199,6 +1217,7 @@ static void php3_parse(FILE *yyin)
 			initialize_input_file_buffer(fp);
 			reset_scanner();
 			(void) phpparse();
+			fclose(fp);
 		} else {
 			php3_printf("Unable to open prepend file.\n");
 		}
@@ -1218,6 +1237,7 @@ static void php3_parse(FILE *yyin)
 			initialize_input_file_buffer(fa);
 			reset_scanner();
 			(void) phpparse();
+			fclose(fa);
 		} else {
 			php3_printf("Unable to open append file.\n");
 		}
@@ -1285,7 +1305,7 @@ extern void yy_destroy_tls(void);
 
 int main(int argc, char *argv[])
 {
-	int cgi = 0, arg = 1, c, i, len;
+	int cgi = 0, c, i, len;
 	FILE *in = NULL;
 	char *s;
 	int display_source_mode = 0;
@@ -1298,10 +1318,44 @@ int main(int argc, char *argv[])
 	php3_globals = TlsGetValue(TlsIndex);
 
 	if ((php3_globals == 0) && (GetLastError() != 0)) {
-		php3_error(E_CORE_ERROR,"TlsGetValue error");
+		if(!php3_header(0,NULL)) exit(0);
+		PUTS("TlsGetValue error\n");
+		return FAILURE;
 	}
 
 #endif
+
+	/* Make sure we detect we are a cgi - a bit redundancy here,
+	   but the default case is that we have to check only the first one. */
+	if (getenv("SERVER_SOFTWARE")
+		|| getenv("SERVER_NAME")
+		|| getenv("GATEWAY_INTERFACE")
+		|| getenv("REQUEST_METHOD")) {
+		cgi = 1;
+#if FORCE_CGI_REDIRECT
+		if (!getenv("REDIRECT_STATUS")) {
+			if(php3_header(0,NULL))
+				PUTS("<b>Security Alert!</b>  PHP CGI cannot be accessed directly.\n\
+\n\
+<P>This PHP CGI binary was compiled with force-cgi-redirect enabled.  This\n\
+means that a page will only be served up if the REDIRECT_STATUS CGI variable is\n\
+set.  This variable is set, for example, by Apache's Action directive redirect.\n\
+<P>You may disable this restriction by recompiling the PHP binary with the\n\
+--disable-force-cgi-redirect switch.  If you do this and you have your PHP CGI\n\
+binary accessible somewhere in your web tree, people will be able to circumvent\n\
+.htaccess security by loading files through the PHP parser.  A good way around\n\
+this is to define doc_root in your php3.ini file to something other than your\n\
+top-level DOCUMENT_ROOT.  This way you can separate the part of your web space\n\n
+which uses PHP from the normal part using .htaccess security.  If you do not have\n\
+any .htaccess restrictions anywhere on your site you can leave doc_root undefined.\n\
+\n");
+
+			/* remove that detailed explanation some time */
+
+			return FAILURE;
+		}
+#endif /* FORCE_CGI_REDIRECT */
+	}
 #if WIN32|WINNT
 	_fmode=_O_BINARY; /*sets default for file streams to binary */
 	setmode(0, O_BINARY);		/* make the stdio mode be binary */
@@ -1320,8 +1374,9 @@ int main(int argc, char *argv[])
 	
 	php3_TreatHeaders();
 
-	while ((c = getopt(argc, argv, "f:qvishpe?v")) != -1) {
-		switch (c) {
+	if (!cgi) { /* never execute the arguments if you are a CGI */
+		while ((c = getopt(argc, argv, "f:qvishpe?v")) != -1) {
+			switch (c) {
 			case 'f':
 				GLOBAL(request_info).filename = estrdup(optarg);
 			case 'q':
@@ -1353,37 +1408,40 @@ int main(int argc, char *argv[])
 			default:
 				php3_printf("Warning: unrecognized option `-%c'\n", c);
 				break;
+			}
 		}
-		arg++;
-	}
+		if (!GLOBAL(request_info).query_string) {
+			for(i=optind,len=0; i<argc; i++)
+				len+=strlen(argv[i])+1;
 
-	if (GLOBAL(request_info).path_info) {
-		cgi = 1;
-	} else if(!GLOBAL(request_info).query_string) {
-		for(i=arg,len=0; i<argc; i++) {
-			len+=strlen(argv[i])+1;
+			s = malloc(len+1); /* leak - but only for command line version, so ok */
+			*s='\0';           /* we are pretending it came from the environment  */
+			s[len-1]='\0';
+			for(i=optind,len=0; i<argc; i++) {
+				strcat(s,argv[i]);
+				if(i<(argc-1)) strcat(s,"+");	
+			}
+			GLOBAL(request_info).query_string = s;
 		}
-		s = malloc(len*sizeof(char)+1); /* leak - but only for command line version, so ok */
-		*s='\0';                        /* we are pretending it came from the environment  */
-		s[len-1]='\0';
-		for(i=arg,len=0; i<argc; i++) {
-			strcat(s,argv[i]);
-			if(i<(argc-1)) strcat(s,"+");	
-		}
-		GLOBAL(request_info).query_string = s;
-	}
-	if (GLOBAL(request_info).filename != NULL) {
-		in = php3_fopen_for_parser(GLOBAL(request_info).filename);
-	} else if (!cgi && argc > arg) {
-		GLOBAL(request_info).filename = estrdup(argv[arg]);
-		in = php3_fopen_for_parser(GLOBAL(request_info).filename);
-	} else if (cgi) {
-		in = php3_fopen_for_parser(NULL);
-	}
+		if (!GLOBAL(request_info).filename && argc > optind)
+			GLOBAL(request_info).filename = estrdup(argv[optind]);
+	} /* not cgi */
+
+	/* If for some reason the CGI interface is not setting the
+	   PATH_TRANSLATED correctly, request_info.filename is NULL.
+	   We still call php3_fopen_for_parser, because if you set doc_root
+	   or user_dir configuration directives, PATH_INFO is used to construct
+	   the filename as a side effect of php3_fopen_for_parser.
+	   */
+	if (cgi || GLOBAL(request_info).filename)
+		in = php3_fopen_for_parser();
+
 	if (cgi && !in) {
-		php3_printf("No input file specified.\n");
+		if(php3_header(0,NULL))
+			PUTS("No input file specified.\n");
 		php3_request_shutdown((void *)0 _INLINE_TLS);
 		php3_module_shutdown( _INLINE_TLS_VOID);
+		return FAILURE;
 	} else if (in) {
  		/* #!php support */
  		c = fgetc(in);	
@@ -1520,14 +1578,11 @@ PHPAPI int php3_sapi_main(struct sapi_request_info *sapi_info)
 	YY_TLS_VARS;
 	TLS_VARS;
 
+
 	GLOBAL(php3_preprocess)=sapi_info->preprocess;
 	GLOBAL(php3_display_source)=sapi_info->display_source_mode;
 	GLOBAL(sapi_rqst)=sapi_info;
-/*
-	if (php3_module_startup(php3_globals)==FAILURE) {
-		return FAILURE;
-	}
-*/
+
 	if (php3_request_startup( _INLINE_TLS_VOID) == FAILURE) {
 		return FAILURE;
 	}
@@ -1539,12 +1594,25 @@ PHPAPI int php3_sapi_main(struct sapi_request_info *sapi_info)
 		return(1);
 	}
 
-	in = php3_fopen_for_parser(sapi_info->filename);
-	
-	if (sapi_info->cgi && !in) {
+	/* if its not cgi, require that we have a filename now */
+	if (!sapi_info->cgi && !sapi_info->filename) {
 		php3_printf("No input file specified.\n");
+		php3_request_shutdown((void *)GLOBAL(sapi_rqst),php3_globals);
 		return 0;
 	} 
+
+	/* 
+	  if request_info.filename is null and cgi, fopen_for_parser is responsible
+	  request_info.filename will only be estrduped in fopen_for parser
+	  if it is null at this point
+	*/
+	in = php3_fopen_for_parser();
+	
+	if (sapi_info->cgi && !in){
+		php3_printf("No input file specified for cgi.\n");
+		php3_request_shutdown((void *)GLOBAL(sapi_rqst),php3_globals);
+		return 0;
+	}
 
 	if (sapi_info->cgi && in) {
  		/* #!php support */
@@ -1561,7 +1629,6 @@ PHPAPI int php3_sapi_main(struct sapi_request_info *sapi_info)
 		GLOBAL(phpin) = in;
 		phprestart(GLOBAL(phpin));
 		GLOBAL(initialized) |= INIT_SCANNER;
-		hash_index_update(&GLOBAL(include_names), 0, (void *) &GLOBAL(request_info).filename, sizeof(char *), NULL);
 	}
 
 	if (sapi_info->display_source_mode) {
@@ -1609,7 +1676,6 @@ PHPAPI int php3_sapi_main(struct sapi_request_info *sapi_info)
 	if (GLOBAL(initialized)) {
 		php3_header(0, NULL);	/* Make sure headers have been sent */
 		php3_request_shutdown((void *)GLOBAL(sapi_rqst),php3_globals);
-/*		php3_module_shutdown(php3_globals); */
 		return SUCCESS;
 	} else {
 		return FAILURE;
@@ -1624,10 +1690,6 @@ extern flex_globals *yy_init_tls(void);
 extern void yy_destroy_tls(void);
 extern VOID ErrorExit (LPTSTR lpszMessage);
 
-#if DEBUG
-FILE *logfile;
-#endif
-
 BOOL WINAPI DllMain(HANDLE hModule, 
                       DWORD  ul_reason_for_call, 
                       LPVOID lpReserved)
@@ -1640,15 +1702,13 @@ BOOL WINAPI DllMain(HANDLE hModule,
 		   and doing whatever true global inits
 		   need to be done
 		*/
-		/*lets create our mutexes for blocking*/
+		_fmode=_O_BINARY; /*sets default for file streams to binary */
+		/* make the stdio mode be binary */
+		setmode(_fileno(stdin), O_BINARY);
+		setmode(_fileno(stdout), O_BINARY);
+		setmode(_fileno(stderr), O_BINARY);
+		setlocale(LC_CTYPE,"");
 
-#if HAVE_SETLOCALE
-	setlocale(LC_CTYPE,"");
-#endif
-
-#if DEBUG
-		logfile=freopen("/php3log.txt","w",stderr);
-#endif
 		CREATE_MUTEX(gLock,"GENERAL");
 
 		if(!tls_startup())
@@ -1657,6 +1717,11 @@ BOOL WINAPI DllMain(HANDLE hModule,
 			return 0;
 		php3_globals = TlsGetValue(TlsIndex);
 		yy_init_tls();
+
+		if(php3_config_ini_startup(_INLINE_TLS_VOID)==FAILURE){
+			return 0;
+		}
+
 		if (php3_module_startup(php3_globals)==FAILURE) {
 			ErrorExit("module startup failed"); 
 			return 0;
@@ -1683,18 +1748,17 @@ BOOL WINAPI DllMain(HANDLE hModule,
 		/*
 		    close down anything down in process_attach 
 		*/
-		ini_close=1;
 		php3_globals = TlsGetValue(TlsIndex);
 		php3_module_shutdown(php3_globals);
+
+		php3_config_ini_shutdown(_INLINE_TLS_VOID);
+
 		if(!tls_destroy())
 			return 0;
 		if(!tls_shutdown())
 			return 0;
 		yy_destroy_tls();
 		break;
-#if DEBUG
-		fclose(logfile);
-#endif
     }
     return TRUE;
 }

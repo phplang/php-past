@@ -1,5 +1,5 @@
 <!--
-  $Id: functions.sgml,v 1.12 1998/01/15 16:38:13 ssb Exp $
+  $Id: functions.sgml,v 1.14 1998/02/20 04:37:17 amitay Exp $
   -->
 
 <!--
@@ -27,6 +27,7 @@
   &mysqlref;
   &oraref;
   &pgsqlref;
+  &ldapref;
   &dtref;
   &dirref;
   &fileref;
@@ -37,7 +38,7 @@
   <sect>PHP execution
   <sect>PHP options & information
   <sect>System
-  <sect>Networking
+  &netref;
   &strngref;
   &regexref;
   <sect>Variables

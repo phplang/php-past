@@ -4,34 +4,152 @@ or some other directory on your link path and copy c-client/rfc822.h, mail.h
 and linkage.h to /usr/local/include.  Then type: make imap.so from the 
 php3/dl directory. 
 
-imap_open  - opens a mailbox
-imap_num_msg - number of mesages in mbox
-imap_headers - array of header lines
-imap_header - individual message header
-imap_body - individual message body
-imap_expunge - delete message marked for deleation.
-imap_delete - mark message for deleation
-imap_undelete - unmark message for deleation
-imap_check - get current status of mailbox
-imap_close - close mailbox
+If you are compling with the imap4r1 lib define IMAP41.
 
+Function list:
 
+--  imap_open
+Description: opens a IMAP_stream to a mailbox
+int imap_open(string mailbox, string username, string password);
+Returns: IMAP_stream
+
+--  imap_reopen
+Description: re-opens a IMAP_stream to a new mailbox
+int imap_reopen(IMAP_stream mbox
+			, string mailbox, string username, string password);
+Returns: True if sucessful False otherwise.
+
+--  imap_close
+Description: Closes a IMAP_stream.
+int imap_close(IMAP_stream mbox);
+Returns: True if sucessful False otherwise.
+
+--  imap_check
+Description: Checks current mailbox.
+array imap_check(IMAP_stream mbox);
+Returns: This function returns an associative array.  The elements are 
+"Date", "Driver", "Mailbox", "Nmsgs", and "Recent".
+
+--  imap_num_msg
+int imap_num_msg(IMAP_stream mbox);
+Returns: number of messages in current mailbox.
+
+--  imap_headers
+array imap_headers(IMAP_stream mbox);
+Returns: An array of strings formated with header info. One element per mail msg
+
+--  imap_header
+array imap_header(IMAP_stream mbox,long msgno);
+Returns: This function returns an associative array. The elements are
+"Date", "From", "From2", "Subject", "To", "cc", "ReplyTo", "Recent",
+"Unseen", "Flagged", "Answered", "Deleted", "Msgno", "MailDate", and "Size".
+
+--  imap_headerinfo - alias for imap_header
+array imap_headerinfo(IMAP_stream mbox,long msgno);
+Returns: This function returns an associative array. The elements are
+"Date", "From", "From2", "Subject", "To", "cc", "ReplyTo", "Recent",
+"Unseen", "Flagged", "Answered", "Deleted", "Msgno", "MailDate", and "Size".
+
+--  imap_body
+string imap_body(IMAP_stream mbox,long msgno);
+Returns: This function returns the body of the email msg.
+
+--  imap_expunge
+Description: This function removes and msg marked with imap_delete.
+int imap_expunge(IMAP_stream mbox); 
+Returns: True if sucessful False otherwise.
+
+--  imap_delete
+Description: Flags a message for deleation.  Actual deleation done by imap_expunge
+int imap_delete(IMAP_stream mbox,long msgno);
+Returns: True if sucessful False otherwise.
+
+--  imap_undelete
+Description: Removes deleation flag.
+int imap_undelete(IMAP_stream mbox,long msgno);
+Returns: True if sucessful False otherwise.
+
+--  imap_mail_copy
+Description: copies a mail msg from current mailbox to new mailbox.
+int imap_mail_copy(IMAP_stream mbox, string new_box, string msglist);
+Returns: True if sucessful False otherwise.
+Note: msglist is a range not just message numbers. See imap doc.
+
+--  imap_mail_move
+Description: moves a mail msg from current mailbox to new mailbox.
+int imap_mail_moves(IMAP_stream mbox, string new_box, string msglist);
+Returns: True if sucessful False otherwise.
+Note: msglist is a range not just message numbers. See imap doc.
+
+--  imap_createmailbox
+Description: creates a new mailb called newmbox.
+int imap_createmailbox(IMAP_stream mbox, string newmbox);
+Returns: True if sucessful False otherwise.
+
+--  imap_renamemailbox
+Description: rename old mailbox to new mailbox.
+int imap_renamemailbox(IMAP_stream mbox, string oldmbox, string newmbox);
+Returns: True if sucessful False otherwise.
+
+--  imap_deletemailbox
+Description: deleates a mailbox called oldbox.
+int imap_deletemailbox(IMAP_stream mbox, string oldbox);
+Returns: True if sucessful False otherwise.
+
+--  imap_listmailbox
+array imap_listmailbox(IMAP_stream mbox);
+Returns: Array of strings that have the mailbox names.
 Here is a sample program
+
+Here are some new function.
+added by 
+/--------------------------------------------------------------------\
+| Kaj-Michael Lang        | WWW:    http://www.tal.org               |
+| Kaskentie 5 C9          | E-Mail: milang@tal.org                   |
+| 20720 Turku             |         milang@onion.sip.fi              |
+| FINLAND                 |         milang@infa.abo.fi               |
+|-------------------------|         klang@abo.fi                     |
+| GSM: +358-(0)40-5271058 | FTP:    ftp://ftp.tal.org                |
+\--------------------------------------------------------------------/
+
+--  imap_listsubscribed()
+    List all the mailboxes that you have subscribed
+--  imap_subscribe()
+    Subscribes to a mailbox
+--  imap_unsubscribe()
+    Unsubscribes from a mailbox
+--  imap_scanmailbox()
+    Almost the same as imap_listmailbox but uses a string to search for in
+    the mailboxes
+--  imap_num_recent()
+    Gives the numbers of recent messages in the mailbox. Almost the same as
+    imap_num_msg
 
 <title> Imap Example </title>
 </head>
 <body>
-<pre>
 <?
     dl("/your/path/to/dl/imap.so");
     $mbox=imap_open("{Imap host}INBOX","?user?","?password?");
-    echo imap_check($mbox),"\n";
+    $check=imap_check($mbox);
+    echo  
+    echo $check->Date,"<br>\n";
+    echo "Connection Type: ",$check->Driver,"<br>\n";
+    echo "Mbox: ",$check->Mailbox,"<br>\n";
+    echo "Number Messages: ",$check->Nmsgs;
+    echo " Recent: ",$check->Recent,"<br>\n";
     $num=imap_num_msg($mbox);
-    $h=imap_headers($mbox);
     for ( $i=1 ; $i <= $num ; $i++){
-        echo $h[$i-1],"\n";
+        echo"<hr>\n";
+        $h=imap_header($mbox,$i);
+        if ($h->Date[0] == "D") echo $h->Date,"<br>\n";
+        if ($h->To[0] == "T") echo $h->To,"<br>\n";
+        if ($h->From[0] == "F") echo $h->From,"<br>\n";
+        if ($h->cc[0] == "C") echo $h->cc,"<br>\n";
+        if ($h->ReplyTo[0] == "R") echo $h->ReplyTo,"<br>\n";
+        if ($h->Subject) echo $h->Subject,"<br>\n";
+        echo "<pre>\n",imap_body($mbox,$i),"\n</pre>";
     }
     imap_close($mbox);
 ?>
-</pre>
 </body>

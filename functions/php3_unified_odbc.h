@@ -23,7 +23,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: php3_unified_odbc.h,v 1.15 1998/01/29 13:34:22 ssb Exp $ */
+/* $Id: php3_unified_odbc.h,v 1.16 1998/02/09 22:49:38 shane Exp $ */
 
 #ifndef _UNIFIED_ODBC_H
 #define _UNIFIED_ODBC_H
@@ -67,6 +67,7 @@ extern int php3_minit_uodbc(INITFUNCARG);
 extern int php3_mshutdown_uodbc(void);
 extern int php3_rinit_uodbc(INITFUNCARG);
 extern void php3_info_uodbc(void);
+extern void php3_uodbc_setoption(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_uodbc_autocommit(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_uodbc_close(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_uodbc_close_all(INTERNAL_FUNCTION_PARAMETERS);

@@ -23,8 +23,9 @@
    +----------------------------------------------------------------------+
  */
  
-/* $Id: pgsql.c,v 1.46 1998/01/22 23:00:30 zeev Exp $ */
+/* $Id: pgsql.c,v 1.47 1998/02/28 20:50:39 zeev Exp $ */
 
+#include <stdlib.h>
 
 #ifndef MSVC5
 #include "config.h"
@@ -42,6 +43,7 @@ function_entry pgsql_functions[] = {
 	{"pg_connect",		php3_pgsql_connect,			NULL},
 	{"pg_pconnect",		php3_pgsql_pconnect,		NULL},
 	{"pg_close",		php3_pgsql_close,			NULL},
+	{"pg_cmdtuples",	php3_pgsql_cmdtuples,			NULL},
 	{"pg_dbname",		php3_pgsql_dbname,			NULL},
 	{"pg_errormessage",	php3_pgsql_error_message,	NULL},
 	{"pg_options",		php3_pgsql_options,			NULL},
@@ -553,6 +555,7 @@ void php3_pgsql_exec(INTERNAL_FUNCTION_PARAMETERS)
 
 #define PHP3_PG_NUM_ROWS 1
 #define PHP3_PG_NUM_FIELDS 2
+#define PHP3_PG_CMD_TUPLES 3
 
 void php3_pgsql_get_result_info(INTERNAL_FUNCTION_PARAMETERS, int entry_type)
 {
@@ -579,6 +582,9 @@ void php3_pgsql_get_result_info(INTERNAL_FUNCTION_PARAMETERS, int entry_type)
 		case PHP3_PG_NUM_FIELDS:
 			return_value->value.lval = PQnfields(pgsql_result);
 			break;
+		case PHP3_PG_CMD_TUPLES:
+			return_value->value.lval = atoi(PQcmdTuples(pgsql_result));
+			break;
 		default:
 			RETURN_FALSE;
 	}
@@ -596,6 +602,10 @@ void php3_pgsql_num_fields(INTERNAL_FUNCTION_PARAMETERS)
 	php3_pgsql_get_result_info(INTERNAL_FUNCTION_PARAM_PASSTHRU,PHP3_PG_NUM_FIELDS);
 }
 
+void php3_pgsql_cmdtuples(INTERNAL_FUNCTION_PARAMETERS)
+{
+	php3_pgsql_get_result_info(INTERNAL_FUNCTION_PARAM_PASSTHRU,PHP3_PG_CMD_TUPLES);
+}
 
 char *get_field_name(PGconn *pgsql, Oid oid, HashTable *list)
 {

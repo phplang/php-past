@@ -315,6 +315,10 @@ SOURCE=.\functions\number.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\functions\pack.c
+# End Source File
+# Begin Source File
+
 SOURCE=.\functions\pageinfo.c
 # End Source File
 # Begin Source File
@@ -468,6 +472,10 @@ SOURCE=.\control_structures_inline.h
 # Begin Source File
 
 SOURCE=.\debugger.c
+# End Source File
+# Begin Source File
+
+SOURCE=".\fopen-wrappers.c"
 # End Source File
 # Begin Source File
 

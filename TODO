@@ -1,4 +1,4 @@
-$Id: TODO,v 1.133 1998/02/02 07:05:13 shane Exp $
+$Id: TODO,v 1.134 1998/02/05 02:35:35 shane Exp $
 
 +----
 | * -- to be done
@@ -77,6 +77,13 @@ P ISAPI (Shane)
 Win32 Specific
 --------------
 * implement some kind of syslog->file log support for win95.
+* change all file open/read/write functions from c library to win32 
+  api file functions.  The win32 api functions handle both disk files
+  and network files.  This will allow include and require to use http
+  or ftp files as the unix version does, and do away with my
+  workaround to support this.  (3.1?)
+* implement symlinks via windows shell links (shortcuts).  This will
+  work only at the script level and is not a c language level port.
 
 Testing
 -------

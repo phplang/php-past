@@ -24,7 +24,7 @@
  */
 
 
-/* $Id: variables.h,v 1.36 1998/01/28 18:59:04 zeev Exp $ */
+/* $Id: variables.h,v 1.39 1998/02/20 04:03:58 zeev Exp $ */
 
 
 #ifndef _VARIABLES_H
@@ -39,7 +39,7 @@ extern void get_array_variable(YYSTYPE *result, YYSTYPE *varname, YYSTYPE *idx I
 extern void get_next_array_variable(YYSTYPE *result, YYSTYPE *varname);
 extern int incdec_variable(YYSTYPE *result, YYSTYPE *varname, int (*func) (YYSTYPE *), int post INLINE_TLS);
 /*not used ?? extern void incdec_class_variable(YYSTYPE *result, YYSTYPE *classname, YYSTYPE *varname, int (*func) (YYSTYPE *), int post);*/
-extern void print_variable(YYSTYPE *varname INLINE_TLS);
+extern void print_variable(YYSTYPE *var INLINE_TLS);
 extern int is_not_internal_function(YYSTYPE *yystype);
 extern void array_assign_next(YYSTYPE *result, YYSTYPE *varname, YYSTYPE *expr);
 extern void add_array_pair_list(YYSTYPE *result, YYSTYPE *idx, YYSTYPE *value, int initialize INLINE_TLS);
@@ -56,8 +56,10 @@ extern int yystype_copy_constructor(YYSTYPE *yystype);
 /* Internal functions which have a YACC rule */
 extern void php3_unset(YYSTYPE *result, YYSTYPE *var_ptr);
 extern void php3_isset(YYSTYPE *result, YYSTYPE *var_ptr);
+extern void php3_empty(YYSTYPE *result, YYSTYPE *var_ptr);
 
 extern PHPAPI void var_reset(YYSTYPE *var);
+extern PHPAPI void var_uninit(YYSTYPE *var);
 
 extern void read_pointer_value(YYSTYPE *result,YYSTYPE *array_result INLINE_TLS);
 extern inline void get_regular_variable_pointer(YYSTYPE *result, YYSTYPE *varname INLINE_TLS);

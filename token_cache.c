@@ -24,7 +24,7 @@
  */
 
 
-/* $Id: token_cache.c,v 1.60 1998/01/31 21:18:46 zeev Exp $ */
+/* $Id: token_cache.c,v 1.66 1998/02/23 21:28:40 zeev Exp $ */
 
 #ifdef THREAD_SAFE
 #include "tls.h"
@@ -127,7 +127,7 @@ int read_next_token(TokenCacheManager *tcm, Token **token, YYSTYPE *phplval)
 		/* we need to read from the lexical scanner */
 		Token next_token;
 
-		phplval->type = IS_EMPTY;	/* the lex scanner doesn't always set phplval->type, make sure the type is not 'dirty' */
+		phplval->type = IS_LONG;	/* the lex scanner doesn't always set phplval->type, make sure the type is not 'dirty' */
 		phplval->cs_data.switched = 0;
 		next_token.token_type = lex_scan(phplval);
 		if (next_token.token_type == DONE_EVAL) {
@@ -163,8 +163,7 @@ int read_next_token(TokenCacheManager *tcm, Token **token, YYSTYPE *phplval)
 		GLOBAL(tc)->tokens[GLOBAL(tc)->count] = next_token;
 		GLOBAL(tc)->count++;
 	}
-	GLOBAL(tc)->pos++;
-	*token = &GLOBAL(tc)->tokens[GLOBAL(tc)->pos - 1];
+	*token = &GLOBAL(tc)->tokens[GLOBAL(tc)->pos++];
 	return (*token)->token_type;
 }
 
@@ -406,6 +405,7 @@ static int is_reserved_word(int token_type)
 	switch (token_type) {
 		case LOGICAL_OR:
 		case LOGICAL_AND:
+		case LOGICAL_XOR:
 		case PHP_PRINT:
 		case PHP_ECHO:
 		case EXIT:
@@ -417,6 +417,7 @@ static int is_reserved_word(int token_type)
 		case WHILE:
 		case ENDWHILE:
 		case FOR:
+		case ENDFOR:
 		case SWITCH:
 		case ENDSWITCH:
 		case CASE:
@@ -428,11 +429,13 @@ static int is_reserved_word(int token_type)
 		case RETURN:
 		case INCLUDE:
 		case REQUIRE:
-		case SHOW_SOURCE:
+		case HIGHLIGHT_FILE:
+		case HIGHLIGHT_STRING:
 		case PHP_GLOBAL:
 		case PHP_STATIC:
 		case PHP_UNSET:
 		case PHP_ISSET:
+		case PHP_EMPTY:
 		case CLASS:
 		case EXTENDS:
 		case PHP_LIST:
@@ -440,6 +443,10 @@ static int is_reserved_word(int token_type)
 		case NEW:
 		case VAR:
 		case EVAL:
+		case PHP_LINE:
+		case PHP_FILE:
+		case PHP_TRUE:
+		case PHP_FALSE:
 			return 1;
 			break;
 		default:

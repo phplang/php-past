@@ -1,13 +1,13 @@
 <!--
-   $Id: migration.sgml,v 1.9 1998/01/31 21:50:43 ssb Exp $
+   $Id: migration.sgml,v 1.11 1998/02/13 19:27:42 ssb Exp $
    $Source: /repository/php3/doc/appendices/migration.sgml,v $
   -->
 
 <appendix id="migration">
- <title>Migrating PHP/FI 2.0 code to PHP 3.0</title>
+ <title>Migrating from PHP/FI 2.0 to PHP 3.0</title>
 
  <sect1>
-  <title>About the changes in 3.0</title>
+  <title>About the incompatbilities in 3.0</title>
   <simpara>
    PHP 3.0 is rewritten from the ground up.  It has a proper parser
    that is much more robust and consistent than 2.0's.  3.0 is also
@@ -135,7 +135,7 @@ endwhile;
   </para>
   <warning>
    <simpara>
-    If you use the old while..endwhile synyax in PHP 3.0, you will get
+    If you use the old while..endwhile syntax in PHP 3.0, you will get
     a never-ending loop.
    </simpara>
   </warning>
@@ -244,9 +244,10 @@ $fp = @fopen($file, "r") or print("Could not open $file for reading&lt;br&gt;\n"
       prior to 1.2.  Apache 1.2 or later is required.
 
     <listitem><simpara>
-      <link linkend="function.echo">echo</link> no longer supports a
-      format string.  Use the <link
-      linkend="function.printf">printf</link> function instead.
+      <link linkend="function.echo"><function>echo()</function></link>
+      no longer supports a format string.  Use the <link
+      linkend="function.printf"><function>printf()</function></link>
+      function instead.
 
     <listitem><simpara>
       In PHP/FI 2.0, an implementation side-effect caused
@@ -260,8 +261,10 @@ $fp = @fopen($file, "r") or print("Could not open $file for reading&lt;br&gt;\n"
      <simpara>
       That is, you cannot traverse an array by having a loop that does
       <literal>$data = $array[]</literal>.  Use <link
-       linkend="function.current">current()</link> and <link
-       linkend="function.next">next()</link> instead.
+      linkend="function.current"><function>current()</function></link>
+      and <link
+      linkend="function.next"><function>next()</function></link>
+      instead.
      <simpara>
       Also, <literal>$array1[] = $array2</literal> does not append the
       values of <literal>$array2</literal> to <literal>$array1</literal>,

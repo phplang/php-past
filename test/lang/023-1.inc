@@ -42,13 +42,13 @@ Correct result - 3:  <? echo $j%$i; ?><br>
   $i = 5.0;
   $j = 3.0;
 ?>
-Correct result - 8.0:  <? echo $i+$j; ?><br>
-Correct result - 8.0:  <? echo $i+$j; ?><br>
-Correct result - 2.0:  <? echo $i-$j; ?><br>
-Correct result - -2.0:  <? echo $j-$i; ?><br>
-Correct result - 15.0:  <? echo $i*$j; ?><br>
-Correct result - 15.0:  <? echo $j*$i; ?><br>
-Correct result - 1.666:  <? echo $i/$j; ?><br>
+Correct result - 8:  <? echo $i+$j; ?><br>
+Correct result - 8:  <? echo $i+$j; ?><br>
+Correct result - 2:  <? echo $i-$j; ?><br>
+Correct result - -2:  <? echo $j-$i; ?><br>
+Correct result - 15:  <? echo $i*$j; ?><br>
+Correct result - 15:  <? echo $j*$i; ?><br>
+Correct result - 1.666667:  <? echo $i/$j; ?><br>
 Correct result - 0.6:  <? echo $j/$i; ?><br>
 Correct result - 2:  <? echo $i%$j; ?><br>
 Correct result - 3:  <? echo $j%$i; ?><br>

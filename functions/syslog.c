@@ -22,7 +22,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: syslog.c,v 1.25 1998/01/31 11:53:34 zeev Exp $ */
+/* $Id: syslog.c,v 1.26 1998/02/03 18:54:28 shane Exp $ */
 #ifdef THREAD_SAFE
 #include "tls.h"
 #endif
@@ -49,24 +49,26 @@ int php3_init_syslog(INITFUNCARG)
 {
 	TLS_VARS;
 	
-	SET_VAR_LONG("LOG_EMERG", LOG_EMERG);
-	SET_VAR_LONG("LOG_ALERT", LOG_ALERT);
-	SET_VAR_LONG("LOG_CRIT", LOG_CRIT);
-	SET_VAR_LONG("LOG_ERR", LOG_ERR);
+	/* error levels */
+	SET_VAR_LONG("LOG_EMERG", LOG_EMERG); /* system unusable */
+	SET_VAR_LONG("LOG_ALERT", LOG_ALERT); /* immediate action required */
+	SET_VAR_LONG("LOG_CRIT", LOG_CRIT); /* critical conditions */
+	SET_VAR_LONG("LOG_ERR", LOG_ERR); 
 	SET_VAR_LONG("LOG_WARNING", LOG_WARNING);
 	SET_VAR_LONG("LOG_NOTICE", LOG_NOTICE);
 	SET_VAR_LONG("LOG_INFO", LOG_INFO);
 	SET_VAR_LONG("LOG_DEBUG", LOG_DEBUG);
+	/* facility: type of program logging the message */
 	SET_VAR_LONG("LOG_KERN", LOG_KERN);
-	SET_VAR_LONG("LOG_USER", LOG_USER);
-	SET_VAR_LONG("LOG_MAIL", LOG_MAIL);
-	SET_VAR_LONG("LOG_DAEMON", LOG_DAEMON);
+	SET_VAR_LONG("LOG_USER", LOG_USER); /* generic user level */
+	SET_VAR_LONG("LOG_MAIL", LOG_MAIL); /* log to email */
+	SET_VAR_LONG("LOG_DAEMON", LOG_DAEMON); /* other system daemons */
 	SET_VAR_LONG("LOG_AUTH", LOG_AUTH);
 	SET_VAR_LONG("LOG_SYSLOG", LOG_SYSLOG);
 	SET_VAR_LONG("LOG_LPR", LOG_LPR);
 #ifdef LOG_NEWS
 	/* No LOG_NEWS on HP-UX */
-	SET_VAR_LONG("LOG_NEWS", LOG_NEWS);
+	SET_VAR_LONG("LOG_NEWS", LOG_NEWS); /* usenet new */
 #endif
 #ifdef LOG_UUCP
 	/* No LOG_UUCP on HP-UX */
@@ -90,6 +92,7 @@ int php3_init_syslog(INITFUNCARG)
 	SET_VAR_LONG("LOG_LOCAL6", LOG_LOCAL6);
 	SET_VAR_LONG("LOG_LOCAL7", LOG_LOCAL7);
 #endif
+	/* options */
 	SET_VAR_LONG("LOG_PID", LOG_PID);
 	SET_VAR_LONG("LOG_CONS", LOG_CONS);
 	SET_VAR_LONG("LOG_ODELAY", LOG_ODELAY);
@@ -97,7 +100,7 @@ int php3_init_syslog(INITFUNCARG)
 	SET_VAR_LONG("LOG_NOWAIT", LOG_NOWAIT);
 #ifdef LOG_PERROR
 /* AIX doesn't have LOG_PERROR */
-	SET_VAR_LONG("LOG_PERROR", LOG_PERROR);
+	SET_VAR_LONG("LOG_PERROR", LOG_PERROR); /*log to stderr*/
 #endif
 	return SUCCESS;
 }

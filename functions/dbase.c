@@ -57,11 +57,7 @@ static int le_dbhead;
 #define DBase_TLS_VARS
 #endif
 
-#if MSVC5
 #include <fcntl.h>
-#else
-#include <sys/fcntl.h>
-#endif
 #include <errno.h>
 
 
@@ -369,7 +365,7 @@ void php3_dbase_get_record(INTERNAL_FUNCTION_PARAMETERS) {
         efree(fnp);
 
 	/* mark whether this record was deleted */
-	if (data[0] = '*') {
+	if (data[0] == '*') {
 		add_assoc_long(return_value,"deleted",1);
 	}
 	else {

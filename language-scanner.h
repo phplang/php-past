@@ -25,7 +25,7 @@
  */
 
 
-/* $Id: language-scanner.h,v 1.12 1998/01/17 21:23:29 andi Exp $ */
+/* $Id: language-scanner.h,v 1.14 1998/02/14 16:02:01 zeev Exp $ */
 
 
 #ifndef _LANGUAGE_SCANNER_H
@@ -38,12 +38,14 @@ typedef struct {
 	unsigned char type;
 	uint lineno;
 	char *eval_string;
+	int in_eval;
 } PHPLexState;
 
 #define LEX_STATE_INCLUDE 0
 #define LEX_STATE_EVAL 1
-#define LEX_STATE_DISPLAY_SOURCE 2
-#define LEX_STATE_CONDITIONAL_INCLUDE 3
+#define LEX_STATE_HIGHLIGHT_FILE 2
+#define LEX_STATE_HIGHLIGHT_STRING 3
+#define LEX_STATE_CONDITIONAL_INCLUDE 4
 
 extern TokenCacheManager token_cache_manager;
 

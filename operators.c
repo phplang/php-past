@@ -24,7 +24,7 @@
  */
 
 
-/* $Id: operators.c,v 1.56 1998/02/01 17:31:57 zeev Exp $ */
+/* $Id: operators.c,v 1.61 1998/02/23 18:09:18 zeev Exp $ */
 
 #ifdef THREAD_SAFE
 #include "tls.h"
@@ -143,7 +143,7 @@ PHPAPI void convert_to_boolean_long(YYSTYPE *op)
 		case IS_STRING:
 			strval = op->value.strval;
 
-			if (op->strlen == 0 || (op->strlen == 1 && strval[0] == '0')) {
+			if (op->strlen == 0) {
 				op->value.lval = 0;
 			} else {
 				op->value.lval = 1;
@@ -186,7 +186,9 @@ PHPAPI void convert_to_string(YYSTYPE *op)
 			op->strlen = sprintf(op->value.strval, "%ld", lval);  /* SAFE */
 			op->type = IS_STRING;
 			break;
-		case IS_DOUBLE:
+		case IS_DOUBLE: {
+			char *ptr;
+			
 			dval = op->value.dval;
 
 			op->value.strval = (char *) emalloc(MAX_LENGTH_OF_DOUBLE + 1);
@@ -194,8 +196,18 @@ PHPAPI void convert_to_string(YYSTYPE *op)
 				return;
 			}
 			op->strlen = sprintf(op->value.strval, "%f", dval);  /* SAFE */
+			ptr = op->value.strval + op->strlen-1;
+			while ((*ptr=='0' || *ptr=='.') && ptr!=op->value.strval) {
+				ptr--;
+				op->strlen--;
+				if (*(ptr+1)=='.') {
+					break;
+				}
+			}
+			*(ptr+1) = 0;
 			op->type = IS_STRING;
 			break;
+		}
 		default:
 			yystype_destructor(op _INLINE_TLS);
 			var_reset(op);
@@ -261,16 +273,10 @@ int add_function(YYSTYPE *result, YYSTYPE *op1, YYSTYPE *op2 INLINE_TLS)
 		yystype_destructor(op2 _INLINE_TLS);
 		return SUCCESS;
 	}
-	if (op1->type == IS_STRING && op2->type == IS_STRING) {
-		result->strlen = op1->strlen + op2->strlen;
-		result->value.strval = (char *) emalloc(result->strlen + 1);
-		strcpy(result->value.strval, op1->value.strval);
-		strcat(result->value.strval, op2->value.strval);
-		result->value.strval[result->strlen] = 0;
-		result->type = IS_STRING;
-		STR_FREE(op1->value.strval);
-		STR_FREE(op2->value.strval);
-		return SUCCESS;
+	if (php3_ini.warn_plus_overloading) {
+		if (op1->type == IS_STRING || op2->type == IS_STRING) {
+			php3_error(E_NOTICE,"Using plus operator on string operands");
+		}
 	}
 	convert_string_to_number(op1);
 	convert_string_to_number(op2);
@@ -395,29 +401,17 @@ int div_function(YYSTYPE *result, YYSTYPE *op1, YYSTYPE *op2 INLINE_TLS)
 
 int mod_function(YYSTYPE *result, YYSTYPE *op1, YYSTYPE *op2 INLINE_TLS)
 {
-	convert_string_to_number(op1);
-	convert_string_to_number(op2);
+	convert_to_long(op1);
+	convert_to_long(op2);
 
-	if (op1->type == IS_DOUBLE) {
-		op1->value.lval = (long) op1->value.dval;
-		op1->type = IS_LONG;
-	}
-	if (op2->type == IS_DOUBLE) {
-		op2->value.lval = (long) op2->value.dval;
-		op2->type = IS_LONG;
-	}
 	if (op2->value.lval == 0) {
+		var_reset(result);
 		return FAILURE;			/* modulus by zero */
 	}
-	if (op1->type == IS_LONG && op2->type == IS_LONG) {
-		result->type = IS_LONG;
-		result->value.lval = op1->value.lval % op2->value.lval;
-		return SUCCESS;
-	}
-	yystype_destructor(op1 _INLINE_TLS);
-	yystype_destructor(op2 _INLINE_TLS);
-	var_reset(result);
-	return FAILURE;				/* unknown datatype */
+
+	result->type = IS_LONG;
+	result->value.lval = op1->value.lval % op2->value.lval;
+	return SUCCESS;
 }
 
 int boolean_or_function(YYSTYPE *result, YYSTYPE *op1, YYSTYPE *op2)
@@ -468,6 +462,17 @@ int boolean_and_function(YYSTYPE *result, YYSTYPE *op1, YYSTYPE *op2)
 }
 
 
+int boolean_xor_function(YYSTYPE *result, YYSTYPE *op1, YYSTYPE *op2)
+{
+	result->type = IS_LONG;
+
+	convert_to_boolean_long(op1);
+	convert_to_boolean_long(op2);
+	result->value.lval = op1->value.lval ^ op2->value.lval;
+	return SUCCESS;
+}
+
+
 int boolean_not_function(YYSTYPE *result, YYSTYPE *op1)
 {
 	convert_to_boolean_long(op1);
@@ -512,28 +517,6 @@ int bitwise_not_function(YYSTYPE *result, YYSTYPE *op1 INLINE_TLS)
 
 int bitwise_or_function(YYSTYPE *result, YYSTYPE *op1, YYSTYPE *op2 INLINE_TLS)
 {
-	if (op1->type == IS_DOUBLE) {
-		op1->value.lval = (long) op1->value.dval;
-		op1->type = IS_LONG;
-	}
-	if (op2->type == IS_DOUBLE) {
-		op2->value.lval = (long) op2->value.dval;
-		op2->type = IS_LONG;
-	}
-	if (op1->type == IS_LONG && op2->type == IS_LONG) {
-		result->type = IS_LONG;
-		result->value.lval = op1->value.lval | op2->value.lval;
-		return SUCCESS;
-	}
-	if ((op1->type == IS_STRING && op2->type == IS_LONG)
-		|| (op1->type == IS_LONG && op2->type == IS_STRING)) {
-		/* assume that the string is 0 */
-		result->type = IS_LONG;
-		result->value.lval = (op1->type == IS_LONG ? op1->value.lval : op2->value.lval);
-		yystype_destructor(op1 _INLINE_TLS);
-		yystype_destructor(op2 _INLINE_TLS);
-		return SUCCESS;
-	}
 	if (op1->type == IS_STRING && op2->type == IS_STRING) {
 		YYSTYPE *longer, *shorter;
 		int i;
@@ -554,37 +537,17 @@ int bitwise_or_function(YYSTYPE *result, YYSTYPE *op1, YYSTYPE *op2 INLINE_TLS)
 		STR_FREE(shorter->value.strval);
 		return SUCCESS;
 	}
-	yystype_destructor(op1 _INLINE_TLS);
-	yystype_destructor(op2 _INLINE_TLS);
-	var_reset(result);
-	return FAILURE;				/* unknown datatype */
+	convert_to_long(op1);
+	convert_to_long(op2);
+
+	result->type = IS_LONG;
+	result->value.lval = op1->value.lval | op2->value.lval;
+	return SUCCESS;
 }
 
 
 int bitwise_and_function(YYSTYPE *result, YYSTYPE *op1, YYSTYPE *op2 INLINE_TLS)
 {
-	if (op1->type == IS_DOUBLE) {
-		op1->value.lval = (long) op1->value.dval;
-		op1->type = IS_LONG;
-	}
-	if (op2->type == IS_DOUBLE) {
-		op2->value.lval = (long) op2->value.dval;
-		op2->type = IS_LONG;
-	}
-	if (op1->type == IS_LONG && op2->type == IS_LONG) {
-		result->type = IS_LONG;
-		result->value.lval = op1->value.lval & op2->value.lval;
-		return SUCCESS;
-	}
-	if ((op1->type == IS_STRING && op2->type == IS_LONG)
-		|| (op1->type == IS_LONG && op2->type == IS_STRING)) {
-		/* assume that the string is 0 */
-		result->type = IS_LONG;
-		result->value.lval = 0;  /* AND with 0 is 0 */
-		yystype_destructor(op1 _INLINE_TLS);
-		yystype_destructor(op2 _INLINE_TLS);
-		return SUCCESS;
-	}
 	if (op1->type == IS_STRING && op2->type == IS_STRING) {
 		YYSTYPE *longer, *shorter;
 		int i;
@@ -605,37 +568,19 @@ int bitwise_and_function(YYSTYPE *result, YYSTYPE *op1, YYSTYPE *op2 INLINE_TLS)
 		STR_FREE(longer->value.strval);
 		return SUCCESS;
 	}
-	yystype_destructor(op1 _INLINE_TLS);
-	yystype_destructor(op2 _INLINE_TLS);
-	var_reset(result);
-	return FAILURE;				/* unknown datatype */
+	
+
+	convert_to_long(op1);
+	convert_to_long(op2);
+
+	result->type = IS_LONG;
+	result->value.lval = op1->value.lval & op2->value.lval;
+	return SUCCESS;
 }
 
 
 int bitwise_xor_function(YYSTYPE *result, YYSTYPE *op1, YYSTYPE *op2 INLINE_TLS)
 {
-	if (op1->type == IS_DOUBLE) {
-		op1->value.lval = (long) op1->value.dval;
-		op1->type = IS_LONG;
-	}
-	if (op2->type == IS_DOUBLE) {
-		op2->value.lval = (long) op2->value.dval;
-		op2->type = IS_LONG;
-	}
-	if (op1->type == IS_LONG && op2->type == IS_LONG) {
-		result->type = IS_LONG;
-		result->value.lval = op1->value.lval ^ op2->value.lval;
-		return SUCCESS;
-	}
-	if ((op1->type == IS_STRING && op2->type == IS_LONG)
-		|| (op1->type == IS_LONG && op2->type == IS_STRING)) {
-		/* assume that the string is 0 */
-		result->type = IS_LONG;
-		result->value.lval = (op1->type == IS_LONG ? op1->value.lval : op2->value.lval) ^ 0;
-		yystype_destructor(op1 _INLINE_TLS);
-		yystype_destructor(op2 _INLINE_TLS);
-		return SUCCESS;
-	}
 	if (op1->type == IS_STRING && op2->type == IS_STRING) {
 		YYSTYPE *longer, *shorter;
 		int i;
@@ -656,10 +601,13 @@ int bitwise_xor_function(YYSTYPE *result, YYSTYPE *op1, YYSTYPE *op2 INLINE_TLS)
 		STR_FREE(longer->value.strval);
 		return SUCCESS;
 	}
-	yystype_destructor(op1 _INLINE_TLS);
-	yystype_destructor(op2 _INLINE_TLS);
-	var_reset(result);
-	return FAILURE;				/* unknown datatype */
+
+	convert_to_long(op1);	
+	convert_to_long(op2);	
+
+	result->type = IS_LONG;
+	result->value.lval = op1->value.lval ^ op2->value.lval;
+	return SUCCESS;
 }
 
 int add_char_to_string(YYSTYPE *result, YYSTYPE *op1, YYSTYPE *op2 INLINE_TLS)
@@ -672,7 +620,7 @@ int add_char_to_string(YYSTYPE *result, YYSTYPE *op1, YYSTYPE *op2 INLINE_TLS)
 	}
 	result->strlen = op1->strlen + 1;
 	result->value.strval = (char *) emalloc(result->strlen + 1);
-	strcpy(result->value.strval, op1->value.strval);
+	memcpy(result->value.strval, op1->value.strval, op1->strlen);
 	result->value.strval[result->strlen - 1] = op2->value.chval;
 	result->value.strval[result->strlen] = 0;
 	result->type = IS_STRING;
@@ -716,7 +664,10 @@ int compare_function(YYSTYPE *result, YYSTYPE *op1, YYSTYPE *op2 INLINE_TLS)
 {
 	if (op1->type == IS_STRING && op2->type == IS_STRING) {
 		result->type = IS_LONG;
-		result->value.lval = strcmp(op1->value.strval, op2->value.strval);
+		result->value.lval = op1->strlen-op2->strlen;
+		if (!result->value.lval) {
+			result->value.lval = memcmp(op1->value.strval, op2->value.strval, op1->strlen);
+		}
 		STR_FREE(op1->value.strval);
 		STR_FREE(op2->value.strval);
 		return SUCCESS;

@@ -24,7 +24,7 @@
  */
 
 
-/* $Id: hash.c,v 1.74 1998/01/25 02:28:28 shane Exp $ */
+/* $Id: hash.c,v 1.75 1998/02/16 08:03:34 andi Exp $ */
 #ifdef THREAD_SAFE
 #include "tls.h"
 #endif
@@ -46,10 +46,11 @@ uint nNumPrimeNumbers = sizeof(PrimeNumbers) / sizeof(uint);
 
 static uint hashpjw(char *arKey, uint nKeyLength)
 {
-	uint h = 0, g, i;
+	uint h = 0, g;
+	char *arEnd=arKey+nKeyLength;
 
-	for (i = 0; i < nKeyLength; i++) {
-		h = (h << 4) + arKey[i];
+	while (arKey < arEnd) {
+		h = (h << 4) + *arKey++;
 		if ((g = (h & 0xF0000000))) {
 			h = h ^ (g >> 24);
 			h = h ^ g;

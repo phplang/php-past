@@ -123,6 +123,9 @@
 /* Define if you want to enable bc style precision math support */
 #define WITH_BCMATH 0
 
+/* Define if you want to prevent the CGI from working unless REDIRECT_STATUS is defined in the environment */
+#define FORCE_CGI_REDIRECT 0
+
 /* Define if you want to enable memory limit support */
 #define MEMORY_LIMIT 0
 

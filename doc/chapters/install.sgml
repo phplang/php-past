@@ -341,7 +341,7 @@
       <option>--enable-magic-quotes</option>
      </synopsis>
      <simpara>
-      Enable magic cookies by default.
+      Enable magic quotes by default.
     </sect3>
 
     <sect3 id="enable-debugger">
@@ -384,6 +384,30 @@
      <simpara>
       Makes it possible to run code on other HTTP or FTP servers directly
       from PHP3 with <link linkend="function.include">include()</link>.
+    </sect3>
+
+
+    <sect3 id="disable-cgi-force-redirect">
+     <title>--disable-cgi-force-redirect</title>
+     <synopsis>
+      <option>--disable-cgi-force-redirect</option>
+     </synopsis>
+     <simpara>
+      When using PHP as a CGI binary, PHP by default always first
+      checks that it is used by redirection (for example under Apache,
+      by using Action directives).  This makes sure that the PHP
+      binary cannot be used to bypass standard web server authentication
+      procedures by calling it directly, like
+      http://my.host/cgi-bin/php/secret/doc.html.  This example accesses
+      http://my.host/secret/doc.html but does not honour any security
+      settings enforced by httpd for directory /secret.
+
+     <simpara>
+      This option disables the check and enables bypassing httpd
+      security and authentication settings.  Use it only if your
+      server software is unable to indicate that a safe redirection
+      was done and all your files under your document root and
+      user directories may be accessed by anyone.
     </sect3>
 
     <sect3 id="disable-syntax-hl">

@@ -23,7 +23,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: mail.c,v 1.42 1997/12/31 15:56:33 rasmus Exp $ */
+/* $Id: mail.c,v 1.43 1998/02/03 19:40:00 shane Exp $ */
 
 #include <stdlib.h>
 #include <ctype.h>
@@ -66,18 +66,8 @@ DLEXPORT php3_module_entry *get_module(void) { return &odbc_module_entry; }
 void php3_mail(INTERNAL_FUNCTION_PARAMETERS)
 {
 	YYSTYPE *argv[4];
+	char *to=NULL, *message=NULL, *headers=NULL, *subject=NULL;
 	int argc;
-	char *message;
-	char *subject;
-	char *to;
-	char *headers = NULL;
-#if MSVC5
-	int tsm_err;
-	char *tsm_err_msg;
-#else
-	FILE *sendmail;
-	int ret;
-#endif
 	TLS_VARS;
 	
 	argc = ARG_COUNT(ht);
@@ -117,6 +107,23 @@ void php3_mail(INTERNAL_FUNCTION_PARAMETERS)
 		convert_to_string(argv[3]);
 		headers = (char *) estrndup(argv[3]->value.strval,argv[3]->strlen);
 	}
+	if(_php3_mail(to, subject, message, headers)){
+		RETURN_TRUE;
+	}else{
+		RETURN_FALSE;
+	}
+}
+
+int _php3_mail(char *to, char *subject, char *message, char *headers){
+#if MSVC5
+	int tsm_err;
+	char *tsm_err_msg;
+#else
+	FILE *sendmail;
+	int ret;
+#endif
+	TLS_VARS;
+
 #if MSVC5
 	if(TSendMail(php3_ini.smtp,&tsm_err,headers,subject,to,message) != SUCCESS){
 		tsm_err_msg = (char *) estrdup(GetSMErrorText(tsm_err));
@@ -126,7 +133,7 @@ void php3_mail(INTERNAL_FUNCTION_PARAMETERS)
 		if(subject) efree(subject);
 		if(to) efree(to);
 		if(headers) efree(headers);
-		RETURN_FALSE
+		return 0;
 	}else{
 		if(message) efree(message);
 		if(subject) efree(subject);
@@ -149,9 +156,9 @@ void php3_mail(INTERNAL_FUNCTION_PARAMETERS)
 		if(to) efree(to);
 		if(headers) efree(headers);
 		if (ret == -1) {
-			RETURN_FALSE;
+			return 0;
 		} else {
-			RETURN_TRUE;
+			return 1;
 		}
 	} else {
 		php3_error(E_WARNING, "Could not execute mail delivery program");
@@ -159,9 +166,10 @@ void php3_mail(INTERNAL_FUNCTION_PARAMETERS)
 		if(subject) efree(subject);
 		if(to) efree(to);
 		if(headers) efree(headers);
-		RETURN_FALSE;
+		return 0;
 	}
 #endif
+	return 1;
 }
 
 void php3_info_mail(void)

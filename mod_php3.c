@@ -22,7 +22,7 @@
    | (with helpful hints from Dean Gaudet <dgaudet@arctic.org>            |
    +----------------------------------------------------------------------+
  */
-/* $Id: mod_php3.c,v 1.55 1998/02/01 03:01:11 jim Exp $ */
+/* $Id: mod_php3.c,v 1.61 1998/02/28 21:49:20 zeev Exp $ */
 
 #ifdef THREAD_SAFE
 #include "tls.h"
@@ -243,7 +243,7 @@ static void *php3_create_dir(pool * p, char *dummy)
 {
 	php3_ini_structure *new;
 
-	php3_module_startup(); /* php3_ini_master is set up here */
+	php3_module_startup();  /* php3_ini_master is set up here */
 
 	new = (php3_ini_structure *) palloc(p, sizeof(php3_ini_structure));
 	memcpy(new,&php3_ini_master,sizeof(php3_ini_structure));
@@ -259,13 +259,50 @@ static void *php3_merge_dir(pool *p, void *basev, void *addv)
 	php3_ini_structure *new = (php3_ini_structure *) palloc(p, sizeof(php3_ini_structure));
 	php3_ini_structure *base = (php3_ini_structure *) basev;
 	php3_ini_structure *add = (php3_ini_structure *) addv;
+	php3_ini_structure orig = php3_ini_master;
 
-	/*
-	 * Because of the way things are initialized, addv already contains
-	 * the new conf structure at this point, so we can just memcpy it
-	 */
-	memcpy(new,add,sizeof(php3_ini_structure));
+	/* Start with the base config */
+	memcpy(new,base,sizeof(php3_ini_structure));
 
+	/* Now, add any fields that have changed in *add compared to the master config */
+	if(add->smtp != orig.smtp) new->smtp = add->smtp;
+	if(add->sendmail_path != orig.sendmail_path) new->sendmail_path = add->sendmail_path;
+	if(add->sendmail_from != orig.sendmail_from) new->sendmail_from = add->sendmail_from;
+	if(add->errors != orig.errors) new->errors = add->errors;
+	if(add->magic_quotes_gpc != orig.magic_quotes_gpc) new->magic_quotes_gpc = add->magic_quotes_gpc;
+	if(add->magic_quotes_runtime != orig.magic_quotes_runtime) new->magic_quotes_runtime = add->magic_quotes_runtime;
+	if(add->magic_quotes_sybase != orig.magic_quotes_sybase) new->magic_quotes_sybase = add->magic_quotes_sybase;
+	if(add->ignore_missing_userfunc_args != orig.ignore_missing_userfunc_args) new->ignore_missing_userfunc_args = add->ignore_missing_userfunc_args;
+	if(add->track_errors != orig.track_errors) new->track_errors = add->track_errors;
+	if(add->display_errors != orig.display_errors) new->display_errors = add->display_errors;
+	if(add->log_errors != orig.log_errors) new->log_errors = add->log_errors;
+	if(add->doc_root != orig.doc_root) new->doc_root = add->doc_root;
+	if(add->user_dir != orig.user_dir) new->user_dir = add->user_dir;
+	if(add->safe_mode != orig.safe_mode) new->safe_mode = add->safe_mode;
+	if(add->track_vars != orig.track_vars) new->track_vars = add->track_vars;
+	if(add->safe_mode_exec_dir != orig.safe_mode_exec_dir) new->safe_mode_exec_dir = add->safe_mode_exec_dir;
+	if(add->cgi_ext != orig.cgi_ext) new->cgi_ext = add->cgi_ext;
+	if(add->isapi_ext != orig.isapi_ext) new->isapi_ext = add->isapi_ext;
+	if(add->nsapi_ext != orig.nsapi_ext) new->nsapi_ext = add->nsapi_ext;
+	if(add->include_path != orig.include_path) new->include_path = add->include_path;
+	if(add->auto_prepend_file != orig.auto_prepend_file) new->auto_prepend_file = add->auto_prepend_file;
+	if(add->auto_append_file != orig.auto_append_file) new->auto_append_file = add->auto_append_file;
+	if(add->upload_tmp_dir != orig.upload_tmp_dir) new->upload_tmp_dir = add->upload_tmp_dir;
+	if(add->extension_dir != orig.extension_dir) new->extension_dir = add->extension_dir;
+	if(add->short_open_tag != orig.short_open_tag) new->short_open_tag = add->short_open_tag;
+	if(add->debugger_host != orig.debugger_host) new->debugger_host = add->debugger_host;
+	if(add->debugger_port != orig.debugger_port) new->debugger_port = add->debugger_port;
+	if(add->error_log != orig.error_log) new->error_log = add->error_log;
+	/* skip the highlight stuff */
+	if(add->sql_safe_mode != orig.sql_safe_mode) new->sql_safe_mode = add->sql_safe_mode;
+	if(add->xbithack != orig.xbithack) new->xbithack = add->xbithack;
+	if(add->engine != orig.engine) new->engine = add->engine;
+	if(add->last_modified != orig.last_modified) new->last_modified = add->last_modified;
+	if(add->max_execution_time != orig.max_execution_time) new->max_execution_time = add->max_execution_time;
+	if(add->memory_limit != orig.memory_limit) new->memory_limit = add->memory_limit;
+	if(add->browscap != orig.browscap) new->browscap = add->browscap;
+	if(add->arg_separator != orig.arg_separator) new->arg_separator = add->arg_separator;
+	
 	return new;
 }
 
@@ -312,6 +349,15 @@ char *php3flaghandler(cmd_parms * cmd, php3_ini_structure * conf, int val)
 		case 10:
 			conf->log_errors = val;
 			break;
+		case 11:
+			conf->display_errors = val;
+			break;
+		case 12:
+			conf->magic_quotes_sybase = val;
+			break;
+	    case 13:
+			conf->ignore_missing_userfunc_args = val;
+			break;
 	}
 	return NULL;
 }
@@ -356,6 +402,21 @@ char *php3take1handler(cmd_parms * cmd, php3_ini_structure * conf, char *arg)
 		case 9:
 			conf->error_log = pstrdup(cmd->pool, arg);
 			break;
+		case 10:
+			conf->arg_separator = pstrdup(cmd->pool, arg);
+			break;
+		case 11:
+			conf->max_execution_time = atoi(arg);
+			break;
+		case 12:
+			conf->memory_limit = atoi(arg);
+			break;
+		case 13:
+			conf->sendmail_path = pstrdup(cmd->pool, arg);
+			break;
+		case 14:
+			conf->browscap = pstrdup(cmd->pool, arg);
+			break;
 	}
 	return NULL;
 }
@@ -376,17 +437,9 @@ int php3_xbithack_handler(request_rec * r)
 	return send_parsed_php3(r);
 }
 
-void php3_exit_handler(server_rec *s, pool *p)
-{
-	php3_module_shutdown();
-}
-
 void php3_init_handler(server_rec *s, pool *p)
 {
-	/* For Apache 1.2 try registering a cleanup function for the main server pool */
-#if MODULE_MAGIC_NUMBER < 19970728
 	register_cleanup(p, NULL, php3_module_shutdown, php3_module_shutdown);
-#endif
 }
 
 handler_rec php3_handlers[] =
@@ -411,18 +464,26 @@ command_rec php3_commands[] =
 	{"php3_upload_tmp_dir", php3take1handler, (void *)7,  RSRC_CONF, TAKE1, "directory"},
 	{"php3_extension_dir", php3take1handler, (void *)8,  RSRC_CONF, TAKE1, "directory"},
 	{"php3_error_log", php3take1handler, (void *)9, OR_OPTIONS, TAKE1, "error log file"},
+	{"php3_arg_separator", php3take1handler, (void *)10, OR_OPTIONS, TAKE1, "GET method arg separator"},
+	{"php3_max_execution_time", php3take1handler, (void *)11, OR_OPTIONS, TAKE1, "Max script run time in seconds"},
+	{"php3_memory_limit", php3take1handler, (void *)12, OR_OPTIONS, TAKE1, "Max memory in bytes a script may use"},
+	{"php3_sendmail_path", php3take1handler, (void *)13, OR_OPTIONS, TAKE1, "Full path to sendmail binary"},
+	{"php3_browscap", php3take1handler, (void *)14, OR_OPTIONS, TAKE1, "Full path to browscap file"},
 
 	{"php3_track_errors", php3flaghandler, (void *)0, OR_OPTIONS, FLAG, "on|off"},
 	{"php3_magic_quotes_gpc", php3flaghandler, (void *)1, OR_OPTIONS, FLAG, "on|off"},
 	{"php3_magic_quotes_runtime", php3flaghandler, (void *)2, OR_OPTIONS, FLAG, "on|off"},
 	{"php3_short_open_tag", php3flaghandler, (void *)3, OR_OPTIONS, FLAG, "on|off"},
 	{"php3_safe_mode", php3flaghandler, (void *)4, RSRC_CONF, FLAG, "on|off"},
-	{"php3_track_vars", php3flaghandler, (void *)5, RSRC_CONF, FLAG, "on|off"},
+	{"php3_track_vars", php3flaghandler, (void *)5, OR_OPTIONS, FLAG, "on|off"},
 	{"php3_sql_safe_mode", php3flaghandler, (void *)6,  RSRC_CONF, FLAG, "on|off"},
 	{"php3_engine", php3flaghandler, (void *)7, RSRC_CONF, FLAG, "on|off"},
 	{"php3_xbithack", php3flaghandler, (void *)8, OR_OPTIONS, FLAG, "on|off"},
 	{"php3_last_modified", php3flaghandler, (void *)9, OR_OPTIONS, FLAG, "on|off"},
 	{"php3_log_errors", php3flaghandler, (void *)10, OR_OPTIONS, FLAG, "on|off"},
+	{"php3_display_errors", php3flaghandler, (void *)11, OR_OPTIONS, FLAG, "on|off"},
+	{"php3_magic_quotes_sybase", php3flaghandler, (void *)12, OR_OPTIONS, FLAG, "on|off"},
+	{"php3_ignore_missing_userfunc_args", php3flaghandler, (void *)13, OR_OPTIONS, FLAG, "on|off"},
 	{NULL}
 };
 
@@ -452,7 +513,7 @@ module MODULE_VAR_EXPORT php3_module =
 	,NULL             			/* child_init */
 #endif
 #if MODULE_MAGIC_NUMBER >= 19970728
-	,php3_exit_handler			/* child_exit */
+	,NULL						/* child_exit */
 #endif
 #if MODULE_MAGIC_NUMBER >= 19970902
 	,NULL						/* post read-request */

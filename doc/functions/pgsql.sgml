@@ -23,6 +23,33 @@
   </refentry>
 
 
+  <refentry id="function.pg-cmdtuples">
+   <refnamediv>
+    <refname>pg_cmdtuples</refname>
+    <refpurpose></refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>pg_cmdtuples</function></funcdef>
+     <paramdef>int <parameter>result_id</parameter></paramdef>
+    </funcsynopsis>
+     <para>
+     pg_cmdtuples() returns the number of tuples (instances) affected
+     by INSERT, UPDATE, and DELETE queries. If no tuple is affected the
+     function will return 0.
+    <example>
+     <title>pg_cmdtuples</title>
+     <programlisting>
+$result = pg_Exec ($conn, "INSERT INTO verlag VALUES ('Autor')");
+$cmdtuples = pg_cmdtuples ($result);
+echo $cmdtuples . " <- cmdtuples affected.";
+</programlisting>
+    </example>
+   </refsect1>
+  </refentry>
+
+
   <refentry id="function.pg-connect">
    <refnamediv>
     <refname>pg_Connect</refname>

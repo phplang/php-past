@@ -23,10 +23,9 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: db.c,v 1.49 1998/01/15 22:01:07 jim Exp $ */
+/* $Id: db.c,v 1.54 1998/02/20 22:49:06 shane Exp $ */
 #if COMPILE_DL
 #include "dl/phpdl.h"
-#include "functions/reg.h"
 #endif
 
 #include "parser.h"
@@ -76,7 +75,7 @@
 
 #if NDBM && !GDBM
 #if BSD2
-#define DB_DBM_HSEARCH
+#define DB_DBM_HSEARCH 1
 #include <db.h>
 #else
 #include <ndbm.h>
@@ -169,7 +168,7 @@ static int le_db;
 /*needed for blocking calls in windows*/
 void *dbm_mutex;
 
-DLEXPORT dbm_info *_php3_finddbm(YYSTYPE *id,HashTable *list)
+dbm_info *_php3_finddbm(YYSTYPE *id,HashTable *list)
 {
 	list_entry *le;
 	dbm_info *info;
@@ -232,22 +231,21 @@ static char *php3_get_info_db(void)
 }
 
 
-DLEXPORT void php3_info_db(void)
+void php3_info_db(void)
 {
 	PUTS(php3_get_info_db());
 }
 
-DLEXPORT void php3_dblist(INTERNAL_FUNCTION_PARAMETERS)
+void php3_dblist(INTERNAL_FUNCTION_PARAMETERS)
 {
 	char *str = php3_get_info_db();
 	RETURN_STRING(str);
 }
 
 
-DLEXPORT void php3_dbmopen(INTERNAL_FUNCTION_PARAMETERS) {
+void php3_dbmopen(INTERNAL_FUNCTION_PARAMETERS) {
 	YYSTYPE *filename, *mode;
 	dbm_info *info;
-	char *fn;
 	int ret;
 	DBM_TLS_VARS;
 
@@ -255,8 +253,9 @@ DLEXPORT void php3_dbmopen(INTERNAL_FUNCTION_PARAMETERS) {
 		WRONG_PARAM_COUNT;
 	}
 
-	fn=filename->value.strval;;
-
+	convert_to_string(filename);
+	convert_to_string(mode);
+	
 	info = _php3_dbmopen(filename->value.strval, mode->value.strval);
 	if (info) {
 		ret = php3_list_insert(info, DBM_GLOBAL(le_db));
@@ -266,7 +265,7 @@ DLEXPORT void php3_dbmopen(INTERNAL_FUNCTION_PARAMETERS) {
 	}
 }
 
-DLEXPORT dbm_info *_php3_dbmopen(char *filename, char *mode) {
+dbm_info *_php3_dbmopen(char *filename, char *mode) {
 	dbm_info *info;
 	int ret, lock=0;
 	char *lockfn = NULL;
@@ -280,6 +279,11 @@ DLEXPORT dbm_info *_php3_dbmopen(char *filename, char *mode) {
 
 	DBM_TYPE dbf;
 	DBM_MODE_TYPE imode;
+
+	if (filename == NULL) {
+		php3_error(E_WARNING, "NULL filename passed to _php3_dbmopen()");
+		return NULL;
+	}
 
 	switch (*mode) {
 		case 'w': 
@@ -301,7 +305,7 @@ DLEXPORT dbm_info *_php3_dbmopen(char *filename, char *mode) {
 	}
 
 	if (lock) {
-		lockfn = emalloc(strlen(filename) + 4);
+		lockfn = emalloc(strlen(filename) + 5);
 		strcpy(lockfn, filename);
 		strcat(lockfn, ".lck");
 
@@ -394,7 +398,7 @@ DLEXPORT dbm_info *_php3_dbmopen(char *filename, char *mode) {
 	return NULL;
 }
 
-DLEXPORT void php3_dbmclose(INTERNAL_FUNCTION_PARAMETERS) {
+void php3_dbmclose(INTERNAL_FUNCTION_PARAMETERS) {
 	YYSTYPE *id;
 
 	if (ARG_COUNT(ht) != 1 || getParameters(ht,1,&id)==FAILURE) {
@@ -409,7 +413,7 @@ DLEXPORT void php3_dbmclose(INTERNAL_FUNCTION_PARAMETERS) {
 	}
 }
 
-DLEXPORT int _php3_dbmclose(dbm_info *info) {
+int _php3_dbmclose(dbm_info *info) {
 	int ret = 0;
 	DBM_TYPE dbf;
 	int lockfd;
@@ -448,7 +452,7 @@ DLEXPORT int _php3_dbmclose(dbm_info *info) {
  * ret = 0  success
  * ret = 1  key already exists - nothing done
  */
-DLEXPORT void php3_dbminsert(INTERNAL_FUNCTION_PARAMETERS)
+void php3_dbminsert(INTERNAL_FUNCTION_PARAMETERS)
 {
 	YYSTYPE *id, *key, *value;
 	dbm_info *info;
@@ -470,7 +474,7 @@ DLEXPORT void php3_dbminsert(INTERNAL_FUNCTION_PARAMETERS)
 	RETURN_LONG(ret);
 }
 
-DLEXPORT int _php3_dbminsert(dbm_info *info, char *key, char *value) {
+int _php3_dbminsert(dbm_info *info, char *key, char *value) {
 	datum key_datum, value_datum;
 	int ret;
 	DBM_TYPE dbf;
@@ -501,7 +505,7 @@ DLEXPORT int _php3_dbminsert(dbm_info *info, char *key, char *value) {
 	return(ret);	
 }	
 
-DLEXPORT void php3_dbmreplace(INTERNAL_FUNCTION_PARAMETERS)
+void php3_dbmreplace(INTERNAL_FUNCTION_PARAMETERS)
 {
 	YYSTYPE *id, *key, *value;
 	dbm_info *info;
@@ -523,7 +527,7 @@ DLEXPORT void php3_dbmreplace(INTERNAL_FUNCTION_PARAMETERS)
 	RETURN_LONG(ret);
 }
 
-DLEXPORT int _php3_dbmreplace(dbm_info *info, char *key, char *value) {
+int _php3_dbmreplace(dbm_info *info, char *key, char *value) {
 	DBM_TYPE dbf;
 	int ret;
 	datum key_datum, value_datum;
@@ -554,7 +558,7 @@ DLEXPORT int _php3_dbmreplace(dbm_info *info, char *key, char *value) {
 	return(ret);	
 }	
 
-DLEXPORT void php3_dbmfetch(INTERNAL_FUNCTION_PARAMETERS)
+void php3_dbmfetch(INTERNAL_FUNCTION_PARAMETERS)
 {
 	YYSTYPE *id, *key;
 	dbm_info *info;
@@ -579,7 +583,7 @@ DLEXPORT void php3_dbmfetch(INTERNAL_FUNCTION_PARAMETERS)
 	}
 }
 
-DLEXPORT char *_php3_dbmfetch(dbm_info *info, char *key) {
+char *_php3_dbmfetch(dbm_info *info, char *key) {
 	datum key_datum, value_datum;
 	char *ret;
 	DBM_TYPE dbf;
@@ -624,7 +628,7 @@ DLEXPORT char *_php3_dbmfetch(dbm_info *info, char *key) {
 }
 
 
-DLEXPORT void php3_dbmexists(INTERNAL_FUNCTION_PARAMETERS)
+void php3_dbmexists(INTERNAL_FUNCTION_PARAMETERS)
 {
 	YYSTYPE *id, *key;
 	dbm_info *info;
@@ -645,7 +649,7 @@ DLEXPORT void php3_dbmexists(INTERNAL_FUNCTION_PARAMETERS)
 	RETURN_LONG(ret);
 }
 
-DLEXPORT int _php3_dbmexists(dbm_info *info, char *key) {
+int _php3_dbmexists(dbm_info *info, char *key) {
 	datum key_datum;
 	int ret;
 	DBM_TYPE dbf;
@@ -667,7 +671,7 @@ DLEXPORT int _php3_dbmexists(dbm_info *info, char *key) {
 	return(ret);
 }
 		
-DLEXPORT void php3_dbmdelete(INTERNAL_FUNCTION_PARAMETERS)
+void php3_dbmdelete(INTERNAL_FUNCTION_PARAMETERS)
 {
 	YYSTYPE *id, *key;
 	dbm_info *info;
@@ -688,7 +692,7 @@ DLEXPORT void php3_dbmdelete(INTERNAL_FUNCTION_PARAMETERS)
 	RETURN_LONG(ret);
 }
 
-DLEXPORT int _php3_dbmdelete(dbm_info *info, char *key) {
+int _php3_dbmdelete(dbm_info *info, char *key) {
 	datum key_datum;
 	int ret;
 	DBM_TYPE dbf;
@@ -709,7 +713,7 @@ DLEXPORT int _php3_dbmdelete(dbm_info *info, char *key) {
 	return(ret);
 }
 
-DLEXPORT void php3_dbmfirstkey(INTERNAL_FUNCTION_PARAMETERS)
+void php3_dbmfirstkey(INTERNAL_FUNCTION_PARAMETERS)
 {
 	YYSTYPE *id;
 	dbm_info *info;
@@ -735,7 +739,7 @@ DLEXPORT void php3_dbmfirstkey(INTERNAL_FUNCTION_PARAMETERS)
 	}
 }
 
-DLEXPORT char *_php3_dbmfirstkey(dbm_info *info) {
+char *_php3_dbmfirstkey(dbm_info *info) {
 	datum ret_datum;
 	char *ret;
 	DBM_TYPE dbf;
@@ -766,7 +770,7 @@ DLEXPORT char *_php3_dbmfirstkey(dbm_info *info) {
 	return (ret);
 }
 
-DLEXPORT void php3_dbmnextkey(INTERNAL_FUNCTION_PARAMETERS)
+void php3_dbmnextkey(INTERNAL_FUNCTION_PARAMETERS)
 {
 	YYSTYPE *id, *key;
 	dbm_info *info;
@@ -793,7 +797,7 @@ DLEXPORT void php3_dbmnextkey(INTERNAL_FUNCTION_PARAMETERS)
 	}
 }
 
-DLEXPORT char *_php3_dbmnextkey(dbm_info *info, char *key) {
+char *_php3_dbmnextkey(dbm_info *info, char *key) {
 	datum key_datum, ret_datum;
 	char *ret;
 	DBM_TYPE dbf;
@@ -1061,7 +1065,7 @@ datum flatfile_nextkey(FILE *dbf) {
 #endif
 
 
-DLEXPORT int php3_minit_db(INITFUNCARG)
+int php3_minit_db(INITFUNCARG)
 {
 #ifdef THREAD_SAFE
 	dbm_global_struct *dbm_globals;
@@ -1104,7 +1108,7 @@ static int php3_mend_db(void){
 	return SUCCESS;
 }
 
-DLEXPORT int php3_rinit_db(INITFUNCARG) {
+int php3_rinit_db(INITFUNCARG) {
 #if !GDBM && !NDBM
 	CurrentFlatFilePos = 0L;
 #endif

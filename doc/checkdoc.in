@@ -1,0 +1,70 @@
+#!@PERL_PATH@
+#
+# Script that checks which functions are documented in the manual.
+#
+# $Id: checkdoc.in,v 1.2 1998/03/02 00:37:31 ssb Exp $
+#
+# Author: Stig Bakken <ssb@guardian.no>
+#
+
+$dir = "functions";
+$funclist = "funclist.txt";
+
+@sgml_files = &glob($dir, "\\.sgml\$");
+&check_functions(@sgml_files);
+
+if ($ARGV[0] eq '-m') {
+    foreach $function (sort @functions) {
+	next if ($func_in_file{$function});
+	print "$function\n";
+    }
+} else {
+    printf("%-32s    %s\n", "FUNCTION NAME", "DOCUMENTED IN");
+    print "-" x 70, "\n";
+    foreach $function (sort @functions) {
+	printf("%-32s    %s\n", $function, $func_in_file{$function});
+    }
+}
+
+
+### Subroutines:
+
+sub glob {
+    my $dir = shift;
+    my $pattern = shift;
+    my @f = ();
+    if (opendir(DIR, $dir)) {
+	foreach $file (readdir(DIR)) {
+	    next unless ($file =~ m/$pattern/);
+	    push(@f, $file);
+	}
+	close DIR;
+    }
+    return @f;
+}
+
+sub check_functions {
+    foreach $sgml_file (@_) {
+	$path = "$dir/$sgml_file";
+	if (open(SGML, $path)) {
+	    while (<SGML>) {
+		next unless (m!(^|\s+)id\s*=\s*(['\"])([^\2]*?)\2\s*!);
+		$func = $3;
+		next unless ($func =~ s!^function\.!!);
+		$func =~ s/-/_/g;
+		$func_in_file{$func} = $sgml_file;
+	    }
+	} else {
+	    warn "Could not open $path\n";
+	}
+    }
+    
+    if (open(FUNCLIST, $funclist)) {
+	while (<FUNCLIST>) {
+	    s!\s*!!g;
+	    $len = length($_);
+	    $longest = $len if ($len > $longest);
+	    push(@functions, $_);
+	}
+    }
+}

@@ -5,7 +5,7 @@
 
 <!--
 
-  $Id: howto.dsl,v 1.1 1998/01/26 03:04:12 ssb Exp $
+  $Id: howto.dsl,v 1.2 1998/03/02 13:59:02 ssb Exp $
 
   This file contains HTML-specific stylesheet customization for
   the SGML HOWTO.
@@ -14,7 +14,6 @@
 
 <style-specification id="local-docbook" use="docbook">
 
-(define %gentext-nav-tblwidth% "100%")
 (define (toc-depth nd)
   (if (string=? (gi nd) "ARTICLE")
       2 ; the depth of the top-level TOC

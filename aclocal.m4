@@ -1,4 +1,4 @@
-dnl $Id: aclocal.m4,v 1.8 1998/01/29 14:18:22 ssb Exp $
+dnl $Id: aclocal.m4,v 1.9 1998/02/26 09:05:24 jaakko Exp $
 dnl
 dnl This file contains local autoconf functions.
 
@@ -49,7 +49,10 @@ AC_DEFUN(AC_FIND_SOLID_LIBS,[
     FreeBSD) ac_solid_os=fbx;;
     # "uname -s" on SCO makes no sense.
   esac
-  SOLID_LIBS=`echo "$1/scl${ac_solid_os}*.a" | cut -d' ' -f1`
+  SOLID_LIBS=`echo $1/scl${ac_solid_os}*.so | cut -d' ' -f1`
+  if test ! -f $SOLID_LIBS; then
+    SOLID_LIBS=`echo $1/scl${ac_solid_os}*.a | cut -d' ' -f1`
+  fi
   AC_MSG_RESULT(`echo $SOLID_LIBS | sed -e 's!.*/!!'`)
 ])
 

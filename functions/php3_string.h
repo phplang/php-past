@@ -24,10 +24,14 @@
  */
 
 
-/* $Id: php3_string.h,v 1.7 1998/01/23 07:28:14 jaakko Exp $ */
+/* $Id: php3_string.h,v 1.8 1998/02/20 15:17:24 zeev Exp $ */
 
 #ifndef _PHPSTRING_H
 #define _PHPSTRING_H
+
+#ifndef THREAD_SAFE
+extern char *strtok_string;
+#endif
 
 extern void php3_strlen(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_chop(INTERNAL_FUNCTION_PARAMETERS);

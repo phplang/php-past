@@ -35,9 +35,7 @@ typedef struct _mem_header {
 	char *filename;
 	uint lineno;
 #endif
-#if DEBUG | MEMORY_LIMIT
 	int size;
-#endif
 } mem_header;
 
 typedef union {
@@ -49,7 +47,7 @@ typedef union {
 #define PLATFORM_ALIGNMENT (sizeof(align_test))
 #define PLATFORM_PADDING (((PLATFORM_ALIGNMENT-sizeof(mem_header))%PLATFORM_ALIGNMENT+PLATFORM_ALIGNMENT)%PLATFORM_ALIGNMENT)
 
-extern PHPAPI char *strndup(const char *s, unsigned int length);
+extern PHPAPI char *php3_strndup(const char *s, unsigned int length);
 
 #if DEBUG
 extern PHPAPI void *_emalloc(size_t size,char *filename,uint lineno);
@@ -65,14 +63,6 @@ extern PHPAPI char *_estrndup(const char *s, unsigned int length,char *filename,
 #define estrdup(s)				_estrdup((s),__FILE__,__LINE__)
 #define estrndup(s,length)		_estrndup((s),(length),__FILE__,__LINE__)
 #else
-# if CGI_BINARY
-#define emalloc(size)			malloc((size))
-#define efree(ptr)				free((ptr))
-#define ecalloc(nmemb,size)		calloc((nmemb),(size))
-#define erealloc(ptr,size)		realloc((ptr),(size))
-#define estrdup(s)				strdup((s))
-#define estrndup(s,length)		strndup((s),(length))
-# else
 extern PHPAPI void *_emalloc(size_t size);
 extern PHPAPI void _efree(void *ptr);
 extern PHPAPI void *_ecalloc(size_t nmemb, size_t size);
@@ -85,7 +75,6 @@ extern PHPAPI char *_estrndup(const char *s, unsigned int length);
 #define erealloc(ptr,size)		_erealloc((ptr),(size))
 #define estrdup(s)				_estrdup((s))
 #define estrndup(s,length)		_estrndup((s),(length))
-# endif
 #endif
 
 #define pemalloc(size,persistent) ((persistent)?malloc(size):emalloc(size))

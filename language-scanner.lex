@@ -26,7 +26,7 @@
 */
 
 
-/* $Id: language-scanner.lex,v 1.118 1998/02/01 23:53:05 zeev Exp $ */
+/* $Id: language-scanner.lex,v 1.135 1998/02/20 04:03:56 zeev Exp $ */
 
 %}
 
@@ -72,7 +72,8 @@
 extern Stack input_source_stack;
 int php3_display_source; /* whether or not we're in display-source mode */
 int php3_preprocess;  /* whether we're in preprocess mode */
-int phplineno=1;
+int phplineno;
+static int in_eval;
 #endif
 
 #ifndef YY_TLS_VARS
@@ -94,6 +95,28 @@ int phplineno=1;
 #define BEGIN_STRONG()	{ PUTS("<STRONG>"); }
 #define END_STRONG()	{ PUTS("</STRONG>"); }
 
+#define HANDLE_NEWLINES(s,l) \
+do { \
+	char *p = (s),*boundary = p+(l); \
+\
+	if (GLOBAL(in_eval)) { \
+		break; \
+	} \
+	while(p<boundary) { \
+		if (*p++=='\n') { \
+			GLOBAL(phplineno)++; \
+		} \
+	} \
+} while(0)
+
+#define HANDLE_NEWLINE(c) \
+{ \
+	if (c=='\n' && !GLOBAL(in_eval)) { \
+		GLOBAL(phplineno)++; \
+	} \
+}
+		
+	
 void reset_scanner()
 {
 	YY_TLS_VARS
@@ -101,6 +124,7 @@ void reset_scanner()
 
 	BEGIN(INITIAL);
 	GLOBAL(phplineno)=1;
+	GLOBAL(in_eval)=0;
 }
 
 /* Used to make sure that a buffer is allocated for yyin */
@@ -117,7 +141,7 @@ int include_file(YYSTYPE *file, int display_source)
 	YY_BUFFER_STATE buffer_state = YY_CURRENT_BUFFER;
 	PHPLexState lex_state;
 	char *filename;
-	SOCK_VARS; /* They don't actually get used, but we have to have 'em */
+	SOCK_VARS /* They don't actually get used, but we have to have 'em */
 	TLS_VARS;
 
 	convert_to_string(file);
@@ -126,10 +150,12 @@ int include_file(YYSTYPE *file, int display_source)
 		return FAILURE;
 	}
 	memcpy(&lex_state.buffer_state,&buffer_state,sizeof(YY_BUFFER_STATE));
-	lex_state.type = (display_source?LEX_STATE_DISPLAY_SOURCE:LEX_STATE_INCLUDE);
+	lex_state.type = (display_source?LEX_STATE_HIGHLIGHT_FILE:LEX_STATE_INCLUDE);
 	lex_state.lineno = GLOBAL(phplineno);
 	lex_state.state = YYSTATE;
-
+	lex_state.in_eval = GLOBAL(in_eval);
+	GLOBAL(in_eval)=0;
+	
 	stack_push(&GLOBAL(input_source_stack),&lex_state,sizeof(PHPLexState));
 
 	tmp = php3_fopen_wrapper(file->value.strval, "r", USE_PATH|IGNORE_URL_WIN SOCK_PARG);
@@ -146,12 +172,13 @@ int include_file(YYSTYPE *file, int display_source)
 	GLOBAL(phplineno)=1+MAX_TOKENS_PER_CACHE*GLOBAL(include_count);
 	filename = estrndup(file->value.strval,file->strlen);
 	hash_index_update(&GLOBAL(include_names),GLOBAL(include_count),(void *) &filename,sizeof(char *),NULL);
+	
 
 	return SUCCESS;
 }
 
 
-void eval_string(YYSTYPE *str,YYSTYPE *return_offset INLINE_TLS)
+void eval_string(YYSTYPE *str,YYSTYPE *return_offset, int display_source INLINE_TLS)
 {
 	PHPLexState lex_state,*ls;
 	YY_TLS_VARS
@@ -167,13 +194,34 @@ void eval_string(YYSTYPE *str,YYSTYPE *return_offset INLINE_TLS)
 	str->value.strval[str->strlen+1]=0;
 
 	memcpy(&lex_state.buffer_state,&buffer_state,sizeof(YY_BUFFER_STATE));
-	lex_state.type = LEX_STATE_EVAL;
+	if (!display_source) {
+		lex_state.type = LEX_STATE_EVAL;
+		lex_state.return_offset = return_offset->offset+1;
+	} else {
+		lex_state.type = LEX_STATE_HIGHLIGHT_STRING;
+	}
 	lex_state.state = YYSTATE;
-	lex_state.return_offset = return_offset->offset+1;
 	lex_state.eval_string = str->value.strval;
+	lex_state.lineno = GLOBAL(phplineno);
+	lex_state.in_eval = GLOBAL(in_eval);
+	GLOBAL(phplineno) = GLOBAL(current_lineno);
+	GLOBAL(in_eval)=1;
 	stack_push(&GLOBAL(input_source_stack),&lex_state,sizeof(PHPLexState));
 
-	tcm_new(&GLOBAL(token_cache_manager));
+	if (!display_source) {
+		tcm_new(&GLOBAL(token_cache_manager));
+		
+	} else {
+		if (display_source==2 && !yystype_true(return_offset)) {
+			display_source=1;
+		}
+		if (display_source==1) {
+			BEGIN(INITIAL);
+			start_display_source(0 _INLINE_TLS);
+		} else {
+			start_display_source(1 _INLINE_TLS);
+		}
+	}
 
 	yy_scan_buffer(str->value.strval, str->strlen+2);
 }
@@ -195,6 +243,8 @@ int conditional_include_file(YYSTYPE *file,YYSTYPE *return_offset INLINE_TLS)
 	lex_state.state = YYSTATE;
 	lex_state.return_offset = return_offset->offset+1;
 	lex_state.lineno = GLOBAL(phplineno);
+	lex_state.in_eval = GLOBAL(in_eval);
+	GLOBAL(in_eval) = 0;
 	stack_push(&GLOBAL(input_source_stack),&lex_state,sizeof(PHPLexState));
 
 	tmp = php3_fopen_wrapper(file->value.strval, "r", USE_PATH|IGNORE_URL_WIN SOCK_PARG);
@@ -264,6 +314,7 @@ DNUM	[0-9]*[\.][0-9]+
 HNUM	"0x"[0-9a-fA-F]+
 LABEL	[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*
 WHITESPACE [ \n\r\t]+
+TABS_AND_SPACES [ \t]*
 TOKENS [;:,.\[\]()|^&+-/*=%!~$<>{}?@]
 ENCAPSED_TOKENS [\[\]{}$]
 ESCAPED_AND_WHITESPACE [\n\t\r #'.:;,()|^&+-/*=%!~<>?@]+
@@ -327,6 +378,10 @@ TLS_VARS;
 	return FOR;
 }
 
+<IN_PHP>"endfor" {
+	return ENDFOR;
+}
+
 <IN_PHP>"switch" {
 	return SWITCH;
 }
@@ -379,15 +434,15 @@ TLS_VARS;
 	return VAR;
 }
 
-<IN_PHP>"(int)" {
+<IN_PHP>"("{TABS_AND_SPACES}("int"|"integer"){TABS_AND_SPACES}")" {
 	return INT_CAST;
 }
 
-<IN_PHP>"(double)" {
+<IN_PHP>"("{TABS_AND_SPACES}("real"|"double"|"float"){TABS_AND_SPACES}")" {
 	return DOUBLE_CAST;
 }
 
-<IN_PHP>"(string)" {
+<IN_PHP>"("{TABS_AND_SPACES}"string"{TABS_AND_SPACES}")" {
 	return STRING_CAST;
 }
 
@@ -403,8 +458,12 @@ TLS_VARS;
 	return REQUIRE;
 }
 
-<IN_PHP>"show_source" {
-	return SHOW_SOURCE;
+<IN_PHP>"highlight_file"|"show_source" {
+	return HIGHLIGHT_FILE;
+}
+
+<IN_PHP>"highlight_string" {
+	return HIGHLIGHT_STRING;
 }
 
 <IN_PHP>"global" {
@@ -413,6 +472,10 @@ TLS_VARS;
 
 <IN_PHP>"isset" {
 	return PHP_ISSET;
+}
+
+<IN_PHP>"empty" {
+	return PHP_EMPTY;
 }
 
 <IN_PHP>"static" {
@@ -512,6 +575,10 @@ TLS_VARS;
 	return LOGICAL_AND;
 }
 
+<IN_PHP>"XOR" {
+	return LOGICAL_XOR;
+}
+
 <IN_PHP>{TOKENS} {
 	return yytext[0];
 }
@@ -535,6 +602,19 @@ TLS_VARS;
 	return DNUMBER;
 }
 
+<IN_PHP>"TRUE" {
+	phplval->value.lval = 1;
+	phplval->type = IS_LONG;
+	return PHP_TRUE;
+}
+
+<IN_PHP>"FALSE" {
+	phplval->value.strval = empty_string;
+	phplval->strlen = 0;
+	phplval->type = IS_STRING;
+	return PHP_FALSE;
+}
+
 <IN_PHP>"__LINE__" {
 	phplval->value.lval = php3_get_lineno(GLOBAL(current_lineno));
 	phplval->type = IS_LONG;
@@ -552,20 +632,14 @@ TLS_VARS;
 
 
 <INITIAL>(([^<]|"<"[^?s]){1,400})|"<s" {
-	int i;
-	
 	phplval->value.strval = (char *) estrndup(yytext, yyleng);
 	phplval->strlen = yyleng;
 	phplval->type = IS_STRING;
-	for (i=0; i<yyleng; i++) {
-		if (yytext[i] == '\n') {
-			GLOBAL(phplineno)++;
-		}
-	}
+	HANDLE_NEWLINES(yytext,yyleng);
 	return INLINE_HTML;
 }
 
-<INITIAL>"<?"|"<script"" "+"language"" "*"="" "*("php"|"\"php\""|"\'php\'")" "*">" {
+<INITIAL>"<?"|"<script"{WHITESPACE}+"language"{WHITESPACE}*"="{WHITESPACE}*("php"|"\"php\""|"\'php\'"){WHITESPACE}*">" {
 	if (php3_ini.short_open_tag) {
 		if (!(GLOBAL(initialized) & INIT_ENVIRONMENT)) {
 			hash_environment();
@@ -584,9 +658,7 @@ TLS_VARS;
 }
 
 <INITIAL>"<?php"[ \n\r\t] {
-	if (yytext[yyleng-1] == '\n') {
-		GLOBAL(phplineno)++;
-	}
+	HANDLE_NEWLINE(yytext[yyleng-1]);
 	if (!(GLOBAL(initialized) & INIT_ENVIRONMENT)) {
 		hash_environment();
 	}
@@ -599,9 +671,7 @@ TLS_VARS;
 
 <INITIAL>"<?php_track_vars?>"([\n]|"\r\n")? {
 	GLOBAL(php3_track_vars)=1;
-	if (yytext[yyleng-1]=='\n') {
-	  GLOBAL(phplineno)++;
-	}
+	HANDLE_NEWLINE(yytext[yyleng-1]);
 	if (GLOBAL(php3_display_source)) {
 		BEGIN_COLOR(php3_ini.highlight_default);
 		PUTS("&lt;?php_track_vars?&gt; ");
@@ -618,13 +688,7 @@ TLS_VARS;
 
 
 <IN_PHP>{WHITESPACE} {
-	int i;
-
-	for (i=0; i<yyleng; i++) {
-		if (yytext[i] == '\n') {
-			GLOBAL(phplineno)++;
-		}
-	}
+	HANDLE_NEWLINES(yytext,yyleng);
 	if (GLOBAL(php3_display_source)) {
 		register int i;
 		
@@ -636,9 +700,7 @@ TLS_VARS;
 
 
 <IN_PHP>([#]|"//")([^\n\r?]|"?"[^>\n\r])*("?\n"|"?\r\n")? { /* eat one line comments */
-	if (yytext[yyleng-1] == '\n') {
-		GLOBAL(phplineno)++;
-	}
+	HANDLE_NEWLINE(yytext[yyleng-1]);
 	if (GLOBAL(php3_display_source)) {
 		END_COLOR();
 		BEGIN_ITALIC();
@@ -666,16 +728,12 @@ TLS_VARS;
 	for (;;) {
 		if (GLOBAL(php3_display_source)) {
 			while((c=MY_INPUT())!='*' && c!=EOF) {
-				if (c == '\n') {
-					GLOBAL(phplineno)++;
-				}
+				HANDLE_NEWLINE(c);
 				html_putc(c);
 			}
 		} else {
 			while ((c=MY_INPUT())!='*' && c!=EOF) { /* eat up text of comment */
-				if (c == '\n') {
-					GLOBAL(phplineno)++;
-				}
+				HANDLE_NEWLINE(c);
 			}
 		}
 		if (c=='*') {
@@ -702,16 +760,14 @@ TLS_VARS;
 		if (c==EOF) {
 			php3_error(E_WARNING,"Unterminated comment starting line %d.\n",start_lineno);
 			break;
-		} else if (c=='\n') {
-			GLOBAL(phplineno)++;
+		} else {
+			HANDLE_NEWLINE(c);
 		}
 	}
 }
 
-<IN_PHP>("?>"|"</script"" "*">")([\n]|"\r\n")? {
-	if (yytext[yyleng-1] == '\n') {
-		GLOBAL(phplineno)++;
-	}
+<IN_PHP>("?>"|"</script"{WHITESPACE}*">")([\n]|"\r\n")? {
+	HANDLE_NEWLINE(yytext[yyleng-1]);
 	BEGIN(INITIAL);
 	return ';';  /* implicit ';' at php-end tag */
 }
@@ -746,13 +802,7 @@ TLS_VARS;
 
 
 <DOUBLE_QUOTES,BACKQUOTE>{ESCAPED_AND_WHITESPACE} {
-	int i;
-
-	for (i=0; i<yyleng; i++) {
-		if (yytext[i] == '\n') {
-			GLOBAL(phplineno)++;
-		}
-	}
+	HANDLE_NEWLINES(yytext,yyleng);
 	phplval->value.strval = (char *) estrndup(yytext, yyleng);
 	phplval->strlen = yyleng;
 	phplval->type = IS_STRING;
@@ -760,13 +810,7 @@ TLS_VARS;
 }
 
 <SINGLE_QUOTE>([^'\\]|\\[^'\\])+ {
-	int i;
-
-	for (i=0; i<yyleng; i++) {
-		if (yytext[i] == '\n') {
-			GLOBAL(phplineno)++;
-		}
-	}
+	HANDLE_NEWLINES(yytext,yyleng);
 	phplval->value.strval = (char *) estrndup(yytext, yyleng);
 	phplval->strlen = yyleng;
 	phplval->type = IS_STRING;
@@ -842,9 +886,10 @@ TLS_VARS;
 			phplval->value.chval='\\';
 			break;
 		case '$':
-		case '[':
-		case ']':
 			phplval->value.chval=yytext[1];
+			break;
+		case '0':
+			phplval->value.chval='\0';
 			break;
 		default:
 			phplval->value.strval = estrndup(yytext,yyleng);
@@ -892,6 +937,9 @@ TLS_VARS;
 		yy_delete_buffer(YY_CURRENT_BUFFER);
 		stack_top(&GLOBAL(input_source_stack),(void **) &lex_state);
 
+		GLOBAL(phplineno) = lex_state->lineno;
+		GLOBAL(in_eval) = lex_state->in_eval;
+		
 		switch(lex_state->type) {
 			case LEX_STATE_CONDITIONAL_INCLUDE: /* switching out of include() */
 				seek_token(&GLOBAL(token_cache_manager),lex_state->return_offset);
@@ -899,7 +947,7 @@ TLS_VARS;
 				if(yyin->_tmpfname=="url"){
 					closesocket(yyin->_file);
 					efree(yyin);
-				}else{
+				} else {
 #endif
 				fclose(yyin);
 #if WIN32|WINNT
@@ -907,7 +955,6 @@ TLS_VARS;
 #endif
 				BEGIN(lex_state->state);
 				yy_switch_to_buffer(lex_state->buffer_state);
-				GLOBAL(phplineno) = lex_state->lineno;
 				stack_del_top(&GLOBAL(input_source_stack));
 				return DONE_EVAL;
 				break;
@@ -919,7 +966,18 @@ TLS_VARS;
 				stack_del_top(&GLOBAL(input_source_stack));
 				return DONE_EVAL;
 				break;
-			case LEX_STATE_DISPLAY_SOURCE:
+			case LEX_STATE_HIGHLIGHT_STRING:
+				GLOBAL(php3_display_source)=0;
+				GLOBAL(ExecuteFlag) = stack_int_top(&GLOBAL(css));
+				stack_del_top(&GLOBAL(css));
+				GLOBAL(Execute) = SHOULD_EXECUTE;
+				END_COLOR();
+				BEGIN(lex_state->state);
+				yy_switch_to_buffer(lex_state->buffer_state);
+				STR_FREE(lex_state->eval_string);
+				stack_del_top(&GLOBAL(input_source_stack));
+				break;
+			case LEX_STATE_HIGHLIGHT_FILE:
 				GLOBAL(php3_display_source)=0;
 				GLOBAL(ExecuteFlag) = stack_int_top(&GLOBAL(css));
 				stack_del_top(&GLOBAL(css));
@@ -928,10 +986,10 @@ TLS_VARS;
 				/* break missing intentionally */
 			case LEX_STATE_INCLUDE:
 #if WIN32|WINNT
-				if(yyin->_tmpfname=="url"){
+				if (yyin->_tmpfname=="url") {
 					closesocket(yyin->_file);
 					efree(yyin);
-				}else{
+				} else {
 #endif
 				fclose(yyin);
 #if WIN32|WINNT
@@ -939,7 +997,6 @@ TLS_VARS;
 #endif
 				BEGIN(lex_state->state);
 				yy_switch_to_buffer(lex_state->buffer_state);
-				GLOBAL(phplineno) = lex_state->lineno;
 				stack_del_top(&GLOBAL(input_source_stack));
 				break;
 		}

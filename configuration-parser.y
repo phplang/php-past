@@ -25,7 +25,7 @@
 
 
 
-/* $Id: configuration-parser.y,v 1.58 1998/01/07 20:39:07 shane Exp $ */
+/* $Id: configuration-parser.y,v 1.61 1998/02/12 18:30:37 zeev Exp $ */
 
 #define DEBUG_CFG_PARSER 1
 #ifdef THREAD_SAFE
@@ -169,6 +169,7 @@ int php3_init_config(void)
 
 		php3_ini.safe_mode = 0;
 		cfgin = php3_fopen_with_path("php3.ini","r",php_ini_path,&opened_path);
+		free(php_ini_path);
 		php3_ini.safe_mode = safe_mode_state;
 
 		if (!cfgin) {
@@ -196,6 +197,7 @@ int php3_init_config(void)
 		parsing_mode = PARSING_MODE_CFG;
 		currently_parsed_filename = "php3.ini";
 		yyparse();
+		fclose(cfgin);
 	}
 	
 #endif
@@ -223,6 +225,7 @@ int php3_minit_browscap(INITFUNCARGS)
 		parsing_mode = PARSING_MODE_BROWSCAP;
 		currently_parsed_filename = php3_ini.browscap;
 		yyparse();
+		fclose(cfgin);
 	}
 
 	return SUCCESS;
@@ -335,7 +338,7 @@ statement:
 				hash_init(tmp.value.ht, 0, NULL, (void (*)(void *))yystype_config_destructor, 1);
 				tmp.type = IS_OBJECT;
 				hash_update(active_hash_table, $1.value.strval, $1.strlen+1, (void *) &tmp, sizeof(YYSTYPE), (void **) &current_section);
-				tmp.value.strval = strndup($1.value.strval,$1.strlen);
+				tmp.value.strval = php3_strndup($1.value.strval,$1.strlen);
 				tmp.strlen = $1.strlen;
 				tmp.type = IS_STRING;
 				convert_browscap_pattern(&tmp);

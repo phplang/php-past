@@ -26,7 +26,7 @@
 */
 
 
-/* $Id: language-parser.y,v 1.116 1998/02/01 20:53:30 zeev Exp $ */
+/* $Id: language-parser.y,v 1.126 1998/02/24 16:51:08 zeev Exp $ */
 
 
 /* 
@@ -115,7 +115,7 @@ HashTable *class_symbol_table=NULL;
 /* Variables used in function calls */
 static YYSTYPE return_value;
 static HashTable list, plist;
-YYSTYPE *data,globals;
+YYSTYPE globals;
 unsigned int param_index;  /* used during function calls */
 
 /* Temporary variable used for multi dimensional arrays */
@@ -159,6 +159,7 @@ void destroy_resource_plist(void)
 
 %left ','
 %left LOGICAL_OR
+%left LOGICAL_XOR
 %left LOGICAL_AND
 %right PHP_PRINT
 %left '=' PLUS_EQUAL MINUS_EQUAL MUL_EQUAL DIV_EQUAL CONCAT_EQUAL MOD_EQUAL AND_EQUAL OR_EQUAL XOR_EQUAL
@@ -175,6 +176,7 @@ void destroy_resource_plist(void)
 %left '*' '/' '%'
 %right '!' '~' INCREMENT DECREMENT INT_CAST DOUBLE_CAST STRING_CAST '@'
 %right '['
+%nonassoc NEW
 %token EXIT
 %token IF
 %left ELSEIF
@@ -193,6 +195,7 @@ void destroy_resource_plist(void)
 %token WHILE
 %token ENDWHILE
 %token FOR
+%token ENDFOR
 %token SWITCH
 %token ENDSWITCH
 %token CASE
@@ -205,23 +208,26 @@ void destroy_resource_plist(void)
 %token RETURN
 %token INCLUDE
 %token REQUIRE
-%token SHOW_SOURCE
+%token HIGHLIGHT_FILE
+%token HIGHLIGHT_STRING
 %token PHP_GLOBAL
 %token PHP_STATIC
 %token PHP_UNSET
 %token PHP_ISSET
+%token PHP_EMPTY
 %token CLASS
 %token EXTENDS
 %token PHP_CLASS_OPERATOR
 %token PHP_DOUBLE_ARROW
 %token PHP_LIST
 %token PHP_ARRAY
-%token NEW
 %token VAR
 %token EVAL
 %token DONE_EVAL
 %token PHP_LINE
 %token PHP_FILE
+%token PHP_TRUE
+%token PHP_FALSE
 
 %% /* Rules */
 
@@ -235,16 +241,14 @@ statement:
 		'{' statement_list '}'
 	|	IF '(' expr ')' { cs_start_if(&$3 _INLINE_TLS); } statement elseif_list else_single { cs_end_if( _INLINE_TLS_VOID); }
 	|	IF '(' expr ')' ':' { cs_start_if(&$3 _INLINE_TLS); } statement_list new_elseif_list new_else_single { cs_end_if( _INLINE_TLS_VOID); } ENDIF ';'
-	|	WHILE '(' expr ')' { cs_start_while(&$3 _INLINE_TLS); } statement { cs_end_while(&$1 _INLINE_TLS); }
-	|	WHILE '(' expr ')' ':' { cs_start_while(&$3 _INLINE_TLS); } statement_list ENDWHILE ';' { cs_end_while(&$1 _INLINE_TLS); }
+	|	WHILE '(' expr ')' { cs_start_while(&$3 _INLINE_TLS); } while_statement { cs_end_while(&$1 _INLINE_TLS); }
 	|	DO { cs_start_do_while( _INLINE_TLS_VOID); } statement WHILE { cs_force_eval_do_while( _INLINE_TLS_VOID); } '(' expr ')' ';'{ cs_end_do_while(&$1,&$7 _INLINE_TLS); }
 	|	FOR { for_pre_expr1(&$1 _INLINE_TLS); }
 			'(' for_expr { if (GLOBAL(Execute)) yystype_destructor(&$4 _INLINE_TLS); for_pre_expr2(&$1 _INLINE_TLS); }
 			';' for_expr { for_pre_expr3(&$1,&$7 _INLINE_TLS); }
 			';' for_expr { for_pre_statement(&$1,&$7,&$10 _INLINE_TLS); }
-			')' statement { for_post_statement(&$1,&$6,&$9,&$12 _INLINE_TLS); }
-	|	SWITCH '(' expr ')' { cs_switch_start(&$1,&$3 _INLINE_TLS); } '{' case_list '}' { cs_switch_end(&$3 _INLINE_TLS); }
-	|	SWITCH '(' expr ')' { cs_switch_start(&$1,&$3 _INLINE_TLS); } ':' case_list ENDSWITCH ';' { cs_switch_end(&$3 _INLINE_TLS); }
+			')' for_statement { for_post_statement(&$1,&$6,&$9,&$12 _INLINE_TLS); }
+	|	SWITCH '(' expr ')' { cs_switch_start(&$1,&$3 _INLINE_TLS); } switch_case_list { cs_switch_end(&$3 _INLINE_TLS); }
 	|	BREAK ';' { DO_OR_DIE(cs_break_continue(NULL,DO_BREAK _INLINE_TLS)) }	
 	|	BREAK expr ';' { DO_OR_DIE(cs_break_continue(&$2,DO_BREAK _INLINE_TLS)) }
 	|	CONTINUE ';' { DO_OR_DIE(cs_break_continue(NULL,DO_CONTINUE _INLINE_TLS)) }
@@ -263,12 +267,31 @@ statement:
 	|	INLINE_HTML { if (GLOBAL(Execute)) { if(php3_header(0,NULL)) PUTS($1.value.strval); } }
 	|	expr ';'  { if (GLOBAL(Execute)) yystype_destructor(&$1 _INLINE_TLS); }
 	|	REQUIRE { cs_start_include(&$1 _INLINE_TLS); } expr ';' { cs_end_include(&$1,&$3 _INLINE_TLS); }
-	|	SHOW_SOURCE expr ';' { if (GLOBAL(Execute)) cs_show_source(&$2 _INLINE_TLS); }
-	|	EVAL '(' expr ')' ';' { if (GLOBAL(Execute)) eval_string(&$3,&$5 _INLINE_TLS); }
+	|	HIGHLIGHT_FILE expr ';' { if (GLOBAL(Execute)) cs_show_source(&$2 _INLINE_TLS); }
+	|	HIGHLIGHT_STRING '(' expr ')' ';'  { if (GLOBAL(Execute)) eval_string(&$3,NULL,1 _INLINE_TLS); }
+	|	HIGHLIGHT_STRING '(' expr ',' expr ')' ';' { if (GLOBAL(Execute)) eval_string(&$3,&$5,2 _INLINE_TLS); }
+	|	EVAL '(' expr ')' ';' { if (GLOBAL(Execute)) eval_string(&$3,&$5,0 _INLINE_TLS); }
 	|	INCLUDE expr ';' { if (GLOBAL(Execute)) conditional_include_file(&$2,&$3 _INLINE_TLS); }
 	|	';'		/* empty statement */
 ;
 
+
+for_statement:
+		statement
+	|	':' statement_list ENDFOR ';'
+;
+
+switch_case_list:
+		'{' case_list '}'
+	|	'{' ';' case_list '}'
+	|	':' case_list ENDSWITCH ';'
+	|	':' ';' case_list ENDSWITCH ';'
+;
+
+while_statement:
+		statement
+	|	':' statement_list ENDWHILE ';'
+;
 
 elseif_list:
 		/* empty */
@@ -411,6 +434,7 @@ expr_without_variable:
 	|	expr BOOLEAN_AND { cs_pre_boolean_and(&$1 _INLINE_TLS); } expr { cs_post_boolean_and(&$$,&$1,&$4 _INLINE_TLS); }
 	|	expr LOGICAL_OR { cs_pre_boolean_or(&$1 _INLINE_TLS); } expr { cs_post_boolean_or(&$$,&$1,&$4 _INLINE_TLS); }
 	|	expr LOGICAL_AND { cs_pre_boolean_and(&$1 _INLINE_TLS); } expr { cs_post_boolean_and(&$$,&$1,&$4 _INLINE_TLS); }
+	|	expr LOGICAL_XOR expr { if (GLOBAL(Execute)) { boolean_xor_function(&$$,&$1,&$3); } }
 	|	expr '|' expr { if (GLOBAL(Execute)) bitwise_or_function(&$$,&$1,&$3 _INLINE_TLS); }
 	|	expr '^' expr { if (GLOBAL(Execute)) bitwise_xor_function(&$$,&$1,&$3 _INLINE_TLS); }
 	|	expr '&' expr { if (GLOBAL(Execute)) bitwise_and_function(&$$,&$1,&$3 _INLINE_TLS); }
@@ -442,7 +466,7 @@ expr_without_variable:
 	|	'$' unambiguous_class_name PHP_CLASS_OPERATOR var { cs_functioncall_pre_variable_passing(&$4,&$2 _INLINE_TLS); }
 			'(' function_call_parameter_list ')' { cs_functioncall_post_variable_passing(&$4 _INLINE_TLS); }
 			possible_function_call { cs_functioncall_end(&$$,&$4,&$8 _INLINE_TLS); }
-	|	NEW STRING  { assign_new_object(&$$,&$2 _INLINE_TLS); }
+	|	NEW expr  { assign_new_object(&$$,&$2 _INLINE_TLS); }
 	|	INT_CAST expr { if (GLOBAL(Execute)) { convert_to_long(&$2); $$ = $2; } }
 	|	DOUBLE_CAST expr { if (GLOBAL(Execute)) { convert_to_double(&$2); $$ = $2; } }
 	|	STRING_CAST expr { if (GLOBAL(Execute)) { convert_to_string(&$2); $$ = $2; } }
@@ -456,6 +480,8 @@ expr_without_variable:
 	|	PHP_PRINT expr { if (GLOBAL(Execute)) { print_variable(&$2 _INLINE_TLS);  yystype_destructor(&$2 _INLINE_TLS);  $$.value.lval=1; $$.type=IS_LONG; } }
 	|	PHP_LINE { if (GLOBAL(Execute)) { $$ = $1; } }
 	|	PHP_FILE { if (GLOBAL(Execute)) { $$ = $1; COPY_STRING($$); } }
+	|	PHP_TRUE { if (GLOBAL(Execute)) $$ = $1; }
+	|	PHP_FALSE { if (GLOBAL(Execute)) $$ = $1; }
 ;
 
 
@@ -492,7 +518,7 @@ unambiguous_array_name:
 
 unambiguous_class_name:
 		unambiguous_class_name PHP_CLASS_OPERATOR varname_scalar { get_object_symtable(&$$,&$1,&$3 _INLINE_TLS); }
-	|	multi_dimensional_array { if (GLOBAL(Execute)) { if (((YYSTYPE *)$1.value.yystype_ptr)->type == IS_OBJECT) { $$=$1; } else { $$.value.yystype_ptr=NULL; } } }
+	|	multi_dimensional_array { if (GLOBAL(Execute)) { if ($1.value.yystype_ptr && ((YYSTYPE *)$1.value.yystype_ptr)->type == IS_OBJECT) { $$=$1; } else { $$.value.yystype_ptr=NULL; } } }
 	|	varname_scalar { get_object_symtable(&$$,NULL,&$1 _INLINE_TLS); }
 ;
 
@@ -592,6 +618,7 @@ encaps_list:
 internal_functions_in_yacc:
 		PHP_UNSET '(' assignment_variable_pointer ')' { php3_unset(&$$, &$3); }
 	|	PHP_ISSET '(' assignment_variable_pointer ')' { php3_isset(&$$, &$3); }
+	|	PHP_EMPTY '(' assignment_variable_pointer ')' { php3_empty(&$$, &$3); }
 ;
 
 

@@ -1,5 +1,93 @@
 PHP 3.0 CHANGE LOG                                                    ChangeLog
 |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+=======
+March 2 Version 3.0b6
+- Made [s]printf handle %ld
+- Changed CGI version to only open regular files as input script
+- Added ignore_missing_userfunc_args directive to suppress warnings messages
+  about missing arguments to user-defined functions
+- Added Postgres function - pg_cmdtuples(), by Vladimir Litovka
+- Disabled command line options if used as CGI
+- Changed CGI version to use PATH_TRANSLATED as the script file name
+- Link with solid shared library instead of static one
+- Fixed a crash with functions that aren't being called correctly
+- Fixed file descriptor leak in auto-prepend/append
+- Imap module is usable. See README in dl/imap.
+
+February 24 Version 3.0b5
+- Made the URL aware file functions be enabled by default
+- Fixed an unlikely crash bug in the parser, with uninitialized array elements
+  which are refered to as objects.
+- Fixed several fields that were being incorrectly read in Sybase CT.
+- Fix Apache-1.3 related SIGHUP problem which was preventing php3.ini from 
+  getting re-read on a SIGHUP
+- *** WARNING *** Downwards incompatible change:  The plus operator (+) is not
+  longer overloaded as concatenation for strings.  Instead, it converts its
+  arguments to numbers and performs numeric addition.
+- Add Stig and Tin's bdf2gdfont script to extra/gd directory
+- Added join() as an alias to implode()
+- Made implode() accept arguments in the order used by explode() as well
+- Made $php_errormsg local in function calls
+- Fixed Apache configuration directive bugs
+- Added a number of .ini directives to Apache .conf directive list
+- Fixed a 'memory leak' with strtok()
+- echo/print now handle binary data correctly.
+- NEW now accepts any expression for the class name argument.
+- Add ImageDashedLine() GD function
+- Add arg_separator .ini directive so the '&' GET method separator can be
+  changed to ';' for example.  Corresponding php3_arg_separator Apache .conf
+  directive works as well.
+- Walked around an implementation side effect of switch().  <? switch(expr) { ?>
+  now works.
+- Added memory caching, resulting in a significant performance boost
+- Added support for for(): .. endfor; loops
+- Added a new predicate - empty($var).  Returns true if $var is not set,
+  or is FALSE.  Returns false otherwise.
+- Added is_integer() (same as is_long()) and is_real() (same as is_double()).
+- Added sizeof() as an alias to the count() function
+- Added --enable-force-cgi-redirect, to prevent the CGI from working if
+  someone directly accesses PHP not through Apache's CGI redirect
+  (off by default).
+- Fixed marking of deleted dBase records. Noticed by Simon Gornall
+  <simon@oyster.co.uk>.
+- Fixed fixed "%%" bug in [s]printf
+- Fixed a UMR (initialized memory read) in the Oracle code
+- Potential fix for mysql-related SIGPIPE problem which caused httpd to spin
+- Made PHP responsive to the Apache link status (stop executing if the link
+  dies).
+- Fixed a crash bug with StrongHold and secure pages
+- Fixed StrongHold installation
+- Optimized the function call sequence a bit.
+- Fixed Sybase/CT date/datetime/money fields work to correctly.
+- Fixed Apache module startup problems - php3_module_startup should only be
+  called once.
+- Fixed ord() with characters >127
+- Fixed bug in file_exists() function
+- Fixed stripslashes() to remove the escaping quote (instead of backslash)
+  in case magic_quotes_sybase is true.
+- Also make echo and print automatically remove trailing decimal zeros.
+- Added htmlentities(), currently handling only ISO-8859-1 entities
+- "0" is no longer considered false, the only string which is false is the
+  empty string "".
+- Added 'true' and 'false' keywords
+- Added 'xor' (logical exclusive or)
+- Automatic conversion from double to string removes decimal trailing zeros.
+- Added arsort() and rsort() to sort in descending order.
+- Turned on "XLATOPT_NOCNV" by default for uODBC/Solid.
+- Added support for a port number in the mysql_(p)connect() functions
+- Fixed a file descriptor leak in the configuration parser.
+- Fixed a few buglets with syntax highlighting with certain language keywords
+- Added functions to control minimum severity level of Sybase messages to
+  display.
+- Added highlight_string() - behaves like highlight_file(), only instead
+  of highlighting a file, it syntax highlights the contents of its
+  argument.
+- Renamed show_source() to highlight_file().  show_source() is still
+  supported for downwards compatability.
+- Fixed a bug in class inheritence - member functions with upper case
+  letters in their names couldn't be redefined.
+- Made chown(), chgrp() and chmod() return TRUE/FALSE instead of 0/-1.
+
 February 02 Version 3.0b4
 - Fixed a segfault bug in one of the unified ODBC error messages.
 - Set default file modes to binary on win32 (solved a lot of bs)
@@ -66,8 +154,6 @@ February 02 Version 3.0b4
 - Changed pg_exec() to always return a result identifier on succees
 - Solid linking fixes (tries to find the right library)
 - Fixed a but with date() and the 'w' element.
-- Changed pg_exec() to return the oid on INSERT queries.  
-  Removed pg_getlastoid().
 - Tried to eliminate unimportant memory leak notifications.
 - Made min() and max() backwards compatible and able to handle doubles.
 - Add fgetc() function
